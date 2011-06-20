@@ -55,6 +55,15 @@ public:
      * \return true on successful load, or false on failure
      */
     bool load( const QString &fileName );
+    /**
+     * Load an EMF file
+     *
+     * \param contents a QByteArray containing the contents of the EMF.
+     *
+     * \return true on successful load, or false on failure
+     */
+    bool load(const QByteArray &contents);
+
 
     /**
      * Load an EMF file from a stream

@@ -25,11 +25,14 @@
 #include "EmfObjects.h"
 
 
+#define DEBUG_EMFPAINT 0
 #define DEBUG_PAINTER_TRANSFORM 0
 
 namespace Libemf
 {
 
+
+static QPainter::CompositionMode  rasteropToQtComposition(long rop);
 
 // ================================================================
 //                         Class OutputPainterStrategy
@@ -39,7 +42,6 @@ OutputPainterStrategy::OutputPainterStrategy()
     : m_header( 0 )
     , m_path( 0 )
     , m_currentlyBuildingPath( false )
-    , m_image( 0 )
     , m_fillRule(Qt::OddEvenFill)
     , m_mapMode(MM_TEXT)
     , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
@@ -59,7 +61,6 @@ OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size,
     , m_windowExtIsSet(false)
     , m_viewportExtIsSet(false)
     , m_windowViewportIsSet(false)
-    , m_image( 0 )
     , m_fillRule(Qt::OddEvenFill)
     , m_mapMode(MM_TEXT)
     , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
@@ -75,7 +76,6 @@ OutputPainterStrategy::~OutputPainterStrategy()
 {
     delete m_header;
     delete m_path;
-    delete m_image;
 }
 
 void OutputPainterStrategy::paintBounds(const Header *header)
@@ -212,11 +212,6 @@ void OutputPainterStrategy::setPixelV( QPoint &point, quint8 red, quint8 green, 
     m_painter->drawPoint( point );
 
     m_painter->restore();
-}
-
-QImage* OutputPainterStrategy::image()
-{
-    return m_image;
 }
 
 
@@ -959,6 +954,9 @@ void OutputPainterStrategy::setBkColor( const quint8 red, const quint8 green, co
 
 void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject &textObject )
 {
+    const QPoint  &referencePoint = textObject.referencePoint();
+    const QString &text = textObject.textString();
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << "Ref point: " << textObject.referencePoint()
                   << "options: " << hex << textObject.options() << dec
@@ -966,7 +964,6 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
                   << "text: " << textObject.textString();
 #endif
 
-    const QString &text = textObject.textString();
     int  x = textObject.referencePoint().x();
     int  y = textObject.referencePoint().y();
 
@@ -1357,10 +1354,13 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
     kDebug(31000) << "    source" << source;
 #endif
 
-    // SRCCOPY is the simplest case.  TODO: implement the rest.
-    if (record.rasterOperation() == 0x00cc0020) {
-        m_painter->drawImage(target, record.image(), source);
-    }
+    QPainter::RenderHints      oldRenderHints = m_painter->renderHints();
+    m_painter->setRenderHints(0); // Antialiasing makes composition modes invalid
+    QPainter::CompositionMode  oldCompMode = m_painter->compositionMode();
+    m_painter->setCompositionMode(rasteropToQtComposition(record.rasterOperation()));
+    m_painter->drawImage(target, record.image(), source);
+    m_painter->setCompositionMode(oldCompMode);
+    m_painter->setRenderHints(oldRenderHints);
 }
 
 
@@ -1415,6 +1415,52 @@ int OutputPainterStrategy::convertFontWeight( quint32 emfWeight )
     } else {
         return QFont::Black;
     }
+}
+
+static QPainter::CompositionMode  rasteropToQtComposition(long rop)
+{
+    // Code copied from filters/libkowmf/qwmf.cc
+    // FIXME: Should be cleaned up
+
+    /* TODO: Ternary raster operations
+    0x00C000CA  dest = (source AND pattern)
+    0x00F00021  dest = pattern
+    0x00FB0A09  dest = DPSnoo
+    0x005A0049  dest = pattern XOR dest   */
+    static const struct OpTab {
+        long winRasterOp;
+        QPainter::CompositionMode qtRasterOp;
+    } opTab[] = {
+        // ### untested (conversion from Qt::RasterOp)
+        { 0x00CC0020, QPainter::CompositionMode_Source }, // CopyROP
+        { 0x00EE0086, QPainter::RasterOp_SourceOrDestination }, // OrROP
+        { 0x008800C6, QPainter::RasterOp_SourceAndDestination }, // AndROP
+        { 0x00660046, QPainter::RasterOp_SourceXorDestination }, // XorROP
+        // ----------------------------------------------------------------
+        // FIXME: Checked above this, below is still todo
+        // ----------------------------------------------------------------
+        { 0x00440328, QPainter::CompositionMode_DestinationOut }, // AndNotROP
+        { 0x00330008, QPainter::CompositionMode_DestinationOut }, // NotCopyROP
+        { 0x001100A6, QPainter::CompositionMode_SourceOut }, // NandROP
+        { 0x00C000CA, QPainter::CompositionMode_Source }, // CopyROP
+        { 0x00BB0226, QPainter::CompositionMode_Destination }, // NotOrROP
+        { 0x00F00021, QPainter::CompositionMode_Source }, // CopyROP
+        { 0x00FB0A09, QPainter::CompositionMode_Source }, // CopyROP
+        { 0x005A0049, QPainter::CompositionMode_Source }, // CopyROP
+        { 0x00550009, QPainter::CompositionMode_DestinationOut }, // NotROP
+        { 0x00000042, QPainter::CompositionMode_Clear }, // ClearROP
+        { 0x00FF0062, QPainter::CompositionMode_Source } // SetROP
+    };
+
+    int i;
+    for (i = 0 ; i < 15 ; i++)
+        if (opTab[i].winRasterOp == rop)
+            break;
+
+    if (i < 15)
+        return opTab[i].qtRasterOp;
+    else
+        return QPainter::CompositionMode_Source;
 }
 
 } // xnamespace...

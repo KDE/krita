@@ -40,7 +40,7 @@ KisPaintInformation::KisPaintInformation(const QPointF & pos_, qreal pressure_,
         qreal rotation_,
         qreal tangentialPressure_,
         qreal perspective_,
-        int time)
+        int   time)
         : d(new Private)
 {
     d->pos = pos_;
@@ -111,6 +111,11 @@ const QPointF& KisPaintInformation::pos() const
 void KisPaintInformation::setPos(const QPointF& p)
 {
     d->pos = p;
+}
+
+void KisPaintInformation::setMovement(const KisVector2D& m)
+{
+    d->movement = m;
 }
 
 qreal KisPaintInformation::pressure() const
@@ -190,6 +195,36 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
     qreal rotation = (1 - t) * pi1.rotation() + t * pi2.rotation();
     qreal tangentialPressure = (1 - t) * pi1.tangentialPressure() + t * pi2.tangentialPressure();
     qreal perspective = (1 - t) * pi1.perspective() + t * pi2.perspective();
-    int time = (1 - t) * pi1.currentTime() + t * pi2.currentTime();
+    int   time = (1 - t) * pi1.currentTime() + t * pi2.currentTime();
     return KisPaintInformation(p, pressure, xTilt, yTilt, movement, rotation, tangentialPressure, perspective, time);
 }
+
+qreal KisPaintInformation::ascension(const KisPaintInformation& info, bool normalize)
+{
+    qreal xTilt = info.xTilt();
+    qreal yTilt = info.yTilt();
+    // radians -PI, PI
+    qreal ascension = atan2(-xTilt, yTilt);
+    // if normalize is true map to 0.0..1.0
+    return normalize ? (ascension / (2 * M_PI) + 0.5) : ascension;
+}
+
+qreal KisPaintInformation::declination(const KisPaintInformation& info, qreal maxTiltX, qreal maxTiltY, bool normalize)
+{
+    qreal xTilt = qBound(-1.0, info.xTilt() / maxTiltX , 1.0);
+    qreal yTilt = qBound(-1.0, info.yTilt() / maxTiltY , 1.0);
+    
+    qreal e;
+    if (fabs(xTilt) > fabs(yTilt)) {
+        e = sqrt(1.0 + yTilt*yTilt);
+    } else {
+        e = sqrt(1.0 + xTilt*xTilt);
+    }
+    
+    qreal cosAlpha    = sqrt(xTilt*xTilt + yTilt*yTilt)/e;
+    qreal declination = acos(cosAlpha); // in radians in [0, 0.5 * PI]
+    
+    // mapping to 0.0..1.0 if normalize is true
+    return normalize ? (declination / (M_PI * 0.5)) : declination;
+}
+

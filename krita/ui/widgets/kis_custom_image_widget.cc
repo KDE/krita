@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2005 Thomas Zander <zander@kde.org>
  * Copyright (C) 2005 Casper Boemann <cbr@boemann.dk>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
@@ -20,7 +20,7 @@
 
 #include "widgets/kis_custom_image_widget.h"
 
-
+#include <QMimeData>
 #include <QPushButton>
 #include <QSlider>
 #include <QComboBox>

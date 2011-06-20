@@ -45,11 +45,7 @@ void KoSimpleOdsDocument::addSheet(KoSimpleOdsSheet* sheet)
 QFile::FileError KoSimpleOdsDocument::saveDocument(const QString& path)
 {
     // create output store
-    if (m_store) {
-	delete m_store;
-	m_store = 0;
-    }
-    
+    delete m_store;
     m_store = KoStore::createStore(path, KoStore::Write,
                                     "application/vnd.oasis.opendocument.spreadsheet", KoStore::Zip);
     if (!m_store) {

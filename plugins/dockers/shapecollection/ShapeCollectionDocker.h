@@ -86,7 +86,7 @@ class ShapeCollectionDocker : public QDockWidget
 
     protected:
         /**
-         * Load the default koffice shapes
+         * Load the default calligra shapes
          */
         void loadDefaultShapes();
 

@@ -107,12 +107,32 @@ kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-    set_target_properties(krita PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.krita")
+    set_target_properties(krita PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.krita")
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita 2")
 endif (Q_WS_MAC)
 
 target_link_libraries(kdeinit_krita kritaui)
 target_link_libraries(krita ${QT_QTCORE_LIBRARY} kdeinit_krita)
+
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    find_package(OpenCTL)
+    find_package(OpenShiva)
+    find_package(QtShiva )
+    
+    if(NOT ${OPENCTL_VERSION} VERSION_GREATER 0.9.15.1 )
+        # Workaround for the following issues:
+        # http://bugs.kde.org/274675 http://bugs.kde.org/248051
+        # http://redmine.opengtl.org/issues/72
+        message(status "Found OpenGTL < 0.9.15.1, on a 64 bits system, krita will be forced linked to the libraries to make sure opengtl symbols are available")
+        if(HAVE_OPENSHIVA AND HAVE_QTSHIVA)
+            target_link_libraries(krita ${OPENSHIVA_LDFLAGS})
+        endif()
+
+        if(OPENCTL_FOUND AND OPENEXR_FOUND)
+            target_link_libraries(krita ${OPENCTL_LDFLAGS})
+        endif()
+    endif()
+endif()
 
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Calligra Dockers plugin
+Name[pt]='Plugin' de Áreas Acopláveis do Calligra
+Name[pt_BR]=Plugin de módulos acopláveis do Calligra
+Name[sv]=Calligra-dockningsinsticksprogram
+Name[uk]=Додаток панелей для Calligra
+Name[x-test]=xxCalligra Dockers pluginxx
+X-KDE-ServiceTypes=Calligra/Dock
+Type=Service
+X-KDE-Library=calligradockers
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

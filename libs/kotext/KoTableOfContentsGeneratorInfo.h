@@ -33,12 +33,12 @@
 #include <KoXmlWriter.h>
 
 class KoTextSharedLoadingData;
+class ToCGenerator; // not actually defined in kotext, a textlayouter is free to define
 
 const int INVALID_OUTLINE_LEVEL = 0;
 
 class IndexEntry
 {
-
 public:
     enum IndexEntryName {UNKNOWN, LINK_START, CHAPTER, SPAN, TEXT, TAB_STOP, PAGE_NUMBER, LINK_END};
 
@@ -54,7 +54,6 @@ public:
 
 class IndexEntryLinkStart : public IndexEntry
 {
-
 public:
     IndexEntryLinkStart(QString _styleName);
 
@@ -63,7 +62,6 @@ public:
 
 class IndexEntryChapter : public IndexEntry
 {
-
 public:
     IndexEntryChapter(QString _styleName);
     virtual void addAttributes(KoXmlWriter* writer) const;
@@ -75,7 +73,6 @@ public:
 
 class IndexEntrySpan : public IndexEntry
 {
-
 public:
     IndexEntrySpan(QString _styleName);
     virtual void addAttributes(KoXmlWriter* writer) const;
@@ -86,7 +83,6 @@ public:
 
 class IndexEntryText : public IndexEntry
 {
-
 public:
     IndexEntryText(QString _styleName);
 };
@@ -94,7 +90,6 @@ public:
 
 class IndexEntryTabStop : public IndexEntry
 {
-
 public:
     IndexEntryTabStop(QString _styleName);
     virtual void addAttributes(KoXmlWriter* writer) const;
@@ -110,7 +105,6 @@ private:
 
 class IndexEntryPageNumber : public IndexEntry
 {
-
 public:
     IndexEntryPageNumber(QString _styleName);
 };
@@ -118,7 +112,6 @@ public:
 
 class IndexEntryLinkEnd : public IndexEntry
 {
-
 public:
     IndexEntryLinkEnd(QString _styleName);
 };
@@ -126,7 +119,6 @@ public:
 
 class TocEntryTemplate
 {
-
 public:
     void saveOdf(KoXmlWriter * writer) const;
 
@@ -139,7 +131,6 @@ public:
 
 class IndexTitleTemplate
 {
-
 public:
     void saveOdf(KoXmlWriter * writer) const;
 
@@ -151,7 +142,6 @@ public:
 
 class IndexSourceStyle
 {
-
 public:
     void saveOdf(KoXmlWriter * writer) const;
 
@@ -162,7 +152,6 @@ public:
 
 class IndexSourceStyles
 {
-
 public:
     void saveOdf(KoXmlWriter * writer) const;
 
@@ -170,60 +159,42 @@ public:
     QList<IndexSourceStyle> styles;
 };
 
-
-class TableOfContentSource
+class KOTEXT_EXPORT KoTableOfContentsGeneratorInfo
 {
-
 public:
-    void saveOdf(KoXmlWriter * writer) const;
+    KoTableOfContentsGeneratorInfo();
+    ~KoTableOfContentsGeneratorInfo();
+    void loadOdf(KoTextSharedLoadingData *sharedLoadingData, const KoXmlElement &element);
+    void saveOdf(KoXmlWriter *writer) const;
 
-    QString indexScope; // enum {document, chapter}
-    int outlineLevel;
-    bool relativeTabStopPosition;
-    bool useIndexMarks;
-    bool useIndexSourceStyles;
-    bool useOutlineLevel;
+    void setGenerator(ToCGenerator *generator);
 
-    IndexTitleTemplate indexTitleTemplate;
-    QList<TocEntryTemplate> entryTemplate; // N-entries
-    QList<IndexSourceStyles> indexSourceStyles;
-};
+    ToCGenerator *generator() const;
 
 
-class TableOfContent
-{
-
-public:
-    QString name;
-    QString styleName;
+    QString m_name;
+    QString m_styleName;
     // TODO: add support for those according ODF v1.2
     // text: protected
     // text: protection-key
     // text:protection-key-digest-algorithm
     // xml:id
-    TableOfContentSource tocSource;
-};
+    QString m_indexScope; // enum {document, chapter}
+    int m_outlineLevel;
+    bool m_relativeTabStopPosition;
+    bool m_useIndexMarks;
+    bool m_useIndexSourceStyles;
+    bool m_useOutlineLevel;
 
-
-class KOTEXT_EXPORT KoTableOfContentsGeneratorInfo
-{
-
-public:
-    KoTableOfContentsGeneratorInfo();
-    ~KoTableOfContentsGeneratorInfo();
-    void loadOdf(const KoXmlElement &element);
-    void saveOdf(KoXmlWriter * writer) const;
-    void setSharedLoadingData(KoTextSharedLoadingData * loadingData);
-
-    TableOfContent * tableOfContentData() const;
+    IndexTitleTemplate m_indexTitleTemplate;
+    QList<TocEntryTemplate> m_entryTemplate; // N-entries
+    QList<IndexSourceStyles> m_indexSourceStyles;
 
 private:
-    int styleNameToStyleId(QString styleName);
-
-    TableOfContent * m_toc;
-    KoTextSharedLoadingData * m_sharedLoadingData;
+    int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
+    ToCGenerator * m_generator;
 };
 
-Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo*)
+Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *)
 
 #endif

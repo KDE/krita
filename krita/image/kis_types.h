@@ -20,6 +20,7 @@
 
 #include <QVector>
 #include <QPoint>
+#include <QList>
 
 template<class T>
 class KisWeakSharedPtr;
@@ -223,6 +224,12 @@ typedef KisSharedPtr<KisPaintOpPreset> KisPaintOpPresetSP;
 
 class KisPaintOpSettings;
 typedef KisSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;
+
+class KisPaintOp;
+typedef KisSharedPtr<KisPaintOp> KisPaintOpSP;
+
+class KoID;
+typedef QList<KoID> KoIDList;
 
 #include <kis_shared_ptr.h>
 

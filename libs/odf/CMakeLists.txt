@@ -12,6 +12,7 @@ endif( QCA2_FOUND )
 set(koodf_LIB_SRCS
     KoOdf.cpp
     KoXmlNS.cpp
+    KoOdfManifestEntry.cpp
     KoDom.cpp
     KoGenStyle.cpp
     KoGenStyles.cpp
@@ -69,7 +70,7 @@ if( QCA2_FOUND )
 endif( QCA2_FOUND )
 
 set_target_properties(koodf PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS koodf ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
@@ -78,6 +79,7 @@ install( FILES
     koodf_export.h
     KoOdf.h
     KoXmlNS.h
+    KoOdfManifestEntry.h
     KoDom.h
     KoGenStyle.h
     KoGenStyles.h

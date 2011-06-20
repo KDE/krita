@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (C) 2001-2010 Klaralvdalens Datakonsult AB.  All rights reserved.
+** Copyright (C) 2001-2011 Klaralvdalens Datakonsult AB.  All rights reserved.
 **
 ** This file is part of the KD Chart library.
 **
@@ -10,7 +10,7 @@
 **
 ** This file may be distributed and/or modified under the terms of the
 ** GNU General Public License version 2 and version 3 as published by the
-** Free Software Foundation and appearing in the file LICENSE.GPL included.
+** Free Software Foundation and appearing in the file LICENSE.GPL.txt included.
 **
 ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -148,6 +148,8 @@ private:
     // helper
     QVariant defaultsForRole( int role ) const;
 
+    void removeEntriesFromDataMap( int start, int end );
+    void removeEntriesFromDirectionDataMaps( Qt::Orientation dir, int start, int end );
     QMap<int, QMap<int, QMap<int, QVariant> > > mDataMap;
     QMap<int, QMap<int, QVariant> > mHorizontalHeaderDataMap;
     QMap<int, QMap<int, QVariant> > mVerticalHeaderDataMap;

@@ -21,9 +21,6 @@
 
 #include "KoTextAnchor.h"
 #include "KoInlineObject_p.h"
-#include "KoTextDocumentLayout.h"
-#include "KoTextShapeContainerModel.h"
-#include "KoTextShapeData.h"
 #include "KoStyleStack.h"
 #include "KoOdfLoadingContext.h"
 
@@ -57,16 +54,12 @@ public:
             shape(s),
             document(0),
             position(-1),
-            model(0),
             behaveAsCharacter(false),
             verticalPos(KoTextAnchor::VTop),
             verticalRel(KoTextAnchor::VLine),
             horizontalPos(KoTextAnchor::HLeft),
             horizontalRel(KoTextAnchor::HChar),
             anchorType("char"),
-            pageRect(0,0,10,10),
-            pageContentRect(0,0,10,10),
-            pageNumber(0),
             anchorStrategy(0),
             inlineObjectAscent(0),
             inlineObjectDescent(0)
@@ -74,31 +67,6 @@ public:
         Q_ASSERT(shape);
     }
 
-    /// as multiple shapes can hold 1 text flow; the anchored shape can be moved between containers and thus models
-    void setContainer(KoShapeContainer *container)
-    {
-        if (container == 0) {
-            if (model)
-                model->removeAnchor(parent);
-            model = 0;
-            shape->setParent(0);
-            return;
-        }
-        KoTextShapeContainerModel *theModel = dynamic_cast<KoTextShapeContainerModel*>(container->model());
-        if (theModel != model) {
-            if (model)
-                model->removeAnchor(parent);
-            if (shape->parent() != container) {
-                if (shape->parent()) {
-                    shape->parent()->removeShape(shape);
-                }
-                container->addShape(shape);
-            }
-            model = theModel;
-            model->addAnchor(parent);
-        }
-        Q_ASSERT(model == theModel);
-    }
 
     virtual QDebug printDebug(QDebug dbg) const
     {
@@ -115,7 +83,6 @@ public:
     const QTextDocument *document;
     int position;
     QTextCharFormat format;
-    KoTextShapeContainerModel *model;
     QPointF distance;
     bool behaveAsCharacter;
     KoTextAnchor::VerticalPos verticalPos;
@@ -124,9 +91,6 @@ public:
     KoTextAnchor::HorizontalRel horizontalRel;
     QString anchorType;
     bool fakeAsChar;
-    QRectF pageRect;
-    QRectF pageContentRect;
-    int pageNumber;
     KoAnchorStrategy *anchorStrategy;
     qreal inlineObjectAscent;
     qreal inlineObjectDescent;
@@ -136,14 +100,14 @@ KoTextAnchor::KoTextAnchor(KoShape *shape)
     : KoInlineObject(*(new KoTextAnchorPrivate(this, shape)), false)
 {
     Q_D(KoTextAnchor);
+    shape->setAnchored(true);
+    shape->setVisible(false);
     d->fakeAsChar = false;
 }
 
 KoTextAnchor::~KoTextAnchor()
 {
     Q_D(KoTextAnchor);
-    if (d->model)
-        d->model->removeAnchor(this);
     if (d->anchorStrategy != 0) {
         delete d->anchorStrategy;
     }
@@ -216,7 +180,9 @@ void KoTextAnchor::updatePosition(const QTextDocument *document, QTextInlineObje
     d->document = document;
     d->position = posInDocument;
     d->format = format;
-    d->setContainer(dynamic_cast<KoShapeContainer*>(shapeForPosition(document, posInDocument)));
+    if (d->anchorStrategy != 0) {
+        d->anchorStrategy->updatePosition(d->shape, document, posInDocument);
+    }
 }
 
 void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
@@ -227,6 +193,13 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
     Q_UNUSED(format);
     Q_UNUSED(pd);
     Q_D(KoTextAnchor);
+
+    if (!d->shape->isVisible()) {
+        // Per default the shape this anchor presents is hidden and we only make it visible once an explicit resize-request
+        // was made. This prevents shapes that are anchored at e.g. hidden textboxes to not become visible as long as they
+        // are not asked to resize.
+        d->shape->setVisible(true);
+    }
 
     // important detail; top of anchored shape is at the baseline.
     QFontMetricsF fm(format.font(), pd);
@@ -326,7 +299,7 @@ void KoTextAnchor::paint(QPainter &painter, QPaintDevice *, const QTextDocument 
     KoChangeTracker *changeTracker = KoTextDocument(document).changeTracker();
     if (!changeTracker)
         return;
-
+    
     KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
     if (changeElement && changeElement->getChangeType() == KoGenChange::DeleteChange) {
         changePen.setColor(changeTracker->getDeletionBgColor());
@@ -334,6 +307,8 @@ void KoTextAnchor::paint(QPainter &painter, QPaintDevice *, const QTextDocument 
     } else if (changeElement && changeElement->getChangeType() == KoGenChange::InsertChange) {
         changePen.setColor(changeTracker->getInsertionBgColor());
         drawChangeRect = true;
+    } else if (changeElement && changeElement->getChangeType() == KoGenChange::FormatChange) {
+        changePen.setColor(changeTracker->getFormatChangeBgColor());
     }
 
     painter.setPen(changePen);
@@ -634,8 +609,8 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     // if svg:x or svg:y should be ignored set new position
     shape()->setPosition(d->distance);
 
-    if (element.hasAttributeNS(KoXmlNS::koffice, "anchor-type")) {
-        QString anchorType = element.attributeNS(KoXmlNS::koffice, "anchor-type"); // our enriched properties
+    if (element.hasAttributeNS(KoXmlNS::calligra, "anchor-type")) {
+        QString anchorType = element.attributeNS(KoXmlNS::calligra, "anchor-type"); // our enriched properties
         QStringList types = anchorType.split('|');
         if (types.count() > 1) {
             QString vertical = types[0];
@@ -717,43 +692,7 @@ bool KoTextAnchor::behavesAsCharacter() const
 void KoTextAnchor::detachFromModel()
 {
     Q_D(KoTextAnchor);
-    d->model = 0;
-}
-
-QRectF KoTextAnchor::pageRect()
-{
-    Q_D(KoTextAnchor);
-    return d->pageRect;
-}
-
-void KoTextAnchor::setPageRect(QRectF &pageRect)
-{
-    Q_D(KoTextAnchor);
-    d->pageRect = pageRect;
-}
-
-QRectF KoTextAnchor::pageContentRect()
-{
-    Q_D(KoTextAnchor);
-    return d->pageContentRect;
-}
-
-void KoTextAnchor::setPageContentRect(QRectF &pageContentRect)
-{
-    Q_D(KoTextAnchor);
-    d->pageContentRect = pageContentRect;
-}
-
-int KoTextAnchor::pageNumber()
-{
-    Q_D(KoTextAnchor);
-    return d->pageNumber;
-}
-
-void KoTextAnchor::setPageNumber(int pageNumber)
-{
-    Q_D(KoTextAnchor);
-    d->pageNumber = pageNumber;
+    d->anchorStrategy->detachFromModel();
 }
 
 KoAnchorStrategy * KoTextAnchor::anchorStrategy()

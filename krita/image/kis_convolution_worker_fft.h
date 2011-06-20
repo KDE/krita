@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2010 Edward Apap <schumifer@hotmail.com>
+ *  Copyright (c) 2011 José Luis Vergara Toloza <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,6 +19,8 @@
 
 #ifndef KIS_CONVOLUTION_WORKER_FFT_H
 #define KIS_CONVOLUTION_WORKER_FFT_H
+
+#include <iostream>
 
 #include <KoChannelInfo.h>
 
@@ -100,6 +103,14 @@ public:
         QList<KoChannelInfo *> convChannelList = this->convolvableChannelList(src);
         m_noOfChannels = convChannelList.count();
 
+        // Pentalis comment: Find out if one of those is the alpha channel
+        qint8 alphaChannelIndex = -1;  //-1 = FALSE
+        for (quint32 i = 0; i < m_noOfChannels; ++i) {
+            if (convChannelList.at(i)->channelType() == KoChannelInfo::ALPHA) {
+                alphaChannelIndex = i;
+            }
+        }
+        
         m_channelFFT = new fftw_complex*[m_noOfChannels];
         for (quint32 i = 0; i < m_noOfChannels; ++i)
             m_channelFFT[i] = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * m_fftLength);
@@ -116,7 +127,10 @@ public:
             m_channelPtr[k] = (double*)m_channelFFT[k];
 
         typename _IteratorFactory_::HLineConstIterator hitSrc = _IteratorFactory_::createHLineConstIterator(src, srcPos.x() - halfKernelWidth, srcPos.y() - halfKernelHeight, m_fftWidth, dataRect);
-
+        
+        //Pentalis comment: apparently here we are saving the Raw data elsewhere before replacing it with something else.
+        //...That something else seems to be the number turned into a Double.
+        //...So, I need to perform my Alpha Premultiplication here.
         for (quint32 srcRow = 0; srcRow < m_fftHeight; ++srcRow)
         {
             while (!hitSrc.isDone())
@@ -136,7 +150,44 @@ public:
 
             hitSrc.nextRow();
         }
+        
+        // Pentalis comment: All the code below is devoted to premultiplying alpha, obviously there's no need for that if there's no alpha channel in the convolution list
+        if (alphaChannelIndex >= 0)
+        {
+            // Pentalis comment: Resetting m_channelPtr to the start (according to the loop above), or what I think is the start
+            for (quint32 k = 0; k < m_noOfChannels; ++k)
+                m_channelPtr[k] = (double*)m_channelFFT[k];
+            
+            // Pentalis comment: I'll keep trying till this thing works and I never have to touch it again  UPDATE: WORKED!
+            
+            // Pentalis comment: Iterate over the same pixels again but this time with a different intent
+            for (quint32 srcRow = 0; srcRow < m_fftHeight; ++srcRow)
+            {
+                for (quint32 srcCol = 0; srcCol < m_fftWidth; ++srcCol)
+                {
+                    //const quint8* data = hitSrc.oldRawData();
 
+                    for (quint32 k = 0; k < m_noOfChannels; ++k) {
+                        /* Pentalis comment: Pass to the next loop if you hit the alpha channel,
+                        make sure to increment *m_channelPtr[k]  (this was a bug that took hours to find) */
+                        if (k == alphaChannelIndex) {
+                            *m_channelPtr[k]++;
+                            continue;
+                        }
+                        
+                        /* Pentalis comments: PREMULTIPLY BY ALPHA
+                        This code works because m_channelPtr has already been filled entirely */
+                        *m_channelPtr[k] *= *m_channelPtr[alphaChannelIndex];
+                        *m_channelPtr[k]++;
+                    }
+                }
+
+                for (quint32 k = 0; k < m_noOfChannels; ++k) {
+                    m_channelPtr[k] += m_extraMem;
+                }
+            }
+        }
+        
         addToProgress(10);
         if (isInterrupted()) return;
         
@@ -206,39 +257,90 @@ public:
 
         const quint32 pixelSize = src->colorSpace()->pixelSize();
 
-        for (quint32 y = 0; y < areaHeight; ++y)
+        // Pentalis comment: if there IS an alpha Channel...
+        if (alphaChannelIndex >= 0)
         {
-            for (quint32 x = 0; x < areaWidth; ++x)
+            double alphaChannelPixelValue;
+            for (quint32 y = 0; y < areaHeight; ++y)
             {
-                quint8 *data = hitDst.rawData();
-                memcpy(hitDst.rawData(), hitSrcCpy.oldRawData(), pixelSize);
-
-                for (quint32 k = 0; k < m_noOfChannels; ++k)
+                for (quint32 x = 0; x < areaWidth; ++x)
                 {
-                    channelPixelValue = *(m_channelPtr[k]) * fftScale + m_absoluteOffset[k];
+                    quint8 *data = hitDst.rawData();
+                    memcpy(hitDst.rawData(), hitSrcCpy.oldRawData(), pixelSize);
 
-                    // clamp values
-                    if (channelPixelValue > m_maxClamp[k])
-                        channelPixelValue = m_maxClamp[k];
-                    else if (channelPixelValue < m_minClamp[k])
-                        channelPixelValue = m_minClamp[k];
+                    // Pentalis comment: This needs to be done only once and before we iterate over the channels
+                    alphaChannelPixelValue = *(m_channelPtr[alphaChannelIndex]) * fftScale + m_absoluteOffset[alphaChannelIndex];
+                    
+                    for (quint32 k = 0; k < m_noOfChannels; ++k)
+                    {
+                        channelPixelValue = *(m_channelPtr[k]) * fftScale + m_absoluteOffset[k];
+                        
+                        if (k != alphaChannelIndex) {
+                            /* Pentalis comment: divide the PREMULTIPLIED (see conditionals above) channels by the
+                            CONVOLUTED alpha channel. Also, avoid division by zero. */
+                            if (alphaChannelIndex != 0) {
+                                channelPixelValue /= alphaChannelPixelValue;
+                            }
+                        }
+                        
+                        // clamp values
+                        if (channelPixelValue > m_maxClamp[k])
+                            channelPixelValue = m_maxClamp[k];
+                        else if (channelPixelValue < m_minClamp[k])
+                            channelPixelValue = m_minClamp[k];
 
-                    fromDoubleFuncPtr[k](data, convChannelList[k]->pos(), channelPixelValue);
+                        fromDoubleFuncPtr[k](data, convChannelList[k]->pos(), channelPixelValue);
 
-                    ++m_channelPtr[k];
+                        ++m_channelPtr[k];
+                    }
+
+                    ++hitDst;
+                    ++hitSrcCpy;
                 }
 
-                ++hitDst;
-                ++hitSrcCpy;
+                for (quint32 k = 0; k < m_noOfChannels; ++k)
+                    m_channelPtr[k] += rowOffsetPtr;
+
+                hitDst.nextRow();
+                hitSrcCpy.nextRow();
             }
-
-            for (quint32 k = 0; k < m_noOfChannels; ++k)
-                m_channelPtr[k] += rowOffsetPtr;
-
-            hitDst.nextRow();
-            hitSrcCpy.nextRow();
         }
+        else 
+        {
+            for (quint32 y = 0; y < areaHeight; ++y)
+            {
+                for (quint32 x = 0; x < areaWidth; ++x)
+                {
+                    quint8 *data = hitDst.rawData();
+                    memcpy(hitDst.rawData(), hitSrcCpy.oldRawData(), pixelSize);
 
+                    for (quint32 k = 0; k < m_noOfChannels; ++k)
+                    {
+                        channelPixelValue = *(m_channelPtr[k]) * fftScale + m_absoluteOffset[k];
+                        
+                        // clamp values
+                        if (channelPixelValue > m_maxClamp[k])
+                            channelPixelValue = m_maxClamp[k];
+                        else if (channelPixelValue < m_minClamp[k])
+                            channelPixelValue = m_minClamp[k];
+
+                        fromDoubleFuncPtr[k](data, convChannelList[k]->pos(), channelPixelValue);
+
+                        ++m_channelPtr[k];
+                    }
+
+                    ++hitDst;
+                    ++hitSrcCpy;
+                }
+
+                for (quint32 k = 0; k < m_noOfChannels; ++k)
+                    m_channelPtr[k] += rowOffsetPtr;
+
+                hitDst.nextRow();
+                hitSrcCpy.nextRow();
+            }
+        }
+        
         addToProgress(20);
         cleanUp();
     }

@@ -26,8 +26,9 @@ HistoryDock::HistoryDock() : QDockWidget(), historyCanvas(0) {
 }
 
 void HistoryDock::setCanvas(KoCanvasBase *canvas) {
+    
     KisCanvas2* myCanvas = dynamic_cast<KisCanvas2*>( canvas );
-
+    
     KUndoStack* undoStack = canvas->shapeController()->resourceManager()->undoStack();
 
     undoView->setStack(undoStack);

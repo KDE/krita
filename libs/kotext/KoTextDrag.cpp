@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_calligra@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -121,7 +121,7 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     kDebug(30015) << "testing to see if we should add rdf to odf file?";
 #ifdef SHOULD_BUILD_RDF
     // RDF: Copy relevant RDF to output ODF
-    if (Soprano::Model *m = helper.rdfModel()) {
+    if (const Soprano::Model *m = helper.rdfModel()) {
         kDebug(30015) << "rdf model size:" << m->statementCount();
         KoTextRdfCore::createAndSaveManifest(m, textSharedData->getRdfIdMapping(),
                                              store, manifestWriter);

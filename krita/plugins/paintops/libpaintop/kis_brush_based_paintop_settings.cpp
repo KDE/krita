@@ -116,3 +116,7 @@ bool KisBrushBasedPaintOpSettings::isValid()
     return true;
 }
 
+bool KisBrushBasedPaintOpSettings::isLoadable()
+{
+    return (KisBrushServer::instance()->brushServer()->resources().count() > 0);
+}

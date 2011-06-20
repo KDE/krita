@@ -23,6 +23,8 @@
 
 #include <kis_types.h>
 
+class KisView2;
+class KisCanvas2;
 class KisSpecificColorSelectorWidget;
 
 class SpecificColorSelectorDock : public QDockWidget, public KoCanvasObserverBase
@@ -33,10 +35,13 @@ public:
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas();
 public slots:
     void layerChanged(const KisNodeSP);
 private:
     KisSpecificColorSelectorWidget* m_colorSelector;
+    KisCanvas2 *m_canvas;
+    KisView2 *m_view;
 };
 
 

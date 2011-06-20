@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007,2008 Sebastian Sauer <mail@dipe.org>
- * Copyright (C) 2007,ducroquet Pierre Ducroquet <pinaraf@gmail.com>
+ * Copyright (C) 2007-2011 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
@@ -32,6 +32,7 @@
 #include <QVariant>
 #include <QTextFormat>
 
+extern QVariant val;
 struct Property;
 class KoCharacterStyle;
 class KoListStyle;
@@ -128,12 +129,48 @@ public:
 
         // numbering
         LineNumbering,           ///< bool, specifies whether lines should be numbered in this paragraph
-        LineNumberStartValue     ///< integer value that specifies the number for the first line in the paragraph
-
+        LineNumberStartValue,    ///< integer value that specifies the number for the first line in the paragraph
+        SectionStart,            ///< section definition
+        SectionEnd,               ///< end of a named section
 // do 15.5.24
 // continue at 15.5.28
+        ForceDisablingList,       ///< bool, for compatibility with the weird text:enable-numbering attribute not used anymore by OpenOffice.org
+        
+        // other properties
+        BackgroundTransparency,   ///< qreal between 0 and 1, background transparency
+        SnapToLayoutGrid,         ///< bool, snap the paragraph to the layout grid of the page
+        JoinBorder,               ///< bool, whether a border for one paragraph is to be extended around the following paragraph
+        RegisterTrue,             ///< bool, align lines on both sides of a printed text
+        StrictLineBreak,          ///< bool, if true, line breaks are forbidden between some characters
+        JustifySingleWord,        ///< bool, if true, a single word will be justified
+        BreakBefore,              ///< KoText::TextBreakProperty, whether there is a page/column break before the paragraphs
+        BreakAfter,               ///< KoText::TextBreakProperty, whether there is a page/column break after the paragraphs
+        AutomaticWritingMode,     ///< bool
+        PageNumber,               ///< int, 0 means auto (ie. previous page number + 1), N sets up a new page number
+        TextAutoSpace,            ///< AutoSpace, indicating whether to add space between portions of Asian, Western and complex texts
+        KeepWithNext,             ///< Try to keep this block with its following block on the same page
+        KeepHyphenation,          ///< bool, whether both parts of a hyphenated word shall lie within a single page
+        HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
+        PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
+        VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
+        
+        NormalLineHeight          ///< bool, internal property for reserved usage
     };
 
+    enum AutoSpace {
+        NoAutoSpace,              ///< space should not be added between portions of Asian, Western and complex texts
+        IdeographAlpha            ///< space should be added between portions of Asian, Western and complex texts
+    };
+    
+    enum VerticalAlign {
+        VAlignAuto,
+        VAlignBaseline,
+        VAlignBottom,
+        VAlignMiddle,
+        VAlignTop
+    };
+        
+    
     /// Constructor
     KoParagraphStyle(QObject *parent = 0);
     /// Creates a KoParagrahStyle with the given block format, the block character format and \a parent
@@ -313,11 +350,50 @@ public:
     QBrush background() const;
     /// See similar named method on QTextBlockFormat
     void clearBackground();
+    
+    qreal backgroundTransparency() const;
+    void setBackgroundTransparency(qreal transparency);
 
-    void setBreakBefore(bool on);
-    bool breakBefore();
-    void setBreakAfter(bool on);
-    bool breakAfter();
+    bool snapToLayoutGrid() const;
+    void setSnapToLayoutGrid(bool value);
+    
+    bool registerTrue() const;
+    void setRegisterTrue(bool value);
+    
+    bool strictLineBreak() const;
+    void setStrictLineBreak(bool value);
+    
+    bool justifySingleWord() const;
+    void setJustifySingleWord(bool value);
+    
+    bool automaticWritingMode() const;
+    void setAutomaticWritingMode(bool value);
+    
+    void setPageNumber(int pageNumber);
+    int pageNumber() const;
+    
+    void setKeepWithNext(bool value);
+    bool keepWithNext() const;
+    
+    void setPunctuationWrap(bool value);
+    bool punctuationWrap() const;
+    
+    void setTextAutoSpace(AutoSpace value);
+    AutoSpace textAutoSpace() const;
+    
+    void setKeepHyphenation(bool value);
+    bool keepHyphenation() const;
+    
+    void setHyphenationLadderCount(int value);
+    int hyphenationLadderCount() const;
+    
+    VerticalAlign verticalAlignment() const;
+    void setVerticalAlignment(VerticalAlign value);
+    
+    void setBreakBefore(KoText::KoTextBreakProperty value);
+    KoText::KoTextBreakProperty breakBefore();
+    void setBreakAfter(KoText::KoTextBreakProperty value);
+    KoText::KoTextBreakProperty breakAfter();
     void setLeftPadding(qreal padding);
     qreal leftPadding();
     void setTopPadding(qreal padding);
@@ -368,29 +444,32 @@ public:
     KoBorder::BorderStyle bottomBorderStyle();
     void setBottomBorderColor(const QColor &color);
     QColor bottomBorderColor();
+    
+    bool joinBorder() const;
+    void setJoinBorder(bool value);
 
     KoText::Direction textProgressionDirection() const;
     void setTextProgressionDirection(KoText::Direction dir);
 
     // ************ properties from QTextBlockFormat
     /// duplicated property from QTextBlockFormat
-    void setTopMargin(qreal topMargin);
+    void setTopMargin(QTextLength topMargin);
     /// duplicated property from QTextBlockFormat
     qreal topMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setBottomMargin(qreal margin);
+    void setBottomMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
     qreal bottomMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setLeftMargin(qreal margin);
+    void setLeftMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
     qreal leftMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setRightMargin(qreal margin);
+    void setRightMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
     qreal rightMargin() const;
     /// set the margin around the paragraph, making the margin on all sides equal.
-    void setMargin(qreal margin);
+    void setMargin(QTextLength margin);
 
     void setIsListHeader(bool on);
     bool isListHeader() const;
@@ -400,9 +479,9 @@ public:
     /// duplicated property from QTextBlockFormat
     Qt::Alignment alignment() const;
     /// duplicated property from QTextBlockFormat
-    void setTextIndent(qreal margin);
+    void setTextIndent(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    qreal textIndent() const;
+    QTextLength textIndent() const;
     /// Custom KoParagraphStyle property for auto-text-indent
     void setAutoTextIndent(bool on);
     bool autoTextIndent() const;
@@ -603,14 +682,13 @@ private:
      */
     void loadOdfProperties(KoShapeLoadingContext &scontext);
     qreal propertyDouble(int key) const;
+    QTextLength propertyLength(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;
 
     class Private;
     Private * const d;
-
-    bool normalLineHeight;
 };
 
 #endif

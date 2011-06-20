@@ -30,6 +30,7 @@ set(kowidgets_LIB_SRCS
     KoUniColorChooser.cpp
     KoUniColorDialog.cpp
     KoXYColorSelector.cpp
+    KoStrokeConfigWidget.cpp
     KoShadowConfigWidget.cpp
     KoIconToolTip.cpp
     KoResourceItemChooser.cpp
@@ -67,7 +68,7 @@ endif (GHNS)
 target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms ${KDE4_KDEUI_LIBS})
 
 set_target_properties(kowidgets PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
 install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -87,6 +88,7 @@ install( FILES
     KoZoomMode.h
 
     KoColorPatch.h
+    KoStrokeConfigWidget.h
     KoShadowConfigWidget.h
     KoColorPopupAction.h
     KoColorSetWidget.h

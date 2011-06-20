@@ -44,7 +44,7 @@ KoHyphenator::KoHyphenator()
 {
     /*  Reading config for dictionary encodings from file...*/
 
-    QString path = KGlobal::dirs()->findResource("data", "koffice/hyphdicts/dicts.xml");
+    QString path = KGlobal::dirs()->findResource("data", "calligra/hyphdicts/dicts.xml");
 #ifdef DEBUG_HYPHENATOR
     kDebug(32500) << path;
 #endif
@@ -168,7 +168,7 @@ HyphenDict *KoHyphenator::dict(const QString &_lang) const
 #ifdef DEBUG_HYPHENATOR
         kDebug(32500) << "Searching dictionary for '" << lang << "' language...";
 #endif
-        QString path = KGlobal::dirs()->findResource("data", "koffice/hyphdicts/hyph_" + lang + ".dic");
+        QString path = KGlobal::dirs()->findResource("data", "calligra/hyphdicts/hyph_" + lang + ".dic");
         if (!path.isEmpty()) {
 #ifdef DEBUG_HYPHENATOR
             kDebug(32500) << "Loading dictionary for '" << lang << "' language: path =" << path;

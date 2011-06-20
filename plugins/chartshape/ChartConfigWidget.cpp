@@ -37,7 +37,7 @@
 #include <KDebug>
 #include <KMessageBox>
 
-// KOffice
+// Calligra
 #include <interfaces/KoChartModel.h>
 
 // KDChart

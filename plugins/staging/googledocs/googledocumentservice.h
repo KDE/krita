@@ -35,6 +35,7 @@ class GoogleDocumentService : public QObject
 
 public:
     GoogleDocumentService();
+    virtual ~GoogleDocumentService();
     void clientLogin(const QString & username, const QString & password);
     void getDocument();
     void downloadDocument (const QString & url, const QString & type);

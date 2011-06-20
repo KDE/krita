@@ -35,7 +35,7 @@
 #include <kis_paint_layer.h>
 
 K_PLUGIN_FACTORY(KisBMPExportFactory, registerPlugin<KisBMPExport>();)
-K_EXPORT_PLUGIN(KisBMPExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(KisBMPExportFactory("calligrafilters"))
 
 KisBMPExport::KisBMPExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {

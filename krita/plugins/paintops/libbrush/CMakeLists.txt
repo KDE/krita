@@ -1,7 +1,5 @@
 add_subdirectory( tests )
 
-#add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
 set(kritalibbrush_LIB_SRCS
     kis_auto_brush.cpp
     kis_boundary.cc
@@ -32,7 +30,7 @@ target_link_libraries(kritalibbrush kritaui )
 target_link_libraries(kritalibbrush LINK_INTERFACE_LIBRARIES kritaui)
 
 set_target_properties(kritalibbrush PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
 install(TARGETS kritalibbrush  ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -45,6 +45,8 @@ class KToggleAction;
 class KUrl;
 class QTextDocument;
 class QLabel;
+class KoCopyController;
+class KoCutController;
 
 /// Creates a view with a KoPACanvasBase and rulers
 class KOPAGEAPP_EXPORT KoPAView : public KoView, public KoPAViewBase
@@ -70,6 +72,12 @@ public:
     virtual ~KoPAView();
 
     KoZoomController* zoomController() const;
+
+    KoCopyController* copyController() const;
+
+    KoCutController* cutController() const;
+
+    KAction* deleteSelectionAction() const;
 
     void updateReadWrite( bool readwrite );
 
@@ -149,6 +157,14 @@ public:
 
     /// Insert a new page after the current one
     void insertPage();
+
+    void centerPage();
+
+signals:
+    /// emited when select All action is triggered and the view is not visible
+    void selectAllRequested();
+    /// emited when deselect All action is triggered and the view is not visible
+    void deselectAllRequested();
 
 protected:
 

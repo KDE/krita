@@ -43,7 +43,7 @@
 #include <KoColorSpaceRegistry.h>
 
 K_PLUGIN_FACTORY(ODGImportFactory, registerPlugin<KisODGImport>();)
-K_EXPORT_PLUGIN(ODGImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(ODGImportFactory("calligrafilters"))
 
 KisODGImport::KisODGImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {

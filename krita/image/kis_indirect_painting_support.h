@@ -24,6 +24,7 @@
 #include "kis_types.h"
 #include "kis_node.h"
 
+class QBitArray;
 
 /**
  * For classes that support indirect painting.
@@ -45,6 +46,7 @@ public:
     void setTemporaryTarget(KisPaintDeviceSP t);
     void setTemporaryCompositeOp(const KoCompositeOp* c);
     void setTemporaryOpacity(quint8 o);
+    void setTemporaryChannelFlags(const QBitArray& channelFlags);
 
     /**
      * Writes the temporary target into the paint device of the layer.
@@ -72,6 +74,7 @@ public:
     const KisPaintDeviceSP temporaryTarget() const;
     const KoCompositeOp* temporaryCompositeOp() const;
     quint8 temporaryOpacity() const;
+    const QBitArray& temporaryChannelFlags() const;
 
 private:
     struct Private;

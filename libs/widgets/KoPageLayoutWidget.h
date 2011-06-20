@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOFFICE_PAGE_LAYOUT_WIDGET
-#define KOFFICE_PAGE_LAYOUT_WIDGET
+#ifndef CALLIGRA_PAGE_LAYOUT_WIDGET
+#define CALLIGRA_PAGE_LAYOUT_WIDGET
 
 #include "kowidgets_export.h"
 
@@ -35,6 +35,8 @@ class KOWIDGETS_EXPORT KoPageLayoutWidget : public QWidget
 public:
     KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layout);
     ~KoPageLayoutWidget();
+
+    KoPageLayout pageLayout() const;
 
     void setUnit(const KoUnit &unit);
     void showUnitchooser(bool on);

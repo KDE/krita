@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C)  2006 Thomas Zander <zander@kde.org>
  * Copyright (C)  2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C)  2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -107,7 +108,7 @@ Qt::Alignment KoText::valignmentFromString(const QString &align)
     Qt::Alignment alignment = Qt::AlignTop;
     if (align == "top")
         alignment = Qt::AlignTop;
-    else if (align == "center")
+    else if (align == "middle")
         alignment = Qt::AlignVCenter;
     else if (align == "bottom")
         alignment = Qt::AlignBottom;
@@ -120,9 +121,11 @@ QString KoText::valignmentToString(Qt::Alignment alignment)
     if (alignment == (Qt::AlignTop))
         align = "top";
     else if (alignment == Qt::AlignVCenter)
-        align = "center";
+        align = "middle";
     else if (alignment == Qt::AlignBottom)
         align = "bottom";
+    else
+        align = "automatic";
     return align;
 }
 
@@ -135,9 +138,27 @@ KoText::Direction KoText::directionFromString(const QString &writingMode)
         return KoText::RightLeftTopBottom;
     if (writingMode == "tb" || writingMode == "tb-rl")
         return KoText::TopBottomRightLeft;
+    if (writingMode == "tb-lr")
+        return KoText::TopBottomLeftRight;
     if (writingMode == "page")
         return KoText::InheritDirection;
     return KoText::AutoDirection;
+}
+
+QString KoText::directionToString(KoText::Direction direction)
+{
+    if (direction == KoText::LeftRightTopBottom)
+        return "lr";
+    if (direction == KoText::RightLeftTopBottom)
+        return "rl";
+    if (direction == KoText::TopBottomRightLeft)
+        return "tb-rl";
+    if (direction == KoText::TopBottomLeftRight)
+        return "tb-lr";
+    if (direction == KoText::InheritDirection)
+        return "page";
+    
+    return "auto";
 }
 
 KoText::KoTextBreakProperty KoText::textBreakFromString(const QString& textBreak)
@@ -157,3 +178,22 @@ QString KoText::textBreakToString(KoText::KoTextBreakProperty textBreak)
         return "column";
     return "auto";
 }
+
+QTextLength KoText::parseLength(const QString &length)
+{
+    if (length.contains('%'))
+    {
+        QString lengthValue = length.left(length.indexOf('%'));
+        bool ok = false;
+        qreal realLength = lengthValue.toDouble(&ok);
+        if (ok)
+            return QTextLength(QTextLength::PercentageLength, realLength);
+        else
+            return QTextLength(QTextLength::PercentageLength, 0);
+    }
+    else
+    {
+        return QTextLength(QTextLength::FixedLength, KoUnit::parseValue(length));
+    }
+}
+

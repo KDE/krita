@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +23,7 @@
 #define KOODFWORKAROUND_H
 
 #include "flake_export.h"
+#include <qnamespace.h>
 
 class KoXmlElement;
 class KoShape;
@@ -47,7 +49,7 @@ namespace KoOdfWorkaround
 {
     /**
      * OpenOffice handles a line with the width of 0 as a cosmetic line but in svg it makes the line invisible.
-     * To show it in koffice use a very small line width. However this is not a cosmetic line.
+     * To show it in calligra use a very small line width. However this is not a cosmetic line.
      */
     FLAKE_EXPORT void fixPenWidth(QPen &pen, KoShapeLoadingContext &context);
 
@@ -87,6 +89,15 @@ namespace KoOdfWorkaround
      * to the correct percent value (i.e. -5cm = -50mm = -50%).
      */
     FLAKE_EXPORT void fixGluePointPosition(QString &positionString, KoShapeLoadingContext &context);
+
+    /**
+     * OpenOffice and LibreOffice does not conform to the specification about default value
+     * of the svg:fill-rule. If this attribute is missing, according the spec, the initial
+     * value is nonzero, but OOo uses evenodd. Because we are conform to the spec, we need
+     * to set what OOo display.
+     * See http://www.w3.org/TR/SVG/painting.html#FillRuleProperty
+     */
+    FLAKE_EXPORT void fixMissingFillRule(Qt::FillRule &fillRule, KoShapeLoadingContext &context);
 }
 
 #endif /* KOODFWORKAROUND_H */

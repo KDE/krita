@@ -21,7 +21,6 @@
 #define KOTEXTANCHOR_H
 
 #include "KoInlineObject.h"
-#include "KoTextDocumentLayout.h"
 
 #include "kotext_export.h"
 
@@ -31,24 +30,19 @@ class KoShape;
 class KoTextAnchorPrivate;
 class KoXmlElement;
 class KoShapeLoadingContext;
+class KoShapeContainer;
 
 /**
  * This class is an interface that positions the shape linked to text anchor
  */
-class KOTEXT_EXPORT KoAnchorStrategy{
+class KOTEXT_EXPORT KoAnchorStrategy {
 public:
     KoAnchorStrategy(){};
     virtual ~KoAnchorStrategy(){};
 
-    virtual bool positionShape(KoTextDocumentLayout::LayoutState *state) = 0;
+    virtual void detachFromModel() = 0;
 
-    virtual bool isPositioned() = 0;
-
-    virtual void reset() = 0;
-
-    virtual bool isRelayoutNeeded() = 0;
-
-    virtual QPointF relayoutPosition() = 0;
+    virtual void updatePosition(KoShape *shape, const QTextDocument *document, int position) = 0;
 };
 
 /**
@@ -74,7 +68,7 @@ public:
  * <li> Position the anchor with updatePosition() what will attach the KoTextAnchor-instance to
  *    the TextShape's \a KoTextShapeContainerModel . </ol>
  * The position of the shape relative to the anchor is called the offset. It's loaded by loadOdf().
- * @see KWAnchorStrategy for more information about the layout of anchors/shapes in KWord.
+ * @see KWAnchorStrategy for more information about the layout of anchors/shapes in Words.
  */
 class KOTEXT_EXPORT KoTextAnchor : public KoInlineObject
 {
@@ -194,43 +188,24 @@ public:
     /**
      * Returns true if the anchored frame is positioned as a (potentially big) character in
      * the text layout or false when it will not take any space as an inline object.
-     * An anchor which behaves as a characterin the text will potentially change the
+     * An anchor which behaves as a character in the text will potentially change the
      * ascent/descent of the line.
      */
     bool behavesAsCharacter() const;
 
     /**
-     * Set if the anchor shuld behave as a character
+     * Set if the anchor should behave as a character
      */
     void setBehavesAsCharacter(bool);
 
     /// \internal make sure that the anchor has no KoTextShapeContainerModel references anymore.
     void detachFromModel();
 
-    // get page rectangle coordinates to which this text anchor is anchored (needed for HPage)
-    QRectF pageRect();
-
-    // set page rectangle coordinates to which this text anchor is anchored (needed for HPage)
-    void setPageRect(QRectF &pageRect);
-
-    // get content rectangle coordinates to which this text anchor is anchored (needed for HPageContent)
-    QRectF pageContentRect();
-
-    // set content rectangle coordinates to which this text anchor is anchored (needed for HPageContent)
-    void setPageContentRect(QRectF &marginRect);
-
-    // get number of page to which this text anchor is anchored (needed for HOutside,HInside,HFromInside)
-    int pageNumber();
-
-    // set number of page to which this text anchor is anchored (needed for HOutside,HInside,HFromInside)
-    void setPageNumber(int pageNumber);
-
     // get anchor strategy which is used to position shape linked to text anchor
     KoAnchorStrategy * anchorStrategy();
 
     // set anchor strategy which is used to position shape linked to text anchor
     void setAnchorStrategy(KoAnchorStrategy * anchorStrategy);
-
 
     qreal inlineObjectAscent();
 

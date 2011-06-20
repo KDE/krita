@@ -27,6 +27,7 @@
 
 #include <KoFilterChain.h>
 #include <KoColorSpace.h>
+#include <KoColorModelStandardIds.h>
 
 #include <kis_doc2.h>
 #include <kis_group_layer.h>
@@ -40,7 +41,7 @@
 #include "ui_kis_wdg_options_tiff.h"
 
 K_PLUGIN_FACTORY(KisTIFFExportFactory, registerPlugin<KisTIFFExport>();)
-K_EXPORT_PLUGIN(KisTIFFExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(KisTIFFExportFactory("calligrafilters"))
 
 KisTIFFExport::KisTIFFExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
@@ -70,6 +71,10 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
         kdb->optionswdg->kComboBoxPredictor->removeItem(1);
     } else {
         kdb->optionswdg->kComboBoxPredictor->removeItem(2);
+    }
+
+    if (cs->colorModelId() == CMYKAColorModelID) {
+        kdb->optionswdg->alpha->setChecked(false);
     }
 
     if (kdb->exec() == QDialog::Rejected) {

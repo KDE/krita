@@ -43,7 +43,7 @@
 
 
 K_PLUGIN_FACTORY(KisBMPImportFactory, registerPlugin<KisBMPImport>();)
-K_EXPORT_PLUGIN(KisBMPImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(KisBMPImportFactory("calligrafilters"))
 
 KisBMPImport::KisBMPImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
@@ -66,7 +66,7 @@ KoFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const Q
 {
     dbgFile << "BMP import! From:" << from << ", To:" << to << "";
 
-    if (from != "image/bmp")
+    if (!(from == "image/bmp" || from == "image/x-xpixmap" || from == "image/gif" || from == "image/x-xbitmap"))
         return KoFilter::NotImplemented;
 
     if (to != "application/x-krita")

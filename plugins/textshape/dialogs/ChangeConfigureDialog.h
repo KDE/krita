@@ -21,6 +21,7 @@
 #define __CHANGE_CONFIGURE_DIALOG_H__
 
 #include <QtGui>
+#include <KoChangeTracker.h>
 
 class ColorDisplayLabel:public QLabel
 {
@@ -50,12 +51,14 @@ class ChangeConfigureDialog:public QDialog
     }ChangeType;
 
     public:
-        ChangeConfigureDialog(const QColor& insertionColor, const QColor& deletionColor, const QColor& formatChangeColor, QWidget *parent=NULL);
+        ChangeConfigureDialog(const QColor& insertionColor, const QColor& deletionColor, const QColor& formatChangeColor, const QString& authorName, KoChangeTracker::ChangeSaveFormat changeSaveFormat, QWidget *parent=NULL);
         ~ChangeConfigureDialog();
         
         const QColor& getInsertionBgColor();
         const QColor& getDeletionBgColor();
         const QColor& getFormatChangeBgColor();
+        const QString authorName();
+        KoChangeTracker::ChangeSaveFormat saveFormat();
 
     private:
         Ui::ChangeConfigureDialog ui;

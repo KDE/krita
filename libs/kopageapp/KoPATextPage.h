@@ -33,9 +33,12 @@ public:
 
     virtual ~KoPATextPage();
 
-    virtual int pageNumber(PageSelection select = CurrentPage, int adjustment = 0) const;
+    virtual int pageNumber() const;
+    virtual int visiblePageNumber(PageSelection select = CurrentPage, int adjustment = 0) const;
 
     KoPAPageBase *page() const;
+
+    virtual QRectF rect() const;
 
 private:
     int m_pageNumber;

@@ -2,6 +2,7 @@
  * imagesplit.cc -- Part of Krita
  *
  * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ * Copyright (c) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,14 +56,12 @@ Imagesplit::Imagesplit(QObject *parent, const QVariantList &)
 {
     if (parent->inherits("KisView2")) {
         setComponentData(ImagesplitFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/imagesplit.rc"), true);
-
         KAction *action  = new KAction(i18n("Image Split "), this);
         actionCollection()->addAction("imagesplit", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotImagesplit()));
-
         m_view = (KisView2*) parent;
+
     }
 }
 
@@ -94,8 +93,20 @@ void Imagesplit::saveAsImage(QRect imgSize,QString mimeType,KUrl url)
 
 void Imagesplit::slotImagesplit()
 {
+    // Taking the title - url from caption function and removing file extension
+    QStringList strList = ((m_view->document())->caption()).split(".");
+    QString suffix = strList.at(0);
 
-    DlgImagesplit * dlgImagesplit = new DlgImagesplit(m_view);
+    // Getting all mime types and converting them into names which are displayed at combo box
+    QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
+    QStringList listFileType;
+    foreach(const QString tempStr, listMimeFilter) {
+        KMimeType::Ptr type = KMimeType::mimeType( tempStr );
+        listFileType.append(type->comment());
+    }
+
+
+    DlgImagesplit * dlgImagesplit = new DlgImagesplit(m_view,suffix,listFileType);
     dlgImagesplit->setObjectName("Imagesplit");
     Q_CHECK_PTR(dlgImagesplit);
 
@@ -109,18 +120,17 @@ void Imagesplit::slotImagesplit()
         int img_width = image->width()/(numVerticalLines+1);
         int img_height = image->height()/(numHorizontalLines+1);
 
-        QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
-
 
         if (dlgImagesplit->autoSave()) {
             for(int i=0,k=1;i<(numVerticalLines+1);i++) {
                 for(int j=0;j<(numHorizontalLines+1);j++,k++)
                 {
+                    KMimeType::Ptr mimeTypeSelected = KMimeType::mimeType( listMimeFilter.at(dlgImagesplit->cmbIndex));
                     KUrl url( QDir::homePath());
-                    QString fileName = dlgImagesplit->suffix()+"_"+ QString::number(k)+".kra";
+                    QString fileName = dlgImagesplit->suffix()+"_"+ QString::number(k)+mimeTypeSelected->mainExtension();
                     url.addPath( fileName );
                     KUrl kurl=url.url();
-                    saveAsImage(QRect((i*img_width),(j*img_height),img_width,img_height),listMimeFilter.at(0),kurl);
+                    saveAsImage(QRect((i*img_width),(j*img_height),img_width,img_height),listMimeFilter.at(dlgImagesplit->cmbIndex),kurl);
                 }
             }
         }
@@ -150,10 +160,7 @@ void Imagesplit::slotImagesplit()
 
         }
 
-
-
     }
-
     delete dlgImagesplit;
 }
 

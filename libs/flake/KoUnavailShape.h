@@ -23,7 +23,7 @@
 #define KOUNAVAILSHAPE_H
 
 
-// KOffice
+// Calligra
 #include <KoShape.h>
 #include <KoFrameShape.h>
 
@@ -55,8 +55,6 @@ public:
 
     /// reimplemented
     void paint(QPainter &painter, const KoViewConverter &converter);
-    /// reimplemented
-    void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
     /// reimplemented
     virtual void saveOdf(KoShapeSavingContext & context) const;
     /// reimplemented

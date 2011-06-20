@@ -32,8 +32,8 @@
 #include <QtCore/QRectF>
 #include <QtCore/QVarLengthArray>
 
-// #define KOFFICE_RTREE_DEBUG
-#ifdef KOFFICE_RTREE_DEBUG
+// #define CALLIGRA_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
 #include <QtGui/QPainter>
 #endif
 
@@ -126,7 +126,7 @@ public:
         m_leafMap.clear();
     }
 
-#ifdef KOFFICE_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
     /**
      * @brief Paint the tree
      *
@@ -147,7 +147,7 @@ protected:
     class Node
     {
     public:
-#ifdef KOFFICE_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
         static int nodeIdCnt;
 #endif
         Node(int capacity, int level, Node * parent);
@@ -211,7 +211,7 @@ protected:
             m_level = level;
         }
 
-#ifdef KOFFICE_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
         virtual int nodeId() const {
             return m_nodeId;
         }
@@ -231,7 +231,7 @@ protected:
         int m_counter;
         // the position in the parent
         int m_place;
-#ifdef KOFFICE_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
         int m_nodeId;
 #endif
         int m_level;
@@ -258,7 +258,7 @@ class NonLeafNode : virtual public Node
 
         virtual Node * getNode(int index) const;
 
-#ifdef KOFFICE_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
         virtual void paint(QPainter & p, int level) const;
         virtual void debug(QString line) const;
 #endif
@@ -297,7 +297,7 @@ class LeafNode : virtual public Node
             return true;
         }
 
-#ifdef KOFFICE_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
         virtual void debug(QString line) const;
         virtual void paint(QPainter & p, int level) const;
 #endif
@@ -486,7 +486,7 @@ QList<T> KoRTree<T>::values() const
     return found.values();
 }
 
-#ifdef KOFFICE_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
 template <typename T>
 void KoRTree<T>::paint(QPainter & p) const
 {
@@ -713,7 +713,7 @@ void KoRTree<T>::condenseTree(Node *node, QVector<Node*> & reinsert)
     //qDebug() << "KoRTree::condenseTree end reinsert.size()" << reinsert.size();
 }
 
-#ifdef KOFFICE_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
 template <typename T>
 QColor KoRTree<T>::Node::levelColor[] = {
     QColor(Qt::green),
@@ -732,7 +732,7 @@ KoRTree<T>::Node::Node(int capacity, int level, Node * parent)
         : m_parent(parent)
         , m_childBoundingBox(capacity)
         , m_counter(0)
-#ifdef KOFFICE_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
         , m_nodeId(nodeIdCnt++)
 #endif
         , m_level(level)
@@ -752,7 +752,6 @@ void KoRTree<T>::Node::remove(int index)
 template <typename T>
 void KoRTree<T>::Node::updateBoundingBox()
 {
-    QRectF oldBB = m_boundingBox;
     m_boundingBox = QRectF();
     for (int i = 0; i < m_counter; ++i) {
         m_boundingBox = m_boundingBox.unite(m_childBoundingBox[i]);
@@ -766,7 +765,7 @@ void KoRTree<T>::Node::clear()
     m_boundingBox = QRectF();
 }
 
-#ifdef KOFFICE_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
 template <typename T>
 void KoRTree<T>::Node::paintRect(QPainter & p, int level) const
 {
@@ -918,7 +917,7 @@ typename KoRTree<T>::Node * KoRTree<T>::NonLeafNode::getLeastEnlargement(const Q
     return m_childs[minIndex];
 }
 
-#ifdef KOFFICE_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
 template <typename T>
 void KoRTree<T>::NonLeafNode::debug(QString line) const
 {
@@ -1069,7 +1068,7 @@ int KoRTree<T>::LeafNode::getDataId(int index) const
     return m_dataIds[ index ];
 }
 
-#ifdef KOFFICE_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
 template <typename T>
 void KoRTree<T>::LeafNode::debug(QString line) const
 {

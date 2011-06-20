@@ -24,7 +24,11 @@
 #include "../KoDocument.h"
 #include "KoSopranoTableModelDelegate.h"
 #include "KoSopranoTableModel.h"
+#include "KoRdfSemanticTreeWidgetItem.h"
 #include "../KoGlobal.h"
+#include "KoRdfFoaF.h"
+#include "KoRdfCalendarEvent.h"
+#include "KoRdfLocation.h"
 
 #include <kdebug.h>
 #include <QComboBox>
@@ -344,9 +348,9 @@ void KoDocumentRdfEditWidget::addTriple()
     // is set to a bnode value. Because the user most likely doesn't
     // want to create a bnode, we change it to a URI first.
     //
-    Soprano::Node obj(QUrl(m_rdf->model()->createBlankNode().toString()));
-    Soprano::Statement st(Soprano::Node(QUrl("http://koffice.org/new-node")),
-                          Soprano::Node(QUrl("http://koffice.org/new-node")),
+    Soprano::Node obj(QUrl(const_cast<Soprano::Model*>(m_rdf->model())->createBlankNode().toString()));
+    Soprano::Statement st(Soprano::Node(QUrl("http://calligra-suite.org/new-node")),
+                          Soprano::Node(QUrl("http://calligra-suite.org/new-node")),
                           obj,
                           m_rdf->manifestRdfNode());
     int newRowNumber = d->m_tripleModel->insertStatement(st);
@@ -409,7 +413,7 @@ void KoDocumentRdfEditWidget::sparqlExecute()
 {
     d->m_ui->m_sparqlResultView->selectionModel()->clear();
     QString sparql = d->m_ui->m_sparqlQuery->toPlainText();
-    Soprano::Model *m = d->m_rdf->model();
+    const Soprano::Model *m = d->m_rdf->model();
     kDebug(30015) << "running SPARQL query:" << sparql;
     Soprano::QueryResultIterator qrIter =
         m->executeQuery(sparql, Soprano::Query::QueryLanguageSparql);

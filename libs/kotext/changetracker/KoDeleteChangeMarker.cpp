@@ -19,7 +19,7 @@
 
 #include "KoDeleteChangeMarker.h"
 
-//KOffice includes
+//Calligra includes
 #include <KoTextDocument.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -39,12 +39,12 @@
 #include <QPainter>
 
 /*********************************** ODF Bug Work-around code **********************************************/
-const QString KoDeleteChangeMarker::RDFListName("http://www.koffice.org/list#");
-const QString KoDeleteChangeMarker::RDFListItemName("http://www.koffice.org/list-item#");
+const QString KoDeleteChangeMarker::RDFListName("http://www.calligra-suite.org/list#");
+const QString KoDeleteChangeMarker::RDFListItemName("http://www.calligra-suite.org/list-item#");
 const QString KoDeleteChangeMarker::RDFListValidity("http://www.kofficde.org/list-status#valid");
-const QString KoDeleteChangeMarker::RDFListItemValidity("http://www.koffice.org/list-item-status#valid");
-const QString KoDeleteChangeMarker::RDFListLevel("http://www.koffice.org/list-status#level");
-const QString KoDeleteChangeMarker::RDFDeleteChangeContext("http://www.koffice.org/deleteChangeMetadata");
+const QString KoDeleteChangeMarker::RDFListItemValidity("http://www.calligra-suite.org/list-item-status#valid");
+const QString KoDeleteChangeMarker::RDFListLevel("http://www.calligra-suite.org/list-status#level");
+const QString KoDeleteChangeMarker::RDFDeleteChangeContext("http://www.calligra-suite.org/deleteChangeMetadata");
 /***********************************************************************************************************/
 
 class KoDeleteChangeMarker::Private
@@ -98,11 +98,6 @@ int KoDeleteChangeMarker::position() const
     return d->position;
 }
 
-void KoDeleteChangeMarker::setDeleteChangeXml(QString &deleteChangeXml)
-{
-    d->deleteChangeXml = deleteChangeXml;
-}
-
 bool KoDeleteChangeMarker::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_UNUSED(element)
@@ -151,6 +146,12 @@ QTextDocument* KoDeleteChangeMarker::document() const
 void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext &context)
 {
     KoGenChange change;
+    if (d->changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
+        change.setChangeFormat(KoGenChange::ODF_1_2);
+    } else {
+        change.setChangeFormat(KoGenChange::DELTAXML);
+    }
+    
     QString changeName;
     KoTextSharedSavingData *sharedData = 0;
     if (context.sharedData(KOTEXT_SHARED_SAVING_ID)) {
@@ -158,8 +159,8 @@ void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext &context)
         if (!sharedData) {
             kWarning(32500) << "There is no KoTextSharedSavingData in the context. This should not be the case";
             return;
-        }
-    }
+        }   
+    }   
     d->changeTracker->saveInlineChange(d->id, change);
     change.addChildElement("deleteChangeXml", d->deleteChangeXml);
     changeName = sharedData->genChanges().insert(change);
@@ -167,6 +168,11 @@ void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext &context)
     context.xmlWriter().startElement("text:change", false);
     context.xmlWriter().addAttribute("text:change-id", changeName);
     context.xmlWriter().endElement();
+}
+
+void KoDeleteChangeMarker::setDeleteChangeXml(QString &deleteChangeXml)
+{
+    d->deleteChangeXml = deleteChangeXml;
 }
 
 void KoDeleteChangeMarker::setDeletedListStyle(KoListStyle::ListIdType id, KoListStyle *style)

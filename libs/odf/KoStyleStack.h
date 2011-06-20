@@ -24,6 +24,7 @@
 
 #include <QtCore/QList>
 #include <QtCore/QStack>
+#include <QtCore/QPair>
 
 #include <kdemacros.h>
 
@@ -134,8 +135,9 @@ public:
 
     /**
      * Special case for the current font size, due to special handling of fo:font-size="115%".
+     * First item in the returned value contains the font point size and the second the got percent.
      */
-    qreal fontSize(const qreal defaultFontPointSize = 12.0) const;
+    QPair<qreal,qreal> fontSize(const qreal defaultFontPointSize = 12.0) const;
 
     /**
      * Return the name of the style specified by the user,

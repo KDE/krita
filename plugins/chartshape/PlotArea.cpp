@@ -30,7 +30,7 @@
 #include <QPainter>
 #include <kdebug.h>
 
-// KOffice
+// Calligra
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoShapeLoadingContext.h>
@@ -603,6 +603,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
          plotAreaElement.hasAttributeNS( KoXmlNS::svg, "height" ) )
         parent()->layout()->setPosition( this, FloatingPosition );
 
+    context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
 
     // First step is to load the axis. Datasets are attached to an
@@ -655,7 +656,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     // chart types like line charts, stock charts, etc.
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         styleStack.clear();
-        context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
+        //context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
 
         styleStack.setTypeProperties( "graphic" );
         styleStack.setTypeProperties( "chart" );
@@ -702,7 +703,8 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     // actual data is not stored here.
     //
     // FIXME: Isn't the proxy model a strange place to store this data?
-    proxyModel()->loadOdf( plotAreaElement, context );
+    qDebug() << d->chartType;
+    proxyModel()->loadOdf( plotAreaElement, context, d->chartType == StockChartType ? 3 : 1, d->chartType );
 
     // Now load the surfaces (wall and possibly floor)
     // FIXME: Use named tags instead of looping?
@@ -1053,8 +1055,7 @@ void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
 
     // Calculate the clipping rect
     QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
-    //clipRect.intersect( paintRect );
-    painter.setClipRect( paintRect );
+    painter.setClipRect( paintRect, Qt::IntersectClip );
 
     // Paint the background
     if ( background() ) {
@@ -1092,7 +1093,7 @@ void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
     }*/
     painter.setRenderHint( QPainter::Antialiasing, false );
 
-    // KDChart thinks in pixels, KOffice in pt
+    // KDChart thinks in pixels, Calligra in pt
     ScreenConversions::scaleFromPtToPx( painter );
 
     // Only paint the actual chart if there is a certain minimal size,

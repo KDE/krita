@@ -25,7 +25,7 @@
 
 #include "kis_brush_based_paintop.h"
 #include <kis_pressure_darken_option.h>
-#include <kis_pressure_opacity_option.h>
+#include <kis_pressure_flow_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_mix_option.h>
@@ -61,7 +61,7 @@ private:
     KisPressureSizeOption m_sizeOption;
     KisPressureSpacingOption m_spacingOption;
     KisPressureMirrorOption m_mirrorOption;
-    KisPressureOpacityOption m_opacityOption;
+    KisFlowOpacityOption m_opacityOption;
     KisPressureSoftnessOption m_softnessOption;
     KisPressureSharpnessOption m_sharpnessOption;
     KisPressureDarkenOption m_darkenOption;

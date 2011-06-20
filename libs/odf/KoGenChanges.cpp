@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
+  Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
    Copyright (C) 2010 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -128,10 +128,15 @@ const KoGenChange* KoGenChanges::change(const QString& name) const
 
 void KoGenChanges::saveOdfChanges(KoXmlWriter* xmlWriter) const
 {
-    xmlWriter->startElement("text:tracked-changes");
-
     QMap<KoGenChange, QString> changesList = changes();
     QMap<KoGenChange, QString>::const_iterator it = changesList.constBegin();
+
+    if ((it != changesList.constEnd()) && (it.key().changeFormat() == KoGenChange::DELTAXML)) {
+        xmlWriter->startElement("delta:tracked-changes");
+    } else {
+        xmlWriter->startElement("text:tracked-changes");
+    }
+
     for (; it != changesList.constEnd() ; ++it) {
         it.key().writeChange(xmlWriter, it.value());
     }

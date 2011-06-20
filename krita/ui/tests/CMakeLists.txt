@@ -101,3 +101,9 @@ target_link_libraries(KisDoc2Test  ${KDE4_KDEUI_LIBS}  komain kritaui kritaimage
 set(kis_coordinates_converter_test_SRCS kis_coordinates_converter_test.cpp )
 kde4_add_unit_test(KisCoordinatesConverterTest TESTNAME krita-ui-KisCoordinatesConverterTest  ${kis_coordinates_converter_test_SRCS})
 target_link_libraries(KisCoordinatesConverterTest  ${KDE4_KDEUI_LIBS}  komain kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_clipboard_test_SRCS kis_clipboard_test.cpp )
+kde4_add_unit_test(KisClipboardTest TESTNAME krita-ui-KisClipboardTest  ${kis_clipboard_test_SRCS})
+target_link_libraries(KisClipboardTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})

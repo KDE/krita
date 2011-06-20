@@ -29,6 +29,14 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
+#include <KoTextLayoutRootArea.h>
+#include <KoTextDocumentLayout.h>
+
+#include <QFontMetricsF>
+#include <QTextDocument>
+#include <QAbstractTextDocumentLayout>
+#include <QTextInlineObject>
+#include <QDebug>
 
 PageVariable::PageVariable()
         : KoVariable(true),
@@ -72,36 +80,54 @@ void PageVariable::propertyChanged(Property property, const QVariant &value)
     }
 }
 
-void PageVariable::variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument)
+void PageVariable::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
-    Q_UNUSED(document);
-    Q_UNUSED(posInDocument);
+    KoTextPage *page = 0;
+    if (m_type != PageCount) {
+#if 0 // the code is left here to do some testing
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+        KoTextLayoutRootArea *rootArea = 0;
+        KoTextPage *page2 = 0;
+        if (lay) {
+            rootArea = lay->rootAreaForPosition(posInDocument);
+            if (rootArea) {
+                page2 = rootArea->page();
+            }
+        }
+#endif
+        page = document->resource(KoTextDocument::LayoutTextPage, KoTextDocument::LayoutTextPageUrl).value<KoTextPage*>();
+        //qDebug() << __PRETTY_FUNCTION__ << lay << rootArea << page << page2;
+    }
+    int pagenumber = 0;
+
     switch (m_type) {
     case PageCount:
         break;
     case PageNumber:
-        if (value().isEmpty() || ! m_fixed) {
-            if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
-                KoTextPage* page = shapeData->page();
-                int pagenumber = 0;
-                if (page) {
-                    pagenumber = page->pageNumber(m_pageselect, m_pageadjust);
+        if (page) {
+            // the text is not yet layouted therefore we don't get the rootArea
+            // if we don't do that we get an endless change of the variable.
+            QString currentValue = value();
+            if (currentValue.isEmpty() || ! m_fixed) {
+                pagenumber = page->visiblePageNumber(m_pageselect, m_pageadjust);
+                QString newValue = pagenumber >= 0 ? QString::number(pagenumber) : QString();
+                // only update value when changed
+                if (currentValue != newValue) {
+                     setValue(newValue);
                 }
-                setValue(pagenumber >= 0 ? QString::number(pagenumber) : QString());
             }
         }
         break;
     case PageContinuation:
-        if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
-            KoTextPage* page = shapeData->page();
-            int pagenumber = 0;
-            if (page) {
-                pagenumber = page->pageNumber(m_pageselect);
-            }
+        if (page) {
+            // the text is not yet layouted therefore we don't get the rootArea
+            // if we don't do that we get an endless change of the variable.
+            pagenumber = page->visiblePageNumber(m_pageselect);
             setValue(pagenumber >= 0 ? m_continuation : QString());
         }
         break;
     }
+    KoVariable::resize(document, object, posInDocument, format, pd);
 }
 
 void PageVariable::saveOdf(KoShapeSavingContext & context)

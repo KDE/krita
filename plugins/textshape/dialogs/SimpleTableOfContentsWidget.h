@@ -25,14 +25,14 @@
 #include <QWidget>
 #include <QTextBlock>
 
-class TextTool;
+class ReferencesTool;
 class KoStyleManager;
 
 class SimpleTableOfContentsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleTableOfContentsWidget(QWidget *parent = 0);
+    explicit SimpleTableOfContentsWidget(ReferencesTool *tool, QWidget *parent = 0);
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
@@ -44,9 +44,7 @@ private:
     Ui::SimpleTableOfContentsWidget widget;
     KoStyleManager *m_styleManager;
     bool m_blockSignals;
-    bool m_comboboxHasBidiItems;
     QTextBlock m_currentBlock;
-    TextTool *m_tool;
 };
 
 #endif

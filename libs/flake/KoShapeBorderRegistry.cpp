@@ -31,7 +31,7 @@ void KoShapeBorderRegistry::init()
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "FlakeBorderPlugins";
     config.blacklist = "FlakeBorderPluginsDisabled";
-    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Border"),
+    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Border"),
                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
                                      config);
 

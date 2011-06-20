@@ -32,15 +32,11 @@ class PAINTOP_EXPORT KisPressureSharpnessOptionWidget : public KisCurveOptionWid
     
 public:
     KisPressureSharpnessOptionWidget();
-
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
     
 private slots:
-    void setSharpnessFactor(qreal sharpness);
     void setThreshold(int threshold);
     
 private:
-    KisDoubleSliderSpinBox* m_sharpnessFactor; 
     KisSliderSpinBox* m_threshold;
 };
 

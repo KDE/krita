@@ -13,7 +13,9 @@ install( FILES
     dynabrush.kpp  
     experimentbrush.kpp  
     gridbrush.kpp  
-    paintbrush.kpp  
+    paintbrush.kpp
+    colorsmudge.kpp
+    sketchbrush.kpp
     DESTINATION  ${DATA_INSTALL_DIR}/krita/defaultpresets)
 
 

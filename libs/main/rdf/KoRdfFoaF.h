@@ -22,7 +22,16 @@
 
 #include "KoRdfSemanticItem.h"
 
-class KoRdfFoaFPrivate;
+// contacts
+#ifdef KDEPIMLIBS_FOUND
+#include <kabc/addressee.h>
+#include <kabc/stdaddressbook.h>
+#include <kabc/addressbook.h>
+#include <kabc/phonenumber.h>
+#include <kabc/vcardconverter.h>
+#endif
+
+#include "ui_KoRdfFoaFEditWidget.h"
 
 /**
  * @short Contact information from the FOAF vocabulary.
@@ -33,8 +42,8 @@ class KoRdfFoaF : public KoRdfSemanticItem
     Q_OBJECT
 public:
 
-    KoRdfFoaF(QObject *parent, KoDocumentRdf *m_rdf = 0);
-    KoRdfFoaF(QObject *parent, KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it);
+    KoRdfFoaF(QObject *parent, const KoDocumentRdf *m_rdf = 0);
+    KoRdfFoaF(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it);
     virtual ~KoRdfFoaF();
 
     // inherited and reimplemented...
@@ -67,6 +76,22 @@ public:
     virtual QString name() const;
 
 private:
-    Q_DECLARE_PRIVATE(KoRdfFoaF);
+    // foaf Rdf template,
+    // s == m_uri
+    // s -> <uri:gollum>; p -> <http://xmlns.com/foaf/0.1/name>; o -> "Gollum"
+    // s-> <uri:gollum>; p -> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>; o -> <http://xmlns.com/foaf/0.1/Person>
+    QString m_uri;   // This is the subject in Rdf
+    QString m_name;
+    QString m_nick;
+    QString m_homePage;
+    QString m_imageUrl;
+    QString m_phone;
+    Ui::KoRdfFoaFEditWidget editWidget;
+
+#ifdef KDEPIMLIBS_FOUND
+    KABC::Addressee toKABC() const;
+    void fromKABC(KABC::Addressee addr);
+#endif
+
 };
 #endif

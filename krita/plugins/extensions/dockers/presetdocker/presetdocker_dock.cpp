@@ -42,11 +42,16 @@ PresetDockerDock::PresetDockerDock( ) : QDockWidget(i18n("Preset docker")), m_ca
 
 void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
 {
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this);
+        m_presetChooser->disconnect(m_canvas->view()->paintOpBox());
+    }
+    
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(m_canvas);
-    if(!m_canvas) return;
+    if (!m_canvas) return;
 
-   connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
+    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
            this, SLOT(resourceChanged(int, const QVariant&)));
 
     connect(m_presetChooser, SIGNAL(resourceSelected(KoResource*)),

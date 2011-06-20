@@ -19,10 +19,10 @@
  */
 #include "SimpleCharacterWidget.h"
 #include "TextTool.h"
-#include "../ListItemsHelper.h"
 #include "../commands/ChangeListCommand.h"
 
 #include <KAction>
+#include <KSelectAction>
 #include <KoTextBlockData.h>
 #include <KoParagraphStyle.h>
 #include <KoInlineTextObjectManager.h>
@@ -63,11 +63,13 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     if (family) { // kdelibs 4.1 didn't return anything here.
         widget.fontsFrame->addWidget(family,0,0);
         connect(family, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
+        connect(family, SIGNAL(activated(int)), this, SLOT(fontFamilyActivated(int)));
     }
     QComboBox *size = qobject_cast<QComboBox*> (tool->action("format_fontsize")->requestWidget(this));
     if (size) { // kdelibs 4.1 didn't return anything here.
         widget.fontsFrame->addWidget(size,0,1);
         connect(size, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
+        connect(size, SIGNAL(activated(int)), this, SLOT(fontSizeActivated(int)));
     }
 
     widget.fontsFrame->setColumnStretch(0,1);
@@ -81,6 +83,36 @@ void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
 void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
 {
     Q_UNUSED(format);
+}
+
+void SimpleCharacterWidget::fontFamilyActivated(int index) {
+    /**
+     * Hack:
+     *
+     * Selecting a font that is already selected in the combobox
+     * will not trigger the action, so we help it on the way by
+     * manually triggering it here if that happens.
+     */
+    if (index == m_lastFontFamilyIndex) {
+        KSelectAction *action = qobject_cast<KSelectAction*>(m_tool->action("format_fontfamily"));
+        action->currentAction()->trigger();
+    }
+    m_lastFontFamilyIndex = index;
+}
+
+void SimpleCharacterWidget::fontSizeActivated(int index) {
+    /**
+     * Hack:
+     *
+     * Selecting a font size that is already selected in the
+     * combobox will not trigger the action, so we help it on
+     * the way by manually triggering it here if that happens.
+     */
+    if (index == m_lastFontSizeIndex) {
+        KSelectAction *action = qobject_cast<KSelectAction*>(m_tool->action("format_fontsize"));
+        action->currentAction()->trigger();
+    }
+    m_lastFontSizeIndex = index;
 }
 
 #include <SimpleCharacterWidget.moc>

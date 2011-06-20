@@ -97,6 +97,22 @@ public:
     QRect exactBounds() const;
 
     bool accept(KisNodeVisitor &v);
+    
+    /**
+     * set the channelflags for locking certain channels (used by painting tools)
+     * for this layer to the specified bit array.
+     * The bit array must have exactly the same number of channels as
+     * the colorspace this layer is in, or be empty, in which case all
+     * channels are active.
+     */
+    void setChannelLockFlags(const QBitArray& channelFlags);
+    
+    /**
+     * Return a bit array where each bit indicates whether a
+     * particular channel is locked or not (used by painting tools).
+     * If the channelflags bit array is empty, all channels are active.
+     */
+    const QBitArray& channelLockFlags() const;
 
     /**
      * Returns the paintDevice that accompanies this layer
@@ -117,7 +133,7 @@ public:
     /**
      * @param l if true, the alpha channel will be protected from modification
      */
-    void setAlphaLocked(bool l);
+    void setAlphaLocked(bool lock);
 
 public slots:
 

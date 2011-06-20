@@ -57,11 +57,15 @@ public:
     static const QString smil;
     static const QString xhtml;
 
-    static const QString koffice;
+    static const QString calligra;
     static const QString officeooo;
     static const QString ooo;
 
     static const char* nsURI2NS(const QString nsURI);
+    
+    static const QString delta;
+    static const QString split;
+    static const QString ac;
 private:
     KoXmlNS(); // don't create an instance of me :)
 };

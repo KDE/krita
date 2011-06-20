@@ -44,10 +44,10 @@ set(flake_SRCS
     #KoUnavailCollection.cpp
     KoToolBase.cpp
     KoCanvasController.cpp
-    KoCanvasControllerGraphicsWidget.cpp
     KoCanvasControllerWidget.cpp
     KoCanvasControllerWidgetViewport_p.cpp
     KoShapeRegistry.cpp
+    KoDeferredShapeFactoryBase.cpp
     KoToolFactoryBase.cpp
     KoPathShapeFactory.cpp
     KoShapeFactoryBase.cpp
@@ -204,7 +204,7 @@ if(HAVE_OPENGL)
 endif(HAVE_OPENGL)
 
 set_target_properties(flake PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
 ########### install files ###############
@@ -235,6 +235,7 @@ install(
     KoDataCenterBase.h
     KoDockFactoryBase.h
     KoDockRegistry.h
+    KoDeferredShapeFactoryBase.h
     KoDrag.h
     KoDragOdfSaveHelper.h
     KoFlake.h
@@ -246,6 +247,7 @@ install(
     KoInsets.h
     KoPathSegment.h
     KoPointerEvent.h
+    KoRTree.h
     KoSelection.h
     KoShape.h
     KoShapeBorderModel.h

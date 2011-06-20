@@ -3,6 +3,7 @@
  * Copyright (C) 2000-2005 David Faure <faure@kde.org>
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2011 Inge Wallin <ingwa@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -223,8 +224,8 @@ public:
     KoViewWrapperWidget(QWidget *parent)
             : QWidget(parent) {
         KGlobal::locale()->insertCatalog("calligra");
-        // Tell the iconloader about share/apps/koffice/icons
-        KIconLoader::global()->addAppDir("koffice");
+        // Tell the iconloader about share/apps/calligra/icons
+        KIconLoader::global()->addAppDir("calligra");
         m_view = 0;
         // Avoid warning from KParts - we'll have the KoView as focus proxy anyway
         setFocusPolicy(Qt::ClickFocus);
@@ -273,7 +274,7 @@ void KoBrowserExtension::print()
         // TODO remove code duplication (KoMainWindow), by moving this to KoView
         QPrinter printer;
         QPrintDialog *printDialog = KdePrint::createPrintDialog(&printer, view->printDialogPages(), view);
-        // ### TODO: apply global koffice settings here
+        // ### TODO: apply global calligra settings here
         view->setupPrinter( printer, *printDialog );
         if ( printDialog->exec() )
             view->print( printer, *printDialog );
@@ -827,9 +828,9 @@ bool KoDocument::saveNativeFormat(const QString & file)
 
     KoStore::Backend backend = KoStore::Auto;
 #if 0
-    if (d->specialOutputFlag == SaveAsKOffice1dot1) {
-        kDebug(30003) << "Saving as KOffice-1.1 format, using a tar.gz";
-        backend = KoStore::Tar; // KOffice-1.0/1.1 used tar.gz for the native mimetype
+    if (d->specialOutputFlag == SaveAsCalligra1dot1) {
+        kDebug(30003) << "Saving as Calligra-1.1 format, using a tar.gz";
+        backend = KoStore::Tar; // Calligra-1.0/1.1 used tar.gz for the native mimetype
         //// TODO more backwards compat stuff (embedded docs etc.)
     } else
 #endif
@@ -875,7 +876,7 @@ bool KoDocument::saveNativeFormat(const QString & file)
     if (oasis) {
         return saveNativeFormatODF(store, mimeType);
     } else {
-        return saveNativeFormatKOffice(store);
+        return saveNativeFormatCalligra(store);
     }
 }
 
@@ -988,7 +989,7 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
     return true;
 }
 
-bool KoDocument::saveNativeFormatKOffice(KoStore *store)
+bool KoDocument::saveNativeFormatCalligra(KoStore *store)
 {
     kDebug(30003) << "Saving root";
     if (store->open("root")) {
@@ -1265,7 +1266,7 @@ bool KoDocument::openUrl(const KUrl & _url)
     if (autosaveOpened)
         resetURL(); // Force save to act like 'Save As'
     else {
-        // We have no koffice shell when we are being embedded as a readonly part.
+        // We have no calligra shell when we are being embedded as a readonly part.
         //if ( d->shells.isEmpty() )
         //    kWarning(30003) << "no shell yet !";
         // Add to recent actions list in our shells
@@ -1280,6 +1281,81 @@ bool KoDocument::openUrl(const KUrl & _url)
     }
     return ret;
 }
+
+// It seems that people have started to save .docx files as .doc and
+// similar for xls and ppt.  So let's make a small replacement table
+// here and see if we can open the files anyway.
+static struct MimetypeReplacement {
+    const char *typeFromName;         // If the mime type from the name is this...
+    const char *typeFromContents;     // ...and findByFileContents() reports this type...
+    const char *useThisType;          // ...then use this type for real.
+} replacementMimetypes[] = {
+    // doc / docx
+    {
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    },
+    {
+        "application/msword",
+        "application/zip",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    },
+    {
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/msword",
+        "application/msword"
+    },
+    {
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/x-ole-storage",
+        "application/msword"
+    },
+
+    // xls / xlsx
+    {
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    },
+    {
+        "application/vnd.ms-excel",
+        "application/zip",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    },
+    {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/vnd.ms-excel",
+        "application/vnd.ms-excel"
+    },
+    {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/x-ole-storage",
+        "application/vnd.ms-excel"
+    },
+
+    // ppt / pptx
+    {
+        "application/vnd.ms-powerpoint",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    },
+    {
+        "application/vnd.ms-powerpoint",
+        "application/zip",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    },
+    {
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "application/vnd.ms-powerpoint",
+        "application/vnd.ms-powerpoint"
+    },
+    {
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "application/x-ole-storage",
+        "application/vnd.ms-powerpoint"
+    }
+};
 
 bool KoDocument::openFile()
 {
@@ -1298,11 +1374,77 @@ bool KoDocument::openFile()
     d->specialOutputFlag = 0;
     QByteArray _native_format = nativeFormatMimeType();
 
-    KUrl u;
-    u.setPath(localFilePath());
+    KUrl u(localFilePath());
     QString typeName = arguments().mimeType();
-    if (typeName.isEmpty())
+    //kDebug(30003) << "mimetypes 1:" << typeName;
+
+    if (typeName.isEmpty()) {
         typeName = KMimeType::findByUrl(u, 0, true)->name();
+    }
+    //kDebug(30003) << "mimetypes 2:" << typeName;
+
+    // Sometimes it seems that arguments().mimeType() contains a much
+    // too generic mime type.  In that case, let's try some educated
+    // guesses based on what we know about file extension.
+    //
+    // FIXME: Should we just ignore this and always call
+    //        KMimeType::findByUrl()? David Faure says that it's
+    //        impossible for findByUrl() to fail ot initiate the
+    //        mimetype for "*.doc" to application/msword.  This hints
+    //        that we should do that.  But why does it happen like
+    //        this at all?
+    if (typeName == "application/zip") {
+        QString filename = u.fileName();
+
+        // None of doc, xls or ppt are really zip files.  But docx,
+        // xlsx and pptx are.  This miscategorization seems to only
+        // crop up when there is a, say, docx file saved as doc.  The
+        // conversion to the docx mimetype will happen below.
+        if (filename.endsWith(".doc"))
+            typeName = "application/msword";
+        else if (filename.endsWith(".xls"))
+            typeName = "application/vnd.ms-excel";
+        else if (filename.endsWith(".ppt"))
+            typeName = "application/vnd.ms-powerpoint";
+
+        // Potentially more guesses here...
+    } else if (typeName == "application/x-ole-storage") {
+        QString filename = u.fileName();
+
+        // None of docx, xlsx or pptx are really OLE files.  But doc,
+        // xls and ppt are.  This miscategorization seems to only crop
+        // up when there is a, say, doc file saved as docx.  The
+        // conversion to the doc mimetype will happen below.
+        if (filename.endsWith(".docx"))
+            typeName = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        else if (filename.endsWith(".xlsx"))
+            typeName = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        else if (filename.endsWith(".pptx"))
+            typeName = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+
+        // Potentially more guesses here...
+    }
+    //kDebug(30003) << "mimetypes 3:" << typeName;
+
+    // In some cases docx files are saved as doc and similar.  We have
+    // a small hardcoded table for those cases.  Check if this is
+    // applicable here.
+    for (uint i = 0; i < sizeof(replacementMimetypes) / sizeof(struct MimetypeReplacement); ++i) {
+        struct MimetypeReplacement *replacement = &replacementMimetypes[i];
+
+        if (typeName == replacement->typeFromName) {
+            //kDebug(30003) << "found potential replacement target:" << typeName;
+            int accuracy;
+            QString typeFromContents = KMimeType::findByFileContent(u.path(), &accuracy)->name();
+            //kDebug(30003) << "found potential replacement:" << typeFromContents;
+            if (typeFromContents == replacement->typeFromContents) {
+                typeName = replacement->useThisType;
+                //kDebug(30003) << "So really use this:" << typeName;
+                break;
+            }
+        }
+    }
+    //kDebug(30003) << "mimetypes 4:" << typeName;
 
     // Allow to open backup files, don't keep the mimetype application/x-trash.
     if (typeName == "application/x-trash") {
@@ -1354,11 +1496,13 @@ bool KoDocument::openFile()
     d->progressUpdater->setReferenceTime(d->profileReferenceTime);
     d->progressUpdater->start();
 
+    setupOpenFileSubProgress();
+
     if (!isNativeFormat(typeName.toLatin1(), ForImport)) {
         if (!d->filterManager)
             d->filterManager = new KoFilterManager(this, d->progressUpdater);
         KoFilter::ConversionStatus status;
-        importedFile = d->filterManager->importDocument(localFilePath(), status);
+        importedFile = d->filterManager->importDocument(localFilePath(), typeName, status);
         if (status != KoFilter::OK) {
             QApplication::restoreOverrideCursor();
 
@@ -1462,7 +1606,7 @@ bool KoDocument::openFile()
         // remove temp file - uncomment this to debug import filters
         if (!importedFile.isEmpty()) {
 #ifndef NDEBUG
-            if (!getenv("KOFFICE_DEBUG_FILTERS"))
+            if (!getenv("CALLIGRA_DEBUG_FILTERS"))
 #endif
             QFile::remove(importedFile);
         }
@@ -1503,16 +1647,18 @@ bool KoDocument::openFile()
         QTimer::singleShot(0, notify, SLOT(sendEvent()));
         deleteOpenPane();
     }
-    d->bLoading = false;
 
-    QPointer<KoUpdater> updater
-            = progressUpdater()->startSubtask(1, "clear undo stack");
-    updater->setProgress(0);
-    undoStack()->clear();
-    updater->setProgress(100);
-
+    if (progressUpdater()) {
+        QPointer<KoUpdater> updater
+                = progressUpdater()->startSubtask(1, "clear undo stack");
+        updater->setProgress(0);
+        undoStack()->clear();
+        updater->setProgress(100);
+    }
     delete d->progressUpdater;
     d->progressUpdater = 0;
+
+    d->bLoading = false;
 
     return ok;
 }
@@ -1644,7 +1790,7 @@ bool KoDocument::loadNativeFormat(const QString & file_)
         in.close();
         d->bEmpty = false;
         return res;
-    } else { // It's a koffice store (tar.gz, zip, directory, etc.)
+    } else { // It's a calligra store (tar.gz, zip, directory, etc.)
         in.close();
 
         return loadNativeFormatFromStore(file);
@@ -2053,12 +2199,12 @@ QDomDocument KoDocument::createDomDocument(const QString& tagName, const QString
 QDomDocument KoDocument::createDomDocument(const QString& appName, const QString& tagName, const QString& version)
 {
     QDomImplementation impl;
-    QString url = QString("http://www.koffice.org/DTD/%1-%2.dtd").arg(appName).arg(version);
+    QString url = QString("http://www.calligra-suite.org/DTD/%1-%2.dtd").arg(appName).arg(version);
     QDomDocumentType dtype = impl.createDocumentType(tagName,
                              QString("-//KDE//DTD %1 %2//EN").arg(appName).arg(version),
                              url);
     // The namespace URN doesn't need to include the version number.
-    QString namespaceURN = QString("http://www.koffice.org/DTD/%1").arg(appName);
+    QString namespaceURN = QString("http://www.calligra-suite.org/DTD/%1").arg(appName);
     QDomDocument doc = impl.createDocument(namespaceURN, tagName, dtype);
     doc.insertBefore(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""), doc.documentElement());
     return doc;
@@ -2090,10 +2236,10 @@ QByteArray KoDocument::nativeFormatMimeType() const
 #ifndef NDEBUG
     if (nativeMimeType.isEmpty()) {
         // shouldn't happen, let's find out why it happened
-        if (!service->serviceTypes().contains("KOfficePart"))
-            kWarning(30003) << "Wrong desktop file, KOfficePart isn't mentioned";
-        else if (!KServiceType::serviceType("KOfficePart"))
-            kWarning(30003) << "The KOfficePart service type isn't installed!";
+        if (!service->serviceTypes().contains("CalligraPart"))
+            kWarning(30003) << "Wrong desktop file, CalligraPart isn't mentioned";
+        else if (!KServiceType::serviceType("CalligraPart"))
+            kWarning(30003) << "The CalligraPart service type isn't installed!";
         else
             kWarning(30003) << "Failed to read NativeMimeType from desktop file!";
     }
@@ -2125,7 +2271,7 @@ KService::Ptr KoDocument::readNativeService(const KComponentData &componentData)
         // The old way is kept as fallback for compatibility, but in theory this is really never used anymore.
 
         // Try by path first, so that we find the global one (which has the native mimetype)
-        // even if the user created a kword.desktop in ~/.kde/share/applnk or any subdir of it.
+        // even if the user created a words.desktop in ~/.kde/share/applnk or any subdir of it.
         // If he created it under ~/.kde/share/applnk/Office/ then no problem anyway.
         service = KService::serviceByDesktopPath(QString::fromLatin1("Office/%1.desktop").arg(instname));
     }
@@ -2142,10 +2288,10 @@ QByteArray KoDocument::readNativeFormatMimeType(const KComponentData &componentD
         return QByteArray();
 
     if (service->property("X-KDE-NativeMimeType").toString().isEmpty()) {
-        // It may be that the servicetype "KOfficePart" is missing, which leads to this property not being known
-        KServiceType::Ptr ptr = KServiceType::serviceType("KOfficePart");
+        // It may be that the servicetype "CalligraPart" is missing, which leads to this property not being known
+        KServiceType::Ptr ptr = KServiceType::serviceType("CalligraPart");
         if (!ptr)
-            kError(30003) << "The serviceType KOfficePart is missing. Check that you have a kofficepart.desktop file in the share/servicetypes directory." << endl;
+            kError(30003) << "The serviceType CalligraPart is missing. Check that you have a calligrapart.desktop file in the share/servicetypes directory." << endl;
         else {
             kWarning(30003) << service->entryPath() << ": no X-KDE-NativeMimeType entry!";
         }
@@ -2173,7 +2319,7 @@ QStringList KoDocument::extraNativeMimeTypes(KoDocument::ImportExportType import
 {
     Q_UNUSED(importExportType);
     QStringList lst;
-    // This implementation is temporary while we treat both koffice-1.3 and OASIS formats as native.
+    // This implementation is temporary while we treat both calligra-1.3 and OASIS formats as native.
     // But it's good to have this virtual method, in case some app want to
     // support more than one native format.
     KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
@@ -2207,7 +2353,10 @@ void KoDocument::addShell(KoMainWindow *shell)
 void KoDocument::removeShell(KoMainWindow *shell)
 {
     //kDebug(30003) <<"shell" << (void*)shell <<"removed from doc" << this;
-    d->shells.removeAll(shell);
+    if (shell) {
+        disconnect(shell, SIGNAL(documentSaved()), d->undoStack, SLOT(setClean()));
+        d->shells.removeAll(shell);
+    }
 }
 
 const QList<KoMainWindow*>& KoDocument::shells() const

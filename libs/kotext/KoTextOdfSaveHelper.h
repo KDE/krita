@@ -24,7 +24,7 @@
 
 #include "kotext_export.h"
 
-class KoTextShapeData;
+class KoTextShapeDataBase;
 class KoXmlWriter;
 namespace Soprano
 {
@@ -34,7 +34,7 @@ namespace Soprano
 class KOTEXT_EXPORT KoTextOdfSaveHelper : public KoDragOdfSaveHelper
 {
 public:
-    KoTextOdfSaveHelper(KoTextShapeData * shapeData, int from, int to);
+    KoTextOdfSaveHelper(KoTextShapeDataBase *shapeData, int from, int to);
     virtual ~KoTextOdfSaveHelper();
 
     /// reimplemented
@@ -47,8 +47,8 @@ public:
      * and you need to ensure that it lives longer than this object
      * unless you reset the model to 0.
      */
-    void setRdfModel(Soprano::Model *m);
-    Soprano::Model *rdfModel() const;
+    void setRdfModel(const Soprano::Model *m);
+    const Soprano::Model *rdfModel() const;
 
 private:
     struct Private;

@@ -32,7 +32,7 @@ KoSopranoTableModel::KoSopranoTableModel(KoDocumentRdf *rdf)
     }
 }
 
-Soprano::Model *KoSopranoTableModel::model() const
+const Soprano::Model *KoSopranoTableModel::model() const
 {
     return m_rdf->model();
 }
@@ -176,8 +176,8 @@ Qt::ItemFlags KoSopranoTableModel::flags(const QModelIndex &index) const
  */
 bool KoSopranoTableModel::setDataUpdateTriple(const QModelIndex &index, Soprano::Statement &old, Soprano::Statement &n)
 {
-    model()->addStatement(n);
-    model()->removeStatement(old);
+    const_cast<Soprano::Model*>(model())->addStatement(n);
+    const_cast<Soprano::Model*>(model())->removeStatement(old);
     m_statementIndex[ index.row()] = n;
     emit dataChanged(index, index);
     return true;
@@ -248,7 +248,7 @@ int KoSopranoTableModel::insertStatement(Soprano::Statement st)
     int newRowNumber = rowCount();
     kDebug(30015) << "insert, newrow:" << newRowNumber << endl;
     beginInsertRows(parent, newRowNumber, newRowNumber);
-    model()->addStatement(st);
+    const_cast<Soprano::Model*>(model())->addStatement(st);
     m_statementIndex << st;
     endInsertRows();
     return newRowNumber;
@@ -280,10 +280,10 @@ QModelIndexList KoSopranoTableModel::copyTriples(const QModelIndexList &srclist)
         // is unique relative to the original.
         //
         Soprano::Node obj(QUrl(st.object().toString() + '-'
-                               + model()->createBlankNode().toString()));
+                               + const_cast<Soprano::Model*>(model())->createBlankNode().toString()));
         Soprano::Statement n(st.subject(), st.predicate(),
                              obj, st.context());
-        model()->addStatement(n);
+        const_cast<Soprano::Model*>(model())->addStatement(n);
         m_statementIndex << n;
         QModelIndex newIdx = index(currentNewRowNum, ColSubj);
         ret << newIdx;
@@ -316,7 +316,7 @@ void KoSopranoTableModel::deleteTriples(const QModelIndexList &srclist)
         int firstRow =  r;
         int lastRow = r;
         beginRemoveRows(QModelIndex(), firstRow, lastRow);
-        model()->removeStatement(st);
+        const_cast<Soprano::Model*>(model())->removeStatement(st);
         // m_statementIndex[ r ] = Soprano::Statement();
         for (int i = r; i < m_statementIndex.size() - 1; ++i) {
             m_statementIndex[ i ] = m_statementIndex[ i + 1 ];

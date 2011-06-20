@@ -59,7 +59,7 @@ public:
      * Get the Soprano::Model that contains all the Rdf
      * You do not own the model, do not delete it.
      */
-    virtual Soprano::Model *model() const;
+    virtual const Soprano::Model *model() const;
 
     /**
      * Convenience method to get the KoDocumentRdf given a CanvasBase

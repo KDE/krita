@@ -41,7 +41,7 @@ void TestChangeListCommand::addList()
     QCOMPARE(format.intProperty(QTextListFormat::ListStyle), (int) KoListStyle::DecimalItem);
 
     cursor.setPosition(block.position());
-    ChangeListCommand clc2(cursor, KoListStyle::DiscItem);
+    ChangeListCommand clc2(cursor, KoListStyle::Bullet);
     clc2.setTool(tool);
     clc2.redo();
 
@@ -69,7 +69,7 @@ void TestChangeListCommand::addListWithLevel2()
     KoListLevelProperties llp;
     llp.setLevel(2);
     llp.setDisplayLevel(2);
-    llp.setStyle(KoListStyle::DiscItem);
+    llp.setStyle(KoListStyle::Bullet);
     style.setLevelProperties(llp);
 
     ChangeListCommand clc(cursor, &style, 2);
@@ -85,7 +85,7 @@ void TestChangeListCommand::addListWithLevel2()
     QVERIFY(block.textList() == 0);
 
     QTextListFormat format = tl->format();
-    QCOMPARE(format.intProperty(QTextListFormat::ListStyle), (int) KoListStyle::DiscItem);
+    QCOMPARE(format.intProperty(QTextListFormat::ListStyle), (int) KoListStyle::Bullet);
     QCOMPARE(format.intProperty(KoListStyle::DisplayLevel), (int) 2);
     QCOMPARE(format.intProperty(KoListStyle::Level), (int) 2);
 }
@@ -149,7 +149,7 @@ void TestChangeListCommand::joinList()
     KoListStyle style;
     KoListLevelProperties llp;
     llp.setLevel(1);
-    llp.setStyle(KoListStyle::DiscItem);
+    llp.setStyle(KoListStyle::Bullet);
     style.setLevelProperties(llp);
     QTextBlock block = doc.begin().next();
     style.applyStyle(block);
@@ -166,7 +166,7 @@ void TestChangeListCommand::joinList()
     QVERIFY(block.textList() == 0);
 
     cursor.setPosition(block.position());
-    ChangeListCommand clc(cursor, KoListStyle::DiscItem);
+    ChangeListCommand clc(cursor, KoListStyle::Bullet);
     clc.setTool(tool);
     clc.redo();
     QCOMPARE(block.textList(), tl);
@@ -183,7 +183,7 @@ void TestChangeListCommand::joinList2()
     KoListStyle style;
     KoListLevelProperties llp1;
     llp1.setLevel(1);
-    llp1.setStyle(KoListStyle::DiscItem);
+    llp1.setStyle(KoListStyle::Bullet);
     style.setLevelProperties(llp1);
     QTextBlock block = doc.begin().next().next();
     style.applyStyle(block); // apply on parag2
@@ -197,17 +197,17 @@ void TestChangeListCommand::joinList2()
     block = block.next().next(); // parag4
     style2.applyStyle(block);
 
-    // now apply the default 'DiscItem' on 'parag1' expecting it to join with the list already set on 'parag2'
+    // now apply the default 'Bullet' on 'parag1' expecting it to join with the list already set on 'parag2'
     block = doc.begin().next();
     cursor.setPosition(block.position());
-    ChangeListCommand clc(cursor, KoListStyle::DiscItem);
+    ChangeListCommand clc(cursor, KoListStyle::Bullet);
     clc.setTool(tool);
     clc.redo();
     QTextList *tl = block.textList();
     QVERIFY(tl);
     block = block.next();
     QCOMPARE(tl, block.textList());
-    QCOMPARE(tl->format().intProperty(QTextListFormat::ListStyle), (int) KoListStyle::DiscItem);
+    QCOMPARE(tl->format().intProperty(QTextListFormat::ListStyle), (int) KoListStyle::Bullet);
 
     // now apply the 'DecimalItem' on 'parag3' and expect it to join with the list already set on 'parag4'
     block = doc.lastBlock(); // parag4

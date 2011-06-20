@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,12 +28,11 @@ class KoTextBlockData::Private
 public:
     Private()
         : counterWidth(0),
-        counterSpacing(0),
-        counterIsImage(false),
-        counterIndex(1),
-        border(0),
-        paintStrategy(0),
-        top(0)
+          counterSpacing(0),
+          counterIsImage(false),
+          counterIndex(1),
+          border(0),
+          paintStrategy(0)
     {
     }
 
@@ -48,14 +48,13 @@ public:
     bool counterIsImage;
     int counterIndex;
     QPointF counterPos;
+    QTextCharFormat labelFormat;
     KoTextBlockBorderData *border;
     KoTextBlockPaintStrategyBase *paintStrategy;
-    qreal top;
-    qreal bottom;
 };
 
 KoTextBlockData::KoTextBlockData()
-        : d(new Private())
+    : d(new Private())
 {
     d->counterWidth = -1.0;
 }
@@ -149,6 +148,16 @@ QPointF KoTextBlockData::counterPosition() const
     return d->counterPos;
 }
 
+void KoTextBlockData::setLabelFormat(const QTextCharFormat &format)
+{
+    d->labelFormat = format;
+}
+
+QTextCharFormat KoTextBlockData::labelFormat() const
+{
+    return d->labelFormat;
+}
+
 KoTextBlockBorderData *KoTextBlockData::border() const
 {
     return d->border;
@@ -163,14 +172,4 @@ void KoTextBlockData::setPaintStrategy(KoTextBlockPaintStrategyBase *paintStrate
 KoTextBlockPaintStrategyBase *KoTextBlockData::paintStrategy() const
 {
     return d->paintStrategy;
-}
-
-void KoTextBlockData::setEffectiveTop(qreal y)
-{
-    d->top = y;
-}
-
-qreal KoTextBlockData::effectiveTop() const
-{
-    return d->top;
 }

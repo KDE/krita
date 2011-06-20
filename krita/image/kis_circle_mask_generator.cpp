@@ -74,23 +74,19 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
         
         double normeFade = norme(xr * transformedFadeX, yr * transformedFadeY);
         if (normeFade > 1) {
-            double xle, yle;
             // xle stands for x-coordinate limit exterior
             // yle stands for y-coordinate limit exterior
             // we are computing the coordinate on the external ellipse in order to compute
             // the fade value
-            if (xr == 0) {
-                xle = 0;
-                yle = yr > 0 ? 1 / d->ycoef : -1 / d->ycoef;
-            } else {
-                double c = yr / (double)xr;
-                xle = sqrt(1 / norme(d->xcoef, c * d->ycoef));
-                xle = xr > 0 ? xle : -xle;
-                yle = xle * c;
-            }
+            // xle = xr / sqrt(norme(xr * d->xcoef, yr * d->ycoef))
+            // yle = yr / sqrt(norme(xr * d->xcoef, yr * d->ycoef))
+
             // On the internal limit of the fade area, normeFade is equal to 1
-            double normeFadeLimitE = norme(xle * transformedFadeX, yle * transformedFadeY);
-            return (uchar)(255 *(normeFade - 1) / (normeFadeLimitE - 1));
+
+            // normeFadeLimitE = norme(xle * transformedFadeX, yle * transformedFadeY)
+            // return (uchar)(255 *(normeFade - 1) / (normeFadeLimitE - 1));
+            return (uchar)(255 * n * (normeFade - 1) / (normeFade - n));
+            // if n == 0, the conversion of NaN to uchar will correctly result in zero
         } else {
             n = 1 - n;
             if( width() < 2 || height() < 2 || n > d->xcoef * 0.5 || n > d->ycoef * 0.5)

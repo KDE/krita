@@ -2,6 +2,7 @@
  *  preferencesdlg.cc - part of KImageShop
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
+ *  Copyright (c) 2003-2011 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -73,7 +74,7 @@
 #include <kis_cubic_curve.h>
 
 GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
-        : WdgGeneralSettings(_parent, _name)
+    : WdgGeneralSettings(_parent, _name)
 {
     KisConfig cfg;
 
@@ -84,7 +85,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
     chkShowRootLayer->setChecked(cfg.showRootLayer());
     chkZoomWithWheel->setChecked(cfg.zoomWithWheel());
-    
+
     int autosaveInterval = cfg.autoSaveInterval();
     //convert to minutes
     m_autosaveSpinBox->setValue(autosaveInterval / 60);
@@ -138,7 +139,7 @@ bool GeneralTab::showOutlineWhilePainting()
 //---------------------------------------------------------------------------------------------------
 
 ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
-        : QWidget(parent)
+    : QWidget(parent)
 {
     setObjectName(name);
 
@@ -164,7 +165,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     //hide printing settings
     m_page->groupBox2->hide();
-    
+
     if (m_page->cmbMonitorProfile->contains(cfg.monitorProfile()))
         m_page->cmbMonitorProfile->setCurrent(cfg.monitorProfile());
     if (m_page->cmbPrintProfile->contains(cfg.printerProfile()))
@@ -269,18 +270,18 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
 {
     setObjectName(name);
     m_page = new WdgTabletSettings(this);
-    
+
     KisConfig cfg;
     KisCubicCurve curve;
     curve.fromString( cfg.pressureTabletCurve() );
-    
+
     m_page->pressureCurve->setCurve(curve);
 }
 
 
 //---------------------------------------------------------------------------------------------------
 PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
-        : WdgPerformanceSettings(parent, name)
+    : WdgPerformanceSettings(parent, name)
 {
     // XXX: Make sure only profiles that fit the specified color model
     // are shown in the profile combos
@@ -319,7 +320,7 @@ void PerformanceTab::setDefault()
 //---------------------------------------------------------------------------------------------------
 
 DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
-        : WdgDisplaySettings(parent, name)
+    : WdgDisplaySettings(parent, name)
 {
     KisConfig cfg;
 
@@ -352,8 +353,8 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 
     QStringList qtVersion = QString(qVersion()).split('.');
     int versionNumber = qtVersion.at(0).toInt()*10000
-                        + qtVersion.at(1).toInt()*100
-                        + qtVersion.at(2).toInt();
+            + qtVersion.at(1).toInt()*100
+            + qtVersion.at(2).toInt();
     if(versionNumber>=40603)
         cbUseOpenGLToolOutlineWorkaround->hide();
 
@@ -490,11 +491,35 @@ void GridSettingsTab::linkOffsetToggled(bool b)
     }
 }
 
+//---------------------------------------------------------------------------------------------------
+FullscreenSettingsTab::FullscreenSettingsTab(QWidget* parent) : WdgFullscreenSettingsBase(parent)
+{
+    KisConfig cfg;
+
+    chkDockers->setChecked(cfg.hideDockersFullscreen());
+    chkMenu->setChecked(cfg.hideMenuFullscreen());
+    chkScrollbars->setChecked(cfg.hideScrollbarsFullscreen());
+    chkStatusbar->setChecked(cfg.hideStatusbarFullscreen());
+    chkTitlebar->setChecked(cfg.hideTitlebarFullscreen());
+    chkToolbar->setChecked(cfg.hideToolbarFullscreen());
+
+}
+
+void FullscreenSettingsTab::setDefault()
+{
+    chkDockers->setChecked(true);
+    chkMenu->setChecked(true);
+    chkScrollbars->setChecked(true);
+    chkStatusbar->setChecked(true);
+    chkTitlebar->setChecked(true);
+    chkToolbar->setChecked(true);
+}
+
 
 //---------------------------------------------------------------------------------------------------
 
 KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
-        : KPageDialog(parent)
+    : KPageDialog(parent)
 {
     Q_UNUSED(name);
     setCaption(i18n("Preferences"));
@@ -553,10 +578,19 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     addPage(page);
     m_tabletSettings = new TabletSettingsTab(vbox);
     m_tabletSettings->m_page->pressureCurve->setMaximumSize(QSize(1000, 1000));
-    
-    
+
+    // full-screen mode
+    vbox = new KVBox();
+    page = new KPageWidgetItem(vbox, i18n("Full-screen settings"));
+    page->setHeader(i18n("Full-screen"));
+    page->setIcon(KIcon("preferences-system-performance"));
+    addPage(page);
+    m_fullscreenSettings = new FullscreenSettingsTab(vbox);
+
+
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
-    foreach (KisPreferenceSet *preferenceSet, preferenceSetRegistry->values()) {
+    foreach (KisAbstractPreferenceSetFactory *preferenceSetFactory, preferenceSetRegistry->values()) {
+        KisPreferenceSet* preferenceSet = preferenceSetFactory->createPreferenceSet();
         vbox = new KVBox();
         page = new KPageWidgetItem(vbox, preferenceSet->name());
         page->setHeader(preferenceSet->header());
@@ -575,10 +609,6 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 
 KisDlgPreferences::~KisDlgPreferences()
 {
-    KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
-    foreach (KisPreferenceSet *preferenceSet, preferenceSetRegistry->values()) {
-        preferenceSet->setParent(0);
-    }
 }
 
 void KisDlgPreferences::slotDefault()
@@ -593,6 +623,7 @@ void KisDlgPreferences::slotDefault()
 #endif
     m_gridSettings->setDefault();
     m_tabletSettings->setDefault();
+    m_fullscreenSettings->setDefault();
 }
 
 bool KisDlgPreferences::editPreferences()
@@ -627,7 +658,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUseBlackPointCompensation(dialog->m_colorSettings->m_page->chkBlackpoint->isChecked());
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());
         cfg.setRenderIntent(dialog->m_colorSettings->m_page->cmbMonitorIntent->currentIndex());
-        
+
         // Tablet settings
         cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );
 
@@ -685,6 +716,13 @@ bool KisDlgPreferences::editPreferences()
         cfg.setGridOffsetX(dialog->m_gridSettings->intXOffset->value());
         cfg.setGridOffsetY(dialog->m_gridSettings->intYOffset->value());
         cfg.setGridOffsetAspect(dialog->m_gridSettings->offsetAspectButton->keepAspectRatio());
+
+        cfg.setHideDockersFullscreen(dialog->m_fullscreenSettings->chkDockers->checkState());
+        cfg.setHideMenuFullscreen(dialog->m_fullscreenSettings->chkMenu->checkState());
+        cfg.setHideScrollbarsFullscreen(dialog->m_fullscreenSettings->chkScrollbars->checkState());
+        cfg.setHideStatusbarFullscreen(dialog->m_fullscreenSettings->chkStatusbar->checkState());
+        cfg.setHideTitlebarFullscreen(dialog->m_fullscreenSettings->chkTitlebar->checkState());
+        cfg.setHideToolbarFullscreen(dialog->m_fullscreenSettings->chkToolbar->checkState());
 
     }
     delete dialog;

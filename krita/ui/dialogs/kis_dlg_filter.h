@@ -52,6 +52,8 @@ protected slots:
 
     void createMask();
 
+    void previewCheckBoxChange(int state);
+
 signals:
 
     void sigPleaseApplyFilter(KisNodeSP, KisFilterConfiguration*);

@@ -19,6 +19,7 @@
 
 #include "kra/kis_kra_savexml_visitor.h"
 #include "kis_kra_tags.h"
+#include "kis_kra_utils.h"
 
 #include <QTextStream>
 
@@ -69,8 +70,12 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
 bool KisSaveXmlVisitor::visit(KisPaintLayer *layer)
 {
     QDomElement layerElement = m_doc.createElement(LAYER);
+    
     saveLayer(layerElement, PAINT_LAYER, layer);
+    
+    layerElement.setAttribute(CHANNEL_LOCK_FLAGS, flagsToString(layer->channelLockFlags()));
     layerElement.setAttribute(COLORSPACE_NAME, layer->paintDevice()->colorSpace()->id());
+    
     m_elem.appendChild(layerElement);
 
     /*    if(layer->paintDevice()->hasExifInfo())
@@ -210,16 +215,7 @@ bool KisSaveXmlVisitor::visit(KisSelectionMask *mask)
 
 void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer)
 {
-    QString channelFlagsString;
-    QBitArray channelFlags = layer->channelFlags();
-    for (int i = 0; i < channelFlags.count(); ++i) {
-        if (channelFlags[i])
-            channelFlagsString += '1';
-        else
-            channelFlagsString += '0';
-    }
-
-    el.setAttribute(CHANNEL_FLAGS, channelFlagsString);
+    el.setAttribute(CHANNEL_FLAGS, flagsToString(layer->channelFlags()));
     el.setAttribute(NAME, layer->name());
     el.setAttribute(OPACITY, layer->opacity());
     el.setAttribute(COMPOSITE_OP, layer->compositeOp()->id());

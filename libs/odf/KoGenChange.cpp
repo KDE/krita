@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
+   Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,7 +39,9 @@ static int compareMap(const QMap<QString, QString> &map1, const QMap<QString, QS
 }
 
 
-KoGenChange::KoGenChange()
+KoGenChange::KoGenChange(KoGenChange::ChangeFormat changeFormat)
+    : m_changeFormat(changeFormat)
+    , m_type(UNKNOWN)
 {
 }
 
@@ -69,6 +71,15 @@ void KoGenChange::writeChangeMetaData(KoXmlWriter* writer) const
 }
 
 void KoGenChange::writeChange(KoXmlWriter *writer, const QString &name) const
+{
+    if (m_changeFormat == KoGenChange::ODF_1_2) {
+        writeODF12Change(writer, name);
+    } else {
+        writeDeltaXmlChange(writer, name);
+    }
+}
+
+void KoGenChange::writeODF12Change(KoXmlWriter *writer, const QString &name) const
 {
     writer->startElement("text:changed-region");
     writer->addAttribute("text:id", name);
@@ -100,6 +111,18 @@ void KoGenChange::writeChange(KoXmlWriter *writer, const QString &name) const
 
     writer->endElement(); // text:insertion/format/deletion
     writer->endElement(); // text:change
+}
+
+void KoGenChange::writeDeltaXmlChange(KoXmlWriter *writer, const QString &name) const
+{
+    writer->startElement("delta:change-transaction");
+    writer->addAttribute("delta:change-id", name);
+    if (!m_changeMetaData.isEmpty()) {
+        writer->startElement("delta:change-info");
+        writeChangeMetaData(writer);
+        writer->endElement(); // delta:change-info
+    }
+    writer->endElement(); // delta:change-transaction
 }
 
 bool KoGenChange::operator<(const KoGenChange &other) const

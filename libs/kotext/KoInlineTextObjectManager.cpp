@@ -36,12 +36,16 @@ KoInlineTextObjectManager::KoInlineTextObjectManager(QObject *parent)
 {
 }
 
+KoInlineTextObjectManager::~KoInlineTextObjectManager()
+{
+}
+
 KoInlineObject *KoInlineTextObjectManager::inlineTextObject(const QTextCharFormat &format) const
 {
     int id = format.intProperty(InlineInstanceId);
     if (id <= 0)
         return 0;
-    return m_objects.value(id);
+    return m_objects.value(id, 0);
 }
 
 KoInlineObject *KoInlineTextObjectManager::inlineTextObject(const QTextCursor &cursor) const

@@ -25,7 +25,7 @@
 // Qt
 #include <QObject>
 
-// KOffice
+// Calligra
 #include <KoShape.h>
 
 // KChart

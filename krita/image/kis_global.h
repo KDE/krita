@@ -22,11 +22,11 @@
 #include <limits.h>
 
 #include <kglobal.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 #include <KoConfig.h>
 
-#define KRITA_VERSION KOFFICE_VERSION
+#define KRITA_VERSION CALLIGRA_VERSION
 
 const quint8 quint8_MAX = UCHAR_MAX;
 const quint16 quint16_MAX = 65535;

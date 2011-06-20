@@ -37,7 +37,7 @@ namespace Kross {
 
 /**
 * The KoScriptingPart class implements the top-level guiclient
-* functionality to integrate scripting using Kross into a KOffice
+* functionality to integrate scripting using Kross into a Calligra
 * application.
 */
 class KOKROSS_EXPORT KoScriptingPart : public KParts::Plugin

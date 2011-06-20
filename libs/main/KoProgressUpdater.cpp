@@ -30,6 +30,9 @@
 
 #include <kdebug.h>
 
+// 4 updates per second should be enough
+#define PROGRESSUPDATER_GUITIMERINTERVAL 250
+
 class KoProgressUpdater::Private
 {
 public:
@@ -104,7 +107,7 @@ QTime KoProgressUpdater::referenceTime() const
 void KoProgressUpdater::start(int range, const QString &text)
 {
     kDebug(30003) << range << text;
-    d->updateGuiTimer.start(100); // 10 updates/second should be enough?
+    d->updateGuiTimer.start(PROGRESSUPDATER_GUITIMERINTERVAL);
 
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
@@ -133,6 +136,12 @@ QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
 
     QPointer<KoUpdater> updater = new KoUpdater(p);
     d->subTaskWrappers.append(updater);
+
+    if (!d->updateGuiTimer.isActive()) {
+        // we maybe need to restart the timer if it was stopped in updateUi() cause
+        // other sub-tasks created before this one finished already.
+        d->updateGuiTimer.start(PROGRESSUPDATER_GUITIMERINTERVAL);
+    }
 
     return updater;
 }

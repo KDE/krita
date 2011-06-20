@@ -29,7 +29,12 @@ KoPATextPage::~KoPATextPage()
 {
 }
 
-int KoPATextPage::pageNumber(PageSelection select, int adjustment) const
+int KoPATextPage::pageNumber() const
+{
+    return m_pageNumber;
+}
+
+int KoPATextPage::visiblePageNumber(PageSelection select, int adjustment) const
 {
     Q_UNUSED(select);
     return m_pageNumber + adjustment;
@@ -38,4 +43,9 @@ int KoPATextPage::pageNumber(PageSelection select, int adjustment) const
 KoPAPageBase *KoPATextPage::page() const
 {
     return m_page;
+}
+
+QRectF KoPATextPage::rect() const
+{
+    return QRectF();
 }

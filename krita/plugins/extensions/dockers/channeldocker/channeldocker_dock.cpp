@@ -18,7 +18,8 @@
 #include "channeldocker_dock.h"
 
 #include <QGridLayout>
-#include <QListView>
+#include <QTableView>
+#include <QHeaderView>
 #include <klocale.h>
 
 #include <KoResourceManager.h>
@@ -31,19 +32,25 @@
 
 ChannelDockerDock::ChannelDockerDock( ) : QDockWidget(i18n("Channels")), m_canvas(0)
 {
-    m_channelList = new QListView(this);
+    m_channelTable = new QTableView(this);
     m_model = new ChannelModel(this);
-    m_channelList->setModel(m_model);
-    setWidget(m_channelList);
+    m_channelTable->setModel(m_model);
+    m_channelTable->setShowGrid(false);
+    m_channelTable->verticalHeader()->setVisible(false);
+    setWidget(m_channelTable);
 }
 
 void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
 {
-    m_canvas = canvas;
-        
-    KisView2* view = static_cast<KisCanvas2*>(m_canvas)->view();
-    m_model->slotLayerActivated(view->activeLayer());
-    connect(view->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), m_model, SLOT(slotLayerActivated(KisLayerSP)));
+    if (m_canvas && m_canvas->view()) {
+        m_canvas->view()->layerManager()->disconnect(m_model);
+    }
+    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    if (m_canvas) {
+        KisView2* view = m_canvas->view();
+        m_model->slotLayerActivated(view->activeLayer());
+        connect(view->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), m_model, SLOT(slotLayerActivated(KisLayerSP)));
+    }
 }
 
 

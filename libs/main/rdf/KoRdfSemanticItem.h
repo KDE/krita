@@ -27,13 +27,12 @@
 #include <QMimeData>
 #include <kdatetime.h>
 #include <Soprano/Soprano>
-
 #include "RdfForward.h"
 #include "KoSemanticStylesheet.h"
 
 class KoCanvasBase;
 class QTreeWidgetItem;
-class KoRdfSemanticItemPrivate;
+
 
 /**
  * @short Base class for C++ objects which represent Rdf at a higher level.
@@ -55,6 +54,14 @@ class KoRdfSemanticItemPrivate;
 class KOMAIN_EXPORT KoRdfSemanticItem : public QObject
 {
     Q_OBJECT
+
+public:
+
+    KoRdfSemanticItem(QObject *parent);
+    KoRdfSemanticItem(const KoDocumentRdf *rdf, QObject *parent);
+    KoRdfSemanticItem(const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it, QObject *parent);
+    virtual ~KoRdfSemanticItem();
+
 
 protected:
 
@@ -126,23 +133,18 @@ protected:
      * shown to the user.
      *
      */
-    virtual void importFromDataComplete(const QByteArray &ba, KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0);
+    virtual void importFromDataComplete(const QByteArray &ba, const KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0);
 
     friend class KoSemanticStylesheetsEditor;
     friend class KoSemanticStylesheet;
     virtual void setupStylesheetReplacementMapping(QMap<QString, QString> &m);
 
-protected:
-    /* KoRdfSemanticItem(KoRdfSemanticItemPrivate &dd,QObject *parent, KoDocumentRdf *rdf = 0); */
-    /* KoRdfSemanticItem(KoRdfSemanticItemPrivate &dd,QObject *parent, KoDocumentRdf *rdf, Soprano::QueryResultIterator &it); */
 public:
-
-    virtual ~KoRdfSemanticItem();
 
     /**
      * The document Rdf object that this semantic item is associated with.
      */
-    KoDocumentRdf *documentRdf() const;
+    const KoDocumentRdf *documentRdf() const;
 
     /**
      * A Semantic Item can appear multiple times in a document. For
@@ -252,7 +254,7 @@ public:
      * classNames(). Useful for menus and other places that want to
      * allow the user to create new SemanticItem Objects.
      */
-    static KoRdfSemanticItem* createSemanticItem(QObject *parent, KoDocumentRdf *rdf, const QString &klass);
+    static KoRdfSemanticItem* createSemanticItem(QObject *parent, const KoDocumentRdf *rdf, const QString &semanticClass);
 
     /**
      * Get the system semantic stylesheets that are supported for this
@@ -372,10 +374,9 @@ private:
                           const Soprano::Node &explicitLinkingSubject);
 
 protected:
-    KoRdfSemanticItemPrivate *const d_ptr;
-    KoRdfSemanticItem(KoRdfSemanticItemPrivate &dd, QObject *parent);
-private:
-    Q_DECLARE_PRIVATE(KoRdfSemanticItem);
+
+    const KoDocumentRdf *m_rdf;    //< For access to the Rdf model during CRUD operations
+    Soprano::Node m_context; //< This determines the Rdf/XML file the Rdf is stored in (see context())
 };
 
 #endif

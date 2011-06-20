@@ -66,8 +66,6 @@ private:
     virtual void deletePreviousChar();
     virtual void deleteSelection(QTextCursor &selection);
     virtual void removeChangeElement(int changeId);
-    virtual void insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
-    virtual int fragmentLength(QTextDocumentFragment &fragment);
     virtual void updateListIds(QTextCursor &cursor);
     virtual void updateListChanges();
     virtual void handleListItemDelete(QTextCursor &cursor);

@@ -73,7 +73,7 @@ kplato/
 kpresenter/  
 krita/
 kspread/
-kword/
+words/
 kivio/
 
 kchart/      source code of two applications who are now available as shapes.
@@ -108,16 +108,18 @@ Contact info
 ------------
 
 Developer and User mailing list: mailto:calligra-devel@kde.org
+Kexi User mailing list:          mailto:kexi@kde.org
 Krita mailing list:              mailto:kimageshop@kde.org
 
 Subscribing and list information: http://www.kde.org/mailinglists
 Archives: http://lists.kde.org
 
 IRC channel for developers:  #calligra on irc.freenode.org
-IRC channel for Krita: #krita on irc.freenode.org
+IRC channel for Kexi:        #kexi on irc.freenode.org
+IRC channel for Krita:       #krita on irc.freenode.org
 
-Calligra Suite forums:         http://forum.kde.org/viewforum.php?f=203
-Krita forums:           http://forum.kde.org/viewforum.php?f=136
+Calligra Suite forums:       http://forum.kde.org/viewforum.php?f=203
+Krita forums:                http://forum.kde.org/viewforum.php?f=136
 
 If you have questions about this README file or about Calligra Suite in general,
 please mail to the Calligra Suite mailing list: mailto:calligra-devel@kde.org

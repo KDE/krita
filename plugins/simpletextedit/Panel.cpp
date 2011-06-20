@@ -96,11 +96,12 @@ void Panel::setInitialButtonIcon(QToolButton *button, const QString &name) const
 {
     button->setIconSize(QSize(42, 42));
     button->setEnabled(false);
-    button->setIcon(KIcon("koffice_simple_format_"+ name +"_inactive"));
+    button->setIcon(KIcon("calligra_simple_format_"+ name +"_inactive"));
 }
 
 void Panel::setCanvas (KoCanvasBase *canvas)
 {
+    m_canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
     m_canvas = canvas;
     Q_ASSERT(m_canvas);
     connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(toolChangeDetected(const QString&)));
@@ -176,7 +177,7 @@ void Panel::applyAction(KAction *action, QToolButton *button, const QString &ico
     Q_ASSERT(button);
     button->setEnabled(action);
     button->setIconSize(QSize(42, 42));
-    KIcon icon("koffice_simple_format_"+ iconName + (action ? "_active" : "_inactive"));
+    KIcon icon("calligra_simple_format_"+ iconName + (action ? "_active" : "_inactive"));
     if (action == 0) {
         button->setIcon(icon);
         button->setEnabled(false);

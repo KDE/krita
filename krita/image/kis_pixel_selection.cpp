@@ -242,7 +242,11 @@ QVector<QPolygon> KisPixelSelection::outline()
 
     quint8* buffer = new quint8[width*height];
 
+#ifdef __GNUC__
 #warning "Do not deep copy the entire image here!"
+#else
+#pragma WARNING( "Do not deep copy the entire image here!" )
+#endif
     readBytes(buffer, xOffset, yOffset, width, height);
 
     KisOutlineGenerator generator(colorSpace(), *defaultPixel());

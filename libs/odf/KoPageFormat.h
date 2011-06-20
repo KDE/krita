@@ -27,7 +27,7 @@
 
 #include <QtGui/QPrinter>
 
-/// The page formats koffice supports
+/// The page formats calligra supports
 namespace KoPageFormat
 {
 /**

@@ -2,7 +2,7 @@
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
- * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -33,6 +33,8 @@
 #include "dialogs/FontDia.h"
 #include "dialogs/TableDialog.h"
 #include "dialogs/ChangeConfigureDialog.h"
+#include "dialogs/ChangeTrackingOptionsWidget.h"
+#include "dialogs/SimpleTableWidget.h"
 #include "commands/TextCutCommand.h"
 #include "commands/TextPasteCommand.h"
 #include "commands/ChangeListCommand.h"
@@ -68,6 +70,8 @@
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
 
+#include <KoTextLayoutRootArea.h>
+
 #include <kdebug.h>
 #include <KRun>
 #include <KStandardShortcut>
@@ -78,6 +82,7 @@
 #include <KStandardAction>
 #include <KMimeType>
 #include <KMessageBox>
+#include <KUser>
 #include <QTabWidget>
 #include <QTextDocumentFragment>
 #include <QToolTip>
@@ -104,17 +109,71 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_allowResourceManagerUpdates(true),
         m_prevCursorPosition(-1),
         m_caretTimer(this),
-        m_caretTimerState(true),
-        m_currentCommand(0),
+        m_caretTimerState(true)
+        , m_currentCommand(0),
         m_currentCommandHasChildren(false),
         m_specialCharacterDocker(0),
         m_textTyping(false),
         m_textDeleting(false),
         m_changeTipTimer(this),
         m_changeTipCursorPos(0)
+        , m_delayedEnsureVisible(false)
 {
     setTextMode(true);
 
+    createActions();
+
+    m_textEditingPlugins = canvas->resourceManager()->
+        resource(TextEditingPluginContainer::ResourceId).value<TextEditingPluginContainer*>();
+    if (m_textEditingPlugins == 0) {
+        m_textEditingPlugins = new TextEditingPluginContainer(canvas->resourceManager());
+        QVariant variant;
+        variant.setValue(m_textEditingPlugins);
+        canvas->resourceManager()->setResource(TextEditingPluginContainer::ResourceId, variant);
+    }
+
+    foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values()) {
+        connect(plugin, SIGNAL(startMacro(const QString &)),
+                this, SLOT(startMacro(const QString &)));
+        connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
+        QHash<QString, KAction*> actions = plugin->actions();
+        QHash<QString, KAction*>::iterator i = actions.begin();
+        while (i != actions.end()) {
+            addAction(i.key(), i.value());
+            ++i;
+        }
+    }
+
+    // setup the context list.
+    QSignalMapper *signalMapper = new QSignalMapper(this);
+    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
+    QList<QAction*> list;
+    list.append(this->action("text_default"));
+    list.append(this->action("format_font"));
+    foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
+        KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
+        if (factory->showInMenu()) {
+            KAction *a = new KAction(i18n("Apply %1", factory->title()), this);
+            connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
+            signalMapper->setMapping(a, factory->id());
+            list.append(a);
+            addAction(QString("apply_%1").arg(factory->id()), a);
+        }
+    }
+    setPopupActionList(list);
+
+    connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
+
+    m_caretTimer.setInterval(500);
+    connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
+
+    m_changeTipTimer.setInterval(500);
+    m_changeTipTimer.setSingleShot(true);
+    connect(&m_changeTipTimer, SIGNAL(timeout()), this, SLOT(showChangeTip()));
+}
+
+void TextTool::createActions()
+{
     m_actionFormatBold  = new KAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold);
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
@@ -210,67 +269,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
     connect(m_actionFormatFontFamily, SIGNAL(triggered(const QString &)),
             this, SLOT(setFontFamily(const QString &)));
 
-    /*
-        m_actionFormatStyleMenu  = new KActionMenu(i18n("Style"), this);
-        addAction("format_stylemenu", m_actionFormatStyleMenu);
-        m_actionFormatStyle  = new KSelectAction(i18n("Style"), this);
-        addAction("format_style", m_actionFormatStyle);
-        connect(m_actionFormatStyle, SIGNAL(activated(int)),
-                this, SLOT(textStyleSelected(int)));
-        updateStyleList();
-
-        // ----------------------- More format actions, for the toolbar only
-        QActionGroup* spacingActionGroup = new QActionGroup(this);
-        spacingActionGroup->setExclusive(true);
-        m_actionFormatSpacingSingle = new KToggleAction(i18n("Line Spacing 1"), "format-line-spacing-simple", Qt::CTRL + Qt::Key_1,
-                this, SLOT(textSpacingSingle()),
-                actionCollection(), "format_spacingsingle");
-        m_actionFormatSpacingSingle->setActionGroup(spacingActionGroup);
-        m_actionFormatSpacingOneAndHalf = new KToggleAction(i18n("Line Spacing 1.5"), "format-line-spacing-double", Qt::CTRL + Qt::Key_5,
-                this, SLOT(textSpacingOneAndHalf()),
-                actionCollection(), "format_spacing15");
-        m_actionFormatSpacingOneAndHalf->setActionGroup(spacingActionGroup);
-        m_actionFormatSpacingDouble = new KToggleAction(i18n("Line Spacing 2"), "format-line-spacing-triple", Qt::CTRL + Qt::Key_2,
-                this, SLOT(textSpacingDouble()),
-                actionCollection(), "format_spacingdouble");
-        m_actionFormatSpacingDouble->setActionGroup(spacingActionGroup);
-
-        m_actionFormatColor = new TKSelectColorAction(i18n("Text Color..."), TKSelectColorAction::TextColor,
-                this, SLOT(textColor()),
-                actionCollection(), "format_color", true);
-        m_actionFormatColor->setDefaultColor(QColor());
-
-
-        m_actionFormatNumber  = new KActionMenu(KIcon("format-list-ordered"), i18n("Number"), this);
-        addAction("format_number", m_actionFormatNumber);
-        m_actionFormatNumber->setDelayed(false);
-        m_actionFormatBullet  = new KActionMenu(KIcon("format-list-unordered"), i18n("Bullet"), this);
-        addAction("format_bullet", m_actionFormatBullet);
-        m_actionFormatBullet->setDelayed(false);
-        QActionGroup* counterStyleActionGroup = new QActionGroup(this);
-        counterStyleActionGroup->setExclusive(true);
-        QList<KoCounterStyleWidget::StyleRepresenter*> stylesList;
-        KoCounterStyleWidget::makeCounterRepresenterList(stylesList);
-        foreach (KoCounterStyleWidget::StyleRepresenter* styleRepresenter, stylesList) {
-            // Dynamically create toggle-actions for each list style.
-            // This approach allows to edit toolbars and extract separate actions from this menu
-            KToggleAction* act = new KToggleAction(styleRepresenter->name(), // TODO icon
-                    actionCollection(),
-                    QString("counterstyle_%1").arg(styleRepresenter->style()));
-            connect(act, SIGNAL(triggered(bool)), this, SLOT(slotCounterStyleSelected()));
-            act->setActionGroup(counterStyleActionGroup);
-            // Add to the right menu: both for "none", bullet for bullets, numbers otherwise
-            if (styleRepresenter->style() == KoParagCounter::STYLE_NONE) {
-                m_actionFormatBullet->insert(act);
-                m_actionFormatNumber->insert(act);
-            } else if (styleRepresenter->isBullet())
-                m_actionFormatBullet->insert(act);
-            else
-                m_actionFormatNumber->insert(act);
-        }
-    */
-
-
     // ------------------- Actions with a key binding and no GUI item
     action  = new KAction(i18n("Insert Non-Breaking Space"), this);
     addAction("nonbreaking_space", action);
@@ -289,7 +287,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
     action  = new KAction(i18n("Insert Soft Hyphen"), this);
     addAction("soft_hyphen", action);
-    //action->setShortcut(Qt::CTRL+Qt::Key_Minus); // TODO this one is also used for the kde-global zoom-out :(
+    //action->setShortcut(Qt::CTRL + Qt::Key_Minus); // TODO this one is also used for the kde-global zoom-out :(
     connect(action, SIGNAL(triggered()), this, SLOT(softHyphen()));
 
     action  = new KAction(i18n("Line Break"), this);
@@ -341,50 +339,47 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action->setToolTip(i18n("Change text attributes to their default values"));
     connect(action, SIGNAL(triggered()), this, SLOT(setDefaultFormat()));
 
-    m_textEditingPlugins = canvas->resourceManager()->
-        resource(TextEditingPluginContainer::ResourceId).value<TextEditingPluginContainer*>();
-    if (m_textEditingPlugins == 0) {
-        m_textEditingPlugins = new TextEditingPluginContainer(canvas->resourceManager());
-        QVariant variant;
-        variant.setValue(m_textEditingPlugins);
-        canvas->resourceManager()->setResource(TextEditingPluginContainer::ResourceId, variant);
-    }
-
-    foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values()) {
-        connect(plugin, SIGNAL(startMacro(const QString &)),
-                this, SLOT(startMacro(const QString &)));
-        connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
-        QHash<QString, KAction*> actions = plugin->actions();
-        QHash<QString, KAction*>::iterator i = actions.begin();
-        while (i != actions.end()) {
-            addAction(i.key(), i.value());
-            ++i;
-        }
-    }
-
-    // setup the context list.
-    QSignalMapper *signalMapper = new QSignalMapper(this);
-    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
-    QList<QAction*> list;
-    list.append(this->action("text_default"));
-    list.append(this->action("format_font"));
-    foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
-        KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
-        if (factory->showInMenu()) {
-            KAction *a = new KAction(i18n("Apply %1", factory->title()), this);
-            connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
-            signalMapper->setMapping(a, factory->id());
-            list.append(a);
-            addAction(QString("apply_%1").arg(factory->id()), a);
-        }
-    }
-    setPopupActionList(list);
-
-
     action = new KAction(i18n("Table..."), this);
     addAction("insert_table", action);
     action->setToolTip(i18n("Insert a table into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
+
+    action  = new KAction(KIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
+    action->setToolTip(i18n("Insert Row Above"));
+    addAction("insert_tablerow_above", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
+
+    action  = new KAction(KIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
+    action->setToolTip(i18n("Insert Row Below"));
+    addAction("insert_tablerow_below", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
+
+    action  = new KAction(KIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
+    action->setToolTip(i18n("Insert Column Left"));
+    addAction("insert_tablecolumn_left", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
+
+    action  = new KAction(KIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
+    action->setToolTip(i18n("Insert Column Right"));
+    addAction("insert_tablecolumn_right", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
+    action  = new KAction(KIcon("edit-table-delete-column"), i18n("Column"), this);
+    action->setToolTip(i18n("Delete Column"));
+    addAction("delete_tablecolumn", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
+
+    action  = new KAction(KIcon("edit-table-delete-row"), i18n("Row"), this);
+    action->setToolTip(i18n("Delete Row"));
+    addAction("delete_tablerow", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
+
+    action  = new KAction(KIcon("merge"), i18n("Merge Cells"), this);
+    addAction("merge_tablecells", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeTableCells()));
+
+    action  = new KAction(KIcon("split"), i18n("Split Cells"), this);
+    addAction("split_tablecells", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
 
     action  = new KAction(KIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
     action->setToolTip(i18n("Insert Row Above"));
@@ -453,7 +448,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     connect(action, SIGNAL(triggered()), this, SLOT(showStyleManager()));
 
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
-    addAction("edit_selectall", action);
+    addAction("edit_select_all", action);
 
     action = new KAction(i18n("Special Character..."), this);
     action->setIcon(KIcon("character-set"));
@@ -462,6 +457,11 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action->setToolTip(i18n("Insert one or more symbols or characters not found on the keyboard"));
     action->setWhatsThis(i18n("Insert one or more symbols or characters not found on the keyboard."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertSpecialCharacter()));
+
+    action = new KAction(i18n("Repaint"), this);
+    action->setIcon(KIcon("view-refresh"));
+    addAction("repaint", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(relayoutContent()));
 
 #ifndef NDEBUG
     action = new KAction("Paragraph Debug", this); // do NOT add i18n!
@@ -473,15 +473,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("detailed_debug_styles", action);
     connect(action, SIGNAL(triggered()), this, SLOT(debugTextStyles()));
 #endif
-
-    connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
-
-    m_caretTimer.setInterval(500);
-    connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
-
-    m_changeTipTimer.setInterval(1000);
-    m_changeTipTimer.setSingleShot(true);
-    connect(&m_changeTipTimer, SIGNAL(timeout()), this, SLOT(showChangeTip()));
 }
 
 #ifndef NDEBUG
@@ -506,19 +497,31 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     m_textEditingPlugins(0),
     m_changeTipTimer(this),
     m_changeTipCursorPos(0)
+    , m_delayedEnsureVisible(false)
 {
     // we could init some vars here, but we probably don't have to
     KGlobal::setLocale(new KLocale("en"));
-    QTextDocument *document = new QTextDocument();
-    KoTextDocumentLayout *layout = new KoTextDocumentLayout(document);
+    QTextDocument *document = new QTextDocument(); // this document is leaked
+
     KoInlineTextObjectManager *inlineManager = new KoInlineTextObjectManager();
-    layout->setInlineTextObjectManager(inlineManager);
-    document->setDocumentLayout(layout);
+    KoTextDocument(document).setInlineTextObjectManager(inlineManager);
+
     m_textEditor = new KoTextEditor(document);
+    KoTextDocument(document).setTextEditor(m_textEditor.data());
+
     m_changeTracker = new KoChangeTracker();
     KoTextDocument(document).setChangeTracker(m_changeTracker);
+
     KoTextDocument(document).setUndoStack(new KUndoStack());
-    KoTextDocument(document).setTextEditor(m_textEditor.data());
+
+#if 0
+    KoTextDocumentLayout *layout = new KoTextDocumentLayout(document);
+    document->setDocumentLayout(layout);
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
 }
 #endif
 
@@ -528,8 +531,9 @@ TextTool::~TextTool()
 
 void TextTool::showChangeTip()
 {
-    if (!m_textShapeData)
+    if (!m_textShapeData || !m_changeTipCursorPos || !m_changeTracker->displayChanges())
         return;
+
     QTextCursor c(m_textShapeData->document());
     c.setPosition(m_changeTipCursorPos);
     if (m_changeTracker && m_changeTracker->containsInlineChanges(c.charFormat())) {
@@ -571,6 +575,16 @@ void TextTool::blinkCaret()
     repaintCaret();
 }
 
+void TextTool::relayoutContent()
+{
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    Q_ASSERT(lay);
+    foreach (KoTextLayoutRootArea *rootArea, lay->rootAreas()) {
+        rootArea->setDirty();
+    }
+    lay->emitLayoutIsDirty();
+}
+
 void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (m_textEditor.isNull())
@@ -581,110 +595,55 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                )
             && !m_caretTimer.isActive()) { // make sure we blink
         m_caretTimer.start();
+        m_caretTimerState = true;
     }
-    QTextBlock block = m_textEditor.data()->block();
-    if (! block.layout()) // not layouted yet.  The Shape paint method will trigger a layout
-        return;
+    if (!m_caretTimerState)
+        m_caretTimer.setInterval(500); // we set it lower during typing, so set it back to normal
+
     if (!m_textShapeData)
         return;
-
-    int selectStart = m_textEditor.data()->position();
-    int selectEnd = m_textEditor.data()->anchor();
-    if (selectEnd < selectStart)
-        qSwap(selectStart, selectEnd);
-    QList<TextShape *> shapesToPaint;
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-    if (lay) {
-        foreach (KoShape *shape, lay->shapes()) {
-            TextShape *ts = dynamic_cast<TextShape*>(shape);
-            if (! ts)
-                continue;
-            KoTextShapeData *data = ts->textShapeData();
-            // check if shape contains some of the selection, if not, skip
-            if (!((data->endPosition() >= selectStart && data->position() <= selectEnd)
-                    || (data->position() <= selectStart && data->endPosition() >= selectEnd)))
-                continue;
-            if (painter.hasClipping()) {
-                QRect rect = converter.documentToView(ts->boundingRect()).toRect();
-                if (painter.clipRegion().intersect(QRegion(rect)).isEmpty())
-                    continue;
-            }
-            shapesToPaint << ts;
-        }
-    }
-    if (shapesToPaint.isEmpty()) // quite unlikely, though ;)
+    if (m_textShapeData->isDirty())
         return;
 
     qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
 
-    QAbstractTextDocumentLayout::PaintContext pc;
-    QAbstractTextDocumentLayout::Selection selection;
-    selection.cursor = *(m_textEditor.data()->cursor());
-    QPalette palette = canvas()->canvasWidget() ? canvas()->canvasWidget()->palette() : canvas()->canvasItem()->palette();
-    selection.format.setBackground(palette.brush(QPalette::Highlight));
-    selection.format.setForeground(palette.brush(QPalette::HighlightedText));
-    pc.selections.append(selection);
-    foreach (TextShape *ts, shapesToPaint) {
-        KoTextShapeData *data = ts->textShapeData();
-        Q_ASSERT(data);
-        if (data->endPosition() == -1)
-            continue;
-
-        painter.save();
-        QTransform shapeMatrix = ts->absoluteTransformation(&converter);
-        shapeMatrix.scale(zoomX, zoomY);
-        painter.setTransform(shapeMatrix * painter.transform());
-        painter.setClipRect(ts->outlineRect(), Qt::IntersectClip);
-        painter.translate(0, -data->documentOffset());
-        if ((data->endPosition() >= selectStart && data->position() <= selectEnd)
-                || (data->position() <= selectStart && data->endPosition() >= selectEnd)) {
-            QRectF clip = textRect(*m_textEditor.data()->cursor());
-            painter.save();
-            painter.setClipRect(clip, Qt::IntersectClip);
-            data->document()->documentLayout()->draw(&painter, pc);
-            painter.restore();
-        }
-        if ((data == m_textShapeData) && m_caretTimerState) {
-            // paint caret
+    painter.save();
+    QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
+    shapeMatrix.scale(zoomX, zoomY);
+    shapeMatrix.translate(0, -m_textShapeData->documentOffset());
+    if (m_caretTimerState) {
+        // Lets draw the caret ourselves, as the Qt method doesn't take cursor
+        // charFormat into consideration.
+        QTextBlock block = m_textEditor.data()->block();
+        if (block.isValid()) {
             int posInParag = m_textEditor.data()->position() - block.position();
             if (posInParag <= block.layout()->preeditAreaPosition())
                 posInParag += block.layout()->preeditAreaText().length();
-            m_textEditor.data()->position();
 
-            // Lets draw the caret ourselves, as the Qt method doesn't take cursor
-            // charFormat into consideration.
-            QTextBlock block = m_textEditor.data()->block();
-            if (block.isValid()) {
-                QTextLine tl = block.layout()->lineForTextPosition(m_textEditor.data()->position() - block.position());
-                if (tl.isValid()) {
-                    const int posInParag = m_textEditor.data()->position() - block.position();
-                    QPen caretPen(m_textEditor.data()->charFormat().foreground(), 1.0);
-                    painter.setPen(caretPen);
-
-                    painter.setRenderHint(QPainter::Antialiasing,false);
-                    if (tl.ascent() > 0) {
-                        QPointF caretBasePos;
-                        QFontMetricsF fm(m_textEditor.data()->charFormat().font(), painter.device());
-                        caretBasePos.setX(tl.cursorToX(posInParag));
-                        caretBasePos.setY(tl.y() + tl.ascent());
-                        painter.drawLine(caretBasePos.x(),
-                               caretBasePos.y() - qMin(tl.ascent(), fm.ascent()),
-                               caretBasePos.x(),
-                               caretBasePos.y() + qMin(tl.descent(), fm.descent()));
-                    } else {
-                        //line only filled with characters-without-size (eg anchors)
-                        // layout will make sure line has height of block font
-                        QFontMetricsF fm(block.charFormat().font(), painter.device());
-                        painter.drawLine(tl.x(), tl.y(),
-                                         tl.x(), tl.y() + fm.ascent() + fm.descent());
-                    }
+            QTextLine tl = block.layout()->lineForTextPosition(m_textEditor.data()->position() - block.position());
+            if (tl.isValid()) {
+                painter.setRenderHint(QPainter::Antialiasing,false);
+                QRectF rect = caretRect(m_textEditor.data()->cursor());
+                if (tl.ascent() > 0) {
+                    QFontMetricsF fm(m_textEditor.data()->charFormat().font(), painter.device());
+                    rect.setY(rect.y() + tl.ascent() - qMin(tl.ascent(), fm.ascent()));
+                    rect.setHeight(qMin(tl.ascent(), fm.ascent()) + qMin(tl.descent(), fm.descent()));
+                } else {
+                    //line only filled with characters-without-size (eg anchors)
+                    // layout will make sure line has height of block font
+                    QFontMetricsF fm(block.charFormat().font(), painter.device());
+                    rect.setHeight(fm.ascent() + fm.descent());
                 }
+                QRectF drawRect(shapeMatrix.map(rect.topLeft()), shapeMatrix.map(rect.bottomLeft()));
+                drawRect.setWidth(2);
+                painter.fillRect(drawRect, QColor(Qt::white));
+                painter.fillRect(drawRect, QBrush(Qt::black, Qt::Dense3Pattern));
             }
         }
-
-        painter.restore();
     }
+
+    painter.restore();
 }
 
 void TextTool::updateSelectedShape(const QPointF &point)
@@ -702,13 +661,12 @@ void TextTool::updateSelectedShape(const QPointF &point)
             if (textShape) {
                 KoTextShapeData *d = static_cast<KoTextShapeData*>(textShape->userData());
                 const bool sameDocument = m_textShapeData ? d->document() == m_textShapeData->document() : false;
-                if (sameDocument && d->position() < 0)
-                    continue; // don't change to a shape that has no text
                 m_textShape = textShape;
                 if (sameDocument)
                     break; // stop looking.
             }
         }
+
         setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
 
         // This is how we inform the rulers of the active range
@@ -738,10 +696,12 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
         if (m_textEditor.data()->hasSelection())
             repaintSelection(); // will erase selection
-        else if (! m_textEditor.data()->hasSelection())
+        else
             repaintCaret();
-        int position = pointToPosition(event->point);
-        m_textEditor.data()->setPosition(position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+        KoPointedAt pointedAt = hitTest(event->point);
+        if (pointedAt.position != -1) {
+            m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+        }
         if (shiftPressed) // altered selection.
             repaintSelection();
         else
@@ -775,9 +735,6 @@ void TextTool::setShapeData(KoTextShapeData *data)
     bool docChanged = !data || !m_textShapeData || m_textShapeData->document() != data->document();
     if (m_textShapeData) {
         disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        if (lay)
-            disconnect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
     }
     m_textShapeData = data;
     if (!m_textShapeData)
@@ -789,38 +746,6 @@ void TextTool::setShapeData(KoTextShapeData *data)
         m_textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
         Q_ASSERT(m_textEditor.data());
         connect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
-
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        if (lay) {
-            connect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
-
-             // check and remove the demo text.
-            bool demoTextOn = true;
-            foreach (KoShape *shape, lay->shapes()) {
-                TextShape *ts = dynamic_cast<TextShape*>(shape);
-                if (ts && !ts->demoText()) { // if any shape in the series has it turned off, we don't have it anymore.
-                    demoTextOn = false;
-                    break;
-                }
-            }
-
-            if (demoTextOn) {
-                QTextDocument *doc = m_textShapeData->document();
-                doc->setUndoRedoEnabled(false); // removes undo history
-                KoTextDocument document(doc);
-                document.clearText();
-                KoStyleManager *styleManager = document.styleManager();
-                if (styleManager) {
-                    QTextBlock block = doc->begin();
-                    styleManager->defaultParagraphStyle()->applyStyle(block);
-                }
-                m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
-                foreach (KoShape *shape, lay->shapes()) {
-                    TextShape *ts = dynamic_cast<TextShape*>(shape);
-                    if (ts) ts->setDemoText(false);
-                }
-            }
-        }
     }
     m_textEditor.data()->updateDefaultTextDirection(m_textShapeData->pageDirection());
 }
@@ -905,19 +830,14 @@ QStringList TextTool::supportedPasteMimeTypes() const
     return list;
 }
 
-int TextTool::pointToPosition(const QPointF & point) const
+KoPointedAt TextTool::hitTest(const QPointF & point) const
 {
-    if (!m_textShape || !m_textShapeData)
-        return -1;
-    QPointF p = m_textShape->convertScreenPos(point);
-    int caretPos = m_textEditor.data()->document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
-    caretPos = qMax(caretPos, m_textShapeData->position());
-    if (m_textShapeData->endPosition() == -1) {
-        kWarning(32500) << "Clicking in not fully laid-out textframe";
-        m_textShapeData->fireResizeEvent(); // requests a layout run ;)
+    if (!m_textShape || !m_textShapeData) {
+        return KoPointedAt();
     }
-    caretPos = qMin(caretPos, m_textShapeData->endPosition());
-    return caretPos;
+    QPointF p = m_textShape->convertScreenPos(point);
+    KoTextLayoutRootArea *rootArea = m_textShapeData->rootArea();
+    return rootArea ? rootArea->hitTest(p, Qt::FuzzyHit) : KoPointedAt();
 }
 
 void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
@@ -950,30 +870,29 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
     if (QToolTip::isVisible())
         QToolTip::hideText();
 
-    int position = pointToPosition(event->point);
+    KoPointedAt pointedAt = hitTest(event->point);
 
     if (event->buttons() == Qt::NoButton) {
-        if (!m_textShapeData || m_textShapeData->endPosition() == position) {
+        //if (!m_textShapeData ){//FIXME|| m_textShapeData->endPosition() == position) {
+        if (!m_textShapeData || pointedAt.position < 0) {
             useCursor(Qt::IBeamCursor);
             return;
         }
-        QTextCursor cursor(*(m_textEditor.data()->cursor()));
-        cursor.setPosition(position);
 
         QTextCursor mouseOver(m_textShapeData->document());
-        mouseOver.setPosition(position);
+        mouseOver.setPosition(pointedAt.position);
 
         if (m_changeTracker && m_changeTracker->containsInlineChanges(mouseOver.charFormat())) {
             m_changeTipTimer.start();
-            m_changeTipCursorPos = position;
+            m_changeTipCursorPos = pointedAt.position;
         }
 
-        if (cursor.charFormat().isAnchor()) {
+        if (pointedAt.bookmark || !pointedAt.externalHRef.isEmpty()) {
             useCursor(Qt::PointingHandCursor);
             return;
         }
 
-        // check if mouse pointer is not over shape with hyperlink
+        // check if mouse pointer is over shape with hyperlink
         KoShape *selectedShape = canvas()->shapeManager()->shapeAt(event->point);
         if (selectedShape != 0 && selectedShape != m_textShape && selectedShape->hyperLink().size() != 0) {
             useCursor(Qt::PointingHandCursor);
@@ -982,20 +901,25 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
 
         useCursor(Qt::IBeamCursor);
         return;
-    }
+    } else {
+        useCursor(Qt::IBeamCursor);
+        if (pointedAt.position == m_textEditor.data()->position()) return;
+        if (pointedAt.position >= 0) {
+            if (m_textEditor.data()->hasSelection())
+                repaintSelection(); // will erase selection
+            else
+                repaintCaret();
 
-    useCursor(Qt::IBeamCursor);
-    if (position == m_textEditor.data()->position()) return;
-    if (position >= 0) {
-        if (m_textEditor.data()->hasSelection())
-            repaintSelection(); // will erase selection
-        else
-            repaintCaret();
-        m_textEditor.data()->setPosition(position, QTextCursor::KeepAnchor);
-        repaintSelection();
-    }
+            m_textEditor.data()->setPosition(pointedAt.position, QTextCursor::KeepAnchor);
 
-    updateSelectionHandler();
+            if (m_textEditor.data()->hasSelection())
+                repaintSelection();
+            else
+                repaintCaret();
+        }
+
+        updateSelectionHandler();
+    }
 }
 
 void TextTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -1014,48 +938,18 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
         return;
     }
 
-    // Is there an anchor here ?
-    if (m_textEditor.data()->charFormat().isAnchor() && !m_textEditor.data()->hasSelection()) {
-        QString anchor = m_textEditor.data()->charFormat().anchorHref();
-        // local uri has this prefix but bookmark does not contain it, so strip it
-        if ( anchor.startsWith("#") ){
-            anchor = anchor.right(anchor.size()-1);
-        }
-        if (!anchor.isEmpty()) {
-            KoTextDocument document(m_textShapeData->document());
-            KoInlineTextObjectManager *inlineManager = document.inlineTextObjectManager();
-            if (inlineManager) {
-                QList<QString> bookmarks = inlineManager->bookmarkManager()->bookmarkNameList();
-                // Which are the bookmarks we have ?
-                foreach(const QString& s, bookmarks) {
-                    // Is this bookmark the good one ?
-                    if (s == anchor) {
-                        // if Yes, let's jump to it
-                        KoBookmark *bookmark = inlineManager->bookmarkManager()->retrieveBookmark(s);
-                        m_textEditor.data()->setPosition(bookmark->position());
-                        ensureCursorVisible();
-                        event->accept();
-                        return;
-                    }
-                }
-            }
+    KoPointedAt pointedAt = hitTest(event->point);
 
-            runUrl(event, anchor);
+    // Is there an anchor here ?
+    if (!m_textEditor.data()->hasSelection()) {
+        if (pointedAt.bookmark) {
+            m_textEditor.data()->setPosition(pointedAt.bookmark->position());
+            ensureCursorVisible();
+            event->accept();
             return;
-        } else {
-            QStringList anchorList = m_textEditor.data()->charFormat().anchorNames();
-            QString anchorName;
-            if (!anchorList.isEmpty()) {
-                anchorName = anchorList.takeFirst();
-            }
-            KoTextDocument document(m_textShapeData->document());
-            KoBookmark *bookmark = document.inlineTextObjectManager()->bookmarkManager()->retrieveBookmark(anchorName);
-            if (bookmark) {
-                m_textEditor.data()->setPosition(bookmark->position());
-                ensureCursorVisible();
-            } else {
-                kDebug(32500) << "A bookmark should exist but has not been found";
-            }
+        }
+        if (!pointedAt.externalHRef.isEmpty()) {
+            runUrl(event, pointedAt.externalHRef);
         }
     }
 }
@@ -1133,17 +1027,17 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             }
         } else if (hit(item, KStandardShortcut::Prior)) { // page up
             // Scroll up one page. Default: Prior
-            QPointF point = caretRect(textEditor->position()).topLeft();
+            QPointF point = caretRect(textEditor->cursor()).topLeft();
             qreal moveDistance = canvas()->viewConverter()->viewToDocument(QSizeF(0,canvas()->canvasController()->visibleHeight())).height() * 0.8;
             point.setY(point.y() - moveDistance);
-            destinationPosition = m_textEditor.data()->document()->documentLayout()->hitTest(point, Qt::FuzzyHit);
+            destinationPosition = m_textShapeData->rootArea()->hitTest(point, Qt::FuzzyHit).position;
         }
         else if (hit(item, KStandardShortcut::Next)) {
             // Scroll down one page. Default: Next
-            QPointF point = caretRect(textEditor->position()).topLeft();
+            QPointF point = caretRect(textEditor->cursor()).topLeft();
             qreal moveDistance = canvas()->viewConverter()->viewToDocument(QSizeF(0,canvas()->canvasController()->visibleHeight())).height() * 0.8;
             point.setY(point.y() + moveDistance);
-            destinationPosition = m_textEditor.data()->document()->documentLayout()->hitTest(point, Qt::FuzzyHit);
+            destinationPosition = m_textShapeData->rootArea()->hitTest(point, Qt::FuzzyHit).position;
         }
         else if (hit(item, KStandardShortcut::BeginningOfLine))
             // Goto beginning of current line. Default: Home
@@ -1155,15 +1049,6 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             moveOperation = QTextCursor::WordLeft;
         else if (hit(item, KStandardShortcut::ForwardWord))
             moveOperation = QTextCursor::WordRight;
-#ifndef NDEBUG
-        else if (event->key() == Qt::Key_F12) {
-            textEditor->insertTable(3, 2);
-            QTextTable *table = textEditor->cursor()->currentTable();
-            QTextCursor c = table->cellAt(1,1).firstCursorPosition();
-            c.insertText("foo bar baz");
-            textEditor->setPosition(c.position());
-        }
-#endif
 #ifdef Q_WS_MAC
         // Don't reject "alt" key, it may be used for typing text on Mac OS
         else if ((event->modifiers() & Qt::ControlModifier) || event->text().length() == 0) {
@@ -1176,11 +1061,9 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             textEditor->newLine();
             updateActions();
             editingPluginEvents();
-            ensureCursorVisible();
         } else if ((event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint()))) { // insert the text
             m_prevCursorPosition = textEditor->position();
             textEditor->insertText(event->text());
-            ensureCursorVisible();
             editingPluginEvents();
         }
     }
@@ -1227,16 +1110,14 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             repaintCaret();
         updateActions();
         editingPluginEvents();
-        ensureCursorVisible();
     }
     if (m_caretTimer.isActive()) { // make the caret not blink but decide on the action if its visible or not.
         m_caretTimer.stop();
+        m_caretTimer.setInterval(50);
         m_caretTimer.start();
-        m_caretTimerState = moveOperation != QTextCursor::NoMove; // turn caret off while typing
-        if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return
-                || event->key() == Qt::Key_Backspace) // except the enter/backspace key
-            m_caretTimerState = true;
+        m_caretTimerState = true; // turn caret on while typing
     }
+    ensureCursorVisible();
 
     updateSelectionHandler();
 }
@@ -1250,7 +1131,7 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
     switch (query) {
     case Qt::ImMicroFocus: {
         // The rectangle covering the area of the input cursor in widget coordinates.
-        QRectF rect = caretRect(textEditor->position());
+        QRectF rect = caretRect(textEditor->cursor());
         rect.moveTop(rect.top() - m_textShapeData->documentOffset());
         QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
         qreal zoomX, zoomY;
@@ -1312,34 +1193,28 @@ void TextTool::ensureCursorVisible()
     KoTextEditor *textEditor = m_textEditor.data();
     if (!textEditor || !m_textShapeData)
         return;
-    if (m_textShapeData->endPosition() < textEditor->position() || m_textShapeData->position() > textEditor->position()) {
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        Q_ASSERT(lay);
-        foreach (KoShape* shape, lay->shapes()) {
-            TextShape *textShape = dynamic_cast<TextShape*>(shape);
-            Q_ASSERT(textShape);
-            KoTextShapeData *d = static_cast<KoTextShapeData*>(textShape->userData());
-            if (textEditor->position() >= d->position() && textEditor->position() <= d->endPosition()) {
-                if (m_textShapeData)
-                    disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
-                m_textShapeData = d;
-                if (m_textShapeData)
-                    connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
-                m_textShape = textShape;
-                break;
-            }
-        }
+
+    const int position = textEditor->position();
+
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    Q_ASSERT(lay);
+    KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(position);
+
+    if (rootArea && m_textShapeData->rootArea() != rootArea) {
+        // If we have changed root area we need to update m_textShape and m_textShapeData
+        m_textShape = static_cast<TextShape*>(rootArea->associatedShape());
+        Q_ASSERT(m_textShape);
+        disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
+        m_textShapeData = static_cast<KoTextShapeData*>(m_textShape->userData());
+        Q_ASSERT(m_textShapeData);
+        connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
     }
 
-    QRectF cursorPos = caretRect(textEditor->position());
+    QRectF cursorPos = caretRect(textEditor->cursor());
     if (! cursorPos.isValid()) { // paragraph is not yet layouted.
         // The number one usecase for this is when the user pressed enter.
-        // So take bottom of last paragraph.
-        QTextBlock block = textEditor->block().previous();
-        if (block.isValid()) {
-            qreal y = block.layout()->boundingRect().bottom();
-            cursorPos = QRectF(0, y, 1, 10);
-        }
+        // try to do it on next caret blink
+        m_delayedEnsureVisible = true;
     }
     cursorPos.moveTop(cursorPos.top() - m_textShapeData->documentOffset());
     canvas()->ensureVisible(m_textShape->absoluteTransformation(0).mapRect(cursorPos));
@@ -1376,15 +1251,18 @@ void TextTool::updateActions()
     m_actionFormatFontSize->setFontSize(cf.fontPointSize());
     m_actionFormatFontFamily->setFont(cf.font().family());
 
-    KoTextDocument::ResizeMethod resizemethod = m_textShapeData ? KoTextDocument(m_textShapeData->document()).resizeMethod() : KoTextDocument::AutoResize;
-    m_shrinkToFitAction->setEnabled(resizemethod != KoTextDocument::AutoResize);
-    m_shrinkToFitAction->setChecked(resizemethod == KoTextDocument::ShrinkToFitResize);
+    KoTextShapeData::ResizeMethod resizemethod = KoTextShapeData::AutoResize;
+    if(m_textShapeData) {
+        resizemethod = m_textShapeData->resizeMethod();
+    }
+    m_shrinkToFitAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
+    m_shrinkToFitAction->setChecked(resizemethod == KoTextShapeData::ShrinkToFitResize);
 
-    m_growWidthAction->setEnabled(resizemethod != KoTextDocument::AutoResize);
-    m_growWidthAction->setChecked(resizemethod == KoTextDocument::AutoGrowWidth || resizemethod == KoTextDocument::AutoGrowWidthAndHeight);
+    m_growWidthAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
+    m_growWidthAction->setChecked(resizemethod == KoTextShapeData::AutoGrowWidth || resizemethod == KoTextShapeData::AutoGrowWidthAndHeight);
 
-    m_growHeightAction->setEnabled(resizemethod != KoTextDocument::AutoResize);
-    m_growHeightAction->setChecked(resizemethod == KoTextDocument::AutoGrowHeight || resizemethod == KoTextDocument::AutoGrowWidthAndHeight);
+    m_growHeightAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
+    m_growHeightAction->setChecked(resizemethod == KoTextShapeData::AutoGrowHeight || resizemethod == KoTextShapeData::AutoGrowWidthAndHeight);
 
     QTextBlockFormat bf = textEditor->blockFormat();
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
@@ -1429,8 +1307,11 @@ void TextTool::updateStyleManager()
 
 void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
+    kDebug();
+
     Q_UNUSED(toolActivation);
     m_caretTimer.start();
+    m_caretTimerState = true;
     foreach (KoShape *shape, shapes) {
         m_textShape = dynamic_cast<TextShape*>(shape);
         if (m_textShape)
@@ -1480,6 +1361,8 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
 
 void TextTool::deactivate()
 {
+    kDebug();
+
     m_caretTimer.stop();
     m_caretTimerState = false;
     repaintCaret();
@@ -1518,11 +1401,31 @@ void TextTool::repaintCaret()
     KoTextEditor *textEditor = m_textEditor.data();
     if (!textEditor || !m_textShapeData)
         return;
-    QRectF repaintRect = caretRect(textEditor->position());
-    repaintRect.moveTop(repaintRect.top() - m_textShapeData->documentOffset());
-    if (repaintRect.isValid()) {
-        repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
-        canvas()->updateCanvas(repaintRect);
+
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    Q_ASSERT(lay);
+    KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(textEditor->position());
+
+    if (rootArea) {
+        // If we have changed root area we need to update m_textShape and m_textShapeData
+        if (m_delayedEnsureVisible) {
+            m_delayedEnsureVisible = false;
+            ensureCursorVisible();
+            return;
+        }
+
+        TextShape *textShape = static_cast<TextShape*>(rootArea->associatedShape());
+        if (!textShape)
+            return;
+        if (!textShape->textShapeData())
+            return;
+
+        QRectF repaintRect = caretRect(textEditor->cursor());
+        repaintRect.moveTop(repaintRect.top() - textShape->textShapeData()->documentOffset());
+        if (repaintRect.isValid()) {
+            repaintRect = textShape->absoluteTransformation(0).mapRect(repaintRect);
+            canvas()->updateCanvas(repaintRect);
+        }
     }
 }
 
@@ -1531,13 +1434,8 @@ void TextTool::repaintSelection()
     KoTextEditor *textEditor = m_textEditor.data();
     if (textEditor == 0)
         return;
-    repaintSelection(*textEditor->cursor());
-}
+    QTextCursor cursor = *textEditor->cursor();
 
-void TextTool::repaintSelection(QTextCursor &cursor)
-{
-    int startPosition = cursor.selectionStart();
-    int endPosition = cursor.selectionEnd();
     QList<TextShape *> shapes;
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
@@ -1546,13 +1444,11 @@ void TextTool::repaintSelection(QTextCursor &cursor)
         if (textShape == 0) // when the shape is being deleted its no longer a TextShape but a KoShape
             continue;
 
-        const int from = textShape->textShapeData()->position();
-        const int end = textShape->textShapeData()->endPosition();
-        if ((from <= startPosition && end >= startPosition && end <= endPosition)
-            || (from >= startPosition && end <= endPosition) // shape totally included
-            || (from <= endPosition && end >= endPosition)
-           )
-            shapes.append(textShape);
+        if (textShape->textShapeData()->isCursorVisible(&cursor)) {
+            //Q_ASSERT(!shapes.contains(textShape));
+            if (!shapes.contains(textShape))
+                shapes.append(textShape);
+        }
     }
 
     // loop over all shapes that contain the text and update per shape.
@@ -1561,27 +1457,17 @@ void TextTool::repaintSelection(QTextCursor &cursor)
         QRectF rect = repaintRect;
         rect.moveTop(rect.y() - ts->textShapeData()->documentOffset());
         rect = ts->absoluteTransformation(0).mapRect(rect);
-        canvas()->updateCanvas(ts->boundingRect().intersected(rect));
+        QRectF r = ts->boundingRect().intersected(rect);
+        canvas()->updateCanvas(r);
     }
 }
 
-QRectF TextTool::caretRect(int position) const
+QRectF TextTool::caretRect(QTextCursor *cursor) const
 {
-    if (!m_textShapeData)
-        return QRectF();
-    QTextBlock block = m_textShapeData->document()->findBlock(position);
-    if (!block.isValid())
-        return QRectF();
-    QTextLine line1 = block.layout()->lineForTextPosition(position - block.position());
-    if (!line1.isValid())
-        return QRectF();
-    qreal startX = line1.cursorToX(position - block.position());
-    if (line1.ascent()==0) {
-        // Block is empty from any visible content and has as such no height
-        // but in that case the block font defines line height
-        return QRectF(startX, line1.y(), 1, 24);
-    }
-    return QRectF(startX, line1.y(), 1, line1.height());
+    QTextCursor tmpCursor(*cursor);
+    tmpCursor.setPosition(cursor->position()); // looses the anchor
+
+    return textRect(tmpCursor);
 }
 
 QRectF TextTool::textRect(QTextCursor &cursor) const
@@ -1597,9 +1483,9 @@ KoToolSelection* TextTool::selection()
     return m_textEditor.data();
 }
 
-QMap<QString, QWidget *> TextTool::createOptionWidgets()
+QList<QWidget *> TextTool::createOptionWidgets()
 {
-    QMap<QString, QWidget *> widgets;
+    QList<QWidget *> widgets;
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
     SimpleStylesWidget *ssw = new SimpleStylesWidget(0);
@@ -1616,26 +1502,27 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
     connect(spw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(spw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
 
-
     // Connect to/with simple styles widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
     connect(ssw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
     connect(ssw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
     connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
-
     // Connect to/with simple table widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));
     connect(stw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
-
     updateStyleManager();
     if (m_textShape)
         updateActions();
-    widgets.insert(i18n("Character"), scw);
-    widgets.insert(i18n("Paragraph"), spw);
-    widgets.insert(i18n("Styles"), ssw);
-    widgets.insert(i18n("Table"), stw);
+    scw->setWindowTitle(i18n("Character"));
+    widgets.append(scw);
+    spw->setWindowTitle(i18n("Paragraph"));
+    widgets.append(spw);
+    ssw->setWindowTitle(i18n("Styles"));
+    widgets.append(ssw);
+    stw->setWindowTitle(i18n("Table"));
+    widgets.append(stw);
     return widgets;
 }
 
@@ -1882,7 +1769,6 @@ void TextTool::insertTable()
     TableDialog *dia = new TableDialog(0);
     if (dia->exec() == TableDialog::Accepted)
         m_textEditor.data()->insertTable(dia->rows(), dia->columns());
-
     delete dia;
 }
 
@@ -1944,7 +1830,7 @@ void TextTool::formatParagraph()
 
 void TextTool::toggleShowChanges(bool on)//TODO transfer this in KoTextEditor
 {
-    Q_ASSERT(m_textShapeData);
+    m_actionShowChanges->setChecked(on);
     ShowChangesCommand *command = new ShowChangesCommand(on, m_textShapeData->document(), this->canvas());
     connect(command, SIGNAL(toggledShowChange(bool)), m_actionShowChanges, SLOT(setChecked(bool)));
     m_textEditor.data()->addCommand(command);
@@ -1952,6 +1838,7 @@ void TextTool::toggleShowChanges(bool on)//TODO transfer this in KoTextEditor
 
 void TextTool::toggleRecordChanges(bool on)
 {
+    m_actionRecordChanges->setChecked(on);
     if (m_changeTracker)
         m_changeTracker->setRecordChanges(on);
 }
@@ -1963,13 +1850,17 @@ void TextTool::configureChangeTracking()
         insertionBgColor = m_changeTracker->getInsertionBgColor();
         deletionBgColor = m_changeTracker->getDeletionBgColor();
         formatChangeBgColor = m_changeTracker->getFormatChangeBgColor();
+        QString authorName = m_changeTracker->authorName();
+        KoChangeTracker::ChangeSaveFormat changeSaveFormat = m_changeTracker->saveFormat();
 
-        ChangeConfigureDialog changeDialog(insertionBgColor, deletionBgColor, formatChangeBgColor, canvas()->canvasWidget());
+        ChangeConfigureDialog changeDialog(insertionBgColor, deletionBgColor, formatChangeBgColor, authorName, changeSaveFormat, canvas()->canvasWidget());
 
         if (changeDialog.exec()) {
             m_changeTracker->setInsertionBgColor(changeDialog.getInsertionBgColor());
             m_changeTracker->setDeletionBgColor(changeDialog.getDeletionBgColor());
             m_changeTracker->setFormatChangeBgColor(changeDialog.getFormatChangeBgColor());
+            m_changeTracker->setAuthorName(changeDialog.authorName());
+            m_changeTracker->setSaveFormat(changeDialog.saveFormat());
             writeConfig();
         }
     }
@@ -2074,6 +1965,10 @@ bool TextTool::isBidiDocument() const
 
 void TextTool::resourceChanged(int key, const QVariant &var)
 {
+    if (m_textEditor.isNull())
+        return;
+    if (!m_textShapeData)
+        return;
     if (m_allowResourceManagerUpdates == false)
         return;
     if (key == KoText::CurrentTextPosition) {
@@ -2122,6 +2017,7 @@ void TextTool::selectFont()
 
 void TextTool::shapeAddedToCanvas()
 {
+    kDebug();
     if (m_textShape) {
         KoSelection *selection = canvas()->shapeManager()->selection();
         KoShape *shape = selection->firstSelectedShape();
@@ -2156,11 +2052,14 @@ void TextTool::shapeDataRemoved()
 // ---------- editing plugins methods.
 void TextTool::editingPluginEvents()
 {
-    if (m_prevCursorPosition == -1 || m_prevCursorPosition == m_textEditor.data()->position())
+    if (m_prevCursorPosition == -1 || m_prevCursorPosition == m_textEditor.data()->position()) {
+        kDebug()<<"m_prevCursorPosition="<<m_prevCursorPosition<<"m_textEditor.data()->position()="<<m_textEditor.data()->position();
         return;
+    }
 
     QTextBlock block = m_textEditor.data()->block();
     if (! block.contains(m_prevCursorPosition)) {
+        kDebug()<<"m_prevCursorPosition="<<m_prevCursorPosition;
         finishedWord();
         finishedParagraph();
         m_prevCursorPosition = -1;
@@ -2170,6 +2069,7 @@ void TextTool::editingPluginEvents()
         if (from > to)
             qSwap(from, to);
         QString section = block.text().mid(from - block.position(), to - from);
+        kDebug()<<"from="<<from<<"to="<<to;
         if (section.contains(' ')) {
             finishedWord();
             m_prevCursorPosition = -1;
@@ -2179,6 +2079,7 @@ void TextTool::editingPluginEvents()
 
 void TextTool::finishedWord()
 {
+    kDebug();
     if (m_textShapeData)
         foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
             plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
@@ -2186,6 +2087,7 @@ void TextTool::finishedWord()
 
 void TextTool::finishedParagraph()
 {
+    kDebug();
     if (m_textShapeData)
         foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
             plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
@@ -2203,53 +2105,29 @@ void TextTool::setBackgroundColor(const KoColor &color)
 
 void TextTool::setGrowWidthToFit(bool enabled)
 {
-    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShape, KoTextDocument::AutoGrowWidth, enabled));
+    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShapeData, KoTextShapeData::AutoGrowWidth, enabled));
     updateActions();
 }
 
 void TextTool::setGrowHeightToFit(bool enabled)
 {
-    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShape, KoTextDocument::AutoGrowHeight, enabled));
+    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShapeData, KoTextShapeData::AutoGrowHeight, enabled));
     updateActions();
 }
 
 void TextTool::setShrinkToFit(bool enabled)
 {
-    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShape, KoTextDocument::ShrinkToFitResize, enabled));
+    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShapeData, KoTextShapeData::ShrinkToFitResize, enabled));
     updateActions();
 }
-
-void TextTool::shapeAddedToDoc(KoShape *shape)
-{
-    // calling ensureCursorVisible below is a rather intrusive thing to do for the user
-    // so make doube sure we need it!
-    if (!m_textShapeData)
-        return;
-    TextShape *ts = dynamic_cast<TextShape*>(shape);
-    if (!ts)
-        return;
-    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(ts->userData());
-    if (!data)
-        return;
-    if (data->document() != m_textShapeData->document())
-        return;
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-    Q_ASSERT(lay);
-    const QList<KoShape*> shapes = lay->shapes();
-    // only when the new one is directly after our current one should we do the move
-    if (shapes.indexOf(ts) - shapes.indexOf(m_textShape) > 1)
-        return;
-    // in case the new frame added is a freshly appended frame
-    // allow the layouter to do some work and then optionally move the view to follow the cursor
-    QTimer::singleShot(0, this, SLOT(ensureCursorVisible()));
-}
-
 
 void TextTool::readConfig()
 {
     if (m_changeTracker) {
         QColor bgColor, defaultColor;
-        KConfigGroup interface = KoGlobal::kofficeConfig()->group("Change-Tracking");
+        QString changeAuthor;
+        int changeSaveFormat = KoChangeTracker::DELTAXML;
+        KConfigGroup interface = KoGlobal::calligraConfig()->group("Change-Tracking");
         if (interface.exists()) {
             bgColor = interface.readEntry("insertionBgColor", defaultColor);
             m_changeTracker->setInsertionBgColor(bgColor);
@@ -2257,6 +2135,15 @@ void TextTool::readConfig()
             m_changeTracker->setDeletionBgColor(bgColor);
             bgColor = interface.readEntry("formatChangeBgColor", defaultColor);
             m_changeTracker->setFormatChangeBgColor(bgColor);
+            changeAuthor = interface.readEntry("changeAuthor", changeAuthor);
+            if (changeAuthor == "") {
+                KUser user(KUser::UseRealUserID);
+                m_changeTracker->setAuthorName(user.property(KUser::FullName).toString());
+            } else {
+                m_changeTracker->setAuthorName(changeAuthor);
+            }
+            changeSaveFormat = interface.readEntry("changeSaveFormat", changeSaveFormat);
+            m_changeTracker->setSaveFormat((KoChangeTracker::ChangeSaveFormat)(changeSaveFormat));
         }
     }
 }
@@ -2264,10 +2151,16 @@ void TextTool::readConfig()
 void TextTool::writeConfig()
 {
     if (m_changeTracker) {
-        KConfigGroup interface = KoGlobal::kofficeConfig()->group("Change-Tracking");
+        KConfigGroup interface = KoGlobal::calligraConfig()->group("Change-Tracking");
         interface.writeEntry("insertionBgColor", m_changeTracker->getInsertionBgColor());
         interface.writeEntry("deletionBgColor", m_changeTracker->getDeletionBgColor());
         interface.writeEntry("formatChangeBgColor", m_changeTracker->getFormatChangeBgColor());
+        KUser user(KUser::UseRealUserID);
+        QString changeAuthor = m_changeTracker->authorName();
+        if (changeAuthor != user.property(KUser::FullName).toString()) {
+            interface.writeEntry("changeAuthor", changeAuthor);
+        }
+        interface.writeEntry("changeSaveFormat", (int)(m_changeTracker->saveFormat()));
     }
 }
 

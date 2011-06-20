@@ -63,7 +63,7 @@
 #include <KDChartRingDiagram>
 #include <KDChartPolarDiagram>
 
-// KOffice
+// Calligra
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoEmbeddedDocumentSaver.h>
@@ -499,7 +499,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     foreach( KoShape *label, labels() ) {
         TextLabelData *labelData = qobject_cast<TextLabelData*>( label->userData() );
         KoTextDocument doc( labelData->document() );
-        doc.setResizeMethod( KoTextDocument::AutoResize );
+//FIXME        doc.setResizeMethod( KoTextDocument::AutoResize );
     }
 
     KoColorBackground *background = new KoColorBackground( Qt::white );
@@ -729,7 +729,7 @@ void ChartShape::paintComponent( QPainter &painter,
 
         // Calculate the clipping rect
         QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
-        painter.setClipRect( paintRect );
+        painter.setClipRect( paintRect, Qt::IntersectClip );
 
         QPainterPath p;
         p.addRect( paintRect );
@@ -1003,6 +1003,10 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
 
 
     // 2. Load the data
+//     int dimensions = numDimensions( chartType );
+//     qDebug() << "DIMENSIONS" << dimensions;
+//     d->proxyModel->setDataDimensions( dimensions );
+//     qDebug() << d->proxyModel->dataSets().count();
     KoXmlElement  dataElem = KoXml::namedItemNS( chartElement,
                                                  KoXmlNS::table, "table" );
     if ( !dataElem.isNull() ) {
@@ -1013,11 +1017,14 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
     // 3. Load the plot area (this is where the meat is!).
     KoXmlElement  plotareaElem = KoXml::namedItemNS( chartElement,
                                                      KoXmlNS::chart, "plot-area" );
+
     if ( !plotareaElem.isNull() ) {
-        if ( !d->plotArea->loadOdf( plotareaElem, context ) )
-            return false;
         d->plotArea->setChartType( chartType );
         d->plotArea->setChartSubType( chartSubType() );
+        if ( !d->plotArea->loadOdf( plotareaElem, context ) )
+            return false;
+//         d->plotArea->setChartType( chartType );
+//         d->plotArea->setChartSubType( chartSubType() );
     }
 
     // 4. Load the title.
@@ -1108,7 +1115,7 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     // documents.
     //
     // FIXME: The check isEmpty() fixes a crash that happened when a
-    //        chart shape was saved from KWord.  There are two
+    //        chart shape was saved from Words.  There are two
     //        problems with this fix:
     //        1. Checking the tag hierarchy is hardly the right way to do this
     //        2. The position doesn't seem to be saved yet.

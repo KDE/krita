@@ -146,8 +146,8 @@ void KisGridDrawer::drawGrid(const QRectF& area)
 
     quint32 offsetx = cfg.getGridOffsetX();
     quint32 offsety = cfg.getGridOffsetY();
-    quint32 hspacing = cfg.getGridHSpacing(); // m_doc->gridData().gridX(); // use koffice grid when KOffice grid is on par with Krita grid, and is configurable by whatever mean Krita has to manipulate the grid
-    quint32 vspacing = cfg.getGridVSpacing(); // m_doc->gridData().gridY(); // use koffice grid when KOffice grid is on par with Krita grid, and is configurable by whatever mean Krita has to manipulate the grid
+    quint32 hspacing = cfg.getGridHSpacing(); // m_doc->gridData().gridX(); // use calligra grid when Calligra grid is on par with Krita grid, and is configurable by whatever mean Krita has to manipulate the grid
+    quint32 vspacing = cfg.getGridVSpacing(); // m_doc->gridData().gridY(); // use calligra grid when Calligra grid is on par with Krita grid, and is configurable by whatever mean Krita has to manipulate the grid
     quint32 subdivision = cfg.getGridSubdivisions() - 1;
 
     // Draw vertical line

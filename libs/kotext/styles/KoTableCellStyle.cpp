@@ -28,6 +28,8 @@
 #include "Styles_p.h"
 #include "KoTextDocument.h"
 #include "KoTableCellStyle_p.h"
+#include <KoShapeLoadingContext.h>
+#include "KoCharacterStyle.h"
 
 #include <KDebug>
 
@@ -40,8 +42,33 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
+
+KoTableCellStyle::RotationAlignment rotationAlignmentFromString(const QString& align)
+{
+    if (align == "bottom")
+        return KoTableCellStyle::RAlignBottom;
+    if (align == "center")
+        return KoTableCellStyle::RAlignCenter;
+    if (align == "top")
+        return KoTableCellStyle::RAlignTop;
+    
+    return KoTableCellStyle::RAlignNone;
+}
+
+QString rotationAlignmentToString(KoTableCellStyle::RotationAlignment align)
+{
+    if (align == KoTableCellStyle::RAlignBottom)
+        return "bottom";
+    if (align == KoTableCellStyle::RAlignTop)
+        return "top";
+    if (align == KoTableCellStyle::RAlignCenter)
+        return "center";
+    return "none";
+}
+
 KoTableCellStylePrivate::KoTableCellStylePrivate()
-    : parentStyle(0)
+    : charStyle(0)
+    , parentStyle(0)
     , next(0)
 {
 }
@@ -58,6 +85,8 @@ void KoTableCellStylePrivate::setProperty(int key, const QVariant &value)
 KoTableCellStyle::KoTableCellStyle(QObject *parent)
     : KoTableBorderStyle(*new KoTableCellStylePrivate(), parent)
 {
+    Q_D(KoTableCellStyle);
+    d->charStyle = new KoCharacterStyle(this);
 }
 
 KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *parent)
@@ -65,6 +94,7 @@ KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *
 {
     Q_D(KoTableCellStyle);
     d->stylesPrivate = format.properties();
+    d->charStyle = new KoCharacterStyle(this);
 }
 
 KoTableCellStyle::~KoTableCellStyle()
@@ -204,6 +234,34 @@ void KoTableCellStyle::setPadding(qreal padding)
     setLeftPadding(padding);
 }
 
+KoCharacterStyle *KoTableCellStyle::characterStyle()
+{
+    Q_D(KoTableCellStyle);
+    return d->charStyle;
+}
+
+void KoTableCellStyle::setCharacterStyle(KoCharacterStyle *style)
+{
+    Q_D(KoTableCellStyle);
+    if (d->charStyle == style) {
+        return;
+    }
+    if (d->charStyle && d->charStyle->parent() == this) {
+        delete d->charStyle;
+    }
+    d->charStyle = style;
+}
+
+bool KoTableCellStyle::shrinkToFit() const
+{
+    return propertyBoolean(ShrinkToFit);
+}
+
+void KoTableCellStyle::setShrinkToFit(bool state)
+{
+    setProperty(ShrinkToFit, state);
+}
+
 void KoTableCellStyle::setProperty(int key, const QVariant &value)
 {
     Q_D(KoTableCellStyle);
@@ -277,6 +335,9 @@ void KoTableCellStyle::applyStyle(QTextTableCellFormat &format) const
     if (d->parentStyle) {
         d->parentStyle->applyStyle(format);
     }
+    if (d->charStyle) {
+        d->charStyle->applyStyle(format);
+    }
     QList<int> keys = d->stylesPrivate.keys();
     for (int i = 0; i < keys.count(); i++) {
         QVariant variant = d->stylesPrivate.value(keys[i]);
@@ -331,13 +392,25 @@ QBrush KoTableCellStyle::background() const
     return qvariant_cast<QBrush>(variant);
 }
 
+void KoTableCellStyle::setWrap(bool state)
+{
+    setProperty(Wrap, state);
+}
+
+bool KoTableCellStyle::wrap() const
+{
+    return propertyBoolean(Wrap);
+}
+
 void KoTableCellStyle::setAlignment(Qt::Alignment alignment)
 {
-    setProperty(QTextFormat::BlockAlignment, (int) alignment);
+    setProperty(VerticalAlignment, (int) alignment);
 }
 
 Qt::Alignment KoTableCellStyle::alignment() const
 {
+    if (propertyInt(VerticalAlignment) == 0)
+        return Qt::AlignTop;
     return static_cast<Qt::Alignment>(propertyInt(VerticalAlignment));
 }
 
@@ -383,8 +456,102 @@ void KoTableCellStyle::setMasterPageName(const QString &name)
     setProperty(MasterPageName, name);
 }
 
-void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context)
+void KoTableCellStyle::setCellProtection(KoTableCellStyle::CellProtectionFlag protection)
 {
+    setProperty(CellProtection, protection);
+}
+
+KoTableCellStyle::CellProtectionFlag KoTableCellStyle::cellProtection() const
+{
+    return (CellProtectionFlag) propertyInt(CellProtection);
+}
+
+void KoTableCellStyle::setTextDirection(KoText::Direction value)
+{
+    setProperty(TextWritingMode, value);
+}
+
+KoText::Direction KoTableCellStyle::textDirection() const
+{
+    return (KoText::Direction) propertyInt(TextWritingMode);
+}
+
+bool KoTableCellStyle::printContent() const
+{
+    return (hasProperty(PrintContent) && propertyBoolean(PrintContent));
+}
+
+void KoTableCellStyle::setPrintContent(bool state)
+{
+    setProperty(PrintContent, state);
+}
+
+bool KoTableCellStyle::repeatContent() const
+{
+    return (hasProperty(RepeatContent) && propertyBoolean(RepeatContent));
+}
+
+void KoTableCellStyle::setRepeatContent(bool state)
+{
+    setProperty(RepeatContent, state);
+}
+
+int KoTableCellStyle::decimalPlaces() const
+{
+    return propertyInt(DecimalPlaces);
+}
+
+void KoTableCellStyle::setDecimalPlaces(int places)
+{
+    setProperty(DecimalPlaces, places);
+}
+
+bool KoTableCellStyle::alignFromType() const
+{
+    return (hasProperty(AlignFromType) && propertyBoolean(AlignFromType));
+}
+
+void KoTableCellStyle::setAlignFromType(bool state)
+{
+    setProperty(AlignFromType, state);
+}
+
+int KoTableCellStyle::rotationAngle() const
+{
+    return propertyInt(RotationAngle);
+}
+
+void KoTableCellStyle::setRotationAngle(int value)
+{
+    if (value >= 0)
+        setProperty(RotationAngle, value);
+}
+
+void KoTableCellStyle::setDirection(KoTableCellStyle::CellTextDirection direction)
+{
+    setProperty(Direction, direction);
+}
+
+KoTableCellStyle::RotationAlignment KoTableCellStyle::rotationAlignment() const
+{
+    return static_cast<RotationAlignment>(propertyInt(RotationAlign));
+}
+
+void KoTableCellStyle::setRotationAlignment(KoTableCellStyle::RotationAlignment align)
+{
+    setProperty(RotationAlign, align);
+}
+
+KoTableCellStyle::CellTextDirection KoTableCellStyle::direction() const
+{
+    if (hasProperty(Direction))
+        return (KoTableCellStyle::CellTextDirection) propertyInt(Direction);
+    return KoTableCellStyle::Default;
+}
+
+void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContext &scontext)
+{
+    KoOdfLoadingContext &context = scontext.odfLoadingContext();
     Q_D(KoTableCellStyle);
     if (element->hasAttributeNS(KoXmlNS::style, "display-name"))
         d->name = element->attributeNS(KoXmlNS::style, "display-name", QString());
@@ -402,6 +569,10 @@ void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext 
 
     context.styleStack().setTypeProperties("table-cell");
     loadOdfProperties(context.styleStack());
+
+    KoCharacterStyle *charstyle = characterStyle();
+    context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
+    charstyle->loadOdf(scontext);   // load the KoCharacterStyle from the stylestack
 
     context.styleStack().setTypeProperties("graphic");
     loadOdfProperties(context.styleStack());
@@ -429,8 +600,8 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "left")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "left");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "left")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "left");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "left")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "left");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Left, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -439,8 +610,8 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "top")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "top");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "top")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "top");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "top")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "top");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Top, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -450,8 +621,8 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "right")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "right");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "right")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "right");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "right")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "right");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Right, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -460,8 +631,8 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "bottom")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "bottom");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "bottom")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "bottom");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "bottom")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "bottom");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Bottom, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -470,16 +641,16 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-tl-br")) {
         QString border = styleStack.property(KoXmlNS::style, "diagonal-tl-br");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "tl-br")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "tl-br");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "tl-br")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "tl-br");
         }
         setEdge(TopLeftToBottomRight, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
     }
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-bl-tr")) {
         QString border = styleStack.property(KoXmlNS::style, "diagonal-bl-tr");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "bl-tr")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "bl-tr");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "bl-tr")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "bl-tr");
         }
         setEdge(BottomLeftToTopRight, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
     }
@@ -532,7 +703,7 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
         const QString bgcolor = styleStack.property(KoXmlNS::fo, "background-color");
         QBrush brush = background();
         if (bgcolor == "transparent")
-           clearBackground();
+            setBackground(Qt::NoBrush);
         else {
             if (brush.style() == Qt::NoBrush)
                 brush.setStyle(Qt::SolidPattern);
@@ -541,11 +712,91 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
         }
     }
 
+    if (styleStack.hasProperty(KoXmlNS::draw, "opacity")) {
+        const QString opacity = styleStack.property(KoXmlNS::draw, "opacity");
+        if (!opacity.isEmpty() && opacity.right(1) == "%") {
+            float percent = opacity.left(opacity.length() - 1).toFloat();
+            QBrush brush = background();
+            QColor color = brush.color();
+            color.setAlphaF(percent / 100.0);
+            brush.setColor(color);
+            setBackground(brush);
+        }
+    }
+
+    if (styleStack.hasProperty(KoXmlNS::style, "shrink-to-fit")) {
+        setShrinkToFit(styleStack.property(KoXmlNS::style, "shrink-to-fit") == "true");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "print-content")) {
+        setPrintContent(styleStack.property(KoXmlNS::style, "print-content") == "true");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "repeat-content")) {
+        setRepeatContent(styleStack.property(KoXmlNS::style, "repeat-content") == "true");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "repeat-content")) {
+        setRepeatContent(styleStack.property(KoXmlNS::style, "repeat-content") == "true");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "decimal-places")) {
+        bool ok;
+        int value = styleStack.property(KoXmlNS::style, "decimal-places").toInt(&ok);
+        if (ok)
+            setDecimalPlaces(value);
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "rotation-angle")) {
+        bool ok;
+        int value = styleStack.property(KoXmlNS::style, "rotation-angle").toInt(&ok);
+        if (ok)
+            setRotationAngle(value);
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "direction")) {
+        if (styleStack.property(KoXmlNS::style, "direction") == "ltr")
+            setDirection(KoTableCellStyle::LeftToRight);
+        else
+            setDirection(KoTableCellStyle::TopToBottom);
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "rotation-align")) {
+        setRotationAlignment(rotationAlignmentFromString(styleStack.property(KoXmlNS::style, "rotation-align")));
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "text-align-source")) {
+        setAlignFromType(styleStack.property(KoXmlNS::style, "text-align-source") == "value-type");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::fo, "wrap-option")) {
+        setWrap(styleStack.property(KoXmlNS::fo, "wrap-option") == "wrap");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "cell-protect")) {
+        QString protection = styleStack.property(KoXmlNS::style, "cell-protect");
+        if (protection == "none")
+            setCellProtection(NoProtection);
+        else if (protection == "hidden-and-protected")
+            setCellProtection(HiddenAndProtected);
+        else if (protection == "protected")
+            setCellProtection(Protected);
+        else if (protection == "formula-hidden")
+            setCellProtection(FormulaHidden);
+        else if ((protection == "protected formula-hidden") || (protection == "formula-hidden protected"))
+            setCellProtection(ProtectedAndFormulaHidden);
+    }
     // Alignment
     const QString verticalAlign(styleStack.property(KoXmlNS::style, "vertical-align"));
     if (!verticalAlign.isEmpty()) {
-        setAlignment(KoText::valignmentFromString(verticalAlign));
+        if (verticalAlign == "automatic")
+            setAlignment((Qt::AlignmentFlag) 0);
+        else
+            setAlignment(KoText::valignmentFromString(verticalAlign));
     }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "writing-mode"))
+        setTextDirection(KoText::directionFromString(styleStack.property(KoXmlNS::style, "writing-mode")));
 }
 
 void KoTableCellStyle::copyProperties(const KoTableCellStyle *style)
@@ -585,6 +836,17 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
 {
     Q_D(KoTableCellStyle);
     QList<int> keys = d->stylesPrivate.keys();
+    bool donePadding = false;
+    if (hasProperty(QTextFormat::TableCellLeftPadding) && 
+            hasProperty(QTextFormat::TableCellRightPadding) && 
+            hasProperty(QTextFormat::TableCellTopPadding) && 
+            hasProperty(QTextFormat::TableCellBottomPadding) && 
+            leftPadding() == rightPadding() &&
+            topPadding() == bottomPadding() &&
+            topPadding() == leftPadding()) {
+        donePadding = true;
+        style.addPropertyPt("fo:padding", leftPadding(), KoGenStyle::TableCellType);
+    }
     foreach(int key, keys) {
         if (key == CellBackgroundBrush) {
             QBrush backBrush = background();
@@ -592,27 +854,76 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::TableCellType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::TableCellType);
+            if (!backBrush.isOpaque()) {
+                style.addProperty("draw:opacity", QString("%1%").arg(backBrush.color().alphaF() * 100.0), KoGenStyle::GraphicType);
+            }
         } else if (key == VerticalAlignment) {
-            style.addProperty("style:vertical-align", KoText::valignmentToString(alignment()), KoGenStyle::TableCellType);
-            
-        } else if (key == QTextFormat::TableCellLeftPadding) {
+            if (propertyInt(VerticalAlignment) == 0)
+                style.addProperty("style:vertical-align", "automatic", KoGenStyle::TableCellType);
+            else
+                style.addProperty("style:vertical-align", KoText::valignmentToString(alignment()), KoGenStyle::TableCellType);
+        } else if ((key == QTextFormat::TableCellLeftPadding) && (!donePadding)) {
             style.addPropertyPt("fo:padding-left", leftPadding(), KoGenStyle::TableCellType);
-        } else if (key == QTextFormat::TableCellRightPadding) {
+        } else if ((key == QTextFormat::TableCellRightPadding) && (!donePadding)) {
             style.addPropertyPt("fo:padding-right", rightPadding(), KoGenStyle::TableCellType);
-        } else if (key == QTextFormat::TableCellTopPadding) {
+        } else if ((key == QTextFormat::TableCellTopPadding) && (!donePadding)) {
             style.addPropertyPt("fo:padding-top", topPadding(), KoGenStyle::TableCellType);
-        } else if (key == QTextFormat::TableCellBottomPadding) {
+        } else if ((key == QTextFormat::TableCellBottomPadding) && (!donePadding)) {
             style.addPropertyPt("fo:padding-bottom", bottomPadding(), KoGenStyle::TableCellType);
+        } else if (key == ShrinkToFit) {
+            style.addProperty("style:shrink-to-fit", shrinkToFit(), KoGenStyle::TableCellType);
+        } else if (key == PrintContent) {
+            style.addProperty("style:print-content", printContent(), KoGenStyle::TableCellType);
+        } else if (key == RepeatContent) {
+            style.addProperty("style:repeat-content", repeatContent(), KoGenStyle::TableCellType);
+        } else if (key == DecimalPlaces) {
+            style.addProperty("style:decimal-places", decimalPlaces(), KoGenStyle::TableCellType);
+        } else if (key == RotationAngle) {
+            style.addProperty("style:rotation-angle", rotationAngle(), KoGenStyle::TableCellType);
+        } else if (key == Wrap) {
+            if (wrap())
+                style.addProperty("fo:wrap-option", "wrap", KoGenStyle::TableCellType);
+            else
+                style.addProperty("fo:wrap-option", "no-wrap", KoGenStyle::TableCellType);
+        } else if (key == Direction) {
+            if (direction() == LeftToRight)
+                style.addProperty("style:direction", "ltr", KoGenStyle::TableCellType);
+            else if (direction() == TopToBottom)
+                style.addProperty("style:direction", "ttb", KoGenStyle::TableCellType);
+        } else if (key == CellProtection) {
+            if (cellProtection() == NoProtection)
+                style.addProperty("style:cell-protect", "none", KoGenStyle::TableCellType);
+            else if (cellProtection() == HiddenAndProtected)
+                style.addProperty("style:cell-protect", "hidden-and-protected", KoGenStyle::TableCellType);
+            else if (cellProtection() == Protected)
+                style.addProperty("style:cell-protect", "protected", KoGenStyle::TableCellType);
+            else if (cellProtection() == FormulaHidden)
+                style.addProperty("style:cell-protect", "formula-hidden", KoGenStyle::TableCellType);
+            else if (cellProtection() == ProtectedAndFormulaHidden)
+                style.addProperty("style:cell-protect", "protected formula-hidden", KoGenStyle::TableCellType);
+        } else if (key == AlignFromType) {
+            if (alignFromType())
+                style.addProperty("style:text-align-source", "value-type", KoGenStyle::TableCellType);
+            else
+                style.addProperty("style:text-align-source", "fix", KoGenStyle::TableCellType);
+        } else if (key == RotationAlign) {
+            style.addProperty("style:rotation-align", rotationAlignmentToString(rotationAlignment()), KoGenStyle::TableCellType);
+        } else if (key == TextWritingMode) {
+            style.addProperty("style:writing-mode", KoText::directionToString(textDirection()), KoGenStyle::TableCellType);
         }
     }
+    if (d->charStyle) {
+        d->charStyle->saveOdf(style);
+    }
+
 /*
 
     // Borders
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "left")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "left");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "left")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "left");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "left")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "left");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Left, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -621,8 +932,8 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "top")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "top");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "top")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "top");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "top")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "top");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Top, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -632,8 +943,8 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "right")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "right");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "right")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "right");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "right")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "right");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Right, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -642,8 +953,8 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "bottom")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "bottom");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "bottom")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "bottom");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "bottom")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "bottom");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Bottom, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -652,16 +963,16 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-tl-br")) {
         QString border = styleStack.property(KoXmlNS::style, "diagonal-tl-br");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "tl-br")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "tl-br");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "tl-br")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "tl-br");
         }
         setEdge(TopLeftToBottomRight, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
     }
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-bl-tr")) {
         QString border = styleStack.property(KoXmlNS::style, "diagonal-bl-tr");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "bl-tr")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "bl-tr");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "bl-tr")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "bl-tr");
         }
         setEdge(BottomLeftToTopRight, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
     }
@@ -707,100 +1018,6 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
             QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
             setEdgeDoubleBorderValues(BottomLeftToTopRight, KoUnit::parseValue(blw[0], 1.0), KoUnit::parseValue(blw[1], 0.1));
         }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-if (key == QTextFormat::BlockAlignment) {
-            int alignValue = 0;
-            bool ok = false;
-            alignValue = d->stylesPrivate.value(key).toInt(&ok);
-            if (ok) {
-                Qt::Alignment alignment = (Qt::Alignment) alignValue;
-                QString align = KoText::alignmentToString(alignment);
-                if (!align.isEmpty())
-                    style.addProperty("fo:text-align", align, KoGenStyle::ParagraphType);
-            }
-        } else if (key == KoTableCellStyle::TextProgressionDirection) {
-            int directionValue = 0;
-            bool ok = false;
-            directionValue = d->stylesPrivate.value(key).toInt(&ok);
-            if (ok) {
-                QString direction = "";
-                if (directionValue == KoText::LeftRightTopBottom)
-                    direction = "lr";
-                else if (directionValue == KoText::RightLeftTopBottom)
-                    direction = "rl";
-                else if (directionValue == KoText::TopBottomRightLeft)
-                    direction = "tb";
-                if (!direction.isEmpty())
-                    style.addProperty("style:writing-mode", direction, KoGenStyle::ParagraphType);
-            }
-        }
-    // Border
-    QString leftBorder = QString("%1pt %2 %3").arg(QString::number(leftBorderWidth()),
-                         odfBorderStyleString(leftBorderStyle()),
-                         leftBorderColor().name());
-    QString rightBorder = QString("%1pt %2 %3").arg(QString::number(rightBorderWidth()),
-                          odfBorderStyleString(rightBorderStyle()),
-                          rightBorderColor().name());
-    QString topBorder = QString("%1pt %2 %3").arg(QString::number(topBorderWidth()),
-                        odfBorderStyleString(topBorderStyle()),
-                        topBorderColor().name());
-    QString bottomBorder = QString("%1pt %2 %3").arg(QString::number(bottomBorderWidth()),
-                           odfBorderStyleString(bottomBorderStyle()),
-                           bottomBorderColor().name());
-    if (leftBorder == rightBorder && leftBorder == topBorder && leftBorder == bottomBorder) {
-        if (leftBorderWidth() > 0 && leftBorderStyle() != KoParagraphStyle::BorderNone)
-            style.addProperty("fo:border", leftBorder, KoGenStyle::ParagraphType);
-    } else {
-        if (leftBorderWidth() > 0 && leftBorderStyle() != KoParagraphStyle::BorderNone)
-            style.addProperty("fo:border-left", leftBorder, KoGenStyle::ParagraphType);
-        if (rightBorderWidth() > 0 && rightBorderStyle() != KoParagraphStyle::BorderNone)
-            style.addProperty("fo:border-right", rightBorder, KoGenStyle::ParagraphType);
-        if (topBorderWidth() > 0 && topBorderStyle() != KoParagraphStyle::BorderNone)
-            style.addProperty("fo:border-top", topBorder, KoGenStyle::ParagraphType);
-        if (bottomBorderWidth() > 0 && bottomBorderStyle() != KoParagraphStyle::BorderNone)
-            style.addProperty("fo:border-bottom", bottomBorder, KoGenStyle::ParagraphType);
-    }
-    QString leftBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(leftInnerBorderWidth()),
-                                  QString::number(leftBorderSpacing()),
-                                  QString::number(leftBorderWidth()));
-    QString rightBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(rightInnerBorderWidth()),
-                                   QString::number(rightBorderSpacing()),
-                                   QString::number(rightBorderWidth()));
-    QString topBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(topInnerBorderWidth()),
-                                 QString::number(topBorderSpacing()),
-                                 QString::number(topBorderWidth()));
-    QString bottomBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(bottomInnerBorderWidth()),
-                                    QString::number(bottomBorderSpacing()),
-                                    QString::number(bottomBorderWidth()));
-    if (leftBorderLineWidth == rightBorderLineWidth &&
-            leftBorderLineWidth == topBorderLineWidth &&
-            leftBorderLineWidth == bottomBorderLineWidth &&
-            leftBorderStyle() == KoParagraphStyle::BorderDouble &&
-            rightBorderStyle() == KoParagraphStyle::BorderDouble &&
-            topBorderStyle() == KoParagraphStyle::BorderDouble &&
-            bottomBorderStyle() == KoParagraphStyle::BorderDouble) {
-        style.addProperty("style:border-line-width", leftBorderLineWidth, KoGenStyle::ParagraphType);
-    } else {
-        if (leftBorderStyle() == KoParagraphStyle::BorderDouble)
-            style.addProperty("style:border-line-width-left", leftBorderLineWidth, KoGenStyle::ParagraphType);
-        if (rightBorderStyle() == KoParagraphStyle::BorderDouble)
-            style.addProperty("style:border-line-width-right", rightBorderLineWidth, KoGenStyle::ParagraphType);
-        if (topBorderStyle() == KoParagraphStyle::BorderDouble)
-            style.addProperty("style:border-line-width-top", topBorderLineWidth, KoGenStyle::ParagraphType);
-        if (bottomBorderStyle() == KoParagraphStyle::BorderDouble)
-            style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, KoGenStyle::ParagraphType);
     }
 */
 }

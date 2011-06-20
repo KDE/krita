@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoOdfWorkaround.h"
 #include "KoPathShape.h"
 #include "KoPathShape_p.h"
 #include "KoPathPoint.h"
@@ -113,7 +114,7 @@ void KoPathShape::saveOdf(KoShapeSavingContext & context) const
     saveOdfAttributes(context, OdfAllAttributes | OdfViewbox);
 
     context.xmlWriter().addAttribute("svg:d", toString());
-    context.xmlWriter().addAttribute("koffice:nodeTypes", d->nodeTypes());
+    context.xmlWriter().addAttribute("calligra:nodeTypes", d->nodeTypes());
 
     saveOdfCommonChildElements(context);
     saveText(context);
@@ -198,10 +199,15 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
 
     if (styleStack.hasProperty(KoXmlNS::svg, "fill-rule")) {
         QString rule = styleStack.property(KoXmlNS::svg, "fill-rule");
-        d->fillRule = rule == "nonzero" ?  Qt::WindingFill : Qt::OddEvenFill;
+        d->fillRule = (rule == "nonzero") ?  Qt::WindingFill : Qt::OddEvenFill;
     } else {
         d->fillRule = Qt::WindingFill;
+#ifndef NWORKAROUND_ODF_BUGS
+        KoOdfWorkaround::fixMissingFillRule(d->fillRule, context);
+#endif
     }
+
+
 }
 
 QRectF KoPathShape::loadOdfViewbox(const KoXmlElement & element) const
@@ -297,12 +303,9 @@ void KoPathShapePrivate::debugPath() const
 
 void KoPathShape::paintPoints(QPainter &painter, const KoViewConverter &converter, int handleRadius)
 {
-    Q_D(KoPathShape);
     applyConversion(painter, converter);
 
     KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
-
-    QRectF handle = converter.viewToDocument(d->handleRect(QPoint(0, 0), handleRadius));
 
     for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
@@ -718,7 +721,6 @@ KoPathPoint * KoPathShape::pointByIndex(const KoPathPointIndex &pointIndex) cons
     if (subpath == 0 || pointIndex.second < 0 || pointIndex.second >= subpath->size())
         return 0;
 
-qDebug() << "subpath is correctly returned by KoPathShape::pointByIndex()";
     return subpath->at(pointIndex.second);
 }
 
@@ -1257,8 +1259,8 @@ void updateNodeType(KoPathPoint * point, const QChar & nodeType)
 void KoPathShapePrivate::loadNodeTypes(const KoXmlElement &element)
 {
     Q_Q(KoPathShape);
-    if (element.hasAttributeNS(KoXmlNS::koffice, "nodeTypes")) {
-        QString nodeTypes = element.attributeNS(KoXmlNS::koffice, "nodeTypes");
+    if (element.hasAttributeNS(KoXmlNS::calligra, "nodeTypes")) {
+        QString nodeTypes = element.attributeNS(KoXmlNS::calligra, "nodeTypes");
         QString::const_iterator nIt(nodeTypes.constBegin());
         KoSubpathList::const_iterator pathIt(q->m_subpaths.constBegin());
         for (; pathIt != q->m_subpaths.constEnd(); ++pathIt) {
@@ -1266,7 +1268,7 @@ void KoPathShapePrivate::loadNodeTypes(const KoXmlElement &element)
             for (; it != (*pathIt)->constEnd(); ++it, nIt++) {
                 // be sure not to crash if there are not enough nodes in nodeTypes
                 if (nIt == nodeTypes.constEnd()) {
-                    kWarning(30006) << "not enough nodes in koffice:nodeTypes";
+                    kWarning(30006) << "not enough nodes in calligra:nodeTypes";
                     return;
                 }
                 // the first node is always of type 'c'

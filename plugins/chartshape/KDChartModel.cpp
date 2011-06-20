@@ -230,6 +230,8 @@ QVariant KDChartModel::data( const QModelIndex &index,
     case Qt::DisplayRole:
         if ( d->dataDimensions > 1 && dataSection == 0 )
             return dataSet->xData( section );
+        else if ( d->dataDimensions > 2 && dataSection == 2 )
+            return dataSet->customData( section );
         else
             return dataSet->yData( section );
     case KDChart::DatasetBrushRole:
@@ -398,7 +400,7 @@ QVariant KDChartModel::headerData( int section,
 
     if ( orientation != d->dataDirection ) {
         int dataSetNumber = section / d->dataDimensions;
-        if ( d->dataSets.count() <= dataSetNumber ) {
+        if ( d->dataSets.count() <= dataSetNumber || dataSetNumber < 0 ) {
             qWarning() << "KDChartModel::headerData(): trying to get more datasets than we have.";
             return QVariant();
         }
@@ -467,7 +469,6 @@ int KDChartModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) co
         rows = d->maxDataSetSize();
     else
         rows = d->dataSets.size() * d->dataDimensions;
-
     return rows;
 }
 
@@ -477,7 +478,9 @@ int KDChartModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ )
 
     int columns;
     if ( d->dataDirection == Qt::Vertical )
+    {
         columns = d->dataSets.size() * d->dataDimensions;
+    }
     else
         columns = d->maxDataSetSize();
 
@@ -500,7 +503,6 @@ void KDChartModel::addDataSet( DataSet *dataSet )
         qWarning() << "KDChartModel::addDataSet(): Attempting to insert already-contained data set";
         return;
     }
-
     dataSet->setKdChartModel( this );
 
     int dataSetIndex = d->dataSetIndex( dataSet );

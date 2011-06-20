@@ -21,14 +21,14 @@
 #include "KoPABackgroundTool.h"
 
 //Qt includes
-#include <QMap>
+#include <QList>
 #include <QLabel>
 #include <QPainter>
 
 //KDE includes
 #include <klocale.h>
 
-//KOffice includes
+//Calligra includes
 #include <KoPACanvas.h>
 #include <KoResourceManager.h>
 #include <KoPAView.h>
@@ -98,11 +98,12 @@ KoPAViewBase * KoPABackgroundTool::view() const
     return m_view;
 }
 
-QMap<QString, QWidget *> KoPABackgroundTool::createOptionWidgets()
+QList<QWidget *> KoPABackgroundTool::createOptionWidgets()
 {
     KoPABackgroundToolWidget * widget = new KoPABackgroundToolWidget( this );
-    QMap<QString, QWidget *> widgets;
-    widgets.insert( i18n("Background Tool"), widget );
+    QList<QWidget *> widgets;
+    widget->setWindowTitle( i18n("Background Tool") );
+    widgets.append(widget );
     QLabel dummy4( i18n("Use the styles docker to manipulate the background.") );
 #if 0
     KoPAMasterPageDocker *masterPageDocker = new KoPAMasterPageDocker();

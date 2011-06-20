@@ -52,14 +52,23 @@ public:
 };
 
 KoListLevelProperties::KoListLevelProperties()
-        : d(new Private())
+        : QObject()
+        , d(new Private())
 {
+    QSharedPointer<KoCharacterStyle> charStyle = QSharedPointer<KoCharacterStyle>(new KoCharacterStyle);
+    setMarkCharacterStyle(charStyle);
+
+    setRelativeBulletSize(100);
+    setAlignmentMode(false);
+    connect(this,SIGNAL(styleChanged(int)),SLOT(onStyleChanged(int)));
 }
 
 KoListLevelProperties::KoListLevelProperties(const KoListLevelProperties &other)
-        : d(new Private())
+        : QObject()
+        , d(new Private())
 {
     d->copy(other.d);
+    connect(this,SIGNAL(styleChanged(int)),SLOT(onStyleChanged(int)));
 }
 
 KoListLevelProperties::~KoListLevelProperties()
@@ -170,6 +179,7 @@ QString KoListLevelProperties::listItemPrefix() const
 void KoListLevelProperties::setStyle(KoListStyle::Style style)
 {
     setProperty(QTextListFormat::ListStyle, (int) style);
+    emit styleChanged(style);
 }
 
 KoListStyle::Style KoListLevelProperties::style() const
@@ -253,12 +263,12 @@ QChar KoListLevelProperties::bulletCharacter() const
 
 void KoListLevelProperties::setRelativeBulletSize(int percent)
 {
-    setProperty(KoListStyle::BulletSize, percent);
+    setProperty(KoListStyle::RelativeBulletSize, percent);
 }
 
 int KoListLevelProperties::relativeBulletSize() const
 {
-    return propertyInt(KoListStyle::BulletSize);
+    return propertyInt(KoListStyle::RelativeBulletSize);
 }
 
 void KoListLevelProperties::setAlignment(Qt::Alignment align)
@@ -365,6 +375,56 @@ qreal KoListLevelProperties::minimumDistance() const
     return propertyDouble(KoListStyle::MinimumDistance);
 }
 
+void KoListLevelProperties::setMargin(qreal value)
+{
+    setProperty(KoListStyle::Margin, value);
+}
+
+qreal KoListLevelProperties::margin() const
+{
+    return propertyDouble(KoListStyle::Margin);
+}
+
+void KoListLevelProperties::setTextIndent(qreal value)
+{
+    setProperty(KoListStyle::TextIndent, value);
+}
+
+qreal KoListLevelProperties::textIndent() const
+{
+    return propertyDouble(KoListStyle::TextIndent);
+}
+
+void KoListLevelProperties::setAlignmentMode(bool isLabelAlignmentMode)
+{
+    setProperty(KoListStyle::AlignmentMode, isLabelAlignmentMode);
+}
+
+bool KoListLevelProperties::alignmentMode() const
+{
+    return propertyBoolean(KoListStyle::AlignmentMode);
+}
+
+void KoListLevelProperties::setTabStopPosition(qreal value)
+{
+    setProperty(KoListStyle::TabStopPosition,value);
+}
+
+qreal KoListLevelProperties::tabStopPosition() const
+{
+    return propertyDouble(KoListStyle::TabStopPosition);
+}
+
+void KoListLevelProperties::setLabelFollowedBy(KoListStyle::ListLabelFollowedBy value)
+{
+    setProperty(KoListStyle::LabelFollowedBy, value);
+}
+
+KoListStyle::ListLabelFollowedBy KoListLevelProperties::labelFollowedBy() const
+{
+    return (KoListStyle::ListLabelFollowedBy)propertyInt(KoListStyle::LabelFollowedBy);
+}
+
 // static
 KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list)
 {
@@ -375,6 +435,25 @@ KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list)
     }
     llp.d->stylesPrivate = list->format().properties();
     return llp;
+}
+
+void KoListLevelProperties::onStyleChanged(int key)
+{
+    int bullet=0;
+    switch (key) {
+        case KoListStyle::Bullet:               bullet = 0x2022; break;
+        case KoListStyle::BlackCircle:          bullet = 0x25CF; break;
+        case KoListStyle::CircleItem:           bullet = 0x25CB; break;
+        case KoListStyle::RhombusItem:          bullet = 0xE00C; break;
+        case KoListStyle::SquareItem:           bullet = 0xE00A; break;
+        case KoListStyle::RightArrowHeadItem:   bullet = 0x27A2; break;
+        case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
+        case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
+        case KoListStyle::BallotXItem:          bullet = 0x2717; break;
+    }
+
+    if (bullet != 0)
+        setBulletCharacter(QChar(bullet));
 }
 
 void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& style)
@@ -412,8 +491,10 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         }
     }
 
+    bool hasBulletRelativeSize=false;
     if (style.localName() == "list-level-style-bullet") {   // list with bullets
 
+        setRelativeBulletSize(45); //arbitary value for bulleted list
         // special case bullets:
         //qDebug() << QChar(0x2202) << QChar(0x25CF) << QChar(0xF0B7) << QChar(0xE00C)
         //<< QChar(0xE00A) << QChar(0x27A2)<< QChar(0x2794) << QChar(0x2714) << QChar(0x2d) << QChar(0x2717);
@@ -427,12 +508,14 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         } else { // try to determinate the bullet we should use
             switch (bulletChar[0].unicode()) {
             case 0x2022: // bullet, a small disc -> circle
-                //TODO use BulletSize to differ between small and large discs
-                setStyle(KoListStyle::DiscItem);
+                setStyle(KoListStyle::Bullet);
                 break;
             case 0x25CF: // black circle, large disc -> disc
             case 0xF0B7: // #113361
-                setStyle(KoListStyle::DiscItem);
+                setStyle(KoListStyle::BlackCircle);
+                break;
+            case 0x25CB:           //white circle, no fill
+                setStyle(KoListStyle::CircleItem);
                 break;
             case 0xE00C: // losange => rhombus
                 setStyle(KoListStyle::RhombusItem);
@@ -482,10 +565,13 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         }
         QString size = style.attributeNS(KoXmlNS::text, "bullet-relative-size", QString());
         if (!size.isEmpty()) {
+            hasBulletRelativeSize=true;
             setRelativeBulletSize(size.replace("%", "").toInt());
         }
 
     } else if (style.localName() == "list-level-style-number" || style.localName() == "outline-level-style") { // it's a numbered list
+
+        setRelativeBulletSize(100); //arbitary value for numbered list
 
         KoOdfNumberDefinition numberDefinition;
         numberDefinition.loadOdf(style);
@@ -566,6 +652,8 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                         // the position and spacing of the list label and the list item. The values of the attributes for
                         // text:space-before, text:min-label-width and text:min-label-distance are assumed to be 0.
 
+                        setAlignmentMode(true);
+
                         QString textAlign(p.attributeNS(KoXmlNS::fo, "text-align"));
                         setAlignment(textAlign.isEmpty() ? Qt::AlignLeft : KoText::alignmentFromString(textAlign));
 
@@ -573,7 +661,32 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                         QString marginleft(p.attributeNS(KoXmlNS::fo, "margin-left"));
                         qreal ti = textindent.isEmpty() ? 0 : KoUnit::parseValue(textindent);
                         qreal ml = marginleft.isEmpty() ? 0 : KoUnit::parseValue(marginleft);
-                        setIndent(qMax<qreal>(0.0, ti + ml));
+                        setTextIndent(ti);
+                        setMargin(ml);
+
+                        QString labelFollowedBy(p.attributeNS(KoXmlNS::text, "label-followed-by","space"));
+                        if(labelFollowedBy.compare("listtab",Qt::CaseInsensitive)==0) {
+
+                            setLabelFollowedBy(KoListStyle::ListTab);
+
+                            // list tab position is evaluated only if label is followed by listtab
+                            // the it is only evaluated if there is a list-tab-stop-position specified
+                            // if not specified use the fo:margin-left:
+                            QString tabStop(p.attributeNS(KoXmlNS::text, "list-tab-stop-position"));
+                            if (!tabStop.isEmpty()) {
+                                qreal tabStopPos = KoUnit::parseValue(tabStop);
+                                setTabStopPosition(qMax<qreal>(0.0, tabStopPos));
+                            }
+
+                        }else if(labelFollowedBy.compare("nothing",Qt::CaseInsensitive)==0) {
+
+                            setLabelFollowedBy(KoListStyle::Nothing);
+
+                        }else {
+
+                            setLabelFollowedBy(KoListStyle::Space);
+
+                        }
 
                         setMinimumWidth(0);
                         setMinimumDistance(0);
@@ -581,9 +694,13 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                         //TODO support ODF 18.829 text:label-followed-by and 18.832 text:list-tab-stop-position
                      }
                 }
-            } else { // default is mode == "label-width-and-position"
+            }
+
+            if(alignmentMode()!=true ){ // default is mode == "label-width-and-position"
                 // The text:space-before, text:min-label-width, text:minimum-label-distance and fo:text-align attributes
                 // are used to define the position and spacing of the list label and the list item.
+
+                setAlignmentMode(false);
 
                 QString spaceBefore(property.attributeNS(KoXmlNS::text, "space-before"));
                 if (!spaceBefore.isEmpty())
@@ -599,16 +716,17 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
 
                 QString minLableDistance(property.attributeNS(KoXmlNS::text, "min-label-distance"));
                 if (!minLableDistance.isEmpty())
-                    setMinimumDistance(KoUnit::parseValue(minLableDistance));
-
-                QString width(property.attributeNS(KoXmlNS::fo, "width"));
-                if (!width.isEmpty())
-                    setWidth(KoUnit::parseValue(width));
-
-                QString height(property.attributeNS(KoXmlNS::fo, "height"));
-                if (!height.isEmpty())
-                    setHeight(KoUnit::parseValue(height));
+                    setMinimumDistance(KoUnit::parseValue(minLableDistance));               
             }
+
+            QString width(property.attributeNS(KoXmlNS::fo, "width"));
+            if (!width.isEmpty())
+                setWidth(KoUnit::parseValue(width));
+
+            QString height(property.attributeNS(KoXmlNS::fo, "height"));
+            if (!height.isEmpty())
+                setHeight(KoUnit::parseValue(height));
+
         } else if (localName == "text-properties") {
             QSharedPointer<KoCharacterStyle> charStyle = QSharedPointer<KoCharacterStyle>(new KoCharacterStyle);
             context.styleStack().save();
@@ -616,6 +734,14 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
             charStyle->loadOdf(scontext);
             context.styleStack().restore();
+            //if not set in bullet-relative-size or any where before then set it now
+            if (!hasBulletRelativeSize && charStyle->hasProperty(KoCharacterStyle::PercentageFontSize)) {
+                setRelativeBulletSize((int)charStyle->percentageFontSize());
+                // in bullet lists in layout we recompute the font point size
+                // relatively to the paragraph size of the list item so drop it
+                // to indicate that it is not correct
+                charStyle->clearFontPointSize();
+            }
             setMarkCharacterStyle(charStyle);
         }
     }
@@ -676,14 +802,15 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer) const
             bullet = d->stylesPrivate.value(KoListStyle::BulletCharacter).toInt();
         } else { // try to determine the bullet character from the style
             switch (style()) {
-            case KoListStyle::DiscItem:             bullet = 0x2022; break;
+            case KoListStyle::Bullet:               bullet = 0x2022; break;
+            case KoListStyle::CircleItem:           bullet = 0x25CB; break;
             case KoListStyle::RhombusItem:          bullet = 0xE00C; break;
             case KoListStyle::SquareItem:           bullet = 0xE00A; break;
             case KoListStyle::RightArrowHeadItem:   bullet = 0x27A2; break;
             case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
             case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
             case KoListStyle::BallotXItem:          bullet = 0x2717; break;
-            default:                                bullet = 0x25CF; break;
+            default:                                bullet = 0x25CF; break; //KoListStyle::BlackCircle
             }
         }
         writer->addAttribute("text:bullet-char", QChar(bullet));
@@ -691,17 +818,41 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer) const
 
     writer->startElement("style:list-level-properties", false);
 
-    if (d->stylesPrivate.contains(KoListStyle::Indent))
-        writer->addAttribute("text:space-before", toPoint(indent()));
+    if(d->stylesPrivate.contains(KoListStyle::AlignmentMode) && alignmentMode()==false) {
 
-    if (d->stylesPrivate.contains(KoListStyle::MinimumWidth))
-        writer->addAttribute("text:min-label-width", toPoint(minimumWidth()));
+        writer->addAttribute("text:list-level-position-and-space-mode","label-width-and-position");
 
-    if (d->stylesPrivate.contains(KoListStyle::Alignment))
-        writer->addAttribute("fo:text-align", KoText::alignmentToString(alignment()));
+        if (d->stylesPrivate.contains(KoListStyle::Indent))
+            writer->addAttribute("text:space-before", toPoint(indent()));
 
-    if (d->stylesPrivate.contains(KoListStyle::MinimumDistance))
-        writer->addAttribute("text:min-label-distance", toPoint(minimumDistance()));
+        if (d->stylesPrivate.contains(KoListStyle::MinimumWidth))
+            writer->addAttribute("text:min-label-width", toPoint(minimumWidth()));
+
+        if (d->stylesPrivate.contains(KoListStyle::Alignment))
+            writer->addAttribute("fo:text-align", KoText::alignmentToString(alignment()));
+
+        if (d->stylesPrivate.contains(KoListStyle::MinimumDistance))
+            writer->addAttribute("text:min-label-distance", toPoint(minimumDistance()));
+    } else {
+         writer->addAttribute("text:list-level-position-and-space-mode","label-alignment");
+
+         writer->startElement("style:list-level-label-alignment");
+
+         KoUnit unit(KoUnit::Centimeter);
+         if(labelFollowedBy()==KoListStyle::ListTab) {
+             writer->addAttribute("text:label-followed-by","listtab");
+             writer->addAttribute("text:list-tab-stop-position",unit.toUserStringValue(tabStopPosition())+"cm");
+         } else if (labelFollowedBy()==KoListStyle::Nothing){
+             writer->addAttribute("text:label-followed-by","nothing");
+         }else{
+             writer->addAttribute("text:label-followed-by","space");
+         }
+
+         writer->addAttribute("fo:text-indent",unit.toUserStringValue(textIndent())+"cm");
+         writer->addAttribute("fo:margin-left",unit.toUserStringValue(margin())+"cm");
+
+         writer->endElement();
+    }
 
     writer->endElement(); // list-level-properties
 
@@ -719,7 +870,7 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer) const
 //   kDebug(32500) << "Key KoListStyle::ListItemPrefix :" << d->stylesPrivate.value(KoListStyle::ListItemPrefix);
 //   kDebug(32500) << "Key KoListStyle::ListItemSuffix :" << d->stylesPrivate.value(KoListStyle::ListItemSuffix);
 //   kDebug(32500) << "Key KoListStyle::CharacterStyleId :" << d->stylesPrivate.value(KoListStyle::CharacterStyleId);
-//   kDebug(32500) << "Key KoListStyle::BulletSize :" << d->stylesPrivate.value(KoListStyle::BulletSize);
+//   kDebug(32500) << "Key KoListStyle::RelativeBulletSize :" << d->stylesPrivate.value(KoListStyle::RelativeBulletSize);
 //   kDebug(32500) << "Key KoListStyle::Alignment :" << d->stylesPrivate.value(KoListStyle::Alignment);
 //   kDebug(32500) << "Key KoListStyle::LetterSynchronization :" << d->stylesPrivate.value(KoListStyle::LetterSynchronization);
 

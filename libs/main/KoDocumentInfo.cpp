@@ -21,7 +21,7 @@
 #include "KoDocumentInfo.h"
 
 #include "KoDocument.h"
-#include "kofficeversion.h"
+#include "calligraversion.h"
 #include "KoOdfWriteStore.h"
 
 #include <QDateTime>
@@ -120,8 +120,8 @@ bool KoDocumentInfo::saveOasis(KoStore* store)
     xmlWriter->startElement("office:meta");
 
     xmlWriter->startElement("meta:generator");
-    xmlWriter->addTextNode(QString("KOffice/%1")
-                           .arg(KOFFICE_VERSION_STRING));
+    xmlWriter->addTextNode(QString("Calligra/%1")
+                           .arg(CALLIGRA_VERSION_STRING));
     xmlWriter->endElement();
 
     if (!saveOasisAboutInfo(*xmlWriter))
@@ -284,7 +284,7 @@ bool KoDocumentInfo::loadOasisAboutInfo(const KoXmlNode& metaDoc)
     KoXmlElement e;
     forEachElement(e, metaDoc) {
         QString tag(e.localName());
-        if (! m_aboutTags.contains(tag))
+        if (! m_aboutTags.contains(tag) && tag != "generator")
             continue;
 
         //kDebug( 30003 )<<"localName="<<e.localName();
@@ -296,6 +296,8 @@ bool KoDocumentInfo::loadOasisAboutInfo(const KoXmlNode& metaDoc)
             KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag.toLatin1().constData());
             if (!e.isNull() && !e.text().isEmpty())
                 setAboutInfo(tag, e.text().trimmed());
+        } else if (tag == "generator") {
+            setOriginalGenerator(e.text().trimmed());
         } else {
             KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::meta, tag.toLatin1().constData());
             if (!e.isNull() && !e.text().isEmpty())
@@ -368,6 +370,16 @@ void KoDocumentInfo::resetMetaData()
     setAboutInfo("editing-cycles", QString::number(0));
     setAboutInfo("initial-creator", authorInfo("creator"));
     setAboutInfo("creation-date", QDateTime::currentDateTime().toString(Qt::ISODate));
+}
+
+QString KoDocumentInfo::originalGenerator() const
+{
+    return m_generator;
+}
+
+void KoDocumentInfo::setOriginalGenerator(const QString &generator)
+{
+    m_generator = generator;
 }
 
 #include <KoDocumentInfo.moc>

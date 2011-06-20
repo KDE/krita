@@ -1,13 +1,12 @@
 include_directories( ${KOTEXT_INCLUDES}	
-	${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
+    ${TEXTLAYOUT_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
 	${CMAKE_CURRENT_SOURCE_DIR}/flake 
 	${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
 	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
 	${CMAKE_CURRENT_SOURCE_DIR}/openrastertk
 	${CMAKE_SOURCE_DIR}/krita/image/metadata 
 	${EXIV2_INCLUDE_DIR} )
-
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 add_subdirectory( tests )
 
@@ -20,6 +19,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp 
     canvas/kis_canvas2.cpp
     canvas/kis_canvas_controller.cpp
+    canvas/kis_tool_proxy.cpp
     canvas/kis_canvas_decoration.cc
     canvas/kis_coordinates_converter.cpp 
     canvas/kis_grid_manager.cpp 
@@ -99,6 +99,7 @@ set(kritaui_LIB_SRCS
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
     kisexiv2/kis_xmp_io.cpp
+    kra/kis_kra_utils.cpp
     kra/kis_kra_load_visitor.cpp
     kra/kis_kra_loader.cpp 
     kra/kis_kra_save_visitor.cpp 
@@ -133,7 +134,7 @@ set(kritaui_LIB_SRCS
     tool/kis_color_picker_utils.cpp
     widgets/kis_channelflags_widget.cpp 
     widgets/kis_cmb_composite.cc
-    widgets/kis_cmb_paintop.cpp
+    widgets/kis_paintop_list_widget.cpp
     widgets/kis_cmb_idlist.cc 
     widgets/kis_color_space_selector.cc
     widgets/kis_curve_widget.cpp
@@ -157,11 +158,13 @@ set(kritaui_LIB_SRCS
     widgets/kis_progress_widget.cpp
     widgets/kis_selection_options.cc 
     widgets/kis_scratch_pad.cpp
+    widgets/kis_preset_selector_strip.cpp
     widgets/kis_tree_view_popup.cc 
     widgets/kis_slider_spin_box.cpp
     widgets/kis_wdg_generator.cpp
     widgets/kis_workspace_chooser.cpp
     widgets/squeezedcombobox.cpp
+    widgets/kis_categorized_list_view.cpp
 )
 
 if(HAVE_OPENGL)
@@ -186,6 +189,7 @@ add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 
 kde4_add_ui_files(kritaui_LIB_SRCS
+    forms/wdgfullscreensettings.ui
     forms/wdgautogradient.ui
     forms/wdggeneralsettings.ui
     forms/wdgperformancesettings.ui
@@ -219,6 +223,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgpaintactioneditor.ui
     forms/wdgmultipliersdoublesliderspinbox.ui
     forms/wdgnodequerypatheditor.ui
+    forms/wdgpresetselectorstrip.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
@@ -236,7 +241,7 @@ endif(HAVE_OPENGL)
 target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage komain ${GL_INTERFACE_LIBRARIES} )
 
 set_target_properties(kritaui
-    PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

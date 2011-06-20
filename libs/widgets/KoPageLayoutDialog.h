@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOFFICE_PAGE_LAYOUT_DIALOG
-#define KOFFICE_PAGE_LAYOUT_DIALOG
+#ifndef CALLIGRA_PAGE_LAYOUT_DIALOG
+#define CALLIGRA_PAGE_LAYOUT_DIALOG
 
 #include "kowidgets_export.h"
 
@@ -51,7 +51,7 @@ public:
 signals:
     void unitChanged(const KoUnit &unit);
 
-private slots:
+public slots:
     void setPageLayout(const KoPageLayout &layout);
 
 protected slots:

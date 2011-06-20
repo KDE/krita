@@ -15,6 +15,8 @@ install(FILES
     unlocked.png
     transparency-locked.png
     transparency-unlocked.png
+    transparency-enabled.png
+    transparency-disabled.png
     selection_add.png
     selection_exclude.png
     selection_intersect.png

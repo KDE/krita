@@ -30,7 +30,6 @@ class QPaintDevice;
 class QPainter;
 class QRectF;
 
-class KoShape;
 class KoInlineTextObjectManager;
 class KoInlineObjectPrivate;
 class KoShapeSavingContext;
@@ -76,11 +75,11 @@ public:
 
         KarbonStart = 1000,      ///< Base number for karbon specific values.
         KexiStart = 2000,        ///< Base number for kexi specific values.
-        KivioStart = 3000,       ///< Base number for kivio specific values.
+        FlowStart = 3000,       ///< Base number for flow specific values.
         KPlatoStart = 4000,      ///< Base number for kplato specific values.
         KPresenterStart = 5000,  ///< Base number for kpresenter specific values.
         KritaStart = 6000,       ///< Base number for krita specific values.
-        KWordStart = 7000,       ///< Base number for kword specific values.
+        WordsStart = 7000,       ///< Base number for words specific values.
         VariableManagerStart = 8000, ///< Start of numbers reserved for the KoVariableManager
         User = 12000
     };
@@ -158,7 +157,7 @@ public:
      * @param format the character format for the inline object.
      * @param pd the postscript-paintdevice that all text is rendered on. Use this for QFont and related
      *  classes so the inline object can be reused on any paintdevice.
-     * @param painter the painting object to paint on.  Note that unline many places in koffice painting
+     * @param painter the painting object to paint on.  Note that unline many places in calligra painting
      *    should happen at the position indicated by the rect, not at top-left.
      * @param rect the rectangle inside which the variable can paint itself.  Painting outside the rect
      *    will give varous problems with regards to repainting issues.
@@ -223,15 +222,6 @@ public:
 
 protected:
     explicit KoInlineObject(KoInlineObjectPrivate &, bool propertyChangeListener = false);
-
-    /**
-     * We allow a text document to be shown in more than one shape; which brings up the need to figure out
-     * which shape is used for a certain text.
-     * @param document the document we are searching in.
-     * @param position the position of the character in the text document we want to locate.
-     * @return the shape the text is laid-out in.  Or 0 if there is no shape for that text character.
-     */
-    static KoShape *shapeForPosition(const QTextDocument *document, int position);
 
     KoInlineObjectPrivate *d_ptr;
 

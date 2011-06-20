@@ -111,7 +111,7 @@ void KisMemoryLeakTracker::Private::dumpReferencedObjectsAndDelete(QHash<const _
             }
 #else
             Q_UNUSED(_delete);
-            errKrita << "Enable backtrace support in kis_memory_leak_tracker.cpp";
+            errKrita << "Enable backtrace support by running 'cmake -DHAVE_BACKTRACE_SUPPORT=ON'";
 #endif
         }
         errKrita << "=====";

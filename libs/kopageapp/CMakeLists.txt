@@ -1,7 +1,5 @@
 include_directories( 
-    ${KOMAIN_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/widgets
-    ${PIGMENT_INCLUDES}
+    ${KOPAGEAPP_INCLUDES}
 )
 
 if(KDE4_BUILD_TESTS)
@@ -54,11 +52,11 @@ set( kopageapp_LIB_SRCS
 
 kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})
 
-target_link_libraries(kopageapp komain)
+target_link_libraries(kopageapp komain textlayout)
 target_link_libraries(kopageapp LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(kopageapp PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kopageapp  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

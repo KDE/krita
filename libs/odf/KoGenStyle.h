@@ -4,6 +4,7 @@
    Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
    Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,6 +31,7 @@
 #include <iostream>
 #include "koodf_export.h"
 
+class QTextLength;
 class KoGenStyles;
 class KoXmlWriter;
 
@@ -115,7 +117,7 @@ public:
         GradientStyle,               ///< draw:gradient as in odf 14.14.1 Gradient (office:styles)
         LinearGradientStyle,         ///< svg:linearGradient as in odf 14.14.2 SVG Gradients (office:styles)
         RadialGradientStyle,         ///< svg:radialGradient as in odf 14.14.2 SVG Gradients (office:styles)
-        ConicalGradientStyle,        ///< koffice:conicalGradient koffice extension for conical gradients
+        ConicalGradientStyle,        ///< calligra:conicalGradient calligra extension for conical gradients
         FillImageStyle,              ///< draw:fill-image as in odf 14.14.4 Fill Image (office:styles)
         NumericBooleanStyle,         ///< number:boolean 14.7.6 Boolean Style
                                      ///<  @note unused
@@ -289,6 +291,16 @@ public:
      *  and the unit name ("pt") is appended to it.
      */
     void addPropertyPt(const QString &propName, qreal propValue, PropertyType type = DefaultType);
+    
+    /**
+     *  Add a property which represents a length, measured in pt, or in percent
+     *  The number is written out with the highest possible precision
+     *  (unlike QString::number and setNum, which default to 6 digits) or as integer (for percents),
+     *  and the unit name ("pt" or "%") is appended to it.
+     */
+    void addPropertyLength(const QString &propName, const QTextLength &propValue, PropertyType type = DefaultType);
+    
+    
 
     /**
      *  Add an attribute to the style
@@ -438,6 +450,13 @@ public:
             return it.value();
         return QString();
     }
+
+    /**
+     * Copies properties of defined type from a style to another style.
+     * This is needed in rare cases where two styles have properties of different types
+     * and we want to merge them to one style.
+     */
+    static void copyPropertiesFromStyle(const KoGenStyle &sourceStyle, KoGenStyle &targetStyle, PropertyType type = DefaultType);
 
 private:
 #ifndef NDEBUG

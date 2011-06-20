@@ -53,7 +53,7 @@ protected slots:
 
 private:
 
-    void setupStylesheetsItems(const QString &klass,
+    void setupStylesheetsItems(const QString &semanticClass,
                                KoRdfSemanticItem *si,
                                const QList<KoSemanticStylesheet*> &ssl,
                                const QMap<QString, QTreeWidgetItem*> &m,

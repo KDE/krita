@@ -54,12 +54,13 @@
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
         : m_view(view)
 {
-    m_fGChanged = true;  
+    m_fGChanged = true;
     m_enablefGChange = true;    // default to true, so that colour history is working without popup palette
 }
 
 KisCanvasResourceProvider::~KisCanvasResourceProvider()
 {
+    disconnect(); // in case Qt gets confused
 }
 
 void KisCanvasResourceProvider::setResourceManager(KoResourceManager *resourceManager)
@@ -414,6 +415,16 @@ void KisCanvasResourceProvider::setMirrorVertical(bool mirrorVertical)
 bool KisCanvasResourceProvider::mirrorVertical() const
 {
     return m_resourceManager->resource(MirrorVertical).toBool();
+}
+
+void KisCanvasResourceProvider::setOpacity(qreal opacity)
+{
+    m_resourceManager->setResource(Opacity, opacity);
+}
+
+qreal KisCanvasResourceProvider::opacity()
+{
+    return m_resourceManager->resource(Opacity).toDouble();
 }
 
 #include "kis_canvas_resource_provider.moc"

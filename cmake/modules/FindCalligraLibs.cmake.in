@@ -2,7 +2,7 @@
 # Once done this will define
 #
 #  CALLIGRALIBS_FOUND - system has Calligra
-#  CALLIGRALIBS_INCLUDE_DIR - the Koffice include directory
+#  CALLIGRALIBS_INCLUDE_DIR - the Calligra include directory
 # KOMAIN_LIBRARY
 # KOTEXT_LIBRARY
 # KOODF_LIBRARY
@@ -88,7 +88,7 @@ SET( CALLIGRALIBS_LIBRARIES
     ${KOWIDGETS_LIBRARY}
 )
 
-# these are defined inside of Calligra, so lets define them for people using koffice too
+# these are defined inside of Calligra, so lets define them for people using calligra too
 set(KOPLUGIN_INCLUDES ${CALLIGRALIBS_INCLUDE_DIR})
 set(KOODF_INCLUDES ${CALLIGRALIBS_INCLUDE_DIR})
 set(PIGMENT_INCLUDES ${CALLIGRALIBS_INCLUDE_DIR})
@@ -119,5 +119,5 @@ MARK_AS_ADVANCED(CALLIGRALIBS_INCLUDE_DIR
 
 # define the generic version of the Calligra libraries here
 # this makes it easy to advance it when the next Calligra release comes
-set(GENERIC_KOFFICE_LIB_VERSION "@GENERIC_KOFFICE_LIB_VERSION@")
-set(GENERIC_KOFFICE_LIB_SOVERSION "@GENERIC_KOFFICE_LIB_SOVERSION@")
+set(GENERIC_CALLIGRA_LIB_VERSION "@GENERIC_CALLIGRA_LIB_VERSION@")
+set(GENERIC_CALLIGRA_LIB_SOVERSION "@GENERIC_CALLIGRA_LIB_SOVERSION@")

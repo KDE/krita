@@ -631,6 +631,10 @@ public:
 
     /// Returns the current brush stroke style
     StrokeStyle strokeStyle() const;
+    
+    void setFlow(quint8 flow);
+    
+    quint8 flow() const;
 
     /// Set the opacity which is used in painting (like filling polygons)
     void setOpacity(quint8 opacity);

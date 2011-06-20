@@ -43,6 +43,9 @@ public:
     void setBackgroundColor(const QColor& color);
     QColor backgroundColor() const;
 
+    void setBackgroundOpacity(qreal opacity);
+    qreal backgroundOpacity() const;
+
     qreal leftPadding() const;
     void setLeftPadding(qreal padding);
 
@@ -61,6 +64,10 @@ public:
     bool glyphOrientation() const;
     void setGlyphOrientation(bool orientation);
 
+    void setTextStyle(const KoGenStyle& style);
+    void setParagraphStyle(const KoGenStyle& style);
+    KoGenStyle styleProperties() const;
+
 protected:
     virtual void prepareStyle( KoGenStyle& style ) const;
     virtual QString defaultPrefix() const;
@@ -71,6 +78,7 @@ protected:
 private:
     KoBorder* m_borders;
     QColor m_backgroundColor;
+    qreal m_backgroundOpacity;
 
     qreal m_leftPadding;
     qreal m_topPadding;
@@ -79,6 +87,8 @@ private:
 
     QString m_verticalAlign;
     bool m_glyphOrientation;
+
+    KoGenStyle m_styleProperties;
 };
 
 #endif

@@ -42,6 +42,7 @@
 #include <kis_paintop_settings_widget.h>
 #include <kis_canvas_resource_provider.h>
 #include <widgets/kis_preset_chooser.h>
+#include <widgets/kis_preset_selector_strip.h>
 
 #include <ui_wdgpaintopsettings.h>
 #include <kis_node.h>
@@ -59,6 +60,7 @@ public:
     QFont smallFont;
     KisCanvasResourceProvider *resourceProvider;
     bool detached;
+    bool ignoreHideEvents;
 };
 
 KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider, QWidget * parent)
@@ -83,10 +85,12 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setCanvasColor(Qt::white);
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setCutoutOverlay(QRect(25, 25, 200, 200));
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->setCanvasResourceProvider(resourceProvider);
     m_d->uiWdgPaintOpPresetSettings.fillLayer->setIcon(KIcon("newlayer"));
+    m_d->uiWdgPaintOpPresetSettings.fillLayer->hide();
     m_d->uiWdgPaintOpPresetSettings.fillGradient->setIcon(KIcon("krita_tool_gradient"));
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KIcon("krita_tool_color_fill"));
-    m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KIcon("list-remove"));
+    m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KIcon("edit-clear"));
 
     connect(m_d->uiWdgPaintOpPresetSettings.eraseScratchPad, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(clear()));
@@ -114,6 +118,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
             this, SIGNAL(defaultPresetClicked()));
+                        
+    connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
+            m_d->uiWdgPaintOpPresetSettings.txtPreset, SLOT(clear()));
 
     connect(m_d->uiWdgPaintOpPresetSettings.txtPreset, SIGNAL(textChanged(QString)),
             this, SIGNAL(presetNameLineEditChanged(QString)));
@@ -121,9 +128,18 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.paintopList, SIGNAL(activated(const QString&)),
             this, SIGNAL(paintopActivated(QString)));
 
+    connect(this, SIGNAL(paintopActivated(QString)),
+            m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(currentPaintopChanged(QString)));
 
+    connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
+            this, SIGNAL(signalResourceSelected(KoResource*)));
+    
+    connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
+            m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
+            
     KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();
+    m_d->ignoreHideEvents = false;
 
 }
 
@@ -241,8 +257,10 @@ void KisPaintOpPresetsPopup::switchDetached()
 
         m_d->detached = !m_d->detached;
         if (m_d->detached) {
+            m_d->ignoreHideEvents = true;
             parentWidget()->setWindowFlags(Qt::Tool);
             parentWidget()->show();
+            m_d->ignoreHideEvents = false;
         }
         else {
             parentWidget()->setWindowFlags(Qt::Popup);
@@ -284,8 +302,16 @@ QString KisPaintOpPresetsPopup::currentPaintOp()
     return m_d->uiWdgPaintOpPresetSettings.paintopList->currentItem();
 }
 
+void KisPaintOpPresetsPopup::setPresetImage(const QImage& image)
+{
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->setPresetImage(image);
+}
+
 void KisPaintOpPresetsPopup::hideEvent(QHideEvent *event)
 {
+    if(m_d->ignoreHideEvents) {
+        return;
+    }
     if (m_d->detached) {
         switchDetached();
     }

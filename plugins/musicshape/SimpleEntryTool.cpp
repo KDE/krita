@@ -359,7 +359,7 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
             painter.save();
             painter.setTransform(shape->absoluteTransformation(&viewConverter) * painter.transform());
             KoShape::applyConversion( painter, viewConverter );
-            painter.setClipRect(QRectF(QPointF(0, 0), shape->size()));            
+            painter.setClipRect(QRectF(QPointF(0, 0), shape->size()), Qt::IntersectClip);
 
             for (int b = qMax(shape->firstBar(), m_selectionStart); b <= m_selectionEnd && b < sheet->barCount() && b <= shape->lastBar(); b++) {
                 Bar* bar = sheet->bar(b);
@@ -395,7 +395,7 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
 
     painter.setTransform(m_musicshape->absoluteTransformation(&viewConverter) * painter.transform());
     KoShape::applyConversion( painter, viewConverter );
-    painter.setClipRect(QRectF(QPointF(0, 0), m_musicshape->size()));
+    painter.setClipRect(QRectF(QPointF(0, 0), m_musicshape->size()), Qt::IntersectClip);
         
     if (m_activeAction->isVoiceAware()) {
         for (int i = 0; i < sheet->partCount(); i++) {

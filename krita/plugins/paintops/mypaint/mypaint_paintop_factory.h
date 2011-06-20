@@ -71,7 +71,7 @@ public:
     QList<MyPaintBrushResource*> brushes() const;
     MyPaintBrushResource* brush(const QString& fileName) const;
     
-    void addPresets();
+    virtual void processAfterLoading();
 
 private:
 

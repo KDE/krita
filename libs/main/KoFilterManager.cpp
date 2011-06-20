@@ -77,18 +77,24 @@ KoFilterManager::~KoFilterManager()
 }
 
 QString KoFilterManager::importDocument(const QString& url,
+                                        const QString& documentMimeType,
                                         KoFilter::ConversionStatus& status)
 {
     // Find the mime type for the file to be imported.
-    KUrl u;
-    u.setPath(url);
-    KMimeType::Ptr t = KMimeType::findByUrl(u, 0, true);
-    if (t)
-        m_graph.setSourceMimeType(t->name().toLatin1());    // .latin1() is okay here (Werner)
+    QString  typeName(documentMimeType);
+    KUrl u(url);
+    KMimeType::Ptr t;
+    if (documentMimeType.isEmpty()) {
+        t = KMimeType::findByUrl(u, 0, true);
+        if (t)
+            typeName = t->name();
+    }
+    m_graph.setSourceMimeType(typeName.toLatin1()); // .latin1() is okay here (Werner)
+
     if (!m_graph.isValid()) {
         bool userCancelled = false;
 
-        kWarning(30500) << "Can't open " << t->name() << ", trying filter chooser";
+        kWarning(30500) << "Can't open " << typeName << ", trying filter chooser";
         if (m_document) {
             if (!m_document->isAutoErrorHandlingEnabled()) {
                 status = KoFilter::BadConversionGraph;
@@ -117,8 +123,8 @@ QString KoFilterManager::importDocument(const QString& url,
 
         if (!m_graph.isValid()) {
             kError(30500) << "Couldn't create a valid graph for this source mimetype: "
-                << t->name();
-            importErrorHelper(t->name(), userCancelled);
+                << typeName;
+            importErrorHelper(typeName, userCancelled);
             status = KoFilter::BadConversionGraph;
             return QString();
         }
@@ -151,7 +157,7 @@ QString KoFilterManager::importDocument(const QString& url,
 
     if (!chain) {
         kError(30500) << "Couldn't create a valid filter chain!" << endl;
-        importErrorHelper(t->name());
+        importErrorHelper(typeName);
         status = KoFilter::BadConversionGraph;
         return QString();
     }
@@ -453,7 +459,7 @@ QStringList KoFilterManager::mimeFilter()
     // To find *all* reachable mimetypes, we have to resort to
     // a small hat trick, in order to avoid multiple searches:
     // We introduce a fake vertex, which is connected to every
-    // single KOffice mimetype. Due to that one BFS is enough :)
+    // single Calligra mimetype. Due to that one BFS is enough :)
     // Now we just need an... ehrm.. unique name for our fake mimetype
     Vertex *v = new Vertex("supercalifragilistic/x-pialadocious");
     vertices.insert("supercalifragilistic/x-pialadocious", v);

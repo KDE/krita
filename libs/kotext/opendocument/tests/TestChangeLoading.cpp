@@ -67,7 +67,7 @@
 TestChangeLoading::TestChangeLoading()
 {
     componentData = new KComponentData("TestLoading");
-    componentData->dirs()->addResourceType("styles", "data", "kword/styles/");
+    componentData->dirs()->addResourceType("styles", "data", "words/styles/");
 }
 
 TestChangeLoading::~TestChangeLoading()

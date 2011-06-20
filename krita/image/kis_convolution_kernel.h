@@ -19,6 +19,7 @@
 #ifndef _KIS_CONVOLUTION_KERNEL_H_
 #define _KIS_CONVOLUTION_KERNEL_H_
 
+#include <cstddef>
 #include <Eigen/Core>
 #include "kis_shared.h"
 #include "krita_export.h"

@@ -70,12 +70,61 @@ public:
             canvas(cc),
             inputDevice(id),
             dummyToolWidget(0),
-            dummyToolLabel(0) {
+            dummyToolLabel(0)
+    {
     }
 
-    ~CanvasData() {
+    ~CanvasData()
+    {
         // the dummy tool widget does not necessarily have a parent and we create it, so we delete it.
         delete dummyToolWidget;
+    }
+
+    void activateToolActions()
+    {
+        disabledActions.clear();
+        // we do several things here
+        // 1. enable the actions of the active tool
+        // 2. disable conflicting actions
+        // 3. replace conflicting actions in the action collection
+        KActionCollection *ac = canvas->actionCollection();
+        QHash<QString, KAction*> toolActions = activeTool->actions();
+        QHash<QString, KAction*>::const_iterator it(toolActions.constBegin());
+        for (; it != toolActions.constEnd(); ++it) {
+            if (ac) {
+                QAction* action = ac->action(it.key());
+                if (action) {
+                    ac->takeAction(action);
+                    if (action != it.value()) {
+                        action->setEnabled(false);
+                        disabledActions.append(action);
+                    }
+                    it.value()->setShortcut(action->shortcut());
+                }
+                ac->addAction(it.key(), it.value());
+            }
+            it.value()->setEnabled(true);
+        }
+    }
+
+    void deactivateToolActions()
+    {
+        if (!activeTool)
+            return;
+        // disable actions of active tool
+        foreach(KAction *action, activeTool->actions()) {
+            action->setEnabled(false);
+        }
+        // enable actions which where disables on activating the active tool
+        // and re-add them to the action collection
+        KActionCollection *ac = canvas->actionCollection();
+        foreach(QAction *action, disabledActions) {
+            action->setEnabled(true);
+            if(ac) {
+                ac->addAction(action->objectName(), action);
+            }
+        }
+        disabledActions.clear();
     }
 
     KoToolBase *activeTool;     // active Tool
@@ -87,6 +136,7 @@ public:
     const KoInputDevice inputDevice;
     QWidget *dummyToolWidget;  // the widget shown in the toolDocker.
     QLabel *dummyToolLabel;
+    QList<QAction*> disabledActions; ///< disabled conflicting actions
 };
 
 KoToolManager::Private::Private(KoToolManager *qq)
@@ -105,40 +155,17 @@ KoToolManager::Private::~Private()
 // helper method.
 CanvasData *KoToolManager::Private::createCanvasData(KoCanvasController *controller, KoInputDevice device)
 {
-    QHash<QString, KoToolBase*> origHash;
-    if (canvasses.contains(controller))
-        origHash = canvasses.value(controller).first()->allTools;
-
     QHash<QString, KoToolBase*> toolsHash;
     foreach(ToolHelper *tool, tools) {
-        if (tool->inputDeviceAgnostic() && origHash.contains(tool->id())) {
-            // reuse ones that are marked as inputDeviceAgnostic();
-            toolsHash.insert(tool->id(), origHash.value(tool->id()));
-            continue;
+        QPair<QString, KoToolBase*> toolPair = q->createTools(controller, tool);
+        if (toolPair.second) { // only if a real tool was created
+            toolsHash.insert(toolPair.first, toolPair.second);
         }
-        if (! tool->canCreateTool(controller->canvas())) {
-            kDebug(30006) << "Skipping the creation of tool" << tool->id();
-            continue;
-        }
-        kDebug(30006) << "Creating tool" << tool->id() << ". Activated on:" << tool->activationShapeId() << ", prio:" << tool->priority();
-        KoToolBase *tl = tool->createTool(controller->canvas());
-        Q_ASSERT(tl);
-        uniqueToolIds.insert(tl, tool->uniqueId());
-        toolsHash.insert(tool->id(), tl);
-        tl->setObjectName(tool->id());
-        foreach(KAction *action, tl->actions())
-            action->setEnabled(false);
-        KoZoomTool *zoomTool = dynamic_cast<KoZoomTool*>(tl);
-        if (zoomTool)
-            zoomTool->setCanvasController(controller);
-        KoPanTool *panTool = dynamic_cast<KoPanTool*>(tl);
-        if (panTool)
-            panTool->setCanvasController(controller);
     }
-    KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(toolsHash.value(KoCreateShapesTool_ID));
-    Q_ASSERT(createTool);
+    KoCreateShapesTool *createShapesTool = dynamic_cast<KoCreateShapesTool*>(toolsHash.value(KoCreateShapesTool_ID));
+    Q_ASSERT(createShapesTool);
     QString id = KoShapeRegistry::instance()->keys()[0];
-    createTool->setShapeId(id);
+    createShapesTool->setShapeId(id);
 
     CanvasData *cd = new CanvasData(controller, device);
     cd->allTools = toolsHash;
@@ -200,9 +227,7 @@ void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
     }
 
     if (newActiveTool) {
-        foreach(KAction *action, canvasData->activeTool->actions()) {
-            action->setEnabled(false);
-        }
+        canvasData->deactivateToolActions();
         // repaint the decorations before we deactivate the tool as it might deleted
         // data needed for the repaint
         canvasData->activeTool->deactivate();
@@ -316,8 +341,8 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
         canvasData->activeTool->activate(toolActivation, shapesToOperateOn);
     }
 
-    QMap<QString, QWidget *> optionWidgetMap = canvasData->activeTool->optionWidgets();
-    if (optionWidgetMap.empty()) { // no option widget.
+    QList<QWidget *> optionWidgetList = canvasData->activeTool->optionWidgets();
+    if (optionWidgetList.empty()) { // no option widget.
         QWidget *toolWidget;
         QString title;
         foreach(ToolHelper *tool, tools) {
@@ -339,15 +364,15 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
             canvasData->dummyToolWidget = toolWidget;
         }
         canvasData->dummyToolLabel->setText(i18n("Active tool: %1", title));
-        optionWidgetMap.insert(i18n("Tool Options"), toolWidget);
+        optionWidgetList.append(toolWidget);
     }
 
     // Activate the actions for the currently active tool
-    activateActions(canvasData->canvas->actionCollection(), canvasData->activeTool->actions());
+    canvasData->activateToolActions();
 
     KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
     if (canvasControllerWidget) {
-        canvasControllerWidget->setToolOptionWidgets(optionWidgetMap);
+        canvasControllerWidget->setToolOptionWidgets(optionWidgetList);
     }
     emit q->changedTool(canvasData->canvas, uniqueToolIds.value(canvasData->activeTool));
 }
@@ -394,7 +419,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
         } else {
             KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
             if (canvasControllerWidget) {
-                canvasControllerWidget->setToolOptionWidgets(QMap<QString, QWidget *>());
+                canvasControllerWidget->setToolOptionWidgets(QList<QWidget *>());
             }
             // as a last resort just set a blank one
             canvasData = 0;
@@ -701,22 +726,6 @@ void KoToolManager::Private::switchToolTemporaryRequested(const QString &id)
     switchTool(id, true);
 }
 
-void KoToolManager::Private::activateActions(KActionCollection* ac,  QHash<QString, KAction*> actions)
-{
-    QHash<QString, KAction*>::const_iterator it( actions.constBegin());
-    for (; it != actions.constEnd(); ++it) {
-        if (ac) {
-            QAction* action = ac->action(it.key());
-                if (action) {
-                    ac->takeAction(action);
-                    it.value()->setShortcut(action->shortcut());
-                }
-                ac->addAction(it.key(), it.value());
-        }
-        it.value()->setEnabled(true);
-    }
-}
-
 // ******** KoToolManager **********
 KoToolManager::KoToolManager()
     : QObject(),
@@ -731,15 +740,15 @@ KoToolManager::~KoToolManager()
     delete d;
 }
 
-QList<KoToolManager::Button> KoToolManager::createToolList(KoCanvasBase *canvas) const
+QList<KoToolButton> KoToolManager::createToolList(KoCanvasBase *canvas) const
 {
-    QList<KoToolManager::Button> answer;
+    QList<KoToolButton> answer;
     foreach(ToolHelper *tool, d->tools) {
         if (tool->id() == KoCreateShapesTool_ID)
             continue; // don't show this one.
         if (!tool->canCreateTool(canvas))
             continue;
-        Button button;
+        KoToolButton button;
         button.button = tool->createButton();
         button.section = tool->toolType();
         button.priority = tool->priority();
@@ -784,7 +793,8 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
         QHash<QString, KAction*> actions = tool->actions();
         QHash<QString, KAction*>::const_iterator it(actions.constBegin());
         for (; it != actions.constEnd(); ++it) {
-            ac->addAction(it.key(), it.value());
+            if (!ac->action(it.key()))
+                ac->addAction(it.key(), it.value());
         }
     }
     foreach(ToolHelper * th, d->tools) {
@@ -927,6 +937,93 @@ void KoToolManager::injectDeviceEvent(KoInputDeviceHandlerEvent * event)
     }
 }
 
+void KoToolManager::addDeferredToolFactory(KoToolFactoryBase *toolFactory)
+{
+    ToolHelper *tool = new ToolHelper(toolFactory);
+    d->tools.append(tool);
+
+    // connect to all tools so we can hear their button-clicks
+    connect(tool, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
+
+    // now create tools for all existing canvases
+    foreach(KoCanvasController *controller, d->canvasses.keys()) {
+
+        // this canvascontroller is unknown, which is weird
+        if (!d->canvasses.contains(controller)) {
+            continue;
+        }
+
+        // create a tool for all canvasdata objects (i.e., all input devices on this canvas)
+        foreach (CanvasData *cd, d->canvasses[controller]) {
+            QPair<QString, KoToolBase*> toolPair = createTools(controller, tool);
+            if (toolPair.second) {
+                cd->allTools.insert(toolPair.first, toolPair.second);
+            }
+        }
+
+        // Then create a button for the toolbox for this canvas
+        if (tool->id() == KoCreateShapesTool_ID || !tool->canCreateTool(controller->canvas())) {
+            continue;
+        }
+
+        KoToolButton button;
+        button.button = tool->createButton();
+        button.section = tool->toolType();
+        button.priority = tool->priority();
+        button.buttonGroupId = tool->uniqueId();
+        button.visibilityCode = tool->activationShapeId();
+
+        emit addedTool(button, controller);
+    }
+
+}
+
+QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *controller, ToolHelper *tool)
+{
+    // XXX: maybe this method should go into the private class?
+
+    QHash<QString, KoToolBase*> origHash;
+
+    if (d->canvasses.contains(controller)) {
+        origHash = d->canvasses.value(controller).first()->allTools;
+    }
+
+    if (tool->inputDeviceAgnostic() && origHash.contains(tool->id())) {
+        // reuse ones that are marked as inputDeviceAgnostic();
+        return QPair<QString, KoToolBase*>(tool->id(), origHash.value(tool->id()));
+    }
+
+    if (!tool->canCreateTool(controller->canvas())) {
+        kDebug(30006) << "Skipping the creation of tool" << tool->id();
+        return  QPair<QString, KoToolBase*>(QString::null, 0);
+    }
+
+    kDebug(30006) << "Creating tool" << tool->id() << ". Activated on:" << tool->activationShapeId() << ", prio:" << tool->priority();
+
+    KoToolBase *tl = tool->createTool(controller->canvas());
+    Q_ASSERT(tl);
+    d->uniqueToolIds.insert(tl, tool->uniqueId());
+
+    tl->setObjectName(tool->id());
+
+    foreach(KAction *action, tl->actions()) {
+        action->setEnabled(false);
+    }
+
+    KoZoomTool *zoomTool = dynamic_cast<KoZoomTool*>(tl);
+    if (zoomTool) {
+        zoomTool->setCanvasController(controller);
+    }
+
+    KoPanTool *panTool = dynamic_cast<KoPanTool*>(tl);
+    if (panTool) {
+        panTool->setCanvasController(controller);
+    }
+
+    return QPair<QString, KoToolBase*>(tool->id(), tl);
+}
+
+
 KoToolManager* KoToolManager::instance()
 {
     K_GLOBAL_STATIC(KoToolManager, s_instance)
@@ -943,6 +1040,5 @@ KoToolManager::Private *KoToolManager::priv()
 {
     return d;
 }
-
 
 #include <KoToolManager.moc>

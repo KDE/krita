@@ -40,7 +40,8 @@ private slots:
 
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );
-
+    virtual void unsetCanvas();
+    
     void shadowChanged();
     void locationChanged(Qt::DockWidgetArea area);
 

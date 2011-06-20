@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 David Faure <faure@kde.org>
+   Copyright (C) 2010 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,15 +18,19 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Own
 #include "KoOdfLoadingContext.h"
+
+// KDE
+#include <kstandarddirs.h>
+#include <kdebug.h>
+
+// Calligra
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoStore.h>
 #include <KoXmlNS.h>
-
-#include <kstandarddirs.h>
-
-#include <kdebug.h>
+#include <KoOdfManifestEntry.h>
 
 
 
@@ -173,8 +178,8 @@ void KoOdfLoadingContext::parseGenerator() const
             KoXmlElement generator = KoXml::namedItemNS(office, KoXmlNS::meta, "generator");
             if (!generator.isNull()) {
                 d->generator = generator.text();
-                if (d->generator.startsWith("KOffice")) {
-                    d->generatorType = KOffice;
+                if (d->generator.startsWith("Calligra")) {
+                    d->generatorType = Calligra;
                 }
                 // NeoOffice is a port of OpenOffice to Mac OS X
                 else if (d->generator.startsWith("OpenOffice.org") || d->generator.startsWith("NeoOffice") || d->generator.startsWith("LibreOffice")) {
@@ -243,7 +248,7 @@ bool KoOdfLoadingContext::useStylesAutoStyles() const
 QString KoOdfLoadingContext::mimeTypeForPath(const QString& path) const
 {
     if (d->manifestEntries.contains(path)) {
-        return d->manifestEntries[path]->mediaType;
+        return d->manifestEntries[path]->mediaType();
     }
     else {
         return QString();
@@ -254,7 +259,7 @@ QList<KoOdfManifestEntry*> KoOdfLoadingContext::manifestEntries() const
 {
     return d->manifestEntries.values();
 }
-\
+
 bool KoOdfLoadingContext::parseManifest(const KoXmlDocument &manifestDocument)
 {
     // First find the manifest:manifest node.
@@ -309,4 +314,3 @@ bool KoOdfLoadingContext::parseManifest(const KoXmlDocument &manifestDocument)
 
     return true;
 }
-

@@ -14,10 +14,10 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 #######################
 ######################
 
-# define the generic version of the KOffice libraries here
-# this makes it easy to advance it when the next KOffice release comes
-set(GENERIC_KOFFICE_LIB_VERSION "8.0.0")
-set(GENERIC_KOFFICE_LIB_SOVERSION "8")
+# define the generic version of the Calligra libraries here
+# this makes it easy to advance it when the next Calligra release comes
+set(GENERIC_CALLIGRA_LIB_VERSION "8.0.0")
+set(GENERIC_CALLIGRA_LIB_SOVERSION "8")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
@@ -28,6 +28,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 #
 #eg:
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
+option(BUILD_koabstraction "Build directory koabstraction" ON) # koabstraction isn't buildable at the moment
+option(BUILD_mobile "Build directory mobile" ON) # mobile depends on koabstraction it builds but does not run
 
 option(GHNS "support Get Hot New Stuff" ON)
 
@@ -36,7 +38,7 @@ option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 
 IF (TINY)
     set(SHOULD_BUILD_WORDS TRUE)
-    set(SHOULD_BUILD_KPRESENTER TRUE)
+    set(SHOULD_BUILD_STAGE TRUE)
     set(SHOULD_BUILD_TABLES TRUE)
     set(SHOULD_BUILD_KARBON FALSE)
     set(SHOULD_BUILD_KRITA FALSE)
@@ -54,9 +56,10 @@ IF (TINY)
     set(SHOULD_BUILD_CALLIGRA FALSE)
     set(SHOULD_BUILD_CSTESTER FALSE)
     set(SHOULD_BUILD_KOABSTRACTION TRUE)
+    set(SHOULD_BUILD_ACTIVE TRUE)
 ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_WORDS FALSE)
-    set(SHOULD_BUILD_KPRESENTER FALSE)
+    set(SHOULD_BUILD_STAGE FALSE)
     set(SHOULD_BUILD_TABLES FALSE)
     set(SHOULD_BUILD_KARBON TRUE)
     set(SHOULD_BUILD_KRITA TRUE)
@@ -74,9 +77,10 @@ ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_CALLIGRA FALSE)
     set(SHOULD_BUILD_CSTESTER FALSE)
     set(SHOULD_BUILD_KOABSTRACTION FALSE)
+    set(SHOULD_BUILD_ACTIVE FALSE)
 ELSE()
     set(SHOULD_BUILD_WORDS TRUE)
-    set(SHOULD_BUILD_KPRESENTER TRUE)
+    set(SHOULD_BUILD_STAGE TRUE)
     set(SHOULD_BUILD_TABLES TRUE)
     set(SHOULD_BUILD_KARBON TRUE)
     set(SHOULD_BUILD_KRITA TRUE)
@@ -94,6 +98,7 @@ ELSE()
     set(SHOULD_BUILD_CALLIGRA TRUE)
     set(SHOULD_BUILD_CSTESTER TRUE)
     set(SHOULD_BUILD_KOABSTRACTION TRUE)
+    set(SHOULD_BUILD_ACTIVE FALSE)
 ENDIF()
 
 if(KDE4_BUILD_TESTS)
@@ -130,6 +135,10 @@ endif(KDE_VERSION LESS "4.4.0")
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
+find_package(Boost REQUIRED) # for pigment and stage
+if (NOT Boost_FOUND)
+    MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, tables and krita.")
+endif (NOT Boost_FOUND)
 
 if (APPLE)
    find_package(Carbon REQUIRED)
@@ -177,7 +186,7 @@ macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by
 ## Test for create ressources
 ##
 macro_optional_find_package(CreateResources)
-macro_log_feature(CREATERESOURCES_FOUND "Create Resources" "Create Resources (brushes, palettes etc.)" "http://create.freedesktop.org" FALSE "" "Recommended at runtime for KOffice for optional extra resources.")
+macro_log_feature(CREATERESOURCES_FOUND "Create Resources" "Create Resources (brushes, palettes etc.)" "http://create.freedesktop.org" FALSE "" "Recommended at runtime for Calligra for optional extra resources.")
 
 ##
 ## Test for kdepimlibs
@@ -185,11 +194,6 @@ macro_log_feature(CREATERESOURCES_FOUND "Create Resources" "Create Resources (br
 macro_optional_find_package(KdepimLibs)
 macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by KPlato and the KDE address book integration (available as a module in KDE)")
 
-##
-## Test for boost
-##
-macro_optional_find_package(Boost)
-macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" FALSE "" "Required by KPresenter")
 
 ##
 ## Test for eigen2
@@ -309,7 +313,7 @@ TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
 ##############################
 #############################
 
-include(MacroKOfficeAddBenchmark)
+include(MacroCalligraAddBenchmark)
 
  ####################
 #####################
@@ -359,11 +363,16 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${KOODF_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/main)
 
+# TextLayout depends on kotext
+set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/textlayout)
+
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
-                    ${KOTEXT_INCLUDES}
+                    ${TEXTLAYOUT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/main
+                    ${CMAKE_SOURCE_DIR}/libs/main/rdf
                     ${CMAKE_SOURCE_DIR}/libs/main/config)
 
 if(SHOULD_BUILD_SCRIPTING)
@@ -371,13 +380,17 @@ if(SHOULD_BUILD_SCRIPTING)
 endif(SHOULD_BUILD_SCRIPTING)
 
 # kopageapp
-set(KOPAGEAPP_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
+set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
+                    ${PIGMENT_INCLUDES}
+                    ${KOMAIN_INCLUDES}
+                    ${CMAKE_SOURCE_DIR}/libs/widgets
+                    ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
 
 # koproperty
 SET(KOPROPERTY_TARGETNAME koproperty)                           # TODO remove when we move to independent place
 SET(KOPROPERTY_LIBS ${KOPROPERTY_TARGETNAME})                   # TODO remove when we move to independent place
-SET(KOPROPERTY_LIB_VERSION ${GENERIC_KOFFICE_LIB_VERSION})      # TODO remove when we move to independent place
-SET(KOPROPERTY_LIB_SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION})  # TODO remove when we move to independent place
+SET(KOPROPERTY_LIB_VERSION ${GENERIC_CALLIGRA_LIB_VERSION})      # TODO remove when we move to independent place
+SET(KOPROPERTY_LIB_SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION})  # TODO remove when we move to independent place
 SET(KOPROPERTY_USE_KOLIBS TRUE)                                 # TODO remove when we move to independent place
 set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
                         ${CMAKE_SOURCE_DIR}/libs
@@ -397,14 +410,9 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 
 
 ### Tables: eigen2, boost
-if(NOT EIGEN2_FOUND OR NOT Boost_FOUND)
+if(NOT EIGEN2_FOUND)
     set(SHOULD_BUILD_TABLES FALSE)
-endif(NOT EIGEN2_FOUND OR NOT Boost_FOUND)
-
-### KPresenter: boost
-if(NOT Boost_FOUND)
-    set(SHOULD_BUILD_KPRESENTER FALSE)
-endif(NOT Boost_FOUND)
+endif(NOT EIGEN2_FOUND)
 
 ### Krita: pigment, eigen2, exiv2
 if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
@@ -415,6 +423,12 @@ endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
 if(NOT KdepimLibs_FOUND)
     set(SHOULD_BUILD_KPLATO FALSE)
 endif(NOT KdepimLibs_FOUND)
+
+  
+if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
+  set(SHOULD_BUILD_ACTIVE FALSE)
+endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
+
 
 ### HACK ###
 # Those BUILD_ are illegally used below before they are defined, which cause problem on a first build
@@ -427,7 +441,7 @@ if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     ## Test for sqlite
     ##
     set(SQLITE_RECOMMENDED_VERSION "3.7.3")
-    find_package(KofficeSqlite 3.6.16)
+    find_package(CalligraSqlite 3.6.16)
     macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine" "http://www.sqlite.org"
                       FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")
 
@@ -444,7 +458,7 @@ endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
 ###################
 
 if(SHOULD_BUILD_WORDS)
-    macro_optional_add_subdirectory(words)
+   macro_optional_add_subdirectory(words)
 endif(SHOULD_BUILD_WORDS)
 
 if (SHOULD_BUILD_KFORMULA)
@@ -468,9 +482,9 @@ if (SHOULD_BUILD_KCHART)
     macro_optional_add_subdirectory(kchart)
 endif (SHOULD_BUILD_KCHART)
 
-if(SHOULD_BUILD_KPRESENTER)
+if(SHOULD_BUILD_STAGE)
   macro_optional_add_subdirectory(kpresenter)
-endif(SHOULD_BUILD_KPRESENTER)
+endif(SHOULD_BUILD_STAGE)
 
 if(SHOULD_BUILD_KEXI)
     macro_optional_add_subdirectory(kexi)
@@ -496,9 +510,14 @@ if(SHOULD_BUILD_BRAINDUMP)
   macro_optional_add_subdirectory(braindump)
 endif(SHOULD_BUILD_BRAINDUMP)
 
-if(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_KPRESENTER)
+if(SHOULD_BUILD_ACTIVE)
+  macro_optional_add_subdirectory(active)
+endif(SHOULD_BUILD_ACTIVE)
+
+
+if(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
     set(SHOULD_BUILD_KOABSTRACTION FALSE)
-endif(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_KPRESENTER)
+endif(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
 
 if(SHOULD_BUILD_KOABSTRACTION)
     # koabstraction depends on kotext & flake
@@ -543,7 +562,7 @@ message(STATUS "---------------- The following applications will be built ------
 
 macro_display_application_enabled(words ${SHOULD_BUILD_WORDS})
 macro_display_application_enabled(tables ${SHOULD_BUILD_TABLES})
-macro_display_application_enabled(kpresenter ${SHOULD_BUILD_KPRESENTER})
+macro_display_application_enabled(kpresenter ${SHOULD_BUILD_STAGE})
 macro_display_application_enabled(flow ${SHOULD_BUILD_FLOW})
 macro_display_application_enabled(kexi ${SHOULD_BUILD_KEXI})
 macro_display_application_enabled(kplato ${SHOULD_BUILD_KPLATO})
@@ -555,6 +574,7 @@ macro_display_application_enabled(kchart ${SHOULD_BUILD_KCHART})
 macro_display_application_enabled(mobile ${SHOULD_BUILD_MOBILE})
 macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
 macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})
+macro_display_application_enabled(active ${SHOULD_BUILD_ACTIVE})
 
 message(STATUS "--------------------------------------------------------------------------" )
 

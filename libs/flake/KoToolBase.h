@@ -21,6 +21,7 @@
 #define KOTOOL_H
 
 #include <QString>
+#include <QList>
 #include <QObject>
 #include <QCursor>
 #include <QStringList>
@@ -105,7 +106,7 @@ public:
      *
      * @see m_optionWidgets
      */
-    QMap<QString, QWidget *> optionWidgets();
+    QList<QWidget *> optionWidgets();
 
     /**
      * Returns the internal selection option of this tool.
@@ -387,7 +388,7 @@ protected:
      * Sets the option widget to 0 by default.
      */
     virtual QWidget *createOptionWidget();
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
 
     /**
      * Add an action under the given name to the collection.

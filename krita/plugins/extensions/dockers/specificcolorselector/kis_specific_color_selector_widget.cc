@@ -31,7 +31,9 @@
 #include "kis_debug.h"
 
 
-KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent) : QWidget(parent), m_colorSpace(0)
+KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
+    : QWidget(parent),
+      m_colorSpace(0)
 {
     m_layout = new QVBoxLayout(this);
     setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
@@ -87,6 +89,20 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
             }
         }
     }
+    bool allChannels8Bit = true;
+    foreach(KoChannelInfo* channel, channels) {
+        if (channel->channelType() == KoChannelInfo::COLOR && channel->channelValueType() != KoChannelInfo::UINT8) {
+            allChannels8Bit = false;
+        }
+    }
+    if(allChannels8Bit) {
+        KisColorInput* input = new KisHexColorInput(this, &m_color);
+        m_inputs.append(input);
+        m_layout->addWidget(input);
+        connect(input, SIGNAL(updated()), this,  SLOT(update()));
+        connect(this,  SIGNAL(updated()), input, SLOT(update()));
+    }
+    m_layout->addStretch(10);
 }
 
 void KisSpecificColorSelectorWidget::update()

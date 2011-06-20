@@ -21,13 +21,14 @@
 #include "KoRdfSemanticTree.h"
 #include "KoDocumentRdf.h"
 #include "KoDocumentRdf_p.h"
-
+#include "KoRdfSemanticTreeWidgetItem.h"
 #include <kdebug.h>
 #include <klocale.h>
+#include "KoRdfFoaF.h"
+#include "KoRdfCalendarEvent.h"
+#include "KoRdfLocation.h"
 
 #include <QSet>
-
-using namespace Soprano;
 
 class KoRdfSemanticTreePrivate : public QSharedData
 {

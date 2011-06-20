@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -22,17 +22,22 @@
 
 #include "kotext_export.h"
 
+#include <QString>
+#include <QRectF>
+#include <QMetaType>
+
 /**
  * Interface for a single OpenDocumentText page.
  *
- * The KWord KWPageTextInfo class does implement this interface to provide
+ * The Words KWPageTextInfo class does implement this interface to provide
  * application specific functionality for single pages.
  * @see KoTextShapeData::setPage();
  */
 class KOTEXT_EXPORT KoTextPage
 {
 public:
-
+    /// Constructor.
+    explicit KoTextPage();
     /// Destructor.
     virtual ~KoTextPage();
 
@@ -41,6 +46,15 @@ public:
         CurrentPage = 0,
         NextPage = 1
     };
+
+    /**
+     * Returns the unique number of this page for internal purposes. All pages
+     * are numbered consecutively starting by 1.
+     *
+     * This is used for example to anchor images to pages. The image then referes
+     * to the unique page-number.
+     */
+    virtual int pageNumber() const = 0;
 
     /**
      * Returns the number of this page for display purposes.
@@ -62,7 +76,24 @@ public:
      * \return the user visible page number, or -1 if the page referenced does not
      * exist.
      */
-    virtual int pageNumber(PageSelection select = CurrentPage, int adjustment = 0) const = 0;
+    virtual int visiblePageNumber(PageSelection select = CurrentPage, int adjustment = 0) const = 0;
+
+    /**
+     * Returns the name of the master-page that should be used for this page or a null
+     * QString if this page does not explicit define a master-page in which case the
+     * default master-page will be used.
+     *
+     * Per default a null QString is returned.
+     */
+    virtual QString masterPageName() const;
+
+    /**
+     * Returns the rect of the page in document coords
+     */
+    virtual QRectF rect() const = 0;
+
 };
+
+Q_DECLARE_METATYPE(KoTextPage*)
 
 #endif

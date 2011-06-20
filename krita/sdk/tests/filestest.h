@@ -67,7 +67,8 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             KoFilterManager manager(&doc);
             QByteArray nativeFormat = doc.nativeFormatMimeType();
             KoFilter::ConversionStatus status;
-            QString s = manager.importDocument(sourceFileInfo.absoluteFilePath(), status);
+            QString s = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString(),
+                                               status);
 
             if (!doc.image()) {
                 failuresDocImage << sourceFileInfo.fileName();

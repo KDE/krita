@@ -31,8 +31,8 @@ void KoInputDeviceHandlerRegistry::init()
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "DevicePlugins";
     config.blacklist = "DevicePluginsDisabled";
-    config.group = "koffice";
-    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Device"),
+    config.group = "calligra";
+    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Device"),
                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"), config);
 
     foreach(const QString & id, keys()) {

@@ -28,6 +28,7 @@
 #include <QTextFragment>
 #include <QTextList>
 #include <QTextStream>
+#include <QTextCursor>
 
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
@@ -37,7 +38,6 @@
 #include "styles/KoStyleManager.h"
 #include "KoTextDocument.h"
 #include "KoTextBlockData.h"
-#include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoBookmark.h>
 #include <KoInlineNote.h>
@@ -123,8 +123,7 @@ QString KoTextDebug::inlineObjectAttributes(const QTextCharFormat &textFormat)
     QString attrs;
 
     if (textFormat.objectType() == QTextFormat::UserObject + 1) {
-        KoTextDocumentLayout *lay = document ? qobject_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
-        KoInlineTextObjectManager *inlineObjectManager = lay ? lay->inlineTextObjectManager() : 0;
+        KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(document).inlineTextObjectManager();
         KoInlineObject *inlineObject = inlineObjectManager->inlineTextObject(textFormat);
         if (KoBookmark *bookmark = dynamic_cast<KoBookmark *>(inlineObject)) {
             if (bookmark->type() == KoBookmark::SinglePosition) {
@@ -145,7 +144,6 @@ QString KoTextDebug::inlineObjectAttributes(const QTextCharFormat &textFormat)
                 attrs.append(" type=\"endnote\"");
             }
             attrs.append(QString(" label=\"%1\"").arg(note->label()));
-            attrs.append(QString(" text=\"%1\"").arg(note->text().toPlainText()));
         } else {
             attrs.append(" type=\"inlineobject\">");
         }
@@ -545,7 +543,7 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             key = "alignment";
             value = QString::number(properties[id].toInt());
             break;
-        case KoListStyle::BulletSize:
+        case KoListStyle::RelativeBulletSize:
             key = "bullet-size";
             value = QString::number(properties[id].toInt());
             break;
@@ -596,6 +594,26 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
         case KoListStyle::BulletImageKey:
             key = "bullet-image-key";
             value = QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::Margin:
+            key="margin-left";
+            value =QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::TextIndent:
+            key="text-indent";
+            value =QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::AlignmentMode:
+            key="label-alignment";
+            value=QString(properties[id].toBool()? "true":"false");
+            break;
+        case KoListStyle::LabelFollowedBy:
+            key="label-followed-by";
+            value =QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::TabStopPosition:
+            key="tab-stop-position";
+            value =QString::number(properties[id].toInt());
             break;
         default:
             break;
@@ -1263,9 +1281,8 @@ void KoTextDebug::dumpFragment(const QTextFragment &fragment, QTextStream &out)
 {
     depth += INDENT;
 
-    KoTextDocumentLayout *lay = document ? qobject_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
     QTextCharFormat charFormat = fragment.charFormat();
-    KoInlineObject *inlineObject = lay ? lay->inlineTextObjectManager()->inlineTextObject(charFormat) : 0;
+    KoInlineObject *inlineObject = KoTextDocument(document).inlineTextObjectManager()->inlineTextObject(charFormat);
     if (inlineObject) {
         QString cf = inlineObjectAttributes(charFormat);
 

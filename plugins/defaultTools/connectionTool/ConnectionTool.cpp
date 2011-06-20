@@ -59,7 +59,7 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     , m_oldSnapStrategies(0)
 {
     QPixmap connectPixmap;
-    connectPixmap.load(KStandardDirs::locate("data", "koffice/icons/cursor_connect.png"));
+    connectPixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_connect.png"));
     m_connectCursor = QCursor(connectPixmap, 4, 1);
 
     m_alignPercent = new KAction(QString("%"), this);
@@ -677,9 +677,9 @@ void ConnectionTool::updateStatusText()
     }
 }
 
-QMap<QString, QWidget *> ConnectionTool::createOptionWidgets()
+QList<QWidget *> ConnectionTool::createOptionWidgets()
 {
-    QMap<QString, QWidget *> map;
+    QList<QWidget *> list;
 
     m_connectionShapeWidgets.clear();
 
@@ -694,13 +694,15 @@ QMap<QString, QWidget *> ConnectionTool::createOptionWidgets()
             cw->setEnabled(false);
             connect(cw, SIGNAL(propertyChanged()), this, SLOT(connectionChanged()));
             m_connectionShapeWidgets.append(cw);
-            map.insert(i18n("Connection"), cw);
+            cw->setWindowTitle(i18n("Connection"));
+            list.append(cw);
         }
     }
+    ConnectionPointWidget *connectPoint = new ConnectionPointWidget(this);
+    connectPoint->setWindowTitle(i18n("Connection Point"));
+    list.append(connectPoint);
 
-    map.insert(i18n("Connection Point"), new ConnectionPointWidget(this));
-
-    return map;
+    return list;
 }
 
 void ConnectionTool::horizontalAlignChanged()

@@ -137,7 +137,7 @@ public:
         BiggestRunAroundSide,   ///< Run other text around the side that has the most space
         LeftRunAroundSide,      ///< Run other text around the left side of the frame
         RightRunAroundSide,     ///< Run other text around the right side of the frame
-        AutoRunAroundSide,      ///< Run other text dynamically around both sides of the shape, provided there is sufficient space left
+        EnoughRunAroundSide,      ///< Run other text dynamically around both sides of the shape, provided there is sufficient space left
         BothRunAroundSide,      ///< Run other text around both sides of the shape
         NoRunAround,            ///< The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
         RunThrough              ///< The text will completely ignore the frame and layout as if it was not there
@@ -369,13 +369,15 @@ public:
     QSet<KoEventAction *> eventActions() const;
 
     /**
-     * Return the side text should flow around this shape.
+     * Return the side text should flow around this shape. This implements the ODF style:wrap
+     * attribute that specifies how text is displayed around a frame or graphic object.
      */
     TextRunAroundSide textRunAroundSide() const;
 
     /**
      * Set the side text should flow around this shape.
      * @param side the requested side
+     * @param runThrought run through the foreground or background or...
      */
     void setTextRunAroundSide(TextRunAroundSide side, Through runThrought = Background);
 
@@ -390,6 +392,34 @@ public:
      * @param distance the space around this shape to keep free from text
      */
     void setTextRunAroundDistance(qreal distance);
+
+    /**
+     * Return the threshold above which text should flow around this shape.
+     * The text will not flow around the shape on a side unless the space available on that side
+     * is above this threshold. Only used when the text run around side is EnoughRunAroundSide.
+     * @return threshold the threshold
+     */
+    qreal textRunAroundThreshold() const;
+
+    /**
+     * Set the threshold above which text should flow around this shape.
+     * The text will not flow around the shape on a side unless the space available on that side
+     * is above this threshold. Only used when the text run around side is EnoughRunAroundSide.
+     * @param threshold the new threshold
+     */
+    void setTextRunAroundThreshold(qreal threshold);
+
+    /**
+     * Set an indication if the shape is anchored by text.
+     * @param anchored if the shape is anchored by text
+     */
+    void setAnchored(bool anchored);
+
+    /**
+     * Return if the shape is anchored by text
+     * @return true if the shape is anchored by text
+     */
+    bool isAnchored() const;
 
     /**
      * Set the background of the shape.

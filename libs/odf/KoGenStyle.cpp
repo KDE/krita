@@ -2,6 +2,7 @@
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +21,8 @@
 */
 #include "KoGenStyle.h"
 #include "KoGenStyles.h"
+
+#include <QTextLength>
 
 #include <KoXmlWriter.h>
 
@@ -314,6 +317,23 @@ void KoGenStyle::addPropertyPt(const QString& propName, qreal propValue, Propert
     m_properties[type].insert(propName, str);
 }
 
+void KoGenStyle::addPropertyLength(const QString& propName, const QTextLength &propValue, PropertyType type)
+{
+    if (type == DefaultType) {
+        type = m_propertyType;
+    }
+    if (propValue.type() == QTextLength::FixedLength) {
+        return addPropertyPt(propName, propValue.rawValue(), type);
+    } else {
+        QString str;
+        str.setNum((int) propValue.rawValue());
+        str += '%';
+        m_properties[type].insert(propName, str);
+    }
+}
+
+
+
 void KoGenStyle::addAttributePt(const QString& attrName, qreal attrValue)
 {
     QString str;
@@ -438,4 +458,20 @@ bool KoGenStyle::isEmpty() const
         if (! m_properties[i].isEmpty())
             return false;
     return true;
+}
+
+void KoGenStyle::copyPropertiesFromStyle(const KoGenStyle &sourceStyle, KoGenStyle &targetStyle, PropertyType type)
+{
+    if (type == DefaultType) {
+        type = sourceStyle.m_propertyType;
+    }
+
+    const StyleMap& map = sourceStyle.m_properties[type];
+    if (!map.isEmpty()) {
+        QMap<QString, QString>::const_iterator it = map.constBegin();
+        const QMap<QString, QString>::const_iterator end = map.constEnd();
+        for (; it != end; ++it) {
+            targetStyle.addProperty(it.key(), it.value(), type);
+        }
+    }
 }

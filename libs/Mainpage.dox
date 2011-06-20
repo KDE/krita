@@ -1,6 +1,6 @@
 /**
  * \mainpage
- * The KOffice libraries are really a set of different libraries; but not all of them
+ * The Calligra libraries are really a set of different libraries; but not all of them
  * have docs so all unmaintained (documentation wise) libs go in this project.
  * Other projects:
  * <ul>
@@ -12,6 +12,6 @@
 
 /**
  *
- * \defgroup KOfficeMacros KOffice Macros
+ * \defgroup CalligraMacros Calligra Macros
  *
  */

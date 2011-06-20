@@ -350,6 +350,23 @@ void TestTableLayout::testRowHeightFixed()
     m_layout->layout();
 
     QVERIFY(!dynamic_cast<MockRootAreaProvider*>(m_layout->provider())->m_askedForMoreThenOneArea);
+    QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).height() - 14) < ROUNDING);
+}
+
+void TestTableLayout::testRowHeightMinimum()
+{
+    KoTableStyle *tableStyle = new KoTableStyle;
+
+    setupTest("merged text", "top right text", "mid right text", "bottom left text", "bottom mid text", "bottom right text", tableStyle);
+    KoTableColumnAndRowStyleManager styleManager = KoTableColumnAndRowStyleManager::getManager(m_table);
+    KoTableRowStyle row1style;
+    row1style.setMinimumRowHeight(3.2);
+    styleManager.setRowStyle(1, row1style);
+
+    m_layout->layout();
+
+    QVERIFY(!dynamic_cast<MockRootAreaProvider*>(m_layout->provider())->m_askedForMoreThenOneArea);
+    QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).height() - 14) < ROUNDING);
 }
 
 QTEST_KDEMAIN(TestTableLayout, GUI)

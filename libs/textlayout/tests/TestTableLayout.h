@@ -97,6 +97,11 @@ private slots:
       */
     void testRowHeightFixed();
 
+    /**
+     * Test minimum row-height.
+     */
+    void testRowHeightMinimum();
+
 private:
     QTextCursor setupTest();
     void setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText, KoTableStyle* tableStyle = 0);

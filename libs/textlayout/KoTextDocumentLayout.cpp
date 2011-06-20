@@ -279,16 +279,12 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         // Mark all selected root-areas as dirty so they are relayouted.
         for(int i = startIndex; i <= endIndex; ++i) {
             d->rootAreaList[i]->setDirty();
-<<<<<<< HEAD
         }
     }
 
     // Once done we emit the layoutIsDirty signal. The consumer (e.g. the TextShape) will then layout dirty
     // root-areas and if needed following ones which got dirty cause content moved to them. Also this will
     // created new root-areas using KoTextLayoutRootAreaProvider::provide if needed.
-=======
- 
->>>>>>> Auto updating Table Of Contents has landed
     emitLayoutIsDirty();
 }
 

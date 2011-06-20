@@ -39,7 +39,7 @@
 
 #include <kio/netaccess.h>
 
-// koffice's headers
+// calligra's headers
 #include <KoFilterChain.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

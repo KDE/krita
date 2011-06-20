@@ -42,7 +42,7 @@ class PAINTOP_EXPORT KisCurveOption
 {
 public:
     KisCurveOption(const QString & label, const QString& name, const QString& category,
-                   bool checked, qreal value=1.0, qreal min=0.0, qreal max=1.0, bool useCurve=true);
+                   bool checked, qreal value=1.0, qreal min=0.0, qreal max=1.0, bool useCurve=true, bool separateCurveValue=false);
     
     virtual ~KisCurveOption();
     
@@ -72,6 +72,20 @@ public:
     const KisCurveLabel& minimumLabel() const;
     const KisCurveLabel& maximumLabel() const;
     
+    double computeValue(const KisPaintInformation& info) const {
+        if(m_useCurve) {
+            if(m_separateCurveValue)
+                return m_sensor->parameter(info);
+            else
+                return m_minValue + (m_value - m_minValue) * m_sensor->parameter(info);
+        }
+        
+        if(m_separateCurveValue)
+            return 1.0;
+        
+        return m_value;
+    }
+    
 protected:
     void setMinimumLabel(const KisCurveLabel& _label);
     void setMaximumLabel(const KisCurveLabel& _label);
@@ -81,13 +95,6 @@ protected:
      * Read the option using the prefix in argument
      */
     void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfiguration* setting);
-
-    double computeValue(const KisPaintInformation& info) const {
-        if(m_useCurve) 
-            return m_minValue + (m_value - m_minValue) * m_sensor->parameter(info);
-        
-        return m_value;
-    }
 
 protected:
     QString m_label;
@@ -99,6 +106,7 @@ protected:
     
 private:
     bool          m_useCurve;
+    bool          m_separateCurveValue;
     qreal         m_value;
     qreal         m_minValue;
     qreal         m_maxValue;

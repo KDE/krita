@@ -32,7 +32,7 @@
 #include "Staff.h"
 
 #include <KoXmlWriter.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 #include <kdebug.h>
 
@@ -385,7 +385,7 @@ void MusicXmlWriter::writeSheet(KoXmlWriter& w, Sheet* sheet, bool writeNamespac
 //        "http://www.musicxml.org/dtds/partwise.dtd");
     w.startElement("music:score-partwise");
     if (writeNamespaceDef) {
-        w.addAttribute("xmlns:music", "http://www.koffice.org/music");
+        w.addAttribute("xmlns:music", "http://www.calligra-suite.org/music");
     }
     w.addAttribute("version", "1.1");
 

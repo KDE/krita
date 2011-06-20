@@ -21,7 +21,7 @@
 #ifndef KCHART_CHARTDOCUMENT_H
 #define KCHART_CHARTDOCUMENT_H
 
-// KOffice
+// Calligra
 #include <KoDocument.h>
 #include <KoXmlReaderForward.h>
 

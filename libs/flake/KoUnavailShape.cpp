@@ -35,7 +35,7 @@
 #include <kstandarddirs.h>
 #include <KDebug>
 
-// KOffice
+// Calligra
 #include "KoUnit.h"
 #include "KoStore.h"
 #include "KoXmlNS.h"
@@ -47,6 +47,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include <KoShapeBackground.h>
 
 
 // The XML of a frame looks something like this:
@@ -139,6 +140,7 @@ KoUnavailShape::Private::Private()
 KoUnavailShape::Private::~Private()
 {
     qDeleteAll(objectEntries);
+    qDeleteAll(embeddedFiles);
 }
 
 
@@ -165,7 +167,17 @@ KoUnavailShape::~KoUnavailShape()
 void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     applyConversion(painter, converter);
-    draw(painter);
+    if (background()) {
+        QPainterPath p;
+        p.addRect(QRectF(QPointF(), size()));
+        background()->paint(painter, p);
+    } 
+
+    // Only draw something if the frame isn't empty.
+    kDebug(30006) << "Number of objects:" << d->objectEntries.size();
+    if (!d->objectEntries.isEmpty()) {
+        draw(painter);
+    }
 }
 
 void KoUnavailShape::draw(QPainter &painter) const
@@ -176,7 +188,7 @@ void KoUnavailShape::draw(QPainter &painter) const
 
     // Get the question mark "icon".
     QPixmap questionMark;
-    questionMark.load(KStandardDirs::locate("data", "koffice/icons/questionmark.png"));
+    questionMark.load(KStandardDirs::locate("data", "calligra/icons/questionmark.png"));
 
     // The size of the image is:
     //  - the size of the shape if  shapesize < 2cm
@@ -412,14 +424,20 @@ void KoUnavailShape::Private::saveObjects(const KoXmlElement & element)
     // Loop through all the child elements of the draw:frame and save them.
     KoXmlNode n = element.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
+        kDebug(30006) << "In draw:frame, node =" << n.nodeName();
+
+        // This disregards #text, but that's not in the spec anyway so
+        // it doesn't need to be saved.
+        if (!n.isElement())
+            continue;
+
         ObjectEntry  *object = new ObjectEntry;
 
         QByteArray contentsTmp;
         QBuffer buffer(&contentsTmp); // the member
         KoXmlWriter writer(&buffer);
 
-        if (n.isElement())
-            saveXmlRecursive(n.toElement(), writer, object);
+        saveXmlRecursive(n.toElement(), writer, object);
 
         object->frameContents = contentsTmp;
         objectEntries.append(object);

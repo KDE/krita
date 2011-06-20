@@ -32,9 +32,9 @@ class QWidget;
 
 /**
 * The KoScriptingModule provides the base class for Kross
-* module functionality for KOffice applications.
+* module functionality for Calligra applications.
 *
-* Each KOffice-application does provide an own implementation for
+* Each Calligra-application does provide an own implementation for
 * this one to extend those module with additional own functionality.
 */
 class KOKROSS_EXPORT KoScriptingModule : public QObject

@@ -1,4 +1,4 @@
-/* This file is part of the KOffice libraries
+/* This file is part of the Calligra libraries
    Copyright (C) 2001 Werner Trobin <trobin@kde.org>
                  2002 Werner Trobin <trobin@kde.org>
 
@@ -96,14 +96,14 @@ protected:
      * filter library). This method works according to the template method
      * pattern and calls savePartContents() during execution.
      * Call this method when you want to convert some data using one or more
-     * KOffice filters selected via the filter manager.
+     * Calligra filters selected via the filter manager.
      * This is the way to go when it comes to embedding unless you have very
      * special requirements.
      *
      * @param from The mimetype of the source data
      * @param to The mimetype of the destination part. If this field is set
      *           to "" the filter manager will try to find the best native
-     *           KOffice mimetype. When the method returns this parameter will
+     *           Calligra mimetype. When the method returns this parameter will
      *           hold the string of the used mimetype.
      * @param status Returns the error status of the filter
      * @param key Optional key field to allow custom keys inside the part

@@ -85,7 +85,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_maximumAllowedWidth(0.0)
  , m_dropCapsWidth(0)
  , m_startOfArea(0)
- , m_endOfArea()
+ , m_endOfArea(0)
  , m_acceptsPageBreak(false)
  , m_virginPage(true)
  , m_verticalAlignOffset(0)
@@ -454,9 +454,15 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
 
             if (acceptsPageBreak()
                    && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysAfter)) {
-                m_endOfArea = new FrameIterator(cursor);
                 Q_ASSERT(!cursor->it.atEnd());
-                ++(cursor->it);
+                QTextFrame::iterator nextIt = cursor->it;
+                ++nextIt;
+                bool wasIncremented = !nextIt.currentFrame();
+                if (wasIncremented)
+                    cursor->it = nextIt;
+                m_endOfArea = new FrameIterator(cursor);
+                if (!wasIncremented)
+                    ++(cursor->it);
                 setBottom(m_y + m_footNotesHeight);
                 m_blockRects.last().setBottom(m_y);
                 return false;
@@ -746,8 +752,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
             m_listIndent = textList->format().doubleProperty(KoListStyle::Indent) + listLabelIndent;
         } else {
-            if (! format.hasProperty(QTextFormat::BlockLeftMargin)) {
+            if (!format.hasProperty(KoParagraphStyle::ListLevel)) {
                 leftMargin = textList->format().doubleProperty(KoListStyle::Margin);
+                m_listIndent = textList->format().doubleProperty(KoListStyle::Indent);
             }
         }
     }
@@ -831,7 +838,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     handleBordersAndSpacing(blockData, &block);
     m_blockRects.last().setLeft(m_blockRects.last().left() + qMin(m_indent, qreal(0.0)));
 
-    if (textList) {
+    if (textList && block.layout()->lineCount() == 1) {
         // if list set counterposition. Do this after borders so we can account for them.
         if (m_isRtl) {
             m_width -= blockData->counterWidth() + blockData->counterSpacing() + m_listIndent;
@@ -851,27 +858,32 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 blockData->setCounterPosition(QPointF(x(), m_y));
             }
         }
-    }
 
-    if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
-        if (block.blockFormat().intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
-            qreal listTab = textList->format().doubleProperty(KoListStyle::TabStopPosition);
-            if (!m_documentLayout->relativeTabs()) {
-                listTab += leftMargin + m_indent;
-            } else {
-                listTab -= leftMargin + m_indent; // express it relatively like other tabs
-            }
-
-            foreach(KoText::Tab tab, tabs) {
-                qreal position = tab.position  * 72. / qt_defaultDpiY();
-                if (position > listLabelIndent) {
-                    // found the relevant normal tab
-                    if (position > listTab && listTab > listLabelIndent) {
-                        // But special tab is more relevant
-                        position = listTab;
+        if (textList->format().boolProperty(KoListStyle::AlignmentMode)) {
+            if (block.blockFormat().intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
+                if (textList->format().hasProperty(KoListStyle::TabStopPosition)) {
+                    qreal listTab = textList->format().doubleProperty(KoListStyle::TabStopPosition);
+                    if (!m_documentLayout->relativeTabs()) {
+                        listTab += leftMargin + m_indent;
+                    } else {
+                        listTab -= leftMargin + m_indent; // express it relatively like other tabs
                     }
-                    m_indent += position;
-                    break;
+
+                    foreach(KoText::Tab tab, tabs) {
+                        qreal position = tab.position  * 72. / qt_defaultDpiY();
+                        if (position > listLabelIndent) {
+                            // found the relevant normal tab
+                            if (position > listTab && listTab > listLabelIndent) {
+                                // But special tab is more relevant
+                                position = listTab;
+                            }
+                            m_indent += position;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    m_indent = 0;
                 }
             }
         }
@@ -894,10 +906,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         documentLayout()->setAnchoringParagraphRect(m_blockRects.last());
 
         runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y));
-
-        // during fit is where documentLayout->positionInlineObjects is called
-        //so now is a good time to position the obstructions
-        documentLayout()->positionAnchoredObstructions();
 
         qreal bottomOfText = line.y() + line.height();
 
@@ -968,6 +976,16 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         if (softBreak) {
             return false;
         }
+
+        // during fit is where documentLayout->positionInlineObjects is called
+        //so now is a good time to position the obstructions
+        int oldObstructionCount = documentLayout()->currentObstructions().size();
+
+        documentLayout()->positionAnchoredObstructions();
+
+        if (oldObstructionCount < documentLayout()->currentObstructions().size()) {
+            return false;
+        }
     }
 
     m_bottomSpacing = format.bottomMargin();
@@ -994,7 +1012,7 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList) const
         return guessGlyphWidth * 3;
     }
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
-        if (! block.blockFormat().hasProperty(QTextFormat::TextIndent)) {
+        if (! block.blockFormat().hasProperty(KoParagraphStyle::ListLevel)) {
             return textList->format().doubleProperty(KoListStyle::TextIndent);
         }
     }
@@ -1086,6 +1104,9 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         if (useFontProperties) {
             //stretch line height to powerpoint size
             fontStretch = PresenterFontStretch;
+        } else if ( block.charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+            // stretch line height to ms-word size
+            fontStretch = block.charFormat().property(KoCharacterStyle::FontStretch).toDouble();
         }
         height = block.charFormat().fontPointSize() * fontStretch;
     } else {

@@ -58,11 +58,13 @@ KisStatusBar::KisStatusBar(KisView2 * view)
 
     // XXX: Use the KStatusbar fixed size labels!
     m_statusBarStatusLabel = new KSqueezedTextLabel(view);
+    m_statusBarStatusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
             m_statusBarStatusLabel, SLOT(setText(const QString &)));
     view->addStatusBarItem(m_statusBarStatusLabel, 2);
 
     m_statusBarProfileLabel = new KSqueezedTextLabel(view);
+    m_statusBarProfileLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     view->addStatusBarItem(m_statusBarProfileLabel, 3);
 
     m_imageSizeLabel = new QLabel(QString(), view);

@@ -59,7 +59,7 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     , m_oldSnapStrategies(0)
 {
     QPixmap connectPixmap;
-    connectPixmap.load(KStandardDirs::locate("data", "koffice/icons/cursor_connect.png"));
+    connectPixmap.load(KStandardDirs::locate("data", "calligra/icons/cursor_connect.png"));
     m_connectCursor = QCursor(connectPixmap, 4, 1);
 
     m_alignPercent = new KAction(QString("%"), this);

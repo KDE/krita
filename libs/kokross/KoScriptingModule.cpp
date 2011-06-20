@@ -22,7 +22,7 @@
 #include "KoScriptingModule.h"
 #include "KoScriptingOdf.h"
 
-// koffice
+// calligra
 #include <KoMainWindow.h>
 #include <KoApplicationAdaptor.h>
 #include <KoDocumentAdaptor.h>

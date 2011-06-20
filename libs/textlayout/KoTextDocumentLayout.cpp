@@ -391,9 +391,11 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
                 d->anchoringState = Private::AnchoringMovingState;
                 if (d->anchoringCycle <= 10) // loop-protection
                     d->anchoringRootArea->setDirty(); // make sure we do the layout to flow around
+                d->anchoringIndex++;
+            } else {
+                break;
             }
             // move the index to next not positioned shape
-            d->anchoringIndex++;
         }
         break;
     }
@@ -437,8 +439,8 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 
 void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
 {
-    foreach(KoTextAnchor *anchor, d->textAnchors) {
-        anchor->setAnchorStrategy(0);
+    for(int i = d->anchoringIndex; i<d->textAnchors.size(); i++ ) {
+        d->textAnchors[i]->setAnchorStrategy(0);
     }
 
     qDeleteAll(d->anchoredObstructions);
@@ -542,7 +544,12 @@ bool KoTextDocumentLayout::doLayout()
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 finished = rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
-                    d->anchoringIndex = 0;
+                    for(int i = d->anchoringIndex; i<d->textAnchors.size(); i++ ) {
+                         d->textAnchors[i]->setAnchorStrategy(0);
+                     }
+                     d->textAnchors.clear();
+                     d->anchoringIndex = 0;
+                    //d->anchoringIndex = 0;
                     d->anchoringCycle++;
                     if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
                         d->anchoringState = Private::AnchoringFinalState;
@@ -612,7 +619,12 @@ bool KoTextDocumentLayout::doLayout()
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
-                    d->anchoringIndex = 0;
+                    //d->anchoringIndex = 0;
+                    for(int i = d->anchoringIndex; i<d->textAnchors.size(); i++ ) {
+                         d->textAnchors[i]->setAnchorStrategy(0);
+                     }
+                     d->textAnchors.clear();
+                     d->anchoringIndex = 0;
                     d->anchoringCycle++;
                     if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
                         d->anchoringState = Private::AnchoringFinalState;

@@ -97,6 +97,10 @@ public:
 
         if(!m_projection) return true;
         QRect applyRect = m_updateRect & m_projection->extent();
+        
+        // If the intersection of the updaterect and the projection extent is
+        //      null, we are finish here.
+        if(applyRect.isNull()) return true;
 
         Q_ASSERT(layer->nodeProgressProxy());
 

@@ -1,4 +1,4 @@
-/* This file is part of the KOffice libraries
+/* This file is part of the Calligra libraries
    Copyright (C) 2001 Werner Trobin <trobin@kde.org>
 
 This library is free software; you can redistribute it and/or
@@ -39,7 +39,7 @@ Boston, MA 02110-1301, USA.
 
 // Those "defines" are needed in the setupConnections method below.
 // Please always keep the strings and the length in sync!
-using namespace KOfficeFilter;
+using namespace CalligraFilter;
 
 
 KoFilterChain::KoFilterChain(const KoFilterManager* manager) :
@@ -441,7 +441,7 @@ void KoFilterChain::storageInit(const QString& file, KoStore::Mode mode, KoStore
     if (mode == KoStore::Write) {
         // To create valid storages we also have to add the mimetype
         // magic "applicationIndentifier" to the storage.
-        // As only filters with a KOffice destination should query
+        // As only filters with a Calligra destination should query
         // for a storage to write to, we don't check the content of
         // the mimetype here. It doesn't do a lot of harm if someome
         // "abuses" this method.

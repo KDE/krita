@@ -1,4 +1,4 @@
-/* This file is part of the KOffice libraries
+/* This file is part of the Calligra libraries
    Copyright (C) 2001 Werner Trobin <trobin@kde.org>
 
 This library is free software; you can redistribute it and/or
@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef __koffice_filter_chain_h__
-#define __koffice_filter_chain_h__
+#ifndef __calligra_filter_chain_h__
+#define __calligra_filter_chain_h__
 
 #include <QHash>
 #include <QList>
@@ -36,7 +36,7 @@ class KoFilterManager;
 class KoDocument;
 
 
-namespace KOfficeFilter
+namespace CalligraFilter
 {
     class Graph;
     class ChainLink;
@@ -55,7 +55,7 @@ namespace KOfficeFilter
  */
 class KOMAIN_EXPORT KoFilterChain : public KShared
 {
-    // Only KOffice::Graph is allowed to construct instances and
+    // Only Calligra::Graph is allowed to construct instances and
     // add chain links.
     friend class Graph;
     friend class KoFilterManager;
@@ -132,11 +132,11 @@ public:
     void dump();
 
 private:
-    // ### API for KOffice::Graph:
+    // ### API for Calligra::Graph:
     // Construct a filter chain belonging to some KoFilterManager.
     // The parent filter manager may be 0.
 
-    friend class KOfficeFilter::Graph;
+    friend class CalligraFilter::Graph;
 
     KoFilterChain(const KoFilterManager* manager);
 
@@ -194,7 +194,7 @@ private:
 
     const KoFilterManager* const m_manager;
 
-    KOfficeFilter::ChainLinkList m_chainLinks;
+    CalligraFilter::ChainLinkList m_chainLinks;
 
     // stuff needed for bookkeeping
     int m_state;
@@ -229,4 +229,4 @@ private:
     Private * const d;
 };
 
-#endif // __koffice_filter_chain_h__
+#endif // __calligra_filter_chain_h__

@@ -57,7 +57,7 @@ public:
      * tar:/0/1 is saved as part0/part1/maindoc.xml
      * tar:/0/1/pictures/picture0.png is saved as part0/part1/pictures/picture0.png
      *
-     * see specification (koffice/lib/store/SPEC) for details.
+     * see specification (calligra/lib/store/SPEC) for details.
      */
     QString toExternalNaming(const QString &internalNaming) const;
 

@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOFFICE_PAGE_PREVIEW_WIDGET
-#define KOFFICE_PAGE_PREVIEW_WIDGET
+#ifndef CALLIGRA_PAGE_PREVIEW_WIDGET
+#define CALLIGRA_PAGE_PREVIEW_WIDGET
 
 #include "kowidgets_export.h"
 

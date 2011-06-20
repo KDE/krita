@@ -51,7 +51,7 @@ class KOMAIN_EXPORT KoView : public QWidget, public KParts::PartBase
 public:
     /**
      * Creates a new view for the document. Usually you don't create views yourself
-     * since the KOffice components come with their own view classes which inherit
+     * since the Calligra components come with their own view classes which inherit
      * KoView.
      *
      * The standard way to retrieve a KoView is to call @ref KoDocument::createView.
@@ -116,7 +116,7 @@ public:
      *  The default implementation asks @ref KoDocument::hitTest. This
      *  will iterate over all child documents to detect a hit.
      *
-     *  If your koffice component has multiple pages, like for example KSpread, then the hittest
+     *  If your calligra component has multiple pages, like for example KSpread, then the hittest
      *  may not succeed for a child that is not on the visible page. In those
      *  cases you need to reimplement this method.
      */
@@ -204,7 +204,7 @@ public:
 
     /**
      * @return the KoMainWindow in which this view is currently.
-     * WARNING: this could be 0, if the main window isn't a koffice main window.
+     * WARNING: this could be 0, if the main window isn't a calligra main window.
      * (e.g. it can be any KParts application).
      */
     KoMainWindow * shell() const;
@@ -217,7 +217,7 @@ public:
 
     /**
      * @return the statusbar of the KoMainWindow in which this view is currently.
-     * WARNING: this could be 0, if the main window isn't a koffice main window.
+     * WARNING: this could be 0, if the main window isn't a calligra main window.
      * (e.g. it can be any KParts application).
      */
     KStatusBar * statusBar() const;

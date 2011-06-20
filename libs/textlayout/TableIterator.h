@@ -76,6 +76,8 @@ public:
     QVector<qreal> headerRowPositions; // we will only fill those of header rows
     /// Rows of header cell areas.
     QVector<QVector<KoTextLayoutArea *> > headerCellAreas;
+    /// The name of the master-page that is used for this table.
+    QString masterPageName;
 };
 
 #endif

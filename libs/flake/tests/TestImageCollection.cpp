@@ -1,5 +1,5 @@
 /*
- *  This file is part of KOffice tests
+ *  This file is part of Calligra tests
  *
  *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  *
@@ -33,7 +33,7 @@
 void TestImageCollection::testGetImageImage()
 {
     KoImageCollection collection;
-    QImage image(KDESRCDIR "/logo-koffice.png");
+    QImage image(KDESRCDIR "/logo-calligra.png");
 
     KoImageData *id1 = collection.createImageData(image);
     QCOMPARE(id1->hasCachedImage(), true);
@@ -74,7 +74,7 @@ void TestImageCollection::testGetImageImage()
 void TestImageCollection::testGetExternalImage()
 {
     KoImageCollection collection;
-    QUrl url(KDESRCDIR "/logo-koffice.png");
+    QUrl url(KDESRCDIR "/logo-calligra.png");
     KoImageData *id1 = collection.createExternalImageData(url);
     QCOMPARE(id1->suffix(), QString("png"));
     QCOMPARE(id1->hasCachedImage(), false);
@@ -97,7 +97,7 @@ void TestImageCollection::testGetImageStore()
 {
     KoImageCollection collection;
     KoStore *store = KoStore::createStore(KDESRCDIR "/store.zip", KoStore::Read);
-    QString image("logo-koffice.jpg");
+    QString image("logo-calligra.jpg");
     KoImageData *id1 = collection.createImageData(image, store);
     QCOMPARE(id1->suffix(), QString("jpg"));
     QCOMPARE(id1->hasCachedImage(), false);
@@ -202,7 +202,7 @@ void TestImageCollection::testPreload1()
 void TestImageCollection::testPreload2()
 {
     KoImageData data;
-    QUrl url(KDESRCDIR "/logo-koffice.png");
+    QUrl url(KDESRCDIR "/logo-calligra.png");
     data.setExternalImage(url);
 
     QCOMPARE(data.hasCachedImage(), false);
@@ -224,7 +224,7 @@ void TestImageCollection::testPreload3()
 {
     KoImageData data;
     KoStore *store = KoStore::createStore(KDESRCDIR "/store.zip", KoStore::Read);
-    QString image("logo-koffice.png");
+    QString image("logo-calligra.png");
     data.setImage(image, store);
 
     QCOMPARE(data.hasCachedImage(), true); // the png is tiny.. Its kept in memory.
@@ -255,7 +255,7 @@ void TestImageCollection::testPreload3()
 void TestImageCollection::testSameKey()
 {
     KoStore *store = KoStore::createStore(KDESRCDIR "/store.zip", KoStore::Read);
-    QString image("logo-koffice.png");
+    QString image("logo-calligra.png");
     KoImageData data;
     data.setImage(image, store);
 
@@ -264,7 +264,7 @@ void TestImageCollection::testSameKey()
 
     QCOMPARE(data.key(), data2.key());
 
-    QFile file(KDESRCDIR "/logo-koffice.png");
+    QFile file(KDESRCDIR "/logo-calligra.png");
     file.open(QIODevice::ReadOnly);
     QByteArray imageData = file.readAll();
     KoImageData data3;
@@ -272,16 +272,16 @@ void TestImageCollection::testSameKey()
     QCOMPARE(data.key(), data3.key());
     QCOMPARE(data2.key(), data3.key());
 
-    QImage qImage1(KDESRCDIR "/logo-koffice.png");
-    QImage qImage2(KDESRCDIR "/logo-koffice.png");
+    QImage qImage1(KDESRCDIR "/logo-calligra.png");
+    QImage qImage2(KDESRCDIR "/logo-calligra.png");
     KoImageData data4;
     data4.setImage(qImage1);
     KoImageData data5;
     data5.setImage(qImage2);
     QCOMPARE(data4.key(), data5.key());
 
-    QImage qImage3(KDESRCDIR "/logo-koffice-big.png");
-    QImage qImage4(KDESRCDIR "/logo-koffice-big.png");
+    QImage qImage3(KDESRCDIR "/logo-calligra-big.png");
+    QImage qImage4(KDESRCDIR "/logo-calligra-big.png");
     KoImageData data6;
     data6.setImage(qImage3);
     KoImageData data7;

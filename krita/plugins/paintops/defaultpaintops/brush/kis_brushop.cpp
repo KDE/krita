@@ -65,10 +65,10 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
         }
     }
 
+    m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
     m_mirrorOption.readOptionSetting(settings);
-    m_opacityOption.readOptionSetting(settings);
     m_softnessOption.readOptionSetting(settings);
     m_sharpnessOption.readOptionSetting(settings);
     m_darkenOption.readOptionSetting(settings);
@@ -76,9 +76,9 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_mixOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
 
+    m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
     m_mirrorOption.sensor()->reset();
-    m_opacityOption.sensor()->reset();
     m_softnessOption.sensor()->reset();
     m_sharpnessOption.sensor()->reset();
     m_darkenOption.sensor()->reset();
@@ -130,8 +130,11 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
 
     m_sharpnessOption.apply(info, pt, x, y, xFraction, yFraction);
 
-    quint8 origOpacity = m_opacityOption.apply(painter(), info);
-    m_colorSource->selectColor(m_mixOption.apply(info) );
+    quint8 origOpacity = painter()->opacity();
+    quint8 origFlow    = painter()->flow();
+    
+    m_opacityOption.apply(painter(), info);
+    m_colorSource->selectColor(m_mixOption.apply(info));
     m_darkenOption.apply(m_colorSource, info);
 
     if(m_hsvTransfo)
@@ -171,6 +174,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
     painter()->renderMirrorMask(QRect(QPoint(x,y), QSize(dab->bounds().width(),dab->bounds().height())),dab);
     painter()->setOpacity(origOpacity);
+    painter()->setFlow(origFlow);
 
     if(m_spacingOption.isChecked())
         return spacing(m_spacingOption.apply(info));

@@ -109,7 +109,7 @@ bool KoZipStore::init(Mode _mode, const QByteArray& appIdentification)
         // Write identification
         (void)m_pZip->writeFile("mimetype", "", "", appIdentification.data() , appIdentification.length());
         m_pZip->setCompression(KZip::DeflateCompression);
-        // We don't need the extra field in KOffice - so we leave it as "no extra field".
+        // We don't need the extra field in Calligra - so we leave it as "no extra field".
     }
     return good;
 }

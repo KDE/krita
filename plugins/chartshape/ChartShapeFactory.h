@@ -27,7 +27,7 @@
 // Qt
 #include <QStringList>
 
-// KOffice
+// Calligra
 #include <KoShapeFactoryBase.h>
 #include <QVariantList>
 

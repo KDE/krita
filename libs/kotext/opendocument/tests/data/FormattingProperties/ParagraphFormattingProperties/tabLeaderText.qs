@@ -29,6 +29,6 @@ cursor.insertText("this is (tab)\tan example of paragraph with tab stop at 3in, 
 
 document;
 
-// Actually, you dont need to set leaderType and leaderStyle for leaderText to take effect in KWord
+// Actually, you dont need to set leaderType and leaderStyle for leaderText to take effect in Words
 // But in OO.o, you need leaderStyle not to be none. So, to make the example odts openable in OO.o,
 // we made the odts set leaderStyle.

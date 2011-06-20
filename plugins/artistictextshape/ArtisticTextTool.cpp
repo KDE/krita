@@ -118,7 +118,6 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
 
     KoShapeManager *manager = canvas->shapeManager();
     connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
-    connect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
     addAction("edit_select_all", KStandardAction::selectAll(this, SLOT(selectAll()), this));
     addAction("edit_deselect_all", KStandardAction::deselect(this, SLOT(deselectAll()), this));
@@ -229,13 +228,6 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
     }
     if (m_hoverText) {
         KoSelection *selection = canvas()->shapeManager()->selection();
-        if(m_hoverText != m_currentShape) {
-            // if we hit another text shape, select that shape
-            selection->deselectAll();
-            setCurrentShape(m_hoverText);
-            selection->select( m_currentShape );
-        }
-        // change the text cursor position
         int hitCursorPos = cursorFromMousePosition(event->point);
         if (hitCursorPos >= 0) {
             setTextCursorInternal(hitCursorPos);
@@ -294,13 +286,10 @@ void ArtisticTextTool::mouseMoveEvent( KoPointerEvent *event )
 
     const bool hoverOnBaseline = textOnPath && m_currentShape->baselineShape() == m_hoverPath;
     // update cursor and status text
-    if ( m_hoverText ) {
+    if ( m_hoverText && m_hoverText == m_currentShape ) {
         useCursor( QCursor( Qt::IBeamCursor ) );
-        if (m_hoverText == m_currentShape)
-            emit statusTextChanged(i18n("Click to change cursor position."));
-        else
-            emit statusTextChanged(i18n("Click to select text shape."));
-    } else if( m_hoverPath && m_currentShape && !hoverOnBaseline) {
+        emit statusTextChanged(i18n("Click to change cursor position."));
+    } else if ( m_hoverPath && m_currentShape && ! hoverOnBaseline ) {
         useCursor( QCursor( Qt::PointingHandCursor ) );
         emit statusTextChanged(i18n("Double click to put text on path."));
     } else  if (m_hoverHandle) {
@@ -359,7 +348,6 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
         case Qt::Key_Delete:
             if (m_selection.hasSelection()) {
                 removeFromTextCursor(m_selection.selectionStart(), m_selection.selectionCount());
-                m_selection.clear();
             } else if( textCursor() >= 0 && textCursor() < m_currentShape->plainText().length()) {
                 removeFromTextCursor( textCursor(), 1 );
             }
@@ -367,7 +355,6 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
         case Qt::Key_Backspace:
             if (m_selection.hasSelection()) {
                 removeFromTextCursor(m_selection.selectionStart(), m_selection.selectionCount());
-                m_selection.clear();
             } else {
                 removeFromTextCursor( textCursor()-1, 1 );
             }
@@ -452,7 +439,6 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
             }
             if (m_selection.hasSelection()) {
                 removeFromTextCursor(m_selection.selectionStart(), m_selection.selectionCount());
-                m_selection.clear();
             }
             addToTextCursor( event->text() );
         }
@@ -688,6 +674,10 @@ void ArtisticTextTool::createTextCursorShape()
 void ArtisticTextTool::removeFromTextCursor( int from, unsigned int count )
 {
     if ( from >= 0 ) {
+        if (m_selection.hasSelection()) {
+            // clear selection before text is removed, or else selection will be invalid
+            m_selection.clear();
+        }
         QUndoCommand *cmd = new RemoveTextRangeCommand(this, m_currentShape, from, count);
         canvas()->addCommand( cmd );
     }
@@ -728,21 +718,6 @@ void ArtisticTextTool::textChanged()
     const QString currentText = m_currentShape->plainText();
     if (m_textCursor > currentText.length())
         setTextCursorInternal(currentText.length());
-}
-
-void ArtisticTextTool::shapeSelectionChanged()
-{
-    KoSelection *selection = canvas()->shapeManager()->selection();
-    if (selection->isSelected(m_currentShape))
-        return;
-
-    foreach (KoShape *shape, selection->selectedShapes()) {
-        ArtisticTextShape *text = dynamic_cast<ArtisticTextShape*>(shape);
-        if(text) {
-            setCurrentShape(text);
-            break;
-        }
-    }
 }
 
 QPainterPath ArtisticTextTool::offsetHandleShape()

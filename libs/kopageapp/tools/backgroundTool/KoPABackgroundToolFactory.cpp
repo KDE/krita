@@ -19,7 +19,7 @@
 
 #include "KoPABackgroundToolFactory.h"
 
-//KOffice includes
+//Calligra includes
 #include <KoPACanvas.h>
 
 #include "KoPABackgroundTool.h"

@@ -46,7 +46,7 @@
  *
  * To find the attribute with a given name, use QDomElement::attributeNS.
  *
- * Do not use getElementsByTagNameNS, it's recursive (which is never needed in KOffice).
+ * Do not use getElementsByTagNameNS, it's recursive (which is never needed in Calligra).
  * Do not use tagName() or nodeName() or prefix(), since the prefix isn't fixed.
  *
  * @author David Faure <faure@kde.org>

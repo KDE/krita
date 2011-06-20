@@ -32,4 +32,4 @@ static QObject* createDocInfoPropsPage(QWidget* w, QObject* parent, const QVaria
 }
 
 K_PLUGIN_FACTORY(PropsDlgFactory, registerPlugin<KoDocumentInfoPropsPage>(QString(), createDocInfoPropsPage);)
-K_EXPORT_PLUGIN(PropsDlgFactory("koffice"))
+K_EXPORT_PLUGIN(PropsDlgFactory("calligra"))

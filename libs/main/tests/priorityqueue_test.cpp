@@ -59,7 +59,7 @@ void PriorityQueue_test::testQueue()
     QList<Node*> list;
     QHash<QByteArray, Node*> dict;
 
-    KOfficeFilter::PriorityQueue<Node> queue;
+    CalligraFilter::PriorityQueue<Node> queue;
 
     srand(time(0));
     for (int i = 0; i < 12; ++i) {
@@ -78,7 +78,7 @@ void PriorityQueue_test::testQueue()
 
 
     kDebug() << "##### Queue 2:";
-    KOfficeFilter::PriorityQueue<Node> queue2(dict);
+    CalligraFilter::PriorityQueue<Node> queue2(dict);
     //queue2.dump();
 
     Node *n = list.at(6);

@@ -35,7 +35,7 @@ public:
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; m_view = 0;}
+    virtual void unsetCanvas();
 public slots:
     void layerChanged(const KisNodeSP);
 private:

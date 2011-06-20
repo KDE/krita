@@ -101,6 +101,7 @@ KoTextAnchor::KoTextAnchor(KoShape *shape)
 {
     Q_D(KoTextAnchor);
     shape->setAnchored(true);
+    shape->setVisible(false);
     d->fakeAsChar = false;
 }
 
@@ -192,6 +193,13 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
     Q_UNUSED(format);
     Q_UNUSED(pd);
     Q_D(KoTextAnchor);
+
+    if (!d->shape->isVisible()) {
+        // Per default the shape this anchor presents is hidden and we only make it visible once an explicit resize-request
+        // was made. This prevents shapes that are anchored at e.g. hidden textboxes to not become visible as long as they
+        // are not asked to resize.
+        d->shape->setVisible(true);
+    }
 
     // important detail; top of anchored shape is at the baseline.
     QFontMetricsF fm(format.font(), pd);
@@ -601,8 +609,8 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     // if svg:x or svg:y should be ignored set new position
     shape()->setPosition(d->distance);
 
-    if (element.hasAttributeNS(KoXmlNS::koffice, "anchor-type")) {
-        QString anchorType = element.attributeNS(KoXmlNS::koffice, "anchor-type"); // our enriched properties
+    if (element.hasAttributeNS(KoXmlNS::calligra, "anchor-type")) {
+        QString anchorType = element.attributeNS(KoXmlNS::calligra, "anchor-type"); // our enriched properties
         QStringList types = anchorType.split('|');
         if (types.count() > 1) {
             QString vertical = types[0];

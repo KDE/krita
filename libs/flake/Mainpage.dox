@@ -2,7 +2,7 @@
  * \mainpage Flake
  *
  * The Flake library is a low level library for all kinds of graphical content
- * to be placed on any KOffice canvas. This includes a line to text-areas or
+ * to be placed on any Calligra canvas. This includes a line to text-areas or
  * even movies.  Just as important, this library will include tools to manipulate
  * the graphical content. At least at the level of Flake objects.  This goes from
  * moving/rotating the object to a basis for complex brushes for a paint program.
@@ -59,7 +59,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=My Flake Shapes Plugin
-ServiceTypes=KOffice/Shape
+ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-Library=myflakeshapesplugin
 X-Flake-MinVersion=1

@@ -44,13 +44,13 @@ void KoToolRegistry::init()
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "FlakePlugins";
     config.blacklist = "FlakePluginsDisabled";
-    config.group = "koffice";
-    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Flake"),
+    config.group = "calligra";
+    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Flake"),
                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
                                      config);
     config.whiteList = "ToolPlugins";
     config.blacklist = "ToolPluginsDisabled";
-    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Tool"),
+    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Tool"),
                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
                                      config);
 
@@ -61,7 +61,7 @@ void KoToolRegistry::init()
     add(new KoZoomToolFactory());
     add(new KoPanToolFactory());
 
-    KConfigGroup cfg = KGlobal::config()->group("koffice");
+    KConfigGroup cfg = KGlobal::config()->group("calligra");
     QStringList toolsBlacklist = cfg.readEntry("ToolsBlacklist", QStringList());
     foreach (const QString& toolID, toolsBlacklist) {
         remove(toolID);

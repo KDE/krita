@@ -28,7 +28,7 @@ class KoTextEditingPlugin;
 class TextTool;
 
 /// This class holds on to the text editing plugins.
-/// the goal of this class is to have one plugin instance per koffice-document
+/// the goal of this class is to have one plugin instance per calligra-document
 /// instead of one per tool.
 class TextEditingPluginContainer : public QObject
 {

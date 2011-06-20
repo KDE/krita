@@ -66,7 +66,12 @@ void KoCopyControllerPrivate::copy()
 
 void KoCopyControllerPrivate::cut()
 {
-    canvas->toolProxy()->cut();
+    if (canvas->toolProxy()->selection() && canvas->toolProxy()->selection()->hasSelection()) {
+        canvas->toolProxy()->cut();
+    }
+    else {
+        emit parent->copyRequested();
+    }
 }
 
 void KoCopyControllerPrivate::selectionChanged(bool hasSelection)

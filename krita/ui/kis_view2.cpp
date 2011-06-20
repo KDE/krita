@@ -5,8 +5,9 @@
  *                1999 Michael Koch    <koch@kde.org>
  *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *                2002 Patrick Julien <freak@codepimps.org>
- *                2003-20010 Boudewijn Rempt <boud@valdyas.org>
+ *                2003-2010 Boudewijn Rempt <boud@valdyas.org>
  *                2004 Clarence Dang <dang@kde.org>
+ *                2011 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,6 +40,7 @@
 #include <QObject>
 #include <QScrollBar>
 
+#include <kio/netaccess.h>
 #include <kmenubar.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
@@ -187,6 +189,7 @@ public:
     KAction * totalRefresh;
     KAction* mirrorCanvas;
     KAction* createTemplate;
+    KAction *saveIncremental;
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
     KisNodeManager * nodeManager;
@@ -252,6 +255,17 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
 
+    // krita/krita.rc must also be modified to add actions to the menu entries
+    
+    m_d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
+    actionCollection()->addAction("save_incremental_version", m_d->saveIncremental);
+    connect(m_d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
+    connect(shell(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
+    
+    if (koDocument()->localFilePath().isNull()) {
+        m_d->saveIncremental->setEnabled(false);
+    }
+    
     m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
     actionCollection()->addAction("total_refresh", m_d->totalRefresh);
     m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
@@ -858,6 +872,88 @@ void KisView2::slotCreateTemplate()
 
     KisFactory2::componentData().dirs()->addResourceType("krita_template", "data", "krita/templates/");
 
+}
+
+void KisView2::slotDocumentSaved()
+{
+    m_d->saveIncremental->setEnabled(true);
+}
+
+void KisView2::slotSaveIncremental()
+{
+    KoDocument* pDoc = koDocument();
+    if (!pDoc) return;
+    
+    bool foundVersion;
+    bool fileAlreadyExists;
+    QString version = "000";
+    QString newVersion;
+    QString letter;
+    QString fileName = pDoc->localFilePath();
+    
+    // Find current version filenames
+    QRegExp regex("_\\d{1,5}[.]|_\\d{1,4}[a-z][.]"); //  Regexp to find incremental versions in the filename
+    regex.indexIn(fileName);     //  Perform the search
+    QStringList matches = regex.capturedTexts();
+    foundVersion = matches.at(0).isEmpty() ? false : true;
+
+    // If the filename has a version, prepare it for incrementation
+    if (foundVersion) {
+        version = matches.at(matches.count() - 1);     //  Look at the last index, we don't care about other matches
+        if (version.contains(QRegExp("[a-z]"))) {
+            version.chop(1);             //  Trim "."
+            letter = version.right(1);   //  Save letter
+            version.chop(1);             //  Trim letter
+        } else {
+            version.chop(1);             //  Trim "."
+        }
+        version.remove(0, 1);            //  Trim "_"
+    } else {
+        // ...else, simply add a version to it so the next loop works
+        QRegExp regex2("[.][a-z]{2,4}$");  //  Heuristic to find file extension
+        regex2.indexIn(fileName);
+        QStringList matches2 = regex2.capturedTexts();
+        QString extensionPlusVersion = matches2.at(0);
+        extensionPlusVersion.prepend(version);
+        extensionPlusVersion.prepend("_");
+        fileName.replace(regex2, extensionPlusVersion);
+    }
+
+    // Prepare the base for new version filename
+    int intVersion = version.toInt(0);
+    ++intVersion;
+    QString baseNewVersion = QString::number(intVersion);
+    while (baseNewVersion.length() < version.length()) {
+        baseNewVersion.prepend("0");
+    }
+
+    // Check if the file exists under the new name and search until options are exhausted (test appending a to z)
+    do {
+        newVersion = baseNewVersion;
+        newVersion.prepend("_");
+        if (!letter.isNull()) newVersion.append(letter);
+        newVersion.append(".");
+        fileName.replace(regex, newVersion);
+        fileAlreadyExists = KIO::NetAccess::exists(fileName, KIO::NetAccess::DestinationSide, this);
+        if (fileAlreadyExists) {
+            if (!letter.isNull()) {
+                char letterCh = letter.at(0).toLatin1();
+                ++letterCh;
+                letter = QString(QChar(letterCh));
+            } else {
+                letter = "a";
+            }
+        }
+    } while (fileAlreadyExists && letter != "{");  // x, y, z, {...
+
+    if (letter == "{") {
+        KMessageBox::error(this, "Alternative names exhausted, try saving with a higher number", "Couldn't save incremental version");
+        return;
+    }
+    
+    pDoc->saveAs(fileName);
+    
+    shell()->updateCaption();
 }
 
 void KisView2::disableControls()

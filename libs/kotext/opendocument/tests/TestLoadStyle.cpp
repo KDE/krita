@@ -1,5 +1,5 @@
 /*
- *  This file is part of KOffice tests
+ *  This file is part of Calligra tests
  *
  *  Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
@@ -45,7 +45,7 @@
 TestLoadStyle::TestLoadStyle()
 {
     componentData = new KComponentData("TestLoadStyle");
-    componentData->dirs()->addResourceType("styles", "data", "kword/styles/");
+    componentData->dirs()->addResourceType("styles", "data", "words/styles/");
 }
 
 TestLoadStyle::~TestLoadStyle()

@@ -553,7 +553,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             FrameIterator *cellCursor = cursor->frameIterator(col);
 
             bool cellFully = cellArea->layout(cellCursor);
-            allCellsFullyDone = allCellsFullyDone && cellFully;
+            allCellsFullyDone = allCellsFullyDone && (cellFully || rowHasExactHeight);
 
             noCellsFitted = noCellsFitted && (cellArea->top() >= cellArea->bottom());
 
@@ -774,7 +774,7 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
         QTextTableCell startTableCell = d->table->cellAt(selection.cursor.selectionStart());
         QTextTableCell endTableCell = d->table->cellAt(selection.cursor.selectionEnd());
 
-        if (startTableCell != endTableCell && startTableCell.isValid()) {
+        if (startTableCell.isValid() && startTableCell != endTableCell) {
             int selectionRow;
             int selectionColumn;
             int selectionRowSpan;

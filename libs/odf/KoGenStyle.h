@@ -117,7 +117,7 @@ public:
         GradientStyle,               ///< draw:gradient as in odf 14.14.1 Gradient (office:styles)
         LinearGradientStyle,         ///< svg:linearGradient as in odf 14.14.2 SVG Gradients (office:styles)
         RadialGradientStyle,         ///< svg:radialGradient as in odf 14.14.2 SVG Gradients (office:styles)
-        ConicalGradientStyle,        ///< koffice:conicalGradient koffice extension for conical gradients
+        ConicalGradientStyle,        ///< calligra:conicalGradient calligra extension for conical gradients
         FillImageStyle,              ///< draw:fill-image as in odf 14.14.4 Fill Image (office:styles)
         NumericBooleanStyle,         ///< number:boolean 14.7.6 Boolean Style
                                      ///<  @note unused

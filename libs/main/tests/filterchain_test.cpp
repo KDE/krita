@@ -25,9 +25,9 @@
 int main(int /*argc*/, char ** /*argv*/)
 {
     KComponentData componentData("filterchain_test");    // we need an instance when using the trader
-    KOfficeFilter::Graph g("application/x-kspread");
+    CalligraFilter::Graph g("application/x-kspread");
     g.dump();
-    g.setSourceMimeType("application/x-kword");
+    g.setSourceMimeType("application/x-words");
     g.dump();
 
     KoFilterManager *manager = new KoFilterManager(0);
@@ -59,11 +59,11 @@ int main(int /*argc*/, char ** /*argv*/)
         chain->dump();
     }
 
-    // Try to find the closest KOffice part
+    // Try to find the closest Calligra part
     mimeType = "";
     chain = g.chain(manager, mimeType);
     if (!chain)
-        kDebug() << "It was already a KOffice part, OK";
+        kDebug() << "It was already a Calligra part, OK";
     else
         kError() << "We really got a chain? ugh :}" << endl;
 
@@ -79,13 +79,13 @@ int main(int /*argc*/, char ** /*argv*/)
     }
 
     kDebug() << "Checking mimeFilter() for Import:";
-    QStringList list = KoFilterManager::mimeFilter("application/x-kword",  KoFilterManager::Import);
+    QStringList list = KoFilterManager::mimeFilter("application/x-words",  KoFilterManager::Import);
     Q_FOREACH(const QString& it, list)
         kDebug() << "" << it;
     kDebug() << "" << list.count() << " entries.";
 
     kDebug() << "Checking mimeFilter() for Export:";
-    list = KoFilterManager::mimeFilter("application/x-kword",  KoFilterManager::Export);
+    list = KoFilterManager::mimeFilter("application/x-words",  KoFilterManager::Export);
     Q_FOREACH(const QString& it, list)
         kDebug() << "" << it;
     kDebug() << "" << list.count() << " entries.";

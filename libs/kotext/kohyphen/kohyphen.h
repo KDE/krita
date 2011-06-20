@@ -51,7 +51,7 @@ private:
  *
  * It handles the hyphenation dictionary loading for the specified language.
  * QString -> char* conversion is done by using of settings in
- * dicts.xml file in datadir/koffice/hyphdicts (dictionaries are also located
+ * dicts.xml file in datadir/calligra/hyphdicts (dictionaries are also located
  * there).
  *
  * The @ref hyphenate() functions returns QString containing hyphenation

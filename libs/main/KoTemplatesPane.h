@@ -29,7 +29,7 @@ class KoTemplatesPanePrivate;
 
 /**
  * This widget is the right-side part of the template opening widget.
- * The parent widget is initial widget in the document space of each KOffice component.
+ * The parent widget is initial widget in the document space of each Calligra component.
  * This widget shows a list of templates and can show their details or open it.
  */
 class KoTemplatesPane : public KoDetailsPane

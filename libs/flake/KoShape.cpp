@@ -485,13 +485,6 @@ QTransform KoShape::transformation() const
 
 bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
 {
-    if(s1->runThrough() > s2->runThrough()) {
-        return false;
-    }
-    if(s1->runThrough() < s2->runThrough()) {
-        return true;
-    }
-
     bool foundCommonParent = false;
     KoShape *parentShapeS1 = s1;
     KoShape *parentShapeS2 = s2;
@@ -517,9 +510,17 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
     if (s1 == parentShapeS2) {
         return true;
     }
-    else if (s2 == parentShapeS1) {
+    if (s2 == parentShapeS1) {
         return false;
     }
+
+    if(s1->runThrough() > s2->runThrough()) {
+        return false;
+    }
+    if(s1->runThrough() < s2->runThrough()) {
+        return true;
+    }
+
     return index1 < index2;
 }
 

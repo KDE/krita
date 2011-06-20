@@ -1417,7 +1417,7 @@ void TextTool::repaintCaret()
         TextShape *textShape = static_cast<TextShape*>(rootArea->associatedShape());
         if (!textShape)
             return;
-        if (!textShape->textShapeData());
+        if (!textShape->textShapeData())
             return;
 
         QRectF repaintRect = caretRect(textEditor->cursor());

@@ -136,7 +136,7 @@ void KoOdfGraphicStyles::saveOdfStrokeStyle(KoGenStyle &styleStroke, KoGenStyles
     }
 
     if (pen.brush().gradient()) {
-        styleStroke.addProperty("koffice:stroke-gradient", saveOdfGradientStyle(mainStyles, pen.brush()));
+        styleStroke.addProperty("calligra:stroke-gradient", saveOdfGradientStyle(mainStyles, pen.brush()));
     }
     else {
         styleStroke.addProperty("svg:stroke-color", pen.color().name());
@@ -156,7 +156,7 @@ void KoOdfGraphicStyles::saveOdfStrokeStyle(KoGenStyle &styleStroke, KoGenStyles
         break;
     default:
         styleStroke.addProperty("draw:stroke-linejoin", "miter");
-        styleStroke.addProperty("koffice:stroke-miterlimit", QString("%1").arg(pen.miterLimit()));
+        styleStroke.addProperty("calligra:stroke-miterlimit", QString("%1").arg(pen.miterLimit()));
         break;
     }
 }
@@ -406,7 +406,7 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader &s
             }
         }
         gradient->setStops(stops);
-    } else if (e->namespaceURI() == KoXmlNS::koffice) {
+    } else if (e->namespaceURI() == KoXmlNS::calligra) {
         if (e->localName() == "conicalGradient") {
             QPointF center;
             center.setX(percent(*e, KoXmlNS::svg, "cx", "50%", size.width()));
@@ -619,8 +619,8 @@ QPen KoOdfGraphicStyles::loadOdfStrokeStyle(const KoStyleStack &styleStack, cons
                 tmpPen.setJoinStyle(Qt::RoundJoin);
             else {
                 tmpPen.setJoinStyle(Qt::MiterJoin);
-                if (styleStack.hasProperty(KoXmlNS::koffice, "stroke-miterlimit")) {
-                    QString miterLimit = styleStack.property(KoXmlNS::koffice, "stroke-miterlimit");
+                if (styleStack.hasProperty(KoXmlNS::calligra, "stroke-miterlimit")) {
+                    QString miterLimit = styleStack.property(KoXmlNS::calligra, "stroke-miterlimit");
                     tmpPen.setMiterLimit(miterLimit.toDouble());
                 }
             }

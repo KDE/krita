@@ -98,8 +98,6 @@ KAboutData* KisFactory2::aboutData()
 
 const KComponentData &KisFactory2::componentData()
 {
-    QString homedir = qgetenv("HOME");
-
     if (!s_instance) {
         if (s_aboutData)
             s_instance = new KComponentData(s_aboutData);
@@ -133,14 +131,14 @@ const KComponentData &KisFactory2::componentData()
         // for images in the paintop box
         s_instance->dirs()->addResourceType("kis_images", "data", "krita/images/");
 
-        s_instance->dirs()->addResourceType("kis_profiles", "data", "krita/profiles/");
+        s_instance->dirs()->addResourceType("icc_profiles", 0, "krita/profiles/");
 
         s_instance->dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
 
         s_instance->dirs()->addResourceType("kis_backgrounds", "data", "krita/backgrounds/");
 
-        // Tell the iconloader about share/apps/koffice/icons
-        KIconLoader::global()->addAppDir("koffice");
+        // Tell the iconloader about share/apps/calligra/icons
+        KIconLoader::global()->addAppDir("calligra");
     }
 
     return *s_instance;

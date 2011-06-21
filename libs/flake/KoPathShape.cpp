@@ -114,7 +114,7 @@ void KoPathShape::saveOdf(KoShapeSavingContext & context) const
     saveOdfAttributes(context, OdfAllAttributes | OdfViewbox);
 
     context.xmlWriter().addAttribute("svg:d", toString());
-    context.xmlWriter().addAttribute("koffice:nodeTypes", d->nodeTypes());
+    context.xmlWriter().addAttribute("calligra:nodeTypes", d->nodeTypes());
 
     saveOdfCommonChildElements(context);
     saveText(context);
@@ -1259,8 +1259,8 @@ void updateNodeType(KoPathPoint * point, const QChar & nodeType)
 void KoPathShapePrivate::loadNodeTypes(const KoXmlElement &element)
 {
     Q_Q(KoPathShape);
-    if (element.hasAttributeNS(KoXmlNS::koffice, "nodeTypes")) {
-        QString nodeTypes = element.attributeNS(KoXmlNS::koffice, "nodeTypes");
+    if (element.hasAttributeNS(KoXmlNS::calligra, "nodeTypes")) {
+        QString nodeTypes = element.attributeNS(KoXmlNS::calligra, "nodeTypes");
         QString::const_iterator nIt(nodeTypes.constBegin());
         KoSubpathList::const_iterator pathIt(q->m_subpaths.constBegin());
         for (; pathIt != q->m_subpaths.constEnd(); ++pathIt) {
@@ -1268,7 +1268,7 @@ void KoPathShapePrivate::loadNodeTypes(const KoXmlElement &element)
             for (; it != (*pathIt)->constEnd(); ++it, nIt++) {
                 // be sure not to crash if there are not enough nodes in nodeTypes
                 if (nIt == nodeTypes.constEnd()) {
-                    kWarning(30006) << "not enough nodes in koffice:nodeTypes";
+                    kWarning(30006) << "not enough nodes in calligra:nodeTypes";
                     return;
                 }
                 // the first node is always of type 'c'

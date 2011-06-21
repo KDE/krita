@@ -83,7 +83,7 @@ public:
     virtual QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
     /**
-     * Draw the image embedded in another KOffice document
+     * Draw the image embedded in another Calligra document
      */
     virtual void paintContent(QPainter& painter, const QRect& rect);
 

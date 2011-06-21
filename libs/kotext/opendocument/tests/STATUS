@@ -1,10 +1,10 @@
 Here we have all the text tests listed in http://develop.opendocumentfellowship.com/testsuite/.
 
-Testcase on the left and the (assumed/expected/guessed) support status of KWord 1.6 on the right.
-None of these status can be relied upon for KWord 2.0.
+Testcase on the left and the (assumed/expected/guessed) support status of Words 1.6 on the right.
+None of these status can be relied upon for Words 2.0.
 
-Testcases that start with a "*" can be loaded in KWord.
-Testcases that start with a "**" can be saved by KWord.
+Testcases that start with a "*" can be loaded in Words.
+Testcases that start with a "**" can be saved by Words.
 
 ./TextContents/lists/startValue/test.xml:   <result>unsupported</result>
 *./TextContents/lists/embededBulletedList/test.xml:   <result>fullsupport</result>
@@ -126,7 +126,7 @@ Testcases that start with a "**" can be saved by KWord.
 ./FormattingProperties/TextFormattingProperties/windowFontColor/test.xml:   <result>unsupported</result>
 
 
-Table stuff (KWord 2.0 does not have table support yet)
+Table stuff (Words 2.0 does not have table support yet)
 ------------------------------------------------------
 ./FormattingProperties/TableFormattingProperties/tableAlignment/test.xml:   <result>fullsupport</result>
 ./FormattingProperties/TableFormattingProperties/tableTopAndBottomMargin/test.xml:   <result>fullsupport</result>

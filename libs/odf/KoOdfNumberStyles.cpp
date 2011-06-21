@@ -37,7 +37,7 @@ namespace KoOdfNumberStyles
     static void parseOdfDateKlocale(KoXmlWriter &elementWriter, QString &format, QString &text);
     static bool saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &text);
     static void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString &format, QString &text);
-    static void addKofficeNumericStyleExtension(KoXmlWriter &elementWriter, const QString &_suffix, const QString &_prefix);
+    static void addCalligraNumericStyleExtension(KoXmlWriter &elementWriter, const QString &_suffix, const QString &_prefix);
 
 
 // OO spec 2.5.4. p68. Conversion to Qt format: see qdate.html
@@ -92,7 +92,7 @@ QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent
             // TODO the spec has a strange mention of number:format-source
             else if (e.attributeNS(KoXmlNS::number, "textual", QString()) == "true") {
                 bool isExtraShort = false;      // find out if we have to use the extra-short month name (just 1st letter)
-                if (e.attributeNS(KoXmlNS::koffice, "number-length", QString()) == "extra-short") {
+                if (e.attributeNS(KoXmlNS::calligra, "number-length", QString()) == "extra-short") {
                     isExtraShort = true;
                 }
 
@@ -607,7 +607,7 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool k
                 addTextNumber(text, elementWriter);
                 elementWriter.startElement("number:month");
                 elementWriter.addAttribute("number:textual", "true");
-                elementWriter.addAttribute("koffice:number-length", "extra-short");
+                elementWriter.addAttribute("calligra:number-length", "extra-short");
                 elementWriter.endElement();
                 format = format.remove(0, 5);
             } else if (format.startsWith("MMMM")) {
@@ -769,7 +769,7 @@ QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString &_format,
         elementWriter.addAttribute("number:denominator-value", denominatorValue);
     elementWriter.endElement();
 
-    addKofficeNumericStyleExtension(elementWriter, _suffix, _prefix);
+    addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
 
     text = _suffix;
     addTextNumber(text, elementWriter);
@@ -818,7 +818,7 @@ QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString &_format,
 
     text = _suffix ;
     addTextNumber(text, elementWriter);
-    addKofficeNumericStyleExtension(elementWriter, _suffix, _prefix);
+    addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
@@ -867,7 +867,7 @@ QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString &_format,
 
     text = _suffix ;
     addTextNumber(text, elementWriter);
-    addKofficeNumericStyleExtension(elementWriter, _suffix, _prefix);
+    addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
@@ -940,7 +940,7 @@ QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
 
     text = _suffix;
     addTextNumber(text, elementWriter);
-    addKofficeNumericStyleExtension(elementWriter, _suffix, _prefix);
+    addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
@@ -993,7 +993,7 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
 
     text =  _suffix ;
     addTextNumber(text, elementWriter);
-    addKofficeNumericStyleExtension(elementWriter, _suffix, _prefix);
+    addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
 
     elementWriter.startElement("number:currency-symbol");
     //kDebug(30003) << " currency-symbol:" << symbol;
@@ -1030,7 +1030,7 @@ QString saveOdfTextStyle(KoGenStyles &mainStyles, const QString &_format, const 
 
     text =  _suffix ;
     addTextNumber(text, elementWriter);
-    addKofficeNumericStyleExtension(elementWriter, _suffix, _prefix);
+    addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
     elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
@@ -1039,8 +1039,8 @@ QString saveOdfTextStyle(KoGenStyles &mainStyles, const QString &_format, const 
 }
 
 //This is an extension of numeric style. For the moment we used namespace of
-//oasis format for specific koffice extension. Change it for the future.
-void addKofficeNumericStyleExtension(KoXmlWriter &elementWriter, const QString &_suffix, const QString &_prefix)
+//oasis format for specific calligra extension. Change it for the future.
+void addCalligraNumericStyleExtension(KoXmlWriter &elementWriter, const QString &_suffix, const QString &_prefix)
 {
     if (!_suffix.isEmpty()) {
         elementWriter.startElement("number:suffix");

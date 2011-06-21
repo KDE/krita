@@ -459,7 +459,7 @@ QStringList KoFilterManager::mimeFilter()
     // To find *all* reachable mimetypes, we have to resort to
     // a small hat trick, in order to avoid multiple searches:
     // We introduce a fake vertex, which is connected to every
-    // single KOffice mimetype. Due to that one BFS is enough :)
+    // single Calligra mimetype. Due to that one BFS is enough :)
     // Now we just need an... ehrm.. unique name for our fake mimetype
     Vertex *v = new Vertex("supercalifragilistic/x-pialadocious");
     vertices.insert("supercalifragilistic/x-pialadocious", v);

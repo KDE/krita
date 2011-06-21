@@ -68,11 +68,11 @@ public:
 };
 
 /**
- *  The %KOffice document class
+ *  The %Calligra document class
  *
- *  This class provides some functionality each %KOffice document should have.
+ *  This class provides some functionality each %Calligra document should have.
  *
- *  @short The %KOffice document class
+ *  @short The %Calligra document class
  */
 class KOMAIN_EXPORT KoDocument : public KParts::ReadWritePart, public KoOdfDocument
 {
@@ -125,7 +125,7 @@ public:
      * of @p element is of interest here. The method searches first in the
      * KActionCollection of the first view and then in the KActionCollection of this
      * document.
-     * This allows %KOffice applications to define actions in both the view and the document.
+     * This allows %Calligra applications to define actions in both the view and the document.
      * They should only define view-actions (like zooming and stuff) in the view.
      * Every action which changes the document should be defined in the document.
      *
@@ -249,7 +249,7 @@ public:
     virtual QStringList extraNativeMimeTypes(ImportExportType importExportType) const;
 
     /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
-    enum { /*SaveAsKOffice1dot1 = 1,*/ // old and removed
+    enum { /*SaveAsCalligra1dot1 = 1,*/ // old and removed
         SaveAsDirectoryStore = 2,
         SaveAsFlatXML = 4,
         SaveEncrypted = 8
@@ -395,7 +395,7 @@ public:
     /**
      *  Paints the data itself. Normally called by paintEverything(). It does not
      *  paint the children.
-     *  It's this method that %KOffice Parts have to implement.
+     *  It's this method that %Calligra Parts have to implement.
      *
      *  @param painter     The painter object onto which will be drawn.
      *  @param rect        The rect that should be used in the painter object.
@@ -467,14 +467,14 @@ public:
     virtual bool saveToStore(KoStore *store, const QString& path);
 
     /**
-     *  Reimplement this method to load the contents of your KOffice document,
+     *  Reimplement this method to load the contents of your Calligra document,
      *  from the XML document. This is for the pre-Oasis file format (maindoc.xml).
      */
     virtual bool loadXML(const KoXmlDocument & doc, KoStore *store) = 0;
 
 
     /**
-     *  Reimplement this to save the contents of the %KOffice document into
+     *  Reimplement this to save the contents of the %Calligra document into
      *  a QDomDocument. The framework takes care of saving it to the store.
      */
     virtual QDomDocument saveXML();
@@ -488,11 +488,11 @@ public:
     QDomDocument createDomDocument(const QString& tagName, const QString& version) const;
 
     /**
-     *  Return a correctly created QDomDocument for an old (1.3-style) %KOffice document,
+     *  Return a correctly created QDomDocument for an old (1.3-style) %Calligra document,
      *  including processing instruction, complete DOCTYPE tag (with systemId and publicId), and root element.
      *  This static method can be used e.g. by filters.
-     *  @param appName the app's instance name, e.g. kword, kspread, kpresenter etc.
-     *  @param tagName the name of the tag for the root element, e.g. DOC for kword/kpresenter.
+     *  @param appName the app's instance name, e.g. words, kspread, kpresenter etc.
+     *  @param tagName the name of the tag for the root element, e.g. DOC for words/kpresenter.
      *  @param version the DTD version (usually the application's version).
      */
     static QDomDocument createDomDocument(const QString& appName, const QString& tagName, const QString& version);
@@ -696,7 +696,7 @@ public:
 
     /**
      * Sets the document URL to empty URL
-     * KParts doesn't allow this, but %KOffice apps have e.g. templates
+     * KParts doesn't allow this, but %Calligra apps have e.g. templates
      * After using loadNativeFormat on a template, one wants
      * to set the url to KUrl()
      */
@@ -1026,7 +1026,7 @@ private slots:
 private:
 
     bool saveNativeFormatODF(KoStore *store, const QByteArray &mimeType);
-    bool saveNativeFormatKOffice(KoStore *store);
+    bool saveNativeFormatCalligra(KoStore *store);
     bool saveToStream(QIODevice *dev);
 
 

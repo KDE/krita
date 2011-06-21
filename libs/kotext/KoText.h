@@ -34,7 +34,7 @@
 
 
 /**
- * Generic namespace of the KOffice Text library for helper methods and data.
+ * Generic namespace of the Calligra Text library for helper methods and data.
  */
 namespace KoText
 {
@@ -80,7 +80,7 @@ struct KOTEXT_EXPORT Tab {
 };
 
 /**
- * Text resources per koffice-document.
+ * Text resources per calligra-document.
  * \sa KoResourceManager KoShapeController::resourceManager()
  */
 enum DocumentResource {

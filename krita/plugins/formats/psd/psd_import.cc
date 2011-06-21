@@ -27,7 +27,7 @@
 #include "psd_loader.h"
 
 K_PLUGIN_FACTORY(ImportFactory, registerPlugin<psdImport>();)
-K_EXPORT_PLUGIN(ImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(ImportFactory("calligrafilters"))
 
         psdImport::psdImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {

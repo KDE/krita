@@ -47,7 +47,7 @@
 #include <KUndoStack>
 #include <kstandarddirs.h>
 
-// KOffice
+// Calligra
 #include <KoApplication.h>
 #include <KoCanvasBase.h>
 #include <KoColorProfile.h>

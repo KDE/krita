@@ -26,12 +26,12 @@
 class KoApplicationPrivate;
 
 /**
- *  @brief Base class for all %KOffice apps
+ *  @brief Base class for all %Calligra apps
  *
  *  This class handles arguments given on the command line and
- *  shows a generic about dialog for all KOffice apps.
+ *  shows a generic about dialog for all Calligra apps.
  *
- *  In addition it adds the standard directories where KOffice applications
+ *  In addition it adds the standard directories where Calligra applications
  *  can find their images etc.
  *
  *  If the last mainwindow becomes closed, KoApplication automatically

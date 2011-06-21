@@ -85,7 +85,6 @@ private slots:
     void convertText();
     void blinkCursor();
     void textChanged();
-    void shapeSelectionChanged();
     void setStartOffset(int offset);
     void toggleFontBold(bool enabled);
     void toggleFontItalic(bool enabled);

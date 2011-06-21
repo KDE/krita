@@ -36,7 +36,7 @@ class KoView;
 class KOMAIN_EXPORT KoViewAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.view")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.view")
 public:
     explicit KoViewAdaptor(KoView *view);
 

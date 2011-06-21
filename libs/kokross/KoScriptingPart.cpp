@@ -24,7 +24,7 @@
 #include "KoScriptManager.h"
 #include "KoScriptingDocker.h"
 
-// koffice
+// calligra
 #include <KoView.h>
 #include <KoMainWindow.h>
 
@@ -52,7 +52,7 @@ class KoScriptingPart::Private
 public:
     /**
     * The \a KoScriptingModule instance that provides the base class for
-    * Kross module functionality for KOffice applications.
+    * Kross module functionality for Calligra applications.
     */
     QPointer<KoScriptingModule> module;
 

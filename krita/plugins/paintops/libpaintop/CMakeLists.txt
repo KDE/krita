@@ -82,7 +82,7 @@ target_link_libraries(kritalibpaintop kritaui kritalibbrush)
 target_link_libraries(kritalibpaintop LINK_INTERFACE_LIBRARIES kritaui kritalibbrush)
 
 set_target_properties(kritalibpaintop PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
 install(TARGETS kritalibpaintop  ${INSTALL_TARGETS_DEFAULT_ARGS})

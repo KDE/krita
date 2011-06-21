@@ -57,7 +57,7 @@ public:
     static const QString smil;
     static const QString xhtml;
 
-    static const QString koffice;
+    static const QString calligra;
     static const QString officeooo;
     static const QString ooo;
 

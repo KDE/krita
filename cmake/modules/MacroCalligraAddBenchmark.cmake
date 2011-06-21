@@ -8,7 +8,7 @@
 
 add_custom_target(benchmark)
 
-MACRO (KOFFICE_ADD_BENCHMARK _test_NAME)
+MACRO (CALLIGRA_ADD_BENCHMARK _test_NAME)
 
     set(_srcList ${ARGN})
     set(_targetName ${_test_NAME})
@@ -79,4 +79,4 @@ MACRO (KOFFICE_ADD_BENCHMARK _test_NAME)
         endif (NOT KDE4_BUILD_TESTS)
     endif (NOT MSVC_IDE)
 
-ENDMACRO (KOFFICE_ADD_BENCHMARK)
+ENDMACRO (CALLIGRA_ADD_BENCHMARK)

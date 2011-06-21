@@ -18,7 +18,7 @@
  */
 
 #include "TestShapeGroupCommand.h"
-#include <MockShapes.h>
+#include "MockShapes.h"
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
 #include <KoLineBorder.h>
@@ -177,8 +177,8 @@ void TestShapeGroupCommand::testSublevelGroup()
     qSort(childOrder.begin(), childOrder.end(), KoShape::compareShapeZIndex);
     QList<KoShape*> expectedOrder;
     expectedOrder << sublevelShape2 << sublevelShape1;
-    QCOMPARE(childOrder, expectedOrder); 
-    // check that the group has the zIndex/parent of its added top shape 
+    QCOMPARE(childOrder, expectedOrder);
+    // check that the group has the zIndex/parent of its added top shape
     QCOMPARE(toplevelGroup->parent(), static_cast<KoShapeContainer*>(0));
     QCOMPARE(toplevelGroup->zIndex(), 1);
 }
@@ -254,7 +254,8 @@ void TestShapeGroupCommand::testGroupStrokeShapes()
     strokeCmd->redo();
     QCOMPARE(strokeShape1->size(), QSizeF(50, 50));
     QCOMPARE(strokeShape2->size(), QSizeF(50, 50));
-    QCOMPARE(strokeGroup->boundingRect(), bound);
+    // A shape group has no size, so it does not have an outlinerect, so does not have a boundingrect.
+    QCOMPARE(strokeGroup->boundingRect(), QRectF(0, 0, 0.0001, 0.0001));
 }
 
 QTEST_MAIN(TestShapeGroupCommand)

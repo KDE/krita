@@ -10,7 +10,7 @@
 #include "%{APPNAMELC}_converter.h"
 
 K_PLUGIN_FACTORY(ImportFactory, registerPlugin<%{APPNAME}Import>();)
-K_EXPORT_PLUGIN(ImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(ImportFactory("calligrafilters"))
 
 %{APPNAME}Import::%{APPNAME}Import(QObject *parent, const QVariantList&) : KoFilter(parent)
 {

@@ -77,14 +77,14 @@ public:
     bool saveOasis(KoStore* store);
 
     /**
-     * Load the KoDocumentInfo from an KOffice-1.3 DomDocument
+     * Load the KoDocumentInfo from an Calligra-1.3 DomDocument
      * @param doc the QDomDocument to load from
      * @return true if success
      */
     bool load(const KoXmlDocument& doc);
 
     /**
-     * Save the KoDocumentInfo to an KOffice-1.3 DomDocument
+     * Save the KoDocumentInfo to an Calligra-1.3 DomDocument
      * @return the QDomDocument to which was saved
      */
     QDomDocument save();
@@ -148,14 +148,14 @@ private:
     bool saveOasisAboutInfo(KoXmlWriter &xmlWriter);
 
     /**
-     * Load the information about the document from a KOffice-1.3 file
+     * Load the information about the document from a Calligra-1.3 file
      * @param e the element to load from
      * @return true if success
      */
     bool loadAboutInfo(const KoXmlElement& e);
 
     /**
-     * Save the information about the document to a KOffice-1.3 file
+     * Save the information about the document to a Calligra-1.3 file
      * @param doc the QDomDocument to save in
      * @return the QDomElement to which was saved
      */
@@ -169,14 +169,14 @@ private:
     bool loadOasisAuthorInfo(const KoXmlNode& metaDoc);
 
     /**
-     * Load the information about the document from a KOffice-1.3 file
+     * Load the information about the document from a Calligra-1.3 file
      * @param e the element to load from
      * @return true if success
      */
     bool loadAuthorInfo(const KoXmlElement& e);
 
     /**
-     * Save the information about the author to a KOffice-1.3 file
+     * Save the information about the author to a Calligra-1.3 file
      * @param doc the QDomDocument to save in
      * @return the QDomElement to which was saved
      */

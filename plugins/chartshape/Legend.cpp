@@ -31,7 +31,7 @@
 #include <QFont>
 #include <QImage>
 
-// KOffice
+// Calligra
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoShapeLoadingContext.h>
@@ -412,7 +412,7 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
         background()->paint( painter, p );
     }
 
-    // KDChart thinks in pixels, KOffice in pt
+    // KDChart thinks in pixels, Calligra in pt
     ScreenConversions::scaleFromPtToPx( painter );
 
     d->kdLegend->paint( &painter );
@@ -504,8 +504,8 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
             setLegendPosition( EndPosition );
         }
 
-        if ( legendElement.hasAttributeNS( KoXmlNS::koffice, "title" ) ) {
-            setTitle( legendElement.attributeNS( KoXmlNS::koffice,
+        if ( legendElement.hasAttributeNS( KoXmlNS::calligra, "title" ) ) {
+            setTitle( legendElement.attributeNS( KoXmlNS::calligra,
                                                        "title", QString() ) );
         }
 

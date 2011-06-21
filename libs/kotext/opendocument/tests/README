@@ -23,7 +23,7 @@ How to run the test suite - 3 steps
     $ ./generator --include-paths=/usr/include/qt4
 
   Make sure that the QTDIR environment variable points to the Qt that you
-  compiled KOffice against, and that the right qmake command is in your PATH
+  compiled Calligra against, and that the right qmake command is in your PATH
   This will create bindings for Qt.
 
 2) Compile QtScript bindings for Qt:
@@ -59,4 +59,4 @@ QTSCRIPTGENERATOR=~/qtscriptgenerator
 (cd $QTSCRIPTGENERATOR/generator && qmake && make && ./generator) || exit
 (cd ../qtbindings && echo -e "TEMPLATE=subdirs\nSUBDIRS=qtscript_core qtscript_gui qs_eval" > qtbindings.pro && qmake && make) || exit
 export QSCRIPT_PLUGIN_PATH=$QTSCRIPTGENERATOR/plugins
-cd $YOUR_KOFFICE_BUILDDIR/libs/kotext/opendocument/tests && ./TestLoading
+cd $YOUR_CALLIGRA_BUILDDIR/libs/kotext/opendocument/tests && ./TestLoading

@@ -224,8 +224,8 @@ public:
     KoViewWrapperWidget(QWidget *parent)
             : QWidget(parent) {
         KGlobal::locale()->insertCatalog("calligra");
-        // Tell the iconloader about share/apps/koffice/icons
-        KIconLoader::global()->addAppDir("koffice");
+        // Tell the iconloader about share/apps/calligra/icons
+        KIconLoader::global()->addAppDir("calligra");
         m_view = 0;
         // Avoid warning from KParts - we'll have the KoView as focus proxy anyway
         setFocusPolicy(Qt::ClickFocus);
@@ -274,7 +274,7 @@ void KoBrowserExtension::print()
         // TODO remove code duplication (KoMainWindow), by moving this to KoView
         QPrinter printer;
         QPrintDialog *printDialog = KdePrint::createPrintDialog(&printer, view->printDialogPages(), view);
-        // ### TODO: apply global koffice settings here
+        // ### TODO: apply global calligra settings here
         view->setupPrinter( printer, *printDialog );
         if ( printDialog->exec() )
             view->print( printer, *printDialog );
@@ -828,9 +828,9 @@ bool KoDocument::saveNativeFormat(const QString & file)
 
     KoStore::Backend backend = KoStore::Auto;
 #if 0
-    if (d->specialOutputFlag == SaveAsKOffice1dot1) {
-        kDebug(30003) << "Saving as KOffice-1.1 format, using a tar.gz";
-        backend = KoStore::Tar; // KOffice-1.0/1.1 used tar.gz for the native mimetype
+    if (d->specialOutputFlag == SaveAsCalligra1dot1) {
+        kDebug(30003) << "Saving as Calligra-1.1 format, using a tar.gz";
+        backend = KoStore::Tar; // Calligra-1.0/1.1 used tar.gz for the native mimetype
         //// TODO more backwards compat stuff (embedded docs etc.)
     } else
 #endif
@@ -876,7 +876,7 @@ bool KoDocument::saveNativeFormat(const QString & file)
     if (oasis) {
         return saveNativeFormatODF(store, mimeType);
     } else {
-        return saveNativeFormatKOffice(store);
+        return saveNativeFormatCalligra(store);
     }
 }
 
@@ -989,7 +989,7 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
     return true;
 }
 
-bool KoDocument::saveNativeFormatKOffice(KoStore *store)
+bool KoDocument::saveNativeFormatCalligra(KoStore *store)
 {
     kDebug(30003) << "Saving root";
     if (store->open("root")) {
@@ -1266,7 +1266,7 @@ bool KoDocument::openUrl(const KUrl & _url)
     if (autosaveOpened)
         resetURL(); // Force save to act like 'Save As'
     else {
-        // We have no koffice shell when we are being embedded as a readonly part.
+        // We have no calligra shell when we are being embedded as a readonly part.
         //if ( d->shells.isEmpty() )
         //    kWarning(30003) << "no shell yet !";
         // Add to recent actions list in our shells
@@ -1606,7 +1606,7 @@ bool KoDocument::openFile()
         // remove temp file - uncomment this to debug import filters
         if (!importedFile.isEmpty()) {
 #ifndef NDEBUG
-            if (!getenv("KOFFICE_DEBUG_FILTERS"))
+            if (!getenv("CALLIGRA_DEBUG_FILTERS"))
 #endif
             QFile::remove(importedFile);
         }
@@ -1790,7 +1790,7 @@ bool KoDocument::loadNativeFormat(const QString & file_)
         in.close();
         d->bEmpty = false;
         return res;
-    } else { // It's a koffice store (tar.gz, zip, directory, etc.)
+    } else { // It's a calligra store (tar.gz, zip, directory, etc.)
         in.close();
 
         return loadNativeFormatFromStore(file);
@@ -2199,12 +2199,12 @@ QDomDocument KoDocument::createDomDocument(const QString& tagName, const QString
 QDomDocument KoDocument::createDomDocument(const QString& appName, const QString& tagName, const QString& version)
 {
     QDomImplementation impl;
-    QString url = QString("http://www.koffice.org/DTD/%1-%2.dtd").arg(appName).arg(version);
+    QString url = QString("http://www.calligra-suite.org/DTD/%1-%2.dtd").arg(appName).arg(version);
     QDomDocumentType dtype = impl.createDocumentType(tagName,
                              QString("-//KDE//DTD %1 %2//EN").arg(appName).arg(version),
                              url);
     // The namespace URN doesn't need to include the version number.
-    QString namespaceURN = QString("http://www.koffice.org/DTD/%1").arg(appName);
+    QString namespaceURN = QString("http://www.calligra-suite.org/DTD/%1").arg(appName);
     QDomDocument doc = impl.createDocument(namespaceURN, tagName, dtype);
     doc.insertBefore(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""), doc.documentElement());
     return doc;
@@ -2236,10 +2236,10 @@ QByteArray KoDocument::nativeFormatMimeType() const
 #ifndef NDEBUG
     if (nativeMimeType.isEmpty()) {
         // shouldn't happen, let's find out why it happened
-        if (!service->serviceTypes().contains("KOfficePart"))
-            kWarning(30003) << "Wrong desktop file, KOfficePart isn't mentioned";
-        else if (!KServiceType::serviceType("KOfficePart"))
-            kWarning(30003) << "The KOfficePart service type isn't installed!";
+        if (!service->serviceTypes().contains("CalligraPart"))
+            kWarning(30003) << "Wrong desktop file, CalligraPart isn't mentioned";
+        else if (!KServiceType::serviceType("CalligraPart"))
+            kWarning(30003) << "The CalligraPart service type isn't installed!";
         else
             kWarning(30003) << "Failed to read NativeMimeType from desktop file!";
     }
@@ -2271,7 +2271,7 @@ KService::Ptr KoDocument::readNativeService(const KComponentData &componentData)
         // The old way is kept as fallback for compatibility, but in theory this is really never used anymore.
 
         // Try by path first, so that we find the global one (which has the native mimetype)
-        // even if the user created a kword.desktop in ~/.kde/share/applnk or any subdir of it.
+        // even if the user created a words.desktop in ~/.kde/share/applnk or any subdir of it.
         // If he created it under ~/.kde/share/applnk/Office/ then no problem anyway.
         service = KService::serviceByDesktopPath(QString::fromLatin1("Office/%1.desktop").arg(instname));
     }
@@ -2288,10 +2288,10 @@ QByteArray KoDocument::readNativeFormatMimeType(const KComponentData &componentD
         return QByteArray();
 
     if (service->property("X-KDE-NativeMimeType").toString().isEmpty()) {
-        // It may be that the servicetype "KOfficePart" is missing, which leads to this property not being known
-        KServiceType::Ptr ptr = KServiceType::serviceType("KOfficePart");
+        // It may be that the servicetype "CalligraPart" is missing, which leads to this property not being known
+        KServiceType::Ptr ptr = KServiceType::serviceType("CalligraPart");
         if (!ptr)
-            kError(30003) << "The serviceType KOfficePart is missing. Check that you have a kofficepart.desktop file in the share/servicetypes directory." << endl;
+            kError(30003) << "The serviceType CalligraPart is missing. Check that you have a calligrapart.desktop file in the share/servicetypes directory." << endl;
         else {
             kWarning(30003) << service->entryPath() << ": no X-KDE-NativeMimeType entry!";
         }
@@ -2319,7 +2319,7 @@ QStringList KoDocument::extraNativeMimeTypes(KoDocument::ImportExportType import
 {
     Q_UNUSED(importExportType);
     QStringList lst;
-    // This implementation is temporary while we treat both koffice-1.3 and OASIS formats as native.
+    // This implementation is temporary while we treat both calligra-1.3 and OASIS formats as native.
     // But it's good to have this virtual method, in case some app want to
     // support more than one native format.
     KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();

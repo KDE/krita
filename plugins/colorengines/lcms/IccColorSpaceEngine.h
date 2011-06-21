@@ -27,6 +27,7 @@ class IccColorSpaceEngine : public KoColorSpaceEngine
 public:
     IccColorSpaceEngine();
     virtual ~IccColorSpaceEngine();
+    virtual void addProfile(const QString &filename);
     virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
     quint32 computeColorSpaceType(const KoColorSpace* cs) const;
 private:

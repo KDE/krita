@@ -31,7 +31,7 @@
 #include "kis_jpeg_converter.h"
 
 K_PLUGIN_FACTORY(JPEGImportFactory, registerPlugin<KisJPEGImport>();)
-K_EXPORT_PLUGIN(JPEGImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(JPEGImportFactory("calligrafilters"))
 
 KisJPEGImport::KisJPEGImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {

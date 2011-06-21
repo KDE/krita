@@ -22,7 +22,7 @@
 #ifndef KCHART_CHARTTOOL_H
 #define KCHART_CHARTTOOL_H
 
-// KOffice
+// Calligra
 #include <KoToolBase.h>
 
 // KChart

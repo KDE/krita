@@ -1,5 +1,5 @@
 /*
- *  This file is part of KOffice tests
+ *  This file is part of Calligra tests
  *
  *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  *  Copyright (C) 2009-2010 Casper Boemann <casper.boemann@kogmbh.com>
@@ -197,14 +197,16 @@ void TestDocumentLayout::testRootAreaZeroWidth()
 
     m_layout->layout();
 
-    QVERIFY(provider->m_askedForMoreThenOneArea);
+    QVERIFY(!provider->m_askedForMoreThenOneArea);
     QVERIFY(provider->m_area);
     QVERIFY(!provider->m_area->isDirty());
-    QVERIFY(provider->m_area->virginPage());
+    QVERIFY(!provider->m_area->virginPage());
     QVERIFY(provider->m_area->nextStartOfArea());
-    QVERIFY(provider->m_area->isStartingAt(provider->m_area->nextStartOfArea()));
-    QCOMPARE(provider->m_area->boundingRect(), QRectF(0.,0.,0.,0.));
-    QCOMPARE(provider->m_area->referenceRect(), QRectF(0.,0.,0.,0.));
+    QVERIFY(!provider->m_area->isStartingAt(provider->m_area->nextStartOfArea()));
+    QCOMPARE(provider->m_area->boundingRect().topLeft(), QPointF(0.,0.));
+    //QCOMPARE(provider->m_area->boundingRect().height(), qreal(14.4));
+    QCOMPARE(provider->m_area->referenceRect().topLeft(), QPointF(0.,0.));
+    //QCOMPARE(provider->m_area->referenceRect().bottomLeft(), QPointF(0.,14.4));
 }
 
 void TestDocumentLayout::testRootAreaZeroHeight()
@@ -235,13 +237,15 @@ void TestDocumentLayout::testRootAreaZeroWidthAndHeight()
 
     m_layout->layout();
 
-    QVERIFY(provider->m_askedForMoreThenOneArea);
+    QVERIFY(!provider->m_askedForMoreThenOneArea);
     QVERIFY(provider->m_area);
     QVERIFY(!provider->m_area->isDirty());
-    QVERIFY(provider->m_area->virginPage());
+    QVERIFY(!provider->m_area->virginPage());
     QVERIFY(provider->m_area->nextStartOfArea());
-    QVERIFY(provider->m_area->isStartingAt(provider->m_area->nextStartOfArea()));
-    QCOMPARE(provider->m_area->boundingRect(), QRectF(0.,0.,0.,0.));
+    QVERIFY(!provider->m_area->isStartingAt(provider->m_area->nextStartOfArea()));
+    QCOMPARE(provider->m_area->boundingRect().topLeft(), QPointF(0.,0.));
+    QCOMPARE(provider->m_area->boundingRect().height(), qreal(0.));
+    //QCOMPARE(provider->m_area->boundingRect().width(), qreal(6.67188));
     QCOMPARE(provider->m_area->referenceRect(), QRectF(0.,0.,0.,0.));
 }
 

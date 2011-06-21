@@ -1,5 +1,5 @@
 /*
- *  koImageResource.cc - part of KOffice
+ *  koImageResource.cc - part of Calligra
  *
  *  Copyright (C) 2005 Thomas Zander <zander@kde.org>
  *

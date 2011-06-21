@@ -31,7 +31,7 @@
  * Generally, subclasses of this class provide functions to allow data to
  * be stored and retrieved, and instances are attached to KoShape using
  * KoShape::setApplicationData(). This makes it possible for an application to attach
- * application specific data (like a Frame in KWord) and have the deletion of a shape also delete
+ * application specific data (like a Frame in Words) and have the deletion of a shape also delete
  * that data.
  * Each subclass should provide a reimplementation of the destructor to ensure that
  * any private data is automatically cleaned up when user data objects are deleted.

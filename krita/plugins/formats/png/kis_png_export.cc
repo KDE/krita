@@ -43,7 +43,7 @@
 #include "kis_png_converter.h"
 
 K_PLUGIN_FACTORY(KisPNGExportFactory, registerPlugin<KisPNGExport>();)
-K_EXPORT_PLUGIN(KisPNGExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(KisPNGExportFactory("calligrafilters"))
 
 KisPNGExport::KisPNGExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {

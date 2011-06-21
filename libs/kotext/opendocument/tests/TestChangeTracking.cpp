@@ -66,7 +66,7 @@
 TestChangeTracking::TestChangeTracking()
 {
     componentData = new KComponentData("TestLoading");
-    componentData->dirs()->addResourceType("styles", "data", "kword/styles/");
+    componentData->dirs()->addResourceType("styles", "data", "words/styles/");
 }
 
 TestChangeTracking::~TestChangeTracking()

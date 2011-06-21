@@ -36,7 +36,7 @@
 class KisExternalLayer;
 
 K_PLUGIN_FACTORY(ExportFactory, registerPlugin<OraExport>();)
-K_EXPORT_PLUGIN(ExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(ExportFactory("calligrafilters"))
 
 OraExport::OraExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {

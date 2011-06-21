@@ -96,7 +96,7 @@ void Panel::setInitialButtonIcon(QToolButton *button, const QString &name) const
 {
     button->setIconSize(QSize(42, 42));
     button->setEnabled(false);
-    button->setIcon(KIcon("koffice_simple_format_"+ name +"_inactive"));
+    button->setIcon(KIcon("calligra_simple_format_"+ name +"_inactive"));
 }
 
 void Panel::setCanvas (KoCanvasBase *canvas)
@@ -177,7 +177,7 @@ void Panel::applyAction(KAction *action, QToolButton *button, const QString &ico
     Q_ASSERT(button);
     button->setEnabled(action);
     button->setIconSize(QSize(42, 42));
-    KIcon icon("koffice_simple_format_"+ iconName + (action ? "_active" : "_inactive"));
+    KIcon icon("calligra_simple_format_"+ iconName + (action ? "_active" : "_inactive"));
     if (action == 0) {
         button->setIcon(icon);
         button->setEnabled(false);

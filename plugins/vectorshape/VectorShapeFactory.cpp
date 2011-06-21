@@ -24,7 +24,7 @@
 // VectorShape
 #include "VectorShape.h"
 
-// KOffice
+// Calligra
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>

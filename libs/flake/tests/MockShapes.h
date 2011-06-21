@@ -49,8 +49,7 @@ public:
 class MockContainer : public KoShapeContainer
 {
 public:
-    MockContainer(KoShapeContainerModel *model) : KoShapeContainer(model), paintedCount(0) {}
-    MockContainer() : paintedCount(0) {}
+    MockContainer(KoShapeContainerModel *model = 0) : KoShapeContainer(model), paintedCount(0) {}
     void paintComponent(QPainter &painter, const KoViewConverter &converter) {
         Q_UNUSED(painter);
         Q_UNUSED(converter);

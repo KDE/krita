@@ -254,7 +254,8 @@ void TestShapeGroupCommand::testGroupStrokeShapes()
     strokeCmd->redo();
     QCOMPARE(strokeShape1->size(), QSizeF(50, 50));
     QCOMPARE(strokeShape2->size(), QSizeF(50, 50));
-    QCOMPARE(strokeGroup->boundingRect(), bound);
+    // A shape group has no size, so it does not have an outlinerect, so does not have a boundingrect.
+    QCOMPARE(strokeGroup->boundingRect(), QRectF(0, 0, 0.0001, 0.0001));
 }
 
 QTEST_MAIN(TestShapeGroupCommand)

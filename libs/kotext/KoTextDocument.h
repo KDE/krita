@@ -32,7 +32,7 @@
 
 class KoStyleManager;
 class KoInlineTextObjectManager;
-class KUndoStack;
+class KUndo2Stack;
 class KoTextEditor;
 class KoOdfLineNumberingConfiguration;
 class KoChangeTracker;
@@ -89,10 +89,10 @@ public:
     KoOdfLineNumberingConfiguration *lineNumberingConfiguration() const;
 
     ///Sets the global undo stack
-    void setUndoStack(KUndoStack *undoStack);
+    void setUndoStack(KUndo2Stack *undoStack);
 
     ///Returns the global undo stack
-    KUndoStack *undoStack() const;
+    KUndo2Stack *undoStack() const;
 
     ///Sets the global heading list
     void setHeadingList(KoList *list);

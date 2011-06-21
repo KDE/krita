@@ -41,8 +41,8 @@ public:
 };
 
 
-KoEventActionAddCommand::KoEventActionAddCommand(KoShape *shape, KoEventAction *eventAction, QUndoCommand *parent)
-    : QUndoCommand(parent),
+KoEventActionAddCommand::KoEventActionAddCommand(KoShape *shape, KoEventAction *eventAction, KUndo2Command *parent)
+    : KUndo2Command(parent),
     d(new KoEventActionAddCommandPrivate(shape, eventAction))
 {
 }

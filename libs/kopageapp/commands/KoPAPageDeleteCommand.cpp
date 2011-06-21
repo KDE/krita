@@ -24,8 +24,8 @@
 #include "KoPADocument.h"
 #include "KoPAPageBase.h"
 
-KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBase *page, QUndoCommand *parent )
-: QUndoCommand( parent )
+KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBase *page, KUndo2Command *parent )
+: KUndo2Command( parent )
 , m_document( document )
 , m_deletePages(false)
 {
@@ -43,8 +43,8 @@ KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBa
     }
 }
 
-KoPAPageDeleteCommand::KoPAPageDeleteCommand(KoPADocument *document, const QList<KoPAPageBase*> &pages, QUndoCommand *parent)
-: QUndoCommand(parent)
+KoPAPageDeleteCommand::KoPAPageDeleteCommand(KoPADocument *document, const QList<KoPAPageBase*> &pages, KUndo2Command *parent)
+: KUndo2Command(parent)
 , m_document(document)
 , m_deletePages(false)
 {
@@ -77,7 +77,7 @@ KoPAPageDeleteCommand::~KoPAPageDeleteCommand()
 
 void KoPAPageDeleteCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     int index = -1;
 
     foreach (KoPAPageBase *page, m_pages) {
@@ -90,7 +90,7 @@ void KoPAPageDeleteCommand::redo()
 
 void KoPAPageDeleteCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     QMapIterator<int, KoPAPageBase*> i(m_pages);
 
     while (i.hasNext()) {

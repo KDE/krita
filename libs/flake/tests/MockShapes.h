@@ -96,7 +96,7 @@ public:
     bool snapToGrid() const  {
         return true;
     }
-    void addCommand(QUndoCommand*) { }
+    void addCommand(KUndo2Command*) { }
     KoShapeManager *shapeManager() const  {
         return m_shapeManager;
     }

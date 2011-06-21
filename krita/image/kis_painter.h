@@ -33,7 +33,7 @@
 
 class QPen;
 class QRegion;
-class QUndoCommand;
+class KUndo2Command;
 class QRect;
 class QRectF;
 class QStringList;

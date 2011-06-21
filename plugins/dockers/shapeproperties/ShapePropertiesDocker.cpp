@@ -160,7 +160,7 @@ void ShapePropertiesDocker::shapePropertyChanged()
 {
     if( d->canvas && d->currentPanel )
     {
-        QUndoCommand * cmd = d->currentPanel->createCommand();
+        KUndo2Command * cmd = d->currentPanel->createCommand();
         if( ! cmd )
             return;
         d->canvas->addCommand( cmd );

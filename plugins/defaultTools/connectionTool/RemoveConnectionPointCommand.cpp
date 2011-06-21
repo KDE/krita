@@ -21,8 +21,8 @@
 #include "RemoveConnectionPointCommand.h"
 #include <KoShape.h>
 
-RemoveConnectionPointCommand::RemoveConnectionPointCommand(KoShape* shape, int connectionPointId, QUndoCommand* parent)
-: QUndoCommand(parent), m_shape(shape), m_connectionPointId(connectionPointId)
+RemoveConnectionPointCommand::RemoveConnectionPointCommand(KoShape* shape, int connectionPointId, KUndo2Command* parent)
+: KUndo2Command(parent), m_shape(shape), m_connectionPointId(connectionPointId)
 {
     Q_ASSERT(m_shape);
     m_connectionPoint = m_shape->connectionPoint(m_connectionPointId);
@@ -39,12 +39,12 @@ void RemoveConnectionPointCommand::redo()
     m_shape->removeConnectionPoint(m_connectionPointId);
     updateRoi();
 
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 }
 
 void RemoveConnectionPointCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     m_shape->setConnectionPoint(m_connectionPointId, m_connectionPoint);
     updateRoi();

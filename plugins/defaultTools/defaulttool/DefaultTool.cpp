@@ -735,7 +735,7 @@ void DefaultTool::customMoveEvent(KoPointerEvent * event)
     if (move < threshold && zoom < threshold && rotate < threshold) {
         if (m_customEventStrategy) {
             m_customEventStrategy->finishInteraction(event->modifiers());
-            QUndoCommand *command = m_customEventStrategy->createCommand();
+            KUndo2Command *command = m_customEventStrategy->createCommand();
             if (command)
                 canvas()->addCommand(command);
             delete m_customEventStrategy;
@@ -977,7 +977,7 @@ void DefaultTool::selectionGroup()
     }
     KoShapeGroup *group = new KoShapeGroup();
     // TODO what if only one shape is left?
-    QUndoCommand *cmd = new QUndoCommand(i18n("Group shapes"));
+    KUndo2Command *cmd = new KUndo2Command(i18n("Group shapes"));
     canvas()->shapeController()->addShapeDirect(group, cmd);
     KoShapeGroupCommand::createCommand(group, groupedShapes, cmd);
     canvas()->addCommand(cmd);
@@ -999,13 +999,13 @@ void DefaultTool::selectionUngroup()
         }
     }
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     // add a ungroup command for each found shape container to the macro command
     foreach(KoShape* shape, containerSet) {
         KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
         if (group) {
-            cmd = cmd ? cmd : new QUndoCommand(i18n("Ungroup shapes"));
+            cmd = cmd ? cmd : new KUndo2Command(i18n("Ungroup shapes"));
             new KoShapeUngroupCommand(group, group->shapes(),
                                       group->parent()? QList<KoShape*>(): canvas()->shapeManager()->topLevelShapes(),
                                       cmd);
@@ -1085,7 +1085,7 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
     if (editableShapes.count() < 1)
         return;
 
-    QUndoCommand * cmd = KoShapeReorderCommand::createCommand(editableShapes, canvas()->shapeManager(), order);
+    KUndo2Command * cmd = KoShapeReorderCommand::createCommand(editableShapes, canvas()->shapeManager(), order);
     if (cmd) {
         canvas()->addCommand(cmd);
     }

@@ -25,8 +25,8 @@
 #include "KoPADocument.h"
 #include "KoPAPageBase.h"
 
-KoPAPageMoveCommand::KoPAPageMoveCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, QUndoCommand *parent )
-: QUndoCommand( parent )
+KoPAPageMoveCommand::KoPAPageMoveCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent )
+: KUndo2Command( parent )
 , m_document( document )
 , m_after( after )
 {
@@ -34,8 +34,8 @@ KoPAPageMoveCommand::KoPAPageMoveCommand( KoPADocument *document, KoPAPageBase *
     init( QList<KoPAPageBase *>() << page );
 }
 
-KoPAPageMoveCommand::KoPAPageMoveCommand( KoPADocument *document, const QList<KoPAPageBase *> &pages, KoPAPageBase *after, QUndoCommand *parent )
-: QUndoCommand( parent )
+KoPAPageMoveCommand::KoPAPageMoveCommand( KoPADocument *document, const QList<KoPAPageBase *> &pages, KoPAPageBase *after, KUndo2Command *parent )
+: KUndo2Command( parent )
 , m_document( document )
 , m_after( after )
 {

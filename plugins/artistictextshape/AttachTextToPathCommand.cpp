@@ -22,8 +22,8 @@
 
 #include <KLocale>
 
-AttachTextToPathCommand::AttachTextToPathCommand( ArtisticTextShape * textShape, KoPathShape * pathShape, QUndoCommand * parent )
-    : QUndoCommand(parent), m_textShape(textShape), m_pathShape(pathShape)
+AttachTextToPathCommand::AttachTextToPathCommand( ArtisticTextShape * textShape, KoPathShape * pathShape, KUndo2Command * parent )
+    : KUndo2Command(parent), m_textShape(textShape), m_pathShape(pathShape)
 {
     setText( i18n("Attach Path") );
     m_oldMatrix = m_textShape->transformation();
@@ -31,7 +31,7 @@ AttachTextToPathCommand::AttachTextToPathCommand( ArtisticTextShape * textShape,
 
 void AttachTextToPathCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     m_textShape->update();
     m_textShape->putOnPath( m_pathShape );
     m_textShape->update();
@@ -43,5 +43,5 @@ void AttachTextToPathCommand::undo()
     m_textShape->removeFromPath();
     m_textShape->setTransformation( m_oldMatrix );
     m_textShape->update();
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }

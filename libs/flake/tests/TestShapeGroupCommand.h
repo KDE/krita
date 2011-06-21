@@ -23,7 +23,7 @@
 #include <QtTest/QtTest>
 
 class KoShapeGroup;
-class QUndoCommand;
+class KUndo2Command;
 class MockShape;
 
 class TestShapeGroupCommand : public QObject
@@ -43,7 +43,7 @@ private slots:
 
 private:
     KoShapeGroup *toplevelGroup, *sublevelGroup, *strokeGroup;
-    QUndoCommand *cmd1, *cmd2, *strokeCmd;
+    KUndo2Command *cmd1, *cmd2, *strokeCmd;
     MockShape *toplevelShape1, *toplevelShape2;
     MockShape *sublevelShape1, *sublevelShape2;
     MockShape *extraShape1, *extraShape2;

@@ -20,15 +20,15 @@
 #ifndef TEXTCUTCOMMAND_H
 #define TEXTCUTCOMMAND_H
 
-#include <QUndoStack>
+#include <kundo2qstack.h>
 
 class TextTool;
 
-class TextCutCommand : public QUndoCommand
+class TextCutCommand : public KUndo2Command
 {
 public:
 
-    TextCutCommand(TextTool *tool, QUndoCommand* parent = 0);
+    TextCutCommand(TextTool *tool, KUndo2Command* parent = 0);
 
     virtual void undo();
     virtual void redo();

@@ -31,7 +31,7 @@ RemoveTextRangeCommand::RemoveTextRangeCommand(ArtisticTextTool *tool, ArtisticT
 
 void RemoveTextRangeCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     if (!m_shape)
         return;
@@ -45,7 +45,7 @@ void RemoveTextRangeCommand::redo()
 
 void RemoveTextRangeCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     if ( !m_shape )
         return;

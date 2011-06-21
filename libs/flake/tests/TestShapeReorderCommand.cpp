@@ -183,7 +183,7 @@ void TestShapeReorderCommand::testBringToFront()
     QList<KoShape*> selectedShapes;
     selectedShapes.append(&shape1);
 
-    QUndoCommand * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::BringToFront);
+    KUndo2Command * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::BringToFront);
     cmd->redo();
 
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
@@ -220,7 +220,7 @@ void TestShapeReorderCommand::testSendToBack()
     QList<KoShape*> selectedShapes;
     selectedShapes.append(&shape3);
 
-    QUndoCommand * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::SendToBack);
+    KUndo2Command * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::SendToBack);
     cmd->redo();
 
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
@@ -257,7 +257,7 @@ void TestShapeReorderCommand::testMoveUp()
     QList<KoShape*> selectedShapes;
     selectedShapes.append(&shape1);
 
-    QUndoCommand * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::RaiseShape);
+    KUndo2Command * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::RaiseShape);
     cmd->redo();
 
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
@@ -294,7 +294,7 @@ void TestShapeReorderCommand::testMoveDown()
     QList<KoShape*> selectedShapes;
     selectedShapes.append(&shape2);
 
-    QUndoCommand * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::LowerShape);
+    KUndo2Command * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::LowerShape);
     cmd->redo();
 
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
@@ -342,7 +342,7 @@ void TestShapeReorderCommand::testMoveUpOverlapping()
     QList<KoShape*> selectedShapes;
     selectedShapes.append(&shape1);
     
-    QUndoCommand * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::RaiseShape);
+    KUndo2Command * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::RaiseShape);
     cmd->redo();
     delete cmd;
     
@@ -391,7 +391,7 @@ void TestShapeReorderCommand::testMoveDownOverlapping()
     QList<KoShape*> selectedShapes;
     selectedShapes.append(&shape5);
     
-    QUndoCommand * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::LowerShape);
+    KUndo2Command * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::LowerShape);
     cmd->redo();
     delete cmd;
     
@@ -437,7 +437,7 @@ void TestShapeReorderCommand::testSendToBackChildren()
     QList<KoShape*> selectedShapes;
     selectedShapes.append(&shape3);
     
-    QUndoCommand * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::SendToBack);
+    KUndo2Command * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::SendToBack);
     cmd->redo();
     delete cmd;
     
@@ -506,7 +506,7 @@ void TestShapeReorderCommand::testNoCommand()
     QList<KoShape*> selectedShapes;
     selectedShapes.append(&shape3);
 
-    QUndoCommand * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::BringToFront);
+    KUndo2Command * cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::BringToFront);
     QVERIFY(cmd == 0);
 
     cmd = KoShapeReorderCommand::createCommand(selectedShapes, &manager, KoShapeReorderCommand::RaiseShape);

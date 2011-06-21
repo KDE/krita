@@ -31,7 +31,7 @@
 #define MARGIN_DEFAULT 10 // we consider it the default value
 
 ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Style style, int level,
-                                     ChangeFlags flags, QUndoCommand *parent)
+                                     ChangeFlags flags, KUndo2Command *parent)
                                          : TextCommandBase(parent),
                                          m_flags(flags),
                                          m_first(true),
@@ -80,7 +80,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Sty
 }
 
 ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level,
-                                     ChangeFlags flags, QUndoCommand *parent)
+                                     ChangeFlags flags, KUndo2Command *parent)
                                          : TextCommandBase(parent),
                                          m_flags(flags),
                                          m_first(true),
@@ -338,7 +338,7 @@ void ChangeListCommand::undo()
     }
 }
 
-bool ChangeListCommand::mergeWith(const QUndoCommand *)
+bool ChangeListCommand::mergeWith(const KUndo2Command *)
 {
     return false;
 }

@@ -46,8 +46,8 @@ public:
     bool deleteShapes;  ///< shows if shapes should be deleted when deleting the command
 };
 
-KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeControllerBase *controller, KoShape *shape, QUndoCommand *parent)
-        : QUndoCommand(parent),
+KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeControllerBase *controller, KoShape *shape, KUndo2Command *parent)
+        : KUndo2Command(parent),
         d(new Private(controller))
 {
     d->shapes.append(shape);
@@ -57,8 +57,8 @@ KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeControllerBase *controller, Ko
 }
 
 KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes,
-        QUndoCommand *parent)
-        : QUndoCommand(parent),
+        KUndo2Command *parent)
+        : KUndo2Command(parent),
         d(new Private(controller))
 {
     d->shapes = shapes;
@@ -76,7 +76,7 @@ KoShapeDeleteCommand::~KoShapeDeleteCommand()
 
 void KoShapeDeleteCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     if (! d->controller)
         return;
 
@@ -91,7 +91,7 @@ void KoShapeDeleteCommand::redo()
 
 void KoShapeDeleteCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     if (! d->controller)
         return;
 

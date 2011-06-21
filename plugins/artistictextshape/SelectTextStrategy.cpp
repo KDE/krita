@@ -44,7 +44,7 @@ void SelectTextStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Keybo
         m_selection->selectText(qMin(m_oldCursor, m_newCursor), qMax(m_oldCursor, m_newCursor));
 }
 
-QUndoCommand *SelectTextStrategy::createCommand()
+KUndo2Command *SelectTextStrategy::createCommand()
 {
     return 0;
 }

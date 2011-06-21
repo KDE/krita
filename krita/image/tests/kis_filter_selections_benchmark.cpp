@@ -18,7 +18,7 @@
 
 #include "kis_filter_selections_benchmark.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include "kis_painter.h"
 

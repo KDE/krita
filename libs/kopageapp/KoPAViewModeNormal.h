@@ -62,7 +62,7 @@ public:
 
     void removeShape( KoShape *shape );
 
-    virtual void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, QUndoCommand *parent = 0 );
+    virtual void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent = 0 );
 
 private:
     void paintMargins( QPainter &painter, const KoViewConverter &converter );

@@ -19,7 +19,7 @@
 #include "kis_selection_tool_helper.h"
 
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <KoShapeController.h>
 #include <KoPathShape.h>
@@ -106,7 +106,7 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
 
     transaction.commit(undoAdapter);
 
-    QUndoCommand *cmd = m_canvas->shapeController()->addShape(shape);
+    KUndo2Command *cmd = m_canvas->shapeController()->addShape(shape);
     undoAdapter->addCommand(cmd);
     undoAdapter->endMacro();
 }

@@ -651,7 +651,7 @@ void SimpleEntryTool::keyPressEvent( QKeyEvent *event )
     }
 }
 
-void SimpleEntryTool::addCommand(QUndoCommand* command)
+void SimpleEntryTool::addCommand(KUndo2Command* command)
 {
     canvas()->addCommand(command);
 }

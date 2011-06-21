@@ -30,8 +30,8 @@
 #include <kdebug.h>
 
 InsertTableRowCommand::InsertTableRowCommand(KoTextEditor *te, QTextTable *t, bool below, int changeId,
-                                 QUndoCommand *parent) :
-    QUndoCommand (parent)
+                                 KUndo2Command *parent) :
+    KUndo2Command (parent)
     ,m_first(true)
     ,m_textEditor(te)
     ,m_table(t)
@@ -51,7 +51,7 @@ void InsertTableRowCommand::undo()
 
     carsManager.removeRows(m_row, 1);
 
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }
 
 void InsertTableRowCommand::redo()
@@ -59,7 +59,7 @@ void InsertTableRowCommand::redo()
     KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
     if (!m_first) {
         carsManager.insertRows(m_row, 1, m_style);
-        QUndoCommand::redo();
+        KUndo2Command::redo();
     } else {
         m_first = false;
         QTextTableCell cell = m_table->cellAt(*m_textEditor->cursor());

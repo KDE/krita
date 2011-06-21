@@ -56,7 +56,7 @@ public:
     ApplyTransformCmd(KisToolTransform *tool, ToolTransformArgs::TransfMode mode, KisNodeSP node);
 };
 
-class TransformCmd : public QUndoCommand
+class TransformCmd : public KUndo2Command
 {
 public:
     TransformCmd(KisToolTransform *tool, const ToolTransformArgs &args, KisSelectionSP origSel, QPoint startPos, QPoint endPos, QImage *origImg, QImage *origSelectionImg);

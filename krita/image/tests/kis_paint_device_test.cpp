@@ -246,7 +246,7 @@ void KisPaintDeviceTest::testColorSpaceConversion()
     KisPaintDeviceSP dev = new KisPaintDevice(srcCs);
     dev->convertFromQImage(image, "");
     dev->move(10, 10);   // Unalign with tile boundaries
-    QUndoCommand* cmd = dev->convertTo(dstCs);
+    KUndo2Command* cmd = dev->convertTo(dstCs);
 
     QVERIFY(dev->exactBounds() == QRect(10, 10, image.width(), image.height()));
     QVERIFY(dev->pixelSize() == dstCs->pixelSize());

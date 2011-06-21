@@ -24,7 +24,7 @@
 #include "core/Chord.h"
 
 class MusicShape;
-class QUndoCommand;
+class KUndo2Command;
 class AbstractMusicAction;
 class MusicCursor;
 class QMenu;
@@ -54,7 +54,7 @@ public:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 
-    void addCommand(QUndoCommand* command);
+    void addCommand(KUndo2Command* command);
 
     MusicShape* shape();
     int voice();

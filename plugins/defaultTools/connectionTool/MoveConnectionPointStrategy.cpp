@@ -57,7 +57,7 @@ void MoveConnectionPointStrategy::finishInteraction(Qt::KeyboardModifiers /*modi
 {
 }
 
-QUndoCommand* MoveConnectionPointStrategy::createCommand()
+KUndo2Command* MoveConnectionPointStrategy::createCommand()
 {
     int grabDistance = grabSensitivity();
     const qreal dx = m_newPoint.position.x()-m_oldPoint.position.x();

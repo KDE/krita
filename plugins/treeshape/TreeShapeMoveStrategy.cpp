@@ -72,7 +72,7 @@ TreeShapeMoveStrategy::TreeShapeMoveStrategy(KoToolBase *tool, const QPointF &cl
     m_connector->setVisible(false);
 
     KoShapeController *controller = tool->canvas()->shapeController();
-    m_command = new QUndoCommand;
+    m_command = new KUndo2Command;
     controller->addShapeDirect(m_movable,m_command);
     controller->addShapeDirect(m_connector,m_command);
     controller->addShapeDirect(m_ballastTree,m_command);
@@ -127,7 +127,7 @@ void TreeShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardMo
     }
 }
 
-QUndoCommand* TreeShapeMoveStrategy::createCommand()
+KUndo2Command* TreeShapeMoveStrategy::createCommand()
 {
     if (m_diff.isNull() || m_selectedShapes.isEmpty() || (m_newParent == 0)) {
         kDebug() << "children " << m_selectedShapes.size() << "parent" << m_newParent;

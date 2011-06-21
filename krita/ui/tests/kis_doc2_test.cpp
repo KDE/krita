@@ -18,7 +18,7 @@
 
 #include "kis_doc2_test.h"
 
-#include <KUndoStack>
+#include <kundo2stack.h>
 #include <qtest_kde.h>
 #include <kstandarddirs.h>
 #include "kis_doc2.h"
@@ -40,7 +40,7 @@ public:
         m_added = false;
     }
 
-    void notifyCommandAdded(const QUndoCommand * cmd) {
+    void notifyCommandAdded(const KUndo2Command * cmd) {
         if(!m_command) {
             m_command = cmd;
         }
@@ -49,7 +49,7 @@ public:
         m_added = true;
     }
 
-    void notifyCommandExecuted(const QUndoCommand * cmd) {
+    void notifyCommandExecuted(const KUndo2Command * cmd) {
         if(!m_command) {
             m_command = cmd;
         }
@@ -66,18 +66,18 @@ public:
         return m_executed;
     }
 
-    const QUndoCommand* command() {
+    const KUndo2Command* command() {
         return m_command;
     }
 
 private:
-    const QUndoCommand* m_command;
+    const KUndo2Command* m_command;
     bool m_executed;
     bool m_added;
 };
 
 
-class TestCommand : public QUndoCommand
+class TestCommand : public KUndo2Command
 {
 public:
     void undo() {}
@@ -88,8 +88,8 @@ void KisDoc2Test::testUndoRedoNotify()
 {
     KisDoc2 doc;
 
-    QUndoCommand *testCommand1 = new TestCommand();
-    QUndoCommand *testCommand2 = new TestCommand();
+    KUndo2Command *testCommand1 = new TestCommand();
+    KUndo2Command *testCommand2 = new TestCommand();
 
     KisCommandHistoryListenerFake listener;
 

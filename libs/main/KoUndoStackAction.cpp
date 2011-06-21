@@ -20,11 +20,11 @@
 
 #include "KoUndoStackAction.h"
 
-#include <kundostack.h>
+#include <kundo2stack.h>
 #include <klocale.h>
 #include <kstandardshortcut.h>
 
-KoUndoStackAction::KoUndoStackAction(KUndoStack* stack, Type type)
+KoUndoStackAction::KoUndoStackAction(KUndo2Stack* stack, Type type)
     : KAction(stack)
     , m_type(type)
 {

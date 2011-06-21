@@ -23,7 +23,7 @@
 #include "kis_layer.h"
 #include "kis_selection.h"
 
-class QUndoCommand;
+class KUndo2Command;
 class KoShape;
 class KisCanvas2;
 

@@ -88,7 +88,7 @@ void KisToneMappingDialog::apply()
     undoAdapter->beginMacro(d->currentOperator->name());
 
     if (!(*d->layer->paintDevice()->colorSpace() == *colorSpace)) {
-        QUndoCommand* cmd = d->layer->paintDevice()->convertTo(colorSpace);
+        KUndo2Command* cmd = d->layer->paintDevice()->convertTo(colorSpace);
         undoAdapter->addCommand(cmd);
     }
 

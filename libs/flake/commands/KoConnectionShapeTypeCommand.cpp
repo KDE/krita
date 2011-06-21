@@ -21,8 +21,8 @@
 #include <klocale.h>
 
 KoConnectionShapeTypeCommand::KoConnectionShapeTypeCommand(
-    KoConnectionShape * connection, KoConnectionShape::Type type, QUndoCommand *parent)
-        : QUndoCommand(parent)
+    KoConnectionShape * connection, KoConnectionShape::Type type, KUndo2Command *parent)
+        : KUndo2Command(parent)
         , m_connection(connection)
         , m_newType(type)
 {
@@ -35,7 +35,7 @@ KoConnectionShapeTypeCommand::KoConnectionShapeTypeCommand(
 
 void KoConnectionShapeTypeCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     m_connection->update();
 
@@ -47,7 +47,7 @@ void KoConnectionShapeTypeCommand::redo()
 
 void KoConnectionShapeTypeCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     m_connection->update();
 

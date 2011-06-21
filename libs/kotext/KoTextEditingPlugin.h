@@ -27,7 +27,7 @@
 class KAction;
 class QTextDocument;
 class QTextCursor;
-class QUndoCommand;
+class KUndo2Command;
 
 /**
  * This is a base class for a text editing plugin as used by the text tool.

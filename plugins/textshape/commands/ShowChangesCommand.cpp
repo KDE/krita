@@ -39,7 +39,7 @@
 #include <QtAlgorithms>
 #include <QList>
 
-ShowChangesCommand::ShowChangesCommand(bool showChanges, QTextDocument *document, KoCanvasBase *canvas, QUndoCommand *parent) :
+ShowChangesCommand::ShowChangesCommand(bool showChanges, QTextDocument *document, KoCanvasBase *canvas, KUndo2Command *parent) :
     TextCommandBase (parent),
     m_document(document),
     m_first(true),
@@ -59,7 +59,7 @@ void ShowChangesCommand::undo()
 {
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
-    foreach (QUndoCommand *shapeCommand, m_shapeCommands)
+    foreach (KUndo2Command *shapeCommand, m_shapeCommands)
         shapeCommand->undo();
     emit toggledShowChange(!m_showChanges);
     enableDisableStates(!m_showChanges);
@@ -70,7 +70,7 @@ void ShowChangesCommand::redo()
     if (!m_first) {
         TextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
-        foreach (QUndoCommand *shapeCommand, m_shapeCommands)
+        foreach (KUndo2Command *shapeCommand, m_shapeCommands)
             shapeCommand->redo();
         emit toggledShowChange(m_showChanges);
         enableDisableStates(m_showChanges);
@@ -160,7 +160,7 @@ void ShowChangesCommand::checkAndAddAnchoredShapes(int position, int length)
 
             if (container) {
                 container->addShape(anchor->shape());
-                QUndoCommand *shapeCommand = m_canvas->shapeController()->addShapeDirect(anchor->shape());
+                KUndo2Command *shapeCommand = m_canvas->shapeController()->addShapeDirect(anchor->shape());
                 shapeCommand->redo();
                 m_shapeCommands.push_front(shapeCommand);
             }
@@ -205,7 +205,7 @@ void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)
             if (!anchor)
                 continue;
             
-            QUndoCommand *shapeCommand = m_canvas->shapeController()->removeShape(anchor->shape());
+            KUndo2Command *shapeCommand = m_canvas->shapeController()->removeShape(anchor->shape());
             shapeCommand->redo();
             m_shapeCommands.push_front(shapeCommand);
         }

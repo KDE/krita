@@ -33,7 +33,7 @@
 
 class KoShape;
 class KoLineBorder;
-class KUndoStack;
+class KUndo2Stack;
 class KoImageCollection;
 class KoOdfDocument;
 
@@ -82,7 +82,7 @@ namespace KoDocumentResource
  * This enum holds identifiers to the resources that can be stored in here.
  */
 enum DocumentResource {
-    UndoStack,              ///< The document-wide undo stack (KUndoStack)
+    UndoStack,              ///< The document-wide undo stack (KUndo2Stack)
     ImageCollection,        ///< The KoImageCollection for the document
     OdfDocument,            ///< The document this canvas shows (KoOdfDocument)
     PasteOffset,            ///< Application wide paste offset
@@ -303,8 +303,8 @@ public:
      */
     void clearResource(int key);
 
-    KUndoStack *undoStack() const;
-    void setUndoStack(KUndoStack *undoStack);
+    KUndo2Stack *undoStack() const;
+    void setUndoStack(KUndo2Stack *undoStack);
 
     KoImageCollection *imageCollection() const;
     void setImageCollection(KoImageCollection *ic);

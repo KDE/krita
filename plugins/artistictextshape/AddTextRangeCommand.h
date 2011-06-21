@@ -21,7 +21,7 @@
 #ifndef ADDTEXTRANGECOMMAND_H 
 #define ADDTEXTRANGECOMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 #include "ArtisticTextTool.h"
 #include "ArtisticTextRange.h"
 #include <QtCore/QPointer>
@@ -29,7 +29,7 @@
 class ArtisticTextShape;
 
 /// Undo command to add a range of text to a artistic text shape
-class AddTextRangeCommand : public QUndoCommand
+class AddTextRangeCommand : public KUndo2Command
 {
 public:
     AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, const QString &text, int from);

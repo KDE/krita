@@ -21,8 +21,8 @@
 #include "TreeChangeStructureCommand.h"
 #include <klocale.h>
 
-TreeChangeStructureCommand::TreeChangeStructureCommand(TreeShape *tree, TreeShape::TreeType structure, QUndoCommand *parent)
-    : QUndoCommand(parent)
+TreeChangeStructureCommand::TreeChangeStructureCommand(TreeShape *tree, TreeShape::TreeType structure, KUndo2Command *parent)
+    : KUndo2Command(parent)
     , m_tree(tree)
     , m_newStructure(structure)
 {
@@ -36,7 +36,7 @@ TreeChangeStructureCommand::TreeChangeStructureCommand(TreeShape *tree, TreeShap
 
 void TreeChangeStructureCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     m_tree->update();
 
@@ -48,7 +48,7 @@ void TreeChangeStructureCommand::redo()
 
 void TreeChangeStructureCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     m_tree->update();
 

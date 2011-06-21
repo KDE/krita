@@ -25,7 +25,7 @@
 KoPathPointTypeCommand::KoPathPointTypeCommand(
     const QList<KoPathPointData> & pointDataList,
     PointType pointType,
-    QUndoCommand *parent)
+    KUndo2Command *parent)
         : KoPathBaseCommand(parent)
         , m_pointType(pointType)
 {
@@ -52,7 +52,7 @@ KoPathPointTypeCommand::~KoPathPointTypeCommand()
 
 void KoPathPointTypeCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     repaint(false);
     m_additionalPointData.clear();
 
@@ -156,7 +156,7 @@ void KoPathPointTypeCommand::redo()
 
 void KoPathPointTypeCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     repaint(false);
 
     /*

@@ -39,7 +39,7 @@
 #include <KoXmlReader.h>
 #include <KoOdfDocument.h>
 
-class QUndoCommand;
+class KUndo2Command;
 class QGraphicsItem;
 
 class KoStore;
@@ -51,7 +51,7 @@ class KoDocumentInfo;
 class KoDocumentRdf;
 class KoDocumentRdfBase;
 class KoOpenPane;
-class KUndoStack;
+class KUndo2Stack;
 class KoTextEditor;
 class KoProgressUpdater;
 class KoProgressProxy;
@@ -802,12 +802,12 @@ public slots:
     /**
      * Returns the global undo stack
      */
-    KUndoStack *undoStack();
+    KUndo2Stack *undoStack();
     /**
      * Adds a command to the undo stack and executes it by calling the redo() function.
      * @param command command to add to the undo stack
      */
-    virtual void addCommand(QUndoCommand *command);
+    virtual void addCommand(KUndo2Command *command);
 
     /**
      * Begins recording of a macro command. At the end endMacro needs to be called.

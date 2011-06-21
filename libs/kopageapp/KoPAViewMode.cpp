@@ -102,7 +102,7 @@ const KoPageLayout &KoPAViewMode::activePageLayout() const
     return m_view->activePage()->pageLayout();
 }
 
-void KoPAViewMode::changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, QUndoCommand *parent )
+void KoPAViewMode::changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent )
 {
     Q_UNUSED( pageLayout );
     Q_UNUSED( applyToDocument );

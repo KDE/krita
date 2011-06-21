@@ -21,7 +21,7 @@
 
 #include <krita_export.h>
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QSize>
 #include <QBitArray>
 
@@ -32,7 +32,7 @@
 #include "kis_types.h"
 #include "kis_paint_device.h"
 
-class KisPaintDeviceConvertTypeCommand : public QUndoCommand
+class KisPaintDeviceConvertTypeCommand : public KUndo2Command
 {
 
 public:
@@ -68,7 +68,7 @@ public:
 
     virtual void redo() {
 
-        //QUndoStack calls redo(), so the first call needs to be blocked
+        //KUndo2QStack calls redo(), so the first call needs to be blocked
         if (m_firstRedo) {
             m_firstRedo = false;
             return;

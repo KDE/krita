@@ -20,12 +20,12 @@
 #ifndef RECTANGLESHAPECONFIGCOMMAND_H
 #define RECTANGLESHAPECONFIGCOMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 class RectangleShape;
 
 /// The undo / redo command for configuring a rectangle shape
-class RectangleShapeConfigCommand : public QUndoCommand
+class RectangleShapeConfigCommand : public KUndo2Command
 {
 public:
     /**
@@ -35,7 +35,7 @@ public:
      * @param cornerRadiusY the y corner radius
      * @param parent the optional parent command
      */
-    RectangleShapeConfigCommand(RectangleShape *rectangle, qreal cornerRadiusX, qreal cornerRadiusY, QUndoCommand *parent = 0);
+    RectangleShapeConfigCommand(RectangleShape *rectangle, qreal cornerRadiusX, qreal cornerRadiusY, KUndo2Command *parent = 0);
     /// redo the command
     virtual void redo();
     /// revert the actions done in redo

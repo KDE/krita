@@ -490,23 +490,38 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
     KoShape *parentShapeS2 = s2;
     int index1 = parentShapeS1->zIndex();
     int index2 = parentShapeS2->zIndex();
+    int runThrough1 = parentShapeS1->runThrough();
+    int runThrough2 = parentShapeS2->runThrough();
     while (parentShapeS1 && !foundCommonParent) {
         parentShapeS2 = s2;
         index2 = parentShapeS2->zIndex();
+        runThrough2 = parentShapeS2->runThrough();
         while (parentShapeS2) {
             if (parentShapeS2 == parentShapeS1) {
                 foundCommonParent = true;
                 break;
             }
             index2 = parentShapeS2->zIndex();
+            runThrough2 = parentShapeS2->runThrough();
             parentShapeS2 = parentShapeS2->parent();
         }
 
         if (!foundCommonParent) {
             index1 = parentShapeS1->zIndex();
+            runThrough1 = parentShapeS1->runThrough();
             parentShapeS1 = parentShapeS1->parent();
         }
     }
+
+    // If the shape runs through the foreground or background.
+    if (runThrough1 > runThrough2) {
+        return false;
+    }
+    if (runThrough1 < runThrough2) {
+        return true;
+    }
+
+    // If the one shape is a parent/child of the other then sort so.
     if (s1 == parentShapeS2) {
         return true;
     }
@@ -514,17 +529,7 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
         return false;
     }
 
-    if (s1->runThrough() < 0 || s2->runThrough() < 0) {
-        // If one of them is runThrough==Background and the other is not then we don't need to
-        // evaluate the z-Index. Note that on runThrough==Foreground we still need to.
-        if (s1->runThrough() > s2->runThrough()) {
-            return false;
-        }
-        if (s1->runThrough() < s2->runThrough()) {
-            return true;
-        }
-    }
-
+    // If we went that far then the z-Index is used for sorting.
     return index1 < index2;
 }
 
@@ -942,8 +947,8 @@ void KoShape::setZIndex(int zIndex)
     Q_D(KoShape);
     if (d->zIndex == zIndex)
         return;
-    notifyChanged();
     d->zIndex = zIndex;
+    notifyChanged();
 }
 
 int KoShape::runThrough()

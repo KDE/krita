@@ -20,8 +20,8 @@
 #include "EllipseShapeConfigCommand.h"
 #include <klocale.h>
 
-EllipseShapeConfigCommand::EllipseShapeConfigCommand(EllipseShape *ellipse, EllipseShape::EllipseType type, qreal startAngle, qreal endAngle, QUndoCommand *parent)
-    : QUndoCommand(parent)
+EllipseShapeConfigCommand::EllipseShapeConfigCommand(EllipseShape *ellipse, EllipseShape::EllipseType type, qreal startAngle, qreal endAngle, KUndo2Command *parent)
+    : KUndo2Command(parent)
     , m_ellipse(ellipse)
     , m_newType(type)
     , m_newStartAngle(startAngle)
@@ -38,7 +38,7 @@ EllipseShapeConfigCommand::EllipseShapeConfigCommand(EllipseShape *ellipse, Elli
 
 void EllipseShapeConfigCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     m_ellipse->update();
 
@@ -54,7 +54,7 @@ void EllipseShapeConfigCommand::redo()
 
 void EllipseShapeConfigCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     m_ellipse->update();
 

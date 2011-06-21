@@ -34,7 +34,7 @@
 
 #include <krita_export.h>
 
-class QUndoCommand;
+class KUndo2Command;
 class QRect;
 class QImage;
 class QPoint;
@@ -396,7 +396,7 @@ public:
      *
      * @return a command that can be used to undo the conversion.
      */
-    QUndoCommand* convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+    KUndo2Command* convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
 
     /**
      * Changes the profile of the colorspace of this paint device to the given

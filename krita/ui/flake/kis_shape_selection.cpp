@@ -21,7 +21,7 @@
 
 #include <QPainter>
 #include <QTimer>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QMimeData>
 
 #include <ktemporaryfile.h>
@@ -406,7 +406,7 @@ void KisShapeSelection::moveY(qint32 y)
 }
 
 // TODO same code as in shape layer, refactor!
-QUndoCommand* KisShapeSelection::transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
+KUndo2Command* KisShapeSelection::transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
 
     Q_UNUSED(xshear);
     Q_UNUSED(yshear);
@@ -435,6 +435,3 @@ QUndoCommand* KisShapeSelection::transform(double  xscale, double  yscale, doubl
 
     return new KoShapeTransformCommand(shapes, oldTransformations, newTransformations);
 }
-
-
-#include "kis_shape_selection.moc"

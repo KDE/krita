@@ -21,8 +21,8 @@
 #include "ChangeConnectionPointCommand.h"
 #include <KoShape.h>
 
-ChangeConnectionPointCommand::ChangeConnectionPointCommand(KoShape* shape, int connectionPointId, const KoConnectionPoint &oldPoint, const KoConnectionPoint &newPoint, QUndoCommand* parent)
-: QUndoCommand(parent), m_shape(shape), m_connectionPointId(connectionPointId)
+ChangeConnectionPointCommand::ChangeConnectionPointCommand(KoShape* shape, int connectionPointId, const KoConnectionPoint &oldPoint, const KoConnectionPoint &newPoint, KUndo2Command* parent)
+: KUndo2Command(parent), m_shape(shape), m_connectionPointId(connectionPointId)
 , m_oldPoint(oldPoint), m_newPoint(newPoint)
 {
     Q_ASSERT(m_shape);
@@ -38,12 +38,12 @@ void ChangeConnectionPointCommand::redo()
     m_shape->setConnectionPoint(m_connectionPointId, m_newPoint);
     updateRoi(m_newPoint.position);
 
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 }
 
 void ChangeConnectionPointCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     updateRoi(m_newPoint.position);
     m_shape->setConnectionPoint(m_connectionPointId, m_oldPoint);

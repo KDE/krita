@@ -67,7 +67,7 @@ void KoPathPointMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     Q_UNUSED(modifiers);
 }
 
-QUndoCommand* KoPathPointMoveStrategy::createCommand()
+KUndo2Command* KoPathPointMoveStrategy::createCommand()
 {
     m_tool->canvas()->updateCanvas(m_tool->canvas()->snapGuide()->boundingRect());
 
@@ -75,7 +75,7 @@ QUndoCommand* KoPathPointMoveStrategy::createCommand()
     if (! selection)
         return 0;
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
     if (!m_move.isNull()) {
         // as the point is already at the new position we need to undo the change
         KoPathPointMoveCommand revert(selection->selectedPointsData(), -m_move);

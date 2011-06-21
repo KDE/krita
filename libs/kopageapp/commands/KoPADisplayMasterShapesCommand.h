@@ -20,7 +20,7 @@
 #ifndef KOPADISPLAYMASTERSHAPESCOMMAND_H
 #define KOPADISPLAYMASTERSHAPESCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include "kopageapp_export.h"
 
@@ -29,7 +29,7 @@ class KoPAPage;
 /**
  * Command to change if master shapes should be displayed
  */
-class KOPAGEAPP_EXPORT KoPADisplayMasterShapesCommand : public QUndoCommand
+class KOPAGEAPP_EXPORT KoPADisplayMasterShapesCommand : public KUndo2Command
 {
 public:
     KoPADisplayMasterShapesCommand( KoPAPage * page, bool display );

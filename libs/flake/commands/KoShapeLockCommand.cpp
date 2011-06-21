@@ -23,8 +23,8 @@
 
 #include <klocale.h>
 
-KoShapeLockCommand::KoShapeLockCommand(const QList<KoShape*> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock, QUndoCommand *parent)
-        : QUndoCommand(parent)
+KoShapeLockCommand::KoShapeLockCommand(const QList<KoShape*> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock, KUndo2Command *parent)
+        : KUndo2Command(parent)
 {
     m_shapes = shapes;
     m_oldLock = oldLock;
@@ -42,7 +42,7 @@ KoShapeLockCommand::~KoShapeLockCommand()
 
 void KoShapeLockCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     for (int i = 0; i < m_shapes.count(); ++i) {
         m_shapes[i]->setGeometryProtected(m_newLock[i]);
     }
@@ -50,7 +50,7 @@ void KoShapeLockCommand::redo()
 
 void KoShapeLockCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     for (int i = 0; i < m_shapes.count(); ++i) {
         m_shapes[i]->setGeometryProtected(m_oldLock[i]);
     }

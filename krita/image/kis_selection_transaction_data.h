@@ -36,7 +36,7 @@ class KRITAIMAGE_EXPORT KisSelectionTransactionData : public KisTransactionData
 {
 
 public:
-    KisSelectionTransactionData(const QString& name, KisImageWSP image, KisSelectionSP selection, QUndoCommand* parent = 0);
+    KisSelectionTransactionData(const QString& name, KisImageWSP image, KisSelectionSP selection, KUndo2Command* parent = 0);
     virtual ~KisSelectionTransactionData();
 
 public:

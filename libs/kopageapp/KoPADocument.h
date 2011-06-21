@@ -295,7 +295,7 @@ protected:
      * @param page The page that will be removed
      * @param parent The command that will be used to delete the page
      */
-    virtual void pageRemoved( KoPAPageBase * page, QUndoCommand * parent );
+    virtual void pageRemoved( KoPAPageBase * page, KUndo2Command * parent );
 
     /**
      * @brief Enables/Disables the given actions in all views

@@ -28,7 +28,7 @@
 #include <QPen>
 #include <QLayout>
 #include <QVBoxLayout>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <kis_debug.h>
 #include <klocale.h>

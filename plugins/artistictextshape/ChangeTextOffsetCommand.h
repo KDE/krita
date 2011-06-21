@@ -20,17 +20,17 @@
 #ifndef CHANGETEXTOFFSETCOMMAND_H
 #define CHANGETEXTOFFSETCOMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 class ArtisticTextShape;
 
-class ChangeTextOffsetCommand : public QUndoCommand
+class ChangeTextOffsetCommand : public KUndo2Command
 {
 public:
-    ChangeTextOffsetCommand( ArtisticTextShape * textShape, qreal oldOffset, qreal newOffset, QUndoCommand * parent = 0 );
-    /// reimplemented from QUndoCommand
+    ChangeTextOffsetCommand( ArtisticTextShape * textShape, qreal oldOffset, qreal newOffset, KUndo2Command * parent = 0 );
+    /// reimplemented from KUndo2Command
     virtual void redo();
-    /// reimplemented from QUndoCommand
+    /// reimplemented from KUndo2Command
     virtual void undo();
 private:
     ArtisticTextShape * m_textShape;

@@ -26,8 +26,8 @@ KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(
     const KoPathPointData &pointData,
     const QPointF &offset,
     KoPathPoint::PointType pointType,
-    QUndoCommand *parent)
-        : QUndoCommand(parent)
+    KUndo2Command *parent)
+        : KUndo2Command(parent)
         , m_pointData(pointData)
         , m_pointType(pointType)
 {
@@ -43,7 +43,7 @@ KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(
 
 void KoPathControlPointMoveCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     KoPathShape * pathShape = m_pointData.pathShape;
     KoPathPoint * point = pathShape->pointByIndex(m_pointData.pointIndex);
     if (point) {
@@ -88,7 +88,7 @@ void KoPathControlPointMoveCommand::redo()
 
 void KoPathControlPointMoveCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     m_offset *= -1.0;
     redo();
     m_offset *= -1.0;

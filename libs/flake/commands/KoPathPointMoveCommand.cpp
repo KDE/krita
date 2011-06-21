@@ -35,8 +35,8 @@ public:
 };
 
 
-KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QPointF &offset, QUndoCommand *parent)
-    : QUndoCommand(parent),
+KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QPointF &offset, KUndo2Command *parent)
+    : KUndo2Command(parent),
     d(new KoPathPointMoveCommandPrivate())
 {
     setText(i18n("Move points"));
@@ -49,8 +49,8 @@ KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &poi
     }
 }
 
-KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QList<QPointF> &offsets, QUndoCommand *parent)
-    : QUndoCommand(parent),
+KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QList<QPointF> &offsets, KUndo2Command *parent)
+    : KUndo2Command(parent),
     d(new KoPathPointMoveCommandPrivate())
 {
     Q_ASSERT(pointData.count() == offsets.count());
@@ -74,7 +74,7 @@ KoPathPointMoveCommand::~KoPathPointMoveCommand()
 
 void KoPathPointMoveCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     if (! d->undoCalled)
         return;
 
@@ -84,7 +84,7 @@ void KoPathPointMoveCommand::redo()
 
 void KoPathPointMoveCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     if (d->undoCalled)
         return;
 

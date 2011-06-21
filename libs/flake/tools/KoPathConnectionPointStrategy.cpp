@@ -120,7 +120,7 @@ void KoPathConnectionPointStrategy::finishInteraction(Qt::KeyboardModifiers modi
     KoParameterChangeStrategy::finishInteraction(modifiers);
 }
 
-QUndoCommand* KoPathConnectionPointStrategy::createCommand()
+KUndo2Command* KoPathConnectionPointStrategy::createCommand()
 {
     Q_D(KoPathConnectionPointStrategy);
 

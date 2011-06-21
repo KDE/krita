@@ -29,8 +29,8 @@ public:
     QList<QPointF> previousPositions, newPositions;
 };
 
-KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions, QUndoCommand *parent)
-        : QUndoCommand(parent),
+KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions, KUndo2Command *parent)
+        : KUndo2Command(parent),
         d(new Private())
 {
     d->shapes = shapes;
@@ -49,7 +49,7 @@ KoShapeMoveCommand::~KoShapeMoveCommand()
 
 void KoShapeMoveCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     for (int i = 0; i < d->shapes.count(); i++) {
         d->shapes.at(i)->update();
         d->shapes.at(i)->setPosition(d->newPositions.at(i));
@@ -59,7 +59,7 @@ void KoShapeMoveCommand::redo()
 
 void KoShapeMoveCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     for (int i = 0; i < d->shapes.count(); i++) {
         d->shapes.at(i)->update();
         d->shapes.at(i)->setPosition(d->previousPositions.at(i));

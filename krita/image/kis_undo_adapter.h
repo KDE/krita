@@ -25,7 +25,7 @@
 
 #include <krita_export.h>
 
-class QUndoCommand;
+class KUndo2Command;
 class KoDocument;
 
 /**
@@ -41,8 +41,8 @@ public:
 
     KisCommandHistoryListener() {}
     virtual ~KisCommandHistoryListener() {}
-    virtual void notifyCommandAdded(const QUndoCommand * cmd) = 0;
-    virtual void notifyCommandExecuted(const QUndoCommand * cmd) = 0;
+    virtual void notifyCommandAdded(const KUndo2Command * cmd) = 0;
+    virtual void notifyCommandExecuted(const KUndo2Command * cmd) = 0;
 };
 
 class KRITAIMAGE_EXPORT KisUndoAdapter : public QObject
@@ -61,11 +61,11 @@ public:
     /**
      * FIXME: Are both of these functions really used?
      */
-    virtual void notifyCommandAdded(const QUndoCommand *command);
-    virtual void notifyCommandExecuted(const QUndoCommand *command);
+    virtual void notifyCommandAdded(const KUndo2Command *command);
+    virtual void notifyCommandExecuted(const KUndo2Command *command);
 
-    virtual const QUndoCommand * presentCommand();
-    virtual void addCommand(QUndoCommand *cmd);
+    virtual const KUndo2Command * presentCommand();
+    virtual void addCommand(KUndo2Command *cmd);
     virtual void undoLastCommand();
 
     /// XXX: is this actually threadsafe?

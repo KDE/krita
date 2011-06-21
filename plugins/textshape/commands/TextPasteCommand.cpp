@@ -41,8 +41,8 @@
                     // we can't include a private header from kotext outside of kotext.
 #endif
 
-TextPasteCommand::TextPasteCommand(QClipboard::Mode mode, TextTool *tool, QUndoCommand *parent)
-    : QUndoCommand (parent),
+TextPasteCommand::TextPasteCommand(QClipboard::Mode mode, TextTool *tool, KUndo2Command *parent)
+    : KUndo2Command (parent),
     m_tool(tool),
     m_first(true),
     m_mode(mode)
@@ -52,14 +52,14 @@ TextPasteCommand::TextPasteCommand(QClipboard::Mode mode, TextTool *tool, QUndoC
 
 void TextPasteCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }
 
 void TextPasteCommand::redo()
 {
     KoTextEditor *editor = KoTextDocument(m_tool->m_textShapeData->document()).textEditor();
     if (!m_first) {
-        QUndoCommand::redo();
+        KUndo2Command::redo();
     } else {
         //kDebug() << "begin paste command";
         editor->cursor()->beginEditBlock();

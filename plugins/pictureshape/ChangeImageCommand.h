@@ -19,17 +19,17 @@
 #ifndef CHANGEIMAGECOMMAND_H
 #define CHANGEIMAGECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <QSizeF>
 
 class KoImageData;
 class PictureShape;
 
-class ChangeImageCommand : public QUndoCommand
+class ChangeImageCommand : public KUndo2Command
 {
 public:
-    ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, QUndoCommand *parent = 0);
+    ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, KUndo2Command *parent = 0);
     virtual ~ChangeImageCommand();
 
     /// redo the command

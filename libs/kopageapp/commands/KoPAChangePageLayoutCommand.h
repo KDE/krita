@@ -20,7 +20,7 @@
 #ifndef KOPACHANGEPAGELAYOUTCOMMAND_H
 #define KOPACHANGEPAGELAYOUTCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include "KoPageLayout.h"
 
 class KoPADocument;
@@ -30,10 +30,10 @@ class KoPAPageBase;
 /**
  * Command to change the master page of a page
  */
-class KoPAChangePageLayoutCommand : public QUndoCommand
+class KoPAChangePageLayoutCommand : public KUndo2Command
 {
 public:
-    KoPAChangePageLayoutCommand( KoPADocument *document, KoPAMasterPage *page, const KoPageLayout &newPageLayout, bool applyToDocument, QUndoCommand *parent = 0 );
+    KoPAChangePageLayoutCommand( KoPADocument *document, KoPAMasterPage *page, const KoPageLayout &newPageLayout, bool applyToDocument, KUndo2Command *parent = 0 );
     virtual ~KoPAChangePageLayoutCommand();
 
     /// redo the command

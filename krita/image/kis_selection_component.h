@@ -21,7 +21,7 @@
 #include <krita_export.h>
 
 class QRect;
-class QUndoCommand;
+class KUndo2Command;
 class KisSelection;
 
 class KRITAIMAGE_EXPORT KisSelectionComponent
@@ -38,7 +38,7 @@ public:
     virtual void moveX(qint32 x) { Q_UNUSED(x); }
     virtual void moveY(qint32 y) { Q_UNUSED(y); }
     
-    virtual QUndoCommand* transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey)
+    virtual KUndo2Command* transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey)
     {
         Q_UNUSED(xscale);
         Q_UNUSED(yscale);

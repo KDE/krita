@@ -22,9 +22,9 @@
 #define CHANGETEXTANCHORCOMMAND_H
 
 #include "ArtisticTextShape.h"
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
-class ChangeTextAnchorCommand : public QUndoCommand
+class ChangeTextAnchorCommand : public KUndo2Command
 {
 public:
     ChangeTextAnchorCommand( ArtisticTextShape * shape, ArtisticTextShape::TextAnchor anchor );

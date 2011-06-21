@@ -224,6 +224,18 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
 void KisLayerBox::setImage(KisImageWSP image)
 {
+    if(m_image && m_canvas && m_canvas->view())
+    {
+        disconnect(m_image, SIGNAL(sigAboutToBeDeleted()), this, SLOT(notifyImageDeleted()));
+        disconnect(m_nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)), this, SLOT(setCurrentNode(KisNodeSP)));
+        disconnect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), m_nodeManager, SLOT(slotUiActivatedNode(KisNodeSP)));
+
+        disconnect(m_nodeModel, SIGNAL(requestAddNode(KisNodeSP, KisNodeSP)), m_nodeManager, SLOT(addNode(KisNodeSP, KisNodeSP)));
+        disconnect(m_nodeModel, SIGNAL(requestAddNode(KisNodeSP, KisNodeSP, int)), m_nodeManager, SLOT(insertNode(KisNodeSP, KisNodeSP, int)));
+        disconnect(m_nodeModel, SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP)), m_nodeManager, SLOT(moveNode(KisNodeSP, KisNodeSP)));
+        disconnect(m_nodeModel, SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP, int)), m_nodeManager, SLOT(moveNodeAt(KisNodeSP, KisNodeSP, int)));
+    }
+    
     m_image = image;
 
     if (m_image && m_canvas && m_canvas->view()) {

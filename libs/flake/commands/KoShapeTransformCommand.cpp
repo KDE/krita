@@ -35,8 +35,8 @@ public:
     QList<QTransform> newState;
 };
 
-KoShapeTransformCommand::KoShapeTransformCommand(const QList<KoShape*> &shapes, const QList<QTransform> &oldState, const QList<QTransform> &newState, QUndoCommand * parent)
-        : QUndoCommand(parent),
+KoShapeTransformCommand::KoShapeTransformCommand(const QList<KoShape*> &shapes, const QList<QTransform> &oldState, const QList<QTransform> &newState, KUndo2Command * parent)
+        : KUndo2Command(parent),
         d(new Private(shapes))
 {
     Q_ASSERT(shapes.count() == oldState.count());
@@ -52,7 +52,7 @@ KoShapeTransformCommand::~KoShapeTransformCommand()
 
 void KoShapeTransformCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     const int shapeCount = d->shapes.count();
     for (int i = 0; i < shapeCount; ++i) {
@@ -65,7 +65,7 @@ void KoShapeTransformCommand::redo()
 
 void KoShapeTransformCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     const int shapeCount = d->shapes.count();
     for (int i = 0; i < shapeCount; ++i) {

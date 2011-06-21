@@ -21,7 +21,7 @@
 #ifndef KOPATHCONTROLPOINTMOVECOMMAND_H
 #define KOPATHCONTROLPOINTMOVECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QPointF>
 #include "KoPathShape.h"
 #include "KoPathPointData.h"
@@ -30,7 +30,7 @@
 
 
 /// The undo / redo command for path point moving.
-class FLAKE_TEST_EXPORT KoPathControlPointMoveCommand : public QUndoCommand
+class FLAKE_TEST_EXPORT KoPathControlPointMoveCommand : public KUndo2Command
 {
 public:
     /**
@@ -40,7 +40,7 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoPathControlPointMoveCommand(const KoPathPointData &pointData, const QPointF &offset,
-            KoPathPoint::PointType pointType, QUndoCommand *parent = 0);
+            KoPathPoint::PointType pointType, KUndo2Command *parent = 0);
     /// redo the command
     void redo();
     /// revert the actions done in redo

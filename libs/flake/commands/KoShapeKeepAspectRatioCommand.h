@@ -20,7 +20,7 @@
 #ifndef KOSHAPEKEEPASPECTRATIOCOMMAND_H
 #define KOSHAPEKEEPASPECTRATIOCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 
 class KoShape;
@@ -28,7 +28,7 @@ class KoShape;
 /**
  * Command that changes the keepAspectRatio property of KoShape
  */
-class KoShapeKeepAspectRatioCommand : public QUndoCommand
+class KoShapeKeepAspectRatioCommand : public KUndo2Command
 {
 public:
     /**
@@ -38,7 +38,7 @@ public:
      * @param newKeepAspectRatio the new settings
      * @param parent the parent command
      */
-    KoShapeKeepAspectRatioCommand(const QList<KoShape*> &shapes, const QList<bool> &oldKeepAspectRatio, const QList<bool> &newKeepAspectRatio, QUndoCommand* parent = 0);
+    KoShapeKeepAspectRatioCommand(const QList<KoShape*> &shapes, const QList<bool> &oldKeepAspectRatio, const QList<bool> &newKeepAspectRatio, KUndo2Command* parent = 0);
     ~KoShapeKeepAspectRatioCommand();
 
     /// Execute the command

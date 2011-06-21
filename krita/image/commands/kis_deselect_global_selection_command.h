@@ -19,12 +19,12 @@
 #define KIS_DESELECT_GLOBAL_SELECTION_COMMAND_H_
 
 #include <krita_export.h>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include "kis_types.h"
 
 
 /// The command for deselection the global selection of KisImage
-class KRITAIMAGE_EXPORT KisDeselectGlobalSelectionCommand : public QUndoCommand
+class KRITAIMAGE_EXPORT KisDeselectGlobalSelectionCommand : public KUndo2Command
 {
 
 public:
@@ -33,7 +33,7 @@ public:
      * @param image the image
      * @param parent the parent command
      */
-    KisDeselectGlobalSelectionCommand(KisImageWSP image, QUndoCommand * parent = 0);
+    KisDeselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent = 0);
     virtual ~KisDeselectGlobalSelectionCommand();
 
     virtual void redo();

@@ -21,8 +21,8 @@
 #include "RectangleShape.h"
 #include <klocale.h>
 
-RectangleShapeConfigCommand::RectangleShapeConfigCommand(RectangleShape * rectangle, qreal cornerRadiusX, qreal cornerRadiusY, QUndoCommand *parent)
-    : QUndoCommand(parent)
+RectangleShapeConfigCommand::RectangleShapeConfigCommand(RectangleShape * rectangle, qreal cornerRadiusX, qreal cornerRadiusY, KUndo2Command *parent)
+    : KUndo2Command(parent)
     , m_rectangle(rectangle)
     , m_newCornerRadiusX(cornerRadiusX)
     , m_newCornerRadiusY(cornerRadiusY)
@@ -37,7 +37,7 @@ RectangleShapeConfigCommand::RectangleShapeConfigCommand(RectangleShape * rectan
 
 void RectangleShapeConfigCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     m_rectangle->update();
 
@@ -51,7 +51,7 @@ void RectangleShapeConfigCommand::redo()
 
 void RectangleShapeConfigCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     m_rectangle->update();
 

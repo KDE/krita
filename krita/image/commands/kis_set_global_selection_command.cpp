@@ -26,8 +26,8 @@
 #include "kis_selection_mask.h"
 #include "kis_pixel_selection.h"
 
-KisSetGlobalSelectionCommand::KisSetGlobalSelectionCommand(KisImageWSP image, QUndoCommand * parent, KisSelectionSP selection) :
-        QUndoCommand(parent)
+KisSetGlobalSelectionCommand::KisSetGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent, KisSelectionSP selection) :
+        KUndo2Command(parent)
         , m_image(image)
 {
     m_oldSelection = m_image->globalSelection();

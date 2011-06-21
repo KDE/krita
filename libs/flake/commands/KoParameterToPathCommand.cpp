@@ -34,8 +34,8 @@ public:
     QList<KoPathShape*> copies;
 };
 
-KoParameterToPathCommand::KoParameterToPathCommand(KoParameterShape *shape, QUndoCommand *parent)
-    : QUndoCommand(parent),
+KoParameterToPathCommand::KoParameterToPathCommand(KoParameterShape *shape, KUndo2Command *parent)
+    : KUndo2Command(parent),
     d(new KoParameterToPathCommandPrivate())
 {
     d->shapes.append(shape);
@@ -43,8 +43,8 @@ KoParameterToPathCommand::KoParameterToPathCommand(KoParameterShape *shape, QUnd
     setText(i18n("Convert to Path"));
 }
 
-KoParameterToPathCommand::KoParameterToPathCommand(const QList<KoParameterShape*> &shapes, QUndoCommand *parent)
-    : QUndoCommand(parent),
+KoParameterToPathCommand::KoParameterToPathCommand(const QList<KoParameterShape*> &shapes, KUndo2Command *parent)
+    : KUndo2Command(parent),
     d(new KoParameterToPathCommandPrivate())
 {
     d->shapes = shapes;
@@ -59,7 +59,7 @@ KoParameterToPathCommand::~KoParameterToPathCommand()
 
 void KoParameterToPathCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     for (int i = 0; i < d->shapes.size(); ++i) {
         KoParameterShape *parameterShape = d->shapes.at(i);
         parameterShape->update();
@@ -70,7 +70,7 @@ void KoParameterToPathCommand::redo()
 
 void KoParameterToPathCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     for (int i = 0; i < d->shapes.size(); ++i) {
         KoParameterShape * parameterShape = d->shapes.at(i);
         parameterShape->update();

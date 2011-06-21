@@ -25,7 +25,7 @@
 
 #include "flake_export.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 #include <QPointF>
 
@@ -34,14 +34,14 @@ class TreeShape;
 class KoShapeContainer;
 
 /// The undo / redo command for shape moving.
-class TreeShapeMoveCommand : public QUndoCommand
+class TreeShapeMoveCommand : public KUndo2Command
 {
 public:
     TreeShapeMoveCommand(const QList<KoShape*> &shapes,
                          TreeShape *newParent,
                          KoShape *nextShape,
                          QPointF diff,
-                         QUndoCommand *parent = 0);
+                         KUndo2Command *parent = 0);
     ~TreeShapeMoveCommand();
     /// redo the command
     void redo();

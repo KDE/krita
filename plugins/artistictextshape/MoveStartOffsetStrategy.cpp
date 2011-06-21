@@ -111,7 +111,7 @@ void MoveStartOffsetStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
     }
 }
 
-QUndoCommand *MoveStartOffsetStrategy::createCommand()
+KUndo2Command *MoveStartOffsetStrategy::createCommand()
 {
     return new ChangeTextOffsetCommand(m_text, m_oldStartOffset, m_text->startOffset());
 }

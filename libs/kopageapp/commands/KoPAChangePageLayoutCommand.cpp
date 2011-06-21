@@ -25,8 +25,8 @@
 #include "KoPADocument.h"
 #include "KoPAMasterPage.h"
 
-KoPAChangePageLayoutCommand::KoPAChangePageLayoutCommand( KoPADocument *document, KoPAMasterPage *masterPage, const KoPageLayout &newPageLayout, bool applyToDocument, QUndoCommand *parent )
-: QUndoCommand( parent)
+KoPAChangePageLayoutCommand::KoPAChangePageLayoutCommand( KoPADocument *document, KoPAMasterPage *masterPage, const KoPageLayout &newPageLayout, bool applyToDocument, KUndo2Command *parent )
+: KUndo2Command( parent)
 , m_document( document )
 , m_newPageLayout( newPageLayout )
 {

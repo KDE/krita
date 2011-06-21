@@ -45,7 +45,7 @@ void KoParameterChangeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt
     d->releasePoint = mouseLocation;
 }
 
-QUndoCommand* KoParameterChangeStrategy::createCommand()
+KUndo2Command* KoParameterChangeStrategy::createCommand()
 {
     Q_D(KoParameterChangeStrategy);
     KoParameterHandleMoveCommand *cmd = 0;

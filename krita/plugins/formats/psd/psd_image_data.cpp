@@ -38,35 +38,26 @@ PSDImageData::~PSDImageData(){
 }
 
 bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header){
-
+    quint64 start = io->pos();
     qDebug() << "Position before read " << io->pos();
     psdread(io, &compression);
     qDebug() << "COMPRESSION TYPE " << compression;
 
     channelSize = header->channelDepth/8;
     channelDataLength = header->height * header->width * channelSize;
-    //  channelInfoRecords = new ChannelInfo[header->nChannels];
 
-    for (int i =0; i < header->nChannels ; i++){
-        channelInfoRecords[i].channelId = i;
-        if (i==0)
-            channelInfoRecords[i].channelDataStart=io->pos();
-        else
-            channelInfoRecords[i].channelDataStart=channelInfoRecords[i-1].channelDataStart + io->pos();
-        channelInfoRecords[i].channelDataLength= channelDataLength;
-    }
-
-    for (int i=0; i < header->nChannels; i++){
-        qDebug()<<channelInfoRecords[i].channelId;
-        qDebug()<<channelInfoRecords[i].channelDataStart;
-        qDebug()<<channelInfoRecords[i].channelDataLength;
-        qDebug()<<endl;
-    }
 
     switch(compression){
 
     case 0: // Uncompressed
-
+        for (int channel = 0; channel < header->nChannels; channel++){
+            channelInfoRecords[channel].channelId = channel;
+            channelInfoRecords[channel].compressionType = Compression::Uncompressed;
+            channelInfoRecords[channel].channelDataStart = start;
+            channelInfoRecords[channel].channelDataLength = header->width * header->height * channelSize;
+            start += channelInfoRecords[channel].channelDataLength;
+            //  channelInfoRecords.append(channelInfoRecords);
+        }
         switch(header->colormode){
         case Bitmap:
             break;
@@ -95,6 +86,26 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header){
 
     case 1: // RLE
         qDebug()<<"RLE ENCODED";
+        quint32 rlelength;
+        quint32 sumrlelength;
+        for (int channel=0; channel < header->nChannels; channel++){
+            channelInfoRecords[channel].channelId = channel;
+            for (int row = 0; row < header->height; row++ ){
+                if (header->version == 1){
+                    psdread(io,&rlelength);
+                }
+                else if (header->version == 2){
+                    psdread(io,&rlelength);
+                }
+                channelInfoRecords[channel].rleRowLengths.append(rlelength);
+                sumrlelength += rlelength;
+            }
+        }
+
+        for (int channel = 0; channel < header->nChannels; channel++){
+            channelInfoRecords[channel].channelDataStart = start;
+            channelInfoRecords[channel].channelDataLength = sumrlelength;
+        }
 
         switch(colormode){
         case Bitmap:
@@ -251,10 +262,10 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header)
 }
 
 
-PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header){
+bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header){
     return true;
 }
 
-PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header){
+bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header){
     return true;
 }

@@ -23,7 +23,7 @@
 
 #include <psd.h>
 #include <psd_header.h>
-
+#include <compression.h>
 
 #include <QFile>
 class QIODevice;
@@ -51,6 +51,7 @@ private:
     int byteRead;
     struct ChannelInfo {
         qint16 channelId;
+        Compression::CompressionType compressionType;
         quint64 channelDataStart;
         quint64 channelDataLength;
         QVector<quint32> rleRowLengths;

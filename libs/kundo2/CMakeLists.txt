@@ -1,4 +1,4 @@
-include_directories( ${QT_INCLUDES} )
+include_directories(${QT_INCLUDES} ${KDE4_INCLUDES})
 
 set(kundo2_LIB_SRCS
 	kundo2stack.cpp

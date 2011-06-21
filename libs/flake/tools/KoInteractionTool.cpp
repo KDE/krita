@@ -68,7 +68,7 @@ void KoInteractionTool::mouseReleaseEvent(KoPointerEvent *event)
     Q_D(KoInteractionTool);
     if (d->currentStrategy) {
         d->currentStrategy->finishInteraction(event->modifiers());
-        QUndoCommand *command = d->currentStrategy->createCommand();
+        KUndo2Command *command = d->currentStrategy->createCommand();
         if (command)
             d->canvas->addCommand(command);
         delete d->currentStrategy;

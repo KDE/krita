@@ -25,6 +25,7 @@
 #include <QQueue>
 #include <QList>
 #include <QPixmap>
+#include "KoResourceServerObserver.h"
 
 class QString;
 class QColor;
@@ -37,7 +38,7 @@ class KisPaintopBox;
 class KisPaletteManager;
 class KisView2;
 
-class KoFavoriteResourceManager : public QObject
+class KoFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset>
 {
     Q_OBJECT
 
@@ -46,15 +47,14 @@ public:
     KoFavoriteResourceManager(KisPaintopBox*, QWidget* = 0);
     ~KoFavoriteResourceManager();
 
-    static const int MAX_FAVORITE_BRUSHES = 9;
+    static const int MAX_FAVORITE_PRESETS = 10;
 //    static const int MAX_RECENT_COLORS = 3;
 
     /************************************Popup Palette************************************/
 
     void showPaletteManager();
     void resetPopupPaletteParent(QWidget * = 0);
-    QList<QPixmap> favoriteBrushPixmaps();
-    QPixmap favoriteBrushPixmap(int);
+    QList<QImage> favoritePresetImages();
     bool isPopupPaletteVisible();
 
     /**********************************Favorite Brushes***********************************/
@@ -62,19 +62,24 @@ public:
     /**Checks if newBrush is saved as a favorite brush.
     Returns -1 if the newBrush is not yet saved, then newBrush will be appended
     Returns the position of the brush on the list otherwise**/
-    int addFavoriteBrush (KisPaintOpPresetSP);
-    void removeFavoriteBrush(int);
-    void removeFavoriteBrush(KisPaintOpPresetSP);
+    int addFavoritePreset(const QString& name);
+    void removeFavoritePreset(int);
+    void removeFavoritePreset(const QString& name);
     //returns -1 if paintop is not in the list, returns the paintop position otherwise
-    int isFavoriteBrushSaved(KisPaintOpPresetSP paintop);
-    int favoriteBrushesTotal();
+    int isFavoriteBrushSaved(const QString& name);
+    int favoritePresetsTotal();
 
-    QStringList favoriteBrushesStringList();
+    QStringList favoritePresetList();
 
 
     /***********************************Recent Colors************************************/
     inline int recentColorsTotal() { return m_colorList->size(); } ;
     inline const KoColor& recentColorAt(int pos) { return m_colorList->guiColor(pos); };
+    
+    // Reimplemented from KoResourceServerObserver
+    virtual void removingResource(KisPaintOpPreset* resource);
+    virtual void resourceAdded(KisPaintOpPreset* resource);
+    virtual void resourceChanged(KisPaintOpPreset* resource);
 
 signals:
     void sigSetFGColor(const KoColor& c);
@@ -89,7 +94,6 @@ signals:
     void sigChangeFGColorSelector(const QColor&);
 
 public slots:
-    void slotChangePaintopLabel(KisPaintOpPresetSP paintop);
     void slotShowPopupPalette(const QPoint& = QPoint(0,0));
     void slotChangeActivePaintop(int);
 
@@ -106,13 +110,13 @@ private:
     KisPopupPalette* m_popupPalette;
     KisPaintopBox* m_paintopBox;
 
-    QList<KisPaintOpPresetSP> m_favoriteBrushesList;
+    QStringList m_favoritePresetsList;
 
     /**The list of recently used colors**/
     KisColorDataList * m_colorList;
 
-    bool isFavoriteBrushesFull();
-    void saveFavoriteBrushes();
+    bool isFavoritePresetsFull();
+    void saveFavoritePresets();
 
     void printColors() { m_colorList->printGuiList(); /*m_colorList->printPriorityList();*/ };
 

@@ -138,7 +138,7 @@ void ShapeRotateStrategy::paint( QPainter &painter, const KoViewConverter &conve
     painter.drawEllipse( circle );
 }
 
-QUndoCommand* ShapeRotateStrategy::createCommand() {
+KUndo2Command* ShapeRotateStrategy::createCommand() {
     QList<QTransform> newTransforms;
     foreach( KoShape* shape, m_selectedShapes )
         newTransforms << shape->transformation();

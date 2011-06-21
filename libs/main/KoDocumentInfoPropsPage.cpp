@@ -81,7 +81,7 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props,
             d->m_info->loadOasis(metaDoc);
         }
     }
-    // Old koffice file format?
+    // Old calligra file format?
     else if (d->m_src->hasFile("documentinfo.xml")) {
         if (d->m_src->open("documentinfo.xml")) {
             KoXmlDocument doc;
@@ -136,7 +136,7 @@ void KoDocumentInfoPropsPage::applyChanges()
 
     KMimeType::Ptr mimeType = KMimeType::findByUrl(d->m_url, 0, true);
     if (mimeType && dynamic_cast<KFilterDev *>(d->m_dst->device()) != 0) {
-        QByteArray appIdentification("KOffice ");   // We are limited in the number of chars.
+        QByteArray appIdentification("Calligra ");   // We are limited in the number of chars.
         appIdentification += mimeType->name().toLatin1();
         appIdentification += '\004'; // Two magic bytes to make the identification
         appIdentification += '\006'; // more reliable (DF)

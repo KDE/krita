@@ -57,7 +57,7 @@ Soprano::Node KoRdfSemanticItemViewSite::linkingSubject() const
 {
     const KoDocumentRdf *documentRdf = d->m_semItem->documentRdf();
     Soprano::Model *m = const_cast<Soprano::Model*>(documentRdf->model());
-    Node pred(QUrl("http://koffice.org/rdf/site/package/common#idref"));
+    Node pred(QUrl("http://calligra-suite.org/rdf/site/package/common#idref"));
     Node obj = Node::createLiteralNode(d->m_xmlid);
     Node context = documentRdf->manifestRdfNode();
     // try to find it if it already exists
@@ -74,7 +74,7 @@ Soprano::Node KoRdfSemanticItemViewSite::linkingSubject() const
 QString KoRdfSemanticItemViewSite::getProperty(const QString &prop, const QString &defval) const
 {
     Soprano::Node ls = linkingSubject();
-    QString fqprop = "http://koffice.org/rdf/site#" + prop;
+    QString fqprop = "http://calligra-suite.org/rdf/site#" + prop;
     const KoDocumentRdf *rdf = d->m_semItem->documentRdf();
     const Soprano::Model *m = rdf->model();
     StatementIterator it = m->listStatements(ls, Node::createResourceNode(QUrl(fqprop)),
@@ -88,7 +88,7 @@ QString KoRdfSemanticItemViewSite::getProperty(const QString &prop, const QStrin
 
 void KoRdfSemanticItemViewSite::setProperty(const QString &prop, const QString &v)
 {
-    QString fqprop = "http://koffice.org/rdf/site#" + prop;
+    QString fqprop = "http://calligra-suite.org/rdf/site#" + prop;
     const KoDocumentRdf *documentRdf = d->m_semItem->documentRdf();
     Soprano::Model *m = const_cast<Soprano::Model*>(documentRdf->model());
     Soprano::Node ls = linkingSubject();

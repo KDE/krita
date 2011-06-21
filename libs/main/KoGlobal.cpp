@@ -46,23 +46,23 @@ KoGlobal* KoGlobal::self()
 }
 
 KoGlobal::KoGlobal()
-        : m_pointSize(-1), m_kofficeConfig(0)
+        : m_pointSize(-1), m_calligraConfig(0)
 {
     if (KGlobal::locale()) {
-        // Install the libkoffice* translations
+        // Install the libcalligra* translations
         KGlobal::locale()->insertCatalog("calligra");
     }
 
     // When runnint unittests, there is not necessarily a main component
     if (KGlobal::hasMainComponent()) {
-        // Tell KStandardDirs about the koffice prefix
-        KGlobal::dirs()->addPrefix(KOFFICEPREFIX);
+        // Tell KStandardDirs about the calligra prefix
+        KGlobal::dirs()->addPrefix(CALLIGRAPREFIX);
     }
 }
 
 KoGlobal::~KoGlobal()
 {
-    delete m_kofficeConfig;
+    delete m_calligraConfig;
 }
 
 QFont KoGlobal::_defaultFont()
@@ -170,10 +170,10 @@ QString KoGlobal::languageFromTag(const QString &langTag)
     return langTag;
 }
 
-KConfig* KoGlobal::_kofficeConfig()
+KConfig* KoGlobal::_calligraConfig()
 {
-    if (!m_kofficeConfig) {
-        m_kofficeConfig = new KConfig("kofficerc");
+    if (!m_calligraConfig) {
+        m_calligraConfig = new KConfig("calligrarc");
     }
-    return m_kofficeConfig;
+    return m_calligraConfig;
 }

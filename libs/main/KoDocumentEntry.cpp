@@ -33,7 +33,7 @@
 #include <limits.h> // UINT_MAX
 
 /**
- * Port from KOffice Trader to KTrader/KActivator (kded) by Simon Hausmann
+ * Port from Calligra Trader to KTrader/KActivator (kded) by Simon Hausmann
  * (c) 1999 Simon Hausmann <hausmann@kde.org>
  * Port to KService and simplifications by David Faure <faure@kde.org>
  */
@@ -81,11 +81,11 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
             // Still no match. Either the mimetype itself is unknown, or we have no service for it.
             // Help the user debugging stuff by providing some more diagnostics
             if (KServiceType::serviceType(mimetype).isNull()) {
-                kError(30003) << "Unknown KOffice MimeType " << mimetype << "." << endl;
+                kError(30003) << "Unknown Calligra MimeType " << mimetype << "." << endl;
                 kError(30003) << "Check your installation (for instance, run 'kde4-config --path mime' and check the result)." << endl;
             } else {
-                kError(30003) << "Found no KOffice part able to handle " << mimetype << "!" << endl;
-                kError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and KOfficePart, did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+                kError(30003) << "Found no Calligra part able to handle " << mimetype << "!" << endl;
+                kError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and CalligraPart, did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
             }
             return KoDocumentEntry();
         }
@@ -109,7 +109,7 @@ QList<KoDocumentEntry> KoDocumentEntry::query(QueryFlags flags, const QString & 
     const bool onlyDocEmb = flags & OnlyEmbeddableDocuments;
 
     // Query the trader
-    const KService::List offers = KServiceTypeTrader::self()->query("KOfficePart", constr);
+    const KService::List offers = KServiceTypeTrader::self()->query("CalligraPart", constr);
 
     KService::List::ConstIterator it = offers.begin();
     unsigned int max = offers.count();

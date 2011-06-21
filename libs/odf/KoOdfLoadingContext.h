@@ -42,7 +42,7 @@ class KoOdfManifestEntry;
 class KOODF_EXPORT KoOdfLoadingContext
 {
 public:
-    enum GeneratorType { Unknown, KOffice, OpenOffice, MicrosoftOffice };
+    enum GeneratorType { Unknown, Calligra, OpenOffice, MicrosoftOffice };
     /**
      * Stores reference to the KoOdfStylesReader and stored passed by
      * KoDocument. Make sure that the KoOdfStylesReader instance outlives
@@ -72,9 +72,9 @@ public:
 
     KoStyleStack &styleStack() const;
 
-    /// Return the <meta:generator> of the document, e.g. "KOffice/1.4.0a"
+    /// Return the <meta:generator> of the document, e.g. "Calligra/1.4.0a"
     QString generator() const;
-    /// Return the GeneratorType of the document, e.g. KOffice
+    /// Return the GeneratorType of the document, e.g. Calligra
     GeneratorType generatorType() const;
 
     /**

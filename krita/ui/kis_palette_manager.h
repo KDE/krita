@@ -31,6 +31,7 @@ class QLabel;
 class QPushButton;
 class KoFavoriteResourceManager;
 class KisPaintopBox;
+class KisPresetChooser;
 
 class KisPaletteManager : public QDialog
 {
@@ -39,25 +40,24 @@ class KisPaletteManager : public QDialog
 public:
     KisPaletteManager(KoFavoriteResourceManager*, KisPaintopBox*);
     ~KisPaletteManager();
-    void changeCurrentBrushLabel();
+
+    virtual void showEvent(QShowEvent* );
+
+    void updatePaletteView();
 
 private slots:
+    void slotUpdateAddButton();
     void slotEnableRemoveButton();
     void slotDeleteBrush();
     void slotAddBrush();
 
 private:
-
-    QStringListModel * m_model;
-    QListView *m_brushList;
-    QStringList m_nameList;
     QPushButton *m_saveButton;
     QPushButton *m_removeButton;
     KoFavoriteResourceManager *m_resourceManager;
     KisPaintopBox *m_paintOpBox;
-    QLabel *m_currentBrushLabel;
-
-    void resetDataModel();
+    KisPresetChooser* m_allPresetsView;
+    KisPresetChooser* m_palettePresetsView;
 };
 
 

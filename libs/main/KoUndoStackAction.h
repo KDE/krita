@@ -23,7 +23,7 @@
 
 #include <kaction.h>
 
-class KUndoStack;
+class KUndo2Stack;
 
 class KoUndoStackAction : public KAction
 {
@@ -34,7 +34,7 @@ public:
         RED0
     };
 
-    KoUndoStackAction(KUndoStack* stack, Type type);
+    KoUndoStackAction(KUndo2Stack* stack, Type type);
 
 private slots:
     void slotUndoTextChanged(const QString& text);

@@ -22,7 +22,7 @@
 #ifndef VECTORSHAPE_FACTORY_H
 #define VECTORSHAPE_FACTORY_H
 
-// KOffice
+// Calligra
 #include <KoShapeFactoryBase.h>
 
 

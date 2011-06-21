@@ -19,7 +19,7 @@
 #ifndef REMOVESTAFFELEMENTCOMMAND_H
 #define REMOVESTAFFELEMENTCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class MusicShape;
 namespace MusicCore {
@@ -27,7 +27,7 @@ namespace MusicCore {
     class Bar;
 }
 
-class RemoveStaffElementCommand : public QUndoCommand
+class RemoveStaffElementCommand : public KUndo2Command
 {
 public:
     RemoveStaffElementCommand(MusicShape* shape, MusicCore::StaffElement* se, MusicCore::Bar* bar);

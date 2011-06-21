@@ -23,6 +23,7 @@
 
 MockRootAreaProvider::MockRootAreaProvider()
     : m_area(0),
+    m_suggestedSize(QSizeF(200,1000)),
     m_askedForMoreThenOneArea(false)
 {
 }
@@ -37,19 +38,31 @@ KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextDocumentLayout *docume
     return 0;
 }
 
+void MockRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)
+{
+    Q_UNUSED(rootArea);
+    Q_UNUSED(isNewRootArea);
+}
+
 void MockRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
 }
 
 QSizeF MockRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
 {
-    return QSizeF(200,1000);
+    Q_UNUSED(rootArea);
+    return m_suggestedSize;
+}
+
+void MockRootAreaProvider::setSuggestedSize(QSizeF size)
+{
+    m_suggestedSize = size;
 }
 
 QList<KoTextLayoutObstruction *> MockRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)
 {
+    Q_UNUSED(rootArea);
     QList<KoTextLayoutObstruction*> obstructions;
-
     return obstructions;
 }
 

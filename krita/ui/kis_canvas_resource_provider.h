@@ -112,8 +112,8 @@ public:
     void setMirrorVertical(bool mirrorVertical);
     bool mirrorVertical() const;
 
-    void setOpacity(int opacity);
-    int opacity();
+    void setOpacity(qreal opacity);
+    qreal opacity();
 
 public slots:
 

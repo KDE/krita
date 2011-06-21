@@ -186,7 +186,7 @@ void KoDocumentInfoDlg::initAboutTab()
     d->m_aboutUi->leTitle->setText(d->m_info->aboutInfo("title"));
     d->m_aboutUi->leSubject->setText(d->m_info->aboutInfo("subject"));
 
-    d->m_aboutUi->leKeywords->setToolTip(i18n("Use ';' (Example: Office;KDE;KOffice)"));
+    d->m_aboutUi->leKeywords->setToolTip(i18n("Use ';' (Example: Office;KDE;Calligra)"));
     if (!d->m_info->aboutInfo("keyword").isEmpty())
         d->m_aboutUi->leKeywords->setText(d->m_info->aboutInfo("keyword"));
 
@@ -314,7 +314,7 @@ void KoDocumentInfoDlg::saveAuthorData()
     d->m_info->setAuthorInfo("street", d->m_authorUi->leStreet->text());
     d->m_info->setAuthorInfo("position", d->m_authorUi->lePosition->text());
 
-    KConfig* config = KoGlobal::kofficeConfig();
+    KConfig* config = KoGlobal::calligraConfig();
     KConfigGroup cgs(config, "Author");
     cgs.writeEntry("telephone", d->m_authorUi->lePhoneHome->text());
     cgs.writeEntry("telephone-work", d->m_authorUi->lePhoneWork->text());

@@ -72,7 +72,7 @@
 #include <QDesktopWidget>
 #include <QtGui/QPrintPreviewDialog>
 
-#include "kofficeversion.h"
+#include "calligraversion.h"
 
 class KoPartManager : public KParts::PartManager
 {
@@ -240,9 +240,9 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     }
 
     QString doc;
-    QStringList allFiles = KGlobal::dirs()->findAllResources("data", "koffice/koffice_shell.rc");
+    QStringList allFiles = KGlobal::dirs()->findAllResources("data", "calligra/calligra_shell.rc");
     setXMLFile(findMostRecentXMLFile(allFiles, doc));
-    setLocalXMLFile(KStandardDirs::locateLocal("data", "koffice/koffice_shell.rc"));
+    setLocalXMLFile(KStandardDirs::locateLocal("data", "calligra/calligra_shell.rc"));
 
     actionCollection()->addAction(KStandardAction::New, "file_new", this, SLOT(slotFileNew()));
     actionCollection()->addAction(KStandardAction::Open, "file_open", this, SLOT(slotFileOpen()));
@@ -594,16 +594,16 @@ void KoMainWindow::updateCaption()
 void KoMainWindow::updateCaption(const QString & caption, bool mod)
 {
     kDebug(30003) << "KoMainWindow::updateCaption(" << caption << "," << mod << ")";
-#ifdef KOFFICE_ALPHA
-    setCaption(QString("ALPHA %1: %2").arg(KOFFICE_ALPHA).arg(caption), mod);
+#ifdef CALLIGRA_ALPHA
+    setCaption(QString("ALPHA %1: %2").arg(CALLIGRA_ALPHA).arg(caption), mod);
     return;
 #endif
-#ifdef KOFFICE_BETA
-    setCaption(QString("BETA %1: %2").arg(KOFFICE_BETA).arg(caption), mod);
+#ifdef CALLIGRA_BETA
+    setCaption(QString("BETA %1: %2").arg(CALLIGRA_BETA).arg(caption), mod);
     return;
 #endif
-#ifdef KOFFICE_RC
-    setCaption(QString("RELEASE CANDIDATE %1: %2").arg(KOFFICE_RC).arg(caption), mod);
+#ifdef CALLIGRA_RC
+    setCaption(QString("RELEASE CANDIDATE %1: %2").arg(CALLIGRA_RC).arg(caption), mod);
     return;
 #endif
 
@@ -1043,6 +1043,10 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 
 void KoMainWindow::closeEvent(QCloseEvent *e)
 {
+    if(rootDocument() && rootDocument()->isLoading()) {
+        e->setAccepted(false);
+        return;
+    }
     if (queryClose()) {
         if (d->docToOpen) {
             // The open pane is visible

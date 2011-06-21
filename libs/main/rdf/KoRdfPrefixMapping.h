@@ -37,7 +37,7 @@ class KoRdfPrefixMappingPrivate;
  * @see KoDocumentRdf
  *
  * Both Rdf and XML support namespaces. This class is intended to allow
- * the advanced user to use such namespace mappings in the KOffice suite
+ * the advanced user to use such namespace mappings in the Calligra suite
  * when dealing with Rdf.
  *
  * For example, to be able to say dc:author for the dublin core author uri

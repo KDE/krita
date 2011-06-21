@@ -20,7 +20,7 @@
 #ifndef KOEVENTACTIONADDCOMMAND_H
 #define KOEVENTACTIONADDCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include "flake_export.h"
 
 class KoShape;
@@ -28,10 +28,10 @@ class KoEventAction;
 class KoEventActionAddCommandPrivate;
 
 /// API docs go here
-class FLAKE_EXPORT KoEventActionAddCommand : public QUndoCommand
+class FLAKE_EXPORT KoEventActionAddCommand : public KUndo2Command
 {
 public:
-    KoEventActionAddCommand(KoShape *shape, KoEventAction *eventAction, QUndoCommand *parent = 0);
+    KoEventActionAddCommand(KoShape *shape, KoEventAction *eventAction, KUndo2Command *parent = 0);
     virtual ~KoEventActionAddCommand();
 
     /// redo the command

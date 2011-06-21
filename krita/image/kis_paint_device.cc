@@ -554,7 +554,7 @@ bool KisPaintDevice::read(KoStore *store)
     return retval;
 }
 
-QUndoCommand* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
+KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
 {
     m_d->cache.invalidate();
     dbgImage << this << colorSpace()->id() << dstColorSpace->id() << renderingIntent;

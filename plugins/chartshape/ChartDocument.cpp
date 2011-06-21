@@ -27,7 +27,7 @@
 #include <QDebug>
 #include <QPainter>
 
-// KOffice
+// Calligra
 #include <KoDocument.h>
 #include <KoXmlWriter.h>
 #include <KoOdfReadStore.h>

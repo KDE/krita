@@ -19,7 +19,7 @@
  */
 
 /**
- * @file this file is part of the Krita application in koffice
+ * @file this file is part of the Krita application in calligra
  * @author Boudewijn Rempt
  * @author comments by hscott
  * @since 1.4 or 2005

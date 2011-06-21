@@ -22,7 +22,7 @@
 
 #include <krita_export.h>
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include "kis_types.h"
 #include "kis_image_command.h"
 

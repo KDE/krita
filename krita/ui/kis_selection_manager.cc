@@ -518,7 +518,7 @@ void KisSelectionManager::selectAll()
     undoAdapter->beginMacro(i18n("Select All"));
 
     if (!image->globalSelection()) {
-        QUndoCommand *globalSelectionCommand =
+        KUndo2Command *globalSelectionCommand =
             new KisSetGlobalSelectionCommand(image, 0, 0);
 
         undoAdapter->addCommand(globalSelectionCommand);

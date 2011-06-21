@@ -19,14 +19,14 @@
 #ifndef KIS_LAYER_COMMAND_H_
 #define KIS_LAYER_COMMAND_H_
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <krita_export.h>
 #include "kis_types.h"
 
 class KisLayer;
 
 /// the base command for commands altering a layer
-class KRITAIMAGE_EXPORT KisLayerCommand : public QUndoCommand
+class KRITAIMAGE_EXPORT KisLayerCommand : public KUndo2Command
 {
 
 public:

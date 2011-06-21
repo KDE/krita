@@ -25,8 +25,8 @@
 
 #include "PictureShape.h"
 
-ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, QUndoCommand *parent)
-: QUndoCommand(parent)
+ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, KUndo2Command *parent)
+: KUndo2Command(parent)
 , m_shape(shape)
 , m_oldImageData(0)
 , m_newImageData(newImageData)

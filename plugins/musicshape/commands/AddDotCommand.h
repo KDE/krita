@@ -19,14 +19,14 @@
 #ifndef ADDDOTCOMMAND_H
 #define ADDDOTCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 namespace MusicCore {
     class Chord;
 }
 class MusicShape;
 
-class AddDotCommand : public QUndoCommand {
+class AddDotCommand : public KUndo2Command {
 public:
     AddDotCommand(MusicShape* shape, MusicCore::Chord* chord);
     virtual void redo();

@@ -57,7 +57,6 @@
 #include "kis_factory2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_resource_server_provider.h"
-#include "kis_composite_ops_model.h"
 #include "ko_favorite_resource_manager.h"
 
 #include "widgets/kis_popup_button.h"
@@ -401,13 +400,22 @@ void KisPaintopBox::slotUpdatePreset()
 {
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
     
-    if(m_activePreset->settings()->getBool("PressureOpacity")) {
+    if(m_activePreset->settings()->hasProperty("OpacityValue")) {
+        qreal opacity = m_activePreset->settings()->getDouble("OpacityValue");
+        
         m_sliderOpacity->blockSignals(true);
-        m_sliderOpacity->setValue(m_activePreset->settings()->getDouble("OpacityValue"));
+        m_sliderOpacity->setValue(opacity);
         m_sliderOpacity->blockSignals(false);
         m_sliderOpacity->setDisabled(false);
+        m_resourceProvider->setOpacity(opacity);
     }
-    else m_sliderOpacity->setDisabled(true);
+    else {
+        m_sliderOpacity->blockSignals(true);
+        m_sliderOpacity->setValue(1.0);
+        m_sliderOpacity->blockSignals(false);
+        m_sliderOpacity->setDisabled(true);
+        m_resourceProvider->setOpacity(1.0);
+    }
     
     if(m_activePreset->settings()->hasProperty("CompositeOp")) {
         m_cmbCompositeOp->setDisabled(false);

@@ -18,7 +18,7 @@
 
 #include "kis_dumb_undo_adapter.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 
 KisDumbUndoAdapter::KisDumbUndoAdapter()
@@ -30,11 +30,11 @@ KisDumbUndoAdapter::~KisDumbUndoAdapter()
 {
 }
 
-const QUndoCommand * KisDumbUndoAdapter::presentCommand() {
+const KUndo2Command * KisDumbUndoAdapter::presentCommand() {
     return 0;
 }
 
-void KisDumbUndoAdapter::addCommand(QUndoCommand *command) {
+void KisDumbUndoAdapter::addCommand(KUndo2Command *command) {
     command->redo();
     notifyCommandAdded(command);
     delete command;

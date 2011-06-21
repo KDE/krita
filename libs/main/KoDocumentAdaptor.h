@@ -30,18 +30,18 @@
 class KoDocument;
 
 /**
- * DBUS interface for any KOffice document
+ * DBUS interface for any Calligra document
  * Use KoApplicationIface to get hold of an existing document's interface,
  * or to create a document.
  *
- * Note: KOffice Applications may (and should) reimplement KoDocument::dcopObject()
+ * Note: Calligra Applications may (and should) reimplement KoDocument::dcopObject()
  * In this case, don't look here... (unless the DCOP interface for the document
  * inherits KoDocumentAdaptor, which is a good thing to do)
  */
 class KOMAIN_EXPORT KoDocumentAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.document")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.document")
 public:
 
     explicit KoDocumentAdaptor(KoDocument * doc);

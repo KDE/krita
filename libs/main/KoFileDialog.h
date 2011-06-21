@@ -26,7 +26,7 @@
 
 /**
  * Extension to KFileDialog in order to add special entries to the filter combo,
- * like "save as koffice-1.1", "save as dir" etc.
+ * like "save as calligra-1.1", "save as dir" etc.
  * @note Used only when saving!
  *
  * This class is INTERNAL to KoMainWindow, do NOT use in your application.

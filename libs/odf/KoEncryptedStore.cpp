@@ -141,7 +141,7 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
             // Write identification
             (void)m_pZip->writeFile("mimetype", "", "", appIdentification.data(), appIdentification.length());
             m_pZip->setCompression(KZip::DeflateCompression);
-            // We don't need the extra field in KOffice - so we leave it as "no extra field".
+            // We don't need the extra field in Calligra - so we leave it as "no extra field".
         }
     } else {
         d->good = m_pZip->open(QIODevice::ReadOnly);

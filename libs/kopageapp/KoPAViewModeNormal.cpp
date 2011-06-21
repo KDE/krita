@@ -197,7 +197,7 @@ void KoPAViewModeNormal::removeShape( KoShape *shape )
     }
 }
 
-void KoPAViewModeNormal::changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, QUndoCommand *parent )
+void KoPAViewModeNormal::changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent )
 {
     KoPAPageBase *page = m_view->activePage();
     KoPAMasterPage *masterPage = dynamic_cast<KoPAMasterPage *>( page );

@@ -1,16 +1,16 @@
 <!--    $Id$
 
 This is an XML document type definition (DTD) for the documentinfo.xml files which
-are used by all KOffice-1.1 and 1.1.1 programs, to store information about the
+are used by all Calligra-1.1 and 1.1.1 programs, to store information about the
 document (e.g. title and abstract) and its author.
 
 ChangeLog:
-Initial version (for koffice-1.1.1) written by David Faure <faure@kde.org>.
+Initial version (for calligra-1.1.1) written by David Faure <faure@kde.org>.
 -->
 
 <!--
-  The document-info for a KOffice document contains one main element for each tab of
-the "Document Info" dialog. As of KOffice-1.1, this includes: author and about.
+  The document-info for a Calligra document contains one main element for each tab of
+the "Document Info" dialog. As of Calligra-1.1, this includes: author and about.
 A third page, "log" is planned for the future.
 -->
 <!ELEMENT document-info

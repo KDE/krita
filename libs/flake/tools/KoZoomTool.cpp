@@ -34,8 +34,8 @@ KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
         m_temporary(false), m_zoomInMode(true)
 {
     QPixmap inPixmap, outPixmap;
-    inPixmap.load(KStandardDirs::locate("data", "koffice/icons/zoom_in_cursor.png"));
-    outPixmap.load(KStandardDirs::locate("data", "koffice/icons/zoom_out_cursor.png"));
+    inPixmap.load(KStandardDirs::locate("data", "calligra/icons/zoom_in_cursor.png"));
+    outPixmap.load(KStandardDirs::locate("data", "calligra/icons/zoom_out_cursor.png"));
     m_inCursor = QCursor(inPixmap, 4, 4);
     m_outCursor = QCursor(outPixmap, 4, 4);
 }

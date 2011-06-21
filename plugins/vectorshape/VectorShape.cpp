@@ -36,7 +36,7 @@
 // KDE
 #include <KDebug>
 
-// KOffice
+// Calligra
 #include "KoUnit.h"
 #include "KoStore.h"
 #include "KoXmlNS.h"

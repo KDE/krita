@@ -107,6 +107,8 @@ public:
 
     KoCanvasController *canvasController;
     KoZoomController *zoomController;
+    KoCopyController *copyController;
+    KoCutController *cutController;
 
     KAction *editPaste;
     KAction *deleteSelectionAction;
@@ -263,9 +265,9 @@ void KoPAView::initGUI()
 void KoPAView::initActions()
 {
     KAction *action = actionCollection()->addAction( KStandardAction::Cut, "edit_cut", 0, 0);
-    new KoCutController(kopaCanvas(), action);
+    d->cutController = new KoCutController(kopaCanvas(), action);
     action = actionCollection()->addAction( KStandardAction::Copy, "edit_copy", 0, 0 );
-    new KoCopyController(kopaCanvas(), action);
+    d->copyController = new KoCopyController(kopaCanvas(), action);
     d->editPaste = actionCollection()->addAction( KStandardAction::Paste, "edit_paste", proxyObject, SLOT( editPaste() ) );
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(d->canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
@@ -391,6 +393,20 @@ KoZoomController* KoPAView::zoomController() const
     return d->zoomController;
 }
 
+KoCopyController* KoPAView::copyController() const
+{
+    return d->copyController;
+}
+
+KoCutController* KoPAView::cutController() const
+{
+    return d->cutController;
+}
+
+KAction* KoPAView::deleteSelectionAction() const
+{
+    return d->deleteSelectionAction;
+}
 
 void KoPAView::importDocument()
 {
@@ -485,6 +501,10 @@ void KoPAView::editSelectAll()
     KoSelection* selection = kopaCanvas()->shapeManager()->selection();
     if( !selection )
         return;
+    if (!this->isVisible()) {
+        emit selectAllRequested();
+        return;
+    }
 
     QList<KoShape*> shapes = activePage()->shapes();
 
@@ -505,6 +525,11 @@ void KoPAView::editSelectAll()
 
 void KoPAView::editDeselectAll()
 {
+    if (!this->isVisible()) {
+        emit deselectAllRequested();
+        return;
+    }
+
     KoSelection* selection = kopaCanvas()->shapeManager()->selection();
     if( selection )
         selection->deselectAll();
@@ -538,7 +563,7 @@ void KoPAView::formatPageLayout()
     KoPAPageLayoutDialog dialog( d->doc, pageLayout, d->canvas );
 
     if ( dialog.exec() == QDialog::Accepted ) {
-        QUndoCommand *command = new QUndoCommand( i18n( "Change page layout" ) );
+        KUndo2Command *command = new KUndo2Command( i18n( "Change page layout" ) );
         viewMode()->changePageLayout( dialog.pageLayout(), dialog.applyToDocument(), command );
 
         d->canvas->addCommand( command );
@@ -677,6 +702,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
 
     if ( shell() && pageChanged ) {
         d->documentStructureDocker->setActivePage(d->activePage);
+        proxyObject->emitActivePageChanged();
     }
 
     // Set the current page number in the canvas resource provider
@@ -872,7 +898,7 @@ void KoPAView::clipboardDataChanged()
 
     if (data)
     {
-        // TODO see if we can use the KoPasteController instead of having to add this feature in each koffice app.
+        // TODO see if we can use the KoPasteController instead of having to add this feature in each calligra app.
         QStringList mimeTypes = d->canvas->toolProxy()->supportedPasteMimeTypes();
         mimeTypes << KoOdf::mimeType( KoOdf::Graphics );
         mimeTypes << KoOdf::mimeType( KoOdf::Presentation );

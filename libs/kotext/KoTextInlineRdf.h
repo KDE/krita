@@ -66,7 +66,7 @@ class KoTextEditor;
  * with the cursor and fetch back the inline Rdf if one is associated
  * with a text block.
  *
- * FIXME: createXmlId() should consult with the KOffice codebase when
+ * FIXME: createXmlId() should consult with the Calligra codebase when
  * generating new xml:id values during save.
  */
 class KOTEXT_EXPORT KoTextInlineRdf

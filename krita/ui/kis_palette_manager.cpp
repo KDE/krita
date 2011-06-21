@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2009 Vera Lukman <shicmap@gmail.com>
+   Copyright 2011 Sven Langkamp <sven.langkamp@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,57 +44,61 @@
 #include "kis_paintop_settings_widget.h"
 #include "kis_shared_ptr.h"
 #include "ko_favorite_resource_manager.h"
+#include "KoResourceModel.h"
+#include "KoResourceItemView.h"
+#include "kis_resource_server_provider.h"
+#include "KoResourceServerAdapter.h"
+#include "kis_paintop_preset.h"
+#include "kis_preset_chooser.h"
 
 KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPaintopBox *paintOpBox)
     : QDialog(paintOpBox)
-    , m_model(0)
-    , m_brushList (0)
     , m_saveButton(0)
     , m_removeButton(0)
     , m_resourceManager(manager)
     , m_paintOpBox(paintOpBox)
-    , m_currentBrushLabel(0)
-
 {
-    setWindowTitle(i18n("Krita - Palette Manager"));
-    m_currentBrushLabel = new QLabel ("");
+    setWindowTitle(i18n("Palette Manager"));
 
-    /*SETTING MODEL*/
-    m_model = new QStringListModel();
-    resetDataModel();
+    m_allPresetsView = new KisPresetChooser(this);
+    m_allPresetsView->showButtons(false);
+    m_allPresetsView->setPresetFilter(KoID("dummy",""));
+    m_allPresetsView->setShowAll(true);
+
+    m_palettePresetsView = new KisPresetChooser(this);
+    m_palettePresetsView->showButtons(false);   
+    m_palettePresetsView->setPresetFilter(KoID("dummy",""));
+    m_palettePresetsView->setShowAll(true);
 
     /*LEFT COMPONENTS*/
     QFrame *HSeparator = new QFrame();
     HSeparator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
 
-    m_saveButton = new QPushButton (i18n("&Save to Palette"));
+    m_saveButton = new QPushButton (i18n("Add to Palette"));
     m_saveButton->setSizePolicy(QSizePolicy::Fixed , QSizePolicy::Fixed);
+    m_saveButton->setEnabled(false);
 
     /*LEFT LAYOUT*/
     QVBoxLayout *leftLayout = new QVBoxLayout ();
-    leftLayout->addWidget(new QLabel (i18n("Current Brush")));
-    leftLayout->addWidget(HSeparator);
-    leftLayout->addWidget(m_currentBrushLabel);
-//    leftLayout->addWidget(paintOpSettings->widget());
-    leftLayout->addStretch();
+    leftLayout->addWidget(new QLabel(i18n("Available Presets")));
+    leftLayout->addWidget(m_allPresetsView);
     leftLayout->addWidget(m_saveButton);
+
+    m_allPresetsView->updateViewSettings();
 
     /*CENTER COMPONENT : Divider*/
     QFrame *VSeparator = new QFrame();
     VSeparator->setFrameStyle(QFrame::VLine | QFrame::Sunken);
 
     /*RIGHT COMPONENTS*/
-    m_brushList = new QListView;
-    m_brushList->setModel(m_model);
-    m_brushList->setWordWrap(true);
-    m_removeButton = new QPushButton(i18n("Remove Brush"));
+    m_removeButton = new QPushButton(i18n("Remove Preset"));
     m_removeButton->setSizePolicy(QSizePolicy::Fixed , QSizePolicy::Fixed);
     m_removeButton->setEnabled(false);//set the button to center
 
     /*RIGHT LAYOUT*/
     QVBoxLayout *rightLayout = new QVBoxLayout();
-    rightLayout->addWidget(new QLabel(i18n("Favorite Brushes")));
-    rightLayout->addWidget(m_brushList);
+    rightLayout->addWidget(new QLabel(i18n("Favorite Presets")));
+    rightLayout->addWidget(m_palettePresetsView);
     rightLayout->addWidget(m_removeButton);
 
     /*MAIN LAYOUT*/
@@ -103,32 +108,27 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     mainLayout->addLayout(rightLayout);
 
     setLayout(mainLayout);
-    changeCurrentBrushLabel();
 
     /*SIGNALS AND SLOTS*/
-    connect(m_brushList, SIGNAL(pressed(QModelIndex)), this, SLOT(slotEnableRemoveButton()));
+    connect(m_allPresetsView, SIGNAL(resourceSelected(KoResource*)), this, SLOT(slotUpdateAddButton()) );
+    connect(m_palettePresetsView, SIGNAL(resourceSelected(KoResource*)), this, SLOT(slotEnableRemoveButton()) );
     connect(m_removeButton, SIGNAL(clicked()), this, SLOT(slotDeleteBrush()));
     connect(m_saveButton, SIGNAL(clicked()), this, SLOT(slotAddBrush()));
+
+    updatePaletteView();
 }
 
-void KisPaletteManager::changeCurrentBrushLabel()
+KisPaletteManager::~KisPaletteManager()
 {
-    m_currentBrushLabel->setText(m_paintOpBox->currentPaintop().id());
-    //m_paintOpBox->currentPaintopKoID().name() doesn't work properly.
-}
-
-
-void KisPaletteManager::resetDataModel()
-{
-    m_nameList = m_resourceManager->favoriteBrushesStringList();
-    m_model->setStringList(m_nameList);
+    m_resourceManager = 0;
+    m_paintOpBox = 0;
 }
 
 void KisPaletteManager::slotAddBrush()
 {
 
-    KisPaintOpPresetSP newBrush = m_paintOpBox->paintOpPresetSP();
-    int pos = m_resourceManager->addFavoriteBrush(newBrush);
+    KisPaintOpPreset* newPreset = static_cast<KisPaintOpPreset*>(m_allPresetsView->currentResource());
+    int pos = m_resourceManager->addFavoritePreset(newPreset->name());
 
     QModelIndex index;
 
@@ -138,42 +138,45 @@ void KisPaletteManager::slotAddBrush()
     }
     else if (pos == -1) //favorite brush is successfully saved
     {
-        m_nameList.append(m_paintOpBox->currentPaintop().id());
-        m_model->setStringList(m_nameList);
-        index = m_model->index(m_resourceManager->favoriteBrushesTotal()-1);
+        updatePaletteView();
     }
-    else //brush has already existed
-    {
-        index = m_model->index(pos);
-    }
+}
 
-    m_brushList->setCurrentIndex(index);
-    slotEnableRemoveButton();
+void KisPaletteManager::slotUpdateAddButton()
+{
+    KoResource * resource = m_allPresetsView-> currentResource();
+    if( resource ) {
+        m_saveButton->setEnabled(true);
+    } else {
+        m_saveButton->setEnabled(false);
+    }
 }
 
 void KisPaletteManager::slotEnableRemoveButton()
 {
-    QModelIndex index = m_brushList->currentIndex();
-    m_removeButton->setEnabled(index.row() != -1);
+    KoResource * resource = m_allPresetsView->currentResource();
+    m_removeButton->setEnabled(resource != 0);
 }
 
 void KisPaletteManager::slotDeleteBrush()
 {
-    int pos = m_brushList->currentIndex().row();
-    m_nameList.removeAt(pos);
-    m_resourceManager->removeFavoriteBrush(pos);
-    m_model->setStringList(m_nameList);
+    KoResource * resource = m_palettePresetsView->currentResource();
+    m_resourceManager->removeFavoritePreset(resource->name());
     m_removeButton->setEnabled(false);
+    updatePaletteView();
 }
 
-KisPaletteManager::~KisPaletteManager()
+void KisPaletteManager::showEvent(QShowEvent* e)
 {
-    delete m_model;
-    delete m_brushList;
-    delete m_saveButton;
-    delete m_removeButton;
-    m_resourceManager = 0;
-    m_paintOpBox = 0;
+    QDialog::showEvent(e);
+    m_allPresetsView->updateViewSettings();
+    m_palettePresetsView->updateViewSettings();
 }
+
+void KisPaletteManager::updatePaletteView()
+{
+    m_palettePresetsView->setFilteredNames(m_resourceManager->favoritePresetList());
+}
+
 
 #include "kis_palette_manager.moc"

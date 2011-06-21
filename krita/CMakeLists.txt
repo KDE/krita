@@ -107,7 +107,7 @@ kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-    set_target_properties(krita PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.krita")
+    set_target_properties(krita PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.krita")
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita 2")
 endif (Q_WS_MAC)
 

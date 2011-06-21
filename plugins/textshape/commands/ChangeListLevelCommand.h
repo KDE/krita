@@ -46,7 +46,7 @@ public:
      * @param coef indicates by how many levels the list item should be displaced
      * @param parent the parent undo command for macro functionality
      */
-    ChangeListLevelCommand(const QTextCursor &cursor, CommandType type, int coef, QUndoCommand *parent = 0);
+    ChangeListLevelCommand(const QTextCursor &cursor, CommandType type, int coef, KUndo2Command *parent = 0);
 
     ~ChangeListLevelCommand();
 
@@ -55,12 +55,12 @@ public:
     /// revert the actions done in redo
     virtual void undo();
 
-    /// reimplemnted from QUndoCommand
+    /// reimplemnted from KUndo2Command
     virtual int id() const {
         return 58450689;
     }
-    /// reimplemnted from QUndoCommand
-    virtual bool mergeWith(const QUndoCommand *other);
+    /// reimplemnted from KUndo2Command
+    virtual bool mergeWith(const KUndo2Command *other);
 
 private:
     int effectiveLevel(int level);

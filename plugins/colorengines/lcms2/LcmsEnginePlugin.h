@@ -21,7 +21,7 @@
 #define KO_LCMS_ENGINE_PLUGIN_H
 
 #include <kparts/plugin.h>
-
+class KUrl;
 class LcmsEnginePlugin : public QObject
 {
 
@@ -30,6 +30,7 @@ class LcmsEnginePlugin : public QObject
 public:
 
     LcmsEnginePlugin(QObject *parent, const QVariantList &);
+
 };
 
 #endif // KO_LCMS_ENGINE_PLUGIN_H

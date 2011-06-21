@@ -48,6 +48,7 @@ private slots:
     void fillCmbDepths(const KoID& idd);
     void fillCmbProfiles();
     void colorSpaceChanged();
+    void installProfile();
 private:
     struct Private;
     Private * const d;

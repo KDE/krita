@@ -39,7 +39,7 @@ class KoTextLayoutRootArea;
 
 /**
  * The data store that is held by each TextShape instance.
- * This is a separate object to allow KWord proper to use this class' API and
+ * This is a separate object to allow Words proper to use this class' API and
  * access the internals of the text shape.
  *
  * This class holds a QTextDocument pointer and is built so multiple shapes (and thus

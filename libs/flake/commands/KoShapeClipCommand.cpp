@@ -52,8 +52,8 @@ public:
     bool executed;
 };
 
-KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes, const QList<KoPathShape*> &clipPathShapes, QUndoCommand *parent)
-        : QUndoCommand(parent), d(new Private(controller))
+KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes, const QList<KoPathShape*> &clipPathShapes, KUndo2Command *parent)
+        : KUndo2Command(parent), d(new Private(controller))
 {
     d->shapesToClip = shapes;
     d->clipPathShapes = clipPathShapes;
@@ -70,8 +70,8 @@ KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase *controller, const 
     setText(i18n("Clip Shape"));
 }
 
-KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase *controller, KoShape *shape, const QList<KoPathShape*> &clipPathShapes, QUndoCommand *parent)
-        : QUndoCommand(parent), d(new Private(controller))
+KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase *controller, KoShape *shape, const QList<KoPathShape*> &clipPathShapes, KUndo2Command *parent)
+        : KUndo2Command(parent), d(new Private(controller))
 {
     d->shapesToClip.append(shape);
     d->clipPathShapes = clipPathShapes;
@@ -108,12 +108,12 @@ void KoShapeClipCommand::redo()
 
     d->executed = true;
 
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 }
 
 void KoShapeClipCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     const uint shapeCount = d->shapesToClip.count();
     for (uint i = 0; i < shapeCount; ++i) {

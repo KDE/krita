@@ -29,7 +29,7 @@
 #include <QCache>
 #include <QSize>
 
-// KOffice
+// Calligra
 #include <KoShape.h>
 #include <KoFrameShape.h>
 

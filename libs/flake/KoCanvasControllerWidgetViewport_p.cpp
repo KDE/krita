@@ -187,7 +187,7 @@ void Viewport::handleDropEvent(QDropEvent *event)
     QPointF newPos = correctPosition(event->pos());
     m_parent->canvas()->clipToDocument(m_draggedShape, newPos); // ensure the shape is dropped inside the document.
     m_draggedShape->setAbsolutePosition(newPos);
-    QUndoCommand * cmd = m_parent->canvas()->shapeController()->addShape(m_draggedShape);
+    KUndo2Command * cmd = m_parent->canvas()->shapeController()->addShape(m_draggedShape);
     if (cmd) {
         m_parent->canvas()->addCommand(cmd);
         KoSelection *selection = m_parent->canvas()->shapeManager()->selection();

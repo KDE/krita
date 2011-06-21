@@ -42,8 +42,8 @@ public:
     bool deleteEventAction;
 };
 
-KoEventActionRemoveCommand::KoEventActionRemoveCommand(KoShape *shape, KoEventAction *eventAction, QUndoCommand *parent)
-    : QUndoCommand(parent),
+KoEventActionRemoveCommand::KoEventActionRemoveCommand(KoShape *shape, KoEventAction *eventAction, KUndo2Command *parent)
+    : KUndo2Command(parent),
     d(new KoEventActionRemoveCommandPrivate(shape, eventAction))
 {
 }

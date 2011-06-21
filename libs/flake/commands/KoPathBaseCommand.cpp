@@ -21,13 +21,13 @@
 #include "KoPathBaseCommand.h"
 #include "KoPathShape.h"
 
-KoPathBaseCommand::KoPathBaseCommand(QUndoCommand *parent)
-        : QUndoCommand(parent)
+KoPathBaseCommand::KoPathBaseCommand(KUndo2Command *parent)
+        : KUndo2Command(parent)
 {
 }
 
-KoPathBaseCommand::KoPathBaseCommand(KoPathShape *shape, QUndoCommand *parent)
-        : QUndoCommand(parent)
+KoPathBaseCommand::KoPathBaseCommand(KoPathShape *shape, KUndo2Command *parent)
+        : KUndo2Command(parent)
 {
     m_shapes.insert(shape);
 }

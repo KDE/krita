@@ -19,7 +19,7 @@
 #ifndef SETCLEFCOMMAND_H
 #define SETCLEFCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include "../core/Clef.h"
 
@@ -29,7 +29,7 @@ namespace MusicCore {
     class Staff;
 }
 
-class SetClefCommand : public QUndoCommand
+class SetClefCommand : public KUndo2Command
 {
 public:
     SetClefCommand(MusicShape* shape, MusicCore::Bar* bar, MusicCore::Staff* staff, MusicCore::Clef::ClefShape clefShape, int line, int octaveChange);

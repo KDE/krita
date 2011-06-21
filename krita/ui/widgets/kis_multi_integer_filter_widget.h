@@ -19,11 +19,11 @@
 #ifndef _KIS_MULTI_INTEGER_FILTER_WIDGET_H_
 #define _KIS_MULTI_INTEGER_FILTER_WIDGET_H_
 
-#include <vector>
-
 #include <knuminput.h>
 #include <kis_config_widget.h>
 #include "krita_export.h"
+
+#include <vector>
 
 class KisDelayedActionIntegerInput : public KIntNumInput
 {

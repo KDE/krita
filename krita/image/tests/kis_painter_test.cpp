@@ -157,7 +157,7 @@ void KisPainterTest::testPaintDeviceBltSelection(const KoColorSpace * cs)
         painter2.bitBlt(0, 0, src, 0, 0, 30, 30);
         painter2.end();
 
-        QCOMPARE(dst2->exactBounds(), QRect(0, 0, 64, 64));
+        QCOMPARE(dst2->exactBounds(), QRect(10, 10, 10, 10));
     }
 }
 
@@ -338,7 +338,7 @@ void KisPainterTest::testSelectionBitBltFixedSelection()
     fixedSelection->convertTo(KoColorSpaceRegistry::instance()->alpha8());
 
     KisPainter painter(dst);
-    
+
     painter.bitBltWithFixedSelection(0, 0, src, fixedSelection, 20, 20);
     painter.end();
 

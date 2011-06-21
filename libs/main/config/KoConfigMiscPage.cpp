@@ -84,7 +84,7 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoResourceManager *documentR
     QString unitType = KoUnit::unitName(unit);
     //#################"laurent
     //don't load unitType from config file because unit is
-    //depend from kword file => unit can be different from config file
+    //depend from words file => unit can be different from config file
 
     grid->addWidget(new QLabel(i18n("Units:"), tmpQGroupBox), 0, 0);
 

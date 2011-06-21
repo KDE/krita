@@ -39,7 +39,7 @@ class ShowChangesCommand : public QObject, public TextCommandBase
     Q_OBJECT
 public:
 
-    ShowChangesCommand(bool showChanges, QTextDocument *document, KoCanvasBase *canvas, QUndoCommand* parent = 0);
+    ShowChangesCommand(bool showChanges, QTextDocument *document, KoCanvasBase *canvas, KUndo2Command* parent = 0);
     ~ShowChangesCommand();
 
     virtual void undo();
@@ -63,7 +63,7 @@ private:
     bool m_showChanges;
     KoCanvasBase *m_canvas;
     
-    QList<QUndoCommand *> m_shapeCommands;
+    QList<KUndo2Command *> m_shapeCommands;
 };
 
 #endif // SHOWCHANGECOMMAND_H

@@ -22,7 +22,7 @@
 #define KOSHAPETRANSFORMCOMMAND_H
 
 #include "flake_export.h"
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 class KoShape;
 class QTransform;
@@ -30,7 +30,7 @@ class QTransform;
 /**
  * A command to transform a selection of shapes with the same transformation.
  */
-class FLAKE_EXPORT KoShapeTransformCommand : public QUndoCommand
+class FLAKE_EXPORT KoShapeTransformCommand : public KUndo2Command
 {
 public:
 
@@ -43,7 +43,7 @@ public:
      * @see KoShape::transformation()
      * @see KoShape::setTransformation()
      */
-    KoShapeTransformCommand(const QList<KoShape*> &shapes, const QList<QTransform> &oldState, const QList<QTransform> &newState, QUndoCommand * parent = 0);
+    KoShapeTransformCommand(const QList<KoShape*> &shapes, const QList<QTransform> &oldState, const QList<QTransform> &newState, KUndo2Command * parent = 0);
     ~KoShapeTransformCommand();
     /// redo the command
     void redo();

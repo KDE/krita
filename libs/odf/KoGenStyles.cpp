@@ -53,7 +53,7 @@ static const struct {
     { KoGenStyle::ListStyle,            "text:list-style", 0, false  },
     { KoGenStyle::LinearGradientStyle,  "svg:linearGradient", 0, true  },
     { KoGenStyle::RadialGradientStyle,  "svg:radialGradient", 0, true  },
-    { KoGenStyle::ConicalGradientStyle, "koffice:conicalGradient", 0, true  },
+    { KoGenStyle::ConicalGradientStyle, "calligra:conicalGradient", 0, true  },
     { KoGenStyle::StrokeDashStyle,      "draw:stroke-dash", 0, true  },
     { KoGenStyle::FillImageStyle,       "draw:fill-image", 0, true  },
     { KoGenStyle::HatchStyle,           "draw:hatch", "style:graphic-properties", true  },

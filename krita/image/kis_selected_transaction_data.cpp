@@ -24,7 +24,7 @@
 #include "kis_layer.h"
 #include "kis_undo_adapter.h"
 
-KisSelectedTransactionData::KisSelectedTransactionData(const QString& name, KisNodeSP node, QUndoCommand* parent)
+KisSelectedTransactionData::KisSelectedTransactionData(const QString& name, KisNodeSP node, KUndo2Command* parent)
         : KisTransactionData(name, node->paintDevice(), parent)
         , m_selTransaction(0)
         , m_hadSelection(false /*device->hasSelection()*/)

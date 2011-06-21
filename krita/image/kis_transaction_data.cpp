@@ -44,8 +44,8 @@ public:
     bool transactionFinished;
 };
 
-KisTransactionData::KisTransactionData(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent)
-        : QUndoCommand(name, parent)
+KisTransactionData::KisTransactionData(const QString& name, KisPaintDeviceSP device, KUndo2Command* parent)
+        : KUndo2Command(name, parent)
         , m_d(new Private())
 {
     m_d->device = device;
@@ -74,7 +74,7 @@ void KisTransactionData::endTransaction()
 
 void KisTransactionData::redo()
 {
-    //QUndoStack calls redo(), so the first call needs to be blocked
+    //KUndo2QStack calls redo(), so the first call needs to be blocked
     if (m_d->firstRedo) {
         m_d->firstRedo = false;
         return;

@@ -20,7 +20,7 @@
 #ifndef ABSTRACTTEXTCOMMMAND_H
 #define ABSTRACTTEXTCOMMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class TextTool;
 
@@ -45,20 +45,20 @@ void MyCommand::undo() {
 @endcode
  * @see TextTool::addCommand()
  */
-class TextCommandBase : public QUndoCommand
+class TextCommandBase : public KUndo2Command
 {
 public:
     /// constructor
-    TextCommandBase(QUndoCommand *parent) : QUndoCommand(parent), m_tool(0) {}
+    TextCommandBase(KUndo2Command *parent) : KUndo2Command(parent), m_tool(0) {}
     virtual ~TextCommandBase() {}
     /// method called by the tool.
     void setTool(TextTool *tool) {
         m_tool = tool;
     }
 
-    // reimplemented from QUndoCommand
+    // reimplemented from KUndo2Command
     virtual void redo();
-    // reimplemented from QUndoCommand
+    // reimplemented from KUndo2Command
     virtual void undo();
 
     /// Sets the m_allowAddUndoCommand of the associated tool

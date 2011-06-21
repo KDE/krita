@@ -109,7 +109,7 @@ class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>
 
 public:
     KisPresetProxyAdapter(KoResourceServer< KisPaintOpPreset >* resourceServer)
-         : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer), m_showAll(false){}
+         : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer), m_showAll(false), m_filterNames(false){}
     virtual ~KisPresetProxyAdapter() {}
 
     virtual QList< KoResource* > resources() {
@@ -135,7 +135,8 @@ public:
             return true;
 
         return ((preset->paintOp() == m_paintopID || m_showAll) &&
-                preset->name().contains(m_nameFilter, Qt::CaseInsensitive));
+                preset->name().contains(m_nameFilter, Qt::CaseInsensitive) &&
+                (!m_filterNames || m_filteredNames.contains(preset->name())));
     }
 
     ///Set id for paintop to be accept by the proxy model, if not filter is set all
@@ -154,6 +155,12 @@ public:
     void setPresetNameFilter(const QString &nameFilter)
     {
         m_nameFilter = nameFilter;
+    }
+    
+    void setFilteredNames(const QStringList filteredNames)
+    {
+        m_filterNames = true;
+        m_filteredNames = filteredNames;
     }
 
     void setShowAll(bool show)
@@ -176,6 +183,8 @@ private:
     KoID m_paintopID;
     QString m_nameFilter;
     bool m_showAll;
+    bool m_filterNames;
+    QStringList m_filteredNames;
 };
 
 KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
@@ -215,6 +224,13 @@ void KisPresetChooser::setPresetFilter(const KoID& paintopID)
         m_presetProxy->invalidate();
         updateViewSettings();
     }
+}
+
+void KisPresetChooser::setFilteredNames(const QStringList filteredNames)
+{
+    m_presetProxy->setFilteredNames(filteredNames);
+    m_presetProxy->invalidate();
+    updateViewSettings();
 }
 
 void KisPresetChooser::searchTextChanged(const QString& searchString)
@@ -276,6 +292,11 @@ void KisPresetChooser::updateViewSettings()
         m_delegate->setShowText(false);
     }
     
+}
+
+KoResource* KisPresetChooser::currentResource()
+{
+    return m_chooser->currentResource();
 }
 
 #include "kis_preset_chooser.moc"

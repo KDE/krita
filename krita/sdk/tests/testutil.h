@@ -21,7 +21,7 @@
 
 #include <QList>
 #include <QTime>
-#include <QUndoStack>
+#include <kundo2qstack.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -176,7 +176,7 @@ public:
     ~KisUndoAdapterDummy() {}
 
 public:
-    void addCommand(QUndoCommand *cmd) {
+    void addCommand(KUndo2Command *cmd) {
         qDebug() << cmd;
         undostack.push(cmd);
     }
@@ -194,7 +194,7 @@ public:
     }
 
 private:
-    QUndoStack undostack;
+    KUndo2QStack undostack;
 };
 
 

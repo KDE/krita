@@ -30,8 +30,8 @@
 
 #include <kdebug.h>
 
-// 10 updates/second should be enough?
-#define PROGRESSUPDATER_GUITIMERINTERVAL 100
+// 4 updates per second should be enough
+#define PROGRESSUPDATER_GUITIMERINTERVAL 250
 
 class KoProgressUpdater::Private
 {

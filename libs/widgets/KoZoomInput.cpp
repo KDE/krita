@@ -49,8 +49,6 @@ KoZoomInput::KoZoomInput(QWidget* parent)
     setAttribute(Qt::WA_MacMiniSize, true);
 #endif
 
-    setToolTip(i18n("Zoom"));
-
     QWidget* first = new QWidget(this);
     QHBoxLayout* layout = new QHBoxLayout(first);
     layout->setSpacing(0);

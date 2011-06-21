@@ -19,7 +19,7 @@
 
 /**
  * @file
- * This file is part of the Krita koffice application. It handles
+ * This file is part of the Krita calligra application. It handles
  * a contains a KisFilter OR a KisLayer, and this class is created
  * to influence the rendering of layers below this one. Can also
  * function as a fixating layer.

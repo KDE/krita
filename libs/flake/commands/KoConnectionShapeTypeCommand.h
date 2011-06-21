@@ -21,10 +21,10 @@
 #define KoConnectionShapeTypeCommand_H
 
 #include "KoConnectionShape.h"
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 /// The undo / redo command for configuring an KoConnection shape
-class KoConnectionShapeTypeCommand : public QUndoCommand
+class KoConnectionShapeTypeCommand : public KUndo2Command
 {
 public:
     /**
@@ -33,7 +33,7 @@ public:
      * @param type the connection type
      * @param parent the optional parent command
      */
-    KoConnectionShapeTypeCommand(KoConnectionShape *connection, KoConnectionShape::Type type, QUndoCommand *parent = 0);
+    KoConnectionShapeTypeCommand(KoConnectionShape *connection, KoConnectionShape::Type type, KUndo2Command *parent = 0);
     /// redo the command
     virtual void redo();
     /// revert the actions done in redo

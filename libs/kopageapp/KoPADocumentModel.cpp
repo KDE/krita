@@ -258,7 +258,7 @@ bool KoPADocumentModel::setData(const QModelIndex &index, const QVariant &value,
         case Qt::DisplayRole:
         case Qt::EditRole:
         {
-            QUndoCommand * cmd = new KoShapeRenameCommand( shape, value.toString() );
+            KUndo2Command * cmd = new KoShapeRenameCommand( shape, value.toString() );
             // TODO 2.1 use different text for the command if e.g. it is a page/slide or layer
             m_document->addCommand( cmd );
         }   break;
@@ -501,7 +501,7 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
             emit layoutAboutToBeChanged();
             beginInsertRows( parent, group->shapeCount(), group->shapeCount()+toplevelShapes.count() );
 
-            QUndoCommand * cmd = new QUndoCommand();
+            KUndo2Command * cmd = new KUndo2Command();
             cmd->setText( i18n("Reparent shapes") );
 
             foreach( KoShape * shape, toplevelShapes )
@@ -522,7 +522,7 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
                 emit layoutAboutToBeChanged();
                 beginInsertRows( parent, container->shapeCount(), container->shapeCount()+toplevelShapes.count() );
 
-                QUndoCommand * cmd = new QUndoCommand();
+                KUndo2Command * cmd = new KUndo2Command();
                 cmd->setText( i18n("Reparent shapes") );
 
                 QList<bool> clipped;

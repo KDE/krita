@@ -435,6 +435,3 @@ QUndoCommand* KisShapeSelection::transform(double  xscale, double  yscale, doubl
 
     return new KoShapeTransformCommand(shapes, oldTransformations, newTransformations);
 }
-
-
-#include "kis_shape_selection.moc"

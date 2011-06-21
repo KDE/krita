@@ -147,7 +147,7 @@ public:
 
     QList<KoInlineNote*> footNotes() const;
 
-    void reNumbering( QTextBlock block );
+    void reNumbering(QTextBlock block);
 
 public slots:
     void documentInformationUpdated(const QString &info, const QString &data);

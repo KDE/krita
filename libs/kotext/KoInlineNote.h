@@ -52,7 +52,7 @@ public:
     KoInlineNote(Type type);
     // destructor
     virtual ~KoInlineNote();
-    QTextCursor textCursor( void ) const;
+    QTextCursor textCursor(void) const;
     /**
      * Set the textframe where we will create our own textframe within
      * Our textframe is the one containing the real note contents.

@@ -237,22 +237,18 @@ void KoInlineTextObjectManager::reNumbering(QTextBlock block)
 {
     int i=1;
 
-    while(block.isValid())
-    {
+    while(block.isValid()) {
         QString text = block.text();
         int pos = text.indexOf(QChar::ObjectReplacementCharacter);
 
-        while (pos >= 0 && pos <= block.length() )
-        {
+        while (pos >= 0 && pos <= block.length() ) {
             QTextCursor c1(block);
             c1.setPosition(block.position() + pos);
             c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
 
             KoInlineNote *note = dynamic_cast<KoInlineNote*>(this->inlineTextObject(c1));
-            if (note && note->type() == KoInlineNote::Footnote)
-            {
-                if(note->autoNumbering())
-                {
+            if (note && note->type() == KoInlineNote::Footnote) {
+                if(note->autoNumbering()) {
                     note->setLabel(QString().number(i));
 
                     QTextCursor cursor = note->textFrame()->firstCursorPosition();
@@ -260,8 +256,7 @@ void KoInlineTextObjectManager::reNumbering(QTextBlock block)
                     cursor.removeSelectedText();
                     QTextCharFormat *fmat = new QTextCharFormat();
                     fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-                    if(note->autoNumbering())
-                    {
+                    if(note->autoNumbering()) {
                         cursor.insertText(note->label(),*fmat);
                     }
                     fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);

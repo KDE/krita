@@ -113,24 +113,20 @@ void ReferencesTool::insertFootNote()
 {
     note = textEditor()->insertFootNote();
     note->setAutoNumbering(sfenw->widget.autoNumbering->isChecked());
-    if(note->autoNumbering())
-    {
+    if(note->autoNumbering()) {
         note->setLabel(QString().number(note->manager()->footNotes().count()));
     }
-    else
-    {
+    else {
         note->setLabel(sfenw->widget.characterEdit->text());
     }
 
     QTextCursor cursor = note->textCursor();
     QTextCharFormat *fmat = new QTextCharFormat();
     fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-    if(note->autoNumbering())
-    {
+    if(note->autoNumbering()) {
         cursor.insertText(note->label(),*fmat);
     }
-    else
-    {
+    else {
         cursor.insertText(sfenw->widget.characterEdit->text(),*fmat);
     }
 

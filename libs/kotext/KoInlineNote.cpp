@@ -183,8 +183,7 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     KoTextLoader loader(context);
     QTextCursor cursor(d->textFrame);
 
-    if (element.namespaceURI() == KoXmlNS::text && element.localName() == "note")
-    {
+    if (element.namespaceURI() == KoXmlNS::text && element.localName() == "note") {
 
         QString className = element.attributeNS(KoXmlNS::text, "note-class");
         if (className == "footnote") {
@@ -198,20 +197,16 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
         }
 
         d->id = element.attributeNS(KoXmlNS::text, "id");
-        for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling())
-        {
+        for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
             KoXmlElement ts = node.toElement();
             if (ts.namespaceURI() != KoXmlNS::text)
                 continue;
-            if (ts.localName() == "note-body")
-            {
+            if (ts.localName() == "note-body") {
                 loader.loadBody(ts, cursor);
             }
-            else if (ts.localName() == "note-citation")
-            {
+            else if (ts.localName() == "note-citation") {
                 d->label = ts.attributeNS(KoXmlNS::text, "label");
-                if (d->label.isEmpty())
-                {
+                if (d->label.isEmpty()) {
                     setAutoNumbering(true);
                     d->label = ts.text();
                 }
@@ -249,8 +244,7 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
             writer->addAttribute("text:note-class", "endnote");
         writer->addAttribute("text:id", d->id);
         writer->startElement("text:note-citation", false);
-        if (!autoNumbering())
-        {
+        if (!autoNumbering()) {
             writer->addAttribute("text:label", d->label);
         }
         writer->addTextNode(d->label);

@@ -25,12 +25,12 @@
 #include <kdebug.h>
 #include <KoResource.h>
 #include <qdom.h>
-#include "KoResourceModel.h"
+#include "kowidgets_export.h"
 
 /**
  * KoResourceTagging allows to add and delete tags to resources and also search reources using tags
  */
-class KoResourceTagging {
+class KOWIDGETS_EXPORT KoResourceTagging {
 
 public:
 
@@ -38,7 +38,7 @@ public:
     * Constructs a KoResourceTagging object
     *
     */
-    KoResourceTagging(KoResourceModel* model);
+    KoResourceTagging(const QString& extensions);
     ~KoResourceTagging();
 
     QStringList getAssignedTagsList(KoResource* resource);
@@ -60,7 +60,7 @@ private:
     QMultiHash<QString, QString> m_tagRepo;
     QHash<QString, int> m_tagList;
     QString m_tagsXMLFile;
-    KoResourceModel* m_model;
+    QString m_serverExtensions;
 
 
 };

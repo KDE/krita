@@ -64,7 +64,8 @@ public:
     void showButtons(bool show);
     
     KoResource* currentResource();
-    
+    void showTaggingBar( bool showSearchBar, bool showOpBar );
+
 signals:
     void resourceSelected(KoResource * resource);
     

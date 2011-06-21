@@ -85,7 +85,7 @@ public:
 
     void showGetHotNewStuff( bool showDownload, bool showUpload);
 
-    void showTagSearchBar( bool showSearchBar );
+    void showTaggingBar( bool showSearchBar, bool showOpBar );
 
     ///Set a proxy model with will be used to filter the resources
     void setProxyModel( QAbstractProxyModel* proxyModel );

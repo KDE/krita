@@ -44,17 +44,15 @@
 #include "KoResourceItemDelegate.h"
 #include "KoResourceModel.h"
 #include "KoResource.h"
-#include "KoResourceTagging.h"
 
 class KoResourceItemChooser::Private
 {
 public:
-    Private() : model(0), view(0), buttonGroup(0) , tagObject(0){}
+    Private() : model(0), view(0), buttonGroup(0) {}
     KoResourceModel* model;
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
     QComboBox *tagSearchCombo, *tagOpCombo;
-    KoResourceTagging *tagObject;
     KoResource *curResource;
     QString knsrcFile;
     QCompleter *tagCompleter;
@@ -131,14 +129,13 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->tagOpCombo = new QComboBox( this );
     d->tagOpCombo->setEditable( true );
     d->tagOpCombo->setEnabled( false );
+    d->tagOpCombo->hide();
 
     connect( d->tagOpCombo, SIGNAL(activated(QString)), this, SLOT(tagOpComboActivated(QString)));
     connect( d->tagOpCombo, SIGNAL(editTextChanged(QString)), this, SLOT(tagOpComboTextChanged(QString)));
 
     layout->addWidget( d->tagOpCombo );
     layout->addLayout( buttonLayout );
-
-    d->tagObject = new KoResourceTagging(d->model);
 
     d->tagCompleter = new QCompleter(getTagNamesList(""),this);
     d->tagSearchCombo->setCompleter(d->tagCompleter);
@@ -149,7 +146,6 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
 
 KoResourceItemChooser::~KoResourceItemChooser()
 {
-    delete d->tagObject;
     delete d;
 }
 
@@ -236,9 +232,10 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 #endif
 }
 
-void KoResourceItemChooser::showTagSearchBar(bool showSearchBar)
+void KoResourceItemChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
 {
     showSearchBar ? d->tagSearchCombo->show() : d->tagSearchCombo->hide();
+    showOpBar ? d->tagOpCombo->show() : d->tagOpCombo->hide();
 }
 
 void KoResourceItemChooser::setRowCount( int rowCount )
@@ -318,7 +315,7 @@ void KoResourceItemChooser::activated( const QModelIndex & index )
 
     if( d->curResource ) {
         emit resourceSelected( d->curResource );
-        setTagOpCombo(d->tagObject->getAssignedTagsList(d->curResource ));
+        setTagOpCombo(d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource ));
     }
 
     updateButtonState();
@@ -399,29 +396,29 @@ void KoResourceItemChooser::tagOpComboActivated(QString lineEditText)
         tagsListNew.removeAll("");
     }
 
-    QStringList tagsList = d->tagObject->getAssignedTagsList(d->curResource);
+    QStringList tagsList = d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource);
 
     foreach(const QString& tag, tagsListNew) {
         if(!tagsList.contains(tag)) {
-            d->tagObject->addTag(d->curResource, tag);
+            d->model->resourceServerAdapter()->addTag(d->curResource, tag);
         }
      }
 
      foreach(const QString& tag, tagsList) {
         if(!tagsListNew.contains(tag)) {
-            d->tagObject->delTag(d->curResource, tag);
+            d->model->resourceServerAdapter()->delTag(d->curResource, tag);
         }
      }
 
-    setTagOpCombo( d->tagObject->getAssignedTagsList(d->curResource));
+    setTagOpCombo( d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource));
 }
 
 void KoResourceItemChooser::tagOpComboTextChanged(QString lineEditText)
 {
     if(lineEditText.isEmpty()) {
-        QStringList assignedTagsList = d->tagObject->getAssignedTagsList(d->curResource);
+        QStringList assignedTagsList = d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource);
         foreach(const QString& tag, assignedTagsList) {
-            d->tagObject->delTag(d->curResource, tag);
+            d->model->resourceServerAdapter()->delTag(d->curResource, tag);
         }
     }
     d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
@@ -430,7 +427,7 @@ void KoResourceItemChooser::tagOpComboTextChanged(QString lineEditText)
 
 QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
 {
-    QStringList tagNamesList = d->tagObject->getTagNamesList();
+    QStringList tagNamesList = d->model->resourceServerAdapter()->getTagNamesList();
 
     if(lineEditText.contains(", ")) {
         QStringList tagsList = lineEditText.split(", ");
@@ -462,7 +459,7 @@ QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
 
 QStringList KoResourceItemChooser::getTaggedResourceFileNames(QString lineEditText)
 {
-    return d->tagObject->searchTag(lineEditText);
+    return d->model->resourceServerAdapter()->searchTag(lineEditText);
 }
 
 void KoResourceItemChooser::tagSearchComboActivated(QString lineEditText)

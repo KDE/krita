@@ -59,6 +59,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     m_d->uiWdgPaintOpPresets.viewModeButton->setMenu(menu);
     m_d->uiWdgPaintOpPresets.viewModeButton->setPopupMode(QToolButton::InstantPopup);
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(mode);
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->showTaggingBar(false,true);
     
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));

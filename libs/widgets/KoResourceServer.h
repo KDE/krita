@@ -39,6 +39,7 @@
 #include <qdom.h>
 #include "KoResource.h"
 #include "KoResourceServerObserver.h"
+#include "KoResourceTagging.h"
 
 #include "kowidgets_export.h"
 
@@ -101,11 +102,13 @@ public:
         , m_deleteResource(deleteResource)
         {
             blackListFile = KStandardDirs::locateLocal("data", "krita/" + type + ".blacklist");
+            m_tagObject = new KoResourceTagging(extensions);
         }
 
     virtual ~KoResourceServer()
         {
             qDeleteAll(m_resources);
+            delete m_tagObject;
         }
 
    /**
@@ -378,6 +381,31 @@ public:
         return blackListFileNames;
     }
 
+    QStringList getAssignedTagsList( KoResource* resource )
+    {
+        return m_tagObject->getAssignedTagsList(resource);
+    }
+
+    QStringList getTagNamesList()
+    {
+        return m_tagObject->getTagNamesList();
+    }
+
+    void addTag( KoResource* resource,const QString& tag)
+    {
+        m_tagObject->addTag(resource,tag);
+    }
+
+    void delTag( KoResource* resource,const QString& tag)
+    {
+        m_tagObject->delTag(resource,tag);
+    }
+
+    QStringList searchTag(const QString& lineEditText)
+    {
+        return m_tagObject->searchTag(lineEditText);
+    }
+
 protected:
 
     /**
@@ -484,7 +512,6 @@ protected:
        f.close();
 
     }
-
 private:
 
     QHash<QString, T*> m_resourcesByName;
@@ -495,6 +522,7 @@ private:
     bool m_deleteResource;
     QString blackListFile;
     QStringList blackListFileNames;
+    KoResourceTagging* m_tagObject;
 
 };
 

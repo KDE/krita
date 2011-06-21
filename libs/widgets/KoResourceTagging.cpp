@@ -24,11 +24,9 @@
 #include <kstandarddirs.h>
 #include <QFile>
 
-#include "KoResourceServerAdapter.h"
-
-KoResourceTagging::KoResourceTagging(KoResourceModel* model)
+KoResourceTagging::KoResourceTagging(const QString& extensions)
 {
-    m_model = model;
+    m_serverExtensions = extensions;
     m_tagsXMLFile = KStandardDirs::locateLocal("data", "krita/tags.xml");
     readXMLFile();
 }
@@ -254,7 +252,7 @@ void KoResourceTagging::readXMLFile()
 bool KoResourceTagging::isServerResource(QString resourceName)
 {
     bool removeChild = false;
-    QStringList extensionsList = m_model->resourceServerAdapter()->extensions().split(":");
+    QStringList extensionsList = m_serverExtensions.split(":");
     foreach (QString extension, extensionsList) {
         if(resourceName.contains(extension.remove("*"))) {
             removeChild = true;
@@ -262,9 +260,9 @@ bool KoResourceTagging::isServerResource(QString resourceName)
         }
     }
 
-    if(!removeChild && !resourceName.contains(".")) {
-        removeChild = true;
-    }
+    //if(!removeChild && !resourceName.contains(".")) {
+     //   removeChild = true;
+    //}
 
     return removeChild;
 }

@@ -5,6 +5,7 @@ Name[pt_BR]=Componente de gráfico do Calligra
 Name[sv]=Calligra Chart-komponent
 Name[uk]=Компонент діаграм Calligra
 Name[x-test]=xxCalligra Chart Componentxx
+Name[zh_TW]=Calligra Chart 組件
 X-KDE-Library=kchartpart
 Type=Service
 MimeType=application/vnd.oasis.opendocument.chart;application/vnd.oasis.opendocument.chart-template;application/x-kchart;

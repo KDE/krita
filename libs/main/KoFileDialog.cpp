@@ -108,7 +108,7 @@ void KoFileDialog::setSpecialMimeFilter(QStringList& mimeFilter,
         filterWidget()->setCurrentIndex(idxSpecialOutputFlag);
         slotChangedfilter(filterWidget()->currentIndex());
     }
-    // [Mainly KWord] Tell MS Office users that they can save in RTF!
+    // [Mainly Words] Tell MS Office users that they can save in RTF!
     int itemIndex = 0;
     QString compatString;
     foreach(const QString & tmpString, mimeFilter) {

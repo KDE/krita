@@ -33,7 +33,7 @@
 #include <QList>
 
 ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, ChangeListLevelCommand::CommandType type,
-                                               int coef, QUndoCommand *parent)
+                                               int coef, KUndo2Command *parent)
     : TextCommandBase(parent),
       m_type(type),
       m_coefficient(coef),
@@ -115,7 +115,7 @@ void ChangeListLevelCommand::undo()
     }
 }
 
-bool ChangeListLevelCommand::mergeWith(const QUndoCommand *)
+bool ChangeListLevelCommand::mergeWith(const KUndo2Command *)
 {
     return false;
 }

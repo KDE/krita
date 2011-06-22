@@ -102,7 +102,7 @@ void TreeTool::activate(ToolActivation, const QSet<KoShape*> &)
 void TreeTool::changeStructure(int index)
 {
     kDebug() << index;
-    QUndoCommand *command = new QUndoCommand;
+    KUndo2Command *command = new KUndo2Command;
     command->setText(i18n("Change Tree Structure"));
     foreach(TreeShape *tree, m_selectedTrees) {
         TreeShape::TreeType structure = static_cast<TreeShape::TreeType>(index);
@@ -115,7 +115,7 @@ void TreeTool::changeStructure(int index)
 void TreeTool::changeShape(int index)
 {
     kDebug() << index;
-//     QUndoCommand *command = new QUndoCommand;
+//     KUndo2Command *command = new KUndo2Command;
 //     command->setText(i18n("Change Background Shape"));
 //     foreach(TreeShape *tree, m_selectedTrees) {
 //         TreeShape::RootType type = static_cast<TreeShape::RootType>(index);
@@ -128,7 +128,7 @@ void TreeTool::changeShape(int index)
 void TreeTool::changeConnectionType(int index)
 {
     kDebug() << index;
-    QUndoCommand *command = new QUndoCommand;
+    KUndo2Command *command = new KUndo2Command;
     command->setText(i18n("Change Connection Type"));
     foreach(TreeShape *tree, m_selectedTrees) {
         KoConnectionShape::Type type = static_cast<KoConnectionShape::Type>(index);
@@ -189,7 +189,7 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
                 if (tree) {
                     kDebug() << "Adding child...";
                     KoShapeController *controller = canvas()->shapeController();
-                    QUndoCommand *command = new QUndoCommand;
+                    KUndo2Command *command = new KUndo2Command;
                     foreach(KoShape* shape, tree->addNewChild()) {
                         controller->addShapeDirect(shape, command);
                     }
@@ -206,7 +206,7 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
                     if (tree) {
                         kDebug() << "Adding child...";
                         KoShapeController *controller = canvas()->shapeController();
-                        QUndoCommand *command = new QUndoCommand;
+                        KUndo2Command *command = new KUndo2Command;
                         foreach(KoShape* shape, tree->addNewChild()) {
                             controller->addShapeDirect(shape, command);
                         }
@@ -224,7 +224,7 @@ void TreeTool::keyPressEvent(QKeyEvent *event)
                 if (tree) {
                     kDebug() << tree->shapeId();
                     KoShapeController *controller = canvas()->shapeController();
-                    QUndoCommand *command = new QUndoCommand;
+                    KUndo2Command *command = new KUndo2Command;
                     controller->removeShape(tree,command);
                     TreeShape *grandparent = dynamic_cast<TreeShape*>(tree->parent());
                     if (grandparent) {

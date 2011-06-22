@@ -51,8 +51,8 @@ public:
 };
 
 KoPathCombineCommand::KoPathCombineCommand(KoShapeControllerBase *controller,
-        const QList<KoPathShape*> &paths, QUndoCommand *parent)
-: QUndoCommand(parent)
+        const QList<KoPathShape*> &paths, KUndo2Command *parent)
+: KUndo2Command(parent)
 , d(new Private(controller, paths))
 {
     setText(i18n("Combine paths"));
@@ -75,7 +75,7 @@ KoPathCombineCommand::~KoPathCombineCommand()
 
 void KoPathCombineCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     if (! d->paths.size())
         return;
@@ -115,6 +115,6 @@ void KoPathCombineCommand::undo()
             parentIt++;
         }
     }
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }
 

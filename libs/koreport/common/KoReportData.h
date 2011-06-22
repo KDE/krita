@@ -1,4 +1,4 @@
-/* Koffice/Kexi report engine
+/* Calligra/Kexi report engine
  * Copyright (C) 2007-2010 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or

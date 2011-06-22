@@ -38,7 +38,7 @@ AddTextRangeCommand::AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextSha
 
 void AddTextRangeCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     if ( !m_shape )
         return;
@@ -58,7 +58,7 @@ void AddTextRangeCommand::redo()
 
 void AddTextRangeCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     if ( ! m_shape )
         return;

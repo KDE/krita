@@ -20,7 +20,7 @@
 #ifndef KOPACHANGEMASTERPAGECOMMAND_H
 #define KOPACHANGEMASTERPAGECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class KoPADocument;
 class KoPAPage;
@@ -29,7 +29,7 @@ class KoPAMasterPage;
 /**
  * Command to change the master page of a page
  */
-class KoPAChangeMasterPageCommand : public QUndoCommand
+class KoPAChangeMasterPageCommand : public KUndo2Command
 {
 public:
     KoPAChangeMasterPageCommand( KoPADocument *document, KoPAPage * page, KoPAMasterPage * masterPage );

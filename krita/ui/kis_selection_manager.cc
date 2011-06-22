@@ -492,7 +492,7 @@ void KisSelectionManager::selectAll()
     undoAdapter->beginMacro(i18n("Select All"));
 
     if (!image->globalSelection()) {
-        QUndoCommand *cmd = new KisSetGlobalSelectionCommand(image, 0, 0);
+        KUndo2Command *cmd = new KisSetGlobalSelectionCommand(image, 0, 0);
         undoAdapter->addCommand(cmd);
     }
 
@@ -513,7 +513,7 @@ void KisSelectionManager::deselect()
     if (!image) return;
 
     if (image->globalSelection()) {
-        QUndoCommand *cmd = new KisDeselectGlobalSelectionCommand(image);
+        KUndo2Command *cmd = new KisDeselectGlobalSelectionCommand(image);
         image->undoAdapter()->addCommand(cmd);
         selectionChanged();
     }
@@ -525,7 +525,7 @@ void KisSelectionManager::reselect()
     if (!image) return;
 
     if (image->globalSelection()) {
-        QUndoCommand *cmd = new KisReselectGlobalSelectionCommand(image);
+        KUndo2Command *cmd = new KisReselectGlobalSelectionCommand(image);
         image->undoAdapter()->addCommand(cmd);
         selectionChanged();
     }

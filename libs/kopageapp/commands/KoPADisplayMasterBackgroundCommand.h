@@ -22,7 +22,7 @@
 #ifndef KOPADISPLAYMASTERBACKGROUNDCOMMAND_H
 #define KOPADISPLAYMASTERBACKGROUNDCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include "kopageapp_export.h"
 
@@ -31,7 +31,7 @@ class KoPAPage;
 /**
  * Command to change if master shapes should be displayed
  */
-class KOPAGEAPP_EXPORT KoPADisplayMasterBackgroundCommand : public QUndoCommand
+class KOPAGEAPP_EXPORT KoPADisplayMasterBackgroundCommand : public KUndo2Command
 {
 public:
     KoPADisplayMasterBackgroundCommand( KoPAPage * page, bool display );

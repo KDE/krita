@@ -104,8 +104,8 @@ public:
 public:
     void paint(QPainter& gc, const KoViewConverter &converter);
 
-    void notifyCommandAdded(const QUndoCommand *);
-    void notifyCommandExecuted(const QUndoCommand *);
+    void notifyCommandAdded(const KUndo2Command *);
+    void notifyCommandExecuted(const KUndo2Command *);
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);

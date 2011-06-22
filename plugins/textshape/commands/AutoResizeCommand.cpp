@@ -26,7 +26,7 @@
 //#include <KAction>
 
 AutoResizeCommand::AutoResizeCommand(KoTextShapeData *shapeData, KoTextShapeData::ResizeMethod resizeMethod, bool enabled)
-    : QUndoCommand()
+    : KUndo2Command()
     , m_shapeData(shapeData)
     , m_resizeMethod(resizeMethod)
     , m_enabled(enabled)

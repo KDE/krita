@@ -19,7 +19,7 @@
 #ifndef SETTIMESIGNATURECOMMAND_H
 #define SETTIMESIGNATURECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 
 #include "../core/TimeSignature.h"
@@ -30,7 +30,7 @@ namespace MusicCore {
     class TimeSignature;
 }
 
-class SetTimeSignatureCommand : public QUndoCommand
+class SetTimeSignatureCommand : public KUndo2Command
 {
 public:
     SetTimeSignatureCommand(MusicShape* shape, MusicCore::Bar* bar, int beats, int beat);

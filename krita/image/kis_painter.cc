@@ -36,7 +36,7 @@
 #include <QRect>
 #include <QString>
 #include <QStringList>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <kis_debug.h>
 #include <klocale.h>

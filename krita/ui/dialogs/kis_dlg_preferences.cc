@@ -54,7 +54,7 @@
 #include <kpagewidgetmodel.h>
 #include <kicon.h>
 #include <kvbox.h>
-#include <kundostack.h>
+#include <kundo2stack.h>
 
 #include "widgets/squeezedcombobox.h"
 #include "kis_clipboard.h"

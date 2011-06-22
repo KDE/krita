@@ -58,10 +58,10 @@ KoApplication::KoApplication()
         : KApplication(initHack())
         , d(new KoApplicationPrivate)
 {
-    // Tell the iconloader about share/apps/koffice/icons
-    KIconLoader::global()->addAppDir("koffice");
+    // Tell the iconloader about share/apps/calligra/icons
+    KIconLoader::global()->addAppDir("calligra");
 
-    // Initialize all KOffice directories etc.
+    // Initialize all Calligra directories etc.
     KoGlobal::initialize();
 
     new KoApplicationAdaptor(this);

@@ -58,7 +58,7 @@ void TestPointRemoveCommand::redoUndoPointRemove()
     MockShapeController mockController;
     KoShapeController shapeController(0, &mockController);
 
-    QUndoCommand *cmd = KoPathPointRemoveCommand::createCommand(pd, &shapeController);
+    KUndo2Command *cmd = KoPathPointRemoveCommand::createCommand(pd, &shapeController);
     cmd->redo();
 
     QPainterPath ppath1(QPointF(0, 0));
@@ -107,7 +107,7 @@ void TestPointRemoveCommand::redoUndoSubpathRemove()
     MockShapeController mockController;
     KoShapeController shapeController(0, &mockController);
 
-    QUndoCommand *cmd1 = KoPathPointRemoveCommand::createCommand(pd, &shapeController);
+    KUndo2Command *cmd1 = KoPathPointRemoveCommand::createCommand(pd, &shapeController);
     cmd1->redo();
 
     QPainterPath ppath1(QPointF(0, 0));
@@ -124,7 +124,7 @@ void TestPointRemoveCommand::redoUndoSubpathRemove()
     pd2.append(KoPathPointData(&path1, path1.pathPointIndex(point21)));
     pd2.append(KoPathPointData(&path1, path1.pathPointIndex(point22)));
 
-    QUndoCommand *cmd2 = KoPathPointRemoveCommand::createCommand(pd2, &shapeController);
+    KUndo2Command *cmd2 = KoPathPointRemoveCommand::createCommand(pd2, &shapeController);
     cmd2->redo();
 
     QPainterPath ppath2(QPointF(0, 0));
@@ -175,7 +175,7 @@ void TestPointRemoveCommand::redoUndoShapeRemove()
     mockController.addShape(path2);
     KoShapeController shapeController(0, &mockController);
 
-    QUndoCommand *cmd = KoPathPointRemoveCommand::createCommand(pd, &shapeController);
+    KUndo2Command *cmd = KoPathPointRemoveCommand::createCommand(pd, &shapeController);
     cmd->redo();
     QVERIFY(!mockController.contains(path1));
     QVERIFY(!mockController.contains(path2));
@@ -239,7 +239,7 @@ void TestPointRemoveCommand::redoUndo()
     QPainterPath ppath2Org = path2->outline();
     QPainterPath ppath3Org = path3->outline();
 
-    QUndoCommand *cmd1 = KoPathPointRemoveCommand::createCommand(pd, &shapeController);
+    KUndo2Command *cmd1 = KoPathPointRemoveCommand::createCommand(pd, &shapeController);
     cmd1->redo();
 
     QVERIFY(mockController.contains(path1));
@@ -270,7 +270,7 @@ void TestPointRemoveCommand::redoUndo()
     pd2.append(KoPathPointData(path3, path3->pathPointIndex(point32)));
     pd2.append(KoPathPointData(path3, path3->pathPointIndex(point33)));
 
-    QUndoCommand *cmd2 = KoPathPointRemoveCommand::createCommand(pd2, &shapeController);
+    KUndo2Command *cmd2 = KoPathPointRemoveCommand::createCommand(pd2, &shapeController);
     cmd2->redo();
 
     QVERIFY(!mockController.contains(path1));

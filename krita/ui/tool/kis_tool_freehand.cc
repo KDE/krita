@@ -677,12 +677,15 @@ void KisToolFreehand::updateOutlineRect()
         canvas()->updateCanvas(m_oldOutlineRect);
     }
 
-#ifdef __GNUC__
-#warning "Remove adjusted() call -- it smells hacky"
-#else
-#pragma WARNING( "Remove adjusted() call -- it smells hacky" )
-#endif
-    m_oldOutlineRect = outlineDocRect.adjusted(-2,-2,2,2);
+    // This adjusted call is needed as we paint with a 3 pixel wide brush and the pen is outside the bounds of the path
+    // Pen uses view coordinates so we have to zoom the document value to match 2 pixel in view coordiates
+    // See BUG 275829
+    qreal zoomX;
+    qreal zoomY;
+    canvas()->viewConverter()->zoom(&zoomX, &zoomY);
+    qreal xoffset = 2.0/zoomX;
+    qreal yoffset = 2.0/zoomY;
+    m_oldOutlineRect = outlineDocRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
 
     canvas()->updateCanvas(m_oldOutlineRect);
 }

@@ -212,7 +212,7 @@ void KisCanvas2::resetCanvasTransformations()
     pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }
 
-void KisCanvas2::addCommand(QUndoCommand *command)
+void KisCanvas2::addCommand(KUndo2Command *command)
 {
     m_d->view->koDocument()->addCommand(command);
 }

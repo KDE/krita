@@ -2,7 +2,7 @@
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
- * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -477,7 +477,7 @@ void TextTool::createActions()
 
 #ifndef NDEBUG
 #include "tests/MockShapes.h"
-#include <KUndoStack>
+#include <kundo2stack.h>
 
 TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     : KoToolBase(canvas),
@@ -512,7 +512,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     m_changeTracker = new KoChangeTracker();
     KoTextDocument(document).setChangeTracker(m_changeTracker);
 
-    KoTextDocument(document).setUndoStack(new KUndoStack());
+    KoTextDocument(document).setUndoStack(new KUndo2Stack());
 
 #if 0
     KoTextDocumentLayout *layout = new KoTextDocumentLayout(document);
@@ -1417,7 +1417,7 @@ void TextTool::repaintCaret()
         TextShape *textShape = static_cast<TextShape*>(rootArea->associatedShape());
         if (!textShape)
             return;
-        if (!textShape->textShapeData());
+        if (!textShape->textShapeData())
             return;
 
         QRectF repaintRect = caretRect(textEditor->cursor());
@@ -1535,11 +1535,11 @@ void TextTool::addUndoCommand()
 {
     return;
 /*    if (! m_allowAddUndoCommand) return;
-    class UndoTextCommand : public QUndoCommand
+    class UndoTextCommand : public KUndo2Command
     {
     public:
-        UndoTextCommand(QTextDocument *document, TextTool *tool, QUndoCommand *parent = 0)
-                : QUndoCommand(i18n("Text"), parent),
+        UndoTextCommand(QTextDocument *document, TextTool *tool, KUndo2Command *parent = 0)
+                : KUndo2Command(i18n("Text"), parent),
                 m_document(document),
                 m_tool(tool) {
         }
@@ -1585,7 +1585,7 @@ void TextTool::addUndoCommand()
         canvas()->addCommand(new UndoTextCommand(m_textShapeData->document(), this));
 */}
 
-void TextTool::addCommand(QUndoCommand *command)
+void TextTool::addCommand(KUndo2Command *command)
 {
 /*    m_currentCommand = command;
     TextCommandBase *cmd = dynamic_cast<TextCommandBase*>(command);
@@ -1600,7 +1600,7 @@ void TextTool::addCommand(QUndoCommand *command)
     m_textEditor.data()->addCommand(command);
 }
 
-void TextTool::startEditing(QUndoCommand* command)
+void TextTool::startEditing(KUndo2Command* command)
 {
     m_currentCommand = command;
     m_currentCommandHasChildren = true;
@@ -1899,16 +1899,16 @@ void TextTool::startMacro(const QString &title)
 
     if (m_currentCommand) return;
 
-    class MacroCommand : public QUndoCommand
+    class MacroCommand : public KUndo2Command
     {
     public:
-        MacroCommand(const QString &title) : QUndoCommand(title), m_first(true) {}
+        MacroCommand(const QString &title) : KUndo2Command(title), m_first(true) {}
         virtual void redo() {
             if (! m_first)
-                QUndoCommand::redo();
+                KUndo2Command::redo();
             m_first = false;
         }
-        virtual bool mergeWith(const QUndoCommand *) {
+        virtual bool mergeWith(const KUndo2Command *) {
             return false;
         }
         bool m_first;
@@ -2127,7 +2127,7 @@ void TextTool::readConfig()
         QColor bgColor, defaultColor;
         QString changeAuthor;
         int changeSaveFormat = KoChangeTracker::DELTAXML;
-        KConfigGroup interface = KoGlobal::kofficeConfig()->group("Change-Tracking");
+        KConfigGroup interface = KoGlobal::calligraConfig()->group("Change-Tracking");
         if (interface.exists()) {
             bgColor = interface.readEntry("insertionBgColor", defaultColor);
             m_changeTracker->setInsertionBgColor(bgColor);
@@ -2151,7 +2151,7 @@ void TextTool::readConfig()
 void TextTool::writeConfig()
 {
     if (m_changeTracker) {
-        KConfigGroup interface = KoGlobal::kofficeConfig()->group("Change-Tracking");
+        KConfigGroup interface = KoGlobal::calligraConfig()->group("Change-Tracking");
         interface.writeEntry("insertionBgColor", m_changeTracker->getInsertionBgColor());
         interface.writeEntry("deletionBgColor", m_changeTracker->getDeletionBgColor());
         interface.writeEntry("formatChangeBgColor", m_changeTracker->getFormatChangeBgColor());

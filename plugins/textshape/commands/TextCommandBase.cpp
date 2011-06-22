@@ -22,14 +22,14 @@
 
 void TextCommandBase::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     if (m_tool)
         m_tool->m_allowAddUndoCommand = false;
 }
 
 void TextCommandBase::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     if (m_tool)
         m_tool->m_allowAddUndoCommand = false;
 }

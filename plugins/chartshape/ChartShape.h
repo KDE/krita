@@ -27,7 +27,7 @@
 // Qt
 #include <Qt>
 
-// KOffice
+// Calligra
 #include <KoShapeContainer.h>
 #include <KoFrameShape.h>
 
@@ -95,7 +95,7 @@ const char * odfCharttype(int charttype);
 
 class CHARTSHAPELIB_EXPORT ChartShape
     : public QObject
-    , public KoChart::ChartInterface // The public interface within KOffice
+    , public KoChart::ChartInterface // The public interface within Calligra
     , public KoFrameShape            // For saving as a frame
     , public KoShapeContainer        // The chart shape embeds other shapes.
 {

@@ -20,7 +20,7 @@
 
 #include "kis_debug.h"
 #include "KoDocument.h"
-#include <KUndoStack>
+#include <kundo2stack.h>
 
 KisUndoAdapter::KisUndoAdapter(KoDocument* doc): m_doc(doc)
 {
@@ -42,7 +42,7 @@ void KisUndoAdapter::removeCommandHistoryListener(KisCommandHistoryListener * l)
         m_undoListeners.remove(index);
 }
 
-void KisUndoAdapter::notifyCommandAdded(const QUndoCommand *command)
+void KisUndoAdapter::notifyCommandAdded(const KUndo2Command *command)
 {
     if (!command) {
         kWarning() << "Empty command!";
@@ -54,7 +54,7 @@ void KisUndoAdapter::notifyCommandAdded(const QUndoCommand *command)
 
 }
 
-void KisUndoAdapter::notifyCommandExecuted(const QUndoCommand *command)
+void KisUndoAdapter::notifyCommandExecuted(const KUndo2Command *command)
 {
     if (!command) {
         kWarning() << "Empty command!";
@@ -66,12 +66,12 @@ void KisUndoAdapter::notifyCommandExecuted(const QUndoCommand *command)
 
 }
 
-const QUndoCommand * KisUndoAdapter::presentCommand()
+const KUndo2Command * KisUndoAdapter::presentCommand()
 {
     return m_doc->undoStack()->command(m_doc->undoStack()->index() - 1);
 }
 
-void KisUndoAdapter::addCommand(QUndoCommand *command)
+void KisUndoAdapter::addCommand(KUndo2Command *command)
 {
     m_doc->addCommand(command);
     notifyCommandAdded(command);

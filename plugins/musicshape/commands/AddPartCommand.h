@@ -19,7 +19,7 @@
 #ifndef ADDPARTCOMMAND_H
 #define ADDPARTCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 namespace MusicCore {
     class Sheet;
@@ -27,7 +27,7 @@ namespace MusicCore {
 }
 class MusicShape;
 
-class AddPartCommand : public QUndoCommand {
+class AddPartCommand : public KUndo2Command {
 public:
     AddPartCommand(MusicShape* shape);
     virtual void redo();

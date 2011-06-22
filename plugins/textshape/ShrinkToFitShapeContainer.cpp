@@ -32,6 +32,7 @@ ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoReso
     setPosition(childShape->position());
     setSize(childShape->size());
     setZIndex(childShape->zIndex());
+    setRunThrough(childShape->runThrough());
     rotate(childShape->rotation());
     //setTransformation(childShape->transformation());
 

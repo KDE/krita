@@ -1,4 +1,4 @@
-/* This file is part of the KOffice libraries
+/* This file is part of the Calligra libraries
    Copyright (C) 2001 Werner Trobin <trobin@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
 
 // Better put all those internal classes in some namespace to avoid clashes
 // as the names are quite generic
-namespace KOfficeFilter
+namespace CalligraFilter
 {
 
 /**
@@ -232,6 +232,6 @@ void PriorityQueue<T>::buildHeap()
         heapify(i);
 }
 
-} // namespace KOffice
+} // namespace Calligra
 
 #endif // priority_queue_h

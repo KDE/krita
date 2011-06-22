@@ -25,13 +25,13 @@
 
 #include "flake_export.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 
 class KoShape;
 
 /// The undo / redo command for shape sizing.
-class FLAKE_EXPORT KoShapeSizeCommand : public QUndoCommand
+class FLAKE_EXPORT KoShapeSizeCommand : public KUndo2Command
 {
 public:
     /**
@@ -42,7 +42,7 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeSizeCommand(const QList<KoShape*> &shapes, const QList<QSizeF> &previousSizes,
-            const QList<QSizeF> &newSizes, QUndoCommand *parent = 0);
+            const QList<QSizeF> &newSizes, KUndo2Command *parent = 0);
     ~KoShapeSizeCommand();
 
     /// redo the command

@@ -1,6 +1,6 @@
 # The following variables should be set: KOPROPERTY_TARGETNAME, KOPROPERTY_LIBS, KOPROPERTY_LIB_VERSION, KOPROPERTY_LIB_SOVERSION.
-# Set KOPROPERTY_USE_KOLIBS to TRUE if extra features that use KOffice libraries should be compiled-in.
-# See koffice/kexi/CMakeLists.txt for example.
+# Set KOPROPERTY_USE_KOLIBS to TRUE if extra features that use Calligra libraries should be compiled-in.
+# See calligra/kexi/CMakeLists.txt for example.
 # TODO remove when we move to independent place
 
 add_subdirectory( test )

@@ -101,7 +101,7 @@ public:
     virtual bool loadOdf(KoOdfReadStore &odfStore) = 0;
 
     /**
-     *  Reimplement this method to save the contents of your %KOffice document,
+     *  Reimplement this method to save the contents of your %Calligra document,
      *  using the ODF format.
      */
     virtual bool saveOdf(SavingContext &documentContext) = 0;

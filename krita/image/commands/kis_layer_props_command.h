@@ -22,7 +22,7 @@
 
 #include <krita_export.h>
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QSize>
 #include <QBitArray>
 #include "kis_types.h"

@@ -143,7 +143,7 @@ bool StarShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &c
     if (e.localName() == "regular-polygon" && e.namespaceURI() == KoXmlNS::draw)
         return true;
     return (e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw
-            && e.attributeNS(KoXmlNS::draw, "engine", "") == "koffice:star");
+            && e.attributeNS(KoXmlNS::draw, "engine", "") == "calligra:star");
 }
 
 QList<KoShapeConfigWidgetBase*> StarShapeFactory::createShapeOptionPanels()

@@ -30,8 +30,8 @@
 #include <kdebug.h>
 
 DeleteTableRowCommand::DeleteTableRowCommand(KoTextEditor *te, QTextTable *t, int changeId,
-                                             QUndoCommand *parent) :
-    QUndoCommand (parent)
+                                             KUndo2Command *parent) :
+    KUndo2Command (parent)
     ,m_first(true)
     ,m_textEditor(te)
     ,m_table(t)
@@ -48,7 +48,7 @@ void DeleteTableRowCommand::undo()
             carsManager.insertRows(m_selectionRow + i, 1, m_deletedStyles.at(i));
         }
     }
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }
 
 void DeleteTableRowCommand::redo()
@@ -58,7 +58,7 @@ void DeleteTableRowCommand::redo()
         if (!m_changeId) {
             carsManager.removeRows(m_selectionRow, m_selectionRowSpan);
         }
-        QUndoCommand::redo();
+        KUndo2Command::redo();
     } else {
         m_first = false;
         int selectionColumn;

@@ -27,7 +27,7 @@
 #include <QString>
 #include <QTextDocument>
 
-// KOffice
+// Calligra
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeRegistry.h>

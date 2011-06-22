@@ -61,7 +61,7 @@ public:
     KoTextEditor *q;
     QTextCursor caret;
     QTextDocument *document;
-    QUndoCommand *headCommand;
+    KUndo2Command *headCommand;
     QString commandTitle;
     KoText::Direction direction;
     bool isBidiDocument;

@@ -19,14 +19,14 @@
 #ifndef ADDBARSCOMMAND_H
 #define ADDBARSCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 namespace MusicCore {
     class Sheet;
 }
 class MusicShape;
 
-class AddBarsCommand : public QUndoCommand {
+class AddBarsCommand : public KUndo2Command {
 public:
     AddBarsCommand(MusicShape* shape, int bars);
     virtual void redo();

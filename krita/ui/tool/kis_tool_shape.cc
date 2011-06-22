@@ -136,7 +136,7 @@ void KisToolShape::addShape(KoShape* shape)
             shape->setBackground(0);
             break;
     }
-    QUndoCommand * cmd = canvas()->shapeController()->addShape(shape);
+    KUndo2Command * cmd = canvas()->shapeController()->addShape(shape);
     canvas()->addCommand(cmd);
 }
 

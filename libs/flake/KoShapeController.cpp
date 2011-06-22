@@ -49,7 +49,7 @@ public:
     KoCanvasBase *canvas;
     KoShapeControllerBase *shapeController;
 
-    QUndoCommand* addShape(KoShape *shape, bool showDialog, QUndoCommand *parent) {
+    KUndo2Command* addShape(KoShape *shape, bool showDialog, KUndo2Command *parent) {
         Q_ASSERT(canvas->shapeManager());
 
         if (showDialog) {
@@ -130,22 +130,22 @@ KoShapeController::~KoShapeController()
     delete d;
 }
 
-QUndoCommand* KoShapeController::addShape(KoShape *shape, QUndoCommand *parent)
+KUndo2Command* KoShapeController::addShape(KoShape *shape, KUndo2Command *parent)
 {
     return d->addShape(shape, true, parent);
 }
 
-QUndoCommand* KoShapeController::addShapeDirect(KoShape *shape, QUndoCommand *parent)
+KUndo2Command* KoShapeController::addShapeDirect(KoShape *shape, KUndo2Command *parent)
 {
     return d->addShape(shape, false, parent);
 }
 
-QUndoCommand* KoShapeController::removeShape(KoShape *shape, QUndoCommand *parent)
+KUndo2Command* KoShapeController::removeShape(KoShape *shape, KUndo2Command *parent)
 {
     return new KoShapeDeleteCommand(d->shapeController, shape, parent);
 }
 
-QUndoCommand* KoShapeController::removeShapes(const QList<KoShape*> &shapes, QUndoCommand *parent)
+KUndo2Command* KoShapeController::removeShapes(const QList<KoShape*> &shapes, KUndo2Command *parent)
 {
     return new KoShapeDeleteCommand(d->shapeController, shapes, parent);
 }

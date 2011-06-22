@@ -29,7 +29,7 @@
 #include <kpluginfactory.h>
 #include <klocale.h>
 
-// KOffice
+// Calligra
 #include <KoProperties.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>

@@ -21,24 +21,24 @@
 #ifndef KOPATHBASECOMMAND_H
 #define KOPATHBASECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QSet>
 
 class KoPathShape;
 
 /// the base command for commands altering a path shape
-class KoPathBaseCommand : public QUndoCommand
+class KoPathBaseCommand : public KUndo2Command
 {
 public:
     /**
      * @param parent the parent command used for macro commands
      */
-    explicit KoPathBaseCommand(QUndoCommand *parent = 0);
+    explicit KoPathBaseCommand(KUndo2Command *parent = 0);
 
     /** initialize the base command with a single shape
      * @param parent the parent command used for macro commands
      */
-    explicit KoPathBaseCommand(KoPathShape *shape, QUndoCommand *parent = 0);
+    explicit KoPathBaseCommand(KoPathShape *shape, KUndo2Command *parent = 0);
 
 protected:
     /**

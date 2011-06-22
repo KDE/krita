@@ -87,7 +87,7 @@ void MusicTool::mouseReleaseEvent( KoPointerEvent* )
 {
 }
 
-void MusicTool::addCommand(QUndoCommand* command)
+void MusicTool::addCommand(KUndo2Command* command)
 {
     canvas()->addCommand(command);
 }

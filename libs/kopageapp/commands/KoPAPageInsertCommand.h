@@ -20,7 +20,7 @@
 #ifndef KOPAPAGEINSERTCOMMAND_H
 #define KOPAPAGEINSERTCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include "kopageapp_export.h"
 
@@ -30,10 +30,10 @@ class KoPAPageBase;
 /**
  * Command for inserting a page into a Document
  */
-class KOPAGEAPP_TEST_EXPORT KoPAPageInsertCommand : public QUndoCommand
+class KOPAGEAPP_TEST_EXPORT KoPAPageInsertCommand : public KUndo2Command
 {
 public:
-    KoPAPageInsertCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, QUndoCommand *parent = 0 );
+    KoPAPageInsertCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent = 0 );
     virtual ~KoPAPageInsertCommand();
 
     /// redo the command

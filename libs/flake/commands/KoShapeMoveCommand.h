@@ -25,14 +25,14 @@
 
 #include "flake_export.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 #include <QPointF>
 
 class KoShape;
 
 /// The undo / redo command for shape moving.
-class FLAKE_EXPORT KoShapeMoveCommand : public QUndoCommand
+class FLAKE_EXPORT KoShapeMoveCommand : public KUndo2Command
 {
 public:
     /**
@@ -45,7 +45,7 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions,
-                       QUndoCommand *parent = 0);
+                       KUndo2Command *parent = 0);
     ~KoShapeMoveCommand();
     /// redo the command
     void redo();

@@ -24,8 +24,8 @@
 #include "KoPADocument.h"
 #include "KoPAPageBase.h"
 
-KoPAPageInsertCommand::KoPAPageInsertCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, QUndoCommand *parent )
-: QUndoCommand( parent )
+KoPAPageInsertCommand::KoPAPageInsertCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent )
+: KUndo2Command( parent )
 , m_document( document )
 , m_page( page )
 , m_after( after )

@@ -41,7 +41,7 @@ class QTextBlockFormat;
 class QTextDocument;
 class QTextDocumentFragment;
 class QString;
-class QUndoCommand;
+class KUndo2Command;
 
 class KOTEXT_EXPORT KoTextEditor: public KoToolSelection
 {
@@ -75,10 +75,10 @@ QTextCursor ( const QTextCursor & cursor )
     bool operator>=(const QTextCursor &other) const;
 
 public slots:
-    ///This should be used only as read-only cursor or within a QUndoCommand sub-class which will be added to the textEditor with addCommand. For examples of proper implementation of such undoCommands, see the TextShape commands.
+    ///This should be used only as read-only cursor or within a KUndo2Command sub-class which will be added to the textEditor with addCommand. For examples of proper implementation of such undoCommands, see the TextShape commands.
     QTextCursor* cursor();
 
-    void addCommand(QUndoCommand *command, bool addCommandToStack = true);
+    void addCommand(KUndo2Command *command, bool addCommandToStack = true);
 
     void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
 

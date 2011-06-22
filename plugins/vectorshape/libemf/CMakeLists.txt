@@ -22,7 +22,7 @@ set(libemf_LIB_SRCS
 
 #target_link_libraries(libemf  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} )
 
-#set_target_properties(libemf PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+#set_target_properties(libemf PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 
 ########### install files ###############

@@ -26,8 +26,8 @@
 
 #include "VectorShape.h"
 
-ChangeVectorDataCommand::ChangeVectorDataCommand(VectorShape *shape, QByteArray &newImageData, QUndoCommand *parent)
-    : QUndoCommand(parent)
+ChangeVectorDataCommand::ChangeVectorDataCommand(VectorShape *shape, QByteArray &newImageData, KUndo2Command *parent)
+    : KUndo2Command(parent)
     , m_shape(shape)
 {
     Q_ASSERT( shape );

@@ -426,7 +426,7 @@ void Autocorrect::autoFormatBulletList()
 void Autocorrect::replaceTypographicQuotes()
 {
     /* this method is ported from lib/kotext/KoAutoFormat.cpp KoAutoFormat::doTypographicQuotes
-     * from KOffice 1.x branch */
+     * from Calligra 1.x branch */
 
     if (!(m_replaceDoubleQuotes && m_word.contains('"')) &&
             !(m_replaceSingleQuotes && m_word.contains('\''))) return;
@@ -557,7 +557,7 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
     QString word = _word;
 
     /* this method is ported from lib/kotext/KoAutoFormat.cpp KoAutoFormat::doAutoDetectUrl
-     * from KOffice 1.x branch */
+     * from Calligra 1.x branch */
     // kDebug() <<"link:" << word;
 
     char link_type = 0;
@@ -606,7 +606,7 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
     }
 
     if (pos != -1) {
-        // A URL inside e.g. quotes (like "http://www.koffice.org" with the quotes) shouldn't include the quote in the URL.
+        // A URL inside e.g. quotes (like "http://www.calligra-suite.org" with the quotes) shouldn't include the quote in the URL.
 	    while (!word.at(word.length()-1).isLetter() &&  !word.at(word.length()-1).isDigit() && word.at(word.length()-1) != '/')
             word.truncate(word.length() - 1);
         word.remove(0, pos);
@@ -628,7 +628,7 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
 
 void Autocorrect::readConfig()
 {
-    KConfigGroup interface = KoGlobal::kofficeConfig()->group("Autocorrect");
+    KConfigGroup interface = KoGlobal::calligraConfig()->group("Autocorrect");
 
     m_enabled->setChecked(interface.readEntry("enabled", m_enabled->isChecked()));
     m_uppercaseFirstCharOfSentence = interface.readEntry("UppercaseFirstCharOfSentence", m_uppercaseFirstCharOfSentence);
@@ -654,7 +654,7 @@ void Autocorrect::readConfig()
 
 void Autocorrect::writeConfig()
 {
-    KConfigGroup interface = KoGlobal::kofficeConfig()->group("Autocorrect");
+    KConfigGroup interface = KoGlobal::calligraConfig()->group("Autocorrect");
     interface.writeEntry("enabled", m_enabled->isChecked());
     interface.writeEntry("UppercaseFirstCharOfSentence", m_uppercaseFirstCharOfSentence);
     interface.writeEntry("FixTwoUppercaseChars", m_fixTwoUppercaseChars);
@@ -677,23 +677,23 @@ void Autocorrect::writeConfig()
 
 void Autocorrect::readAutocorrectXmlEntry()
 {
-    // Taken from KOffice 1.x KoAutoFormat.cpp
+    // Taken from Calligra 1.x KoAutoFormat.cpp
     KLocale *locale = KGlobal::locale();
     QString kdelang = locale->languageList().first();
     kdelang.remove(QRegExp("@.*"));
 
     QString fname;
     if (!m_autocorrectLang.isEmpty())
-        fname = KGlobal::dirs()->findResource("data", "koffice/autocorrect/" + m_autocorrectLang + ".xml");
+        fname = KGlobal::dirs()->findResource("data", "calligra/autocorrect/" + m_autocorrectLang + ".xml");
     if (m_autocorrectLang != "all_languages") {
         if (fname.isEmpty() && !kdelang.isEmpty())
-            fname = KGlobal::dirs()->findResource("data", "koffice/autocorrect/" + kdelang + ".xml");
+            fname = KGlobal::dirs()->findResource("data", "calligra/autocorrect/" + kdelang + ".xml");
         if (fname.isEmpty() && kdelang.contains("_")) {
             kdelang.remove( QRegExp( "_.*" ) );
-            fname = KGlobal::dirs()->findResource("data", "koffice/autocorrect/" + kdelang + ".xml");
+            fname = KGlobal::dirs()->findResource("data", "calligra/autocorrect/" + kdelang + ".xml");
         }
         if (fname.isEmpty())
-            fname = KGlobal::dirs()->findResource("data", "koffice/autocorrect/autocorrect.xml");
+            fname = KGlobal::dirs()->findResource("data", "calligra/autocorrect/autocorrect.xml");
     }
     if (m_autocorrectLang.isEmpty())
         m_autocorrectLang = kdelang;

@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include "kis_benchmark_values.h"
 
 #include "kis_paint_device.h"

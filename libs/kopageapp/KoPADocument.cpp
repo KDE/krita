@@ -560,7 +560,7 @@ void KoPADocument::removePage( KoPAPageBase * page )
     addCommand( command );
 }
 
-void KoPADocument::pageRemoved( KoPAPageBase * page, QUndoCommand * parent )
+void KoPADocument::pageRemoved( KoPAPageBase * page, KUndo2Command * parent )
 {
     Q_UNUSED( page );
     Q_UNUSED( parent );

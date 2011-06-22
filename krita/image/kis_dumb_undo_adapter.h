@@ -21,7 +21,7 @@
 
 #include "kis_undo_adapter.h"
 
-class QUndoCommand;
+class KUndo2Command;
 
 class KRITAIMAGE_EXPORT KisDumbUndoAdapter : public KisUndoAdapter
 {
@@ -30,9 +30,9 @@ public:
     virtual ~KisDumbUndoAdapter();
 
 public:
-    const QUndoCommand * presentCommand();
+    const KUndo2Command * presentCommand();
 
-    void addCommand(QUndoCommand *command);
+    void addCommand(KUndo2Command *command);
     void undoLastCommand();
 
     void beginMacro(const QString& macroName);

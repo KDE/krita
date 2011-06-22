@@ -20,19 +20,19 @@
 #ifndef DETACHTEXTFROMPATHCOMMAND_H
 #define DETACHTEXTFROMPATHCOMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 #include <QtGui/QPainterPath>
 
 class ArtisticTextShape;
 class KoPathShape;
 
-class DetachTextFromPathCommand : public QUndoCommand
+class DetachTextFromPathCommand : public KUndo2Command
 {
 public:
-    explicit DetachTextFromPathCommand( ArtisticTextShape * textShape, QUndoCommand * parent = 0 );
-    /// reimplemented from QUndoCommand
+    explicit DetachTextFromPathCommand( ArtisticTextShape * textShape, KUndo2Command * parent = 0 );
+    /// reimplemented from KUndo2Command
     virtual void redo();
-    /// reimplemented from QUndoCommand
+    /// reimplemented from KUndo2Command
     virtual void undo();
 private:
     ArtisticTextShape * m_textShape;

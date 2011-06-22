@@ -49,7 +49,7 @@ public:
     virtual ~TreeShapeMoveStrategy() {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    QUndoCommand* createCommand();
+    KUndo2Command* createCommand();
     void finishInteraction( Qt::KeyboardModifiers modifiers );
     virtual void paint( QPainter &painter, const KoViewConverter &converter);
 
@@ -67,7 +67,7 @@ private:
     KoShape *m_movable;
     KoConnectionShape *m_connector;
     KoShape *m_ballastRoot, *m_ballastTree, *m_ballastConnector;
-    QUndoCommand *m_command;
+    KUndo2Command *m_command;
 };
 
 #endif

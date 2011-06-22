@@ -1216,7 +1216,7 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
             m_strikeOutType = S_SIMPLE;
         else if( strikeOutType =="thick-line")
             m_strikeOutType = S_SIMPLE_BOLD;
-        // not supported by KWord: "slash" and "X"
+        // not supported by Words: "slash" and "X"
         // not supported by OO: stylelines (solid, dash, dot, dashdot, dashdotdot)
     }
     */

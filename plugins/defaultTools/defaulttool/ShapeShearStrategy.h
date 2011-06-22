@@ -49,7 +49,7 @@ public:
     virtual ~ShapeShearStrategy() {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    QUndoCommand* createCommand();
+    KUndo2Command* createCommand();
     void finishInteraction( Qt::KeyboardModifiers modifiers ) { Q_UNUSED( modifiers ); }
     virtual void paint( QPainter &painter, const KoViewConverter &converter);
 

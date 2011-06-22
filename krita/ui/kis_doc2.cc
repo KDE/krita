@@ -44,10 +44,10 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
-#include <KUndoStack>
+#include <kundo2stack.h>
 #include <kstandarddirs.h>
 
-// KOffice
+// Calligra
 #include <KoApplication.h>
 #include <KoCanvasBase.h>
 #include <KoColorProfile.h>
@@ -553,7 +553,7 @@ KisUndoAdapter* KisDoc2::undoAdapter() const
 
 void KisDoc2::undoIndexChanged(int idx)
 {
-    const QUndoCommand* command = undoStack()->command(idx);
+    const KUndo2Command* command = undoStack()->command(idx);
     if (command) {
         m_d->undoAdapter->notifyCommandExecuted(undoStack()->command(idx));
     }

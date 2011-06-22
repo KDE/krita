@@ -606,11 +606,11 @@ void TestXmlReader::testDocument()
     QBuffer xmldevice;
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
-    xmlstream << "<koffice>";
-    xmlstream << "  <kword/>\n";
+    xmlstream << "<calligra>";
+    xmlstream << "  <words/>\n";
     xmlstream << "  <kpresenter/>\n";
     xmlstream << "  <krita/>\n";
-    xmlstream << "</koffice>";
+    xmlstream << "</calligra>";
     xmldevice.close();
 
     KoXmlDocument doc;

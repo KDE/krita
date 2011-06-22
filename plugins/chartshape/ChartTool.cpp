@@ -36,7 +36,7 @@
 #include <KIcon>
 #include <KDebug>
 
-// KOffice
+// Calligra
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>

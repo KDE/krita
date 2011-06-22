@@ -600,8 +600,8 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "left")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "left");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "left")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "left");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "left")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "left");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Left, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -610,8 +610,8 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "top")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "top");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "top")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "top");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "top")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "top");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Top, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -621,8 +621,8 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "right")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "right");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "right")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "right");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "right")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "right");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Right, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -631,8 +631,8 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "bottom")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "bottom");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "bottom")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "bottom");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "bottom")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "bottom");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Bottom, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -641,16 +641,16 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-tl-br")) {
         QString border = styleStack.property(KoXmlNS::style, "diagonal-tl-br");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "tl-br")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "tl-br");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "tl-br")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "tl-br");
         }
         setEdge(TopLeftToBottomRight, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
     }
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-bl-tr")) {
         QString border = styleStack.property(KoXmlNS::style, "diagonal-bl-tr");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "bl-tr")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "bl-tr");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "bl-tr")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "bl-tr");
         }
         setEdge(BottomLeftToTopRight, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
     }
@@ -922,8 +922,8 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "left")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "left");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "left")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "left");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "left")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "left");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Left, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -932,8 +932,8 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "top")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "top");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "top")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "top");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "top")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "top");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Top, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -943,8 +943,8 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "right")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "right");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "right")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "right");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "right")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "right");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Right, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -953,8 +953,8 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "bottom")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "bottom");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "bottom")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "bottom");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "bottom")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "bottom");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             setEdge(Bottom, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
@@ -963,16 +963,16 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-tl-br")) {
         QString border = styleStack.property(KoXmlNS::style, "diagonal-tl-br");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "tl-br")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "tl-br");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "tl-br")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "tl-br");
         }
         setEdge(TopLeftToBottomRight, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
     }
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-bl-tr")) {
         QString border = styleStack.property(KoXmlNS::style, "diagonal-bl-tr");
         QString style = border.section(' ', 1, 1);
-        if (styleStack.hasProperty(KoXmlNS::koffice, "specialborder", "bl-tr")) {
-            style = styleStack.property(KoXmlNS::koffice, "specialborder", "bl-tr");
+        if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "bl-tr")) {
+            style = styleStack.property(KoXmlNS::calligra, "specialborder", "bl-tr");
         }
         setEdge(BottomLeftToTopRight, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
     }

@@ -20,12 +20,12 @@
 #ifndef STARSHAPECONFIGCOMMAND_H
 #define STARSHAPECONFIGCOMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 class StarShape;
 
 /// The undo / redo command for configuring a star shape
-class StarShapeConfigCommand : public QUndoCommand
+class StarShapeConfigCommand : public KUndo2Command
 {
 public:
     /**
@@ -37,7 +37,7 @@ public:
      * @param convex indicates whether the star is convex or not
      * @param parent the optional parent command
      */
-    StarShapeConfigCommand(StarShape *star, uint cornerCount, qreal innerRadius, qreal outerRadius, bool convex, QUndoCommand *parent = 0);
+    StarShapeConfigCommand(StarShape *star, uint cornerCount, qreal innerRadius, qreal outerRadius, bool convex, KUndo2Command *parent = 0);
     /// redo the command
     virtual void redo();
     /// revert the actions done in redo

@@ -28,7 +28,7 @@
 //KDE includes
 #include <klocale.h>
 
-//KOffice includes
+//Calligra includes
 #include <KoPACanvas.h>
 #include <KoResourceManager.h>
 #include <KoPAView.h>

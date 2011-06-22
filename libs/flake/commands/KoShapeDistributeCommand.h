@@ -26,11 +26,11 @@
 
 #include "flake_export.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 
 /// The undo / redo command for distributing shapes
-class FLAKE_EXPORT KoShapeDistributeCommand : public QUndoCommand
+class FLAKE_EXPORT KoShapeDistributeCommand : public KUndo2Command
 {
 public:
     /// The different options to ditribute with this command
@@ -52,7 +52,7 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeDistributeCommand(const QList<KoShape*> &shapes, Distribute distribute,
-            const QRectF &boundingRect, QUndoCommand *parent = 0);
+            const QRectF &boundingRect, KUndo2Command *parent = 0);
     virtual ~KoShapeDistributeCommand();
     /// redo the command
     virtual void redo();

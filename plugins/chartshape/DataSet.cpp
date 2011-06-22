@@ -51,7 +51,7 @@
 #include "Surface.h"
 #include "OdfLoadingHelper.h"
 
-// KOffice
+// Calligra
 #include <KoXmlNS.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoGenStyle.h>

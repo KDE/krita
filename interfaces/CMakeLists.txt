@@ -12,7 +12,7 @@ kde4_add_library(kochart SHARED ${kochart_LIB_SRCS})
 
 target_link_libraries(kochart komain )
 
-set_target_properties(kochart PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kochart PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS kochart  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 

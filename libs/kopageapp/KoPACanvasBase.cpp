@@ -123,7 +123,7 @@ bool KoPACanvasBase::snapToGrid() const
     return d->doc->gridData().snapToGrid();
 }
 
-void KoPACanvasBase::addCommand( QUndoCommand *command )
+void KoPACanvasBase::addCommand( KUndo2Command *command )
 {
     d->doc->addCommand( command );
 }

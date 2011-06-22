@@ -63,7 +63,7 @@ public:
 
     bool visit(KisExternalLayer *layer) {
         KisUndoAdapter *undoAdapter = layer->image()->undoAdapter();
-        QUndoCommand* command = layer->crop(m_rect);
+        KUndo2Command* command = layer->crop(m_rect);
         if (command)
             undoAdapter->addCommand(command);
         return visitAll(layer);
@@ -146,7 +146,7 @@ private:
         if (m_movelayers) {
             QPoint oldPos(node->x(), node->y());
             QPoint newPos(node->x() - m_rect.x(), node->y() - m_rect.y());
-            QUndoCommand *cmd = new KisNodeMoveCommand(node, oldPos, newPos, image);
+            KUndo2Command *cmd = new KisNodeMoveCommand(node, oldPos, newPos, image);
             undoAdapter->addCommand(cmd);
         }
 

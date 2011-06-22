@@ -63,7 +63,7 @@ extern "C" {
 }
 
 K_PLUGIN_FACTORY(XCFImportFactory, registerPlugin<KisXCFImport>();)
-K_EXPORT_PLUGIN(XCFImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(XCFImportFactory("calligrafilters"))
 
 KisXCFImport::KisXCFImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {

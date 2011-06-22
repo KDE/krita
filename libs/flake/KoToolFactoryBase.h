@@ -240,7 +240,7 @@ protected:
 
     /**
      * set if the tools instance this factory creates can be reused between input devices.
-     * There is always at least one instance of a tool per view. KOffice will use this boolean to
+     * There is always at least one instance of a tool per view. Calligra will use this boolean to
      * decide if additionally it should create one instance per input device, like mouse and tablet.
      *
      * When a user has a mouse and 2 tablet pens it is useful to have one tool per device since each

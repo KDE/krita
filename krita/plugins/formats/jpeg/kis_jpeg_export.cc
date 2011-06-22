@@ -47,7 +47,7 @@
 class KisExternalLayer;
 
 K_PLUGIN_FACTORY(KisJPEGExportFactory, registerPlugin<KisJPEGExport>();)
-K_EXPORT_PLUGIN(KisJPEGExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(KisJPEGExportFactory("calligrafilters"))
 
 KisJPEGExport::KisJPEGExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {

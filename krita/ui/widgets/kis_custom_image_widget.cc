@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2005 Thomas Zander <zander@kde.org>
  * Copyright (C) 2005 Casper Boemann <cbr@boemann.dk>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
@@ -28,7 +28,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <kcolorcombo.h>
 #include <kis_debug.h>

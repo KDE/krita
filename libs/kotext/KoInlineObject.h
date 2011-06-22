@@ -139,6 +139,7 @@ public:
      * QTextInlineObject::setAscent() and QTextInlineObject::setDescent() methods.
      * Note that this method is called while painting; and thus is time sensitive; avoid doing anything time
      * consuming.
+     * Note make sure that the width is 0 when there is nothing to be shown for the object.
      * @param document the text document this inline object is operating on.
      * @param object the inline object properties
      * @param posInDocument the character position in the document (param document) this inline object is at.

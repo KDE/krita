@@ -144,7 +144,6 @@ public:
 
     QTextFrame* endNotesFrame();
 
-    QTextFrame* citationsFrame();
     /**
      * Specifies if tabs are relative to paragraph indent.
      *

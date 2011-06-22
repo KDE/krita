@@ -314,26 +314,6 @@ QTextFrame *KoTextDocument::footNotesFrame()
     return frame;
 }
 
-QTextFrame *KoTextDocument::citationsFrame()
-{
-    QVariant resource = m_document->resource(KoTextDocument::FootNotesFrame,
-            FootNotesFrameURL);
-
-    QTextFrame *frame = resource.value<QTextFrame *>();
-
-    if (frame == 0) {
-        QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
-        QTextFrameFormat format;
-        format.setProperty(KoText::SubFrameType, KoText::FootNotesFrameType);
-
-        frame = cursor.insertFrame(format);
-
-        resource.setValue(frame);
-        m_document->addResource(KoTextDocument::FootNotesFrame, FootNotesFrameURL, resource);
-    }
-    return frame;
-}
-
 QTextFrame *KoTextDocument::endNotesFrame()
 {
     QVariant resource = m_document->resource(KoTextDocument::EndNotesFrame,

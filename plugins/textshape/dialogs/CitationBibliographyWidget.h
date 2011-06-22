@@ -11,7 +11,7 @@
 class TextTool;
 class KoStyleManager;
 
-class CitationBibliographyWidget : public KDialog
+class CitationBibliographyWidget : public QDialog
 {
     Q_OBJECT
 public:

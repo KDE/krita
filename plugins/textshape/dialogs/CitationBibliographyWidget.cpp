@@ -11,14 +11,11 @@
 #include <QMessageBox>
 
 CitationBibliographyWidget::CitationBibliographyWidget(QTextDocument *doc,QWidget *parent) :
-    KDialog(parent),
+    QDialog(parent),
     m_blockSignals(false),
     document(doc)
 {
     widget.setupUi(this);
-    setCaption(i18n("Insert Citations/Bibliography"));
-    setMainWidget(parent);
-    setModal(true);
     connect(widget.buttonBox,SIGNAL(accepted()),this,SLOT(insertCitation()));
     connect(widget.buttonBox,SIGNAL(accepted()),this,SLOT(accept()));
 }

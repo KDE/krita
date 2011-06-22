@@ -23,6 +23,7 @@
 #include "dialogs/SimpleCitationWidget.h"
 #include "dialogs/SimpleFootEndNotesWidget.h"
 #include "dialogs/SimpleCaptionsWidget.h"
+#include "dialogs/CitationBibliographyWidget.h"
 
 #include <KoTextLayoutRootArea.h>
 #include <KoCanvasBase.h>
@@ -48,6 +49,11 @@ void ReferencesTool::createActions()
     addAction("insert_tableofcentents", action);
     action->setToolTip(i18n("Insert a Table of Contents into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertTableOfContents()));
+
+    KAction *action1 = new KAction(i18n("Add Citation"),this);
+    addAction("insert_citation",action1);
+    action1->setToolTip(i18n("Insert a citation into the document."));
+    connect(action1, SIGNAL(triggered()), this, SLOT(insertCitation()));
 }
 
 void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -68,7 +74,7 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
     //SimpleCitationWidget *scw = new SimpleCitationWidget(0);
     SimpleFootEndNotesWidget *sfenw = new SimpleFootEndNotesWidget(0);
     //SimpleCaptionsWidget *scapw = new SimpleCaptionsWidget(0);
-
+    SimpleCitationWidget *scw = new SimpleCitationWidget(this,0);
     // Connect to/with simple table of contents option widget
     connect(stocw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
@@ -78,10 +84,14 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
     // Connect to/with simple citation index option widget
     connect(sfenw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
+    connect(scw,SIGNAL(doneWithFocus()),this,SLOT(returnFocusToCanvas()));
+
     stocw->setWindowTitle(i18n("Table of Contents"));
     widgets.append(stocw);
     sfenw->setWindowTitle(i18n("Footnotes & Endnotes"));
     widgets.append(sfenw);
+    scw->setWindowTitle(i18n("Citations and Bibliography"));
+    widgets.append(scw);
     //widgets.insert(i18n("Citations"), scw);
     //widgets.insert(i18n("Captions"), scapw);
     return widgets;
@@ -90,6 +100,13 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
 void ReferencesTool::insertTableOfContents()
 {
     textEditor()->insertTableOfContents();
+}
+
+void ReferencesTool::insertCitation()
+{
+    CitationBibliographyWidget *dialog = new CitationBibliographyWidget(textEditor()->document(),0);
+    //textEditor()->insertCitation();
+    dialog->exec();
 }
 
 #include <ReferencesTool.moc>

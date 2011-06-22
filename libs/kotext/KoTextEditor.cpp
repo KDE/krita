@@ -1143,6 +1143,20 @@ void KoTextEditor::insertTableOfContents()
     emit cursorPositionChanged();
 }
 
+KoInlineCite *KoTextEditor::insertCitation()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Add Citation"));
+
+    KoInlineCite *cite = new KoInlineCite;
+
+    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
+    manager->insertInlineObject(d->caret,cite);
+
+    cite->setMotherFrame(KoTextDocument(d->caret.block().document()).footNotesFrame());
+    d->updateState(KoTextEditor::Private::NoOp);
+    return cite;
+}
+
 void KoTextEditor::insertText(const QString &text)
 {
     d->updateState(KoTextEditor::Private::KeyPress, i18n("Key Press"));

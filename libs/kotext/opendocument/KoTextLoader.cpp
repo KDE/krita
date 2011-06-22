@@ -33,6 +33,7 @@
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
 #include <KoInlineNote.h>
+#include <KoInlineCite.h>
 #include <KoInlineTextObjectManager.h>
 #include "KoList.h"
 #include <KoOdfLoadingContext.h>
@@ -1467,6 +1468,25 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
     }
 }
 
+void KoTextLoader::loadCite(const KoXmlElement &noteElem, QTextCursor &cursor)
+{
+    KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
+    if (textObjectManager) {
+        KoInlineCite *cite = new KoInlineCite;
+        cite->setMotherFrame(KoTextDocument(cursor.block().document()).footNotesFrame());
+
+        int position = cursor.position(); // need to store this as the following might move is
+
+        if (cite->loadOdf(noteElem, d->context)) {
+            cursor.setPosition(position); // restore the position before inserting the note
+            textObjectManager->insertInlineObject(cursor, cite);
+        } else {
+            cursor.setPosition(position); // restore the position
+            delete cite;
+        }
+    }
+}
+
 void KoTextLoader::loadText(const QString &fulltext, QTextCursor &cursor,
                             bool *stripLeadingSpace, bool isLastNode)
 {
@@ -1604,6 +1624,8 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 d->closeChangeRegion(ts);
         } else if ( (isTextNS && localName == "note")) { // text:note
             loadNote(ts, cursor);
+        } else if (isTextNS && localName == "bibliography-mark") { // text:bibliography-mark
+            loadCite(ts,cursor);
         } else if (isTextNS && localName == "tab") { // text:tab
             cursor.insertText("\t");
         } else if (isTextNS && localName == "a") { // text:a

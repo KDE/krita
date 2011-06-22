@@ -193,6 +193,11 @@ private:
     void loadNote(const KoXmlElement &element, QTextCursor& cursor);
 
     /**
+     * Load a citation \p element into the \p cursor.
+     */
+    void loadCite(const KoXmlElement &element, QTextCursor& cursor);
+
+    /**
     * Load the shape element and assign hyperlink to it \p element into the \p cursor .
     */
     void loadShapeWithHyperLink(const KoXmlElement &element, QTextCursor& cursor);

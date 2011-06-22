@@ -47,6 +47,8 @@ protected:
 private slots:
     /// insert a table of contents
     void insertTableOfContents();
+    /// insert a citation
+    void insertCitation();
 
 private:
 };

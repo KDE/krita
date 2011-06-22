@@ -26,6 +26,7 @@
 #include <KoGenChange.h>
 #include "KoText.h"
 #include <KoToolSelection.h>
+#include <KoInlineCite.h>
 
 #include <QClipboard>
 #include <QMetaType>
@@ -34,6 +35,7 @@
 class KoCharacterStyle;
 class KoInlineObject;
 class KoParagraphStyle;
+class KoInlineCite;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -239,6 +241,8 @@ public slots:
      * Insert a table of Contents at the current cursor position.
      */
     void insertTableOfContents();
+
+    KoInlineCite *insertCitation();
 
     void insertText(const QString &text);
 

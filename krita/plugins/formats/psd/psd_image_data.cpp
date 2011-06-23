@@ -217,17 +217,17 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header)
             for ( col = 0; col < header->width; col++) {
                 index = row * header->width + col;
                 io->seek(channelInfoRecords[0].channelDataStart);
-                data = io->read(channelSize);
+                data = io->read(channelDataLength);
                 quint16 red = ntohs(reinterpret_cast<const quint16 *>(data.constData())[index]);
                 KoRgbU16Traits::setRed(it.rawData(), red);
 
                 io->seek(channelInfoRecords[1].channelDataStart);
-                data = io->read(channelSize);
+                data = io->read(channelDataLength);
                 quint16 green = ntohs(reinterpret_cast<const quint16 *>(data.constData())[index]);
                 KoRgbU16Traits::setGreen(it.rawData(), green);
 
                 io->seek(channelInfoRecords[2].channelDataStart);
-                data = io->read(channelSize);
+                data = io->read(channelDataLength);
                 quint16 blue = ntohs(reinterpret_cast<const quint16 *>(data.constData())[index]);
                 KoRgbU16Traits::setBlue(it.rawData(), blue);
 

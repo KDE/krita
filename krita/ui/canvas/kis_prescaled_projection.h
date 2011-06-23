@@ -69,15 +69,13 @@ public slots:
      * Retrieves image's data from KisImage object and updates
      * internal cache
      * @param dirtyImageRect the rect changed on the image
-     * @return prefilled info object that should be used in
-     * the second stage of the update
      * @see recalculateCache
      */
     KisUpdateInfoSP updateCache(const QRect &dirtyImageRect);
 
     /**
      * Updates the prescaled cache at current zoom level
-     * @param prefilled update structure returned by updateCache
+     * @param info update structure returned by updateCache
      * @see updateCache
      */
     void recalculateCache(KisUpdateInfoSP info);

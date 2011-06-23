@@ -43,30 +43,7 @@ class KisCoordinatesConverter;
  * prescaled QImage representation that is always suitable for
  * painting onto the canvas.
  *
- * [deprecated]
- * Optionally, the KisPrescaledProjection can also provide a QPixmap
- * with the checkered background blended in.
- *
- * Optionally, the projection can also draw the mask and selection
- * masks and the selection outline.
- * [/deprecated]
- *
- * The following scaling methods are supported:
- *
- * <ul>
- *   <li>Qt's smooth scaling
- *   <li>Our own smooth scaling 
- *   <li>Our own sampling 
- *   <li>nearest-neighbour sampling on KisImage directly (doesn't need
- *       a QImage of the visible area)
- * </ul>
- *
  * Note: the export macro is only for the unittest.
- *
- * Note: with any method except for nearest-neighbour sampling Krita
- * keeps a QImage the size of the unscaled image in memory. This
- * should become either a QImage the size of the nearest pyramid level
- * or a tiled QImage representation like the OpenGL image textures.
  */
 class KRITAUI_EXPORT KisPrescaledProjection : public QObject, public KisShared
 {
@@ -79,10 +56,8 @@ public:
     void setImage(KisImageWSP image);
 
     /**
-     * Return the prescaled QImage. This image has a transparency
-     * channel and is therefore suitable for generated a prescaled
-     * representation of an image for the KritaShape. The prescaled
-     * image is exactly as big as the canvas widget in pixels.
+     * Return the prescaled QImage. The prescaled image is exactly as big as
+     * the canvas widget in pixels.
      */
     QImage prescaledQImage() const;
 
@@ -144,6 +119,7 @@ public slots:
     void preScale();
 
 private:
+
     friend class KisPrescaledProjectionTest;
 
     KisPrescaledProjection(const KisPrescaledProjection &);

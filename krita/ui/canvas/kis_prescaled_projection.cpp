@@ -170,9 +170,10 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
 
     if(offset != alignedOffset) {
         /**
-         * We can't optimize anything whe offset is float :(
+         * We can't optimize anything when offset is float :(
          * Just prescale entire image.
          */
+        dbgRender << "prescaling the entire image because the offset is float";
         preScale();
         return;
     }
@@ -407,6 +408,9 @@ void KisPrescaledProjection::drawUsingBackend(QPainter &gc, KisPPUpdateInfoSP in
         m_d->projectionBackend->drawFromOriginalImage(gc, info);
     } else /* if info->transfer == KisPPUpdateInformation::PATCH */ {
         KisImagePatch patch = m_d->projectionBackend->getNearestPatch(info);
+        // prescale the patch because otherwise we'd scale using QPainter, which gives
+        // a crap result compared to QImage's smoothscale
+        patch.preScale(info->viewportRect);
         patch.drawMe(gc, info->viewportRect, info->renderHints);
     }
 }

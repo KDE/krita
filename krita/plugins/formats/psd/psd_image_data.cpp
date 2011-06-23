@@ -38,25 +38,38 @@ PSDImageData::~PSDImageData(){
 }
 
 bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header){
-    quint64 start = io->pos();
+
     qDebug() << "Position before read " << io->pos();
     psdread(io, &compression);
     qDebug() << "COMPRESSION TYPE " << compression;
-
+    quint64 start = io->pos();
     channelSize = header->channelDepth/8;
     channelDataLength = header->height * header->width * channelSize;
-
 
     switch(compression){
 
     case 0: // Uncompressed
-        /*      for (int channel = 0; channel < header->nChannels; channel++){
-            channelInfoRecords[channel].channelId = channel;
-            channelInfoRecords[channel].compressionType = Compression::Uncompressed;
-            channelInfoRecords[channel].channelDataStart = start;
-            channelInfoRecords[channel].channelDataLength = header->width * header->height * channelSize;
-            start += channelInfoRecords[channel].channelDataLength;
-        }*/
+        for (int channel = 0; channel < header->nChannels; channel++) {
+
+            ChannelInfo channelInfo;
+            channelInfo.channelId = channel;
+            channelInfo.compressionType = Compression::Uncompressed;
+            channelInfo.channelDataStart = start;
+            channelInfo.channelDataLength = header->width * header->height * channelSize;
+            start += channelInfo.channelDataLength;
+            channelInfoRecords.append(channelInfo);
+
+        }
+
+        for (int channel = 0; channel < header->nChannels; channel++) {
+            qDebug()<<"Channel ID: "<<channelInfoRecords[channel].channelId;
+            qDebug()<<"Channel Compression Type: "<<channelInfoRecords[channel].compressionType;
+            qDebug()<<"Channe Data Start: "<<channelInfoRecords[channel].channelDataStart;
+            qDebug()<<"Channel Data Length: "<<channelInfoRecords[channel].channelDataLength<<endl;
+            qDebug()<<"---------------------------------------------------"<<endl;
+
+        }
+
         switch(header->colormode){
         case Bitmap:
             break;
@@ -86,13 +99,13 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header){
 
     case 1: // RLE
         qDebug()<<"RLE ENCODED";
-        quint32 rlelength;
+        /* quint16 rlelength;
         quint32 sumrlelength;
         for (int channel=0; channel < header->nChannels; channel++){
             channelInfoRecords[channel].channelId = channel;
             for (int row = 0; row < header->height; row++ ){
                 if (header->version == 1){
-                    psdread(io,&rlelength);
+            //        psdread(io,(quint8)&rlelength);
                 }
                 else if (header->version == 2){
                     psdread(io,&rlelength);
@@ -106,7 +119,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header){
             channelInfoRecords[channel].channelDataStart = start;
             channelInfoRecords[channel].channelDataLength = sumrlelength;
         }
-
+*/
         switch(colormode){
         case Bitmap:
             break;
@@ -198,7 +211,32 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header){
 
 bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header){
     int row,col,index;
+    if (channelSize == 2) {
+        for (row = 0; row < header->height; row++) {
+            KisHLineIterator it = dev->createHLineIterator(0, row, header->width);
+            for ( col = 0; col < header->width; col++) {
+                index = row * header->width + col;
+                io->seek(channelInfoRecords[0].channelDataStart);
+                data = io->read(channelSize);
+                quint16 red = ntohs(reinterpret_cast<const quint16 *>(data.constData())[index]);
+                KoRgbU16Traits::setRed(it.rawData(), red);
 
+                io->seek(channelInfoRecords[1].channelDataStart);
+                data = io->read(channelSize);
+                quint16 green = ntohs(reinterpret_cast<const quint16 *>(data.constData())[index]);
+                KoRgbU16Traits::setGreen(it.rawData(), green);
+
+                io->seek(channelInfoRecords[2].channelDataStart);
+                data = io->read(channelSize);
+                quint16 blue = ntohs(reinterpret_cast<const quint16 *>(data.constData())[index]);
+                KoRgbU16Traits::setBlue(it.rawData(), blue);
+
+                dev->colorSpace()->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
+                ++it;
+            }
+        }
+    }
+    /*
     // XXX: this code is only valid for images with channelsize == 2
     if (channelSize == 2) {
 
@@ -239,7 +277,7 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header)
                 ++it;
             }
         }
-    }
+    }*/
     return true;
 }
 

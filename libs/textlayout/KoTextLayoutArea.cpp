@@ -822,21 +822,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // Set up a var to keep track of where last added tab is. Conversion of tabOffset is required because Qt thinks in device units and we don't
     qreal position = tabOffset;
 
-    if (!variant.isNull()) {
-        foreach(const QVariant &tv, qvariant_cast<QList<QVariant> >(variant)) {
-            KoText::Tab koTab = tv.value<KoText::Tab>();
-            QTextOption::Tab tab;
-
-            // conversion here is required because Qt thinks in device units and we don't
-            position = (koTab.position + tabOffset) * qt_defaultDpiY() / 72. -3;
-
-            tab.position = position;
-            tab.type = koTab.type;
-            tab.delimiter = koTab.delimiter;
-            tabs.append(tab);
-        }
-    }
-
     if (!tabs.isEmpty()) {
         //unfortunately the tabs are not guaranteed to be ordered, so lets do that ourselves
         qSort(tabs.begin(), tabs.end(), compareTab);

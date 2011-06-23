@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
+ * Copyright (C) 2011 Ko GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -318,6 +319,7 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
             m_indexTitleTemplate.text = p.text();
         // second child
         } else if (p.localName() == "table-of-content-entry-template") {
+            qDebug() <<"table-of-content-entry-template";
             TocEntryTemplate tocEntryTemplate;
             tocEntryTemplate.outlineLevel = p.attribute("outline-level").toInt();
             tocEntryTemplate.styleName = p.attribute("style-name");
@@ -379,6 +381,7 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
 
         // third child
         } else if (p.localName() == "index-source-styles" && p.namespaceURI() == KoXmlNS::text) {
+            qDebug() <<"index-source-styles";
                 IndexSourceStyles indexStyles;
                 indexStyles.outlineLevel = p.attribute("outline-level").toInt();
 

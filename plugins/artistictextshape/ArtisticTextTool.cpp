@@ -118,7 +118,6 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
 
     KoShapeManager *manager = canvas->shapeManager();
     connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
-    connect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
     addAction("edit_select_all", KStandardAction::selectAll(this, SLOT(selectAll()), this));
     addAction("edit_deselect_all", KStandardAction::deselect(this, SLOT(deselectAll()), this));
@@ -480,6 +479,9 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
     updateActions();
     emit statusTextChanged( i18n("Press return to finish editing.") );
     repaintDecorations();
+
+    KoShapeManager *manager = canvas()->shapeManager();
+    connect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 }
 
 void ArtisticTextTool::blinkCursor()
@@ -501,6 +503,9 @@ void ArtisticTextTool::deactivate()
 
 void ArtisticTextTool::updateActions()
 {
+    KoShapeManager *manager = canvas()->shapeManager();
+    disconnect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+
     if( m_currentShape ) {
         const QFont font = m_currentShape->fontAt(textCursor());
         const CharIndex index = m_currentShape->indexOfChar(textCursor());

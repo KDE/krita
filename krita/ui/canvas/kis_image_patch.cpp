@@ -92,24 +92,20 @@ void KisImagePatch::preScale(const QRectF &dstRect)
     qreal scaleX = dstRect.width() / m_interestRect.width();
     qreal scaleY = dstRect.height() / m_interestRect.height();
 
-    // only smoothscale below 2.0
-    if (scaleX < 2.0 && scaleY < 2.0) {
-
-        QSize newImageSize = QSize(ceil(m_image.width() * scaleX),
+    QSize newImageSize = QSize(ceil(m_image.width() * scaleX),
                                    ceil(m_image.height() * scaleY));
-        // Calculating new _aligned_ scale
-        scaleX = qreal(newImageSize.width()) / m_image.width();
-        scaleY = qreal(newImageSize.height()) / m_image.height();
+    // Calculating new _aligned_ scale
+    scaleX = qreal(newImageSize.width()) / m_image.width();
+    scaleY = qreal(newImageSize.height()) / m_image.height();
 
-        m_scaleX *= scaleX;
-        m_scaleY *= scaleY;
+    m_scaleX *= scaleX;
+    m_scaleY *= scaleY;
 
-        scaleRect(m_interestRect, scaleX, scaleY);
+    scaleRect(m_interestRect, scaleX, scaleY);
 
-        m_image = m_image.scaled(newImageSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    m_image = m_image.scaled(newImageSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-        m_isScaled = true;
-    }
+    m_isScaled = true;
 
 }
 

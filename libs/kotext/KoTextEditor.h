@@ -244,7 +244,7 @@ public slots:
 
     KoInlineNote *insertFootNote();
 
-    void insertEndNote();
+    KoInlineNote *insertEndNote();
 
 
     void insertText(const QString &text);

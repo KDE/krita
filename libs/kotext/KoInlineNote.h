@@ -52,6 +52,9 @@ public:
     KoInlineNote(Type type);
     // destructor
     virtual ~KoInlineNote();
+
+    QString toRoman(int) const;
+
     QTextCursor textCursor(void) const;
     /**
      * Set the textframe where we will create our own textframe within

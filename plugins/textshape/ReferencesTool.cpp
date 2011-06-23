@@ -123,12 +123,7 @@ void ReferencesTool::insertFootNote()
     QTextCursor cursor = note->textCursor();
     QTextCharFormat *fmat = new QTextCharFormat();
     fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-    if(note->autoNumbering()) {
-        cursor.insertText(note->label(),*fmat);
-    }
-    else {
-        cursor.insertText(sfenw->widget.characterEdit->text(),*fmat);
-    }
+    cursor.insertText(note->label(),*fmat);
 
     fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
     cursor.insertText(" ",*fmat);
@@ -138,7 +133,24 @@ void ReferencesTool::insertFootNote()
 
 void ReferencesTool::insertEndNote()
 {
-    textEditor()->insertEndNote();
+    note = textEditor()->insertEndNote();
+    note->setAutoNumbering(sfenw->widget.autoNumbering->isChecked());
+    if(note->autoNumbering()) {
+        note->setLabel(note->toRoman(note->manager()->endNotes().count()));
+    }
+    else {
+        note->setLabel(sfenw->widget.characterEdit->text());
+    }
+
+    QTextCursor cursor = note->textCursor();
+    QTextCharFormat *fmat = new QTextCharFormat();
+    fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    cursor.insertText(note->label(),*fmat);
+
+    fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
+    cursor.insertText(" ",*fmat);
+
+    //note->manager()->reNumbering(note->textFrame()->document()->begin());
 }
 
 #include <ReferencesTool.moc>

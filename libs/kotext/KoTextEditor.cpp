@@ -1123,25 +1123,17 @@ KoInlineNote *KoTextEditor::insertFootNote()
     return note;
 }
 
-void KoTextEditor::insertEndNote()
+KoInlineNote *KoTextEditor::insertEndNote()
 {
     d->updateState(KoTextEditor::Private::Custom, i18n("Add Endnote"));
-    /*KoInlineNote *note = new KoInlineNote(KoInlineNote::Endnote);
-    note->setMotherFrame(KoTextDocument(d->caret.block().document()).endNotesFrame());
-    note->setLabel("i");
-    //note->setAutoNumbering(true);
+
+    KoInlineNote *note = new KoInlineNote(KoInlineNote::Endnote);
     KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
     manager->insertInlineObject(d->caret,note);
-    d->caret.setPosition(note->textCursorPosition());
+    note->setMotherFrame(KoTextDocument(d->caret.document()).endNotesFrame());
 
-    emit cursorPositionChanged();
-
-    QTextCharFormat *fmat = new QTextCharFormat();
-    fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-    d->caret.insertText("i",*fmat);
-    fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
-    d->caret.insertText(" ",*fmat);*/
     d->updateState(KoTextEditor::Private::NoOp);
+    return note;
 }
 
 void KoTextEditor::insertTableOfContents()

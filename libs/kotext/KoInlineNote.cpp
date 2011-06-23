@@ -27,6 +27,7 @@
 #include <KoTextWriter.h>
 #include <KoTextDocument.h>
 #include <KoText.h>
+#include <KoInlineTextObjectManager.h>
 
 #include <KDebug>
 
@@ -71,6 +72,55 @@ KoInlineNote::~KoInlineNote()
     delete d;
 }
 
+QString KoInlineNote::toRoman(int num) const
+{
+    QString roman = "";
+    int rem,i;
+    rem = num/1000;
+    for(i=1;i<=rem && num/1000!=0;i++) {
+         roman.append("m");
+    }
+    num = num%1000;
+    rem = num/500;
+    for(i=1;i<=rem && num/500!=0;i++) {
+        roman.append("d");
+    }
+    num = num%500;
+    rem = num/100;
+    for(i=1;i<=rem && num/100!=0;i++) {
+        roman.append("c");
+    }
+    num = num%100;
+    rem = num/50;
+    for(i=1;i<=rem && num/50!=0;i++) {
+         roman.append("l");
+    }
+    num = num%50;
+    rem = num/10;
+    for(i=1;i<=rem && num/10!=0;i++) {
+         roman.append("x");
+    }
+    num = num%10;
+    if(num>=5 && num<=8) {
+         rem = num%5;
+         roman.append("v");
+         for(i=1;i<=rem;i++)
+            roman.append("i");
+    }
+    else if(num==9) {
+         roman.append("ix");
+    }
+    else if(num>=1 && num<=3) {
+         for(i=1;i<=num;i++)
+            roman.append("i");
+    }
+    else if (num==4)
+        roman.append("iv");
+
+    qDebug()<<"Roman : "<<roman;
+    return roman;
+}
+
 QTextCursor KoInlineNote::textCursor() const
 {
     return (d->textFrame->lastCursorPosition());
@@ -79,7 +129,6 @@ QTextCursor KoInlineNote::textCursor() const
 void KoInlineNote::setMotherFrame(QTextFrame *motherFrame)
 {
     // We create our own subframe
-    //aasduwewaejdsafkdsafasdasfdiwe
 
     QTextCursor cursor(motherFrame->lastCursorPosition());
     QTextFrameFormat format;
@@ -206,7 +255,7 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
             }
             else if (ts.localName() == "note-citation") {
                 d->label = ts.attributeNS(KoXmlNS::text, "label");
-                if (d->label.isEmpty()) {
+                    if (d->label.isEmpty()) {
                     setAutoNumbering(true);
                     d->label = ts.text();
                 }

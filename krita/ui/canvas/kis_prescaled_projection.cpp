@@ -83,19 +83,10 @@ void copyQImage(qint32 deltaX, qint32 deltaY, QImage* dstImage, const QImage& sr
 
 struct KisPrescaledProjection::Private {
     Private()
-            : useNearestNeighbour(false)
-            , cacheKisImageAsQImage(true)
-            , viewportSize(0, 0)
+            : viewportSize(0, 0)
             , monitorProfile(0)
             , projectionBackend(0) {
     }
-
-    /**
-     * TODO: useNearestNeighbour is not used at the moment
-     * thought this option worth implementing (ok, yeah.. reimplementing)
-     */
-    bool useNearestNeighbour;
-    bool cacheKisImageAsQImage;
 
     QImage prescaledQImage;
 
@@ -144,9 +135,8 @@ void KisPrescaledProjection::setCoordinatesConverter(KisCoordinatesConverter *co
     m_d->coordinatesConverter = coordinatesConverter;
 }
 
-void KisPrescaledProjection::initBackend(bool cacheKisImageAsQImage)
+void KisPrescaledProjection::initBackend()
 {
-    Q_UNUSED(cacheKisImageAsQImage);
     delete m_d->projectionBackend;
 
     // we disable building the pyramid with setting its height to 1
@@ -159,14 +149,8 @@ void KisPrescaledProjection::updateSettings()
 {
     KisConfig cfg;
 
-    if (m_d->useNearestNeighbour != cfg.useNearestNeighbour() ||
-        m_d->cacheKisImageAsQImage != cfg.cacheKisImageAsQImage() ||
-        m_d->projectionBackend == 0 ) {
-
-        m_d->useNearestNeighbour = cfg.useNearestNeighbour();
-        m_d->cacheKisImageAsQImage = cfg.cacheKisImageAsQImage();
-
-        initBackend(m_d->cacheKisImageAsQImage);
+    if (m_d->projectionBackend == 0) {
+        initBackend();
     }
 
     setMonitorProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));

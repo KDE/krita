@@ -129,7 +129,7 @@ private:
      * Called from updateSettings to set up chosen backend:
      * now there is only one option left: KisImagePyramid
      */
-    void initBackend(bool cacheKisImageAsQImage);
+    void initBackend();
 
     void updateViewportSize();
 

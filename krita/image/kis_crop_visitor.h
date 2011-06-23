@@ -28,6 +28,12 @@
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_adjustment_layer.h"
+
+#include "kis_transformation_mask.h"
+#include "kis_transparency_mask.h"
+#include "kis_filter_mask.h"
+#include "kis_selection_mask.h"
+
 #include "kis_transaction.h"
 #include "kis_selection.h"
 #include "kis_external_layer_iface.h"
@@ -60,74 +66,91 @@ public:
         KUndo2Command* command = layer->crop(m_rect);
         if (command)
             undoAdapter->addCommand(command);
-        return true;
+        return visitAll(layer);
     }
 
-    /**
-     * Crops the specified layer and adds the undo information to the undo adapter of the
-     * layer's image.
-     */
     bool visit(KisPaintLayer *layer) {
-        return cropPaintDeviceLayer(layer);
+        cropPaintDeviceNode(layer);
+        return visitAll(layer);
     }
 
     bool visit(KisGroupLayer *layer) {
         layer->resetCache();
-
-        KisNodeSP child = layer->firstChild();
-        while (child) {
-            child->accept(*this);
-            child = child->nextSibling();
-        }
         layer->setDirty();
-        return true;
+        return visitAll(layer);
     }
 
-    virtual bool visit(KisAdjustmentLayer* layer) {
-        // XXX: crop the selection?
+    bool visit(KisAdjustmentLayer* layer) {
         layer->resetCache();
-        return true;
+        cropPaintDeviceNode(layer);
+        return visitAll(layer);
+
     }
 
-    virtual bool visit(KisGeneratorLayer * layer) {
-        return cropPaintDeviceLayer(layer);
+    bool visit(KisGeneratorLayer * layer) {
+        layer->resetCache();
+        cropPaintDeviceNode(layer);
+        return visitAll(layer);
     }
 
     bool visit(KisNode*) {
         return true;
     }
     bool visit(KisCloneLayer*) {
-        return false;
-    }
-    bool visit(KisFilterMask*) {
         return true;
     }
-    bool visit(KisTransparencyMask*) {
-        return true;
+    bool visit(KisFilterMask *mask) {
+        return cropPaintDeviceNode((KisNode*)mask);
     }
-    bool visit(KisTransformationMask*) {
-        return true;
+    bool visit(KisTransparencyMask *mask) {
+        return cropPaintDeviceNode(mask);
     }
-    bool visit(KisSelectionMask*) {
-        return true;
+    bool visit(KisTransformationMask *mask) {
+        return cropPaintDeviceNode(mask);
     }
-
+    bool visit(KisSelectionMask *mask) {
+        return cropPaintDeviceNode(mask);
+    }
 
 private:
+    KisImageWSP getImage(KisNode *node) {
+        // temporary hack, our masks do not have a link to image.
 
-    bool cropPaintDeviceLayer(KisLayer * layer) {
-        KisUndoAdapter *undoAdapter = layer->image()->undoAdapter();
+        while (node) {
+            KisLayer *layer = dynamic_cast<KisLayer*>(node);
+            if(layer) {
+                return layer->image();
+            }
+            node = node->parent().data();
+        }
+        return 0;
+    }
 
-        KisSelectedTransaction transaction(i18n("Crop"), layer);
-        layer->paintDevice()->crop(m_rect);
+    /**
+     * Crops the specified layer and adds the undo information
+     * to the undo adapter of the layer's image.
+     */
+    bool cropPaintDeviceNode(KisNode *node) {
+        /**
+         * TODO: implement actual robust cropping of the selections,
+         * including the cropping of vector (!) selection.
+         */
+        KisImageWSP image = getImage(node);
+        KisUndoAdapter *undoAdapter = image->undoAdapter();
+
+        QRect nodeExtent = node->extent();
+        KisTransaction transaction(i18n("Crop"), node->paintDevice());
+        node->paintDevice()->crop(m_rect);
         transaction.commit(undoAdapter);
 
         if (m_movelayers) {
-            QPoint oldPos(layer->x(), layer->y());
-            QPoint newPos(layer->x() - m_rect.x(), layer->y() - m_rect.y());
-            KUndo2Command *cmd = new KisNodeMoveCommand(layer, oldPos, newPos, layer->image());
+            QPoint oldPos(node->x(), node->y());
+            QPoint newPos(node->x() - m_rect.x(), node->y() - m_rect.y());
+            KUndo2Command *cmd = new KisNodeMoveCommand(node, oldPos, newPos, image);
             undoAdapter->addCommand(cmd);
         }
+
+        node->setDirty(nodeExtent);
         return true;
     }
 

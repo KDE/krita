@@ -28,6 +28,7 @@ private slots:
 
     void testCreation();
     void testUndo();
+    void testCropTransparencyMask();
 };
 
 #endif

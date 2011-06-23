@@ -43,30 +43,7 @@ class KisCoordinatesConverter;
  * prescaled QImage representation that is always suitable for
  * painting onto the canvas.
  *
- * [deprecated]
- * Optionally, the KisPrescaledProjection can also provide a QPixmap
- * with the checkered background blended in.
- *
- * Optionally, the projection can also draw the mask and selection
- * masks and the selection outline.
- * [/deprecated]
- *
- * The following scaling methods are supported:
- *
- * <ul>
- *   <li>Qt's smooth scaling
- *   <li>Our own smooth scaling 
- *   <li>Our own sampling 
- *   <li>nearest-neighbour sampling on KisImage directly (doesn't need
- *       a QImage of the visible area)
- * </ul>
- *
  * Note: the export macro is only for the unittest.
- *
- * Note: with any method except for nearest-neighbour sampling Krita
- * keeps a QImage the size of the unscaled image in memory. This
- * should become either a QImage the size of the nearest pyramid level
- * or a tiled QImage representation like the OpenGL image textures.
  */
 class KRITAUI_EXPORT KisPrescaledProjection : public QObject, public KisShared
 {
@@ -79,10 +56,8 @@ public:
     void setImage(KisImageWSP image);
 
     /**
-     * Return the prescaled QImage. This image has a transparency
-     * channel and is therefore suitable for generated a prescaled
-     * representation of an image for the KritaShape. The prescaled
-     * image is exactly as big as the canvas widget in pixels.
+     * Return the prescaled QImage. The prescaled image is exactly as big as
+     * the canvas widget in pixels.
      */
     QImage prescaledQImage() const;
 
@@ -94,15 +69,13 @@ public slots:
      * Retrieves image's data from KisImage object and updates
      * internal cache
      * @param dirtyImageRect the rect changed on the image
-     * @return prefilled info object that should be used in
-     * the second stage of the update
      * @see recalculateCache
      */
     KisUpdateInfoSP updateCache(const QRect &dirtyImageRect);
 
     /**
      * Updates the prescaled cache at current zoom level
-     * @param prefilled update structure returned by updateCache
+     * @param info update structure returned by updateCache
      * @see updateCache
      */
     void recalculateCache(KisUpdateInfoSP info);
@@ -144,6 +117,7 @@ public slots:
     void preScale();
 
 private:
+
     friend class KisPrescaledProjectionTest;
 
     KisPrescaledProjection(const KisPrescaledProjection &);
@@ -153,7 +127,7 @@ private:
      * Called from updateSettings to set up chosen backend:
      * now there is only one option left: KisImagePyramid
      */
-    void initBackend(bool cacheKisImageAsQImage);
+    void initBackend();
 
     void updateViewportSize();
 

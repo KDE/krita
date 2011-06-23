@@ -24,6 +24,7 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_fill_painter.h"
+#include "kis_transparency_mask.h"
 
 #include "testutil.h"
 
@@ -60,6 +61,41 @@ void KisCropVisitorTest::testUndo()
     if (!TestUtil::compareQImages(errpoint, image1, dev->convertToQImage(0, 0, 0, 300, 300))) {
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
+    delete undoAdapterDummy;
+}
+
+void KisCropVisitorTest::testCropTransparencyMask()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    TestUtil::KisUndoAdapterDummy* undoAdapterDummy = new TestUtil::KisUndoAdapterDummy();
+    KisImageSP image = new KisImage(undoAdapterDummy, 300, 300, cs, "test", false);
+    KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE_U8);
+    KisPaintDeviceSP dev = layer->paintDevice();
+
+    QRect fillRect(0,0,300,300);
+    dev->fill(fillRect, KoColor(Qt::white, cs));
+
+    KisTransparencyMaskSP mask = new KisTransparencyMask();
+
+    image->addNode(layer, image->rootLayer());
+    image->addNode(mask, layer);
+
+    QRect selectionRect(50,50,100,100);
+
+    mask->setSelection(new KisSelection());
+    KisPixelSelectionSP pixelSelection = mask->selection()->getOrCreatePixelSelection();
+    pixelSelection->select(selectionRect, MAX_SELECTED);
+
+    QCOMPARE(pixelSelection->selectedExactRect(), selectionRect);
+
+    QRect cropRect(75,75,50,50);
+
+    KisCropVisitor visitor(cropRect, false);
+
+    mask->accept(visitor);
+
+    QCOMPARE(pixelSelection->selectedExactRect(), cropRect);
     delete undoAdapterDummy;
 }
 

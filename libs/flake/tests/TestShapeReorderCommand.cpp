@@ -91,8 +91,8 @@ void TestShapeReorderCommand::testRunThroughSorting()
 
     QCOMPARE(shapes.indexOf(&shape1), 2);
     QCOMPARE(shapes.indexOf(&shape2), 0);
-    QCOMPARE(shapes.indexOf(&shape3), 4);
-    QCOMPARE(shapes.indexOf(&shape4), 3);
+    QCOMPARE(shapes.indexOf(&shape3), 3);
+    QCOMPARE(shapes.indexOf(&shape4), 4);
     QCOMPARE(shapes.indexOf(&shape5), 1);
 }
 
@@ -144,17 +144,17 @@ void TestShapeReorderCommand::testParentChildSorting()
 
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
-    QCOMPARE(shapes.indexOf(&shape1), 3);
-    QCOMPARE(shapes.indexOf(&shape2), 2);
-    QCOMPARE(shapes.indexOf(&shape3), 9);
-    QCOMPARE(shapes.indexOf(&shape4), 7);
-    QCOMPARE(shapes.indexOf(&shape5), 6);
-    QCOMPARE(shapes.indexOf(&shape6), 0);
-    QCOMPARE(shapes.indexOf(&shape7), 1);
+    QCOMPARE(shapes.indexOf(&shape1), 2);
+    QCOMPARE(shapes.indexOf(&shape2), 0);
+    QCOMPARE(shapes.indexOf(&shape3), 7);
+    QCOMPARE(shapes.indexOf(&shape4), 6);
+    QCOMPARE(shapes.indexOf(&shape5), 5);
+    QCOMPARE(shapes.indexOf(&shape6), 8);
+    QCOMPARE(shapes.indexOf(&shape7), 9);
 
-    QCOMPARE(shapes.indexOf(&container1), 8);
-    QCOMPARE(shapes.indexOf(&container2), 5);
-    QCOMPARE(shapes.indexOf(&container3), 4);
+    QCOMPARE(shapes.indexOf(&container1), 1);
+    QCOMPARE(shapes.indexOf(&container2), 4);
+    QCOMPARE(shapes.indexOf(&container3), 3);
 }
 
 void TestShapeReorderCommand::testBringToFront()

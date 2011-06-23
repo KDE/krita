@@ -130,7 +130,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     QLabel* labelMode = new QLabel(i18n("Mode: "), this);
     labelMode->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     m_cmbCompositeOp = new KisCompositeOpComboBox();
-    
+
     QLabel* labelOpacity = new QLabel(i18n("Opacity: "), this);
     labelOpacity->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     m_sliderOpacity = new KisDoubleSliderSpinBox(this);
@@ -145,11 +145,11 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
     m_workspaceWidget->setFixedSize(32, 32);
     m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));
-    
+
     QHBoxLayout* baseLayout = new QHBoxLayout(this);
     m_paintopWidget = new QWidget(this);
     baseLayout->addWidget(m_paintopWidget);
-    
+
     m_layout = new QHBoxLayout(m_paintopWidget);
     m_layout->addWidget(m_settingsWidget);
     m_layout->addWidget(m_presetWidget);
@@ -178,7 +178,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     m_prevCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
     m_currCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
-    
+
     slotNodeChanged(view->activeNode());
     updatePaintops(view->image()->colorSpace());
     setCurrentPaintop(defaultPaintOp());
@@ -212,7 +212,7 @@ KisPaintOpPresetSP KisPaintopBox::paintOpPresetSP(KoID* paintop)
 {
     if(paintop == 0)
         return m_activePreset->clone();
-    
+
     return activePreset(*paintop);
 }
 
@@ -221,7 +221,7 @@ void KisPaintopBox::updatePaintops(const KoColorSpace* colorSpace)
     /* get the list of the factories*/
     QList<QString> keys = KisPaintOpRegistry::instance()->keys();
     QList<KisPaintOpFactory*> factoryList;
-    
+
     foreach(const QString & paintopId, keys) {
         KisPaintOpFactory * factory = KisPaintOpRegistry::instance()->get(paintopId);
         if (KisPaintOpRegistry::instance()->userVisible(KoID(factory->id(), factory->name()), colorSpace)){
@@ -230,7 +230,7 @@ void KisPaintopBox::updatePaintops(const KoColorSpace* colorSpace)
             kWarning() << "Brush engine " << factory->name() << " is not visible for colorspace" << colorSpace->name();
         }
     }
-    
+
     m_presetsPopup->setPaintOpList(factoryList);
 }
 
@@ -238,10 +238,10 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
 {
     KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(resource);
     dbgUI << "preset " << preset->name() << "selected";
-    
+
     if(!preset->settings()->isLoadable())
         return;
-    
+
     setCurrentPaintop(preset->paintOp(), preset->clone());
     m_presetsPopup->setPresetImage(preset->image());
     m_presetsPopup->resourceSelected(resource);
@@ -250,7 +250,7 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
 QPixmap KisPaintopBox::paintopPixmap(const KoID& paintop)
 {
     QString pixmapName = KisPaintOpRegistry::instance()->pixmap(paintop);
-    
+
     if(pixmapName.isEmpty())
         return QPixmap();
 
@@ -274,14 +274,14 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 {
     m_tabletToolMap[m_currTabletToolID].paintOpID = currentPaintop();
     m_tabletToolMap[m_currTabletToolID].preset    = m_activePreset;
-    
+
     TabletToolMap::iterator toolData = m_tabletToolMap.find(inputDevice);
-    
+
     if(toolData == m_tabletToolMap.end())
         setCurrentPaintop(currentPaintop());
     else
         setCurrentPaintop(toolData->paintOpID, toolData->preset);
-    
+
     m_currTabletToolID = TabletToolID(inputDevice);
 }
 
@@ -301,46 +301,46 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
             m_optionWidget->disconnect(this);
             m_optionWidget->hide();
         }
-        
+
         m_paintOpPresetMap[m_activePreset->paintOp()] = m_activePreset->clone();
         m_tabletToolMap[m_currTabletToolID].preset    = m_activePreset->clone();
         m_tabletToolMap[m_currTabletToolID].paintOpID = m_activePreset->paintOp();
     }
 
     preset = (!preset) ? activePreset(paintop) : preset;
-    
+
     Q_ASSERT(preset && preset->settings());
-    
+
     if(!m_paintopOptionWidgets.contains(paintop))
         m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createSettingsWidget(this);
-    
+
     m_optionWidget = m_paintopOptionWidgets[paintop];
     m_optionWidget->setImage(m_view->image());
     m_optionWidget->setConfiguration(preset->settings());
-    
+
     preset->settings()->setOptionsWidget(m_optionWidget);
     preset->settings()->setNode(m_resourceProvider->currentNode());
-    
+
     m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
     m_presetsPopup->setPreset(preset);
     m_presetsChooserPopup->setPresetFilter(paintop);
-    
+
     Q_ASSERT(m_optionWidget && m_presetWidget);
     connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotUpdatePreset()));
-    
+
     KisPaintOpFactory* paintOp     = KisPaintOpRegistry::instance()->get(paintop.id());
     QString            pixFilename = KisFactory2::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
-    
+
     m_settingsWidget->setIcon(QIcon(pixFilename));
-    m_resourceProvider->slotPaintOpPresetActivated(preset);
+    m_resourceProvider->setPaintOpPreset(preset);
     m_presetsPopup->setCurrentPaintOp(paintop.id());
-    
+
     if (m_presetsPopup->currentPaintOp() != paintop.id()){
         // Must change the paintop as the current one is not supported
         // by the new colorspace.
         kWarning() << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
     }
-    
+
     m_activePreset = preset;
     emit signalPaintopChanged(preset);
 }
@@ -354,12 +354,12 @@ KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)
 {
     QString defaultName = paintOp.id() + ".kpp";
     QString path        = KGlobal::mainComponent().dirs()->findResource("kis_defaultpresets", defaultName);
-    
+
     KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
-    
+
     if(!preset->load())
         return KisPaintOpRegistry::instance()->defaultPreset(paintOp, m_view->image());
-    
+
     return preset;
 }
 
@@ -367,14 +367,14 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID& paintOp)
 {
     if(m_paintOpPresetMap[paintOp] == 0)
         m_paintOpPresetMap[paintOp] = defaultPreset(paintOp);
-    
+
     return m_paintOpPresetMap[paintOp];
 }
 
 void KisPaintopBox::slotSaveActivePreset()
 {
     KisPaintOpPresetSP curPreset = m_resourceProvider->currentPreset();
-    
+
     if (!curPreset)
         return;
 
@@ -392,17 +392,17 @@ void KisPaintopBox::slotSaveActivePreset()
     newPreset->setName(name);
 
     m_presetsPopup->changeSavePresetButtonText(true);
-    
+
     rServer->addResource(newPreset);
 }
 
 void KisPaintopBox::slotUpdatePreset()
 {
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
-    
+
     if(m_activePreset->settings()->hasProperty("OpacityValue")) {
         qreal opacity = m_activePreset->settings()->getDouble("OpacityValue");
-        
+
         m_sliderOpacity->blockSignals(true);
         m_sliderOpacity->setValue(opacity);
         m_sliderOpacity->blockSignals(false);
@@ -416,7 +416,7 @@ void KisPaintopBox::slotUpdatePreset()
         m_sliderOpacity->setDisabled(true);
         m_resourceProvider->setOpacity(1.0);
     }
-    
+
     if(m_activePreset->settings()->hasProperty("CompositeOp")) {
         m_cmbCompositeOp->setDisabled(false);
         m_eraseModeButton->setDisabled(false);
@@ -443,7 +443,7 @@ void KisPaintopBox::slotNodeChanged(const KisNodeSP node)
     // Deconnect colorspace change of previous node
     if (m_previousNode && m_previousNode->paintDevice())
         disconnect(m_previousNode->paintDevice().data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
-    
+
     // Reconnect colorspace change of node
     if(node && node->paintDevice())
     {
@@ -452,7 +452,7 @@ void KisPaintopBox::slotNodeChanged(const KisNodeSP node)
         m_previousNode = node;
         slotColorSpaceChanged(node->colorSpace());
     }
-    
+
     for(TabletToolMap::iterator itr=m_tabletToolMap.begin(); itr!=m_tabletToolMap.end(); ++itr) {
         if(itr->preset && itr->preset->settings())
             itr->preset->settings()->setNode(node);
@@ -475,21 +475,21 @@ void KisPaintopBox::slotToggleEraseMode(bool checked)
 void KisPaintopBox::updateCompositeOp(QString compositeOpID)
 {
     KisNodeSP node = m_resourceProvider->currentNode();
-    
+
     if(node && node->paintDevice()) {
         if(!node->paintDevice()->colorSpace()->hasCompositeOp(compositeOpID))
             compositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
-        
+
         int index = m_cmbCompositeOp->indexOf(KoID(compositeOpID));
-        
+
         m_cmbCompositeOp->blockSignals(true);
         m_cmbCompositeOp->setCurrentIndex(index);
         m_cmbCompositeOp->blockSignals(false);
-        
+
         m_eraseModeButton->blockSignals(true);
         m_eraseModeButton->setChecked(compositeOpID == COMPOSITE_ERASE);
         m_eraseModeButton->blockSignals(false);
-        
+
         if(compositeOpID != m_currCompositeOpID) {
             m_activePreset->settings()->setProperty("CompositeOp", compositeOpID);
             m_optionWidget->setConfiguration(m_activePreset->settings().data());
@@ -504,7 +504,7 @@ void KisPaintopBox::slotSetCompositeMode(int index)
 {
     if(m_activePreset->settings()->hasProperty("CompositeOp")) {
         KoID compositeOp;
-    
+
         if(m_cmbCompositeOp->entryAt(compositeOp, index))
             updateCompositeOp(compositeOp.id());
     }

@@ -150,6 +150,7 @@ void KisPrescaledProjection::initBackend(bool cacheKisImageAsQImage)
     delete m_d->projectionBackend;
 
     // we disable building the pyramid with setting its height to 1
+    // XXX: setting it higher than 1 is broken because it's not updated until you show/hide the layer
     m_d->projectionBackend = new KisImagePyramid(1);
     m_d->projectionBackend->setImage(m_d->image);
 }
@@ -178,8 +179,8 @@ void KisPrescaledProjection::updateSettings()
 void KisPrescaledProjection::viewportMoved(const QPointF &offset)
 {
     // FIXME: \|/
-    if(m_d->prescaledQImage.isNull()) return;
-    if(offset.isNull()) return;
+    if (m_d->prescaledQImage.isNull()) return;
+    if (offset.isNull()) return;
 
     QPoint alignedOffset = offset.toPoint();
 
@@ -215,7 +216,6 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
     QVector<QRect> rects = updateRegion.rects();
 
     foreach(QRect rect, rects) {
-        //gc.fillRect(rect, QColor(128, 0, 0, 255));
 
         QRect imageRect =
             m_d->coordinatesConverter->viewportToImage(rect).toAlignedRect();

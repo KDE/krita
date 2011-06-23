@@ -230,8 +230,7 @@ void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
     }
 }
 
-KisUpdateInfoSP
-KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
+KisUpdateInfoSP KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
 {
     if (!m_d->image) {
         dbgRender << "Calling updateCache without an image: " << kBacktrace() << endl;
@@ -343,8 +342,7 @@ void KisPrescaledProjection::notifyCanvasSizeChanged(const QSize &widgetSize)
 }
 
 
-KisPPUpdateInfoSP
-KisPrescaledProjection::getUpdateInformation(const QRect &viewportRect,
+KisPPUpdateInfoSP KisPrescaledProjection::getUpdateInformation(const QRect &viewportRect,
                                              const QRect &dirtyImageRect)
 {
     KisPPUpdateInfoSP info = new KisPPUpdateInfo();

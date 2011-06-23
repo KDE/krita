@@ -25,6 +25,7 @@
 #include <KoXmlWriter.h>
 
 #include <QTextInlineObject>
+#include <QPainter>
 
 KoTextSoftPageBreak::KoTextSoftPageBreak()
 {

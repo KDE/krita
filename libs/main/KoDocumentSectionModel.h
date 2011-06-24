@@ -130,6 +130,9 @@ class KoDocumentSectionModel: public QAbstractItemModel
         stasis ends, the old value is restored and the new one discarded */
         bool canHaveStasis;
         
+        /** If the property isMutable and canHaveStasis, indicate whether it is in stasis or not */
+        bool isInStasis;
+
         /** If the property isMutable and canHaveStasis, provide this value to store the property's
         state while in stasis */
         bool stateInStasis;
@@ -139,7 +142,8 @@ class KoDocumentSectionModel: public QAbstractItemModel
 
         /// Constructor for a mutable property.
         Property( const QString &n, const QIcon &on, const QIcon &off, bool isOn, bool stasis = false )
-            : name( n ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ), canHaveStasis( stasis ), stateInStasis( false ) { }
+            : name( n ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ),
+              canHaveStasis( stasis ), isInStasis( false), stateInStasis( false ) { }
 
         /// Constructor for a nonmutable property.
         Property( const QString &n, const QString &s )

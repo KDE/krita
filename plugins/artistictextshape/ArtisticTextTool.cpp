@@ -500,13 +500,13 @@ void ArtisticTextTool::deactivate()
     }
     m_hoverPath = 0;
     m_hoverText = 0;
+
+    KoShapeManager *manager = canvas()->shapeManager();
+    disconnect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 }
 
 void ArtisticTextTool::updateActions()
 {
-    KoShapeManager *manager = canvas()->shapeManager();
-    disconnect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
-
     if( m_currentShape ) {
         const QFont font = m_currentShape->fontAt(textCursor());
         const CharIndex index = m_currentShape->indexOfChar(textCursor());

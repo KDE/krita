@@ -152,6 +152,8 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->bnRaise, SIGNAL(clicked()), SLOT(slotLowerClicked()));
     connect(m_wdgLayerBox->bnLower, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     // END NOTE
+    connect(m_wdgLayerBox->bnLeft, SIGNAL(clicked()), SLOT(slotLeftClicked()));
+    connect(m_wdgLayerBox->bnRight, SIGNAL(clicked()), SLOT(slotRightClicked()));
 
     connect(m_wdgLayerBox->bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
     connect(m_wdgLayerBox->bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));

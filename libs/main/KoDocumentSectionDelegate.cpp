@@ -126,7 +126,6 @@ bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *m
                     QModelIndex eachItem;
                     // STEP 1: Go.
                     if (propertyList[clickedProperty].isInStasis == false) { // Enter
-                        qDebug() << "ENTERING stasis";
                         /* Make every leaf of this node go State = False, saving the old property value to stateInStasis */
                         for (quint16 i = 0; i < numberOfLeaves; ++i) { // Foreach leaf in the node (index.parent())
                             eachItem = model->index(i, 0, index.parent());
@@ -145,7 +144,6 @@ bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *m
                         propertyList[clickedProperty].state = true;
                         model->setData(index, QVariant::fromValue(propertyList), Model::PropertiesRole);
                     } else { // Leave
-                        qDebug() << "LEAVING stasis";
                         /* Make every leaf of this node go State = stateInStasis */
                         for (quint16 i = 0; i < numberOfLeaves; ++i) {
                             eachItem = model->index(i, 0, index.parent());
@@ -156,8 +154,6 @@ bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *m
                             model->setData(eachItem, QVariant::fromValue(eachPropertyList), Model::PropertiesRole);
                         }
                     }
-                    // STEP 3: Inform the view of what happened
-                    qDebug() << "KoDelegate: Eureka!, Visible Property matched, stasis entered or left";
                 } else {
                     propertyList[clickedProperty].state = !propertyList[clickedProperty].state.toBool();
                     model->setData(index, QVariant::fromValue(propertyList), Model::PropertiesRole);

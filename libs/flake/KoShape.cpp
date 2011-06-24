@@ -874,7 +874,7 @@ void KoShape::setTextRunAroundSide(TextRunAroundSide side, Through runThrought)
         if (runThrought == Background) {
             setRunThrough(-1);
         } else {
-            setRunThrough(0); // run-through=Foreground is the default
+            setRunThrough(1);
         }
     } else {
         setRunThrough(0);

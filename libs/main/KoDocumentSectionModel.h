@@ -125,12 +125,21 @@ class KoDocumentSectionModel: public QAbstractItemModel
         /** If the property isMutable, provide a boolean. Otherwise, a string suitable for displaying. */
         QVariant state;
 
+        /** If the property is mutable, specifies whether it can be put into stasis. When a property
+        is in stasis, a new state is created, and the old one is stored in stateInStasis. When
+        stasis ends, the old value is restored and the new one discarded */
+        bool canHaveStasis;
+        
+        /** If the property isMutable and canHaveStasis, provide this value to store the property's
+        state while in stasis */
+        bool stateInStasis;
+
         /// Default constructor. Use if you want to assign the members manually.
         Property(): isMutable( false ) { }
 
         /// Constructor for a mutable property.
-        Property( const QString &n, const QIcon &on, const QIcon &off, bool isOn )
-            : name( n ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ) { }
+        Property( const QString &n, const QIcon &on, const QIcon &off, bool isOn, bool stasis = false )
+            : name( n ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ), canHaveStasis( stasis ), stateInStasis( false ) { }
 
         /// Constructor for a nonmutable property.
         Property( const QString &n, const QString &s )

@@ -109,15 +109,15 @@ bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *m
             int xPos = mouseEvent->pos().x() - iconsRect_.left();
             if (xPos % (iconWidth + d->margin) < iconWidth) { //it's on an icon, not a margin
                 Model::PropertyList propertyList = index.data(Model::PropertiesRole).value<Model::PropertyList>();
-                int p = -1;
+                int clickedProperty = -1;
                 for (int i = 0; i < propertyList.count(); ++i) {
                     if (propertyList[i].isMutable) {
                         xPos -= iconWidth + d->margin;
                     }
-                    ++p;
+                    ++clickedProperty;
                     if (xPos < 0) break;
                 }
-                propertyList[p].state = !propertyList[p].state.toBool();
+                propertyList[clickedProperty].state = !propertyList[clickedProperty].state.toBool();
                 model->setData(index, QVariant::fromValue(propertyList), Model::PropertiesRole);
             }
             return true;

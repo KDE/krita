@@ -140,8 +140,6 @@ public:
      */
     bool openDocument(KoDocument *newdoc, const KUrl & url);
 
-//     virtual DCOPObject * dcopObject();
-
     /**
      * Reloads the recent documents list.
      */

@@ -73,7 +73,7 @@ ChangeTrackedDeleteCommand::ChangeTrackedDeleteCommand(DeleteMode mode, TextTool
     m_mode(mode),
     m_removedElements()
 {
-      setText(i18n("Delete"));
+      setText(i18nc("(qtundo-format)", "Delete"));
 }
 
 void ChangeTrackedDeleteCommand::undo()
@@ -341,7 +341,7 @@ bool ChangeTrackedDeleteCommand::mergeWith( const KUndo2Command *command)
     {
     public:
         UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
-        : KUndo2Command(i18n("Text"), parent),
+        : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
         m_document(document)
         {}
 

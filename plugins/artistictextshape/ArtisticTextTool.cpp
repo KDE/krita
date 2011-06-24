@@ -572,7 +572,7 @@ void ArtisticTextTool::convertText()
     path->setShapeId( KoPathShapeId );
 
     KUndo2Command * cmd = canvas()->shapeController()->addShapeDirect( path );
-    cmd->setText( i18n("Convert to Path") );
+    cmd->setText( i18nc("(qtundo-format)", "Convert to Path") );
     canvas()->shapeController()->removeShape( m_currentShape, cmd );
     canvas()->addCommand( cmd );
 

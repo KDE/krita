@@ -49,7 +49,7 @@ KoShapeCreateCommand::KoShapeCreateCommand(KoShapeControllerBase *controller, Ko
         : KUndo2Command(parent),
         d(new Private(controller, shape))
 {
-    setText(i18n("Create shape"));
+    setText(i18nc("(qtundo-format)", "Create shape"));
 }
 
 KoShapeCreateCommand::~KoShapeCreateCommand()

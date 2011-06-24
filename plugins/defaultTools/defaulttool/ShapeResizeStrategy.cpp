@@ -237,7 +237,7 @@ KUndo2Command* ShapeResizeStrategy::createCommand()
         newSizes << m_selectedShapes[i]->size();
         transformations << m_selectedShapes[i]->transformation();
     }
-    KUndo2Command * cmd = new KUndo2Command(i18n("Resize"));
+    KUndo2Command * cmd = new KUndo2Command(i18nc("(qtundo-format)", "Resize"));
     new KoShapeSizeCommand(m_selectedShapes, m_startSizes, newSizes, cmd );
     new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, transformations, cmd );
     return cmd;

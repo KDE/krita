@@ -39,7 +39,7 @@ KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPoi
     Q_ASSERT(d->shapes.count() == d->previousPositions.count());
     Q_ASSERT(d->shapes.count() == d->newPositions.count());
 
-    setText(i18n("Move shapes"));
+    setText(i18nc("(qtundo-format)", "Move shapes"));
 }
 
 KoShapeMoveCommand::~KoShapeMoveCommand()

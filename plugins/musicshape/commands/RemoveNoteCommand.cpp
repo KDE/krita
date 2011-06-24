@@ -29,7 +29,7 @@ using namespace MusicCore;
 RemoveNoteCommand::RemoveNoteCommand(MusicShape* shape, Chord* chord, Note* note)
     : m_chord(chord), m_note(note), m_shape(shape)
 {
-    setText(i18n("Remove note"));
+    setText(i18nc("(qtundo-format)", "Remove note"));
 }
 
 void RemoveNoteCommand::redo()

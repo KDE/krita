@@ -42,7 +42,7 @@ TreeShapeMoveCommand::TreeShapeMoveCommand(const QList<KoShape*> &shapes,
         m_parents.append(par);
         m_connectors.append(par ? par->connector(shape) : 0);
     }
-    setText(i18n("Attach tree"));
+    setText(i18nc("(qtundo-format)", "Attach tree"));
 }
 
 TreeShapeMoveCommand::~TreeShapeMoveCommand()

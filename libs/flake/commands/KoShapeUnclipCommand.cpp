@@ -120,7 +120,7 @@ KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeControllerBase *controller, co
         d->oldClipPaths.append(shape->clipPath());
     }
 
-    setText(i18n("Unclip Shape"));
+    setText(i18nc("(qtundo-format)", "Unclip Shape"));
 }
 
 KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeControllerBase *controller, KoShape *shape, KUndo2Command *parent)
@@ -129,7 +129,7 @@ KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeControllerBase *controller, Ko
     d->shapesToUnclip.append(shape);
     d->oldClipPaths.append(shape->clipPath());
 
-    setText(i18n("Unclip Shapes"));
+    setText(i18nc("(qtundo-format)", "Unclip Shapes"));
 }
 
 KoShapeUnclipCommand::~KoShapeUnclipCommand()

@@ -42,7 +42,7 @@ AcceptChangeCommand::AcceptChangeCommand (int changeId, QList<QPair<int, int> > 
     m_changeRanges(changeRanges),
     m_document(document)
 {
-    setText(i18n("Accept change"));
+    setText(i18nc("(qtundo-format)", "Accept change"));
 
     m_changeTracker = KoTextDocument(m_document).changeTracker();
 }

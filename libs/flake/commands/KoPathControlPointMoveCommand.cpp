@@ -38,7 +38,7 @@ KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(
         m_offset = point->parent()->documentToShape(offset) - point->parent()->documentToShape(QPointF(0, 0));
     }
 
-    setText(i18n("Move control point"));
+    setText(i18nc("(qtundo-format)", "Move control point"));
 }
 
 void KoPathControlPointMoveCommand::redo()

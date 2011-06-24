@@ -28,10 +28,10 @@ KoPADisplayMasterShapesCommand::KoPADisplayMasterShapesCommand( KoPAPage * page,
 , m_display( display )
 {
     if ( m_display ) {
-        setText( i18n( "Show master shapes" ) );
+        setText( i18nc( "(qtundo-format)", "Show master shapes" ) );
     }
     else {
-        setText( i18n( "Hide master shapes" ) );
+        setText( i18nc( "(qtundo-format)", "Hide master shapes" ) );
     }
 }
 

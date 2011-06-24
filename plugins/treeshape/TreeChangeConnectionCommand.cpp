@@ -28,7 +28,7 @@ TreeChangeConnectionCommand::TreeChangeConnectionCommand(TreeShape *tree, KoConn
 {
     Q_ASSERT(m_tree);
 
-    setText(i18n("Change tree"));
+    setText(i18nc("(qtundo-format)", "Change tree"));
 
     m_oldType = m_tree->connectionType();
 }

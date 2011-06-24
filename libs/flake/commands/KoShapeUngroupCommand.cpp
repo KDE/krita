@@ -54,7 +54,7 @@ KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const 
         d->oldZIndex.append(zIndex++);
     }
 
-    setText(i18n("Ungroup shapes"));
+    setText(i18nc("(qtundo-format)", "Ungroup shapes"));
 }
 
 void KoShapeUngroupCommand::redo()

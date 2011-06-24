@@ -23,7 +23,7 @@
 
 
 KisNodeOpacityCommand::KisNodeOpacityCommand(KisNodeSP node, quint8 oldOpacity, quint8 newOpacity) :
-        KisNodeCommand(i18n("Node Opacity"), node)
+        KisNodeCommand(i18nc("(qtundo-format)", "Node Opacity"), node)
 {
     m_oldOpacity = oldOpacity;
     m_newOpacity = newOpacity;

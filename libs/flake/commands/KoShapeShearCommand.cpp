@@ -48,7 +48,7 @@ KoShapeShearCommand::KoShapeShearCommand(const QList<KoShape*> &shapes, const QL
     Q_ASSERT(d->shapes.count() == d->newShearXs.count());
     Q_ASSERT(d->shapes.count() == d->newShearYs.count());
 
-    setText(i18n("Shear shapes"));
+    setText(i18nc("(qtundo-format)", "Shear shapes"));
 }
 
 KoShapeShearCommand::~KoShapeShearCommand()

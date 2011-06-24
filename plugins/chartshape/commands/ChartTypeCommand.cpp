@@ -85,37 +85,37 @@ void ChartTypeCommand::setChartType(ChartType type, ChartSubtype subtype)
 
     switch (type) {
     case BarChartType:
-        setText(i18n("Bar Chart"));
+        setText(i18nc("(qtundo-format)", "Bar Chart"));
         break;
     case LineChartType:
-        setText(i18n("Line Chart"));
+        setText(i18nc("(qtundo-format)", "Line Chart"));
         break;
     case AreaChartType:
-        setText(i18n("Area Chart"));
+        setText(i18nc("(qtundo-format)", "Area Chart"));
         break;
     case CircleChartType:
-        setText(i18n("Circle Chart"));
+        setText(i18nc("(qtundo-format)", "Circle Chart"));
         break;
     case RingChartType:
-        setText(i18n("Ring Chart"));
+        setText(i18nc("(qtundo-format)", "Ring Chart"));
         break;
     case ScatterChartType:
-        setText(i18n("Scatter Chart"));
+        setText(i18nc("(qtundo-format)", "Scatter Chart"));
         break;
     case RadarChartType:
-        setText(i18n("Radar Chart"));
+        setText(i18nc("(qtundo-format)", "Radar Chart"));
         break;
     case StockChartType:
-        setText(i18n("Stock Chart"));
+        setText(i18nc("(qtundo-format)", "Stock Chart"));
         break;
     case BubbleChartType:
-        setText(i18n("Bubble Chart"));
+        setText(i18nc("(qtundo-format)", "Bubble Chart"));
         break;
     case SurfaceChartType:
-        setText(i18n("Surface Chart"));
+        setText(i18nc("(qtundo-format)", "Surface Chart"));
         break;
     case GanttChartType:
-        setText(i18n("Gantt Chart"));
+        setText(i18nc("(qtundo-format)", "Gantt Chart"));
         break;
     case LastChartType:
     default:

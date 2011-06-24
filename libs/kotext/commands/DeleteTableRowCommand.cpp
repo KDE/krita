@@ -37,7 +37,7 @@ DeleteTableRowCommand::DeleteTableRowCommand(KoTextEditor *te, QTextTable *t, in
     ,m_table(t)
     ,m_changeId(changeId)
 {
-    setText(i18n("Delete Row"));
+    setText(i18nc("(qtundo-format)", "Delete Row"));
 }
 
 void DeleteTableRowCommand::undo()

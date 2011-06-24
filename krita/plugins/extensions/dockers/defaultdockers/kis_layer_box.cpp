@@ -131,6 +131,14 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->bnLower->setEnabled(false);
     m_wdgLayerBox->bnLower->setIcon(BarIcon("go-down"));
     m_wdgLayerBox->bnLower->setIconSize(QSize(22, 22));
+    
+    m_wdgLayerBox->bnLeft->setEnabled(true);
+    m_wdgLayerBox->bnLeft->setIcon(BarIcon("arrow-left"));
+    m_wdgLayerBox->bnLeft->setIconSize(QSize(22, 22));
+    
+    m_wdgLayerBox->bnRight->setEnabled(true);
+    m_wdgLayerBox->bnRight->setIcon(BarIcon("arrow-right"));
+    m_wdgLayerBox->bnRight->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnProperties->setIcon(BarIcon("document-properties"));
     m_wdgLayerBox->bnProperties->setIconSize(QSize(22, 22));

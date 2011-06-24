@@ -467,6 +467,16 @@ void KisLayerBox::slotLowerClicked()
     m_nodeManager->lowerNode();
 }
 
+void KisLayerBox::slotLeftClicked()
+{
+    qDebug() << "slotLeftClicked";
+}
+
+void KisLayerBox::slotRightClicked()
+{
+    qDebug() << "slotRightClicked";
+}
+
 void KisLayerBox::slotPropertiesClicked()
 {
     if (KisNodeSP active = m_nodeManager->activeNode()) {

@@ -90,6 +90,8 @@ private slots:
     void slotRmClicked();
     void slotRaiseClicked();
     void slotLowerClicked();
+    void slotLeftClicked();
+    void slotRightClicked();
     void slotPropertiesClicked();
     void slotDuplicateClicked();
 

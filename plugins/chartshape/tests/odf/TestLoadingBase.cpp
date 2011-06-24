@@ -61,7 +61,13 @@ TestLoadingBase::TestLoadingBase()
 void TestLoadingBase::initTestCase()
 {
     ChartDocument document( m_chart );
-    KoStore *store = KoStore::createStore( QString( KDESRCDIR ) + "/doc", KoStore::Read );
+    QString srcdirname( KDESRCDIR );
+    QVERIFY( !srcdirname.isEmpty() );
+    QDir srcdir(srcdirname);
+    QVERIFY( srcdir.exists() );
+    bool hasDocDirInSrcDir = srcdir.cd("doc");
+    QVERIFY( hasDocDirInSrcDir );
+    KoStore *store = KoStore::createStore( srcdir.absolutePath(), KoStore::Read );
     QVERIFY( store->enterDirectory( "doc" ) );
     QString errorMsg;
     KoOdfReadStore odfReadStore( store );

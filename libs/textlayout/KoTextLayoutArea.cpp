@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008,2011 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2007-2008 Pierre Ducroquet <pinaraf@pinaraf.info>
@@ -55,6 +55,7 @@
 #include <KoImageCollection.h>
 #include <KoInlineNote.h>
 #include <KoInlineNote.h>
+#include <KoTextSoftPageBreak.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTableOfContentsGeneratorInfo.h>
 
@@ -911,10 +912,32 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         bool softBreak = false;
         if (acceptsPageBreak() && !format.nonBreakableLines() && bottomOfText > maximumAllowedBottom() - 150) {
-            int softBreakPos = block.text().indexOf(QChar(0x000c), line.textStart());
-            if (softBreakPos > 0 && softBreakPos < line.textStart() + line.textLength()) {
+            int softBreakPos = -1;
+            QString text = block.text();
+            int pos = text.indexOf(QChar::ObjectReplacementCharacter, line.textStart());
+
+            while (pos >= 0 && pos <= line.textStart() + line.textLength()) {
+                QTextCursor c1(block);
+                c1.setPosition(block.position() + pos);
+                c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
+
+                KoTextSoftPageBreak *softPageBreak = dynamic_cast<KoTextSoftPageBreak*>(m_documentLayout->inlineTextObjectManager()->inlineTextObject(c1));
+                if (softPageBreak) {
+                    softBreakPos = pos;
+                }
+
+                pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
+            }
+
+            if (softBreakPos >= 0 && softBreakPos < line.textStart() + line.textLength()) {
                 line.setNumColumns(softBreakPos - line.textStart() + 1, line.width());
                 softBreak = true;
+                // if the softBreakPos is at the start of the line stop here so
+                // we don't add a line here. That fixes the problem that e.g. the counter is before
+                // the page break and the text is after the page break
+                if (softBreakPos == 0) {
+                    return false;
+                }
             }
         }
         findFootNotes(block, line);

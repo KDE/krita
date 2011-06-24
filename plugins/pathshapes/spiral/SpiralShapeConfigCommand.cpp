@@ -20,8 +20,8 @@
 #include "SpiralShapeConfigCommand.h"
 #include <klocale.h>
 
-SpiralShapeConfigCommand::SpiralShapeConfigCommand(SpiralShape * spiral, SpiralShape::SpiralType type, bool clockWise, qreal fade, QUndoCommand *parent)
-    : QUndoCommand(parent)
+SpiralShapeConfigCommand::SpiralShapeConfigCommand(SpiralShape * spiral, SpiralShape::SpiralType type, bool clockWise, qreal fade, KUndo2Command *parent)
+    : KUndo2Command(parent)
     , m_spiral(spiral)
     , m_newType(type)
     , m_newClockWise(clockWise)
@@ -29,7 +29,7 @@ SpiralShapeConfigCommand::SpiralShapeConfigCommand(SpiralShape * spiral, SpiralS
 {
     Q_ASSERT(m_spiral);
 
-    setText(i18n("Change spiral"));
+    setText(i18nc("(qtundo-format)", "Change spiral"));
 
     m_oldType = m_spiral->type();
     m_oldClockWise = m_spiral->clockWise();
@@ -38,7 +38,7 @@ SpiralShapeConfigCommand::SpiralShapeConfigCommand(SpiralShape * spiral, SpiralS
 
 void SpiralShapeConfigCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     m_spiral->update();
 
@@ -54,7 +54,7 @@ void SpiralShapeConfigCommand::redo()
 
 void SpiralShapeConfigCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     m_spiral->update();
 

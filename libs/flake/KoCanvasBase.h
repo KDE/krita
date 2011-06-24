@@ -36,7 +36,7 @@
 #include "flake_export.h"
 
 class QGraphicsWidget;
-class QUndoCommand;
+class KUndo2Command;
 
 class KoResourceManager;
 class KoShapeManager;
@@ -109,7 +109,7 @@ public:
      * it when the undo limit is reached, or when deleting the command history itself.
      * @param command the command to add
      */
-    virtual void addCommand(QUndoCommand *command) = 0;
+    virtual void addCommand(KUndo2Command *command) = 0;
 
     /**
      * return the current shapeManager

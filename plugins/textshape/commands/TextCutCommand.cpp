@@ -26,23 +26,23 @@
 #include <KAction>
 #include <klocale.h>
 
-TextCutCommand::TextCutCommand(TextTool *tool, QUndoCommand *parent) :
-    QUndoCommand (parent),
+TextCutCommand::TextCutCommand(TextTool *tool, KUndo2Command *parent) :
+    KUndo2Command (parent),
     m_tool(tool),
     m_first(true)
 {
-    setText(i18n("Cut"));
+    setText(i18nc("(qtundo-format)", "Cut"));
 }
 
 void TextCutCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }
 
 void TextCutCommand::redo()
 {
     if (!m_first) {
-        QUndoCommand::redo();
+        KUndo2Command::redo();
     } else {
         m_first = false;
         m_tool->copy();

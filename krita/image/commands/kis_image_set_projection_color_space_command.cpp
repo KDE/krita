@@ -26,7 +26,7 @@
 
 
 KisImageSetProjectionColorSpaceCommand::KisImageSetProjectionColorSpaceCommand(KisImageWSP image, const KoColorSpace * afterColorSpace)
-    : KisImageCommand(i18n("Convert Image Type"), image)
+    : KisImageCommand(i18nc("(qtundo-format)", "Convert Image Type"), image)
 {
     m_beforeColorSpace = image->colorSpace();
     m_afterColorSpace = afterColorSpace;

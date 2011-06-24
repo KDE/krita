@@ -19,7 +19,7 @@
 #ifndef KIS_TRANSACTION_H_
 #define KIS_TRANSACTION_H_
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include "kis_types.h"
 #include <krita_export.h>
@@ -34,7 +34,7 @@
 class KisTransaction
 {
 public:
-    KisTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent = 0) {
+    KisTransaction(const QString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0) {
         m_transactionData = new KisTransactionData(name, device, parent);
     }
 
@@ -42,7 +42,7 @@ public:
         delete m_transactionData;
     }
 
-    QUndoCommand* undoCommand() {
+    KUndo2Command* undoCommand() {
         return m_transactionData;
     }
 
@@ -89,7 +89,7 @@ protected:
 class KisSelectedTransaction : public KisTransaction
 {
 public:
-    KisSelectedTransaction(const QString& name, KisNodeSP node, QUndoCommand* parent = 0)
+    KisSelectedTransaction(const QString& name, KisNodeSP node, KUndo2Command* parent = 0)
     {
         m_transactionData = new KisSelectedTransactionData(name, node, parent);
     }
@@ -98,7 +98,7 @@ public:
 class KisSelectionTransaction : public KisTransaction
 {
 public:
-    KisSelectionTransaction(const QString& name, KisImageWSP image, KisSelectionSP selection, QUndoCommand* parent = 0)
+    KisSelectionTransaction(const QString& name, KisImageWSP image, KisSelectionSP selection, KUndo2Command* parent = 0)
     {
         m_transactionData = new KisSelectionTransactionData(name, image, selection, parent);
     }

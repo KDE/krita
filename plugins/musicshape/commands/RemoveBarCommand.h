@@ -19,14 +19,14 @@
 #ifndef REMOVEBARCOMMAND_H
 #define REMOVEBARCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 namespace MusicCore {
     class Bar;
 }
 class MusicShape;
 
-class RemoveBarCommand : public QUndoCommand
+class RemoveBarCommand : public KUndo2Command
 {
 public:
     RemoveBarCommand(MusicShape* shape, int barIdx);

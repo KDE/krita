@@ -38,13 +38,13 @@
 #include <QTextDocument>
 #include <QTextFragment>
 
-RejectChangeCommand::RejectChangeCommand (int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, QUndoCommand* parent) : TextCommandBase(parent),
+RejectChangeCommand::RejectChangeCommand (int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, KUndo2Command* parent) : TextCommandBase(parent),
     m_first(true),
     m_changeId(changeId),
     m_changeRanges(changeRanges),
     m_document(document)
 {
-    setText(i18n("Reject change"));
+    setText(i18nc("(qtundo-format)", "Reject change"));
 
     m_changeTracker = KoTextDocument(m_document).changeTracker();
     m_layout = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());

@@ -57,6 +57,7 @@ SpecialButton::SpecialButton(QWidget *parent)
     preview->setAutoFillBackground(true);
     preview->setBackgroundRole(QPalette::Base);
     preview->setMinimumWidth(50);
+    preview->setMinimumHeight(32);
     preview->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     QHBoxLayout *l = new QHBoxLayout(this);
     l->addWidget(preview);

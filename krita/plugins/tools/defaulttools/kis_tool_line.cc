@@ -242,7 +242,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
             KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
             path->setBorder(border);
 
-            QUndoCommand * cmd = canvas()->shapeController()->addShape(path);
+            KUndo2Command * cmd = canvas()->shapeController()->addShape(path);
             canvas()->addCommand(cmd);
         }
     }

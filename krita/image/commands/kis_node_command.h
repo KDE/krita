@@ -20,13 +20,13 @@
 #define KIS_NODE_COMMAND_H_
 
 #include <krita_export.h>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include "kis_types.h"
 
 class KisNode;
 
 /// the base command for commands altering a node
-class KRITAIMAGE_EXPORT KisNodeCommand : public QUndoCommand
+class KRITAIMAGE_EXPORT KisNodeCommand : public KUndo2Command
 {
 
 public:

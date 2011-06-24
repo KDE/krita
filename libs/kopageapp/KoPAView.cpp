@@ -563,7 +563,7 @@ void KoPAView::formatPageLayout()
     KoPAPageLayoutDialog dialog( d->doc, pageLayout, d->canvas );
 
     if ( dialog.exec() == QDialog::Accepted ) {
-        QUndoCommand *command = new QUndoCommand( i18n( "Change page layout" ) );
+        KUndo2Command *command = new KUndo2Command( i18nc( "(qtundo-format)", "Change page layout" ) );
         viewMode()->changePageLayout( dialog.pageLayout(), dialog.applyToDocument(), command );
 
         d->canvas->addCommand( command );

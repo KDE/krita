@@ -192,15 +192,16 @@ void KisPixelSelection::clear()
 
 void KisPixelSelection::invert()
 {
-    // Extent is needed here (not exactBounds), because unselected but existing pixel
-    // need to be inverted too
-    QRect rc = extent();
+    // Region is needed here (not exactBounds or extent), because
+    // unselected but existing pixels need to be inverted too
+    QRect rc = region().boundingRect();
 
     KisRectIterator it = createRectIterator(rc.x(), rc.y(), rc.width(), rc.height());
     while (! it.isDone()) {
         *(it.rawData()) = MAX_SELECTED - *(it.rawData());
         ++it;
     }
+
     quint8 defPixel = MAX_SELECTED - *defaultPixel();
     setDefaultPixel(&defPixel);
 }
@@ -257,13 +258,14 @@ QVector<QPolygon> KisPixelSelection::outline()
     return paths;
 }
 
-void KisPixelSelection::renderToProjection(KisSelection* projection)
+void KisPixelSelection::renderToProjection(KisPixelSelection* projection)
 {
     renderToProjection(projection, selectedExactRect());
 }
 
-void KisPixelSelection::renderToProjection(KisSelection* projection, const QRect& rc)
+void KisPixelSelection::renderToProjection(KisPixelSelection* projection, const QRect& rc)
 {
+    // FIXME: use selectedRect() instead
     QRect updateRect = rc & selectedExactRect();
 
     if (updateRect.isValid()) {

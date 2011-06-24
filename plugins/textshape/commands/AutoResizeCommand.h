@@ -21,14 +21,14 @@
 #ifndef AUTORESIZECOMMAND_H
 #define AUTORESIZECOMMAND_H
 
-#include <QUndoStack>
+#include <kundo2qstack.h>
 #include <QPointer>
 #include <TextTool.h>
 #include <KoTextDocumentLayout.h>
 
 class TextShape;
 
-class AutoResizeCommand : public QUndoCommand
+class AutoResizeCommand : public KUndo2Command
 {
 public:
     AutoResizeCommand(KoTextShapeData *shapeData, KoTextShapeData::ResizeMethod resizeMethod, bool enable);

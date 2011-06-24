@@ -26,7 +26,7 @@ class UpdateInformation;
 class KisImagePatch;
 
 /**
- * KisProjectionBackend ia an abstract class represinting
+ * KisProjectionBackend is an abstract class representing
  * an object that can store a cache of KisImage projection.
  * More than that this object can perform some scaling operations
  * that are based on "patches" paradigm

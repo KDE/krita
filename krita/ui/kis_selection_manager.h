@@ -37,6 +37,8 @@ class KisDoc;
 class KisClipboard;
 class KisNodeCommandsAdapter;
 
+class KisSelectionFilter;
+
 /**
  * The selection manager is responsible selections
  * and the clipboard.
@@ -77,7 +79,6 @@ public slots:
     void selectAll();
     void deselect();
     void clear();
-    void deleteSelection();
     void fillForegroundColor();
     void fillBackgroundColor();
     void fillPattern();
@@ -92,8 +93,14 @@ public slots:
 
 signals:
     void currentSelectionChanged();
+    void signalUpdateGUI();
 
 public:
+    bool havePixelsSelected();
+    bool havePixelsInClipboard();
+    bool haveShapesSelected();
+    bool haveShapesInClipboard();
+
     void grow(qint32 xradius, qint32 yradius);
     void shrink(qint32 xradius, qint32 yradius, bool edge_lock);
     void border(qint32 xradius, qint32 yradius);
@@ -109,13 +116,9 @@ private:
     void fill(const KoColor& color, bool fillWithPattern, const QString& transactionText);
     void updateStatusBar();
 
-
-    void computeBorder(qint32  *circ, qint32  xradius, qint32  yradius);
-    inline void rotatePointers(quint8  **p, quint32 n);
-    void computeTransition(quint8* transition, quint8** buf, qint32 width);
-
     void copyFromDevice(KisPaintDeviceSP device);
-    
+    void applySelectionFilter(KisSelectionFilter *filter);
+
     KisView2 * m_view;
     KisDoc2 * m_doc;
 
@@ -133,10 +136,9 @@ private:
     KAction *m_selectAll;
     KAction *m_deselect;
     KAction *m_clear;
-    KAction *m_delete;
     KAction *m_reselect;
     KAction *m_invert;
-    KAction *m_toNewLayer;
+    KAction *m_copyToNewLayer;
     KAction *m_smooth;
     KAction *m_load;
     KAction *m_save;

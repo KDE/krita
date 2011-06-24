@@ -21,10 +21,10 @@
 #include "ArtisticTextShape.h"
 #include <KLocale>
 
-DetachTextFromPathCommand::DetachTextFromPathCommand( ArtisticTextShape * textShape, QUndoCommand * parent )
-: QUndoCommand(parent), m_textShape(textShape), m_pathShape(0)
+DetachTextFromPathCommand::DetachTextFromPathCommand( ArtisticTextShape * textShape, KUndo2Command * parent )
+: KUndo2Command(parent), m_textShape(textShape), m_pathShape(0)
 {
-    setText( i18n("Detach Path") );
+    setText( i18nc("(qtundo-format)", "Detach Path") );
     
     Q_ASSERT( m_textShape->layout() != ArtisticTextShape::Straight );
 
@@ -36,7 +36,7 @@ DetachTextFromPathCommand::DetachTextFromPathCommand( ArtisticTextShape * textSh
 
 void DetachTextFromPathCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     m_textShape->update();
     m_textShape->removeFromPath();
@@ -54,5 +54,5 @@ void DetachTextFromPathCommand::undo()
 
     m_textShape->update();
     
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }

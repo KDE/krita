@@ -26,7 +26,7 @@
 #include <QVariantList>
 
 #include <kdebug.h>
-#include <KUndoStack>
+#include <kundo2stack.h>
 
 #include "KoTextDocument.h"
 #include "KoTextEditor.h"
@@ -184,17 +184,17 @@ KoList *KoTextDocument::headingList() const
     return resource.value<KoList *>();
 }
 
-void KoTextDocument::setUndoStack(KUndoStack *undoStack)
+void KoTextDocument::setUndoStack(KUndo2Stack *undoStack)
 {
     QVariant v;
     v.setValue<void*>(undoStack);
     m_document->addResource(KoTextDocument::UndoStack, UndoStackURL, v);
 }
 
-KUndoStack *KoTextDocument::undoStack() const
+KUndo2Stack *KoTextDocument::undoStack() const
 {
     QVariant resource = m_document->resource(KoTextDocument::UndoStack, UndoStackURL);
-    return static_cast<KUndoStack*>(resource.value<void*>());
+    return static_cast<KUndo2Stack*>(resource.value<void*>());
 }
 
 void KoTextDocument::setLists(const QList<KoList *> &lists)

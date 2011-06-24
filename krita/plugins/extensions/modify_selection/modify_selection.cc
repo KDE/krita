@@ -68,36 +68,52 @@ ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
 
         m_view = (KisView2*) parent;
 
-        // Selection manager takes ownership?
-        KAction* a  = new KAction(i18n("Grow Selection..."), this);
-        actionCollection()->addAction("growselection", a);
-        KAction* b  = new KAction(i18n("Shrink Selection..."), this);
-        actionCollection()->addAction("shrinkselection", b);
-        KAction* c  = new KAction(i18n("Border Selection..."), this);
-        actionCollection()->addAction("borderselection", c);
-        KAction* d  = new KAction(i18n("Feather Selection..."), this);
-        actionCollection()->addAction("featherselection", d);
+        // Selection manager takes ownership
+        m_growSelection  = new KAction(i18n("Grow Selection..."), this);
+        actionCollection()->addAction("growselection", m_growSelection);
 
-        Q_CHECK_PTR(a);
-        Q_CHECK_PTR(b);
-        Q_CHECK_PTR(c);
-        Q_CHECK_PTR(d);
+        m_shrinkSelection = new KAction(i18n("Shrink Selection..."), this);
+        actionCollection()->addAction("shrinkselection", m_shrinkSelection);
 
-        connect(a, SIGNAL(triggered()), this, SLOT(slotGrowSelection()));
-        connect(b, SIGNAL(triggered()), this, SLOT(slotShrinkSelection()));
-        connect(c, SIGNAL(triggered()), this, SLOT(slotBorderSelection()));
-        connect(d, SIGNAL(triggered()), this, SLOT(slotFeatherSelection()));
+        m_borderSelection  = new KAction(i18n("Border Selection..."), this);
+        actionCollection()->addAction("borderselection", m_borderSelection);
 
-        m_view->selectionManager()->addSelectionAction(a);
-        m_view->selectionManager()->addSelectionAction(b);
-        m_view->selectionManager()->addSelectionAction(c);
-        m_view->selectionManager()->addSelectionAction(d);
+        m_featherSelection  = new KAction(i18n("Feather Selection..."), this);
+        actionCollection()->addAction("featherselection", m_featherSelection);
+
+        Q_CHECK_PTR(m_growSelection);
+        Q_CHECK_PTR(m_shrinkSelection);
+        Q_CHECK_PTR(m_borderSelection);
+        Q_CHECK_PTR(m_featherSelection);
+
+        connect(m_growSelection, SIGNAL(triggered()), this, SLOT(slotGrowSelection()));
+        connect(m_shrinkSelection, SIGNAL(triggered()), this, SLOT(slotShrinkSelection()));
+        connect(m_borderSelection, SIGNAL(triggered()), this, SLOT(slotBorderSelection()));
+        connect(m_featherSelection, SIGNAL(triggered()), this, SLOT(slotFeatherSelection()));
+
+        m_view->selectionManager()->addSelectionAction(m_growSelection);
+        m_view->selectionManager()->addSelectionAction(m_shrinkSelection);
+        m_view->selectionManager()->addSelectionAction(m_borderSelection);
+        m_view->selectionManager()->addSelectionAction(m_featherSelection);
+
+        connect(m_view->selectionManager(), SIGNAL(signalUpdateGUI()),
+                SLOT(slotUpdateGUI()));
     }
 }
 
 ModifySelection::~ModifySelection()
 {
     m_view = 0;
+}
+
+void ModifySelection::slotUpdateGUI()
+{
+    bool havePixelsSelected = m_view->selectionManager()->havePixelsSelected();
+
+    m_growSelection->setEnabled(havePixelsSelected);
+    m_shrinkSelection->setEnabled(havePixelsSelected);
+    m_borderSelection->setEnabled(havePixelsSelected);
+    m_featherSelection->setEnabled(havePixelsSelected);
 }
 
 void ModifySelection::slotGrowSelection()

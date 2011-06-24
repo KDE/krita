@@ -20,14 +20,14 @@
 #ifndef KOPATHREVERSECOMMAND_H
 #define KOPATHREVERSECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 #include "flake_export.h"
 
 class KoPathShape;
 
 /// The undo / redo command for reversing path directions
-class FLAKE_EXPORT KoPathReverseCommand : public QUndoCommand
+class FLAKE_EXPORT KoPathReverseCommand : public KUndo2Command
 {
 public:
     /**
@@ -35,7 +35,7 @@ public:
      * @param paths the list of paths to reverse
      * @param parent the parent command used for macro commands
      */
-    explicit KoPathReverseCommand(const QList<KoPathShape*> &paths, QUndoCommand *parent = 0);
+    explicit KoPathReverseCommand(const QList<KoPathShape*> &paths, KUndo2Command *parent = 0);
     virtual ~KoPathReverseCommand();
     /// redo the command
     void redo();

@@ -21,16 +21,16 @@
 #define KOSHAPERENAMECOMMAND_H
 
 #include "flake_export.h"
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class QString;
 class KoShape;
 
 /// API docs go here
-class FLAKE_EXPORT KoShapeRenameCommand : public QUndoCommand
+class FLAKE_EXPORT KoShapeRenameCommand : public KUndo2Command
 {
 public:
-    KoShapeRenameCommand(KoShape *shape, const QString &newName, QUndoCommand *parent = 0);
+    KoShapeRenameCommand(KoShape *shape, const QString &newName, KUndo2Command *parent = 0);
     virtual ~KoShapeRenameCommand();
 
     /// redo the command

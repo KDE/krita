@@ -29,6 +29,7 @@
 #include "kis_selection.h"
 #include <krita_export.h>
 
+
 /**
  * KisPixelSelection contains a byte-map representation of a layer, where
  * the value of a byte signifies whether a corresponding pixel is selected, or not.
@@ -107,8 +108,8 @@ public:
 
     QVector<QPolygon> outline();
 
-    virtual void renderToProjection(KisSelection* projection);
-    virtual void renderToProjection(KisSelection* projection, const QRect& r);
+    virtual void renderToProjection(KisPixelSelection* projection);
+    virtual void renderToProjection(KisPixelSelection* projection, const QRect& r);
 
 private:
     /**

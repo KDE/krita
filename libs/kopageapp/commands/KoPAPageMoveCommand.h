@@ -21,7 +21,7 @@
 #define KOPAPAGEMOVECOMMAND_H
 
 #include <QtCore/QMap>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include "kopageapp_export.h"
 
@@ -31,11 +31,11 @@ class KoPAPageBase;
 /**
  * Command for moving a page in a document
  */
-class KOPAGEAPP_TEST_EXPORT KoPAPageMoveCommand : public QUndoCommand
+class KOPAGEAPP_TEST_EXPORT KoPAPageMoveCommand : public KUndo2Command
 {
 public:
-    KoPAPageMoveCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, QUndoCommand *parent = 0 );
-    KoPAPageMoveCommand( KoPADocument *document, const QList<KoPAPageBase *> &pages, KoPAPageBase *after, QUndoCommand *parent = 0 );
+    KoPAPageMoveCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent = 0 );
+    KoPAPageMoveCommand( KoPADocument *document, const QList<KoPAPageBase *> &pages, KoPAPageBase *after, KUndo2Command *parent = 0 );
     void init( const QList<KoPAPageBase *> &pages );
     virtual ~KoPAPageMoveCommand();
 

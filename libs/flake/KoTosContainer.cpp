@@ -80,6 +80,7 @@ bool KoTosContainer::loadText(const KoXmlElement &element, KoShapeLoadingContext
                 textShape->setSize(size());
                 textShape->setTransformation(transformation());
                 textShape->setPosition(QPointF(0, 0));
+                textShape->setRunThrough(runThrough());
                 setTextAlignment(Qt::AlignCenter);
                 return loadOdf;
             }
@@ -255,4 +256,13 @@ void KoTosContainer::shapeChanged(ChangeType type, KoShape *shape)
     foreach(KoShape *shape, d->model->shapes())
         shape->notifyChanged();
 #endif
+}
+
+void KoTosContainer::setRunThrough(short int runThrough)
+{
+    KoShape::setRunThrough(runThrough);
+    KoShape *textShape = this->textShape();
+    if (textShape) {
+        textShape->setRunThrough(runThrough);
+    }
 }

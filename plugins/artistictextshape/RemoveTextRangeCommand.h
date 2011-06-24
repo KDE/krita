@@ -21,14 +21,14 @@
 #ifndef REMOVETEXTRANGECOMMAND_H
 #define REMOVETEXTRANGECOMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 #include <QtCore/QPointer>
 #include "ArtisticTextTool.h"
 
 class ArtisticTextShape;
 
 /// Undo command to remove a range of text from an artistic text shape
-class RemoveTextRangeCommand : public QUndoCommand
+class RemoveTextRangeCommand : public KUndo2Command
 {
 public:
     RemoveTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, int from, unsigned int count);

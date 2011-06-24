@@ -31,7 +31,7 @@
 #include <QList>
 #include <QMap>
 #include <QDebug>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QMimeData>
 
 #include <ktemporaryfile.h>
@@ -431,7 +431,7 @@ void KisShapeLayer::selectionChanged()
     emit selectionChanged(m_d->canvas->shapeManager()->selection()->selectedShapes());
 }
 
-QUndoCommand* KisShapeLayer::crop(const QRect & rect) {
+KUndo2Command* KisShapeLayer::crop(const QRect & rect) {
     QRectF croppedRect = m_d->converter->viewToDocument(rect);
     QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
     if(shapes.isEmpty())
@@ -446,7 +446,7 @@ QUndoCommand* KisShapeLayer::crop(const QRect & rect) {
     return new KoShapeMoveCommand(shapes, previousPositions, newPositions);
 }
 
-QUndoCommand* KisShapeLayer::transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
+KUndo2Command* KisShapeLayer::transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
 
     Q_UNUSED(xshear);
     Q_UNUSED(yshear);

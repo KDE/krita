@@ -19,7 +19,7 @@
 #ifndef ADDNOTECOMMAND_H
 #define ADDNOTECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include "../core/Global.h"
 
@@ -30,7 +30,7 @@ namespace MusicCore {
 }
 class MusicShape;
 
-class AddNoteCommand : public QUndoCommand {
+class AddNoteCommand : public KUndo2Command {
 public:
     AddNoteCommand(MusicShape* shape, MusicCore::Chord* chord, MusicCore::Staff* staff, MusicCore::Duration duration, int pitch, int accidentals=0);
     virtual void redo();

@@ -36,12 +36,10 @@ KoDocumentAdaptor::KoDocumentAdaptor(KoDocument * doc)
 {
     setAutoRelaySignals(true);
     m_pDoc = doc;
-//   m_actionProxy = new KDCOPActionProxy( doc->actionCollection(), this );
 }
 
 KoDocumentAdaptor::~KoDocumentAdaptor()
 {
-//     delete m_actionProxy;
 }
 
 void KoDocumentAdaptor::openUrl(const QString & url)
@@ -279,18 +277,5 @@ void KoDocumentAdaptor::setDocumentInfoAbstract(const QString &text)
     m_pDoc->documentInfo()->setAboutInfo("comments", text);
 }
 
-// DCOPCStringList KoDocumentAdaptor::functionsDynamic()
-// {
-//     return DCOPObject::functionsDynamic() + KDCOPPropertyProxy::functions( m_pDoc );
-// }
-//
-// bool KoDocumentAdaptor::processDynamic( const DCOPCString &fun, const QByteArray &data,
-//                                       DCOPCString& replyType, QByteArray &replyData )
-// {
-//     if ( KDCOPPropertyProxy::isPropertyRequest( fun, m_pDoc ) )
-//         return KDCOPPropertyProxy::processPropertyRequest( fun, data, replyType, replyData, m_pDoc );
-//
-//     return DCOPObject::processDynamic( fun, data, replyType, replyData );
-// }
 
 #include <KoDocumentAdaptor.moc>

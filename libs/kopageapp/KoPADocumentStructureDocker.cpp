@@ -338,8 +338,8 @@ void KoPADocumentStructureDocker::addLayer()
                 qSort( layers.begin(), layers.end(), KoShape::compareShapeZIndex );
                 layer->setZIndex( layers.last()->zIndex() + 1 );
             }
-            QUndoCommand *cmd = new KoShapeCreateCommand( m_doc, layer, 0 );
-            cmd->setText( i18n( "Create Layer") );
+            KUndo2Command *cmd = new KoShapeCreateCommand( m_doc, layer, 0 );
+            cmd->setText( i18nc( "(qtundo-format)", "Create Layer" ) );
             m_doc->addCommand( cmd );
             m_model->update();
         }
@@ -355,7 +355,7 @@ void KoPADocumentStructureDocker::deleteItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     if( selectedLayers.count() )
     {
@@ -368,7 +368,7 @@ void KoPADocumentStructureDocker::deleteItem()
                 deleteShapes.append( page );
             }
             cmd = new KoShapeDeleteCommand( m_doc, deleteShapes );
-            cmd->setText( i18n( "Delete Layer" ) );
+            cmd->setText( i18nc( "(qtundo-format)", "Delete Layer" ) );
         }
         else
         {
@@ -399,7 +399,7 @@ void KoPADocumentStructureDocker::raiseItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     if( selectedLayers.count() )
     {
@@ -433,7 +433,7 @@ void KoPADocumentStructureDocker::lowerItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     if( selectedLayers.count() )
     {

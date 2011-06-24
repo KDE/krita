@@ -83,19 +83,10 @@ void copyQImage(qint32 deltaX, qint32 deltaY, QImage* dstImage, const QImage& sr
 
 struct KisPrescaledProjection::Private {
     Private()
-            : useNearestNeighbour(false)
-            , cacheKisImageAsQImage(true)
-            , viewportSize(0, 0)
+            : viewportSize(0, 0)
             , monitorProfile(0)
             , projectionBackend(0) {
     }
-
-    /**
-     * TODO: useNearestNeighbour is not used at the moment
-     * thought this option worth implementing (ok, yeah.. reimplementing)
-     */
-    bool useNearestNeighbour;
-    bool cacheKisImageAsQImage;
 
     QImage prescaledQImage;
 
@@ -144,12 +135,12 @@ void KisPrescaledProjection::setCoordinatesConverter(KisCoordinatesConverter *co
     m_d->coordinatesConverter = coordinatesConverter;
 }
 
-void KisPrescaledProjection::initBackend(bool cacheKisImageAsQImage)
+void KisPrescaledProjection::initBackend()
 {
-    Q_UNUSED(cacheKisImageAsQImage);
     delete m_d->projectionBackend;
 
     // we disable building the pyramid with setting its height to 1
+    // XXX: setting it higher than 1 is broken because it's not updated until you show/hide the layer
     m_d->projectionBackend = new KisImagePyramid(1);
     m_d->projectionBackend->setImage(m_d->image);
 }
@@ -158,14 +149,8 @@ void KisPrescaledProjection::updateSettings()
 {
     KisConfig cfg;
 
-    if (m_d->useNearestNeighbour != cfg.useNearestNeighbour() ||
-        m_d->cacheKisImageAsQImage != cfg.cacheKisImageAsQImage() ||
-        m_d->projectionBackend == 0 ) {
-
-        m_d->useNearestNeighbour = cfg.useNearestNeighbour();
-        m_d->cacheKisImageAsQImage = cfg.cacheKisImageAsQImage();
-
-        initBackend(m_d->cacheKisImageAsQImage);
+    if (m_d->projectionBackend == 0) {
+        initBackend();
     }
 
     setMonitorProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));
@@ -178,16 +163,17 @@ void KisPrescaledProjection::updateSettings()
 void KisPrescaledProjection::viewportMoved(const QPointF &offset)
 {
     // FIXME: \|/
-    if(m_d->prescaledQImage.isNull()) return;
-    if(offset.isNull()) return;
+    if (m_d->prescaledQImage.isNull()) return;
+    if (offset.isNull()) return;
 
     QPoint alignedOffset = offset.toPoint();
 
     if(offset != alignedOffset) {
         /**
-         * We can't optimize anything whe offset is float :(
+         * We can't optimize anything when offset is float :(
          * Just prescale entire image.
          */
+        dbgRender << "prescaling the entire image because the offset is float";
         preScale();
         return;
     }
@@ -215,7 +201,6 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
     QVector<QRect> rects = updateRegion.rects();
 
     foreach(QRect rect, rects) {
-        //gc.fillRect(rect, QColor(128, 0, 0, 255));
 
         QRect imageRect =
             m_d->coordinatesConverter->viewportToImage(rect).toAlignedRect();
@@ -246,8 +231,7 @@ void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
     }
 }
 
-KisUpdateInfoSP
-KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
+KisUpdateInfoSP KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
 {
     if (!m_d->image) {
         dbgRender << "Calling updateCache without an image: " << kBacktrace() << endl;
@@ -359,8 +343,7 @@ void KisPrescaledProjection::notifyCanvasSizeChanged(const QSize &widgetSize)
 }
 
 
-KisPPUpdateInfoSP
-KisPrescaledProjection::getUpdateInformation(const QRect &viewportRect,
+KisPPUpdateInfoSP KisPrescaledProjection::getUpdateInformation(const QRect &viewportRect,
                                              const QRect &dirtyImageRect)
 {
     KisPPUpdateInfoSP info = new KisPPUpdateInfo();
@@ -425,6 +408,9 @@ void KisPrescaledProjection::drawUsingBackend(QPainter &gc, KisPPUpdateInfoSP in
         m_d->projectionBackend->drawFromOriginalImage(gc, info);
     } else /* if info->transfer == KisPPUpdateInformation::PATCH */ {
         KisImagePatch patch = m_d->projectionBackend->getNearestPatch(info);
+        // prescale the patch because otherwise we'd scale using QPainter, which gives
+        // a crap result compared to QImage's smoothscale
+        patch.preScale(info->viewportRect);
         patch.drawMe(gc, info->viewportRect, info->renderHints);
     }
 }

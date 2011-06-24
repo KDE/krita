@@ -46,7 +46,7 @@
 #include <KLocale>
 #include <KDebug>
 #include <KStandardDirs>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QPointF>
 #include <QKeyEvent>
 
@@ -370,7 +370,7 @@ void ConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
                 return;
             } else {
                 // finalize adding the new connection shape with an undo command
-                QUndoCommand * cmd = canvas()->shapeController()->addShape(m_currentShape);
+                KUndo2Command * cmd = canvas()->shapeController()->addShape(m_currentShape);
                 canvas()->addCommand(cmd);
             }
             resetEditMode();
@@ -378,7 +378,7 @@ void ConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
         m_currentStrategy->finishInteraction(event->modifiers());
         // TODO: Add parent command to KoInteractionStrategy::createCommand
         // so that we can have a single command to undo for the user
-        QUndoCommand *command = m_currentStrategy->createCommand();
+        KUndo2Command *command = m_currentStrategy->createCommand();
         if (command)
             canvas()->addCommand(command);
         delete m_currentStrategy;

@@ -21,18 +21,18 @@
 #ifndef DELETETABLEROWCOMMAND_H
 #define DELETETABLEROWCOMMAND_H
 
-#include <QUndoStack>
+#include <kundo2qstack.h>
 #include <QList>
 #include <KoTableRowStyle.h>
 
 class KoTextEditor;
 class QTextTable;
 
-class DeleteTableRowCommand : public QUndoCommand
+class DeleteTableRowCommand : public KUndo2Command
 {
 public:
 
-    DeleteTableRowCommand(KoTextEditor *te, QTextTable *t, int changeId = 0, QUndoCommand *parent = 0);
+    DeleteTableRowCommand(KoTextEditor *te, QTextTable *t, int changeId = 0, KUndo2Command *parent = 0);
 
     virtual void undo();
     virtual void redo();

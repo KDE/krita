@@ -30,14 +30,14 @@
 #include <kdebug.h>
 
 DeleteTableColumnCommand::DeleteTableColumnCommand(KoTextEditor *te, QTextTable *t, int changeId,
-                                             QUndoCommand *parent) :
-    QUndoCommand (parent)
+                                             KUndo2Command *parent) :
+    KUndo2Command (parent)
     ,m_first(true)
     ,m_textEditor(te)
     ,m_table(t)
     ,m_changeId(changeId)
 {
-    setText(i18n("Delete Column"));
+    setText(i18nc("(qtundo-format)", "Delete Column"));
 }
 
 void DeleteTableColumnCommand::undo()
@@ -49,7 +49,7 @@ void DeleteTableColumnCommand::undo()
         }
     }
 
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }
 
 void DeleteTableColumnCommand::redo()
@@ -59,7 +59,7 @@ void DeleteTableColumnCommand::redo()
         if (!m_changeId) {
             carsManager.removeColumns(m_selectionColumn, m_selectionColumnSpan);
         }
-        QUndoCommand::redo();
+        KUndo2Command::redo();
     } else {
         m_first = false;
         int selectionRow;

@@ -25,7 +25,7 @@
 
 #include "flake_export.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QPair>
 
 /// The undo / redo command for ungrouping shapes
@@ -39,7 +39,7 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeUngroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
-                          const QList<KoShape *> &topLevelShapes = QList<KoShape*>(), QUndoCommand *parent = 0);
+                          const QList<KoShape *> &topLevelShapes = QList<KoShape*>(), KUndo2Command *parent = 0);
     /// redo the command
     void redo();
     /// revert the actions done in redo

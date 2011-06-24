@@ -51,7 +51,7 @@ public:
     /// reimplemented method
     virtual bool snapToGrid() const;
     /// reimplemented method
-    virtual void addCommand( QUndoCommand *command );
+    virtual void addCommand( KUndo2Command *command );
     /// reimplemented method
     virtual KoShapeManager * shapeManager() const;
     KoShapeManager * masterShapeManager() const;

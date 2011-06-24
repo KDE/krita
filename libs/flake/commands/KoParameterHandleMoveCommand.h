@@ -22,14 +22,14 @@
 #ifndef KOPARAMETERHANDLEMOVECOMMAND_H
 #define KOPARAMETERHANDLEMOVECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QPointF>
 #include "flake_export.h"
 
 class KoParameterShape;
 
 /// The undo / redo command for changing a parameter
-class KoParameterHandleMoveCommand : public QUndoCommand
+class KoParameterHandleMoveCommand : public KUndo2Command
 {
 public:
     /**
@@ -41,7 +41,7 @@ public:
      * @param keyModifiers the key modifiers used while moving.
      * @param parent the parent command if this is a compound undo command.
      */
-    KoParameterHandleMoveCommand(KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint, Qt::KeyboardModifiers keyModifiers, QUndoCommand *parent = 0);
+    KoParameterHandleMoveCommand(KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint, Qt::KeyboardModifiers keyModifiers, KUndo2Command *parent = 0);
     virtual ~KoParameterHandleMoveCommand();
 
     /// redo the command

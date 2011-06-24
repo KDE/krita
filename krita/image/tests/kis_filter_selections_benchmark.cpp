@@ -18,7 +18,7 @@
 
 #include "kis_filter_selections_benchmark.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include "kis_painter.h"
 
@@ -78,29 +78,31 @@ typedef QTime KisTimeCounter;
 void KisFilterSelectionsBenchmark::initSelection()
 {
     m_selection = new KisSelection();
+    KisPixelSelectionSP pixelSelection = m_selection->getOrCreatePixelSelection();
+
 
 //67.2% deselected
     qDebug() << "Deselected: 67.2%";
-    m_selection->dataManager()->clear(75, 75, 500, 320, 255);
-    m_selection->dataManager()->clear(100, 100, 50, 50, quint8(0));
-    m_selection->dataManager()->clear(150, 150, 50, 50, quint8(0));
-    m_selection->dataManager()->clear(200, 200, 50, 50, quint8(0));
+    pixelSelection->dataManager()->clear(75, 75, 500, 320, 255);
+    pixelSelection->dataManager()->clear(100, 100, 50, 50, quint8(0));
+    pixelSelection->dataManager()->clear(150, 150, 50, 50, quint8(0));
+    pixelSelection->dataManager()->clear(200, 200, 50, 50, quint8(0));
 
-    m_selection->dataManager()->clear(375, 195, 200, 200, quint8(0));
-    m_selection->dataManager()->clear(75, 195, 200, 200, quint8(0));
+    pixelSelection->dataManager()->clear(375, 195, 200, 200, quint8(0));
+    pixelSelection->dataManager()->clear(75, 195, 200, 200, quint8(0));
 
-    m_selection->dataManager()->clear(375, 75, 150, 150, quint8(0));
+    pixelSelection->dataManager()->clear(375, 75, 150, 150, quint8(0));
 
-    m_selection->dataManager()->clear(205, 105, 50, 50, quint8(128));
+    pixelSelection->dataManager()->clear(205, 105, 50, 50, quint8(128));
 
 // 94.9% deselected
 //    qDebug() << "Deselected: 94.9%";
-//    m_selection->dataManager()->clear(75,75,500,320,255);
-//    m_selection->dataManager()->clear(80,80,490,310,quint8(0));
+//    pixelSelection->dataManager()->clear(75,75,500,320,255);
+//    pixelSelection->dataManager()->clear(80,80,490,310,quint8(0));
 
 
 
-    m_selection->convertToQImage(0).save("TEST_FILTER_SELECTION.png");
+    pixelSelection->convertToQImage(0).save("TEST_FILTER_SELECTION.png");
 }
 
 void KisFilterSelectionsBenchmark::initFilter(const QString &name)

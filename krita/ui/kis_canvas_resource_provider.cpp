@@ -196,15 +196,14 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
     emit sigGradientChanged(gradient);
 }
 
-void KisCanvasResourceProvider::slotPaintOpPresetActivated(const KisPaintOpPresetSP preset)
+void KisCanvasResourceProvider::setPaintOpPreset(const KisPaintOpPresetSP preset)
 {
-
     Q_ASSERT(preset->valid());
     Q_ASSERT(!preset->paintOp().id().isEmpty());
     Q_ASSERT(preset->settings());
     if (!preset) return;
 
-    dbgUI << "slotPaintOpPresetActivated" << preset->paintOp();
+    dbgUI << "setPaintOpPreset" << preset->paintOp();
 
     QVariant v;
     v.setValue(preset);

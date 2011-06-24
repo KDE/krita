@@ -19,14 +19,14 @@
 #ifndef SETACCIDENTALSCOMMAND_H
 #define SETACCIDENTALSCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 namespace MusicCore {
     class Note;
 }
 class MusicShape;
 
-class SetAccidentalsCommand : public QUndoCommand {
+class SetAccidentalsCommand : public KUndo2Command {
 public:
     SetAccidentalsCommand(MusicShape* shape, MusicCore::Note* note, int accidentals);
     virtual void redo();

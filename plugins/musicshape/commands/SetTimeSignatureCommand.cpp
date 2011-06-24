@@ -31,7 +31,7 @@ using namespace MusicCore;
 SetTimeSignatureCommand::SetTimeSignatureCommand(MusicShape* shape, Bar* bar, int beats, int beat)
     : m_shape(shape), m_bar(bar)
 {
-    setText(i18n("Change time signature"));
+    setText(i18nc("(qtundo-format)", "Change time signature"));
     
     Sheet* sheet = bar->sheet();
     for (int p = 0; p < sheet->partCount(); p++) {

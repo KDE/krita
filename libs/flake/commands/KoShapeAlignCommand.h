@@ -24,13 +24,13 @@
 #include "flake_export.h"
 
 #include <QRectF>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 
 class KoShape;
 
 /// The undo / redo command for aligning shapes
-class FLAKE_EXPORT KoShapeAlignCommand : public QUndoCommand
+class FLAKE_EXPORT KoShapeAlignCommand : public KUndo2Command
 {
 public:
     /// The different alignment options for this command
@@ -49,7 +49,7 @@ public:
      * @param boundingRect the rect the shape will be aligned in
      * @param parent the parent command used for macro commands
      */
-    KoShapeAlignCommand(const QList<KoShape*> &shapes, Align align, const QRectF &boundingRect, QUndoCommand *parent = 0);
+    KoShapeAlignCommand(const QList<KoShape*> &shapes, Align align, const QRectF &boundingRect, KUndo2Command *parent = 0);
     virtual ~KoShapeAlignCommand();
     /// redo the command
     virtual void redo();

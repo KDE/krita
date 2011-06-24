@@ -192,7 +192,7 @@ void KisCustomBrushWidget::createBrush()
             dev->crop(r);
 
             KisHLineIterator pixelIt = dev->createHLineIterator(r.x(), r.top(), r.width());
-            KisHLineConstIterator maskIt = selection->createHLineIterator(r.x(), r.top(), r.width());
+            KisHLineConstIterator maskIt = selection->projection()->createHLineIterator(r.x(), r.top(), r.width());
 
             for (qint32 y = r.top(); y <= r.bottom(); ++y) {
 

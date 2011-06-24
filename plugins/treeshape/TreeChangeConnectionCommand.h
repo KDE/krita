@@ -22,10 +22,10 @@
 #define TREECHANGECONNECTIONCOMMAND_H
 
 #include "TreeShape.h"
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 /// The undo / redo command for configuring a connections between root and children
-class TreeChangeConnectionCommand : public QUndoCommand
+class TreeChangeConnectionCommand : public KUndo2Command
 {
 public:
     /**
@@ -35,7 +35,7 @@ public:
      * @param followParent if tree will follow parent's structure
      * @param parent the optional parent command
      */
-    TreeChangeConnectionCommand(TreeShape *tree, KoConnectionShape::Type type, QUndoCommand *parent=0);
+    TreeChangeConnectionCommand(TreeShape *tree, KoConnectionShape::Type type, KUndo2Command *parent=0);
     /// redo the command
     virtual void redo();
     /// revert the actions done in redo

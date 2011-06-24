@@ -22,7 +22,7 @@
 #include "commands/kis_layer_commands.h"
 
 KisLayerCommand::KisLayerCommand(const QString& name, KisLayerSP layer) :
-        QUndoCommand(name), m_layer(layer)
+        KUndo2Command(name), m_layer(layer)
 {
 }
 

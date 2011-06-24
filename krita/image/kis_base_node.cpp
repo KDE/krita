@@ -127,7 +127,7 @@ void KisBaseNode::setCompositeOp(const QString& compositeOp)
 KoDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l;
-    l << KoDocumentSectionModel::Property(i18n("Visible"), KIcon("visible"), KIcon("novisible"), visible(), true);
+    l << KoDocumentSectionModel::Property(i18n("Visible"), KIcon("visible"), KIcon("novisible"), visible(), true, true);
     l << KoDocumentSectionModel::Property(i18n("Locked"), KIcon("locked"), KIcon("unlocked"), userLocked());
     return l;
 }

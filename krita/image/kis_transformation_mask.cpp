@@ -109,7 +109,7 @@ KisTransformationSettingsCommand::KisTransformationSettingsCommand(KisTransforma
         qint32 new_xtranslate,
         qint32 new_ytranslate,
         KisFilterStrategy * new_filter)
-        : KUndo2Command(i18n("Transformation Mask Settings"))
+        : KUndo2Command(i18nc("(qtundo-format)", "Transformation Mask Settings"))
         , m_mask(mask)
         , m_old_name(old_name)
         , m_old_xscale(old_xscale)

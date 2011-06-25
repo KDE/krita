@@ -493,7 +493,6 @@ bool KoDocument::saveFile()
 
     // The output format is set by koMainWindow, and by openFile
     QByteArray outputMimeType = d->outputMimeType;
-    //Q_ASSERT( !outputMimeType.isEmpty() ); // happens when using the DCOP method saveAs
     if (outputMimeType.isEmpty())
         outputMimeType = d->outputMimeType = nativeFormatMimeType();
 
@@ -2369,17 +2368,6 @@ int KoDocument::shellCount() const
     return d->shells.count();
 }
 
-// DCOPObject *KoDocument::dcopObject()
-// {
-//     if ( !d->dcopObject )
-//         d->dcopObject = new KoDocumentIface( this );
-//     return d->dcopObject;
-// }
-
-// QByteArray KoDocument::dcopObjectId() const
-// {
-//     return const_cast<KoDocument *>(this)->dcopObject()->objId();
-// }
 
 void KoDocument::setErrorMessage(const QString& errMsg)
 {

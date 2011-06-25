@@ -28,8 +28,10 @@ KisBrushSP KisTextBrushFactory::getOrCreateBrush(const QDomElement& brushDefinit
     QFont font;
     font.fromString(brushDefinition.attribute("font"));
     double spacing = brushDefinition.attribute("spacing", "1.0").toDouble();
+    QString pipeMode = brushDefinition.attribute("pipe", "false");
+    bool pipe = (pipeMode == "true") ? true : false;
 
-    KisBrushSP brush = new KisTextBrush(text, font);
+    KisBrushSP brush = new KisTextBrush(text, font, pipe);
     brush->setSpacing(spacing);
 
     return brush;

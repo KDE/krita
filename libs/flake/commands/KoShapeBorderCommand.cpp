@@ -67,7 +67,7 @@ KoShapeBorderCommand::KoShapeBorderCommand(const QList<KoShape*> &shapes, KoShap
         d->addNewBorder(border);
     }
 
-    setText(i18n("Set border"));
+    setText(i18nc("(qtundo-format)", "Set border"));
 }
 
 KoShapeBorderCommand::KoShapeBorderCommand(const QList<KoShape*> &shapes,
@@ -86,7 +86,7 @@ KoShapeBorderCommand::KoShapeBorderCommand(const QList<KoShape*> &shapes,
     foreach (KoShapeBorderModel * border, borders)
         d->addNewBorder(border);
 
-    setText(i18n("Set border"));
+    setText(i18nc("(qtundo-format)", "Set border"));
 }
 
 KoShapeBorderCommand::KoShapeBorderCommand(KoShape* shape, KoShapeBorderModel *border, KUndo2Command *parent)
@@ -97,7 +97,7 @@ KoShapeBorderCommand::KoShapeBorderCommand(KoShape* shape, KoShapeBorderModel *b
     d->addNewBorder(border);
     d->addOldBorder(shape->border());
 
-    setText(i18n("Set border"));
+    setText(i18nc("(qtundo-format)", "Set border"));
 }
 
 KoShapeBorderCommand::~KoShapeBorderCommand()

@@ -1539,7 +1539,7 @@ void TextTool::addUndoCommand()
     {
     public:
         UndoTextCommand(QTextDocument *document, TextTool *tool, KUndo2Command *parent = 0)
-                : KUndo2Command(i18n("Text"), parent),
+                : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
                 m_document(document),
                 m_tool(tool) {
         }

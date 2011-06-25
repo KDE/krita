@@ -42,7 +42,7 @@ AcceptChangeCommand::AcceptChangeCommand (int changeId, QList<QPair<int, int> > 
     m_changeRanges(changeRanges),
     m_document(document)
 {
-    setText(i18n("Accept change"));
+    setText(i18nc("(qtundo-format)", "Accept change"));
 
     m_changeTracker = KoTextDocument(m_document).changeTracker();
 }
@@ -58,7 +58,7 @@ void AcceptChangeCommand::redo()
         QTextCursor cursor(m_document);
         if (m_changeTracker->elementById(m_changeId)->getChangeType() != KoGenChange::DeleteChange) {
             QList<QPair<int, int> >::const_iterator it;
-            for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); it++) {
+            for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); ++it) {
                 cursor.setPosition((*it).first);
                 cursor.setPosition((*it).second, QTextCursor::KeepAnchor);
                 QTextCharFormat format = cursor.charFormat();
@@ -76,7 +76,7 @@ void AcceptChangeCommand::redo()
         } else {
             QList<QPair<int, int> >::const_iterator it;
             QStack<QPair<int, int> > deleteRanges;
-            for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); it++) {
+            for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); ++it) {
                 deleteRanges.push(QPair<int, int>((*it).first, (*it).second));
             }
             while (!deleteRanges.isEmpty()) {

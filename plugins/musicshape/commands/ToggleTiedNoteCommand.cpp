@@ -29,7 +29,7 @@
 ToggleTiedNoteCommand::ToggleTiedNoteCommand(MusicShape* shape, MusicCore::Note* note)
     : m_shape(shape), m_note(note)
 {
-    setText(i18n("Toggle Note Tie"));
+    setText(i18nc("(qtundo-format)", "Toggle Note Tie"));
 }
 
 void ToggleTiedNoteCommand::redo()

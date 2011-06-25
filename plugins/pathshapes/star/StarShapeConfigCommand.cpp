@@ -31,7 +31,7 @@ StarShapeConfigCommand::StarShapeConfigCommand(StarShape * star, uint cornerCoun
 {
     Q_ASSERT(m_star);
 
-    setText(i18n("Change star"));
+    setText(i18nc("(qtundo-format)", "Change star"));
 
     m_oldCornerCount = m_star->cornerCount();
     m_oldInnerRadius = m_star->baseRadius();

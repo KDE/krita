@@ -502,7 +502,7 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
             beginInsertRows( parent, group->shapeCount(), group->shapeCount()+toplevelShapes.count() );
 
             KUndo2Command * cmd = new KUndo2Command();
-            cmd->setText( i18n("Reparent shapes") );
+            cmd->setText( i18nc("(qtundo-format)", "Reparent shapes") );
 
             foreach( KoShape * shape, toplevelShapes )
                 new KoShapeUngroupCommand( shape->parent(), QList<KoShape*>() << shape, QList<KoShape*>(), cmd );
@@ -523,7 +523,7 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
                 beginInsertRows( parent, container->shapeCount(), container->shapeCount()+toplevelShapes.count() );
 
                 KUndo2Command * cmd = new KUndo2Command();
-                cmd->setText( i18n("Reparent shapes") );
+                cmd->setText( i18nc("(qtundo-format)", "Reparent shapes") );
 
                 QList<bool> clipped;
                 QList<bool> inheritsTransform;

@@ -500,13 +500,13 @@ void ArtisticTextTool::deactivate()
     }
     m_hoverPath = 0;
     m_hoverText = 0;
+
+    KoShapeManager *manager = canvas()->shapeManager();
+    disconnect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 }
 
 void ArtisticTextTool::updateActions()
 {
-    KoShapeManager *manager = canvas()->shapeManager();
-    disconnect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
-
     if( m_currentShape ) {
         const QFont font = m_currentShape->fontAt(textCursor());
         const CharIndex index = m_currentShape->indexOfChar(textCursor());
@@ -572,7 +572,7 @@ void ArtisticTextTool::convertText()
     path->setShapeId( KoPathShapeId );
 
     KUndo2Command * cmd = canvas()->shapeController()->addShapeDirect( path );
-    cmd->setText( i18n("Convert to Path") );
+    cmd->setText( i18nc("(qtundo-format)", "Convert to Path") );
     canvas()->shapeController()->removeShape( m_currentShape, cmd );
     canvas()->addCommand( cmd );
 

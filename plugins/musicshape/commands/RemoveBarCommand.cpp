@@ -28,7 +28,7 @@ using namespace MusicCore;
 RemoveBarCommand::RemoveBarCommand(MusicShape* shape, int barIdx)
     : m_shape(shape), m_bar(m_shape->sheet()->bar(barIdx)), m_index(barIdx)
 {
-    setText(i18n("Remove bar"));
+    setText(i18nc("(qtundo-format)", "Remove bar"));
 }
 
 void RemoveBarCommand::redo()

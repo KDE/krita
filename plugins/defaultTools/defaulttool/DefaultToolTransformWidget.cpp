@@ -104,7 +104,7 @@ void DefaultToolTransformWidget::rotationChanged()
         newTransforms << shape->transformation();
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );
-    cmd->setText( i18n("Rotate") );
+    cmd->setText( i18nc("(qtundo-format)", "Rotate") );
     m_tool->canvas()->addCommand( cmd );
 }
 
@@ -137,7 +137,7 @@ void DefaultToolTransformWidget::shearXChanged()
         newTransforms << shape->transformation();
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );
-    cmd->setText( i18n("Shear X") );
+    cmd->setText( i18nc("(qtundo-format)", "Shear X") );
     m_tool->canvas()->addCommand( cmd );
 }
 
@@ -170,7 +170,7 @@ void DefaultToolTransformWidget::shearYChanged()
         newTransforms << shape->transformation();
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );
-    cmd->setText( i18n("Shear Y") );
+    cmd->setText( i18nc("(qtundo-format)", "Shear Y") );
     m_tool->canvas()->addCommand( cmd );
 }
 
@@ -207,7 +207,7 @@ void DefaultToolTransformWidget::scaleXChanged()
         newTransforms << shape->transformation();
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );
-    cmd->setText( i18n("Scale") );
+    cmd->setText( i18nc("(qtundo-format)", "Scale") );
     m_tool->canvas()->addCommand( cmd );
 }
 
@@ -239,7 +239,7 @@ void DefaultToolTransformWidget::scaleYChanged()
         newTransforms << shape->transformation();
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );
-    cmd->setText( i18n("Scale") );
+    cmd->setText( i18nc("(qtundo-format)", "Scale") );
     m_tool->canvas()->addCommand( cmd );
 }
 
@@ -266,7 +266,7 @@ void DefaultToolTransformWidget::resetTransformations()
         newTransforms << shape->transformation();
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );
-    cmd->setText( i18n("Reset Transformations") );
+    cmd->setText( i18nc("(qtundo-format)", "Reset Transformations") );
     m_tool->canvas()->addCommand( cmd );
 }
 

@@ -31,7 +31,7 @@ TextCutCommand::TextCutCommand(TextTool *tool, KUndo2Command *parent) :
     m_tool(tool),
     m_first(true)
 {
-    setText(i18n("Cut"));
+    setText(i18nc("(qtundo-format)", "Cut"));
 }
 
 void TextCutCommand::undo()

@@ -37,7 +37,7 @@ public:
                        KisFilterConfiguration* config,
                        const QString& before,
                        const QString& after)
-            : KUndo2Command(i18n("Change Filter")) {
+            : KUndo2Command(i18nc("(qtundo-format)", "Change Filter")) {
         m_node = node;
         m_config = config;
         m_before = before;

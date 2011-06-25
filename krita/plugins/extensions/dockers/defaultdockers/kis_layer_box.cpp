@@ -489,9 +489,7 @@ void KisLayerBox::slotLeftClicked()
     /* By the principle of least surprise, placing the node at
     grandParent->index(parent) + 1 ensures that the node appears
     just outside and above the parent on the Layer Box widget */
-    m_nodeManager->moveNodeAt(m_nodeManager->activeNode(),
-                              grandParent,
-                              grandParent->index(parent) + 1);
+    m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
 }
 
 void KisLayerBox::slotRightClicked()

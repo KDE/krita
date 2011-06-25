@@ -173,19 +173,7 @@ public:
     bool antialiasCurves();
     void setAntialiasCurves(bool v);
 
-    int numProjectionThreads();
-    void setNumProjectThreads(int num);
-
-    int projectionChunkSize();
-    void setProjectionChunkSize(int num);
-
-    bool aggregateDirtyRegionsInPainter();
-    void setAggregateDirtyRegionsInPainter(bool aggregate);
-
-    bool useBoundingRectInProjection();
-    void setUseBoundingRectInProjection(bool use);
-
-    bool showRootLayer();
+    cbool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
 
     bool showOutlineWhilePainting();

@@ -477,46 +477,6 @@ void KisConfig::setAntialiasCurves(bool v)
     m_cfg.writeEntry("antialiascurves", v);
 }
 
-int KisConfig::numProjectionThreads()
-{
-    return m_cfg.readEntry("maxprojectionthreads", QThread::idealThreadCount());
-}
-
-void KisConfig::setNumProjectThreads(int num)
-{
-    m_cfg.writeEntry("maxprojectionthreads", num);
-}
-
-int KisConfig::projectionChunkSize()
-{
-    return m_cfg.readEntry("updaterectsize", 1024);
-}
-
-void KisConfig::setProjectionChunkSize(int num)
-{
-    m_cfg.writeEntry("updaterectsize", num);
-}
-
-bool KisConfig::aggregateDirtyRegionsInPainter()
-{
-    return m_cfg.readEntry("aggregate_dirty_regions", true);
-}
-
-void KisConfig::setAggregateDirtyRegionsInPainter(bool aggregate)
-{
-    m_cfg.writeEntry("aggregate_dirty_regions", aggregate);
-}
-
-bool KisConfig::useBoundingRectInProjection()
-{
-    return m_cfg.readEntry("use_bounding_rect_of_dirty_region", true);
-}
-
-void KisConfig::setUseBoundingRectInProjection(bool use)
-{
-    m_cfg.writeEntry("use_bounding_rect_of_dirty_region", use);
-}
-
 bool KisConfig::showRootLayer()
 {
     return m_cfg.readEntry("ShowRootLayer", false);

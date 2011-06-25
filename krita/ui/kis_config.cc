@@ -626,17 +626,6 @@ void KisConfig::setBackupFile(bool backupFile)
      m_cfg.writeEntry("CreateBackupFile", backupFile);
 }
 
-quint32 KisConfig::maxCachedImageSize()
-{
-    // Let's say, 5 megapixels
-    return m_cfg.readEntry("maxCachedImageSize", 5);
-}
-
-void KisConfig::setMaxCachedImageSize(quint32 size)
-{
-    m_cfg.writeEntry("maxCachedImageSize", size);
-}
-
 bool KisConfig::showFilterGallery()
 {
     return m_cfg.readEntry("showFilterGallery", false);

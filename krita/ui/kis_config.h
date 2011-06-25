@@ -224,11 +224,6 @@ public:
     bool backupFile();
     void setBackupFile(bool backupFile);
 
-    // in megapixels -- above 5, we will no longer use the
-    // memory-guzzling qimage canvas cache
-    quint32 maxCachedImageSize();
-    void setMaxCachedImageSize(quint32);
-
     bool showFilterGallery();
     void setShowFilterGallery(bool showFilterGallery);
 

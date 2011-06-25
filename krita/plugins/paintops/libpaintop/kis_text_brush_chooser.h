@@ -38,13 +38,10 @@ public:
     void setBrush(KisBrushSP brush);
 
 private slots:
-
     void rebuildTextBrush();
-
     void getFont();
 
 signals:
-
     void sigBrushChanged();
 
 private:

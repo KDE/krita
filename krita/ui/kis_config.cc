@@ -41,7 +41,6 @@ const qint32 IMAGE_DEFAULT_WIDTH = 1600;
 const qint32 IMAGE_DEFAULT_HEIGHT = 1200;
 const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_TOOLICON;
 const qint32 DEFAULT_MAX_TILES_MEM = 5000;
-const qint32 DEFAULT_SWAPPINESS = 100;
 }
 
 KisConfig::KisConfig()
@@ -299,16 +298,6 @@ qint32 KisConfig::maxTilesInMem() const
 void KisConfig::setMaxTilesInMem(qint32 tiles)
 {
     m_cfg.writeEntry("maxtilesinmem", tiles);
-}
-
-qint32 KisConfig::swappiness() const
-{
-    return m_cfg.readEntry("swappiness", DEFAULT_SWAPPINESS);
-}
-
-void KisConfig::setSwappiness(qint32 swappiness)
-{
-    m_cfg.writeEntry("swappiness", swappiness);
 }
 
 quint32 KisConfig::getGridMainStyle()

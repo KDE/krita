@@ -125,11 +125,6 @@ public:
     qint32 maxTilesInMem() const;
     void setMaxTilesInMem(qint32 tiles);
 
-    /// Number of tiles that will be swapped at once. The higher, the more swapped, but more
-    /// chance that it will become slow
-    qint32 swappiness() const;
-    void setSwappiness(qint32 swappiness);
-
     quint32 getGridMainStyle();
     void setGridMainStyle(quint32 v);
 

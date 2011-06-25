@@ -192,9 +192,6 @@ public:
     bool useNearestNeighbour();
     void setUseNearestNeighbour(bool useNearestNeigbour);
 
-    bool useSampling();
-    void setSampling(bool sampling);
-
     bool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
 

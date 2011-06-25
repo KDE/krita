@@ -537,16 +537,6 @@ void KisConfig::setUseNearestNeighbour(bool useNearestNeigbour)
     m_cfg.writeEntry("fast_zoom", useNearestNeigbour);
 }
 
-bool KisConfig::useSampling()
-{
-    return m_cfg.readEntry("sampled_scaling", false);
-}
-
-void KisConfig::setSampling(bool sampling)
-{
-    m_cfg.writeEntry("sampled_scaling", sampling);
-}
-
 bool KisConfig::showRootLayer()
 {
     return m_cfg.readEntry("ShowRootLayer", false);

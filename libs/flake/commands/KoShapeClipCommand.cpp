@@ -67,7 +67,7 @@ KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase *controller, const 
         d->oldParents.append(path->parent());
     }
 
-    setText(i18n("Clip Shape"));
+    setText(i18nc("(qtundo-format)", "Clip Shape"));
 }
 
 KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase *controller, KoShape *shape, const QList<KoPathShape*> &clipPathShapes, KUndo2Command *parent)
@@ -83,7 +83,7 @@ KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase *controller, KoShap
         d->oldParents.append(path->parent());
     }
 
-    setText(i18n("Clip Shape"));
+    setText(i18nc("(qtundo-format)", "Clip Shape"));
 }
 
 KoShapeClipCommand::~KoShapeClipCommand()

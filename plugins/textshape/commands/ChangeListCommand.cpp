@@ -76,7 +76,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Sty
 
     initList(&listStyle);
 
-    setText(i18n("Change List"));
+    setText(i18nc("(qtundo-format)", "Change List"));
 }
 
 ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level,
@@ -89,7 +89,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle *sty
     Q_ASSERT(style);
     extractTextBlocks(cursor, level); // don't care about return value
     initList(style);
-    setText(i18n("Change List"));
+    setText(i18nc("(qtundo-format)", "Change List"));
 }
 
 ChangeListCommand::~ChangeListCommand()

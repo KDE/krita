@@ -32,6 +32,7 @@ public:
     KoProperties properties;
     KisBaseNodeSP linkedTo;
     bool systemLocked;
+    KoDocumentSectionModel::Property hack_visible; //HACK
 };
 
 KisBaseNode::KisBaseNode()
@@ -127,7 +128,7 @@ void KisBaseNode::setCompositeOp(const QString& compositeOp)
 KoDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l;
-    l << KoDocumentSectionModel::Property(i18n("Visible"), KIcon("visible"), KIcon("novisible"), visible());
+    l << KoDocumentSectionModel::Property(i18n("Visible"), KIcon("visible"), KIcon("novisible"), visible(), m_d->hack_visible.isInStasis, m_d->hack_visible.stateInStasis);
     l << KoDocumentSectionModel::Property(i18n("Locked"), KIcon("locked"), KIcon("unlocked"), userLocked());
     return l;
 }
@@ -135,6 +136,7 @@ KoDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
 void KisBaseNode::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
 {
     setVisible(properties.at(0).state.toBool());
+    m_d->hack_visible = properties.at(0);
     setUserLocked(properties.at(1).state.toBool());
 }
 

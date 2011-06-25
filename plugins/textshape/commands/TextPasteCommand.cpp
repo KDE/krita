@@ -47,7 +47,7 @@ TextPasteCommand::TextPasteCommand(QClipboard::Mode mode, TextTool *tool, KUndo2
     m_first(true),
     m_mode(mode)
 {
-    setText(i18n("Paste"));
+    setText(i18nc("(qtundo-format)", "Paste"));
 }
 
 void TextPasteCommand::undo()

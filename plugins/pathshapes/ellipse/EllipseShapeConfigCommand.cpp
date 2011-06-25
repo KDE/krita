@@ -29,7 +29,7 @@ EllipseShapeConfigCommand::EllipseShapeConfigCommand(EllipseShape *ellipse, Elli
 {
     Q_ASSERT(m_ellipse);
 
-    setText(i18n("Change ellipse"));
+    setText(i18nc("(qtundo-format)", "Change ellipse"));
 
     m_oldType = m_ellipse->type();
     m_oldStartAngle = m_ellipse->startAngle();

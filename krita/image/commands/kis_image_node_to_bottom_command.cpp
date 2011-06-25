@@ -26,7 +26,7 @@
 #include "../kis_image.h"
 
 KisImageNodeToBottomCommand::KisImageNodeToBottomCommand(KisImageWSP image, KisNodeSP node)
-        : KisImageCommand(i18n("Lower"), image), m_node(node)
+        : KisImageCommand(i18nc("(qtundo-format)", "Lower"), image), m_node(node)
 {
     m_prevParent = m_node->parent();
     m_prevAbove = m_node->prevSibling();

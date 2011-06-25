@@ -339,7 +339,7 @@ void KoPADocumentStructureDocker::addLayer()
                 layer->setZIndex( layers.last()->zIndex() + 1 );
             }
             KUndo2Command *cmd = new KoShapeCreateCommand( m_doc, layer, 0 );
-            cmd->setText( i18n( "Create Layer") );
+            cmd->setText( i18nc( "(qtundo-format)", "Create Layer" ) );
             m_doc->addCommand( cmd );
             m_model->update();
         }
@@ -368,7 +368,7 @@ void KoPADocumentStructureDocker::deleteItem()
                 deleteShapes.append( page );
             }
             cmd = new KoShapeDeleteCommand( m_doc, deleteShapes );
-            cmd->setText( i18n( "Delete Layer" ) );
+            cmd->setText( i18nc( "(qtundo-format)", "Delete Layer" ) );
         }
         else
         {

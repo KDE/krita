@@ -288,33 +288,12 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
 
     KisConfig cfg;
 
-    // it's scaled from 0 - 6, but the config is in 0 - 300
-    m_swappiness->setValue(cfg.swappiness() / 50);
     m_maxTiles->setValue(cfg.maxTilesInMem());
-#if 0
-    m_projection->setChecked(cfg.useProjections());
-    chkUseBoundingRect->setChecked(cfg.useBoundingRectInProjection());
-    chkAggregateDirtyRegions->setChecked(cfg.aggregateDirtyRegionsInPainter());
-    intChunkSize->setValue(cfg.projectionChunkSize());
-    intNumThreads->setValue(cfg.numProjectionThreads());
-    chkUpdateAllOfQPainterCanvas->setChecked(cfg.updateAllOfQPainterCanvas());
-    chkUseNearestNeighbour->setChecked(cfg.useNearestNeigbour());
-#endif
 }
 
 void PerformanceTab::setDefault()
 {
-    m_swappiness->setValue(3);
     m_maxTiles->setValue(500);
-#if 0
-    m_projection->setChecked(true);
-    chkUseBoundingRect->setChecked(false);
-    chkAggregateDirtyRegions->setChecked(true);
-    intChunkSize->setValue(512);
-    intNumThreads->setValue(QThread::idealThreadCount());
-    chkUpdateAllOfQPainterCanvas->setChecked(true);
-    chkUseNearestNeighbour->setChecked(false);
-#endif
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -663,16 +642,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );
 
 #if 0
-        // it's scaled from 0 - 6, but the config is in 0 - 300
-        cfg.setSwappiness(dialog->m_performanceSettings->m_swappiness->value() * 50);
         cfg.setMaxTilesInMem(dialog->m_performanceSettings->m_maxTiles->value());
-        cfg.setUseProjections(dialog->m_performanceSettings->m_projection->isChecked());
-        cfg.setNumProjectThreads(dialog->m_performanceSettings->intNumThreads->value());
-        cfg.setProjectionChunkSize(dialog->m_performanceSettings->intChunkSize->value());
-        cfg.setAggregateDirtyRegionsInPainter(dialog->m_performanceSettings->chkAggregateDirtyRegions->isChecked());
-        cfg.setUseBoundingRectInProjection(dialog->m_performanceSettings->chkUseBoundingRect->isChecked());
-        cfg.setUpdateAllOfQpainterCanvas(dialog->m_performanceSettings->chkUpdateAllOfQPainterCanvas->isChecked());
-        cfg.setUseNearestNeighbour(dialog->m_performanceSettings->chkUseNearestNeighbour->isChecked());
         // let the tile manager know
         //KisTileManager::instance()->configChanged();
 #endif

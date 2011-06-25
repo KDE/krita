@@ -34,10 +34,10 @@ KoPAPageInsertCommand::KoPAPageInsertCommand( KoPADocument *document, KoPAPageBa
     Q_ASSERT( document );
     Q_ASSERT( page );
     if ( m_page->pageType() == KoPageApp::Slide ) {
-        setText( i18n( "Insert slide" ) );
+        setText( i18nc( "(qtundo-format)", "Insert slide" ) );
     }
     else {
-        setText( i18n( "Insert page" ) );
+        setText( i18nc( "(qtundo-format)", "Insert page" ) );
     }
 }
 

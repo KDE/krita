@@ -17,6 +17,7 @@ set_target_properties(koplugin PROPERTIES
 install(TARGETS kundo2 ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
+    kundo2_export.h
 	kundo2stack.h
 	kundo2qstack.h
 	kundo2group.h

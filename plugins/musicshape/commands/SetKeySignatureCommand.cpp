@@ -35,7 +35,7 @@ typedef QPair<Bar*, KeySignature*> BarKeySignaturePair;
 SetKeySignatureCommand::SetKeySignatureCommand(MusicShape* shape, int bar, RegionType type, Staff* staff, int accidentals)
     : m_shape(shape), m_staff(staff)
 {
-    setText(i18n("Change key signature"));
+    setText(i18nc("(qtundo-format)", "Change key signature"));
     Sheet* sheet = shape->sheet();
     
     if (staff) {
@@ -82,7 +82,7 @@ SetKeySignatureCommand::SetKeySignatureCommand(MusicShape* shape, int bar, Regio
 SetKeySignatureCommand::SetKeySignatureCommand(MusicShape* shape, int startBar, int endBar, MusicCore::Staff* staff, int accidentals)
     : m_shape(shape), m_staff(staff)
 {
-    setText(i18n("Change key signature"));
+    setText(i18nc("(qtundo-format)", "Change key signature"));
     Sheet* sheet = shape->sheet();
     
     if (staff) {

@@ -48,7 +48,7 @@ KoPathReverseCommand::KoPathReverseCommand(const QList<KoPathShape*> &paths, KUn
         : KUndo2Command(parent),
         d(new Private(paths))
 {
-    setText(i18n("Reverse paths"));
+    setText(i18nc("(qtundo-format)", "Reverse paths"));
 }
 
 KoPathReverseCommand::~KoPathReverseCommand()

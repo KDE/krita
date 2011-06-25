@@ -33,7 +33,7 @@ ChangeVectorDataCommand::ChangeVectorDataCommand(VectorShape *shape, QByteArray 
     Q_ASSERT( shape );
     m_oldImageData = m_shape->compressedContents();
     m_newImageData = newImageData;
-    setText(i18n("Change Vector Data"));
+    setText(i18nc("(qtundo-format)", "Change Vector Data"));
 }
 
 ChangeVectorDataCommand::~ChangeVectorDataCommand()

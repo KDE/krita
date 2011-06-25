@@ -25,7 +25,7 @@
 #include "kis_undo_adapter.h"
 
 KisImageNodeRaiseCommand::KisImageNodeRaiseCommand(KisImageWSP image, KisNodeSP node)
-        : KisImageCommand(i18n("Raise"), image), m_node(node)
+        : KisImageCommand(i18nc("(qtundo-format)", "Raise"), image), m_node(node)
 {
 }
 

@@ -69,7 +69,6 @@ public:
     KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor);
     virtual ~KisToolPaint();
 
-
 protected:
 
     void setMode(ToolMode mode);

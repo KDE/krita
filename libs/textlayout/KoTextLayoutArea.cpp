@@ -932,6 +932,12 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             if (softBreakPos >= 0 && softBreakPos < line.textStart() + line.textLength()) {
                 line.setNumColumns(softBreakPos - line.textStart() + 1, line.width());
                 softBreak = true;
+                // if the softBreakPos is at the start of the line stop here so
+                // we don't add a line here. That fixes the problem that e.g. the counter is before
+                // the page break and the text is after the page break
+                if (softBreakPos == 0) {
+                    return false;
+                }
             }
         }
         findFootNotes(block, line);

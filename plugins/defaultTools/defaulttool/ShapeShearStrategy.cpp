@@ -177,7 +177,7 @@ KUndo2Command* ShapeShearStrategy::createCommand() {
     foreach( KoShape* shape, m_selectedShapes )
         newTransforms << shape->transformation();
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, newTransforms );
-    cmd->setText( i18n("Shear") );
+    cmd->setText( i18nc("(qtundo-format)", "Shear") );
     KoSelection * sel = tool()->canvas()->shapeManager()->selection();
     new SelectionTransformCommand(sel, m_initialSelectionMatrix, sel->transformation(), cmd);
     return cmd;

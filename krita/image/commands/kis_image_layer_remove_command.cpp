@@ -24,7 +24,7 @@
 
 
 KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageWSP image, KisNodeSP layer)
-        : KisImageCommand(i18n("Remove Layer"), image)
+        : KisImageCommand(i18nc("(qtundo-format)", "Remove Layer"), image)
 {
     m_layer = layer;
     m_prevParent = layer->parent();

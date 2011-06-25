@@ -103,7 +103,7 @@ void TreeTool::changeStructure(int index)
 {
     kDebug() << index;
     KUndo2Command *command = new KUndo2Command;
-    command->setText(i18n("Change Tree Structure"));
+    command->setText(i18nc("(qtundo-format)", "Change Tree Structure"));
     foreach(TreeShape *tree, m_selectedTrees) {
         TreeShape::TreeType structure = static_cast<TreeShape::TreeType>(index);
         new TreeChangeStructureCommand(tree, structure, command);
@@ -116,7 +116,7 @@ void TreeTool::changeShape(int index)
 {
     kDebug() << index;
 //     KUndo2Command *command = new KUndo2Command;
-//     command->setText(i18n("Change Background Shape"));
+//     command->setText(i18nc("(qtundo-format)", "Change Background Shape"));
 //     foreach(TreeShape *tree, m_selectedTrees) {
 //         TreeShape::RootType type = static_cast<TreeShape::RootType>(index);
 //         new TreeChangeShapeCommand(tree, type, command);
@@ -129,7 +129,7 @@ void TreeTool::changeConnectionType(int index)
 {
     kDebug() << index;
     KUndo2Command *command = new KUndo2Command;
-    command->setText(i18n("Change Connection Type"));
+    command->setText(i18nc("(qtundo-format)", "Change Connection Type"));
     foreach(TreeShape *tree, m_selectedTrees) {
         KoConnectionShape::Type type = static_cast<KoConnectionShape::Type>(index);
         new TreeChangeConnectionCommand(tree, type, command);

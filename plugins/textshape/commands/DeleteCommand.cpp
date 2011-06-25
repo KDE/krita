@@ -40,7 +40,7 @@ DeleteCommand::DeleteCommand(DeleteMode mode, TextTool *tool, KUndo2Command *par
     m_undone(false),
     m_mode(mode)
 {
-    setText(i18n("Delete"));
+    setText(i18nc("(qtundo-format)", "Delete"));
 }
 
 void DeleteCommand::undo()
@@ -216,7 +216,7 @@ bool DeleteCommand::mergeWith(const KUndo2Command *command)
     {
     public:
         UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
-        : KUndo2Command(i18n("Text"), parent),
+        : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
         m_document(document)
         {}
 

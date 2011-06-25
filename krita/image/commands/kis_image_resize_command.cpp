@@ -25,7 +25,7 @@
 
 KisImageResizeCommand::KisImageResizeCommand(KisImageWSP image,
                                              const QSize& newSize)
-        : KisImageCommand(i18n("Resize Image"), image)
+        : KisImageCommand(i18nc("(qtundo-format)", "Resize Image"), image)
 {
     // do we really need a translatable name for the command?
     m_sizeBefore = image->size();

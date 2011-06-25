@@ -50,9 +50,9 @@ ShowChangesCommand::ShowChangesCommand(bool showChanges, QTextDocument *document
     m_changeTracker = KoTextDocument(m_document).changeTracker();
     m_textEditor = KoTextDocument(m_document).textEditor();
     if (showChanges)
-      setText(i18n("Show Changes"));
+      setText(i18nc("(qtundo-format)", "Show Changes"));
     else
-      setText(i18n("Hide Changes"));
+      setText(i18nc("(qtundo-format)", "Hide Changes"));
 }
 
 void ShowChangesCommand::undo()

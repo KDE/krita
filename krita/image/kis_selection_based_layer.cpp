@@ -131,7 +131,7 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
              */
             tempSelection = new KisSelection(*tempSelection);
 
-            KisPainter gc2(tempSelection);
+            KisPainter gc2(tempSelection->getOrCreatePixelSelection());
             gc2.setOpacity(temporaryOpacity());
             gc2.setCompositeOp(temporaryCompositeOp());
             gc2.bitBlt(rect.topLeft(), temporaryTarget(), rect);

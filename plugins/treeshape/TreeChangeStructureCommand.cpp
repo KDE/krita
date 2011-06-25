@@ -28,7 +28,7 @@ TreeChangeStructureCommand::TreeChangeStructureCommand(TreeShape *tree, TreeShap
 {
     Q_ASSERT(m_tree);
 
-    setText(i18n("Change tree"));
+    setText(i18nc("(qtundo-format)", "Change tree"));
 
     m_oldStructure = m_tree->structure();
     m_oldFollowParent = false;

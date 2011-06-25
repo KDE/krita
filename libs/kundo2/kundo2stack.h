@@ -128,10 +128,6 @@ public:
 
     const KUndo2Command *command(int index) const;
 
-    // functions from KUndoStack
-    QAction* createRedoAction(KActionCollection* actionCollection, const QString& actionName = QString());
-    QAction* createUndoAction(KActionCollection* actionCollection, const QString& actionName = QString());
-
 public Q_SLOTS:
     void setClean();
     void setIndex(int idx);
@@ -164,12 +160,14 @@ private:
     friend class KUndo2Group;
 };
 
-// HACK!!! (inheritance in the wrong direction)
-// Cross your fingers that nobody feels the difference ;)
 class KUNDO2_EXPORT KUndo2Stack : public KUndo2QStack
 {
 public:
-	explicit KUndo2Stack(QObject *parent = 0);
+    explicit KUndo2Stack(QObject *parent = 0);
+
+    // functions from KUndoStack
+    QAction* createRedoAction(KActionCollection* actionCollection, const QString& actionName = QString());
+    QAction* createUndoAction(KActionCollection* actionCollection, const QString& actionName = QString());
 };
 
 #endif // QT_NO_UNDOSTACK

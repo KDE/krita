@@ -188,10 +188,6 @@ public:
     bool useRegionOfInterestInProjection();
     void setUseRegionOfInterestInProjection(bool use);
 
-    // Use nearest-neighbour interpolation on KisImage
-    bool useNearestNeighbour();
-    void setUseNearestNeighbour(bool useNearestNeigbour);
-
     bool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
 

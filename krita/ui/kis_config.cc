@@ -527,16 +527,6 @@ void KisConfig::setUseRegionOfInterestInProjection(bool use)
     m_cfg.writeEntry("use_region_of_interest", use);
 }
 
-bool KisConfig::useNearestNeighbour()
-{
-    return m_cfg.readEntry("fast_zoom", false);
-}
-
-void KisConfig::setUseNearestNeighbour(bool useNearestNeigbour)
-{
-    m_cfg.writeEntry("fast_zoom", useNearestNeigbour);
-}
-
 bool KisConfig::showRootLayer()
 {
     return m_cfg.readEntry("ShowRootLayer", false);

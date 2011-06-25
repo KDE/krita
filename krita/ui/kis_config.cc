@@ -557,16 +557,6 @@ void KisConfig::setThreadColorSpaceConversion(bool threadColorSpaceConversion)
     m_cfg.writeEntry("thread_colorspace_conversion", threadColorSpaceConversion);
 }
 
-bool KisConfig::cacheKisImageAsQImage()
-{
-    return m_cfg.readEntry("cache_kis_image_as_qimage", true);
-}
-
-void KisConfig::setCacheKisImageAsQImage(bool cacheKisImageAsQImage)
-{
-    m_cfg.writeEntry("cache_kis_image_as_qimage", cacheKisImageAsQImage);
-}
-
 
 bool KisConfig::showRootLayer()
 {

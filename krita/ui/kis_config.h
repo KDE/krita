@@ -198,9 +198,6 @@ public:
     bool threadColorSpaceConversion();
     void setThreadColorSpaceConversion(bool threadColorSpaceConversion);
 
-    bool cacheKisImageAsQImage();
-    void setCacheKisImageAsQImage(bool cacheKisImageAsQImage);
-
     bool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
 

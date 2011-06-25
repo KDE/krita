@@ -25,8 +25,9 @@
 #include <QtGui>
 #include <QVector3D>
 #include <cmath>
+#include <krita_export.h>
 
-class KisLightSource : public QLabel
+class KRITAUI_EXPORT KisLightSource : public QLabel
 {
     Q_OBJECT
 

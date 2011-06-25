@@ -201,9 +201,6 @@ public:
     bool cacheKisImageAsQImage();
     void setCacheKisImageAsQImage(bool cacheKisImageAsQImage);
 
-    bool drawMaskVisualisationOnUnscaledCanvasCache();
-    void setDrawMaskVisualisationOnUnscaledCanvasCache(bool drawMaskVisualisationOnUnscaledCanvasCache);
-
     bool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
 

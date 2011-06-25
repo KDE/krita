@@ -568,16 +568,6 @@ void KisConfig::setCacheKisImageAsQImage(bool cacheKisImageAsQImage)
 }
 
 
-bool KisConfig::drawMaskVisualisationOnUnscaledCanvasCache()
-{
-    return m_cfg.readEntry("drawMaskVisualisationOnUnscaledCanvasCache", false);
-}
-
-void KisConfig::setDrawMaskVisualisationOnUnscaledCanvasCache(bool drawMaskVisualisationOnUnscaledCanvasCache)
-{
-    m_cfg.writeEntry("drawMaskVisualisationOnUnscaledCanvasCache", drawMaskVisualisationOnUnscaledCanvasCache);
-}
-
 bool KisConfig::showRootLayer()
 {
     return m_cfg.readEntry("ShowRootLayer", false);

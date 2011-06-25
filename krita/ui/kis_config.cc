@@ -547,17 +547,6 @@ void KisConfig::setSampling(bool sampling)
     m_cfg.writeEntry("sampled_scaling", sampling);
 }
 
-bool KisConfig::threadColorSpaceConversion()
-{
-    return m_cfg.readEntry("thread_colorspace_conversion", false);
-}
-
-void KisConfig::setThreadColorSpaceConversion(bool threadColorSpaceConversion)
-{
-    m_cfg.writeEntry("thread_colorspace_conversion", threadColorSpaceConversion);
-}
-
-
 bool KisConfig::showRootLayer()
 {
     return m_cfg.readEntry("ShowRootLayer", false);

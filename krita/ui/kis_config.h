@@ -195,9 +195,6 @@ public:
     bool useSampling();
     void setSampling(bool sampling);
 
-    bool threadColorSpaceConversion();
-    void setThreadColorSpaceConversion(bool threadColorSpaceConversion);
-
     bool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
 

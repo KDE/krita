@@ -204,10 +204,6 @@ public:
     bool drawMaskVisualisationOnUnscaledCanvasCache();
     void setDrawMaskVisualisationOnUnscaledCanvasCache(bool drawMaskVisualisationOnUnscaledCanvasCache);
 
-    bool fastZoom() {
-        return false;
-    }
-
     bool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
 

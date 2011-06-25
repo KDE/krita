@@ -173,7 +173,7 @@ public:
     bool antialiasCurves();
     void setAntialiasCurves(bool v);
 
-    cbool showRootLayer();
+    bool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
 
     bool showOutlineWhilePainting();

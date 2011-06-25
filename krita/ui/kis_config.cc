@@ -517,16 +517,6 @@ void KisConfig::setUseBoundingRectInProjection(bool use)
     m_cfg.writeEntry("use_bounding_rect_of_dirty_region", use);
 }
 
-bool KisConfig::useRegionOfInterestInProjection()
-{
-    return m_cfg.readEntry("use_region_of_interest", false);
-}
-
-void KisConfig::setUseRegionOfInterestInProjection(bool use)
-{
-    m_cfg.writeEntry("use_region_of_interest", use);
-}
-
 bool KisConfig::showRootLayer()
 {
     return m_cfg.readEntry("ShowRootLayer", false);

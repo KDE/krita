@@ -185,9 +185,6 @@ public:
     bool useBoundingRectInProjection();
     void setUseBoundingRectInProjection(bool use);
 
-    bool useRegionOfInterestInProjection();
-    void setUseRegionOfInterestInProjection(bool use);
-
     bool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
 

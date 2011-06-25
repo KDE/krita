@@ -479,7 +479,17 @@ void KisLayerBox::slotLowerClicked()
 
 void KisLayerBox::slotLeftClicked()
 {
-    qDebug() << "slotLeftClicked";
+    if (!m_nodeManager->activeNode()->parent()->parent()) return;
+
+    KisNodeSP parent = m_nodeManager->activeNode()->parent();
+    KisNodeSP grandParent = parent->parent();
+
+    /* By the principle of least surprise, placing the node at
+    grandParent->index(parent) + 1 ensures that the node appears
+    just outside and above the parent on the Layer Box widget */
+    m_nodeManager->moveNodeAt(m_nodeManager->activeNode(),
+                              grandParent,
+                              grandParent->index(parent) + 1);
 }
 
 void KisLayerBox::slotRightClicked()

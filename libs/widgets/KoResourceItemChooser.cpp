@@ -25,7 +25,7 @@
 #include <QGridLayout>
 #include <QButtonGroup>
 #include <QPushButton>
-#include <QComboBox>
+#include <klineedit.h>
 #include <QHeaderView>
 #include <QAbstractProxyModel>
 
@@ -52,7 +52,7 @@ public:
     KoResourceModel* model;
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
-    QComboBox *tagSearchCombo, *tagOpCombo;
+    KLineEdit *tagSearchLineEdit, *tagOpLineEdit;
     KoResource *curResource;
     QString knsrcFile;
     QCompleter *tagCompleter;
@@ -73,16 +73,17 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->buttonGroup = new QButtonGroup( this );
     d->buttonGroup->setExclusive( false );
 
-    d->tagSearchCombo = new QComboBox( this );
-    d->tagSearchCombo->setEditable( true );
-    d->tagSearchCombo->setEnabled( true );
-    d->tagSearchCombo->hide();
+    d->tagSearchLineEdit = new KLineEdit(this);
+    d->tagSearchLineEdit->setClearButtonShown(true);
+    d->tagSearchLineEdit->setClickMessage("Enter search tag here");
+    d->tagSearchLineEdit->setEnabled( true );
+    d->tagSearchLineEdit->hide();
 
-    connect( d->tagSearchCombo, SIGNAL(activated(QString)), this, SLOT(tagSearchComboActivated(QString)));
-    connect( d->tagSearchCombo, SIGNAL(editTextChanged(QString)), this, SLOT(tagSearchComboTextChanged(QString)));
+    connect( d->tagSearchLineEdit, SIGNAL(returnPressed(QString)), this, SLOT(tagSearchLineEditActivated(QString)));
+    connect( d->tagSearchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(tagSearchLineEditTextChanged(QString)));
 
     QVBoxLayout* layout = new QVBoxLayout( this );
-    layout->addWidget( d->tagSearchCombo );
+    layout->addWidget( d->tagSearchLineEdit );
     layout->addWidget( d->view );
 
     QGridLayout* buttonLayout = new QGridLayout;
@@ -126,19 +127,19 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     buttonLayout->setSpacing( 0 );
     buttonLayout->setMargin( 0 );
 
-    d->tagOpCombo = new QComboBox( this );
-    d->tagOpCombo->setEditable( true );
-    d->tagOpCombo->setEnabled( false );
-    d->tagOpCombo->hide();
+    d->tagOpLineEdit = new KLineEdit( this );
+    d->tagOpLineEdit->setClickMessage("Add / Remove Tag");
+    d->tagOpLineEdit->setEnabled( false );
+    d->tagOpLineEdit->hide();
 
-    connect( d->tagOpCombo, SIGNAL(activated(QString)), this, SLOT(tagOpComboActivated(QString)));
-    connect( d->tagOpCombo, SIGNAL(editTextChanged(QString)), this, SLOT(tagOpComboTextChanged(QString)));
+    connect( d->tagOpLineEdit, SIGNAL(returnPressed(QString)), this, SLOT(tagOpLineEditActivated(QString)));
+    connect( d->tagOpLineEdit, SIGNAL(textChanged(QString)), this, SLOT(tagOpLineEditTextChanged(QString)));
 
-    layout->addWidget( d->tagOpCombo );
+    layout->addWidget( d->tagOpLineEdit );
     layout->addLayout( buttonLayout );
 
     d->tagCompleter = new QCompleter(getTagNamesList(""),this);
-    d->tagSearchCombo->setCompleter(d->tagCompleter);
+    d->tagSearchLineEdit->setCompleter(d->tagCompleter);
 
 
     updateButtonState();
@@ -234,8 +235,8 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 
 void KoResourceItemChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
 {
-    showSearchBar ? d->tagSearchCombo->show() : d->tagSearchCombo->hide();
-    showOpBar ? d->tagOpCombo->show() : d->tagOpCombo->hide();
+    showSearchBar ? d->tagSearchLineEdit->show() : d->tagSearchLineEdit->hide();
+    showOpBar ? d->tagOpLineEdit->show() : d->tagOpLineEdit->hide();
 }
 
 void KoResourceItemChooser::setRowCount( int rowCount )
@@ -315,7 +316,7 @@ void KoResourceItemChooser::activated( const QModelIndex & index )
 
     if( d->curResource ) {
         emit resourceSelected( d->curResource );
-        setTagOpCombo(d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource ));
+        setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource ));
     }
 
     updateButtonState();
@@ -335,13 +336,13 @@ void KoResourceItemChooser::updateButtonState()
     if( resource ) {
         removeButton->setEnabled( resource->removable() );
         uploadButton->setEnabled(resource->removable());
-        d->tagOpCombo->setEnabled( resource->removable());
+        d->tagOpLineEdit->setEnabled( resource->removable());
         return;
     }
 
     removeButton->setEnabled( false );
     uploadButton->setEnabled(false);
-    d->tagOpCombo->setEnabled( false );
+    d->tagOpLineEdit->setEnabled( false );
 }
 
 KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& index)
@@ -369,27 +370,26 @@ QSize KoResourceItemChooser::viewSize()
     return d->view->size();
 }
 
-void KoResourceItemChooser::setTagOpCombo(QStringList tagsList)
+void KoResourceItemChooser::setTagOpLineEdit(QStringList tagsList)
 {
     QString tags;
     if(!tagsList.isEmpty()) {
         tagsList.sort();
         tags = tagsList.join(", ");
         tags.append(", ");
-        d->tagOpCombo->setEditText( tags );
+        d->tagOpLineEdit->setText(tags);
      }
     else
     {
-        d->tagOpCombo->clear();
-        d->tagOpCombo->clearEditText();
+        d->tagOpLineEdit->clear();
     }
 
     d->tagCompleter = new QCompleter(getTagNamesList(tags),this);
-    d->tagOpCombo->setCompleter(d->tagCompleter);
+    d->tagOpLineEdit->setCompleter(d->tagCompleter);
 }
 
 
-void KoResourceItemChooser::tagOpComboActivated(QString lineEditText)
+void KoResourceItemChooser::tagOpLineEditActivated(QString lineEditText)
 {
     QStringList tagsListNew = lineEditText.split(", ");
     if(tagsListNew.contains("")) {
@@ -410,10 +410,10 @@ void KoResourceItemChooser::tagOpComboActivated(QString lineEditText)
         }
      }
 
-    setTagOpCombo( d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource));
+    setTagOpLineEdit( d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource));
 }
 
-void KoResourceItemChooser::tagOpComboTextChanged(QString lineEditText)
+void KoResourceItemChooser::tagOpLineEditTextChanged(QString lineEditText)
 {
     if(lineEditText.isEmpty()) {
         QStringList assignedTagsList = d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource);
@@ -422,7 +422,7 @@ void KoResourceItemChooser::tagOpComboTextChanged(QString lineEditText)
         }
     }
     d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
-    d->tagOpCombo->setCompleter(d->tagCompleter);
+    d->tagOpLineEdit->setCompleter(d->tagCompleter);
 }
 
 QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
@@ -462,7 +462,7 @@ QStringList KoResourceItemChooser::getTaggedResourceFileNames(QString lineEditTe
     return d->model->resourceServerAdapter()->searchTag(lineEditText);
 }
 
-void KoResourceItemChooser::tagSearchComboActivated(QString lineEditText)
+void KoResourceItemChooser::tagSearchLineEditActivated(QString lineEditText)
 {
     d->model->resourceServerAdapter()->setTagSearch(true);
     d->model->resourceServerAdapter()->setTaggedResourceFileNames(getTaggedResourceFileNames(lineEditText));
@@ -472,19 +472,19 @@ void KoResourceItemChooser::tagSearchComboActivated(QString lineEditText)
         lineEditText.append(", ");
     }
     d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
-    d->tagSearchCombo->setCompleter(d->tagCompleter);
-    d->tagSearchCombo->setEditText( lineEditText );
+    d->tagSearchLineEdit->setCompleter(d->tagCompleter);
+    d->tagSearchLineEdit->setText( lineEditText );
 
 }
 
-void KoResourceItemChooser::tagSearchComboTextChanged(QString lineEditText)
+void KoResourceItemChooser::tagSearchLineEditTextChanged(QString lineEditText)
 {
     if(lineEditText.isEmpty()) {
         d->model->resourceServerAdapter()->setTagSearch(false);
         d->model->resourceServerAdapter()->updateServer();
     }
     d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
-    d->tagSearchCombo->setCompleter(d->tagCompleter);
+    d->tagSearchLineEdit->setCompleter(d->tagCompleter);
 }
 
 #include <KoResourceItemChooser.moc>

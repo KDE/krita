@@ -104,11 +104,11 @@ public slots:
     
 private slots:
     void activated ( const QModelIndex & index );
-    void setTagOpCombo(QStringList assignedTagsList);
-    void tagOpComboActivated(QString lineEditText);
-    void tagOpComboTextChanged(QString lineEditText);
-    void tagSearchComboActivated(QString lineEditText);
-    void tagSearchComboTextChanged(QString lineEditText);
+    void setTagOpLineEdit(QStringList assignedTagsList);
+    void tagOpLineEditActivated(QString lineEditText);
+    void tagOpLineEditTextChanged(QString lineEditText);
+    void tagSearchLineEditActivated(QString lineEditText);
+    void tagSearchLineEditTextChanged(QString lineEditText);
 
 private:
     void updateButtonState();

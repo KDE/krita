@@ -56,6 +56,8 @@ private:
     void writeXMLFile();
     bool isServerResource(QString resourceName);
     void addTag(const QString& fileName,const QString& tag);
+    QString getAdjustedFileName(QString fileName);
+    QStringList removeAdjustedFileNames(QStringList fileNamesList);
 
     QMultiHash<QString, QString> m_tagRepo;
     QHash<QString, int> m_tagList;

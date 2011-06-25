@@ -38,7 +38,7 @@ KoResourceTagging::~KoResourceTagging()
 
 QStringList KoResourceTagging::getAssignedTagsList( KoResource* resource )
 {
-    return m_tagRepo.values(resource->filename());
+    return m_tagRepo.values(getAdjustedFileName(resource->filename()));
 }
 
 QStringList KoResourceTagging::getTagNamesList()
@@ -48,11 +48,12 @@ QStringList KoResourceTagging::getTagNamesList()
 
 void KoResourceTagging::addTag( KoResource* resource,const QString& tag)
 {
-    if( m_tagRepo.contains ( resource->filename(), tag ) ) {
+    QString fileName = getAdjustedFileName (resource->filename());
+    if( m_tagRepo.contains ( fileName, tag ) ) {
         return;
     }
 
-    addTag( resource->filename(), tag );
+    addTag( fileName, tag );
 }
 
 void KoResourceTagging::addTag(const QString& fileName,const QString& tag)
@@ -72,11 +73,12 @@ void KoResourceTagging::addTag(const QString& fileName,const QString& tag)
 
 void KoResourceTagging::delTag( KoResource* resource,const QString& tag)
 {
-    if( ! m_tagRepo.contains ( resource->filename(), tag ) ) {
+    QString fileName = getAdjustedFileName(resource->filename());
+    if( ! m_tagRepo.contains ( fileName, tag ) ) {
         return;
     }
 
-    m_tagRepo.remove( resource->filename(), tag);
+    m_tagRepo.remove( fileName, tag);
 
     int val = m_tagList.value(tag);
 
@@ -111,9 +113,9 @@ QStringList KoResourceTagging::searchTag(const QString& lineEditText)
                 resultKeysList.append(key);
             }
         }
-        return resultKeysList;
+        return removeAdjustedFileNames(resultKeysList);
     }
-    return keysList;
+    return removeAdjustedFileNames(keysList);
 }
 
 void KoResourceTagging::writeXMLFile()
@@ -259,10 +261,24 @@ bool KoResourceTagging::isServerResource(QString resourceName)
             break;
         }
     }
-
-    //if(!removeChild && !resourceName.contains(".")) {
-     //   removeChild = true;
-    //}
-
     return removeChild;
+}
+
+QString KoResourceTagging::getAdjustedFileName(QString fileName)
+{
+    if(!fileName.contains(".")) {
+        return fileName + "-krita" + m_serverExtensions.split(":").takeFirst().remove("*");
+    }
+    return fileName;
+}
+
+QStringList KoResourceTagging::removeAdjustedFileNames(QStringList fileNamesList)
+{
+    foreach(QString fileName, fileNamesList) {
+        if(fileName.contains("-krita")) {
+            fileNamesList.append(fileName.split("-krita").takeFirst());
+            fileNamesList.removeAll(fileName);
+        }
+    }
+    return fileNamesList;
 }

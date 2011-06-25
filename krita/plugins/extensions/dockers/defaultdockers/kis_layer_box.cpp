@@ -479,10 +479,12 @@ void KisLayerBox::slotLowerClicked()
 
 void KisLayerBox::slotLeftClicked()
 {
-    if (!m_nodeManager->activeNode()->parent()->parent()) return;
-
+    KisNodeSP node = m_nodeManager->activeNode();
     KisNodeSP parent = m_nodeManager->activeNode()->parent();
     KisNodeSP grandParent = parent->parent();
+    
+    if (!grandParent) return;  
+    if (!grandParent->parent() && node->inherits("KisMask")) return;
 
     /* By the principle of least surprise, placing the node at
     grandParent->index(parent) + 1 ensures that the node appears

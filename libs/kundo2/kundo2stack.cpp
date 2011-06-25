@@ -1062,7 +1062,7 @@ bool KUndo2QStack::isActive() const
 
 QAction* KUndo2QStack::createRedoAction(KActionCollection* actionCollection, const QString& actionName)
 {
-    QAction* action = createRedoAction(actionCollection);
+    QAction* action = createRedoAction(static_cast<QObject*>(actionCollection));
 
     if(actionName.isEmpty()) {
         action->setObjectName(KStandardAction::name(KStandardAction::Redo));
@@ -1081,7 +1081,7 @@ QAction* KUndo2QStack::createRedoAction(KActionCollection* actionCollection, con
 
 QAction* KUndo2QStack::createUndoAction(KActionCollection* actionCollection, const QString& actionName)
 {
-    QAction* action = createUndoAction(actionCollection);
+    QAction* action = createUndoAction(static_cast<QObject*>(actionCollection));
 
     if(actionName.isEmpty()) {
         action->setObjectName(KStandardAction::name(KStandardAction::Undo));

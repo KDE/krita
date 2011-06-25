@@ -208,10 +208,6 @@ public:
         return false;
     }
 
-    // If there's no XRender use QPixmaps instead of QImage for the QPainterCanvas
-    bool noXRender();
-    void setNoXRender(bool noXRender);
-
     bool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
 

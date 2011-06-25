@@ -494,7 +494,22 @@ void KisLayerBox::slotLeftClicked()
 
 void KisLayerBox::slotRightClicked()
 {
-    qDebug() << "slotRightClicked";
+    KisNodeSP node = m_nodeManager->activeNode();
+    KisNodeSP parent = m_nodeManager->activeNode()->parent();
+    KisNodeSP newParent;
+    int nodeIndex = parent->index(node);
+    int indexAbove = nodeIndex + 1;
+    int indexBelow = nodeIndex - 1;
+
+    if (parent->at(indexBelow) && parent->at(indexBelow)->allowAsChild(node)) {
+        newParent = parent->at(indexBelow);
+    } else if (parent->at(indexAbove) && parent->at(indexAbove)->allowAsChild(node)) {
+        newParent = parent->at(indexAbove);
+    } else {
+        return;
+    }
+
+    m_nodeManager->moveNodeAt(node, newParent, 0);
 }
 
 void KisLayerBox::slotPropertiesClicked()

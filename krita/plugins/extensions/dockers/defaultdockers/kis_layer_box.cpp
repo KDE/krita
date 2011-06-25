@@ -70,6 +70,7 @@
 #include "kis_view2.h"
 #include "kis_node_manager.h"
 #include "kis_node_model.h"
+#include "kis_layer_manager.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_doc2.h"
 
@@ -354,12 +355,14 @@ void KisLayerBox::slotSetOpacity(double opacity)
 void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &index)
 {
     QMenu menu;
+
     if (index.isValid()) {
         m_wdgLayerBox->listLayers->addPropertyActions(&menu, index);
         menu.addAction(KIcon("document-properties"), i18n("&Properties..."), this, SLOT(slotPropertiesClicked()));
         menu.addSeparator();
         menu.addAction(KIcon("edit-delete"), i18n("&Remove Layer"), this, SLOT(slotRmClicked()));
         menu.addAction(KIcon("edit-duplicate"), i18n("&Duplicate Layer or Mask"), this, SLOT(slotDuplicateClicked()));
+        menu.addAction(KIcon("edit-merge"), i18n("&Merge with Layer Below"), this, SLOT(slotMergeLayer()));
         menu.addSeparator();
 
     }
@@ -376,6 +379,11 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
     menu.addAction(m_newSelectionMaskAction);
 
     menu.exec(pos);
+}
+
+void KisLayerBox::slotMergeLayer()
+{
+    m_nodeManager->layerManager()->mergeLayer();
 }
 
 void KisLayerBox::slotMinimalView()

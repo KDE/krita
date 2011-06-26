@@ -25,6 +25,10 @@
 #include <QBuffer>
 #include <kcodecs.h>
 #include <renderobjects.h>
+#include <MarbleWidget.h>
+#include <MarbleModel.h>
+#include <QImage>
+#include <QPixmap>
 
 #define myDebug() kDebug(44021) << "\e[35m=="
 
@@ -54,12 +58,30 @@ KoReportItemMaps::KoReportItemMaps(QDomNode & element)
             myDebug() << "\e[35m====== while parsing image element encountered unknow element: " << n;
 //         }
     }
-
+    
+    initMarble();
+    
 }
+
+void KoReportItemMaps::initMarble()
+{
+    m_marble = new Marble::MarbleWidget();
+    m_marble->setMapThemeId("earth/srtm/srtm.dgml");
+    m_marble->centerOn(52,20.8, false);
+    m_marble->zoomView(1800);
+    m_marble->setShowOverviewMap(false);
+    m_marble->setFixedSize(m_size.toScene().toSize());
+    m_mapImage = new QImage(m_size.toScene().toSize(), QImage::Format_ARGB32);
+    m_mapImage->fill(QColor(200, 150, 5).rgb());
+    
+//     connect(m_marble->model()->d)
+}
+
 
 KoReportItemMaps::~KoReportItemMaps()
 {
     delete m_set;
+    delete m_marble;
 }
 
 // bool KoReportItemMaps::isInline() const
@@ -155,6 +177,9 @@ int KoReportItemMaps::render(OROPage* page, OROSection* section,  QPointF offset
     Q_UNUSED(data) 
     
     myDebug() << "Render";
+    
+    //QPainter painter(m_mapImage);
+    m_marble->render(m_mapImage);
 
     /*QString uudata;
     QByteArray imgdata;
@@ -167,14 +192,13 @@ int KoReportItemMaps::render(OROPage* page, OROSection* section,  QPointF offset
 
     //QImage img;
     //img.loadFromData(imgdata);
-    QImage img(300,400,QImage::Format_ARGB32);
-    img.fill(QColor(0xce, 0x00, 0xef, 0xff).rgba());
+    
     OROImage * id = new OROImage();
-    id->setImage(img);
+    id->setImage(*m_mapImage);
     //if (mode().toLower() == "stretch") {
-        id->setScaled(true);
-        id->setAspectRatioMode(Qt::KeepAspectRatio);
-        id->setTransformationMode(Qt::SmoothTransformation);
+        id->setScaled(false);
+        //id->setAspectRatioMode(Qt::KeepAspectRatio);
+        //id->setTransformationMode(Qt::SmoothTransformation);
     //}
 
     id->setPosition(m_pos.toScene() + offset);

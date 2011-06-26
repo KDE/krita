@@ -65,6 +65,7 @@ KoReportDesignerItemMaps::KoReportDesignerItemMaps(KoReportDesigner * rw, QGraph
     m_size.setSceneSize(QSizeF(100, 100));
     m_pos.setScenePos(pos);
     m_name->setValue(m_reportDesigner->suggestEntityName("mapbrowser"));
+    //initMarble();
 }
 
 KoReportDesignerItemMaps::KoReportDesignerItemMaps(QDomNode & element, KoReportDesigner * rw, QGraphicsScene* scene)
@@ -97,7 +98,11 @@ void KoReportDesignerItemMaps::paint(QPainter* painter, const QStyleOptionGraphi
     myDebug() << "\e[35m======Paint\e[0m";
     // store any values we plan on changing so we can restore them
     QPen  p = painter->pen();
-
+    painter->fillRect(rect(), QColor(0xc2, 0xfc, 0xc7));//C2FCC7
+    
+    //Draw a border so user knows the object edge
+    painter->setPen(QPen(QColor(224, 224, 224)));
+    painter->drawRect(rect());
 //     if (isInline()) {
 //         //QImage t_img = _image;
 //         QImage t_img = m_staticImage->value().value<QPixmap>().toImage();
@@ -108,19 +113,14 @@ void KoReportDesignerItemMaps::paint(QPainter* painter, const QStyleOptionGraphi
 //     } else {
 //         painter->drawText(rect(), 0, dataSourceAndObjectTypeName(itemDataSource(), "image"));
 //     }
-    painter->setBrush(QBrush(QColor(0xce, 0x00, 0xef, 0xaa)));
-    painter->drawRoundedRect(rect(),30,30);
+    //painter->setBrush(QBrush(QColor(0xce, 0x00, 0xef, 0xaa)));
+    //painter->drawRoundedRect(rect(),30,30);
     //painter->drawRect(rect());
     //painter->fillRect(rect(),);
     
     painter->setPen(Qt::black);
     painter->drawText(rect(), 0, dataSourceAndObjectTypeName(itemDataSource(), "maps"));
     
-
-    //Draw a border so user knows the object edge
-    painter->setPen(QPen(QColor(224, 224, 224)));
-    painter->drawRect(rect());
-
 
     drawHandles(painter);
 

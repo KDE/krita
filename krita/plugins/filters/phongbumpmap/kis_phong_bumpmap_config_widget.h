@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 José Luis Vergara <pentalis@gmail.com>
+ *  Copyright (c) 2010-2011 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,34 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef PHONGBUMPMAP_H
-#define PHONGBUMPMAP_H
-
-#include <QWidget>
-
-#include <QObject>
-#include <QVariant>
-
-#include <kis_types.h>
-#include <filter/kis_filter.h>
-#include "kis_config_widget.h"
+#ifndef KIS_PHONG_BUMPMAP_CONFIG_WIDGET_H
+#define KIS_PHONG_BUMPMAP_CONFIG_WIDGET_H
 
 #include "ui_wdgphongbumpmap.h"
-
-#include "constants.h"
-
-#include "phong_pixel_processor.h"
-
+#include "kis_paint_device.h"
+#include "kis_config_widget.h"
 
 class KisNodeModel;
 
-class PhongBumpmapWidget : public QWidget, public Ui::WdgPhongBumpmap
+class KisPhongBumpmapWidget : public QWidget, public Ui::WdgPhongBumpmap
 {
     Q_OBJECT
 
 public:
-    
-    PhongBumpmapWidget(QWidget *parent) : QWidget(parent)
+    KisPhongBumpmapWidget(QWidget *parent) : QWidget(parent)
     {
         setupUi(this);
         
@@ -59,49 +46,6 @@ public:
     }
 };
 
-class KritaPhongBumpmap : public QObject
-{
-public:
-    KritaPhongBumpmap(QObject *parent, const QVariantList &);
-    virtual ~KritaPhongBumpmap();
-};
-
-
-/**
- * Implementation of the phong illumination model on top of a 
- * heightmap-based mesh to achieve a bumpmapping effect with
- * multiple illumination sources.
- *
- */
-class KisFilterPhongBumpmap : public KisFilter
-{
-public:
-    KisFilterPhongBumpmap();
-    
-public:
-
-    using KisFilter::process;
-
-    void process(KisPaintDeviceSP device,
-                const QRect& applyRect,
-                const KisFilterConfiguration* config,
-                KoUpdater* progressUpdater
-                ) const;
-
-    qreal inline pixelProcess (quint8* heightmap, quint32 posup, quint32 posdown, quint32 posleft, quint32 posright);
-    
-    QRect neededRect(const QRect &rect, const KisFilterConfiguration* config) const;
-    QRect changedRect(const QRect &rect, const KisFilterConfiguration* config) const;
-    
-    bool supportsAdjustmentLayers() const {
-        return false;
-    }
-
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    
-};
-
 class KisPhongBumpmapConfigWidget : public KisConfigWidget
 {
 
@@ -114,12 +58,11 @@ public:
     void setConfiguration(const KisPropertiesConfiguration* config);
     KisPropertiesConfiguration* configuration() const;
 
-    PhongBumpmapWidget * m_page;
+    KisPhongBumpmapWidget * m_page;
 
 private:
-
     KisPaintDeviceSP m_device;
     KisImageWSP m_image;
 };
 
-#endif
+#endif  //KIS_PHONG_BUMPMAP_CONFIG_WIDGET_H

@@ -18,7 +18,6 @@
 
 #include "kis_phong_bumpmap_config_widget.h"
 #include <filter/kis_filter_configuration.h>
-#include <QtGui>
 #include "phong_bumpmap_constants.h"
 #include "KoChannelInfo.h"
 #include "KoColorSpace.h"

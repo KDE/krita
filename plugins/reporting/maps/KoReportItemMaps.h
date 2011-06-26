@@ -29,7 +29,10 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
+#include <MarbleWidget.h>
+#include <RdfForward.h>
 
+class QImage;
 namespace Scripting
 {
 class Maps;
@@ -54,6 +57,7 @@ public:
     virtual QString itemDataSource() const;
 
 protected:
+    void initMarble();
     KoProperty::Property * m_controlSource;
     KoProperty::Property* m_resizeMode;
     KoProperty::Property* m_staticImage;
@@ -64,11 +68,17 @@ protected:
     QString mode() const;
     bool isInline() const;
     QByteArray inlineImageData() const;
+    Marble::MarbleWidget *m_marble;
+    QImage *m_mapImage;
     
 private:
     virtual void createProperties();
 
+    
+    
     friend class Scripting::Maps;
+    
+    
 };
 
 #endif

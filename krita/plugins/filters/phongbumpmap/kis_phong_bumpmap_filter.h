@@ -39,18 +39,18 @@ public:
 
     void process(KisPaintDeviceSP device,
                 const QRect& applyRect,
-                const KisFilterConfiguration* config,
-                KoUpdater* progressUpdater
+                const KisFilterConfiguration *config,
+                KoUpdater *progressUpdater
                 ) const;
 
-    QRect neededRect(const QRect &rect, const KisFilterConfiguration* config) const;
-    QRect changedRect(const QRect &rect, const KisFilterConfiguration* config) const;
+    QRect neededRect(const QRect &rect, const KisFilterConfiguration *config) const;
+    QRect changedRect(const QRect &rect, const KisFilterConfiguration *config) const;
 
     bool supportsAdjustmentLayers() const {
         return false;
     }
 
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 };
 

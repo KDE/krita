@@ -27,6 +27,15 @@
 #include <filter/kis_filter_configuration.h>
 #include "kis_iterator_ng.h"
 
+KisFilterPhongBumpmap::KisFilterPhongBumpmap()
+                      : KisFilter(KoID("phongbumpmap"     , i18n("PhongBumpmap")),
+                                  KisFilter::categoryMap(), i18n("&PhongBumpmap..."))
+{
+    setColorSpaceIndependence(TO_LAB16);
+    setSupportsPainting(true);
+    setSupportsIncrementalPainting(true);
+}
+
 void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
                                     const QRect& applyRect,
                                     const KisFilterConfiguration* config,
@@ -47,7 +56,7 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
         return;
     }
 
-    //Bypass stuff lol
+    // TODO complete this part
     userChosenHeightChannel = "Red";
     
     timer.start();
@@ -55,8 +64,9 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
     KoChannelInfo* m_heightChannel = 0;
 
     foreach (KoChannelInfo* channel, device->colorSpace()->channels()) {
-        if (userChosenHeightChannel == channel->name())
+        if (userChosenHeightChannel == channel->name()) {
             m_heightChannel = channel;
+        }
     }
 
     QRect inputArea = applyRect;
@@ -68,55 +78,42 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
     quint32 posleft;
     quint32 posright;
     QRect tileLimits;
-
     QColor I; //Reflected light
 
-    //======================================
     //======Preparation paraphlenalia=======
-    //======================================
 
     //Hardcoded facts about Phong Bumpmap: it _will_ generate an RGBA16 bumpmap
-    const quint32 PIXELS_OF_OUTPUT_AREA = abs(outputArea.width() * outputArea.height());
-    const quint8 BYTE_DEPTH_OF_BUMPMAP = 2; //16 bits per channel
-    const quint8 CHANNEL_COUNT_OF_BUMPMAP = 4; //RGBA
-    const quint32 BYTES_TO_FILL_BUMPMAP_AREA = PIXELS_OF_OUTPUT_AREA * BYTE_DEPTH_OF_BUMPMAP * CHANNEL_COUNT_OF_BUMPMAP;
-    QVector<quint8> bumpmap(BYTES_TO_FILL_BUMPMAP_AREA);
-    quint8* bumpmapDataPointer = bumpmap.data();
-    const quint8 PIXEL_SIZE = BYTE_DEPTH_OF_BUMPMAP * CHANNEL_COUNT_OF_BUMPMAP;
-    
-    //qDebug("Tiempo de total preparacion: %d ms", timer.restart());
-    
+    const quint8    BYTE_DEPTH_OF_BUMPMAP    = 2;      // 16 bits per channel
+    const quint8    CHANNEL_COUNT_OF_BUMPMAP = 4;      // RGBA
+    const quint32   pixelsOfOutputArea       = abs(outputArea.width() * outputArea.height());
+    const quint8    pixelSize                = BYTE_DEPTH_OF_BUMPMAP * CHANNEL_COUNT_OF_BUMPMAP;
+    const quint32   bytesToFillBumpmapArea   = pixelsOfOutputArea * pixelSize;
+
+    QVector<quint8> bumpmap(bytesToFillBumpmapArea);
+    quint8         *bumpmapDataPointer       = bumpmap.data();
+    quint32         ki                       = m_heightChannel->index();
     PhongPixelProcessor tileRenderer(config);
-    quint32 ki = m_heightChannel->index();
 
-    //======================================
     //===============RENDER=================
-    //======================================
-
+    
     QVector<PtrToDouble> toDoubleFuncPtr(device->colorSpace()->channels().count());
-    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(device->colorSpace()->mathToolboxId().id());
-    if (!mathToolbox->getToDoubleChannelPtr(device->colorSpace()->channels(), toDoubleFuncPtr))
+    KisMathToolbox *mathToolbox = KisMathToolboxRegistry::instance()->value(device->colorSpace()->mathToolboxId().id());
+    if (!mathToolbox->getToDoubleChannelPtr(device->colorSpace()->channels(), toDoubleFuncPtr)) {
         return;
+    }
     
     KisHLineIteratorSP iterator;
     quint32 curPixel = 0;
-    
     iterator = device->createHLineIteratorNG(inputArea.x(),
                                              inputArea.y(),
                                              inputArea.width()
                                              );
-    
     curPixel = 0;
     
-    for (qint32 srcRow = 0; srcRow < inputArea.height(); ++srcRow)
-    {
-        do
-        {
-            const quint8* data = iterator->rawData();
-            //tileRenderer.realheightmap[curPixel] = (double)*data;
-
+    for (qint32 srcRow = 0; srcRow < inputArea.height(); ++srcRow) {
+        do {
+            const quint8 *data = iterator->rawData();
             tileRenderer.realheightmap[curPixel] = toDoubleFuncPtr[ki](data, device->colorSpace()->channels()[ki]->pos());
-
             curPixel++;
         }
         while (iterator->nextPixel());
@@ -136,8 +133,8 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
 
             memcpy(bumpmapDataPointer,
                    tileRenderer.testingHeightmapIlluminatePixel(posup, posdown, posleft, posright).data(),
-                   PIXEL_SIZE);
-            bumpmapDataPointer += PIXEL_SIZE;
+                   pixelSize);
+            bumpmapDataPointer += pixelSize;
         }
     }
 
@@ -147,20 +144,9 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
     device->makeCloneFrom(bumpmapPaintDevice, bumpmapPaintDevice->extent());  // THIS COULD BE BUG GY
 }
 
-
-
-KisFilterPhongBumpmap::KisFilterPhongBumpmap()
-                      : KisFilter(KoID("phongbumpmap", i18n("PhongBumpmap")), KisFilter::categoryMap(), i18n("&PhongBumpmap..."))
+KisFilterConfiguration *KisFilterPhongBumpmap::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    setColorSpaceIndependence(TO_LAB16);
-    setSupportsPainting(true);
-    setSupportsIncrementalPainting(true);
-}
-
-
-KisFilterConfiguration* KisFilterPhongBumpmap::factoryConfiguration(const KisPaintDeviceSP) const
-{
-    KisFilterConfiguration* config = new KisFilterConfiguration(id(), 0);
+    KisFilterConfiguration *config = new KisFilterConfiguration(id(), 0);
     return config;
 }
 
@@ -174,19 +160,9 @@ QRect KisFilterPhongBumpmap::changedRect(const QRect &rect, const KisFilterConfi
     return rect.adjusted(-2, -2, 2, 2);
 }
 
-
-
-
-
-
-KisConfigWidget * KisFilterPhongBumpmap::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget *KisFilterPhongBumpmap::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
 {
-    KisPhongBumpmapConfigWidget * w = new KisPhongBumpmapConfigWidget(dev, image, parent);
-    
-    //KisLightSource* newlight = new KisLightSource(QColor(0, 255, 255, 255), 0, 90, w->m_page->lightStage);
-    
-    //QObject::connect(newlight, SIGNAL(moved()), w->m_page->lightStage, SLOT(update()));
-
+    KisPhongBumpmapConfigWidget *w = new KisPhongBumpmapConfigWidget(dev, image, parent);
     return w;
 }
 

@@ -1,4 +1,4 @@
-/* This file is part of the KOffice libraries
+/* This file is part of the Calligra libraries
    Copyright (C) 2001 Werner Trobin <trobin@kde.org>
 
 This library is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ Boston, MA 02110-1301, USA.
 #include <limits.h> // UINT_MAX
 
 
-namespace KOfficeFilter {
+namespace CalligraFilter {
 
 Graph::Graph(const QByteArray& from)
         : m_from(from)
@@ -75,8 +75,8 @@ KoFilterChain::Ptr Graph::chain(const KoFilterManager* manager, QByteArray& to) 
     if (!isValid() || !manager)
         return KoFilterChain::Ptr();
 
-    if (to.isEmpty()) {    // if the destination is empty we search the closest KOffice part
-        to = findKOfficePart();
+    if (to.isEmpty()) {    // if the destination is empty we search the closest Calligra part
+        to = findCalligraPart();
         if (to.isEmpty())    // still empty? strange stuff...
             return KoFilterChain::Ptr();
     }
@@ -196,9 +196,9 @@ void Graph::shortestPaths()
     m_graphValid = true;
 }
 
-QByteArray Graph::findKOfficePart() const
+QByteArray Graph::findCalligraPart() const
 {
-    // Here we simply try to find the closest KOffice mimetype
+    // Here we simply try to find the closest Calligra mimetype
     const QList<KoDocumentEntry> parts(KoDocumentEntry::query(KoDocumentEntry::AllEntries));
     QList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
     QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
@@ -219,7 +219,7 @@ QByteArray Graph::findKOfficePart() const
     if (!v)
         return "";
 
-    // Now we try to find the "cheapest" KOffice vertex
+    // Now we try to find the "cheapest" Calligra vertex
     while (partIt != partEnd) {
         QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
         nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType").toString();
@@ -236,7 +236,7 @@ QByteArray Graph::findKOfficePart() const
         ++partIt;
     }
 
-    // It seems it already is a KOffice part
+    // It seems it already is a Calligra part
     if (v->key() == 0)
         return "";
 

@@ -19,7 +19,7 @@
 #ifndef KIS_TRANSACTION_DATA_H_
 #define KIS_TRANSACTION_DATA_H_
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include "kis_types.h"
 #include <krita_export.h>
@@ -27,16 +27,16 @@
 /**
  * A tile based undo command.
  *
- * Ordinary QUndoCommand subclasses store parameters and apply the action in
+ * Ordinary KUndo2Command subclasses store parameters and apply the action in
  * the redo() command, however, Krita doesn't work like this. Undo replaces
  * the current tiles in a paint device with the old tiles, redo replaces them
  * again with the new tiles without actually executing the command that changed
  * the image data again.
  */
-class KRITAIMAGE_EXPORT KisTransactionData : public QUndoCommand
+class KRITAIMAGE_EXPORT KisTransactionData : public KUndo2Command
 {
 public:
-    KisTransactionData(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent = 0);
+    KisTransactionData(const QString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0);
     virtual ~KisTransactionData();
 
 public:

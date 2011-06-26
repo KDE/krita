@@ -19,7 +19,7 @@
 #define KIS_CHANGE_GENERATOR_COMMAND_H_
 
 #include <krita_export.h>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QRect>
 #include "kis_types.h"
 #include <klocale.h>
@@ -28,7 +28,7 @@
 class KisNode;
 
 template <typename T>
-class KisChangeGeneratorCmd : public QUndoCommand
+class KisChangeGeneratorCmd : public KUndo2Command
 {
 
 public:
@@ -37,7 +37,7 @@ public:
                           KisFilterConfiguration* config,
                           const QString& before,
                           const QString& after)
-            : QUndoCommand(i18n("Change Generator")) {
+            : KUndo2Command(i18nc("(qtundo-format)", "Change Generator")) {
         m_node = node;
         m_config = config;
         m_before = before;

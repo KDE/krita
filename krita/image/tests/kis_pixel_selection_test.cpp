@@ -84,6 +84,10 @@ void KisPixelSelectionTest::testInvertWithImage()
     selection->select(QRect(5, 5, 10, 10));
     selection->invert();
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 200, 200));
+
+    // round trip
+    selection->invert();
+    QCOMPARE(selection->selectedExactRect(), QRect(5, 5, 10, 10));
 }
 
 void KisPixelSelectionTest::testClear()
@@ -181,7 +185,7 @@ void KisPixelSelectionTest::testUpdateProjection()
     KisSelectionSP sel = new KisSelection();
     KisPixelSelectionSP psel = new KisPixelSelection();
     psel->select(QRect(0, 0, 100, 100));
-    psel->renderToProjection(sel.data());
+    psel->renderToProjection(sel->projection().data());
     QCOMPARE(sel->selectedExactRect(), QRect(0, 0, 100, 100));
 }
 

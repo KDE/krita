@@ -47,12 +47,12 @@ DatasetSelectorWidget::~DatasetSelectorWidget()
     delete mUi;
 }
 
-void DatasetSelectorWidget::on_sbStartColumn_valueChanged ( const int )
+void DatasetSelectorWidget::on_sbStartColumn_valueChanged ( int )
 {
     calculateMapping();
 }
 
-void DatasetSelectorWidget::on_sbStartRow_valueChanged( const int )
+void DatasetSelectorWidget::on_sbStartRow_valueChanged( int )
 {
     calculateMapping();
 }

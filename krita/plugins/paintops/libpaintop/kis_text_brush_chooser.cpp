@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,6 +39,7 @@ KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char* name, cons
     setWindowTitle(caption);
     connect((QObject*)lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(rebuildTextBrush()));
     connect((QObject*)bnFont, SIGNAL(clicked()), this, SLOT(getFont()));
+    connect(pipeModeChbox, SIGNAL(toggled(bool)), this, SLOT(rebuildTextBrush()));
     m_font = font();
     inputSpacing->setRange(0.0, 10, 2);
     inputSpacing->setValue(0.1);
@@ -59,6 +61,7 @@ void KisTextBrushChooser::rebuildTextBrush()
     KisTextBrush* textBrush = dynamic_cast<KisTextBrush*>(m_textBrush.data());
     textBrush->setFont(m_font);
     textBrush->setText(lineEdit->text());
+    textBrush->setPipeMode(pipeModeChbox->isChecked());
     textBrush->setSpacing(inputSpacing->value());
     textBrush->updateBrush();
 

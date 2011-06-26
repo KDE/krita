@@ -265,14 +265,14 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
     // Don't try to fill if we start outside the borders, just return an empty 'fill'
     if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
-        return new KisSelection(device());
+        return new KisSelection(new KisSelectionDefaultBounds(device()));
 
     KisPaintDeviceSP sourceDevice = KisPaintDeviceSP(0);
 
     // sample merged?
     if (m_sampleMerged) {
         if (!projection) {
-            return new KisSelection(device());
+            return new KisSelection(new KisSelectionDefaultBounds(device()));
         }
         sourceDevice = projection;
     } else {
@@ -281,7 +281,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
     m_size = m_width * m_height;
 
-    KisSelectionSP selection = new KisSelection(device());
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(device()));
     KisPixelSelectionSP pSel = selection->getOrCreatePixelSelection();
 
     const KoColorSpace * devColorSpace = sourceDevice->colorSpace();
@@ -303,11 +303,10 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     if (progressUpdater()) progressUpdater()->setProgress(0);
 
     bool hasSelection = m_careForSelection && this->selection();
-    KisSelectionSP srcSel = KisSelectionSP(0);
+    KisSelectionSP srcSel;
+
     if (hasSelection) {
         srcSel = this->selection();
-        if (!srcSel->hasPixelSelection())
-            srcSel->setPixelSelection(new KisPixelSelection(new KisSelectionDefaultBounds(sourceDevice)));
     }
 
     while (!stack.empty()) {

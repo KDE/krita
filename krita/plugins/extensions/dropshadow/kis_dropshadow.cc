@@ -151,7 +151,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
                         newRootY += -shadowBounds.top();
                     }
 
-                    QUndoCommand *moveCommand = new KisNodeMoveCommand(image->rootLayer(),
+                    KUndo2Command *moveCommand = new KisNodeMoveCommand(image->rootLayer(),
                             QPoint(image->rootLayer()->x(), image->rootLayer()->y()), QPoint(newRootX, newRootY), image);
                     Q_ASSERT(moveCommand != 0);
 

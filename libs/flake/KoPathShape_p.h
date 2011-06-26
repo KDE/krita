@@ -44,7 +44,7 @@ public:
      *
      * This is inspired by inkscape and uses the same mechanism as they do.
      * The only difference is that they use sodipodi:nodeTypes as element and
-     * we use koffice:nodeTyes as attribute.
+     * we use calligra:nodeTyes as attribute.
      * This attribute contains of a string which has the node type of each point
      * in it. The following node types exist:
      *

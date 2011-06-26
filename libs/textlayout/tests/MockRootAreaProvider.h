@@ -30,11 +30,14 @@ public:
     /// reimplemented
     virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout);
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
-    virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea) {}
+    virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea);
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea);
     virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea);
 
+    void setSuggestedSize(QSizeF size);
+
     KoTextLayoutRootArea *m_area;
+    QSizeF m_suggestedSize;
     bool m_askedForMoreThenOneArea;
 };
 

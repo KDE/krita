@@ -24,7 +24,7 @@
 
 // #include <QApplication>
 
-// koffice
+// calligra
 // #include <KoDocumentAdaptor.h>
 // #include <KoApplicationAdaptor.h>
 // #include <KoColorSpaceRegistry.h>

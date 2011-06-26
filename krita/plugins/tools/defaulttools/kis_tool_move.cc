@@ -22,7 +22,7 @@
 #include "kis_tool_move.h"
 
 #include <QPoint>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <klocale.h>
 
@@ -260,7 +260,7 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *event)
             QPoint pos = convertToPixelCoord(event).toPoint();
             drag(pos);
 
-            QUndoCommand *cmd = new KisNodeMoveCommand(m_selectedNode, m_layerStart, m_layerPosition, currentImage());
+            KUndo2Command *cmd = new KisNodeMoveCommand(m_selectedNode, m_layerStart, m_layerPosition, currentImage());
             Q_CHECK_PTR(cmd);
 
             canvas()->addCommand(cmd);

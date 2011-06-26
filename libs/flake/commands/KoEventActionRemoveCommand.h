@@ -20,7 +20,7 @@
 #ifndef KOEVENTACTIONREMOVECOMMAND_H
 #define KOEVENTACTIONREMOVECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include "flake_export.h"
 
 class KoShape;
@@ -28,10 +28,10 @@ class KoEventAction;
 class KoEventActionRemoveCommandPrivate;
 
 /// API docs go here
-class FLAKE_EXPORT KoEventActionRemoveCommand : public QUndoCommand
+class FLAKE_EXPORT KoEventActionRemoveCommand : public KUndo2Command
 {
 public:
-    KoEventActionRemoveCommand(KoShape *shape, KoEventAction *eventAction, QUndoCommand *parent = 0);
+    KoEventActionRemoveCommand(KoShape *shape, KoEventAction *eventAction, KUndo2Command *parent = 0);
     virtual ~KoEventActionRemoveCommand();
 
     /// redo the command

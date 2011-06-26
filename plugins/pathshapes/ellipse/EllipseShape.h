@@ -43,7 +43,7 @@ public:
     };
 
     EllipseShape();
-    ~EllipseShape();
+    virtual ~EllipseShape();
 
     void setSize(const QSizeF &newSize);
     virtual QPointF normalize();

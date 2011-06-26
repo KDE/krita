@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_calligra@gadz.org>
  * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 
 #include "KoChangeTracker.h"
 
-//KOffice includes
+//Calligra includes
 #include "styles/KoCharacterStyle.h"
 #include "KoChangeTrackerElement.h"
 #include <KoXmlReader.h>

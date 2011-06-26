@@ -29,7 +29,7 @@ class QString;
 class QIcon;
 class QDomDocument;
 class QDomElement;
-class QUndoCommand;
+class KUndo2Command;
 
 /**
    A base interface for layers that are implemented outside the Krita
@@ -45,12 +45,12 @@ public:
         return KIcon("system-run");
     }
     
-    virtual QUndoCommand* crop(const QRect & rect) {
+    virtual KUndo2Command* crop(const QRect & rect) {
         Q_UNUSED(rect);
         return 0;
     }
     
-    virtual QUndoCommand* transform(double xscale, double yscale, double xshear, double yshear, double angle, qint32 translatex, qint32 translatey) {
+    virtual KUndo2Command* transform(double xscale, double yscale, double xshear, double yshear, double angle, qint32 translatex, qint32 translatey) {
         Q_UNUSED(xscale);
         Q_UNUSED(yscale);
         Q_UNUSED(xshear);

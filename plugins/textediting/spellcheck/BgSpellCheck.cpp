@@ -96,7 +96,7 @@ QString BgSpellCheck::fetchMoreText()
         iter = block.begin();
         while (!iter.atEnd() && iter.fragment().position() + iter.fragment().length() <=
                 m_currentPosition)
-            iter++;
+            ++iter;
         break;
     }
 

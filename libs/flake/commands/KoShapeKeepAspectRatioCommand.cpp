@@ -26,8 +26,8 @@
 KoShapeKeepAspectRatioCommand::KoShapeKeepAspectRatioCommand(const QList<KoShape*>& shapes,
         const QList<bool>& oldKeepAspectRatio,
         const QList<bool>& newKeepAspectRatio,
-        QUndoCommand* parent)
-        : QUndoCommand(i18n("Keep Aspect Ratio"), parent)
+        KUndo2Command* parent)
+        : KUndo2Command(i18nc("(qtundo-format)", "Keep Aspect Ratio"), parent)
 {
     m_shapes = shapes;
     m_oldKeepAspectRatio = oldKeepAspectRatio;
@@ -40,7 +40,7 @@ KoShapeKeepAspectRatioCommand::~KoShapeKeepAspectRatioCommand()
 
 void KoShapeKeepAspectRatioCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     for (int i = 0; i < m_shapes.count(); ++i) {
         m_shapes[i]->setKeepAspectRatio(m_newKeepAspectRatio[i]);
     }
@@ -48,7 +48,7 @@ void KoShapeKeepAspectRatioCommand::redo()
 
 void KoShapeKeepAspectRatioCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     for (int i = 0; i < m_shapes.count(); ++i) {
         m_shapes[i]->setKeepAspectRatio(m_oldKeepAspectRatio[i]);
     }

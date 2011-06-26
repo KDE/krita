@@ -30,7 +30,7 @@
 #include <KoUnit.h>
 
 class KoShape;
-class QUndoCommand;
+class KUndo2Command;
 
 /**
  * Base widget for shape-configuration panels.
@@ -86,7 +86,7 @@ public:
     virtual bool showOnShapeSelect();
 
     /// Creates a command which applies all changes to the opened shape
-    virtual QUndoCommand * createCommand();
+    virtual KUndo2Command * createCommand();
 
 signals:
     /// is emitted after one of the config options has changed

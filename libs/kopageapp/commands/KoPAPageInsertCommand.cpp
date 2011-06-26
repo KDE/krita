@@ -24,8 +24,8 @@
 #include "KoPADocument.h"
 #include "KoPAPageBase.h"
 
-KoPAPageInsertCommand::KoPAPageInsertCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, QUndoCommand *parent )
-: QUndoCommand( parent )
+KoPAPageInsertCommand::KoPAPageInsertCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent )
+: KUndo2Command( parent )
 , m_document( document )
 , m_page( page )
 , m_after( after )
@@ -34,10 +34,10 @@ KoPAPageInsertCommand::KoPAPageInsertCommand( KoPADocument *document, KoPAPageBa
     Q_ASSERT( document );
     Q_ASSERT( page );
     if ( m_page->pageType() == KoPageApp::Slide ) {
-        setText( i18n( "Insert slide" ) );
+        setText( i18nc( "(qtundo-format)", "Insert slide" ) );
     }
     else {
-        setText( i18n( "Insert page" ) );
+        setText( i18nc( "(qtundo-format)", "Insert page" ) );
     }
 }
 

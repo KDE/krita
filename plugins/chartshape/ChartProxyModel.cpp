@@ -30,7 +30,7 @@
 // KDE
 #include <KDebug>
 
-// KOffice
+// Calligra
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>

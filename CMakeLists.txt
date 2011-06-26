@@ -14,10 +14,10 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 #######################
 ######################
 
-# define the generic version of the KOffice libraries here
-# this makes it easy to advance it when the next KOffice release comes
-set(GENERIC_KOFFICE_LIB_VERSION "8.0.0")
-set(GENERIC_KOFFICE_LIB_SOVERSION "8")
+# define the generic version of the Calligra libraries here
+# this makes it easy to advance it when the next Calligra release comes
+set(GENERIC_CALLIGRA_LIB_VERSION "8.0.0")
+set(GENERIC_CALLIGRA_LIB_SOVERSION "8")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
@@ -126,6 +126,8 @@ if(KDE_VERSION LESS "4.4.0")
     set(GHNS FALSE)
 endif(KDE_VERSION LESS "4.4.0")
 
+macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
+
  ###########################
 ############################
 ## Required dependencies  ##
@@ -186,7 +188,7 @@ macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by
 ## Test for create ressources
 ##
 macro_optional_find_package(CreateResources)
-macro_log_feature(CREATERESOURCES_FOUND "Create Resources" "Create Resources (brushes, palettes etc.)" "http://create.freedesktop.org" FALSE "" "Recommended at runtime for KOffice for optional extra resources.")
+macro_log_feature(CREATERESOURCES_FOUND "Create Resources" "Create Resources (brushes, palettes etc.)" "http://create.freedesktop.org" FALSE "" "Recommended at runtime for Calligra for optional extra resources.")
 
 ##
 ## Test for kdepimlibs
@@ -313,7 +315,7 @@ TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
 ##############################
 #############################
 
-include(MacroKOfficeAddBenchmark)
+include(MacroCalligraAddBenchmark)
 
  ####################
 #####################
@@ -335,6 +337,8 @@ set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
                    ${CMAKE_BINARY_DIR}/libs/odf
                    ${KDE4_INCLUDES})
 
+set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
+
 # pigment depends on koplugin and lcms
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/pigment
@@ -348,6 +352,7 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${KOODF_INCLUDES}
                    ${KOPLUGIN_INCLUDES}
                    ${PIGMENT_INCLUDES}
+                   ${KUNDO2_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/flake/commands
                    ${CMAKE_SOURCE_DIR}/libs/flake/tools
                    ${CMAKE_BINARY_DIR}/libs/flake)
@@ -389,8 +394,8 @@ set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
 # koproperty
 SET(KOPROPERTY_TARGETNAME koproperty)                           # TODO remove when we move to independent place
 SET(KOPROPERTY_LIBS ${KOPROPERTY_TARGETNAME})                   # TODO remove when we move to independent place
-SET(KOPROPERTY_LIB_VERSION ${GENERIC_KOFFICE_LIB_VERSION})      # TODO remove when we move to independent place
-SET(KOPROPERTY_LIB_SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION})  # TODO remove when we move to independent place
+SET(KOPROPERTY_LIB_VERSION ${GENERIC_CALLIGRA_LIB_VERSION})      # TODO remove when we move to independent place
+SET(KOPROPERTY_LIB_SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION})  # TODO remove when we move to independent place
 SET(KOPROPERTY_USE_KOLIBS TRUE)                                 # TODO remove when we move to independent place
 set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
                         ${CMAKE_SOURCE_DIR}/libs
@@ -441,7 +446,7 @@ if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     ## Test for sqlite
     ##
     set(SQLITE_RECOMMENDED_VERSION "3.7.3")
-    find_package(KofficeSqlite 3.6.16)
+    find_package(CalligraSqlite 3.6.16)
     macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine" "http://www.sqlite.org"
                       FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")
 

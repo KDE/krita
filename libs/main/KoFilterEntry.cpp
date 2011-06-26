@@ -48,7 +48,7 @@ QList<KoFilterEntry::Ptr> KoFilterEntry::query(const QString & _constr)
     kDebug(30500) << "KoFilterEntry::query(" << _constr << " )";
     QList<KoFilterEntry::Ptr> lst;
 
-    KService::List offers = KServiceTypeTrader::self()->query("KOfficeFilter", _constr);
+    KService::List offers = KServiceTypeTrader::self()->query("CalligraFilter", _constr);
 
     KService::List::ConstIterator it = offers.constBegin();
     unsigned int max = offers.count();

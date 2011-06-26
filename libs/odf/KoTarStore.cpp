@@ -104,7 +104,7 @@ KoTarStore::~KoTarStore()
 QByteArray KoTarStore::completeMagic(const QByteArray& appMimetype)
 {
     kDebug(30002) << "QCString KoTarStore::completeMagic( const QCString& appMimetype )********************";
-    QByteArray res("KOffice ");
+    QByteArray res("Calligra ");
     res += appMimetype;
     res += '\004'; // Two magic bytes to make the identification
     res += '\006'; // more reliable (DF)

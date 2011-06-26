@@ -90,9 +90,12 @@ private slots:
     void slotRmClicked();
     void slotRaiseClicked();
     void slotLowerClicked();
+    void slotLeftClicked();
+    void slotRightClicked();
     void slotPropertiesClicked();
     void slotDuplicateClicked();
 
+    void slotMergeLayer();
     void slotNewPaintLayer();
     void slotNewGroupLayer();
     void slotNewAdjustmentLayer();
@@ -119,6 +122,15 @@ private:
     QTimer m_delayTimer;
     int m_newOpacity;
 
+    KAction* m_newPainterLayerAction;
+    KAction* m_newGroupLayerAction;
+    KAction* m_newCloneLayerAction;
+    KAction* m_newShapeLayerAction;
+    KAction* m_newAdjustmentLayerAction;
+    KAction* m_newGeneratorLayerAction;
+    KAction* m_newTransparencyMaskAction;
+    KAction* m_newEffectMaskAction;
+    KAction* m_newSelectionMaskAction;
 };
 
 class KisLayerBoxFactory : public KoDockFactoryBase

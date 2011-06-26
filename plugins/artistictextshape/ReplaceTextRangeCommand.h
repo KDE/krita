@@ -20,7 +20,7 @@
 #ifndef REPLACETEXTRANGECOMMAND_H
 #define REPLACETEXTRANGECOMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 #include "ArtisticTextTool.h"
 #include "ArtisticTextRange.h"
 #include <QtCore/QPointer>
@@ -28,12 +28,12 @@
 class ArtisticTextShape;
 
 /// Undo command to replace a range of text on an artistic text shape
-class ReplaceTextRangeCommand : public QUndoCommand
+class ReplaceTextRangeCommand : public KUndo2Command
 {
 public:
-    ReplaceTextRangeCommand(ArtisticTextShape *shape, const QString &text, int from, int count, ArtisticTextTool *tool, QUndoCommand *parent = 0);
-    ReplaceTextRangeCommand(ArtisticTextShape *shape, const ArtisticTextRange &text, int from, int count, ArtisticTextTool *tool, QUndoCommand *parent = 0);
-    ReplaceTextRangeCommand(ArtisticTextShape *shape, const QList<ArtisticTextRange> &text, int from, int count, ArtisticTextTool *tool, QUndoCommand *parent = 0);
+    ReplaceTextRangeCommand(ArtisticTextShape *shape, const QString &text, int from, int count, ArtisticTextTool *tool, KUndo2Command *parent = 0);
+    ReplaceTextRangeCommand(ArtisticTextShape *shape, const ArtisticTextRange &text, int from, int count, ArtisticTextTool *tool, KUndo2Command *parent = 0);
+    ReplaceTextRangeCommand(ArtisticTextShape *shape, const QList<ArtisticTextRange> &text, int from, int count, ArtisticTextTool *tool, KUndo2Command *parent = 0);
 
     virtual void redo();
     virtual void undo();

@@ -38,13 +38,13 @@
 #include <QTextDocument>
 #include <QTextFragment>
 
-RejectChangeCommand::RejectChangeCommand (int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, QUndoCommand* parent) : TextCommandBase(parent),
+RejectChangeCommand::RejectChangeCommand (int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, KUndo2Command* parent) : TextCommandBase(parent),
     m_first(true),
     m_changeId(changeId),
     m_changeRanges(changeRanges),
     m_document(document)
 {
-    setText(i18n("Reject change"));
+    setText(i18nc("(qtundo-format)", "Reject change"));
 
     m_changeTracker = KoTextDocument(m_document).changeTracker();
     m_layout = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());
@@ -62,7 +62,7 @@ void RejectChangeCommand::redo()
         if (m_changeTracker->elementById(m_changeId)->getChangeType() == KoGenChange::InsertChange) {
             QList<QPair<int, int> >::const_iterator it;
             QStack<QPair<int, int> > deleteRanges;
-            for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); it++) {
+            for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); ++it) {
                 deleteRanges.push(QPair<int, int>((*it).first, (*it).second));
             }
             while (!deleteRanges.isEmpty()) {
@@ -74,7 +74,7 @@ void RejectChangeCommand::redo()
         }
         else if (m_changeTracker->elementById(m_changeId)->getChangeType() == KoGenChange::FormatChange) {
             QList<QPair<int, int> >::const_iterator it;
-            for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); it++) {
+            for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); ++it) {
                 cursor.setPosition((*it).first);
                 cursor.setPosition((*it).second, QTextCursor::KeepAnchor);
                 int changeId = cursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
@@ -92,7 +92,7 @@ void RejectChangeCommand::redo()
         } else if (m_changeTracker->elementById(m_changeId)->getChangeType() == KoGenChange::DeleteChange){
             QList<QPair<int, int> >::const_iterator it;
             QStack<QPair<int, int> > deleteRanges;
-            for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); it++) {
+            for (it = m_changeRanges.constBegin(); it != m_changeRanges.constEnd(); ++it) {
                 cursor.setPosition((*it).first);
                 cursor.setPosition((*it).second, QTextCursor::KeepAnchor);
                 deleteRanges.push(QPair<int, int>((*it).first, (*it).second));

@@ -60,7 +60,7 @@ public:
         return false;
     }
 
-    virtual void addCommand(QUndoCommand *)
+    virtual void addCommand(KUndo2Command *)
     {
     }
 

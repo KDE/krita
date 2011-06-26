@@ -32,7 +32,7 @@ class KoStore;
 class KisShapeSelectionCanvas;
 class KisShapeSelectionModel;
 class KisImageViewConverter;
-class QUndoCommand;
+class KUndo2Command;
 
 /**
  * The marker class.
@@ -66,8 +66,8 @@ public:
      *
      * @param projection the target selection
      */
-    virtual void renderToProjection(KisSelection* projection);
-    virtual void renderToProjection(KisSelection* projection, const QRect& r);
+    virtual void renderToProjection(KisPixelSelection* projection);
+    virtual void renderToProjection(KisPixelSelection* projection, const QRect& r);
 
     virtual void setDirty();
 
@@ -78,7 +78,7 @@ public:
     void moveX(qint32 x);
     void moveY(qint32 y);
     
-    QUndoCommand* transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey);
+    KUndo2Command* transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey);
         
 
 protected:
@@ -87,7 +87,7 @@ protected:
 
 private:
 
-    void renderSelection(KisSelection* projection, const QRect& r);
+    void renderSelection(KisPixelSelection* projection, const QRect& r);
 
     KisImageWSP m_image;
     QPainterPath m_outline;

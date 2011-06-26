@@ -19,7 +19,7 @@
 #ifndef REMOVENOTECOMMAND_H
 #define REMOVENOTECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 namespace MusicCore {
     class Chord;
@@ -27,7 +27,7 @@ namespace MusicCore {
 }
 class MusicShape;
 
-class RemoveNoteCommand : public QUndoCommand {
+class RemoveNoteCommand : public KUndo2Command {
 public:
     RemoveNoteCommand(MusicShape* shape, MusicCore::Chord* chord, MusicCore::Note* note);
     virtual void redo();

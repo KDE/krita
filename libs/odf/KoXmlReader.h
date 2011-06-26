@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOFFICE_XMLREADER
-#define KOFFICE_XMLREADER
+#ifndef CALLIGRA_XMLREADER
+#define CALLIGRA_XMLREADER
 
 // KOXML_USE_QDOM is defined there
 #include "KoXmlReaderForward.h"
@@ -322,7 +322,7 @@ private:
  *
  * To find the attribute with a given name, use QDomElement::attributeNS.
  *
- * Do not use getElementsByTagNameNS, it's recursive (which is never needed in KOffice).
+ * Do not use getElementsByTagNameNS, it's recursive (which is never needed in Calligra).
  * Do not use tagName() or nodeName() or prefix(), since the prefix isn't fixed.
  *
  * @author David Faure <faure@kde.org>
@@ -404,4 +404,4 @@ KOODF_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
         if ( ( elem = _node.toElement() ).isNull() ) {} else
 
 
-#endif // KOFFICE_XMLREADER
+#endif // CALLIGRA_XMLREADER

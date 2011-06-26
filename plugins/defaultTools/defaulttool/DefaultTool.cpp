@@ -134,8 +134,8 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     setupActions();
 
     QPixmap rotatePixmap, shearPixmap;
-    rotatePixmap.load(KStandardDirs::locate("data", "koffice/icons/rotate.png"));
-    shearPixmap.load(KStandardDirs::locate("data", "koffice/icons/shear.png"));
+    rotatePixmap.load(KStandardDirs::locate("data", "calligra/icons/rotate.png"));
+    shearPixmap.load(KStandardDirs::locate("data", "calligra/icons/shear.png"));
 
     m_rotateCursors[0] = QCursor(rotatePixmap.transformed(QTransform().rotate(45)));
     m_rotateCursors[1] = QCursor(rotatePixmap.transformed(QTransform().rotate(90)));
@@ -188,63 +188,63 @@ bool DefaultTool::wantsAutoScroll() const
 
 void DefaultTool::setupActions()
 {
-    KAction* actionBringToFront = new KAction(KIcon("object-order-front-koffice"),
+    KAction* actionBringToFront = new KAction(KIcon("object-order-front-calligra"),
                                                i18n("Bring to &Front"), this);
     addAction("object_order_front", actionBringToFront);
     actionBringToFront->setShortcut(QKeySequence("Ctrl+Shift+]"));
     connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
 
-    KAction* actionRaise = new KAction(KIcon("object-order-raise-koffice"), i18n("&Raise"), this);
+    KAction* actionRaise = new KAction(KIcon("object-order-raise-calligra"), i18n("&Raise"), this);
     addAction("object_order_raise", actionRaise);
     actionRaise->setShortcut(QKeySequence("Ctrl+]"));
     connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
 
-    KAction* actionLower = new KAction(KIcon("object-order-lower-koffice"), i18n("&Lower"), this);
+    KAction* actionLower = new KAction(KIcon("object-order-lower-calligra"), i18n("&Lower"), this);
     addAction("object_order_lower", actionLower);
     actionLower->setShortcut(QKeySequence("Ctrl+["));
     connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
 
-    KAction* actionSendToBack = new KAction(KIcon("object-order-back-koffice"),
+    KAction* actionSendToBack = new KAction(KIcon("object-order-back-calligra"),
                                              i18n("Send to &Back"), this);
     addAction("object_order_back", actionSendToBack);
     actionSendToBack->setShortcut(QKeySequence("Ctrl+Shift+["));
     connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
 
-    KAction* actionAlignLeft = new KAction(KIcon("object-align-horizontal-left-koffice"),
+    KAction* actionAlignLeft = new KAction(KIcon("object-align-horizontal-left-calligra"),
                                             i18n("Align Left"), this);
     addAction("object_align_horizontal_left", actionAlignLeft);
     connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
 
-    KAction* actionAlignCenter = new KAction(KIcon("object-align-horizontal-center-koffice"),
+    KAction* actionAlignCenter = new KAction(KIcon("object-align-horizontal-center-calligra"),
                                               i18n("Horizontally Center"), this);
     addAction("object_align_horizontal_center", actionAlignCenter);
     connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
 
-    KAction* actionAlignRight = new KAction(KIcon("object-align-horizontal-right-koffice"),
+    KAction* actionAlignRight = new KAction(KIcon("object-align-horizontal-right-calligra"),
                                              i18n("Align Right"), this);
     addAction("object_align_horizontal_right", actionAlignRight);
     connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
 
-    KAction* actionAlignTop = new KAction(KIcon("object-align-vertical-top-koffice"), i18n("Align Top"), this);
+    KAction* actionAlignTop = new KAction(KIcon("object-align-vertical-top-calligra"), i18n("Align Top"), this);
     addAction("object_align_vertical_top", actionAlignTop);
     connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
 
-    KAction* actionAlignMiddle = new KAction(KIcon("object-align-vertical-center-koffice"),
+    KAction* actionAlignMiddle = new KAction(KIcon("object-align-vertical-center-calligra"),
                                               i18n("Vertically Center"), this);
     addAction("object_align_vertical_center", actionAlignMiddle);
     connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
 
-    KAction* actionAlignBottom = new KAction(KIcon("object-align-vertical-bottom-koffice"),
+    KAction* actionAlignBottom = new KAction(KIcon("object-align-vertical-bottom-calligra"),
                                               i18n("Align Bottom"), this);
     addAction("object_align_vertical_bottom", actionAlignBottom);
     connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
 
-    KAction* actionGroupBottom = new KAction(KIcon("object-group-koffice"),
+    KAction* actionGroupBottom = new KAction(KIcon("object-group-calligra"),
                                               i18n("Group"), this);
     addAction("object_group", actionGroupBottom);
     connect(actionGroupBottom, SIGNAL(triggered()), this, SLOT(selectionGroup()));
 
-    KAction* actionUngroupBottom = new KAction(KIcon("object-ungroup-koffice"),
+    KAction* actionUngroupBottom = new KAction(KIcon("object-ungroup-calligra"),
                                                 i18n("Ungroup"), this);
     addAction("object_ungroup", actionUngroupBottom);
     connect(actionUngroupBottom, SIGNAL(triggered()), this, SLOT(selectionUngroup()));
@@ -735,7 +735,7 @@ void DefaultTool::customMoveEvent(KoPointerEvent * event)
     if (move < threshold && zoom < threshold && rotate < threshold) {
         if (m_customEventStrategy) {
             m_customEventStrategy->finishInteraction(event->modifiers());
-            QUndoCommand *command = m_customEventStrategy->createCommand();
+            KUndo2Command *command = m_customEventStrategy->createCommand();
             if (command)
                 canvas()->addCommand(command);
             delete m_customEventStrategy;
@@ -977,7 +977,7 @@ void DefaultTool::selectionGroup()
     }
     KoShapeGroup *group = new KoShapeGroup();
     // TODO what if only one shape is left?
-    QUndoCommand *cmd = new QUndoCommand(i18n("Group shapes"));
+    KUndo2Command *cmd = new KUndo2Command(i18nc("(qtundo-format)", "Group shapes"));
     canvas()->shapeController()->addShapeDirect(group, cmd);
     KoShapeGroupCommand::createCommand(group, groupedShapes, cmd);
     canvas()->addCommand(cmd);
@@ -999,13 +999,13 @@ void DefaultTool::selectionUngroup()
         }
     }
 
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
 
     // add a ungroup command for each found shape container to the macro command
     foreach(KoShape* shape, containerSet) {
         KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
         if (group) {
-            cmd = cmd ? cmd : new QUndoCommand(i18n("Ungroup shapes"));
+            cmd = cmd ? cmd : new KUndo2Command(i18nc("(qtundo-format)", "Ungroup shapes"));
             new KoShapeUngroupCommand(group, group->shapes(),
                                       group->parent()? QList<KoShape*>(): canvas()->shapeManager()->topLevelShapes(),
                                       cmd);
@@ -1085,7 +1085,7 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
     if (editableShapes.count() < 1)
         return;
 
-    QUndoCommand * cmd = KoShapeReorderCommand::createCommand(editableShapes, canvas()->shapeManager(), order);
+    KUndo2Command * cmd = KoShapeReorderCommand::createCommand(editableShapes, canvas()->shapeManager(), order);
     if (cmd) {
         canvas()->addCommand(cmd);
     }

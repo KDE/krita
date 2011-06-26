@@ -1,5 +1,5 @@
 Autoformat feature:
-kword and kpresenter have autoformat feature:
+words and kpresenter have autoformat feature:
 -> Simple autocorrection :
 	-> Convert first letter of a sentence automatically to uppercase
 	-> Convert two uppercase characters to one uppercase and one lowercase
@@ -24,7 +24,7 @@ kword and kpresenter have autoformat feature:
 	characters.
 -> Advanced autocorrection:
 	-> we can define a word which will be replaced by another word 
-	=> for example koffices by koffice, or microsoft by linux
+	=> for example calligras by calligra, or microsoft by linux
 ->Exception:
 	-> we can define list of exception word:
 		=>Do not treat as the end of a sequence 
@@ -38,13 +38,13 @@ kword and kpresenter have autoformat feature:
 		when we force 2 uppercase letters.
 ->Auto Completion:
 	->When have a manual completion by default it's CTRL+E (we can configurate
-	it into kword or kpresenter.
+	it into words or kpresenter.
 	->we can save list of completion word
 	->define min word length : min equals 5
 	->define max number of completion word ( max = 500 )
 	->Append space after completion.
 
--2002-03-27- koffice 1.1post.
+-2002-03-27- calligra 1.1post.
 Laurent Montel <lmontel@mandrakesoft.com>
 Be careful my English is not good, so you can change all you want in this file.
 

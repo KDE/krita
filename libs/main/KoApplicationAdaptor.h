@@ -31,12 +31,12 @@ class QStringList;
 
 
 /**
- * D-BUS interface for any KOffice application (entry point)
+ * D-BUS interface for any Calligra application (entry point)
  */
 class KOMAIN_EXPORT KoApplicationAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.application")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.application")
 public:
     explicit KoApplicationAdaptor(QObject *parent);
     virtual ~KoApplicationAdaptor();

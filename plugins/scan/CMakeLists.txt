@@ -4,14 +4,14 @@ include_directories( ${KOMAIN_INCLUDES} )
 
 ########### next target ###############
 
-set(kofficescan_PART_SRCS scan.cpp )
+set(calligrascan_PART_SRCS scan.cpp )
 
 
-kde4_add_plugin(kofficescan ${kofficescan_PART_SRCS})
+kde4_add_plugin(calligrascan ${calligrascan_PART_SRCS})
 
-target_link_libraries(kofficescan komain )
+target_link_libraries(calligrascan komain )
 
-install(TARGETS kofficescan  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligrascan  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

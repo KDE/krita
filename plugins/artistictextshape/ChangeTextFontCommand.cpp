@@ -22,15 +22,15 @@
 #include "ArtisticTextShape.h"
 #include <KLocale>
 
-ChangeTextFontCommand::ChangeTextFontCommand(ArtisticTextShape * shape, const QFont &font, QUndoCommand *parent)
-    : QUndoCommand(parent), m_shape(shape), m_newFont( font ), m_rangeStart(-1), m_rangeCount(-1)
+ChangeTextFontCommand::ChangeTextFontCommand(ArtisticTextShape * shape, const QFont &font, KUndo2Command *parent)
+    : KUndo2Command(parent), m_shape(shape), m_newFont( font ), m_rangeStart(-1), m_rangeCount(-1)
 {
     Q_ASSERT(m_shape);
-    setText( i18n("Change font") );
+    setText( i18nc("(qtundo-format)", "Change font") );
 }
 
-ChangeTextFontCommand::ChangeTextFontCommand(ArtisticTextShape *shape, int from, int count, const QFont &font, QUndoCommand *parent)
-    : QUndoCommand(parent), m_shape(shape), m_newFont( font ), m_rangeStart(from), m_rangeCount(count)
+ChangeTextFontCommand::ChangeTextFontCommand(ArtisticTextShape *shape, int from, int count, const QFont &font, KUndo2Command *parent)
+    : KUndo2Command(parent), m_shape(shape), m_newFont( font ), m_rangeStart(from), m_rangeCount(count)
 {
     Q_ASSERT(m_shape);
 }

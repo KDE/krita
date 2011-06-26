@@ -104,8 +104,8 @@ public:
  * The goal is to merge the point that is ending an open subpath with the one
  * starting the same or another open subpath.
  */
-KoPathPointMergeCommand::KoPathPointMergeCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, QUndoCommand *parent)
-    : QUndoCommand(parent), d(new Private(pointData1, pointData2))
+KoPathPointMergeCommand::KoPathPointMergeCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, KUndo2Command *parent)
+    : KUndo2Command(parent), d(new Private(pointData1, pointData2))
 {
     Q_ASSERT(pointData1.pathShape == pointData2.pathShape);
     Q_ASSERT(d->pathShape);
@@ -149,7 +149,7 @@ KoPathPointMergeCommand::KoPathPointMergeCommand(const KoPathPointData &pointDat
         d->oldControlPoint2 = d->pathShape->shapeToDocument(p2->controlPoint2());
     }
 
-    setText(i18n("Merge points"));
+    setText(i18nc("(qtundo-format)", "Merge points"));
 }
 
 KoPathPointMergeCommand::~KoPathPointMergeCommand()
@@ -159,7 +159,7 @@ KoPathPointMergeCommand::~KoPathPointMergeCommand()
 
 void KoPathPointMergeCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     if (d->removedPoint)
         return;
@@ -201,7 +201,7 @@ void KoPathPointMergeCommand::redo()
 
 void KoPathPointMergeCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     if (!d->removedPoint)
         return;

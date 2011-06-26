@@ -1,20 +1,21 @@
 /*
-  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
-  *
-  *  This program is free software; you can redistribute it and/or modify
-  *  it under the terms of the GNU General Public License as published by
-  *  the Free Software Foundation; either version 2 of the License, or
-  *  (at your option) any later version.
-  *
-  *  This program is distributed in the hope that it will be useful,
-  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  *  GNU General Public License for more details.
-  *
-  *  You should have received a copy of the GNU General Public License
-  *  along with this program; if not, write to the Free Software
-  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-  */
+ *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
 #ifndef _KIS_TEXT_BRUSH_H_
 #define _KIS_TEXT_BRUSH_H_
@@ -23,22 +24,21 @@
 
 #include "kis_brush.h"
 #include "krita_export.h"
+#include "kis_gbr_brush.h"
 
 class BRUSH_EXPORT KisTextBrush : public KisBrush
 {
 
 public:
+    KisTextBrush();
+    KisTextBrush(const QString& txt, const QFont& font, bool animate = false);
+    virtual ~KisTextBrush();
 
-    KisTextBrush() {
-        setBrushType(MASK);
-    }
+    virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
+            double scaleX, double scaleY, double angle,
+            const KisPaintInformation& info,
+            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
-    KisTextBrush(const QString& txt, const QFont& font) {
-        setFont(font);
-        setText(txt);
-        updateBrush();
-        setBrushType(MASK);
-    }
 
     virtual bool load() {
         return false;
@@ -52,8 +52,13 @@ public:
         m_font = font;
     }
 
-    QFont font() {
+    void setPipeMode(bool pipe);
 
+    bool pipeMode() const {
+        return (brushType() == PIPE_MASK);
+    }
+
+    QFont font() {
         return m_font;
     }
 
@@ -61,10 +66,22 @@ public:
 
     void toXML(QDomDocument& , QDomElement&) const;
 
-private:
+    virtual void setAngle(qreal _angle);
+    virtual void setScale(qreal _scale);
 
+private:
+    void init();
+    QImage renderChar(const QString& text);
+    void selectNextBrush(const KisPaintInformation& info) const;
+    void clearBrushes();
+
+private:
     QFont m_font;
     QString m_txt;
+
+    mutable int m_letterIndex;
+    mutable KisGbrBrush * m_currentBrush;
+    mutable QMap<QString, KisGbrBrush*> m_brushes;
 };
 
 #endif

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kofficegoogledocs" version="1">
+<kpartgui library="calligragoogledocs" version="1">
 <MenuBar>
     <Menu name="file"><text>&amp;File</text>
 	<Separator/>

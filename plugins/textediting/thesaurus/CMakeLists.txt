@@ -22,5 +22,5 @@ install(TARGETS thesaurustool  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  thesaurustool.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  thesaurus.txt  DESTINATION ${DATA_INSTALL_DIR}/koffice/thesaurus)
+install( FILES  thesaurus.txt  DESTINATION ${DATA_INSTALL_DIR}/calligra/thesaurus)
 

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kofficescan" version="1">
+<kpartgui library="calligrascan" version="1">
 <MenuBar>
     <Menu name="insert"><text>&amp;Insert</text>
 	<Separator/>

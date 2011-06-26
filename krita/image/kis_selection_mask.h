@@ -78,8 +78,6 @@ public:
     bool active() const;
     void setActive(bool active);
 
-    QImage createThumbnail(qint32 w, qint32 h);
-
 signals:
     void changeActivity(KisSelectionMask* mask, bool active);
 

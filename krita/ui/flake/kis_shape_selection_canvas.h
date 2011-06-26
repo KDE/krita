@@ -26,7 +26,7 @@
 class KoShapeManager;
 class KoToolProxy;
 class KoViewConverter;
-class QUndoCommand;
+class KUndo2Command;
 class QWidget;
 class KoUnit;
 
@@ -43,7 +43,7 @@ public:
 
     void gridSize(qreal *horizontal, qreal *vertical) const;
     bool snapToGrid() const;
-    void addCommand(QUndoCommand *command);
+    void addCommand(KUndo2Command *command);
     KoShapeManager *shapeManager() const;
     void updateCanvas(const QRectF& rc);
     KoToolProxy * toolProxy() const;

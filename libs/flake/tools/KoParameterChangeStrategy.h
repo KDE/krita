@@ -42,7 +42,7 @@ public:
 
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
-    virtual QUndoCommand* createCommand();
+    virtual KUndo2Command* createCommand();
 
 protected:
     /// constructor

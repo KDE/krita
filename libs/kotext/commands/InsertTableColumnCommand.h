@@ -21,18 +21,18 @@
 #ifndef INSERTTABLECOLUMNCOMMAND_H
 #define INSERTTABLECOLUMNCOMMAND_H
 
-#include <QUndoStack>
+#include <kundo2qstack.h>
 #include <QList>
 #include <KoTableColumnStyle.h>
 
 class KoTextEditor;
 class QTextTable;
 
-class InsertTableColumnCommand : public QUndoCommand
+class InsertTableColumnCommand : public KUndo2Command
 {
 public:
 
-    InsertTableColumnCommand(KoTextEditor *te, QTextTable *t, bool right, int changeId = 0, QUndoCommand *parent = 0);
+    InsertTableColumnCommand(KoTextEditor *te, QTextTable *t, bool right, int changeId = 0, KUndo2Command *parent = 0);
 
     virtual void undo();
     virtual void redo();

@@ -20,7 +20,7 @@
 #ifndef __KOVARIABLE_H__
 #define __KOVARIABLE_H__
 
-// KOffice libs
+// Calligra libs
 #include "KoInlineObject.h"
 #include "kotext_export.h"
 

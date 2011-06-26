@@ -22,13 +22,13 @@
 
 #include "flake_export.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 
 class KoPathShape;
 
 /// The undo / redo command for setting the fill rule of a path shape
-class FLAKE_EXPORT KoPathFillRuleCommand : public QUndoCommand
+class FLAKE_EXPORT KoPathFillRuleCommand : public KUndo2Command
 {
 public:
     /**
@@ -37,7 +37,7 @@ public:
      * @param fillRule the new fill rule
      * @param parent the parent command used for macro commands
      */
-    KoPathFillRuleCommand(const QList<KoPathShape*> &shapes, Qt::FillRule fillRule, QUndoCommand *parent = 0);
+    KoPathFillRuleCommand(const QList<KoPathShape*> &shapes, Qt::FillRule fillRule, KUndo2Command *parent = 0);
     virtual ~KoPathFillRuleCommand();
     /// redo the command
     void redo();

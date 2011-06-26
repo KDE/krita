@@ -143,16 +143,17 @@ public:
             composite<alphaLocked, false>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
         }
     }
-    void composite(quint8 *dstRowStart,
-                   qint32 dststride,
-                   const quint8 *srcRowStart,
-                   qint32 srcstride,
-                   const quint8 *maskRowStart,
-                   qint32 maskstride,
-                   qint32 rows,
-                   qint32 cols,
-                   quint8 U8_opacity,
-                   const QBitArray & channelFlags) const
+    
+    virtual void composite(quint8 *dstRowStart,
+                           qint32 dststride,
+                           const quint8 *srcRowStart,
+                           qint32 srcstride,
+                           const quint8 *maskRowStart,
+                           qint32 maskstride,
+                           qint32 rows,
+                           qint32 cols,
+                           quint8 U8_opacity,
+                           const QBitArray& channelFlags=QBitArray()) const
     {
         bool alphaLocked = false;
         if (!channelFlags.isEmpty()) {

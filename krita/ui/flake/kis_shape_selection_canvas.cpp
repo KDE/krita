@@ -48,7 +48,7 @@ bool KisShapeSelectionCanvas::snapToGrid() const
     return false;
 }
 
-void KisShapeSelectionCanvas::addCommand(QUndoCommand *)
+void KisShapeSelectionCanvas::addCommand(KUndo2Command *)
 {
     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
 }

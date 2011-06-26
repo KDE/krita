@@ -1,4 +1,4 @@
-/* This file is part of the KOffice libraries
+/* This file is part of the Calligra libraries
     Copyright (c) 2003 David Faure <faure@kde.org>
 
     This library is free software; you can redistribute it and/or
@@ -17,29 +17,29 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kofficeversion.h"
+#include "calligraversion.h"
 
-unsigned int KOffice::version()
+unsigned int Calligra::version()
 {
-    return KOFFICE_VERSION;
+    return CALLIGRA_VERSION;
 }
 
-unsigned int KOffice::versionMajor()
+unsigned int Calligra::versionMajor()
 {
-    return KOFFICE_VERSION_MAJOR;
+    return CALLIGRA_VERSION_MAJOR;
 }
 
-unsigned int KOffice::versionMinor()
+unsigned int Calligra::versionMinor()
 {
-    return KOFFICE_VERSION_MINOR;
+    return CALLIGRA_VERSION_MINOR;
 }
 
-unsigned int KOffice::versionRelease()
+unsigned int Calligra::versionRelease()
 {
-    return KOFFICE_VERSION_RELEASE;
+    return CALLIGRA_VERSION_RELEASE;
 }
 
-const char *KOffice::versionString()
+const char *Calligra::versionString()
 {
-    return KOFFICE_VERSION_STRING;
+    return CALLIGRA_VERSION_STRING;
 }

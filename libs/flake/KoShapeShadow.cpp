@@ -66,7 +66,7 @@ void KoShapeShadow::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
     style.addProperty("draw:shadow-offset-x", QString("%1pt").arg(d->offset.x()));
     style.addProperty("draw:shadow-offset-y", QString("%1pt").arg(d->offset.y()));
     if (d->blur != 0)
-        style.addProperty("koffice:shadow-blur-radius", QString("%1").arg(d->blur));
+        style.addProperty("calligra:shadow-blur-radius", QString("%1").arg(d->blur));
 }
 
 void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)

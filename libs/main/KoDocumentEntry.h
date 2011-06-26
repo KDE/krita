@@ -31,7 +31,7 @@ class KoDocument;
 class KoFilter;
 
 /**
- *  Represents an available KOffice component
+ *  Represents an available Calligra component
  *  that supports the document interface.
  */
 class KOMAIN_EXPORT KoDocumentEntry
@@ -89,9 +89,9 @@ public:
     enum QueryFlag {
         AllEntries = 0,
         /**
-         * OnlyEmbeddableDocuments specifies if only KOffice Parts should be
+         * OnlyEmbeddableDocuments specifies if only Calligra Parts should be
          * listed which are embeddable into other koDocuments, or all (if false)
-         * (eg.: it makes no sense to embed Kexi into KWord,
+         * (eg.: it makes no sense to embed Kexi into Words,
          *  but it makes sense to embed it into KoShell)
          */
         OnlyEmbeddableDocuments = 1
@@ -112,7 +112,7 @@ public:
     /**
      *  This is a convenience function.
      *
-     *  @return a document entry for the KOffice component that supports
+     *  @return a document entry for the Calligra component that supports
      *          the requested mimetype and fits the user best.
      */
     static KoDocumentEntry queryByMimeType(const QString & mimetype);

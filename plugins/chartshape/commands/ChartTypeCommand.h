@@ -21,7 +21,7 @@
 #define KCHART_CHART_TYPE_COMMAND
 
 // Qt
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 // KChart
 #include "kchart_global.h"
@@ -46,7 +46,7 @@ class ChartShape;
 /**
  * Chart type replacement command.
  */
-class ChartTypeCommand : public QUndoCommand
+class ChartTypeCommand : public KUndo2Command
 {
 public:
     /**

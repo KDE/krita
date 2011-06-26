@@ -34,6 +34,7 @@
  *            channels_type srcAlpha,
  *            channels_type* dst,
  *            channels_type dstAlpha,
+ *            channels_type maskAlpha,
  *            channels_type opacity,
  *            const QBitArray& channelFlags
  *        )
@@ -53,55 +54,59 @@ public:
 
     using KoCompositeOp::composite;
     
-    virtual void composite(quint8*       dstRowStart , qint32 dstRowStride ,
-                           const quint8* srcRowStart , qint32 srcRowStride ,
-                           const quint8* maskRowStart, qint32 maskRowStride,
-                           qint32 rows, qint32 cols, quint8 U8_opacity, quint8 U8_flow, const QBitArray& channelFlags) const {
+    virtual void composite(const KoCompositeOp::ParameterInfo& params) const {
         
-        const QBitArray& flags           = channelFlags.isEmpty() ? QBitArray(channels_nb,true) : channelFlags;
-        bool             allChannelFlags = channelFlags.isEmpty() || channelFlags == QBitArray(channels_nb,true);
+        const QBitArray& flags           = params.channelFlags.isEmpty() ? QBitArray(channels_nb,true) : params.channelFlags;
+        bool             allChannelFlags = params.channelFlags.isEmpty() || params.channelFlags == QBitArray(channels_nb,true);
         bool             alphaLocked     = (alpha_pos != -1) && !flags.testBit(alpha_pos);
+        bool             useMask         = params.maskRowStart != 0;
         
-        if(alphaLocked) {
-            if(allChannelFlags)
-                genericComposite<true,true>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, U8_flow, flags);
-            else
-                genericComposite<true,false>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, U8_flow, flags);
+        if(useMask) {
+            if(alphaLocked) {
+                if(allChannelFlags) { genericComposite<true,true,true> (params, flags); }
+                else                { genericComposite<true,true,false>(params, flags); }
+            }
+            else {
+                if(allChannelFlags) { genericComposite<true,false,true> (params, flags); }
+                else                { genericComposite<true,false,false>(params, flags); }
+            }
         }
         else {
-            if(allChannelFlags)
-                genericComposite<false,true>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, U8_flow, flags);
-            else
-                genericComposite<false,false>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, U8_flow, flags);
+            if(alphaLocked) {
+                if(allChannelFlags) { genericComposite<false,true,true> (params, flags); }
+                else                { genericComposite<false,true,false>(params, flags); }
+            }
+            else {
+                if(allChannelFlags) { genericComposite<false,false,true> (params, flags); }
+                else                { genericComposite<false,false,false>(params, flags); }
+            }
         }
     }
 
 private:
-    template<bool alphaLocked, bool allChannelFlags>
-    void genericComposite(quint8*       dstRowStart , qint32 dstRowStride ,
-                          const quint8* srcRowStart , qint32 srcRowStride ,
-                          const quint8* maskRowStart, qint32 maskRowStride,
-                          qint32 rows, qint32 cols, quint8 U8_opacity, quint8 U8_flow, const QBitArray& channelFlags) const {
+    template<bool useMask, bool alphaLocked, bool allChannelFlags>
+    void genericComposite(const KoCompositeOp::ParameterInfo& params, const QBitArray& channelFlags) const {
         
         using namespace Arithmetic;
         
-        qint32        srcInc    = (srcRowStride == 0) ? 0 : channels_nb;
-        bool          useMask   = maskRowStart != 0;
-        channels_type flow      = scale<channels_type>(U8_flow);
-        channels_type opacity   = mul(scale<channels_type>(U8_opacity), flow);
+        qint32        srcInc       = (params.srcRowStride == 0) ? 0 : channels_nb;
+        channels_type opacity      = scale<channels_type>(params.opacity);
+        quint8*       dstRowStart  = params.dstRowStart;
+        const quint8* srcRowStart  = params.srcRowStart;
+        const quint8* maskRowStart = params.maskRowStart;
         
-        for(; rows>0; --rows) {
+        for(qint32 r=0; r<params.rows; ++r) {
             const channels_type* src  = reinterpret_cast<const channels_type*>(srcRowStart);
             channels_type*       dst  = reinterpret_cast<channels_type*>(dstRowStart);
             const quint8*        mask = maskRowStart;
             
-            for(qint32 c=cols; c>0; --c) {
+            for(qint32 c=0; c<params.cols; ++c) {
                 channels_type srcAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : src[alpha_pos];
                 channels_type dstAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : dst[alpha_pos];
-                channels_type blend    = useMask ? mul(opacity, scale<channels_type>(*mask)) : opacity;
+                channels_type mskAlpha = useMask ? scale<channels_type>(*mask) : unitValue<channels_type>();
                 
                 channels_type newDstAlpha = _compositeOp::template composeColorChannels<alphaLocked,allChannelFlags>(
-                    src, srcAlpha, dst, dstAlpha, blend, flow, channelFlags
+                    src, srcAlpha, dst, dstAlpha, mskAlpha, opacity, channelFlags
                 );
                 
                 if(alpha_pos != -1)
@@ -109,12 +114,14 @@ private:
                 
                 src += srcInc;
                 dst += channels_nb;
-                ++mask;
+                
+                if(useMask)
+                    ++mask;
             }
             
-            srcRowStart  += srcRowStride;
-            dstRowStart  += dstRowStride;
-            maskRowStart += maskRowStride;
+            srcRowStart  += params.srcRowStride;
+            dstRowStart  += params.dstRowStride;
+            maskRowStart += params.maskRowStride;
         }
     }
 };

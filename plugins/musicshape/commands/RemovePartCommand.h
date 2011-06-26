@@ -19,7 +19,7 @@
 #ifndef REMOVEPARTCOMMAND_H
 #define REMOVEPARTCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 namespace MusicCore {
     class Sheet;
@@ -27,7 +27,7 @@ namespace MusicCore {
 }
 class MusicShape;
 
-class RemovePartCommand : public QUndoCommand {
+class RemovePartCommand : public KUndo2Command {
 public:
     RemovePartCommand(MusicShape* shape, MusicCore::Part* part);
     virtual void redo();

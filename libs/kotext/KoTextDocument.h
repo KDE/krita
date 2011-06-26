@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
- * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,7 +32,7 @@
 
 class KoStyleManager;
 class KoInlineTextObjectManager;
-class KUndoStack;
+class KUndo2Stack;
 class KoTextEditor;
 class KoOdfLineNumberingConfiguration;
 class KoChangeTracker;
@@ -89,10 +89,10 @@ public:
     KoOdfLineNumberingConfiguration *lineNumberingConfiguration() const;
 
     ///Sets the global undo stack
-    void setUndoStack(KUndoStack *undoStack);
+    void setUndoStack(KUndo2Stack *undoStack);
 
     ///Returns the global undo stack
-    KUndoStack *undoStack() const;
+    KUndo2Stack *undoStack() const;
 
     ///Sets the global heading list
     void setHeadingList(KoList *list);

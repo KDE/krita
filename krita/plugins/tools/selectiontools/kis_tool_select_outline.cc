@@ -123,6 +123,8 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                 KisPainter painter(tmpSel);
                 painter.setBounds(currentImage()->bounds());
                 painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
+                painter.setGradient(currentGradient());
+                painter.setPattern(currentPattern());
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);
                 painter.setStrokeStyle(KisPainter::StrokeStyleNone);
                 painter.setOpacity(OPACITY_OPAQUE_U8);

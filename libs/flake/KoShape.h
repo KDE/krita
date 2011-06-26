@@ -494,7 +494,7 @@ public:
      * The run through property is used to determine if the shape is behind, inside or before text.
      * @param runThrough the new run through;
      */
-    void setRunThrough(short int runThrough);
+    virtual void setRunThrough(short int runThrough);
 
     /**
      * Changes the Shape to be visible or invisible.

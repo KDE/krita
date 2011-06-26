@@ -87,14 +87,16 @@ ImageSize::ImageSize(QObject *parent, const QVariantList &)
         connect(m_scaleLayerAction, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
 
         m_view = (KisView2*) parent;
-        // Selection manager takes ownership?
-        action  = new KAction(i18n("&Scale..."), this);
-        actionCollection()->addAction("selectionscale", action);
-        Q_CHECK_PTR(action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));
+        // Selection manager takes ownership
+        m_scaleSelectionAction  = new KAction(i18n("&Scale..."), this);
+        actionCollection()->addAction("selectionscale", m_scaleSelectionAction);
+        Q_CHECK_PTR(m_scaleSelectionAction);
+        connect(m_scaleSelectionAction, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));
+        m_view ->selectionManager()->addSelectionAction(m_scaleSelectionAction);
 
-        m_view ->selectionManager()->addSelectionAction(action);
         connect(m_view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), SLOT(slotNodeChanged(KisNodeSP)));
+        connect(m_view->selectionManager(), SIGNAL(signalUpdateGUI()),
+                SLOT(slotSelectionChanged()));
     }
 }
 
@@ -220,15 +222,18 @@ void ImageSize::slotSelectionScale()
     QPointer<KoUpdater> u = pu->startSubtask();
 
     if (dlgSize->exec() == QDialog::Accepted) {
+        KisSelectionTransaction transaction(i18n("Scale Selection"), image, selection);
+
         qint32 w = dlgSize->width();
         qint32 h = dlgSize->height();
-        KisTransformWorker worker(selection.data(),
+        KisTransformWorker worker(selection->mergedPixelSelection(),
                                   (double)w / ((double)(rc.width())),
                                   (double)h / ((double)(rc.height())),
                                   0, 0, 0.0, 0.0, 0.0, 0, 0, u,
                                   dlgSize->filterType()
                                  );
         worker.run();
+        transaction.commit(image->undoAdapter());
         layer->setDirty();
         pu->deleteLater();
     }
@@ -240,6 +245,11 @@ void ImageSize::slotNodeChanged(const KisNodeSP node)
 {
     Q_UNUSED(node);
     m_scaleLayerAction->setEnabled(m_view->activeLayer());
+}
+
+void ImageSize::slotSelectionChanged()
+{
+    m_scaleSelectionAction->setEnabled(m_view->selectionManager()->havePixelsSelected());
 }
 
 #include "imagesize.moc"

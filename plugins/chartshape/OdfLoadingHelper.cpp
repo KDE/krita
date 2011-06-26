@@ -23,7 +23,7 @@
 // Own
 #include "OdfLoadingHelper.h"
 
-// KOffice
+// Calligra
 #include "KoOdfStylesReader.h"
 #include "KoStyleStack.h"
 

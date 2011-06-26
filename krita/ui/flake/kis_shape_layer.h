@@ -91,8 +91,8 @@ public:
     bool saveLayer(KoStore * store) const;
     bool loadLayer(KoStore* store);
 
-    QUndoCommand* crop(const QRect & rect);
-    QUndoCommand* transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey);
+    KUndo2Command* crop(const QRect & rect);
+    KUndo2Command* transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey);
 
     bool visible(bool recursive = false) const;
     void setVisible(bool visible);

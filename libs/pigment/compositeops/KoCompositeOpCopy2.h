@@ -44,19 +44,16 @@ public:
 public:
     template<bool alphaLocked, bool allChannelFlags>
     inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
-                                                     channels_type*       dst, channels_type dstAlpha,
-                                                     channels_type opacity, channels_type flow, const QBitArray& channelFlags) {
-        Q_UNUSED(flow);
+                                                     channels_type*       dst, channels_type dstAlpha, channels_type maskAlpha,
+                                                     channels_type opacity, const QBitArray& channelFlags) {
         using namespace Arithmetic;
-        
-        channels_type blendAlpha = opacity;
-        channels_type blendColor = mul(srcAlpha, blendAlpha);
+        opacity = mul(maskAlpha, opacity);
         
         if(dstAlpha != zeroValue<channels_type>()) {
             // blend the color channels
             for(qint32 i=0; i<channels_nb; ++i)
                 if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) 
-                    dst[i] = lerp(dst[i], src[i], blendColor);
+                    dst[i] = lerp(dst[i], src[i], opacity);
         }
         else {
             // don't blend if the color of the destination is undefined (has zero opacity)
@@ -67,7 +64,7 @@ public:
         }
         
         // blend the alpha channel
-        return lerp(dstAlpha, srcAlpha, blendAlpha);
+        return lerp(dstAlpha, srcAlpha, opacity);
     }
 };
 

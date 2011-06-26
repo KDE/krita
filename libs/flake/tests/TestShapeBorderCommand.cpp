@@ -35,7 +35,7 @@ void TestShapeBorderCommand::refCounting()
     QCOMPARE(whiteBorder->useCount(), 1);
 
     // old border is white, new border is black
-    QUndoCommand *cmd1 = new KoShapeBorderCommand(shape1, blackBorder);
+    KUndo2Command *cmd1 = new KoShapeBorderCommand(shape1, blackBorder);
     cmd1->redo();
     QVERIFY(shape1->border() == blackBorder);
 
@@ -44,7 +44,7 @@ void TestShapeBorderCommand::refCounting()
     QVERIFY(shape1->border() == whiteBorder);
 
     // old border is white, new border is red
-    QUndoCommand *cmd2 = new KoShapeBorderCommand(shape1, redBorder);
+    KUndo2Command *cmd2 = new KoShapeBorderCommand(shape1, redBorder);
     cmd2->redo();
     QVERIFY(shape1->border() == redBorder);
 

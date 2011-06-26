@@ -29,13 +29,13 @@ KisTileMemoryPool8BPP KisTileData::m_pool8BPP;
 
 
 KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store)
-        : m_state(NORMAL),
-          m_mementoFlag(0),
-          m_age(0),
-        m_usersCount(0),
-        m_refCount(0),
-        m_pixelSize(pixelSize),
-        m_store(store)
+    : m_state(NORMAL),
+      m_mementoFlag(0),
+      m_age(0),
+      m_usersCount(0),
+      m_refCount(0),
+      m_pixelSize(pixelSize),
+      m_store(store)
 {
     m_store->checkFreeMemory();
     m_data = allocateData(m_pixelSize);
@@ -50,13 +50,13 @@ KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataSt
  * + it's unlocked and has refCount==0
  */
 KisTileData::KisTileData(const KisTileData& rhs)
-        : m_state(NORMAL),
-          m_mementoFlag(0),
-          m_age(0),
-        m_usersCount(0),
-        m_refCount(0),
-        m_pixelSize(rhs.m_pixelSize),
-        m_store(rhs.m_store)
+    : m_state(NORMAL),
+      m_mementoFlag(0),
+      m_age(0),
+      m_usersCount(0),
+      m_refCount(0),
+      m_pixelSize(rhs.m_pixelSize),
+      m_store(rhs.m_store)
 {
     m_store->checkFreeMemory();
     m_data = allocateData(m_pixelSize);

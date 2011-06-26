@@ -22,8 +22,8 @@
 #include <klocale.h>
 #include <math.h>
 
-KoPathSegmentBreakCommand::KoPathSegmentBreakCommand(const KoPathPointData & pointData, QUndoCommand *parent)
-        : QUndoCommand(parent)
+KoPathSegmentBreakCommand::KoPathSegmentBreakCommand(const KoPathPointData & pointData, KUndo2Command *parent)
+        : KUndo2Command(parent)
         , m_pointData(pointData)
         , m_startIndex(-1, -1)
         , m_broken(false)
@@ -37,7 +37,7 @@ KoPathSegmentBreakCommand::KoPathSegmentBreakCommand(const KoPathPointData & poi
             ++m_startIndex.second;
         }
     }
-    setText(i18n("Break subpath"));
+    setText(i18nc("(qtundo-format)", "Break subpath"));
 }
 
 KoPathSegmentBreakCommand::~KoPathSegmentBreakCommand()
@@ -46,7 +46,7 @@ KoPathSegmentBreakCommand::~KoPathSegmentBreakCommand()
 
 void KoPathSegmentBreakCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     // a repaint before is needed as the shape can shrink during the break
     m_pointData.pathShape->update();
     if (m_startIndex.first != -1) {
@@ -64,7 +64,7 @@ void KoPathSegmentBreakCommand::redo()
 
 void KoPathSegmentBreakCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     if (m_startIndex.first != -1) {
         m_startIndex = m_pointData.pathShape->closeSubpath(m_startIndex);
         m_pointData.pathShape->normalize();

@@ -42,7 +42,7 @@ int main(int argc, char** argv)
                          KAboutData::License_LGPL,
                          ki18n("(c) 2007 Cyrille Berger"),
                          KLocalizedString(),
-                         "www.koffice.org",
+                         "www.calligra-suite.org",
                          "submit@bugs.kde.org");
     KCmdLineArgs::init(argc, argv, &aboutData);
     // Initialize the list of options

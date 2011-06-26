@@ -41,7 +41,7 @@ class QKeyEvent;
 class QWheelEvent;
 class QCloseEvent;
 class QRectF;
-class QUndoCommand;
+class KUndo2Command;
 
 class KOPAGEAPP_EXPORT KoPAViewMode : public QObject
 {
@@ -147,7 +147,7 @@ public:
 
     virtual const KoPageLayout &activePageLayout() const;
 
-    virtual void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, QUndoCommand *parent = 0 );
+    virtual void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent = 0 );
 
     QPointF origin();
 

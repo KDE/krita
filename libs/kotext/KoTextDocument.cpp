@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
- * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_calligra@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,7 +26,7 @@
 #include <QVariantList>
 
 #include <kdebug.h>
-#include <KUndoStack>
+#include <kundo2stack.h>
 
 #include "KoTextDocument.h"
 #include "KoTextEditor.h"
@@ -184,17 +184,17 @@ KoList *KoTextDocument::headingList() const
     return resource.value<KoList *>();
 }
 
-void KoTextDocument::setUndoStack(KUndoStack *undoStack)
+void KoTextDocument::setUndoStack(KUndo2Stack *undoStack)
 {
     QVariant v;
     v.setValue<void*>(undoStack);
     m_document->addResource(KoTextDocument::UndoStack, UndoStackURL, v);
 }
 
-KUndoStack *KoTextDocument::undoStack() const
+KUndo2Stack *KoTextDocument::undoStack() const
 {
     QVariant resource = m_document->resource(KoTextDocument::UndoStack, UndoStackURL);
-    return static_cast<KUndoStack*>(resource.value<void*>());
+    return static_cast<KUndo2Stack*>(resource.value<void*>());
 }
 
 void KoTextDocument::setLists(const QList<KoList *> &lists)

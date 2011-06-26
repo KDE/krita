@@ -22,20 +22,20 @@
 #define REMOVECONNECTIONPOINTCOMMAND_H
 
 #include <KoConnectionPoint.h>
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 #include <QtCore/QPointF>
 
 class KoShape;
 
-class RemoveConnectionPointCommand : public QUndoCommand
+class RemoveConnectionPointCommand : public KUndo2Command
 {
 public:
     /// Creates new comand to remove connection point from shape
-    RemoveConnectionPointCommand(KoShape *shape, int connectionPointId, QUndoCommand *parent = 0);
+    RemoveConnectionPointCommand(KoShape *shape, int connectionPointId, KUndo2Command *parent = 0);
     virtual ~RemoveConnectionPointCommand();
-    /// reimplemented from QUndoCommand
+    /// reimplemented from KUndo2Command
     virtual void redo();
-    /// reimplemented from QUndoCommand
+    /// reimplemented from KUndo2Command
     virtual void undo();
 
 private:

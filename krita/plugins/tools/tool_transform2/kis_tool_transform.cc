@@ -99,7 +99,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     m_scaleCursors[6] = KisCursor::sizeVerCursor();
     m_scaleCursors[7] = KisCursor::sizeFDiagCursor();
     QPixmap shearPixmap;
-    shearPixmap.load(KStandardDirs::locate("data", "koffice/icons/shear.png"));
+    shearPixmap.load(KStandardDirs::locate("data", "calligra/icons/shear.png"));
     m_shearCursors[7] = QCursor(shearPixmap.transformed(QTransform().rotate(45)));
     m_shearCursors[6] = QCursor(shearPixmap.transformed(QTransform().rotate(90)));
     m_shearCursors[5] = QCursor(shearPixmap.transformed(QTransform().rotate(135)));
@@ -1980,7 +1980,7 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
         m_transform = QTransform();
         m_origImg = new QImage(dev->convertToQImage(0, x, y, w, h));
         if (selection) {
-            m_origSelectionImg = new QImage(selection->convertToQImage(0, x, y, w, h));
+            m_origSelectionImg = new QImage(selection->projection()->convertToQImage(0, x, y, w, h));
         } else {
             m_origSelectionImg = new QImage(w, h, QImage::Format_ARGB32_Premultiplied);
             m_origSelectionImg->fill(0xFFFFFFFF);
@@ -2280,7 +2280,7 @@ void KisToolTransform::applyTransform()
     setCurrentNodeLocked(false);
 }
 
-void KisToolTransform::notifyCommandAdded(const QUndoCommand * command)
+void KisToolTransform::notifyCommandAdded(const KUndo2Command * command)
 {
     const ApplyTransformCmdData * cmd1 = dynamic_cast<const ApplyTransformCmdData*>(command);
     const TransformCmd* cmd2 = dynamic_cast<const TransformCmd*>(command);
@@ -2297,7 +2297,7 @@ void KisToolTransform::notifyCommandAdded(const QUndoCommand * command)
     }
 }
 
-void KisToolTransform::notifyCommandExecuted(const QUndoCommand * command)
+void KisToolTransform::notifyCommandExecuted(const KUndo2Command * command)
 {
     Q_UNUSED(command);
     const ApplyTransformCmdData * presentCmd1 = 0;

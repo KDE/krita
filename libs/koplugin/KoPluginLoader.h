@@ -78,7 +78,7 @@ public:
          * /code
          *  KConfigGroup configGroup = KGlobal::config()->group(config.group);
          * /endcode
-         * For most cases you can pass the string "koffice" into this variable.
+         * For most cases you can pass the string "calligra" into this variable.
          */
         const char * group;
         /// This contains the variable name for the list of plugins (by library name) the user wants to load
@@ -101,7 +101,7 @@ public:
     /**
      * Load all plugins that conform to the versiontype and versionstring,
      * for instance:
-     * KoPluginLoader::instance()->load("KOffice/Flake", "([X-Flake-Version] == 3)");
+     * KoPluginLoader::instance()->load("Calligra/Flake", "([X-Flake-Version] == 3)");
      * This method allows you to optionally limit the plugins that are loaded by version, but also
      * using a user configurable set of config options.
      * If you pass a PluginsConfig struct only those plugins are loaded that are specified in the

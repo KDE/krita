@@ -21,7 +21,7 @@
 
 #include <KoToolBase.h>
 class MusicShape;
-class QUndoCommand;
+class KUndo2Command;
 
 class MusicTool : public KoToolBase
 {
@@ -39,7 +39,7 @@ public:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
   void deactivate();
 
-  void addCommand(QUndoCommand* command);
+  void addCommand(KUndo2Command* command);
     MusicShape* shape();
 protected:
   /*

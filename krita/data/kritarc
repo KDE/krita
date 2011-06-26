@@ -146,7 +146,7 @@ Collapsed=false
 [KoShapeCollection]
 QuickShapes=ArtisticText,TextShapeID,DivineProportionShapeID,EllipseShape,RectangleShape
 
-[koffice]
+[calligra]
 FlakePluginsDisabled=formulashape,divineproportionshape,kexirelationdesignshape,vectorshape
 ShapePluginsDisabled=musicshape,pictureshape,videoshape,chartshape,spreadsheetshape,pluginshape,treeshape
 TextEditingPluginsDisabled=thesaurustool,changecase,autocorrect,spellcheck

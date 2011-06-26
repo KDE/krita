@@ -1,5 +1,5 @@
 /*
- *  This file is part of KOffice tests
+ *  This file is part of Calligra tests
  *
  *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  *
@@ -49,8 +49,7 @@ public:
 class MockContainer : public KoShapeContainer
 {
 public:
-    MockContainer(KoShapeContainerModel *model) : KoShapeContainer(model), paintedCount(0) {}
-    MockContainer() : paintedCount(0) {}
+    MockContainer(KoShapeContainerModel *model = 0) : KoShapeContainer(model), paintedCount(0) {}
     void paintComponent(QPainter &painter, const KoViewConverter &converter) {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
@@ -97,7 +96,7 @@ public:
     bool snapToGrid() const  {
         return true;
     }
-    void addCommand(QUndoCommand*) { }
+    void addCommand(KUndo2Command*) { }
     KoShapeManager *shapeManager() const  {
         return m_shapeManager;
     }

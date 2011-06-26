@@ -122,8 +122,7 @@ void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
         m_d->selection->setDefaultBounds(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
     }
     else {
-        m_d->selection = new KisSelection(parentPaintDevice,
-                                          new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        m_d->selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
 
         quint8 newDefaultPixel = MAX_SELECTED;
         m_d->selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
@@ -143,8 +142,9 @@ KisSelectionSP KisMask::selection() const
         KisLayer *parentLayer = dynamic_cast<KisLayer*>(parent().data());
         if(parentLayer) {
             KisPaintDeviceSP parentPaintDevice = parentLayer->paintDevice();
-            m_d->selection = new KisSelection(parentPaintDevice,
-                                              parentPaintDevice->defaultBounds());
+            m_d->selection = new KisSelection(
+                new KisSelectionDefaultBounds(parentPaintDevice,
+                                              parentLayer->image()));
 
             quint8 newDefaultPixel = MAX_SELECTED;
             m_d->selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
@@ -197,7 +197,7 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 
         m_d->selection->updateProjection(rc);
 
-        if(!m_d->selection->selectedRect().intersects(rc))
+        if(!extent().intersects(rc))
             return;
 
         KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
@@ -293,7 +293,8 @@ void KisMask::setDirty(const QRect & rect)
 
 QImage KisMask::createThumbnail(qint32 w, qint32 h)
 {
-    KisPaintDeviceSP originalDevice = paintDevice();
+    KisPaintDeviceSP originalDevice =
+        selection() ? selection()->projection() : 0;
 
     return originalDevice ?
            originalDevice->createThumbnail(w, h) : QImage();

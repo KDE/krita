@@ -54,7 +54,7 @@ public:
      */
     ChangeListCommand(const QTextCursor &cursor, KoListStyle::Style style, int level = 0,
                       ChangeFlags flags = ChangeFlags(ModifyExistingList | MergeWithAdjacentList),
-                      QUndoCommand *parent = 0);
+                      KUndo2Command *parent = 0);
 
     /**
      * Change the list property of 'block'.
@@ -65,7 +65,7 @@ public:
      */
     ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level = 0,
                       ChangeFlags flags = ChangeFlags(ModifyExistingList | MergeWithAdjacentList | MergeExactly),
-                      QUndoCommand *parent = 0);
+                      KUndo2Command *parent = 0);
     ~ChangeListCommand();
 
     /// redo the command
@@ -73,12 +73,12 @@ public:
     /// revert the actions done in redo
     virtual void undo();
 
-    /// reimplemnted from QUndoCommand
+    /// reimplemnted from KUndo2Command
     virtual int id() const {
         return 58450687;
     }
-    /// reimplemnted from QUndoCommand
-    virtual bool mergeWith(const QUndoCommand *other);
+    /// reimplemnted from KUndo2Command
+    virtual bool mergeWith(const KUndo2Command *other);
 
 private:
     enum CommandAction {

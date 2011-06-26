@@ -1,4 +1,4 @@
-/* This file is part of the KOffice libraries
+/* This file is part of the Calligra libraries
    Copyright (C) 2001 Werner Trobin <trobin@kde.org>
 
 This library is free software; you can redistribute it and/or
@@ -48,7 +48,7 @@ namespace
     }
 }
 
-namespace KOfficeFilter {
+namespace CalligraFilter {
 
     ChainLink::ChainLink(KoFilterChain *chain, KoFilterEntry::Ptr filterEntry,
                          const QByteArray& from, const QByteArray& to)

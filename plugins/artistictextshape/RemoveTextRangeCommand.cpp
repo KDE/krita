@@ -26,12 +26,12 @@ RemoveTextRangeCommand::RemoveTextRangeCommand(ArtisticTextTool *tool, ArtisticT
 : m_tool(tool), m_shape(shape), m_from(from), m_count(count)
 {
     m_cursor = tool->textCursor();
-    setText( i18n("Remove text range") );
+    setText( i18nc("(qtundo-format)", "Remove text range") );
 }
 
 void RemoveTextRangeCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     if (!m_shape)
         return;
@@ -45,7 +45,7 @@ void RemoveTextRangeCommand::redo()
 
 void RemoveTextRangeCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     if ( !m_shape )
         return;

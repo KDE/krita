@@ -91,6 +91,8 @@ public:
      */
     KoShape *createTextShape(KoResourceManager *documentResources = 0);
 
+    virtual void setRunThrough(short int runThrough);
+
 protected:
     /// constructor
     KoTosContainer(KoTosContainerPrivate &);

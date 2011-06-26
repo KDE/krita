@@ -52,7 +52,7 @@ ApplyTransformCmd::ApplyTransformCmd(KisToolTransform *tool, ToolTransformArgs::
 }
 
 TransformCmd::TransformCmd(KisToolTransform *tool, const ToolTransformArgs &args, KisSelectionSP origSel, QPoint startPos, QPoint endPos, QImage *origImg, QImage *origSelectionImg)
-        : QUndoCommand(i18n("Transform"))
+        : KUndo2Command(i18nc("(qtundo-format)", "Transform"))
 {
     m_args = args;
     m_tool = tool;

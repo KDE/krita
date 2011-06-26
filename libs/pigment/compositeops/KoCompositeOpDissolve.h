@@ -65,9 +65,7 @@ public:
     virtual void composite(quint8*       dstRowStart , qint32 dstRowStride ,
                            const quint8* srcRowStart , qint32 srcRowStride ,
                            const quint8* maskRowStart, qint32 maskRowStride,
-                           qint32 rows, qint32 cols, quint8 U8_opacity, quint8 U8_flow, const QBitArray& channelFlags) const {
-        
-        Q_UNUSED(U8_flow);
+                           qint32 rows, qint32 cols, quint8 U8_opacity, const QBitArray& channelFlags) const {
         
         const QBitArray& flags       = channelFlags.isEmpty() ? QBitArray(channels_nb,true) : channelFlags;
         bool             alphaLocked = (alpha_pos != -1) && !flags.testBit(alpha_pos);

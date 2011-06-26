@@ -25,7 +25,7 @@
 // KDE
 #include <kpluginfactory.h>
 
-// KOffice libs
+// Calligra libs
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 

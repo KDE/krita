@@ -21,8 +21,8 @@
 #include "KoPathSegmentTypeCommand.h"
 #include <klocale.h>
 
-KoPathSegmentTypeCommand::KoPathSegmentTypeCommand(const KoPathPointData & pointData, SegmentType segmentType, QUndoCommand *parent)
-: QUndoCommand(parent)
+KoPathSegmentTypeCommand::KoPathSegmentTypeCommand(const KoPathPointData & pointData, SegmentType segmentType, KUndo2Command *parent)
+: KUndo2Command(parent)
 , m_segmentType(segmentType)
 {
     QList<KoPathPointData> pointDataList;
@@ -31,8 +31,8 @@ KoPathSegmentTypeCommand::KoPathSegmentTypeCommand(const KoPathPointData & point
 }
 
 KoPathSegmentTypeCommand::KoPathSegmentTypeCommand(const QList<KoPathPointData> & pointDataList, SegmentType segmentType,
-        QUndoCommand *parent)
-        : QUndoCommand(parent)
+        KUndo2Command *parent)
+        : KUndo2Command(parent)
         , m_segmentType(segmentType)
 {
     initialize(pointDataList);
@@ -44,7 +44,7 @@ KoPathSegmentTypeCommand::~KoPathSegmentTypeCommand()
 
 void KoPathSegmentTypeCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     QList<KoPathPointData>::const_iterator it(m_pointDataList.constBegin());
     for (; it != m_pointDataList.constEnd(); ++it) {
         KoPathShape * pathShape = it->pathShape;
@@ -70,7 +70,7 @@ void KoPathSegmentTypeCommand::redo()
 
 void KoPathSegmentTypeCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     for (int i = 0; i < m_pointDataList.size(); ++i) {
         const KoPathPointData & pd = m_pointDataList.at(i);
         pd.pathShape->update();
@@ -129,8 +129,8 @@ void KoPathSegmentTypeCommand::initialize(const QList<KoPathPointData> & pointDa
     }
 
     if (m_segmentType == Curve) {
-        setText(i18n("Change segments to curves"));
+        setText(i18nc("(qtundo-format)", "Change segments to curves"));
     } else {
-        setText(i18n("Change segments to lines"));
+        setText(i18nc("(qtundo-format)", "Change segments to lines"));
     }
 }

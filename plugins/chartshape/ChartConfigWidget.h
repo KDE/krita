@@ -24,7 +24,7 @@
 #define KCHART_CHART_CONFIG_WIDGET
 
 
-// KOffice
+// Calligra
 #include <KoShapeConfigWidgetBase.h>
 
 // KChart

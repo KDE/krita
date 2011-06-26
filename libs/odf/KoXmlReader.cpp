@@ -21,7 +21,7 @@
 #include "KoXmlNS.h"
 
 /*
-  This is a memory-efficient DOM implementation for KOffice. See the API
+  This is a memory-efficient DOM implementation for Calligra. See the API
   documentation for details.
 
   IMPORTANT !
@@ -45,7 +45,7 @@
   Some differences compared to QDom:
 
   - DOM tree in KoXmlDocument is read-only, you can not modify it. This is
-    sufficient for KOffice since the tree is only accessed when loading
+    sufficient for Calligra since the tree is only accessed when loading
     a document to the application. For saving the document to XML file,
     use KoXmlWriter.
 

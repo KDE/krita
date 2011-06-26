@@ -60,12 +60,12 @@ FontDia::FontDia(QTextCursor* cursor, QWidget* parent)
                 if (fragment.position() >= end)
                     break;
                 if (fragment.position() + fragment.length() <= begin) {
-                    iter++;
+                    ++iter;
                     continue;
                 }
                 if (!(m_uniqueFormat = (fragment.charFormat() == m_initialFormat)))
                     break;
-                iter++;
+                ++iter;
             }
             if (!m_uniqueFormat)
                 break;

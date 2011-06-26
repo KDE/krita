@@ -70,7 +70,7 @@ void SpiralShapeConfigWidget::save()
     m_spiral->setFade(widget.fade->value());
 }
 
-QUndoCommand * SpiralShapeConfigWidget::createCommand()
+KUndo2Command * SpiralShapeConfigWidget::createCommand()
 {
     if (!m_spiral)
         return 0;

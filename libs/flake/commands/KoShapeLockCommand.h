@@ -21,13 +21,13 @@
 #ifndef KOSHAPELOCKCOMMAND_H
 #define KOSHAPELOCKCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 
 class KoShape;
 
 /// The undo / redo command to lock a set of shapes position and size
-class KoShapeLockCommand : public QUndoCommand
+class KoShapeLockCommand : public KUndo2Command
 {
 public:
     /**
@@ -38,7 +38,7 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeLockCommand(const QList<KoShape*> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock,
-                       QUndoCommand *parent = 0);
+                       KUndo2Command *parent = 0);
     ~KoShapeLockCommand();
 
     /// redo the command

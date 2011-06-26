@@ -102,14 +102,14 @@ void KoColorSpaceRegistry::init()
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "ColorSpacePlugins";
     config.blacklist = "ColorSpacePluginsDisabled";
-    config.group = "koffice";
-    KoPluginLoader::instance()->load("KOffice/ColorSpace", "[X-Pigment-MinVersion] <= 0", config);
+    config.group = "calligra";
+    KoPluginLoader::instance()->load("Calligra/ColorSpace", "[X-Pigment-MinVersion] <= 0", config);
 
     KoPluginLoader::PluginsConfig configExtensions;
     configExtensions.whiteList = "ColorSpaceExtensionsPlugins";
     configExtensions.blacklist = "ColorSpaceExtensionsPluginsDisabled";
-    configExtensions.group = "koffice";
-    KoPluginLoader::instance()->load("KOffice/ColorSpaceExtension", "[X-Pigment-MinVersion] <= 0", configExtensions);
+    configExtensions.group = "calligra";
+    KoPluginLoader::instance()->load("Calligra/ColorSpaceExtension", "[X-Pigment-MinVersion] <= 0", configExtensions);
 
 
     dbgPigment << "Loaded the following colorspaces:";

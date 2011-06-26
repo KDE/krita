@@ -1,13 +1,13 @@
 /**
- * \mainpage KOffice Core library called: 'main'
+ * \mainpage Calligra Core library called: 'main'
  * 
  * The "main" library provides the basic model-view implementation for
- * KOffice applications. It is not the base library for all KOffice libraries,
+ * Calligra applications. It is not the base library for all Calligra libraries,
  * but the base library for applications.
  *
  * Some frequently asked questions and answers:
 -------------------------------------------------------------------------
-| This document answers some questions about how the startup of KOffice
+| This document answers some questions about how the startup of Calligra
 | applications works. This file was put together by
 | Eric R. Turner <eric.r.turner@bitbreather.com>
 | from the answers given by David Faure <faure@kde.org>
@@ -47,16 +47,16 @@ languages.
 
 Q: What is a KoApplicationInterface used for?
 
-A: It allows a KOffice application to participate in Inter-Process
+A: It allows a Calligra application to participate in Inter-Process
 Communication and Remote Procedure Calls via DCOP.
 
 
 
 Q: What is the .desktop file?
 
-A: It's responsible for the menu entry, standard KDE stuff. In KOffice
+A: It's responsible for the menu entry, standard KDE stuff. In Calligra
 we add a few useful tags to it, in particular the "native mime type"
-of the component (e.g. application/x-kword for kword).
+of the component (e.g. application/x-words for words).
 
 
 
@@ -66,11 +66,11 @@ A: Yes.
 
 
 
-Q: What's a KoDocumentEntry? I couldn't find it in lib/kofficecore.
+Q: What's a KoDocumentEntry? I couldn't find it in lib/calligracore.
 
-A: KoDocumentEntry describes a KOffice component (i.e. it's a
+A: KoDocumentEntry describes a Calligra component (i.e. it's a
 representation in memory of the data contained in the .desktop
-file). It's in kofficecore/koQueryTrader.h.
+file). It's in calligracore/koQueryTrader.h.
 
 
 
@@ -88,9 +88,9 @@ A: The KoMainWindow is the same for all. But KoDocumentEntry was
 created from specific application data, and koQueryTrader klopens the
 library containing this component. The very same mechanism is used to
 1) embed other components inside the app, 2) create any kind of
-koffice document, e.g. in koshell. All the KOffice applications are in
+calligra document, e.g. in koshell. All the Calligra applications are in
 fact very small wrappers that simply dlopen their own compnent - with
-the code in kofficecore, which can also dlopen ANY component.
+the code in calligracore, which can also dlopen ANY component.
 
 
 
@@ -105,7 +105,7 @@ iterateover all windows in the application, but this is rarely needed.
 
 Q: How does KoMainWindow relate to KoDocument and KoView?
 
-A: KOffice applications reimplement KoDocument and KoView. But the
+A: Calligra applications reimplement KoDocument and KoView. But the
 KoMainWindow is the same class for all, since it doesn't have any
 app-specific stuff. It's GUI, i.e. menus and toolbars, are provided by
 1) itself (the standard stuff like the File and Help menus), 2) the

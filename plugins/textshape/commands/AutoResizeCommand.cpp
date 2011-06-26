@@ -26,7 +26,7 @@
 //#include <KAction>
 
 AutoResizeCommand::AutoResizeCommand(KoTextShapeData *shapeData, KoTextShapeData::ResizeMethod resizeMethod, bool enabled)
-    : QUndoCommand()
+    : KUndo2Command()
     , m_shapeData(shapeData)
     , m_resizeMethod(resizeMethod)
     , m_enabled(enabled)
@@ -37,13 +37,13 @@ AutoResizeCommand::AutoResizeCommand(KoTextShapeData *shapeData, KoTextShapeData
     const QString s = m_enabled ? i18nc("Enable Shrink To Fit", "Enable") : i18nc("Disable Shrink To Fit", "Disable");
     switch (m_resizeMethod) {
         case KoTextShapeData::AutoGrowWidth:
-            setText(i18nc("Enable/Disable Grow To Fit Width", "%1 Grow To Fit Width", s));
+            setText(i18nc("(qtundo-format) Enable/Disable Grow To Fit Width", "%1 Grow To Fit Width", s));
             break;
         case KoTextShapeData::AutoGrowHeight:
-            setText(i18nc("Enable/Disable Grow To Fit Height", "%1 Grow To Fit Height", s));
+            setText(i18nc("(qtundo-format) Enable/Disable Grow To Fit Height", "%1 Grow To Fit Height", s));
             break;
         case KoTextShapeData::ShrinkToFitResize:
-            setText(i18nc("Enable/Disable Shrink To Fit", "%1 Shrink To Fit", s));
+            setText(i18nc("(qtundo-format) Enable/Disable Shrink To Fit", "%1 Shrink To Fit", s));
             break;
         default:
             Q_ASSERT_X(false, __FUNCTION__, QString("The resize-method '%1' is unsupported by this command").arg(resizeMethod).toUtf8());

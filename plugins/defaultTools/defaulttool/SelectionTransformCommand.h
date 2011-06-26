@@ -20,20 +20,20 @@
 #ifndef SELECTION_TRANSFORM_COMMAND_H
 #define SELECTION_TRANSFORM_COMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 #include <QtGui/QTransform>
 
 class KoSelection;
 class KoShape;
 
-class SelectionTransformCommand : public QUndoCommand
+class SelectionTransformCommand : public KUndo2Command
 {
 public:
-    SelectionTransformCommand( KoSelection * selection, const QTransform &oldTransformation, const QTransform &newTransformation, QUndoCommand * parent = 0 );
+    SelectionTransformCommand( KoSelection * selection, const QTransform &oldTransformation, const QTransform &newTransformation, KUndo2Command * parent = 0 );
 
-    /// reimplemented from QUndoCommand
+    /// reimplemented from KUndo2Command
     virtual void redo();
-    /// reimplemented from QUndoCommand
+    /// reimplemented from KUndo2Command
     virtual void undo();
 private:
     KoSelection * m_selection;

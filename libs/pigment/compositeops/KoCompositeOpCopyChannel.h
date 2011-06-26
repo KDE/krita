@@ -46,10 +46,10 @@ public:
 public:
     template<bool alphaLocked, bool allChannelFlags>
     inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
-                                                     channels_type*       dst, channels_type dstAlpha,
-                                                     channels_type opacity, channels_type flow, const QBitArray& channelFlags) {
-        Q_UNUSED(flow);
+                                                     channels_type*       dst, channels_type dstAlpha, channels_type maskAlpha,
+                                                     channels_type opacity, const QBitArray& channelFlags) {
         using namespace Arithmetic;
+        opacity = mul(opacity, maskAlpha);
         
         if(allChannelFlags || channelFlags.testBit(channel_pos)) {
             if(channel_pos == alpha_pos)

@@ -26,14 +26,14 @@
 
 #include "VectorShape.h"
 
-ChangeVectorDataCommand::ChangeVectorDataCommand(VectorShape *shape, QByteArray &newImageData, QUndoCommand *parent)
-    : QUndoCommand(parent)
+ChangeVectorDataCommand::ChangeVectorDataCommand(VectorShape *shape, QByteArray &newImageData, KUndo2Command *parent)
+    : KUndo2Command(parent)
     , m_shape(shape)
 {
     Q_ASSERT( shape );
     m_oldImageData = m_shape->compressedContents();
     m_newImageData = newImageData;
-    setText(i18n("Change Vector Data"));
+    setText(i18nc("(qtundo-format)", "Change Vector Data"));
 }
 
 ChangeVectorDataCommand::~ChangeVectorDataCommand()

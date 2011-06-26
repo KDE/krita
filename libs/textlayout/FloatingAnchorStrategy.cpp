@@ -107,6 +107,9 @@ bool FloatingAnchorStrategy::moveSubject()
     checkPageBorder(newPosition, containerBoundingRect);
 
     if (newPosition == m_anchor->shape()->position()) {
+        if (m_anchor->shape()->textRunAroundSide() != KoShape::RunThrough) {
+            updateObstruction(data->documentOffset());
+        }
         return true;
     }
 
@@ -131,18 +134,6 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
          break;
 
      case KoTextAnchor::HParagraph:
-     {
-         if (layout->lineCount() != 0) {
-             QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-             if (!tl.isValid())
-                 return false; // lets go for a second round.
-             anchorBoundingRect.setX(tl.x() + containerBoundingRect.x());
-             anchorBoundingRect.setWidth(tl.width());
-         } else {
-             return false; // lets go for a second round.
-         }
-         break;
-     }
      case KoTextAnchor::HPageContent:
          anchorBoundingRect.setX(containerBoundingRect.x());
          anchorBoundingRect.setWidth(containerBoundingRect.width());
@@ -296,7 +287,7 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
                 return false; // lets go for a second round.
             anchorBoundingRect.setY(top + containerBoundingRect.y()  - data->documentOffset());
             anchorBoundingRect.setHeight(tl.y() + tl.height() - top);
-//            KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
+            KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
 //            if(blockData && m_anchor->verticalRel() == KoTextAnchor::VParagraph) {
 //                anchorBoundingRect.setY(paragraphRect().top() + containerBoundingRect.y()  - data->documentOffset());
 //            }

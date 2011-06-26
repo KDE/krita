@@ -22,7 +22,7 @@
 #include "kis_node.h"
 
 KisNodeCommand::KisNodeCommand(const QString& name, KisNodeSP node)
-    : QUndoCommand(name), m_node(node)
+    : KUndo2Command(name), m_node(node)
 {
 }
 

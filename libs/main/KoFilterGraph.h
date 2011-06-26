@@ -1,4 +1,4 @@
-/* This file is part of the KOffice libraries
+/* This file is part of the Calligra libraries
    Copyright (C) 2001 Werner Trobin <trobin@kde.org>
 
 This library is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <QByteArray>
 #include <QHash>
 
-namespace KOfficeFilter {
+namespace CalligraFilter {
 
 /**
  * The main worker behind the scenes. Manages the creation of the graph,
@@ -51,7 +51,7 @@ public:
 
     // Creates a chain from "from" to the "to" mimetype
     // If the "to" mimetype isEmpty() then we try to find the
-    // closest KOffice mimetype and use that as destination.
+    // closest Calligra mimetype and use that as destination.
     // After such a search "to" will contain the dest. mimetype (return value)
     // if the search was successful. Might return 0!
     KoFilterChain::Ptr chain(const KoFilterManager* manager, QByteArray& to) const;
@@ -65,9 +65,9 @@ private:
 
     void buildGraph();
     void shortestPaths();
-    QByteArray findKOfficePart() const;
+    QByteArray findCalligraPart() const;
 
-    QHash<QByteArray, KOfficeFilter::Vertex*> m_vertices;
+    QHash<QByteArray, CalligraFilter::Vertex*> m_vertices;
     QByteArray m_from;
     bool m_graphValid;
 

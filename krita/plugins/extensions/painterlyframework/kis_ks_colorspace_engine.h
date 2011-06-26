@@ -38,6 +38,7 @@ class KisKSColorSpaceEngine : public KoColorSpaceEngine
 public:
     KisKSColorSpaceEngine();
     ~KisKSColorSpaceEngine();
+    void addProfile( const QString &profile ) { Q_UNUSED(profile); }
     KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
 };
 

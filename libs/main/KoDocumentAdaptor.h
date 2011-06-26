@@ -30,18 +30,14 @@
 class KoDocument;
 
 /**
- * DBUS interface for any KOffice document
+ * DBUS interface for any Calligra document
  * Use KoApplicationIface to get hold of an existing document's interface,
  * or to create a document.
- *
- * Note: KOffice Applications may (and should) reimplement KoDocument::dcopObject()
- * In this case, don't look here... (unless the DCOP interface for the document
- * inherits KoDocumentAdaptor, which is a good thing to do)
  */
 class KOMAIN_EXPORT KoDocumentAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.document")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.document")
 public:
 
     explicit KoDocumentAdaptor(KoDocument * doc);
@@ -76,22 +72,14 @@ public slots: // METHODS
     Q_SCRIPTABLE int viewCount();
 
     /**
-     * @return a DCOP reference (DCOPRef) to the view with index @p idx
+     * @return a representing the view with index @p idx
      */
     Q_SCRIPTABLE QString view(int idx);
 
     /**
-     * DCOP-action proxy
-     */
-//     DCOPRef action( const DCOPCString &name );
-    /**
      * @return list of actions
      */
     Q_SCRIPTABLE QStringList actions();
-    /**
-     * @return a map of (action name, DCOP reference)
-     */
-//     QMap<DCOPCString,DCOPRef> actionMap();
 
     /**
      * Saves the document under its existing filename
@@ -141,13 +129,9 @@ public slots: // METHODS
     Q_SCRIPTABLE void setDocumentInfoAuthorPosition(const QString & text);
 
 public:
-//     virtual DCOPCStringList functionsDynamic();
-//     virtual bool processDynamic( const DCOPCString &fun, const QByteArray &data,
-//                                  DCOPCString& replyType, QByteArray &replyData );
 
 protected:
     KoDocument * m_pDoc;
-//     KDCOPActionProxy *m_actionProxy;
 };
 
 #endif

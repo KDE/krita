@@ -28,7 +28,7 @@
 #include "jp2_converter.h"
 
 K_PLUGIN_FACTORY(ImportFactory, registerPlugin<jp2Import>();)
-K_EXPORT_PLUGIN(ImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(ImportFactory("calligrafilters"))
 
 jp2Import::jp2Import(QObject *parent, const QVariantList &) : KoFilter(parent)
 {

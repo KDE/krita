@@ -527,6 +527,18 @@ void KoTableCellStyle::setRotationAngle(int value)
         setProperty(RotationAngle, value);
 }
 
+void KoTableCellStyle::setVerticalGlyphOrientation(bool state)
+{
+    setProperty(VerticalGlyphOrientation, state);
+}
+
+bool KoTableCellStyle::verticalGlyphOrientation() const
+{
+    if (hasProperty(VerticalGlyphOrientation))
+        return propertyBoolean(VerticalGlyphOrientation);
+    return true;
+}
+
 void KoTableCellStyle::setDirection(KoTableCellStyle::CellTextDirection direction)
 {
     setProperty(Direction, direction);
@@ -754,6 +766,11 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
             setRotationAngle(value);
     }
     
+    if (styleStack.hasProperty(KoXmlNS::style, "glyph-orientation-vertical"))
+    {
+        setVerticalGlyphOrientation(styleStack.property(KoXmlNS::style, "glyph-orientation-vertical") == "auto");
+    }
+    
     if (styleStack.hasProperty(KoXmlNS::style, "direction")) {
         if (styleStack.property(KoXmlNS::style, "direction") == "ltr")
             setDirection(KoTableCellStyle::LeftToRight);
@@ -910,6 +927,11 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
             style.addProperty("style:rotation-align", rotationAlignmentToString(rotationAlignment()), KoGenStyle::TableCellType);
         } else if (key == TextWritingMode) {
             style.addProperty("style:writing-mode", KoText::directionToString(textDirection()), KoGenStyle::TableCellType);
+        } else if (key == VerticalGlyphOrientation) {
+            if (verticalGlyphOrientation())
+                style.addProperty("style:glyph-orientation-vertical", "auto", KoGenStyle::TableCellType);
+            else
+                style.addProperty("style:glyph-orientation-vertical", "0", KoGenStyle::TableCellType);
         }
     }
     if (d->charStyle) {

@@ -42,7 +42,7 @@ public:
     SpecialButton(QWidget *parent);
 
     void setStylesWidget(StylesWidget *stylesWidget);
-    void setStylePreview(QPixmap &pm);
+    void setStylePreview(const QPixmap &pm);
 
     void showPopup();
 protected:
@@ -72,7 +72,7 @@ SpecialButton::SpecialButton(QWidget *parent)
     setLayout(l);
 }
 
-void SpecialButton::setStylePreview(QPixmap &pm)
+void SpecialButton::setStylePreview(const QPixmap &pm)
 {
     m_preview->setPixmap(pm);
 }
@@ -176,8 +176,7 @@ void SimpleStylesWidget::setCurrentFormat(const QTextBlockFormat &format)
     m_currentBlockFormat = format;
 
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
-    QPixmap pm = m_thumbnailer->thumbnail(m_styleManager->paragraphStyle(id), m_blockFrame->size());
-    m_blockFrame->setStylePreview(pm);
+    m_blockFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->paragraphStyle(id), m_blockFrame->size()));
     m_popupForBlock->setCurrentFormat(format);
 }
 
@@ -188,8 +187,7 @@ void SimpleStylesWidget::setCurrentFormat(const QTextCharFormat &format)
     m_currentCharFormat = format;
 
     int id = m_currentCharFormat.intProperty(KoCharacterStyle::StyleId);
-    QPixmap pm = m_thumbnailer->thumbnail(m_styleManager->characterStyle(id), m_charFrame->size());
-    m_charFrame->setStylePreview(pm);
+    m_charFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->characterStyle(id), m_charFrame->size()));
     m_popupForChar->setCurrentFormat(format);
 }
 

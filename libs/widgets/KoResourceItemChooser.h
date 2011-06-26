@@ -84,7 +84,7 @@ public:
     void showButtons( bool show );
 
     void showGetHotNewStuff( bool showDownload, bool showUpload);
-
+    /// sets the visibilty of tagging KlineEdits.
     void showTaggingBar( bool showSearchBar, bool showOpBar );
 
     ///Set a proxy model with will be used to filter the resources
@@ -92,8 +92,11 @@ public:
 
     void setKnsrcFile(const QString& knsrcFileArg);
     QSize viewSize();
+    /// Gets the tagged resource names from tagObject in resource Server
     QStringList getTaggedResourceFileNames(QString lineEditText);
+    /// Gets the tag Names from tag Object for setting the Completer Object
     QStringList getTagNamesList(QString lineEditText);
+    /// Called when a brush is activated. Sets the tagging KlineEdit accordingly.
     void brushResourceChanged();
 
 signals:
@@ -104,10 +107,15 @@ public slots:
     void slotButtonClicked( int button );
     
 private slots:
+    /// whenever a resource is selected, activated() is called to set the new resource
+    /// @signalEmit controls whether resourceSelected signal is emitted or not
     void activated ( const QModelIndex & index , bool signalEmit = true);
+
     void setTagOpLineEdit(QStringList assignedTagsList);
+
     void tagOpLineEditActivated(QString lineEditText);
     void tagOpLineEditTextChanged(QString lineEditText);
+
     void tagSearchLineEditActivated(QString lineEditText);
     void tagSearchLineEditTextChanged(QString lineEditText);
 

@@ -381,6 +381,7 @@ public:
         return blackListFileNames;
     }
 
+    /// the below functions helps to access tagObject functions
     QStringList getAssignedTagsList( KoResource* resource )
     {
         return m_tagObject->getAssignedTagsList(resource);

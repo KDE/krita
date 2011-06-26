@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright 2009 Vera Lukman <shicmap@gmail.com>
    Copyright 2011 Sven Langkamp <sven.langkamp@gmail.com>
+   Copyright 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

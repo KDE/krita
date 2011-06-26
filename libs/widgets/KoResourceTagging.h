@@ -54,9 +54,12 @@ public:
 private:
     void readXMLFile();
     void writeXMLFile();
+    /// To check whether the resource belongs to the present server or not
     bool isServerResource(QString resourceName);
     void addTag(const QString& fileName,const QString& tag);
+    /// If resource filenames have no extensions, then we add "-krita.extension".
     QString getAdjustedFileName(QString fileName);
+    /// Removes the adjustements before going to the server
     QStringList removeAdjustedFileNames(QStringList fileNamesList);
 
     QMultiHash<QString, QString> m_tagRepo;

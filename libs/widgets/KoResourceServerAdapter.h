@@ -189,7 +189,7 @@ public:
     void updateServer()
     {
         emitRemovingResource(0);
-    }    
+    }
 
     QStringList getAssignedTagsList( KoResource* resource )
     {

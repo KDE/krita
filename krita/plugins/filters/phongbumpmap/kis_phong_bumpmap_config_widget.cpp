@@ -22,7 +22,7 @@
 #include "KoChannelInfo.h"
 #include "KoColorSpace.h"
 
-KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageWSP image, QWidget * parent, Qt::WFlags f)
+KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageWSP image, QWidget *parent, Qt::WFlags f)
                             : KisConfigWidget(parent, f)
                             , m_device(dev)
                             , m_image(image)
@@ -48,7 +48,7 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
     connect(m_page->specularReflectivityCheckBox, SIGNAL(toggled(bool)),
             m_page->shinynessExponentLabel, SLOT(setEnabled(bool)));
 
-    QVBoxLayout * l = new QVBoxLayout(this);
+    QVBoxLayout *l = new QVBoxLayout(this);
     Q_CHECK_PTR(l);
 
     l->addWidget(m_page);
@@ -61,7 +61,7 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
 
 }
 
-void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfiguration *config)
 {
     QVariant tempcolor;
     m_page->ambientReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_AMBIENT_REFLECTIVITY) );
@@ -70,7 +70,7 @@ void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfigurat
     m_page->shinynessExponentKisSliderSpinBox->setValue( config->getInt(PHONG_SHINYNESS_EXPONENT) );
     m_page->diffuseReflectivityCheckBox->setChecked( config->getBool(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED) );
     m_page->specularReflectivityCheckBox->setChecked( config->getBool(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED) );
-    // Indexes are off by 1 simply because arrays start at 0 and the GUI naming scheme started at 1
+    // NOTE: Indexes are off by 1 simply because arrays start at 0 and the GUI naming scheme started at 1
     m_page->lightSourceGroupBox1->setChecked( config->getBool(PHONG_ILLUMINANT_IS_ENABLED[0]) );
     m_page->lightSourceGroupBox2->setChecked( config->getBool(PHONG_ILLUMINANT_IS_ENABLED[1]) );
     m_page->lightSourceGroupBox3->setChecked( config->getBool(PHONG_ILLUMINANT_IS_ENABLED[2]) );
@@ -95,9 +95,9 @@ void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfigurat
     if (!config) return;
 }
 
-KisPropertiesConfiguration* KisPhongBumpmapConfigWidget::configuration() const
+KisPropertiesConfiguration *KisPhongBumpmapConfigWidget::configuration() const
 {
-    KisFilterConfiguration * config = new KisFilterConfiguration("phongbumpmap", 2);
+    KisFilterConfiguration *config = new KisFilterConfiguration("phongbumpmap", 2);
     config->setProperty(PHONG_HEIGHT_CHANNEL, m_page->heightChannelComboBox->currentText());
     config->setProperty(PHONG_AMBIENT_REFLECTIVITY, m_page->ambientReflectivityKisDoubleSliderSpinBox->value());
     config->setProperty(PHONG_DIFFUSE_REFLECTIVITY, m_page->diffuseReflectivityKisDoubleSliderSpinBox->value());

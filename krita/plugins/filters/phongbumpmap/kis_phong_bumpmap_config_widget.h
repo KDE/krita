@@ -48,17 +48,14 @@ public:
 
 class KisPhongBumpmapConfigWidget : public KisConfigWidget
 {
-
     Q_OBJECT
 
 public:
-    KisPhongBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageWSP image, QWidget * parent, Qt::WFlags f = 0);
+    KisPhongBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageWSP image, QWidget *parent, Qt::WFlags f = 0);
     virtual ~KisPhongBumpmapConfigWidget() {}
-
-    void setConfiguration(const KisPropertiesConfiguration* config);
-    KisPropertiesConfiguration* configuration() const;
-
-    KisPhongBumpmapWidget * m_page;
+    void setConfiguration(const KisPropertiesConfiguration *config);
+    KisPropertiesConfiguration *configuration() const;
+    KisPhongBumpmapWidget *m_page;
 
 private:
     KisPaintDeviceSP m_device;

@@ -66,7 +66,10 @@ KoReportItemMaps::KoReportItemMaps(QDomNode & element)
 void KoReportItemMaps::initMarble()
 {
     m_marble = new Marble::MarbleWidget();
-    m_marble->setMapThemeId("earth/srtm/srtm.dgml");
+    //m_marble->setMapThemeId("earth/srtm/srtm.dgml");
+    
+    m_marble->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
+    
     m_marble->centerOn(52,20.8, false);
     m_marble->zoomView(1800);
     m_marble->setShowOverviewMap(false);

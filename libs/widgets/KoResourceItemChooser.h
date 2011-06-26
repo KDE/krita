@@ -94,6 +94,7 @@ public:
     QSize viewSize();
     QStringList getTaggedResourceFileNames(QString lineEditText);
     QStringList getTagNamesList(QString lineEditText);
+    void brushResourceChanged();
 
 signals:
     /// Emitted when a resource was selected
@@ -103,7 +104,7 @@ public slots:
     void slotButtonClicked( int button );
     
 private slots:
-    void activated ( const QModelIndex & index );
+    void activated ( const QModelIndex & index , bool signalEmit = true);
     void setTagOpLineEdit(QStringList assignedTagsList);
     void tagOpLineEditActivated(QString lineEditText);
     void tagOpLineEditTextChanged(QString lineEditText);

@@ -269,6 +269,7 @@ void KisBrushChooser::slotActivatedBrush(KoResource * resource)
     if (brush) {
         m_brush = brush;
     }
+    m_itemChooser->brushResourceChanged();
 }
 
 void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)

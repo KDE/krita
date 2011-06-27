@@ -290,6 +290,7 @@ void KoResourceItemChooser::setCurrentResource(KoResource* resource)
         return;
 
     d->view->setCurrentIndex(index);
+    setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(resource));
 }
 
 void KoResourceItemChooser::setCurrentItem(int row, int column)
@@ -307,7 +308,7 @@ void KoResourceItemChooser::setProxyModel( QAbstractProxyModel* proxyModel )
     d->view->setModel(proxyModel);
 }
 
-void KoResourceItemChooser::activated( const QModelIndex & index, bool signalEmit )
+void KoResourceItemChooser::activated( const QModelIndex & index )
 {
     if( ! index.isValid() )
         return;
@@ -315,9 +316,7 @@ void KoResourceItemChooser::activated( const QModelIndex & index, bool signalEmi
     d->curResource = resourceFromModelIndex(index);
 
     if( d->curResource ) {
-        if(signalEmit) {
-            emit resourceSelected( d->curResource );
-        }
+        emit resourceSelected( d->curResource );
         setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource ));
     }
 
@@ -487,11 +486,6 @@ void KoResourceItemChooser::tagSearchLineEditTextChanged(QString lineEditText)
     }
     d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
     d->tagSearchLineEdit->setCompleter(d->tagCompleter);
-}
-
-void KoResourceItemChooser::brushResourceChanged()
-{
-    activated(d->view->currentIndex(), false);
 }
 
 #include <KoResourceItemChooser.moc>

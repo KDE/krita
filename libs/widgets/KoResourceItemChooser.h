@@ -96,8 +96,6 @@ public:
     QStringList getTaggedResourceFileNames(QString lineEditText);
     /// Gets the tag Names from tag Object for setting the Completer Object
     QStringList getTagNamesList(QString lineEditText);
-    /// Called when a brush is activated. Sets the tagging KlineEdit accordingly.
-    void brushResourceChanged();
 
 signals:
     /// Emitted when a resource was selected
@@ -107,9 +105,7 @@ public slots:
     void slotButtonClicked( int button );
     
 private slots:
-    /// whenever a resource is selected, activated() is called to set the new resource
-    /// @signalEmit controls whether resourceSelected signal is emitted or not
-    void activated ( const QModelIndex & index , bool signalEmit = true);
+    void activated ( const QModelIndex & index );
 
     void setTagOpLineEdit(QStringList assignedTagsList);
 

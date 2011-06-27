@@ -29,20 +29,26 @@ class KoChangeTracker;
 class KoStyleManager;
 
 class QTextFrame;
+class QTextCursor;
 
 /**
  * This object is an inline object, which means it is anchored in the text-flow and it can hold
- * bibliography-mark(citation) and bibliography info.
+ * bibliography-mark(citation).
  */
 class KOTEXT_EXPORT KoInlineCite : public KoInlineObject
 {
 public:
+    enum Type {
+        Citation
+    };
     /**
-     * Construct a new note to be inserted in the text using KoTextSelectionHandler::insertInlineObject() for example.
+     * Construct a new cite to be inserted in the text using KoTextSelectionHandler::insertInlineObject() for example.
      */
     KoInlineCite();
 
     virtual ~KoInlineCite();
+
+    Type type() const;        //return type of cite  (always Citation). But useful when differentiating KoInlineObjects
 
     /**
      * Set the textframe where we will create our own textframe within
@@ -115,8 +121,70 @@ public:
 
     QString identifier() const;
 
+    QString address() const;
+
+    QString author() const;
+
+    QString bibliographyType() const;
+
+    QString annotation() const;
+
+    QString bookTitle() const;
+
+    QString chapter() const;
+
+    QString edition() const;
+
+    QString editor() const;
+
+    QString publicationType() const;
+
+    QString institution() const;
+
+    QString journal() const;
+
+    QString month() const;
+
+    QString note() const;
+
+    QString number() const;
+
+    QString organisations() const;
+
+    QString pages() const;
+
+    QString publisher() const;
+
+    QString school() const;
+
+    QString series() const;
+
+    QString title() const;
+
+    QString reportType() const;
+
+    QString volume() const;
+
+    QString year() const;
+
+    QString url() const;
+
+    QString isbn() const;
+
+    QString custom1() const;
+
+    QString custom2() const;
+
+    QString custom3() const;
+
+    QString custom4() const;
+
+    QString custom5() const;
+
     /// return the current text frame
     QTextFrame *textFrame() const;
+
+    QTextCursor textCursor() const;
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 

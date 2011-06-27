@@ -25,6 +25,7 @@
 #include "KoTextLocator.h"
 #include "KoBookmark.h"
 #include "KoInlineNote.h"
+#include "KoInlineCite.h"
 
 #include <QTextCursor>
 #include <QPainter>
@@ -230,6 +231,17 @@ QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
     return answers;
 }
 
+QList<KoInlineCite*> KoInlineTextObjectManager::citations() const
+{
+    QList<KoInlineCite*> answers;
+    foreach(KoInlineObject* object, m_objects) {
+        KoInlineCite* cite = dynamic_cast<KoInlineCite*>(object);
+        if (cite && cite->type() == KoInlineCite::Citation) {
+            answers.append(cite);
+        }
+    }
+    return answers;
+}
 
 void KoInlineTextObjectManager::documentInformationUpdated(const QString &info, const QString &data)
 {

@@ -23,7 +23,7 @@
 #include "dialogs/SimpleCitationWidget.h"
 #include "dialogs/SimpleFootEndNotesWidget.h"
 #include "dialogs/SimpleCaptionsWidget.h"
-#include "dialogs/CitationBibliographyWidget.h"
+#include "dialogs/CitationInsertionDialog.h"
 
 #include <KoTextLayoutRootArea.h>
 #include <KoCanvasBase.h>
@@ -104,7 +104,7 @@ void ReferencesTool::insertTableOfContents()
 
 void ReferencesTool::insertCitation()
 {
-    CitationBibliographyWidget *dialog = new CitationBibliographyWidget(textEditor()->document(),0);
+    CitationInsertionDialog *dialog = new CitationInsertionDialog(textEditor()->document(),0);
     //textEditor()->insertCitation();
     dialog->exec();
 }

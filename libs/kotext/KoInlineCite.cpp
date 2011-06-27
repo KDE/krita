@@ -1,4 +1,3 @@
-
 /* This file is part of the KDE project
  * Copyright (C) 2011 Smit Patel <smitpatel24@gmail.com>
  *
@@ -93,6 +92,11 @@ KoInlineCite::~KoInlineCite()
     delete d;
 }
 
+KoInlineCite::Type KoInlineCite::type() const
+{
+    return KoInlineCite::Citation;
+}
+
 void KoInlineCite::setMotherFrame(QTextFrame *motherFrame)
 {
     QTextCursor cursor(motherFrame->lastCursorPosition());
@@ -102,19 +106,9 @@ void KoInlineCite::setMotherFrame(QTextFrame *motherFrame)
     d->textFrame = cursor.insertFrame(format);
 }
 
-QTextFrame *KoInlineCite::textFrame() const
-{
-    return d->textFrame;
-}
-
 void KoInlineCite::setIdentifier(const QString &identifier)
 {
     d->identifier = identifier;
-}
-
-QString KoInlineCite::identifier() const
-{
-    return d->identifier;
 }
 
 void KoInlineCite::setAddress(const QString &addr)
@@ -267,6 +261,171 @@ void KoInlineCite::setYear(const QString &year)
     d->year = year;
 }
 
+QTextCursor KoInlineCite::textCursor() const
+{
+    return (d->textFrame->lastCursorPosition());
+}
+
+QTextFrame *KoInlineCite::textFrame() const
+{
+    return d->textFrame;
+}
+
+QString KoInlineCite::identifier() const
+{
+    return d->identifier;
+}
+
+QString KoInlineCite::address() const
+{
+    return d->address;
+}
+
+QString KoInlineCite::annotation() const
+{
+    return d->annote;
+}
+
+QString KoInlineCite::author() const
+{
+    return d->author;
+}
+
+QString KoInlineCite::bibliographyType() const
+{
+    return d->bibliographyType;
+}
+
+QString KoInlineCite::bookTitle() const
+{
+    return d->booktitle;
+}
+
+QString KoInlineCite::chapter() const
+{
+    return d->chapter;
+}
+
+QString KoInlineCite::custom1() const
+{
+    return d->custom1;
+}
+
+QString KoInlineCite::custom2() const
+{
+    return d->custom2;
+}
+
+QString KoInlineCite::custom3() const
+{
+    return d->custom3;
+}
+
+QString KoInlineCite::custom4() const
+{
+    return d->custom4;
+}
+
+QString KoInlineCite::custom5() const
+{
+    return d->custom5;
+}
+
+QString KoInlineCite::edition() const
+{
+    return d->edition;
+}
+
+QString KoInlineCite::editor() const
+{
+    return d->editor;
+}
+
+QString KoInlineCite::institution() const
+{
+    return d->institution;
+}
+
+QString KoInlineCite::isbn() const
+{
+    return d->isbn;
+}
+
+QString KoInlineCite::journal() const
+{
+    return d->journal;
+}
+
+QString KoInlineCite::month() const
+{
+    return d->month;
+}
+
+QString KoInlineCite::note() const
+{
+    return d->note;
+}
+
+QString KoInlineCite::number() const
+{
+    return d->number;
+}
+
+QString KoInlineCite::organisations() const
+{
+    return d->organisation;
+}
+
+QString KoInlineCite::pages() const
+{
+    return d->pages;
+}
+
+QString KoInlineCite::publisher() const
+{
+    return d->publisher;
+}
+
+QString KoInlineCite::publicationType() const
+{
+    return d->publicationType;
+}
+
+QString KoInlineCite::reportType() const
+{
+    return d->reportType;
+}
+
+QString KoInlineCite::school() const
+{
+    return d->school;
+}
+
+QString KoInlineCite::series() const
+{
+    return d->series;
+}
+
+QString KoInlineCite::title() const
+{
+    return d->title;
+}
+
+QString KoInlineCite::volume() const
+{
+    return d->volume;
+}
+
+QString KoInlineCite::year() const
+{
+    return d->year;
+}
+
+QString KoInlineCite::url() const
+{
+    return d->url;
+}
+
 void KoInlineCite::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(document);
@@ -297,15 +456,20 @@ void KoInlineCite::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     if (d->identifier.isEmpty())
         return;
 
+    QString citeLabel = QString("[%1]").arg(d->identifier);
+
     QFont font(format.font(), pd);
-    QTextLayout layout(d->identifier, font, pd);
+    QTextLayout layout(citeLabel, font, pd);
     layout.setCacheEnabled(true);
     QList<QTextLayout::FormatRange> layouts;
     QTextLayout::FormatRange range;
     range.start = 0;
-    range.length = d->identifier.length();
+    range.length = citeLabel.length();
     range.format = format;
-    range.format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    range.format.setVerticalAlignment(QTextCharFormat::AlignNormal);
+    QBrush *brush = new QBrush(Qt::SolidPattern);
+    brush->setColor(Qt::lightGray);
+    range.format.setBackground(*brush);
     layouts.append(range);
     layout.setAdditionalFormats(layouts);
 
@@ -320,11 +484,10 @@ void KoInlineCite::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
 
 bool KoInlineCite::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    KoTextLoader loader(context);
-    QTextCursor cursor(d->textFrame->lastCursorPosition());
-    //QMessageBox::critical(0,QString("loading"),QString("loading citation"),QMessageBox::Ok);
+    Q_UNUSED(context);
+    //KoTextLoader loader(context);
+    QTextCursor cursor(d->textFrame);
     if (element.namespaceURI() == KoXmlNS::text && element.localName() == "bibliography-mark") {
-
         d->identifier = element.attributeNS(KoXmlNS::text, "identifier");
         d->bibliographyType = element.attributeNS(KoXmlNS::text, "bibliography-type");
         d->address = element.attributeNS(KoXmlNS::text, "address");

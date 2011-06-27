@@ -99,6 +99,7 @@ enum KoSubFrameType {
     EndNotesFrameType,
     FootNotesFrameType,
     NoteFrameType,
+    CitationFrameType,
     TableOfContentsFrameType
 };
 

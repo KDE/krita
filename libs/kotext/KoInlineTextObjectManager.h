@@ -31,6 +31,7 @@
 class KoCanvasBase;
 class KoTextLocator;
 class KoInlineNote;
+class KoInlineCite;
 class QAction;
 
 /**
@@ -143,6 +144,8 @@ public:
      * @return a list of all inline objects that are endnotes
      */
     QList<KoInlineNote*> endNotes() const;
+
+    QList<KoInlineCite*> citations() const;
 
 public slots:
     void documentInformationUpdated(const QString &info, const QString &data);

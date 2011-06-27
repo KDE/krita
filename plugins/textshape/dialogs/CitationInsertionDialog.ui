@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CitationBibliographyWidget</class>
- <widget class="QDialog" name="CitationBibliographyWidget">
+ <class>CitationInsertionDialog</class>
+ <widget class="QDialog" name="CitationInsertionDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>770</width>
-    <height>666</height>
+    <height>598</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Insert Bibliography entry</string>
   </property>
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
@@ -30,8 +30,8 @@
      <rect>
       <x>20</x>
       <y>31</y>
-      <width>711</width>
-      <height>528</height>
+      <width>721</width>
+      <height>451</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -452,7 +452,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>570</y>
+     <y>500</y>
      <width>67</width>
      <height>17</height>
     </rect>
@@ -471,10 +471,10 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>560</x>
-     <y>630</y>
-     <width>176</width>
-     <height>27</height>
+     <x>550</x>
+     <y>560</y>
+     <width>201</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="orientation">
@@ -487,10 +487,10 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>590</y>
-     <width>701</width>
-     <height>33</height>
+     <x>30</x>
+     <y>520</y>
+     <width>721</width>
+     <height>31</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -502,11 +502,18 @@
      </widget>
     </item>
     <item>
-     <widget class="QComboBox" name="existingCites"/>
+     <widget class="KComboBox" name="existingCites"/>
     </item>
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>shortName</tabstop>
   <tabstop>sourceType</tabstop>
@@ -539,7 +546,6 @@
   <tabstop>ud3</tabstop>
   <tabstop>ud4</tabstop>
   <tabstop>ud5</tabstop>
-  <tabstop>existingCites</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
@@ -547,7 +553,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>CitationBibliographyWidget</receiver>
+   <receiver>CitationInsertionDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

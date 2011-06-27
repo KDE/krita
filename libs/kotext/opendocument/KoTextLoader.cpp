@@ -34,6 +34,7 @@
 #include <KoBookmarkManager.h>
 #include <KoInlineNote.h>
 #include <KoInlineCite.h>
+#include <KoInlineBibliography.h>
 #include <KoInlineTextObjectManager.h>
 #include "KoList.h"
 #include <KoOdfLoadingContext.h>
@@ -1472,10 +1473,10 @@ void KoTextLoader::loadCite(const KoXmlElement &noteElem, QTextCursor &cursor)
 {
     KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
     if (textObjectManager) {
-        KoInlineCite *cite = new KoInlineCite;
-        cite->setMotherFrame(KoTextDocument(cursor.block().document()).footNotesFrame());
 
         int position = cursor.position(); // need to store this as the following might move is
+        KoInlineCite *cite = new KoInlineCite;
+        cite->setMotherFrame(KoTextDocument(cursor.block().document()).citationsFrame());
 
         if (cite->loadOdf(noteElem, d->context)) {
             cursor.setPosition(position); // restore the position before inserting the note

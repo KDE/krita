@@ -54,7 +54,7 @@ void KoPAChangePageLayoutCommand::redo()
     while ( it != m_oldLayouts.constEnd() ) {
         it.key()->setPageLayout( m_newPageLayout );
         m_document->updateViews( it.key() );
-        it++;
+        ++it;
     }
 }
 
@@ -64,7 +64,7 @@ void KoPAChangePageLayoutCommand::undo()
     while ( it != m_oldLayouts.constEnd() ) {
         it.key()->setPageLayout( it.value() );
         m_document->updateViews( it.key() );
-        it++;
+        ++it;
     }
 }
 

@@ -106,7 +106,7 @@ void KoShapeBackgroundCommand::redo()
     foreach(KoShape *shape, d->shapes) {
         shape->setBackground(*brushIt);
         shape->update();
-        brushIt++;
+        ++brushIt;
     }
 }
 
@@ -117,7 +117,7 @@ void KoShapeBackgroundCommand::undo()
     foreach(KoShape *shape, d->shapes) {
         shape->setBackground(*brushIt);
         shape->update();
-        brushIt++;
+        ++brushIt;
     }
 }
 

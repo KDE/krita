@@ -367,7 +367,7 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
                     cursor.setCharFormat(fm);
                     iter = block.begin();
                 } else {
-                    iter++;
+                    ++iter;
                 }
             }
             block = block.next();

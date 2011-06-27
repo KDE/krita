@@ -88,7 +88,7 @@ void KoPathCombineCommand::redo()
             d->controller->removeShape(p);
             if (*parentIt)
                 (*parentIt)->removeShape(p);
-            parentIt++;
+            ++parentIt;
 
         }
         if (d->combinedPathParent)
@@ -112,7 +112,7 @@ void KoPathCombineCommand::undo()
         foreach(KoPathShape* p, d->paths) {
             d->controller->addShape(p);
             p->setParent(*parentIt);
-            parentIt++;
+            ++parentIt;
         }
     }
     KUndo2Command::undo();

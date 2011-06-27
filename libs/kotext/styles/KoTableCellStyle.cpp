@@ -42,6 +42,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
+#include <cfloat>
 
 KoTableCellStyle::RotationAlignment rotationAlignmentFromString(const QString& align)
 {
@@ -516,12 +517,12 @@ void KoTableCellStyle::setAlignFromType(bool state)
     setProperty(AlignFromType, state);
 }
 
-int KoTableCellStyle::rotationAngle() const
+qreal KoTableCellStyle::rotationAngle() const
 {
-    return propertyInt(RotationAngle);
+    return propertyDouble(RotationAngle);
 }
 
-void KoTableCellStyle::setRotationAngle(int value)
+void KoTableCellStyle::setRotationAngle(qreal value)
 {
     if (value >= 0)
         setProperty(RotationAngle, value);
@@ -760,10 +761,7 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     }
     
     if (styleStack.hasProperty(KoXmlNS::style, "rotation-angle")) {
-        bool ok;
-        int value = styleStack.property(KoXmlNS::style, "rotation-angle").toInt(&ok);
-        if (ok)
-            setRotationAngle(value);
+        setRotationAngle(KoUnit::parseAngle(styleStack.property(KoXmlNS::style, "rotation-angle")));
     }
     
     if (styleStack.hasProperty(KoXmlNS::style, "glyph-orientation-vertical"))
@@ -896,7 +894,9 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
         } else if (key == DecimalPlaces) {
             style.addProperty("style:decimal-places", decimalPlaces(), KoGenStyle::TableCellType);
         } else if (key == RotationAngle) {
-            style.addProperty("style:rotation-angle", rotationAngle(), KoGenStyle::TableCellType);
+            QString str;
+            str.setNum(rotationAngle(), 'f', DBL_DIG);
+            style.addProperty("style:rotation-angle", QString::number(rotationAngle()), KoGenStyle::TableCellType);
         } else if (key == Wrap) {
             if (wrap())
                 style.addProperty("fo:wrap-option", "wrap", KoGenStyle::TableCellType);

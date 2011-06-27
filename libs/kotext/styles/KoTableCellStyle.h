@@ -197,8 +197,8 @@ public:
     void setAlignFromType(bool state);
     bool alignFromType() const;
 
-    void setRotationAngle(int value);
-    int rotationAngle() const;
+    void setRotationAngle(qreal value);
+    qreal rotationAngle() const;
 
     void setDirection(CellTextDirection direction);
     CellTextDirection direction() const;

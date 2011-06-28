@@ -184,11 +184,14 @@ ImageDockerDock::ImageDockerDock():
     m_ui->bnPopup->setIcon(QIcon::fromTheme("zoom-original"));
     m_ui->bnPopup->setPopupWidget(m_popupUi);
     
+    m_popupUi->zoomSlider->setRange(5, 500);
+    m_popupUi->zoomSlider->setValue(100);
+    
     m_zoomButtons->addButton(m_popupUi->bnZoomFit   , KisImageView::VIEW_MODE_FIT);
     m_zoomButtons->addButton(m_popupUi->bnZoomAdjust, KisImageView::VIEW_MODE_ADJUST);
     m_zoomButtons->addButton(m_popupUi->bnZoom25    , 25);
     m_zoomButtons->addButton(m_popupUi->bnZoom50    , 50);
-    m_zoomButtons->addButton(m_popupUi->bnZoom75    , 70);
+    m_zoomButtons->addButton(m_popupUi->bnZoom75    , 75);
     m_zoomButtons->addButton(m_popupUi->bnZoom100   , 100);
     
     m_model->setRootPath(QDir::rootPath());
@@ -207,7 +210,6 @@ ImageDockerDock::ImageDockerDock():
     connect(m_ui->imgView            , SIGNAL(sigColorSelected(const QColor&))        , SLOT(slotColorSelected(const QColor)));
     connect(m_ui->imgView            , SIGNAL(sigViewModeChanged(int, qreal))         , SLOT(slotViewModeChanged(int, qreal)));
     connect(m_popupUi->zoomSlider    , SIGNAL(valueChanged(int))                      , SLOT(slotZoomChanged(int)));
-    connect(m_popupUi->zoomSpinBox   , SIGNAL(valueChanged(int))                      , SLOT(slotZoomChanged(int)));
     connect(m_zoomButtons            , SIGNAL(buttonClicked(int))                     , SLOT(slotZoomChanged(int)));
     connect(m_zoomButtons            , SIGNAL(buttonClicked(int))                     , SLOT(slotCloseZoomPopup()));
     connect(this                     , SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
@@ -242,6 +244,7 @@ void ImageDockerDock::addCurrentPathToHistory()
 void ImageDockerDock::updatePath(const QString& path)
 {
     m_ui->cmbPath->lineEdit()->setText(path);
+    m_ui->bnBack->setDisabled(m_history.empty());
     m_thumbModel->setCurrentDirectory(path);
 }
 
@@ -292,9 +295,6 @@ void ImageDockerDock::setZoom(const ImageInfo& info)
     m_popupUi->zoomSlider->blockSignals(true);
     m_popupUi->zoomSlider->setValue(zoom);
     m_popupUi->zoomSlider->blockSignals(false);
-    m_popupUi->zoomSpinBox->blockSignals(true);
-    m_popupUi->zoomSpinBox->setValue(zoom);
-    m_popupUi->zoomSpinBox->blockSignals(false);
 }
 
 
@@ -316,11 +316,13 @@ void ImageDockerDock::slotItemDoubleClicked(const QModelIndex& index)
 
 void ImageDockerDock::slotBackButtonClicked()
 {
-    QString     path  = m_history.last();
-    QModelIndex index = m_proxyModel->mapFromSource(m_model->index(path));
-    m_ui->treeView->setRootIndex(index);
-    m_history.pop_back();
-    updatePath(path);
+    if(!m_history.empty()) {
+        QString     path  = m_history.last();
+        QModelIndex index = m_proxyModel->mapFromSource(m_model->index(path));
+        m_ui->treeView->setRootIndex(index);
+        m_history.pop_back();
+        updatePath(path);
+    }
 }
 
 void ImageDockerDock::slotHomeButtonClicked()
@@ -475,9 +477,6 @@ void ImageDockerDock::slotViewModeChanged(int viewMode, qreal scale)
         m_popupUi->zoomSlider->blockSignals(true);
         m_popupUi->zoomSlider->setValue(zoom);
         m_popupUi->zoomSlider->blockSignals(false);
-        m_popupUi->zoomSpinBox->blockSignals(true);
-        m_popupUi->zoomSpinBox->setValue(zoom);
-        m_popupUi->zoomSpinBox->blockSignals(false);
     }
 }
 

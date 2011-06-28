@@ -24,6 +24,7 @@
 #include <QGraphicsLinearLayout>
 #include <QGraphicsWidget>
 #include <QMutexLocker>
+#include <QIcon>
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // ------------- KisImageLoader ---------------------------------------------------------- //
@@ -70,13 +71,27 @@ void KisImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
     
     if(m_loader->isImageLoaded(this)) {
         QImage  image = m_loader->getImage(this);
-        QPointF offset((m_size-image.width()) / 2.0, (m_size-image.height()) / 2.0);
-        painter->drawImage(offset, image);
+        
+        if(!image.isNull()) {
+            QPointF offset((m_size-image.width()) / 2.0, (m_size-image.height()) / 2.0);
+            painter->drawImage(offset, image);
+        }
+        else {
+            QIcon   icon = QIcon::fromTheme("image-missing");
+            QRect   rect = boundingRect().toRect();
+            QPixmap img  = icon.pixmap(rect.size());
+            painter->drawPixmap(rect, img, img.rect());
+        }
+    }
+    else {
+        QIcon   icon = QIcon::fromTheme("image-loading");
+        QRect   rect = boundingRect().toRect();
+        QPixmap img  = icon.pixmap(rect.size());
+        painter->drawPixmap(rect, img, img.rect());
     }
     
-    if(isSelected()) {
+    if(isSelected())
         painter->fillRect(boundingRect(), Qt::Dense5Pattern);
-    }
     
     painter->drawRect(boundingRect());
 }

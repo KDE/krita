@@ -46,9 +46,6 @@ private:
     quint64 channelDataLength;
     quint32 channelSize;
 
-    QByteArray r,g,b,a; // RGB
-    QByteArray data;
-
     struct ChannelInfo {
         qint16 channelId;
         Compression::CompressionType compressionType;

@@ -147,8 +147,6 @@ QLayout* KisWidgetChooser::createPopupLayout()
 
 void KisWidgetChooser::removeWidget(const QString& id)
 {
-    Q_ASSERT(m_widgets.contains(id));
-    
     Iterator data = qFind(m_widgets.begin(), m_widgets.end(), Data(id));
     
     if(data != m_widgets.end()) {

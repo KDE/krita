@@ -154,7 +154,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
 
         QTextLayout *layout = block.layout();
         QTextFrame::iterator next = it;
-        next++;
+        ++next;
         if (next != stop && point.y() > layout->boundingRect().bottom()) {
             // just skip this block.
             continue;
@@ -319,7 +319,6 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_preregisteredFootNotesHeight = 0;
     m_prevBorder = 0;
     m_prevBorderPadding = 0;
-
     while (!cursor->it.atEnd()) {
         QTextBlock block = cursor->it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(cursor->it.currentFrame());
@@ -424,7 +423,6 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 cursor->currentSubFrameIterator = 0;
             }
         } else if (block.isValid()) {
-
             // FIXME this doesn't work for cells inside tables. We probably should make it more
             // generic to handle such cases too.
             bool masterPageNameChanged = false;
@@ -433,7 +431,6 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 masterPageNameChanged = true;
                 cursor->masterPageName = masterPageName;
             }
-
             if (!virginPage() &&
                 (masterPageNameChanged ||
                     (acceptsPageBreak() &&
@@ -445,14 +442,12 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 }
                 return false;
             }
-
             if (layoutBlock(cursor) == false) {
                 m_endOfArea = new FrameIterator(cursor);
                 setBottom(m_y + m_footNotesHeight);
                 m_blockRects.last().setBottom(m_y);
                 return false;
             }
-
             if (acceptsPageBreak()
                    && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysAfter)) {
                 Q_ASSERT(!cursor->it.atEnd());
@@ -469,7 +464,6 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 return false;
             }
         }
-
         bool atEnd = cursor->it.atEnd();
         if (!atEnd) {
             ++(cursor->it);
@@ -562,7 +556,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     else
         m_isRtl =  dir == KoText::RightLeftTopBottom || dir == KoText::PerhapsRightLeftTopBottom;
 
-
     // initialize list item stuff for this parag.
     QTextList *textList = block.textList();
     if (textList) {
@@ -629,14 +622,12 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         blockData->setCounterWidth(0.0);
         blockData->setCounterIsImage(false);
     }
-
     if (blockData == 0) {
         blockData = new KoTextBlockData();
         block.setUserData(blockData);
     }
 
     QTextLayout *layout = block.layout();
-
     QTextOption option = layout->textOption();
     option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
 
@@ -647,7 +638,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         option.setTextDirection(Qt::LeftToRight);
 
     option.setUseDesignMetrics(true);
-
     // Drop caps
     // first remove any drop-caps related formatting that's already there in the layout.
     // we'll do it all afresh now.
@@ -661,7 +651,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     }
     if (formatRanges.count() != layout->additionalFormats().count())
         layout->setAdditionalFormats(formatRanges);
-
     bool dropCaps = format.dropCaps();
     int dropCapsLength = format.dropCapsLength();
     int dropCapsLines = format.dropCapsLines();
@@ -765,7 +754,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     m_x = left() + (m_isRtl ? rightMargin : leftMargin);
 
     m_documentLayout->clearInlineObjectRegistry(block);
-
     m_indent = 0;
     QTextLine line;
     bool anyLineAdded = false;
@@ -891,23 +879,17 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     }
 
     layout->setTextOption(option);
-
     // So now is the time to create the lines of this paragraph
     RunAroundHelper runAroundHelper;
     runAroundHelper.setObstructions(documentLayout()->currentObstructions());
-
     qreal maxLineHeight = 0;
     qreal y_justBelowDropCaps = 0;
 
     while (line.isValid()) {
         runAroundHelper.setLine(this, line);
-
         runAroundHelper.setObstructions(documentLayout()->currentObstructions());
-
         documentLayout()->setAnchoringParagraphRect(m_blockRects.last());
-
         runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y));
-
         qreal bottomOfText = line.y() + line.height();
 
         bool softBreak = false;
@@ -941,14 +923,12 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             }
         }
         findFootNotes(block, line);
-
         if (bottomOfText > maximumAllowedBottom()) {
             // We can not fit line within our allowed space
             // in case we resume layout on next page the line is reused later
             // but if not then we need to make sure the line becomes invisible
             // we use m_maximalAllowedBottom because we want to be below
             // footnotes too.
-
             if (!virginPage() && format.nonBreakableLines()) {
                 line.setPosition(QPointF(x(), m_maximalAllowedBottom));
                 cursor->lineTextStart = -1;
@@ -964,7 +944,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
         confirmFootNotes();
         anyLineAdded = true;
-
         maxLineHeight = qMax(maxLineHeight, addLine(line, cursor, blockData));
 
         if (!runAroundHelper.stayOnBaseline()) {
@@ -972,7 +951,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             maxLineHeight = 0;
             m_indent = 0;
         }
-
         // drop caps
         if (m_dropCapsNChars > 0) { // we just laid out the dropped chars
             y_justBelowDropCaps = m_y; // save the y position just below the dropped characters
@@ -988,7 +966,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 m_dropCapsWidth = 0;
             }
         }
-
         // Expand bounding rect so if we have content outside we show it
         expandBoundingLeft(line.x());
         expandBoundingRight(line.x() + line.naturalTextWidth());

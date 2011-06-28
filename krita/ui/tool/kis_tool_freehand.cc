@@ -247,11 +247,14 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     if (m_smooth) {
         if (!m_haveTangent) {
             m_haveTangent = true;
-            m_previousTangent = (info.pos() - m_previousPaintInformation.pos()) * (m_smoothness / 3.0);
+            m_previousTangent = (info.pos() - m_previousPaintInformation.pos()) * m_smoothness /
+                                 (3.0 * (info.currentTime() - m_previousPaintInformation.currentTime()));
         } else {
-            QPointF newTangent = (info.pos() - m_olderPaintInformation.pos()) * (m_smoothness / 6.0);
-            QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent;
-            QPointF control2 = m_previousPaintInformation.pos() - newTangent;
+            QPointF newTangent = (info.pos() - m_olderPaintInformation.pos()) * m_smoothness /
+                                  (3.0 * (info.currentTime() - m_olderPaintInformation.currentTime()));
+            qreal scaleFactor = (m_previousPaintInformation.currentTime() - m_olderPaintInformation.currentTime());
+            QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent * scaleFactor;
+            QPointF control2 = m_previousPaintInformation.pos() - newTangent * scaleFactor;
             paintBezierCurve(m_olderPaintInformation,
                             control1,
                             control2,
@@ -294,8 +297,9 @@ void KisToolFreehand::finishStroke()
         // shouldn't happen
         return;
     }
-    QPointF newTangent = (m_previousPaintInformation.pos() - m_olderPaintInformation.pos()) * (m_smoothness / 3.0);
-    QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent;
+    QPointF newTangent = (m_previousPaintInformation.pos() - m_olderPaintInformation.pos()) * m_smoothness / 3.0;
+    qreal scaleFactor = (m_previousPaintInformation.currentTime() - m_olderPaintInformation.currentTime());
+    QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent * scaleFactor;
     QPointF control2 = m_previousPaintInformation.pos() - newTangent;
     paintBezierCurve(m_olderPaintInformation,
                     control1,

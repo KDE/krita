@@ -92,7 +92,7 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles)
                 style->applyStyle(cf);
                 cursor.mergeCharFormat(cf);
             }
-            iter++;
+            ++iter;
         }
         block = block.next();
     }

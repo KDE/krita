@@ -66,6 +66,8 @@ public:
        , changeTracker(0)
        , inlineTextObjectManager(0)
        , provider(0)
+       ,layoutPosition(0)
+       ,anchoringRootArea(0)
        , anchoringIndex(0)
        , defaultTabSizing(0)
        , y(0)
@@ -327,6 +329,8 @@ void KoTextDocumentLayout::registerAnchoredObstruction(KoTextLayoutObstruction *
 
 void KoTextDocumentLayout::positionAnchoredObstructions()
 {
+    if (!d->anchoringRootArea)
+        return;
     KoTextPage *page = d->anchoringRootArea->page();
     if (!page)
         return;

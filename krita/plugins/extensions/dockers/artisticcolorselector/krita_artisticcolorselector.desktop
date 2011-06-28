@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Artistic color selector
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritaartisticcolorselector
+X-Krita-Version=4

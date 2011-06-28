@@ -109,6 +109,11 @@ KisToolFreehand::~KisToolFreehand()
     delete m_painter;
 }
 
+int KisToolFreehand::flags() const
+{
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
+}
+
 void KisToolFreehand::deactivate()
 {
     if(mode() == PAINT_MODE)

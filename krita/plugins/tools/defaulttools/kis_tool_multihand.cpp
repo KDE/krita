@@ -149,6 +149,11 @@ KisToolMultihand::~KisToolMultihand()
 {
 }
 
+int KisToolMultihand::flags() const
+{
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
+}
+
 void KisToolMultihand::initTransformations()
 {
     // mirror mode decide own number of brushes

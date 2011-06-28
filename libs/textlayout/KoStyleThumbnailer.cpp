@@ -171,10 +171,9 @@ void KoStyleThumbnailer::layoutThumbnail(QSize size, QPixmap &pm)
         documentSize = rootArea.boundingRect().size();
 
         while ((documentSize.width() > size.width() || (documentSize.height()+2) > size.height()) && fmt.fontPointSize()>0) {
-            cursor.select(QTextCursor::Document);
-            fmt = cursor.charFormat();
+            fmt = cursor.blockCharFormat();
             fmt.setFontPointSize(fmt.fontPointSize() - 1);
-            cursor.setCharFormat(fmt);
+            cursor.setBlockCharFormat(fmt);
 
             frameCursor = FrameIterator(d->pixmapHelperDocument->rootFrame());
             rootArea.setReferenceRect(0, size.width(), 0, 1E6);

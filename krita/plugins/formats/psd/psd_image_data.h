@@ -48,7 +48,7 @@ private:
 
     QByteArray r,g,b,a; // RGB
     QByteArray data;
-    int byteRead;
+
     struct ChannelInfo {
         qint16 channelId;
         Compression::CompressionType compressionType;

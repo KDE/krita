@@ -243,7 +243,7 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header)
 
             }
 
-            if (channelSize == 2) {
+           else if (channelSize == 2) {
 
                 quint16 red = ntohs(reinterpret_cast<const quint16 *>(vectorBytes.constData())[index]);
                 KoRgbU16Traits::setRed(it.rawData(), red);
@@ -257,7 +257,7 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header)
             }
 
             // XXX see implementation Openexr
-            if (channelSize == 4) {
+           else if (channelSize == 4) {
 
                 quint16 red = ntohs(reinterpret_cast<const quint16 *>(vectorBytes.constData())[index]);
                 KoRgbU16Traits::setRed(it.rawData(), red);
@@ -316,7 +316,7 @@ bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header)
 
             }
 
-            if (channelSize == 2) {
+           else if (channelSize == 2) {
 
                 quint16 L = ntohs(reinterpret_cast<const quint16 *>(l.constData())[index]);
                 KoLabTraits<quint16>::setL(it.rawData(),L);
@@ -329,7 +329,7 @@ bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header)
 
             }
 
-            if (channelSize == 4) {
+           else if (channelSize == 4) {
 
                 quint32 L = ntohs(reinterpret_cast<const quint32 *>(l.constData())[index]);
                 KoLabTraits<quint32>::setL(it.rawData(),L);

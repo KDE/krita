@@ -114,6 +114,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header) 
                 channelInfo.rleRowLengths.append(rlelength);
                 sumrlelength += rlelength;
             }
+            channelInfoRecords.append(channelInfo);
         }
 
         for (int channel = 0; channel < header->nChannels; channel++) {

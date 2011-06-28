@@ -570,9 +570,11 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* event)
     QPointF dragPos = mapCoord(event->posF(), m_renderArea);
     
     if(m_clickedRing >= 0) {
-        float angle = std::atan2(dragPos.x(), dragPos.y()) - std::atan2(m_clickPos.x(), m_clickPos.y());
+        float angle     = std::atan2(dragPos.x(), dragPos.y()) - std::atan2(m_clickPos.x(), m_clickPos.y());
+        float dist      = std::sqrt(dragPos.x()*dragPos.x() + dragPos.y()*dragPos.y()) * 0.80f;
+        float threshold = 5.0f * (1.0f-(dist*dist));
         
-        if(qAbs(angle * Radian::TO_DEG) >= 5.0f || m_mouseMoved) {
+        if(qAbs(angle * Radian::TO_DEG) >= threshold || m_mouseMoved) {
             bool selectedRingMoved = true;
             
             if(m_pressedButtons & Qt::RightButton) {

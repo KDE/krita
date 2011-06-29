@@ -120,6 +120,7 @@ set(kritaimage_LIB_SRCS
    kis_iterator_ng.cpp
    kis_merge_walker.cc
    kis_updater_context.cpp
+   kis_update_job_item.cpp
    kis_abstract_update_queue.cpp
    kis_simple_update_queue.cpp
    kis_abstract_update_scheduler.cpp

@@ -23,6 +23,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_merge_walker.h"
+#include "kis_update_job_item.h"
 #include "kis_simple_update_queue.h"
 
 bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect) {

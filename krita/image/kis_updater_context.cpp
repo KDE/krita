@@ -21,6 +21,8 @@
 #include <QThread>
 #include <QThreadPool>
 
+#include "kis_update_job_item.h"
+
 
 KisUpdaterContext::KisUpdaterContext(qint32 threadCount)
 {
@@ -83,7 +85,8 @@ bool KisUpdaterContext::isJobAllowed(KisBaseRectsWalkerSP walker)
  * one atomic method like `bool push()`, because this implementation
  * of KisUpdaterContext will not work in case of multiple
  * producers. But currently we have only one producer (one thread
- * in a time), that is guaranteed by the mutex in KisSimpleUpdateQueue.
+ * in a time), that is guaranteed by the lock()/unlock() pair in
+ * KisAbstractUpdateQueue::processQueue.
  */
 void KisUpdaterContext::addJob(KisBaseRectsWalkerSP walker)
 {

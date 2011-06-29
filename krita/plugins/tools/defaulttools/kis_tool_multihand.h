@@ -59,7 +59,7 @@ public:
 
     KisToolMultihand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText);
     virtual ~KisToolMultihand();
-
+    virtual int flags() const;
     virtual void setDirty(const QRegion& region);
 
 protected:

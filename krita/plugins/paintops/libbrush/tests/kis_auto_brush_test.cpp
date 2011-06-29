@@ -60,15 +60,6 @@ void KisAutoBrushTest::testMaskGeneration()
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
 
-    a->mask(fdev, 1.0, 1.0, 0.0, info);
-
-    result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_2.png");
-    image = fdev->convertToQImage();
-    if (!TestUtil::compareQImages(errpoint, image, result)) {
-        image.save("kis_autobrush_test_2.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
-    }
-
     // Check creating a mask dab with a single color
     fdev = new KisFixedPaintDevice(cs);
     a->mask(fdev, KoColor(Qt::black, cs), 1.0, 1.0, 0.0, info);
@@ -93,17 +84,6 @@ void KisAutoBrushTest::testMaskGeneration()
     image = fdev->convertToQImage();
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_autobrush_test_4.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
-    }
-
-    // check creating a mask dab with a default color
-    fdev = new KisFixedPaintDevice(cs);
-    a->mask(fdev, 1.0, 1.0, 0.0, info);
-
-    result = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "result_autobrush_3.png");
-    image = fdev->convertToQImage();
-    if (!TestUtil::compareQImages(errpoint, image, result)) {
-        image.save("kis_autobrush_test_5.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
 
@@ -143,39 +123,39 @@ void KisAutoBrushTest::testCopyMasking()
     int w = 64;
     int h = 64;
 
-    int x = 0; 
+    int x = 0;
     int y = 0;
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    
+
     KoColor black(Qt::black, cs);
     KoColor red(Qt::red, cs);
-    
-    
+
+
     KisPaintDeviceSP tempDev = new KisPaintDevice(cs);
     tempDev->fill(0, 0, w+1, h+1, red.data()); // see the TODO
 #ifdef SAVE_OUTPUT_IMAGES
     tempDev->convertToQImage(0).save("tempDev.png");
-#endif    
-    
+#endif
+
     KisCircleMaskGenerator * mask = new KisCircleMaskGenerator(w,1.0,0.5,0.5,2);
     KisAutoBrush brush(mask,0,0);
-    
+
     KisFixedPaintDeviceSP maskDab = new KisFixedPaintDevice(cs);
     brush.mask(maskDab,black,1,1,0,KisPaintInformation()); // grows to w+1, h+1
-    maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());    
+    maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
 
-#ifdef SAVE_OUTPUT_IMAGES    
+#ifdef SAVE_OUTPUT_IMAGES
     maskDab->convertToQImage(0,0,0,64,64).save("maskDab.png");
-#endif        
-    
+#endif
+
     QRect rc = tempDev->exactBounds();
     QRect maskRc = maskDab->bounds();
-    
+
     //TODO: if rc != maskRc, bitBltWithFixedSelection works wrong
     //qDebug() << rc;
     //qDebug() << maskRc;
-    
-    
+
+
     KisFixedPaintDeviceSP dev2fixed = new KisFixedPaintDevice(cs);
     dev2fixed->setRect(rc);
     dev2fixed->initialize();
@@ -187,8 +167,8 @@ void KisAutoBrushTest::testCopyMasking()
     painter.setCompositeOp(COMPOSITE_COPY);
     painter.bltFixedWithFixedSelection(x, y, dev2fixed, maskDab, 0,0,0,0,rc.width(), rc.height() );
     //painter.bitBltWithFixedSelection(x, y, tempDev, maskDab, 0, 0, 0, 0, rc.width(), rc.height());
-    
-#ifdef SAVE_OUTPUT_IMAGES    
+
+#ifdef SAVE_OUTPUT_IMAGES
     dev->convertToQImage(0).save("final.png");
 #endif
 }

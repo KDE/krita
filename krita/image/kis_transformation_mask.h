@@ -19,7 +19,7 @@
 #define _KIS_TRANSFORMATION_MASK_
 
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <klocale.h>
 
@@ -142,7 +142,7 @@ private:
 
 };
 
-class KRITAIMAGE_EXPORT KisTransformationSettingsCommand : public QUndoCommand
+class KRITAIMAGE_EXPORT KisTransformationSettingsCommand : public KUndo2Command
 {
 
 public:

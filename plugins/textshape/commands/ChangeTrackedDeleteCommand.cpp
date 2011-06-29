@@ -42,7 +42,7 @@
 #include <KoOdf.h>
 #include <rdf/KoDocumentRdfBase.h>
 #include <QTextDocumentFragment>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <KDebug>
 //#include <iostream>
@@ -64,7 +64,7 @@ static KoListStyle::ListIdType ListId(const QTextListFormat &format)
 }
 
 using namespace std;
-ChangeTrackedDeleteCommand::ChangeTrackedDeleteCommand(DeleteMode mode, TextTool *tool, QUndoCommand *parent) :
+ChangeTrackedDeleteCommand::ChangeTrackedDeleteCommand(DeleteMode mode, TextTool *tool, KUndo2Command *parent) :
     TextCommandBase (parent),
     m_tool(tool),
     m_first(true),
@@ -73,7 +73,7 @@ ChangeTrackedDeleteCommand::ChangeTrackedDeleteCommand(DeleteMode mode, TextTool
     m_mode(mode),
     m_removedElements()
 {
-      setText(i18n("Delete"));
+      setText(i18nc("(qtundo-format)", "Delete"));
 }
 
 void ChangeTrackedDeleteCommand::undo()
@@ -323,7 +323,7 @@ void ChangeTrackedDeleteCommand::deleteSelection(QTextCursor &selection)
             selection.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor,1);
 
         foreach (KoShape *shape, shapesInSelection) {
-            QUndoCommand *shapeDeleteCommand = m_tool->canvas()->shapeController()->removeShape(shape, this);
+            KUndo2Command *shapeDeleteCommand = m_tool->canvas()->shapeController()->removeShape(shape, this);
             shapeDeleteCommand->redo();
             m_canMerge = false;
         }
@@ -335,13 +335,13 @@ int ChangeTrackedDeleteCommand::id() const
     return 98765;
 }
 
-bool ChangeTrackedDeleteCommand::mergeWith( const QUndoCommand *command)
+bool ChangeTrackedDeleteCommand::mergeWith( const KUndo2Command *command)
 {
-    class UndoTextCommand : public QUndoCommand
+    class UndoTextCommand : public KUndo2Command
     {
     public:
-        UndoTextCommand(QTextDocument *document, QUndoCommand *parent = 0)
-        : QUndoCommand(i18n("Text"), parent),
+        UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
+        : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
         m_document(document)
         {}
 

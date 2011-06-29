@@ -29,13 +29,13 @@
  * Not closed
  * - break from the back of the subpath
  */
-KoPathBreakAtPointCommand::KoPathBreakAtPointCommand(const QList<KoPathPointData> & pointDataList, QUndoCommand *parent)
-        : QUndoCommand(parent)
+KoPathBreakAtPointCommand::KoPathBreakAtPointCommand(const QList<KoPathPointData> & pointDataList, KUndo2Command *parent)
+        : KUndo2Command(parent)
         , m_deletePoints(true)
 {
     QList<KoPathPointData> sortedPointDataList(pointDataList);
     qSort(sortedPointDataList);
-    setText(i18n("Break subpath at points"));
+    setText(i18nc("(qtundo-format)", "Break subpath at points"));
 
     QList<KoPathPointData>::const_iterator it(sortedPointDataList.constBegin());
     for (; it != sortedPointDataList.constEnd(); ++it) {
@@ -81,7 +81,7 @@ KoPathBreakAtPointCommand::~KoPathBreakAtPointCommand()
 
 void KoPathBreakAtPointCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     KoPathPointData last(0, KoPathPointIndex(-1, -1));
 
     // offset, needed when path was opened
@@ -124,7 +124,7 @@ void KoPathBreakAtPointCommand::redo()
 
 void KoPathBreakAtPointCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     KoPathShape * lastPathShape = 0;
 
     for (int i = 0; i < m_pointDataList.size(); ++i) {

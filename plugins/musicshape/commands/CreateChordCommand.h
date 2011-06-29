@@ -19,7 +19,7 @@
 #ifndef CREATECHORDCOMMAND_H
 #define CREATECHORDCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include "../core/Global.h"
 
@@ -30,7 +30,7 @@ namespace MusicCore {
 }
 class MusicShape;
 
-class CreateChordCommand : public QUndoCommand {
+class CreateChordCommand : public KUndo2Command {
 public:
     CreateChordCommand(MusicShape* shape, MusicCore::VoiceBar* voiceBar, MusicCore::Staff* staff, MusicCore::Duration duration, int before, int pitch, int accidentals);
     CreateChordCommand(MusicShape* shape, MusicCore::VoiceBar* voiceBar, MusicCore::Staff* staff, MusicCore::Duration duration, int before);

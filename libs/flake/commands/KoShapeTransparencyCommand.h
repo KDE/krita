@@ -22,7 +22,7 @@
 
 #include "flake_export.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 #include <QBrush>
 
@@ -30,7 +30,7 @@ class KoShape;
 class KoShapeBackground;
 
 /// The undo / redo command for setting the shape transparency
-class FLAKE_EXPORT KoShapeTransparencyCommand : public QUndoCommand
+class FLAKE_EXPORT KoShapeTransparencyCommand : public KUndo2Command
 {
 public:
     /**
@@ -39,7 +39,7 @@ public:
      * @param transparency the new shape transparency
      * @param parent the parent command used for macro commands
      */
-    KoShapeTransparencyCommand(const QList<KoShape*> &shapes, qreal transparency, QUndoCommand *parent = 0);
+    KoShapeTransparencyCommand(const QList<KoShape*> &shapes, qreal transparency, KUndo2Command *parent = 0);
 
     /**
      * Command to set a new shape transparency.
@@ -47,7 +47,7 @@ public:
      * @param transparency the new shape transparency
      * @param parent the parent command used for macro commands
      */
-    KoShapeTransparencyCommand(KoShape *shape, qreal transparency, QUndoCommand *parent = 0);
+    KoShapeTransparencyCommand(KoShape *shape, qreal transparency, KUndo2Command *parent = 0);
 
     /**
      * Command to set new shape transparencies.
@@ -55,7 +55,7 @@ public:
      * @param fills the new transparencies, one for each shape
      * @param parent the parent command used for macro commands
      */
-    KoShapeTransparencyCommand(const QList<KoShape*> &shapes, const QList<qreal> &transparencies, QUndoCommand *parent = 0);
+    KoShapeTransparencyCommand(const QList<KoShape*> &shapes, const QList<qreal> &transparencies, KUndo2Command *parent = 0);
 
     virtual ~KoShapeTransparencyCommand();
     /// redo the command

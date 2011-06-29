@@ -49,11 +49,11 @@ public:
 };
 
 
-KoPathSeparateCommand::KoPathSeparateCommand(KoShapeControllerBase *controller, const QList<KoPathShape*> &paths, QUndoCommand *parent)
-        : QUndoCommand(parent),
+KoPathSeparateCommand::KoPathSeparateCommand(KoShapeControllerBase *controller, const QList<KoPathShape*> &paths, KUndo2Command *parent)
+        : KUndo2Command(parent),
         d(new Private(controller, paths))
 {
-    setText(i18n("Separate paths"));
+    setText(i18nc("(qtundo-format)", "Separate paths"));
 }
 
 KoPathSeparateCommand::~KoPathSeparateCommand()
@@ -63,7 +63,7 @@ KoPathSeparateCommand::~KoPathSeparateCommand()
 
 void KoPathSeparateCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     if (d->separatedPaths.isEmpty()) {
         foreach(KoPathShape* p, d->paths) {
             QList<KoPathShape*> separatedPaths;
@@ -86,7 +86,7 @@ void KoPathSeparateCommand::redo()
 
 void KoPathSeparateCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     if (d->controller) {
         foreach(KoPathShape *p, d->separatedPaths)
             d->controller->removeShape(p);

@@ -48,7 +48,7 @@ bool KoShapeConfigWidgetBase::showOnShapeSelect()
     return true;
 }
 
-QUndoCommand * KoShapeConfigWidgetBase::createCommand()
+KUndo2Command * KoShapeConfigWidgetBase::createCommand()
 {
     return 0;
 }

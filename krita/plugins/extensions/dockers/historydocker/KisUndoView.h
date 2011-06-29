@@ -66,8 +66,8 @@
 #ifndef QT_NO_UNDOVIEW
 
 class KisUndoViewPrivate;
-class QUndoStack;
-class QUndoGroup;
+class KUndo2QStack;
+class KUndo2Group;
 class QIcon;
 
 class KisUndoView : public QListView
@@ -78,15 +78,15 @@ class KisUndoView : public QListView
 
 public:
     explicit KisUndoView(QWidget *parent = 0);
-    explicit KisUndoView(QUndoStack *stack, QWidget *parent = 0);
+    explicit KisUndoView(KUndo2QStack *stack, QWidget *parent = 0);
 #ifndef QT_NO_UNDOGROUP
-    explicit KisUndoView(QUndoGroup *group, QWidget *parent = 0);
+    explicit KisUndoView(KUndo2Group *group, QWidget *parent = 0);
 #endif
     ~KisUndoView();
 
-    QUndoStack *stack() const;
+    KUndo2QStack *stack() const;
 #ifndef QT_NO_UNDOGROUP
-    QUndoGroup *group() const;
+    KUndo2Group *group() const;
 #endif
 
     void setEmptyLabel(const QString &label);
@@ -99,9 +99,9 @@ public:
     void setCanvas(KisCanvas2* canvas);
 
 public Q_SLOTS:
-    void setStack(QUndoStack *stack);
+    void setStack(KUndo2QStack *stack);
 #ifndef QT_NO_UNDOGROUP
-    void setGroup(QUndoGroup *group);
+    void setGroup(KUndo2Group *group);
 #endif
 
 private:

@@ -25,7 +25,7 @@
 #include "kis_undo_adapter.h"
 
 KisImageNodeToTopCommand::KisImageNodeToTopCommand(KisImageWSP image, KisNodeSP node)
-        : KisImageCommand(i18n("Lower"), image), m_node(node)
+        : KisImageCommand(i18nc("(qtundo-format)", "Lower"), image), m_node(node)
 {
     m_prevParent = m_node->parent();
     m_prevAbove = m_node->prevSibling();

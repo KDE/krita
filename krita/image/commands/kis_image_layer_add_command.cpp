@@ -24,7 +24,7 @@
 
 
 KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, KisNodeSP aboveThis)
-        : KisImageCommand(i18n("Add Layer"), image), m_index(-1)
+        : KisImageCommand(i18nc("(qtundo-format)", "Add Layer"), image), m_index(-1)
 {
     m_layer = layer;
     m_parent = parent;
@@ -32,7 +32,7 @@ KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image, KisNodeSP la
 }
 
 KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, quint32 index)
-        : KisImageCommand(i18n("Add Layer"), image), m_index(index)
+        : KisImageCommand(i18nc("(qtundo-format)", "Add Layer"), image), m_index(index)
 {
     m_layer = layer;
     m_parent = parent;

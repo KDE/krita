@@ -125,11 +125,6 @@ public:
     qint32 maxTilesInMem() const;
     void setMaxTilesInMem(qint32 tiles);
 
-    /// Number of tiles that will be swapped at once. The higher, the more swapped, but more
-    /// chance that it will become slow
-    qint32 swappiness() const;
-    void setSwappiness(qint32 swappiness);
-
     quint32 getGridMainStyle();
     void setGridMainStyle(quint32 v);
 
@@ -178,45 +173,6 @@ public:
     bool antialiasCurves();
     void setAntialiasCurves(bool v);
 
-    int numProjectionThreads();
-    void setNumProjectThreads(int num);
-
-    int projectionChunkSize();
-    void setProjectionChunkSize(int num);
-
-    bool aggregateDirtyRegionsInPainter();
-    void setAggregateDirtyRegionsInPainter(bool aggregate);
-
-    bool useBoundingRectInProjection();
-    void setUseBoundingRectInProjection(bool use);
-
-    bool useRegionOfInterestInProjection();
-    void setUseRegionOfInterestInProjection(bool use);
-
-    // Use nearest-neighbour interpolation on KisImage
-    bool useNearestNeighbour();
-    void setUseNearestNeighbour(bool useNearestNeigbour);
-
-    bool useSampling();
-    void setSampling(bool sampling);
-
-    bool threadColorSpaceConversion();
-    void setThreadColorSpaceConversion(bool threadColorSpaceConversion);
-
-    bool cacheKisImageAsQImage();
-    void setCacheKisImageAsQImage(bool cacheKisImageAsQImage);
-
-    bool drawMaskVisualisationOnUnscaledCanvasCache();
-    void setDrawMaskVisualisationOnUnscaledCanvasCache(bool drawMaskVisualisationOnUnscaledCanvasCache);
-
-    bool fastZoom() {
-        return false;
-    }
-
-    // If there's no XRender use QPixmaps instead of QImage for the QPainterCanvas
-    bool noXRender();
-    void setNoXRender(bool noXRender);
-
     bool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
 
@@ -228,11 +184,6 @@ public:
 
     bool backupFile();
     void setBackupFile(bool backupFile);
-
-    // in megapixels -- above 5, we will no longer use the
-    // memory-guzzling qimage canvas cache
-    quint32 maxCachedImageSize();
-    void setMaxCachedImageSize(quint32);
 
     bool showFilterGallery();
     void setShowFilterGallery(bool showFilterGallery);

@@ -28,14 +28,14 @@ KoPADisplayMasterBackgroundCommand::KoPADisplayMasterBackgroundCommand( KoPAPage
 , m_display( display )
 {
     if ( m_display ) {
-        setText( i18n( "Display master background" ) );
+        setText( i18nc( "(qtundo-format)", "Display master background" ) );
     }
     else {
         if ( m_page->pageType() == KoPageApp::Slide ) {
-            setText( i18n( "Display slide background" ) );
+            setText( i18nc( "(qtundo-format)", "Display slide background" ) );
         }
         else {
-            setText( i18n( "Display page background" ) );
+            setText( i18nc( "(qtundo-format)", "Display page background" ) );
         }
     }
 }

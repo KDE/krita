@@ -477,7 +477,7 @@ void TextTool::createActions()
 
 #ifndef NDEBUG
 #include "tests/MockShapes.h"
-#include <KUndoStack>
+#include <kundo2stack.h>
 
 TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     : KoToolBase(canvas),
@@ -512,7 +512,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     m_changeTracker = new KoChangeTracker();
     KoTextDocument(document).setChangeTracker(m_changeTracker);
 
-    KoTextDocument(document).setUndoStack(new KUndoStack());
+    KoTextDocument(document).setUndoStack(new KUndo2Stack());
 
 #if 0
     KoTextDocumentLayout *layout = new KoTextDocumentLayout(document);
@@ -1231,6 +1231,8 @@ void TextTool::updateActions()
     if (textEditor == 0)
         return;
     m_allowActions = false;
+
+    //Update the characterStyle related GUI elements
     QTextCharFormat cf = textEditor->charFormat();
     m_actionFormatBold->setChecked(cf.fontWeight() > QFont::Normal);
     m_actionFormatItalic->setChecked(cf.fontItalic());
@@ -1264,6 +1266,7 @@ void TextTool::updateActions()
     m_growHeightAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
     m_growHeightAction->setChecked(resizemethod == KoTextShapeData::AutoGrowHeight || resizemethod == KoTextShapeData::AutoGrowWidthAndHeight);
 
+    //update paragraphStyle GUI element
     QTextBlockFormat bf = textEditor->blockFormat();
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
         bool revert = (textEditor->block().layout()->textOption().textDirection() == Qt::LeftToRight) != QApplication::isLeftToRight();
@@ -1282,6 +1285,7 @@ void TextTool::updateActions()
 
     m_actionFormatDecreaseIndent->setEnabled(textEditor->blockFormat().leftMargin() > 0.);
 
+    //change tracking
     if (m_changeTracker && m_changeTracker->displayChanges())
         m_actionShowChanges->setChecked(true);
     if (m_changeTracker && m_changeTracker->recordChanges())
@@ -1504,6 +1508,8 @@ QList<QWidget *> TextTool::createOptionWidgets()
 
     // Connect to/with simple styles widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), ssw, SLOT(setCurrentFormat(QTextBlockFormat)));
+    connect(this, SIGNAL(charFormatChanged(QTextCharFormat)), ssw, SLOT(setCurrentFormat(QTextCharFormat)));
     connect(ssw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
     connect(ssw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
     connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
@@ -1535,11 +1541,11 @@ void TextTool::addUndoCommand()
 {
     return;
 /*    if (! m_allowAddUndoCommand) return;
-    class UndoTextCommand : public QUndoCommand
+    class UndoTextCommand : public KUndo2Command
     {
     public:
-        UndoTextCommand(QTextDocument *document, TextTool *tool, QUndoCommand *parent = 0)
-                : QUndoCommand(i18n("Text"), parent),
+        UndoTextCommand(QTextDocument *document, TextTool *tool, KUndo2Command *parent = 0)
+                : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
                 m_document(document),
                 m_tool(tool) {
         }
@@ -1585,7 +1591,7 @@ void TextTool::addUndoCommand()
         canvas()->addCommand(new UndoTextCommand(m_textShapeData->document(), this));
 */}
 
-void TextTool::addCommand(QUndoCommand *command)
+void TextTool::addCommand(KUndo2Command *command)
 {
 /*    m_currentCommand = command;
     TextCommandBase *cmd = dynamic_cast<TextCommandBase*>(command);
@@ -1600,7 +1606,7 @@ void TextTool::addCommand(QUndoCommand *command)
     m_textEditor.data()->addCommand(command);
 }
 
-void TextTool::startEditing(QUndoCommand* command)
+void TextTool::startEditing(KUndo2Command* command)
 {
     m_currentCommand = command;
     m_currentCommandHasChildren = true;
@@ -1899,16 +1905,16 @@ void TextTool::startMacro(const QString &title)
 
     if (m_currentCommand) return;
 
-    class MacroCommand : public QUndoCommand
+    class MacroCommand : public KUndo2Command
     {
     public:
-        MacroCommand(const QString &title) : QUndoCommand(title), m_first(true) {}
+        MacroCommand(const QString &title) : KUndo2Command(title), m_first(true) {}
         virtual void redo() {
             if (! m_first)
-                QUndoCommand::redo();
+                KUndo2Command::redo();
             m_first = false;
         }
-        virtual bool mergeWith(const QUndoCommand *) {
+        virtual bool mergeWith(const KUndo2Command *) {
             return false;
         }
         bool m_first;

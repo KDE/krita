@@ -58,9 +58,9 @@ void KoPathControlPointMoveStrategy::finishInteraction(Qt::KeyboardModifiers mod
     Q_UNUSED(modifiers);
 }
 
-QUndoCommand* KoPathControlPointMoveStrategy::createCommand()
+KUndo2Command* KoPathControlPointMoveStrategy::createCommand()
 {
-    QUndoCommand *cmd = 0;
+    KUndo2Command *cmd = 0;
     if (!m_move.isNull()) {
         cmd = new KoPathControlPointMoveCommand(m_pointData, m_move, m_pointType);
         cmd->undo();

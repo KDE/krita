@@ -25,7 +25,7 @@
 #include "kis_paint_layer.h"
 #include <KoColorSpaceRegistry.h>
 #include "kis_paint_device.h"
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include "kis_types.h"
 
 void KisSelectedTransactionTest::testCreation()
@@ -34,7 +34,7 @@ void KisSelectedTransactionTest::testCreation()
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     KisNodeSP node = new KisPaintLayer(image, "bla", 0);
-    QUndoCommand * cmd = new QUndoCommand();
+    KUndo2Command * cmd = new KUndo2Command();
     KisSelectedTransaction test("bla", node, cmd);
 
 }

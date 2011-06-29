@@ -198,6 +198,9 @@ public:
     /// parse common %Calligra and Odf values, like "10cm", "5mm" to pt
     static qreal parseValue(const QString &value, qreal defaultVal = 0.0);
 
+    /// parse an angle to its value in degrees
+    static qreal parseAngle(const QString &value, qreal defaultVal = 0.0);
+    
     QString toString() {
         return KoUnit::unitName(*this);
     }

@@ -76,7 +76,7 @@ void PluginShape::saveOdf(KoShapeSavingContext &context) const
         writer.addAttribute("draw:name", itr.key());
         writer.addAttribute("draw:value", itr.value());
         writer.endElement(); // draw:param
-        itr++;
+        ++itr;
     }
     writer.endElement(); // draw:plugin
     saveOdfCommonChildElements(context);

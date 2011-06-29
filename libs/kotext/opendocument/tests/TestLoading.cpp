@@ -1175,6 +1175,8 @@ void TestLoading::testLoading()
     Q_UNUSED(showDocument);
 //    showDocument(actualDocument);
 //    showDocument(expectedDocument);
+
+    /* don't fill the harddisc
     if (!documentsEqual) {
         testName.replace('/', '_');
         QFile file1("failed-loading-" + testName + "-actual");
@@ -1190,6 +1192,8 @@ void TestLoading::testLoading()
             file2.close();
         }
     }
+    */
+
     if (testcase.indexOf("Tables/") > 0)
         QEXPECT_FAIL("", "Tables not supported yet", Abort);
     delete actualDocument;
@@ -1221,6 +1225,7 @@ void TestLoading::testSaving()
 
     bool documentsEqual = compareDocuments(savedDocument, expectedDocument);
 
+    /* don't fill the harddisc
     if (!documentsEqual) {
         testName.replace('/', '_');
         QFile file1("failed-saving-" + testName + "-actual");
@@ -1236,6 +1241,8 @@ void TestLoading::testSaving()
             file2.close();
         }
     }
+    */
+
     delete actualDocument;
     delete expectedDocument;
     delete savedDocument;

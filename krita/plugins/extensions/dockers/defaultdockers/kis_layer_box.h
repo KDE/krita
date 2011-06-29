@@ -90,9 +90,12 @@ private slots:
     void slotRmClicked();
     void slotRaiseClicked();
     void slotLowerClicked();
+    void slotLeftClicked();
+    void slotRightClicked();
     void slotPropertiesClicked();
     void slotDuplicateClicked();
 
+    void slotMergeLayer();
     void slotNewPaintLayer();
     void slotNewGroupLayer();
     void slotNewAdjustmentLayer();

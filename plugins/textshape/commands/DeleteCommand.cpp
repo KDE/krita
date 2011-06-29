@@ -22,7 +22,7 @@
 #include "DeleteCommand.h"
 #include <klocale.h>
 #include <TextTool.h>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <KoTextEditor.h>
 #include <KoTextDocument.h>
 #include <KoTextDocumentLayout.h>
@@ -33,19 +33,19 @@
 
 #include <QWeakPointer>
 
-DeleteCommand::DeleteCommand(DeleteMode mode, TextTool *tool, QUndoCommand *parent) :
+DeleteCommand::DeleteCommand(DeleteMode mode, TextTool *tool, KUndo2Command *parent) :
     TextCommandBase (parent),
     m_tool(tool),
     m_first(true),
     m_undone(false),
     m_mode(mode)
 {
-    setText(i18n("Delete"));
+    setText(i18nc("(qtundo-format)", "Delete"));
 }
 
 void DeleteCommand::undo()
 {
-    foreach (QUndoCommand *command, m_shapeDeleteCommands)
+    foreach (KUndo2Command *command, m_shapeDeleteCommands)
         command->undo();
 
     TextCommandBase::undo();
@@ -58,7 +58,7 @@ void DeleteCommand::redo()
 {
     m_undone = false;
     if (!m_first) {
-        foreach (QUndoCommand *command, m_shapeDeleteCommands)
+        foreach (KUndo2Command *command, m_shapeDeleteCommands)
             command->redo();
 
         TextCommandBase::redo();
@@ -197,7 +197,7 @@ void DeleteCommand::deleteTextAnchor(KoInlineObject *object)
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
         if (anchor) {
                 KoShape *shape = anchor->shape();
-                QUndoCommand *shapeDeleteCommand = m_tool->canvas()->shapeController()->removeShape(shape);
+                KUndo2Command *shapeDeleteCommand = m_tool->canvas()->shapeController()->removeShape(shape);
                 shapeDeleteCommand->redo();
                 m_shapeDeleteCommands.push_back(shapeDeleteCommand);
         }
@@ -210,13 +210,13 @@ int DeleteCommand::id() const
     return 56789;
 }
 
-bool DeleteCommand::mergeWith(const QUndoCommand *command)
+bool DeleteCommand::mergeWith(const KUndo2Command *command)
 {
-    class UndoTextCommand : public QUndoCommand
+    class UndoTextCommand : public KUndo2Command
     {
     public:
-        UndoTextCommand(QTextDocument *document, QUndoCommand *parent = 0)
-        : QUndoCommand(i18n("Text"), parent),
+        UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
+        : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
         m_document(document)
         {}
 
@@ -259,7 +259,7 @@ bool DeleteCommand::mergeWith(const QUndoCommand *command)
     return true;
 }
 
-bool DeleteCommand::checkMerge( const QUndoCommand *command )
+bool DeleteCommand::checkMerge( const KUndo2Command *command )
 {
     DeleteCommand *other = const_cast<DeleteCommand *>(static_cast<const DeleteCommand *>(command));
 
@@ -326,7 +326,7 @@ DeleteCommand::~DeleteCommand()
             delete object;
         }
 
-        foreach (QUndoCommand *command, m_shapeDeleteCommands)
+        foreach (KUndo2Command *command, m_shapeDeleteCommands)
             delete command;
     }
 }

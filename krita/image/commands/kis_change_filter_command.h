@@ -19,7 +19,7 @@
 #define KIS_CHANGE_FILTER_COMMAND_H
 
 #include <krita_export.h>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QRect>
 #include "kis_types.h"
 #include <klocale.h>
@@ -28,7 +28,7 @@
 class KisNode;
 
 template <typename T>
-class KisChangeFilterCmd : public QUndoCommand
+class KisChangeFilterCmd : public KUndo2Command
 {
 
 public:
@@ -37,7 +37,7 @@ public:
                        KisFilterConfiguration* config,
                        const QString& before,
                        const QString& after)
-            : QUndoCommand(i18n("Change Filter")) {
+            : KUndo2Command(i18nc("(qtundo-format)", "Change Filter")) {
         m_node = node;
         m_config = config;
         m_before = before;

@@ -60,8 +60,9 @@ KisImagePatch::KisImagePatch()
 
 KisImagePatch::KisImagePatch(QRect imageRect, qint32 borderWidth,
                              qreal scaleX, qreal scaleY)
-    : m_scaleX(scaleX),
-      m_scaleY(scaleY)
+    : m_scaleX(scaleX)
+    , m_scaleY(scaleY)
+    , m_isScaled(false)
 {
     // First we get unscaled rects
     m_interestRect = QRectF(borderWidth, borderWidth,
@@ -81,6 +82,31 @@ KisImagePatch::KisImagePatch(QRect imageRect, qint32 borderWidth,
 void KisImagePatch::setImage(QImage image)
 {
     m_image = image;
+    m_isScaled = false;
+}
+
+void KisImagePatch::preScale(const QRectF &dstRect)
+{
+    if (m_isScaled) return;
+
+    qreal scaleX = dstRect.width() / m_interestRect.width();
+    qreal scaleY = dstRect.height() / m_interestRect.height();
+
+    QSize newImageSize = QSize(ceil(m_image.width() * scaleX),
+                                   ceil(m_image.height() * scaleY));
+    // Calculating new _aligned_ scale
+    scaleX = qreal(newImageSize.width()) / m_image.width();
+    scaleY = qreal(newImageSize.height()) / m_image.height();
+
+    m_scaleX *= scaleX;
+    m_scaleY *= scaleY;
+
+    scaleRect(m_interestRect, scaleX, scaleY);
+
+    m_image = m_image.scaled(newImageSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+    m_isScaled = true;
+
 }
 
 QRect KisImagePatch::patchRect()
@@ -103,6 +129,7 @@ void KisImagePatch::drawMe(QPainter &gc,
     gc.drawImage(dstRect, m_image, m_interestRect);
     gc.restore();
 
+#if 0
     /**
      * Just for debugging purposes
      */
@@ -114,4 +141,5 @@ void KisImagePatch::drawMe(QPainter &gc,
     dbgRender << ppVar(m_interestRect);
     dbgRender << ppVar(dstRect);
     dbgRender << "## EODM #############################";
+#endif
 }

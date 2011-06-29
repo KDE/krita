@@ -21,21 +21,21 @@
 #include "TreeChangeConnectionCommand.h"
 #include <klocale.h>
 
-TreeChangeConnectionCommand::TreeChangeConnectionCommand(TreeShape *tree, KoConnectionShape::Type type, QUndoCommand *parent)
-    : QUndoCommand(parent)
+TreeChangeConnectionCommand::TreeChangeConnectionCommand(TreeShape *tree, KoConnectionShape::Type type, KUndo2Command *parent)
+    : KUndo2Command(parent)
     , m_tree(tree)
     , m_newType(type)
 {
     Q_ASSERT(m_tree);
 
-    setText(i18n("Change tree"));
+    setText(i18nc("(qtundo-format)", "Change tree"));
 
     m_oldType = m_tree->connectionType();
 }
 
 void TreeChangeConnectionCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     m_tree->update();
 
@@ -47,7 +47,7 @@ void TreeChangeConnectionCommand::redo()
 
 void TreeChangeConnectionCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     m_tree->update();
 

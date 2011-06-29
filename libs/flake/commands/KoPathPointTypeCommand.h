@@ -21,7 +21,7 @@
 #ifndef KOPATHPOINTTYPECOMMAND_H
 #define KOPATHPOINTTYPECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 #include "KoPathBaseCommand.h"
 //#include "KoPathShape.h"
@@ -47,7 +47,7 @@ public:
      * @param pointType the new point type to set
      * @param parent the parent command used for macro commands
      */
-    KoPathPointTypeCommand(const QList<KoPathPointData> &pointDataList, PointType pointType, QUndoCommand *parent = 0);
+    KoPathPointTypeCommand(const QList<KoPathPointData> &pointDataList, PointType pointType, KUndo2Command *parent = 0);
     ~KoPathPointTypeCommand();
 
     /// redo the command

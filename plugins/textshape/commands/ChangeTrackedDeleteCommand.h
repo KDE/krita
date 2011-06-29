@@ -20,7 +20,7 @@
 #ifndef CHANGETRACKEDDELETECOMMAND_H
 #define CHANGETRACKEDDELETECOMMAND_H
 
-#include <QUndoStack>
+#include <kundo2qstack.h>
 #include "TextCommandBase.h"
 #include <KoListStyle.h>
 #include <QList>
@@ -42,14 +42,14 @@ public:
         NextChar
     };
 
-    ChangeTrackedDeleteCommand(DeleteMode mode, TextTool *tool, QUndoCommand* parent = 0);
+    ChangeTrackedDeleteCommand(DeleteMode mode, TextTool *tool, KUndo2Command* parent = 0);
     ~ChangeTrackedDeleteCommand();
 
     virtual void undo();
     virtual void redo();
 
     virtual int id() const;
-    virtual bool mergeWith ( const QUndoCommand *command);
+    virtual bool mergeWith ( const KUndo2Command *command);
 
 private:
     TextTool *m_tool;

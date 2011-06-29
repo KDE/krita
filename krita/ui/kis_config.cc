@@ -41,7 +41,6 @@ const qint32 IMAGE_DEFAULT_WIDTH = 1600;
 const qint32 IMAGE_DEFAULT_HEIGHT = 1200;
 const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_TOOLICON;
 const qint32 DEFAULT_MAX_TILES_MEM = 5000;
-const qint32 DEFAULT_SWAPPINESS = 100;
 }
 
 KisConfig::KisConfig()
@@ -301,16 +300,6 @@ void KisConfig::setMaxTilesInMem(qint32 tiles)
     m_cfg.writeEntry("maxtilesinmem", tiles);
 }
 
-qint32 KisConfig::swappiness() const
-{
-    return m_cfg.readEntry("swappiness", DEFAULT_SWAPPINESS);
-}
-
-void KisConfig::setSwappiness(qint32 swappiness)
-{
-    m_cfg.writeEntry("swappiness", swappiness);
-}
-
 quint32 KisConfig::getGridMainStyle()
 {
     quint32 v = m_cfg.readEntry("gridmainstyle", 0);
@@ -488,117 +477,6 @@ void KisConfig::setAntialiasCurves(bool v)
     m_cfg.writeEntry("antialiascurves", v);
 }
 
-int KisConfig::numProjectionThreads()
-{
-    return m_cfg.readEntry("maxprojectionthreads", QThread::idealThreadCount());
-}
-
-void KisConfig::setNumProjectThreads(int num)
-{
-    m_cfg.writeEntry("maxprojectionthreads", num);
-}
-
-int KisConfig::projectionChunkSize()
-{
-    return m_cfg.readEntry("updaterectsize", 1024);
-}
-
-void KisConfig::setProjectionChunkSize(int num)
-{
-    m_cfg.writeEntry("updaterectsize", num);
-}
-
-bool KisConfig::aggregateDirtyRegionsInPainter()
-{
-    return m_cfg.readEntry("aggregate_dirty_regions", true);
-}
-
-void KisConfig::setAggregateDirtyRegionsInPainter(bool aggregate)
-{
-    m_cfg.writeEntry("aggregate_dirty_regions", aggregate);
-}
-
-bool KisConfig::useBoundingRectInProjection()
-{
-    return m_cfg.readEntry("use_bounding_rect_of_dirty_region", true);
-}
-
-void KisConfig::setUseBoundingRectInProjection(bool use)
-{
-    m_cfg.writeEntry("use_bounding_rect_of_dirty_region", use);
-}
-
-bool KisConfig::useRegionOfInterestInProjection()
-{
-    return m_cfg.readEntry("use_region_of_interest", false);
-}
-
-void KisConfig::setUseRegionOfInterestInProjection(bool use)
-{
-    m_cfg.writeEntry("use_region_of_interest", use);
-}
-
-bool KisConfig::useNearestNeighbour()
-{
-    return m_cfg.readEntry("fast_zoom", false);
-}
-
-void KisConfig::setUseNearestNeighbour(bool useNearestNeigbour)
-{
-    m_cfg.writeEntry("fast_zoom", useNearestNeigbour);
-}
-
-bool KisConfig::useSampling()
-{
-    return m_cfg.readEntry("sampled_scaling", false);
-}
-
-void KisConfig::setSampling(bool sampling)
-{
-    m_cfg.writeEntry("sampled_scaling", sampling);
-}
-
-bool KisConfig::threadColorSpaceConversion()
-{
-    return m_cfg.readEntry("thread_colorspace_conversion", false);
-}
-
-void KisConfig::setThreadColorSpaceConversion(bool threadColorSpaceConversion)
-{
-    m_cfg.writeEntry("thread_colorspace_conversion", threadColorSpaceConversion);
-}
-
-bool KisConfig::cacheKisImageAsQImage()
-{
-    return m_cfg.readEntry("cache_kis_image_as_qimage", true);
-}
-
-void KisConfig::setCacheKisImageAsQImage(bool cacheKisImageAsQImage)
-{
-    m_cfg.writeEntry("cache_kis_image_as_qimage", cacheKisImageAsQImage);
-}
-
-
-bool KisConfig::drawMaskVisualisationOnUnscaledCanvasCache()
-{
-    return m_cfg.readEntry("drawMaskVisualisationOnUnscaledCanvasCache", false);
-}
-
-void KisConfig::setDrawMaskVisualisationOnUnscaledCanvasCache(bool drawMaskVisualisationOnUnscaledCanvasCache)
-{
-    m_cfg.writeEntry("drawMaskVisualisationOnUnscaledCanvasCache", drawMaskVisualisationOnUnscaledCanvasCache);
-}
-
-bool KisConfig::noXRender()
-{
-    return m_cfg.readEntry("NoXRender",  false);
-}
-
-void KisConfig::setNoXRender(bool noXRender)
-{
-    m_cfg.writeEntry("NoXRender",  noXRender);
-}
-
 bool KisConfig::showRootLayer()
 {
     return m_cfg.readEntry("ShowRootLayer", false);
@@ -635,17 +513,6 @@ bool KisConfig::backupFile()
 void KisConfig::setBackupFile(bool backupFile)
 {
      m_cfg.writeEntry("CreateBackupFile", backupFile);
-}
-
-quint32 KisConfig::maxCachedImageSize()
-{
-    // Let's say, 5 megapixels
-    return m_cfg.readEntry("maxCachedImageSize", 5);
-}
-
-void KisConfig::setMaxCachedImageSize(quint32 size)
-{
-    m_cfg.writeEntry("maxCachedImageSize", size);
 }
 
 bool KisConfig::showFilterGallery()

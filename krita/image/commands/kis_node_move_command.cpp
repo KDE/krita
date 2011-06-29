@@ -27,7 +27,7 @@
 
 
 KisNodeMoveCommand::KisNodeMoveCommand(KisNodeSP node, const QPoint& oldpos, const QPoint& newpos, KisImageSP image) :
-    KisNodeCommand(i18n("Move"), node), m_image(image)
+    KisNodeCommand(i18nc("(qtundo-format)", "Move"), node), m_image(image)
 {
     m_oldPos = oldpos;
     m_newPos = newpos;

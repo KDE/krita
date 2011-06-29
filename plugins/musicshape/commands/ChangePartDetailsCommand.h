@@ -19,7 +19,7 @@
 #ifndef CHANGEPARTDETAILSCOMMAND_H
 #define CHANGEPARTDETAILSCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 #include <QPair>
 
@@ -31,7 +31,7 @@ namespace MusicCore {
 }
 class MusicShape;
 
-class ChangePartDetailsCommand : public QUndoCommand
+class ChangePartDetailsCommand : public KUndo2Command
 {
 public:
     ChangePartDetailsCommand(MusicShape* shape, MusicCore::Part* part, const QString& name, const QString& abbreviation, int staffCount);

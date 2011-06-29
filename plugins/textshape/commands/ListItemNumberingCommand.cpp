@@ -25,14 +25,14 @@
 #include <KoTextBlockData.h>
 #include <QTextCursor>
 
-ListItemNumberingCommand::ListItemNumberingCommand(const QTextBlock &block, bool numbered, QUndoCommand *parent)
+ListItemNumberingCommand::ListItemNumberingCommand(const QTextBlock &block, bool numbered, KUndo2Command *parent)
     : TextCommandBase(parent),
       m_block(block),
       m_numbered(numbered),
       m_first(true)
 {
     m_wasNumbered = !block.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem);
-    setText(i18n("Change List Numbering"));
+    setText(i18nc("(qtundo-format)", "Change List Numbering"));
 }
 
 ListItemNumberingCommand::~ListItemNumberingCommand()
@@ -79,7 +79,7 @@ void ListItemNumberingCommand::undo()
         userData->setCounterWidth(-1.0);
 }
 
-bool ListItemNumberingCommand::mergeWith(const QUndoCommand *other)
+bool ListItemNumberingCommand::mergeWith(const KUndo2Command *other)
 {
     Q_UNUSED(other);
     return false;

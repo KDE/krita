@@ -116,7 +116,6 @@ void RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
             movedDown += 10;
         }
     }
-
     line.setLineWidth(m_textWidth);
     line.setPosition(QPointF(lineRectPart.x(), lineRectPart.y()));
     checkEndOfLine(lineRectPart, maxNaturalTextWidth);

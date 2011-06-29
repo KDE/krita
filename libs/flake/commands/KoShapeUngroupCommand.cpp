@@ -25,7 +25,7 @@
 #include <klocale.h>
 
 KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
-        const QList<KoShape*> &topLevelShapes, QUndoCommand *parent)
+        const QList<KoShape*> &topLevelShapes, KUndo2Command *parent)
     : KoShapeGroupCommand(*(new KoShapeGroupCommandPrivate(container, shapes)), parent)
 {
     QList<KoShape*> orderdShapes(shapes);
@@ -54,7 +54,7 @@ KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const 
         d->oldZIndex.append(zIndex++);
     }
 
-    setText(i18n("Ungroup shapes"));
+    setText(i18nc("(qtundo-format)", "Ungroup shapes"));
 }
 
 void KoShapeUngroupCommand::redo()

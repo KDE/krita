@@ -28,8 +28,8 @@ TreeShapeMoveCommand::TreeShapeMoveCommand(const QList<KoShape*> &shapes,
                                            TreeShape *newParent,
                                            KoShape *nextShape,
                                            QPointF diff,
-                                           QUndoCommand *parent)
-        : QUndoCommand(parent),
+                                           KUndo2Command *parent)
+        : KUndo2Command(parent),
         m_newParent(newParent),
         m_nextShape(nextShape),
         m_diff(diff)
@@ -42,7 +42,7 @@ TreeShapeMoveCommand::TreeShapeMoveCommand(const QList<KoShape*> &shapes,
         m_parents.append(par);
         m_connectors.append(par ? par->connector(shape) : 0);
     }
-    setText(i18n("Attach tree"));
+    setText(i18nc("(qtundo-format)", "Attach tree"));
 }
 
 TreeShapeMoveCommand::~TreeShapeMoveCommand()
@@ -51,7 +51,7 @@ TreeShapeMoveCommand::~TreeShapeMoveCommand()
 
 void TreeShapeMoveCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     Q_ASSERT(!m_trees.isEmpty());
     for (int i = 0; i < m_trees.count(); i++) {
         TreeShape *tree = m_trees[i];
@@ -69,7 +69,7 @@ void TreeShapeMoveCommand::redo()
 
 void TreeShapeMoveCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     for (int i = 0; i < m_trees.count(); i++) {
         TreeShape *tree = m_trees[i];
         tree->setNextShape(m_oldNextShapes[i]);

@@ -172,12 +172,12 @@ void ShapeShearStrategy::paint( QPainter &painter, const KoViewConverter &conver
     decorator.paint(painter, converter);
 }
 
-QUndoCommand* ShapeShearStrategy::createCommand() {
+KUndo2Command* ShapeShearStrategy::createCommand() {
     QList<QTransform> newTransforms;
     foreach( KoShape* shape, m_selectedShapes )
         newTransforms << shape->transformation();
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, newTransforms );
-    cmd->setText( i18n("Shear") );
+    cmd->setText( i18nc("(qtundo-format)", "Shear") );
     KoSelection * sel = tool()->canvas()->shapeManager()->selection();
     new SelectionTransformCommand(sel, m_initialSelectionMatrix, sel->transformation(), cmd);
     return cmd;

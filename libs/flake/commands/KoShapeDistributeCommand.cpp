@@ -38,8 +38,8 @@ public:
     KoShapeMoveCommand *command;
 };
 
-KoShapeDistributeCommand::KoShapeDistributeCommand(const QList<KoShape*> &shapes, Distribute distribute, const QRectF &boundingRect, QUndoCommand *parent)
-        : QUndoCommand(parent),
+KoShapeDistributeCommand::KoShapeDistributeCommand(const QList<KoShape*> &shapes, Distribute distribute, const QRectF &boundingRect, KUndo2Command *parent)
+        : KUndo2Command(parent),
         d(new Private())
 {
     d->distribute = distribute;
@@ -125,7 +125,7 @@ KoShapeDistributeCommand::KoShapeDistributeCommand(const QList<KoShape*> &shapes
     }
     d->command = new KoShapeMoveCommand(sortedPos.values(), previousPositions, newPositions);
 
-    setText(i18n("Distribute shapes"));
+    setText(i18nc("(qtundo-format)", "Distribute shapes"));
 }
 
 KoShapeDistributeCommand::~KoShapeDistributeCommand()
@@ -135,13 +135,13 @@ KoShapeDistributeCommand::~KoShapeDistributeCommand()
 
 void KoShapeDistributeCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     d->command->redo();
 }
 
 void KoShapeDistributeCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     d->command->undo();
 }
 

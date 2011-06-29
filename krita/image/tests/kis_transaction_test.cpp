@@ -22,7 +22,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
-#include <QUndoStack>
+#include <kundo2qstack.h>
 
 #include "kis_types.h"
 #include "kis_transform_worker.h"
@@ -36,7 +36,7 @@ public:
         : KisUndoAdapter(0)
     {}
 
-    void addCommand(QUndoCommand *command) {
+    void addCommand(KUndo2Command *command) {
         m_stack.push(command);
     }
 
@@ -49,7 +49,7 @@ public:
     }
 
 private:
-    QUndoStack m_stack;
+    KUndo2QStack m_stack;
 };
 
 void KisTransactionTest::testUndo()

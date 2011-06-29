@@ -27,7 +27,7 @@ class KoShapeGroupCommandPrivate
 {
 public:
     KoShapeGroupCommandPrivate(KoShapeContainer *container, const QList<KoShape *> &shapes, const QList<bool> &clipped = QList<bool>(), const QList<bool> &inheritTransform = QList<bool>());
-    void init(QUndoCommand *q);
+    void init(KUndo2Command *q);
     QRectF containerBoundingRect();
 
     QList<KoShape*> shapes; ///<list of shapes to be grouped

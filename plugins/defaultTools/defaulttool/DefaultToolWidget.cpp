@@ -224,7 +224,7 @@ void DefaultToolWidget::sizeHasChanged()
         }
         m_tool->repaintDecorations();
         selection->applyAbsoluteTransformation( resizeMatrix );
-        QUndoCommand * cmd = new QUndoCommand(i18n("Resize"));
+        KUndo2Command * cmd = new KUndo2Command(i18nc("(qtundo-format)", "Resize"));
         new KoShapeSizeCommand( selectedShapes, oldSizes, newSizes, cmd );
         new KoShapeTransformCommand( selectedShapes, oldState, newState, cmd );
         m_tool->canvas()->addCommand( cmd );

@@ -19,14 +19,14 @@
 #ifndef REMOVECHORDCOMMAND_H
 #define REMOVECHORDCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 namespace MusicCore {
     class Chord;
 }
 class MusicShape;
 
-class RemoveChordCommand : public QUndoCommand {
+class RemoveChordCommand : public KUndo2Command {
 public:
     RemoveChordCommand(MusicShape* shape, MusicCore::Chord* chord);
     virtual void redo();

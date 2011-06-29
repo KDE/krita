@@ -25,12 +25,12 @@
 #include "KoPADocument.h"
 #include "KoPAMasterPage.h"
 
-KoPAChangePageLayoutCommand::KoPAChangePageLayoutCommand( KoPADocument *document, KoPAMasterPage *masterPage, const KoPageLayout &newPageLayout, bool applyToDocument, QUndoCommand *parent )
-: QUndoCommand( parent)
+KoPAChangePageLayoutCommand::KoPAChangePageLayoutCommand( KoPADocument *document, KoPAMasterPage *masterPage, const KoPageLayout &newPageLayout, bool applyToDocument, KUndo2Command *parent )
+: KUndo2Command( parent)
 , m_document( document )
 , m_newPageLayout( newPageLayout )
 {
-    setText( i18n( "Set Page Layout" ) );
+    setText( i18nc( "(qtundo-format)", "Set Page Layout" ) );
 
     if ( !applyToDocument ) {
         m_oldLayouts.insert( masterPage, masterPage->pageLayout() );
@@ -54,7 +54,7 @@ void KoPAChangePageLayoutCommand::redo()
     while ( it != m_oldLayouts.constEnd() ) {
         it.key()->setPageLayout( m_newPageLayout );
         m_document->updateViews( it.key() );
-        it++;
+        ++it;
     }
 }
 
@@ -64,7 +64,7 @@ void KoPAChangePageLayoutCommand::undo()
     while ( it != m_oldLayouts.constEnd() ) {
         it.key()->setPageLayout( it.value() );
         m_document->updateViews( it.key() );
-        it++;
+        ++it;
     }
 }
 

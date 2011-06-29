@@ -344,7 +344,7 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
             endShape = d->existingEndPoint.path;
     }
 
-    QUndoCommand *cmd = canvas()->shapeController()->addShape(pathShape);
+    KUndo2Command *cmd = canvas()->shapeController()->addShape(pathShape);
     if (cmd) {
         KoSelection *selection = canvas()->shapeManager()->selection();
         selection->deselectAll();

@@ -61,7 +61,7 @@ public:
     KoTextEditor *q;
     QTextCursor caret;
     QTextDocument *document;
-    QUndoCommand *headCommand;
+    KUndo2Command *headCommand;
     QString commandTitle;
     KoText::Direction direction;
     bool isBidiDocument;
@@ -149,7 +149,7 @@ public:
                 if (fragment.position() > end)
                     break;
                 if (fragment.position() + fragment.length() <= start) {
-                    iter++;
+                    ++iter;
                     continue;
                 }
 
@@ -175,7 +175,7 @@ public:
                 if (registerChange)
                     editor->registerTrackedChange(cursor,KoGenChange::FormatChange,title, format, prevFormat, false); //this will lead to every fragment having a different change untill the change merging in registerTrackedChange checks also for formatChange or not?
 
-                iter++;
+                ++iter;
             }
             block = block.next();
         }

@@ -73,6 +73,11 @@ KisToolLine::~KisToolLine()
 {
 }
 
+int KisToolLine::flags() const
+{
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
+}
+
 QWidget* KisToolLine::createOptionWidget()
 {
     QWidget* widget = KisToolPaint::createOptionWidget();
@@ -242,7 +247,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
             KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
             path->setBorder(border);
 
-            QUndoCommand * cmd = canvas()->shapeController()->addShape(path);
+            KUndo2Command * cmd = canvas()->shapeController()->addShape(path);
             canvas()->addCommand(cmd);
         }
     }

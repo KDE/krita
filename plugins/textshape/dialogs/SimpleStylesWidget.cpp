@@ -21,6 +21,7 @@
 #include "StylesWidget.h"
 
 #include <KoStyleManager.h>
+#include <KoStyleThumbnailer.h>
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
 
@@ -32,6 +33,8 @@
 #include <QComboBox> // just to query style
 #include <QHBoxLayout>
 #include <QDesktopWidget>
+#include <QPixmap>
+#include <QLabel>
 
 class SpecialButton : public QFrame
 {
@@ -39,12 +42,14 @@ public:
     SpecialButton(QWidget *parent);
 
     void setStylesWidget(StylesWidget *stylesWidget);
+    void setStylePreview(const QPixmap &pm);
 
     void showPopup();
 protected:
     virtual void mousePressEvent(QMouseEvent *event);
 
     StylesWidget *m_stylesWidget;
+    QLabel *m_preview;
 };
 
 SpecialButton::SpecialButton(QWidget *parent)
@@ -53,15 +58,23 @@ SpecialButton::SpecialButton(QWidget *parent)
     setFrameShape(QFrame::StyledPanel);
     setFrameShadow(QFrame::Sunken);
 
-    QWidget *preview = new QWidget(this);
-    preview->setAutoFillBackground(true);
-    preview->setBackgroundRole(QPalette::Base);
-    preview->setMinimumWidth(50);
-    preview->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    setMinimumSize(50,32);
+    setMaximumHeight(25);
+
+    m_preview = new QLabel();
+    m_preview->setAutoFillBackground(true);
+    m_preview->setBackgroundRole(QPalette::Base);
+    m_preview->setMinimumWidth(50);
+    m_preview->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     QHBoxLayout *l = new QHBoxLayout(this);
-    l->addWidget(preview);
+    l->addWidget(m_preview);
     l->setMargin(0);
     setLayout(l);
+}
+
+void SpecialButton::setStylePreview(const QPixmap &pm)
+{
+    m_preview->setPixmap(pm);
 }
 
 void SpecialButton::showPopup()
@@ -98,7 +111,13 @@ void SpecialButton::mousePressEvent(QMouseEvent *)
 
 SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
         : QWidget(parent)
-        , m_blockSignals(false)
+        ,m_styleManager(0)
+        ,m_blockSignals(false)
+        ,m_popupForBlock(0)
+        ,m_popupForChar(0)
+        ,m_thumbnailer(0)
+        ,m_blockFrame(0)
+        ,m_charFrame(0)
 {
     setObjectName("simplestyleswidget");
     m_popupForBlock = new StylesWidget(this, true, Qt::Popup);
@@ -108,15 +127,15 @@ SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
     m_popupForChar->setFrameShape(QFrame::StyledPanel);
     m_popupForChar->setFrameShadow(QFrame::Raised);
 
-    SpecialButton *blockFrame = new SpecialButton(this);
-    blockFrame->setStylesWidget(m_popupForBlock);
+    m_blockFrame = new SpecialButton(this);
+    m_blockFrame->setStylesWidget(m_popupForBlock);
 
-    SpecialButton *charFrame = new SpecialButton(this);
-    charFrame->setStylesWidget(m_popupForChar);
+    m_charFrame = new SpecialButton(this);
+    m_charFrame->setStylesWidget(m_popupForChar);
 
     QHBoxLayout *l = new QHBoxLayout(this);
-    l->addWidget(blockFrame);
-    l->addWidget(charFrame);
+    l->addWidget(m_blockFrame);
+    l->addWidget(m_charFrame);
     l->setMargin(0);
     setLayout(l);
 
@@ -126,10 +145,13 @@ SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
     connect(m_popupForChar, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(characterStyleSelected(KoCharacterStyle *)));
     connect(m_popupForChar, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(doneWithFocus()));
     connect(m_popupForChar, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(hidePopups()));
+
+    m_thumbnailer = new KoStyleThumbnailer();
 }
 
 SimpleStylesWidget::~SimpleStylesWidget()
 {
+    delete m_thumbnailer;
 }
 
 void SimpleStylesWidget::setStyleManager(KoStyleManager *sm)
@@ -150,24 +172,15 @@ void SimpleStylesWidget::setCurrentFormat(const QTextBlockFormat &format)
 {
     if (format == m_currentBlockFormat)
         return;
+
     m_currentBlockFormat = format;
+
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
-    bool unchanged = true;
-    KoParagraphStyle *usedStyle = 0;
-    if (m_styleManager)
-        usedStyle = m_styleManager->paragraphStyle(id);
-    if (usedStyle) {
-        foreach(int property, m_currentBlockFormat.properties().keys()) {
-            if (property == QTextFormat::ObjectIndex)
-                continue;
-            if (property == KoParagraphStyle::ListStyleId)
-                continue;
-            if (m_currentBlockFormat.property(property) != usedStyle->value(property)) {
-                unchanged = false;
-                break;
-            }
-        }
+    KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
+    if (style) {
+        m_blockFrame->setStylePreview(m_thumbnailer->thumbnail(style, m_blockFrame->size()));
     }
+    m_popupForBlock->setCurrentFormat(format);
 }
 
 void SimpleStylesWidget::setCurrentFormat(const QTextCharFormat &format)
@@ -177,25 +190,11 @@ void SimpleStylesWidget::setCurrentFormat(const QTextCharFormat &format)
     m_currentCharFormat = format;
 
     int id = m_currentCharFormat.intProperty(KoCharacterStyle::StyleId);
-    bool unchanged = true;
-    KoCharacterStyle *usedStyle = 0;
-    if (m_styleManager)
-        usedStyle = m_styleManager->characterStyle(id);
-    if (usedStyle) {
-        QTextCharFormat defaultFormat;
-        usedStyle->unapplyStyle(defaultFormat); // sets the default properties.
-        foreach(int property, m_currentCharFormat.properties().keys()) {
-            if (property == QTextFormat::ObjectIndex)
-                continue;
-            if (m_currentCharFormat.property(property) != usedStyle->value(property)
-                    && m_currentCharFormat.property(property) != defaultFormat.property(property)) {
-                unchanged = false;
-                break;
-            }
-        }
+    KoCharacterStyle *style(m_styleManager->characterStyle(id));
+    if (style) {
+        m_charFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->characterStyle(id), m_charFrame->size()));
     }
+    m_popupForChar->setCurrentFormat(format);
 }
-
-
 
 #include <SimpleStylesWidget.moc>

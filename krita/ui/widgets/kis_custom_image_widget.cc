@@ -28,7 +28,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <kcolorcombo.h>
 #include <kis_debug.h>

@@ -20,15 +20,15 @@
 #ifndef CHANGEIMAGECOMMAND_H
 #define CHANGEIMAGECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QByteArray>
 
 #include "VectorShape.h"
 
-class ChangeVectorDataCommand : public QUndoCommand
+class ChangeVectorDataCommand : public KUndo2Command
 {
 public:
-    ChangeVectorDataCommand(VectorShape *shape, QByteArray &newImageData, QUndoCommand *parent = 0);
+    ChangeVectorDataCommand(VectorShape *shape, QByteArray &newImageData, KUndo2Command *parent = 0);
     virtual ~ChangeVectorDataCommand();
 
     /// redo the command

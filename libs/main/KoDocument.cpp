@@ -51,7 +51,7 @@
 #include <KoXmlWriter.h>
 
 #include <kdialog.h>
-#include <KUndoStack>
+#include <kundo2stack.h>
 #include <kfileitem.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
@@ -203,7 +203,7 @@ public:
     QString templateType;
     QList<KoVersionInfo> versionInfo;
 
-    KUndoStack *undoStack;
+    KUndo2Stack *undoStack;
 
     KoGridData gridData;
     KoGuidesData guidesData;
@@ -379,7 +379,7 @@ KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     d->pageLayout.leftMargin = 0;
     d->pageLayout.rightMargin = 0;
 
-    d->undoStack = new KUndoStack(this);
+    d->undoStack = new KUndo2Stack(this);
 
     KConfigGroup cfgGrp(componentData().config(), "Undo");
     d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));
@@ -493,7 +493,6 @@ bool KoDocument::saveFile()
 
     // The output format is set by koMainWindow, and by openFile
     QByteArray outputMimeType = d->outputMimeType;
-    //Q_ASSERT( !outputMimeType.isEmpty() ); // happens when using the DCOP method saveAs
     if (outputMimeType.isEmpty())
         outputMimeType = d->outputMimeType = nativeFormatMimeType();
 
@@ -2369,17 +2368,6 @@ int KoDocument::shellCount() const
     return d->shells.count();
 }
 
-// DCOPObject *KoDocument::dcopObject()
-// {
-//     if ( !d->dcopObject )
-//         d->dcopObject = new KoDocumentIface( this );
-//     return d->dcopObject;
-// }
-
-// QByteArray KoDocument::dcopObjectId() const
-// {
-//     return const_cast<KoDocument *>(this)->dcopObject()->objId();
-// }
 
 void KoDocument::setErrorMessage(const QString& errMsg)
 {
@@ -2725,12 +2713,12 @@ QList<KoVersionInfo> & KoDocument::versionList()
     return d->versionInfo;
 }
 
-KUndoStack *KoDocument::undoStack()
+KUndo2Stack *KoDocument::undoStack()
 {
     return d->undoStack;
 }
 
-void KoDocument::addCommand(QUndoCommand *command)
+void KoDocument::addCommand(KUndo2Command *command)
 {
     if (command)
         d->undoStack->push(command);

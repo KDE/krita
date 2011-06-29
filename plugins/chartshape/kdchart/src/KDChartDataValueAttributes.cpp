@@ -257,7 +257,7 @@ int DataValueAttributes::decimalDigits() const
     return d->decimalDigits;
 }
 
-void DataValueAttributes::setPrefix( const QString prefixString )
+void DataValueAttributes::setPrefix( const QString &prefixString )
 {
     d->prefix = prefixString;
 }
@@ -267,7 +267,7 @@ QString DataValueAttributes::prefix() const
     return d->prefix;
 }
 
-void DataValueAttributes::setSuffix( const QString suffixString )
+void DataValueAttributes::setSuffix( const QString &suffixString )
 {
     d->suffix  = suffixString;
 }
@@ -277,7 +277,7 @@ QString DataValueAttributes::suffix() const
     return d->suffix;
 }
 
-void DataValueAttributes::setDataLabel( const QString label )
+void DataValueAttributes::setDataLabel( const QString &label )
 {
     d->dataLabel =  label;
 }

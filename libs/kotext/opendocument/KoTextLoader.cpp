@@ -3,7 +3,7 @@
  * Copyright (C) 2007,2009,2011 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007,2011 Pierre Ducroquet <pinaraf@pinaraf.info>
- * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2011 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
@@ -57,6 +57,7 @@
 #include "KoTextInlineRdf.h"
 #include "KoTableOfContentsGeneratorInfo.h"
 #include "KoSection.h"
+#include "KoTextSoftPageBreak.h"
 
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
@@ -1636,7 +1637,10 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
 #endif
             cursor.insertText(QChar(0x2028));
         } else if (isTextNS && localName == "soft-page-break") { // text:soft-page-break
-            cursor.insertText(QChar(0x000c));
+            KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
+            if (textObjectManager) {
+                textObjectManager->insertInlineObject(cursor, new KoTextSoftPageBreak());
+            }
         } else if (isTextNS && localName == "change-start") { // text:change-start
             d->openChangeRegion(ts);
         } else if (isTextNS && localName == "change-end") {

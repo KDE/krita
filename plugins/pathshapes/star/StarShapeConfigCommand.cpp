@@ -21,8 +21,8 @@
 #include "StarShape.h"
 #include <klocale.h>
 
-StarShapeConfigCommand::StarShapeConfigCommand(StarShape * star, uint cornerCount, qreal innerRadius, qreal outerRadius, bool convex, QUndoCommand *parent)
-    : QUndoCommand(parent)
+StarShapeConfigCommand::StarShapeConfigCommand(StarShape * star, uint cornerCount, qreal innerRadius, qreal outerRadius, bool convex, KUndo2Command *parent)
+    : KUndo2Command(parent)
     , m_star(star)
     , m_newCornerCount(cornerCount)
     , m_newInnerRadius(innerRadius)
@@ -31,7 +31,7 @@ StarShapeConfigCommand::StarShapeConfigCommand(StarShape * star, uint cornerCoun
 {
     Q_ASSERT(m_star);
 
-    setText(i18n("Change star"));
+    setText(i18nc("(qtundo-format)", "Change star"));
 
     m_oldCornerCount = m_star->cornerCount();
     m_oldInnerRadius = m_star->baseRadius();
@@ -41,7 +41,7 @@ StarShapeConfigCommand::StarShapeConfigCommand(StarShape * star, uint cornerCoun
 
 void StarShapeConfigCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     m_star->update();
 
@@ -63,7 +63,7 @@ void StarShapeConfigCommand::redo()
 
 void StarShapeConfigCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     m_star->update();
 

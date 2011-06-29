@@ -33,8 +33,8 @@ public:
     QList<qreal> newShearYs;
 };
 
-KoShapeShearCommand::KoShapeShearCommand(const QList<KoShape*> &shapes, const QList<qreal> &previousShearXs, const QList<qreal> &previousShearYs, const QList<qreal> &newShearXs, const QList<qreal> &newShearYs, QUndoCommand *parent)
-    : QUndoCommand(parent),
+KoShapeShearCommand::KoShapeShearCommand(const QList<KoShape*> &shapes, const QList<qreal> &previousShearXs, const QList<qreal> &previousShearYs, const QList<qreal> &newShearXs, const QList<qreal> &newShearYs, KUndo2Command *parent)
+    : KUndo2Command(parent),
     d(new KoShapeShearCommandPrivate())
 {
     d->shapes = shapes;
@@ -48,7 +48,7 @@ KoShapeShearCommand::KoShapeShearCommand(const QList<KoShape*> &shapes, const QL
     Q_ASSERT(d->shapes.count() == d->newShearXs.count());
     Q_ASSERT(d->shapes.count() == d->newShearYs.count());
 
-    setText(i18n("Shear shapes"));
+    setText(i18nc("(qtundo-format)", "Shear shapes"));
 }
 
 KoShapeShearCommand::~KoShapeShearCommand()
@@ -58,7 +58,7 @@ KoShapeShearCommand::~KoShapeShearCommand()
 
 void KoShapeShearCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     for (int i = 0; i < d->shapes.count(); i++) {
         d->shapes.at(i)->update();
         d->shapes.at(i)->shear(d->newShearXs.at(i), d->newShearYs.at(i));
@@ -68,7 +68,7 @@ void KoShapeShearCommand::redo()
 
 void KoShapeShearCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     for (int i = 0; i < d->shapes.count(); i++) {
         d->shapes.at(i)->update();
         d->shapes.at(i)->shear(d->previousShearXs.at(i), d->previousShearYs.at(i));

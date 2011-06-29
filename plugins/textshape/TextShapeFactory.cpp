@@ -35,7 +35,7 @@
 #include <KoInlineNote.h>
 
 #include <klocale.h>
-#include <KUndoStack>
+#include <kundo2stack.h>
 #include <QTextCursor>
 
 TextShapeFactory::TextShapeFactory()
@@ -124,8 +124,8 @@ void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
     manager->setResource(KoText::InlineTextObjectManager, variant);
 
     if (!manager->hasResource(KoDocumentResource::UndoStack)) {
-        kWarning(32500) << "No KUndoStack found in the document resource manager, creating a new one";
-        manager->setUndoStack(new KUndoStack(manager));
+        kWarning(32500) << "No KUndo2Stack found in the document resource manager, creating a new one";
+        manager->setUndoStack(new KUndo2Stack(manager));
     }
     if (!manager->hasResource(KoText::StyleManager)) {
         variant.setValue(new KoStyleManager(manager));

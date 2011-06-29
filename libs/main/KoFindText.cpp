@@ -245,26 +245,28 @@ void KoFindText::Private::documentDestroyed(QObject *document)
 
 void KoFindText::Private::updateCurrentMatch(int position)
 {
-    if(currentMatch.first != 0) {
+    if (currentMatch.first != 0) {
         QVector<QAbstractTextDocumentLayout::Selection> sel = selections.value(currentMatch.first);
         Q_ASSERT(currentMatch.second < sel.count());
         sel[currentMatch.second].format = highlightFormat;
         selections.insert(currentMatch.first, sel);
     }
-    
-    int counter = 0;
-    QHash<QTextDocument*, QVector<QAbstractTextDocumentLayout::Selection> >::iterator itr;
-    for(itr = selections.begin(); itr != selections.end(); ++itr) {
-        if(counter + itr.value().size() > position) {
-            break;
+
+    const KoFindMatch match = q->currentMatch();
+    if (match.isValid() && match.location().canConvert<QTextCursor>() && match.container().canConvert<QTextDocument*>()) {
+        QTextCursor cursor = match.location().value<QTextCursor>();
+        QTextDocument *document = match.container().value<QTextDocument*>();
+        QVector<QAbstractTextDocumentLayout::Selection> sel = selections.value(document);
+        for (int i = 0; i < sel.size(); ++i) {
+            if (sel[i].cursor == cursor) {
+                sel[i].format = currentMatchFormat;
+                selections.insert(document, sel);
+                currentMatch.first = document;
+                currentMatch.second = i;
+                break;
+            }
         }
-        counter += itr.value().size();
     }
-    currentMatch.first = itr.key();
-    currentMatch.second = position - counter;
-    QVector<QAbstractTextDocumentLayout::Selection> sel = selections.value(itr.key());
-    sel[currentMatch.second].format = currentMatchFormat;
-    selections.insert(itr.key(), sel);
 }
 
 void KoFindText::Private::initializeFormats()

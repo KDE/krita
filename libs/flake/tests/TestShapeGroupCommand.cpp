@@ -23,7 +23,7 @@
 #include <KoShapeGroupCommand.h>
 #include <KoLineBorder.h>
 #include <KoShapeShadow.h>
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 TestShapeGroupCommand::TestShapeGroupCommand()
         : toplevelGroup(0), sublevelGroup(0), strokeGroup(0)

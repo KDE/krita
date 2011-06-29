@@ -42,6 +42,7 @@ set(kotext_LIB_SRCS
     KoBookmark.cpp
     KoBookmarkManager.cpp
     KoInlineNote.cpp
+    KoTextSoftPageBreak.cpp
     FindDirection_p.cpp
     KoFindStrategy.cpp
     KoReplaceStrategy.cpp
@@ -151,6 +152,7 @@ install(
     KoTextRdfCore.h
     KoTextInlineRdf.h
     KoTextMeta.h
+    KoTextSoftPageBreak.cpp
     KoSection.h
 
     DESTINATION

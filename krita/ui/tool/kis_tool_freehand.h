@@ -52,7 +52,7 @@ public:
 
     KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText);
     virtual ~KisToolFreehand();
-
+    virtual int flags() const;
     virtual void setDirty(const QRegion& region);
 
 protected:

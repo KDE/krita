@@ -400,12 +400,6 @@ target_link_libraries(KisPaintopTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_
 
 ########### next target ###############
 
-set(kis_paintop_settings_test_SRCS kis_paintop_settings_test.cpp )
-kde4_add_unit_test(KisPaintopSettingsTest TESTNAME krita-image-KisPaintopSettingsTest ${kis_paintop_settings_test_SRCS})
-target_link_libraries(KisPaintopSettingsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_pattern_test_SRCS kis_pattern_test.cpp )
 kde4_add_unit_test(KisPatternTest TESTNAME krita-image-KisPatternTest ${kis_pattern_test_SRCS})
 target_link_libraries(KisPatternTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

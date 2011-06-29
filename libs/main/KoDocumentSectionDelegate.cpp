@@ -1,6 +1,7 @@
 /*
   Copyright (c) 2006 Gábor Lehel <illissius@gmail.com>
   Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -109,16 +110,55 @@ bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *m
             int xPos = mouseEvent->pos().x() - iconsRect_.left();
             if (xPos % (iconWidth + d->margin) < iconWidth) { //it's on an icon, not a margin
                 Model::PropertyList propertyList = index.data(Model::PropertiesRole).value<Model::PropertyList>();
-                int p = -1;
+                int clickedProperty = -1;
+                // Discover which of all properties was clicked
                 for (int i = 0; i < propertyList.count(); ++i) {
                     if (propertyList[i].isMutable) {
                         xPos -= iconWidth + d->margin;
                     }
-                    ++p;
+                    ++clickedProperty;
                     if (xPos < 0) break;
                 }
-                propertyList[p].state = !propertyList[p].state.toBool();
-                model->setData(index, QVariant::fromValue(propertyList), Model::PropertiesRole);
+                // Using Ctrl+click to enter stasis
+                if (mouseEvent->modifiers() == Qt::ControlModifier
+                    && propertyList[clickedProperty].canHaveStasis) {
+                    // STEP 0: Prepare to Enter or Leave control key stasis
+                    quint16 numberOfLeaves = model->rowCount(index.parent());
+                    QModelIndex eachItem;
+                    // STEP 1: Go.
+                    if (propertyList[clickedProperty].isInStasis == false) { // Enter
+                        /* Make every leaf of this node go State = False, saving the old property value to stateInStasis */
+                        for (quint16 i = 0; i < numberOfLeaves; ++i) { // Foreach leaf in the node (index.parent())
+                            eachItem = model->index(i, 0, index.parent());
+                            // The entire property list has to be altered because model->setData cannot set individual properties
+                            Model::PropertyList eachPropertyList = eachItem.data(Model::PropertiesRole).value<Model::PropertyList>();
+                            eachPropertyList[clickedProperty].stateInStasis = eachPropertyList[clickedProperty].state.toBool();
+                            eachPropertyList[clickedProperty].state = false;
+                            eachPropertyList[clickedProperty].isInStasis = true;
+                            model->setData(eachItem, QVariant::fromValue(eachPropertyList), Model::PropertiesRole);
+                        }
+                        /* Now set the current node's clickedProperty back to True, to save the user time
+                        (obviously, if the user is clicking one item with ctrl+click, he's interested in that
+                        item to have a True property value while the others are in stasis and set to False) */
+                        // First refresh propertyList, otherwise old data will be saved back causing bugs
+                        propertyList = index.data(Model::PropertiesRole).value<Model::PropertyList>();
+                        propertyList[clickedProperty].state = true;
+                        model->setData(index, QVariant::fromValue(propertyList), Model::PropertiesRole);
+                    } else { // Leave
+                        /* Make every leaf of this node go State = stateInStasis */
+                        for (quint16 i = 0; i < numberOfLeaves; ++i) {
+                            eachItem = model->index(i, 0, index.parent());
+                            // The entire property list has to be altered because model->setData cannot set individual properties
+                            Model::PropertyList eachPropertyList = eachItem.data(Model::PropertiesRole).value<Model::PropertyList>();
+                            eachPropertyList[clickedProperty].state = eachPropertyList[clickedProperty].stateInStasis;
+                            eachPropertyList[clickedProperty].isInStasis = false;
+                            model->setData(eachItem, QVariant::fromValue(eachPropertyList), Model::PropertiesRole);
+                        }
+                    }
+                } else {
+                    propertyList[clickedProperty].state = !propertyList[clickedProperty].state.toBool();
+                    model->setData(index, QVariant::fromValue(propertyList), Model::PropertiesRole);
+                }
             }
             return true;
         }

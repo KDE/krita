@@ -104,8 +104,8 @@ public:
 public:
     void paint(QPainter& gc, const KoViewConverter &converter);
 
-    void notifyCommandAdded(const QUndoCommand *);
-    void notifyCommandExecuted(const QUndoCommand *);
+    void notifyCommandAdded(const KUndo2Command *);
+    void notifyCommandExecuted(const KUndo2Command *);
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
@@ -293,11 +293,11 @@ private:
 
 private:
     enum function {ROTATE = 0, MOVE, RIGHTSCALE, TOPRIGHTSCALE, TOPSCALE, TOPLEFTSCALE,
-                   LEFTSCALE, BOTTOMLEFTSCALE, BOTTOMSCALE, BOTTOMRIGHTSCALE, 
+                   LEFTSCALE, BOTTOMLEFTSCALE, BOTTOMSCALE, BOTTOMRIGHTSCALE,
                    BOTTOMSHEAR, RIGHTSHEAR, TOPSHEAR, LEFTSHEAR,
                    MOVECENTER, PERSPECTIVE
                   };
-	
+
     function m_function; // current transformation function
 
     QPointF m_handleDir[9];
@@ -435,6 +435,7 @@ public:
         setToolTip(i18n("Transform a layer or a selection"));
         setToolType(TOOL_TYPE_TRANSFORM);
         setIcon("krita_tool_transform");
+        setShortcut(KShortcut( QKeySequence(Qt::CTRL + Qt::Key_T) ));
         setPriority(11);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }

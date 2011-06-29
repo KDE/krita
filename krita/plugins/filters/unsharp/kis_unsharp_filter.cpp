@@ -21,7 +21,7 @@
 #include "kis_unsharp_filter.h"
 #include <QBitArray>
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <kcombobox.h>
 #include <knuminput.h>

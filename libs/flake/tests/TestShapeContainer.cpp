@@ -22,7 +22,7 @@
 #include <MockShapes.h>
 
 #include <KoShape.h>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <KoShapeGroupCommand.h>
 #include <KoShapeUngroupCommand.h>
 #include <KoShapeTransformCommand.h>

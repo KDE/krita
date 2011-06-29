@@ -306,7 +306,7 @@ KisCurve::iterator KisToolBezier::handleUnderMouse(const QPoint& pos)
     KisCurve pivs = m_curve->pivots(), inHandle;
     KisCurve::iterator it;
     int hint;
-    for (it = pivs.begin(); it != pivs.end(); it++) {
+    for (it = pivs.begin(); it != pivs.end(); ++it) {
         qpos = m_subject->canvasController()->windowToView((*it).point()).toQPoint();
         hint = (*it).hint();
         if (hint != BEZIERENDHINT && !m_derivated->groupSelected(it))

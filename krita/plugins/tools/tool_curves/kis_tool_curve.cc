@@ -224,7 +224,7 @@ PointPair KisToolCurve::pointUnderMouse(const QPointF& pos)
     if (it != m_curve->end())
         return PointPair(it, true);
 
-    for (it = m_curve->begin(); it != m_curve->end(); it++) {
+    for (it = m_curve->begin(); it != m_curve->end(); ++it) {
         next = it.next();
         if (next == m_curve->end() || it == m_curve->end())
             return PointPair(m_curve->end(), false);
@@ -245,7 +245,7 @@ KisCurve::iterator KisToolCurve::handleUnderMouse(const QPointF& pos)
 {
     KisCurve pivs = m_curve->pivots(), inHandle;
     KisCurve::iterator it;
-    for (it = pivs.begin(); it != pivs.end(); it++) {
+    for (it = pivs.begin(); it != pivs.end(); ++it) {
         if (pivotRect(m_subject->canvasController()->windowToView((*it).point()).toPointF()).contains(pos.toPoint()))
             inHandle.pushPoint((*it));
     }
@@ -493,7 +493,7 @@ QVector<QPointF> KisToolCurve::convertCurve()
 {
     QVector<QPointF> points;
 
-    for (KisCurve::iterator i = m_curve->begin(); i != m_curve->end(); i++)
+    for (KisCurve::iterator i = m_curve->begin(); i != m_curve->end(); ++i)
         if ((*i).hint() != NOHINTS)
             points.append((*i).point());
 

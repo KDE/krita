@@ -109,13 +109,12 @@ void KisTestableUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
     // HINT: Not calling start() here
 }
 
-void KisUpdaterContext::addStrokeJob(KisDabProcessingStrategy *strategy,
-                                     KisDabProcessingStrategy::DabProcessingData *data)
+void KisUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
 {
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
 
-    m_jobs[jobIndex]->setStrokeJob(strategy, data);
+    m_jobs[jobIndex]->setStrokeJob(strokeJob);
     m_threadPool.start(m_jobs[jobIndex]);
 }
 

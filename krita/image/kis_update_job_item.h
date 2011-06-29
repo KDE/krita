@@ -22,7 +22,7 @@
 #include <QRunnable>
 #include <QReadWriteLock>
 
-#include "kis_dab_processing_strategy.h"
+#include "kis_stroke_job.h"
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
 
@@ -55,7 +55,9 @@ public:
         if(m_type == MERGE) {
             runMergeJob();
         } else {
-            runStrokeJob();
+            Q_ASSERT(m_type == STROKE);
+            m_strokeJob->run();
+            delete m_strokeJob;
         }
 
         setDone();
@@ -68,19 +70,12 @@ public:
 
     inline void runMergeJob() {
         Q_ASSERT(m_type == MERGE);
-//        qDebug() << "Executing merge job" << m_walker->changeRect()
-//                 << "on thread" << QThread::currentThreadId();
+        // qDebug() << "Executing merge job" << m_walker->changeRect()
+        //          << "on thread" << QThread::currentThreadId();
         m_merger.startMerge(*m_walker);
 
         QRect changeRect = m_walker->changeRect();
         emit sigContinueUpdate(changeRect);
-    }
-
-    inline void runStrokeJob() {
-        Q_ASSERT(m_type == STROKE);
-//        qDebug() << "Executing stroke job" << m_dabStrategy << m_dabData
-//                 << "on thread" << QThread::currentThreadId();
-        m_dabStrategy->processDab(m_dabData);
     }
 
     inline void setWalker(KisBaseRectsWalkerSP walker) {
@@ -90,17 +85,14 @@ public:
         m_walker = walker;
 
         m_isExclusive = false;
-        m_dabStrategy = 0;
-        m_dabData = 0;
+        m_strokeJob = 0;
     }
 
-    inline void setStrokeJob(KisDabProcessingStrategy *strategy,
-                             KisDabProcessingStrategy::DabProcessingData *data) {
+    inline void setStrokeJob(KisStrokeJob *strokeJob) {
         m_type = STROKE;
-        m_dabStrategy = strategy;
-        m_dabData = data;
+        m_strokeJob = strokeJob;
 
-        m_isExclusive = strategy->isExclusive();
+        m_isExclusive = m_strokeJob->isExclusive();
         m_walker = 0;
         m_accessRect = m_changeRect = QRect();
     }
@@ -148,11 +140,9 @@ private:
 
     /**
      * Stroke jobs part
+     * The job is owned by the context and deleted after completion
      */
-
-    KisDabProcessingStrategy *m_dabStrategy;
-    KisDabProcessingStrategy::DabProcessingData *m_dabData;
-
+    KisStrokeJob *m_strokeJob;
 
     /**
      * Merge jobs part

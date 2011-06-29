@@ -24,7 +24,7 @@
 #include <QReadWriteLock>
 #include <QThreadPool>
 
-#include "kis_dab_processing_strategy.h"
+#include "kis_stroke_job.h"
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
 
@@ -72,8 +72,7 @@ public:
      * the same as for addMergeJob()
      * \see addMergeJob()
      */
-    virtual void addStrokeJob(KisDabProcessingStrategy *strategy,
-                              KisDabProcessingStrategy::DabProcessingData *data);
+    virtual void addStrokeJob(KisStrokeJob *strokeJob);
 
     /**
      * Block execution of the caller until all the jobs are finished

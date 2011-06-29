@@ -19,11 +19,13 @@
 #include "kis_updater_context_test.h"
 #include <qtest_kde.h>
 
+#include <QAtomicInt>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_merge_walker.h"
 #include "kis_updater_context.h"
+
 
 void KisUpdaterContextTest::testJobInterference()
 {
@@ -55,6 +57,71 @@ void KisUpdaterContextTest::testJobInterference()
     context.unlock();
 }
 
+#define NUM_THREADS 10
+#define NUM_JOBS 6000
+#define EXCLUSIVE_NTH 3
+#define NUM_CHECKS 10
+#define CHECK_DELAY 3 // ms
+
+class ExclusivenessCheckerStrategy : public KisDabProcessingStrategy
+{
+public:
+    ExclusivenessCheckerStrategy(QAtomicInt &counter,
+                                 QAtomicInt &hadConcurrency,
+                                 bool exclusive)
+        : KisDabProcessingStrategy(exclusive),
+          m_counter(counter),
+          m_hadConcurrency(hadConcurrency)
+    {
+    }
+
+    void processDab(DabProcessingData *data) {
+        Q_UNUSED(data);
+
+        m_counter.ref();
+
+        for(int i = 0; i < NUM_CHECKS; i++) {
+            if(isExclusive()) {
+                Q_ASSERT(m_counter == 1);
+            }
+            else if (m_counter > 1) {
+                m_hadConcurrency.ref();
+            }
+            QTest::qSleep(CHECK_DELAY);
+        }
+
+        m_counter.deref();
+    }
+
+private:
+    QAtomicInt &m_counter;
+    QAtomicInt &m_hadConcurrency;
+};
+
+void KisUpdaterContextTest::stressTestExclusiveJobs()
+{
+    KisUpdaterContext context(NUM_THREADS);
+    QAtomicInt counter;
+    QAtomicInt hadConcurrency;
+
+    for(int i = 0; i < NUM_JOBS; i++) {
+        if(context.hasSpareThread()) {
+            context.addStrokeJob(
+                new ExclusivenessCheckerStrategy(counter, hadConcurrency,
+                                                 i % EXCLUSIVE_NTH == 0),
+                0);
+        }
+        else {
+            QTest::qSleep(CHECK_DELAY);
+        }
+    }
+
+    context.waitForDone();
+
+    QVERIFY(!counter);
+    qDebug() << "Concurrency observed:" << hadConcurrency
+             << "/" << NUM_CHECKS * NUM_JOBS;
+}
 
 QTEST_KDEMAIN(KisUpdaterContextTest, NoGUI)
 #include "kis_updater_context_test.moc"

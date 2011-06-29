@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,19 +16,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_UPDATER_CONTEXT_TEST_H
-#define KIS_UPDATER_CONTEXT_TEST_H
+#include "kis_dab_processing_strategy.h"
 
-#include <QtTest/QtTest>
-
-class KisUpdaterContextTest : public QObject
+KisDabProcessingStrategy::KisDabProcessingStrategy(bool isExclusive)
+    : m_isExclusive(isExclusive)
 {
-    Q_OBJECT
+}
 
-private slots:
-    void testJobInterference();
-    void stressTestExclusiveJobs();
-};
+KisDabProcessingStrategy::~KisDabProcessingStrategy()
+{
+}
 
-#endif /* KIS_UPDATER_CONTEXT_TEST_H */
-
+bool KisDabProcessingStrategy::isExclusive()
+{
+    return m_isExclusive;
+}

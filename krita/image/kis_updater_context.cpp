@@ -33,7 +33,7 @@ KisUpdaterContext::KisUpdaterContext(qint32 threadCount)
 
     m_jobs.resize(threadCount);
     for(qint32 i = 0; i < m_jobs.size(); i++) {
-        m_jobs[i] = new KisUpdateJobItem();
+        m_jobs[i] = new KisUpdateJobItem(&m_exclusiveJobLock);
         connect(m_jobs[i], SIGNAL(sigContinueUpdate(const QRect&)),
                 SIGNAL(sigContinueUpdate(const QRect&)),
                 Qt::DirectConnection);
@@ -107,6 +107,16 @@ void KisTestableUpdaterContext::addJob(KisBaseRectsWalkerSP walker)
 
     m_jobs[jobIndex]->setWalker(walker);
     // HINT: Not calling start() here
+}
+
+void KisUpdaterContext::addStrokeJob(KisDabProcessingStrategy *strategy,
+                                     KisDabProcessingStrategy::DabProcessingData *data)
+{
+    qint32 jobIndex = findSpareThread();
+    Q_ASSERT(jobIndex >= 0);
+
+    m_jobs[jobIndex]->setStrokeJob(strategy, data);
+    m_threadPool.start(m_jobs[jobIndex]);
 }
 
 void KisUpdaterContext::waitForDone()

@@ -20,7 +20,9 @@
 #define __KIS_UPDATE_JOB_ITEM_H
 
 #include <QRunnable>
+#include <QReadWriteLock>
 
+#include "kis_dab_processing_strategy.h"
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
 
@@ -28,41 +30,87 @@
 class KisUpdateJobItem :  public QObject, public QRunnable
 {
     Q_OBJECT
+public:
+    enum Type {
+        EMPTY,
+        MERGE,
+        STROKE
+    };
 
 public:
-    KisUpdateJobItem() {
+    KisUpdateJobItem(QReadWriteLock *exclusiveJobLock)
+        : m_exclusiveJobLock(exclusiveJobLock),
+          m_type(EMPTY)
+    {
         setAutoDelete(false);
     }
 
     void run() {
-        runMerge();
+        if(m_isExclusive) {
+            m_exclusiveJobLock->lockForWrite();
+        } else {
+            m_exclusiveJobLock->lockForRead();
+        }
+
+        if(m_type == MERGE) {
+            runMergeJob();
+        } else {
+            runStrokeJob();
+        }
+
         setDone();
 
         emit sigDoSomeUsefulWork();
         emit sigJobFinished();
+
+        m_exclusiveJobLock->unlock();
     }
 
-    inline void runMerge() {
-//        qDebug() << "Executing merge job" << m_walker->changeRect() << "on thread" << QThread::currentThreadId();
+    inline void runMergeJob() {
+        Q_ASSERT(m_type == MERGE);
+//        qDebug() << "Executing merge job" << m_walker->changeRect()
+//                 << "on thread" << QThread::currentThreadId();
         m_merger.startMerge(*m_walker);
 
         QRect changeRect = m_walker->changeRect();
         emit sigContinueUpdate(changeRect);
     }
 
+    inline void runStrokeJob() {
+        Q_ASSERT(m_type == STROKE);
+//        qDebug() << "Executing stroke job" << m_dabStrategy << m_dabData
+//                 << "on thread" << QThread::currentThreadId();
+        m_dabStrategy->processDab(m_dabData);
+    }
+
     inline void setWalker(KisBaseRectsWalkerSP walker) {
+        m_type = MERGE;
         m_accessRect = walker->accessRect();
         m_changeRect = walker->changeRect();
-
         m_walker = walker;
+
+        m_isExclusive = false;
+        m_dabStrategy = 0;
+        m_dabData = 0;
+    }
+
+    inline void setStrokeJob(KisDabProcessingStrategy *strategy,
+                             KisDabProcessingStrategy::DabProcessingData *data) {
+        m_type = STROKE;
+        m_dabStrategy = strategy;
+        m_dabData = data;
+
+        m_isExclusive = strategy->isExclusive();
+        m_walker = 0;
+        m_accessRect = m_changeRect = QRect();
     }
 
     inline void setDone() {
-        m_walker = 0;
+        m_type = EMPTY;
     }
 
     inline bool isRunning() const {
-        return m_walker;
+        return m_type != EMPTY;
     }
 
     inline const QRect& accessRect() const {
@@ -89,12 +137,33 @@ private:
     }
 
 private:
+    /**
+     * \see KisUpdaterContext::m_exclusiveJobLock
+     */
+    QReadWriteLock *m_exclusiveJobLock;
+
+    bool m_isExclusive;
+
+    volatile Type m_type;
+
+    /**
+     * Stroke jobs part
+     */
+
+    KisDabProcessingStrategy *m_dabStrategy;
+    KisDabProcessingStrategy::DabProcessingData *m_dabData;
+
+
+    /**
+     * Merge jobs part
+     */
+
     KisBaseRectsWalkerSP m_walker;
     KisAsyncMerger m_merger;
 
     /**
      * These rects cache actual values from the walker
-     * to iliminate concurrent access to a walker structure
+     * to eliminate concurrent access to a walker structure
      */
     QRect m_accessRect;
     QRect m_changeRect;

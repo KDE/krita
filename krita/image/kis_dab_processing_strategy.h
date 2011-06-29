@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,19 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_UPDATER_CONTEXT_TEST_H
-#define KIS_UPDATER_CONTEXT_TEST_H
+#ifndef __KIS_DAB_PROCESSING_STRATEGY_H
+#define __KIS_DAB_PROCESSING_STRATEGY_H
 
-#include <QtTest/QtTest>
+#include "krita_export.h"
 
-class KisUpdaterContextTest : public QObject
+
+class KRITAIMAGE_EXPORT KisDabProcessingStrategy
 {
-    Q_OBJECT
+public:
+    class DabProcessingData
+    {
+    };
 
-private slots:
-    void testJobInterference();
-    void stressTestExclusiveJobs();
+public:
+    KisDabProcessingStrategy(bool isExclusive);
+    virtual ~KisDabProcessingStrategy();
+
+    virtual void processDab(DabProcessingData *data) = 0;
+    bool isExclusive();
+
+private:
+    bool m_isExclusive;
 };
 
-#endif /* KIS_UPDATER_CONTEXT_TEST_H */
-
+#endif /* __KIS_DAB_PROCESSING_STRATEGY_H */

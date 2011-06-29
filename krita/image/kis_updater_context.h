@@ -21,8 +21,10 @@
 
 #include <QObject>
 #include <QMutex>
+#include <QReadWriteLock>
 #include <QThreadPool>
 
+#include "kis_dab_processing_strategy.h"
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
 
@@ -66,6 +68,14 @@ public:
     virtual void addJob(KisBaseRectsWalkerSP walker);
 
     /**
+     * Adds a stroke job to the context. The prerequisites are
+     * the same as for addJob()
+     * \see addJob()
+     */
+    virtual void addStrokeJob(KisDabProcessingStrategy *strategy,
+                              KisDabProcessingStrategy::DabProcessingData *data);
+
+    /**
      * Block execution of the caller until all the jobs are finished
      */
     void waitForDone();
@@ -97,6 +107,14 @@ protected:
     qint32 findSpareThread();
 
 protected:
+    /**
+     * The lock is shared by all the child update job items.
+     * When an item wants to run a usual (non-exclusive) job,
+     * it locks the lock for read access. When an exclusive
+     * access is requested, it locks it for write
+     */
+    QReadWriteLock m_exclusiveJobLock;
+
     QMutex m_lock;
     QVector<KisUpdateJobItem*> m_jobs;
     QThreadPool m_threadPool;

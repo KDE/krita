@@ -91,18 +91,20 @@ QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size)
 
     pm.fill(Qt::transparent);
 
+    KoParagraphStyle *clone = style->clone();
     QTextCursor cursor(d->pixmapHelperDocument);
     cursor.select(QTextCursor::Document);
     cursor.setBlockFormat(QTextBlockFormat());
     cursor.setBlockCharFormat(QTextCharFormat());
     cursor.setCharFormat(QTextCharFormat());
-    cursor.insertText(style->name());
+    cursor.insertText(clone->name());
     QTextBlock block = cursor.block();
-    style->applyStyle(block, true);
+    clone->applyStyle(block, true);
 
     layoutThumbnail(size, pm);
 
     d->pixmapCache.insert(pixmapKey, pm);
+    delete clone;
     return pm;
 }
 
@@ -122,18 +124,20 @@ QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size)
 
     pm.fill(Qt::transparent);
 
+    KoCharacterStyle *clone = style->clone();
     QTextCursor cursor(d->pixmapHelperDocument);
     cursor.select(QTextCursor::Document);
     cursor.setBlockFormat(QTextBlockFormat());
     cursor.setBlockCharFormat(QTextCharFormat());
     cursor.setCharFormat(QTextCharFormat());
-    cursor.insertText(style->name());
+    cursor.insertText(clone->name());
     QTextBlock block = cursor.block();
-    style->applyStyle(block);
+    clone->applyStyle(block);
 
     layoutThumbnail(size, pm);
 
     d->pixmapCache.insert(pixmapKey, pm);
+    delete clone;
     return pm;
 }
 

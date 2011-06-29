@@ -50,7 +50,7 @@ void KisUpdaterContextTest::testJobInterference()
     walker2->collectRects(paintLayer, dirtyRect2);
 
     context.lock();
-    context.addJob(walker1);
+    context.addMergeJob(walker1);
 
     QVERIFY(!context.isJobAllowed(walker2));
 

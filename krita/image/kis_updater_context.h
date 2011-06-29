@@ -65,12 +65,12 @@ public:
      * \see isWalkerAllowed()
      * \see hasSpareThread()
      */
-    virtual void addJob(KisBaseRectsWalkerSP walker);
+    virtual void addMergeJob(KisBaseRectsWalkerSP walker);
 
     /**
      * Adds a stroke job to the context. The prerequisites are
-     * the same as for addJob()
-     * \see addJob()
+     * the same as for addMergeJob()
+     * \see addMergeJob()
      */
     virtual void addStrokeJob(KisDabProcessingStrategy *strategy,
                               KisDabProcessingStrategy::DabProcessingData *data);
@@ -132,7 +132,7 @@ public:
      * The only difference - it doesn't start execution
      * of the job
      */
-    void addJob(KisBaseRectsWalkerSP walker);
+    void addMergeJob(KisBaseRectsWalkerSP walker);
 
     const QVector<KisUpdateJobItem*> getJobs();
     void clear();

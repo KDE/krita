@@ -81,14 +81,14 @@ bool KisUpdaterContext::isJobAllowed(KisBaseRectsWalkerSP walker)
 }
 
 /**
- * NOTE: In theory, isJobAllowed() and addJob() should be merged into
+ * NOTE: In theory, isJobAllowed() and addMergeJob() should be merged into
  * one atomic method like `bool push()`, because this implementation
  * of KisUpdaterContext will not work in case of multiple
  * producers. But currently we have only one producer (one thread
  * in a time), that is guaranteed by the lock()/unlock() pair in
  * KisAbstractUpdateQueue::processQueue.
  */
-void KisUpdaterContext::addJob(KisBaseRectsWalkerSP walker)
+void KisUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
 {
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
@@ -100,7 +100,7 @@ void KisUpdaterContext::addJob(KisBaseRectsWalkerSP walker)
 /**
  * This variant is for use in a testing suite only
  */
-void KisTestableUpdaterContext::addJob(KisBaseRectsWalkerSP walker)
+void KisTestableUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
 {
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);

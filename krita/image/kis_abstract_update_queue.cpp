@@ -62,7 +62,7 @@ void KisAbstractUpdateQueue::executeJobSync(KisBaseRectsWalkerSP walker,
     blockProcessing(updaterContext);
 
     Q_ASSERT(updaterContext.isJobAllowed(walker));
-    updaterContext.addJob(walker);
+    updaterContext.addMergeJob(walker);
     updaterContext.waitForDone();
 
     updaterContext.unlock();

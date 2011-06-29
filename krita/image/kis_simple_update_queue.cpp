@@ -86,7 +86,7 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
             item->recalculate(item->requestedRect());
 
         if(updaterContext.isJobAllowed(item)) {
-            updaterContext.addJob(item);
+            updaterContext.addMergeJob(item);
             iter.remove();
             jobAdded = true;
             break;

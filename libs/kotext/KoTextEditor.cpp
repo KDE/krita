@@ -1117,8 +1117,9 @@ KoInlineNote *KoTextEditor::insertFootNote()
     KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
     KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
     manager->insertInlineObject(d->caret,note);
-    note->setMotherFrame(KoTextDocument(d->caret.document()).footNotesFrame());
 
+    note->setMotherFrame(KoTextDocument(d->caret.document()).footNotesFrame());
+   // QObject::connect(d->caret.document(),SIGNAL(cursorPositionChanged(QTextCursor)),note->manager(),SLOT(deleteNote(QTextCursor)));
     d->updateState(KoTextEditor::Private::NoOp);
     return note;
 }

@@ -27,7 +27,7 @@
 #include <KoTextLayoutRootArea.h>
 #include <KoCanvasBase.h>
 #include <KoTextEditor.h>
-
+#include <KoBookmark.h>
 #include <KoInlineNote.h>
 #include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
@@ -120,7 +120,14 @@ void ReferencesTool::insertFootNote()
         note->setLabel(sfenw->widget.characterEdit->text());
     }
 
-    QTextCursor cursor = note->textCursor();
+    QTextCursor cursor(note->textCursor());
+    QString s;
+    s.append("Foot");
+    s.append(note->label());
+    KoBookmark *bookmark = new KoBookmark(note->textFrame()->document());
+    bookmark->setType(KoBookmark::SinglePosition);
+    bookmark->setName(s);
+    note->manager()->insertInlineObject(cursor, bookmark);
     QTextCharFormat *fmat = new QTextCharFormat();
     fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     cursor.insertText(note->label(),*fmat);
@@ -128,7 +135,6 @@ void ReferencesTool::insertFootNote()
     fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
     cursor.insertText(" ",*fmat);
 
-    note->manager()->reNumbering(note->textFrame()->document()->begin());
 }
 
 void ReferencesTool::insertEndNote()
@@ -142,7 +148,16 @@ void ReferencesTool::insertEndNote()
         note->setLabel(sfenw->widget.characterEdit->text());
     }
 
-    QTextCursor cursor = note->textCursor();
+    QTextCursor cursor(note->textCursor());
+
+    QString s;
+    s.append("End");
+    s.append(note->label());
+    KoBookmark *bookmark = new KoBookmark(note->textFrame()->document());
+    bookmark->setType(KoBookmark::SinglePosition);
+    bookmark->setName(s);
+    note->manager()->insertInlineObject(cursor, bookmark);
+
     QTextCharFormat *fmat = new QTextCharFormat();
     fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     cursor.insertText(note->label(),*fmat);
@@ -150,7 +165,6 @@ void ReferencesTool::insertEndNote()
     fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
     cursor.insertText(" ",*fmat);
 
-    //note->manager()->reNumbering(note->textFrame()->document()->begin());
 }
 
 #include <ReferencesTool.moc>

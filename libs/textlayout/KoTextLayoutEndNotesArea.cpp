@@ -92,7 +92,7 @@ void KoTextLayoutEndNotesArea::paint(QPainter *painter, const KoTextDocumentLayo
         return;
 
     if (!d->endNoteAreas.isEmpty()) {
-        painter->drawLine(0, top()+10, 150, top()+10);
+        painter->drawLine(2, top()+10, 150, top()+10);
     }
     foreach(KoTextLayoutArea *area, d->endNoteAreas) {
         area->paint(painter, context);

@@ -27,6 +27,7 @@
 #include <KoTextWriter.h>
 #include <KoTextDocument.h>
 #include <KoText.h>
+#include <KAction>
 #include <KoInlineTextObjectManager.h>
 
 #include <KDebug>
@@ -60,11 +61,15 @@ public:
     QDateTime date;
     bool autoNumbering;
     KoInlineNote::Type type;
+
 };
+int KoInlineNote::count;
+
 KoInlineNote::KoInlineNote(Type type)
     : KoInlineObject(true)
     , d(new Private(type))
 {
+
 }
 
 KoInlineNote::~KoInlineNote()
@@ -117,7 +122,6 @@ QString KoInlineNote::toRoman(int num) const
     else if (num==4)
         roman.append("iv");
 
-    qDebug()<<"Roman : "<<roman;
     return roman;
 }
 
@@ -129,7 +133,6 @@ QTextCursor KoInlineNote::textCursor() const
 void KoInlineNote::setMotherFrame(QTextFrame *motherFrame)
 {
     // We create our own subframe
-
     QTextCursor cursor(motherFrame->lastCursorPosition());
     QTextFrameFormat format;
     format.setProperty(KoText::SubFrameType, KoText::NoteFrameType);
@@ -205,6 +208,12 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
 
     if (d->label.isEmpty())
         return;
+    if(KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->displayedNotes(d->textFrame->document()->begin()) != KoInlineNote::count ) {
+        qDebug()<<"Before : "<<KoInlineNote::count;
+        KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->reNumbering(d->textFrame->document()->begin());
+        KoInlineNote::count = KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->displayedNotes(d->textFrame->document()->begin());
+        qDebug()<<"After : "<<KoInlineNote::count;
+    }
 
     QFont font(format.font(), pd);
     QTextLayout layout(d->label, font, pd);
@@ -215,6 +224,18 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     range.length = d->label.length();
     range.format = format;
     range.format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    QString s;
+    if(d->type == KoInlineNote::Footnote)
+        s.append("Foot");
+    else if(d->type == KoInlineNote::Endnote)
+        s.append("End");
+    s.append(d->label);
+    range.format.setAnchor(true);
+    range.format.setAnchorHref(s);
+
+    QBrush *brush = new QBrush(Qt::SolidPattern);
+    brush->setColor(Qt::lightGray);
+    range.format.setBackground(*brush);
     layouts.append(range);
     layout.setAdditionalFormats(layouts);
 

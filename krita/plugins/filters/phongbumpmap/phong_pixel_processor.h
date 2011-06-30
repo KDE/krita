@@ -24,7 +24,7 @@
 #include <QPair>
 #include <QMap>
 
-#include "constants.h"
+#include "phong_bumpmap_constants.h"
 #include "kis_properties_configuration.h"
 #include <KoChannelInfo.h>
 

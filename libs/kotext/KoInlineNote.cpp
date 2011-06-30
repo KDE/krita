@@ -326,6 +326,7 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
         cursor.setPosition(d->textFrame->firstPosition());
         cursor.movePosition(QTextCursor::WordRight);
         KoTextWriter textWriter(context);
+        qDebug()<<"KoInlineNote::saveOdf::Note";
         textWriter.write(d->textFrame->document(), cursor.position(),d->textFrame->lastPosition());
         writer->endElement();
 
@@ -346,7 +347,6 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
 
         KoTextWriter textWriter(context);
         textWriter.write(d->textFrame->document(), d->textFrame->firstPosition(),d->textFrame->lastPosition());
-
         writer->endElement();
     }
 

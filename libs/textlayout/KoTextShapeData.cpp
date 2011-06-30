@@ -302,6 +302,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *
     }
 
     KoTextWriter writer(context, rdfData);
+    qDebug()<<"KoTextShapeDate::saveOdf";
     writer.write(d->document, from, to);
 
     if (changeTracker) {

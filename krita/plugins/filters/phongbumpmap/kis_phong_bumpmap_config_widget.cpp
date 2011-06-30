@@ -63,6 +63,8 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
 
 void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfiguration *config)
 {
+    if (!config) return;
+    
     QVariant tempcolor;
     m_page->ambientReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_AMBIENT_REFLECTIVITY) );
     m_page->diffuseReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_DIFFUSE_REFLECTIVITY) );
@@ -91,8 +93,6 @@ void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfigurat
     m_page->inclinationSpinBox2->setValue( config->getDouble(PHONG_ILLUMINANT_INCLINATION[1]) );
     m_page->inclinationSpinBox3->setValue( config->getDouble(PHONG_ILLUMINANT_INCLINATION[2]) );
     m_page->inclinationSpinBox4->setValue( config->getDouble(PHONG_ILLUMINANT_INCLINATION[3]) );
-
-    if (!config) return;
 }
 
 KisPropertiesConfiguration *KisPhongBumpmapConfigWidget::configuration() const

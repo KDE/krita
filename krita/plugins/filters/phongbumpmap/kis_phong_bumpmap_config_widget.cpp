@@ -125,12 +125,13 @@ KisPropertiesConfiguration *KisPhongBumpmapConfigWidget::configuration() const
     config->setProperty(PHONG_ILLUMINANT_INCLINATION[3], m_page->inclinationSpinBox4->value());
 
     // Read configuration
+    /*
     QMap<QString, QVariant> rofl = QMap<QString, QVariant>(config->getProperties());
 
     QMap<QString, QVariant>::const_iterator i;
     for (i = rofl.constBegin(); i != rofl.constEnd(); ++i)
         qDebug() << i.key() << ":" << i.value();
-
+    */
     return config;
 }
 

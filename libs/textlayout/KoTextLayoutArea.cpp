@@ -942,6 +942,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 KoTextSoftPageBreak *softPageBreak = dynamic_cast<KoTextSoftPageBreak*>(m_documentLayout->inlineTextObjectManager()->inlineTextObject(c1));
                 if (softPageBreak) {
                     softBreakPos = pos;
+                    break;
                 }
 
                 pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
@@ -953,7 +954,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 // if the softBreakPos is at the start of the line stop here so
                 // we don't add a line here. That fixes the problem that e.g. the counter is before
                 // the page break and the text is after the page break
-                if (softBreakPos == 0) {
+                if (!virginPage() && softBreakPos == 0) {
                     return false;
                 }
             }

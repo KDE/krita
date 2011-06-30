@@ -22,10 +22,13 @@
 
 #include "kis_paint_device.h"
 #include "kis_config_widget.h"
+#include "KoUpdater.h"
 #include "kis_math_toolbox.h"
 #include "KoColorSpaceRegistry.h"
 #include <filter/kis_filter_configuration.h>
 #include "kis_iterator_ng.h"
+#include "kundo2command.h"
+#include "kis_painter.h"
 
 KisFilterPhongBumpmap::KisFilterPhongBumpmap()
                       : KisFilter(KoID("phongbumpmap"     , i18n("PhongBumpmap")),
@@ -38,17 +41,15 @@ KisFilterPhongBumpmap::KisFilterPhongBumpmap()
 
 void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
                                     const QRect& applyRect,
-                                    const KisFilterConfiguration* config,
-                                    KoUpdater* /*progressUpdater*/
+                                    const KisFilterConfiguration *config,
+                                    KoUpdater *progressUpdater
                                     ) const
-{
-#ifdef __GNUC__
-    #warning TODO: implement progress updater for phong bumpmap
-#endif
-
+{    
+    if (progressUpdater) progressUpdater->setProgress(0);
+    
     // Benchmark
     QTime timer, timerE;
-
+    
     QString userChosenHeightChannel = config->getString(PHONG_HEIGHT_CHANNEL, "FAIL");
 
     if (userChosenHeightChannel == "FAIL") {
@@ -61,7 +62,7 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
     
     timer.start();
 
-    KoChannelInfo* m_heightChannel = 0;
+    KoChannelInfo *m_heightChannel = 0;
 
     foreach (KoChannelInfo* channel, device->colorSpace()->channels()) {
         if (userChosenHeightChannel == channel->name()) {
@@ -80,6 +81,8 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
     QRect tileLimits;
     QColor I; //Reflected light
 
+    if (progressUpdater) progressUpdater->setProgress(1);
+
     //======Preparation paraphlenalia=======
 
     //Hardcoded facts about Phong Bumpmap: it _will_ generate an RGBA16 bumpmap
@@ -88,11 +91,12 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
     const quint32   pixelsOfOutputArea       = abs(outputArea.width() * outputArea.height());
     const quint8    pixelSize                = BYTE_DEPTH_OF_BUMPMAP * CHANNEL_COUNT_OF_BUMPMAP;
     const quint32   bytesToFillBumpmapArea   = pixelsOfOutputArea * pixelSize;
-
     QVector<quint8> bumpmap(bytesToFillBumpmapArea);
     quint8         *bumpmapDataPointer       = bumpmap.data();
     quint32         ki                       = m_heightChannel->index();
     PhongPixelProcessor tileRenderer(config);
+
+    if (progressUpdater) progressUpdater->setProgress(2);
 
     //===============RENDER=================
     
@@ -108,7 +112,6 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
                                              inputArea.y(),
                                              inputArea.width()
                                              );
-    curPixel = 0;
     
     for (qint32 srcRow = 0; srcRow < inputArea.height(); ++srcRow) {
         do {
@@ -119,6 +122,8 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
         while (iterator->nextPixel());
         iterator->nextRow();
     }
+
+    if (progressUpdater) progressUpdater->setProgress(50);
 
     const int tileHeightMinus1 = inputArea.width() - 1;
     const int tileWidthMinus1 = inputArea.height() - 1;
@@ -138,10 +143,19 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
         }
     }
 
+    if (progressUpdater) progressUpdater->setProgress(90);
+    
     KisPaintDeviceSP bumpmapPaintDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
     bumpmapPaintDevice->writeBytes(bumpmap.data(), outputArea.x(), outputArea.y(), outputArea.width(), outputArea.height());
-    bumpmapPaintDevice->convertTo(device->colorSpace());
-    device->makeCloneFrom(bumpmapPaintDevice, bumpmapPaintDevice->extent());  // THIS COULD BE BUG GY
+    KUndo2Command *leaker = bumpmapPaintDevice->convertTo(device->colorSpace());
+    KisPainter copier(device);
+    copier.bitBlt(outputArea.x(), outputArea.y(), bumpmapPaintDevice,
+                  outputArea.x(), outputArea.y(), outputArea.width(), outputArea.height());
+    //device->prepareClone(bumpmapPaintDevice);
+    //device->makeCloneFrom(bumpmapPaintDevice, bumpmapPaintDevice->extent());  // THIS COULD BE BUG GY
+    
+    delete leaker;
+    if (progressUpdater) progressUpdater->setProgress(100);
 }
 
 KisFilterConfiguration *KisFilterPhongBumpmap::factoryConfiguration(const KisPaintDeviceSP) const
@@ -152,12 +166,12 @@ KisFilterConfiguration *KisFilterPhongBumpmap::factoryConfiguration(const KisPai
 
 QRect KisFilterPhongBumpmap::neededRect(const QRect &rect, const KisFilterConfiguration* /*config*/) const
 {
-    return rect.adjusted(-2, -2, 2, 2);
+    return rect.adjusted(-1, -1, 1, 1);
 }
 
 QRect KisFilterPhongBumpmap::changedRect(const QRect &rect, const KisFilterConfiguration* /*config*/) const
 {
-    return rect.adjusted(-2, -2, 2, 2);
+    return rect.adjusted(-1, -1, 1, 1);
 }
 
 KisConfigWidget *KisFilterPhongBumpmap::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageWSP image) const

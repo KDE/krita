@@ -288,9 +288,9 @@ void KisLayerBox::updateUI()
 
     m_wdgLayerBox->bnDelete->setEnabled(active);
     m_wdgLayerBox->bnRaise->setEnabled(active && (active->nextSibling()
-                                           || (active->parent() && active->parent() != m_image->root())));
-
-    m_wdgLayerBox->bnLower->setEnabled(active && active->prevSibling());
+                                       || (active->parent() && active->parent() != m_image->root())));
+    m_wdgLayerBox->bnLower->setEnabled(active && (active->prevSibling()
+                                       || (active->parent() && active->parent() != m_image->root())));
     m_wdgLayerBox->bnDuplicate->setEnabled(active);
     m_wdgLayerBox->bnProperties->setEnabled(active);
 
@@ -479,12 +479,28 @@ void KisLayerBox::slotRmClicked()
 
 void KisLayerBox::slotRaiseClicked()
 {
-    m_nodeManager->raiseNode();
+    KisNodeSP node = m_nodeManager->activeNode();
+    KisNodeSP parent = m_nodeManager->activeNode()->parent();
+    KisNodeSP grandParent = parent->parent();
+
+    if (!m_nodeManager->activeNode()->prevSibling()) {
+        if (!grandParent) return;  
+        if (!grandParent->parent() && node->inherits("KisMask")) return;
+        parent->nextSibling() ?
+        m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent)) 
+        : m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) - 1);
+    } else {
+        m_nodeManager->raiseNode();
+    }
 }
 
 void KisLayerBox::slotLowerClicked()
 {
-    m_nodeManager->lowerNode();
+    if (!m_nodeManager->activeNode()->nextSibling()) {
+        slotLeftClicked();
+    } else {
+        m_nodeManager->lowerNode();
+    }
 }
 
 void KisLayerBox::slotLeftClicked()

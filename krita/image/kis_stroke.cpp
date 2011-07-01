@@ -18,7 +18,6 @@
 
 #include "kis_stroke.h"
 
-#include <QMutexLocker>
 #include "kis_stroke_strategy.h"
 
 
@@ -97,8 +96,6 @@ void KisStroke::endStroke()
 
 void KisStroke::cancelStroke()
 {
-    QMutexLocker locker(&m_mutex);
-
     if(!m_strokeInitialized) {
         clearQueue();
     }
@@ -145,7 +142,6 @@ bool KisStroke::prevJobSequential() const
 
 bool KisStroke::nextJobSequential() const
 {
-    QMutexLocker locker(&m_mutex);
     return !m_jobsQueue.isEmpty() ?
         m_jobsQueue.head()->isSequential() : false;
 }
@@ -159,12 +155,10 @@ void KisStroke::enqueue(KisDabProcessingStrategy *strategy,
         return;
     }
 
-    QMutexLocker locker(&m_mutex);
     m_jobsQueue.enqueue(new KisStrokeJob(strategy, data));
 }
 
 KisStrokeJob* KisStroke::dequeue()
 {
-    QMutexLocker locker(&m_mutex);
     return !m_jobsQueue.isEmpty() ? m_jobsQueue.dequeue() : 0;
 }

@@ -20,7 +20,6 @@
 #define __KIS_STROKE_H
 
 #include <QQueue>
-#include <QMutex>
 #include <kis_types.h>
 #include "krita_export.h"
 #include "kis_stroke_job.h"
@@ -75,7 +74,6 @@ private:
     bool m_strokeInitialized;
     bool m_strokeEnded;
     bool m_prevJobSequential;
-    mutable QMutex m_mutex;
 };
 
 #endif /* __KIS_STROKE_H */

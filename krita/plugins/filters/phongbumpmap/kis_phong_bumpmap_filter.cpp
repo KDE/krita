@@ -125,8 +125,8 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
 
     if (progressUpdater) progressUpdater->setProgress(50);
 
-    const int tileHeightMinus1 = inputArea.width() - 1;
-    const int tileWidthMinus1 = inputArea.height() - 1;
+    const int tileHeightMinus1 = inputArea.height() - 1;
+    const int tileWidthMinus1 = inputArea.width() - 1;
 
     // Foreach INNER pixel in tile
     for (int y = 1; y < tileHeightMinus1; ++y) {

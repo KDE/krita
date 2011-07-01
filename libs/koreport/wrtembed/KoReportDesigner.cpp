@@ -883,6 +883,7 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
                 
             m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
             m_sectionData->insertItem = QString();
+            unsetSectionCursor();
         }
     }
 }
@@ -915,6 +916,7 @@ void KoReportDesigner::slotItem(const QString &entity)
 {
     m_sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
     m_sectionData->insertItem = entity;
+    setSectionCursor(QCursor(Qt::CrossCursor));
 }
 
 void KoReportDesigner::slotEditDelete()
@@ -1209,3 +1211,58 @@ bool KoReportDesigner::actionPriortyLessThan(QAction* act1, QAction* act2)
     return false;
 }
 
+void KoReportDesigner::setSectionCursor(const QCursor& c)
+{
+    if (m_pageFooterAny)
+        m_pageFooterAny->setSectionCursor(c);
+    if (m_pageFooterEven)
+        m_pageFooterEven->setSectionCursor(c);
+    if (m_pageFooterFirst)
+        m_pageFooterFirst->setSectionCursor(c);
+    if (m_pageFooterLast)
+        m_pageFooterLast->setSectionCursor(c);
+    if (m_pageFooterOdd)
+        m_pageFooterOdd->setSectionCursor(c);
+
+    if (m_pageHeaderAny)
+        m_pageHeaderAny->setSectionCursor(c);
+    if (m_pageHeaderEven)
+        m_pageHeaderEven->setSectionCursor(c);
+    if (m_pageHeaderFirst)
+        m_pageHeaderFirst->setSectionCursor(c);
+    if (m_pageHeaderLast)
+        m_pageHeaderLast->setSectionCursor(c);
+    if (m_pageHeaderOdd)
+        m_pageHeaderOdd->setSectionCursor(c);
+    
+    if (m_detail)
+        m_detail->setSectionCursor(c);
+}
+
+void KoReportDesigner::unsetSectionCursor()
+{
+    if (m_pageFooterAny)
+        m_pageFooterAny->unsetSectionCursor();
+    if (m_pageFooterEven)
+        m_pageFooterEven->unsetSectionCursor();
+    if (m_pageFooterFirst)
+        m_pageFooterFirst->unsetSectionCursor();
+    if (m_pageFooterLast)
+        m_pageFooterLast->unsetSectionCursor();
+    if (m_pageFooterOdd)
+        m_pageFooterOdd->unsetSectionCursor();
+    
+    if (m_pageHeaderAny)
+        m_pageHeaderAny->unsetSectionCursor();
+    if (m_pageHeaderEven)
+        m_pageHeaderEven->unsetSectionCursor();
+    if (m_pageHeaderFirst)
+        m_pageHeaderFirst->unsetSectionCursor();
+    if (m_pageHeaderLast)
+        m_pageHeaderLast->unsetSectionCursor();
+    if (m_pageHeaderOdd)
+        m_pageHeaderOdd->unsetSectionCursor();
+    
+    if (m_detail)
+        m_detail->unsetSectionCursor();
+}

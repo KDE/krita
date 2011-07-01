@@ -176,8 +176,8 @@ public:
     void saveParagraph(const QTextBlock &block, int from, int to);
     void saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles);
     QTextBlock& saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level, QTextTable *currentTable);
-    void saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc);
-    void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextFrame *currentFrame = 0, QTextList *currentList = 0);
+    void saveTableOfContents(QTextDocument *document, QHash<QTextList *, QString> &listStyles, QTextBlock toc);
+    void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextList *currentList = 0);
     void saveInlineRdf(KoTextInlineRdf *rdf, TagInformation *tagInfos);
     int checkForBlockChange(const QTextBlock &block);
     int checkForListItemChange(const QTextBlock &block);
@@ -1427,11 +1427,12 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
 
 }
 
-void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc)
+void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, QHash<QTextList *, QString> &listStyles, QTextBlock toc)
 {
     writer->startElement("text:table-of-content");
 
-    KoTableOfContentsGeneratorInfo *info = toc->frameFormat().property(KoText::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
+    KoTableOfContentsGeneratorInfo *info = toc.blockFormat().property(KoParagraphStyle::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
+    QTextDocument *tocDocument = toc.blockFormat().property(KoParagraphStyle::TableOfContentsDocument).value<QTextDocument*>();
     if (!info->m_styleName.isNull()) {
             writer->addAttribute("text:style-name",info->m_styleName);
     }
@@ -1441,16 +1442,15 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int fro
 
     writer->startElement("text:index-body");
     // write the title (one p block)
-    QTextCursor localBlock = toc->firstCursorPosition();
+    QTextCursor localBlock = tocDocument->rootFrame()->firstCursorPosition();
     localBlock.movePosition(QTextCursor::NextBlock);
     int endTitle = localBlock.position();
     writer->startElement("text:index-title");
-        writeBlocks(document, from, endTitle, listStyles, currentTable, toc);
+        writeBlocks(tocDocument, 0, endTitle, listStyles);
     writer->endElement(); // text:index-title
-    from = endTitle;
 
-    QTextBlock block = toc->lastCursorPosition().block();
-    writeBlocks(document, from, to, listStyles, currentTable, toc);
+    QTextBlock block = tocDocument->rootFrame()->lastCursorPosition().block();
+    writeBlocks(tocDocument, endTitle, -1, listStyles);
 
     writer->endElement(); // table:index-body
     writer->endElement(); // table:table-of-content
@@ -1525,7 +1525,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 paraTagInformation.addAttribute("text:style-name", listStyles.value(textList));
 
                 int changeId = openTagRegion(block.position(), KoTextWriter::Private::NumberedParagraph, paraTagInformation);
-                writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, currentTable, 0, textList);
+                writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, currentTable, textList);
                 closeTagRegion(changeId);
             } else {
                 if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
@@ -1561,7 +1561,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 }
 
                 if (textList == topLevelTextList) {
-                    writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, currentTable, 0, textList);
+                    writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, currentTable, textList);
                     // we are generating a text:list-item. Look forward and generate unnumbered list items.
                     while (true) {
                         QTextBlock nextBlock = block.next();
@@ -1662,7 +1662,7 @@ void KoTextWriter::Private::postProcessListItemSplit(int changeId)
     writer->addCompleteElement(outputXml.toUtf8());
 }
 
-void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *currentFrame, QTextList *currentList)
+void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextList *currentList)
 {
     QTextBlock block = document->findBlock(from);
     int sectionLevel = 0;
@@ -1670,7 +1670,10 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {
 
         QTextCursor cursor(block);
-        QTextFrame *cursorFrame = cursor.currentFrame();
+
+        if (cursor.currentFrame() != document->rootFrame()) {
+            break; // we've reached the "end" (end/footnotes saved in another way)
+        }
 
         QTextBlockFormat format = block.blockFormat();
         if (format.hasProperty(KoParagraphStyle::SectionStart)) {
@@ -1681,17 +1684,13 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 section->saveOdf(context);
             }
         }
-        int blockOutlineLevel = format.property(KoParagraphStyle::OutlineLevel).toInt();
-
-        if (cursorFrame != currentFrame
-                    && cursorFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
-            int frameBegin = cursorFrame->firstPosition();
-            int frameEnd = cursorFrame->lastPosition();
-            saveTableOfContents(document, frameBegin, frameEnd, listStyles, currentTable, cursor.currentFrame());
-            block = cursorFrame->lastCursorPosition().block();
+        if (format.hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+            saveTableOfContents(document, listStyles, block);
             block = block.next();
             continue;
         }
+        int blockOutlineLevel = format.property(KoParagraphStyle::OutlineLevel).toInt();
+
         if (cursor.currentTable() != currentTable) {
             // Call the code to save the table....
             saveTable(cursor.currentTable(), listStyles);

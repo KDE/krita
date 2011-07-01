@@ -91,8 +91,7 @@ enum DocumentResource {
 };
 
 enum KoTextFrameProperty {
-    TableOfContentsData = QTextFormat::UserProperty + 1,
-    SubFrameType = QTextFormat::UserProperty + 2
+    SubFrameType = QTextFormat::UserProperty + 1
 };
 
 enum KoSubFrameType {

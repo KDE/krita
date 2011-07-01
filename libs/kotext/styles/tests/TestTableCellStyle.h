@@ -11,7 +11,10 @@ public:
     TestTableCellStyle() {}
 
 private slots:
-    void testTableCellStyle();
+    void testPen();
+    void testPadding();
+    void testSpacing();
+    void testMargin();
 
 };
 

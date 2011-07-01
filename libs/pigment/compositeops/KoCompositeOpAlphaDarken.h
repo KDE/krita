@@ -43,10 +43,18 @@ public:
     
     virtual void composite(const KoCompositeOp::ParameterInfo& params) const
     {
+        if(params.maskRowStart != 0)
+            genericComposite<true>(params);
+        else
+            genericComposite<false>(params);
+    }
+    
+    template<bool useMask>
+    void genericComposite(const KoCompositeOp::ParameterInfo& params) const
+    {
         using namespace Arithmetic;
         
         qint32        srcInc       = (params.srcRowStride == 0) ? 0 : channels_nb;
-        bool          useMask      = params.maskRowStart != 0;
         channels_type flow         = scale<channels_type>(params.flow);
         channels_type opacity      = mul(flow, scale<channels_type>(params.opacity));
         quint8*       dstRowStart  = params.dstRowStart;
@@ -86,7 +94,9 @@ public:
                 
                 src += srcInc;
                 dst += channels_nb;
-                ++mask;
+                
+                if(useMask)
+                    ++mask;
             }
             
             srcRowStart  += params.srcRowStride;

@@ -107,6 +107,7 @@ void TestDocumentLayout::testHitTest()
 
     QCOMPARE(lines, 8);
 
+    /* Following is device-/font-dependent and therefore can be different on other computers
     // outside text
     QCOMPARE(p->m_area->hitTest(QPointF(0, 0), Qt::FuzzyHit).position, 0);
     QCOMPARE(p->m_area->hitTest(QPointF(0, 0), Qt::ExactHit).position, -1);
@@ -126,6 +127,7 @@ void TestDocumentLayout::testHitTest()
     QCOMPARE(p->m_area->hitTest(QPointF(20, paragOffets[1]), Qt::ExactHit).position, 139);
     QCOMPARE(p->m_area->hitTest(QPointF(20, paragOffets[1]), Qt::FuzzyHit).position, 139);
     QVERIFY(p->m_area->hitTest(QPointF(20, paragOffets[1] + 20), Qt::FuzzyHit).position >= 139);
+    */
 }
 
 void TestDocumentLayout::testRootAreaZeroWidth()

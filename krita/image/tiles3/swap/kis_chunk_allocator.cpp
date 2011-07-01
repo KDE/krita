@@ -136,7 +136,7 @@ void KisChunkAllocator::debugChunks()
     quint64 idx = 0;
     KisChunkDataListIterator i;
 
-    for(i = m_list.begin(); i != m_list.end(); i++) {
+    for(i = m_list.begin(); i != m_list.end(); ++i) {
         qDebug("chunk #%lld: [%lld %lld]", idx++, i->m_begin, i->m_end);
     }
 }
@@ -146,7 +146,7 @@ bool KisChunkAllocator::sanityCheck(bool pleaseCrash)
     bool failed = false;
     KisChunkDataListIterator i;
 
-    for(i = m_list.begin(); i != m_list.end(); i++) {
+    for(i = m_list.begin(); i != m_list.end(); ++i) {
         if(HAS_PREVIOUS(m_list, i)) {
             if(PEEK_PREVIOUS(i).m_end >= i->m_begin) {
                 qWarning("Chunks overlapped: [%lld %lld], [%lld %lld]", PEEK_PREVIOUS(i).m_begin, PEEK_PREVIOUS(i).m_end, i->m_begin, i->m_end);
@@ -179,7 +179,7 @@ qreal KisChunkAllocator::debugFragmentation(bool toStderr)
     quint64 free = 0;
     qreal fragmentation = 0;
 
-    for(i = m_list.begin(); i != m_list.end(); i++) {
+    for(i = m_list.begin(); i != m_list.end(); ++i) {
         allocated += i->m_end - i->m_begin + 1;
 
         if(HAS_PREVIOUS(m_list, i))

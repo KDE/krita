@@ -44,10 +44,15 @@ ReferencesTool::~ReferencesTool()
 
 void ReferencesTool::createActions()
 {
-    KAction *action = new KAction(i18n("Table of Contents..."), this);
+    KAction *action = new KAction(i18n("Insert"), this);
     addAction("insert_tableofcentents", action);
     action->setToolTip(i18n("Insert a Table of Contents into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertTableOfContents()));
+
+    action = new KAction(i18n("Configure..."), this);
+    addAction("format_tableofcentents", action);
+    action->setToolTip(i18n("Configure the Table of Contents"));
+    connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
 }
 
 void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -90,6 +95,10 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
 void ReferencesTool::insertTableOfContents()
 {
     textEditor()->insertTableOfContents();
+}
+
+void ReferencesTool::formatTableOfContents()
+{
 }
 
 #include <ReferencesTool.moc>

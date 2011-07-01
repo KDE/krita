@@ -728,8 +728,6 @@ QTransform KoOdfGraphicStyles::loadTransformation(const QString &transformation)
             transform.shear(tan(params[0].toDouble()), 0.0F);
         else if (subtransform[0] == "skewy")
             transform.shear(tan(params[0].toDouble()), 0.0F);
-        else if (subtransform[0] == "skewy")
-            transform.shear(0.0F, tan(params[0].toDouble()));
         else if (subtransform[0] == "matrix") {
             if (params.count() >= 6) {
                 transform.setMatrix(params[0].toDouble(), params[1].toDouble(), 0,

@@ -25,14 +25,15 @@
 KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy)
     : m_strokeStrategy(strokeStrategy),
       m_strokeInitialized(false),
-      m_strokeEnded(false)
+      m_strokeEnded(false),
+      m_prevJobSequential(false)
 {
     m_initStrategy = m_strokeStrategy->createInitStrategy();
     m_dabStrategy = m_strokeStrategy->createDabStrategy();
     m_cancelStrategy = m_strokeStrategy->createCancelStrategy();
     m_finishStrategy = m_strokeStrategy->createFinishStrategy();
 
-    enqueue(new KisStrokeJob(m_initStrategy, 0));
+    enqueue(m_initStrategy, 0);
 }
 
 KisStroke::~KisStroke()
@@ -50,15 +51,19 @@ KisStroke::~KisStroke()
 void KisStroke::addJob(KisDabProcessingStrategy::DabProcessingData *data)
 {
     Q_ASSERT(!m_strokeEnded);
-    enqueue(new KisStrokeJob(m_dabStrategy, data));
+    enqueue(m_dabStrategy, data);
 }
 
 KisStrokeJob* KisStroke::popOneJob()
 {
     KisStrokeJob *job = dequeue();
 
-    if(!m_strokeInitialized && job) {
-        m_strokeInitialized = true;
+    if(job) {
+        m_prevJobSequential = job->isSequential();
+
+        if(!m_strokeInitialized) {
+            m_strokeInitialized = true;
+        }
     }
 
     return job;
@@ -74,7 +79,7 @@ void KisStroke::endStroke()
     Q_ASSERT(!m_strokeEnded);
     m_strokeEnded = true;
 
-    enqueue(new KisStrokeJob(m_finishStrategy, 0));
+    enqueue(m_finishStrategy, 0);
 }
 
 /**
@@ -99,7 +104,9 @@ void KisStroke::cancelStroke()
     }
     else if(m_strokeInitialized && !m_jobsQueue.isEmpty()) {
         clearQueue();
-        m_jobsQueue.enqueue(new KisStrokeJob(m_cancelStrategy, 0));
+        if(m_cancelStrategy) {
+            m_jobsQueue.enqueue(new KisStrokeJob(m_cancelStrategy, 0));
+        }
     }
     // else {
     //     too late ...
@@ -116,14 +123,14 @@ void KisStroke::clearQueue()
     m_jobsQueue.clear();
 }
 
+bool KisStroke::isInitialized() const
+{
+    return m_strokeInitialized;
+}
+
 bool KisStroke::isEnded() const
 {
     return m_strokeEnded;
-}
-
-bool KisStroke::isSequential() const
-{
-    return m_strokeStrategy->isSequential();
 }
 
 bool KisStroke::isExclusive() const
@@ -131,13 +138,29 @@ bool KisStroke::isExclusive() const
     return m_strokeStrategy->isExclusive();
 }
 
-void KisStroke::enqueue(KisStrokeJob* job)
+bool KisStroke::prevJobSequential() const
+{
+    return m_prevJobSequential;
+}
+
+bool KisStroke::nextJobSequential() const
+{
+    QMutexLocker locker(&m_mutex);
+    return !m_jobsQueue.isEmpty() ?
+        m_jobsQueue.head()->isSequential() : false;
+}
+
+void KisStroke::enqueue(KisDabProcessingStrategy *strategy,
+                        KisDabProcessingStrategy::DabProcessingData *data)
 {
     // factory methods can return null, if no action is needed
-    if(!job) return;
+    if(!strategy) {
+        delete data;
+        return;
+    }
 
     QMutexLocker locker(&m_mutex);
-    m_jobsQueue.enqueue(job);
+    m_jobsQueue.enqueue(new KisStrokeJob(strategy, data));
 }
 
 KisStrokeJob* KisStroke::dequeue()

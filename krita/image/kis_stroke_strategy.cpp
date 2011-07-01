@@ -20,8 +20,7 @@
 
 
 KisStrokeStrategy::KisStrokeStrategy(QString id, QString name)
-    : m_sequential(true),
-      m_exclusive(false),
+    : m_exclusive(false),
       m_needsIndirectPainting(false),
       m_id(id),
       m_name(name)
@@ -53,11 +52,6 @@ KisDabProcessingStrategy* KisStrokeStrategy::createDabStrategy()
     return 0;
 }
 
-bool KisStrokeStrategy::isSequential() const
-{
-    return m_sequential;
-}
-
 bool KisStrokeStrategy::isExclusive() const
 {
     return m_exclusive;
@@ -76,11 +70,6 @@ QString KisStrokeStrategy::id() const
 QString KisStrokeStrategy::name() const
 {
     return m_name;
-}
-
-void KisStrokeStrategy::setSequential(bool value)
-{
-    m_sequential = value;
 }
 
 void KisStrokeStrategy::setExclusive(bool value)

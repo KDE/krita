@@ -19,56 +19,8 @@
 #include "kis_stroke_test.h"
 #include <qtest_kde.h>
 
-#include "kis_stroke_strategy.h"
 #include "kis_stroke.h"
 
-class KisNoopDabStrategy : public KisDabProcessingStrategy
-{
-public:
-    KisNoopDabStrategy(QString name)
-        : m_name(name)
-    {}
-
-    void processDab(DabProcessingData *data) {
-        Q_UNUSED(data);
-    }
-
-    QString name() {
-        return m_name;
-    }
-
-private:
-    QString m_name;
-};
-
-class KisTestingStrokeStrategy : public KisStrokeStrategy
-{
-    KisDabProcessingStrategy* createInitStrategy() {
-        return new KisNoopDabStrategy("init");
-    }
-
-    KisDabProcessingStrategy* createFinishStrategy() {
-        return new KisNoopDabStrategy("finish");
-    }
-
-    KisDabProcessingStrategy* createCancelStrategy() {
-        return new KisNoopDabStrategy("cancel");
-    }
-
-    KisDabProcessingStrategy* createDabStrategy() {
-        return new KisNoopDabStrategy("dab");
-    }
-};
-
-#define SCOMPARE(s1, s2) QCOMPARE(QString(s1), QString(s2))
-
-QString KisStrokeTest::getName(KisStrokeJob *job) {
-    KisNoopDabStrategy *pointer =
-        dynamic_cast<KisNoopDabStrategy*>(job->testingGetDabStrategy());
-    Q_ASSERT(pointer);
-
-    return pointer->name();
-}
 
 void KisStrokeTest::testRegularStroke()
 {

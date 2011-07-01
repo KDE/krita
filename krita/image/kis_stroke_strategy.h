@@ -36,7 +36,6 @@ public:
     virtual KisDabProcessingStrategy* createCancelStrategy();
     virtual KisDabProcessingStrategy* createDabStrategy();
 
-    bool isSequential() const;
     bool isExclusive() const;
     bool needsIndirectPainting() const;
 
@@ -47,12 +46,10 @@ protected:
     // you are not supposed to change these parameters
     // in places other than a constructor
 
-    void setSequential(bool value);
     void setExclusive(bool value);
     void setNeedsIndirectPainting(bool value);
 
 private:
-    bool m_sequential;
     bool m_exclusive;
     bool m_needsIndirectPainting;
 

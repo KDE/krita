@@ -39,6 +39,10 @@ public:
         m_dabStrategy->processDab(m_dabData);
     }
 
+    bool isSequential() const {
+        return m_dabStrategy->isSequential();
+    }
+
     bool isExclusive() const {
         return m_dabStrategy->isExclusive();
     }

@@ -42,13 +42,17 @@ public:
     void endStroke();
     void cancelStroke();
 
+    bool isInitialized() const;
     bool isEnded() const;
 
-    bool isSequential() const;
     bool isExclusive() const;
 
+    bool prevJobSequential() const;
+    bool nextJobSequential() const;
+
 private:
-    void enqueue(KisStrokeJob* job);
+    void enqueue(KisDabProcessingStrategy *strategy,
+                 KisDabProcessingStrategy::DabProcessingData *data);
     KisStrokeJob* dequeue();
     void clearQueue();
 
@@ -70,7 +74,8 @@ private:
     QQueue<KisStrokeJob*> m_jobsQueue;
     bool m_strokeInitialized;
     bool m_strokeEnded;
-    QMutex m_mutex;
+    bool m_prevJobSequential;
+    mutable QMutex m_mutex;
 };
 
 #endif /* __KIS_STROKE_H */

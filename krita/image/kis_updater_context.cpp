@@ -53,6 +53,22 @@ KisUpdaterContext::~KisUpdaterContext()
         delete m_jobs[i];
 }
 
+void KisUpdaterContext::getJobsSnapshot(qint32 &numMergeJobs,
+                                        qint32 &numStrokeJobs)
+{
+    numMergeJobs = 0;
+    numStrokeJobs = 0;
+
+    foreach(const KisUpdateJobItem *item, m_jobs) {
+        if(item->type() == KisUpdateJobItem::MERGE) {
+            numMergeJobs++;
+        }
+        else if(item->type() == KisUpdateJobItem::STROKE) {
+            numStrokeJobs++;
+        }
+    }
+}
+
 bool KisUpdaterContext::hasSpareThread()
 {
     bool found = false;
@@ -116,6 +132,18 @@ void KisUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
 
     m_jobs[jobIndex]->setStrokeJob(strokeJob);
     m_threadPool.start(m_jobs[jobIndex]);
+}
+
+/**
+ * This variant is for use in a testing suite only
+ */
+void KisTestableUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
+{
+    qint32 jobIndex = findSpareThread();
+    Q_ASSERT(jobIndex >= 0);
+
+    m_jobs[jobIndex]->setStrokeJob(strokeJob);
+    // HINT: Not calling start() here
 }
 
 void KisUpdaterContext::waitForDone()

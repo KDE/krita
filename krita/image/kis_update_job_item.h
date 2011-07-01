@@ -105,6 +105,10 @@ public:
         return m_type != EMPTY;
     }
 
+    inline Type type() const {
+        return m_type;
+    }
+
     inline const QRect& accessRect() const {
         return m_accessRect;
     }
@@ -120,12 +124,18 @@ signals:
 
 private:
     /**
-     * Open walker for the testing suite.
+     * Open walker and stroke job for the testing suite.
      * Please, do not use it in production code.
      */
     friend class KisSimpleUpdateQueueTest;
+    friend class KisStrokesQueueTest;
+
     inline KisBaseRectsWalkerSP walker() const {
         return m_walker;
+    }
+
+    inline KisStrokeJob* strokeJob() const {
+        return m_strokeJob;
     }
 
 private:

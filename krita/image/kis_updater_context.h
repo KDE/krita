@@ -40,6 +40,14 @@ public:
 
 
     /**
+     * Returns the number of currently running jobs of each type.
+     * To use this information you should lock the context beforehand.
+     *
+     * \see lock()
+     */
+    void getJobsSnapshot(qint32 &numMergeJobs, qint32 &numStrokeJobs);
+
+    /**
      * Check whether there is a spare thread for running
      * one more job
      */
@@ -132,6 +140,7 @@ public:
      * of the job
      */
     void addMergeJob(KisBaseRectsWalkerSP walker);
+    void addStrokeJob(KisStrokeJob *strokeJob);
 
     const QVector<KisUpdateJobItem*> getJobs();
     void clear();

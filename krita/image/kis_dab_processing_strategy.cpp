@@ -18,13 +18,19 @@
 
 #include "kis_dab_processing_strategy.h"
 
-KisDabProcessingStrategy::KisDabProcessingStrategy(bool isExclusive)
-    : m_isExclusive(isExclusive)
+KisDabProcessingStrategy::KisDabProcessingStrategy(bool isSequential, bool isExclusive)
+    : m_isSequential(isSequential),
+      m_isExclusive(isExclusive)
 {
 }
 
 KisDabProcessingStrategy::~KisDabProcessingStrategy()
 {
+}
+
+bool KisDabProcessingStrategy::isSequential() const
+{
+    return m_isSequential;
 }
 
 bool KisDabProcessingStrategy::isExclusive() const

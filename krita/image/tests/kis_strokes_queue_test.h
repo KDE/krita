@@ -16,30 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_DAB_PROCESSING_STRATEGY_H
-#define __KIS_DAB_PROCESSING_STRATEGY_H
+#ifndef __KIS_STROKES_QUEUE_TEST_H
+#define __KIS_STROKES_QUEUE_TEST_H
 
-#include "krita_export.h"
+#include <QtTest/QtTest>
 
 
-class KRITAIMAGE_EXPORT KisDabProcessingStrategy
+class KisStrokesQueueTest : public QObject
 {
-public:
-    class DabProcessingData
-    {
-    };
+    Q_OBJECT
 
-public:
-    KisDabProcessingStrategy(bool isSequential = true, bool isExclusive = false);
-    virtual ~KisDabProcessingStrategy();
-
-    virtual void processDab(DabProcessingData *data) = 0;
-    bool isSequential() const;
-    bool isExclusive() const;
-
-private:
-    bool m_isSequential;
-    bool m_isExclusive;
+private slots:
+    void testSequentialJobs();
+    void testExclusiveStrokes();
+    void testStrokesOverlapping();
 };
 
-#endif /* __KIS_DAB_PROCESSING_STRATEGY_H */
+#endif /* __KIS_STROKES_QUEUE_TEST_H */

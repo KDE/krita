@@ -352,6 +352,12 @@ target_link_libraries(KisStrokeTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_L
 
 ########### next target ###############
 
+set(kis_strokes_queue_test_SRCS kis_strokes_queue_test.cpp )
+kde4_add_unit_test(KisStrokesQueueTest TESTNAME krita-image-KisStrokesQueueTest ${kis_strokes_queue_test_SRCS})
+target_link_libraries(KisStrokesQueueTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_macro_test_SRCS kis_macro_test.cpp )
 kde4_add_unit_test(KisMacroTest TESTNAME krita-image-KisMacroTest ${kis_macro_test_SRCS})
 target_link_libraries(KisMacroTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

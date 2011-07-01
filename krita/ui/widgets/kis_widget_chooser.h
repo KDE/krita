@@ -20,7 +20,6 @@
 #define H_KIS_WIDGET_CHOOSER_H_
 
 #include <krita_export.h>
-#include <QWidget>
 #include <QList>
 #include <QIcon>
 #include <QFrame>
@@ -93,7 +92,7 @@ private:
     QIcon         m_acceptIcon;
     QToolButton*  m_arrowButton;
     QButtonGroup* m_buttons;
-    QWidget*      m_popup;
+    QFrame*       m_popup;
     QString       m_choosenID;
     QList<Data>   m_widgets;
 };

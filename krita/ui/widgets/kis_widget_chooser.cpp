@@ -31,17 +31,17 @@
 KisWidgetChooser::KisWidgetChooser(QWidget* parent):
     QFrame(parent)
 {
-    QFrame::setFrameShape(QFrame::Panel);
-    QFrame::setFrameShadow(QFrame::Raised);
-    QFrame::setContentsMargins(1, 1, 1, 1);
+//     QFrame::setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
     
     m_acceptIcon  = QIcon::fromTheme("list-add");
     m_buttons     = new QButtonGroup();
     m_popup       = new QFrame(0, Qt::Popup);
     m_arrowButton = new QToolButton();
+    
+    m_popup->setFrameStyle(QFrame::Panel|QFrame::Raised);
     m_arrowButton->setIcon(arrowIcon());
     m_arrowButton->setAutoRaise(true);
-        
+    
     connect(m_arrowButton, SIGNAL(clicked(bool)), SLOT(slotButtonPressed()));
 }
 
@@ -91,7 +91,7 @@ void KisWidgetChooser::addWidget(const QString& id, const QString& label, QWidge
 QLayout* KisWidgetChooser::createLayout()
 {
     QHBoxLayout* layout = new QHBoxLayout();
-    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setContentsMargins(2, 0, 0, 0);
     layout->setSpacing(0);
     
     for(Iterator i=m_widgets.begin(); i!=m_widgets.end(); ++i) {
@@ -111,6 +111,9 @@ QLayout* KisWidgetChooser::createPopupLayout()
     QGridLayout* layout = new QGridLayout();
     int          row    = 0;
     int          idx    = 0;
+    
+    layout->setContentsMargins(2, 0, 0, 0);
+    layout->setSpacing(0);
     
     QButtonGroup*           group   = new QButtonGroup();
     QList<QAbstractButton*> buttons = m_buttons->buttons();

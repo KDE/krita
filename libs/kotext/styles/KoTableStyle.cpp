@@ -182,7 +182,7 @@ void KoTableStyle::applyStyle(QTextTableFormat &format) const
             case QTextFormat::FrameBottomMargin:
             case QTextFormat::FrameLeftMargin:
             case QTextFormat::FrameRightMargin:
-                variant = variant.value<QTextLength>().rawValue();
+                variant = propertyLength(key).rawValue();
                 break;
             default:
                 break;

@@ -22,22 +22,29 @@
 #include "kis_full_refresh_walker.h"
 #include "kis_simple_update_queue.h"
 
+struct KisUpdateScheduler::Private {
+    Private() : workQueue(0) {}
+
+    KisAbstractUpdateQueue* workQueue;
+    KisUpdaterContext updaterContext;
+};
+
 KisUpdateScheduler::KisUpdateScheduler(KisImageWSP image)
-    : m_workQueue(0)
+    : m_d(new Private)
 {
     updateSettings();
 
     // The queue will update settings in a constructor itself
-    m_workQueue = new KisSimpleUpdateQueue();
+    m_d->workQueue = new KisSimpleUpdateQueue();
 
-    connect(&m_updaterContext, SIGNAL(sigContinueUpdate(const QRect&)),
+    connect(&m_d->updaterContext, SIGNAL(sigContinueUpdate(const QRect&)),
             image, SLOT(slotProjectionUpdated(const QRect&)),
             Qt::DirectConnection);
 
-    connect(&m_updaterContext, SIGNAL(sigDoSomeUsefulWork()),
+    connect(&m_d->updaterContext, SIGNAL(sigDoSomeUsefulWork()),
             SLOT(doSomeUsefulWork()), Qt::DirectConnection);
 
-    connect(&m_updaterContext, SIGNAL(sigSpareThreadAppeared()),
+    connect(&m_d->updaterContext, SIGNAL(sigSpareThreadAppeared()),
             SLOT(spareThreadAppeared()), Qt::DirectConnection);
 
 }
@@ -48,8 +55,8 @@ KisUpdateScheduler::~KisUpdateScheduler()
 
 void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect)
 {
-    m_workQueue->addJob(node, rc, cropRect);
-    m_workQueue->processQueue(m_updaterContext);
+    m_d->workQueue->addJob(node, rc, cropRect);
+    processQueues();
 }
 
 void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect)
@@ -57,39 +64,44 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
     KisBaseRectsWalkerSP walker = new KisFullRefreshWalker(cropRect);
     walker->collectRects(root, rc);
 
-    m_workQueue->executeJobSync(walker, m_updaterContext);
+    m_d->workQueue->executeJobSync(walker, m_d->updaterContext);
 }
 
 void KisUpdateScheduler::updateSettings()
 {
-    if(m_workQueue) {
-        m_workQueue->updateSettings();
+    if(m_d->workQueue) {
+        m_d->workQueue->updateSettings();
     }
 }
 
 void KisUpdateScheduler::lock()
 {
-    m_workQueue->blockProcessing(m_updaterContext);
+    m_d->workQueue->blockProcessing(m_d->updaterContext);
 }
 
 void KisUpdateScheduler::unlock()
 {
-    m_workQueue->startProcessing(m_updaterContext);
+    m_d->workQueue->startProcessing(m_d->updaterContext);
 }
 
 void KisUpdateScheduler::waitForDone()
 {
-    m_updaterContext.waitForDone();
-    Q_ASSERT(m_workQueue->isEmpty());
+    m_d->updaterContext.waitForDone();
+    Q_ASSERT(m_d->workQueue->isEmpty());
+}
+
+void KisUpdateScheduler::processQueues()
+{
+    m_d->workQueue->processQueue(m_d->updaterContext);
 }
 
 void KisUpdateScheduler::doSomeUsefulWork()
 {
-    m_workQueue->optimize();
+    m_d->workQueue->optimize();
 }
 
 void KisUpdateScheduler::spareThreadAppeared()
 {
-    m_workQueue->processQueue(m_updaterContext);
+    processQueues();
 }
 

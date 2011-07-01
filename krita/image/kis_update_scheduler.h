@@ -39,13 +39,16 @@ public:
 
     void updateSettings();
 
-protected slots:
+private:
+    void processQueues();
+
+private slots:
     void doSomeUsefulWork();
     void spareThreadAppeared();
 
-protected:
-    KisAbstractUpdateQueue* m_workQueue;
-    KisUpdaterContext m_updaterContext;
+private:
+    class Private;
+    Private * const m_d;
 };
 
 #endif /* __KIS_UPDATE_SCHEDULER_H */

@@ -29,9 +29,6 @@ public:
     KisImageConfig();
     ~KisImageConfig();
 
-    bool useUpdateScheduler() const;
-    void setUseUpdateScheduler(bool useUpdateScheduler);
-
     int updatePatchHeight() const;
     void setUpdatePatchHeight(int value);
     int updatePatchWidth() const;

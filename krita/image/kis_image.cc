@@ -66,7 +66,6 @@
 #include "kis_meta_data_merge_strategy.h"
 
 #include "kis_image_config.h"
-#include "kis_projection.h"
 #include "kis_update_scheduler.h"
 
 
@@ -80,21 +79,6 @@
 #else
 #define SANITY_CHECK_LOCKED(name)
 #endif
-
-
-KisAbstractUpdateScheduler* createUpdateScheduler(KisImageWSP image)
-{
-    KisImageConfig config;
-
-    if(config.useUpdateScheduler()) {
-        dbgImage<<"Creating KisUpdateScheduler";
-        return new KisUpdateScheduler(image);
-    }
-    else {
-        dbgImage<<"Created KisProjection";
-        return new KisProjection(image);
-    }
-}
 
 
 class KisImage::KisImagePrivate
@@ -127,7 +111,7 @@ public:
     KisSelectionSP globalSelection;
     KisSelectionSP deselectedGlobalSelection;
 
-    KisAbstractUpdateScheduler* projection;
+    KisUpdateScheduler* scheduler;
 
     bool startProjection;
 };
@@ -175,9 +159,9 @@ KisImage::KisImage(const KisImage& rhs)
         m_d->startProjection = rhs.m_d->startProjection;
         Q_CHECK_PTR(m_d->nserver);
 
-        m_d->projection = 0;
+        m_d->scheduler = 0;
         if (m_d->startProjection) {
-            m_d->projection = createUpdateScheduler(this);
+            m_d->scheduler = new KisUpdateScheduler(this);
         }
     }
 }
@@ -186,7 +170,7 @@ KisImage::~KisImage()
 {
     dbgImage << "deleting kisimage" << objectName();
 
-    delete m_d->projection;
+    delete m_d->scheduler;
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
     delete m_d;
@@ -315,9 +299,9 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height, const 
 
     m_d->recorder = new KisActionRecorder(this);
 
-    m_d->projection = 0;
+    m_d->scheduler = 0;
     if (m_d->startProjection) {
-        m_d->projection = createUpdateScheduler(this);
+        m_d->scheduler = new KisUpdateScheduler(this);
     }
 }
 
@@ -330,8 +314,8 @@ void KisImage::lock()
 {
 //  blockSignals(true);
     if (!locked()) {
-        if (m_d->projection) {
-            m_d->projection->lock();
+        if (m_d->scheduler) {
+            m_d->scheduler->lock();
         }
         m_d->sizeChangedWhileLocked = false;
     }
@@ -350,8 +334,8 @@ void KisImage::unlock()
                 emit sigSizeChanged(m_d->width, m_d->height);
             }
 
-            if (m_d->projection) {
-                m_d->projection->unlock();
+            if (m_d->scheduler) {
+                m_d->scheduler->unlock();
             }
         }
 //      blockSignals(false);
@@ -1121,8 +1105,8 @@ void KisImage::refreshGraph(KisNodeSP root, const QRect &rc, const QRect &cropRe
 {
     if (!root) root = m_d->rootLayer;
 
-    if (!locked() && m_d->projection) {
-        m_d->projection->fullRefresh(root, rc, cropRect);
+    if (!locked() && m_d->scheduler) {
+        m_d->scheduler->fullRefresh(root, rc, cropRect);
     }
 }
 
@@ -1133,9 +1117,9 @@ void KisImage::slotProjectionUpdated(const QRect & rc)
 
 void KisImage::updateProjection(KisNodeSP node, const QRect& rc)
 {
-    if (!locked() && m_d->projection) {
+    if (!locked() && m_d->scheduler) {
         dbgImage << "KisImage: requested and update for" << node->name() << rc;
-        m_d->projection->updateProjection(node, rc, bounds());
+        m_d->scheduler->updateProjection(node, rc, bounds());
     }
 }
 

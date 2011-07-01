@@ -32,16 +32,6 @@ KisImageConfig::~KisImageConfig()
     m_config.sync();
 }
 
-bool KisImageConfig::useUpdateScheduler() const
-{
-    return m_config.readEntry("useUpdateScheduler", true);
-}
-
-void KisImageConfig::setUseUpdateScheduler(bool value)
-{
-    m_config.writeEntry("useUpdateScheduler", value);
-}
-
 int KisImageConfig::updatePatchHeight() const
 {
     return m_config.readEntry("updatePatchHeight", 512);

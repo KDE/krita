@@ -127,7 +127,6 @@ set(kritaimage_LIB_SRCS
    kis_strokes_queue.cpp
    kis_abstract_update_queue.cpp
    kis_simple_update_queue.cpp
-   kis_abstract_update_scheduler.cpp
    kis_update_scheduler.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
@@ -158,7 +157,6 @@ set(kritaimage_LIB_SRCS
    kis_perspective_math.cpp
    kis_pixel_selection.cpp
    kis_processing_information.cpp
-   kis_projection.cc
    kis_properties_configuration.cc
    kis_random_accessor.cpp
    kis_random_accessor_ng.cpp

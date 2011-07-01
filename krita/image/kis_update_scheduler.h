@@ -19,11 +19,10 @@
 #ifndef __KIS_UPDATE_SCHEDULER_H
 #define __KIS_UPDATE_SCHEDULER_H
 
-#include "kis_abstract_update_scheduler.h"
 #include "kis_updater_context.h"
 #include "kis_abstract_update_queue.h"
 
-class KRITAIMAGE_EXPORT KisUpdateScheduler : public KisAbstractUpdateScheduler
+class KRITAIMAGE_EXPORT KisUpdateScheduler : public QObject
 {
     Q_OBJECT
 

@@ -16,28 +16,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_DAB_PROCESSING_STRATEGY_H
-#define __KIS_DAB_PROCESSING_STRATEGY_H
+#ifndef __KIS_STROKE_TEST_H
+#define __KIS_STROKE_TEST_H
 
-#include "krita_export.h"
+#include <QtTest/QtTest>
 
+class KisStrokeJob;
 
-class KRITAIMAGE_EXPORT KisDabProcessingStrategy
+class KisStrokeTest : public QObject
 {
-public:
-    class DabProcessingData
-    {
-    };
-
-public:
-    KisDabProcessingStrategy(bool isExclusive = false);
-    virtual ~KisDabProcessingStrategy();
-
-    virtual void processDab(DabProcessingData *data) = 0;
-    bool isExclusive() const;
-
+    Q_OBJECT
 private:
-    bool m_isExclusive;
+    static QString getName(KisStrokeJob *job);
+
+private slots:
+    void testRegularStroke();
+    void testCancelStrokeCase1();
+    void testCancelStrokeCase2and3();
+    void testCancelStrokeCase4();
 };
 
-#endif /* __KIS_DAB_PROCESSING_STRATEGY_H */
+#endif /* __KIS_STROKE_TEST_H */

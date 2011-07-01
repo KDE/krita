@@ -346,6 +346,12 @@ target_link_libraries(KisUpdateSchedulerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT
 
 ########### next target ###############
 
+set(kis_stroke_test_SRCS kis_stroke_test.cpp )
+kde4_add_unit_test(KisStrokeTest TESTNAME krita-image-KisStrokeTest ${kis_stroke_test_SRCS})
+target_link_libraries(KisStrokeTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_macro_test_SRCS kis_macro_test.cpp )
 kde4_add_unit_test(KisMacroTest TESTNAME krita-image-KisMacroTest ${kis_macro_test_SRCS})
 target_link_libraries(KisMacroTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

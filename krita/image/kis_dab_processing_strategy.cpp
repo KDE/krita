@@ -27,7 +27,7 @@ KisDabProcessingStrategy::~KisDabProcessingStrategy()
 {
 }
 
-bool KisDabProcessingStrategy::isExclusive()
+bool KisDabProcessingStrategy::isExclusive() const
 {
     return m_isExclusive;
 }

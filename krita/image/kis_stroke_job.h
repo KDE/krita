@@ -39,8 +39,15 @@ public:
         m_dabStrategy->processDab(m_dabData);
     }
 
-    bool isExclusive() {
+    bool isExclusive() const {
         return m_dabStrategy->isExclusive();
+    }
+
+private:
+    // for testing use only, do not use in real code
+    friend class KisStrokeTest;
+    KisDabProcessingStrategy* testingGetDabStrategy() {
+        return m_dabStrategy;
     }
 
 private:

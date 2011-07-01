@@ -122,6 +122,8 @@ set(kritaimage_LIB_SRCS
    kis_updater_context.cpp
    kis_update_job_item.cpp
    kis_dab_processing_strategy.cpp
+   kis_stroke_strategy.cpp
+   kis_stroke.cpp
    kis_abstract_update_queue.cpp
    kis_simple_update_queue.cpp
    kis_abstract_update_scheduler.cpp

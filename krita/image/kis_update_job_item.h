@@ -46,7 +46,7 @@ public:
     }
 
     void run() {
-        if(m_isExclusive) {
+        if(m_exclusive) {
             m_exclusiveJobLock->lockForWrite();
         } else {
             m_exclusiveJobLock->lockForRead();
@@ -84,7 +84,7 @@ public:
         m_changeRect = walker->changeRect();
         m_walker = walker;
 
-        m_isExclusive = false;
+        m_exclusive = false;
         m_strokeJob = 0;
     }
 
@@ -92,7 +92,7 @@ public:
         m_type = STROKE;
         m_strokeJob = strokeJob;
 
-        m_isExclusive = m_strokeJob->isExclusive();
+        m_exclusive = m_strokeJob->isExclusive();
         m_walker = 0;
         m_accessRect = m_changeRect = QRect();
     }
@@ -134,7 +134,7 @@ private:
      */
     QReadWriteLock *m_exclusiveJobLock;
 
-    bool m_isExclusive;
+    bool m_exclusive;
 
     volatile Type m_type;
 

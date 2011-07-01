@@ -27,6 +27,7 @@
 class StylesWidget;
 class SpecialButton;
 class KoStyleManager;
+class KoStyleThumbnailer;
 class KoParagraphStyle;
 class KoCharacterStyle;
 
@@ -55,6 +56,9 @@ private:
     bool m_blockSignals;
     StylesWidget *m_popupForBlock;
     StylesWidget *m_popupForChar;
+    KoStyleThumbnailer *m_thumbnailer;
+    SpecialButton *m_blockFrame;
+    SpecialButton *m_charFrame;
 };
 
 #endif

@@ -165,6 +165,9 @@ set(kritaui_LIB_SRCS
     widgets/kis_workspace_chooser.cpp
     widgets/squeezedcombobox.cpp
     widgets/kis_categorized_list_view.cpp
+    widgets/kis_widget_chooser.cpp
+    widgets/kis_light_source.cpp
+    widgets/kis_light_stage.cpp
 )
 
 if(HAVE_OPENGL)

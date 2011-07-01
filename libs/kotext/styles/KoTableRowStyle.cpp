@@ -359,8 +359,6 @@ void KoTableRowStyle::saveOdf(KoGenStyle &style) const
             style.addPropertyPt("style:min-row-height", minimumRowHeight(), KoGenStyle::TableRowType);
         } else if (key == RowHeight) {
             style.addPropertyPt("style:row-height", rowHeight(), KoGenStyle::TableRowType);
-        } else if (key == MinimumRowHeight) {
-            style.addPropertyPt("style:min-row-height", minimumRowHeight(), KoGenStyle::TableRowType);
         } else if (key == UseOptimalHeight) {
             style.addProperty("style:use-optimal-row-height", useOptimalHeight(), KoGenStyle::TableRowType);
         } else if (key == BreakBefore) {

@@ -1502,18 +1502,17 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
         return border;
 #ifndef NWORKAROUND_ODF_BUGS
     } else if (stroke.isEmpty()) {
-        QPen pen;
+        QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, "solid", stylesReader);
         if (KoOdfWorkaround::fixMissingStroke(pen, element, context, this)) {
             KoLineBorder *border = new KoLineBorder();
 
-            // FIXME: (make it possible to) use a cosmetic pen
-            if (pen.widthF() == 0.0)
-                border->setLineWidth(0.5);
-            else
-                border->setLineWidth(pen.widthF());
+#ifndef NWORKAROUND_ODF_BUGS
+            KoOdfWorkaround::fixPenWidth(pen, context);
+#endif
+            border->setLineWidth(pen.widthF());
             border->setJoinStyle(pen.joinStyle());
             border->setLineStyle(pen.style(), pen.dashPattern());
-            border->setLineBrush(pen.brush());
+            border->setColor(pen.color());
 
             return border;
         }

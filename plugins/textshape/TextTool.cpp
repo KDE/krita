@@ -1231,6 +1231,8 @@ void TextTool::updateActions()
     if (textEditor == 0)
         return;
     m_allowActions = false;
+
+    //Update the characterStyle related GUI elements
     QTextCharFormat cf = textEditor->charFormat();
     m_actionFormatBold->setChecked(cf.fontWeight() > QFont::Normal);
     m_actionFormatItalic->setChecked(cf.fontItalic());
@@ -1264,6 +1266,7 @@ void TextTool::updateActions()
     m_growHeightAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
     m_growHeightAction->setChecked(resizemethod == KoTextShapeData::AutoGrowHeight || resizemethod == KoTextShapeData::AutoGrowWidthAndHeight);
 
+    //update paragraphStyle GUI element
     QTextBlockFormat bf = textEditor->blockFormat();
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
         bool revert = (textEditor->block().layout()->textOption().textDirection() == Qt::LeftToRight) != QApplication::isLeftToRight();
@@ -1282,6 +1285,7 @@ void TextTool::updateActions()
 
     m_actionFormatDecreaseIndent->setEnabled(textEditor->blockFormat().leftMargin() > 0.);
 
+    //change tracking
     if (m_changeTracker && m_changeTracker->displayChanges())
         m_actionShowChanges->setChecked(true);
     if (m_changeTracker && m_changeTracker->recordChanges())
@@ -1504,6 +1508,8 @@ QList<QWidget *> TextTool::createOptionWidgets()
 
     // Connect to/with simple styles widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), ssw, SLOT(setCurrentFormat(QTextBlockFormat)));
+    connect(this, SIGNAL(charFormatChanged(QTextCharFormat)), ssw, SLOT(setCurrentFormat(QTextCharFormat)));
     connect(ssw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
     connect(ssw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
     connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));

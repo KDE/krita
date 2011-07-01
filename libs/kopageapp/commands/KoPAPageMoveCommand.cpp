@@ -87,7 +87,7 @@ void KoPAPageMoveCommand::undo()
     }
 
     QMap<int, KoPAPageBase *>::const_iterator it;
-    for ( it = m_pageIndices.constBegin(); it != m_pageIndices.constEnd(); it++ ) {
+    for ( it = m_pageIndices.constBegin(); it != m_pageIndices.constEnd(); ++it ) {
         m_document->insertPage( it.value(), it.key() );
     }
 }

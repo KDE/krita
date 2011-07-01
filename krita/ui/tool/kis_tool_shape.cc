@@ -47,6 +47,11 @@ KisToolShape::~KisToolShape()
 {
 }
 
+int KisToolShape::flags() const
+{
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
+}
+
 QWidget * KisToolShape::createOptionWidget()
 {
     QWidget * optionWidget = KisToolPaint::createOptionWidget();

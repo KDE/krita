@@ -66,6 +66,8 @@ public:
        , changeTracker(0)
        , inlineTextObjectManager(0)
        , provider(0)
+       ,layoutPosition(0)
+       ,anchoringRootArea(0)
        , anchoringIndex(0)
        , defaultTabSizing(0)
        , y(0)
@@ -74,6 +76,7 @@ public:
        , continuousLayout(true)
        , layoutBlocked(false)
        , restartLayout(false)
+       , documentChangedCount(0)
     {
     }
     KoStyleManager *styleManager;
@@ -111,6 +114,7 @@ public:
         ,AnchoringFinalState
     };
     AnchoringState anchoringState;
+    int documentChangedCount;
 };
 
 
@@ -284,6 +288,11 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     emitLayoutIsDirty();
 }
 
+int KoTextDocumentLayout::documentChangedCount() const
+{
+    return d->documentChangedCount;
+}
+
 KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) const
 {
     QTextBlock block = document()->findBlock(position);
@@ -327,6 +336,8 @@ void KoTextDocumentLayout::registerAnchoredObstruction(KoTextLayoutObstruction *
 
 void KoTextDocumentLayout::positionAnchoredObstructions()
 {
+    if (!d->anchoringRootArea)
+        return;
     KoTextPage *page = d->anchoringRootArea->page();
     if (!page)
         return;
@@ -474,6 +485,8 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
 
 void KoTextDocumentLayout::emitLayoutIsDirty()
 {
+    d->documentChangedCount++;
+
     emit layoutIsDirty();
 }
 

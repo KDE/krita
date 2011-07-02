@@ -292,67 +292,73 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
 }
 
 bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io) {
+    int channelOffset = 0;
 
+    for (int row = 0; row <m_header->height; row++) {
 
-    qDebug()<<"Channel Size: "<<m_channelSize;
-    int row,col,index;
-    QByteArray l,a,b;
-    l = io->read(m_channelDataLength);
-    a = io->read(m_channelDataLength);
-    b = io->read(m_channelDataLength);
-
-    //XXX: this code is only valid for images with channelsize == 2
-
-
-    for (row = 0; row < m_header->height; row++) {
         KisHLineIterator it = dev->createHLineIterator(0, row, m_header->width);
-        for ( col = 0; col < m_header->width; col++) {
-            index = row * m_header->width + col;
+        QVector<QByteArray> vectorBytes;
+
+        for (int channel = 0; channel < m_header->nChannels; channel++) {
+
+            io->seek(m_channelInfoRecords[channel].channelDataStart + channelOffset);
+            vectorBytes.append(io->read(m_header->width*m_channelSize));
+            qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
+
+        }
+        channelOffset += (m_header->width * m_channelSize);
+
+        qDebug() << "------------------------------------------";
+        qDebug() << "channel offset:"<< channelOffset ;
+        qDebug() << "------------------------------------------";
+
+        for (int col = 0; col < m_header->width; col++) {
 
             if (m_channelSize == 1) {
 
-                quint8 L = ntohs(reinterpret_cast<const quint8 *>(l.constData())[index]);
+                quint8 L = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[0].constData())[col]);
                 KoLabTraits<quint8>::setL(it.rawData(),L);
 
-                quint8 A = ntohs(reinterpret_cast<const quint8 *>(a.constData())[index]);
+                quint8 A = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[1].constData())[col]);
                 KoLabTraits<quint8>::setA(it.rawData(),A);
 
-                quint8 B = ntohs(reinterpret_cast<const quint8 *>(b.constData())[index]);
+                quint8 B = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[2].constData())[col]);
                 KoLabTraits<quint8>::setB(it.rawData(),B);
 
             }
 
             else if (m_channelSize == 2) {
 
-                quint16 L = ntohs(reinterpret_cast<const quint16 *>(l.constData())[index]);
+                quint16 L = ntohs(reinterpret_cast<const quint16 *>(vectorBytes[0].constData())[col]);
                 KoLabTraits<quint16>::setL(it.rawData(),L);
 
-                quint16 A = ntohs(reinterpret_cast<const quint16 *>(a.constData())[index]);
+                quint16 A = ntohs(reinterpret_cast<const quint16 *>(vectorBytes[1].constData())[col]);
                 KoLabTraits<quint16>::setA(it.rawData(),A);
 
-                quint16 B = ntohs(reinterpret_cast<const quint16 *>(b.constData())[index]);
+                quint16 B = ntohs(reinterpret_cast<const quint16 *>(vectorBytes[2].constData())[col]);
                 KoLabTraits<quint16>::setB(it.rawData(),B);
 
             }
 
             else if (m_channelSize == 4) {
 
-                quint32 L = ntohs(reinterpret_cast<const quint32 *>(l.constData())[index]);
+                quint32 L = ntohs(reinterpret_cast<const quint32 *>(vectorBytes[0].constData())[col]);
                 KoLabTraits<quint32>::setL(it.rawData(),L);
 
-                quint32 A = ntohs(reinterpret_cast<const quint32 *>(a.constData())[index]);
+                quint32 A = ntohs(reinterpret_cast<const quint32 *>(vectorBytes[1].constData())[col]);
                 KoLabTraits<quint32>::setA(it.rawData(),A);
 
-                quint32 B = ntohs(reinterpret_cast<const quint32 *>(b.constData())[index]);
+                quint32 B = ntohs(reinterpret_cast<const quint32 *>(vectorBytes[2].constData())[col]);
                 KoLabTraits<quint32>::setB(it.rawData(),B);
 
             }
 
             dev->colorSpace()->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
-
             ++it;
         }
+
     }
 
     return true;
+
 }

@@ -277,9 +277,9 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
             }
 
             dev->colorSpace()->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
-
+            ++it;
         }
-        ++it;
+
     }
 
     return true;

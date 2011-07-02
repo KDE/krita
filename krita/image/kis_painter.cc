@@ -31,7 +31,6 @@
 #include <climits>
 #include <strings.h>
 
-#include <qregion.h>
 #include <QImage>
 #include <QRect>
 #include <QString>
@@ -241,30 +240,21 @@ KisTransaction* KisPainter::takeTransaction()
     return temp;
 }
 
-QRegion KisPainter::takeDirtyRegion()
+QVector<QRect> KisPainter::takeDirtyRegion()
 {
-    QRegion r;
-    foreach(QRect rc, d->dirtyRects) {
-        r += rc;
-    }
+    QVector<QRect> vrect = d->dirtyRects;
     d->dirtyRects.clear();
-    return r;
+    return vrect;
 }
 
 
-QRegion KisPainter::addDirtyRect(const QRect & rc)
+QVector<QRect>  KisPainter::addDirtyRect(const QRect & rc)
 {
     QRect r = rc.normalized();
     if (r.isValid() && r.width() > 0 && r.height() > 0) {
         d->dirtyRects.append(rc);
     }
-
-    QRegion region;
-    foreach(QRect rc, d->dirtyRects) {
-        region += rc;
-    }
-    return region;
-
+    return d->dirtyRects;
 }
 
 void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,

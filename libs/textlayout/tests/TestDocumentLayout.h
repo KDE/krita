@@ -38,15 +38,24 @@ public:
 private slots:
     void initTestCase();
 
-#if 0
-    /// Test the hittest of KoTextDocumentLayout
+    /**
+     * Test the hittest of KoTextDocumentLayout.
+     */
     void testHitTest();
-    /// Test the hittest of KoTextDocumentLayout regarding setions
-    void testHitTestSection();
-#endif
 
+    /**
+     * Test root-area with zero width.
+     */
     void testRootAreaZeroWidth();
+
+    /**
+     * Test root-area with zero height.
+     */
     void testRootAreaZeroHeight();
+
+    /**
+     * Test root-area with zero width and height.
+     */
     void testRootAreaZeroWidthAndHeight();
 
 private:

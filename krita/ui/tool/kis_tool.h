@@ -82,23 +82,22 @@ class  KRITAUI_EXPORT KisTool
     Q_OBJECT
 
 public:
+    enum { FLAG_USES_CUSTOM_PRESET=0x01, FLAG_USES_CUSTOM_COMPOSITEOP=0x02 };
 
     KisTool(KoCanvasBase * canvas, const QCursor & cursor);
     virtual ~KisTool();
-
+    
+    virtual int flags() const { return 0; }
+    
     void deleteSelection();
 // KoToolBase Implementation.
 
 public slots:
-
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-
     virtual void deactivate();
-
     virtual void resourceChanged(int key, const QVariant & res);
 
 protected:
-
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
@@ -139,6 +138,7 @@ protected:
     /// Convert a pixel path into a view path
     QPainterPath pixelToView(const QPainterPath &pixelPath) const;
 
+    /// Convert a pixel polygon into a view path
     QPolygonF pixelToView(const QPolygonF &pixelPolygon) const;
 
     /// Update the canvas for the given rectangle in image pixel coordinates.
@@ -155,7 +155,6 @@ protected:
     }
 
 protected:
-
     bool specialModifierActive();
     virtual void gesture(const QPointF &offsetInDocPixels,
                          const QPointF &initialDocPoint);
@@ -223,7 +222,6 @@ protected slots:
     virtual void resetCursorStyle();
 
 private slots:
-
     void slotToggleFgBg();
     void slotResetFgBg();
 

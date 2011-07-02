@@ -212,7 +212,7 @@ Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
     }
     qint16* dataIt = reinterpret_cast<qint16*>(array.data() + index);
     for (QList<KisMetaData::Value>::iterator it = values.begin();
-            it != values.end(); it++) {
+            it != values.end(); ++it) {
         dataIt[0] = it->asRational().numerator;
         dataIt[1] = it->asRational().denominator;
         dataIt += 2;

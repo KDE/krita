@@ -27,6 +27,7 @@
 #include <QList>
 #include <QString>
 #include <QVariant>
+#include <QTextDocument>
 
 #include <KoXmlReader.h>
 #include "KoText.h"
@@ -98,7 +99,6 @@ public:
     void setPosition(const QString &position);
 
     KoText::Tab tab;
-private:
     QString m_position;
 };
 
@@ -196,5 +196,6 @@ private:
 };
 
 Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *)
+Q_DECLARE_METATYPE(QTextDocument *)
 
 #endif

@@ -107,11 +107,13 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
     }
     case Qt::DecorationRole: {
         KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
-        if (paragStyle)
+        if (paragStyle) {
             return m_styleThumbnailer->thumbnail(paragStyle);
+        }
         KoCharacterStyle *characterStyle =  m_styleManager->characterStyle(id);
-        if (characterStyle)
+        if (characterStyle) {
             return m_styleThumbnailer->thumbnail(characterStyle);
+        }
         break;
     }
     default: break;
@@ -169,14 +171,6 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
     if (m_styleManager == 0) {
         return;
     }
-
-    delete m_tmpTextShape;
-
-    KoInlineTextObjectManager *itom = new KoInlineTextObjectManager(this);
-    m_tmpTextShape = new TextShape(itom);
-    m_tmpTextShape->setSize(QSizeF(250, 300));
-    m_styleThumbnailer->setPixmapHelperDocument(m_tmpTextShape->textShapeData()->document());
-
 
     if (m_paragraphMode) {
         foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles())

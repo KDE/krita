@@ -48,6 +48,9 @@ private slots:
     /// insert a table of contents
     void insertTableOfContents();
 
+    /// format the table of contents template
+    void formatTableOfContents();
+
 private:
 };
 

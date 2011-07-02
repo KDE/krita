@@ -5,6 +5,7 @@
  *  Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
  *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *  Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,6 +70,7 @@
 #include "kis_view2.h"
 #include "kis_node_manager.h"
 #include "kis_node_model.h"
+#include "kis_layer_manager.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_doc2.h"
 
@@ -131,6 +133,14 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->bnLower->setEnabled(false);
     m_wdgLayerBox->bnLower->setIcon(BarIcon("go-down"));
     m_wdgLayerBox->bnLower->setIconSize(QSize(22, 22));
+    
+    m_wdgLayerBox->bnLeft->setEnabled(true);
+    m_wdgLayerBox->bnLeft->setIcon(BarIcon("arrow-left"));
+    m_wdgLayerBox->bnLeft->setIconSize(QSize(22, 22));
+    
+    m_wdgLayerBox->bnRight->setEnabled(true);
+    m_wdgLayerBox->bnRight->setIcon(BarIcon("arrow-right"));
+    m_wdgLayerBox->bnRight->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnProperties->setIcon(BarIcon("document-properties"));
     m_wdgLayerBox->bnProperties->setIconSize(QSize(22, 22));
@@ -144,6 +154,8 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->bnRaise, SIGNAL(clicked()), SLOT(slotLowerClicked()));
     connect(m_wdgLayerBox->bnLower, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     // END NOTE
+    connect(m_wdgLayerBox->bnLeft, SIGNAL(clicked()), SLOT(slotLeftClicked()));
+    connect(m_wdgLayerBox->bnRight, SIGNAL(clicked()), SLOT(slotRightClicked()));
 
     connect(m_wdgLayerBox->bnProperties, SIGNAL(clicked()), SLOT(slotPropertiesClicked()));
     connect(m_wdgLayerBox->bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
@@ -276,9 +288,9 @@ void KisLayerBox::updateUI()
 
     m_wdgLayerBox->bnDelete->setEnabled(active);
     m_wdgLayerBox->bnRaise->setEnabled(active && (active->nextSibling()
-                                           || (active->parent() && active->parent() != m_image->root())));
-
-    m_wdgLayerBox->bnLower->setEnabled(active && active->prevSibling());
+                                       || (active->parent() && active->parent() != m_image->root())));
+    m_wdgLayerBox->bnLower->setEnabled(active && (active->prevSibling()
+                                       || (active->parent() && active->parent() != m_image->root())));
     m_wdgLayerBox->bnDuplicate->setEnabled(active);
     m_wdgLayerBox->bnProperties->setEnabled(active);
 
@@ -343,12 +355,15 @@ void KisLayerBox::slotSetOpacity(double opacity)
 void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &index)
 {
     QMenu menu;
+
     if (index.isValid()) {
         m_wdgLayerBox->listLayers->addPropertyActions(&menu, index);
         menu.addAction(KIcon("document-properties"), i18n("&Properties..."), this, SLOT(slotPropertiesClicked()));
         menu.addSeparator();
         menu.addAction(KIcon("edit-delete"), i18n("&Remove Layer"), this, SLOT(slotRmClicked()));
         menu.addAction(KIcon("edit-duplicate"), i18n("&Duplicate Layer or Mask"), this, SLOT(slotDuplicateClicked()));
+        QAction* mergeLayerDown = menu.addAction(KIcon("edit-merge"), i18n("&Merge with Layer Below"), this, SLOT(slotMergeLayer()));
+        if (!index.sibling(index.row() + 1, 0).isValid()) mergeLayerDown->setEnabled(false);
         menu.addSeparator();
 
     }
@@ -365,6 +380,11 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
     menu.addAction(m_newSelectionMaskAction);
 
     menu.exec(pos);
+}
+
+void KisLayerBox::slotMergeLayer()
+{
+    m_nodeManager->layerManager()->mergeLayer();
 }
 
 void KisLayerBox::slotMinimalView()
@@ -459,12 +479,63 @@ void KisLayerBox::slotRmClicked()
 
 void KisLayerBox::slotRaiseClicked()
 {
-    m_nodeManager->raiseNode();
+    KisNodeSP node = m_nodeManager->activeNode();
+    KisNodeSP parent = m_nodeManager->activeNode()->parent();
+    KisNodeSP grandParent = parent->parent();
+
+    if (!m_nodeManager->activeNode()->prevSibling()) {
+        if (!grandParent) return;  
+        if (!grandParent->parent() && node->inherits("KisMask")) return;
+        parent->nextSibling() ?
+        m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent)) 
+        : m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) - 1);
+    } else {
+        m_nodeManager->raiseNode();
+    }
 }
 
 void KisLayerBox::slotLowerClicked()
 {
-    m_nodeManager->lowerNode();
+    if (!m_nodeManager->activeNode()->nextSibling()) {
+        slotLeftClicked();
+    } else {
+        m_nodeManager->lowerNode();
+    }
+}
+
+void KisLayerBox::slotLeftClicked()
+{
+    KisNodeSP node = m_nodeManager->activeNode();
+    KisNodeSP parent = m_nodeManager->activeNode()->parent();
+    KisNodeSP grandParent = parent->parent();
+    
+    if (!grandParent) return;  
+    if (!grandParent->parent() && node->inherits("KisMask")) return;
+
+    /* By the principle of least surprise, placing the node at
+    grandParent->index(parent) + 1 ensures that the node appears
+    just outside and above the parent on the Layer Box widget */
+    m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
+}
+
+void KisLayerBox::slotRightClicked()
+{
+    KisNodeSP node = m_nodeManager->activeNode();
+    KisNodeSP parent = m_nodeManager->activeNode()->parent();
+    KisNodeSP newParent;
+    int nodeIndex = parent->index(node);
+    int indexAbove = nodeIndex + 1;
+    int indexBelow = nodeIndex - 1;
+
+    if (parent->at(indexBelow) && parent->at(indexBelow)->allowAsChild(node)) {
+        newParent = parent->at(indexBelow);
+    } else if (parent->at(indexAbove) && parent->at(indexAbove)->allowAsChild(node)) {
+        newParent = parent->at(indexAbove);
+    } else {
+        return;
+    }
+
+    m_nodeManager->moveNodeAt(node, newParent, 0);
 }
 
 void KisLayerBox::slotPropertiesClicked()

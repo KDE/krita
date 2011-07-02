@@ -110,7 +110,7 @@ public:
      * this percolates up to parent nodes all the way to the root
      * node, if propagate is true;
      */
-    virtual void setDirty(const QRegion & region);
+    virtual void setDirty(const QVector<QRect> & region);
 
     /**
      * Some filters will cause a change of pixels those are outside
@@ -128,7 +128,7 @@ public:
      * See \ref changeRect
      */
     virtual QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
-    
+
     virtual void setSystemLocked(bool l, bool update = true);
 
 public: // Graph methods

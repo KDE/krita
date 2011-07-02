@@ -191,3 +191,36 @@ QSize ReportSectionDetail::sizeHint() const
     }
     return s += m_detail->size();
 }
+
+void ReportSectionDetail::setSectionCursor(const QCursor& c)
+{
+    ReportSectionDetailGroup * rsdg = 0;
+    
+    if (m_detail)
+        m_detail->setSectionCursor(c);
+    
+    for (int gi = 0; gi < (int) groupList.count(); gi++) {
+        rsdg = groupList.at(gi);
+        if (rsdg->groupHeader()) 
+            rsdg->groupHeader()->setSectionCursor(c);
+        if (rsdg->groupFooter())
+            rsdg->groupFooter()->setSectionCursor(c);
+    }
+    
+}
+
+void ReportSectionDetail::unsetSectionCursor()
+{
+    ReportSectionDetailGroup * rsdg = 0;
+    
+    if (m_detail)
+        m_detail->unsetSectionCursor();
+    
+    foreach(ReportSectionDetailGroup* rsdg, groupList) {
+        if (rsdg->groupHeader()) 
+            rsdg->groupHeader()->unsetSectionCursor();
+        if (rsdg->groupFooter())
+            rsdg->groupFooter()->unsetSectionCursor();
+    }
+}
+

@@ -440,7 +440,12 @@ void KoXmlWriter::addTextSpan(const QString& text, const QMap<int, int>& tabCach
     // Flush nrSpaces when encountering two or more consecutive spaces
     for (int i = 0; i < len ; ++i) {
         QChar ch = text[i];
-        if (ch != ' ') {
+        ushort unicode = ch.unicode();
+        if (unicode == ' ') {
+            if (i == 0)
+                leadingSpace = true;
+            ++nrSpaces;
+        } else {
             if (nrSpaces > 0) {
                 // For the first space we use ' '.
                 // "it is good practice to use (text:s) for the second and all following SPACE
@@ -464,39 +469,35 @@ void KoXmlWriter::addTextSpan(const QString& text, const QMap<int, int>& tabCach
             }
             nrSpaces = 0;
             leadingSpace = false;
-        }
-        switch (ch.unicode()) {
-        case '\t':
-            if (!str.isEmpty())
-                addTextNode(str);
-            str.clear();
-            startElement("text:tab");
-            if (tabCache.contains(i))
-                addAttribute("text:tab-ref", tabCache[i] + 1);
-            endElement();
-            break;
-        // gracefully handle \f form feed in text input.
-        // otherwise the xml will not be valid. 
-        // \f can be added e.g. in ascii import filter.
-        case '\f':
-        case '\n':
-            if (!str.isEmpty())
-                addTextNode(str);
-            str.clear();
-            startElement("text:line-break");
-            endElement();
-            break;
-        case ' ':
-            if (i == 0)
-                leadingSpace = true;
-            ++nrSpaces;
-            break;
-        default:
-            // don't add stuff that is not allowed in xml. The stuff we need we have already handled above
-            if (ch.unicode() >= 0x20) {
-                str += text[i];
+
+            switch (unicode) {
+            case '\t':
+                if (!str.isEmpty())
+                    addTextNode(str);
+                str.clear();
+                startElement("text:tab");
+                if (tabCache.contains(i))
+                    addAttribute("text:tab-ref", tabCache[i] + 1);
+                endElement();
+                break;
+            // gracefully handle \f form feed in text input.
+            // otherwise the xml will not be valid. 
+            // \f can be added e.g. in ascii import filter.
+            case '\f':
+            case '\n':
+                if (!str.isEmpty())
+                    addTextNode(str);
+                str.clear();
+                startElement("text:line-break");
+                endElement();
+                break;
+            default:
+                // don't add stuff that is not allowed in xml. The stuff we need we have already handled above
+                if (ch.unicode() >= 0x20) {
+                    str += text[i];
+                }
+                break;
             }
-            break;
         }
     }
     // either we still have text in str or we have spaces in nrSpaces

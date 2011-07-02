@@ -126,19 +126,19 @@ bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, K
 {
     bool fixed = false;
 
-    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    if (element.prefix() == "chart") {
-        styleStack.save();
+    if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
+        KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+        if (element.prefix() == "chart") {
+            styleStack.save();
 
-        bool hasStyle = element.hasAttributeNS(KoXmlNS::chart, "style-name");
-        if (hasStyle) {
-            context.odfLoadingContext().fillStyleStack(element, KoXmlNS::chart, "style-name", "chart");
-            styleStack.setTypeProperties("graphic");
-        }
+            bool hasStyle = element.hasAttributeNS(KoXmlNS::chart, "style-name");
+            if (hasStyle) {
+                context.odfLoadingContext().fillStyleStack(element, KoXmlNS::chart, "style-name", "chart");
+                styleStack.setTypeProperties("graphic");
+            }
 
-        if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
             if (hasStyle && styleStack.hasProperty(KoXmlNS::draw, "stroke") &&
-                            !styleStack.hasProperty(KoXmlNS::draw, "stroke-color")) {
+                            !styleStack.hasProperty(KoXmlNS::svg, "stroke-color")) {
                 fixed = true;
                 pen.setColor(Qt::black);
             } else if (!hasStyle) {
@@ -146,8 +146,8 @@ bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, K
                 KoXmlElement chartElement = plotAreaElement.parentNode().toElement();
 
                 if (element.tagName() == "series") {
-                    if (chartElement.hasAttributeNS(KoXmlNS::chart, "class")) {
-                        QString chartType = chartElement.attributeNS(KoXmlNS::chart, "class");
+                    QString chartType = chartElement.attributeNS(KoXmlNS::chart, "class");
+                    if (!chartType.isEmpty()) {
                         // TODO: Check what default backgrounds for surface, stock and gantt charts are
                         if (chartType == "chart:line" ||
                              chartType == "chart:scatter") {
@@ -160,19 +160,19 @@ bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, K
                     pen = QPen(Qt::black);
                 }
             }
+            styleStack.restore();
         }
-
-        styleStack.restore();
-    } else {
-        const KoPathShape *pathShape = dynamic_cast<const KoPathShape*>(shape);
-        if (pathShape) {
-            const QString strokeColor(styleStack.property(KoXmlNS::draw, "stroke-color"));
-            if (strokeColor.isEmpty()) {
-                pen.setColor(Qt::black);
-            } else {
-                pen.setColor(styleStack.property(KoXmlNS::svg, "stroke-color"));
+        else {
+            const KoPathShape *pathShape = dynamic_cast<const KoPathShape*>(shape);
+            if (pathShape) {
+                const QString strokeColor(styleStack.property(KoXmlNS::svg, "stroke-color"));
+                if (strokeColor.isEmpty()) {
+                    pen.setColor(Qt::black);
+                } else {
+                    pen.setColor(strokeColor);
+                }
+                fixed = true;
             }
-            fixed = true;
         }
     }
 

@@ -545,10 +545,10 @@ public:
     virtual void setDirty(const QRect & rc);
 
     /**
-     *  Add the specified region to the parent layer's dirty region
-     *  (if there is a parent layer)
+     * Add the specified rects to the parent layer's set of dirty rects
+     * (if there's a parent layer)
      */
-    virtual void setDirty(const QRegion & region);
+    virtual void setDirty(const QVector<QRect> &rc);
 
     /**
      *  Set the parent layer completely dirty, if this paint device has

@@ -440,7 +440,7 @@ void KoCharacterStyle::unapplyStyle(QTextBlock &block) const
         return;
     QTextBlock::iterator iter = block.end();
     do {
-        iter--;
+        --iter;
         QTextFragment fragment = iter.fragment();
         cursor.setPosition(fragment.position() + 1);
         cf = cursor.charFormat();

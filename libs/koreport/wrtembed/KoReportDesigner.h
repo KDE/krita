@@ -264,9 +264,6 @@ public slots:
     void slotRaiseSelected();
     void slotLowerSelected();
     
-    void setSectionCursor(const QCursor&);
-    void unsetSectionCursor();
-
 protected:
 
     ReportSection *m_reportHeader;
@@ -336,6 +333,9 @@ private:
     unsigned int selectionCount() const;
 
     static bool actionPriortyLessThan(QAction* act1, QAction* act2);
+    
+    void setSectionCursor(const QCursor&);
+    void unsetSectionCursor();
 
 private slots:
     void slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p);

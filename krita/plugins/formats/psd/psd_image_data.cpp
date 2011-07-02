@@ -314,16 +314,16 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
             if (m_channelSize == 1) {
 
                 quint8 C = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[0].constData())[col]);
-                KoLabTraits<quint8>::setC(it.rawData(),C);
+               KoCmykTraits<quint8>::setC(it.rawData(),C);
 
                 quint8 M = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[1].constData())[col]);
-                KoLabTraits<quint8>::setM(it.rawData(),M);
+                KoCmykTraits<quint8>::setM(it.rawData(),M);
 
                 quint8 Y = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[2].constData())[col]);
-                KoLabTraits<quint8>::setY(it.rawData(),Y);
+                KoCmykTraits<quint8>::setY(it.rawData(),Y);
 
                 quint8 K = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[3].constData())[col]);
-                KoLabTraits<quint8>::setK(it.rawData(),K);
+                KoCmykTraits<quint8>::setK(it.rawData(),K);
 
             }
 
@@ -347,16 +347,16 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
             else if (m_channelSize == 4) {
 
                 quint32 C = ntohs(reinterpret_cast<const quint32 *>(vectorBytes[0].constData())[col]);
-                KoLabTraits<quint32>::setC(it.rawData(),C);
+                KoCmykTraits<quint32>::setC(it.rawData(),C);
 
                 quint32 M = ntohs(reinterpret_cast<const quint32 *>(vectorBytes[1].constData())[col]);
-                KoLabTraits<quint32>::setM(it.rawData(),M);
+                KoCmykTraits<quint32>::setM(it.rawData(),M);
 
                 quint32 Y = ntohs(reinterpret_cast<const quint32 *>(vectorBytes[2].constData())[col]);
-                KoLabTraits<quint32>::setY(it.rawData(),Y);
+                KoCmykTraits<quint32>::setY(it.rawData(),Y);
 
                 quint32 K = ntohs(reinterpret_cast<const quint32 *>(vectorBytes[3].constData())[col]);
-                KoLabTraits<quint32>::setK(it.rawData(),K);
+                KoCmykTraits<quint32>::setK(it.rawData(),K);
 
             }
 

@@ -248,13 +248,12 @@ QVector<QRect> KisPainter::takeDirtyRegion()
 }
 
 
-QVector<QRect>  KisPainter::addDirtyRect(const QRect & rc)
+void KisPainter::addDirtyRect(const QRect & rc)
 {
     QRect r = rc.normalized();
     if (r.isValid() && r.width() > 0 && r.height() > 0) {
         d->dirtyRects.append(rc);
     }
-    return d->dirtyRects;
 }
 
 void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,

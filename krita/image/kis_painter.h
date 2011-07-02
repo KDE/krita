@@ -374,7 +374,7 @@ public:
       * The methods in this class do not tell the paintdevice to update, but they calculate the
       * dirty area. This method returns this dirty area and resets it.
       */
-    QVector<QRect> takeDirtyRegion();
+    void takeDirtyRegion();
 
     /**
      * Paint a line that connects the dots in points

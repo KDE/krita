@@ -36,9 +36,7 @@
 #include <QTextInlineObject>
 #include <QFontMetricsF>
 #include <QTextOption>
-#include <QDateTime>
-#include <QWeakPointer>
-#include <QMessageBox>
+//#include <QMessageBox>
 
 class KoInlineCite::Private
 {
@@ -440,9 +438,11 @@ void KoInlineCite::resize(const QTextDocument *document, QTextInlineObject objec
     Q_UNUSED(posInDocument);
     if (d->identifier.isEmpty())
         return;
+
+    QString citeLabel = QString("[%1]").arg(d->identifier);
     Q_ASSERT(format.isCharFormat());
     QFontMetricsF fm(format.font(), pd);
-    object.setWidth(fm.width(d->identifier));
+    object.setWidth(fm.width(citeLabel));
     object.setAscent(fm.ascent());
     object.setDescent(fm.descent());
 }

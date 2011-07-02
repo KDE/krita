@@ -321,11 +321,11 @@ void KisNode::setDirty()
     setDirty(extent());
 }
 
-void KisNode::setDirty(const QRegion & region)
+void KisNode::setDirty(const QVector<QRect> &region)
 {
     if (region.isEmpty()) return;
 
-    foreach(const QRect & rc, region.rects()) {
+    foreach(const QRect &rc, region) {
         setDirty(rc);
     }
 }

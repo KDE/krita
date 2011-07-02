@@ -64,7 +64,7 @@ void KisToolRectangle::finishRect(const QRectF &rect)
 {
     if (rect.isNull())
         return;
-    
+
     if (image()) {
         KisRecordedShapePaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), KisRecordedShapePaintAction::Rectangle, rect);
         setupPaintAction(&linePaintAction);
@@ -82,8 +82,7 @@ void KisToolRectangle::finishRect(const QRectF &rect)
         painter.paintRect(rect);
         painter.endTransaction(image()->undoAdapter());
 
-        QRegion bound = painter.takeDirtyRegion();
-        device->setDirty(bound);
+        device->setDirty(painter.takeDirtyRegion());
         notifyModified();
     } else {
         QRectF r = convertToPt(rect);

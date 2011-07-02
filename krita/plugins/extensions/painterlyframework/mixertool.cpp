@@ -238,7 +238,7 @@ void MixerTool::mouseReleaseEvent(KoPointerEvent *event)
     m_d->mixer->resourceManager()->setResource(KoCanvasResource::ForegroundColor, event->pos());
 }
 
-void MixerTool::setDirty(const QRegion& region)
+void MixerTool::setDirty(const QVector<QRect>& region)
 {
     m_d->mixer->updateCanvas(region);
 }

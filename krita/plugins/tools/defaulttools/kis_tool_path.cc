@@ -171,7 +171,7 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
         }
     }
     image->actionRecorder()->addAction(bezierCurvePaintAction);
-    
+
     if (!currentNode->inherits("KisShapeLayer")) {
 
         KisPaintDeviceSP dev = currentNode->paintDevice();
@@ -179,9 +179,9 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
         if (!dev) {
             return;
         }
-        
+
         setCurrentNodeLocked(true);
-        
+
         KisSelectionSP selection = kiscanvas->view()->selection();
 
         KisPainter painter(dev, selection);
@@ -191,8 +191,7 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
         painter.paintPainterPath(mapedOutline);
         painter.endTransaction(image->undoAdapter());
 
-        QRegion dirtyRegion = painter.takeDirtyRegion();
-        dev->setDirty(dirtyRegion);
+        dev->setDirty(painter.takeDirtyRegion());
         image->setModified();
         setCurrentNodeLocked(false);
 

@@ -166,7 +166,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
             KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
 
             QMap<int, QByteArray> planes;
-            foreach(PSDLayerRecord::ChannelInfo *channel, layerRecord->channelInfoRecords) {
+            foreach(ChannelInfo *channel, layerRecord->channelInfoRecords) {
                 planes[channel->channelId] = layerRecord->readChannelData(&f, channel);
                 if (planes[channel->channelId].length() == 0) {
                     dbgFile << layerRecord->error;

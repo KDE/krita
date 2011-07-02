@@ -30,6 +30,14 @@
 
 class QIODevice;
 
+struct ChannelInfo {
+    qint16 channelId; // 0 red, 1 green, 2 blue, -1 transparency, -2 user-supplied layer mask
+    Compression::CompressionType compressionType;
+    quint64 channelDataStart;
+    quint64 channelDataLength;
+    QVector<quint32> rleRowLengths;
+};
+
 class PSDLayerRecord
 {
 public:
@@ -53,14 +61,6 @@ public:
     quint32 right;
 
     quint16 nChannels;
-
-    struct ChannelInfo {
-        qint16 channelId; // 0 red, 1 green, 2 blue, -1 transparency, -2 user-supplied layer mask
-        Compression::CompressionType compressionType;
-        quint64 channelDataStart;
-        quint64 channelDataLength;
-        QVector<quint32> rleRowLengths;
-    };
 
     QVector<ChannelInfo*> channelInfoRecords;
 
@@ -111,6 +111,6 @@ public:
 };
 
 QDebug operator<<(QDebug dbg, const PSDLayerRecord& layer);
-QDebug operator<<(QDebug dbg, const PSDLayerRecord::ChannelInfo& layer);
+QDebug operator<<(QDebug dbg, const ChannelInfo& layer);
 
 #endif // PSD_LAYER_RECORD_H

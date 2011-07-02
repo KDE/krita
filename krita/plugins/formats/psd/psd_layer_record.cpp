@@ -487,7 +487,7 @@ bool PSDLayerRecord::valid()
     return true;
 }
 
-QByteArray PSDLayerRecord::readChannelData(QIODevice* io, PSDLayerRecord::ChannelInfo *channelInfo)
+QByteArray PSDLayerRecord::readChannelData(QIODevice* io, ChannelInfo *channelInfo)
 {
     dbgFile << "Going to read channel data for channel " << channelInfo
             << "from io with current pos" << io->pos();
@@ -549,7 +549,7 @@ QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)
     dbg.nospace() << ", transparency protected: " << layer.transparencyProtected;
     dbg.nospace() << ", visible: " << layer.visible;
     dbg.nospace() << ", irrelevant: " << layer.irrelevant << "\n";
-    foreach(const PSDLayerRecord::ChannelInfo* channel, layer.channelInfoRecords) {
+    foreach(const ChannelInfo* channel, layer.channelInfoRecords) {
         dbg.space() << channel;
     }
 #endif
@@ -557,7 +557,7 @@ QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)
 }
 
 
-QDebug operator<<(QDebug dbg, const PSDLayerRecord::ChannelInfo &channel)
+QDebug operator<<(QDebug dbg, const ChannelInfo &channel)
 {
 #ifndef NODEBUG
     dbg.nospace() << "\tChannel type" << channel.channelId

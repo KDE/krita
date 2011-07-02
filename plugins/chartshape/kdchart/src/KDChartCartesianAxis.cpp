@@ -305,7 +305,7 @@ void CartesianAxis::Private::drawSubUnitRulers( QPainter* painter, CartesianCoor
                 QPointF leftPoint = plane->translate( diagramIsVertical ? QPointF( 0, f ) : QPointF( f, 0 ) );
                 //qDebug() << "geoRect:" << geoRect << "   geoRect.top()" << geoRect.top() << "geoRect.bottom()" << geoRect.bottom() << "  translatedValue:" << translatedValue;
                 // we don't draw the sub ticks, if we are at the same position as a normal tick
-                if( qAbs( mayBeTick - diagramIsVertical ? leftPoint.y() : leftPoint.x() ) > 1 ){
+                if( qAbs( (mayBeTick - diagramIsVertical !=0) ? leftPoint.y() : leftPoint.x() ) > 1 ){
                     const qreal translatedValue = leftPoint.y();
                     bool translatedValueIsWithinBoundaries;
                     if ( diagramIsVertical ) {

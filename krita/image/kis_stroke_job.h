@@ -49,7 +49,7 @@ public:
 
 private:
     // for testing use only, do not use in real code
-    friend class KisStrokeTest;
+    friend QString getJobName(KisStrokeJob *job);
     KisDabProcessingStrategy* testingGetDabStrategy() {
         return m_dabStrategy;
     }

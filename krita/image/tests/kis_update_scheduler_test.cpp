@@ -22,11 +22,11 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
+#include "scheduler_utils.h"
 #include "kis_update_scheduler.h"
 #include "kis_updater_context.h"
 #include "kis_update_job_item.h"
 #include "kis_simple_update_queue.h"
-#include "kis_simple_update_queue_test.h"
 
 #include "../../sdk/tests/testutil.h"
 

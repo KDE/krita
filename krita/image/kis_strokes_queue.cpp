@@ -151,8 +151,9 @@ bool KisStrokesQueue::checkExclusiveProperty(qint32 numMergeJobs,
 bool KisStrokesQueue::checkSequentialProperty(qint32 numMergeJobs,
                                               qint32 numStrokeJobs)
 {
-    KisStroke *stroke = m_d->strokesQueue.head();
+    Q_UNUSED(numMergeJobs);
 
+    KisStroke *stroke = m_d->strokesQueue.head();
     if(!stroke->prevJobSequential() && !stroke->nextJobSequential()) return true;
 
     Q_ASSERT(numStrokeJobs <= 1);

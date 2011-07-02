@@ -19,7 +19,7 @@
 #include "kis_strokes_queue_test.h"
 #include <qtest_kde.h>
 
-#include "kis_stroke_test.h"
+#include "scheduler_utils.h"
 #include "kis_strokes_queue.h"
 #include "kis_updater_context.h"
 #include "kis_update_job_item.h"
@@ -29,7 +29,7 @@
 #define COMPARE_WALKER(item, walker)            \
     QCOMPARE(item->walker(), walker)
 #define COMPARE_NAME(item, name)                                \
-    QCOMPARE(KisStrokeTest::getName(item->strokeJob()), QString(name))
+    QCOMPARE(getJobName(item->strokeJob()), QString(name))
 #define VERIFY_EMPTY(item)                                      \
     QVERIFY(!item->isRunning())
 

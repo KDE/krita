@@ -20,8 +20,8 @@
 #define __KIS_STROKE_TEST_H
 
 #include <QtTest/QtTest>
-#include "kis_stroke_strategy.h"
-#include "kis_stroke_job.h"
+
+class KisStrokeJob;
 
 
 class KisStrokeTest : public QObject
@@ -36,72 +36,5 @@ private slots:
     void testCancelStrokeCase2and3();
     void testCancelStrokeCase4();
 };
-
-
-class KisNoopDabStrategy : public KisDabProcessingStrategy
-{
-public:
-KisNoopDabStrategy(QString name, bool sequential = true)
-        : KisDabProcessingStrategy(sequential),
-          m_name(name)
-    {}
-
-    void processDab(DabProcessingData *data) {
-        Q_UNUSED(data);
-    }
-
-    QString name() {
-        return m_name;
-    }
-
-private:
-    QString m_name;
-};
-
-class KisTestingStrokeStrategy : public KisStrokeStrategy
-{
-public:
-    KisTestingStrokeStrategy(const QString &prefix = QString(),
-                             bool exclusive = false,
-                             bool inhibitServiceJobs = false)
-        : m_prefix(prefix),
-          m_inhibitServiceJobs(inhibitServiceJobs)
-    {
-        setExclusive(exclusive);
-    }
-
-    KisDabProcessingStrategy* createInitStrategy() {
-        return !m_inhibitServiceJobs ?
-            new KisNoopDabStrategy(m_prefix + "init", true) : 0;
-    }
-
-    KisDabProcessingStrategy* createFinishStrategy() {
-        return !m_inhibitServiceJobs ?
-            new KisNoopDabStrategy(m_prefix + "finish", true) : 0;
-    }
-
-    KisDabProcessingStrategy* createCancelStrategy() {
-        return !m_inhibitServiceJobs ?
-            new KisNoopDabStrategy(m_prefix + "cancel", true) : 0;
-    }
-
-    KisDabProcessingStrategy* createDabStrategy() {
-        return new KisNoopDabStrategy(m_prefix + "dab", false);
-    }
-
-private:
-    QString m_prefix;
-    bool m_inhibitServiceJobs;
-};
-
-#define SCOMPARE(s1, s2) QCOMPARE(QString(s1), QString(s2))
-
-inline QString KisStrokeTest::getName(KisStrokeJob *job) {
-    KisNoopDabStrategy *pointer =
-        dynamic_cast<KisNoopDabStrategy*>(job->testingGetDabStrategy());
-    Q_ASSERT(pointer);
-
-    return pointer->name();
-}
 
 #endif /* __KIS_STROKE_TEST_H */

@@ -20,8 +20,6 @@
 #define KIS_SIMPLE_UPDATE_QUEUE_TEST_H
 
 #include <QtTest/QtTest>
-#include <QRect>
-#include "kis_merge_walker.h"
 
 
 class KisSimpleUpdateQueueTest : public QObject
@@ -33,18 +31,6 @@ private slots:
     void testSplit();
     void testChecksum();
 };
-
-
-bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect) {
-    if(walker->requestedRect() == rect) {
-        return true;
-    }
-    else {
-        qDebug() << "walker rect:" << walker->requestedRect();
-        qDebug() << "expected rect:" << rect;
-        return false;
-    }
-}
 
 #endif /* KIS_SIMPLE_UPDATE_QUEUE_TEST_H */
 

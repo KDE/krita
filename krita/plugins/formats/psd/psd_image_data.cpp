@@ -81,6 +81,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
             doRGB(dev, io);
             break;
         case CMYK:
+            doCMYK(dev,io);
             break;
         case MultiChannel:
             break;
@@ -287,7 +288,82 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 
 
 bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
+    int channelOffset = 0;
 
+    for (int row = 0; row <m_header->height; row++) {
+
+        KisHLineIterator it = dev->createHLineIterator(0, row, m_header->width);
+        QVector<QByteArray> vectorBytes;
+
+        for (int channel = 0; channel < m_header->nChannels; channel++) {
+
+            io->seek(m_channelInfoRecords[channel].channelDataStart + channelOffset);
+            vectorBytes.append(io->read(m_header->width*m_channelSize));
+            qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
+
+        }
+        channelOffset += (m_header->width * m_channelSize);
+
+        qDebug() << "------------------------------------------";
+        qDebug() << "channel offset:"<< channelOffset ;
+        qDebug() << "------------------------------------------";
+
+        for (int col = 0; col < m_header->width; col++) {
+
+            if (m_channelSize == 1) {
+
+                quint8 C = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[0].constData())[col]);
+                KoLabTraits<quint8>::setL(it.rawData(),C);
+
+                quint8 M = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[1].constData())[col]);
+                KoLabTraits<quint8>::setA(it.rawData(),M);
+
+                quint8 Y = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[2].constData())[col]);
+                KoLabTraits<quint8>::setB(it.rawData(),Y);
+
+                quint8 K = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[3].constData())[col]);
+                KoLabTraits<quint8>::setB(it.rawData(),K);
+
+            }
+
+            else if (m_channelSize == 2) {
+
+
+                quint16 C = ntohs(reinterpret_cast<const quint16 *>(vectorBytes[0].constData())[col]);
+                KoCmykTraits<quint16>::setC(it.rawData(),C);
+
+                quint16 M = ntohs(reinterpret_cast<const quint16 *>(vectorBytes[1].constData())[col]);
+                KoCmykTraits<quint16>::setM(it.rawData(),M);
+
+                quint16 Y = ntohs(reinterpret_cast<const quint16 *>(vectorBytes[2].constData())[col]);
+                KoCmykTraits<quint16>::setY(it.rawData(),Y);
+
+                quint16 K = ntohs(reinterpret_cast<const quint16 *>(vectorBytes[3].constData())[col]);
+                KoCmykTraits<quint16>::setK(it.rawData(),K);
+
+            }
+
+            else if (m_channelSize == 4) {
+
+                quint32 C = ntohs(reinterpret_cast<const quint32 *>(vectorBytes[0].constData())[col]);
+                KoLabTraits<quint32>::setL(it.rawData(),C);
+
+                quint32 M = ntohs(reinterpret_cast<const quint32 *>(vectorBytes[1].constData())[col]);
+                KoLabTraits<quint32>::setA(it.rawData(),M);
+
+                quint32 Y = ntohs(reinterpret_cast<const quint32 *>(vectorBytes[2].constData())[col]);
+                KoLabTraits<quint32>::setB(it.rawData(),Y);
+
+                quint32 K = ntohs(reinterpret_cast<const quint32 *>(vectorBytes[3].constData())[col]);
+                KoLabTraits<quint32>::setB(it.rawData(),K);
+
+            }
+
+            dev->colorSpace()->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
+            ++it;
+        }
+
+    }
     return true;
 }
 

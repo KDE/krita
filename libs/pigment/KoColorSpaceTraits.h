@@ -376,7 +376,7 @@ struct KoXyzTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
 template<typename _channels_type_>
 struct KoCmykTraits : public KoColorSpaceTrait<_channels_type_, 5, 4> {
     typedef _channels_type_ channels_type;
-    typedef KoColorSpaceTrait<_channels_type_, 5, 4> parent;
+    typedef KoColorSpaceTrait<_channels_type_, 4, 3> parent;
 
     static const qint32 c_pos = 0;
     static const qint32 m_pos = 1;
@@ -433,10 +433,6 @@ struct KoCmykTraits : public KoColorSpaceTrait<_channels_type_, 5, 4> {
         channels_type* d = parent::nativeArray(data);
         d[k_pos] = nv;
     }
-
 };
-
-
-
 
 #endif

@@ -30,12 +30,16 @@
  * This class is the base class to define the main characteristics of a colorspace
  * which inherits KoColorSpaceAbstract.
  *
+ * - _channels_type_ is the type of the value use for each channel, for example quint8 for 8bits per channel
+ *                   color spaces, or quint16 for 16bits integer per channel, float for 32bits per channel
+ *                   floating point color spaces
+ * - _channels_nb_ is the total number of channels in an image (for example RGB is 3 but RGBA is four)
+ * - _alpha_pos_ is the position of the alpha channel among the channels, if there is no alpha channel,
+ *               then _alpha_pos_ is set to -1
+ * 
  * For instance a colorspace of three color channels and alpha channel in 16bits,
  * will be defined as KoColorSpaceTrait\<quint16, 4, 3\>. The same without the alpha
  * channel is KoColorSpaceTrait\<quint16,3,-1\>
- *
- * So: if you do not have an alpha channel, the _alpha_pos is -1.
- * Other code will depend on that.
  *
  */
 template<typename _channels_type_, int _channels_nb_, int _alpha_pos_>

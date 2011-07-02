@@ -39,29 +39,29 @@ PSDImageData::~PSDImageData() {
 
 }
 
-bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header) {
+bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
 
     qDebug() << "Position before read " << io->pos();
     psdread(io, &m_compression);
     qDebug() << "COMPRESSION TYPE " << m_compression;
     quint64 start = io->pos();
-    m_channelSize = header->channelDepth/8;
-    m_channelDataLength = header->height * header->width * m_channelSize;
+    m_channelSize = m_header->channelDepth/8;
+    m_channelDataLength = m_header->height * m_header->width * m_channelSize;
 
     switch (m_compression) {
 
     case 0: // Uncompressed
-        for (int channel = 0; channel < header->nChannels; channel++) {
+        for (int channel = 0; channel < m_header->nChannels; channel++) {
             ChannelInfo channelInfo;
             channelInfo.channelId = channel;
             channelInfo.compressionType = Compression::Uncompressed;
             channelInfo.channelDataStart = start;
-            channelInfo.channelDataLength = header->width * header->height * m_channelSize;
+            channelInfo.channelDataLength = m_header->width * m_header->height * m_channelSize;
             start += channelInfo.channelDataLength;
             m_channelInfoRecords.append(channelInfo);
         }
 
-        for (int channel = 0; channel < header->nChannels; channel++) {
+        for (int channel = 0; channel < m_header->nChannels; channel++) {
             qDebug() << "Channel ID: " << m_channelInfoRecords[channel].channelId;
             qDebug() << "Channel Compression Type: " << m_channelInfoRecords[channel].compressionType;
             qDebug() << "Channel Data Start: " << m_channelInfoRecords[channel].channelDataStart;
@@ -69,7 +69,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header) 
             qDebug() << "---------------------------------------------------";
         }
 
-        switch (header->colormode) {
+        switch (m_header->colormode) {
         case Bitmap:
             break;
         case Grayscale:
@@ -78,7 +78,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header) 
             break;
         case RGB:
             qDebug()<<"RGB";
-            doRGB(dev,io,header);
+            doRGB(dev, io);
             break;
         case CMYK:
             break;
@@ -87,7 +87,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header) 
         case DuoTone:
             break;
         case Lab:
-            doLAB(dev,io,header);
+            doLAB(dev, io);
             break;
         case UNKNOWN:
             break;
@@ -102,14 +102,14 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header) 
         quint32 rlelength;
         quint32 sumrlelength;
 
-        for (int channel=0; channel < header->nChannels; channel++) {
+        for (int channel=0; channel < m_header->nChannels; channel++) {
             ChannelInfo channelInfo;
             channelInfo.channelId = channel;
-            for (int row = 0; row < header->height; row++ ) {
-                if (header->version == 1) {
+            for (int row = 0; row < m_header->height; row++ ) {
+                if (m_header->version == 1) {
                     psdread(io,(quint16*)&rlelength);
                 }
-                else if (header->version == 2) {
+                else if (m_header->version == 2) {
                     psdread(io,&rlelength);
                 }
                 channelInfo.rleRowLengths.append(rlelength);
@@ -118,12 +118,12 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header) 
             m_channelInfoRecords.append(channelInfo);
         }
 
-        for (int channel = 0; channel < header->nChannels; channel++) {
+        for (int channel = 0; channel < m_header->nChannels; channel++) {
             m_channelInfoRecords[channel].channelDataStart = start;
             m_channelInfoRecords[channel].channelDataLength = sumrlelength;
         }
 
-        switch (header->colormode) {
+        switch (m_header->colormode) {
         case Bitmap:
             break;
         case Grayscale:
@@ -151,7 +151,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header) 
     case 2: // ZIP without prediction
         qDebug()<<"ZIP without prediction";
 
-        switch (header->colormode) {
+        switch (m_header->colormode) {
         case Bitmap:
             break;
         case Grayscale:
@@ -179,7 +179,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header) 
     case 3: // ZIP with prediction
         qDebug()<<"ZIP with prediction";
 
-        switch (header->colormode) {
+        switch (m_header->colormode) {
         case Bitmap:
             break;
         case Grayscale:
@@ -212,29 +212,29 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header) 
     return true;
 }
 
-bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header) {
+bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 
     int channelOffset = 0;
     
-    for (int row = 0; row <header->height; row++) {
+    for (int row = 0; row <m_header->height; row++) {
         
-        KisHLineIterator it = dev->createHLineIterator(0, row, header->width);
+        KisHLineIterator it = dev->createHLineIterator(0, row, m_header->width);
         QVector<QByteArray> vectorBytes;
 
-        for (int channel = 0; channel < header->nChannels; channel++) {
+        for (int channel = 0; channel < m_header->nChannels; channel++) {
 
             io->seek(m_channelInfoRecords[channel].channelDataStart + channelOffset);
-            vectorBytes.append(io->read(header->width*m_channelSize));
+            vectorBytes.append(io->read(m_header->width*m_channelSize));
             qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
 
         }
-        channelOffset += (header->width * m_channelSize);
+        channelOffset += (m_header->width * m_channelSize);
         
         qDebug() << "------------------------------------------";
         qDebug() << "channel offset:"<< channelOffset ;
         qDebug() << "------------------------------------------";
 
-        for (int col = 0; col < header->width; col++) {
+        for (int col = 0; col < m_header->width; col++) {
 
             if (m_channelSize == 1) {
 
@@ -286,12 +286,12 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header)
 }
 
 
-bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header) {
+bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
 
     return true;
 }
 
-bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header) {
+bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io) {
 
 
     qDebug()<<"Channel Size: "<<m_channelSize;
@@ -304,10 +304,10 @@ bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header)
     //XXX: this code is only valid for images with channelsize == 2
 
 
-    for (row = 0; row < header->height; row++) {
-        KisHLineIterator it = dev->createHLineIterator(0, row, header->width);
-        for ( col = 0; col < header->width; col++) {
-            index = row * header->width + col;
+    for (row = 0; row < m_header->height; row++) {
+        KisHLineIterator it = dev->createHLineIterator(0, row, m_header->width);
+        for ( col = 0; col < m_header->width; col++) {
+            index = row * m_header->width + col;
 
             if (m_channelSize == 1) {
 

@@ -132,6 +132,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         case Indexed:
             break;
         case RGB:
+            doRGB(dev,io);
             break;
         case CMYK:
             break;
@@ -313,16 +314,16 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
             if (m_channelSize == 1) {
 
                 quint8 C = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[0].constData())[col]);
-                KoLabTraits<quint8>::setL(it.rawData(),C);
+                KoLabTraits<quint8>::setC(it.rawData(),C);
 
                 quint8 M = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[1].constData())[col]);
-                KoLabTraits<quint8>::setA(it.rawData(),M);
+                KoLabTraits<quint8>::setM(it.rawData(),M);
 
                 quint8 Y = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[2].constData())[col]);
-                KoLabTraits<quint8>::setB(it.rawData(),Y);
+                KoLabTraits<quint8>::setY(it.rawData(),Y);
 
                 quint8 K = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[3].constData())[col]);
-                KoLabTraits<quint8>::setB(it.rawData(),K);
+                KoLabTraits<quint8>::setK(it.rawData(),K);
 
             }
 
@@ -346,16 +347,16 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
             else if (m_channelSize == 4) {
 
                 quint32 C = ntohs(reinterpret_cast<const quint32 *>(vectorBytes[0].constData())[col]);
-                KoLabTraits<quint32>::setL(it.rawData(),C);
+                KoLabTraits<quint32>::setC(it.rawData(),C);
 
                 quint32 M = ntohs(reinterpret_cast<const quint32 *>(vectorBytes[1].constData())[col]);
-                KoLabTraits<quint32>::setA(it.rawData(),M);
+                KoLabTraits<quint32>::setM(it.rawData(),M);
 
                 quint32 Y = ntohs(reinterpret_cast<const quint32 *>(vectorBytes[2].constData())[col]);
-                KoLabTraits<quint32>::setB(it.rawData(),Y);
+                KoLabTraits<quint32>::setY(it.rawData(),Y);
 
                 quint32 K = ntohs(reinterpret_cast<const quint32 *>(vectorBytes[3].constData())[col]);
-                KoLabTraits<quint32>::setB(it.rawData(),K);
+                KoLabTraits<quint32>::setK(it.rawData(),K);
 
             }
 

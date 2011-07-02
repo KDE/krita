@@ -20,13 +20,16 @@
 
 #include "kis_merge_walker.h"
 #include "kis_full_refresh_walker.h"
+#include "kis_updater_context.h"
 #include "kis_simple_update_queue.h"
 
-struct KisUpdateScheduler::Private {
-    Private() : workQueue(0) {}
 
-    KisAbstractUpdateQueue* workQueue;
-    KisUpdaterContext updaterContext;
+struct KisUpdateScheduler::Private {
+    Private() : workQueue(0), processingBlocked(false) {}
+
+    KisSimpleUpdateQueue *workQueue;
+    KisUpdaterContext *updaterContext;
+    bool processingBlocked;
 };
 
 KisUpdateScheduler::KisUpdateScheduler(KisImageWSP image)
@@ -36,21 +39,32 @@ KisUpdateScheduler::KisUpdateScheduler(KisImageWSP image)
 
     // The queue will update settings in a constructor itself
     m_d->workQueue = new KisSimpleUpdateQueue();
+    m_d->updaterContext = new KisUpdaterContext();
 
-    connect(&m_d->updaterContext, SIGNAL(sigContinueUpdate(const QRect&)),
-            image, SLOT(slotProjectionUpdated(const QRect&)),
-            Qt::DirectConnection);
+    connectImage(image);
+}
 
-    connect(&m_d->updaterContext, SIGNAL(sigDoSomeUsefulWork()),
-            SLOT(doSomeUsefulWork()), Qt::DirectConnection);
-
-    connect(&m_d->updaterContext, SIGNAL(sigSpareThreadAppeared()),
-            SLOT(spareThreadAppeared()), Qt::DirectConnection);
-
+KisUpdateScheduler::KisUpdateScheduler()
+    : m_d(new Private)
+{
+    updateSettings();
 }
 
 KisUpdateScheduler::~KisUpdateScheduler()
 {
+}
+
+void KisUpdateScheduler::connectImage(KisImageWSP image)
+{
+    connect(m_d->updaterContext, SIGNAL(sigContinueUpdate(const QRect&)),
+            image, SLOT(slotProjectionUpdated(const QRect&)),
+            Qt::DirectConnection);
+
+    connect(m_d->updaterContext, SIGNAL(sigDoSomeUsefulWork()),
+            SLOT(doSomeUsefulWork()), Qt::DirectConnection);
+
+    connect(m_d->updaterContext, SIGNAL(sigSpareThreadAppeared()),
+            SLOT(spareThreadAppeared()), Qt::DirectConnection);
 }
 
 void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect)
@@ -64,7 +78,15 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
     KisBaseRectsWalkerSP walker = new KisFullRefreshWalker(cropRect);
     walker->collectRects(root, rc);
 
-    m_d->workQueue->executeJobSync(walker, m_d->updaterContext);
+    m_d->updaterContext->lock();
+    lock();
+
+    Q_ASSERT(m_d->updaterContext->isJobAllowed(walker));
+    m_d->updaterContext->addMergeJob(walker);
+    m_d->updaterContext->waitForDone();
+
+    m_d->updaterContext->unlock();
+    unlock();
 }
 
 void KisUpdateScheduler::updateSettings()
@@ -76,23 +98,26 @@ void KisUpdateScheduler::updateSettings()
 
 void KisUpdateScheduler::lock()
 {
-    m_d->workQueue->blockProcessing(m_d->updaterContext);
+    m_d->processingBlocked = true;
+    waitForDone();
 }
 
 void KisUpdateScheduler::unlock()
 {
-    m_d->workQueue->startProcessing(m_d->updaterContext);
+    m_d->processingBlocked = false;
+    processQueues();
 }
 
 void KisUpdateScheduler::waitForDone()
 {
-    m_d->updaterContext.waitForDone();
-    Q_ASSERT(m_d->workQueue->isEmpty());
+    m_d->updaterContext->waitForDone();
 }
 
 void KisUpdateScheduler::processQueues()
 {
-    m_d->workQueue->processQueue(m_d->updaterContext);
+    if(m_d->processingBlocked) return;
+
+    m_d->workQueue->processQueue(*m_d->updaterContext);
 }
 
 void KisUpdateScheduler::doSomeUsefulWork()
@@ -105,3 +130,23 @@ void KisUpdateScheduler::spareThreadAppeared()
     processQueues();
 }
 
+KisTestableUpdateScheduler::KisTestableUpdateScheduler(KisImageWSP image, qint32 threadCount)
+{
+    updateSettings();
+
+    // The queue will update settings in a constructor itself
+    m_d->workQueue = new KisTestableSimpleUpdateQueue();
+    m_d->updaterContext = new KisTestableUpdaterContext(threadCount);
+
+    connectImage(image);
+}
+
+KisTestableUpdaterContext* KisTestableUpdateScheduler::updaterContext()
+{
+    return dynamic_cast<KisTestableUpdaterContext*>(m_d->updaterContext);
+}
+
+KisTestableSimpleUpdateQueue* KisTestableUpdateScheduler::updateQueue()
+{
+    return dynamic_cast<KisTestableSimpleUpdateQueue*>(m_d->workQueue);
+}

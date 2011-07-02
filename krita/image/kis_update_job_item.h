@@ -129,6 +129,7 @@ private:
      */
     friend class KisSimpleUpdateQueueTest;
     friend class KisStrokesQueueTest;
+    friend class KisUpdateSchedulerTest;
 
     inline KisBaseRectsWalkerSP walker() const {
         return m_walker;

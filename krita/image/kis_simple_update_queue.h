@@ -19,19 +19,21 @@
 #ifndef __KIS_SIMPLE_UPDATE_QUEUE_H
 #define __KIS_SIMPLE_UPDATE_QUEUE_H
 
-#include "kis_abstract_update_queue.h"
-
 #include <QMutex>
+#include "kis_updater_context.h"
 
 typedef QList<KisBaseRectsWalkerSP> KisWalkersList;
 typedef QListIterator<KisBaseRectsWalkerSP> KisWalkersListIterator;
 typedef QMutableListIterator<KisBaseRectsWalkerSP> KisMutableWalkersListIterator;
 
-class KRITAIMAGE_EXPORT KisSimpleUpdateQueue : public KisAbstractUpdateQueue
+
+class KRITAIMAGE_EXPORT KisSimpleUpdateQueue
 {
 public:
     KisSimpleUpdateQueue();
-    ~KisSimpleUpdateQueue();
+    virtual ~KisSimpleUpdateQueue();
+
+    void processQueue(KisUpdaterContext &updaterContext);
 
     void addJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
 

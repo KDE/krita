@@ -125,7 +125,6 @@ set(kritaimage_LIB_SRCS
    kis_stroke_strategy.cpp
    kis_stroke.cpp
    kis_strokes_queue.cpp
-   kis_abstract_update_queue.cpp
    kis_simple_update_queue.cpp
    kis_update_scheduler.cpp
    kis_group_layer.cc

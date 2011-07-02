@@ -23,6 +23,10 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_update_scheduler.h"
+#include "kis_updater_context.h"
+#include "kis_update_job_item.h"
+#include "kis_simple_update_queue.h"
+#include "kis_simple_update_queue_test.h"
 
 #include "../../sdk/tests/testutil.h"
 
@@ -144,6 +148,57 @@ void KisUpdateSchedulerTest::benchmarkOverlappedMerge()
         scheduler.waitForDone();
     }
 }
+
+void KisUpdateSchedulerTest::testLocking()
+{
+    KisImageSP image = buildTestingImage();
+    KisNodeSP rootLayer = image->rootLayer();
+    KisNodeSP paintLayer1 = rootLayer->firstChild();
+    QRect imageRect = image->bounds();
+
+    QCOMPARE(paintLayer1->name(), QString("paint1"));
+    QCOMPARE(imageRect, QRect(0,0,640,441));
+
+    KisTestableUpdateScheduler scheduler(image, 2);
+
+    QRect dirtyRect1(0,0,50,100);
+    QRect dirtyRect2(0,0,100,100);
+    QRect dirtyRect3(50,0,50,100);
+    QRect dirtyRect4(150,150,50,50);
+
+
+    KisTestableUpdaterContext *context = scheduler.updaterContext();
+    QVector<KisUpdateJobItem*> jobs;
+
+    scheduler.updateProjection(paintLayer1, imageRect, imageRect);
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), false);
+    QVERIFY(checkWalker(jobs[0]->walker(), imageRect));
+
+    context->clear();
+
+    scheduler.lock();
+
+    scheduler.updateProjection(paintLayer1, dirtyRect1, imageRect);
+    scheduler.updateProjection(paintLayer1, dirtyRect2, imageRect);
+    scheduler.updateProjection(paintLayer1, dirtyRect3, imageRect);
+    scheduler.updateProjection(paintLayer1, dirtyRect4, imageRect);
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), false);
+    QCOMPARE(jobs[1]->isRunning(), false);
+
+    scheduler.unlock();
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), true);
+    QVERIFY(checkWalker(jobs[0]->walker(), dirtyRect2));
+    QVERIFY(checkWalker(jobs[1]->walker(), dirtyRect4));
+}
+
 
 QTEST_KDEMAIN(KisUpdateSchedulerTest, NoGUI)
 #include "kis_update_scheduler_test.moc"

@@ -19,8 +19,12 @@
 #ifndef __KIS_UPDATE_SCHEDULER_H
 #define __KIS_UPDATE_SCHEDULER_H
 
-#include "kis_updater_context.h"
-#include "kis_abstract_update_queue.h"
+#include <QObject>
+#include "krita_export.h"
+#include "kis_types.h"
+
+class QRect;
+
 
 class KRITAIMAGE_EXPORT KisUpdateScheduler : public QObject
 {
@@ -30,14 +34,45 @@ public:
     KisUpdateScheduler(KisImageWSP image);
     virtual ~KisUpdateScheduler();
 
+    /**
+     * Blocks processing of the queues.
+     * The function will wait until all the executing jobs
+     * are finished.
+     * NOTE: you may add new jobs while the block held, but they
+     * will be delayed until unlock() is called.
+     *
+     * \see unlock()
+     */
     void lock();
+
+    /**
+     * Unblocks the process and calls processQueues()
+     *
+     * \see processQueues()
+     */
     void unlock();
+
+    /**
+     * Called when it is necessary to reread configuration
+     */
+    void updateSettings();
+
+    /**
+     * Waits until all the running jobs are finished. If some other thread
+     * adds jobs in parallel, then you may wait forever. If you you don't
+     * want it, consider lock() instead
+     *
+     * \see lock()
+     */
     void waitForDone();
 
     void updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect);
     void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
 
-    void updateSettings();
+protected:
+    // Trivial constructor for testing support
+    KisUpdateScheduler();
+    void connectImage(KisImageWSP image);
 
 private:
     void processQueues();
@@ -46,9 +81,22 @@ private slots:
     void doSomeUsefulWork();
     void spareThreadAppeared();
 
-private:
+protected:
     class Private;
     Private * const m_d;
+};
+
+
+class KisTestableUpdaterContext;
+class KisTestableSimpleUpdateQueue;
+
+class KRITAIMAGE_EXPORT KisTestableUpdateScheduler : public KisUpdateScheduler
+{
+public:
+    KisTestableUpdateScheduler(KisImageWSP image, qint32 threadCount);
+
+    KisTestableUpdaterContext* updaterContext();
+    KisTestableSimpleUpdateQueue* updateQueue();
 };
 
 #endif /* __KIS_UPDATE_SCHEDULER_H */

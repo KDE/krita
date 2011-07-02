@@ -71,6 +71,16 @@ void KisSimpleUpdateQueue::updateSettings()
     m_maxMergeCollectAlpha = config.maxMergeCollectAlpha();
 }
 
+void KisSimpleUpdateQueue::processQueue(KisUpdaterContext &updaterContext)
+{
+    updaterContext.lock();
+
+    while(updaterContext.hasSpareThread() &&
+          processOneJob(updaterContext));
+
+    updaterContext.unlock();
+}
+
 bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
 {
     QMutexLocker locker(&m_lock);

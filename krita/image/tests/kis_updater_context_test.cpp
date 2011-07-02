@@ -109,7 +109,7 @@ void KisUpdaterContextTest::stressTestExclusiveJobs()
             context.addStrokeJob(new KisStrokeJob(
                 new ExclusivenessCheckerStrategy(counter, hadConcurrency,
                                                  i % EXCLUSIVE_NTH == 0),
-                0));
+                                                 0));
         }
         else {
             QTest::qSleep(CHECK_DELAY);

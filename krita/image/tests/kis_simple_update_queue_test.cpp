@@ -22,20 +22,9 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
-#include "kis_merge_walker.h"
 #include "kis_update_job_item.h"
 #include "kis_simple_update_queue.h"
 
-bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect) {
-    if(walker->requestedRect() == rect) {
-        return true;
-    }
-    else {
-        qDebug() << "walker rect:" << walker->requestedRect();
-        qDebug() << "expected rect:" << rect;
-        return false;
-    }
-}
 
 void KisSimpleUpdateQueueTest::testJobProcessing()
 {
@@ -83,31 +72,6 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
     walkersList = queue.getWalkersList();
 
     QCOMPARE(walkersList.size(), 0);
-
-
-    /**
-     * Test blocking the process
-     */
-
-    context.clear();
-
-    queue.blockProcessing(context);
-
-    queue.addJob(paintLayer, dirtyRect1, imageRect);
-    queue.addJob(paintLayer, dirtyRect2, imageRect);
-    queue.addJob(paintLayer, dirtyRect3, imageRect);
-    queue.addJob(paintLayer, dirtyRect4, imageRect);
-
-    jobs = context.getJobs();
-    QCOMPARE(jobs[0]->walker(), KisBaseRectsWalkerSP(0));
-    QCOMPARE(jobs[1]->walker(), KisBaseRectsWalkerSP(0));
-
-    queue.startProcessing(context);
-
-    jobs = context.getJobs();
-
-    QVERIFY(checkWalker(jobs[0]->walker(), dirtyRect2));
-    QVERIFY(checkWalker(jobs[1]->walker(), dirtyRect4));
 }
 
 void KisSimpleUpdateQueueTest::testSplit()

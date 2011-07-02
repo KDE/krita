@@ -323,6 +323,7 @@ struct KoRgbU16Traits : public KoRgbTraits<quint16> {
 template<typename _channels_type_>
 struct KoXyzTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
     typedef _channels_type_ channels_type;
+    typedef KoColorSpaceTrait<_channels_type_, 4, 3> parent;
     static const qint32 x_pos = 0;
     static const qint32 y_pos = 1;
     static const qint32 z_pos = 2;
@@ -336,6 +337,37 @@ struct KoXyzTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
         channels_type Z;
         channels_type alpha;
     };
+
+    /// @return the X component
+        inline static channels_type X(quint8* data) {
+            channels_type* d = parent::nativeArray(data);
+            return d[x_pos];
+        }
+        /// Set the X component
+        inline static void setX(quint8* data, channels_type nv) {
+            channels_type* d = parent::nativeArray(data);
+            d[x_pos] = nv;
+        }
+        /// @return the Y component
+        inline static channels_type Y(quint8* data) {
+            channels_type* d = parent::nativeArray(data);
+            return d[y_pos];
+        }
+        /// Set the Y component
+        inline static void setY(quint8* data, channels_type nv) {
+            channels_type* d = parent::nativeArray(data);
+            d[y_pos] = nv;
+        }
+        /// @return the Z component
+        inline static channels_type Z(quint8* data) {
+            channels_type* d = parent::nativeArray(data);
+            return d[z_pos];
+        }
+        /// Set the Z component
+        inline static void setZ(quint8* data, channels_type nv) {
+            channels_type* d = parent::nativeArray(data);
+            d[z_pos] = nv;
+        }
 };
 
 /** Base class for CMYK traits, it provides some convenient functions to
@@ -344,7 +376,7 @@ struct KoXyzTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
 template<typename _channels_type_>
 struct KoCmykTraits : public KoColorSpaceTrait<_channels_type_, 5, 4> {
     typedef _channels_type_ channels_type;
-    typedef KoColorSpaceTrait<_channels_type_, 4, 3> parent;
+    typedef KoColorSpaceTrait<_channels_type_, 5, 4> parent;
 
     static const qint32 c_pos = 0;
     static const qint32 m_pos = 1;

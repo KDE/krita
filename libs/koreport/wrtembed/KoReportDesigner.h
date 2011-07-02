@@ -263,6 +263,9 @@ public slots:
 
     void slotRaiseSelected();
     void slotLowerSelected();
+    
+    void setSectionCursor(const QCursor&);
+    void unsetSectionCursor();
 
 protected:
 

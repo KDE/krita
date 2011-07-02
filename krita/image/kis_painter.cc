@@ -78,8 +78,7 @@ struct KisPainter::Private {
     KisTransaction*             transaction;
     KoUpdater*                  progressUpdater;
 
-    QRegion                     dirtyRegion;
-    QRect                       dirtyRect;
+    QVector<QRect>              dirtyRects;
     KisPaintOp*                 paintOp;
     QRect                       bounds;
     KoColor                     paintColor;
@@ -96,7 +95,6 @@ struct KisPainter::Private {
     const KoColorSpace*         colorSpace;
     KoColorProfile*             profile;
     const KoCompositeOp*        compositeOp;
-    bool                        useBoundingDirtyRect;
     const KoAbstractGradient*   gradient;
     KisPaintOpPresetSP          paintOpPreset;
     QImage                      polygonMaskImage;
@@ -155,9 +153,6 @@ void KisPainter::init()
     d->mirrorVerticaly = false;
     d->paramInfo.opacity = 1.0f;
     d->paramInfo.flow = 1.0f;
-
-    KConfigGroup cfg = KGlobal::config()->group("");
-    d->useBoundingDirtyRect = cfg.readEntry("aggregate_dirty_regions", true);
 }
 
 KisPainter::~KisPainter()
@@ -248,39 +243,29 @@ KisTransaction* KisPainter::takeTransaction()
 
 QRegion KisPainter::takeDirtyRegion()
 {
-    if (d->useBoundingDirtyRect) {
-        QRegion r(d->dirtyRect);
-        d->dirtyRegion = QRegion();
-        d->dirtyRect = QRect();
-        return r;
-    } else {
-        QRegion r = d->dirtyRegion;
-        d->dirtyRegion = QRegion();
-        return r;
+    QRegion r;
+    foreach(QRect rc, d->dirtyRects) {
+        r += rc;
     }
+    d->dirtyRects.clear();
+    return r;
 }
 
 
 QRegion KisPainter::addDirtyRect(const QRect & rc)
 {
     QRect r = rc.normalized();
-
-    if (!r.isValid() || r.width() <= 0 || r.height() <= 0) {
-        return d->dirtyRegion;
+    if (r.isValid() && r.width() > 0 && r.height() > 0) {
+        d->dirtyRects.append(rc);
     }
 
-    if (d->useBoundingDirtyRect) {
-        d->dirtyRect = d->dirtyRect.united(r);
-        return QRegion(d->dirtyRect);
-    } else {
-        d->dirtyRegion += QRegion(r);
-        return d->dirtyRegion;
+    QRegion region;
+    foreach(QRect rc, d->dirtyRects) {
+        region += rc;
     }
+    return region;
+
 }
-
-
-
-
 
 void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
                                           const KisPaintDeviceSP srcDev,
@@ -513,7 +498,7 @@ void KisPainter::bitBlt(qint32 dstX, qint32 dstY,
                 d->paramInfo.rows          = rows;
                 d->paramInfo.cols          = columns;
                 d->colorSpace->bitBlt(srcCs, d->paramInfo, d->compositeOp);
-                
+
                 srcX_ += columns;
                 dstX_ += columns;
                 columnsRemaining -= columns;
@@ -672,7 +657,7 @@ void KisPainter::bitBltOldData(qint32 dstX, qint32 dstY,
                 d->paramInfo.rows          = rows;
                 d->paramInfo.cols          = columns;
                 d->colorSpace->bitBlt(srcCs, d->paramInfo, d->compositeOp);
-                
+
                 srcX_ += columns;
                 dstX_ += columns;
                 columnsRemaining -= columns;
@@ -874,7 +859,7 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     d->paramInfo.maskRowStride = 0;
     d->paramInfo.rows          = srcHeight;
     d->paramInfo.cols          = srcWidth;
-    
+
     // TODO: use the d->selection && !isDeselected() combo
     if (d->selection) {
         /* d->selection is a KisPaintDevice, so first a readBytes is performed to
@@ -885,8 +870,8 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
         d->paramInfo.maskRowStart  = selBytes;
         d->paramInfo.maskRowStride = srcWidth * selectionProjection->pixelSize();
     }
-    
-    // ...and then blit.        
+
+    // ...and then blit.
     d->colorSpace->bitBlt(srcCs, d->paramInfo, d->compositeOp);
     d->device->writeBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
@@ -1527,7 +1512,7 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
 
     int    pixelSize    = d->device->pixelSize();
     quint8 pixelOpacity = quint8(d->paramInfo.opacity*255.0f);
-    
+
     KisRandomAccessorPixel accessor = d->device->createRandomAccessor(x, y, d->selection);
     accessor.moveTo(x, y);
     if (accessor.isSelected()) {
@@ -1565,7 +1550,7 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
 void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
 {
     KisRandomAccessorPixel accessor = d->device->createRandomAccessor(start.x(), start.y(), d->selection);
-    
+
     int     pixelSize    = d->device->pixelSize();
     quint8  pixelOpacity = quint8(d->paramInfo.opacity*255.0f);
     KoColor mycolor(d->paintColor);
@@ -1881,7 +1866,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
 {
 
     KisRandomAccessorPixel accessor = d->device->createRandomAccessor(start.x(), start.y(), d->selection);
-    
+
     int           pixelSize    = d->device->pixelSize();
     quint8        pixelOpacity = quint8(d->paramInfo.opacity*255.0f);
     KoColorSpace* cs           = d->device->colorSpace();

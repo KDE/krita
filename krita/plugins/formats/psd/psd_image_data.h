@@ -24,6 +24,7 @@
 #include <psd.h>
 #include <psd_header.h>
 #include <compression.h>
+#include <psd_layer_record.h>
 
 #include <QFile>
 class QIODevice;
@@ -42,20 +43,14 @@ public:
     bool doLAB(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header);
 
 private:
-    quint16 compression;
-    quint64 channelDataLength;
-    quint32 channelSize;
+    
+    PSDHeader *m_header;
+    
+    quint16 m_compression;
+    quint64 m_channelDataLength;
+    quint32 m_channelSize;
 
-    struct ChannelInfo {
-        qint16 channelId;
-        Compression::CompressionType compressionType;
-        quint64 channelDataStart;
-        quint64 channelDataLength;
-        QVector<quint32> rleRowLengths;
-    };
-
-    QVector<ChannelInfo> channelInfoRecords;
-    PSDColorMode colormode;
+    QVector<ChannelInfo> m_channelInfoRecords;
 };
 
 #endif // PSD_IMAGE_DATA_H

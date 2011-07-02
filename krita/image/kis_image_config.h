@@ -37,6 +37,7 @@ public:
     qreal maxCollectAlpha() const;
     qreal maxMergeAlpha() const;
     qreal maxMergeCollectAlpha() const;
+    qreal schedulerBalancingRatio() const;
 
     int maxSwapSize() const;
     void setMaxSwapSize(int value);

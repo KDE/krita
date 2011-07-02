@@ -36,6 +36,7 @@ public:
     void addJob(KisDabProcessingStrategy::DabProcessingData *data);
 
     bool hasJobs() const;
+    qint32 numJobs() const;
     KisStrokeJob* popOneJob();
 
     void endStroke();

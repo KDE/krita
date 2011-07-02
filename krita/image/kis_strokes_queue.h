@@ -41,6 +41,8 @@ public:
     void processQueue(KisUpdaterContext &updaterContext);
     bool needsExclusiveAccess() const;
 
+    qint32 sizeMetric() const;
+
 private:
     KisStroke* currentStroke();
     bool sanityCheckCurrentStrokeFinished(bool finished);

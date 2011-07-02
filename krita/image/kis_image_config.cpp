@@ -67,6 +67,14 @@ qreal KisImageConfig::maxMergeCollectAlpha() const
     return m_config.readEntry("maxMergeCollectAlpha", 1.5);
 }
 
+qreal KisImageConfig::schedulerBalancingRatio() const
+{
+    /**
+     * updates-queue-size / strokes-queue-size
+     */
+    return m_config.readEntry("schedulerBalancingRatio", 2.);
+}
+
 int KisImageConfig::maxSwapSize() const
 {
     return m_config.readEntry("maxSwapSize", 4096); // in MiB

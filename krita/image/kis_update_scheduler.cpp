@@ -18,6 +18,7 @@
 
 #include "kis_update_scheduler.h"
 
+#include "kis_image_config.h"
 #include "kis_merge_walker.h"
 #include "kis_full_refresh_walker.h"
 #include "kis_updater_context.h"
@@ -27,12 +28,14 @@
 
 struct KisUpdateScheduler::Private {
     Private() : updatesQueue(0), strokesQueue(0),
-                updaterContext(0), processingBlocked(false) {}
+                updaterContext(0), processingBlocked(false),
+                balancingRatio(1.0) {}
 
     KisSimpleUpdateQueue *updatesQueue;
     KisStrokesQueue *strokesQueue;
     KisUpdaterContext *updaterContext;
     bool processingBlocked;
+    qreal balancingRatio; // updates-queue-size/strokes-queue-size
 };
 
 KisUpdateScheduler::KisUpdateScheduler(KisImageWSP image)
@@ -125,6 +128,9 @@ void KisUpdateScheduler::updateSettings()
     if(m_d->updatesQueue) {
         m_d->updatesQueue->updateSettings();
     }
+
+    KisImageConfig config;
+    m_d->balancingRatio = config.schedulerBalancingRatio();
 }
 
 void KisUpdateScheduler::lock()
@@ -148,10 +154,17 @@ void KisUpdateScheduler::processQueues()
 {
     if(m_d->processingBlocked) return;
 
-    m_d->strokesQueue->processQueue(*m_d->updaterContext);
-
-    if(!m_d->strokesQueue->needsExclusiveAccess()) {
+    if(m_d->strokesQueue->needsExclusiveAccess()) {
+        m_d->strokesQueue->processQueue(*m_d->updaterContext);
+    }
+    else if(m_d->balancingRatio * m_d->strokesQueue->sizeMetric() > m_d->updatesQueue->sizeMetric()) {
+        m_d->strokesQueue->processQueue(*m_d->updaterContext);
         m_d->updatesQueue->processQueue(*m_d->updaterContext);
+    }
+    else {
+        m_d->updatesQueue->processQueue(*m_d->updaterContext);
+        m_d->strokesQueue->processQueue(*m_d->updaterContext);
+
     }
 }
 

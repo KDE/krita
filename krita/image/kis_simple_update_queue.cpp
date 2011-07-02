@@ -120,10 +120,16 @@ void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QRect& rc, const QRect& 
     m_lock.unlock();
 }
 
-bool KisSimpleUpdateQueue::isEmpty()
+bool KisSimpleUpdateQueue::isEmpty() const
 {
     QMutexLocker locker(&m_lock);
     return m_list.isEmpty();
+}
+
+qint32 KisSimpleUpdateQueue::sizeMetric() const
+{
+    QMutexLocker locker(&m_lock);
+    return m_list.size();
 }
 
 bool KisSimpleUpdateQueue::trySplitJob(KisNodeSP node, const QRect& rc, const QRect& cropRect)

@@ -94,6 +94,15 @@ bool KisStrokesQueue::needsExclusiveAccess() const
     return m_d->needsExclusiveAccess;
 }
 
+qint32 KisStrokesQueue::sizeMetric() const
+{
+    if(m_d->strokesQueue.isEmpty()) return 0;
+    QMutexLocker locker(&m_d->mutex);
+
+    // just a rough approximation
+    return m_d->strokesQueue.head()->numJobs() * m_d->strokesQueue.size();
+}
+
 bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext)
 {
     if(m_d->strokesQueue.isEmpty()) return false;

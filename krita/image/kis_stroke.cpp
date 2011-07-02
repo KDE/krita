@@ -73,6 +73,11 @@ bool KisStroke::hasJobs() const
     return !m_jobsQueue.isEmpty();
 }
 
+qint32 KisStroke::numJobs() const
+{
+    return m_jobsQueue.size();
+}
+
 void KisStroke::endStroke()
 {
     Q_ASSERT(!m_strokeEnded);

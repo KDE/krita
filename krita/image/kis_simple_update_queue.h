@@ -39,7 +39,8 @@ public:
 
     void optimize();
 
-    bool isEmpty();
+    bool isEmpty() const;
+    qint32 sizeMetric() const;
 
     void updateSettings();
 
@@ -55,7 +56,7 @@ protected:
 
 protected:
 
-    QMutex m_lock;
+    mutable QMutex m_lock;
     KisWalkersList m_list;
 
     /**

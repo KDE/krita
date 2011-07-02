@@ -199,6 +199,52 @@ void KisUpdateSchedulerTest::testLocking()
     QVERIFY(checkWalker(jobs[1]->walker(), dirtyRect4));
 }
 
+void KisUpdateSchedulerTest::testExclusiveStrokes()
+{
+    KisImageSP image = buildTestingImage();
+    KisNodeSP rootLayer = image->rootLayer();
+    KisNodeSP paintLayer1 = rootLayer->firstChild();
+    QRect imageRect = image->bounds();
+
+    QCOMPARE(paintLayer1->name(), QString("paint1"));
+    QCOMPARE(imageRect, QRect(0,0,640,441));
+
+    QRect dirtyRect1(0,0,50,100);
+
+    KisTestableUpdateScheduler scheduler(image, 2);
+    KisTestableUpdaterContext *context = scheduler.updaterContext();
+    QVector<KisUpdateJobItem*> jobs;
+
+    scheduler.updateProjection(paintLayer1, dirtyRect1, imageRect);
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), false);
+    QVERIFY(checkWalker(jobs[0]->walker(), dirtyRect1));
+
+    scheduler.startStroke(new KisTestingStrokeStrategy("excl_", true, false));
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), false);
+    QVERIFY(checkWalker(jobs[0]->walker(), dirtyRect1));
+
+    context->clear();
+    scheduler.endStroke();
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), false);
+    COMPARE_NAME(jobs[0], "excl_init");
+
+    scheduler.updateProjection(paintLayer1, dirtyRect1, imageRect);
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), false);
+    COMPARE_NAME(jobs[0], "excl_init");
+}
+
 
 QTEST_KDEMAIN(KisUpdateSchedulerTest, NoGUI)
 #include "kis_update_scheduler_test.moc"

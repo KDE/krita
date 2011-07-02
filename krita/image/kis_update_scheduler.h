@@ -23,6 +23,9 @@
 #include "krita_export.h"
 #include "kis_types.h"
 
+#include "kis_stroke_strategy.h"
+#include "kis_dab_processing_strategy.h"
+
 class QRect;
 
 
@@ -68,6 +71,11 @@ public:
 
     void updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect);
     void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
+
+    void startStroke(KisStrokeStrategy *strokeStrategy);
+    void addJob(KisDabProcessingStrategy::DabProcessingData *data);
+    void endStroke();
+    void cancelStroke();
 
 protected:
     // Trivial constructor for testing support

@@ -26,14 +26,6 @@
 #include "kis_merge_walker.h"
 
 
-#define COMPARE_WALKER(item, walker)            \
-    QCOMPARE(item->walker(), walker)
-#define COMPARE_NAME(item, name)                                \
-    QCOMPARE(getJobName(item->strokeJob()), QString(name))
-#define VERIFY_EMPTY(item)                                      \
-    QVERIFY(!item->isRunning())
-
-
 void KisStrokesQueueTest::testSequentialJobs()
 {
     KisStrokesQueue queue;

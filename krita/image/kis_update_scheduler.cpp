@@ -22,12 +22,15 @@
 #include "kis_full_refresh_walker.h"
 #include "kis_updater_context.h"
 #include "kis_simple_update_queue.h"
+#include "kis_strokes_queue.h"
 
 
 struct KisUpdateScheduler::Private {
-    Private() : workQueue(0), processingBlocked(false) {}
+    Private() : updatesQueue(0), strokesQueue(0),
+                updaterContext(0), processingBlocked(false) {}
 
-    KisSimpleUpdateQueue *workQueue;
+    KisSimpleUpdateQueue *updatesQueue;
+    KisStrokesQueue *strokesQueue;
     KisUpdaterContext *updaterContext;
     bool processingBlocked;
 };
@@ -38,7 +41,8 @@ KisUpdateScheduler::KisUpdateScheduler(KisImageWSP image)
     updateSettings();
 
     // The queue will update settings in a constructor itself
-    m_d->workQueue = new KisSimpleUpdateQueue();
+    m_d->updatesQueue = new KisSimpleUpdateQueue();
+    m_d->strokesQueue = new KisStrokesQueue();
     m_d->updaterContext = new KisUpdaterContext();
 
     connectImage(image);
@@ -52,6 +56,9 @@ KisUpdateScheduler::KisUpdateScheduler()
 
 KisUpdateScheduler::~KisUpdateScheduler()
 {
+    delete m_d->updatesQueue;
+    delete m_d->strokesQueue;
+    delete m_d->updaterContext;
 }
 
 void KisUpdateScheduler::connectImage(KisImageWSP image)
@@ -69,7 +76,7 @@ void KisUpdateScheduler::connectImage(KisImageWSP image)
 
 void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect)
 {
-    m_d->workQueue->addJob(node, rc, cropRect);
+    m_d->updatesQueue->addJob(node, rc, cropRect);
     processQueues();
 }
 
@@ -89,10 +96,34 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
     unlock();
 }
 
+void KisUpdateScheduler::startStroke(KisStrokeStrategy *strokeStrategy)
+{
+    m_d->strokesQueue->startStroke(strokeStrategy);
+    processQueues();
+}
+
+void KisUpdateScheduler::addJob(KisDabProcessingStrategy::DabProcessingData *data)
+{
+    m_d->strokesQueue->addJob(data);
+    processQueues();
+}
+
+void KisUpdateScheduler::endStroke()
+{
+    m_d->strokesQueue->endStroke();
+    processQueues();
+}
+
+void KisUpdateScheduler::cancelStroke()
+{
+    m_d->strokesQueue->cancelStroke();
+    processQueues();
+}
+
 void KisUpdateScheduler::updateSettings()
 {
-    if(m_d->workQueue) {
-        m_d->workQueue->updateSettings();
+    if(m_d->updatesQueue) {
+        m_d->updatesQueue->updateSettings();
     }
 }
 
@@ -117,12 +148,16 @@ void KisUpdateScheduler::processQueues()
 {
     if(m_d->processingBlocked) return;
 
-    m_d->workQueue->processQueue(*m_d->updaterContext);
+    m_d->strokesQueue->processQueue(*m_d->updaterContext);
+
+    if(!m_d->strokesQueue->needsExclusiveAccess()) {
+        m_d->updatesQueue->processQueue(*m_d->updaterContext);
+    }
 }
 
 void KisUpdateScheduler::doSomeUsefulWork()
 {
-    m_d->workQueue->optimize();
+    m_d->updatesQueue->optimize();
 }
 
 void KisUpdateScheduler::spareThreadAppeared()
@@ -135,7 +170,8 @@ KisTestableUpdateScheduler::KisTestableUpdateScheduler(KisImageWSP image, qint32
     updateSettings();
 
     // The queue will update settings in a constructor itself
-    m_d->workQueue = new KisTestableSimpleUpdateQueue();
+    m_d->updatesQueue = new KisTestableSimpleUpdateQueue();
+    m_d->strokesQueue = new KisStrokesQueue();
     m_d->updaterContext = new KisTestableUpdaterContext(threadCount);
 
     connectImage(image);
@@ -148,5 +184,5 @@ KisTestableUpdaterContext* KisTestableUpdateScheduler::updaterContext()
 
 KisTestableSimpleUpdateQueue* KisTestableUpdateScheduler::updateQueue()
 {
-    return dynamic_cast<KisTestableSimpleUpdateQueue*>(m_d->workQueue);
+    return dynamic_cast<KisTestableSimpleUpdateQueue*>(m_d->updatesQueue);
 }

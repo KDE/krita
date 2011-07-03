@@ -90,21 +90,21 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
 
     QPushButton *button = new QPushButton( this );
     button->setIcon( SmallIcon("document-open") );
-    button->setToolTip( i18n("Import") );
+    button->setToolTip( i18n("Import Resource") );
     button->setEnabled( true );
     d->buttonGroup->addButton( button, Button_Import );
     buttonLayout->addWidget( button, 0, 0 );
 
     button = new QPushButton( this );
     button->setIcon( SmallIcon("trash-empty") );
-    button->setToolTip( i18n("Delete") );
+    button->setToolTip( i18n("Delete Resource") );
     button->setEnabled( false );
     d->buttonGroup->addButton( button, Button_Remove );
     buttonLayout->addWidget( button, 0, 1 );
 
     button = new QPushButton( this );
     button->setIcon( SmallIcon("download") );
-    button->setToolTip( i18n("Download") );
+    button->setToolTip( i18n("Download Resource") );
     button->setEnabled( true );
     button->hide();
     d->buttonGroup->addButton( button, Button_GhnsDownload );
@@ -112,7 +112,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
 
     button = new QPushButton( this );
     button->setIcon( SmallIcon("go-up") );
-    button->setToolTip( i18n("Share") );
+    button->setToolTip( i18n("Share Resource") );
     button->setEnabled( false );
     button->hide();
     d->buttonGroup->addButton( button, Button_GhnsUpload);

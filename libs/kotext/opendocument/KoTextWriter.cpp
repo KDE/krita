@@ -1685,11 +1685,12 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         int blockOutlineLevel = format.property(KoParagraphStyle::OutlineLevel).toInt();
 
         if (cursorFrame != currentFrame
-                    && cursorFrame->format().intProperty(KoText::SubFrameType) == KoText::FootNotesFrameType) {
+                    && cursorFrame->format().intProperty(KoText::SubFrameType) == KoText::NoteFrameType) {
             block = cursorFrame->lastCursorPosition().block();
             block = block.next();
             continue;
         }
+
         if (cursorFrame != currentFrame
                     && cursorFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
             int frameBegin = cursorFrame->firstPosition();

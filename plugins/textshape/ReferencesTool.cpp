@@ -65,6 +65,7 @@ void ReferencesTool::createActions()
     addAction("insert_endnote",action2);
     action2->setToolTip(i18n("Insert an End Note into the document."));
     connect(action2, SIGNAL(triggered()), this, SLOT(insertEndNote()));
+
 }
 
 void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -111,6 +112,7 @@ void ReferencesTool::insertTableOfContents()
 
 void ReferencesTool::insertFootNote()
 {
+    connect(textEditor()->document(),SIGNAL(cursorPositionChanged(QTextCursor)),this,SLOT(disableButtons(QTextCursor)));
     note = textEditor()->insertFootNote();
     note->setAutoNumbering(sfenw->widget.autoNumbering->isChecked());
     if(note->autoNumbering()) {
@@ -165,6 +167,17 @@ void ReferencesTool::insertEndNote()
     fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
     cursor.insertText(" ",*fmat);
 
+}
+
+void ReferencesTool::disableButtons(QTextCursor cursor)
+{
+    if(cursor.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::NoteFrameType) {
+        sfenw->widget.addFootnote->setEnabled(false);
+        sfenw->widget.addEndnote->setEnabled(false);
+    } else {
+        sfenw->widget.addFootnote->setEnabled(true);
+        sfenw->widget.addEndnote->setEnabled(true);
+    }
 }
 
 #include <ReferencesTool.moc>

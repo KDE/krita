@@ -190,6 +190,9 @@ public:
         if(role == CategoryEndRole)
             return getCategoryBegin(idx.row()) + m_categories[index.first].entries.size();
         
+        if(role == ExpandCategoryRole)
+            return m_categories[index.first].expanded;
+        
         if(isHeader(index)) {
             switch(role)
             {
@@ -197,8 +200,6 @@ public:
                 return categoryToString(m_categories[index.first].data);
             case IsHeaderRole:
                 return true;
-            case ExpandCategoryRole:
-                return m_categories[index.first].expanded;
             }
         }
         else {
@@ -221,9 +222,11 @@ public:
         Index index = getIndex(idx.row());
         
         if(role == ExpandCategoryRole && isHeader(index)) {
-            emit layoutAboutToBeChanged();
+            int beg = getCategoryBegin(idx.row());
+            int end = beg - 1 + m_categories[index.first].entries.size();
+            
             m_categories[index.first].expanded = value.toBool();
-            emit layoutChanged();
+            emit dataChanged(QAbstractListModel::index(beg), QAbstractListModel::index(end));
         }
         
         return false;

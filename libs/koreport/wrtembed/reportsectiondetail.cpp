@@ -216,8 +216,7 @@ void ReportSectionDetail::unsetSectionCursor()
     if (m_detail)
         m_detail->unsetSectionCursor();
     
-    for (int gi = 0; gi < (int) groupList.count(); gi++) {
-        rsdg = groupList.at(gi);
+    foreach(ReportSectionDetailGroup* rsdg, groupList) {
         if (rsdg->groupHeader()) 
             rsdg->groupHeader()->unsetSectionCursor();
         if (rsdg->groupFooter())

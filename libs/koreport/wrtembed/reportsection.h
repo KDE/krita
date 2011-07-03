@@ -67,7 +67,7 @@ public:
     const QGraphicsItemList items() {
         return m_scene->items();
     };
-public slots:
+
     void setSectionCursor(const QCursor&);
     void unsetSectionCursor();
     

@@ -97,10 +97,13 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     if(!stop.currentBlock().isValid() || m_endOfArea->lineTextStart >= 0) {
         ++stop;
     }
+
     int tableAreaIndex = 0;
     int blockIndex = 0;
     int tocIndex = 0;
-    for (; it != stop; ++it) {
+    bool isAtEnd = false;
+    for (; it != stop && !isAtEnd; ++it) {
+        isAtEnd = it.atEnd();
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();

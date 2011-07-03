@@ -63,6 +63,7 @@ void KoResourceTagging::addTag(const QString& fileName,const QString& tag)
     if(m_tagList.contains(tag))
     {
         int val = m_tagList.value(tag);
+        m_tagList.remove(tag);
         m_tagList.insert(tag, ++val);
     }
     else
@@ -84,7 +85,7 @@ void KoResourceTagging::delTag( KoResource* resource,const QString& tag)
 
     m_tagList.remove(tag);
 
-    if( val !=0 ){
+    if( val !=0 && val != 1){
         m_tagList.insert(tag, --val);
     }
 }
@@ -266,7 +267,7 @@ bool KoResourceTagging::isServerResource(QString resourceName)
 
 QString KoResourceTagging::getAdjustedFileName(QString fileName)
 {
-    if(!fileName.contains(".")) {
+    if(!isServerResource(fileName)) {
         return fileName + "-krita" + m_serverExtensions.split(":").takeFirst().remove("*");
     }
     return fileName;

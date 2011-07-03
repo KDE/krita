@@ -29,14 +29,23 @@ void KisCategorizedListView::slotIndexChanged(const QModelIndex& index)
 {
     if(model()->data(index, IsHeaderRole).toBool()) {
         bool expanded = model()->data(index, ExpandCategoryRole).toBool();
-        int beg       = model()->data(index, CategoryBeginRole).toInt();
-        int end       = model()->data(index, CategoryEndRole).toInt();
-        
         model()->setData(index, !expanded, ExpandCategoryRole);
-        
-        for(; beg!=end; ++beg)
-            setRowHidden(beg, expanded);
-        
         emit sigCategoryToggled(index, !expanded);
     }
 }
+
+void KisCategorizedListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+{
+    QListView::dataChanged(topLeft, bottomRight);
+    
+    int beg = topLeft.row();
+    int end = bottomRight.row();
+    
+    for(; beg<=end; ++beg) {
+        QModelIndex index    = model()->index(beg, 0);
+        bool        isHeader = model()->data(index, IsHeaderRole).toBool();
+        bool        expanded = model()->data(index, ExpandCategoryRole).toBool();
+        setRowHidden(beg, !expanded && !isHeader);
+    }
+}
+

@@ -30,6 +30,7 @@
 #include "KoTextOdfSaveHelper.h"
 #include "KoTextPaste.h"
 #include "KoTableOfContentsGeneratorInfo.h"
+#include "KoBibliographyInfo.h"
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
 #include "changetracker/KoDeleteChangeMarker.h"
@@ -1138,6 +1139,41 @@ void KoTextEditor::insertTableOfContents()
     }
 
     d->caret.insertFrame(tocFormat);
+
+    d->updateState(KoTextEditor::Private::NoOp);
+    emit cursorPositionChanged();
+}
+
+void KoTextEditor::insertBibliography()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table Of Contents"));
+
+    QTextFrameFormat bibFormat;
+    bibFormat.setProperty(KoText::SubFrameType, KoText::BibliographyFrameType);
+    KoBibliographyInfo * info = new KoBibliographyInfo();
+    bibFormat.setProperty( KoText::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info) );
+
+    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+    if (changeTracker && changeTracker->recordChanges()) {
+        QTextCharFormat charFormat = d->caret.charFormat();
+        QTextBlockFormat blockFormat = d->caret.blockFormat();
+        QString title = i18n("Insert Bibliography");
+
+        int changeId;
+        if (!d->caret.atBlockStart()) {
+            changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, charFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
+        } else {
+            changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, blockFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
+        }
+
+        if (!changeId) {
+            changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+        }
+
+        bibFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+    }
+
+    d->caret.insertFrame(bibFormat);
 
     d->updateState(KoTextEditor::Private::NoOp);
     emit cursorPositionChanged();

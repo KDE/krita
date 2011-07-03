@@ -55,7 +55,9 @@ set(kotext_LIB_SRCS
     KoTextInlineRdf.cpp
     KoTextMeta.cpp
 
+    ToCBibGeneratorInfo.cpp
     KoTableOfContentsGeneratorInfo.cpp
+    KoBibliographyInfo.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp

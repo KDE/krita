@@ -242,6 +242,8 @@ public slots:
      */
     void insertTableOfContents();
 
+    void insertBibliography();
+
     KoInlineCite *insertCitation();
 
     void insertText(const QString &text);

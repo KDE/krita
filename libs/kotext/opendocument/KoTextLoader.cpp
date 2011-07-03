@@ -58,6 +58,7 @@
 #include <KoXmlReader.h>
 #include "KoTextInlineRdf.h"
 #include "KoTableOfContentsGeneratorInfo.h"
+#include "KoBibliographyInfo.h"
 #include "KoSection.h"
 
 #include "changetracker/KoChangeTracker.h"
@@ -700,6 +701,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, K
                         loadSection(tag, cursor);
                     } else if (localName == "table-of-content") {
                         loadTableOfContents(tag, cursor);
+                    } else if (localName == "bibliography") {
+                        loadBibliography(tag, cursor);
                     } else {
                         KoInlineObject *obj = KoInlineObjectRegistry::instance()->createFromOdf(tag, d->context);
                         if (obj) {
@@ -2361,6 +2364,64 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     cursor.movePosition(QTextCursor::End);
 }
 
+void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cursor)
+{
+    Q_ASSERT(element.tagName() == "bibliography");
+    QTextFrameFormat bibFormat;
+    bibFormat.setProperty(KoText::SubFrameType, KoText::BibliographyFrameType);
+
+    KoBibliographyInfo *info = new KoBibliographyInfo();
+
+    info->m_name = element.attribute("name");
+    info->m_styleName = element.attribute("style-name");
+
+    KoXmlElement e;
+    forEachElement(e, element) {
+        if (e.isNull() || e.namespaceURI() != KoXmlNS::text) {
+            continue;
+        }
+
+        if (e.localName() == "bibliography-source" && e.namespaceURI() == KoXmlNS::text) {
+            info->loadOdf(d->textSharedData, e);
+
+            Q_ASSERT( !tocFormat.hasProperty(KoText::BibliographyData) );
+            bibFormat.setProperty( KoText::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info) );
+            cursor.insertFrame(bibFormat);
+
+        } else if (e.localName() == "index-body") {
+            QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
+
+            bool firstTime = true;
+            KoXmlElement p;
+            forEachElement(p, e) {
+                if (p.isNull() || p.namespaceURI() != KoXmlNS::text)
+                    continue;
+
+                if (!firstTime) {
+                    // use empty formats to not inherit from the prev parag
+                    QTextBlockFormat bf;
+                    QTextCharFormat cf;
+                    cursorFrame.insertBlock(bf, cf);
+                }
+                firstTime = false;
+
+                QTextBlock current = cursorFrame.block();
+                QTextBlockFormat blockFormat;
+
+                if (p.localName() == "p") {
+                    loadParagraph(p, cursorFrame);
+                } else if (p.localName() == "index-title") {
+                    loadBody(p, cursorFrame);
+                }
+
+                QTextCursor c(current);
+                c.mergeBlockFormat(blockFormat);
+            }
+        }// index-body
+    }
+    // Get out of the frame
+    cursor.movePosition(QTextCursor::End);
+}
 
 void KoTextLoader::startBody(int total)
 {

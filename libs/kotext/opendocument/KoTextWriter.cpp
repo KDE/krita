@@ -73,6 +73,7 @@
 #include <KoXmlWriter.h>
 #include <rdf/KoDocumentRdfBase.h>
 #include <KoTableOfContentsGeneratorInfo.h>
+#include <KoBibliographyInfo.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <Soprano/Soprano>
@@ -177,6 +178,7 @@ public:
     void saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles);
     QTextBlock& saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level, QTextTable *currentTable);
     void saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc);
+    void saveBibliography(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *bib);
     void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextFrame *currentFrame = 0, QTextList *currentList = 0);
     void saveInlineRdf(KoTextInlineRdf *rdf, TagInformation *tagInfos);
     int checkForBlockChange(const QTextBlock &block);
@@ -1456,6 +1458,35 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int fro
     writer->endElement(); // table:table-of-content
 }
 
+void KoTextWriter::Private::saveBibliography(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *bib)
+{
+    writer->startElement("text:bibliography");
+
+    KoBibliographyInfo *info = bib->frameFormat().property(KoText::BibliographyData).value<KoBibliographyInfo *>();
+    if (!info->m_styleName.isNull()) {
+            writer->addAttribute("text:style-name",info->m_styleName);
+    }
+    writer->addAttribute("text:name",info->m_name);
+
+    info->saveOdf(writer);
+
+    writer->startElement("text:index-body");
+    // write the title (one p block)
+    QTextCursor localBlock = bib->firstCursorPosition();
+    localBlock.movePosition(QTextCursor::NextBlock);
+    int endTitle = localBlock.position();
+    writer->startElement("text:index-title");
+        writeBlocks(document, from, endTitle, listStyles, currentTable, bib);
+    writer->endElement(); // text:index-title
+    from = endTitle;
+
+    QTextBlock block = bib->lastCursorPosition().block();
+    writeBlocks(document, from, to , listStyles, currentTable, bib);
+
+    writer->endElement(); // table:index-body
+    writer->endElement(); // table:table-of-content
+}
+
 QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level, QTextTable *currentTable)
 {
     QTextList *textList, *topLevelTextList;
@@ -1692,6 +1723,17 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             block = block.next();
             continue;
         }
+
+        if (cursorFrame != currentFrame
+                    && cursorFrame->format().intProperty(KoText::SubFrameType) == KoText::BibliographyFrameType) {
+            int frameBegin = cursorFrame->firstPosition();
+            int frameEnd = cursorFrame->lastPosition();
+            saveBibliography(document, frameBegin, frameEnd, listStyles, currentTable, cursor.currentFrame());
+            block = cursorFrame->lastCursorPosition().block();
+            block = block.next();
+            continue;
+        }
+
         if (cursor.currentTable() != currentTable) {
             // Call the code to save the table....
             saveTable(cursor.currentTable(), listStyles);

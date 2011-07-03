@@ -270,6 +270,18 @@ void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property
     m_scene->update();
 }
 
+void ReportSection::setSectionCursor(const QCursor& c)
+{
+    if (m_sceneView)
+        m_sceneView->setCursor(c);
+}
+
+void ReportSection::unsetSectionCursor()
+{
+    if (m_sceneView)
+        m_sceneView->unsetCursor();
+}
+
 //
 // class ReportResizeBar
 //

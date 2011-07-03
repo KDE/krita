@@ -281,7 +281,7 @@ public:
     CurveIterator operator-=(int i) {
         m_position -= i; return *this;
     }
-    CurveIterator operator=(const BaseIterator &it) {
+    CurveIterator& operator=(const BaseIterator &it) {
         m_position = it; return *this;
     }
     CurvePoint& operator*() {

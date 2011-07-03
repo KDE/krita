@@ -59,8 +59,8 @@ public:
 
     KisToolMultihand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText);
     virtual ~KisToolMultihand();
-
-    virtual void setDirty(const QRegion& region);
+    virtual int flags() const;
+    virtual void setDirty(const QVector<QRect>& region);
 
 protected:
     void gesture(const QPointF &offsetInDocPixels,
@@ -197,7 +197,7 @@ private:
     qint32 m_rate;
     bool m_isAirbrushing;
 
-    QRegion m_incrementalDirtyRegion;
+    QVector<QRect> m_incrementalDirtyRegion;
     QList<FreehandPaintJob*> m_paintJobs;
     KisRecordedPathPaintAction* m_pathPaintAction;
     QThreadPool* m_executor;

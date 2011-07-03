@@ -68,6 +68,7 @@ class KRITAUI_EXPORT KisToolPaint
 public:
     KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor);
     virtual ~KisToolPaint();
+    virtual int flags() const;
 
 protected:
 

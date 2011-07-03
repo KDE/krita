@@ -107,7 +107,7 @@ void renderCodeEAN13(const QRect & r, const QString & _str, int align, QPainter 
     int old_sum = val[12]; // get the old check sum value (-1 if none was set)
     int checksum = 0;
     for (i = 0; i < 12; ++i) {
-        checksum += val[i] * (i % 2 ? 3 : 1);
+        checksum += val[i] * ((i % 2) ? 3 : 1);
     }
     checksum = (checksum % 10);
     if (checksum) checksum = 10 - checksum;
@@ -259,7 +259,7 @@ void renderCodeUPCA(const QRect & r, const QString & _str, int align, QPainter *
     int old_sum = val[12]; // get the old check sum value (-1 if none was set)
     int checksum = 0;
     for (i = 0; i < 12; ++i) {
-        checksum += val[i] * (i % 2 ? 3 : 1);
+        checksum += val[i] * ((i % 2) ? 3 : 1);
     }
     checksum = (checksum % 10);
     if (checksum) checksum = 10 - checksum;
@@ -414,7 +414,7 @@ void renderCodeEAN8(const QRect & r, const QString & _str, int align, QPainter *
     int old_sum = val[7]; // get the old check sum value (-1 if none was set)
     int checksum = 0;
     for (i = 0; i < 7; ++i) {
-        checksum += val[i] * (i % 2 ? 1 : 3);
+        checksum += val[i] * ((i % 2) ? 1 : 3);
     }
     checksum = (checksum % 10);
     if (checksum) checksum = 10 - checksum;

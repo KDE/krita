@@ -176,7 +176,10 @@ void SimpleStylesWidget::setCurrentFormat(const QTextBlockFormat &format)
     m_currentBlockFormat = format;
 
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
-    m_blockFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->paragraphStyle(id), m_blockFrame->size()));
+    KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
+    if (style) {
+        m_blockFrame->setStylePreview(m_thumbnailer->thumbnail(style, m_blockFrame->size()));
+    }
     m_popupForBlock->setCurrentFormat(format);
 }
 
@@ -187,7 +190,10 @@ void SimpleStylesWidget::setCurrentFormat(const QTextCharFormat &format)
     m_currentCharFormat = format;
 
     int id = m_currentCharFormat.intProperty(KoCharacterStyle::StyleId);
-    m_charFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->characterStyle(id), m_charFrame->size()));
+    KoCharacterStyle *style(m_styleManager->characterStyle(id));
+    if (style) {
+        m_charFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->characterStyle(id), m_charFrame->size()));
+    }
     m_popupForChar->setCurrentFormat(format);
 }
 

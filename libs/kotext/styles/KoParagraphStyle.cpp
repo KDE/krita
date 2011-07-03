@@ -733,7 +733,7 @@ void KoParagraphStyle::setBottomMargin(QTextLength margin)
 qreal KoParagraphStyle::bottomMargin() const
 {
     if (parentStyle())
-        return propertyLength(QTextFormat::BlockBottomMargin).value(parentStyle()->topMargin());
+        return propertyLength(QTextFormat::BlockBottomMargin).value(parentStyle()->bottomMargin());
     else
         return propertyLength(QTextFormat::BlockBottomMargin).value(0);
 }
@@ -746,7 +746,7 @@ void KoParagraphStyle::setLeftMargin(QTextLength margin)
 qreal KoParagraphStyle::leftMargin() const
 {
     if (parentStyle())
-        return propertyLength(QTextFormat::BlockLeftMargin).value(parentStyle()->topMargin());
+        return propertyLength(QTextFormat::BlockLeftMargin).value(parentStyle()->leftMargin());
     else
         return propertyLength(QTextFormat::BlockLeftMargin).value(0);
 }
@@ -759,7 +759,7 @@ void KoParagraphStyle::setRightMargin(QTextLength margin)
 qreal KoParagraphStyle::rightMargin() const
 {
     if (parentStyle())
-        return propertyLength(QTextFormat::BlockRightMargin).value(parentStyle()->topMargin());
+        return propertyLength(QTextFormat::BlockRightMargin).value(parentStyle()->rightMargin());
     else
         return propertyLength(QTextFormat::BlockRightMargin).value(0);
 }

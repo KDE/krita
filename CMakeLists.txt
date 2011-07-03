@@ -298,6 +298,10 @@ else(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
 	add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
 endif(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
   
+##
+## Test for Qt Webkit
+##
+macro_log_feature(QT_QTWEBKIT_FOUND "Qt Webkit" "Qt binding for Webkit, the HTML engine." "http://qt.nokia.com" FALSE "" "Required for the web shape")
 
 ##
 ## Test endianess

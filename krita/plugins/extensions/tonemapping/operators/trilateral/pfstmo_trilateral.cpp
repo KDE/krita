@@ -136,10 +136,10 @@ int main(int argc, char* argv[])
 {
     try {
         pfstmo_trilateral(argc, argv);
-    } catch (pfs::Exception ex) {
+    } catch (const pfs::Exception &ex) {
         fprintf(stderr, PROG_NAME " error: %s\n", ex.getMessage());
         return EXIT_FAILURE;
-    } catch (QuietException  ex) {
+    } catch (const QuietException &ex) {
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;

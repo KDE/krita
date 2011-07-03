@@ -70,7 +70,7 @@ void KisToolEllipse::finishEllipse(const QRectF& rect)
         painter.paintEllipse(rect);
         painter.endTransaction(image()->undoAdapter());
 
-        QRegion bound = painter.takeDirtyRegion();
+        QVector<QRect> bound = painter.takeDirtyRegion();
         device->setDirty(bound);
         notifyModified();
     } else {

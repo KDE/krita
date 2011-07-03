@@ -364,6 +364,9 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(const KoInputDevice &)),
             m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(const KoInputDevice &)));
+    
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
+            m_d->controlFrame->paintopBox(), SLOT(slotToolChanged(KoCanvasController*,int)));
 
     show();
 

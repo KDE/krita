@@ -29,16 +29,23 @@
 
 #include <KoDpi.h>
 
+#include <kdeversion.h>
 #include <klocale.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <krecentdirs.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+
+#if KDE_IS_VERSION(4,6,0)
+#include <krecentdirs.h>
+#endif
+
 #include <QtDBus/QtDBus>
 #include <QFile>
+
+
 
 bool KoApplication::m_starting = true;
 
@@ -137,13 +144,13 @@ bool KoApplication::start()
 
     // No argument -> create an empty document
     if (!argsCount) {
-
+#if KDE_IS_VERSION(4,6,0)
         // if there's no document, add the current working directory
         // to the recent dirs so the open dialog and open pane show
         // the directory from where the app was started, instead of
         // the last directory from where we opened a file
         KRecentDirs::add(":OpenDialog", QDir::currentPath());
-
+#endif
         QString errorMsg;
         KoDocument* doc = entry.createDoc(&errorMsg);
         if (!doc) {

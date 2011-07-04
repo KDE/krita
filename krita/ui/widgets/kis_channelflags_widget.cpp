@@ -64,7 +64,7 @@ void KisChannelFlagsWidget::setChannelFlags(const QBitArray & cf)
     if (cf.isEmpty()) return;
 
     for (int i = 0; i < qMin(m_channelChecks.size(), cf.size()); ++i) {
-        m_channelChecks.at(i)->setChecked(cf.testBit(m_colorSpace->channels()[i]->index()));
+        m_channelChecks.at(i)->setChecked(cf.testBit(i));
     }
 }
 
@@ -74,10 +74,9 @@ QBitArray KisChannelFlagsWidget::channelFlags() const
     QBitArray ba(m_channelChecks.size());
 
     for (int i = 0; i < m_channelChecks.size(); ++i) {
-
         bool flag = m_channelChecks.at(i)->isChecked();
         if (!flag) allTrue = false;
-        qint32 idx = m_colorSpace->channels()[i]->index();
+        qint32 idx = i;
         ba.setBit(idx, flag);
         dbgUI << " channel " << i << " is " << flag << ", allTrue = " << allTrue << ", so ba.testBit(" << i << ")" << " is " << ba.testBit(idx) << " at " << idx;
     }

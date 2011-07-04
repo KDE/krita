@@ -82,13 +82,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisView2 *view, K
 
     setObjectName(name);
     m_page = new WdgLayerProperties(this);
-/*
-    const QString deviceName = layer->name();
-    const KoColorSpace *colorSpace = layer->colorSpace();
-    const KoCompositeOp *compositeOp = layer->compositeOp();
-    QBitArray channelFlags = layer->channelFlags();
-    quint8 opacity = layer->opacity();
-*/    
+
     d->deviceName = layer->name();
     d->colorSpace = layer->colorSpace();
     d->compositeOp = layer->compositeOp();

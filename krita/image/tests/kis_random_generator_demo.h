@@ -26,11 +26,11 @@ public:
     virtual ~Noise();
 
     void update(quint64 seed, int shift, int cutoff, bool chR, bool chG, bool chB);
-    QImage image();
-    QImage histogram();
-    quint64 min();
-    quint64 max();
-    quint64 mean();
+    QImage image() const;
+    QImage histogram() const;
+    quint64 min() const;
+    quint64 max() const;
+    quint64 mean() const;
 
 private:
     int _wx, _wy;

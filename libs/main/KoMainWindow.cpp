@@ -35,6 +35,8 @@
 #include "KoDocumentEntry.h"
 #include "KoDockerManager.h"
 
+#include <krecentdirs.h>
+#include <ksplashscreen.h>
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>
 #include <ktoggleaction.h>
@@ -128,6 +130,7 @@ public:
         readOnly = false;
         dockWidgetMenu = 0;
         dockerManager = 0;
+        splashscreen = 0;
     }
     ~KoMainWindowPrivate() {
         qDeleteAll(toolbarList);
@@ -214,6 +217,8 @@ public:
     KoDockerManager *dockerManager;
     QList<QDockWidget *> dockWidgets;
     QList<QDockWidget *> hiddenDockwidgets; // List of dockers hiddent by the call to hideDocker
+
+    KSplashScreen *splashscreen;
 };
 
 KoMainWindow::KoMainWindow(const KComponentData &componentData)
@@ -535,13 +540,16 @@ void KoMainWindow::addRecentURL(const KUrl& url)
             for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it)
                 if (path.contains(*it))
                     ok = false; // it's in the tmp resource
-            if (ok)
+            if (ok) {
                 KRecentDocument::add(path);
-        } else
+                KRecentDirs::add(":OpenDialog", QFileInfo(path).dir().canonicalPath());
+            }
+        } else {
             KRecentDocument::add(url.url(KUrl::RemoveTrailingSlash), true);
-
-        if (ok)
+        }
+        if (ok) {
             d->recent->addUrl(url);
+        }
         saveRecentFiles();
     }
 }
@@ -635,7 +643,7 @@ bool KoMainWindow::openDocument(const KUrl & url)
         saveRecentFiles();
         return false;
     }
-    return  openDocumentInternal(url);
+    return openDocumentInternal(url);
 }
 
 // (not virtual)
@@ -1200,8 +1208,7 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
-    KFileDialog *dialog = new
-    KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString(), this);
+    KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString(), this);
     dialog->setObjectName("file dialog");
     dialog->setMode(KFile::File);
     if (!isImporting())

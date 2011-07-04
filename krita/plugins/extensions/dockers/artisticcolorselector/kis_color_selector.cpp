@@ -34,14 +34,13 @@
 static const int MIN_NUM_HUE_PIECES       = 1;
 static const int MAX_NUM_HUE_PIECES       = 48;
 static const int MIN_NUM_LIGHT_PIECES     = 1;
-static const int MAX_NUM_LIGHT_PIECES     = 20;
+static const int MAX_NUM_LIGHT_PIECES     = 30;
 static const int MIN_NUM_SATURATION_RINGS = 1;
 static const int MAX_NUM_SATURATION_RINGS = 20;
 
 KisColorSelector::KisColorSelector(QWidget* parent, KisColor::Type type):
     QWidget(parent),
     m_colorSpace(type),
-    m_numPieces(12),
     m_inverseSaturation(false),
     m_relativeLight(false),
     m_light(0.5f),
@@ -480,14 +479,15 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
     KisColor color(m_selectedColor);
     
     for(int i=0; i<m_numLightPieces; ++i) {
-        qreal  t1 = qreal(i)   / qreal(m_numLightPieces);
-        qreal  t2 = qreal(i+1) / qreal(m_numLightPieces);
-        QRectF r(t1, 0.0, t2-t1, 1.0);
+        qreal  t1   = qreal(i)   / qreal(m_numLightPieces);
+        qreal  t2   = qreal(i+1) / qreal(m_numLightPieces);
+        qreal  diff = t2 - t1;// + 0.001;
+        QRectF r(t1, 0.0, diff, 1.0);
         
         color.setX(getLight(i, color.getH()));
         
         if(m_lightStripPos == LSP_LEFT || m_lightStripPos == LSP_RIGHT)
-            r = QRectF(0.0, t1, 1.0, t2-t1);
+            r = QRectF(0.0, t1, 1.0, diff);
         
         r = matrix.mapRect(r);
         painter.fillRect(r, color.getQColor());

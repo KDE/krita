@@ -57,55 +57,23 @@ struct CoreImpl: public KisColor::Core
         float g = qBound(0.0f, rgb(1), 1.0f);
         float b = qBound(0.0f, rgb(2), 1.0f);
         
-        hsx(0) = ::getHue(r, g, b);
-        hsx(1) = ::getSaturation<HSLType>(r, g, b);
-        hsx(2) = ::getLightness <HSXType>(r, g, b);
-    }
-};
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// --------- CoreHSVImpl --------------------------------------------------------------------- //
-
-struct CoreHSVImpl: public KisColor::Core
-{
-    virtual void setRGB(float r, float g, float b, float a) {
-        rgb(0) = r;
-        rgb(1) = g;
-        rgb(2) = b;
-        hsx(3) = a;
-        updateHSX();
-    }
-    
-    virtual void setHSX(float h, float s, float x, float a) {
+        float            h = ::getHue(r, g, b);
+        float            x = ::getLightness<HSXType>(r, g, b);
+        KisColor::VecRGB hue;
+        ::getRGB(hue(0), hue(1), hue(2), h);
+        ::setLightness<HSXType>(hue(0), hue(1), hue(2), x);
+        KisColor::VecRGB diff1 = hue - KisColor::VecRGB(x,x,x);
+        KisColor::VecRGB diff2 = rgb - KisColor::VecRGB(x,x,x);
+        
         hsx(0) = h;
-        hsx(1) = s;
+        hsx(1) = diff1.dot(diff2) / diff1.squaredNorm(); // project rgb onto (VecRGB(x,x,x) - hue)
         hsx(2) = x;
-        hsx(3) = a;
-        updateRGB();
-    }
-    
-    virtual void updateRGB() {
-        float h = qBound(0.0f, hsx(0), 1.0f);
-        float s = qBound(0.0f, hsx(1), 1.0f);
-        float v = qBound(0.0f, hsx(2), 1.0f);
         
-        ::getRGB(rgb(0), rgb(1), rgb(2), h);
-        ::setSaturation<HSVType>(rgb(0), rgb(1), rgb(2), s);
-        ::setLightness <HSVType>(rgb(0), rgb(1), rgb(2), v);
-    }
-    
-    virtual void updateHSX() {
-        float r = qBound(0.0f, rgb(0), 1.0f);
-        float g = qBound(0.0f, rgb(1), 1.0f);
-        float b = qBound(0.0f, rgb(2), 1.0f);
-        
-        hsx(0) = ::getHue(r, g, b);
-        hsx(1) = ::getSaturation<HSVType>(r, g, b);
-        hsx(2) = ::getLightness <HSVType>(r, g, b);
+//         hsx(0) = ::getHue(r, g, b);
+//         hsx(1) = ::getSaturation<HSLType>(r, g, b);
+//         hsx(2) = ::getLightness <HSXType>(r, g, b);
     }
 };
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // --------- KisColor ------------------------------------------------------------------------ //
@@ -156,7 +124,7 @@ void KisColor::initRGB(Type type, float r, float g, float b, float a)
     switch(type)
     {
         case HSY: { new (m_coreData) CoreImpl<HSYType>; } break;
-        case HSV: { new (m_coreData) CoreHSVImpl;       } break;
+        case HSV: { new (m_coreData) CoreImpl<HSVType>; } break;
         case HSL: { new (m_coreData) CoreImpl<HSLType>; } break;
         case HSI: { new (m_coreData) CoreImpl<HSIType>; } break;
     }
@@ -170,7 +138,7 @@ void KisColor::initHSX(Type type, float h, float s, float x, float a)
     switch(type)
     {
         case HSY: { new (m_coreData) CoreImpl<HSYType>; } break;
-        case HSV: { new (m_coreData) CoreHSVImpl;       } break;
+        case HSV: { new (m_coreData) CoreImpl<HSVType>; } break;
         case HSL: { new (m_coreData) CoreImpl<HSLType>; } break;
         case HSI: { new (m_coreData) CoreImpl<HSIType>; } break;
     }

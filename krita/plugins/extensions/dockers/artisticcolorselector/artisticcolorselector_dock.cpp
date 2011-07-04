@@ -69,9 +69,9 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock():
     m_preferencesUI->numPiecesSlider->setRange(2, 48);
     m_preferencesUI->numPiecesSlider->setValue(12);
     m_preferencesUI->numRingsSlider->setRange(2, 20);
-    m_preferencesUI->numRingsSlider->setValue(9);
+    m_preferencesUI->numRingsSlider->setValue(11);
     m_preferencesUI->numLightPiecesSlider->setRange(2, 30);
-    m_preferencesUI->numLightPiecesSlider->setValue(15);
+    m_preferencesUI->numLightPiecesSlider->setValue(19);
     
     connect(m_preferencesUI->numLightPiecesSlider, SIGNAL(valueChanged(int))                      , SLOT(slotPreferenceChanged()));
     connect(m_preferencesUI->numPiecesSlider     , SIGNAL(valueChanged(int))                      , SLOT(slotPreferenceChanged()));

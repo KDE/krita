@@ -36,7 +36,6 @@
 #include "KoDockerManager.h"
 
 #include <krecentdirs.h>
-#include <ksplashscreen.h>
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>
 #include <ktoggleaction.h>
@@ -130,7 +129,6 @@ public:
         readOnly = false;
         dockWidgetMenu = 0;
         dockerManager = 0;
-        splashscreen = 0;
     }
     ~KoMainWindowPrivate() {
         qDeleteAll(toolbarList);
@@ -218,7 +216,6 @@ public:
     QList<QDockWidget *> dockWidgets;
     QList<QDockWidget *> hiddenDockwidgets; // List of dockers hiddent by the call to hideDocker
 
-    KSplashScreen *splashscreen;
 };
 
 KoMainWindow::KoMainWindow(const KComponentData &componentData)

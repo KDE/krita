@@ -133,6 +133,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
         m_sliderChooser[i] = new KisWidgetChooser();
         KisDoubleSliderSpinBox* slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
         KisDoubleSliderSpinBox* slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow"   , i18n("Flow:"));
+        KisDoubleSliderSpinBox* slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size"   , i18n("Size:"));
         
         slOpacity->setRange(0.0, 1.0, 2);
         slOpacity->setValue(1.0);
@@ -143,6 +144,11 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
         slFlow->setValue(1.0);
         slFlow->setSingleStep(0.05);
         slFlow->setMinimumWidth(120);
+        
+        slSize->setRange(0.0, 1000.0, 2);
+        slSize->setValue(100.0);
+        slSize->setSingleStep(0.05);
+        slSize->setMinimumWidth(120);
     }
     
     m_sliderChooser[0]->chooseWidget("opacity");
@@ -210,8 +216,10 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("flow")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
+    connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
     connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
     connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("flow")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
+    connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
 
     //Needed to connect canvas to favoriate resource manager
     m_view->canvasBase()->createFavoriteResourceManager(this);
@@ -396,14 +404,15 @@ void KisPaintopBox::setWidgetState(int flags)
         m_settingsWidget->setEnabled(flags & ENABLE_PRESETS);
     }
     
-    if(flags & (ENABLE_OPACITY|DISABLE_OPACITY)) {
-        m_sliderChooser[0]->getWidget("opacity")->setEnabled(flags & ENABLE_OPACITY);
-        m_sliderChooser[1]->getWidget("opacity")->setEnabled(flags & ENABLE_OPACITY);
-    }
-    
-    if(flags & (ENABLE_FLOW|DISABLE_FLOW)) {
-        m_sliderChooser[0]->getWidget("flow")->setEnabled(flags & ENABLE_FLOW);
-        m_sliderChooser[1]->getWidget("flow")->setEnabled(flags & ENABLE_FLOW);
+    for(int i=0; i<2; ++i) {
+        if(flags & (ENABLE_OPACITY|DISABLE_OPACITY))
+            m_sliderChooser[i]->getWidget("opacity")->setEnabled(flags & ENABLE_OPACITY);
+        
+        if(flags & (ENABLE_FLOW|DISABLE_FLOW))
+            m_sliderChooser[i]->getWidget("flow")->setEnabled(flags & ENABLE_FLOW);
+        
+        if(flags & (ENABLE_SIZE|DISABLE_SIZE))
+            m_sliderChooser[i]->getWidget("size")->setEnabled(flags & ENABLE_SIZE);
     }
 }
 
@@ -473,6 +482,8 @@ void KisPaintopBox::slotSaveActivePreset()
 void KisPaintopBox::slotUpdatePreset()
 {
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
+    
+    setSliderValue("size", m_activePreset->settings()->paintOpSize().width());
 
     if(m_activePreset->settings()->hasProperty("OpacityValue")) {
         qreal opacity = m_activePreset->settings()->getDouble("OpacityValue");
@@ -586,15 +597,22 @@ void KisPaintopBox::sliderChanged(int n)
 {
     qreal opacity = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("opacity")->value();
     qreal flow    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("flow")->value();
+    qreal size    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("size")->value();
+    
+    setSliderValue("opacity", opacity);
+    setSliderValue("flow"   , flow   );
+    setSliderValue("size"   , size   );
+    
+    // IMPORTANT: set the PaintOp size before setting the other properties
+    //            it wont work the other way
+    qreal sizeDiff = size - m_activePreset->settings()->paintOpSize().width();
+    m_activePreset->settings()->changePaintOpSize(sizeDiff, 0);
     
     if(m_activePreset->settings()->hasProperty("OpacityValue"))
         m_activePreset->settings()->setProperty("OpacityValue", opacity);
     
     if(m_activePreset->settings()->hasProperty("FlowValue"))
         m_activePreset->settings()->setProperty("FlowValue", flow);
-    
-    setSliderValue("opacity", opacity);
-    setSliderValue("flow"   , flow   );
     
     m_optionWidget->setConfiguration(m_activePreset->settings().data());
 }
@@ -623,8 +641,8 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
         if(flags & KisTool::FLAG_USES_CUSTOM_COMPOSITEOP) { setWidgetState(ENABLE_COMPOSITEOP|ENABLE_OPACITY);   }
         else                                              { setWidgetState(DISABLE_COMPOSITEOP|DISABLE_OPACITY); }
         
-        if(flags & KisTool::FLAG_USES_CUSTOM_PRESET) { setWidgetState(ENABLE_PRESETS);  }
-        else                                         { setWidgetState(DISABLE_PRESETS); }
+        if(flags & KisTool::FLAG_USES_CUSTOM_PRESET) { setWidgetState(ENABLE_PRESETS|ENABLE_SIZE);   }
+        else                                         { setWidgetState(DISABLE_PRESETS|DISABLE_SIZE); }
     }
     else setWidgetState(DISABLE_ALL);
 }

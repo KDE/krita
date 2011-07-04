@@ -77,6 +77,8 @@ class KisPaintopBox : public QWidget
         DISABLE_OPACITY     = 0x0020,
         ENABLE_FLOW         = 0x0040,
         DISABLE_FLOW        = 0x0080,
+        ENABLE_SIZE         = 0x0100,
+        DISABLE_SIZE        = 0x0200,
         ENABLE_ALL          = 0x5555,
         DISABLE_ALL         = 0xAAAA
     };

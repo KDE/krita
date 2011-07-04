@@ -45,6 +45,11 @@ public:
     }
 };
 
+/**
+ * KisDlgLayerProperties is a dialogue for displaying and modifying information on a KisLayer.
+ * The dialog is non modal by default and uses a timer to check for user changes to the
+ * configuration, showing a preview of them.
+ */
 class KisDlgLayerProperties : public KDialog
 {
     Q_OBJECT

@@ -40,10 +40,10 @@
 
 void KisGradientBenchmark::initTestCase()
 {
-    m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();    
     m_device = new KisPaintDevice(m_colorSpace);
     m_color = KoColor(m_colorSpace);
-
+    
     m_color.fromQColor(QColor(0,0,0,0)); // default pixel
     m_device->fill( 0,0,GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT,m_color.data() );
 }
@@ -54,7 +54,7 @@ void KisGradientBenchmark::benchmarkGradient()
     KoColor bg(m_colorSpace);
     fg.fromQColor(Qt::blue);
     bg.fromQColor(Qt::black);
-
+    
     QBENCHMARK
     {
         QLinearGradient grad;
@@ -73,12 +73,12 @@ void KisGradientBenchmark::benchmarkGradient()
         fillPainter.setOpacity(OPACITY_OPAQUE_U8);
         // default
         fillPainter.setCompositeOp(COMPOSITE_OVER);
-
+        
         fillPainter.paintGradient(QPointF(0,0), QPointF(3000,3000), KisGradientPainter::GradientShapeBiLinear, KisGradientPainter::GradientRepeatNone, true, false, 0, 0, GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT);
 
         fillPainter.deleteTransaction();
     }
-
+    
     // uncomment this to see the output
     QImage out = m_device->convertToQImage(m_colorSpace->profile(),0,0,GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT);
     out.save("fill_output.png");

@@ -22,7 +22,11 @@
 #include "kis_base_node.h"
 #include "krita_export.h"
 
+#include <QVector>
+
+class QRect;
 class QStringList;
+
 class KoProperties;
 
 class KisNodeVisitor;
@@ -106,11 +110,18 @@ public:
     }
 
     /**
+     * Add the given rects to the set of dirty rects for this node;
+     * this percolates up to parent nodes all the way to the root
+     * node.
+     */
+    virtual void setDirty(const QVector<QRect> &rects);
+
+    /**
      * Add the given region to the set of dirty rects for this node;
      * this percolates up to parent nodes all the way to the root
      * node, if propagate is true;
      */
-    virtual void setDirty(const QVector<QRect> & region);
+    virtual void setDirty(const QRegion & region);
 
     /**
      * Some filters will cause a change of pixels those are outside

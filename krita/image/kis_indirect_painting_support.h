@@ -52,7 +52,7 @@ public:
      * Writes the temporary target into the paint device of the layer.
      * This action will lock the temporary target itself.
      */
-    void mergeToLayer(KisLayerSP layer, const QVector<QRect> &region,
+    void mergeToLayer(KisLayerSP layer, const QRegion &region,
                       const QString &transactionText);
 
     /**
@@ -65,7 +65,7 @@ public:
 
     /**
      * Unlock the temporary target
-     *
+     * 
      * \see lockTemporaryTarget()
      */
     void unlockTemporaryTarget() const;

@@ -24,7 +24,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QRectF>
-#include <QVector>
+#include <QRegion>
 #include <QResizeEvent>
 #include <QTabletEvent>
 #include <kundo2command.h>
@@ -185,9 +185,11 @@ void MixerCanvas::paintEvent(QPaintEvent *event)
 void MixerCanvas::updateCanvas(const QVector<QRect>& region)
 {
     m_dirty = true;
+    QRect bounds;
     foreach(const QRect &rc, region) {
-        update(rc);
+        bounds |= rc;
     }
+    update(bounds);
 }
 
 void MixerCanvas::slotClear()

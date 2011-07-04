@@ -23,11 +23,9 @@
 
 #include <KoToolBase.h>
 
-#include <QVector>
-#include <QRect>
-
 class KoPointerEvent;
 class MixerCanvas;
+class QRegion;
 class KisPaintInformation;
 
 class MixerTool : public KoToolBase
@@ -49,7 +47,7 @@ public:
 public:
 
 
-    void setDirty(const QVector<QRect> &region);
+    void setDirty(const QRegion &region);
 
     // KoToolBase Implementation.
 

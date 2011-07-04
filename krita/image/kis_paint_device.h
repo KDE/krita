@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QRect>
+#include <QVector>
 
 #include "kis_debug.h"
 
@@ -545,16 +546,18 @@ public:
     virtual void setDirty(const QRect & rc);
 
     /**
-     * Add the specified rects to the parent layer's set of dirty rects
-     * (if there's a parent layer)
+     *  Add the specified region to the parent layer's dirty region
+     *  (if there is a parent layer)
      */
-    virtual void setDirty(const QVector<QRect> &rc);
+    virtual void setDirty(const QRegion & region);
 
     /**
      *  Set the parent layer completely dirty, if this paint device has
      *  as parent layer.
      */
     virtual void setDirty();
+
+    virtual void setDirty(const QVector<QRect> rects);
 
 public:
 

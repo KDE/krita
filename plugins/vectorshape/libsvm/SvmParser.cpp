@@ -431,6 +431,7 @@ bool SvmParser::parse(const QByteArray &data)
         case META_GRADIENTEX_ACTION:
         case META_LAYOUTMODE_ACTION:
         case META_TEXTLANGUAGE_ACTION:
+            break;
         case META_OVERLINECOLOR_ACTION:
             {
                 quint32  colorData;

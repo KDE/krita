@@ -156,21 +156,11 @@ void ToCGenerator::generate()
     QTextBlock block = m_document->rootFrame()->firstCursorPosition().block();
     int blockId = 0;
     while (block.isValid()) {
-        QString tocEntryText = block.text();
-        tocEntryText.remove(QChar::ObjectReplacementCharacter);
-        // some headings contain tabs, replace all occurences with spaces
-        tocEntryText.replace('\t',' ');
-        tocEntryText = removeWhitespacePrefix(tocEntryText);
-        // Choose only TOC blocks -- headings with outline level
-        if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel) && !tocEntryText.isEmpty()) {
-            cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
-            int outlineLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
-
-            if (outlineLevel >= 1 && (outlineLevel-1) < m_ToCInfo->m_entryTemplate.size()
-                        && outlineLevel <= m_ToCInfo->m_useOutlineLevel) {
-                generateEntry(outlineLevel, cursor, block, blockId);
-            }
-        } else {
+        // Choose only TOC blocks
+        if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) {
+            int level = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
+            generateEntry(level, cursor, block, blockId);
+        } else if (m_ToCInfo->m_useIndexSourceStyles) {
             foreach (IndexSourceStyles indexSourceStyles, m_ToCInfo->m_indexSourceStyles) {
                 foreach (IndexSourceStyle indexStyle, indexSourceStyles.styles) {
                     if (indexStyle.styleId == block.blockFormat().intProperty(KoParagraphStyle::StyleId)) {
@@ -202,13 +192,13 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
 
     // Add only blocks with text
     if (!tocEntryText.isEmpty()) {
-        cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
-
         KoParagraphStyle *tocTemplateStyle = 0;
+
         if (outlineLevel >= 1 && (outlineLevel-1) < m_ToCInfo->m_entryTemplate.size()
-                    && outlineLevel <= m_ToCInfo->m_useOutlineLevel) {
+                    && outlineLevel <= m_ToCInfo->m_outlineLevel) {
             // List's index starts with 0, outline level starts with 0
             TocEntryTemplate tocEntryTemplate = m_ToCInfo->m_entryTemplate.at(outlineLevel - 1);
+
             // ensure that we fetched correct entry template
             Q_ASSERT(tocEntryTemplate.outlineLevel == outlineLevel);
             if (tocEntryTemplate.outlineLevel != outlineLevel) {
@@ -219,6 +209,8 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
             if (tocTemplateStyle == 0) {
                 tocTemplateStyle = generateTemplateStyle(styleManager, outlineLevel);
             }
+
+            cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
 
             QTextBlock tocEntryTextBlock = cursor.block();
             tocTemplateStyle->applyStyle( tocEntryTextBlock );

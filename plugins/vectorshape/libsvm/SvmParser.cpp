@@ -212,8 +212,11 @@ bool SvmParser::parse(const QByteArray &data)
         // Parse all actions.
         switch (actionType) {
         case META_NULL_ACTION:
+            break;
         case META_PIXEL_ACTION:
+            break;
         case META_POINT_ACTION:
+            break;
         case META_LINE_ACTION:
             break;
         case META_RECT_ACTION:
@@ -226,9 +229,13 @@ bool SvmParser::parse(const QByteArray &data)
             }
             break;
         case META_ROUNDRECT_ACTION:
+            break;
         case META_ELLIPSE_ACTION:
+            break;
         case META_ARC_ACTION:
+            break;
         case META_PIE_ACTION:
+            break;
         case META_CHORD_ACTION:
             break;
         case META_POLYLINE_ACTION:
@@ -304,22 +311,39 @@ bool SvmParser::parse(const QByteArray &data)
             }
             break;
         case META_STRETCHTEXT_ACTION:
+            break;
         case META_TEXTRECT_ACTION:
+            break;
         case META_BMP_ACTION:
+            break;
         case META_BMPSCALE_ACTION:
+            break;
         case META_BMPSCALEPART_ACTION:
+            break;
         case META_BMPEX_ACTION:
+            break;
         case META_BMPEXSCALE_ACTION:
+            break;
         case META_BMPEXSCALEPART_ACTION:
+            break;
         case META_MASK_ACTION:
+            break;
         case META_MASKSCALE_ACTION:
+            break;
         case META_MASKSCALEPART_ACTION:
+            break;
         case META_GRADIENT_ACTION:
+            break;
         case META_HATCH_ACTION:
+            break;
         case META_WALLPAPER_ACTION:
+            break;
         case META_CLIPREGION_ACTION:
+            break;
         case META_ISECTRECTCLIPREGION_ACTION:
+            break;
         case META_ISECTREGIONCLIPREGION_ACTION:
+            break;
         case META_MOVECLIPREGION_ACTION:
             break;
         case META_LINECOLOR_ACTION:
@@ -423,12 +447,19 @@ bool SvmParser::parse(const QByteArray &data)
             }
             break;
         case META_RASTEROP_ACTION:
+            break;
         case META_TRANSPARENT_ACTION:
+            break;
         case META_EPS_ACTION:
+            break;
         case META_REFPOINT_ACTION:
+            break;
         case META_TEXTLINECOLOR_ACTION:
+            break;
         case META_TEXTLINE_ACTION:
+            break;
         case META_FLOATTRANSPARENT_ACTION:
+            break;
         case META_GRADIENTEX_ACTION:
             break;
         case META_LAYOUTMODE_ACTION:

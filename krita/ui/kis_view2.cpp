@@ -256,16 +256,16 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
 
     // krita/krita.rc must also be modified to add actions to the menu entries
-    
+
     m_d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
     actionCollection()->addAction("save_incremental_version", m_d->saveIncremental);
     connect(m_d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
     connect(shell(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
-    
+
     if (koDocument()->localFilePath().isNull()) {
         m_d->saveIncremental->setEnabled(false);
     }
-    
+
     m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
     actionCollection()->addAction("total_refresh", m_d->totalRefresh);
     m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
@@ -364,7 +364,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(const KoInputDevice &)),
             m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(const KoInputDevice &)));
-    
+
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             m_d->controlFrame->paintopBox(), SLOT(slotToolChanged(KoCanvasController*,int)));
 
@@ -398,7 +398,7 @@ void KisView2::dragEnterEvent(QDragEnterEvent *event)
     dbgUI << "KisView2::dragEnterEvent";
     // Only accept drag if we're not busy, particularly as we may
     // be showing a progress bar and calling qApp->processEvents().
-    if (event->mimeData()->hasImage()) {
+    if (event->mimeData()->hasImage() || event->mimeData()->hasUrls()) {
         event->accept();
     } else {
         event->ignore();
@@ -886,14 +886,14 @@ void KisView2::slotSaveIncremental()
 {
     KoDocument* pDoc = koDocument();
     if (!pDoc) return;
-    
+
     bool foundVersion;
     bool fileAlreadyExists;
     QString version = "000";
     QString newVersion;
     QString letter;
     QString fileName = pDoc->localFilePath();
-    
+
     // Find current version filenames
     QRegExp regex("_\\d{1,5}[.]|_\\d{1,4}[a-z][.]"); //  Regexp to find incremental versions in the filename
     regex.indexIn(fileName);     //  Perform the search
@@ -953,9 +953,9 @@ void KisView2::slotSaveIncremental()
         KMessageBox::error(this, "Alternative names exhausted, try saving with a higher number", "Couldn't save incremental version");
         return;
     }
-    
+
     pDoc->saveAs(fileName);
-    
+
     shell()->updateCaption();
 }
 

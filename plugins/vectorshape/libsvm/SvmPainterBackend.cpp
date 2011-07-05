@@ -171,12 +171,8 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
             kDebug(31000) << "*** Unsetting fill color";
 #endif
     }
-    if (context.changedItems & GCTextColor) {
-        m_painter->setPen(context.textColor);
-#if DEBUG_SVMPAINT
-        kDebug(31000) << "*** Setting text color to" << context.textColor;
-#endif
-    }
+    // GCTextColor: We don't need to do anything here since text color
+    //              is set when the text is drawn.
     if (context.changedItems & GCTextFillColor) {
         // FIXME
     }

@@ -359,6 +359,7 @@ bool SvmParser::parse(const QByteArray &data)
                 kDebug(31000) << "Color:"  << mContext.textColor;
                 mContext.changedItems |= GCTextColor;
             }
+            break;
         case META_TEXTFILLCOLOR_ACTION:
             {
                 quint32  colorData;

@@ -217,7 +217,9 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
     int tableAreaIndex = 0;
     int tocIndex = 0;
 
-    for (; it != stop; ++it) {
+    bool atEnd = false;
+    for (; it != stop && !atEnd; ++it) {
+        atEnd = it.atEnd();
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();

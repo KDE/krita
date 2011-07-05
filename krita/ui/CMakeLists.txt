@@ -76,6 +76,7 @@ set(kritaui_LIB_SRCS
     kis_import_catcher.cc 
     kis_layer_manager.cc
     kis_mask_manager.cc
+    kis_mimedata.cpp
     kis_node_commands_adapter.cpp
     kis_node_manager.cpp 
     kis_node_model.cpp

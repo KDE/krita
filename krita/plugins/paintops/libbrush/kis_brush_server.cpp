@@ -74,19 +74,22 @@ public:
     }
 
     ///Reimplemented
-    void importResourceFile( const QString & filename ) {
+    virtual void importResourceFile(const QString& filename, bool fileCreation = true)
+    {
         QFileInfo fi( filename );
         if( fi.exists() == false )
             return;
 
         if( fi.suffix().toLower() == "abr") {
-            QFile::copy(filename, saveLocation() + fi.fileName());
+            if(fileCreation) {
+                QFile::copy(filename, saveLocation() + fi.fileName());
+            }
             QList<KisBrush*> collectionResources = createResources( filename );
             foreach(KisBrush* brush, collectionResources) {
                 addResource(brush);
             }
         } else {
-            KoResourceServer<KisBrush>::importResourceFile(filename);
+            KoResourceServer<KisBrush>::importResourceFile(filename, fileCreation);
         }
     }
 

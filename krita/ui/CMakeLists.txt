@@ -132,6 +132,7 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_rectangle_base.cpp
     tool/kis_tool_polyline_base.cpp
     tool/kis_color_picker_utils.cpp
+    tool/kis_resources_snapshot.cpp
     widgets/kis_channelflags_widget.cpp 
     widgets/kis_cmb_composite.cc
     widgets/kis_paintop_list_widget.cpp

@@ -92,9 +92,6 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         return ba;
 
     }
-    else if (mimetype == "image/openraster") {
-        return 0;
-    }
     else if (mimetype == "application/x-krita-node-pointer") {
         return qVariantFromValue(qulonglong(m_node.constData()));
     }

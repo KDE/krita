@@ -24,7 +24,9 @@
 
 #include <kis_types.h>
 /**
- * KisMimeData implements delayed retrieval of node for d&d and copy/paste
+ * KisMimeData implements delayed retrieval of node for d&d and copy/paste.
+ *
+ * TODO: implement support for the ora format.
  */
 class KisMimeData : public QMimeData
 {
@@ -48,7 +50,6 @@ public:
      * current node's paintdevice
      * <li>application/x-krita-node-pointer: for internal d&d
      * <li>application/zip: allows drop targets that can handle zip files to open the data
-     * <li>image/openraster: for interchange with other apps that support openraster
      * </ul>
      */
     QStringList formats () const;

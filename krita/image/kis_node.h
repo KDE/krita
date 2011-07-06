@@ -85,11 +85,10 @@ public:
     virtual bool accept(KisNodeVisitor &v);
 
     /**
-     * Re-implement this method to add constraints for the node
-     * subclasses that can be added as to this subclass of KisNode.
+     * Re-implement this method to add constraints for the
+     * subclasses that can be added as children to this node
      *
-     * @return false if the given node is not allowed as a subclass to
-     * this node
+     * @return false if the given node is not allowed as a child to this node
      */
     virtual bool allowAsChild(KisNodeSP) const = 0;
 

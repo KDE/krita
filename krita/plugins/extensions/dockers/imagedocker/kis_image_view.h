@@ -81,6 +81,7 @@ private slots:
 private:
     qreal calcScale(qreal scale, int viewMode, const QSizeF& imgSize) const;
     QSize viewportSize(bool withScrollbars) const;
+    virtual void resizeEvent(QResizeEvent* event);
     
 private:
     qreal             m_scale;

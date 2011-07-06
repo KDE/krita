@@ -42,6 +42,12 @@
        <string>Browse</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QSplitter" name="splitter">
          <property name="orientation">
@@ -143,6 +149,12 @@
        <string>Images</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,1">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1,0,0,0">
          <item>

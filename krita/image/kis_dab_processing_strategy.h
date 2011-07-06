@@ -27,6 +27,8 @@ class KRITAIMAGE_EXPORT KisDabProcessingStrategy
 public:
     class DabProcessingData
     {
+    public:
+        virtual ~DabProcessingData();
     };
 
 public:

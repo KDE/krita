@@ -18,6 +18,10 @@
 
 #include "kis_dab_processing_strategy.h"
 
+KisDabProcessingStrategy::DabProcessingData::~DabProcessingData()
+{
+}
+
 KisDabProcessingStrategy::KisDabProcessingStrategy(bool isSequential, bool isExclusive)
     : m_isSequential(isSequential),
       m_isExclusive(isExclusive)

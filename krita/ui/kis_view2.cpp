@@ -103,7 +103,6 @@
 #include "kis_group_layer.h"
 #include "kis_custom_palette.h"
 #include "kis_resource_server_provider.h"
-#include "kis_projection.h"
 #include "kis_node.h"
 #include "kis_node_manager.h"
 #include "kis_selection.h"

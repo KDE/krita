@@ -337,13 +337,14 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_preregisteredFootNotesHeight = 0;
     m_prevBorder = 0;
     m_prevBorderPadding = 0;
+
     while (!cursor->it.atEnd()) {
         QTextBlock block = cursor->it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(cursor->it.currentFrame());
         QTextFrame *subFrame = cursor->it.currentFrame();
         if (table) {
             if (acceptsPageBreak() && !virginPage()
-                   && (table->frameFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore)) {
+                   && (table->frameFormat().intProperty(KoParagraphStyle::BreakBefore) & KoText::PageBreak)) {
                 m_endOfArea = new FrameIterator(cursor);
                 setBottom(m_y + m_footNotesHeight);
                 if (!m_blockRects.isEmpty()) {
@@ -469,7 +470,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 if (!virginPage() &&
                     (masterPageNameChanged ||
                         (acceptsPageBreak() &&
-                        (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore)))) {
+                        (block.blockFormat().intProperty(KoParagraphStyle::BreakBefore) & KoText::PageBreak)))) {
                     m_endOfArea = new FrameIterator(cursor);
                     setBottom(m_y + m_footNotesHeight);
                     if (!m_blockRects.isEmpty()) {
@@ -486,7 +487,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 }
 
                 if (acceptsPageBreak()
-                    && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysAfter)) {
+                    && (block.blockFormat().intProperty(KoParagraphStyle::BreakAfter) & KoText::PageBreak)) {
                     Q_ASSERT(!cursor->it.atEnd());
                     QTextFrame::iterator nextIt = cursor->it;
                     ++nextIt;

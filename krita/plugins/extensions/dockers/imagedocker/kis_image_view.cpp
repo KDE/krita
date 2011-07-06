@@ -45,14 +45,14 @@ void KisImageViewport::setImage(const QPixmap& pixmap, qreal scale)
 {
     m_scale        = scale;
     m_pixmap       = pixmap;
-    m_cachedPixmap = pixmap.scaled(imageRect().size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    m_cachedPixmap = pixmap.scaled(imageRect().size(), Qt::IgnoreAspectRatio, Qt::FastTransformation);
 }
 
 void KisImageViewport::setScale(qreal scale)
 {
     if(!qFuzzyCompare(scale, m_scale)) {
         m_scale        = scale;
-        m_cachedPixmap = m_pixmap.scaled(imageRect().size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        m_cachedPixmap = m_pixmap.scaled(imageRect().size(), Qt::IgnoreAspectRatio, Qt::FastTransformation);
     }
 }
 
@@ -243,6 +243,18 @@ void KisImageView::slotRegionSelected(const QRect& rect)
     QSize  offset    = ((viewSize - selRect.size()) / 2.0).toSize();
     QPoint scrollPos = selRect.topLeft().toPoint() - QPoint(offset.width(), offset.height());
     setScrollPos(scrollPos);
+    
+    emit sigViewModeChanged(m_viewMode, m_scale);
+}
+
+void KisImageView::resizeEvent(QResizeEvent* event)
+{
+    QScrollArea::resizeEvent(event);
+    
+    m_scale = calcScale(m_scale, m_viewMode, m_imgViewport->imageSize());
+    m_imgViewport->setScale(m_scale);
+    m_imgViewport->setMinimumSize(m_imgViewport->sizeHint());
+    m_imgViewport->adjustSize();
     
     emit sigViewModeChanged(m_viewMode, m_scale);
 }

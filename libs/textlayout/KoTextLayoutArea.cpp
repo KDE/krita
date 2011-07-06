@@ -669,6 +669,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QTextLayout *layout = block.layout();
     QTextOption option = layout->textOption();
     option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+    option.setFlags(QTextOption::IncludeTrailingSpaces);
 
     option.setAlignment(QStyle::visualAlignment(m_isRtl ? Qt::RightToLeft : Qt::LeftToRight, format.alignment()));
     if (m_isRtl)

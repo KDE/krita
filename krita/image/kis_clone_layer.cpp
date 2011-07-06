@@ -57,7 +57,6 @@ KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageWSP image, const QString &
 
 KisCloneLayer::KisCloneLayer(const KisCloneLayer& rhs)
         : KisLayer(rhs)
-        , KisIndirectPaintingSupport()
         , m_d(new Private())
 {
     m_d->copyFrom = rhs.copyFrom();

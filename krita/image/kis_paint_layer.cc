@@ -131,6 +131,12 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     unlockTemporaryTarget();
 }
 
+void KisPaintLayer::setDirty(const QRect & rect)
+{
+    KisIndirectPaintingSupport::setDirty(rect);
+    KisLayer::setDirty(rect);
+}
+
 QIcon KisPaintLayer::icon() const
 {
     return QIcon();

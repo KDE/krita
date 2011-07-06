@@ -85,6 +85,9 @@ public:
                                   KisPaintDeviceSP projection,
                                   const QRect& rect) const;
 
+    using KisLayer::setDirty;
+    void setDirty(const QRect & rect);
+
     QIcon icon() const;
     void setImage(KisImageWSP image);
 

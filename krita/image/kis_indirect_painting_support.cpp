@@ -19,6 +19,8 @@
 
 #include "kis_indirect_painting_support.h"
 
+#include <QMutex>
+#include <QMutexLocker>
 #include <QReadWriteLock>
 
 #include <KoCompositeOp.h>
@@ -35,6 +37,9 @@ struct KisIndirectPaintingSupport::Private {
     quint8 compositeOpacity;
     QBitArray channelFlags;
     QReadWriteLock lock;
+
+    QMutex dirtyRegionMutex;
+    QRegion dirtyRegion;
 };
 
 
@@ -51,6 +56,7 @@ KisIndirectPaintingSupport::~KisIndirectPaintingSupport()
 
 void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t)
 {
+    d->dirtyRegion = QRegion();
     d->temporaryTarget = t;
 }
 
@@ -109,7 +115,28 @@ bool KisIndirectPaintingSupport::hasTemporaryTarget() const
     return d->temporaryTarget;
 }
 
-void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QRegion &region, const QString &transactionText)
+void KisIndirectPaintingSupport::setDirty(const QRect &rect)
+{
+    lockTemporaryTarget();
+    if(hasTemporaryTarget()) {
+        addIndirectlyDirtyRect(rect);
+    }
+    unlockTemporaryTarget();
+}
+
+void KisIndirectPaintingSupport::addIndirectlyDirtyRect(const QRect &rect)
+{
+    QMutexLocker locker(&d->dirtyRegionMutex);
+    d->dirtyRegion += rect;
+}
+
+QRegion KisIndirectPaintingSupport::indirectlyDirtyRegion()
+{
+    QMutexLocker locker(&d->dirtyRegionMutex);
+    return d->dirtyRegion;
+}
+
+void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QString &transactionText)
 {
     /**
      * We do not apply selection here, because it has already
@@ -125,7 +152,8 @@ void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QRegion &r
         gc.beginTransaction(transactionText);
     }
 
-    foreach(const QRect& rc, region.rects()) {
+    QRegion dirtyRegion = indirectlyDirtyRegion();
+    foreach(const QRect& rc, dirtyRegion.rects()) {
         gc.bitBlt(rc.topLeft(), d->temporaryTarget, rc);
     }
     d->temporaryTarget = 0;

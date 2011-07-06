@@ -466,7 +466,7 @@ void KisScratchPad::endPaint(QEvent *event) {
                 dynamic_cast<KisIndirectPaintingSupport*>(layer.data());
             Q_ASSERT(indirect);
 
-            indirect->mergeToLayer(layer, m_incrementalDirtyRegion, QString("scratchpaint"));
+            indirect->mergeToLayer(layer, QString("scratchpaint"));
             m_incrementalDirtyRegion = QRegion();
         } else {
             KisDumbUndoAdapter dua;

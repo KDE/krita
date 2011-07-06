@@ -529,7 +529,7 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
         
         painter.setRenderHint(QPainter::Antialiasing, true);
         painter.setPen(QPen(QBrush(Qt::red), penSize));
-        float t = 1.0f - m_selectedColor.getX();
+        float t = 1.0f - m_light;
         
         if(isVertical) {
             int y = rect.y() + int(size * t);
@@ -595,6 +595,7 @@ void KisColorSelector::mousePressEvent(QMouseEvent* event)
             Radian angle = std::atan2(m_clickPos.x(), m_clickPos.y()) - Radian::RAD_90;
             m_selectedColor.setH(angle.scaled(0.0f, 1.0f));
             m_selectedColor.setS(getSaturation(m_clickedRing));
+            m_selectedColor.setX(getLight(m_light, m_selectedColor.getH(), m_relativeLight));
             setSelectedColor(m_selectedColor, !(m_pressedButtons & Qt::RightButton), false);
             m_selectedRing = m_clickedRing;
             m_mouseMoved   = true;
@@ -636,6 +637,7 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* event)
                 KisColor color = m_colorRings[m_clickedRing].tmpColor;
                 Radian   angle = m_colorRings[m_clickedRing].getMovedAngel() + (color.getH()*Radian::PI2);
                 color.setH(angle.scaled(0.0f, 1.0f));
+                color.setX(getLight(m_light, color.getH(), m_relativeLight));
                 
                 m_selectedPiece = getHueIndex(angle, m_colorRings[m_clickedRing].getShift());
                 setSelectedColor(color, m_selectedColorIsFgColor, false);
@@ -647,6 +649,7 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* event)
     else {
         Radian angle = std::atan2(dragPos.x(), dragPos.y()) - Radian::RAD_90;
         m_selectedColor.setH(angle.scaled(0.0f, 1.0f));
+        m_selectedColor.setX(getLight(m_light, m_selectedColor.getH(), m_relativeLight));
         setSelectedColor(m_selectedColor, m_selectedColorIsFgColor, false);
     }
     
@@ -661,14 +664,13 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* event)
         m_selectedRing  = m_clickedRing;
         m_selectedPiece = getHueIndex(angle, m_colorRings[m_clickedRing].getShift());
         
-        if(getNumPieces() > 1) {
+        if(getNumPieces() > 1)
             m_selectedColor.setH(getHue(m_selectedPiece, m_colorRings[m_clickedRing].getShift()));
-            m_selectedColor.setS(getSaturation(m_selectedRing));
-        }
-        else {
+        else
             m_selectedColor.setH(angle.scaled(0.0f, 1.0f));
-            m_selectedColor.setS(getSaturation(m_selectedRing));
-        }
+        
+        m_selectedColor.setS(getSaturation(m_selectedRing));
+        m_selectedColor.setX(getLight(m_light, m_selectedColor.getH(), m_relativeLight));
         
         setSelectedColor(m_selectedColor, !(m_pressedButtons & Qt::RightButton));
     }

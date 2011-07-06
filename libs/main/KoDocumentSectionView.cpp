@@ -28,6 +28,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QPersistentModelIndex>
+#include <QApplication>
 
 class KoDocumentSectionView::Private
 {
@@ -36,6 +37,7 @@ public:
     KoDocumentSectionDelegate *delegate;
     DisplayMode mode;
     QPersistentModelIndex hovered;
+    QPoint lastPos;
 };
 
 KoDocumentSectionView::KoDocumentSectionView(QWidget *parent)
@@ -91,6 +93,7 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
         switch(e->type()) {
         case QEvent::MouseButtonPress: {
             const QPoint pos = static_cast<QMouseEvent*>(e)->pos();
+            d->lastPos = pos;
             if (!indexAt(pos).isValid())
                 return QTreeView::viewportEvent(e);
             QModelIndex index = model()->buddy(indexAt(pos));
@@ -115,6 +118,13 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
                     d->delegate->editorEvent(&e, model(), optionForIndex(hovered), hovered);
                 }
                 d->hovered = hovered;
+            }
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(e);
+            if ((Qt::LeftButton | Qt::MidButton) & mouseEvent->buttons()) {
+                if ((mouseEvent->pos() - d->lastPos).manhattanLength() > qApp->startDragDistance()) {
+                    return QTreeView::viewportEvent(e);
+                }
+                return true;
             }
         } break;
        case QEvent::ToolTip: {

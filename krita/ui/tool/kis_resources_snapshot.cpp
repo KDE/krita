@@ -19,7 +19,6 @@
 #include "kis_resources_snapshot.h"
 
 #include <KoColor.h>
-#include <KoColor.h>
 #include <KoAbstractGradient.h>
 #include "kis_painter.h"
 #include "kis_paintop_preset.h"

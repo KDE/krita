@@ -300,14 +300,46 @@ bool SvmParser::parse(const QByteArray &data)
             {
                 QPoint   startPoint;
                 QString  string;
+                quint16  startIndex;
+                quint16  len;
+                quint32  dxArrayLen;
+                qint32  *dxArray;
 
                 stream >> startPoint;
                 parseString(stream, string);
+                stream >> startIndex;
+                stream >> len;
+                stream >> dxArrayLen;
+                if (dxArrayLen > 0) {
+                    dxArray = new qint32[dxArrayLen];  // FIXME: Should cap to a reasonable value.
 
-                // FIXME: Much more here
+                    for (uint i = 0; i < dxArrayLen; ++i)
+                        stream >> dxArray[i];
+                }
 
-                kDebug(31000) << "Text: " << startPoint << string;
-                mBackend->textArray(mContext, startPoint, string);
+                if (version > 1) {
+                    quint16  len2;
+
+                    stream >> len2;
+                    // FIXME: More here
+                }
+
+#if 0
+                kDebug(31000) << "Text: " << startPoint << string
+                              << startIndex << len;
+                if (dxArrayLen > 0) {
+                    kDebug(31000) << "dxArrayLen:" << dxArrayLen;
+                    for (uint i = 0; i < dxArrayLen; ++i)
+                        kDebug(31000) << dxArray[i];
+                }
+                else
+                    kDebug(31000) << "dxArrayLen = 0";
+#endif
+                mBackend->textArray(mContext, startPoint, string, startIndex, len,
+                                    dxArrayLen, dxArray);
+
+                if (dxArrayLen)
+                    delete[] dxArray;
             }
             break;
         case META_STRETCHTEXT_ACTION:

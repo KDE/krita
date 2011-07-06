@@ -35,7 +35,7 @@
 #include "SvmGraphicsContext.h"
 
 
-#define DEBUG_SVMPAINT 0
+#define DEBUG_SVMPAINT 1
 
 
 /**
@@ -126,13 +126,21 @@ void SvmPainterBackend::polygon( SvmGraphicsContext &context, const QPolygon &po
 }
 
 void SvmPainterBackend::textArray(SvmGraphicsContext &context,
-                                  const QPoint &point, const QString &string)
+                                  const QPoint &point, const QString &string,
+                                  quint16 startIndex, quint16 len,
+                                  quint32 dxArrayLen, qint32 *dxArray)
 {
     updateFromGraphicscontext(context);
 
     m_painter->save();
     m_painter->setPen(context.textColor);
-    m_painter->drawText(point, string);
+    // FIXME: Handle text background color.  How do we get the area? A testfile would be nice.
+    m_painter->drawText(point, string.mid(startIndex, len));
+
+    // FIXME: DxArray not handled yet.
+    Q_UNUSED(dxArrayLen);
+    Q_UNUSED(dxArray);
+
     m_painter->restore();
 }
 

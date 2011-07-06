@@ -107,6 +107,12 @@ public:
     /// Begin an undoable paint operation
     void beginTransaction(const QString& transactionName = "");
 
+    /// Return the transaction's text message
+    QString transactionText();
+
+    /// Cancel all the changes made by the painter
+    void revertTransaction();
+
     /// Finish the undoable paint operation
     void endTransaction(KisUndoAdapter *undoAdapter);
 

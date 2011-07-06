@@ -81,6 +81,13 @@ public:
         m_transactionData = 0;
     }
 
+    QString text() const {
+        Q_ASSERT_X(m_transactionData, "KisTransaction::name()",
+                   "the name has been requested after the transaction"
+                   "has already been ended");
+        return m_transactionData->text();
+    }
+
 protected:
     KisTransaction() {}
     KisTransactionData* m_transactionData;

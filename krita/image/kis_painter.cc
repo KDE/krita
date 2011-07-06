@@ -209,6 +209,24 @@ void KisPainter::beginTransaction(const QString& transactionName)
     Q_CHECK_PTR(d->transaction);
 }
 
+QString KisPainter::transactionText()
+{
+    Q_ASSERT_X(d->transaction, "KisPainter::transactionText()",
+               "No transaction is in progress");
+
+    return d->transaction->text();
+}
+
+void KisPainter::revertTransaction()
+{
+    Q_ASSERT_X(d->transaction, "KisPainter::revertTransaction()",
+               "No transaction is in progress");
+
+    d->transaction->revert();
+    delete d->transaction;
+    d->transaction = 0;
+}
+
 void KisPainter::endTransaction(KisUndoAdapter *undoAdapter)
 {
     Q_ASSERT_X(d->transaction, "KisPainter::endTransaction()",

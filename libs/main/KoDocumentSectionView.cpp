@@ -94,11 +94,13 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
         case QEvent::MouseButtonPress: {
             const QPoint pos = static_cast<QMouseEvent*>(e)->pos();
             d->lastPos = pos;
-            if (!indexAt(pos).isValid())
+            if (!indexAt(pos).isValid()) {
                 return QTreeView::viewportEvent(e);
+            }
             QModelIndex index = model()->buddy(indexAt(pos));
-            if (d->delegate->editorEvent(e, model(), optionForIndex(index), index))
+            if (d->delegate->editorEvent(e, model(), optionForIndex(index), index)) {
                 return true;
+            }
         } break;
         case QEvent::Leave: {
             QEvent e(QEvent::Leave);
@@ -129,16 +131,18 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
         } break;
        case QEvent::ToolTip: {
             const QPoint pos = static_cast<QHelpEvent*>(e)->pos();
-            if (!indexAt(pos).isValid())
+            if (!indexAt(pos).isValid()) {
                 return QTreeView::viewportEvent(e);
+            }
             QModelIndex index = model()->buddy(indexAt(pos));
             return d->delegate->editorEvent(e, model(), optionForIndex(index), index);
         } break;
-        case QEvent::Resize:
+        case QEvent::Resize: {
             scheduleDelayedItemsLayout();
             break;
+        }
         default: break;
-    }
+        }
     }
     return QTreeView::viewportEvent(e);
 }

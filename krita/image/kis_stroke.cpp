@@ -32,7 +32,7 @@ KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy)
     m_cancelStrategy = m_strokeStrategy->createCancelStrategy();
     m_finishStrategy = m_strokeStrategy->createFinishStrategy();
 
-    enqueue(m_initStrategy, 0);
+    enqueue(m_initStrategy, m_strokeStrategy->createInitData());
 }
 
 KisStroke::~KisStroke()
@@ -83,7 +83,7 @@ void KisStroke::endStroke()
     Q_ASSERT(!m_strokeEnded);
     m_strokeEnded = true;
 
-    enqueue(m_finishStrategy, 0);
+    enqueue(m_finishStrategy, m_strokeStrategy->createFinishData());
 }
 
 /**
@@ -107,7 +107,9 @@ void KisStroke::cancelStroke()
     else if(m_strokeInitialized && !m_jobsQueue.isEmpty()) {
         clearQueue();
         if(m_cancelStrategy) {
-            m_jobsQueue.enqueue(new KisStrokeJob(m_cancelStrategy, 0));
+            m_jobsQueue.enqueue(
+                new KisStrokeJob(m_cancelStrategy,
+                                 m_strokeStrategy->createCancelData()));
         }
     }
     // else {

@@ -52,6 +52,24 @@ KisDabProcessingStrategy* KisStrokeStrategy::createDabStrategy()
     return 0;
 }
 
+KisDabProcessingStrategy::DabProcessingData*
+KisStrokeStrategy::createInitData()
+{
+    return 0;
+}
+
+KisDabProcessingStrategy::DabProcessingData*
+KisStrokeStrategy::createFinishData()
+{
+    return 0;
+}
+
+KisDabProcessingStrategy::DabProcessingData*
+KisStrokeStrategy::createCancelData()
+{
+    return 0;
+}
+
 bool KisStrokeStrategy::isExclusive() const
 {
     return m_exclusive;

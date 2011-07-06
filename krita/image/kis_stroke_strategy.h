@@ -36,6 +36,10 @@ public:
     virtual KisDabProcessingStrategy* createCancelStrategy();
     virtual KisDabProcessingStrategy* createDabStrategy();
 
+    virtual KisDabProcessingStrategy::DabProcessingData* createInitData();
+    virtual KisDabProcessingStrategy::DabProcessingData* createFinishData();
+    virtual KisDabProcessingStrategy::DabProcessingData* createCancelData();
+
     bool isExclusive() const;
     bool needsIndirectPainting() const;
 

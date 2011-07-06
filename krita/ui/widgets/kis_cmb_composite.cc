@@ -33,7 +33,6 @@ KisCompositeOpListWidget::KisCompositeOpListWidget(QWidget* parent):
 {
     m_model    = KisCompositeOpListModel::sharedInstance();
     m_delegate = new KisCategorizedItemDelegate(m_model, true);
-    m_model->fill(KoCompositeOpRegistry::instance().getCompositeOps());
     
     setModel(m_model);
     setItemDelegate(m_delegate);
@@ -52,10 +51,9 @@ KisCompositeOpListWidget::~KisCompositeOpListWidget()
 KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
     QComboBox(parent)
 {
-    m_view     = new KisCategorizedListView();
     m_model    = KisCompositeOpListModel::sharedInstance();
+    m_view     = new KisCategorizedListView();
     m_delegate = new KisCategorizedItemDelegate(m_model, true);
-    m_model->fill(KoCompositeOpRegistry::instance().getCompositeOps());
     
     setMaxVisibleItems(100);
     setSizeAdjustPolicy(AdjustToContents);

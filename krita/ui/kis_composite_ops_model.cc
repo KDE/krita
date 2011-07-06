@@ -23,10 +23,20 @@
 #include <kcategorizedsortfilterproxymodel.h>
 #include "kis_debug.h"
 
+struct CompositeOpModelInitializer
+{
+    CompositeOpModelInitializer() {
+        model.addCategory(KoID("favorites", i18n("Favorites")));
+        model.addEntries(KoCompositeOpRegistry::instance().getCompositeOps());
+    }
+    
+    KisCompositeOpListModel model;
+};
+
 KisCompositeOpListModel* KisCompositeOpListModel::sharedInstance()
 {
-    static KisCompositeOpListModel model;
-    return &model;
+    static CompositeOpModelInitializer initializer;
+    return &initializer.model;
 }
 
 void KisCompositeOpListModel::validateCompositeOps(const KoColorSpace* colorSpace)

@@ -96,7 +96,7 @@ private:
     
     void recalculateAreas(quint8 numLightPieces);
     void recalculateRings(quint8 numRings, quint8 numPieces);
-    void createRing(ColorRing& wheel, quint8 numPieces, qreal innerRadius, qreal outerRadius, qreal borderSize);
+    void createRing(ColorRing& wheel, quint8 numPieces, qreal innerRadius, qreal outerRadius);
     
     void drawRing(QPainter& painter, ColorRing& wheel, const QRect& rect);
     void drawOutline(QPainter& painter, const QRect& rect);
@@ -107,8 +107,8 @@ private:
     qreal getHue(int hueIdx, Radian shift=0.0f) const;
     qint8 getLightIndex(const QPointF& pt) const;
     qint8 getLightIndex(qreal light) const;
-    qreal getLight(qreal light, qreal hue) const;
-    qreal getLight(int lightIdx, qreal hue) const;
+    qreal getLight(qreal light, qreal hue, bool relative) const;
+    qreal getLight(const QPointF& pt) const;
     qint8 getSaturationIndex(const QPointF& pt) const;
     qint8 getSaturationIndex(qreal saturation) const;
     qreal getSaturation(int saturationIdx) const;

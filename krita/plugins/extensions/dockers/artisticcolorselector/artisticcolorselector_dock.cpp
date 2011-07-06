@@ -66,11 +66,11 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock():
     m_hsxButtons->addButton(m_preferencesUI->bnHsl, KisColor::HSL);
     m_hsxButtons->addButton(m_preferencesUI->bnHsv, KisColor::HSV);
     
-    m_preferencesUI->numPiecesSlider->setRange(2, 48);
+    m_preferencesUI->numPiecesSlider->setRange(1, 48);
     m_preferencesUI->numPiecesSlider->setValue(12);
-    m_preferencesUI->numRingsSlider->setRange(2, 20);
+    m_preferencesUI->numRingsSlider->setRange(1, 20);
     m_preferencesUI->numRingsSlider->setValue(11);
-    m_preferencesUI->numLightPiecesSlider->setRange(2, 30);
+    m_preferencesUI->numLightPiecesSlider->setRange(1, 30);
     m_preferencesUI->numLightPiecesSlider->setValue(19);
     
     connect(m_preferencesUI->numLightPiecesSlider, SIGNAL(valueChanged(int))                      , SLOT(slotPreferenceChanged()));

@@ -33,6 +33,7 @@
 #include "kis_node_graph_listener.h"
 #include "kis_node_facade.h"
 #include "kis_default_bounds.h"
+#include "kis_dab_processing_strategy.h"
 
 class KoColorSpace;
 class KoCompositeOp;
@@ -44,6 +45,7 @@ class KisFilterStrategy;
 class KoColorProfile;
 class KoUpdater;
 class KisPerspectiveGrid;
+class KisStrokeStrategy;
 
 namespace KisMetaData
 {
@@ -557,6 +559,11 @@ signals:
     void sigAboutToBeDeleted();
 
 public slots:
+
+    void startStroke(KisStrokeStrategy *strokeStrategy);
+    void addJob(KisDabProcessingStrategy::DabProcessingData *data);
+    void endStroke();
+    void cancelStroke();
 
     void slotProjectionUpdated(const QRect & rc);
     void updateProjection(KisNodeSP node, const QRect& rc);

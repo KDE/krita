@@ -1096,6 +1096,34 @@ KisPerspectiveGrid* KisImage::perspectiveGrid()
     return m_d->perspectiveGrid;
 }
 
+void KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
+{
+    if (m_d->scheduler) {
+        m_d->scheduler->startStroke(strokeStrategy);
+    }
+}
+
+void KisImage::addJob(KisDabProcessingStrategy::DabProcessingData *data)
+{
+    if (m_d->scheduler) {
+        m_d->scheduler->addJob(data);
+    }
+}
+
+void KisImage::endStroke()
+{
+    if (m_d->scheduler) {
+        m_d->scheduler->endStroke();
+    }
+}
+
+void KisImage::cancelStroke()
+{
+    if (m_d->scheduler) {
+        m_d->scheduler->cancelStroke();
+    }
+}
+
 void KisImage::refreshGraph(KisNodeSP root)
 {
     refreshGraph(root, bounds(), bounds());

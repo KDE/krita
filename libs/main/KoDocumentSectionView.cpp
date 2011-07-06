@@ -121,9 +121,11 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
                 }
                 d->hovered = hovered;
             }
-            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(e);
-            if ((Qt::LeftButton | Qt::MidButton) & mouseEvent->buttons()) {
-                if ((mouseEvent->pos() - d->lastPos).manhattanLength() > qApp->startDragDistance()) {
+            /* This is a workaround for a bug in QTreeView that immediately begins a dragging action
+            when the mouse lands on the decoration/icon of a different index and moves 1 pixel or more */
+            Qt::MouseButtons buttons = static_cast<QMouseEvent*>(e);
+            if ((Qt::LeftButton | Qt::MidButton) & buttons) {
+                if ((pos - d->lastPos).manhattanLength() > qApp->startDragDistance()) {
                     return QTreeView::viewportEvent(e);
                 }
                 return true;

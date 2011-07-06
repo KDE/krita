@@ -22,6 +22,9 @@
 #include "kis_types.h"
 #include "kis_tool_paint.h"
 #include "kis_paint_information.h"
+#include "kis_resources_snapshot.h"
+#include "kis_paintop_settings.h"
+#include "kis_distance_information.h"
 
 #include "krita_export.h"
 
@@ -40,7 +43,6 @@ class FreehandPaintJob;
 class KisRecordedPathPaintAction;
 class FreehandPaintJobExecutor;
 
-#include "kis_paintop_settings.h"
 
 class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
 {
@@ -154,6 +156,9 @@ private:
     KAction* m_decreaseBrushSize;
 
     bool m_hasPaintAtLeastOnce; ///< this indicates whether mouseReleaseEvent should call paintAt or not
+
+    KisResourcesSnapshotSP m_resources;
+    KisDistanceInformation m_dragDistance;
 };
 
 

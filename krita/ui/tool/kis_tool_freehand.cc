@@ -58,6 +58,8 @@
 #include <kis_painting_assistants_manager.h>
 #include <kis_3d_object_model.h>
 
+#include "strokes/freehand_stroke.h"
+
 #define ENABLE_RECORDING
 static const int HIDE_OUTLINE_TIMEOUT = 800; // ms
 
@@ -341,59 +343,21 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
         canvas2->view()->disableControls();
 
     setCurrentNodeLocked(true);
+
     m_hasPaintAtLeastOnce = false;
-
-    KisPaintDeviceSP paintDevice = currentNode()->paintDevice();
-    KisPaintDeviceSP targetDevice;
-
-    if (!m_compositeOp)
-        m_compositeOp = paintDevice->colorSpace()->compositeOp(COMPOSITE_OVER);
-
-    m_strokeTimeMeasure.start();
-    m_paintIncremental = currentPaintOpPreset()->settings()->paintIncremental();
-
-    if (!m_paintIncremental) {
-        KisIndirectPaintingSupport* indirect =
-            dynamic_cast<KisIndirectPaintingSupport*>(currentNode().data());
-
-        if (indirect) {
-            targetDevice = new KisPaintDevice(currentNode().data(), paintDevice->colorSpace());
-            indirect->setTemporaryTarget(targetDevice);
-            indirect->setTemporaryCompositeOp(m_compositeOp);
-            indirect->setTemporaryOpacity(m_opacity);
-            
-            KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(currentNode().data());
-            
-            if(paintLayer)
-                indirect->setTemporaryChannelFlags(paintLayer->channelLockFlags());
-        }
-        else {
-            m_paintIncremental = true;
-        }
-    }
-
-    if (!targetDevice)
-        targetDevice = paintDevice;
-
-
-    if (m_painter)
-        delete m_painter;
-
-    m_painter = new KisPainter(targetDevice, currentSelection());
-    m_painter->beginTransaction(m_transactionText);
-
-    setupPainter(m_painter);
-    
-    if (m_paintIncremental) {
-        m_painter->setCompositeOp(m_compositeOp);
-        m_painter->setOpacity(m_opacity);
-    } else {
-        m_painter->setCompositeOp(paintDevice->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
-        m_painter->setOpacity(OPACITY_OPAQUE_U8);
-    }
-
-    m_previousTangent = QPointF(0, 0);
     m_haveTangent = false;
+    m_previousTangent = QPointF();
+    m_strokeTimeMeasure.start();
+
+    m_painter = new KisPainter();
+    m_resources =
+        new KisResourcesSnapshot(image(), canvas()->resourceManager());
+    bool indirectPainting = currentPaintOpPreset()->settings()->paintIncremental();
+
+    KisStrokeStrategy *stroke =
+        new FreehandStrokeStrategy(indirectPainting, m_resources, m_painter);
+
+    image()->startStroke(stroke);
 
 
 #ifdef ENABLE_RECORDING // Temporary, to figure out what is going without being
@@ -402,81 +366,55 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
             KisNodeQueryPath::absolutePath(currentNode()),
             currentPaintOpPreset()
             );
-    m_pathPaintAction->setPaintIncremental(m_paintIncremental);
+    m_pathPaintAction->setPaintIncremental(!indirectPainting);
     setupPaintAction(m_pathPaintAction);
 #endif
 }
 
 void KisToolFreehand::endPaint()
 {
+    image()->endStroke();
+
+    m_painter = 0;
+
+    if (m_assistant) {
+        static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->endStroke();
+    }
+
+    setCurrentNodeLocked(false);
+    notifyModified();
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
     if(canvas2) {
         canvas2->view()->enableControls();
     }
 
-    if (m_painter) {
-
-        m_executor->waitForDone();
-        // If painting in mouse release, make sure painter
-        // is destructed or end()ed
-
-        // XXX: For now, only layers can be painted on in non-incremental mode
-        KisLayerSP layer = dynamic_cast<KisLayer*>(currentNode().data());
-
-        if (layer && !m_paintIncremental) {
-            m_painter->deleteTransaction();
-
-            KisIndirectPaintingSupport *indirect =
-                dynamic_cast<KisIndirectPaintingSupport*>(layer.data());
-            Q_ASSERT(indirect);
-
-            indirect->mergeToLayer(layer, m_incrementalDirtyRegion, m_transactionText);
-
-            m_incrementalDirtyRegion = QRegion();
-        } else {
-            m_painter->endTransaction(image()->undoAdapter());
-        }
-    }
-    delete m_painter;
-    m_painter = 0;
-    notifyModified();
-
-    if (!m_paintJobs.empty()) {
-        foreach(FreehandPaintJob* job , m_paintJobs) {
-            delete job;
-        }
-        m_paintJobs.clear();
-    }
-    
-    if (m_assistant) {
-        static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->endStroke();
-    }
-    
 #ifdef ENABLE_RECORDING
     if (image() && m_pathPaintAction)
         image()->actionRecorder()->addAction(*m_pathPaintAction);
     delete m_pathPaintAction;
     m_pathPaintAction = 0;
 #endif
-
-    setCurrentNodeLocked(false);
 }
 
 void KisToolFreehand::paintAt(const KisPaintInformation &pi)
 {
     m_hasPaintAtLeastOnce = true;
-    FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
-    queuePaintJob(new FreehandPaintAtJob(this, m_painter, pi, previousJob), previousJob);
-    m_pathPaintAction->addPoint(pi);
+
+    image()->addJob(
+        new FreehandStrokeJobStrategy::Data(m_resources->currentNode(),
+                                            m_painter, pi,
+                                            m_dragDistance));
 }
 
 void KisToolFreehand::paintLine(const KisPaintInformation &pi1,
                                 const KisPaintInformation &pi2)
 {
     m_hasPaintAtLeastOnce = true;
-    FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
-    queuePaintJob(new FreehandPaintLineJob(this, m_painter, pi1, pi2, previousJob), previousJob);
-    m_pathPaintAction->addLine(pi1, pi2);
+
+    image()->addJob(
+        new FreehandStrokeJobStrategy::Data(m_resources->currentNode(),
+                                            m_painter, pi1, pi2,
+                                            m_dragDistance));
 }
 
 void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
@@ -485,9 +423,12 @@ void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
                                        const KisPaintInformation &pi2)
 {
     m_hasPaintAtLeastOnce = true;
-    FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
-    queuePaintJob(new FreehandPaintBezierJob(this, m_painter, pi1, control1, control2, pi2, previousJob), previousJob);
-    m_pathPaintAction->addCurve(pi1, control1, control2, pi2);
+
+    image()->addJob(
+        new FreehandStrokeJobStrategy::Data(m_resources->currentNode(),
+                                            m_painter,
+                                            pi1, control1, control2, pi2,
+                                            m_dragDistance));
 }
 
 void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*previousJob*/)

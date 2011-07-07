@@ -31,7 +31,7 @@ class FreehandStrokeTester : public utils::StrokeTester
 {
 public:
     FreehandStrokeTester()
-        : StrokeTester("freehand")
+        : StrokeTester("freehand", QSize(500, 500))
     {
     }
 

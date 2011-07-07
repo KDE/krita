@@ -32,7 +32,7 @@ class KisUndoAdapter;
 
 namespace utils {
 
-    KisImageSP createImage(KisUndoAdapter *undoAdapter);
+    KisImageSP createImage(KisUndoAdapter *undoAdapter, const QSize &imageSize);
     KoResourceManager* createResourceManager(KisImageWSP image,
                                              KisNodeSP node = 0,
                                              const QString &presetFileName = "autobrush_300px.kpp");
@@ -40,10 +40,11 @@ namespace utils {
     class StrokeTester
     {
     public:
-        StrokeTester(const QString &name);
+        StrokeTester(const QString &name, const QSize &imageSize);
         virtual ~StrokeTester();
 
         void test();
+        void benchmark();
 
     protected:
         virtual KisStrokeStrategy* createStroke(bool indirectPainting,
@@ -57,11 +58,12 @@ namespace utils {
     private:
         void testOneStroke(bool cancelled, bool indirectPainting);
 
-        QImage doStroke(bool cancelled, bool indirectPainting);
+        QImage doStroke(bool cancelled, bool indirectPainting, bool needQImage = true);
         QString formatFilename(const QString &baseName,  bool cancelled, bool indirectPainting);
 
     private:
         QString m_name;
+        QSize m_imageSize;
     };
 }
 

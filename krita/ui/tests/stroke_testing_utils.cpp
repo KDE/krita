@@ -35,16 +35,24 @@
 
 
 
-KisImageSP utils::createImage(KisUndoAdapter *undoAdapter) {
-    QRect imageRect(0,0,500,500);
+KisImageSP utils::createImage(KisUndoAdapter *undoAdapter, const QSize &imageSize) {
+    QRect imageRect(0,0,imageSize.width(),imageSize.height());
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(undoAdapter, imageRect.width(), imageRect.height(), cs, "stroke test");
 
     KisPaintLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisPaintLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
+    KisPaintLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE_U8);
+    KisPaintLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE_U8);
+    KisPaintLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE_U8);
 
     image->lock();
     image->addNode(paintLayer1);
+    image->addNode(paintLayer2);
+    image->addNode(paintLayer3);
+    image->addNode(paintLayer4);
+    image->addNode(paintLayer5);
     image->unlock();
     return image;
 }
@@ -110,8 +118,9 @@ KoResourceManager* utils::createResourceManager(KisImageWSP image,
 }
 
 
-utils::StrokeTester::StrokeTester(const QString &name)
-    : m_name(name)
+utils::StrokeTester::StrokeTester(const QString &name, const QSize &imageSize)
+    : m_name(name),
+      m_imageSize(imageSize)
 {
 }
 
@@ -125,6 +134,12 @@ void utils::StrokeTester::test()
     testOneStroke(false, true);
     testOneStroke(true, false);
     testOneStroke(true, true);
+}
+
+void utils::StrokeTester::benchmark()
+{
+    // not cancelled, indirect painting, no qimage
+    doStroke(false, true, false);
 }
 
 void utils::StrokeTester::testOneStroke(bool cancelled,
@@ -155,10 +170,10 @@ QString utils::StrokeTester::formatFilename(const QString &baseName,
     return result;
 }
 
-QImage utils::StrokeTester::doStroke(bool cancelled, bool indirectPainting)
+QImage utils::StrokeTester::doStroke(bool cancelled, bool indirectPainting, bool needQImage)
 {
     KisUndoAdapter *undoAdapter = new KisDumbUndoAdapter();
-    KisImageSP image = utils::createImage(undoAdapter);
+    KisImageSP image = utils::createImage(undoAdapter, m_imageSize);
     KoResourceManager *manager = utils::createResourceManager(image);
 
     KisPainter *painter = new KisPainter();
@@ -176,10 +191,14 @@ QImage utils::StrokeTester::doStroke(bool cancelled, bool indirectPainting)
         image->cancelStroke();
     }
 
-    QTest::qSleep(2000);
+    image->waitForDone();
 
     KisPaintDeviceSP device = resources->currentNode()->paintDevice();
-    QImage resultImage = device->convertToQImage(0, 0, 0, image->width(), image->height());
+    QImage resultImage;
+
+    if(needQImage) {
+        resultImage = device->convertToQImage(0, 0, 0, image->width(), image->height());
+    }
 
     image = 0;
     delete manager;

@@ -88,6 +88,12 @@ void KisCustomBrushWidget::showEvent(QShowEvent *)
 
 void KisCustomBrushWidget::slotUpdateCurrentBrush(int)
 {
+    if (brushStyle->currentIndex() == 0) {
+        comboBox2->setEnabled(false);
+    }
+    else {
+        comboBox2->setEnabled(true);
+    }
     if (m_image) {
         createBrush();
         if (m_brush){

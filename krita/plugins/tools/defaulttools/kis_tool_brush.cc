@@ -77,9 +77,7 @@ void KisToolBrush::timeoutPaint()
     Q_ASSERT(currentPaintOpPreset()->settings()->isAirbrushing());
     if (currentImage() && m_painter) {
         paintAt(m_previousPaintInformation);
-        QRegion r = m_painter->takeDirtyRegion();
-        dbgPlugins << "Timeout paint dirty region:" << r;
-        currentNode()->setDirty(r);
+        currentNode()->setDirty(m_painter->takeDirtyRegion());
     }
 }
 
@@ -90,7 +88,7 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
 
     m_rate = currentPaintOpPreset()->settings()->rate();
     m_isAirbrushing = currentPaintOpPreset()->settings()->isAirbrushing();
-    
+
     if (!m_painter) {
         warnKrita << "Didn't create a painter! Something is wrong!";
         return;

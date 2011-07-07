@@ -45,6 +45,8 @@ class KisToolLine : public KisToolPaint
 public:
     KisToolLine(KoCanvasBase * canvas);
     virtual ~KisToolLine();
+    
+    virtual int flags() const;
 
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);

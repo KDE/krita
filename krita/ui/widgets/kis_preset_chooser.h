@@ -57,12 +57,17 @@ public:
     /// Turns on name filter mode
     ///@param filteredNames list of names of presets that will be shown
     void setFilteredNames(const QStringList filteredNames);
-
+    /// get tag names and used to set Completer object in paintop_presets_popup class
+    QStringList getTagNamesList(const QString& searchString);
+    /// Sets a list of resources in the paintop list, when ever user press enter in the linedit of paintop_presets_popup Class
+    void returnKeyPressed(QString lineEditText);
     void setViewMode(ViewMode mode);
     void showButtons(bool show);
     
     KoResource* currentResource();
-    
+    /// Sets the visibility of tagging klineEdits
+    void showTaggingBar( bool showSearchBar, bool showOpBar );
+
 signals:
     void resourceSelected(KoResource * resource);
     

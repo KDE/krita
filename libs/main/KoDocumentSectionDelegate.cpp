@@ -100,7 +100,8 @@ void KoDocumentSectionDelegate::paint(QPainter *p, const QStyleOptionViewItem &o
 bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
     if ((event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick)
-            && (index.flags() & Qt::ItemIsEnabled)) {
+        && (index.flags() & Qt::ItemIsEnabled))
+    {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
         const QRect iconsRect_ = iconsRect(option, index).translated(option.rect.topLeft());

@@ -134,7 +134,7 @@ public:
     qreal evaluate();
 
     /// Returns the last occurred error
-    Error error() { return m_error; }
+    Error error() const { return m_error; }
 
     /// returns string representaion of the formula
     QString toString() const;

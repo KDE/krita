@@ -111,6 +111,11 @@ KisToolFreehand::~KisToolFreehand()
     delete m_painter;
 }
 
+int KisToolFreehand::flags() const
+{
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
+}
+
 void KisToolFreehand::deactivate()
 {
     if(mode() == PAINT_MODE)
@@ -249,11 +254,14 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     if (m_smooth) {
         if (!m_haveTangent) {
             m_haveTangent = true;
-            m_previousTangent = (info.pos() - m_previousPaintInformation.pos()) * (m_smoothness / 3.0);
+            m_previousTangent = (info.pos() - m_previousPaintInformation.pos()) * m_smoothness /
+                                 (3.0 * (info.currentTime() - m_previousPaintInformation.currentTime()));
         } else {
-            QPointF newTangent = (info.pos() - m_olderPaintInformation.pos()) * (m_smoothness / 6.0);
-            QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent;
-            QPointF control2 = m_previousPaintInformation.pos() - newTangent;
+            QPointF newTangent = (info.pos() - m_olderPaintInformation.pos()) * m_smoothness /
+                                  (3.0 * (info.currentTime() - m_olderPaintInformation.currentTime()));
+            qreal scaleFactor = (m_previousPaintInformation.currentTime() - m_olderPaintInformation.currentTime());
+            QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent * scaleFactor;
+            QPointF control2 = m_previousPaintInformation.pos() - newTangent * scaleFactor;
             paintBezierCurve(m_olderPaintInformation,
                             control1,
                             control2,
@@ -296,8 +304,9 @@ void KisToolFreehand::finishStroke()
         // shouldn't happen
         return;
     }
-    QPointF newTangent = (m_previousPaintInformation.pos() - m_olderPaintInformation.pos()) * (m_smoothness / 3.0);
-    QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent;
+    QPointF newTangent = (m_previousPaintInformation.pos() - m_olderPaintInformation.pos()) * m_smoothness / 3.0;
+    qreal scaleFactor = (m_previousPaintInformation.currentTime() - m_olderPaintInformation.currentTime());
+    QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent * scaleFactor;
     QPointF control2 = m_previousPaintInformation.pos() - newTangent;
     paintBezierCurve(m_olderPaintInformation,
                     control1,
@@ -442,6 +451,17 @@ bool KisToolFreehand::wantsAutoScroll() const
 {
     return false;
 }
+
+void KisToolFreehand::setDirty(const QVector<QRect> &rects)
+{
+    currentNode()->setDirty(rects);
+    if (!m_paintIncremental) {
+        foreach(const QRect &rc, rects) {
+            m_incrementalDirtyRegion += rc;
+        }
+    }
+}
+
 
 void KisToolFreehand::setDirty(const QRegion& region)
 {

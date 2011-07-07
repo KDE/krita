@@ -205,15 +205,21 @@ QColor KoParagraphStyle::propertyColor(int key) const
 
 void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
 {
-    bool hadBreak = format.hasProperty(QTextFormat::PageBreakPolicy);
+    bool hadBreakBefore = format.hasProperty(BreakBefore);
+    bool hadBreakAfter = format.hasProperty(BreakAfter);
 
     if (d->parentStyle) {
         d->parentStyle->applyStyle(format);
     }
-    if (!hadBreak) {
-         // page preak should not be inherited according to odf, yet if it was there before we
-         // shouldn't remove
-         format.clearProperty(QTextFormat::PageBreakPolicy);
+    if (!hadBreakBefore) {
+         // page preak should not be inherited according to odf, yet if it was there
+         // before we shouldn't remove
+         format.clearProperty(BreakBefore);
+    }
+    if (!hadBreakAfter) {
+         // page preak should not be inherited according to odf, yet if it was there
+         // before we shouldn't remove
+         format.clearProperty(BreakAfter);
     }
     const QMap<int, QVariant> props = d->stylesPrivate.properties();
     QMap<int, QVariant>::const_iterator it = props.begin();
@@ -424,17 +430,6 @@ bool KoParagraphStyle::followDocBaseline() const
 
 void KoParagraphStyle::setBreakBefore(KoText::KoTextBreakProperty value)
 {
-    bool pageBreak = (value == KoText::PageBreak);
-   
-    int prop = d->stylesPrivate.value(QTextFormat::PageBreakPolicy).toInt();
-
-    if (pageBreak) {
-        prop |= QTextFormat::PageBreak_AlwaysBefore;
-    } else {
-        prop &= ~QTextFormat::PageBreak_AlwaysBefore;
-    }
-
-    setProperty(QTextFormat::PageBreakPolicy, prop);
     setProperty(BreakBefore, value);
 }
 
@@ -445,17 +440,6 @@ KoText::KoTextBreakProperty KoParagraphStyle::breakBefore()
 
 void KoParagraphStyle::setBreakAfter(KoText::KoTextBreakProperty value)
 {
-    bool pageBreak = (value == KoText::PageBreak);
-    
-    int prop = d->stylesPrivate.value(QTextFormat::PageBreakPolicy).toInt();
-
-    if (pageBreak) {
-        prop |= QTextFormat::PageBreak_AlwaysAfter;
-    } else {
-        prop &= ~QTextFormat::PageBreak_AlwaysAfter;
-    }
-
-    setProperty(QTextFormat::PageBreakPolicy, prop);
     setProperty(BreakAfter, value);
 }
 
@@ -733,7 +717,7 @@ void KoParagraphStyle::setBottomMargin(QTextLength margin)
 qreal KoParagraphStyle::bottomMargin() const
 {
     if (parentStyle())
-        return propertyLength(QTextFormat::BlockBottomMargin).value(parentStyle()->topMargin());
+        return propertyLength(QTextFormat::BlockBottomMargin).value(parentStyle()->bottomMargin());
     else
         return propertyLength(QTextFormat::BlockBottomMargin).value(0);
 }
@@ -746,7 +730,7 @@ void KoParagraphStyle::setLeftMargin(QTextLength margin)
 qreal KoParagraphStyle::leftMargin() const
 {
     if (parentStyle())
-        return propertyLength(QTextFormat::BlockLeftMargin).value(parentStyle()->topMargin());
+        return propertyLength(QTextFormat::BlockLeftMargin).value(parentStyle()->leftMargin());
     else
         return propertyLength(QTextFormat::BlockLeftMargin).value(0);
 }
@@ -759,7 +743,7 @@ void KoParagraphStyle::setRightMargin(QTextLength margin)
 qreal KoParagraphStyle::rightMargin() const
 {
     if (parentStyle())
-        return propertyLength(QTextFormat::BlockRightMargin).value(parentStyle()->topMargin());
+        return propertyLength(QTextFormat::BlockRightMargin).value(parentStyle()->rightMargin());
     else
         return propertyLength(QTextFormat::BlockRightMargin).value(0);
 }

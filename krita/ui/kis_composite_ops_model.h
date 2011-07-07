@@ -30,6 +30,8 @@ class KoColorSpace;
 class KRITAUI_EXPORT KisCompositeOpListModel: public KisCategorizedListModel<KoID,KoID>
 {
 public:
+    static KisCompositeOpListModel* sharedInstance();
+    
     virtual QString categoryToString(const KoID& val) const { return val.name(); }
     virtual QString entryToString   (const KoID& val) const { return val.name(); }
     void validateCompositeOps(const KoColorSpace* colorSpace);

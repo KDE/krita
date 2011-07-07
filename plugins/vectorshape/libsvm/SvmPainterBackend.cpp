@@ -171,18 +171,12 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
             kDebug(31000) << "*** Unsetting fill color";
 #endif
     }
-    if (context.changedItems & GCTextColor) {
-        m_painter->setPen(context.textColor);
-#if DEBUG_SVMPAINT
-        kDebug(31000) << "*** Setting text color to" << context.textColor;
-#endif
-    }
-    if (context.changedItems & GCTextFillColor) {
-        // FIXME
-    }
-    if (context.changedItems & GCTextAlign) {
-        // FIXME: Probably don't need to do anything here.
-    }
+    // GCTextColor: We don't need to do anything here since text color
+    //              is set when the text is drawn.
+    // GCTextFillColor: We don't need to do anything here since text
+    //              fill color is set when the text is drawn.
+    // GCTextAlign: We don't need to do anything here since text
+    //              alignment is only used when the text is drawn.
     if (context.changedItems & GCMapMode) {
         // Reset the transform and then apply the new mapmode to it.
         m_painter->setTransform(m_outputTransform);

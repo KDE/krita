@@ -131,12 +131,12 @@ private:
     double m_angle;
     double m_oldPressure;
     KoColor m_color;
-    
+
     int m_saturationId;
     KoColorTransformation * m_transfo;
-    
+
     // internal counter counts the calls of paint, the counter is 1 when the first call occurs
-    inline bool firstStroke(){
+    inline bool firstStroke() const {
         return (m_counter == 1);
     }
 };

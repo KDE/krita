@@ -721,8 +721,16 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         event->ignore();
     }
 
-    if (event->button() ==  Qt::MidButton) // Paste
-        paste();
+    if (event->button() ==  Qt::MidButton) { // Paste
+        const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Selection);
+
+        // on windows we do not have data if we try to paste this selection
+        if (data) {
+            m_prevCursorPosition = m_textEditor.data()->position();
+            m_textEditor.data()->addCommand(new TextPasteCommand(QClipboard::Selection, this));
+            editingPluginEvents();
+        }
+    }
 }
 
 const QTextCursor TextTool::cursor()

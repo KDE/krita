@@ -23,6 +23,12 @@
 #include <kcategorizedsortfilterproxymodel.h>
 #include "kis_debug.h"
 
+KisCompositeOpListModel* KisCompositeOpListModel::sharedInstance()
+{
+    static KisCompositeOpListModel model;
+    return &model;
+}
+
 void KisCompositeOpListModel::validateCompositeOps(const KoColorSpace* colorSpace)
 {
     typedef QList<Category>::iterator Itr;

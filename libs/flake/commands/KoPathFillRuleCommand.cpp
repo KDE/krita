@@ -65,6 +65,6 @@ void KoPathFillRuleCommand::undo()
     foreach(KoPathShape *shape, d->shapes) {
         shape->setFillRule(*ruleIt);
         shape->update();
-        ruleIt++;
+        ++ruleIt;
     }
 }

@@ -182,10 +182,14 @@ void MixerCanvas::paintEvent(QPaintEvent *event)
     QFrame::paintEvent(event);
 }
 
-void MixerCanvas::updateCanvas(const QRegion& region)
+void MixerCanvas::updateCanvas(const QVector<QRect>& region)
 {
     m_dirty = true;
-    update(region.boundingRect());
+    QRect bounds;
+    foreach(const QRect &rc, region) {
+        bounds |= rc;
+    }
+    update(bounds);
 }
 
 void MixerCanvas::slotClear()

@@ -30,23 +30,23 @@ public:
     void initFilterPosition(qreal x, qreal y);
     bool applyFilter(qreal cursorX, qreal cursorY);
     void setFixedAngles(qreal angleX, qreal angleY);
-/* setters */    
+/* setters */
     void setMass(qreal mass){ m_mass = mass;}
     void setDrag(qreal drag){ m_drag = drag;}
     void setUseFixedAngle(bool useFixed){ m_fixedAngle = useFixed; }
-/* getters */        
-    qreal velocity(){ return m_vel; }
-    qreal velocityX(){ return m_velx; }
-    qreal velocityY(){ return m_vely; }
-    
-    qreal x() { return m_filterX; }
-    qreal y() { return m_filterY; }
-    qreal prevX() { return m_prevX; }
-    qreal prevY() { return m_prevY; }
-    qreal angleX() { return m_angleX; }
-    qreal angleY() { return m_angleY; }
-    qreal acceleration() { return m_acc; }
-     
+/* getters */
+    qreal velocity() const { return m_vel; }
+    qreal velocityX() const { return m_velx; }
+    qreal velocityY() const { return m_vely; }
+
+    qreal x() const { return m_filterX; }
+    qreal y() const { return m_filterY; }
+    qreal prevX() const { return m_prevX; }
+    qreal prevY() const { return m_prevY; }
+    qreal angleX() const { return m_angleX; }
+    qreal angleY() const { return m_angleY; }
+    qreal acceleration() const { return m_acc; }
+
 private:
     qreal m_filterX, m_filterY;
     qreal m_velx, m_vely, m_vel; // velocity
@@ -63,11 +63,11 @@ private:
 
 private:
     // linear interpolation between f0 and f1
-    qreal flerp(qreal f0, qreal f1, qreal p) {
+    qreal flerp(qreal f0, qreal f1, qreal p) const {
         return ((f0 *(1.0 - p)) + (f1 * p));
     }
 
-    
+
 };
 
 #endif

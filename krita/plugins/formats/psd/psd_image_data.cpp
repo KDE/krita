@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QVector>
 #include <QByteArray>
+#include <QBuffer>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceMaths.h>
@@ -51,7 +52,9 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
     switch (m_compression) {
 
     case 0: // Uncompressed
+
         for (int channel = 0; channel < m_header->nChannels; channel++) {
+
             ChannelInfo channelInfo;
             channelInfo.channelId = channel;
             channelInfo.compressionType = Compression::Uncompressed;
@@ -59,9 +62,11 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
             channelInfo.channelDataLength = m_header->width * m_header->height * m_channelSize;
             start += channelInfo.channelDataLength;
             m_channelInfoRecords.append(channelInfo);
+
         }
 
         for (int channel = 0; channel < m_header->nChannels; channel++) {
+
             qDebug() << "Channel ID: " << m_channelInfoRecords[channel].channelId;
             qDebug() << "Channel Compression Type: " << m_channelInfoRecords[channel].compressionType;
             qDebug() << "Channel Data Start: " << m_channelInfoRecords[channel].channelDataStart;
@@ -107,6 +112,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
             ChannelInfo channelInfo;
             channelInfo.channelId = channel;
             channelInfo.channelDataStart = start;
+            channelInfo.compressionType = Compression::RLE;
             for (int row = 0; row < m_header->height; row++ ) {
                 if (m_header->version == 1) {
                     psdread(io,(quint16*)&rlelength);
@@ -230,22 +236,47 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
         QVector<QByteArray> vectorBytes;
 
         for (int channel = 0; channel < m_header->nChannels; channel++) {
-            if (m_compression == 0){
-                io->seek(m_channelInfoRecords[channel].channelDataStart + channelOffset);
+
+            io->seek(m_channelInfoRecords[channel].channelDataStart + channelOffset);
+
+            switch (m_compression){
+
+            case Compression::Uncompressed:
+
                 vectorBytes.append(io->read(m_header->width*m_channelSize));
+
+                // Debug
                 qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
+
+                break;
+
+            case Compression::RLE:
+
+                QByteArray CompressedBytes;
+                QBuffer buffer;
+                CompressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
+                // buffer.write(Compression::uncompress());
+                //vectorBytes.append(buffer);
+
+                // Debug
+                qDebug()<<"CompressedBytes data"<<CompressedBytes;
+                qDebug()<<"Row length read: "<<m_channelInfoRecords[channel].rleRowLengths;
+                qDebug()<<"IO Position before Read: "<<io->pos();
+                qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
+
+                break;
+
+            case Compression::ZIP:
+                break;
+
+            case Compression::ZIPWithPrediction:
+                break;
+
+            default:
+                break;
             }
-            else if (m_compression == 1){
 
-            }
 
-            else if (m_compression == 2){
-
-            }
-
-            else if (m_compression == 3){
-
-            }
         }
         channelOffset += (m_header->width * m_channelSize);
         

@@ -641,8 +641,8 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
         if(flags & KisTool::FLAG_USES_CUSTOM_COMPOSITEOP) { setWidgetState(ENABLE_COMPOSITEOP|ENABLE_OPACITY);   }
         else                                              { setWidgetState(DISABLE_COMPOSITEOP|DISABLE_OPACITY); }
         
-        if(flags & KisTool::FLAG_USES_CUSTOM_PRESET) { setWidgetState(ENABLE_PRESETS|ENABLE_SIZE);   }
-        else                                         { setWidgetState(DISABLE_PRESETS|DISABLE_SIZE); }
+        if(flags & KisTool::FLAG_USES_CUSTOM_PRESET) { setWidgetState(ENABLE_PRESETS|ENABLE_SIZE|ENABLE_FLOW);    }
+        else                                         { setWidgetState(DISABLE_PRESETS|DISABLE_SIZE|DISABLE_FLOW); }
     }
     else setWidgetState(DISABLE_ALL);
 }

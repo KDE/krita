@@ -480,15 +480,13 @@ void KisLayerBox::slotRmClicked()
 void KisLayerBox::slotRaiseClicked()
 {
     KisNodeSP node = m_nodeManager->activeNode();
-    KisNodeSP parent = m_nodeManager->activeNode()->parent();
+    KisNodeSP parent = node->parent();
     KisNodeSP grandParent = parent->parent();
 
     if (!m_nodeManager->activeNode()->prevSibling()) {
         if (!grandParent) return;  
         if (!grandParent->parent() && node->inherits("KisMask")) return;
-        parent->nextSibling() ?
-        m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent)) 
-        : m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) - 1);
+        m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
     } else {
         m_nodeManager->raiseNode();
     }
@@ -496,8 +494,14 @@ void KisLayerBox::slotRaiseClicked()
 
 void KisLayerBox::slotLowerClicked()
 {
+    KisNodeSP node = m_nodeManager->activeNode();
+    KisNodeSP parent = node->parent();
+    KisNodeSP grandParent = parent->parent();
+    
     if (!m_nodeManager->activeNode()->nextSibling()) {
-        slotLeftClicked();
+        if (!grandParent) return;  
+        if (!grandParent->parent() && node->inherits("KisMask")) return;
+        m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
     } else {
         m_nodeManager->lowerNode();
     }
@@ -506,16 +510,18 @@ void KisLayerBox::slotLowerClicked()
 void KisLayerBox::slotLeftClicked()
 {
     KisNodeSP node = m_nodeManager->activeNode();
-    KisNodeSP parent = m_nodeManager->activeNode()->parent();
+    KisNodeSP parent = node->parent();
     KisNodeSP grandParent = parent->parent();
+    quint16 nodeIndex = parent->index(node);
     
     if (!grandParent) return;  
     if (!grandParent->parent() && node->inherits("KisMask")) return;
 
-    /* By the principle of least surprise, placing the node at
-    grandParent->index(parent) + 1 ensures that the node appears
-    just outside and above the parent on the Layer Box widget */
-    m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
+    if (nodeIndex <= parent->childCount() / 2) {
+        m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
+    } else {
+        m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
+    }
 }
 
 void KisLayerBox::slotRightClicked()
@@ -529,13 +535,13 @@ void KisLayerBox::slotRightClicked()
 
     if (parent->at(indexBelow) && parent->at(indexBelow)->allowAsChild(node)) {
         newParent = parent->at(indexBelow);
+        m_nodeManager->moveNodeAt(node, newParent, newParent->childCount());
     } else if (parent->at(indexAbove) && parent->at(indexAbove)->allowAsChild(node)) {
         newParent = parent->at(indexAbove);
+        m_nodeManager->moveNodeAt(node, newParent, 0);
     } else {
         return;
     }
-
-    m_nodeManager->moveNodeAt(node, newParent, 0);
 }
 
 void KisLayerBox::slotPropertiesClicked()

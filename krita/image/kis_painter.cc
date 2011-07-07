@@ -251,7 +251,7 @@ QVector<QRect> KisPainter::takeDirtyRegion()
 void KisPainter::addDirtyRect(const QRect & rc)
 {
     QRect r = rc.normalized();
-    if (r.isValid() && r.width() > 0 && r.height() > 0) {
+    if (r.isValid()) {
         d->dirtyRects.append(rc);
     }
 }

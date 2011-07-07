@@ -329,13 +329,9 @@ void KisNode::setDirty(const QVector<QRect> &rects)
     }
 }
 
-void KisNode::setDirty(const QRegion & region)
+void KisNode::setDirty(const QRegion &region)
 {
-    if (region.isEmpty()) return;
-
-    foreach(const QRect &rc, region.rects()) {
-        setDirty(rc);
-    }
+    setDirty(region.rects());
 }
 
 #include "kis_node.moc"

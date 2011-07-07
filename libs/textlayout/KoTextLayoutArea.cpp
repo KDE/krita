@@ -929,7 +929,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         runAroundHelper.setLine(this, line);
         runAroundHelper.setObstructions(documentLayout()->currentObstructions());
         documentLayout()->setAnchoringParagraphRect(m_blockRects.last());
-        runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y));
+        runAroundHelper.fit( /* resetHorizontalPosition */ false, /* rightToLeft */ m_isRtl, QPointF(x(), m_y));
         qreal bottomOfText = line.y() + line.height();
 
         bool softBreak = false;

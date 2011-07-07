@@ -102,8 +102,8 @@ bool KisStrokesQueue::isEmpty() const
 
 qint32 KisStrokesQueue::sizeMetric() const
 {
-    if(m_d->strokesQueue.isEmpty()) return 0;
     QMutexLocker locker(&m_d->mutex);
+    if(m_d->strokesQueue.isEmpty()) return 0;
 
     // just a rough approximation
     return m_d->strokesQueue.head()->numJobs() * m_d->strokesQueue.size();

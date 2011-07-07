@@ -75,6 +75,11 @@ qreal KisImageConfig::schedulerBalancingRatio() const
     return m_config.readEntry("schedulerBalancingRatio", 2.);
 }
 
+void KisImageConfig::setSchedulerBalancingRatio(qreal value)
+{
+    m_config.writeEntry("schedulerBalancingRatio", value);
+}
+
 int KisImageConfig::maxSwapSize() const
 {
     return m_config.readEntry("maxSwapSize", 4096); // in MiB

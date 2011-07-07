@@ -669,13 +669,18 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QTextLayout *layout = block.layout();
     QTextOption option = layout->textOption();
     option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
-    option.setFlags(QTextOption::IncludeTrailingSpaces);
 
     option.setAlignment(QStyle::visualAlignment(m_isRtl ? Qt::RightToLeft : Qt::LeftToRight, format.alignment()));
-    if (m_isRtl)
+    if (m_isRtl) {
         option.setTextDirection(Qt::RightToLeft);
-    else
+        // For right-to-left we need to make sure that trailing spaces are included into the QTextLine naturalTextWidth
+        // and naturalTextRect calculation so they are proper handled in the RunAroundHelper. For left-to-right we do
+        // not like to include trailing spaces in the calculations cause else justified text would not look proper
+        // justified. Seems for right-to-left we have to accept that justified text will not look proper justified then.
+        option.setFlags(QTextOption::IncludeTrailingSpaces);
+    } else {
         option.setTextDirection(Qt::LeftToRight);
+    }
 
     option.setUseDesignMetrics(true);
     // Drop caps

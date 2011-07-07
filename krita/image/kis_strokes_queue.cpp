@@ -94,6 +94,12 @@ bool KisStrokesQueue::needsExclusiveAccess() const
     return m_d->needsExclusiveAccess;
 }
 
+bool KisStrokesQueue::isEmpty() const
+{
+    QMutexLocker locker(&m_d->mutex);
+    return m_d->strokesQueue.isEmpty();
+}
+
 qint32 KisStrokesQueue::sizeMetric() const
 {
     if(m_d->strokesQueue.isEmpty()) return 0;

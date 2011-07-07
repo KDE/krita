@@ -1096,6 +1096,13 @@ KisPerspectiveGrid* KisImage::perspectiveGrid()
     return m_d->perspectiveGrid;
 }
 
+void KisImage::waitForDone()
+{
+    if (m_d->scheduler) {
+        m_d->scheduler->waitForDone();
+    }
+}
+
 void KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
 {
     if (m_d->scheduler) {

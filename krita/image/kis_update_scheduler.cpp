@@ -136,7 +136,7 @@ void KisUpdateScheduler::updateSettings()
 void KisUpdateScheduler::lock()
 {
     m_d->processingBlocked = true;
-    waitForDone();
+    m_d->updaterContext->waitForDone();
 }
 
 void KisUpdateScheduler::unlock()
@@ -147,7 +147,10 @@ void KisUpdateScheduler::unlock()
 
 void KisUpdateScheduler::waitForDone()
 {
-    m_d->updaterContext->waitForDone();
+    while(!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty()) {
+        processQueues();
+        m_d->updaterContext->waitForDone();
+    }
 }
 
 void KisUpdateScheduler::processQueues()

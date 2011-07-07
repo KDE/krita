@@ -40,6 +40,7 @@ public:
 
     void processQueue(KisUpdaterContext &updaterContext);
     bool needsExclusiveAccess() const;
+    bool isEmpty() const;
 
     qint32 sizeMetric() const;
 

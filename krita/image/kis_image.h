@@ -560,6 +560,8 @@ signals:
 
 public slots:
 
+    void waitForDone();
+
     void startStroke(KisStrokeStrategy *strokeStrategy);
     void addJob(KisDabProcessingStrategy::DabProcessingData *data);
     void endStroke();

@@ -41,11 +41,13 @@
 class KoInlineCite::Private
 {
 public:
-    Private()
-        : textFrame(0)
+    Private(KoInlineCite::Type t)
+        : textFrame(0),
+          type(t)
     {
     }
     QTextFrame *textFrame;
+    KoInlineCite::Type type;
     QString bibliographyType;
     QString identifier;
     QString address;
@@ -64,7 +66,7 @@ public:
     QString organisation;
     QString pages;
     QString publisher;
-    QString school;             //university in UI file  // saved under text:school XML format
+    QString school;             //university in UI and saved under text:school tag in XML format
     QString series;
     QString title;
     QString reportType;
@@ -79,9 +81,9 @@ public:
     QString custom5;
 };
 
-KoInlineCite::KoInlineCite()
+KoInlineCite::KoInlineCite(Type type)
     :KoInlineObject(true)
-    ,d(new Private())
+    ,d(new Private(type))
 {
 }
 
@@ -92,14 +94,18 @@ KoInlineCite::~KoInlineCite()
 
 KoInlineCite::Type KoInlineCite::type() const
 {
-    return KoInlineCite::Citation;
+    return d->type;
 }
 
+void KoInlineCite::setType(Type t)
+{
+    d->type = t;
+}
 void KoInlineCite::setMotherFrame(QTextFrame *motherFrame)
 {
     QTextCursor cursor(motherFrame->lastCursorPosition());
     QTextFrameFormat format;
-    format.setProperty(KoText::SubFrameType, KoText::NoteFrameType);
+    format.setProperty(KoText::SubFrameType, KoText::CitationFrameType);
 
     d->textFrame = cursor.insertFrame(format);
 }
@@ -422,6 +428,56 @@ QString KoInlineCite::year() const
 QString KoInlineCite::url() const
 {
     return d->url;
+}
+
+bool KoInlineCite::hasSameData(KoInlineCite *cite) const
+{
+    return (d->address == cite->address() && d->annote == cite->annotation() && d->author == cite->author() &&
+            d->bibliographyType == cite->bibliographyType() && d->booktitle == cite->bookTitle() &&
+            d->chapter == cite->chapter() && d->custom1 == cite->custom1() && d->custom2 == cite->custom2() &&
+            d->custom3 == cite->custom3() && d->custom4 == cite->custom4() && d->custom5 == cite->custom5() &&
+            d->edition == cite->edition() && d->editor == cite->editor() && d->identifier == cite->identifier() &&
+            d->institution == cite->institution() && d->isbn == cite->isbn() && d->journal == cite->journal() &&
+            d->month == cite->month() && d->note == cite->note() && d->number == cite->number() &&
+            d->organisation == cite->organisations() && d->pages == cite->pages() && d->publicationType == cite->publicationType() &&
+            d->publisher == cite->publisher() && d->reportType == cite->reportType() && d->school == cite->school() &&
+            d->series == cite->series() && d->title == cite->title() && d->url == cite->url() && d->volume == cite->volume() &&
+            d->year == cite->year());
+}
+
+void KoInlineCite::copyFrom(KoInlineCite *cite)
+{
+    d->address = cite->address();
+    d->annote = cite->annotation();
+    d->author = cite->author();
+    d->bibliographyType = cite->bibliographyType();
+    d->booktitle = cite->bookTitle();
+    d->chapter = cite->chapter();
+    d->custom1 = cite->custom1();
+    d->custom2 = cite->custom2();
+    d->custom3 = cite->custom3();
+    d->custom4 = cite->custom4();
+    d->custom5 = cite->custom5();
+    d->edition = cite->edition();
+    d->editor = cite->editor();
+    d->identifier = cite->identifier();
+    d->institution = cite->institution();
+    d->isbn = cite->isbn();
+    d->journal = cite->journal();
+    d->month = cite->month();
+    d->note = cite->note();
+    d->number = cite->number();
+    d->organisation = cite->organisations();
+    d->pages = cite->pages();
+    d->publicationType = cite->publicationType();
+    d->publisher = cite->publisher();
+    d->reportType = cite->reportType();
+    d->school = cite->school();
+    d->series = cite->series();
+    d->title = cite->title();
+    d->url = cite->url();
+    d->volume = cite->volume();
+    d->year = cite->year();
 }
 
 void KoInlineCite::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)

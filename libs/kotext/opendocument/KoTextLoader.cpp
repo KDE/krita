@@ -1478,7 +1478,7 @@ void KoTextLoader::loadCite(const KoXmlElement &noteElem, QTextCursor &cursor)
     if (textObjectManager) {
 
         int position = cursor.position(); // need to store this as the following might move is
-        KoInlineCite *cite = new KoInlineCite;
+        KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
         cite->setMotherFrame(KoTextDocument(cursor.block().document()).citationsFrame());
 
         if (cite->loadOdf(noteElem, d->context)) {
@@ -2387,7 +2387,6 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
             Q_ASSERT( !tocFormat.hasProperty(KoText::BibliographyData) );
             bibFormat.setProperty( KoText::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info) );
             cursor.insertFrame(bibFormat);
-
         } else if (e.localName() == "index-body") {
             QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
 

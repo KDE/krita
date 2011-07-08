@@ -39,16 +39,23 @@ class KOTEXT_EXPORT KoInlineCite : public KoInlineObject
 {
 public:
     enum Type {
-        Citation
+        Citation,
+        ClonedCitation                  //cloned from other citation in document
     };
     /**
      * Construct a new cite to be inserted in the text using KoTextSelectionHandler::insertInlineObject() for example.
      */
-    KoInlineCite();
+    KoInlineCite(Type type);
 
     virtual ~KoInlineCite();
 
-    Type type() const;        //return type of cite  (always Citation). But useful when differentiating KoInlineObjects
+    Type type() const;        //return type of cite
+
+    void setType(Type t);
+
+    bool hasSameData(KoInlineCite *cite) const;
+
+    void copyFrom(KoInlineCite *cite);
 
     /**
      * Set the textframe where we will create our own textframe within

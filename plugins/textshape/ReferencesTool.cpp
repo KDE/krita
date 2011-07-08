@@ -105,8 +105,7 @@ void ReferencesTool::insertTableOfContents()
 void ReferencesTool::insertCitation()
 {
     CitationInsertionDialog *dialog = new CitationInsertionDialog(textEditor()->document(),0);
-    //textEditor()->insertCitation();
-    dialog->exec();
+    dialog->show();
 }
 
 #include <ReferencesTool.moc>

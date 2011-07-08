@@ -231,12 +231,13 @@ QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
     return answers;
 }
 
-QList<KoInlineCite*> KoInlineTextObjectManager::citations() const
+QList<KoInlineCite*> KoInlineTextObjectManager::citations(bool duplicatesEnabled) const
 {
     QList<KoInlineCite*> answers;
     foreach(KoInlineObject* object, m_objects) {
         KoInlineCite* cite = dynamic_cast<KoInlineCite*>(object);
-        if (cite && cite->type() == KoInlineCite::Citation) {
+        if (cite && (cite->type() == KoInlineCite::Citation ||
+                     (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
             answers.append(cite);
         }
     }

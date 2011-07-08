@@ -1183,14 +1183,11 @@ KoInlineCite *KoTextEditor::insertCitation()
 {
     d->updateState(KoTextEditor::Private::Custom, i18n("Add Citation"));
 
-    KoInlineCite *cite = new KoInlineCite;
-
+    KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
     KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
-
     manager->insertInlineObject(d->caret,cite);
 
     cite->setMotherFrame(KoTextDocument(d->caret.block().document()).citationsFrame());
-
     d->updateState(KoTextEditor::Private::NoOp);
     return cite;
 }

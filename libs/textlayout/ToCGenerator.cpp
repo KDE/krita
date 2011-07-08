@@ -236,7 +236,9 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                             bookmark->setName(target);
                             bookmark->setType(KoBookmark::SinglePosition);
                             QTextCursor blockCursor(block);
+#if QT_VERSION >= 0x040700 
                             blockCursor.setKeepPositionOnInsert(true);
+#endif
                             m_documentLayout->inlineTextObjectManager()->insertInlineObject(blockCursor, bookmark);
                         }
 

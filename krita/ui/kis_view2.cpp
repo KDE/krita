@@ -311,6 +311,13 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
+    //Remove KoMainWindow fullscreen before adding Krita specific fullscreen
+    QAction* oldFullscreen = shell()->actionCollection()->action("view_fullscreen");
+    if(oldFullscreen) {
+        shell()->actionCollection()->takeAction(oldFullscreen);
+        delete oldFullscreen;
+    }
+
     tAction = new KToggleAction(i18n("Show Canvas Only"), this);
     tAction->setCheckedState(KGuiItem(i18n("Return to Window")));
     tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
@@ -331,13 +338,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     //Workaround, by default has the same shortcut as hide/show dockers
     action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_toggledockers"));
-    if (action) {
-        action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
-        action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
-    }
-
-    //Workaround, by default has the same shortcut as full-screen
-    action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_fullscreen"));
     if (action) {
         action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
         action->setShortcut(QKeySequence(), KAction::ActiveShortcut);

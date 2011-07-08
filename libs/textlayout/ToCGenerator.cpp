@@ -98,7 +98,7 @@ QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManag
     for (it = block.begin(); !(it.atEnd()); ++it) {
         QTextFragment currentFragment = it.fragment();
         // most possibly inline object
-        if (currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter && currentFragment.isValid()) {
+        if (currentFragment.isValid() && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
             KoInlineObject *inlineObject = inlineTextObjectManager->inlineTextObject( currentFragment.charFormat() );
             KoBookmark *bookmark = dynamic_cast<KoBookmark*>(inlineObject);
             if (bookmark) {

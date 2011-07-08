@@ -154,7 +154,15 @@ void TestStyles::testApplyParagraphStyleWithParent()
     QCOMPARE(style1.alignment(), Qt::AlignRight);
     QCOMPARE(style2.alignment(), Qt::AlignCenter);
     QCOMPARE(style3.alignment(), Qt::AlignLeft | Qt::AlignAbsolute);
-    
+
+    style3.setLineHeightPercent(150);
+    style3.setLineHeightAbsolute(8.0);
+    QCOMPARE(style3.lineHeightPercent(), 0);
+    QCOMPARE(style3.lineHeightAbsolute(), 8.0);
+    style3.setLineHeightPercent(150);
+    QCOMPARE(style3.lineHeightPercent(), 150);
+    QCOMPARE(style3.lineHeightAbsolute(), 0.0);
+
     QTextLength length0(QTextLength::FixedLength, 0.0);
     QTextLength length1(QTextLength::FixedLength, 10.0);
     QTextLength length2(QTextLength::FixedLength, 20.0);
@@ -188,7 +196,7 @@ void TestStyles::testApplyParagraphStyleWithParent()
 
     style3.applyStyle(rawFormat);
     KoParagraphStyle format3(rawFormat, rawFormat.toCharFormat());
-    QCOMPARE(rawFormat.properties().count(), 4);
+    QCOMPARE(rawFormat.properties().count(), 6);
     QCOMPARE(format3.alignment(), Qt::AlignLeft | Qt::AlignAbsolute);
     QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), 1004);
     QCOMPARE(format3.leftMargin(), 10.0);

@@ -70,8 +70,8 @@ void KoReportItemMaps::initMarble()
     
     m_marble->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
     
-    m_marble->centerOn(52,20.8, false);
-    m_marble->zoomView(1800);
+    m_marble->centerOn(20.81,52.12, false);
+    m_marble->zoomView(2100);
     m_marble->setShowOverviewMap(false);
     m_marble->setFixedSize(m_size.toScene().toSize());
     m_mapImage = new QImage(m_size.toScene().toSize(), QImage::Format_ARGB32);

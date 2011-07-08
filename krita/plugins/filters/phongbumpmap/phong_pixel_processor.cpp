@@ -22,8 +22,9 @@
 #include <KoColorSpaceRegistry.h>
 #include <iostream>
 
-PhongPixelProcessor::PhongPixelProcessor(const KisPropertiesConfiguration* config)
+PhongPixelProcessor::PhongPixelProcessor(quint32 pixelArea, const KisPropertiesConfiguration* config)
 {
+    m_pixelArea = pixelArea;
     initialize(config);
 }
 
@@ -87,8 +88,7 @@ void PhongPixelProcessor::initialize(const KisPropertiesConfiguration* config)
     diffuseLightIsEnabled = config->getBool(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED);
     specularLightIsEnabled = config->getBool(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED);
     
-    //TODO BUG THIS IS HARDCODED FIX IT
-    realheightmap = QVector<double>(300000, 0);
+    realheightmap = QVector<double>(m_pixelArea, 0);
 }
 
 

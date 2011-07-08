@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <KoTableOfContentsGeneratorInfo.h>
+#include "KoTableOfContentsGeneratorInfo.h"
 
 #include <QTextCursor>
 
@@ -423,13 +423,13 @@ void KoTableOfContentsGeneratorInfo::saveOdf(KoXmlWriter * writer) const
     writer->endElement(); // text:table-of-content-source
 }
 
-void KoTableOfContentsGeneratorInfo::setGenerator(ToCGenerator *generator)
+void KoTableOfContentsGeneratorInfo::setGenerator(ToCGeneratorInterface *generator)
 {
     delete m_generator;
     m_generator = generator;
 }
 
-ToCGenerator *KoTableOfContentsGeneratorInfo::generator() const
+ToCGeneratorInterface *KoTableOfContentsGeneratorInfo::generator() const
 {
     return m_generator;
 }

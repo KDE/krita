@@ -38,10 +38,7 @@ class KoCanvasBase;
 
 class KisPainter;
 
-class QThreadPool;
-class FreehandPaintJob;
 class KisRecordedPathPaintAction;
-class FreehandPaintJobExecutor;
 
 
 class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
@@ -55,8 +52,6 @@ public:
     KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText);
     virtual ~KisToolFreehand();
     virtual int flags() const;
-    virtual void setDirty(const QVector<QRect> &rects);
-    virtual void setDirty(const QRegion &region);
 
 protected:
     void gesture(const QPointF &offsetInDocPixels,
@@ -98,7 +93,6 @@ private:
      * adjust a coordinates according to a KisPaintingAssitant, if available.
      */
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
-    void queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* previousJob);
     void showOutlineTemporary();
 
     void updateOutlineRect();
@@ -119,9 +113,6 @@ protected:
     double m_dragDist;
     QPointF m_strokeBegin;
 
-    bool m_paintIncremental;
-
-    QString m_transactionText;
     KisPainter *m_painter;
     bool m_smooth;
     double m_smoothness;
@@ -145,11 +136,7 @@ private:
     QRectF m_oldOutlineRect;
     bool m_explicitShowOutline;
 
-
-    QRegion m_incrementalDirtyRegion;
-    QList<FreehandPaintJob*> m_paintJobs;
     KisRecordedPathPaintAction* m_pathPaintAction;
-    QThreadPool* m_executor;
 
     QTime m_strokeTimeMeasure;
 

@@ -22,7 +22,6 @@
  */
 
 #include "kis_tool_freehand.h"
-#include "kis_tool_freehand_p.h"
 
 #include <QPainter>
 #include <QRect>
@@ -65,15 +64,10 @@ static const int HIDE_OUTLINE_TIMEOUT = 800; // ms
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
     : KisToolPaint(canvas, cursor)
-    , m_transactionText(transactionText)
 {
     m_explicitShowOutline = false;
 
-
     m_painter = 0;
-    m_paintIncremental = false;
-    m_executor = new QThreadPool(this);
-    m_executor->setMaxThreadCount(1);
     m_smooth = true;
     m_assistant = false;
     m_smoothness = 1.0;
@@ -108,7 +102,6 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 
 KisToolFreehand::~KisToolFreehand()
 {
-    delete m_painter;
 }
 
 int KisToolFreehand::flags() const
@@ -361,7 +354,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     m_painter = new KisPainter();
     m_resources =
         new KisResourcesSnapshot(image(), canvas()->resourceManager());
-    bool indirectPainting = currentPaintOpPreset()->settings()->paintIncremental();
+    bool indirectPainting = !currentPaintOpPreset()->settings()->paintIncremental();
 
     KisStrokeStrategy *stroke =
         new FreehandStrokeStrategy(indirectPainting, m_resources, m_painter);
@@ -383,7 +376,6 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 void KisToolFreehand::endPaint()
 {
     image()->endStroke();
-
     m_painter = 0;
 
     if (m_assistant) {
@@ -440,39 +432,9 @@ void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
                                             m_dragDistance));
 }
 
-void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*previousJob*/)
-{
-    m_paintJobs.append(job);
-    //    dbgUI << "Queue length:" << m_executor->queueLength();
-    m_executor->start(job, -m_paintJobs.size());
-}
-
 bool KisToolFreehand::wantsAutoScroll() const
 {
     return false;
-}
-
-void KisToolFreehand::setDirty(const QVector<QRect> &rects)
-{
-    currentNode()->setDirty(rects);
-    if (!m_paintIncremental) {
-        foreach(const QRect &rc, rects) {
-            m_incrementalDirtyRegion += rc;
-        }
-    }
-}
-
-
-void KisToolFreehand::setDirty(const QRegion& region)
-{
-    if (region.isEmpty())
-        return;
-
-    currentNode()->setDirty(region);
-
-    if (!m_paintIncremental) {
-        m_incrementalDirtyRegion += region;
-    }
 }
 
 void KisToolFreehand::setSmooth(bool smooth)

@@ -283,6 +283,7 @@ void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
 void KoParagraphStyle::setLineHeightPercent(int lineHeight)
 {
     setProperty(PercentLineHeight, lineHeight);
+    setProperty(FixedLineHeight, 0);
     remove(NormalLineHeight);
 }
 
@@ -294,6 +295,7 @@ int KoParagraphStyle::lineHeightPercent() const
 void KoParagraphStyle::setLineHeightAbsolute(qreal height)
 {
     setProperty(FixedLineHeight, height);
+    setProperty(PercentLineHeight, 0);
     remove(NormalLineHeight);
 }
 

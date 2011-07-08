@@ -372,6 +372,8 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             m_d->controlFrame->paintopBox(), SLOT(slotToolChanged(KoCanvasController*,int)));
 
+    // 25 px is a distance that works well for Tablet and Mouse events
+    qApp->setStartDragDistance(25);
     show();
 
 

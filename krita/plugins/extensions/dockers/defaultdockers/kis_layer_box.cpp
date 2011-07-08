@@ -363,7 +363,12 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         menu.addAction(KIcon("edit-duplicate"), i18n("&Duplicate Layer or Mask"), this, SLOT(slotDuplicateClicked()));
         QAction* mergeLayerDown = menu.addAction(KIcon("edit-merge"), i18n("&Merge with Layer Below"), this, SLOT(slotMergeLayer()));
         if (!index.sibling(index.row() + 1, 0).isValid()) mergeLayerDown->setEnabled(false);
+        menu.addSeparator();
     }
+    menu.addSeparator();
+    menu.addAction(m_newTransparencyMaskAction);
+    menu.addAction(m_newEffectMaskAction);
+    menu.addAction(m_newSelectionMaskAction);
 
     menu.exec(pos);
 }

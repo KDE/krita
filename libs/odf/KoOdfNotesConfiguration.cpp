@@ -90,6 +90,7 @@ KoOdfNotesConfiguration &KoOdfNotesConfiguration::operator=(const KoOdfNotesConf
 void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
 {
 
+    qDebug()<<"loadodf";
     QString noteClass = element.attributeNS(KoXmlNS::text, "note-class", "footnote");
 
     if (noteClass == "footnote") {
@@ -138,6 +139,7 @@ void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
 
 void KoOdfNotesConfiguration::saveOdf(KoXmlWriter *writer) const
 {
+    qDebug()<<"saveodf";
     if (d->noteClass == Footnote) {
         writer->addAttribute("text:note-class", "footnote");
     }

@@ -887,8 +887,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
     if ( const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
         writer->addAttribute("text:id", context.subId(blockData));
-        qDebug()<<context.subId(blockData);
-    }
+        }
 
     if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
         QTextBlock previousBlock = block.previous();
@@ -2554,7 +2553,6 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
     d->changeTracker = KoTextDocument(document).changeTracker();
 
     QTextBlock block = document->findBlock(from);
-    qDebug()<<"write";
     QVector<int> changesVector;
     if (d->changeTracker) {
         d->changeTracker->allChangeIds(changesVector);

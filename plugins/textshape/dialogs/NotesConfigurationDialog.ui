@@ -1,0 +1,935 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NotesConfigurationDialog</class>
+ <widget class="QDialog" name="NotesConfigurationDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>605</width>
+    <height>492</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>605</width>
+    <height>492</height>
+   </size>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>9</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Footnotes/Endnotes Settings</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>false</bool>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_6">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetMinimumSize</enum>
+   </property>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
+     <property name="leftMargin">
+      <number>4</number>
+     </property>
+     <property name="topMargin">
+      <number>12</number>
+     </property>
+     <property name="rightMargin">
+      <number>4</number>
+     </property>
+     <property name="bottomMargin">
+      <number>4</number>
+     </property>
+     <item>
+      <widget class="QDockWidget" name="dockWidget">
+       <property name="features">
+        <set>QDockWidget::DockWidgetMovable</set>
+       </property>
+       <property name="windowTitle">
+        <string>Location</string>
+       </property>
+       <widget class="QWidget" name="dockWidgetContents_2">
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QRadioButton" name="footnote">
+             <property name="text">
+              <string>Foot Note</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="endnote">
+             <property name="text">
+              <string>End Note</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QComboBox" name="location_footnote">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>333</width>
+               <height>0</height>
+              </size>
+             </property>
+             <item>
+              <property name="text">
+               <string>Bottom of page</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Below text</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="location_endnote">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <item>
+              <property name="text">
+               <string>End of document</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>End of section</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+        <zorder></zorder>
+        <zorder></zorder>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDockWidget" name="dockWidget_2">
+       <property name="features">
+        <set>QDockWidget::DockWidgetMovable</set>
+       </property>
+       <property name="windowTitle">
+        <string>Autonumbering</string>
+       </property>
+       <widget class="QWidget" name="dockWidgetContents_3">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QLabel" name="numStyle">
+             <property name="text">
+              <string> Numbering style</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="startAt">
+             <property name="text">
+              <string> Start at </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="beginAt">
+             <property name="text">
+              <string> Begin at </string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <item>
+            <widget class="QComboBox" name="numStyleCombo">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>333</width>
+               <height>0</height>
+              </size>
+             </property>
+             <item>
+              <property name="text">
+               <string>1, 2, 3, ...</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>a, b, c, ...</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>A, B, C, ...</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>i, ii, iii, ...</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>I,II,III, ...</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QSpinBox" name="startAtSpinBox">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>9999</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Maximum</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>177</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QComboBox" name="beginAtCombo">
+             <item>
+              <property name="text">
+               <string>Document</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Page</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Chapter</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QDockWidget" name="dockWidget_3">
+         <property name="features">
+          <set>QDockWidget::DockWidgetMovable</set>
+         </property>
+         <property name="windowTitle">
+          <string>Styles</string>
+         </property>
+         <widget class="QWidget" name="dockWidgetContents_4">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <item>
+              <widget class="QLabel" name="paragraph">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string> Paragraph </string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="page">
+               <property name="text">
+                <string> Page</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_8">
+             <item>
+              <widget class="QComboBox" name="paragraphCombo">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>147</width>
+                 <height>27</height>
+                </size>
+               </property>
+               <property name="currentIndex">
+                <number>7</number>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Addressee</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Caption</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Drawing</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Endnote</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Footer</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Footer left</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Footer right</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Footnote</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Frame contents</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Header</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Header left</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Header right</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Illustration</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Sender</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Table</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Table of contents</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Table Heading</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Text</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="pageCombo">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>27</height>
+                </size>
+               </property>
+               <property name="currentIndex">
+                <number>7</number>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Default</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>First page</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Left page</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Right page</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Envelope</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Index</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>HTML</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Footnote</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Endnote</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Landscape</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDockWidget" name="dockWidget_4">
+         <property name="features">
+          <set>QDockWidget::DockWidgetMovable</set>
+         </property>
+         <property name="windowTitle">
+          <string>Character Styles</string>
+         </property>
+         <widget class="QWidget" name="dockWidgetContents_5">
+          <layout class="QHBoxLayout" name="horizontalLayout_7">
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_9">
+             <item>
+              <widget class="QLabel" name="textarea">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>37</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Text area </string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="notearea">
+               <property name="text">
+                <string>Note area   </string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_10">
+             <item>
+              <widget class="QComboBox" name="textareaCombo">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>208</width>
+                 <height>27</height>
+                </size>
+               </property>
+               <property name="currentIndex">
+                <number>8</number>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Bullets</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Caption Characters</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Definition</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Drop Caps</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Emphasis</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Endnote anchor</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Endnote Characters</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Example</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Footnote anchor</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Footnote Characters</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Index Link</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Internet Link</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Line numbering</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Main index entry</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Numbering Symbols</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Page Number</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Placeholder</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Quotation</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Rubies</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Source Text</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Strong Emphasis</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Teletype</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>User Entry</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Variable</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Vertical Numbering Symbols</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Visited Internet Link</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="noteareaCombo">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>199</width>
+                 <height>27</height>
+                </size>
+               </property>
+               <property name="currentIndex">
+                <number>9</number>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Bullets</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Caption Characters</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Definition</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Drop Caps</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Emphasis</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Endnote anchor</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Endnote Characters</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Example</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Footnote anchor</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Footnote Characters</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Index Link</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Internet Link</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Line numbering</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Main index entry</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Numbering Symbols</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Page Number</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Placeholder</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Quotation</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Rubies</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Source Text</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Strong Emphasis</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Teletype</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>User Entry</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Variable</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Vertical Numbering Symbols</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Visited Internet Link</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QDockWidget" name="dockWidget_5">
+       <property name="features">
+        <set>QDockWidget::DockWidgetMovable</set>
+       </property>
+       <property name="windowTitle">
+        <string>Continuation Notice</string>
+       </property>
+       <widget class="QWidget" name="dockWidgetContents_6">
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_11">
+           <item>
+            <widget class="QLabel" name="cont1">
+             <property name="text">
+              <string> End of Footnote </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="cont2">
+             <property name="text">
+              <string> Start of next page </string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>45</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_12">
+           <item>
+            <widget class="QLineEdit" name="endlineEdit"/>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="startlineEdit"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>100</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Apply|QDialogButtonBox::Discard|QDialogButtonBox::Help</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

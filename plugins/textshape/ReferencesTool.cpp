@@ -23,6 +23,7 @@
 #include "dialogs/SimpleCitationWidget.h"
 #include "dialogs/SimpleFootEndNotesWidget.h"
 #include "dialogs/SimpleCaptionsWidget.h"
+#include "dialogs/NotesConfigurationDialog.h"
 
 #include <KoTextLayoutRootArea.h>
 #include <KoCanvasBase.h>
@@ -136,6 +137,9 @@ void ReferencesTool::insertFootNote()
 
     fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
     cursor.insertText(" ",*fmat);
+
+    NotesConfigurationDialog *dialog = new NotesConfigurationDialog(cursor.document(),0);
+    dialog->exec();
 
 }
 

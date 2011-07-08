@@ -60,27 +60,27 @@ void Noise::update(quint64 seed, int shift, int cutoff, bool chR, bool chG, bool
     }
 }
 
-QImage Noise::image()
+QImage Noise::image() const
 {
     return _image;
 }
 
-QImage Noise::histogram()
+QImage Noise::histogram() const
 {
     return _hist;
 }
 
-quint64 Noise::min()
+quint64 Noise::min() const
 {
     return _min;
 }
 
-quint64 Noise::max()
+quint64 Noise::max() const
 {
     return _max;
 }
 
-quint64 Noise::mean()
+quint64 Noise::mean() const
 {
     return qreal(1<<24) * qreal(_sum) / qreal(_wx * _wy);
 }

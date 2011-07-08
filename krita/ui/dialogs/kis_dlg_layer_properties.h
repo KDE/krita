@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +22,7 @@
 #include <QList>
 #include <QCheckBox>
 
+#include "kis_types.h"
 #include <kdialog.h>
 
 #include "ui_wdglayerproperties.h"
@@ -30,6 +32,8 @@ class KoCompositeOp;
 class KoColorSpace;
 class QBitArray;
 class KisChannelFlagsWidget;
+class KisView2;
+class KisDoc2;
 
 class WdgLayerProperties : public QWidget, public Ui::WdgLayerProperties
 {
@@ -41,18 +45,17 @@ public:
     }
 };
 
+/**
+ * KisDlgLayerProperties is a dialogue for displaying and modifying information on a KisLayer.
+ * The dialog is non modal by default and uses a timer to check for user changes to the
+ * configuration, showing a preview of them.
+ */
 class KisDlgLayerProperties : public KDialog
 {
-
     Q_OBJECT
 
 public:
-    KisDlgLayerProperties(const QString& deviceName,
-                          qint32 opacity,
-                          const KoCompositeOp* compositeOp,
-                          const KoColorSpace * colorSpace,
-                          const QBitArray & channelFlags,
-                          QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
+    KisDlgLayerProperties(KisLayerSP layer, KisView2 *view, KisDoc2 *doc, QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
 
     virtual ~KisDlgLayerProperties();
 
@@ -67,13 +70,23 @@ public:
      */
     QBitArray getChannelFlags() const;
 
+public slots:
+    void updatePreview();
+
 protected slots:
     void slotNameChanged(const QString &);
-
+    void applyNewProperties();
+    void cleanPreviewChanges();
+    
 private:
+    KisLayerSP m_layer;
+    KisView2 *m_view;
+    KisDoc2 *m_doc;
     WdgLayerProperties * m_page;
     KisChannelFlagsWidget * m_channelFlags;
-    const KoColorSpace * m_colorSpace;
+    
+    struct Private;
+    Private * const d;
 };
 
 #endif // KIS_DLG_LAYER_PROPERTIES_H_

@@ -225,10 +225,9 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
                 setupPainter(m_painter);
                 m_painter->paintLine(m_startPos, m_endPos);
 
-                QVector<QRect> dirtyRegion = m_painter->takeDirtyRegion();
                 m_painter->endTransaction(image()->undoAdapter());
 
-                device->setDirty(dirtyRegion);
+                device->setDirty(m_painter->takeDirtyRegion());
                 notifyModified();
 
                 delete m_painter;

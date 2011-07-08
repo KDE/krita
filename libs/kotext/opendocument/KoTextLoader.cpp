@@ -1701,6 +1701,14 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             If a heading has a numbering applied, the text of the formatted number can be included in a
             <text:number> element. This text can be used by applications that do not support numbering of
             headings, but it will be ignored by applications that support numbering.                   */
+        } else if (isTextNS && localName == "dde-connection") {
+            // TODO: load actual connection (or at least preserve it)
+            // For now: just load the text
+            for (KoXmlNode n = ts.firstChild(); !n.isNull(); n = n.nextSibling()) {
+                if (n.isText()) {
+                    loadText(n.toText().data(), cursor, stripLeadingSpace, false);
+                }
+            }
         } else if ((isDrawNS) && localName == "a") { // draw:a
             loadShapeWithHyperLink(ts, cursor);
         } else if (isDrawNS) {

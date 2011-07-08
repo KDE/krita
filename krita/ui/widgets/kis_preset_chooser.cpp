@@ -120,7 +120,7 @@ public:
 
         QList<KoResource*> resources;
         foreach( KisPaintOpPreset* resource, serverResources ) {
-            if(filterAcceptsPreset(resource)) {
+            if(filterAcceptsPreset(resource) || (m_filterNames && m_filteredNames.contains(resource->filename())) ) {
                 resources.append( resource );
             }
         }
@@ -159,8 +159,12 @@ public:
     
     void setFilteredNames(const QStringList filteredNames)
     {
-        m_filterNames = true;
         m_filteredNames = filteredNames;
+    }
+
+    void setFilterNames(bool filterNames)
+    {
+        m_filterNames = filterNames;
     }
 
     void setShowAll(bool show)
@@ -228,6 +232,7 @@ void KisPresetChooser::setPresetFilter(const KoID& paintopID)
 
 void KisPresetChooser::setFilteredNames(const QStringList filteredNames)
 {
+    m_presetProxy->setFilterNames(true);
     m_presetProxy->setFilteredNames(filteredNames);
     m_presetProxy->invalidate();
     updateViewSettings();
@@ -235,9 +240,25 @@ void KisPresetChooser::setFilteredNames(const QStringList filteredNames)
 
 void KisPresetChooser::searchTextChanged(const QString& searchString)
 {
+    if(searchString.isEmpty()) {
+        m_presetProxy->setFilterNames(false);
+    }
     m_presetProxy->setPresetNameFilter(searchString);
     m_presetProxy->invalidate();
     updateViewSettings();
+}
+
+void KisPresetChooser::returnKeyPressed(QString lineEditText)
+{
+    m_presetProxy->setFilterNames(true);
+    m_presetProxy->setFilteredNames(m_chooser->getTaggedResourceFileNames(lineEditText));
+    m_presetProxy->invalidate();
+    updateViewSettings();
+}
+
+QStringList KisPresetChooser::getTagNamesList(const QString& searchString)
+{
+    return m_chooser->getTagNamesList(searchString);
 }
 
 void KisPresetChooser::setShowAll(bool show)
@@ -297,6 +318,11 @@ void KisPresetChooser::updateViewSettings()
 KoResource* KisPresetChooser::currentResource()
 {
     return m_chooser->currentResource();
+}
+
+void KisPresetChooser::showTaggingBar( bool showSearchBar, bool showOpBar )
+{
+    m_chooser->showTaggingBar(showSearchBar,showOpBar);
 }
 
 #include "kis_preset_chooser.moc"

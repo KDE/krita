@@ -122,7 +122,9 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
     }
     int tableAreaIndex = 0;
     int tocIndex = 0;
-    for (; it != stop; ++it) {
+    bool atEnd = false;
+    for (; it != stop && !atEnd; ++it) {
+        atEnd = it.atEnd();
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();
@@ -217,7 +219,9 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
     int tableAreaIndex = 0;
     int tocIndex = 0;
 
-    for (; it != stop; ++it) {
+    bool atEnd = false;
+    for (; it != stop && !atEnd; ++it) {
+        atEnd = it.atEnd();
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();
@@ -335,13 +339,14 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_preregisteredFootNotesHeight = 0;
     m_prevBorder = 0;
     m_prevBorderPadding = 0;
+
     while (!cursor->it.atEnd()) {
         QTextBlock block = cursor->it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(cursor->it.currentFrame());
         QTextFrame *subFrame = cursor->it.currentFrame();
         if (table) {
             if (acceptsPageBreak() && !virginPage()
-                   && (table->frameFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore)) {
+                   && (table->frameFormat().intProperty(KoParagraphStyle::BreakBefore) & KoText::PageBreak)) {
                 m_endOfArea = new FrameIterator(cursor);
                 setBottom(m_y + m_footNotesHeight);
                 if (!m_blockRects.isEmpty()) {
@@ -467,7 +472,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 if (!virginPage() &&
                     (masterPageNameChanged ||
                         (acceptsPageBreak() &&
-                        (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore)))) {
+                        (block.blockFormat().intProperty(KoParagraphStyle::BreakBefore) & KoText::PageBreak)))) {
                     m_endOfArea = new FrameIterator(cursor);
                     setBottom(m_y + m_footNotesHeight);
                     if (!m_blockRects.isEmpty()) {
@@ -484,7 +489,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 }
 
                 if (acceptsPageBreak()
-                    && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysAfter)) {
+                    && (block.blockFormat().intProperty(KoParagraphStyle::BreakAfter) & KoText::PageBreak)) {
                     Q_ASSERT(!cursor->it.atEnd());
                     QTextFrame::iterator nextIt = cursor->it;
                     ++nextIt;
@@ -668,10 +673,16 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
 
     option.setAlignment(QStyle::visualAlignment(m_isRtl ? Qt::RightToLeft : Qt::LeftToRight, format.alignment()));
-    if (m_isRtl)
+    if (m_isRtl) {
         option.setTextDirection(Qt::RightToLeft);
-    else
+        // For right-to-left we need to make sure that trailing spaces are included into the QTextLine naturalTextWidth
+        // and naturalTextRect calculation so they are proper handled in the RunAroundHelper. For left-to-right we do
+        // not like to include trailing spaces in the calculations cause else justified text would not look proper
+        // justified. Seems for right-to-left we have to accept that justified text will not look proper justified then.
+        option.setFlags(QTextOption::IncludeTrailingSpaces);
+    } else {
         option.setTextDirection(Qt::LeftToRight);
+    }
 
     option.setUseDesignMetrics(true);
     // Drop caps
@@ -925,7 +936,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         runAroundHelper.setLine(this, line);
         runAroundHelper.setObstructions(documentLayout()->currentObstructions());
         documentLayout()->setAnchoringParagraphRect(m_blockRects.last());
-        runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y));
+        runAroundHelper.fit( /* resetHorizontalPosition */ false, /* rightToLeft */ m_isRtl, QPointF(x(), m_y));
         qreal bottomOfText = line.y() + line.height();
 
         bool softBreak = false;

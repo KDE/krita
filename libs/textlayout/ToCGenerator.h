@@ -33,7 +33,7 @@ class KoTextDocumentLayout;
 
 class QTextDocument;
 
-class ToCGenerator : public QObject
+class ToCGenerator : public QObject, public ToCGeneratorInterface
 {
     Q_OBJECT
 public:

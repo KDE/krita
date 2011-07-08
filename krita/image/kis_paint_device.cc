@@ -304,14 +304,11 @@ void KisPaintDevice::setDirty(const QRect & rc)
         m_d->parent->setDirty(rc);
 }
 
-void KisPaintDevice::setDirty(const QVector<QRect> &rects)
+void KisPaintDevice::setDirty(const QRegion & region)
 {
     m_d->cache.invalidate();
-    if (m_d->parent.isValid()) {
-        foreach(const QRect &rc, rects) {
-            m_d->parent->setDirty(rc);
-        }
-    }
+    if (m_d->parent.isValid())
+        m_d->parent->setDirty(region);
 }
 
 void KisPaintDevice::setDirty()
@@ -319,6 +316,13 @@ void KisPaintDevice::setDirty()
     m_d->cache.invalidate();
     if (m_d->parent.isValid())
         m_d->parent->setDirty();
+}
+
+void KisPaintDevice::setDirty(const QVector<QRect> rects)
+{
+    m_d->cache.invalidate();
+    if (m_d->parent.isValid())
+        m_d->parent->setDirty(rects);
 }
 
 void KisPaintDevice::setParentNode(KisNodeWSP parent)

@@ -132,11 +132,13 @@ void KisToolMultihand::timeoutPaint()
     if (currentImage() && !m_painters.isEmpty()) {
 
         for (int i = 0; i < m_painters.size(); i++){
+            KisPainter * painter = m_painters.at(i);
             KisPaintInformation pi1 = m_previousPaintInformation;
             pi1.setPos( m_brushTransforms.at(i).map(pi1.pos()) );
             paintAt(pi1, m_painters[i]);
             currentNode()->setDirty(m_painters[i]->takeDirtyRegion());
         }
+
     }
 }
 
@@ -600,7 +602,7 @@ void KisToolMultihand::endPaint()
 
         indirect->mergeToLayer(layer, m_incrementalDirtyRegion, m_transactionText);
 
-        m_incrementalDirtyRegion.clear();
+        m_incrementalDirtyRegion = QRegion();
     } else {
         m_transaction->commit(image()->undoAdapter());
     }
@@ -677,7 +679,17 @@ bool KisToolMultihand::wantsAutoScroll() const
     return false;
 }
 
-void KisToolMultihand::setDirty(const QVector<QRect>& region)
+void KisToolMultihand::setDirty(const QVector<QRect> &rects)
+{
+    currentNode()->setDirty(rects);
+    if (!m_paintIncremental) {
+        foreach (const QRect &rc, rects) {
+            m_incrementalDirtyRegion += rc;
+        }
+    }
+}
+
+void KisToolMultihand::setDirty(const QRegion& region)
 {
     if (region.isEmpty())
         return;

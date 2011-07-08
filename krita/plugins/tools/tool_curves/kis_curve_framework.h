@@ -250,16 +250,16 @@ public:
 
     ~CurveIterator() {}
 
-    bool operator==(BaseIterator it) {
+    bool operator==(const BaseIterator &it) const {
         return m_position == it;
     }
-    bool operator==(CurveIterator it) {
+    bool operator==(const CurveIterator &it) const {
         return m_position == it.position();
     }
-    bool operator!=(BaseIterator it) {
+    bool operator!=(const BaseIterator &it) const {
         return m_position != it;
     }
-    bool operator!=(CurveIterator it) {
+    bool operator!=(const CurveIterator &it) const {
         return m_position != it.position();
     }
 

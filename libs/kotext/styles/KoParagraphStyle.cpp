@@ -1257,8 +1257,11 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
                 }
             }
         }
-        else
+        else {
             setProperty(NormalLineHeight, true);
+            setProperty(PercentLineHeight, 0);
+            setProperty(FixedLineHeight, 0.0);
+        }
     }
     else {
         const QString lineSpacing(styleStack.property(KoXmlNS::style, "line-spacing"));

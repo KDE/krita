@@ -168,7 +168,7 @@ public:
     QString styleName;
     int styleId;
     QList<IndexEntry*> indexEntries;
-    //IndexEntryTabStop tabStop;
+    QString bibliographyType;
 };
 
 class ToCBibGeneratorInfo

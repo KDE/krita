@@ -182,6 +182,7 @@ public:
         EndNotesFrame,
         FootNotesFrame,
         CitationsFrame,
+        BibliographyFrame,
         RelativeTabs,
         HeadingList,
         Selections,

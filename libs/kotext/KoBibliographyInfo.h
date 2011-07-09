@@ -46,7 +46,7 @@ public:
     QString m_name;
     QString m_styleName;
     IndexTitleTemplate m_indexTitleTemplate;
-    QList<BibliographyEntryTemplate> m_entryTemplate;
+    QMap<QString, BibliographyEntryTemplate> m_entryTemplate;
 
 private:
     int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);

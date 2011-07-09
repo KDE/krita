@@ -39,6 +39,7 @@
 #include "KoTextLayoutObstruction.h"
 #include "FrameIterator.h"
 #include "ToCGenerator.h"
+#include "BibliographyGenerator.h"
 #include "KoPointedAt.h"
 
 #include <KoParagraphStyle.h>
@@ -57,6 +58,7 @@
 #include <KoInlineNote.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTableOfContentsGeneratorInfo.h>
+#include <KoBibliographyInfo.h>
 
 #include <KDebug>
 
@@ -419,6 +421,39 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 expandBoundingRight(tocArea->boundingRect().right());
                 m_bottomSpacing = 0;
                 m_y = tocArea->bottom();
+                delete cursor->currentSubFrameIterator;
+                cursor->currentSubFrameIterator = 0;
+            } else if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::BibliographyFrameType) {
+                QVariant data = subFrame->format().property(KoText::BibliographyData);
+                KoBibliographyInfo *bibInfo = data.value<KoBibliographyInfo *>();
+
+                if (!bibInfo->generator()) {
+                    new BibliographyGenerator(subFrame, bibInfo); // attaches it self to the frame
+                }
+                // Let's create KoTextLayoutArea and let that handle the bibliography like a plain frame
+                KoTextLayoutArea *bibArea = new KoTextLayoutArea(this, m_documentLayout);
+                m_bibliographyAreas.append(bibArea);
+                m_y += m_bottomSpacing;
+                if (!m_blockRects.isEmpty()) {
+                    m_blockRects.last().setBottom(m_y);
+                }
+                bibArea->setVirginPage(virginPage());
+                bibArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
+                if (bibArea->layout(cursor->subFrameIterator(subFrame)) == false) {
+                    m_endOfArea = new FrameIterator(cursor);
+                    m_y = bibArea->bottom();
+                    setBottom(m_y + m_footNotesHeight);
+                    // Expand bounding rect so if we have content outside we show it
+                    expandBoundingLeft(bibArea->boundingRect().left());
+                    expandBoundingRight(bibArea->boundingRect().right());
+                    return false;
+                }
+                setVirginPage(false);
+                // Expand bounding rect so if we have content outside we show it
+                expandBoundingLeft(bibArea->boundingRect().left());
+                expandBoundingRight(bibArea->boundingRect().right());
+                m_bottomSpacing = 0;
+                m_y = bibArea->bottom();
                 delete cursor->currentSubFrameIterator;
                 cursor->currentSubFrameIterator = 0;
             }

@@ -18,7 +18,6 @@
  */
 
 #include "KoBibliographyInfo.h"
-
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
@@ -46,7 +45,7 @@ KoBibliographyInfo::KoBibliographyInfo()
 
 KoBibliographyInfo::~KoBibliographyInfo()
 {
-    foreach (const BibliographyEntryTemplate &entryTemplate, m_entryTemplate) {
+    foreach (const BibliographyEntryTemplate &entryTemplate, m_entryTemplate.values()) {
         qDeleteAll(entryTemplate.indexEntries);
     }
     delete m_generator;
@@ -72,6 +71,7 @@ void KoBibliographyInfo::loadOdf(KoTextSharedLoadingData *sharedLoadingData, con
         } else if (p.localName() == "bibliography-entry-template") {
             BibliographyEntryTemplate bibEntryTemplate;
             bibEntryTemplate.styleName = p.attribute("style-name");
+            bibEntryTemplate.bibliographyType = p.attribute("bibliography-type");
             bibEntryTemplate.styleId = styleNameToStyleId(sharedLoadingData, bibEntryTemplate.styleName );
 
             KoXmlElement indexEntry;
@@ -108,7 +108,7 @@ void KoBibliographyInfo::loadOdf(KoTextSharedLoadingData *sharedLoadingData, con
                     bibEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryTabStop));
                 }
             }
-            m_entryTemplate.append(bibEntryTemplate);
+            m_entryTemplate[bibEntryTemplate.bibliographyType] = bibEntryTemplate;
 
         // third child
         }
@@ -121,7 +121,7 @@ void KoBibliographyInfo::saveOdf(KoXmlWriter * writer) const
 
         m_indexTitleTemplate.saveOdf(writer);
 
-        foreach (const BibliographyEntryTemplate &entry, m_entryTemplate) {
+        foreach (const BibliographyEntryTemplate &entry, m_entryTemplate.values()) {
             entry.saveOdf(writer);
         }
 
@@ -130,7 +130,7 @@ void KoBibliographyInfo::saveOdf(KoXmlWriter * writer) const
 
 void KoBibliographyInfo::setGenerator(BibliographyGenerator *generator)
 {
-    delete m_generator;
+    //delete m_generator;
     m_generator = generator;
 }
 

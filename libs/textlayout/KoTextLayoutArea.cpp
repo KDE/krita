@@ -167,6 +167,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
 
         for (int i = 0; i < layout->lineCount(); i++) {
             QTextLine line = layout->lineAt(i);
+            QRectF lineRect = line.naturalTextRect();
             if (point.y() > line.y() + line.height()) {
                 pointedAt.position = block.position() + line.textStart() + line.textLength();
                 pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
@@ -179,14 +180,14 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
                     (point.x() < line.naturalTextRect().left() || point.x() > line.naturalTextRect().right())) {
                 return KoPointedAt();
             }
-            if (point.x() > line.x() + line.naturalTextWidth() && layout->textOption().textDirection() == Qt::RightToLeft) {
+            if (point.x() > lineRect.x() + lineRect.width() && layout->textOption().textDirection() == Qt::RightToLeft) {
                 // totally right of RTL text means the position is the start of the text.
                 //TODO how about the other side?
                 pointedAt.position = block.position() + line.textStart();
                 pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
                 return pointedAt;
             }
-            if (point.x() > line.x() + line.naturalTextWidth()) {
+            if (point.x() > lineRect.x() + lineRect.width()) {
                 // right of line
                 basicallyFound = true;
                 pointedAt.position = block.position() + line.textStart() + line.textLength();

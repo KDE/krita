@@ -4,13 +4,13 @@
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.                              
- *                                                                    
+ *   (at your option) any later version.
+ *
  *   This program is distributed in the hope that it will be useful,  
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of   
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
- *   GNU General Public License for more details.                     
- *                                                                    
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/> 
  */
@@ -22,6 +22,7 @@
 #include <QVector>
 #include <QByteArray>
 #include <QBuffer>
+
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceMaths.h>
@@ -72,6 +73,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
             qDebug() << "Channel Data Start: " << m_channelInfoRecords[channel].channelDataStart;
             qDebug() << "Channel Data Length: " << m_channelInfoRecords[channel].channelDataLength;
             qDebug() << "---------------------------------------------------";
+
         }
 
         switch (m_header->colormode) {
@@ -104,6 +106,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         break;
 
     case 1: // RLE
+
         qDebug()<<"RLE ENCODED";
         quint32 rlelength;
         quint32 sumrlelength;
@@ -187,7 +190,6 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         default:
             break;
         }
-
         break;
 
     case 3: // ZIP with prediction
@@ -217,10 +219,8 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         }
 
         break;
-
     default:
         break;
-
     }
 
     return true;
@@ -229,9 +229,9 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
 bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 
     int channelOffset = 0;
-    
+
     for (int row = 0; row <m_header->height; row++) {
-        
+
         KisHLineIterator it = dev->createHLineIterator(0, row, m_header->width);
         QVector<QByteArray> vectorBytes;
 
@@ -243,28 +243,25 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 
             case Compression::Uncompressed:
 
+            {
                 vectorBytes.append(io->read(m_header->width*m_channelSize));
 
                 // Debug
                 qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
-
-                break;
+            }
+            break;
 
             case Compression::RLE:
-
-                QByteArray CompressedBytes;
-                QBuffer buffer;
-                CompressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
-                // buffer.write(Compression::uncompress());
-                //vectorBytes.append(buffer);
-
-                // Debug
-                qDebug()<<"CompressedBytes data"<<CompressedBytes;
-                qDebug()<<"Row length read: "<<m_channelInfoRecords[channel].rleRowLengths;
-                qDebug()<<"IO Position before Read: "<<io->pos();
-                qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
-
-                break;
+            {
+                QByteArray compressedBytes,unCompressedBytes;
+                QBuffer buffer(&unCompressedBytes);
+                int uncompressedLength = m_header->width * (m_channelInfoRecords[channel].channelDataLength / 8);
+                compressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
+                buffer.write(Compression::uncompress(uncompressedLength, compressedBytes, m_channelInfoRecords[channel].compressionType));
+                vectorBytes.append(buffer.readAll());
+                //buffer.data().clear();
+            }
+            break;
 
             case Compression::ZIP:
                 break;
@@ -276,10 +273,9 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
                 break;
             }
 
-
         }
         channelOffset += (m_header->width * m_channelSize);
-        
+
         qDebug() << "------------------------------------------";
         qDebug() << "channel offset:"<< channelOffset ;
         qDebug() << "------------------------------------------";
@@ -376,7 +372,6 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
             }
 
             else if (m_channelSize == 2) {
-
 
                 quint16 C = ntohs(reinterpret_cast<const quint16 *>(vectorBytes[0].constData())[col]);
                 KoCmykTraits<quint16>::setC(it.rawData(),C);

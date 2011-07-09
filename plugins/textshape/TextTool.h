@@ -314,6 +314,7 @@ private:
     bool m_trackChanges;
     bool m_allowResourceManagerUpdates;
     int m_prevCursorPosition; /// used by editingPluginEvents
+    int m_prevMouseSelectionStart, m_prevMouseSelectionEnd;
 
     QTimer m_caretTimer;
     bool m_caretTimerState;

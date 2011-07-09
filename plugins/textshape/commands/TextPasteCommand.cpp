@@ -110,11 +110,11 @@ void TextPasteCommand::redo()
                 delete rdfModel;
             }
 #endif
-        } else if (data->hasHtml()) {
+        } else if (!m_pasteAsText && data->hasHtml()) {
             //kDebug() << "pasting html";
             editor->cursor()->insertHtml(data->html());
             //kDebug() << "done with pasting";
-        } else if (data->hasText()) {
+        } else if (m_pasteAsText || data->hasText()) {
             //kDebug() << "pasting text";
             editor->cursor()->insertText(data->text());
             //kDebug() << "done with pasting";

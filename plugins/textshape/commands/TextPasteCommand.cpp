@@ -41,9 +41,10 @@
                     // we can't include a private header from kotext outside of kotext.
 #endif
 
-TextPasteCommand::TextPasteCommand(QClipboard::Mode mode, TextTool *tool, KUndo2Command *parent)
+TextPasteCommand::TextPasteCommand(QClipboard::Mode mode, TextTool *tool, KUndo2Command *parent, bool pasteAsText)
     : KUndo2Command (parent),
     m_tool(tool),
+    m_pasteAsText(pasteAsText),
     m_first(true),
     m_mode(mode)
 {
@@ -92,8 +93,12 @@ void TextPasteCommand::redo()
 #endif
 
             //kDebug() << "pasting odf text";
-            KoTextPaste paste(*editor->cursor(), m_tool->canvas(), rdfModel);
-            paste.paste(odfType, data);
+            if (m_pasteAsText) {
+                editor->cursor()->insertText(data->text());
+            } else {
+                KoTextPaste paste(*editor->cursor(), m_tool->canvas(), rdfModel);
+                paste.paste(odfType, data);
+            }
             //kDebug() << "done with pasting odf";
 
 #ifdef SHOULD_BUILD_RDF

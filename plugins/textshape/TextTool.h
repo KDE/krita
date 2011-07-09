@@ -159,6 +159,8 @@ signals:
     void blockChanged(const QTextBlock &block);
 
 private slots:
+    /// paste text from the clipboard without formatting
+    void pasteAsText();
     /// make the selected text bold or not
     void bold(bool);
     /// make the selected text italic or not
@@ -318,6 +320,7 @@ private:
 
     QTimer m_caretTimer;
     bool m_caretTimerState;
+    KAction *m_actionPasteAsText;
     KAction *m_actionFormatBold;
     KAction *m_actionFormatItalic;
     KAction *m_actionFormatUnderline;

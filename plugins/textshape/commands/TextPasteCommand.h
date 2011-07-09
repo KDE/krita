@@ -29,7 +29,7 @@ class TextPasteCommand : public KUndo2Command
 {
 public:
 
-    TextPasteCommand(QClipboard::Mode mode, TextTool *tool, KUndo2Command *parent = 0);
+    TextPasteCommand(QClipboard::Mode mode, TextTool *tool, KUndo2Command *parent = 0, bool pasteAsText = false);
 
     virtual void undo();
 
@@ -37,6 +37,7 @@ public:
 
 private:
     TextTool *m_tool;
+    bool m_pasteAsText;
     bool m_first;
     QClipboard::Mode m_mode;
 };

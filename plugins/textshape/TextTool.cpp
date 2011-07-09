@@ -176,6 +176,11 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
 void TextTool::createActions()
 {
+    m_actionPasteAsText  = new KAction(KIcon("paste"), i18n("Paste As Text"), this);
+    addAction("edit_paste_text", m_actionPasteAsText);
+    m_actionPasteAsText->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
+    connect(m_actionPasteAsText, SIGNAL(triggered(bool)), this, SLOT(pasteAsText()));
+
     m_actionFormatBold  = new KAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold);
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
@@ -1637,6 +1642,20 @@ void TextTool::stopEditing()
 {
     m_currentCommand = 0;
     m_currentCommandHasChildren = false;
+}
+
+void TextTool::pasteAsText()
+{
+    KoTextEditor *textEditor = m_textEditor.data();
+    if (!textEditor) return;
+
+    const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
+    // on windows we do not have data if we try to paste this selection
+    if (!data) return;
+
+    m_prevCursorPosition = m_textEditor.data()->position();
+    textEditor->addCommand(new TextPasteCommand(QClipboard::Clipboard, this, 0, true));
+    editingPluginEvents();
 }
 
 void TextTool::bold(bool bold)

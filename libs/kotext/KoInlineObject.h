@@ -72,6 +72,11 @@ public:
         SenderPosition,
         AuthorInitials,
 
+        ChapterName, ///< Name of a chapter.
+        ChapterNumber, ///< Number of a chapter.
+        ChapterNumberName, ///< Name and number of a chapter.
+        ChapterPlainNumber, ///< Number of a chapter without text defined by style:num-prefix and style:num-suffix.
+        ChapterPlainNumberName, ///< Name of a chapter with the number of the same chapter without text defined by style:num-prefix and style:num-suffix.
 
         KarbonStart = 1000,      ///< Base number for karbon specific values.
         KexiStart = 2000,        ///< Base number for kexi specific values.

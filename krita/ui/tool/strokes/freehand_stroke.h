@@ -22,33 +22,21 @@
 #include "krita_export.h"
 #include "kis_types.h"
 #include "kis_node.h"
-#include "kis_stroke_strategy.h"
+#include "kis_painter_based_stroke_strategy.h"
 #include "kis_distance_information.h"
 #include "kis_paint_information.h"
-#include "kis_resources_snapshot.h"
 
 class KisPainter;
 
 
-class KRITAUI_EXPORT FreehandStrokeStrategy : public KisStrokeStrategy
+class KRITAUI_EXPORT FreehandStrokeStrategy : public KisPainterBasedStrokeStrategy
 {
 public:
     FreehandStrokeStrategy(bool needsIndirectPainting,
                            KisResourcesSnapshotSP resources,
                            KisPainter *painter);
 
-    KisDabProcessingStrategy* createInitStrategy();
-    KisDabProcessingStrategy* createFinishStrategy();
-    KisDabProcessingStrategy* createCancelStrategy();
     KisDabProcessingStrategy* createDabStrategy();
-
-    KisDabProcessingStrategy::DabProcessingData* createInitData();
-    KisDabProcessingStrategy::DabProcessingData* createFinishData();
-    KisDabProcessingStrategy::DabProcessingData* createCancelData();
-
-private:
-    KisResourcesSnapshotSP m_resources;
-    KisPainter *m_painter;
 };
 
 class FreehandStrokeJobStrategy : public KisDabProcessingStrategy

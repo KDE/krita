@@ -24,30 +24,17 @@
 #include "kis_base_stroke_job_strategies.h"
 #include "kis_painter.h"
 
+/********************************************************************/
+/*                     FreehandStrokeStrategy                       */
+/********************************************************************/
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                KisResourcesSnapshotSP resources,
                                                KisPainter *painter)
-    : KisStrokeStrategy("FREEHAND_STROKE", "Freehand stroke"),
-      m_resources(resources),
-      m_painter(painter)
+    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", "Freehand stroke",
+                                    resources, painter)
 {
     setNeedsIndirectPainting(needsIndirectPainting);
-}
-
-KisDabProcessingStrategy* FreehandStrokeStrategy::createInitStrategy()
-{
-    return new InitStrokeJobStrategy();
-}
-
-KisDabProcessingStrategy* FreehandStrokeStrategy::createFinishStrategy()
-{
-    return new FinishStrokeJobStrategy();
-}
-
-KisDabProcessingStrategy* FreehandStrokeStrategy::createCancelStrategy()
-{
-    return new CancelStrokeJobStrategy();
 }
 
 KisDabProcessingStrategy* FreehandStrokeStrategy::createDabStrategy()
@@ -55,28 +42,10 @@ KisDabProcessingStrategy* FreehandStrokeStrategy::createDabStrategy()
     return new FreehandStrokeJobStrategy();
 }
 
-KisDabProcessingStrategy::DabProcessingData*
-FreehandStrokeStrategy::createInitData()
-{
-    return new InitStrokeJobStrategy::Data(m_painter, m_resources,
-                                           needsIndirectPainting(),
-                                           name());
-}
 
-KisDabProcessingStrategy::DabProcessingData*
-FreehandStrokeStrategy::createFinishData()
-{
-    return new FinishStrokeJobStrategy::Data(m_painter, m_resources);
-}
-
-KisDabProcessingStrategy::DabProcessingData*
-FreehandStrokeStrategy::createCancelData()
-{
-    return new CancelStrokeJobStrategy::Data(m_painter, m_resources);
-}
-
-
-////////////////////////////////////////////////////////////////////////
+/********************************************************************/
+/*                   FreehandStrokeJobStrategy                      */
+/********************************************************************/
 
 FreehandStrokeJobStrategy::FreehandStrokeJobStrategy()
   : KisDabProcessingStrategy(true, false)

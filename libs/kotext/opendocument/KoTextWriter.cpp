@@ -1196,8 +1196,6 @@ int KoTextWriter::Private::checkForListItemChange(const QTextBlock &block)
 int KoTextWriter::Private::checkForListChange(const QTextBlock &listBlock)
 {
     QTextBlock block(listBlock);
-    QTextList *textList;
-    textList = block.textList();
 
     KoTextDocument textDocument(block.document());
     KoList *list = textDocument.list(block);
@@ -1449,7 +1447,6 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, QHash<Q
         writeBlocks(tocDocument, 0, endTitle, listStyles);
     writer->endElement(); // text:index-title
 
-    QTextBlock block = tocDocument->rootFrame()->lastCursorPosition().block();
     writeBlocks(tocDocument, endTitle, -1, listStyles);
 
     writer->endElement(); // table:index-body

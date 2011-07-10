@@ -84,6 +84,7 @@ void KoPAPageDeleteCommand::redo()
         index = m_document->takePage(page);
         Q_ASSERT(index != -1);
     }
+    Q_UNUSED(index); // to build with unused-but-set-variable
 
     m_deletePages = true;
 }

@@ -315,7 +315,6 @@ namespace KDChart {
                     doc.setPlainText( text );
 
                 const RelativePosition relPos( attrs.position( valueIsPositive ) );
-                const Qt::Alignment alignBottomLeft = Qt::AlignBottom | Qt::AlignLeft;
                 const QFont calculatedFont( ta.calculatedFont( plane, KDChartEnums::MeasureOrientationMinimum ) );
 
                 // note: We can not use boundingRect() to retrieve the width, as that returnes a too small value

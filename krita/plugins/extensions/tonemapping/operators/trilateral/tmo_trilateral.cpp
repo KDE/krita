@@ -225,20 +225,10 @@ void compress_base(double **base, int width, int height)
     double maxval = -1e20;
     double factor;
 
-    int minx, miny, maxx, maxy;
-
     fprintf(stderr, "Compressing base layer\n");
 
     for (y = 0; y < height; y++)
         for (x = 0; x < width; x++) {
-            if (base[y][x] < minval) {
-                minx = x;
-                miny = y;
-            }
-            if (base[y][x] > maxval) {
-                maxx = x;
-                maxy = y;
-            }
             minval = (minval < base[y][x]) ? minval : base[y][x];
             maxval = (maxval > base[y][x]) ? maxval : base[y][x];
         }

@@ -522,7 +522,6 @@ bool KoTextDocumentLayout::doLayout()
     d->y = 0;
     d->layoutScheduled = false;
     d->restartLayout = false;
-    KoTextLayoutRootArea *previousRootArea = 0;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         if (d->restartLayout) {
@@ -605,7 +604,6 @@ bool KoTextDocumentLayout::doLayout()
         }
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
                                                // 50 just to seperate pages
-        previousRootArea = rootArea;
     }
 
     while (d->layoutPosition->it != document()->rootFrame()->end()) {

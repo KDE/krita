@@ -282,6 +282,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
     so crash if someone attempts to do this. Don't resize YET as it would obfuscate the mistake. */
     Q_ASSERT(selection->bounds().contains(selRect));
+    Q_UNUSED(selRect); // only used by the above Q_ASSERT
 
     /* KisPaintDevice is a tricky beast, and it can easily have unpredictable exactBounds() or extent()
     in limit cases (for example, when brushes become too small in a brush engine). That's why there's no
@@ -831,6 +832,7 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
     so crash if someone attempts to do this. Don't resize as it would obfuscate the mistake. */
     Q_ASSERT(srcDev->bounds().contains(srcRect));
+    Q_UNUSED(srcRect); // only used in above assertion
 
     // Convenient renaming
     const KoColorSpace * srcCs = d->colorSpace;
@@ -901,7 +903,9 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
     /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
     so crash if someone attempts to do this. Don't resize as it would obfuscate the mistake. */
     Q_ASSERT(srcDev->bounds().contains(srcRect));
+    Q_UNUSED(srcRect); // only used in above assertion
     Q_ASSERT(selection->bounds().contains(selRect));
+    Q_UNUSED(selRect); // only used in above assertion
 
     /* Create an intermediate byte array to hold information before it is written
     to the current paint device (aka: d->device) */
@@ -1866,7 +1870,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
     KoColor col1(c1);
     KoColor col2(c1);
 
-    float grada, gradb, dxa, dxb, dya, dyb, adya, adyb, fraca, fracb,
+    float grada, gradb, dxa, dxb, dya, dyb, fraca, fracb,
     xfa, yfa, xfb, yfb, b1a, b2a, b1b, b2b, dstX, dstY;
     int x, y, ix1, ix2, iy1, iy2;
 
@@ -1981,12 +1985,6 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
     dya = y1a - y0a; // rise of a
     dxb = x1b - x0b; // run of b
     dyb = y1b - y0b; // rise of b
-
-    if (dya < 0) adya = -dya;
-    else adya = dya;
-    if (dyb < 0) adyb = -dyb;
-    else adyb = dyb;
-
 
     if (horizontal) { // horizontal-ish lines
         if (x1 < x0) {

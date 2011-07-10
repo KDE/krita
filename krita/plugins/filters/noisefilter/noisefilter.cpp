@@ -99,7 +99,6 @@ void KisFilterNoise::process(KisPaintDeviceSP device,
                             KoUpdater* progressUpdater
                             ) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(!device.isNull());
 
     if (progressUpdater) {

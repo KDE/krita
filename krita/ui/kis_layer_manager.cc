@@ -168,13 +168,11 @@ void KisLayerManager::updateGUI()
 
     KisLayerSP layer;
     qint32 nlayers = 0;
-    qint32 nvisible = 0;
 
 
     if (image) {
         layer = m_activeLayer;
         nlayers = image->nlayers();
-        nvisible = nlayers - image->nHiddenLayers();
     }
 
     bool enable = image && layer && layer->visible() && !layer->userLocked() && !layer->systemLocked();
@@ -218,14 +216,6 @@ void KisLayerManager::layerProperties()
     KisLayerSP layer = m_activeLayer;
 
     if (!layer) return;
-
-    const KoColorSpace * cs = 0;
-    KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(layer.data());
-    if (pl) {
-        cs = pl->paintDevice()->colorSpace();
-    } else {
-        cs = layer->image()->colorSpace();
-    }
 
 
     if (KisAdjustmentLayerSP alayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data()))) {

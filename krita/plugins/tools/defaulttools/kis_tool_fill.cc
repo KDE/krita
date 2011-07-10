@@ -102,7 +102,6 @@ bool KisToolFill::flood(int startX, int startY)
     QVector<QRect> dirty;
 
     if (m_fillOnlySelection && selection) {
-        QRect rc = selection->selectedRect();
         KisPaintDeviceSP filled = new KisPaintDevice(device->colorSpace());
         KisFillPainter fillPainter(filled);
         fillPainter.setProgress(updater->startSubtask());

@@ -408,9 +408,6 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     qint32 maskHeight = outputMask->height();
 
     if (coloringInformation || dst->data() == 0 || dst->bounds().isEmpty()) {
-        // old bounds
-        QRect bounds = dst->bounds();
-
         // new bounds. we don't care if there is some extra memory occcupied.
         dst->setRect(QRect(0, 0, maskWidth, maskHeight));
         dst->initialize();

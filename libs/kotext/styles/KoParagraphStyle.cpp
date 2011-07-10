@@ -1194,17 +1194,13 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     }
 
     // Indentation (margin)
-    bool hasMarginLeft = false;
-    bool hasMarginRight = false;
     const QString marginLeft(styleStack.property(KoXmlNS::fo, "margin-left" ));
     if (!marginLeft.isEmpty()) {
         setLeftMargin(KoText::parseLength(marginLeft));
-        hasMarginLeft = true;
     }
     const QString marginRight(styleStack.property(KoXmlNS::fo, "margin-right" ));
     if (!marginRight.isEmpty()) {
         setRightMargin(KoText::parseLength(marginRight));
-        hasMarginRight = true;
     }
     const QString marginTop(styleStack.property(KoXmlNS::fo, "margin-top"));
     if (!marginTop.isEmpty()) {
@@ -1217,8 +1213,6 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     const QString margin(styleStack.property(KoXmlNS::fo, "margin"));
     if (!margin.isEmpty()) {
         setMargin(KoText::parseLength(margin));
-        hasMarginLeft = true;
-        hasMarginRight = true;
     }
 
     // Automatic Text indent

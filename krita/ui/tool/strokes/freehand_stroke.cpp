@@ -54,29 +54,27 @@ FreehandStrokeJobStrategy::FreehandStrokeJobStrategy()
 
 void FreehandStrokeJobStrategy::processDab(DabProcessingData *data)
 {
-    Data *internalData = dynamic_cast<Data*>(data);
+    Data *d = dynamic_cast<Data*>(data);
 
-    switch(internalData->type) {
+    switch(d->type) {
     case Data::POINT:
-        internalData->dragDistance = KisDistanceInformation(0,0);
-        internalData->painter->paintAt(internalData->pi1);
-        internalData->node->setDirty(internalData->painter->takeDirtyRegion());
+        d->dragDistance = KisDistanceInformation(0,0);
+        d->painter->paintAt(d->pi1);
+        d->node->setDirty(d->painter->takeDirtyRegion());
         break;
     case Data::LINE:
-        internalData->dragDistance =
-            internalData->painter->paintLine(internalData->pi1,
-                                             internalData->pi2,
-                                             internalData->dragDistance);
-        internalData->node->setDirty(internalData->painter->takeDirtyRegion());
+        d->dragDistance =
+            d->painter->paintLine(d->pi1, d->pi2, d->dragDistance);
+        d->node->setDirty(d->painter->takeDirtyRegion());
         break;
     case Data::CURVE:
-        internalData->dragDistance =
-            internalData->painter->paintBezierCurve(internalData->pi1,
-                                                    internalData->control1,
-                                                    internalData->control2,
-                                                    internalData->pi2,
-                                                    internalData->dragDistance);
-        internalData->node->setDirty(internalData->painter->takeDirtyRegion());
+        d->dragDistance =
+            d->painter->paintBezierCurve(d->pi1,
+                                         d->control1,
+                                         d->control2,
+                                         d->pi2,
+                                         d->dragDistance);
+        d->node->setDirty(d->painter->takeDirtyRegion());
         break;
     };
 }

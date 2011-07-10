@@ -33,15 +33,15 @@ InitStrokeJobStrategy::InitStrokeJobStrategy(bool isExclusive)
 
 void InitStrokeJobStrategy::processDab(DabProcessingData *data)
 {
-    Data *internalData = dynamic_cast<Data*>(data);
+    Data *d = dynamic_cast<Data*>(data);
 
-    KisResourcesSnapshotSP resources = internalData->resources;
-    KisPainter *painter = internalData->painter;
+    KisResourcesSnapshotSP resources = d->resources;
+    KisPainter *painter = d->painter;
 
     KisNodeSP node = resources->currentNode();
     KisPaintDeviceSP paintDevice = node->paintDevice();
     KisPaintDeviceSP targetDevice = paintDevice;
-    bool hasIndirectPainting = internalData->needsIndirectPainting;
+    bool hasIndirectPainting = d->needsIndirectPainting;
 
     if (hasIndirectPainting) {
         KisIndirectPaintingSupport *indirect =
@@ -78,7 +78,7 @@ void InitStrokeJobStrategy::processDab(DabProcessingData *data)
         painter->setChannelFlags(QBitArray());
     }
 
-    painter->beginTransaction(internalData->transactionText);
+    painter->beginTransaction(d->transactionText);
 }
 
 
@@ -89,25 +89,22 @@ FinishStrokeJobStrategy::FinishStrokeJobStrategy(bool isExclusive)
 
 void FinishStrokeJobStrategy::processDab(DabProcessingData *data)
 {
-    Data *internalData = dynamic_cast<Data*>(data);
+    Data *d = dynamic_cast<Data*>(data);
 
-    KisResourcesSnapshotSP resources = internalData->resources;
-    KisPainter *painter = internalData->painter;
-
-    KisNodeSP node = resources->currentNode();
+    KisNodeSP node = d->resources->currentNode();
     KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
     KisIndirectPaintingSupport *indirect =
         dynamic_cast<KisIndirectPaintingSupport*>(node.data());
 
     if(layer && indirect && indirect->hasTemporaryTarget()) {
-        QString transactionText = painter->transactionText();
-        painter->deleteTransaction();
+        QString transactionText = d->painter->transactionText();
+        d->painter->deleteTransaction();
         indirect->mergeToLayer(layer, transactionText);
     }
     else {
-        painter->endTransaction(resources->image()->undoAdapter());
+        d->painter->endTransaction(d->resources->image()->undoAdapter());
     }
-    delete painter;
+    delete d->painter;
 }
 
 
@@ -118,15 +115,12 @@ CancelStrokeJobStrategy::CancelStrokeJobStrategy(bool isExclusive)
 
 void CancelStrokeJobStrategy::processDab(DabProcessingData *data)
 {
-    Data *internalData = dynamic_cast<Data*>(data);
+    Data *d = dynamic_cast<Data*>(data);
 
-    KisResourcesSnapshotSP resources = internalData->resources;
-    KisPainter *painter = internalData->painter;
+    d->painter->revertTransaction();
+    delete d->painter;
 
-    painter->revertTransaction();
-    delete painter;
-
-    KisNodeSP node = resources->currentNode();
+    KisNodeSP node = d->resources->currentNode();
     KisIndirectPaintingSupport *indirect =
         dynamic_cast<KisIndirectPaintingSupport*>(node.data());
 

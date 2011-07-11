@@ -42,8 +42,6 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource, KoReport
         return;
     }
 
-    bool have_detail = false;
-
     QDomNodeList sections = elemSource.childNodes();
 
     for (int nodeCounter = 0; nodeCounter < sections.count(); nodeCounter++) {
@@ -101,7 +99,6 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource, KoReport
             KRSectionData * sd = new KRSectionData(elemThis, report);
             if (sd->isValid()) {
                 m_detailSection = sd;
-                have_detail = true;
             } else
                 delete sd;
         } else {

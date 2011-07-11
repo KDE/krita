@@ -127,7 +127,6 @@ QGradient* KoStopGradient::toQGradient() const
         break;
     }
     case QGradient::ConicalGradient: {
-        QPointF diff = m_stop - m_start;
         qreal angle = atan2(m_start.y(), m_start.x()) * 180.0 / M_PI;
         if (angle < 0.0)
             angle += 360.0;

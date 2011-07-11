@@ -132,8 +132,6 @@ QRectF KoTableCellStyle::boundingRect(const QRectF &contentRect) const
 
 void KoTableCellStyle::paintBackground(QPainter &painter, const QRectF &bounds) const
 {
-    QRectF innerBounds = bounds;
-
     if (hasProperty(CellBackgroundBrush)) {
         painter.fillRect(bounds, background());
     }

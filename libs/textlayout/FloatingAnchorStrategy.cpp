@@ -80,7 +80,6 @@ bool FloatingAnchorStrategy::moveSubject()
         return false; // let's fake we moved to force another relayout
     }
 
-    QRectF boundingRect = m_anchor->shape()->boundingRect();
     QRectF containerBoundingRect = m_anchor->shape()->parent()->boundingRect();
     QRectF anchorBoundingRect;
     QPointF newPosition;

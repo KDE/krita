@@ -824,7 +824,6 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store,
     }
 
     bool res = true;
-    bool internalURL = false;
     if ( tmpURL.startsWith( STORE_PROTOCOL )
          || tmpURL.startsWith( INTERNAL_PROTOCOL )
          || KUrl::isRelativeUrl( tmpURL ) )
@@ -841,7 +840,6 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store,
                 tmpURL = KUrl( tmpURL ).path().mid( 1 );
             res = d->document->loadFromStore( store, tmpURL );
         }
-        internalURL = true;
         d->document->setStoreInternal( true );
     }
     else {

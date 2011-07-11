@@ -201,7 +201,6 @@ void RadarGrid::drawGrid( PaintContext* context )
             const double textHeight = metric.height() / 2.0;
             QPointF textOffset( textLength, -textHeight );
             textOffset = scaleToRect( textOffset, context->rectangle(), destRect );
-            QPointF p = translatedPoint - textOffset;
             QPointF _topLeft = topLeft;
             _topLeft.setY( translatedPoint.y() );
             QRectF boundary( _topLeft, ( translatedPoint + QPointF( 0, step / 2.0 ) ) );

@@ -55,7 +55,6 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP im
         QDialog(parent),
         d(new Private)
 {
-    QRect rc = node->extent();
     setModal(false);
 
     d->uiFilterDialog.setupUi(this);

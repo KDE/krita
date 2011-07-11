@@ -89,13 +89,9 @@ public:
     * instance likes to load an ODF element.
     *
     * @param element the element to start loadingat
-    * @param cursor the text cursor to insert the body after
-    * @param section If non-zero, all the following text belongs with this section. The
-    *                section is added to the first block of the body.
-    *
+    * @param cursor the text cursor to insert the body after    *
     */
     void loadBody(const KoXmlElement &element, QTextCursor &cursor);
-    void loadBody(const KoXmlElement &element, QTextCursor &cursor, KoSection *section);
 
 signals:
 

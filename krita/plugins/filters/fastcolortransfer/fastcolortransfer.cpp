@@ -89,7 +89,6 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP device,
                          const KisFilterConfiguration* config,
                          KoUpdater* progressUpdater) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device != 0);
 
     dbgPlugins << "Start transferring color";

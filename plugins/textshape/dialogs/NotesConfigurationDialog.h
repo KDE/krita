@@ -21,6 +21,7 @@
 
 #include <ui_NotesConfigurationDialog.h>
 #include <KoListStyle.h>
+#include <KoOdfNotesConfiguration.h>
 
 #include <QDialog>
 #include <QTextDocument>
@@ -33,11 +34,14 @@ class NotesConfigurationDialog : public QDialog
 public:
     explicit NotesConfigurationDialog(QTextDocument *doc,QWidget *parent = 0);
     Ui::NotesConfigurationDialog widget;
+    //KoOdfNotesConfiguration *notesConfiguration( void );
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
     void footnoteSetup( bool on );
     void endnoteSetup( bool on );
+    //void setNotesConfiguration( void );
+
 signals:
     void doneWithFocus();
 

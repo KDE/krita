@@ -53,6 +53,7 @@ private slots:
     void insertTableOfContents();
     void insertFootNote();
     void insertEndNote();
+    void openSettings();
     void disableButtons(QTextCursor cursor);
 
 private:

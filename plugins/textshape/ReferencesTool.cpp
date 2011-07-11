@@ -53,19 +53,26 @@ void ReferencesTool::createActions()
     KAction *action;
     KAction *action1;
     KAction *action2;
+    KAction *action3;
 
     action = new KAction(i18n("Add ToC"), this);
     addAction("insert_tableofcentents", action);
     action->setToolTip(i18n("Insert a Table of Contents into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertTableOfContents()));
-    action1 = new KAction(i18n("Add Footnote"),this);
+    action1 = new KAction(i18n("Footnote"),this);
     addAction("insert_footnote",action1);
     action1->setToolTip(i18n("Insert a Foot Note into the document."));
     connect(action1, SIGNAL(triggered()), this, SLOT(insertFootNote()));
-    action2 = new KAction(i18n("Add Endnote"),this);
+    action2 = new KAction(i18n("Endnote"),this);
     addAction("insert_endnote",action2);
     action2->setToolTip(i18n("Insert an End Note into the document."));
     connect(action2, SIGNAL(triggered()), this, SLOT(insertEndNote()));
+    action3 = new KAction(this);
+    QIcon *icon = new QIcon("/home/brijesh/kde/src/calligra/plugins/textshape/pics/settings-icon1_1.png");
+    action3->setIcon( *icon );
+    addAction("notes_settings",action3);
+    action3->setToolTip(i18n("Footnote/Endnote Settings"));
+    connect(action3, SIGNAL(triggered()), this, SLOT(openSettings()));
 
 }
 
@@ -138,9 +145,6 @@ void ReferencesTool::insertFootNote()
     fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
     cursor.insertText(" ",*fmat);
 
-    NotesConfigurationDialog *dialog = new NotesConfigurationDialog(cursor.document(),0);
-    dialog->exec();
-
 }
 
 void ReferencesTool::insertEndNote()
@@ -171,6 +175,12 @@ void ReferencesTool::insertEndNote()
     fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
     cursor.insertText(" ",*fmat);
 
+}
+
+void ReferencesTool::openSettings()
+{
+    NotesConfigurationDialog *dialog = new NotesConfigurationDialog(textEditor()->document(),0);
+    dialog->exec();
 }
 
 void ReferencesTool::disableButtons(QTextCursor cursor)

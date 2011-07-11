@@ -208,10 +208,10 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
 
     if (d->label.isEmpty())
         return;
-    if(KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->displayedNotes(d->textFrame->document()->begin()) != KoInlineNote::count ) {
+    /*if(KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->displayedNotes(d->textFrame->document()->begin()) != KoInlineNote::count ) {
         KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->reNumbering(d->textFrame->document()->begin());
         KoInlineNote::count = KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->displayedNotes(d->textFrame->document()->begin());
-    }
+    }*/
 
     QFont font(format.font(), pd);
     QTextLayout layout(d->label, font, pd);

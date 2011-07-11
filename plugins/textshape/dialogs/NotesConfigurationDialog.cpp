@@ -33,6 +33,16 @@ NotesConfigurationDialog::NotesConfigurationDialog(QTextDocument *doc, QWidget *
 
 }
 
+/*void NotesConfigurationDialog::setNotesConfiguration()
+{
+
+}
+
+KoOdfNotesConfiguration *NotesConfigurationDialog::notesConfiguration()
+{
+
+}*/
+
 void NotesConfigurationDialog::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;

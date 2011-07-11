@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>231</width>
-    <height>127</height>
+    <height>129</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -86,6 +86,26 @@
        <widget class="QToolButton" name="addFootnote">
         <property name="text">
          <string>FootNote</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="settings">
+        <property name="toolTip">
+         <string>Settings</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>../pics/settings-icon1_1.png</normaloff>../pics/settings-icon1_1.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
         </property>
        </widget>
       </item>

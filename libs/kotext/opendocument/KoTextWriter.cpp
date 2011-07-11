@@ -1667,7 +1667,10 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
     QTextBlock block = document->findBlock(from);
     int sectionLevel = 0;
 
-    while (block.isValid() && ((to == -1) || (block.position() <= to))) {
+    KoOdfNotesConfiguration notesConfiguration;
+    notesConfiguration.saveOdf(writer);
+
+        while (block.isValid() && ((to == -1) || (block.position() <= to))) {
 
         QTextCursor cursor(block);
         QTextFrame *cursorFrame = cursor.currentFrame();

@@ -16,28 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_dab_processing_strategy.h"
+#include "kis_stroke_job_strategy.h"
 
-KisDabProcessingStrategy::DabProcessingData::~DabProcessingData()
+KisStrokeJobStrategy::StrokeJobData::~StrokeJobData()
 {
 }
 
-KisDabProcessingStrategy::KisDabProcessingStrategy(bool isSequential, bool isExclusive)
+KisStrokeJobStrategy::KisStrokeJobStrategy(bool isSequential, bool isExclusive)
     : m_isSequential(isSequential),
       m_isExclusive(isExclusive)
 {
 }
 
-KisDabProcessingStrategy::~KisDabProcessingStrategy()
+KisStrokeJobStrategy::~KisStrokeJobStrategy()
 {
 }
 
-bool KisDabProcessingStrategy::isSequential() const
+bool KisStrokeJobStrategy::isSequential() const
 {
     return m_isSequential;
 }
 
-bool KisDabProcessingStrategy::isExclusive() const
+bool KisStrokeJobStrategy::isExclusive() const
 {
     return m_isExclusive;
 }

@@ -16,26 +16,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_DAB_PROCESSING_STRATEGY_H
-#define __KIS_DAB_PROCESSING_STRATEGY_H
+#ifndef __KIS_STROKE_JOB_STRATEGY_H
+#define __KIS_STROKE_JOB_STRATEGY_H
 
 #include "krita_export.h"
 
 
-class KRITAIMAGE_EXPORT KisDabProcessingStrategy
+class KRITAIMAGE_EXPORT KisStrokeJobStrategy
 {
 public:
-    class DabProcessingData
+    class StrokeJobData
     {
     public:
-        virtual ~DabProcessingData();
+        virtual ~StrokeJobData();
     };
 
 public:
-    KisDabProcessingStrategy(bool isSequential = true, bool isExclusive = false);
-    virtual ~KisDabProcessingStrategy();
+    KisStrokeJobStrategy(bool isSequential = true, bool isExclusive = false);
+    virtual ~KisStrokeJobStrategy();
 
-    virtual void processDab(DabProcessingData *data) = 0;
+    virtual void run(StrokeJobData *data) = 0;
     bool isSequential() const;
     bool isExclusive() const;
 
@@ -44,4 +44,4 @@ private:
     bool m_isExclusive;
 };
 
-#endif /* __KIS_DAB_PROCESSING_STRATEGY_H */
+#endif /* __KIS_STROKE_JOB_STRATEGY_H */

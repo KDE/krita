@@ -105,7 +105,7 @@ void KisUpdateScheduler::startStroke(KisStrokeStrategy *strokeStrategy)
     processQueues();
 }
 
-void KisUpdateScheduler::addJob(KisDabProcessingStrategy::DabProcessingData *data)
+void KisUpdateScheduler::addJob(KisStrokeJobStrategy::StrokeJobData *data)
 {
     m_d->strokesQueue->addJob(data);
     processQueues();

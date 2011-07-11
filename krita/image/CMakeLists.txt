@@ -121,7 +121,7 @@ set(kritaimage_LIB_SRCS
    kis_merge_walker.cc
    kis_updater_context.cpp
    kis_update_job_item.cpp
-   kis_dab_processing_strategy.cpp
+   kis_stroke_job_strategy.cpp
    kis_stroke_strategy.cpp
    kis_stroke.cpp
    kis_strokes_queue.cpp

@@ -63,19 +63,19 @@ void KisUpdaterContextTest::testJobInterference()
 #define NUM_CHECKS 10
 #define CHECK_DELAY 3 // ms
 
-class ExclusivenessCheckerStrategy : public KisDabProcessingStrategy
+class ExclusivenessCheckerStrategy : public KisStrokeJobStrategy
 {
 public:
     ExclusivenessCheckerStrategy(QAtomicInt &counter,
                                  QAtomicInt &hadConcurrency,
                                  bool exclusive)
-        : KisDabProcessingStrategy(exclusive),
+        : KisStrokeJobStrategy(exclusive),
           m_counter(counter),
           m_hadConcurrency(hadConcurrency)
     {
     }
 
-    void processDab(DabProcessingData *data) {
+    void run(StrokeJobData *data) {
         Q_UNUSED(data);
 
         m_counter.ref();

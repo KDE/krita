@@ -27,11 +27,11 @@
 
 
 InitStrokeJobStrategy::InitStrokeJobStrategy(bool isExclusive)
-    : KisDabProcessingStrategy(true, isExclusive)
+    : KisStrokeJobStrategy(true, isExclusive)
 {
 }
 
-void InitStrokeJobStrategy::processDab(DabProcessingData *data)
+void InitStrokeJobStrategy::run(StrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
 
@@ -83,11 +83,11 @@ void InitStrokeJobStrategy::processDab(DabProcessingData *data)
 
 
 FinishStrokeJobStrategy::FinishStrokeJobStrategy(bool isExclusive)
-    : KisDabProcessingStrategy(true, isExclusive)
+    : KisStrokeJobStrategy(true, isExclusive)
 {
 }
 
-void FinishStrokeJobStrategy::processDab(DabProcessingData *data)
+void FinishStrokeJobStrategy::run(StrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
 
@@ -109,11 +109,11 @@ void FinishStrokeJobStrategy::processDab(DabProcessingData *data)
 
 
 CancelStrokeJobStrategy::CancelStrokeJobStrategy(bool isExclusive)
-    : KisDabProcessingStrategy(true, isExclusive)
+    : KisStrokeJobStrategy(true, isExclusive)
 {
 }
 
-void CancelStrokeJobStrategy::processDab(DabProcessingData *data)
+void CancelStrokeJobStrategy::run(StrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
 

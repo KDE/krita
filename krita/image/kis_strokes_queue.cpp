@@ -51,7 +51,7 @@ void KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
     m_d->strokesQueue.enqueue(new KisStroke(strokeStrategy));
 }
 
-void KisStrokesQueue::addJob(KisDabProcessingStrategy::DabProcessingData *data)
+void KisStrokesQueue::addJob(KisStrokeJobStrategy::StrokeJobData *data)
 {
     QMutexLocker locker(&m_d->mutex);
 

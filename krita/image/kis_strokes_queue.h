@@ -20,7 +20,7 @@
 #define __KIS_STROKES_QUEUE_H
 
 #include "krita_export.h"
-#include "kis_dab_processing_strategy.h"
+#include "kis_stroke_job_strategy.h"
 #include "kis_stroke_strategy.h"
 
 class KisUpdaterContext;
@@ -33,7 +33,7 @@ public:
     ~KisStrokesQueue();
 
     void startStroke(KisStrokeStrategy *strokeStrategy);
-    void addJob(KisDabProcessingStrategy::DabProcessingData *data);
+    void addJob(KisStrokeJobStrategy::StrokeJobData *data);
 
     void endStroke();
     void cancelStroke();

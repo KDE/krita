@@ -1110,7 +1110,7 @@ void KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
     }
 }
 
-void KisImage::addJob(KisDabProcessingStrategy::DabProcessingData *data)
+void KisImage::addJob(KisStrokeJobStrategy::StrokeJobData *data)
 {
     if (m_d->scheduler) {
         m_d->scheduler->addJob(data);

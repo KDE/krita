@@ -33,7 +33,7 @@ public:
     KisStroke(KisStrokeStrategy *strokeStrategy);
     ~KisStroke();
 
-    void addJob(KisDabProcessingStrategy::DabProcessingData *data);
+    void addJob(KisStrokeJobStrategy::StrokeJobData *data);
 
     bool hasJobs() const;
     qint32 numJobs() const;
@@ -51,8 +51,8 @@ public:
     bool nextJobSequential() const;
 
 private:
-    void enqueue(KisDabProcessingStrategy *strategy,
-                 KisDabProcessingStrategy::DabProcessingData *data);
+    void enqueue(KisStrokeJobStrategy *strategy,
+                 KisStrokeJobStrategy::StrokeJobData *data);
     KisStrokeJob* dequeue();
     void clearQueue();
 
@@ -66,10 +66,10 @@ private:
 private:
     // the strategies are owned by the stroke
     KisStrokeStrategy *m_strokeStrategy;
-    KisDabProcessingStrategy *m_initStrategy;
-    KisDabProcessingStrategy *m_dabStrategy;
-    KisDabProcessingStrategy *m_cancelStrategy;
-    KisDabProcessingStrategy *m_finishStrategy;
+    KisStrokeJobStrategy *m_initStrategy;
+    KisStrokeJobStrategy *m_dabStrategy;
+    KisStrokeJobStrategy *m_cancelStrategy;
+    KisStrokeJobStrategy *m_finishStrategy;
 
     QQueue<KisStrokeJob*> m_jobsQueue;
     bool m_strokeInitialized;

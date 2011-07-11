@@ -36,13 +36,13 @@ public:
                            KisResourcesSnapshotSP resources,
                            KisPainter *painter);
 
-    KisDabProcessingStrategy* createDabStrategy();
+    KisStrokeJobStrategy* createDabStrategy();
 };
 
-class FreehandStrokeJobStrategy : public KisDabProcessingStrategy
+class FreehandStrokeJobStrategy : public KisStrokeJobStrategy
 {
 public:
-    class Data : public DabProcessingData {
+    class Data : public StrokeJobData {
     public:
         enum DabType {
             POINT,
@@ -95,7 +95,7 @@ public:
 public:
     FreehandStrokeJobStrategy();
 
-    void processDab(DabProcessingData *data);
+    void run(StrokeJobData *data);
 };
 
 #endif /* __FREEHAND_STROKE_H */

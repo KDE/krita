@@ -24,7 +24,7 @@
 #include "kis_types.h"
 
 #include "kis_stroke_strategy.h"
-#include "kis_dab_processing_strategy.h"
+#include "kis_stroke_job_strategy.h"
 
 class QRect;
 
@@ -73,7 +73,7 @@ public:
     void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
 
     void startStroke(KisStrokeStrategy *strokeStrategy);
-    void addJob(KisDabProcessingStrategy::DabProcessingData *data);
+    void addJob(KisStrokeJobStrategy::StrokeJobData *data);
     void endStroke();
     void cancelStroke();
 

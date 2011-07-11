@@ -19,16 +19,16 @@
 #ifndef __KIS_STROKE_JOB_STRATEGIES_H
 #define __KIS_STROKE_JOB_STRATEGIES_H
 
-#include "kis_dab_processing_strategy.h"
+#include "kis_stroke_job_strategy.h"
 #include "kis_resources_snapshot.h"
 
 class KisPainter;
 
 
-class InitStrokeJobStrategy : public KisDabProcessingStrategy
+class InitStrokeJobStrategy : public KisStrokeJobStrategy
 {
 public:
-    class Data : public DabProcessingData {
+    class Data : public StrokeJobData {
     public:
         Data(KisPainter *_painter,
              KisResourcesSnapshotSP _resources,
@@ -49,13 +49,13 @@ public:
 public:
     InitStrokeJobStrategy(bool isExclusive = false);
 
-    void processDab(DabProcessingData *data);
+    void run(StrokeJobData *data);
 };
 
-class FinishStrokeJobStrategy : public KisDabProcessingStrategy
+class FinishStrokeJobStrategy : public KisStrokeJobStrategy
 {
 public:
-    class Data : public DabProcessingData {
+    class Data : public StrokeJobData {
     public:
         Data(KisPainter *_painter,
              KisResourcesSnapshotSP _resources)
@@ -70,13 +70,13 @@ public:
 public:
     FinishStrokeJobStrategy(bool isExclusive = false);
 
-    void processDab(DabProcessingData *data);
+    void run(StrokeJobData *data);
 };
 
-class CancelStrokeJobStrategy : public KisDabProcessingStrategy
+class CancelStrokeJobStrategy : public KisStrokeJobStrategy
 {
 public:
-    class Data : public DabProcessingData {
+    class Data : public StrokeJobData {
     public:
         Data(KisPainter *_painter,
              KisResourcesSnapshotSP _resources)
@@ -91,7 +91,7 @@ public:
 public:
     CancelStrokeJobStrategy(bool isExclusive = false);
 
-    void processDab(DabProcessingData *data);
+    void run(StrokeJobData *data);
 };
 
 #endif /* __KIS_STROKE_JOB_STRATEGIES_H */

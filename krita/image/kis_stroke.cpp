@@ -47,7 +47,7 @@ KisStroke::~KisStroke()
     delete m_strokeStrategy;
 }
 
-void KisStroke::addJob(KisDabProcessingStrategy::DabProcessingData *data)
+void KisStroke::addJob(KisStrokeJobStrategy::StrokeJobData *data)
 {
     Q_ASSERT(!m_strokeEnded);
     enqueue(m_dabStrategy, data);
@@ -153,8 +153,8 @@ bool KisStroke::nextJobSequential() const
         m_jobsQueue.head()->isSequential() : false;
 }
 
-void KisStroke::enqueue(KisDabProcessingStrategy *strategy,
-                        KisDabProcessingStrategy::DabProcessingData *data)
+void KisStroke::enqueue(KisStrokeJobStrategy *strategy,
+                        KisStrokeJobStrategy::StrokeJobData *data)
 {
     // factory methods can return null, if no action is needed
     if(!strategy) {

@@ -35,13 +35,13 @@ public:
 
     ~KisPainterBasedStrokeStrategy();
 
-    KisDabProcessingStrategy* createInitStrategy();
-    KisDabProcessingStrategy* createFinishStrategy();
-    KisDabProcessingStrategy* createCancelStrategy();
+    KisStrokeJobStrategy* createInitStrategy();
+    KisStrokeJobStrategy* createFinishStrategy();
+    KisStrokeJobStrategy* createCancelStrategy();
 
-    KisDabProcessingStrategy::DabProcessingData* createInitData();
-    KisDabProcessingStrategy::DabProcessingData* createFinishData();
-    KisDabProcessingStrategy::DabProcessingData* createCancelData();
+    KisStrokeJobStrategy::StrokeJobData* createInitData();
+    KisStrokeJobStrategy::StrokeJobData* createFinishData();
+    KisStrokeJobStrategy::StrokeJobData* createCancelData();
 
 private:
     KisResourcesSnapshotSP m_resources;

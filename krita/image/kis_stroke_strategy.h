@@ -20,7 +20,7 @@
 #define __KIS_STROKE_STRATEGY_H
 
 #include <QString>
-#include "kis_dab_processing_strategy.h"
+#include "kis_stroke_job_strategy.h"
 
 class KisStrokeStrategy;
 
@@ -31,14 +31,14 @@ public:
     KisStrokeStrategy(QString id = QString(), QString name = QString());
     virtual ~KisStrokeStrategy();
 
-    virtual KisDabProcessingStrategy* createInitStrategy();
-    virtual KisDabProcessingStrategy* createFinishStrategy();
-    virtual KisDabProcessingStrategy* createCancelStrategy();
-    virtual KisDabProcessingStrategy* createDabStrategy();
+    virtual KisStrokeJobStrategy* createInitStrategy();
+    virtual KisStrokeJobStrategy* createFinishStrategy();
+    virtual KisStrokeJobStrategy* createCancelStrategy();
+    virtual KisStrokeJobStrategy* createDabStrategy();
 
-    virtual KisDabProcessingStrategy::DabProcessingData* createInitData();
-    virtual KisDabProcessingStrategy::DabProcessingData* createFinishData();
-    virtual KisDabProcessingStrategy::DabProcessingData* createCancelData();
+    virtual KisStrokeJobStrategy::StrokeJobData* createInitData();
+    virtual KisStrokeJobStrategy::StrokeJobData* createFinishData();
+    virtual KisStrokeJobStrategy::StrokeJobData* createCancelData();
 
     bool isExclusive() const;
     bool needsIndirectPainting() const;
@@ -48,7 +48,7 @@ public:
 
 protected:
     // you are not supposed to change these parameters
-    // in places other than a constructor
+    // after the KisStroke object has been created
 
     void setExclusive(bool value);
     void setNeedsIndirectPainting(bool value);

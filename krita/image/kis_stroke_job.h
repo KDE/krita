@@ -19,13 +19,13 @@
 #ifndef __KIS_STROKE_JOB_H
 #define __KIS_STROKE_JOB_H
 
-#include "kis_dab_processing_strategy.h"
+#include "kis_stroke_job_strategy.h"
 
 class KisStrokeJob
 {
 public:
-    KisStrokeJob(KisDabProcessingStrategy *strategy,
-                 KisDabProcessingStrategy::DabProcessingData *data)
+    KisStrokeJob(KisStrokeJobStrategy *strategy,
+                 KisStrokeJobStrategy::StrokeJobData *data)
         : m_dabStrategy(strategy),
           m_dabData(data)
     {
@@ -36,7 +36,7 @@ public:
     }
 
     void run() {
-        m_dabStrategy->processDab(m_dabData);
+        m_dabStrategy->run(m_dabData);
     }
 
     bool isSequential() const {
@@ -50,16 +50,16 @@ public:
 private:
     // for testing use only, do not use in real code
     friend QString getJobName(KisStrokeJob *job);
-    KisDabProcessingStrategy* testingGetDabStrategy() {
+    KisStrokeJobStrategy* testingGetDabStrategy() {
         return m_dabStrategy;
     }
 
 private:
     // Shared between different jobs
-    KisDabProcessingStrategy *m_dabStrategy;
+    KisStrokeJobStrategy *m_dabStrategy;
 
     // Owned by the job
-    KisDabProcessingStrategy::DabProcessingData *m_dabData;
+    KisStrokeJobStrategy::StrokeJobData *m_dabData;
 };
 
 #endif /* __KIS_STROKE_JOB_H */

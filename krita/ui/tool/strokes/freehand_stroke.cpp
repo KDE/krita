@@ -37,7 +37,7 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
     setNeedsIndirectPainting(needsIndirectPainting);
 }
 
-KisDabProcessingStrategy* FreehandStrokeStrategy::createDabStrategy()
+KisStrokeJobStrategy* FreehandStrokeStrategy::createDabStrategy()
 {
     return new FreehandStrokeJobStrategy();
 }
@@ -48,11 +48,11 @@ KisDabProcessingStrategy* FreehandStrokeStrategy::createDabStrategy()
 /********************************************************************/
 
 FreehandStrokeJobStrategy::FreehandStrokeJobStrategy()
-  : KisDabProcessingStrategy(true, false)
+  : KisStrokeJobStrategy(true, false)
 {
 }
 
-void FreehandStrokeJobStrategy::processDab(DabProcessingData *data)
+void FreehandStrokeJobStrategy::run(StrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
 

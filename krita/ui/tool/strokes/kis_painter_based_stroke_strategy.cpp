@@ -35,22 +35,22 @@ KisPainterBasedStrokeStrategy::~KisPainterBasedStrokeStrategy()
 {
 }
 
-KisDabProcessingStrategy* KisPainterBasedStrokeStrategy::createInitStrategy()
+KisStrokeJobStrategy* KisPainterBasedStrokeStrategy::createInitStrategy()
 {
     return new InitStrokeJobStrategy();
 }
 
-KisDabProcessingStrategy* KisPainterBasedStrokeStrategy::createFinishStrategy()
+KisStrokeJobStrategy* KisPainterBasedStrokeStrategy::createFinishStrategy()
 {
     return new FinishStrokeJobStrategy();
 }
 
-KisDabProcessingStrategy* KisPainterBasedStrokeStrategy::createCancelStrategy()
+KisStrokeJobStrategy* KisPainterBasedStrokeStrategy::createCancelStrategy()
 {
     return new CancelStrokeJobStrategy();
 }
 
-KisDabProcessingStrategy::DabProcessingData*
+KisStrokeJobStrategy::StrokeJobData*
 KisPainterBasedStrokeStrategy::createInitData()
 {
     return new InitStrokeJobStrategy::Data(m_painter, m_resources,
@@ -58,13 +58,13 @@ KisPainterBasedStrokeStrategy::createInitData()
                                            name());
 }
 
-KisDabProcessingStrategy::DabProcessingData*
+KisStrokeJobStrategy::StrokeJobData*
 KisPainterBasedStrokeStrategy::createFinishData()
 {
     return new FinishStrokeJobStrategy::Data(m_painter, m_resources);
 }
 
-KisDabProcessingStrategy::DabProcessingData*
+KisStrokeJobStrategy::StrokeJobData*
 KisPainterBasedStrokeStrategy::createCancelData()
 {
     return new CancelStrokeJobStrategy::Data(m_painter, m_resources);

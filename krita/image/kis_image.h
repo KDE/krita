@@ -33,7 +33,7 @@
 #include "kis_node_graph_listener.h"
 #include "kis_node_facade.h"
 #include "kis_default_bounds.h"
-#include "kis_dab_processing_strategy.h"
+#include "kis_stroke_job_strategy.h"
 
 class KoColorSpace;
 class KoCompositeOp;
@@ -563,7 +563,7 @@ public slots:
     void waitForDone();
 
     void startStroke(KisStrokeStrategy *strokeStrategy);
-    void addJob(KisDabProcessingStrategy::DabProcessingData *data);
+    void addJob(KisStrokeJobStrategy::StrokeJobData *data);
     void endStroke();
     void cancelStroke();
 

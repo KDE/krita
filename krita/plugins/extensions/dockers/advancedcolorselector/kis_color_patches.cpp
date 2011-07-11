@@ -95,7 +95,7 @@ void KisColorPatches::paintEvent(QPaintEvent* e)
                          m_patchHeight,
                          m_colors.at(i-m_buttonList.size()).toQColor());
     }
-    
+
 //    for(int i=0; i<m_buttonList.size(); i++) {
 //        m_buttonList.at(i)->paintEvent(e);
 //    }
@@ -166,9 +166,15 @@ void KisColorPatches::mouseReleaseEvent(QMouseEvent* event)
 
 void KisColorPatches::mousePressEvent(QMouseEvent *event)
 {
+    KoColor koColor;
+    if(!colorAt(event->pos(), &koColor))
+        return;
+
     KisColorSelectorBase::mousePressEvent(event);
     if(event->isAccepted())
         return;
+
+    updateColorPreview(koColor.toQColor());
 
     if (event->button() == Qt::LeftButton)
         m_dragStartPos = event->pos();

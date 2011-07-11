@@ -106,10 +106,10 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         break;
 
     case 1: // RLE
-
+    {
         qDebug()<<"RLE ENCODED";
-        quint32 rlelength;
-        quint32 sumrlelength;
+        quint32 rlelength = 0;
+        quint32 sumrlelength = 0;
 
         for (int channel=0; channel < m_header->nChannels; channel++) {
             ChannelInfo channelInfo;
@@ -164,7 +164,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         }
 
         break;
-
+    }
     case 2: // ZIP without prediction
         qDebug()<<"ZIP without prediction";
 

@@ -30,44 +30,14 @@ ChapterVariableFactory::ChapterVariableFactory()
     : KoInlineObjectFactoryBase("chapter", TextVariable)
 {
     KoInlineObjectTemplate var1;
-    var1.id = "chaptername";
-    var1.name = i18n("Chapter name");
+    var1.id = "chapter";
+    var1.name = i18n("Chapter");
     KoProperties *props = new KoProperties();
-    props->setProperty("vartype", KoInlineObject::ChapterName);
+    props->setProperty("vartype", KoInlineObject::Chapter);
+    props->setProperty("format", 2);
+    props->setProperty("level", 1);
     var1.properties = props;
     addTemplate(var1);
-
-    KoInlineObjectTemplate var2;
-    var2.id = "chapternumber";
-    var2.name = i18n("Chapter number");
-    props = new KoProperties();
-    props->setProperty("vartype", KoInlineObject::ChapterNumber);
-    var2.properties = props;
-    addTemplate(var2);
-
-    KoInlineObjectTemplate var3;
-    var3.id = "chapternumbername";
-    var3.name = i18n("Chapter number and name");
-    props = new KoProperties();
-    props->setProperty("vartype", KoInlineObject::ChapterNumberName);
-    var3.properties = props;
-    addTemplate(var3);
-
-    KoInlineObjectTemplate var4;
-    var4.id = "chapterplainnumber";
-    var4.name = i18n("Chapter number (plain)");
-    props = new KoProperties();
-    props->setProperty("vartype", KoInlineObject::ChapterPlainNumber);
-    var4.properties = props;
-    addTemplate(var4);
-
-    KoInlineObjectTemplate var5;
-    var5.id = "chapterplainnumbername";
-    var5.name = i18n("Chapter number and name (plain)");
-    props = new KoProperties();
-    props->setProperty("vartype", KoInlineObject::ChapterPlainNumberName);
-    var5.properties = props;
-    addTemplate(var5);
 
     QStringList elementNames;
     elementNames << "chapter";

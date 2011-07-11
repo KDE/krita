@@ -37,54 +37,81 @@
 #include <QAbstractTextDocumentLayout>
 #include <QTextInlineObject>
 #include <QDebug>
+#include <QLabel>
+#include <QComboBox>
+#include <QGridLayout>
+#include <KNumInput>
+#include <KLocale>
 
 ChapterVariable::ChapterVariable()
         : KoVariable(true)
-        , m_type(KoInlineObject::ChapterName)
-        , m_level(0)
+        , m_format(ChapterName)
+        , m_level(1)
 {
 }
 
 void ChapterVariable::readProperties(const KoProperties *props)
 {
-    m_type = (KoInlineObject::Property) props->intProperty("vartype");
-    m_level = props->intProperty("level");
+    m_format = (FormatTypes) props->intProperty("format");
+    m_level = qMax(1, props->intProperty("level"));
 }
 
-void ChapterVariable::propertyChanged(Property property, const QVariant &value)
+void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
-    Q_UNUSED(property);
-    //setValue(value.toString());
-}
+    QTextDocument *document = const_cast<QTextDocument*>(_document);
+    bool checkBackwards = true;
 
-void ChapterVariable::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
-{
-    QTextBlock block = document->findBlock(posInDocument);//cursor.block();
-    for(; block.isValid(); block = block.previous()) {
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+    KoTextDocumentLayout *ref = lay->referencedLayout();
+    if (ref) {
+        KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(posInDocument);
+        if (!rootArea)
+            return;
+        KoTextPage *page = rootArea->page();
+        if (!page)
+            return;
+        int pagenumber = page->pageNumber();
+        foreach(KoTextLayoutRootArea *a, ref->rootAreas()) {
+            KoTextPage * p = a->page();
+            if (!p || p->pageNumber() != pagenumber)
+                continue;
+            QTextFrame::iterator it = a->startTextFrameIterator();
+            document = ref->document();
+            Q_ASSERT(it.currentBlock().isValid());
+            posInDocument = it.currentBlock().position();
+            checkBackwards = false; // check forward
+            break;
+        }
+    }
+
+    QTextBlock block = document->findBlock(posInDocument);
+    for(; block.isValid(); (block = (checkBackwards ? block.previous() : block.next()))) {
         if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) {
             int level = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
-            if (m_level < 1 || level == m_level) {
+            if (ref)
+                qDebug()<<"....1"<<level<<block.text();
+            if (level == m_level) {
                 KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-                switch(m_type) {
-                case KoInlineObject::ChapterName:
+                switch(m_format) {
+                case ChapterName:
                     setValue(block.text());
                     break;
-                case KoInlineObject::ChapterNumber:
+                case ChapterNumber:
                     setValue(data ? data->counterText() : QString());
                     break;
-                case KoInlineObject::ChapterNumberName:
+                case ChapterNumberName:
                     setValue(data ? QString("%1 %2").arg(data->counterText()).arg(block.text()) : block.text());
                     break;
-                case KoInlineObject::ChapterPlainNumber:
-                    setValue(data ? QString::number(data->counterIndex()) : QString());
+                case ChapterPlainNumber:
+                    setValue(data ? data->counterPlainText() : QString());
                     break;
-                case KoInlineObject::ChapterPlainNumberName:
-                    setValue(data ? QString("%1 %2").arg(data->counterIndex()).arg(block.text()) : QString());
+                case ChapterPlainNumberName:
+                    setValue(data ? QString("%1 %2").arg(data->counterPlainText()).arg(block.text()) : QString());
                     break;
                 default:
                     break;
                 }
-                break;
+                break; // leave foreach
             }
         }
     }
@@ -96,20 +123,20 @@ void ChapterVariable::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
     writer->startElement("text:chapter ", false);
-    switch(m_type) {
-    case KoInlineObject::ChapterName:
+    switch(m_format) {
+    case ChapterName:
         writer->addAttribute("text:display", "name");
         break;
-    case KoInlineObject::ChapterNumber:
+    case ChapterNumber:
         writer->addAttribute("text:display", "number");
         break;
-    case KoInlineObject::ChapterNumberName:
+    case ChapterNumberName:
         writer->addAttribute("text:display", "number-and-name");
         break;
-    case KoInlineObject::ChapterPlainNumber:
+    case ChapterPlainNumber:
         writer->addAttribute("text:display", "plain-number");
         break;
-    case KoInlineObject::ChapterPlainNumberName:
+    case ChapterPlainNumberName:
         writer->addAttribute("text:display", "plain-number-and-name");
         break;
     default:
@@ -126,20 +153,55 @@ bool ChapterVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
 
     const QString display = element.attributeNS(KoXmlNS::text, "display", QString());
     if (display == "name") {
-        m_type = KoInlineObject::ChapterName;
+        m_format = ChapterName;
     } else if (display == "number") {
-        m_type = KoInlineObject::ChapterNumber;
+        m_format = ChapterNumber;
     } else if (display == "number-and-name") {
-        m_type = KoInlineObject::ChapterNumberName;
+        m_format = ChapterNumberName;
     } else if (display == "plain-number") {
-        m_type = KoInlineObject::ChapterPlainNumber;
+        m_format = ChapterPlainNumber;
     } else if (display == "plain-number-and-name") {
-        m_type = KoInlineObject::ChapterPlainNumberName;
+        m_format = ChapterPlainNumberName;
     } else { // fallback
-        m_type = KoInlineObject::ChapterNumberName;
+        m_format = ChapterNumberName;
     }
 
-    m_level = element.attributeNS(KoXmlNS::text, "outline-level", QString()).toInt();
+    m_level = qMax(1, element.attributeNS(KoXmlNS::text, "outline-level", QString()).toInt());
 
     return true;
+}
+
+QWidget* ChapterVariable::createOptionsWidget()
+{
+    QWidget *widget = new QWidget();
+    QGridLayout *layout = new QGridLayout(widget);
+    layout->setColumnStretch(1, 1);
+    widget->setLayout(layout);
+
+    layout->addWidget(new QLabel(i18n("Format:"), widget), 0, 0);
+    QComboBox *formatEdit = new QComboBox(widget);
+    formatEdit->addItems( QStringList() << i18n("Numer") << i18n("Name") << i18n("Number and name") << i18n("Number without separator") << i18n("Number and name without separator") );
+    formatEdit->setCurrentIndex(2);
+    layout->addWidget(formatEdit, 0, 1);
+
+    layout->addWidget(new QLabel(i18n("Level:"), widget), 1, 0);
+    KIntNumInput *levelEdit = new KIntNumInput(widget);
+    levelEdit->setMinimum(1);
+    levelEdit->setValue(m_level);
+    layout->addWidget(levelEdit, 1, 1);
+
+    connect(formatEdit, SIGNAL(currentIndexChanged(int)), this, SLOT(formatChanged(int)));
+    connect(levelEdit, SIGNAL(valueChanged(int)), this, SLOT(levelChanged(int)));
+
+    return widget;
+}
+
+void ChapterVariable::formatChanged(int format)
+{
+    m_format = (FormatTypes) format;
+}
+
+void ChapterVariable::levelChanged(int level)
+{
+    m_level = level;
 }

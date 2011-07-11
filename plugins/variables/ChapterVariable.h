@@ -19,6 +19,8 @@
 #ifndef CHAPTERVARIABLE_H
 #define CHAPTERVARIABLE_H
 
+#include <QObject>
+
 #include <KoVariable.h>
 #include <KoTextShapeData.h>
 #include <KoTextPage.h>
@@ -28,25 +30,34 @@ class KoShapeSavingContext;
 /**
  * This is a KoVariable for chapter variables.
  */
-class ChapterVariable : public KoVariable
+class ChapterVariable : public QObject, public KoVariable
 {
+    Q_OBJECT
 public:
     ChapterVariable();
 
+    // reimplmented
+    QWidget* createOptionsWidget();
     void readProperties(const KoProperties *props);
-
-    void propertyChanged(Property property, const QVariant &value);
-
-    /// reimplmented
     void saveOdf(KoShapeSavingContext & context);
-
-    /// reimplemented
     bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
+
+private Q_SLOTS:
+    void formatChanged(int format);
+    void levelChanged(int level);
 
 private:
     void resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
 
-    KoInlineObject::Property m_type;
+    enum FormatTypes {
+        ChapterName,
+        ChapterNumber,
+        ChapterNumberName,
+        ChapterPlainNumber,
+        ChapterPlainNumberName
+    };
+
+    FormatTypes m_format;
     int m_level;
 };
 

@@ -352,6 +352,12 @@ target_link_libraries(KisStrokeTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_L
 
 ########### next target ###############
 
+set(kis_stroke_strategy_undo_command_based_test_SRCS kis_stroke_strategy_undo_command_based_test.cpp )
+kde4_add_unit_test(KisStrokeStrategyUndoCommandBasedTest TESTNAME krita-image-KisStrokeStrategyUndoCommandBasedTest ${kis_stroke_strategy_undo_command_based_test_SRCS})
+target_link_libraries(KisStrokeStrategyUndoCommandBasedTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_strokes_queue_test_SRCS kis_strokes_queue_test.cpp )
 kde4_add_unit_test(KisStrokesQueueTest TESTNAME krita-image-KisStrokesQueueTest ${kis_strokes_queue_test_SRCS})
 target_link_libraries(KisStrokesQueueTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

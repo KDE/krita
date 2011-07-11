@@ -59,6 +59,7 @@ private:
 private:
     // for testing use only, do not use in real code
     friend class KisStrokeTest;
+    friend class KisStrokeStrategyUndoCommandBasedTest;
     QQueue<KisStrokeJob*>& testingGetQueue() {
         return m_jobsQueue;
     }

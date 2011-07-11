@@ -93,6 +93,7 @@ void KisStroke::endStroke()
  * 1) Not initialized, has jobs -- just clear the queue
  * 2) Initialized, has jobs, not finished -- clear the queue,
  *    enqueue the cancel job
+ * 5) Initialized, no jobs, not finished -- enqueue the cancel job
  * 3) Initialized, has jobs, finished -- clear the queue, enqueue
  *    the cancel job
  * 4) Initialized, no jobs, finished -- it's too late to cancel
@@ -104,7 +105,9 @@ void KisStroke::cancelStroke()
     if(!m_strokeInitialized) {
         clearQueue();
     }
-    else if(m_strokeInitialized && !m_jobsQueue.isEmpty()) {
+    else if(m_strokeInitialized &&
+            (!m_jobsQueue.isEmpty() || !m_strokeEnded)) {
+
         clearQueue();
         if(m_cancelStrategy) {
             m_jobsQueue.enqueue(

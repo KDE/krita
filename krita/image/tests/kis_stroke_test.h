@@ -21,19 +21,16 @@
 
 #include <QtTest/QtTest>
 
-class KisStrokeJob;
-
 
 class KisStrokeTest : public QObject
 {
     Q_OBJECT
-public:
-    static inline QString getName(KisStrokeJob *job);
 
 private slots:
     void testRegularStroke();
     void testCancelStrokeCase1();
     void testCancelStrokeCase2and3();
+    void testCancelStrokeCase5();
     void testCancelStrokeCase4();
 };
 

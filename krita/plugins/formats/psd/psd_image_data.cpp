@@ -109,9 +109,10 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
     {
         qDebug()<<"RLE ENCODED";
         quint32 rlelength = 0;
-        quint32 sumrlelength = 0;
+        
 
         for (int channel=0; channel < m_header->nChannels; channel++) {
+            quint32 sumrlelength = 0;
             ChannelInfo channelInfo;
             channelInfo.channelId = channel;
             channelInfo.channelDataStart = start;
@@ -127,7 +128,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
                 sumrlelength += rlelength;
             }
             channelInfo.channelDataLength = sumrlelength;
-            start +=sumrlelength;
+            start += sumrlelength;
             m_channelInfoRecords.append(channelInfo);
         }
 
@@ -278,7 +279,6 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 
         qDebug() << "------------------------------------------";
         qDebug() << "channel offset:"<< channelOffset ;
-        qDebug() << "------------------------------------------";
 
         for (int col = 0; col < m_header->width; col++) {
 
@@ -351,7 +351,6 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
 
         qDebug() << "------------------------------------------";
         qDebug() << "channel offset:"<< channelOffset ;
-        qDebug() << "------------------------------------------";
 
         for (int col = 0; col < m_header->width; col++) {
 

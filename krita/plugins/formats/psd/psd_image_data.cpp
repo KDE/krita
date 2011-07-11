@@ -232,8 +232,8 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 
     int channelOffset = 0;
 
-    for (int row = 0; row <m_header->height; row++) {
-
+    for (int row = 0; row < m_header->height; row++) {
+        
         KisHLineIterator it = dev->createHLineIterator(0, row, m_header->width);
         QVector<QByteArray> vectorBytes;
 
@@ -241,7 +241,7 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 
             io->seek(m_channelInfoRecords[channel].channelDataStart + channelOffset);
 
-            switch (m_compression){
+            switch (m_compression) {
 
             case Compression::Uncompressed:
 
@@ -255,13 +255,15 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 
             case Compression::RLE:
             {
-                QByteArray compressedBytes,unCompressedBytes;
-                QBuffer buffer(&unCompressedBytes);
-                int uncompressedLength = m_header->width * (m_channelInfoRecords[channel].channelDataLength / 8);
-                compressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
-                buffer.write(Compression::uncompress(uncompressedLength, compressedBytes, m_channelInfoRecords[channel].compressionType));
-                vectorBytes.append(buffer.readAll());
-                //buffer.data().clear();
+                int uncompressedLength = m_header->width * m_header->channelDepth / 8;
+                qDebug() << "channel" << channel << "row" << row << "rle length" << m_channelInfoRecords[channel].rleRowLengths[row] << "uncompressed length" << uncompressedLength;
+                
+                QByteArray compressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
+                
+                
+                QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, m_channelInfoRecords[channel].compressionType);
+                vectorBytes.append(uncompressedBytes);
+                
             }
             break;
 

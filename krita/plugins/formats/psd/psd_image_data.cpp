@@ -137,6 +137,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
             qDebug() << "Channel Compression Type: " << m_channelInfoRecords[channel].compressionType;
             qDebug() << "Channel Data Start: " << m_channelInfoRecords[channel].channelDataStart;
             qDebug() << "Channel Data Length: " << m_channelInfoRecords[channel].channelDataLength;
+            qDebug() << "Found " << m_channelInfoRecords[channel].rleRowLengths.size() << "rows";
             qDebug() << "---------------------------------------------------";
         }
 

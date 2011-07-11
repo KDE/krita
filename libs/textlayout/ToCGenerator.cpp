@@ -67,8 +67,12 @@ ToCGenerator::ToCGenerator(QTextDocument *tocDocument, QTextBlock block, KoTable
     // connect to FinishedLayout
     connect(m_documentLayout, SIGNAL(finishedLayout()), this, SLOT(generate()));
 
-    // do a generate right now to have a ToC with placeholder numbers.
-    generate();
+    // We cannot do generate right now to have a ToC with placeholder numbers cause we are in the middle
+    // of a layout-process when called what means that the document isn't ready and therefore it would
+    // not make sense to recreate the toc yet anyways cause required content may still missing. So, we
+    // need to wait till layouting is finished and our generate() method is called by the layouter.
+    //generate();
+
     m_generatedDocumentChangeCount = -1; // we need one more intial layout to get pagenumbers
 }
 
@@ -103,7 +107,7 @@ QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManag
         if (s.isEmpty())
             continue;
         // most possibly inline object
-        if (s[s.length() - 1].unicode() == QChar::ObjectReplacementCharacter) {
+        if (s[0].unicode() == QChar::ObjectReplacementCharacter) {
             KoInlineObject *inlineObject = inlineTextObjectManager->inlineTextObject( currentFragment.charFormat() );
             KoBookmark *bookmark = dynamic_cast<KoBookmark*>(inlineObject);
             if (bookmark) {
@@ -241,9 +245,6 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                             bookmark->setName(target);
                             bookmark->setType(KoBookmark::SinglePosition);
                             QTextCursor blockCursor(block);
-#if QT_VERSION >= 0x040700 
-                            blockCursor.setKeepPositionOnInsert(true);
-#endif
                             m_documentLayout->inlineTextObjectManager()->insertInlineObject(blockCursor, bookmark);
                         }
 

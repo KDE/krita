@@ -142,6 +142,15 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             kFatal() << "Unhandled attribute value node " << content.tagName();
         }
     }
+    
+    if (m_name == "fo:line-height") {
+        // Here, the OpenDocument specification has problems.
+        // A line height can obviously not be zero...
+        // Still, they used nonNegativeLength instead of positiveLength ?
+        m_references.removeOne("nonNegativeLength");
+        m_references << "positiveLength";
+    }
+    
     foreach (QString reference, m_references) {
         if (reference == "boolean") {
             result << "true" << "false";

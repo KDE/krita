@@ -49,12 +49,11 @@ public:
 public:
     template<bool alphaLocked, bool allChannelFlags>
     inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
-                                                     channels_type*       dst, channels_type dstAlpha,
-                                                     channels_type opacity, channels_type flow, const QBitArray& channelFlags) {
-        Q_UNUSED(flow);
+                                                     channels_type*       dst, channels_type dstAlpha, channels_type maskAlpha,
+                                                     channels_type opacity, const QBitArray& channelFlags) {
         using namespace Arithmetic;
         
-        srcAlpha = mul(srcAlpha, opacity);
+        srcAlpha = mul(srcAlpha, maskAlpha, opacity);
         
         if(alphaLocked) {
             if(dstAlpha != zeroValue<channels_type>()) {
@@ -108,12 +107,11 @@ public:
 public:
     template<bool alphaLocked, bool allChannelFlags>
     inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
-                                                     channels_type*       dst, channels_type dstAlpha,
-                                                     channels_type opacity, channels_type flow, const QBitArray& channelFlags) {
-        Q_UNUSED(flow);
+                                                     channels_type*       dst, channels_type dstAlpha, channels_type maskAlpha,
+                                                     channels_type opacity, const QBitArray& channelFlags) {
         using namespace Arithmetic;
         
-        srcAlpha = mul(srcAlpha, opacity);
+        srcAlpha = mul(srcAlpha, maskAlpha, opacity);
         
         if(alphaLocked) {
             if(dstAlpha != zeroValue<channels_type>()) {

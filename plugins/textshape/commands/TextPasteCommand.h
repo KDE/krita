@@ -21,15 +21,15 @@
 #define TEXTPASTECOMMAND_H
 
 #include <QClipboard>
-#include <QUndoStack>
+#include <kundo2qstack.h>
 
 class TextTool;
 
-class TextPasteCommand : public QUndoCommand
+class TextPasteCommand : public KUndo2Command
 {
 public:
 
-    TextPasteCommand(QClipboard::Mode mode, TextTool *tool, QUndoCommand *parent = 0);
+    TextPasteCommand(QClipboard::Mode mode, TextTool *tool, KUndo2Command *parent = 0, bool pasteAsText = false);
 
     virtual void undo();
 
@@ -37,6 +37,7 @@ public:
 
 private:
     TextTool *m_tool;
+    bool m_pasteAsText;
     bool m_first;
     QClipboard::Mode m_mode;
 };

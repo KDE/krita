@@ -33,13 +33,13 @@
 #include <QList>
 
 ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, ChangeListLevelCommand::CommandType type,
-                                               int coef, QUndoCommand *parent)
+                                               int coef, KUndo2Command *parent)
     : TextCommandBase(parent),
       m_type(type),
       m_coefficient(coef),
       m_first(true)
 {
-    setText(i18n("Change List Level"));
+    setText(i18nc("(qtundo-format)", "Change List Level"));
 
     int selectionStart = qMin(cursor.anchor(), cursor.position());
     int selectionEnd = qMax(cursor.anchor(), cursor.position());
@@ -115,7 +115,7 @@ void ChangeListLevelCommand::undo()
     }
 }
 
-bool ChangeListLevelCommand::mergeWith(const QUndoCommand *)
+bool ChangeListLevelCommand::mergeWith(const KUndo2Command *)
 {
     return false;
 }

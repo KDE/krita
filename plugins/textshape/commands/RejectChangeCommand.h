@@ -33,7 +33,7 @@ class RejectChangeCommand : public QObject, public TextCommandBase
 {
     Q_OBJECT
 public:
-    RejectChangeCommand(int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, QUndoCommand *parent = 0);
+    RejectChangeCommand(int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, KUndo2Command *parent = 0);
     ~RejectChangeCommand();
 
     virtual void redo();

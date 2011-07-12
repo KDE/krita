@@ -43,7 +43,7 @@ namespace Libsvm
 
 enum GraphicsContextMembers {
     GCLineColor     = 0x0001,
-    GCFillBrush     = 0x0002,
+    GCFillColor     = 0x0002,
     GCTextColor     = 0x0004,
     GCTextFillColor = 0x0008,
     GCTextAlign     = 0x0010,
@@ -58,13 +58,18 @@ struct SvmGraphicsContext {
     SvmGraphicsContext();
 
     QColor    lineColor;
-    QBrush    fillBrush;
+    bool      lineColorSet; // true: use lineColor, false: set penStyle to Qt::NoPen.
+    QColor    fillColor;
+    bool      fillColorSet; // true: use fillColor, false: set brushStyle to Qt::NoBrush.
     QColor    textColor;
     QColor    textFillColor;
+    bool      textFillColorSet;
     TextAlign textAlign;
     MapMode   mapMode;
+    quint32   layoutMode;
     QFont     font;
     QColor    overlineColor;
+    bool      overlineColorSet;
     // ... much more here;
 
     quint32  changedItems;      // bitmap

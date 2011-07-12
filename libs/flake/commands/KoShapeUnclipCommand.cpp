@@ -112,24 +112,24 @@ public:
     bool executed;
 };
 
-KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes, QUndoCommand *parent)
-        : QUndoCommand(parent), d(new Private(controller))
+KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes, KUndo2Command *parent)
+        : KUndo2Command(parent), d(new Private(controller))
 {
     d->shapesToUnclip = shapes;
     foreach(KoShape *shape, d->shapesToUnclip) {
         d->oldClipPaths.append(shape->clipPath());
     }
 
-    setText(i18n("Unclip Shape"));
+    setText(i18nc("(qtundo-format)", "Unclip Shape"));
 }
 
-KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeControllerBase *controller, KoShape *shape, QUndoCommand *parent)
-        : QUndoCommand(parent), d(new Private(controller))
+KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeControllerBase *controller, KoShape *shape, KUndo2Command *parent)
+        : KUndo2Command(parent), d(new Private(controller))
 {
     d->shapesToUnclip.append(shape);
     d->oldClipPaths.append(shape->clipPath());
 
-    setText(i18n("Unclip Shapes"));
+    setText(i18nc("(qtundo-format)", "Unclip Shapes"));
 }
 
 KoShapeUnclipCommand::~KoShapeUnclipCommand()
@@ -157,12 +157,12 @@ void KoShapeUnclipCommand::redo()
 
     d->executed = true;
 
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 }
 
 void KoShapeUnclipCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     const uint shapeCount = d->shapesToUnclip.count();
     for (uint i = 0; i < shapeCount; ++i) {

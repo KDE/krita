@@ -66,7 +66,7 @@ public:
 
 } // namespace KoChart
 
-Q_DECLARE_INTERFACE(KoChart::ChartInterface, "org.koffice.KoChart.ChartInterface:1.0")
+Q_DECLARE_INTERFACE(KoChart::ChartInterface, "org.calligra.KoChart.ChartInterface:1.0")
 
 #endif // KOCHART_INTERFACE
 

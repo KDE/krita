@@ -37,9 +37,9 @@ class KoDocumentAdaptor;
 * The following python samples does open the content.xml file and
 * reads all text:p elements from it;
 * \code
-* import Kross, KWord
-* KWord.document().openUrl("/home/kde4/testDoc.odt")
-* reader = KWord.store().open("META-INF/manifest.xml")
+* import Kross, Words
+* Words.document().openUrl("/home/kde4/testDoc.odt")
+* reader = Words.store().open("META-INF/manifest.xml")
 * reader = store.open("content.xml")
 * def onElement():
 *     if reader.name() != "text:p":
@@ -208,12 +208,12 @@ private:
 /**
 * The KoScriptingOdfManifestReader class handles reading ODF META-INF/manifest.xml files.
 *
-* The following python sample script does use the KWord scripting module to load a
+* The following python sample script does use the Words scripting module to load a
 * ISO OpenDocument Text file and print the content of the manifest-file to stdout;
 * \code
-* import Kross, KWord
-* KWord.document().openUrl("/home/kde4/testDoc.odt")
-* reader = KWord.store().open("META-INF/manifest.xml")
+* import Kross, Words
+* Words.document().openUrl("/home/kde4/testDoc.odt")
+* reader = Words.store().open("META-INF/manifest.xml")
 * if not reader:
 *     raise "Failed to read the mainfest"
 * for i in range( reader.count() ):
@@ -298,19 +298,19 @@ public slots:
 /**
 * The KoScriptingOdfStore class provides access to the KoStore functionality.
 *
-* The following python sample does use KWord do read a ODT document and then
+* The following python sample does use Words do read a ODT document and then
 * flushes the DOM tree to stdout.
 * \code
 * import Kross
-* KWord = Kross.module("kword")
+* Words = Kross.module("words")
 *
-* # Get the KWord KoApplicationAdaptor instance.
-* docAdaptor = KWord.document()
+* # Get the Words KoApplicationAdaptor instance.
+* docAdaptor = Words.document()
 * # Open an ISO OpenDocument Text File.
 * docAdaptor.openUrl("/home/kde4/testDoc.odt")
 *
 * # Get a KoStore instance.
-* store = KWord.store()
+* store = Words.store()
 * # Open the content.xml file within the KoStore.
 * reader = store.open("content.xml")
 * if not reader:

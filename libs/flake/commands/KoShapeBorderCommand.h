@@ -23,14 +23,14 @@
 
 #include "flake_export.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 
 class KoShape;
 class KoShapeBorderModel;
 
 /// The undo / redo command for setting the shape border
-class FLAKE_EXPORT KoShapeBorderCommand : public QUndoCommand
+class FLAKE_EXPORT KoShapeBorderCommand : public KUndo2Command
 {
 public:
     /**
@@ -39,7 +39,7 @@ public:
      * @param border the new border, the same for all given shapes
      * @param parent the parent command used for macro commands
      */
-    KoShapeBorderCommand(const QList<KoShape*> &shapes, KoShapeBorderModel *border, QUndoCommand *parent = 0);
+    KoShapeBorderCommand(const QList<KoShape*> &shapes, KoShapeBorderModel *border, KUndo2Command *parent = 0);
 
     /**
      * Command to set new shape borders.
@@ -47,7 +47,7 @@ public:
      * @param borders the new borders, one for each shape
      * @param parent the parent command used for macro commands
      */
-    KoShapeBorderCommand(const QList<KoShape*> &shapes, const QList<KoShapeBorderModel*> &borders, QUndoCommand *parent = 0);
+    KoShapeBorderCommand(const QList<KoShape*> &shapes, const QList<KoShapeBorderModel*> &borders, KUndo2Command *parent = 0);
 
     /**
      * Command to set a new shape border.
@@ -55,7 +55,7 @@ public:
      * @param border the new border
      * @param parent the parent command used for macro commands
      */
-    KoShapeBorderCommand(KoShape* shape, KoShapeBorderModel *border, QUndoCommand *parent = 0);
+    KoShapeBorderCommand(KoShape* shape, KoShapeBorderModel *border, KUndo2Command *parent = 0);
 
     virtual ~KoShapeBorderCommand();
     /// redo the command

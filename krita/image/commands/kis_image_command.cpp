@@ -25,7 +25,7 @@
 
 
 KisImageCommand::KisImageCommand(const QString& name, KisImageWSP image)
-        : QUndoCommand(name)
+        : KUndo2Command(name)
         , m_image(image)
 {
 }

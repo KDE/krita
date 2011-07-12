@@ -25,7 +25,7 @@ class KAction;
 class KToggleAction;
 
 /**
- * Convenience methods to access all standard KOffice actions.
+ * Convenience methods to access all standard Calligra actions.
  * See KStandardAction for usage details.
  */
 namespace KoStandardAction

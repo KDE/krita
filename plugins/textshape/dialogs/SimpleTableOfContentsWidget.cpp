@@ -30,6 +30,7 @@ SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, Q
 {
     widget.setupUi(this);
     widget.addToC->setDefaultAction(tool->action("insert_tableofcentents"));
+    widget.configureToC->setDefaultAction(tool->action("format_tableofcentents"));
 
     connect(widget.addToC, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 }

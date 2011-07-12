@@ -99,7 +99,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     m_scaleCursors[6] = KisCursor::sizeVerCursor();
     m_scaleCursors[7] = KisCursor::sizeFDiagCursor();
     QPixmap shearPixmap;
-    shearPixmap.load(KStandardDirs::locate("data", "koffice/icons/shear.png"));
+    shearPixmap.load(KStandardDirs::locate("data", "calligra/icons/shear.png"));
     m_shearCursors[7] = QCursor(shearPixmap.transformed(QTransform().rotate(45)));
     m_shearCursors[6] = QCursor(shearPixmap.transformed(QTransform().rotate(90)));
     m_shearCursors[5] = QCursor(shearPixmap.transformed(QTransform().rotate(135)));
@@ -328,9 +328,7 @@ void KisToolTransform::recalcOutline()
         s = m_canvas->viewConverter()->documentToView(s);
 
         v = QVector3D(m_originalTopLeft - m_originalCenter);
-        QPointF tmp1 = m_originalTopLeft - m_originalCenter;
         t = transformVector(v);
-        QVector3D temp = t;
         m_topLeft = t + translate3D;
         m_topLeftProj = perspective(t.x(), t.y(), t.z()) + m_currentArgs.translate();
         t = QVector3D(perspective(t.x(), t.y(), t.z()));
@@ -476,7 +474,6 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
         QPointF middletop = converter.documentToView(QPointF(m_middleTopProj.x() / kisimage->xRes(), m_middleTopProj.y() / kisimage->yRes()));
         QPointF middlebottom = converter.documentToView(QPointF(m_middleBottomProj.x() / kisimage->xRes(), m_middleBottomProj.y() / kisimage->yRes()));
         QPointF origtopleft = converter.documentToView(QPointF(m_originalTopLeft.x() / kisimage->xRes(), m_originalTopLeft.y() / kisimage->yRes()));
-        QPointF origbottomright = converter.documentToView(QPointF(m_originalBottomRight.x() / kisimage->xRes(), m_originalBottomRight.y() / kisimage->yRes()));
 
         QRectF handleRect(- m_handleRadius / 2., - m_handleRadius / 2., m_handleRadius, m_handleRadius);
 
@@ -540,12 +537,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
         pen[1].setWidth(3);
 
         QSizeF newRefSize = converter.documentToView(QSizeF(1 / kisimage->xRes(), 1 / kisimage->yRes()));
-        QPointF topleft = converter.documentToView(QPointF(m_topLeftProj.x() / kisimage->xRes(), m_topLeftProj.y() / kisimage->yRes()));
-        QPointF topright = converter.documentToView(QPointF(m_topRightProj.x() / kisimage->xRes(), m_topRightProj.y() / kisimage->yRes()));
-        QPointF bottomleft = converter.documentToView(QPointF(m_bottomLeftProj.x() / kisimage->xRes(), m_bottomLeftProj.y() / kisimage->yRes()));
-        QPointF bottomright = converter.documentToView(QPointF(m_bottomRightProj.x() / kisimage->xRes(), m_bottomRightProj.y() / kisimage->yRes()));
         QPointF origtopleft = converter.documentToView(QPointF(m_originalTopLeft.x() / kisimage->xRes(), m_originalTopLeft.y() / kisimage->yRes()));
-        QPointF origbottomright = converter.documentToView(QPointF(m_originalBottomRight.x() / kisimage->xRes(), m_originalBottomRight.y() / kisimage->yRes()));
 
         QRectF handleRect(- m_handleRadius / 2., - m_handleRadius / 2., m_handleRadius, m_handleRadius);
         QRectF smallHandleRect(- m_handleRadius / 4., - m_handleRadius / 4., m_handleRadius / 2., m_handleRadius / 2.);
@@ -1980,7 +1972,7 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
         m_transform = QTransform();
         m_origImg = new QImage(dev->convertToQImage(0, x, y, w, h));
         if (selection) {
-            m_origSelectionImg = new QImage(selection->convertToQImage(0, x, y, w, h));
+            m_origSelectionImg = new QImage(selection->projection()->convertToQImage(0, x, y, w, h));
         } else {
             m_origSelectionImg = new QImage(w, h, QImage::Format_ARGB32_Premultiplied);
             m_origSelectionImg->fill(0xFFFFFFFF);
@@ -2280,7 +2272,7 @@ void KisToolTransform::applyTransform()
     setCurrentNodeLocked(false);
 }
 
-void KisToolTransform::notifyCommandAdded(const QUndoCommand * command)
+void KisToolTransform::notifyCommandAdded(const KUndo2Command * command)
 {
     const ApplyTransformCmdData * cmd1 = dynamic_cast<const ApplyTransformCmdData*>(command);
     const TransformCmd* cmd2 = dynamic_cast<const TransformCmd*>(command);
@@ -2297,7 +2289,7 @@ void KisToolTransform::notifyCommandAdded(const QUndoCommand * command)
     }
 }
 
-void KisToolTransform::notifyCommandExecuted(const QUndoCommand * command)
+void KisToolTransform::notifyCommandExecuted(const KUndo2Command * command)
 {
     Q_UNUSED(command);
     const ApplyTransformCmdData * presentCmd1 = 0;

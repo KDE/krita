@@ -54,8 +54,8 @@
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>
-#include <KUndoStack>
-#include <QUndoCommand>
+#include <kundo2stack.h>
+#include <kundo2command.h>
 
 class KoTextShapeDataPrivate : public KoTextShapeDataBasePrivate
 {
@@ -224,17 +224,18 @@ bool KoTextShapeData::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
     QTextCursor cursor(document());
     loader.loadBody(element, cursor);   // now let's load the body from the ODF KoXmlElement.
     KoTextEditor *editor = KoTextDocument(document()).textEditor();
-    if (editor) // at one point we have to get the position from the odf doc instead.
+    if (editor) { // at one point we have to get the position from the odf doc instead.
         editor->setPosition(0);
-    editor->finishedLoading();
+        editor->finishedLoading();
+    }
 
     return true;
 }
 
-class InsertDeleteChangesCommand:public QUndoCommand
+class InsertDeleteChangesCommand:public KUndo2Command
 {
     public:
-        InsertDeleteChangesCommand(QTextDocument *document, QUndoCommand *parent=0);
+        InsertDeleteChangesCommand(QTextDocument *document, KUndo2Command *parent=0);
         void redo();
 
     private:
@@ -242,7 +243,7 @@ class InsertDeleteChangesCommand:public QUndoCommand
         void insertDeleteChanges();
 };
 
-InsertDeleteChangesCommand::InsertDeleteChangesCommand(QTextDocument *document,QUndoCommand *parent):QUndoCommand("Insert Delete Changes",parent),m_document(document)
+InsertDeleteChangesCommand::InsertDeleteChangesCommand(QTextDocument *document,KUndo2Command *parent):KUndo2Command("Insert Delete Changes",parent),m_document(document)
 {
 }
 
@@ -276,10 +277,10 @@ void InsertDeleteChangesCommand::insertDeleteChanges()
     }
 }
 
-class RemoveDeleteChangesCommand:public QUndoCommand
+class RemoveDeleteChangesCommand:public KUndo2Command
 {
     public:
-        RemoveDeleteChangesCommand(QTextDocument *document, QUndoCommand *parent=0);
+        RemoveDeleteChangesCommand(QTextDocument *document, KUndo2Command *parent=0);
         void redo();
 
     private:
@@ -287,7 +288,7 @@ class RemoveDeleteChangesCommand:public QUndoCommand
         void removeDeleteChanges();
 };
 
-RemoveDeleteChangesCommand::RemoveDeleteChangesCommand(QTextDocument *document,QUndoCommand *parent):QUndoCommand("Insert Delete Changes",parent),m_document(document)
+RemoveDeleteChangesCommand::RemoveDeleteChangesCommand(QTextDocument *document,KUndo2Command *parent):KUndo2Command("Insert Delete Changes",parent),m_document(document)
 {
 }
 

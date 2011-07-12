@@ -187,7 +187,6 @@ KoView::~KoView()
 {
     kDebug(30003) << "KoView::~KoView" << this;
     delete d->scrollTimer;
-//   delete d->m_dcopObject;
     if (!d->documentDeleted) {
         if (koDocument() && !koDocument()->isSingleViewMode()) {
             if (d->manager && d->registered)   // if we aren't registered we mustn't unregister :)

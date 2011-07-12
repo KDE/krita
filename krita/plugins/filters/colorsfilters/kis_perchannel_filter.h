@@ -100,7 +100,6 @@ public:
 
 private slots:
     virtual void setActiveChannel(int ch);
-    void setPreview(int state);
 
 private:
 

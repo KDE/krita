@@ -24,8 +24,8 @@
 #include "KoPADocument.h"
 #include "KoPAPageBase.h"
 
-KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBase *page, QUndoCommand *parent )
-: QUndoCommand( parent )
+KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBase *page, KUndo2Command *parent )
+: KUndo2Command( parent )
 , m_document( document )
 , m_deletePages(false)
 {
@@ -36,15 +36,15 @@ KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBa
     m_pages.insert(index, page);
 
     if ( page->pageType() == KoPageApp::Slide ) {
-        setText( i18n( "Delete slide" ) );
+        setText( i18nc( "(qtundo-format)", "Delete slide" ) );
     }
     else {
-        setText( i18n( "Delete page" ) );
+        setText( i18nc( "(qtundo-format)", "Delete page" ) );
     }
 }
 
-KoPAPageDeleteCommand::KoPAPageDeleteCommand(KoPADocument *document, const QList<KoPAPageBase*> &pages, QUndoCommand *parent)
-: QUndoCommand(parent)
+KoPAPageDeleteCommand::KoPAPageDeleteCommand(KoPADocument *document, const QList<KoPAPageBase*> &pages, KUndo2Command *parent)
+: KUndo2Command(parent)
 , m_document(document)
 , m_deletePages(false)
 {
@@ -60,10 +60,10 @@ KoPAPageDeleteCommand::KoPAPageDeleteCommand(KoPADocument *document, const QList
     }
 
     if (pages.first()->pageType() == KoPageApp::Slide) {
-        setText(i18np("Delete slide", "Delete slides", m_pages.count()));
+        setText(i18ncp("(qtundo-format)", "Delete slide", "Delete slides", m_pages.count()));
     }
     else {
-        setText(i18np("Delete page", "Delete pages", m_pages.count()));
+        setText(i18ncp("(qtundo-format)", "Delete page", "Delete pages", m_pages.count()));
     }
 }
 
@@ -77,20 +77,21 @@ KoPAPageDeleteCommand::~KoPAPageDeleteCommand()
 
 void KoPAPageDeleteCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     int index = -1;
 
     foreach (KoPAPageBase *page, m_pages) {
         index = m_document->takePage(page);
         Q_ASSERT(index != -1);
     }
+    Q_UNUSED(index); // to build with unused-but-set-variable
 
     m_deletePages = true;
 }
 
 void KoPAPageDeleteCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     QMapIterator<int, KoPAPageBase*> i(m_pages);
 
     while (i.hasNext()) {

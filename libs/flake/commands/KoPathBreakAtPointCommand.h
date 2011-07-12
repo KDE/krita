@@ -21,13 +21,13 @@
 #ifndef KOPATHBREAKATPOINTCOMMAND_H
 #define KOPATHBREAKATPOINTCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
 
 /// Command to break a subpath at points.
-class KoPathBreakAtPointCommand : public QUndoCommand
+class KoPathBreakAtPointCommand : public KUndo2Command
 {
 public:
     /**
@@ -39,7 +39,7 @@ public:
      * @param pointDataList List of point data where the path should be split.
      * @param parent the parent command used for macro commands
      */
-    explicit KoPathBreakAtPointCommand(const QList<KoPathPointData> &pointDataList, QUndoCommand *parent = 0);
+    explicit KoPathBreakAtPointCommand(const QList<KoPathPointData> &pointDataList, KUndo2Command *parent = 0);
     ~KoPathBreakAtPointCommand();
 
     /// redo the command

@@ -37,10 +37,10 @@ public:
     bool deletePoints;
 };
 
-QUndoCommand *KoPathPointRemoveCommand::createCommand(
+KUndo2Command *KoPathPointRemoveCommand::createCommand(
     const QList<KoPathPointData> &pointDataList,
     KoShapeController *shapeController,
-    QUndoCommand *parent)
+    KUndo2Command *parent)
 {
     /*
      * We want to decide if we have to:
@@ -101,7 +101,7 @@ QUndoCommand *KoPathPointRemoveCommand::createCommand(
         pointsOfSubpath.append(*it);
     }
 
-    QUndoCommand *cmd = new QUndoCommand(i18n("Remove points"), parent);
+    KUndo2Command *cmd = new KUndo2Command(i18nc("(qtundo-format)", "Remove points"), parent);
 
     if (pointsToDelete.size() > 0) {
         new KoPathPointRemoveCommand(pointsToDelete, cmd);
@@ -117,8 +117,8 @@ QUndoCommand *KoPathPointRemoveCommand::createCommand(
 }
 
 KoPathPointRemoveCommand::KoPathPointRemoveCommand(const QList<KoPathPointData> & pointDataList,
-        QUndoCommand *parent)
-    : QUndoCommand(parent),
+        KUndo2Command *parent)
+    : KUndo2Command(parent),
     d(new KoPathPointRemoveCommandPrivate())
 {
     QList<KoPathPointData>::const_iterator it(pointDataList.begin());
@@ -130,7 +130,7 @@ KoPathPointRemoveCommand::KoPathPointRemoveCommand(const QList<KoPathPointData> 
         }
     }
     qSort(d->pointDataList);
-    setText(i18n("Remove points"));
+    setText(i18nc("(qtundo-format)", "Remove points"));
 }
 
 KoPathPointRemoveCommand::~KoPathPointRemoveCommand()
@@ -140,7 +140,7 @@ KoPathPointRemoveCommand::~KoPathPointRemoveCommand()
 
 void KoPathPointRemoveCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     KoPathShape * lastPathShape = 0;
     int updateBefore = d->pointDataList.size();
     for (int i = d->pointDataList.size() - 1; i >= 0; --i) {
@@ -180,7 +180,7 @@ void KoPathPointRemoveCommand::redo()
 
 void KoPathPointRemoveCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     KoPathShape * lastPathShape = 0;
     for (int i = 0; i < d->pointDataList.size(); ++i) {
         const KoPathPointData &pd = d->pointDataList.at(i);

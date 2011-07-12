@@ -24,7 +24,7 @@
 ChangeTextAnchorCommand::ChangeTextAnchorCommand( ArtisticTextShape * shape, ArtisticTextShape::TextAnchor anchor )
     : m_shape(shape), m_anchor( anchor )
 {
-    setText( i18n("Change text anchor") );
+    setText( i18nc("(qtundo-format)", "Change text anchor") );
 }
 
 void ChangeTextAnchorCommand::undo()

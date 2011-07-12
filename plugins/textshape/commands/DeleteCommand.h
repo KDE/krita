@@ -20,7 +20,7 @@
 #ifndef DELETECOMMAND_H
 #define DELETECOMMAND_H
 
-#include <QUndoStack>
+#include <kundo2qstack.h>
 #include "TextCommandBase.h"
 #include <QTextCharFormat>
 #include <QList>
@@ -39,18 +39,18 @@ public:
         NextChar
     };
 
-    DeleteCommand(DeleteMode mode, TextTool *tool, QUndoCommand* parent = 0);
+    DeleteCommand(DeleteMode mode, TextTool *tool, KUndo2Command* parent = 0);
     ~DeleteCommand();
 
     virtual void undo();
     virtual void redo();
 
     virtual int id() const;
-    virtual bool mergeWith(const QUndoCommand *command);
+    virtual bool mergeWith(const KUndo2Command *command);
 
 private:
     TextTool *m_tool;
-    QList<QUndoCommand *> m_shapeDeleteCommands;
+    QList<KUndo2Command *> m_shapeDeleteCommands;
     QSet<KoInlineObject *> m_invalidInlineObjects;
     bool m_first;
     bool m_undone;
@@ -65,7 +65,7 @@ private:
     virtual void deleteSelection();
     virtual void deleteInlineObjects();
     virtual void deleteTextAnchor(KoInlineObject *object);
-    virtual bool checkMerge(const QUndoCommand *command);
+    virtual bool checkMerge(const KUndo2Command *command);
     virtual void updateListChanges();
 };
 

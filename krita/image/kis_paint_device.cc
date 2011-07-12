@@ -169,10 +169,11 @@ public:
 
     KisNodeWSP parent;
     KisDefaultBoundsSP defaultBounds;
+    PaintDeviceCache cache;
     qint32 x;
     qint32 y;
     KoColorSpace* colorSpace;
-    PaintDeviceCache cache;
+
 };
 
 KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& name)
@@ -216,13 +217,13 @@ void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
     }
     else {
         const qint32 pixelSize = colorSpace->pixelSize();
-        
+
         quint8* defaultPixel = new quint8[colorSpace->pixelSize()];
         colorSpace->fromQColor(Qt::transparent, defaultPixel);
 
         m_datamanager = new KisDataManager(pixelSize, defaultPixel);
         delete[] defaultPixel;
-        
+
         Q_CHECK_PTR(m_datamanager);
     }
     m_d->cache.setupCache();
@@ -315,6 +316,13 @@ void KisPaintDevice::setDirty()
     m_d->cache.invalidate();
     if (m_d->parent.isValid())
         m_d->parent->setDirty();
+}
+
+void KisPaintDevice::setDirty(const QVector<QRect> rects)
+{
+    m_d->cache.invalidate();
+    if (m_d->parent.isValid())
+        m_d->parent->setDirty(rects);
 }
 
 void KisPaintDevice::setParentNode(KisNodeWSP parent)
@@ -554,7 +562,7 @@ bool KisPaintDevice::read(KoStore *store)
     return retval;
 }
 
-QUndoCommand* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
+KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
 {
     m_d->cache.invalidate();
     dbgImage << this << colorSpace()->id() << dstColorSpace->id() << renderingIntent;
@@ -776,7 +784,7 @@ KisRectIteratorPixel KisPaintDevice::createRectIterator(qint32 left, qint32 top,
     KisDataManager* selectionDm = 0;
 
     if (selection)
-        selectionDm = selection->dataManager().data();
+        selectionDm = selection->projection()->dataManager().data();
 
     return KisRectIteratorPixel(m_datamanager.data(), selectionDm, left, top, w, h, m_d->x, m_d->y);
 }
@@ -787,7 +795,7 @@ KisRectConstIteratorPixel KisPaintDevice::createRectConstIterator(qint32 left, q
     KisDataManager* selectionDm = 0;
 
     if (selection)
-        selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
+        selectionDm = const_cast< KisDataManager*>(selection->projection()->dataManager().data());
 
     return KisRectConstIteratorPixel(dm, selectionDm, left, top, w, h, m_d->x, m_d->y);
 }
@@ -798,7 +806,7 @@ KisHLineIteratorPixel  KisPaintDevice::createHLineIterator(qint32 x, qint32 y, q
     KisDataManager* selectionDm = 0;
 
     if (selection)
-        selectionDm = selection->dataManager().data();
+        selectionDm = selection->projection()->dataManager().data();
 
     return KisHLineIteratorPixel(m_datamanager.data(), selectionDm, x, y, w, m_d->x, m_d->y);
 }
@@ -856,7 +864,7 @@ KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, q
     KisDataManager* selectionDm = 0;
 
     if (selection)
-        selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
+        selectionDm = const_cast< KisDataManager*>(selection->projection()->dataManager().data());
 
     return KisHLineConstIteratorPixel(dm, selectionDm, x, y, w, m_d->x, m_d->y);
 }
@@ -867,7 +875,7 @@ KisRepeatHLineConstIteratorPixel KisPaintDevice::createRepeatHLineConstIterator(
     KisDataManager* selectionDm = 0;
 
     if (selection)
-        selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
+        selectionDm = const_cast< KisDataManager*>(selection->projection()->dataManager().data());
 
     return KisRepeatHLineConstIteratorPixel(dm, selectionDm, x, y, w, m_d->x, m_d->y, _dataWidth);
 }
@@ -878,7 +886,7 @@ KisRepeatVLineConstIteratorPixel KisPaintDevice::createRepeatVLineConstIterator(
     KisDataManager* selectionDm = 0;
 
     if (selection)
-        selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
+        selectionDm = const_cast< KisDataManager*>(selection->projection()->dataManager().data());
 
     return KisRepeatVLineConstIteratorPixel(dm, selectionDm, x, y, h, m_d->x, m_d->y, _dataWidth);
 }
@@ -889,7 +897,7 @@ KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(qint32 x, qint32 y, q
     KisDataManager* selectionDm = 0;
 
     if (selection)
-        selectionDm = selection->dataManager().data();
+        selectionDm = selection->projection()->dataManager().data();
 
     return KisVLineIteratorPixel(m_datamanager.data(), selectionDm, x, y, h, m_d->x, m_d->y);
 }
@@ -900,7 +908,7 @@ KisVLineConstIteratorPixel  KisPaintDevice::createVLineConstIterator(qint32 x, q
     KisDataManager* selectionDm = 0;
 
     if (selection)
-        selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
+        selectionDm = const_cast< KisDataManager*>(selection->projection()->dataManager().data());
 
     return KisVLineConstIteratorPixel(dm, selectionDm, x, y, h, m_d->x, m_d->y);
 }
@@ -911,7 +919,7 @@ KisRandomAccessorPixel KisPaintDevice::createRandomAccessor(qint32 x, qint32 y, 
     KisDataManager* selectionDm = 0;
 
     if (selection)
-        selectionDm = selection->dataManager().data();
+        selectionDm = selection->projection()->dataManager().data();
 
     return KisRandomAccessorPixel(m_datamanager.data(), selectionDm, x, y, m_d->x, m_d->y);
 }
@@ -922,7 +930,7 @@ KisRandomConstAccessorPixel KisPaintDevice::createRandomConstAccessor(qint32 x, 
     KisDataManager* selectionDm = 0;
 
     if (selection)
-        selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
+        selectionDm = const_cast< KisDataManager*>(selection->projection()->dataManager().data());
 
     return KisRandomConstAccessorPixel(dm, selectionDm, x, y, m_d->x, m_d->y);
 }
@@ -956,7 +964,7 @@ void KisPaintDevice::clearSelection(KisSelectionSP selection)
     if (r.isValid()) {
 
         KisHLineIterator devIt = createHLineIterator(r.x(), r.y(), r.width());
-        KisHLineConstIterator selectionIt = selection->createHLineIterator(r.x(), r.y(), r.width());
+        KisHLineConstIterator selectionIt = selection->projection()->createHLineIterator(r.x(), r.y(), r.width());
 
         const quint8* defaultPixel_ = defaultPixel();
         bool transparentDefault = (m_d->colorSpace->opacityU8(defaultPixel_) == OPACITY_TRANSPARENT_U8);

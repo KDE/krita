@@ -61,7 +61,6 @@ void InitialsCommentShape::paint(QPainter& painter, const KoViewConverter& conve
 
     painter.setPen(Qt::black);
 
-    const QSizeF size = QSizeF(20,20);
     painter.drawRect(QRectF(initialsBoxPoint, initialsBoxSize));
 
     painter.drawText(QRectF(initialsBoxPoint, initialsBoxSize), Qt::AlignCenter, m_initials);

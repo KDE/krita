@@ -28,7 +28,7 @@
 #include <QPen>
 #include <QDebug>
 
-// KOffice
+// Calligra
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>

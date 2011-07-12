@@ -1,4 +1,4 @@
-/* This file is part of the KOffice libraries
+/* This file is part of the Calligra libraries
    Copyright (C) 2001 Werner Trobin <trobin@kde.org>
 
 This library is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ Boston, MA 02110-1301, USA.
 #include "KoFilterChain.h"
 #include "PriorityQueue_p.h"
 
-namespace KOfficeFilter {
+namespace CalligraFilter {
 /**
  * An internal class representing a filter (=edge) in the filter graph.
  * @internal

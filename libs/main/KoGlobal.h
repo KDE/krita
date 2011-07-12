@@ -38,7 +38,7 @@ public:
         (void)self(); // I don't want to make KGlobal instances public, so self() is private
     }
     /**
-     * Return the default font for KOffice programs.
+     * Return the default font for Calligra programs.
      * This is (currently) the same as the KDE-global default font,
      * except that it is guaranteed to have a point size set,
      * never a pixel size (see @ref QFont).
@@ -48,13 +48,13 @@ public:
     }
 
     /**
-     * @return the global KConfig object around kofficerc.
-     * kofficerc is used for KOffice-wide settings, from totally unrelated classes,
+     * @return the global KConfig object around calligrarc.
+     * calligrarc is used for Calligra-wide settings, from totally unrelated classes,
      * so this is the centralization of the KConfig object so that the file is
      * parsed only once
      */
-    static KConfig* kofficeConfig() {
-        return self()->_kofficeConfig();
+    static KConfig* calligraConfig() {
+        return self()->_calligraConfig();
     }
 
     /// Return the list of available languages, in their displayable form
@@ -80,13 +80,13 @@ private:
     QFont _defaultFont();
     QStringList _listOfLanguages();
     QStringList _listOfLanguageTags();
-    KConfig* _kofficeConfig();
+    KConfig* _calligraConfig();
     void createListOfLanguages();
 
     int m_pointSize;
     typedef QMap<QString, QString> LanguageMap;
     LanguageMap m_langMap; // display-name -> language tag
-    KConfig* m_kofficeConfig;
+    KConfig* m_calligraConfig;
     // No BC problem here, constructor is private, feel free to add members
 
     friend class this_is_a_singleton; // work around gcc warning

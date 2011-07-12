@@ -18,7 +18,7 @@
 
 #include "kis_simple_noise_reducer.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>

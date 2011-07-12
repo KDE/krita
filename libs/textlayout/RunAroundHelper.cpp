@@ -62,7 +62,7 @@ void RunAroundHelper::updateObstruction(KoTextLayoutObstruction *obstruction)
     }
 }
 
-void RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
+void RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft, QPointF position)
 {
     Q_ASSERT(line.isValid());
     if (resetHorizontalPosition) {
@@ -117,6 +117,15 @@ void RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
         }
     }
 
+    if (isRightToLeft && line.naturalTextWidth() > m_textWidth) {
+        // This can happen if spaces are added at the end of a line. Those spaces will not result in a
+        // line-break. On left-to-right everything is fine and the spaces at the end are just not visible
+        // but on right-to-left we need to adust the position cause spaces at the end are displayed at
+        // the beginning and we need to make sure that doesn't result in us cutting of text at the right side.
+        qreal diff = line.naturalTextWidth() - m_textWidth;
+        lineRectPart.setX(lineRectPart.x() - diff);
+    }
+
     line.setLineWidth(m_textWidth);
     line.setPosition(QPointF(lineRectPart.x(), lineRectPart.y()));
     checkEndOfLine(lineRectPart, maxNaturalTextWidth);
@@ -147,6 +156,7 @@ void RunAroundHelper::createLineParts()
     } else {
         QList<QRectF> lineParts;
         QRectF rightLineRect = m_lineRect;
+        bool lastRightRectValid = false;
         qSort(m_validObstructions.begin(), m_validObstructions.end(), KoTextLayoutObstruction::compareRectLeft);
         // Devide rect to parts, part can be invalid when obstructions are not disjunct.
         foreach (KoTextLayoutObstruction *validObstruction, m_validObstructions) {
@@ -155,9 +165,17 @@ void RunAroundHelper::createLineParts()
             QRectF lineRect = validObstruction->getRightLinePart(rightLineRect);
             if (lineRect.isValid()) {
                 rightLineRect = lineRect;
+                lastRightRectValid = true;
+            } else {
+                lastRightRectValid = false;
             }
         }
-        lineParts.append(rightLineRect);
+        if (lastRightRectValid) {
+            lineParts.append(rightLineRect);
+        }
+        else {
+            lineParts.append(QRect());
+        }
         Q_ASSERT(m_validObstructions.size() + 1 == lineParts.size());
         // Select invalid parts because of wrap.
         for (int i = 0; i < m_validObstructions.size(); i++) {
@@ -246,10 +264,11 @@ void RunAroundHelper::setMaxTextWidth(const QRectF &minLineRectPart, const qreal
 
     widthDiff /= 2;
     while (width <= maxWidth && width <= maxNaturalTextWidth && widthDiff > MIN_WIDTH) {
-        line.setLineWidth(width + widthDiff);
+        qreal linewidth = width + widthDiff;
+        line.setLineWidth(linewidth);
         height = line.height();
         if (height <= maxHeight) {
-            width = width + widthDiff;
+            width = linewidth;
             m_textWidth = width;
         }
         widthDiff /= 2;

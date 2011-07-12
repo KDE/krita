@@ -21,9 +21,9 @@
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
+#include <QDeclarativeView>
 #include <KoText.h>
 //#include <BibliographyGenerator.h>
-//#include <ToCGenerator.h>
 
 const int INVALID_OUTLINE_LEVEL = 0;
 
@@ -91,7 +91,6 @@ public:
     void setPosition(const QString &position);
 
     KoText::Tab tab;
-private:
     QString m_position;
 };
 
@@ -163,6 +162,10 @@ public:
 class BibliographyEntryTemplate
 {
 public:
+    enum BibliographyType {ARTICLE, BOOK, BOOKLET, CONFERENCE, CUSTOM1, CUSTOM2, CUSTOM3, CUSTOM4,
+                           CUSTOM5, EMAIL, INBOOK, INCOLLECTION, INPROCEEDINGS, JOURNAL, MANUAL,
+                           MASTERSTHESIS, MISC,PHDTHESIS, PROCEEDINGS,TECHREPORT, UNPUBLISHED,
+                           WWW};
     void saveOdf(KoXmlWriter * writer) const;
 
     QString styleName;

@@ -37,8 +37,8 @@ public:
     QString oldName;
 };
 
-KoShapeRenameCommand::KoShapeRenameCommand(KoShape *shape, const QString &newName, QUndoCommand *parent)
-: QUndoCommand(parent)
+KoShapeRenameCommand::KoShapeRenameCommand(KoShape *shape, const QString &newName, KUndo2Command *parent)
+: KUndo2Command(parent)
 , d(new Private(shape, newName))
 {
     // TODO 2.1 add "Rename Shape"
@@ -52,12 +52,12 @@ KoShapeRenameCommand::~KoShapeRenameCommand()
 
 void KoShapeRenameCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     d->shape->setName(d->newName);
 }
 
 void KoShapeRenameCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     d->shape->setName(d->oldName);
 }

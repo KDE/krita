@@ -51,14 +51,14 @@
 #define PI_TO_POINT(pi) qreal((pi)*12)
 #define CC_TO_POINT(cc) qreal((cc)*12.840103)
 /**
- * %KOffice stores everything in pt (using "qreal") internally.
+ * %Calligra stores everything in pt (using "qreal") internally.
  * When displaying a value to the user, the value is converted to the user's unit
  * of choice, and rounded to a reasonable precision to avoid 0.999999
  */
 class KOODF_EXPORT KoUnit
 {
 public:
-    /** Length units supported by KOffice. */
+    /** Length units supported by Calligra. */
     enum Unit {
         Millimeter,
         Point,  ///< Postscript point, 1/72th of an Inco
@@ -195,9 +195,12 @@ public:
     /// @param hidePixel count as if the Pixel unit hadn't been shown in the list
     int indexInList(PixelVisibility visibility = HidePixel) const;
 
-    /// parse common %KOffice and Odf values, like "10cm", "5mm" to pt
+    /// parse common %Calligra and Odf values, like "10cm", "5mm" to pt
     static qreal parseValue(const QString &value, qreal defaultVal = 0.0);
 
+    /// parse an angle to its value in degrees
+    static qreal parseAngle(const QString &value, qreal defaultVal = 0.0);
+    
     QString toString() {
         return KoUnit::unitName(*this);
     }

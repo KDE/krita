@@ -25,8 +25,8 @@
 
 #include "PictureShape.h"
 
-ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, QUndoCommand *parent)
-: QUndoCommand(parent)
+ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, KUndo2Command *parent)
+: KUndo2Command(parent)
 , m_shape(shape)
 , m_oldImageData(0)
 , m_newImageData(newImageData)
@@ -35,7 +35,7 @@ ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImag
     KoImageData *oldImageData = qobject_cast<KoImageData*>(m_shape->userData());
     // we need new here as setUserData deletes the old data
     m_oldImageData = oldImageData ? new KoImageData( *oldImageData ): 0;
-    setText(i18n("Change image"));
+    setText(i18nc("(qtundo-format)", "Change image"));
 
     m_oldSize = shape->size();
     m_newSize = newImageData->imageSize();

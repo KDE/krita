@@ -18,7 +18,7 @@
  */
 
 /**
- * @file this file is part of the Krita application in koffice.
+ * @file this file is part of the Krita application in calligra.
  * Handles the gradient colour picker segments and their positions.
  * @author Cyrille Berger
  * @author Sven Langkamp

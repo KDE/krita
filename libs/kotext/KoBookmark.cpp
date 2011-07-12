@@ -73,11 +73,13 @@ void KoBookmark::updatePosition(const QTextDocument *document, QTextInlineObject
 
 void KoBookmark::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
-    Q_UNUSED(object);
-    Q_UNUSED(pd);
-    Q_UNUSED(format);
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
+    Q_UNUSED(format);
+    Q_UNUSED(pd);
+    object.setWidth(0);
+    object.setAscent(0);
+    object.setDescent(0);
 }
 
 void KoBookmark::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, QTextInlineObject , int , const QTextCharFormat &)

@@ -56,7 +56,7 @@ target_link_libraries(kopageapp komain textlayout)
 target_link_libraries(kopageapp LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(kopageapp PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kopageapp  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

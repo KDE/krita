@@ -263,7 +263,7 @@ void KisMaskManager::maskToSelection()
     KisImageWSP image = m_view->image();
     if (!image) return;
     m_commandsAdapter->beginMacro(i18n("Mask to Selection"));
-    QUndoCommand* cmd = new KisSetGlobalSelectionCommand(image, 0, m_activeMask->selection());
+    KUndo2Command* cmd = new KisSetGlobalSelectionCommand(image, 0, m_activeMask->selection());
     image->undoAdapter()->addCommand(cmd);
     m_commandsAdapter->removeNode(m_activeMask);
     m_commandsAdapter->endMacro();

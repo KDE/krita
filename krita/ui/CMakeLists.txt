@@ -76,6 +76,7 @@ set(kritaui_LIB_SRCS
     kis_import_catcher.cc 
     kis_layer_manager.cc
     kis_mask_manager.cc
+    kis_mimedata.cpp
     kis_node_commands_adapter.cpp
     kis_node_manager.cpp 
     kis_node_model.cpp
@@ -165,6 +166,10 @@ set(kritaui_LIB_SRCS
     widgets/kis_workspace_chooser.cpp
     widgets/squeezedcombobox.cpp
     widgets/kis_categorized_list_view.cpp
+    widgets/kis_widget_chooser.cpp
+    widgets/kis_tool_button.cpp
+#    widgets/kis_light_source.cpp
+#    widgets/kis_light_stage.cpp
 )
 
 if(HAVE_OPENGL)
@@ -241,7 +246,7 @@ endif(HAVE_OPENGL)
 target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage komain ${GL_INTERFACE_LIBRARIES} )
 
 set_target_properties(kritaui
-    PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

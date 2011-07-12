@@ -36,12 +36,10 @@ KoDocumentAdaptor::KoDocumentAdaptor(KoDocument * doc)
 {
     setAutoRelaySignals(true);
     m_pDoc = doc;
-//   m_actionProxy = new KDCOPActionProxy( doc->actionCollection(), this );
 }
 
 KoDocumentAdaptor::~KoDocumentAdaptor()
 {
-//     delete m_actionProxy;
 }
 
 void KoDocumentAdaptor::openUrl(const QString & url)
@@ -123,7 +121,7 @@ QString KoDocumentAdaptor::documentInfoCompanyName() const
 
 QString KoDocumentAdaptor::documentInfoTelephone() const
 {
-    kDebug(30003) << " Keep compatibility with koffice <= 1.3 : use documentInfoTelephoneWork";
+    kDebug(30003) << " Keep compatibility with calligra <= 1.3 : use documentInfoTelephoneWork";
     return documentInfoTelephoneWork();
 }
 
@@ -225,7 +223,7 @@ void KoDocumentAdaptor::setDocumentInfoAuthorPosition(const QString &text)
 
 void KoDocumentAdaptor::setDocumentInfoTelephone(const QString &text)
 {
-    kDebug(30003) << "Keep compatibility with koffice <= 1.3 : use setDocumentInfoTelephoneWork";
+    kDebug(30003) << "Keep compatibility with calligra <= 1.3 : use setDocumentInfoTelephoneWork";
     setDocumentInfoTelephoneWork(text);
 }
 
@@ -279,18 +277,5 @@ void KoDocumentAdaptor::setDocumentInfoAbstract(const QString &text)
     m_pDoc->documentInfo()->setAboutInfo("comments", text);
 }
 
-// DCOPCStringList KoDocumentAdaptor::functionsDynamic()
-// {
-//     return DCOPObject::functionsDynamic() + KDCOPPropertyProxy::functions( m_pDoc );
-// }
-//
-// bool KoDocumentAdaptor::processDynamic( const DCOPCString &fun, const QByteArray &data,
-//                                       DCOPCString& replyType, QByteArray &replyData )
-// {
-//     if ( KDCOPPropertyProxy::isPropertyRequest( fun, m_pDoc ) )
-//         return KDCOPPropertyProxy::processPropertyRequest( fun, data, replyType, replyData, m_pDoc );
-//
-//     return DCOPObject::processDynamic( fun, data, replyType, replyData );
-// }
 
 #include <KoDocumentAdaptor.moc>

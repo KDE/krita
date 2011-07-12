@@ -35,7 +35,7 @@
 #include "SvmGraphicsContext.h"
 
 
-#define DEBUG_SVMPAINT 0
+#define DEBUG_SVMPAINT 1
 
 
 /**
@@ -126,13 +126,21 @@ void SvmPainterBackend::polygon( SvmGraphicsContext &context, const QPolygon &po
 }
 
 void SvmPainterBackend::textArray(SvmGraphicsContext &context,
-                                  const QPoint &point, const QString &string)
+                                  const QPoint &point, const QString &string,
+                                  quint16 startIndex, quint16 len,
+                                  quint32 dxArrayLen, qint32 *dxArray)
 {
     updateFromGraphicscontext(context);
 
     m_painter->save();
     m_painter->setPen(context.textColor);
-    m_painter->drawText(point, string);
+    // FIXME: Handle text background color.  How do we get the area? A testfile would be nice.
+    m_painter->drawText(point, string.mid(startIndex, len));
+
+    // FIXME: DxArray not handled yet.
+    Q_UNUSED(dxArrayLen);
+    Q_UNUSED(dxArray);
+
     m_painter->restore();
 }
 
@@ -143,29 +151,40 @@ void SvmPainterBackend::textArray(SvmGraphicsContext &context,
 void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
 {
     if (context.changedItems & GCLineColor) {
-        m_painter->setPen(context.lineColor);
+        QPen pen = m_painter->pen();
+        if (context.lineColorSet) {
+            pen.setColor(context.lineColor);
+            pen.setStyle(Qt::SolidLine);
+        }
+        else
+            pen.setStyle(Qt::NoPen);
+        m_painter->setPen(pen);
 #if DEBUG_SVMPAINT
         kDebug(31000) << "*** Setting line color to" << context.lineColor;
 #endif
     }
-    if (context.changedItems & GCFillBrush) {
-        m_painter->setBrush(context.fillBrush);
+    if (context.changedItems & GCFillColor) {
+        QBrush brush(m_painter->brush());
+        if (context.fillColorSet) {
+            brush.setColor(context.fillColor);
+            brush.setStyle(Qt::SolidPattern);
+        }
+        else
+            brush.setStyle(Qt::NoBrush);
+        m_painter->setBrush(brush);
 #if DEBUG_SVMPAINT
-        kDebug(31000) << "*** Setting fill brush to" << context.fillBrush;
+        if (context.fillColorSet)
+            kDebug(31000) << "*** Setting fill color to" << context.fillColor;
+        else
+            kDebug(31000) << "*** Unsetting fill color";
 #endif
     }
-    if (context.changedItems & GCTextColor) {
-        m_painter->setPen(context.textColor);
-#if DEBUG_SVMPAINT
-        kDebug(31000) << "*** Setting text color to" << context.textColor;
-#endif
-    }
-    if (context.changedItems & GCTextFillColor) {
-        // FIXME
-    }
-    if (context.changedItems & GCTextAlign) {
-        // FIXME: Probably don't need to do anything here.
-    }
+    // GCTextColor: We don't need to do anything here since text color
+    //              is set when the text is drawn.
+    // GCTextFillColor: We don't need to do anything here since text
+    //              fill color is set when the text is drawn.
+    // GCTextAlign: We don't need to do anything here since text
+    //              alignment is only used when the text is drawn.
     if (context.changedItems & GCMapMode) {
         // Reset the transform and then apply the new mapmode to it.
         m_painter->setTransform(m_outputTransform);

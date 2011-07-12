@@ -50,6 +50,9 @@ private slots:
     /// insert a citation
     void insertCitation();
 
+    /// format the table of contents template
+    void formatTableOfContents();
+
 private:
 };
 

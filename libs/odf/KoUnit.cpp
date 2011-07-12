@@ -20,6 +20,7 @@
 
 #include "KoUnit.h"
 
+#include <cmath>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdebug.h>
@@ -219,6 +220,41 @@ QString KoUnit::unitName(KoUnit _unit)
     if (_unit.m_unit == Cicero) return QString::fromLatin1("cc");
     if (_unit.m_unit == Pixel) return QString::fromLatin1("px");
     return QString::fromLatin1("pt");
+}
+
+qreal KoUnit::parseAngle(const QString& _value, qreal defaultVal)
+{
+    if (_value.isEmpty())
+        return defaultVal;
+
+    QString value(_value.simplified());
+    value.remove(' ');
+
+    int firstLetter = -1;
+    for (int i = 0; i < value.length(); ++i) {
+        if (value.at(i).isLetter()) {
+            if (value.at(i) == 'e')
+                continue;
+            firstLetter = i;
+            break;
+        }
+    }
+
+    if (firstLetter == -1)
+        return value.toDouble();
+
+    QString unit = value.mid(firstLetter);
+    value.truncate(firstLetter);
+    const qreal val = value.toDouble();
+    
+    if (unit == "deg")
+        return val;
+    else if (unit == "rad")
+        return val * 180 / M_PI;
+    else if (unit == "grad")
+        return val * 0.9;
+    
+    return defaultVal;
 }
 
 #ifndef QT_NO_DEBUG_STREAM

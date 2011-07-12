@@ -35,6 +35,8 @@
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_node.h"
+#include "kis_view2.h"
+#include "kis_image.h"
 
 class KisColorPreviewPopup : public QWidget {
 public:
@@ -454,16 +456,20 @@ void KisColorSelectorBase::resourceChanged(int key, const QVariant &v)
 
 const KoColorSpace* KisColorSelectorBase::colorSpace() const
 {
-    if(m_colorSpace!=0) {
+    if (m_colorSpace != 0) {
         return m_colorSpace;
     }
-    else {
-        Q_ASSERT(m_canvas);
+    else if (m_canvas && m_canvas->resourceManager()) {
         KisNodeSP currentNode = m_canvas->resourceManager()->
                                 resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-        m_colorSpace=currentNode->colorSpace();
+        if (currentNode) {
+            m_colorSpace=currentNode->colorSpace();
+        } else {
+            m_colorSpace=m_canvas->view()->image()->colorSpace();
+        }
         return m_colorSpace;
     }
+    return KoColorSpaceRegistry::instance()->rgb8(0);
 }
 
 void KisColorSelectorBase::updateSettings()

@@ -112,7 +112,7 @@ class KoRdfFoaF;
  *
  * The Rdf that is stored using these methods is collected and made
  * available by the KoDocumentRdf class. The inline Rdf using option
- * (1) is stored along with the KOffice C++ objects that are created
+ * (1) is stored along with the Calligra C++ objects that are created
  * during document loading. This class also knows how to find the
  * scattered Rdf that option (1) loads. Leaving the Rdf from option
  * (1) scattered in the document allows it to be preserved in the
@@ -211,7 +211,7 @@ public:
      * also updates the C++ objects to use the new xmlid values so that
      * the instance of the document in memory is correctly linked.
      *
-     * This way, KOffice is free to change the xml:id during save() and
+     * This way, Calligra is free to change the xml:id during save() and
      * the Rdf is still linked correctly.
      */
     void updateXmlIdReferences(const QMap<QString, QString> &m);

@@ -130,12 +130,12 @@ public:
         // numbering
         LineNumbering,           ///< bool, specifies whether lines should be numbered in this paragraph
         LineNumberStartValue,    ///< integer value that specifies the number for the first line in the paragraph
-        SectionStart,            ///< section definition
-        SectionEnd,               ///< end of a named section
+        SectionStartings,            ///< list of section definitions
+        SectionEndings,               ///< list <end of a named section>
 // do 15.5.24
 // continue at 15.5.28
         ForceDisablingList,       ///< bool, for compatibility with the weird text:enable-numbering attribute not used anymore by OpenOffice.org
-        
+
         // other properties
         BackgroundTransparency,   ///< qreal between 0 and 1, background transparency
         SnapToLayoutGrid,         ///< bool, snap the paragraph to the layout grid of the page
@@ -153,8 +153,12 @@ public:
         HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
         PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
         VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
-        
-        NormalLineHeight          ///< bool, internal property for reserved usage
+
+        NormalLineHeight,         ///< bool, internal property for reserved usage
+        TableOfContentsData,      // set when block is instead a TableOfContents
+        TableOfContentsDocument,   // set when block is instead a TableOfContents
+        BibliographyData,
+        BibliographyDocument
     };
 
     enum AutoSpace {

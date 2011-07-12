@@ -1,5 +1,5 @@
 /*
- *  This file is part of KOffice tests
+ *  This file is part of Calligra tests
  *
  *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  *
@@ -89,6 +89,18 @@ private slots:
      * Test relative column-width.
      */
     void testColumnWidthRelative();
+
+    /**
+      * Test fixed row height. The row is smaller then the text that is within the cells. Expected
+      * is that the resulting table will still match to the available space and won't be spread
+      * over multiple pages. This tests for bug #275409.
+      */
+    void testRowHeightFixed();
+
+    /**
+     * Test minimum row-height.
+     */
+    void testRowHeightMinimum();
 
 private:
     QTextCursor setupTest();

@@ -44,11 +44,11 @@ public:
     QList<KoPathShape*> paths;
 };
 
-KoPathReverseCommand::KoPathReverseCommand(const QList<KoPathShape*> &paths, QUndoCommand *parent)
-        : QUndoCommand(parent),
+KoPathReverseCommand::KoPathReverseCommand(const QList<KoPathShape*> &paths, KUndo2Command *parent)
+        : KUndo2Command(parent),
         d(new Private(paths))
 {
-    setText(i18n("Reverse paths"));
+    setText(i18nc("(qtundo-format)", "Reverse paths"));
 }
 
 KoPathReverseCommand::~KoPathReverseCommand()
@@ -58,14 +58,14 @@ KoPathReverseCommand::~KoPathReverseCommand()
 
 void KoPathReverseCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     d->reverse();
 }
 
 void KoPathReverseCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     d->reverse();
 }

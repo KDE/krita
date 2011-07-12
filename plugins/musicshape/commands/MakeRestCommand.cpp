@@ -29,7 +29,7 @@ using namespace MusicCore;
 MakeRestCommand::MakeRestCommand(MusicShape* shape, Chord* chord)
     : m_chord(chord), m_shape(shape)
 {
-    setText(i18n("Convert chord to rest"));
+    setText(i18nc("(qtundo-format)", "Convert chord to rest"));
     for (int i = 0; i < chord->noteCount(); i++) {
         m_notes.append(chord->note(i));
     }

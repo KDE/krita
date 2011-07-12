@@ -75,8 +75,6 @@ void  TernaryAxis::paintCtx (PaintContext * paintContext)
     TernaryCoordinatePlane* plane =
         (TernaryCoordinatePlane*) paintContext->coordinatePlane();
     // QObject* refArea = plane->parent();
-    QRectF drawArea = paintContext->rectangle();
-    QRectF titleArea;
 
     // paint the axis label (across the triangle, that one):
     QList<PrerenderedLabel*> labels;

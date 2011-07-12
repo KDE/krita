@@ -63,7 +63,7 @@
 #include <KDChartRingDiagram>
 #include <KDChartPolarDiagram>
 
-// KOffice
+// Calligra
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoEmbeddedDocumentSaver.h>
@@ -824,7 +824,6 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store,
     }
 
     bool res = true;
-    bool internalURL = false;
     if ( tmpURL.startsWith( STORE_PROTOCOL )
          || tmpURL.startsWith( INTERNAL_PROTOCOL )
          || KUrl::isRelativeUrl( tmpURL ) )
@@ -841,7 +840,6 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store,
                 tmpURL = KUrl( tmpURL ).path().mid( 1 );
             res = d->document->loadFromStore( store, tmpURL );
         }
-        internalURL = true;
         d->document->setStoreInternal( true );
     }
     else {
@@ -1115,7 +1113,7 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     // documents.
     //
     // FIXME: The check isEmpty() fixes a crash that happened when a
-    //        chart shape was saved from KWord.  There are two
+    //        chart shape was saved from Words.  There are two
     //        problems with this fix:
     //        1. Checking the tag hierarchy is hardly the right way to do this
     //        2. The position doesn't seem to be saved yet.

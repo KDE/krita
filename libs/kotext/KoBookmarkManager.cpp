@@ -67,7 +67,7 @@ void KoBookmarkManager::rename(const QString &oldName, const QString &newName)
             d->bookmarkNameList.replace(listPos, newName);
             return;
         }
-        i++;
+        ++i;
     }
 }
 

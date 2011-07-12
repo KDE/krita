@@ -90,6 +90,8 @@ void KisToolSelectPolygonal::LocalTool::finishPolyline(const QVector<QPointF> &p
         painter.setBounds(currentImage()->bounds());
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+        painter.setGradient(m_selectingTool->currentGradient());
+        painter.setPattern(m_selectingTool->currentPattern());
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
         painter.setAntiAliasPolygonFill(m_selectingTool->m_optWidget->antiAliasSelection());
         painter.setOpacity(OPACITY_OPAQUE_U8);

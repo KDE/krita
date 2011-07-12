@@ -82,6 +82,8 @@ void KisToolSelectElliptical::LocalTool::finishEllipse(const QRectF &rect)
         KisPainter painter(tmpSel);
         painter.setBounds(currentImage()->bounds());
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
+        painter.setGradient(m_selectingTool->currentGradient());
+        painter.setPattern(m_selectingTool->currentPattern());
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
         painter.setAntiAliasPolygonFill(m_selectingTool->m_optWidget->antiAliasSelection());

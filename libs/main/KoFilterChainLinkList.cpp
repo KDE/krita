@@ -1,4 +1,4 @@
-/* This file is part of the KOffice libraries
+/* This file is part of the Calligra libraries
    Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
 
 This library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@ Boston, MA 02110-1301, USA.
 #include "KoFilterChainLinkList.h"
 #include "KoFilterChainLink.h"
 
-namespace KOfficeFilter {
+namespace CalligraFilter {
 
     ChainLinkList::ChainLinkList() {}
 

@@ -27,7 +27,7 @@
 #include <klocale.h>
 
 // static
-KoShapeGroupCommand * KoShapeGroupCommand::createCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, QUndoCommand *parent)
+KoShapeGroupCommand * KoShapeGroupCommand::createCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent)
 {
     QList<KoShape*> orderedShapes(shapes);
     qSort(orderedShapes.begin(), orderedShapes.end(), KoShape::compareShapeZIndex);
@@ -49,8 +49,8 @@ KoShapeGroupCommandPrivate::KoShapeGroupCommandPrivate(KoShapeContainer *c, cons
 }
 
 
-KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, const QList<bool> &clipped, const QList<bool> &inheritTransform, QUndoCommand *parent)
-    : QUndoCommand(parent),
+KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, const QList<bool> &clipped, const QList<bool> &inheritTransform, KUndo2Command *parent)
+    : KUndo2Command(parent),
     d(new KoShapeGroupCommandPrivate(container,shapes, clipped, inheritTransform))
 {
     Q_ASSERT(d->clipped.count() == d->shapes.count());
@@ -58,8 +58,8 @@ KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QLis
     d->init(this);
 }
 
-KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, QUndoCommand *parent)
-    : QUndoCommand(parent),
+KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent)
+    : KUndo2Command(parent),
     d(new KoShapeGroupCommandPrivate(container,shapes))
 {
     for (int i = 0; i < shapes.count(); ++i) {
@@ -74,13 +74,13 @@ KoShapeGroupCommand::~KoShapeGroupCommand()
     delete d;
 }
 
-KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroupCommandPrivate &dd, QUndoCommand *parent)
-    : QUndoCommand(parent),
+KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroupCommandPrivate &dd, KUndo2Command *parent)
+    : KUndo2Command(parent),
     d(&dd)
 {
 }
 
-void KoShapeGroupCommandPrivate::init(QUndoCommand *q)
+void KoShapeGroupCommandPrivate::init(KUndo2Command *q)
 {
     foreach(KoShape* shape, shapes) {
         oldParents.append(shape->parent());
@@ -90,15 +90,15 @@ void KoShapeGroupCommandPrivate::init(QUndoCommand *q)
     }
 
     if (container->shapes().isEmpty()) {
-        q->setText(i18n("Group shapes"));
+        q->setText(i18nc("(qtundo-format)", "Group shapes"));
     } else {
-        q->setText(i18n("Add shapes to group"));
+        q->setText(i18nc("(qtundo-format)", "Add shapes to group"));
     }
 }
 
 void KoShapeGroupCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     if (dynamic_cast<KoShapeGroup*>(d->container)) {
         QRectF bound = d->containerBoundingRect();
@@ -149,7 +149,7 @@ void KoShapeGroupCommand::redo()
 
 void KoShapeGroupCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     QTransform ungroupTransform = d->container->absoluteTransformation(0);
     for (int i = 0; i < d->shapes.count(); i++) {

@@ -24,7 +24,7 @@
 
 #include "flake_export.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 
 class KoShape;
@@ -32,7 +32,7 @@ class KoShapeManager;
 class KoShapeReorderCommandPrivate;
 
 /// This command allows you to change the zIndex of a number of shapes.
-class FLAKE_EXPORT KoShapeReorderCommand : public QUndoCommand
+class FLAKE_EXPORT KoShapeReorderCommand : public KUndo2Command
 {
 public:
     /**
@@ -42,7 +42,7 @@ public:
      *  this list naturally must have the same amount of items as the shapes set.
      * @param parent the parent command used for macro commands
      */
-    KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes, QUndoCommand *parent = 0);
+    KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes, KUndo2Command *parent = 0);
     ~KoShapeReorderCommand();
 
     /// An enum for defining what kind of reordering to use.
@@ -63,7 +63,7 @@ public:
      * @return command for reording the shapes or 0 if no reordering happend
      */
     static KoShapeReorderCommand *createCommand(const QList<KoShape*> &shapes, KoShapeManager *manager,
-            MoveShapeType move, QUndoCommand *parent = 0);
+            MoveShapeType move, KUndo2Command *parent = 0);
 
     /// redo the command
     void redo();

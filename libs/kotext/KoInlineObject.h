@@ -79,7 +79,7 @@ public:
         KPlatoStart = 4000,      ///< Base number for kplato specific values.
         KPresenterStart = 5000,  ///< Base number for kpresenter specific values.
         KritaStart = 6000,       ///< Base number for krita specific values.
-        KWordStart = 7000,       ///< Base number for kword specific values.
+        WordsStart = 7000,       ///< Base number for words specific values.
         VariableManagerStart = 8000, ///< Start of numbers reserved for the KoVariableManager
         User = 12000
     };
@@ -139,6 +139,7 @@ public:
      * QTextInlineObject::setAscent() and QTextInlineObject::setDescent() methods.
      * Note that this method is called while painting; and thus is time sensitive; avoid doing anything time
      * consuming.
+     * Note make sure that the width is 0 when there is nothing to be shown for the object.
      * @param document the text document this inline object is operating on.
      * @param object the inline object properties
      * @param posInDocument the character position in the document (param document) this inline object is at.
@@ -157,7 +158,7 @@ public:
      * @param format the character format for the inline object.
      * @param pd the postscript-paintdevice that all text is rendered on. Use this for QFont and related
      *  classes so the inline object can be reused on any paintdevice.
-     * @param painter the painting object to paint on.  Note that unline many places in koffice painting
+     * @param painter the painting object to paint on.  Note that unline many places in calligra painting
      *    should happen at the position indicated by the rect, not at top-left.
      * @param rect the rectangle inside which the variable can paint itself.  Painting outside the rect
      *    will give varous problems with regards to repainting issues.

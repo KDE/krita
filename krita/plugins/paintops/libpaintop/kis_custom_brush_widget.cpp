@@ -88,6 +88,12 @@ void KisCustomBrushWidget::showEvent(QShowEvent *)
 
 void KisCustomBrushWidget::slotUpdateCurrentBrush(int)
 {
+    if (brushStyle->currentIndex() == 0) {
+        comboBox2->setEnabled(false);
+    }
+    else {
+        comboBox2->setEnabled(true);
+    }
     if (m_image) {
         createBrush();
         if (m_brush){
@@ -192,7 +198,7 @@ void KisCustomBrushWidget::createBrush()
             dev->crop(r);
 
             KisHLineIterator pixelIt = dev->createHLineIterator(r.x(), r.top(), r.width());
-            KisHLineConstIterator maskIt = selection->createHLineIterator(r.x(), r.top(), r.width());
+            KisHLineConstIterator maskIt = selection->projection()->createHLineIterator(r.x(), r.top(), r.width());
 
             for (qint32 y = r.top(); y <= r.bottom(); ++y) {
 

@@ -30,7 +30,7 @@
 #include <QPainter>
 #include <kdebug.h>
 
-// KOffice
+// Calligra
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoShapeLoadingContext.h>
@@ -1020,7 +1020,6 @@ void PlotArea::paintPixmap( QPainter &painter, const KoViewConverter &converter 
 {
     // Adjust the size of the painting area to the current zoom level
     const QSize paintRectSize = converter.documentToView( size() ).toSize();
-    const QRect paintRect = QRect( QPoint( 0, 0 ), paintRectSize );
     const QSize plotAreaSize = size().toSize();
     const int borderX = 4;
     const int borderY = 4;
@@ -1093,7 +1092,7 @@ void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
     }*/
     painter.setRenderHint( QPainter::Antialiasing, false );
 
-    // KDChart thinks in pixels, KOffice in pt
+    // KDChart thinks in pixels, Calligra in pt
     ScreenConversions::scaleFromPtToPx( painter );
 
     // Only paint the actual chart if there is a certain minimal size,

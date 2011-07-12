@@ -78,7 +78,7 @@ bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt
         }
         ignoreEvent = true;
     }
-    
+
     return ignoreEvent;
 }
 
@@ -88,8 +88,8 @@ void KisDuplicateOpSettings::activate()
     KisDuplicateOpSettingsWidget* options = dynamic_cast<KisDuplicateOpSettingsWidget*>(optionsWidget());
     if(!options)
         return;
-    
-    if (m_image->perspectiveGrid()->countSubGrids() != 1) {
+
+    if (m_image && m_image.isValid() && m_image->perspectiveGrid()->countSubGrids() != 1) {
         options->m_duplicateOption->setHealing(false);
         options->m_duplicateOption->setPerspective(false);
     } else {
@@ -144,19 +144,19 @@ QRectF KisDuplicateOpSettings::duplicateOutlineRect(const QPointF& pos, KisImage
 }
 
 QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
-{    
+{
     /*QRectF dubRect = duplicateOutlineRect(pos, image);
     if (_mode == CursorIsOutline) {
         dubRect |= KisBrushBasedPaintOpSettings::paintOutlineRect(pos, image, _mode);
     }
     return dubRect;*/
-    
+
     if (_mode != CursorIsOutline) return QRectF();
-    
+
     QPointF hotSpot = KisBrushBasedPaintOpSettings::brushOutline(pos,_mode).boundingRect().center();
     QRectF boundRect = brushOutline(pos,_mode).boundingRect();
     return image->pixelToDocument(boundRect.translated(-hotSpot)).translated(pos);
-    
+
 }
 
 void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
@@ -171,9 +171,9 @@ void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image,
 }
 QPainterPath KisDuplicateOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
 {
-    QPainterPath path; 
+    QPainterPath path;
     path = KisBrushBasedPaintOpSettings::brushOutline(QPointF(0.0,0.0),KisPaintOpSettings::CursorIsOutline, scale, rotation);
-    
+
     QPainterPath copy(path);
     QRectF rect2 = copy.boundingRect();
     if (m_isOffsetNotUptodate || !getBool(DUPLICATE_MOVE_SOURCE_POINT)) {
@@ -181,19 +181,19 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const QPointF& pos, KisPaintOp
     } else {
         copy.translate(-m_offset);
     }
-    
+
     path.addPath(copy);
-    
+
     QTransform m;
     m.scale(0.5,0.5);
     rect2 = m.mapRect(rect2);
-    
+
     path.moveTo(rect2.topLeft());
     path.lineTo(rect2.bottomRight());
-    
+
     path.moveTo(rect2.topRight());
     path.lineTo(rect2.bottomLeft());
-    
+
     if (mode == CursorIsOutline){
         return path.translated(pos);
     } else {

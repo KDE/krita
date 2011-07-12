@@ -1,5 +1,5 @@
 /*
- *  This file is part of KOffice tests
+ *  This file is part of Calligra tests
  *
  *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  *  Copyright (C) 2009-2010 Casper Boemann <casper.boemann@kogmbh.com>
@@ -25,9 +25,9 @@
 #include <QPainter>
 #include <qtest_kde.h>
 
-class MockTextShape;
 class QTextDocument;
 class KoTextDocumentLayout;
+class KoStyleManager;
 
 class TestDocumentLayout : public QObject
 {
@@ -38,18 +38,33 @@ public:
 private slots:
     void initTestCase();
 
-    /// Test the hittest of KoTextDocumentLayout
+    /**
+     * Test the hittest of KoTextDocumentLayout.
+     */
     void testHitTest();
-    /// Test the hittest of KoTextDocumentLayout regarding setions
-    void testHitTestSection();
+
+    /**
+     * Test root-area with zero width.
+     */
+    void testRootAreaZeroWidth();
+
+    /**
+     * Test root-area with zero height.
+     */
+    void testRootAreaZeroHeight();
+
+    /**
+     * Test root-area with zero width and height.
+     */
+    void testRootAreaZeroWidthAndHeight();
 
 private:
-    void initForNewTest();
+    void setupTest(const QString &initText = QString());
 
 private:
-    MockTextShape *shape1;
-    QTextDocument *doc;
-    KoTextDocumentLayout *layout;
+    QTextDocument *m_doc;
+    KoStyleManager *m_styleManager;
+    KoTextDocumentLayout *m_layout;
 };
 
 #endif

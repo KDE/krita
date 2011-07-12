@@ -288,7 +288,7 @@ QList<KisEffectMaskSP> KisLayer::effectMasks() const
     QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), properties);
     QList<KisEffectMaskSP> masks;
 
-    if (m_d->previewMask)
+    if (m_d->previewMask && m_d->previewMask->visible())
         masks.append(m_d->previewMask);
 
     foreach(const KisNodeSP& node,  nodes) {
@@ -301,7 +301,7 @@ QList<KisEffectMaskSP> KisLayer::effectMasks() const
 
 bool KisLayer::hasEffectMasks() const
 {
-    if (m_d->previewMask) return true;
+    if (m_d->previewMask && m_d->previewMask->visible()) return true;
 
     KoProperties properties;
     properties.setProperty("visible", true);

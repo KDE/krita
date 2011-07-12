@@ -36,8 +36,8 @@ public:
     KoShapeMoveCommand *command;
 };
 
-KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align align, const QRectF &boundingRect, QUndoCommand *parent)
-        : QUndoCommand(parent),
+KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align align, const QRectF &boundingRect, KUndo2Command *parent)
+        : KUndo2Command(parent),
         d(new Private())
 {
     QList<QPointF> previousPositions;
@@ -81,7 +81,7 @@ KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align al
     }
     d->command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
 
-    setText(i18n("Align shapes"));
+    setText(i18nc("(qtundo-format)", "Align shapes"));
 }
 
 KoShapeAlignCommand::~KoShapeAlignCommand()
@@ -91,12 +91,12 @@ KoShapeAlignCommand::~KoShapeAlignCommand()
 
 void KoShapeAlignCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     d->command->redo();
 }
 
 void KoShapeAlignCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     d->command->undo();
 }

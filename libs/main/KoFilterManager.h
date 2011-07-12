@@ -19,8 +19,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef __koffice_filter_manager_h__
-#define __koffice_filter_manager_h__
+#ifndef __calligra_filter_manager_h__
+#define __calligra_filter_manager_h__
 
 #include <QtCore/QObject>
 #include <QtCore/QMap>
@@ -36,7 +36,7 @@ class KoProgressUpdater;
 /**
  *  @brief The class managing all the filters.
  *
- *  This class manages all filters for a %KOffice application. Normally
+ *  This class manages all filters for a %Calligra application. Normally
  *  you will not have to use it, since KoMainWindow takes care of loading
  *  and saving documents.
  *
@@ -102,7 +102,7 @@ public:
     /**
      * @brief Exports the given file/document to the specified URL/mimetype.
      *
-     * If @p mimeType is empty, then the closest matching KOffice part is searched
+     * If @p mimeType is empty, then the closest matching Calligra part is searched
      * and when the method returns @p mimeType contains this mimetype.
      * Oh, well, export is a C++ keyword ;)
      */
@@ -122,9 +122,9 @@ public:
     /**
      * The same method as KoFilterManager::mimeFilter but suited for KoShell.
      * We do not need the mimetype, as we will simply use all available
-     * %KOffice mimetypes. The Direction enum is omitted, as we only
+     * %Calligra mimetypes. The Direction enum is omitted, as we only
      * call this for importing. When saving from KoShell we already
-     * know the KOffice part we are using.
+     * know the Calligra part we are using.
      */
     static QStringList mimeFilter();
 
@@ -189,7 +189,7 @@ private:
     KoFilterChain *const m_parentChain;
     QString m_importUrl, m_exportUrl;
     QByteArray m_importUrlMimetypeHint;  ///< suggested mimetype
-    KOfficeFilter::Graph m_graph;
+    CalligraFilter::Graph m_graph;
     Direction m_direction;
 
     /// A static cache for the availability checks of filters
@@ -199,4 +199,4 @@ private:
     Private * const d;
 };
 
-#endif  // __koffice_filter_manager_h__
+#endif  // __calligra_filter_manager_h__

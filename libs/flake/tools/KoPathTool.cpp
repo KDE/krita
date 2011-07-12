@@ -235,7 +235,7 @@ void KoPathTool::removePoints()
     Q_D(KoToolBase);
     // TODO finish current action or should this not possible during actions???
     if (m_pointSelection.size() > 0) {
-        QUndoCommand *cmd = KoPathPointRemoveCommand::createCommand(m_pointSelection.selectedPointsData(), d->canvas->shapeController());
+        KUndo2Command *cmd = KoPathPointRemoveCommand::createCommand(m_pointSelection.selectedPointsData(), d->canvas->shapeController());
         PointHandle *pointHandle = dynamic_cast<PointHandle*>(m_activeHandle);
         if (pointHandle && m_pointSelection.contains(pointHandle->activePoint())) {
             delete m_activeHandle;
@@ -618,7 +618,7 @@ void KoPathTool::mouseReleaseEvent(KoPointerEvent *event)
     if (m_currentStrategy) {
         const bool hadNoSelection = !m_pointSelection.hasSelection();
         m_currentStrategy->finishInteraction(event->modifiers());
-        QUndoCommand *command = m_currentStrategy->createCommand();
+        KUndo2Command *command = m_currentStrategy->createCommand();
         if (command)
             d->canvas->addCommand(command);
         if (hadNoSelection && dynamic_cast<KoPathPointRubberSelectStrategy*>(m_currentStrategy)

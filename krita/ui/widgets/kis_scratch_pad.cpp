@@ -36,6 +36,7 @@
 #include <kis_paintop_settings.h>
 #include <kis_default_bounds.h>
 #include <kis_dumb_undo_adapter.h>
+#include <kis_canvas_resource_provider.h>
 
 class KisScratchPadDefaultBounds : public KisDefaultBounds
 {
@@ -61,6 +62,7 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     , m_compositeOp(0)
     , m_scale(1.0)
     , m_opacity(OPACITY_OPAQUE_U8)
+    , m_resourceProvider(0)
 {
     setAutoFillBackground(false);
 
@@ -199,6 +201,11 @@ void KisScratchPad::setPresetImage(const QImage& image)
     update();
 }
 
+void KisScratchPad::setCanvasResourceProvider(KisCanvasResourceProvider* resourceProvider)
+{
+    m_resourceProvider = resourceProvider;
+}
+
 void KisScratchPad::contextMenuEvent ( QContextMenuEvent * event ) {
 
     QWidget::contextMenuEvent(event);
@@ -325,6 +332,7 @@ void KisScratchPad::wheelEvent ( QWheelEvent * event ) {
 }
 
 void KisScratchPad::initPainting(QEvent* event) {
+    Q_ASSERT(m_resourceProvider);
     if (currentPaintOpPreset() && currentPaintOpPreset()->settings()) {
         m_paintIncremental = currentPaintOpPreset()->settings()->paintIncremental();
         /// todo: create a KoPointerEvent and use it here
@@ -378,6 +386,8 @@ void KisScratchPad::initPainting(QEvent* event) {
 
     m_painter->setPaintColor(m_paintColor);
     m_painter->setBackgroundColor(m_backgroundColor);
+    m_painter->setGradient(m_resourceProvider->currentGradient());
+    m_painter->setPattern(m_resourceProvider->currentPattern());
     m_painter->setPaintOpPreset(m_preset, 0);
 
     QPointF pos;
@@ -397,9 +407,14 @@ void KisScratchPad::initPainting(QEvent* event) {
     }
     m_distanceInformation.spacing = m_painter->paintAt(m_previousPaintInformation);
     m_distanceInformation.distance = 0.0;
-    QRect rc = m_painter->takeDirtyRegion().boundingRect();
 
-    update(pos.x() - rc.width(), pos.y() - rc.height(), rc.width() * 2, rc.height() *2);
+
+    QRect bounds;
+    foreach(const QRect &rc, m_painter->takeDirtyRegion()) {
+        bounds |= rc;
+    }
+
+    update(pos.x() - bounds.width(), pos.y() - bounds.height(), bounds.width() * 2, bounds.height() *2);
 }
 
 void KisScratchPad::paint(QEvent* event) {
@@ -429,12 +444,15 @@ void KisScratchPad::paint(QEvent* event) {
 
     m_distanceInformation = m_painter->paintLine(m_previousPaintInformation, info, m_distanceInformation);
     m_previousPaintInformation = info;
-    QRegion dirtRegion = m_painter->takeDirtyRegion();
-    QRect rc = dirtRegion.boundingRect();
-    m_incrementalDirtyRegion+=dirtRegion;
 
-    m_paintLayer->updateProjection(dirtRegion.boundingRect());
-    update(pos.x() - rc.width(), pos.y() - rc.height(), rc.width() * 2, rc.height() *2);
+    QRect bounds;
+    foreach(const QRect &rc, m_painter->takeDirtyRegion()) {
+        bounds |= rc;
+        m_incrementalDirtyRegion += rc;
+    }
+
+    m_paintLayer->updateProjection(bounds);
+    update(pos.x() - bounds.width(), pos.y() - bounds.height(), bounds.width() * 2, bounds.height() *2);
 }
 
 void KisScratchPad::endPaint(QEvent *event) {
@@ -464,8 +482,13 @@ void KisScratchPad::endPaint(QEvent *event) {
         }
     }
 
-    QRect rc = m_painter->takeDirtyRegion().boundingRect();
-    update(rc.translated(m_currentMousePosition));
+
+    QRect bounds;
+    foreach(const QRect &rc, m_painter->takeDirtyRegion()) {
+        bounds |= rc;
+    }
+
+    update(bounds.translated(m_currentMousePosition));
 
     delete m_painter;
     m_painter = 0;

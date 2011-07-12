@@ -1,9 +1,9 @@
 #!/bin/bash
 
-pwd | grep "koffice/plugins/chartshape/tests/odf$" > /dev/null
+pwd | grep "calligra/plugins/chartshape/tests/odf$" > /dev/null
 # If grep returns 1 (instead of 0), the string wasn't found in pwd's output
 if [ $? -eq 1 ]; then
-    echo "Error: This script must be run from koffice/plugins/chartshape/tests/odf"
+    echo "Error: This script must be run from calligra/plugins/chartshape/tests/odf"
     exit
 fi
 if [ -z $2 ]; then

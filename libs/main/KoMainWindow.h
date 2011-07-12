@@ -37,7 +37,7 @@ class KRecentFilesAction;
 class QDockWidget;
 class QLabel;
 
-// KOffice class but not in main module
+// Calligra class but not in main module
 class KoDockerManager;
 
 namespace KParts
@@ -46,10 +46,10 @@ class PartManager;
 }
 
 /**
- * @brief Main window for a KOffice application
+ * @brief Main window for a Calligra application
  *
  * This class is used to represent a main window
- * of a KOffice component. Each main window contains
+ * of a Calligra component. Each main window contains
  * a menubar and some toolbars.
  *
  * @note This class does NOT need to be subclassed in your application.
@@ -62,7 +62,7 @@ public:
     /**
      *  Constructor.
      *
-     *  Initializes a KOffice main window (with its basic GUI etc.).
+     *  Initializes a Calligra main window (with its basic GUI etc.).
      */
     explicit KoMainWindow(const KComponentData &instance);
 
@@ -139,8 +139,6 @@ public:
      * Special method for KoApplication::start, don't use.
      */
     bool openDocument(KoDocument *newdoc, const KUrl & url);
-
-//     virtual DCOPObject * dcopObject();
 
     /**
      * Reloads the recent documents list.

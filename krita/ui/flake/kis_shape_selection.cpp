@@ -21,7 +21,7 @@
 
 #include <QPainter>
 #include <QTimer>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QMimeData>
 
 #include <ktemporaryfile.h>
@@ -305,7 +305,7 @@ void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter&
     Q_UNUSED(converter);
 }
 
-void KisShapeSelection::renderToProjection(KisSelection* projection)
+void KisShapeSelection::renderToProjection(KisPixelSelection* projection)
 {
     Q_ASSERT(projection);
     Q_ASSERT(m_image);
@@ -316,13 +316,13 @@ void KisShapeSelection::renderToProjection(KisSelection* projection)
     renderSelection(projection, boundingRect.toAlignedRect());
 }
 
-void KisShapeSelection::renderToProjection(KisSelection* projection, const QRect& r)
+void KisShapeSelection::renderToProjection(KisPixelSelection* projection, const QRect& r)
 {
     Q_ASSERT(projection);
     renderSelection(projection, r);
 }
 
-void KisShapeSelection::renderSelection(KisSelection* projection, const QRect& r)
+void KisShapeSelection::renderSelection(KisPixelSelection* projection, const QRect& r)
 {
     Q_ASSERT(projection);
     Q_ASSERT(m_image);
@@ -406,7 +406,7 @@ void KisShapeSelection::moveY(qint32 y)
 }
 
 // TODO same code as in shape layer, refactor!
-QUndoCommand* KisShapeSelection::transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
+KUndo2Command* KisShapeSelection::transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
 
     Q_UNUSED(xshear);
     Q_UNUSED(yshear);
@@ -435,6 +435,3 @@ QUndoCommand* KisShapeSelection::transform(double  xscale, double  yscale, doubl
 
     return new KoShapeTransformCommand(shapes, oldTransformations, newTransformations);
 }
-
-
-#include "kis_shape_selection.moc"

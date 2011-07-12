@@ -128,13 +128,13 @@ void KoBibliographyInfo::saveOdf(KoXmlWriter * writer) const
     writer->endElement();
 }
 
-void KoBibliographyInfo::setGenerator(BibliographyGenerator *generator)
+void KoBibliographyInfo::setGenerator(BibliographyGeneratorInterface *generator)
 {
-    //delete m_generator;
+    delete m_generator;
     m_generator = generator;
 }
 
-BibliographyGenerator *KoBibliographyInfo::generator() const
+BibliographyGeneratorInterface *KoBibliographyInfo::generator() const
 {
     return m_generator;
 }

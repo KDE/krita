@@ -19,7 +19,7 @@
 #ifndef SETKEYSIGNATURECOMMAND_H
 #define SETKEYSIGNATURECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 #include <QPair>
 
@@ -30,7 +30,7 @@ namespace MusicCore {
     class KeySignature;
 }
 
-class SetKeySignatureCommand : public QUndoCommand
+class SetKeySignatureCommand : public KUndo2Command
 {
 public:
     enum RegionType {

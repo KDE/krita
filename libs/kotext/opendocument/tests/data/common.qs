@@ -176,7 +176,7 @@ QTextListFormat.clone = function(fmt) {
     return newFormat;
 };
 
-// KOffice specific
+// Calligra specific
 var KoListStyle = {};
 i = QTextFormat.UserProperty+1000;
 KoListStyle.ListItemPrefix = i;

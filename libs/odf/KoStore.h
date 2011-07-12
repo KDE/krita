@@ -34,7 +34,7 @@ class QWidget;
 class KoStorePrivate;
 
 /**
- * Saves and loads KOffice documents using various backends. Currently supported
+ * Saves and loads Calligra documents using various backends. Currently supported
  * backends are ZIP, tar and directory.
  * We call a "store" the file on the hard disk (the one the users sees)
  * and call a "file" a file inside the store.
@@ -47,7 +47,7 @@ public:
     enum Backend { Auto, Tar, Zip, Directory, Encrypted };
 
     /**
-     * Open a store (i.e. the representation on disk of a KOffice document).
+     * Open a store (i.e. the representation on disk of a Calligra document).
      *
      * @param fileName the name of the file to open
      * @param mode if KoStore::Read, open an existing store to read it.
@@ -72,7 +72,7 @@ public:
                                 const QByteArray &appIdentification = "", Backend backend = Auto);
 
     /**
-     * Open a store (i.e. the representation on disk of a KOffice document).
+     * Open a store (i.e. the representation on disk of a Calligra document).
      *
      * @param window associated window (for the progress bar dialog and authentication)
      * @param url URL of the file to open
@@ -259,7 +259,7 @@ public:
 
     /**
      * Do not expand file and directory names
-     * Useful when using KoStore on non-KOffice files.
+     * Useful when using KoStore on non-Calligra files.
      * (This method should be called just after the constructor)
      */
     void disallowNameExpansion();

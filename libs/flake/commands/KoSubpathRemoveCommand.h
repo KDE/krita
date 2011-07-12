@@ -21,14 +21,14 @@
 #ifndef KOSUBPATHREMOVECOMMAND_H
 #define KOSUBPATHREMOVECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include "flake_export.h"
 #include "KoPathPointData.h"
 
 #include "KoPathPoint.h"
 
 /// The undo / redo command for removing a subpath
-class FLAKE_TEST_EXPORT KoSubpathRemoveCommand : public QUndoCommand
+class FLAKE_TEST_EXPORT KoSubpathRemoveCommand : public KUndo2Command
 {
 public:
     /**
@@ -37,7 +37,7 @@ public:
      * @param subpathIndex the index. See KoPathShape::removeSubpath()
      * @param parent the parent command if the resulting command is a compound undo command.
      */
-    KoSubpathRemoveCommand(KoPathShape *pathShape, int subpathIndex, QUndoCommand *parent = 0);
+    KoSubpathRemoveCommand(KoPathShape *pathShape, int subpathIndex, KUndo2Command *parent = 0);
     ~KoSubpathRemoveCommand();
 
     /// redo the command

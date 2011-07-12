@@ -22,7 +22,7 @@
 
 
 KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KoDocumentSectionModel::PropertyList newPropertyList)
-    : KisNodeCommand(i18n("Property Changes"), node),
+    : KisNodeCommand(i18nc("(qtundo-format)", "Property Changes"), node),
       m_newPropertyList(newPropertyList),
       m_oldPropertyList(node->sectionModelProperties())
 /**

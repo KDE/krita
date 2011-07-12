@@ -1,5 +1,6 @@
 /*
   Copyright (c) 2006 Gábor Lehel <illissius@gmail.com>
+  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -30,7 +31,7 @@
  * Model class for use with KoDocumentSectionView. The document
  * sections that an application uses need to inherit from this class
  * to be displayable in the KoDocumentSectionView. That would be,
- * for instance, pages in KWord or KPresenter, layers in Krita or
+ * for instance, pages in Words or KPresenter, layers in Krita or
  * Karbon, sheets in KSpread.
  *
  * The KoDocumentSectionView will display a thumbnail and a row of
@@ -125,16 +126,34 @@ class KoDocumentSectionModel: public QAbstractItemModel
         /** If the property isMutable, provide a boolean. Otherwise, a string suitable for displaying. */
         QVariant state;
 
+        /** If the property is mutable, specifies whether it can be put into stasis. When a property
+        is in stasis, a new state is created, and the old one is stored in stateInStasis. When
+        stasis ends, the old value is restored and the new one discarded */
+        bool canHaveStasis;
+        
+        /** If the property isMutable and canHaveStasis, indicate whether it is in stasis or not */
+        bool isInStasis;
+
+        /** If the property isMutable and canHaveStasis, provide this value to store the property's
+        state while in stasis */
+        bool stateInStasis;
+
         /// Default constructor. Use if you want to assign the members manually.
         Property(): isMutable( false ) { }
 
         /// Constructor for a mutable property.
         Property( const QString &n, const QIcon &on, const QIcon &off, bool isOn )
-            : name( n ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ) { }
+                : name( n ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ), canHaveStasis( false ) { }
+        
+        /** Constructor for a mutable property accepting stasis */
+        Property( const QString &n, const QIcon &on, const QIcon &off, bool isOn,
+                  bool isInStasis, bool stateInStasis )
+                : name( n ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ),
+                  canHaveStasis( true ), isInStasis( isInStasis ), stateInStasis( stateInStasis ) { }
 
         /// Constructor for a nonmutable property.
         Property( const QString &n, const QString &s )
-            : name( n ), isMutable( false ), state( s ) { }
+                : name( n ), isMutable( false ), state( s ) { }
     };
 
     /** Return this type for PropertiesRole. */

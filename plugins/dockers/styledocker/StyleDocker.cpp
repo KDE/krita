@@ -446,7 +446,7 @@ void StyleDocker::updateGradient(KoResource * item)
 
     // check which color to set foreground == border, background == fill
     if (activeStyle == KoFlake::Background) {
-        QUndoCommand * firstCommand = 0;
+        KUndo2Command * firstCommand = 0;
         foreach (KoShape * shape, selectedShapes) {
             KoShapeBackground * fill = applyFillGradientStops(shape, newStops);
             if (! fill)

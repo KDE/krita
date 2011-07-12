@@ -29,7 +29,7 @@ using namespace MusicCore;
 SetClefCommand::SetClefCommand(MusicShape* shape, Bar* bar, Staff* staff, Clef::ClefShape clefShape, int line, int octaveChange)
     : m_shape(shape), m_bar(bar), m_clef(new Clef(staff, 0, clefShape, line, octaveChange)), m_oldClef(NULL)
 {
-    setText(i18n("Change clef"));
+    setText(i18nc("(qtundo-format)", "Change clef"));
     
     for (int i = 0; i < bar->staffElementCount(staff); i++) {
         Clef* c = dynamic_cast<Clef*>(bar->staffElement(staff, i));

@@ -106,7 +106,7 @@ KoXmlWriter* KoOdfWriteStore::createOasisXmlWriter(QIODevice* dev, const char* r
         writer->addAttribute("xmlns:fo", KoXmlNS::fo);
         writer->addAttribute("xmlns:anim", KoXmlNS::anim);
         writer->addAttribute("xmlns:smil", KoXmlNS::smil);
-        writer->addAttribute("xmlns:koffice", KoXmlNS::koffice);
+        writer->addAttribute("xmlns:calligra", KoXmlNS::calligra);
         writer->addAttribute("xmlns:officeooo", KoXmlNS::officeooo);
         writer->addAttribute("xmlns:delta", KoXmlNS::delta);
         writer->addAttribute("xmlns:split", KoXmlNS::split);

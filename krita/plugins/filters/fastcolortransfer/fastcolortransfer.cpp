@@ -22,7 +22,7 @@
 #include <kpluginfactory.h>
 #include <kurlrequester.h>
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoProgressUpdater.h>
@@ -89,7 +89,6 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP device,
                          const KisFilterConfiguration* config,
                          KoUpdater* progressUpdater) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device != 0);
 
     dbgPlugins << "Start transferring color";
@@ -133,7 +132,7 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP device,
     const KoColorSpace* oldCS = device->colorSpace();
     KisPaintDeviceSP srcLAB = new KisPaintDevice(*device.data());
     dbgPlugins << "srcLab : " << srcLAB->extent();
-    QUndoCommand* cmd = srcLAB->convertTo(labCS);
+    KUndo2Command* cmd = srcLAB->convertTo(labCS);
     delete cmd;
     dbgPlugins << "convert ref to lab";
     dbgPlugins << "ref : " << srcLAB->extent();

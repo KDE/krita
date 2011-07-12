@@ -2,7 +2,7 @@
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
- * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -108,6 +108,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_trackChanges(false),
         m_allowResourceManagerUpdates(true),
         m_prevCursorPosition(-1),
+        m_prevMouseSelectionStart(-1),
+        m_prevMouseSelectionEnd(-1),
         m_caretTimer(this),
         m_caretTimerState(true)
         , m_currentCommand(0),
@@ -174,6 +176,11 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
 void TextTool::createActions()
 {
+    m_actionPasteAsText  = new KAction(KIcon("paste"), i18n("Paste As Text"), this);
+    addAction("edit_paste_text", m_actionPasteAsText);
+    m_actionPasteAsText->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
+    connect(m_actionPasteAsText, SIGNAL(triggered(bool)), this, SLOT(pasteAsText()));
+
     m_actionFormatBold  = new KAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold);
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
@@ -477,7 +484,7 @@ void TextTool::createActions()
 
 #ifndef NDEBUG
 #include "tests/MockShapes.h"
-#include <KUndoStack>
+#include <kundo2stack.h>
 
 TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     : KoToolBase(canvas),
@@ -512,7 +519,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     m_changeTracker = new KoChangeTracker();
     KoTextDocument(document).setChangeTracker(m_changeTracker);
 
-    KoTextDocument(document).setUndoStack(new KUndoStack());
+    KoTextDocument(document).setUndoStack(new KUndo2Stack());
 
 #if 0
     KoTextDocumentLayout *layout = new KoTextDocumentLayout(document);
@@ -721,8 +728,16 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         event->ignore();
     }
 
-    if (event->button() ==  Qt::MidButton) // Paste
-        paste();
+    if (event->button() ==  Qt::MidButton) { // Paste
+        const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Selection);
+
+        // on windows we do not have data if we try to paste this selection
+        if (data) {
+            m_prevCursorPosition = m_textEditor.data()->position();
+            m_textEditor.data()->addCommand(new TextPasteCommand(QClipboard::Selection, this));
+            editingPluginEvents();
+        }
+    }
 }
 
 const QTextCursor TextTool::cursor()
@@ -846,12 +861,23 @@ void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
         event->ignore(); // allow the event to be used by another
         return;
     }
-    m_textEditor.data()->clearSelection();
+
     int pos = m_textEditor.data()->position();
     m_textEditor.data()->movePosition(QTextCursor::WordLeft);
     m_textEditor.data()->movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
-    if (qAbs(pos - m_textEditor.data()->position()) <= 1) // clicked between two words
+
+    // clicked between two words
+    if (qAbs(pos - m_textEditor.data()->position()) <= 1)
         m_textEditor.data()->movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
+
+    // switch between select single words or whole line
+    if (m_prevMouseSelectionStart == m_textEditor.data()->selectionStart() && m_prevMouseSelectionEnd == m_textEditor.data()->selectionEnd()) {
+        m_textEditor.data()->clearSelection();
+        m_textEditor.data()->movePosition(QTextCursor::StartOfLine);
+        m_textEditor.data()->movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    }
+    m_prevMouseSelectionStart = m_textEditor.data()->selectionStart();
+    m_prevMouseSelectionEnd = m_textEditor.data()->selectionEnd();
 
     repaintSelection();
     updateSelectionHandler();
@@ -1231,6 +1257,8 @@ void TextTool::updateActions()
     if (textEditor == 0)
         return;
     m_allowActions = false;
+
+    //Update the characterStyle related GUI elements
     QTextCharFormat cf = textEditor->charFormat();
     m_actionFormatBold->setChecked(cf.fontWeight() > QFont::Normal);
     m_actionFormatItalic->setChecked(cf.fontItalic());
@@ -1264,6 +1292,7 @@ void TextTool::updateActions()
     m_growHeightAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
     m_growHeightAction->setChecked(resizemethod == KoTextShapeData::AutoGrowHeight || resizemethod == KoTextShapeData::AutoGrowWidthAndHeight);
 
+    //update paragraphStyle GUI element
     QTextBlockFormat bf = textEditor->blockFormat();
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
         bool revert = (textEditor->block().layout()->textOption().textDirection() == Qt::LeftToRight) != QApplication::isLeftToRight();
@@ -1282,6 +1311,7 @@ void TextTool::updateActions()
 
     m_actionFormatDecreaseIndent->setEnabled(textEditor->blockFormat().leftMargin() > 0.);
 
+    //change tracking
     if (m_changeTracker && m_changeTracker->displayChanges())
         m_actionShowChanges->setChecked(true);
     if (m_changeTracker && m_changeTracker->recordChanges())
@@ -1504,6 +1534,8 @@ QList<QWidget *> TextTool::createOptionWidgets()
 
     // Connect to/with simple styles widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), ssw, SLOT(setCurrentFormat(QTextBlockFormat)));
+    connect(this, SIGNAL(charFormatChanged(QTextCharFormat)), ssw, SLOT(setCurrentFormat(QTextCharFormat)));
     connect(ssw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
     connect(ssw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
     connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
@@ -1535,11 +1567,11 @@ void TextTool::addUndoCommand()
 {
     return;
 /*    if (! m_allowAddUndoCommand) return;
-    class UndoTextCommand : public QUndoCommand
+    class UndoTextCommand : public KUndo2Command
     {
     public:
-        UndoTextCommand(QTextDocument *document, TextTool *tool, QUndoCommand *parent = 0)
-                : QUndoCommand(i18n("Text"), parent),
+        UndoTextCommand(QTextDocument *document, TextTool *tool, KUndo2Command *parent = 0)
+                : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
                 m_document(document),
                 m_tool(tool) {
         }
@@ -1585,7 +1617,7 @@ void TextTool::addUndoCommand()
         canvas()->addCommand(new UndoTextCommand(m_textShapeData->document(), this));
 */}
 
-void TextTool::addCommand(QUndoCommand *command)
+void TextTool::addCommand(KUndo2Command *command)
 {
 /*    m_currentCommand = command;
     TextCommandBase *cmd = dynamic_cast<TextCommandBase*>(command);
@@ -1600,7 +1632,7 @@ void TextTool::addCommand(QUndoCommand *command)
     m_textEditor.data()->addCommand(command);
 }
 
-void TextTool::startEditing(QUndoCommand* command)
+void TextTool::startEditing(KUndo2Command* command)
 {
     m_currentCommand = command;
     m_currentCommandHasChildren = true;
@@ -1610,6 +1642,20 @@ void TextTool::stopEditing()
 {
     m_currentCommand = 0;
     m_currentCommandHasChildren = false;
+}
+
+void TextTool::pasteAsText()
+{
+    KoTextEditor *textEditor = m_textEditor.data();
+    if (!textEditor) return;
+
+    const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
+    // on windows we do not have data if we try to paste this selection
+    if (!data) return;
+
+    m_prevCursorPosition = m_textEditor.data()->position();
+    textEditor->addCommand(new TextPasteCommand(QClipboard::Clipboard, this, 0, true));
+    editingPluginEvents();
 }
 
 void TextTool::bold(bool bold)
@@ -1899,16 +1945,16 @@ void TextTool::startMacro(const QString &title)
 
     if (m_currentCommand) return;
 
-    class MacroCommand : public QUndoCommand
+    class MacroCommand : public KUndo2Command
     {
     public:
-        MacroCommand(const QString &title) : QUndoCommand(title), m_first(true) {}
+        MacroCommand(const QString &title) : KUndo2Command(title), m_first(true) {}
         virtual void redo() {
             if (! m_first)
-                QUndoCommand::redo();
+                KUndo2Command::redo();
             m_first = false;
         }
-        virtual bool mergeWith(const QUndoCommand *) {
+        virtual bool mergeWith(const KUndo2Command *) {
             return false;
         }
         bool m_first;
@@ -2127,7 +2173,7 @@ void TextTool::readConfig()
         QColor bgColor, defaultColor;
         QString changeAuthor;
         int changeSaveFormat = KoChangeTracker::DELTAXML;
-        KConfigGroup interface = KoGlobal::kofficeConfig()->group("Change-Tracking");
+        KConfigGroup interface = KoGlobal::calligraConfig()->group("Change-Tracking");
         if (interface.exists()) {
             bgColor = interface.readEntry("insertionBgColor", defaultColor);
             m_changeTracker->setInsertionBgColor(bgColor);
@@ -2151,7 +2197,7 @@ void TextTool::readConfig()
 void TextTool::writeConfig()
 {
     if (m_changeTracker) {
-        KConfigGroup interface = KoGlobal::kofficeConfig()->group("Change-Tracking");
+        KConfigGroup interface = KoGlobal::calligraConfig()->group("Change-Tracking");
         interface.writeEntry("insertionBgColor", m_changeTracker->getInsertionBgColor());
         interface.writeEntry("deletionBgColor", m_changeTracker->getDeletionBgColor());
         interface.writeEntry("formatChangeBgColor", m_changeTracker->getFormatChangeBgColor());

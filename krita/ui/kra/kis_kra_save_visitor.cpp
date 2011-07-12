@@ -53,9 +53,8 @@
 
 using namespace KRA;
 
-KisKraSaveVisitor::KisKraSaveVisitor(KisImageWSP image, KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames)
+KisKraSaveVisitor::KisKraSaveVisitor(KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames)
         : KisNodeVisitor()
-        , m_image(image)
         , m_store(store)
         , m_external(false)
         , m_count(count)

@@ -36,7 +36,7 @@
 
 
 KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP newParent, KisNodeSP newAbove)
-        : KisImageCommand(i18n("Move Layer"), image)
+        : KisImageCommand(i18nc("(qtundo-format)", "Move Layer"), image)
 {
     m_layer = layer;
     m_newParent = newParent;
@@ -47,7 +47,7 @@ KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP 
 }
 
 KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP node, KisNodeSP newParent, quint32 index)
-        : KisImageCommand(i18n("Move Layer"), image)
+        : KisImageCommand(i18nc("(qtundo-format)", "Move Layer"), image)
 {
     m_layer = node;
     m_newParent = newParent;

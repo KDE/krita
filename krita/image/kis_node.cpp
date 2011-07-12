@@ -22,6 +22,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QPainterPath>
+#include <QRect>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -321,11 +322,18 @@ void KisNode::setDirty()
     setDirty(extent());
 }
 
+void KisNode::setDirty(const QVector<QRect> &rects)
+{
+    foreach(const QRect &rc, rects) {
+        setDirty(rc);
+    }
+}
+
 void KisNode::setDirty(const QRegion & region)
 {
     if (region.isEmpty()) return;
 
-    foreach(const QRect & rc, region.rects()) {
+    foreach(const QRect &rc, region.rects()) {
         setDirty(rc);
     }
 }

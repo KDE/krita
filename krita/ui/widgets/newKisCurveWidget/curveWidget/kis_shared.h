@@ -30,7 +30,7 @@ protected:
     KisShared();
     ~KisShared();
 public:
-    int refCount() {
+    int refCount() const {
         return _ref;
     }
     bool ref() {

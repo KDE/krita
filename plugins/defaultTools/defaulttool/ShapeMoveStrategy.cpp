@@ -117,7 +117,7 @@ void ShapeMoveStrategy::moveSelection()
     tool()->canvas()->shapeManager()->selection()->setPosition(m_initialSelectionPosition + m_diff);
 }
 
-QUndoCommand* ShapeMoveStrategy::createCommand()
+KUndo2Command* ShapeMoveStrategy::createCommand()
 {
     tool()->canvas()->snapGuide()->reset();
     if(m_diff.x() == 0 && m_diff.y() == 0)

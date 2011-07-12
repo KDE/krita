@@ -20,8 +20,8 @@
 #include "SelectionTransformCommand.h"
 #include <KoSelection.h>
 
-SelectionTransformCommand::SelectionTransformCommand( KoSelection * selection, const QTransform &oldTransformation, const QTransform &newTransformation, QUndoCommand * parent )
-: QUndoCommand( parent )
+SelectionTransformCommand::SelectionTransformCommand( KoSelection * selection, const QTransform &oldTransformation, const QTransform &newTransformation, KUndo2Command * parent )
+: KUndo2Command( parent )
 , m_selection( selection )
 , m_oldTransformation( oldTransformation )
 , m_newTransformation( newTransformation )
@@ -32,7 +32,7 @@ SelectionTransformCommand::SelectionTransformCommand( KoSelection * selection, c
 
 void SelectionTransformCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     m_selection->blockSignals( true );
     
@@ -57,5 +57,5 @@ void SelectionTransformCommand::undo()
 
     m_selection->blockSignals( false );
 
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }

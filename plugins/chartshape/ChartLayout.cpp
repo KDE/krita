@@ -25,7 +25,7 @@
 // KChart
 #include "ChartLayout.h"
 
-// KOffice
+// Calligra
 #include <KoShapeContainer.h>
 
 using namespace KChart;

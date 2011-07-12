@@ -81,7 +81,7 @@ void IndexEntry::saveOdf(KoXmlWriter* writer) const
 }
 
 IndexEntryBibliography::IndexEntryBibliography(QString _styleName)
-    : IndexEntry(_styleName, IndexEntry::CHAPTER)
+    : IndexEntry(_styleName, IndexEntry::BIBLIOGRAPHY)
     , dataField(QString())
 {
 

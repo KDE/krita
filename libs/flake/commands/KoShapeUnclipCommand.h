@@ -21,14 +21,14 @@
 #define KOSHAPEUNCLIPCOMMAND_H
 
 #include "flake_export.h"
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 
 class KoShape;
 class KoShapeControllerBase;
 
 /// The undo / redo command for removing the shape clip path
-class FLAKE_EXPORT KoShapeUnclipCommand : public QUndoCommand
+class FLAKE_EXPORT KoShapeUnclipCommand : public KUndo2Command
 {
 public:
     /**
@@ -37,7 +37,7 @@ public:
      * @param shapes a set of all the shapes to remove the clip path from.
      * @param parent the parent command used for macro commands
      */
-    KoShapeUnclipCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes, QUndoCommand *parent = 0);
+    KoShapeUnclipCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes, KUndo2Command *parent = 0);
 
     /**
      * Command to remove clip path from a single shape.
@@ -45,7 +45,7 @@ public:
      * @param shape a single shape to remove the clip path from.
      * @param parent the parent command used for macro commands
      */
-    KoShapeUnclipCommand(KoShapeControllerBase *controller, KoShape *shape, QUndoCommand *parent = 0);
+    KoShapeUnclipCommand(KoShapeControllerBase *controller, KoShape *shape, KUndo2Command *parent = 0);
 
     /// Destroys the command
     virtual ~KoShapeUnclipCommand();

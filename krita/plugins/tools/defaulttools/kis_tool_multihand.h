@@ -59,8 +59,9 @@ public:
 
     KisToolMultihand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText);
     virtual ~KisToolMultihand();
-
-    virtual void setDirty(const QRegion& region);
+    virtual int flags() const;
+    virtual void setDirty(const QVector<QRect> &rects);
+    virtual void setDirty(const QRegion &region);
 
 protected:
     void gesture(const QPointF &offsetInDocPixels,

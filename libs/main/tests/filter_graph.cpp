@@ -32,7 +32,7 @@ int main(int /*argc*/, char ** /*argv*/)
 
     QByteArray output = "digraph filters {\n";
 
-    // The following code is shamelessly copied over from KOffice::Graph::buildGraph
+    // The following code is shamelessly copied over from Calligra::Graph::buildGraph
     // It wasn't feasible to do some serious changes in the lib for that tiny bit
     // of duplicated code in a test file.
 

@@ -28,6 +28,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QPersistentModelIndex>
+#include <QApplication>
 
 class KoDocumentSectionView::Private
 {
@@ -36,6 +37,7 @@ public:
     KoDocumentSectionDelegate *delegate;
     DisplayMode mode;
     QPersistentModelIndex hovered;
+    QPoint lastPos;
 };
 
 KoDocumentSectionView::KoDocumentSectionView(QWidget *parent)
@@ -91,11 +93,14 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
         switch(e->type()) {
         case QEvent::MouseButtonPress: {
             const QPoint pos = static_cast<QMouseEvent*>(e)->pos();
-            if (!indexAt(pos).isValid())
+            d->lastPos = pos;
+            if (!indexAt(pos).isValid()) {
                 return QTreeView::viewportEvent(e);
+            }
             QModelIndex index = model()->buddy(indexAt(pos));
-            if (d->delegate->editorEvent(e, model(), optionForIndex(index), index))
+            if (d->delegate->editorEvent(e, model(), optionForIndex(index), index)) {
                 return true;
+            }
         } break;
         case QEvent::Leave: {
             QEvent e(QEvent::Leave);
@@ -116,19 +121,30 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
                 }
                 d->hovered = hovered;
             }
+            /* This is a workaround for a bug in QTreeView that immediately begins a dragging action
+            when the mouse lands on the decoration/icon of a different index and moves 1 pixel or more */
+            Qt::MouseButtons buttons = static_cast<QMouseEvent*>(e)->buttons();
+            if ((Qt::LeftButton | Qt::MidButton) & buttons) {
+                if ((pos - d->lastPos).manhattanLength() > qApp->startDragDistance()) {
+                    return QTreeView::viewportEvent(e);
+                }
+                return true;
+            }
         } break;
        case QEvent::ToolTip: {
             const QPoint pos = static_cast<QHelpEvent*>(e)->pos();
-            if (!indexAt(pos).isValid())
+            if (!indexAt(pos).isValid()) {
                 return QTreeView::viewportEvent(e);
+            }
             QModelIndex index = model()->buddy(indexAt(pos));
             return d->delegate->editorEvent(e, model(), optionForIndex(index), index);
         } break;
-        case QEvent::Resize:
+        case QEvent::Resize: {
             scheduleDelayedItemsLayout();
             break;
+        }
         default: break;
-    }
+        }
     }
     return QTreeView::viewportEvent(e);
 }

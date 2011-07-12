@@ -21,20 +21,20 @@
 #ifndef ADDCONNECTIONPOINTCOMMAND_H
 #define ADDCONNECTIONPOINTCOMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 #include <QtCore/QPointF>
 
 class KoShape;
 
-class AddConnectionPointCommand : public QUndoCommand
+class AddConnectionPointCommand : public KUndo2Command
 {
 public:
     /// Creates new comand to add connection point to shape
-    AddConnectionPointCommand(KoShape *shape, const QPointF &connectionPoint, QUndoCommand *parent = 0);
+    AddConnectionPointCommand(KoShape *shape, const QPointF &connectionPoint, KUndo2Command *parent = 0);
     virtual ~AddConnectionPointCommand();
-    /// reimplemented from QUndoCommand
+    /// reimplemented from KUndo2Command
     virtual void redo();
-    /// reimplemented from QUndoCommand
+    /// reimplemented from KUndo2Command
     virtual void undo();
 
 private:

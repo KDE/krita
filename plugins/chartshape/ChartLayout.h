@@ -25,7 +25,7 @@
 #include <QList>
 #include <QMap>
 
-// KOffice
+// Calligra
 #include <KoShapeContainerModel.h>
 
 // KChart

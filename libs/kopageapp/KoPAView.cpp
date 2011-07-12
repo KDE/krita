@@ -563,7 +563,7 @@ void KoPAView::formatPageLayout()
     KoPAPageLayoutDialog dialog( d->doc, pageLayout, d->canvas );
 
     if ( dialog.exec() == QDialog::Accepted ) {
-        QUndoCommand *command = new QUndoCommand( i18n( "Change page layout" ) );
+        KUndo2Command *command = new KUndo2Command( i18nc( "(qtundo-format)", "Change page layout" ) );
         viewMode()->changePageLayout( dialog.pageLayout(), dialog.applyToDocument(), command );
 
         d->canvas->addCommand( command );
@@ -898,7 +898,7 @@ void KoPAView::clipboardDataChanged()
 
     if (data)
     {
-        // TODO see if we can use the KoPasteController instead of having to add this feature in each koffice app.
+        // TODO see if we can use the KoPasteController instead of having to add this feature in each calligra app.
         QStringList mimeTypes = d->canvas->toolProxy()->supportedPasteMimeTypes();
         mimeTypes << KoOdf::mimeType( KoOdf::Graphics );
         mimeTypes << KoOdf::mimeType( KoOdf::Presentation );

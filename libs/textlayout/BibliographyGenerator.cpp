@@ -19,6 +19,7 @@
 
 #include "BibliographyGenerator.h"
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "KoTextDocumentLayout.h"
 #include "KoTextLayoutRootArea.h"
@@ -30,6 +31,7 @@
 #include <KoTextBlockData.h>
 #include <KoStyleManager.h>
 #include <KoTextEditor.h>
+#include <KoPostscriptPaintDevice.h>
 
 #include <QTextFrame>
 #include <QTimer>
@@ -37,27 +39,31 @@
 #include <KoBookmark.h>
 #include <KoInlineTextObjectManager.h>
 
-BibliographyGenerator::BibliographyGenerator(QTextFrame *bibFrame, KoBibliographyInfo *bibInfo)
-    : QObject(bibFrame)
-    , m_bibFrame(bibFrame)
+BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block, KoBibliographyInfo *bibInfo)
+    : QObject(bibDocument)
+    , m_bibDocument(bibDocument)
     , m_bibInfo(bibInfo)
+    , m_block(block)
 {
     Q_ASSERT(bibFrame);
     Q_ASSERT(bibInfo);
 
     m_bibInfo->setGenerator(this);
 
-    // connect to FinishedLayout
-    KoTextDocumentLayout *docLayout = static_cast<KoTextDocumentLayout *>(bibFrame->document()->documentLayout());
-    QObject::connect(docLayout, SIGNAL(finishedLayout()), this, SLOT(generate()));
+    bibDocument->setUndoRedoEnabled(false);
+    bibDocument->setDocumentLayout(new BibDocumentLayout(bibDocument));
+    m_documentLayout = static_cast<KoTextDocumentLayout *>(m_block.document()->documentLayout());
+    m_document = m_documentLayout->document();
+
+    connect(m_documentLayout, SIGNAL(finishedLayout()), this, SLOT(generate()));
 
     // do a generate right now to have a Bibliography with placeholder numbers.
-    QTimer::singleShot(0, this, SLOT(generate()));
+    generate();
 }
 
 BibliographyGenerator::~BibliographyGenerator()
 {
-    //delete m_bibInfo;
+    delete m_bibInfo;
 }
 
 static QString removeWhitespacePrefix(const QString& text)
@@ -85,13 +91,11 @@ void BibliographyGenerator::generate()
     if (!m_bibInfo)
         return;
 
-    KoTextEditor &cursor = *KoTextDocument(m_bibFrame->document()).textEditor();
-    cursor.setPosition(m_bibFrame->firstPosition(), QTextCursor::KeepAnchor);
+    QTextCursor cursor = m_bibDocument->rootFrame()->lastCursorPosition();
+    cursor.setPosition(m_bibDocument->rootFrame()->firstPosition(), QTextCursor::KeepAnchor);
     cursor.beginEditBlock();
 
-    QTextDocument *doc = m_bibFrame->document();
-    KoTextDocument koDocument(doc);
-    KoStyleManager *styleManager = koDocument.styleManager();
+    KoStyleManager *styleManager = KoTextDocument(m_document).styleManager();
 
     if (!m_bibInfo->m_indexTitleTemplate.text.isNull()) {
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_bibInfo->m_indexTitleTemplate.styleId);
@@ -106,7 +110,7 @@ void BibliographyGenerator::generate()
         cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
     }
 
-    QTextBlock block = m_bibFrame->lastCursorPosition().block();
+    QTextBlock block = m_document->rootFrame()->firstCursorPosition().block();
     int blockId = 0;
     while (block.isValid()) {
         QString bibEntryText = block.text();
@@ -116,7 +120,6 @@ void BibliographyGenerator::generate()
         //if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel) && !bibEntryText.isEmpty()) {
         if (!bibEntryText.isEmpty()) {
             qDebug() << "bibentrytext is " << bibEntryText << endl;
-            cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
 
             KoParagraphStyle *bibTemplateStyle = 0;
             qDebug() << "size is " << m_bibInfo->m_entryTemplate.size() << endl;
@@ -127,6 +130,7 @@ void BibliographyGenerator::generate()
                 bibTemplateStyle = generateTemplateStyle(styleManager);
             }
 
+            cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
             QTextBlock bibEntryTextBlock = cursor.block();
             bibTemplateStyle->applyStyle( bibEntryTextBlock );
 
@@ -138,6 +142,7 @@ void BibliographyGenerator::generate()
                 switch(entry->name) {
                     case IndexEntry::BIBLIOGRAPHY: {
                         // have to add some code here acc. to bib type.
+                        cursor.insertText(bibEntryText);
                         break;
                     }
                     case IndexEntry::SPAN: {
@@ -145,13 +150,21 @@ void BibliographyGenerator::generate()
                         cursor.insertText(span->text);
                         break;
                     }
-                    case IndexEntry::TEXT: {
-                        //IndexEntryText * text = static_cast<IndexEntryText*>(entry);
-                        cursor.insertText(bibEntryText);
-                        break;
-                    }
                     case IndexEntry::TAB_STOP: {
+                        IndexEntryTabStop *tabEntry = static_cast<IndexEntryTabStop*>(entry);
+
                         cursor.insertText("\t");
+
+                        QTextBlockFormat blockFormat = cursor.blockFormat();
+                        QList<QVariant> tabList;
+                        if (tabEntry->m_position == "MAX") {
+                            tabEntry->tab.position = m_maxTabPosition;
+                        } else {
+                            tabEntry->tab.position = tabEntry->m_position.toDouble();
+                        }
+                        tabList.append(QVariant::fromValue<KoText::Tab>(tabEntry->tab));
+                        blockFormat.setProperty(KoParagraphStyle::TabPositions, QVariant::fromValue<QList<QVariant> >(tabList));
+                        cursor.setBlockFormat(blockFormat);
                         break;
                     }
                     default:{
@@ -166,6 +179,81 @@ void BibliographyGenerator::generate()
         block = block.next();
     }
     cursor.endEditBlock();
+    KoTextLayoutRootArea *rootArea = m_documentLayout->rootAreaForPosition(m_block.position());
+
+    if (rootArea) {
+        rootArea->setDirty();
+    }
 }
 
+BibDocumentLayout::BibDocumentLayout(QTextDocument *doc)
+        : QAbstractTextDocumentLayout(doc)
+{
+    setPaintDevice(new KoPostscriptPaintDevice());
+}
+
+BibDocumentLayout::~BibDocumentLayout()
+{
+}
+
+QRectF BibDocumentLayout::blockBoundingRect(const QTextBlock &block) const
+{
+    Q_UNUSED(block);
+    return QRect();
+}
+
+QSizeF BibDocumentLayout::documentSize() const
+{
+    return QSizeF();
+}
+
+void BibDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context)
+{
+    // WARNING Text shapes ask their root area directly to paint.
+    // It saves a lot of extra traversal, that is quite costly for big
+    // documents
+    Q_UNUSED(painter);
+    Q_UNUSED(context);
+}
+
+
+int BibDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
+{
+    Q_UNUSED(point);
+    Q_UNUSED(accuracy);
+    Q_ASSERT(false); //we should not call this method.
+    return -1;
+}
+
+QRectF BibDocumentLayout::frameBoundingRect(QTextFrame*) const
+{
+    return QRectF();
+}
+
+int BibDocumentLayout::pageCount() const
+{
+    return 1;
+}
+
+void BibDocumentLayout::documentChanged(int position, int charsRemoved, int charsAdded)
+{
+    Q_UNUSED(position);
+    Q_UNUSED(charsRemoved);
+    Q_UNUSED(charsAdded);
+}
+
+/*
+void BibDocumentLayout::drawInlineObject(QPainter *, const QRectF &, QTextInlineObject , int , const QTextFormat &)
+{
+}
+
+// This method is called by qt every time  QTextLine.setWidth()/setNumColums() is called
+void BibDocumentLayout::positionInlineObject(QTextInlineObject , int , const QTextFormat &)
+{
+}
+
+void BibDocumentLayout::resizeInlineObject(QTextInlineObject , int , const QTextFormat &)
+{
+}
+*/
 

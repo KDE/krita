@@ -284,7 +284,7 @@ void KisCurveMagnetic::calculateCurve(KisCurve::iterator p1, KisCurve::iterator 
         openMatrix[current.col()][current.row()].clear();
 
         QList<Node> successors = current.getNeighbor(dst, endNode);
-        for (QList<Node>::iterator i = successors.begin(); i != successors.end(); i++) {
+        for (QList<Node>::iterator i = successors.begin(); i != successors.end(); ++i) {
             int col = (*i).col();
             int row = (*i).row();
             if ((*i) == endNode) {

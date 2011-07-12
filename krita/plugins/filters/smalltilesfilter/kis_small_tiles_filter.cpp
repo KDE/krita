@@ -68,7 +68,6 @@ void KisSmallTilesFilter::process(KisPaintDeviceSP device,
                                   KoUpdater* progressUpdater
                                  ) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(!device.isNull());
 
     //read the filter configuration values from the KisFilterConfiguration object

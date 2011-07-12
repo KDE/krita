@@ -43,7 +43,7 @@
 #include <KoColorSpaceRegistry.h>
 
 K_PLUGIN_FACTORY(ODGImportFactory, registerPlugin<KisODGImport>();)
-K_EXPORT_PLUGIN(ODGImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(ODGImportFactory("calligrafilters"))
 
 KisODGImport::KisODGImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
@@ -64,12 +64,6 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
 
     if (!doc)
         return KoFilter::CreationError;
-
-    KisView2 * view = 0;
-
-    if (!doc->views().isEmpty()) {
-        view = static_cast<KisView2*>(doc->views().first());
-    }
 
     QString filename = m_chain->inputFile();
 

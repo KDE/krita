@@ -25,6 +25,7 @@ set(textlayout_LIB_SRCS
     AnchorStrategy.cpp
     ToCGenerator.cpp
     BibliographyGenerator.cpp
+    ToCDocumentLayout.cpp
 )
 
 
@@ -34,7 +35,7 @@ target_link_libraries(textlayout kotext)
 target_link_libraries(textlayout LINK_INTERFACE_LIBRARIES kotext)
 
 set_target_properties(textlayout PROPERTIES
-   VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+   VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS textlayout  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

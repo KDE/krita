@@ -19,14 +19,14 @@
 #ifndef TOGGLETIEDNOTECOMMAND_H
 #define TOGGLETIEDNOTECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 namespace MusicCore {
     class Note;
 }
 class MusicShape;
 
-class ToggleTiedNoteCommand : public QUndoCommand {
+class ToggleTiedNoteCommand : public KUndo2Command {
 public:
     ToggleTiedNoteCommand(MusicShape* shape, MusicCore::Note* note);
     virtual void redo();

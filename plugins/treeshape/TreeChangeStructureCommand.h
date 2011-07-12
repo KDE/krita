@@ -22,10 +22,10 @@
 #define TREECHANGESTRUCTURECOMMAND_H
 
 #include "TreeShape.h"
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 /// The undo / redo command for configuring a a tree shape
-class TreeChangeStructureCommand : public QUndoCommand
+class TreeChangeStructureCommand : public KUndo2Command
 {
 public:
     /**
@@ -35,7 +35,7 @@ public:
      * @param followParent if tree will follow parent's structure
      * @param parent the optional parent command
      */
-    TreeChangeStructureCommand(TreeShape *tree, TreeShape::TreeType structure, QUndoCommand *parent = 0);
+    TreeChangeStructureCommand(TreeShape *tree, TreeShape::TreeType structure, KUndo2Command *parent = 0);
     /// redo the command
     virtual void redo();
     /// revert the actions done in redo

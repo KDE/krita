@@ -41,25 +41,29 @@
                     // we can't include a private header from kotext outside of kotext.
 #endif
 
-TextPasteCommand::TextPasteCommand(QClipboard::Mode mode, TextTool *tool, QUndoCommand *parent)
-    : QUndoCommand (parent),
+TextPasteCommand::TextPasteCommand(QClipboard::Mode mode, TextTool *tool, KUndo2Command *parent, bool pasteAsText)
+    : KUndo2Command (parent),
     m_tool(tool),
+    m_pasteAsText(pasteAsText),
     m_first(true),
     m_mode(mode)
 {
-    setText(i18n("Paste"));
+    if (m_pasteAsText)
+        setText(i18n("Paste As Text"));
+    else
+        setText(i18nc("(qtundo-format)", "Paste"));
 }
 
 void TextPasteCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }
 
 void TextPasteCommand::redo()
 {
     KoTextEditor *editor = KoTextDocument(m_tool->m_textShapeData->document()).textEditor();
     if (!m_first) {
-        QUndoCommand::redo();
+        KUndo2Command::redo();
     } else {
         //kDebug() << "begin paste command";
         editor->cursor()->beginEditBlock();
@@ -80,36 +84,41 @@ void TextPasteCommand::redo()
             if (!data->hasFormat(KoOdf::mimeType(odfType))) {
                 odfType = KoOdf::OpenOfficeClipboard;
             }
-            bool weOwnRdfModel = true;
-            const Soprano::Model *rdfModel = 0;
+            
+            if (m_pasteAsText) {
+                editor->cursor()->insertText(data->text());
+            } else {
+                bool weOwnRdfModel = true;
+                const Soprano::Model *rdfModel = 0;
 #ifdef SHOULD_BUILD_RDF
-            rdfModel = Soprano::createModel();
-            if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
-                delete rdfModel;
-                rdfModel = rdf->model();
-                weOwnRdfModel = false;
-            }
+                rdfModel = Soprano::createModel();
+                if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
+                    delete rdfModel;
+                    rdfModel = rdf->model();
+                    weOwnRdfModel = false;
+                }
 #endif
 
-            //kDebug() << "pasting odf text";
-            KoTextPaste paste(*editor->cursor(), m_tool->canvas(), rdfModel);
-            paste.paste(odfType, data);
-            //kDebug() << "done with pasting odf";
+                //kDebug() << "pasting odf text";
+                KoTextPaste paste(*editor->cursor(), m_tool->canvas(), rdfModel);
+                paste.paste(odfType, data);
+                //kDebug() << "done with pasting odf";
 
 #ifdef SHOULD_BUILD_RDF
-            if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
-                KoTextEditor *e = KoDocumentRdf::ensureTextTool(m_tool->canvas());
-                rdf->updateInlineRdfStatements(e->document());
-            }
-            if (weOwnRdfModel && rdfModel) {
-                delete rdfModel;
-            }
+                if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
+                    KoTextEditor *e = KoDocumentRdf::ensureTextTool(m_tool->canvas());
+                    rdf->updateInlineRdfStatements(e->document());
+                }
+                if (weOwnRdfModel && rdfModel) {
+                    delete rdfModel;
+                }
 #endif
-        } else if (data->hasHtml()) {
+            }
+        } else if (!m_pasteAsText && data->hasHtml()) {
             //kDebug() << "pasting html";
             editor->cursor()->insertHtml(data->html());
             //kDebug() << "done with pasting";
-        } else if (data->hasText()) {
+        } else if (m_pasteAsText || data->hasText()) {
             //kDebug() << "pasting text";
             editor->cursor()->insertText(data->text());
             //kDebug() << "done with pasting";

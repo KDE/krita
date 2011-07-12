@@ -86,7 +86,7 @@ public: // KoCanvasBase implementation
 
     bool snapToGrid() const;
 
-    void addCommand(QUndoCommand *command);
+    void addCommand(KUndo2Command *command);
 
     virtual void startMacro(const QString &title);
     virtual void stopMacro();

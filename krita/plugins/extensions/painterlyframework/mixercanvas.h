@@ -34,7 +34,7 @@ class QRectF;
 class QRegion;
 class QResizeEvent;
 class QTabletEvent;
-class QUndoCommand;
+class KUndo2Command;
 
 class KoColorSpace;
 class KoShapeManager;
@@ -63,7 +63,7 @@ public:
     QWidget *canvasWidget() { return this; }
     const QWidget *canvasWidget() const { return this; }
 
-    void updateCanvas(const QRegion &region);
+    void updateCanvas(const QVector<QRect> &region);
 
     KoColor currentColorAt(QPoint pos);
 
@@ -92,7 +92,7 @@ public:
     void updateCanvas(const QRectF &rc) { Q_UNUSED(rc);}
     KoToolProxy* toolProxy() const { Q_ASSERT(false); return 0; }
     KoUnit unit() const;
-    void addCommand(QUndoCommand *command);
+    void addCommand(KUndo2Command *command);
 
 
 public slots:

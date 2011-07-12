@@ -60,11 +60,11 @@ void GoogleDocumentService::clientLogin(const QString & username, const QString 
     data.append(QString("Email=" + username + "&Passwd=" + password).toUtf8());
 
     if(!haveDocAuthToken) {
-        data.append(QString("&service=writely&source=KOfficev2").toUtf8());
+        data.append(QString("&service=writely&source=Calligrav2").toUtf8());
         this->username = username;
         this->password = password;
     } else {
-        data.append(QString("&service=wise&source=KOfficev2").toUtf8());
+        data.append(QString("&service=wise&source=Calligrav2").toUtf8());
     }
     QNetworkRequest req(QUrl("https://www.google.com/accounts/ClientLogin"));
     req.setRawHeader("Host", "www.google.com");
@@ -80,7 +80,7 @@ void GoogleDocumentService::listDocuments()
     authToken = docAuthToken;
     QNetworkRequest requestHeader(QUrl("https://docs.google.com/feeds/default/private/full"));
     requestHeader.setRawHeader("Host", "docs.google.com");
-    requestHeader.setRawHeader("User-Agent", "KOffice");
+    requestHeader.setRawHeader("User-Agent", "Calligra");
     requestHeader.setRawHeader("GData-Version", "3.0");
     requestHeader.setRawHeader("Content-Type", "application/atom+xml");
     requestHeader.setRawHeader("Authorization", authToken.toUtf8());
@@ -92,7 +92,6 @@ void GoogleDocumentService::listDocuments()
 void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
 {
     QUrl url = networkReply->url();
-    bool ok = false;
     if (!networkReply->error()) {
         if (!loggedin) {
             QString text(networkReply->readAll());
@@ -128,7 +127,7 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
             qDebug() << "Part received.........";
             if (newInformation) {
                 emit progressUpdate("Parsing document list...");
-                ok = xmlReader.parse(&xmlInput, true);
+                xmlReader.parse(&xmlInput, true);
                 newInformation = false;
                 getDocument();
             }
@@ -173,7 +172,7 @@ void GoogleDocumentService::downloadDocument(const QString & _url, const QString
     QUrl documentUrl(url + exportFormat);
 
     QNetworkRequest requestHeader(documentUrl);
-    requestHeader.setRawHeader("User-Agent", "KOffice");
+    requestHeader.setRawHeader("User-Agent", "Calligra");
     requestHeader.setRawHeader("GData-Version", "3.0");
     requestHeader.setRawHeader("Authorization", authToken.toUtf8());
 

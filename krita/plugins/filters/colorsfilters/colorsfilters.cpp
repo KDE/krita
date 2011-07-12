@@ -106,7 +106,6 @@ void KisAutoContrast::process(KisPaintDeviceSP device,
                          const KisFilterConfiguration* config,
                          KoUpdater* progressUpdater) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device != 0);
     Q_UNUSED(config);
     // initialize
@@ -178,15 +177,15 @@ void KisAutoContrast::process(KisPaintDeviceSP device,
     qint32 pixelsProcessed = 0;
 
     KoMixColorsOp * mixOp = device->colorSpace()->mixColorsOp();
-
+    quint32 npix;
     do {
-        quint32 npix = iter->nConseqPixels();
+        npix = iter->nConseqPixels();
         quint8 *firstPixel = iter->rawData();
         // adjust
         adj->transform(iter->oldRawData(), iter->rawData(), npix);
         pixelsProcessed += npix;
         if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
-    } while(iter->nextPixel()  && !(progressUpdater && progressUpdater->interrupted()));
+    } while(iter->nextPixels(npix)  && !(progressUpdater && progressUpdater->interrupted()));
     delete[] transfer;
     delete adj;
 }

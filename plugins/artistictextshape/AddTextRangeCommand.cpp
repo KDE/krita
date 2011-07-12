@@ -25,20 +25,20 @@
 AddTextRangeCommand::AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, const QString &text, int from)
     : m_tool(tool), m_shape(shape), m_plainText(text), m_formattedText(QString(), QFont()), m_from(from)
 {
-    setText( i18n("Add text range") );
+    setText( i18nc("(qtundo-format)", "Add text range") );
     m_oldFormattedText = shape->text();
 }
 
 AddTextRangeCommand::AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, const ArtisticTextRange &text, int from)
     : m_tool(tool), m_shape(shape), m_formattedText(text), m_from(from)
 {
-    setText( i18n("Add text range") );
+    setText( i18nc("(qtundo-format)", "Add text range") );
     m_oldFormattedText = shape->text();
 }
 
 void AddTextRangeCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     if ( !m_shape )
         return;
@@ -58,7 +58,7 @@ void AddTextRangeCommand::redo()
 
 void AddTextRangeCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     if ( ! m_shape )
         return;

@@ -45,11 +45,11 @@ public:
     bool deleteShape;
 };
 
-KoShapeCreateCommand::KoShapeCreateCommand(KoShapeControllerBase *controller, KoShape *shape, QUndoCommand *parent)
-        : QUndoCommand(parent),
+KoShapeCreateCommand::KoShapeCreateCommand(KoShapeControllerBase *controller, KoShape *shape, KUndo2Command *parent)
+        : KUndo2Command(parent),
         d(new Private(controller, shape))
 {
-    setText(i18n("Create shape"));
+    setText(i18nc("(qtundo-format)", "Create shape"));
 }
 
 KoShapeCreateCommand::~KoShapeCreateCommand()
@@ -59,7 +59,7 @@ KoShapeCreateCommand::~KoShapeCreateCommand()
 
 void KoShapeCreateCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     Q_ASSERT(d->shape);
     Q_ASSERT(d->controller);
     if (d->shapeParent)
@@ -72,7 +72,7 @@ void KoShapeCreateCommand::redo()
 
 void KoShapeCreateCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     Q_ASSERT(d->shape);
     Q_ASSERT(d->controller);
     // the parent has to be there when it is removed from the KoShapeControllerBase

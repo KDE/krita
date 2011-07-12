@@ -31,7 +31,7 @@
 #include "kis_tiff_converter.h"
 
 K_PLUGIN_FACTORY(TIFFImportFactory, registerPlugin<KisTIFFImport>();)
-K_EXPORT_PLUGIN(TIFFImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(TIFFImportFactory("calligrafilters"))
 
 KisTIFFImport::KisTIFFImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
@@ -52,12 +52,6 @@ KoFilter::ConversionStatus KisTIFFImport::convert(const QByteArray&, const QByte
 
     if (!doc)
         return KoFilter::CreationError;
-
-    KisView2 * view = 0;
-
-    if (!doc->views().isEmpty()) {
-        view = static_cast<KisView2*>(doc->views().first());
-    }
 
     QString filename = m_chain -> inputFile();
 

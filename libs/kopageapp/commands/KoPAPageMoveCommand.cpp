@@ -25,8 +25,8 @@
 #include "KoPADocument.h"
 #include "KoPAPageBase.h"
 
-KoPAPageMoveCommand::KoPAPageMoveCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, QUndoCommand *parent )
-: QUndoCommand( parent )
+KoPAPageMoveCommand::KoPAPageMoveCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent )
+: KUndo2Command( parent )
 , m_document( document )
 , m_after( after )
 {
@@ -34,8 +34,8 @@ KoPAPageMoveCommand::KoPAPageMoveCommand( KoPADocument *document, KoPAPageBase *
     init( QList<KoPAPageBase *>() << page );
 }
 
-KoPAPageMoveCommand::KoPAPageMoveCommand( KoPADocument *document, const QList<KoPAPageBase *> &pages, KoPAPageBase *after, QUndoCommand *parent )
-: QUndoCommand( parent )
+KoPAPageMoveCommand::KoPAPageMoveCommand( KoPADocument *document, const QList<KoPAPageBase *> &pages, KoPAPageBase *after, KUndo2Command *parent )
+: KUndo2Command( parent )
 , m_document( document )
 , m_after( after )
 {
@@ -55,10 +55,10 @@ void KoPAPageMoveCommand::init( const QList<KoPAPageBase *> &pages )
     }
 
     if ( pages.at(0)->pageType() == KoPageApp::Slide ) {
-        setText( i18np( "Move slide", "Move slides", pages.size() ) );
+        setText( i18ncp( "(qtundo-format)", "Move slide", "Move slides", pages.size() ) );
     }
     else {
-        setText( i18np( "Move page", "Move pages", pages.size() ) );
+        setText( i18ncp( "(qtundo-format)", "Move page", "Move pages", pages.size() ) );
     }
 }
 
@@ -87,7 +87,7 @@ void KoPAPageMoveCommand::undo()
     }
 
     QMap<int, KoPAPageBase *>::const_iterator it;
-    for ( it = m_pageIndices.constBegin(); it != m_pageIndices.constEnd(); it++ ) {
+    for ( it = m_pageIndices.constBegin(); it != m_pageIndices.constEnd(); ++it ) {
         m_document->insertPage( it.value(), it.key() );
     }
 }

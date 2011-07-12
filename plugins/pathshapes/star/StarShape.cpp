@@ -263,14 +263,12 @@ bool StarShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & co
 
     if (element.localName() == "custom-shape") {
         QString drawEngine = element.attributeNS(KoXmlNS::draw, "engine", "");
-        if (drawEngine != "koffice:star")
+        if (drawEngine != "calligra:star")
             return false;
         loadAsCustomShape = true;
     } else if (element.localName() != "regular-polygon") {
         return false;
     }
-
-    QPointF loadedPosition = position();
 
     m_radius[tip] = 50;
     m_center = QPointF(50,50);
@@ -359,7 +357,7 @@ void StarShape::saveOdf(KoShapeSavingContext & context) const
             saveOdfAttributes(context, OdfAllAttributes);
 
             // now write the special shape data
-            context.xmlWriter().addAttribute("draw:engine", "koffice:star");
+            context.xmlWriter().addAttribute("draw:engine", "calligra:star");
             // create the data attribute
             QString drawData = QString("corners:%1;").arg(m_cornerCount);
             drawData += m_convex ? "concave:false;" : "concave:true;";

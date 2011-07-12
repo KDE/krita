@@ -254,40 +254,32 @@ void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
                               const quint8 *srcRowStart, qint32 srcRowStride,
                               const quint8 *maskRowStart, qint32 maskRowStride,
                               qint32 rows, qint32 numColumns,
-                              quint8 opacity, quint8 flow) const
-{
-    composite(dstRowStart, dstRowStride,
-              srcRowStart, srcRowStride,
-              maskRowStart, maskRowStride,
-              rows, numColumns,
-              opacity, flow, d->defaultChannelFlags);
-}
-
-void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
-                              const quint8 *srcRowStart, qint32 srcRowStride,
-                              const quint8 *maskRowStart, qint32 maskRowStride,
-                              qint32 rows, qint32 numColumns,
                               quint8 opacity, const QBitArray& channelFlags) const
 {
-    composite(dstRowStart, dstRowStride,
-            srcRowStart, srcRowStride,
-            maskRowStart, maskRowStride,
-            rows, numColumns,
-            opacity, 255, channelFlags);
+    KoCompositeOp::ParameterInfo params;
+    params.dstRowStart   = dstRowStart;
+    params.dstRowStride  = dstRowStride;
+    params.srcRowStart   = srcRowStart;
+    params.srcRowStride  = srcRowStride;
+    params.maskRowStart  = maskRowStart;
+    params.maskRowStride = maskRowStride;
+    params.rows          = rows;
+    params.cols          = numColumns;
+    params.opacity       = float(opacity) / 255.0f;
+    params.flow          = 1.0f;
+    params.channelFlags  = channelFlags;
+    composite(params);
 }
 
-void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
-                              const quint8 *srcRowStart, qint32 srcRowStride,
-                              const quint8 *maskRowStart, qint32 maskRowStride,
-                              qint32 rows, qint32 numColumns,
-                              quint8 opacity, quint8 flow, const QBitArray& channelFlags) const
+void KoCompositeOp::composite(const KoCompositeOp::ParameterInfo& params) const
 {
-    composite(dstRowStart, dstRowStride,
-              srcRowStart, srcRowStride,
-              maskRowStart, maskRowStride,
-              rows, numColumns,
-              opacity, channelFlags);
+    composite(params.dstRowStart           , params.dstRowStride ,
+              params.srcRowStart           , params.srcRowStride ,
+              params.maskRowStart          , params.maskRowStride,
+              params.rows                  , params.cols         ,
+              quint8(params.opacity*255.0f), params.channelFlags );
 }
+
 
 QString KoCompositeOp::category() const
 {

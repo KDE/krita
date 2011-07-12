@@ -29,6 +29,13 @@
 class KoTextSharedLoadingData;
 class BibliographyGenerator;
 
+class KOTEXT_EXPORT BibliographyGeneratorInterface {
+public:
+    BibliographyGeneratorInterface() {}
+    virtual ~BibliographyGeneratorInterface() {}
+    virtual void setMaxTabPosition(qreal maxTabPosition) = 0;
+};
+
 class KOTEXT_EXPORT KoBibliographyInfo
 {
 public:
@@ -39,9 +46,9 @@ public:
     void loadOdf(KoTextSharedLoadingData *sharedLoadingData, const KoXmlElement &element);
     void saveOdf(KoXmlWriter *writer) const;
 
-    void setGenerator(BibliographyGenerator *generator);
+    void setGenerator(BibliographyGeneratorInterface *generator);
 
-    BibliographyGenerator *generator() const;
+    BibliographyGeneratorInterface *generator() const;
 
     QString m_name;
     QString m_styleName;
@@ -50,8 +57,9 @@ public:
 
 private:
     int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
-    BibliographyGenerator * m_generator;
+    BibliographyGeneratorInterface * m_generator;
 };
 
 Q_DECLARE_METATYPE(KoBibliographyInfo *);       //to avail KoBibliographyInfo * to all template based function.(QVarient)
+Q_DECLARE_METATYPE(QTextDocument *);
 #endif // KOBIBLIOGRAPHYINFO_H

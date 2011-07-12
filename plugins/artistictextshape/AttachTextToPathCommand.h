@@ -20,19 +20,19 @@
 #ifndef ATTACHTEXTTOPATHCOMMAND_H
 #define ATTACHTEXTTOPATHCOMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 #include <QtGui/QTransform>
 
 class ArtisticTextShape;
 class KoPathShape;
 
-class AttachTextToPathCommand : public QUndoCommand
+class AttachTextToPathCommand : public KUndo2Command
 {
 public:
-    AttachTextToPathCommand( ArtisticTextShape * textShape, KoPathShape * pathShape, QUndoCommand * parent = 0 );
-    /// reimplemented from QUndoCommand
+    AttachTextToPathCommand( ArtisticTextShape * textShape, KoPathShape * pathShape, KUndo2Command * parent = 0 );
+    /// reimplemented from KUndo2Command
     virtual void redo();
-    /// reimplemented from QUndoCommand
+    /// reimplemented from KUndo2Command
     virtual void undo();
 private:
     ArtisticTextShape * m_textShape;

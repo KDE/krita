@@ -22,20 +22,20 @@
 #define CHANGECONNECTIONPOINTCOMMAND_H
 
 #include <KoConnectionPoint.h>
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 #include <QtCore/QPointF>
 
 class KoShape;
 
-class ChangeConnectionPointCommand : public QUndoCommand
+class ChangeConnectionPointCommand : public KUndo2Command
 {
 public:
     /// Creates new comand to change connection point of shape
-    ChangeConnectionPointCommand(KoShape *shape, int connectionPointId, const KoConnectionPoint &oldPoint, const KoConnectionPoint &newPoint, QUndoCommand *parent = 0);
+    ChangeConnectionPointCommand(KoShape *shape, int connectionPointId, const KoConnectionPoint &oldPoint, const KoConnectionPoint &newPoint, KUndo2Command *parent = 0);
     virtual ~ChangeConnectionPointCommand();
-    /// reimplemented from QUndoCommand
+    /// reimplemented from KUndo2Command
     virtual void redo();
-    /// reimplemented from QUndoCommand
+    /// reimplemented from KUndo2Command
     virtual void undo();
 
 private:

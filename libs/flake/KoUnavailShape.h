@@ -23,7 +23,7 @@
 #define KOUNAVAILSHAPE_H
 
 
-// KOffice
+// Calligra
 #include <KoShape.h>
 #include <KoFrameShape.h>
 

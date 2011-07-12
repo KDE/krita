@@ -148,6 +148,7 @@ void KisTileCompressor2::decompressTileData(quint8 *buffer,
                                                  (quint8*)m_linearizationBuffer.data(), tileDataSize);
 
         Q_ASSERT(bytesWritten == tileDataSize);
+        Q_UNUSED(bytesWritten); // unused-but-set-variable
 
         KisAbstractCompression::delinearizeColors((quint8*)m_linearizationBuffer.data(),
                                                   tileData->data(),

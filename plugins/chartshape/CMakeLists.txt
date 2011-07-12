@@ -56,7 +56,7 @@ kde4_add_ui_files(chartshape_LIB_SRCS
 kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})
 target_link_libraries(chartshapelib kdchart komain textlayout)
 target_link_libraries(chartshapelib LINK_INTERFACE_LIBRARIES kdchart)
-set_target_properties(chartshapelib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(chartshapelib PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 install(TARGETS chartshapelib ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -68,4 +68,4 @@ install(TARGETS chartshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES chartshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES kchartpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons )
+kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )

@@ -230,10 +230,6 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
             }
         } else {
             qreal boundTop = fm.ascent();
-            qreal boundBottom = 0;
-            if (d->verticalRel == VChar) {
-                boundBottom = fm.descent();
-            }
             switch (d->verticalPos) {
             case VFromTop:
                  object.setAscent(qMax((qreal) 0, -d->distance.y()));
@@ -609,8 +605,8 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     // if svg:x or svg:y should be ignored set new position
     shape()->setPosition(d->distance);
 
-    if (element.hasAttributeNS(KoXmlNS::koffice, "anchor-type")) {
-        QString anchorType = element.attributeNS(KoXmlNS::koffice, "anchor-type"); // our enriched properties
+    if (element.hasAttributeNS(KoXmlNS::calligra, "anchor-type")) {
+        QString anchorType = element.attributeNS(KoXmlNS::calligra, "anchor-type"); // our enriched properties
         QStringList types = anchorType.split('|');
         if (types.count() > 1) {
             QString vertical = types[0];

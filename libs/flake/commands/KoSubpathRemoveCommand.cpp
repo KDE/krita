@@ -21,13 +21,13 @@
 #include "KoSubpathRemoveCommand.h"
 #include <klocale.h>
 
-KoSubpathRemoveCommand::KoSubpathRemoveCommand(KoPathShape *pathShape, int subpathIndex, QUndoCommand *parent)
-        : QUndoCommand(parent)
+KoSubpathRemoveCommand::KoSubpathRemoveCommand(KoPathShape *pathShape, int subpathIndex, KUndo2Command *parent)
+        : KUndo2Command(parent)
         , m_pathShape(pathShape)
         , m_subpathIndex(subpathIndex)
         , m_subpath(0)
 {
-    setText(i18n("Remove subpath"));
+    setText(i18nc("(qtundo-format)", "Remove subpath"));
 }
 
 KoSubpathRemoveCommand::~KoSubpathRemoveCommand()
@@ -40,7 +40,7 @@ KoSubpathRemoveCommand::~KoSubpathRemoveCommand()
 
 void KoSubpathRemoveCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     m_pathShape->update();
     m_subpath = m_pathShape->removeSubpath(m_subpathIndex);
     if (m_subpath) {
@@ -57,7 +57,7 @@ void KoSubpathRemoveCommand::redo()
 
 void KoSubpathRemoveCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     if (m_subpath) {
         m_pathShape->addSubpath(m_subpath, m_subpathIndex);
         m_pathShape->normalize();

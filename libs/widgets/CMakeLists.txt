@@ -38,6 +38,7 @@ set(kowidgets_LIB_SRCS
     KoResourceModel.cpp
     KoResourceItemDelegate.cpp
     KoResourceItemView.cpp
+    KoResourceTagging.cpp
     KoItemToolTip.cpp
     KoCheckerBoardPainter.cpp
     KoResourceServerAdapter.cpp
@@ -68,7 +69,7 @@ endif (GHNS)
 target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms ${KDE4_KDEUI_LIBS})
 
 set_target_properties(kowidgets PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
 install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -101,6 +102,7 @@ install( FILES
     KoXYColorSelector.h
     KoResourceItemChooser.h
     KoResourceSelector.h
+    KoResourceTagging.h
     KoLineStyleSelector.h
     KoDockWidgetTitleBar.h
     KoDockWidgetTitleBar.h

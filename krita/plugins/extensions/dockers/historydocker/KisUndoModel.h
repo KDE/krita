@@ -58,10 +58,10 @@
 ****************************************************************************/
 #include <QAbstractItemModel>
 
-#include <QUndoStack>
+#include <kundo2qstack.h>
 #include <QItemSelectionModel>
 #include <QIcon>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include "kis_types.h"
 #include "kis_canvas2.h"
 #include "kis_view2.h"
@@ -74,7 +74,7 @@ class KisUndoModel : public QAbstractItemModel
 public:
     KisUndoModel(QObject *parent = 0);
 
-    QUndoStack *stack() const;
+    KUndo2QStack *stack() const;
 
     virtual QModelIndex index(int row, int column,
     const QModelIndex &parent = QModelIndex()) const;
@@ -95,7 +95,7 @@ public:
     void setCanvas(KisCanvas2* canvas);
 
 public slots:
-    void setStack(QUndoStack *stack);
+    void setStack(KUndo2QStack *stack);
     void addImage(int idx);
 
 private slots:
@@ -104,10 +104,10 @@ private slots:
     void setStackCurrentIndex(const QModelIndex &index);
 
 private:
-    QUndoStack *m_stack;
+    KUndo2QStack *m_stack;
     QItemSelectionModel *m_sel_model;
     QString m_emty_label;
     QIcon m_clean_icon;
     KisCanvas2* m_canvas;
-    QMap<const QUndoCommand*, QImage> imageMap;
+    QMap<const KUndo2Command*, QImage> imageMap;
 };

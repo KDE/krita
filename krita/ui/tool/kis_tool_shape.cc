@@ -47,6 +47,11 @@ KisToolShape::~KisToolShape()
 {
 }
 
+int KisToolShape::flags() const
+{
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
+}
+
 QWidget * KisToolShape::createOptionWidget()
 {
     QWidget * optionWidget = KisToolPaint::createOptionWidget();
@@ -136,7 +141,7 @@ void KisToolShape::addShape(KoShape* shape)
             shape->setBackground(0);
             break;
     }
-    QUndoCommand * cmd = canvas()->shapeController()->addShape(shape);
+    KUndo2Command * cmd = canvas()->shapeController()->addShape(shape);
     canvas()->addCommand(cmd);
 }
 

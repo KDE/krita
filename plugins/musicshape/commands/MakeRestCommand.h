@@ -19,7 +19,7 @@
 #ifndef MAKERESTCOMMAND_H
 #define MAKERESTCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QList>
 
 namespace MusicCore {
@@ -28,7 +28,7 @@ namespace MusicCore {
 }
 class MusicShape;
 
-class MakeRestCommand : public QUndoCommand {
+class MakeRestCommand : public KUndo2Command {
 public:
     MakeRestCommand(MusicShape* shape, MusicCore::Chord* chord);
     virtual void redo();

@@ -43,6 +43,7 @@ set(kotext_LIB_SRCS
     KoBookmarkManager.cpp
     KoInlineNote.cpp
     KoInlineCite.cpp
+    KoTextSoftPageBreak.cpp
     FindDirection_p.cpp
     KoFindStrategy.cpp
     KoReplaceStrategy.cpp
@@ -119,7 +120,7 @@ endif( FREETYPE_FOUND )
 
 
 set_target_properties(kotext PROPERTIES
-   VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+   VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -154,6 +155,7 @@ install(
     KoTextRdfCore.h
     KoTextInlineRdf.h
     KoTextMeta.h
+    KoTextSoftPageBreak.cpp
     KoSection.h
 
     DESTINATION

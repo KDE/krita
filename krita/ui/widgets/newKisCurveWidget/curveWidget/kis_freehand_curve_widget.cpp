@@ -35,7 +35,7 @@ QList<QPointF> KisFreehandCurveWidget::controlPoints() const
 {
     QList<QPointF> retPoints;
 
-    for (QMap<int, int>::const_iterator iter=m_points.begin(); iter!=(m_points.end()); iter++) {
+    for (QMap<int, int>::const_iterator iter=m_points.begin(); iter!=(m_points.end()); ++iter) {
         retPoints.append(QPointF(iter.key(), iter.value()));
     }
 
@@ -75,7 +75,7 @@ void KisFreehandCurveWidget::paintEvent(QPaintEvent *)
     path.moveTo(firstPoint.key(), firstPoint.value());
 
 
-    for (QMap<int, int>::iterator iter=m_points.begin(); iter!=(m_points.end()); iter++) {
+    for (QMap<int, int>::iterator iter=m_points.begin(); iter!=(m_points.end()); ++iter) {
         path.lineTo(iter.key(), iter.value());
     }
 

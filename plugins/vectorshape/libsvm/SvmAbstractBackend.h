@@ -92,7 +92,9 @@ public:
     virtual void polygon(SvmGraphicsContext &context, const QPolygon &polygon) = 0;
 
     virtual void textArray(SvmGraphicsContext &context,
-                           const QPoint &point, const QString &string) = 0;
+                           const QPoint &point, const QString &string,
+                           quint16 startIndex, quint16 len,
+                           quint32 dxArrayLen, qint32 *dxArray) = 0;
 };
 
 

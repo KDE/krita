@@ -27,7 +27,7 @@
 #include <QRegion>
 #include <QResizeEvent>
 #include <QTabletEvent>
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <KoResourceManager.h>
 #include <KoColorSpace.h>
@@ -82,7 +82,7 @@ KisPaintDeviceSP MixerCanvas::device()
     return m_paintDevice;
 }
 
-void MixerCanvas::addCommand(QUndoCommand *command)
+void MixerCanvas::addCommand(KUndo2Command *command)
 {
     delete command;
 }
@@ -182,10 +182,14 @@ void MixerCanvas::paintEvent(QPaintEvent *event)
     QFrame::paintEvent(event);
 }
 
-void MixerCanvas::updateCanvas(const QRegion& region)
+void MixerCanvas::updateCanvas(const QVector<QRect>& region)
 {
     m_dirty = true;
-    update(region.boundingRect());
+    QRect bounds;
+    foreach(const QRect &rc, region) {
+        bounds |= rc;
+    }
+    update(bounds);
 }
 
 void MixerCanvas::slotClear()

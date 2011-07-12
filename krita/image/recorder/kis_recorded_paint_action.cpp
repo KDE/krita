@@ -127,7 +127,7 @@ void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecor
 
     // compositeOp
     elt.setAttribute("compositeOp", d->compositeOp);
-    
+
     // Save stroke style
     switch(d->strokeStyle)
     {
@@ -298,7 +298,7 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info, KoUpd
     painter->setPattern(d->pattern);
     painter->setGradient(d->gradient);
     painter->setGenerator(d->generator);
-    
+
     playPaint(info, painter);
 
     if (!d->paintIncremental) {
@@ -306,8 +306,7 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info, KoUpd
         painter2.setCompositeOp(d->compositeOp);
         painter2.setOpacity(d->opacity * 255);
 
-        QRegion r = painter->takeDirtyRegion();
-        QVector<QRect> dirtyRects = r.rects();
+        QVector<QRect> dirtyRects = painter->takeDirtyRegion();
         QVector<QRect>::iterator it = dirtyRects.begin();
         QVector<QRect>::iterator end = dirtyRects.end();
         while (it != end) {
@@ -345,7 +344,7 @@ void KisRecordedPaintActionFactory::setupPaintAction(KisRecordedPaintAction* act
 
     KoColor bC = backgroundColorFromXML(elt);
     KoColor fC = paintColorFromXML(elt);
-    
+
     action->setName(name);
     action->setBackgroundColor(bC);
     action->setPaintColor(fC);
@@ -353,7 +352,7 @@ void KisRecordedPaintActionFactory::setupPaintAction(KisRecordedPaintAction* act
     action->setPaintIncremental(paintIncremental);
     action->setCompositeOp(compositeOp);
 
-    
+
     // Load stroke style
     QString strokeAttr = elt.attribute("strokeStyle", "None");
     if (strokeAttr == "Brush" )

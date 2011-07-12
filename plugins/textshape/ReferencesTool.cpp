@@ -45,15 +45,20 @@ ReferencesTool::~ReferencesTool()
 
 void ReferencesTool::createActions()
 {
-    KAction *action = new KAction(i18n("Table of Contents..."), this);
+    KAction *action = new KAction(i18n("Insert"), this);
     addAction("insert_tableofcentents", action);
     action->setToolTip(i18n("Insert a Table of Contents into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertTableOfContents()));
 
-    KAction *action1 = new KAction(i18n("Add Citation"),this);
-    addAction("insert_citation",action1);
-    action1->setToolTip(i18n("Insert a citation into the document."));
-    connect(action1, SIGNAL(triggered()), this, SLOT(insertCitation()));
+    action = new KAction(i18n("Configure..."), this);
+    addAction("format_tableofcentents", action);
+    action->setToolTip(i18n("Configure the Table of Contents"));
+    connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
+
+    action = new KAction(i18n("Add Citation"),this);
+    addAction("insert_citation",action);
+    action->setToolTip(i18n("Insert a citation into the document."));
+    connect(action, SIGNAL(triggered()), this, SLOT(insertCitation()));
 }
 
 void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -104,8 +109,12 @@ void ReferencesTool::insertTableOfContents()
 
 void ReferencesTool::insertCitation()
 {
-    CitationInsertionDialog *dialog = new CitationInsertionDialog(textEditor()->document(),0);
+    CitationInsertionDialog *dialog = new CitationInsertionDialog(textEditor()->document(),canvas()->canvasWidget());
     dialog->show();
+}
+
+void ReferencesTool::formatTableOfContents()
+{
 }
 
 #include <ReferencesTool.moc>

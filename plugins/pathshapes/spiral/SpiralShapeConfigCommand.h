@@ -21,10 +21,10 @@
 #define SPIRALSHAPECONFIGCOMMAND_H
 
 #include "SpiralShape.h"
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 /// The undo / redo command for configuring a spiral shape
-class SpiralShapeConfigCommand : public QUndoCommand
+class SpiralShapeConfigCommand : public KUndo2Command
 {
 public:
     /**
@@ -34,7 +34,7 @@ public:
      * @param fade the fade parameter
      * @param parent the optional parent command
      */
-    SpiralShapeConfigCommand(SpiralShape *spiral, SpiralShape::SpiralType type, bool clockWise, qreal fade, QUndoCommand *parent = 0);
+    SpiralShapeConfigCommand(SpiralShape *spiral, SpiralShape::SpiralType type, bool clockWise, qreal fade, KUndo2Command *parent = 0);
     /// redo the command
     virtual void redo();
     /// revert the actions done in redo

@@ -21,8 +21,8 @@
 #include "KoSubpathJoinCommand.h"
 #include <klocale.h>
 
-KoSubpathJoinCommand::KoSubpathJoinCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, QUndoCommand *parent)
-        : QUndoCommand(parent)
+KoSubpathJoinCommand::KoSubpathJoinCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, KUndo2Command *parent)
+        : KUndo2Command(parent)
         , m_pointData1(pointData1)
         , m_pointData2(pointData2)
         , m_splitIndex(KoPathPointIndex(-1, -1))
@@ -48,9 +48,9 @@ KoSubpathJoinCommand::KoSubpathJoinCommand(const KoPathPointData &pointData1, co
             m_reverse |= ReverseFirst;
         if (m_pointData2.pointIndex.second != 0)
             m_reverse |= ReverseSecond;
-        setText(i18n("Close subpath"));
+        setText(i18nc("(qtundo-format)", "Close subpath"));
     } else {
-        setText(i18n("Join subpaths"));
+        setText(i18nc("(qtundo-format)", "Join subpaths"));
     }
 
     KoPathPoint * point1 = pathShape->pointByIndex(m_pointData1.pointIndex);
@@ -68,7 +68,7 @@ KoSubpathJoinCommand::~KoSubpathJoinCommand()
 
 void KoSubpathJoinCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     KoPathShape * pathShape = m_pointData1.pathShape;
 
     bool closeSubpath = m_pointData1.pointIndex.first == m_pointData2.pointIndex.first;
@@ -109,7 +109,7 @@ void KoSubpathJoinCommand::redo()
 
 void KoSubpathJoinCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     KoPathShape * pathShape = m_pointData1.pathShape;
     pathShape->update();
     if (m_pointData1.pointIndex.first == m_pointData2.pointIndex.first) {

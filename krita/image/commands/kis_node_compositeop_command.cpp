@@ -25,7 +25,7 @@
 
 KisNodeCompositeOpCommand::KisNodeCompositeOpCommand(KisNodeSP node, const QString& oldCompositeOp,
         const QString& newCompositeOp) :
-        KisNodeCommand(i18n("Node Composite Mode"), node)
+        KisNodeCommand(i18nc("(qtundo-format)", "Node Composite Mode"), node)
 {
     m_oldCompositeOp = oldCompositeOp;
     m_newCompositeOp = newCompositeOp;

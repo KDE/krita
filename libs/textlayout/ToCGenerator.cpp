@@ -45,11 +45,12 @@
 
 static const QString INVALID_HREF_TARGET = "INVALID_HREF";
 
-ToCGenerator::ToCGenerator(QTextDocument *tocDocument, QTextBlock block, KoTableOfContentsGeneratorInfo *tocInfo)
+ToCGenerator::ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGeneratorInfo *tocInfo)
     : QObject(tocDocument)
     , m_ToCDocument(tocDocument)
     , m_ToCInfo(tocInfo)
-    , m_block(block)
+    , m_document(0)
+    , m_documentLayout(0)
     , m_generatedDocumentChangeCount(-1)
     , m_maxTabPosition(0.0)
 {
@@ -60,12 +61,6 @@ ToCGenerator::ToCGenerator(QTextDocument *tocDocument, QTextBlock block, KoTable
 
     tocDocument->setUndoRedoEnabled(false);
     tocDocument->setDocumentLayout(new ToCDocumentLayout(tocDocument));
-
-    m_documentLayout = static_cast<KoTextDocumentLayout *>(m_block.document()->documentLayout());
-    m_document = m_documentLayout->document();
-
-    // connect to FinishedLayout
-    connect(m_documentLayout, SIGNAL(finishedLayout()), this, SLOT(generate()));
 
     // We cannot do generate right now to have a ToC with placeholder numbers cause we are in the middle
     // of a layout-process when called what means that the document isn't ready and therefore it would
@@ -81,7 +76,6 @@ ToCGenerator::~ToCGenerator()
     delete m_ToCInfo;
 }
 
-
 static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int outlineLevel) {
     KoParagraphStyle *style = new KoParagraphStyle();
     style->setName("Contents " + QString::number(outlineLevel));
@@ -94,6 +88,20 @@ static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int
 void ToCGenerator::setMaxTabPosition(qreal maxtabPosition)
 {
     m_maxTabPosition = maxtabPosition;
+}
+
+void ToCGenerator::setBlock(const QTextBlock &block)
+{
+    if (m_documentLayout) {
+        disconnect(m_documentLayout, SIGNAL(finishedLayout()), this, SLOT(generate()));
+    }
+
+    m_block = block;
+    m_documentLayout = static_cast<KoTextDocumentLayout *>(m_block.document()->documentLayout());
+    m_document = m_documentLayout->document();
+
+    // connect to FinishedLayout
+    connect(m_documentLayout, SIGNAL(finishedLayout()), this, SLOT(generate()));
 }
 
 QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManager* inlineTextObjectManager)
@@ -181,11 +189,12 @@ void ToCGenerator::generate()
         block = block.next();
     }
     cursor.endEditBlock();
-    KoTextLayoutRootArea *rootArea = m_documentLayout->rootAreaForPosition(m_block.position());
 
+    KoTextLayoutRootArea *rootArea = m_documentLayout->rootAreaForPosition(m_block.previous().position());
     if (rootArea) {
         rootArea->setDirty();
     }
+
     m_generatedDocumentChangeCount = m_documentLayout->documentChangedCount();
 }
 

@@ -421,9 +421,14 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
 
                 if (!tocInfo->generator()) {
                     // The generator attaches itself to the tocInfo
-                    new ToCGenerator(tocDocument, block, tocInfo);
+                    new ToCGenerator(tocDocument, tocInfo);
                 }
                 tocInfo->generator()->setMaxTabPosition(right() - left());
+
+                if (!cursor->currentSubFrameIterator) {
+                    // Let the generator know which QTextBlock it needs to ask for a relayout once the toc got generated.
+                    tocInfo->generator()->setBlock(block);
+                }
 
                 // Let's create KoTextLayoutArea and let to handle the ToC
                 KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, documentLayout());

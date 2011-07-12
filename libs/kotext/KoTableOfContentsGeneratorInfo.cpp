@@ -263,7 +263,7 @@ KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo()
         // index-entry-tab-stop
         IndexEntryTabStop *entryTabStop = new IndexEntryTabStop(QString());
         entryTabStop->tab.type = QTextOption::RightTab;
-        entryTabStop->setPosition("MAX");
+        entryTabStop->setPosition("");
         entryTabStop->tab.leaderText = ".";
         tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryTabStop));
 

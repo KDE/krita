@@ -198,6 +198,12 @@ void ToCGenerator::generate()
     m_generatedDocumentChangeCount = m_documentLayout->documentChangedCount();
 }
 
+static bool compareTab(const QVariant &tab1, const QVariant &tab2)
+{
+    return tab1.value<KoText::Tab>().position < tab2.value<KoText::Tab>().position;
+}
+
+
 void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlock block, int &blockId)
 {
     KoStyleManager *styleManager = KoTextDocument(m_document).styleManager();
@@ -297,12 +303,14 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
 
                         QTextBlockFormat blockFormat = cursor.blockFormat();
                         QList<QVariant> tabList;
-                        if (tabEntry->m_position == "MAX") {
+                        if (tabEntry->m_position.isEmpty()) {
                             tabEntry->tab.position = m_maxTabPosition;
                         } else {
                             tabEntry->tab.position = tabEntry->m_position.toDouble();
                         }
                         tabList.append(QVariant::fromValue<KoText::Tab>(tabEntry->tab));
+                        qSort(tabList.begin(), tabList.end(), compareTab);
+
                         blockFormat.setProperty(KoParagraphStyle::TabPositions, QVariant::fromValue<QList<QVariant> >(tabList));
                         cursor.setBlockFormat(blockFormat);
                         break;

@@ -569,11 +569,6 @@ QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
     return line;
 }
 
-bool compareTab(const KoText::Tab &tab1, const KoText::Tab &tab2)
-{
-    return tab1.position < tab2.position;
-}
-
 // layoutBlock() method is structured like this:
 //
 // 1) Setup various helper values
@@ -837,9 +832,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     qreal position = tabOffset;
 
     if (!tabs.isEmpty()) {
-        //unfortunately the tabs are not guaranteed to be ordered, so lets do that ourselves
-        qSort(tabs.begin(), tabs.end(), compareTab);
-
         position = tabs.last().position;
     }
 

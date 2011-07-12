@@ -65,6 +65,9 @@ public:
 
     void notifyCommandDone(QUndoCommandSP command);
     QVector<QUndoCommandSP> takeUndoCommands();
+    bool undo() {
+        return m_undo;
+    }
 
 private:
     bool m_undo;
@@ -83,14 +86,11 @@ class KRITAIMAGE_EXPORT KisStrokeJobStrategyUndoCommandBased : public KisStrokeJ
 public:
     class Data : public StrokeJobData {
     public:
-        Data(bool _undo,
-             QUndoCommandSP _command)
-            : undo(_undo),
-              command(_command)
+        Data(QUndoCommandSP _command)
+            : command(_command)
         {
         }
 
-        bool undo;
         QUndoCommandSP command;
     };
 
@@ -99,6 +99,9 @@ public:
     void run(StrokeJobData *data);
 
 private:
+    // testing suite
+    friend QString getCommandName(KisStrokeJob *job);
+
     KisStrokeStrategyUndoCommandBased *m_parentStroke;
 };
 
@@ -106,14 +109,13 @@ private:
 class KRITAIMAGE_EXPORT KisStrokeJobStrategyCancelUndoCommandBased : public KisStrokeJobStrategy
 {
 public:
-    KisStrokeJobStrategyCancelUndoCommandBased(bool undo, KisStrokeStrategyUndoCommandBased *parentStroke);
+    KisStrokeJobStrategyCancelUndoCommandBased(KisStrokeStrategyUndoCommandBased *parentStroke);
     void run(StrokeJobData *data);
 
 private:
     // testing suite
     friend QString getCommandName(KisStrokeJob *job);
 
-    bool m_undo;
     KisStrokeStrategyUndoCommandBased *m_parentStroke;
 };
 

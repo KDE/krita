@@ -51,7 +51,7 @@ KisStrokeJobStrategy* KisStrokeStrategyUndoCommandBased::createFinishStrategy()
 
 KisStrokeJobStrategy* KisStrokeStrategyUndoCommandBased::createCancelStrategy()
 {
-    return new KisStrokeJobStrategyCancelUndoCommandBased(!m_undo, this);
+    return new KisStrokeJobStrategyCancelUndoCommandBased(this);
 }
 
 KisStrokeJobStrategy* KisStrokeStrategyUndoCommandBased::createDabStrategy()
@@ -62,12 +62,12 @@ KisStrokeJobStrategy* KisStrokeStrategyUndoCommandBased::createDabStrategy()
 
 KisStrokeJobStrategy::StrokeJobData* KisStrokeStrategyUndoCommandBased::createInitData()
 {
-    return new KisStrokeJobStrategyUndoCommandBased::Data(m_undo, m_initCommand);
+    return new KisStrokeJobStrategyUndoCommandBased::Data(m_initCommand);
 }
 
 KisStrokeJobStrategy::StrokeJobData* KisStrokeStrategyUndoCommandBased::createFinishData()
 {
-    return new KisStrokeJobStrategyUndoCommandBased::Data(m_undo, m_finishCommand);
+    return new KisStrokeJobStrategyUndoCommandBased::Data(m_finishCommand);
 }
 
 KisStrokeJobStrategy::StrokeJobData* KisStrokeStrategyUndoCommandBased::createCancelData()
@@ -102,20 +102,17 @@ void KisStrokeJobStrategyUndoCommandBased::run(StrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
 
-    if(d->undo) {
+    if(m_parentStroke->undo()) {
         d->command->undo();
     } else {
         d->command->redo();
     }
 
-    if(m_parentStroke) {
-        m_parentStroke->notifyCommandDone(d->command);
-    }
+    m_parentStroke->notifyCommandDone(d->command);
 }
 
-KisStrokeJobStrategyCancelUndoCommandBased::KisStrokeJobStrategyCancelUndoCommandBased(bool undo, KisStrokeStrategyUndoCommandBased *parentStroke)
+KisStrokeJobStrategyCancelUndoCommandBased::KisStrokeJobStrategyCancelUndoCommandBased(KisStrokeStrategyUndoCommandBased *parentStroke)
     : KisStrokeJobStrategy(true, false),
-      m_undo(undo),
       m_parentStroke(parentStroke)
 {
 }
@@ -126,7 +123,7 @@ void KisStrokeJobStrategyCancelUndoCommandBased::run(StrokeJobData *data)
 
     QVector<QUndoCommandSP> commands = m_parentStroke->takeUndoCommands();
     foreach(QUndoCommandSP cmd, commands) {
-        if(m_undo) {
+        if(!m_parentStroke->undo()) {
             cmd->undo();
         } else {
             cmd->redo();

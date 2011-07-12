@@ -37,7 +37,7 @@ inline QString getCommandName(KisStrokeJob *job) {
             dynamic_cast<KisStrokeJobStrategyUndoCommandBased::Data*>(
                 job->testingGetDabData());
 
-        return data->command->text() + undoString(data->undo);
+        return data->command->text() + undoString(jobStrategy->m_parentStroke->undo());
     }
     else {
         KisStrokeJobStrategyCancelUndoCommandBased *jobStrategy =
@@ -49,7 +49,7 @@ inline QString getCommandName(KisStrokeJob *job) {
             jobStrategy->m_parentStroke->takeUndoCommands();
 
         foreach(QUndoCommandSP cmd, commands) {
-            result += cmd->text() + undoString(jobStrategy->m_undo) + QString(" ");
+            result += cmd->text() + undoString(jobStrategy->m_parentStroke) + QString(" ");
         }
         return result.trimmed();
     }
@@ -68,7 +68,7 @@ void KisStrokeStrategyUndoCommandBasedTest::testFinishedStroke()
 
     KisStroke stroke(strategy);
     stroke.addJob(
-        new KisStrokeJobStrategyUndoCommandBased::Data(false, dabCommand));
+        new KisStrokeJobStrategyUndoCommandBased::Data(dabCommand));
     stroke.endStroke();
 
 
@@ -96,7 +96,7 @@ void KisStrokeStrategyUndoCommandBasedTest::testCancelledStroke()
 
     KisStroke stroke(strategy);
     stroke.addJob(
-        new KisStrokeJobStrategyUndoCommandBased::Data(false, dabCommand));
+        new KisStrokeJobStrategyUndoCommandBased::Data(dabCommand));
 
 
     KisStrokeJob *job;

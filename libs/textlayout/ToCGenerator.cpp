@@ -325,7 +325,7 @@ QString ToCGenerator::resolvePageNumber(const QTextBlock &headingBlock)
     KoTextLayoutRootArea *rootArea = layout->rootAreaForPosition(headingBlock.position());
     if (rootArea) {
         if (rootArea->page()) {
-            return QString::number(rootArea->page()->pageNumber());
+            return QString::number(rootArea->page()->visiblePageNumber());
         }
     }
     return "###";

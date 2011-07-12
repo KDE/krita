@@ -60,13 +60,14 @@ void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject o
 {
     QTextDocument *document = const_cast<QTextDocument*>(_document);
     bool checkBackwards = true;
+    QTextFrame::iterator startIt, endIt;
 
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     KoTextDocumentLayout *ref = lay->referencedLayout();
     if (ref) {
         KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(posInDocument);
         if (!rootArea)
-            return;
+            return; // not ready yet
         KoTextPage *page = rootArea->page();
         if (!page)
             return;
@@ -75,21 +76,26 @@ void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject o
             KoTextPage * p = a->page();
             if (!p || p->pageNumber() != pagenumber)
                 continue;
-            QTextFrame::iterator it = a->startTextFrameIterator();
+            startIt = a->startTextFrameIterator();
+            endIt = a->endTextFrameIterator();
+            if (startIt.currentBlock().isValid())
+                posInDocument = startIt.currentBlock().position();
+            else if (startIt.currentFrame())
+                posInDocument = startIt.currentFrame()->firstCursorPosition().position();
+            else // abort
+                break;
             document = ref->document();
-            Q_ASSERT(it.currentBlock().isValid());
-            posInDocument = it.currentBlock().position();
             checkBackwards = false; // check forward
             break;
         }
+        if (document == _document)
+            return;
     }
 
     QTextBlock block = document->findBlock(posInDocument);
-    for(; block.isValid(); (block = (checkBackwards ? block.previous() : block.next()))) {
+    while (block.isValid()) {
         if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) {
             int level = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
-            if (ref)
-                qDebug()<<"....1"<<level<<block.text();
             if (level == m_level) {
                 KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
                 switch(m_format) {
@@ -111,7 +117,27 @@ void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject o
                 default:
                     break;
                 }
-                break; // leave foreach
+                return; // job done, leave and don't execute the KoVariable::resize at the bottom
+            }
+        }
+
+        if (checkBackwards) {
+            block = block.previous();
+        } else {
+            block = block.next();
+
+            // If we search forwards and reached the end of the page then we continue searching backwards
+            // at the beginning of the page.
+            if (!block.isValid() ||
+                (endIt.currentBlock().isValid() && block.position() > endIt.currentBlock().position()) ||
+                (endIt.currentFrame() && block.position() > endIt.currentFrame()->firstCursorPosition().block().position()) ) {
+                if (startIt.currentBlock().isValid())
+                    block = startIt.currentBlock();
+                else if (startIt.currentFrame())
+                    block = startIt.currentFrame()->firstCursorPosition().block();
+                else // abort
+                    break;
+                checkBackwards = true;
             }
         }
     }

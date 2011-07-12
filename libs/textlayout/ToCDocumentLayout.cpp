@@ -22,6 +22,8 @@
 
 #include <KoPostscriptPaintDevice.h>
 
+#include <QTextBlock>
+
 #include <kdebug.h>
 
 // ------------------- ToCDocumentLayout --------------------

@@ -117,7 +117,7 @@ void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject o
                 default:
                     break;
                 }
-                return; // job done, leave and don't execute the KoVariable::resize at the bottom
+                break; // job done
             }
         }
 

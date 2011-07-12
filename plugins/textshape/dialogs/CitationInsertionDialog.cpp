@@ -22,24 +22,23 @@
 
 #include <KAction>
 #include <KDebug>
-#include "KoInlineCite.h"
-#include "KoTextEditor.h"
+#include <KoInlineCite.h>
 #include <KoInlineTextObjectManager.h>
 
 #include <QWidget>
 #include <QMessageBox>
 
-CitationInsertionDialog::CitationInsertionDialog(QTextDocument *doc,QWidget *parent) :
+CitationInsertionDialog::CitationInsertionDialog(KoTextEditor *editor ,QWidget *parent) :
     QDialog(parent),
     m_blockSignals(false),
-    document(doc)
+    m_editor(editor)
 {
     dialog.setupUi(this);
     connect(dialog.buttonBox,SIGNAL(accepted()),this,SLOT(insert()));
     connect(dialog.existingCites,SIGNAL(currentIndexChanged(QString)),this,SLOT(selectionChangedFromExistingCites()));
 
     QStringList existingCites(i18n("Select"));
-    foreach (KoInlineCite *cite, KoTextDocument(document).inlineTextObjectManager()->citations()) {
+    foreach (KoInlineCite *cite, KoTextDocument(m_editor->document()).inlineTextObjectManager()->citations()) {
         existingCites << cite->identifier();
         m_cites[cite->identifier()] = cite;
     }
@@ -62,10 +61,10 @@ void CitationInsertionDialog::insert()
             } else return;
         }
     }
-    KoInlineCite *cite = KoTextEditor(document).insertCitation();
+    KoInlineCite *cite = m_editor->insertCitation();
     if (dialog.shortName->text() == "") {
         dialog.shortName->setText(QString("Short name%1").arg(
-                                      QString::number(KoTextDocument(document).inlineTextObjectManager()->citations().count())));
+                                      QString::number(KoTextDocument(m_editor->document()).inlineTextObjectManager()->citations().count())));
     }
     cite->copyFrom(toCite());
     emit accept();
@@ -80,7 +79,7 @@ void CitationInsertionDialog::selectionChangedFromExistingCites()
     else if (dialog.existingCites->currentIndex() == 0) {
         KoInlineCite *blankCite = new KoInlineCite(KoInlineCite::Citation);
         blankCite->setIdentifier(QString("Short name%1").arg(
-                                      QString::number(KoTextDocument(document).inlineTextObjectManager()->citations().count()+1)));
+                                      QString::number(KoTextDocument(m_editor->document()).inlineTextObjectManager()->citations().count()+1)));
         fillValuesFrom(blankCite);
     }
 }

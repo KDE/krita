@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>173</width>
-    <height>67</height>
+    <width>231</width>
+    <height>129</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -16,77 +16,104 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1">
-   <property name="margin">
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
    </property>
-   <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
-      <number>2</number>
-     </property>
-     <item row="0" column="0" rowspan="2">
-      <widget class="QToolButton" name="addCitation">
-       <property name="text">
-        <string>Add Footnote</string>
-       </property>
-       <property name="autoRaise">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QToolButton" name="addBibliography">
-       <property name="text">
-        <string>Add Endnote</string>
-       </property>
-       <property name="autoRaise">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
+   <property name="margin">
+    <number>4</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="numbering">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QRadioButton" name="autoNumbering">
+        <property name="text">
+         <string>Auto</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QRadioButton" name="label">
+          <property name="text">
+           <string>Label</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="characterEdit"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Preferred</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>7</width>
+          <height>14</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
    </item>
-   <item row="0" column="1">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Preferred</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>0</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="0">
-    <spacer>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-    </spacer>
+   <item>
+    <widget class="QFrame" name="type">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QToolButton" name="addEndnote">
+        <property name="text">
+         <string>EndNote</string>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="addFootnote">
+        <property name="text">
+         <string>FootNote</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="settings">
+        <property name="toolTip">
+         <string>Settings</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>../pics/settings-icon1_1.png</normaloff>../pics/settings-icon1_1.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
- <tabstops>
-  <tabstop>addCitation</tabstop>
- </tabstops>
  <resources/>
  <connections/>
 </ui>

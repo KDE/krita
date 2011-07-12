@@ -659,10 +659,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             blockData->setLabelFormat(labelFormat);
         }
     } else if (blockData) { // make sure it is empty
-        blockData->setCounterText(QString());
-        blockData->setCounterSpacing(0.0);
-        blockData->setCounterWidth(0.0);
-        blockData->setCounterIsImage(false);
+        blockData->clearCounter();
     }
     if (blockData == 0) {
         blockData = new KoTextBlockData();

@@ -193,6 +193,9 @@ public:
     void setBlockLayout(bool block);
     bool layoutBlocked() const;
 
+    KoTextDocumentLayout* referencedLayout() const;
+    void setReferencedLayout(KoTextDocumentLayout *layout);
+
 signals:
     /**
      * Signal that is emitted during layouting to inform about the progress done so far.

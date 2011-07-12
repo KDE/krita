@@ -69,6 +69,7 @@ public:
        ,layoutPosition(0)
        ,anchoringRootArea(0)
        , anchoringIndex(0)
+       , referencedLayout(0)
        , defaultTabSizing(0)
        , y(0)
        , isLayouting(false)
@@ -100,6 +101,8 @@ public:
     QHash<KoShape*,KoTextLayoutObstruction*> anchoredObstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
     QList<KoTextLayoutObstruction*> freeObstructions; // obstructions affecting the current rootArea, and not anchored
 
+    KoTextDocumentLayout *referencedLayout;
+
     qreal defaultTabSizing;
     qreal y;
     bool isLayouting;
@@ -115,6 +118,7 @@ public:
     };
     AnchoringState anchoringState;
     int documentChangedCount;
+
 };
 
 
@@ -710,6 +714,16 @@ void KoTextDocumentLayout::setBlockLayout(bool block)
 bool KoTextDocumentLayout::layoutBlocked() const
 {
     return d->layoutBlocked;
+}
+
+KoTextDocumentLayout* KoTextDocumentLayout::referencedLayout() const
+{
+    return d->referencedLayout;
+}
+
+void KoTextDocumentLayout::setReferencedLayout(KoTextDocumentLayout *layout)
+{
+    d->referencedLayout = layout;
 }
 
 QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame*) const

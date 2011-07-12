@@ -204,14 +204,20 @@ QWidget* ChapterVariable::createOptionsWidget()
     layout->setColumnStretch(1, 1);
     widget->setLayout(layout);
 
-    layout->addWidget(new QLabel(i18n("Format:"), widget), 0, 0);
+    QLabel *formatLabel = new QLabel(i18n("Format:"), widget);
+    formatLabel->setAlignment(Qt::AlignRight);
+    layout->addWidget(formatLabel, 0, 0);
     QComboBox *formatEdit = new QComboBox(widget);
-    formatEdit->addItems( QStringList() << i18n("Numer") << i18n("Name") << i18n("Number and name") << i18n("Number without separator") << i18n("Number and name without separator") );
+    formatLabel->setBuddy(formatEdit);
+    formatEdit->addItems( QStringList() << i18n("Number") << i18n("Name") << i18n("Number and name") << i18n("Number without separator") << i18n("Number and name without separator") );
     formatEdit->setCurrentIndex(2);
     layout->addWidget(formatEdit, 0, 1);
 
-    layout->addWidget(new QLabel(i18n("Level:"), widget), 1, 0);
+    QLabel *levelLabel = new QLabel(i18n("Level:"), widget);
+    levelLabel->setAlignment(Qt::AlignRight);
+    layout->addWidget(levelLabel, 1, 0);
     KIntNumInput *levelEdit = new KIntNumInput(widget);
+    levelLabel->setBuddy(levelEdit);
     levelEdit->setMinimum(1);
     levelEdit->setValue(m_level);
     layout->addWidget(levelEdit, 1, 1);

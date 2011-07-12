@@ -27,6 +27,7 @@
 class KoShapeLoadingContext;
 class KoChangeTracker;
 class KoStyleManager;
+class KAction;
 
 class QTextFrame;
 class QTextCursor;
@@ -37,6 +38,7 @@ class QTextCursor;
  */
 class KOTEXT_EXPORT KoInlineNote : public KoInlineObject
 {
+
 public:
     /// The type of note specifies how the application will use the text from the note.
     enum Type {
@@ -107,7 +109,9 @@ public:
 
     static int count;
 
-protected:
+    static int count;
+
+   protected:
     /// reimplemented
     virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
                                 int posInDocument, const QTextCharFormat &format);

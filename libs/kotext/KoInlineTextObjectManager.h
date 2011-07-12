@@ -151,8 +151,16 @@ public:
 
     QList<KoInlineNote*> endNotes() const;
 
+    QList<KoInlineNote*> footNotes() const;
+
+    void reNumbering(QTextBlock block);
+
+    int displayedNotes(QTextBlock block) const;
+
 public slots:
     void documentInformationUpdated(const QString &info, const QString &data);
+
+    void deleteNote(QTextCursor cursor);
 
 signals:
     /**

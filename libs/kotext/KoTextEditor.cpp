@@ -51,6 +51,7 @@
 
 #include <QApplication>
 #include <QFontDatabase>
+#include <QLabel>
 #include <QTextBlock>
 #include <QTextBlockFormat>
 #include <QTextCharFormat>
@@ -1138,7 +1139,7 @@ KoInlineNote *KoTextEditor::insertEndNote()
 
 void KoTextEditor::insertTableOfContents()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table Of Contents"));
+    d->updateState(KoTextEditor::Private::Custom, i18n("Add"));
 
     QTextBlockFormat tocFormat;
     tocFormat.setProperty(KoText::SubFrameType, KoText::TableOfContentsFrameType);

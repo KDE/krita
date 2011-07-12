@@ -28,9 +28,11 @@
 #include <KoTextDocument.h>
 #include <KoText.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoInlineTextObjectManager.h>
 
 #include <KDebug>
 
+#include <QMessageBox>
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextCursor>
@@ -49,6 +51,7 @@ public:
         , autoNumbering(false)
         , type(t)
     {
+
     }
 
     QTextFrame *textFrame;
@@ -58,6 +61,7 @@ public:
     QDateTime date;
     bool autoNumbering;
     KoInlineNote::Type type;
+
 };
 int KoInlineNote::count;
 
@@ -65,6 +69,7 @@ KoInlineNote::KoInlineNote(Type type)
     : KoInlineObject(true)
     , d(new Private(type))
 {
+
 }
 
 KoInlineNote::~KoInlineNote()
@@ -271,16 +276,19 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
                 continue;
             if (ts.localName() == "note-body") {
                 loader.loadBody(ts, cursor);
-            } else if (ts.localName() == "note-citation") {
+            }
+            else if (ts.localName() == "note-citation") {
                 d->label = ts.attributeNS(KoXmlNS::text, "label");
-                if (d->label.isEmpty()) {
+                    if (d->label.isEmpty()) {
                     setAutoNumbering(true);
                     d->label = ts.text();
                 }
             }
         }
+
         cursor.setPosition(cursor.currentFrame()->firstPosition());
         QTextCharFormat *fmat = new QTextCharFormat();
+
         fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
         cursor.insertText(d->label,*fmat);
         fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
@@ -301,8 +309,7 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
 void KoInlineNote::saveOdf(KoShapeSavingContext & context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
-
-    if (d->type == Footnote || d->type == Endnote) {
+        if (d->type == Footnote || d->type == Endnote) {
         writer->startElement("text:note", false);
         if (d->type == Footnote)
             writer->addAttribute("text:note-class", "footnote");
@@ -310,9 +317,11 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
             writer->addAttribute("text:note-class", "endnote");
         writer->addAttribute("text:id", d->id);
         writer->startElement("text:note-citation", false);
-        if (!autoNumbering())
+        if (!autoNumbering()) {
             writer->addAttribute("text:label", d->label);
+        }
         writer->addTextNode(d->label);
+
         writer->endElement();
 
         writer->startElement("text:note-body", false);
@@ -340,7 +349,7 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
 
         KoTextWriter textWriter(context);
         textWriter.write(d->textFrame->document(), d->textFrame->firstPosition(),d->textFrame->lastPosition());
-
         writer->endElement();
     }
+
 }

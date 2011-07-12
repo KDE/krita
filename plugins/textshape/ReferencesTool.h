@@ -61,6 +61,10 @@ private slots:
 
     /// insert a table of contents
     void insertTableOfContents();
+    void insertFootNote();
+    void insertEndNote();
+    void openSettings();
+    void disableButtons(QTextCursor cursor);
 
     /// format the table of contents template
     void formatTableOfContents();
@@ -69,6 +73,7 @@ private:
     SimpleTableOfContentsWidget *stocw;
     SimpleFootEndNotesWidget *sfenw;
     KoInlineNote *note;
+
 };
 
 #endif // REFERENCESTOOL_H

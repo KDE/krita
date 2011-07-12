@@ -35,6 +35,7 @@ KoInlineTextObjectManager::KoInlineTextObjectManager(QObject *parent)
         m_lastObjectId(0),
         m_variableManager(this)
 {
+
 }
 
 KoInlineTextObjectManager::~KoInlineTextObjectManager()
@@ -134,6 +135,7 @@ void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
     if (object) {
         m_objects.remove(object->id());
     }
+
     // TODO dirty the document somehow
 }
 
@@ -362,6 +364,15 @@ void KoInlineTextObjectManager::documentInformationUpdated(const QString &info, 
         setProperty(KoInlineObject::SenderPosition, data);
     else if (info == "company")
         setProperty(KoInlineObject::SenderCompany, data);
+}
+
+void KoInlineTextObjectManager::deleteNote(QTextCursor cursor)
+{
+/*    //KoInlineObject *object = inlineTextObject(cursor);
+    //KoInlineNote* note = dynamic_cast<KoInlineNote*>(object);
+    qDebug()<<"d";
+    this->reNumbering(cursor.block().previous());
+*/
 }
 
 QList<KoInlineObject*> KoInlineTextObjectManager::inlineTextObjects() const

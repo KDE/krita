@@ -24,6 +24,7 @@
 #include <KDebug>
 
 #include <QWidget>
+#include <KoInlineNote.h>
 
 SimpleFootEndNotesWidget::SimpleFootEndNotesWidget(TextTool *tool ,QWidget *parent)
         : QWidget(parent),

@@ -27,7 +27,7 @@
 #include <KoTextWriter.h>
 #include <KoTextDocument.h>
 #include <KoText.h>
-
+#include <KoInlineTextObjectManager.h>
 #include <KDebug>
 
 #include <QTextDocument>
@@ -58,6 +58,7 @@ public:
     bool autoNumbering;
     KoInlineNote::Type type;
 };
+int KoInlineNote::count;
 
 KoInlineNote::KoInlineNote(Type type)
     : KoInlineObject(true)
@@ -68,6 +69,11 @@ KoInlineNote::KoInlineNote(Type type)
 KoInlineNote::~KoInlineNote()
 {
     delete d;
+}
+
+QTextCursor KoInlineNote::textCursor() const
+{
+    return (d->textFrame->lastCursorPosition());
 }
 
 void KoInlineNote::setMotherFrame(QTextFrame *motherFrame)
@@ -155,6 +161,10 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     if (d->label.isEmpty())
         return;
 
+    /*if(KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->displayedNotes(d->textFrame->document()->begin()) != KoInlineNote::count ) {
+         KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->reNumbering(d->textFrame->document()->begin());
+         KoInlineNote::count = KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->displayedNotes(d->textFrame->document()->begin());
+    }*/
     QFont font(format.font(), pd);
     QTextLayout layout(d->label, font, pd);
     layout.setCacheEnabled(true);
@@ -164,6 +174,17 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     range.length = d->label.length();
     range.format = format;
     range.format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    QString s;
+    if(d->type == KoInlineNote::Footnote)
+        s.append("Foot");
+    else if(d->type == KoInlineNote::Endnote)
+        s.append("End");
+    s.append(d->label);
+    range.format.setAnchor(true);
+    range.format.setAnchorHref(s);
+    QBrush *brush = new QBrush(Qt::SolidPattern);
+    brush->setColor(Qt::lightGray);
+    range.format.setBackground(*brush);
     layouts.append(range);
     layout.setAdditionalFormats(layouts);
 
@@ -196,7 +217,6 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
 
         d->id = element.attributeNS(KoXmlNS::text, "id");
         for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
-            setAutoNumbering(false);
             KoXmlElement ts = node.toElement();
             if (ts.namespaceURI() != KoXmlNS::text)
                 continue;
@@ -210,6 +230,12 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
                 }
             }
         }
+        cursor.setPosition(cursor.currentFrame()->firstPosition());
+        QTextCharFormat *fmat = new QTextCharFormat();
+        fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+        cursor.insertText(d->label,*fmat);
+        fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
+        cursor.insertText(" ",*fmat);
     }
     else if (element.namespaceURI() == KoXmlNS::office && element.localName() == "annotation") {
         d->author = element.attributeNS(KoXmlNS::text, "dc-creator");
@@ -227,8 +253,6 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
 
-    QTextCursor cursor(d->textFrame);
-
     if (d->type == Footnote || d->type == Endnote) {
         writer->startElement("text:note", false);
         if (d->type == Footnote)
@@ -243,8 +267,11 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
         writer->endElement();
 
         writer->startElement("text:note-body", false);
+        QTextCursor cursor(d->textFrame);
+        cursor.setPosition(d->textFrame->firstPosition());
+        cursor.movePosition(QTextCursor::WordRight);
         KoTextWriter textWriter(context);
-        textWriter.write(d->textFrame->document(), d->textFrame->firstPosition(),d->textFrame->lastPosition());
+        textWriter.write(d->textFrame->document(), cursor.position(),d->textFrame->lastPosition());
         writer->endElement();
 
         writer->endElement();

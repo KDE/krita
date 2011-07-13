@@ -29,6 +29,7 @@ class KoChangeTracker;
 class KoStyleManager;
 
 class QTextFrame;
+class QTextCursor;
 
 /**
  * This object is an inline object, which means it is anchored in the text-flow and it can hold note info.
@@ -51,6 +52,8 @@ public:
     KoInlineNote(Type type);
     // destructor
     virtual ~KoInlineNote();
+
+    QTextCursor textCursor(void) const;
 
     /**
      * Set the textframe where we will create our own textframe within
@@ -98,6 +101,8 @@ public:
 
     ///reimplemented
     void saveOdf(KoShapeSavingContext &context);
+
+    static int count;
 
 protected:
     /// reimplemented

@@ -25,6 +25,7 @@
 
 #include <KoGenChange.h>
 #include "KoText.h"
+#include <KoInlineNote.h>
 #include <KoToolSelection.h>
 
 #include <QClipboard>
@@ -235,7 +236,11 @@ public slots:
      */
     void splitTableCells();
 
-     /**
+    KoInlineNote *insertFootNote();
+
+    KoInlineNote *insertEndNote();
+
+    /**
      * Insert a table of Contents at the current cursor position.
      */
     void insertTableOfContents();

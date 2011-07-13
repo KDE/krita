@@ -23,15 +23,21 @@
 #include "dialogs/SimpleCitationWidget.h"
 #include "dialogs/SimpleFootEndNotesWidget.h"
 #include "dialogs/SimpleCaptionsWidget.h"
+#include "dialogs/NotesConfigurationDialog.h"
 
 #include <KoTextLayoutRootArea.h>
 #include <KoCanvasBase.h>
 #include <KoTextEditor.h>
+#include <KoBookmark.h>
+#include <KoInlineNote.h>
+#include <KoTextDocumentLayout.h>
+#include <KoInlineTextObjectManager.h>
 
 #include <kdebug.h>
 
 #include <KLocale>
 #include <KAction>
+#include <QTextDocument>
 
 ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas)
 {
@@ -53,6 +59,24 @@ void ReferencesTool::createActions()
     addAction("format_tableofcentents", action);
     action->setToolTip(i18n("Configure the Table of Contents"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
+
+    action = new KAction(i18n("Footnote"),this);
+    addAction("insert_footnote",action);
+    action->setToolTip(i18n("Insert a Foot Note into the document."));
+    connect(action, SIGNAL(triggered()), this, SLOT(insertFootNote()));
+
+    action = new KAction(i18n("Endnote"),this);
+    addAction("insert_endnote",action);
+    action->setToolTip(i18n("Insert an End Note into the document."));
+    connect(action, SIGNAL(triggered()), this, SLOT(insertEndNote()));
+
+    action = new KAction(this);
+    QIcon *icon = new QIcon("/home/brijesh/kde/src/calligra/plugins/textshape/pics/settings-icon1_1.png");
+    action->setIcon( *icon );
+    addAction("notes_settings",action);
+    action->setToolTip(i18n("Footnote/Endnote Settings"));
+    connect(action, SIGNAL(triggered()), this, SLOT(openSettings()));
+
 }
 
 void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -71,7 +95,7 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
     QList<QWidget *> widgets;
     SimpleTableOfContentsWidget *stocw = new SimpleTableOfContentsWidget(this, 0);
     //SimpleCitationWidget *scw = new SimpleCitationWidget(0);
-    SimpleFootEndNotesWidget *sfenw = new SimpleFootEndNotesWidget(0);
+    sfenw = new SimpleFootEndNotesWidget(this,0);
     //SimpleCaptionsWidget *scapw = new SimpleCaptionsWidget(0);
 
     // Connect to/with simple table of contents option widget
@@ -99,6 +123,82 @@ void ReferencesTool::insertTableOfContents()
 
 void ReferencesTool::formatTableOfContents()
 {
+}
+
+void ReferencesTool::insertFootNote()
+{
+    connect(textEditor()->document(),SIGNAL(cursorPositionChanged(QTextCursor)),this,SLOT(disableButtons(QTextCursor)));
+    note = textEditor()->insertFootNote();
+    note->setAutoNumbering(sfenw->widget.autoNumbering->isChecked());
+    if(note->autoNumbering()) {
+        note->setLabel(QString().number(note->manager()->footNotes().count()));
+    }
+    else {
+        note->setLabel(sfenw->widget.characterEdit->text());
+    }
+
+    QTextCursor cursor(note->textCursor());
+    QString s;
+    s.append("Foot");
+    s.append(note->label());
+    KoBookmark *bookmark = new KoBookmark(note->textFrame()->document());
+    bookmark->setType(KoBookmark::SinglePosition);
+    bookmark->setName(s);
+    note->manager()->insertInlineObject(cursor, bookmark);
+    QTextCharFormat *fmat = new QTextCharFormat();
+    fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    cursor.insertText(note->label(),*fmat);
+
+    fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
+    cursor.insertText(" ",*fmat);
+
+}
+
+void ReferencesTool::insertEndNote()
+{
+    note = textEditor()->insertEndNote();
+    note->setAutoNumbering(sfenw->widget.autoNumbering->isChecked());
+    if(note->autoNumbering()) {
+        note->setLabel(note->toRoman(note->manager()->endNotes().count()));
+    }
+    else {
+        note->setLabel(sfenw->widget.characterEdit->text());
+    }
+
+    QTextCursor cursor(note->textCursor());
+
+    QString s;
+    s.append("End");
+    s.append(note->label());
+    KoBookmark *bookmark = new KoBookmark(note->textFrame()->document());
+    bookmark->setType(KoBookmark::SinglePosition);
+    bookmark->setName(s);
+    note->manager()->insertInlineObject(cursor, bookmark);
+
+    QTextCharFormat *fmat = new QTextCharFormat();
+    fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    cursor.insertText(note->label(),*fmat);
+
+    fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
+    cursor.insertText(" ",*fmat);
+
+}
+
+void ReferencesTool::openSettings()
+{
+    NotesConfigurationDialog *dialog = new NotesConfigurationDialog(textEditor()->document(),0);
+    dialog->exec();
+}
+
+void ReferencesTool::disableButtons(QTextCursor cursor)
+{
+    if(cursor.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::NoteFrameType) {
+        sfenw->widget.addFootnote->setEnabled(false);
+        sfenw->widget.addEndnote->setEnabled(false);
+    } else {
+        sfenw->widget.addFootnote->setEnabled(true);
+        sfenw->widget.addEndnote->setEnabled(true);
+    }
 }
 
 #include <ReferencesTool.moc>

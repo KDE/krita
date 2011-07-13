@@ -80,6 +80,7 @@
 #include <QMap>
 #include <QRect>
 #include <QStack>
+#include <QMessageBox>
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTextList>
@@ -1466,7 +1467,8 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
         if (note->loadOdf(noteElem, d->context)) {
             cursor.setPosition(position); // restore the position before inserting the note
             textObjectManager->insertInlineObject(cursor, note);
-        } else {
+        }
+        else {
             cursor.setPosition(position); // restore the position
             delete note;
         }

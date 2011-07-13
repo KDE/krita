@@ -23,10 +23,12 @@
 
 #include "kotext_export.h"
 
+#include <QProcess>
 #include <KoGenChange.h>
 #include "KoText.h"
 #include <KoInlineNote.h>
 #include <KoToolSelection.h>
+#include <KoInlineNote.h>
 
 #include <QClipboard>
 #include <QMetaType>
@@ -244,6 +246,11 @@ public slots:
      * Insert a table of Contents at the current cursor position.
      */
     void insertTableOfContents();
+
+    KoInlineNote *insertFootNote();
+
+    KoInlineNote *insertEndNote();
+
 
     void insertText(const QString &text);
 

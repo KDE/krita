@@ -887,7 +887,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
     if ( const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
         writer->addAttribute("text:id", context.subId(blockData));
-    }
+        }
 
     if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
         QTextBlock previousBlock = block.previous();
@@ -1404,7 +1404,8 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
                 tableCellInformation.addAttribute("table:style-name", cellStyleName);
                 changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell, tableCellInformation);
                 writeBlocks(table->document(), cell.firstPosition(), cell.lastPosition(), listStyles, table);
-            } else {
+              }
+             else {
                 TagInformation tableCellInformation;
                 tableCellInformation.setTagName("table:covered-table-cell");
                 changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell, tableCellInformation);
@@ -1448,7 +1449,6 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, QHash<Q
     writer->endElement(); // text:index-title
 
     writeBlocks(tocDocument, endTitle, -1, listStyles);
-
     writer->endElement(); // table:index-body
     writer->endElement(); // table:table-of-content
 }
@@ -1664,7 +1664,10 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
     QTextBlock block = document->findBlock(from);
     int sectionLevel = 0;
 
-    while (block.isValid() && ((to == -1) || (block.position() <= to))) {
+    KoOdfNotesConfiguration notesConfiguration;
+    notesConfiguration.saveOdf(writer);
+
+        while (block.isValid() && ((to == -1) || (block.position() <= to))) {
 
         QTextCursor cursor(block);
 
@@ -1687,6 +1690,13 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         }
         if (format.hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
             saveTableOfContents(document, listStyles, block);
+                    && cursorFrame->format().intProperty(KoText::SubFrameType) == KoText::NoteFrameType) {
+            block = cursorFrame->lastCursorPosition().block();
+            block = block.next();
+            continue;
+        }
+
+        if (cursorFrame != currentFrame
             block = block.next();
             continue;
         }
@@ -1751,6 +1761,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         KoSectionEnd sectionEnd;
         sectionEnd.saveOdf(context);
     }
+
 }
 
 int KoTextWriter::Private::checkForSplit(const QTextBlock &block)
@@ -2548,7 +2559,6 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
     d->changeTracker = KoTextDocument(document).changeTracker();
 
     QTextBlock block = document->findBlock(from);
-
     QVector<int> changesVector;
     if (d->changeTracker) {
         d->changeTracker->allChangeIds(changesVector);

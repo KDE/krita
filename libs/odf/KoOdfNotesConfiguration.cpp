@@ -138,7 +138,7 @@ void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
 
 void KoOdfNotesConfiguration::saveOdf(KoXmlWriter *writer) const
 {
-    if (d->noteClass == Footnote) {
+     if (d->noteClass == Footnote) {
         writer->addAttribute("text:note-class", "footnote");
     }
     else if (d->noteClass == Endnote) {

@@ -27,6 +27,8 @@
 #include <qdom.h>
 #include "kowidgets_export.h"
 
+#include <Nepomuk/Resource>
+
 /**
  * KoResourceTagging allows to add and delete tags to resources and also search reources using tags
  */
@@ -54,6 +56,12 @@ public:
 private:
     void readXMLFile();
     void writeXMLFile();
+
+    void writeNepomukRepo();
+    QList<Nepomuk::Resource> readNepomukRepo();
+    void updateTagRepoFromNepomuk();
+
+
     /// To check whether the resource belongs to the present server or not
     bool isServerResource(QString resourceName);
     void addTag(const QString& fileName,const QString& tag);
@@ -62,11 +70,17 @@ private:
     /// Removes the adjustements before going to the server
     QStringList removeAdjustedFileNames(QStringList fileNamesList);
 
+    bool isResourceAvailable(const QString& resourceURI);
+
+    void addNepomukTag(const QString& fileName,const QString& tag);
+    void delNepomukTag(const QString& fileName,const QString& tag);
+
     QMultiHash<QString, QString> m_tagRepo;
     QHash<QString, int> m_tagList;
     QString m_tagsXMLFile;
     QString m_serverExtensions;
 
+    bool m_nepomuk;
 
 };
 

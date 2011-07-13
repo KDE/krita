@@ -24,16 +24,36 @@
 #include <kstandarddirs.h>
 #include <QFile>
 
+#include <Nepomuk/ResourceManager>
+#include <Nepomuk/Variant>
+#include <Nepomuk/File>
+#include <Nepomuk/Tag>
+
+#include <Soprano/Statement>
+#include <Soprano/Node>
+#include <Soprano/Model>
+#include <Soprano/QueryResultIterator>
+#include <Soprano/StatementIterator>
+#include <Soprano/NodeIterator>
+#include <Soprano/Vocabulary/NAO>
+#include <Soprano/Vocabulary/RDFS>
+#include <Soprano/PluginManager>
+
+#include <kurl.h>
+
 KoResourceTagging::KoResourceTagging(const QString& extensions)
 {
     m_serverExtensions = extensions;
     m_tagsXMLFile = KStandardDirs::locateLocal("data", "krita/tags.xml");
     readXMLFile();
+    writeNepomukRepo();
+    //readNepomukRepo();
 }
 
 KoResourceTagging::~KoResourceTagging()
 {
-    writeXMLFile();
+    //writeXMLFile();
+   // writeNepomukRepo();
 }
 
 QStringList KoResourceTagging::getAssignedTagsList( KoResource* resource )
@@ -49,15 +69,16 @@ QStringList KoResourceTagging::getTagNamesList()
 void KoResourceTagging::addTag( KoResource* resource,const QString& tag)
 {
     QString fileName = getAdjustedFileName (resource->filename());
-    if( m_tagRepo.contains ( fileName, tag ) ) {
-        return;
-    }
 
     addTag( fileName, tag );
 }
 
 void KoResourceTagging::addTag(const QString& fileName,const QString& tag)
 {
+    if( m_tagRepo.contains ( fileName, tag ) ) {
+        return;
+    }
+
     m_tagRepo.insert( fileName, tag );
 
     if(m_tagList.contains(tag))
@@ -75,6 +96,7 @@ void KoResourceTagging::addTag(const QString& fileName,const QString& tag)
 void KoResourceTagging::delTag( KoResource* resource,const QString& tag)
 {
     QString fileName = getAdjustedFileName(resource->filename());
+
     if( ! m_tagRepo.contains ( fileName, tag ) ) {
         return;
     }
@@ -282,4 +304,152 @@ QStringList KoResourceTagging::removeAdjustedFileNames(QStringList fileNamesList
         }
     }
     return fileNamesList;
+}
+
+
+
+
+/*
+ * Nepomuk coding part
+ *
+ */
+
+
+
+void KoResourceTagging::writeNepomukRepo()
+{
+    QStringList resourceFileNames = m_tagRepo.uniqueKeys();
+
+    QList<Nepomuk::Resource> resourceList = readNepomukRepo();
+
+    foreach(Nepomuk::Resource resource, resourceList) {
+        QString resourceFileOld = resource.toFile().url().url().remove("file://");
+
+        if(resourceFileNames.contains(resourceFileOld)) {
+            resourceFileNames.removeAll(resourceFileOld);
+
+            QStringList tagNameListNew = m_tagRepo.values(resourceFileOld);
+
+            QList<Nepomuk::Tag> tagListOld = resource.tags();
+
+            foreach(Nepomuk::Tag tag, tagListOld) {
+                QString tagName =  tag.genericLabel();
+
+                 if(tagNameListNew.contains(tagName)) {
+                     tagNameListNew.removeAll(tagName);
+                 }
+                 else {
+                     tag.remove();
+                 }
+            }
+            foreach(QString tagName, tagNameListNew) {
+                addNepomukTag(resourceFileOld,tagName);
+            }
+        }
+        else {
+            if(isServerResource(resourceFileOld)) {
+                resource.remove();
+            }
+        }
+    }
+
+    foreach(QString resourceFileName, resourceFileNames) {
+
+        QStringList tagNameListNew = m_tagRepo.values(resourceFileName);
+
+        foreach(QString tagName, tagNameListNew) {
+            addNepomukTag(resourceFileName,tagName);
+        }
+    }
+}
+
+bool KoResourceTagging::isResourceAvailable(const QString& resourceURI)
+{
+    Soprano::Model* model = Nepomuk::ResourceManager::instance()->mainModel();
+
+    QString query
+       = QString("select ?p where { %1 %2 ?p . } ")
+         .arg( Soprano::Node::resourceToN3(resourceURI) )
+         .arg( Soprano::Node::resourceToN3(Soprano::Vocabulary::NAO::hasTag()) );
+
+    Soprano::QueryResultIterator it
+        = model->executeQuery( query,
+                               Soprano::Query::QueryLanguageSparql );
+
+    return it.isValid();
+}
+
+QList<Nepomuk::Resource> KoResourceTagging::readNepomukRepo()
+{
+    Soprano::Model* model = Nepomuk::ResourceManager::instance()->mainModel();
+
+    QList<Nepomuk::Resource> resourceList;
+
+    QString query
+       = QString("select ?r ?p where { ?r %1 ?p . } ")
+         .arg( Soprano::Node::resourceToN3(Soprano::Vocabulary::NAO::hasTag()) );
+
+   Soprano::QueryResultIterator it
+       = model->executeQuery( query,
+                              Soprano::Query::QueryLanguageSparql );
+    while( it.next() ) {
+       resourceList << Nepomuk::Resource( it.binding("r").uri() );
+    }
+    return resourceList;
+}
+
+void KoResourceTagging::updateTagRepoFromNepomuk()
+{
+    QList<Nepomuk::Resource> resourceList = readNepomukRepo();
+    foreach(Nepomuk::Resource resource, resourceList) {
+        QString resourceFileName = resource.toFile().url().url().remove("file://");
+
+        if(isServerResource(resourceFileName)) {
+            QList<Nepomuk::Tag> tagList = resource.tags();
+            foreach(Nepomuk::Tag tagName, tagList) {
+                 addTag(resourceFileName,tagName.genericLabel());
+            }
+        }
+    }
+ }
+
+void KoResourceTagging::addNepomukTag(const QString &fileName, const QString &tagNew)
+{
+    KUrl kurl(fileName);
+
+    Nepomuk::File resourceFile( kurl );
+
+    Nepomuk::Tag nepomukTag( tagNew );
+
+    if(isResourceAvailable(resourceFile.uri())) {
+        QList<Nepomuk::Tag> tags = resourceFile.tags();
+        foreach(Nepomuk::Tag tag, tags){
+            if(tag.genericLabel() == nepomukTag.genericLabel()) {
+                return;
+            }
+        }
+        Nepomuk::Resource(resourceFile.uri).addTag( nepomukTag);
+        return;
+    }
+
+    resourceFile.addTag( nepomukTag );
+}
+
+void KoResourceTagging::delNepomukTag(const QString &fileName, const QString &tag)
+{
+    KUrl kurl(fileName);
+
+    Nepomuk::File resourceFile( kurl );
+
+    Nepomuk::Tag nepomukTag( tag );
+
+    if(isResourceAvailable(resourceFile.uri())) {
+        QList<Nepomuk::Tag> tags = resourceFile.tags();
+        foreach(Nepomuk::Tag tag, tags){
+            if(tag.genericLabel() == nepomukTag.genericLabel()) {
+                tag.remove();
+                return;
+            }
+        }
+    }
 }

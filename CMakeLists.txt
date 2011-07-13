@@ -32,7 +32,7 @@ option(BUILD_koabstraction "Build directory koabstraction" ON) # koabstraction i
 option(BUILD_mobile "Build directory mobile" ON) # mobile depends on koabstraction it builds but does not run
 
 option(GHNS "support Get Hot New Stuff" ON)
-
+option(NEPOMUK "support NEPOMUK Tagging" ON)
 option(TINY "compile a tiny Calligra" OFF)
 option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 
@@ -266,7 +266,19 @@ if(LCMS2_FOUND)
     set(HAVE_LCMS TRUE)
 endif(LCMS2_FOUND)
 
-    
+if(NEPOMUK)
+    find_package(Nepomuk REQUIRED)
+endif(NEPOMUK)
+
+##
+## Test for Nepomuk
+##
+if(NEPOMUK)
+    macro_optional_find_package(Nepomuk)
+    macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE "" "Required to handle metadata of resources")
+    include(SopranoAddOntology)
+endif(NEPOMUK)
+
 
 macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required for color management and Krita")
 

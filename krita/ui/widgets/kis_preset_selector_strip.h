@@ -83,9 +83,9 @@ private:
     * This is a workaround to access members of KisPresetChooser using the QObject tree
     * instead of class methods
     */
-    KoResourceItemView* antiOOPHack;
+    KoResourceItemView* m_antiOOPHack;
     
-    QTimer* refresher;
+    QTimer* m_refresher;
 };
 
 

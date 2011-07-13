@@ -32,13 +32,10 @@
 #include <QVector>
 #include <QString>
 #include <QVariant>
-#include <QPainter>
 
 struct Property;
 class QTextTableCell;
 class QRectF;
-class QPainter;
-class QPainterPath;
 class KoStyleStack;
 class KoGenStyle;
 class KoGenStyles;
@@ -129,16 +126,7 @@ public:
      * @return the bounding rectange.
      */
     QRectF boundingRect(const QRectF &contentRect) const;
-
-
-    /**
-     * Paint the background.
-     *
-     * @painter the painter to draw with.
-     * @bounds the bounding rectangle to draw.
-     */
-    void paintBackground(QPainter &painter, const QRectF &bounds) const;
-
+    
     void setBackground(const QBrush &brush);
     /// See similar named method on QTextBlockFormat
     QBrush background() const;
@@ -208,7 +196,7 @@ public:
     
     void setVerticalGlyphOrientation(bool state);
     bool verticalGlyphOrientation() const;
-
+    
     /// set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableCellStyle *parent);
 

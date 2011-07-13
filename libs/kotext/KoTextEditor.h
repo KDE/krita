@@ -247,11 +247,6 @@ public slots:
      */
     void insertTableOfContents();
 
-    KoInlineNote *insertFootNote();
-
-    KoInlineNote *insertEndNote();
-
-
     void insertText(const QString &text);
 
     void insertText(const QString &text, const QTextCharFormat &format);

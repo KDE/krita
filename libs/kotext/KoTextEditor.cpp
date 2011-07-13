@@ -1136,33 +1136,6 @@ KoInlineNote *KoTextEditor::insertEndNote()
     return note;
 }
 
-KoInlineNote *KoTextEditor::insertFootNote()
-{
-    d->updateState(KoTextEditor::Private::Custom, i18n("Add Footnote"));
-
-    KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
-    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
-    manager->insertInlineObject(d->caret,note);
-
-    note->setMotherFrame(KoTextDocument(d->caret.document()).footNotesFrame());
-   // QObject::connect(d->caret.document(),SIGNAL(cursorPositionChanged(QTextCursor)),note->manager(),SLOT(deleteNote(QTextCursor)));
-    d->updateState(KoTextEditor::Private::NoOp);
-    return note;
-}
-
-KoInlineNote *KoTextEditor::insertEndNote()
-{
-    d->updateState(KoTextEditor::Private::Custom, i18n("Add Endnote"));
-
-    KoInlineNote *note = new KoInlineNote(KoInlineNote::Endnote);
-    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
-    manager->insertInlineObject(d->caret,note);
-    note->setMotherFrame(KoTextDocument(d->caret.document()).endNotesFrame());
-
-    d->updateState(KoTextEditor::Private::NoOp);
-    return note;
-}
-
 void KoTextEditor::insertTableOfContents()
 {
     d->updateState(KoTextEditor::Private::Custom, i18n("Add"));

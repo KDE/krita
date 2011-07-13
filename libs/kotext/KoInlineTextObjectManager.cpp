@@ -265,7 +265,7 @@ void KoInlineTextObjectManager::reNumbering(QTextBlock block)
             }
             else if (note && note->type() == KoInlineNote::Endnote) {
                 if(note->autoNumbering()) {
-                    note->setLabel(note->toRoman(j));
+                    note->setLabel(QString().number(j));
 
                     QTextCursor cursor = note->textFrame()->firstCursorPosition();
                     cursor.movePosition(QTextCursor::WordRight,QTextCursor::KeepAnchor);

@@ -159,7 +159,7 @@ void ReferencesTool::insertEndNote()
     note = textEditor()->insertEndNote();
     note->setAutoNumbering(sfenw->widget.autoNumbering->isChecked());
     if(note->autoNumbering()) {
-        note->setLabel(note->toRoman(note->manager()->endNotes().count()));
+        note->setLabel(QString().number(note->manager()->endNotes().count()));
     }
     else {
         note->setLabel(sfenw->widget.characterEdit->text());

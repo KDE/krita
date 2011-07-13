@@ -52,6 +52,7 @@ private:
     quint32 m_channelSize;
 
     QVector<ChannelInfo> m_channelInfoRecords;
+    QVector<int> m_channelOffset;
 };
 
 #endif // PSD_IMAGE_DATA_H

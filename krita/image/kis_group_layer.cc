@@ -56,6 +56,8 @@ KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
         m_d(new Private())
 {
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
+    m_d->x = rhs.m_d->x;
+    m_d->y = rhs.m_d->y;
     m_d->paintDevice->setDefaultPixel(const_cast<KisGroupLayer*>(&rhs)->m_d->paintDevice->defaultPixel());
 }
 

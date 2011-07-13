@@ -82,11 +82,11 @@ KisNode::KisNode(const KisNode & rhs)
 
     KisSafeReadNodeList::const_iterator iter;
     FOREACH_SAFE(iter, rhs.m_d->nodes) {
-        KisNodeSP children = (*iter)->clone();
-        children->createNodeProgressProxy();
-        m_d->nodes.append(children);
-        children->setParent(this);
-        children->setGraphListener(m_d->graphListener);
+        KisNodeSP child = (*iter)->clone();
+        child->createNodeProgressProxy();
+        m_d->nodes.append(child);
+        child->setParent(this);
+        child->setGraphListener(m_d->graphListener);
     }
 }
 

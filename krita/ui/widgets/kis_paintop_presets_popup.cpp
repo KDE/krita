@@ -179,11 +179,13 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
         connect(m_d->settingsWidget,SIGNAL(sigConfigurationItemChanged()),this,SLOT(slotCheckPresetValidity()));
         slotCheckPresetValidity();
         if (m_d->settingsWidget->supportScratchBox()){
+            m_d->uiWdgPaintOpPresetSettings.scratchPad->clear();
             showScratchPad();
         }else{
             hideScratchPad();
         }
     }
+    m_d->uiWdgPaintOpPresetSettings.txtPreset->clear();
 
     if (widget) {
         widget->setFont(m_d->smallFont);

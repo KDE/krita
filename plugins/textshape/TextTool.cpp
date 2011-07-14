@@ -26,7 +26,6 @@
 #include "dialogs/SimpleCharacterWidget.h"
 #include "dialogs/SimpleParagraphWidget.h"
 #include "dialogs/SimpleTableWidget.h"
-#include "dialogs/SimpleStylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
 #include "dialogs/StyleManagerDialog.h"
 #include "dialogs/InsertCharacter.h"
@@ -1518,12 +1517,12 @@ QList<QWidget *> TextTool::createOptionWidgets()
     QList<QWidget *> widgets;
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
-    SimpleStylesWidget *ssw = new SimpleStylesWidget(0);
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
 
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
     connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(scw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
 
 
     // Connect to/with simple paragraph widget (docker)
@@ -1531,14 +1530,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     connect(this, SIGNAL(blockChanged(const QTextBlock&)), spw, SLOT(setCurrentBlock(const QTextBlock&)));
     connect(spw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(spw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
-
-    // Connect to/with simple styles widget (docker)
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
-    connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), ssw, SLOT(setCurrentFormat(QTextBlockFormat)));
-    connect(this, SIGNAL(charFormatChanged(QTextCharFormat)), ssw, SLOT(setCurrentFormat(QTextCharFormat)));
-    connect(ssw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
-    connect(ssw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
-    connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(spw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
 
     // Connect to/with simple table widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));
@@ -1551,8 +1543,6 @@ QList<QWidget *> TextTool::createOptionWidgets()
     widgets.append(scw);
     spw->setWindowTitle(i18n("Paragraph"));
     widgets.append(spw);
-    ssw->setWindowTitle(i18n("Styles"));
-    widgets.append(ssw);
     stw->setWindowTitle(i18n("Table"));
     widgets.append(stw);
     return widgets;

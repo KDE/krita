@@ -245,29 +245,29 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
             case Compression::Uncompressed:
 
             {
-                channelid=0;
-                io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffset[channelid]);
-
+                io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffset[0]);
                 vectorBytes.append(io->read(m_header->width*m_channelSize));
-
                 // Debug
                 qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
-
             }
                 break;
 
             case Compression::RLE:
             {
-                channelid=channel;
-                io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffset[channelid]);
+
+                io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffset[channel]);
                 int uncompressedLength = m_header->width * m_header->channelDepth / 8;
 
                 qDebug() << "channel" << channel << "row" << row << "rle length" << m_channelInfoRecords[channel].rleRowLengths[row] << "uncompressed length" << uncompressedLength;
-                
+
                 QByteArray compressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
                 
                 QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, m_channelInfoRecords[channel].compressionType);
                 vectorBytes.append(uncompressedBytes);
+
+                m_channelOffset[channel] +=  m_channelInfoRecords[channel].rleRowLengths[row];
+                qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
+
 
             }
                 break;
@@ -283,13 +283,11 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
             }
 
         }
-        qDebug()<<"ChannelID" << channelid;
+
         if (m_channelInfoRecords[channelid].compressionType == 0){
             m_channelOffset[channelid] += (m_header->width * m_channelSize);
         }
-        else if (m_channelInfoRecords[channelid].compressionType == 1){
-            m_channelOffset[channelid] += m_channelInfoRecords[channelid].rleRowLengths[row];
-        }
+
         qDebug() << "------------------------------------------";
         qDebug() << "channel offset:"<< m_channelOffset[channelid] <<": "<<  channelid;
 

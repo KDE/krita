@@ -764,7 +764,7 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
     QRectF bRect(cellBoundingRect(tableCell));
 
     // Possibly paint the background of the cell
-    QVariant background(tableCell.format().property(KoTableBorderStyle::CellBackgroundBrush));
+    QVariant background(tableCell.format().property(KoTableCellStyle::CellBackgroundBrush));
     if (!background.isNull()) {
         painter->fillRect(bRect, qvariant_cast<QBrush>(background));
     }

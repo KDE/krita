@@ -57,10 +57,6 @@ public:
         BottomLeftToTopRightBorderSpacing,  ///< the bottom letf to top right diagonal spacing
         BottomLeftToTopRightBorderInnerPen, ///< the bottom letf to top right diagonal inner pen
         BottomLeftToTopRightBorderStyle,    ///< the bottom letf to top right borderstyle
-        CellBackgroundBrush,     ///< the cell background brush, as QTextFormat::BackgroundBrush is used by paragraphs
-        VerticalAlignment,     ///< the vertical alignment oinside the cell
-        MasterPageName,         ///< Optional name of the master-page
-        InlineRdf               ///< Optional KoTextInlineRdf object
     };
 
     enum Side {

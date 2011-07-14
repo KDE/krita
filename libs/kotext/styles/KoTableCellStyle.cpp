@@ -536,6 +536,18 @@ void KoTableCellStyle::setDirection(KoTableCellStyle::CellTextDirection directio
     setProperty(Direction, direction);
 }
 
+KoBorder KoTableCellStyle::borders() const
+{
+    if (hasProperty(Borders))
+        return value(Borders).value<KoBorder>();
+    return KoBorder();
+}
+
+void KoTableCellStyle::setBorders(const KoBorder& borders)
+{
+    setProperty(Borders, QVariant::fromValue<KoBorder>(borders));
+}
+
 KoTableCellStyle::RotationAlignment KoTableCellStyle::rotationAlignment() const
 {
     return static_cast<RotationAlignment>(propertyInt(RotationAlign));
@@ -584,6 +596,23 @@ void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
     context.styleStack().setTypeProperties("paragraph");
     loadOdfProperties(context.styleStack());
     context.styleStack().restore();
+
+    // Borders - ugly mode enabled
+    KoBorder styleBorders;
+    KoXmlElement elem;
+    KoXmlNode node = element->firstChild();
+    do {
+        if (node.nodeName() == "style:table-cell-properties") {
+            elem = node.toElement();
+            break;
+        }
+    } while (!(node = node.nextSibling()).isNull());
+    if (styleBorders.loadOdf(elem)) {
+        setBorders(styleBorders);
+        kWarning(32500) << "Loaded borders successfully";
+        KoBorder testBorders = borders();
+        kWarning(32500) << (testBorders != KoBorder());
+    }
 }
 
 void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
@@ -923,6 +952,9 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("style:glyph-orientation-vertical", "auto", KoGenStyle::TableCellType);
             else
                 style.addProperty("style:glyph-orientation-vertical", "0", KoGenStyle::TableCellType);
+        } else if (key == Borders) {
+            kWarning(32500) << "Calling save odf in borders !";
+            borders().saveOdf(style, KoGenStyle::TableCellType);
         }
     }
     if (d->charStyle) {

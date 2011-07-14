@@ -26,6 +26,7 @@
 #include "KoText.h"
 #include "kotext_export.h"
 
+#include <KoBorder.h>
 #include <QColor>
 
 #include <QObject>
@@ -79,18 +80,23 @@ public:
     
     enum Property {
         StyleId = QTextTableFormat::UserProperty + 1,
-        ShrinkToFit,        ///< Shrink the cell content to fit the size
-        Wrap,               ///< Wrap the text within the cell
-        CellProtection,     ///< The cell protection when the table is protected
-        PrintContent,       ///< Should the content of this cell be printed
-        RepeatContent,      ///< Display the cell content as many times as possible
-        DecimalPlaces,      ///< Count the maximum number of decimal places to display
-        AlignFromType,      ///< Should the alignment property be respected or should the alignment be based on the value type
-        RotationAngle,      ///< Rotation angle of the cell content, in degrees
-        Direction,          ///< The direction of the text in the cell. This is a CellTextDirection.
-        RotationAlign,      ///< How the edge of the text is aligned after rotation. This is a RotationAlignment
-        TextWritingMode,    ///< KoText::Direction, the direction for writing text in the cell
-        VerticalGlyphOrientation    ///< bool, specify wether this feature is enabled or not
+        ShrinkToFit,                ///< Shrink the cell content to fit the size
+        Wrap,                       ///< Wrap the text within the cell
+        CellProtection,             ///< The cell protection when the table is protected
+        PrintContent,               ///< Should the content of this cell be printed
+        RepeatContent,              ///< Display the cell content as many times as possible
+        DecimalPlaces,              ///< Count the maximum number of decimal places to display
+        AlignFromType,              ///< Should the alignment property be respected or should the alignment be based on the value type
+        RotationAngle,              ///< Rotation angle of the cell content, in degrees
+        Direction,                  ///< The direction of the text in the cell. This is a CellTextDirection.
+        RotationAlign,              ///< How the edge of the text is aligned after rotation. This is a RotationAlignment
+        TextWritingMode,            ///< KoText::Direction, the direction for writing text in the cell
+        VerticalGlyphOrientation,   ///< bool, specify wether this feature is enabled or not
+        CellBackgroundBrush,        ///< the cell background brush, as QTextFormat::BackgroundBrush is used by paragraphs
+        VerticalAlignment,          ///< the vertical alignment oinside the cell
+        MasterPageName,             ///< Optional name of the master-page
+        InlineRdf,                  ///< Optional KoTextInlineRdf object
+        Borders                     ///< KoBorder, the borders of this cell
     };
 
     /// Constructor
@@ -196,6 +202,9 @@ public:
     
     void setVerticalGlyphOrientation(bool state);
     bool verticalGlyphOrientation() const;
+    
+    void setBorders(const KoBorder &borders);
+    KoBorder borders() const;
     
     /// set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableCellStyle *parent);

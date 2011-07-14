@@ -1668,10 +1668,11 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         QTextCursor cursor(block);
 
+ /*FIXME does not work cause e.g. tables are in own frames
         if (cursor.currentFrame() != document->rootFrame()) {
             break; // we've reached the "end" (end/footnotes saved in another way)
         }
-
+*/
         QTextBlockFormat format = block.blockFormat();
         if (format.hasProperty(KoParagraphStyle::SectionStartings)) {
             QVariant v = format.property(KoParagraphStyle::SectionStartings);

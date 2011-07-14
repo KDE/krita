@@ -142,6 +142,7 @@ void KoShadowConfigWidget::blurChanged()
 void KoShadowConfigWidget::setUnit( const KoUnit &unit )
 {
     d->widget.shadowOffset->setUnit( unit );
+    d->widget.shadowBlur->setUnit( unit );
 }
 
 #include <KoShadowConfigWidget.moc>

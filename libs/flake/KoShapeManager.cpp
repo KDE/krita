@@ -465,9 +465,9 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
 
         KoFilterEffect *lastEffect = filterEffects.last();
 
-        if (shape->shadow()) {
+        /*if (shape->shadow()) {
             shape->shadow()->paintBuffer(clippingOffset, imageBuffers.value(lastEffect->output()), painter, converter);
-        }
+        }*/
 
         // Paint the result
         painter.save();

@@ -64,11 +64,17 @@ public:
         BorderInset,    ///< The border makes the entire box look as though it were embedded in the canvas. (old words type)
         BorderOutset,   ///< The opposite of 'inset': the border makes the entire box look as though it were coming out of the canvas. (old words type)
 
+        BorderDashedLong,    ///< Dashed single border with long spaces
+        BorderTriple,    ///< Triple lined border
+        BorderSlash,    ///< slash border
+        BorderWave,    ///< wave border
+        BorderDoubleWave,    ///< double wave border
+        
         // words legacy
-        BorderDashDotPattern,
-        BorderDashDotDotPattern
+        BorderDashDot,
+        BorderDashDotDot
     };
-
+    
     /// Holds data about one border line.
     struct KOODF_EXPORT BorderData {
         BorderData();

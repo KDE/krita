@@ -130,44 +130,44 @@ QRectF KoTableCellStyle::boundingRect(const QRectF &contentRect) const
    );
 }
 
-KoTableCellStyle::BorderStyle KoTableCellStyle::oasisBorderStyle(const QString &borderstyle)
+KoBorder::BorderStyle KoTableCellStyle::oasisBorderStyle(const QString &borderstyle)
 {
     if (borderstyle == "none")
-        return BorderNone;
+        return KoBorder::BorderNone;
     if (borderstyle == "double")
-        return BorderDouble;
+        return KoBorder::BorderDouble;
     if (borderstyle == "dotted")
-        return BorderDotted;
+        return KoBorder::BorderDotted;
     if (borderstyle == "dashed")
-        return BorderDashed;
+        return KoBorder::BorderDashed;
     if (borderstyle == "dash-largegap")
-        return BorderDashedLong;
+        return KoBorder::BorderDashedLong;
     if (borderstyle == "dot-dash") // not offficially odf, but we suppport it anyway
-        return BorderDashDot;
+        return KoBorder::BorderDashDot;
     if (borderstyle == "dot-dot-dash") // not offficially odf, but we suppport it anyway
-        return BorderDashDotDot;
-    if (borderstyle == "slash") // not offficially odf, but we suppport it anyway
-        return BorderSlash;
-    if (borderstyle == "wave") // not offficially odf, but we suppport it anyway
-        return BorderWave;
-    if (borderstyle == "double-wave") // not offficially odf, but we suppport it anyway
-        return BorderDoubleWave;
-    return BorderSolid; // not needed to handle "solid" since it's the default
+        return KoBorder::BorderDashDotDot;
+    if (borderstyle == "slash") // not officially odf, but we suppport it anyway
+        return KoBorder::BorderSlash;
+    if (borderstyle == "wave") // not officially odf, but we suppport it anyway
+        return KoBorder::BorderWave;
+    if (borderstyle == "double-wave") // not officially odf, but we suppport it anyway
+        return KoBorder::BorderDoubleWave;
+    return KoBorder::BorderSolid; // not needed to handle "solid" since it's the default
 }
 
-QString KoTableCellStyle::odfBorderStyleString(const KoTableCellStyle::BorderStyle borderstyle)
+QString KoTableCellStyle::odfBorderStyleString(const KoBorder::BorderStyle borderstyle)
 {
     switch (borderstyle) {
-    case BorderDouble:
+    case KoBorder::BorderDouble:
         return QString("double");
-    case BorderSolid:
+    case KoBorder::BorderSolid:
         return QString("solid");
-    case BorderDashed:
+    case KoBorder::BorderDashed:
         return QString("dashed");
-    case BorderDotted:
+    case KoBorder::BorderDotted:
         return QString("dotted");
     default:
-    case BorderNone:
+    case KoBorder::BorderNone:
         return QString("none");
     }
 }

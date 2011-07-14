@@ -293,8 +293,8 @@ private:
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;
-    BorderStyle oasisBorderStyle(const QString &borderstyle);
-    QString odfBorderStyleString(const BorderStyle borderstyle);
+    KoBorder::BorderStyle oasisBorderStyle(const QString &borderstyle);
+    QString odfBorderStyleString(const KoBorder::BorderStyle borderstyle);
 
     Q_DECLARE_PRIVATE(KoTableCellStyle)
 };

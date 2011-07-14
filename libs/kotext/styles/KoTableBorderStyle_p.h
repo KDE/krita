@@ -39,7 +39,7 @@ public:
     virtual ~KoTableBorderStylePrivate();
 
     Edge edges[6];
-    KoTableBorderStyle::BorderStyle borderstyle[6];
+    KoBorder::BorderStyle borderstyle[6];
 };
 
 #endif // KOTABLEBORDERSTYLE_P_H

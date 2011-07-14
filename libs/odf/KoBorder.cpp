@@ -233,9 +233,9 @@ KoBorder::BorderStyle KoBorder::odfBorderStyle(const QString &borderstyle, bool 
     if (borderstyle == "dotted")
         return BorderDotted;
     if (borderstyle == "dot-dash")
-        return BorderDashDotPattern;
+        return BorderDashDot;
     if (borderstyle == "dot-dot-dash")
-        return BorderDashDotDotPattern;
+        return BorderDashDotDot;
     if (borderstyle == "double")
         return BorderDouble;
     if (borderstyle == "groove")   // Not odf compatible -- see above
@@ -260,9 +260,9 @@ QString KoBorder::odfBorderStyleString(BorderStyle borderstyle)
         return QString("dashed");
     case BorderDotted:
         return QString("dotted");
-    case BorderDashDotPattern:
+    case BorderDashDot:
         return QString("dot-dash");
-    case BorderDashDotDotPattern:
+    case BorderDashDotDot:
         return QString("dot-dot-dash");
     case BorderDouble:
         return QString("double");

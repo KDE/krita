@@ -24,6 +24,7 @@
 
 #include "KoText.h"
 #include "kotext_export.h"
+#include <KoBorder.h>
 
 class KoTableBorderStylePrivate;
 
@@ -68,23 +69,6 @@ public:
         BottomLeftToTopRight  ///< References the border from bottom, left corner to top, right corner of cell
     };
 
-    /// Enum used to differentiate between the 3 types of border styles
-    enum BorderStyle {
-        BorderNone = 0, ///< No line border
-        BorderSolid,    ///< Solid line border
-        BorderDotted,    ///< Dotted single border
-        BorderDashDot,    ///< Dot Dashsingle border
-        BorderDashDotDot,    ///< Dot Dot Dash single border
-        BorderDashed,    ///< Dashed single border
-        BorderDashedLong,    ///< Dashed single border with long spaces
-        BorderDouble,    ///< Double lined border
-        BorderTriple,    ///< Triple lined border
-        BorderSlash,    ///< slash border
-        BorderWave,    ///< wave border
-        BorderDoubleWave    ///< double wave border
-    };
-
-
     /// Constructor
     KoTableBorderStyle(QObject *parent = 0);
     /// Creates a KoTableBorderStyle with the given table cell format, and \a parent
@@ -93,13 +77,13 @@ public:
     ~KoTableBorderStyle();
 
     /// returns if the borderstyle needs to be specially drawn
-    bool isDrawn(BorderStyle style) const;
+    bool isDrawn(KoBorder::BorderStyle style) const;
 
     /// draws a horizontal wave line
-    void drawHorizontalWave(BorderStyle style, QPainter &painter, qreal x, qreal w, qreal t) const;
+    void drawHorizontalWave(KoBorder::BorderStyle style, QPainter &painter, qreal x, qreal w, qreal t) const;
 
     /// draws a vertical wave line
-    void drawVerticalWave(BorderStyle style, QPainter &painter, qreal y, qreal h, qreal t) const;
+    void drawVerticalWave(KoBorder::BorderStyle style, QPainter &painter, qreal y, qreal h, qreal t) const;
 
     /**
      * Set the properties of an edge.
@@ -109,7 +93,7 @@ public:
      * @param totalWidth the thickness of the border. Sum of outerwidth, spacing and innerwidth for double borders
      * @param color the color of the border line(s).
      */
-    void setEdge(Side side, BorderStyle style, qreal totalWidth, QColor color);
+    void setEdge(Side side, KoBorder::BorderStyle style, qreal totalWidth, QColor color);
 
     /**
      * Set the properties of a double border.

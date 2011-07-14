@@ -246,7 +246,15 @@ KoBorder::BorderStyle KoBorder::odfBorderStyle(const QString &borderstyle, bool 
         return BorderInset;
     if (borderstyle == "outset")   // Not odf compatible -- see above
         return BorderOutset;
-
+    if (borderstyle == "dash-largegap")
+        return KoBorder::BorderDashedLong;
+    if (borderstyle == "slash") // not officially odf, but we suppport it anyway
+        return KoBorder::BorderSlash;
+    if (borderstyle == "wave") // not officially odf, but we suppport it anyway
+        return KoBorder::BorderWave;
+    if (borderstyle == "double-wave") // not officially odf, but we suppport it anyway
+        return KoBorder::BorderDoubleWave;
+    
     if (converted)
         *converted = false;
     

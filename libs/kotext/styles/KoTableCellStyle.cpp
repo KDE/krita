@@ -130,48 +130,6 @@ QRectF KoTableCellStyle::boundingRect(const QRectF &contentRect) const
    );
 }
 
-KoBorder::BorderStyle KoTableCellStyle::oasisBorderStyle(const QString &borderstyle)
-{
-    if (borderstyle == "none")
-        return KoBorder::BorderNone;
-    if (borderstyle == "double")
-        return KoBorder::BorderDouble;
-    if (borderstyle == "dotted")
-        return KoBorder::BorderDotted;
-    if (borderstyle == "dashed")
-        return KoBorder::BorderDashed;
-    if (borderstyle == "dash-largegap")
-        return KoBorder::BorderDashedLong;
-    if (borderstyle == "dot-dash") // not offficially odf, but we suppport it anyway
-        return KoBorder::BorderDashDot;
-    if (borderstyle == "dot-dot-dash") // not offficially odf, but we suppport it anyway
-        return KoBorder::BorderDashDotDot;
-    if (borderstyle == "slash") // not officially odf, but we suppport it anyway
-        return KoBorder::BorderSlash;
-    if (borderstyle == "wave") // not officially odf, but we suppport it anyway
-        return KoBorder::BorderWave;
-    if (borderstyle == "double-wave") // not officially odf, but we suppport it anyway
-        return KoBorder::BorderDoubleWave;
-    return KoBorder::BorderSolid; // not needed to handle "solid" since it's the default
-}
-
-QString KoTableCellStyle::odfBorderStyleString(const KoBorder::BorderStyle borderstyle)
-{
-    switch (borderstyle) {
-    case KoBorder::BorderDouble:
-        return QString("double");
-    case KoBorder::BorderSolid:
-        return QString("solid");
-    case KoBorder::BorderDashed:
-        return QString("dashed");
-    case KoBorder::BorderDotted:
-        return QString("dotted");
-    default:
-    case KoBorder::BorderNone:
-        return QString("none");
-    }
-}
-
 void KoTableCellStyle::setParentStyle(KoTableCellStyle *parent)
 {
     Q_D(KoTableCellStyle);
@@ -637,7 +595,7 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
             style = styleStack.property(KoXmlNS::calligra, "specialborder", "left");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
-            setEdge(Left, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
+            setEdge(Left, KoBorder::odfBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
         }
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "top")) {
@@ -647,7 +605,7 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
             style = styleStack.property(KoXmlNS::calligra, "specialborder", "top");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
-            setEdge(Top, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
+            setEdge(Top, KoBorder::odfBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
         }
     }
 
@@ -658,7 +616,7 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
             style = styleStack.property(KoXmlNS::calligra, "specialborder", "right");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
-            setEdge(Right, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
+            setEdge(Right, KoBorder::odfBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
         }
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "bottom")) {
@@ -668,7 +626,7 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
             style = styleStack.property(KoXmlNS::calligra, "specialborder", "bottom");
         }
         if (!border.isEmpty() && border != "none" && border != "hidden") {
-            setEdge(Bottom, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
+            setEdge(Bottom, KoBorder::odfBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
         }
     }
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-tl-br")) {
@@ -677,7 +635,7 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
         if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "tl-br")) {
             style = styleStack.property(KoXmlNS::calligra, "specialborder", "tl-br");
         }
-        setEdge(TopLeftToBottomRight, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
+        setEdge(TopLeftToBottomRight, KoBorder::odfBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
     }
     if (styleStack.hasProperty(KoXmlNS::style, "diagonal-bl-tr")) {
         QString border = styleStack.property(KoXmlNS::style, "diagonal-bl-tr");
@@ -685,7 +643,7 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
         if (styleStack.hasProperty(KoXmlNS::calligra, "specialborder", "bl-tr")) {
             style = styleStack.property(KoXmlNS::calligra, "specialborder", "bl-tr");
         }
-        setEdge(BottomLeftToTopRight, oasisBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
+        setEdge(BottomLeftToTopRight, KoBorder::odfBorderStyle(style), KoUnit::parseValue(border.section(' ', 0, 0), 1.0),QColor(border.section(' ', 2, 2)));
     }
 
     if (styleStack.hasProperty(KoXmlNS::style, "border-line-width", "left")) {

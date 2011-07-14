@@ -39,7 +39,7 @@ int div2(const unsigned int n)
 double pyramid_lookup(int x, int y, int level)
 /* PRE:  */
 {
-    int n, s;
+    int s;
 
     /* Level 0 is a special case, the value is just the image */
     if (level == 0) {
@@ -51,7 +51,6 @@ double pyramid_lookup(int x, int y, int level)
 
     /* Compute the size of the slice */
     level--;
-    n = 1 << level;
     s = PyramidWidth0 >> level;
 
     //x = x >> level;

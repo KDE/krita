@@ -16,6 +16,8 @@ set(textvariables_SRCS
     PageVariableFactory.cpp
     InfoVariable.cpp
     InfoVariableFactory.cpp
+    ChapterVariable.cpp
+    ChapterVariableFactory.cpp
 )
 
 

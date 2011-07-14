@@ -56,6 +56,11 @@ public:
     KoTextBlockData();
     virtual ~KoTextBlockData();
 
+    /**
+     * Clear the counter and set everything to default values.
+     */
+    void clearCounter();
+
     /// return if this block has up-to-date counter data
     bool hasCounterData() const;
     /// return the width (in pt) of the counter.
@@ -66,10 +71,6 @@ public:
     qreal counterSpacing() const;
     /// set the spacing (in pt) between the counter and the text
     void setCounterSpacing(qreal spacing);
-    /// set the exact text that will be painted as the counter
-    void setCounterText(const QString &text);
-    /// return the exact text that will be painted as the counter
-    QString counterText() const;
 
     /** sets the index that is used at this level.
      * If this represents a paragraph with counter 3.1, then the text is the 1.
@@ -78,6 +79,9 @@ public:
     void setCounterIndex(int index);
     /// returns the index for the counter at this level
     int counterIndex() const;
+
+    /// return the exact text that will be painted as the counter
+    QString counterText() const;
 
     /**
      * set the text that is used for the counter at this level. the text is formatted
@@ -91,6 +95,18 @@ public:
     /// return the partial text for this paragraphs counter
     QString partialCounterText() const;
 
+    /// set the plain counter text which equals the counterText minus prefix and sufix
+    void setCounterPlainText(const QString &text);
+    /// return the plain counter text which equals the counterText minus prefix and sufix
+    QString counterPlainText() const;
+
+    void setCounterPrefix(const QString &text);
+    QString counterPrefix() const;
+
+    void setCounterSuffix(const QString &text);
+    QString counterSuffix() const;
+
+   
     /// Set if the counter is a image or not
     void setCounterIsImage(bool isImage);
 

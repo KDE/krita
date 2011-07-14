@@ -77,7 +77,7 @@ protected:
     /// @return the default configuration as defined by whoever wrote the plugin
     virtual KisPropertiesConfiguration* factoryConfiguration() const;
 private:
-    QString configEntryGroup();
+    QString configEntryGroup() const;
 private:
     struct Private;
     Private* const d;

@@ -205,15 +205,21 @@ QColor KoParagraphStyle::propertyColor(int key) const
 
 void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
 {
-    bool hadBreak = format.hasProperty(QTextFormat::PageBreakPolicy);
+    bool hadBreakBefore = format.hasProperty(BreakBefore);
+    bool hadBreakAfter = format.hasProperty(BreakAfter);
 
     if (d->parentStyle) {
         d->parentStyle->applyStyle(format);
     }
-    if (!hadBreak) {
-         // page preak should not be inherited according to odf, yet if it was there before we
-         // shouldn't remove
-         format.clearProperty(QTextFormat::PageBreakPolicy);
+    if (!hadBreakBefore) {
+         // page preak should not be inherited according to odf, yet if it was there
+         // before we shouldn't remove
+         format.clearProperty(BreakBefore);
+    }
+    if (!hadBreakAfter) {
+         // page preak should not be inherited according to odf, yet if it was there
+         // before we shouldn't remove
+         format.clearProperty(BreakAfter);
     }
     const QMap<int, QVariant> props = d->stylesPrivate.properties();
     QMap<int, QVariant>::const_iterator it = props.begin();
@@ -277,6 +283,7 @@ void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
 void KoParagraphStyle::setLineHeightPercent(int lineHeight)
 {
     setProperty(PercentLineHeight, lineHeight);
+    setProperty(FixedLineHeight, 0.0);
     remove(NormalLineHeight);
 }
 
@@ -288,6 +295,7 @@ int KoParagraphStyle::lineHeightPercent() const
 void KoParagraphStyle::setLineHeightAbsolute(qreal height)
 {
     setProperty(FixedLineHeight, height);
+    setProperty(PercentLineHeight, 0);
     remove(NormalLineHeight);
 }
 
@@ -424,17 +432,6 @@ bool KoParagraphStyle::followDocBaseline() const
 
 void KoParagraphStyle::setBreakBefore(KoText::KoTextBreakProperty value)
 {
-    bool pageBreak = (value == KoText::PageBreak);
-   
-    int prop = d->stylesPrivate.value(QTextFormat::PageBreakPolicy).toInt();
-
-    if (pageBreak) {
-        prop |= QTextFormat::PageBreak_AlwaysBefore;
-    } else {
-        prop &= ~QTextFormat::PageBreak_AlwaysBefore;
-    }
-
-    setProperty(QTextFormat::PageBreakPolicy, prop);
     setProperty(BreakBefore, value);
 }
 
@@ -445,17 +442,6 @@ KoText::KoTextBreakProperty KoParagraphStyle::breakBefore()
 
 void KoParagraphStyle::setBreakAfter(KoText::KoTextBreakProperty value)
 {
-    bool pageBreak = (value == KoText::PageBreak);
-    
-    int prop = d->stylesPrivate.value(QTextFormat::PageBreakPolicy).toInt();
-
-    if (pageBreak) {
-        prop |= QTextFormat::PageBreak_AlwaysAfter;
-    } else {
-        prop &= ~QTextFormat::PageBreak_AlwaysAfter;
-    }
-
-    setProperty(QTextFormat::PageBreakPolicy, prop);
     setProperty(BreakAfter, value);
 }
 
@@ -1208,17 +1194,13 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     }
 
     // Indentation (margin)
-    bool hasMarginLeft = false;
-    bool hasMarginRight = false;
     const QString marginLeft(styleStack.property(KoXmlNS::fo, "margin-left" ));
     if (!marginLeft.isEmpty()) {
         setLeftMargin(KoText::parseLength(marginLeft));
-        hasMarginLeft = true;
     }
     const QString marginRight(styleStack.property(KoXmlNS::fo, "margin-right" ));
     if (!marginRight.isEmpty()) {
         setRightMargin(KoText::parseLength(marginRight));
-        hasMarginRight = true;
     }
     const QString marginTop(styleStack.property(KoXmlNS::fo, "margin-top"));
     if (!marginTop.isEmpty()) {
@@ -1231,8 +1213,6 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     const QString margin(styleStack.property(KoXmlNS::fo, "margin"));
     if (!margin.isEmpty()) {
         setMargin(KoText::parseLength(margin));
-        hasMarginLeft = true;
-        hasMarginRight = true;
     }
 
     // Automatic Text indent
@@ -1271,8 +1251,11 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
                 }
             }
         }
-        else
+        else {
             setProperty(NormalLineHeight, true);
+            setProperty(PercentLineHeight, 0);
+            setProperty(FixedLineHeight, 0.0);
+        }
     }
     else {
         const QString lineSpacing(styleStack.property(KoXmlNS::style, "line-spacing"));
@@ -1960,10 +1943,10 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             } else if (key == KoParagraphStyle::LineSpacing && lineSpacing() != 0) {
                 style.addPropertyPt("style:line-spacing", lineSpacing(), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
-            } else if (key == KoParagraphStyle::PercentLineHeight) {
+            } else if (key == KoParagraphStyle::PercentLineHeight && lineHeightPercent() != 0) {
                 style.addProperty("fo:line-height", QString("%1%").arg(lineHeightPercent()), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
-            } else if (key == KoParagraphStyle::FixedLineHeight && lineHeightAbsolute() >= 0) {
+            } else if (key == KoParagraphStyle::FixedLineHeight && lineHeightAbsolute() != 0) {
                 style.addPropertyPt("fo:line-height", lineHeightAbsolute(), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
             } else if (key == KoParagraphStyle::LineSpacingFromFont && lineHeightAbsolute() == 0) {

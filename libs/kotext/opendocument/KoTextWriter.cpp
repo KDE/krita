@@ -1196,8 +1196,6 @@ int KoTextWriter::Private::checkForListItemChange(const QTextBlock &block)
 int KoTextWriter::Private::checkForListChange(const QTextBlock &listBlock)
 {
     QTextBlock block(listBlock);
-    QTextList *textList;
-    textList = block.textList();
 
     KoTextDocument textDocument(block.document());
     KoList *list = textDocument.list(block);
@@ -1449,7 +1447,6 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, QHash<Q
         writeBlocks(tocDocument, 0, endTitle, listStyles);
     writer->endElement(); // text:index-title
 
-    QTextBlock block = tocDocument->rootFrame()->lastCursorPosition().block();
     writeBlocks(tocDocument, endTitle, -1, listStyles);
 
     writer->endElement(); // table:index-body
@@ -1671,17 +1668,21 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         QTextCursor cursor(block);
 
-        if (cursor.currentFrame() != document->rootFrame()) {
+        if (cursor.currentFrame()->format().hasProperty(KoText::SubFrameType)) {
             break; // we've reached the "end" (end/footnotes saved in another way)
         }
 
         QTextBlockFormat format = block.blockFormat();
-        if (format.hasProperty(KoParagraphStyle::SectionStart)) {
-            QVariant v = format.property(KoParagraphStyle::SectionStart);
-            KoSection* section = (KoSection*)(v.value<void*>());
-            if (section) {
-                ++sectionLevel;
-                section->saveOdf(context);
+        if (format.hasProperty(KoParagraphStyle::SectionStartings)) {
+            QVariant v = format.property(KoParagraphStyle::SectionStartings);
+            QList<QVariant> sectionStarts = v.value<QList<QVariant> >();
+
+        foreach (QVariant sv, sectionStarts) {
+                KoSection* section = (KoSection*)(sv.value<void*>());
+                if (section) {
+                    ++sectionLevel;
+                    section->saveOdf(context);
+                }
             }
         }
         if (format.hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
@@ -1729,12 +1730,15 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             }
         }
 
-        if (format.hasProperty(KoParagraphStyle::SectionEnd)) {
-            QVariant v = format.property(KoParagraphStyle::SectionEnd);
-            KoSectionEnd* section = (KoSectionEnd*)(v.value<void*>());
-            if (section && sectionLevel >= 1) {
-                --sectionLevel;
-                section->saveOdf(context);
+        if (format.hasProperty(KoParagraphStyle::SectionEndings)) {
+            QVariant v = format.property(KoParagraphStyle::SectionEndings);
+            QList<QVariant> sectionEndings = v.value<QList<QVariant> >();
+            KoSectionEnd sectionEnd;
+            foreach (QVariant sv, sectionEndings) {
+                if (sectionLevel >= 1) {
+                    --sectionLevel;
+                    sectionEnd.saveOdf(context);
+                }
             }
         }
 

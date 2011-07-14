@@ -130,15 +130,6 @@ QRectF KoTableCellStyle::boundingRect(const QRectF &contentRect) const
    );
 }
 
-void KoTableCellStyle::paintBackground(QPainter &painter, const QRectF &bounds) const
-{
-    QRectF innerBounds = bounds;
-
-    if (hasProperty(CellBackgroundBrush)) {
-        painter.fillRect(bounds, background());
-    }
-}
-
 KoTableCellStyle::BorderStyle KoTableCellStyle::oasisBorderStyle(const QString &borderstyle)
 {
     if (borderstyle == "none")
@@ -582,7 +573,7 @@ void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
 
     context.styleStack().setTypeProperties("table-cell");
     loadOdfProperties(context.styleStack());
-
+    
     KoCharacterStyle *charstyle = characterStyle();
     context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
     charstyle->loadOdf(scontext);   // load the KoCharacterStyle from the stylestack

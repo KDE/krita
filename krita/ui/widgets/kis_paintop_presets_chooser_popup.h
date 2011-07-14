@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
+ * Copyright 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -43,7 +44,10 @@ signals:
 private slots:
     void slotThumbnailMode();
     void slotDetailMode();
-
+    /// Passes the lineEdit text to the preset Chooser when a returnPressed signal is generated
+    void returnKeyPressed(QString lineEditText);
+    /// Sets the lineEdit so that it can search for multiple tags like "round, circle, "
+    void setLineEditCompleter(const QString& searchString);
     virtual void paintEvent(QPaintEvent* );
    
 private:

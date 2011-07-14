@@ -22,7 +22,6 @@
 #define MIXERCANVAS_H_
 
 #include <QFrame>
-#include <QVector>
 
 #include <KoCanvasBase.h>
 #include <kis_types.h>
@@ -31,8 +30,8 @@ class QPoint;
 class QImage;
 class QMouseEvent;
 class QPaintEvent;
-class QRect;
 class QRectF;
+class QRegion;
 class QResizeEvent;
 class QTabletEvent;
 class KUndo2Command;

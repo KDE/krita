@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Adam Celarek <kdedev at xibo dot at>
+ * Copyright (C) 2011 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,18 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_FREEHAND_CURVE_H
-#define KIS_FREEHAND_CURVE_H
+#ifndef KO_CHAPTER_VARIABLE_FACTORY
+#define KO_CHAPTER_VARIABLE_FACTORY
 
-#include "kis_simple_curve.h"
+#include <KoInlineObjectFactoryBase.h>
 
-class KisFreehandCurve : public KisSimpleCurve
+class ChapterVariableFactory : public KoInlineObjectFactoryBase
 {
 public:
-    KisFreehandCurve();
+    ChapterVariableFactory();
 
-    QString className() const;
-    void updatePainterPath();
+    virtual KoInlineObject *createInlineObject(const KoProperties *properties = 0) const;
 };
 
-#endif // KIS_FREEHAND_CURVE_H
+#endif

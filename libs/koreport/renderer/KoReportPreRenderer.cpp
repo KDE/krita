@@ -341,9 +341,7 @@ qreal KoReportPreRendererPrivate::renderSectionSize(const KRSectionData & sectio
         return intHeight;
 
     QList<KoReportItemBase*> objects = sectionData.objects();
-    KoReportItemBase * elemThis;
     foreach(KoReportItemBase *ob, objects) {
-        elemThis = ob;
         QPointF offset(m_leftMargin, m_yOffset);
         QVariant itemData = m_kodata->value(ob->itemDataSource());
 
@@ -385,7 +383,6 @@ qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionDat
     QList<KoReportItemBase*> objects = sectionData.objects();
     KoReportItemBase * elemThis;
     foreach(KoReportItemBase *ob, objects) {
-        elemThis = ob;
         QPointF offset(m_leftMargin, m_yOffset);
         QVariant itemData = m_kodata->value(ob->itemDataSource());
 

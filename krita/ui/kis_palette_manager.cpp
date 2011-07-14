@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright 2009 Vera Lukman <shicmap@gmail.com>
    Copyright 2011 Sven Langkamp <sven.langkamp@gmail.com>
+   Copyright 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,6 +31,7 @@
 #include "kis_palette_manager.h"
 #include <QtGui>
 #include "klocale.h"
+#include <kmenu.h>
 #include <kis_paintop_settings_widget.h>
 
 #include <KoToolManager.h>
@@ -50,6 +52,7 @@
 #include "KoResourceServerAdapter.h"
 #include "kis_paintop_preset.h"
 #include "kis_preset_chooser.h"
+#include <kconfiggroup.h>
 
 KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPaintopBox *paintOpBox)
     : QDialog(paintOpBox)
@@ -62,11 +65,13 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
 
     m_allPresetsView = new KisPresetChooser(this);
     m_allPresetsView->showButtons(false);
+    m_allPresetsView->showTaggingBar(false,false);
     m_allPresetsView->setPresetFilter(KoID("dummy",""));
     m_allPresetsView->setShowAll(true);
 
     m_palettePresetsView = new KisPresetChooser(this);
-    m_palettePresetsView->showButtons(false);   
+    m_palettePresetsView->showButtons(false);
+    m_palettePresetsView->showTaggingBar(false,false);
     m_palettePresetsView->setPresetFilter(KoID("dummy",""));
     m_palettePresetsView->setShowAll(true);
 
@@ -99,7 +104,37 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     QVBoxLayout *rightLayout = new QVBoxLayout();
     rightLayout->addWidget(new QLabel(i18n("Favorite Presets")));
     rightLayout->addWidget(m_palettePresetsView);
-    rightLayout->addWidget(m_removeButton);
+
+    /*RIGHT BOTTOM LAYOUT*/
+    QHBoxLayout *rightBottomLayout = new QHBoxLayout();
+    rightBottomLayout->addWidget(m_removeButton);
+    rightBottomLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+    QToolButton* viewButton = new QToolButton();
+    viewButton->setPopupMode(QToolButton::InstantPopup);
+    rightBottomLayout->addWidget(viewButton);
+    rightLayout->addLayout(rightBottomLayout);
+
+    KMenu* menu = new KMenu(this);
+
+    QActionGroup *actionGroup = new QActionGroup(this);
+
+    KConfigGroup group(KGlobal::config(), "favoriteList");
+    KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)group.readEntry("presetChooserViewMode", 0);
+    m_allPresetsView->setViewMode(mode);
+    m_palettePresetsView->setViewMode(mode);
+
+    QAction* action = menu->addAction(KIcon("view-preview"), i18n("Thumbnails"), this, SLOT(slotThumbnailMode()));
+    action->setCheckable(true);
+    action->setChecked(mode == KisPresetChooser::THUMBNAIL);
+    action->setActionGroup(actionGroup);
+
+    action = menu->addAction(KIcon("view-list-details"), i18n("Details"), this, SLOT(slotDetailMode()));
+    action->setCheckable(true);
+    action->setChecked(mode == KisPresetChooser::DETAIL);
+    action->setActionGroup(actionGroup);
+
+    viewButton->setIcon(KIcon("view-choose"));
+    viewButton->setMenu(menu);
 
     /*MAIN LAYOUT*/
     QHBoxLayout *mainLayout = new QHBoxLayout();
@@ -178,5 +213,22 @@ void KisPaletteManager::updatePaletteView()
     m_palettePresetsView->setFilteredNames(m_resourceManager->favoritePresetList());
 }
 
+void KisPaletteManager::slotThumbnailMode()
+{
+    KConfigGroup group(KGlobal::config(), "favoriteList");
+    group.writeEntry("presetChooserViewMode", (int)KisPresetChooser::THUMBNAIL);
+
+    m_allPresetsView->setViewMode(KisPresetChooser::THUMBNAIL);
+    m_palettePresetsView->setViewMode(KisPresetChooser::THUMBNAIL);
+}
+
+void KisPaletteManager::slotDetailMode()
+{
+    KConfigGroup group(KGlobal::config(), "favoriteList");
+    group.writeEntry("presetChooserViewMode", (int)KisPresetChooser::DETAIL);
+
+    m_allPresetsView->setViewMode(KisPresetChooser::DETAIL);
+    m_palettePresetsView->setViewMode(KisPresetChooser::DETAIL);
+}
 
 #include "kis_palette_manager.moc"

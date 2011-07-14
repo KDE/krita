@@ -300,7 +300,7 @@ public:
     /**
      * Set the x offset of this layer in the image place.
      * Re-implement this where it makes sense, by default it does
-     * nothing.
+     * nothing. It should not move child nodes.
      */
     virtual void setX(qint32) {
     }
@@ -315,7 +315,7 @@ public:
     /**
      * Set the y offset of this layer in the image place.
      * Re-implement this where it makes sense, by default it does
-     * nothing.
+     * nothing. It should not move child nodes.
      */
     virtual void setY(qint32) {
     }

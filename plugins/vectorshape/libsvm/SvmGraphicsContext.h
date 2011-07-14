@@ -66,6 +66,7 @@ struct SvmGraphicsContext {
     bool      textFillColorSet;
     TextAlign textAlign;
     MapMode   mapMode;
+    quint32   layoutMode;
     QFont     font;
     QColor    overlineColor;
     bool      overlineColorSet;

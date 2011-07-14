@@ -76,6 +76,7 @@ set(kritaui_LIB_SRCS
     kis_import_catcher.cc 
     kis_layer_manager.cc
     kis_mask_manager.cc
+    kis_mimedata.cpp
     kis_node_commands_adapter.cpp
     kis_node_manager.cpp 
     kis_node_model.cpp
@@ -166,6 +167,7 @@ set(kritaui_LIB_SRCS
     widgets/squeezedcombobox.cpp
     widgets/kis_categorized_list_view.cpp
     widgets/kis_widget_chooser.cpp
+    widgets/kis_tool_button.cpp
 #    widgets/kis_light_source.cpp
 #    widgets/kis_light_stage.cpp
 )

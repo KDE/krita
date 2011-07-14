@@ -441,7 +441,7 @@ void KisToolFreehand::endPaint()
 
             indirect->mergeToLayer(layer, m_incrementalDirtyRegion, m_transactionText);
 
-            m_incrementalDirtyRegion.clear();
+            m_incrementalDirtyRegion = QRegion();
         } else {
             m_painter->endTransaction(image()->undoAdapter());
         }
@@ -511,7 +511,18 @@ bool KisToolFreehand::wantsAutoScroll() const
     return false;
 }
 
-void KisToolFreehand::setDirty(const QVector<QRect>& region)
+void KisToolFreehand::setDirty(const QVector<QRect> &rects)
+{
+    currentNode()->setDirty(rects);
+    if (!m_paintIncremental) {
+        foreach(const QRect &rc, rects) {
+            m_incrementalDirtyRegion += rc;
+        }
+    }
+}
+
+
+void KisToolFreehand::setDirty(const QRegion& region)
 {
     if (region.isEmpty())
         return;

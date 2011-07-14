@@ -798,7 +798,7 @@ void KoTextEditor::insertFrameBreak()
     QTextBlock block = d->caret.block();
     if (d->caret.position() == block.position() && block.length() > 0) { // start of parag
         QTextBlockFormat bf = d->caret.blockFormat();
-        bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+        bf.setProperty(KoParagraphStyle::BreakBefore, KoText::PageBreak);
         d->caret.insertBlock(bf);
         if (block.textList())
             block.textList()->remove(block);
@@ -806,7 +806,7 @@ void KoTextEditor::insertFrameBreak()
         QTextBlockFormat bf = d->caret.blockFormat();
         newLine();
         bf = d->caret.blockFormat();
-        bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore); // TODO we should create an autostyle instead
+        bf.setProperty(KoParagraphStyle::BreakBefore, KoText::PageBreak);
         d->caret.setBlockFormat(bf);
     }
     d->updateState(KoTextEditor::Private::NoOp);

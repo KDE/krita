@@ -98,6 +98,7 @@ void KisFloodFillBenchmark::benchmarkFlood()
 
         // fill twice
         fillPainter.fillColor(1, 1, 0);
+
         fillPainter.deleteTransaction();
     }
 

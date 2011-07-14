@@ -69,26 +69,26 @@ public:
     /**
        The width of the bitmap, in pixels
     */
-    qint32 width() { return m_width; };
+    qint32 width() const { return m_width; };
 
     /**
        The height of the bitmap, in pixels
     */
-    qint32 height() { return m_height; };
+    qint32 height() const { return m_height; };
 
     /**
        The number of bits that make up a pixel
 
        This is an enumerated type - see the BitCount enum
     */
-    quint16 bitCount() { return m_bitCount; };
+    quint16 bitCount() const { return m_bitCount; };
 
     /**
        The type of compression used in the image
 
        This is an enumerated type
     */
-    quint32 compression() { return m_compression; };
+    quint32 compression() const { return m_compression; };
 
 //private:
     Type  m_headerType;         /// Which header type that is represented.

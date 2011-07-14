@@ -114,9 +114,13 @@ bool EnhancedPathCommand::execute()
     // counter-clockwise arc (x1 y1 x2 y2 x3 y3 x y) +
     case 'A':
     // the same as A, with implied moveto to the starting point (x1 y1 x2 y2 x3 y3 x y) +
-    case 'B': {
-        bool lineTo = m_command.unicode() == 'A';
-
+    case 'B':
+    // clockwise arc (x1 y1 x2 y2 x3 y3 x y) +
+    case 'W':
+    // the same as W, but implied moveto (x1 y1 x2 y2 x3 y3 x y) +
+    case 'V': {
+        bool lineTo = ((m_command.unicode() == 'A') || (m_command.unicode() == 'W'));
+        bool clockwise = ((m_command.unicode() == 'W') || (m_command.unicode() == 'V'));
         for (int i = 0; i < pointsCount; i+=4) {
             QRectF bbox = rectFromPoints(points[i], points[i+1]);
             QPointF center = bbox.center();
@@ -125,39 +129,15 @@ bool EnhancedPathCommand::execute()
             qreal startAngle = angleFromPoint(points[i+2] - center);
             qreal stopAngle = angleFromPoint(points[i+3] - center);
             // we are moving counter-clockwise to the end angle
-            qreal sweepAngle = radSweepAngle(startAngle, stopAngle, false);
+            qreal sweepAngle = radSweepAngle(startAngle, stopAngle, clockwise);
             // compute the starting point to draw the line to
             QPointF startPoint(rx * cos(startAngle), ry * sin(2*M_PI - startAngle));
 
-            if (lineTo)
+            if (lineTo) {
                 m_parent->lineTo(center + startPoint);
-            else
+            } else {
                 m_parent->moveTo(center + startPoint);
-
-            m_parent->arcTo(rx, ry, startAngle * rad2deg, sweepAngle * rad2deg);
-        }
-        break;
-    }
-    // clockwise arc (x1 y1 x2 y2 x3 y3 x y) +
-    case 'W':
-    // the same as W, but implied moveto (x1 y1 x2 y2 x3 y3 x y) +
-    case 'V': {
-        bool lineTo = m_command.unicode() == 'W';
-
-        for (int i = 0; i < pointsCount; i+=4) {
-            QRectF bbox = rectFromPoints(points[i], points[i+1]);
-            QPointF center = bbox.center();
-            qreal rx = 0.5 * bbox.width();
-            qreal ry = 0.5 * bbox.height();
-            qreal startAngle = angleFromPoint(points[i+2] - center);
-            qreal stopAngle = angleFromPoint(points[i+3] - center);
-            // we are moving clockwise to the end angle
-            qreal sweepAngle = radSweepAngle(startAngle, stopAngle, true);
-
-            if (lineTo)
-                m_parent->lineTo(points[i+2]);
-            else
-                m_parent->moveTo(points[i+2]);
+            }
 
             m_parent->arcTo(rx, ry, startAngle * rad2deg, sweepAngle * rad2deg);
         }
@@ -225,7 +205,7 @@ QList<QPointF> EnhancedPathCommand::pointsFromParameters()
         mod = 2;
     }
     if ((points.count() % mod) != 0) { // invalid command
-        kWarning(31000) << "Invalid point count for command" << m_command << "ignoring";
+        kWarning(31000) << "Invalid point count for command" << m_command << "ignoring" << "count:" << points.count() << "mod:" << mod;
         return QList<QPointF>();
     }
 

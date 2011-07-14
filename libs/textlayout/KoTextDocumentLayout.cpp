@@ -69,6 +69,7 @@ public:
        ,layoutPosition(0)
        ,anchoringRootArea(0)
        , anchoringIndex(0)
+       , referencedLayout(0)
        , defaultTabSizing(0)
        , y(0)
        , isLayouting(false)
@@ -92,13 +93,15 @@ public:
     QHash<int, KoInlineObjectExtent> inlineObjectExtents; // maps text-position to whole-line-height of an inline object
     int inlineObjectOffset;
     QList<KoTextAnchor *> textAnchors; // list of all inserted inline objects
+    KoTextLayoutRootArea *anchoringRootArea;
     int anchoringIndex; // index of last not positioned inline object inside textAnchors
     int anchoringCycle; // how many times have we cycled in iterative mode;
     QRectF anchoringParagraphRect;
 
     QHash<KoShape*,KoTextLayoutObstruction*> anchoredObstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
     QList<KoTextLayoutObstruction*> freeObstructions; // obstructions affecting the current rootArea, and not anchored
-    KoTextLayoutRootArea *anchoringRootArea;
+
+    KoTextDocumentLayout *referencedLayout;
 
     qreal defaultTabSizing;
     qreal y;
@@ -115,6 +118,7 @@ public:
     };
     AnchoringState anchoringState;
     int documentChangedCount;
+
 };
 
 
@@ -522,7 +526,6 @@ bool KoTextDocumentLayout::doLayout()
     d->y = 0;
     d->layoutScheduled = false;
     d->restartLayout = false;
-    KoTextLayoutRootArea *previousRootArea = 0;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         if (d->restartLayout) {
@@ -605,7 +608,6 @@ bool KoTextDocumentLayout::doLayout()
         }
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
                                                // 50 just to seperate pages
-        previousRootArea = rootArea;
     }
 
     while (d->layoutPosition->it != document()->rootFrame()->end()) {
@@ -712,6 +714,16 @@ void KoTextDocumentLayout::setBlockLayout(bool block)
 bool KoTextDocumentLayout::layoutBlocked() const
 {
     return d->layoutBlocked;
+}
+
+KoTextDocumentLayout* KoTextDocumentLayout::referencedLayout() const
+{
+    return d->referencedLayout;
+}
+
+void KoTextDocumentLayout::setReferencedLayout(KoTextDocumentLayout *layout)
+{
+    d->referencedLayout = layout;
 }
 
 QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame*) const

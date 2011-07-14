@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,6 +39,13 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 
+#include "kis_undo_adapter.h"
+#include "qtimer.h"
+#include "commands/kis_layer_commands.h"
+#include "kis_layer.h"
+#include "kis_view2.h"
+#include "kis_doc2.h"
+#include "kis_cursor.h"
 #include <kis_debug.h>
 #include <kis_global.h>
 
@@ -49,57 +57,137 @@
 #include "widgets/kis_channelflags_widget.h"
 #include <kis_composite_ops_model.h>
 
-KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
-        qint32 opacity,
-        const KoCompositeOp* compositeOp,
-        const KoColorSpace * colorSpace,
-        const QBitArray & channelFlags,
-        QWidget *parent, const char *name, Qt::WFlags f)
-        : KDialog(parent)
-        , m_colorSpace(colorSpace)
+
+struct KisDlgLayerProperties::Private
+{
+    QString deviceName;
+    const KoColorSpace *colorSpace;
+    const KoCompositeOp *compositeOp;
+    QBitArray channelFlags;
+    quint8 opacity;
+};
+
+KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisView2 *view, KisDoc2 *doc, QWidget *parent, const char *name, Qt::WFlags f)
+                      : KDialog(parent)
+                      , m_layer(layer)
+                      , m_view(view)
+                      , m_doc(doc)
+                      , d(new Private())
 {
     Q_UNUSED(f);
     setCaption(i18n("Layer Properties"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
+    setModal(false);
 
     setObjectName(name);
     m_page = new WdgLayerProperties(this);
 
-    opacity = int((opacity * 100.0) / 255 + 0.5);
+    d->deviceName = layer->name();
+    d->colorSpace = layer->colorSpace();
+    d->compositeOp = layer->compositeOp();
+    d->channelFlags = layer->channelFlags();
+    d->opacity = layer->opacity();
+    
+    quint8 sliderOpacity = int((d->opacity * 100.0) / 255 + 0.5);
 
     setMainWidget(m_page);
 
-    m_page->editName->setText(deviceName);
+    m_page->editName->setText(d->deviceName);
     connect(m_page->editName, SIGNAL(textChanged(const QString &)), this, SLOT(slotNameChanged(const QString &)));
 
-    m_page->lblColorSpace->setText(colorSpace->name());
+    m_page->lblColorSpace->setText(d->colorSpace->name());
 
-    if (const KoColorProfile* profile = colorSpace->profile()) {
+    if (const KoColorProfile* profile = d->colorSpace->profile()) {
         m_page->lblProfile->setText(profile->name());
     }
 
     m_page->intOpacity->setRange(0, 100);
-    m_page->intOpacity->setValue(opacity);
+    m_page->intOpacity->setValue(sliderOpacity);
 
-    m_page->cmbComposite->getModel()->validateCompositeOps(colorSpace);
-    m_page->cmbComposite->setCurrentIndex(m_page->cmbComposite->indexOf(KoID(compositeOp->id())));
+    m_page->cmbComposite->getModel()->validateCompositeOps(d->colorSpace);
+    m_page->cmbComposite->setCurrentIndex(m_page->cmbComposite->indexOf(KoID(d->compositeOp->id())));
 
     slotNameChanged(m_page->editName->text());
 
     QVBoxLayout * vbox = new QVBoxLayout;
-    m_channelFlags = new KisChannelFlagsWidget(colorSpace);
+    m_channelFlags = new KisChannelFlagsWidget(d->colorSpace);
     vbox->addWidget(m_channelFlags);
     vbox->addStretch(1);
     m_page->grpActiveChannels->setLayout(vbox);
-    m_channelFlags->setChannelFlags(channelFlags);
+
+    m_channelFlags->setChannelFlags(d->channelFlags);
 
     setMinimumSize(m_page->sizeHint());
 
+    QTimer* ticker = new QTimer;
+    ticker->start(200);
+    connect(ticker, SIGNAL(timeout()), SLOT(updatePreview()));
 }
 
 KisDlgLayerProperties::~KisDlgLayerProperties()
 {
+    if (result() == QDialog::Accepted) {
+        applyNewProperties();
+    } else { // QDialog::Rejected
+        cleanPreviewChanges();
+        m_doc->setModified(true);
+        m_layer->setDirty();
+    }
+}
+
+void KisDlgLayerProperties::updatePreview()
+{
+    if (!m_layer) return;
+
+    if(m_page->checkBoxPreview->isChecked()) {
+        if (   m_layer->name()              !=  getName()
+            || m_layer->opacity()           !=  getOpacity()
+            || m_layer->compositeOp()->id() !=  getCompositeOp() 
+            || m_layer->channelFlags()      !=  getChannelFlags() )
+        {
+            m_layer->setOpacity(getOpacity());
+            m_layer->setCompositeOp(getCompositeOp());
+            m_layer->setName(getName());
+            m_layer->setChannelFlags(getChannelFlags());
+            m_doc->setModified(true);
+        }
+        m_layer->setDirty();
+        
+    }
+}
+
+void KisDlgLayerProperties::applyNewProperties()
+{
+    if (!m_layer) return;
+    
+    cleanPreviewChanges();
+    
+    if (   m_layer->name()              !=  getName()
+        || m_layer->opacity()           !=  getOpacity()
+        || m_layer->compositeOp()->id() !=  getCompositeOp() 
+        || m_layer->channelFlags()      !=  getChannelFlags() )
+    {
+        QApplication::setOverrideCursor(KisCursor::waitCursor());
+        KUndo2Command *change = new KisLayerPropsCommand(m_layer,
+                                            m_layer->opacity(),       getOpacity(),
+                                            m_layer->compositeOpId(), getCompositeOp(),
+                                            m_layer->name(),          getName(),
+                                            m_layer->channelFlags(),  getChannelFlags(),
+                                            true);
+        m_view->undoAdapter()->addCommand(change);
+        QApplication::restoreOverrideCursor();
+        m_doc->setModified(true);
+        m_layer->setDirty();
+    }
+}
+
+void KisDlgLayerProperties::cleanPreviewChanges()
+{
+    m_layer->setOpacity(d->opacity);
+    m_layer->setCompositeOp(d->compositeOp->id());
+    m_layer->setName(d->deviceName);
+    m_layer->setChannelFlags(d->channelFlags);
 }
 
 void KisDlgLayerProperties::slotNameChanged(const QString &_text)

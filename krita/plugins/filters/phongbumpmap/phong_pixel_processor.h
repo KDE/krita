@@ -38,7 +38,7 @@ class PhongPixelProcessor
 {
     
 public:
-    PhongPixelProcessor(const KisPropertiesConfiguration* config);
+    PhongPixelProcessor(quint32 pixelArea, const KisPropertiesConfiguration* config);
     ~PhongPixelProcessor();
     
     void initialize(const KisPropertiesConfiguration* config);
@@ -96,6 +96,9 @@ public:
     
     bool diffuseLightIsEnabled;
     bool specularLightIsEnabled;
+
+private:
+    quint32 m_pixelArea;
 };
 
 

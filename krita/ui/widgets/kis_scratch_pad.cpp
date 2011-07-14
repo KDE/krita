@@ -407,9 +407,14 @@ void KisScratchPad::initPainting(QEvent* event) {
     }
     m_distanceInformation.spacing = m_painter->paintAt(m_previousPaintInformation);
     m_distanceInformation.distance = 0.0;
+
+
+    QRect bounds;
     foreach(const QRect &rc, m_painter->takeDirtyRegion()) {
-        update(pos.x() - rc.width(), pos.y() - rc.height(), rc.width() * 2, rc.height() *2);
+        bounds |= rc;
     }
+
+    update(pos.x() - bounds.width(), pos.y() - bounds.height(), bounds.width() * 2, bounds.height() *2);
 }
 
 void KisScratchPad::paint(QEvent* event) {
@@ -440,14 +445,14 @@ void KisScratchPad::paint(QEvent* event) {
     m_distanceInformation = m_painter->paintLine(m_previousPaintInformation, info, m_distanceInformation);
     m_previousPaintInformation = info;
 
-    QVector<QRect> rects = m_painter->takeDirtyRegion();
-
-    m_incrementalDirtyRegion += rects;
-
-    foreach(const QRect &rc, rects) {
-        m_paintLayer->updateProjection(rc);
-        update(pos.x() - rc.width(), pos.y() - rc.height(), rc.width() * 2, rc.height() *2);
+    QRect bounds;
+    foreach(const QRect &rc, m_painter->takeDirtyRegion()) {
+        bounds |= rc;
+        m_incrementalDirtyRegion += rc;
     }
+
+    m_paintLayer->updateProjection(bounds);
+    update(pos.x() - bounds.width(), pos.y() - bounds.height(), bounds.width() * 2, bounds.height() *2);
 }
 
 void KisScratchPad::endPaint(QEvent *event) {
@@ -470,16 +475,20 @@ void KisScratchPad::endPaint(QEvent *event) {
             Q_ASSERT(indirect);
 
             indirect->mergeToLayer(layer, m_incrementalDirtyRegion, QString("scratchpaint"));
-            m_incrementalDirtyRegion.clear();
+            m_incrementalDirtyRegion = QRegion();
         } else {
             KisDumbUndoAdapter dua;
             m_painter->endTransaction(&dua);
         }
     }
 
+
+    QRect bounds;
     foreach(const QRect &rc, m_painter->takeDirtyRegion()) {
-        update(rc.translated(m_currentMousePosition));
+        bounds |= rc;
     }
+
+    update(bounds.translated(m_currentMousePosition));
 
     delete m_painter;
     m_painter = 0;

@@ -67,7 +67,6 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceSP device,
                                       KoUpdater* progressUpdater
                                       ) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device);
     // TODO take selections into account
     float threshold;

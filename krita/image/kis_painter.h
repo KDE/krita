@@ -658,8 +658,7 @@ public:
     void setCompositeOp(const QString& op);
 
     /**
-     * Add the r to the current dirty rect, and return the vector
-     * of dirty rects after adding r to it.
+     * Add the r to the current dirty rect.
      */
     void addDirtyRect(const QRect & r);
 

@@ -35,14 +35,10 @@ KisColorPatches::KisColorPatches(QString configPrefix, QWidget *parent) :
 {
     resize(1, 1);
     updateSettings();
-
-//    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-//    resize(m_numCols*m_patchWidth, m_numRows*m_patchHeight);
 }
 
 void KisColorPatches::setColors(QList<KoColor>colors)
 {
-//    qDebug()<<"KisColSelNgPatches::setColors() -> size:"<<colors.size();
     if(m_allowColorListChangeGuard) {
         m_colors = colors;
 
@@ -80,7 +76,7 @@ void KisColorPatches::paintEvent(QPaintEvent* e)
     for(int i=m_buttonList.size(); i<qMin(fieldCount(), m_colors.size()+m_buttonList.size()); i++) {
         int row;
         int col;
-        if((m_direction==Vertical && m_allowScrolling) || (m_direction==Horizontal && m_allowScrolling==false)) {
+        if(m_direction==Vertical) {
             row= i/numPatchesInARow;
             col = i%numPatchesInARow;
         }
@@ -95,10 +91,7 @@ void KisColorPatches::paintEvent(QPaintEvent* e)
                          m_patchHeight,
                          m_colors.at(i-m_buttonList.size()).toQColor());
     }
-    
-//    for(int i=0; i<m_buttonList.size(); i++) {
-//        m_buttonList.at(i)->paintEvent(e);
-//    }
+
     QWidget::paintEvent(e);
 }
 
@@ -166,9 +159,15 @@ void KisColorPatches::mouseReleaseEvent(QMouseEvent* event)
 
 void KisColorPatches::mousePressEvent(QMouseEvent *event)
 {
+    KoColor koColor;
+    if(!colorAt(event->pos(), &koColor))
+        return;
+
     KisColorSelectorBase::mousePressEvent(event);
     if(event->isAccepted())
         return;
+
+    updateColorPreview(koColor.toQColor());
 
     if (event->button() == Qt::LeftButton)
         m_dragStartPos = event->pos();
@@ -199,8 +198,7 @@ void KisColorPatches::mouseMoveEvent(QMouseEvent *event)
     mimeData->setText(color.name());
     drag->setMimeData(mimeData);
 
-    /*Qt::DropAction dropAction = */drag->exec(Qt::CopyAction);
-//    kDebug() << dropAction;
+    drag->exec(Qt::CopyAction);
 
     event->accept();
 }
@@ -221,7 +219,7 @@ bool KisColorPatches::colorAt(const QPoint &pos, KoColor *result) const
     int row = (pos.y()-scrollY)/m_patchHeight;
 
     int patchNr;
-    if(m_direction == Horizontal) {
+    if(m_direction == Vertical) {
         int patchesInARow = width()/m_patchWidth;
         patchNr=row*patchesInARow+column;
     }
@@ -244,7 +242,6 @@ void KisColorPatches::setAdditionalButtons(QList<QWidget*> buttonList)
 {
     for(int i=0; i<buttonList.size(); i++) {
         buttonList.at(i)->setParent(this);
-//        buttonList.at(i)->setMaximumSize(m_patchWidth, m_patchHeight);
     }
     m_buttonList = buttonList;
 }

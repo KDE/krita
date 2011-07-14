@@ -67,7 +67,8 @@ public:
 
 private:
     void drag(const QPoint& pos);
-
+    void moveNode(KisNodeSP node, int x, int y);
+    
 private:
 
     MoveToolOptionsWidget* m_optionsWidget;

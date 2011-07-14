@@ -33,12 +33,12 @@ KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
     setupUi(this);
     smallPresetChooser->showButtons(false);
     smallPresetChooser->setViewMode(KisPresetChooser::STRIP);
-    antiOOPHack = smallPresetChooser->findChild<KoResourceItemView*>();
-    antiOOPHack->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    antiOOPHack->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_antiOOPHack = smallPresetChooser->findChild<KoResourceItemView*>();
+    m_antiOOPHack->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_antiOOPHack->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    refresher = new QTimer(this);
-    refresher->setSingleShot(true);
+    m_refresher = new QTimer(this);
+    m_refresher->setSingleShot(true);
     
     /* This is an heuristic to fill smallPresetChooser with only the presets
      * for the paintop that comes selected by default: Pixel Brush. */
@@ -53,12 +53,12 @@ KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
             this, SLOT(prepareDeleteButton()));
     connect(smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(startRefreshingTimer()));
-    connect(refresher, SIGNAL(timeout()), this, SLOT(repaintDeleteButton()));
+    connect(m_refresher, SIGNAL(timeout()), this, SLOT(repaintDeleteButton()));
 }
 
 KisPresetSelectorStrip::~KisPresetSelectorStrip()
 {
-    delete refresher;
+    delete m_refresher;
 }
 
 void KisPresetSelectorStrip::showEvent(QShowEvent* event)
@@ -82,7 +82,7 @@ void KisPresetSelectorStrip::startRefreshingTimer()
 {
     // Estimated time it takes for the ResourceView to scroll when a widget
     // that is only partially visible becomes visible
-    refresher->start(450);
+    m_refresher->start(450);
 }
 
 void KisPresetSelectorStrip::repaintDeleteButton()
@@ -94,15 +94,15 @@ void KisPresetSelectorStrip::repaintDeleteButton()
 
 void KisPresetSelectorStrip::prepareDeleteButton()
 {
-    const quint8 HEURISTIC_OFFSET = 3;  // This number is just conjured out of the nether to make
+    const quint8 HEURISTIC_OFFSET = 7;  // This number is just conjured out of the nether to make
                                         // things look good
     quint16 buttonWidth     = deletePresetBtn->width();
     quint16 buttonHeight    = deletePresetBtn->height();
-    quint16 columnWidth     = antiOOPHack->columnWidth(0);  // All columns assumed equal in width
-    quint16 currentColumn   = antiOOPHack->currentIndex().column();
-    quint16 rowHeight       = antiOOPHack->rowHeight(0);    // There is only 1 row in this widget
+    quint16 columnWidth     = m_antiOOPHack->columnWidth(0);  // All columns assumed equal in width
+    quint16 currentColumn   = m_antiOOPHack->currentIndex().column();
+    quint16 rowHeight       = m_antiOOPHack->rowHeight(0);    // There is only 1 row in this widget
     quint16 yPos            = rowHeight - deletePresetBtn->height() + HEURISTIC_OFFSET;
-    quint16 xPos            = antiOOPHack->columnViewportPosition(currentColumn)
+    quint16 xPos            = m_antiOOPHack->columnViewportPosition(currentColumn)
                               + columnWidth + HEURISTIC_OFFSET - buttonWidth;
     
     deletePresetBtn->setGeometry(xPos, yPos, buttonWidth, buttonHeight);
@@ -113,7 +113,7 @@ void KisPresetSelectorStrip::on_leftScrollBtn_pressed()
 {
     // Deciding how far beyond the left margin (10 pixels) was an arbitrary decision
     QPoint beyondLeftMargin(-10, 0);
-    antiOOPHack->scrollTo(antiOOPHack->indexAt(beyondLeftMargin), QAbstractItemView::EnsureVisible);
+    m_antiOOPHack->scrollTo(m_antiOOPHack->indexAt(beyondLeftMargin), QAbstractItemView::EnsureVisible);
     
     deletePresetBtn->setVisible(false);
 }
@@ -121,13 +121,13 @@ void KisPresetSelectorStrip::on_leftScrollBtn_pressed()
 void KisPresetSelectorStrip::on_rightScrollBtn_pressed()
 {
     // Deciding how far beyond the right margin to put the point (10 pixels) was an arbitrary decision
-    QPoint beyondRightMargin(10 + antiOOPHack->viewport()->width(), 0);
-    antiOOPHack->scrollTo(antiOOPHack->indexAt(beyondRightMargin), QAbstractItemView::EnsureVisible);
+    QPoint beyondRightMargin(10 + m_antiOOPHack->viewport()->width(), 0);
+    m_antiOOPHack->scrollTo(m_antiOOPHack->indexAt(beyondRightMargin), QAbstractItemView::EnsureVisible);
     
     deletePresetBtn->setVisible(false);
 }
 
-void KisPresetSelectorStrip::on_deletePresetBtn_pressed()
+void KisPresetSelectorStrip::on_deletePresetBtn_clicked()
 {
     KoResourceItemChooser* veryAntiOOPHack = smallPresetChooser->findChild<KoResourceItemChooser*>();
     veryAntiOOPHack->slotButtonClicked(KoResourceItemChooser::Button_Remove);

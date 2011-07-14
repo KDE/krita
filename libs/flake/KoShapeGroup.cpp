@@ -59,26 +59,6 @@ QSizeF KoShapeGroup::size() const
     return QSizeF(0, 0);
 }
 
-QRectF KoShapeGroup::boundingRect() const
-{
-    QTransform transform = absoluteTransformation(0);
-    QPointF topleft = (0, 0);
-
-    if (d->border) {
-        KoInsets insets;
-        d->border->borderInsets(this, insets);
-        bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
-    }
-    bb = transform.mapRect(bb);
-    if (d->shadow) {
-        KoInsets insets;
-        d->shadow->insets(insets);
-        bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
-    }
-
-    return bb;
-}
-
 void KoShapeGroup::shapeCountChanged()
 {
     // TODO: why is this needed here ? the group/ungroup command should take care of this

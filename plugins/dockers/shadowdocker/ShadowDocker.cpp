@@ -128,7 +128,7 @@ void ShadowDocker::shadowChanged()
 {
     if (d->canvas) {
         KoSelection *selection = d->canvas->shapeManager()->selection();
-        KoShape * shape = selection->firstSelectedShape();
+        KoShape * shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
         if( ! shape )
             return;
 
@@ -137,7 +137,7 @@ void ShadowDocker::shadowChanged()
         newShadow->setColor( d->widget->shadowColor() );
         newShadow->setOffset( d->widget->shadowOffset() );
         newShadow->setBlur( d->widget->shadowBlur() );
-        d->canvas->addCommand( new KoShapeShadowCommand( selection->selectedShapes(), newShadow ) );
+        d->canvas->addCommand( new KoShapeShadowCommand( selection->selectedShapes(KoFlake::TopLevelSelection), newShadow ) );
     }
 }
 

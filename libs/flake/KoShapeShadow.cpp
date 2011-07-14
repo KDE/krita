@@ -2,7 +2,7 @@
  * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2010 Ariya Hidayat <ariya.hidayat@gmail.com>
- * Copyright (C) 2010 Yue Liu <opuspace@gmail.com>
+ * Copyright (C) 2010-2011 Yue Liu <opuspace@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,6 +22,7 @@
 
 #include "KoShapeShadow.h"
 #include "KoShapeGroup.h"
+#include "KoSelection.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeBorderModel.h"
 #include "KoShape.h"
@@ -33,6 +34,7 @@
 #include <QtGui/QPainter>
 #include <QtCore/QAtomicInt>
 #include <QImage>
+#include <QRectF>
 
 class KoShapeShadow::Private
 {
@@ -71,33 +73,28 @@ void KoShapeShadow::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
         style.addProperty("calligra:shadow-blur-radius", QString("%1pt").arg(d->blur));
 }
 
-void KoShapeShadow::paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, QTransform &offsetMatrix)
+void KoShapeShadow::paintGroupShadow(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter)
 {
     QList<KoShape*> shapes = group->shapes();
     foreach(KoShape *child, shapes) {
         // we paint recursively here, so we do not have to check recursively for visibility
         if (!child->isVisible())
             continue;
-        KoShapeGroup *childGroup = dynamic_cast<KoShapeGroup*>(child);
-        if (childGroup) {
-            paintGroup(childGroup, painter, converter, offsetMatrix);
-        } else {
-            painter.save();
-            paintShape(child, painter, converter, offsetMatrix);
-            painter.restore();
-        }
+        painter.save();
+        //apply group child's transformation
+        painter.setTransform(child->absoluteTransformation(&converter), true);
+        paintShadow(child, painter, converter);
+        painter.restore();
     }
 }
 
-//offsetMatrix left
-void KoShapeShadow::paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, QTransform &offsetMatrix)
+void KoShapeShadow::paintShadow(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
 {
     if (shape->background()) {
         painter.save();
         KoShape::applyConversion(painter, converter);
         // the shadow direction is independent of the shapes transformation
-        // please only change if you know what you are doing
-        painter.setTransform(offsetMatrix * painter.transform());
+        painter.translate(d->offset.x(), d->offset.y());
         painter.setBrush(QBrush(d->color));
         QPainterPath path(shape->outline());
         KoPathShape * pathShape = dynamic_cast<KoPathShape*>(shape);
@@ -113,8 +110,7 @@ void KoShapeShadow::paintShape(KoShape *shape, QPainter &painter, const KoViewCo
         KoShape::applyConversion(painter, converter);
         QTransform newPainterMatrix = painter.transform();
         // the shadow direction is independent of the shapes transformation
-        // please only change if you know what you are doing
-        painter.setTransform(offsetMatrix * painter.transform());
+        painter.translate(d->offset.x(), d->offset.y());
         // compensate applyConversion call in paint
         QTransform scaleMatrix = newPainterMatrix * oldPainterMatrix.inverted();
         painter.setTransform(scaleMatrix.inverted() * painter.transform());
@@ -128,66 +124,49 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     if (! d->visible)
         return;
 
-    // calculate the shadow offset independent of shape transformation
-    QTransform tm;
-    tm.translate(d->offset.x(), d->offset.y());
-    QTransform tr = shape->absoluteTransformation(&converter);
-    QTransform offsetMatrix = tr * tm * tr.inverted();
-
-    //The shadowRect includes the region that both the shape, shadow, and blur expansion needed
-    QRectF shadowRect(0, 0, 0, 0);
-    qreal shapeWidth;
+    //the boundingRect of the shape or the KoSelection boundingRect of the group
+    QRectF shadowRect;
     KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
-
     if (group) {
-        foreach(child, group)
-        {
-            shadowRect.united(child->boundingRect());
-            shapeWidth = group->size().width();
-        }
+        KoSelection selection;
+        selection.select(group);
+        shadowRect = selection.boundingRect();
     } else {
         shadowRect = shape->boundingRect();
-        shapeWidth = shape->boundingRect().width();
     }
-
-    //convert relative radius to absolute radius
-    qreal absBR = d->blur*0.01*shapeWidth;
-    qreal expand = 3 * absBR; //blur would cause the shadow to be bigger
+    //the algorithm used would caused shadow to expand 3 times of the blur radius on each side
+    qreal expand = 3 * d->blur;
     QRectF clipRegion = shadowRect.adjusted(-expand, -expand, expand, expand);
     QRectF zoomedClipRegion = converter.documentToView(clipRegion);
-
-    // determine the offset from the blur expand edge to the shadow bound's origin
-    QPointF blurOffset(expand, expand);
-    QPointF zoomedBlurOffset = converter.documentToView(blurOffset);
-
-    QPointF clippingOffset = zoomedClipRegion.topLeft() + converter.documentToView(d->offset);
+    //offset on buffer image from image topleft to shape's position
+    QPointF imagePaintOffset = zoomedClipRegion.topLeft() - converter.documentToView(shape->position());
 
     // Init the buffer image
     QImage sourceGraphic(zoomedClipRegion.size().toSize(), QImage::Format_ARGB32_Premultiplied);
     sourceGraphic.fill(qRgba(0,0,0,0));
-
     // Init the buffer painter
-    QPainter bufferPainter(&sourceGraphic);
-    bufferPainter.translate(zoomedBlurOffset);
-    bufferPainter.setPen(Qt::NoPen);
-    bufferPainter.setBrush(Qt::NoBrush);
-    bufferPainter.setRenderHint(QPainter::Antialiasing, painter.testRenderHint(QPainter::Antialiasing));
+    QPainter imagePainter(&sourceGraphic);
+    imagePainter.translate(-1.0f*imagePaintOffset);
+    imagePainter.setPen(Qt::NoPen);
+    imagePainter.setBrush(Qt::NoBrush);
+    imagePainter.setRenderHint(QPainter::Antialiasing, painter.testRenderHint(QPainter::Antialiasing));
 
-    if (group)
-        paintGroup(group, bufferPainter, converter, offsetMatrix);
-    else
-        paintShape(shape, bufferPainter, converter, offsetMatrix);
+    if (group) {
+        //later we'll apply child's absoluteTransformation
+        imagePainter.setTransform(group->absoluteTransformation(&converter).inverted(), true);
+        paintGroupShadow(group, imagePainter, converter);
+    } else {
+        paintShadow(shape, imagePainter, converter);
+    }
+    imagePainter.end();
 
-    bufferPainter.end();
-    blurShadow(sourceGraphic, absBR, d->color);
+    //convert relative radius to absolute radius
+    qreal absRadius = converter.documentToViewX(d->blur);
+    blurShadow(sourceGraphic, absRadius, d->color);
     // Paint the result
     painter.save();
-    painter.drawImage(clippingOffset, sourceGraphic);
+    painter.drawImage(imagePaintOffset, sourceGraphic);
     painter.restore();
-}
-
-void KoShapeShadow::paintBuffer(QPointF &clippingOffset, QImage image, QPainter &painter, const KoViewConverter &converter) {
-    kDebug() << "Shadow painted!";
 }
 
 void KoShapeShadow::setOffset(const QPointF & offset)
@@ -240,10 +219,10 @@ void KoShapeShadow::insets(KoInsets &insets) const
         return;
     }
 
-    insets.left = (d->offset.x() - d->blur()*3 < 0.0) ? qAbs(d->offset.x() - d->blur()*3) : 0.0;
-    insets.top = (d->offset.y() - d->blur()*3 < 0.0) ? qAbs(d->offset.y() - d->blur()*3) : 0.0;
-    insets.right = (d->offset.x() + d->blur()*3 > 0.0) ? d->offset.x() + d->blur()*3 : 0.0;
-    insets.bottom = (d->offset.y() + d->blur()*3 > 0.0) ? d->offset.y() + d->blur()*3 : 0.0;
+    insets.left = (d->offset.x() < 0.0) ? qAbs(d->offset.x()) : 0.0;
+    insets.top = (d->offset.y() < 0.0) ? qAbs(d->offset.y()) : 0.0;
+    insets.right = (d->offset.x() > 0.0) ? d->offset.x() : 0.0;
+    insets.bottom = (d->offset.y() > 0.0) ? d->offset.y() : 0.0;
 }
 
 bool KoShapeShadow::ref()

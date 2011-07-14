@@ -55,7 +55,6 @@ public:
 
     /// a group in flake doesn't have a size, this funcion just returns QSizeF(0,0)
     virtual QSizeF size() const;
-    virtual QSizeF boundingRect() const;
     /// reimplemented from KoShape
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented

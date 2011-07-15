@@ -105,28 +105,30 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
     unlock();
 }
 
-void KisUpdateScheduler::startStroke(KisStrokeStrategy *strokeStrategy)
+KisStrokeId KisUpdateScheduler::startStroke(KisStrokeStrategy *strokeStrategy)
 {
-    m_d->strokesQueue->startStroke(strokeStrategy);
+    KisStrokeId id  = m_d->strokesQueue->startStroke(strokeStrategy);
+    processQueues();
+    return id;
+}
+
+void KisUpdateScheduler::addJob(KisStrokeId id, KisStrokeJobStrategy::StrokeJobData *data)
+{
+    m_d->strokesQueue->addJob(id, data);
     processQueues();
 }
 
-void KisUpdateScheduler::addJob(KisStrokeJobStrategy::StrokeJobData *data)
+void KisUpdateScheduler::endStroke(KisStrokeId id)
 {
-    m_d->strokesQueue->addJob(data);
+    m_d->strokesQueue->endStroke(id);
     processQueues();
 }
 
-void KisUpdateScheduler::endStroke()
+bool KisUpdateScheduler::cancelStroke(KisStrokeId id)
 {
-    m_d->strokesQueue->endStroke();
+    bool result = m_d->strokesQueue->cancelStroke(id);
     processQueues();
-}
-
-void KisUpdateScheduler::cancelStroke()
-{
-    m_d->strokesQueue->cancelStroke();
-    processQueues();
+    return result;
 }
 
 void KisUpdateScheduler::updateSettings()

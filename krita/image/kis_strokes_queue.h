@@ -20,6 +20,7 @@
 #define __KIS_STROKES_QUEUE_H
 
 #include "krita_export.h"
+#include "kis_types.h"
 #include "kis_stroke_job_strategy.h"
 #include "kis_stroke_strategy.h"
 
@@ -32,11 +33,11 @@ public:
     KisStrokesQueue();
     ~KisStrokesQueue();
 
-    void startStroke(KisStrokeStrategy *strokeStrategy);
-    void addJob(KisStrokeJobStrategy::StrokeJobData *data);
+    KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);
+    void addJob(KisStrokeId id, KisStrokeJobStrategy::StrokeJobData *data);
 
-    void endStroke();
-    void cancelStroke();
+    void endStroke(KisStrokeId id);
+    bool cancelStroke(KisStrokeId id);
 
     void processQueue(KisUpdaterContext &updaterContext);
     bool needsExclusiveAccess() const;
@@ -45,9 +46,6 @@ public:
     qint32 sizeMetric() const;
 
 private:
-    KisStroke* currentStroke();
-    bool sanityCheckCurrentStrokeFinished(bool finished);
-
     bool processOneJob(KisUpdaterContext &updaterContext);
     bool checkStrokeState(bool hasStrokeJobsRunning);
     bool checkExclusiveProperty(qint32 numMergeJobs, qint32 numStrokeJobs);

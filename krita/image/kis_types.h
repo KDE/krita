@@ -231,6 +231,16 @@ typedef KisSharedPtr<KisPaintOp> KisPaintOpSP;
 class KoID;
 typedef QList<KoID> KoIDList;
 
+template<class T> class QSharedPointer;
+template<class T> class QWeakPointer;
+
+class KisStroke;
+typedef QSharedPointer<KisStroke> KisStrokeSP;
+typedef QWeakPointer<KisStroke> KisStrokeWSP;
+typedef KisStrokeWSP KisStrokeId;
+
+#include <QSharedPointer>
+#include <QWeakPointer>
 #include <kis_shared_ptr.h>
 
 #endif // KISTYPES_H_

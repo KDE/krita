@@ -1103,32 +1103,38 @@ void KisImage::waitForDone()
     }
 }
 
-void KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
+KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
+{
+    KisStrokeId id;
+
+    if (m_d->scheduler) {
+        id = m_d->scheduler->startStroke(strokeStrategy);
+    }
+
+    return id;
+}
+
+void KisImage::addJob(KisStrokeId id, KisStrokeJobStrategy::StrokeJobData *data)
 {
     if (m_d->scheduler) {
-        m_d->scheduler->startStroke(strokeStrategy);
+        m_d->scheduler->addJob(id, data);
     }
 }
 
-void KisImage::addJob(KisStrokeJobStrategy::StrokeJobData *data)
+void KisImage::endStroke(KisStrokeId id)
 {
     if (m_d->scheduler) {
-        m_d->scheduler->addJob(data);
+        m_d->scheduler->endStroke(id);
     }
 }
 
-void KisImage::endStroke()
+bool KisImage::cancelStroke(KisStrokeId id)
 {
+    bool result = false;
     if (m_d->scheduler) {
-        m_d->scheduler->endStroke();
+        result = m_d->scheduler->cancelStroke(id);
     }
-}
-
-void KisImage::cancelStroke()
-{
-    if (m_d->scheduler) {
-        m_d->scheduler->cancelStroke();
-    }
+    return result;
 }
 
 void KisImage::refreshGraph(KisNodeSP root)

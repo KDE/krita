@@ -222,7 +222,7 @@ void KisUpdateSchedulerTest::testExclusiveStrokes()
     QCOMPARE(jobs[1]->isRunning(), false);
     QVERIFY(checkWalker(jobs[0]->walker(), dirtyRect1));
 
-    scheduler.startStroke(new KisTestingStrokeStrategy("excl_", true, false));
+    KisStrokeId id = scheduler.startStroke(new KisTestingStrokeStrategy("excl_", true, false));
 
     jobs = context->getJobs();
     QCOMPARE(jobs[0]->isRunning(), true);
@@ -230,7 +230,7 @@ void KisUpdateSchedulerTest::testExclusiveStrokes()
     QVERIFY(checkWalker(jobs[0]->walker(), dirtyRect1));
 
     context->clear();
-    scheduler.endStroke();
+    scheduler.endStroke(id);
 
     jobs = context->getJobs();
     QCOMPARE(jobs[0]->isRunning(), true);

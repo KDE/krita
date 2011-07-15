@@ -29,11 +29,11 @@
 void KisStrokesQueueTest::testSequentialJobs()
 {
     KisStrokesQueue queue;
-    queue.startStroke(new KisTestingStrokeStrategy("tri_", false));
-    queue.addJob(0);
-    queue.addJob(0);
-    queue.addJob(0);
-    queue.endStroke();
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("tri_", false));
+    queue.addJob(id, 0);
+    queue.addJob(id, 0);
+    queue.addJob(id, 0);
+    queue.endStroke(id);
 
     KisTestableUpdaterContext context(2);
     QVector<KisUpdateJobItem*> jobs;
@@ -69,11 +69,11 @@ void KisStrokesQueueTest::testSequentialJobs()
 void KisStrokesQueueTest::testExclusiveStrokes()
 {
     KisStrokesQueue queue;
-    queue.startStroke(new KisTestingStrokeStrategy("excl_", true));
-    queue.addJob(0);
-    queue.addJob(0);
-    queue.addJob(0);
-    queue.endStroke();
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("excl_", true));
+    queue.addJob(id, 0);
+    queue.addJob(id, 0);
+    queue.addJob(id, 0);
+    queue.endStroke(id);
 
     // well, this walker is not initialized... but who cares?
     KisBaseRectsWalkerSP walker = new KisMergeWalker(QRect());
@@ -138,18 +138,18 @@ void KisStrokesQueueTest::testExclusiveStrokes()
 void KisStrokesQueueTest::testStrokesOverlapping()
 {
     KisStrokesQueue queue;
-    queue.startStroke(new KisTestingStrokeStrategy("1_", false, true));
-    queue.addJob(0);
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("1_", false, true));
+    queue.addJob(id, 0);
 
     // comment out this line to catch an assert
-    queue.endStroke();
+    queue.endStroke(id);
 
-    queue.startStroke(new KisTestingStrokeStrategy("2_", false, true));
-    queue.addJob(0);
-    queue.endStroke();
+    id = queue.startStroke(new KisTestingStrokeStrategy("2_", false, true));
+    queue.addJob(id, 0);
+    queue.endStroke(id);
 
     // uncomment this line to catch an assert
-    // queue.addJob(0);
+    // queue.addJob(id, 0);
 
     KisTestableUpdaterContext context(2);
     QVector<KisUpdateJobItem*> jobs;

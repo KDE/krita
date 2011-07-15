@@ -181,14 +181,14 @@ QImage utils::StrokeTester::doStroke(bool cancelled, bool indirectPainting, bool
         new KisResourcesSnapshot(image, manager);
 
     KisStrokeStrategy *stroke = createStroke(indirectPainting, resources, painter);
-    image->startStroke(stroke);
+    m_strokeId = image->startStroke(stroke);
     addPaintingJobs(image, resources, painter);
 
     if(!cancelled) {
-        image->endStroke();
+        image->endStroke(m_strokeId);
     }
     else {
-        image->cancelStroke();
+        image->cancelStroke(m_strokeId);
     }
 
     image->waitForDone();

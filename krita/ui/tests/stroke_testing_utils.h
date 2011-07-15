@@ -47,6 +47,10 @@ namespace utils {
         void benchmark();
 
     protected:
+        KisStrokeId strokeId() {
+            return m_strokeId;
+        }
+
         virtual KisStrokeStrategy* createStroke(bool indirectPainting,
                                                 KisResourcesSnapshotSP resources,
                                                 KisPainter *painter) = 0;
@@ -62,6 +66,7 @@ namespace utils {
         QString formatFilename(const QString &baseName,  bool cancelled, bool indirectPainting);
 
     private:
+        KisStrokeId m_strokeId;
         QString m_name;
         QSize m_imageSize;
     };

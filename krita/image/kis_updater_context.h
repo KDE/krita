@@ -134,6 +134,7 @@ public:
      * Creates an explicit number of threads
      */
     KisTestableUpdaterContext(qint32 threadCount);
+    ~KisTestableUpdaterContext();
 
     /**
      * The only difference - it doesn't start execution

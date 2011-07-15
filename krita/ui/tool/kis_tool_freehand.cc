@@ -359,7 +359,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     KisStrokeStrategy *stroke =
         new FreehandStrokeStrategy(indirectPainting, m_resources, m_painter);
 
-    image()->startStroke(stroke);
+    m_strokeId = image()->startStroke(stroke);
 
 
 #ifdef ENABLE_RECORDING // Temporary, to figure out what is going without being
@@ -375,7 +375,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 
 void KisToolFreehand::endPaint()
 {
-    image()->endStroke();
+    image()->endStroke(m_strokeId);
     m_painter = 0;
 
     if (m_assistant) {
@@ -401,7 +401,7 @@ void KisToolFreehand::paintAt(const KisPaintInformation &pi)
 {
     m_hasPaintAtLeastOnce = true;
 
-    image()->addJob(
+    image()->addJob(m_strokeId,
         new FreehandStrokeJobStrategy::Data(m_resources->currentNode(),
                                             m_painter, pi,
                                             m_dragDistance));
@@ -412,7 +412,7 @@ void KisToolFreehand::paintLine(const KisPaintInformation &pi1,
 {
     m_hasPaintAtLeastOnce = true;
 
-    image()->addJob(
+    image()->addJob(m_strokeId,
         new FreehandStrokeJobStrategy::Data(m_resources->currentNode(),
                                             m_painter, pi1, pi2,
                                             m_dragDistance));
@@ -425,7 +425,7 @@ void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
 {
     m_hasPaintAtLeastOnce = true;
 
-    image()->addJob(
+    image()->addJob(m_strokeId,
         new FreehandStrokeJobStrategy::Data(m_resources->currentNode(),
                                             m_painter,
                                             pi1, control1, control2, pi2,

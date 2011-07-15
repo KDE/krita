@@ -145,6 +145,7 @@ private:
 
     bool m_hasPaintAtLeastOnce; ///< this indicates whether mouseReleaseEvent should call paintAt or not
 
+    KisStrokeId m_strokeId;
     KisResourcesSnapshotSP m_resources;
     KisDistanceInformation m_dragDistance;
 };

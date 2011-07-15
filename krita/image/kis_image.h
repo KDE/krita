@@ -562,10 +562,10 @@ public slots:
 
     void waitForDone();
 
-    void startStroke(KisStrokeStrategy *strokeStrategy);
-    void addJob(KisStrokeJobStrategy::StrokeJobData *data);
-    void endStroke();
-    void cancelStroke();
+    KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);
+    void addJob(KisStrokeId id, KisStrokeJobStrategy::StrokeJobData *data);
+    void endStroke(KisStrokeId id);
+    bool cancelStroke(KisStrokeId id);
 
     void slotProjectionUpdated(const QRect & rc);
     void updateProjection(KisNodeSP node, const QRect& rc);

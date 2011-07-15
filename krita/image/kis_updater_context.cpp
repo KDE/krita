@@ -188,6 +188,10 @@ KisTestableUpdaterContext::KisTestableUpdaterContext(qint32 threadCount)
 {
 }
 
+KisTestableUpdaterContext::~KisTestableUpdaterContext() {
+    clear();
+}
+
 const QVector<KisUpdateJobItem*> KisTestableUpdaterContext::getJobs()
 {
     return m_jobs;
@@ -195,7 +199,8 @@ const QVector<KisUpdateJobItem*> KisTestableUpdaterContext::getJobs()
 
 void KisTestableUpdaterContext::clear()
 {
-    foreach(KisUpdateJobItem *item, m_jobs)
-        item->setDone();
+    foreach(KisUpdateJobItem *item, m_jobs) {
+        item->testingSetDone();
+    }
 }
 

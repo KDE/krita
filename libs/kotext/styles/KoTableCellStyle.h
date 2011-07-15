@@ -279,7 +279,7 @@ private:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOdfProperties(KoStyleStack &styleStack);
+    void loadOdfProperties(KoShapeLoadingContext &context, KoStyleStack &styleStack);
     qreal propertyDouble(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;

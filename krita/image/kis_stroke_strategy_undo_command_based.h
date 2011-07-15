@@ -19,13 +19,15 @@
 #ifndef __KIS_STROKE_STRATEGY_UNDO_COMMAND_BASED_H
 #define __KIS_STROKE_STRATEGY_UNDO_COMMAND_BASED_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QSharedPointer>
 #include <QVector>
 #include <QMutex>
+
+#include "kis_types.h"
 #include "kis_stroke_strategy.h"
 
-typedef QSharedPointer<QUndoCommand> QUndoCommandSP;
+
 class QString;
 
 class KisStrokeJob;
@@ -35,8 +37,8 @@ class KRITAIMAGE_EXPORT KisStrokeStrategyUndoCommandBased : public KisStrokeStra
 public:
     KisStrokeStrategyUndoCommandBased(const QString &name,
                                       bool undo,
-                                      QUndoCommandSP initCommand,
-                                      QUndoCommandSP finishCommand);
+                                      KUndo2CommandSP initCommand = KUndo2CommandSP(0),
+                                      KUndo2CommandSP finishCommand = KUndo2CommandSP(0));
 
     /**
      * WARNING: This method is not considered to be called after
@@ -46,7 +48,7 @@ public:
 
     /**
      * Defines whether the commands added with addJob() are sequential
-     * or not.
+     * or not. All the jobs are sequential by default.
      *
      * WARNING: This method is not considered to be called after
      * the KisStroke object has been created
@@ -63,21 +65,21 @@ public:
     KisStrokeJobStrategy::StrokeJobData* createFinishData();
     KisStrokeJobStrategy::StrokeJobData* createCancelData();
 
-    void notifyCommandDone(QUndoCommandSP command);
-    QVector<QUndoCommandSP> takeUndoCommands();
+    void notifyCommandDone(KUndo2CommandSP command);
+    QVector<KUndo2CommandSP> takeUndoCommands();
     bool undo() {
         return m_undo;
     }
 
 private:
     bool m_undo;
-    QUndoCommandSP m_initCommand;
-    QUndoCommandSP m_finishCommand;
+    KUndo2CommandSP m_initCommand;
+    KUndo2CommandSP m_finishCommand;
     bool m_sequential;
 
     // protects done commands only
     QMutex m_mutex;
-    QVector<QUndoCommandSP> m_doneCommands;
+    QVector<KUndo2CommandSP> m_doneCommands;
 };
 
 
@@ -86,12 +88,12 @@ class KRITAIMAGE_EXPORT KisStrokeJobStrategyUndoCommandBased : public KisStrokeJ
 public:
     class Data : public StrokeJobData {
     public:
-        Data(QUndoCommandSP _command)
+        Data(KUndo2CommandSP _command)
             : command(_command)
         {
         }
 
-        QUndoCommandSP command;
+        KUndo2CommandSP command;
     };
 
 public:

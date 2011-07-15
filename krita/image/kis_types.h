@@ -234,6 +234,9 @@ typedef QList<KoID> KoIDList;
 template<class T> class QSharedPointer;
 template<class T> class QWeakPointer;
 
+class KUndo2Command;
+typedef QSharedPointer<KUndo2Command> KUndo2CommandSP;
+
 class KisStroke;
 typedef QSharedPointer<KisStroke> KisStrokeSP;
 typedef QWeakPointer<KisStroke> KisStrokeWSP;

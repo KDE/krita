@@ -45,10 +45,10 @@ inline QString getCommandName(KisStrokeJob *job) {
                 job->testingGetDabStrategy());
 
         QString result;
-        QVector<QUndoCommandSP> commands =
+        QVector<KUndo2CommandSP> commands =
             jobStrategy->m_parentStroke->takeUndoCommands();
 
-        foreach(QUndoCommandSP cmd, commands) {
+        foreach(KUndo2CommandSP cmd, commands) {
             result += cmd->text() + undoString(jobStrategy->m_parentStroke) + QString(" ");
         }
         return result.trimmed();
@@ -58,9 +58,9 @@ inline QString getCommandName(KisStrokeJob *job) {
 
 void KisStrokeStrategyUndoCommandBasedTest::testFinishedStroke()
 {
-    QUndoCommandSP initCommand(new QUndoCommand("init"));
-    QUndoCommandSP dabCommand(new QUndoCommand("dab"));
-    QUndoCommandSP finishCommand(new QUndoCommand("finish"));
+    KUndo2CommandSP initCommand(new KUndo2Command("init"));
+    KUndo2CommandSP dabCommand(new KUndo2Command("dab"));
+    KUndo2CommandSP finishCommand(new KUndo2Command("finish"));
 
     KisStrokeStrategy *strategy =
         new KisStrokeStrategyUndoCommandBased("test", false,
@@ -86,9 +86,9 @@ void KisStrokeStrategyUndoCommandBasedTest::testFinishedStroke()
 
 void KisStrokeStrategyUndoCommandBasedTest::testCancelledStroke()
 {
-    QUndoCommandSP initCommand(new QUndoCommand("init"));
-    QUndoCommandSP dabCommand(new QUndoCommand("dab"));
-    QUndoCommandSP finishCommand(new QUndoCommand("finish"));
+    KUndo2CommandSP initCommand(new KUndo2Command("init"));
+    KUndo2CommandSP dabCommand(new KUndo2Command("dab"));
+    KUndo2CommandSP finishCommand(new KUndo2Command("finish"));
 
     KisStrokeStrategy *strategy =
         new KisStrokeStrategyUndoCommandBased("test", false,

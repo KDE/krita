@@ -137,7 +137,8 @@ QWidget *KoRdfLocation::createEditor(QWidget *parent)
     editWidget.wlat->setValue(m_dlat);
     editWidget.wlong->setValue(m_dlong);
 
-    editWidget.map->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
+    editWidget.map->setMapThemeId("earth/srtm/srtm.dgml");
+//    editWidget.map->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
     editWidget.map->zoomViewBy(100);
     editWidget.map->zoomView(1500);
     editWidget.map->centerOn(dlong(), dlat());

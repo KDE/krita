@@ -72,7 +72,8 @@ void KoRdfLocation::showInViewer()
     QWidget* ret = new QWidget(parent);
     viewWidget.setupUi(ret);
     viewWidget.name->setText(m_name);
-    viewWidget.map->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
+    viewWidget.map->setMapThemeId("earth/srtm/srtm.dgml");
+//    viewWidget.map->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
     viewWidget.map->zoomViewBy(100);
     viewWidget.map->zoomView(1500);
     viewWidget.map->centerOn(dlong(), dlat());

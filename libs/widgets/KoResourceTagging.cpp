@@ -24,36 +24,39 @@
 #include <kstandarddirs.h>
 #include <QFile>
 
+#ifdef NEPOMUK
 #include <Nepomuk/ResourceManager>
 #include <Nepomuk/Variant>
-#include <Nepomuk/File>
 #include <Nepomuk/Tag>
 
-#include <Soprano/Statement>
-#include <Soprano/Node>
 #include <Soprano/Model>
 #include <Soprano/QueryResultIterator>
-#include <Soprano/StatementIterator>
-#include <Soprano/NodeIterator>
 #include <Soprano/Vocabulary/NAO>
-#include <Soprano/Vocabulary/RDFS>
-#include <Soprano/PluginManager>
 
 #include <kurl.h>
+#endif
 
 KoResourceTagging::KoResourceTagging(const QString& extensions)
 {
     m_serverExtensions = extensions;
     m_tagsXMLFile = KStandardDirs::locateLocal("data", "krita/tags.xml");
-    readXMLFile();
-    writeNepomukRepo();
-    //readNepomukRepo();
+    m_nepomukOn = true;
+
+    if(m_nepomukOn) {
+#ifdef NEPOMUK
+      updateTagRepoFromNepomuk();
+#endif
+    }
+    else {
+        readXMLFile();
+    }
 }
 
 KoResourceTagging::~KoResourceTagging()
 {
-    //writeXMLFile();
-   // writeNepomukRepo();
+    if(!m_nepomukOn) {
+        writeXMLFile();
+     }
 }
 
 QStringList KoResourceTagging::getAssignedTagsList( KoResource* resource )
@@ -81,6 +84,11 @@ void KoResourceTagging::addTag(const QString& fileName,const QString& tag)
 
     m_tagRepo.insert( fileName, tag );
 
+#ifdef NEPOMUK
+    if(m_nepomukOn) {
+        addNepomukTag(fileName,tag);
+    }
+#endif
     if(m_tagList.contains(tag))
     {
         int val = m_tagList.value(tag);
@@ -102,7 +110,11 @@ void KoResourceTagging::delTag( KoResource* resource,const QString& tag)
     }
 
     m_tagRepo.remove( fileName, tag);
-
+#ifdef NEPOMUK
+    if(m_nepomukOn) {
+        delNepomukTag(fileName,tag);
+    }
+#endif
     int val = m_tagList.value(tag);
 
     m_tagList.remove(tag);
@@ -141,7 +153,7 @@ QStringList KoResourceTagging::searchTag(const QString& lineEditText)
     return removeAdjustedFileNames(keysList);
 }
 
-void KoResourceTagging::writeXMLFile()
+void KoResourceTagging::writeXMLFile(bool serverIdentity)
 {
    QFile f(m_tagsXMLFile);
    bool fileExists = f.exists();
@@ -203,7 +215,7 @@ void KoResourceTagging::writeXMLFile()
                    }
                }
                else {
-                    if( isServerResource(resourceEl.attribute("identifier"))) {
+                    if( isServerResource(resourceEl.attribute("identifier")) && serverIdentity) {
                        root.removeChild(resourceNodesList.at(i--));
                    }
                }
@@ -237,7 +249,7 @@ void KoResourceTagging::writeXMLFile()
 
 }
 
-void KoResourceTagging::readXMLFile()
+void KoResourceTagging::readXMLFile(bool serverIdentity)
 {
     QFile f(m_tagsXMLFile);
     if (!f.open(QIODevice::ReadOnly)) {
@@ -261,7 +273,7 @@ void KoResourceTagging::readXMLFile()
     for(int i=0; i< resourceNodesList.count(); i++) {
         QDomElement resourceEl = resourceNodesList.at(i).toElement();
         if(resourceEl.tagName() == "resource") {
-            if (isServerResource(resourceEl.attribute("identifier"))) {
+            if (isServerResource(resourceEl.attribute("identifier")) || !serverIdentity) {
                 QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
                 for(int j = 0; j < tagNodesList.count() ; j++) {
                     QDomElement tagEl = tagNodesList.at(j).toElement();
@@ -314,17 +326,15 @@ QStringList KoResourceTagging::removeAdjustedFileNames(QStringList fileNamesList
  *
  */
 
-
-
-void KoResourceTagging::writeNepomukRepo()
+#ifdef NEPOMUK
+void KoResourceTagging::writeNepomukRepo(bool serverIdentity)
 {
     QStringList resourceFileNames = m_tagRepo.uniqueKeys();
 
     QList<Nepomuk::Resource> resourceList = readNepomukRepo();
 
     foreach(Nepomuk::Resource resource, resourceList) {
-        QString resourceFileOld = resource.toFile().url().url().remove("file://");
-
+        QString resourceFileOld = resource.genericLabel();
         if(resourceFileNames.contains(resourceFileOld)) {
             resourceFileNames.removeAll(resourceFileOld);
 
@@ -339,7 +349,7 @@ void KoResourceTagging::writeNepomukRepo()
                      tagNameListNew.removeAll(tagName);
                  }
                  else {
-                     tag.remove();
+                     delNepomukTag(resource.genericLabel(),tagName);
                  }
             }
             foreach(QString tagName, tagNameListNew) {
@@ -347,7 +357,7 @@ void KoResourceTagging::writeNepomukRepo()
             }
         }
         else {
-            if(isServerResource(resourceFileOld)) {
+            if(isServerResource(resourceFileOld) && serverIdentity) {
                 resource.remove();
             }
         }
@@ -363,22 +373,6 @@ void KoResourceTagging::writeNepomukRepo()
     }
 }
 
-bool KoResourceTagging::isResourceAvailable(const QString& resourceURI)
-{
-    Soprano::Model* model = Nepomuk::ResourceManager::instance()->mainModel();
-
-    QString query
-       = QString("select ?p where { %1 %2 ?p . } ")
-         .arg( Soprano::Node::resourceToN3(resourceURI) )
-         .arg( Soprano::Node::resourceToN3(Soprano::Vocabulary::NAO::hasTag()) );
-
-    Soprano::QueryResultIterator it
-        = model->executeQuery( query,
-                               Soprano::Query::QueryLanguageSparql );
-
-    return it.isValid();
-}
-
 QList<Nepomuk::Resource> KoResourceTagging::readNepomukRepo()
 {
     Soprano::Model* model = Nepomuk::ResourceManager::instance()->mainModel();
@@ -386,28 +380,28 @@ QList<Nepomuk::Resource> KoResourceTagging::readNepomukRepo()
     QList<Nepomuk::Resource> resourceList;
 
     QString query
-       = QString("select ?r ?p where { ?r %1 ?p . } ")
+       = QString("select distinct ?r where { ?r %1 ?p . } ")
          .arg( Soprano::Node::resourceToN3(Soprano::Vocabulary::NAO::hasTag()) );
 
    Soprano::QueryResultIterator it
-       = model->executeQuery( query,
-                              Soprano::Query::QueryLanguageSparql );
+       = model->executeQuery( query,Soprano::Query::QueryLanguageSparql );
     while( it.next() ) {
        resourceList << Nepomuk::Resource( it.binding("r").uri() );
     }
     return resourceList;
 }
 
-void KoResourceTagging::updateTagRepoFromNepomuk()
+void KoResourceTagging::updateTagRepoFromNepomuk(bool serverIdentity)
 {
     QList<Nepomuk::Resource> resourceList = readNepomukRepo();
     foreach(Nepomuk::Resource resource, resourceList) {
-        QString resourceFileName = resource.toFile().url().url().remove("file://");
 
-        if(isServerResource(resourceFileName)) {
+        QString resourceFileName = correctedNepomukFileName(resource.genericLabel());
+
+        if(isServerResource(resourceFileName) || !serverIdentity) {
             QList<Nepomuk::Tag> tagList = resource.tags();
             foreach(Nepomuk::Tag tagName, tagList) {
-                 addTag(resourceFileName,tagName.genericLabel());
+                 addTag(resourceFileName, tagName.genericLabel());
             }
         }
     }
@@ -415,41 +409,72 @@ void KoResourceTagging::updateTagRepoFromNepomuk()
 
 void KoResourceTagging::addNepomukTag(const QString &fileName, const QString &tagNew)
 {
-    KUrl kurl(fileName);
-
-    Nepomuk::File resourceFile( kurl );
-
+    QUrl qurl(adjustedNepomukFileName(fileName));
+    Nepomuk::Resource resource(qurl);
     Nepomuk::Tag nepomukTag( tagNew );
-
-    if(isResourceAvailable(resourceFile.uri())) {
-        QList<Nepomuk::Tag> tags = resourceFile.tags();
-        foreach(Nepomuk::Tag tag, tags){
-            if(tag.genericLabel() == nepomukTag.genericLabel()) {
-                return;
-            }
-        }
-        Nepomuk::Resource(resourceFile.uri).addTag( nepomukTag);
-        return;
-    }
-
-    resourceFile.addTag( nepomukTag );
+    resource.addTag(nepomukTag);
 }
 
-void KoResourceTagging::delNepomukTag(const QString &fileName, const QString &tag)
+void KoResourceTagging::delNepomukTag(const QString &fileName, const QString &tagNew)
 {
-    KUrl kurl(fileName);
+    QUrl qurl(adjustedNepomukFileName(fileName));
+    Nepomuk::Resource res(qurl);
+    Nepomuk::Tag nepomukTag( tagNew );
+    Nepomuk::Variant tagValue(nepomukTag);
+    res.removeProperty(res.tagUri(),tagValue);
 
-    Nepomuk::File resourceFile( kurl );
+    if(res.tags().count() == 0) {
+        res.remove();
+    }
 
-    Nepomuk::Tag nepomukTag( tag );
-
-    if(isResourceAvailable(resourceFile.uri())) {
-        QList<Nepomuk::Tag> tags = resourceFile.tags();
-        foreach(Nepomuk::Tag tag, tags){
-            if(tag.genericLabel() == nepomukTag.genericLabel()) {
-                tag.remove();
-                return;
-            }
-        }
+    if(nepomukTag.tagOf().count() == 0) {
+        nepomukTag.remove();
     }
 }
+
+void KoResourceTagging::clearNepomukTag()
+{
+    QList<Nepomuk::Resource> resourceList = readNepomukRepo();
+
+    foreach(Nepomuk::Resource resource, resourceList) {
+        resource.remove();
+    }
+}
+
+void KoResourceTagging::setNepomukBool(bool nepomukOn)
+{
+    m_nepomukOn = nepomukOn;
+}
+
+QString KoResourceTagging::adjustedNepomukFileName(QString fileName)
+{
+    if(fileName.contains(" ")) {
+        fileName.replace(" ","_k_");
+    }
+    return fileName;
+}
+
+QString KoResourceTagging::correctedNepomukFileName(QString fileName)
+{
+    if(fileName.contains("_k_")) {
+        fileName.replace("_k_"," ");
+    }
+    return fileName;
+}
+
+void KoResourceTagging::updateNepomukXML(bool nepomukOn)
+{
+    if(nepomukOn) {
+        m_tagRepo.clear();
+        m_tagList.clear();
+        readXMLFile(false);
+        writeNepomukRepo(false);
+    }
+    else {
+        m_tagRepo.clear();
+        m_tagList.clear();
+        updateTagRepoFromNepomuk(false);
+        writeXMLFile(false);
+    }
+}
+#endif

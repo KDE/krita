@@ -275,7 +275,7 @@ endif(NEPOMUK)
 ##
 if(NEPOMUK)
     macro_optional_find_package(Nepomuk)
-    macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE "" "Required to handle metadata of resources")
+    macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
     include(SopranoAddOntology)
 endif(NEPOMUK)
 

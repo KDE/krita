@@ -263,6 +263,7 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
                 QByteArray compressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
                 
                 QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, m_channelInfoRecords[channel].compressionType);
+                qDebug() << "uncompressedBytes" << uncompressedBytes.length();
                 vectorBytes.append(uncompressedBytes);
 
                 m_channelOffset[channel] +=  m_channelInfoRecords[channel].rleRowLengths[row];
@@ -295,13 +296,13 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 
             if (m_channelSize == 1) {
 
-                quint8 red = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[0].constData())[col]);
+                quint8 red = vectorBytes[0].constData()[col];
                 KoRgbU8Traits::setRed(it.rawData(), red);
 
-                quint8 green = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[1].constData())[col]);
+                quint8 green = vectorBytes[1].constData()[col];
                 KoRgbU8Traits::setGreen(it.rawData(), green);
 
-                quint8 blue = ntohs(reinterpret_cast<const quint8 *>(vectorBytes[2].constData())[col]);
+                quint8 blue = vectorBytes[2].constData()[col];
                 KoRgbU8Traits::setBlue(it.rawData(), blue);
 
             }

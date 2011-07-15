@@ -150,6 +150,10 @@ if( Soprano_FOUND )
     target_link_libraries(komain ${SOPRANO_LIBRARIES})
     target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
+if( MARBLE_FOUND )
+    target_link_libraries(komain ${MARBLE_LIBRARIES})
+    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
+endif( MARBLE_FOUND )
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})
 

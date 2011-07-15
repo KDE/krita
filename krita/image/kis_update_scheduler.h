@@ -70,6 +70,7 @@ public:
     void waitForDone();
 
     void updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect);
+    void fullRefreshAsync(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
 
     void startStroke(KisStrokeStrategy *strokeStrategy);

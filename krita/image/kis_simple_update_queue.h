@@ -35,7 +35,8 @@ public:
 
     void processQueue(KisUpdaterContext &updaterContext);
 
-    void addJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
+    void addUpdateJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
+    void addFullRefreshJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
 
     void optimize();
 
@@ -45,10 +46,12 @@ public:
     void updateSettings();
 
 protected:
+    void addJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, KisBaseRectsWalker::UpdateType type);
+
     bool processOneJob(KisUpdaterContext &updaterContext);
 
-    bool trySplitJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
-    bool tryMergeJob(KisNodeSP node, const QRect& rc);
+    bool trySplitJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, KisBaseRectsWalker::UpdateType type);
+    bool tryMergeJob(KisNodeSP node, const QRect& rc, KisBaseRectsWalker::UpdateType type);
 
     void collectJobs(KisBaseRectsWalkerSP &baseWalker, QRect baseRect,
                      const KisNodeSP &baseNode, const qreal maxAlpha);

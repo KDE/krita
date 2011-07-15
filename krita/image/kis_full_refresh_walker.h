@@ -38,6 +38,10 @@ public:
     {
     }
 
+    UpdateType type() const {
+        return KisBaseRectsWalker::FULL_REFRESH;
+    }
+
 private:
     inline bool canHaveChildLayers(KisNodeSP node) {
         return qobject_cast<KisGroupLayer*>(node.data());

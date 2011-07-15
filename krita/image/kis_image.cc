@@ -1145,6 +1145,20 @@ void KisImage::refreshGraph(KisNodeSP root, const QRect &rc, const QRect &cropRe
     }
 }
 
+void KisImage::refreshGraphAsync(KisNodeSP root)
+{
+    refreshGraphAsync(root, bounds(), bounds());
+}
+
+void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect)
+{
+    if (!root) root = m_d->rootLayer;
+
+    if (!locked() && m_d->scheduler) {
+        m_d->scheduler->fullRefreshAsync(root, rc, cropRect);
+    }
+}
+
 void KisImage::slotProjectionUpdated(const QRect & rc)
 {
     emit sigImageUpdated(rc);

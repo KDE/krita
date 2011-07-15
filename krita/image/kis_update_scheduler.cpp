@@ -79,7 +79,13 @@ void KisUpdateScheduler::connectImage(KisImageWSP image)
 
 void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect)
 {
-    m_d->updatesQueue->addJob(node, rc, cropRect);
+    m_d->updatesQueue->addUpdateJob(node, rc, cropRect);
+    processQueues();
+}
+
+void KisUpdateScheduler::fullRefreshAsync(KisNodeSP root, const QRect& rc, const QRect &cropRect)
+{
+    m_d->updatesQueue->addFullRefreshJob(root, rc, cropRect);
     processQueues();
 }
 

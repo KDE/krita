@@ -28,6 +28,11 @@ KisMergeWalker::~KisMergeWalker()
 {
 }
 
+KisBaseRectsWalker::UpdateType KisMergeWalker::type() const
+{
+    return KisBaseRectsWalker::UPDATE;
+}
+
 void KisMergeWalker::startTrip(KisNodeSP startWith)
 {
     if(isMask(startWith)) {

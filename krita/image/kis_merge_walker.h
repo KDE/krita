@@ -33,6 +33,8 @@ public:
     KisMergeWalker(QRect cropRect);
     virtual ~KisMergeWalker();
 
+    UpdateType type() const;
+
 protected:
 
     /**

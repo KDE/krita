@@ -30,6 +30,12 @@ typedef KisSharedPtr<KisBaseRectsWalker> KisBaseRectsWalkerSP;
 class KRITAIMAGE_EXPORT KisBaseRectsWalker : public KisShared
 {
 public:
+    enum UpdateType {
+        UPDATE,
+        FULL_REFRESH
+    };
+
+
     typedef qint32 NodePosition;
     enum NodePositionValues {
         /**
@@ -131,6 +137,8 @@ public:
     inline const QRect& requestedRect() const {
         return m_requestedRect;
     }
+
+    virtual UpdateType type() const = 0;
 
 protected:
 

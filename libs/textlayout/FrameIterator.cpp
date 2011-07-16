@@ -61,7 +61,7 @@ FrameIterator::FrameIterator(FrameIterator *other)
         currentSubFrameIterator = 0;
 }
 
-bool FrameIterator::operator ==(const FrameIterator &other)
+bool FrameIterator::operator ==(const FrameIterator &other) const
 {
     if (it != other.it)
         return false;

@@ -189,12 +189,12 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 
              foreach(const QString &file, e.installedFiles()) {
                  QFileInfo fi(file);
-                  d->model->resourceServerAdapter()->importResourceFile( fi.absolutePath()+"/"+fi.fileName() , false );
+                  d->model->resourceServerAdapter()->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
               }
 
        foreach(const QString &file, e.uninstalledFiles()) {
                  QFileInfo fi(file);
-                 d->model->resourceServerAdapter()->removeResourceFile(fi.absolutePath()+"/"+fi.fileName());
+                 d->model->resourceServerAdapter()->removeResourceFile(fi.absolutePath()+'/'+fi.fileName());
               }
       }
      }

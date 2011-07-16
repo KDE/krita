@@ -79,7 +79,11 @@ void KoRdfLocationEditWidget::setupMap( Marble::MarbleWidget* _map,
     d->xlong = _xlong;
     kDebug(30015) << " map:" << d->map;
 
+#if MARBLE_VERSION >= 0x000c00
+    Marble::MarbleWidgetDefaultInputHandler *handler = new Marble::MarbleWidgetDefaultInputHandler(d->map);
+#else
     Marble::MarbleWidgetDefaultInputHandler *handler = new Marble::MarbleWidgetDefaultInputHandler();
+#endif
 
 //    handler->setLeftMouseButtonPopup( false );
     handler->setPositionSignalConnected(true);
@@ -87,7 +91,9 @@ void KoRdfLocationEditWidget::setupMap( Marble::MarbleWidget* _map,
             this, SLOT(mouseMoveGeoPosition(QString)));
 
     d->map->setInputHandler(handler);
+#if MARBLE_VERSION < 0x000c00
     handler->init(d->map);
+#endif
 
 }
 #endif

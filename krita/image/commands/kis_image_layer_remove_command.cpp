@@ -34,19 +34,12 @@ KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageWSP image, KisNod
 void KisImageLayerRemoveCommand::redo()
 {
     UpdateTarget target(m_image, m_layer, m_image->bounds());
-
-    m_image->lock();
     m_image->removeNode(m_layer);
-    m_image->unlock();
-
     target.update();
 }
 
 void KisImageLayerRemoveCommand::undo()
 {
-    m_image->lock();
     m_image->addNode(m_layer, m_prevParent, m_prevAbove);
-    m_image->unlock();
-
     m_layer->setDirty(m_image->bounds());
 }

@@ -160,7 +160,7 @@ void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QString &t
 
     // in the scratchpad the layer has no image and there is no undo adapter
     if(layer->image()) {
-        gc.endTransaction(layer->image()->undoAdapter());
+        gc.endTransactionWorkaround(layer->image()->undoAdapter());
     }
 
     d->lock.unlock();

@@ -24,9 +24,12 @@
 #include <QObject>
 
 #include <krita_export.h>
+#include "kis_types.h"
 
 class KUndo2Command;
 class KoDocument;
+class KisStrokeStrategyUndoCommandBased;
+
 
 /**
  * Undo listeners want to be notified of undo and redo actions.
@@ -54,6 +57,11 @@ public:
     virtual ~KisUndoAdapter();
 
 public:
+    /**
+     * FIXME: remove this method after all the tools are ported
+     * to the strokes framework
+     */
+    void setImage(KisImageWSP image);
 
     virtual void setCommandHistoryListener(KisCommandHistoryListener * l);
     virtual void removeCommandHistoryListener(KisCommandHistoryListener * l);
@@ -63,6 +71,11 @@ public:
      */
     virtual void notifyCommandAdded(const KUndo2Command *command);
     virtual void notifyCommandExecuted(const KUndo2Command *command);
+
+    void beginMacroWorkaround(const QString& macroName);
+    void endMacroWorkaround();
+    void addCommandWorkaroundSP(KUndo2CommandSP command);
+    void addCommandWorkaround(KUndo2Command *cmd);
 
     virtual const KUndo2Command * presentCommand();
     virtual void addCommand(KUndo2Command *cmd);
@@ -85,6 +98,10 @@ private:
 
     QVector<KisCommandHistoryListener*> m_undoListeners;
     KoDocument* m_doc;
+    KisImageWSP m_image;
+    qint32 m_macroCounter;
+    KisStrokeId m_macroStrokeId;
+    KisStrokeStrategyUndoCommandBased *m_macroStrokeStrategy;
 };
 
 

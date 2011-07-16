@@ -19,18 +19,20 @@
 #include "kis_stroke_strategy_undo_command_based.h"
 
 #include <QMutexLocker>
-
+#include "kis_undo_adapter.h"
 
 KisStrokeStrategyUndoCommandBased::
 KisStrokeStrategyUndoCommandBased(const QString &name,
                                   bool undo,
+                                  KisUndoAdapter *undoAdapter,
                                   KUndo2CommandSP initCommand,
                                   KUndo2CommandSP finishCommand)
   : KisStrokeStrategy("STROKE_UNDO_COMMAND_BASED", name),
     m_undo(undo),
     m_initCommand(initCommand),
     m_finishCommand(finishCommand),
-    m_sequential(true)
+    m_sequential(true),
+    m_undoAdapter(undoAdapter)
 {
 }
 
@@ -41,12 +43,12 @@ void KisStrokeStrategyUndoCommandBased::setSequential(bool value)
 
 KisStrokeJobStrategy* KisStrokeStrategyUndoCommandBased::createInitStrategy()
 {
-    return m_initCommand ? new KisStrokeJobStrategyUndoCommandBased(true, this) : 0;
+    return m_initCommand ? new KisStrokeJobStrategyUndoCommandBased(true, this, 0) : 0;
 }
 
 KisStrokeJobStrategy* KisStrokeStrategyUndoCommandBased::createFinishStrategy()
 {
-    return m_finishCommand ? new KisStrokeJobStrategyUndoCommandBased(true, this) : 0;
+    return m_finishCommand ? new KisStrokeJobStrategyUndoCommandBased(true, this, m_undoAdapter) : 0;
 }
 
 KisStrokeJobStrategy* KisStrokeStrategyUndoCommandBased::createCancelStrategy()
@@ -56,18 +58,18 @@ KisStrokeJobStrategy* KisStrokeStrategyUndoCommandBased::createCancelStrategy()
 
 KisStrokeJobStrategy* KisStrokeStrategyUndoCommandBased::createDabStrategy()
 {
-    return new KisStrokeJobStrategyUndoCommandBased(m_sequential, this);
+    return new KisStrokeJobStrategyUndoCommandBased(m_sequential, this, 0);
 }
 
 
 KisStrokeJobStrategy::StrokeJobData* KisStrokeStrategyUndoCommandBased::createInitData()
 {
-    return m_initCommand ? new KisStrokeJobStrategyUndoCommandBased::Data(m_initCommand) : 0;
+    return m_initCommand ? new KisStrokeJobStrategyUndoCommandBased::Data(m_initCommand, false) : 0;
 }
 
 KisStrokeJobStrategy::StrokeJobData* KisStrokeStrategyUndoCommandBased::createFinishData()
 {
-    return m_finishCommand ? new KisStrokeJobStrategyUndoCommandBased::Data(m_finishCommand) : 0;
+    return m_finishCommand ? new KisStrokeJobStrategyUndoCommandBased::Data(m_finishCommand, true) : 0;
 }
 
 KisStrokeJobStrategy::StrokeJobData* KisStrokeStrategyUndoCommandBased::createCancelData()
@@ -78,7 +80,7 @@ KisStrokeJobStrategy::StrokeJobData* KisStrokeStrategyUndoCommandBased::createCa
 void KisStrokeStrategyUndoCommandBased::notifyCommandDone(KUndo2CommandSP command)
 {
     QMutexLocker locker(&m_mutex);
-    m_doneCommands.prepend(command);
+    m_doneCommands.append(command);
 }
 
 QVector<KUndo2CommandSP> KisStrokeStrategyUndoCommandBased::takeUndoCommands()
@@ -92,9 +94,10 @@ QVector<KUndo2CommandSP> KisStrokeStrategyUndoCommandBased::takeUndoCommands()
 }
 
 
-KisStrokeJobStrategyUndoCommandBased::KisStrokeJobStrategyUndoCommandBased(bool isSequential, KisStrokeStrategyUndoCommandBased *parentStroke)
+KisStrokeJobStrategyUndoCommandBased::KisStrokeJobStrategyUndoCommandBased(bool isSequential, KisStrokeStrategyUndoCommandBased *parentStroke, KisUndoAdapter *undoAdapter)
     : KisStrokeJobStrategy(isSequential, false),
-      m_parentStroke(parentStroke)
+      m_parentStroke(parentStroke),
+      m_undoAdapter(undoAdapter)
 {
 }
 
@@ -109,6 +112,17 @@ void KisStrokeJobStrategyUndoCommandBased::run(StrokeJobData *data)
     }
 
     m_parentStroke->notifyCommandDone(d->command);
+
+    if(d->doFinish && m_undoAdapter) {
+        m_undoAdapter->beginMacroWorkaround(m_parentStroke->name());
+
+        QVector<KUndo2CommandSP> commands = m_parentStroke->takeUndoCommands();
+        foreach(KUndo2CommandSP cmd, commands) {
+            m_undoAdapter->addCommandWorkaroundSP(cmd);
+        }
+
+        m_undoAdapter->endMacroWorkaround();
+    }
 }
 
 KisStrokeJobStrategyCancelUndoCommandBased::KisStrokeJobStrategyCancelUndoCommandBased(KisStrokeStrategyUndoCommandBased *parentStroke)
@@ -122,7 +136,12 @@ void KisStrokeJobStrategyCancelUndoCommandBased::run(StrokeJobData *data)
     Q_UNUSED(data);
 
     QVector<KUndo2CommandSP> commands = m_parentStroke->takeUndoCommands();
-    foreach(KUndo2CommandSP cmd, commands) {
+    QVectorIterator<KUndo2CommandSP> it(commands);
+
+    it.toBack();
+    while(it.hasPrevious()) {
+        KUndo2CommandSP cmd = it.previous();
+
         if(!m_parentStroke->undo()) {
             cmd->undo();
         } else {

@@ -118,6 +118,12 @@ public:
     void endTransaction(KisUndoAdapter *undoAdapter);
 
     /**
+     * FIXME: Temporary workaround for commiting a transaction
+     * from the stroke
+     */
+    void endTransactionWorkaround(KisUndoAdapter *undoAdapter);
+
+    /**
      * Finish the transaction and delete it's undo information.
      * NOTE: Be careful, because all the previous transactions
      * will become non-undoable after execution of this method.

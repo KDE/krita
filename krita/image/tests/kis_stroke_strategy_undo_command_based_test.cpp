@@ -63,12 +63,12 @@ void KisStrokeStrategyUndoCommandBasedTest::testFinishedStroke()
     KUndo2CommandSP finishCommand(new KUndo2Command("finish"));
 
     KisStrokeStrategy *strategy =
-        new KisStrokeStrategyUndoCommandBased("test", false,
+        new KisStrokeStrategyUndoCommandBased("test", false, 0,
                                               initCommand, finishCommand);
 
     KisStroke stroke(strategy);
     stroke.addJob(
-        new KisStrokeJobStrategyUndoCommandBased::Data(dabCommand));
+        new KisStrokeJobStrategyUndoCommandBased::Data(dabCommand, false));
     stroke.endStroke();
 
 
@@ -91,12 +91,12 @@ void KisStrokeStrategyUndoCommandBasedTest::testCancelledStroke()
     KUndo2CommandSP finishCommand(new KUndo2Command("finish"));
 
     KisStrokeStrategy *strategy =
-        new KisStrokeStrategyUndoCommandBased("test", false,
+        new KisStrokeStrategyUndoCommandBased("test", false, 0,
                                               initCommand, finishCommand);
 
     KisStroke stroke(strategy);
     stroke.addJob(
-        new KisStrokeJobStrategyUndoCommandBased::Data(dabCommand));
+        new KisStrokeJobStrategyUndoCommandBased::Data(dabCommand, false));
 
 
     KisStrokeJob *job;

@@ -31,12 +31,14 @@
 class QString;
 
 class KisStrokeJob;
+class KisUndoAdapter;
 
 class KRITAIMAGE_EXPORT KisStrokeStrategyUndoCommandBased : public KisStrokeStrategy
 {
 public:
     KisStrokeStrategyUndoCommandBased(const QString &name,
                                       bool undo,
+                                      KisUndoAdapter *undoAdapter,
                                       KUndo2CommandSP initCommand = KUndo2CommandSP(0),
                                       KUndo2CommandSP finishCommand = KUndo2CommandSP(0));
 
@@ -76,6 +78,7 @@ private:
     KUndo2CommandSP m_initCommand;
     KUndo2CommandSP m_finishCommand;
     bool m_sequential;
+    KisUndoAdapter *m_undoAdapter;
 
     // protects done commands only
     QMutex m_mutex;
@@ -88,16 +91,18 @@ class KRITAIMAGE_EXPORT KisStrokeJobStrategyUndoCommandBased : public KisStrokeJ
 public:
     class Data : public StrokeJobData {
     public:
-        Data(KUndo2CommandSP _command)
-            : command(_command)
+        Data(KUndo2CommandSP _command, bool _doFinish)
+        : command(_command),
+          doFinish(_doFinish)
         {
         }
 
         KUndo2CommandSP command;
+        bool doFinish;
     };
 
 public:
-    KisStrokeJobStrategyUndoCommandBased(bool isSequential, KisStrokeStrategyUndoCommandBased *parentStroke);
+    KisStrokeJobStrategyUndoCommandBased(bool isSequential, KisStrokeStrategyUndoCommandBased *parentStroke, KisUndoAdapter *undoAdapter);
     void run(StrokeJobData *data);
 
 private:
@@ -105,6 +110,7 @@ private:
     friend QString getCommandName(KisStrokeJob *job);
 
     KisStrokeStrategyUndoCommandBased *m_parentStroke;
+    KisUndoAdapter *m_undoAdapter;
 };
 
 

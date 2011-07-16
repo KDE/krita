@@ -102,7 +102,7 @@ void FinishStrokeJobStrategy::run(StrokeJobData *data)
         indirect->mergeToLayer(layer, transactionText);
     }
     else {
-        d->painter->endTransaction(d->resources->image()->undoAdapter());
+        d->painter->endTransactionWorkaround(d->resources->image()->undoAdapter());
     }
     delete d->painter;
 }

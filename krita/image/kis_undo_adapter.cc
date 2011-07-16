@@ -21,8 +21,15 @@
 #include "kis_debug.h"
 #include "KoDocument.h"
 #include <kundo2stack.h>
+#include "commands/kis_scheduled_undo_command.h"
+#include "kis_stroke_strategy_undo_command_based.h"
+#include "kis_transaction_data.h"
+#include "kis_image.h"
 
-KisUndoAdapter::KisUndoAdapter(KoDocument* doc): m_doc(doc)
+
+KisUndoAdapter::KisUndoAdapter(KoDocument* doc)
+    : m_doc(doc),
+      m_macroCounter(0)
 {
 }
 
@@ -71,10 +78,81 @@ const KUndo2Command * KisUndoAdapter::presentCommand()
     return m_doc->undoStack()->command(m_doc->undoStack()->index() - 1);
 }
 
+void KisUndoAdapter::beginMacroWorkaround(const QString& macroName)
+{
+    m_doc->beginMacro(macroName);
+}
+
+void KisUndoAdapter::endMacroWorkaround()
+{
+    m_doc->endMacro();
+}
+
+void KisUndoAdapter::addCommandWorkaroundSP(KUndo2CommandSP command)
+{
+    if(!command) return;
+
+    KUndo2Command *commandPointer =
+        new KisScheduledUndoCommand(command, m_image, true);
+
+    m_doc->addCommand(commandPointer);
+}
+
+void KisUndoAdapter::addCommandWorkaround(KUndo2Command* command)
+{
+    addCommandWorkaroundSP(KUndo2CommandSP(command));
+}
+
+void KisUndoAdapter::beginMacro(const QString& macroName)
+{
+    if(!m_macroCounter) {
+        m_macroStrokeStrategy =
+            new KisStrokeStrategyUndoCommandBased(macroName,
+                                                  false, this);
+        m_macroStrokeId = m_image->startStroke(m_macroStrokeStrategy);
+    }
+    m_macroCounter++;
+}
+
+void KisUndoAdapter::endMacro()
+{
+    m_macroCounter--;
+
+    if(!m_macroCounter) {
+        m_image->endStroke(m_macroStrokeId);
+        m_macroStrokeStrategy = 0;
+    }
+}
+
 void KisUndoAdapter::addCommand(KUndo2Command *command)
 {
-    m_doc->addCommand(command);
-    notifyCommandAdded(command);
+    if(!command) return;
+
+    /**
+     * FIXME: This is a kind of hack until all the tool are ported
+     * to the strokes framework. We wrap all the commands
+     * into a special command that executes the internal
+     * command onto the scheduler
+     */
+
+    if(m_macroCounter) {
+        m_image->addJob(m_macroStrokeId,
+                        new KisStrokeJobStrategyUndoCommandBased::Data(KUndo2CommandSP(command),
+                                                                       false));
+    }
+    else {
+        KisStrokeStrategyUndoCommandBased *strategy =
+            new KisStrokeStrategyUndoCommandBased(command->text(),
+                                                  false, this,
+                                                  KUndo2CommandSP(command));
+        KisStrokeId id = m_image->startStroke(strategy);
+        m_image->endStroke(id);
+    }
+}
+
+void KisUndoAdapter::setImage(KisImageWSP image)
+{
+    m_image = image;
 }
 
 void KisUndoAdapter::undoLastCommand()
@@ -93,16 +171,6 @@ void KisUndoAdapter::undoLastCommand()
      * to the undoStack
      */
     m_doc->undoStack()->undo();
-}
-
-void KisUndoAdapter::beginMacro(const QString& macroName)
-{
-    m_doc->beginMacro(macroName);
-}
-
-void KisUndoAdapter::endMacro()
-{
-    m_doc->endMacro();
 }
 
 void KisUndoAdapter::emitSelectionChanged()

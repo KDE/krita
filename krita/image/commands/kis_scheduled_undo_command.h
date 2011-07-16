@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,25 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_image_commands.h"
-#include "kis_image.h"
+#ifndef __KIS_SCHEDULED_UNDO_COMMAND_H
+#define __KIS_SCHEDULED_UNDO_COMMAND_H
 
-#include <klocale.h>
+#include <kundo2command.h>
+#include "kis_types.h"
 
 
-KisImageLockCommand::KisImageLockCommand(KisImageWSP image, bool lockImage)
-        : KisImageCommand("lock image", image)  // Not for translation, this is only ever used inside a macro command.
+class KisScheduledUndoCommand : public KUndo2Command
 {
-    Q_UNUSED(lockImage)
-}
+public:
+    KisScheduledUndoCommand(KUndo2CommandSP command, KisImageWSP image, bool isExclusive);
+    ~KisScheduledUndoCommand();
 
-void KisImageLockCommand::redo()
-{
-    m_image->refreshGraphAsync();
-}
+    void undo();
+    void redo();
 
-void KisImageLockCommand::undo()
-{
-    m_image->refreshGraphAsync();
-}
+private:
+    KUndo2CommandSP m_realCommand;
+    KisImageWSP m_image;
+    bool m_exclusive;
+    bool m_skipOneRedoStroke;
+};
 
+#endif /* __KIS_SCHEDULED_UNDO_COMMAND_H */

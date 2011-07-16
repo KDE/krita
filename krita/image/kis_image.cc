@@ -283,6 +283,10 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height, const 
     m_d->sizeChangedWhileLocked = false;
     m_d->perspectiveGrid = 0;
 
+    if(adapter) {
+        adapter->setImage(this);
+    }
+
     m_d->adapter = adapter;
 
     m_d->nserver = new KisNameServer(1);

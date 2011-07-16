@@ -124,16 +124,28 @@ kde4_add_ui_files( komain_LIB_SRCS
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
 )
-if( Soprano_FOUND )
+if(Soprano_FOUND)
+
     kde4_add_ui_files( komain_LIB_SRCS
        rdf/KoDocumentRdfEditWidget.ui
        rdf/KoRdfFoaFEditWidget.ui
        rdf/KoRdfCalendarEventEditWidget.ui
-       rdf/KoRdfLocationEditWidget.ui
-       rdf/KoRdfLocationViewWidget.ui
        rdf/KoSemanticStylesheetsEditor.ui
     )
-endif( Soprano_FOUND )
+
+    if(MARBLE_FOUND)
+        kde4_add_ui_files( komain_LIB_SRCS
+           rdf/KoRdfLocationEditWidgetMarble.ui
+           rdf/KoRdfLocationViewWidgetMarble.ui
+        )
+    else(MARBLE_FOUND)
+        kde4_add_ui_files( komain_LIB_SRCS
+           rdf/KoRdfLocationEditWidget.ui
+           rdf/KoRdfLocationViewWidget.ui
+        )
+    endif(MARBLE_FOUND)
+
+endif(Soprano_FOUND)
 
 
 kde4_add_library(komain SHARED ${komain_LIB_SRCS})

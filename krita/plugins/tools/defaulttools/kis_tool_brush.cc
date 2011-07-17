@@ -54,7 +54,7 @@
 const int MAXIMUM_RATE = 1000;  // 1 second for rate? Just quick test
 
 KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
-        : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18n("Brush"))
+        : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18nc("(qtundo-format)", "Brush"))
 {
     setObjectName("tool_brush");
 

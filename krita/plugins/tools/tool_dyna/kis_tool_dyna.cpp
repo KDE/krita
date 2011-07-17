@@ -54,7 +54,7 @@
 #define MAXIMUM_MAGNETISM 1000
 
 KisToolDyna::KisToolDyna(KoCanvasBase * canvas)
-        : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18n("Dyna"))
+        : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18nc("(qtundo-format)", "Dyna"))
 {
     setObjectName("tool_dyna");
 

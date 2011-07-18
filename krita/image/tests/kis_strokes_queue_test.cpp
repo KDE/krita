@@ -66,6 +66,39 @@ void KisStrokesQueueTest::testSequentialJobs()
     VERIFY_EMPTY(jobs[1]);
 }
 
+void KisStrokesQueueTest::testConcurrentSequentialBarrier()
+{
+    KisStrokesQueue queue;
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("tri_", false));
+    queue.addJob(id, 0);
+    queue.addJob(id, 0);
+    queue.endStroke(id);
+
+    // make the number of threads higher
+    KisTestableUpdaterContext context(3);
+    QVector<KisUpdateJobItem*> jobs;
+
+    queue.processQueue(context);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "tri_init");
+    VERIFY_EMPTY(jobs[1]);
+
+    context.clear();
+    queue.processQueue(context);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "tri_dab");
+    COMPARE_NAME(jobs[1], "tri_dab");
+
+    context.clear();
+    queue.processQueue(context);
+
+    jobs = context.getJobs();
+    COMPARE_NAME(jobs[0], "tri_finish");
+    VERIFY_EMPTY(jobs[1]);
+}
+
 void KisStrokesQueueTest::testExclusiveStrokes()
 {
     KisStrokesQueue queue;

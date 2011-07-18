@@ -28,6 +28,7 @@ class KisStrokesQueueTest : public QObject
 
 private slots:
     void testSequentialJobs();
+    void testConcurrentSequentialBarrier();
     void testExclusiveStrokes();
     void testStrokesOverlapping();
 };

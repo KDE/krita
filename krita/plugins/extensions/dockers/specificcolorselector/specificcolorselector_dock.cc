@@ -80,8 +80,8 @@ void SpecificColorSelectorDock::unsetCanvas()
 
 void SpecificColorSelectorDock::layerChanged(const KisNodeSP node)
 {
-    if(!node) return;
-
+    if (!node) return;
+    if (!m_colorSelector) return;
     if (node->inherits("KisMask") && node->parent())
         m_colorSelector->setColorSpace(static_cast<const KisLayer*>(node->parent().data())->colorSpace());
     else

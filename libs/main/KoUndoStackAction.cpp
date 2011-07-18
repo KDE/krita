@@ -50,5 +50,5 @@ KoUndoStackAction::KoUndoStackAction(KUndo2Stack* stack, Type type)
 void KoUndoStackAction::slotUndoTextChanged(const QString& text)
 {
     QString actionText = (m_type == UNDO) ? i18n("Undo") : i18n("Redo");
-    setText(actionText + " " + text);
+    setText(actionText + ' ' + text);
 }

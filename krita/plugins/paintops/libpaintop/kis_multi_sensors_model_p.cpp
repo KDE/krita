@@ -115,7 +115,7 @@ KisDynamicSensor* KisMultiSensorsModel::getSensor(const QModelIndex& index)
     if(m_currentSensor && m_currentSensor->id() == id)
     {
         return m_currentSensor;
-    } else if(m_listSensor) {
+    } else if (m_listSensor) {
         KisDynamicSensor* sensor = m_listSensor->getSensor(id);
         if(sensor)
         {
@@ -169,17 +169,20 @@ void KisMultiSensorsModel::setCurrentCurve(const QModelIndex& currentIndex, cons
             foreach(const QString& id, m_listSensor->sensorIds())
             {
                 KisDynamicSensor* sensor =  m_listSensor->getSensor(id);
-                sensor->setCurve(curve);
-                sensor->removeCurve();
+                if (sensor) {
+                    sensor->setCurve(curve);
+                    sensor->removeCurve();
+                }
             }
         }
     } else {
         KisDynamicSensor* sensor = getSensor(currentIndex);
-        Q_ASSERT(sensor);
-        sensor->setCurve(curve);
-        if(m_listSensor)
-        {
-            m_listSensor->removeCurve();
+        if (sensor) {
+            sensor->setCurve(curve);
+            if (m_listSensor)
+            {
+                m_listSensor->removeCurve();
+            }
         }
     }
 }

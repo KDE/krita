@@ -124,7 +124,7 @@ void Canvas::replayStep()
 
     QString line = m_list.at(m_listId++);
     qDebug() << "Line:" << line;
-    QStringList values = line.split(" ");
+    QStringList values = line.split(' ');
     if (values[0] == "c") {
         clear();
     } else {

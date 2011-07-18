@@ -303,6 +303,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 {
     KisConfig cfg;
 
+    labelWarning->setPixmap(KIcon("dialog-warning").pixmap(32, 32));
 #ifdef HAVE_OPENGL
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);

@@ -255,9 +255,9 @@ void KoResourceTagging::readXMLFile()
 bool KoResourceTagging::isServerResource(QString resourceName)
 {
     bool removeChild = false;
-    QStringList extensionsList = m_serverExtensions.split(":");
+    QStringList extensionsList = m_serverExtensions.split(':');
     foreach (QString extension, extensionsList) {
-        if(resourceName.contains(extension.remove("*"))) {
+        if(resourceName.contains(extension.remove('*'))) {
             removeChild = true;
             break;
         }
@@ -268,7 +268,7 @@ bool KoResourceTagging::isServerResource(QString resourceName)
 QString KoResourceTagging::getAdjustedFileName(QString fileName)
 {
     if(!isServerResource(fileName)) {
-        return fileName + "-krita" + m_serverExtensions.split(":").takeFirst().remove("*");
+        return fileName + "-krita" + m_serverExtensions.split(':').takeFirst().remove('*');
     }
     return fileName;
 }

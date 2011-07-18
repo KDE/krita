@@ -102,10 +102,10 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                                 if (!mergedAllowedValues.contains(baseValue))
                                     mergedAllowedValues << baseValue;
                                 foreach (QString knownValue, mergedAllowedValues) {
-                                    if ((knownValue == baseValue) || (knownValue.contains(baseValue + " ")) || (knownValue.contains(" " + baseValue))) {
+                                    if ((knownValue == baseValue) || (knownValue.contains(baseValue + ' ')) || (knownValue.contains(' ' + baseValue))) {
                                         continue;
                                     }
-                                    QString builtValue = knownValue + " " + baseValue;
+                                    QString builtValue = knownValue + ' ' + baseValue;
                                     if (!mergedAllowedValues.contains(builtValue))
                                         mergedAllowedValues << builtValue;
                                 }

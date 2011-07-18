@@ -68,13 +68,19 @@ private:
 
 KisSimpleStrokeStrategy::KisSimpleStrokeStrategy(QString id, QString name)
     : KisStrokeStrategy(id, name),
-      m_jobEnabled(4, false)
+      m_jobEnabled(4, false),
+      m_sequentiality(KisStrokeJobStrategy::SEQUENTIAL)
 {
 }
 
 void KisSimpleStrokeStrategy::enableJob(JobType type, bool enable)
 {
     m_jobEnabled[(int)type] = enable;
+}
+
+void KisSimpleStrokeStrategy::setSequentiality(KisStrokeJobStrategy::Sequentiality sequentiality)
+{
+    m_sequentiality = sequentiality;
 }
 
 KisStrokeJobStrategy*
@@ -116,7 +122,7 @@ KisStrokeJobStrategy* KisSimpleStrokeStrategy::createCancelStrategy()
 KisStrokeJobStrategy* KisSimpleStrokeStrategy::createDabStrategy()
 {
     return createStrategy(JOB_DOSTROKE,
-                          KisStrokeJobStrategy::CONCURRENT,
+                          m_sequentiality,
                           KisStrokeJobStrategy::NORMAL);
 }
 

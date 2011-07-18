@@ -52,6 +52,7 @@ public:
 
 protected:
     void enableJob(JobType type, bool enable = true);
+    void setSequentiality(KisStrokeJobStrategy::Sequentiality sequentiality = KisStrokeJobStrategy::SEQUENTIAL);
 
 private:
     KisStrokeJobStrategy* createStrategy(JobType type,
@@ -60,6 +61,7 @@ private:
 
 private:
     QVector<bool> m_jobEnabled;
+    KisStrokeJobStrategy::Sequentiality m_sequentiality;
 };
 
 #endif /* __KIS_SIMPLE_STROKE_STRATEGY_H */

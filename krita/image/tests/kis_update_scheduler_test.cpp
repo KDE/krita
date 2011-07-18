@@ -243,6 +243,32 @@ void KisUpdateSchedulerTest::testExclusiveStrokes()
     QCOMPARE(jobs[0]->isRunning(), true);
     QCOMPARE(jobs[1]->isRunning(), false);
     COMPARE_NAME(jobs[0], "excl_init");
+
+    context->clear();
+    scheduler.processQueues();
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), false);
+    COMPARE_NAME(jobs[0], "excl_finish");
+
+    context->clear();
+    scheduler.processQueues();
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), false);
+    QVERIFY(checkWalker(jobs[0]->walker(), dirtyRect1));
+}
+
+void KisUpdateSchedulerTest::testEmptyStroke()
+{
+    KisImageSP image = buildTestingImage();
+
+    KisStrokeId id = image->startStroke(new KisStrokeStrategy());
+    image->addJob(id, 0);
+    image->endStroke(id);
+    image->waitForDone();
 }
 
 

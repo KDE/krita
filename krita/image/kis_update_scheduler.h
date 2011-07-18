@@ -82,8 +82,6 @@ protected:
     // Trivial constructor for testing support
     KisUpdateScheduler();
     void connectImage(KisImageWSP image);
-
-private:
     void processQueues();
 
 private slots:
@@ -106,6 +104,7 @@ public:
 
     KisTestableUpdaterContext* updaterContext();
     KisTestableSimpleUpdateQueue* updateQueue();
+    using KisUpdateScheduler::processQueues;
 };
 
 #endif /* __KIS_UPDATE_SCHEDULER_H */

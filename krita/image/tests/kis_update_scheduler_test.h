@@ -35,6 +35,7 @@ private slots:
     void benchmarkOverlappedMerge();
     void testLocking();
     void testExclusiveStrokes();
+    void testEmptyStroke();
 };
 
 #endif /* KIS_UPDATE_SCHEDULER_TEST_H */

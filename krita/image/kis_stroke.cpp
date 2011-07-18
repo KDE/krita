@@ -32,7 +32,12 @@ KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy)
     m_cancelStrategy = m_strokeStrategy->createCancelStrategy();
     m_finishStrategy = m_strokeStrategy->createFinishStrategy();
 
-    enqueue(m_initStrategy, m_strokeStrategy->createInitData());
+    if(!m_initStrategy) {
+        m_strokeInitialized = true;
+    }
+    else {
+        enqueue(m_initStrategy, m_strokeStrategy->createInitData());
+    }
 }
 
 KisStroke::~KisStroke()

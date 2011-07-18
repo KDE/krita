@@ -137,8 +137,7 @@ void KisUndoAdapter::addCommand(KUndo2Command *command)
 
     if(m_macroCounter) {
         m_image->addJob(m_macroStrokeId,
-                        new KisStrokeJobStrategyUndoCommandBased::Data(KUndo2CommandSP(command),
-                                                                       false));
+                        new KisStrokeStrategyUndoCommandBased::Data(KUndo2CommandSP(command)));
     }
     else {
         KisStrokeStrategyUndoCommandBased *strategy =

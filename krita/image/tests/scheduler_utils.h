@@ -23,6 +23,7 @@
 #include "kis_merge_walker.h"
 #include "kis_stroke_strategy.h"
 #include "kis_stroke_job.h"
+#include "kis_stroke.h"
 
 
 #define SCOMPARE(s1, s2) QCOMPARE(QString(s1), QString(s2))
@@ -33,6 +34,15 @@
     QCOMPARE(getJobName(item->strokeJob()), QString(name))
 #define VERIFY_EMPTY(item)                                      \
     QVERIFY(!item->isRunning())
+
+void executeStrokeJobs(KisStroke *stroke) {
+    KisStrokeJob *job;
+
+    while((job = stroke->popOneJob())) {
+        job->run();
+        delete job;
+    }
+}
 
 bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect) {
     if(walker->requestedRect() == rect) {

@@ -27,40 +27,34 @@ inline QString undoString(bool undo) {
     return undo ? "_undo" : "_redo";
 }
 
-inline QString getCommandName(KisStrokeJob *job) {
-    KisStrokeJobStrategyUndoCommandBased *jobStrategy =
-        dynamic_cast<KisStrokeJobStrategyUndoCommandBased*>(
-            job->testingGetDabStrategy());
-
-    if(jobStrategy) {
-        KisStrokeJobStrategyUndoCommandBased::Data *data =
-            dynamic_cast<KisStrokeJobStrategyUndoCommandBased::Data*>(
-                job->testingGetDabData());
-
-        return data->command->text() + undoString(jobStrategy->m_parentStroke->undo());
+class TestingUndoCommand : public KUndo2Command
+{
+public:
+    TestingUndoCommand(const QString &name, QString &result)
+        : KUndo2Command(name),
+          m_result(result)
+    {
     }
-    else {
-        KisStrokeJobStrategyCancelUndoCommandBased *jobStrategy =
-            dynamic_cast<KisStrokeJobStrategyCancelUndoCommandBased*>(
-                job->testingGetDabStrategy());
 
-        QString result;
-        QVector<KUndo2CommandSP> commands =
-            jobStrategy->m_parentStroke->takeFinishedCommands();
-
-        foreach(KUndo2CommandSP cmd, commands) {
-            result += cmd->text() + undoString(jobStrategy->m_parentStroke) + QString(" ");
-        }
-        return result.trimmed();
+    void undo() {
+        m_result += QString(" ") + text() + undoString(true);
     }
-}
+
+    void redo() {
+        m_result += QString(" ") + text() + undoString(false);
+    }
+
+private:
+    QString &m_result;
+};
 
 
 void KisStrokeStrategyUndoCommandBasedTest::testFinishedStroke()
 {
-    KUndo2CommandSP initCommand(new KUndo2Command("init"));
-    KUndo2CommandSP dabCommand(new KUndo2Command("dab"));
-    KUndo2CommandSP finishCommand(new KUndo2Command("finish"));
+    QString result;
+    KUndo2CommandSP initCommand(new TestingUndoCommand("init", result));
+    KUndo2CommandSP dabCommand(new TestingUndoCommand("dab", result));
+    KUndo2CommandSP finishCommand(new TestingUndoCommand("finish", result));
 
     KisStrokeStrategy *strategy =
         new KisStrokeStrategyUndoCommandBased("test", false, 0,
@@ -68,27 +62,20 @@ void KisStrokeStrategyUndoCommandBasedTest::testFinishedStroke()
 
     KisStroke stroke(strategy);
     stroke.addJob(
-        new KisStrokeJobStrategyUndoCommandBased::Data(dabCommand, false));
+        new KisStrokeStrategyUndoCommandBased::Data(dabCommand));
     stroke.endStroke();
 
+    executeStrokeJobs(&stroke);
 
-    QQueue<KisStrokeJob*> &queue = stroke.testingGetQueue();
-    QCOMPARE(queue.size(), 3);
-
-    SCOMPARE(getCommandName(queue[0]), "init_redo");
-    SCOMPARE(getCommandName(queue[1]), "dab_redo");
-    SCOMPARE(getCommandName(queue[2]), "finish_redo");
-
-    delete stroke.popOneJob(); // init
-    delete stroke.popOneJob(); // dab
-    delete stroke.popOneJob(); // finish
+    SCOMPARE(result.trimmed(), "init_redo dab_redo finish_redo");
 }
 
 void KisStrokeStrategyUndoCommandBasedTest::testCancelledStroke()
 {
-    KUndo2CommandSP initCommand(new KUndo2Command("init"));
-    KUndo2CommandSP dabCommand(new KUndo2Command("dab"));
-    KUndo2CommandSP finishCommand(new KUndo2Command("finish"));
+    QString result;
+    KUndo2CommandSP initCommand(new TestingUndoCommand("init", result));
+    KUndo2CommandSP dabCommand(new TestingUndoCommand("dab", result));
+    KUndo2CommandSP finishCommand(new TestingUndoCommand("finish", result));
 
     KisStrokeStrategy *strategy =
         new KisStrokeStrategyUndoCommandBased("test", false, 0,
@@ -96,7 +83,7 @@ void KisStrokeStrategyUndoCommandBasedTest::testCancelledStroke()
 
     KisStroke stroke(strategy);
     stroke.addJob(
-        new KisStrokeJobStrategyUndoCommandBased::Data(dabCommand, false));
+        new KisStrokeStrategyUndoCommandBased::Data(dabCommand));
 
 
     KisStrokeJob *job;
@@ -110,12 +97,9 @@ void KisStrokeStrategyUndoCommandBasedTest::testCancelledStroke()
 
     stroke.cancelStroke();
 
-    QQueue<KisStrokeJob*> &queue = stroke.testingGetQueue();
-    QCOMPARE(queue.size(), 1);
+    executeStrokeJobs(&stroke);
 
-    SCOMPARE(getCommandName(queue[0]), "init_undo dab_undo");
-
-    delete stroke.popOneJob(); // cancel
+    SCOMPARE(result.trimmed(), "init_redo dab_redo dab_undo init_undo");
 }
 
 QTEST_KDEMAIN(KisStrokeStrategyUndoCommandBasedTest, NoGUI)

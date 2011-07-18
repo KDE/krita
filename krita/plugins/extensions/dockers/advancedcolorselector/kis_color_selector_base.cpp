@@ -423,7 +423,6 @@ void KisColorSelectorBase::hidePopup()
 
 void KisColorSelectorBase::commitColor(const KoColor& color, ColorRole role)
 {
-    Q_ASSERT(m_canvas);
     if (!m_canvas)
         return;
 

@@ -19,18 +19,17 @@
  */
 
 #include "fastcolortransfer.h"
+
+#include <math.h>
+
 #include <kpluginfactory.h>
-#include <kurlrequester.h>
 
 #include <kundo2command.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
-#include <KoFilter.h>
-#include <KoFilterManager.h>
 
-#include <kis_doc2.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>

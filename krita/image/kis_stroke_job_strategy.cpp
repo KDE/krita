@@ -22,9 +22,10 @@ KisStrokeJobStrategy::StrokeJobData::~StrokeJobData()
 {
 }
 
-KisStrokeJobStrategy::KisStrokeJobStrategy(bool isSequential, bool isExclusive)
-    : m_isSequential(isSequential),
-      m_isExclusive(isExclusive)
+KisStrokeJobStrategy::KisStrokeJobStrategy(Sequentiality sequentiality,
+                                           Exclusivity exclusivity)
+    : m_isSequential(sequentiality == SEQUENTIAL),
+      m_isExclusive(exclusivity == EXCLUSIVE)
 {
 }
 

@@ -47,7 +47,7 @@ public:
     };
 
 public:
-    InitStrokeJobStrategy(bool isExclusive = false);
+    InitStrokeJobStrategy(Exclusivity exclusivity = NORMAL);
 
     void run(StrokeJobData *data);
 };
@@ -68,7 +68,7 @@ public:
     };
 
 public:
-    FinishStrokeJobStrategy(bool isExclusive = false);
+    FinishStrokeJobStrategy(Exclusivity exclusivity = NORMAL);
 
     void run(StrokeJobData *data);
 };
@@ -89,7 +89,7 @@ public:
     };
 
 public:
-    CancelStrokeJobStrategy(bool isExclusive = false);
+    CancelStrokeJobStrategy(Exclusivity exclusivity = NORMAL);
 
     void run(StrokeJobData *data);
 };

@@ -43,12 +43,12 @@ void KisStrokeStrategyUndoCommandBased::setSequential(bool value)
 
 KisStrokeJobStrategy* KisStrokeStrategyUndoCommandBased::createInitStrategy()
 {
-    return m_initCommand ? new KisStrokeJobStrategyUndoCommandBased(true, this, 0) : 0;
+    return m_initCommand ? new KisStrokeJobStrategyUndoCommandBased(KisStrokeJobStrategy::SEQUENTIAL, this, 0) : 0;
 }
 
 KisStrokeJobStrategy* KisStrokeStrategyUndoCommandBased::createFinishStrategy()
 {
-    return m_finishCommand ? new KisStrokeJobStrategyUndoCommandBased(true, this, m_undoAdapter) : 0;
+    return m_finishCommand ? new KisStrokeJobStrategyUndoCommandBased(KisStrokeJobStrategy::SEQUENTIAL, this, m_undoAdapter) : 0;
 }
 
 KisStrokeJobStrategy* KisStrokeStrategyUndoCommandBased::createCancelStrategy()
@@ -58,7 +58,7 @@ KisStrokeJobStrategy* KisStrokeStrategyUndoCommandBased::createCancelStrategy()
 
 KisStrokeJobStrategy* KisStrokeStrategyUndoCommandBased::createDabStrategy()
 {
-    return new KisStrokeJobStrategyUndoCommandBased(m_sequential, this, 0);
+    return new KisStrokeJobStrategyUndoCommandBased(m_sequential ? KisStrokeJobStrategy::SEQUENTIAL : KisStrokeJobStrategy::CONCURRENT, this, 0);
 }
 
 
@@ -94,8 +94,8 @@ QVector<KUndo2CommandSP> KisStrokeStrategyUndoCommandBased::takeFinishedCommands
 }
 
 
-KisStrokeJobStrategyUndoCommandBased::KisStrokeJobStrategyUndoCommandBased(bool isSequential, KisStrokeStrategyUndoCommandBased *parentStroke, KisUndoAdapter *undoAdapter)
-    : KisStrokeJobStrategy(isSequential, false),
+KisStrokeJobStrategyUndoCommandBased::KisStrokeJobStrategyUndoCommandBased(Sequentiality sequentiality, KisStrokeStrategyUndoCommandBased *parentStroke, KisUndoAdapter *undoAdapter)
+    : KisStrokeJobStrategy(sequentiality, NORMAL),
       m_parentStroke(parentStroke),
       m_undoAdapter(undoAdapter)
 {
@@ -126,7 +126,7 @@ void KisStrokeJobStrategyUndoCommandBased::run(StrokeJobData *data)
 }
 
 KisStrokeJobStrategyCancelUndoCommandBased::KisStrokeJobStrategyCancelUndoCommandBased(KisStrokeStrategyUndoCommandBased *parentStroke)
-    : KisStrokeJobStrategy(true, false),
+    : KisStrokeJobStrategy(SEQUENTIAL, NORMAL),
       m_parentStroke(parentStroke)
 {
 }

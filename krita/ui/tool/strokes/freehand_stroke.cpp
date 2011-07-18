@@ -48,7 +48,7 @@ KisStrokeJobStrategy* FreehandStrokeStrategy::createDabStrategy()
 /********************************************************************/
 
 FreehandStrokeJobStrategy::FreehandStrokeJobStrategy()
-  : KisStrokeJobStrategy(true, false)
+  : KisStrokeJobStrategy(SEQUENTIAL, NORMAL)
 {
 }
 

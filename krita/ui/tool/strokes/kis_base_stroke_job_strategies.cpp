@@ -26,8 +26,8 @@
 #include "kis_selection.h"
 
 
-InitStrokeJobStrategy::InitStrokeJobStrategy(bool isExclusive)
-    : KisStrokeJobStrategy(true, isExclusive)
+InitStrokeJobStrategy::InitStrokeJobStrategy(Exclusivity exclusivity)
+    : KisStrokeJobStrategy(SEQUENTIAL, exclusivity)
 {
 }
 
@@ -82,8 +82,8 @@ void InitStrokeJobStrategy::run(StrokeJobData *data)
 }
 
 
-FinishStrokeJobStrategy::FinishStrokeJobStrategy(bool isExclusive)
-    : KisStrokeJobStrategy(true, isExclusive)
+FinishStrokeJobStrategy::FinishStrokeJobStrategy(Exclusivity exclusivity)
+    : KisStrokeJobStrategy(SEQUENTIAL, exclusivity)
 {
 }
 
@@ -108,8 +108,8 @@ void FinishStrokeJobStrategy::run(StrokeJobData *data)
 }
 
 
-CancelStrokeJobStrategy::CancelStrokeJobStrategy(bool isExclusive)
-    : KisStrokeJobStrategy(true, isExclusive)
+CancelStrokeJobStrategy::CancelStrokeJobStrategy(Exclusivity exclusivity)
+    : KisStrokeJobStrategy(SEQUENTIAL, exclusivity)
 {
 }
 

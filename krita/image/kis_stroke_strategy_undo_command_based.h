@@ -102,7 +102,7 @@ public:
     };
 
 public:
-    KisStrokeJobStrategyUndoCommandBased(bool isSequential, KisStrokeStrategyUndoCommandBased *parentStroke, KisUndoAdapter *undoAdapter);
+    KisStrokeJobStrategyUndoCommandBased(Sequentiality sequentiality, KisStrokeStrategyUndoCommandBased *parentStroke, KisUndoAdapter *undoAdapter);
     void run(StrokeJobData *data);
 
 private:

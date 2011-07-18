@@ -68,10 +68,11 @@ class ExclusivenessCheckerStrategy : public KisStrokeJobStrategy
 public:
     ExclusivenessCheckerStrategy(QAtomicInt &counter,
                                  QAtomicInt &hadConcurrency,
-                                 bool exclusive)
-        : KisStrokeJobStrategy(exclusive),
+                                 Exclusivity exclusivity)
+        : KisStrokeJobStrategy(SEQUENTIAL, exclusivity),
           m_counter(counter),
-          m_hadConcurrency(hadConcurrency)
+          m_hadConcurrency(hadConcurrency),
+          m_needExclusive(exclusivity == KisStrokeJobStrategy::EXCLUSIVE)
     {
     }
 
@@ -81,7 +82,7 @@ public:
         m_counter.ref();
 
         for(int i = 0; i < NUM_CHECKS; i++) {
-            if(isExclusive()) {
+            if(m_needExclusive) {
                 Q_ASSERT(m_counter == 1);
             }
             else if (m_counter > 1) {
@@ -96,6 +97,7 @@ public:
 private:
     QAtomicInt &m_counter;
     QAtomicInt &m_hadConcurrency;
+    bool m_needExclusive;
 };
 
 void KisUpdaterContextTest::stressTestExclusiveJobs()
@@ -106,9 +108,11 @@ void KisUpdaterContextTest::stressTestExclusiveJobs()
 
     for(int i = 0; i < NUM_JOBS; i++) {
         if(context.hasSpareThread()) {
+            bool exclusive = i % EXCLUSIVE_NTH == 0;
+
             context.addStrokeJob(new KisStrokeJob(
                 new ExclusivenessCheckerStrategy(counter, hadConcurrency,
-                                                 i % EXCLUSIVE_NTH == 0),
+                                                 exclusive ? KisStrokeJobStrategy::EXCLUSIVE : KisStrokeJobStrategy::NORMAL),
                                                  0));
         }
         else {

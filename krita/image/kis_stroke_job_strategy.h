@@ -25,6 +25,16 @@
 class KRITAIMAGE_EXPORT KisStrokeJobStrategy
 {
 public:
+    enum Sequentiality {
+        CONCURRENT,
+        SEQUENTIAL
+    };
+
+    enum Exclusivity {
+        NORMAL,
+        EXCLUSIVE
+    };
+
     class StrokeJobData
     {
     public:
@@ -32,7 +42,8 @@ public:
     };
 
 public:
-    KisStrokeJobStrategy(bool isSequential = true, bool isExclusive = false);
+    KisStrokeJobStrategy(Sequentiality sequentiality = SEQUENTIAL,
+                         Exclusivity exclusivity = NORMAL);
     virtual ~KisStrokeJobStrategy();
 
     virtual void run(StrokeJobData *data) = 0;

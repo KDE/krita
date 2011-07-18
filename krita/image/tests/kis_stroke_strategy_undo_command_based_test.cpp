@@ -46,7 +46,7 @@ inline QString getCommandName(KisStrokeJob *job) {
 
         QString result;
         QVector<KUndo2CommandSP> commands =
-            jobStrategy->m_parentStroke->takeUndoCommands();
+            jobStrategy->m_parentStroke->takeFinishedCommands();
 
         foreach(KUndo2CommandSP cmd, commands) {
             result += cmd->text() + undoString(jobStrategy->m_parentStroke) + QString(" ");
@@ -113,7 +113,7 @@ void KisStrokeStrategyUndoCommandBasedTest::testCancelledStroke()
     QQueue<KisStrokeJob*> &queue = stroke.testingGetQueue();
     QCOMPARE(queue.size(), 1);
 
-    SCOMPARE(getCommandName(queue[0]), "dab_undo init_undo");
+    SCOMPARE(getCommandName(queue[0]), "init_undo dab_undo");
 
     delete stroke.popOneJob(); // cancel
 }

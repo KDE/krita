@@ -83,7 +83,7 @@ void KisStrokeStrategyUndoCommandBased::notifyCommandDone(KUndo2CommandSP comman
     m_doneCommands.append(command);
 }
 
-QVector<KUndo2CommandSP> KisStrokeStrategyUndoCommandBased::takeUndoCommands()
+QVector<KUndo2CommandSP> KisStrokeStrategyUndoCommandBased::takeFinishedCommands()
 {
     QMutexLocker locker(&m_mutex);
 
@@ -116,7 +116,7 @@ void KisStrokeJobStrategyUndoCommandBased::run(StrokeJobData *data)
     if(d->doFinish && m_undoAdapter) {
         m_undoAdapter->beginMacroWorkaround(m_parentStroke->name());
 
-        QVector<KUndo2CommandSP> commands = m_parentStroke->takeUndoCommands();
+        QVector<KUndo2CommandSP> commands = m_parentStroke->takeFinishedCommands();
         foreach(KUndo2CommandSP cmd, commands) {
             m_undoAdapter->addCommandWorkaroundSP(cmd);
         }
@@ -135,7 +135,7 @@ void KisStrokeJobStrategyCancelUndoCommandBased::run(StrokeJobData *data)
 {
     Q_UNUSED(data);
 
-    QVector<KUndo2CommandSP> commands = m_parentStroke->takeUndoCommands();
+    QVector<KUndo2CommandSP> commands = m_parentStroke->takeFinishedCommands();
     QVectorIterator<KUndo2CommandSP> it(commands);
 
     it.toBack();

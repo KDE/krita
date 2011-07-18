@@ -68,7 +68,7 @@ public:
     KisStrokeJobStrategy::StrokeJobData* createCancelData();
 
     void notifyCommandDone(KUndo2CommandSP command);
-    QVector<KUndo2CommandSP> takeUndoCommands();
+    QVector<KUndo2CommandSP> takeFinishedCommands();
     bool undo() {
         return m_undo;
     }

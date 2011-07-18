@@ -58,11 +58,22 @@ void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
             m_canvas->view()->paintOpBox(), SLOT(resourceSelected(KoResource*)));
 }
 
+void PresetDockerDock::unsetCanvas()
+{
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this);
+        m_presetChooser->disconnect(m_canvas->view()->paintOpBox());
+    }
+    m_canvas = 0;
+}
+
 void PresetDockerDock::resourceChanged(int key, const QVariant& v)
 {
-    KisPaintOpPresetSP preset = m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-    if (preset) {
-        m_presetChooser->setPresetFilter(preset->paintOp());
+    if (m_canvas) {
+        KisPaintOpPresetSP preset = m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        if (preset) {
+            m_presetChooser->setPresetFilter(preset->paintOp());
+        }
     }
 }
 

@@ -59,7 +59,9 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
         delete input;
     }
     m_inputs.clear();
-    QList<KoChannelInfo*> channels = m_colorSpace->channels();
+
+    QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_colorSpace->channels());
+    
     foreach(KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR) {
             KisColorInput* input = 0;

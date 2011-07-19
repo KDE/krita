@@ -112,11 +112,13 @@ StyleDocker::StyleDocker(QWidget * parent)
     KoResourceSelector * gradientSelector = new KoResourceSelector(gradientResourceAdapter, m_stack);
     gradientSelector->setColumnCount(1);
     gradientSelector->setRowHeight(20);
+    gradientSelector->setMinimumWidth(100);
 
     KoAbstractResourceServerAdapter * patternResourceAdapter = new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer(), this);
     KoResourceSelector * patternSelector = new KoResourceSelector(patternResourceAdapter, m_stack);
     patternSelector->setColumnCount(5);
     patternSelector->setRowHeight(30);
+    patternSelector->setMinimumWidth(100);
 
     m_stack->addWidget(m_colorSelector);
     m_stack->addWidget(gradientSelector);

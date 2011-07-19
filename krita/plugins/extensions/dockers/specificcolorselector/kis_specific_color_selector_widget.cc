@@ -36,7 +36,6 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
       m_colorSpace(0)
 {
     m_layout = new QVBoxLayout(this);
-    setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
     m_updateAllowed = true;
     m_delayTimer = new QTimer(this);
     m_delayTimer->setInterval(50);

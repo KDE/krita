@@ -42,7 +42,7 @@ class KoColorPopupAction;
 class KoPathShape;
 class QSpacerItem;
 class QGridLayout;
-class KDoubleNumInput;
+class KoSliderCombo;
 
 class StyleDocker : public QDockWidget, public KoCanvasObserverBase
 {
@@ -66,7 +66,7 @@ private slots:
     void updateGradient(KoResource * item);
     void updatePattern(KoResource * item);
     void updateFillRule(Qt::FillRule fillRule);
-    void updateOpacity(double opacity);
+    void updateOpacity(qreal opacity);
     /// Called when the docker changes area
     void locationChanged(Qt::DockWidgetArea area);
 
@@ -95,7 +95,7 @@ private:
     KoColorPopupAction *m_actionColor;
     QSpacerItem *m_spacer;
     QGridLayout *m_layout;
-    KDoubleNumInput *m_opacity;
+    KoSliderCombo *m_opacity;
     
     QTime m_lastColorChange;
     KoShapeBackgroundCommand * m_lastFillCommand;

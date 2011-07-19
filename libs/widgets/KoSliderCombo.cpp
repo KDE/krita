@@ -299,7 +299,7 @@ qreal KoSliderCombo::decimals() const
 
 qreal KoSliderCombo::value() const
 {
-    return currentText().toDouble();
+    return KGlobal::locale()->readNumber(currentText());
 }
 
 void KoSliderCombo::setDecimals(int dec)

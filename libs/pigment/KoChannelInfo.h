@@ -19,8 +19,9 @@
 #ifndef KOCHANNELINFO_H_
 #define KOCHANNELINFO_H_
 
-#include <QtGui/QColor>
-#include <QtCore/QString>
+#include <QColor>
+#include <QString>
+#include <QList>
 
 /**
  * This class gives some basic information about a channel,
@@ -110,6 +111,35 @@ public:
         
     }
 public:
+    
+    /**
+     * converts the display position to the pixel-order index in the channels vector.
+     */
+    static int displayPositionToChannelIndex(int displayPosition, QList<KoChannelInfo*> channels) 
+    {
+        for (int i = 0; i < channels.size(); ++i) {
+            if (channels.at(i)->displayPosition() == displayPosition) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    static QList<KoChannelInfo*> displayOrderSorted(QList<KoChannelInfo*> channels) 
+    {
+        QList <KoChannelInfo*> sortedChannels;
+        for (int i = 0; i < channels.size(); ++i) {
+            foreach(KoChannelInfo* channel, channels) {
+                if (channel->displayPosition() == i) {
+                    sortedChannels << channel;
+                    break;
+                }
+            }
+        }
+        Q_ASSERT(channels.size() == sortedChannels.size());
+        return sortedChannels;
+    }
+    
     /**
      * User-friendly name for this channel for presentation purposes in the gui
      */

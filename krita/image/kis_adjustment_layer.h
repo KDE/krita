@@ -110,6 +110,10 @@ public:
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
+    void setDirty(const QRect & rect);
+    using KisNode::setDirty;
+    
+    
 public slots:
     /**
      * gets this AdjustmentLayer. Overrides function in

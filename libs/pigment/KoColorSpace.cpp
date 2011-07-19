@@ -115,7 +115,7 @@ QBitArray KoColorSpace::channelFlags(bool color, bool alpha, bool substance, boo
                 (alpha && channel->channelType() == KoChannelInfo::ALPHA) ||
                 (substrate && channel->channelType() == KoChannelInfo::SUBSTRATE) ||
                 (substance && channel->channelType() == KoChannelInfo::SUBSTANCE))
-            ba.setBit(channel->index(), true);
+            ba.setBit(i, true);
     }
     return ba;
 }

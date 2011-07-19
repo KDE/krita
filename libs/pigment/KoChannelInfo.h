@@ -55,7 +55,7 @@ public:
     /**
      * @param name of the channel
      * @param npos position of the channel in the pixel (in bytes)
-     * @param index index of the channel in the pixel
+     * @param displayPosition the position of the channel in the user-visible order
      * @param channelType type of the channel
      * @param channelValueType type of the numerical data used by the channel
      * @param size number of bytes (not bits) of the channel (if -1, it is deduced from the channelType)
@@ -63,14 +63,14 @@ public:
      */
     KoChannelInfo(const QString & name, 
                   qint32 npos,
-                  qint32 index, 
+                  qint32 displayPosition, 
                   enumChannelType channelType, 
                   enumChannelValueType channelValueType,
                   qint32 size = -1, 
                   QColor color = QColor(0, 0, 0))
         : m_name(name)
         , m_pos(npos)
-        , m_index(index)
+        , m_displayPosition(displayPosition)
         , m_channelType(channelType)
         , m_channelValueType(channelValueType)
         , m_size(size)
@@ -125,10 +125,10 @@ public:
     }
     
     /**
-     * @return the index of the channel in pixel
+     * @return the displayPosition of the channel in pixel
      */
-    inline qint32 index() const {
-        return m_index;
+    inline qint32 displayPosition() const {
+        return m_displayPosition;
     }
     
     /**
@@ -169,7 +169,7 @@ private:
     
     QString m_name;
     qint32 m_pos;
-    qint32 m_index;
+    qint32 m_displayPosition;
     enumChannelType m_channelType;
     enumChannelValueType m_channelValueType;
     qint32 m_size;

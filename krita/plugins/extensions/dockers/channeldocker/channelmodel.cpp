@@ -34,21 +34,21 @@ QVariant ChannelModel::data(const QModelIndex& index, int role) const
     if (m_currentLayer.isValid() && index.isValid())
     {
         switch (role) {
-            case Qt::DisplayRole:
-                return m_currentLayer->colorSpace()->channels().at(index.row())->name();
+        case Qt::DisplayRole:
+            return m_currentLayer->colorSpace()->channels().at(index.row())->name();
             
-            case Qt::CheckStateRole: {
-                Q_ASSERT(index.row() < rowCount());
-                Q_ASSERT(index.column() < columnCount());
-                
-                if (index.column() == 0) {
-                    QBitArray flags = m_currentLayer->channelFlags();
-                    return (flags.isEmpty() || flags.testBit(index.row())) ? Qt::Checked : Qt::Unchecked;
-                }
-                
-                QBitArray flags = dynamic_cast<const KisPaintLayer*>(m_currentLayer.data())->channelLockFlags();
-                return (flags.isEmpty() || flags.testBit(index.row())) ? Qt::Unchecked : Qt::Checked;
+        case Qt::CheckStateRole: {
+            Q_ASSERT(index.row() < rowCount());
+            Q_ASSERT(index.column() < columnCount());
+            
+            if (index.column() == 0) {
+                QBitArray flags = m_currentLayer->channelFlags();
+                return (flags.isEmpty() || flags.testBit(index.row())) ? Qt::Checked : Qt::Unchecked;
             }
+            
+            QBitArray flags = dynamic_cast<const KisPaintLayer*>(m_currentLayer.data())->channelLockFlags();
+            return (flags.isEmpty() || flags.testBit(index.row())) ? Qt::Unchecked : Qt::Checked;
+        }
         }
     }
     return QVariant();

@@ -93,7 +93,8 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
     const quint32   bytesToFillBumpmapArea   = pixelsOfOutputArea * pixelSize;
     QVector<quint8> bumpmap(bytesToFillBumpmapArea);
     quint8         *bumpmapDataPointer       = bumpmap.data();
-    quint32         ki                       = m_heightChannel->index();
+    quint32         ki                       = KoChannelInfo::displayPositionToChannelIndex(m_heightChannel->displayPosition(),
+                                                                                            device->colorSpace()->channels());
     PhongPixelProcessor tileRenderer(pixelsOfInputArea, config);
 
     if (progressUpdater) progressUpdater->setProgress(2);

@@ -54,7 +54,7 @@ public:
     KoChannelInfo() { }
     /**
      * @param name of the channel
-     * @param npos position of the channel in the pixel (in byte)
+     * @param npos position of the channel in the pixel (in bytes)
      * @param index index of the channel in the pixel
      * @param channelType type of the channel
      * @param channelValueType type of the numerical data used by the channel

@@ -109,3 +109,11 @@ set(TestFallBackColorTransformation_test_SRCS TestFallBackColorTransformation.cp
 kde4_add_unit_test(TestFallBackColorTransformation TESTNAME libs-pigment-TestFallBackColorTransformation ${TestFallBackColorTransformation_test_SRCS})
 
 target_link_libraries(TestFallBackColorTransformation  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestKoChannelInfo_test_SRCS TestKoChannelInfo.cpp )
+
+kde4_add_unit_test(TestKoChannelInfo TESTNAME libs-pigment-TestKoChannelInfo ${TestKoChannelInfo_test_SRCS})
+
+target_link_libraries(TestKoChannelInfo  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})

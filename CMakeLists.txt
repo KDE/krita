@@ -266,17 +266,15 @@ if(LCMS2_FOUND)
     set(HAVE_LCMS TRUE)
 endif(LCMS2_FOUND)
 
-if(NEPOMUK)
-    find_package(Nepomuk REQUIRED)
-endif(NEPOMUK)
-
 ##
 ## Test for Nepomuk
 ##
 if(NEPOMUK)
     macro_optional_find_package(Nepomuk)
+    if(NOT NEPOMUK_FOUND)
+        set(NEPOMUK FALSE)
+    endif(NOT NEPOMUK_FOUND)
     macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
-    include(SopranoAddOntology)
 endif(NEPOMUK)
 
 

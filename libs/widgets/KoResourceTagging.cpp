@@ -40,7 +40,12 @@ KoResourceTagging::KoResourceTagging(const QString& extensions)
 {
     m_serverExtensions = extensions;
     m_tagsXMLFile = KStandardDirs::locateLocal("data", "krita/tags.xml");
-    m_nepomukOn = true;
+    m_config = KConfigGroup( KGlobal::config(), "resource tagging" );
+    m_nepomukOn = m_config.readEntry("nepomuk_usage_for_resource_tagging", false);
+
+#ifndef NEPOMUK
+    m_nepomukOn = false;
+#endif
 
     if(m_nepomukOn) {
 #ifdef NEPOMUK
@@ -57,6 +62,9 @@ KoResourceTagging::~KoResourceTagging()
     if(!m_nepomukOn) {
         writeXMLFile();
      }
+
+    m_config.writeEntry("nepomuk_usage_for_resource_tagging", QVariant(m_nepomukOn));
+    m_config.sync();
 }
 
 QStringList KoResourceTagging::getAssignedTagsList( KoResource* resource )
@@ -441,11 +449,6 @@ void KoResourceTagging::clearNepomukTag()
     }
 }
 
-void KoResourceTagging::setNepomukBool(bool nepomukOn)
-{
-    m_nepomukOn = nepomukOn;
-}
-
 QString KoResourceTagging::adjustedNepomukFileName(QString fileName)
 {
     if(fileName.contains(" ")) {
@@ -478,3 +481,8 @@ void KoResourceTagging::updateNepomukXML(bool nepomukOn)
     }
 }
 #endif
+
+void KoResourceTagging::setNepomukBool(bool nepomukOn)
+{
+    m_nepomukOn = nepomukOn;
+}

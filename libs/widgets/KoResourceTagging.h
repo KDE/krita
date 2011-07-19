@@ -26,6 +26,11 @@
 #include <KoResource.h>
 #include <qdom.h>
 #include "kowidgets_export.h"
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+#include <KoConfig.h>
+
+
 #ifdef NEPOMUK
 #include <Nepomuk/Resource>
 #endif
@@ -88,7 +93,7 @@ private:
     QString m_serverExtensions;
 
     bool m_nepomukOn;
-
+    KConfigGroup m_config;
 };
 
 

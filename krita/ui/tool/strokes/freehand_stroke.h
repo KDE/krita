@@ -32,17 +32,7 @@ class KisPainter;
 class KRITAUI_EXPORT FreehandStrokeStrategy : public KisPainterBasedStrokeStrategy
 {
 public:
-    FreehandStrokeStrategy(bool needsIndirectPainting,
-                           KisResourcesSnapshotSP resources,
-                           KisPainter *painter);
-
-    KisStrokeJobStrategy* createDabStrategy();
-};
-
-class FreehandStrokeJobStrategy : public KisStrokeJobStrategy
-{
-public:
-    class Data : public StrokeJobData {
+    class Data : public KisPainterBasedStrokeStrategy::Data {
     public:
         enum DabType {
             POINT,
@@ -93,9 +83,11 @@ public:
     };
 
 public:
-    FreehandStrokeJobStrategy();
+    FreehandStrokeStrategy(bool needsIndirectPainting,
+                           KisResourcesSnapshotSP resources,
+                           KisPainter *painter);
 
-    void run(StrokeJobData *data);
+    void doStrokeCallback(KisSimpleStrokeStrategy::Data *data);
 };
 
 #endif /* __FREEHAND_STROKE_H */

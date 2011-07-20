@@ -21,12 +21,9 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
-#include "kis_base_stroke_job_strategies.h"
 #include "kis_painter.h"
 
-/********************************************************************/
-/*                     FreehandStrokeStrategy                       */
-/********************************************************************/
+
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                KisResourcesSnapshotSP resources,
@@ -35,24 +32,10 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                     resources, painter)
 {
     setNeedsIndirectPainting(needsIndirectPainting);
+    enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 }
 
-KisStrokeJobStrategy* FreehandStrokeStrategy::createDabStrategy()
-{
-    return new FreehandStrokeJobStrategy();
-}
-
-
-/********************************************************************/
-/*                   FreehandStrokeJobStrategy                      */
-/********************************************************************/
-
-FreehandStrokeJobStrategy::FreehandStrokeJobStrategy()
-  : KisStrokeJobStrategy(SEQUENTIAL, NORMAL)
-{
-}
-
-void FreehandStrokeJobStrategy::run(StrokeJobData *data)
+void FreehandStrokeStrategy::doStrokeCallback(KisSimpleStrokeStrategy::Data *data)
 {
     Data *d = dynamic_cast<Data*>(data);
 

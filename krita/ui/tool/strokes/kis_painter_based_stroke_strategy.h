@@ -19,13 +19,13 @@
 #ifndef __KIS_PAINTER_BASED_STROKE_STRATEGY_H
 #define __KIS_PAINTER_BASED_STROKE_STRATEGY_H
 
-#include "kis_stroke_strategy.h"
+#include "kis_simple_stroke_strategy.h"
 #include "kis_resources_snapshot.h"
 
 class KisPainter;
 
 
-class KRITAUI_EXPORT KisPainterBasedStrokeStrategy : public KisStrokeStrategy
+class KRITAUI_EXPORT KisPainterBasedStrokeStrategy : public KisSimpleStrokeStrategy
 {
 public:
     KisPainterBasedStrokeStrategy(const QString &id,
@@ -33,15 +33,9 @@ public:
                                   KisResourcesSnapshotSP resources,
                                   KisPainter *painter);
 
-    ~KisPainterBasedStrokeStrategy();
-
-    KisStrokeJobStrategy* createInitStrategy();
-    KisStrokeJobStrategy* createFinishStrategy();
-    KisStrokeJobStrategy* createCancelStrategy();
-
-    KisStrokeJobStrategy::StrokeJobData* createInitData();
-    KisStrokeJobStrategy::StrokeJobData* createFinishData();
-    KisStrokeJobStrategy::StrokeJobData* createCancelData();
+    void initStrokeCallback();
+    void finishStrokeCallback();
+    void cancelStrokeCallback();
 
 private:
     KisResourcesSnapshotSP m_resources;

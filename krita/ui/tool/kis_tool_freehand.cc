@@ -402,9 +402,9 @@ void KisToolFreehand::paintAt(const KisPaintInformation &pi)
     m_hasPaintAtLeastOnce = true;
 
     image()->addJob(m_strokeId,
-        new FreehandStrokeJobStrategy::Data(m_resources->currentNode(),
-                                            m_painter, pi,
-                                            m_dragDistance));
+        new FreehandStrokeStrategy::Data(m_resources->currentNode(),
+                                         m_painter, pi,
+                                         m_dragDistance));
 }
 
 void KisToolFreehand::paintLine(const KisPaintInformation &pi1,
@@ -413,9 +413,9 @@ void KisToolFreehand::paintLine(const KisPaintInformation &pi1,
     m_hasPaintAtLeastOnce = true;
 
     image()->addJob(m_strokeId,
-        new FreehandStrokeJobStrategy::Data(m_resources->currentNode(),
-                                            m_painter, pi1, pi2,
-                                            m_dragDistance));
+        new FreehandStrokeStrategy::Data(m_resources->currentNode(),
+                                         m_painter, pi1, pi2,
+                                         m_dragDistance));
 }
 
 void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
@@ -426,10 +426,10 @@ void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
     m_hasPaintAtLeastOnce = true;
 
     image()->addJob(m_strokeId,
-        new FreehandStrokeJobStrategy::Data(m_resources->currentNode(),
-                                            m_painter,
-                                            pi1, control1, control2, pi2,
-                                            m_dragDistance));
+        new FreehandStrokeStrategy::Data(m_resources->currentNode(),
+                                         m_painter,
+                                         pi1, control1, control2, pi2,
+                                         m_dragDistance));
 }
 
 bool KisToolFreehand::wantsAutoScroll() const

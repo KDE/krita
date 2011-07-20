@@ -18,54 +18,100 @@
 
 #include "kis_painter_based_stroke_strategy.h"
 
-#include "kis_base_stroke_job_strategies.h"
+#include <KoColorSpace.h>
+#include <KoCompositeOp.h>
 #include "kis_painter.h"
+#include "kis_paint_device.h"
+#include "kis_paint_layer.h"
+#include "kis_selection.h"
+
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
                                                              const QString &name,
                                                              KisResourcesSnapshotSP resources,
                                                              KisPainter *painter)
-    : KisStrokeStrategy(id, name),
+    : KisSimpleStrokeStrategy(id, name),
       m_resources(resources),
       m_painter(painter)
 {
+    enableJob(KisSimpleStrokeStrategy::JOB_INIT);
+    enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
+    enableJob(KisSimpleStrokeStrategy::JOB_CANCEL);
 }
 
-KisPainterBasedStrokeStrategy::~KisPainterBasedStrokeStrategy()
+void KisPainterBasedStrokeStrategy::initStrokeCallback()
 {
+    KisNodeSP node = m_resources->currentNode();
+    KisPaintDeviceSP paintDevice = node->paintDevice();
+    KisPaintDeviceSP targetDevice = paintDevice;
+    bool hasIndirectPainting = needsIndirectPainting();
+
+    if (hasIndirectPainting) {
+        KisIndirectPaintingSupport *indirect =
+            dynamic_cast<KisIndirectPaintingSupport*>(node.data());
+
+        if (indirect) {
+            targetDevice = new KisPaintDevice(node, paintDevice->colorSpace());
+            indirect->setTemporaryTarget(targetDevice);
+            indirect->setTemporaryCompositeOp(m_resources->compositeOp());
+            indirect->setTemporaryOpacity(m_resources->opacity());
+
+            KisPaintLayer *paintLayer = dynamic_cast<KisPaintLayer*>(node.data());
+            if(paintLayer) {
+                indirect->setTemporaryChannelFlags(paintLayer->channelLockFlags());
+            }
+        }
+        else {
+            hasIndirectPainting = false;
+        }
+    }
+
+    KisSelectionSP selection;
+    KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+    if(layer) {
+        selection = layer->selection();
+    }
+
+    m_painter->begin(targetDevice, selection);
+    m_resources->setupPainter(m_painter);
+
+    if(hasIndirectPainting) {
+        m_painter->setCompositeOp(paintDevice->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
+        m_painter->setOpacity(OPACITY_OPAQUE_U8);
+        m_painter->setChannelFlags(QBitArray());
+    }
+
+    m_painter->beginTransaction(name());
 }
 
-KisStrokeJobStrategy* KisPainterBasedStrokeStrategy::createInitStrategy()
+void KisPainterBasedStrokeStrategy::finishStrokeCallback()
 {
-    return new InitStrokeJobStrategy();
+    KisNodeSP node = m_resources->currentNode();
+    KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+    KisIndirectPaintingSupport *indirect =
+        dynamic_cast<KisIndirectPaintingSupport*>(node.data());
+
+    if(layer && indirect && indirect->hasTemporaryTarget()) {
+        QString transactionText = m_painter->transactionText();
+        m_painter->deleteTransaction();
+        indirect->mergeToLayer(layer, transactionText);
+    }
+    else {
+        m_painter->endTransactionWorkaround(m_resources->image()->undoAdapter());
+    }
+    delete m_painter;
 }
 
-KisStrokeJobStrategy* KisPainterBasedStrokeStrategy::createFinishStrategy()
+void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
 {
-    return new FinishStrokeJobStrategy();
-}
+    m_painter->revertTransaction();
+    delete m_painter;
 
-KisStrokeJobStrategy* KisPainterBasedStrokeStrategy::createCancelStrategy()
-{
-    return new CancelStrokeJobStrategy();
-}
+    KisNodeSP node = m_resources->currentNode();
+    KisIndirectPaintingSupport *indirect =
+        dynamic_cast<KisIndirectPaintingSupport*>(node.data());
 
-KisStrokeJobStrategy::StrokeJobData*
-KisPainterBasedStrokeStrategy::createInitData()
-{
-    return new InitStrokeJobStrategy::Data(m_painter, m_resources,
-                                           needsIndirectPainting(),
-                                           name());
-}
-
-KisStrokeJobStrategy::StrokeJobData*
-KisPainterBasedStrokeStrategy::createFinishData()
-{
-    return new FinishStrokeJobStrategy::Data(m_painter, m_resources);
-}
-
-KisStrokeJobStrategy::StrokeJobData*
-KisPainterBasedStrokeStrategy::createCancelData()
-{
-    return new CancelStrokeJobStrategy::Data(m_painter, m_resources);
+    if(indirect && indirect->hasTemporaryTarget()) {
+        indirect->setTemporaryTarget(0);
+    }
 }

@@ -52,9 +52,9 @@ protected:
         pi2 = KisPaintInformation(QPointF(300, 300));
 
         image->addJob(strokeId(),
-            new FreehandStrokeJobStrategy::Data(resources->currentNode(),
-                                                painter, pi1, pi2,
-                                                m_dragDistance));
+            new FreehandStrokeStrategy::Data(resources->currentNode(),
+                                             painter, pi1, pi2,
+                                             m_dragDistance));
     }
 
 private:

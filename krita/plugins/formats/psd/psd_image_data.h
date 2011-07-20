@@ -52,7 +52,7 @@ private:
     quint32 m_channelSize;
 
     QVector<ChannelInfo> m_channelInfoRecords;
-    QVector<int> m_channelOffset;
+    QVector<int> m_channelOffsets; // this doesn't need to be global
 };
 
 #endif // PSD_IMAGE_DATA_H

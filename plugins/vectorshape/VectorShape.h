@@ -28,6 +28,8 @@
 #include <QByteArray>
 #include <QCache>
 #include <QSize>
+#include <QThread>
+#include <QMutex>
 
 // Calligra
 #include <KoShape.h>
@@ -38,11 +40,34 @@
 
 
 class QPainter;
+class VectorShape;
 
 #define VectorShape_SHAPEID "VectorShapeID"
 
+class RenderThread : public QThread
+{
+    Q_OBJECT
+public:
+    RenderThread(VectorShape *shape, const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY);
+    virtual ~RenderThread();
+Q_SIGNALS:
+    void finished(QSize boundingSize, QImage *image);
+protected:
+    virtual void run();
+    void draw(QPainter &painter);
+    void drawNull(QPainter &painter) const;
+    void drawWmf(QPainter &painter) const;
+    void drawEmf(QPainter &painter) const;
+    void drawSvm(QPainter &painter) const;
+private:
+    VectorShape *m_shape;
+    QSizeF m_size;
+    QSize m_boundingSize;
+    qreal m_zoomX, m_zoomY;
+};
 
-class VectorShape : public KoShape, public KoFrameShape {
+class VectorShape : public QObject, public KoShape, public KoFrameShape {
+    Q_OBJECT
 public:
     // Type of vector file. Add here when we get support for more.
     enum VectorType {
@@ -73,23 +98,22 @@ public:
     QByteArray  compressedContents() const;
     void  setCompressedContents( const QByteArray &newContents );
 
-private:
-
-    void draw(QPainter &painter);
-    void drawNull(QPainter &painter) const;
-    void drawWmf(QPainter &painter) const;
-    void drawEmf(QPainter &painter) const;
-    void drawSvm(QPainter &painter) const;
-
     static bool isWmf(const QByteArray &bytes);
     static bool isEmf(const QByteArray &bytes);
     static bool isSvm(const QByteArray &bytes);
 
-    // Member variables
+private Q_SLOTS:
+    void renderFinished(QSize boundingSize, QImage *image);
 
+private:
+    friend class RenderThread;
+
+    // Member variables
     VectorType  m_type;
     QByteArray  m_contents;
     QCache<int, QImage> m_cache;
+    bool m_isRendering;
+    mutable QMutex m_mutex;
 };
 
 #endif

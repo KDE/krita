@@ -154,18 +154,20 @@ void KisColorSelectorContainer::updateSettings()
 
 void KisColorSelectorContainer::reactOnLayerChange()
 {
-    KisNodeSP node = m_canvas->view()->resourceProvider()->currentNode();
-    if (node) {
-        KisPaintDeviceSP device = node->paintDevice();
-        if (device) {
-            m_colorSelAction->setEnabled(true);
-            m_mypaintAction->setEnabled(true);
-            m_minimalAction->setEnabled(true);
-        }
-        else {
-//            m_colorSelAction->setEnabled(false);
-//            m_mypaintAction->setEnabled(false);
-//            m_minimalAction->setEnabled(false);
+    if (m_canvas) {
+        KisNodeSP node = m_canvas->view()->resourceProvider()->currentNode();
+        if (node) {
+            KisPaintDeviceSP device = node->paintDevice();
+            if (device) {
+                m_colorSelAction->setEnabled(true);
+                m_mypaintAction->setEnabled(true);
+                m_minimalAction->setEnabled(true);
+            }
+            else {
+                //            m_colorSelAction->setEnabled(false);
+                //            m_mypaintAction->setEnabled(false);
+                //            m_minimalAction->setEnabled(false);
+            }
         }
     }
 }

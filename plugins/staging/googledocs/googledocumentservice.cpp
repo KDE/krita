@@ -92,7 +92,6 @@ void GoogleDocumentService::listDocuments()
 void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
 {
     QUrl url = networkReply->url();
-    bool ok = false;
     if (!networkReply->error()) {
         if (!loggedin) {
             QString text(networkReply->readAll());
@@ -128,7 +127,7 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
             qDebug() << "Part received.........";
             if (newInformation) {
                 emit progressUpdate("Parsing document list...");
-                ok = xmlReader.parse(&xmlInput, true);
+                xmlReader.parse(&xmlInput, true);
                 newInformation = false;
                 getDocument();
             }

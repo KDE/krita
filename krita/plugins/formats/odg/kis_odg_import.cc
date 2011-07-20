@@ -65,12 +65,6 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
     if (!doc)
         return KoFilter::CreationError;
 
-    KisView2 * view = 0;
-
-    if (!doc->views().isEmpty()) {
-        view = static_cast<KisView2*>(doc->views().first());
-    }
-
     QString filename = m_chain->inputFile();
 
     KoStore* store = KoStore::createStore(filename, KoStore::Read, from, KoStore::Zip);

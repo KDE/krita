@@ -129,6 +129,7 @@ protected:
     /// Checks if and how the tool can paint on the current node
     NodePaintAbility nodePaintAbility();
 
+    const KoCompositeOp* compositeOp();
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
@@ -138,7 +139,6 @@ private slots:
     void slotPopupQuickHelp();
     void slotSetOpacity(qreal opacity);
 
-    void slotSetCompositeMode(const QString& compositeOp);
     void makeColorLighter();
     void makeColorDarker();
 
@@ -149,7 +149,6 @@ protected slots:
 
 protected:
     quint8 m_opacity;
-    const KoCompositeOp * m_compositeOp;
     bool m_paintOutline;
     QVector<qreal> m_pressureSamples;
 

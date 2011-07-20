@@ -44,7 +44,9 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
                                     const KisFilterConfiguration *config,
                                     KoUpdater *progressUpdater
                                     ) const
-{    
+{
+    if (!config) return;
+
     if (progressUpdater) progressUpdater->setProgress(0);
     
     // Benchmark
@@ -56,9 +58,6 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
         qDebug("FIX YOUR FILTER");
         return;
     }
-
-    // TODO complete this part
-    userChosenHeightChannel = "Red";
     
     timer.start();
 
@@ -88,31 +87,33 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
     //Hardcoded facts about Phong Bumpmap: it _will_ generate an RGBA16 bumpmap
     const quint8    BYTE_DEPTH_OF_BUMPMAP    = 2;      // 16 bits per channel
     const quint8    CHANNEL_COUNT_OF_BUMPMAP = 4;      // RGBA
+    const quint32   pixelsOfInputArea        = abs(inputArea.width() * inputArea.height());
     const quint32   pixelsOfOutputArea       = abs(outputArea.width() * outputArea.height());
     const quint8    pixelSize                = BYTE_DEPTH_OF_BUMPMAP * CHANNEL_COUNT_OF_BUMPMAP;
     const quint32   bytesToFillBumpmapArea   = pixelsOfOutputArea * pixelSize;
     QVector<quint8> bumpmap(bytesToFillBumpmapArea);
     quint8         *bumpmapDataPointer       = bumpmap.data();
-    quint32         ki                       = m_heightChannel->index();
-    PhongPixelProcessor tileRenderer(config);
+    quint32         ki                       = KoChannelInfo::displayPositionToChannelIndex(m_heightChannel->displayPosition(),
+                                                                                            device->colorSpace()->channels());
+    PhongPixelProcessor tileRenderer(pixelsOfInputArea, config);
 
     if (progressUpdater) progressUpdater->setProgress(2);
 
     //===============RENDER=================
-    
+
     QVector<PtrToDouble> toDoubleFuncPtr(device->colorSpace()->channels().count());
     KisMathToolbox *mathToolbox = KisMathToolboxRegistry::instance()->value(device->colorSpace()->mathToolboxId().id());
     if (!mathToolbox->getToDoubleChannelPtr(device->colorSpace()->channels(), toDoubleFuncPtr)) {
         return;
     }
-    
+
     KisHLineIteratorSP iterator;
     quint32 curPixel = 0;
     iterator = device->createHLineIteratorNG(inputArea.x(),
                                              inputArea.y(),
                                              inputArea.width()
                                              );
-    
+
     for (qint32 srcRow = 0; srcRow < inputArea.height(); ++srcRow) {
         do {
             const quint8 *data = iterator->rawData();
@@ -144,7 +145,7 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
     }
 
     if (progressUpdater) progressUpdater->setProgress(90);
-    
+
     KisPaintDeviceSP bumpmapPaintDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
     bumpmapPaintDevice->writeBytes(bumpmap.data(), outputArea.x(), outputArea.y(), outputArea.width(), outputArea.height());
     KUndo2Command *leaker = bumpmapPaintDevice->convertTo(device->colorSpace());

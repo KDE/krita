@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>655</width>
+    <width>657</width>
     <height>335</height>
    </rect>
   </property>
@@ -118,10 +118,10 @@
    <item row="0" column="1">
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <property name="spacing">
-      <number>2</number>
+      <number>0</number>
      </property>
      <property name="topMargin">
-      <number>3</number>
+      <number>0</number>
      </property>
      <item>
       <widget class="KisPresetSelectorStrip" name="presetWidget" native="true">
@@ -131,10 +131,16 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>56</height>
+         <height>60</height>
         </size>
        </property>
       </widget>

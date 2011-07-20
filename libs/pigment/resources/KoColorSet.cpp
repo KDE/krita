@@ -29,18 +29,6 @@
 
 #include "KoColorSpaceRegistry.h"
 
-namespace
-{
-enum enumPaletteType {
-    FORMAT_UNKNOWN,
-    FORMAT_GPL, // Gimp palette
-    FORMAT_PAL, // RIFF palette
-    FORMAT_ACT // Photoshop binary color palette
-};
-
-}
-
-
 /*
 KoColorSet::KoColorSet(const KisGradient * gradient, qint32 nColors, const QString & name)
     : super(QString("")),
@@ -138,7 +126,6 @@ qint32 KoColorSet::nColors()
 
 bool KoColorSet::init()
 {
-    enumPaletteType format = FORMAT_UNKNOWN;
 
     QString s = QString::fromUtf8(m_data.data(), m_data.count());
 
@@ -149,7 +136,6 @@ bool KoColorSet::init()
 
 
     if (s.startsWith("RIFF") || s.startsWith("PAL data")) {
-        format = FORMAT_PAL;
     } else if (s.startsWith("GIMP Palette")) {
         // XXX: No checks for wrong input yet!
         quint32 index = 0;
@@ -165,8 +151,6 @@ bool KoColorSet::init()
         qint32 r, g, b;
         QColor color;
         KoColorSetEntry e;
-
-        format = FORMAT_GPL;
 
         // Read name
         if (!lines[1].startsWith("Name: ") || !lines[0].startsWith("GIMP")) {
@@ -222,7 +206,6 @@ bool KoColorSet::init()
         return true;
     } else if (s.length() == 768) {
         kWarning(30009) << "Photoshop format palette file. Not implemented yet";
-        format = FORMAT_ACT;
     }
     return false;
 }

@@ -102,7 +102,12 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
         // Create the cache image.
         cache = new QImage(rc.size().toSize(), QImage::Format_ARGB32);
         cache->fill(0);
-        QPainter gc(cache);
+        QPainter gc;
+        if (!gc.begin(cache)) {
+            kWarning(31000) << "Failed to create image-cache";
+            delete cache;
+            return;
+        }
         applyConversion(gc, converter);
         draw(gc);
         gc.end();

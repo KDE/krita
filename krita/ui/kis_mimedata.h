@@ -24,7 +24,9 @@
 
 #include <kis_types.h>
 /**
- * KisMimeData implements delayed retrieval of node for d&d and copy/paste
+ * KisMimeData implements delayed retrieval of node for d&d and copy/paste.
+ *
+ * TODO: implement support for the ora format.
  */
 class KisMimeData : public QMimeData
 {
@@ -41,11 +43,13 @@ public:
     KisNodeSP node() const;
 
     /**
-     * KisMimeData provides two formats if a node has been set:
+     * KisMimeData provides the following formats if a node has been set:
      * <ul>
      * <li>application/x-krita-node: requests a whole serialized node. For d&d between instances of Krita.
      * <li>application/x-qt-image: fallback for other applications, returns a QImage of the
      * current node's paintdevice
+     * <li>application/x-krita-node-pointer: for internal d&d
+     * <li>application/zip: allows drop targets that can handle zip files to open the data
      * </ul>
      */
     QStringList formats () const;

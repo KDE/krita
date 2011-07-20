@@ -230,10 +230,6 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
             }
         } else {
             qreal boundTop = fm.ascent();
-            qreal boundBottom = 0;
-            if (d->verticalRel == VChar) {
-                boundBottom = fm.descent();
-            }
             switch (d->verticalPos) {
             case VFromTop:
                  object.setAscent(qMax((qreal) 0, -d->distance.y()));

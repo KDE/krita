@@ -1020,7 +1020,6 @@ void PlotArea::paintPixmap( QPainter &painter, const KoViewConverter &converter 
 {
     // Adjust the size of the painting area to the current zoom level
     const QSize paintRectSize = converter.documentToView( size() ).toSize();
-    const QRect paintRect = QRect( QPoint( 0, 0 ), paintRectSize );
     const QSize plotAreaSize = size().toSize();
     const int borderX = 4;
     const int borderY = 4;

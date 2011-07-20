@@ -137,8 +137,6 @@ void KisFilterWave::process(KisPaintDeviceSP device,
                             KoUpdater* progressUpdater
                            ) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
-
     Q_ASSERT(device.data() != 0);
 
     int cost = (applyRect.width() * applyRect.height()) / 100;

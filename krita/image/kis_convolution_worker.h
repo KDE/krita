@@ -92,7 +92,7 @@ protected:
         QList<KoChannelInfo *> convChannelList;
 
         for (qint32 c = 0; c < channelInfo.count(); ++c) {
-            if (painterChannelFlags.testBit(channelInfo[c]->index())) {
+            if (painterChannelFlags.testBit(c)) {
                 convChannelList.append(channelInfo[c]);
             }
         }

@@ -146,15 +146,17 @@ KoUnit KoResourceManager::unitResource(int key) const
 
 void KoResourceManager::setGrabSensitivity(int grabSensitivity)
 {
-    // do not allow arbitrary small handles
-    if (grabSensitivity < 1)
-        grabSensitivity = 1;
+    // do not allow arbitrary small grab sensitivity
+    if (grabSensitivity < 3)
+        grabSensitivity = 3;
     setResource(KoDocumentResource::GrabSensitivity, QVariant(grabSensitivity));
 }
 
 int KoResourceManager::grabSensitivity() const
 {
-    return resource(KoDocumentResource::GrabSensitivity).toInt();
+    if (d->resources.contains(KoDocumentResource::GrabSensitivity))
+        return resource(KoDocumentResource::GrabSensitivity).toInt();
+    return 3; // default value
 }
 
 void KoResourceManager::setPasteOffset(qreal pasteOffset)

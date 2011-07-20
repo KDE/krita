@@ -33,6 +33,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
+#include <KoOdfWorkaround.h>
 #include <KoParagraphStyle.h>
 #include <KoPostscriptPaintDevice.h>
 #include <KoSelection.h>
@@ -310,7 +311,19 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
         QTextCursor cursor(document);
         QTextBlock block = cursor.block();
         paragraphStyle.applyStyle(block, false);
-
+#ifndef NWORKAROUND_ODF_BUGS
+        KoTextShapeData::ResizeMethod method = m_textShapeData->resizeMethod();
+        if (KoOdfWorkaround::fixAutoGrow(method, context)) {
+            KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+            Q_ASSERT(lay);
+            if (lay) {
+                SimpleRootAreaProvider *provider = dynamic_cast<SimpleRootAreaProvider*>(lay->provider());
+                if (provider) {
+                    provider->m_fixAutogrow = true;
+                }
+            }
+        }
+#endif
     }
 
     bool answer = loadOdfFrame(element, context);

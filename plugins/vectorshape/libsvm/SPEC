@@ -645,10 +645,10 @@ It contains the following parts
 
 Point		startPoint
 String          string
-uint16          index
+uint16          startIndex
 uint16          len
 uint32          dxArrayLen 
-int32           dxArray[arrayLen]  // If arrayLen > 0
+int32           dxArray[]
     If version is greater than 1:
 uint16          len2
 unicodechar     chars[len2]
@@ -658,15 +658,17 @@ startPoint      The point where the string is drawn
 
 string          the text string
 
-index           ?
+startIndex      The index of the first character of the string that
+                should be drawn.
 
-len             ?
+len             The number of characters that should be drawn,
+                starting with the character at 'startIndex'.
 
 dxArrayLen      The number of character offsets in dxArray
 
 dxArray         An array of character offsets for the characters in
                 the string. The number of offsets is stored in
-                dxArrayLen. 
+                dxArrayLen.   FIXME: What unit is this in?
 
 
 2.3.4 Unsorted Action Types

@@ -411,9 +411,7 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
     Q_UNUSED(row);
     Q_UNUSED(column);
 
-    qDebug() << "KisNodeModel::dropMimeData" << data->formats() << " row = " << row << " column = " << column;
     const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data);
-    qDebug() << "KisMimeData" << mimedata;
 
     KisNode *node = 0;
     if (mimedata) {

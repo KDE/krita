@@ -71,7 +71,7 @@ public:
         SenderLastname,
         SenderPosition,
         AuthorInitials,
-
+        Chapter, ///< Chapter (number, name, number and name, plain number, plain number and name) variables.
 
         KarbonStart = 1000,      ///< Base number for karbon specific values.
         KexiStart = 2000,        ///< Base number for kexi specific values.

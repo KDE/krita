@@ -68,7 +68,7 @@ void KisGridManager::setup(KActionCollection * collection)
 
     m_toggleSnapToGrid  = new KToggleAction(i18n("Snap To Grid"), this);
     collection->addAction("view_snap_to_grid", m_toggleSnapToGrid);
-    connect(toggleGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
+    connect(m_toggleSnapToGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
 
     // Fast grid config
     m_gridFastConfig1x1  = new KAction(i18n("1x1"), this);

@@ -359,7 +359,6 @@ void Legend::paintPixmap( QPainter &painter, const KoViewConverter &converter )
 {
     // Adjust the size of the painting area to the current zoom level
     const QSize paintRectSize = converter.documentToView( d->lastSize ).toSize();
-    const QRect paintRect = QRect( QPoint( 0, 0 ), paintRectSize );
     d->image = QImage( paintRectSize, QImage::Format_ARGB32 );
 
     QPainter pixmapPainter( &d->image );

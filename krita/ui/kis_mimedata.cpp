@@ -22,11 +22,9 @@
 #include "kis_node.h"
 #include "kis_paint_device.h"
 #include "kis_shared_ptr.h"
-#include "kra/kis_kra_savexml_visitor.h"
-#include "kra/kis_kra_save_visitor.h"
+#include "kis_doc2.h"
 
 #include <KoStore.h>
-#include <KoStoreDevice.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -35,6 +33,7 @@
 #include <QBuffer>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QTemporaryFile>
 
 KisMimeData::KisMimeData() :
     QMimeData()
@@ -57,6 +56,7 @@ QStringList KisMimeData::formats () const
     if (m_node) {
         f << "application/x-krita-node-pointer"
           << "application/x-krita-node"
+          << "application/x-openraster"
           << "application/x-qt-image";
     }
     return f;
@@ -70,7 +70,8 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         const KoColorProfile *monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
         return m_node->paintDevice()->convertToQImage(monitorProfile);
     }
-    else if (mimetype == "application/x-krita-node") {
+    else if (mimetype == "application/x-krita-node"
+             || mimetype == "application/zip") {
 
         KisNode *node = const_cast<KisNode*>(m_node.constData());
 
@@ -78,22 +79,15 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         QBuffer buf(&ba);
         KoStore *store = KoStore::createStore(&buf, KoStore::Write);
 
-        store->open("layer.xml");
-        KoStoreDevice dev(store);
+        Q_ASSERT(!store->bad());
 
-        QDomDocument layerdoc;
-        QDomElement nodeElement = layerdoc.createElement("NODE");
-        quint32 count = 1;
-        KisSaveXmlVisitor vxml(layerdoc, nodeElement, count, true);
-        node->accept(vxml);
+        KisDoc2 doc;
+        QRect rc = node->projection()->exactBounds();
+        KisImageSP image = new KisImage(0, rc.width(), rc.height(), node->colorSpace(), node->name(), false);
+        image->addNode(node->clone());
+        doc.setCurrentImage(image);
 
-        QByteArray s = layerdoc.toByteArray();
-        dev.write(s.constData(), s.size());
-        store->close();
-
-        KisKraSaveVisitor vbinary(store, count, node->name(), vxml.nodeFileNames());
-        node->accept(vbinary);
-        delete store;
+        doc.saveNativeFormatCalligra(store);
 
         return ba;
 

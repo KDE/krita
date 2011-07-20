@@ -36,7 +36,6 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
       m_colorSpace(0)
 {
     m_layout = new QVBoxLayout(this);
-    setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
     m_updateAllowed = true;
     m_delayTimer = new QTimer(this);
     m_delayTimer->setInterval(50);
@@ -60,7 +59,9 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
         delete input;
     }
     m_inputs.clear();
-    QList<KoChannelInfo*> channels = m_colorSpace->channels();
+
+    QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_colorSpace->channels());
+    
     foreach(KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR) {
             KisColorInput* input = 0;

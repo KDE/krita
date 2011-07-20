@@ -245,3 +245,14 @@ void KoOdfWorkaround::fixMissingFillRule(Qt::FillRule& fillRule, KoShapeLoadingC
         fillRule = Qt::OddEvenFill;
     }
 }
+
+bool KoOdfWorkaround::fixAutoGrow(KoTextShapeDataBase::ResizeMethod method, KoShapeLoadingContext &context)
+{
+    bool fix = false;
+    if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
+        if (method == KoTextShapeDataBase::AutoGrowWidth || method == KoTextShapeDataBase::AutoGrowHeight || method == KoTextShapeDataBase::AutoGrowWidthAndHeight) {
+            fix = true;
+        }
+    }
+    return fix;
+}

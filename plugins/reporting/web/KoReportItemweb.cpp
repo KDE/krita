@@ -24,47 +24,174 @@
 #include <kglobalsettings.h>
 #include <QBuffer>
 #include <kcodecs.h>
+ #include <QGraphicsRectItem>
 #include <renderobjects.h>
 
-KoReportItemChart::KoReportItemChart()
+#include <QtWebKit>
+#include <QtWebKit/QWebHistory>
+#include <QWebView>
+#include <QtGui/QPushButton>
+#include <QtGui/QLabel>
+#include <QtGui/QHBoxLayout>
+#include <QtGui/QVBoxLayout>
+#include <QtCore/QUrl>
+#include <QtGui/QAction>
+#include <QTextBrowser>
+#include <QWebPage>
+#include <QtGui/QWidget>
+#include <QtGui/QApplication>
+
+/*WebBrowserWidget::WebBrowserWidget(QWidget *parent)
+        : QWidget(parent)
+	,m_readOnly(false)
+	,m_urlChanged_enabled(false)
 {
-    //m_reportData = 0;
-    createProperties();
+    setFocusPolicy(Qt::StrongFocus);
+    setMinimumHeight(sizeHint().height());
+    setMinimumWidth(minimumHeight());
+
+    m_view = new QGraphicsWebView();
+    m_view->load(QUrl("http://www.kde.org"));
+//    v_layout = new QVBoxLayout();
+//    v_layout->addWidget(m_view);
+
+    setLayout(v_layout);
+    v_layout->addStretch();
+
+
+};
+
+WebBrowserWidget::~WebBrowserWidget()
+{
+
 }
 
+
+WebBrowserWidget::WebBrowserWidget()  
+{
+}
+
+
+
+bool WebBrowserWidget::cursorAtStart()
+{
+    return true; //! \todo ?
+}
+
+bool WebBrowserWidget::cursorAtEnd()
+{
+    return true; //! \todo ?
+}
+
+
+QVariant WebBrowserWidget::value()
+{
+    if (dataSource().isEmpty()) {
+        //not db-aware
+        return QVariant();
+    }
+    //db-aware mode
+    
+    return m_url;
+
+
+}
+
+bool WebBrowserWidget::valueIsNull()
+{
+    return (m_url).isEmpty();
+
+}
+void WebBrowserWidget::clear()
+{
+    setUrl("www.google.com");
+}
+
+
+
+void WebBrowserWidget::setInvalidState(const QString& displayText)
+{
+    Q_UNUSED(displayText);
+
+//    if (!dataSource().isEmpty()) {
+//        m_url.clear();
+//    }
+    setReadOnly(true);
+}
+
+void WebBrowserWidget::setValueInternal(const QVariant &add, bool removeOld)
+{
+    Q_UNUSED(add); //compares  
+    Q_UNUSED(removeOld);
+
+    if (isReadOnly())
+        return;
+    m_urlChanged_enabled= false;		//if removeold is true then change the Url to value of add as specified in kexidataitem interface.cpp
+
+    if (removeOld)
+        { 			//set property editor to add
+	 setUrl(add.toString()); 
+	}       
+
+    m_urlChanged_enabled = true;
+}
+
+bool WebBrowserWidget::valueIsEmpty()
+{
+    return false;
+}
+
+
+bool WebBrowserWidget::isReadOnly() const
+{
+    return m_readOnly;
+}
+
+
+void  WebBrowserWidget::setReadOnly(bool val)
+{
+    m_readOnly=val;
+}*/
 KoReportItemweb::KoReportItemweb(QDomNode & element)
 {
-    createProperties();
+//    createProperties();
     QDomNodeList nl = element.childNodes();
     QString n;
     QDomNode node;
  QDomElement e = element.toElement();
-    m_url->setValue(e.attribute("report:address"));
+    my_url->setValue(e.attribute("report:address"));
 
     m_name->setValue(element.toElement().attribute("report:name"));
- //   m_controlSource->setValue(element.toElement().attribute("report:web-data-source"));
- //   m_resizeMode->setValue(element.toElement().attribute("report:resize-mode", "stretch"));
- //   Z = element.toElement().attribute("report:z-index").toDouble();
-
+ 
     parseReportRect(element.toElement(), &m_pos, &m_size);
+}
 
-   /* for (int i = 0; i < nl.count(); i++) {
-        node = nl.item(i);
-        n = node.nodeName();
+void KoReportItemweb::createProperties()
+{
+    m_set = new KoProperty::Set(0, "Web");
+    my_url = new KoProperty::Property("item-web-url", QStringList(), QStringList(), QString(), i18n("url"));
+    m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
+    m_set->addProperty(m_controlSource);
+    //QStringList keys, strings;
+    //keys << "clip" << "stretch";
+    //strings << i18n("Clip") << i18n("Stretch");
+    //m_resizeMode = new KoProperty::Property("resize-mode", keys, strings, "clip", i18n("Resize Mode"));
 
-        if (n == "report:web-data") {
+    //m_staticImage = new KoProperty::Property("static-image", QPixmap(), i18n("Static Image"));
 
-            setInlineImageData(node.firstChild().nodeValue().toLatin1());
-        } else {
-            kDebug() << "while parsing image element encountered unknow element: " << n;
-        }
-    }*/
-
+    addDefaultProperties();
+    m_set->addProperty(m_controlSource);
+    m_set->addProperty(my_url);
+    //m_set->addProperty(m_staticImage);
 }
 
 KoReportItemweb::~KoReportItemweb()
 {
     delete m_set;
+}
+QString KoReportItemweb::typeName() const
+{
+    return "web";
 }
 
 /*bool KoReportItemweb::isInline() const
@@ -72,7 +199,7 @@ KoReportItemweb::~KoReportItemweb()
     return !(inlineImageData().isEmpty());
 }*/
 
-QByteArray KoReportItemweb::inlineImageData() const
+/*QByteArray KoReportItemweb::inlineImageData() const
 {
     QPixmap pixmap = m_staticImage->value().value<QPixmap>();
     QByteArray ba;
@@ -115,52 +242,27 @@ void KoReportItemweb::setMode(const QString &m)
         m_resizeMode->setValue(m);
     }
 }
+*/
 
-void KoReportItemweb::createProperties()
+void KoReportItemweb::setUrl(const QString& url)
 {
-    m_set = new KoProperty::Set(0, "Image");
-
-    m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
-
-    QStringList keys, strings;
-    keys << "clip" << "stretch";
-    strings << i18n("Clip") << i18n("Stretch");
-    m_resizeMode = new KoProperty::Property("resize-mode", keys, strings, "clip", i18n("Resize Mode"));
-
-    m_staticImage = new KoProperty::Property("static-image", QPixmap(), i18n("Static Image"));
-
-    addDefaultProperties();
-    m_set->addProperty(m_controlSource);
-    m_set->addProperty(m_resizeMode);
-    m_set->addProperty(m_staticImage);
-}
-
-
-void KoReportItemweb::setColumn(const QString &c)
-{
-    m_controlSource->setValue(c);
-}
-
-QString KoReportItemweb::itemDataSource() const
-{
-    return m_controlSource->value().toString();
-}
-
-QString KoReportItemweb::typeName() const
-{
-    return "report:image";
-}
-
+     m_url=QUrl(url);
+     m_view->load(m_url);
+}//ok
 int KoReportItemweb::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
 {
     Q_UNUSED(script)
 
-    QString uudata;
-    QByteArray imgdata;
-    if (!isInline()) {
+//    QString uudata;
+//    QByteArray imgdata;
+
+QPointF pos = m_pos.toScene();
+    QSizeF size = m_size.toScene();
+ pos += offset;
+/*    if (!isInline()) {
         imgdata = data.toByteArray();
     } else {
-        uudata = inlineImageData();
+       0 uudata = inlineImageData();
         imgdata = KCodecs::base64Decode(uudata.toLatin1());
     }
 
@@ -189,7 +291,30 @@ int KoReportItemweb::render(OROPage* page, OROSection* section,  QPointF offset,
     if (!page) {
         delete id;
     }
-    
+OROImage * id = new OROImage();
+    id->setImage(*m_view);
+
+    id->setPosition(m_pos.toScene() + offset);
+    id->setSize(m_size.toScene());
+    if (page) {
+        page->addPrimitive(id);
+    }
+
+QGraphicsScene scene; 
+
+   QGraphicsItem view(&scene);
+   view.setFrameShape(QFrame::NoFrame);
+   view.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+   view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+ 
+   m_view->resize(300, 300);*/
+   m_view->load(QUrl("http://www.kde.org"));
+
+//   scene.addItem(view);
+//   view.resize(300,300);
+//   view.show();
+   
     return 0; //Item doesnt stretch the section height
 }
 

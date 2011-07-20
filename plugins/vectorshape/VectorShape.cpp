@@ -105,7 +105,7 @@ RenderThread::~RenderThread()
 void RenderThread::run()
 {
     QMutexLocker locker(&m_shape->m_mutex);
-    QImage *image = new QImage(boundingSize, QImage::Format_ARGB32);
+    QImage *image = new QImage(m_boundingSize, QImage::Format_ARGB32);
     image->fill(0);
     QPainter painter;
     if (!painter.begin(image)) {

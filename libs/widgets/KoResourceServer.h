@@ -407,18 +407,12 @@ public:
         return m_tagObject->searchTag(lineEditText);
     }
 
-    void setNepomukBool(bool nepomukOn)
-    {
-        m_tagObject->setNepomukBool(nepomukOn);
-#ifdef NEPOMUK
-        updateNepomukXML(nepomukOn);
-#endif
-    }
 
 #ifdef NEPOMUK
     void updateNepomukXML(bool nepomukOn)
     {
         KoResourceTagging* tagObject = new KoResourceTagging(extensions());
+        tagObject->setNepomukBool(nepomukOn);
         tagObject->updateNepomukXML(nepomukOn);
         delete tagObject;
     }

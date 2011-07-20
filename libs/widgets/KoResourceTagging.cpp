@@ -62,9 +62,6 @@ KoResourceTagging::~KoResourceTagging()
     if(!m_nepomukOn) {
         writeXMLFile();
      }
-
-    m_config.writeEntry("nepomuk_usage_for_resource_tagging", QVariant(m_nepomukOn));
-    m_config.sync();
 }
 
 QStringList KoResourceTagging::getAssignedTagsList( KoResource* resource )
@@ -479,6 +476,9 @@ void KoResourceTagging::updateNepomukXML(bool nepomukOn)
         updateTagRepoFromNepomuk(false);
         writeXMLFile(false);
     }
+
+    m_config.writeEntry("nepomuk_usage_for_resource_tagging", QVariant(m_nepomukOn));
+    m_config.sync();
 }
 #endif
 

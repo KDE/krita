@@ -110,9 +110,7 @@ public:
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
-    void setDirty(const QRect & rect);
-    using KisNode::setDirty;
-    
+    void setChannelFlags(const QBitArray & channelFlags);
     
 public slots:
     /**

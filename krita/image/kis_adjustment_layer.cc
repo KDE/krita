@@ -128,12 +128,12 @@ KoDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties(
     return l;
 }
 
-void KisAdjustmentLayer::setDirty(const QRect & rect)
+void KisAdjustmentLayer::setChannelFlags(const QBitArray & channelFlags)
 {
     if (m_d->filterConfig) {
-        m_d->filterConfig->setChannelFlags(channelFlags());
+        m_d->filterConfig->setChannelFlags(channelFlags);
     }
-    KisLayer::setDirty(rect);
+    KisLayer::setChannelFlags(channelFlags);
 }
 
 #include "kis_adjustment_layer.moc"

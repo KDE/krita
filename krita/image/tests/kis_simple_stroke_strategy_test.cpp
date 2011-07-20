@@ -54,7 +54,7 @@ public:
         m_stageCounter++;
     }
 
-    void doStrokeCallback(KisStrokeJobStrategy::StrokeJobData *data) {
+    void doStrokeCallback(KisSimpleStrokeStrategy::Data *data) {
         Q_UNUSED(data);
 
         QCOMPARE(m_stageCounter, 1);

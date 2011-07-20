@@ -51,7 +51,8 @@ public:
             m_parentStroke->cancelStrokeCallback();
             break;
         case KisSimpleStrokeStrategy::JOB_DOSTROKE:
-            m_parentStroke->doStrokeCallback(data);
+            m_parentStroke->doStrokeCallback(
+                static_cast<KisSimpleStrokeStrategy::Data*>(data));
             break;
         }
     }
@@ -154,7 +155,7 @@ void KisSimpleStrokeStrategy::cancelStrokeCallback()
 {
 }
 
-void KisSimpleStrokeStrategy::doStrokeCallback(KisStrokeJobStrategy::StrokeJobData *data)
+void KisSimpleStrokeStrategy::doStrokeCallback(Data *data)
 {
     Q_UNUSED(data);
 }

@@ -93,7 +93,7 @@ void KisStrokeStrategyUndoCommandBased::cancelStrokeCallback()
     }
 }
 
-void KisStrokeStrategyUndoCommandBased::doStrokeCallback(KisStrokeJobStrategy::StrokeJobData *data)
+void KisStrokeStrategyUndoCommandBased::doStrokeCallback(KisSimpleStrokeStrategy::Data *data)
 {
     Data *d = dynamic_cast<Data*>(data);
     executeCommand(d->command);

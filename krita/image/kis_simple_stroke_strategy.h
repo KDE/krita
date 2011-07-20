@@ -33,6 +33,10 @@ public:
         JOB_DOSTROKE
     };
 
+    class Data : public KisStrokeJobStrategy::StrokeJobData
+    {
+    };
+
 public:
     KisSimpleStrokeStrategy(QString id = QString(), QString name = QString());
 
@@ -48,7 +52,7 @@ public:
     virtual void initStrokeCallback();
     virtual void finishStrokeCallback();
     virtual void cancelStrokeCallback();
-    virtual void doStrokeCallback(KisStrokeJobStrategy::StrokeJobData *data);
+    virtual void doStrokeCallback(Data *data);
 
 protected:
     void enableJob(JobType type, bool enable = true);

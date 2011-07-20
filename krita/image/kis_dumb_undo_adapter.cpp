@@ -22,7 +22,6 @@
 
 
 KisDumbUndoAdapter::KisDumbUndoAdapter()
-    : KisUndoAdapter(0)
 {
 }
 
@@ -34,7 +33,7 @@ const KUndo2Command * KisDumbUndoAdapter::presentCommand() {
     return 0;
 }
 
-void KisDumbUndoAdapter::addCommandWorkaroundSP(KUndo2CommandSP command) {
+void KisDumbUndoAdapter::addCommand(KUndo2CommandSP command) {
     /**
      * Ermm.. Done with it! :P
      */
@@ -47,14 +46,14 @@ void KisDumbUndoAdapter::undoLastCommand() {
      */
 }
 
-void KisDumbUndoAdapter::beginMacroWorkaround(const QString& macroName) {
+void KisDumbUndoAdapter::beginMacro(const QString& macroName) {
     /**
      * Yes, sir! >:)
      */
     Q_UNUSED(macroName);
 }
 
-void KisDumbUndoAdapter::endMacroWorkaround() {
+void KisDumbUndoAdapter::endMacro() {
     /**
      * Roger that! :)
      */

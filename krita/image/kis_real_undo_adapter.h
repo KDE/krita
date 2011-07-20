@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_DUMB_UNDO_ADAPTER_H_
-#define KIS_DUMB_UNDO_ADAPTER_H_
+#ifndef __KIS_REAL_UNDO_ADAPTER_H
+#define __KIS_REAL_UNDO_ADAPTER_H
 
 #include "kis_undo_adapter.h"
 
-class KUndo2Command;
+class KoDocument;
 
-class KRITAIMAGE_EXPORT KisDumbUndoAdapter : public KisUndoAdapter
+
+class KRITAIMAGE_EXPORT KisRealUndoAdapter : public KisUndoAdapter
 {
 public:
-    KisDumbUndoAdapter();
-    virtual ~KisDumbUndoAdapter();
+    KisRealUndoAdapter(KoDocument *doc);
+    using KisUndoAdapter::addCommand;
 
-public:
     const KUndo2Command* presentCommand();
     void undoLastCommand();
     void addCommand(KUndo2CommandSP cmd);
@@ -37,9 +37,7 @@ public:
     void endMacro();
 
 private:
-    Q_DISABLE_COPY(KisDumbUndoAdapter);
+    KoDocument* m_doc;
 };
 
-
-#endif // KIS_DUMB_UNDO_ADAPTER_H_
-
+#endif /* __KIS_REAL_UNDO_ADAPTER_H */

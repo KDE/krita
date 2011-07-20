@@ -65,14 +65,14 @@ void KisStrokeStrategyUndoCommandBased::finishStrokeCallback()
     executeCommand(m_finishCommand);
 
     if(m_undoAdapter) {
-        m_undoAdapter->beginMacroWorkaround(name());
+        m_undoAdapter->beginMacro(name());
 
         QVector<KUndo2CommandSP> commands = takeFinishedCommands();
         foreach(KUndo2CommandSP cmd, commands) {
-            m_undoAdapter->addCommandWorkaroundSP(cmd);
+            m_undoAdapter->addCommand(cmd);
         }
 
-        m_undoAdapter->endMacroWorkaround();
+        m_undoAdapter->endMacro();
     }
 }
 

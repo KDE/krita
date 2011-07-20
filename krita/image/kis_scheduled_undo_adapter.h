@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,30 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_DUMB_UNDO_ADAPTER_H_
-#define KIS_DUMB_UNDO_ADAPTER_H_
+#ifndef __KIS_SCHEDULED_UNDO_ADAPTER_H
+#define __KIS_SCHEDULED_UNDO_ADAPTER_H
 
 #include "kis_undo_adapter.h"
 
-class KUndo2Command;
 
-class KRITAIMAGE_EXPORT KisDumbUndoAdapter : public KisUndoAdapter
+class KRITAIMAGE_EXPORT KisScheduledUndoAdapter : public KisUndoAdapter
 {
 public:
-    KisDumbUndoAdapter();
-    virtual ~KisDumbUndoAdapter();
+    KisScheduledUndoAdapter();
+    using KisUndoAdapter::addCommand;
 
-public:
     const KUndo2Command* presentCommand();
     void undoLastCommand();
-    void addCommand(KUndo2CommandSP cmd);
+    void addCommand(KUndo2CommandSP command);
     void beginMacro(const QString& macroName);
     void endMacro();
 
 private:
-    Q_DISABLE_COPY(KisDumbUndoAdapter);
+    qint32 m_macroCounter;
+    KisStrokeId m_macroStrokeId;
 };
 
-
-#endif // KIS_DUMB_UNDO_ADAPTER_H_
-
+#endif /* __KIS_SCHEDULED_UNDO_ADAPTER_H */

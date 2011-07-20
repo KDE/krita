@@ -87,7 +87,7 @@
 #include "kis_config.h"
 #include "widgets/kis_custom_image_widget.h"
 #include "canvas/kis_canvas2.h"
-#include "kis_undo_adapter.h"
+#include "kis_real_undo_adapter.h"
 #include "flake/kis_shape_controller.h"
 #include "kra/kis_kra_loader.h"
 #include "kra/kis_kra_saver.h"
@@ -199,7 +199,7 @@ bool KisDoc2::init()
     delete m_d->nserver;
     m_d->nserver = 0;
 
-    m_d->undoAdapter = new KisUndoAdapter(this);
+    m_d->undoAdapter = new KisRealUndoAdapter(this);
     connect(undoStack(), SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));
     Q_CHECK_PTR(m_d->undoAdapter);
 
@@ -318,7 +318,7 @@ bool KisDoc2::completeLoading(KoStore *store)
     m_d->kraLoader = 0;
 
     setModified(false);
-    m_d->image->setUndoAdapter(m_d->undoAdapter);
+    m_d->image->setRealUndoAdapter(m_d->undoAdapter);
     m_d->shapeController->setImage(m_d->image);
 
     connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
@@ -529,7 +529,7 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
         m_d->image->disconnect(this);
     }
     m_d->image = image;
-    m_d->image->setUndoAdapter(m_d->undoAdapter);
+    m_d->image->setRealUndoAdapter(m_d->undoAdapter);
     m_d->shapeController->setImage(image);
 
     setModified(false);

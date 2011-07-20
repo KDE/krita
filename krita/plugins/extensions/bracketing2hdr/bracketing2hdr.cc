@@ -533,7 +533,7 @@ bool Bracketing2HDRPlugin::loadImagesInMemory()
         QString s = manager.importDocument(fileName, status);
         f.image = d.image();
         f.device = 0;
-        f.image->setUndoAdapter(0);
+        f.image->setRealUndoAdapter(0);
         if (f.image) {
             f.device = f.image->projection();
         }

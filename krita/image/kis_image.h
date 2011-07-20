@@ -35,6 +35,7 @@
 #include "kis_default_bounds.h"
 #include "kis_stroke_job_strategy.h"
 
+class KoDocument;
 class KoColorSpace;
 class KoCompositeOp;
 class KoColor;
@@ -65,7 +66,7 @@ class KRITAIMAGE_EXPORT KisImage : public QObject, public KisNodeFacade, public 
 public:
 
     /// @param colorSpace can be null. in that case it will be initialised to a default color space.
-    KisImage(KisUndoAdapter * adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true);
+    KisImage(KisUndoAdapter *realUndoAdapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true);
     virtual ~KisImage();
 
 public: // KisNodeGraphListener implementation
@@ -266,16 +267,28 @@ public:
     void assignImageProfile(const KoColorProfile *profile);
 
     /**
-     * Replace the current undo adapter with the specified undo adapter.
-     * The current undo adapter will _not_ be deleted.
+     * Returns the current undo adapter. You can add new commands to the
+     * undo stack using the adapter. This adapter works as a support
+     * for the commands created before adding the strokes. It wraps them
+     * into the stroke and runs them onto the scheduler
      */
-    void setUndoAdapter(KisUndoAdapter * undoAdapter);
+    KisUndoAdapter* undoAdapter() const;
 
     /**
-     * Returns the current undo adapter. You can add new commands to the
-     * undo stack using the adapter
+     * This adapter is used by the strokes system. The commands are added
+     * to it *after* redo() is done (in the scheduler context). They are
+     * wrapped into a special command and added to the undo stack. redo()
+     * in not called.
      */
-    KisUndoAdapter *undoAdapter() const;
+    KisUndoAdapter* realUndoAdapter() const;
+
+    /**
+     * Replace the current real undo adapter with the specified undo adapter.
+     * The current undo adapter will _not_ be deleted.
+     *
+     * \see realUndoAdapter()
+     */
+    void setRealUndoAdapter(KisUndoAdapter * undoAdapter);
 
     /**
      * @return the action recorder associated with this image
@@ -581,7 +594,7 @@ public slots:
 private:
     KisImage(const KisImage& rhs);
     KisImage& operator=(const KisImage& rhs);
-    void init(KisUndoAdapter * adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace);
+    void init(KisUndoAdapter *realUndoAdapter, qint32 width, qint32 height, const KoColorSpace * colorSpace);
     void emitSizeChanged();
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);

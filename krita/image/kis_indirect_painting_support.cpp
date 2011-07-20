@@ -136,7 +136,7 @@ QRegion KisIndirectPaintingSupport::indirectlyDirtyRegion()
     return d->dirtyRegion;
 }
 
-void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QString &transactionText)
+void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText)
 {
     /**
      * We do not apply selection here, because it has already
@@ -148,7 +148,11 @@ void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QString &t
     gc.setChannelFlags(d->channelFlags);
 
     d->lock.lockForWrite();
-    if(layer->image()) {
+
+    /**
+     * Scratchpad may not have an undo adapter
+     */
+    if(undoAdapter) {
         gc.beginTransaction(transactionText);
     }
 
@@ -158,9 +162,8 @@ void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QString &t
     }
     d->temporaryTarget = 0;
 
-    // in the scratchpad the layer has no image and there is no undo adapter
-    if(layer->image()) {
-        gc.endTransactionWorkaround(layer->image()->undoAdapter());
+    if(undoAdapter) {
+        gc.endTransaction(undoAdapter);
     }
 
     d->lock.unlock();

@@ -172,12 +172,12 @@ QList<const KoColorSpace*> allColorSpaces()
 class KisUndoAdapterDummy : public KisUndoAdapter
 {
 public:
-    KisUndoAdapterDummy() : KisUndoAdapter(0) {}
+    KisUndoAdapterDummy() : KisUndoAdapter() {}
     ~KisUndoAdapterDummy() {}
 
 public:
     void addCommand(KUndo2Command *cmd) {
-        qDebug() << cmd;
+        qDebug() << "Adding a command to stack" << cmd->text();
         undostack.push(cmd);
     }
 
@@ -189,8 +189,24 @@ public:
         undostack.endMacro();
     }
 
-    void doUndo() {
+    void undo() {
         undostack.undo();
+    }
+
+    void redo() {
+        undostack.redo();
+    }
+
+    const KUndo2Command* presentCommand() {
+        return undostack.command(undostack.index() - 1);
+    }
+
+    void undoLastCommand() {
+        undostack.undo();
+    }
+
+    void addCommand(KUndo2CommandSP cmd) {
+        qFatal("Not supported");
     }
 
 private:

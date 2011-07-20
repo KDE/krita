@@ -40,7 +40,6 @@ void KisCropVisitorTest::testUndo()
 
     TestUtil::KisUndoAdapterDummy* undoAdapterDummy = new TestUtil::KisUndoAdapterDummy();
     KisImageSP image = new KisImage(undoAdapterDummy, 300, 300, cs, "test");
-    image->lock();
     KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP dev = layer->paintDevice();
 
@@ -55,7 +54,7 @@ void KisCropVisitorTest::testUndo()
     layer->accept(visitor);
 
     undoAdapterDummy->endMacro();
-    undoAdapterDummy->doUndo();
+    undoAdapterDummy->undo();
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, image1, dev->convertToQImage(0, 0, 0, 300, 300))) {

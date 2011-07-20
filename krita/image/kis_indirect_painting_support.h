@@ -25,6 +25,7 @@
 #include "kis_node.h"
 
 class QBitArray;
+class KisUndoAdapter;
 
 /**
  * For classes that support indirect painting.
@@ -54,7 +55,7 @@ public:
      * Writes the temporary target into the paint device of the layer.
      * This action will lock the temporary target itself.
      */
-    void mergeToLayer(KisLayerSP layer, const QString &transactionText);
+    void mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText);
 
     /**
      * Lock the temporary target.

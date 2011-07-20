@@ -221,16 +221,6 @@ void KisPainter::revertTransaction()
     d->transaction = 0;
 }
 
-void KisPainter::endTransactionWorkaround(KisUndoAdapter *undoAdapter)
-{
-    Q_ASSERT_X(d->transaction, "KisPainter::endTransaction()",
-               "No transaction is in progress");
-
-    d->transaction->commitWorkaround(undoAdapter);
-    delete d->transaction;
-    d->transaction = 0;
-}
-
 void KisPainter::endTransaction(KisUndoAdapter *undoAdapter)
 {
     Q_ASSERT_X(d->transaction, "KisPainter::endTransaction()",

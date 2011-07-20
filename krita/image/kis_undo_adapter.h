@@ -27,8 +27,6 @@
 #include "kis_types.h"
 
 class KUndo2Command;
-class KoDocument;
-class KisStrokeStrategyUndoCommandBased;
 
 
 /**
@@ -53,55 +51,38 @@ class KRITAIMAGE_EXPORT KisUndoAdapter : public QObject
     Q_OBJECT
 
 public:
-    KisUndoAdapter(KoDocument* doc);
+    KisUndoAdapter();
     virtual ~KisUndoAdapter();
 
 public:
-    /**
-     * FIXME: remove this method after all the tools are ported
-     * to the strokes framework
-     */
+    void setCommandHistoryListener(KisCommandHistoryListener *listener);
+    void removeCommandHistoryListener(KisCommandHistoryListener *listener);
+
+    void notifyCommandAdded(const KUndo2Command *command);
+    void notifyCommandExecuted(const KUndo2Command *command);
+
     void setImage(KisImageWSP image);
-
-    virtual void setCommandHistoryListener(KisCommandHistoryListener * l);
-    virtual void removeCommandHistoryListener(KisCommandHistoryListener * l);
-
-    /**
-     * FIXME: Are both of these functions really used?
-     */
-    virtual void notifyCommandAdded(const KUndo2Command *command);
-    virtual void notifyCommandExecuted(const KUndo2Command *command);
-
-    virtual void beginMacroWorkaround(const QString& macroName);
-    virtual void endMacroWorkaround();
-    virtual void addCommandWorkaroundSP(KUndo2CommandSP command);
-    void addCommandWorkaround(KUndo2Command *cmd);
-
-    virtual const KUndo2Command * presentCommand();
-    virtual void addCommand(KUndo2Command *cmd);
-    virtual void undoLastCommand();
-
-    /// XXX: is this actually threadsafe?
-    virtual void beginMacro(const QString& macroName);
-
-    /// XXX: is this actually threadsafe?
-    virtual void endMacro();
+    KisImageWSP image();
 
     void emitSelectionChanged();
+    virtual void addCommand(KUndo2Command *cmd);
+
+    virtual const KUndo2Command* presentCommand() = 0;
+    virtual void undoLastCommand() = 0;
+    virtual void addCommand(KUndo2CommandSP cmd) = 0;
+
+    /// XXX: is this actually threadsafe?
+    /// AAA: No. Absolutely.
+    virtual void beginMacro(const QString& macroName) = 0;
+    virtual void endMacro() = 0;
 
 signals:
     void selectionChanged();
 
 private:
-    KisUndoAdapter(const KisUndoAdapter&);
-    KisUndoAdapter& operator=(const KisUndoAdapter&);
-
+    Q_DISABLE_COPY(KisUndoAdapter);
     QVector<KisCommandHistoryListener*> m_undoListeners;
-    KoDocument* m_doc;
     KisImageWSP m_image;
-    qint32 m_macroCounter;
-    KisStrokeId m_macroStrokeId;
-    KisStrokeStrategyUndoCommandBased *m_macroStrokeStrategy;
 };
 
 

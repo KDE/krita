@@ -32,11 +32,10 @@ public:
 public:
     const KUndo2Command * presentCommand();
 
-    void addCommand(KUndo2Command *command);
+    void beginMacroWorkaround(const QString& macroName);
+    void endMacroWorkaround();
+    void addCommandWorkaroundSP(KUndo2CommandSP command);
     void undoLastCommand();
-
-    void beginMacro(const QString& macroName);
-    void endMacro();
 
 private:
     Q_DISABLE_COPY(KisDumbUndoAdapter);

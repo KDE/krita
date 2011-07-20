@@ -72,9 +72,9 @@ public:
     virtual void notifyCommandAdded(const KUndo2Command *command);
     virtual void notifyCommandExecuted(const KUndo2Command *command);
 
-    void beginMacroWorkaround(const QString& macroName);
-    void endMacroWorkaround();
-    void addCommandWorkaroundSP(KUndo2CommandSP command);
+    virtual void beginMacroWorkaround(const QString& macroName);
+    virtual void endMacroWorkaround();
+    virtual void addCommandWorkaroundSP(KUndo2CommandSP command);
     void addCommandWorkaround(KUndo2Command *cmd);
 
     virtual const KUndo2Command * presentCommand();

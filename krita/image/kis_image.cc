@@ -127,45 +127,6 @@ KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height, const K
     init(adapter, width, height, colorSpace);
 }
 
-KisImage::KisImage(const KisImage& rhs)
-        : QObject()
-        , KisNodeFacade(rhs)
-        , KisNodeGraphListener(rhs)
-        , KisShared()
-        , m_d(new KisImagePrivate())
-{
-
-    if (this != &rhs) {
-
-        dbgImage << "copying" << objectName() << "from" << rhs.objectName();
-
-        if (rhs.m_d->perspectiveGrid)
-            m_d->perspectiveGrid = new KisPerspectiveGrid(*rhs.m_d->perspectiveGrid);
-        else
-            m_d->perspectiveGrid = 0;
-
-        m_d->width = rhs.m_d->width;
-        m_d->height = rhs.m_d->height;
-        m_d->xres = rhs.m_d->xres;
-        m_d->yres = rhs.m_d->yres;
-        m_d->unit = rhs.m_d->unit;
-        m_d->colorSpace = rhs.m_d->colorSpace;
-        m_d->adapter = rhs.m_d->adapter;
-        m_d->globalSelection = 0;
-        m_d->deselectedGlobalSelection = 0;
-        setRootLayer(static_cast<KisGroupLayer*>(rhs.m_d->rootLayer->clone().data()));
-        m_d->annotations = rhs.m_d->annotations; // XXX the annotations would probably need to be deep-copied
-        m_d->nserver = new KisNameServer(*rhs.m_d->nserver);
-        m_d->startProjection = rhs.m_d->startProjection;
-        Q_CHECK_PTR(m_d->nserver);
-
-        m_d->scheduler = 0;
-        if (m_d->startProjection) {
-            m_d->scheduler = new KisUpdateScheduler(this);
-        }
-    }
-}
-
 KisImage::~KisImage()
 {
     dbgImage << "deleting kisimage" << objectName();

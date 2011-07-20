@@ -66,7 +66,6 @@ public:
 
     /// @param colorSpace can be null. in that case it will be initialised to a default color space.
     KisImage(KisUndoAdapter * adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true);
-    KisImage(const KisImage& rhs);
     virtual ~KisImage();
 
 public: // KisNodeGraphListener implementation
@@ -580,6 +579,7 @@ public slots:
     void refreshGraph(KisNodeSP root, const QRect& rc, const QRect &cropRect);
 
 private:
+    KisImage(const KisImage& rhs);
     KisImage& operator=(const KisImage& rhs);
     void init(KisUndoAdapter * adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace);
     void emitSizeChanged();

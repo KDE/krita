@@ -27,13 +27,13 @@
 #include <QList>
 #include <QString>
 #include <QVariant>
+#include <QTextDocument>
 
 #include <KoXmlReader.h>
 #include "KoText.h"
 #include <KoXmlWriter.h>
 
 class KoTextSharedLoadingData;
-class ToCGenerator; // not actually defined in kotext, a textlayouter is free to define
 
 const int INVALID_OUTLINE_LEVEL = 0;
 
@@ -98,7 +98,6 @@ public:
     void setPosition(const QString &position);
 
     KoText::Tab tab;
-private:
     QString m_position;
 };
 
@@ -159,6 +158,13 @@ public:
     QList<IndexSourceStyle> styles;
 };
 
+class KOTEXT_EXPORT ToCGeneratorInterface {
+public:
+    ToCGeneratorInterface() {}
+    virtual ~ToCGeneratorInterface() {}
+    virtual void setMaxTabPosition(qreal maxTabPosition) = 0;
+};
+
 class KOTEXT_EXPORT KoTableOfContentsGeneratorInfo
 {
 public:
@@ -167,9 +173,9 @@ public:
     void loadOdf(KoTextSharedLoadingData *sharedLoadingData, const KoXmlElement &element);
     void saveOdf(KoXmlWriter *writer) const;
 
-    void setGenerator(ToCGenerator *generator);
+    void setGenerator(ToCGeneratorInterface *generator);
 
-    ToCGenerator *generator() const;
+    ToCGeneratorInterface *generator() const;
 
 
     QString m_name;
@@ -192,9 +198,10 @@ public:
 
 private:
     int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
-    ToCGenerator * m_generator;
+    ToCGeneratorInterface * m_generator;
 };
 
 Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *)
+Q_DECLARE_METATYPE(QTextDocument *)
 
 #endif

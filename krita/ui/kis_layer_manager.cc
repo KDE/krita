@@ -285,47 +285,12 @@ void KisLayerManager::layerProperties()
             }
 
         }
-    } else {
-        KisDlgLayerProperties dlg(layer->name(),
-                                  layer->opacity(),
-                                  layer->compositeOp(),
-                                  cs,
-                                  layer->channelFlags());
-        dlg.resize(dlg.minimumSizeHint());
-
-        if (dlg.exec() == QDialog::Accepted) {
-
-            QBitArray newChannelFlags = dlg.getChannelFlags();
-            for (int i = 0; i < newChannelFlags.size(); ++i) {
-                dbgUI << "we got flags: " << i << " is " << newChannelFlags.testBit(i);
-            }
-            QBitArray oldChannelFlags = layer->channelFlags();
-            for (int i = 0; i < oldChannelFlags.size(); ++i) {
-                dbgUI << "the old ones were: " << i << " is " << oldChannelFlags.testBit(i);
-            }
-
-            dbgUI << " and are they the same: " << (oldChannelFlags == newChannelFlags);
-
-            if (layer->name() != dlg.getName() ||
-                    layer->opacity() != dlg.getOpacity() ||
-                    layer->compositeOp()->id() != dlg.getCompositeOp()
-               ) {
-                QApplication::setOverrideCursor(KisCursor::waitCursor());
-                m_view->undoAdapter()->addCommand(new KisLayerPropsCommand(layer,
-                                                  layer->opacity(), dlg.getOpacity(),
-                                                  layer->compositeOpId(), dlg.getCompositeOp(),
-                                                  layer->name(), dlg.getName(),
-                                                  oldChannelFlags, newChannelFlags));
-                QApplication::restoreOverrideCursor();
-                m_doc->setModified(true);
-            }
-            if (oldChannelFlags != newChannelFlags) {
-                layer->setChannelFlags(newChannelFlags);
-                layer->setDirty();
-            }
-        }
+    } else { // If layer == normal painting layer, shape layer, or group layer
+        KisDlgLayerProperties *dialog = new KisDlgLayerProperties(layer, m_view, m_doc);
+        dialog->resize(dialog->minimumSizeHint());
+        dialog->setAttribute(Qt::WA_DeleteOnClose);
+        dialog->show();
     }
-
 }
 
 void KisLayerManager::layerAdd()

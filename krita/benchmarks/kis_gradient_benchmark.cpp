@@ -62,7 +62,6 @@ void KisGradientBenchmark::benchmarkGradient()
         grad.setColorAt(1.0, Qt::red);
         KoAbstractGradient* kograd = KoStopGradient::fromQGradient(&grad);
         Q_ASSERT(kograd);
-        QRegion dirty;
         KisGradientPainter fillPainter(m_device);
         //setupPainter(&fillPainter);
         fillPainter.setBounds( QRect(0,0,GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT) );
@@ -77,7 +76,6 @@ void KisGradientBenchmark::benchmarkGradient()
         
         fillPainter.paintGradient(QPointF(0,0), QPointF(3000,3000), KisGradientPainter::GradientShapeBiLinear, KisGradientPainter::GradientRepeatNone, true, false, 0, 0, GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT);
 
-        dirty = fillPainter.takeDirtyRegion();
         fillPainter.deleteTransaction();
     }
     

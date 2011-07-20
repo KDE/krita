@@ -17,4 +17,12 @@ kde4_add_unit_test(zoomcontroller_test TESTNAME libs-widgets-zoomcontroller_test
 
 target_link_libraries(zoomcontroller_test  kowidgets komain ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(KoResourceTagging_test_SRCS KoResourceTagging_test.cpp )
+
+kde4_add_unit_test(KoResourceTagging_test TESTNAME libs-widgets-KoResourceTagging_test  ${KoResourceTagging_test_SRCS})
+
+target_link_libraries(KoResourceTagging_test  kowidgets komain ${QT_QTTEST_LIBRARY})
+
 ########### end ###############

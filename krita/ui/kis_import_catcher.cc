@@ -66,7 +66,11 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
     KisImageWSP importedImage = m_d->doc->image();
 
     if (importedImage) {
-        KisLayerSP importedImageLayer = new KisPaintLayer(importedImage.data(),importedImage->nextLayerName(), OPACITY_OPAQUE_U8, importedImage->projection());
+        KisLayerSP importedImageLayer =
+                new KisPaintLayer(importedImage.data(),
+                                  importedImage->nextLayerName(),
+                                  OPACITY_OPAQUE_U8,
+                                  importedImage->projection());
 
         if (!importedImageLayer.isNull()) {
             QStringList list;

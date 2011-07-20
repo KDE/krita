@@ -57,6 +57,9 @@ public:
     void removeSection(int idx, bool del = false);
     virtual QSize sizeHint() const;
 
+    void setSectionCursor(const QCursor&);
+    void unsetSectionCursor();
+    
 protected:
     QString m_query;
 

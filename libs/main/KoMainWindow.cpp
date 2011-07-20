@@ -35,6 +35,10 @@
 #include "KoDocumentEntry.h"
 #include "KoDockerManager.h"
 
+#include <kdeversion.h>
+#if KDE_IS_VERSION(4,6,0)
+#include <krecentdirs.h>
+#endif
 #include <krecentfilesaction.h>
 #include <kaboutdata.h>
 #include <ktoggleaction.h>
@@ -214,6 +218,7 @@ public:
     KoDockerManager *dockerManager;
     QList<QDockWidget *> dockWidgets;
     QList<QDockWidget *> hiddenDockwidgets; // List of dockers hiddent by the call to hideDocker
+
 };
 
 KoMainWindow::KoMainWindow(const KComponentData &componentData)
@@ -535,13 +540,18 @@ void KoMainWindow::addRecentURL(const KUrl& url)
             for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it)
                 if (path.contains(*it))
                     ok = false; // it's in the tmp resource
-            if (ok)
+            if (ok) {
                 KRecentDocument::add(path);
-        } else
+#if KDE_IS_VERSION(4,6,0)
+                KRecentDirs::add(":OpenDialog", QFileInfo(path).dir().canonicalPath());
+#endif
+            }
+        } else {
             KRecentDocument::add(url.url(KUrl::RemoveTrailingSlash), true);
-
-        if (ok)
+        }
+        if (ok) {
             d->recent->addUrl(url);
+        }
         saveRecentFiles();
     }
 }
@@ -635,7 +645,7 @@ bool KoMainWindow::openDocument(const KUrl & url)
         saveRecentFiles();
         return false;
     }
-    return  openDocumentInternal(url);
+    return openDocumentInternal(url);
 }
 
 // (not virtual)
@@ -1200,8 +1210,7 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
-    KFileDialog *dialog = new
-    KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString(), this);
+    KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString(), this);
     dialog->setObjectName("file dialog");
     dialog->setMode(KFile::File);
     if (!isImporting())
@@ -1765,7 +1774,7 @@ void KoMainWindow::slotReloadFile()
         return;
 
     KUrl url = pDoc->url();
-    if (pDoc && !pDoc->isEmpty()) {
+    if (!pDoc->isEmpty()) {
         setRootDocument(0);   // don't delete this shell when deleting the document
         if(d->rootDoc)
             d->rootDoc->clearUndoHistory();

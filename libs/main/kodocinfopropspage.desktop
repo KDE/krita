@@ -1,6 +1,9 @@
 [Desktop Entry]
 Type=Service
 Name=Calligra Document Info Properties Page
+Name[et]=Calligra dokumendiinfo omaduste lehekülg
+Name[nb]=Calligra dokumentinformasjonsside
+Name[nds]=Dokmentinformatschonen-Egenschappensiet för Calligra
 Name[pt]=Página de Propriedades do Documento do Calligra
 Name[pt_BR]=Página de propriedades do documento do Calligra
 Name[sv]=Calligra-sida med dokumentinformation

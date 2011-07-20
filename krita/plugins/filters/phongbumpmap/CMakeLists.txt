@@ -1,5 +1,7 @@
 set(kritaphongbumpmap_PART_SRCS
-    phongbumpmap.cpp
+    kis_phong_bumpmap_plugin.cpp
+    kis_phong_bumpmap_config_widget.cpp
+    kis_phong_bumpmap_filter.cpp
     phong_pixel_processor.cpp
     )
 

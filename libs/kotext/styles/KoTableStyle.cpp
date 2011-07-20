@@ -175,7 +175,19 @@ void KoTableStyle::applyStyle(QTextTableFormat &format) const
     QList<int> keys = d->stylesPrivate.keys();
     for (int i = 0; i < keys.count(); i++) {
         QVariant variant = d->stylesPrivate.value(keys[i]);
-        format.setProperty(keys[i], variant);
+        int key = keys[i];
+        switch(key) {
+            // Qt expects qreal's for the Frame*Margin's unlike the Block*Margin's
+            case QTextFormat::FrameTopMargin:
+            case QTextFormat::FrameBottomMargin:
+            case QTextFormat::FrameLeftMargin:
+            case QTextFormat::FrameRightMargin:
+                variant = propertyLength(key).rawValue();
+                break;
+            default:
+                break;
+        }
+        format.setProperty(key, variant);
     }
 }
 

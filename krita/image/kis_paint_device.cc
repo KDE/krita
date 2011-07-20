@@ -169,10 +169,11 @@ public:
 
     KisNodeWSP parent;
     KisDefaultBoundsSP defaultBounds;
+    PaintDeviceCache cache;
     qint32 x;
     qint32 y;
     KoColorSpace* colorSpace;
-    PaintDeviceCache cache;
+
 };
 
 KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& name)
@@ -216,13 +217,13 @@ void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
     }
     else {
         const qint32 pixelSize = colorSpace->pixelSize();
-        
+
         quint8* defaultPixel = new quint8[colorSpace->pixelSize()];
         colorSpace->fromQColor(Qt::transparent, defaultPixel);
 
         m_datamanager = new KisDataManager(pixelSize, defaultPixel);
         delete[] defaultPixel;
-        
+
         Q_CHECK_PTR(m_datamanager);
     }
     m_d->cache.setupCache();
@@ -315,6 +316,13 @@ void KisPaintDevice::setDirty()
     m_d->cache.invalidate();
     if (m_d->parent.isValid())
         m_d->parent->setDirty();
+}
+
+void KisPaintDevice::setDirty(const QVector<QRect> rects)
+{
+    m_d->cache.invalidate();
+    if (m_d->parent.isValid())
+        m_d->parent->setDirty(rects);
 }
 
 void KisPaintDevice::setParentNode(KisNodeWSP parent)

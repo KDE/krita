@@ -67,6 +67,10 @@ public:
     const QGraphicsItemList items() {
         return m_scene->items();
     };
+
+    void setSectionCursor(const QCursor&);
+    void unsetSectionCursor();
+    
 protected slots:
     void slotResizeBarDragged(int delta);
 

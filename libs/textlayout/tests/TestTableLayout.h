@@ -93,7 +93,7 @@ private slots:
     /**
       * Test fixed row height. The row is smaller then the text that is within the cells. Expected
       * is that the resulting table will still match to the available space and won't be spread
-      over multiple pages. This tests for bug #275409.
+      * over multiple pages. This tests for bug #275409.
       */
     void testRowHeightFixed();
 

@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QRect>
+#include <QVector>
 
 #include "kis_debug.h"
 
@@ -555,6 +556,8 @@ public:
      *  as parent layer.
      */
     virtual void setDirty();
+
+    virtual void setDirty(const QVector<QRect> rects);
 
 public:
 

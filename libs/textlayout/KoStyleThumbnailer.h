@@ -50,13 +50,6 @@ public:
     virtual ~KoStyleThumbnailer();
 
     /**
-     * Set a text document that is capable of drawing the styles
-     * The method only has any effect first time, and the document is just to generate
-     ' preview pixmaps
-     */
-    void setPixmapHelperDocument(QTextDocument *pixmapHelperDocument);
-
-    /**
      * Return a thumbnail representing the style
      * The thunbnail is 250*48 pt.
      * The created thumbnail is cached.
@@ -87,6 +80,8 @@ public:
     QPixmap thumbnail(KoCharacterStyle *style, QSize size);
 
 private:
+    void layoutThumbnail(QSize size, QPixmap &pm);
+
     class Private;
     Private* const d;
 };

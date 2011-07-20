@@ -136,9 +136,7 @@ void KisToolMultihand::timeoutPaint()
             KisPaintInformation pi1 = m_previousPaintInformation;
             pi1.setPos( m_brushTransforms.at(i).map(pi1.pos()) );
             paintAt(pi1, m_painters[i]);
-
-            QRegion r = m_painters[i]->takeDirtyRegion();
-            currentNode()->setDirty(r);
+            currentNode()->setDirty(m_painters[i]->takeDirtyRegion());
         }
 
     }
@@ -147,6 +145,11 @@ void KisToolMultihand::timeoutPaint()
 
 KisToolMultihand::~KisToolMultihand()
 {
+}
+
+int KisToolMultihand::flags() const
+{
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
 }
 
 void KisToolMultihand::initTransformations()
@@ -674,6 +677,16 @@ void KisToolMultihand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*
 bool KisToolMultihand::wantsAutoScroll() const
 {
     return false;
+}
+
+void KisToolMultihand::setDirty(const QVector<QRect> &rects)
+{
+    currentNode()->setDirty(rects);
+    if (!m_paintIncremental) {
+        foreach (const QRect &rc, rects) {
+            m_incrementalDirtyRegion += rc;
+        }
+    }
 }
 
 void KisToolMultihand::setDirty(const QRegion& region)

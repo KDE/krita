@@ -99,7 +99,7 @@ bool KisToolFill::flood(int startX, int startY)
     KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
     updater->start(100, i18n("Flood Fill"));
 
-    QRegion dirty;
+    QVector<QRect> dirty;
 
     if (m_fillOnlySelection && selection) {
         QRect rc = selection->selectedRect();
@@ -126,18 +126,11 @@ bool KisToolFill::flood(int startX, int startY)
 
         m_painter->beginTransaction(i18n("Fill"));
 
-        QVector<QRect> rects = dirty.rects();
-
-        QVector<QRect>::iterator it = rects.begin();
-        QVector<QRect>::iterator end = rects.end();
-
         m_painter->setCompositeOp(m_compositeOp);
         m_painter->setOpacity(m_opacity);
 
-        while (it != end) {
-            QRect rc = *it;
+        foreach(const QRect &rc, dirty) {
             m_painter->bitBlt(rc.topLeft(), filled, rc);
-            ++it;
         }
 
         m_painter->endTransaction(image()->undoAdapter());

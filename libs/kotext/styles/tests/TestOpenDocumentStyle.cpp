@@ -167,7 +167,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
         } else if (reference == "borderWidths") {
             result << "42px 42pt 12cm" << "0px 0pt 0cm";
         } else if (reference == "angle") {
-            result << "5deg" << "1rad" << "-3grad" << "3.14rad" << "45";    // OpenDocument 1.1 : no unit == degrees
+            result << "5deg" << "1rad" << "400grad" << "3.14159265rad" << "45";    // OpenDocument 1.1 : no unit == degrees
         } else if (reference == "zeroToHundredPercent") {
             result << "0%" << "10%" << "100%" << "13.37%" << "42.73%";
         } else if (reference == "string") {
@@ -187,10 +187,17 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
         return false;
     if (initialValue == outputValue)
         return true;
-    if (m_name == "style:writing-mode")
-        return KoText::directionFromString(initialValue) == KoText::directionFromString(outputValue);
     if (m_references.contains("percent") && initialValue.contains('%'))
         return false;
+    
+    // -----------   Special cases
+    if (m_name == "style:glyph-orientation-vertical")
+        if ((initialValue.at(0) == '0') && (outputValue.at(0) == '0'))
+            return true;
+    if (m_name == "style:writing-mode")
+        return KoText::directionFromString(initialValue) == KoText::directionFromString(outputValue);
+    // -----------
+    
     foreach (QString reference, m_references) {
         if ((reference == "positiveLength") || (reference == "nonNegativeLength") || (reference == "length")) {
             if (qAbs(KoUnit::parseValue(initialValue) - KoUnit::parseValue(outputValue)) < 0.0001)
@@ -199,8 +206,7 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
             if (initialValue.toLower() == outputValue.toLower())
                 return true;
         } else if (reference == "angle") {
-            //TODO: implement comparison of angles
-            return (initialValue.toLower() == outputValue.toLower());
+            return qAbs(KoUnit::parseAngle(initialValue) - KoUnit::parseAngle(outputValue)) < 0.0001;
         }
     }
     if (!m_equivalences.empty()) {

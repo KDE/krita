@@ -82,7 +82,6 @@ void KisFilterRandomPick::process(KisPaintDeviceSP device,
                          KoUpdater* progressUpdater
                                  ) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
     Q_UNUSED(config);
     Q_ASSERT(!device.isNull());
 

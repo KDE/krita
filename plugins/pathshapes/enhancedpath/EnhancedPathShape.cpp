@@ -238,11 +238,10 @@ EnhancedPathParameter * EnhancedPathShape::parameter(const QString & text)
         if (c.toAscii() == '$' || c.toAscii() == '?') {
             parameter = new EnhancedPathReferenceParameter(text, this);
         } else {
-            if (c.isDigit()) {
-                bool success = false;
-                qreal constant = text.toDouble(&success);
-                if (success)
-                    parameter = new EnhancedPathConstantParameter(constant, this);
+            bool success = false;
+            qreal constant = text.toDouble(&success);
+            if (success) {
+                parameter = new EnhancedPathConstantParameter(constant, this);
             } else {
                 Identifier identifier = EnhancedPathNamedParameter::identifierFromString(text);
                 if (identifier != IdentifierUnknown)
@@ -341,8 +340,9 @@ void EnhancedPathShape::addCommand(const QString &command, bool triggerUpdate)
     // now parse the command parameters
     if (!commandStr.isEmpty()) {
         QStringList tokens = commandStr.split(' ');
-        for (int i = 0; i < tokens.count(); ++i)
+        for (int i = 0; i < tokens.count(); ++i) {
             cmd->addParameter(parameter(tokens[i]));
+        }
     }
     m_commands.append(cmd);
 

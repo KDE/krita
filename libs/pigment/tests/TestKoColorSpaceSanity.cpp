@@ -29,7 +29,7 @@ void TestKoColorSpaceSanity::testChannelsInfo()
     {
         qDebug() << colorSpace->id();
         QCOMPARE(colorSpace->channelCount(), quint32(colorSpace->channels().size()));
-        QList<int> indexes;
+        QList<int> displayPositions;
         quint32 colorChannels = 0;
         quint32 size = 0;
         foreach(KoChannelInfo* info, colorSpace->channels())
@@ -48,11 +48,11 @@ void TestKoColorSpaceSanity::testChannelsInfo()
                 }
             }
 
-            // Check index
-            quint32 index = info->index();
-            QVERIFY(index < colorSpace->channelCount());
-            QVERIFY(indexes.indexOf(index) == -1);
-            indexes.push_back(index);
+            // Check displayPosition
+            quint32 displayPosition = info->displayPosition();
+            QVERIFY(displayPosition < colorSpace->channelCount());
+            QVERIFY(displayPositions.indexOf(displayPosition) == -1);
+            displayPositions.push_back(displayPosition);
 
             size += info->size();
         }

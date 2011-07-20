@@ -112,7 +112,7 @@ void IndexEntryChapter::addAttributes(KoXmlWriter* writer) const
 
 IndexEntrySpan::IndexEntrySpan(QString _styleName): IndexEntry(_styleName, IndexEntry::SPAN)
 {
-    text = QString();
+    text.clear();
 }
 
 
@@ -263,8 +263,8 @@ KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo()
         // index-entry-tab-stop
         IndexEntryTabStop *entryTabStop = new IndexEntryTabStop(QString());
         entryTabStop->tab.type = QTextOption::RightTab;
-        entryTabStop->setPosition("MAX");
-        entryTabStop->tab.leaderText = ".";
+        entryTabStop->setPosition("");
+        entryTabStop->tab.leaderText = '.';
         tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryTabStop));
 
         // index-entry-page-number

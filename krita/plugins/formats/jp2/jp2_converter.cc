@@ -409,7 +409,6 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     // Decode the file
     opj_cinfo_t *cinfo = 0;
 
-    bool hasColorSpaceInfo = false;
     /* get a decoder handle */
     switch (parameters.decod_format) {
     case J2K_CFMT: {
@@ -418,7 +417,6 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     }
     case JP2_CFMT: {
         cinfo = opj_create_compress(CODEC_JP2);
-        hasColorSpaceInfo = true;
         break;
     }
     case JPT_CFMT: {

@@ -80,7 +80,6 @@ bool FloatingAnchorStrategy::moveSubject()
         return false; // let's fake we moved to force another relayout
     }
 
-    QRectF boundingRect = m_anchor->shape()->boundingRect();
     QRectF containerBoundingRect = m_anchor->shape()->parent()->boundingRect();
     QRectF anchorBoundingRect;
     QPointF newPosition;
@@ -287,7 +286,7 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
                 return false; // lets go for a second round.
             anchorBoundingRect.setY(top + containerBoundingRect.y()  - data->documentOffset());
             anchorBoundingRect.setHeight(tl.y() + tl.height() - top);
-            KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
+//             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
 //            if(blockData && m_anchor->verticalRel() == KoTextAnchor::VParagraph) {
 //                anchorBoundingRect.setY(paragraphRect().top() + containerBoundingRect.y()  - data->documentOffset());
 //            }

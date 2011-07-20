@@ -102,7 +102,6 @@ bool KisToolFill::flood(int startX, int startY)
     QVector<QRect> dirty;
 
     if (m_fillOnlySelection && selection) {
-        QRect rc = selection->selectedRect();
         KisPaintDeviceSP filled = new KisPaintDevice(device->colorSpace());
         KisFillPainter fillPainter(filled);
         fillPainter.setProgress(updater->startSubtask());
@@ -126,7 +125,7 @@ bool KisToolFill::flood(int startX, int startY)
 
         m_painter->beginTransaction(i18n("Fill"));
 
-        m_painter->setCompositeOp(m_compositeOp);
+        m_painter->setCompositeOp(compositeOp());
         m_painter->setOpacity(m_opacity);
 
         foreach(const QRect &rc, dirty) {
@@ -144,7 +143,7 @@ bool KisToolFill::flood(int startX, int startY)
         fillPainter.setProgress(updater->startSubtask());
         fillPainter.setOpacity(m_opacity);
         fillPainter.setFillThreshold(m_threshold);
-        fillPainter.setCompositeOp(m_compositeOp);
+        fillPainter.setCompositeOp(compositeOp());
         fillPainter.setSampleMerged(!m_unmerged);
         fillPainter.setCareForSelection(true);
         fillPainter.setWidth(currentImage()->width());

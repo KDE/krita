@@ -160,8 +160,10 @@ void KisCanvas2::gridSize(qreal *horizontal, qreal *vertical) const
 {
     Q_ASSERT(horizontal);
     Q_ASSERT(vertical);
-    *horizontal = m_d->view->document()->gridData().gridX();
-    *vertical = m_d->view->document()->gridData().gridY();
+    QTransform transform = coordinatesConverter()->imageToDocumentTransform();
+    QPointF size = transform.map(QPointF(m_d->view->document()->gridData().gridX(), m_d->view->document()->gridData().gridY()));
+    *horizontal = size.x();
+    *vertical = size.y();
 }
 
 bool KisCanvas2::snapToGrid() const

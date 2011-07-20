@@ -355,8 +355,9 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     KisPaintDeviceSP paintDevice = currentNode()->paintDevice();
     KisPaintDeviceSP targetDevice;
 
-    if (!m_compositeOp)
-        m_compositeOp = paintDevice->colorSpace()->compositeOp(COMPOSITE_OVER);
+    const KoCompositeOp* op = compositeOp();
+    if (!op)
+        op = paintDevice->colorSpace()->compositeOp(COMPOSITE_OVER);
 
     m_strokeTimeMeasure.start();
     m_paintIncremental = currentPaintOpPreset()->settings()->paintIncremental();
@@ -368,7 +369,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
         if (indirect) {
             targetDevice = new KisPaintDevice(currentNode().data(), paintDevice->colorSpace());
             indirect->setTemporaryTarget(targetDevice);
-            indirect->setTemporaryCompositeOp(m_compositeOp);
+            indirect->setTemporaryCompositeOp(op);
             indirect->setTemporaryOpacity(m_opacity);
 
             KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(currentNode().data());
@@ -394,7 +395,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     setupPainter(m_painter);
 
     if (m_paintIncremental) {
-        m_painter->setCompositeOp(m_compositeOp);
+        m_painter->setCompositeOp(compositeOp());
         m_painter->setOpacity(m_opacity);
     } else {
         m_painter->setCompositeOp(paintDevice->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));

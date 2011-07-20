@@ -421,9 +421,14 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
 
                 if (!tocInfo->generator()) {
                     // The generator attaches itself to the tocInfo
-                    new ToCGenerator(tocDocument, block, tocInfo);
+                    new ToCGenerator(tocDocument, tocInfo);
                 }
                 tocInfo->generator()->setMaxTabPosition(right() - left());
+
+                if (!cursor->currentSubFrameIterator) {
+                    // Let the generator know which QTextBlock it needs to ask for a relayout once the toc got generated.
+                    tocInfo->generator()->setBlock(block);
+                }
 
                 // Let's create KoTextLayoutArea and let to handle the ToC
                 KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, documentLayout());
@@ -564,11 +569,6 @@ QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
     return line;
 }
 
-bool compareTab(const KoText::Tab &tab1, const KoText::Tab &tab2)
-{
-    return tab1.position < tab2.position;
-}
-
 // layoutBlock() method is structured like this:
 //
 // 1) Setup various helper values
@@ -659,10 +659,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             blockData->setLabelFormat(labelFormat);
         }
     } else if (blockData) { // make sure it is empty
-        blockData->setCounterText(QString());
-        blockData->setCounterSpacing(0.0);
-        blockData->setCounterWidth(0.0);
-        blockData->setCounterIsImage(false);
+        blockData->clearCounter();
     }
     if (blockData == 0) {
         blockData = new KoTextBlockData();
@@ -835,9 +832,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     qreal position = tabOffset;
 
     if (!tabs.isEmpty()) {
-        //unfortunately the tabs are not guaranteed to be ordered, so lets do that ourselves
-        qSort(tabs.begin(), tabs.end(), compareTab);
-
         position = tabs.last().position;
     }
 

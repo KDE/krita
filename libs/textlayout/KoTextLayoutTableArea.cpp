@@ -33,7 +33,7 @@
 #include <QtGlobal>
 #include <QTextTable>
 #include <QTextTableFormat>
-#include <QVector>
+#include <QPainter>
 #include <QRectF>
 #include <QVector>
 

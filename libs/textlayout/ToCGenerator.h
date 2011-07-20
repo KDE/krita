@@ -37,10 +37,11 @@ class ToCGenerator : public QObject, public ToCGeneratorInterface
 {
     Q_OBJECT
 public:
-    explicit ToCGenerator(QTextDocument *tocDocument, QTextBlock block, KoTableOfContentsGeneratorInfo *tocInfo);
+    explicit ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGeneratorInfo *tocInfo);
     virtual ~ToCGenerator();
 
-    void setMaxTabPosition(qreal maxTabPosition);
+    virtual void setMaxTabPosition(qreal maxTabPosition);
+    virtual void setBlock(const QTextBlock &block);
 
 public slots:
     void generate();

@@ -233,6 +233,23 @@ endif( Soprano_FOUND )
 
 
 ##
+## Test for marble
+##
+macro_optional_find_package(Marble)
+macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget" "http://techbase.kde.org/Projects/Marble/" FALSE "" "Required to show locations on a map")
+if(NOT MARBLE_FOUND)
+    set(CAN_USE_MARBLE FALSE)
+    set(MARBLE_INCLUDE_DIR "")
+else(NOT MARBLE_FOUND)
+    set(CAN_USE_MARBLE TRUE)
+endif(NOT MARBLE_FOUND)
+if( MARBLE_FOUND )
+   add_definitions( -DCAN_USE_MARBLE )
+endif( MARBLE_FOUND )
+
+
+
+##
 ## Test for lcms
 ##
 macro_optional_find_package(LCMS)
@@ -379,6 +396,7 @@ set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
+                    ${MARBLE_INCLUDE_DIR}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/main
                     ${CMAKE_SOURCE_DIR}/libs/main/rdf

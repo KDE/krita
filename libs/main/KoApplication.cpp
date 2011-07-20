@@ -274,12 +274,6 @@ bool KoApplication::start()
                         if (!roundtripFileName.isEmpty()) {
                             doc->saveAs(KUrl("file:"+roundtripFileName));
                         }
-                        // handle events that were triggered during loading or
-                        // saving, before closing the document, since these
-                        // events can cause access to the document
-                        while (qApp->hasPendingEvents()) {
-                            qApp->processEvents();
-                        }
                         // close the document
                         shell->slotFileQuit();
                         return true; // only load one document!

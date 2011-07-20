@@ -28,12 +28,16 @@
 
 class TextTool;
 class KoStyleManager;
+class KoCharacterStyle;
+class StylesWidget;
+class KoStyleThumbnailer;
 
 class SimpleCharacterWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit SimpleCharacterWidget(TextTool *tool, QWidget *parent = 0);
+    virtual ~SimpleCharacterWidget();
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
@@ -42,9 +46,11 @@ public slots:
 private slots:
     void fontFamilyActivated(int index);
     void fontSizeActivated(int index);
+    void hidePopup();
 
 signals:
     void doneWithFocus();
+    void characterStyleSelected(KoCharacterStyle *);
 
 private:
     Ui::SimpleCharacterWidget widget;
@@ -53,8 +59,10 @@ private:
     bool m_comboboxHasBidiItems;
     int m_lastFontFamilyIndex;
     int m_lastFontSizeIndex;
-    QTextBlock m_currentBlock;
     TextTool *m_tool;
+    QTextCharFormat m_currentCharFormat;
+    KoStyleThumbnailer *m_thumbnailer;
+    StylesWidget *m_stylePopup;
 };
 
 #endif

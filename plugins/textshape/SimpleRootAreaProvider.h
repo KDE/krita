@@ -45,6 +45,7 @@ public:
 
     KoTextLayoutRootArea *m_area;
     KoTextShapeData *m_textShapeData;
+    bool m_fixAutogrow;
 };
 
 #endif

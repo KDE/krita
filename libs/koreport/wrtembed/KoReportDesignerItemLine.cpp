@@ -217,10 +217,6 @@ void KoReportDesignerItemLine::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
 int KoReportDesignerItemLine::grabHandle(QPointF pos)
 {
-    QRectF r = boundingRect();
-
-    QPointF center = r.center();
-
     if (QRectF(line().p1().x(), line().p1().y() - 2, 5, 5).contains(pos)) {
         // we are over point 1
         return 1;

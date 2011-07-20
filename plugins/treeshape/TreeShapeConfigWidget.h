@@ -21,7 +21,7 @@
 #ifndef TREESHAPECONFIGWIDGET_H
 #define TREESHAPECONFIGWIDGET_H
 
-#include <ui_TreeShapeConfigWidget.h>
+#include "ui_TreeShapeConfigWidget.h"
 #include <KoShapeConfigWidgetBase.h>
 
 class TreeShape;

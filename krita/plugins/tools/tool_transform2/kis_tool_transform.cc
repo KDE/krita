@@ -328,9 +328,7 @@ void KisToolTransform::recalcOutline()
         s = m_canvas->viewConverter()->documentToView(s);
 
         v = QVector3D(m_originalTopLeft - m_originalCenter);
-        QPointF tmp1 = m_originalTopLeft - m_originalCenter;
         t = transformVector(v);
-        QVector3D temp = t;
         m_topLeft = t + translate3D;
         m_topLeftProj = perspective(t.x(), t.y(), t.z()) + m_currentArgs.translate();
         t = QVector3D(perspective(t.x(), t.y(), t.z()));
@@ -476,7 +474,6 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
         QPointF middletop = converter.documentToView(QPointF(m_middleTopProj.x() / kisimage->xRes(), m_middleTopProj.y() / kisimage->yRes()));
         QPointF middlebottom = converter.documentToView(QPointF(m_middleBottomProj.x() / kisimage->xRes(), m_middleBottomProj.y() / kisimage->yRes()));
         QPointF origtopleft = converter.documentToView(QPointF(m_originalTopLeft.x() / kisimage->xRes(), m_originalTopLeft.y() / kisimage->yRes()));
-        QPointF origbottomright = converter.documentToView(QPointF(m_originalBottomRight.x() / kisimage->xRes(), m_originalBottomRight.y() / kisimage->yRes()));
 
         QRectF handleRect(- m_handleRadius / 2., - m_handleRadius / 2., m_handleRadius, m_handleRadius);
 
@@ -540,12 +537,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
         pen[1].setWidth(3);
 
         QSizeF newRefSize = converter.documentToView(QSizeF(1 / kisimage->xRes(), 1 / kisimage->yRes()));
-        QPointF topleft = converter.documentToView(QPointF(m_topLeftProj.x() / kisimage->xRes(), m_topLeftProj.y() / kisimage->yRes()));
-        QPointF topright = converter.documentToView(QPointF(m_topRightProj.x() / kisimage->xRes(), m_topRightProj.y() / kisimage->yRes()));
-        QPointF bottomleft = converter.documentToView(QPointF(m_bottomLeftProj.x() / kisimage->xRes(), m_bottomLeftProj.y() / kisimage->yRes()));
-        QPointF bottomright = converter.documentToView(QPointF(m_bottomRightProj.x() / kisimage->xRes(), m_bottomRightProj.y() / kisimage->yRes()));
         QPointF origtopleft = converter.documentToView(QPointF(m_originalTopLeft.x() / kisimage->xRes(), m_originalTopLeft.y() / kisimage->yRes()));
-        QPointF origbottomright = converter.documentToView(QPointF(m_originalBottomRight.x() / kisimage->xRes(), m_originalBottomRight.y() / kisimage->yRes()));
 
         QRectF handleRect(- m_handleRadius / 2., - m_handleRadius / 2., m_handleRadius, m_handleRadius);
         QRectF smallHandleRect(- m_handleRadius / 4., - m_handleRadius / 4., m_handleRadius / 2., m_handleRadius / 2.);

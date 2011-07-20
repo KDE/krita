@@ -435,7 +435,6 @@ double HairyBrush::computeMousePressure(double distance)
 
 void HairyBrush::colorifyBristles(KisRandomConstAccessor& acc, KoColorSpace * cs, QPointF point)
 {
-    QPoint p = point.toPoint();
     KoColor color(cs);
     int pixelSize = cs->pixelSize();
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Adam Celarek <kdedev at xibo dot at>
+ * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,21 +16,30 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef SPECIALBUTTON_H
+#define SPECIALBUTTON_H
 
-#include "kis_freehand_curve.h"
-#include <QString>
-#include <QVector>
+#include <QFrame>
 
-KisFreehandCurve::KisFreehandCurve()
+class QPixmap;
+class QLabel;
+class StylesWidget;
+
+class SpecialButton : public QFrame
 {
-}
+    Q_OBJECT
+public:
+    SpecialButton(QWidget *parent);
 
-QString KisFreehandCurve::className() const
-{
-    return "KisFreehandCurve";
-}
+    void setStylesWidget(StylesWidget *stylesWidget);
+    void setStylePreview(const QPixmap &pm);
 
-void KisFreehandCurve::updatePainterPath()
-{
+    void showPopup();
+protected:
+    virtual void mousePressEvent(QMouseEvent *event);
 
-}
+    StylesWidget *m_stylesWidget;
+    QLabel *m_preview;
+};
+
+#endif //SPECIALBUTTON_H

@@ -107,7 +107,9 @@ protected:
 public:
     //========== Channels =====================================================//
 
-    /// Return a list describing all the channels this color model has.
+    /// Return a list describing all the channels this color model has. The order
+    /// of the channels in the list is the order of channels in the pixel. To find
+    /// out the preferred display position, use KoChannelInfo::displayPosition.
     virtual QList<KoChannelInfo *> channels() const;
 
     /**

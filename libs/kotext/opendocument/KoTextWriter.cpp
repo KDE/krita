@@ -350,7 +350,7 @@ void KoTextWriter::Private::saveODF12Change(QTextCharFormat format)
 
 QString KoTextWriter::Private::generateDeleteChangeXml(KoDeleteChangeMarker *marker)
 {
-    if (!changeTracker) return QString::null;
+    if (!changeTracker) return QString();
 
     //Create a QTextDocument from the Delete Fragment
     QTextDocument doc;
@@ -723,7 +723,7 @@ QString KoTextWriter::Private::saveTableColumnStyle(const KoTableColumnStyle& ta
     QString columnName = QChar('A' + int(columnNumber % 26));
     if (columnNumber > 25)
         columnName.prepend(QChar('A' + int(columnNumber/26)));
-    QString generatedName = tableStyleName + "." + columnName;
+    QString generatedName = tableStyleName + '.' + columnName;
 
     KoGenStyle style(KoGenStyle::TableColumnAutoStyle, "table-column");
 
@@ -737,8 +737,7 @@ QString KoTextWriter::Private::saveTableColumnStyle(const KoTableColumnStyle& ta
 
 QString KoTextWriter::Private::saveTableRowStyle(const KoTableRowStyle& tableRowStyle, int rowNumber, const QString& tableStyleName)
 {
-    // 26*26 columns should be enough for everyone
-    QString generatedName = tableStyleName + "." + QString::number(rowNumber + 1);
+    QString generatedName = tableStyleName + '.' + QString::number(rowNumber + 1);
 
     KoGenStyle style(KoGenStyle::TableRowAutoStyle, "table-row");
 
@@ -756,7 +755,7 @@ QString KoTextWriter::Private::saveTableCellStyle(const QTextTableCellFormat& ce
     QString columnName = QChar('A' + int(columnNumber % 26));
     if (columnNumber > 25)
         columnName.prepend(QChar('A' + int(columnNumber/26)));
-    QString generatedName = tableStyleName + "." + columnName;
+    QString generatedName = tableStyleName + '.' + columnName;
 
     KoGenStyle style(KoGenStyle::TableCellAutoStyle, "table-cell");
 
@@ -1196,8 +1195,6 @@ int KoTextWriter::Private::checkForListItemChange(const QTextBlock &block)
 int KoTextWriter::Private::checkForListChange(const QTextBlock &listBlock)
 {
     QTextBlock block(listBlock);
-    QTextList *textList;
-    textList = block.textList();
 
     KoTextDocument textDocument(block.document());
     KoList *list = textDocument.list(block);
@@ -1449,7 +1446,6 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, QHash<Q
         writeBlocks(tocDocument, 0, endTitle, listStyles);
     writer->endElement(); // text:index-title
 
-    QTextBlock block = tocDocument->rootFrame()->lastCursorPosition().block();
     writeBlocks(tocDocument, endTitle, -1, listStyles);
 
     writer->endElement(); // table:index-body
@@ -1671,17 +1667,21 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         QTextCursor cursor(block);
 
-        if (cursor.currentFrame() != document->rootFrame()) {
+        if (cursor.currentFrame()->format().hasProperty(KoText::SubFrameType)) {
             break; // we've reached the "end" (end/footnotes saved in another way)
         }
 
         QTextBlockFormat format = block.blockFormat();
-        if (format.hasProperty(KoParagraphStyle::SectionStart)) {
-            QVariant v = format.property(KoParagraphStyle::SectionStart);
-            KoSection* section = (KoSection*)(v.value<void*>());
-            if (section) {
-                ++sectionLevel;
-                section->saveOdf(context);
+        if (format.hasProperty(KoParagraphStyle::SectionStartings)) {
+            QVariant v = format.property(KoParagraphStyle::SectionStartings);
+            QList<QVariant> sectionStarts = v.value<QList<QVariant> >();
+
+        foreach (QVariant sv, sectionStarts) {
+                KoSection* section = (KoSection*)(sv.value<void*>());
+                if (section) {
+                    ++sectionLevel;
+                    section->saveOdf(context);
+                }
             }
         }
         if (format.hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
@@ -1729,12 +1729,15 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             }
         }
 
-        if (format.hasProperty(KoParagraphStyle::SectionEnd)) {
-            QVariant v = format.property(KoParagraphStyle::SectionEnd);
-            KoSectionEnd* section = (KoSectionEnd*)(v.value<void*>());
-            if (section && sectionLevel >= 1) {
-                --sectionLevel;
-                section->saveOdf(context);
+        if (format.hasProperty(KoParagraphStyle::SectionEndings)) {
+            QVariant v = format.property(KoParagraphStyle::SectionEndings);
+            QList<QVariant> sectionEndings = v.value<QList<QVariant> >();
+            KoSectionEnd sectionEnd;
+            foreach (QVariant sv, sectionEndings) {
+                if (sectionLevel >= 1) {
+                    --sectionLevel;
+                    sectionEnd.saveOdf(context);
+                }
             }
         }
 
@@ -1931,7 +1934,7 @@ void KoTextWriter::Private::generateFinalXml(QTextStream &outputXmlStream, const
         handleListItemWithParagraphMerge(outputXmlStream, element);
     } else if ((firstChild == "list") && (secondChild == "list")) {
         handleListWithListMerge(outputXmlStream, element);
-    } else if ((firstChild == "list") && (secondChild == "")) {
+    } else if ((firstChild == "list") && (secondChild.isEmpty())) {
         handleListItemWithListItemMerge(outputXmlStream, element);
     } else {
         //Not Possible

@@ -88,7 +88,7 @@ void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
     Q_ASSERT(filterConfig);
     delete m_d->filterConfig;
     m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(filterConfig);
-    if (parent()->inherits("KisLayer")) {
+    if (parent() && parent()->inherits("KisLayer")) {
         m_d->filterConfig->setChannelFlags(qobject_cast<KisLayer*>(parent().data())->channelFlags());
     }
 }

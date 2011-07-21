@@ -1260,6 +1260,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             setProperty(PercentLineHeight, 0);
             setProperty(FixedLineHeight, 0.0);
             setProperty(MinimumLineHeight, 0.0);
+            setProperty(LineSpacing, 0.0);
         }
     }
     else {

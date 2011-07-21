@@ -117,8 +117,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
         radioNepomuk->setChecked(true);
     }
 
-    connect(radioNepomuk,SIGNAL(clicked(bool)),SLOT(tagBackendChange(bool)));
-    connect(radioXml,SIGNAL(clicked(bool)),SLOT(tagBackendChange(bool)));
+    connect(radioNepomuk,SIGNAL(toggled(bool)),SLOT(tagBackendChange(bool)));
 #endif
 
 }
@@ -173,7 +172,7 @@ void GeneralTab::tagBackendChange(bool on)
     }
 
     if (radioXml->isChecked()){
-        tagServer->updateNepomukXML(!on);
+        tagServer->updateNepomukXML(on);
     }
 }
 

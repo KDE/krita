@@ -55,7 +55,13 @@ public:
     * @returns list of polygons around every non-transparent area
     **/
     QVector<QPolygon> outline(quint8* buffer, qint32 xOffset, qint32 yOffset, qint32 width, qint32 height);
-    
+
+    /**
+    * Set the generator to produce simpile outline, skipping outline that are fully enclosed
+    * @param simple set simple mode, if true enclosed outline will be skipped
+    **/
+    void setSimpleOutline(bool simple);
+
 private:
 
     enum EdgeType {
@@ -74,6 +80,7 @@ private:
 
     const KoColorSpace* m_cs;
     quint8 m_defaultOpacity;
+    bool m_simple;
 };
 
 #endif // KIS_OUTLINE_GENERATOR_H

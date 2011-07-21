@@ -26,6 +26,7 @@
 
 class KisTextToolOptionWidget : public QWidget, public Ui_WdgTextOptions
 {
+    Q_OBJECT
 public:
     KisTextToolOptionWidget(QWidget* parent = 0);
 
@@ -37,6 +38,8 @@ public:
     TextMode mode();
     
     KisPainter::FillStyle style();
+private slots:
+    void modeChanged(int mode);
 private:
     QButtonGroup* m_buttonGroup;
 };

@@ -64,6 +64,8 @@ QList< QWidget* > KisToolText::createOptionWidgets()
 
 KisPainter::FillStyle KisToolText::fillStyle()
 {
+    if(m_optionWidget->mode() == KisTextToolOptionWidget::MODE_MULTILINE)
+        return KisPainter::FillStyleNone;
     return m_optionWidget->style();
 }
 

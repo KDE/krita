@@ -43,7 +43,9 @@
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
 #include <QtCore/QUrl>
+*/
 #include <QGraphicsWebView>
+/*
 class QWebView;
 //class QLineEdit;
 class QVBoxLayout;
@@ -113,7 +115,7 @@ private:
     QWebHistory* m_history;
    
 };
-
+*/
 namespace Scripting
 {
 class web;

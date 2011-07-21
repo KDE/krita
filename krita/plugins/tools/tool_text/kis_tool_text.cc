@@ -47,7 +47,7 @@ void KisToolText::finishRect(const QRectF &rect)
     QString shapeString = (m_optionWidget->mode() == KisTextToolOptionWidget::MODE_ARTISTIC) ? "ArtisticText" : "TextShapeID";
     KoShapeFactoryBase* textFactory = KoShapeRegistry::instance()->value(shapeString);
     if (textFactory) {
-        KoShape* shape = textFactory->createDefaultShape();
+        KoShape* shape = textFactory->createDefaultShape(canvas()->shapeController()->resourceManager());
         shape->setSize(r.size());
         shape->setPosition(r.topLeft());
         addShape(shape);
@@ -64,6 +64,8 @@ QList< QWidget* > KisToolText::createOptionWidgets()
 
 KisPainter::FillStyle KisToolText::fillStyle()
 {
+    if(m_optionWidget->mode() == KisTextToolOptionWidget::MODE_MULTILINE)
+        return KisPainter::FillStyleNone;
     return m_optionWidget->style();
 }
 

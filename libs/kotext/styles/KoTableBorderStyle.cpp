@@ -689,3 +689,26 @@ qreal KoTableBorderStyle::bottomBorderWidth() const
     return edge.spacing + edge.innerPen.widthF() + edge.outerPen.widthF();
 }
 
+qreal KoTableBorderStyle::leftOuterBorderWidth() const
+{
+    Q_D(const KoTableBorderStyle);
+    return d->edges[Left].outerPen.widthF();
+}
+
+qreal KoTableBorderStyle::rightOuterBorderWidth() const
+{
+    Q_D(const KoTableBorderStyle);
+    return d->edges[Right].outerPen.widthF();
+}
+
+qreal KoTableBorderStyle::topOuterBorderWidth() const
+{
+    Q_D(const KoTableBorderStyle);
+    return d->edges[Top].outerPen.widthF();
+}
+
+qreal KoTableBorderStyle::bottomOuterBorderWidth() const
+{
+    Q_D(const KoTableBorderStyle);
+    return d->edges[Bottom].outerPen.widthF();
+}

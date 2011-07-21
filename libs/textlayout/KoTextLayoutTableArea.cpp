@@ -402,8 +402,23 @@ void KoTextLayoutTableArea::layoutColumns()
         // Increment by this column's width.
         columnPosition += d->columnWidths[col];
     }
-    expandBoundingLeft(d->columnPositions[0]);
-    expandBoundingRight(d->columnPositions[d->table->columns()]);
+
+    // Borders can be outside of the cell (outer-borders) in which case it's need
+    // to take them into account to not cut content off.
+    qreal leftBorder = 0.0;
+    qreal rightBorder = 0.0;
+    for (int row = 0; row < d->table->rows(); ++row) {
+        QTextTableCell leftCell = d->table->cellAt(row, 0);
+        KoTableCellStyle leftCellStyle(leftCell.format().toTableCellFormat());
+        leftBorder = qMax(leftBorder, leftCellStyle.leftOuterBorderWidth());
+
+        QTextTableCell rightCell = d->table->cellAt(row, d->table->columns() - 1);
+        KoTableCellStyle rightCellStyle(rightCell.format().toTableCellFormat());
+        rightBorder = qMax(rightBorder, leftCellStyle.rightOuterBorderWidth());
+    }
+
+    expandBoundingLeft(d->columnPositions[0] - leftBorder);
+    expandBoundingRight(d->columnPositions[d->table->columns()] + rightBorder);
 }
 
 void KoTextLayoutTableArea::collectBorderThicknesss(int row, qreal &topBorderWidth, qreal &bottomBorderWidth)

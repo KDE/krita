@@ -224,6 +224,11 @@ public:
     qreal topBorderWidth() const;
     qreal bottomBorderWidth() const;
 
+    qreal leftOuterBorderWidth() const;
+    qreal rightOuterBorderWidth() const;
+    qreal topOuterBorderWidth() const;
+    qreal bottomOuterBorderWidth() const;
+
 protected:
     KoTableBorderStyle(KoTableBorderStylePrivate &dd, const QTextTableCellFormat &format, QObject *parent);
     KoTableBorderStyle(KoTableBorderStylePrivate &dd, QObject *parent);

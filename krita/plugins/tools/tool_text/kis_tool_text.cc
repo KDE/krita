@@ -44,20 +44,28 @@ void KisToolText::finishRect(const QRectF &rect)
         return;
 
     QRectF r = convertToPt(rect);
-    KoShapeFactoryBase* textFactory = KoShapeRegistry::instance()->value("ArtisticText");
+    QString shapeString = (m_optionWidget->mode() == KisTextToolOptionWidget::MODE_ARTISTIC) ? "ArtisticText" : "TextShapeID";
+    KoShapeFactoryBase* textFactory = KoShapeRegistry::instance()->value(shapeString);
     if (textFactory) {
         KoShape* shape = textFactory->createDefaultShape();
         shape->setSize(r.size());
         shape->setPosition(r.topLeft());
-        shape->setBackground( new KoColorBackground(currentFgColor().toQColor()));
-        KUndo2Command * cmd = canvas()->shapeController()->addShape(shape);
-        canvas()->addCommand(cmd);
-    }   
+        addShape(shape);
+    }
 }
 
 QList< QWidget* > KisToolText::createOptionWidgets()
 {
-    return QList< QWidget* >();
+    m_optionWidget = new KisTextToolOptionWidget();
+    QList< QWidget* > widgets;
+    widgets.append(m_optionWidget);
+    return widgets;
 }
+
+KisPainter::FillStyle KisToolText::fillStyle()
+{
+    return m_optionWidget->style();
+}
+
 
 #include "kis_tool_text.moc"

@@ -56,7 +56,7 @@ public:
 protected:
     virtual QWidget * createOptionWidget();
 
-    KisPainter::FillStyle fillStyle();
+    virtual KisPainter::FillStyle fillStyle();
     KisPainter::StrokeStyle strokeStyle();
 
     virtual void setupPainter(KisPainter * painter);

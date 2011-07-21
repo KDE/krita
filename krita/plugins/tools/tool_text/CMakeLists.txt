@@ -3,10 +3,11 @@
 set(kritatooltext_PART_SRCS
     tool_text.cc
     kis_tool_text.cc
+    kis_text_tool_option_widget.cpp
     )
 
 
-# kde4_add_ui_files(kritatooltext_PART_SRCS wdg_tool_crop.ui)
+kde4_add_ui_files(kritatooltext_PART_SRCS wdgtextoptions.ui)
 
 kde4_add_plugin(kritatooltext ${kritatooltext_PART_SRCS})
 

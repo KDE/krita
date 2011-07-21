@@ -24,6 +24,7 @@
 #include "KoToolFactoryBase.h"
 
 #include <kis_tool_rectangle_base.h>
+#include "kis_text_tool_option_widget.h"
 
 class KisToolText : public KisToolRectangleBase
 {
@@ -35,8 +36,11 @@ public:
     
     virtual QList< QWidget* > createOptionWidgets();
 
+    virtual KisPainter::FillStyle fillStyle();
+
 protected:
     virtual void finishRect(const QRectF& rect);
+    KisTextToolOptionWidget* m_optionWidget;
 };
 
 class KisToolTextFactory : public KoToolFactoryBase

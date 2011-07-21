@@ -72,8 +72,10 @@ void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject o
             return; // not ready yet
         }
         KoTextPage *page = rootArea->page();
-        if (!page)
-            return;
+        if (!page) {
+            KoVariable::resize(_document, object, _posInDocument, format, pd);
+            return; // should not happen
+        }
         int pagenumber = page->pageNumber();
         foreach(KoTextLayoutRootArea *a, ref->rootAreas()) {
             KoTextPage * p = a->page();
@@ -93,7 +95,7 @@ void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject o
         }
         if (document == _document) {
             KoVariable::resize(_document, object, _posInDocument, format, pd);
-            return;
+            return; // should not happen
         }
     }
 

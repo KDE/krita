@@ -284,6 +284,7 @@ void KoParagraphStyle::setLineHeightPercent(int lineHeight)
 {
     setProperty(PercentLineHeight, lineHeight);
     setProperty(FixedLineHeight, 0.0);
+    setProperty(MinimumLineHeight, 0.0);
     remove(NormalLineHeight);
 }
 
@@ -296,6 +297,7 @@ void KoParagraphStyle::setLineHeightAbsolute(qreal height)
 {
     setProperty(FixedLineHeight, height);
     setProperty(PercentLineHeight, 0);
+    setProperty(MinimumLineHeight, 0.0);
     remove(NormalLineHeight);
 }
 
@@ -306,6 +308,8 @@ qreal KoParagraphStyle::lineHeightAbsolute() const
 
 void KoParagraphStyle::setMinimumLineHeight(qreal height)
 {
+    setProperty(FixedLineHeight, 0.0);
+    setProperty(PercentLineHeight, 0);
     setProperty(MinimumLineHeight, height);
     remove(NormalLineHeight);
 }
@@ -1255,6 +1259,8 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             setProperty(NormalLineHeight, true);
             setProperty(PercentLineHeight, 0);
             setProperty(FixedLineHeight, 0.0);
+            setProperty(MinimumLineHeight, 0.0);
+            setProperty(LineSpacing, 0.0);
         }
     }
     else {
@@ -1937,7 +1943,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
                     key == KoParagraphStyle::FixedLineHeight ||
                     key == KoParagraphStyle::LineSpacingFromFont) {
 
-            if (key == KoParagraphStyle::MinimumLineHeight && minimumLineHeight() >= 0) {
+            if (key == KoParagraphStyle::MinimumLineHeight && minimumLineHeight() != 0) {
                 style.addPropertyPt("style:line-height-at-least", minimumLineHeight(), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
             } else if (key == KoParagraphStyle::LineSpacing && lineSpacing() != 0) {

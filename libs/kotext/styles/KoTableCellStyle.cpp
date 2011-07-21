@@ -29,6 +29,7 @@
 #include "KoTextDocument.h"
 #include "KoTableCellStyle_p.h"
 #include <KoShapeLoadingContext.h>
+#include <KoOdfGraphicStyles.h>
 #include "KoCharacterStyle.h"
 
 #include <KDebug>
@@ -542,17 +543,17 @@ void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
     context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
 
     context.styleStack().setTypeProperties("table-cell");
-    loadOdfProperties(context.styleStack());
+    loadOdfProperties(scontext, context.styleStack());
     
     KoCharacterStyle *charstyle = characterStyle();
     context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
     charstyle->loadOdf(scontext);   // load the KoCharacterStyle from the stylestack
 
     context.styleStack().setTypeProperties("graphic");
-    loadOdfProperties(context.styleStack());
+    loadOdfProperties(scontext, context.styleStack());
 
     context.styleStack().setTypeProperties("paragraph");
-    loadOdfProperties(context.styleStack());
+    loadOdfProperties(scontext, context.styleStack());
     context.styleStack().restore();
 
     // Borders - ugly mode enabled
@@ -573,7 +574,7 @@ void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
     }
 }
 
-void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
+void KoTableCellStyle::loadOdfProperties(KoShapeLoadingContext &context, KoStyleStack &styleStack)
 {
     // Padding
     if (styleStack.hasProperty(KoXmlNS::fo, "padding-left"))
@@ -713,6 +714,14 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
             brush.setColor(color);
             setBackground(brush);
         }
+    }
+
+    QString fillStyle = styleStack.property(KoXmlNS::draw, "fill");
+    if (fillStyle == "solid" || fillStyle == "hatch") {
+        styleStack.save();
+        QBrush brush = KoOdfGraphicStyles::loadOdfFillStyle(styleStack, fillStyle, context.odfLoadingContext().stylesReader());
+        setBackground(brush);
+        styleStack.restore();
     }
 
     if (styleStack.hasProperty(KoXmlNS::style, "shrink-to-fit")) {

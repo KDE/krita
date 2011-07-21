@@ -19,8 +19,9 @@
 #ifndef KOCHANNELINFO_H_
 #define KOCHANNELINFO_H_
 
-#include <QtGui/QColor>
-#include <QtCore/QString>
+#include <QColor>
+#include <QString>
+#include <QList>
 
 /**
  * This class gives some basic information about a channel,
@@ -49,83 +50,124 @@ public:
         INT16, ///< use this for an integer 16bits channel
         OTHER ///< Use this if the channel is neither an integer or a float
     };
-
+    
 public:
     KoChannelInfo() { }
     /**
      * @param name of the channel
-     * @param npos position of the channel in the pixel (in byte)
-     * @param index index of the channel in the pixel
+     * @param npos position of the channel in the pixel (in bytes)
+     * @param displayPosition the position of the channel in the user-visible order
      * @param channelType type of the channel
      * @param channelValueType type of the numerical data used by the channel
      * @param size number of bytes (not bits) of the channel (if -1, it is deduced from the channelType)
      * @param color a color to represent that channel (for instance in an histogram)
      */
-    KoChannelInfo(const QString & name, qint32 npos, qint32 index, enumChannelType channelType, enumChannelValueType channelValueType, qint32 size = -1, QColor color = QColor(0, 0, 0))
-            : m_name(name), m_pos(npos), m_index(index), m_channelType(channelType), m_channelValueType(channelValueType), m_size(size), m_color(color)
-            {
-              switch(m_channelValueType)
-              {
-                case UINT8:
-                case INT8:
-                  Q_ASSERT(m_size == -1 || m_size == 1);
-                  m_size = 1;
-                  break;
-                case UINT16:
-                case INT16:
-                  Q_ASSERT(m_size == -1 || m_size == 2);
-                  m_size = 2;
-                  break;
-                case UINT32:
-                  Q_ASSERT(m_size == -1 || m_size == 4);
-                  m_size = 4;
-                  break;
-                case FLOAT16:
-                  Q_ASSERT(m_size == -1 || m_size == 2);
-                  m_size = 2;
-                  break;
-                case FLOAT32:
-                  Q_ASSERT(m_size == -1 || m_size == 4);
-                  m_size = 4;
-                  break;
-                case FLOAT64:
-                  Q_ASSERT(m_size == -1 || m_size == 8);
-                  m_size = 8;
-                  break;
-                case OTHER:
-                  Q_ASSERT(m_size != -1);
-              }
-            
-            }
+    KoChannelInfo(const QString & name, 
+                  qint32 npos,
+                  qint32 displayPosition, 
+                  enumChannelType channelType, 
+                  enumChannelValueType channelValueType,
+                  qint32 size = -1, 
+                  QColor color = QColor(0, 0, 0))
+        : m_name(name)
+        , m_pos(npos)
+        , m_displayPosition(displayPosition)
+        , m_channelType(channelType)
+        , m_channelValueType(channelValueType)
+        , m_size(size)
+        , m_color(color)
+    {
+        switch(m_channelValueType)
+        {
+        case UINT8:
+        case INT8:
+            Q_ASSERT(m_size == -1 || m_size == 1);
+            m_size = 1;
+            break;
+        case UINT16:
+        case INT16:
+            Q_ASSERT(m_size == -1 || m_size == 2);
+            m_size = 2;
+            break;
+        case UINT32:
+            Q_ASSERT(m_size == -1 || m_size == 4);
+            m_size = 4;
+            break;
+        case FLOAT16:
+            Q_ASSERT(m_size == -1 || m_size == 2);
+            m_size = 2;
+            break;
+        case FLOAT32:
+            Q_ASSERT(m_size == -1 || m_size == 4);
+            m_size = 4;
+            break;
+        case FLOAT64:
+            Q_ASSERT(m_size == -1 || m_size == 8);
+            m_size = 8;
+            break;
+        case OTHER:
+            Q_ASSERT(m_size != -1);
+        }
+        
+    }
 public:
+    
+    /**
+     * converts the display position to the pixel-order index in the channels vector.
+     */
+    static int displayPositionToChannelIndex(int displayPosition, QList<KoChannelInfo*> channels) 
+    {
+        for (int i = 0; i < channels.size(); ++i) {
+            if (channels.at(i)->displayPosition() == displayPosition) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    static QList<KoChannelInfo*> displayOrderSorted(QList<KoChannelInfo*> channels) 
+    {
+        QList <KoChannelInfo*> sortedChannels;
+        for (int i = 0; i < channels.size(); ++i) {
+            foreach(KoChannelInfo* channel, channels) {
+                if (channel->displayPosition() == i) {
+                    sortedChannels << channel;
+                    break;
+                }
+            }
+        }
+        Q_ASSERT(channels.size() == sortedChannels.size());
+        return sortedChannels;
+    }
+    
     /**
      * User-friendly name for this channel for presentation purposes in the gui
      */
     inline QString name() const {
         return m_name;
     }
-
+    
     /**
      * returns the position of the first byte of the channel in the pixel
      */
     inline qint32 pos() const {
         return m_pos;
     }
-
+    
     /**
-     * @return the index of the channel in pixel
+     * @return the displayPosition of the channel in pixel
      */
-    inline qint32 index() const {
-        return m_index;
+    inline qint32 displayPosition() const {
+        return m_displayPosition;
     }
-
+    
     /**
      * returns the number of bytes this channel takes
      */
     inline qint32 size() const {
         return m_size;
     }
-
+    
     /**
      * returns the type of the channel
      */
@@ -145,24 +187,24 @@ public:
     inline QColor color() const {
         return m_color;
     }
-
+    
     /**
      * A channel is less than another channel if its pos is smaller.
      */
     inline bool operator<(const KoChannelInfo & info) {
         return m_pos < info.m_pos;
     }
-
+    
 private:
-
+    
     QString m_name;
     qint32 m_pos;
-    qint32 m_index;
+    qint32 m_displayPosition;
     enumChannelType m_channelType;
     enumChannelValueType m_channelValueType;
     qint32 m_size;
     QColor m_color;
-
+    
 };
 
 #endif // KOCHANNELINFO_H_

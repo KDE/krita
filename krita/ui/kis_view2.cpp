@@ -311,18 +311,11 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
-    //Remove KoMainWindow fullscreen before adding Krita specific fullscreen
-    QAction* oldFullscreen = shell()->actionCollection()->action("view_fullscreen");
-    if(oldFullscreen) {
-        shell()->actionCollection()->takeAction(oldFullscreen);
-        delete oldFullscreen;
-    }
-
     tAction = new KToggleAction(i18n("Show Canvas Only"), this);
     tAction->setCheckedState(KGuiItem(i18n("Return to Window")));
     tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
     QList<QKeySequence> shortcuts;
-    shortcuts << QKeySequence("Ctrl+h") << QKeySequence("ctrl+Shift+f");
+    shortcuts << QKeySequence("Ctrl+h");
     tAction->setShortcuts(shortcuts);
     tAction->setChecked(false);
     actionCollection()->addAction("view_show_just_the_canvas", tAction);

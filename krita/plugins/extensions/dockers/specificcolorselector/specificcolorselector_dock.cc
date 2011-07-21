@@ -60,8 +60,6 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
     connect(m_colorSelector, SIGNAL(colorChanged(const KoColor&)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
     connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSelector, SLOT(setColor(const KoColor&)));
 
-    m_colorSelector->setColor(view->resourceProvider()->fgColor());
-
     connect(view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), this, SLOT(layerChanged(const KisNodeSP)));
     connect(view->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_colorSelector, SLOT(setColorSpace(const KoColorSpace*)));
 
@@ -80,12 +78,13 @@ void SpecificColorSelectorDock::unsetCanvas()
 
 void SpecificColorSelectorDock::layerChanged(const KisNodeSP node)
 {
-    if(!node) return;
-
+    if (!node) return;
+    if (!m_colorSelector) return;
     if (node->inherits("KisMask") && node->parent())
         m_colorSelector->setColorSpace(static_cast<const KisLayer*>(node->parent().data())->colorSpace());
     else
         m_colorSelector->setColorSpace(static_cast<const KisLayer*>(node.data())->colorSpace());
+    m_colorSelector->setColor(m_view->resourceProvider()->fgColor());
 }
 
 

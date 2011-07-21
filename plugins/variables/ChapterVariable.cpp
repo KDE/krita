@@ -56,9 +56,10 @@ void ChapterVariable::readProperties(const KoProperties *props)
     m_level = qMax(1, props->intProperty("level"));
 }
 
-void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
+void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject object, int _posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
     QTextDocument *document = const_cast<QTextDocument*>(_document);
+    int posInDocument = _posInDocument;
     bool checkBackwards = true;
     QTextFrame::iterator startIt, endIt;
 
@@ -66,11 +67,15 @@ void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject o
     KoTextDocumentLayout *ref = lay->referencedLayout();
     if (ref) {
         KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(posInDocument);
-        if (!rootArea)
+        if (!rootArea) {
+            KoVariable::resize(_document, object, _posInDocument, format, pd);
             return; // not ready yet
+        }
         KoTextPage *page = rootArea->page();
-        if (!page)
-            return;
+        if (!page) {
+            KoVariable::resize(_document, object, _posInDocument, format, pd);
+            return; // should not happen
+        }
         int pagenumber = page->pageNumber();
         foreach(KoTextLayoutRootArea *a, ref->rootAreas()) {
             KoTextPage * p = a->page();
@@ -88,8 +93,10 @@ void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject o
             checkBackwards = false; // check forward
             break;
         }
-        if (document == _document)
-            return;
+        if (document == _document) {
+            KoVariable::resize(_document, object, _posInDocument, format, pd);
+            return; // should not happen
+        }
     }
 
     QTextBlock block = document->findBlock(posInDocument);
@@ -142,7 +149,7 @@ void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject o
         }
     }
 
-    KoVariable::resize(document, object, posInDocument, format, pd);
+    KoVariable::resize(_document, object, _posInDocument, format, pd);
 }
 
 void ChapterVariable::saveOdf(KoShapeSavingContext &context)

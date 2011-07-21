@@ -36,7 +36,7 @@ public:
     FrameIterator(QTextTableCell frame);
     FrameIterator(FrameIterator *other);
 
-    bool operator ==(const FrameIterator &other);
+    bool operator ==(const FrameIterator &other) const;
 
     TableIterator *tableIterator(QTextTable *);
     FrameIterator *subFrameIterator(QTextFrame *);

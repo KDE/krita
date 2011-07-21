@@ -107,7 +107,7 @@ void KoVariable::resize(const QTextDocument *document, QTextInlineObject object,
     Q_ASSERT(format.isCharFormat());
     QFontMetricsF fm(format.font(), pd);
 
-    qreal width = qMax(0.0, fm.width(d->value));
+    qreal width = qMax(qreal(0.0), fm.width(d->value));
     qreal ascent = fm.ascent();
     qreal descent = fm.descent();
     if (object.width() != width) {

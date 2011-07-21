@@ -28,6 +28,7 @@ SimpleRootAreaProvider::SimpleRootAreaProvider(KoTextShapeData *data, TextShape 
     : m_textShape(textshape)
     , m_area(0)
     , m_textShapeData(data)
+    , m_fixAutogrow(false)
 
 {
 }
@@ -62,11 +63,17 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
     }
     if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
-        newSize.setHeight(rootArea->bottom() - rootArea->top());
+        qreal height = rootArea->bottom() - rootArea->top();
+        if (height > newSize.height()) {
+            newSize.setHeight(rootArea->bottom() - rootArea->top());
+        }
     }
     if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
-        newSize.setWidth(rootArea->right() - rootArea->left());
+        qreal width = rootArea->bottom() - rootArea->top();
+        if (width > newSize.width()) {
+            newSize.setWidth(rootArea->right() - rootArea->left());
+        }
     }
 
     qreal newBottom = rootArea->top() + newSize.height();
@@ -86,16 +93,21 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
     }
 
     if (newSize != rootArea->associatedShape()->size()) {
-        QSizeF tmpSize = rootArea->associatedShape()->size();
-        tmpSize.setWidth(newSize.width());
-        QPointF centerpos = rootArea->associatedShape()->absolutePosition(KoFlake::CenteredPosition);
-        rootArea->associatedShape()->setSize(tmpSize);
-        rootArea->associatedShape()->setAbsolutePosition(centerpos, KoFlake::CenteredPosition);
-        centerpos = rootArea->associatedShape()->absolutePosition(sizeAnchor);
+        // OO grows to both sides so when to small the initial layouting needs
+        // to keep that into account.
+        if (m_fixAutogrow) {
+            m_fixAutogrow = false;
+            QSizeF tmpSize = rootArea->associatedShape()->size();
+            tmpSize.setWidth(newSize.width());
+            QPointF centerpos = rootArea->associatedShape()->absolutePosition(KoFlake::CenteredPosition);
+            rootArea->associatedShape()->setSize(tmpSize);
+            rootArea->associatedShape()->setAbsolutePosition(centerpos, KoFlake::CenteredPosition);
+            centerpos = rootArea->associatedShape()->absolutePosition(sizeAnchor);
+            rootArea->associatedShape()->setSize(newSize);
+            rootArea->associatedShape()->setAbsolutePosition(centerpos, sizeAnchor);
+        }
         rootArea->associatedShape()->setSize(newSize);
-        rootArea->associatedShape()->setAbsolutePosition(centerpos, sizeAnchor);
     }
-
 
     updateRect |= rootArea->associatedShape()->outlineRect();
     rootArea->associatedShape()->update(rootArea->associatedShape()->outlineRect());

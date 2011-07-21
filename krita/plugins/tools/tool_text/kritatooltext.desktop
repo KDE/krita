@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Text Tool
+X-KDE-ServiceTypes=Krita/Tool
+Type=Service
+X-KDE-Library=kritatooltext
+X-Krita-Version=4

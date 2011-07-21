@@ -561,8 +561,8 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 
     // full-screen mode
     vbox = new KVBox();
-    page = new KPageWidgetItem(vbox, i18n("Full-screen settings"));
-    page->setHeader(i18n("Full-screen"));
+    page = new KPageWidgetItem(vbox, i18n("Canvas-only settings"));
+    page->setHeader(i18n("Canvas-only"));
     page->setIcon(KIcon("preferences-system-performance"));
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);

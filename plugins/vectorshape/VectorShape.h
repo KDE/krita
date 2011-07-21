@@ -28,7 +28,7 @@
 #include <QByteArray>
 #include <QCache>
 #include <QSize>
-#include <QThread>
+#include <QRunnable>
 #include <QMutex>
 
 // Calligra
@@ -44,7 +44,7 @@ class VectorShape;
 
 #define VectorShape_SHAPEID "VectorShapeID"
 
-class RenderThread : public QThread
+class RenderThread : public QObject, public QRunnable
 {
     Q_OBJECT
 public:

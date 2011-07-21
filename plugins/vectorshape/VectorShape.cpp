@@ -33,6 +33,7 @@
 #include <QDataStream>
 #include <QPixmap>
 #include <QMutexLocker>
+#include <QThreadPool>
 
 // KDE
 #include <KDebug>
@@ -94,8 +95,9 @@ void VectorShape::setCompressedContents( const QByteArray &newContents )
 //                             Painting
 
 RenderThread::RenderThread(VectorShape *shape, const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY)
-    : QThread(), m_shape(shape), m_size(size), m_boundingSize(boundingSize), m_zoomX(zoomX), m_zoomY(zoomY)
+    : QObject(), QRunnable(), m_shape(shape), m_size(size), m_boundingSize(boundingSize), m_zoomX(zoomX), m_zoomY(zoomY)
 {
+    setAutoDelete(true);
 }
 
 RenderThread::~RenderThread()
@@ -248,7 +250,7 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
             converter.zoom(&zoomX, &zoomY);
             RenderThread *t = new RenderThread(this, size(), rc.size().toSize(), zoomX, zoomY);
             connect(t, SIGNAL(finished(QSize,QImage*)), this, SLOT(renderFinished(QSize,QImage*)));
-            t->start();
+            QThreadPool::globalInstance()->start(t);
         }
     } else {
         QVector<QRect> clipRects = painter.clipRegion().rects();

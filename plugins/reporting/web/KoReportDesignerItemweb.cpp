@@ -86,30 +86,46 @@ KoReportDesignerItemweb::~KoReportDesignerItemweb()									 //done,compared
     // do we need to clean anything up?
 }
 
-void KoReportDesignerItemweb::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+//i do not need paint function as i am not displaying my image as a picture,it is a qwebview
+
+/*void KoReportDesignerItemweb::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-   QFont f = painter->font();
-   QPen  p = painter->pen();
-   QColor bg = Qt::white;
-   painter->fillRect(QGraphicsRectItem::rect(), bg); 
-   m_view->page()->mainFrame()->render(painter);
-   drawHandles(painter);
+    // store any values we plan on changing so we can restore them
+    QPen  p = painter->pen();
+  painter->fillRect(rect(), QColor(0xc2, 0xfc, 0xc7));//C2FCC7
+
+    if (isInline()) {
+        //QImage t_img = _image;
+        QImage t_img = m_staticImage->value().value<QPixmap>().toImage();
+        if (mode() == "stretch") {
+            t_img = t_img.scaled(rect().width(), rect().height(), Qt::KeepAspectRatio);
+        }
+        painter->drawImage(rect().left(), rect().top(), t_img, 0, 0, rect().width(), rect().height());
+    } else {
+        painter->drawText(rect(), 0, dataSourceAndObjectTypeName(itemDataSource(), "image"));
+    }
+
+    //Draw a border so user knows the object edge
+    painter->setPen(QPen(QColor(224, 224, 224)));
+    painter->drawRect(rect());
+
+
+    drawHandles(painter);
 
     // restore an values before we started just in case
-    painter->setFont(f);
     painter->setPen(p);
-}
+}*/
 
 void KoReportDesignerItemweb::buildXML(QDomDocument & doc, QDomElement & parent)
 {
     QDomElement entity = doc.createElement("report:image");
 
     // properties
-    addPropertyAsAttribute(&entity, my_url);
-//    addPropertyAsAttribute(&entity, m_dataSource);
+    addPropertyAsAttribute(&entity, m_url);
+    addPropertyAsAttribute(&entity, m_dataSource);
     entity.setAttribute("report:z-index", zValue());
     buildXMLRect(doc, entity, &m_pos, &m_size);
 
@@ -120,9 +136,9 @@ void KoReportDesignerItemweb::buildXML(QDomDocument & doc, QDomElement & parent)
         entity.appendChild(web);
     } else {
         addPropertyAsAttribute(&entity, m_controlSource);
-    }
+    }*/
 
-    parent.appendChild(entity);*/
+    parent.appendChild(entity);
 }
 
 void KoReportDesignerItemweb::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
@@ -134,19 +150,18 @@ void KoReportDesignerItemweb::slotPropertyChanged(KoProperty::Set &s, KoProperty
         } else {
             m_oldName = p.value().toString();
         }
-}
-    else {
+    }else if(p.name=="url"){
 
-	setUrl(m_oldName);
-}
+	setUrl(p.valur.toString());
+} else if (p.name() == "data-source") {
+    void setDataSource(const QString &ds);
+
     KoReportDesignerItemRectBase::propertyChanged(s, p);
     if (m_reportDesigner) m_reportDesigner->setModified(true);
 }
 
 void KoReportDesignerItemweb::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-//    m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
+    m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     KoReportDesignerItemRectBase::mousePressEvent(event);
 }
-
-

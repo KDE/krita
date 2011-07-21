@@ -44,7 +44,6 @@ PresetDockerDock::PresetDockerDock( )
 
 void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
 {
-    qDebug() << ">>>>>>>>>>>>>>." << canvas;
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
         m_presetChooser->disconnect(m_canvas->view()->paintOpBox());

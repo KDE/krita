@@ -214,6 +214,12 @@ target_link_libraries(KisCropVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTT
 
 ########### next target ###############
 
+set(kis_crop_processing_visitor_test_SRCS kis_crop_processing_visitor_test.cpp )
+kde4_add_unit_test(KisCropProcessingVisitorTest TESTNAME krita-image-KisCropProcessingVisitorTest ${kis_crop_processing_visitor_test_SRCS})
+target_link_libraries(KisCropProcessingVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_datamanager_test_SRCS kis_datamanager_test.cpp )
 kde4_add_unit_test(KisDatamanagerTest TESTNAME krita-image-KisDatamanagerTest ${kis_datamanager_test_SRCS})
 target_link_libraries(KisDatamanagerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

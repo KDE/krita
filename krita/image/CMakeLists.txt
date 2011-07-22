@@ -89,6 +89,7 @@ set(kritaimage_LIB_SRCS
    commands/kis_reselect_global_selection_command.cpp
    commands/kis_set_global_selection_command.cpp
    commands/kis_scheduled_undo_command.cpp
+   commands/kis_processing_command.cpp
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc
    filter/kis_filter_job.cpp

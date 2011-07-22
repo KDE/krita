@@ -161,17 +161,20 @@ void TestStyles::testApplyParagraphStyleWithParent()
     QCOMPARE(style3.lineHeightPercent(), 0);
     QCOMPARE(style3.lineHeightAbsolute(), 8.0);
     QCOMPARE(style3.lineSpacing(), 23.45);
+    QVERIFY(!style3.hasNormalLineHeight());
 
     style3.setNormalLineHeight();
     QCOMPARE(style3.lineHeightPercent(), 0);
     QCOMPARE(style3.lineHeightAbsolute(), 0.0);
     QCOMPARE(style3.lineSpacing(), 0.0);
+    QVERIFY(style3.hasNormalLineHeight());
 
     style3.setLineHeightPercent(150);
     style3.setLineSpacing(56.78);
     QCOMPARE(style3.lineHeightPercent(), 150);
     QCOMPARE(style3.lineHeightAbsolute(), 0.0);
     QCOMPARE(style3.lineSpacing(), 56.78);
+    QVERIFY(!style3.hasNormalLineHeight());
 
     QTextLength length0(QTextLength::FixedLength, 0.0);
     QTextLength length1(QTextLength::FixedLength, 10.0);

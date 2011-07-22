@@ -74,18 +74,18 @@ private slots:
     
     /**
     * This small button will hover over a preset when it is selected;
-    * and will remove the preset when pressed
+    * and will remove the preset when clicked
     */
-    void on_deletePresetBtn_pressed();
+    void on_deletePresetBtn_clicked();
     
 private:
     /**
     * This is a workaround to access members of KisPresetChooser using the QObject tree
     * instead of class methods
     */
-    KoResourceItemView* antiOOPHack;
+    KoResourceItemView* m_antiOOPHack;
     
-    QTimer* refresher;
+    QTimer* m_refresher;
 };
 
 

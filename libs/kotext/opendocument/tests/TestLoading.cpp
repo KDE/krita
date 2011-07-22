@@ -1007,6 +1007,8 @@ void TestLoading::addData(LoadSave loadSave)
 
     QTest::newRow("bookmark") << "ParagraphElements/bookmark";
     QTest::newRow("note") << "ParagraphElements/note";
+
+    QTest::newRow("dde") << "DDE/dde";
 }
 
 QTextDocument *TestLoading::documentFromScript(const QString &script)

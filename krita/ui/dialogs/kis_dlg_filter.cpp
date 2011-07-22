@@ -55,7 +55,6 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP im
         QDialog(parent),
         d(new Private)
 {
-    QRect rc = node->extent();
     setModal(false);
 
     d->uiFilterDialog.setupUi(this);
@@ -122,6 +121,9 @@ void KisFilterDialog::apply()
     if (!d->currentFilter) return;
 
     KisFilterConfiguration* config = d->uiFilterDialog.filterSelection->configuration();
+    if (d->node->inherits("KisLayer")) {
+        config->setChannelFlags(qobject_cast<KisLayer*>(d->node.data())->channelFlags());
+    }
     emit(sigPleaseApplyFilter(d->node, config));
     d->uiFilterDialog.pushButtonOk->setEnabled(false);
 }

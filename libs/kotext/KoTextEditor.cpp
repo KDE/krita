@@ -437,20 +437,18 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             QTextBlock startBlock = selection.document()->findBlock(selection.anchor());
             QTextBlock endBlock = selection.document()->findBlock(selection.position());
 
-            if (startBlock != endBlock) {
-                do {
-                    startBlock = startBlock.next();
-                    QTextCursor cursor(startBlock);
-                    QTextBlockFormat blockFormat;
-                    blockFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-                    cursor.mergeBlockFormat(blockFormat);
+            while (startBlock.isValid() && startBlock != endBlock) {
+                startBlock = startBlock.next();
+                QTextCursor cursor(startBlock);
+                QTextBlockFormat blockFormat;
+                blockFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+                cursor.mergeBlockFormat(blockFormat);
 
-                    QTextCharFormat blockCharFormat = cursor.blockCharFormat();
-                    if (blockCharFormat.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
-                        blockCharFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
-                        cursor.setBlockCharFormat(blockCharFormat);
-                    }
-                } while(startBlock != endBlock);
+                QTextCharFormat blockCharFormat = cursor.blockCharFormat();
+                if (blockCharFormat.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
+                    blockCharFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
+                    cursor.setBlockCharFormat(blockCharFormat);
+                }
             }
         }
     }
@@ -798,7 +796,7 @@ void KoTextEditor::insertFrameBreak()
     QTextBlock block = d->caret.block();
     if (d->caret.position() == block.position() && block.length() > 0) { // start of parag
         QTextBlockFormat bf = d->caret.blockFormat();
-        bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+        bf.setProperty(KoParagraphStyle::BreakBefore, KoText::PageBreak);
         d->caret.insertBlock(bf);
         if (block.textList())
             block.textList()->remove(block);
@@ -806,7 +804,7 @@ void KoTextEditor::insertFrameBreak()
         QTextBlockFormat bf = d->caret.blockFormat();
         newLine();
         bf = d->caret.blockFormat();
-        bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore); // TODO we should create an autostyle instead
+        bf.setProperty(KoParagraphStyle::BreakBefore, KoText::PageBreak);
         d->caret.setBlockFormat(bf);
     }
     d->updateState(KoTextEditor::Private::NoOp);

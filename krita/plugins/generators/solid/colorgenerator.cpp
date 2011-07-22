@@ -93,7 +93,6 @@ void KisColorGenerator::generate(KisProcessingInformation dstInfo,
                                  KoUpdater* progressUpdater) const
 {
     KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
 
     Q_ASSERT(!dst.isNull());
     Q_ASSERT(config);

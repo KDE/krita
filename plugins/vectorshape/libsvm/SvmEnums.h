@@ -121,6 +121,24 @@ namespace Libsvm
     };
 
 
+    /**
+       Layout Mode
+
+       See the SPEC, Section 2.2.2.4
+    */
+    enum LayoutMode {
+        TEXT_LAYOUT_DEFAULT           = 0x0000,
+        TEXT_LAYOUT_BIDI_LTR          = 0x0000,
+        TEXT_LAYOUT_BIDI_RTL          = 0x0001,
+        TEXT_LAYOUT_BIDI_STRONG       = 0x0002,
+        TEXT_LAYOUT_TEXTORIGIN_LEFT   = 0x0004,
+        TEXT_LAYOUT_TEXTORIGIN_RIGHT  = 0x0008,
+        TEXT_LAYOUT_COMPLEX_DISABLED  = 0x0100,
+        TEXT_LAYOUT_ENABLE_LIGATURES  = 0x0200,
+        TEXT_LAYOUT_SUBSTITUTE_DIGITS = 0x0400
+    };
+
+
     // ----------------------------------------------------------------
     //                             Flags
     // ----------------------------------------------------------------

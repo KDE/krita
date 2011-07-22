@@ -1,19 +1,19 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #include "kis_node.h"
@@ -22,6 +22,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QPainterPath>
+#include <QRect>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -38,9 +39,9 @@ typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 
 
 /**
- * The link between KisProjection ans KisImageUpdater
- * uses queued signals with an argument of KisNodeSP type,
- * so we should register it beforehand
+ *The link between KisProjection ans KisImageUpdater
+ *uses queued signals with an argument of KisNodeSP type,
+ *so we should register it beforehand
  */
 struct KisNodeSPStaticRegistrar {
     KisNodeSPStaticRegistrar() {
@@ -59,9 +60,9 @@ public:
     }
 
     KisNodeWSP parent;
-    KisNodeGraphListener * graphListener;
+    KisNodeGraphListener *graphListener;
     KisSafeReadNodeList nodes;
-    KisNodeProgressProxy* nodeProgressProxy;
+    KisNodeProgressProxy *nodeProgressProxy;
 };
 
 KisNode::KisNode()
@@ -81,11 +82,11 @@ KisNode::KisNode(const KisNode & rhs)
 
     KisSafeReadNodeList::const_iterator iter;
     FOREACH_SAFE(iter, rhs.m_d->nodes) {
-        KisNodeSP children = (*iter)->clone();
-        children->createNodeProgressProxy();
-        m_d->nodes.append(children);
-        children->setParent(this);
-        children->setGraphListener(m_d->graphListener);
+        KisNodeSP child = (*iter)->clone();
+        child->createNodeProgressProxy();
+        m_d->nodes.append(child);
+        child->setParent(this);
+        child->setGraphListener(m_d->graphListener);
     }
 }
 
@@ -121,12 +122,12 @@ bool KisNode::accept(KisNodeVisitor &v)
     return v.visit(this);
 }
 
-KisNodeGraphListener * KisNode::graphListener() const
+KisNodeGraphListener *KisNode::graphListener() const
 {
     return m_d->graphListener;
 }
 
-void KisNode::setGraphListener(KisNodeGraphListener * graphListener)
+void KisNode::setGraphListener(KisNodeGraphListener *graphListener)
 {
     m_d->graphListener = graphListener;
 }
@@ -321,11 +322,18 @@ void KisNode::setDirty()
     setDirty(extent());
 }
 
+void KisNode::setDirty(const QVector<QRect> &rects)
+{
+    foreach(const QRect &rc, rects) {
+        setDirty(rc);
+    }
+}
+
 void KisNode::setDirty(const QRegion & region)
 {
     if (region.isEmpty()) return;
 
-    foreach(const QRect & rc, region.rects()) {
+    foreach(const QRect &rc, region.rects()) {
         setDirty(rc);
     }
 }

@@ -63,7 +63,7 @@ public:
     QWidget *canvasWidget() { return this; }
     const QWidget *canvasWidget() const { return this; }
 
-    void updateCanvas(const QRegion &region);
+    void updateCanvas(const QVector<QRect> &region);
 
     KoColor currentColorAt(QPoint pos);
 

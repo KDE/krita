@@ -537,7 +537,7 @@ QString DoubleSpinBoxDelegate::displayTextForProperty( const Property* prop ) co
             if (unit.isEmpty())
                 return minValueText;
             else
-                return minValueText + " " + unit;
+                return minValueText + ' ' + unit;
         }
     }
 //! @todo precision?
@@ -545,7 +545,7 @@ QString DoubleSpinBoxDelegate::displayTextForProperty( const Property* prop ) co
     QString display;
 #ifdef KOPROPERTY_USE_KOLIBS
     if (!unit.isEmpty()) {
-        return KGlobal::locale()->formatNumber(KoUnit::unit(unit).toUserValue(prop->value().toDouble())) + " " + unit;
+        return KGlobal::locale()->formatNumber(KoUnit::unit(unit).toUserValue(prop->value().toDouble())) + ' ' + unit;
     }
 #endif
     return KGlobal::locale()->formatNumber(prop->value().toDouble());

@@ -146,7 +146,7 @@ void KisLightSource::mouseMoveEvent(QMouseEvent* event)
 
     m_moving = false;
 
-    paintEvent(&QPaintEvent(this->geometry()));
+    update();
 
     qDebug() << lightVector;
 

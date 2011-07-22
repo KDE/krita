@@ -407,9 +407,14 @@ void KisScratchPad::initPainting(QEvent* event) {
     }
     m_distanceInformation.spacing = m_painter->paintAt(m_previousPaintInformation);
     m_distanceInformation.distance = 0.0;
-    QRect rc = m_painter->takeDirtyRegion().boundingRect();
 
-    update(pos.x() - rc.width(), pos.y() - rc.height(), rc.width() * 2, rc.height() *2);
+
+    QRect bounds;
+    foreach(const QRect &rc, m_painter->takeDirtyRegion()) {
+        bounds |= rc;
+    }
+
+    update(pos.x() - bounds.width(), pos.y() - bounds.height(), bounds.width() * 2, bounds.height() *2);
 }
 
 void KisScratchPad::paint(QEvent* event) {
@@ -439,12 +444,15 @@ void KisScratchPad::paint(QEvent* event) {
 
     m_distanceInformation = m_painter->paintLine(m_previousPaintInformation, info, m_distanceInformation);
     m_previousPaintInformation = info;
-    QRegion dirtRegion = m_painter->takeDirtyRegion();
-    QRect rc = dirtRegion.boundingRect();
-    m_incrementalDirtyRegion+=dirtRegion;
 
-    m_paintLayer->updateProjection(dirtRegion.boundingRect());
-    update(pos.x() - rc.width(), pos.y() - rc.height(), rc.width() * 2, rc.height() *2);
+    QRect bounds;
+    foreach(const QRect &rc, m_painter->takeDirtyRegion()) {
+        bounds |= rc;
+        m_incrementalDirtyRegion += rc;
+    }
+
+    m_paintLayer->updateProjection(bounds);
+    update(pos.x() - bounds.width(), pos.y() - bounds.height(), bounds.width() * 2, bounds.height() *2);
 }
 
 void KisScratchPad::endPaint(QEvent *event) {
@@ -474,8 +482,13 @@ void KisScratchPad::endPaint(QEvent *event) {
         }
     }
 
-    QRect rc = m_painter->takeDirtyRegion().boundingRect();
-    update(rc.translated(m_currentMousePosition));
+
+    QRect bounds;
+    foreach(const QRect &rc, m_painter->takeDirtyRegion()) {
+        bounds |= rc;
+    }
+
+    update(bounds.translated(m_currentMousePosition));
 
     delete m_painter;
     m_painter = 0;

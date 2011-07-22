@@ -304,7 +304,6 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6 (QDataStream & abr, AbrInfo *ab
     Q_UNUSED(image_ID);
     qint32 brush_size;
     qint32 brush_end;
-    qint32 complement_to_4;
     qint32 next_brush;
 
     qint32 top, left, bottom, right;
@@ -325,7 +324,6 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6 (QDataStream & abr, AbrInfo *ab
         brush_end++;
     }
 
-    complement_to_4 = brush_end - brush_size;
     next_brush = abr.device()->pos() + brush_end;
 
     // discard key

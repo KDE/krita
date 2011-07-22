@@ -86,13 +86,13 @@ QWidget* KisToolLine::createOptionWidget()
     m_cbRotation     = new QCheckBox(i18n("Rotation"));
     m_cbTangPressure = new QCheckBox(i18n("Tangential Pressure"));
     m_bnVaryingEnds  = new QPushButton(i18n("Varying End-Points"));
-    
+
     m_cbPressure->setChecked(true);
     m_cbTilt->setChecked(true);
     m_cbRotation->setChecked(true);
     m_cbTangPressure->setChecked(true);
     m_bnVaryingEnds->setCheckable(true);
-    
+
     addOptionWidgetOption(m_cbPressure);
     addOptionWidgetOption(m_cbTilt);
     addOptionWidgetOption(m_cbRotation);
@@ -104,7 +104,7 @@ QWidget* KisToolLine::createOptionWidget()
 void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
-    
+
     if (mode() == KisTool::PAINT_MODE) {
         paintLine(gc, QRect());
     }
@@ -117,7 +117,7 @@ void KisToolLine::mousePressEvent(KoPointerEvent *event)
                        Qt::LeftButton, Qt::NoModifier)) {
 
         setMode(KisTool::PAINT_MODE);
-    
+
         m_startPos = KisPaintInformation(
             convertToPixelCoord(event),
             PRESSURE_DEFAULT,
@@ -154,7 +154,7 @@ void KisToolLine::mouseMoveEvent(KoPointerEvent *event)
         } else {
             m_endPos.setPos(pos);
         }
-        
+
         m_maxPressure = qMax(m_maxPressure, float(pressureToCurve(event->pressure())));
         updatePreview();
     }
@@ -171,7 +171,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
         updatePreview();
 
         QPointF pos = convertToPixelCoord(event);
-        
+
         if(m_bnVaryingEnds->isChecked()) {
             m_endPos = KisPaintInformation(
                 m_endPos.pos(),
@@ -196,7 +196,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
 
         if (m_startPos.pos() == m_endPos.pos())
             return;
-        
+
         if(m_cbPressure->isChecked()) {
             m_startPos.setPressure(m_maxPressure);
             m_endPos.setPressure(m_maxPressure);
@@ -225,10 +225,9 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
                 setupPainter(m_painter);
                 m_painter->paintLine(m_startPos, m_endPos);
 
-                QRegion dirtyRegion = m_painter->takeDirtyRegion();
                 m_painter->endTransaction(image()->undoAdapter());
 
-                device->setDirty(dirtyRegion);
+                device->setDirty(m_painter->takeDirtyRegion());
                 notifyModified();
 
                 delete m_painter;

@@ -29,6 +29,7 @@
 
 #include <KoDpi.h>
 
+#include <kdeversion.h>
 #include <klocale.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
@@ -36,8 +37,15 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+
+#if KDE_IS_VERSION(4,6,0)
+#include <krecentdirs.h>
+#endif
+
 #include <QtDBus/QtDBus>
 #include <QFile>
+#include <QSplashScreen>
+
 
 bool KoApplication::m_starting = true;
 
@@ -48,10 +56,11 @@ namespace {
 class KoApplicationPrivate
 {
 public:
-    KoApplicationPrivate()  {
-//         m_appIface = 0;
-    }
-//     KoApplicationIface *m_appIface;  // to avoid a leak
+    KoApplicationPrivate() 
+        : splashScreen(0)
+    {}
+
+    QSplashScreen *splashScreen;
 };
 
 KoApplication::KoApplication()
@@ -91,14 +100,28 @@ bool KoApplication::initHack()
 class KoApplication::ResetStarting
 {
 public:
+    ResetStarting(QSplashScreen *splash = 0)
+        : m_splash(splash)
+    {
+    }
+
     ~ResetStarting()  {
         KoApplication::m_starting = false;
+        if (m_splash) {
+            m_splash->hide();
+        }
     }
+
+    QSplashScreen *m_splash;
 };
 
 bool KoApplication::start()
 {
-    ResetStarting resetStarting; // reset m_starting to false when we're done
+    if (d->splashScreen) {
+        d->splashScreen->show();
+    }
+
+    ResetStarting resetStarting(d->splashScreen); // reset m_starting to false when we're done
     Q_UNUSED(resetStarting);
 
     // Find the *.desktop file corresponding to the kapp instance name
@@ -136,6 +159,13 @@ bool KoApplication::start()
 
     // No argument -> create an empty document
     if (!argsCount) {
+#if KDE_IS_VERSION(4,6,0)
+        // if there's no document, add the current working directory
+        // to the recent dirs so the open dialog and open pane show
+        // the directory from where the app was started, instead of
+        // the last directory from where we opened a file
+        KRecentDirs::add(":OpenDialog", QDir::currentPath());
+#endif
         QString errorMsg;
         KoDocument* doc = entry.createDoc(&errorMsg);
         if (!doc) {
@@ -259,12 +289,6 @@ bool KoApplication::start()
                         if (!roundtripFileName.isEmpty()) {
                             doc->saveAs(KUrl("file:"+roundtripFileName));
                         }
-                        // handle events that were triggered during loading or
-                        // saving, before closing the document, since these
-                        // events can cause access to the document
-                        while (qApp->hasPendingEvents()) {
-                            qApp->processEvents();
-                        }
                         // close the document
                         shell->slotFileQuit();
                         return true; // only load one document!
@@ -319,6 +343,11 @@ KoApplication::~KoApplication()
 bool KoApplication::isStarting()
 {
     return KoApplication::m_starting;
+}
+
+void KoApplication::setSplashScreen(QSplashScreen *splashScreen)
+{
+    d->splashScreen = splashScreen;
 }
 
 #include <KoApplication.moc>

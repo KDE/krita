@@ -42,7 +42,6 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     QTransform painterMatrix = painter.worldTransform();
 
     painter.setPen( Qt::green );
-    bool editable=false;
     foreach(KoShape *shape, m_selection->selectedShapes(KoFlake::StrippedSelection)) {
         // apply the shape transformation on top of the old painter transformation
         painter.setWorldTransform( shape->absoluteTransformation(&converter) * painterMatrix );
@@ -51,8 +50,6 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         // draw the shape bounding rect
         painter.drawRect( QRectF( QPointF(), shape->size() ) );
 
-        if(!shape->isGeometryProtected())
-            editable = true;
     }
 
     if(m_selection->count()>1) {

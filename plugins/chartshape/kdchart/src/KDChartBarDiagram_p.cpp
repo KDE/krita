@@ -68,7 +68,6 @@ void BarDiagram::BarDiagramType::paintBars( PaintContext* ctx, const QModelIndex
         bool paintTop = true;
         if ( maxDepth )
             threeDAttrs.setDepth( -maxDepth );
-        QPointF boundRight =  ctx->coordinatePlane()->translate( diagram()->dataBoundaries().second );
         //fixme adjust the painting to reasonable depth value
         switch ( type() )
         {

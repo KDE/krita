@@ -43,7 +43,9 @@ public:
     }
     qreal counterWidth;
     qreal counterSpacing;
-    QString counterText;
+    QString counterPrefix;
+    QString counterPlainText;
+    QString counterSuffix;
     QString partialCounterText;
     bool counterIsImage;
     int counterIndex;
@@ -66,7 +68,7 @@ KoTextBlockData::~KoTextBlockData()
 
 bool KoTextBlockData::hasCounterData() const
 {
-    return d->counterWidth >= 0 && (!d->counterText.isNull() || d->counterIsImage);
+    return d->counterWidth >= 0 && (!d->counterPlainText.isNull() || d->counterIsImage);
 }
 
 qreal KoTextBlockData::counterWidth() const
@@ -98,14 +100,20 @@ void KoTextBlockData::setCounterSpacing(qreal spacing)
     d->counterSpacing = spacing;
 }
 
-void KoTextBlockData::setCounterText(const QString &text)
-{
-    d->counterText = text;
-}
-
 QString KoTextBlockData::counterText() const
 {
-    return d->counterText;
+    return d->counterPrefix + d->counterPlainText + d->counterSuffix;
+}
+
+void KoTextBlockData::clearCounter()
+{
+    d->partialCounterText.clear();
+    d->counterPlainText.clear();
+    d->counterPrefix.clear();
+    d->counterSuffix.clear();
+    d->counterSpacing = 0.0;
+    d->counterWidth = 0.0;
+    d->counterIsImage = false;
 }
 
 void KoTextBlockData::setPartialCounterText(const QString &text)
@@ -116,6 +124,36 @@ void KoTextBlockData::setPartialCounterText(const QString &text)
 QString KoTextBlockData::partialCounterText() const
 {
     return d->partialCounterText;
+}
+
+void KoTextBlockData::setCounterPlainText(const QString &text)
+{
+    d->counterPlainText = text;
+}
+
+QString KoTextBlockData::counterPlainText() const
+{
+    return d->counterPlainText;
+}
+
+void KoTextBlockData::setCounterPrefix(const QString &text)
+{
+    d->counterPrefix = text;
+}
+
+QString KoTextBlockData::counterPrefix() const
+{
+    return d->counterPrefix;
+}
+
+void KoTextBlockData::setCounterSuffix(const QString &text)
+{
+    d->counterSuffix = text;
+}
+
+QString KoTextBlockData::counterSuffix() const
+{
+    return d->counterSuffix;
 }
 
 void KoTextBlockData::setCounterIsImage(bool isImage)

@@ -71,6 +71,7 @@ void KisAdjustmentLayer::setFilter(KisFilterConfiguration * filterConfig)
 {
     delete m_d->filterConfig;
     m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(filterConfig);
+    m_d->filterConfig->setChannelFlags(channelFlags());
 }
 
 QRect KisAdjustmentLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
@@ -125,6 +126,14 @@ KoDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties(
     if (filter())
         l << KoDocumentSectionModel::Property(i18n("Filter"), KisFilterRegistry::instance()->value(filter()->name())->name());
     return l;
+}
+
+void KisAdjustmentLayer::setChannelFlags(const QBitArray & channelFlags)
+{
+    if (m_d->filterConfig) {
+        m_d->filterConfig->setChannelFlags(channelFlags);
+    }
+    KisLayer::setChannelFlags(channelFlags);
 }
 
 #include "kis_adjustment_layer.moc"

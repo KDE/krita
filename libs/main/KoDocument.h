@@ -459,7 +459,7 @@ public:
     virtual bool loadOasisFromStore(KoStore *store);
 
     /**
-     *  @brief Saves a document to a store.
+     *  @brief Saves a sub-document to a store.
      *
      *  You should not have to reimplement this - but call it in saveChildren().
      */
@@ -518,6 +518,16 @@ public:
      *  Made public for writing templates.
      */
     virtual bool saveNativeFormat(const QString & file);
+
+    /**
+     * Saves the document in native ODF format to the given store.
+     */
+    bool saveNativeFormatODF(KoStore *store, const QByteArray &mimeType);
+
+    /**
+     * Saves the document in the native format to the given store.
+     */
+    bool saveNativeFormatCalligra(KoStore *store);
 
 public:
 
@@ -1024,8 +1034,6 @@ private slots:
 
 private:
 
-    bool saveNativeFormatODF(KoStore *store, const QByteArray &mimeType);
-    bool saveNativeFormatCalligra(KoStore *store);
     bool saveToStream(QIODevice *dev);
 
 

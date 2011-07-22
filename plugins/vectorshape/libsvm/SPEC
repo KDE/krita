@@ -150,11 +150,27 @@ enum LineStyle
 {
     LINE_NONE  = 0,
     LINE_SOLID = 1,
-    LINE_DASH  = 2,
+    LINE_DASH  = 2
 };
 
 
-2.1.1.4 ... Enumeration
+2.1.1.4 LayoutMode Enumeration
+
+enum LayoutMode
+{
+    TEXT_LAYOUT_DEFAULT           = 0x0000,
+    TEXT_LAYOUT_BIDI_LTR          = 0x0000,
+    TEXT_LAYOUT_BIDI_RTL          = 0x0001,
+    TEXT_LAYOUT_BIDI_STRONG       = 0x0002,
+    TEXT_LAYOUT_TEXTORIGIN_LEFT   = 0x0004,
+    TEXT_LAYOUT_TEXTORIGIN_RIGHT  = 0x0008,
+    TEXT_LAYOUT_COMPLEX_DISABLED  = 0x0100,
+    TEXT_LAYOUT_ENABLE_LIGATURES  = 0x0200,
+    TEXT_LAYOUT_SUBSTITUTE_DIGITS = 0x0400
+};
+
+
+2.1.1.5 ... Enumeration
 FIXME
 
 
@@ -492,6 +508,7 @@ doSet           Should the color be applied (true), or should the pen
 2.3.2.2 META_FILLCOLOR_ACTION (133)
 
 A fill color sets the brush color in the current context.
+
 It contains the following parts
 uint32          colorData
 bool            isSet
@@ -519,7 +536,18 @@ Font 		font
 font            The new font that will be used when writing text.
 
 
-2.3.2.5 META_TEXTLANGUAGE_ACTION (150)
+
+2.3.2.5 META_LAYOUTMODE_ACTION (149)
+
+This action sets the current layout mode in the graphics context.
+
+uint32		layoutMode
+
+layoutMode	This defines the text layout mode.  It should contain
+                one of the values of the LayoutMode enumeration.
+
+
+2.3.2.6 META_TEXTLANGUAGE_ACTION (150)
 
 This action sets the current text language in the graphics context.
 
@@ -604,6 +632,45 @@ Polygon         complexPolygon
 The complexPolygonIndex is used to replace a polygon from the polygons list.
 
 
+2.3.3.4 META_TEXT_ACTION
+
+...
+
+
+2.3.3.5 META_TEXTARRAY_ACTION
+
+The textarray action draws a complex text.
+
+It contains the following parts
+
+Point		startPoint
+String          string
+uint16          startIndex
+uint16          len
+uint32          dxArrayLen 
+int32           dxArray[]
+    If version is greater than 1:
+uint16          len2
+unicodechar     chars[len2]
+
+
+startPoint      The point where the string is drawn
+
+string          the text string
+
+startIndex      The index of the first character of the string that
+                should be drawn.
+
+len             The number of characters that should be drawn,
+                starting with the character at 'startIndex'.
+
+dxArrayLen      The number of character offsets in dxArray
+
+dxArray         An array of character offsets for the characters in
+                the string. The number of offsets is stored in
+                dxArrayLen.   FIXME: What unit is this in?
+
+
 2.3.4 Unsorted Action Types
 - - - - - - - - - - - - - -
 
@@ -619,8 +686,6 @@ These action types have so far not being sorted into any other type.
  META_PIE_ACTION
  META_CHORD_ACTION
  META_POLYGON_ACTION
- META_TEXT_ACTION
- META_TEXTARRAY_ACTION
  META_STRETCHTEXT_ACTION
  META_TEXTRECT_ACTION
  META_BMP_ACTION
@@ -670,9 +735,9 @@ tools/inc/tools/fontenum.hxx    Enums for fonts
                                 FontType, FontEmbeddedBitmap, FontAntiAlias 
 
 vcl/inc/vcl/gdimtf.hxx		The main GDI file object
-vcl/source/gdimtf.cxx
+vcl/source/gdi/gdimtf.cxx
 vcl/inc/vcl/metaact.hxx         Metafile actions
-vcl/source/metaact.cxx
+vcl/source/gdi/metaact.cxx
 vcl/inc/vcl/outdev.hxx          Enums, defines and flags for outdevice:
                                 Push, DrawText, Drawimage, Grid, ComplexTextLayout,
                                 DrawModes, AntiAlias, AddFontSubstitute

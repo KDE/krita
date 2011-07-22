@@ -34,9 +34,9 @@ SET ( textshape_SRCS
     ReferencesToolFactory.cpp
 
     dialogs/StylesWidget.cpp
+    dialogs/SpecialButton.cpp
     dialogs/SimpleCharacterWidget.cpp
     dialogs/SimpleParagraphWidget.cpp
-    dialogs/SimpleStylesWidget.cpp
     dialogs/SimpleTableWidget.cpp
     dialogs/SimpleTableOfContentsWidget.cpp
     dialogs/SimpleCitationWidget.cpp

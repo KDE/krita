@@ -74,7 +74,7 @@ TableIterator::~TableIterator()
     }
 }
 
-bool TableIterator::operator ==(const TableIterator &other)
+bool TableIterator::operator ==(const TableIterator &other) const
 {
     if (table != other.table)
         return false;

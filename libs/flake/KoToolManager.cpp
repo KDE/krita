@@ -369,6 +369,16 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
 
     // Activate the actions for the currently active tool
     canvasData->activateToolActions();
+    QList<CanvasData*> items = canvasses[canvasData->canvas];
+    foreach(CanvasData *cd, items) {
+        foreach(KoToolBase* tool, cd->allTools) {
+            if(tool == canvasData->activeTool)
+                continue;
+            foreach(KAction* action, tool->actions()) {
+                action->setEnabled(false);
+            }
+        }
+    }
 
     KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
     if (canvasControllerWidget) {

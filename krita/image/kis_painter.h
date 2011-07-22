@@ -24,6 +24,8 @@
 
 #include <math.h>
 
+#include <QVector>
+
 #include <KoColorSpaceConstants.h>
 
 #include "kis_distance_information.h"
@@ -32,7 +34,6 @@
 #include <krita_export.h>
 
 class QPen;
-class QRegion;
 class KUndo2Command;
 class QRect;
 class QRectF;
@@ -330,7 +331,7 @@ public:
                                     const KisFixedPaintDeviceSP srcDev,
                                     const KisFixedPaintDeviceSP selection,
                                     quint32 srcWidth, quint32 srcHeight);
-    
+
     /**
      * fills a region of width @param width and height @param height of the current
      * paint device with the color @param color. @param x and @param y set the x and y positions of the
@@ -373,7 +374,7 @@ public:
       * The methods in this class do not tell the paintdevice to update, but they calculate the
       * dirty area. This method returns this dirty area and resets it.
       */
-    QRegion takeDirtyRegion();
+    QVector<QRect> takeDirtyRegion();
 
     /**
      * Paint a line that connects the dots in points
@@ -631,9 +632,9 @@ public:
 
     /// Returns the current brush stroke style
     StrokeStyle strokeStyle() const;
-    
+
     void setFlow(quint8 flow);
-    
+
     quint8 flow() const;
 
     /// Set the opacity which is used in painting (like filling polygons)
@@ -657,9 +658,9 @@ public:
     void setCompositeOp(const QString& op);
 
     /**
-     * Add the r to the current dirty rect, and return the dirtyRegion after adding r to it.
+     * Add the r to the current dirty rect.
      */
-    QRegion addDirtyRect(const QRect & r);
+    void addDirtyRect(const QRect & r);
 
     /**
      * Reset the selection to the given selection. All painter actions will be

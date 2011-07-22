@@ -53,12 +53,6 @@ KoFilter::ConversionStatus KisPNGImport::convert(const QByteArray&, const QByteA
     if (!doc)
         return KoFilter::CreationError;
 
-    KisView2 * view = 0;
-
-    if (!doc->views().isEmpty()) {
-        view = static_cast<KisView2*>(doc->views().first());
-    }
-
     QString filename = m_chain -> inputFile();
 
     doc -> prepareForImport();

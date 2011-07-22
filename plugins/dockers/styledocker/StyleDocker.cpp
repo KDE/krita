@@ -46,9 +46,9 @@
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerAdapter.h>
 #include <KoColorPopupAction.h>
+#include <KoSliderCombo.h>
 
 #include <klocale.h>
-#include <KNumInput>
 
 #include <QtGui/QGridLayout>
 #include <QtGui/QStackedWidget>
@@ -88,10 +88,12 @@ StyleDocker::StyleDocker(QWidget * parent)
 
     m_layout->addWidget(new QLabel(i18n("Opacity:")), 2, 0);
 
-    m_opacity = new KDoubleNumInput(mainWidget);
+    m_opacity = new KoSliderCombo(mainWidget);
     m_opacity->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    m_opacity->setRange(0.0, 1.0, 0.05, true);
-    m_opacity->setValue(1.0);
+    m_opacity->setMinimum(0);
+    m_opacity->setMaximum(100);
+    m_opacity->setValue(100);
+    m_opacity->setDecimals(0);
     m_layout->addWidget(m_opacity, 2, 1);
 
     m_spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -110,11 +112,13 @@ StyleDocker::StyleDocker(QWidget * parent)
     KoResourceSelector * gradientSelector = new KoResourceSelector(gradientResourceAdapter, m_stack);
     gradientSelector->setColumnCount(1);
     gradientSelector->setRowHeight(20);
+    gradientSelector->setMinimumWidth(100);
 
     KoAbstractResourceServerAdapter * patternResourceAdapter = new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer(), this);
     KoResourceSelector * patternSelector = new KoResourceSelector(patternResourceAdapter, m_stack);
     patternSelector->setColumnCount(5);
     patternSelector->setRowHeight(30);
+    patternSelector->setMinimumWidth(100);
 
     m_stack->addWidget(m_colorSelector);
     m_stack->addWidget(gradientSelector);
@@ -136,7 +140,7 @@ StyleDocker::StyleDocker(QWidget * parent)
              this, SLOT(updatePattern(KoResource*)));
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
              this, SLOT(locationChanged(Qt::DockWidgetArea)));
-    connect(m_opacity, SIGNAL(valueChanged(double)), this, SLOT(updateOpacity(double)));
+    connect(m_opacity, SIGNAL(valueChanged(qreal, bool)), this, SLOT(updateOpacity(qreal)));
 
     setWidget(mainWidget);
 }
@@ -207,11 +211,11 @@ void StyleDocker::updateStyle()
     KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
     if (shape) {
         updateStyle(shape->border(), shape->background());
-        m_opacity->setValue(1.0-shape->transparency());
+        m_opacity->setValue(100-shape->transparency()*100);
     }
     else {
         updateStyle(0, 0);
-        m_opacity->setValue(1.0);
+        m_opacity->setValue(100);
     }
     m_opacity->blockSignals(false);
 }
@@ -529,7 +533,7 @@ void StyleDocker::updateFillRule(Qt::FillRule fillRule)
         m_canvas->addCommand(new KoPathFillRuleCommand(pathsToChange, fillRule));
 }
 
-void StyleDocker::updateOpacity(double opacity)
+void StyleDocker::updateOpacity(qreal opacity)
 {
     if (! m_canvas)
         return;
@@ -542,7 +546,7 @@ void StyleDocker::updateOpacity(double opacity)
     if (!selectedShapes.count())
         return;
 
-    m_canvas->addCommand(new KoShapeTransparencyCommand(selectedShapes, 1.0-opacity));
+    m_canvas->addCommand(new KoShapeTransparencyCommand(selectedShapes, 1.0-opacity/100));
 }
 
 QList<KoPathShape*> StyleDocker::selectedPathShapes()

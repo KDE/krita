@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>267</width>
-    <height>285</height>
+    <width>270</width>
+    <height>293</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -49,7 +49,7 @@
      <item row="2" column="1">
       <widget class="QComboBox" name="comboBox2">
        <property name="enabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="currentIndex">
         <number>2</number>

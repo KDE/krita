@@ -53,7 +53,7 @@ KoGlobal::KoGlobal()
         KGlobal::locale()->insertCatalog("calligra");
     }
 
-    // When runnint unittests, there is not necessarily a main component
+    // When running unittests, there is not necessarily a main component
     if (KGlobal::hasMainComponent()) {
         // Tell KStandardDirs about the calligra prefix
         KGlobal::dirs()->addPrefix(CALLIGRAPREFIX);

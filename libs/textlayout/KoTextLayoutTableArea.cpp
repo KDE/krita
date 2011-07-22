@@ -391,7 +391,7 @@ void KoTextLayoutTableArea::layoutColumns()
     }
 
     expandBoundingLeft(d->columnPositions[0] - leftBorder);
-    expandBoundingRight(d->columnPositions[d->table->columns()] + rightBorder);
+    expandBoundingRight(d->columnPositions[d->table->columns()] + rightBorder + leftBorder);
 }
 
 void KoTextLayoutTableArea::collectBorderThicknesss(int row, qreal &topBorderWidth, qreal &bottomBorderWidth)
@@ -835,21 +835,21 @@ void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocu
 
         // And then the same treatment for vertical borders
         if (column == 0) {
-            cellStyle.drawLeftmostVerticalBorder(*painter, bRect.x(), bRect.y(), bRect.height(), accuBlankBorders);
+            cellStyle.drawLeftmostVerticalBorder(*painter, bRect.x(), bRect.y(), bRect.height() + cellStyle.bottomOuterBorderWidth(), accuBlankBorders);
         }
         if (column + tableCell.columnSpan() == d->table->columns()) {
             // we hit the rightmost edge of the table so draw the rightmost border
-            cellStyle.drawRightmostVerticalBorder(*painter, bRect.right(), bRect.y(), bRect.height(), accuBlankBorders);
+            cellStyle.drawRightmostVerticalBorder(*painter, bRect.right(), bRect.y(), bRect.height() + cellStyle.bottomOuterBorderWidth(), accuBlankBorders);
         } else {
             // we have cells to the right so draw sharedborders
             int r = row;
             while (r < row + tableCell.rowSpan()) {
                 QTextTableCell tableCellRight = d->table->cellAt(r, column + tableCell.columnSpan());
                 QTextTableCellFormat rightTfm(tableCellRight.format().toTableCellFormat());
+                KoTableBorderStyle cellBelowRight(rightTfm);
                 QRectF rightBRect = cellBoundingRect(tableCellRight);
                 qreal y = qMax(bRect.y(), rightBRect.y());
-                qreal y2 = qMin(bRect.bottom(), rightBRect.bottom());
-                KoTableBorderStyle cellBelowRight(rightTfm);
+                qreal y2 = qMin(bRect.bottom() + cellStyle.bottomOuterBorderWidth(), rightBRect.bottom() + cellBelowRight.bottomOuterBorderWidth());
                 cellStyle.drawSharedVerticalBorder(*painter, cellBelowRight, bRect.right(), y, y2-y, accuBlankBorders);
                 r = tableCellRight.row() + rightTfm.tableCellRowSpan();
             }

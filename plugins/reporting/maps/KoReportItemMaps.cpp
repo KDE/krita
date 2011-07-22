@@ -30,7 +30,7 @@
 #include <QImage>
 #include <QPixmap>
 
-#define myDebug() kDebug(44021) << "\e[35m=="
+#define myDebug() kDebug(44021)
 
 KoReportItemMaps::KoReportItemMaps(QDomNode & element)
 {
@@ -41,7 +41,7 @@ KoReportItemMaps::KoReportItemMaps(QDomNode & element)
     QDomNode node;
 
     m_name->setValue(element.toElement().attribute("report:name"));
-    //m_controlSource->setValue(element.toElement().attribute("report:Maps-data-source"));
+    m_controlSource->setValue(element.toElement().attribute("report:Maps-data-source"));
     //m_resizeMode->setValue(element.toElement().attribute("report:resize-mode", "stretch"));
     Z = element.toElement().attribute("report:z-index").toDouble();
 
@@ -180,6 +180,8 @@ int KoReportItemMaps::render(OROPage* page, OROSection* section,  QPointF offset
     Q_UNUSED(data) 
     
     myDebug() << "Render";
+    myDebug() << "data:" << data;
+    deserializeData(data);
     
     //QPainter painter(m_mapImage);
     m_marble->render(m_mapImage);
@@ -223,4 +225,16 @@ int KoReportItemMaps::render(OROPage* page, OROSection* section,  QPointF offset
     return 0; //Item doesnt stretch the section height
 }
 
+void KoReportItemMaps::deserializeData(const QVariant& serialized)
+{
+    kDebug() << "seting new data";
+    kDebug() << "serializedData:" << serialized;
+    QStringList dataList = serialized.toString().split(";");
+    kDebug() << "splited:" << dataList;
+    if(dataList.length()==3){
+        m_marble->setCenterLatitude(dataList[0].toDouble());
+        m_marble->setCenterLongitude(dataList[1].toDouble());
+        m_marble->zoomView(dataList[2].toInt());
+    }
+}
 

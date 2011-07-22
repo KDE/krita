@@ -73,6 +73,7 @@ protected:
     
 private:
     virtual void createProperties();
+    void deserializeData(const QVariant& serialized);
 
     
     

@@ -181,6 +181,7 @@ set(kritaimage_LIB_SRCS
    kis_undo_adapter.cpp
    kis_real_undo_adapter.cpp
    kis_scheduled_undo_adapter.cpp
+   kis_surrogate_undo_adapter.cpp
    krita_utils.cpp
    kis_dumb_undo_adapter.cpp
    kis_outline_generator.cpp

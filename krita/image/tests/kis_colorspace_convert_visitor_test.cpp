@@ -23,7 +23,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
-#include <testutil.h>
+#include "kis_surrogate_undo_adapter.h"
 
 #include "kis_colorspace_convert_visitor.h"
 #include "kis_paint_layer.h"
@@ -35,13 +35,13 @@ void KisColorSpaceConvertVisitorTest::testCreation()
     QVERIFY(rgb);
     const KoColorSpace * lab = KoColorSpaceRegistry::instance()->lab16();
     QVERIFY(lab);
-    TestUtil::KisUndoAdapterDummy* undoAdapterDummy = new TestUtil::KisUndoAdapterDummy();
-    KisImageSP image = new KisImage(undoAdapterDummy, 100, 100, lab, "test");
+    KisUndoAdapter* undoAdapter = new KisSurrogateUndoAdapter();
+    KisImageSP image = new KisImage(undoAdapter, 100, 100, lab, "test");
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8, lab);
     KisColorSpaceConvertVisitor test(image, rgb, KoColorConversionTransformation::IntentPerceptual);
     layer->accept(test);
     QVERIFY(layer->colorSpace()->colorModelId() == rgb->colorModelId());
-    delete undoAdapterDummy;
+    delete undoAdapter;
 }
 
 

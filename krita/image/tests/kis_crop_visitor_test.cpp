@@ -27,6 +27,7 @@
 #include "kis_transparency_mask.h"
 
 #include "testutil.h"
+#include "kis_surrogate_undo_adapter.h"
 
 void KisCropVisitorTest::testCreation()
 {
@@ -38,8 +39,8 @@ void KisCropVisitorTest::testUndo()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    TestUtil::KisUndoAdapterDummy* undoAdapterDummy = new TestUtil::KisUndoAdapterDummy();
-    KisImageSP image = new KisImage(undoAdapterDummy, 300, 300, cs, "test");
+    KisSurrogateUndoAdapter* undoAdapter = new KisSurrogateUndoAdapter();
+    KisImageSP image = new KisImage(undoAdapter, 300, 300, cs, "test");
     KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP dev = layer->paintDevice();
 
@@ -47,28 +48,28 @@ void KisCropVisitorTest::testUndo()
     painter.fillRect(QRect(0, 0, 300, 300), KoColor(Qt::white, cs));
     QImage image1 = dev->convertToQImage(0, 0, 0, 300, 300);
 
-    undoAdapterDummy->beginMacro();
+    undoAdapter->beginMacro("");
 
     QRect rc(0, 0, 100, 100);
     KisCropVisitor visitor(rc, true);
     layer->accept(visitor);
 
-    undoAdapterDummy->endMacro();
-    undoAdapterDummy->undo();
+    undoAdapter->endMacro();
+    undoAdapter->undo();
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, image1, dev->convertToQImage(0, 0, 0, 300, 300))) {
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
-    delete undoAdapterDummy;
+    delete undoAdapter;
 }
 
 void KisCropVisitorTest::testCropTransparencyMask()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    TestUtil::KisUndoAdapterDummy* undoAdapterDummy = new TestUtil::KisUndoAdapterDummy();
-    KisImageSP image = new KisImage(undoAdapterDummy, 300, 300, cs, "test", false);
+    KisUndoAdapter* undoAdapter = new KisSurrogateUndoAdapter();
+    KisImageSP image = new KisImage(undoAdapter, 300, 300, cs, "test", false);
     KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP dev = layer->paintDevice();
 
@@ -95,7 +96,7 @@ void KisCropVisitorTest::testCropTransparencyMask()
     mask->accept(visitor);
 
     QCOMPARE(pixelSelection->selectedExactRect(), cropRect);
-    delete undoAdapterDummy;
+    delete undoAdapter;
 }
 
 

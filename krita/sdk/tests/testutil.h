@@ -169,51 +169,6 @@ QList<const KoColorSpace*> allColorSpaces()
     return KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
 }
 
-class KisUndoAdapterDummy : public KisUndoAdapter
-{
-public:
-    KisUndoAdapterDummy() : KisUndoAdapter() {}
-    ~KisUndoAdapterDummy() {}
-
-public:
-    void addCommand(KUndo2Command *cmd) {
-        qDebug() << "Adding a command to stack" << cmd->text();
-        undostack.push(cmd);
-    }
-
-    void beginMacro(const QString& s = "Test") {
-        undostack.beginMacro(s);
-    }
-
-    void endMacro() {
-        undostack.endMacro();
-    }
-
-    void undo() {
-        undostack.undo();
-    }
-
-    void redo() {
-        undostack.redo();
-    }
-
-    const KUndo2Command* presentCommand() {
-        return undostack.command(undostack.index() - 1);
-    }
-
-    void undoLastCommand() {
-        undostack.undo();
-    }
-
-    void addCommand(KUndo2CommandSP cmd) {
-        qFatal("Not supported");
-    }
-
-private:
-    KUndo2QStack undostack;
-};
-
-
 }
 
 #endif

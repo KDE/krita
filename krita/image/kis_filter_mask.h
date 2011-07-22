@@ -52,6 +52,7 @@ public:
     }
 
     bool accept(KisNodeVisitor &v);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     KisFilterMask(const KisFilterMask& rhs);
 

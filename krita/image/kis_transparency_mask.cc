@@ -26,6 +26,7 @@
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 
 
 KisTransparencyMask::KisTransparencyMask()
@@ -100,5 +101,9 @@ bool KisTransparencyMask::accept(KisNodeVisitor &v)
     return v.visit(this);
 }
 
+void KisTransparencyMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
+}
 
 #include "kis_transparency_mask.moc"

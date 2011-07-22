@@ -83,6 +83,7 @@ public:
     virtual KisNodeSP clone() const = 0;
 
     virtual bool accept(KisNodeVisitor &v);
+    virtual void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     /**
      * Re-implement this method to add constraints for the

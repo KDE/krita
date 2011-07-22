@@ -87,6 +87,8 @@ public:
         return QRect();
     }
 
+    using KisLayer::accept;
+
     bool accept(KisNodeVisitor& v) {
         return v.visit(this);
     }
@@ -152,6 +154,8 @@ public:
     QRect exactBounds() const {
         return QRect();
     }
+
+    using KisLayer::accept;
 
     bool accept(KisNodeVisitor& v) {
         return v.visit(this);

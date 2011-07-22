@@ -85,6 +85,7 @@ public:
     void setY(qint32);
 
     bool accept(KisNodeVisitor&);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     KoShapeManager *shapeManager() const;
 

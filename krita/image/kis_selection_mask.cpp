@@ -25,6 +25,7 @@
 #include "kis_image.h"
 #include <KoCompositeOp.h>
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 #include "kis_pixel_selection.h"
 #include "kis_undo_adapter.h"
 
@@ -86,6 +87,11 @@ KisImageWSP KisSelectionMask::image() const
 bool KisSelectionMask::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
+}
+
+void KisSelectionMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
 }
 
 KisSelectionSP KisSelectionMask::deleselectedSelection()

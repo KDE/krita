@@ -84,6 +84,7 @@ public:
     QRect exactBounds() const;
 
     bool accept(KisNodeVisitor &);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     /**
      * Used when loading: loading is done in two passes, and the copy

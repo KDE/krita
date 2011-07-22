@@ -231,6 +231,9 @@ typedef KisSharedPtr<KisPaintOp> KisPaintOpSP;
 class KoID;
 typedef QList<KoID> KoIDList;
 
+class KisProcessingVisitor;
+typedef KisSharedPtr<KisProcessingVisitor> KisProcessingVisitorSP;
+
 template<class T> class QSharedPointer;
 template<class T> class QWeakPointer;
 

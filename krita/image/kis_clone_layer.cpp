@@ -28,6 +28,7 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 
 
 class KisCloneLayer::Private
@@ -160,6 +161,11 @@ QRect KisCloneLayer::exactBounds() const
 bool KisCloneLayer::accept(KisNodeVisitor & v)
 {
     return v.visit(this);
+}
+
+void KisCloneLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
 }
 
 void KisCloneLayer::setCopyFrom(KisLayerSP fromLayer)

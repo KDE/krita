@@ -32,6 +32,7 @@
 #include "kis_painter.h"
 #include "kis_paint_device.h"
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 #include "kis_default_bounds.h"
 
 class KisPaintLayer::Private
@@ -181,6 +182,11 @@ const KoColorSpace * KisPaintLayer::colorSpace() const
 bool KisPaintLayer::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
+}
+
+void KisPaintLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
 }
 
 void KisPaintLayer::setChannelLockFlags(const QBitArray& channelFlags)

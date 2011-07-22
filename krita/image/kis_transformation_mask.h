@@ -132,6 +132,8 @@ public:
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
     bool accept(KisNodeVisitor &v);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
+
 private:
 
     double m_xscale, m_yscale;

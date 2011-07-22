@@ -21,6 +21,7 @@
 #include "kis_paint_device.h"
 #include "kis_transform_worker.h"
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 #include "kis_filter_strategy.h"
 
 #include "QRect"
@@ -163,6 +164,9 @@ bool KisTransformationMask::accept(KisNodeVisitor &v)
     return v.visit(this);
 }
 
-
+void KisTransformationMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
+}
 
 #include "kis_transformation_mask.moc"

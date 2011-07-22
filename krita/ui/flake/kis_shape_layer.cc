@@ -75,6 +75,7 @@
 #include "kis_image_view_converter.h"
 #include <kis_painter.h>
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 #include "kis_effect_mask.h"
 
 #include "kis_shape_layer_paste.h"
@@ -228,6 +229,11 @@ void KisShapeLayer::setY(qint32 y)
 bool KisShapeLayer::accept(KisNodeVisitor& visitor)
 {
     return visitor.visit(this);
+}
+
+void KisShapeLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
 }
 
 KoShapeManager* KisShapeLayer::shapeManager() const

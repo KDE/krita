@@ -560,6 +560,13 @@ void KoPADocument::removePage( KoPAPageBase * page )
     addCommand( command );
 }
 
+
+void KoPADocument::removePages(QList<KoPAPageBase *> &pages)
+{
+    KoPAPageDeleteCommand *command = new KoPAPageDeleteCommand(this, pages);
+    addCommand(command);
+}
+
 void KoPADocument::pageRemoved( KoPAPageBase * page, KUndo2Command * parent )
 {
     Q_UNUSED( page );

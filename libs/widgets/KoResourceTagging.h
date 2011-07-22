@@ -77,7 +77,6 @@ private:
     QStringList removeAdjustedFileNames(QStringList fileNamesList);
 
 #ifdef NEPOMUK
-    void clearNepomukTag();
     QList<Nepomuk::Resource> readNepomukRepo();
     void writeNepomukRepo(bool serverIdentity=true);
     void updateTagRepoFromNepomuk(bool serverIdentity=true);

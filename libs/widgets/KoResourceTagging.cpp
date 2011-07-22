@@ -437,15 +437,6 @@ void KoResourceTagging::delNepomukTag(const QString &fileName, const QString &ta
     }
 }
 
-void KoResourceTagging::clearNepomukTag()
-{
-    QList<Nepomuk::Resource> resourceList = readNepomukRepo();
-
-    foreach(Nepomuk::Resource resource, resourceList) {
-        resource.remove();
-    }
-}
-
 QString KoResourceTagging::adjustedNepomukFileName(QString fileName)
 {
     if(fileName.contains(" ")) {

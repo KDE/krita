@@ -226,7 +226,13 @@ public:
     /// @see setLineSpacing
     qreal lineSpacing() const;
 
+    /**
+     * Set the line-height to "normal". This overwrites a line-height set before either
+     * with \a setLineHeightAbsolute or \a setMinimumLineHeight . If set then a value
+     * set with \a setLineSpacing will be ignored.
+     */
     void setNormalLineHeight();
+    /// @see setNormalLineHeight
     bool hasNormalLineHeight() const;
 
     /**

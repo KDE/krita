@@ -226,6 +226,9 @@ public:
     /// @see setLineSpacing
     qreal lineSpacing() const;
 
+    void setNormalLineHeight();
+    bool hasNormalLineHeight() const;
+
     /**
      * If set to true the font-encoded height will be used instead of the font-size propery
      * This property influences setLineHeightPercent() behavior.

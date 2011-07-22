@@ -341,6 +341,20 @@ bool KoParagraphStyle::lineSpacingFromFont() const
     return propertyBoolean(LineSpacingFromFont);
 }
 
+void KoParagraphStyle::setNormalLineHeight()
+{
+    setProperty(NormalLineHeight, true);
+    setProperty(PercentLineHeight, 0);
+    setProperty(FixedLineHeight, 0.0);
+    setProperty(MinimumLineHeight, 0.0);
+    setProperty(LineSpacing, 0.0);
+}
+
+bool KoParagraphStyle::hasNormalLineHeight() const
+{
+    return propertyBoolean(NormalLineHeight);
+}
+
 void KoParagraphStyle::setAlignLastLine(Qt::Alignment alignment)
 {
     setProperty(AlignLastLine, (int) alignment);
@@ -1256,11 +1270,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             }
         }
         else {
-            setProperty(NormalLineHeight, true);
-            setProperty(PercentLineHeight, 0);
-            setProperty(FixedLineHeight, 0.0);
-            setProperty(MinimumLineHeight, 0.0);
-            setProperty(LineSpacing, 0.0);
+            setNormalLineHeight();
         }
     }
     else {

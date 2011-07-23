@@ -70,9 +70,9 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     }
     else if (mimetype == "application/x-krita-node"
              || mimetype == "application/zip") {
-
+        
         KisNode *node = const_cast<KisNode*>(m_node.constData());
-
+        
         QByteArray ba;
         QBuffer buf(&ba);
         KoStore *store = KoStore::createStore(&buf, KoStore::Write);
@@ -80,13 +80,23 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         Q_ASSERT(!store->bad());
 
         KisDoc2 doc;
-        QRect rc = node->projection()->exactBounds();
+
+        QRect rc = node->exactBounds();
+        
         KisImageSP image = new KisImage(0, rc.width(), rc.height(), node->colorSpace(), node->name(), false);
         image->addNode(node->clone());
         doc.setCurrentImage(image);
 
         doc.saveNativeFormatCalligra(store);
 
+#if 0        
+        QFile f("./KRITA_DROP_FILE.kra");
+        f.open(QFile::WriteOnly);
+        f.write(ba);
+        f.flush();
+        f.close();
+#endif
+        
         return ba;
 
     }

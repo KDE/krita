@@ -94,7 +94,7 @@ public slots:
     void createSelectionmask();
 
     /**
-     * Create a new local selection from the active mask.
+     * Create a new global selection from the active mask.
      */
     void maskToSelection();
 

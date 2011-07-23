@@ -257,8 +257,6 @@ void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
 
 void KisMaskManager::maskToSelection()
 {
-    // XXX: should we remove the mask when setting the mask as selection?
-    // XXX: should the selection be layer-local, or global?
     if (!m_activeMask) return;
     KisImageWSP image = m_view->image();
     if (!image) return;

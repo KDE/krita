@@ -422,9 +422,6 @@ void KisView2::dropEvent(QDropEvent *event)
             KisDoc2 tmpDoc;
             tmpDoc.loadNativeFormatFromStore(ba);
 
-            qDebug() << tmpDoc.image()->rootLayer();
-            qDebug() << tmpDoc.image()->rootLayer()->firstChild();
-
             node = tmpDoc.image()->rootLayer()->firstChild();
             node->setName(i18n("Pasted Layer"));
         }

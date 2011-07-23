@@ -54,9 +54,7 @@ QStringList KisMimeData::formats () const
 {
     QStringList f = QMimeData::formats();
     if (m_node) {
-        f << "application/x-krita-node-pointer"
-          << "application/x-krita-node"
-          << "application/x-openraster"
+        f << "application/x-krita-node"
           << "application/x-qt-image";
     }
     return f;
@@ -91,9 +89,6 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
 
         return ba;
 
-    }
-    else if (mimetype == "application/x-krita-node-pointer") {
-        return qVariantFromValue(qulonglong(m_node.constData()));
     }
     else {
         return QMimeData::retrieveData(mimetype, preferredType);

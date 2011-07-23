@@ -22,7 +22,7 @@
 #include "krita_export.h"
 
 
-class KRITAIMAGE_EXPORT KisStrokeJobStrategy
+class KRITAIMAGE_EXPORT KisStrokeJobData
 {
 public:
     enum Sequentiality {
@@ -35,24 +35,30 @@ public:
         EXCLUSIVE
     };
 
-    class StrokeJobData
-    {
-    public:
-        virtual ~StrokeJobData();
-    };
-
 public:
-    KisStrokeJobStrategy(Sequentiality sequentiality = SEQUENTIAL,
-                         Exclusivity exclusivity = NORMAL);
-    virtual ~KisStrokeJobStrategy();
+    KisStrokeJobData(Sequentiality sequentiality = SEQUENTIAL,
+                     Exclusivity exclusivity = NORMAL);
+    virtual ~KisStrokeJobData();
 
-    virtual void run(StrokeJobData *data) = 0;
     bool isSequential() const;
     bool isExclusive() const;
 
 private:
     bool m_isSequential;
     bool m_isExclusive;
+};
+
+
+class KRITAIMAGE_EXPORT KisStrokeJobStrategy
+{
+public:
+    KisStrokeJobStrategy();
+    virtual ~KisStrokeJobStrategy();
+
+    virtual void run(KisStrokeJobData *data) = 0;
+
+
+private:
 };
 
 #endif /* __KIS_STROKE_JOB_STRATEGY_H */

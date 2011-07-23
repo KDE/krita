@@ -1102,7 +1102,7 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
     return id;
 }
 
-void KisImage::addJob(KisStrokeId id, KisStrokeJobStrategy::StrokeJobData *data)
+void KisImage::addJob(KisStrokeId id, KisStrokeJobData *data)
 {
     if (m_d->scheduler) {
         m_d->scheduler->addJob(id, data);

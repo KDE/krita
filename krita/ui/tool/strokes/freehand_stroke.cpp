@@ -35,7 +35,7 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 }
 
-void FreehandStrokeStrategy::doStrokeCallback(KisSimpleStrokeStrategy::Data *data)
+void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
 

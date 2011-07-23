@@ -33,7 +33,7 @@ public:
     KisStroke(KisStrokeStrategy *strokeStrategy);
     ~KisStroke();
 
-    void addJob(KisStrokeJobStrategy::StrokeJobData *data);
+    void addJob(KisStrokeJobData *data);
 
     bool hasJobs() const;
     qint32 numJobs() const;
@@ -52,7 +52,7 @@ public:
 
 private:
     void enqueue(KisStrokeJobStrategy *strategy,
-                 KisStrokeJobStrategy::StrokeJobData *data);
+                 KisStrokeJobData *data);
     KisStrokeJob* dequeue();
     void clearQueue();
 

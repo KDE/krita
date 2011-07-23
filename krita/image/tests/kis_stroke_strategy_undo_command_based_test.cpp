@@ -102,5 +102,87 @@ void KisStrokeStrategyUndoCommandBasedTest::testCancelledStroke()
     SCOMPARE(result.trimmed(), "init_redo dab_redo dab_undo init_undo");
 }
 
+#define NUM_JOBS 1000
+#define SEQUENTIAL_NTH 12
+#define NUM_CHECKS 10
+#define CHECK_DELAY 2 // ms
+
+class ExclusivenessCheckerCommand : public KUndo2Command
+{
+public:
+    ExclusivenessCheckerCommand(QAtomicInt &counter,
+                                QAtomicInt &hadConcurrency,
+                                bool exclusive)
+        : m_counter(counter),
+          m_hadConcurrency(hadConcurrency),
+          m_exclusive(exclusive)
+    {
+    }
+    void redo() { checkState(); }
+    void undo() { checkState(); }
+
+private:
+    void checkState() {
+        m_counter.ref();
+        for(int i = 0; i < NUM_CHECKS; i++) {
+
+            if(m_exclusive) {
+                Q_ASSERT(m_counter == 1);
+            }
+            else {
+                m_hadConcurrency.ref();
+            }
+
+            QTest::qSleep(CHECK_DELAY);
+        }
+        m_counter.deref();
+    }
+
+private:
+    QAtomicInt &m_counter;
+    QAtomicInt &m_hadConcurrency;
+    bool m_exclusive;
+};
+
+#include <KoColorSpaceRegistry.h>
+#include "kis_image.h"
+
+void KisStrokeStrategyUndoCommandBasedTest::stressTestSequentialCommands()
+{
+
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 300, 300, cs, "test", true);
+
+    QAtomicInt counter;
+    QAtomicInt hadConcurrency;
+
+    KisStrokeStrategy *strategy =
+        new KisStrokeStrategyUndoCommandBased("test", false, 0);
+
+    KisStrokeId id = image->startStroke(strategy);
+
+    for(int i = 0; i < NUM_JOBS; i++) {
+        bool isSequential = i % SEQUENTIAL_NTH == 0;
+
+        KisStrokeJobData::Sequentiality seq = isSequential ?
+            KisStrokeJobData::SEQUENTIAL : KisStrokeJobData::CONCURRENT;
+
+        KUndo2CommandSP command(new ExclusivenessCheckerCommand(counter,
+                                                                hadConcurrency,
+                                                                isSequential));
+
+        image->addJob(id,
+            new KisStrokeStrategyUndoCommandBased::Data(command, seq));
+
+    }
+
+    image->endStroke(id);
+    image->waitForDone();
+
+    QVERIFY(!counter);
+    qDebug() << "Concurrency observed:" << hadConcurrency
+             << "/" << NUM_CHECKS * NUM_JOBS;
+}
+
 QTEST_KDEMAIN(KisStrokeStrategyUndoCommandBasedTest, NoGUI)
 #include "kis_stroke_strategy_undo_command_based_test.moc"

@@ -36,10 +36,13 @@ class KisUndoAdapter;
 class KRITAIMAGE_EXPORT KisStrokeStrategyUndoCommandBased : public KisSimpleStrokeStrategy
 {
 public:
-    class Data : public KisSimpleStrokeStrategy::Data {
+    class Data : public KisStrokeJobData {
     public:
-        Data(KUndo2CommandSP _command)
-            : command(_command)
+        Data(KUndo2CommandSP _command,
+             Sequentiality _sequentiality = SEQUENTIAL,
+             Exclusivity _exclusivity = NORMAL)
+            : KisStrokeJobData(_sequentiality, _exclusivity),
+              command(_command)
         {
         }
         KUndo2CommandSP command;
@@ -57,7 +60,7 @@ public:
     void initStrokeCallback();
     void finishStrokeCallback();
     void cancelStrokeCallback();
-    void doStrokeCallback(KisSimpleStrokeStrategy::Data *data);
+    void doStrokeCallback(KisStrokeJobData *data);
 
 private:
     void executeCommand(KUndo2CommandSP command);

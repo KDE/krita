@@ -575,7 +575,7 @@ public slots:
     void waitForDone();
 
     KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);
-    void addJob(KisStrokeId id, KisStrokeJobStrategy::StrokeJobData *data);
+    void addJob(KisStrokeId id, KisStrokeJobData *data);
     void endStroke(KisStrokeId id);
     bool cancelStroke(KisStrokeId id);
 

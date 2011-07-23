@@ -52,7 +52,7 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
     return KisStrokeId(stroke);
 }
 
-void KisStrokesQueue::addJob(KisStrokeId id, KisStrokeJobStrategy::StrokeJobData *data)
+void KisStrokesQueue::addJob(KisStrokeId id, KisStrokeJobData *data)
 {
     QMutexLocker locker(&m_d->mutex);
 

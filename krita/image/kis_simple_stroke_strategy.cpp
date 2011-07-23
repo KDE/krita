@@ -27,16 +27,13 @@ class SimpleStrokeJobStrategy : public KisStrokeJobStrategy
 {
 public:
     SimpleStrokeJobStrategy(KisSimpleStrokeStrategy::JobType type,
-                            Sequentiality sequentiality,
-                            Exclusivity exclusivity,
                             KisSimpleStrokeStrategy *parentStroke)
-        : KisStrokeJobStrategy(sequentiality, exclusivity),
-          m_type(type),
+        : m_type(type),
           m_parentStroke(parentStroke)
     {
     }
 
-    void run(StrokeJobData *data) {
+    void run(KisStrokeJobData *data) {
         switch(m_type) {
         case KisSimpleStrokeStrategy::JOB_INIT:
             Q_UNUSED(data);
@@ -51,8 +48,7 @@ public:
             m_parentStroke->cancelStrokeCallback();
             break;
         case KisSimpleStrokeStrategy::JOB_DOSTROKE:
-            m_parentStroke->doStrokeCallback(
-                static_cast<KisSimpleStrokeStrategy::Data*>(data));
+            m_parentStroke->doStrokeCallback(data);
             break;
         }
     }
@@ -69,8 +65,7 @@ private:
 
 KisSimpleStrokeStrategy::KisSimpleStrokeStrategy(QString id, QString name)
     : KisStrokeStrategy(id, name),
-      m_jobEnabled(4, false),
-      m_sequentiality(KisStrokeJobStrategy::SEQUENTIAL)
+      m_jobEnabled(4, false)
 {
 }
 
@@ -79,21 +74,13 @@ void KisSimpleStrokeStrategy::enableJob(JobType type, bool enable)
     m_jobEnabled[(int)type] = enable;
 }
 
-void KisSimpleStrokeStrategy::setSequentiality(KisStrokeJobStrategy::Sequentiality sequentiality)
-{
-    m_sequentiality = sequentiality;
-}
-
 KisStrokeJobStrategy*
-KisSimpleStrokeStrategy::createStrategy(JobType type,
-                                        KisStrokeJobStrategy::Sequentiality sequentiality,
-                                        KisStrokeJobStrategy::Exclusivity exclusivity)
+KisSimpleStrokeStrategy::createStrategy(JobType type)
 {
     KisStrokeJobStrategy *strategy = 0;
 
     if(m_jobEnabled[(int)type]) {
-        strategy = new SimpleStrokeJobStrategy(type, sequentiality,
-                                               exclusivity, this);
+        strategy = new SimpleStrokeJobStrategy(type, this);
     }
 
     return strategy;
@@ -101,44 +88,36 @@ KisSimpleStrokeStrategy::createStrategy(JobType type,
 
 KisStrokeJobStrategy* KisSimpleStrokeStrategy::createInitStrategy()
 {
-    return createStrategy(JOB_INIT,
-                          KisStrokeJobStrategy::SEQUENTIAL,
-                          KisStrokeJobStrategy::NORMAL);
+    return createStrategy(JOB_INIT);
 }
 
 KisStrokeJobStrategy* KisSimpleStrokeStrategy::createFinishStrategy()
 {
-    return createStrategy(JOB_FINISH,
-                          KisStrokeJobStrategy::SEQUENTIAL,
-                          KisStrokeJobStrategy::NORMAL);
+    return createStrategy(JOB_FINISH);
 }
 
 KisStrokeJobStrategy* KisSimpleStrokeStrategy::createCancelStrategy()
 {
-    return createStrategy(JOB_CANCEL,
-                          KisStrokeJobStrategy::SEQUENTIAL,
-                          KisStrokeJobStrategy::NORMAL);
+    return createStrategy(JOB_CANCEL);
 }
 
 KisStrokeJobStrategy* KisSimpleStrokeStrategy::createDabStrategy()
 {
-    return createStrategy(JOB_DOSTROKE,
-                          m_sequentiality,
-                          KisStrokeJobStrategy::NORMAL);
+    return createStrategy(JOB_DOSTROKE);
 }
 
 
-KisStrokeJobStrategy::StrokeJobData* KisSimpleStrokeStrategy::createInitData()
+KisStrokeJobData* KisSimpleStrokeStrategy::createInitData()
 {
     return 0;
 }
 
-KisStrokeJobStrategy::StrokeJobData* KisSimpleStrokeStrategy::createFinishData()
+KisStrokeJobData* KisSimpleStrokeStrategy::createFinishData()
 {
     return 0;
 }
 
-KisStrokeJobStrategy::StrokeJobData* KisSimpleStrokeStrategy::createCancelData()
+KisStrokeJobData* KisSimpleStrokeStrategy::createCancelData()
 {
     return 0;
 }
@@ -155,7 +134,7 @@ void KisSimpleStrokeStrategy::cancelStrokeCallback()
 {
 }
 
-void KisSimpleStrokeStrategy::doStrokeCallback(Data *data)
+void KisSimpleStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Q_UNUSED(data);
 }

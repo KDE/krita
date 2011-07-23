@@ -30,9 +30,9 @@ void KisStrokesQueueTest::testSequentialJobs()
 {
     KisStrokesQueue queue;
     KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("tri_", false));
-    queue.addJob(id, 0);
-    queue.addJob(id, 0);
-    queue.addJob(id, 0);
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id);
 
     KisTestableUpdaterContext context(2);
@@ -70,8 +70,8 @@ void KisStrokesQueueTest::testConcurrentSequentialBarrier()
 {
     KisStrokesQueue queue;
     KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("tri_", false));
-    queue.addJob(id, 0);
-    queue.addJob(id, 0);
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id);
 
     // make the number of threads higher
@@ -103,9 +103,9 @@ void KisStrokesQueueTest::testExclusiveStrokes()
 {
     KisStrokesQueue queue;
     KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("excl_", true));
-    queue.addJob(id, 0);
-    queue.addJob(id, 0);
-    queue.addJob(id, 0);
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
+    queue.addJob(id, new KisStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.endStroke(id);
 
     // well, this walker is not initialized... but who cares?

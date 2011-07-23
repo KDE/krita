@@ -52,7 +52,7 @@ KisStroke::~KisStroke()
     delete m_strokeStrategy;
 }
 
-void KisStroke::addJob(KisStrokeJobStrategy::StrokeJobData *data)
+void KisStroke::addJob(KisStrokeJobData *data)
 {
     Q_ASSERT(!m_strokeEnded);
     enqueue(m_dabStrategy, data);
@@ -162,7 +162,7 @@ bool KisStroke::nextJobSequential() const
 }
 
 void KisStroke::enqueue(KisStrokeJobStrategy *strategy,
-                        KisStrokeJobStrategy::StrokeJobData *data)
+                        KisStrokeJobData *data)
 {
     // factory methods can return null, if no action is needed
     if(!strategy) {

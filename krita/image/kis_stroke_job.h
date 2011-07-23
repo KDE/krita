@@ -25,7 +25,7 @@ class KisStrokeJob
 {
 public:
     KisStrokeJob(KisStrokeJobStrategy *strategy,
-                 KisStrokeJobStrategy::StrokeJobData *data)
+                 KisStrokeJobData *data)
         : m_dabStrategy(strategy),
           m_dabData(data)
     {
@@ -40,11 +40,13 @@ public:
     }
 
     bool isSequential() const {
-        return m_dabStrategy->isSequential();
+        // Default value is 'SEQUENTIAL'
+        return m_dabData ? m_dabData->isSequential() : true;
     }
 
     bool isExclusive() const {
-        return m_dabStrategy->isExclusive();
+        // Default value is 'NORMAL'
+        return m_dabData ? m_dabData->isExclusive() : false;
     }
 
 private:
@@ -56,7 +58,7 @@ private:
         return m_dabStrategy;
     }
 
-    KisStrokeJobStrategy::StrokeJobData* testingGetDabData() {
+    KisStrokeJobData* testingGetDabData() {
         return m_dabData;
     }
 
@@ -65,7 +67,7 @@ private:
     KisStrokeJobStrategy *m_dabStrategy;
 
     // Owned by the job
-    KisStrokeJobStrategy::StrokeJobData *m_dabData;
+    KisStrokeJobData *m_dabData;
 };
 
 #endif /* __KIS_STROKE_JOB_H */

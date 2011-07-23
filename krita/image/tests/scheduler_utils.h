@@ -58,12 +58,11 @@ bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect) {
 class KisNoopDabStrategy : public KisStrokeJobStrategy
 {
 public:
-KisNoopDabStrategy(QString name, Sequentiality sequentiality = SEQUENTIAL)
-        : KisStrokeJobStrategy(sequentiality),
-          m_name(name)
+KisNoopDabStrategy(QString name)
+        : m_name(name)
     {}
 
-    void run(StrokeJobData *data) {
+    void run(KisStrokeJobData *data) {
         Q_UNUSED(data);
     }
 
@@ -89,25 +88,21 @@ public:
 
     KisStrokeJobStrategy* createInitStrategy() {
         return !m_inhibitServiceJobs ?
-            new KisNoopDabStrategy(m_prefix + "init",
-                                   KisStrokeJobStrategy::SEQUENTIAL) : 0;
+            new KisNoopDabStrategy(m_prefix + "init") : 0;
     }
 
     KisStrokeJobStrategy* createFinishStrategy() {
         return !m_inhibitServiceJobs ?
-            new KisNoopDabStrategy(m_prefix + "finish",
-                                   KisStrokeJobStrategy::SEQUENTIAL) : 0;
+            new KisNoopDabStrategy(m_prefix + "finish") : 0;
     }
 
     KisStrokeJobStrategy* createCancelStrategy() {
         return !m_inhibitServiceJobs ?
-            new KisNoopDabStrategy(m_prefix + "cancel",
-                                   KisStrokeJobStrategy::SEQUENTIAL) : 0;
+            new KisNoopDabStrategy(m_prefix + "cancel") : 0;
     }
 
     KisStrokeJobStrategy* createDabStrategy() {
-        return new KisNoopDabStrategy(m_prefix + "dab",
-                                      KisStrokeJobStrategy::CONCURRENT);
+        return new KisNoopDabStrategy(m_prefix + "dab");
     }
 
 private:

@@ -33,10 +33,6 @@ public:
         JOB_DOSTROKE
     };
 
-    class Data : public KisStrokeJobStrategy::StrokeJobData
-    {
-    };
-
 public:
     KisSimpleStrokeStrategy(QString id = QString(), QString name = QString());
 
@@ -45,27 +41,23 @@ public:
     KisStrokeJobStrategy* createCancelStrategy();
     KisStrokeJobStrategy* createDabStrategy();
 
-    KisStrokeJobStrategy::StrokeJobData* createInitData();
-    KisStrokeJobStrategy::StrokeJobData* createFinishData();
-    KisStrokeJobStrategy::StrokeJobData* createCancelData();
+    KisStrokeJobData* createInitData();
+    KisStrokeJobData* createFinishData();
+    KisStrokeJobData* createCancelData();
 
     virtual void initStrokeCallback();
     virtual void finishStrokeCallback();
     virtual void cancelStrokeCallback();
-    virtual void doStrokeCallback(Data *data);
+    virtual void doStrokeCallback(KisStrokeJobData *data);
 
 protected:
     void enableJob(JobType type, bool enable = true);
-    void setSequentiality(KisStrokeJobStrategy::Sequentiality sequentiality = KisStrokeJobStrategy::SEQUENTIAL);
 
 private:
-    KisStrokeJobStrategy* createStrategy(JobType type,
-                                         KisStrokeJobStrategy::Sequentiality sequentiality,
-                                         KisStrokeJobStrategy::Exclusivity exclusivity);
+    KisStrokeJobStrategy* createStrategy(JobType type);
 
 private:
     QVector<bool> m_jobEnabled;
-    KisStrokeJobStrategy::Sequentiality m_sequentiality;
 };
 
 #endif /* __KIS_SIMPLE_STROKE_STRATEGY_H */

@@ -18,14 +18,29 @@
 
 #include "kis_stroke_job_strategy.h"
 
-KisStrokeJobStrategy::StrokeJobData::~StrokeJobData()
+KisStrokeJobData::KisStrokeJobData(Sequentiality sequentiality,
+                                   Exclusivity exclusivity)
+    : m_isSequential(sequentiality == SEQUENTIAL),
+      m_isExclusive(exclusivity == EXCLUSIVE)
 {
 }
 
-KisStrokeJobStrategy::KisStrokeJobStrategy(Sequentiality sequentiality,
-                                           Exclusivity exclusivity)
-    : m_isSequential(sequentiality == SEQUENTIAL),
-      m_isExclusive(exclusivity == EXCLUSIVE)
+KisStrokeJobData::~KisStrokeJobData()
+{
+}
+
+bool KisStrokeJobData::isSequential() const
+{
+    return m_isSequential;
+}
+
+bool KisStrokeJobData::isExclusive() const
+{
+    return m_isExclusive;
+}
+
+
+KisStrokeJobStrategy::KisStrokeJobStrategy()
 {
 }
 
@@ -33,12 +48,4 @@ KisStrokeJobStrategy::~KisStrokeJobStrategy()
 {
 }
 
-bool KisStrokeJobStrategy::isSequential() const
-{
-    return m_isSequential;
-}
 
-bool KisStrokeJobStrategy::isExclusive() const
-{
-    return m_isExclusive;
-}

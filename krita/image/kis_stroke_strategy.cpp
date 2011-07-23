@@ -52,20 +52,17 @@ KisStrokeJobStrategy* KisStrokeStrategy::createDabStrategy()
     return 0;
 }
 
-KisStrokeJobStrategy::StrokeJobData*
-KisStrokeStrategy::createInitData()
+KisStrokeJobData* KisStrokeStrategy::createInitData()
 {
     return 0;
 }
 
-KisStrokeJobStrategy::StrokeJobData*
-KisStrokeStrategy::createFinishData()
+KisStrokeJobData* KisStrokeStrategy::createFinishData()
 {
     return 0;
 }
 
-KisStrokeJobStrategy::StrokeJobData*
-KisStrokeStrategy::createCancelData()
+KisStrokeJobData* KisStrokeStrategy::createCancelData()
 {
     return 0;
 }

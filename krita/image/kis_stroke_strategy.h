@@ -36,9 +36,9 @@ public:
     virtual KisStrokeJobStrategy* createCancelStrategy();
     virtual KisStrokeJobStrategy* createDabStrategy();
 
-    virtual KisStrokeJobStrategy::StrokeJobData* createInitData();
-    virtual KisStrokeJobStrategy::StrokeJobData* createFinishData();
-    virtual KisStrokeJobStrategy::StrokeJobData* createCancelData();
+    virtual KisStrokeJobData* createInitData();
+    virtual KisStrokeJobData* createFinishData();
+    virtual KisStrokeJobData* createCancelData();
 
     bool isExclusive() const;
     bool needsIndirectPainting() const;

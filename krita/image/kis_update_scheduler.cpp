@@ -112,7 +112,7 @@ KisStrokeId KisUpdateScheduler::startStroke(KisStrokeStrategy *strokeStrategy)
     return id;
 }
 
-void KisUpdateScheduler::addJob(KisStrokeId id, KisStrokeJobStrategy::StrokeJobData *data)
+void KisUpdateScheduler::addJob(KisStrokeId id, KisStrokeJobData *data)
 {
     m_d->strokesQueue->addJob(id, data);
     processQueues();

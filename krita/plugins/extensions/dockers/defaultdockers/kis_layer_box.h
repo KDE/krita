@@ -65,7 +65,7 @@ public:
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas();
 private slots:
 
     void setImage(KisImageWSP image);
@@ -103,7 +103,6 @@ private slots:
     void slotNewShapeLayer();
     void slotNewTransparencyMask();
     void slotNewEffectMask();
-    void slotNewTransformationMask();
     void slotNewSelectionMask();
     void slotCompositeOpChanged(int index);
     void slotOpacityChanged();
@@ -120,16 +119,6 @@ private:
     Ui_WdgLayerBox* m_wdgLayerBox;
     QTimer m_delayTimer;
     int m_newOpacity;
-
-    KAction* m_newPainterLayerAction;
-    KAction* m_newGroupLayerAction;
-    KAction* m_newCloneLayerAction;
-    KAction* m_newShapeLayerAction;
-    KAction* m_newAdjustmentLayerAction;
-    KAction* m_newGeneratorLayerAction;
-    KAction* m_newTransparencyMaskAction;
-    KAction* m_newEffectMaskAction;
-    KAction* m_newSelectionMaskAction;
 };
 
 class KisLayerBoxFactory : public KoDockFactoryBase

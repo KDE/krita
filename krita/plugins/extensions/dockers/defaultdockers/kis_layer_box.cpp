@@ -51,6 +51,7 @@
 #include <klocale.h>
 #include <khbox.h>
 #include <kicon.h>
+#include <kaction.h>
 
 #include <KoDocumentSectionView.h>
 #include <KoColorSpace.h>
@@ -74,7 +75,7 @@
 #include "kis_doc2.h"
 
 #include "ui_wdglayerbox.h"
-#include <KAction>
+
 
 KisLayerBox::KisLayerBox()
         : QDockWidget(i18n("Layers"))
@@ -115,12 +116,10 @@ KisLayerBox::KisLayerBox()
     actions[1]->trigger(); //TODO save/load previous state
 
     m_wdgLayerBox->bnViewMode->setMenu(m_viewModeMenu);
+    m_wdgLayerBox->bnViewMode->setIconSize(QSize(22,22));
     m_wdgLayerBox->bnViewMode->setPopupMode(QToolButton::InstantPopup);
     m_wdgLayerBox->bnViewMode->setIcon(KIcon("view-choose"));
     m_wdgLayerBox->bnViewMode->setText(i18n("View mode"));
-
-    m_wdgLayerBox->bnAdd->setIcon(BarIcon("list-add"));
-    m_wdgLayerBox->bnAdd->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnDelete->setIcon(BarIcon("list-remove"));
     m_wdgLayerBox->bnDelete->setIconSize(QSize(22, 22));
@@ -147,7 +146,6 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->bnDuplicate->setIcon(BarIcon("edit-copy"));
     m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
 
-    connect(m_wdgLayerBox->bnAdd, SIGNAL(clicked()), SLOT(slotNewPaintLayer()));
     connect(m_wdgLayerBox->bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
     // NOTE: this is _not_ a mistake. The layerbox shows the layers in the reverse order
     connect(m_wdgLayerBox->bnRaise, SIGNAL(clicked()), SLOT(slotLowerClicked()));
@@ -164,44 +162,42 @@ KisLayerBox::KisLayerBox()
 
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(int)), SLOT(slotCompositeOpChanged(int)));
 
-    m_newPainterLayerAction = new KAction(KIcon("document-new"), i18n("&Paint Layer"), this);
-    connect(m_newPainterLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewPaintLayer()));
-    m_newGroupLayerAction = new KAction(KIcon("folder-new"), i18n("&Group Layer"), this);
-    connect(m_newGroupLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewGroupLayer()));
-    m_newCloneLayerAction = new KAction(KIcon("edit-copy"), i18n("&Clone Layer"), this);
-    connect(m_newCloneLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewCloneLayer()));
-    m_newShapeLayerAction = new KAction(KIcon("bookmark-new"), i18n("&Shape Layer"), this);
-    connect(m_newShapeLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewShapeLayer()));
-    m_newAdjustmentLayerAction = new KAction(KIcon("view-filter"), i18n("&Filter Layer..."), this);
-    connect(m_newAdjustmentLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewAdjustmentLayer()));
-    m_newGeneratorLayerAction = new KAction(KIcon("view-filter"), i18n("&Generated Layer..."), this);
-    connect(m_newGeneratorLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewGeneratorLayer()));
-    m_newTransparencyMaskAction = new KAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this);
-    connect(m_newTransparencyMaskAction, SIGNAL(triggered(bool)), this, SLOT(slotNewTransparencyMask()));
-    m_newEffectMaskAction = new KAction(KIcon("bookmarks"), i18n("&Filter Mask..."), this);
-    connect(m_newEffectMaskAction, SIGNAL(triggered(bool)), this, SLOT(slotNewEffectMask()));
-    m_newSelectionMaskAction = new KAction(KIcon("edit-paste"), i18n("&Local Selection"), this);
-    connect(m_newSelectionMaskAction, SIGNAL(triggered(bool)), this, SLOT(slotNewSelectionMask()));
-
-    m_newLayerMenu = new KMenu(this);
-    m_wdgLayerBox->bnAdd->setMenu(m_newLayerMenu);
-    m_wdgLayerBox->bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
-
-    m_newLayerMenu->addAction(m_newPainterLayerAction);
-    m_newLayerMenu->addAction(m_newGroupLayerAction);
-    m_newLayerMenu->addAction(m_newCloneLayerAction);
-    m_newLayerMenu->addAction(m_newShapeLayerAction);
-    m_newLayerMenu->addAction(m_newAdjustmentLayerAction);
-    m_newLayerMenu->addAction(m_newGeneratorLayerAction);
-    m_newLayerMenu->addSeparator();
-    m_newLayerMenu->addAction(m_newTransparencyMaskAction);
-    m_newLayerMenu->addAction(m_newEffectMaskAction);
-#if 0 // XXX_2.0
-    m_newLayerMenu->addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
-#endif
-    m_newLayerMenu->addAction(m_newSelectionMaskAction);
-
-
+    m_wdgLayerBox->bnAddPaintLayer->setIcon(BarIcon("document-new"));
+    m_wdgLayerBox->bnAddPaintLayer->setIconSize(QSize(22,22));
+    connect(m_wdgLayerBox->bnAddPaintLayer, SIGNAL(clicked()), SLOT(slotNewPaintLayer()));
+    
+    m_wdgLayerBox->bnAddGroupLayer->setIcon(BarIcon("folder-new"));
+    m_wdgLayerBox->bnAddGroupLayer->setIconSize(QSize(22,22));
+    connect(m_wdgLayerBox->bnAddGroupLayer, SIGNAL(clicked()), SLOT(slotNewGroupLayer()));
+    
+    m_wdgLayerBox->bnAddCloneLayer->setIcon(BarIcon("edit-copy"));
+    m_wdgLayerBox->bnAddCloneLayer->setIconSize(QSize(22,22));
+    connect(m_wdgLayerBox->bnAddCloneLayer, SIGNAL(clicked()), SLOT(slotNewCloneLayer()));
+    
+    m_wdgLayerBox->bnAddShapeLayer->setIcon(BarIcon("bookmaer-new"));
+    m_wdgLayerBox->bnAddShapeLayer->setIconSize(QSize(22,22));
+    connect(m_wdgLayerBox->bnAddShapeLayer, SIGNAL(clicked()), SLOT(slotNewShapeLayer()));
+    
+    m_wdgLayerBox->bnAddFilterLayer->setIcon(BarIcon("view-filter"));
+    m_wdgLayerBox->bnAddFilterLayer->setIconSize(QSize(22,22));
+    connect(m_wdgLayerBox->bnAddFilterLayer, SIGNAL(clicked()), SLOT(slotNewAdjustmentLayer()));
+    
+    m_wdgLayerBox->bnAddGeneratedLayer->setIcon(BarIcon("view-filter"));
+    m_wdgLayerBox->bnAddGeneratedLayer->setIconSize(QSize(22,22));
+    connect(m_wdgLayerBox->bnAddGeneratedLayer, SIGNAL(clicked()), SLOT(slotNewGeneratorLayer()));
+    
+    m_wdgLayerBox->bnAddTransparencyMask->setIcon(BarIcon("edit-copy"));
+    m_wdgLayerBox->bnAddTransparencyMask->setIconSize(QSize(22,22));
+    connect(m_wdgLayerBox->bnAddTransparencyMask, SIGNAL(clicked()), SLOT(slotNewTransparencyMask()));
+    
+    m_wdgLayerBox->bnAddFilterMask->setIcon(BarIcon("bookmarks"));
+    m_wdgLayerBox->bnAddFilterMask->setIconSize(QSize(22,22));
+    connect(m_wdgLayerBox->bnAddFilterMask, SIGNAL(clicked()), SLOT(slotNewEffectMask()));
+    
+    m_wdgLayerBox->bnAddLocalSelectionMask->setIcon(BarIcon("edit-paste"));
+    m_wdgLayerBox->bnAddLocalSelectionMask->setIconSize(QSize(22,22));
+    connect(m_wdgLayerBox->bnAddLocalSelectionMask, SIGNAL(clicked()), SLOT(slotNewSelectionMask()));
+    
     m_nodeModel = new KisNodeModel(this);
 
     // connect model updateUI() to enable/disable controls
@@ -231,6 +227,12 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         connect(m_canvas, SIGNAL(imageChanged(KisImageWSP)), SLOT(setImage(KisImageWSP)));
         setImage(m_canvas->view()->image());
     }
+}    
+
+
+void KisLayerBox::unsetCanvas()
+{
+    m_canvas = 0;
 }
 
 void KisLayerBox::setImage(KisImageWSP image)
@@ -312,10 +314,10 @@ void KisLayerBox::updateUI()
             slotSetCompositeOp(l->compositeOp());
         }
     }
-    m_newTransparencyMaskAction->setEnabled(active);
-    m_newEffectMaskAction->setEnabled(active);
-    m_newSelectionMaskAction->setEnabled(active);
-    m_newCloneLayerAction->setEnabled(active && !active->inherits("KisGroupLayer"));
+    m_wdgLayerBox->bnAddTransparencyMask->setEnabled(active);
+    m_wdgLayerBox->bnAddFilterMask->setEnabled(active);
+    m_wdgLayerBox->bnAddLocalSelectionMask->setEnabled(active);
+    m_wdgLayerBox->bnAddCloneLayer->setEnabled(active && !active->inherits("KisGroupLayer"));
 }
 
 void KisLayerBox::setCurrentNode(KisNodeSP node)
@@ -364,10 +366,6 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
         if (!index.sibling(index.row() + 1, 0).isValid()) mergeLayerDown->setEnabled(false);
         menu.addSeparator();
     }
-    menu.addSeparator();
-    menu.addAction(m_newTransparencyMaskAction);
-    menu.addAction(m_newEffectMaskAction);
-    menu.addAction(m_newSelectionMaskAction);
 
     menu.exec(pos);
 }
@@ -432,12 +430,6 @@ void KisLayerBox::slotNewTransparencyMask()
 void KisLayerBox::slotNewEffectMask()
 {
     m_nodeManager->createNode("KisFilterMask");
-}
-
-
-void KisLayerBox::slotNewTransformationMask()
-{
-    m_nodeManager->createNode("KisTransformationMask");
 }
 
 

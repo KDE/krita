@@ -28,13 +28,11 @@
 #include <kis_transaction.h>
 #include <filter/kis_filter_configuration.h>
 #include <commands/kis_node_commands.h>
-#include "dialogs/kis_dlg_transformation_effect.h"
 #include <kis_undo_adapter.h>
 #include <kis_paint_layer.h>
 #include "kis_doc2.h"
 #include "kis_view2.h"
 #include <kis_layer.h>
-#include <kis_transformation_mask.h>
 #include <kis_filter_mask.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
@@ -127,17 +125,6 @@ void KisMaskManager::createFilterMask()
     }
 }
 
-void KisMaskManager::createTransformationMask()
-{
-    KisLayerSP layer = m_view->activeLayer();
-
-    if (layer) {
-        KisNodeSP above = m_activeMask ?
-                          static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
-        createTransformationMask(layer, above);
-    }
-}
-
 void KisMaskManager::createSelectionmask()
 {
     KisLayerSP layer = m_view->activeLayer();
@@ -199,38 +186,6 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
         m_commandsAdapter->undoLastCommand();
     }
     masksUpdated();
-}
-
-void KisMaskManager::createTransformationMask(KisNodeSP parent, KisNodeSP above)
-{
-    KisDlgTransformationEffect dlg(QString(), 1.0, 1.0, 0.0, 0.0, 0.0, 0, 0, KoID("Mitchell"), m_view);
-    if (dlg.exec() == QDialog::Accepted) {
-        /**
-         * FIXME: Add preview feature
-         */
-
-        KisLayer *layer = dynamic_cast<KisLayer*>(parent.data());
-        KisTransformationMask * mask = new KisTransformationMask();
-        mask->initSelection(m_view->selection(), layer);
-
-        mask->setName(dlg.transformationEffect()->maskName());
-        mask->setXScale(dlg.transformationEffect()->xScale());
-        mask->setYScale(dlg.transformationEffect()->yScale());
-        mask->setXShear(dlg.transformationEffect()->xShear());
-        mask->setYShear(dlg.transformationEffect()->yShear());
-        mask->setRotation(dlg.transformationEffect()->rotation());
-        mask->setXTranslation(dlg.transformationEffect()->moveX());
-        mask->setYTranslation(dlg.transformationEffect()->moveY());
-        mask->setFilterStrategy(dlg.transformationEffect()->filterStrategy());
-        m_commandsAdapter->addNode(mask, parent, above);
-
-        // is this line really needed?
-        //mask->setDirty(selection->selectedExactRect());
-
-        activateMask(mask);
-        masksUpdated();
-    }
-
 }
 
 void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
@@ -390,47 +345,7 @@ void KisMaskManager::maskProperties()
 {
     if (!m_activeMask) return;
 
-    if (m_activeMask->inherits("KisTransformationMask")) {
-        KisTransformationMask * mask = static_cast<KisTransformationMask*>(m_activeMask.data());
-
-        KisDlgTransformationEffect dlg(mask->name(),
-                                       mask->xScale(),
-                                       mask->yScale(),
-                                       mask->xShear(),
-                                       mask->yShear(),
-                                       mask->rotation(),
-                                       mask->xTranslate(),
-                                       mask->yTranslate(),
-                                       KoID(mask->filterStrategy()->id()),
-                                       m_view);
-        if (dlg.exec() == QDialog::Accepted) {
-            // XXX_NODE: make undoable
-            KisTransformationSettingsCommand * cmd = new KisTransformationSettingsCommand
-            (mask,
-             mask->name(),
-             mask->xScale(),
-             mask->yScale(),
-             mask->xShear(),
-             mask->yShear(),
-             mask->rotation(),
-             mask->xTranslate(),
-             mask->yTranslate(),
-             mask->filterStrategy(),
-             dlg.transformationEffect()->maskName(),
-             dlg.transformationEffect()->xScale(),
-             dlg.transformationEffect()->yScale(),
-             dlg.transformationEffect()->xShear(),
-             dlg.transformationEffect()->yShear(),
-             dlg.transformationEffect()->rotation(),
-             dlg.transformationEffect()->moveX(),
-             dlg.transformationEffect()->moveY(),
-             dlg.transformationEffect()->filterStrategy());
-            cmd->redo();
-            m_view->undoAdapter()->addCommand(cmd);
-            m_view->document()->setModified(true);
-            mask->setDirty(mask->extent());
-        }
-    } else if (m_activeMask->inherits("KisFilterMask")) {
+    if (m_activeMask->inherits("KisFilterMask")) {
         KisFilterMask * mask = static_cast<KisFilterMask*>(m_activeMask.data());
 
         KisLayerSP layer = dynamic_cast<KisLayer*>(mask->parent().data());

@@ -82,13 +82,6 @@ public slots:
     void createFilterMask();
 
     /**
-     * create a new transformation mask. If the transform tool is
-     * active, get the current transformation and selection and create
-     * the mask from that.
-     */
-    void createTransformationMask();
-
-    /**
      * Create a local, i.e., per-layer selection object.
      */
     void createSelectionmask();
@@ -180,7 +173,6 @@ private:
     void activateMask(KisMaskSP mask);
 
     void createSelectionMask(KisNodeSP parent, KisNodeSP above);
-    void createTransformationMask(KisNodeSP parent, KisNodeSP above);
     void createFilterMask(KisNodeSP parent, KisNodeSP above);
     void createTransparencyMask(KisNodeSP parent, KisNodeSP above);
 

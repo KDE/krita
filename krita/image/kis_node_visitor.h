@@ -29,7 +29,6 @@ class KisExternalLayer;
 class KisCloneLayer;
 class KisFilterMask;
 class KisTransparencyMask;
-class KisTransformationMask;
 class KisSelectionMask;
 
 class KRITAIMAGE_EXPORT KisNodeVisitor
@@ -56,8 +55,6 @@ public:
     virtual bool visit(KisFilterMask *mask) = 0;
 
     virtual bool visit(KisTransparencyMask *mask) = 0;
-
-    virtual bool visit(KisTransformationMask *mask) = 0;
 
     virtual bool visit(KisSelectionMask *mask) = 0;
 

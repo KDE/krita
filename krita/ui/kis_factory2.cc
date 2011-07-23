@@ -120,6 +120,9 @@ const KComponentData &KisFactory2::componentData()
                                          QString::fromLatin1("[X-Krita-Version] == 4"));
 
         // Load dockers
+        KoPluginLoader::PluginsConfig config;
+        config.blacklist = "DockerPluginsDisabled";
+        config.group = "krita";
         KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
                                          QString::fromLatin1("[X-Krita-Version] == 4"));
 

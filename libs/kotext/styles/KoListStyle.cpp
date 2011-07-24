@@ -214,6 +214,17 @@ void KoListStyle::saveOdf(KoGenStyle &style)
     style.addChildElement("text-list-level-style-content", elementContents);
 }
 
+bool KoListStyle::isNumberingStyle() const
+{
+    QMap<int, KoListLevelProperties>::const_iterator it(d->levels.constBegin());
+    for (; it != d->levels.constEnd(); ++it) {
+        if (isNumberingStyle(it.value().style())) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool KoListStyle::isNumberingStyle(int style)
 {
     bool retval = true;

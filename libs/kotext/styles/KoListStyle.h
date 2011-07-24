@@ -247,6 +247,11 @@ public:
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(KoListStyle *other);
 
+    /**
+     * Check if list has numbering in one of it's list levels
+     */
+    bool isNumberingStyle() const;
+
     /// returns true if style is a numbering style
     static bool isNumberingStyle(int style);
 signals:

@@ -73,6 +73,7 @@ void KoShapeShadow::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
         style.addProperty("calligra:shadow-blur-radius", QString("%1pt").arg(d->blur));
 }
 
+
 void KoShapeShadow::paintGroupShadow(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter)
 {
     QList<KoShape*> shapes = group->shapes();
@@ -167,6 +168,10 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     painter.save();
     painter.drawImage(imagePaintOffset, sourceGraphic);
     painter.restore();
+}
+
+void KoShapeShadow::paintBuffer(QPointF &clippingOffset, QImage image, QPainter &painter, const KoViewConverter &converter) {
+    kDebug() << "Shadow painted!";
 }
 
 void KoShapeShadow::setOffset(const QPointF & offset)

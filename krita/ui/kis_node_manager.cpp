@@ -126,12 +126,14 @@ KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
     m_d->view = view;
     m_d->doc = doc;
     m_d->layerManager = new KisLayerManager(view, doc);
+    
     m_d->maskManager = new KisMaskManager(view);
     m_d->self = this;
     m_d->commandsAdapter = new KisNodeCommandsAdapter(view);
     connect(m_d->view->image(), SIGNAL(sigPostLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged(KisGroupLayerSP)));
     connect(m_d->view->image(), SIGNAL(sigAboutToMoveNode(KisNode*,int,int)), SLOT(aboutToMoveNode()));
     connect(m_d->view->image(), SIGNAL(sigNodeHasBeenMoved(KisNode*,int,int)), SLOT(nodeHasBeenMoved()));
+    connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), SIGNAL(sigLayerActivated(KisLayerSP)));
 }
 
 KisNodeManager::~KisNodeManager()
@@ -139,6 +141,7 @@ KisNodeManager::~KisNodeManager()
     delete m_d->commandsAdapter;
     delete m_d;
 }
+
 void KisNodeManager::setup(KActionCollection * actionCollection)
 {
     m_d->layerManager->setup(actionCollection);
@@ -166,6 +169,11 @@ KisNodeSP KisNodeManager::activeNode()
     return m_d->activeNode;
 }
 
+KisLayerSP KisNodeManager::activeLayer()
+{
+    return m_d->layerManager->activeLayer();
+}
+
 const KoColorSpace* KisNodeManager::activeColorSpace()
 {
     Q_ASSERT(m_d->maskManager);
@@ -181,17 +189,6 @@ const KoColorSpace* KisNodeManager::activeColorSpace()
         else
             return m_d->view->image()->colorSpace();
     }
-}
-
-
-KisLayerManager * KisNodeManager::layerManager()
-{
-    return m_d->layerManager;
-}
-
-KisMaskManager * KisNodeManager::maskManager()
-{
-    return m_d->maskManager;
 }
 
 bool allowAsChild(const QString & parentType, const QString & childType)
@@ -513,6 +510,46 @@ void KisNodeManager::nodeHasBeenMoved()
         activateNode(m_d->activeNodeBeforeMove);
         m_d->activeNodeBeforeMove = 0;
     }
+}
+
+void KisNodeManager::mergeLayerDown()
+{
+    m_d->layerManager->mergeLayer();
+}
+
+void KisNodeManager::rotate(double radians)
+{
+    // XXX: implement rotation for masks as well
+    m_d->layerManager->rotateLayer(radians);
+
+}
+
+
+void KisNodeManager::rotate180()
+{
+    rotate(M_PI);
+}
+
+void KisNodeManager::rotateLeft90()
+{
+   rotate(M_PI / 2 - 2*M_PI); 
+}
+
+void KisNodeManager::rotateRight90()
+{
+    rotate(M_PI / 2);
+}
+
+void KisNodeManager::shear(double angleX, double angleY)
+{
+    // XXX: implement shear for masks as well
+    m_d->layerManager->shearLayer(angleX, angleY);
+}
+
+void KisNodeManager::scale(double sx, double sy, KisFilterStrategy *filterStrategy)
+{
+    // XXX: implement scale for masks as well
+    m_d->layerManager->scaleLayer(sx, sy, filterStrategy);
 }
 
 #include "kis_node_manager.moc"

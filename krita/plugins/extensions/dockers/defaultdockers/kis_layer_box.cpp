@@ -70,7 +70,6 @@
 #include "kis_view2.h"
 #include "kis_node_manager.h"
 #include "kis_node_model.h"
-#include "kis_layer_manager.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_doc2.h"
 
@@ -373,9 +372,9 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
     menu.exec(pos);
 }
 
-void KisLayerBox::slotMergeLayer()
+void KisLayerBox::slotMergeLayer()      
 {
-    m_nodeManager->layerManager()->mergeLayer();
+    m_nodeManager->mergeLayerDown();
 }
 
 void KisLayerBox::slotMinimalView()

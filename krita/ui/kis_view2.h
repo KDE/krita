@@ -40,7 +40,6 @@ class KisCanvas2;
 class KisDoc2;
 class KisFilterManager;
 class KisImage;
-class KisLayerManager;
 class KisCanvasResourceProvider;
 class KisSelectionManager;
 class KisStatusBar;
@@ -119,10 +118,6 @@ public:  // Krita specific interfaces
     /// and knows where to start painting on the canvas widget, i.e.,
     /// the document offset.
     KoCanvasController * canvasController();
-
-    /// The layer manager handles everything action related to
-    /// layers
-    KisLayerManager * layerManager();
 
     /// The node manager handles everything about nodes
     KisNodeManager * nodeManager();

@@ -98,7 +98,6 @@
 #include "kis_image_manager.h"
 #include "kis_control_frame.h"
 #include "kis_paintop_box.h"
-#include "kis_layer_manager.h"
 #include "kis_zoom_manager.h"
 #include "canvas/kis_grid_manager.h"
 #include "canvas/kis_perspective_grid_manager.h"
@@ -352,10 +351,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->resourceProvider, SLOT(slotNodeActivated(KisNodeSP)));
 
-
-    connect(layerManager(), SIGNAL(currentColorSpaceChanged(const KoColorSpace*)),
-            m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
-
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
 
@@ -446,12 +441,12 @@ void KisView2::dropEvent(QDropEvent *event)
             node->setY(pos.y() - node->projection()->exactBounds().height());
 
             KisNodeCommandsAdapter adapter(this);
-            if (!m_d->nodeManager->layerManager()->activeLayer()) {
+            if (!m_d->nodeManager->activeLayer()) {
                 adapter.addNode(node, kisimage->rootLayer() , 0);
             } else {
                 adapter.addNode(node,
-                                m_d->nodeManager->layerManager()->activeLayer()->parent(),
-                                m_d->nodeManager->layerManager()->activeLayer());
+                                m_d->nodeManager->activeLayer()->parent(),
+                                m_d->nodeManager->activeLayer());
             }
             node->setDirty();
             canvas()->update();
@@ -565,14 +560,6 @@ KoCanvasController * KisView2::canvasController()
     return m_d->canvasController;
 }
 
-KisLayerManager * KisView2::layerManager()
-{
-    if (m_d->nodeManager)
-        return m_d->nodeManager->layerManager();
-    else
-        return 0;
-}
-
 KisNodeSP KisView2::activeNode()
 {
     if (m_d->nodeManager)
@@ -583,8 +570,8 @@ KisNodeSP KisView2::activeNode()
 
 KisLayerSP KisView2::activeLayer()
 {
-    if (m_d->nodeManager && m_d->nodeManager->layerManager())
-        return m_d->nodeManager->layerManager()->activeLayer();
+    if (m_d->nodeManager)
+        return m_d->nodeManager->activeLayer();
     else
         return 0;
 }

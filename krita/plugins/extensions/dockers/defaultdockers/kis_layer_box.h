@@ -47,7 +47,6 @@ class KMenu;
 class KoCompositeOp;
 class KisCanvas2;
 class KisNodeModel;
-class KisLayerManager;
 class Ui_WdgLayerBox;
 
 /**

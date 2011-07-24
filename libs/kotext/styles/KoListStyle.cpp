@@ -216,11 +216,28 @@ void KoListStyle::saveOdf(KoGenStyle &style)
 
 bool KoListStyle::isNumberingStyle(int style)
 {
-    return !(style == KoListStyle::SquareItem || style == KoListStyle::Bullet
-                 || style == KoListStyle::BlackCircle || style == KoListStyle::CircleItem
-                 || style == KoListStyle::BoxItem || style == KoListStyle::RhombusItem
-                 || style == KoListStyle::HeavyCheckMarkItem || style == KoListStyle::BallotXItem
-                 || style == KoListStyle::RightArrowItem || style == KoListStyle::RightArrowHeadItem);
+    bool retval = true;
+    switch (style) {
+    case KoListStyle::SquareItem:
+    case KoListStyle::DiscItem:
+    case KoListStyle::CircleItem:
+    case KoListStyle::None:
+    case KoListStyle::Bullet:
+    case KoListStyle::BlackCircle:
+    case KoListStyle::BoxItem:
+    case KoListStyle::RhombusItem:
+    case KoListStyle::HeavyCheckMarkItem:
+    case KoListStyle::BallotXItem:
+    case KoListStyle::RightArrowItem:
+    case KoListStyle::RightArrowHeadItem:
+    case KoListStyle::CustomCharItem:
+    case KoListStyle::ImageItem:
+        retval = false;
+        break;
+    default:
+        retval = true;
+    }
+    return retval;
 }
 
 QList<int> KoListStyle::listLevels() const

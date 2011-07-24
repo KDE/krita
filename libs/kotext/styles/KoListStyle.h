@@ -66,6 +66,8 @@ public:
     typedef quintptr ListIdType;
 
     /// This list is used to specify what kind of list-style to use
+    /// If you add a style to that list you also need to check if you need to update
+    /// KoListStyle::isNumberingStyle(int)
     enum Style {
         /// Draw a square
         SquareItem = QTextListFormat::ListSquare,

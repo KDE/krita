@@ -30,8 +30,6 @@ class KoShapeGroup;
 class KoGenStyle;
 class KoShapeSavingContext;
 class QPainter;
-class QRectF;
-class QPointF;
 class QImage;
 class QTransform;
 class KoViewConverter;
@@ -53,26 +51,39 @@ public:
     /**
      * Paints the shadow of the shape group to the buffer image.
      * @param group the shape group to paint around
-     * @param painter the painter to paint on the image
+     * @param painter the painter to paint to, the painter will have the topleft of the
+     *       shape group as its start coordinate.
      * @param converter to convert between internal and view coordinates.
      */
-    void paintGroupShadow(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter);
+    void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, QTransform &offsetMatrix);
     
     /**
      * Paints the shadow of the shape to the buffer image.
      * @param shape the shape to paint around
-     * @param painter the painter to paint on the image
+     * @param painter the painter to paint to, the painter will have the topleft of the
+     *       shape as its start coordinate.
      * @param converter to convert between internal and view coordinates.
      */
-    void paintShadow(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
+    void paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, QTransform &offsetMatrix);
     
     /**
      * Paints the shadow of the shape.
      * @param shape the shape to paint around
-     * @param painter the painter to paint shadows to canvas
+     * @param painter the painter to paint to, the painter will have the topleft of the
+     *       shape as its start coordinate.
      * @param converter to convert between internal and view coordinates.
      */
     void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
+
+    /**
+     * Paints the shadow from a buffer image directly.
+     * @param clippingOffset the shapr position offset
+     * @param image the buffer image
+     * @param painter the painter to paint to, the painter will have the topleft of the
+     *       shape as its start coordinate.
+     * @param converter to convert between internal and view coordinates.
+     */
+    void paintBuffer(QPointF &clippingOffset, QImage image, QPainter &painter, const KoViewConverter &converter);
 
     /**
      * Sets the shadow offset from the topleft corner of the shape

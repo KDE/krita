@@ -432,7 +432,7 @@ void KoPADocument::saveOdfDocumentStyles( KoPASavingContext & context )
 {
     KoStyleManager *styleManager = resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     Q_ASSERT( styleManager );
-    styleManager->saveOdf( context.mainStyles() );
+    styleManager->saveOdf(context);
 }
 
 bool KoPADocument::loadOdfDocumentStyles( KoPALoadingContext & context )

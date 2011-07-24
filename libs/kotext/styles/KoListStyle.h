@@ -32,6 +32,7 @@
 
 class KoListLevelProperties;
 class KoShapeLoadingContext;
+class KoShapeSavingContext;
 class KoGenStyle;
 
 
@@ -242,7 +243,7 @@ public:
     /**
      * Save the style to a KoGenStyle object using the OpenDocument format
      */
-    void saveOdf(KoGenStyle &style);
+    void saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const;
 
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(KoListStyle *other);

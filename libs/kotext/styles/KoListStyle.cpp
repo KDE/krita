@@ -197,7 +197,7 @@ void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& s
     }
 }
 
-void KoListStyle::saveOdf(KoGenStyle &style)
+void KoListStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const
 {
     if (!d->name.isEmpty() && !style.isDefaultStyle()) {
         style.addAttribute("style:display-name", d->name);
@@ -208,7 +208,7 @@ void KoListStyle::saveOdf(KoGenStyle &style)
     QMapIterator<int, KoListLevelProperties> it(d->levels);
     while (it.hasNext()) {
         it.next();
-        it.value().saveOdf(&elementWriter);
+        it.value().saveOdf(&elementWriter, context);
     }
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     style.addChildElement("text-list-level-style-content", elementContents);

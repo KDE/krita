@@ -48,7 +48,6 @@ class KisUndoAdapter;
 class KisZoomManager;
 class KisImageManager;
 class KisNodeManager;
-class KisMaskManager;
 class KisPerspectiveGridManager;
 class KisPaintingAssistantsManager;
 class KisGridManager;
@@ -124,9 +123,6 @@ public:  // Krita specific interfaces
     /// The layer manager handles everything action related to
     /// layers
     KisLayerManager * layerManager();
-
-    /// The mask manager handles everything action-related to masks
-    KisMaskManager * maskManager();
 
     /// The node manager handles everything about nodes
     KisNodeManager * nodeManager();

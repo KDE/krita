@@ -125,15 +125,25 @@ void KisMaskManager::createFilterMask()
     }
 }
 
-void KisMaskManager::createSelectionmask()
+void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
 {
-    KisLayerSP layer = m_view->activeLayer();
+    KisLayer * layer = dynamic_cast<KisLayer*>(parent.data());
+    if (layer && layer->selectionMask())
+        layer->selectionMask()->setActive(false);
 
-    if (layer) {
-        KisNodeSP above = m_activeMask ?
-                          static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
-        createSelectionMask(layer, above);
-    }
+    KisSelectionMask *mask = new KisSelectionMask(m_view->image());
+    mask->initSelection(m_view->selection(), layer);
+
+    connect(mask,SIGNAL(changeActivity(KisSelectionMask*,bool)),this,SLOT(changeActivity(KisSelectionMask*,bool)));
+
+    //counting number of KisSelectionMask    
+    QList<KisNodeSP> selectionMasks = layer->childNodes(QStringList("KisSelectionMask"),KoProperties());
+
+    mask->setName(i18n("Selection ")+QString::number(selectionMasks.count()+1));
+    m_commandsAdapter->addNode(mask, parent, above);
+
+    activateMask(mask);
+    masksUpdated();
 }
 
 void KisMaskManager::createTransparencyMask(KisNodeSP parent, KisNodeSP above)
@@ -148,12 +158,6 @@ void KisMaskManager::createTransparencyMask(KisNodeSP parent, KisNodeSP above)
 
     activateMask(mask);
     masksUpdated();
-}
-
-void KisMaskManager::addEffectMask(KisNodeSP parent, KisEffectMaskSP mask)
-{
-    m_commandsAdapter->addNode(mask, parent, 02110);
-    activateMask(mask);
 }
 
 void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
@@ -187,28 +191,6 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
     }
     masksUpdated();
 }
-
-void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
-{
-    KisLayer * layer = dynamic_cast<KisLayer*>(parent.data());
-    if (layer && layer->selectionMask())
-        layer->selectionMask()->setActive(false);
-
-    KisSelectionMask *mask = new KisSelectionMask(m_view->image());
-    mask->initSelection(m_view->selection(), layer);
-
-    connect(mask,SIGNAL(changeActivity(KisSelectionMask*,bool)),this,SLOT(changeActivity(KisSelectionMask*,bool)));
-
-    //counting number of KisSelectionMask    
-    QList<KisNodeSP> selectionMasks = layer->childNodes(QStringList("KisSelectionMask"),KoProperties());
-
-    mask->setName(i18n("Selection ")+QString::number(selectionMasks.count()+1));
-    m_commandsAdapter->addNode(mask, parent, above);
-
-    activateMask(mask);
-    masksUpdated();
-}
-
 
 void KisMaskManager::maskToSelection()
 {
@@ -375,11 +357,6 @@ void KisMaskManager::maskProperties()
     } else {
         // Not much to show for transparency or selection masks?
     }
-}
-
-void KisMaskManager::showMask()
-{
-    // XXX: make sure the canvas knows it should paint the active mask as a mask
 }
 
 void KisMaskManager::raiseMask()

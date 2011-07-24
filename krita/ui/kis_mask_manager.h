@@ -44,32 +44,28 @@ public:
     KisMaskManager(KisView2 * view);
     ~KisMaskManager() {}
 
+signals:
+
+    void sigMaskActivated(KisMaskSP mask);
+
+private:
+    
+    friend class KisNodeManager;
+    
     void setup(KActionCollection * actionCollection);
+
     void updateGUI();
-
-    /**
-     * @return the active mask, if there is one
-     */
-    KisMaskSP activeMask();
-
+    
     /**
      * @return the paint device associated with the currently
      *         active mask, if there is one.
      */
     KisPaintDeviceSP activeDevice();
 
-signals:
-
-    void sigMaskActivated(KisMaskSP mask);
-
-public slots:
-
-
     /**
-     * Add a pre-existing mask to the graph; for instance, a preview
-     * mask that has been made definitive.
+     * @return the active mask, if there is one
      */
-    void addEffectMask(KisNodeSP parent, KisEffectMaskSP mask);
+    KisMaskSP activeMask();
 
     /**
      * Create a new transparency mask.
@@ -80,11 +76,6 @@ public slots:
      * Create a new filter mask.
      */
     void createFilterMask();
-
-    /**
-     * Create a local, i.e., per-layer selection object.
-     */
-    void createSelectionmask();
 
     /**
      * Create a new global selection from the active mask.
@@ -102,12 +93,6 @@ public slots:
      * Create an exact duplicate of the current mask.
      */
     void duplicateMask();
-
-    /**
-     * Show the mask as an overlay. The mask properties determine the
-     * color and opacity of the mask.
-     */
-    void showMask();
 
     /**
      * Delete the mask
@@ -162,10 +147,6 @@ public slots:
 
     void changeActivity(KisSelectionMask *mask,bool active);
 
-private:
-
-    friend class KisNodeManager;
-
     /**
      * Activate a new mask. There can be only one mask active per
      * view; and if the mask is active, it becomes the paint device.
@@ -176,7 +157,6 @@ private:
     void createFilterMask(KisNodeSP parent, KisNodeSP above);
     void createTransparencyMask(KisNodeSP parent, KisNodeSP above);
 
-private:
     KisView2 * m_view;
 
     KisMaskSP m_activeMask;

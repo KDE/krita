@@ -573,14 +573,6 @@ KisLayerManager * KisView2::layerManager()
         return 0;
 }
 
-KisMaskManager * KisView2::maskManager()
-{
-    if (m_d->nodeManager)
-        return m_d->nodeManager->maskManager();
-    else
-        return 0;
-}
-
 KisNodeSP KisView2::activeNode()
 {
     if (m_d->nodeManager)

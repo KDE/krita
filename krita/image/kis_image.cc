@@ -735,8 +735,7 @@ void KisImage::flatten()
     setModified();
 }
 
-// FIXME: Rename to Merge Down?
-KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
+KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
 {
     if(!layer->prevSibling()) return 0;
 

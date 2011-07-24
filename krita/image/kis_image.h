@@ -423,7 +423,7 @@ public:
      * Merge the specified layer with the layer
      * below this layer, remove the specified layer.
      */
-    KisLayerSP mergeLayer(KisLayerSP l, const KisMetaData::MergeStrategy* strategy);
+    KisLayerSP mergeDown(KisLayerSP l, const KisMetaData::MergeStrategy* strategy);
 
     /**
      * flatten the layer: that is, the projection becomes the layer

@@ -36,9 +36,7 @@
   <Action name="mirror_canvas"/>
   <Separator/>
   <Action name="view_newview"/>    
-  <ActionList name="view_closeallviews"/>   
   <Separator/>      
-  <ActionList name="view_split"/>
   <Action name="zoom"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>

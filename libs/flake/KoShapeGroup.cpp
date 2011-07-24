@@ -54,11 +54,10 @@ bool KoShapeGroup::hitTest(const QPointF &position) const
     return false;
 }
 
-/*
 QSizeF KoShapeGroup::size() const
 {
     return QSizeF(0, 0);
-}*/
+}
 
 void KoShapeGroup::shapeCountChanged()
 {

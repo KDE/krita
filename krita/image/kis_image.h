@@ -440,8 +440,6 @@ public:
     /// use if the layers have changed _completely_ (eg. when flattening)
     void notifyLayersChanged();
 
-    void notifyPropertyChanged(KisLayerSP layer);
-
     /**
      * Called whenever a layer has changed. The layer is added to a
      * list of dirty layers and as soon as the document stores the
@@ -481,9 +479,6 @@ public:
     void notifyAboutToBeDeleted();
 
 signals:
-
-    /// Emitted after a layer's properties (visible, locked, opacity, composite op, name, ...) change
-    void sigLayerPropertiesChanged(KisLayerSP layer);
 
     /**
      * Emitted when the list of layers has changed completely.

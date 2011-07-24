@@ -991,11 +991,6 @@ void KisImage::notifyLayersChanged()
     emit sigPostLayersChanged(rootLayer());
 }
 
-void KisImage::notifyPropertyChanged(KisLayerSP layer)
-{
-    emit sigLayerPropertiesChanged(layer);
-}
-
 QRect KisImage::bounds() const
 {
     return QRect(0, 0, width(), height());

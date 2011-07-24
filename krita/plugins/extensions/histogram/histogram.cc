@@ -73,7 +73,6 @@ Histogram::Histogram(QObject *parent, const QVariantList &)
             connect(image.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged()));
             connect(image.data(), SIGNAL(sigNodeHasBeenAdded(KisNode *, int)), SLOT(slotLayersChanged()));
             connect(m_view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(slotLayersChanged()));
-            connect(image.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), SLOT(slotLayersChanged()));
             connect(image.data(), SIGNAL(sigNodeHasBeenRemoved(KisNode *, int)), SLOT(slotLayersChanged()));
             m_image = image.data();
         }
@@ -86,7 +85,7 @@ Histogram::~Histogram()
 
 void Histogram::slotLayersChanged()
 {
-    m_action->setEnabled(m_image && m_view->nodeManager()->activeLayer() && m_view->nodeManager()->activeLayer()->visible());
+    m_action->setEnabled(m_image && m_view->nodeManager()->activeLayer());
 }
 
 void Histogram::slotActivated()

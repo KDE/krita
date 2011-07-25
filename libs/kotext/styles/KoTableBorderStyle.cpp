@@ -283,7 +283,10 @@ void KoTableBorderStyle::paintBorders(QPainter &painter, const QRectF &bounds, Q
         painter.drawLine(QLineF(bounds.left(), t, bounds.right(), t));
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->append(QLineF(bounds.left() + leftOuterPen.widthF(), bounds.top() + topOuterPen.widthF(), bounds.right() - rightOuterPen.widthF(), bounds.top() + topOuterPen.widthF()));
+        accumulatedBlankBorders->append(QLineF(bounds.left() + leftOuterPen.widthF() + d->edges[Left].spacing,
+                                               bounds.top() + topOuterPen.widthF() + d->edges[Top].spacing,
+                                               bounds.right() - rightOuterPen.widthF() - d->edges[Right].spacing,
+                                               bounds.top() + topOuterPen.widthF() + d->edges[Top].spacing));
     }
 
     if (bottomOuterPen.widthF() > 0) {
@@ -293,7 +296,10 @@ void KoTableBorderStyle::paintBorders(QPainter &painter, const QRectF &bounds, Q
         painter.drawLine(QLineF(bounds.left(), b, bounds.right(), b));
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->append(QLineF(bounds.left() + leftOuterPen.widthF(), bounds.bottom() - bottomOuterPen.widthF(), bounds.right() - rightOuterPen.widthF(), bounds.bottom() - bottomOuterPen.widthF()));
+        accumulatedBlankBorders->append(QLineF(bounds.left() + leftOuterPen.widthF() + d->edges[Left].spacing,
+                                               bounds.bottom() - bottomOuterPen.widthF() - d->edges[Bottom].spacing,
+                                               bounds.right() - rightOuterPen.widthF() - d->edges[Right].spacing,
+                                               bounds.bottom() - bottomOuterPen.widthF() - d->edges[Bottom].spacing));
     }
 
     if (leftOuterPen.widthF() > 0) {
@@ -303,7 +309,10 @@ void KoTableBorderStyle::paintBorders(QPainter &painter, const QRectF &bounds, Q
         painter.drawLine(QLineF(l, bounds.top() + d->edges[Top].outerPen.widthF(), l, bounds.bottom() - d->edges[Bottom].outerPen.widthF()));
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->append(QLineF(bounds.left() + leftOuterPen.widthF(), bounds.top() + topOuterPen.widthF(), bounds.left() + leftOuterPen.widthF(), bounds.bottom() - bottomOuterPen.widthF()));
+        accumulatedBlankBorders->append(QLineF(bounds.left() + leftOuterPen.widthF() + d->edges[Left].spacing,
+                                               bounds.top() + topOuterPen.widthF() + d->edges[Top].spacing,
+                                               bounds.left() + leftOuterPen.widthF() + d->edges[Left].spacing,
+                                               bounds.bottom() - bottomOuterPen.widthF() - d->edges[Bottom].spacing));
     }
 
     if (d->edges[Right].outerPen.widthF() > 0) {
@@ -313,8 +322,10 @@ void KoTableBorderStyle::paintBorders(QPainter &painter, const QRectF &bounds, Q
         painter.drawLine(QLineF(r, bounds.top() + d->edges[Top].outerPen.widthF(), r, bounds.bottom() - bottomOuterPen.widthF()));
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->append(QLineF(bounds.right() - rightOuterPen.widthF(), bounds.top() + topOuterPen.widthF(), bounds.right() - rightOuterPen.widthF(), bounds.bottom() - bottomOuterPen.widthF()));
-
+        accumulatedBlankBorders->append(QLineF(bounds.right() - rightOuterPen.widthF() - d->edges[Right].spacing,
+                                               bounds.top() + topOuterPen.widthF() + d->edges[Top].spacing,
+                                               bounds.right() - rightOuterPen.widthF() - d->edges[Right].spacing,
+                                               bounds.bottom() - bottomOuterPen.widthF() - d->edges[Bottom].spacing));
     }
 
     paintDiagonalBorders(painter, bounds);

@@ -527,8 +527,8 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             KoTextLayoutArea *cellArea = new KoTextLayoutArea(this, documentLayout());
             d->cellAreas[cell.row()][cell.column()] = cellArea;
 
-            qreal left = d->columnPositions[col] + cellStyle.leftPadding() + cellStyle.leftBorderWidth();
-            qreal right = qMax(left, d->columnPositions[col+cell.columnSpan()] - cellStyle.rightPadding() - cellStyle.rightBorderWidth());
+            qreal left = d->columnPositions[col] + cellStyle.leftPadding() + cellStyle.leftInnerBorderWidth();
+            qreal right = qMax(left, d->columnPositions[col+cell.columnSpan()] - cellStyle.rightPadding() - cellStyle.rightInnerBorderWidth());
 
             cellArea->setReferenceRect(
                     left,
@@ -624,8 +624,8 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
 
             d->cellAreas[cell.row()][cell.column()] = cellArea;
 
-            qreal left = d->columnPositions[col] + cellStyle.leftPadding() + cellStyle.leftBorderWidth();
-            qreal right = qMax(left, d->columnPositions[col+cell.columnSpan()] - cellStyle.rightPadding() - cellStyle.rightBorderWidth());
+            qreal left = d->columnPositions[col] + cellStyle.leftPadding() + cellStyle.leftInnerBorderWidth();
+            qreal right = qMax(left, d->columnPositions[col+cell.columnSpan()] - cellStyle.rightInnerPadding() - cellStyle.rightBorderWidth());
 
             cellArea->setReferenceRect(
                     left,

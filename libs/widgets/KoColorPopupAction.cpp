@@ -154,6 +154,8 @@ KoColor KoColorPopupAction::currentKoColor() const
 void KoColorPopupAction::updateIcon( )
 {
     QSize iconSize(16,16);
+    // This must be a QImage, as drawing to a QPixmap outside the
+    // UI thread will cause sporadic crashes.
     QImage pm = icon().pixmap(iconSize).toImage();
     if(pm.isNull())
     {

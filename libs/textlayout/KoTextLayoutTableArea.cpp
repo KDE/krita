@@ -625,7 +625,7 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
             d->cellAreas[cell.row()][cell.column()] = cellArea;
 
             qreal left = d->columnPositions[col] + cellStyle.leftPadding() + cellStyle.leftInnerBorderWidth();
-            qreal right = qMax(left, d->columnPositions[col+cell.columnSpan()] - cellStyle.rightInnerPadding() - cellStyle.rightBorderWidth());
+            qreal right = qMax(left, d->columnPositions[col+cell.columnSpan()] - cellStyle.rightPadding() - cellStyle.rightInnerBorderWidth());
 
             cellArea->setReferenceRect(
                     left,

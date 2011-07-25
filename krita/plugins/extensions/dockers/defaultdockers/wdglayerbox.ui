@@ -296,7 +296,7 @@
           <string>Create a new Shape Layer</string>
          </property>
          <property name="whatsThis">
-          <string>Create a new Shape Layer. Shape layers contain vector objects such as text or vector graphics. Drop vector objecs from the shape selector on the canvas after selecting a shape layer.</string>
+          <string>Create a new Shape Layer. Shape layers contain vector objects such as text or vector graphics. Drop vector objects from the shape selector on the canvas after selecting a shape layer.</string>
          </property>
          <property name="text">
           <string>...</string>
@@ -337,7 +337,7 @@
           <string>Add a Transparency Mask</string>
          </property>
          <property name="whatsThis">
-          <string>Add a New Transparency Mask. Press to create an emtpy transparency mask or a transparency mask based on the current global selection. Drop a layer or mask to create a new transparency mask based on a layer, a layer's channels or the mask.</string>
+          <string>Add a New Transparency Mask. Press to create an empty transparency mask or a transparency mask based on the current global selection. Drop a layer or mask to create a new transparency mask based on a layer, a layer's channels or the mask.</string>
          </property>
          <property name="text">
           <string>...</string>
@@ -405,7 +405,7 @@
           <string>Add a New Local Selection Mask</string>
          </property>
          <property name="whatsThis">
-          <string>Add a New Local Selection Mask. Press to create an emtpy local selection or a local selection based on the current global selection. Drop a layer or mask to create a new local selection based on a layer, a layer's channels or the mask.</string>
+          <string>Add a New Local Selection Mask. Press to create an empty local selection or a local selection based on the current global selection. Drop a layer or mask to create a new local selection based on a layer, a layer's channels or the mask.</string>
          </property>
          <property name="text">
           <string>...</string>

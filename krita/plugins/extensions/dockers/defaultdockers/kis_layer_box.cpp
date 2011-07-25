@@ -116,7 +116,6 @@ KisLayerBox::KisLayerBox()
     actions[1]->trigger(); //TODO save/load previous state
 
     m_wdgLayerBox->bnViewMode->setMenu(m_viewModeMenu);
-    m_wdgLayerBox->bnViewMode->setIconSize(QSize(22,22));
     m_wdgLayerBox->bnViewMode->setPopupMode(QToolButton::InstantPopup);
     m_wdgLayerBox->bnViewMode->setIcon(KIcon("view-choose"));
     m_wdgLayerBox->bnViewMode->setText(i18n("View mode"));
@@ -163,39 +162,30 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(int)), SLOT(slotCompositeOpChanged(int)));
 
     m_wdgLayerBox->bnAddPaintLayer->setIcon(BarIcon("document-new"));
-    m_wdgLayerBox->bnAddPaintLayer->setIconSize(QSize(22,22));
     connect(m_wdgLayerBox->bnAddPaintLayer, SIGNAL(clicked()), SLOT(slotNewPaintLayer()));
     
     m_wdgLayerBox->bnAddGroupLayer->setIcon(BarIcon("folder-new"));
-    m_wdgLayerBox->bnAddGroupLayer->setIconSize(QSize(22,22));
     connect(m_wdgLayerBox->bnAddGroupLayer, SIGNAL(clicked()), SLOT(slotNewGroupLayer()));
     
     m_wdgLayerBox->bnAddCloneLayer->setIcon(BarIcon("edit-copy"));
-    m_wdgLayerBox->bnAddCloneLayer->setIconSize(QSize(22,22));
     connect(m_wdgLayerBox->bnAddCloneLayer, SIGNAL(clicked()), SLOT(slotNewCloneLayer()));
     
     m_wdgLayerBox->bnAddShapeLayer->setIcon(BarIcon("bookmaer-new"));
-    m_wdgLayerBox->bnAddShapeLayer->setIconSize(QSize(22,22));
     connect(m_wdgLayerBox->bnAddShapeLayer, SIGNAL(clicked()), SLOT(slotNewShapeLayer()));
     
     m_wdgLayerBox->bnAddFilterLayer->setIcon(BarIcon("view-filter"));
-    m_wdgLayerBox->bnAddFilterLayer->setIconSize(QSize(22,22));
     connect(m_wdgLayerBox->bnAddFilterLayer, SIGNAL(clicked()), SLOT(slotNewAdjustmentLayer()));
     
     m_wdgLayerBox->bnAddGeneratedLayer->setIcon(BarIcon("view-filter"));
-    m_wdgLayerBox->bnAddGeneratedLayer->setIconSize(QSize(22,22));
     connect(m_wdgLayerBox->bnAddGeneratedLayer, SIGNAL(clicked()), SLOT(slotNewGeneratorLayer()));
     
     m_wdgLayerBox->bnAddTransparencyMask->setIcon(BarIcon("edit-copy"));
-    m_wdgLayerBox->bnAddTransparencyMask->setIconSize(QSize(22,22));
     connect(m_wdgLayerBox->bnAddTransparencyMask, SIGNAL(clicked()), SLOT(slotNewTransparencyMask()));
     
     m_wdgLayerBox->bnAddFilterMask->setIcon(BarIcon("bookmarks"));
-    m_wdgLayerBox->bnAddFilterMask->setIconSize(QSize(22,22));
     connect(m_wdgLayerBox->bnAddFilterMask, SIGNAL(clicked()), SLOT(slotNewEffectMask()));
     
     m_wdgLayerBox->bnAddLocalSelectionMask->setIcon(BarIcon("edit-paste"));
-    m_wdgLayerBox->bnAddLocalSelectionMask->setIconSize(QSize(22,22));
     connect(m_wdgLayerBox->bnAddLocalSelectionMask, SIGNAL(clicked()), SLOT(slotNewSelectionMask()));
     
     m_nodeModel = new KisNodeModel(this);

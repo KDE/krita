@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>258</width>
-    <height>470</height>
+    <height>492</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -74,14 +74,14 @@
         <widget class="QToolButton" name="bnViewMode">
          <property name="minimumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="text">
@@ -89,8 +89,8 @@
          </property>
          <property name="iconSize">
           <size>
-           <width>22</width>
-           <height>22</height>
+           <width>16</width>
+           <height>16</height>
           </size>
          </property>
          <property name="autoRaise">
@@ -109,14 +109,14 @@
         <widget class="KisDropButton" name="bnAddPaintLayer">
          <property name="minimumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="toolTip">
@@ -130,8 +130,8 @@
          </property>
          <property name="iconSize">
           <size>
-           <width>22</width>
-           <height>22</height>
+           <width>16</width>
+           <height>16</height>
           </size>
          </property>
          <property name="autoRaise">
@@ -143,14 +143,14 @@
         <widget class="KisDropButton" name="bnAddGroupLayer">
          <property name="minimumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="toolTip">
@@ -167,8 +167,8 @@
          </property>
          <property name="iconSize">
           <size>
-           <width>22</width>
-           <height>22</height>
+           <width>16</width>
+           <height>16</height>
           </size>
          </property>
          <property name="autoRaise">
@@ -180,14 +180,14 @@
         <widget class="KisDropButton" name="bnAddFilterLayer">
          <property name="minimumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="toolTip">
@@ -201,8 +201,8 @@
          </property>
          <property name="iconSize">
           <size>
-           <width>22</width>
-           <height>22</height>
+           <width>16</width>
+           <height>16</height>
           </size>
          </property>
          <property name="autoRaise">
@@ -214,14 +214,14 @@
         <widget class="KisDropButton" name="bnAddCloneLayer">
          <property name="minimumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="toolTip">
@@ -235,8 +235,8 @@
          </property>
          <property name="iconSize">
           <size>
-           <width>22</width>
-           <height>22</height>
+           <width>16</width>
+           <height>16</height>
           </size>
          </property>
          <property name="autoRaise">
@@ -248,14 +248,14 @@
         <widget class="KisDropButton" name="bnAddGeneratedLayer">
          <property name="minimumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="toolTip">
@@ -269,8 +269,8 @@
          </property>
          <property name="iconSize">
           <size>
-           <width>22</width>
-           <height>22</height>
+           <width>16</width>
+           <height>16</height>
           </size>
          </property>
          <property name="autoRaise">
@@ -282,14 +282,14 @@
         <widget class="KisDropButton" name="bnAddShapeLayer">
          <property name="minimumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="toolTip">
@@ -303,8 +303,8 @@
          </property>
          <property name="iconSize">
           <size>
-           <width>22</width>
-           <height>22</height>
+           <width>16</width>
+           <height>16</height>
           </size>
          </property>
          <property name="autoRaise">
@@ -323,14 +323,14 @@
         <widget class="KisDropButton" name="bnAddTransparencyMask">
          <property name="minimumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="toolTip">
@@ -344,8 +344,8 @@
          </property>
          <property name="iconSize">
           <size>
-           <width>22</width>
-           <height>22</height>
+           <width>16</width>
+           <height>16</height>
           </size>
          </property>
          <property name="autoRaise">
@@ -357,14 +357,14 @@
         <widget class="KisDropButton" name="bnAddFilterMask">
          <property name="minimumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="toolTip">
@@ -378,8 +378,8 @@
          </property>
          <property name="iconSize">
           <size>
-           <width>22</width>
-           <height>22</height>
+           <width>16</width>
+           <height>16</height>
           </size>
          </property>
          <property name="autoRaise">
@@ -391,14 +391,14 @@
         <widget class="KisDropButton" name="bnAddLocalSelectionMask">
          <property name="minimumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>32</width>
-           <height>32</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
          <property name="toolTip">
@@ -412,8 +412,8 @@
          </property>
          <property name="iconSize">
           <size>
-           <width>22</width>
-           <height>22</height>
+           <width>16</width>
+           <height>16</height>
           </size>
          </property>
          <property name="autoRaise">

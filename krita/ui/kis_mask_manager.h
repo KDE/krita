@@ -48,6 +48,21 @@ signals:
 
     void sigMaskActivated(KisMaskSP mask);
 
+private slots:
+    
+    /**
+     * Create a new global selection from the active mask.
+     */
+    void maskToSelection();
+
+    /**
+     * Create a new layer from the current mask. The user can choose
+     * the colorspace of the new layer and which channels should be
+     * filled from the mask channel.
+     */
+    void maskToLayer();
+
+    
 private:
     
     friend class KisNodeManager;
@@ -77,17 +92,6 @@ private:
      */
     void createFilterMask();
 
-    /**
-     * Create a new global selection from the active mask.
-     */
-    void maskToSelection();
-
-    /**
-     * Create a new layer from the current mask. The user can choose
-     * the colorspace of the new layer and which channels should be
-     * filled from the mask channel.
-     */
-    void maskToLayer();
 
     /**
      * Create an exact duplicate of the current mask.

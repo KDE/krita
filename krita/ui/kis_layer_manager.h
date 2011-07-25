@@ -72,14 +72,15 @@ private:
 
     void updateGUI();
     
-    void mergeLayer();
+
     void scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy);
     void rotateLayer(double radians);
     void shearLayer(double angleX, double angleY);
     
 private slots:
 
-
+    void mergeLayer();
+    
     void imageResizeToActiveLayer();
 
     void actLayerVisChanged(int show);

@@ -96,7 +96,7 @@ bool EnhancedPathCommand::execute()
         bool lineTo = m_command.unicode() == 'T';
 
         for (int i = 0; i < pointsCount; i+=3) {
-            const QPointF &radii = points[i+1]/2;
+            const QPointF &radii = points[i+1];
             const QPointF &angles = points[i+2] / rad2deg;
             // compute the ellipses starting point
             QPointF start(radii.x() * cos(angles.x()), -1 * radii.y() * sin(angles.x()));

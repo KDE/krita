@@ -210,7 +210,7 @@ void TestStyles::testApplyParagraphStyleWithParent()
     style3.applyStyle(rawFormat);
     KoParagraphStyle format3(rawFormat, rawFormat.toCharFormat());
     QCOMPARE(rawFormat.properties().count(), 8);
-    QCOMPARE(rawFormat.property(KoParagraphStyle::LineSpacing).toDouble(), 56.78);
+    QCOMPARE(rawFormat.property(KoParagraphStyle::LineSpacing).toReal(), 56.78);
     QCOMPARE(format3.alignment(), Qt::AlignLeft | Qt::AlignAbsolute);
     QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), 1004);
     QCOMPARE(format3.leftMargin(), 10.0);

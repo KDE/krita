@@ -50,10 +50,10 @@ class RenderThread : public QObject, public QRunnable
 public:
     RenderThread(VectorShape *shape, const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY);
     virtual ~RenderThread();
+    virtual void run();
 Q_SIGNALS:
     void finished(QSize boundingSize, QImage *image);
 protected:
-    virtual void run();
     void draw(QPainter &painter);
     void drawNull(QPainter &painter) const;
     void drawWmf(QPainter &painter) const;

@@ -250,7 +250,13 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
             converter.zoom(&zoomX, &zoomY);
             RenderThread *t = new RenderThread(this, size(), rc.size().toSize(), zoomX, zoomY);
             connect(t, SIGNAL(finished(QSize,QImage*)), this, SLOT(renderFinished(QSize,QImage*)));
-            QThreadPool::globalInstance()->start(t);
+            // Since the backends may use QPainter::drawText we need to make sure to only
+            // use threads if the font-backend supports that what is in most cases.
+            if (QFontDatabase::supportsThreadedFontRendering()) {
+                QThreadPool::globalInstance()->start(t);
+            } else { // else just execute the logic non-threaded.
+                t->run();
+            }
         }
     } else {
         QVector<QRect> clipRects = painter.clipRegion().rects();

@@ -1214,7 +1214,9 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         if (lineSpacing == 0.0) { // unset
             int percent = format.intProperty(KoParagraphStyle::PercentLineHeight);
             if (percent != 0) {
+                qreal prevHeight = height;
                 height *= percent / 100.0;
+                lineAdjust = height - prevHeight;
             } else
                 height *= 1.2; // default
         }

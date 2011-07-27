@@ -59,9 +59,9 @@ KisUpdateScheduler::KisUpdateScheduler()
 
 KisUpdateScheduler::~KisUpdateScheduler()
 {
+    delete m_d->updaterContext;
     delete m_d->updatesQueue;
     delete m_d->strokesQueue;
-    delete m_d->updaterContext;
 }
 
 void KisUpdateScheduler::connectImage(KisImageWSP image)

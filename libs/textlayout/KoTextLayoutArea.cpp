@@ -588,7 +588,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     //QTextBlockFormat format = block.blockFormat();
 
     int dropCapsAffectsNMoreLines = 0;
-    qreal dropCapsPositionAdjust;
+    qreal dropCapsPositionAdjust = 0.0;
 
     KoText::Direction dir = format.textProgressionDirection();
     if (dir == KoText::InheritDirection)
@@ -699,6 +699,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     bool dropCaps = format.dropCaps();
     int dropCapsLength = format.dropCapsLength();
     int dropCapsLines = format.dropCapsLines();
+
     if (dropCaps && dropCapsLength != 0 && dropCapsLines > 1
             && dropCapsAffectsNMoreLines == 0 // first line of this para is not affected by a previous drop-cap
             && block.length() > 1) {

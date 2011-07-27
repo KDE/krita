@@ -98,6 +98,8 @@ public:
     }
 
     inline void setDone() {
+        m_walker = 0;
+        m_strokeJob = 0;
         m_type = EMPTY;
     }
 

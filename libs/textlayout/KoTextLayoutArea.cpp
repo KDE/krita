@@ -1070,7 +1070,7 @@ qreal KoTextLayoutArea::x() const
 qreal KoTextLayoutArea::width() const
 {
     if (m_dropCapsNChars > 0) {
-        return m_dropCapsWidth + 10;
+        return m_dropCapsWidth;
     }
     qreal width = m_width;
     if (m_maximumAllowedWidth > 0) {

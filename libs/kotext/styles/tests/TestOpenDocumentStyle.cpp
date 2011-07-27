@@ -27,6 +27,8 @@
 #include <KoXmlWriter.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoEmbeddedDocumentSaver.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
@@ -369,8 +371,13 @@ void saveOdf(T* genStyle, KoGenStyle *styleWriter)
 template<>
 void saveOdf<KoParagraphStyle>(KoParagraphStyle *genStyle, KoGenStyle *styleWriter)
 {
+    QByteArray array;
+    QBuffer buffer(&array);
+    KoXmlWriter xmlWriter(&buffer);
     KoGenStyles styles;
-    genStyle->saveOdf(*styleWriter, styles);
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoShapeSavingContext context(xmlWriter, styles, embeddedSaver);
+    genStyle->saveOdf(*styleWriter, context);
 }
 
 template<class T>

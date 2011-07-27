@@ -202,7 +202,7 @@ void SimpleParagraphWidget::fillListButtons()
                 lay->layout();
 
             textShape.paintComponent(p, zoomHandler);
-            if(listStyle.isNumberingStyle(item.style)) {
+            if(KoListStyle::isNumberingStyle(item.style)) {
                 widget.numberedListButton->addItem(pm, static_cast<int> (item.style));
             } else {
                 widget.bulletListButton->addItem(pm, static_cast<int> (item.style));

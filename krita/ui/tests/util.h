@@ -44,7 +44,6 @@
 #include "kis_shape_layer.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
-#include "kis_transformation_mask.h"
 #include "kis_selection_mask.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
@@ -171,16 +170,6 @@ KisDoc2* createCompleteDocument()
     transparencyMask2->setName("transparencyMask2");
     transparencyMask2->setSelection(createPixelSelection(paintLayer1->paintDevice()));
     image->addNode(transparencyMask2, group2);
-
-    KisTransformationMaskSP transformationMask1 = new KisTransformationMask();
-    transformationMask1->setName("transformationMask1");
-    transformationMask1->setSelection(createPixelSelection(paintLayer1->paintDevice()));
-    image->addNode(transformationMask1, cloneLayer1);
-
-    KisTransformationMaskSP transformationMask2 = new KisTransformationMask();
-    transformationMask2->setName("transformationMask2");
-    transformationMask2->setSelection(createPixelSelection(paintLayer1->paintDevice()));
-    image->addNode(transformationMask2, adjustmentLayer2);
 
     KisSelectionMaskSP selectionMask1 = new KisSelectionMask(image);
     image->addNode(selectionMask1, paintLayer1);

@@ -626,7 +626,7 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, co
         // therefore we would need to store that information in the saving context
         if (originalParagraphStyle != defaultParagraphStyle) {
             KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
-            originalParagraphStyle->saveOdf(style, context.mainStyles());
+            originalParagraphStyle->saveOdf(style, context);
             generatedName = context.mainStyles().insert(style, internalName, KoGenStyles::DontAddNumberToName);
         }
     } else { // There are manual changes... We'll have to store them then
@@ -635,7 +635,7 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, co
             style.setAutoStyleInStylesDotXml(true);
         if (originalParagraphStyle)
             paragStyle.removeDuplicates(*originalParagraphStyle);
-        paragStyle.saveOdf(style, context.mainStyles());
+        paragStyle.saveOdf(style, context);
         generatedName = context.mainStyles().insert(style, "P");
     }
     return generatedName;
@@ -800,8 +800,8 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
             KoListStyle *listStyle = list->style();
             bool automatic = listStyle->styleId() == 0;
             KoGenStyle style(automatic ? KoGenStyle::ListAutoStyle : KoGenStyle::ListStyle);
-            listStyle->saveOdf(style);
-            QString generatedName = context.mainStyles().insert(style, listStyle->name(), KoGenStyles::AllowDuplicates);
+            listStyle->saveOdf(style, context);
+            QString generatedName = context.mainStyles().insert(style, listStyle->name(), listStyle->isNumberingStyle() ? KoGenStyles::AllowDuplicates : KoGenStyles::DontAddNumberToName);
             listStyles[textList] = generatedName;
             generatedLists.insert(list, generatedName);
         } else {
@@ -811,7 +811,7 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
             KoGenStyle style(KoGenStyle::ListAutoStyle);
             KoListStyle listStyle;
             listStyle.setLevelProperties(llp);
-            listStyle.saveOdf(style);
+            listStyle.saveOdf(style, context);
             QString generatedName = context.mainStyles().insert(style, listStyle.name());
             listStyles[textList] = generatedName;
         }

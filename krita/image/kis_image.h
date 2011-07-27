@@ -423,7 +423,7 @@ public:
      * Merge the specified layer with the layer
      * below this layer, remove the specified layer.
      */
-    KisLayerSP mergeLayer(KisLayerSP l, const KisMetaData::MergeStrategy* strategy);
+    KisLayerSP mergeDown(KisLayerSP l, const KisMetaData::MergeStrategy* strategy);
 
     /**
      * flatten the layer: that is, the projection becomes the layer
@@ -439,8 +439,6 @@ public:
 
     /// use if the layers have changed _completely_ (eg. when flattening)
     void notifyLayersChanged();
-
-    void notifyPropertyChanged(KisLayerSP layer);
 
     /**
      * Called whenever a layer has changed. The layer is added to a
@@ -481,9 +479,6 @@ public:
     void notifyAboutToBeDeleted();
 
 signals:
-
-    /// Emitted after a layer's properties (visible, locked, opacity, composite op, name, ...) change
-    void sigLayerPropertiesChanged(KisLayerSP layer);
 
     /**
      * Emitted when the list of layers has changed completely.

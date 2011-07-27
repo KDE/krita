@@ -33,6 +33,7 @@
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoUnit.h>
 #include <KoText.h>
@@ -755,18 +756,10 @@ static QString toPoint(qreal number)
     return str;
 }
 
-void KoListLevelProperties::saveOdf(KoXmlWriter *writer) const
+void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &context) const
 {
-    bool isNumber = false;
-    switch (d->stylesPrivate.value(QTextListFormat::ListStyle).toInt()) {
-    case KoListStyle::DecimalItem:
-    case KoListStyle::AlphaLowerItem:
-    case KoListStyle::UpperAlphaItem:
-    case KoListStyle::RomanLowerItem:
-    case KoListStyle::UpperRomanItem:
-        isNumber = true;
-        break;
-    }
+    bool isNumber = KoListStyle::isNumberingStyle(d->stylesPrivate.value(QTextListFormat::ListStyle).toInt());
+
     if (isNumber)
         writer->startElement("text:list-level-style-number");
     else

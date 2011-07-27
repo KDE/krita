@@ -204,6 +204,11 @@ public:
     qreal topBorderWidth() const;
     qreal bottomBorderWidth() const;
 
+    qreal leftInnerBorderWidth() const;
+    qreal rightInnerBorderWidth() const;
+    qreal topInnerBorderWidth() const;
+    qreal bottomInnerBorderWidth() const;
+
     qreal leftOuterBorderWidth() const;
     qreal rightOuterBorderWidth() const;
     qreal topOuterBorderWidth() const;

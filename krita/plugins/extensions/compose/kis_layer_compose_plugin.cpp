@@ -32,7 +32,7 @@
 #include <kis_paint_device.h>
 #include <kis_layer.h>
 #include <kis_statusbar.h>
-#include <kis_layer_manager.h>
+#include <kis_node_manager.h>
 
 
 #include "dlg_compose.h"

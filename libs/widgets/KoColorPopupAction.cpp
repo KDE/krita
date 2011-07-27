@@ -154,10 +154,12 @@ KoColor KoColorPopupAction::currentKoColor() const
 void KoColorPopupAction::updateIcon( )
 {
     QSize iconSize(16,16);
-    QPixmap pm = icon().pixmap(iconSize);
+    // This must be a QImage, as drawing to a QPixmap outside the
+    // UI thread will cause sporadic crashes.
+    QImage pm = icon().pixmap(iconSize).toImage();
     if(pm.isNull())
     {
-        pm = QPixmap(iconSize);
+        pm = QImage(iconSize, QImage::Format_ARGB32_Premultiplied);
         pm.fill(Qt::transparent);
         // there was no icon set so we assume 
         // that we create an icon from the current color
@@ -174,7 +176,7 @@ void KoColorPopupAction::updateIcon( )
 
     p.end();
 
-    setIcon(QIcon(pm));
+    setIcon(QIcon(QPixmap::fromImage(pm)));
 }
 
 void KoColorPopupAction::emitColorChanged()

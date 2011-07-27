@@ -36,7 +36,7 @@
 #include "kis_view2.h"
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
-#include "kis_layer_manager.h"
+#include "kis_node_manager.h"
 #include "kis_node.h"
 #include "kis_paint_device.h"
 
@@ -85,7 +85,7 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
 {
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-        m_canvas->view()->layerManager()->disconnect(this);
+        m_canvas->view()->nodeManager()->disconnect(this);
         KActionCollection *ac = m_canvas->view()->actionCollection();
         ac->takeAction(ac->action("show_color_selector"));
         ac->takeAction(ac->action("show_mypaint_shade_selector"));
@@ -98,8 +98,8 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
     m_myPaintShadeSelector->setCanvas(canvas);
     m_minimalShadeSelector->setCanvas(canvas);
 
-    if (m_canvas->view()->layerManager()) {
-        connect(m_canvas->view()->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
+    if (m_canvas->view()->nodeManager()) {
+        connect(m_canvas->view()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
     }
     KActionCollection* actionCollection = canvas->view()->actionCollection();
 

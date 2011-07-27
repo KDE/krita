@@ -96,7 +96,7 @@ bool EnhancedPathCommand::execute()
         bool lineTo = m_command.unicode() == 'T';
 
         for (int i = 0; i < pointsCount; i+=3) {
-            const QPointF &radii = points[i+1]/2;
+            const QPointF &radii = points[i+1];
             const QPointF &angles = points[i+2] / rad2deg;
             // compute the ellipses starting point
             QPointF start(radii.x() * cos(angles.x()), -1 * radii.y() * sin(angles.x()));
@@ -133,7 +133,12 @@ bool EnhancedPathCommand::execute()
             // compute the starting point to draw the line to
             QPointF startPoint(rx * cos(startAngle), ry * sin(2*M_PI - startAngle));
 
-            if (lineTo) {
+            // if A or W is first command in enhanced path
+            // move to the starting point
+            bool isFirstCommandInPath = (m_parent->subpathCount() == 0);
+            bool isFirstCommandInSubpath = m_parent->isClosedSubpath( m_parent->subpathCount() - 1 );
+
+            if (lineTo && !isFirstCommandInPath && !isFirstCommandInSubpath) {
                 m_parent->lineTo(center + startPoint);
             } else {
                 m_parent->moveTo(center + startPoint);

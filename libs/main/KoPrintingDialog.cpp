@@ -70,7 +70,7 @@ public:
     void preparePage(const QVariant &page) {
         const int pageNumber = page.toInt();
 
-        QPointer<KoUpdater> updater = updaters.at(index-1);
+        QPointer<KoUpdater> updater = updaters.at(index - 1);
 
         if (painter) {
             painter->save(); // state before page preparation
@@ -312,32 +312,27 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
             } while (iter != pages.begin());
         }
 
-        if (blocking) {
-            d->resetValues();
-            foreach (int page, d->pages) {
-                d->index++;
-                d->updaters.append(d->progress->startSubtask()); // one per page
-                d->preparePage(page);
-                d->printPage(page);
-            }
-            d->painter->end();
-            printingDone();
-            d->stop = true;
-            d->resetValues();
-        } else {
-            for (int i=0; i < d->pages.count(); i++)
-                d->updaters.append(d->progress->startSubtask()); // one per page
-            d->pageNumber->setText(i18n("Printing page %1", QString::number(d->pages[d->index])));
-            while (!d->stop && d->index < d->pages.count()) {
-                d->pageNumber->setText(i18n("Printing page %1",
-                                                     QString::number(d->pages[d->index])));
-                d->preparePage(d->pages[d->index++]);
-                d->printPage(d->pages[d->index]);
+
+        d->resetValues();
+        foreach (int page, d->pages) {
+            d->index++;
+            d->updaters.append(d->progress->startSubtask()); // one per page
+            d->preparePage(page);
+            d->printPage(page);
+            if (!blocking) {
                 qApp->processEvents();
             }
-            d->printingDone();
-
+            
         }
+        d->painter->end();
+        if (blocking) {
+            printingDone();
+        }
+        else {
+            d->printingDone();
+        }
+        d->stop = true;
+        d->resetValues();
     }
 }
 

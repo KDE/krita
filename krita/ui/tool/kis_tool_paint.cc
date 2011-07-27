@@ -130,7 +130,6 @@ void KisToolPaint::resourceChanged(int key, const QVariant& v)
 void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
-    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
     resetCursorStyle();
 }
 

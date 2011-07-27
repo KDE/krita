@@ -18,8 +18,6 @@
 #ifndef KIS_MASK_WIDGETS_H
 #define KIS_MASK_WIDGETS_H
 
-
-#include "ui_wdgtransformationeffect.h"
 #include "ui_wdgmasksource.h"
 #include "ui_wdgmaskfromselection.h"
 #include <kis_filter_strategy.h>
@@ -30,55 +28,6 @@
 #include <QLineEdit>
 #include <QWidget>
 #include <QString>
-
-
-class WdgTransformationEffect : public QWidget, public Ui::WdgTransformationEffect
-{
-    Q_OBJECT
-
-public:
-    WdgTransformationEffect(QWidget *parent)
-            : QWidget(parent) {
-        setupUi(this);
-    }
-
-
-    QString maskName() const {
-        return Ui::WdgTransformationEffect::maskName->text();
-    }
-
-    double xScale() const {
-        return dblScaleX->value();
-    }
-
-    double yScale() const {
-        return dblScaleY->value();
-    }
-
-    double xShear() const {
-        return dblShearX->value();
-    }
-
-    double yShear() const {
-        return dblShearY->value();
-    }
-
-    double rotation() const {
-        return dblRotation->value();
-    }
-    int moveX() const {
-        return intMoveX->value();
-    }
-
-    int moveY() const {
-        return intMoveY->value();
-    }
-
-    KisFilterStrategy * filterStrategy() {
-        KoID filterID = cmbFilter->currentItem();
-        return KisFilterStrategyRegistry::instance()->value(filterID.id());
-    }
-};
 
 class WdgMaskSource : public QWidget, public Ui::WdgMaskSource
 {

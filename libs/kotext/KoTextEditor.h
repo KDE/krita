@@ -23,7 +23,6 @@
 
 #include "kotext_export.h"
 
-#include <QProcess>
 #include <KoGenChange.h>
 #include "KoText.h"
 #include <KoInlineNote.h>

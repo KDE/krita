@@ -97,7 +97,6 @@ enum KoTextFrameProperty {
 enum KoSubFrameType {
     EndNotesFrameType,
     FootNotesFrameType,
-    CitationsFrameType,
     NoteFrameType,
     TableOfContentsFrameType
 };

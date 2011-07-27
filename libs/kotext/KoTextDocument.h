@@ -140,8 +140,6 @@ public:
     /// Set the KoInlineTextObjectManager
     void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
-    QTextFrame* citationsFrame();
-
     QTextFrame* footNotesFrame();
 
     QTextFrame* endNotesFrame();
@@ -181,7 +179,6 @@ public:
         LineNumberingConfiguration,
         EndNotesFrame,
         FootNotesFrame,
-        CitationsFrame,
         RelativeTabs,
         HeadingList,
         Selections,
@@ -199,7 +196,6 @@ public:
     static const QUrl LineNumberingConfigurationURL;
     static const QUrl EndNotesFrameURL;
     static const QUrl FootNotesFrameURL;
-    static const QUrl CitationsFrameURL;
     static const QUrl RelativeTabsURL;
     static const QUrl HeadingListURL;
     static const QUrl SelectionsURL;

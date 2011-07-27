@@ -142,12 +142,12 @@ QString KoOdfNumberDefinition::formattedNumber(int number) const
         QChar letter;
 
         if(d->letterSynchronization) {
-            int i=0,loop,rem;
+            int i,loop,rem;
             loop = (number-1)/26;
             rem = (number-1)%26;
             letter = (char)(rem+97);
 
-            for(i=1;i<=loop;i++) {
+            for(i=0;i<=loop;i++) {
                 alpha.append(letter);
             }
             return alpha;
@@ -171,12 +171,12 @@ QString KoOdfNumberDefinition::formattedNumber(int number) const
         QChar letter;
 
         if(d->letterSynchronization) {
-            int i=0,loop,rem;
+            int i,loop,rem;
             loop = (number-1)/26;
             rem = (number-1)%26;
             letter = (char)(rem+65);
 
-            for(i=1;i<=loop;i++) {
+            for(i=0;i<=loop;i++) {
                 alpha.append(letter);
             }
             return alpha;

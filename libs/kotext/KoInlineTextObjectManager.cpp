@@ -326,6 +326,31 @@ int KoInlineTextObjectManager::displayedNotes(QTextBlock block) const
     return i;
 }
 
+KoInlineNote *KoInlineTextObjectManager::getFirstNote(QTextBlock block) const
+{
+    while(block.isValid()) {
+        QString text = block.text();
+        int pos = text.indexOf(QChar::ObjectReplacementCharacter);
+
+        while (pos >= 0 && pos <= block.length() ) {
+            QTextCursor c1(block);
+            c1.setPosition(block.position() + pos);
+            c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
+
+            KoInlineNote *note = dynamic_cast<KoInlineNote*>(this->inlineTextObject(c1));
+            if (note && note->type() == KoInlineNote::Footnote) {
+                return note;
+            }
+            else if (note && note->type() == KoInlineNote::Endnote) {
+                return note;
+            }
+
+            pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
+        }
+        block = block.next();
+    }
+}
+
 void KoInlineTextObjectManager::documentInformationUpdated(const QString &info, const QString &data)
 {
     if (info == "title")

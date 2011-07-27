@@ -151,6 +151,8 @@ public:
 
     int displayedNotes(QTextBlock block) const;
 
+    KoInlineNote *getFirstNote(QTextBlock block) const;
+
 public slots:
     void documentInformationUpdated(const QString &info, const QString &data);
 

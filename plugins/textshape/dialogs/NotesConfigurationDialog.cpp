@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "NotesConfigurationDialog.h"
+#include "KoTextDocument.h"
 
 #include <KAction>
 
@@ -82,6 +83,11 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
         else notesConfig->setNoteClass(KoOdfNotesConfiguration::Endnote);
         //set Number Format
         KoOdfNumberDefinition *numFormat = new KoOdfNumberDefinition();
+        //set prefix
+        numFormat->setPrefix(widget.prefixLineEdit->text());
+        //set suffix
+        numFormat->setSuffix(widget.suffixLineEdit->text());
+
         switch(widget.numStyleCombo->currentIndex()) {
         case 0:
             numFormat->setFormatSpecification(KoOdfNumberDefinition::Numeric);
@@ -89,23 +95,23 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
             break;
         case 1:
             numFormat->setFormatSpecification(KoOdfNumberDefinition::AlphabeticLowerCase);
+            numFormat->setLetterSynchronization(false);
             notesConfig->setNumberFormat(*numFormat);
-            notesConfig->numberFormat().setLetterSynchronization(false);
             break;
         case 2:
             numFormat->setFormatSpecification(KoOdfNumberDefinition::AlphabeticUpperCase);
+            numFormat->setLetterSynchronization(false);
             notesConfig->setNumberFormat(*numFormat);
-            notesConfig->numberFormat().setLetterSynchronization(false);
             break;
         case 3:
             numFormat->setFormatSpecification(KoOdfNumberDefinition::AlphabeticLowerCase);
+            numFormat->setLetterSynchronization(true);
             notesConfig->setNumberFormat(*numFormat);
-            notesConfig->numberFormat().setLetterSynchronization(true);
             break;
         case 4:
             numFormat->setFormatSpecification(KoOdfNumberDefinition::AlphabeticUpperCase);
+            numFormat->setLetterSynchronization(true);
             notesConfig->setNumberFormat(*numFormat);
-            notesConfig->numberFormat().setLetterSynchronization(true);
             break;
         case 5:
             numFormat->setFormatSpecification(KoOdfNumberDefinition::RomanLowerCase);
@@ -144,10 +150,7 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
             notesConfig->setNumberingScheme(KoOdfNotesConfiguration::BeginAtChapter);
             break;
         }
-        //set prefix
-        notesConfig->numberFormat().setPrefix(widget.prefixLineEdit->text());
-        //set suffix
-        notesConfig->numberFormat().setSuffix(widget.suffixLineEdit->text());
+
         //set footnote continuation forward
         notesConfig->setFootnoteContinuationForward(widget.endlineEdit->text());
         //set footnote continuation backward
@@ -161,6 +164,8 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
         //set master page
 
         //set note paragraph style
+
+        KoTextDocument(document).setNotesConfiguration(notesConfig);
         this->close();
     }
     else if(widget.buttonBox->standardButton(button) == widget.buttonBox->Discard) {

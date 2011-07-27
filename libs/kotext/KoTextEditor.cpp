@@ -51,7 +51,6 @@
 
 #include <QApplication>
 #include <QFontDatabase>
-#include <QLabel>
 #include <QTextBlock>
 #include <QTextBlockFormat>
 #include <QTextCharFormat>
@@ -1112,7 +1111,7 @@ void KoTextEditor::splitTableCells()
 
 KoInlineNote *KoTextEditor::insertFootNote()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Add Footnote"));
+    d->updateState(KoTextEditor::Private::Custom, i18n("Footnote"));
 
     KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
     KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
@@ -1125,7 +1124,7 @@ KoInlineNote *KoTextEditor::insertFootNote()
 
 KoInlineNote *KoTextEditor::insertEndNote()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Add Endnote"));
+    d->updateState(KoTextEditor::Private::Custom, i18n("Endnote"));
 
     KoInlineNote *note = new KoInlineNote(KoInlineNote::Endnote);
     KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
@@ -1138,7 +1137,7 @@ KoInlineNote *KoTextEditor::insertEndNote()
 
 void KoTextEditor::insertTableOfContents()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Add"));
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table Of Contents"));
 
     QTextBlockFormat tocFormat;
     tocFormat.setProperty(KoText::SubFrameType, KoText::TableOfContentsFrameType);

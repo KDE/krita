@@ -141,6 +141,7 @@ void ReferencesTool::insertFootNote()
     QString s;
     s.append("Foot");
     s.append(note->label());
+    note->setId(s);
     KoBookmark *bookmark = new KoBookmark(note->textFrame()->document());
     bookmark->setType(KoBookmark::SinglePosition);
     bookmark->setName(s);
@@ -170,6 +171,7 @@ void ReferencesTool::insertEndNote()
     QString s;
     s.append("End");
     s.append(note->label());
+    note->setId(s);
     KoBookmark *bookmark = new KoBookmark(note->textFrame()->document());
     bookmark->setType(KoBookmark::SinglePosition);
     bookmark->setName(s);

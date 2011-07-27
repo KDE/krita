@@ -458,10 +458,7 @@ void KisSelectionManager::pasteNew()
     KisDoc2* doc = dynamic_cast<KisDoc2*>(entry.createDoc());
     if (!doc) return;
 
-    Q_ASSERT(doc->undoAdapter());
-
-
-    KisImageWSP image = new KisImage(doc->undoAdapter(),
+    KisImageWSP image = new KisImage(doc->createUndoStore(),
                                      rect.width(),
                                      rect.height(),
                                      clip->colorSpace(),

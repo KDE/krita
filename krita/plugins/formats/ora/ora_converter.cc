@@ -31,15 +31,13 @@
 #include <kis_open_raster_stack_load_visitor.h>
 #include <kis_open_raster_stack_save_visitor.h>
 #include <kis_paint_layer.h>
-#include <kis_undo_adapter.h>
 
 #include "ora_load_context.h"
 #include "ora_save_context.h"
 
-OraConverter::OraConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
+OraConverter::OraConverter(KisDoc2 *doc)
 {
     m_doc = doc;
-    m_adapter = adapter;
     m_job = 0;
     m_stop = false;
 }

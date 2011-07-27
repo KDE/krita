@@ -27,7 +27,7 @@
 #include "kis_transparency_mask.h"
 
 #include "testutil.h"
-#include "kis_surrogate_undo_adapter.h"
+#include "kis_undo_stores.h"
 
 void KisCropVisitorTest::testCreation()
 {
@@ -39,8 +39,8 @@ void KisCropVisitorTest::testUndo()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisSurrogateUndoAdapter* undoAdapter = new KisSurrogateUndoAdapter();
-    KisImageSP image = new KisImage(undoAdapter, 300, 300, cs, "test");
+    KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
+    KisImageSP image = new KisImage(undoStore, 300, 300, cs, "test");
     KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP dev = layer->paintDevice();
 
@@ -48,28 +48,26 @@ void KisCropVisitorTest::testUndo()
     painter.fillRect(QRect(0, 0, 300, 300), KoColor(Qt::white, cs));
     QImage image1 = dev->convertToQImage(0, 0, 0, 300, 300);
 
-    undoAdapter->beginMacro("");
+    undoStore->beginMacro("");
 
     QRect rc(0, 0, 100, 100);
     KisCropVisitor visitor(rc, true);
     layer->accept(visitor);
 
-    undoAdapter->endMacro();
-    undoAdapter->undo();
+    undoStore->endMacro();
+    undoStore->undo();
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, image1, dev->convertToQImage(0, 0, 0, 300, 300))) {
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
-    delete undoAdapter;
 }
 
 void KisCropVisitorTest::testCropTransparencyMask()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisUndoAdapter* undoAdapter = new KisSurrogateUndoAdapter();
-    KisImageSP image = new KisImage(undoAdapter, 300, 300, cs, "test", false);
+    KisImageSP image = new KisImage(0, 300, 300, cs, "test", false);
     KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP dev = layer->paintDevice();
 
@@ -96,7 +94,6 @@ void KisCropVisitorTest::testCropTransparencyMask()
     mask->accept(visitor);
 
     QCOMPARE(pixelSelection->selectedExactRect(), cropRect);
-    delete undoAdapter;
 }
 
 

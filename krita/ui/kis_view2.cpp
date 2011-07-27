@@ -641,7 +641,10 @@ KisSelectionSP KisView2::selection()
 
 KisUndoAdapter * KisView2::undoAdapter()
 {
-    return m_d->doc->undoAdapter();
+    KisImageWSP image = m_d->doc->image();
+    Q_ASSERT(image);
+
+    return image->undoAdapter();
 }
 
 

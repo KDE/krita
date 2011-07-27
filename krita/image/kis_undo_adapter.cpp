@@ -18,11 +18,9 @@
 
 #include "kis_undo_adapter.h"
 
-#include "kis_debug.h"
-#include "kis_image.h"
 
-
-KisUndoAdapter::KisUndoAdapter()
+KisUndoAdapter::KisUndoAdapter(KisUndoStore *undoStore)
+    : m_undoStore(undoStore)
 {
 }
 
@@ -32,58 +30,16 @@ KisUndoAdapter::~KisUndoAdapter()
 
 void KisUndoAdapter::setCommandHistoryListener(KisCommandHistoryListener *listener)
 {
-    if (!m_undoListeners.contains(listener)) {
-        m_undoListeners.append(listener);
-    }
+    m_undoStore->setCommandHistoryListener(listener);
 }
 void KisUndoAdapter::removeCommandHistoryListener(KisCommandHistoryListener *listener)
 {
-    int index = m_undoListeners.indexOf(listener);
-    if (index != -1) {
-        m_undoListeners.remove(index);
-    }
-}
-
-void KisUndoAdapter::notifyCommandAdded(const KUndo2Command *command)
-{
-    if (!command) {
-        kWarning() << "Empty command!";
-        return;
-    }
-    foreach(KisCommandHistoryListener*  l, m_undoListeners) {
-        l->notifyCommandAdded(command);
-    }
-}
-
-void KisUndoAdapter::notifyCommandExecuted(const KUndo2Command *command)
-{
-    if (!command) {
-        kWarning() << "Empty command!";
-        return;
-    }
-    foreach(KisCommandHistoryListener*  l, m_undoListeners) {
-        l->notifyCommandExecuted(command);
-    }
+    m_undoStore->removeCommandHistoryListener(listener);
 }
 
 void KisUndoAdapter::emitSelectionChanged()
 {
     emit selectionChanged();
-}
-
-void KisUndoAdapter::setImage(KisImageWSP image)
-{
-    m_image = image;
-}
-
-KisImageWSP KisUndoAdapter::image()
-{
-    return m_image;
-}
-
-void KisUndoAdapter::addCommand(KUndo2Command *cmd)
-{
-    addCommand(KUndo2CommandSP(cmd));
 }
 
 #include "kis_undo_adapter.moc"

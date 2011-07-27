@@ -16,27 +16,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_SCHEDULED_UNDO_ADAPTER_H
-#define __KIS_SCHEDULED_UNDO_ADAPTER_H
+#include "kis_post_execution_undo_adapter.h"
 
-#include "kis_undo_adapter.h"
+#include "kis_undo_store.h"
+#include "kis_image.h"
+#include "commands/kis_scheduled_undo_command.h"
 
 
-class KRITAIMAGE_EXPORT KisScheduledUndoAdapter : public KisUndoAdapter
+KisPostExecutionUndoAdapter::KisPostExecutionUndoAdapter(KisUndoStore *undoStore,
+                                                         KisImageWSP image)
+    : m_undoStore(undoStore),
+      m_image(image)
 {
-public:
-    KisScheduledUndoAdapter();
-    using KisUndoAdapter::addCommand;
+}
 
-    const KUndo2Command* presentCommand();
-    void undoLastCommand();
-    void addCommand(KUndo2CommandSP command);
-    void beginMacro(const QString& macroName);
-    void endMacro();
+void KisPostExecutionUndoAdapter::addCommand(KUndo2CommandSP command)
+{
+    if(!command) return;
 
-private:
-    qint32 m_macroCounter;
-    KisStrokeId m_macroStrokeId;
-};
+    KUndo2Command *commandPointer =
+        new KisScheduledUndoCommand(command, m_image, false);
 
-#endif /* __KIS_SCHEDULED_UNDO_ADAPTER_H */
+    m_undoStore->addCommand(commandPointer);
+}
+
+void KisPostExecutionUndoAdapter::beginMacro(const QString& macroName)
+{
+    m_undoStore->beginMacro(macroName);
+}
+
+void KisPostExecutionUndoAdapter::endMacro()
+{
+    m_undoStore->endMacro();
+}
+

@@ -231,6 +231,16 @@ void KisPainter::endTransaction(KisUndoAdapter *undoAdapter)
     d->transaction = 0;
 }
 
+void KisPainter::endTransaction(KisPostExecutionUndoAdapter *undoAdapter)
+{
+    Q_ASSERT_X(d->transaction, "KisPainter::endTransaction()",
+               "No transaction is in progress");
+
+    d->transaction->commit(undoAdapter);
+    delete d->transaction;
+    d->transaction = 0;
+}
+
 void KisPainter::deleteTransaction()
 {
     if (!d->transaction) return;

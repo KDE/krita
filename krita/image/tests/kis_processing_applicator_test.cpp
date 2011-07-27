@@ -26,7 +26,7 @@
 #include "kis_paint_layer.h"
 #include "kis_paint_device.h"
 
-#include "kis_surrogate_undo_adapter.h"
+#include "kis_undo_stores.h"
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
 
@@ -39,12 +39,12 @@
   +----------+
 */
 
-KisImageSP createImage(KisUndoAdapter *undoAdapter,
+KisImageSP createImage(KisUndoStore *undoStore,
                        KisPaintLayerSP &paintLayer1,
                        KisPaintLayerSP &paintLayer2)
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(undoAdapter, 300, 300, cs, "test");
+    KisImageSP image = new KisImage(undoStore, 300, 300, cs, "test");
 
     QRect fillRect1(50,50,100,100);
     QRect fillRect2(75,75,50,50);
@@ -97,10 +97,10 @@ bool checkLayers(KisImageWSP image,
 
 void KisProcessingApplicatorTest::testNonRecursiveProcessing()
 {
-    KisSurrogateUndoAdapter imageAdapter;
+    KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
     KisPaintLayerSP paintLayer1;
     KisPaintLayerSP paintLayer2;
-    KisImageSP image = createImage(&imageAdapter, paintLayer1, paintLayer2);
+    KisImageSP image = createImage(undoStore, paintLayer1, paintLayer2);
 
     QRect cropRect1(25,25,75,75);
     QRect cropRect2(100,100,50,50);
@@ -129,21 +129,21 @@ void KisProcessingApplicatorTest::testNonRecursiveProcessing()
 
     QVERIFY(checkLayers(image, "crop_l2"));
 
-    imageAdapter.undo();
+    undoStore->undo();
     image->waitForDone();
     QVERIFY(checkLayers(image, "crop_l1"));
 
-    imageAdapter.undo();
+    undoStore->undo();
     image->waitForDone();
     QVERIFY(checkLayers(image, "initial"));
 }
 
 void KisProcessingApplicatorTest::testRecursiveProcessing()
 {
-    KisSurrogateUndoAdapter imageAdapter;
+    KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
     KisPaintLayerSP paintLayer1;
     KisPaintLayerSP paintLayer2;
-    KisImageSP image = createImage(&imageAdapter, paintLayer1, paintLayer2);
+    KisImageSP image = createImage(undoStore, paintLayer1, paintLayer2);
 
     QRect cropRect1(40,40,86,86);
 
@@ -160,7 +160,7 @@ void KisProcessingApplicatorTest::testRecursiveProcessing()
 
     QVERIFY(checkLayers(image, "recursive_crop"));
 
-    imageAdapter.undo();
+    undoStore->undo();
     image->waitForDone();
     QVERIFY(checkLayers(image, "recursive_initial"));
 }

@@ -17,72 +17,62 @@
  */
 
 #include "kis_surrogate_undo_adapter.h"
-#include "kundo2command.h"
+#include "kis_undo_stores.h"
 
 
-class SurrogateUndoCommand : public KUndo2Command
+KisSurrogateUndoAdapter::KisSurrogateUndoAdapter()
+    : KisUndoAdapter(new KisSurrogateUndoStore)
 {
-public:
-    SurrogateUndoCommand(KUndo2CommandSP command) : m_command(command) {}
-    void undo() { m_command->undo(); }
-    void redo() { m_command->redo(); }
+    m_undoStore = static_cast<KisSurrogateUndoStore*>(undoStore());
+}
 
-private:
-    KUndo2CommandSP m_command;
-};
-
+KisSurrogateUndoAdapter::~KisSurrogateUndoAdapter()
+{
+    delete m_undoStore;
+}
 
 const KUndo2Command* KisSurrogateUndoAdapter::presentCommand()
 {
-    return m_undoStack.command(m_undoStack.index() - 1);
+    return m_undoStore->presentCommand();
 }
 
 void KisSurrogateUndoAdapter::undoLastCommand()
 {
-    m_undoStack.undo();
+    m_undoStore->undoLastCommand();
 }
 
 void KisSurrogateUndoAdapter::addCommand(KUndo2Command *command)
 {
-    m_undoStack.push(command);
-}
-
-void KisSurrogateUndoAdapter::addCommand(KUndo2CommandSP command)
-{
-    m_undoStack.push(new SurrogateUndoCommand(command));
+    m_undoStore->addCommand(command);
 }
 
 void KisSurrogateUndoAdapter::beginMacro(const QString& macroName)
 {
-    m_undoStack.beginMacro(macroName);
+    m_undoStore->beginMacro(macroName);
 }
 
 void KisSurrogateUndoAdapter::endMacro()
 {
-    m_undoStack.endMacro();
+    m_undoStore->endMacro();
 }
 
 void KisSurrogateUndoAdapter::undo()
 {
-    m_undoStack.undo();
+    m_undoStore->undo();
 }
 
 void KisSurrogateUndoAdapter::redo()
 {
-    m_undoStack.redo();
+    m_undoStore->redo();
 }
 
 void KisSurrogateUndoAdapter::undoAll()
 {
-    while(m_undoStack.canUndo()) {
-        m_undoStack.undo();
-    }
+    m_undoStore->undoAll();
 }
 
 void KisSurrogateUndoAdapter::redoAll()
 {
-    while(m_undoStack.canRedo()) {
-        m_undoStack.redo();
-    }
+    m_undoStore->redoAll();
 }
 

@@ -142,10 +142,9 @@ namespace
     }
 }
 
-KisTIFFConverter::KisTIFFConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
+KisTIFFConverter::KisTIFFConverter(KisDoc2 *doc)
 {
     m_doc = doc;
-    m_adapter = adapter;
     m_job = 0;
     m_stop = false;
 }
@@ -330,7 +329,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     }
     // Creating the KisImageWSP
     if (! m_image) {
-        m_image = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
+        m_image = new KisImage(m_doc->createUndoStore(), width, height, cs, "built image");
         m_image->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres )); // It is the "invert" macro because we convert from pointer-per-inchs to points
         m_image->lock();
         Q_CHECK_PTR(m_image);

@@ -31,15 +31,13 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
-#include "kis_dumb_undo_adapter.h"
 
 
-
-KisImageSP utils::createImage(KisUndoAdapter *undoAdapter, const QSize &imageSize) {
+KisImageSP utils::createImage(KisUndoStore *undoStore, const QSize &imageSize) {
     QRect imageRect(0,0,imageSize.width(),imageSize.height());
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(undoAdapter, imageRect.width(), imageRect.height(), cs, "stroke test");
+    KisImageSP image = new KisImage(undoStore, imageRect.width(), imageRect.height(), cs, "stroke test");
 
     KisPaintLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
     KisPaintLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
@@ -172,8 +170,7 @@ QString utils::StrokeTester::formatFilename(const QString &baseName,
 
 QImage utils::StrokeTester::doStroke(bool cancelled, bool indirectPainting, bool needQImage)
 {
-    KisUndoAdapter *undoAdapter = new KisDumbUndoAdapter();
-    KisImageSP image = utils::createImage(undoAdapter, m_imageSize);
+    KisImageSP image = utils::createImage(0, m_imageSize);
     KoResourceManager *manager = utils::createResourceManager(image);
 
     KisPainter *painter = new KisPainter();
@@ -202,6 +199,5 @@ QImage utils::StrokeTester::doStroke(bool cancelled, bool indirectPainting, bool
 
     image = 0;
     delete manager;
-    delete undoAdapter;
     return resultImage;
 }

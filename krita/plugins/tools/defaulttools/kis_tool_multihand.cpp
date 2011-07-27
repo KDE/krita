@@ -601,11 +601,11 @@ void KisToolMultihand::endPaint()
             dynamic_cast<KisIndirectPaintingSupport*>(layer.data());
         Q_ASSERT(indirect);
 
-        indirect->mergeToLayer(layer, image()->realUndoAdapter(), m_transactionText);
+        indirect->mergeToLayer(layer, image()->undoAdapter(), m_transactionText);
 
         m_incrementalDirtyRegion = QRegion();
     } else {
-        m_transaction->commit(image()->realUndoAdapter());
+        m_transaction->commit(image()->undoAdapter());
     }
 
 

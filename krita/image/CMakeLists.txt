@@ -181,14 +181,15 @@ set(kritaimage_LIB_SRCS
    kis_warptransform_worker.cc
    kis_transformation_mask.cpp
    kis_transparency_mask.cc
+   kis_undo_store.cpp
+   kis_undo_stores.cpp
    kis_undo_adapter.cpp
-   kis_real_undo_adapter.cpp
-   kis_scheduled_undo_adapter.cpp
    kis_surrogate_undo_adapter.cpp
+   kis_legacy_undo_adapter.cpp
+   kis_post_execution_undo_adapter.cpp
    kis_processing_visitor.cpp
    kis_processing_applicator.cpp
    krita_utils.cpp
-   kis_dumb_undo_adapter.cpp
    kis_outline_generator.cpp
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_filter.cc

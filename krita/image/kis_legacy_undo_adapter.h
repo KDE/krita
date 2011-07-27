@@ -16,28 +16,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_REAL_UNDO_ADAPTER_H
-#define __KIS_REAL_UNDO_ADAPTER_H
+#ifndef __KIS_LEGACY_UNDO_ADAPTER_H
+#define __KIS_LEGACY_UNDO_ADAPTER_H
 
 #include "kis_undo_adapter.h"
 
-class KoDocument;
 
-
-class KRITAIMAGE_EXPORT KisRealUndoAdapter : public KisUndoAdapter
+class KRITAIMAGE_EXPORT KisLegacyUndoAdapter : public KisUndoAdapter
 {
 public:
-    KisRealUndoAdapter(KoDocument *doc);
-    using KisUndoAdapter::addCommand;
+    KisLegacyUndoAdapter(KisUndoStore *undoStore, KisImageWSP image);
 
     const KUndo2Command* presentCommand();
     void undoLastCommand();
-    void addCommand(KUndo2CommandSP cmd);
+    void addCommand(KUndo2Command *cmd);
     void beginMacro(const QString& macroName);
     void endMacro();
-
 private:
-    KoDocument* m_doc;
+    KisImageWSP m_image;
+    qint32 m_macroCounter;
 };
 
-#endif /* __KIS_REAL_UNDO_ADAPTER_H */
+#endif /* __KIS_LEGACY_UNDO_ADAPTER_H */

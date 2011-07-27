@@ -16,29 +16,48 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_UNDO_ADAPTER_H_
-#define KIS_UNDO_ADAPTER_H_
+#ifndef KIS_UNDO_STORE_H_
+#define KIS_UNDO_STORE_H_
 
-#include <QObject>
+#include <QString>
+#include <QVector>
 
 #include <krita_export.h>
 #include "kis_types.h"
-#include "kis_undo_store.h"
+
+class KUndo2Command;
 
 
-class KRITAIMAGE_EXPORT KisUndoAdapter : public QObject
+/**
+ * Undo listeners want to be notified of undo and redo actions.
+ * add notification is given _before_ the command is added to the
+ * stack.
+ * execute notification is given on undo and redo
+ */
+class KisCommandHistoryListener
 {
-    Q_OBJECT
 
 public:
-    KisUndoAdapter(KisUndoStore *undoStore);
-    virtual ~KisUndoAdapter();
+
+    KisCommandHistoryListener() {}
+    virtual ~KisCommandHistoryListener() {}
+    virtual void notifyCommandAdded(const KUndo2Command * cmd) = 0;
+    virtual void notifyCommandExecuted(const KUndo2Command * cmd) = 0;
+};
+
+class KRITAIMAGE_EXPORT KisUndoStore
+{
+public:
+    KisUndoStore();
+    virtual ~KisUndoStore();
 
 public:
-    void emitSelectionChanged();
-
     void setCommandHistoryListener(KisCommandHistoryListener *listener);
     void removeCommandHistoryListener(KisCommandHistoryListener *listener);
+
+    /**
+     * WARNING: All these methods are not considered as thread-safe
+     */
 
     virtual const KUndo2Command* presentCommand() = 0;
     virtual void undoLastCommand() = 0;
@@ -46,23 +65,15 @@ public:
     virtual void beginMacro(const QString& macroName) = 0;
     virtual void endMacro() = 0;
 
-    inline void setUndoStore(KisUndoStore *undoStore) {
-        m_undoStore = undoStore;
-    }
-
-signals:
-    void selectionChanged();
-
 protected:
-    inline KisUndoStore* undoStore() {
-        return m_undoStore;
-    }
+    void notifyCommandAdded(const KUndo2Command *command);
+    void notifyCommandExecuted(const KUndo2Command *command);
 
 private:
-    Q_DISABLE_COPY(KisUndoAdapter);
-    KisUndoStore *m_undoStore;
+    Q_DISABLE_COPY(KisUndoStore);
+    QVector<KisCommandHistoryListener*> m_undoListeners;
 };
 
 
-#endif // KIS_UNDO_ADAPTER_H_
+#endif // KIS_UNDO_STORE_H_
 

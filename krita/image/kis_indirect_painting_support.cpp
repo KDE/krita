@@ -138,6 +138,19 @@ QRegion KisIndirectPaintingSupport::indirectlyDirtyRegion()
 
 void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText)
 {
+    mergeToLayerImpl(layer, undoAdapter, transactionText);
+}
+
+void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const QString &transactionText)
+{
+    mergeToLayerImpl(layer, undoAdapter, transactionText);
+}
+
+template<class UndoAdapter>
+void KisIndirectPaintingSupport::mergeToLayerImpl(KisLayerSP layer,
+                                                  UndoAdapter *undoAdapter,
+                                                  const QString &transactionText)
+{
     /**
      * We do not apply selection here, because it has already
      * been taken into account in a tool code

@@ -68,9 +68,12 @@
 #include "kis_image_config.h"
 #include "kis_update_scheduler.h"
 
-#include "kis_real_undo_adapter.h"
-#include "kis_scheduled_undo_adapter.h"
-#include "kis_dumb_undo_adapter.h"
+#include "kis_undo_stores.h"
+#include "kis_legacy_undo_adapter.h"
+#include "kis_post_execution_undo_adapter.h"
+
+#include "kis_processing_applicator.h"
+#include "processing/kis_crop_processing_visitor.h"
 
 
 // #define SANITY_CHECKS
@@ -107,9 +110,10 @@ public:
     QList<KisLayer*> dirtyLayers; // for thumbnails
 
     KisNameServer *nserver;
-    KisUndoAdapter *scheduledUndoAdapter;
-    KisUndoAdapter *realUndoAdapter;
-    bool needDeleteRealUndoAdapter;
+
+    KisUndoStore *undoStore;
+    KisUndoAdapter *legacyUndoAdapter;
+    KisPostExecutionUndoAdapter *postExecutionUndoAdapter;
 
     KisActionRecorder *recorder;
 
@@ -123,7 +127,7 @@ public:
     bool startProjection;
 };
 
-KisImage::KisImage(KisUndoAdapter *realUndoAdapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection)
+KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection)
         : QObject(0)
         , KisShared()
         , m_d(new KisImagePrivate())
@@ -131,18 +135,23 @@ KisImage::KisImage(KisUndoAdapter *realUndoAdapter, qint32 width, qint32 height,
     setObjectName(name);
     dbgImage << "creating" << name;
     m_d->startProjection = startProjection;
-    init(realUndoAdapter, width, height, colorSpace);
+    init(undoStore, width, height, colorSpace);
 }
 
 KisImage::~KisImage()
 {
     dbgImage << "deleting kisimage" << objectName();
 
-    if(m_d->needDeleteRealUndoAdapter) {
-        delete m_d->realUndoAdapter;
-    }
+    /**
+     * First delete the nodes, while strokes
+     * and undo are still alive
+     */
+    m_d->rootLayer = 0;
 
-    delete m_d->scheduledUndoAdapter;
+    delete m_d->postExecutionUndoAdapter;
+    delete m_d->legacyUndoAdapter;
+    delete m_d->undoStore;
+
     delete m_d->scheduler;
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
@@ -246,7 +255,7 @@ void KisImage::rollBackLayerName()
     m_d->nserver->rollback();
 }
 
-void KisImage::init(KisUndoAdapter *realUndoAdapter, qint32 width, qint32 height, const KoColorSpace *colorSpace)
+void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace)
 {
     if (colorSpace == 0) {
         colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -256,18 +265,13 @@ void KisImage::init(KisUndoAdapter *realUndoAdapter, qint32 width, qint32 height
     m_d->sizeChangedWhileLocked = false;
     m_d->perspectiveGrid = 0;
 
-    if(!realUndoAdapter) {
-        m_d->realUndoAdapter = new KisDumbUndoAdapter();
-        m_d->needDeleteRealUndoAdapter = true;
-    }
-    else {
-        m_d->realUndoAdapter = realUndoAdapter;
-        m_d->needDeleteRealUndoAdapter = false;
+    if(!undoStore) {
+        undoStore = new KisDumbUndoStore();
     }
 
-    m_d->scheduledUndoAdapter = new KisScheduledUndoAdapter();
-    m_d->realUndoAdapter->setImage(this);
-    m_d->scheduledUndoAdapter->setImage(this);
+    m_d->undoStore = undoStore;
+    m_d->legacyUndoAdapter = new KisLegacyUndoAdapter(m_d->undoStore, this);
+    m_d->postExecutionUndoAdapter = new KisPostExecutionUndoAdapter(m_d->undoStore, this);
 
     m_d->nserver = new KisNameServer(1);
 
@@ -970,20 +974,28 @@ QRect KisImage::bounds() const
     return QRect(0, 0, width(), height());
 }
 
-KisUndoAdapter* KisImage::realUndoAdapter() const
+KisPostExecutionUndoAdapter* KisImage::postExecutionUndoAdapter() const
 {
-    return m_d->realUndoAdapter;
+    return m_d->postExecutionUndoAdapter;
 }
 
-void KisImage::setRealUndoAdapter(KisUndoAdapter * adapter)
+void KisImage::setUndoStore(KisUndoStore *undoStore)
 {
-    m_d->realUndoAdapter = adapter;
-    m_d->realUndoAdapter->setImage(this);
+
+    m_d->legacyUndoAdapter->setUndoStore(undoStore);
+    m_d->postExecutionUndoAdapter->setUndoStore(undoStore);
+    delete m_d->undoStore;
+    m_d->undoStore = undoStore;
+}
+
+KisUndoStore* KisImage::undoStore()
+{
+    return m_d->undoStore;
 }
 
 KisUndoAdapter* KisImage::undoAdapter() const
 {
-    return m_d->scheduledUndoAdapter;
+    return m_d->legacyUndoAdapter;
 }
 
 KisActionRecorder* KisImage::actionRecorder() const
@@ -1082,6 +1094,11 @@ KisPerspectiveGrid* KisImage::perspectiveGrid()
     if (m_d->perspectiveGrid == 0)
         m_d->perspectiveGrid = new KisPerspectiveGrid();
     return m_d->perspectiveGrid;
+}
+
+void KisImage::barrierLock()
+{
+    lock();
 }
 
 void KisImage::waitForDone()

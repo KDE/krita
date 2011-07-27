@@ -25,12 +25,11 @@
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
-#include <kis_undo_adapter.h>
 
-PSDSaver::PSDSaver(KisDoc2 *doc, KisUndoAdapter *adapter)
+
+PSDSaver::PSDSaver(KisDoc2 *doc)
 {
     m_doc = doc;
-    m_adapter = adapter;
     m_job = 0;
     m_stop = false;
 }

@@ -34,7 +34,6 @@
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
-#include <kis_undo_adapter.h>
 #include <kis_group_layer.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
@@ -48,11 +47,10 @@
 #include "psd_layer_section.h"
 #include "psd_resource_block.h"
 
-PSDLoader::PSDLoader(KisDoc2 *doc, KisUndoAdapter *adapter)
+PSDLoader::PSDLoader(KisDoc2 *doc)
 {
     m_image = 0;
     m_doc = doc;
-    m_adapter = adapter;
     m_job = 0;
     m_stop = false;
 }
@@ -127,7 +125,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     if (!cs) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
 
     // Creating the KisImageWSP
-    m_image = new KisImage(m_doc->undoAdapter(),  header.width, header.height, cs, "built image");
+    m_image = new KisImage(m_doc->createUndoStore(),  header.width, header.height, cs, "built image");
     Q_CHECK_PTR(m_image);
     m_image->lock();
 

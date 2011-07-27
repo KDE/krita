@@ -19,12 +19,12 @@
 #include "kis_stroke_strategy_undo_command_based.h"
 
 #include <QMutexLocker>
-#include "kis_undo_adapter.h"
+#include "kis_post_execution_undo_adapter.h"
 
 KisStrokeStrategyUndoCommandBased::
 KisStrokeStrategyUndoCommandBased(const QString &name,
                                   bool undo,
-                                  KisUndoAdapter *undoAdapter,
+                                  KisPostExecutionUndoAdapter *undoAdapter,
                                   KUndo2CommandSP initCommand,
                                   KUndo2CommandSP finishCommand)
   : KisSimpleStrokeStrategy("STROKE_UNDO_COMMAND_BASED", name),

@@ -27,12 +27,12 @@
 #include "kis_resources_snapshot.h"
 
 
-class KisUndoAdapter;
+class KisUndoStore;
 
 
 namespace utils {
 
-    KisImageSP createImage(KisUndoAdapter *undoAdapter, const QSize &imageSize);
+    KisImageSP createImage(KisUndoStore *undoStore, const QSize &imageSize);
     KoResourceManager* createResourceManager(KisImageWSP image,
                                              KisNodeSP node = 0,
                                              const QString &presetFileName = "autobrush_300px.kpp");

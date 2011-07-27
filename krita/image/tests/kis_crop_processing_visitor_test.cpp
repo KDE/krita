@@ -32,11 +32,10 @@
 
 void KisCropProcessingVisitorTest::testUndo()
 {
-    KisSurrogateUndoAdapter imageAdapter;
     KisSurrogateUndoAdapter undoAdapter;
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(&imageAdapter, 300, 300, cs, "test", false);
+    KisImageSP image = new KisImage(0, 300, 300, cs, "test", false);
     KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP device = layer->paintDevice();
 
@@ -62,11 +61,10 @@ void KisCropProcessingVisitorTest::testUndo()
 
 void KisCropProcessingVisitorTest::testCropTransparencyMask()
 {
-    KisSurrogateUndoAdapter imageAdapter;
     KisSurrogateUndoAdapter undoAdapter;
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(&imageAdapter, 300, 300, cs, "test", false);
+    KisImageSP image = new KisImage(0, 300, 300, cs, "test", false);
     KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP device = layer->paintDevice();
 
@@ -99,10 +97,8 @@ void KisCropProcessingVisitorTest::testCropTransparencyMask()
 
 void KisCropProcessingVisitorTest::testWrappedInCommand()
 {
-    KisSurrogateUndoAdapter imageAdapter;
-
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(&imageAdapter, 300, 300, cs, "test", false);
+    KisImageSP image = new KisImage(0, 300, 300, cs, "test", false);
     KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP device = layer->paintDevice();
 

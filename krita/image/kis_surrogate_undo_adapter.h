@@ -19,16 +19,20 @@
 #ifndef __KIS_SURROGATE_UNDO_ADAPTER_H
 #define __KIS_SURROGATE_UNDO_ADAPTER_H
 
-#include <kundo2stack.h>
 #include "kis_undo_adapter.h"
+
+class KisSurrogateUndoStore;
+
 
 class KRITAIMAGE_EXPORT KisSurrogateUndoAdapter : public KisUndoAdapter
 {
 public:
-    void addCommand(KUndo2Command *command);
+    KisSurrogateUndoAdapter();
+    ~KisSurrogateUndoAdapter();
+
     const KUndo2Command* presentCommand();
     void undoLastCommand();
-    void addCommand(KUndo2CommandSP command);
+    void addCommand(KUndo2Command *command);
     void beginMacro(const QString& macroName);
     void endMacro();
 
@@ -39,7 +43,7 @@ public:
     void redoAll();
 
 private:
-    KUndo2Stack m_undoStack;
+    KisSurrogateUndoStore *m_undoStore;
 };
 
 #endif /* __KIS_SURROGATE_UNDO_ADAPTER_H */

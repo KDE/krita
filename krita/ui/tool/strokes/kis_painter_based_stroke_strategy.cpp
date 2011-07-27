@@ -94,10 +94,14 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
     if(layer && indirect && indirect->hasTemporaryTarget()) {
         QString transactionText = m_painter->transactionText();
         m_painter->deleteTransaction();
-        indirect->mergeToLayer(layer, m_resources->image()->realUndoAdapter(), transactionText);
+
+        indirect->mergeToLayer(layer,
+                               m_resources->image()->postExecutionUndoAdapter(),
+                               transactionText);
     }
     else {
-        m_painter->endTransaction(m_resources->image()->realUndoAdapter());
+        m_painter->endTransaction(
+            m_resources->image()->postExecutionUndoAdapter());
     }
     delete m_painter;
 }

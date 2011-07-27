@@ -35,7 +35,7 @@
 #include <kis_gradient_painter.h>
 #include <kis_paintop_settings.h>
 #include <kis_default_bounds.h>
-#include <kis_dumb_undo_adapter.h>
+#include <kis_surrogate_undo_adapter.h>
 #include <kis_canvas_resource_provider.h>
 
 class KisScratchPadDefaultBounds : public KisDefaultBounds
@@ -474,10 +474,10 @@ void KisScratchPad::endPaint(QEvent *event) {
                 dynamic_cast<KisIndirectPaintingSupport*>(layer.data());
             Q_ASSERT(indirect);
 
-            indirect->mergeToLayer(layer, 0, QString("scratchpaint"));
+            indirect->mergeToLayer(layer, (KisUndoAdapter*)0, QString("scratchpaint"));
             m_incrementalDirtyRegion = QRegion();
         } else {
-            KisDumbUndoAdapter dua;
+            KisSurrogateUndoAdapter dua;
             m_painter->endTransaction(&dua);
         }
     }

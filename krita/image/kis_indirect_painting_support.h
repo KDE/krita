@@ -26,6 +26,7 @@
 
 class QBitArray;
 class KisUndoAdapter;
+class KisPostExecutionUndoAdapter;
 
 /**
  * For classes that support indirect painting.
@@ -56,6 +57,8 @@ public:
      * This action will lock the temporary target itself.
      */
     void mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText);
+    void mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const QString &transactionText);
+
 
     /**
      * Lock the temporary target.
@@ -89,6 +92,10 @@ private:
     void addIndirectlyDirtyRect(const QRect &rect);
     QRegion indirectlyDirtyRegion();
 
+    template<class UndoAdapter>
+        void mergeToLayerImpl(KisLayerSP layer,
+                              UndoAdapter *undoAdapter,
+                              const QString &transactionText);
 private:
     struct Private;
     Private* const d;

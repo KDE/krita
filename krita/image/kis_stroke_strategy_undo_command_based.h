@@ -31,7 +31,8 @@
 class QString;
 
 class KisStrokeJob;
-class KisUndoAdapter;
+class KisPostExecutionUndoAdapter;
+
 
 class KRITAIMAGE_EXPORT KisStrokeStrategyUndoCommandBased : public KisSimpleStrokeStrategy
 {
@@ -51,7 +52,7 @@ public:
 public:
     KisStrokeStrategyUndoCommandBased(const QString &name,
                                       bool undo,
-                                      KisUndoAdapter *undoAdapter,
+                                      KisPostExecutionUndoAdapter *undoAdapter,
                                       KUndo2CommandSP initCommand = KUndo2CommandSP(0),
                                       KUndo2CommandSP finishCommand = KUndo2CommandSP(0));
 
@@ -71,7 +72,7 @@ private:
     bool m_undo;
     KUndo2CommandSP m_initCommand;
     KUndo2CommandSP m_finishCommand;
-    KisUndoAdapter *m_undoAdapter;
+    KisPostExecutionUndoAdapter *m_undoAdapter;
 
     // protects done commands only
     QMutex m_mutex;

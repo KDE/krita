@@ -41,7 +41,9 @@ class KoCompositeOp;
 class KoColor;
 
 class KisActionRecorder;
+class KisUndoStore;
 class KisUndoAdapter;
+class KisPostExecutionUndoAdapter;
 class KisFilterStrategy;
 class KoColorProfile;
 class KoUpdater;
@@ -66,7 +68,7 @@ class KRITAIMAGE_EXPORT KisImage : public QObject, public KisNodeFacade, public 
 public:
 
     /// @param colorSpace can be null. in that case it will be initialised to a default color space.
-    KisImage(KisUndoAdapter *realUndoAdapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true);
+    KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true);
     virtual ~KisImage();
 
 public: // KisNodeGraphListener implementation
@@ -268,9 +270,10 @@ public:
 
     /**
      * Returns the current undo adapter. You can add new commands to the
-     * undo stack using the adapter. This adapter works as a support
-     * for the commands created before adding the strokes. It wraps them
-     * into the stroke and runs them onto the scheduler
+     * undo stack using the adapter. This adapter is used for a backward
+     * compatibility for old commands created before strokes. It blocks
+     * all the porcessing at the scheduler, waits until it's finished
+     * adn executes commands exclusively.
      */
     KisUndoAdapter* undoAdapter() const;
 
@@ -280,15 +283,20 @@ public:
      * wrapped into a special command and added to the undo stack. redo()
      * in not called.
      */
-    KisUndoAdapter* realUndoAdapter() const;
+    KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const;
 
     /**
-     * Replace the current real undo adapter with the specified undo adapter.
-     * The current undo adapter will _not_ be deleted.
-     *
-     * \see realUndoAdapter()
+     * Replace current undo store with the new one. The old store
+     * will be deleted.
+     * This method is used by KisDoc2 for dropping all the commands
+     * during file loading.
      */
-    void setRealUndoAdapter(KisUndoAdapter * undoAdapter);
+    void setUndoStore(KisUndoStore *undoStore);
+
+    /**
+     * Return current undo store of the image
+     */
+    KisUndoStore* undoStore();
 
     /**
      * @return the action recorder associated with this image
@@ -572,6 +580,7 @@ signals:
 
 public slots:
 
+    void barrierLock();
     void waitForDone();
 
     KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);
@@ -594,7 +603,7 @@ public slots:
 private:
     KisImage(const KisImage& rhs);
     KisImage& operator=(const KisImage& rhs);
-    void init(KisUndoAdapter *realUndoAdapter, qint32 width, qint32 height, const KoColorSpace * colorSpace);
+    void init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace);
     void emitSizeChanged();
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);

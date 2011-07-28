@@ -1016,7 +1016,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         // line fitted so try and do the next one
         line = layout->createLine();
-        cursor->lineTextStart = line.isValid() ? line.textStart() : 0;
+        if (!line.isValid()) {
+            break;
+        }
+        cursor->lineTextStart = line.textStart();
         if (softBreak) {
             return false;
         }

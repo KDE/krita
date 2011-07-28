@@ -374,6 +374,7 @@ void SectionEditor::btnMoveUp_clicked()
         QString s = lbGroups->currentItem()->text();
         lbGroups->takeItem(idx);
         lbGroups->insertItem(idx - 1, s);
+        lbGroups->setCurrentRow(idx - 1, QItemSelectionModel::ClearAndSelect);
         ReportSectionDetailGroup * rsdg = m_reportSectionDetail->groupSection(idx);
         bool showgh = rsdg->groupHeaderVisible();
         bool showgf = rsdg->groupFooterVisible();
@@ -393,6 +394,7 @@ void SectionEditor::brnMoveDown_clicked()
         QString s = lbGroups->currentItem()->text();
         lbGroups->takeItem(idx);
         lbGroups->insertItem (idx + 1, s);
+        lbGroups->setCurrentRow(idx + 1, QItemSelectionModel::ClearAndSelect);
         ReportSectionDetailGroup * rsdg = m_reportSectionDetail->groupSection(idx);
         bool showgh = rsdg->groupHeaderVisible();
         bool showgf = rsdg->groupFooterVisible();

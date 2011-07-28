@@ -112,6 +112,8 @@ public:
      */
     KoToolSelection *selection();
 
+    /// returns true if the current tool holds a selection
+    bool hasSelection() const;
     /// Forwarded to the current KoToolBase
     void cut();
     /// Forwarded to the current KoToolBase

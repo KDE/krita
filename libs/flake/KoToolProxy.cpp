@@ -437,6 +437,16 @@ QHash<QString, KAction*> KoToolProxy::actions() const
     return d->activeTool ? d->activeTool->actions() : QHash<QString, KAction*>();
 }
 
+bool KoToolProxy::hasSelection() const
+{
+    if (d->activeTool && d->activeTool->selection()) {
+        return d->activeTool->selection()->hasSelection();
+    }
+    else {
+        return false;
+    }
+}
+
 void KoToolProxy::cut()
 {
     // TODO maybe move checking the active layer to KoPasteController ?

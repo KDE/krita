@@ -72,7 +72,7 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
 {
     KisStrokeStrategyUndoCommandBased *strategy =
         new KisStrokeStrategyUndoCommandBased(name, false,
-                                              m_image->realUndoAdapter());
+                                              m_image->postExecutionUndoAdapter());
 
     m_strokeId = m_image->startStroke(strategy);
     applyCommand(new UpdateCommand(m_image, m_node, m_recursive, false));

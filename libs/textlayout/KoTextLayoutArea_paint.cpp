@@ -72,11 +72,6 @@ extern int qt_defaultDpiY();
 
 void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
-    painter->setPen(context.textContext.palette.color(QPalette::Text)); // for text that has no color.
-    const QRegion clipRegion = painter->clipRegion();
-    KoTextBlockBorderData *lastBorder = 0;
-    QRectF lastBorderRect;
-
     if (m_startOfArea == 0) // We have not been layouted yet
         return;
 
@@ -91,6 +86,11 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
     painter->save();
     painter->translate(0, m_verticalAlignOffset);
+
+    painter->setPen(context.textContext.palette.color(QPalette::Text)); // for text that has no color.
+    const QRegion clipRegion = painter->clipRegion(); // fetch after painter->translate so the clipRegion is correct
+    KoTextBlockBorderData *lastBorder = 0;
+    QRectF lastBorderRect;
 
     QTextFrame::iterator it = m_startOfArea->it;
     QTextFrame::iterator stop = m_endOfArea->it;

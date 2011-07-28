@@ -1239,6 +1239,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
 
     if (lineAdjust) {
         line.setPosition(QPointF(line.x(), line.y() + lineAdjust));
+        m_blockRects.last().moveTop(m_blockRects.last().top() + lineAdjust);
     }
 
     return height;

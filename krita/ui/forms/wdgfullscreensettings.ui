@@ -14,7 +14,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Select which parts of Krita will be hidden in full-screen mode.</string>
+      <string>Select which parts of Krita will be hidden in canvas-only mode.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>

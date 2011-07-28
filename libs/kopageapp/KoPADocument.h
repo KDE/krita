@@ -155,6 +155,15 @@ public:
      */
     virtual void removePage( KoPAPageBase * page );
 
+    /**
+     * Remove the given pages from the document
+     *
+     * This generates the command and adds the command that deletes the pages
+     *
+     * @param pages The list of pages that gets removed
+     */
+    virtual void removePages(QList<KoPAPageBase*> &pages);
+
     void addShape( KoShape *shape );
     void removeShape( KoShape* shape );
 

@@ -46,6 +46,7 @@ void KisBoundary::generateBoundary()
         return;
 
     KisOutlineGenerator generator(d->m_device->colorSpace(), OPACITY_TRANSPARENT_U8);
+    generator.setSimpleOutline(true);
     d->m_boundary = generator.outline(d->m_device->data(), 0, 0, d->m_device->bounds().width(), d->m_device->bounds().height());
 
     d->path = QPainterPath();

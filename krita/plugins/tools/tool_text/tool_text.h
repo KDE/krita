@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,18 +16,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_TRANSFORMATION_MASK_TEST_H
-#define KIS_TRANSFORMATION_MASK_TEST_H
+#ifndef TOOL_TEXT_H_
+#define TOOL_TEXT_H_
 
-#include <QtTest/QtTest>
+#include <QObject>
+#include <QVariant>
 
-class KisTransformationMaskTest : public QObject
+/**
+ * A module that provides a text tool.
+ */
+class ToolText : public QObject
 {
     Q_OBJECT
-private slots:
-
-    void testCreation();
+public:
+    ToolText(QObject *parent, const QVariantList &);
+    virtual ~ToolText();
 
 };
 
-#endif
+#endif // TOOL_TEXT_H_

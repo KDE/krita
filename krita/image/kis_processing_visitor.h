@@ -30,7 +30,6 @@ class KisExternalLayer;
 class KisCloneLayer;
 class KisFilterMask;
 class KisTransparencyMask;
-class KisTransformationMask;
 class KisSelectionMask;
 
 class KRITAIMAGE_EXPORT KisProcessingVisitor : public KisShared
@@ -47,7 +46,6 @@ public:
     virtual void visit(KisCloneLayer *layer, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter) = 0;
-    virtual void visit(KisTransformationMask *mask, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter) = 0;
 };
 

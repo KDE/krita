@@ -50,12 +50,16 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Sty
     foreach (int lev, levels) {
         KoListLevelProperties llp;
         llp.setLevel(lev);
-        llp.setStyle(style);        
+        llp.setStyle(style);
         if (KoListStyle::isNumberingStyle(style)) {
             llp.setStartValue(1);
             llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
             llp.setListItemSuffix(".");
-        } else {
+        }
+        else if (style == KoListStyle::CustomCharItem) {
+            llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
+        }
+        else {
             llp.setRelativeBulletSize(45);   //for non-numbering bullets the default relative bullet size is 45%(The spec does not say it; we take it)
         }
 

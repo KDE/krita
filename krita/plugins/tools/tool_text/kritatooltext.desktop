@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Text Tool
+Name[it]=Strumento testo
+Name[pt]=Ferramenta de Texto
+Name[pt_BR]=Ferramenta de texto
+Name[sv]=Textverktyg
+Name[uk]=Інструмент тексту
+Name[x-test]=xxText Toolxx
+X-KDE-ServiceTypes=Krita/Tool
+Type=Service
+X-KDE-Library=kritatooltext
+X-Krita-Version=4

@@ -179,7 +179,6 @@ set(kritaimage_LIB_SRCS
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp
    kis_warptransform_worker.cc
-   kis_transformation_mask.cpp
    kis_transparency_mask.cc
    kis_undo_store.cpp
    kis_undo_stores.cpp

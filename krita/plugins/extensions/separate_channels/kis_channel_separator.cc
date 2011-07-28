@@ -57,7 +57,7 @@
 #include <kis_view2.h>
 #include <kis_paint_device.h>
 #include <KoChannelInfo.h>
-#include <kis_layer_manager.h>
+#include <kis_node_manager.h>
 #include <kis_node_commands_adapter.h>
 #include <KoColorModelStandardIds.h>
 

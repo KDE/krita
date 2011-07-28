@@ -1,5 +1,6 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *
+ *  Copyright (c) 2011 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,16 +17,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_transformation_mask_test.h"
 
-#include <qtest_kde.h>
-#include "kis_transformation_mask.h"
+#ifndef KIS_TEXT_TOOL_OPTION_WIDGET_H
+#define KIS_TEXT_TOOL_OPTION_WIDGET_H
 
-void KisTransformationMaskTest::testCreation()
+#include "ui_wdgtextoptions.h"
+#include <kis_painter.h>
+
+class KisTextToolOptionWidget : public QWidget, public Ui_WdgTextOptions
 {
-    KisTransformationMask test;
-}
+    Q_OBJECT
+public:
+    KisTextToolOptionWidget(QWidget* parent = 0);
 
+    enum TextMode{
+        MODE_ARTISTIC,
+        MODE_MULTILINE
+    };
+    
+    TextMode mode();
+    
+    KisPainter::FillStyle style();
+private slots:
+    void modeChanged(int mode);
+private:
+    QButtonGroup* m_buttonGroup;
+};
 
-QTEST_KDEMAIN(KisTransformationMaskTest, GUI)
-#include "kis_transformation_mask_test.moc"
+#endif // KIS_TEXT_TOOL_OPTION_WIDGET_H

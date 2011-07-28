@@ -52,7 +52,7 @@ class KOTEXT_EXPORT KoTableStyle : public QObject
     Q_OBJECT
 public:
     enum Property {
-        StyleId = QTextTableFormat::UserProperty + 1,
+        StyleId = QTextTableFormat::UserProperty + 100,
         // Linespacing properties
         KeepWithNext,    ///< If true, keep table with next paragraph
         BreakBefore,    ///< If true, insert a frame break before this table

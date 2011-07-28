@@ -270,59 +270,64 @@ void KoTableBorderStyle::paintBorders(QPainter &painter, const QRectF &bounds, Q
 
     QRectF innerBounds = bounds;
 
-    if (d->edges[Top].outerPen.widthF() > 0) {
-        QPen pen = d->edges[Top].outerPen;
+    // outer lines
+    QPen topOuterPen = d->edges[Top].outerPen;
+    QPen bottomOuterPen = d->edges[Bottom].outerPen;
+    QPen leftOuterPen = d->edges[Left].outerPen;
+    QPen rightOuterPen = d->edges[Right].outerPen;
 
-        painter.setPen(pen);
-        const qreal t = bounds.top() + pen.widthF() / 2.0;
-        innerBounds.setTop(bounds.top() + d->edges[Top].spacing + pen.widthF());
-        if(isDrawn(d->borderstyle[Top])) {
-#if 0 // Unfinished code?
-            const qreal width = pen.widthF()/6;
-            qreal x;
-            //for (
-#endif
-        } else {
-            painter.drawLine(QLineF(bounds.left(), t, bounds.right(), t));
-        }
+    if (topOuterPen.widthF() > 0) {
+        painter.setPen(topOuterPen);
+        const qreal t = bounds.top() + topOuterPen.widthF() / 2.0;
+        innerBounds.setTop(bounds.top() + d->edges[Top].spacing + topOuterPen.widthF());
+        painter.drawLine(QLineF(bounds.left(), t, bounds.right(), t));
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->append(QLineF(bounds.left(), bounds.top(), bounds.right(), bounds.top()));
-
+        accumulatedBlankBorders->append(QLineF(bounds.left() + leftOuterPen.widthF() + d->edges[Left].spacing,
+                                               bounds.top() + topOuterPen.widthF() + d->edges[Top].spacing,
+                                               bounds.right() - rightOuterPen.widthF() - d->edges[Right].spacing,
+                                               bounds.top() + topOuterPen.widthF() + d->edges[Top].spacing));
     }
-    if (d->edges[Bottom].outerPen.widthF() > 0) {
-        QPen pen = d->edges[Bottom].outerPen;
-        painter.setPen(pen);
-        const qreal b = bounds.bottom() - pen.widthF() / 2.0;
-        innerBounds.setBottom(bounds.bottom() - d->edges[Bottom].spacing - pen.widthF());
+
+    if (bottomOuterPen.widthF() > 0) {
+        painter.setPen(bottomOuterPen);
+        const qreal b = bounds.bottom() - bottomOuterPen.widthF() / 2.0;
+        innerBounds.setBottom(bounds.bottom() - d->edges[Bottom].spacing - bottomOuterPen.widthF());
         painter.drawLine(QLineF(bounds.left(), b, bounds.right(), b));
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->append(QLineF(bounds.left(), bounds.bottom(), bounds.right(), bounds.bottom()));
-
+        accumulatedBlankBorders->append(QLineF(bounds.left() + leftOuterPen.widthF() + d->edges[Left].spacing,
+                                               bounds.bottom() - bottomOuterPen.widthF() - d->edges[Bottom].spacing,
+                                               bounds.right() - rightOuterPen.widthF() - d->edges[Right].spacing,
+                                               bounds.bottom() - bottomOuterPen.widthF() - d->edges[Bottom].spacing));
     }
-    if (d->edges[Left].outerPen.widthF() > 0) {
-        QPen pen = d->edges[Left].outerPen;
-        painter.setPen(pen);
-        const qreal l = bounds.left() + pen.widthF() / 2.0;
-        innerBounds.setLeft(bounds.left() + d->edges[Left].spacing + pen.widthF());
+
+    if (leftOuterPen.widthF() > 0) {
+        painter.setPen(leftOuterPen);
+        const qreal l = bounds.left() + leftOuterPen.widthF() / 2.0;
+        innerBounds.setLeft(bounds.left() + d->edges[Left].spacing + leftOuterPen.widthF());
         painter.drawLine(QLineF(l, bounds.top() + d->edges[Top].outerPen.widthF(), l, bounds.bottom() - d->edges[Bottom].outerPen.widthF()));
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->append(QLineF(bounds.left(), bounds.top(), bounds.left(), bounds.bottom()));
-
+        accumulatedBlankBorders->append(QLineF(bounds.left() + leftOuterPen.widthF() + d->edges[Left].spacing,
+                                               bounds.top() + topOuterPen.widthF() + d->edges[Top].spacing,
+                                               bounds.left() + leftOuterPen.widthF() + d->edges[Left].spacing,
+                                               bounds.bottom() - bottomOuterPen.widthF() - d->edges[Bottom].spacing));
     }
+
     if (d->edges[Right].outerPen.widthF() > 0) {
-        QPen pen = d->edges[Right].outerPen;
-        painter.setPen(pen);
-        const qreal r = bounds.right() - pen.widthF() / 2.0;
-        innerBounds.setRight(bounds.right() - d->edges[Right].spacing - pen.widthF());
-        painter.drawLine(QLineF(r, bounds.top() + d->edges[Top].outerPen.widthF(), r, bounds.bottom() - d->edges[Bottom].outerPen.widthF()));
+        painter.setPen(rightOuterPen);
+        const qreal r = bounds.right() - rightOuterPen.widthF() / 2.0;
+        innerBounds.setRight(bounds.right() - d->edges[Right].spacing - rightOuterPen.widthF());
+        painter.drawLine(QLineF(r, bounds.top() + d->edges[Top].outerPen.widthF(), r, bounds.bottom() - bottomOuterPen.widthF()));
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->append(QLineF(bounds.right(), bounds.top(), bounds.right(), bounds.bottom()));
-
+        accumulatedBlankBorders->append(QLineF(bounds.right() - rightOuterPen.widthF() - d->edges[Right].spacing,
+                                               bounds.top() + topOuterPen.widthF() + d->edges[Top].spacing,
+                                               bounds.right() - rightOuterPen.widthF() - d->edges[Right].spacing,
+                                               bounds.bottom() - bottomOuterPen.widthF() - d->edges[Bottom].spacing));
     }
+
     paintDiagonalBorders(painter, bounds);
 
     // inner lines
@@ -689,3 +694,50 @@ qreal KoTableBorderStyle::bottomBorderWidth() const
     return edge.spacing + edge.innerPen.widthF() + edge.outerPen.widthF();
 }
 
+qreal KoTableBorderStyle::leftInnerBorderWidth() const
+{
+    Q_D(const KoTableBorderStyle);
+    return d->edges[Left].innerPen.widthF();
+}
+
+qreal KoTableBorderStyle::rightInnerBorderWidth() const
+{
+    Q_D(const KoTableBorderStyle);
+    return d->edges[Right].innerPen.widthF();
+}
+
+qreal KoTableBorderStyle::topInnerBorderWidth() const
+{
+    Q_D(const KoTableBorderStyle);
+    return d->edges[Top].innerPen.widthF();
+}
+
+qreal KoTableBorderStyle::bottomInnerBorderWidth() const
+{
+    Q_D(const KoTableBorderStyle);
+    return d->edges[Bottom].innerPen.widthF();
+}
+
+qreal KoTableBorderStyle::leftOuterBorderWidth() const
+{
+    Q_D(const KoTableBorderStyle);
+    return d->edges[Left].outerPen.widthF();
+}
+
+qreal KoTableBorderStyle::rightOuterBorderWidth() const
+{
+    Q_D(const KoTableBorderStyle);
+    return d->edges[Right].outerPen.widthF();
+}
+
+qreal KoTableBorderStyle::topOuterBorderWidth() const
+{
+    Q_D(const KoTableBorderStyle);
+    return d->edges[Top].outerPen.widthF();
+}
+
+qreal KoTableBorderStyle::bottomOuterBorderWidth() const
+{
+    Q_D(const KoTableBorderStyle);
+    return d->edges[Bottom].outerPen.widthF();
+}

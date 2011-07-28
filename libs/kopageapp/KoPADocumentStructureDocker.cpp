@@ -380,7 +380,7 @@ void KoPADocumentStructureDocker::deleteItem()
         cmd = new KoShapeDeleteCommand( m_doc, selectedShapes );
     }
     else if (!selectedPages.isEmpty() && selectedPages.count() < m_doc->pages().count()) {
-        cmd = new KoPAPageDeleteCommand(m_doc, selectedPages);
+        m_doc->removePages(selectedPages);
     }
 
     if( cmd )

@@ -18,6 +18,8 @@
 
 #include "kis_crop_processing_visitor.h"
 
+#include <klocale.h>
+
 #include "commands_new/kis_node_move_command2.h"
 
 #include "kis_group_layer.h"
@@ -25,7 +27,6 @@
 #include "kis_adjustment_layer.h"
 #include "generator/kis_generator_layer.h"
 
-#include "kis_transformation_mask.h"
 #include "kis_transparency_mask.h"
 #include "kis_filter_mask.h"
 #include "kis_selection_mask.h"
@@ -91,11 +92,6 @@ void KisCropProcessingVisitor::visit(KisFilterMask *mask, KisUndoAdapter *undoAd
 }
 
 void KisCropProcessingVisitor::visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter)
-{
-    cropNode(mask, undoAdapter);
-}
-
-void KisCropProcessingVisitor::visit(KisTransformationMask *mask, KisUndoAdapter *undoAdapter)
 {
     cropNode(mask, undoAdapter);
 }

@@ -197,7 +197,7 @@ void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& s
     }
 }
 
-void KoListStyle::saveOdf(KoGenStyle &style)
+void KoListStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const
 {
     if (!d->name.isEmpty() && !style.isDefaultStyle()) {
         style.addAttribute("style:display-name", d->name);
@@ -208,19 +208,47 @@ void KoListStyle::saveOdf(KoGenStyle &style)
     QMapIterator<int, KoListLevelProperties> it(d->levels);
     while (it.hasNext()) {
         it.next();
-        it.value().saveOdf(&elementWriter);
+        it.value().saveOdf(&elementWriter, context);
     }
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     style.addChildElement("text-list-level-style-content", elementContents);
 }
 
+bool KoListStyle::isNumberingStyle() const
+{
+    QMap<int, KoListLevelProperties>::const_iterator it(d->levels.constBegin());
+    for (; it != d->levels.constEnd(); ++it) {
+        if (isNumberingStyle(it.value().style())) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool KoListStyle::isNumberingStyle(int style)
 {
-    return !(style == KoListStyle::SquareItem || style == KoListStyle::Bullet
-                 || style == KoListStyle::BlackCircle || style == KoListStyle::CircleItem
-                 || style == KoListStyle::BoxItem || style == KoListStyle::RhombusItem
-                 || style == KoListStyle::HeavyCheckMarkItem || style == KoListStyle::BallotXItem
-                 || style == KoListStyle::RightArrowItem || style == KoListStyle::RightArrowHeadItem);
+    bool retval = true;
+    switch (style) {
+    case KoListStyle::SquareItem:
+    case KoListStyle::DiscItem:
+    case KoListStyle::CircleItem:
+    case KoListStyle::None:
+    case KoListStyle::Bullet:
+    case KoListStyle::BlackCircle:
+    case KoListStyle::BoxItem:
+    case KoListStyle::RhombusItem:
+    case KoListStyle::HeavyCheckMarkItem:
+    case KoListStyle::BallotXItem:
+    case KoListStyle::RightArrowItem:
+    case KoListStyle::RightArrowHeadItem:
+    case KoListStyle::CustomCharItem:
+    case KoListStyle::ImageItem:
+        retval = false;
+        break;
+    default:
+        retval = true;
+    }
+    return retval;
 }
 
 QList<int> KoListStyle::listLevels() const

@@ -40,7 +40,7 @@ class KoTableCellStyle;
 class KoSectionStyle;
 class KoXmlWriter;
 class ChangeFollower;
-class KoGenStyles;
+class KoShapeSavingContext;
 class KoTextShapeData;
 
 /**
@@ -67,12 +67,12 @@ public:
     /**
      * Save document styles
      */
-    void saveOdf(KoGenStyles& mainStyles);
+    void saveOdf(KoShapeSavingContext &context);
 
     /**
      * Save the default-style styles
      */
-    void saveOdfDefaultStyles(KoGenStyles &mainStyles);
+    void saveOdfDefaultStyles(KoShapeSavingContext &context);
 
     /**
      * Add a new style, automatically giving it a new styleId.

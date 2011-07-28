@@ -44,7 +44,6 @@
 #include "kis_shape_layer.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
-#include "kis_transformation_mask.h"
 #include "kis_selection_mask.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"

@@ -1,4 +1,4 @@
-include_directories(  )
+include_directories( ${FLAKE_INCLUDES} )
 
 ########### Flake Plugin library ###############
 

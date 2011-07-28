@@ -49,11 +49,10 @@ void KoTextSoftPageBreak::saveOdf(KoShapeSavingContext &context)
     writer.endElement();
 }
 
-void KoTextSoftPageBreak::updatePosition(const QTextDocument *document, QTextInlineObject object,
+void KoTextSoftPageBreak::updatePosition(const QTextDocument *document,
                                          int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(document)
-    Q_UNUSED(object)
     Q_UNUSED(posInDocument)
     Q_UNUSED(format)
 }

@@ -1855,7 +1855,7 @@ KoDeleteChangeMarker * KoTextLoader::Private::insertDeleteChangeMarker(QTextCurs
         changeElement->setChangeType(KoGenChange::DeleteChange);
         KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
         if (textObjectManager) {
-            deleteChangemarker->updatePosition(cursor.block().document(), QTextInlineObject(), cursor.position(), QTextCharFormat());
+            deleteChangemarker->updatePosition(cursor.block().document(), cursor.position(), QTextCharFormat());
             textObjectManager->insertInlineObject(cursor, deleteChangemarker);
         }
         retMarker = deleteChangemarker;

@@ -779,6 +779,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     }
 
     KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, inliner);
+    inliner->updatePosition(d->document, d->caret.position(), format);
 
     int endPosition = d->caret.position();
     d->caret.setPosition(startPosition);

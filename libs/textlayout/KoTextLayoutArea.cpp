@@ -44,6 +44,7 @@
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
 #include <KoListStyle.h>
+#include <KoTableStyle.h>
 #include <KoStyleManager.h>
 #include <KoTextBlockData.h>
 #include <KoTextBlockBorderData.h>
@@ -131,6 +132,9 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
         QTextBlockFormat format = block.blockFormat();
 
         if (table) {
+            if (tableAreaIndex >= m_tableAreas.size()) {
+                continue;
+            }
             if (point.y() > m_tableAreas[tableAreaIndex]->top()
                     && point.y() < m_tableAreas[tableAreaIndex]->bottom()) {
                 return m_tableAreas[tableAreaIndex]->hitTest(point, accuracy);
@@ -229,6 +233,9 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
         QTextBlockFormat format = block.blockFormat();
 
         if (table) {
+            if (tableAreaIndex >= m_tableAreas.size()) {
+                continue;
+            }
             if (cursor.selectionEnd() < table->firstPosition()) {
                 return retval.translated(0, m_verticalAlignOffset);
             }
@@ -347,7 +354,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         QTextFrame *subFrame = cursor->it.currentFrame();
         if (table) {
             if (acceptsPageBreak() && !virginPage()
-                   && (table->frameFormat().intProperty(KoParagraphStyle::BreakBefore) & KoText::PageBreak)) {
+                   && (table->frameFormat().intProperty(KoTableStyle::BreakBefore) & KoText::PageBreak)) {
                 m_endOfArea = new FrameIterator(cursor);
                 setBottom(m_y + m_footNotesHeight);
                 if (!m_blockRects.isEmpty()) {

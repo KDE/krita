@@ -27,7 +27,8 @@ class KRITAIMAGE_EXPORT KisStrokeJobData
 public:
     enum Sequentiality {
         CONCURRENT,
-        SEQUENTIAL
+        SEQUENTIAL,
+        BARRIER
     };
 
     enum Exclusivity {
@@ -40,10 +41,12 @@ public:
                      Exclusivity exclusivity = NORMAL);
     virtual ~KisStrokeJobData();
 
+    bool isBarrier() const;
     bool isSequential() const;
     bool isExclusive() const;
 
 private:
+    bool m_isBarrier;
     bool m_isSequential;
     bool m_isExclusive;
 };

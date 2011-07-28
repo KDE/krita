@@ -161,6 +161,12 @@ bool KisStroke::nextJobSequential() const
         m_jobsQueue.head()->isSequential() : false;
 }
 
+bool KisStroke::nextJobBarrier() const
+{
+    return !m_jobsQueue.isEmpty() ?
+        m_jobsQueue.head()->isBarrier() : false;
+}
+
 void KisStroke::enqueue(KisStrokeJobStrategy *strategy,
                         KisStrokeJobData *data)
 {

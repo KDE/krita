@@ -30,6 +30,7 @@ private slots:
     void testSequentialJobs();
     void testConcurrentSequentialBarrier();
     void testExclusiveStrokes();
+    void testBarrierStrokeJobs();
     void testStrokesOverlapping();
 };
 

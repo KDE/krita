@@ -50,6 +50,8 @@ public:
     bool prevJobSequential() const;
     bool nextJobSequential() const;
 
+    bool nextJobBarrier() const;
+
 private:
     void enqueue(KisStrokeJobStrategy *strategy,
                  KisStrokeJobData *data);

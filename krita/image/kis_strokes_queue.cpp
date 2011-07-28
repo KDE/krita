@@ -81,13 +81,14 @@ bool KisStrokesQueue::cancelStroke(KisStrokeId id)
     return stroke;
 }
 
-void KisStrokesQueue::processQueue(KisUpdaterContext &updaterContext)
+void KisStrokesQueue::processQueue(KisUpdaterContext &updaterContext,
+                                   bool externalJobsPending)
 {
     updaterContext.lock();
     m_d->mutex.lock();
 
     while(updaterContext.hasSpareThread() &&
-          processOneJob(updaterContext));
+          processOneJob(updaterContext, externalJobsPending));
 
     m_d->mutex.unlock();
     updaterContext.unlock();
@@ -113,7 +114,8 @@ qint32 KisStrokesQueue::sizeMetric() const
     return m_d->strokesQueue.head()->numJobs() * m_d->strokesQueue.size();
 }
 
-bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext)
+bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext,
+                                    bool externalJobsPending)
 {
     if(m_d->strokesQueue.isEmpty()) return false;
     bool result = false;
@@ -124,7 +126,9 @@ bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext)
 
     if(checkStrokeState(numStrokeJobs) &&
        checkExclusiveProperty(numMergeJobs, numStrokeJobs) &&
-       checkSequentialProperty(numMergeJobs, numStrokeJobs)) {
+       checkSequentialProperty(numMergeJobs, numStrokeJobs) &&
+       checkBarrierProperty(numMergeJobs, numStrokeJobs,
+                            externalJobsPending)) {
 
         KisStrokeSP stroke = m_d->strokesQueue.head();
         updaterContext.addStrokeJob(stroke->popOneJob());
@@ -177,4 +181,14 @@ bool KisStrokesQueue::checkSequentialProperty(qint32 numMergeJobs,
 
     Q_ASSERT(!stroke->prevJobSequential() || numStrokeJobs <= 1);
     return numStrokeJobs == 0;
+}
+
+bool KisStrokesQueue::checkBarrierProperty(qint32 numMergeJobs,
+                                           qint32 numStrokeJobs,
+                                           bool externalJobsPending)
+{
+    KisStrokeSP stroke = m_d->strokesQueue.head();
+    if(!stroke->nextJobBarrier()) return true;
+
+    return !numMergeJobs && !numStrokeJobs && !externalJobsPending;
 }

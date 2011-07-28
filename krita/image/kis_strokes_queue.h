@@ -39,18 +39,19 @@ public:
     void endStroke(KisStrokeId id);
     bool cancelStroke(KisStrokeId id);
 
-    void processQueue(KisUpdaterContext &updaterContext);
+    void processQueue(KisUpdaterContext &updaterContext, bool externalJobsPending);
     bool needsExclusiveAccess() const;
     bool isEmpty() const;
 
     qint32 sizeMetric() const;
 
 private:
-    bool processOneJob(KisUpdaterContext &updaterContext);
+    bool processOneJob(KisUpdaterContext &updaterContext, bool externalJobsPending);
     bool checkStrokeState(bool hasStrokeJobsRunning);
     bool checkExclusiveProperty(qint32 numMergeJobs, qint32 numStrokeJobs);
     bool checkSequentialProperty(qint32 numMergeJobs, qint32 numStrokeJobs);
-
+    bool checkBarrierProperty(qint32 numMergeJobs, qint32 numStrokeJobs,
+                              bool externalJobsPending);
 private:
     class Private;
     Private * const m_d;

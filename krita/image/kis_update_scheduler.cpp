@@ -175,19 +175,22 @@ void KisUpdateScheduler::processQueues()
     if(m_d->processingBlocked) return;
 
     if(m_d->strokesQueue->needsExclusiveAccess()) {
-        m_d->strokesQueue->processQueue(*m_d->updaterContext);
+        m_d->strokesQueue->processQueue(*m_d->updaterContext,
+                                        !m_d->updatesQueue->isEmpty());
 
         if(!m_d->strokesQueue->needsExclusiveAccess()) {
             m_d->updatesQueue->processQueue(*m_d->updaterContext);
         }
     }
     else if(m_d->balancingRatio * m_d->strokesQueue->sizeMetric() > m_d->updatesQueue->sizeMetric()) {
-        m_d->strokesQueue->processQueue(*m_d->updaterContext);
+        m_d->strokesQueue->processQueue(*m_d->updaterContext,
+                                        !m_d->updatesQueue->isEmpty());
         m_d->updatesQueue->processQueue(*m_d->updaterContext);
     }
     else {
         m_d->updatesQueue->processQueue(*m_d->updaterContext);
-        m_d->strokesQueue->processQueue(*m_d->updaterContext);
+        m_d->strokesQueue->processQueue(*m_d->updaterContext,
+                                        !m_d->updatesQueue->isEmpty());
 
     }
 }

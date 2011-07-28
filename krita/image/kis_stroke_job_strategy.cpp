@@ -20,13 +20,19 @@
 
 KisStrokeJobData::KisStrokeJobData(Sequentiality sequentiality,
                                    Exclusivity exclusivity)
-    : m_isSequential(sequentiality == SEQUENTIAL),
+    : m_isBarrier(sequentiality == BARRIER),
+      m_isSequential(sequentiality == SEQUENTIAL),
       m_isExclusive(exclusivity == EXCLUSIVE)
 {
 }
 
 KisStrokeJobData::~KisStrokeJobData()
 {
+}
+
+bool KisStrokeJobData::isBarrier() const
+{
+    return m_isBarrier;
 }
 
 bool KisStrokeJobData::isSequential() const

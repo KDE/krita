@@ -44,6 +44,11 @@ public:
         return m_dabData ? m_dabData->isSequential() : true;
     }
 
+    bool isBarrier() const {
+        // Default value is simply 'SEQUENTIAL', *not* 'BARRIER'
+        return m_dabData ? m_dabData->isBarrier() : false;
+    }
+
     bool isExclusive() const {
         // Default value is 'NORMAL'
         return m_dabData ? m_dabData->isExclusive() : false;

@@ -61,13 +61,25 @@ public:
     void updateSettings();
 
     /**
-     * Waits until all the running jobs are finished. If some other thread
-     * adds jobs in parallel, then you may wait forever. If you you don't
-     * want it, consider lock() instead
+     * Waits until all the running jobs are finished.
+     *
+     * If some other thread adds jobs in parallel, then you may
+     * wait forever. If you you don't want it, consider lock() instead.
      *
      * \see lock()
      */
     void waitForDone();
+
+    /**
+     * Waits until the queues become empty, then blocks the processing.
+     * To unblock processing you should use unlock().
+     *
+     * If some other thread adds jobs in parallel, then you may
+     * wait forever. If you you don't want it, consider lock() instead.
+     *
+     * \see unlock(), lock()
+     */
+    void barrierLock();
 
     void updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect);
     void fullRefreshAsync(KisNodeSP root, const QRect& rc, const QRect &cropRect);

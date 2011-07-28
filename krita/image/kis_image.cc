@@ -298,6 +298,17 @@ bool KisImage::locked() const
     return m_d->lockCount != 0;
 }
 
+void KisImage::barrierLock()
+{
+    if (!locked()) {
+        if (m_d->scheduler) {
+            m_d->scheduler->barrierLock();
+        }
+        m_d->sizeChangedWhileLocked = false;
+    }
+    m_d->lockCount++;
+}
+
 void KisImage::lock()
 {
 //  blockSignals(true);
@@ -1094,11 +1105,6 @@ KisPerspectiveGrid* KisImage::perspectiveGrid()
     if (m_d->perspectiveGrid == 0)
         m_d->perspectiveGrid = new KisPerspectiveGrid();
     return m_d->perspectiveGrid;
-}
-
-void KisImage::barrierLock()
-{
-    lock();
 }
 
 void KisImage::waitForDone()

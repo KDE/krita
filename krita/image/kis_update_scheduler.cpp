@@ -161,6 +161,15 @@ void KisUpdateScheduler::waitForDone()
     }
 }
 
+void KisUpdateScheduler::barrierLock()
+{
+    do {
+        processQueues();
+        m_d->updaterContext->waitForDone();
+        m_d->processingBlocked = true;
+    } while(!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty());
+}
+
 void KisUpdateScheduler::processQueues()
 {
     if(m_d->processingBlocked) return;

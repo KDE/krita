@@ -688,10 +688,11 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // we'll do it all afresh now.
     QList<QTextLayout::FormatRange> formatRanges = layout->additionalFormats();
     for (QList< QTextLayout::FormatRange >::Iterator iter = formatRanges.begin();
-            iter != formatRanges.end();
-        ++iter) {
+            iter != formatRanges.end(); ) {
         if (iter->format.boolProperty(DropCapsAdditionalFormattingId)) {
-            formatRanges.erase(iter);
+            iter = formatRanges.erase(iter);
+        } else {
+            ++iter;
         }
     }
     if (formatRanges.count() != layout->additionalFormats().count())

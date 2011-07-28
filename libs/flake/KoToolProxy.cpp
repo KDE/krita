@@ -410,8 +410,9 @@ void KoToolProxy::inputMethodEvent(QInputMethodEvent *event)
 
 KoToolSelection* KoToolProxy::selection()
 {
-    if (d->activeTool)
+    if (d->activeTool) {
         return d->activeTool->selection();
+    }
     return 0;
 }
 
@@ -422,7 +423,7 @@ void KoToolProxy::setActiveTool(KoToolBase *tool)
     d->activeTool = tool;
     if (tool) {
         connect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
-        d->selectionChanged(d->activeTool->selection() && d->activeTool->selection()->hasSelection());
+        d->selectionChanged(hasSelection());
         emit toolChanged(tool->toolId());
     }
 }
@@ -439,12 +440,7 @@ QHash<QString, KAction*> KoToolProxy::actions() const
 
 bool KoToolProxy::hasSelection() const
 {
-    if (d->activeTool && d->activeTool->selection()) {
-        return d->activeTool->selection()->hasSelection();
-    }
-    else {
-        return false;
-    }
+    return d->activeTool->hasSelection();
 }
 
 void KoToolProxy::cut()

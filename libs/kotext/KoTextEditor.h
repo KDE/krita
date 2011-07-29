@@ -33,6 +33,7 @@
 class KoCharacterStyle;
 class KoInlineObject;
 class KoParagraphStyle;
+class KoCanvasBase;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -57,6 +58,17 @@ public:
     KoTextEditor(QTextDocument *document);
 
     virtual ~KoTextEditor();
+
+    /**
+     * Retrieves the texteditor for the document of the first text shape in the current
+     * set of selected shapes on the given canvas.
+     *
+     * @param canvas the canvas we will check for a suitable selected shape.
+     * @returns a texteditor, or 0 if there is no shape active that has a QTextDocument as
+     * userdata
+     */
+    static KoTextEditor *getTextEditorFromCanvas(KoCanvasBase *canvas);
+
 
 public: // KoToolSelection overloads
 

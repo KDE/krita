@@ -307,6 +307,20 @@ KoTextEditor::~KoTextEditor()
     delete d;
 }
 
+KoTextEditor *KoTextEditor::getTextEditorFromCanvas(KoCanvasBase *canvas)
+{
+    KoSelection *selection = canvas->shapeManager()->selection();
+    if (selection) {
+        foreach(KoShape *shape, selection->selectedShapes()) {
+            if (KoTextShapeDataBase *textData = qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
+                KoTextDocument doc(textData->document());
+                return doc.textEditor();
+            }
+        }
+    }
+    return 0;
+}
+
 void KoTextEditor::updateDefaultTextDirection(KoText::Direction direction)
 {
     d->direction = direction;

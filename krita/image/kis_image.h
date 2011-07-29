@@ -43,6 +43,7 @@ class KoColor;
 class KisActionRecorder;
 class KisUndoStore;
 class KisUndoAdapter;
+class KisImageSignalRouter;
 class KisPostExecutionUndoAdapter;
 class KisFilterStrategy;
 class KoColorProfile;
@@ -499,6 +500,8 @@ public:
      * Called before the image is delted and sends the sigAboutToBeDeleted signal
      */
     void notifyAboutToBeDeleted();
+
+    KisImageSignalRouter* signalRouter();
 
 signals:
 

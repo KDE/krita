@@ -67,6 +67,7 @@
 
 #include "kis_image_config.h"
 #include "kis_update_scheduler.h"
+#include "kis_image_signal_router.h"
 
 #include "kis_undo_stores.h"
 #include "kis_legacy_undo_adapter.h"
@@ -122,7 +123,8 @@ public:
     KisSelectionSP globalSelection;
     KisSelectionSP deselectedGlobalSelection;
 
-    KisUpdateScheduler* scheduler;
+    KisImageSignalRouter *signalRouter;
+    KisUpdateScheduler *scheduler;
 
     bool startProjection;
 };
@@ -153,6 +155,7 @@ KisImage::~KisImage()
     delete m_d->undoStore;
 
     delete m_d->scheduler;
+    delete m_d->signalRouter;
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
     delete m_d;
@@ -163,40 +166,40 @@ KisImage::~KisImage()
 void KisImage::aboutToAddANode(KisNode *parent, int index)
 {
     SANITY_CHECK_LOCKED("aboutToAddANode");
-    emit sigAboutToAddANode(parent, index);
+    m_d->signalRouter->emitAboutToAddANode(parent, index);
 }
 
 void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
 {
-    emit sigNodeHasBeenAdded(parent, index);
+    m_d->signalRouter->emitNodeHasBeenAdded(parent, index);
 }
 
 void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 {
     SANITY_CHECK_LOCKED("aboutToRemoveANode");
-    emit sigAboutToRemoveANode(parent, index);
+    m_d->signalRouter->emitAboutToRemoveANode(parent, index);
 }
 
 void KisImage::nodeHasBeenRemoved(KisNode *parent, int index)
 {
     // XXX: Temporarily for compatibility
-    emit sigNodeHasBeenRemoved(parent, index);
+    m_d->signalRouter->emitNodeHasBeenRemoved(parent, index);
 }
 
 void KisImage::aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex)
 {
     SANITY_CHECK_LOCKED("aboutToMoveNode");
-    emit sigAboutToMoveNode(parent, oldIndex, newIndex);
+    m_d->signalRouter->emitAboutToMoveNode(parent, oldIndex, newIndex);
 }
 
 void KisImage::nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex)
 {
-    emit sigNodeHasBeenMoved(parent, oldIndex, newIndex);
+    m_d->signalRouter->emitNodeHasBeenMoved(parent, oldIndex, newIndex);
 }
 
 void KisImage::nodeChanged(KisNode* node)
 {
-    emit sigNodeChanged(node);
+    m_d->signalRouter->emitNodeChanged(node);
 }
 
 KisSelectionSP KisImage::globalSelection() const
@@ -265,6 +268,8 @@ void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const 
     m_d->sizeChangedWhileLocked = false;
     m_d->perspectiveGrid = 0;
 
+    m_d->signalRouter = new KisImageSignalRouter(this);
+
     if(!undoStore) {
         undoStore = new KisDumbUndoStore();
     }
@@ -330,7 +335,7 @@ void KisImage::unlock()
 
         if (m_d->lockCount == 0) {
             if (m_d->sizeChangedWhileLocked) {
-                emit sigSizeChanged(m_d->width, m_d->height);
+                m_d->signalRouter->emitNotification(SizeChangedSignal);
             }
 
             if (m_d->scheduler) {
@@ -394,7 +399,7 @@ void KisImage::resizeWithOffset(qint32 w, qint32 h, qint32 xOffset, qint32 yOffs
 void KisImage::emitSizeChanged()
 {
     if (!locked()) {
-        emit sigSizeChanged(m_d->width, m_d->height);
+        m_d->signalRouter->emitNotification(SizeChangedSignal);
     } else {
         m_d->sizeChangedWhileLocked = true;
     }
@@ -529,7 +534,7 @@ void KisImage::assignImageProfile(const KoColorProfile *profile)
     undoAdapter()->endMacro();
 
     setModified();
-    emit sigProfileChanged(profile);
+    m_d->signalRouter->emitNotification(ProfileChangedSignal);
 }
 
 void KisImage::convertProjectionColorSpace(const KoColorSpace *dstColorSpace)
@@ -549,7 +554,7 @@ void KisImage::setProjectionColorSpace(const KoColorSpace * colorSpace)
 {
     m_d->colorSpace = colorSpace;
     m_d->rootLayer->resetCache();
-    emit sigColorSpaceChanged(colorSpace);
+    m_d->signalRouter->emitNotification(ColorSpaceChangedSignal);
 }
 
 const KoColorSpace * KisImage::colorSpace() const
@@ -576,7 +581,7 @@ void KisImage::setResolution(double xres, double yres)
 {
     m_d->xres = xres;
     m_d->yres = yres;
-    emit(sigResolutionChanged(xres, yres));
+    m_d->signalRouter->emitNotification(ResolutionChangedSignal);
 }
 
 QPointF KisImage::documentToPixel(const QPointF &documentCoord) const
@@ -818,7 +823,7 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
 
 void KisImage::setModified()
 {
-    emit sigImageModified();
+    m_d->signalRouter->emitNotification(ImageModifiedSignal);
 }
 
 void KisImage::renderToPainter(qint32 srcX,
@@ -970,8 +975,7 @@ KisPaintDeviceSP KisImage::mergedImage()
 
 void KisImage::notifyLayersChanged()
 {
-    emit sigLayersChanged(rootLayer());
-    emit sigPostLayersChanged(rootLayer());
+    m_d->signalRouter->emitNotification(LayersChangedSignal);
 }
 
 QRect KisImage::bounds() const
@@ -1099,6 +1103,11 @@ KisPerspectiveGrid* KisImage::perspectiveGrid()
     if (m_d->perspectiveGrid == 0)
         m_d->perspectiveGrid = new KisPerspectiveGrid();
     return m_d->perspectiveGrid;
+}
+
+KisImageSignalRouter* KisImage::signalRouter()
+{
+    return m_d->signalRouter;
 }
 
 void KisImage::waitForDone()

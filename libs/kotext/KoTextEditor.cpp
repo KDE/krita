@@ -753,19 +753,19 @@ void KoTextEditor::addBookmark(const QString &name)
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
-bool KoTextEditor::insertIndexMarker()
+KoInlineObject *KoTextEditor::insertIndexMarker()
 {//TODO changeTracking
     QTextBlock block = d->caret.block();
     if (d->caret.position() >= block.position() + block.length() - 1)
-        return false; // can't insert one at end of text
+        return 0; // can't insert one at end of text
     if (block.text()[ d->caret.position() - block.position()].isSpace())
-        return false; // can't insert one on a whitespace as that does not indicate a word.
+        return 0; // can't insert one on a whitespace as that does not indicate a word.
 
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Index"));
     KoTextLocator *tl = new KoTextLocator();
     KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, tl);
     d->updateState(KoTextEditor::Private::NoOp);
-    return true;
+    return tl;
 }
 
 void KoTextEditor::insertInlineObject(KoInlineObject *inliner)

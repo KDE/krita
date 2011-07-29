@@ -137,6 +137,7 @@ set(kritaimage_LIB_SRCS
    kis_count_visitor.cpp
    kis_histogram.cc
    kis_image.cc
+   kis_image_signal_router.cpp
    kis_image_config.cpp
    kis_iterator.cc
    kis_layer.cc

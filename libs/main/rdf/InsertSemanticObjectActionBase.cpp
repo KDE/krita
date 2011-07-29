@@ -19,9 +19,6 @@
 
 #include "InsertSemanticObjectActionBase.h"
 #include <KoTextEditor.h>
-#include <KoShapeManager.h>
-#include <KoSelection.h>
-#include <KoTextShapeDataBase.h>
 #include <KoCanvasBase.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
@@ -44,17 +41,7 @@ InsertSemanticObjectActionBase::~InsertSemanticObjectActionBase()
 KoTextEditor *InsertSemanticObjectActionBase::editor() const
 {
     Q_ASSERT(m_canvas);
-    KoSelection *selection = m_canvas->shapeManager()->selection();
-    if (selection) {
-        foreach(KoShape *shape, selection->selectedShapes()) {
-            if (KoTextShapeDataBase *textData = qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
-                KoTextDocument doc(textData->document());
-                return doc.textEditor();
-            }
-        }
-    }
-
-    return 0;
+    return KoTextEditor::getTextEditorFromCanvas(m_canvas);
 }
 
 void InsertSemanticObjectActionBase::activated()

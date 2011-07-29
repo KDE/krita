@@ -44,10 +44,10 @@ class QString;
 class KUndo2Command;
 
 /**
- * KoTextEditor is a wrapper around QTextCursor. KoTextEditor implements KoToolSelection
- * to notify the system that there is text selected which can be used to cut, copy and paste.
+ * KoTextEditor is a wrapper around QTextCursor. It handles undo/redo and change
+ * tracking for all editing commands.
  */
-class KOTEXT_EXPORT KoTextEditor: public KoToolSelection
+class KOTEXT_EXPORT KoTextEditor: public QObject
 {
     Q_OBJECT
 public:

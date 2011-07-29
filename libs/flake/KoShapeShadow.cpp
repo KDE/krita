@@ -27,6 +27,7 @@
 #include "KoShapeBorderModel.h"
 #include "KoShape.h"
 #include "KoInsets.h"
+#include "KoUnit.h"
 #include "KoPathShape.h"
 #include <KoGenStyle.h>
 #include <KoViewConverter.h>
@@ -162,16 +163,12 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     imagePainter.end();
 
     //convert relative radius to absolute radius
-    qreal absRadius = converter.documentToViewX(d->blur);
+    qreal absRadius = converter.documentToViewX(KoUnit::ptToUnit(d->blur, KoUnit(KoUnit::Pixel)));
     blurShadow(sourceGraphic, absRadius, d->color);
     // Paint the result
     painter.save();
     painter.drawImage(imagePaintOffset, sourceGraphic);
     painter.restore();
-}
-
-void KoShapeShadow::paintBuffer(QPointF &clippingOffset, QImage image, QPainter &painter, const KoViewConverter &converter) {
-    kDebug() << "Shadow painted!";
 }
 
 void KoShapeShadow::setOffset(const QPointF & offset)

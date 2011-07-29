@@ -360,6 +360,10 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
     }
 
     if (shape->shadow()) {
+        KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
+        if (group) {
+            group->shadow()->paint(shape, painter, converter);
+        }
         painter.save();
         shape->shadow()->paint(shape, painter, converter);
         painter.restore();

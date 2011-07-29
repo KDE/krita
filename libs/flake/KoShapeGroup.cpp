@@ -72,7 +72,6 @@ void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().startElement("draw:g");
     saveOdfAttributes(context, (OdfMandatories ^ OdfLayer) | OdfAdditionalAttributes);
     context.xmlWriter().addAttributePt("svg:y", position().y());
-
     QList<KoShape*> shapes = this->shapes();
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
@@ -86,7 +85,7 @@ void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
 
 bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-    loadOdfAttributes(element, context, OdfMandatories | OdfAdditionalAttributes | OdfCommonChildElements);
+    loadOdfAttributes(element, context, OdfMandatories | OdfStyle | OdfAdditionalAttributes | OdfCommonChildElements);
 
     KoXmlElement child;
     QMap<KoShapeLayer*, int> usedLayers;
@@ -144,17 +143,6 @@ void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)
         }
         break;
     }
-    /*
-    case KoShape::ShadowChanged:
-    {
-        KoShapeShadow *shade = shadow();
-        if (shade) {
-            if (shade->deref())
-                delete shade;
-            setShadow(0);
-        }
-        break;
-    }*/
     default:
         break;
     }

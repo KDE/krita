@@ -37,16 +37,10 @@ InsertTextLocator::InsertTextLocator(KoCanvasBase *canvas)
 KoInlineObject *InsertTextLocator::createInlineObject()
 {
     Q_ASSERT(m_canvas);
-    KoSelection *selection = m_canvas->shapeManager()->selection();
-    if (selection) {
-        foreach(KoShape *shape, selection->selectedShapes()) {
-            if (KoTextShapeDataBase *textData = qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
-                KoTextDocument doc(textData->document());
-                KoInlineObject *obj = doc.textEditor()->insertIndexMarker();
-                Q_UNUSED(obj); // intentionally unused: if we return it, it gets inserted again
-                break;
-            }
-        }
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
+    if (editor) {
+        KoInlineObject *obj = editor->insertIndexMarker();
+        Q_UNUSED(obj); // intentionally unused: if we return it, it gets inserted again
     }
     return 0;
 }

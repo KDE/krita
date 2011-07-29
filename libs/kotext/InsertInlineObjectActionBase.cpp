@@ -46,16 +46,11 @@ InsertInlineObjectActionBase::~InsertInlineObjectActionBase()
 void InsertInlineObjectActionBase::activated()
 {
     Q_ASSERT(m_canvas);
-    KoSelection *selection = m_canvas->shapeManager()->selection();
-    if (selection) {
-        foreach(KoShape *shape, selection->selectedShapes()) {
-            if (KoTextShapeDataBase *textData = qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
-                KoInlineObject *obj = createInlineObject();
-                if (obj) {
-                    KoTextDocument doc(textData->document());
-                    doc.textEditor()->insertInlineObject(obj);
-                }
-            }
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
+    if (editor) {
+        KoInlineObject *obj = createInlineObject();
+        if (obj) {
+            editor->insertInlineObject(obj);
         }
     }
 }

@@ -25,7 +25,6 @@
 #include <KoTextRdfCore.h>
 #include <KoTextEditor.h>
 #include <KoCanvasBase.h>
-#include <KoToolProxy.h>
 #include <KoBookmark.h>
 #include <KoTextMeta.h>
 #include <KoTextDocument.h>

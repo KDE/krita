@@ -46,10 +46,6 @@ class KUndo2Command;
 /**
  * KoTextEditor is a wrapper around QTextCursor. KoTextEditor implements KoToolSelection
  * to notify the system that there is text selected which can be used to cut, copy and paste.
- *
- * Code like:
- * <code>KoTextEditor *handler = qobject_cast<KoTextEditor*> (m_canvas->toolProxy()->selection());</code>
- * is evil, toolProxy()->selection should be deprecated.
  */
 class KOTEXT_EXPORT KoTextEditor: public KoToolSelection
 {

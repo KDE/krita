@@ -38,12 +38,6 @@ InsertSemanticObjectActionBase::~InsertSemanticObjectActionBase()
 {
 }
 
-KoTextEditor *InsertSemanticObjectActionBase::editor() const
-{
-    Q_ASSERT(m_canvas);
-    return KoTextEditor::getTextEditorFromCanvas(m_canvas);
-}
-
 void InsertSemanticObjectActionBase::activated()
 {
 }

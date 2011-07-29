@@ -36,12 +36,6 @@ RdfSemanticTreeWidgetAction::~RdfSemanticTreeWidgetAction()
 {
 }
 
-KoTextEditor* RdfSemanticTreeWidgetAction::editor()
-{
-    Q_ASSERT(m_canvas);
-    return KoTextEditor::getTextEditorFromCanvas(m_canvas);
-}
-
 void RdfSemanticTreeWidgetAction::activated()
 {
 }

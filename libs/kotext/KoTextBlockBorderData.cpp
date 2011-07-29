@@ -42,6 +42,7 @@ KoTextBlockBorderData::KoTextBlockBorderData(const QRectF &paragRect)
         : d(new Private())
 {
     ///TODO Remove parameter paragRect and update references to this constructor.
+    Q_UNUSED(paragRect);
 }
 
 KoTextBlockBorderData::~KoTextBlockBorderData()

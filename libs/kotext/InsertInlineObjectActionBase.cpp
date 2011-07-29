@@ -23,8 +23,12 @@
 #include "KoInlineObjectFactoryBase.h"
 #include "KoTextEditor.h"
 
-#include <KoToolProxy.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+#include <KoTextShapeDataBase.h>
 #include <KoCanvasBase.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
 
 #include <KDebug>
 
@@ -41,14 +45,18 @@ InsertInlineObjectActionBase::~InsertInlineObjectActionBase()
 
 void InsertInlineObjectActionBase::activated()
 {
-    Q_ASSERT(m_canvas->toolProxy());
-    KoTextEditor *handler = qobject_cast<KoTextEditor*> (m_canvas->toolProxy()->selection());
-    if (handler) {
-        KoInlineObject *obj = createInlineObject();
-        if (obj)
-            handler->insertInlineObject(obj);
-    } else {
-        kWarning(32500) << "InsertVariableAction: No texttool selected while trying to insert variable";
+    Q_ASSERT(m_canvas);
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+    if (selection) {
+        foreach(KoShape *shape, selection->selectedShapes()) {
+            if (KoTextShapeDataBase *textData = qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
+                KoInlineObject *obj = createInlineObject();
+                if (obj) {
+                    KoTextDocument doc(textData->document());
+                    doc.textEditor()->insertInlineObject(obj);
+                }
+            }
+        }
     }
 }
 

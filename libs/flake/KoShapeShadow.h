@@ -49,7 +49,7 @@ public:
      * @param context used for saving
      */
     void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
-    
+
     /**
      * Paints the shadow of the shape.
      * @param shape the shape to paint around

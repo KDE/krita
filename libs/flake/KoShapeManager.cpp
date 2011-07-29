@@ -337,7 +337,7 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
         painter.restore();
     }
 
-#ifdef KOFFICE_RTREE_DEBUG
+#ifdef CALLIGRA_RTREE_DEBUG
     // paint tree
     qreal zx = 0;
     qreal zy = 0;

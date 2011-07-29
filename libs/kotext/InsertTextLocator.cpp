@@ -42,7 +42,9 @@ KoInlineObject *InsertTextLocator::createInlineObject()
         foreach(KoShape *shape, selection->selectedShapes()) {
             if (KoTextShapeDataBase *textData = qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
                 KoTextDocument doc(textData->document());
-                return doc.textEditor()->insertIndexMarker();
+                KoInlineObject *obj = doc.textEditor()->insertIndexMarker();
+                Q_UNUSED(obj); // intentionally unused: if we return it, it gets inserted again
+                break;
             }
         }
     }

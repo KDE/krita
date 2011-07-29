@@ -98,7 +98,7 @@ void KoRdfSemanticTreeWidgetItem::addApplyStylesheetActions(QWidget *parent,
     if (!host) {
         return;
     }
-    KoTextEditor *editor = KoDocumentRdf::ensureTextTool(host);
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(host);
     kDebug(30015) << " semanticItem:" << semanticItem();
     kDebug(30015) << " semanticItem.name:" << semanticItem()->name();
     if (!editor) {

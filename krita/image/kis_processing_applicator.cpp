@@ -153,10 +153,10 @@ void KisProcessingApplicator::visitRecursively(KisNodeSP node,
 {
     // simple tail-recursive iteration
 
-    KisNodeSP nextNode = node->firstChild();
-    while(nextNode) {
-        visitRecursively(nextNode, visitor, sequentiality, exclusivity);
-        nextNode = nextNode->nextSibling();
+    KisNodeSP prevNode = node->lastChild();
+    while(prevNode) {
+        visitRecursively(prevNode, visitor, sequentiality, exclusivity);
+        prevNode = prevNode->prevSibling();
     }
 
     applyCommand(new KisProcessingCommand(visitor, node),

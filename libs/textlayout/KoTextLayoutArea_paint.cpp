@@ -49,7 +49,6 @@
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
 #include <KoImageData.h>
-#include <KoImageCollection.h>
 #include <KoInlineNote.h>
 #include <KoInlineNote.h>
 #include <KoInlineTextObjectManager.h>
@@ -211,7 +210,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             paintStrategy->applyStrategy(painter);
             painter->save();
-            drawListItem(painter, block, context.imageCollection);
+            drawListItem(painter, block);
             painter->restore();
 
             QVector<QTextLayout::FormatRange> selections;
@@ -300,7 +299,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     painter->restore();
 }
 
-void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, KoImageCollection *imageCollection)
+void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
 {
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
     if (data == 0)
@@ -367,16 +366,16 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, 
         }
 
         KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
-        if (listStyle == KoListStyle::ImageItem && imageCollection) {
+        if (listStyle == KoListStyle::ImageItem) {
             QFontMetricsF fm(data->labelFormat().font(), m_documentLayout->paintDevice());
             qreal x = qMax(qreal(1), data->counterPosition().x());
             qreal width = qMax(listFormat.doubleProperty(KoListStyle::Width), (qreal)1.0);
             qreal height = qMax(listFormat.doubleProperty(KoListStyle::Height), (qreal)1.0);
             qreal y = data->counterPosition().y() + fm.ascent() - fm.xHeight()/2 - height/2; // centered
-            qint64 key = listFormat.property(KoListStyle::BulletImageKey).value<qint64>();
-            KoImageData idata;
-            imageCollection->fillFromKey(idata, key);
-            painter->drawPixmap(x, y, width, height, idata.pixmap());
+            KoImageData *idata = listFormat.property(KoListStyle::BulletImage).value<KoImageData *>();
+            if (idata) {
+                painter->drawPixmap(x, y, width, height, idata->pixmap());
+            }
         }
     }
 }

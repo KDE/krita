@@ -259,7 +259,17 @@ bool KoPADocumentModel::setData(const QModelIndex &index, const QVariant &value,
         case Qt::EditRole:
         {
             KUndo2Command * cmd = new KoShapeRenameCommand( shape, value.toString() );
-            // TODO 2.1 use different text for the command if e.g. it is a page/slide or layer
+            if (dynamic_cast<KoPAPageBase *>(shape)) {
+                if (m_document->pageType() == KoPageApp::Slide) {
+                    cmd->setText(i18n("Rename Slide"));
+                }
+                else {
+                    cmd->setText(i18n("Rename Page"));
+                }
+            }
+            else if (dynamic_cast<KoShapeLayer *>(shape)) {
+                cmd->setText(i18n("Rename Layer"));
+            }
             m_document->addCommand( cmd );
         }   break;
         case PropertiesRole:

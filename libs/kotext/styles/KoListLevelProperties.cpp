@@ -314,7 +314,7 @@ qreal KoListLevelProperties::height() const
 
 void KoListLevelProperties::setBulletImage(KoImageData *imageData)
 {
-    setProperty(KoListStyle::BulletImageKey, imageData->key());
+    setProperty(KoListStyle::BulletImage, QVariant::fromValue(imageData));
 }
 
 KoListLevelProperties & KoListLevelProperties::operator=(const KoListLevelProperties & other)

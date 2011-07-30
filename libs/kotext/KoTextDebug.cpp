@@ -41,6 +41,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoBookmark.h>
 #include <KoInlineNote.h>
+#include <KoImageData.h>
 
 #define PARAGRAPH_BORDER_DEBUG
 
@@ -591,9 +592,9 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             key = "height";
             value = QString::number(properties[id].toDouble());
             break;
-        case KoListStyle::BulletImageKey:
-            key = "bullet-image-key";
-            value = QString::number(properties[id].toInt());
+        case KoListStyle::BulletImage:
+            key = "bullet-image";
+            value = QString::number(long(properties[id].value<KoImageData*>()));
             break;
         case KoListStyle::Margin:
             key="margin-left";

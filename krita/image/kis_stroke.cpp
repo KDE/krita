@@ -25,6 +25,7 @@ KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy)
     : m_strokeStrategy(strokeStrategy),
       m_strokeInitialized(false),
       m_strokeEnded(false),
+      m_isCancelled(false),
       m_prevJobSequential(false)
 {
     m_initStrategy = m_strokeStrategy->createInitStrategy();
@@ -54,7 +55,7 @@ KisStroke::~KisStroke()
 
 void KisStroke::addJob(KisStrokeJobData *data)
 {
-    Q_ASSERT(!m_strokeEnded);
+    Q_ASSERT(!m_strokeEnded || m_isCancelled);
     enqueue(m_dabStrategy, data);
 }
 
@@ -124,6 +125,7 @@ void KisStroke::cancelStroke()
     //     too late ...
     // }
 
+    m_isCancelled = true;
     m_strokeEnded = true;
 }
 

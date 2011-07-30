@@ -23,6 +23,7 @@
 #include "kis_types.h"
 
 class KisUndoStore;
+class KisSavedMacroCommand;
 
 
 class KRITAIMAGE_EXPORT KisPostExecutionUndoAdapter
@@ -30,9 +31,10 @@ class KRITAIMAGE_EXPORT KisPostExecutionUndoAdapter
 public:
     KisPostExecutionUndoAdapter(KisUndoStore *undoStore, KisImageWSP image);
 
-    void addCommand(KUndo2CommandSP cmd);
-    void beginMacro(const QString& macroName);
-    void endMacro();
+    void addCommand(KUndo2CommandSP command);
+
+    KisSavedMacroCommand* createMacro(const QString& macroName);
+    void addMacro(KisSavedMacroCommand *macro);
 
     inline void setUndoStore(KisUndoStore *undoStore) {
         m_undoStore = undoStore;

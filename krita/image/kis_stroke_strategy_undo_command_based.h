@@ -26,6 +26,7 @@
 
 #include "kis_types.h"
 #include "kis_simple_stroke_strategy.h"
+#include "commands/kis_saved_commands.h"
 
 
 class QString;
@@ -40,13 +41,16 @@ public:
     class Data : public KisStrokeJobData {
     public:
         Data(KUndo2CommandSP _command,
+             bool _undo = false,
              Sequentiality _sequentiality = SEQUENTIAL,
              Exclusivity _exclusivity = NORMAL)
             : KisStrokeJobData(_sequentiality, _exclusivity),
-              command(_command)
+              command(_command),
+              undo(_undo)
         {
         }
         KUndo2CommandSP command;
+        bool undo;
     };
 
 public:
@@ -64,9 +68,10 @@ public:
     void doStrokeCallback(KisStrokeJobData *data);
 
 private:
-    void executeCommand(KUndo2CommandSP command);
-    void notifyCommandDone(KUndo2CommandSP command);
-    QVector<KUndo2CommandSP> takeFinishedCommands();
+    void executeCommand(KUndo2CommandSP command, bool undo);
+    void notifyCommandDone(KUndo2CommandSP command,
+                           KisStrokeJobData::Sequentiality sequentiality,
+                           KisStrokeJobData::Exclusivity exclusivity);
 
 private:
     bool m_undo;
@@ -76,7 +81,7 @@ private:
 
     // protects done commands only
     QMutex m_mutex;
-    QVector<KUndo2CommandSP> m_doneCommands;
+    KisSavedMacroCommand *m_macroCommand;
 };
 
 #endif /* __KIS_STROKE_STRATEGY_UNDO_COMMAND_BASED_H */

@@ -20,7 +20,7 @@
 
 #include "kis_undo_store.h"
 #include "kis_image.h"
-#include "commands/kis_scheduled_undo_command.h"
+#include "commands/kis_saved_commands.h"
 
 
 KisPostExecutionUndoAdapter::KisPostExecutionUndoAdapter(KisUndoStore *undoStore,
@@ -33,20 +33,15 @@ KisPostExecutionUndoAdapter::KisPostExecutionUndoAdapter(KisUndoStore *undoStore
 void KisPostExecutionUndoAdapter::addCommand(KUndo2CommandSP command)
 {
     if(!command) return;
-
-    KUndo2Command *commandPointer =
-        new KisScheduledUndoCommand(command, m_image, false);
-
-    m_undoStore->addCommand(commandPointer);
+    m_undoStore->addCommand(new KisSavedCommand(command, m_image));
 }
 
-void KisPostExecutionUndoAdapter::beginMacro(const QString& macroName)
+KisSavedMacroCommand* KisPostExecutionUndoAdapter::createMacro(const QString& macroName)
 {
-    m_undoStore->beginMacro(macroName);
+    return new KisSavedMacroCommand(macroName, m_image);
 }
 
-void KisPostExecutionUndoAdapter::endMacro()
+void KisPostExecutionUndoAdapter::addMacro(KisSavedMacroCommand *macro)
 {
-    m_undoStore->endMacro();
+    m_undoStore->addCommand(macro);
 }
-

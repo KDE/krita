@@ -45,10 +45,12 @@ public:
     bool isSequential() const;
     bool isExclusive() const;
 
+    Sequentiality sequentiality() { return m_sequentiality; };
+    Exclusivity exclusivity() { return m_exclusivity; };
+
 private:
-    bool m_isBarrier;
-    bool m_isSequential;
-    bool m_isExclusive;
+    Sequentiality m_sequentiality;
+    Exclusivity m_exclusivity;
 };
 
 

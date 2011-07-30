@@ -21,6 +21,7 @@
 
 #include <QString>
 #include "kis_stroke_job_strategy.h"
+#include "kis_types.h"
 
 class KisStrokeStrategy;
 
@@ -46,7 +47,22 @@ public:
     QString id() const;
     QString name() const;
 
+    /**
+     * Set up by the strokes queue during the stroke initialization
+     */
+    void setCancelStrokeId(KisStrokeId id) { m_cancelStrokeId = id; }
+
 protected:
+    /**
+     * The cancel job may populate the stroke with some new jobs
+     * for cancelling. To achieve this it needs the stroke id.
+     *
+     * WARNING: you can't add new jobs in any places other than
+     * cancel job, because the stroke may be ended in any moment
+     * by the user and the sequence of jobs will be broken
+     */
+    KisStrokeId cancelStrokeId() { return m_cancelStrokeId; }
+
     // you are not supposed to change these parameters
     // after the KisStroke object has been created
 
@@ -59,6 +75,8 @@ private:
 
     QString m_id;
     QString m_name;
+
+    KisStrokeId m_cancelStrokeId;
 };
 
 #endif /* __KIS_STROKE_STRATEGY_H */

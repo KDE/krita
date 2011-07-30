@@ -20,6 +20,8 @@
 
 #include <QMutexLocker>
 #include "kis_post_execution_undo_adapter.h"
+#include "commands/kis_saved_commands.h"
+
 
 KisStrokeStrategyUndoCommandBased::
 KisStrokeStrategyUndoCommandBased(const QString &name,
@@ -31,86 +33,78 @@ KisStrokeStrategyUndoCommandBased(const QString &name,
     m_undo(undo),
     m_initCommand(initCommand),
     m_finishCommand(finishCommand),
-    m_undoAdapter(undoAdapter)
+    m_undoAdapter(undoAdapter),
+    m_macroCommand(0)
 {
-    if(m_initCommand) {
-        enableJob(KisSimpleStrokeStrategy::JOB_INIT);
-    }
-
+    enableJob(KisSimpleStrokeStrategy::JOB_INIT);
     enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
     enableJob(KisSimpleStrokeStrategy::JOB_CANCEL);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 }
 
-void KisStrokeStrategyUndoCommandBased::executeCommand(KUndo2CommandSP command)
+void KisStrokeStrategyUndoCommandBased::executeCommand(KUndo2CommandSP command, bool undo)
 {
     if(!command) return;
 
-    if(m_undo) {
+    if(undo) {
         command->undo();
     } else {
         command->redo();
     }
-
-    notifyCommandDone(command);
 }
 
 void KisStrokeStrategyUndoCommandBased::initStrokeCallback()
 {
-    executeCommand(m_initCommand);
+    if(m_undoAdapter) {
+        m_macroCommand = m_undoAdapter->createMacro(name());
+    }
+
+    executeCommand(m_initCommand, m_undo);
+    notifyCommandDone(m_initCommand,
+                      KisStrokeJobData::SEQUENTIAL,
+                      KisStrokeJobData::NORMAL);
 }
 
 void KisStrokeStrategyUndoCommandBased::finishStrokeCallback()
 {
-    executeCommand(m_finishCommand);
+    executeCommand(m_finishCommand, m_undo);
+    notifyCommandDone(m_finishCommand,
+                      KisStrokeJobData::SEQUENTIAL,
+                      KisStrokeJobData::NORMAL);
 
-    if(m_undoAdapter) {
-        m_undoAdapter->beginMacro(name());
-
-        QVector<KUndo2CommandSP> commands = takeFinishedCommands();
-        foreach(KUndo2CommandSP cmd, commands) {
-            m_undoAdapter->addCommand(cmd);
-        }
-
-        m_undoAdapter->endMacro();
+    QMutexLocker locker(&m_mutex);
+    if(m_macroCommand) {
+        Q_ASSERT(m_undoAdapter);
+        m_undoAdapter->addMacro(m_macroCommand);
+        m_macroCommand = 0;
     }
 }
 
 void KisStrokeStrategyUndoCommandBased::cancelStrokeCallback()
 {
-    QVector<KUndo2CommandSP> commands = takeFinishedCommands();
-    QVectorIterator<KUndo2CommandSP> it(commands);
-
-    it.toBack();
-    while(it.hasPrevious()) {
-        KUndo2CommandSP cmd = it.previous();
-
-        if(!m_undo) {
-            cmd->undo();
-        } else {
-            cmd->redo();
-        }
+    QMutexLocker locker(&m_mutex);
+    if(m_macroCommand) {
+        m_macroCommand->performCancel(cancelStrokeId(), m_undo);
+        delete m_macroCommand;
+        m_macroCommand = 0;
     }
 }
 
 void KisStrokeStrategyUndoCommandBased::doStrokeCallback(KisStrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
-    executeCommand(d->command);
+    executeCommand(d->command, d->undo);
+    notifyCommandDone(d->command, d->sequentiality(), d->exclusivity());
 }
 
-void KisStrokeStrategyUndoCommandBased::notifyCommandDone(KUndo2CommandSP command)
+void KisStrokeStrategyUndoCommandBased::notifyCommandDone(KUndo2CommandSP command,
+                                                          KisStrokeJobData::Sequentiality sequentiality,
+                                                          KisStrokeJobData::Exclusivity exclusivity)
 {
+    if(!command) return;
+
     QMutexLocker locker(&m_mutex);
-    m_doneCommands.append(command);
-}
-
-QVector<KUndo2CommandSP> KisStrokeStrategyUndoCommandBased::takeFinishedCommands()
-{
-    QMutexLocker locker(&m_mutex);
-
-    QVector<KUndo2CommandSP> commands = m_doneCommands;
-    m_doneCommands.clear();
-
-    return commands;
+    if(m_macroCommand) {
+        m_macroCommand->addCommand(command, sequentiality, exclusivity);
+    }
 }

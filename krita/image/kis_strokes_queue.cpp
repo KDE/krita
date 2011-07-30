@@ -48,8 +48,10 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
     QMutexLocker locker(&m_d->mutex);
 
     KisStrokeSP stroke(new KisStroke(strokeStrategy));
+    KisStrokeId id(stroke);
+    strokeStrategy->setCancelStrokeId(id);
     m_d->strokesQueue.enqueue(stroke);
-    return KisStrokeId(stroke);
+    return id;
 }
 
 void KisStrokesQueue::addJob(KisStrokeId id, KisStrokeJobData *data)

@@ -170,6 +170,7 @@ void KisProcessingApplicator::applyCommand(KUndo2Command *command,
     m_image->addJob(m_strokeId,
                     new KisStrokeStrategyUndoCommandBased::
                     Data(KUndo2CommandSP(command),
+                         false,
                          sequentiality,
                          exclusivity));
 }

@@ -77,6 +77,7 @@ private:
     QQueue<KisStrokeJob*> m_jobsQueue;
     bool m_strokeInitialized;
     bool m_strokeEnded;
+    bool m_isCancelled; // cancelled strokes are always 'ended' as well
     bool m_prevJobSequential;
 };
 

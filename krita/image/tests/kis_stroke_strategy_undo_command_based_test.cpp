@@ -19,6 +19,9 @@
 #include "kis_stroke_strategy_undo_command_based_test.h"
 #include <qtest_kde.h>
 
+#include <KoColorSpaceRegistry.h>
+#include "kis_image.h"
+
 #include "kis_stroke.h"
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "scheduler_utils.h"
@@ -77,27 +80,19 @@ void KisStrokeStrategyUndoCommandBasedTest::testCancelledStroke()
     KUndo2CommandSP dabCommand(new TestingUndoCommand("dab", result));
     KUndo2CommandSP finishCommand(new TestingUndoCommand("finish", result));
 
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 300, 300, cs, "test", true);
+
     KisStrokeStrategy *strategy =
-        new KisStrokeStrategyUndoCommandBased("test", false, 0,
+        new KisStrokeStrategyUndoCommandBased("test", false,
+                                              image->postExecutionUndoAdapter(),
                                               initCommand, finishCommand);
 
-    KisStroke stroke(strategy);
-    stroke.addJob(
-        new KisStrokeStrategyUndoCommandBased::Data(dabCommand));
-
-
-    KisStrokeJob *job;
-    job = stroke.popOneJob(); // init
-    job->run();
-    delete job;
-
-    job = stroke.popOneJob(); // dab
-    job->run();
-    delete job;
-
-    stroke.cancelStroke();
-
-    executeStrokeJobs(&stroke);
+    KisStrokeId id = image->startStroke(strategy);
+    image->addJob(id, new KisStrokeStrategyUndoCommandBased::Data(dabCommand));
+    QTest::qSleep(500);
+    image->cancelStroke(id);
+    image->waitForDone();
 
     SCOMPARE(result.trimmed(), "init_redo dab_redo dab_undo init_undo");
 }
@@ -143,9 +138,6 @@ private:
     QAtomicInt &m_hadConcurrency;
     bool m_exclusive;
 };
-
-#include <KoColorSpaceRegistry.h>
-#include "kis_image.h"
 
 void KisStrokeStrategyUndoCommandBasedTest::stressTestSequentialCommands()
 {

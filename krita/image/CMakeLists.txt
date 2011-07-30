@@ -88,7 +88,7 @@ set(kritaimage_LIB_SRCS
    commands/kis_node_property_list_command.cpp
    commands/kis_reselect_global_selection_command.cpp
    commands/kis_set_global_selection_command.cpp
-   commands/kis_scheduled_undo_command.cpp
+   commands/kis_saved_commands.cpp
    commands/kis_processing_command.cpp
    commands_new/kis_node_move_command2.cpp
    processing/kis_crop_processing_visitor.cpp

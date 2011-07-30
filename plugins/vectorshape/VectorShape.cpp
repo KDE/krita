@@ -27,6 +27,7 @@
 #include <math.h>
 
 // Qt
+#include <QFontDatabase>
 #include <QPen>
 #include <QPainter>
 #include <QBuffer>

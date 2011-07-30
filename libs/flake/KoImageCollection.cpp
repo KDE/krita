@@ -91,7 +91,7 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
                     const QString mimetype(KMimeType::findByPath(it.value(), 0 , true)->name());
                     manifestWriter->addManifestEntry(it.value(), mimetype);
                 } else {
-                    kWarning(30006) << "saving image failed";
+                    kWarning(30006) << "saving image" << it.value() << "failed";
                 }
             } else {
                 kWarning(30006) << "saving image failed: open store failed";

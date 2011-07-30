@@ -39,7 +39,7 @@
 
 struct ImageSignalsStaticRegistrar {
     ImageSignalsStaticRegistrar() {
-        qRegisterMetaType<ImageSignalType>("ImageSignalType");
+        qRegisterMetaType<KisImageSignalType>("KisImageSignalType");
     }
 };
 static ImageSignalsStaticRegistrar __registrar;
@@ -48,7 +48,7 @@ static ImageSignalsStaticRegistrar __registrar;
 KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
     : m_image(image)
 {
-    CONNECT_BLOCKING_SIGNAL(sigNotification(ImageSignalType));
+    CONNECT_BLOCKING_SIGNAL(sigNotification(KisImageSignalType));
     CONNECT_BLOCKING_SIGNAL(sigNodeChanged(KisNode*));
     CONNECT_BLOCKING_SIGNAL(sigAboutToAddANode(KisNode*, int));
     CONNECT_BLOCKING_SIGNAL(sigNodeHasBeenAdded(KisNode*, int));
@@ -57,8 +57,8 @@ KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
     CONNECT_BLOCKING_SIGNAL(sigAboutToMoveNode(KisNode*, int, int));
     CONNECT_BLOCKING_SIGNAL(sigNodeHasBeenMoved(KisNode*, int, int));
 
-    connect(this, SIGNAL(sigNotification(ImageSignalType)),
-            SLOT(slotNotification(ImageSignalType)));
+    connect(this, SIGNAL(sigNotification(KisImageSignalType)),
+            SLOT(slotNotification(KisImageSignalType)));
 
     CONNECT_TO_IMAGE(sigLayersChanged(KisGroupLayerSP));
     CONNECT_TO_IMAGE(sigPostLayersChanged(KisGroupLayerSP));
@@ -86,14 +86,14 @@ bool KisImageSignalRouter::checkSameThread()
     return QThread::currentThread() == m_image->thread();
 }
 
-void KisImageSignalRouter::emitNotifications(QVector<ImageSignalType> notifications)
+void KisImageSignalRouter::emitNotifications(KisImageSignalVector notifications)
 {
-    foreach(const ImageSignalType &type, notifications) {
+    foreach(const KisImageSignalType &type, notifications) {
         emitNotification(type);
     }
 }
 
-void KisImageSignalRouter::emitNotification(ImageSignalType type)
+void KisImageSignalRouter::emitNotification(KisImageSignalType type)
 {
     EMIT_BLOCKING(sigNotification(type));
 }
@@ -134,14 +134,14 @@ void KisImageSignalRouter::emitNodeHasBeenMoved(KisNode *parent, int oldIndex, i
 }
 
 
-void KisImageSignalRouter::slotNotification(ImageSignalType type)
+void KisImageSignalRouter::slotNotification(KisImageSignalType type)
 {
     switch(type) {
     case LayersChangedSignal:
         emit sigLayersChanged(m_image->rootLayer());
         emit sigPostLayersChanged(m_image->rootLayer());
         break;
-    case ImageModifiedSignal:
+    case ModifiedSignal:
         emit sigImageModified();
         break;
     case SizeChangedSignal:

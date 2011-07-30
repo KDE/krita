@@ -27,14 +27,16 @@
 class KoColorSpace;
 class KoColorProfile;
 
-enum ImageSignalType {
+enum KisImageSignalType {
     LayersChangedSignal,
-    ImageModifiedSignal,
+    ModifiedSignal,
     SizeChangedSignal,
     ProfileChangedSignal,
     ColorSpaceChangedSignal,
     ResolutionChangedSignal
 };
+
+typedef QVector<KisImageSignalType> KisImageSignalVector;
 
 class KRITAIMAGE_EXPORT KisImageSignalRouter : public QObject
 {
@@ -44,8 +46,8 @@ public:
     KisImageSignalRouter(KisImageWSP image);
     ~KisImageSignalRouter();
 
-    void emitNotification(ImageSignalType type);
-    void emitNotifications(QVector<ImageSignalType> notifications);
+    void emitNotification(KisImageSignalType type);
+    void emitNotifications(KisImageSignalVector notifications);
 
     void emitNodeChanged(KisNode *node);
     void emitAboutToAddANode(KisNode *parent, int index);
@@ -59,11 +61,11 @@ private:
     bool checkSameThread();
 
 private slots:
-    void slotNotification(ImageSignalType type);
+    void slotNotification(KisImageSignalType type);
 
 signals:
 
-    void __sigNotification(ImageSignalType type);
+    void __sigNotification(KisImageSignalType type);
     void __sigNodeChanged(KisNode *node);
     void __sigAboutToAddANode(KisNode *parent, int index);
     void __sigNodeHasBeenAdded(KisNode *parent, int index);
@@ -74,7 +76,7 @@ signals:
 
 signals:
 
-    void sigNotification(ImageSignalType type);
+    void sigNotification(KisImageSignalType type);
 
     // Notifications
     void sigLayersChanged(KisGroupLayerSP rootLayer);

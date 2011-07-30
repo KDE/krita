@@ -23,6 +23,7 @@
 #include "kis_types.h"
 
 #include "kis_stroke_job_strategy.h"
+#include "kis_image_signal_router.h"
 
 
 class KRITAIMAGE_EXPORT KisProcessingApplicator
@@ -31,6 +32,7 @@ public:
     KisProcessingApplicator(KisImageWSP image,
                             KisNodeSP node,
                             bool recursive = false,
+                            KisImageSignalVector emitSignals = KisImageSignalVector(),
                             const QString &name = QString());
 
     ~KisProcessingApplicator();
@@ -55,6 +57,7 @@ private:
     KisImageWSP m_image;
     KisNodeSP m_node;
     bool m_recursive;
+    KisImageSignalVector m_emitSignals;
     KisStrokeId m_strokeId;
 };
 

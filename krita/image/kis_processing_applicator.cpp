@@ -19,6 +19,7 @@
 #include "kis_processing_applicator.h"
 
 #include "kis_image.h"
+#include "kis_image_signal_router.h"
 #include "kis_node.h"
 #include "kis_processing_visitor.h"
 #include "commands/kis_processing_command.h"
@@ -61,20 +62,69 @@ private:
     bool m_finalUpdate;
 };
 
+class EmitImageSignalsCommand : public KUndo2Command
+{
+public:
+    EmitImageSignalsCommand(KisImageWSP image,
+                            KisImageSignalVector emitSignals,
+                            bool finalUpdate)
+        : m_image(image),
+          m_emitSignals(emitSignals),
+          m_finalUpdate(finalUpdate)
+    {
+    }
+
+    void redo() {
+        if(m_finalUpdate) doUpdate(m_emitSignals);
+    }
+
+    void undo() {
+        if(!m_finalUpdate) {
+
+            KisImageSignalVector reverseSignals;
+
+            KisImageSignalVector::iterator i = m_emitSignals.end();
+            while (i != m_emitSignals.begin()) {
+                --i;
+                reverseSignals.append(*i);
+            }
+
+            doUpdate(reverseSignals);
+        }
+    }
+
+private:
+    void doUpdate(KisImageSignalVector emitSignals) {
+        foreach(KisImageSignalType type, emitSignals) {
+            m_image->signalRouter()->emitNotification(type);
+        }
+    }
+
+private:
+    KisImageWSP m_image;
+    KisImageSignalVector m_emitSignals;
+    bool m_finalUpdate;
+};
+
 
 KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
                                                  KisNodeSP node,
                                                  bool recursive,
+                                                 KisImageSignalVector emitSignals,
                                                  const QString &name)
     : m_image(image),
       m_node(node),
-      m_recursive(recursive)
+      m_recursive(recursive),
+      m_emitSignals(emitSignals)
 {
     KisStrokeStrategyUndoCommandBased *strategy =
         new KisStrokeStrategyUndoCommandBased(name, false,
                                               m_image->postExecutionUndoAdapter());
 
     m_strokeId = m_image->startStroke(strategy);
+    if(!m_emitSignals.isEmpty()) {
+        applyCommand(new EmitImageSignalsCommand(m_image, m_emitSignals, false), KisStrokeJobData::BARRIER);
+    }
     applyCommand(new UpdateCommand(m_image, m_node, m_recursive, false));
 }
 
@@ -127,6 +177,9 @@ void KisProcessingApplicator::applyCommand(KUndo2Command *command,
 void KisProcessingApplicator::end()
 {
     applyCommand(new UpdateCommand(m_image, m_node, m_recursive, true));
+    if(!m_emitSignals.isEmpty()) {
+        applyCommand(new EmitImageSignalsCommand(m_image, m_emitSignals, true), KisStrokeJobData::BARRIER);
+    }
     m_image->endStroke(m_strokeId);
 }
 

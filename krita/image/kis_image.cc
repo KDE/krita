@@ -367,23 +367,21 @@ void KisImage::setSize(const QSize& size)
 
 void KisImage::resize(const QRect& newRect, bool cropLayers)
 {
-    if(newRect == bounds())
-        return;
+    if(newRect == bounds()) return;
 
-    QString macroName = cropLayers ? i18n("Crop Image") : i18n("Resize Image");
-    undoAdapter()->beginMacro(macroName);
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-    undoAdapter()->addCommand(new KisImageResizeCommand(KisImageWSP(this), newRect.size()));
+    QString actionName = cropLayers ? i18n("Crop Image") : i18n("Resize Image");
 
+    KisImageSignalVector emitSignals;
+    emitSignals << SizeChangedSignal << ModifiedSignal;
+
+    KisProcessingApplicator applicator(this, m_d->rootLayer, true, emitSignals, actionName);
     if(cropLayers) {
-        KisCropVisitor visitor(newRect, undoAdapter());
-        m_d->rootLayer->accept(visitor);
+        KisProcessingVisitorSP visitor =
+            new KisCropProcessingVisitor(newRect, true);
+        applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
     }
-
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-    undoAdapter()->endMacro();
-
-    setModified();
+    applicator.applyCommand(new KisImageResizeCommand(this, newRect.size()));
+    applicator.end();
 }
 
 void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
@@ -404,7 +402,6 @@ void KisImage::emitSizeChanged()
         m_d->sizeChangedWhileLocked = true;
     }
 }
-
 
 void KisImage::scale(double sx, double sy, KoUpdater *progress, KisFilterStrategy *filterStrategy, bool scaleOnlyShapes)
 {
@@ -823,7 +820,7 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
 
 void KisImage::setModified()
 {
-    m_d->signalRouter->emitNotification(ImageModifiedSignal);
+    m_d->signalRouter->emitNotification(ModifiedSignal);
 }
 
 void KisImage::renderToPainter(qint32 srcX,

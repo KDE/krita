@@ -119,7 +119,6 @@ void RenderThread::run()
         painter.scale(m_zoomX, m_zoomY);
         draw(painter);
         painter.end();
-        qDebug()<<"DONE";
     }
     emit finished(m_boundingSize, image);
 }

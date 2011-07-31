@@ -60,6 +60,8 @@
 #include "libsvm/SvmParser.h"
 #include "libsvm/SvmPainterBackend.h"
 
+// Comment out to get uncached painting, which is good for debugging
+//#define VECTORSHAPE_PAINT_UNCACHED
 
 VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )
@@ -209,7 +211,6 @@ void RenderThread::drawEmf(QPainter &painter) const
     //kDebug(31000) << "position: " << position();
     //kDebug(31000) << "-------------------------------------------";
 
-    // FIXME: Make it static to save time?
     Libemf::Parser  emfParser;
 
 #if 1  // Set to 0 to get debug output
@@ -227,7 +228,6 @@ void RenderThread::drawSvm(QPainter &painter) const
 {
     QSize  shapeSizeInt( m_size.width(), m_size.height() );
 
-    // FIXME: Make it static to save time?
     Libsvm::SvmParser  svmParser;
 
     // Create a new painter backend.
@@ -238,36 +238,39 @@ void RenderThread::drawSvm(QPainter &painter) const
 
 void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
-#if 1  // Set to 0 to get uncached painting, which is good for debugging
     QRectF rc = converter.documentToView(boundingRect());
-
-    // If necessary, recreate the cached image.
     QImage *cache = m_cache[rc.size().toSize().height()];
-    if (!cache || cache->isNull()) {
+
+#ifdef VECTORSHAPE_PAINT_UNCACHED
+    bool useCache = false;
+    bool useThread = false;
+#else
+    bool useCache = cache && !cache->isNull();
+    // Since the backends may use QPainter::drawText we need to make sure to only
+    // use threads if the font-backend supports that what is in most cases.
+    bool useThread = QFontDatabase::supportsThreadedFontRendering();
+#endif
+
+    if (!useCache) { // recreate the cached image
         if (!m_isRendering) {
             m_isRendering = true;
             qreal zoomX, zoomY;
             converter.zoom(&zoomX, &zoomY);
             RenderThread *t = new RenderThread(this, size(), rc.size().toSize(), zoomX, zoomY);
             connect(t, SIGNAL(finished(QSize,QImage*)), this, SLOT(renderFinished(QSize,QImage*)));
-            // Since the backends may use QPainter::drawText we need to make sure to only
-            // use threads if the font-backend supports that what is in most cases.
-            if (QFontDatabase::supportsThreadedFontRendering()) {
+            if (useThread) { // render and paint the image threaded
                 QThreadPool::globalInstance()->start(t);
-            } else { // else just execute the logic non-threaded.
+            } else { // non-threaded rendering and painting of the image
                 t->run();
             }
         }
-    } else {
+    } else { // pain cached image
+        Q_ASSERT(cache && !cache->isNull());
         QVector<QRect> clipRects = painter.clipRegion().rects();
         foreach (const QRect &rc, clipRects) {
             painter.drawImage(rc.topLeft(), *cache, rc);
         }
     }
-#else
-    applyConversion(painter, converter);
-    draw(painter);
-#endif
 }
 
 void VectorShape::renderFinished(QSize boundingSize, QImage *image)

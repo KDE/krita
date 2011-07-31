@@ -83,12 +83,11 @@ void KoVariable::setValue(const QString &value)
     }
 }
 
-void KoVariable::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat & format)
+void KoVariable::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat & format)
 {
     Q_D(KoVariable);
     d->document = document;
     d->lastPositionInDocument = posInDocument;
-    Q_UNUSED(object);
     Q_UNUSED(format);
     // Variables are always 'in place' so the position is 100% defined by the text layout.
     variableMoved(d->document, posInDocument);

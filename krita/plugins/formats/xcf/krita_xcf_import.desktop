@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Krita Gimp Import Filter
+Name[bg]=Филтър за внасяне от Gimp в Krita
 Name[ca]=Filtre d'importació Gimp per al Krita
 Name[ca@valencia]=Filtre d'importació Gimp per al Krita
 Name[cs]=Importní filtr do GIMPu pro Kritu

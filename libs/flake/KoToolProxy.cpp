@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (c) 2006-2010 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (c) 2006-2011 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -410,8 +410,9 @@ void KoToolProxy::inputMethodEvent(QInputMethodEvent *event)
 
 KoToolSelection* KoToolProxy::selection()
 {
-    if (d->activeTool)
+    if (d->activeTool) {
         return d->activeTool->selection();
+    }
     return 0;
 }
 
@@ -422,7 +423,7 @@ void KoToolProxy::setActiveTool(KoToolBase *tool)
     d->activeTool = tool;
     if (tool) {
         connect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
-        d->selectionChanged(d->activeTool->selection() && d->activeTool->selection()->hasSelection());
+        d->selectionChanged(hasSelection());
         emit toolChanged(tool->toolId());
     }
 }
@@ -435,6 +436,11 @@ void KoToolProxyPrivate::setCanvasController(KoCanvasController *c)
 QHash<QString, KAction*> KoToolProxy::actions() const
 {
     return d->activeTool ? d->activeTool->actions() : QHash<QString, KAction*>();
+}
+
+bool KoToolProxy::hasSelection() const
+{
+    return d->activeTool->hasSelection();
 }
 
 void KoToolProxy::cut()

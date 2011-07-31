@@ -124,12 +124,10 @@ public:
      * This is called each time the paragraph this inline object is in is re-layouted giving you the opportunity
      * to reposition your object based on the new information.
      * @param document the text document this inline object is operating on.
-     * @param object the inline object properties
      * @param posInDocument the character position in the document (param document) this inline object is at.
      * @param format the character format for the inline object.
      */
-    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
-                                int posInDocument, const QTextCharFormat &format) = 0;
+    virtual void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format) = 0;
 
     /**
      * Update the size of the inline object.

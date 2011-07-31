@@ -490,7 +490,7 @@ void KoTableBorderStyle::drawBottomHorizontalBorder(QPainter &painter, qreal x, 
         QPen pen = d->edges[Bottom].outerPen;
 
         painter.setPen(pen);
-        t -= pen.widthF() / 2.0;
+        t += pen.widthF() / 2.0;
         if(isDrawn(d->borderstyle[Bottom])) {
             drawHorizontalWave(d->borderstyle[Bottom], painter,x,w,t);
         } else {

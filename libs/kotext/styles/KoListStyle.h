@@ -147,7 +147,7 @@ public:
         MinimumDistance, ///< The minimum distance, in pt, between the counter and the text
         Width,          ///< The width, in pt, of  a picture bullet.
         Height,         ///< The height, in pt, of a picture bullet.
-        BulletImageKey, ///< Bullet image stored as a key for lookup in the imageCollection
+        BulletImage,    ///< Bullet image stored as a key for lookup in the imageCollection
         Margin,         ///< Stores the margin of the list
         TextIndent,     ///< Stores the text indent of list item
         AlignmentMode,   ///< Is true if list-level-position-and-space-mode=label-alignment

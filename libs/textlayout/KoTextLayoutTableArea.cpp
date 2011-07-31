@@ -701,6 +701,8 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
 
     QVector<QLineF> accuBlankBorders;
 
+    bool hasAntialiasing = painter->testRenderHint(QPainter::Antialiasing);
+
     // Draw header row cell backgrounds and contents AND borders.
     for (int row = 0; row < d->headerRows; ++row) {
         for (int column = 0; column < d->table->columns(); ++column) {
@@ -709,7 +711,9 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
             if (d->cellAreas[row][column]) {
                 paintCell(painter, context, tableCell);
 
+                painter->setRenderHint(QPainter::Antialiasing, true);
                 paintCellBorders(painter, context, tableCell, false, &accuBlankBorders);
+                painter->setRenderHint(QPainter::Antialiasing, hasAntialiasing);
             }
         }
     }
@@ -723,6 +727,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
 
     bool topRow = !d->headerRows && firstRow != 0; // are we top row in this area
 
+    painter->setRenderHint(QPainter::Antialiasing, true);
     for (int row = firstRow; row <= lastRow; ++row) {
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
@@ -733,6 +738,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
         }
         topRow = false;
     }
+    painter->setRenderHint(QPainter::Antialiasing, hasAntialiasing);
 
     if (d->collapsing && firstRow != 0) {
     }

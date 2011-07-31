@@ -166,6 +166,10 @@ KoText::Direction KoTextShapeData::pageDirection() const
 
 bool KoTextShapeData::isCursorVisible(QTextCursor *cursor) const
 {
+    Q_UNUSED(cursor);
+#ifdef __GNUC__
+    #warning FIXME: KoTextShapeData::isCursorVisible returns always true, why do we still need it?
+#endif
     return true;
 }
 

@@ -425,6 +425,9 @@ void KoTextDocumentLayout::setAnchoringParagraphRect(const QRectF &paragraphRect
 // This method is called by qt every time  QTextLine.setWidth()/setNumColums() is called
 void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format)
 {
+    // Note: "item" used to be what was positioned. We don't actually use qtextinlineobjects anymore
+    // for our inline objects, but get the id from the format.
+    Q_UNUSED(item);
     //We are called before layout so that we can position objects
     Q_ASSERT(format.isCharFormat());
     if (d->inlineTextObjectManager == 0)
@@ -443,12 +446,12 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
                 anchor->setAnchorStrategy(new FloatingAnchorStrategy(anchor, d->anchoringRootArea));
             }
             d->textAnchors.append(anchor);
-            anchor->updatePosition(document(), item, position, cf);
+            anchor->updatePosition(document(), position, cf);
         }
         static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setParagraphRect(d->anchoringParagraphRect);
     }
     else if (obj) {
-        obj->updatePosition(document(), item, position, cf);
+        obj->updatePosition(document(), position, cf);
     }
 }
 

@@ -121,10 +121,9 @@ KoInlineNote::Type KoInlineNote::type() const
     return d->type;
 }
 
-void KoInlineNote::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+void KoInlineNote::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(document);
-    Q_UNUSED(object);
     Q_UNUSED(posInDocument);
     Q_UNUSED(format);
 }

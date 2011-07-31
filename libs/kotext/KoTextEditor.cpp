@@ -779,6 +779,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     }
 
     KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, inliner);
+    inliner->updatePosition(d->document, d->caret.position(), format);
 
     int endPosition = d->caret.position();
     d->caret.setPosition(startPosition);
@@ -1216,8 +1217,8 @@ void KoTextEditor::newLine()
     d->updateState(KoTextEditor::Private::Custom, i18n("Line Break"));
     if (d->caret.hasSelection())
         d->deleteInlineObjects();
-    KoTextDocument koDocument(d->document);
-    KoStyleManager *styleManager = koDocument.styleManager();
+    KoTextDocument textDocument(d->document);
+    KoStyleManager *styleManager = textDocument.styleManager();
     KoParagraphStyle *nextStyle = 0;
     KoParagraphStyle *currentStyle = 0;
     if (styleManager) {

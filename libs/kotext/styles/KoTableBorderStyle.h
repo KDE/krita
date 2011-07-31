@@ -68,161 +68,20 @@ public:
         TopLeftToBottomRight, ///< References the border from top, left corner to bottom, right corner of cell
         BottomLeftToTopRight  ///< References the border from bottom, left corner to top, right corner of cell
     };
+    
+    struct Edge {
+        Edge() : innerPen(), outerPen(), spacing(0.0) { }
 
-    /// Constructor
-    KoTableBorderStyle(QObject *parent = 0);
-    /// Creates a KoTableBorderStyle with the given table cell format, and \a parent
-    KoTableBorderStyle(const QTextTableCellFormat &tableCellFormat, QObject *parent = 0);
-    /// Destructor
-    ~KoTableBorderStyle();
-
-    /// returns if the borderstyle needs to be specially drawn
-    bool isDrawn(KoBorder::BorderStyle style) const;
-
-    /// draws a horizontal wave line
-    void drawHorizontalWave(KoBorder::BorderStyle style, QPainter &painter, qreal x, qreal w, qreal t) const;
-
-    /// draws a vertical wave line
-    void drawVerticalWave(KoBorder::BorderStyle style, QPainter &painter, qreal y, qreal h, qreal t) const;
-
-    /**
-     * Set the properties of an edge.
-     *
-     * @param side defines which edge this is for.
-     * @param style the border style for this side.
-     * @param totalWidth the thickness of the border. Sum of outerwidth, spacing and innerwidth for double borders
-     * @param color the color of the border line(s).
-     */
-    void setEdge(Side side, KoBorder::BorderStyle style, qreal totalWidth, QColor color);
-
-    /**
-     * Set the properties of a double border.
-     * Note: you need to set the edge first or that would overwrite these values.
-     *
-     * The values will not be set if the border doesn't have a double style
-     *
-     * @param side defines which edge this is for.
-     * @param space the amount of spacing between the outer border and the inner border in case of style being double
-     * @param innerWidth the thickness of the inner border line in case of style being double
-     */
-    void setEdgeDoubleBorderValues(Side side, qreal innerWidth, qreal space);
-
-    /**
-     * Check if the border data has any borders.
-     *
-     * @return true if there has been at least one border set.
-     */
-    bool hasBorders() const;
-
-    /**
-     * Paint the borders.
-     *
-     * @painter the painter to draw with.
-     * @bounds the bounding rectangle to draw.
-     * @blanks a painterpath where blank borders should be added to.
-     */
-    void paintBorders(QPainter &painter, const QRectF &bounds, QVector<QLineF> *blanks) const;
-
-    /**
-     * Paint the diagonal borders.
-     *
-     * @painter the painter to draw with.
-     * @bounds the bounding rectangle to draw.
-     */
-    void paintDiagonalBorders(QPainter &painter, const QRectF &bounds) const;
-
-    /**
-     * Paint the top border.
-     *
-     * @painter the painter to draw with.
-     * @x the x position.
-     * @y the y position.
-     * @w the width.
-     * @blanks a painterpath where blank borders should be added to.
-     */
-    void drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QVector<QLineF> *blanks = 0) const;
-
-    /**
-     * Paint the border that is shared.
-     * It only draws the thickest and it always draws it below the y position.
-     *
-     * @painter the painter to draw with.
-     * @x the x position.
-     * @y the y position.
-     * @w the width.
-     * @blanks a painterpath where blank borders should be added to.
-     */
-    void drawSharedHorizontalBorder(QPainter &painter, const KoTableBorderStyle &styleBelow,  qreal x, qreal y, qreal w, QVector<QLineF> *blanks = 0) const;
-
-    /**
-     * Paint the bottom border.
-     *
-     * @painter the painter to draw with.
-     * @x the x position.
-     * @y the y position.
-     * @w the width.
-     * @blanks a painterpath where blank borders should be added to.
-     */
-    void drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QVector<QLineF> *blanks = 0) const;
-
-    /**
-     * Paint the leftmost border.
-     *
-     * @painter the painter to draw with.
-     * @x the x position.
-     * @y the y position.
-     * @h the height.
-     * @blanks a painterpath where blank borders should be added to.
-     */
-    void drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QVector<QLineF> *blanks = 0) const;
-
-    /**
-     * Paint the border that is shared.
-     * It only draws the thickest and it always draws it below the y position.
-     *
-     * @painter the painter to draw with.
-     * @x the x position.
-     * @y the y position.
-     * @h the height.
-     * @blanks a painterpath where blank borders should be added to.
-     */
-    void drawSharedVerticalBorder(QPainter &painter, const KoTableBorderStyle &styleRight,  qreal x, qreal y, qreal h, QVector<QLineF> *blanks = 0) const;
-
-    /**
-     * Paint the rightmost border.
-     *
-     * @painter the painter to draw with.
-     * @x the x position.
-     * @y the y position.
-     * @h the height.
-     * @blanks a painterpath where blank borders should be added to.
-     */
-    void drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QVector<QLineF> *blanks = 0) const;
-
-    qreal leftBorderWidth() const;
-    qreal rightBorderWidth() const;
-    qreal topBorderWidth() const;
-    qreal bottomBorderWidth() const;
-
-    qreal leftInnerBorderWidth() const;
-    qreal rightInnerBorderWidth() const;
-    qreal topInnerBorderWidth() const;
-    qreal bottomInnerBorderWidth() const;
-
-    qreal leftOuterBorderWidth() const;
-    qreal rightOuterBorderWidth() const;
-    qreal topOuterBorderWidth() const;
-    qreal bottomOuterBorderWidth() const;
+        QPen innerPen;
+        QPen outerPen;
+        qreal spacing;
+    };
 
 protected:
-    KoTableBorderStyle(KoTableBorderStylePrivate &dd, const QTextTableCellFormat &format, QObject *parent);
-    KoTableBorderStyle(KoTableBorderStylePrivate &dd, QObject *parent);
-    KoTableBorderStylePrivate *d_ptr;
-
 private:
-    void init(const QTextTableCellFormat &format);
+    //void init(const QTextTableCellFormat &format);
 
-    Q_DECLARE_PRIVATE(KoTableBorderStyle)
+    //Q_DECLARE_PRIVATE(KoTableBorderStyle)
 };
 
 #endif // KOTABLEBORDERSTYLE_H

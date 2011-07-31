@@ -53,7 +53,7 @@ class KoShapeLoadingContext;
  * a specific KoTableCellStyle.
  * @see KoStyleManager
  */
-class KOTEXT_EXPORT KoTableCellStyle : public KoTableBorderStyle
+class KOTEXT_EXPORT KoTableCellStyle : public QObject
 {
     Q_OBJECT
 public:
@@ -279,7 +279,55 @@ public:
      * @returns a QVariant which holds the property value.
      */
     QVariant value(int key) const;
+    
+    
+    /**
+     * Set the properties of an edge.
+     *
+     * @param side defines which edge this is for.
+     * @param style the border style for this side.
+     * @param totalWidth the thickness of the border. Sum of outerwidth, spacing and innerwidth for double borders
+     * @param color the color of the border line(s).
+     */
+    void setEdge(KoTableBorderStyle::Side side, KoBorder::BorderStyle style, qreal totalWidth, QColor color);
 
+
+    /**
+     * Set the properties of a double border.
+     * Note: you need to set the edge first or that would overwrite these values.
+     *
+     * The values will not be set if the border doesn't have a double style
+     *
+     * @param side defines which edge this is for.
+     * @param space the amount of spacing between the outer border and the inner border in case of style being double
+     * @param innerWidth the thickness of the inner border line in case of style being double
+     */
+    void setEdgeDoubleBorderValues(KoTableBorderStyle::Side side, qreal innerWidth, qreal space);
+
+    /**
+     * Check if the border data has any borders.
+     *
+     * @return true if there has been at least one border set.
+     */
+    bool hasBorders() const;
+
+    qreal leftBorderWidth() const;
+    qreal rightBorderWidth() const;
+    qreal topBorderWidth() const;
+    qreal bottomBorderWidth() const;
+
+    qreal leftInnerBorderWidth() const;
+    qreal rightInnerBorderWidth() const;
+    qreal topInnerBorderWidth() const;
+    qreal bottomInnerBorderWidth() const;
+
+    qreal leftOuterBorderWidth() const;
+    qreal rightOuterBorderWidth() const;
+    qreal topOuterBorderWidth() const;
+    qreal bottomOuterBorderWidth() const;
+    
+    KoTableBorderStyle::Edge getEdge(KoTableBorderStyle::Side side) const;
+    KoBorder::BorderStyle getBorderStyle(KoTableBorderStyle::Side side) const;
 signals:
     void nameChanged(const QString &newName);
 
@@ -290,6 +338,7 @@ private:
      */
     void loadOdfProperties(KoShapeLoadingContext &context, KoStyleStack &styleStack);
     qreal propertyDouble(int key) const;
+    QPen propertyPen(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;

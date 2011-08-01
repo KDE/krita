@@ -58,7 +58,6 @@ public:
      */
     void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
 
-
     /**
      * Sets the shadow offset from the topleft corner of the shape
      * @param offset the shadow offset
@@ -111,24 +110,6 @@ public:
 private:
     class Private;
     Private * const d;
-
-    /**
-     * Paints the shadow of the shape group to the buffer image.
-     * @param group the shape group to paint around
-     * @param painter the painter to paint on the image
-     * @param converter to convert between internal and view coordinates.
-     */
-    void paintGroupShadow(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter);
-
-    /**
-     * Paints the shadow of the shape to the buffer image.
-     * @param shape the shape to paint around
-     * @param painter the painter to paint on the image
-     * @param converter to convert between internal and view coordinates.
-     */
-    void paintShadow(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
-
-    void blurShadow(QImage &image, int radius, const QColor& shadowColor);
 };
 
 #endif // KOSHAPESHADOW_H

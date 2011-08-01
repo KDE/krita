@@ -539,13 +539,14 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
             int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length()
                     - startOfBlock).lineNumber();
             int startOfFragmentInBlock = currentFragment.position() - startOfBlock;
-            Q_ASSERT_X(firstLine <= lastLine, __FUNCTION__, QString("Invalid lines first=%1 last=%2").arg(firstLine).arg(lastLine).toLocal8Bit()); // see bug 278682
-            for (int i = firstLine ; i <= lastLine ; i++) {
+            for (int i = firstLine ; i <= lastLine ; ++i) {
                 QTextLine line = layout->lineAt(i);
                 if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
                     int p1 = currentFragment.position() - startOfBlock;
                     if (block.text().at(p1) != QChar::ObjectReplacementCharacter) {
                         Q_ASSERT_X(line.isValid(), __FUNCTION__, QString("Invalid line=%1 first=%2 last=%3").arg(i).arg(firstLine).arg(lastLine).toLocal8Bit()); // see bug 278682
+                        if (!line.isValid())
+                            continue;
                         int p2 = currentFragment.position() + currentFragment.length() - startOfBlock;
                         int fragmentToLineOffset = qMax(currentFragment.position() - startOfBlock - line.textStart(),0);
                         qreal x1 = line.cursorToX(p1);

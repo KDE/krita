@@ -38,6 +38,10 @@
 #include <QTextInlineObject>
 #include <QDebug>
 
+#ifndef __GNUC__ 
+  #define __PRETTY_FUNCTION__ __FUNCTION__
+#endif /* __PRETTY_FUNCTION__ only exists in gnu c++ */
+
 PageVariable::PageVariable()
         : KoVariable(true),
         m_type(PageNumber),

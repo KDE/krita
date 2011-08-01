@@ -28,9 +28,8 @@
 
 class KoTableBorderStylePrivate;
 
-class KOTEXT_EXPORT KoTableBorderStyle : public QObject
+class KOTEXT_EXPORT KoTableBorderStyle
 {
-    Q_OBJECT
 public:
     enum Property {
         StyleId = QTextTableCellFormat::UserProperty + 7001,
@@ -76,12 +75,6 @@ public:
         QPen outerPen;
         qreal spacing;
     };
-
-protected:
-private:
-    //void init(const QTextTableCellFormat &format);
-
-    //Q_DECLARE_PRIVATE(KoTableBorderStyle)
 };
 
 #endif // KOTABLEBORDERSTYLE_H

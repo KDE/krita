@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>258</width>
+    <width>286</width>
     <height>492</height>
    </rect>
   </property>
@@ -107,13 +107,13 @@
       <widget class="KisDropButton" name="bnAdd">
        <property name="minimumSize">
         <size>
-         <width>22</width>
-         <height>22</height>
+         <width>28</width>
+         <height>28</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>22</width>
+         <width>28</width>
          <height>22</height>
         </size>
        </property>

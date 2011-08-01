@@ -76,6 +76,10 @@ VectorShape::VectorShape()
 
 VectorShape::~VectorShape()
 {
+    // Wait for the render-thread to finish before the shape is allowed to be
+    // destroyed so we can make sure to prevent crashes or unwanted
+    // side-effects. Maybe as alternate we could just kill the render-thread...
+    QMutexLocker locker(&m_mutex);
 }
 
 // Methods specific to the vector shape.
@@ -397,7 +401,6 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
 
     return true;
 }
-
 
 bool VectorShape::isWmf(const QByteArray &bytes)
 {

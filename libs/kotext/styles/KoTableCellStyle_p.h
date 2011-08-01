@@ -36,6 +36,7 @@ public:
     int next;
     StylePrivate stylesPrivate;
     
+    ///@TODO: kill the next two members
     KoTableBorderStyle::Edge edges[6];
     KoBorder::BorderStyle borderstyle[6];
 };

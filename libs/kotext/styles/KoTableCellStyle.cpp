@@ -86,6 +86,7 @@ void KoTableCellStylePrivate::setProperty(int key, const QVariant &value)
 
 KoTableCellStyle::KoTableCellStyle(QObject *parent)
     : QObject(parent)
+    , d_ptr(new KoTableCellStylePrivate)
 {
     Q_D(KoTableCellStyle);
     d->charStyle = new KoCharacterStyle(this);
@@ -93,6 +94,7 @@ KoTableCellStyle::KoTableCellStyle(QObject *parent)
 
 KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *parent)
     : QObject(parent)
+    , d_ptr(new KoTableCellStylePrivate)
 {
     Q_D(KoTableCellStyle);
     d->stylesPrivate = format.properties();

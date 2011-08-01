@@ -42,8 +42,9 @@ class KoGenStyle;
 class KoGenStyles;
 class KoCharacterStyle;
 #include "KoXmlReaderForward.h"
-class KoTableCellStylePrivate;
 class KoShapeLoadingContext;
+
+class KoTableCellStylePrivate;
 
 /**
  * A container for all properties for the table cell style.
@@ -331,6 +332,9 @@ public:
 signals:
     void nameChanged(const QString &newName);
 
+protected:
+    KoTableCellStylePrivate * const d_ptr;
+    
 private:
     /**
      * Load the style from the \a KoStyleStack style stack using the
@@ -344,6 +348,7 @@ private:
     QColor propertyColor(int key) const;
 
     Q_DECLARE_PRIVATE(KoTableCellStyle)
+    
 };
 
 #endif

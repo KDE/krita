@@ -304,7 +304,8 @@ void KoTableCellStyle::applyStyle(QTextTableCellFormat &format) const
         QVariant variant = d->stylesPrivate.value(keys[i]);
         format.setProperty(keys[i], variant);
     }
-
+/*
+ * Kill the following code!
     format.setProperty(KoTableBorderStyle::TopBorderOuterPen, d->edges[KoTableBorderStyle::Top].outerPen);
     format.setProperty(KoTableBorderStyle::TopBorderSpacing,  d->edges[KoTableBorderStyle::Top].spacing);
     format.setProperty(KoTableBorderStyle::TopBorderInnerPen, d->edges[KoTableBorderStyle::Top].innerPen);
@@ -328,7 +329,7 @@ void KoTableCellStyle::applyStyle(QTextTableCellFormat &format) const
     format.setProperty(KoTableBorderStyle::BottomLeftToTopRightBorderOuterPen, d->edges[KoTableBorderStyle::BottomLeftToTopRight].outerPen);
     format.setProperty(KoTableBorderStyle::BottomLeftToTopRightBorderSpacing,  d->edges[KoTableBorderStyle::BottomLeftToTopRight].spacing);
     format.setProperty(KoTableBorderStyle::BottomLeftToTopRightBorderInnerPen, d->edges[KoTableBorderStyle::BottomLeftToTopRight].innerPen);
-    format.setProperty(KoTableBorderStyle::BottomLeftToTopRightBorderStyle, d->borderstyle[KoTableBorderStyle::BottomLeftToTopRight]);
+    format.setProperty(KoTableBorderStyle::BottomLeftToTopRightBorderStyle, d->borderstyle[KoTableBorderStyle::BottomLeftToTopRight]);*/
 }
 
 void KoTableCellStyle::setBackground(const QBrush &brush)

@@ -101,7 +101,7 @@ void VectorShape::setCompressedContents( const QByteArray &newContents )
 // ----------------------------------------------------------------
 //                             Painting
 
-RenderThread::RenderThread(VectorShape *shape, const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY)
+RenderThread::RenderThread(const VectorShape* const shape, const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY)
     : QObject(), QRunnable(), m_shape(shape), m_size(size), m_boundingSize(boundingSize), m_zoomX(zoomX), m_zoomY(zoomY)
 {
     setAutoDelete(true);
@@ -247,27 +247,16 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
 
 #ifdef VECTORSHAPE_PAINT_UNCACHED
     bool useCache = false;
-    bool useThread = false;
+    bool asynchronous = false;
 #else
     bool useCache = cache && !cache->isNull();
     // Since the backends may use QPainter::drawText we need to make sure to only
     // use threads if the font-backend supports that what is in most cases.
-    bool useThread = QFontDatabase::supportsThreadedFontRendering();
+    bool asynchronous = QFontDatabase::supportsThreadedFontRendering();
 #endif
 
     if (!useCache) { // recreate the cached image
-        if (!m_isRendering) {
-            m_isRendering = true;
-            qreal zoomX, zoomY;
-            converter.zoom(&zoomX, &zoomY);
-            RenderThread *t = new RenderThread(this, size(), rc.size().toSize(), zoomX, zoomY);
-            connect(t, SIGNAL(finished(QSize,QImage*)), this, SLOT(renderFinished(QSize,QImage*)));
-            if (useThread) { // render and paint the image threaded
-                QThreadPool::globalInstance()->start(t);
-            } else { // non-threaded rendering and painting of the image
-                t->run();
-            }
-        }
+        render(converter, asynchronous, rc);
     } else { // pain cached image
         Q_ASSERT(cache && !cache->isNull());
         QVector<QRect> clipRects = painter.clipRegion().rects();
@@ -400,6 +389,28 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
     m_contents = qCompress(m_contents);
 
     return true;
+}
+
+void VectorShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
+{
+    QRectF rc = converter.documentToView(boundingRect());
+    render(converter, asynchronous, rc);
+}
+
+void VectorShape::render(const KoViewConverter &converter, bool asynchronous, const QRectF& rect) const
+{
+    if (!m_isRendering) {
+        m_isRendering = true;
+        qreal zoomX, zoomY;
+        converter.zoom(&zoomX, &zoomY);
+        RenderThread *t = new RenderThread(this, size(), rect.size().toSize(), zoomX, zoomY);
+        connect(t, SIGNAL(finished(QSize,QImage*)), this, SLOT(renderFinished(QSize,QImage*)));
+        if (asynchronous) { // render and paint the image threaded
+            QThreadPool::globalInstance()->start(t);
+        } else { // non-threaded rendering and painting of the image
+            t->run();
+        }
+    }
 }
 
 bool VectorShape::isWmf(const QByteArray &bytes)

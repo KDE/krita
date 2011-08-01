@@ -243,13 +243,9 @@ void KoTextLayoutCellHelper::drawTopHorizontalBorder(QPainter &painter, qreal x,
 
 void KoTextLayoutCellHelper::drawSharedHorizontalBorder(QPainter &painter, const KoTableCellStyle &styleBelow,  qreal x, qreal y, qreal w, QVector<QLineF> *accumulatedBlankBorders) const
 {
-    Q_ASSERT(false);
-#if 0
-    const KoTableBorderStylePrivate *styleBelowD = static_cast<const KoTableBorderStylePrivate*>(styleBelow.d_func());
-
     bool paintThis = true;
     if (m_cellStyle.getBorderStyle(KoTableBorderStyle::Bottom) == KoBorder::BorderNone) {
-        if (styleBelowD->borderstyle[KoTableBorderStyle::Top] == KoBorder::BorderNone) {
+        if (styleBelow.getBorderStyle(KoTableBorderStyle::Top) == KoBorder::BorderNone) {
             if (accumulatedBlankBorders) {
                 accumulatedBlankBorders->append(QLineF(x, y, x+w, y));
             }
@@ -258,15 +254,15 @@ void KoTextLayoutCellHelper::drawSharedHorizontalBorder(QPainter &painter, const
         paintThis = false;
     }
     else {
-        if (styleBelowD->borderstyle[KoTableBorderStyle::Top] != KoBorder::BorderNone) {
+        if (styleBelow.getBorderStyle(KoTableBorderStyle::Top) != KoBorder::BorderNone) {
             qreal thisWidth = m_cellStyle.getEdge(KoTableBorderStyle::Bottom).outerPen.widthF() + m_cellStyle.getEdge(KoTableBorderStyle::Bottom).spacing + m_cellStyle.getEdge(KoTableBorderStyle::Bottom).innerPen.widthF();
-            qreal thatWidth = styleBelowD->edges[KoTableBorderStyle::Top].outerPen.widthF() + styleBelowD->edges[KoTableBorderStyle::Top].spacing
-                            + styleBelowD->edges[KoTableBorderStyle::Top].innerPen.widthF();
+            qreal thatWidth = styleBelow.getEdge(KoTableBorderStyle::Top).outerPen.widthF() + styleBelow.getEdge(KoTableBorderStyle::Top).spacing
+                            + styleBelow.getEdge(KoTableBorderStyle::Top).innerPen.widthF();
             paintThis = thisWidth >= thatWidth;
         }
     }
 
-    const KoTableBorderStyle::Edge &edge = paintThis ? m_cellStyle.getEdge(KoTableBorderStyle::Bottom): styleBelowD->edges[KoTableBorderStyle::Top];
+    const KoTableBorderStyle::Edge &edge = paintThis ? m_cellStyle.getEdge(KoTableBorderStyle::Bottom) : styleBelow.getEdge(KoTableBorderStyle::Top);
     const KoBorder::BorderStyle borderStyle = paintThis ? m_cellStyle.getBorderStyle(KoTableBorderStyle::Bottom): m_cellStyle.getBorderStyle(KoTableBorderStyle::Top);
     qreal t=y;
 
@@ -294,7 +290,6 @@ void KoTextLayoutCellHelper::drawSharedHorizontalBorder(QPainter &painter, const
             painter.drawLine(QLineF(x, t, x+w, t));
         }
     }
-#endif
 }
 
 void KoTextLayoutCellHelper::drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QVector<QLineF> *accumulatedBlankBorders) const
@@ -367,14 +362,10 @@ void KoTextLayoutCellHelper::drawLeftmostVerticalBorder(QPainter &painter, qreal
 
 void KoTextLayoutCellHelper::drawSharedVerticalBorder(QPainter &painter, const KoTableCellStyle &styleRight,  qreal x, qreal y, qreal h, QVector<QLineF> *accumulatedBlankBorders) const
 {
-    Q_ASSERT(false);
-#if 0
-    const KoTableBorderStylePrivate *styleRightD = static_cast<const KoTableBorderStylePrivate*>(styleRight.d_func());
-
     // First determine which style "wins" by comparing total width
     qreal thisWidth = m_cellStyle.getEdge(KoTableBorderStyle::Right).outerPen.widthF() + m_cellStyle.getEdge(KoTableBorderStyle::Right).spacing + m_cellStyle.getEdge(KoTableBorderStyle::Right).innerPen.widthF();
-    qreal thatWidth = styleRightD->edges[KoTableBorderStyle::Left].outerPen.widthF() + styleRightD->edges[KoTableBorderStyle::Left].spacing
-                                    + styleRightD->edges[KoTableBorderStyle::Left].innerPen.widthF();
+    qreal thatWidth = styleRight.getEdge(KoTableBorderStyle::Left).outerPen.widthF() + styleRight.getEdge(KoTableBorderStyle::Left).spacing
+                                    + styleRight.getEdge(KoTableBorderStyle::Left).innerPen.widthF();
 
     qreal l=x;
 
@@ -412,8 +403,8 @@ void KoTextLayoutCellHelper::drawSharedVerticalBorder(QPainter &painter, const K
     } else {
         // right style wins
         l -= thatWidth/2.0;
-        if (styleRightD->edges[KoTableBorderStyle::Left].outerPen.widthF() > 0) {
-            QPen pen = styleRightD->edges[KoTableBorderStyle::Left].outerPen;
+        if (styleRight.getEdge(KoTableBorderStyle::Left).outerPen.widthF() > 0) {
+            QPen pen = styleRight.getEdge(KoTableBorderStyle::Left).outerPen;
 
             painter.setPen(pen);
             l += pen.widthF() / 2.0;
@@ -422,11 +413,11 @@ void KoTextLayoutCellHelper::drawSharedVerticalBorder(QPainter &painter, const K
             } else {
                 painter.drawLine(QLineF(l, y, l, y+h));
             }
-            l += styleRightD->edges[KoTableBorderStyle::Left].spacing + pen.widthF() / 2.0;
+            l += styleRight.getEdge(KoTableBorderStyle::Left).spacing + pen.widthF() / 2.0;
         }
         // inner line
-        if (styleRightD->edges[KoTableBorderStyle::Left].innerPen.widthF() > 0) {
-            QPen pen = styleRightD->edges[KoTableBorderStyle::Left].innerPen;
+        if (styleRight.getEdge(KoTableBorderStyle::Left).innerPen.widthF() > 0) {
+            QPen pen = styleRight.getEdge(KoTableBorderStyle::Left).innerPen;
             painter.setPen(pen);
             l += pen.widthF() / 2.0;
             if(isDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Left))) {
@@ -436,7 +427,6 @@ void KoTextLayoutCellHelper::drawSharedVerticalBorder(QPainter &painter, const K
             }
         }
     }
-#endif
 }
 
 void KoTextLayoutCellHelper::drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QVector<QLineF> *accumulatedBlankBorders) const

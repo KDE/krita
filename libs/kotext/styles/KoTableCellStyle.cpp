@@ -113,23 +113,31 @@ KoTableCellStyle *KoTableCellStyle::fromTableCell(const QTextTableCell &tableCel
 
 QRectF KoTableCellStyle::contentRect(const QRectF &boundingRect) const
 {
-    Q_D(const KoTableCellStyle);
+    const KoTableBorderStyle::Edge &leftEdge = getEdge(KoTableBorderStyle::Left);
+    const KoTableBorderStyle::Edge &topEdge = getEdge(KoTableBorderStyle::Top);
+    const KoTableBorderStyle::Edge &rightEdge = getEdge(KoTableBorderStyle::Right);
+    const KoTableBorderStyle::Edge &bottomEdge = getEdge(KoTableBorderStyle::Bottom);
+    
     return boundingRect.adjusted(
-                d->edges[KoTableBorderStyle::Left].outerPen.widthF() + d->edges[KoTableBorderStyle::Left].spacing + d->edges[KoTableBorderStyle::Left].innerPen.widthF() + propertyDouble(QTextFormat::TableCellLeftPadding),
-                d->edges[KoTableBorderStyle::Top].outerPen.widthF() + d->edges[KoTableBorderStyle::Top].spacing + d->edges[KoTableBorderStyle::Top].innerPen.widthF() + propertyDouble(QTextFormat::TableCellTopPadding),
-                - d->edges[KoTableBorderStyle::Right].outerPen.widthF() - d->edges[KoTableBorderStyle::Right].spacing - d->edges[KoTableBorderStyle::Right].innerPen.widthF() - propertyDouble(QTextFormat::TableCellRightPadding),
-                - d->edges[KoTableBorderStyle::Bottom].outerPen.widthF() - d->edges[KoTableBorderStyle::Bottom].spacing - d->edges[KoTableBorderStyle::Bottom].innerPen.widthF() - propertyDouble(QTextFormat::TableCellBottomPadding)
+                leftEdge.outerPen.widthF() + leftEdge.spacing + leftEdge.innerPen.widthF() + propertyDouble(QTextFormat::TableCellLeftPadding),
+                topEdge.outerPen.widthF() + topEdge .spacing + topEdge .innerPen.widthF() + propertyDouble(QTextFormat::TableCellTopPadding),
+                - rightEdge.outerPen.widthF() - rightEdge.spacing - rightEdge.innerPen.widthF() - propertyDouble(QTextFormat::TableCellRightPadding),
+                - bottomEdge.outerPen.widthF() - bottomEdge.spacing - bottomEdge.innerPen.widthF() - propertyDouble(QTextFormat::TableCellBottomPadding)
    );
 }
 
 QRectF KoTableCellStyle::boundingRect(const QRectF &contentRect) const
 {
-    Q_D(const KoTableCellStyle);
+    const KoTableBorderStyle::Edge &leftEdge = getEdge(KoTableBorderStyle::Left);
+    const KoTableBorderStyle::Edge &topEdge = getEdge(KoTableBorderStyle::Top);
+    const KoTableBorderStyle::Edge &rightEdge = getEdge(KoTableBorderStyle::Right);
+    const KoTableBorderStyle::Edge &bottomEdge = getEdge(KoTableBorderStyle::Bottom);
+    
     return contentRect.adjusted(
-                - d->edges[KoTableBorderStyle::Left].outerPen.widthF() - d->edges[KoTableBorderStyle::Left].spacing - d->edges[KoTableBorderStyle::Left].innerPen.widthF() - propertyDouble(QTextFormat::TableCellLeftPadding),
-                - d->edges[KoTableBorderStyle::Top].outerPen.widthF() - d->edges[KoTableBorderStyle::Top].spacing - d->edges[KoTableBorderStyle::Top].innerPen.widthF() - propertyDouble(QTextFormat::TableCellTopPadding),
-                d->edges[KoTableBorderStyle::Right].outerPen.widthF() + d->edges[KoTableBorderStyle::Right].spacing + d->edges[KoTableBorderStyle::Right].innerPen.widthF() + propertyDouble(QTextFormat::TableCellRightPadding),
-                d->edges[KoTableBorderStyle::Bottom].outerPen.widthF() + d->edges[KoTableBorderStyle::Bottom].spacing + d->edges[KoTableBorderStyle::Bottom].innerPen.widthF() + propertyDouble(QTextFormat::TableCellBottomPadding)
+                - leftEdge.outerPen.widthF() - leftEdge.spacing - leftEdge.innerPen.widthF() - propertyDouble(QTextFormat::TableCellLeftPadding),
+                - topEdge.outerPen.widthF() - topEdge.spacing - topEdge.innerPen.widthF() - propertyDouble(QTextFormat::TableCellTopPadding),
+                rightEdge.outerPen.widthF() + rightEdge.spacing + rightEdge.innerPen.widthF() + propertyDouble(QTextFormat::TableCellRightPadding),
+                bottomEdge.outerPen.widthF() + bottomEdge.spacing + bottomEdge.innerPen.widthF() + propertyDouble(QTextFormat::TableCellBottomPadding)
    );
 }
 
@@ -304,32 +312,6 @@ void KoTableCellStyle::applyStyle(QTextTableCellFormat &format) const
         QVariant variant = d->stylesPrivate.value(keys[i]);
         format.setProperty(keys[i], variant);
     }
-/*
- * Kill the following code!
-    format.setProperty(KoTableBorderStyle::TopBorderOuterPen, d->edges[KoTableBorderStyle::Top].outerPen);
-    format.setProperty(KoTableBorderStyle::TopBorderSpacing,  d->edges[KoTableBorderStyle::Top].spacing);
-    format.setProperty(KoTableBorderStyle::TopBorderInnerPen, d->edges[KoTableBorderStyle::Top].innerPen);
-    format.setProperty(KoTableBorderStyle::TopBorderStyle, d->borderstyle[KoTableBorderStyle::Top]);
-    format.setProperty(KoTableBorderStyle::LeftBorderOuterPen, d->edges[KoTableBorderStyle::Left].outerPen);
-    format.setProperty(KoTableBorderStyle::LeftBorderSpacing,  d->edges[KoTableBorderStyle::Left].spacing);
-    format.setProperty(KoTableBorderStyle::LeftBorderInnerPen, d->edges[KoTableBorderStyle::Left].innerPen);
-    format.setProperty(KoTableBorderStyle::LeftBorderStyle, d->borderstyle[KoTableBorderStyle::Left]);
-    format.setProperty(KoTableBorderStyle::BottomBorderOuterPen, d->edges[KoTableBorderStyle::Bottom].outerPen);
-    format.setProperty(KoTableBorderStyle::BottomBorderSpacing,  d->edges[KoTableBorderStyle::Bottom].spacing);
-    format.setProperty(KoTableBorderStyle::BottomBorderInnerPen, d->edges[KoTableBorderStyle::Bottom].innerPen);
-    format.setProperty(KoTableBorderStyle::BottomBorderStyle, d->borderstyle[KoTableBorderStyle::Bottom]);
-    format.setProperty(KoTableBorderStyle::RightBorderOuterPen, d->edges[KoTableBorderStyle::Right].outerPen);
-    format.setProperty(KoTableBorderStyle::RightBorderSpacing,  d->edges[KoTableBorderStyle::Right].spacing);
-    format.setProperty(KoTableBorderStyle::RightBorderInnerPen, d->edges[KoTableBorderStyle::Right].innerPen);
-    format.setProperty(KoTableBorderStyle::RightBorderStyle, d->borderstyle[KoTableBorderStyle::Right]);
-    format.setProperty(KoTableBorderStyle::TopLeftToBottomRightBorderOuterPen, d->edges[KoTableBorderStyle::TopLeftToBottomRight].outerPen);
-    format.setProperty(KoTableBorderStyle::TopLeftToBottomRightBorderSpacing,  d->edges[KoTableBorderStyle::TopLeftToBottomRight].spacing);
-    format.setProperty(KoTableBorderStyle::TopLeftToBottomRightBorderInnerPen, d->edges[KoTableBorderStyle::TopLeftToBottomRight].innerPen);
-    format.setProperty(KoTableBorderStyle::TopLeftToBottomRightBorderStyle, d->borderstyle[KoTableBorderStyle::TopLeftToBottomRight]);
-    format.setProperty(KoTableBorderStyle::BottomLeftToTopRightBorderOuterPen, d->edges[KoTableBorderStyle::BottomLeftToTopRight].outerPen);
-    format.setProperty(KoTableBorderStyle::BottomLeftToTopRightBorderSpacing,  d->edges[KoTableBorderStyle::BottomLeftToTopRight].spacing);
-    format.setProperty(KoTableBorderStyle::BottomLeftToTopRightBorderInnerPen, d->edges[KoTableBorderStyle::BottomLeftToTopRight].innerPen);
-    format.setProperty(KoTableBorderStyle::BottomLeftToTopRightBorderStyle, d->borderstyle[KoTableBorderStyle::BottomLeftToTopRight]);*/
 }
 
 void KoTableCellStyle::setBackground(const QBrush &brush)
@@ -1112,19 +1094,22 @@ void KoTableCellStyle::setEdge(KoTableBorderStyle::Side side, KoBorder::BorderSt
     middlePen = edge.outerPen;
     middlePen.setWidthF(middleWidth);
 
-    d->edges[side] = edge;
-    d->borderstyle[side] = style;
+    Q_ASSERT(false);
+    ///@TODO: fix me !
+//    d->edges[side] = edge;
+//    d->borderstyle[side] = style;
 }
 
 void KoTableCellStyle::setEdgeDoubleBorderValues(KoTableBorderStyle::Side side, qreal innerWidth, qreal space)
 {
-    Q_D(KoTableCellStyle);
-
-    qreal totalWidth = d->edges[side].outerPen.widthF() + d->edges[side].spacing + d->edges[side].innerPen.widthF();
-    if (d->edges[side].innerPen.widthF() > 0.0) {
-        d->edges[side].outerPen.setWidthF(totalWidth - innerWidth - space);
-        d->edges[side].spacing = space;
-        d->edges[side].innerPen.setWidthF(innerWidth);
+    const KoTableBorderStyle::Edge &edge = getEdge(side);
+    Q_ASSERT(false);
+    ///@TODO: rewrite me
+    qreal totalWidth = edge.outerPen.widthF() + edge.spacing + edge.innerPen.widthF();
+    if (edge.innerPen.widthF() > 0.0) {
+        /*edge.outerPen.setWidthF(totalWidth - innerWidth - space);
+        edge.spacing = space;
+        edge.innerPen.setWidthF(innerWidth);*/
     }
 }
 
@@ -1133,89 +1118,73 @@ bool KoTableCellStyle::hasBorders() const
     Q_D(const KoTableCellStyle);
 
     for (int i = KoTableBorderStyle::Top; i <= KoTableBorderStyle::BottomLeftToTopRight; i++)
-        if (d->edges[i].outerPen.widthF() > 0.0)
+        if (getEdge(KoTableBorderStyle::Side(i)).outerPen.widthF() > 0.0)
             return true;
     return false;
 }
 
 qreal KoTableCellStyle::leftBorderWidth() const
 {
-    Q_D(const KoTableCellStyle);
-
-    const KoTableBorderStyle::Edge &edge = d->edges[KoTableBorderStyle::Left];
+    const KoTableBorderStyle::Edge &edge = getEdge(KoTableBorderStyle::Left);
     return edge.spacing + edge.innerPen.widthF() + edge.outerPen.widthF();
 }
 
 qreal KoTableCellStyle::rightBorderWidth() const
 {
-    Q_D(const KoTableCellStyle);
-
-    const KoTableBorderStyle::Edge &edge = d->edges[KoTableBorderStyle::Right];
+    const KoTableBorderStyle::Edge &edge = getEdge(KoTableBorderStyle::Right);
     return edge.spacing + edge.innerPen.widthF() + edge.outerPen.widthF();
 }
 
 qreal KoTableCellStyle::topBorderWidth() const
 {
-    Q_D(const KoTableCellStyle);
-
-    const KoTableBorderStyle::Edge &edge = d->edges[KoTableBorderStyle::Top];
+    const KoTableBorderStyle::Edge &edge = getEdge(KoTableBorderStyle::Top);
     return edge.spacing + edge.innerPen.widthF() + edge.outerPen.widthF();
 }
 
 qreal KoTableCellStyle::bottomBorderWidth() const
 {
-    Q_D(const KoTableCellStyle);
-
-    const KoTableBorderStyle::Edge &edge = d->edges[KoTableBorderStyle::Bottom];
+    const KoTableBorderStyle::Edge &edge = getEdge(KoTableBorderStyle::Bottom);
     return edge.spacing + edge.innerPen.widthF() + edge.outerPen.widthF();
 }
 
 qreal KoTableCellStyle::leftInnerBorderWidth() const
 {
-    Q_D(const KoTableCellStyle);
-    return d->edges[KoTableBorderStyle::Left].innerPen.widthF();
+    return propertyPen(KoTableBorderStyle::LeftBorderInnerPen).widthF();
 }
 
 qreal KoTableCellStyle::rightInnerBorderWidth() const
 {
-    Q_D(const KoTableCellStyle);
-    return d->edges[KoTableBorderStyle::Right].innerPen.widthF();
+    return propertyPen(KoTableBorderStyle::RightBorderInnerPen).widthF();
 }
 
 qreal KoTableCellStyle::topInnerBorderWidth() const
 {
-    Q_D(const KoTableCellStyle);
-    return d->edges[KoTableBorderStyle::Top].innerPen.widthF();
+    return propertyPen(KoTableBorderStyle::TopBorderInnerPen).widthF();
 }
 
 qreal KoTableCellStyle::bottomInnerBorderWidth() const
 {
-    Q_D(const KoTableCellStyle);
-    return d->edges[KoTableBorderStyle::Bottom].innerPen.widthF();
+    return propertyPen(KoTableBorderStyle::BottomBorderInnerPen).widthF();
 }
 
 qreal KoTableCellStyle::leftOuterBorderWidth() const
 {
-    Q_D(const KoTableCellStyle);
-    return d->edges[KoTableBorderStyle::Left].outerPen.widthF();
+    return propertyPen(KoTableBorderStyle::LeftBorderOuterPen).widthF();
 }
 
 qreal KoTableCellStyle::rightOuterBorderWidth() const
 {
-    Q_D(const KoTableCellStyle);
-    return d->edges[KoTableBorderStyle::Right].outerPen.widthF();
+    return propertyPen(KoTableBorderStyle::RightBorderOuterPen).widthF();
 }
 
 qreal KoTableCellStyle::topOuterBorderWidth() const
 {
-    Q_D(const KoTableCellStyle);
-    return d->edges[KoTableBorderStyle::Top].outerPen.widthF();
+    return propertyPen(KoTableBorderStyle::TopBorderOuterPen).widthF();
 }
 
 qreal KoTableCellStyle::bottomOuterBorderWidth() const
 {
-    Q_D(const KoTableCellStyle);
-    return d->edges[KoTableBorderStyle::Bottom].outerPen.widthF();
+    return propertyPen(KoTableBorderStyle::BottomBorderOuterPen).widthF();
 }
 
 KoTableBorderStyle::Edge KoTableCellStyle::getEdge(KoTableBorderStyle::Side side) const

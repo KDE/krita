@@ -116,6 +116,8 @@ protected:
     virtual bool viewportEvent(QEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);
     virtual void showContextMenu(const QPoint &globalPos, const QModelIndex &index);
+    virtual void startDrag (Qt::DropActions supportedActions);
+    QPixmap createDragPixmap() const;
 
 protected slots:
     virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous);

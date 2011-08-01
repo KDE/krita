@@ -27,6 +27,7 @@ class KoShape;
 class KoShapeContainer;
 class QAbstractItemModel;
 class KoViewConverter;
+class KoPAPageBase;
 
 /**
  * Model class for the document structure widget (dsw). The dsw can
@@ -66,6 +67,9 @@ public slots:
     /// Triggers an update of the complete model
     void update();
 
+signals:
+    void requestPageSelection(int start, int count);
+
 private:
     /// Returns properties of the given shape
     PropertyList properties( KoShape* shape ) const;
@@ -79,6 +83,8 @@ private:
     int indexFromChild( KoShapeContainer *parent, KoShape *child ) const;
     /// Returns the parent model index from the given child shape
     QModelIndex parentIndexFromShape( const KoShape * child );
+    /// Creates a context menu when dropping pages to choose between copy or move action.
+    bool doDrop(QList<KoPAPageBase *> pages, KoPAPageBase *pageAfter, Qt::DropAction action);
 
     KoPADocument *m_document; ///< the undelying data structure
     KoShape *m_shape;

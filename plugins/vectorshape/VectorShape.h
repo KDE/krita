@@ -48,7 +48,7 @@ class RenderThread : public QObject, public QRunnable
 {
     Q_OBJECT
 public:
-    RenderThread(VectorShape *shape, const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY);
+    RenderThread(const VectorShape* const shape, const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY);
     virtual ~RenderThread();
     virtual void run();
 Q_SIGNALS:
@@ -60,7 +60,7 @@ protected:
     void drawEmf(QPainter &painter) const;
     void drawSvm(QPainter &painter) const;
 private:
-    VectorShape *m_shape;
+    const VectorShape* const m_shape;
     QSizeF m_size;
     QSize m_boundingSize;
     qreal m_zoomX, m_zoomY;
@@ -93,6 +93,8 @@ public:
     /// Load the real contents of the frame shape.  reimplemented  from KoFrameShape
     virtual bool loadOdfFrameElement(const KoXmlElement& frameElement,
                                      KoShapeLoadingContext& context);
+    /// reimplemented from KoShape
+    virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous = true) const;
 
     // Methods specific to the vector shape.
     QByteArray  compressedContents() const;
@@ -109,11 +111,13 @@ private:
     friend class RenderThread;
 
     // Member variables
-    VectorType  m_type;
-    QByteArray  m_contents;
-    QCache<int, QImage> m_cache;
-    bool m_isRendering;
+    mutable VectorType  m_type;
+    mutable QByteArray  m_contents;
+    mutable bool m_isRendering;
     mutable QMutex m_mutex;
+    QCache<int, QImage> m_cache;
+
+    void render(const KoViewConverter &converter, bool asynchronous, const QRectF& rect) const;
 };
 
 #endif

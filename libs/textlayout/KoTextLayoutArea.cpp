@@ -1022,16 +1022,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         expandBoundingLeft(line.x());
         expandBoundingRight(line.x() + line.naturalTextWidth());
 
-        // line fitted so try and do the next one
-        line = layout->createLine();
-        if (!line.isValid()) {
-            break;
-        }
-        cursor->lineTextStart = line.textStart();
-        if (softBreak) {
-            return false;
-        }
-
         // during fit is where documentLayout->positionInlineObjects is called
         //so now is a good time to position the obstructions
         int oldObstructionCount = documentLayout()->currentObstructions().size();
@@ -1040,6 +1030,17 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         if (oldObstructionCount < documentLayout()->currentObstructions().size()) {
             return false;
+        }
+
+        // line fitted so try and do the next one
+        line = layout->createLine();
+        if (!line.isValid()) {
+            break; // no more line means our job is done
+        }
+        cursor->lineTextStart = line.textStart();
+
+        if (softBreak) {
+            return false; // page-break means we need to start again on the next page
         }
     }
 
@@ -1245,7 +1246,6 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
 
     if (lineAdjust) {
         line.setPosition(QPointF(line.x(), line.y() + lineAdjust));
-        m_blockRects.last().moveTop(m_blockRects.last().top() + lineAdjust);
     }
 
     return height;

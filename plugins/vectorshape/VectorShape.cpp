@@ -60,6 +60,8 @@
 #include "libsvm/SvmParser.h"
 #include "libsvm/SvmPainterBackend.h"
 
+// Comment out to get uncached painting, which is good for debugging
+//#define VECTORSHAPE_PAINT_UNCACHED
 
 VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )
@@ -74,6 +76,10 @@ VectorShape::VectorShape()
 
 VectorShape::~VectorShape()
 {
+    // Wait for the render-thread to finish before the shape is allowed to be
+    // destroyed so we can make sure to prevent crashes or unwanted
+    // side-effects. Maybe as alternate we could just kill the render-thread...
+    QMutexLocker locker(&m_mutex);
 }
 
 // Methods specific to the vector shape.
@@ -95,7 +101,7 @@ void VectorShape::setCompressedContents( const QByteArray &newContents )
 // ----------------------------------------------------------------
 //                             Painting
 
-RenderThread::RenderThread(VectorShape *shape, const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY)
+RenderThread::RenderThread(const VectorShape* const shape, const QSizeF &size, const QSize &boundingSize, qreal zoomX, qreal zoomY)
     : QObject(), QRunnable(), m_shape(shape), m_size(size), m_boundingSize(boundingSize), m_zoomX(zoomX), m_zoomY(zoomY)
 {
     setAutoDelete(true);
@@ -119,7 +125,6 @@ void RenderThread::run()
         painter.scale(m_zoomX, m_zoomY);
         draw(painter);
         painter.end();
-        qDebug()<<"DONE";
     }
     emit finished(m_boundingSize, image);
 }
@@ -210,7 +215,6 @@ void RenderThread::drawEmf(QPainter &painter) const
     //kDebug(31000) << "position: " << position();
     //kDebug(31000) << "-------------------------------------------";
 
-    // FIXME: Make it static to save time?
     Libemf::Parser  emfParser;
 
 #if 1  // Set to 0 to get debug output
@@ -228,7 +232,6 @@ void RenderThread::drawSvm(QPainter &painter) const
 {
     QSize  shapeSizeInt( m_size.width(), m_size.height() );
 
-    // FIXME: Make it static to save time?
     Libsvm::SvmParser  svmParser;
 
     // Create a new painter backend.
@@ -239,36 +242,28 @@ void RenderThread::drawSvm(QPainter &painter) const
 
 void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
-#if 1  // Set to 0 to get uncached painting, which is good for debugging
     QRectF rc = converter.documentToView(boundingRect());
-
-    // If necessary, recreate the cached image.
     QImage *cache = m_cache[rc.size().toSize().height()];
-    if (!cache || cache->isNull()) {
-        if (!m_isRendering) {
-            m_isRendering = true;
-            qreal zoomX, zoomY;
-            converter.zoom(&zoomX, &zoomY);
-            RenderThread *t = new RenderThread(this, size(), rc.size().toSize(), zoomX, zoomY);
-            connect(t, SIGNAL(finished(QSize,QImage*)), this, SLOT(renderFinished(QSize,QImage*)));
-            // Since the backends may use QPainter::drawText we need to make sure to only
-            // use threads if the font-backend supports that what is in most cases.
-            if (QFontDatabase::supportsThreadedFontRendering()) {
-                QThreadPool::globalInstance()->start(t);
-            } else { // else just execute the logic non-threaded.
-                t->run();
-            }
-        }
-    } else {
+
+#ifdef VECTORSHAPE_PAINT_UNCACHED
+    bool useCache = false;
+    bool asynchronous = false;
+#else
+    bool useCache = cache && !cache->isNull();
+    // Since the backends may use QPainter::drawText we need to make sure to only
+    // use threads if the font-backend supports that what is in most cases.
+    bool asynchronous = QFontDatabase::supportsThreadedFontRendering();
+#endif
+
+    if (!useCache) { // recreate the cached image
+        render(converter, asynchronous, rc);
+    } else { // pain cached image
+        Q_ASSERT(cache && !cache->isNull());
         QVector<QRect> clipRects = painter.clipRegion().rects();
         foreach (const QRect &rc, clipRects) {
             painter.drawImage(rc.topLeft(), *cache, rc);
         }
     }
-#else
-    applyConversion(painter, converter);
-    draw(painter);
-#endif
 }
 
 void VectorShape::renderFinished(QSize boundingSize, QImage *image)
@@ -396,6 +391,27 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
     return true;
 }
 
+void VectorShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
+{
+    QRectF rc = converter.documentToView(boundingRect());
+    render(converter, asynchronous, rc);
+}
+
+void VectorShape::render(const KoViewConverter &converter, bool asynchronous, const QRectF& rect) const
+{
+    if (!m_isRendering) {
+        m_isRendering = true;
+        qreal zoomX, zoomY;
+        converter.zoom(&zoomX, &zoomY);
+        RenderThread *t = new RenderThread(this, size(), rect.size().toSize(), zoomX, zoomY);
+        connect(t, SIGNAL(finished(QSize,QImage*)), this, SLOT(renderFinished(QSize,QImage*)));
+        if (asynchronous) { // render and paint the image threaded
+            QThreadPool::globalInstance()->start(t);
+        } else { // non-threaded rendering and painting of the image
+            t->run();
+        }
+    }
+}
 
 bool VectorShape::isWmf(const QByteArray &bytes)
 {

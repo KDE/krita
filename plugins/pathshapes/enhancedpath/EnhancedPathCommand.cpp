@@ -127,6 +127,14 @@ bool EnhancedPathCommand::execute()
             qreal rx = 0.5 * bbox.width();
             qreal ry = 0.5 * bbox.height();
 
+            if (rx == 0) {
+                rx = 1;
+            }
+
+            if (ry == 0) {
+                ry = 1;
+            }
+
             QPointF startRadialVector = points[i+2] - center;
             QPointF endRadialVector = points[i+3] - center;
 

@@ -611,6 +611,9 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
 
 bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qreal topBorderWidth, qreal bottomBorderWidth, qreal rowBottom)
 {
+    Q_UNUSED(topBorderWidth)
+    Q_UNUSED(bottomBorderWidth)
+
     // Let's make sure all merged cells in this row, that don't end in this row get's a layout
     int row = cursor->row;
     int col = 0;

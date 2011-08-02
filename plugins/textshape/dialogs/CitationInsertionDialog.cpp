@@ -17,16 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "CitationInsertionDialog.h"
-#include "ui_CitationInsertionDialog.h"
-#include "TextTool.h"
 
 #include <KAction>
 #include <KDebug>
 #include <KoInlineCite.h>
 #include <KoInlineTextObjectManager.h>
-
-#include <QWidget>
-#include <QMessageBox>
+#include <KoTextDocument.h>
 
 CitationInsertionDialog::CitationInsertionDialog(KoTextEditor *editor ,QWidget *parent) :
     QDialog(parent),
@@ -38,7 +34,7 @@ CitationInsertionDialog::CitationInsertionDialog(KoTextEditor *editor ,QWidget *
     connect(dialog.existingCites,SIGNAL(currentIndexChanged(QString)),this,SLOT(selectionChangedFromExistingCites()));
 
     QStringList existingCites(i18n("Select"));
-    foreach (KoInlineCite *cite, KoTextDocument(m_editor->document()).inlineTextObjectManager()->citations()) {
+    foreach (KoInlineCite *cite, KoTextDocument(m_editor->document()).inlineTextObjectManager()->citations().values()) {
         existingCites << cite->identifier();
         m_cites[cite->identifier()] = cite;
     }
@@ -84,11 +80,6 @@ void CitationInsertionDialog::selectionChangedFromExistingCites()
     }
 }
 
-void CitationInsertionDialog::setStyleManager(KoStyleManager *sm)
-{
-    m_styleManager = sm;
-}
-
 KoInlineCite *CitationInsertionDialog::toCite()
 {
     KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
@@ -108,6 +99,7 @@ KoInlineCite *CitationInsertionDialog::toCite()
     cite->setIdentifier(dialog.shortName->text());
     cite->setInstitution(dialog.institution->text());
     cite->setISBN(dialog.isbn->text());
+    cite->setISSN(dialog.issn->text());
     cite->setJournal(dialog.journal->text());
     cite->setMonth(dialog.month->text());
     cite->setNote(dialog.note->text());
@@ -144,6 +136,7 @@ void CitationInsertionDialog::fillValuesFrom(KoInlineCite *cite)
     dialog.institution->setText(cite->institution());
     dialog.shortName->setText(cite->identifier());
     dialog.isbn->setText(cite->isbn());
+    dialog.issn->setText(cite->issn());
     dialog.journal->setText(cite->journal());
     dialog.month->setText(cite->month());
     dialog.note->setText(cite->note());

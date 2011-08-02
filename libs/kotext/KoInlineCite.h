@@ -53,6 +53,8 @@ public:
 
     void setType(Type t);
 
+    QString dataField(QString fieldName) const;     //returns bibliography-data-field with name fieldName
+
     bool hasSameData(KoInlineCite *cite) const;
 
     void copyFrom(KoInlineCite *cite);
@@ -116,6 +118,8 @@ public:
 
     void setISBN (const QString &isbn);
 
+    void setISSN (const QString &issn);
+
     void setCustom1 (const QString &custom1);
 
     void setCustom2 (const QString &custom2);
@@ -177,6 +181,8 @@ public:
     QString url() const;
 
     QString isbn() const;
+
+    QString issn() const;
 
     QString custom1() const;
 

@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoInlineCite.h"
+#include "KoInlineTextObjectManager.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -74,6 +75,7 @@ public:
     QString year;
     QString url;
     QString isbn;
+    QString issn;
     QString custom1;
     QString custom2;
     QString custom3;
@@ -101,6 +103,78 @@ void KoInlineCite::setType(Type t)
 {
     d->type = t;
 }
+
+QString KoInlineCite::dataField(QString fieldName) const
+{
+    if ( fieldName == "address" ) {
+        return d->address;
+    } else if ( fieldName == "annote" ) {
+        return d->annote;
+    } else if ( fieldName == "author" ) {
+        return d->author;
+    } else if ( fieldName == "bibliography-type" ) {
+        return d->bibliographyType;
+    } else if ( fieldName == "booktitle" ) {
+        return d->booktitle;
+    } else if ( fieldName == "chapter" ) {
+        return d->chapter;
+    } else if ( fieldName == "custom1" ) {
+        return d->custom1;
+    } else if ( fieldName == "custom2" ) {
+        return d->custom2;
+    } else if ( fieldName == "custom3" ) {
+        return d->custom3;
+    } else if ( fieldName == "custom4" ) {
+        return d->custom4;
+    } else if ( fieldName == "custom5" ) {
+        return d->custom5;
+    } else if ( fieldName == "edition" ) {
+        return d->edition;
+    } else if ( fieldName == "editor" ) {
+        return d->editor;
+    } else if ( fieldName == "howpublished" ) {
+        return d->publicationType;
+    } else if ( fieldName == "identifier" ) {
+        return d->identifier;
+    } else if ( fieldName == "institution" ) {
+        return d->institution;
+    } else if ( fieldName == "isbn" ) {
+        return d->isbn;
+    } else if ( fieldName == "issn" ) {
+        return d->issn;
+    } else if ( fieldName == "journal" ) {
+        return d->journal;
+    } else if ( fieldName == "month" ) {
+        return d->month;
+    } else if ( fieldName == "note" ) {
+        return d->note;
+    } else if ( fieldName == "number" ) {
+        return d->number;
+    } else if ( fieldName == "organisations" ) {
+        return d->organisation;
+    } else if ( fieldName == "pages" ) {
+        return d->pages;
+    } else if ( fieldName == "publisher" ) {
+        return d->publisher;
+    } else if ( fieldName == "report-type" ) {
+        return d->reportType;
+    } else if ( fieldName == "school" ) {
+        return d->school;
+    } else if ( fieldName == "series" ) {
+        return d->series;
+    } else if ( fieldName == "title" ) {
+        return d->title;
+    } else if ( fieldName == "url" ) {
+        return d->url;
+    } else if ( fieldName == "volume" ) {
+        return d->volume;
+    } else if ( fieldName == "year" ) {
+        return d->year;
+    } else {
+        return QString();
+    }
+}
+
 void KoInlineCite::setMotherFrame(QTextFrame *motherFrame)
 {
     QTextCursor cursor(motherFrame->lastCursorPosition());
@@ -188,6 +262,11 @@ void KoInlineCite::setInstitution(const QString &institution)
 void KoInlineCite::setISBN(const QString &isbn)
 {
     d->isbn = isbn;
+}
+
+void KoInlineCite::setISSN(const QString &issn)
+{
+    d->issn = issn;
 }
 
 void KoInlineCite::setJournal(const QString &journal)
@@ -355,6 +434,11 @@ QString KoInlineCite::isbn() const
     return d->isbn;
 }
 
+QString KoInlineCite::issn() const
+{
+    return d->issn;
+}
+
 QString KoInlineCite::journal() const
 {
     return d->journal;
@@ -437,12 +521,12 @@ bool KoInlineCite::hasSameData(KoInlineCite *cite) const
             d->chapter == cite->chapter() && d->custom1 == cite->custom1() && d->custom2 == cite->custom2() &&
             d->custom3 == cite->custom3() && d->custom4 == cite->custom4() && d->custom5 == cite->custom5() &&
             d->edition == cite->edition() && d->editor == cite->editor() && d->identifier == cite->identifier() &&
-            d->institution == cite->institution() && d->isbn == cite->isbn() && d->journal == cite->journal() &&
-            d->month == cite->month() && d->note == cite->note() && d->number == cite->number() &&
-            d->organisation == cite->organisations() && d->pages == cite->pages() && d->publicationType == cite->publicationType() &&
-            d->publisher == cite->publisher() && d->reportType == cite->reportType() && d->school == cite->school() &&
-            d->series == cite->series() && d->title == cite->title() && d->url == cite->url() && d->volume == cite->volume() &&
-            d->year == cite->year());
+            d->institution == cite->institution() && d->isbn == cite->isbn() && d->issn == cite->issn() &&
+            d->journal == cite->journal() && d->month == cite->month() && d->note == cite->note() &&
+            d->number == cite->number() && d->organisation == cite->organisations() && d->pages == cite->pages() &&
+            d->publicationType == cite->publicationType() && d->publisher == cite->publisher() &&
+            d->reportType == cite->reportType() && d->school == cite->school() && d->series == cite->series() &&
+            d->title == cite->title() && d->url == cite->url() && d->volume == cite->volume() && d->year == cite->year());
 }
 
 void KoInlineCite::copyFrom(KoInlineCite *cite)
@@ -463,6 +547,7 @@ void KoInlineCite::copyFrom(KoInlineCite *cite)
     d->identifier = cite->identifier();
     d->institution = cite->institution();
     d->isbn = cite->isbn();
+    d->issn = cite->issn();
     d->journal = cite->journal();
     d->month = cite->month();
     d->note = cite->note();
@@ -542,7 +627,6 @@ bool KoInlineCite::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 {
     Q_UNUSED(context);
     //KoTextLoader loader(context);
-    QTextCursor cursor(d->textFrame);
     if (element.namespaceURI() == KoXmlNS::text && element.localName() == "bibliography-mark") {
         d->identifier = element.attributeNS(KoXmlNS::text, "identifier");
         d->bibliographyType = element.attributeNS(KoXmlNS::text, "bibliography-type");
@@ -570,16 +654,23 @@ bool KoInlineCite::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
         d->year = element.attributeNS(KoXmlNS::text, "year");
         d->url = element.attributeNS(KoXmlNS::text, "url");
         d->isbn = element.attributeNS(KoXmlNS::text, "isbn");
+        d->issn = element.attributeNS(KoXmlNS::text, "issn");
         d->custom1 = element.attributeNS(KoXmlNS::text, "custom1");
         d->custom2 = element.attributeNS(KoXmlNS::text, "custom2");
         d->custom3 = element.attributeNS(KoXmlNS::text, "custom3");
         d->custom4 = element.attributeNS(KoXmlNS::text, "custom4");
         d->custom5 = element.attributeNS(KoXmlNS::text, "custom5");
+
+        //Now checking for cloned citation (with same identifier)
+        if (KoTextDocument(d->textFrame->document())
+                .inlineTextObjectManager()->citations(true).keys().count(d->identifier) > 1) {
+
+            this->setType(KoInlineCite::ClonedCitation);
+        }
     }
     else {
         return false;
     }
-    //QMessageBox::critical(0,QString("loading completed"),QString("identifier is %1").arg(d->identifier),QMessageBox::Ok);
     return true;
 }
 
@@ -591,65 +682,67 @@ void KoInlineCite::saveOdf(KoShapeSavingContext &context)
 
     writer->startElement("text:bibliography-mark", false);
 
-    if (d->identifier != "")
+    if (!d->identifier.isEmpty())
         writer->addAttribute("text:identifier", d->identifier);     //can't be "" //to be changed later
-    if (d->bibliographyType != "")
+    if (!d->bibliographyType.isEmpty())
         writer->addAttribute("text:bibliography-type", d->bibliographyType);
-    if (d->address != "")
+    if (!d->address.isEmpty())
         writer->addAttribute("text:address",d->identifier);
-    if (d->annote != "")
+    if (!d->annote.isEmpty())
         writer->addAttribute("text:annote",d->annote);
-    if (d->author != "")
+    if (!d->author.isEmpty())
         writer->addAttribute("text:author",d->author);
-    if (d->booktitle != "")
+    if (!d->booktitle.isEmpty())
         writer->addAttribute("text:booktitle",d->booktitle);
-    if (d->chapter != "")
+    if (!d->chapter.isEmpty())
         writer->addAttribute("text:chapter",d->chapter);
-    if (d->edition != "")
+    if (!d->edition.isEmpty())
         writer->addAttribute("text:edition",d->edition);
-    if (d->editor != "")
+    if (!d->editor.isEmpty())
         writer->addAttribute("text:editor",d->editor);
-    if (d->publicationType != "")
+    if (!d->publicationType.isEmpty())
         writer->addAttribute("text:howpublished",d->publicationType);
-    if (d->institution != "")
+    if (!d->institution.isEmpty())
         writer->addAttribute("text:institution",d->institution);
-    if (d->journal != "")
+    if (!d->journal.isEmpty())
         writer->addAttribute("text:journal",d->journal);
-    if (d->month != "")
+    if (!d->month.isEmpty())
         writer->addAttribute("text:month",d->month);
-    if (d->note != "")
+    if (!d->note.isEmpty())
         writer->addAttribute("text:note",d->note);
-    if (d->number != "")
+    if (!d->number.isEmpty())
         writer->addAttribute("text:number",d->number);
-    if (d->pages != "")
+    if (!d->pages.isEmpty())
         writer->addAttribute("text:pages",d->pages);
-    if (d->publisher != "")
+    if (!d->publisher.isEmpty())
         writer->addAttribute("text:publisher",d->publisher);
-    if (d->school != "")
+    if (!d->school.isEmpty())
         writer->addAttribute("text:school",d->school);
-    if (d->series != "")
+    if (!d->series.isEmpty())
         writer->addAttribute("text:series",d->series);
-    if (d->title != "")
+    if (!d->title.isEmpty())
         writer->addAttribute("text:title",d->title);
-    if (d->reportType != "")
+    if (!d->reportType.isEmpty())
         writer->addAttribute("text:report-type",d->reportType);
-    if (d->volume != "")
+    if (!d->volume.isEmpty())
         writer->addAttribute("text:volume",d->volume);
-    if (d->year != "")
+    if (!d->year.isEmpty())
         writer->addAttribute("text:year",d->year);
-    if (d->url != "")
+    if (!d->url.isEmpty())
         writer->addAttribute("text:url",d->url);
-    if (d->isbn != "")
+    if (!d->isbn.isEmpty())
         writer->addAttribute("text:isbn",d->isbn);
-    if (d->custom1 != "")
+    if (!d->issn.isEmpty())
+        writer->addAttribute("text:issn",d->issn);
+    if (!d->custom1.isEmpty())
         writer->addAttribute("text:custom1",d->custom1);
-    if (d->custom2 != "")
+    if (!d->custom2.isEmpty())
         writer->addAttribute("text:custom2",d->custom2);
-    if (d->custom3 != "")
+    if (!d->custom3.isEmpty())
         writer->addAttribute("text:custom3",d->custom3);
-    if (d->custom4 != "")
+    if (!d->custom4.isEmpty())
         writer->addAttribute("text:custom4",d->custom4);
-    if (d->custom5 != "")
+    if (!d->custom5.isEmpty())
         writer->addAttribute("text:custom5",d->custom5);
 
     writer->addTextNode(QString("[%1]").arg(d->identifier));

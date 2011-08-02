@@ -33,7 +33,6 @@
 #include <QTextCursor>
 #include <QTimer>
 #include <QWeakPointer>
-#include <QWidget>
 
 class TextEditingPluginContainer;
 class InsertCharacter;
@@ -371,7 +370,6 @@ private:
     bool m_delayedEnsureVisible;
     
     TextToolSelection *m_toolSelection;
-    QWidget m_dummyWidget;
 };
 
 #endif

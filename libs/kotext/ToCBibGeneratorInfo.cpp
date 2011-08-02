@@ -18,17 +18,12 @@
  */
 #include "ToCBibGeneratorInfo.h"
 
-ToCBibGeneratorInfo::ToCBibGeneratorInfo()
-{
-}
-
 IndexEntry::IndexEntry(QString _styleName, IndexEntry::IndexEntryName _name)
         :   styleName(_styleName),
             name(_name)
 {
 
 }
-
 
 IndexEntry::~IndexEntry()
 {
@@ -140,7 +135,7 @@ void BibliographyEntryTemplate::saveOdf(KoXmlWriter* writer) const
 {
     writer->startElement("text:bibliography-entry-template");
         writer->addAttribute("text:style-name", styleName);
-
+        writer->addAttribute("text:bibliography-type", bibliographyType);
         foreach(IndexEntry* e,indexEntries) {
             e->saveOdf(writer);
         }

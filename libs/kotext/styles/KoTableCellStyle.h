@@ -292,7 +292,6 @@ public:
      */
     void setEdge(KoTableBorderStyle::Side side, KoBorder::BorderStyle style, qreal totalWidth, QColor color);
 
-
     /**
      * Set the properties of a double border.
      * Note: you need to set the edge first or that would overwrite these values.
@@ -346,6 +345,16 @@ private:
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;
+    
+    
+    /**
+     * Set the format properties from an Edge structure
+     * 
+     * @param side defines which edge this is for.
+     * @param style the border style for this side.
+     * @param edge the Edge that hold the properties values
+     */
+    void setEdge(KoTableBorderStyle::Side side, const KoTableBorderStyle::Edge &edge, KoBorder::BorderStyle style);
 
     Q_DECLARE_PRIVATE(KoTableCellStyle)
     

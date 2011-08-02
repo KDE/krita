@@ -1094,22 +1094,62 @@ void KoTableCellStyle::setEdge(KoTableBorderStyle::Side side, KoBorder::BorderSt
     middlePen = edge.outerPen;
     middlePen.setWidthF(middleWidth);
 
-    Q_ASSERT(false);
-    ///@TODO: fix me !
-//    d->edges[side] = edge;
-//    d->borderstyle[side] = style;
+    setEdge(side, edge, style);
+}
+
+void KoTableCellStyle::setEdge(KoTableBorderStyle::Side side, const KoTableBorderStyle::Edge &edge, KoBorder::BorderStyle style)
+{
+    switch (side)
+    {
+        case KoTableBorderStyle::Top:
+            setProperty(KoTableBorderStyle::TopBorderOuterPen, edge.outerPen);
+            setProperty(KoTableBorderStyle::TopBorderSpacing, edge.spacing);
+            setProperty(KoTableBorderStyle::TopBorderInnerPen, edge.innerPen);
+            setProperty(KoTableBorderStyle::TopBorderStyle, style);
+            break;
+        case KoTableBorderStyle::Left:
+            setProperty(KoTableBorderStyle::LeftBorderOuterPen, edge.outerPen);
+            setProperty(KoTableBorderStyle::LeftBorderSpacing, edge.spacing);
+            setProperty(KoTableBorderStyle::LeftBorderInnerPen, edge.innerPen);
+            setProperty(KoTableBorderStyle::LeftBorderStyle, style);
+            break;
+        case KoTableBorderStyle::Bottom:
+            setProperty(KoTableBorderStyle::BottomBorderOuterPen, edge.outerPen);
+            setProperty(KoTableBorderStyle::BottomBorderSpacing, edge.spacing);
+            setProperty(KoTableBorderStyle::BottomBorderInnerPen, edge.innerPen);
+            setProperty(KoTableBorderStyle::BottomBorderStyle, style);
+            break;
+        case KoTableBorderStyle::Right:
+            setProperty(KoTableBorderStyle::RightBorderOuterPen, edge.outerPen);
+            setProperty(KoTableBorderStyle::RightBorderSpacing, edge.spacing);
+            setProperty(KoTableBorderStyle::RightBorderInnerPen, edge.innerPen);
+            setProperty(KoTableBorderStyle::RightBorderStyle, style);
+            break;
+        case KoTableBorderStyle::TopLeftToBottomRight:
+            setProperty(KoTableBorderStyle::TopLeftToBottomRightBorderOuterPen, edge.outerPen);
+            setProperty(KoTableBorderStyle::TopLeftToBottomRightBorderSpacing, edge.spacing);
+            setProperty(KoTableBorderStyle::TopLeftToBottomRightBorderInnerPen, edge.innerPen);
+            setProperty(KoTableBorderStyle::TopLeftToBottomRightBorderStyle, style);
+            break;
+        case KoTableBorderStyle::BottomLeftToTopRight:
+            setProperty(KoTableBorderStyle::BottomLeftToTopRightBorderOuterPen, edge.outerPen);
+            setProperty(KoTableBorderStyle::BottomLeftToTopRightBorderSpacing, edge.spacing);
+            setProperty(KoTableBorderStyle::BottomLeftToTopRightBorderInnerPen, edge.innerPen);
+            setProperty(KoTableBorderStyle::BottomLeftToTopRightBorderStyle, style);
+            break;
+    }
 }
 
 void KoTableCellStyle::setEdgeDoubleBorderValues(KoTableBorderStyle::Side side, qreal innerWidth, qreal space)
 {
-    const KoTableBorderStyle::Edge &edge = getEdge(side);
-    Q_ASSERT(false);
-    ///@TODO: rewrite me
+    KoTableBorderStyle::Edge edge = getEdge(side);
+    
     qreal totalWidth = edge.outerPen.widthF() + edge.spacing + edge.innerPen.widthF();
     if (edge.innerPen.widthF() > 0.0) {
-        /*edge.outerPen.setWidthF(totalWidth - innerWidth - space);
+        edge.outerPen.setWidthF(totalWidth - innerWidth - space);
         edge.spacing = space;
-        edge.innerPen.setWidthF(innerWidth);*/
+        edge.innerPen.setWidthF(innerWidth);
+        setEdge(side, edge, getBorderStyle(side));
     }
 }
 

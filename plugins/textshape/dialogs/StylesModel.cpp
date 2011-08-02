@@ -46,11 +46,11 @@
 StylesModel::StylesModel(KoStyleManager *manager, bool paragraphMode, QObject *parent)
     : QAbstractListModel(parent),
       m_styleManager(0),
+      m_styleThumbnailer(0),
       m_currentParagraphStyle(0),
       m_currentCharacterStyle(0),
       m_pureParagraphStyle(true),
       m_pureCharacterStyle(true),
-      m_styleThumbnailer(0),
       m_paragraphMode(paragraphMode),
       m_styleMapper(new QSignalMapper(this)),
       m_tmpTextShape(0)

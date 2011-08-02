@@ -432,7 +432,7 @@ void KoPADocument::saveOdfDocumentStyles( KoPASavingContext & context )
 {
     KoStyleManager *styleManager = resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     Q_ASSERT( styleManager );
-    styleManager->saveOdf( context.mainStyles() );
+    styleManager->saveOdf(context);
 }
 
 bool KoPADocument::loadOdfDocumentStyles( KoPALoadingContext & context )
@@ -558,6 +558,13 @@ void KoPADocument::removePage( KoPAPageBase * page )
     KoPAPageDeleteCommand * command = new KoPAPageDeleteCommand( this, page );
     pageRemoved( page, command );
     addCommand( command );
+}
+
+
+void KoPADocument::removePages(QList<KoPAPageBase *> &pages)
+{
+    KoPAPageDeleteCommand *command = new KoPAPageDeleteCommand(this, pages);
+    addCommand(command);
 }
 
 void KoPADocument::pageRemoved( KoPAPageBase * page, KUndo2Command * parent )

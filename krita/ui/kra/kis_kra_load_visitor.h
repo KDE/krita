@@ -54,7 +54,6 @@ public:
     bool visit(KisCloneLayer *layer);
     bool visit(KisFilterMask *mask);
     bool visit(KisTransparencyMask *mask);
-    bool visit(KisTransformationMask *mask);
     bool visit(KisSelectionMask *mask);
 
 private:

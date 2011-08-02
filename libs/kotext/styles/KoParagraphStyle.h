@@ -26,6 +26,9 @@
 #include "KoText.h"
 #include "kotext_export.h"
 
+#include <KoXmlReaderForward.h>
+#include <KoBorder.h>
+
 #include <QObject>
 #include <QVector>
 #include <QString>
@@ -40,9 +43,8 @@ class QTextBlock;
 class KoStyleStack;
 class KoGenStyle;
 class KoGenStyles;
-#include "KoXmlReaderForward.h"
 class KoShapeLoadingContext;
-#include "KoBorder.h"
+class KoShapeSavingContext;
 
 /**
  * A container for all properties for the paragraph wide style.
@@ -227,6 +229,15 @@ public:
     qreal lineSpacing() const;
 
     /**
+     * Set the line-height to "normal". This overwrites a line-height set before either
+     * with \a setLineHeightAbsolute or \a setMinimumLineHeight . If set then a value
+     * set with \a setLineSpacing will be ignored.
+     */
+    void setNormalLineHeight();
+    /// @see setNormalLineHeight
+    bool hasNormalLineHeight() const;
+
+    /**
      * If set to true the font-encoded height will be used instead of the font-size propery
      * This property influences setLineHeightPercent() behavior.
      * When off (default) a font of 12pt will always have a linespacing of 12pt times the
@@ -393,59 +404,59 @@ public:
     void setVerticalAlignment(VerticalAlign value);
     
     void setBreakBefore(KoText::KoTextBreakProperty value);
-    KoText::KoTextBreakProperty breakBefore();
+    KoText::KoTextBreakProperty breakBefore() const;
     void setBreakAfter(KoText::KoTextBreakProperty value);
-    KoText::KoTextBreakProperty breakAfter();
+    KoText::KoTextBreakProperty breakAfter() const;
     void setLeftPadding(qreal padding);
-    qreal leftPadding();
+    qreal leftPadding() const;
     void setTopPadding(qreal padding);
-    qreal topPadding();
+    qreal topPadding() const;
     void setRightPadding(qreal padding);
-    qreal rightPadding();
+    qreal rightPadding() const;
     void setBottomPadding(qreal padding);
-    qreal bottomPadding();
+    qreal bottomPadding() const;
     void setPadding(qreal padding);
 
     void setLeftBorderWidth(qreal width);
-    qreal leftBorderWidth();
+    qreal leftBorderWidth() const;
     void setLeftInnerBorderWidth(qreal width);
-    qreal leftInnerBorderWidth();
+    qreal leftInnerBorderWidth() const;
     void setLeftBorderSpacing(qreal width);
-    qreal leftBorderSpacing();
+    qreal leftBorderSpacing() const;
     void setLeftBorderStyle(KoBorder::BorderStyle style);
-    KoBorder::BorderStyle leftBorderStyle();
+    KoBorder::BorderStyle leftBorderStyle() const;
     void setLeftBorderColor(const QColor &color);
-    QColor leftBorderColor();
+    QColor leftBorderColor() const;
     void setTopBorderWidth(qreal width);
-    qreal topBorderWidth();
+    qreal topBorderWidth() const;
     void setTopInnerBorderWidth(qreal width);
-    qreal topInnerBorderWidth();
+    qreal topInnerBorderWidth() const;
     void setTopBorderSpacing(qreal width);
-    qreal topBorderSpacing();
+    qreal topBorderSpacing() const;
     void setTopBorderStyle(KoBorder::BorderStyle style);
-    KoBorder::BorderStyle topBorderStyle();
+    KoBorder::BorderStyle topBorderStyle() const;
     void setTopBorderColor(const QColor &color);
-    QColor topBorderColor();
+    QColor topBorderColor() const;
     void setRightBorderWidth(qreal width);
-    qreal rightBorderWidth();
+    qreal rightBorderWidth() const;
     void setRightInnerBorderWidth(qreal width);
-    qreal rightInnerBorderWidth();
+    qreal rightInnerBorderWidth() const;
     void setRightBorderSpacing(qreal width);
-    qreal rightBorderSpacing();
+    qreal rightBorderSpacing() const;
     void setRightBorderStyle(KoBorder::BorderStyle style);
-    KoBorder::BorderStyle rightBorderStyle();
+    KoBorder::BorderStyle rightBorderStyle() const;
     void setRightBorderColor(const QColor &color);
-    QColor rightBorderColor();
+    QColor rightBorderColor() const;
     void setBottomBorderWidth(qreal width);
-    qreal bottomBorderWidth();
+    qreal bottomBorderWidth() const;
     void setBottomInnerBorderWidth(qreal width);
-    qreal bottomInnerBorderWidth();
+    qreal bottomInnerBorderWidth() const;
     void setBottomBorderSpacing(qreal width);
-    qreal bottomBorderSpacing();
+    qreal bottomBorderSpacing() const;
     void setBottomBorderStyle(KoBorder::BorderStyle style);
-    KoBorder::BorderStyle bottomBorderStyle();
+    KoBorder::BorderStyle bottomBorderStyle() const;
     void setBottomBorderColor(const QColor &color);
-    QColor bottomBorderColor();
+    QColor bottomBorderColor() const;
     
     bool joinBorder() const;
     void setJoinBorder(bool value);
@@ -645,7 +656,7 @@ public:
      */
     void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context);
 
-    void saveOdf(KoGenStyle &style, KoGenStyles &mainStyles);
+    void saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const;
 
     /**
      * Returns true if this paragraph style has the property set.

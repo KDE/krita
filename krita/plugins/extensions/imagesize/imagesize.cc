@@ -52,7 +52,7 @@
 #include <kis_selection_manager.h>
 #include <kis_transaction.h>
 #include <kis_image_manager.h>
-#include <kis_layer_manager.h>
+#include <kis_node_manager.h>
 #include <kis_transform_visitor.h>
 #include <widgets/kis_progress_widget.h>
 #include <commands/kis_image_set_resolution_command.h>
@@ -184,9 +184,9 @@ void ImageSize::slotLayerSize()
         qint32 w = dlgLayerSize->width();
         qint32 h = dlgLayerSize->height();
 
-        m_view->layerManager()->scaleLayer((double)w / ((double)(rc.width())),
-                                           (double)h / ((double)(rc.height())),
-                                           dlgLayerSize->filterType());
+        m_view->nodeManager()->scale((double)w / ((double)(rc.width())),
+                                     (double)h / ((double)(rc.height())),
+                                     dlgLayerSize->filterType());
     }
     delete dlgLayerSize;
 }

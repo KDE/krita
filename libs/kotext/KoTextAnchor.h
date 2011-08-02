@@ -166,7 +166,7 @@ public:
     const QTextDocument *document() const;
 
     /// reimplemented from KoInlineObject
-    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
+    virtual void updatePosition(const QTextDocument *document,
                                 int posInDocument, const QTextCharFormat &format);
     /// reimplemented from KoInlineObject
     virtual void resize(const QTextDocument *document, QTextInlineObject object,

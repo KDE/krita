@@ -30,6 +30,7 @@
 class KoCharacterStyle;
 class KoListStyle;
 class KoShapeLoadingContext;
+class KoShapeSavingContext;
 class KoXmlWriter;
 class KoImageData;
 
@@ -190,7 +191,7 @@ public:
     /**
      * Save the properties of the style using the OpenDocument format
      */
-    void saveOdf(KoXmlWriter *writer) const;
+    void saveOdf(KoXmlWriter *writer, KoShapeSavingContext &context) const;
 
 public slots:
     void onStyleChanged(int key);

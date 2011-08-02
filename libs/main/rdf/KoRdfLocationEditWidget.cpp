@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
+   Copyright (C) 2011 Ben Martin hacking for fun!
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,13 +24,76 @@
 
 #include <kdebug.h>
 
+// marble for geolocation
+#ifdef CAN_USE_MARBLE
+#include <marble/LatLonEdit.h>
+#include <marble/MarbleWidget.h>
+#include <marble/MarbleWidgetInputHandler.h>
+#endif
+
+class KoRdfLocationEditWidgetPrivate
+{
+public:
+#ifdef CAN_USE_MARBLE
+    Marble::LatLonEdit* xlat;
+    Marble::LatLonEdit* xlong;
+    Marble::MarbleWidget* map;
+#else
+#endif
+    };
+
 KoRdfLocationEditWidget::KoRdfLocationEditWidget(QWidget *parent, Ui::KoRdfLocationEditWidget *ew)
-        : QWidget(parent)
+    : QWidget(parent)
+    , d(new KoRdfLocationEditWidgetPrivate())
 {
     Q_UNUSED(ew);
+}
+
+KoRdfLocationEditWidget::~KoRdfLocationEditWidget()
+{
+    delete d;
 }
 
 void KoRdfLocationEditWidget::mouseMoveGeoPosition(QString s)
 {
     kDebug(30015) << "KoRdfLocationEditWidget::mouseMoveGeoPosition() str:" << s;
+    
+#ifdef CAN_USE_MARBLE
+    if(d->map)
+    {
+        kDebug(30015) << "lat:" << d->map->centerLatitude() << " long:" << d->map->centerLongitude();
+
+        d->xlat->setValue( d->map->centerLatitude());
+        d->xlong->setValue(d->map->centerLongitude());
+    }
+#endif
 }
+
+#ifdef CAN_USE_MARBLE
+void KoRdfLocationEditWidget::setupMap( Marble::MarbleWidget* _map,
+                                        Marble::LatLonEdit* _xlat,
+                                        Marble::LatLonEdit* _xlong)
+{
+    d->map   = _map;
+    d->xlat  = _xlat;
+    d->xlong = _xlong;
+    kDebug(30015) << " map:" << d->map;
+
+#if MARBLE_VERSION >= 0x000c00
+    Marble::MarbleWidgetDefaultInputHandler *handler = new Marble::MarbleWidgetDefaultInputHandler(d->map);
+#else
+    Marble::MarbleWidgetDefaultInputHandler *handler = new Marble::MarbleWidgetDefaultInputHandler();
+#endif
+
+//    handler->setLeftMouseButtonPopup( false );
+    handler->setPositionSignalConnected(true);
+    connect(handler, SIGNAL(mouseMoveGeoPosition(QString)),
+            this, SLOT(mouseMoveGeoPosition(QString)));
+
+    d->map->setInputHandler(handler);
+#if MARBLE_VERSION < 0x000c00
+    handler->init(d->map);
+#endif
+
+}
+#endif

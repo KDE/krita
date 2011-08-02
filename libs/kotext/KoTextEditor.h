@@ -17,7 +17,6 @@
 * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 * Boston, MA 02110-1301, USA.
 */
-
 #ifndef KOTEXTEDITOR_H
 #define KOTEXTEDITOR_H
 
@@ -45,6 +44,14 @@ class QTextDocumentFragment;
 class QString;
 class KUndo2Command;
 
+/**
+ * KoTextEditor is a wrapper around QTextCursor. KoTextEditor implements KoToolSelection
+ * to notify the system that there is text selected which can be used to cut, copy and paste.
+ *
+ * Code like:
+ * <code>KoTextEditor *handler = qobject_cast<KoTextEditor*> (m_canvas->toolProxy()->selection());</code>
+ * is evil, toolProxy()->selection should be deprecated.
+ */
 class KOTEXT_EXPORT KoTextEditor: public KoToolSelection
 {
     Q_OBJECT
@@ -53,15 +60,16 @@ public:
 
     virtual ~KoTextEditor();
 
+public: // KoToolSelection overloads
+
+    /// returns true if the wrapped QTextCursor has a selection.
+    bool hasSelection();
+
+public:
+
+    /// Called when loading is done to check whether there's bidi text in the document.
     void finishedLoading();
 
-/*    QTextCursor ()
-QTextCursor ( QTextDocument * document )
-QTextCursor ( QTextFrame * frame )
-QTextCursor ( const QTextBlock & block )
-QTextCursor ( const QTextCursor & cursor )
-~QTextCursor ()
-*/
     void updateDefaultTextDirection(KoText::Direction direction);
 
     bool operator!=(const QTextCursor &other) const;
@@ -77,7 +85,12 @@ QTextCursor ( const QTextCursor & cursor )
     bool operator>=(const QTextCursor &other) const;
 
 public slots:
-    ///This should be used only as read-only cursor or within a KUndo2Command sub-class which will be added to the textEditor with addCommand. For examples of proper implementation of such undoCommands, see the TextShape commands.
+
+    /**
+     * This should be used only as read-only cursor or within a KUndo2Command sub-class which
+     * will be added to the textEditor with addCommand. For examples of proper implementation of
+     * such undoCommands, see the TextShape commands.
+     */
     QTextCursor* cursor();
 
     void addCommand(KUndo2Command *command, bool addCommandToStack = true);
@@ -143,7 +156,8 @@ public slots:
     bool deleteInlineObjects(bool backward = false);
 
 
-/// QTextCursor methods
+    // Wrapped QTextCursor methods
+
     int anchor() const;
 
     bool atBlockEnd() const;
@@ -179,8 +193,6 @@ public slots:
     void endEditBlock();
 
     bool hasComplexSelection() const;
-
-    bool hasSelection();
 
     void insertBlock();
 

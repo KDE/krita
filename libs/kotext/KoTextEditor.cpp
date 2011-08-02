@@ -438,20 +438,18 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             QTextBlock startBlock = selection.document()->findBlock(selection.anchor());
             QTextBlock endBlock = selection.document()->findBlock(selection.position());
 
-            if (startBlock != endBlock) {
-                do {
-                    startBlock = startBlock.next();
-                    QTextCursor cursor(startBlock);
-                    QTextBlockFormat blockFormat;
-                    blockFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-                    cursor.mergeBlockFormat(blockFormat);
+            while (startBlock.isValid() && startBlock != endBlock) {
+                startBlock = startBlock.next();
+                QTextCursor cursor(startBlock);
+                QTextBlockFormat blockFormat;
+                blockFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+                cursor.mergeBlockFormat(blockFormat);
 
-                    QTextCharFormat blockCharFormat = cursor.blockCharFormat();
-                    if (blockCharFormat.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
-                        blockCharFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
-                        cursor.setBlockCharFormat(blockCharFormat);
-                    }
-                } while(startBlock != endBlock);
+                QTextCharFormat blockCharFormat = cursor.blockCharFormat();
+                if (blockCharFormat.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
+                    blockCharFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
+                    cursor.setBlockCharFormat(blockCharFormat);
+                }
             }
         }
     }
@@ -782,6 +780,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     }
 
     KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, inliner);
+    inliner->updatePosition(d->document, d->caret.position(), format);
 
     int endPosition = d->caret.position();
     d->caret.setPosition(startPosition);
@@ -1245,8 +1244,8 @@ void KoTextEditor::newLine()
     d->updateState(KoTextEditor::Private::Custom, i18n("Line Break"));
     if (d->caret.hasSelection())
         d->deleteInlineObjects();
-    KoTextDocument koDocument(d->document);
-    KoStyleManager *styleManager = koDocument.styleManager();
+    KoTextDocument textDocument(d->document);
+    KoStyleManager *styleManager = textDocument.styleManager();
     KoParagraphStyle *nextStyle = 0;
     KoParagraphStyle *currentStyle = 0;
     if (styleManager) {

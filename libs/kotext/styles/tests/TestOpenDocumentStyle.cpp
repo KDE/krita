@@ -27,6 +27,8 @@
 #include <KoXmlWriter.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoEmbeddedDocumentSaver.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
@@ -102,10 +104,10 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                                 if (!mergedAllowedValues.contains(baseValue))
                                     mergedAllowedValues << baseValue;
                                 foreach (QString knownValue, mergedAllowedValues) {
-                                    if ((knownValue == baseValue) || (knownValue.contains(baseValue + " ")) || (knownValue.contains(" " + baseValue))) {
+                                    if ((knownValue == baseValue) || (knownValue.contains(baseValue + ' ')) || (knownValue.contains(' ' + baseValue))) {
                                         continue;
                                     }
-                                    QString builtValue = knownValue + " " + baseValue;
+                                    QString builtValue = knownValue + ' ' + baseValue;
                                     if (!mergedAllowedValues.contains(builtValue))
                                         mergedAllowedValues << builtValue;
                                 }
@@ -369,8 +371,13 @@ void saveOdf(T* genStyle, KoGenStyle *styleWriter)
 template<>
 void saveOdf<KoParagraphStyle>(KoParagraphStyle *genStyle, KoGenStyle *styleWriter)
 {
+    QByteArray array;
+    QBuffer buffer(&array);
+    KoXmlWriter xmlWriter(&buffer);
     KoGenStyles styles;
-    genStyle->saveOdf(*styleWriter, styles);
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoShapeSavingContext context(xmlWriter, styles, embeddedSaver);
+    genStyle->saveOdf(*styleWriter, context);
 }
 
 template<class T>

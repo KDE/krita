@@ -132,7 +132,6 @@ void KisToolMultihand::timeoutPaint()
     if (currentImage() && !m_painters.isEmpty()) {
 
         for (int i = 0; i < m_painters.size(); i++){
-            KisPainter * painter = m_painters.at(i);
             KisPaintInformation pi1 = m_previousPaintInformation;
             pi1.setPos( m_brushTransforms.at(i).map(pi1.pos()) );
             paintAt(pi1, m_painters[i]);
@@ -523,8 +522,9 @@ void KisToolMultihand::initPaint(KoPointerEvent *)
     KisPaintDeviceSP paintDevice = currentNode()->paintDevice();
     KisPaintDeviceSP targetDevice;
 
-    if (!m_compositeOp)
-        m_compositeOp = paintDevice->colorSpace()->compositeOp(COMPOSITE_OVER);
+    const KoCompositeOp* op = compositeOp();
+    if (!op)
+        op = paintDevice->colorSpace()->compositeOp(COMPOSITE_OVER);
 
     m_strokeTimeMeasure.start();
     m_paintIncremental = currentPaintOpPreset()->settings()->paintIncremental();
@@ -536,7 +536,7 @@ void KisToolMultihand::initPaint(KoPointerEvent *)
         if (indirect) {
             targetDevice = new KisPaintDevice(currentNode().data(), paintDevice->colorSpace());
             indirect->setTemporaryTarget(targetDevice);
-            indirect->setTemporaryCompositeOp(m_compositeOp);
+            indirect->setTemporaryCompositeOp(op);
             indirect->setTemporaryOpacity(m_opacity);
         }
         else {
@@ -554,7 +554,7 @@ void KisToolMultihand::initPaint(KoPointerEvent *)
         KisPainter * painter = new KisPainter(targetDevice, currentSelection());
         setupPainter(painter);
         if (m_paintIncremental) {
-                painter->setCompositeOp(m_compositeOp);
+                painter->setCompositeOp(op);
                 painter->setOpacity(m_opacity);
         } else {
                 painter->setCompositeOp(paintDevice->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));

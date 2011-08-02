@@ -24,6 +24,7 @@
 #include "komain_export.h"
 
 class KoApplicationPrivate;
+class QSplashScreen;
 
 /**
  *  @brief Base class for all %Calligra apps
@@ -71,6 +72,13 @@ public:
      * @return true if the application is starting
      */
     static bool isStarting();
+
+    /**
+     * Tell KoApplication to show this splashscreen when you call start();
+     * when start returns, the splashscreen is hidden. Use KSplashScreen
+     * to have the splash show correctly on Xinerama displays. 
+     */
+    void setSplashScreen(QSplashScreen *splash);
 
 signals:
     /// KoDocument needs to be able to emit document signals from here.

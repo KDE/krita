@@ -15,6 +15,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+ 
+ #ifdef _MSC_VER // this removes KDEWIN extensions to stdint.h: required by exiv2
+#define KDEWIN_STDINT_H
+#endif
+
 #include "kis_iptc_io.h"
 
 #include <kis_debug.h>

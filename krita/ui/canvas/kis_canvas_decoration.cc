@@ -64,6 +64,7 @@ bool KisCanvasDecoration::visible() const
 void KisCanvasDecoration::toggleVisibility()
 {
     d->visible = !d->visible;
+    d->view->canvas()->update();
 }
 
 void KisCanvasDecoration::paint(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter)

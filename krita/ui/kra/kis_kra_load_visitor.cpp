@@ -48,7 +48,6 @@
 #include <kis_clone_layer.h>
 #include <kis_filter_mask.h>
 #include <kis_transparency_mask.h>
-#include <kis_transformation_mask.h>
 #include <kis_selection_mask.h>
 #include "kis_shape_selection.h"
 
@@ -242,13 +241,6 @@ bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 
 bool KisKraLoadVisitor::visit(KisTransparencyMask *mask)
 {
-    mask->setSelection(loadSelection(getLocation(mask)));
-    return true;
-}
-
-bool KisKraLoadVisitor::visit(KisTransformationMask *mask)
-{
-
     mask->setSelection(loadSelection(getLocation(mask)));
     return true;
 }

@@ -54,6 +54,7 @@ public:
      * @param format the textCharFormat
      */
     KoInlineObject *inlineTextObject(const QTextCharFormat &format) const;
+    
     /**
      * Retrieve a formerly added inline object based on the cursor position.
      * @param cursor the cursor which position is used. The anchor is ignored.

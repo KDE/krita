@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Krita BMP Export Filter
-Name[bg]=Филтър за експортиране от Krita в BMP
+Name[bg]=Филтър за изнасяне от Krita в BMP
 Name[ca]=Filtre d'exportació BMP per al Krita
 Name[ca@valencia]=Filtre d'exportació BMP per al Krita
 Name[cs]=Exportní filtr do formátu BMP pro Krita
@@ -25,6 +25,7 @@ Name[lv]=Krita BMP eksporta filtrs
 Name[nb]=BMP-eksportfilter for Krita
 Name[nds]=BMP-Exportfilter för Krita
 Name[nl]=BMP-exportfilter voor Krita
+Name[pl]=Filtr eksportu BMP z Krita
 Name[pt]=Filtro de Exportação de BMP para o Krita
 Name[pt_BR]=Filtro de exportação de BMP para o Krita
 Name[ru]=Фильтр экспорта рисунков Krita в BMP

@@ -83,12 +83,11 @@ void KoVariable::setValue(const QString &value)
     }
 }
 
-void KoVariable::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat & format)
+void KoVariable::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat & format)
 {
     Q_D(KoVariable);
     d->document = document;
     d->lastPositionInDocument = posInDocument;
-    Q_UNUSED(object);
     Q_UNUSED(format);
     // Variables are always 'in place' so the position is 100% defined by the text layout.
     variableMoved(d->document, posInDocument);
@@ -107,7 +106,7 @@ void KoVariable::resize(const QTextDocument *document, QTextInlineObject object,
     Q_ASSERT(format.isCharFormat());
     QFontMetricsF fm(format.font(), pd);
 
-    qreal width = qMax(0.0, fm.width(d->value));
+    qreal width = qMax(qreal(0.0), fm.width(d->value));
     qreal ascent = fm.ascent();
     qreal descent = fm.descent();
     if (object.width() != width) {

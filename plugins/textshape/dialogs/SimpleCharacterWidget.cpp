@@ -20,14 +20,18 @@
 #include "SimpleCharacterWidget.h"
 #include "TextTool.h"
 #include "../commands/ChangeListCommand.h"
+#include "StylesWidget.h"
+#include "SpecialButton.h"
 
 #include <KAction>
 #include <KSelectAction>
 #include <KoTextBlockData.h>
-#include <KoParagraphStyle.h>
+#include <KoCharacterStyle.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextDocumentLayout.h>
 #include <KoZoomHandler.h>
+#include <KoStyleThumbnailer.h>
+#include <KoStyleManager.h>
 
 #include <KDebug>
 
@@ -73,16 +77,47 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     }
 
     widget.fontsFrame->setColumnStretch(0,1);
+
+    m_stylePopup = new StylesWidget(this, true, Qt::Popup);
+    m_stylePopup->setFrameShape(QFrame::StyledPanel);
+    m_stylePopup->setFrameShadow(QFrame::Raised);
+    widget.charFrame->setStylesWidget(m_stylePopup);
+
+    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoParagraphStyle *)), this, SIGNAL(characterStyleSelected(KoParagraphStyle *)));
+    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoParagraphStyle *)), this, SIGNAL(doneWithFocus()));
+    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoParagraphStyle *)), this, SLOT(hidePopup()));
+
+    m_thumbnailer = new KoStyleThumbnailer();
+}
+
+SimpleCharacterWidget::~SimpleCharacterWidget()
+{
+    delete m_thumbnailer;
 }
 
 void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
+    m_stylePopup->setStyleManager(sm);
+}
+
+void SimpleCharacterWidget::hidePopup()
+{
+    m_stylePopup->hide();
 }
 
 void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
 {
-    Q_UNUSED(format);
+    if (format == m_currentCharFormat)
+        return;
+    m_currentCharFormat = format;
+
+    int id = m_currentCharFormat.intProperty(KoCharacterStyle::StyleId);
+    KoCharacterStyle *style(m_styleManager->characterStyle(id));
+    if (style) {
+        widget.charFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->characterStyle(id), widget.charFrame->size()));
+    }
+    m_stylePopup->setCurrentFormat(format);
 }
 
 void SimpleCharacterWidget::fontFamilyActivated(int index) {

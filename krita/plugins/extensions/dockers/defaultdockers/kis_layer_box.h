@@ -47,7 +47,6 @@ class KMenu;
 class KoCompositeOp;
 class KisCanvas2;
 class KisNodeModel;
-class KisLayerManager;
 class Ui_WdgLayerBox;
 
 /**
@@ -66,7 +65,7 @@ public:
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas();
 private slots:
 
     void setImage(KisImageWSP image);
@@ -104,7 +103,6 @@ private slots:
     void slotNewShapeLayer();
     void slotNewTransparencyMask();
     void slotNewEffectMask();
-    void slotNewTransformationMask();
     void slotNewSelectionMask();
     void slotCompositeOpChanged(int index);
     void slotOpacityChanged();
@@ -131,6 +129,7 @@ private:
     KAction* m_newTransparencyMaskAction;
     KAction* m_newEffectMaskAction;
     KAction* m_newSelectionMaskAction;
+
 };
 
 class KisLayerBoxFactory : public KoDockFactoryBase

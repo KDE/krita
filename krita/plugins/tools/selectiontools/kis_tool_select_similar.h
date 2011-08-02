@@ -63,7 +63,6 @@ public:
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("tool_similar_selection");
-        setShortcut(KShortcut(Qt::CTRL + Qt::Key_E));
         setPriority(57);
     }
 

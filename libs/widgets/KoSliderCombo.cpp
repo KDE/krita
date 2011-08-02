@@ -261,7 +261,7 @@ void KoSliderCombo::wheelEvent(QWheelEvent *e)
 
 void KoSliderCombo::KoSliderComboPrivate::lineEditFinished()
 {
-    qreal value = thePublic->currentText().toDouble();
+    qreal value = KGlobal::locale()->readNumber(thePublic->currentText());
     slider->blockSignals(true);
     slider->setValue(int((value - minimum) * 256 / (maximum - minimum) + 0.5));
     slider->blockSignals(false);
@@ -272,13 +272,13 @@ void KoSliderCombo::KoSliderComboPrivate::sliderValueChanged(int slidervalue)
 {
     thePublic->setEditText(KGlobal::locale()->formatNumber(minimum + (maximum - minimum)*slidervalue/256, decimals));
 
-    qreal value = thePublic->currentText().toDouble();
+    qreal value = KGlobal::locale()->readNumber(thePublic->currentText());
     emit thePublic->valueChanged(value, false);
 }
 
 void KoSliderCombo::KoSliderComboPrivate::sliderReleased()
 {
-    qreal value = thePublic->currentText().toDouble();
+    qreal value = KGlobal::locale()->readNumber(thePublic->currentText());
     emit thePublic->valueChanged(value, true);
 }
 
@@ -299,7 +299,7 @@ qreal KoSliderCombo::decimals() const
 
 qreal KoSliderCombo::value() const
 {
-    return currentText().toDouble();
+    return KGlobal::locale()->readNumber(currentText());
 }
 
 void KoSliderCombo::setDecimals(int dec)

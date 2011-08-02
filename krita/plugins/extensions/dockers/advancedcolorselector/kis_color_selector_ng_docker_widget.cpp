@@ -1,4 +1,4 @@
-/*
+    /*
  *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -30,7 +30,7 @@
 
 #include "kis_canvas2.h"
 #include "kis_view2.h"
-#include "kis_layer_manager.h"
+#include "kis_node_manager.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_color_space_selector.h"
 #include "kis_preference_set_registry.h"
@@ -116,8 +116,8 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
     m_colorSelectorContainer->setCanvas(canvas);
 
 
-    if (m_canvas->view()->layerManager()) {
-        connect(m_canvas->view()->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
+    if (m_canvas->view()->nodeManager()) {
+        connect(m_canvas->view()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
     }
     KActionCollection* actionCollection = canvas->view()->actionCollection();
 
@@ -212,20 +212,21 @@ void KisColorSelectorNgDockerWidget::reactOnLayerChange()
     // this will trigger settings update and therefore an update of the color space setting and therefore it will change
     // the color space to the current layer
     emit settingsChanged();
-
-    KisNodeSP node = m_canvas->view()->resourceProvider()->currentNode();
-    if (node && node->paintDevice()) {
-        KisPaintDeviceSP device = node->paintDevice();
-        connect(device.data(), SIGNAL(profileChanged(const KoColorProfile*)), this, SIGNAL(settingsChanged()), Qt::UniqueConnection);
-        connect(device.data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SIGNAL(settingsChanged()), Qt::UniqueConnection);
-
-        if (device) {
-            m_colorHistoryAction->setEnabled(true);
-            m_commonColorsAction->setEnabled(true);
-        }
-        else {
-            m_colorHistoryAction->setEnabled(false);
-            m_commonColorsAction->setEnabled(false);
+    if (m_canvas) {
+        KisNodeSP node = m_canvas->view()->resourceProvider()->currentNode();
+        if (node && node->paintDevice()) {
+            KisPaintDeviceSP device = node->paintDevice();
+            connect(device.data(), SIGNAL(profileChanged(const KoColorProfile*)), this, SIGNAL(settingsChanged()), Qt::UniqueConnection);
+            connect(device.data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SIGNAL(settingsChanged()), Qt::UniqueConnection);
+            
+            if (device) {
+                m_colorHistoryAction->setEnabled(true);
+                m_commonColorsAction->setEnabled(true);
+            }
+            else {
+                m_colorHistoryAction->setEnabled(false);
+                m_commonColorsAction->setEnabled(false);
+            }
         }
     }
 }

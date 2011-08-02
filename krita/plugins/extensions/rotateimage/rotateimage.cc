@@ -45,7 +45,7 @@
 #include <kis_view2.h>
 #include <kis_selection.h>
 #include <kis_image_manager.h>
-#include <kis_layer_manager.h>
+#include <kis_node_manager.h>
 #include <kis_canvas_resource_provider.h>
 
 #include "dlg_rotateimage.h"
@@ -86,15 +86,15 @@ RotateImage::RotateImage(QObject *parent, const QVariantList &)
 
         m_rotate90LayerAction  = new KAction(i18nc("rotate the layer 180 degrees", "Rotate Layer of 180°"), this);
         actionCollection()->addAction("rotateLayer180", m_rotate90LayerAction);
-        connect(m_rotate90LayerAction, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayer180()));
+        connect(m_rotate90LayerAction, SIGNAL(triggered()), m_view->nodeManager(), SLOT(rotate180()));
 
         m_rotate180LayerAction  = new KAction(KIcon("object-rotate-right"), i18nc("rotate the layer 90 degrees to the right", "Rotate Layer of 90° to the Right"), this);
         actionCollection()->addAction("rotateLayerCW90", m_rotate180LayerAction);
-        connect(m_rotate180LayerAction, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayerRight90()));
+        connect(m_rotate180LayerAction, SIGNAL(triggered()), m_view->nodeManager(), SLOT(rotateRight90()));
 
         m_rotate270LayerAction  = new KAction(KIcon("object-rotate-left"), i18nc("rotate the layer 90 degrees to the left", "Rotate Layer of 90° to the Left"), this);
         actionCollection()->addAction("rotateLayerCCW90", m_rotate270LayerAction);
-        connect(m_rotate270LayerAction, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayerLeft90()));
+        connect(m_rotate270LayerAction, SIGNAL(triggered()), m_view->nodeManager(), SLOT(rotateLeft90()));
 
         connect(m_view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), SLOT(slotNodeChanged(KisNodeSP)));
     }
@@ -152,7 +152,7 @@ void RotateImage::slotRotateLayer()
 
     if (dlgRotateImage->exec() == QDialog::Accepted) {
         double angle = dlgRotateImage->angle() * M_PI / 180;
-        m_view->layerManager()->rotateLayer(angle);
+        m_view->nodeManager()->rotate(angle);
 
     }
     delete dlgRotateImage;

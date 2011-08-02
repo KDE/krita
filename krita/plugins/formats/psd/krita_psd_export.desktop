@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=
 Name=Krita PhotoShop Export Filter
+Name[bg]=Филтър за изнасяне от Krita в PhotoShop
 Name[ca]=Filtre d'exportació PhotoShop per al Krita
 Name[ca@valencia]=Filtre d'exportació PhotoShop per al Krita
 Name[cs]=Exportní filtr do PhotoShopu pro Kritu
@@ -20,6 +21,7 @@ Name[kk]=Krita -> PhotoShop экспорт сүзгісі
 Name[nb]=PhotoShop eksportfilter for Krita
 Name[nds]=PhotoShop-Exportfilter för Krita
 Name[nl]=Photoshop-exportfilter voor Krita
+Name[pl]=Filtr eksportu PhotoShop z Krita
 Name[pt]=Filtro de Exportação para PhotoShop para o Krita
 Name[pt_BR]=Filtro de exportação para PhotoShop do Krita
 Name[sv]=Krita Photoshop-exportfilter
@@ -30,7 +32,7 @@ Name[zh_CN]=Krita PhotoShop 导出过滤器
 Name[zh_TW]=Krita PhotoShop 匯出過濾程式
 X-KDE-ServiceTypes=CalligraFilter
 Type=Service
-X-KDE-Export=image/x-psd,image/photoshop,image/x-photoshop,image/x-vnd.adobe.photoshop,image/vnd.adobe.photoshop
+X-KDE-Export=image/vnd.adobe.photoshop
 X-KDE-Import=application/x-krita
 X-KDE-Library=kritapsdexport
 X-KDE-Weight=1

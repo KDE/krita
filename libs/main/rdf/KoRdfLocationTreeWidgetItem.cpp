@@ -47,13 +47,17 @@ QList<KAction *> KoRdfLocationTreeWidgetItem::actions(QWidget *parent, KoCanvasB
 {
     QList<KAction *> m_actions;
     KAction *action = 0;
+    
+#ifdef CAN_USE_MARBLE
     // These were coded to need marble
-    // action = createAction(parent, host, "Edit...");
-    // connect(action, SIGNAL(triggered(bool)), this, SLOT(edit()));
-    // m_actions.append(action);
-    // action = createAction(parent, host, "Show location on a map");
-    // connect(action, SIGNAL(triggered(bool)), this, SLOT(showInViewer()));
-    // m_actions.append(action);
+    action = createAction(parent, host, "Edit...");
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(edit()));
+    m_actions.append(action);
+    action = createAction(parent, host, "Show location on a map");
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(showInViewer()));
+    m_actions.append(action);
+#endif
+    
     action = createAction(parent, host, "Export location to KML file...");
     connect(action, SIGNAL(triggered(bool)), this, SLOT(exportToFile()));
     m_actions.append(action);

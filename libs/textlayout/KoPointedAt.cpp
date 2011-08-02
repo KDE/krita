@@ -43,7 +43,7 @@ KoPointedAt::KoPointedAt(KoPointedAt *other)
 void KoPointedAt::fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *inlineManager)
 {
     bookmark = 0;
-    externalHRef = QString();
+    externalHRef.clear();
 
     if (!inlineManager)
         return;

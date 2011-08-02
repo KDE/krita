@@ -78,7 +78,8 @@ bool ShrinkToFitShapeContainer::loadOdf(const KoXmlElement &element, KoShapeLoad
 
 void ShrinkToFitShapeContainer::saveOdf(KoShapeSavingContext &context) const
 {
-    Q_UNUSED(context);
+    Q_D(const ShrinkToFitShapeContainer);
+    d->childShape->saveOdf(context);
 }
 
 ShrinkToFitShapeContainer* ShrinkToFitShapeContainer::wrapShape(KoShape *shape, KoResourceManager *documentResourceManager)

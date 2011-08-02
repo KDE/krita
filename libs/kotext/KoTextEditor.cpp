@@ -1147,13 +1147,13 @@ void KoTextEditor::insertTableOfContents()
     emit cursorPositionChanged();
 }
 
-void KoTextEditor::insertBibliography()
+QTextBlock KoTextEditor::insertBibliography()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table Of Contents"));
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Bibliography"));
 
-    QTextFrameFormat bibFormat;
+    QTextBlockFormat bibFormat;
     bibFormat.setProperty(KoText::SubFrameType, KoText::BibliographyFrameType);
-    KoBibliographyInfo * info = new KoBibliographyInfo();
+    KoBibliographyInfo *info = new KoBibliographyInfo();
     QTextDocument *bibDocument = new QTextDocument();
     bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info) );
     bibFormat.setProperty( KoParagraphStyle::BibliographyDocument, QVariant::fromValue<QTextDocument*>(bibDocument) );
@@ -1178,10 +1178,12 @@ void KoTextEditor::insertBibliography()
         bibFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
     }
 
-    d->caret.insertFrame(bibFormat);
+    d->caret.insertBlock(bibFormat);
     d->caret.movePosition(QTextCursor::Right);
+
     d->updateState(KoTextEditor::Private::NoOp);
     emit cursorPositionChanged();
+    return d->caret.block();
 }
 
 KoInlineCite *KoTextEditor::insertCitation()

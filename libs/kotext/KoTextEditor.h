@@ -27,7 +27,7 @@
 #include "KoText.h"
 #include <KoToolSelection.h>
 #include <KoInlineCite.h>
-
+#include <KoBibliographyInfo.h>
 #include <QClipboard>
 #include <QMetaType>
 #include <QTextCursor>
@@ -36,6 +36,7 @@ class KoCharacterStyle;
 class KoInlineObject;
 class KoParagraphStyle;
 class KoInlineCite;
+class KoBibliographyInfo;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -242,7 +243,7 @@ public slots:
      */
     void insertTableOfContents();
 
-    void insertBibliography();
+    QTextBlock insertBibliography();
 
     KoInlineCite *insertCitation();
 

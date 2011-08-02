@@ -112,10 +112,10 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
 
     // Test normal cells.
     if (point.y() > d->rowPositions[firstRow] && point.y() < d->rowPositions[lastRow + 1]) {
-        QVector<qreal>::const_iterator start = d->rowPositions.begin() + firstRow;
-        QVector<qreal>::const_iterator end = d->rowPositions.begin() + lastRow + 1;
-        int row = qLowerBound(start, end, point.y()) - d->rowPositions.begin() - 1;
-        int column = qLowerBound(d->columnPositions, point.x()) - d->columnPositions.begin() - 1;
+        QVector<qreal>::const_iterator start = d->rowPositions.constBegin() + firstRow;
+        QVector<qreal>::const_iterator end = d->rowPositions.constBegin() + lastRow + 1;
+        int row = qLowerBound(start, end, point.y()) - d->rowPositions.constBegin() - 1;
+        int column = qLowerBound(d->columnPositions, point.x()) - d->columnPositions.constBegin() - 1;
         QTextTableCell cell = d->table->cellAt(row, qBound(0, column, d->table->columns() - 1));
         return d->cellAreas[cell.row()][cell.column()]->hitTest(point, accuracy);
     }
@@ -123,10 +123,10 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
     // Test header row cells.
     QPointF headerPoint = point + QPointF(d->headerOffsetX, d->headerOffsetY);
     if (headerPoint.y() > d->rowPositions.first() && headerPoint.y() < d->rowPositions[d->headerRows + 1]) {
-        QVector<qreal>::const_iterator start = d->rowPositions.begin();
-        QVector<qreal>::const_iterator end = d->rowPositions.begin() + d->headerRows + 1;
-        int row = qLowerBound(start, end, headerPoint.y()) - d->rowPositions.begin() - 1;
-        int column = qLowerBound(d->columnPositions, headerPoint.x()) - d->columnPositions.begin() - 1;
+        QVector<qreal>::const_iterator start = d->rowPositions.constBegin();
+        QVector<qreal>::const_iterator end = d->rowPositions.constBegin() + d->headerRows + 1;
+        int row = qLowerBound(start, end, headerPoint.y()) - d->rowPositions.constBegin() - 1;
+        int column = qLowerBound(d->columnPositions, headerPoint.x()) - d->columnPositions.constBegin() - 1;
         QTextTableCell cell = d->table->cellAt(row, qBound(0, column, d->table->columns() - 1));
         return d->cellAreas[cell.row()][cell.column()]->hitTest(headerPoint, accuracy);
     }
@@ -612,6 +612,9 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
 
 bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qreal topBorderWidth, qreal bottomBorderWidth, qreal rowBottom)
 {
+    Q_UNUSED(topBorderWidth)
+    Q_UNUSED(bottomBorderWidth)
+
     // Let's make sure all merged cells in this row, that don't end in this row get's a layout
     int row = cursor->row;
     int col = 0;

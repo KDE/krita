@@ -525,7 +525,7 @@ QPainterPath KisPopupPalette::pathFromPresetIndex(int index)
     return path;
 }
 
-int KisPopupPalette::calculatePresetIndex(QPointF point, int n)
+int KisPopupPalette::calculatePresetIndex(QPointF point, int /*n*/)
 {
     int x = point.x() - width()/2;
     int y = point.y() - height()/2;

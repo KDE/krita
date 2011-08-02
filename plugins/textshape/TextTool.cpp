@@ -1515,9 +1515,9 @@ KoToolSelection* TextTool::selection()
 QList<QWidget *> TextTool::createOptionWidgets()
 {
     QList<QWidget *> widgets;
-    SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, &m_dummyWidget);
-    SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, &m_dummyWidget);
-    SimpleTableWidget *stw = new SimpleTableWidget(this, &m_dummyWidget);
+    SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
+    SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
+    SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
 
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));

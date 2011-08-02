@@ -592,7 +592,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QTextBlock block(cursor->it.currentBlock());
     KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
     KoParagraphStyle format(block.blockFormat(), block.charFormat());
-    //QTextBlockFormat format = block.blockFormat();
 
     int dropCapsAffectsNMoreLines = 0;
     qreal dropCapsPositionAdjust = 0.0;
@@ -663,6 +662,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             blockData = dynamic_cast<KoTextBlockData*>(block.userData());
         }
         if (blockData) {
+            qDebug() << "Setting label format" << labelFormat.fontPointSize();
             blockData->setLabelFormat(labelFormat);
         }
     } else if (blockData) { // make sure it is empty

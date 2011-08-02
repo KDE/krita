@@ -254,7 +254,7 @@ enumBrushType KisBrush::brushType() const
     return d->brushType;
 }
 
-void KisBrush::toXML(QDomDocument& document , QDomElement& element) const
+void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const
 {
     element.setAttribute("BrushVersion", "2");
 }

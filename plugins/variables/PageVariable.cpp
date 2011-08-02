@@ -38,10 +38,6 @@
 #include <QTextInlineObject>
 #include <QDebug>
 
-#ifndef __GNUC__ 
-  #define __PRETTY_FUNCTION__ __FUNCTION__
-#endif /* __PRETTY_FUNCTION__ only exists in gnu c++ */
-
 PageVariable::PageVariable()
         : KoVariable(true),
         m_type(PageNumber),
@@ -100,7 +96,6 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject objec
         }
 #endif
         page = document->resource(KoTextDocument::LayoutTextPage, KoTextDocument::LayoutTextPageUrl).value<KoTextPage*>();
-        //qDebug() << __PRETTY_FUNCTION__ << lay << rootArea << page << page2;
     }
     int pagenumber = 0;
 

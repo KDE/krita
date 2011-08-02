@@ -132,7 +132,6 @@ void KisToolMultihand::timeoutPaint()
     if (currentImage() && !m_painters.isEmpty()) {
 
         for (int i = 0; i < m_painters.size(); i++){
-            KisPainter * painter = m_painters.at(i);
             KisPaintInformation pi1 = m_previousPaintInformation;
             pi1.setPos( m_brushTransforms.at(i).map(pi1.pos()) );
             paintAt(pi1, m_painters[i]);

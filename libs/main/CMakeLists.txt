@@ -201,7 +201,9 @@ install( FILES
     KoFilter.h
     KoFilterChain.h
     KoFilterChainLinkList.h
+    KoFilterEntry.h
     KoFilterManager.h
+    KoFilterVertex.h
     KoFindBase.h
     KoFindText.h
     KoFindToolbar.h

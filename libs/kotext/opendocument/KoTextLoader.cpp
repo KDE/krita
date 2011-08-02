@@ -1484,6 +1484,8 @@ void KoTextLoader::loadCite(const KoXmlElement &noteElem, QTextCursor &cursor)
     if (textObjectManager) {
 
         int position = cursor.position(); // need to store this as the following might move is
+
+        //Now creating citation with default type KoInlineCite::Citation.
         KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
         cite->setMotherFrame(KoTextDocument(cursor.block().document()).citationsFrame());
 
@@ -2365,11 +2367,15 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
 
 void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cursor)
 {
+    // make sure that the tag is bibliography
     Q_ASSERT(element.tagName() == "bibliography");
-    QTextFrameFormat bibFormat;
+    QTextBlockFormat bibFormat;
     bibFormat.setProperty(KoText::SubFrameType, KoText::BibliographyFrameType);
 
+
+    // for "meta-information" about the bibliography we use this class
     KoBibliographyInfo *info = new KoBibliographyInfo();
+
     QTextDocument *bibDocument = new QTextDocument();
     KoTextDocument(bibDocument).setStyleManager(d->styleManager);
 
@@ -2385,15 +2391,17 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
         if (e.localName() == "bibliography-source" && e.namespaceURI() == KoXmlNS::text) {
             info->loadOdf(d->textSharedData, e);
 
-            bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info) );
-            bibFormat.setProperty( KoParagraphStyle::BibliographyDocument, QVariant::fromValue<KoBibliographyInfo*>(info) );
-            cursor.insertFrame(bibFormat);
+            bibFormat.setProperty(KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info) );
+            bibFormat.setProperty(KoParagraphStyle::BibliographyDocument, QVariant::fromValue<QTextDocument*>(bibDocument) );
+            cursor.insertBlock(bibFormat);
+            // We'll just try to find displayable elements and add them as paragraphs
         } else if (e.localName() == "index-body") {
             QTextCursor cursorFrame = bibDocument->rootFrame()->lastCursorPosition();
 
             bool firstTime = true;
             KoXmlElement p;
             forEachElement(p, e) {
+                // All elem will be "p" instead of the title, which is particular
                 if (p.isNull() || p.namespaceURI() != KoXmlNS::text)
                     continue;
 
@@ -2417,6 +2425,7 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
                 QTextCursor c(current);
                 c.mergeBlockFormat(blockFormat);
             }
+
         }// index-body
     }
     // Get out of the frame

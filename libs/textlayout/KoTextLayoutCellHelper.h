@@ -38,10 +38,6 @@ class KoTextLayoutCellHelper : public QObject
 public:
     KoTextLayoutCellHelper(const KoTableCellStyle &cellStyle, QObject *parent = 0);
     
-    
-    /// returns if the borderstyle needs to be specially drawn
-    bool isDrawn(KoBorder::BorderStyle style) const;
-
     /// draws a horizontal wave line
     void drawHorizontalWave(KoBorder::BorderStyle style, QPainter &painter, qreal x, qreal w, qreal t) const;
 

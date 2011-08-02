@@ -32,7 +32,7 @@ KoTextLayoutCellHelper::KoTextLayoutCellHelper(const KoTableCellStyle &cellStyle
 
 }
 
-bool KoTextLayoutCellHelper::isDrawn(KoBorder::BorderStyle style) const
+bool isSpeciallyDrawn(KoBorder::BorderStyle style)
 {
     if (style == KoBorder::BorderWave)
         return true;
@@ -217,8 +217,8 @@ void KoTextLayoutCellHelper::drawTopHorizontalBorder(QPainter &painter, qreal x,
 
         painter.setPen(pen);
         t += pen.widthF() / 2.0;
-        if(isDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Top))) {
-                drawHorizontalWave(m_cellStyle.getBorderStyle(KoTableBorderStyle::Top), painter,x,w,t);
+        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Top))) {
+            drawHorizontalWave(m_cellStyle.getBorderStyle(KoTableBorderStyle::Top), painter,x,w,t);
         } else {
             painter.drawLine(QLineF(x, t, x+w, t));
         }
@@ -233,8 +233,8 @@ void KoTextLayoutCellHelper::drawTopHorizontalBorder(QPainter &painter, qreal x,
         QPen pen = m_cellStyle.getEdge(KoTableBorderStyle::Top).innerPen;
         painter.setPen(pen);
         t += pen.widthF() / 2.0;
-        if(isDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Top))) {
-                drawHorizontalWave(m_cellStyle.getBorderStyle(KoTableBorderStyle::Top), painter,x,w,t);
+        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Top))) {
+            drawHorizontalWave(m_cellStyle.getBorderStyle(KoTableBorderStyle::Top), painter,x,w,t);
         } else {
             painter.drawLine(QLineF(x, t, x+w, t));
         }
@@ -272,7 +272,7 @@ void KoTextLayoutCellHelper::drawSharedHorizontalBorder(QPainter &painter, const
 
         painter.setPen(pen);
         t += linewidth / 2.0;
-        if(isDrawn(borderStyle)) {
+        if(isSpeciallyDrawn(borderStyle)) {
             drawHorizontalWave(borderStyle, painter,x,w,t);
         } else {
             painter.drawLine(QLineF(x, t, x+w, t));
@@ -284,7 +284,7 @@ void KoTextLayoutCellHelper::drawSharedHorizontalBorder(QPainter &painter, const
         QPen pen = edge.innerPen;
         painter.setPen(pen);
         t += pen.widthF() / 2.0;
-        if(isDrawn(borderStyle)) {
+        if(isSpeciallyDrawn(borderStyle)) {
             drawHorizontalWave(borderStyle, painter,x,w,t);
         } else {
             painter.drawLine(QLineF(x, t, x+w, t));
@@ -300,7 +300,7 @@ void KoTextLayoutCellHelper::drawBottomHorizontalBorder(QPainter &painter, qreal
 
         painter.setPen(pen);
         t += pen.widthF() / 2.0;
-        if(isDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Bottom))) {
+        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Bottom))) {
             drawHorizontalWave(m_cellStyle.getBorderStyle(KoTableBorderStyle::Bottom), painter,x,w,t);
         } else {
             painter.drawLine(QLineF(x, t, x+w, t));
@@ -317,7 +317,7 @@ void KoTextLayoutCellHelper::drawBottomHorizontalBorder(QPainter &painter, qreal
         QPen pen = m_cellStyle.getEdge(KoTableBorderStyle::Bottom).innerPen;
         painter.setPen(pen);
         t -= pen.widthF() / 2.0;
-        if(isDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Bottom))) {
+        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Bottom))) {
             drawHorizontalWave(m_cellStyle.getBorderStyle(KoTableBorderStyle::Bottom), painter,x,w,t);
         } else {
             painter.drawLine(QLineF(x, t, x+w, t));
@@ -335,7 +335,7 @@ void KoTextLayoutCellHelper::drawLeftmostVerticalBorder(QPainter &painter, qreal
 
         painter.setPen(pen);
         l += pen.widthF() / 2.0;
-        if(isDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Left))) {
+        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Left))) {
             drawVerticalWave(m_cellStyle.getBorderStyle(KoTableBorderStyle::Left), painter,y,h,l);
         } else {
             painter.drawLine(QLineF(l, y, l, y+h));
@@ -352,7 +352,7 @@ void KoTextLayoutCellHelper::drawLeftmostVerticalBorder(QPainter &painter, qreal
         QPen pen = m_cellStyle.getEdge(KoTableBorderStyle::Left).innerPen;
         painter.setPen(pen);
         l += pen.widthF() / 2.0;
-        if(isDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Left))) {
+        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Left))) {
             drawVerticalWave(m_cellStyle.getBorderStyle(KoTableBorderStyle::Left), painter,y,h,l);
         } else {
             painter.drawLine(QLineF(l, y, l, y+h));
@@ -377,7 +377,7 @@ void KoTextLayoutCellHelper::drawSharedVerticalBorder(QPainter &painter, const K
 
             painter.setPen(pen);
             l += pen.widthF() / 2.0;
-            if(isDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Right))) {
+            if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Right))) {
                 drawVerticalWave(m_cellStyle.getBorderStyle(KoTableBorderStyle::Right), painter,y,h,l);
             } else {
                 painter.drawLine(QLineF(l, y, l, y+h));
@@ -394,7 +394,7 @@ void KoTextLayoutCellHelper::drawSharedVerticalBorder(QPainter &painter, const K
             QPen pen = m_cellStyle.getEdge(KoTableBorderStyle::Right).innerPen;
             painter.setPen(pen);
             l += pen.widthF() / 2.0;
-            if(isDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Right))) {
+            if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Right))) {
                 drawVerticalWave(m_cellStyle.getBorderStyle(KoTableBorderStyle::Right), painter,y,h,l);
             } else {
                 painter.drawLine(QLineF(l, y, l, y+h));
@@ -408,7 +408,7 @@ void KoTextLayoutCellHelper::drawSharedVerticalBorder(QPainter &painter, const K
 
             painter.setPen(pen);
             l += pen.widthF() / 2.0;
-            if(isDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Left))) {
+            if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Left))) {
                 drawVerticalWave(m_cellStyle.getBorderStyle(KoTableBorderStyle::Left), painter,y,h,l);
             } else {
                 painter.drawLine(QLineF(l, y, l, y+h));
@@ -420,7 +420,7 @@ void KoTextLayoutCellHelper::drawSharedVerticalBorder(QPainter &painter, const K
             QPen pen = styleRight.getEdge(KoTableBorderStyle::Left).innerPen;
             painter.setPen(pen);
             l += pen.widthF() / 2.0;
-            if(isDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Left))) {
+            if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Left))) {
                 drawVerticalWave(m_cellStyle.getBorderStyle(KoTableBorderStyle::Left), painter,y,h,l);
             } else {
                 painter.drawLine(QLineF(l, y, l, y+h));
@@ -439,7 +439,7 @@ void KoTextLayoutCellHelper::drawRightmostVerticalBorder(QPainter &painter, qrea
 
         painter.setPen(pen);
         l += pen.widthF() / 2.0;
-        if(isDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Right))) {
+        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Right))) {
             drawVerticalWave(m_cellStyle.getBorderStyle(KoTableBorderStyle::Right), painter,y,h,l);
         } else {
             painter.drawLine(QLineF(l, y, l, y+h));
@@ -455,7 +455,7 @@ void KoTextLayoutCellHelper::drawRightmostVerticalBorder(QPainter &painter, qrea
         QPen pen = m_cellStyle.getEdge(KoTableBorderStyle::Right).innerPen;
         painter.setPen(pen);
         l += pen.widthF() / 2.0;
-        if(isDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Right))) {
+        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoTableBorderStyle::Right))) {
             drawVerticalWave(m_cellStyle.getBorderStyle(KoTableBorderStyle::Right), painter,y,h,l);
         } else {
             painter.drawLine(QLineF(l, y, l, y+h));

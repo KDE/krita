@@ -225,19 +225,8 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
         return;
 
     //the boundingRect of the shape or the KoSelection boundingRect of the group
-    QRectF shadowRect;
-    KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
-    if (group) {
-        KoSelection selection;
-        selection.select(group);
-        shadowRect = selection.boundingRect();
-    } else {
-        shadowRect = shape->boundingRect();
-    }
-    //the algorithm used would caused shadow to expand 3 times of the blur radius on each side
-    qreal expand = 3 * d->blur;
-    QRectF clipRegion = shadowRect.adjusted(-expand, -expand, expand, expand);
-    QRectF zoomedClipRegion = converter.documentToView(clipRegion);
+    QRectF shadowRect = shape->boundingRect();
+    QRectF zoomedClipRegion = converter.documentToView(shadowRect);
     //offset on buffer image from image topleft to shape's position
     QPointF imagePaintOffset = zoomedClipRegion.topLeft() - converter.documentToView(shape->position());
 
@@ -251,6 +240,7 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     imagePainter.setBrush(Qt::NoBrush);
     imagePainter.setRenderHint(QPainter::Antialiasing, painter.testRenderHint(QPainter::Antialiasing));
 
+    KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
     if (group) {
         //later we'll apply child's absoluteTransformation
         imagePainter.setTransform(group->absoluteTransformation(&converter).inverted(), true);
@@ -323,6 +313,11 @@ void KoShapeShadow::insets(KoInsets &insets) const
     insets.top = (d->offset.y() < 0.0) ? qAbs(d->offset.y()) : 0.0;
     insets.right = (d->offset.x() > 0.0) ? d->offset.x() : 0.0;
     insets.bottom = (d->offset.y() > 0.0) ? d->offset.y() : 0.0;
+
+    insets.left += 3*d->blur;
+    insets.top += 3*d->blur;
+    insets.right += 3*d->blur;
+    insets.bottom += 3*d->blur;
 }
 
 bool KoShapeShadow::ref()

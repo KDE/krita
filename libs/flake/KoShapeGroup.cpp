@@ -29,6 +29,7 @@
 #include "KoShapeRegistry.h"
 #include "KoShapeBorderModel.h"
 #include "KoShapeShadow.h"
+#include "KoSelection.h"
 
 #include <QPainter>
 
@@ -57,6 +58,22 @@ bool KoShapeGroup::hitTest(const QPointF &position) const
 QSizeF KoShapeGroup::size() const
 {
     return QSizeF(0, 0);
+}
+
+QRectF KoShapeGroup::boundingRect() const
+{
+    QList<KoShape*> shapes = this->shapes();
+    KoSelection selection;
+    foreach(KoShape* shape, shapes) {
+        selection.select(shape);
+    }
+    QRectF shadowRect = selection.boundingRect();
+    if (this->shadow()) {
+        KoInsets insets;
+        this->shadow()->insets(insets);
+        shadowRect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+    }
+    return shadowRect;
 }
 
 void KoShapeGroup::shapeCountChanged()

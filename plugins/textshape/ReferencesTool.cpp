@@ -141,14 +141,17 @@ void ReferencesTool::insertFootNote()
     QString s;
     s.append("Foot");
     s.append(note->label());
-    note->setId(s);
+    KoOdfNotesConfiguration *notesConfig;
+    notesConfig = KoTextDocument(textEditor()->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
     KoBookmark *bookmark = new KoBookmark(note->textFrame()->document());
     bookmark->setType(KoBookmark::SinglePosition);
     bookmark->setName(s);
     note->manager()->insertInlineObject(cursor, bookmark);
     QTextCharFormat *fmat = new QTextCharFormat();
     fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-    cursor.insertText(note->label(),*fmat);
+    cursor.insertText(notesConfig->numberFormat().prefix(),*fmat);
+    cursor.insertText(notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1),*fmat);
+    cursor.insertText(notesConfig->numberFormat().suffix(),*fmat);
 
     fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
     cursor.insertText(" ",*fmat);
@@ -166,20 +169,24 @@ void ReferencesTool::insertEndNote()
         note->setLabel(sfenw->widget.characterEdit->text());
     }
 
-    QTextCursor cursor(note->textCursor());
-
+    QTextCursor cursor(note->textCursor());    
     QString s;
     s.append("End");
     s.append(note->label());
-    note->setId(s);
+    KoOdfNotesConfiguration *notesConfig;
+    notesConfig = KoTextDocument(textEditor()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
     KoBookmark *bookmark = new KoBookmark(note->textFrame()->document());
     bookmark->setType(KoBookmark::SinglePosition);
     bookmark->setName(s);
     note->manager()->insertInlineObject(cursor, bookmark);
 
+    s.clear();
     QTextCharFormat *fmat = new QTextCharFormat();
     fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-    cursor.insertText(note->label(),*fmat);
+    s.append(notesConfig->numberFormat().prefix());
+    s.append(notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1));
+    s.append(notesConfig->numberFormat().suffix());
+    cursor.insertText(s,*fmat);
 
     fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
     cursor.insertText(" ",*fmat);

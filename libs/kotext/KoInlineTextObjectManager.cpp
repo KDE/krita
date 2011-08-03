@@ -25,6 +25,8 @@
 #include "KoTextLocator.h"
 #include "KoBookmark.h"
 #include "KoInlineNote.h"
+#include "KoOdfNotesConfiguration.h"
+#include "KoTextDocument.h"
 
 #include <QTextCursor>
 #include <QPainter>
@@ -239,7 +241,7 @@ void KoInlineTextObjectManager::reNumbering(QTextBlock block)
     while(block.isValid()) {
         QString text = block.text();
         int pos = text.indexOf(QChar::ObjectReplacementCharacter);
-
+        KoOdfNotesConfiguration *notesConfig;
         while (pos >= 0 && pos <= block.length() ) {
             QTextCursor c1(block);
             c1.setPosition(block.position() + pos);
@@ -255,8 +257,13 @@ void KoInlineTextObjectManager::reNumbering(QTextBlock block)
                     cursor.removeSelectedText();
                     QTextCharFormat *fmat = new QTextCharFormat();
                     fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+                    notesConfig = KoTextDocument(note->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
                     if(note->autoNumbering()) {
-                        cursor.insertText(note->label(),*fmat);
+                        QString s;
+                        s.append(notesConfig->numberFormat().prefix());
+                        s.append(notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1));
+                        s.append(notesConfig->numberFormat().suffix());
+                        cursor.insertText(s,*fmat);
                     }
                     fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
                     cursor.insertText(" ",*fmat);
@@ -272,8 +279,13 @@ void KoInlineTextObjectManager::reNumbering(QTextBlock block)
                     cursor.removeSelectedText();
                     QTextCharFormat *fmat = new QTextCharFormat();
                     fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+                    notesConfig = KoTextDocument(note->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
                     if(note->autoNumbering()) {
-                        cursor.insertText(note->label(),*fmat);
+                        QString s;
+                        s.append(notesConfig->numberFormat().prefix());
+                        s.append(notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1));
+                        s.append(notesConfig->numberFormat().suffix());
+                        cursor.insertText(s,*fmat);
                     }
                     fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
                     cursor.insertText(" ",*fmat);

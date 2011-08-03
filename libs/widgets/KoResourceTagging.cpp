@@ -220,7 +220,7 @@ void KoResourceTagging::writeXMLFile(bool serverIdentity)
                    }
                }
                else {
-                    if( isServerResource(resourceEl.attribute("identifier")) && serverIdentity) {
+                    if( isServerResource(resourceEl.attribute("identifier")) || !serverIdentity) {
                        root.removeChild(resourceNodesList.at(i--));
                    }
                }
@@ -362,7 +362,7 @@ void KoResourceTagging::writeNepomukRepo(bool serverIdentity)
             }
         }
         else {
-            if(isServerResource(resourceFileOld) && serverIdentity) {
+            if(isServerResource(resourceFileOld) || !serverIdentity) {
                 resource.remove();
             }
         }

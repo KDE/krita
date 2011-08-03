@@ -170,7 +170,7 @@ private:
     bool init();
 
 private:
-
+    class UndoStack;
     class KisDocPrivate;
     KisDocPrivate * const m_d;
 

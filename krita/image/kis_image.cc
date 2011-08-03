@@ -314,6 +314,27 @@ void KisImage::barrierLock()
     m_d->lockCount++;
 }
 
+bool KisImage::tryBarrierLock()
+{
+    bool result = true;
+
+    if (!locked()) {
+        if (m_d->scheduler) {
+            result = m_d->scheduler->tryBarrierLock();
+        }
+
+        if(result) {
+            m_d->sizeChangedWhileLocked = false;
+        }
+    }
+
+    if(result) {
+        m_d->lockCount++;
+    }
+
+    return result;
+}
+
 void KisImage::lock()
 {
 //  blockSignals(true);

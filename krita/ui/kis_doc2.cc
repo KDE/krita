@@ -22,6 +22,7 @@
  */
 
 #include "kis_doc2.h"
+#include "kis_doc2_p.h"
 
 #include <QApplication>
 #include <QDomDocument>
@@ -139,7 +140,7 @@ public:
 
 
 KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
-        : KoDocument(parentWidget, parent, singleViewMode)
+    : KoDocument(parentWidget, parent, singleViewMode, new UndoStack(this))
         , m_d(new KisDocPrivate())
 {
     setComponentData(KisFactory2::componentData(), false);

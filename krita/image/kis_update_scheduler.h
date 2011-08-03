@@ -81,6 +81,15 @@ public:
      */
     void barrierLock();
 
+
+    /**
+     * Works like barrier lock, but returns false immediately if barrierLock
+     * can't be acquired.
+     *
+     * \see barrierLock()
+     */
+    bool tryBarrierLock();
+
     void updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect);
     void fullRefreshAsync(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);

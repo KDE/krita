@@ -579,6 +579,7 @@ signals:
 public slots:
 
     void barrierLock();
+    bool tryBarrierLock();
     void waitForDone();
 
     KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);

@@ -161,12 +161,27 @@ void KisUpdateScheduler::waitForDone()
     }
 }
 
+bool KisUpdateScheduler::tryBarrierLock()
+{
+    if(!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty())
+        return false;
+
+    m_d->processingBlocked = true;
+    m_d->updaterContext->waitForDone();
+    if(!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty()) {
+        m_d->processingBlocked = false;
+        return false;
+    }
+
+    return true;
+}
+
 void KisUpdateScheduler::barrierLock()
 {
     do {
         processQueues();
-        m_d->updaterContext->waitForDone();
         m_d->processingBlocked = true;
+        m_d->updaterContext->waitForDone();
     } while(!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty());
 }
 

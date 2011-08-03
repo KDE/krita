@@ -37,13 +37,13 @@ class KoTextLayoutCellHelper : public QObject
     Q_OBJECT
 public:
     KoTextLayoutCellHelper(const KoTableCellStyle &cellStyle, QObject *parent = 0);
-    
+
     /// draws a horizontal wave line
     void drawHorizontalWave(KoBorder::BorderStyle style, QPainter &painter, qreal x, qreal w, qreal t) const;
 
     /// draws a vertical wave line
     void drawVerticalWave(KoBorder::BorderStyle style, QPainter &painter, qreal y, qreal h, qreal t) const;
-    
+
     /**
      * Paint the borders.
      *

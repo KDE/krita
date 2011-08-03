@@ -69,12 +69,12 @@ public:
         BorderSlash,    ///< slash border
         BorderWave,    ///< wave border
         BorderDoubleWave,    ///< double wave border
-        
+
         // words legacy
         BorderDashDot,
         BorderDashDotDot
     };
-    
+
     /// Holds data about one border line.
     struct KOODF_EXPORT BorderData {
         BorderData();

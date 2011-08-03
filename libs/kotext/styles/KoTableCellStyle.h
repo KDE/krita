@@ -71,14 +71,14 @@ public:
         LeftToRight,
         TopToBottom
     };
-    
+
     enum RotationAlignment {
         RAlignNone,
         RAlignBottom,
         RAlignTop,
         RAlignCenter
     };
-    
+
     enum Property {
         StyleId = QTextTableFormat::UserProperty + 1,
         ShrinkToFit,                ///< Shrink the cell content to fit the size
@@ -133,7 +133,7 @@ public:
      * @return the bounding rectange.
      */
     QRectF boundingRect(const QRectF &contentRect) const;
-    
+
     void setBackground(const QBrush &brush);
     /// See similar named method on QTextBlockFormat
     QBrush background() const;
@@ -173,7 +173,7 @@ public:
 
     void setAlignment(Qt::Alignment alignment);
     Qt::Alignment alignment() const;
-    
+
     KoText::Direction textDirection() const;
     void setTextDirection (KoText::Direction value);
 
@@ -197,16 +197,16 @@ public:
 
     void setDirection(CellTextDirection direction);
     CellTextDirection direction() const;
-    
+
     void setRotationAlignment(RotationAlignment align);
     RotationAlignment rotationAlignment () const;
-    
+
     void setVerticalGlyphOrientation(bool state);
     bool verticalGlyphOrientation() const;
-    
+
     void setBorders(const KoBorder &borders);
     KoBorder borders() const;
-    
+
     /// set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableCellStyle *parent);
 
@@ -280,8 +280,8 @@ public:
      * @returns a QVariant which holds the property value.
      */
     QVariant value(int key) const;
-    
-    
+
+
     /**
      * Set the properties of an edge.
      *
@@ -325,7 +325,7 @@ public:
     qreal rightOuterBorderWidth() const;
     qreal topOuterBorderWidth() const;
     qreal bottomOuterBorderWidth() const;
-    
+
     KoTableBorderStyle::Edge getEdge(KoTableBorderStyle::Side side) const;
     KoBorder::BorderStyle getBorderStyle(KoTableBorderStyle::Side side) const;
 signals:
@@ -333,7 +333,7 @@ signals:
 
 protected:
     KoTableCellStylePrivate * const d_ptr;
-    
+
 private:
     /**
      * Load the style from the \a KoStyleStack style stack using the
@@ -345,11 +345,11 @@ private:
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;
-    
-    
+
+
     /**
      * Set the format properties from an Edge structure
-     * 
+     *
      * @param side defines which edge this is for.
      * @param style the border style for this side.
      * @param edge the Edge that hold the properties values
@@ -357,7 +357,7 @@ private:
     void setEdge(KoTableBorderStyle::Side side, const KoTableBorderStyle::Edge &edge, KoBorder::BorderStyle style);
 
     Q_DECLARE_PRIVATE(KoTableCellStyle)
-    
+
 };
 
 #endif

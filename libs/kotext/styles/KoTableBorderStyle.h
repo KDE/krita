@@ -67,7 +67,7 @@ public:
         TopLeftToBottomRight, ///< References the border from top, left corner to bottom, right corner of cell
         BottomLeftToTopRight  ///< References the border from bottom, left corner to top, right corner of cell
     };
-    
+
     struct Edge {
         Edge() : innerPen(), outerPen(), spacing(0.0) { }
 

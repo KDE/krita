@@ -117,7 +117,7 @@ QRectF KoTableCellStyle::contentRect(const QRectF &boundingRect) const
     const KoTableBorderStyle::Edge &topEdge = getEdge(KoTableBorderStyle::Top);
     const KoTableBorderStyle::Edge &rightEdge = getEdge(KoTableBorderStyle::Right);
     const KoTableBorderStyle::Edge &bottomEdge = getEdge(KoTableBorderStyle::Bottom);
-    
+
     return boundingRect.adjusted(
                 leftEdge.outerPen.widthF() + leftEdge.spacing + leftEdge.innerPen.widthF() + propertyDouble(QTextFormat::TableCellLeftPadding),
                 topEdge.outerPen.widthF() + topEdge .spacing + topEdge .innerPen.widthF() + propertyDouble(QTextFormat::TableCellTopPadding),
@@ -132,7 +132,7 @@ QRectF KoTableCellStyle::boundingRect(const QRectF &contentRect) const
     const KoTableBorderStyle::Edge &topEdge = getEdge(KoTableBorderStyle::Top);
     const KoTableBorderStyle::Edge &rightEdge = getEdge(KoTableBorderStyle::Right);
     const KoTableBorderStyle::Edge &bottomEdge = getEdge(KoTableBorderStyle::Bottom);
-    
+
     return contentRect.adjusted(
                 - leftEdge.outerPen.widthF() - leftEdge.spacing - leftEdge.innerPen.widthF() - propertyDouble(QTextFormat::TableCellLeftPadding),
                 - topEdge.outerPen.widthF() - topEdge.spacing - topEdge.innerPen.widthF() - propertyDouble(QTextFormat::TableCellTopPadding),
@@ -1030,7 +1030,7 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
 void KoTableCellStyle::setEdge(KoTableBorderStyle::Side side, KoBorder::BorderStyle style, qreal width, QColor color)
 {
     Q_D(KoTableCellStyle);
-    
+
     KoTableBorderStyle::Edge edge;
     qreal innerWidth = 0;
     qreal middleWidth = 0;
@@ -1143,7 +1143,7 @@ void KoTableCellStyle::setEdge(KoTableBorderStyle::Side side, const KoTableBorde
 void KoTableCellStyle::setEdgeDoubleBorderValues(KoTableBorderStyle::Side side, qreal innerWidth, qreal space)
 {
     KoTableBorderStyle::Edge edge = getEdge(side);
-    
+
     qreal totalWidth = edge.outerPen.widthF() + edge.spacing + edge.innerPen.widthF();
     if (edge.innerPen.widthF() > 0.0) {
         edge.outerPen.setWidthF(totalWidth - innerWidth - space);

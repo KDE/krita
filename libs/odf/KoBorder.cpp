@@ -254,10 +254,10 @@ KoBorder::BorderStyle KoBorder::odfBorderStyle(const QString &borderstyle, bool 
         return KoBorder::BorderWave;
     if (borderstyle == "double-wave") // not officially odf, but we suppport it anyway
         return KoBorder::BorderDoubleWave;
-    
+
     if (converted)
         *converted = false;
-    
+
     return BorderSolid;
 }
 
@@ -644,7 +644,7 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
         if (!border.isEmpty() && border != "none" && border != "hidden") {
             QStringList borderData = border.split(' ', QString::SkipEmptyParts);
             kDebug(32500) << "Items :" << borderData;
-            
+
             if (borderData.length() > 0) {
                 const QColor borderColor = QColor(borderData.last());
                 if (borderColor.isValid()) {
@@ -654,7 +654,7 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
                     setRightBorderColor(borderColor);
                     setBottomBorderColor(borderColor);
                 }
-                
+
                 bool converted = false;
                 const BorderStyle borderStyle = odfBorderStyle(borderData.last(), &converted);
                 if (converted) {
@@ -664,7 +664,7 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
                     setRightBorderStyle(borderStyle);
                     setBottomBorderStyle(borderStyle);
                 }
-                
+
                 if (!borderData.isEmpty()) {
                     const qreal borderWidth = KoUnit::parseValue(borderData[0], 1.0);
                     setLeftBorderWidth(borderWidth);

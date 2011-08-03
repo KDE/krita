@@ -63,6 +63,9 @@
 // Comment out to get uncached painting, which is good for debugging
 //#define VECTORSHAPE_PAINT_UNCACHED
 
+// Comment out to get unthreaded painting, which is good for debugging
+//#define VECTORSHAPE_PAINT_UNTHREADED
+
 VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )
     , m_type(VectorTypeNone)
@@ -242,23 +245,23 @@ void RenderThread::drawSvm(QPainter &painter) const
 
 void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    QRectF rc = converter.documentToView(boundingRect());
-    QImage *cache = m_cache[rc.size().toSize().height()];
-
 #ifdef VECTORSHAPE_PAINT_UNCACHED
     bool useCache = false;
+#else
+    bool useCache = true;
+#endif
+
+#ifdef VECTORSHAPE_PAINT_UNTHREADED
     bool asynchronous = false;
 #else
-    bool useCache = cache && !cache->isNull();
     // Since the backends may use QPainter::drawText we need to make sure to only
     // use threads if the font-backend supports that what is in most cases.
     bool asynchronous = QFontDatabase::supportsThreadedFontRendering();
 #endif
 
-    if (!useCache) { // recreate the cached image
-        render(converter, asynchronous, rc);
-    } else { // pain cached image
-        Q_ASSERT(cache && !cache->isNull());
+    QImage *cache = render(converter, asynchronous, useCache);
+    if (cache) { // paint cached image
+        Q_ASSERT(!cache->isNull());
         QVector<QRect> clipRects = painter.clipRegion().rects();
         foreach (const QRect &rc, clipRects) {
             painter.drawImage(rc.topLeft(), *cache, rc);
@@ -393,24 +396,33 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
 
 void VectorShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
 {
-    QRectF rc = converter.documentToView(boundingRect());
-    render(converter, asynchronous, rc);
+    render(converter, asynchronous, true);
 }
 
-void VectorShape::render(const KoViewConverter &converter, bool asynchronous, const QRectF& rect) const
+QImage* VectorShape::render(const KoViewConverter &converter, bool asynchronous, bool useCache) const
 {
-    if (!m_isRendering) {
-        m_isRendering = true;
-        qreal zoomX, zoomY;
-        converter.zoom(&zoomX, &zoomY);
-        RenderThread *t = new RenderThread(this, size(), rect.size().toSize(), zoomX, zoomY);
-        connect(t, SIGNAL(finished(QSize,QImage*)), this, SLOT(renderFinished(QSize,QImage*)));
-        if (asynchronous) { // render and paint the image threaded
-            QThreadPool::globalInstance()->start(t);
-        } else { // non-threaded rendering and painting of the image
-            t->run();
+    QRectF rect = converter.documentToView(boundingRect());
+    int id = rect.size().toSize().height();
+    QImage *cache = useCache ? m_cache[id] : 0;
+
+    if (!cache || cache->isNull()) { // recreate the cached image
+        cache = 0;
+        if (!m_isRendering) {
+            m_isRendering = true;
+            qreal zoomX, zoomY;
+            converter.zoom(&zoomX, &zoomY);
+            RenderThread *t = new RenderThread(this, size(), rect.size().toSize(), zoomX, zoomY);
+            connect(t, SIGNAL(finished(QSize,QImage*)), this, SLOT(renderFinished(QSize,QImage*)));
+            if (asynchronous) { // render and paint the image threaded
+                QThreadPool::globalInstance()->start(t);
+            } else { // non-threaded rendering and painting of the image
+                t->run();
+                cache = m_cache[id];
+            }
         }
     }
+
+    return cache;
 }
 
 bool VectorShape::isWmf(const QByteArray &bytes)

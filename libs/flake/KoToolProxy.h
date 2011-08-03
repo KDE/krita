@@ -107,11 +107,6 @@ public:
      */
     QHash<QString, KAction*> actions() const;
 
-    /**
-     * Proxies for KoToolBase::selection()
-     */
-    KoToolSelection *selection();
-
     /// returns true if the current tool holds a selection
     bool hasSelection() const;
     /// Forwarded to the current KoToolBase

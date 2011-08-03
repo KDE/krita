@@ -443,19 +443,6 @@ public:
      */
     void dumpModel(const QString &msg, Soprano::Model *m = 0) const;
 
-    /**
-     * If the current tool is not something that you can get a
-     * texteditor for, make sure it is and return a TextEditor.
-     */
-    static KoTextEditor *ensureTextTool(KoCanvasBase *host);
-    /**
-     * Switch to the text tool. Useful in cases like the docinfo dialog
-     * where you don't actually have a pointer to the canvas but you
-     * know that some methods you are going to call will require a
-     * KoTextEditor.
-     */
-    static void ensureTextTool();
-
 private:
 
     /**

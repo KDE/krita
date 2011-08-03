@@ -32,10 +32,15 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoStoreDevice.h>
-#include <KoCanvasBase.h>
-#include <KoToolProxy.h>
 #include <KoResourceManager.h>
 #include <KoTextEditor.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+#include <KoTextShapeDataBase.h>
+#include <KoCanvasBase.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
+#include <KoCanvasBase.h>
 #include <KoInlineObject.h>
 #include <KoTextInlineRdf.h>
 #include <KoInlineTextObjectManager.h>
@@ -1489,18 +1494,4 @@ QList<KoSemanticStylesheet*> KoDocumentRdf::userStyleSheetList(const QString& cl
 void KoDocumentRdf::setUserStyleSheetList(const QString& className,const QList<KoSemanticStylesheet*>& l)
 {
     d->userStylesheets[className] = l;
-}
-
-#define TextTool_ID "TextToolFactory_ID"
-
-KoTextEditor *KoDocumentRdf::ensureTextTool(KoCanvasBase *host)
-{
-    KoToolManager::instance()->switchToolRequested(TextTool_ID);
-    KoTextEditor *ret = qobject_cast<KoTextEditor*>(host->toolProxy()->selection());
-    return ret;
-}
-
-void KoDocumentRdf::ensureTextTool()
-{
-    KoToolManager::instance()->switchToolRequested(TextTool_ID);
 }

@@ -408,14 +408,6 @@ void KoToolProxy::inputMethodEvent(QInputMethodEvent *event)
     if (d->activeTool) d->activeTool->inputMethodEvent(event);
 }
 
-KoToolSelection* KoToolProxy::selection()
-{
-    if (d->activeTool) {
-        return d->activeTool->selection();
-    }
-    return 0;
-}
-
 void KoToolProxy::setActiveTool(KoToolBase *tool)
 {
     if (d->activeTool)

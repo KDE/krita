@@ -88,6 +88,28 @@
 
 #include <rdf/KoDocumentRdfBase.h>
 
+class TextToolSelection : public KoToolSelection
+{
+public:
+
+    TextToolSelection(KoTextEditor *editor)
+        : m_editor(editor)
+    {
+    }
+
+    bool hasSelection()
+    {
+        if (m_editor) {
+            return m_editor->hasSelection();
+        }
+        else {
+            return false;
+        }
+    }
+
+    KoTextEditor *m_editor;
+};
+
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
 {
     foreach (const QKeySequence & ks, KStandardShortcut::shortcut(shortcut).toList()) {
@@ -110,15 +132,16 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_prevMouseSelectionStart(-1),
         m_prevMouseSelectionEnd(-1),
         m_caretTimer(this),
-        m_caretTimerState(true)
-        , m_currentCommand(0),
+        m_caretTimerState(true),
+        m_currentCommand(0),
         m_currentCommandHasChildren(false),
         m_specialCharacterDocker(0),
         m_textTyping(false),
         m_textDeleting(false),
         m_changeTipTimer(this),
-        m_changeTipCursorPos(0)
-        , m_delayedEnsureVisible(false)
+        m_changeTipCursorPos(0),
+        m_delayedEnsureVisible(false),
+        m_toolSelection(0)
 {
     setTextMode(true);
 
@@ -514,6 +537,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 
     m_textEditor = new KoTextEditor(document);
     KoTextDocument(document).setTextEditor(m_textEditor.data());
+    m_toolSelection = new TextToolSelection(m_textEditor.data());
 
     m_changeTracker = new KoChangeTracker();
     KoTextDocument(document).setChangeTracker(m_changeTracker);
@@ -755,10 +779,17 @@ void TextTool::setShapeData(KoTextShapeData *data)
         return;
     connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
     if (docChanged) {
-        if (!m_textEditor.isNull())
+        if (!m_textEditor.isNull()) {
             disconnect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
+        }
         m_textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
         Q_ASSERT(m_textEditor.data());
+        if (!m_toolSelection) {
+            m_toolSelection = new TextToolSelection(m_textEditor.data());
+        }
+        else {
+            m_toolSelection->m_editor = m_textEditor.data();
+        }
         connect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
     }
     m_textEditor.data()->updateDefaultTextDirection(m_textShapeData->pageDirection());
@@ -1509,7 +1540,7 @@ QRectF TextTool::textRect(QTextCursor &cursor) const
 
 KoToolSelection* TextTool::selection()
 {
-    return m_textEditor.data();
+    return m_toolSelection;
 }
 
 QList<QWidget *> TextTool::createOptionWidgets()

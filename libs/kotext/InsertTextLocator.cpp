@@ -19,11 +19,15 @@
 
 #include "InsertTextLocator_p.h"
 #include "KoTextEditor.h"
+#include "KoTextDocument.h"
 
 #include <KoCanvasBase.h>
-#include <KoToolProxy.h>
-
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+#include <KoTextShapeDataBase.h>
 #include <KLocale>
+
+
 
 InsertTextLocator::InsertTextLocator(KoCanvasBase *canvas)
         : InsertInlineObjectActionBase(canvas, i18n("Index Reference"))
@@ -32,12 +36,11 @@ InsertTextLocator::InsertTextLocator(KoCanvasBase *canvas)
 
 KoInlineObject *InsertTextLocator::createInlineObject()
 {
-    Q_ASSERT(m_canvas->toolProxy());
-    KoTextEditor *handler = qobject_cast<KoTextEditor*> (m_canvas->toolProxy()->selection());
-    if (handler) {
-        handler->insertIndexMarker();
-    } else {
-        kWarning(32500) << "InsertTextLocator: No texttool selected while trying to insert text locator";
+    Q_ASSERT(m_canvas);
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
+    if (editor) {
+        KoInlineObject *obj = editor->insertIndexMarker();
+        Q_UNUSED(obj); // intentionally unused: if we return it, it gets inserted again
     }
     return 0;
 }

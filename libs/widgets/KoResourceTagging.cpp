@@ -28,6 +28,7 @@
 #include <Nepomuk/ResourceManager>
 #include <Nepomuk/Variant>
 #include <Nepomuk/Tag>
+#include <Nepomuk/File>
 
 #include <Soprano/Model>
 #include <Soprano/QueryResultIterator>
@@ -401,7 +402,7 @@ void KoResourceTagging::updateTagRepoFromNepomuk(bool serverIdentity)
     QList<Nepomuk::Resource> resourceList = readNepomukRepo();
     foreach(Nepomuk::Resource resource, resourceList) {
 
-        QString resourceFileName = correctedNepomukFileName(resource.genericLabel());
+        QString resourceFileName = correctedNepomukFileName(resource.toFile().url().path());
 
         if(isServerResource(resourceFileName) || !serverIdentity) {
             QList<Nepomuk::Tag> tagList = resource.tags();
@@ -414,8 +415,8 @@ void KoResourceTagging::updateTagRepoFromNepomuk(bool serverIdentity)
 
 void KoResourceTagging::addNepomukTag(const QString &fileName, const QString &tagNew)
 {
-    QUrl qurl(adjustedNepomukFileName(fileName));
-    Nepomuk::Resource resource(qurl);
+    KUrl qurl(adjustedNepomukFileName(fileName));
+    Nepomuk::File resource(qurl);
     Nepomuk::Tag nepomukTag( tagNew );
     resource.addTag(nepomukTag);
 }

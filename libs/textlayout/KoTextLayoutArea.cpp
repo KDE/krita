@@ -662,7 +662,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             blockData = dynamic_cast<KoTextBlockData*>(block.userData());
         }
         if (blockData) {
-            qDebug() << "Setting label format" << labelFormat.fontPointSize();
             blockData->setLabelFormat(labelFormat);
         }
     } else if (blockData) { // make sure it is empty

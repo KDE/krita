@@ -62,7 +62,6 @@ public:
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
-    void shapeCountChanged();
     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
 };
 

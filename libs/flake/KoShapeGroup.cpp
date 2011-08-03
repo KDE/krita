@@ -76,14 +76,6 @@ QRectF KoShapeGroup::boundingRect() const
     return shadowRect;
 }
 
-void KoShapeGroup::shapeCountChanged()
-{
-    // TODO: why is this needed here ? the group/ungroup command should take care of this
-    QRectF br = boundingRect();
-    setAbsolutePosition(br.topLeft(), KoFlake::TopLeftCorner);
-    setSize(br.size());
-}
-
 void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
 {
     context.xmlWriter().startElement("draw:g");

@@ -16,32 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_post_execution_undo_adapter.h"
-
-#include "kis_undo_store.h"
 #include "kis_image_interfaces.h"
-#include "commands/kis_saved_commands.h"
 
-
-KisPostExecutionUndoAdapter::KisPostExecutionUndoAdapter(KisUndoStore *undoStore,
-                                                         KisStrokesFacade *strokesFacade)
-    : m_undoStore(undoStore),
-      m_strokesFacade(strokesFacade)
+KisStrokesFacade::~KisStrokesFacade()
 {
-}
-
-void KisPostExecutionUndoAdapter::addCommand(KUndo2CommandSP command)
-{
-    if(!command) return;
-    m_undoStore->addCommand(new KisSavedCommand(command, m_strokesFacade));
-}
-
-KisSavedMacroCommand* KisPostExecutionUndoAdapter::createMacro(const QString& macroName)
-{
-    return new KisSavedMacroCommand(macroName, m_strokesFacade);
-}
-
-void KisPostExecutionUndoAdapter::addMacro(KisSavedMacroCommand *macro)
-{
-    m_undoStore->addCommand(macro);
 }

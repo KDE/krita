@@ -20,14 +20,14 @@
 
 #include <QVector>
 
+#include "kis_image_interfaces.h"
 #include "kis_stroke_strategy_undo_command_based.h"
-#include "kis_image.h"
 
 
 KisSavedCommandBase::KisSavedCommandBase(const QString &name,
-                                         KisImageWSP image)
+                                         KisStrokesFacade *strokesFacade)
     : m_name(name),
-      m_image(image),
+      m_strokesFacade(strokesFacade),
       m_skipOneRedo(true)
 {
 }
@@ -36,9 +36,9 @@ KisSavedCommandBase::~KisSavedCommandBase()
 {
 }
 
-KisImageWSP KisSavedCommandBase::image()
+KisStrokesFacade* KisSavedCommandBase::strokesFacade()
 {
-    return m_image;
+    return m_strokesFacade;
 }
 
 void KisSavedCommandBase::runStroke(bool undo)
@@ -46,9 +46,9 @@ void KisSavedCommandBase::runStroke(bool undo)
     KisStrokeStrategyUndoCommandBased *strategy =
         new KisStrokeStrategyUndoCommandBased(m_name, undo, 0);
 
-    KisStrokeId id = m_image->startStroke(strategy);
+    KisStrokeId id = m_strokesFacade->startStroke(strategy);
     addCommands(id, undo);
-    m_image->endStroke(id);
+    m_strokesFacade->endStroke(id);
 }
 
 void KisSavedCommandBase::undo()
@@ -74,15 +74,15 @@ void KisSavedCommandBase::redo()
 
 
 KisSavedCommand::KisSavedCommand(KUndo2CommandSP command,
-                                 KisImageWSP image)
-    : KisSavedCommandBase(command->text(), image),
+                                 KisStrokesFacade *strokesFacade)
+    : KisSavedCommandBase(command->text(), strokesFacade),
       m_command(command)
 {
 }
 
 void KisSavedCommand::addCommands(KisStrokeId id, bool undo)
 {
-    image()->
+    strokesFacade()->
         addJob(id, new KisStrokeStrategyUndoCommandBased::Data(m_command, undo));
 }
 
@@ -99,8 +99,8 @@ struct KisSavedMacroCommand::Private
 };
 
 KisSavedMacroCommand::KisSavedMacroCommand(const QString &name,
-                                           KisImageWSP image)
-    : KisSavedCommandBase(name, image),
+                                           KisStrokesFacade *strokesFacade)
+    : KisSavedCommandBase(name, strokesFacade),
       m_d(new Private())
 {
 }
@@ -133,7 +133,7 @@ void KisSavedMacroCommand::addCommands(KisStrokeId id, bool undo)
 
     if(!undo) {
         for(it = m_d->commands.begin(); it != m_d->commands.end(); it++) {
-            image()->
+            strokesFacade()->
                 addJob(id, new KisStrokeStrategyUndoCommandBased::
                        Data(it->command,
                             undo,
@@ -145,7 +145,7 @@ void KisSavedMacroCommand::addCommands(KisStrokeId id, bool undo)
         for(it = m_d->commands.end(); it != m_d->commands.begin();) {
             --it;
 
-            image()->
+            strokesFacade()->
                 addJob(id, new KisStrokeStrategyUndoCommandBased::
                        Data(it->command,
                             undo,

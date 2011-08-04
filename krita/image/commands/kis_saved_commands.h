@@ -24,11 +24,13 @@
 #include "krita_export.h"
 #include "kis_stroke_job_strategy.h"
 
+class KisStrokesFacade;
+
 
 class KisSavedCommandBase : public KUndo2Command
 {
 public:
-    KisSavedCommandBase(const QString &name, KisImageWSP image);
+    KisSavedCommandBase(const QString &name, KisStrokesFacade *strokesFacade);
     virtual ~KisSavedCommandBase();
 
     void undo();
@@ -36,21 +38,21 @@ public:
 
 protected:
     virtual void addCommands(KisStrokeId id, bool undo) = 0;
-    KisImageWSP image();
+    KisStrokesFacade* strokesFacade();
 
 private:
     void runStroke(bool undo);
 
 private:
     QString m_name;
-    KisImageWSP m_image;
+    KisStrokesFacade *m_strokesFacade;
     bool m_skipOneRedo;
 };
 
 class KisSavedCommand : public KisSavedCommandBase
 {
 public:
-    KisSavedCommand(KUndo2CommandSP command, KisImageWSP image);
+    KisSavedCommand(KUndo2CommandSP command, KisStrokesFacade *strokesFacade);
 
 protected:
     void addCommands(KisStrokeId id, bool undo);
@@ -62,7 +64,7 @@ private:
 class KisSavedMacroCommand : public KisSavedCommandBase
 {
 public:
-    KisSavedMacroCommand(const QString &name, KisImageWSP image);
+    KisSavedMacroCommand(const QString &name, KisStrokesFacade *strokesFacade);
     ~KisSavedMacroCommand();
 
     void addCommand(KUndo2CommandSP command,

@@ -33,7 +33,8 @@
 #include "kis_node_graph_listener.h"
 #include "kis_node_facade.h"
 #include "kis_default_bounds.h"
-#include "kis_stroke_job_strategy.h"
+#include "kis_image_interfaces.h"
+
 
 class KoDocument;
 class KoColorSpace;
@@ -49,7 +50,6 @@ class KisFilterStrategy;
 class KoColorProfile;
 class KoUpdater;
 class KisPerspectiveGrid;
-class KisStrokeStrategy;
 
 namespace KisMetaData
 {
@@ -61,7 +61,7 @@ class MergeStrategy;
  * meta information about the image. And it also provides some
  * functions to manipulate the whole image.
  */
-class KRITAIMAGE_EXPORT KisImage : public QObject, public KisNodeFacade, public KisNodeGraphListener, public KisShared
+class KRITAIMAGE_EXPORT KisImage : public QObject, public KisStrokesFacade, public KisNodeFacade, public KisNodeGraphListener, public KisShared
 {
 
     Q_OBJECT

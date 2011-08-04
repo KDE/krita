@@ -16,34 +16,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_POST_EXECUTION_UNDO_ADAPTER_H
-#define __KIS_POST_EXECUTION_UNDO_ADAPTER_H
+#ifndef __KIS_IMAGE_INTERFACES_H
+#define __KIS_IMAGE_INTERFACES_H
 
-#include <krita_export.h>
 #include "kis_types.h"
 
-class KisUndoStore;
-class KisSavedMacroCommand;
-class KisStrokesFacade;
+class KisStrokeStrategy;
+class KisStrokeJobData;
 
 
-class KRITAIMAGE_EXPORT KisPostExecutionUndoAdapter
+class KisStrokesFacade
 {
 public:
-    KisPostExecutionUndoAdapter(KisUndoStore *undoStore, KisStrokesFacade *strokesFacade);
-
-    void addCommand(KUndo2CommandSP command);
-
-    KisSavedMacroCommand* createMacro(const QString& macroName);
-    void addMacro(KisSavedMacroCommand *macro);
-
-    inline void setUndoStore(KisUndoStore *undoStore) {
-        m_undoStore = undoStore;
-    }
-
-private:
-    KisUndoStore *m_undoStore;
-    KisStrokesFacade *m_strokesFacade;
+    virtual ~KisStrokesFacade();
+    virtual KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy) = 0;
+    virtual void addJob(KisStrokeId id, KisStrokeJobData *data) = 0;
+    virtual void endStroke(KisStrokeId id) = 0;
+    virtual bool cancelStroke(KisStrokeId id) = 0;
 };
 
-#endif /* __KIS_POST_EXECUTION_UNDO_ADAPTER_H */
+#endif /* __KIS_IMAGE_INTERFACES_H */

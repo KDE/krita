@@ -340,4 +340,11 @@ void KisNode::setDirty(const QRegion &region)
     setDirty(region.rects());
 }
 
+void KisNode::setDirty(const QRect & rect)
+{
+    if(m_d->graphListener) {
+        m_d->graphListener->requestProjectionUpdate(this, rect);
+    }
+}
+
 #include "kis_node.moc"

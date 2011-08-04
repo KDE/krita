@@ -1202,11 +1202,11 @@ void KisImage::slotProjectionUpdated(const QRect & rc)
     emit sigImageUpdated(rc);
 }
 
-void KisImage::updateProjection(KisNodeSP node, const QRect& rc)
+void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
     if (!locked() && m_d->scheduler) {
-        dbgImage << "KisImage: requested and update for" << node->name() << rc;
-        m_d->scheduler->updateProjection(node, rc, bounds());
+        dbgImage << "KisImage: requested and update for" << node->name() << rect;
+        m_d->scheduler->updateProjection(node, rect, bounds());
     }
 }
 

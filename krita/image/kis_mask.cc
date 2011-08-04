@@ -280,17 +280,6 @@ void KisMask::setY(qint32 y)
         m_d->selection->setY(y);
 }
 
-void KisMask::setDirty(const QRect & rect)
-{
-    Q_ASSERT(parent());
-
-    const KisLayer *parentLayer = qobject_cast<const KisLayer*>(parent());
-    KisImageWSP image = parentLayer->image();
-    Q_ASSERT(image);
-
-    image->updateProjection(this, rect);
-}
-
 QImage KisMask::createThumbnail(qint32 w, qint32 h)
 {
     KisPaintDeviceSP originalDevice =

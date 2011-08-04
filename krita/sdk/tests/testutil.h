@@ -31,6 +31,8 @@
 #include <kis_paint_device.h>
 #include <kis_node.h>
 #include <kis_undo_adapter.h>
+#include "kis_node_graph_listener.h"
+
 /**
  * Routines that are useful for writing efficient tests
  */
@@ -168,6 +170,61 @@ QList<const KoColorSpace*> allColorSpaces()
 {
     return KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
 }
+
+class TestGraphListener : public KisNodeGraphListener
+{
+public:
+
+    virtual void aboutToAddANode(KisNode *, int) {
+        beforeInsertRow = true;
+    }
+
+    virtual void nodeHasBeenAdded(KisNode *, int) {
+        afterInsertRow = true;
+    }
+
+    virtual void aboutToRemoveANode(KisNode *, int) {
+        beforeRemoveRow  = true;
+    }
+
+    virtual void nodeHasBeenRemoved(KisNode *, int) {
+        afterRemoveRow = true;
+    }
+
+
+    virtual void aboutToMoveNode(KisNode *, int, int) {
+        beforeMove = true;
+    }
+
+    virtual void nodeHasBeenMoved(KisNode *, int, int) {
+        afterMove = true;
+    }
+
+    virtual void nodeChanged(KisNode*) {
+
+    }
+
+    virtual void requestProjectionUpdate(KisNode *node, const QRect& rect) {
+
+    }
+
+
+    bool beforeInsertRow;
+    bool afterInsertRow;
+    bool beforeRemoveRow;
+    bool afterRemoveRow;
+    bool beforeMove;
+    bool afterMove;
+
+    void resetBools() {
+        beforeRemoveRow = false;
+        afterRemoveRow = false;
+        beforeInsertRow = false;
+        afterInsertRow = false;
+        beforeMove = false;
+        afterMove = false;
+    }
+};
 
 }
 

@@ -235,9 +235,7 @@ void KisLayer::setImage(KisImageWSP image)
 
 void KisLayer::setDirty(const QRect & rect)
 {
-    if(m_d->image) {
-        m_d->image->updateProjection(this, rect);
-    }
+    KisNode::setDirty(rect);
     m_d->clonesList.setDirty(rect);
 }
 

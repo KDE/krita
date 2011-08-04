@@ -135,9 +135,6 @@ public:
      */
     void setY(qint32 y);
 
-    void setDirty(const QRect & rect);
-    using KisNode::setDirty;
-
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QImage createThumbnail(qint32 w, qint32 h);

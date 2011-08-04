@@ -81,6 +81,7 @@ public: // KisNodeGraphListener implementation
     void aboutToMoveNode(KisNode * parent, int oldIndex, int newIndex);
     void nodeHasBeenMoved(KisNode * parent, int oldIndex, int newIndex);
     void nodeChanged(KisNode * node);
+    void requestProjectionUpdate(KisNode *node, const QRect& rect);
 
 public:
 
@@ -588,7 +589,6 @@ public slots:
     bool cancelStroke(KisStrokeId id);
 
     void slotProjectionUpdated(const QRect & rc);
-    void updateProjection(KisNodeSP node, const QRect& rc);
 
     void refreshGraphAsync(KisNodeSP root = 0);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect);

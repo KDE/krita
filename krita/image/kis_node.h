@@ -105,9 +105,7 @@ public:
      * this percolates up to parent nodes all the way to the root
      * node.
      */
-    virtual void setDirty(const QRect & rect) {
-        Q_UNUSED(rect);
-    }
+    virtual void setDirty(const QRect & rect);
 
     /**
      * Add the given rects to the set of dirty rects for this node;

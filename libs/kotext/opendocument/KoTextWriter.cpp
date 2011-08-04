@@ -1341,6 +1341,10 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
     QString tableStyleName = saveTableStyle(*table);
     tableTagInformation.setTagName("table:table");
     tableTagInformation.addAttribute("table:style-name", tableStyleName);
+    if (table->format().boolProperty(KoTableStyle::TableIsProtected))
+    {
+        tableTagInformation.addAttribute("table:protected", "true");
+    }
     int changeId = openTagRegion(table->firstCursorPosition().position(), KoTextWriter::Private::Table, tableTagInformation);
 
     for (int c = 0 ; c < table->columns() ; c++) {

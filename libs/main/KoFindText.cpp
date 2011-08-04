@@ -117,8 +117,6 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
         return;
     }
 
-    int position = 0;
-
     foreach(QTextDocument* document, d->documents) {
         QTextCursor cursor = document->find(pattern, start, flags);
         QVector<QAbstractTextDocumentLayout::Selection> selections;
@@ -245,6 +243,7 @@ void KoFindText::Private::documentDestroyed(QObject *document)
 
 void KoFindText::Private::updateCurrentMatch(int position)
 {
+    Q_UNUSED(position);
     if (currentMatch.first != 0) {
         QVector<QAbstractTextDocumentLayout::Selection> sel = selections.value(currentMatch.first);
         Q_ASSERT(currentMatch.second < sel.count());

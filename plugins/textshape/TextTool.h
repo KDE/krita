@@ -53,6 +53,7 @@ class FontSizeAction;
 class KUndo2Command;
 
 class MockCanvas;
+class TextToolSelection;
 
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
@@ -203,7 +204,7 @@ private slots:
     void setFontSize(qreal size);
     /// Default Format
     void setDefaultFormat();
-    /// see KoTextSelectionHandler::insertIndexMarker
+    /// see KoTextEditor::insertIndexMarker
     void insertIndexMarker();
     /// shows a dialog to insert a table
     void insertTable();
@@ -367,6 +368,8 @@ private:
     int m_changeTipCursorPos;
     QPoint m_changeTipPos;
     bool m_delayedEnsureVisible;
+    
+    TextToolSelection *m_toolSelection;
 };
 
 #endif

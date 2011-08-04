@@ -20,20 +20,20 @@
 #include "KoRdfSemanticItem.h"
 #include "KoDocumentRdf.h"
 #include "KoDocumentRdf_p.h"
-#include <KoInlineObject.h>
-#include <KoTextInlineRdf.h>
-#include <KoTextRdfCore.h>
-#include <KoTextEditor.h>
-#include <KoCanvasBase.h>
-#include <KoToolProxy.h>
-#include <KoBookmark.h>
-#include <KoTextMeta.h>
-#include <KoTextDocument.h>
 #include "KoRdfFoaF.h"
 #include "KoRdfCalendarEvent.h"
 #include "KoRdfLocation.h"
 #include "KoDocumentRdf.h"
 
+#include <KoInlineObject.h>
+#include <KoTextInlineRdf.h>
+#include <KoTextRdfCore.h>
+#include <KoCanvasBase.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
+#include <KoBookmark.h>
+#include <KoTextMeta.h>
+#include <KoTextDocument.h>
 
 #include <kdebug.h>
 #include <QUuid>
@@ -233,12 +233,14 @@ void KoRdfSemanticItem::insert(KoCanvasBase *host)
 {
     Q_UNUSED(host);
     kDebug(30015) << "insert...";
-    KoTextEditor *editor = KoDocumentRdf::ensureTextTool(host);
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(host);
+
     Q_ASSERT(editor);
     Q_ASSERT(editor->document());
 
     KoTextDocument ktd(editor->document());
     KoChangeTrackerDisabledRAII disableChangeTracker(ktd.changeTracker());
+    Q_UNUSED(disableChangeTracker);
 
     KoTextMeta *startmark = new KoTextMeta(editor->document());
     editor->insertInlineObject(startmark);

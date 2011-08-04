@@ -120,6 +120,9 @@ public:
      */
     void setThousandsSeparator(const QString& separator);
 
+    QString delimiter() const;
+    void setDelimiter(const QString& delimit);
+
 protected slots:
     void returnPressed();
     void formatChanged(const QString&);

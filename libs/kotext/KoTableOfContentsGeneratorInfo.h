@@ -164,6 +164,7 @@ public:
     virtual ~ToCGeneratorInterface() {}
     virtual void setMaxTabPosition(qreal maxTabPosition) = 0;
     virtual void setBlock(const QTextBlock &block) = 0;
+    virtual void generate() = 0;
 };
 
 class KOTEXT_EXPORT KoTableOfContentsGeneratorInfo

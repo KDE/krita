@@ -168,7 +168,7 @@ void KoRdfSemanticItemViewSite::select(KoCanvasBase *host)
     Q_ASSERT(d->m_semItem);
     Q_ASSERT(d->m_semItem->documentRdf());
     Q_ASSERT(host);
-    KoTextEditor *editor = KoDocumentRdf::ensureTextTool(host);
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(host);
     KoResourceManager *provider = host->resourceManager();
     const KoDocumentRdf *rdf = d->m_semItem->documentRdf();
     QPair<int, int> p = p = rdf->findExtent(d->m_xmlid);

@@ -39,7 +39,6 @@ public slots:
 
 protected:
     KoCanvasBase *m_canvas;
-    KoTextEditor* editor();
 };
 
 #endif

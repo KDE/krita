@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=ExtensionsManager
+Name[bg]=Управление на разширенията
 Name[ca]=GestorExtensions
 Name[ca@valencia]=GestorExtensions
 Name[da]=Håndtering af udvidelser
@@ -27,6 +28,7 @@ Name[wa]=Manaedjeu d' sitindaedjes
 Name[x-test]=xxExtensionsManagerxx
 Name[zh_TW]=延伸管理員
 Comment=ExtensionsManager
+Comment[bg]=Управление на разширенията
 Comment[ca]=GestorExtensions
 Comment[ca@valencia]=GestorExtensions
 Comment[da]=Håndtering af udvidelser

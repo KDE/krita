@@ -39,6 +39,7 @@
 
 #include <QTextDocument>
 #include <QTimer>
+#include <QTime>
 #include <KDebug>
 #include <KoBookmark.h>
 #include <KoInlineTextObjectManager.h>
@@ -51,7 +52,7 @@ ToCGenerator::ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGenerato
     , m_ToCInfo(tocInfo)
     , m_document(0)
     , m_documentLayout(0)
-    , m_generatedDocumentChangeCount(-1)
+    , m_generatedDocumentChangeCount(-2) // generate 2 times, one for the items and one for the updating the pagenumbers
     , m_maxTabPosition(0.0)
 {
     Q_ASSERT(tocDocument);
@@ -61,14 +62,6 @@ ToCGenerator::ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGenerato
 
     tocDocument->setUndoRedoEnabled(false);
     tocDocument->setDocumentLayout(new ToCDocumentLayout(tocDocument));
-
-    // We cannot do generate right now to have a ToC with placeholder numbers cause we are in the middle
-    // of a layout-process when called what means that the document isn't ready and therefore it would
-    // not make sense to recreate the toc yet anyways cause required content may still missing. So, we
-    // need to wait till layouting is finished and our generate() method is called by the layouter.
-    //generate();
-
-    m_generatedDocumentChangeCount = -1; // we need one more intial layout to get pagenumbers
 }
 
 ToCGenerator::~ToCGenerator()
@@ -142,12 +135,24 @@ static QString removeWhitespacePrefix(const QString& text)
 
 void ToCGenerator::generate()
 {
-    if (!m_ToCInfo)
+    if (!m_ToCInfo) {
         return;
-
+    }
+    if (!m_block.isValid()) {
+        return;
+    }
     if (m_documentLayout->documentChangedCount() == m_generatedDocumentChangeCount) {
         return;
     }
+
+    /*
+    struct Timer {
+        QTime m_timer;
+        Timer() { m_timer.start(); }
+        ~Timer() { kDebug() << "************** elapsed=" << m_timer.elapsed(); }
+    };
+    Timer timer;
+    */
 
     QTextCursor cursor = m_ToCDocument->rootFrame()->lastCursorPosition();
     cursor.setPosition(m_ToCDocument->rootFrame()->firstPosition(), QTextCursor::KeepAnchor);
@@ -195,7 +200,8 @@ void ToCGenerator::generate()
         rootArea->setDirty();
     }
 
-    m_generatedDocumentChangeCount = m_documentLayout->documentChangedCount();
+    if (++m_generatedDocumentChangeCount >= 0)
+        m_generatedDocumentChangeCount = m_documentLayout->documentChangedCount();
 }
 
 static bool compareTab(const QVariant &tab1, const QVariant &tab2)

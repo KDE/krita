@@ -21,6 +21,7 @@
 
 #include "kis_types.h"
 
+class QRect;
 class KisStrokeStrategy;
 class KisStrokeJobData;
 
@@ -33,6 +34,13 @@ public:
     virtual void addJob(KisStrokeId id, KisStrokeJobData *data) = 0;
     virtual void endStroke(KisStrokeId id) = 0;
     virtual bool cancelStroke(KisStrokeId id) = 0;
+};
+
+class KisProjectionUpdateListener
+{
+public:
+    virtual ~KisProjectionUpdateListener();
+    virtual void notifyProjectionUpdated(const QRect &rc) = 0;
 };
 
 #endif /* __KIS_IMAGE_INTERFACES_H */

@@ -1197,7 +1197,7 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
     }
 }
 
-void KisImage::slotProjectionUpdated(const QRect & rc)
+void KisImage::notifyProjectionUpdated(const QRect &rc)
 {
     emit sigImageUpdated(rc);
 }

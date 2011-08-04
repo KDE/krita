@@ -21,3 +21,7 @@
 KisStrokesFacade::~KisStrokesFacade()
 {
 }
+
+KisProjectionUpdateListener::~KisProjectionUpdateListener()
+{
+}

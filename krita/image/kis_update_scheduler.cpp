@@ -18,6 +18,7 @@
 
 #include "kis_update_scheduler.h"
 
+#include "kis_image_interfaces.h"
 #include "kis_image_config.h"
 #include "kis_merge_walker.h"
 #include "kis_full_refresh_walker.h"
@@ -29,32 +30,34 @@
 struct KisUpdateScheduler::Private {
     Private() : updatesQueue(0), strokesQueue(0),
                 updaterContext(0), processingBlocked(false),
-                balancingRatio(1.0) {}
+                balancingRatio(1.0),
+                projectionUpdateListener(0) {}
 
     KisSimpleUpdateQueue *updatesQueue;
     KisStrokesQueue *strokesQueue;
     KisUpdaterContext *updaterContext;
     bool processingBlocked;
     qreal balancingRatio; // updates-queue-size/strokes-queue-size
+    KisProjectionUpdateListener *projectionUpdateListener;
 };
 
-KisUpdateScheduler::KisUpdateScheduler(KisImageWSP image)
+KisUpdateScheduler::KisUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener)
     : m_d(new Private)
 {
     updateSettings();
+    m_d->projectionUpdateListener = projectionUpdateListener;
 
     // The queue will update settings in a constructor itself
     m_d->updatesQueue = new KisSimpleUpdateQueue();
     m_d->strokesQueue = new KisStrokesQueue();
     m_d->updaterContext = new KisUpdaterContext();
 
-    connectImage(image);
+    connectSignals();
 }
 
 KisUpdateScheduler::KisUpdateScheduler()
     : m_d(new Private)
 {
-    updateSettings();
 }
 
 KisUpdateScheduler::~KisUpdateScheduler()
@@ -64,10 +67,10 @@ KisUpdateScheduler::~KisUpdateScheduler()
     delete m_d->strokesQueue;
 }
 
-void KisUpdateScheduler::connectImage(KisImageWSP image)
+void KisUpdateScheduler::connectSignals()
 {
     connect(m_d->updaterContext, SIGNAL(sigContinueUpdate(const QRect&)),
-            image, SLOT(slotProjectionUpdated(const QRect&)),
+            SLOT(continueUpdate(const QRect&)),
             Qt::DirectConnection);
 
     connect(m_d->updaterContext, SIGNAL(sigDoSomeUsefulWork()),
@@ -210,6 +213,11 @@ void KisUpdateScheduler::processQueues()
     }
 }
 
+void KisUpdateScheduler::continueUpdate(const QRect &rect)
+{
+    m_d->projectionUpdateListener->notifyProjectionUpdated(rect);
+}
+
 void KisUpdateScheduler::doSomeUsefulWork()
 {
     m_d->updatesQueue->optimize();
@@ -220,16 +228,18 @@ void KisUpdateScheduler::spareThreadAppeared()
     processQueues();
 }
 
-KisTestableUpdateScheduler::KisTestableUpdateScheduler(KisImageWSP image, qint32 threadCount)
+KisTestableUpdateScheduler::KisTestableUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener,
+                                                       qint32 threadCount)
 {
     updateSettings();
+    m_d->projectionUpdateListener = projectionUpdateListener;
 
     // The queue will update settings in a constructor itself
     m_d->updatesQueue = new KisTestableSimpleUpdateQueue();
     m_d->strokesQueue = new KisStrokesQueue();
     m_d->updaterContext = new KisTestableUpdaterContext(threadCount);
 
-    connectImage(image);
+    connectSignals();
 }
 
 KisTestableUpdaterContext* KisTestableUpdateScheduler::updaterContext()

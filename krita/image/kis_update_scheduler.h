@@ -27,6 +27,7 @@
 #include "kis_stroke_job_strategy.h"
 
 class QRect;
+class KisProjectionUpdateListener;
 
 
 class KRITAIMAGE_EXPORT KisUpdateScheduler : public QObject
@@ -34,7 +35,7 @@ class KRITAIMAGE_EXPORT KisUpdateScheduler : public QObject
     Q_OBJECT
 
 public:
-    KisUpdateScheduler(KisImageWSP image);
+    KisUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener);
     virtual ~KisUpdateScheduler();
 
     /**
@@ -102,10 +103,11 @@ public:
 protected:
     // Trivial constructor for testing support
     KisUpdateScheduler();
-    void connectImage(KisImageWSP image);
+    void connectSignals();
     void processQueues();
 
 private slots:
+    void continueUpdate(const QRect &rect);
     void doSomeUsefulWork();
     void spareThreadAppeared();
 
@@ -121,7 +123,8 @@ class KisTestableSimpleUpdateQueue;
 class KRITAIMAGE_EXPORT KisTestableUpdateScheduler : public KisUpdateScheduler
 {
 public:
-    KisTestableUpdateScheduler(KisImageWSP image, qint32 threadCount);
+    KisTestableUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener,
+                               qint32 threadCount);
 
     KisTestableUpdaterContext* updaterContext();
     KisTestableSimpleUpdateQueue* updateQueue();

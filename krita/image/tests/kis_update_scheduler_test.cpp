@@ -72,7 +72,7 @@ void KisUpdateSchedulerTest::testMerge()
     QCOMPARE(paintLayer1->name(), QString("paint1"));
 
 
-    KisUpdateScheduler scheduler(image);
+    KisUpdateScheduler scheduler(image.data());
 
     /**
      * Test synchronous Full Refresh
@@ -130,7 +130,7 @@ void KisUpdateSchedulerTest::benchmarkOverlappedMerge()
     QCOMPARE(paintLayer1->name(), QString("paint1"));
     QCOMPARE(imageRect, QRect(0,0,640,441));
 
-    KisUpdateScheduler scheduler(image);
+    KisUpdateScheduler scheduler(image.data());
 
     const qint32 xShift = 10;
     const qint32 yShift = 0;
@@ -159,7 +159,7 @@ void KisUpdateSchedulerTest::testLocking()
     QCOMPARE(paintLayer1->name(), QString("paint1"));
     QCOMPARE(imageRect, QRect(0,0,640,441));
 
-    KisTestableUpdateScheduler scheduler(image, 2);
+    KisTestableUpdateScheduler scheduler(image.data(), 2);
 
     QRect dirtyRect1(0,0,50,100);
     QRect dirtyRect2(0,0,100,100);
@@ -211,7 +211,7 @@ void KisUpdateSchedulerTest::testExclusiveStrokes()
 
     QRect dirtyRect1(0,0,50,100);
 
-    KisTestableUpdateScheduler scheduler(image, 2);
+    KisTestableUpdateScheduler scheduler(image.data(), 2);
     KisTestableUpdaterContext *context = scheduler.updaterContext();
     QVector<KisUpdateJobItem*> jobs;
 

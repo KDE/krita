@@ -96,8 +96,9 @@ public:
      *        In this case the @p parent must be a QWidget derived class.
      *        KoDocument will then create a wrapper widget (KoViewWrapperWidget) which is a child of @p parentWidget.
      *        This widget can be retrieved by calling widget().
-     * @param undoStack accepts the stack for the document. You can modify
-     *        the stack if you need. The object is owned by the document.
+     * @param undoStack accepts the stack for the document. You can create any type of stack if you need.
+     *        The stack objects will become owned by the document. This is used by Krita's KisDoc2. The default value for this
+     *        parameter is a usual Qt's stack.
      */
     KoDocument(QWidget *parentWidget,
                QObject *parent,

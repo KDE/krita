@@ -32,12 +32,11 @@
 
  <Menu name="View"><text>&amp;View</text>
   <Action name="view_show_just_the_canvas"/>
+  <Action name="view_fullscreen"/>
   <Action name="mirror_canvas"/>
   <Separator/>
   <Action name="view_newview"/>    
-  <ActionList name="view_closeallviews"/>   
   <Separator/>      
-  <ActionList name="view_split"/>
   <Action name="zoom"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
@@ -87,7 +86,6 @@
   	<Action name="insert_image_as_layer"/>
   	<Action name="cut_selection_to_new_layer"/>
   	<Action name="copy_selection_to_new_layer"/>
-	<Action name="create_layer_from_mask"/>
   </Menu>
   <Action name="resizelayertoowner"/>
   <Separator/>

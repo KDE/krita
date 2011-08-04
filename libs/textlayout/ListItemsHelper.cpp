@@ -276,7 +276,9 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
 
     if (blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem)
         || blockFormat.boolProperty(KoParagraphStyle::IsListHeader)) {
-        data->setCounterText(QString());
+        data->setCounterPlainText(QString());
+        data->setCounterPrefix(QString());
+        data->setCounterSuffix(QString());
         data->setPartialCounterText(QString());
         return;
     }
@@ -455,9 +457,11 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     data->setPartialCounterText(partialCounterText);
     data->setCounterIndex(index);
     item += partialCounterText;
+    data->setCounterPlainText(item);
+    data->setCounterPrefix(prefix);
+    data->setCounterSuffix(suffix);
     if (calcWidth)
         width = qMax(width, m_fm.width(item));
-    data->setCounterText(prefix + item + suffix);
     index++;
 
     int widthPercent = format.intProperty(KoListStyle::RelativeBulletSize);

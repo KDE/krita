@@ -124,16 +124,28 @@ kde4_add_ui_files( komain_LIB_SRCS
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
 )
-if( Soprano_FOUND )
+if(Soprano_FOUND)
+
     kde4_add_ui_files( komain_LIB_SRCS
        rdf/KoDocumentRdfEditWidget.ui
        rdf/KoRdfFoaFEditWidget.ui
        rdf/KoRdfCalendarEventEditWidget.ui
-       rdf/KoRdfLocationEditWidget.ui
-       rdf/KoRdfLocationViewWidget.ui
        rdf/KoSemanticStylesheetsEditor.ui
     )
-endif( Soprano_FOUND )
+
+    if(MARBLE_FOUND)
+        kde4_add_ui_files( komain_LIB_SRCS
+           rdf/KoRdfLocationEditWidgetMarble.ui
+           rdf/KoRdfLocationViewWidgetMarble.ui
+        )
+    else(MARBLE_FOUND)
+        kde4_add_ui_files( komain_LIB_SRCS
+           rdf/KoRdfLocationEditWidget.ui
+           rdf/KoRdfLocationViewWidget.ui
+        )
+    endif(MARBLE_FOUND)
+
+endif(Soprano_FOUND)
 
 
 kde4_add_library(komain SHARED ${komain_LIB_SRCS})
@@ -150,6 +162,10 @@ if( Soprano_FOUND )
     target_link_libraries(komain ${SOPRANO_LIBRARIES})
     target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
+if( MARBLE_FOUND )
+    target_link_libraries(komain ${MARBLE_LIBRARIES})
+    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
+endif( MARBLE_FOUND )
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})
 
@@ -185,7 +201,10 @@ install( FILES
     KoFilter.h
     KoFilterChain.h
     KoFilterChainLinkList.h
+    KoFilterEntry.h
+    KoFilterGraph.h
     KoFilterManager.h
+    KoFilterVertex.h
     KoFindBase.h
     KoFindText.h
     KoFindToolbar.h

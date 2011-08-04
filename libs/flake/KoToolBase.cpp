@@ -26,6 +26,7 @@
 #include "KoViewConverter.h"
 #include "KoShapeController.h"
 #include "KoShapeControllerBase.h"
+#include "KoToolSelection.h"
 
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -301,6 +302,12 @@ bool KoToolBase::paste()
 
 void KoToolBase::copy() const
 {
+}
+
+bool KoToolBase::hasSelection()
+{
+    KoToolSelection *sel = selection();
+    return (sel && sel->hasSelection());
 }
 
 KoToolSelection *KoToolBase::selection()

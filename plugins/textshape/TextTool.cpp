@@ -26,7 +26,6 @@
 #include "dialogs/SimpleCharacterWidget.h"
 #include "dialogs/SimpleParagraphWidget.h"
 #include "dialogs/SimpleTableWidget.h"
-#include "dialogs/SimpleStylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
 #include "dialogs/StyleManagerDialog.h"
 #include "dialogs/InsertCharacter.h"
@@ -89,6 +88,28 @@
 
 #include <rdf/KoDocumentRdfBase.h>
 
+class TextToolSelection : public KoToolSelection
+{
+public:
+
+    TextToolSelection(KoTextEditor *editor)
+        : m_editor(editor)
+    {
+    }
+
+    bool hasSelection()
+    {
+        if (m_editor) {
+            return m_editor->hasSelection();
+        }
+        else {
+            return false;
+        }
+    }
+
+    KoTextEditor *m_editor;
+};
+
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
 {
     foreach (const QKeySequence & ks, KStandardShortcut::shortcut(shortcut).toList()) {
@@ -111,15 +132,16 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_prevMouseSelectionStart(-1),
         m_prevMouseSelectionEnd(-1),
         m_caretTimer(this),
-        m_caretTimerState(true)
-        , m_currentCommand(0),
+        m_caretTimerState(true),
+        m_currentCommand(0),
         m_currentCommandHasChildren(false),
         m_specialCharacterDocker(0),
         m_textTyping(false),
         m_textDeleting(false),
         m_changeTipTimer(this),
-        m_changeTipCursorPos(0)
-        , m_delayedEnsureVisible(false)
+        m_changeTipCursorPos(0),
+        m_delayedEnsureVisible(false),
+        m_toolSelection(0)
 {
     setTextMode(true);
 
@@ -515,6 +537,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 
     m_textEditor = new KoTextEditor(document);
     KoTextDocument(document).setTextEditor(m_textEditor.data());
+    m_toolSelection = new TextToolSelection(m_textEditor.data());
 
     m_changeTracker = new KoChangeTracker();
     KoTextDocument(document).setChangeTracker(m_changeTracker);
@@ -756,10 +779,17 @@ void TextTool::setShapeData(KoTextShapeData *data)
         return;
     connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
     if (docChanged) {
-        if (!m_textEditor.isNull())
+        if (!m_textEditor.isNull()) {
             disconnect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
+        }
         m_textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
         Q_ASSERT(m_textEditor.data());
+        if (!m_toolSelection) {
+            m_toolSelection = new TextToolSelection(m_textEditor.data());
+        }
+        else {
+            m_toolSelection->m_editor = m_textEditor.data();
+        }
         connect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
     }
     m_textEditor.data()->updateDefaultTextDirection(m_textShapeData->pageDirection());
@@ -1510,7 +1540,7 @@ QRectF TextTool::textRect(QTextCursor &cursor) const
 
 KoToolSelection* TextTool::selection()
 {
-    return m_textEditor.data();
+    return m_toolSelection;
 }
 
 QList<QWidget *> TextTool::createOptionWidgets()
@@ -1518,12 +1548,12 @@ QList<QWidget *> TextTool::createOptionWidgets()
     QList<QWidget *> widgets;
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
-    SimpleStylesWidget *ssw = new SimpleStylesWidget(0);
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
 
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
     connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(scw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
 
 
     // Connect to/with simple paragraph widget (docker)
@@ -1531,14 +1561,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     connect(this, SIGNAL(blockChanged(const QTextBlock&)), spw, SLOT(setCurrentBlock(const QTextBlock&)));
     connect(spw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(spw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
-
-    // Connect to/with simple styles widget (docker)
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
-    connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), ssw, SLOT(setCurrentFormat(QTextBlockFormat)));
-    connect(this, SIGNAL(charFormatChanged(QTextCharFormat)), ssw, SLOT(setCurrentFormat(QTextCharFormat)));
-    connect(ssw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
-    connect(ssw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
-    connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(spw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
 
     // Connect to/with simple table widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));
@@ -1551,8 +1574,6 @@ QList<QWidget *> TextTool::createOptionWidgets()
     widgets.append(scw);
     spw->setWindowTitle(i18n("Paragraph"));
     widgets.append(spw);
-    ssw->setWindowTitle(i18n("Styles"));
-    widgets.append(ssw);
     stw->setWindowTitle(i18n("Table"));
     widgets.append(stw);
     return widgets;

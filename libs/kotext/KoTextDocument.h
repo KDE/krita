@@ -27,7 +27,11 @@
 #include <QUrl>
 
 #include "KoList.h"
-
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+#include <KoTextShapeDataBase.h>
+#include <KoCanvasBase.h>
+#include <KoTextEditor.h>
 #include "KoOdfNotesConfiguration.h"
 
 class KoStyleManager;

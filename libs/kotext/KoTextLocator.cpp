@@ -98,9 +98,8 @@ KoTextLocator::~KoTextLocator()
     delete d;
 }
 
-void KoTextLocator::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+void KoTextLocator::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
 {
-    Q_UNUSED(object);
     Q_UNUSED(format);
     if (d->document != document || d->cursorPosition != posInDocument) {
         d->dirty = true;

@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Image Resize and Scale Plugin
-Name[bg]=Приставка за оразмеряване
+Name[bg]=Приставка за преоразмеряване и мащабиране
 Name[ca]=Connector de redimensionament i escalat d'imatge
 Name[ca@valencia]=Connector de redimensionament i escalat d'imatge
 Name[da]=Plugin for størrelsesændring og skalering
@@ -27,7 +27,7 @@ Name[nb]=Programtillegg for skalering og endring av bildestørrelse
 Name[nds]=Moduul för't Ännern un Topassen vun de Bildgrött
 Name[ne]=छवि रिसाइज र मापन प्लगइन
 Name[nl]=Grootte wijzigen en schalen van afbeelding
-Name[pl]=Wtyczka skalowania i zmiany rozmiarów obrazków
+Name[pl]=Wtyczka skalowania i zmiany rozmiarów obrazu
 Name[pt]='Plugin' de Dimensionamento e Escala da Imagem
 Name[pt_BR]=Plug-in de Dimensionamento e Escala da Imagem
 Name[ru]=Модуль масштабирования и изменения размера

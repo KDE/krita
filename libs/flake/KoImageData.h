@@ -24,6 +24,7 @@
 #include "flake_export.h"
 
 #include <QSize>
+#include <QMetaType>
 
 #include <KoShapeUserData.h>
 
@@ -138,5 +139,7 @@ private:
     KoImageDataPrivate *d;
     Q_PRIVATE_SLOT(d, void cleanupImageCache())
 };
+
+Q_DECLARE_METATYPE(KoImageData*)
 
 #endif

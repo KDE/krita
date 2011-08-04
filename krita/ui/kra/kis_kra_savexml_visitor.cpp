@@ -39,7 +39,6 @@
 #include <kis_paint_layer.h>
 #include <kis_selection_mask.h>
 #include <kis_shape_layer.h>
-#include <kis_transformation_mask.h>
 #include <kis_transparency_mask.h>
 
 
@@ -177,25 +176,6 @@ bool KisSaveXmlVisitor::visit(KisTransparencyMask *mask)
     Q_ASSERT(mask);
     QDomElement el = m_doc.createElement(MASK);
     saveMask(el, TRANSPARENCY_MASK, mask);
-    m_elem.appendChild(el);
-    m_count++;
-    return true;
-}
-
-bool KisSaveXmlVisitor::visit(KisTransformationMask *mask)
-{
-    Q_ASSERT(mask);
-    QDomElement el = m_doc.createElement(MASK);
-    saveMask(el, TRANSFORMATION_MASK, mask);
-    el.setAttribute(X_SCALE, mask->xScale());
-    el.setAttribute(Y_SCALE, mask->yScale());
-    el.setAttribute(X_SHEAR, mask->xShear());
-    el.setAttribute(Y_SHEAR, mask->yShear());
-    el.setAttribute(ROTATION, mask->rotation());
-    el.setAttribute(X_TRANSLATION, mask->xTranslate());
-    el.setAttribute(Y_TRANSLATION, mask->yTranslate());
-    Q_ASSERT(mask->filterStrategy());
-    el.setAttribute(FILTER_STATEGY, mask->filterStrategy()->id());
     m_elem.appendChild(el);
     m_count++;
     return true;

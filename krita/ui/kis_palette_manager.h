@@ -50,6 +50,8 @@ private slots:
     void slotEnableRemoveButton();
     void slotDeleteBrush();
     void slotAddBrush();
+    void slotThumbnailMode();
+    void slotDetailMode();
 
 private:
     QPushButton *m_saveButton;

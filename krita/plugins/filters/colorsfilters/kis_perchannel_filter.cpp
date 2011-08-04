@@ -67,11 +67,13 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
             m_dev->colorSpace()->colorChannelCount());
 
-    /* fill in the channel chooser */
-    QList<KoChannelInfo *> channels = dev->colorSpace()->channels();
-    for (unsigned int ch = 0; ch < dev->colorSpace()->colorChannelCount(); ch++)
-        m_page->cmbChannel->addItem(channels.at(ch)->name());
-
+    // fill in the channel chooser, in the display order, but store the pixel index as well.
+    QList<KoChannelInfo *> sortedChannels = KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels());
+    foreach(KoChannelInfo *channel, sortedChannels) {
+        QVariant pixelIndex(KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), 
+                                                                         KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())));
+        m_page->cmbChannel->addItem(channel->name(), pixelIndex);
+    }
     connect(m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
 
     // create the horizontal and vertical gradient labels
@@ -82,8 +84,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     QList<QString> keys =
         KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_dev->colorSpace());
     
-    if(keys.size() > 0)
-    {
+    if(keys.size() > 0) {
         KoHistogramProducerFactory *hpf;
         hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
 	m_histogram = new KisHistogram(m_dev, bounds, hpf->generate(), LINEAR);

@@ -34,7 +34,6 @@
 class KoStyleManager;
 class KoTextDocumentLayout;
 class KoTextBlockData;
-class KoImageCollection;
 class KoInlineNote;
 class KoPointedAt;
 class QTextList;
@@ -173,7 +172,7 @@ private:
 
     void clearPreregisteredFootNotes();
 
-    void drawListItem(QPainter *painter, const QTextBlock &block, KoImageCollection *imageCollection);
+    void drawListItem(QPainter *painter, const QTextBlock &block);
 
     void decorateParagraph(QPainter *painter, const QTextBlock &block);
 

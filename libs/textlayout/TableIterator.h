@@ -53,7 +53,7 @@ public:
     ~TableIterator();
 
     /// Compare this iterator to another.
-    bool operator ==(const TableIterator &other);
+    bool operator ==(const TableIterator &other) const;
 
     /**
      * Returns a frame iterator that iterates over the frames in a given column.

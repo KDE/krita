@@ -27,7 +27,7 @@
 #include <KoColorSpace.h>
 
 KisOutlineGenerator::KisOutlineGenerator(const KoColorSpace* cs, quint8 defaultOpacity)
-    : m_cs(cs), m_defaultOpacity(defaultOpacity)
+    : m_cs(cs), m_defaultOpacity(defaultOpacity), m_simple(false)
 {
 }
 
@@ -60,8 +60,7 @@ QVector<QPolygon> KisOutlineGenerator::outline(quint8* buffer, qint32 xOffset, q
                 QPolygon path;
                 path << QPoint(x + xOffset, y + yOffset);
 
-// XXX: Unused? (BSAR)
-//                bool clockwise = edge == BottomEdge;
+                bool clockwise = edge == BottomEdge;
 
                 qint32 row = y, col = x;
                 EdgeType currentEdge = edge;
@@ -78,7 +77,8 @@ QVector<QPolygon> KisOutlineGenerator::outline(quint8* buffer, qint32 xOffset, q
                     nextOutlineEdge(&currentEdge, &row, &col, buffer, width, height);
                 } while (row != y || col != x || currentEdge != edge);
 
-                paths.push_back(path);
+                if(!m_simple || !clockwise)
+                    paths.push_back(path);
             }
         }
     }
@@ -175,4 +175,9 @@ void KisOutlineGenerator::appendCoordinate(QPolygon * path, int x, int y, EdgeTy
 
     }
     *path << QPoint(x, y);
+}
+
+void KisOutlineGenerator::setSimpleOutline(bool simple)
+{
+    m_simple = simple;
 }

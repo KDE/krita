@@ -241,27 +241,25 @@ void TestBlockLayout::testAdvancedLineSpacing()
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 77.6) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 52) < ROUNDING);
 
     block = block.next(); // line5
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 92.0) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 66.39) < ROUNDING);
 
     block = block.next(); // line6
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QCOMPARE(blockLayout->lineAt(0).y(), 112.0);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 86.39) < ROUNDING);
 
-    qreal height = block.charFormat().fontPointSize() * 1.2; // 1.2 is the font stretch if setLineSpacingFromFont == true
     block = block.next(); // line 7
     QVERIFY(block.isValid());
-
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (112 + height)) < ROUNDING); // 126,4
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 100.79) < ROUNDING);
 }
 
 // Test that spacing between blocks are the max of bottomMargin and topMargin

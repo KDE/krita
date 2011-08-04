@@ -352,7 +352,7 @@ void KoTextWriter::Private::saveODF12Change(QTextCharFormat format)
 
 QString KoTextWriter::Private::generateDeleteChangeXml(KoDeleteChangeMarker *marker)
 {
-    if (!changeTracker) return QString::null;
+    if (!changeTracker) return QString();
 
     //Create a QTextDocument from the Delete Fragment
     QTextDocument doc;
@@ -628,7 +628,7 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, co
         // therefore we would need to store that information in the saving context
         if (originalParagraphStyle != defaultParagraphStyle) {
             KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
-            originalParagraphStyle->saveOdf(style, context.mainStyles());
+            originalParagraphStyle->saveOdf(style, context);
             generatedName = context.mainStyles().insert(style, internalName, KoGenStyles::DontAddNumberToName);
         }
     } else { // There are manual changes... We'll have to store them then
@@ -637,7 +637,7 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, co
             style.setAutoStyleInStylesDotXml(true);
         if (originalParagraphStyle)
             paragStyle.removeDuplicates(*originalParagraphStyle);
-        paragStyle.saveOdf(style, context.mainStyles());
+        paragStyle.saveOdf(style, context);
         generatedName = context.mainStyles().insert(style, "P");
     }
     return generatedName;
@@ -725,7 +725,7 @@ QString KoTextWriter::Private::saveTableColumnStyle(const KoTableColumnStyle& ta
     QString columnName = QChar('A' + int(columnNumber % 26));
     if (columnNumber > 25)
         columnName.prepend(QChar('A' + int(columnNumber/26)));
-    QString generatedName = tableStyleName + "." + columnName;
+    QString generatedName = tableStyleName + '.' + columnName;
 
     KoGenStyle style(KoGenStyle::TableColumnAutoStyle, "table-column");
 
@@ -739,8 +739,7 @@ QString KoTextWriter::Private::saveTableColumnStyle(const KoTableColumnStyle& ta
 
 QString KoTextWriter::Private::saveTableRowStyle(const KoTableRowStyle& tableRowStyle, int rowNumber, const QString& tableStyleName)
 {
-    // 26*26 columns should be enough for everyone
-    QString generatedName = tableStyleName + "." + QString::number(rowNumber + 1);
+    QString generatedName = tableStyleName + '.' + QString::number(rowNumber + 1);
 
     KoGenStyle style(KoGenStyle::TableRowAutoStyle, "table-row");
 
@@ -758,7 +757,7 @@ QString KoTextWriter::Private::saveTableCellStyle(const QTextTableCellFormat& ce
     QString columnName = QChar('A' + int(columnNumber % 26));
     if (columnNumber > 25)
         columnName.prepend(QChar('A' + int(columnNumber/26)));
-    QString generatedName = tableStyleName + "." + columnName;
+    QString generatedName = tableStyleName + '.' + columnName;
 
     KoGenStyle style(KoGenStyle::TableCellAutoStyle, "table-cell");
 
@@ -803,8 +802,8 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
             KoListStyle *listStyle = list->style();
             bool automatic = listStyle->styleId() == 0;
             KoGenStyle style(automatic ? KoGenStyle::ListAutoStyle : KoGenStyle::ListStyle);
-            listStyle->saveOdf(style);
-            QString generatedName = context.mainStyles().insert(style, listStyle->name(), KoGenStyles::AllowDuplicates);
+            listStyle->saveOdf(style, context);
+            QString generatedName = context.mainStyles().insert(style, listStyle->name(), listStyle->isNumberingStyle() ? KoGenStyles::AllowDuplicates : KoGenStyles::DontAddNumberToName);
             listStyles[textList] = generatedName;
             generatedLists.insert(list, generatedName);
         } else {
@@ -814,7 +813,7 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
             KoGenStyle style(KoGenStyle::ListAutoStyle);
             KoListStyle listStyle;
             listStyle.setLevelProperties(llp);
-            listStyle.saveOdf(style);
+            listStyle.saveOdf(style, context);
             QString generatedName = context.mainStyles().insert(style, listStyle.name());
             listStyles[textList] = generatedName;
         }
@@ -1429,6 +1428,8 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
 
 void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, QHash<QTextList *, QString> &listStyles, QTextBlock toc)
 {
+    Q_UNUSED(document);
+
     writer->startElement("text:table-of-content");
 
     KoTableOfContentsGeneratorInfo *info = toc.blockFormat().property(KoParagraphStyle::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
@@ -1698,7 +1699,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         QTextCursor cursor(block);
 
-        if (cursor.currentFrame() != document->rootFrame()) {
+        if (cursor.currentFrame()->format().hasProperty(KoText::SubFrameType)) {
             break; // we've reached the "end" (end/footnotes saved in another way)
         }
 
@@ -1970,7 +1971,7 @@ void KoTextWriter::Private::generateFinalXml(QTextStream &outputXmlStream, const
         handleListItemWithParagraphMerge(outputXmlStream, element);
     } else if ((firstChild == "list") && (secondChild == "list")) {
         handleListWithListMerge(outputXmlStream, element);
-    } else if ((firstChild == "list") && (secondChild == "")) {
+    } else if ((firstChild == "list") && (secondChild.isEmpty())) {
         handleListItemWithListItemMerge(outputXmlStream, element);
     } else {
         //Not Possible

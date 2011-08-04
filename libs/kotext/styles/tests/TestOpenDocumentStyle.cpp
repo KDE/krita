@@ -27,6 +27,8 @@
 #include <KoXmlWriter.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoEmbeddedDocumentSaver.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
@@ -102,10 +104,10 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                                 if (!mergedAllowedValues.contains(baseValue))
                                     mergedAllowedValues << baseValue;
                                 foreach (QString knownValue, mergedAllowedValues) {
-                                    if ((knownValue == baseValue) || (knownValue.contains(baseValue + " ")) || (knownValue.contains(" " + baseValue))) {
+                                    if ((knownValue == baseValue) || (knownValue.contains(baseValue + ' ')) || (knownValue.contains(' ' + baseValue))) {
                                         continue;
                                     }
-                                    QString builtValue = knownValue + " " + baseValue;
+                                    QString builtValue = knownValue + ' ' + baseValue;
                                     if (!mergedAllowedValues.contains(builtValue))
                                         mergedAllowedValues << builtValue;
                                 }
@@ -142,6 +144,15 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             kFatal() << "Unhandled attribute value node " << content.tagName();
         }
     }
+    
+    if (m_name == "fo:line-height") {
+        // Here, the OpenDocument specification has problems.
+        // A line height can obviously not be zero...
+        // Still, they used nonNegativeLength instead of positiveLength ?
+        m_references.removeOne("nonNegativeLength");
+        m_references << "positiveLength";
+    }
+    
     foreach (QString reference, m_references) {
         if (reference == "boolean") {
             result << "true" << "false";
@@ -171,9 +182,14 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
         } else if (reference == "zeroToHundredPercent") {
             result << "0%" << "10%" << "100%" << "13.37%" << "42.73%";
         } else if (reference == "string") {
-            // Now, that sucks !
-            kWarning() << "Found a string reference in " << m_name;
-            result << "";
+            if ((m_name == "fo:border") || (m_name == "fo:border-top") || (m_name == "fo:border-bottom") || (m_name == "fo:border-right") || (m_name == "fo:border-left")) {
+                // KoBorder crashes, be careful
+                result << "12px" << "42px solid" << "24px red" << "32px double red" << "solid black" << "dashed"  << "#ABCDEF";
+            } else {
+                // Now, that sucks !
+                kWarning() << "Found a string reference in " << m_name;
+                result << "";
+            }
         } else {
             kFatal() << "Unhandled reference " << reference << "( in " << m_name << ")";
         }
@@ -355,8 +371,13 @@ void saveOdf(T* genStyle, KoGenStyle *styleWriter)
 template<>
 void saveOdf<KoParagraphStyle>(KoParagraphStyle *genStyle, KoGenStyle *styleWriter)
 {
+    QByteArray array;
+    QBuffer buffer(&array);
+    KoXmlWriter xmlWriter(&buffer);
     KoGenStyles styles;
-    genStyle->saveOdf(*styleWriter, styles);
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoShapeSavingContext context(xmlWriter, styles, embeddedSaver);
+    genStyle->saveOdf(*styleWriter, context);
 }
 
 template<class T>
@@ -395,6 +416,8 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     {
         kWarning(32500) << "Warning : got more than one attribute !";
     }
+    if (!attribute->compare(value, outputPropertyValue))
+        kWarning(32500) << generatedXmlOutput;
     return attribute->compare(value, outputPropertyValue);
 }
 

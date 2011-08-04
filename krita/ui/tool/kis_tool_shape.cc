@@ -36,6 +36,7 @@
 #include <kis_paint_device.h>
 #include <recorder/kis_recorded_paint_action.h>
 #include <KoShape.h>
+#include <KoGradientBackground.h>
 
 KisToolShape::KisToolShape(KoCanvasBase * canvas, const QCursor & cursor)
         : KisToolPaint(canvas, cursor)
@@ -134,6 +135,15 @@ void KisToolShape::addShape(KoShape* shape)
                 shape->setBackground(fill);
             } else {
                 shape->setBackground(0);
+            }
+            break;
+        case KisPainter::FillStyleGradient:
+            {
+                QLinearGradient *gradient = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
+                gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
+                gradient->setStops(currentGradient()->toQGradient()->stops());
+                KoGradientBackground* gradientFill = new KoGradientBackground(gradient);
+                shape->setBackground(gradientFill);
             }
             break;
         case KisPainter::FillStyleNone:

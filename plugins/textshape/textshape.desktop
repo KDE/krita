@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Text Shape
+Name[bg]=Текстова форма
 Name[ca]=Forma de text
 Name[ca@valencia]=Forma de text
 Name[cs]=Tvar textu
@@ -24,6 +25,7 @@ Name[nb]=Tekstform
 Name[nds]=Form »Text«
 Name[ne]=पाठ आकार
 Name[nl]=Tekstvorm
+Name[pl]=Kształt tekstu
 Name[pt]=Forma de Texto
 Name[pt_BR]=Forma de Texto
 Name[sv]=Textform

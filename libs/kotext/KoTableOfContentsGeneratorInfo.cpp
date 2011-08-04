@@ -27,7 +27,6 @@
 #include <KoParagraphStyle.h>
 #include <KoXmlWriter.h>
 
-
 int KoTableOfContentsGeneratorInfo::styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName)
 {
     KoParagraphStyle * style = sharedLoadingData->paragraphStyle(styleName, true);
@@ -75,8 +74,8 @@ KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo()
         // index-entry-tab-stop
         IndexEntryTabStop *entryTabStop = new IndexEntryTabStop(QString());
         entryTabStop->tab.type = QTextOption::RightTab;
-        entryTabStop->setPosition("MAX");
-        entryTabStop->tab.leaderText = ".";
+        entryTabStop->setPosition("");
+        entryTabStop->tab.leaderText = '.';
         tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryTabStop));
 
         // index-entry-page-number

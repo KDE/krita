@@ -958,14 +958,14 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
     const QString &text = textObject.textString();
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << "Ref point: " << textObject.referencePoint()
+    kDebug(31000) << "Ref point: " << referencePoint
                   << "options: " << hex << textObject.options() << dec
                   << "rectangle: " << textObject.rectangle()
                   << "text: " << textObject.textString();
 #endif
 
-    int  x = textObject.referencePoint().x();
-    int  y = textObject.referencePoint().y();
+    int  x = referencePoint.x();
+    int  y = referencePoint.y();
 
     // The TA_UPDATECP flag tells us to use the current position
     if (m_textAlignMode & TA_UPDATECP) {

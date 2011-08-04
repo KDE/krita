@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Krita/Dock
 Comment=Docker for Krita
+Comment[bg]=Контейнер за Krita
 Comment[ca]=Amarrador per al Krita
 Comment[ca@valencia]=Amarrador per al Krita
 Comment[da]=Docker til Krita
@@ -21,6 +22,7 @@ Comment[lv]=Krita doka spraudnis
 Comment[nb]=Dokker for Krita
 Comment[nds]=Andockmoduul för Krita
 Comment[nl]=Vastzetten van Krita
+Comment[pl]=Dokowanie dla Krita
 Comment[pt]=Acoplador para o Krita
 Comment[pt_BR]=Acoplador para o Krita
 Comment[sv]=Dockningsfönster för Krita

@@ -21,6 +21,8 @@
 #include "KoDocumentSectionDelegate.h"
 #include "KoDocumentSectionModel.h"
 
+#include <KIconLoader>
+
 #include <QtDebug>
 #include <QContextMenuEvent>
 #include <QHeaderView>
@@ -29,6 +31,7 @@
 #include <QMouseEvent>
 #include <QPersistentModelIndex>
 #include <QApplication>
+#include <QPainter>
 
 class KoDocumentSectionView::Private
 {
@@ -199,6 +202,83 @@ QStyleOptionViewItem KoDocumentSectionView::optionForIndex(const QModelIndex &in
     if (index == currentIndex())
         option.state |= QStyle::State_HasFocus;
     return option;
+}
+
+void KoDocumentSectionView::startDrag(Qt::DropActions supportedActions)
+{
+    if (displayMode() == KoDocumentSectionView::ThumbnailMode) {
+        const QModelIndexList indexes = selectionModel()->selectedIndexes();
+        if (!indexes.isEmpty()) {
+            QMimeData *data = model()->mimeData(indexes);
+            if (!data) {
+                return;
+            }
+            QDrag *drag = new QDrag(this);
+            drag->setPixmap(createDragPixmap());
+            drag->setMimeData(data);
+            //m_dragSource = this;
+            drag->exec(supportedActions);
+        }
+    }
+    else {
+        QTreeView::startDrag(supportedActions);
+    }
+}
+
+QPixmap KoDocumentSectionView::createDragPixmap() const
+{
+    const QModelIndexList selectedIndexes = selectionModel()->selectedIndexes();
+    Q_ASSERT(!selectedIndexes.isEmpty());
+
+    const int itemCount = selectedIndexes.count();
+
+    // If more than one item is dragged, align the items inside a
+    // rectangular grid. The maximum grid size is limited to 4 x 4 items.
+    int xCount = 2;
+    int size = 96;
+    if (itemCount > 9) {
+        xCount = 4;
+        size = KIconLoader::SizeLarge;
+    }
+    else if (itemCount > 4) {
+        xCount = 3;
+        size = KIconLoader::SizeHuge;
+    }
+    else if (itemCount < xCount) {
+        xCount = itemCount;
+    }
+
+    int yCount = itemCount / xCount;
+    if (itemCount % xCount != 0) {
+        ++yCount;
+    }
+
+    if (yCount > xCount) {
+        yCount = xCount;
+    }
+
+    // Draw the selected items into the grid cells
+    QPixmap dragPixmap(xCount * size + xCount - 1, yCount * size + yCount - 1);
+    dragPixmap.fill(Qt::transparent);
+
+    QPainter painter(&dragPixmap);
+    int x = 0;
+    int y = 0;
+    foreach (const QModelIndex &selectedIndex, selectedIndexes) {
+        const QImage img = selectedIndex.data(int(Model::BeginThumbnailRole) + size).value<QImage>();
+        painter.drawPixmap(x, y, QPixmap().fromImage(img.scaled(QSize(size, size), Qt::KeepAspectRatio)));
+
+        x += size + 1;
+        if (x >= dragPixmap.width()) {
+            x = 0;
+            y += size + 1;
+        }
+        if (y >= dragPixmap.height()) {
+            break;
+        }
+    }
+
+    return dragPixmap;
 }
 
 #include <KoDocumentSectionPropertyAction_p.moc>

@@ -272,11 +272,11 @@ void KoFavoriteResourceManager::removingResource(KisPaintOpPreset* resource)
     removeFavoritePreset(resource->name());
 }
 
-void KoFavoriteResourceManager::resourceAdded(KisPaintOpPreset* resource)
+void KoFavoriteResourceManager::resourceAdded(KisPaintOpPreset* /*resource*/)
 {
 }
 
-void KoFavoriteResourceManager::resourceChanged(KisPaintOpPreset* resource)
+void KoFavoriteResourceManager::resourceChanged(KisPaintOpPreset* /*resource*/)
 {
 }
 

@@ -39,6 +39,7 @@
 #include <klocale.h>
 
 #include <QFont>
+#include <QPainter>
 #include <QPixmap>
 #include <QPixmapCache>
 #include <QRect>

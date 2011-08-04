@@ -104,7 +104,7 @@ public:
         m_noOfChannels = convChannelList.count();
 
         // Pentalis comment: Find out if one of those is the alpha channel
-        qint8 alphaChannelIndex = -1;  //-1 = FALSE
+        quint32 alphaChannelIndex = -1;  //-1 = FALSE
         for (quint32 i = 0; i < m_noOfChannels; ++i) {
             if (convChannelList.at(i)->channelType() == KoChannelInfo::ALPHA) {
                 alphaChannelIndex = i;

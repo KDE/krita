@@ -12,7 +12,6 @@ install(FILES
     NTSC.icm 
     PAL.icm 
     SMPTE-C.icm 
-    srgb_color_space_profile.icm 
     sRGB.icm
     scRGB.icm
     srgbspac.icm 

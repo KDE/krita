@@ -56,6 +56,8 @@ KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
         m_d(new Private())
 {
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
+    m_d->x = rhs.m_d->x;
+    m_d->y = rhs.m_d->y;
     m_d->paintDevice->setDefaultPixel(const_cast<KisGroupLayer*>(&rhs)->m_d->paintDevice->defaultPixel());
 }
 
@@ -163,13 +165,7 @@ qint32 KisGroupLayer::y() const
 
 void KisGroupLayer::setX(qint32 x)
 {
-    qint32 numChildren = childCount();
-
     qint32 delta = x - m_d->x;
-    for (qint32 i = 0; i < numChildren; ++i) {
-        KisNodeSP layer = at(i);
-        layer->setX(layer->x() + delta);
-    }
     m_d->x = x;
     if(m_d->paintDevice) {
         m_d->paintDevice->setX(m_d->paintDevice->x() + delta);
@@ -179,13 +175,7 @@ void KisGroupLayer::setX(qint32 x)
 
 void KisGroupLayer::setY(qint32 y)
 {
-    qint32 numChildren = childCount();
-
     qint32 delta = y - m_d->y;
-    for (qint32 i = 0; i < numChildren; ++i) {
-        KisNodeSP layer = at(i);
-        layer->setY(layer->y() + delta);
-    }
     m_d->y = y;
     if(m_d->paintDevice) {
         m_d->paintDevice->setY(m_d->paintDevice->y() + delta);

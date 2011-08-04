@@ -155,13 +155,26 @@ void TestStyles::testApplyParagraphStyleWithParent()
     QCOMPARE(style2.alignment(), Qt::AlignCenter);
     QCOMPARE(style3.alignment(), Qt::AlignLeft | Qt::AlignAbsolute);
 
+    style3.setLineSpacing(23.45);
     style3.setLineHeightPercent(150);
     style3.setLineHeightAbsolute(8.0);
     QCOMPARE(style3.lineHeightPercent(), 0);
     QCOMPARE(style3.lineHeightAbsolute(), 8.0);
+    QCOMPARE(style3.lineSpacing(), 23.45);
+    QVERIFY(!style3.hasNormalLineHeight());
+
+    style3.setNormalLineHeight();
+    QCOMPARE(style3.lineHeightPercent(), 0);
+    QCOMPARE(style3.lineHeightAbsolute(), 0.0);
+    QCOMPARE(style3.lineSpacing(), 0.0);
+    QVERIFY(style3.hasNormalLineHeight());
+
     style3.setLineHeightPercent(150);
+    style3.setLineSpacing(56.78);
     QCOMPARE(style3.lineHeightPercent(), 150);
     QCOMPARE(style3.lineHeightAbsolute(), 0.0);
+    QCOMPARE(style3.lineSpacing(), 56.78);
+    QVERIFY(!style3.hasNormalLineHeight());
 
     QTextLength length0(QTextLength::FixedLength, 0.0);
     QTextLength length1(QTextLength::FixedLength, 10.0);
@@ -196,7 +209,8 @@ void TestStyles::testApplyParagraphStyleWithParent()
 
     style3.applyStyle(rawFormat);
     KoParagraphStyle format3(rawFormat, rawFormat.toCharFormat());
-    QCOMPARE(rawFormat.properties().count(), 6);
+    QCOMPARE(rawFormat.properties().count(), 8);
+    QCOMPARE(rawFormat.property(KoParagraphStyle::LineSpacing).toReal(), 56.78);
     QCOMPARE(format3.alignment(), Qt::AlignLeft | Qt::AlignAbsolute);
     QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), 1004);
     QCOMPARE(format3.leftMargin(), 10.0);

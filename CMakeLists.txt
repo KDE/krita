@@ -123,9 +123,9 @@ if(KDE_VERSION LESS "4.4.0")
     set(GHNS FALSE)
 endif(KDE_VERSION LESS "4.4.0")
 
-if(KDE_VERSION LESS "4.6.5")
-    set(NEPOMUK FALSE)
-endif(KDE_VERSION LESS "4.6.5")
+if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
+  set(NEPOMUK FALSE)
+endif(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
 

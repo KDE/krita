@@ -23,14 +23,13 @@
 #include "krita_export.h"
 #include "kis_types.h"
 
-#include "kis_stroke_strategy.h"
-#include "kis_stroke_job_strategy.h"
+#include "kis_image_interfaces.h"
 
 class QRect;
 class KisProjectionUpdateListener;
 
 
-class KRITAIMAGE_EXPORT KisUpdateScheduler : public QObject
+class KRITAIMAGE_EXPORT KisUpdateScheduler : public QObject, public KisStrokesFacade
 {
     Q_OBJECT
 

@@ -18,7 +18,6 @@
 
 #include "kis_update_scheduler.h"
 
-#include "kis_image_interfaces.h"
 #include "kis_image_config.h"
 #include "kis_merge_walker.h"
 #include "kis_full_refresh_walker.h"

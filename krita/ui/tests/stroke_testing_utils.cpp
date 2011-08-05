@@ -128,54 +128,74 @@ utils::StrokeTester::~StrokeTester()
 
 void utils::StrokeTester::test()
 {
-    testOneStroke(false, false);
-    testOneStroke(false, true);
-    testOneStroke(true, false);
-    testOneStroke(true, true);
+    testOneStroke(false, false, false);
+    testOneStroke(false, true, false);
+    testOneStroke(true, false, false);
+    testOneStroke(true, true, false);
+
+    // The same, but with an external layer
+
+    testOneStroke(false, false, true);
+    testOneStroke(false, true, true);
+    testOneStroke(true, false, true);
+    testOneStroke(true, true, true);
 }
 
 void utils::StrokeTester::benchmark()
 {
-    // not cancelled, indirect painting, no qimage
-    doStroke(false, true, false);
+    // not cancelled, indirect painting, internal, no qimage
+    doStroke(false, true, false, false);
 }
 
 void utils::StrokeTester::testOneStroke(bool cancelled,
-                                        bool indirectPainting)
+                                        bool indirectPainting,
+                                        bool externalLayer)
 {
     QString filename;
     QImage image;
 
-    filename = formatFilename(m_name, cancelled, indirectPainting);
+    filename = formatFilename(m_name, cancelled, indirectPainting, externalLayer);
     qDebug() << "Testing reference:" << filename;
-    image = doStroke(cancelled, indirectPainting);
+    image = doStroke(cancelled, indirectPainting, externalLayer);
     image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + filename);
 
     QImage refImage;
-    refImage.load(QString(FILES_DATA_DIR) + QDir::separator() + filename);
+    refImage.load(QString(FILES_DATA_DIR) +
+                  QDir::separator() + m_name +
+                  QDir::separator() + filename);
 
     QCOMPARE(image, refImage);
 }
 
 QString utils::StrokeTester::formatFilename(const QString &baseName,
                                             bool cancelled,
-                                            bool indirectPainting)
+                                            bool indirectPainting,
+                                            bool externalLayer)
 {
     QString result = baseName;
     result += indirectPainting ? "_indirect" : "_incremental";
     result += cancelled ? "_cancelled" : "_finished";
+    result += externalLayer ? "_external" : "_internal";
     result += ".png";
     return result;
 }
 
-QImage utils::StrokeTester::doStroke(bool cancelled, bool indirectPainting, bool needQImage)
+QImage utils::StrokeTester::doStroke(bool cancelled, bool indirectPainting, bool externalLayer, bool needQImage)
 {
     KisImageSP image = utils::createImage(0, m_imageSize);
     KoResourceManager *manager = utils::createResourceManager(image);
 
     KisPainter *painter = new KisPainter();
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image, manager);
+        new KisResourcesSnapshot(image,
+                                 image->postExecutionUndoAdapter(),
+                                 manager);
+
+    if(externalLayer) {
+        KisNodeSP externalNode = new KisPaintLayer(0, "extlyr", OPACITY_OPAQUE_U8, image->colorSpace());
+        resources->setCurrentNode(externalNode);
+        Q_ASSERT(resources->currentNode() == externalNode);
+    }
 
     KisStrokeStrategy *stroke = createStroke(indirectPainting, resources, painter);
     m_strokeId = image->startStroke(stroke);

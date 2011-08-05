@@ -96,12 +96,12 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
         m_painter->deleteTransaction();
 
         indirect->mergeToLayer(layer,
-                               m_resources->image()->postExecutionUndoAdapter(),
+                               m_resources->postExecutionUndoAdapter(),
                                transactionText);
     }
     else {
         m_painter->endTransaction(
-            m_resources->image()->postExecutionUndoAdapter());
+            m_resources->postExecutionUndoAdapter());
     }
     delete m_painter;
 }

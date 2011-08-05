@@ -28,17 +28,19 @@
 class KoResourceManager;
 class KoCompositeOp;
 class KisPainter;
+class KisPostExecutionUndoAdapter;
 
 
 class KRITAUI_EXPORT KisResourcesSnapshot : public KisShared
 {
 public:
-    KisResourcesSnapshot(KisImageWSP image, KoResourceManager *resourceManager);
+    KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUndoAdapter *undoAdapter, KoResourceManager *resourceManager);
     ~KisResourcesSnapshot();
 
     void setupPainter(KisPainter *painter);
 
-    KisImageWSP image() const;
+    KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const;
+    void setCurrentNode(KisNodeSP node);
     KisNodeSP currentNode() const;
     quint8 opacity() const;
     const KoCompositeOp* compositeOp() const;

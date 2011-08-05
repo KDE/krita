@@ -354,7 +354,9 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 
     m_painter = new KisPainter();
     m_resources =
-        new KisResourcesSnapshot(image(), canvas()->resourceManager());
+        new KisResourcesSnapshot(image(),
+                                 image()->postExecutionUndoAdapter(),
+                                 canvas()->resourceManager());
     bool indirectPainting = !currentPaintOpPreset()->settings()->paintIncremental();
 
     KisStrokeStrategy *stroke =

@@ -60,10 +60,10 @@ namespace utils {
                                      KisPainter *painter) = 0;
 
     private:
-        void testOneStroke(bool cancelled, bool indirectPainting);
+        void testOneStroke(bool cancelled, bool indirectPainting, bool externalLayer);
 
-        QImage doStroke(bool cancelled, bool indirectPainting, bool needQImage = true);
-        QString formatFilename(const QString &baseName,  bool cancelled, bool indirectPainting);
+        QImage doStroke(bool cancelled, bool indirectPainting, bool externalLayer = false, bool needQImage = true);
+        QString formatFilename(const QString &baseName,  bool cancelled, bool indirectPainting, bool externalLayer);
 
     private:
         KisStrokeId m_strokeId;

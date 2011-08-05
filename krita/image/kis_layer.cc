@@ -266,14 +266,12 @@ KisSelectionMaskSP KisLayer::selectionMask() const
 
 KisSelectionSP KisLayer::selection() const
 {
-   KisLayer *layer=(KisLayer *)this;
-
-    if (layer->selectionMask())
-        return layer->selectionMask()->selection();
+    if (selectionMask())
+        return selectionMask()->selection();
     else if (m_d->image.isValid())
         return m_d->image->globalSelection();
     else
-        return KisSelectionSP(new KisSelection());
+        return 0;
 }
 
 ///////////////////////////////////////////////////////////////////////

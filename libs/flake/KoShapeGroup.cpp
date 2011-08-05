@@ -29,7 +29,6 @@
 #include "KoShapeRegistry.h"
 #include "KoShapeBorderModel.h"
 #include "KoShapeShadow.h"
-#include "KoSelection.h"
 
 #include <QPainter>
 
@@ -62,18 +61,27 @@ QSizeF KoShapeGroup::size() const
 
 QRectF KoShapeGroup::boundingRect() const
 {
+    bool first = true;
+    QRectF groupBound;
     QList<KoShape*> shapes = this->shapes();
-    KoSelection selection;
-    foreach(KoShape* shape, shapes) {
-        selection.select(shape);
+    QList<KoShape*>::const_iterator it = shapes.constBegin();
+    for (; it != selectedShapes.constEnd(); ++it) {
+        const QTransform shapeTransform = (*it)->absoluteTransformation(0);
+        const QRectF shapeRect(QRectF(QPointF(), (*it)->boundingRect().size()));
+        if (first) {
+            groupBound = shapeTransform.mapRect(shapeRect);
+            first = false;
+        } else {
+            groupBound = groupBound.united(shapeTransform.mapRect(shapeRect));
+        }
     }
-    QRectF shadowRect = selection.boundingRect();
+
     if (this->shadow()) {
         KoInsets insets;
         this->shadow()->insets(insets);
-        shadowRect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+        groupBound.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
-    return shadowRect;
+    return groupBound;
 }
 
 void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const

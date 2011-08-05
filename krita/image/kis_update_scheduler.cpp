@@ -214,6 +214,7 @@ void KisUpdateScheduler::processQueues()
 
 void KisUpdateScheduler::continueUpdate(const QRect &rect)
 {
+    Q_ASSERT(m_d->projectionUpdateListener);
     m_d->projectionUpdateListener->notifyProjectionUpdated(rect);
 }
 

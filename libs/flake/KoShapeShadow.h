@@ -26,14 +26,11 @@
 #include <QtGui/QColor>
 
 class KoShape;
-class KoShapeGroup;
 class KoGenStyle;
 class KoShapeSavingContext;
 class QPainter;
-class QRectF;
 class QPointF;
 class QImage;
-class QTransform;
 class KoViewConverter;
 struct KoInsets;
 

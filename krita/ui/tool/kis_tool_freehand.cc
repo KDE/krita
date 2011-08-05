@@ -350,6 +350,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     m_haveTangent = false;
     m_previousTangent = QPointF();
     m_strokeTimeMeasure.start();
+    m_dragDistance.clear();
 
     m_painter = new KisPainter();
     m_resources =

@@ -48,6 +48,7 @@ protected:
         KisPaintInformation pi1;
         KisPaintInformation pi2;
 
+        m_dragDistance.clear();
         pi1 = KisPaintInformation(QPointF(200, 200));
         pi2 = KisPaintInformation(QPointF(300, 300));
 

@@ -65,7 +65,7 @@ QRectF KoShapeGroup::boundingRect() const
     QRectF groupBound;
     QList<KoShape*> shapes = this->shapes();
     QList<KoShape*>::const_iterator it = shapes.constBegin();
-    for (; it != selectedShapes.constEnd(); ++it) {
+    for (; it != shapes.constEnd(); ++it) {
         const QTransform shapeTransform = (*it)->absoluteTransformation(0);
         const QRectF shapeRect(QRectF(QPointF(), (*it)->boundingRect().size()));
         if (first) {

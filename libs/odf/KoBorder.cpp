@@ -791,29 +791,43 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
     if (style.hasAttributeNS(KoXmlNS::style, "diagonal-tl-br")) {
         result = true;
         QString border = style.attributeNS(KoXmlNS::style, "diagonal-tl-br");
-        if (!border.isEmpty() && border != "none" && border != "hidden") {
-            QStringList borderData = border.split(' ', QString::SkipEmptyParts);
-            setTlbrBorderWidth(KoUnit::parseValue(borderData[0], 1.0));
-            setTlbrBorderStyle(odfBorderStyle(borderData[1]));
-            QString specialBorderStyle = style.attributeNS(KoXmlNS::calligra, "specialborder-bottom");
-            if (!specialBorderStyle.isEmpty()) {
-                setTlbrBorderStyle(odfBorderStyle(specialBorderStyle));
-            }
-            setTlbrBorderColor(QColor(borderData[2]));
+        QColor borderColor;
+        KoBorder::BorderStyle borderStyle;
+        qreal borderWidth;
+        bool foundStyle, foundWidth;
+        parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
+        if (borderColor.isValid())
+        {
+            setTlbrBorderColor(borderColor);
+        }
+        if (foundStyle)
+        {
+            setTlbrBorderStyle(borderStyle);
+        }
+        if (foundWidth)
+        {
+            setTlbrBorderWidth(borderWidth);
         }
     }
     if (style.hasAttributeNS(KoXmlNS::style, "diagonal-bl-tr")) {
         result = true;
         QString border = style.attributeNS(KoXmlNS::style, "diagonal-bl-tr");
-        if (!border.isEmpty() && border != "none" && border != "hidden") {
-            QStringList borderData = border.split(' ', QString::SkipEmptyParts);
-            setTrblBorderWidth(KoUnit::parseValue(borderData[0], 1.0));
-            setTrblBorderStyle(odfBorderStyle(borderData[1]));
-            QString specialBorderStyle = style.attributeNS(KoXmlNS::calligra, "specialborder-bottom");
-            if (!specialBorderStyle.isEmpty()) {
-                setTrblBorderStyle(odfBorderStyle(specialBorderStyle));
-            }
-            setTrblBorderColor(QColor(borderData[2]));
+        QColor borderColor;
+        KoBorder::BorderStyle borderStyle;
+        qreal borderWidth;
+        bool foundStyle, foundWidth;
+        parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
+        if (borderColor.isValid())
+        {
+            setTrblBorderColor(borderColor);
+        }
+        if (foundStyle)
+        {
+            setTrblBorderStyle(borderStyle);
+        }
+        if (foundWidth)
+        {
+            setTrblBorderWidth(borderWidth);
         }
     }
 

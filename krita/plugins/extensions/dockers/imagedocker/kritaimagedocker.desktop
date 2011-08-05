@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Image Docker
-Name[en_GB]=Image Docker
-Comment=Docker for reference images
-Comment[en_GB]=Docker for reference images
-X-KDE-ServiceTypes=Krita/Dock
-Type=Service
-X-KDE-Library=kritaimagedocker
-X-Krita-Version=4

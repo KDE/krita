@@ -25,6 +25,7 @@ Name[x-test]=xxKoReport_Shapexx
 Name[zh_TW]=KoReport_Shape
 Comment=KoReport Shape Plugin
 Comment[it]=Estensione per le forme di KoReport
+Comment[nb]=Programtillegg for KoReport form
 Comment[pt]='Plugin' de Formas Gráficas do KoReport
 Comment[pt_BR]=Plugin de formas do KoReport
 Comment[sv]=Insticksprogram för Koffice rapportform

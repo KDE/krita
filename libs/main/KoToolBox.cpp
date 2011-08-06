@@ -36,6 +36,8 @@
 #include <QPainter>
 #include <QRect>
 #include <QTimer>
+#include <QStyle>
+#include <QStyleOptionFrameV3>
 
 #include "math.h"
 #include <KoDockWidgetTitleBar.h>
@@ -204,15 +206,22 @@ void KoToolBox::paintEvent(QPaintEvent *)
     }
     while(iterator != sections.end()) {
         Section *section = *iterator;
+        QStyleOptionFrameV3 frameoption;
+        frameoption.lineWidth = 1;
+        frameoption.midLineWidth = 0;
 
         if (section->seperators() & Section::SeperatorTop) {
             int y = section->y() - halfSpacing;
-            painter.drawLine(section->x(), y, section->x() + section->width(), y);
+            frameoption.frameShape = QFrame::HLine;
+            frameoption.rect = QRect(section->x(), y, section->width(), 2);
+            style()->drawControl(QStyle::CE_ShapedFrame, &frameoption, &painter);
         }
 
         if (section->seperators() & Section::SeperatorLeft) {
             int x = section->x() - halfSpacing;
-            painter.drawLine(x, section->y(), x, section->y() + section->height());
+            frameoption.frameShape = QFrame::VLine;
+            frameoption.rect = QRect(x, section->y(), 2, section->height());
+            style()->drawControl(QStyle::CE_ShapedFrame, &frameoption, &painter);
         }
 
         ++iterator;

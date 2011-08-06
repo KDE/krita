@@ -30,6 +30,8 @@ class KoResourceManager;
 class KisPaintingInformationBuilder;
 class KisStrokesFacade;
 class KisPostExecutionUndoAdapter;
+class KisPaintOp;
+
 
 class KRITAUI_EXPORT KisToolFreehandHelper : public QObject
 {
@@ -50,7 +52,7 @@ public:
     void paint(KoPointerEvent *event);
     void endPaint();
 
-    void paintAtPreviousPos();
+    const KisPaintOp* currentPaintOp() const;
 
 private:
     void paintAt(const KisPaintInformation &pi);

@@ -101,6 +101,9 @@ private slots:
     void slotSetFixedAngle(bool fixedAngle);
 
 private:
+    // FIXME: investigate why this variable is needed
+    double m_dragDist;
+
     QGridLayout* m_optionLayout;
 
     // dyna gui

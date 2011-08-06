@@ -71,7 +71,6 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 {
     m_explicitShowOutline = false;
 
-    m_painter = 0;
     m_smooth = true;
     m_assistant = false;
     m_smoothness = 1.0;
@@ -99,9 +98,6 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 
     m_outlineTimer.setSingleShot(true);
     connect(&m_outlineTimer, SIGNAL(timeout()), this, SLOT(hideOutline()));
-
-    m_strokeTimer.setSingleShot(true);
-    connect(&m_strokeTimer, SIGNAL(timeout()), this, SLOT(finishStroke()));
 
 
     m_infoBuilder = new KisToolPaintingInformationBuilder(this);
@@ -197,7 +193,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     bool ignoreEvent = currentPaintOpPreset()->settings()->mousePressEvent(KisPaintInformation(convertToPixelCoord(e->point),
                                                          pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
                                                          KisVector2D::Zero(),
-                                                         e->rotation(), e->tangentialPressure(), perspective, m_strokeTimeMeasure.elapsed()),e->modifiers());
+                                                         e->rotation(), e->tangentialPressure(), perspective, 0),e->modifiers());
     if (!ignoreEvent){
         e->accept();
         return;
@@ -454,9 +450,11 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
 {
     qreal scale = 1.0;
     qreal rotation = 0;
-    if (m_painter && m_painter->paintOp()){
-        scale = m_painter->paintOp()->currentScale();
-        rotation = m_painter->paintOp()->currentRotation();
+
+    const KisPaintOp *paintOp = m_helper->currentPaintOp();
+    if (paintOp){
+        scale = paintOp->currentScale();
+        rotation = paintOp->currentRotation();
     }
 
     QPointF imagePos = currentImage()->documentToPixel(documentPos);

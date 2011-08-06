@@ -62,6 +62,7 @@ struct KisToolFreehandHelper::Private
 KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder)
     : m_d(new Private)
 {
+    m_d->painter = 0;
     m_d->infoBuilder = infoBuilder;
 
     m_d->smooth = true;
@@ -180,13 +181,19 @@ void KisToolFreehandHelper::endPaint()
     /**
      * There might be some timer events still pending, so
      * we should cancel them. Use this flag for the purpose.
-     * Please not that we are not in MT here, so no mutex
+     * Please note that we are not in MT here, so no mutex
      * is needed
      */
     m_d->painter = 0;
 
     m_d->strokesFacade->endStroke(m_d->strokeId);
 }
+
+const KisPaintOp* KisToolFreehandHelper::currentPaintOp() const
+{
+    return m_d->painter ? m_d->painter->paintOp() : 0;
+}
+
 
 void KisToolFreehandHelper::finishStroke()
 {

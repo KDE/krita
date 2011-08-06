@@ -84,32 +84,31 @@ private:
     friend class KisToolPaintingInformationBuilder;
 
     /**
-     * adjust a coordinates according to a KisPaintingAssitant, if available.
+     * Adjusts a coordinates according to a KisPaintingAssitant,
+     * if available.
      */
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
+
+    /**
+     * Calculates a coefficient for KisPaintInformation
+     * according to perspective grid values
+     */
+    qreal calculatePerspective(const QPointF &documentPoint);
+
     void showOutlineTemporary();
 
     void updateOutlineRect();
     QPainterPath getOutlinePath(const QPointF &documentPos,
                                 KisPaintOpSettings::OutlineMode outlineMode);
 
-    qreal calculatePerspective(const QPointF &documentPoint);
+
 
 private slots:
     void increaseBrushSize();
     void decreaseBrushSize();
     void hideOutline();
+
 protected:
-
-    QTimer m_strokeTimer;
-    KisPaintInformation m_olderPaintInformation;
-    KisPaintInformation m_previousPaintInformation;
-    bool m_haveTangent;
-    QPointF m_previousTangent;
-    double m_dragDist;
-    QPointF m_strokeBegin;
-
-    KisPainter *m_painter;
     bool m_smooth;
     double m_smoothness;
     bool m_assistant;
@@ -134,16 +133,8 @@ private:
 
     KisRecordedPathPaintAction* m_pathPaintAction;
 
-    QTime m_strokeTimeMeasure;
-
     KAction* m_increaseBrushSize;
     KAction* m_decreaseBrushSize;
-
-    bool m_hasPaintAtLeastOnce; ///< this indicates whether mouseReleaseEvent should call paintAt or not
-
-    KisStrokeId m_strokeId;
-    KisResourcesSnapshotSP m_resources;
-    KisDistanceInformation m_dragDistance;
 
     KisPaintingInformationBuilder *m_infoBuilder;
     KisToolFreehandHelper *m_helper;

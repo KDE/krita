@@ -37,6 +37,7 @@ class Attribute : public QObject
         QString name();
         QStringList listValues();
         bool compare (const QString &initialValue, const QString &outputValue);
+        bool hasReference (const QString &reference);
 
     private:
         QStringList listValuesFromNode(const QDomElement &element);

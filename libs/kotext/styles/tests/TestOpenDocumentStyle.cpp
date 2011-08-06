@@ -63,6 +63,11 @@ QStringList Attribute::listValues()
     return m_values;
 }
 
+bool Attribute::hasReference (const QString &ref)
+{
+    return m_references.contains(ref);
+}
+
 QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
 {
     QStringList result;
@@ -152,6 +157,10 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
         m_references.removeOne("nonNegativeLength");
         m_references << "positiveLength";
     }
+    if ((m_references.contains("string")) && ((m_name == "fo:border") || (m_name == "fo:border-top") || (m_name == "fo:border-bottom") || (m_name == "fo:border-right") || (m_name == "fo:border-left") || (m_name == "style:diagonal-tl-br") || (m_name == "style:diagonal-bl-tr"))) {
+        m_references.removeOne("string");
+        m_references << "__border";
+    }
     
     foreach (QString reference, m_references) {
         if (reference == "boolean") {
@@ -181,15 +190,12 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             result << "5deg" << "1rad" << "400grad" << "3.14159265rad" << "45";    // OpenDocument 1.1 : no unit == degrees
         } else if (reference == "zeroToHundredPercent") {
             result << "0%" << "10%" << "100%" << "13.37%" << "42.73%";
+        } else if (reference == "__border") {
+            result << "12px" << "42px solid" << "24px red" << "32px double red" << "solid black" << "dashed"  << "#ABCDEF";
         } else if (reference == "string") {
-            if ((m_name == "fo:border") || (m_name == "fo:border-top") || (m_name == "fo:border-bottom") || (m_name == "fo:border-right") || (m_name == "fo:border-left")) {
-                // KoBorder crashes, be careful
-                result << "12px" << "42px solid" << "24px red" << "32px double red" << "solid black" << "dashed"  << "#ABCDEF";
-            } else {
-                // Now, that sucks !
-                kWarning() << "Found a string reference in " << m_name;
-                result << "";
-            }
+            // Now, that sucks !
+            kWarning() << "Found a string reference in " << m_name;
+            result << "";
         } else {
             kFatal() << "Unhandled reference " << reference << "( in " << m_name << ")";
         }
@@ -415,6 +421,12 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     if (properties.attributeNames().count() > 1)
     {
         kWarning(32500) << "Warning : got more than one attribute !";
+    }
+    if (attribute->hasReference("__border")) {
+        KoBorder original, output;
+	original.loadOdf(mainElement);
+	output.loadOdf(properties);
+	return (original == output);
     }
     if (!attribute->compare(value, outputPropertyValue))
         kWarning(32500) << generatedXmlOutput;

@@ -41,6 +41,10 @@ class KisPainter;
 class KisRecordedPathPaintAction;
 
 
+class KisPaintingInformationBuilder;
+class KisToolFreehandHelper;
+
+
 class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
 {
 
@@ -65,30 +69,20 @@ protected:
     virtual bool wantsAutoScroll() const;
     virtual void deactivate();
 
+    virtual void initStroke(KoPointerEvent *event);
+    virtual void doStroke(KoPointerEvent *event);
+    virtual void endStroke();
 
-    /// Paint a single brush footprint on the current layer
-    virtual void paintAt(const KisPaintInformation &pi);
-
-    /// Paint a line between the specified positions on the current layer
-    virtual void paintLine(const KisPaintInformation &pi1,
-                           const KisPaintInformation &pi2);
-
-    virtual void paintBezierCurve(const KisPaintInformation &pi1,
-                                  const QPointF &control1,
-                                  const QPointF &control2,
-                                  const KisPaintInformation &pi2);
-
-    virtual void initPaint(KoPointerEvent *e);
-    virtual void endPaint();
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
 protected slots:
 
     void setSmooth(bool smooth);
     void setAssistant(bool assistant);
-    void finishStroke();
 
 private:
+    friend class KisToolPaintingInformationBuilder;
+
     /**
      * adjust a coordinates according to a KisPaintingAssitant, if available.
      */
@@ -98,6 +92,8 @@ private:
     void updateOutlineRect();
     QPainterPath getOutlinePath(const QPointF &documentPos,
                                 KisPaintOpSettings::OutlineMode outlineMode);
+
+    qreal calculatePerspective(const QPointF &documentPoint);
 
 private slots:
     void increaseBrushSize();
@@ -148,6 +144,9 @@ private:
     KisStrokeId m_strokeId;
     KisResourcesSnapshotSP m_resources;
     KisDistanceInformation m_dragDistance;
+
+    KisPaintingInformationBuilder *m_infoBuilder;
+    KisToolFreehandHelper *m_helper;
 };
 
 

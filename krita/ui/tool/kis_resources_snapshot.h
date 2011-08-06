@@ -42,6 +42,11 @@ public:
     KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const;
     void setCurrentNode(KisNodeSP node);
     KisNodeSP currentNode() const;
+    bool needsIndirectPainting() const;
+
+    bool needsAirbrushing() const;
+    int airbrushingRate() const;
+
     quint8 opacity() const;
     const KoCompositeOp* compositeOp() const;
 

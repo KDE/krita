@@ -137,6 +137,21 @@ KisNodeSP KisResourcesSnapshot::currentNode() const
     return m_d->currentNode;
 }
 
+bool KisResourcesSnapshot::needsIndirectPainting() const
+{
+    return !m_d->currentPaintOpPreset->settings()->paintIncremental();
+}
+
+bool KisResourcesSnapshot::needsAirbrushing() const
+{
+    return m_d->currentPaintOpPreset->settings()->isAirbrushing();
+}
+
+int KisResourcesSnapshot::airbrushingRate() const
+{
+    return m_d->currentPaintOpPreset->settings()->rate();
+}
+
 quint8 KisResourcesSnapshot::opacity() const
 {
     return m_d->opacity;

@@ -30,6 +30,7 @@
 #include "psd_header.h"
 #include "compression.h"
 
+// Just for pretty debug messages
 QString channelIdToChannelType(int channelId, PSDColorMode colormode)
 {
     switch(channelId) {
@@ -228,7 +229,9 @@ bool PSDLayerRecord::read(QIODevice* io)
             return false;
         }
 
-        dbgFile << "\tchannel" << i << "id" << channelIdToChannelType(info->channelId, m_header.colormode) << "length" << info->channelDataLength;
+        dbgFile << "\tchannel" << i << "id"
+                << channelIdToChannelType(info->channelId, m_header.colormode)
+                << "length" << info->channelDataLength;
         channelInfoRecords << info;
     }
 
@@ -487,50 +490,21 @@ bool PSDLayerRecord::valid()
     return true;
 }
 
-QByteArray PSDLayerRecord::readChannelData(QIODevice* io, ChannelInfo *channelInfo)
+bool PSDLayerRecord::readChannels(QIODevice *io, KisPaintDeviceSP device)
 {
-    dbgFile << "Going to read channel data for channel " << channelInfo
-            << "from io with current pos" << io->pos();
+    quint64 oldPos = io->pos();
 
-    QByteArray unCompressedBytes;
-    io->seek(channelInfo->channelDataStart);
-    switch(channelInfo->compressionType) {
-    case Compression::Uncompressed:
-        {
-            unCompressedBytes = io->read(channelInfo->channelDataLength);
-        }
-        break;
-    case Compression::RLE:
-        {
-            QByteArray compressedBytes;
-            QBuffer buf(&unCompressedBytes);
-            int uncompressedLength = (right - left) * (m_header.channelDepth / 8);
-            foreach(int rleRowLength, channelInfo->rleRowLengths) {
-                compressedBytes = io->read(rleRowLength);
-                if (compressedBytes.length() == 0) {
-                    error = QString("Could not read enough RLE bytes");
-                    return QByteArray();
-                }
-                buf.write(Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType));
-            }
-        }
-        break;
-    case Compression::ZIP:
-    case Compression::ZIPWithPrediction:
-        {
-            io->seek(channelInfo->channelDataStart);
-            int unCompressedLength = (right - left) * (bottom - top) * (m_header.channelDepth / 8);
-            QByteArray compressedBytes = io->read(channelInfo->channelDataLength);
-            unCompressedBytes = Compression::uncompress(unCompressedLength, compressedBytes, channelInfo->compressionType);
-        }
-        break;
-    default:
-        error = QString("Unknown compression type: %1").arg(channelInfo->compressionType);
-        return QByteArray();
+    // Your Code Goes Here :P
+    // copy from doRGB...
+    foreach(ChannelInfo *channelInfo, channelInfoRecords) {
+        qDebug() << "channel" << channelInfo->channelId << channelInfo->channelDataStart << channelInfo->channelDataLength;
     }
-    return unCompressedBytes;
-}
 
+
+    io->seek(oldPos);
+
+    return true;
+}
 
 
 QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)

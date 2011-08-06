@@ -23,6 +23,8 @@
 #include <QByteArray>
 #include <QBitArray>
 
+#include <kis_types.h>
+
 #include "psd.h"
 #include "psd_header.h"
 
@@ -105,7 +107,9 @@ public:
 
     QMap<QString, LayerInfoBlock*> infoBlocks;
 
-    QByteArray readChannelData(QIODevice* io, ChannelInfo *channel);
+    bool readChannels(QIODevice* io, KisPaintDeviceSP device);
+
+private:
 
     const PSDHeader m_header;
 };

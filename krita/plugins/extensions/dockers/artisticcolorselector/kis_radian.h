@@ -121,15 +121,15 @@ public:
         return *this;
     }
     
-    template<class U>
-    friend KisRadian operator + (const KisRadian& l, const U& r) {
-        return KisRadian(l.m_value + r);
-    }
+//     template<class U>
+//     friend KisRadian operator + (const KisRadian& l, const U& r) {
+//         return KisRadian(l.m_value + r);
+//     }
     
-    template<class U>
-    friend KisRadian<U> operator + (const U& l, const KisRadian& r) {
-        return KisRadian<U>(l + r.m_value);
-    }
+//     template<class U>
+//     friend KisRadian<U> operator + (const U& l, const KisRadian& r) {
+//         return KisRadian<U>(l + r.m_value);
+//     }
     
     friend KisRadian operator + (const KisRadian& l, const KisRadian& r) {
         KisRadian rad(l);
@@ -145,15 +145,15 @@ public:
         return *this;
     }
     
-    template<class U>
-    friend KisRadian operator - (const KisRadian& l, const U& r) {
-        return KisRadian(l.m_value - r);
-    }
+//     template<class U>
+//     friend KisRadian operator - (const KisRadian& l, const U& r) {
+//         return KisRadian(l.m_value - r);
+//     }
     
-    template<class U>
-    friend KisRadian<U> operator - (const U& l, const KisRadian& r) {
-        return KisRadian<U>(l - r.m_value);
-    }
+//     template<class U>
+//     friend KisRadian<U> operator - (const U& l, const KisRadian& r) {
+//         return KisRadian<U>(l - r.m_value);
+//     }
     
     friend KisRadian operator - (const KisRadian& l, const KisRadian& r) {
         KisRadian rad(l);
@@ -169,15 +169,15 @@ public:
         return *this;
     }
     
-    template<class U>
-    friend KisRadian operator * (const KisRadian& l, const U& r) {
-        return KisRadian(l.m_value * r);
-    }
+//     template<class U>
+//     friend KisRadian operator * (const KisRadian& l, const U& r) {
+//         return KisRadian(l.m_value * r);
+//     }
     
-    template<class U>
-    friend KisRadian<U> operator * (const U& l, const KisRadian& r) {
-        return KisRadian<U>(l * r.m_value);
-    }
+//     template<class U>
+//     friend KisRadian<U> operator * (const U& l, const KisRadian& r) {
+//         return KisRadian<U>(l * r.m_value);
+//     }
     
     friend KisRadian operator * (const KisRadian& l, const KisRadian& r) {
         KisRadian rad(l);
@@ -193,15 +193,15 @@ public:
         return *this;
     }
     
-    template<class U>
-    friend KisRadian operator / (const KisRadian& l, const U& r) {
-        return KisRadian(l.m_value / r);
-    }
+//     template<class U>
+//     friend KisRadian operator / (const KisRadian& l, const U& r) {
+//         return KisRadian(l.m_value / r);
+//     }
     
-    template<class U>
-    friend KisRadian<U> operator / (const U& l, const KisRadian& r) {
-        return KisRadian<U>(l / r.m_value);
-    }
+//     template<class U>
+//     friend KisRadian<U> operator / (const U& l, const KisRadian& r) {
+//         return KisRadian<U>(l / r.m_value);
+//     }
     
     friend KisRadian operator / (const KisRadian& l, const KisRadian& r) {
         KisRadian rad(l);
@@ -217,15 +217,15 @@ public:
         return *this;
     }
     
-    template<class U>
-    friend KisRadian operator % (const KisRadian& l, const U& r) {
-        return KisRadian(std::fmod(l.m_value, TReal(r)));
-    }
+//     template<class U>
+//     friend KisRadian operator % (const KisRadian& l, const U& r) {
+//         return KisRadian(std::fmod(l.m_value, TReal(r)));
+//     }
     
-    template<class U>
-    friend KisRadian<U> operator % (const U& l, const KisRadian& r) {
-        return KisRadian<U>(std::fmod(l, U(r.m_value)));
-    }
+//     template<class U>
+//     friend KisRadian<U> operator % (const U& l, const KisRadian& r) {
+//         return KisRadian<U>(std::fmod(l, U(r.m_value)));
+//     }
     
     friend KisRadian operator % (const KisRadian& l, const KisRadian& r) {
         KisRadian rad(l);

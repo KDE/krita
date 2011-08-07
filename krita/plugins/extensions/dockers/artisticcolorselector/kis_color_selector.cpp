@@ -26,7 +26,6 @@
 #include <QMouseEvent>
 #include <QResizeEvent>
 #include <QTransform>
-#include <kis_vec.h>
 #include <cmath>
 
 #include "kis_color_selector.h"

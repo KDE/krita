@@ -27,17 +27,12 @@
 class KisColor
 {
 public:
-
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-
     enum Type { HSY, HSV, HSL, HSI };
     typedef Eigen::Vector4f VecHSXA;
     typedef Eigen::Vector3f VecRGB;
     
     struct Core
     {
-        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-
         virtual ~Core() { }
         virtual void setRGB(float r, float g, float b, float a) = 0;
         virtual void setHSX(float h, float s, float x, float a) = 0;

@@ -20,6 +20,8 @@
 #ifndef H_KIS_COLOR_H
 #define H_KIS_COLOR_H
 
+#define EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
+
 #include <QtGlobal>
 #include <Eigen/Core>
 #include <QColor>
@@ -38,8 +40,6 @@ public:
         virtual void setHSX(float h, float s, float x, float a) = 0;
         virtual void updateRGB() = 0;
         virtual void updateHSX() = 0;
-		
-		EIGEN_MAKE_ALIGNED_OPERATOR_NEW
         
         VecRGB  rgb;
         VecHSXA hsx;
@@ -134,5 +134,7 @@ private:
 private:
     quint8 m_coreData[sizeof(Core)];
 };
+
+#undef EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
 
 #endif // H_KIS_COLOR_H

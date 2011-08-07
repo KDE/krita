@@ -43,6 +43,8 @@ public:
         virtual void setHSX(float h, float s, float x, float a) = 0;
         virtual void updateRGB() = 0;
         virtual void updateHSX() = 0;
+		
+		EIGEN_MAKE_ALIGNED_OPERATOR_NEW
         
         VecRGB  rgb;
         VecHSXA hsx;

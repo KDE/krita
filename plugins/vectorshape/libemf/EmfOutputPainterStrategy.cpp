@@ -1027,14 +1027,14 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
     // when fonts are switched, the replacement fonts are sometimes
     // wider than the original fonts.
     QRect  worldRect(m_worldTransform.mapRect(QRect(x, y, textWidth, textHeight)));
-    kDebug(31000) << "rects:" << QRect(x, y, textWidth, textHeight) << worldRect;
+    //kDebug(31000) << "rects:" << QRect(x, y, textWidth, textHeight) << worldRect;
     qreal  scaleX = qreal(1.0);
     qreal  scaleY = qreal(1.0);
     if (bounds.width() < worldRect.width())
         scaleX = qreal(bounds.width()) / qreal(worldRect.width());
     if (bounds.height() < worldRect.height())
         scaleY = qreal(bounds.height()) / qreal(worldRect.height());
-    kDebug(31000) << "scale:" << scaleX << scaleY;
+    //kDebug(31000) << "scale:" << scaleX << scaleY;
 
     if (scaleX < qreal(1.0) || scaleY < qreal(1.0)) {
         m_painter->translate(-x, -y);

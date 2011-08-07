@@ -1100,8 +1100,9 @@ QList<QWidget *> DefaultTool::createOptionWidgets()
     DefaultToolWidget *defaultTool = new DefaultToolWidget(this);
     defaultTool->setWindowTitle(i18n("Geometry"));
     widgets.append(defaultTool);
-    canvas()->createSnapGuideConfigWidget()->setWindowTitle(i18n("Snapping"));
-    widgets.append(canvas()->createSnapGuideConfigWidget());
+    QWidget* snapWidget = canvas()->createSnapGuideConfigWidget();
+    snapWidget->setWindowTitle(i18n("Snapping"));
+    widgets.append(snapWidget);
     return widgets;
 }
 

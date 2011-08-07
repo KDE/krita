@@ -94,19 +94,21 @@ public:
             }
         } else {
             int cnt = 0;
+            QFrame *s;
+            QLabel *l;
             switch(dockingArea) {
             case Qt::TopDockWidgetArea:
             case Qt::BottomDockWidgetArea:
                 housekeeperLayout->setHorizontalSpacing(2);
                 housekeeperLayout->setVerticalSpacing(0);
                 foreach(QWidget* widget, currentWidgetList) {
-                    QFrame *s;
-                    QLabel *l;
                     if (widget->objectName().isEmpty()) {
                         continue; // skip this docker in release build when assert don't crash
                     }
-                    housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), 0, 2*cnt);
-                    currentAuxWidgets.insert(l);
+                    if (!widget->windowTitle().isEmpty()) {
+                        housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), 0, 2*cnt);
+                        currentAuxWidgets.insert(l);
+                    }
                     housekeeperLayout->addWidget(widget, 1, 2*cnt);
                     widget->show();
                     if (widget != currentWidgetList.last()) {
@@ -121,24 +123,22 @@ public:
             case Qt::RightDockWidgetArea:
                 housekeeperLayout->setHorizontalSpacing(0);
                 housekeeperLayout->setVerticalSpacing(2);
-                cnt = 0;
                 foreach(QWidget *widget, currentWidgetList) {
-                    QFrame *s;
-                    QLabel *l;
                     if (widget->objectName().isEmpty()) {
                         Q_ASSERT(!(widget->objectName().isEmpty()));
                         continue; // skip this docker in release build when assert don't crash
                     }
-                    housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), 3*cnt, 0);
-                    currentAuxWidgets.insert(l);
-                    housekeeperLayout->addWidget(widget, 3*cnt+1, 0);
+                    if (!widget->windowTitle().isEmpty()) {
+                        housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), cnt++, 0);
+                        currentAuxWidgets.insert(l);
+                    }
+                    housekeeperLayout->addWidget(widget, cnt++, 0);
                     widget->show();
                     if (widget != currentWidgetList.last()) {
-                        housekeeperLayout->addWidget(s = new QFrame(), 3*cnt+2, 0);
+                        housekeeperLayout->addWidget(s = new QFrame(), cnt++, 0);
                         s->setFrameShape(QFrame::HLine);
                         currentAuxWidgets.insert(s);
                     }
-                    cnt++;
                 }
                 break;
             default:

@@ -78,7 +78,9 @@ PictureShape::PictureShape()
     m_mode(Standard)
 {
     setKeepAspectRatio(true);
-    setFilterEffectStack(new KoFilterEffectStack());
+    KoFilterEffectStack * effectStack = new KoFilterEffectStack();
+    effectStack->setClipRect(QRectF(0, 0, 1, 1));
+    setFilterEffectStack(effectStack);
 }
 
 PictureShape::~PictureShape()

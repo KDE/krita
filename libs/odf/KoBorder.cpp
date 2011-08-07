@@ -678,22 +678,19 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
         qreal allBordersWidth;
         bool foundStyle, foundWidth;
         parseOdfBorder(border, &allBordersColor, &allBordersStyle, &foundStyle, &allBordersWidth, &foundWidth);
-        if (allBordersColor.isValid())
-        {
+        if (allBordersColor.isValid()) {
             setLeftBorderColor(allBordersColor);
             setTopBorderColor(allBordersColor);
             setRightBorderColor(allBordersColor);
             setBottomBorderColor(allBordersColor);
         }
-        if (foundStyle)
-        {
+        if (foundStyle) {
             setLeftBorderStyle(allBordersStyle);
             setTopBorderStyle(allBordersStyle);
             setRightBorderStyle(allBordersStyle);
             setBottomBorderStyle(allBordersStyle);
         }
-        if (foundWidth)
-        {
+        if (foundWidth) {
             setLeftBorderWidth(allBordersWidth);
             setTopBorderWidth(allBordersWidth);
             setRightBorderWidth(allBordersWidth);
@@ -710,16 +707,13 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
             qreal borderWidth;
             bool foundStyle, foundWidth;
             parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
-            if (borderColor.isValid())
-            {
+            if (borderColor.isValid()) {
                 setLeftBorderColor(borderColor);
             }
-            if (foundStyle)
-            {
+            if (foundStyle) {
                 setLeftBorderStyle(borderStyle);
             }
-            if (foundWidth)
-            {
+            if (foundWidth) {
                 setLeftBorderWidth(borderWidth);
             }
         }
@@ -731,16 +725,13 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
             qreal borderWidth;
             bool foundStyle, foundWidth;
             parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
-            if (borderColor.isValid())
-            {
+            if (borderColor.isValid()) {
                 setTopBorderColor(borderColor);
             }
-            if (foundStyle)
-            {
+            if (foundStyle) {
                 setTopBorderStyle(borderStyle);
             }
-            if (foundWidth)
-            {
+            if (foundWidth) {
                 setTopBorderWidth(borderWidth);
             }
         }
@@ -752,16 +743,13 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
             qreal borderWidth;
             bool foundStyle, foundWidth;
             parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
-            if (borderColor.isValid())
-            {
+            if (borderColor.isValid()) {
                 setRightBorderColor(borderColor);
             }
-            if (foundStyle)
-            {
+            if (foundStyle) {
                 setRightBorderStyle(borderStyle);
             }
-            if (foundWidth)
-            {
+            if (foundWidth) {
                 setRightBorderWidth(borderWidth);
             }
         }
@@ -773,16 +761,13 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
             qreal borderWidth;
             bool foundStyle, foundWidth;
             parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
-            if (borderColor.isValid())
-            {
+            if (borderColor.isValid()) {
                 setBottomBorderColor(borderColor);
             }
-            if (foundStyle)
-            {
+            if (foundStyle) {
                 setBottomBorderStyle(borderStyle);
             }
-            if (foundWidth)
-            {
+            if (foundWidth) {
                 setBottomBorderWidth(borderWidth);
             }
         }
@@ -796,16 +781,13 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
         qreal borderWidth;
         bool foundStyle, foundWidth;
         parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
-        if (borderColor.isValid())
-        {
+        if (borderColor.isValid()) {
             setTlbrBorderColor(borderColor);
         }
-        if (foundStyle)
-        {
+        if (foundStyle) {
             setTlbrBorderStyle(borderStyle);
         }
-        if (foundWidth)
-        {
+        if (foundWidth) {
             setTlbrBorderWidth(borderWidth);
         }
     }
@@ -817,16 +799,13 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
         qreal borderWidth;
         bool foundStyle, foundWidth;
         parseOdfBorder(border, &borderColor, &borderStyle, &foundStyle, &borderWidth, &foundWidth);
-        if (borderColor.isValid())
-        {
+        if (borderColor.isValid()) {
             setTrblBorderColor(borderColor);
         }
-        if (foundStyle)
-        {
+        if (foundStyle) {
             setTrblBorderStyle(borderStyle);
         }
-        if (foundWidth)
-        {
+        if (foundWidth) {
             setTrblBorderWidth(borderWidth);
         }
     }

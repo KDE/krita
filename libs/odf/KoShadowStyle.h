@@ -29,7 +29,7 @@
 class KoShadowStylePrivate;
 
 /**
- * A container and parser for shadows as defined in the 
+ * A container and parser for shadows as defined in the
  * OpenDocument specification.
  * Applies to at least :
  * - graphic elements,
@@ -59,11 +59,7 @@ public:
 
 
     bool operator==(const KoShadowStyle &other) const;
-    bool operator!=(const KoShadowStyle &other) const 
-    {
-        return !operator==(other);
-    }
-
+    bool operator!=(const KoShadowStyle &other) const;
 
     /**
      * Loads the given OpenDocument-defined shadow

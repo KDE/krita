@@ -81,6 +81,11 @@ bool KoShadowStyle::operator==(const KoShadowStyle &other) const
     return true;
 }
 
+bool KoShadowStyle::operator!=(const KoShadowStyle &other) const
+{
+    return !operator==(other);
+}
+
 bool KoShadowStyle::loadOdf (const QString &data)
 {
     if (data == "none")
@@ -88,26 +93,21 @@ bool KoShadowStyle::loadOdf (const QString &data)
     QList<KoShadowStyle::ShadowData> shadow_datas;
 
     QStringList sub_shadows = data.split(',');
-    foreach (QString shadow, sub_shadows)
-    {
+    foreach (QString shadow, sub_shadows) {
         QStringList words = shadow.split(' ', QString::SkipEmptyParts);
         if (words.length() == 0)
             return false;
 
         KoShadowStyle::ShadowData currentData;
         QColor shadowColor(words[0]);
-        if (shadowColor.isValid())
-        {
+        if (shadowColor.isValid()) {
             currentData.color = shadowColor;
             words.removeFirst();
-        }
-        else
-        {
+        } else {
             // We keep an invalid color.
         }
 
-        if (words.length() > 0)
-        {
+        if (words.length() > 0) {
             if ((words.length() < 2) || (words.length() > 3))
                 return false;
 
@@ -130,8 +130,7 @@ int KoShadowStyle::shadowCount() const
 QString KoShadowStyle::saveOdf() const
 {
     QStringList parts;
-    foreach (ShadowData data, d->shadows)
-    {
+    foreach (ShadowData data, d->shadows) {
         QString part = QString("%1 %2pt %3pt %4pt").arg(data.color.name()).arg(data.offset.x()).arg(data.offset.y()).arg(data.radius);
         parts << part;
     }

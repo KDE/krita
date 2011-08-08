@@ -49,7 +49,8 @@ private slots:
     void insertTableOfContents();
     /// insert a citation
     void insertCitation();
-
+    /// insert a bibliography
+    void insertBibliography();
     /// format the table of contents template
     void formatTableOfContents();
 

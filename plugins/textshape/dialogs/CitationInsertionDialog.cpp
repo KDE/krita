@@ -24,6 +24,8 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextDocument.h>
 
+#include <QMessageBox>
+
 CitationInsertionDialog::CitationInsertionDialog(KoTextEditor *editor ,QWidget *parent) :
     QDialog(parent),
     m_blockSignals(false),

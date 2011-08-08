@@ -33,7 +33,7 @@ class KOTEXT_EXPORT BibliographyGeneratorInterface {
 public:
     BibliographyGeneratorInterface() {}
     virtual ~BibliographyGeneratorInterface() {}
-    virtual void setMaxTabPosition(qreal maxTabPosition) = 0;
+    //virtual void setMaxTabPosition(qreal maxTabPosition) = 0;
 };
 
 class KOTEXT_EXPORT KoBibliographyInfo
@@ -47,6 +47,7 @@ public:
     void saveOdf(KoXmlWriter *writer) const;
 
     void setGenerator(BibliographyGeneratorInterface *generator);
+    void setEntryTemplates(QMap<QString, BibliographyEntryTemplate> &entryTemplates);
 
     BibliographyGeneratorInterface *generator() const;
 
@@ -61,5 +62,4 @@ private:
 };
 
 Q_DECLARE_METATYPE(KoBibliographyInfo *);       //to avail KoBibliographyInfo * to all template based function.(QVarient)
-Q_DECLARE_METATYPE(QTextDocument *);
 #endif // KOBIBLIOGRAPHYINFO_H

@@ -90,7 +90,7 @@ void KoBibliographyInfo::loadOdf(KoTextSharedLoadingData *sharedLoadingData, con
                     bibEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryBibliography));
 
                 } else if (indexEntry.localName() == "index-entry-span") {
-                    IndexEntrySpan * entrySpan = new IndexEntrySpan(indexEntry.attribute("style-name", QString()) );
+                    IndexEntrySpan * entrySpan = new IndexEntrySpan(indexEntry.attribute("style-name", QString()));
                     entrySpan->text = indexEntry.text();
                     bibEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entrySpan));
 
@@ -132,6 +132,11 @@ void KoBibliographyInfo::setGenerator(BibliographyGeneratorInterface *generator)
 {
     delete m_generator;
     m_generator = generator;
+}
+
+void KoBibliographyInfo::setEntryTemplates(QMap<QString, BibliographyEntryTemplate> &entryTemplates)
+{
+    m_entryTemplate = entryTemplates;
 }
 
 BibliographyGeneratorInterface *KoBibliographyInfo::generator() const

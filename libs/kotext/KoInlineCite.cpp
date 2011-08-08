@@ -565,10 +565,9 @@ void KoInlineCite::copyFrom(KoInlineCite *cite)
     d->year = cite->year();
 }
 
-void KoInlineCite::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+void KoInlineCite::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(document);
-    Q_UNUSED(object);
     Q_UNUSED(posInDocument);
     Q_UNUSED(format);
 }

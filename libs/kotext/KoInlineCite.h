@@ -206,8 +206,7 @@ public:
 
 protected:
     /// reimplemented
-    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
-                                int posInDocument, const QTextCharFormat &format);
+    virtual void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format);
     /// reimplemented
     virtual void resize(const QTextDocument *document, QTextInlineObject object,
                         int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);

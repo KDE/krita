@@ -18,6 +18,7 @@
  */
 
 #include "BibliographyGenerator.h"
+#include "DummyDocumentLayout.h"
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -39,26 +40,28 @@
 #include <KoBookmark.h>
 #include <KoInlineTextObjectManager.h>
 
-BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block, KoBibliographyInfo *bibInfo)
+BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block, KoBibliographyInfo *bibInfo, const QTextDocument *doc)
     : QObject(bibDocument)
+    , document(doc)
     , m_bibDocument(bibDocument)
     , m_bibInfo(bibInfo)
     , m_block(block)
 {
-    Q_ASSERT(bibFrame);
+    Q_ASSERT(bibDocument);
     Q_ASSERT(bibInfo);
 
     m_bibInfo->setGenerator(this);
 
     bibDocument->setUndoRedoEnabled(false);
-    bibDocument->setDocumentLayout(new BibDocumentLayout(bibDocument));
+    bibDocument->setDocumentLayout(new DummyDocumentLayout(bibDocument));
+
     m_documentLayout = static_cast<KoTextDocumentLayout *>(m_block.document()->documentLayout());
     m_document = m_documentLayout->document();
 
     connect(m_documentLayout, SIGNAL(finishedLayout()), this, SLOT(generate()));
 
     // do a generate right now to have a Bibliography with placeholder numbers.
-    generate();
+    //generate();
 }
 
 BibliographyGenerator::~BibliographyGenerator()
@@ -66,22 +69,10 @@ BibliographyGenerator::~BibliographyGenerator()
     delete m_bibInfo;
 }
 
-static QString removeWhitespacePrefix(const QString& text)
-{
-    int firstNonWhitespaceCharIndex = 0;
-    int lenght = text.length();
-    while (firstNonWhitespaceCharIndex < lenght && text.at(firstNonWhitespaceCharIndex).isSpace()) {
-        firstNonWhitespaceCharIndex++;
-    }
-    return text.right(lenght - firstNonWhitespaceCharIndex);
-}
-
-static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager) {
+static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager,QString bibType) {
     KoParagraphStyle *style = new KoParagraphStyle();
-//    style->setName("Contents " + QString::number(outlineLevel));
-    style->setName("Bibliography_20 ");
+    style->setName("Bibliography_"+bibType);
     style->setParent(styleManager->paragraphStyle("Standard"));
-//    style->setLeftMargin(QTextLength(QTextLength::FixedLength, (outlineLevel - 1) * 8));
     styleManager->add(style);
     return style;
 }
@@ -107,153 +98,84 @@ void BibliographyGenerator::generate()
         titleStyle->applyStyle(titleTextBlock);
 
         cursor.insertText(m_bibInfo->m_indexTitleTemplate.text);
-        cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
+        //cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
     }
 
-    QTextBlock block = m_document->rootFrame()->firstCursorPosition().block();
-    int blockId = 0;
-    while (block.isValid()) {
-        QString bibEntryText = block.text();
-        bibEntryText.remove(QChar::ObjectReplacementCharacter);
-        bibEntryText.replace('\t',' ');
-        bibEntryText = removeWhitespacePrefix(bibEntryText);        
-        //if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel) && !bibEntryText.isEmpty()) {
-        if (!bibEntryText.isEmpty()) {
-            qDebug() << "bibentrytext is " << bibEntryText << endl;
+    QTextBlock block = m_bibDocument->rootFrame()->firstCursorPosition().block();
+    QTextCharFormat savedCharFormat = cursor.charFormat();
+    QList<KoInlineCite*> citeList = KoTextDocument(document).inlineTextObjectManager()->citations(false).values();
 
-            KoParagraphStyle *bibTemplateStyle = 0;
-            qDebug() << "size is " << m_bibInfo->m_entryTemplate.size() << endl;
-            BibliographyEntryTemplate bibEntryTemplate = m_bibInfo->m_entryTemplate["article"];     //default bib type.temporarily
+    qDebug() << "TOTAL CITES DETECTED AT BIB IS " <<citeList.size() << "\n" << m_bibInfo->m_indexTitleTemplate.text;
+    foreach (KoInlineCite *cite, citeList)
+    {
+        KoParagraphStyle *bibTemplateStyle = 0;
+        BibliographyEntryTemplate bibEntryTemplate;
+        if (m_bibInfo->m_entryTemplate.keys().contains(cite->bibliographyType())) {
+            // List's index starts with 0, outline level starts with 0
+            bibEntryTemplate = m_bibInfo->m_entryTemplate.value(cite->bibliographyType());
 
             bibTemplateStyle = styleManager->paragraphStyle(bibEntryTemplate.styleId);
             if (bibTemplateStyle == 0) {
-                bibTemplateStyle = generateTemplateStyle(styleManager);
+                bibTemplateStyle = generateTemplateStyle(styleManager, cite->bibliographyType());
             }
-
-            cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
-            QTextBlock bibEntryTextBlock = cursor.block();
-            bibTemplateStyle->applyStyle( bibEntryTextBlock );
-
-            //KoTextBlockData *bd = dynamic_cast<KoTextBlockData *>(block.userData());
-
-            // save the current style due to hyperlinks
-            QTextCharFormat savedCharFormat = cursor.charFormat();
-            foreach (IndexEntry *entry, bibEntryTemplate.indexEntries) {
-                switch(entry->name) {
-                    case IndexEntry::BIBLIOGRAPHY: {
-                        // have to add some code here acc. to bib type.
-                        cursor.insertText(bibEntryText);
-                        break;
-                    }
-                    case IndexEntry::SPAN: {
-                        IndexEntrySpan * span = static_cast<IndexEntrySpan*>(entry);
-                        cursor.insertText(span->text);
-                        break;
-                    }
-                    case IndexEntry::TAB_STOP: {
-                        IndexEntryTabStop *tabEntry = static_cast<IndexEntryTabStop*>(entry);
-
-                        cursor.insertText("\t");
-
-                        QTextBlockFormat blockFormat = cursor.blockFormat();
-                        QList<QVariant> tabList;
-                        if (tabEntry->m_position == "MAX") {
-                            tabEntry->tab.position = m_maxTabPosition;
-                        } else {
-                            tabEntry->tab.position = tabEntry->m_position.toDouble();
-                        }
-                        tabList.append(QVariant::fromValue<KoText::Tab>(tabEntry->tab));
-                        blockFormat.setProperty(KoParagraphStyle::TabPositions, QVariant::fromValue<QList<QVariant> >(tabList));
-                        cursor.setBlockFormat(blockFormat);
-                        break;
-                    }
-                    default:{
-                        cursor.insertText("ERR nothing "+entry->name);
-                        qDebug() << "New or unknown index entry";
-                        break;
-                    }
-                }
-            }// foreach
-            cursor.setCharFormat(savedCharFormat);   // restore the cursor char format
+        } else {
+            qDebug() << "Bibliography meta-data has not BibliographyEntryTemplate for " << cite->bibliographyType();
+            continue;
         }
-        block = block.next();
+            \
+        cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
+        //cursor.insertBlock(cursor.blockFormat(),cursor.charFormat());
+
+        QTextBlock bibEntryTextBlock = cursor.block();
+        bibTemplateStyle->applyStyle( bibEntryTextBlock );
+        bool spanEnabled = false;           //true if data field value is not blank
+        QString deb;
+        foreach (IndexEntry * entry, bibEntryTemplate.indexEntries) {
+            switch(entry->name) {
+                case IndexEntry::BIBLIOGRAPHY: {
+                    IndexEntryBibliography *indexEntry = static_cast<IndexEntryBibliography *>(entry);
+                    cursor.insertText(cite->dataField(indexEntry->dataField));
+                    deb.append(cite->dataField(indexEntry->dataField));
+                    spanEnabled = (cite->dataField(indexEntry->dataField).length()>0);
+                    break;
+                }
+                case IndexEntry::SPAN: {
+                    if(spanEnabled) {
+                        IndexEntrySpan *span = static_cast<IndexEntrySpan*>(entry);
+                        cursor.insertText(span->text);
+                        deb.append(span->text);
+                    }
+                    break;
+                }
+                case IndexEntry::TAB_STOP: {
+                    IndexEntryTabStop *tabEntry = static_cast<IndexEntryTabStop*>(entry);
+
+                    cursor.insertText("\t");
+
+                    QTextBlockFormat blockFormat = cursor.blockFormat();
+                    QList<QVariant> tabList;
+                    if (tabEntry->m_position == "MAX") {
+                        tabEntry->tab.position = m_maxTabPosition;
+                    } else {
+                        tabEntry->tab.position = tabEntry->m_position.toDouble();
+                    }
+                    tabList.append(QVariant::fromValue<KoText::Tab>(tabEntry->tab));
+                    blockFormat.setProperty(KoParagraphStyle::TabPositions, QVariant::fromValue<QList<QVariant> >(tabList));
+                    cursor.setBlockFormat(blockFormat);
+                    break;
+                }
+                default:{
+                    qDebug() << "New or unknown index entry";
+                    break;
+                }
+            }
+        }// foreach
+        qDebug() << "\t" << deb;
     }
-    cursor.endEditBlock();
-    KoTextLayoutRootArea *rootArea = m_documentLayout->rootAreaForPosition(m_block.position());
-
-    if (rootArea) {
-        rootArea->setDirty();
-    }
-}
-
-BibDocumentLayout::BibDocumentLayout(QTextDocument *doc)
-        : QAbstractTextDocumentLayout(doc)
-{
-    setPaintDevice(new KoPostscriptPaintDevice());
-}
-
-BibDocumentLayout::~BibDocumentLayout()
-{
-}
-
-QRectF BibDocumentLayout::blockBoundingRect(const QTextBlock &block) const
-{
-    Q_UNUSED(block);
-    return QRect();
-}
-
-QSizeF BibDocumentLayout::documentSize() const
-{
-    return QSizeF();
-}
-
-void BibDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context)
-{
-    // WARNING Text shapes ask their root area directly to paint.
-    // It saves a lot of extra traversal, that is quite costly for big
-    // documents
-    Q_UNUSED(painter);
-    Q_UNUSED(context);
+    cursor.setCharFormat(savedCharFormat);   // restore the cursor char format
 }
 
 
-int BibDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
-{
-    Q_UNUSED(point);
-    Q_UNUSED(accuracy);
-    Q_ASSERT(false); //we should not call this method.
-    return -1;
-}
 
-QRectF BibDocumentLayout::frameBoundingRect(QTextFrame*) const
-{
-    return QRectF();
-}
 
-int BibDocumentLayout::pageCount() const
-{
-    return 1;
-}
-
-void BibDocumentLayout::documentChanged(int position, int charsRemoved, int charsAdded)
-{
-    Q_UNUSED(position);
-    Q_UNUSED(charsRemoved);
-    Q_UNUSED(charsAdded);
-}
-
-/*
-void BibDocumentLayout::drawInlineObject(QPainter *, const QRectF &, QTextInlineObject , int , const QTextFormat &)
-{
-}
-
-// This method is called by qt every time  QTextLine.setWidth()/setNumColums() is called
-void BibDocumentLayout::positionInlineObject(QTextInlineObject , int , const QTextFormat &)
-{
-}
-
-void BibDocumentLayout::resizeInlineObject(QTextInlineObject , int , const QTextFormat &)
-{
-}
-*/
 

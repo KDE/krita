@@ -28,7 +28,7 @@ const int INVALID_OUTLINE_LEVEL = 0;
 class BibliographyGenerator;
 class ToCGenerator;
 
-class IndexEntry
+class KOTEXT_EXPORT IndexEntry
 {
 public:
     enum IndexEntryName {UNKNOWN, LINK_START, CHAPTER, SPAN, TEXT, TAB_STOP, PAGE_NUMBER, LINK_END, BIBLIOGRAPHY};
@@ -62,7 +62,7 @@ public:
 };
 
 
-class IndexEntrySpan : public IndexEntry
+class  KOTEXT_EXPORT IndexEntrySpan : public IndexEntry
 {
 public:
     IndexEntrySpan(QString _styleName);
@@ -79,7 +79,7 @@ public:
 };
 
 
-class IndexEntryTabStop : public IndexEntry
+class KOTEXT_EXPORT IndexEntryTabStop : public IndexEntry
 {
 public:
     IndexEntryTabStop(QString _styleName);
@@ -118,7 +118,7 @@ public:
 };
 
 
-class IndexTitleTemplate
+class KOTEXT_EXPORT IndexTitleTemplate
 {
 public:
     void saveOdf(KoXmlWriter * writer) const;
@@ -148,7 +148,7 @@ public:
     QList<IndexSourceStyle> styles;
 };
 
-class IndexEntryBibliography : public IndexEntry
+class KOTEXT_EXPORT IndexEntryBibliography : public IndexEntry
 {
 public:
     IndexEntryBibliography(QString _styleName);

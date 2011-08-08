@@ -160,7 +160,9 @@ public:
         TableOfContentsData,      // set when block is instead a TableOfContents
         TableOfContentsDocument,   // set when block is instead a TableOfContents
         BibliographyData,
-        BibliographyDocument
+        BibliographyDocument,
+
+        AutoUpdateBibliography
     };
 
     enum AutoSpace {

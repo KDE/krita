@@ -447,6 +447,10 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
     if (oldRootDoc) {
         oldRootDoc->removeShell(this);
 
+        if (dockerManager()) {
+            dockerManager()->resetToolDockerWidgets();
+        }
+
         // Hide all dockwidgets and remember their old state
         d->dockWidgetVisibilityMap.clear();
 

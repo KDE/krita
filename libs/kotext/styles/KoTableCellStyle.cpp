@@ -500,6 +500,18 @@ void KoTableCellStyle::setBorders(const KoBorder& borders)
     setProperty(Borders, QVariant::fromValue<KoBorder>(borders));
 }
 
+KoShadowStyle KoTableCellStyle::shadow() const
+{
+    if (hasProperty(Shadow))
+        return value(Shadow).value<KoShadowStyle>();
+    return KoShadowStyle();
+}
+
+void KoTableCellStyle::setShadow(const KoShadowStyle& shadow)
+{
+    setProperty(Shadow, QVariant::fromValue<KoShadowStyle>(shadow));
+}
+
 KoTableCellStyle::RotationAlignment KoTableCellStyle::rotationAlignment() const
 {
     return static_cast<RotationAlignment>(propertyInt(RotationAlign));
@@ -580,6 +592,13 @@ void KoTableCellStyle::loadOdfProperties(KoShapeLoadingContext &context, KoStyle
         setBottomPadding(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "padding-bottom")));
     if (styleStack.hasProperty(KoXmlNS::fo, "padding"))
         setPadding(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "padding")));
+
+    if (styleStack.hasProperty(KoXmlNS::style, "shadow")) {
+        KoShadowStyle shadow;
+        if (shadow.loadOdf(styleStack.property(KoXmlNS::style, "shadow"))) {
+            setShadow(shadow);
+        }
+    }
 
     // Borders
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "left")) {
@@ -913,8 +932,9 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
             else
                 style.addProperty("style:glyph-orientation-vertical", "0", KoGenStyle::TableCellType);
         } else if (key == Borders) {
-            kWarning(32500) << "Calling save odf in borders !";
             borders().saveOdf(style, KoGenStyle::TableCellType);
+        } else if (key == Shadow) {
+            style.addProperty("style:shadow", shadow().saveOdf());
         }
     }
     if (d->charStyle) {

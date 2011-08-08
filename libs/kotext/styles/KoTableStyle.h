@@ -36,6 +36,8 @@ class QTextTable;
 class KoStyleStack;
 class KoGenStyle;
 class KoGenStyles;
+class KoShadowStyle;
+
 #include "KoXmlReaderForward.h"
 class KoOdfLoadingContext;
 
@@ -66,8 +68,9 @@ public:
         Visible,                    ///< If true, the table is visible
         PageNumber,                 ///< The page number that is applied after the page break
         TextProgressionDirection,   ///< The direction of the text in the table
-        TableIsProtected            ///< boolean, if true, the table is protected against edits
+        TableIsProtected,           ///< boolean, if true, the table is protected against edits
                                         /// It's not really a property of KoTableStyle but defined here for convenience
+        Shadow                      ///< KoShadowStyle, the table shadow
         
     };
 
@@ -91,6 +94,11 @@ public:
     void setKeepWithNext(bool keep);
     
     bool keepWithNext() const;
+
+    /// This property describe the shadow of the table, if any
+    void setShadow (const KoShadowStyle &shadow);
+
+    KoShadowStyle shadow() const;
 
     /// The property specifies if the table should allow it to be break. Break within a row is specified per row
     void setMayBreakBetweenRows(bool allow);

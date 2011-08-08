@@ -32,6 +32,7 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
+#include <KoShadowStyle.h>
 
 #include <KDebug>
 
@@ -184,7 +185,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
         } else if (reference == "percent") {
             result << "-50%" << "0%" << "100%" << "42%";
         } else if (reference == "borderWidths") {
-            result << "42px 42pt 12cm" << "0px 0pt 0cm";
+            result << "42px 42pt 12cm" << "2pt 23pt 0cm";
         } else if (reference == "angle") {
             result << "5deg" << "1rad" << "400grad" << "3.14159265rad" << "45";    // OpenDocument 1.1 : no unit == degrees
         } else if (reference == "zeroToHundredPercent") {
@@ -228,6 +229,21 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
                 return true;
         } else if (reference == "angle") {
             return qAbs(KoUnit::parseAngle(initialValue) - KoUnit::parseAngle(outputValue)) < 0.0001;
+        } else if (reference == "shadowType") {
+            KoShadowStyle initial, output;
+            Q_ASSERT(initial.loadOdf(initialValue));
+            Q_ASSERT(output.loadOdf(outputValue));
+            return (initial == output);
+        } else if (reference == "borderWidths") {
+            QStringList initials, outputs;
+            initials = initialValue.split(" ");
+            outputs = outputValue.split(" ");
+            if (initials.length() != outputs.length())
+                return false;
+            for (int i = 0 ; i < initials.length() ; i++)
+                if (qAbs(KoUnit::parseValue(initials[i]) - KoUnit::parseValue(outputs[i])) > 0.0001)
+                    return false;
+            return true;
         }
     }
     if (!m_equivalences.empty()) {
@@ -416,7 +432,6 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     KoXmlElement root = generatedXmlReader->documentElement();
     KoXmlElement properties = root.firstChild().toElement();
     QString outputPropertyValue = properties.attribute(attribute->name());
-    kDebug(32500) << "Comparing " << outputPropertyValue << "obtained for " << value;
     if (properties.attributeNames().count() > 1)
     {
         kWarning(32500) << "Warning : got more than one attribute !";
@@ -427,9 +442,12 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
 	output.loadOdf(properties);
 	return (original == output);
     }
-    if (!attribute->compare(value, outputPropertyValue))
-        kWarning(32500) << generatedXmlOutput;
-    return attribute->compare(value, outputPropertyValue);
+    bool result = attribute->compare(value, outputPropertyValue);
+    if (!result) {
+        kDebug(32500) << "Comparison failed : " << outputPropertyValue << "obtained for " << value;
+        kDebug(32500) << generatedXmlOutput;
+    }
+    return result;
 }
 
 void TestOpenDocumentStyle::testTableColumnStyle_data()

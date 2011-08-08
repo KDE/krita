@@ -32,6 +32,7 @@
 #include <QPersistentModelIndex>
 #include <QApplication>
 #include <QPainter>
+#include <QScrollBar>
 
 class KoDocumentSectionView::Private
 {
@@ -45,6 +46,7 @@ public:
 
 KoDocumentSectionView::KoDocumentSectionView(QWidget *parent)
     : QTreeView(parent)
+    , m_dragingFlag(false)
     , d(new Private)
 {
     d->delegate = new KoDocumentSectionDelegate(this, this);
@@ -280,6 +282,66 @@ QPixmap KoDocumentSectionView::createDragPixmap() const
 
     return dragPixmap;
 }
+
+void KoDocumentSectionView::paintEvent(QPaintEvent *event)
+{
+    event->accept();
+    QTreeView::paintEvent(event);
+
+    // Paint the line where the slide should go
+    if (isDraging() && (displayMode() == KoDocumentSectionView::ThumbnailMode)) {
+        QPoint cursorPosition = QWidget::mapFromGlobal(QCursor::pos());
+        QSize size(visualRect(indexAt(cursorPosition)).width(), visualRect(indexAt(cursorPosition)).height());
+
+        int numberRow = indexAt(cursorPosition).row();
+        int scrollBarValue = verticalScrollBar()->value();
+
+        QPoint point1(0, (numberRow + 1) * size.height() - scrollBarValue);
+        QPoint point2(size.width(), (numberRow + 1) * size.height() - scrollBarValue);
+        QLineF line(point1, point2);
+
+        QPainter painter(this->viewport());
+        QPen pen = QPen(palette().brush(QPalette::Highlight), 4);
+        pen.setCapStyle(Qt::RoundCap);
+        painter.setPen(pen);
+        painter.setOpacity(0.8);
+        painter.drawLine(line);
+    }
+}
+
+void KoDocumentSectionView::dropEvent(QDropEvent *ev)
+{
+    setDragingFlag(false);
+    QTreeView::dropEvent(ev);
+}
+
+void KoDocumentSectionView::dragMoveEvent(QDragMoveEvent *ev)
+{
+    ev->accept();
+    if (!model()) {
+        return;
+    }
+    QTreeView::dragMoveEvent(ev);
+    setDragingFlag();
+    viewport()->update();
+}
+
+void KoDocumentSectionView::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    Q_UNUSED(e);
+    setDragingFlag(false);
+}
+
+bool KoDocumentSectionView::isDraging() const
+{
+    return m_dragingFlag;
+}
+
+void KoDocumentSectionView::setDragingFlag(bool flag)
+{
+    m_dragingFlag = flag;
+}
+
 
 #include <KoDocumentSectionPropertyAction_p.moc>
 #include <KoDocumentSectionView.moc>

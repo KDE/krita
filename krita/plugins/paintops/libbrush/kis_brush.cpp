@@ -254,7 +254,7 @@ enumBrushType KisBrush::brushType() const
     return d->brushType;
 }
 
-void KisBrush::toXML(QDomDocument& document , QDomElement& element) const
+void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const
 {
     element.setAttribute("BrushVersion", "2");
 }
@@ -623,6 +623,9 @@ KisQImagemaskSP KisBrush::createMask(double scale, double subPixelX, double subP
     KisQImagemaskSP outputMask = KisQImagemaskSP(0);
 
     if (belowBrush != 0) {
+#if 0 
+        Interpolation showed artifacts
+        
         // We're in between two masks. Interpolate between them.
 
         KisQImagemaskSP scaledAboveMask = scaleMask(aboveBrush, scale, subPixelX, subPixelY);
@@ -634,6 +637,10 @@ KisQImagemaskSP KisBrush::createMask(double scale, double subPixelX, double subP
         double t = (scale - belowBrush->scale()) / (aboveBrush->scale() - belowBrush->scale());
 
         outputMask = KisQImagemask::interpolate(scaledBelowMask, scaledAboveMask, t);
+#endif
+        double t = (scale - belowBrush->scale()) / (aboveBrush->scale() - belowBrush->scale());
+        
+        outputMask = scaleMask( (t >= 0.5) ? aboveBrush : belowBrush, scale, subPixelX, subPixelY);
     } else {
         if (Eigen::ei_isApprox(scale, aboveBrush->scale())) {
             // Exact match.

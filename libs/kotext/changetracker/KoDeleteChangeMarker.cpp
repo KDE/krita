@@ -128,13 +128,12 @@ void KoDeleteChangeMarker::resize(const QTextDocument *document, QTextInlineObje
     object.setWidth(0);
 }
 
-void KoDeleteChangeMarker::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+void KoDeleteChangeMarker::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
 {
     d->position = posInDocument;
     if (document != d->document)
         d->document = const_cast<QTextDocument*>(document); //TODO: when we get rid of the current visualisation of deleted changes (ie inserting them in the doc), we can get rid of this.
 
-    Q_UNUSED(object);
     Q_UNUSED(format);
 }
 

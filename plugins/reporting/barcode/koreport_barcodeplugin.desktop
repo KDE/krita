@@ -25,6 +25,7 @@ Name[x-test]=xxKoReport_Barcodexx
 Name[zh_TW]=KoReport_Barcode
 Comment=KoReport Barcode Plugin
 Comment[it]=Estensione per codici a barre di KoReport
+Comment[nb]=KoReport strekkode-programtillegg
 Comment[pt]='Plugin' de Códigos de Barras do KoReport
 Comment[pt_BR]=Plugin de códigos de barra do KoReport
 Comment[sv]=Insticksprogram för Koffice rapportstreckkod

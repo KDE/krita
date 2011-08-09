@@ -86,7 +86,7 @@ void KisTileData::releaseMemory()
         m_data = 0;
     }
 
-    KisTileData *clone;
+    KisTileData *clone = 0;
     while(m_clonesStack.pop(clone)) {
         delete clone;
     }

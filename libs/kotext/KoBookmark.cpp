@@ -63,9 +63,8 @@ KoBookmark::~KoBookmark()
     delete d;
 }
 
-void KoBookmark::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+void KoBookmark::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
 {
-    Q_UNUSED(object);
     Q_UNUSED(format);
     d->document = document;
     d->posInDocument = posInDocument;

@@ -46,6 +46,7 @@ public:
 class KoCsvImportDialog::Private
 {
 public:
+    KoCsvImportDialog* q;
     KoCsvImportWidget* dialog;
 
     bool        rowsAdjusted;
@@ -61,7 +62,7 @@ public:
     QTextCodec* codec;
     QStringList formatList; ///< List of the column formats
 
-public:
+    explicit Private(KoCsvImportDialog* qq) : q(qq) {}
     void loadSettings();
     void saveSettings();
     void fillTable();
@@ -74,7 +75,7 @@ public:
 
 KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
     : KDialog(parent)
-    , d(new Private)
+    , d(new Private(this))
 {
     d->dialog = new KoCsvImportWidget(this);
     d->rowsAdjusted = false;
@@ -248,6 +249,28 @@ void KoCsvImportDialog::setThousandsSeparator(const QString& separator)
     d->dialog->m_thousandsSeparator->setText(separator);
 }
 
+QString KoCsvImportDialog::delimiter() const
+{
+    return d->delimiter;
+}
+
+void KoCsvImportDialog::setDelimiter(const QString& delimit)
+{
+    d->delimiter = delimit;
+    if (delimit == ",")
+        d->dialog->m_radioComma->setChecked(true);
+    else if (delimit == "\t")
+        d->dialog->m_radioTab->setChecked(true);
+    else if (delimit == " ")
+        d->dialog->m_radioSpace->setChecked(true);
+    else if (delimit == ";")
+        d->dialog->m_radioSemicolon->setChecked(true);
+    else {
+        d->dialog->m_radioOther->setChecked(true);
+        d->dialog->m_delimiterEdit->setText(delimit);
+    }
+}
+
 
 // ----------------------------------------------------------------
 
@@ -265,18 +288,7 @@ void KoCsvImportDialog::Private::loadSettings()
       dialog->comboBoxEncoding->setCurrentIndex(dialog->comboBoxEncoding->findText(codecText));
       codec = updateCodec();
     }
-    if (delimiter == ",")
-        dialog->m_radioComma->setChecked(true);
-    else if (delimiter == "\t")
-        dialog->m_radioTab->setChecked(true);
-    else if (delimiter == " ")
-        dialog->m_radioSpace->setChecked(true);
-    else if (delimiter == ";")
-        dialog->m_radioSemicolon->setChecked(true);
-    else {
-        dialog->m_radioOther->setChecked(true);
-        dialog->m_delimiterEdit->setText(delimiter);
-    }
+    q->setDelimiter(delimiter);
     dialog->m_ignoreDuplicates->setChecked(ignoreDuplicates);
     dialog->m_comboQuote->setCurrentIndex(textQuote == '\'' ? 1 : textQuote == '"' ? 0 : 2);
 }

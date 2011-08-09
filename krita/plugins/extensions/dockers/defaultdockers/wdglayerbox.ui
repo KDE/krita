@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>258</width>
+    <width>286</width>
     <height>492</height>
    </rect>
   </property>
@@ -54,6 +54,34 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QToolButton" name="bnViewMode">
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item row="1" column="0">
@@ -68,374 +96,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QToolButton" name="bnViewMode">
-         <property name="minimumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="Line" name="line_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="KisDropButton" name="bnAddPaintLayer">
-         <property name="minimumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Add a New Paint Layer</string>
-         </property>
-         <property name="whatsThis">
-          <string>Add a New Paint Layer. Press to create an empty paint layer. Drop an existing layer or mask to create a new paint layer based on the layer or mask.</string>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="KisDropButton" name="bnAddGroupLayer">
-         <property name="minimumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Add a Group Layer</string>
-         </property>
-         <property name="statusTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Add a Group Layer. Press to create an empty group layer, or drop a layer to create a new group containing that layer.</string>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="KisDropButton" name="bnAddFilterLayer">
-         <property name="minimumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Add a Filter Layer</string>
-         </property>
-         <property name="whatsThis">
-          <string>Add a Filter Layer. Press to create an empty filter layer or a filter layer with the current selection. Drop a layer or mask to create a filter layer based on that layer or mask.</string>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="KisDropButton" name="bnAddCloneLayer">
-         <property name="minimumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Add a Clone Layer</string>
-         </property>
-         <property name="whatsThis">
-          <string>Add a Clone Layer. Press to clone the current layer, or drop any layer to create a clone.</string>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="KisDropButton" name="bnAddGeneratedLayer">
-         <property name="minimumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Add a Generated Layer</string>
-         </property>
-         <property name="whatsThis">
-          <string>Add a Generated Layer. Press to create an empty generated layer or a generated layer with the current selection. Drop a layer or mask to create a generated layer based on that layer or mask.</string>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="KisDropButton" name="bnAddShapeLayer">
-         <property name="minimumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Create a new Shape Layer</string>
-         </property>
-         <property name="whatsThis">
-          <string>Create a new Shape Layer. Shape layers contain vector objects such as text or vector graphics. Drop vector objects from the shape selector on the canvas after selecting a shape layer.</string>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="KisDropButton" name="bnAddTransparencyMask">
-         <property name="minimumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Add a Transparency Mask</string>
-         </property>
-         <property name="whatsThis">
-          <string>Add a New Transparency Mask. Press to create an empty transparency mask or a transparency mask based on the current global selection. Drop a layer or mask to create a new transparency mask based on a layer, a layer's channels or the mask.</string>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="KisDropButton" name="bnAddFilterMask">
-         <property name="minimumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Add a Filter Mask</string>
-         </property>
-         <property name="whatsThis">
-          <string>Add a Filter Mask. Press to create an empty filter mask or a filter mask with the current selection. Drop a layer or mask to create a filter mask based on that layer or mask.</string>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="KisDropButton" name="bnAddLocalSelectionMask">
-         <property name="minimumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>22</width>
-           <height>22</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Add a New Local Selection Mask</string>
-         </property>
-         <property name="whatsThis">
-          <string>Add a New Local Selection Mask. Press to create an empty local selection or a local selection based on the current global selection. Drop a layer or mask to create a new local selection based on a layer, a layer's channels or the mask.</string>
-         </property>
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
     </layout>
    </item>
    <item row="2" column="0">
@@ -443,6 +103,28 @@
      <property name="topMargin">
       <number>0</number>
      </property>
+     <item>
+      <widget class="KisDropButton" name="bnAdd">
+       <property name="minimumSize">
+        <size>
+         <width>28</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>28</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QToolButton" name="bnDuplicate">
        <property name="minimumSize">
@@ -669,15 +351,6 @@
  </customwidgets>
  <tabstops>
   <tabstop>cmbComposite</tabstop>
-  <tabstop>bnAddLocalSelectionMask</tabstop>
-  <tabstop>bnAddFilterMask</tabstop>
-  <tabstop>bnAddTransparencyMask</tabstop>
-  <tabstop>bnAddShapeLayer</tabstop>
-  <tabstop>bnAddGeneratedLayer</tabstop>
-  <tabstop>bnAddCloneLayer</tabstop>
-  <tabstop>bnAddFilterLayer</tabstop>
-  <tabstop>bnAddGroupLayer</tabstop>
-  <tabstop>bnAddPaintLayer</tabstop>
   <tabstop>bnDuplicate</tabstop>
   <tabstop>bnLower</tabstop>
   <tabstop>bnRaise</tabstop>

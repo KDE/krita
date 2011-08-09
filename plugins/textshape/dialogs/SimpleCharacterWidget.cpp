@@ -83,9 +83,9 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     m_stylePopup->setFrameShadow(QFrame::Raised);
     widget.charFrame->setStylesWidget(m_stylePopup);
 
-    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoParagraphStyle *)), this, SIGNAL(characterStyleSelected(KoParagraphStyle *)));
-    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoParagraphStyle *)), this, SIGNAL(doneWithFocus()));
-    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoParagraphStyle *)), this, SLOT(hidePopup()));
+    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(characterStyleSelected(KoCharacterStyle *)));
+    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(doneWithFocus()));
+    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(hidePopup()));
 
     m_thumbnailer = new KoStyleThumbnailer();
 }

@@ -48,6 +48,8 @@ set(kowidgets_LIB_SRCS
     KoLineStyleModel.cpp
     KoDockWidgetTitleBar.cpp
     KoDockWidgetTitleBarButton.cpp
+    KoSelectionManager.cpp
+    KoSelectionToggle.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS

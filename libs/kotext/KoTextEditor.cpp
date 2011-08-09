@@ -296,7 +296,7 @@ void KoTextEditor::Private::clearCharFormatProperty(int property)
 
 
 KoTextEditor::KoTextEditor(QTextDocument *document)
-    : KoToolSelection(document),
+    : QObject(document),
     d (new Private(this, document))
 {
     connect (d->document, SIGNAL (undoCommandAdded()), this, SLOT (documentCommandAdded()));
@@ -305,6 +305,20 @@ KoTextEditor::KoTextEditor(QTextDocument *document)
 KoTextEditor::~KoTextEditor()
 {
     delete d;
+}
+
+KoTextEditor *KoTextEditor::getTextEditorFromCanvas(KoCanvasBase *canvas)
+{
+    KoSelection *selection = canvas->shapeManager()->selection();
+    if (selection) {
+        foreach(KoShape *shape, selection->selectedShapes()) {
+            if (KoTextShapeDataBase *textData = qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
+                KoTextDocument doc(textData->document());
+                return doc.textEditor();
+            }
+        }
+    }
+    return 0;
 }
 
 void KoTextEditor::updateDefaultTextDirection(KoText::Direction direction)
@@ -753,19 +767,19 @@ void KoTextEditor::addBookmark(const QString &name)
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
-bool KoTextEditor::insertIndexMarker()
+KoInlineObject *KoTextEditor::insertIndexMarker()
 {//TODO changeTracking
     QTextBlock block = d->caret.block();
     if (d->caret.position() >= block.position() + block.length() - 1)
-        return false; // can't insert one at end of text
+        return 0; // can't insert one at end of text
     if (block.text()[ d->caret.position() - block.position()].isSpace())
-        return false; // can't insert one on a whitespace as that does not indicate a word.
+        return 0; // can't insert one on a whitespace as that does not indicate a word.
 
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Index"));
     KoTextLocator *tl = new KoTextLocator();
     KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, tl);
     d->updateState(KoTextEditor::Private::NoOp);
-    return true;
+    return tl;
 }
 
 void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
@@ -779,6 +793,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     }
 
     KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, inliner);
+    inliner->updatePosition(d->document, d->caret.position(), format);
 
     int endPosition = d->caret.position();
     d->caret.setPosition(startPosition);
@@ -979,10 +994,10 @@ void KoTextEditor::insertTable(int rows, int columns)
             QTextTableCell cell = table->cellAt(row, col);
             QTextTableCellFormat format;
             KoTableCellStyle cellStyle;
-            cellStyle.setEdge(KoTableCellStyle::Top, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoTableCellStyle::Left, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoTableCellStyle::Bottom, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoTableCellStyle::Right, KoTableCellStyle::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoTableBorderStyle::Top, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoTableBorderStyle::Left, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoTableBorderStyle::Bottom, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoTableBorderStyle::Right, KoBorder::BorderSolid, 2, QColor(Qt::black));
             cellStyle.setPadding(5);
 
             cellStyle.applyStyle(format);
@@ -1216,8 +1231,8 @@ void KoTextEditor::newLine()
     d->updateState(KoTextEditor::Private::Custom, i18n("Line Break"));
     if (d->caret.hasSelection())
         d->deleteInlineObjects();
-    KoTextDocument koDocument(d->document);
-    KoStyleManager *styleManager = koDocument.styleManager();
+    KoTextDocument textDocument(d->document);
+    KoStyleManager *styleManager = textDocument.styleManager();
     KoParagraphStyle *nextStyle = 0;
     KoParagraphStyle *currentStyle = 0;
     if (styleManager) {

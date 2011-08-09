@@ -119,7 +119,6 @@ KisPaintDeviceSP KisLayerManager::activeDevice()
 
 void KisLayerManager::activateLayer(KisLayerSP layer)
 {
-    Q_ASSERT(layer);
     m_activeLayer = layer;
     emit sigLayerActivated(layer);
     layersUpdated();

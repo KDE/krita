@@ -4,6 +4,7 @@ add_subdirectory( tests )
 
 ########### next target ###############
 set(textlayout_LIB_SRCS
+    KoTextLayoutCellHelper.cpp
     KoTextLayoutArea.cpp
     KoTextLayoutArea_paint.cpp
     KoTextLayoutEndNotesArea.cpp

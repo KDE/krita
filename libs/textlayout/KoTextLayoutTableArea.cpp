@@ -20,6 +20,7 @@
 
 #include "KoTextLayoutTableArea.h"
 
+#include "KoTextLayoutCellHelper.h"
 #include "TableIterator.h"
 #include "KoTextLayoutArea.h"
 #include "KoPointedAt.h"
@@ -111,10 +112,10 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
 
     // Test normal cells.
     if (point.y() > d->rowPositions[firstRow] && point.y() < d->rowPositions[lastRow + 1]) {
-        QVector<qreal>::const_iterator start = d->rowPositions.begin() + firstRow;
-        QVector<qreal>::const_iterator end = d->rowPositions.begin() + lastRow + 1;
-        int row = qLowerBound(start, end, point.y()) - d->rowPositions.begin() - 1;
-        int column = qLowerBound(d->columnPositions, point.x()) - d->columnPositions.begin() - 1;
+        QVector<qreal>::const_iterator start = d->rowPositions.constBegin() + firstRow;
+        QVector<qreal>::const_iterator end = d->rowPositions.constBegin() + lastRow + 1;
+        int row = qLowerBound(start, end, point.y()) - d->rowPositions.constBegin() - 1;
+        int column = qLowerBound(d->columnPositions, point.x()) - d->columnPositions.constBegin() - 1;
         QTextTableCell cell = d->table->cellAt(row, qBound(0, column, d->table->columns() - 1));
         return d->cellAreas[cell.row()][cell.column()]->hitTest(point, accuracy);
     }
@@ -122,10 +123,10 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
     // Test header row cells.
     QPointF headerPoint = point + QPointF(d->headerOffsetX, d->headerOffsetY);
     if (headerPoint.y() > d->rowPositions.first() && headerPoint.y() < d->rowPositions[d->headerRows + 1]) {
-        QVector<qreal>::const_iterator start = d->rowPositions.begin();
-        QVector<qreal>::const_iterator end = d->rowPositions.begin() + d->headerRows + 1;
-        int row = qLowerBound(start, end, headerPoint.y()) - d->rowPositions.begin() - 1;
-        int column = qLowerBound(d->columnPositions, headerPoint.x()) - d->columnPositions.begin() - 1;
+        QVector<qreal>::const_iterator start = d->rowPositions.constBegin();
+        QVector<qreal>::const_iterator end = d->rowPositions.constBegin() + d->headerRows + 1;
+        int row = qLowerBound(start, end, headerPoint.y()) - d->rowPositions.constBegin() - 1;
+        int column = qLowerBound(d->columnPositions, headerPoint.x()) - d->columnPositions.constBegin() - 1;
         QTextTableCell cell = d->table->cellAt(row, qBound(0, column, d->table->columns() - 1));
         return d->cellAreas[cell.row()][cell.column()]->hitTest(headerPoint, accuracy);
     }
@@ -611,6 +612,9 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
 
 bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qreal topBorderWidth, qreal bottomBorderWidth, qreal rowBottom)
 {
+    Q_UNUSED(topBorderWidth)
+    Q_UNUSED(bottomBorderWidth)
+
     // Let's make sure all merged cells in this row, that don't end in this row get's a layout
     int row = cursor->row;
     int col = 0;
@@ -701,6 +705,8 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
 
     QVector<QLineF> accuBlankBorders;
 
+    bool hasAntialiasing = painter->testRenderHint(QPainter::Antialiasing);
+
     // Draw header row cell backgrounds and contents AND borders.
     for (int row = 0; row < d->headerRows; ++row) {
         for (int column = 0; column < d->table->columns(); ++column) {
@@ -709,7 +715,9 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
             if (d->cellAreas[row][column]) {
                 paintCell(painter, context, tableCell);
 
+                painter->setRenderHint(QPainter::Antialiasing, true);
                 paintCellBorders(painter, context, tableCell, false, &accuBlankBorders);
+                painter->setRenderHint(QPainter::Antialiasing, hasAntialiasing);
             }
         }
     }
@@ -723,6 +731,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
 
     bool topRow = !d->headerRows && firstRow != 0; // are we top row in this area
 
+    painter->setRenderHint(QPainter::Antialiasing, true);
     for (int row = firstRow; row <= lastRow; ++row) {
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
@@ -733,6 +742,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
         }
         topRow = false;
     }
+    painter->setRenderHint(QPainter::Antialiasing, hasAntialiasing);
 
     if (d->collapsing && firstRow != 0) {
     }
@@ -752,7 +762,7 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
     QRectF bRect(cellBoundingRect(tableCell));
 
     // Possibly paint the background of the cell
-    QVariant background(tableCell.format().property(KoTableBorderStyle::CellBackgroundBrush));
+    QVariant background(tableCell.format().property(KoTableCellStyle::CellBackgroundBrush));
     if (!background.isNull()) {
         painter->fillRect(bRect, qvariant_cast<QBrush>(background));
     }
@@ -792,14 +802,15 @@ void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocu
 
     // This is an actual cell we want to draw, and not a covered one.
     QTextTableCellFormat tfm(tableCell.format().toTableCellFormat());
-    KoTableBorderStyle cellStyle(tfm);
+    KoTableCellStyle cellStyle(tfm);
+    KoTextLayoutCellHelper cellStyleHelper(cellStyle);
 
     QRectF bRect = cellBoundingRect(tableCell);
 
     if (d->collapsing) {
         // First the horizontal borders
         if (row == 0) {
-            cellStyle.drawTopHorizontalBorder(*painter, bRect.x(), bRect.y(), bRect.width(), accuBlankBorders);
+            cellStyleHelper.drawTopHorizontalBorder(*painter, bRect.x(), bRect.y(), bRect.width(), accuBlankBorders);
         }
         if (topRow) {
             // in collapsing mode we need to also paint the top border of the area
@@ -810,14 +821,15 @@ void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocu
                 QRectF aboveBRect = cellBoundingRect(tableCellAbove);
                 qreal x = qMax(bRect.x(), aboveBRect.x());
                 qreal x2 = qMin(bRect.right(), aboveBRect.right());
-                KoTableBorderStyle cellAboveStyle(aboveTfm);
-                cellAboveStyle.drawSharedHorizontalBorder(*painter, cellStyle, x, bRect.y(), x2 - x, accuBlankBorders);
+                KoTableCellStyle cellAboveStyle(aboveTfm);
+                KoTextLayoutCellHelper cellAboveStyleHelper(cellAboveStyle);
+                cellAboveStyleHelper.drawSharedHorizontalBorder(*painter, cellStyle, x, bRect.y(), x2 - x, accuBlankBorders);
                 c = tableCellAbove.column() + tableCellAbove.columnSpan();
             }
         }
         if (row + tableCell.rowSpan() == d->table->rows()) {
             // we hit the bottom of the table so just draw the bottom border
-            cellStyle.drawBottomHorizontalBorder(*painter, bRect.x(), bRect.bottom(), bRect.width(), accuBlankBorders);
+            cellStyleHelper.drawBottomHorizontalBorder(*painter, bRect.x(), bRect.bottom(), bRect.width(), accuBlankBorders);
         } else {
             int c = column;
             while (c < column + tableCell.columnSpan()) {
@@ -827,38 +839,40 @@ void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocu
                 QRectF belowBRect = cellBoundingRect(tableCellBelow);
                 qreal x = qMax(bRect.x(), belowBRect.x());
                 qreal x2 = qMin(bRect.right(), belowBRect.right());
-                KoTableBorderStyle cellBelowStyle(belowTfm);
-                cellStyle.drawSharedHorizontalBorder(*painter, cellBelowStyle, x, bRect.bottom(), x2 - x, accuBlankBorders);
+                KoTableCellStyle cellBelowStyle(belowTfm);
+                KoTextLayoutCellHelper cellBelowStyleHelper(cellBelowStyle);
+                cellStyleHelper.drawSharedHorizontalBorder(*painter, cellBelowStyle, x, bRect.bottom(), x2 - x, accuBlankBorders);
                 c = tableCellBelow.column() + tableCellBelow.columnSpan();
             }
         }
 
         // And then the same treatment for vertical borders
         if (column == 0) {
-            cellStyle.drawLeftmostVerticalBorder(*painter, bRect.x(), bRect.y(), bRect.height() + cellStyle.bottomOuterBorderWidth(), accuBlankBorders);
+            cellStyleHelper.drawLeftmostVerticalBorder(*painter, bRect.x(), bRect.y(), bRect.height() + cellStyle.bottomOuterBorderWidth(), accuBlankBorders);
         }
         if (column + tableCell.columnSpan() == d->table->columns()) {
             // we hit the rightmost edge of the table so draw the rightmost border
-            cellStyle.drawRightmostVerticalBorder(*painter, bRect.right(), bRect.y(), bRect.height() + cellStyle.bottomOuterBorderWidth(), accuBlankBorders);
+            cellStyleHelper.drawRightmostVerticalBorder(*painter, bRect.right(), bRect.y(), bRect.height() + cellStyle.bottomOuterBorderWidth(), accuBlankBorders);
         } else {
             // we have cells to the right so draw sharedborders
             int r = row;
             while (r < row + tableCell.rowSpan()) {
                 QTextTableCell tableCellRight = d->table->cellAt(r, column + tableCell.columnSpan());
                 QTextTableCellFormat rightTfm(tableCellRight.format().toTableCellFormat());
-                KoTableBorderStyle cellBelowRight(rightTfm);
+                KoTableCellStyle cellBelowRight(rightTfm);
+                KoTextLayoutCellHelper cellBelowRightHelper(cellBelowRight);
                 QRectF rightBRect = cellBoundingRect(tableCellRight);
                 qreal y = qMax(bRect.y(), rightBRect.y());
                 qreal y2 = qMin(bRect.bottom() + cellStyle.bottomOuterBorderWidth(), rightBRect.bottom() + cellBelowRight.bottomOuterBorderWidth());
-                cellStyle.drawSharedVerticalBorder(*painter, cellBelowRight, bRect.right(), y, y2-y, accuBlankBorders);
+                cellBelowRightHelper.drawSharedVerticalBorder(*painter, cellBelowRight, bRect.right(), y, y2-y, accuBlankBorders);
                 r = tableCellRight.row() + rightTfm.tableCellRowSpan();
             }
         }
 
         // Paint diagonal borders for current cell
-        cellStyle.paintDiagonalBorders(*painter, bRect);
+        cellStyleHelper.paintDiagonalBorders(*painter, bRect);
     } else { // separating border model
-        cellStyle.paintBorders(*painter, bRect, accuBlankBorders);
+        cellStyleHelper.paintBorders(*painter, bRect, accuBlankBorders);
     }
 }
 

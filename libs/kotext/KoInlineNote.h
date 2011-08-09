@@ -45,7 +45,7 @@ public:
     };
 
     /**
-     * Construct a new note to be inserted in the text using KoTextSelectionHandler::insertInlineObject() for example.
+     * Construct a new note to be inserted in the text using KoTextEditor::insertInlineObject() for example.
      * @param type the type of note, which specifies how the application will use the text from the new note.
      */
     KoInlineNote(Type type);
@@ -101,7 +101,7 @@ public:
 
 protected:
     /// reimplemented
-    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
+    virtual void updatePosition(const QTextDocument *document,
                                 int posInDocument, const QTextCharFormat &format);
     /// reimplemented
     virtual void resize(const QTextDocument *document, QTextInlineObject object,

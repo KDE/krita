@@ -1855,7 +1855,7 @@ KoDeleteChangeMarker * KoTextLoader::Private::insertDeleteChangeMarker(QTextCurs
         changeElement->setChangeType(KoGenChange::DeleteChange);
         KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
         if (textObjectManager) {
-            deleteChangemarker->updatePosition(cursor.block().document(), QTextInlineObject(), cursor.position(), QTextCharFormat());
+            deleteChangemarker->updatePosition(cursor.block().document(), cursor.position(), QTextCharFormat());
             textObjectManager->insertInlineObject(cursor, deleteChangemarker);
         }
         retMarker = deleteChangemarker;
@@ -1963,6 +1963,9 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 
     if (d->changeTracker && d->changeStack.count()) {
         tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
+    }
+    if (tableElem.attributeNS(KoXmlNS::table, "protected", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::TableIsProtected, true);
     }
     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
     d->inTable = true;

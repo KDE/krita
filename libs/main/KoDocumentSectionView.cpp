@@ -21,6 +21,8 @@
 #include "KoDocumentSectionDelegate.h"
 #include "KoDocumentSectionModel.h"
 
+#include <KIconLoader>
+
 #include <QtDebug>
 #include <QContextMenuEvent>
 #include <QHeaderView>
@@ -29,6 +31,8 @@
 #include <QMouseEvent>
 #include <QPersistentModelIndex>
 #include <QApplication>
+#include <QPainter>
+#include <QScrollBar>
 
 class KoDocumentSectionView::Private
 {
@@ -42,6 +46,7 @@ public:
 
 KoDocumentSectionView::KoDocumentSectionView(QWidget *parent)
     : QTreeView(parent)
+    , m_dragingFlag(false)
     , d(new Private)
 {
     d->delegate = new KoDocumentSectionDelegate(this, this);
@@ -200,6 +205,143 @@ QStyleOptionViewItem KoDocumentSectionView::optionForIndex(const QModelIndex &in
         option.state |= QStyle::State_HasFocus;
     return option;
 }
+
+void KoDocumentSectionView::startDrag(Qt::DropActions supportedActions)
+{
+    if (displayMode() == KoDocumentSectionView::ThumbnailMode) {
+        const QModelIndexList indexes = selectionModel()->selectedIndexes();
+        if (!indexes.isEmpty()) {
+            QMimeData *data = model()->mimeData(indexes);
+            if (!data) {
+                return;
+            }
+            QDrag *drag = new QDrag(this);
+            drag->setPixmap(createDragPixmap());
+            drag->setMimeData(data);
+            //m_dragSource = this;
+            drag->exec(supportedActions);
+        }
+    }
+    else {
+        QTreeView::startDrag(supportedActions);
+    }
+}
+
+QPixmap KoDocumentSectionView::createDragPixmap() const
+{
+    const QModelIndexList selectedIndexes = selectionModel()->selectedIndexes();
+    Q_ASSERT(!selectedIndexes.isEmpty());
+
+    const int itemCount = selectedIndexes.count();
+
+    // If more than one item is dragged, align the items inside a
+    // rectangular grid. The maximum grid size is limited to 4 x 4 items.
+    int xCount = 2;
+    int size = 96;
+    if (itemCount > 9) {
+        xCount = 4;
+        size = KIconLoader::SizeLarge;
+    }
+    else if (itemCount > 4) {
+        xCount = 3;
+        size = KIconLoader::SizeHuge;
+    }
+    else if (itemCount < xCount) {
+        xCount = itemCount;
+    }
+
+    int yCount = itemCount / xCount;
+    if (itemCount % xCount != 0) {
+        ++yCount;
+    }
+
+    if (yCount > xCount) {
+        yCount = xCount;
+    }
+
+    // Draw the selected items into the grid cells
+    QPixmap dragPixmap(xCount * size + xCount - 1, yCount * size + yCount - 1);
+    dragPixmap.fill(Qt::transparent);
+
+    QPainter painter(&dragPixmap);
+    int x = 0;
+    int y = 0;
+    foreach (const QModelIndex &selectedIndex, selectedIndexes) {
+        const QImage img = selectedIndex.data(int(Model::BeginThumbnailRole) + size).value<QImage>();
+        painter.drawPixmap(x, y, QPixmap().fromImage(img.scaled(QSize(size, size), Qt::KeepAspectRatio)));
+
+        x += size + 1;
+        if (x >= dragPixmap.width()) {
+            x = 0;
+            y += size + 1;
+        }
+        if (y >= dragPixmap.height()) {
+            break;
+        }
+    }
+
+    return dragPixmap;
+}
+
+void KoDocumentSectionView::paintEvent(QPaintEvent *event)
+{
+    event->accept();
+    QTreeView::paintEvent(event);
+
+    // Paint the line where the slide should go
+    if (isDraging() && (displayMode() == KoDocumentSectionView::ThumbnailMode)) {
+        QPoint cursorPosition = QWidget::mapFromGlobal(QCursor::pos());
+        QSize size(visualRect(indexAt(cursorPosition)).width(), visualRect(indexAt(cursorPosition)).height());
+
+        int numberRow = indexAt(cursorPosition).row();
+        int scrollBarValue = verticalScrollBar()->value();
+
+        QPoint point1(0, (numberRow + 1) * size.height() - scrollBarValue);
+        QPoint point2(size.width(), (numberRow + 1) * size.height() - scrollBarValue);
+        QLineF line(point1, point2);
+
+        QPainter painter(this->viewport());
+        QPen pen = QPen(palette().brush(QPalette::Highlight), 4);
+        pen.setCapStyle(Qt::RoundCap);
+        painter.setPen(pen);
+        painter.setOpacity(0.8);
+        painter.drawLine(line);
+    }
+}
+
+void KoDocumentSectionView::dropEvent(QDropEvent *ev)
+{
+    setDragingFlag(false);
+    QTreeView::dropEvent(ev);
+}
+
+void KoDocumentSectionView::dragMoveEvent(QDragMoveEvent *ev)
+{
+    ev->accept();
+    if (!model()) {
+        return;
+    }
+    QTreeView::dragMoveEvent(ev);
+    setDragingFlag();
+    viewport()->update();
+}
+
+void KoDocumentSectionView::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    Q_UNUSED(e);
+    setDragingFlag(false);
+}
+
+bool KoDocumentSectionView::isDraging() const
+{
+    return m_dragingFlag;
+}
+
+void KoDocumentSectionView::setDragingFlag(bool flag)
+{
+    m_dragingFlag = flag;
+}
+
 
 #include <KoDocumentSectionPropertyAction_p.moc>
 #include <KoDocumentSectionView.moc>

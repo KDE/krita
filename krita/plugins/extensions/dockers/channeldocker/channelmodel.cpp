@@ -71,12 +71,12 @@ QVariant ChannelModel::headerData(int section, Qt::Orientation orientation, int 
 }
 
 
-int ChannelModel::rowCount(const QModelIndex& parent) const
+int ChannelModel::rowCount(const QModelIndex& /*parent*/) const
 {
     return m_currentLayer.isValid() ? m_currentLayer->colorSpace()->channelCount() : 0;
 }
 
-int ChannelModel::columnCount(const QModelIndex& parent) const
+int ChannelModel::columnCount(const QModelIndex& /*parent*/) const
 {
     return dynamic_cast<const KisPaintLayer*>(m_currentLayer.data()) ? 2 : 1;
 }
@@ -114,7 +114,7 @@ bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int 
     return false;
 }
 
-Qt::ItemFlags ChannelModel::flags(const QModelIndex& index) const
+Qt::ItemFlags ChannelModel::flags(const QModelIndex& /*index*/) const
 {
     Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
     return flags;

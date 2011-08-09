@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007,2008 Sebastian Sauer <mail@dipe.org>
- * Copyright (C) 2007-2011 Pierre Ducroquet <pinaraf@gmail.com>
+ * Copyright (C) 2007-2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
@@ -1133,6 +1133,18 @@ KoParagraphStyle::VerticalAlign KoParagraphStyle::verticalAlignment() const
     return VAlignAuto;
 }
 
+void KoParagraphStyle::setShadow(const KoShadowStyle &shadow)
+{
+    d->setProperty(Shadow, QVariant::fromValue<KoShadowStyle>(shadow));
+}
+
+KoShadowStyle KoParagraphStyle::shadow() const
+{
+    if (hasProperty(Shadow))
+        return value(Shadow).value<KoShadowStyle>();
+    return KoShadowStyle();
+}
+
 void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContext &scontext)
 {
     KoOdfLoadingContext &context = scontext.odfLoadingContext();
@@ -1682,6 +1694,13 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             setVerticalAlignment(VAlignTop);
     }
     
+     
+    if (styleStack.hasProperty(KoXmlNS::style, "shadow")) {
+        KoShadowStyle shadow;
+        if (shadow.loadOdf(styleStack.property(KoXmlNS::style, "shadow")))
+            setShadow(shadow);
+    }
+
     //following properties KoParagraphStyle provides us are not handled now;
     // LineSpacingFromFont,
     // FollowDocBaseline,
@@ -2021,6 +2040,8 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
                 style.addProperty("style:vertical-align", "middle", KoGenStyle::ParagraphType);
             else if (valign == VAlignTop)
                 style.addProperty("style:vertical-align", "top", KoGenStyle::ParagraphType);
+        } else if (key == Shadow) {
+            style.addProperty("style:shadow", shadow().saveOdf());
         }
     }
     if (!writtenLineSpacing && propertyBoolean(NormalLineHeight))
@@ -2065,21 +2086,13 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
                                     QString::number(bottomBorderWidth()));
     if (leftBorderLineWidth == rightBorderLineWidth &&
             leftBorderLineWidth == topBorderLineWidth &&
-            leftBorderLineWidth == bottomBorderLineWidth &&
-            leftBorderStyle() == KoBorder::BorderDouble &&
-            rightBorderStyle() == KoBorder::BorderDouble &&
-            topBorderStyle() == KoBorder::BorderDouble &&
-            bottomBorderStyle() == KoBorder::BorderDouble) {
+            leftBorderLineWidth == bottomBorderLineWidth ) {
         style.addProperty("style:border-line-width", leftBorderLineWidth, KoGenStyle::ParagraphType);
     } else {
-        if (leftBorderStyle() == KoBorder::BorderDouble)
-            style.addProperty("style:border-line-width-left", leftBorderLineWidth, KoGenStyle::ParagraphType);
-        if (rightBorderStyle() == KoBorder::BorderDouble)
-            style.addProperty("style:border-line-width-right", rightBorderLineWidth, KoGenStyle::ParagraphType);
-        if (topBorderStyle() == KoBorder::BorderDouble)
-            style.addProperty("style:border-line-width-top", topBorderLineWidth, KoGenStyle::ParagraphType);
-        if (bottomBorderStyle() == KoBorder::BorderDouble)
-            style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, KoGenStyle::ParagraphType);
+        style.addProperty("style:border-line-width-left", leftBorderLineWidth, KoGenStyle::ParagraphType);
+        style.addProperty("style:border-line-width-right", rightBorderLineWidth, KoGenStyle::ParagraphType);
+        style.addProperty("style:border-line-width-top", topBorderLineWidth, KoGenStyle::ParagraphType);
+        style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, KoGenStyle::ParagraphType);
     }
     const int indentation = 4; // indentation for children of office:styles/style:style/style:paragraph-properties
     // drop-caps

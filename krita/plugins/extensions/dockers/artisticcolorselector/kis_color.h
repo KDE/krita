@@ -20,6 +20,8 @@
 #ifndef H_KIS_COLOR_H
 #define H_KIS_COLOR_H
 
+#define EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
+
 #include <QtGlobal>
 #include <Eigen/Core>
 #include <QColor>
@@ -132,5 +134,7 @@ private:
 private:
     quint8 m_coreData[sizeof(Core)];
 };
+
+#undef EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
 
 #endif // H_KIS_COLOR_H

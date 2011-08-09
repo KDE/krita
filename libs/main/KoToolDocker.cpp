@@ -71,6 +71,13 @@ public:
     QToolButton *lockButton;
     QToolButton *tabButton;
 
+    void resetWidgets()
+    {
+        currentWidgetList.clear();
+        qDeleteAll(currentAuxWidgets);
+        currentAuxWidgets.clear();
+    }
+
     void recreateLayout(const QList<QWidget *> &optionWidgetList)
     {
         foreach(QWidget* widget, currentWidgetList) {
@@ -274,6 +281,11 @@ void KoToolDocker::resizeEvent(QResizeEvent*)
     int fw = isFloating() ? style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, this) : 0;
     d->lockButton->move(width() - d->lockButton->width() - d->scrollArea->verticalScrollBar()->sizeHint().width(), fw);
     d->tabButton->move(d->lockButton->x() - d->tabButton->width() - 2, d->lockButton->y());
+}
+
+void KoToolDocker::resetWidgets()
+{
+    d->resetWidgets();
 }
 
 #include <KoToolDocker_p.moc>

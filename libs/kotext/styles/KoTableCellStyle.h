@@ -27,6 +27,7 @@
 #include "kotext_export.h"
 
 #include <KoBorder.h>
+#include <KoShadowStyle.h>
 #include <QColor>
 
 #include <QObject>
@@ -97,7 +98,8 @@ public:
         VerticalAlignment,          ///< the vertical alignment oinside the cell
         MasterPageName,             ///< Optional name of the master-page
         InlineRdf,                  ///< Optional KoTextInlineRdf object
-        Borders                     ///< KoBorder, the borders of this cell
+        Borders,                    ///< KoBorder, the borders of this cell
+        Shadow                      ///< KoShadowStyle, the shadow of this cell
     };
 
     /// Constructor
@@ -206,6 +208,9 @@ public:
 
     void setBorders(const KoBorder &borders);
     KoBorder borders() const;
+
+    void setShadow (const KoShadowStyle &shadow);
+    KoShadowStyle shadow() const;
 
     /// set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableCellStyle *parent);

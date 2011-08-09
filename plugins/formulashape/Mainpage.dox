@@ -1,0 +1,65 @@
+/**
+ * \mainpage KoFormulaShape
+ *
+ * KoFormulaShape is a flake shape ( derived from KoShape ) that implements the
+ * functionality to edit and show a mathematical formula. Its structure is highly
+ * related to the MathML markup language which is the ODF standard format for
+ * formula markup. At the moment the KoFormulaShape implements only parts of the
+ * MathML presentation markup, content markup is not supported.
+ *
+ * Every formula is stored as a tree of element objects that more or less are
+ * equivalent to the XML structure of the MathML they were loaded from.
+ * The element objects are classes that derive all from the BasicElement class.
+ * They all implement a special interface which is used to alter and navigate
+ * through them.
+ *
+ * The element tree's highest element is an object of the class FormulaElement.
+ * This object is a private member of the FormulaShape class which implements the
+ * public interface of a flake shape.
+ * The according flake tool is implemented in FormulaTool and contains an instance
+ * of FormulaEditor which is used for navigating and modifying the formula.
+ * A FormulaEditor holds a FormulaCursor that represents a position or selection in
+ * the formula, it consists of a start position, simply called position and (if selecting)
+ * an end position of the selection, called mark. It can be modified in various ways.
+ * The FormulaEditor provides methods for modifying the formula according to current 
+ * cursor. These methods return a QUndoCommand, that is wrapped in a FormulaUpdateCommand
+ * (this has to be done to allow the notification of the shape/tool of data changes while
+ * keeping a sepearation between the kformulalib part and the flake part) and than pushed
+ * on the documents undo stack.
+ *
+ * The complex system of attributes which can be hold by the single elements is
+ * completely implemented in the AttributeManager class. The attributes are
+ * generically loaded and stored inside the elements and obtain and parse their
+ * values the elements use AttributeManager which also deals with heritage and
+ * default values.
+ *
+ * MathML specifies a scaling mechanism that uses the scriptlevel attribute. This
+ * mechanism is implemented in BasicElement using the m_scalingFactor. This is the
+ * factor the element is scaled in relation to its parent element. The value is
+ * determined in during layouting in FormulaRenderer class.
+ *
+ * There are a number of elements that do not inherit BasicElement directly but
+ * instead through RowElement. These classes are referred to as the inferred
+ * row elements - see MathML spec 3.1.3.1. 
+ *
+ * Most other elements, especially those with a fixed number of childs, but also
+ * multiscript elements, inherit from FixedElement, which provides some convinience
+ * methods and default implementations to them.
+ *
+ * The MathML specification lists default values for operator's layouting. These
+ * values are different for every element class so each of them implements a
+ * defaultAttributeValue() method that returns the hardcoded default value of the
+ * passed attribute.
+ *
+ * The FormulaCursor class contains a current element, where the cursor is in.
+ * Each element provides a certain number of cursor positions, for example
+ * a token element has a cursor position before each letter and one at the end.
+ * The position and mark (as mentioned above) are in respect to the cursor positions
+ * of the current element. Each element implements a moveCursor method that is called
+ * with the cursor position before the move (oldCursor) and the (maybe already modified)
+ * new cursor position that the element changes according to it's direction. Additionally
+ * each element implements a acceptCursor method, where it can specify if it accepts
+ * this cursor (also according to it's position and selection state) or if the cursor
+ * should be moved further.
+ *
+ */

@@ -61,6 +61,9 @@ private:
     
     friend class KisNodeManager;
     
+    /**
+     * Activate the specified layer. The layer may be 0.
+     */
     void activateLayer(KisLayerSP layer);
 
     KisLayerSP activeLayer();

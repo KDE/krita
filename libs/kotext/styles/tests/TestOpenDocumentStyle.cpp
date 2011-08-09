@@ -32,6 +32,7 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
+#include <KoShadowStyle.h>
 
 #include <KDebug>
 
@@ -150,11 +151,13 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
         }
     }
     
-    if (m_name == "fo:line-height") {
+    if ((m_name == "fo:line-height") || (m_name == "style:line-height-at-least")) {
         // Here, the OpenDocument specification has problems.
         // A line height can obviously not be zero...
         // Still, they used nonNegativeLength instead of positiveLength ?
         m_references.removeOne("nonNegativeLength");
+        m_references.removeOne("percent");
+        m_references << "nonZeroPercent";
         m_references << "positiveLength";
     }
     if ((m_references.contains("string")) && ((m_name == "fo:border") || (m_name == "fo:border-top") || (m_name == "fo:border-bottom") || (m_name == "fo:border-right") || (m_name == "fo:border-left") || (m_name == "style:diagonal-tl-br") || (m_name == "style:diagonal-bl-tr"))) {
@@ -183,8 +186,11 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             result << "0" << "42";
         } else if (reference == "percent") {
             result << "-50%" << "0%" << "100%" << "42%";
+        } else if (reference == "nonZeroPercent") { 
+            // This is not in the spec
+            result << "100%" << "42%" << "-30%";
         } else if (reference == "borderWidths") {
-            result << "42px 42pt 12cm" << "0px 0pt 0cm";
+            result << "42px 42pt 12cm" << "2pt 23pt 0cm";
         } else if (reference == "angle") {
             result << "5deg" << "1rad" << "400grad" << "3.14159265rad" << "45";    // OpenDocument 1.1 : no unit == degrees
         } else if (reference == "zeroToHundredPercent") {
@@ -228,6 +234,21 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
                 return true;
         } else if (reference == "angle") {
             return qAbs(KoUnit::parseAngle(initialValue) - KoUnit::parseAngle(outputValue)) < 0.0001;
+        } else if (reference == "shadowType") {
+            KoShadowStyle initial, output;
+            Q_ASSERT(initial.loadOdf(initialValue));
+            Q_ASSERT(output.loadOdf(outputValue));
+            return (initial == output);
+        } else if (reference == "borderWidths") {
+            QStringList initials, outputs;
+            initials = initialValue.split(" ");
+            outputs = outputValue.split(" ");
+            if (initials.length() != outputs.length())
+                return false;
+            for (int i = 0 ; i < initials.length() ; i++)
+                if (qAbs(KoUnit::parseValue(initials[i]) - KoUnit::parseValue(outputs[i])) > 0.0001)
+                    return false;
+            return true;
         }
     }
     if (!m_equivalences.empty()) {
@@ -367,6 +388,13 @@ void loadOdf<KoParagraphStyle>(KoParagraphStyle* genStyle, const KoXmlElement *m
     genStyle->loadOdf(mainElement, shapeCtxt);
 }
 
+template<>
+void loadOdf<KoCharacterStyle>(KoCharacterStyle* genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
+{
+    KoShapeLoadingContext shapeCtxt(loadCtxt, 0);
+    genStyle->loadOdf(shapeCtxt);
+}
+
 template<class T>
 void saveOdf(T* genStyle, KoGenStyle *styleWriter)
 {
@@ -416,7 +444,6 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     KoXmlElement root = generatedXmlReader->documentElement();
     KoXmlElement properties = root.firstChild().toElement();
     QString outputPropertyValue = properties.attribute(attribute->name());
-    kDebug(32500) << "Comparing " << outputPropertyValue << "obtained for " << value;
     if (properties.attributeNames().count() > 1)
     {
         kWarning(32500) << "Warning : got more than one attribute !";
@@ -427,9 +454,12 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
 	output.loadOdf(properties);
 	return (original == output);
     }
-    if (!attribute->compare(value, outputPropertyValue))
-        kWarning(32500) << generatedXmlOutput;
-    return attribute->compare(value, outputPropertyValue);
+    bool result = attribute->compare(value, outputPropertyValue);
+    if (!result) {
+        kDebug(32500) << "Comparison failed : " << outputPropertyValue << "obtained for " << value;
+        kDebug(32500) << generatedXmlOutput;
+    }
+    return result;
 }
 
 void TestOpenDocumentStyle::testTableColumnStyle_data()
@@ -531,6 +561,28 @@ void TestOpenDocumentStyle::testParagraphStyle()
 
     QVERIFY(basicTestFunction<KoParagraphStyle>(KoGenStyle::ParagraphStyle, "paragraph", attribute, value));
 }
+
+/*
+void TestOpenDocumentStyle::testCharacterStyle_data()
+{
+    QList<Attribute*> attributes = listAttributesFromRNGName("style-text-properties");
+    QTest::addColumn<Attribute*>("attribute");
+    QTest::addColumn<QString>("value");
+    foreach (Attribute *attribute, attributes) {
+        foreach (QString value, attribute->listValues()) {
+            QTest::newRow(attribute->name().toLatin1()) << attribute << value;
+        }
+    }
+}
+
+void TestOpenDocumentStyle::testCharacterStyle()
+{
+    QFETCH(Attribute*, attribute);
+    QFETCH(QString, value);
+
+    QVERIFY(basicTestFunction<KoCharacterStyle>(KoGenStyle::TextStyle, "character", attribute, value));
+}
+*/
 
 QTEST_MAIN(TestOpenDocumentStyle)
 #include <TestOpenDocumentStyle.moc>

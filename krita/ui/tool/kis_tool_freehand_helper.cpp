@@ -110,6 +110,10 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                                               undoAdapter,
                                               resourceManager);
 
+    if(overrideNode) {
+        m_d->resources->setCurrentNode(overrideNode);
+    }
+
     bool indirectPainting = m_d->resources->needsIndirectPainting();
 
     KisStrokeStrategy *stroke =

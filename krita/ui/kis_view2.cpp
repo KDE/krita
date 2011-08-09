@@ -728,6 +728,12 @@ void KisView2::connectCurrentImage()
 
         }
         connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->resourceProvider, SLOT(slotImageSizeChanged()));
+
+        connect(image(), SIGNAL(sigResolutionChanged(double, double)),
+                m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
+        connect(zoomManager()->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
+                m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
+
         connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), this, SLOT(slotImageSizeChanged()));
         connect(image(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageSizeChanged()));
         connect(image()->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));

@@ -71,6 +71,9 @@ public:
     // A callback for our own node graph listener
     void imageUpdated(const QRect &rect);
 
+    // A callback for scratch pad default bounds
+    QRect imageBounds() const;
+
 public slots:
     void fillDefault();
     void fillGradient();

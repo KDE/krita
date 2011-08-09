@@ -75,10 +75,18 @@ private:
 class KisScratchPadDefaultBounds : public KisDefaultBounds
 {
 public:
-    QRect bounds() const
+
+    KisScratchPadDefaultBounds(KisScratchPad *scratchPad)
+        : m_scratchPad(scratchPad)
     {
-        return QRect();
     }
+
+    QRect bounds() const {
+        return m_scratchPad->imageBounds();
+    }
+
+private:
+    KisScratchPad *m_scratchPad;
 };
 
 
@@ -257,6 +265,11 @@ void KisScratchPad::updateTransformations()
     m_eventFilter->setWidgetToDocumentTransform(widgetToDocument());
 }
 
+QRect KisScratchPad::imageBounds() const
+{
+    return widgetToDocument().mapRect(rect());
+}
+
 void KisScratchPad::imageUpdated(const QRect &rect)
 {
     emit sigUpdateCanvas(documentToWidget().mapRect(QRectF(rect)).toAlignedRect());
@@ -321,7 +334,7 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
 
     m_paintLayer = new KisPaintLayer(0, "ScratchPad", OPACITY_OPAQUE_U8, paintDevice);
     m_paintLayer->setGraphListener(m_nodeListener);
-    paintDevice->setDefaultBounds(new KisScratchPadDefaultBounds());
+    paintDevice->setDefaultBounds(new KisScratchPadDefaultBounds(this));
 
     fillDefault();
 }

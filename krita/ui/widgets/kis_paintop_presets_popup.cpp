@@ -89,6 +89,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.fillGradient->setIcon(KIcon("krita_tool_gradient"));
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KIcon("krita_tool_color_fill"));
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KIcon("edit-clear"));
+    m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KIcon("krita_paintop_icon"));
 
     connect(m_d->uiWdgPaintOpPresetSettings.eraseScratchPad, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillDefault()));
@@ -101,6 +102,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->uiWdgPaintOpPresetSettings.fillSolid, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillBackground()));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.paintPresetIcon, SIGNAL(clicked()),
+            m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(paintPresetImage()));
 
     m_d->settingsWidget = 0;
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
@@ -255,7 +259,7 @@ void KisPaintOpPresetsPopup::showScratchPad()
 
 void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 {
-        m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
+    m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
 }
 
 void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& list)
@@ -276,7 +280,6 @@ QString KisPaintOpPresetsPopup::currentPaintOp()
 void KisPaintOpPresetsPopup::setPresetImage(const QImage& image)
 {
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setPresetImage(image);
-    m_d->uiWdgPaintOpPresetSettings.scratchPad->paintPresetImage();
 }
 
 void KisPaintOpPresetsPopup::hideEvent(QHideEvent *event)

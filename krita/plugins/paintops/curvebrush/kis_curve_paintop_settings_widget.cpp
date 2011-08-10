@@ -16,67 +16,39 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <kis_curve_paintop_settings_widget.h>
+#include <kis_properties_configuration.h>
+#include <kis_curve_paintop_settings.h>
 
-#include "kis_curve_paintop_settings.h"
+#include "kis_curve_line_option.h"
+#include <kis_compositeop_option.h>
+#include <kis_paint_action_type_option.h>
+#include <kis_curve_option_widget.h>
+#include <kis_pressure_opacity_option.h>
+#include <kis_linewidth_option.h>
+#include "kis_curves_opacity_option.h"
 
 KisCurvePaintOpSettingsWidget:: KisCurvePaintOpSettingsWidget(QWidget* parent)
-        : KisPaintOpSettingsWidget(parent)
+        : KisPaintOpOptionsWidget(parent)
 {
-    m_options = new Ui::WdgCurveOptions();
-    m_options->setupUi(this);
-    
-    connect(m_options->mode1Btn,SIGNAL(toggled(bool)),this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_options->mode2Btn,SIGNAL(toggled(bool)),this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_options->mode3Btn,SIGNAL(toggled(bool)),this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_options->minDistSPBox,SIGNAL(valueChanged(int)),this, SIGNAL(sigConfigurationUpdated()));
-    connect(m_options->pulseSPBox, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
+    addPaintOpOption(new KisCurveOpOption());
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisLineWidthOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisCurvesOpacityOption()));
+    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(new KisPaintActionTypeOption());
 }
 
 KisCurvePaintOpSettingsWidget::~ KisCurvePaintOpSettingsWidget()
 {
-    delete m_options;
 }
 
-void  KisCurvePaintOpSettingsWidget::setConfiguration(const KisPropertiesConfiguration * config)
-{
-    m_options->minDistSPBox->setValue(config->getInt(CURVE_MIN_DISTANCE));
-    m_options->pulseSPBox->setValue(config->getInt(CURVE_INTERVAL));
-
-    switch (config->getInt(CURVE_MODE)){
-        case 1:
-            m_options->mode1Btn->setChecked(true); break;
-        case 2:
-            m_options->mode2Btn->setChecked(true); break;
-        case 3:
-            m_options->mode3Btn->setChecked(true); break;
-        default:
-            m_options->mode1Btn->setChecked(true); break;
-    }
-}
 
 KisPropertiesConfiguration*  KisCurvePaintOpSettingsWidget::configuration() const
 {
-    KisCurvePaintOpSettings* settings = new KisCurvePaintOpSettings();
-    settings->setOptionsWidget(const_cast<KisCurvePaintOpSettingsWidget*>(this));
-    return settings;
-}
-
-void KisCurvePaintOpSettingsWidget::writeConfiguration(KisPropertiesConfiguration* config) const
-{
-    config->setProperty("paintop", "curvebrush"); // XXX: make this a const id string
-    config->setProperty(CURVE_MIN_DISTANCE, m_options->minDistSPBox->value());  
-    config->setProperty(CURVE_INTERVAL, m_options->pulseSPBox->value());
-    config->setProperty(CURVE_MODE, curveMode());
-}
-
-int  KisCurvePaintOpSettingsWidget::curveMode() const
-{
-    if (m_options->mode1Btn->isChecked()) {
-        return 1;
-    } else if (m_options->mode2Btn->isChecked()) {
-        return 2;
-    } else if (m_options->mode3Btn->isChecked()) {
-        return 3;
-    } else return -1;
+    KisCurvePaintOpSettings* config = new KisCurvePaintOpSettings();
+    config->setOptionsWidget(const_cast<KisCurvePaintOpSettingsWidget*>(this));
+    config->setProperty("paintop", "chalkbrush"); // XXX: make this a const id string
+    writeConfiguration(config);
+    return config;
 }
 

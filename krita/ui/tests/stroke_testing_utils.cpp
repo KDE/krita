@@ -116,9 +116,10 @@ KoResourceManager* utils::createResourceManager(KisImageWSP image,
 }
 
 
-utils::StrokeTester::StrokeTester(const QString &name, const QSize &imageSize)
+utils::StrokeTester::StrokeTester(const QString &name, const QSize &imageSize, const QString &presetFilename)
     : m_name(name),
-      m_imageSize(imageSize)
+      m_imageSize(imageSize),
+      m_presetFilename(presetFilename)
 {
 }
 
@@ -157,12 +158,15 @@ void utils::StrokeTester::testOneStroke(bool cancelled,
     filename = formatFilename(m_name, cancelled, indirectPainting, externalLayer);
     qDebug() << "Testing reference:" << filename;
     image = doStroke(cancelled, indirectPainting, externalLayer);
-    image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + filename);
 
     QImage refImage;
     refImage.load(QString(FILES_DATA_DIR) +
                   QDir::separator() + m_name +
                   QDir::separator() + filename);
+
+    if(image != refImage) {
+        image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + filename);
+    }
 
     QCOMPARE(image, refImage);
 }
@@ -173,6 +177,7 @@ QString utils::StrokeTester::formatFilename(const QString &baseName,
                                             bool externalLayer)
 {
     QString result = baseName;
+    result += "_" + m_presetFilename;
     result += indirectPainting ? "_indirect" : "_incremental";
     result += cancelled ? "_cancelled" : "_finished";
     result += externalLayer ? "_external" : "_internal";
@@ -183,7 +188,7 @@ QString utils::StrokeTester::formatFilename(const QString &baseName,
 QImage utils::StrokeTester::doStroke(bool cancelled, bool indirectPainting, bool externalLayer, bool needQImage)
 {
     KisImageSP image = utils::createImage(0, m_imageSize);
-    KoResourceManager *manager = utils::createResourceManager(image);
+    KoResourceManager *manager = utils::createResourceManager(image, 0, m_presetFilename);
 
     KisPainter *painter = new KisPainter();
     KisResourcesSnapshotSP resources =

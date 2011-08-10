@@ -30,8 +30,8 @@
 class FreehandStrokeTester : public utils::StrokeTester
 {
 public:
-    FreehandStrokeTester()
-        : StrokeTester("freehand", QSize(500, 500))
+    FreehandStrokeTester(const QString &presetFilename)
+        : StrokeTester("freehand", QSize(500, 500), presetFilename)
     {
     }
 
@@ -62,9 +62,15 @@ private:
     KisDistanceInformation m_dragDistance;
 };
 
-void FreehandStrokeTest::testStroke()
+void FreehandStrokeTest::testAutobrushStroke()
 {
-    FreehandStrokeTester tester;
+    FreehandStrokeTester tester("autobrush_300px.kpp");
+    tester.test();
+}
+
+void FreehandStrokeTest::testHatchingStroke()
+{
+    FreehandStrokeTester tester("hatching_30px.kpp");
     tester.test();
 }
 

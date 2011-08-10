@@ -40,7 +40,7 @@ namespace utils {
     class StrokeTester
     {
     public:
-        StrokeTester(const QString &name, const QSize &imageSize);
+        StrokeTester(const QString &name, const QSize &imageSize, const QString &presetFileName = "autobrush_300px.kpp");
         virtual ~StrokeTester();
 
         void test();
@@ -69,6 +69,7 @@ namespace utils {
         KisStrokeId m_strokeId;
         QString m_name;
         QSize m_imageSize;
+        QString m_presetFilename;
     };
 }
 

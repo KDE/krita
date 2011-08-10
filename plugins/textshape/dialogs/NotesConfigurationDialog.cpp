@@ -70,6 +70,7 @@ void NotesConfigurationDialog::endnoteSetup(bool on)
         widget.textareaCombo->setCurrentIndex(5);
         widget.noteareaCombo->setCurrentIndex(6);
     }
+
 }
 
 void NotesConfigurationDialog::apply(QAbstractButton *button)

@@ -176,7 +176,10 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
         notesConfig = KoTextDocument(this->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
     }
     s.append(d->label);
-    QString cite(notesConfig->numberFormat().formattedNumber(d->label.toInt()+notesConfig->startValue()-1));
+    QString cite;
+    if(d->autoNumbering)
+        cite = notesConfig->numberFormat().formattedNumber(d->label.toInt()+notesConfig->startValue()-1);
+    else cite = d->label;
     QTextLayout layout(cite, font, pd);
     layout.setCacheEnabled(true);
     QList<QTextLayout::FormatRange> layouts;
@@ -186,7 +189,7 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     range.format = format;
     range.format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     range.format.setAnchor(true);
-    range.format.setAnchorHref(s);
+    range.format.setAnchorHref('#' + s);
     QBrush *brush = new QBrush(Qt::SolidPattern);
     brush->setColor(Qt::lightGray);
     range.format.setBackground(*brush);
@@ -200,6 +203,7 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     layout.createLine();
     layout.endLayout();
     layout.draw(&painter, rect.topLeft());
+    cite.clear();
 }
 
 bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)

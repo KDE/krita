@@ -251,44 +251,30 @@ void KoInlineTextObjectManager::reNumbering(QTextBlock block)
             if (note && note->type() == KoInlineNote::Footnote) {
                 if(note->autoNumbering()) {
                     note->setLabel(QString().number(i));
-
-                    QTextCursor cursor = note->textFrame()->firstCursorPosition();
-                    cursor.movePosition(QTextCursor::WordRight,QTextCursor::KeepAnchor);
-                    cursor.removeSelectedText();
+                    notesConfig = KoTextDocument(note->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
                     QTextCharFormat *fmat = new QTextCharFormat();
                     fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-                    notesConfig = KoTextDocument(note->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
-                    if(note->autoNumbering()) {
-                        QString s;
-                        s.append(notesConfig->numberFormat().prefix());
-                        s.append(notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1));
-                        s.append(notesConfig->numberFormat().suffix());
-                        cursor.insertText(s,*fmat);
-                    }
-                    fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
-                    cursor.insertText(" ",*fmat);
+                    QTextCursor cursor = note->textFrame()->firstCursorPosition();
+                    QTextFragment frag = cursor.block().begin().fragment();
+                    cursor.setPosition(frag.position(),QTextCursor::MoveAnchor);
+                    cursor.setPosition(frag.position()+frag.length(),QTextCursor::KeepAnchor);
+                    cursor.removeSelectedText();
+                    cursor.insertText(notesConfig->numberFormat().prefix()+notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)+notesConfig->numberFormat().suffix(),*fmat);
                     i++;
                 }
             }
             else if (note && note->type() == KoInlineNote::Endnote) {
                 if(note->autoNumbering()) {
                     note->setLabel(QString().number(j));
-
-                    QTextCursor cursor = note->textFrame()->firstCursorPosition();
-                    cursor.movePosition(QTextCursor::WordRight,QTextCursor::KeepAnchor);
-                    cursor.removeSelectedText();
+                    notesConfig = KoTextDocument(note->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
                     QTextCharFormat *fmat = new QTextCharFormat();
                     fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-                    notesConfig = KoTextDocument(note->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
-                    if(note->autoNumbering()) {
-                        QString s;
-                        s.append(notesConfig->numberFormat().prefix());
-                        s.append(notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1));
-                        s.append(notesConfig->numberFormat().suffix());
-                        cursor.insertText(s,*fmat);
-                    }
-                    fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
-                    cursor.insertText(" ",*fmat);
+                    QTextCursor cursor = note->textFrame()->firstCursorPosition();
+                    QTextFragment frag = cursor.block().begin().fragment();
+                    cursor.setPosition(frag.position(),QTextCursor::MoveAnchor);
+                    cursor.setPosition(frag.position()+frag.length(),QTextCursor::KeepAnchor);
+                    cursor.removeSelectedText();
+                    cursor.insertText(notesConfig->numberFormat().prefix()+notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)+notesConfig->numberFormat().suffix(),*fmat);
                     j++;
                 }
             }
@@ -361,6 +347,7 @@ KoInlineNote *KoInlineTextObjectManager::getFirstNote(QTextBlock block) const
         }
         block = block.next();
     }
+    return (KoInlineNote*)0;
 }
 
 void KoInlineTextObjectManager::documentInformationUpdated(const QString &info, const QString &data)

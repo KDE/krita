@@ -127,7 +127,7 @@ void ReferencesTool::formatTableOfContents()
 
 void ReferencesTool::insertFootNote()
 {
-    connect(textEditor()->document(),SIGNAL(cursorPositionChanged(QTextCursor)),this,SLOT(disableButtons(QTextCursor)));
+    //connect(textEditor()->document(),SIGNAL(cursorPositionChanged(QTextCursor)),this,SLOT(disableButtons(QTextCursor)));
     note = textEditor()->insertFootNote();
     note->setAutoNumbering(sfenw->widget.autoNumbering->isChecked());
     if(note->autoNumbering()) {
@@ -138,23 +138,24 @@ void ReferencesTool::insertFootNote()
     }
 
     QTextCursor cursor(note->textCursor());
+    KoOdfNotesConfiguration *notesConfig;
+    notesConfig = KoTextDocument(textEditor()->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
+
+    QTextCharFormat *cfmat = new QTextCharFormat();
+    cfmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    if(note->autoNumbering())
+        cursor.insertText(notesConfig->numberFormat().prefix()+notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)+notesConfig->numberFormat().suffix(),*cfmat);
+    else cursor.insertText(notesConfig->numberFormat().prefix()+note->label()+notesConfig->numberFormat().suffix(),*cfmat);
+    cfmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
+    cursor.insertText(" ",*cfmat);
+
     QString s;
     s.append("Foot");
     s.append(note->label());
-    KoOdfNotesConfiguration *notesConfig;
-    notesConfig = KoTextDocument(textEditor()->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
     KoBookmark *bookmark = new KoBookmark(note->textFrame()->document());
-    bookmark->setType(KoBookmark::SinglePosition);
     bookmark->setName(s);
+    bookmark->setType(KoBookmark::SinglePosition);
     note->manager()->insertInlineObject(cursor, bookmark);
-    QTextCharFormat *fmat = new QTextCharFormat();
-    fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-    cursor.insertText(notesConfig->numberFormat().prefix(),*fmat);
-    cursor.insertText(notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1),*fmat);
-    cursor.insertText(notesConfig->numberFormat().suffix(),*fmat);
-
-    fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
-    cursor.insertText(" ",*fmat);
 
 }
 
@@ -170,26 +171,26 @@ void ReferencesTool::insertEndNote()
     }
 
     QTextCursor cursor(note->textCursor());    
+    KoOdfNotesConfiguration *notesConfig;
+    notesConfig = KoTextDocument(textEditor()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
+
+    QTextCharFormat *cfmat = new QTextCharFormat();
+    cfmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    if(note->autoNumbering())
+        cursor.insertText(notesConfig->numberFormat().prefix()+notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)+notesConfig->numberFormat().suffix(),*cfmat);
+    else cursor.insertText(notesConfig->numberFormat().prefix()+note->label()+notesConfig->numberFormat().suffix(),*cfmat);
+    cfmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
+    cursor.insertText(" ",*cfmat);
+
     QString s;
     s.append("End");
     s.append(note->label());
-    KoOdfNotesConfiguration *notesConfig;
-    notesConfig = KoTextDocument(textEditor()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
     KoBookmark *bookmark = new KoBookmark(note->textFrame()->document());
     bookmark->setType(KoBookmark::SinglePosition);
     bookmark->setName(s);
     note->manager()->insertInlineObject(cursor, bookmark);
 
-    s.clear();
-    QTextCharFormat *fmat = new QTextCharFormat();
-    fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-    s.append(notesConfig->numberFormat().prefix());
-    s.append(notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1));
-    s.append(notesConfig->numberFormat().suffix());
-    cursor.insertText(s,*fmat);
 
-    fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
-    cursor.insertText(" ",*fmat);
 
 }
 

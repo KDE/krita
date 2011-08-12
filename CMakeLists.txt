@@ -509,7 +509,7 @@ if (SHOULD_BUILD_PLAN)
 endif (SHOULD_BUILD_PLAN)
 
 if(SHOULD_BUILD_STAGE)
-  macro_optional_add_subdirectory(kpresenter)
+  macro_optional_add_subdirectory(stage)
 endif(SHOULD_BUILD_STAGE)
 
 if(SHOULD_BUILD_KEXI)
@@ -588,7 +588,7 @@ message(STATUS "---------------- The following applications will be built ------
 
 macro_display_application_enabled(words ${SHOULD_BUILD_WORDS})
 macro_display_application_enabled(tables ${SHOULD_BUILD_TABLES})
-macro_display_application_enabled(kpresenter ${SHOULD_BUILD_STAGE})
+macro_display_application_enabled(stage ${SHOULD_BUILD_STAGE})
 macro_display_application_enabled(flow ${SHOULD_BUILD_FLOW})
 macro_display_application_enabled(kexi ${SHOULD_BUILD_KEXI})
 macro_display_application_enabled(plan ${SHOULD_BUILD_PLAN})

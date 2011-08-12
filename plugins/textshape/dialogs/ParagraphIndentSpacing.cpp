@@ -179,7 +179,7 @@ void ParagraphIndentSpacing::save(KoParagraphStyle *style)
     style->setBottomMargin(QTextLength(QTextLength::FixedLength, widget.after->value()));
     style->setAutoTextIndent(widget.autoTextIndent->isChecked());
     style->setLineHeightAbsolute(0); // since it trumps percentage based line heights, unset it.
-    style->setMinimumLineHeight(0);
+    style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 0));
     style->setLineSpacing(0);
     switch (widget.lineSpacing->currentIndex()) {
     case 0: style->setLineHeightPercent(120); break;
@@ -199,7 +199,7 @@ void ParagraphIndentSpacing::save(KoParagraphStyle *style)
         break;
     }
     if (widget.lineSpacing->currentIndex() != 5)
-        style->setMinimumLineHeight(widget.minimumLineSpacing->value());
+        style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, widget.minimumLineSpacing->value()));
     style->setLineSpacingFromFont(widget.lineSpacing->currentIndex() != 5 && widget.useFont->isChecked());
 }
 

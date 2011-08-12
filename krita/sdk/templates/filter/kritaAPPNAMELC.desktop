@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=%{APPNAME}
 Name[be]=%{APPNAME}
+Name[bg]=%{APPNAME}
 Name[ca]=%{APPNAME}
 Name[ca@valencia]=%{APPNAME}
 Name[cs]=%{APPNAME}
@@ -41,6 +42,7 @@ Name[zh_CN]=%{APPNAME}
 Name[zh_TW]=%{APPNAME}
 Comment=%{APPNAME}
 Comment[be]=%{APPNAME}
+Comment[bg]=%{APPNAME}
 Comment[ca]=%{APPNAME}
 Comment[ca@valencia]=%{APPNAME}
 Comment[cs]=%{APPNAME}

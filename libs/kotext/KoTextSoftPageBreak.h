@@ -40,7 +40,7 @@ public:
 
     virtual void saveOdf(KoShapeSavingContext &context);
 
-    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
+    virtual void updatePosition(const QTextDocument *document,
                                 int posInDocument, const QTextCharFormat &format);
 
     virtual void resize(const QTextDocument *document, QTextInlineObject object,

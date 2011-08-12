@@ -48,8 +48,8 @@ BitmapHeader::BitmapHeader( QDataStream &stream, int size )
     stream >> m_headerSize;
     stream >> m_width;
     stream >> m_height;
-    stream >> m_planes;
-    stream >> m_bitCount;
+    stream >> m_planes;         // 16 bits
+    stream >> m_bitCount;       // 16 bits
     stream >> m_compression;
     stream >> m_imageSize;
 

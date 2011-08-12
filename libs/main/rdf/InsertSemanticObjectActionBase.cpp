@@ -19,7 +19,9 @@
 
 #include "InsertSemanticObjectActionBase.h"
 #include <KoTextEditor.h>
-#include <KoToolProxy.h>
+#include <KoCanvasBase.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
 #include <KoCanvasBase.h>
 
 InsertSemanticObjectActionBase::InsertSemanticObjectActionBase(KoCanvasBase *canvas,
@@ -34,12 +36,6 @@ InsertSemanticObjectActionBase::InsertSemanticObjectActionBase(KoCanvasBase *can
 
 InsertSemanticObjectActionBase::~InsertSemanticObjectActionBase()
 {
-}
-
-KoTextEditor *InsertSemanticObjectActionBase::editor() const
-{
-    KoTextEditor *ret = qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
-    return ret;
 }
 
 void InsertSemanticObjectActionBase::activated()

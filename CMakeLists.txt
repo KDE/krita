@@ -32,7 +32,7 @@ option(BUILD_koabstraction "Build directory koabstraction" ON) # koabstraction i
 option(BUILD_mobile "Build directory mobile" ON) # mobile depends on koabstraction it builds but does not run
 
 option(GHNS "support Get Hot New Stuff" ON)
-
+option(NEPOMUK "support NEPOMUK Tagging" ON)
 option(TINY "compile a tiny Calligra" OFF)
 option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 
@@ -44,9 +44,7 @@ IF (TINY)
     set(SHOULD_BUILD_KRITA FALSE)
     set(SHOULD_BUILD_KEXI FALSE)
     set(SHOULD_BUILD_FLOW FALSE)
-    set(SHOULD_BUILD_KPLATO FALSE)
-    set(SHOULD_BUILD_KFORMULA FALSE)
-    set(SHOULD_BUILD_KCHART FALSE)
+    set(SHOULD_BUILD_PLAN FALSE)
     set(SHOULD_BUILD_KDGANTT FALSE)
     set(SHOULD_BUILD_KOUNAVAIL FALSE)
     set(SHOULD_BUILD_SCRIPTING FALSE)
@@ -65,9 +63,7 @@ ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_KRITA TRUE)
     set(SHOULD_BUILD_KEXI FALSE)
     set(SHOULD_BUILD_FLOW FALSE)
-    set(SHOULD_BUILD_KPLATO FALSE)
-    set(SHOULD_BUILD_KFORMULA FALSE)
-    set(SHOULD_BUILD_KCHART FALSE)
+    set(SHOULD_BUILD_PLAN FALSE)
     set(SHOULD_BUILD_KDGANTT FALSE)
     set(SHOULD_BUILD_KOUNAVAIL FALSE)
     set(SHOULD_BUILD_SCRIPTING TRUE)
@@ -86,9 +82,7 @@ ELSE()
     set(SHOULD_BUILD_KRITA TRUE)
     set(SHOULD_BUILD_KEXI TRUE)
     set(SHOULD_BUILD_FLOW TRUE)
-    set(SHOULD_BUILD_KPLATO TRUE)
-    set(SHOULD_BUILD_KFORMULA TRUE)
-    set(SHOULD_BUILD_KCHART FALSE)
+    set(SHOULD_BUILD_PLAN TRUE)
     set(SHOULD_BUILD_KDGANTT TRUE)
     set(SHOULD_BUILD_KOUNAVAIL TRUE)
     set(SHOULD_BUILD_SCRIPTING TRUE)
@@ -125,6 +119,10 @@ option(GHNS "support Get Hot New Stuff" ON)
 if(KDE_VERSION LESS "4.4.0")
     set(GHNS FALSE)
 endif(KDE_VERSION LESS "4.4.0")
+
+if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
+  set(NEPOMUK FALSE)
+endif(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
 
@@ -194,7 +192,7 @@ macro_log_feature(CREATERESOURCES_FOUND "Create Resources" "Create Resources (br
 ## Test for kdepimlibs
 ##
 macro_optional_find_package(KdepimLibs)
-macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by KPlato and the KDE address book integration (available as a module in KDE)")
+macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by Plan and the KDE address book integration (available as a module in KDE)")
 
 
 ##
@@ -269,7 +267,17 @@ if(LCMS2_FOUND)
     set(HAVE_LCMS TRUE)
 endif(LCMS2_FOUND)
 
-    
+##
+## Test for Nepomuk
+##
+if(NEPOMUK)
+    macro_optional_find_package(Nepomuk)
+    if(NOT NEPOMUK_FOUND)
+        set(NEPOMUK FALSE)
+    endif(NOT NEPOMUK_FOUND)
+    macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
+endif(NEPOMUK)
+
 
 macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required for color management and Krita")
 
@@ -446,9 +454,9 @@ if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
    set(SHOULD_BUILD_KRITA FALSE)
 endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
 
-### KPlato: kdepimlibs
+### Plan: kdepimlibs
 if(NOT KdepimLibs_FOUND)
-    set(SHOULD_BUILD_KPLATO FALSE)
+    set(SHOULD_BUILD_PLAN FALSE)
 endif(NOT KdepimLibs_FOUND)
 
   
@@ -488,10 +496,6 @@ if(SHOULD_BUILD_WORDS)
    macro_optional_add_subdirectory(words)
 endif(SHOULD_BUILD_WORDS)
 
-if (SHOULD_BUILD_KFORMULA)
-    macro_optional_add_subdirectory(kformula)
-endif (SHOULD_BUILD_KFORMULA)
-
 if (SHOULD_BUILD_FLOW)
     macro_optional_add_subdirectory(flow)
 endif (SHOULD_BUILD_FLOW)
@@ -500,26 +504,21 @@ if (SHOULD_BUILD_KOUNAVAIL)
     macro_optional_add_subdirectory(kounavail)
 endif (SHOULD_BUILD_KOUNAVAIL)
 
-if (SHOULD_BUILD_KPLATO)
+if (SHOULD_BUILD_PLAN)
     macro_optional_add_subdirectory(kdgantt)
-endif (SHOULD_BUILD_KPLATO)
-
-if (SHOULD_BUILD_KCHART)
-    add_definitions(-DHAVE_KCHART)
-    macro_optional_add_subdirectory(kchart)
-endif (SHOULD_BUILD_KCHART)
+endif (SHOULD_BUILD_PLAN)
 
 if(SHOULD_BUILD_STAGE)
-  macro_optional_add_subdirectory(kpresenter)
+  macro_optional_add_subdirectory(stage)
 endif(SHOULD_BUILD_STAGE)
 
 if(SHOULD_BUILD_KEXI)
     macro_optional_add_subdirectory(kexi)
 endif(SHOULD_BUILD_KEXI)
 
-if(SHOULD_BUILD_KPLATO)
-    macro_optional_add_subdirectory(kplato)
-endif(SHOULD_BUILD_KPLATO)
+if(SHOULD_BUILD_PLAN)
+    macro_optional_add_subdirectory(plan)
+endif(SHOULD_BUILD_PLAN)
 
 if(SHOULD_BUILD_TABLES)
     macro_optional_add_subdirectory(tables)
@@ -589,15 +588,13 @@ message(STATUS "---------------- The following applications will be built ------
 
 macro_display_application_enabled(words ${SHOULD_BUILD_WORDS})
 macro_display_application_enabled(tables ${SHOULD_BUILD_TABLES})
-macro_display_application_enabled(kpresenter ${SHOULD_BUILD_STAGE})
+macro_display_application_enabled(stage ${SHOULD_BUILD_STAGE})
 macro_display_application_enabled(flow ${SHOULD_BUILD_FLOW})
 macro_display_application_enabled(kexi ${SHOULD_BUILD_KEXI})
-macro_display_application_enabled(kplato ${SHOULD_BUILD_KPLATO})
+macro_display_application_enabled(plan ${SHOULD_BUILD_PLAN})
 macro_display_application_enabled(krita ${SHOULD_BUILD_KRITA})
 macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
 macro_display_application_enabled(braindump ${SHOULD_BUILD_BRAINDUMP})
-macro_display_application_enabled(kformula ${SHOULD_BUILD_KFORMULA})
-macro_display_application_enabled(kchart ${SHOULD_BUILD_KCHART})
 macro_display_application_enabled(mobile ${SHOULD_BUILD_MOBILE})
 macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
 macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})

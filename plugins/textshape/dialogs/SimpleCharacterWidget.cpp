@@ -78,14 +78,14 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
 
     widget.fontsFrame->setColumnStretch(0,1);
 
-    m_stylePopup = new StylesWidget(this, true, Qt::Popup);
+    m_stylePopup = new StylesWidget(this, false, Qt::Popup);
     m_stylePopup->setFrameShape(QFrame::StyledPanel);
     m_stylePopup->setFrameShadow(QFrame::Raised);
     widget.charFrame->setStylesWidget(m_stylePopup);
 
-    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoParagraphStyle *)), this, SIGNAL(characterStyleSelected(KoParagraphStyle *)));
-    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoParagraphStyle *)), this, SIGNAL(doneWithFocus()));
-    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoParagraphStyle *)), this, SLOT(hidePopup()));
+    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(characterStyleSelected(KoCharacterStyle *)));
+    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(doneWithFocus()));
+    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(hidePopup()));
 
     m_thumbnailer = new KoStyleThumbnailer();
 }

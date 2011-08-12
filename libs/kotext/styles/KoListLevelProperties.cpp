@@ -314,7 +314,7 @@ qreal KoListLevelProperties::height() const
 
 void KoListLevelProperties::setBulletImage(KoImageData *imageData)
 {
-    setProperty(KoListStyle::BulletImageKey, imageData->key());
+    setProperty(KoListStyle::BulletImage, QVariant::fromValue(imageData));
 }
 
 KoListLevelProperties & KoListLevelProperties::operator=(const KoListLevelProperties & other)
@@ -760,20 +760,9 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
 {
     bool isNumber = KoListStyle::isNumberingStyle(d->stylesPrivate.value(QTextListFormat::ListStyle).toInt());
 
-    if (isNumber)
-        writer->startElement("text:list-level-style-number");
-    else
-        writer->startElement("text:list-level-style-bullet");
-
-    // These apply to bulleted and numbered lists
-    if (d->stylesPrivate.contains(KoListStyle::Level))
-        writer->addAttribute("text:level", d->stylesPrivate.value(KoListStyle::Level).toInt());
-    if (d->stylesPrivate.contains(KoListStyle::ListItemPrefix))
-        writer->addAttribute("style:num-prefix", d->stylesPrivate.value(KoListStyle::ListItemPrefix).toString());
-    if (d->stylesPrivate.contains(KoListStyle::ListItemSuffix))
-        writer->addAttribute("style:num-suffix", d->stylesPrivate.value(KoListStyle::ListItemSuffix).toString());
-
     if (isNumber) {
+        writer->startElement("text:list-level-style-number");
+
         if (d->stylesPrivate.contains(KoListStyle::StartValue))
             writer->addAttribute("text:start-value", d->stylesPrivate.value(KoListStyle::StartValue).toInt());
         if (d->stylesPrivate.contains(KoListStyle::DisplayLevel))
@@ -789,7 +778,18 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
         default: break;
         }
         writer->addAttribute("style:num-format", format);
-    } else {
+    }
+    else if (style() == KoListStyle::ImageItem) {
+        KoImageData *imageData = d->stylesPrivate.value(KoListStyle::BulletImage).value<KoImageData *>();
+        writer->startElement("text:list-level-style-image");
+        writer->addAttribute("xlink:show", "embed");
+        writer->addAttribute("xlink:actuate", "onLoad");
+        writer->addAttribute("xlink:type", "simple");
+        writer->addAttribute("xlink:href", context.imageHref(imageData));
+    }
+    else {
+        writer->startElement("text:list-level-style-bullet");
+
         int bullet;
         if (d->stylesPrivate.contains(KoListStyle::BulletCharacter)) {
             bullet = d->stylesPrivate.value(KoListStyle::BulletCharacter).toInt();
@@ -808,6 +808,14 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
         }
         writer->addAttribute("text:bullet-char", QChar(bullet));
     }
+
+    // These apply to bulleted and numbered lists
+    if (d->stylesPrivate.contains(KoListStyle::Level))
+        writer->addAttribute("text:level", d->stylesPrivate.value(KoListStyle::Level).toInt());
+    if (d->stylesPrivate.contains(KoListStyle::ListItemPrefix))
+        writer->addAttribute("style:num-prefix", d->stylesPrivate.value(KoListStyle::ListItemPrefix).toString());
+    if (d->stylesPrivate.contains(KoListStyle::ListItemSuffix))
+        writer->addAttribute("style:num-suffix", d->stylesPrivate.value(KoListStyle::ListItemSuffix).toString());
 
     writer->startElement("style:list-level-properties", false);
 
@@ -845,6 +853,13 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
          writer->addAttribute("fo:margin-left",unit.toUserStringValue(margin())+"cm");
 
          writer->endElement();
+    }
+
+    if (d->stylesPrivate.contains(KoListStyle::Width)) {
+        writer->addAttribute("fo:width", toPoint(width()));
+    }
+    if (d->stylesPrivate.contains(KoListStyle::Height)) {
+        writer->addAttribute("fo:height", toPoint(height()));
     }
 
     writer->endElement(); // list-level-properties

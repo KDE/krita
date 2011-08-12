@@ -46,11 +46,11 @@
 StylesModel::StylesModel(KoStyleManager *manager, bool paragraphMode, QObject *parent)
     : QAbstractListModel(parent),
       m_styleManager(0),
+      m_styleThumbnailer(0),
       m_currentParagraphStyle(0),
       m_currentCharacterStyle(0),
       m_pureParagraphStyle(true),
       m_pureCharacterStyle(true),
-      m_styleThumbnailer(0),
       m_paragraphMode(paragraphMode),
       m_styleMapper(new QSignalMapper(this)),
       m_tmpTextShape(0)
@@ -197,6 +197,11 @@ void StylesModel::addParagraphStyle(KoParagraphStyle *style)
 // called when the stylemanager adds a style
 void StylesModel::addCharacterStyle(KoCharacterStyle *style)
 {
+    foreach(KoParagraphStyle *ps, m_styleManager->paragraphStyles()) {
+        if (style->styleId() == ps->characterStyle()->styleId()) {
+            return;
+        }
+    }
     Q_ASSERT(style);
     m_styleList.append(style->styleId());
     m_styleMapper->setMapping(style, style->styleId());

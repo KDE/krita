@@ -45,6 +45,7 @@ class KToggleAction;
 class KUrl;
 class QTextDocument;
 class QLabel;
+class QTabBar;
 class KoCopyController;
 class KoCutController;
 
@@ -160,6 +161,18 @@ public:
 
     void centerPage();
 
+    /// return a pointer to the tab bar (horizontal by default)
+    QTabBar *tabBar() const;
+
+    /// set view Tab Bar position (vertical / horizontal)
+    void setTabBarPosition(Qt::Orientation orientation);
+
+    /// Show a custom central widget and hides the standard one.
+    void replaceCentralWidget(QWidget *newWidget);
+
+    /// hides any custom central widget and shows the standard widget.
+    void restoreCentralWidget();
+
 signals:
     /// emited when select All action is triggered and the view is not visible
     void selectAllRequested();
@@ -181,6 +194,8 @@ protected:
 
     bool isMasterUsed( KoPAPageBase * page );
     void editPaste();
+
+    void hideCustomCentralWidget();
 
 public slots:
 

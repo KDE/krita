@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mainTabWidget</class>
+ <widget class="QTabWidget" name="mainTabWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>246</width>
+    <height>290</height>
+   </rect>
+  </property>
+  <property name="currentIndex">
+   <number>0</number>
+  </property>
+  <widget class="QWidget" name="tab">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <attribute name="title">
+    <string>Insert</string>
+   </attribute>
+   <layout class="QFormLayout" name="formLayout">
+    <item row="0" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupElements">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>30</horstretch>
+        <verstretch>30</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="title">
+       <string>Elements</string>
+      </property>
+      <property name="flat">
+       <bool>true</bool>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QToolButton" name="buttonFence">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::DelayedPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonScript">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::DelayedPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonRoot">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::DelayedPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonFraction">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::DelayedPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonTable">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::DelayedPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupSymbols">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="title">
+       <string>Symbols</string>
+      </property>
+      <property name="flat">
+       <bool>true</bool>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QToolButton" name="buttonRelation">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::DelayedPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonOperators">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::DelayedPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonMisc">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::DelayedPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonArrows">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::DelayedPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonGreek">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::DelayedPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupActions">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="title">
+       <string>Actions</string>
+      </property>
+      <property name="flat">
+       <bool>true</bool>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QToolButton" name="buttonRow">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::DelayedPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonAlterTable">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::DelayedPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QPushButton" name="buttonLoad">
+      <property name="text">
+       <string comment="This button opens a file dialog to load a MathML file">Load...</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QPushButton" name="buttonSave">
+      <property name="text">
+       <string>Save...</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="tab_2">
+   <attribute name="title">
+    <string>Edit</string>
+   </attribute>
+   <layout class="QGridLayout" name="gridLayout_5">
+    <item row="0" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupGeneralOptions">
+      <property name="title">
+       <string>General options</string>
+      </property>
+      <property name="flat">
+       <bool>true</bool>
+      </property>
+      <widget class="KFontComboBox" name="fontComboBox">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>70</y>
+         <width>151</width>
+         <height>34</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>70</y>
+         <width>41</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Font:</string>
+       </property>
+       <property name="buddy">
+        <cstring>fontComboBox</cstring>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelColors">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>40</y>
+         <width>61</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Colors:</string>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupSpecificOptions">
+      <property name="title">
+       <string>Specific options</string>
+      </property>
+      <property name="flat">
+       <bool>true</bool>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0" rowspan="2">
+        <widget class="QStackedWidget" name="stackedWidget">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="Table">
+          <layout class="QGridLayout" name="gridLayout_4">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Rows:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Columns:</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page_2"/>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>104</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>View MathML</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KFontComboBox</class>
+   <extends>KComboBox</extends>
+   <header>kfontcombobox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

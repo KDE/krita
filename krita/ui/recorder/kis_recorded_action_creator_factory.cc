@@ -46,7 +46,7 @@ QString KisRecordedActionCreatorFactory::name() const
     return d->name;
 }
 
-KisRecordedActionCreator* KisRecordedActionCreatorFactory::createCreator(QWidget* parent) const
+KisRecordedActionCreator* KisRecordedActionCreatorFactory::createCreator(QWidget* /*parent*/) const
 {
   Q_ASSERT(requireCreator() == false);
   return 0;

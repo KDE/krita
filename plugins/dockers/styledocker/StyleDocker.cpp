@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007-2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2009,2011 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008-2010 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -73,20 +73,14 @@ StyleDocker::StyleDocker(QWidget * parent)
     setWindowTitle(i18n("Stroke and Fill"));
 
     QWidget *mainWidget = new QWidget(this);
-    m_layout = new QGridLayout(mainWidget);
 
     m_preview = new StylePreview(mainWidget);
-    m_layout->addWidget(m_preview, 0, 0, 2, 1);
 
-    m_buttons = new StyleButtonBox(mainWidget);
+    m_buttons = new StyleButtonBox(mainWidget, 2, 3);
     m_buttons->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    m_layout->addWidget(m_buttons, 0, 1);
 
     m_stack = new QStackedWidget(mainWidget);
     m_stack->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    m_layout->addWidget(m_stack, 1, 1);
-
-    m_layout->addWidget(new QLabel(i18n("Opacity:")), 2, 0);
 
     m_opacity = new KoSliderCombo(mainWidget);
     m_opacity->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -94,11 +88,16 @@ StyleDocker::StyleDocker(QWidget * parent)
     m_opacity->setMaximum(100);
     m_opacity->setValue(100);
     m_opacity->setDecimals(0);
-    m_layout->addWidget(m_opacity, 2, 1);
 
     m_spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
-    m_layout->addItem(m_spacer, 2, 2);
 
+    m_layout = new QGridLayout(mainWidget);
+    m_layout->addWidget(m_preview, 0, 0, 2, 1);
+    m_layout->addWidget(m_buttons, 0, 1, 2, 1);
+    m_layout->addWidget(m_stack, 0, 2, 1, 2);
+    m_layout->addWidget(new QLabel(i18n("Opacity:")), 1, 2);
+    m_layout->addWidget(m_opacity, 1, 3);
+    m_layout->addItem(m_spacer, 2, 2);
     m_layout->setMargin(0);
     m_layout->setVerticalSpacing(0);
     m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
@@ -124,6 +123,8 @@ StyleDocker::StyleDocker(QWidget * parent)
     m_stack->addWidget(gradientSelector);
     m_stack->addWidget(patternSelector);
     m_stack->setContentsMargins(0, 0, 0, 0);
+    m_stack->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    m_stack->setMinimumWidth(100);
 
     connect(m_preview, SIGNAL(fillSelected()), this, SLOT(fillSelected()));
     connect(m_preview, SIGNAL(strokeSelected()), this, SLOT(strokeSelected()));

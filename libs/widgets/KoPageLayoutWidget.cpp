@@ -313,6 +313,9 @@ void KoPageLayoutWidget::setTextDirection(KoText::Direction direction )
     case KoText::InheritDirection:
     case KoText::AutoDirection:
         index = 0;
+    case KoText::TopBottomLeftRight:
+        ; // unhandled, because it actually doesn't exist in real-world writing systems.
+          // Boustrophedon would be interesting to implement, though
     }
     d->widget.textDirection->setCurrentIndex(index);
 }

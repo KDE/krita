@@ -109,13 +109,6 @@ public:
     QList<QWidget *> optionWidgets();
 
     /**
-     * Returns the internal selection option of this tool.
-     * Each tool can have a selection which is private to that tool and the specified shape that it comes with.
-     * The default returns 0.
-     */
-    virtual KoToolSelection *selection();
-
-    /**
      * Retrieves the entire collection of actions for the tool.
      */
     QHash<QString, KAction*> actions() const;
@@ -234,6 +227,18 @@ public:
 
     /// return the last emitted cursor
     QCursor cursor() const;
+
+    /**
+     * Returns the internal selection object of this tool.
+     * Each tool can have a selection which is private to that tool and the specified shape that it comes with.
+     * The default returns 0.
+     */
+    virtual KoToolSelection *selection();
+
+    /**
+     * @returns true if the tool has selected data.
+     */
+    virtual bool hasSelection();
 
     /**
      * copies the tools selection to the clipboard.

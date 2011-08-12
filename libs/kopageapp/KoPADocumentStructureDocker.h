@@ -88,6 +88,8 @@ public slots:
     /// and eventually dockerReset() signal will be emitted
     void setPart( KParts::Part * part );
 
+    void selectPages(int start, int count);
+
 private slots:
     void slotButtonClicked( int buttonId );
     void addLayer();

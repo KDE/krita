@@ -31,11 +31,11 @@ KisImageLockCommand::KisImageLockCommand(KisImageWSP image, bool lockImage)
 
 void KisImageLockCommand::redo()
 {
-    m_image->refreshGraphAsync();
+    m_image->refreshGraph();
 }
 
 void KisImageLockCommand::undo()
 {
-    m_image->refreshGraphAsync();
+    m_image->refreshGraph();
 }
 

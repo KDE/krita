@@ -35,7 +35,7 @@ void KisImageNodeToTopCommand::redo()
 {
     m_image->toTop(m_node);
 
-    m_image->refreshGraphAsync(m_prevParent);
+    m_image->refreshGraph(m_prevParent);
     m_prevParent->setDirty(m_image->bounds());
 }
 
@@ -43,6 +43,6 @@ void KisImageNodeToTopCommand::undo()
 {
     m_image->moveNode(m_node, m_prevParent, m_prevAbove);
 
-    m_image->refreshGraphAsync(m_prevParent);
+    m_image->refreshGraph(m_prevParent);
     m_prevParent->setDirty(m_image->bounds());
 }

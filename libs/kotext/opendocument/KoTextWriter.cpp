@@ -1388,8 +1388,12 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
             QTextTableCell cell = table->cellAt(r, c);
             int changeId = 0;
 
+            TagInformation tableCellInformation;
+            if (cell.format().boolProperty(KoTableCellStyle::CellIsProtected))
+            {
+                tableCellInformation.addAttribute("table:protected", "true");
+            }
             if ((cell.row() == r) && (cell.column() == c)) {
-                TagInformation tableCellInformation;
                 tableCellInformation.setTagName("table:table-cell");
                 if (cell.rowSpan() > 1)
                     tableCellInformation.addAttribute("table:number-rows-spanned", cell.rowSpan());
@@ -1412,7 +1416,6 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
                 changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell, tableCellInformation);
                 writeBlocks(table->document(), cell.firstPosition(), cell.lastPosition(), listStyles, table);
             } else {
-                TagInformation tableCellInformation;
                 tableCellInformation.setTagName("table:covered-table-cell");
                 changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell, tableCellInformation);
             }

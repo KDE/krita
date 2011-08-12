@@ -1306,7 +1306,7 @@ void TextTool::updateActions()
     }
     m_actionFormatSuper->setChecked(super);
     m_actionFormatSub->setChecked(sub);
-    m_actionFormatFontSize->setFontSize(cf.fontPointSize());
+    m_actionFormatFontSize->setFontSize(cf.font().pointSizeF());
     m_actionFormatFontFamily->setFont(cf.font().family());
 
     KoTextShapeData::ResizeMethod resizemethod = KoTextShapeData::AutoResize;
@@ -1552,6 +1552,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
 
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(this, SIGNAL(harFormatChanged(const QTextCharFormat &format)), scw, SLOT(setCurrentFormat(const QTextCharFormat &)));
     connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(scw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
 

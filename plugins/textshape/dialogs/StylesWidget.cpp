@@ -44,7 +44,11 @@ StylesWidget::StylesWidget(QWidget *parent, bool paragraphMode, Qt::WindowFlags 
     widget.stylesView->setModel(m_stylesModel);
     widget.stylesView->setItemDelegate(m_stylesDelegate);
 
-    connect(widget.stylesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(applyStyle()));
+    if (paragraphMode) {
+        connect(widget.stylesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(applyParagraphStyle()));
+    } else {
+        connect(widget.stylesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(applyCharacterStyle()));
+    }
 }
 
 
@@ -119,7 +123,7 @@ void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
     m_blockSignals = false;
 }
 
-void StylesWidget::applyStyle()
+void StylesWidget::applyParagraphStyle()
 {
     QModelIndex index = widget.stylesView->currentIndex();
     Q_ASSERT(index.isValid());
@@ -129,7 +133,12 @@ void StylesWidget::applyStyle()
         emit doneWithFocus();
         return;
     }
+}
 
+void StylesWidget::applyCharacterStyle()
+{
+    QModelIndex index = widget.stylesView->currentIndex();
+    Q_ASSERT(index.isValid());
     KoCharacterStyle *characterStyle = m_stylesModel->characterStyleForIndex(index);
     if (characterStyle) {
         emit characterStyleSelected(characterStyle);

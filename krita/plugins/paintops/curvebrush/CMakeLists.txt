@@ -1,16 +1,19 @@
 set(kritacurvepaintop_PART_SRCS
-    curve_brush.cpp
-	curve_paintop_plugin.cpp
-	kis_curve_paintop.cpp
-	kis_curve_paintop_settings.cpp
-    kis_curve_paintop_settings_widget.cpp
+      curve_brush.cpp
+      curve_paintop_plugin.cpp
+      kis_curve_paintop.cpp
+      kis_curve_paintop_settings.cpp
+      kis_curve_line_option.cpp
+      kis_linewidth_option.cpp
+      kis_curves_opacity_option.cpp
+      kis_curve_paintop_settings_widget.cpp
     )
 
 kde4_add_ui_files(kritacurvepaintop_PART_SRCS wdgcurveoptions.ui )
 
 kde4_add_plugin(kritacurvepaintop ${kritacurvepaintop_PART_SRCS})
 
-target_link_libraries(kritacurvepaintop kritaui)
+target_link_libraries(kritacurvepaintop kritalibpaintop)
 
 install(TARGETS kritacurvepaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 

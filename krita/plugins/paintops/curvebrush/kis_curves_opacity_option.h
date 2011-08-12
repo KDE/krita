@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_CURVE_PAINTOP_SETTINGS_WIDGET_H_
-#define KIS_CURVE_PAINTOP_SETTINGS_WIDGET_H_
+#ifndef KIS_CURVES_OPACITY_OPTION_H_
+#define KIS_CURVES_OPACITY_OPTION_H_
 
-#include <kis_paintop_options_widget.h>
+#include "kis_curve_option.h"
+#include <kis_paint_information.h>
 
-class KisCurveOpOption;
-class KisPropertiesConfiguration;
-
-class KisCurvePaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisCurvesOpacityOption : public KisCurveOption
 {
-    Q_OBJECT
-
 public:
-    KisCurvePaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisCurvePaintOpSettingsWidget();
-
-    KisPropertiesConfiguration* configuration() const;
-
-private:
-    KisCurveOpOption * m_options;
+    KisCurvesOpacityOption();
+    double apply(const KisPaintInformation & info, double opacity) const;
 };
-
 
 #endif

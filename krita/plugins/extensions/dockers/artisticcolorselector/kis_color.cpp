@@ -19,8 +19,6 @@
 #include <KoColorSpaceMaths.h>
 #include "kis_color.h"
 
-#define EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
-
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // --------- CoreImpl ------------------------------------------------------------------------ //
 
@@ -70,10 +68,6 @@ struct CoreImpl: public KisColor::Core
         hsx(0) = h;
         hsx(1) = diff1.dot(diff2) / diff1.squaredNorm(); // project rgb onto (VecRGB(x,x,x) - hue)
         hsx(2) = x;
-        
-//         hsx(0) = ::getHue(r, g, b);
-//         hsx(1) = ::getSaturation<HSLType>(r, g, b);
-//         hsx(2) = ::getLightness <HSXType>(r, g, b);
     }
 };
 
@@ -121,14 +115,24 @@ KisColor::KisColor(const KisColor& color, KisColor::Type type)
         initRGB(type, color.getR(), color.getG(), color.getB(), color.getA());
 }
 
+KisColor::~KisColor()
+{
+	core()->~Core();
+}
+
 void KisColor::initRGB(Type type, float r, float g, float b, float a)
 {
+	// an offset that is added to the m_coreData buffer to make sure
+	// the struct created with the placement new operator is aligned at 16 bytes
+	// this is required by Eigen for vectorization
+	m_offset = quint8(16 - (reinterpret_cast<size_t>(m_coreData) % 16));
+	
     switch(type)
     {
-        case HSY: { new (m_coreData) CoreImpl<HSYType>; } break;
-        case HSV: { new (m_coreData) CoreImpl<HSVType>; } break;
-        case HSL: { new (m_coreData) CoreImpl<HSLType>; } break;
-        case HSI: { new (m_coreData) CoreImpl<HSIType>; } break;
+        case HSY: { new (m_coreData + m_offset) CoreImpl<HSYType>; } break;
+        case HSV: { new (m_coreData + m_offset) CoreImpl<HSVType>; } break;
+        case HSL: { new (m_coreData + m_offset) CoreImpl<HSLType>; } break;
+        case HSI: { new (m_coreData + m_offset) CoreImpl<HSIType>; } break;
     }
     
     core()->type = type;
@@ -137,12 +141,17 @@ void KisColor::initRGB(Type type, float r, float g, float b, float a)
 
 void KisColor::initHSX(Type type, float h, float s, float x, float a)
 {
+	// an offset that is added to the m_coreData buffer to make sure
+	// the struct created with the placement new operator is aligned at 16 bytes
+	// this is required by Eigen for vectorization
+	m_offset = quint8(16 - (reinterpret_cast<size_t>(m_coreData) % 16));
+	
     switch(type)
     {
-        case HSY: { new (m_coreData) CoreImpl<HSYType>; } break;
-        case HSV: { new (m_coreData) CoreImpl<HSVType>; } break;
-        case HSL: { new (m_coreData) CoreImpl<HSLType>; } break;
-        case HSI: { new (m_coreData) CoreImpl<HSIType>; } break;
+        case HSY: { new (m_coreData + m_offset) CoreImpl<HSYType>; } break;
+        case HSV: { new (m_coreData + m_offset) CoreImpl<HSVType>; } break;
+        case HSL: { new (m_coreData + m_offset) CoreImpl<HSLType>; } break;
+        case HSI: { new (m_coreData + m_offset) CoreImpl<HSIType>; } break;
     }
     
     core()->type = type;

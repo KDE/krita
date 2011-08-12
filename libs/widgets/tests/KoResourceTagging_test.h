@@ -20,6 +20,7 @@
 #define KORESOURCETAGGING_TEST_H
 
 #include <QtTest/QtTest>
+#include <KoConfig.h>
 #include "KoResourceTagging.h"
 
 class KoResourceTagging_test : public QObject
@@ -33,7 +34,9 @@ private slots:
     void testAddingDeletingTag();
     void testSearchingTag();
     void testReadWriteXML();
-
+#ifdef NEPOMUK
+    void testNepomukBackend();
+#endif
 private:
     void addData();
     KoResourceTagging* m_tagObject;

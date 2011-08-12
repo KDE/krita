@@ -20,8 +20,6 @@
 #ifndef H_KIS_COLOR_H
 #define H_KIS_COLOR_H
 
-#define EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
-
 #include <QtGlobal>
 #include <Eigen/Core>
 #include <QColor>
@@ -47,13 +45,14 @@ public:
     };
     
 public:
-    KisColor(Type type=HSY);
-    KisColor(float hue, float a=1.0f, Type type=HSY);
-    KisColor(float r, float g, float b, float a=1.0f, Type type=HSY);
-    KisColor(const QColor& color, Type type=HSY);
-    KisColor(Qt::GlobalColor color, Type type=HSY);
-    KisColor(const KisColor& color);
-    KisColor(const KisColor& color, Type type);
+     KisColor(Type type=HSY);
+     KisColor(float hue, float a=1.0f, Type type=HSY);
+     KisColor(float r, float g, float b, float a=1.0f, Type type=HSY);
+     KisColor(const QColor& color, Type type=HSY);
+     KisColor(Qt::GlobalColor color, Type type=HSY);
+     KisColor(const KisColor& color);
+     KisColor(const KisColor& color, Type type);
+	~KisColor();
     
     inline Type getType()     const { return core()->type;   }
     inline bool hasUndefHue() const { return getS() == 0.0f; }
@@ -128,13 +127,12 @@ public:
 private:
     void initRGB(Type type, float r, float g, float b, float a);
     void initHSX(Type type, float h, float s, float x, float a);
-    inline Core*       core()       { return reinterpret_cast<Core*>      (m_coreData); }
-    inline const Core* core() const { return reinterpret_cast<const Core*>(m_coreData); }
+    inline Core*       core()       { return reinterpret_cast<Core*>      (m_coreData + m_offset); }
+    inline const Core* core() const { return reinterpret_cast<const Core*>(m_coreData + m_offset); }
     
 private:
-    quint8 m_coreData[sizeof(Core)];
+    quint8 m_coreData[sizeof(Core) + 15];
+	quint8 m_offset;
 };
-
-#undef EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
 
 #endif // H_KIS_COLOR_H

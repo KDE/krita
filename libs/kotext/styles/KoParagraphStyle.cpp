@@ -285,7 +285,7 @@ void KoParagraphStyle::setLineHeightPercent(int lineHeight)
 {
     setProperty(PercentLineHeight, lineHeight);
     setProperty(FixedLineHeight, 0.0);
-    setProperty(MinimumLineHeight, 0.0);
+    setProperty(MinimumLineHeight, QTextLength(QTextLength::FixedLength, 0.0));
     remove(NormalLineHeight);
 }
 
@@ -298,7 +298,7 @@ void KoParagraphStyle::setLineHeightAbsolute(qreal height)
 {
     setProperty(FixedLineHeight, height);
     setProperty(PercentLineHeight, 0);
-    setProperty(MinimumLineHeight, 0.0);
+    setProperty(MinimumLineHeight, QTextLength(QTextLength::FixedLength, 0.0));
     remove(NormalLineHeight);
 }
 
@@ -307,7 +307,7 @@ qreal KoParagraphStyle::lineHeightAbsolute() const
     return propertyDouble(FixedLineHeight);
 }
 
-void KoParagraphStyle::setMinimumLineHeight(qreal height)
+void KoParagraphStyle::setMinimumLineHeight(const QTextLength &height)
 {
     setProperty(FixedLineHeight, 0.0);
     setProperty(PercentLineHeight, 0);
@@ -317,7 +317,10 @@ void KoParagraphStyle::setMinimumLineHeight(qreal height)
 
 qreal KoParagraphStyle::minimumLineHeight() const
 {
-    return propertyDouble(MinimumLineHeight);
+    if (parentStyle())
+        return propertyLength(MinimumLineHeight).value(parentStyle()->minimumLineHeight());
+    else
+        return propertyLength(MinimumLineHeight).value(0);
 }
 
 void KoParagraphStyle::setLineSpacing(qreal spacing)
@@ -347,7 +350,7 @@ void KoParagraphStyle::setNormalLineHeight()
     setProperty(NormalLineHeight, true);
     setProperty(PercentLineHeight, 0);
     setProperty(FixedLineHeight, 0.0);
-    setProperty(MinimumLineHeight, 0.0);
+    setProperty(MinimumLineHeight, QTextLength(QTextLength::FixedLength, 0.0));
     setProperty(LineSpacing, 0.0);
 }
 
@@ -1307,7 +1310,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
     const QString lineHeightAtLeast(styleStack.property(KoXmlNS::style, "line-height-at-least"));
     if (!lineHeightAtLeast.isEmpty() && !propertyBoolean(NormalLineHeight) && lineHeightAbsolute() == 0) {    // 3.11.2
-        setMinimumLineHeight(KoUnit::parseValue(lineHeightAtLeast));
+        setMinimumLineHeight(KoText::parseLength(lineHeightAtLeast));
     }  // Line-height-at-least is mutually exclusive with absolute line-height
     const QString fontIndependentLineSpacing(styleStack.property(KoXmlNS::style, "font-independent-line-spacing"));
     if (!fontIndependentLineSpacing.isEmpty() && !propertyBoolean(NormalLineHeight) && lineHeightAbsolute() == 0) {
@@ -1973,8 +1976,8 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
                     key == KoParagraphStyle::FixedLineHeight ||
                     key == KoParagraphStyle::LineSpacingFromFont) {
 
-            if (key == KoParagraphStyle::MinimumLineHeight && minimumLineHeight() != 0) {
-                style.addPropertyPt("style:line-height-at-least", minimumLineHeight(), KoGenStyle::ParagraphType);
+            if (key == KoParagraphStyle::MinimumLineHeight && propertyLength(MinimumLineHeight).rawValue() != 0) {
+                style.addPropertyLength("style:line-height-at-least", propertyLength(MinimumLineHeight), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
             } else if (key == KoParagraphStyle::LineSpacing && lineSpacing() != 0) {
                 style.addPropertyPt("style:line-spacing", lineSpacing(), KoGenStyle::ParagraphType);
@@ -2072,27 +2075,36 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
         if (bottomBorderWidth() > 0 && bottomBorderStyle() != KoBorder::BorderNone)
             style.addProperty("fo:border-bottom", bottomBorder, KoGenStyle::ParagraphType);
     }
-    QString leftBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(leftInnerBorderWidth()),
+    QString leftBorderLineWidth, rightBorderLineWidth, topBorderLineWidth, bottomBorderLineWidth;
+    if (hasProperty(LeftInnerBorderWidth) || hasProperty(LeftBorderSpacing) || hasProperty(LeftBorderWidth))
+        leftBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(leftInnerBorderWidth()),
                                   QString::number(leftBorderSpacing()),
                                   QString::number(leftBorderWidth()));
-    QString rightBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(rightInnerBorderWidth()),
+    if (hasProperty(RightInnerBorderWidth) || hasProperty(RightBorderSpacing) || hasProperty(RightBorderWidth))
+        rightBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(rightInnerBorderWidth()),
                                    QString::number(rightBorderSpacing()),
                                    QString::number(rightBorderWidth()));
-    QString topBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(topInnerBorderWidth()),
+    if (hasProperty(TopInnerBorderWidth) || hasProperty(TopBorderSpacing) || hasProperty(TopBorderWidth))
+        topBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(topInnerBorderWidth()),
                                  QString::number(topBorderSpacing()),
                                  QString::number(topBorderWidth()));
-    QString bottomBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(bottomInnerBorderWidth()),
+    if (hasProperty(BottomInnerBorderWidth) || hasProperty(BottomBorderSpacing) || hasProperty(BottomBorderWidth))
+        bottomBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(bottomInnerBorderWidth()),
                                     QString::number(bottomBorderSpacing()),
                                     QString::number(bottomBorderWidth()));
     if (leftBorderLineWidth == rightBorderLineWidth &&
             leftBorderLineWidth == topBorderLineWidth &&
-            leftBorderLineWidth == bottomBorderLineWidth ) {
+            leftBorderLineWidth == bottomBorderLineWidth && !leftBorderLineWidth.isEmpty()) {
         style.addProperty("style:border-line-width", leftBorderLineWidth, KoGenStyle::ParagraphType);
     } else {
-        style.addProperty("style:border-line-width-left", leftBorderLineWidth, KoGenStyle::ParagraphType);
-        style.addProperty("style:border-line-width-right", rightBorderLineWidth, KoGenStyle::ParagraphType);
-        style.addProperty("style:border-line-width-top", topBorderLineWidth, KoGenStyle::ParagraphType);
-        style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, KoGenStyle::ParagraphType);
+        if (!leftBorderLineWidth.isEmpty())
+            style.addProperty("style:border-line-width-left", leftBorderLineWidth, KoGenStyle::ParagraphType);
+        if (!rightBorderLineWidth.isEmpty())
+            style.addProperty("style:border-line-width-right", rightBorderLineWidth, KoGenStyle::ParagraphType);
+        if (!topBorderLineWidth.isEmpty())
+            style.addProperty("style:border-line-width-top", topBorderLineWidth, KoGenStyle::ParagraphType);
+        if (!bottomBorderLineWidth.isEmpty())
+            style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, KoGenStyle::ParagraphType);
     }
     const int indentation = 4; // indentation for children of office:styles/style:style/style:paragraph-properties
     // drop-caps

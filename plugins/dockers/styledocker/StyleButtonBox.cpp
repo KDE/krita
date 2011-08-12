@@ -260,20 +260,20 @@ static const char* const buttonwinding[]={
 class StyleButtonBox::Private
 {
 public:
-    Private()
+    Private(int rows, int columns)
     : group(0)
-    , rowCount(1)
-    , columnCount(6)
+    , rowCount(rows)
+    , columnCount(columns)
     {}
 
     QButtonGroup* group;
-    int rowCount;
-    int columnCount;
+    const int rowCount;
+    const int columnCount;
 };
 
-StyleButtonBox::StyleButtonBox(QWidget* parent)
+StyleButtonBox::StyleButtonBox(QWidget* parent, int rows, int columns)
 : QWidget(parent)
-, d(new Private())
+, d(new Private(rows, columns))
 {
     //setMinimumSize(45, 70);
     setContentsMargins(0, 0, 0, 0);

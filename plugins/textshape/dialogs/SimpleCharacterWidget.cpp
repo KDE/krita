@@ -78,7 +78,7 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
 
     widget.fontsFrame->setColumnStretch(0,1);
 
-    m_stylePopup = new StylesWidget(this, true, Qt::Popup);
+    m_stylePopup = new StylesWidget(this, false, Qt::Popup);
     m_stylePopup->setFrameShape(QFrame::StyledPanel);
     m_stylePopup->setFrameShadow(QFrame::Raised);
     widget.charFrame->setStylesWidget(m_stylePopup);

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>286</width>
+    <width>292</width>
     <height>492</height>
    </rect>
   </property>
@@ -29,28 +29,6 @@
        </property>
        <property name="whatsThis">
         <string>Select the blending mode for the layer.</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KisDoubleSliderSpinBox" name="doubleOpacity" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>10</width>
-         <height>15</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Layer Opacity</string>
-       </property>
-       <property name="whatsThis">
-        <string>Adjust the transparency of the layer</string>
        </property>
       </widget>
      </item>
@@ -84,7 +62,7 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
+   <item row="2" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="KoDocumentSectionView" name="listLayers" native="true">
@@ -98,7 +76,7 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
+   <item row="3" column="0">
     <layout class="QHBoxLayout" name="hbox1">
      <property name="topMargin">
       <number>0</number>
@@ -323,6 +301,28 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="KisDoubleSliderSpinBox" name="doubleOpacity" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>10</width>
+       <height>15</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Layer Opacity</string>
+     </property>
+     <property name="whatsThis">
+      <string>Adjust the transparency of the layer</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

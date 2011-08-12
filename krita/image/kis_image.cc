@@ -75,6 +75,7 @@
 
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
+#include "commands_new/kis_image_resize_command.h"
 
 
 // #define SANITY_CHECKS

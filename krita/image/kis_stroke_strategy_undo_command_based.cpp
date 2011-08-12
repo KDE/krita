@@ -20,7 +20,7 @@
 
 #include <QMutexLocker>
 #include "kis_post_execution_undo_adapter.h"
-#include "commands/kis_saved_commands.h"
+#include "commands_new/kis_saved_commands.h"
 
 
 KisStrokeStrategyUndoCommandBased::

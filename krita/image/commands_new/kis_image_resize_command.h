@@ -20,20 +20,14 @@
 #ifndef KIS_IMAGE_RESIZE_COMMAND_H_
 #define KIS_IMAGE_RESIZE_COMMAND_H_
 
-#include <krita_export.h>
+#include "krita_export.h"
+#include "kis_types.h"
 
 #include <kundo2command.h>
 #include <QSize>
-#include <QBitArray>
 
-#include "kis_types.h"
-#include "kis_image_command.h"
 
-class KoCompositeOp;
-class KoColorSpace;
-class KoColorProfile;
-
-class KisImageResizeCommand : public KisImageCommand
+class KisImageResizeCommand : public KUndo2Command
 {
 public:
     KisImageResizeCommand(KisImageWSP image, const QSize& newRect);
@@ -44,6 +38,7 @@ public:
 private:
     QSize m_sizeBefore;
     QSize m_sizeAfter;
+    KisImageWSP m_image;
 };
 
 #endif

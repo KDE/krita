@@ -26,7 +26,7 @@
 
 #include "kis_types.h"
 #include "kis_simple_stroke_strategy.h"
-#include "commands/kis_saved_commands.h"
+#include "commands_new/kis_saved_commands.h"
 
 
 class QString;

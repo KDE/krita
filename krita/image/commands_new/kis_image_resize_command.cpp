@@ -17,15 +17,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_image_commands.h"
-#include "kis_image.h"
+#include "kis_image_resize_command.h"
 
 #include <klocale.h>
+#include "kis_image.h"
 
 
 KisImageResizeCommand::KisImageResizeCommand(KisImageWSP image,
                                              const QSize& newSize)
-        : KisImageCommand(i18nc("(qtundo-format)", "Resize Image"), image)
+    : KUndo2Command(i18nc("(qtundo-format)", "Resize Image")),
+      m_image(image)
 {
     // do we really need a translatable name for the command?
     m_sizeBefore = image->size();

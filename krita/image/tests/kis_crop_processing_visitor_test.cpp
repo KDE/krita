@@ -21,7 +21,7 @@
 #include <qtest_kde.h>
 #include <KoColorSpaceRegistry.h>
 #include "processing/kis_crop_processing_visitor.h"
-#include "commands/kis_processing_command.h"
+#include "commands_new/kis_processing_command.h"
 #include "kis_paint_layer.h"
 #include "kis_paint_device.h"
 #include "kis_fill_painter.h"

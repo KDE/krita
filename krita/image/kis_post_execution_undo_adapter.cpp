@@ -20,7 +20,7 @@
 
 #include "kis_undo_store.h"
 #include "kis_image_interfaces.h"
-#include "commands/kis_saved_commands.h"
+#include "commands_new/kis_saved_commands.h"
 
 
 KisPostExecutionUndoAdapter::KisPostExecutionUndoAdapter(KisUndoStore *undoStore,

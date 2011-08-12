@@ -22,7 +22,7 @@
 #include "kis_image_signal_router.h"
 #include "kis_node.h"
 #include "kis_processing_visitor.h"
-#include "commands/kis_processing_command.h"
+#include "commands_new/kis_processing_command.h"
 #include "kis_stroke_strategy_undo_command_based.h"
 
 

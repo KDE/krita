@@ -99,7 +99,9 @@ public:
         MasterPageName,             ///< Optional name of the master-page
         InlineRdf,                  ///< Optional KoTextInlineRdf object
         Borders,                    ///< KoBorder, the borders of this cell
-        Shadow                      ///< KoShadowStyle, the shadow of this cell
+        Shadow,                     ///< KoShadowStyle, the shadow of this cell
+        CellIsProtected             ///< boolean, if true, the cell is protected against edits
+                                        /// It's not really a property of KoTableCellStyle but defined here for convenience
     };
 
     /// Constructor

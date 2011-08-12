@@ -1390,18 +1390,26 @@ KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
 
 void KoMainWindow::slotConfigureKeys()
 {
-    //The undo/redo action text is "undo" + command, replace by simple text while inside editor
-    QAction* undoAction = currentView()->actionCollection()->action("edit_undo");
-    QAction* redoAction = currentView()->actionCollection()->action("edit_redo");
-    QString oldUndoText = undoAction->text();
-    QString oldRedoText = redoAction->text();
-    undoAction->setText(i18n("Undo"));
-    redoAction->setText(i18n("Redo"));
+    QAction* undoAction;
+    QAction* redoAction;
+    QString oldUndoText;
+    QString oldRedoText;
+    if(currentView()) {
+        //The undo/redo action text is "undo" + command, replace by simple text while inside editor
+        undoAction = currentView()->actionCollection()->action("edit_undo");
+        redoAction = currentView()->actionCollection()->action("edit_redo");
+        oldUndoText = undoAction->text();
+        oldRedoText = redoAction->text();
+        undoAction->setText(i18n("Undo"));
+        redoAction->setText(i18n("Redo"));
+    }
 
     guiFactory()->configureShortcuts();
 
-    undoAction->setText(oldUndoText);
-    redoAction->setText(oldRedoText);
+    if(currentView()) {
+        undoAction->setText(oldUndoText);
+        redoAction->setText(oldRedoText);
+    }
 }
 
 void KoMainWindow::slotConfigureToolbars()

@@ -2072,27 +2072,36 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
         if (bottomBorderWidth() > 0 && bottomBorderStyle() != KoBorder::BorderNone)
             style.addProperty("fo:border-bottom", bottomBorder, KoGenStyle::ParagraphType);
     }
-    QString leftBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(leftInnerBorderWidth()),
+    QString leftBorderLineWidth, rightBorderLineWidth, topBorderLineWidth, bottomBorderLineWidth;
+    if (hasProperty(LeftInnerBorderWidth) || hasProperty(LeftBorderSpacing) || hasProperty(LeftBorderWidth))
+        leftBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(leftInnerBorderWidth()),
                                   QString::number(leftBorderSpacing()),
                                   QString::number(leftBorderWidth()));
-    QString rightBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(rightInnerBorderWidth()),
+    if (hasProperty(RightInnerBorderWidth) || hasProperty(RightBorderSpacing) || hasProperty(RightBorderWidth))
+        rightBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(rightInnerBorderWidth()),
                                    QString::number(rightBorderSpacing()),
                                    QString::number(rightBorderWidth()));
-    QString topBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(topInnerBorderWidth()),
+    if (hasProperty(TopInnerBorderWidth) || hasProperty(TopBorderSpacing) || hasProperty(TopBorderWidth))
+        topBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(topInnerBorderWidth()),
                                  QString::number(topBorderSpacing()),
                                  QString::number(topBorderWidth()));
-    QString bottomBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(bottomInnerBorderWidth()),
+    if (hasProperty(BottomInnerBorderWidth) || hasProperty(BottomBorderSpacing) || hasProperty(BottomBorderWidth))
+        bottomBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(bottomInnerBorderWidth()),
                                     QString::number(bottomBorderSpacing()),
                                     QString::number(bottomBorderWidth()));
     if (leftBorderLineWidth == rightBorderLineWidth &&
             leftBorderLineWidth == topBorderLineWidth &&
-            leftBorderLineWidth == bottomBorderLineWidth ) {
+            leftBorderLineWidth == bottomBorderLineWidth && !leftBorderLineWidth.isEmpty()) {
         style.addProperty("style:border-line-width", leftBorderLineWidth, KoGenStyle::ParagraphType);
     } else {
-        style.addProperty("style:border-line-width-left", leftBorderLineWidth, KoGenStyle::ParagraphType);
-        style.addProperty("style:border-line-width-right", rightBorderLineWidth, KoGenStyle::ParagraphType);
-        style.addProperty("style:border-line-width-top", topBorderLineWidth, KoGenStyle::ParagraphType);
-        style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, KoGenStyle::ParagraphType);
+        if (!leftBorderLineWidth.isEmpty())
+            style.addProperty("style:border-line-width-left", leftBorderLineWidth, KoGenStyle::ParagraphType);
+        if (!rightBorderLineWidth.isEmpty())
+            style.addProperty("style:border-line-width-right", rightBorderLineWidth, KoGenStyle::ParagraphType);
+        if (!topBorderLineWidth.isEmpty())
+            style.addProperty("style:border-line-width-top", topBorderLineWidth, KoGenStyle::ParagraphType);
+        if (!bottomBorderLineWidth.isEmpty())
+            style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, KoGenStyle::ParagraphType);
     }
     const int indentation = 4; // indentation for children of office:styles/style:style/style:paragraph-properties
     // drop-caps

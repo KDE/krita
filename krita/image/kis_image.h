@@ -582,6 +582,9 @@ signals:
 
 public slots:
 
+    void blockUpdates();
+    void unblockUpdates();
+
     void barrierLock();
     bool tryBarrierLock();
     void waitForDone();

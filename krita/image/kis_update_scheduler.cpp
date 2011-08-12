@@ -25,6 +25,21 @@
 #include "kis_simple_update_queue.h"
 #include "kis_strokes_queue.h"
 
+#include <QReadWriteLock>
+#include "kis_lazy_wait_condition.h"
+
+//#define DEBUG_BALANCING
+
+#ifdef DEBUG_BALANCING
+#define DEBUG_BALANCING_METRICS(decidedFirst, excl)                     \
+    qDebug() << "Balance decision:" << decidedFirst                     \
+    << "(" << excl << ")"                                               \
+    << "updates:" << m_d->updatesQueue->sizeMetric()                    \
+    << "strokes:" << m_d->strokesQueue->sizeMetric()
+#else
+#define DEBUG_BALANCING_METRICS(decidedFirst, excl)
+#endif
+
 
 struct KisUpdateScheduler::Private {
     Private() : updatesQueue(0), strokesQueue(0),
@@ -38,6 +53,10 @@ struct KisUpdateScheduler::Private {
     bool processingBlocked;
     qreal balancingRatio; // updates-queue-size/strokes-queue-size
     KisProjectionUpdateListener *projectionUpdateListener;
+
+    QAtomicInt updatesLockCounter;
+    QReadWriteLock updatesStartLock;
+    KisLazyWaitCondition updatesFinishedCondition;
 };
 
 KisUpdateScheduler::KisUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener)
@@ -181,6 +200,7 @@ bool KisUpdateScheduler::tryBarrierLock()
 void KisUpdateScheduler::barrierLock()
 {
     do {
+        m_d->processingBlocked = false;
         processQueues();
         m_d->processingBlocked = true;
         m_d->updaterContext->waitForDone();
@@ -189,27 +209,75 @@ void KisUpdateScheduler::barrierLock()
 
 void KisUpdateScheduler::processQueues()
 {
+    wakeUpWaitingThreads();
+
     if(m_d->processingBlocked) return;
 
     if(m_d->strokesQueue->needsExclusiveAccess()) {
+        DEBUG_BALANCING_METRICS("STROKES", "X");
         m_d->strokesQueue->processQueue(*m_d->updaterContext,
                                         !m_d->updatesQueue->isEmpty());
 
         if(!m_d->strokesQueue->needsExclusiveAccess()) {
-            m_d->updatesQueue->processQueue(*m_d->updaterContext);
+            tryProcessUpdatesQueue();
         }
     }
     else if(m_d->balancingRatio * m_d->strokesQueue->sizeMetric() > m_d->updatesQueue->sizeMetric()) {
+        DEBUG_BALANCING_METRICS("STROKES", "N");
         m_d->strokesQueue->processQueue(*m_d->updaterContext,
                                         !m_d->updatesQueue->isEmpty());
-        m_d->updatesQueue->processQueue(*m_d->updaterContext);
+        tryProcessUpdatesQueue();
     }
     else {
-        m_d->updatesQueue->processQueue(*m_d->updaterContext);
+        DEBUG_BALANCING_METRICS("UPDATES", "N");
+        tryProcessUpdatesQueue();
         m_d->strokesQueue->processQueue(*m_d->updaterContext,
                                         !m_d->updatesQueue->isEmpty());
 
     }
+}
+
+void KisUpdateScheduler::blockUpdates()
+{
+    m_d->updatesFinishedCondition.initWaiting();
+
+    m_d->updatesLockCounter.ref();
+    while(haveUpdatesRunning()) {
+        m_d->updatesFinishedCondition.wait();
+    }
+
+    m_d->updatesFinishedCondition.endWaiting();
+}
+
+void KisUpdateScheduler::unblockUpdates()
+{
+    m_d->updatesLockCounter.deref();
+    processQueues();
+}
+
+void KisUpdateScheduler::wakeUpWaitingThreads()
+{
+    if(m_d->updatesLockCounter && !haveUpdatesRunning()) {
+        m_d->updatesFinishedCondition.wakeAll();
+    }
+}
+
+void KisUpdateScheduler::tryProcessUpdatesQueue()
+{
+    QReadLocker locker(&m_d->updatesStartLock);
+    if(m_d->updatesLockCounter) return;
+
+    m_d->updatesQueue->processQueue(*m_d->updaterContext);
+}
+
+bool KisUpdateScheduler::haveUpdatesRunning()
+{
+    QWriteLocker locker(&m_d->updatesStartLock);
+
+    qint32 numMergeJobs, numStrokeJobs;
+    m_d->updaterContext->getJobsSnapshot(numMergeJobs, numStrokeJobs);
+
+    return numMergeJobs;
 }
 
 void KisUpdateScheduler::continueUpdate(const QRect &rect)

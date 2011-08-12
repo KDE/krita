@@ -367,6 +367,16 @@ void KisImage::unlock()
     }
 }
 
+void KisImage::blockUpdates()
+{
+    m_d->scheduler->blockUpdates();
+}
+
+void KisImage::unblockUpdates()
+{
+    m_d->scheduler->unblockUpdates();
+}
+
 void KisImage::notifyLayerUpdated(KisLayerSP layer)
 {
     // Add the layer to the list of layers that need to be

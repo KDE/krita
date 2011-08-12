@@ -90,6 +90,25 @@ public:
      */
     bool tryBarrierLock();
 
+    /**
+     * Blocks all the updates from execution. It doesn't affect
+     * strokes execution in any way. This tipe of lock is supposed
+     * to be held by the strokes themselves when they need a short
+     * access to some parts of the projection of the image.
+     * From all the other places you should use usual lock()/unlock()
+     * methods
+     *
+     * \see lock(), unlock()
+     */
+    void blockUpdates();
+
+    /**
+     * Unblocks updates from execution previously locked by blockUpdates()
+     *
+     * \see blockUpdates()
+     */
+    void unblockUpdates();
+
     void updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect);
     void fullRefreshAsync(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
@@ -109,6 +128,12 @@ private slots:
     void continueUpdate(const QRect &rect);
     void doSomeUsefulWork();
     void spareThreadAppeared();
+
+private:
+    friend class UpdatesBlockTester;
+    bool haveUpdatesRunning();
+    void tryProcessUpdatesQueue();
+    void wakeUpWaitingThreads();
 
 protected:
     class Private;

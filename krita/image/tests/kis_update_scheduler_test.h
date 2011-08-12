@@ -36,6 +36,8 @@ private slots:
     void testLocking();
     void testExclusiveStrokes();
     void testEmptyStroke();
+    void testLazyWaitCondition();
+    void testBlockUpdates();
 };
 
 #endif /* KIS_UPDATE_SCHEDULER_TEST_H */

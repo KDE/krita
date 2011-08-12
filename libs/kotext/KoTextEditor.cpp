@@ -1035,32 +1035,30 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();
         if (table) {
-            // There are 3 ways this table can be selected:
+            // There are 4 ways this table can be selected:
             //  - "before to mid"
             //  - "mid to after"
             //  - "complex mid to mid"
             //  - "simple mid to mid"
-            // The 3 first are entire cells
+            // The 3 first are entire cells, the fourth is within a cell
 
             if (d->caret.selectionStart() <= table->lastPosition()
                 && d->caret.selectionEnd() >= table->firstPosition()) {
                 // We have a selection somewhere 
                 QTextTableCell cell = table->cellAt(d->caret.selectionStart());
-qDebug() <<"We have a selection somewhere";
                 if (d->caret.selectionEnd() > cell.lastPosition()) {
                     // And the selection is complex
-qDebug() <<"And the selection is complex";
                     int selectionRow;
                     int selectionColumn;
                     int selectionRowSpan;
                     int selectionColumnSpan;
                     d->caret.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
 
-                    for (int r = selectionRow; ; r++) {
-                        for (int c = selectionColumn; ; c++) {
-                            QTextTableCell cell = table->cellAt(c,r);
-                            QTextTableCellFormat format = cell.format().toTableCellFormat();
-                            if (format.boolProperty(KoTableCellStyle::CellIsProtected)) {
+                    for (int r = selectionRow; r < selectionRow + selectionRowSpan; r++) {
+                        for (int c = selectionColumn; c < selectionColumn + 
+                                    selectionColumnSpan; c++) {
+                            QTextTableCell cell = table->cellAt(r,c);
+                            if (cell.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
                                 return true;
                             }
 
@@ -1071,9 +1069,7 @@ qDebug() <<"And the selection is complex";
                     }
                 } else {
                     // And the selection is simple
-                    QTextTableCellFormat format = cell.format().toTableCellFormat();
-                    if (format.boolProperty(KoTableCellStyle::CellIsProtected)) {
-qDebug() <<"simple but cell protected";
+                    if (cell.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
                         return true;
                     }
                     return recursiveProtectionCheck(cell.begin());
@@ -1086,7 +1082,7 @@ qDebug() <<"simple but cell protected";
         } else {
             // TODO build up the section stack 
 
-            if (d->caret.selectionStart() <= block.position() + block.length()
+            if (d->caret.selectionStart() < block.position() + block.length()
                 && d->caret.selectionEnd() >= block.position()) {
                 // We have a selection somewhere 
                 // TODO return true if block is protected by section
@@ -1094,7 +1090,7 @@ qDebug() <<"simple but cell protected";
 
             // TODO tear down the section stack 
 
-            if (d->caret.selectionEnd() <= block.position() + block.length()) {
+            if (d->caret.selectionEnd() < block.position() + block.length()) {
                 return false;
             }
         }

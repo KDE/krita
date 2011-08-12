@@ -72,8 +72,10 @@ public: // KoToolSelection overloads
     /// returns true if the wrapped QTextCursor has a selection.
     bool hasSelection();
 
-    /// returns true if the current cursor position is protected from editing
-    bool isEditProtected();
+    /** returns true if the current cursor position is protected from editing
+     * @param cached use cached value if available.
+     */
+    bool isEditProtected(bool useCached = false);
 
 public:
 

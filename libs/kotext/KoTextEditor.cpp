@@ -92,10 +92,11 @@ static bool isRightToLeft(const QString &text)
 /*Private*/
 
 KoTextEditor::Private::Private(KoTextEditor *qq, QTextDocument *document)
-    : q(qq),
-    document (document),
-    headCommand(0),
-    isBidiDocument(false)
+    : q(qq)
+    , document (document)
+    , headCommand(0)
+    , isBidiDocument(false)
+    , editProtectionCached(false)
 {
     caret = QTextCursor(document);
     editorState = NoOp;
@@ -1045,14 +1046,22 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
             if (d->caret.selectionStart() <= table->lastPosition()
                 && d->caret.selectionEnd() >= table->firstPosition()) {
                 // We have a selection somewhere 
-                QTextTableCell cell = table->cellAt(d->caret.selectionStart());
-                if (d->caret.selectionEnd() > cell.lastPosition()) {
-                    // And the selection is complex
+                QTextTableCell cell1 = table->cellAt(d->caret.selectionStart());
+                QTextTableCell cell2 = table->cellAt(d->caret.selectionEnd());
+                if (cell1 != cell2) {
+                    // And the selection is complex or entire table
                     int selectionRow;
                     int selectionColumn;
                     int selectionRowSpan;
                     int selectionColumnSpan;
-                    d->caret.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
+                    if (!cell1.isValid() || !cell2.isValid()) {
+                        // entire table
+                        selectionRow = selectionColumn = 0;
+                        selectionRowSpan = table->rows();
+                        selectionColumnSpan = table->columns();
+                    } else {
+                        d->caret.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
+                    }
 
                     for (int r = selectionRow; r < selectionRow + selectionRowSpan; r++) {
                         for (int c = selectionColumn; c < selectionColumn + 
@@ -1069,10 +1078,10 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
                     }
                 } else {
                     // And the selection is simple
-                    if (cell.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
+                    if (cell1.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
                         return true;
                     }
-                    return recursiveProtectionCheck(cell.begin());
+                    return recursiveProtectionCheck(cell1.begin());
                 }
             }
             if (d->caret.selectionEnd() <= table->lastPosition()) {
@@ -1101,8 +1110,16 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
     return false;
 }
 
-bool KoTextEditor::isEditProtected()
+bool KoTextEditor::isEditProtected(bool useCached)
 {
+    if (useCached) {
+        if (! d->editProtectionCached) {
+            d->editProtected = recursiveProtectionCheck(d->document->rootFrame()->begin());
+            d->editProtectionCached = true;
+        }
+        return d->editProtected;
+    }
+    d->editProtectionCached = false;
     return recursiveProtectionCheck(d->document->rootFrame()->begin());
 }
 
@@ -1469,6 +1486,7 @@ void KoTextEditor::mergeCharFormat(const QTextCharFormat &modifier)
 
 bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode, int n)
 {
+    d->editProtectionCached = false;
     bool b = d->caret.movePosition (operation, mode, n);
     emit cursorPositionChanged();
     return b;
@@ -1632,6 +1650,7 @@ void KoTextEditor::setTableFormat(const QTextTableFormat &format)
 
 void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode m)
 {
+    d->editProtectionCached = false;
     d->caret.setPosition (pos, m);
     emit cursorPositionChanged();
 }

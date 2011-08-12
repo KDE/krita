@@ -653,22 +653,38 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 
             QTextLine tl = block.layout()->lineForTextPosition(m_textEditor.data()->position() - block.position());
             if (tl.isValid()) {
-                painter.setRenderHint(QPainter::Antialiasing,false);
+                painter.setRenderHint(QPainter::Antialiasing, false);
                 QRectF rect = caretRect(m_textEditor.data()->cursor());
+                QPointF baselinePoint;
                 if (tl.ascent() > 0) {
                     QFontMetricsF fm(m_textEditor.data()->charFormat().font(), painter.device());
                     rect.setY(rect.y() + tl.ascent() - qMin(tl.ascent(), fm.ascent()));
                     rect.setHeight(qMin(tl.ascent(), fm.ascent()) + qMin(tl.descent(), fm.descent()));
+                    baselinePoint = QPoint(rect.x(), rect.y() + tl.ascent());
                 } else {
                     //line only filled with characters-without-size (eg anchors)
                     // layout will make sure line has height of block font
                     QFontMetricsF fm(block.charFormat().font(), painter.device());
                     rect.setHeight(fm.ascent() + fm.descent());
+                    baselinePoint = QPoint(rect.x(), rect.y() + fm.ascent());
                 }
                 QRectF drawRect(shapeMatrix.map(rect.topLeft()), shapeMatrix.map(rect.bottomLeft()));
                 drawRect.setWidth(2);
                 painter.fillRect(drawRect, QColor(Qt::white));
                 painter.fillRect(drawRect, QBrush(Qt::black, Qt::Dense3Pattern));
+                if (m_textEditor.data()->isEditProtected(true)) {
+                    QRectF circleRect(shapeMatrix.map(baselinePoint),QSizeF(14, 14));
+                    circleRect.translate(-7.5, -7.5);
+                    QPen pen(Qt::red);
+                    pen.setWidthF(2.0);
+                    painter.setPen(Qt::NoPen);
+                    painter.setPen(pen);
+                    painter.setBrush(QBrush(QColor(255, 255, 255, 192)));
+                    painter.setRenderHint(QPainter::Antialiasing, true);
+                    painter.drawEllipse(circleRect);
+                    painter.drawLine(circleRect.topLeft() + QPointF(2,2),
+                                    circleRect.bottomRight() - QPointF(2,2));
+                }
             }
         }
     }
@@ -1484,6 +1500,14 @@ void TextTool::repaintCaret()
         repaintRect.moveTop(repaintRect.top() - textShape->textShapeData()->documentOffset());
         if (repaintRect.isValid()) {
             repaintRect = textShape->absoluteTransformation(0).mapRect(repaintRect);
+
+            // Make sure there is enough space to show an icon
+            QRectF iconSize = canvas()->viewConverter()->viewToDocument(QRect(0,0,16, 16));
+            repaintRect.setX(repaintRect.x() - iconSize.width() / 2);
+            repaintRect.setWidth(iconSize.width());
+            repaintRect.moveTop(repaintRect.y() - iconSize.height() / 2);
+            repaintRect.moveBottom(repaintRect.bottom() + iconSize.height() / 2);
+
             canvas()->updateCanvas(repaintRect);
         }
     }

@@ -216,7 +216,7 @@ public:
      * You should consider doing a remove(KoParagraphStyle::FixedLineHeight); because if set, it will
      *  be used instead of this value.
      */
-    void setMinimumLineHeight(qreal height);
+    void setMinimumLineHeight(const QTextLength &height);
     /// @see setMinimumLineHeight
     qreal minimumLineHeight() const;
 

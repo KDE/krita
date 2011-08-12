@@ -285,7 +285,7 @@ void KoParagraphStyle::setLineHeightPercent(int lineHeight)
 {
     setProperty(PercentLineHeight, lineHeight);
     setProperty(FixedLineHeight, 0.0);
-    setProperty(MinimumLineHeight, 0.0);
+    setProperty(MinimumLineHeight, QTextLength(QTextLength::FixedLength, 0.0));
     remove(NormalLineHeight);
 }
 
@@ -298,7 +298,7 @@ void KoParagraphStyle::setLineHeightAbsolute(qreal height)
 {
     setProperty(FixedLineHeight, height);
     setProperty(PercentLineHeight, 0);
-    setProperty(MinimumLineHeight, 0.0);
+    setProperty(MinimumLineHeight, QTextLength(QTextLength::FixedLength, 0.0));
     remove(NormalLineHeight);
 }
 
@@ -307,7 +307,7 @@ qreal KoParagraphStyle::lineHeightAbsolute() const
     return propertyDouble(FixedLineHeight);
 }
 
-void KoParagraphStyle::setMinimumLineHeight(qreal height)
+void KoParagraphStyle::setMinimumLineHeight(const QTextLength &height)
 {
     setProperty(FixedLineHeight, 0.0);
     setProperty(PercentLineHeight, 0);
@@ -317,7 +317,10 @@ void KoParagraphStyle::setMinimumLineHeight(qreal height)
 
 qreal KoParagraphStyle::minimumLineHeight() const
 {
-    return propertyDouble(MinimumLineHeight);
+    if (parentStyle())
+        return propertyLength(MinimumLineHeight).value(parentStyle()->minimumLineHeight());
+    else
+        return propertyLength(MinimumLineHeight).value(0);
 }
 
 void KoParagraphStyle::setLineSpacing(qreal spacing)
@@ -347,7 +350,7 @@ void KoParagraphStyle::setNormalLineHeight()
     setProperty(NormalLineHeight, true);
     setProperty(PercentLineHeight, 0);
     setProperty(FixedLineHeight, 0.0);
-    setProperty(MinimumLineHeight, 0.0);
+    setProperty(MinimumLineHeight, QTextLength(QTextLength::FixedLength, 0.0));
     setProperty(LineSpacing, 0.0);
 }
 
@@ -1307,7 +1310,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
     const QString lineHeightAtLeast(styleStack.property(KoXmlNS::style, "line-height-at-least"));
     if (!lineHeightAtLeast.isEmpty() && !propertyBoolean(NormalLineHeight) && lineHeightAbsolute() == 0) {    // 3.11.2
-        setMinimumLineHeight(KoUnit::parseValue(lineHeightAtLeast));
+        setMinimumLineHeight(KoText::parseLength(lineHeightAtLeast));
     }  // Line-height-at-least is mutually exclusive with absolute line-height
     const QString fontIndependentLineSpacing(styleStack.property(KoXmlNS::style, "font-independent-line-spacing"));
     if (!fontIndependentLineSpacing.isEmpty() && !propertyBoolean(NormalLineHeight) && lineHeightAbsolute() == 0) {
@@ -1973,8 +1976,8 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
                     key == KoParagraphStyle::FixedLineHeight ||
                     key == KoParagraphStyle::LineSpacingFromFont) {
 
-            if (key == KoParagraphStyle::MinimumLineHeight && minimumLineHeight() != 0) {
-                style.addPropertyPt("style:line-height-at-least", minimumLineHeight(), KoGenStyle::ParagraphType);
+            if (key == KoParagraphStyle::MinimumLineHeight && propertyLength(MinimumLineHeight).rawValue() != 0) {
+                style.addPropertyLength("style:line-height-at-least", propertyLength(MinimumLineHeight), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
             } else if (key == KoParagraphStyle::LineSpacing && lineSpacing() != 0) {
                 style.addPropertyPt("style:line-spacing", lineSpacing(), KoGenStyle::ParagraphType);

@@ -1727,19 +1727,13 @@ void TextTool::lineBreak()
 void TextTool::alignLeft()
 {
     if (!m_allowActions || !m_textEditor.data()) return;
-    Qt::Alignment align = Qt::AlignLeading;
-    if (m_textEditor.data()->block().layout()->textOption().textDirection() != Qt::LeftToRight)
-        align |= Qt::AlignTrailing;
-    m_textEditor.data()->setHorizontalTextAlignment(align);
+    m_textEditor.data()->setHorizontalTextAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
 }
 
 void TextTool::alignRight()
 {
     if (!m_allowActions || !m_textEditor.data()) return;
-    Qt::Alignment align = Qt::AlignTrailing;
-    if (m_textEditor.data()->block().layout()->textOption().textDirection() == Qt::RightToLeft)
-        align = Qt::AlignLeading;
-    m_textEditor.data()->setHorizontalTextAlignment(align);
+    m_textEditor.data()->setHorizontalTextAlignment(Qt::AlignRight | Qt::AlignAbsolute);
 }
 
 void TextTool::alignCenter()

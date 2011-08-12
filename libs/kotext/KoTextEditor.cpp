@@ -1060,8 +1060,7 @@ qDebug() <<"And the selection is complex";
                         for (int c = selectionColumn; ; c++) {
                             QTextTableCell cell = table->cellAt(c,r);
                             QTextTableCellFormat format = cell.format().toTableCellFormat();
-                            if (format.hasProperty(KoTableCellStyle::CellProtection) 
-                                && format.intProperty(KoTableCellStyle::CellProtection) == KoTableCellStyle::Protected) {
+                            if (format.boolProperty(KoTableCellStyle::CellIsProtected)) {
                                 return true;
                             }
 
@@ -1073,8 +1072,7 @@ qDebug() <<"And the selection is complex";
                 } else {
                     // And the selection is simple
                     QTextTableCellFormat format = cell.format().toTableCellFormat();
-                    if (format.hasProperty(KoTableCellStyle::CellProtection) 
-                                && format.intProperty(KoTableCellStyle::CellProtection) == KoTableCellStyle::Protected) {
+                    if (format.boolProperty(KoTableCellStyle::CellIsProtected)) {
 qDebug() <<"simple but cell protected";
                         return true;
                     }

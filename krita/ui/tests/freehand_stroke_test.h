@@ -29,6 +29,7 @@ class FreehandStrokeTest : public QObject
 private slots:
     void testAutobrushStroke();
     void testHatchingStroke();
+    void testColorSmudgeStroke();
 };
 
 #endif /* __FREEHAND_STROKE_TEST_H */

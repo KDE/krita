@@ -74,5 +74,11 @@ void FreehandStrokeTest::testHatchingStroke()
     tester.test();
 }
 
+void FreehandStrokeTest::testColorSmudgeStroke()
+{
+    FreehandStrokeTester tester("colorsmudge_predefined.kpp");
+    tester.test();
+}
+
 QTEST_KDEMAIN(FreehandStrokeTest, GUI)
 #include "freehand_stroke_test.moc"

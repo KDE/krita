@@ -447,6 +447,7 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     if (properties.attributeNames().count() > 1)
     {
         kWarning(32500) << "Warning : got more than one attribute !";
+        kDebug(32500) << generatedXmlOutput;
     }
     if (attribute->hasReference("__border")) {
         KoBorder original, output;

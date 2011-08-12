@@ -11,4 +11,8 @@ install( FILES
     ColorSmudge\ -\ Structure\ Brush.kpp  
     ColorSmudge\ -\ Wet\ Paint.kpp  
     ColorSmudge\ -\ Smudge\ Only.kpp
+    curvebrush_curvy.kpp
+    curvebrush_recurvy.kpp
+    curvebrush_smoothe.kpp
+
 DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)

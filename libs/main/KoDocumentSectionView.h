@@ -127,6 +127,11 @@ protected:
     virtual void startDrag (Qt::DropActions supportedActions);
     QPixmap createDragPixmap() const;
 
+    /**
+     * Calculates the index of the nearest item to the cursor position
+     */
+    int cursorPageIndex() const;
+
 protected slots:
     virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous);
     virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
@@ -141,7 +146,6 @@ private:
      * @return boolean
      */
     bool isDraging() const;
-
 
     /**
      * Setter for the draging flag

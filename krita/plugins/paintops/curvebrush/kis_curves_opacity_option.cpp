@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_CURVE_PAINTOP_SETTINGS_WIDGET_H_
-#define KIS_CURVE_PAINTOP_SETTINGS_WIDGET_H_
+#include "kis_curves_opacity_option.h"
+#include <klocale.h>
 
-#include <kis_paintop_options_widget.h>
-
-class KisCurveOpOption;
-class KisPropertiesConfiguration;
-
-class KisCurvePaintOpSettingsWidget : public KisPaintOpOptionsWidget
+KisCurvesOpacityOption::KisCurvesOpacityOption()
+        : KisCurveOption(i18n("Curves opacity"), "Curves opacity", KisPaintOpOption::brushCategory(), false)
 {
-    Q_OBJECT
-
-public:
-    KisCurvePaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisCurvePaintOpSettingsWidget();
-
-    KisPropertiesConfiguration* configuration() const;
-
-private:
-    KisCurveOpOption * m_options;
-};
+    setMinimumLabel(i18n("0%"));
+    setMaximumLabel(i18n("100%"));
+}
 
 
-#endif
+double KisCurvesOpacityOption::apply(const KisPaintInformation & info, qreal opacity) const
+{
+    if (!isChecked()) {
+        return opacity;
+    }
+    return computeValue(info) * opacity;
+}

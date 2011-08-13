@@ -87,9 +87,13 @@ KoResourceManager* utils::createResourceManager(KisImageWSP image,
     i.setValue(node);
     manager->setResource(KisCanvasResourceProvider::CurrentKritaNode, i);
 
-    QString dataPath = QString(FILES_DATA_DIR) + QDir::separator();
-    KisPaintOpPresetSP preset = new KisPaintOpPreset(dataPath + presetFileName);
-    preset->load();
+    KisPaintOpPresetSP preset;
+
+    if(!presetFileName.isEmpty()) {
+        QString dataPath = QString(FILES_DATA_DIR) + QDir::separator();
+        preset = new KisPaintOpPreset(dataPath + presetFileName);
+        preset->load();
+    }
 
     i.setValue(preset);
     manager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, i);
@@ -169,7 +173,7 @@ void utils::StrokeTester::testOneStroke(bool cancelled,
              << "(comare against " << (testUpdates ? "projection" : "layer") << ")";
 
     QImage resultImage;
-    resultImage = doStroke(cancelled, indirectPainting, externalLayer);
+    resultImage = doStroke(cancelled, indirectPainting, externalLayer, testUpdates);
 
     QImage refImage;
     refImage.load(referenceFile(testName));
@@ -213,7 +217,11 @@ QString utils::StrokeTester::resultFile(const QString &testName)
     return path;
 }
 
-QImage utils::StrokeTester::doStroke(bool cancelled, bool indirectPainting, bool externalLayer, bool testUpdates, bool needQImage)
+QImage utils::StrokeTester::doStroke(bool cancelled,
+                                     bool indirectPainting,
+                                     bool externalLayer,
+                                     bool testUpdates,
+                                     bool needQImage)
 {
     KisImageSP image = utils::createImage(0, m_imageSize);
     KoResourceManager *manager = utils::createResourceManager(image, 0, m_presetFilename);
@@ -230,7 +238,9 @@ QImage utils::StrokeTester::doStroke(bool cancelled, bool indirectPainting, bool
         Q_ASSERT(resources->currentNode() == externalNode);
     }
 
-    KisStrokeStrategy *stroke = createStroke(indirectPainting, resources, painter);
+    initImage(image, resources->currentNode());
+
+    KisStrokeStrategy *stroke = createStroke(indirectPainting, resources, painter, image);
     m_strokeId = image->startStroke(stroke);
     addPaintingJobs(image, resources, painter);
 
@@ -255,4 +265,10 @@ QImage utils::StrokeTester::doStroke(bool cancelled, bool indirectPainting, bool
     image = 0;
     delete manager;
     return resultImage;
+}
+
+void utils::StrokeTester::initImage(KisImageWSP image, KisNodeSP activeNode)
+{
+    Q_UNUSED(image);
+    Q_UNUSED(activeNode);
 }

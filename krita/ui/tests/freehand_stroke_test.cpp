@@ -38,7 +38,9 @@ public:
 protected:
     KisStrokeStrategy* createStroke(bool indirectPainting,
                                     KisResourcesSnapshotSP resources,
-                                    KisPainter *painter) {
+                                    KisPainter *painter,
+                                    KisImageWSP image) {
+        Q_UNUSED(image);
 
         return new FreehandStrokeStrategy(indirectPainting, resources, painter);
     }

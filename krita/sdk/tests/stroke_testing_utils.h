@@ -51,9 +51,12 @@ namespace utils {
             return m_strokeId;
         }
 
+        virtual void initImage(KisImageWSP image, KisNodeSP activeNode);
+
         virtual KisStrokeStrategy* createStroke(bool indirectPainting,
                                                 KisResourcesSnapshotSP resources,
-                                                KisPainter *painter) = 0;
+                                                KisPainter *painter,
+                                                KisImageWSP image) = 0;
 
         virtual void addPaintingJobs(KisImageWSP image,
                                      KisResourcesSnapshotSP resources,

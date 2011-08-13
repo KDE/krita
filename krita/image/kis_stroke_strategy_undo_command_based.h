@@ -67,7 +67,7 @@ public:
     void cancelStrokeCallback();
     void doStrokeCallback(KisStrokeJobData *data);
 
-private:
+protected:
     void executeCommand(KUndo2CommandSP command, bool undo);
     void notifyCommandDone(KUndo2CommandSP command,
                            KisStrokeJobData::Sequentiality sequentiality,

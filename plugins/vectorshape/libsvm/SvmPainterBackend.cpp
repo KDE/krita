@@ -35,7 +35,7 @@
 #include "SvmGraphicsContext.h"
 
 
-#define DEBUG_SVMPAINT 1
+#define DEBUG_SVMPAINT 0
 
 
 /**
@@ -123,6 +123,21 @@ void SvmPainterBackend::polygon( SvmGraphicsContext &context, const QPolygon &po
 {
     updateFromGraphicscontext(context);
     m_painter->drawPolygon(polygon);
+}
+
+void SvmPainterBackend::polyPolygon(SvmGraphicsContext &context,
+                                    const QList<QPolygon> &polyPolygon)
+{
+    updateFromGraphicscontext(context);
+
+    QPainterPath  path;
+
+    path.setFillRule(Qt::OddEvenFill);
+    //path.setFillRule(Qt::WindingFill);
+    foreach (const QPolygon &polygon, polyPolygon) {
+        path.addPolygon(polygon);
+    }
+    m_painter->drawPath(path);
 }
 
 void SvmPainterBackend::textArray(SvmGraphicsContext &context,

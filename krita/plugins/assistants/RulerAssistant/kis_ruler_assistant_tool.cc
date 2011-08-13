@@ -281,6 +281,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
 
 void KisRulerAssistantTool::removeAllAssistants()
 {
+    m_canvas->view()->resourceProvider()->clearPerspectiveGrids();
     m_canvas->view()->paintingAssistantManager()->removeAll();
     m_handles = m_canvas->view()->paintingAssistantManager()->handles();
     m_canvas->updateCanvas();

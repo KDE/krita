@@ -195,7 +195,6 @@ QList<QWidget *>  KoToolBase::createOptionWidgets()
         if (widget->objectName().isEmpty()) {
             widget->setObjectName(toolId());
         }
-        widget->setWindowTitle(i18n("Tool Options"));
         ow.append(widget);
     }
     return ow;

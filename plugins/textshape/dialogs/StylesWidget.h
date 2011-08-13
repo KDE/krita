@@ -50,7 +50,8 @@ signals:
     void characterStyleSelected(KoCharacterStyle *characterStyle, bool canDelete);
 
 private slots:
-    void applyStyle();
+    void applyParagraphStyle();
+    void applyCharacterStyle();
 
 signals:
     void paragraphStyleSelected(KoParagraphStyle *style);

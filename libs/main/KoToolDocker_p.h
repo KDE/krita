@@ -36,6 +36,8 @@ public:
     explicit KoToolDocker(QWidget *parent = 0);
     ~KoToolDocker();
 
+    void resetWidgets();
+
 protected:
     virtual void resizeEvent(QResizeEvent* event); ///< reimplemented from QWidget
 public slots:

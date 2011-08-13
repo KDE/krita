@@ -1992,6 +1992,9 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     if (d->changeTracker && d->changeStack.count()) {
         tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
     }
+    if (tableElem.attributeNS(KoXmlNS::table, "protected", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::TableIsProtected, true);
+    }
     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
     d->inTable = true;
 
@@ -2200,6 +2203,9 @@ void KoTextLoader::loadTableCell(KoXmlElement &rowTag, QTextTable *tbl, QList<QR
         if (cellStyle)
             cellStyle->applyStyle(cellFormat);
 
+        if (rowTag.attributeNS(KoXmlNS::table, "protected", "false") == "true") {
+            cellFormat.setProperty(KoTableCellStyle::CellIsProtected, true);
+        }
         if (d->changeTracker && d->changeStack.count()) {
             cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
         }

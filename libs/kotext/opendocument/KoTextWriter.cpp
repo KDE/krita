@@ -1343,6 +1343,10 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
     QString tableStyleName = saveTableStyle(*table);
     tableTagInformation.setTagName("table:table");
     tableTagInformation.addAttribute("table:style-name", tableStyleName);
+    if (table->format().boolProperty(KoTableStyle::TableIsProtected))
+    {
+        tableTagInformation.addAttribute("table:protected", "true");
+    }
     int changeId = openTagRegion(table->firstCursorPosition().position(), KoTextWriter::Private::Table, tableTagInformation);
 
     for (int c = 0 ; c < table->columns() ; c++) {
@@ -1386,13 +1390,21 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
             QTextTableCell cell = table->cellAt(r, c);
             int changeId = 0;
 
+            TagInformation tableCellInformation;
+            if (cell.format().boolProperty(KoTableCellStyle::CellIsProtected))
+            {
+                tableCellInformation.addAttribute("table:protected", "true");
+            }
             if ((cell.row() == r) && (cell.column() == c)) {
-                TagInformation tableCellInformation;
                 tableCellInformation.setTagName("table:table-cell");
                 if (cell.rowSpan() > 1)
                     tableCellInformation.addAttribute("table:number-rows-spanned", cell.rowSpan());
                 if (cell.columnSpan() > 1)
                     tableCellInformation.addAttribute("table:number-columns-spanned", cell.columnSpan());
+                if (cell.format().boolProperty(KoTableCellStyle::CellIsProtected))
+                {
+                    tableCellInformation.addAttribute("table:protected", "true");
+                }
 
                 // Save the Rdf for the table cell
                 QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
@@ -1406,7 +1418,6 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
                 changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell, tableCellInformation);
                 writeBlocks(table->document(), cell.firstPosition(), cell.lastPosition(), listStyles, table);
             } else {
-                TagInformation tableCellInformation;
                 tableCellInformation.setTagName("table:covered-table-cell");
                 changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell, tableCellInformation);
             }

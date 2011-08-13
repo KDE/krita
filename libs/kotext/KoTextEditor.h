@@ -30,6 +30,7 @@
 #include <QClipboard>
 #include <QMetaType>
 #include <QTextCursor>
+#include <QTextFrame>
 
 class KoCharacterStyle;
 class KoInlineObject;
@@ -76,6 +77,11 @@ public: // KoToolSelection overloads
 
     /// returns true if the wrapped QTextCursor has a selection.
     bool hasSelection();
+
+    /** returns true if the current cursor position is protected from editing
+     * @param cached use cached value if available.
+     */
+    bool isEditProtected(bool useCached = false);
 
 public:
 
@@ -319,6 +325,9 @@ public slots:
 signals:
     void isBidiUpdated();
     void cursorPositionChanged();
+
+protected:
+    bool recursiveProtectionCheck(QTextFrame::iterator it);
 
 private:
     Q_PRIVATE_SLOT(d, void documentCommandAdded())

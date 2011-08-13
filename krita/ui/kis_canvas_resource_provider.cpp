@@ -396,6 +396,11 @@ void KisCanvasResourceProvider::removePerspectiveGrid(KisAbstractPerspectiveGrid
     m_perspectiveGrids.removeOne(grid);
 }
 
+void KisCanvasResourceProvider::clearPerspectiveGrids()
+{
+    m_perspectiveGrids.clear();
+}
+
 void KisCanvasResourceProvider::setMirrorHorizontal(bool mirrorHorizontal)
 {
     m_resourceManager->setResource(MirrorHorizontal, mirrorHorizontal);

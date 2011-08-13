@@ -105,6 +105,7 @@ public:
     QList<KisAbstractPerspectiveGrid*> perspectiveGrids() const;
     void addPerspectiveGrid(KisAbstractPerspectiveGrid*);
     void removePerspectiveGrid(KisAbstractPerspectiveGrid*);
+    void clearPerspectiveGrids();
 
     void setMirrorHorizontal(bool mirrorHorizontal);
     bool mirrorHorizontal() const;

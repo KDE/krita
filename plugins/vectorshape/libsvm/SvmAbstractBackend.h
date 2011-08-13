@@ -91,6 +91,8 @@ public:
 
     virtual void polygon(SvmGraphicsContext &context, const QPolygon &polygon) = 0;
 
+    virtual void polyPolygon(SvmGraphicsContext &context, const QList<QPolygon> &polyPolygon) = 0;
+
     virtual void textArray(SvmGraphicsContext &context,
                            const QPoint &point, const QString &string,
                            quint16 startIndex, quint16 len,

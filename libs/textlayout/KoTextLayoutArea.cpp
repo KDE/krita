@@ -1181,6 +1181,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
 {
     QTextBlock block = cursor->it.currentBlock();
     QTextBlockFormat format = block.blockFormat();
+    KoParagraphStyle style(format, block.charFormat());
 
     if (blockData && block.textList() && block.layout()->lineCount() == 1) {
         // first line, lets check where the line ended up and adjust the positioning of the counter.
@@ -1285,7 +1286,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         height += lineSpacing;
     }
 
-    qreal minimum = format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
+    qreal minimum = style.minimumLineHeight();
     if (minimum > 0.0)
         height = qMax(height, minimum);
 

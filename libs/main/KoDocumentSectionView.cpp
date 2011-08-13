@@ -32,6 +32,7 @@
 #include <QPersistentModelIndex>
 #include <QApplication>
 #include <QPainter>
+#include <QScrollBar>
 
 class KoDocumentSectionView::Private
 {
@@ -45,6 +46,7 @@ public:
 
 KoDocumentSectionView::KoDocumentSectionView(QWidget *parent)
     : QTreeView(parent)
+    , m_dragingFlag(false)
     , d(new Private)
 {
     d->delegate = new KoDocumentSectionDelegate(this, this);
@@ -279,6 +281,104 @@ QPixmap KoDocumentSectionView::createDragPixmap() const
     }
 
     return dragPixmap;
+}
+
+void KoDocumentSectionView::paintEvent(QPaintEvent *event)
+{
+    event->accept();
+    QTreeView::paintEvent(event);
+
+    // Paint the line where the slide should go
+    if (isDraging() && (displayMode() == KoDocumentSectionView::ThumbnailMode)) {
+        QSize size(visualRect(model()->index(0, 0, QModelIndex())).width(), visualRect(model()->index(0, 0, QModelIndex())).height());
+        int numberRow = cursorPageIndex();
+        int scrollBarValue = verticalScrollBar()->value();
+
+        QPoint point1(0, numberRow * size.height() - scrollBarValue);
+        QPoint point2(size.width(), numberRow * size.height() - scrollBarValue);
+        QLineF line(point1, point2);
+
+        QPainter painter(this->viewport());
+        QPen pen = QPen(palette().brush(QPalette::Highlight), 8);
+        pen.setCapStyle(Qt::RoundCap);
+        painter.setPen(pen);
+        painter.setOpacity(0.8);
+        painter.drawLine(line);
+    }
+}
+
+void KoDocumentSectionView::dropEvent(QDropEvent *ev)
+{
+    if (displayMode() == KoDocumentSectionView::ThumbnailMode) {
+        setDragingFlag(false);
+        ev->accept();
+        clearSelection();
+
+        if (!model()) {
+            return;
+        }
+
+        int newIndex = cursorPageIndex();
+        model()->dropMimeData(ev->mimeData(), ev->dropAction(), newIndex, -1, QModelIndex());
+        return;
+    }
+    QTreeView::dropEvent(ev);
+}
+
+int KoDocumentSectionView::cursorPageIndex() const
+{
+    QSize size(visualRect(model()->index(0, 0, QModelIndex())).width(), visualRect(model()->index(0, 0, QModelIndex())).height());
+    int scrollBarValue = verticalScrollBar()->value();
+
+    QPoint cursorPosition = QWidget::mapFromGlobal(QCursor::pos());
+
+    int numberRow = (cursorPosition.y() + scrollBarValue) / size.height();
+
+    //If cursor is at the half button of the page then the move action is performed after the slide, otherwise it is
+    //performed before the page
+    if (abs((cursorPosition.y() + scrollBarValue) - size.height()*numberRow) > (size.height()/2)) {
+        numberRow++;
+    }
+
+    if (numberRow > model()->rowCount(QModelIndex())) {
+        numberRow = model()->rowCount(QModelIndex());
+    }
+
+    return numberRow;
+}
+
+void KoDocumentSectionView::dragMoveEvent(QDragMoveEvent *ev)
+{
+    if (displayMode() == KoDocumentSectionView::ThumbnailMode) {
+        ev->accept();
+        if (!model()) {
+            return;
+        }
+        QTreeView::dragMoveEvent(ev);
+        setDragingFlag();
+        viewport()->update();
+        return;
+    }
+    QTreeView::dragMoveEvent(ev);
+}
+
+void KoDocumentSectionView::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    if (displayMode() == KoDocumentSectionView::ThumbnailMode) {
+        setDragingFlag(false);
+        return;
+    }
+    QTreeView::dragLeaveEvent(e);
+}
+
+bool KoDocumentSectionView::isDraging() const
+{
+    return m_dragingFlag;
+}
+
+void KoDocumentSectionView::setDragingFlag(bool flag)
+{
+    m_dragingFlag = flag;
 }
 
 #include <KoDocumentSectionPropertyAction_p.moc>

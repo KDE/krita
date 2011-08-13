@@ -48,7 +48,7 @@ class KOPAGEAPP_EXPORT KoPAViewMode : public QObject
 
     Q_OBJECT
 public:
-    KoPAViewMode( KoPAViewBase * view, KoPACanvasBase * canvas );
+    KoPAViewMode(KoPAViewBase * view, KoPACanvasBase * canvas, QString name = "");
     virtual ~KoPAViewMode();
 
     virtual void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect) = 0;
@@ -152,6 +152,8 @@ public:
     QPointF origin();
 
     void setOrigin(const QPointF &origin);
+    void setName(const QString &name);
+    QString name() const;
 
 public slots:
 
@@ -173,6 +175,7 @@ protected:
     KoToolProxy * m_toolProxy;
     KoPAViewBase * m_view;
     QPointF m_origin;
+    QString m_name;
 };
 
 #endif /* KOPAVIEWMODE_H */

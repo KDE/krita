@@ -47,6 +47,9 @@
 #include <kis_selection.h>
 #include <kis_layer.h>
 #include <kis_crop_visitor.h>
+#include <kis_canvas2.h>
+#include <kis_view2.h>
+#include <KoZoomController.h>
 
 KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::load("tool_crop_cursor.png", 6, 6))
@@ -464,6 +467,7 @@ void KisToolCrop::crop()
     m_rectCrop = QRect(0, 0, 0, 0);
 
     updateWidgetValues();
+    dynamic_cast<KisCanvas2*>(canvas())->view()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 0);
 }
 
 void KisToolCrop::setCropX(int x)

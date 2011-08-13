@@ -116,6 +116,10 @@ void KisToolLine::mousePressEvent(KoPointerEvent *event)
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
 
+        if (nodePaintAbility() == NONE) {
+           return;
+        }
+
         setMode(KisTool::PAINT_MODE);
 
         m_startPos = KisPaintInformation(
@@ -202,6 +206,10 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
             m_endPos.setPressure(m_maxPressure);
         }
 
+        NodePaintAbility nodeAbility = nodePaintAbility();
+        if (nodeAbility == NONE) {
+           return;
+        }
 #ifdef ENABLE_RECORDING
         if (image()) {
             KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
@@ -210,10 +218,6 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
             image()->actionRecorder()->addAction(linePaintAction);
         }
 #endif
-        NodePaintAbility nodeAbility = nodePaintAbility();
-        if (nodeAbility == NONE) {
-           return;
-        }
 
         if (nodeAbility == PAINT) {
                 KisPaintDeviceSP device = currentNode()->paintDevice();

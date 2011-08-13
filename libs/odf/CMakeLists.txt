@@ -31,6 +31,7 @@ set(koodf_LIB_SRCS
     KoOdfDocument.cpp
     KoEmbeddedDocumentSaver.cpp
     KoBorder.cpp
+    KoShadowStyle.cpp
     KoPageLayout.cpp
     KoPageFormat.cpp
     KoStore.cpp
@@ -101,6 +102,7 @@ install( FILES
     KoGenChanges.h
     KoEmbeddedDocumentSaver.h
     KoBorder.h
+    KoShadowStyle.h
     KoPageLayout.h
     KoPageFormat.h
     KoColumns.h

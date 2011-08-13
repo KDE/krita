@@ -32,6 +32,7 @@ SimpleCitationWidget::SimpleCitationWidget(TextTool *tool, QWidget *parent)
 //    widget.addRowAbove->setDefaultAction(tool->action("insert_tablerow_above"));
 
     widget.addCitation->setDefaultAction(tool->action("insert_citation"));
+    widget.addBibliography->setDefaultAction(tool->action("insert_bibliography"));
 //    connect(widget.addRowAbove, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.addCitation,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));
     connect(widget.addBibliography,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));

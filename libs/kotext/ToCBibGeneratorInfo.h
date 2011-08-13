@@ -157,7 +157,7 @@ public:
     QString dataField;
 };
 
-class BibliographyEntryTemplate
+class KOTEXT_EXPORT BibliographyEntryTemplate
 {
 public:
     void saveOdf(KoXmlWriter * writer) const;

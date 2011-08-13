@@ -28,8 +28,9 @@
 KisNodeMoveCommand2::KisNodeMoveCommand2(KisNodeSP node,
                                          const QPoint& oldPos,
                                          const QPoint& newPos,
-                                         KisUndoAdapter *undoAdapter)
-    : KUndo2Command(i18nc("(qtundo-format)", "Move")),
+                                         KisUndoAdapter *undoAdapter,
+                                         KUndo2Command *parent)
+    : KUndo2Command(i18nc("(qtundo-format)", "Move"), parent),
       m_oldPos(oldPos),
       m_newPos(newPos),
       m_node(node),

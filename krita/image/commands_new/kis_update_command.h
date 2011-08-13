@@ -1,5 +1,4 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@kde.org>
  *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -16,37 +15,34 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_NODE_MOVE_COMMAND2_H
-#define KIS_NODE_MOVE_COMMAND2_H
+
+#ifndef __KIS_UPDATE_COMMAND_H
+#define __KIS_UPDATE_COMMAND_H
+
 
 #include "kundo2command.h"
 #include "krita_export.h"
 #include "kis_types.h"
 
-
-class QPoint;
-class KisUndoAdapter;
+class KisUpdatesFacade;
 
 
-class KRITAIMAGE_EXPORT KisNodeMoveCommand2 : public KUndo2Command
+class KRITAIMAGE_EXPORT KisUpdateCommand : public KUndo2Command
 {
-
 public:
-    KisNodeMoveCommand2(KisNodeSP node, const QPoint& oldPos, const QPoint& newPos, KisUndoAdapter *undoAdapter, KUndo2Command *parent = 0);
-    virtual ~KisNodeMoveCommand2();
+    KisUpdateCommand(KisNodeSP node, QRect dirtyRect,
+                     KisUpdatesFacade *updatesFacade,
+                     bool needsFullRefresh = false);
+    ~KisUpdateCommand();
 
-    virtual void redo();
-    virtual void undo();
+    void undo();
+    void redo();
 
 private:
-    void moveTo(const QPoint& pos);
-
-private:
-    QPoint m_oldPos;
-    QPoint m_newPos;
     KisNodeSP m_node;
-    KisUndoAdapter *m_undoAdapter;
+    QRect m_dirtyRect;
+    KisUpdatesFacade *m_updatesFacade;
+    bool m_needsFullRefresh;
 };
 
-
-#endif
+#endif /* __KIS_UPDATE_COMMAND_H */

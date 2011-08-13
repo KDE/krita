@@ -36,6 +36,19 @@ public:
     virtual bool cancelStroke(KisStrokeId id) = 0;
 };
 
+class KisUpdatesFacade
+{
+public:
+    virtual ~KisUpdatesFacade();
+
+    virtual void blockUpdates() = 0;
+    virtual void unblockUpdates() = 0;
+
+    virtual void refreshGraphAsync(KisNodeSP root = 0) = 0;
+    virtual void refreshGraphAsync(KisNodeSP root, const QRect &rc) = 0;
+    virtual void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect) = 0;
+};
+
 class KisProjectionUpdateListener
 {
 public:

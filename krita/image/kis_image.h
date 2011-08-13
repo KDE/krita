@@ -61,7 +61,7 @@ class MergeStrategy;
  * meta information about the image. And it also provides some
  * functions to manipulate the whole image.
  */
-class KRITAIMAGE_EXPORT KisImage : public QObject, public KisStrokesFacade, public KisProjectionUpdateListener, public KisNodeFacade, public KisNodeGraphListener, public KisShared
+class KRITAIMAGE_EXPORT KisImage : public QObject, public KisStrokesFacade, public KisUpdatesFacade, public KisProjectionUpdateListener, public KisNodeFacade, public KisNodeGraphListener, public KisShared
 {
 
     Q_OBJECT
@@ -582,9 +582,6 @@ signals:
 
 public slots:
 
-    void blockUpdates();
-    void unblockUpdates();
-
     void barrierLock();
     bool tryBarrierLock();
     void waitForDone();
@@ -594,7 +591,11 @@ public slots:
     void endStroke(KisStrokeId id);
     bool cancelStroke(KisStrokeId id);
 
+    void blockUpdates();
+    void unblockUpdates();
+
     void refreshGraphAsync(KisNodeSP root = 0);
+    void refreshGraphAsync(KisNodeSP root, const QRect &rc);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect);
 
     /**

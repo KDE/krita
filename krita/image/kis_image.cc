@@ -1199,6 +1199,11 @@ void KisImage::refreshGraphAsync(KisNodeSP root)
     refreshGraphAsync(root, bounds(), bounds());
 }
 
+void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc)
+{
+    refreshGraphAsync(root, rc, bounds());
+}
+
 void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect)
 {
     if (!root) root = m_d->rootLayer;

@@ -22,6 +22,10 @@ KisStrokesFacade::~KisStrokesFacade()
 {
 }
 
+KisUpdatesFacade::~KisUpdatesFacade()
+{
+}
+
 KisProjectionUpdateListener::~KisProjectionUpdateListener()
 {
 }

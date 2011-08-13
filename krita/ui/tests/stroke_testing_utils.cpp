@@ -134,6 +134,13 @@ void utils::StrokeTester::test()
     testOneStroke(true, false, false);
     testOneStroke(true, true, false);
 
+    // The same but with updates (compare against projection)
+
+    testOneStroke(false, false, false, true);
+    testOneStroke(false, true, false, true);
+    testOneStroke(true, false, false, true);
+    testOneStroke(true, true, false, true);
+
     // The same, but with an external layer
 
     testOneStroke(false, false, true);
@@ -144,34 +151,37 @@ void utils::StrokeTester::test()
 
 void utils::StrokeTester::benchmark()
 {
-    // not cancelled, indirect painting, internal, no qimage
-    doStroke(false, true, false, false);
+    // not cancelled, indirect painting, internal, no updates, no qimage
+    doStroke(false, true, false, false, false);
 }
 
 void utils::StrokeTester::testOneStroke(bool cancelled,
                                         bool indirectPainting,
-                                        bool externalLayer)
+                                        bool externalLayer,
+                                        bool testUpdates)
 {
-    QString filename;
-    QImage image;
+    QString testName = formatTestName(m_name,
+                                      cancelled,
+                                      indirectPainting,
+                                      externalLayer);
 
-    filename = formatFilename(m_name, cancelled, indirectPainting, externalLayer);
-    qDebug() << "Testing reference:" << filename;
-    image = doStroke(cancelled, indirectPainting, externalLayer);
+    qDebug() << "Testcase:" << testName
+             << "(comare against " << (testUpdates ? "projection" : "layer") << ")";
+
+    QImage resultImage;
+    resultImage = doStroke(cancelled, indirectPainting, externalLayer);
 
     QImage refImage;
-    refImage.load(QString(FILES_DATA_DIR) +
-                  QDir::separator() + m_name +
-                  QDir::separator() + filename);
+    refImage.load(referenceFile(testName));
 
-    if(image != refImage) {
-        image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + filename);
+    if(resultImage != refImage) {
+        resultImage.save(resultFile(testName));
     }
 
-    QCOMPARE(image, refImage);
+    QCOMPARE(resultImage, refImage);
 }
 
-QString utils::StrokeTester::formatFilename(const QString &baseName,
+QString utils::StrokeTester::formatTestName(const QString &baseName,
                                             bool cancelled,
                                             bool indirectPainting,
                                             bool externalLayer)
@@ -181,11 +191,29 @@ QString utils::StrokeTester::formatFilename(const QString &baseName,
     result += indirectPainting ? "_indirect" : "_incremental";
     result += cancelled ? "_cancelled" : "_finished";
     result += externalLayer ? "_external" : "_internal";
-    result += ".png";
     return result;
 }
 
-QImage utils::StrokeTester::doStroke(bool cancelled, bool indirectPainting, bool externalLayer, bool needQImage)
+QString utils::StrokeTester::referenceFile(const QString &testName)
+{
+    QString path =
+        QString(FILES_DATA_DIR) + QDir::separator() +
+        m_name + QDir::separator();
+
+    path += testName;
+    path += ".png";
+    return path;
+}
+
+QString utils::StrokeTester::resultFile(const QString &testName)
+{
+    QString path = QString(FILES_OUTPUT_DIR) + QDir::separator();
+    path += testName;
+    path += ".png";
+    return path;
+}
+
+QImage utils::StrokeTester::doStroke(bool cancelled, bool indirectPainting, bool externalLayer, bool testUpdates, bool needQImage)
 {
     KisImageSP image = utils::createImage(0, m_imageSize);
     KoResourceManager *manager = utils::createResourceManager(image, 0, m_presetFilename);
@@ -215,10 +243,12 @@ QImage utils::StrokeTester::doStroke(bool cancelled, bool indirectPainting, bool
 
     image->waitForDone();
 
-    KisPaintDeviceSP device = resources->currentNode()->paintDevice();
     QImage resultImage;
-
     if(needQImage) {
+        KisPaintDeviceSP device = testUpdates ?
+            image->projection() :
+            resources->currentNode()->paintDevice();
+
         resultImage = device->convertToQImage(0, 0, 0, image->width(), image->height());
     }
 

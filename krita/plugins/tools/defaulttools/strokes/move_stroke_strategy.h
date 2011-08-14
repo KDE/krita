@@ -45,6 +45,16 @@ public:
                        KisPostExecutionUndoAdapter *undoAdapter,
                        KisUndoAdapter *legacyUndoAdapter);
 
+    /**
+     * You can use deferred initialization of the node pointer
+     * To use it you need to pass NULL to the constructor, and
+     * set the node with setNode layer.
+     * NOTE: once set, you cannot change the node anymore,
+     *       you'll get an assert
+     */
+
+    void setNode(KisNodeSP node);
+
     void finishStrokeCallback();
     void cancelStrokeCallback();
     void doStrokeCallback(KisStrokeJobData *data);

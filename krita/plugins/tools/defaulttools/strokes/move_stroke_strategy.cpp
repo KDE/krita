@@ -35,26 +35,37 @@ MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSP node,
 {
 }
 
+void MoveStrokeStrategy::setNode(KisNodeSP node)
+{
+    Q_ASSERT(!m_node);
+    m_node = node;
+}
+
 void MoveStrokeStrategy::finishStrokeCallback()
 {
-    KUndo2Command *updateCommand =
-        new KisUpdateCommand(m_node, m_dirtyRect, m_updatesFacade, true);
+    if(m_node) {
+        KUndo2Command *updateCommand =
+            new KisUpdateCommand(m_node, m_dirtyRect, m_updatesFacade, true);
 
-    addMoveCommands(m_node, updateCommand);
+        addMoveCommands(m_node, updateCommand);
 
-    notifyCommandDone(KUndo2CommandSP(updateCommand),
-                      KisStrokeJobData::SEQUENTIAL,
-                      KisStrokeJobData::EXCLUSIVE);
+        notifyCommandDone(KUndo2CommandSP(updateCommand),
+                          KisStrokeJobData::SEQUENTIAL,
+                          KisStrokeJobData::EXCLUSIVE);
+    }
 
     KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
 }
 
 void MoveStrokeStrategy::cancelStrokeCallback()
 {
-    // FIXME: make cancel job exclusive instead
-    m_updatesFacade->blockUpdates();
-    moveAndUpdate(-m_finalOffset);
-    m_updatesFacade->unblockUpdates();
+    if(m_node) {
+
+        // FIXME: make cancel job exclusive instead
+        m_updatesFacade->blockUpdates();
+        moveAndUpdate(-m_finalOffset);
+        m_updatesFacade->unblockUpdates();
+    }
 
     KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
 }
@@ -63,7 +74,7 @@ void MoveStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
 
-    if(d) {
+    if(m_node && d) {
         moveAndUpdate(d->offset);
 
         /**
@@ -81,8 +92,8 @@ void MoveStrokeStrategy::moveAndUpdate(QPoint offset)
 {
     QRect dirtyRect = moveNode(m_node, offset);
     m_dirtyRect |= dirtyRect;
+
     m_updatesFacade->refreshGraphAsync(m_node, dirtyRect);
-    m_node->setDirty(dirtyRect);
 }
 
 QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)

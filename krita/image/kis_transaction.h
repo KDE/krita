@@ -66,6 +66,14 @@ public:
         m_transactionData = 0;
     }
 
+    KUndo2Command* endAndTake() {
+        Q_ASSERT_X(m_transactionData, "KisTransaction::endAndTake()",
+                   "the transaction has been tried to be committed twice");
+
+        m_transactionData->endTransaction();
+        return m_transactionData;
+    }
+
     void end() {
         Q_ASSERT_X(m_transactionData, "KisTransaction::end()",
                    "nothing to end!");

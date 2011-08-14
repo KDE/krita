@@ -49,6 +49,17 @@ public:
               undo(_undo)
         {
         }
+
+        Data(KUndo2Command *_command,
+             bool _undo = false,
+             Sequentiality _sequentiality = SEQUENTIAL,
+             Exclusivity _exclusivity = NORMAL)
+            : KisStrokeJobData(_sequentiality, _exclusivity),
+              command(_command),
+              undo(_undo)
+        {
+        }
+
         KUndo2CommandSP command;
         bool undo;
     };

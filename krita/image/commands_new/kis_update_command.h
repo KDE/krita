@@ -39,6 +39,9 @@ public:
     void redo();
 
 private:
+    void update();
+
+private:
     KisNodeSP m_node;
     QRect m_dirtyRect;
     KisUpdatesFacade *m_updatesFacade;

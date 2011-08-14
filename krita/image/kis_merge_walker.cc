@@ -20,8 +20,8 @@
 
 
 KisMergeWalker::KisMergeWalker(QRect cropRect)
-    : KisBaseRectsWalker(cropRect)
 {
+    setCropRect(cropRect);
 }
 
 KisMergeWalker::~KisMergeWalker()

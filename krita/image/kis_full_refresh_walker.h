@@ -25,13 +25,13 @@
 #include "kis_base_rects_walker.h"
 
 
-class KRITAIMAGE_EXPORT KisFullRefreshWalker : public KisBaseRectsWalker
+class KRITAIMAGE_EXPORT KisFullRefreshWalker : public virtual KisBaseRectsWalker
 {
 
 public:
     KisFullRefreshWalker(QRect cropRect)
-        : KisBaseRectsWalker(cropRect)
     {
+        setCropRect(cropRect);
     }
 
     virtual ~KisFullRefreshWalker()
@@ -51,6 +51,8 @@ private:
     }
 
 protected:
+    KisFullRefreshWalker() {}
+
 
     QRect calculateChangeRect(KisNodeSP startWith,
                               const QRect &requestedRect,

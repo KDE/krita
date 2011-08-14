@@ -40,21 +40,21 @@ KisUpdateCommand::~KisUpdateCommand()
 void KisUpdateCommand::undo()
 {
     KUndo2Command::undo();
-
-    if(m_needsFullRefresh) {
-        m_updatesFacade->refreshGraphAsync(m_node, m_dirtyRect);
-    }
-
-    m_node->setDirty(m_dirtyRect);
+    update();
 }
 
 void KisUpdateCommand::redo()
 {
     KUndo2Command::redo();
+    update();
+}
 
+void KisUpdateCommand::update()
+{
     if(m_needsFullRefresh) {
         m_updatesFacade->refreshGraphAsync(m_node, m_dirtyRect);
     }
-
-    m_node->setDirty(m_dirtyRect);
+    else {
+        m_node->setDirty(m_dirtyRect);
+    }
 }

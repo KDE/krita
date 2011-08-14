@@ -75,10 +75,6 @@ public:
     typedef QStack<JobItem> NodeStack;
 
 public:
-    KisBaseRectsWalker(QRect cropRect) {
-        setCropRect(cropRect);
-    }
-
     virtual ~KisBaseRectsWalker() {
     }
 

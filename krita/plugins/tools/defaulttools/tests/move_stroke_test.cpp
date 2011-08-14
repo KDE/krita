@@ -66,13 +66,19 @@ protected:
             addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(100,100)));
 
         image->
-            addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(-50,0)));
+            addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(-50, -50)));
 
-        image->
-            addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(0,-50)));
+        for (int i = 0; i < 25; i++) {
+            image->
+                addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(1,0)));
+            QTest::qSleep(1);
+            image->
+                addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(0,1)));
+            QTest::qSleep(1);
+        }
 
-        image->
-            addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(25,25)));
+
+
 
     }
 

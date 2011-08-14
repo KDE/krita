@@ -72,7 +72,7 @@ qreal KisImageConfig::schedulerBalancingRatio() const
     /**
      * updates-queue-size / strokes-queue-size
      */
-    return m_config.readEntry("schedulerBalancingRatio", 2.);
+    return m_config.readEntry("schedulerBalancingRatio", 100.);
 }
 
 void KisImageConfig::setSchedulerBalancingRatio(qreal value)

@@ -116,9 +116,9 @@ include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
 option(GHNS "support Get Hot New Stuff" ON)
-if(KDE_VERSION LESS "4.4.0")
+if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
     set(GHNS FALSE)
-endif(KDE_VERSION LESS "4.4.0")
+endif(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
 
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
   set(NEPOMUK FALSE)
@@ -459,7 +459,7 @@ if(NOT KdepimLibs_FOUND)
     set(SHOULD_BUILD_PLAN FALSE)
 endif(NOT KdepimLibs_FOUND)
 
-  
+### Active: only build with Qt 4.7.0 or better 
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
   set(SHOULD_BUILD_ACTIVE FALSE)
 endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)

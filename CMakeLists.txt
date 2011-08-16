@@ -275,6 +275,7 @@ if(NEPOMUK)
     if(NOT NEPOMUK_FOUND)
         set(NEPOMUK FALSE)
     endif(NOT NEPOMUK_FOUND)
+    add_definitions(-DDISABLE_NEPOMUK_LEGACY)
     macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
 endif(NEPOMUK)
 

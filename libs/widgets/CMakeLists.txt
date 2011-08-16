@@ -4,7 +4,6 @@ add_subdirectory( pics )
 include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES})
 
 if(NEPOMUK)
-    add_definitions(-DISABLE_NEPOMUK_LEGACY)
     include(SopranoAddOntology)
     include_directories(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_INCLUDES})
 endif(NEPOMUK)

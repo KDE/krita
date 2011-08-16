@@ -92,7 +92,7 @@ ELSE()
     set(SHOULD_BUILD_CALLIGRA TRUE)
     set(SHOULD_BUILD_CSTESTER TRUE)
     set(SHOULD_BUILD_KOABSTRACTION TRUE)
-    set(SHOULD_BUILD_ACTIVE FALSE)
+    set(SHOULD_BUILD_ACTIVE TRUE)
 ENDIF()
 
 if(KDE4_BUILD_TESTS)
@@ -116,9 +116,9 @@ include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
 option(GHNS "support Get Hot New Stuff" ON)
-if(KDE_VERSION LESS "4.4.0")
+if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
     set(GHNS FALSE)
-endif(KDE_VERSION LESS "4.4.0")
+endif(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
 
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
   set(NEPOMUK FALSE)
@@ -275,6 +275,7 @@ if(NEPOMUK)
     if(NOT NEPOMUK_FOUND)
         set(NEPOMUK FALSE)
     endif(NOT NEPOMUK_FOUND)
+    add_definitions(-DDISABLE_NEPOMUK_LEGACY)
     macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
 endif(NEPOMUK)
 
@@ -459,10 +460,14 @@ if(NOT KdepimLibs_FOUND)
     set(SHOULD_BUILD_PLAN FALSE)
 endif(NOT KdepimLibs_FOUND)
 
-  
+### Active: only build with Qt 4.7.0 or better 
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
-  set(SHOULD_BUILD_ACTIVE FALSE)
+    set(SHOULD_BUILD_ACTIVE FALSE)
 endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
+
+if (NOT QT_QTDECLARATIVE_FOUND)
+    set(SHOULD_BUILD_ACTIVE FALSE)
+endif (NOT QT_QTDECLARATIVE_FOUND)
 
 
 ### HACK ###

@@ -1912,6 +1912,10 @@ void KoTextLoader::Private::processDeleteChange(QTextCursor &cursor)
 
     KoDeleteChangeMarker *marker;
     foreach (marker, markersList) {
+        if (!marker) {
+            kWarning() << "Empty KoDeleteChangeMarker in the markerslist.";
+            continue;
+        }
         int changeId = marker->changeId();
 
         KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);

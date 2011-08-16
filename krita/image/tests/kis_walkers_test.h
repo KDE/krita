@@ -207,6 +207,7 @@ private slots:
     void testUsualVisiting();
     void testMergeVisiting();
     void testRefreshSubtreeVisiting();
+    void testFullRefreshVisiting();
     void testCachedVisiting();
     void testMasksVisiting();
     void testMasksOverlapping();

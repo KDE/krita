@@ -415,6 +415,7 @@ public:
         tagObject->setNepomukBool(nepomukOn);
         tagObject->updateNepomukXML(nepomukOn);
         delete tagObject;
+        m_tagObject->setNepomukBool(nepomukOn);
     }
 #endif
 protected:

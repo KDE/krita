@@ -20,7 +20,7 @@
 
 #include "kis_base_rects_walker.h"
 #include "kis_merge_walker.h"
-#include "kis_full_refresh_walker.h"
+#include "kis_refresh_subtree_walker.h"
 
 #include <qtest_kde.h>
 #include <KoColorSpaceRegistry.h>
@@ -364,6 +364,14 @@ void KisWalkersTest::testMergeVisiting()
 
 }
 
+class TestingRefreshSubtreeWalker : public KisRefreshSubtreeWalker
+{
+public:
+    TestingRefreshSubtreeWalker(QRect cropRect) : KisRefreshSubtreeWalker(cropRect) {}
+    UpdateType type() const { return FULL_REFRESH; }
+};
+
+
     /*
       +----------+
       |root      |
@@ -378,7 +386,7 @@ void KisWalkersTest::testMergeVisiting()
       +----------+
      */
 
-void KisWalkersTest::testFullRefreshVisiting()
+void KisWalkersTest::testRefreshSubtreeVisiting()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
@@ -407,7 +415,7 @@ void KisWalkersTest::testFullRefreshVisiting()
     // Empty rect to show we don't need any cropping
     QRect cropRect;
 
-    KisFullRefreshWalker walker(cropRect);
+    TestingRefreshSubtreeWalker walker(cropRect);
 
     {
         QString order("root,paint5,cplx2,group,paint1,"

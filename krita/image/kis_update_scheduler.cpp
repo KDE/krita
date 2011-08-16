@@ -20,7 +20,7 @@
 
 #include "kis_image_config.h"
 #include "kis_merge_walker.h"
-#include "kis_recursive_merge_walker.h"
+#include "kis_full_refresh_walker.h"
 
 #include "kis_updater_context.h"
 #include "kis_simple_update_queue.h"
@@ -113,7 +113,7 @@ void KisUpdateScheduler::fullRefreshAsync(KisNodeSP root, const QRect& rc, const
 
 void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect)
 {
-    KisBaseRectsWalkerSP walker = new KisRecursiveMergeWalker(cropRect);
+    KisBaseRectsWalkerSP walker = new KisFullRefreshWalker(cropRect);
     walker->collectRects(root, rc);
 
     m_d->updaterContext->lock();

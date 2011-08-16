@@ -21,7 +21,7 @@
 #include <QMutexLocker>
 
 #include "kis_image_config.h"
-#include "kis_recursive_merge_walker.h"
+#include "kis_full_refresh_walker.h"
 
 
 //#define ENABLE_DEBUG_JOIN
@@ -130,7 +130,7 @@ void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QRect& rc,
         walker = new KisMergeWalker(cropRect);
     }
     else /* if(type == KisBaseRectsWalker::FULL_REFRESH) */ {
-        walker = new KisRecursiveMergeWalker(cropRect);
+        walker = new KisFullRefreshWalker(cropRect);
     }
 
     walker->collectRects(node, rc);

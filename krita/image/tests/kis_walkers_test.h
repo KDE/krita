@@ -206,7 +206,7 @@ class KisWalkersTest : public QObject
 private slots:
     void testUsualVisiting();
     void testMergeVisiting();
-    void testFullRefreshVisiting();
+    void testRefreshSubtreeVisiting();
     void testCachedVisiting();
     void testMasksVisiting();
     void testMasksOverlapping();

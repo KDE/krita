@@ -5,5 +5,5 @@ add_subdirectory(chart)
 add_subdirectory(shape)
 
 if(MARBLE_FOUND)
-  add_subdirectory(maps)
+  macro_optional_add_subdirectory(maps)
 endif(MARBLE_FOUND)

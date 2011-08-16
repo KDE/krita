@@ -1190,6 +1190,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
             if (!m_documentLayout->changeTracker()
                 || !m_documentLayout->changeTracker()->displayChanges()
                 || !m_documentLayout->changeTracker()->containsInlineChanges(cursor->fragmentIterator.fragment().charFormat())
+                || !m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())
                 || !m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
                 || (m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
                 || m_documentLayout->changeTracker()->displayChanges()) {

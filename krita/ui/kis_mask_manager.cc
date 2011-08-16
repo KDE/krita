@@ -391,8 +391,13 @@ void KisMaskManager::changeActivity(KisSelectionMask *mask,bool active)
 {
     KisLayer * layer = dynamic_cast<KisLayer*>(mask->parent().data());
 
-    if (active && layer && layer->selectionMask())
-        layer->selectionMask()->setActive(false);
+    if (active && layer && layer->selectionMask()) {
+        KisSelectionMask* selectionMask = layer->selectionMask().data();
+        layer->selectionMask()->nodeProperties().setProperty("active", false);
+        if (m_view->image()) {
+            m_view->image()->nodeChanged(selectionMask);
+        }
+    }
 
     mask->nodeProperties().setProperty("active", active);
     m_view->selectionManager()->selectionChanged();

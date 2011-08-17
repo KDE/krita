@@ -248,10 +248,6 @@ bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
         if (complete) {
             setVirginPage(false);
             cursor->row++;
-            for (int col = 0; col < d->table->columns(); ++col) {
-                delete cursor->frameIterators[col];
-                cursor->frameIterators[col] = 0;
-            }
         }
     } while (complete && cursor->row < d->table->rows());
 
@@ -465,7 +461,6 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
     bool rowHasExactHeight = rowStyle.hasProperty(KoTableRowStyle::RowHeight);
     qreal rowBottom;
 
-
     if (rowHasExactHeight) {
         rowBottom = d->rowPositions[row] + rowHeight;
     } else {
@@ -557,8 +552,15 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
                     rowBottom = qMax(cellArea->bottom() + cellStyle.bottomPadding() + cellStyle.bottomBorderWidth(), rowBottom);
                 }
             }
+
+            if (cellFully) {
+                delete cursor->frameIterators[col];
+                cursor->frameIterators[col] = 0;
+            }
         }
+
         col += cell.columnSpan(); // Skip across column spans.
+
     }
 
     if (anyCellTried && noCellsFitted && !rowHasExactHeight) {
@@ -640,6 +642,7 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
             cellArea->setVirginPage(virginPage());
 
             FrameIterator *cellCursor =  cursor->frameIterator(col);
+
             cellArea->layout(cellCursor);
         }
         col += cell.columnSpan(); // Skip across column spans.
@@ -695,7 +698,8 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
 
-            if (d->cellAreas[row][column]) {
+            int testRow = row == firstRow ? tableCell.row() : row;
+            if (d->cellAreas[testRow][column]) {
                 paintCell(painter, context, tableCell);
             }
         }
@@ -712,7 +716,8 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
 
-            if (d->cellAreas[row][column]) {
+            int testRow = row == firstRow ? tableCell.row() : row;
+            if (d->cellAreas[testRow][column]) {
                 paintCell(painter, context, tableCell);
 
                 painter->setRenderHint(QPainter::Antialiasing, true);
@@ -728,7 +733,6 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     painter->translate(-d->headerOffsetX, -d->headerOffsetY);
 
     // Draw cell borders.
-
     bool topRow = !d->headerRows && firstRow != 0; // are we top row in this area
 
     painter->setRenderHint(QPainter::Antialiasing, true);
@@ -736,16 +740,14 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
 
-            if (d->cellAreas[row][column]) {
+            int testRow = row == firstRow ? tableCell.row() : row;
+            if (d->cellAreas[testRow][column]) {
                 paintCellBorders(painter, context, tableCell, topRow, &accuBlankBorders);
             }
         }
         topRow = false;
     }
     painter->setRenderHint(QPainter::Antialiasing, hasAntialiasing);
-
-    if (d->collapsing && firstRow != 0) {
-    }
 
     QPen pen(painter->pen());
     painter->setPen(QPen(QColor(0,0,0,96)));

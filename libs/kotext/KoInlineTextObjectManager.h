@@ -146,7 +146,7 @@ public:
      */
     QList<KoInlineNote*> endNotes() const;
 
-    QList<KoInlineCite*> citations(bool duplicatesEnabled = true) const;
+    QMap<QString, KoInlineCite*> citations(bool duplicatesEnabled = true) const;
 
 public slots:
     void documentInformationUpdated(const QString &info, const QString &data);

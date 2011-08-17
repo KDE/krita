@@ -231,14 +231,14 @@ QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
     return answers;
 }
 
-QList<KoInlineCite*> KoInlineTextObjectManager::citations(bool duplicatesEnabled) const
+QMap<QString, KoInlineCite*> KoInlineTextObjectManager::citations(bool duplicatesEnabled) const
 {
-    QList<KoInlineCite*> answers;
+    QMap<QString, KoInlineCite*> answers;
     foreach(KoInlineObject* object, m_objects) {
         KoInlineCite* cite = dynamic_cast<KoInlineCite*>(object);
         if (cite && (cite->type() == KoInlineCite::Citation ||
                      (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
-            answers.append(cite);
+            answers.insert(cite->identifier(),cite);
         }
     }
     return answers;

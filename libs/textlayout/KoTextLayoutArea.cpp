@@ -1221,8 +1221,10 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
     qreal lineAdjust = 0.0;
     qreal fixedLineHeight = format.doubleProperty(KoParagraphStyle::FixedLineHeight);
     if (fixedLineHeight != 0.0) {
-        lineAdjust = fixedLineHeight - height;
+        qreal prevHeight = height;
         height = fixedLineHeight;
+        if (prevHeight > height)
+            lineAdjust = fixedLineHeight - height;
     } else {
         qreal lineSpacing = format.doubleProperty(KoParagraphStyle::LineSpacing);
         if (lineSpacing == 0.0) { // unset
@@ -1256,6 +1258,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
             blockData->setCounterPosition(QPointF(blockData->counterPosition().x(),
                                                   blockData->counterPosition().y() + lineAdjust));
         }
+        m_blockRects.last().moveTop(m_blockRects.last().top() + lineAdjust);
     }
 
     return height;

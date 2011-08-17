@@ -565,7 +565,7 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
                     // lines.
                     int p1 = startOfFragmentInBlock + totalCharactersOnPreviousLines;
 
-                    if (block.text().at(p1) != QChar::ObjectReplacementCharacter) {
+                    if (block.text().length() > p1 && block.text().at(p1) != QChar::ObjectReplacementCharacter) {
                         Q_ASSERT_X(line.isValid(), __FUNCTION__, QString("Invalid line=%1 first=%2 last=%3").arg(i).arg(firstLine).arg(lastLine).toLocal8Bit()); // see bug 278682
                         if (!line.isValid())
                             continue;

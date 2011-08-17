@@ -518,7 +518,6 @@ static qreal computeWidth(KoCharacterStyle::LineWeight weight, qreal width, cons
 void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &block)
 {
     QTextLayout *layout = block.layout();
-    QTextOption textOption = layout->textOption();
 
     QTextBlockFormat bf = block.blockFormat();
     QVariantList tabList = bf.property(KoParagraphStyle::TabPositions).toList();
@@ -527,36 +526,75 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
     QTextBlock::iterator it;
     int startOfBlock = -1;
     int currentTabStop = 0;
+
     // loop over text fragments in this paragraph and draw the underline and line through.
     for (it = block.begin(); !it.atEnd(); ++it) {
         QTextFragment currentFragment = it.fragment();
         if (currentFragment.isValid()) {
             QTextCharFormat fmt = currentFragment.charFormat();
             painter->setFont(fmt.font());
-            if (startOfBlock == -1)
+
+            // a block doesn't have a real start position, so use our own counter. Initialize
+            // it with the position of the first text fragment in the block.
+            if (startOfBlock == -1) {
                 startOfBlock = currentFragment.position(); // start of this block w.r.t. the document
+            }
+
+            // the start of our fragment in the block is the absolute position of the fragment
+            // in the document minus the start of the block in the document.
+            int startOfFragmentInBlock = currentFragment.position() - startOfBlock;
+
+            // a fragment can span multiple lines, but we paint the decorations per line.
             int firstLine = layout->lineForTextPosition(currentFragment.position() - startOfBlock).lineNumber();
             int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length()
                     - startOfBlock).lineNumber();
-            int startOfFragmentInBlock = currentFragment.position() - startOfBlock;
+
+            // we paint per line, but we cannot simply use the number of characters on a line to
+            // advance the begin position of the area we paint on, since a fragment can start beyond
+            // the start of the line. This fixes the underline error in
+            // bug https://bugs.kde.org/show_bug.cgi?id=264471
+            int totalCharactersOnPreviousLines = 0;
+
             for (int i = firstLine ; i <= lastLine ; ++i) {
                 QTextLine line = layout->lineAt(i);
+
                 if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
-                    int p1 = currentFragment.position() - startOfBlock;
+
+                    // the start position for painting the decoration is the position of the fragment
+                    // inside the block plus the number of characters we have painted on previous
+                    // lines.
+                    int p1 = startOfFragmentInBlock + totalCharactersOnPreviousLines;
+
                     if (block.text().at(p1) != QChar::ObjectReplacementCharacter) {
                         Q_ASSERT_X(line.isValid(), __FUNCTION__, QString("Invalid line=%1 first=%2 last=%3").arg(i).arg(firstLine).arg(lastLine).toLocal8Bit()); // see bug 278682
                         if (!line.isValid())
                             continue;
-                        int p2 = currentFragment.position() + currentFragment.length() - startOfBlock;
-                        int fragmentToLineOffset = qMax(currentFragment.position() - startOfBlock - line.textStart(),0);
+
+                        // end position: not that this can be smaller than p1 when we are handling RTL
+                        int p2 = startOfFragmentInBlock + currentFragment.length();
+                        int fragmentToLineOffset = qMax(startOfFragmentInBlock - line.textStart(), 0);
+
                         qreal x1 = line.cursorToX(p1);
                         qreal x2 = line.cursorToX(p2);
+
+                        // Comment by sebsauer:
                         // Following line was supposed to fix bug 171686 (I cannot reproduce the original problem) but it opens bug 260159. So, deactivated for now.
-                        //x2 = qMin(x2, line.naturalTextWidth() + line.cursorToX(line.textStart()));
+                        // x2 = qMin(x2, line.naturalTextWidth() + line.cursorToX(line.textStart()));
+
                         drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         drawOverlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         decorateTabs(painter, tabList, line, currentFragment, startOfBlock, currentTabStop);
+
+                        // Advance the total number of characters we've already done for this fragment in
+                        // this and previous lines. For RTL purposes, we need to take care of the situation
+                        // where p1 is bigger than p2.
+                        if (p1 < p2) {
+                            totalCharactersOnPreviousLines += line.textLength() - p1;
+                        }
+                        else {
+                            totalCharactersOnPreviousLines += line.textLength() - p2;
+                        }
                     }
                 }
             }
@@ -668,6 +706,7 @@ void KoTextLayoutArea::drawOverlines(QPainter *painter, const QTextFragment &cur
 
 void KoTextLayoutArea::drawUnderlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const
 {
+
     QTextCharFormat fmt = currentFragment.charFormat();
     KoCharacterStyle::LineStyle fontUnderLineStyle = (KoCharacterStyle::LineStyle) fmt.intProperty(KoCharacterStyle::UnderlineStyle);
     KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::UnderlineType);

@@ -527,10 +527,18 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
     int startOfBlock = -1;
     int currentTabStop = 0;
 
+//    qDebug() << "\n-------------------"
+//             << "\nGoing to decorate block\n"
+//             << block.text()
+//             << "\n-------------------";
+
     // loop over text fragments in this paragraph and draw the underline and line through.
     for (it = block.begin(); !it.atEnd(); ++it) {
         QTextFragment currentFragment = it.fragment();
         if (currentFragment.isValid()) {
+
+//            qDebug() << "\tGoing to layout fragment:" << currentFragment.text();
+
             QTextCharFormat fmt = currentFragment.charFormat();
             painter->setFont(fmt.font());
 
@@ -549,21 +557,28 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
             int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length()
                     - startOfBlock).lineNumber();
 
-            // we paint per line, but we cannot simply use the number of characters on a line to
-            // advance the begin position of the area we paint on, since a fragment can start beyond
-            // the start of the line. This fixes the underline error in
-            // bug https://bugs.kde.org/show_bug.cgi?id=264471
-            int totalCharactersOnPreviousLines = 0;
+//            qDebug() << "\tfirst line:" << firstLine << "last line:" << lastLine;
 
             for (int i = firstLine ; i <= lastLine ; ++i) {
                 QTextLine line = layout->lineAt(i);
+//                qDebug() << "\n\t\tcurrent line:" << i
+//                         << "\n\t\tline length:" << line.textLength() << "width:"<< line.width() << "natural width" << line.naturalTextWidth()
+//                         << "\n\t\tvalid:" << layout->isValidCursorPosition(currentFragment.position() - startOfBlock)
+//                         << "\n\t\tcurrentFragment.position:"  << currentFragment.position()
+//                         << "\n\t\tstartOfBlock:" << startOfBlock
+//                         << "\n\t\tstartOfFragmentInBlock:" << startOfFragmentInBlock;
 
                 if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
 
                     // the start position for painting the decoration is the position of the fragment
-                    // inside the block plus the number of characters we have painted on previous
-                    // lines.
-                    int p1 = startOfFragmentInBlock + totalCharactersOnPreviousLines;
+                    // inside, but after the first line, the decoration always starts at the beginning
+                    // of the line.  See bug: 264471
+                    int p1 = startOfFragmentInBlock;
+                    if (i > firstLine) {
+                        p1 = line.textStart();
+                    }
+
+//                    qDebug() << "\n\t\tblock.text.length:" << block.text().length() << "p1" << p1;
 
                     if (block.text().length() > p1 && block.text().at(p1) != QChar::ObjectReplacementCharacter) {
                         Q_ASSERT_X(line.isValid(), __FUNCTION__, QString("Invalid line=%1 first=%2 last=%3").arg(i).arg(firstLine).arg(lastLine).toLocal8Bit()); // see bug 278682
@@ -577,6 +592,9 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
                         qreal x1 = line.cursorToX(p1);
                         qreal x2 = line.cursorToX(p2);
 
+//                        qDebug() << "\n\t\t\tp1:" << p1 << "x1:" << x1
+//                                 << "\n\t\t\tp2:" << p2 << "x2:" << x2;
+
                         // Comment by sebsauer:
                         // Following line was supposed to fix bug 171686 (I cannot reproduce the original problem) but it opens bug 260159. So, deactivated for now.
                         // x2 = qMin(x2, line.naturalTextWidth() + line.cursorToX(line.textStart()));
@@ -585,16 +603,6 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
                         drawOverlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         decorateTabs(painter, tabList, line, currentFragment, startOfBlock, currentTabStop);
-
-                        // Advance the total number of characters we've already done for this fragment in
-                        // this and previous lines. For RTL purposes, we need to take care of the situation
-                        // where p1 is bigger than p2.
-                        if (p1 < p2) {
-                            totalCharactersOnPreviousLines += line.textLength() - p1;
-                        }
-                        else {
-                            totalCharactersOnPreviousLines += line.textLength() - p2;
-                        }
                     }
                 }
             }

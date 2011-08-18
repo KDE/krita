@@ -304,7 +304,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                         QTextBlockFormat blockFormat = cursor.blockFormat();
                         QList<QVariant> tabList;
                         if (tabEntry->m_position.isEmpty()) {
-                            tabEntry->tab.position = m_maxTabPosition;
+                            tabEntry->tab.position = m_maxTabPosition - tocTemplateStyle->leftMargin();
                         } else {
                             tabEntry->tab.position = tabEntry->m_position.toDouble();
                         }

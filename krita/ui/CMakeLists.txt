@@ -126,6 +126,7 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_freehand.cc 
     tool/kis_painting_information_builder.cpp
     tool/kis_tool_freehand_helper.cpp
+    tool/kis_tool_multihand_helper.cpp
     tool/kis_recording_adapter.cpp
     tool/kis_tool_paint.cc 
     tool/kis_tool_shape.cc

@@ -32,6 +32,7 @@ class KisRecordingAdapter;
 class KisStrokesFacade;
 class KisPostExecutionUndoAdapter;
 class KisPaintOp;
+class KisPainter;
 
 
 class KRITAUI_EXPORT KisToolFreehandHelper : public QObject
@@ -56,13 +57,31 @@ public:
 
     const KisPaintOp* currentPaintOp() const;
 
-private:
-    void paintAt(const KisPaintInformation &pi);
+protected:
+    virtual void createPainters(QVector<KisPainter*> &painters);
 
-    void paintLine(const KisPaintInformation &pi1,
+    virtual void paintAt(const QVector<KisPainter*> &painters,
+                         const KisPaintInformation &pi);
+
+    virtual void paintLine(const QVector<KisPainter*> &painters,
+                           const KisPaintInformation &pi1,
+                           const KisPaintInformation &pi2);
+
+    virtual void paintBezierCurve(const QVector<KisPainter*> &painters,
+                                  const KisPaintInformation &pi1,
+                                  const QPointF &control1,
+                                  const QPointF &control2,
+                                  const KisPaintInformation &pi2);
+
+protected:
+    void paintAt(KisPainter *painter, const KisPaintInformation &pi);
+
+    void paintLine(KisPainter *painter,
+                   const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2);
 
-    void paintBezierCurve(const KisPaintInformation &pi1,
+    void paintBezierCurve(KisPainter *painter,
+                          const KisPaintInformation &pi1,
                           const QPointF &control1,
                           const QPointF &control2,
                           const KisPaintInformation &pi2);

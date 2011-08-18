@@ -1522,7 +1522,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
     if (element.firstChild().isNull()) {
         // there's nothing in this span. Insert an invisible character to make sure the
         // style is used. See bug: 264471.
-        cursor.insertText(QString(0x200B));
+        cursor.insertText(QString(0x200B)); // invisible space
     }
 
     for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {

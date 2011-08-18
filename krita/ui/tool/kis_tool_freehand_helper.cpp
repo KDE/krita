@@ -25,6 +25,7 @@
 
 #include "kis_distance_information.h"
 #include "kis_painting_information_builder.h"
+#include "kis_recording_adapter.h"
 #include "kis_image.h"
 #include "strokes/freehand_stroke.h"
 #include "kis_painter.h"
@@ -33,6 +34,7 @@
 struct KisToolFreehandHelper::Private
 {
     KisPaintingInformationBuilder *infoBuilder;
+    KisRecordingAdapter *recordingAdapter;
     KisStrokesFacade *strokesFacade;
 
     bool haveTangent;
@@ -59,11 +61,13 @@ struct KisToolFreehandHelper::Private
 };
 
 
-KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder)
+KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
+                                             KisRecordingAdapter *recordingAdapter)
     : m_d(new Private)
 {
     m_d->painter = 0;
     m_d->infoBuilder = infoBuilder;
+    m_d->recordingAdapter = recordingAdapter;
 
     m_d->smooth = true;
     m_d->smoothness = 1.0;
@@ -115,6 +119,10 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     }
 
     bool indirectPainting = m_d->resources->needsIndirectPainting();
+
+    if(m_d->recordingAdapter) {
+        m_d->recordingAdapter->startStroke(image, m_d->resources);
+    }
 
     KisStrokeStrategy *stroke =
         new FreehandStrokeStrategy(indirectPainting,
@@ -191,6 +199,10 @@ void KisToolFreehandHelper::endPaint()
     m_d->painter = 0;
 
     m_d->strokesFacade->endStroke(m_d->strokeId);
+
+    if(m_d->recordingAdapter) {
+        m_d->recordingAdapter->endStroke();
+    }
 }
 
 const KisPaintOp* KisToolFreehandHelper::currentPaintOp() const
@@ -229,6 +241,10 @@ void KisToolFreehandHelper::paintAt(const KisPaintInformation &pi)
         new FreehandStrokeStrategy::Data(m_d->resources->currentNode(),
                                          m_d->painter, pi,
                                          m_d->dragDistance));
+
+    if(m_d->recordingAdapter) {
+        m_d->recordingAdapter->addPoint(pi);
+    }
 }
 
 void KisToolFreehandHelper::paintLine(const KisPaintInformation &pi1,
@@ -239,6 +255,10 @@ void KisToolFreehandHelper::paintLine(const KisPaintInformation &pi1,
         new FreehandStrokeStrategy::Data(m_d->resources->currentNode(),
                                          m_d->painter, pi1, pi2,
                                          m_d->dragDistance));
+
+    if(m_d->recordingAdapter) {
+        m_d->recordingAdapter->addLine(pi1, pi2);
+    }
 }
 
 void KisToolFreehandHelper::paintBezierCurve(const KisPaintInformation &pi1,
@@ -252,5 +272,9 @@ void KisToolFreehandHelper::paintBezierCurve(const KisPaintInformation &pi1,
                                          m_d->painter,
                                          pi1, control1, control2, pi2,
                                          m_d->dragDistance));
+
+    if(m_d->recordingAdapter) {
+        m_d->recordingAdapter->addCurve(pi1, control1, control2, pi2);
+    }
 }
 

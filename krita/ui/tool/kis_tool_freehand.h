@@ -38,11 +38,10 @@ class KoCanvasBase;
 
 class KisPainter;
 
-class KisRecordedPathPaintAction;
-
 
 class KisPaintingInformationBuilder;
 class KisToolFreehandHelper;
+class KisRecordingAdapter;
 
 
 class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
@@ -131,13 +130,12 @@ private:
     QRectF m_oldOutlineRect;
     bool m_explicitShowOutline;
 
-    KisRecordedPathPaintAction* m_pathPaintAction;
-
     KAction* m_increaseBrushSize;
     KAction* m_decreaseBrushSize;
 
     KisPaintingInformationBuilder *m_infoBuilder;
     KisToolFreehandHelper *m_helper;
+    KisRecordingAdapter *m_recordingAdapter;
 };
 
 

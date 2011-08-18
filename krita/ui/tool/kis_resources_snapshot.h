@@ -29,6 +29,7 @@ class KoResourceManager;
 class KoCompositeOp;
 class KisPainter;
 class KisPostExecutionUndoAdapter;
+class KisRecordedPaintAction;
 
 
 class KRITAUI_EXPORT KisResourcesSnapshot : public KisShared
@@ -38,6 +39,8 @@ public:
     ~KisResourcesSnapshot();
 
     void setupPainter(KisPainter *painter);
+    void KDE_DEPRECATED setupPaintAction(KisRecordedPaintAction *action);
+
 
     KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const;
     void setCurrentNode(KisNodeSP node);

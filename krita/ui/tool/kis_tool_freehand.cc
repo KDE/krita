@@ -36,8 +36,6 @@
 #include <kis_canvas_resource_provider.h>
 
 // Krita/image
-#include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_path_paint_action.h>
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
@@ -52,7 +50,6 @@
 #include <opengl/kis_opengl.h>
 #include "canvas/kis_canvas2.h"
 #include "kis_cursor.h"
-#include <recorder/kis_node_query_path.h>
 #include <kis_view2.h>
 #include <kis_painting_assistants_manager.h>
 #include <kis_3d_object_model.h>
@@ -60,10 +57,10 @@
 
 #include "kis_painting_information_builder.h"
 #include "kis_tool_freehand_helper.h"
+#include "kis_recording_adapter.h"
 #include "strokes/freehand_stroke.h"
 
 
-#define ENABLE_RECORDING
 static const int HIDE_OUTLINE_TIMEOUT = 800; // ms
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
@@ -75,7 +72,6 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_assistant = false;
     m_smoothness = 1.0;
     m_magnetism = 1.0;
-    m_pathPaintAction = 0;
 
     setSupportOutline(true);
 
@@ -101,12 +97,14 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 
 
     m_infoBuilder = new KisToolPaintingInformationBuilder(this);
-    m_helper = new KisToolFreehandHelper(m_infoBuilder);
+    m_recordingAdapter = new KisRecordingAdapter();
+    m_helper = new KisToolFreehandHelper(m_infoBuilder, m_recordingAdapter);
 }
 
 KisToolFreehand::~KisToolFreehand()
 {
     delete m_helper;
+    delete m_recordingAdapter;
     delete m_infoBuilder;
 }
 
@@ -134,17 +132,6 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
                         image(),
                         image().data(),
                         image()->postExecutionUndoAdapter());
-
-#ifdef ENABLE_RECORDING // Temporary, to figure out what is going without being
-    // distracted by the recording
-    bool indirectPainting = !currentPaintOpPreset()->settings()->paintIncremental();
-    m_pathPaintAction = new KisRecordedPathPaintAction(
-        KisNodeQueryPath::absolutePath(currentNode()),
-        currentPaintOpPreset()
-        );
-    m_pathPaintAction->setPaintIncremental(!indirectPainting);
-    setupPaintAction(m_pathPaintAction);
-#endif
 }
 
 void KisToolFreehand::doStroke(KoPointerEvent *event)
@@ -155,14 +142,6 @@ void KisToolFreehand::doStroke(KoPointerEvent *event)
 void KisToolFreehand::endStroke()
 {
     m_helper->endPaint();
-
-#ifdef ENABLE_RECORDING
-    if (image() && m_pathPaintAction)
-        image()->actionRecorder()->addAction(*m_pathPaintAction);
-    delete m_pathPaintAction;
-    m_pathPaintAction = 0;
-#endif
-
     setCurrentNodeLocked(false);
 }
 

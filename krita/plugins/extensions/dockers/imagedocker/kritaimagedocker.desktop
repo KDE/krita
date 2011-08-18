@@ -1,8 +1,14 @@
 [Desktop Entry]
 Name=Image Docker
-Name[en_GB]=Image Docker
+Name[pt]=Área de Imagens
+Name[pt_BR]=Acoplador de imagem
+Name[sv]=Bilddockningsfönster
+Name[uk]=Панель швартування зображень
 Comment=Docker for reference images
-Comment[en_GB]=Docker for reference images
+Comment[pt]=Área das imagens de referência
+Comment[pt_BR]=Acoplador para imagens de referência
+Comment[sv]=Dockningsfönster för referensbilder
+Comment[uk]=Панель для еталонних зображень
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritaimagedocker

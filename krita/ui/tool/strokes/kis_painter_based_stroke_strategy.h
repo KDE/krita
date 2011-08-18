@@ -32,6 +32,11 @@ public:
     KisPainterBasedStrokeStrategy(const QString &id,
                                   const QString &name,
                                   KisResourcesSnapshotSP resources,
+                                  QVector<KisPainter*> painters);
+
+    KisPainterBasedStrokeStrategy(const QString &id,
+                                  const QString &name,
+                                  KisResourcesSnapshotSP resources,
                                   KisPainter *painter);
 
     void initStrokeCallback();
@@ -39,8 +44,15 @@ public:
     void cancelStrokeCallback();
 
 private:
+    void init();
+    void initPainters(KisPaintDeviceSP targetDevice,
+                      KisSelectionSP selection,
+                      bool hasIndirectPainting);
+    void deletePainters();
+
+private:
     KisResourcesSnapshotSP m_resources;
-    KisPainter *m_painter;
+    QVector<KisPainter*> m_painters;
     KisTransaction *m_transaction;
 };
 

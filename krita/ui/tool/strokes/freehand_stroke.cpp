@@ -31,6 +31,20 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", "Freehand stroke",
                                     resources, painter)
 {
+    init(needsIndirectPainting);
+}
+
+FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
+                                               KisResourcesSnapshotSP resources,
+                                               QVector<KisPainter*> painters)
+    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", "Freehand stroke",
+                                    resources, painters)
+{
+    init(needsIndirectPainting);
+}
+
+void FreehandStrokeStrategy::init(bool needsIndirectPainting)
+{
     setNeedsIndirectPainting(needsIndirectPainting);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 }

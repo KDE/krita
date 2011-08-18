@@ -87,7 +87,14 @@ public:
                            KisResourcesSnapshotSP resources,
                            KisPainter *painter);
 
+    FreehandStrokeStrategy(bool needsIndirectPainting,
+                           KisResourcesSnapshotSP resources,
+                           QVector<KisPainter*> painters);
+
     void doStrokeCallback(KisStrokeJobData *data);
+
+private:
+    void init(bool needsIndirectPainting);
 };
 
 #endif /* __FREEHAND_STROKE_H */

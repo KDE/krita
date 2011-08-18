@@ -30,15 +30,56 @@
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
                                                              const QString &name,
                                                              KisResourcesSnapshotSP resources,
+                                                             QVector<KisPainter*> painters)
+    : KisSimpleStrokeStrategy(id, name),
+      m_resources(resources),
+      m_painters(painters),
+      m_transaction(0)
+{
+    init();
+}
+
+KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
+                                                             const QString &name,
+                                                             KisResourcesSnapshotSP resources,
                                                              KisPainter *painter)
     : KisSimpleStrokeStrategy(id, name),
       m_resources(resources),
-      m_painter(painter),
+      m_painters(QVector<KisPainter*>() <<  painter),
       m_transaction(0)
+{
+    init();
+}
+
+void KisPainterBasedStrokeStrategy::init()
 {
     enableJob(KisSimpleStrokeStrategy::JOB_INIT);
     enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
     enableJob(KisSimpleStrokeStrategy::JOB_CANCEL);
+}
+
+void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
+                                                 KisSelectionSP selection,
+                                                 bool hasIndirectPainting)
+{
+    foreach(KisPainter *painter, m_painters) {
+        painter->begin(targetDevice, selection);
+        m_resources->setupPainter(painter);
+
+        if(hasIndirectPainting) {
+            painter->setCompositeOp(targetDevice->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
+            painter->setOpacity(OPACITY_OPAQUE_U8);
+            painter->setChannelFlags(QBitArray());
+        }
+    }
+}
+
+void KisPainterBasedStrokeStrategy::deletePainters()
+{
+    foreach(KisPainter *painter, m_painters) {
+        delete painter;
+    }
+    m_painters.clear();
 }
 
 void KisPainterBasedStrokeStrategy::initStrokeCallback()
@@ -76,14 +117,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
 
     m_transaction = new KisTransaction(name(), targetDevice);
 
-    m_painter->begin(targetDevice, selection);
-    m_resources->setupPainter(m_painter);
-
-    if(hasIndirectPainting) {
-        m_painter->setCompositeOp(paintDevice->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
-        m_painter->setOpacity(OPACITY_OPAQUE_U8);
-        m_painter->setChannelFlags(QBitArray());
-    }
+    initPainters(targetDevice, selection, hasIndirectPainting);
 }
 
 void KisPainterBasedStrokeStrategy::finishStrokeCallback()
@@ -105,14 +139,14 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
         m_transaction->commit(m_resources->postExecutionUndoAdapter());
     }
     delete m_transaction;
-    delete m_painter;
+    deletePainters();
 }
 
 void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
 {
     m_transaction->revert();
     delete m_transaction;
-    delete m_painter;
+    deletePainters();
 
     KisNodeSP node = m_resources->currentNode();
     KisIndirectPaintingSupport *indirect =

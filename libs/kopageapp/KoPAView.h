@@ -43,6 +43,9 @@ class KoZoomAction;
 class KoZoomController;
 class KToggleAction;
 class KUrl;
+
+class QDragEnterEvent;
+class QDropEvent;
 class QTextDocument;
 class QLabel;
 class QTabBar;
@@ -71,6 +74,13 @@ public:
      */
     explicit KoPAView( KoPADocument * document, QWidget * parent = 0 );
     virtual ~KoPAView();
+
+// QWidget overrides
+
+    virtual void dragEnterEvent(QDragEnterEvent * event);
+    virtual void dropEvent(QDropEvent * event);
+
+//  KoPAViewBase/KoView overrides
 
     KoZoomController* zoomController() const;
 

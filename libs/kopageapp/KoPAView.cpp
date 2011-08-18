@@ -31,7 +31,12 @@
 #include <QClipboard>
 #include <QLabel>
 #include <QTabBar>
+#include <QDropEvent>
+#include <QDragEnterEvent>
 
+#include <KoShapeRegistry.h>
+#include <KoShapeFactoryBase.h>
+#include <KoProperties.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoResourceManager.h>
 #include <KoColorBackground.h>
@@ -163,6 +168,8 @@ KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 
     if ( d->doc->pageCount() > 0 )
         doUpdateActivePage( d->doc->pageByIndex( 0, false ) );
+
+    setAcceptDrops(true);
 }
 
 KoPAView::~KoPAView()
@@ -178,6 +185,50 @@ KoPAView::~KoPAView()
     delete d->viewModeNormal;
 
     delete d;
+}
+
+void KoPAView::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasImage()
+            || event->mimeData()->hasUrls()) {
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
+void KoPAView::dropEvent(QDropEvent *event)
+{
+    // get position from event and convert to document coordinates
+    QPointF pos = zoomHandler()->viewToDocument(event->pos())
+            + kopaCanvas()->documentOffset() - kopaCanvas()->documentOrigin();
+
+    //qDebug() << "dropping at pos" << pos;
+
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
+    if (!factory) {
+        kWarning(30003) << "No picture shape found, cannot drop images.";
+        return;
+    }
+
+    if (event->mimeData()->hasImage()) {
+        KoProperties params;
+        params.setProperty("qimage", event->mimeData()->imageData());
+
+        KoShape *shape = factory->createShape(&params, d->doc->resourceManager());
+
+        if (!shape) {
+            kWarning(30003) << "Could not create a shape from the image";
+            delete shape;
+            return;
+        }
+        shape->setPosition(pos);
+        //qDebug() << "\tadding shape -- how should that happen?";
+        //d->doc->addShape(shape);
+    }
+    else if (event->mimeData()->hasUrls()) {
+
+    }
 }
 
 void KoPAView::initGUI()

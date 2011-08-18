@@ -23,6 +23,7 @@
 #include "kis_resources_snapshot.h"
 
 class KisPainter;
+class KisTransaction;
 
 
 class KRITAUI_EXPORT KisPainterBasedStrokeStrategy : public KisSimpleStrokeStrategy
@@ -40,6 +41,7 @@ public:
 private:
     KisResourcesSnapshotSP m_resources;
     KisPainter *m_painter;
+    KisTransaction *m_transaction;
 };
 
 #endif /* __KIS_PAINTER_BASED_STROKE_STRATEGY_H */

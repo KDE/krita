@@ -24,6 +24,7 @@
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "kis_selection.h"
+#include "kis_transaction.h"
 
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
@@ -32,7 +33,8 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
                                                              KisPainter *painter)
     : KisSimpleStrokeStrategy(id, name),
       m_resources(resources),
-      m_painter(painter)
+      m_painter(painter),
+      m_transaction(0)
 {
     enableJob(KisSimpleStrokeStrategy::JOB_INIT);
     enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
@@ -72,6 +74,8 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
         selection = layer->selection();
     }
 
+    m_transaction = new KisTransaction(name(), targetDevice);
+
     m_painter->begin(targetDevice, selection);
     m_resources->setupPainter(m_painter);
 
@@ -80,8 +84,6 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
         m_painter->setOpacity(OPACITY_OPAQUE_U8);
         m_painter->setChannelFlags(QBitArray());
     }
-
-    m_painter->beginTransaction(name());
 }
 
 void KisPainterBasedStrokeStrategy::finishStrokeCallback()
@@ -92,23 +94,24 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
         dynamic_cast<KisIndirectPaintingSupport*>(node.data());
 
     if(layer && indirect && indirect->hasTemporaryTarget()) {
-        QString transactionText = m_painter->transactionText();
-        m_painter->deleteTransaction();
+        QString transactionText = m_transaction->text();
+        m_transaction->end();
 
         indirect->mergeToLayer(layer,
                                m_resources->postExecutionUndoAdapter(),
                                transactionText);
     }
     else {
-        m_painter->endTransaction(
-            m_resources->postExecutionUndoAdapter());
+        m_transaction->commit(m_resources->postExecutionUndoAdapter());
     }
+    delete m_transaction;
     delete m_painter;
 }
 
 void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
 {
-    m_painter->revertTransaction();
+    m_transaction->revert();
+    delete m_transaction;
     delete m_painter;
 
     KisNodeSP node = m_resources->currentNode();

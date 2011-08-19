@@ -689,9 +689,7 @@ void KisSelectionManager::imageResizeToSelection()
     KisImageWSP image = m_view->image();
 
     if (image && selection) {
-        image->undoAdapter()->beginMacro(i18n("Resize Image to Size of Selection"));
         image->resize(selection->selectedExactRect(), true);
-        image->undoAdapter()->endMacro();
     }
 }
 

@@ -155,7 +155,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
                             QPoint(image->rootLayer()->x(), image->rootLayer()->y()), QPoint(newRootX, newRootY), image);
                     Q_ASSERT(moveCommand != 0);
 
-                    m_view->document()->addCommand(moveCommand);
+                    m_view->undoAdapter()->addCommand(moveCommand);
                 }
             }
         }

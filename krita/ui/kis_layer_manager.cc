@@ -199,10 +199,7 @@ void KisLayerManager::imageResizeToActiveLayer()
     KisImageWSP image = m_view->image();
 
     if (image && (layer = activeLayer())) {
-
-        undoAdapter->beginMacro(i18n("Resize Image to Size of Current Layer"));
         image->resize(layer->exactBounds(), true);
-        undoAdapter->endMacro();
     }
 }
 

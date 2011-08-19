@@ -561,12 +561,7 @@ bool KoTextDocumentLayout::doLayout()
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 finished = rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
-                    for(int i = 0; i<d->textAnchors.size(); i++ ) {
-                         d->textAnchors[i]->setAnchorStrategy(0);
-                     }
-                     d->textAnchors.clear();
-                     d->anchoringIndex = 0;
-                    //d->anchoringIndex = 0;
+                    d->anchoringIndex = 0;
                     d->anchoringCycle++;
                     if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
                         d->anchoringState = Private::AnchoringFinalState;
@@ -635,12 +630,7 @@ bool KoTextDocumentLayout::doLayout()
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
-                    //d->anchoringIndex = 0;
-                    for(int i = 0; i<d->textAnchors.size(); i++ ) {
-                         d->textAnchors[i]->setAnchorStrategy(0);
-                     }
-                     d->textAnchors.clear();
-                     d->anchoringIndex = 0;
+                    d->anchoringIndex = 0;
                     d->anchoringCycle++;
                     if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
                         d->anchoringState = Private::AnchoringFinalState;

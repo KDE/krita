@@ -1189,7 +1189,7 @@ void KisImage::refreshGraph(KisNodeSP root, const QRect &rc, const QRect &cropRe
 {
     if (!root) root = m_d->rootLayer;
 
-    if (!locked() && m_d->scheduler) {
+    if (m_d->scheduler) {
         m_d->scheduler->fullRefresh(root, rc, cropRect);
     }
 }
@@ -1208,7 +1208,7 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
 {
     if (!root) root = m_d->rootLayer;
 
-    if (!locked() && m_d->scheduler) {
+    if (m_d->scheduler) {
         m_d->scheduler->fullRefreshAsync(root, rc, cropRect);
     }
 }
@@ -1220,7 +1220,7 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
 
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
-    if (!locked() && m_d->scheduler) {
+    if (m_d->scheduler) {
         dbgImage << "KisImage: requested and update for" << node->name() << rect;
         m_d->scheduler->updateProjection(node, rect, bounds());
     }

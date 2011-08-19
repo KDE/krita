@@ -26,7 +26,7 @@
 
 KisSavedCommandBase::KisSavedCommandBase(const QString &name,
                                          KisStrokesFacade *strokesFacade)
-    : m_name(name),
+    : KUndo2Command(name),
       m_strokesFacade(strokesFacade),
       m_skipOneRedo(true)
 {
@@ -44,7 +44,7 @@ KisStrokesFacade* KisSavedCommandBase::strokesFacade()
 void KisSavedCommandBase::runStroke(bool undo)
 {
     KisStrokeStrategyUndoCommandBased *strategy =
-        new KisStrokeStrategyUndoCommandBased(m_name, undo, 0);
+        new KisStrokeStrategyUndoCommandBased(text(), undo, 0);
 
     KisStrokeId id = m_strokesFacade->startStroke(strategy);
     addCommands(id, undo);

@@ -44,7 +44,6 @@ private:
     void runStroke(bool undo);
 
 private:
-    QString m_name;
     KisStrokesFacade *m_strokesFacade;
     bool m_skipOneRedo;
 };

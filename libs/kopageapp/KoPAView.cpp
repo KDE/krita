@@ -203,17 +203,49 @@ void KoPAView::dropEvent(QDropEvent *event)
     QPointF pos = zoomHandler()->viewToDocument(event->pos())
             + kopaCanvas()->documentOffset() - kopaCanvas()->documentOrigin();
 
-    //qDebug() << "dropping at pos" << pos;
-
+    // create a factory
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
     if (!factory) {
         kWarning(30003) << "No picture shape found, cannot drop images.";
         return;
     }
 
+    // we can drop a list of urls from, for instance dolphin
+    QList<QImage> images;
+
     if (event->mimeData()->hasImage()) {
+        images << event->mimeData()->imageData().value<QImage>();
+    }
+    else if (event->mimeData()->hasUrls()) {
+        QList<QUrl> urls = event->mimeData()->urls();
+        foreach (const QUrl url, urls) {
+            QImage image;
+            KUrl kurl(url);
+            // make sure we download the files before inserting them
+            if (!kurl.isLocalFile()) {
+                QString tmpFile;
+                if( KIO::NetAccess::download(kurl, tmpFile, this)) {
+                    image.load(tmpFile);
+                    KIO::NetAccess::removeTempFile(tmpFile);
+                } else {
+                    KMessageBox::error(this, KIO::NetAccess::lastErrorString());
+                }
+            }
+            else {
+                image.load(kurl.toLocalFile());
+            }
+            if (!image.isNull()) {
+                images << image;
+            }
+        }
+    }
+
+    foreach(const QImage image, images) {
+
         KoProperties params;
-        params.setProperty("qimage", event->mimeData()->imageData());
+        QVariant v;
+        v.setValue<QImage>(image);
+        params.setProperty("qimage", v);
 
         KoShape *shape = factory->createShape(&params, d->doc->resourceManager());
 
@@ -223,11 +255,15 @@ void KoPAView::dropEvent(QDropEvent *event)
             return;
         }
         shape->setPosition(pos);
-        //qDebug() << "\tadding shape -- how should that happen?";
-        //d->doc->addShape(shape);
-    }
-    else if (event->mimeData()->hasUrls()) {
-
+        pos += QPointF(25,25); // increase the position for each shape we insert so the
+                               // user can see them all.
+        KUndo2Command *cmd = kopaCanvas()->shapeController()->addShapeDirect(shape);
+        if (cmd) {
+            KoSelection *selection = kopaCanvas()->shapeManager()->selection();
+            selection->deselectAll();
+            selection->select(shape);
+        }
+        kopaCanvas()->addCommand(cmd);
     }
 }
 

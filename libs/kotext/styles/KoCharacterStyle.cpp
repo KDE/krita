@@ -1413,10 +1413,13 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     }
 
     const QString letterSpacing(styleStack.property(KoXmlNS::fo, "letter-spacing"));
-    if (!letterSpacing.isEmpty()) {
+    if ((!letterSpacing.isEmpty()) && (letterSpacing != "normal")) {
         qreal space = KoUnit::parseValue(letterSpacing);
-        QFontMetricsF fm(font());
-        setFontLetterSpacing(100+100*space/fm.averageCharWidth());
+        QFont styleFont = font();
+        if (styleFont != QFont()) {
+            QFontMetricsF fm(font());
+            setFontLetterSpacing(100+100*space/fm.averageCharWidth());
+        }
     }
 
     const QString textOutline(styleStack.property(KoXmlNS::style, "text-outline"));

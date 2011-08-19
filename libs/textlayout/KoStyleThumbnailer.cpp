@@ -186,6 +186,12 @@ void KoStyleThumbnailer::layoutThumbnail(QSize size, QPixmap &pm)
         rootArea.layoutRoot(&frameCursor);
         documentSize = rootArea.boundingRect().size();
 
+        //center the preview in the pixmap
+        int yOffset = (int)((size.height()-documentSize.height())/2);
+        if (yOffset) {
+            p.translate(0, yOffset);
+        }
+
         KoTextDocumentLayout::PaintContext pc;
         rootArea.paint(&p, pc);
         p.save();
@@ -195,6 +201,12 @@ void KoStyleThumbnailer::layoutThumbnail(QSize size, QPixmap &pm)
         p.restore();
     }
     else {
+        //center the preview in the pixmap
+        int yOffset = (int)((size.height()-documentSize.height())/2);
+        if (yOffset) {
+            p.translate(0, yOffset);
+        }
+
         KoTextDocumentLayout::PaintContext pc;
         rootArea.paint(&p, pc);
     }

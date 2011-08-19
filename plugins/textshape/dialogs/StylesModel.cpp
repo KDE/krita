@@ -63,7 +63,6 @@ StylesModel::StylesModel(KoStyleManager *manager, bool paragraphMode, QObject *p
 
 StylesModel::~StylesModel()
 {
-    delete m_styleThumbnailer;
     delete m_tmpTextShape;
 }
 
@@ -106,6 +105,9 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
         break;
     }
     case Qt::DecorationRole: {
+        if (!m_styleThumbnailer) {
+            return QPixmap();
+        }
         KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
         if (paragStyle) {
             return m_styleThumbnailer->thumbnail(paragStyle);

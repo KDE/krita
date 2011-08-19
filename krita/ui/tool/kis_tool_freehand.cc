@@ -108,6 +108,22 @@ KisToolFreehand::~KisToolFreehand()
     delete m_infoBuilder;
 }
 
+KisPaintingInformationBuilder* KisToolFreehand::paintingInformationBuilder() const
+{
+    return m_infoBuilder;
+}
+
+KisRecordingAdapter* KisToolFreehand::recordingAdapter() const
+{
+    return m_recordingAdapter;
+}
+
+void KisToolFreehand::resetHelper(KisToolFreehandHelper *helper)
+{
+    delete m_helper;
+    m_helper = helper;
+}
+
 int KisToolFreehand::flags() const
 {
     return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
@@ -145,12 +161,17 @@ void KisToolFreehand::endStroke()
     setCurrentNodeLocked(false);
 }
 
+void KisToolFreehand::updateOutlineDocPoint(const QPointF &point)
+{
+    m_outlineDocPoint = point;
+}
+
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
     if(mode() == KisTool::PAINT_MODE)
         return;
 
-    m_outlineDocPoint = e->point;
+    updateOutlineDocPoint(e->point);
 
     KisConfig cfg;
     if(cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
@@ -212,7 +233,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
      */
     if(mode() == KisTool::HOVER_MODE ||
        mode() == KisTool::PAINT_MODE) {
-        m_outlineDocPoint = e->point;
+        updateOutlineDocPoint(e->point);
 
         KisConfig cfg;
         if(cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
@@ -290,9 +311,7 @@ void KisToolFreehand::keyReleaseEvent(QKeyEvent* event)
 void KisToolFreehand::gesture(const QPointF &offsetInDocPixels, const QPointF &initialDocPoint)
 {
     currentPaintOpPreset()->settings()->changePaintOpSize(offsetInDocPixels.x(), offsetInDocPixels.y());
-
-    m_outlineDocPoint = initialDocPoint;
-
+    updateOutlineDocPoint(initialDocPoint);
     updateOutlineRect();
 }
 

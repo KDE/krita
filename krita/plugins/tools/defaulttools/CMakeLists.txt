@@ -15,7 +15,6 @@ set(kritadefaulttools_PART_SRCS
     strokes/move_stroke_strategy.cpp
     kis_tool_pan.cpp
     kis_tool_multihand.cpp
-    kis_tool_multihand_p.cpp
     )
 
 kde4_add_ui_files(kritadefaulttools_PART_SRCS wdgcolorpicker.ui wdgmovetool.ui)

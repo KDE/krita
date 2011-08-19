@@ -74,6 +74,12 @@ protected:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
+
+    KisPaintingInformationBuilder* paintingInformationBuilder() const;
+    KisRecordingAdapter* recordingAdapter() const;
+    void resetHelper(KisToolFreehandHelper *helper);
+    void updateOutlineDocPoint(const QPointF &point);
+
 protected slots:
 
     void setSmooth(bool smooth);

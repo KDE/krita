@@ -399,6 +399,10 @@ void KisRulerAssistantTool::openFinish(KJob* job)
                 if (assistant) {
                     if (assistant->handles().size() == assistant->numHandles()) {
                         m_canvas->view()->paintingAssistantManager()->addAssistant(assistant);
+                        KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant);
+                        if (grid) {
+                            m_canvas->view()->resourceProvider()->addPerspectiveGrid(grid);
+                        }
                     } else {
                         errors = true;
                         delete assistant;

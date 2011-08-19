@@ -213,35 +213,16 @@ public:
             return false;
         }
 
-        bool removedFromDisk = true;
+       m_resourcesByName.remove(resource->name());
+       m_resourcesByFilename.remove(resource->shortFilename());
+       m_resources.removeAt(m_resources.indexOf(resource));
+       notifyRemovingResource(resource);
+       if (m_deleteResource) {
+          delete resource;
+       }
 
-        QFile file( resource->filename() );
-        if( ! file.remove() ) {
-
-            // Don't do anything, it's probably write protected. In
-            // //future, we should store in config which read-only
-            // //resources the user has removed and blacklist them on
-            // app-start. But if we cannot remove a resource from the
-            // disk, remove it from the chooser at least.
-
-            removedFromDisk = false;
-            kWarning(30009) << "Could not remove resource!";
-        }
-
-
-          m_resourcesByName.remove(resource->name());
-          m_resourcesByFilename.remove(resource->shortFilename());
-          m_resources.removeAt(m_resources.indexOf(resource));
-          notifyRemovingResource(resource);
-            if (m_deleteResource) {
-                delete resource;
-            }
-
-         if(!removedFromDisk) {
-            writeBlackListFile(resource->filename());
-        }
-
-        return true;
+       writeBlackListFile(resource->filename());
+       return true;
     }
 
     QList<T*> resources() {
@@ -415,6 +396,7 @@ public:
         tagObject->setNepomukBool(nepomukOn);
         tagObject->updateNepomukXML(nepomukOn);
         delete tagObject;
+        m_tagObject->setNepomukBool(nepomukOn);
     }
 #endif
 protected:

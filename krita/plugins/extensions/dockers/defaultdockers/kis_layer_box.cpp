@@ -305,6 +305,8 @@ void KisLayerBox::updateUI()
                                        || (active->parent() && active->parent() != m_image->root())));
     m_wdgLayerBox->bnLower->setEnabled(active && (active->prevSibling()
                                        || (active->parent() && active->parent() != m_image->root())));
+    m_wdgLayerBox->bnLeft->setEnabled(active);
+    m_wdgLayerBox->bnRight->setEnabled(active);
     m_wdgLayerBox->bnDuplicate->setEnabled(active);
     m_wdgLayerBox->bnProperties->setEnabled(active);
 

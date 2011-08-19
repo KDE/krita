@@ -37,9 +37,9 @@ TableIterator::TableIterator(QTextTable *t)
     headerCellAreas.resize(headerRows);
     for (int row = 0; row < headerRows; ++row) {
         headerCellAreas[row].resize(table->columns());
-            for (int col = 0; col < table->columns(); ++col) {
-                headerCellAreas[row][col] = 0;
-            }
+        for (int col = 0; col < table->columns(); ++col) {
+            headerCellAreas[row][col] = 0;
+        }
     }
 }
 
@@ -60,10 +60,12 @@ TableIterator::TableIterator(TableIterator *other)
     headerCellAreas.resize(headerRows);
     for (int row = 0; row < headerRows; ++row) {
         headerCellAreas[row].resize(table->columns());
-            for (int col = 0; col < table->columns(); ++col) {
-                headerCellAreas[row][col] = other->headerCellAreas[row][col];
-            }
+        for (int col = 0; col < table->columns(); ++col) {
+            headerCellAreas[row][col] = other->headerCellAreas[row][col];
+        }
+        headerRowPositions[row] = other->headerRowPositions[row];
     }
+    headerRowPositions[headerRows] = other->headerRowPositions[headerRows];
 }
 
 

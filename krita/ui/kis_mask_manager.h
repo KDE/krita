@@ -62,7 +62,8 @@ private slots:
      */
     void maskToLayer();
 
-    
+    void changeActivity(KisSelectionMask *mask,bool active);
+
 private:
     
     friend class KisNodeManager;
@@ -148,8 +149,6 @@ private:
      * menu items
      */
     void masksUpdated();
-
-    void changeActivity(KisSelectionMask *mask,bool active);
 
     /**
      * Activate a new mask. There can be only one mask active per

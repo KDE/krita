@@ -31,7 +31,12 @@
 #include <QClipboard>
 #include <QLabel>
 #include <QTabBar>
+#include <QDropEvent>
+#include <QDragEnterEvent>
 
+#include <KoShapeRegistry.h>
+#include <KoShapeFactoryBase.h>
+#include <KoProperties.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoResourceManager.h>
 #include <KoColorBackground.h>
@@ -163,6 +168,8 @@ KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 
     if ( d->doc->pageCount() > 0 )
         doUpdateActivePage( d->doc->pageByIndex( 0, false ) );
+
+    setAcceptDrops(true);
 }
 
 KoPAView::~KoPAView()
@@ -178,6 +185,86 @@ KoPAView::~KoPAView()
     delete d->viewModeNormal;
 
     delete d;
+}
+
+void KoPAView::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasImage()
+            || event->mimeData()->hasUrls()) {
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
+void KoPAView::dropEvent(QDropEvent *event)
+{
+    // get position from event and convert to document coordinates
+    QPointF pos = zoomHandler()->viewToDocument(event->pos())
+            + kopaCanvas()->documentOffset() - kopaCanvas()->documentOrigin();
+
+    // create a factory
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
+    if (!factory) {
+        kWarning(30003) << "No picture shape found, cannot drop images.";
+        return;
+    }
+
+    // we can drop a list of urls from, for instance dolphin
+    QList<QImage> images;
+
+    if (event->mimeData()->hasImage()) {
+        images << event->mimeData()->imageData().value<QImage>();
+    }
+    else if (event->mimeData()->hasUrls()) {
+        QList<QUrl> urls = event->mimeData()->urls();
+        foreach (const QUrl url, urls) {
+            QImage image;
+            KUrl kurl(url);
+            // make sure we download the files before inserting them
+            if (!kurl.isLocalFile()) {
+                QString tmpFile;
+                if( KIO::NetAccess::download(kurl, tmpFile, this)) {
+                    image.load(tmpFile);
+                    KIO::NetAccess::removeTempFile(tmpFile);
+                } else {
+                    KMessageBox::error(this, KIO::NetAccess::lastErrorString());
+                }
+            }
+            else {
+                image.load(kurl.toLocalFile());
+            }
+            if (!image.isNull()) {
+                images << image;
+            }
+        }
+    }
+
+    foreach(const QImage image, images) {
+
+        KoProperties params;
+        QVariant v;
+        v.setValue<QImage>(image);
+        params.setProperty("qimage", v);
+
+        KoShape *shape = factory->createShape(&params, d->doc->resourceManager());
+
+        if (!shape) {
+            kWarning(30003) << "Could not create a shape from the image";
+            delete shape;
+            return;
+        }
+        shape->setPosition(pos);
+        pos += QPointF(25,25); // increase the position for each shape we insert so the
+                               // user can see them all.
+        KUndo2Command *cmd = kopaCanvas()->shapeController()->addShapeDirect(shape);
+        if (cmd) {
+            KoSelection *selection = kopaCanvas()->shapeManager()->selection();
+            selection->deselectAll();
+            selection->select(shape);
+        }
+        kopaCanvas()->addCommand(cmd);
+    }
 }
 
 void KoPAView::initGUI()

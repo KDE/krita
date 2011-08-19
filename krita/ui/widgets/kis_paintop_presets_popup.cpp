@@ -293,4 +293,11 @@ void KisPaintOpPresetsPopup::hideEvent(QHideEvent *event)
     QWidget::hideEvent(event);
 }
 
+void KisPaintOpPresetsPopup::resizeEvent(QResizeEvent* event)
+{
+    QWidget::resizeEvent(event);
+    emit sizeChanged();
+}
+
+
 #include "kis_paintop_presets_popup.moc"

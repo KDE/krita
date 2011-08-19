@@ -88,14 +88,6 @@ target_link_libraries(TestKoRgbU8ColorSpaceTester  ${KDE4_KDEUI_LIBS} pigmentcms
 
 ########### next target ###############
 
-set(TestKoCompositeOps_test_SRCS TestKoCompositeOps.cpp )
-
-kde4_add_unit_test(TestKoCompositeOps TESTNAME libs-pigment-TestKoCompositeOps ${TestKoCompositeOps_test_SRCS})
-
-target_link_libraries(TestKoCompositeOps  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(TestKoColorSpaceSanity_test_SRCS TestKoColorSpaceSanity.cpp )
 
 kde4_add_unit_test(TestKoColorSpaceSanity TESTNAME libs-pigment-TestKoColorSpaceSanity ${TestKoColorSpaceSanity_test_SRCS})

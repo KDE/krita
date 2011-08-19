@@ -304,6 +304,15 @@ bool KoPADocumentModel::setData(const QModelIndex &index, const QVariant &value,
 KoDocumentSectionModel::PropertyList KoPADocumentModel::properties( KoShape* shape ) const
 {
     PropertyList l;
+
+    if (KoPAPageBase *page = dynamic_cast<KoPAPageBase *>(shape)) {
+        // The idea is to display the page-number so users know what page-number/slide-number
+        // the shape has also in the case the slide has a name (in which case it's not named
+        // "Slide [slide-number]" any longer.
+        // Maybe we should better use KoTextPage::visiblePageNumber here?
+        l << Property(i18n("Slide"), QString::number(m_document->pageIndex(page) + 1));
+    }
+
     l << Property(i18n("Visible"), SmallIcon("14_layer_visible"), SmallIcon("14_layer_novisible"), shape->isVisible());
     l << Property(i18n("Locked"), SmallIcon("object-locked"), SmallIcon("object-unlocked"), shape->isGeometryProtected());
     return l;
@@ -711,14 +720,16 @@ bool KoPADocumentModel::doDrop(QList<KoPAPageBase *> pages, KoPAPageBase *pageAf
         return false;
     }
 
-   switch (action) {
-   case Qt::MoveAction: {
+    switch (action) {
+    case Qt::MoveAction: {
        KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_document, pages, pageAfter);
        m_document->addCommand( command );
-       emit requestPageSelection(m_document->pageIndex(pageAfter) + 1, pages.count());
+       if ((m_document->pageIndex(pageAfter) + pages.count()) < m_document->pageCount()) {
+            emit requestPageSelection(m_document->pageIndex(pageAfter) + 1, pages.count());
+       }
        return true;
-   }
-   case Qt::CopyAction: {
+    }
+    case Qt::CopyAction: {
        // Copy Pages
        KoPAOdfPageSaveHelper saveHelper(m_document, pages);
        KoDrag drag;
@@ -737,12 +748,12 @@ bool KoPADocumentModel::doDrop(QList<KoPAPageBase *> pages, KoPAPageBase *pageAf
        }
        emit requestPageSelection(m_document->pageIndex(pageAfter) + 1, sizeof(documentTypes) / sizeof(KoOdf::DocumentType) - 1);
        return true;
-   }
-   default:
+    }
+    default:
        qDebug("Unknown action: %d ", (int)action);
        return false;
-   }
-   return false;
+    }
+    return false;
 }
 
 #include <KoPADocumentModel.moc>

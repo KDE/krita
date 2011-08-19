@@ -1519,6 +1519,12 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
     if (d->loadSpanLevel++ == 0)
         d->loadSpanInitialPos = cursor.position();
 
+    if (element.firstChild().isNull()) {
+        // there's nothing in this span. Insert an invisible character to make sure the
+        // style is used. See bug: 264471.
+        cursor.insertText(QString(0x200B)); // invisible space
+    }
+
     for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
         KoXmlElement ts = node.toElement();
         const QString localName(ts.localName());
@@ -1912,6 +1918,10 @@ void KoTextLoader::Private::processDeleteChange(QTextCursor &cursor)
 
     KoDeleteChangeMarker *marker;
     foreach (marker, markersList) {
+        if (!marker) {
+            kWarning() << "Empty KoDeleteChangeMarker in the markerslist.";
+            continue;
+        }
         int changeId = marker->changeId();
 
         KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);

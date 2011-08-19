@@ -88,3 +88,6 @@ add_subdirectory( pics )
 add_subdirectory( fonts ) 
 add_subdirectory( tests )
 add_subdirectory( templates )
+
+install( FILES  kformulapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+

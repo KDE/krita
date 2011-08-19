@@ -306,7 +306,9 @@ void DeleteCommand::updateListChanges()
 
             if (!KoTextDocument(document).list(currentBlock)) {
                 KoList *list = KoTextDocument(document).list(listId);
-                list->updateStoredList(currentBlock);
+                if (list) {
+                    list->updateStoredList(currentBlock);
+                }
             }
         }
     }

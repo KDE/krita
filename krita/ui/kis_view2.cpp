@@ -377,6 +377,19 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     connect(m_d->canvas, SIGNAL(scrollAreaSizeChanged()), m_d->zoomManager, SLOT(slotScrollAreaSizeChanged()));
 
     setAcceptDrops(true);
+
+#if 0
+    //check for colliding shortcuts
+    QSet<QKeySequence> existingShortcuts;
+    foreach(QAction* action, actionCollection()->actions()) {
+        if(action->shortcut() == QKeySequence("")) {
+            continue;
+        }
+        dbgUI << "shortcut " << action->text() << " " << action->shortcut();
+        Q_ASSERT(!existingShortcuts.contains(action->shortcut()));
+        existingShortcuts.insert(action->shortcut());
+    }
+#endif
 }
 
 

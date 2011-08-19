@@ -149,9 +149,29 @@ KoParagraphStyle *StylesModel::paragraphStyleForIndex(const QModelIndex &index) 
     return m_styleManager->paragraphStyle(index.internalId());
 }
 
+QModelIndex StylesModel::indexForParagraphStyle(const KoParagraphStyle &style) const
+{
+    if (&style) {
+        return createIndex(m_styleList.indexOf(style.styleId()), 0, style.styleId());;
+    }
+    else {
+        return QModelIndex();
+    }
+}
+
 KoCharacterStyle *StylesModel::characterStyleForIndex(const QModelIndex &index) const
 {
     return m_styleManager->characterStyle(index.internalId());
+}
+
+QModelIndex StylesModel::indexForCharacterStyle(const KoCharacterStyle &style) const
+{
+    if (&style) {
+        return createIndex(m_styleList.indexOf(style.styleId()), 0, style.styleId());
+    }
+    else {
+        return QModelIndex();
+    }
 }
 
 void StylesModel::setStyleManager(KoStyleManager *sm)
@@ -165,9 +185,6 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
         disconnect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
     }
     m_styleManager = sm;
-    if (!m_styleThumbnailer) {
-        m_styleThumbnailer = new KoStyleThumbnailer;
-    }
     if (m_styleManager == 0) {
         return;
     }
@@ -183,6 +200,11 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
         connect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
         connect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
     }
+}
+
+void StylesModel::setStyleThumbnailer(KoStyleThumbnailer *thumbnailer)
+{
+    m_styleThumbnailer = thumbnailer;
 }
 
 // called when the stylemanager adds a style

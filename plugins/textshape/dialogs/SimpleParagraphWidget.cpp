@@ -95,6 +95,7 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 SimpleParagraphWidget::~SimpleParagraphWidget()
 {
     delete m_thumbnailer;
+    delete m_stylePopup;
 }
 
 void SimpleParagraphWidget::directionChangeRequested()
@@ -247,6 +248,20 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
     m_stylePopup->setCurrentFormat(format);
 }
 
+void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
+{
+    if (format == m_currentBlockFormat)
+        return;
+    m_currentBlockFormat = format;
+
+    int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
+    KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
+    if (style) {
+        widget.blockFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->paragraphStyle(id), widget.blockFrame->contentsRect().size()));
+    }
+    m_stylePopup->setCurrentFormat(format);
+}
+
 void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
@@ -255,7 +270,7 @@ void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
 
 void SimpleParagraphWidget::hidePopup()
 {
-    m_stylePopup->hide();
+    widget.blockFrame->hidePopup();
 }
 
 void SimpleParagraphWidget::listStyleChanged(int id)

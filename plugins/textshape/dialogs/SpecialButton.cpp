@@ -24,10 +24,15 @@
 #include <QDesktopWidget>
 #include <QPixmap>
 #include <QLabel>
+#include <QHideEvent>
+#include <QShowEvent>
 
+#include <KDebug>
 
 SpecialButton::SpecialButton(QWidget *parent)
-    : QFrame(parent)
+    : QFrame(parent),
+      m_stylesWidget(0),
+      m_preview(0)
 {
     setFrameShape(QFrame::StyledPanel);
     setFrameShadow(QFrame::Sunken);
@@ -44,6 +49,13 @@ SpecialButton::SpecialButton(QWidget *parent)
     l->addWidget(m_preview);
     l->setMargin(0);
     setLayout(l);
+
+    isPopupVisible = false;
+}
+
+SpecialButton::~SpecialButton()
+{
+    delete m_preview;
 }
 
 void SpecialButton::setStylePreview(const QPixmap &pm)
@@ -58,7 +70,6 @@ void SpecialButton::showPopup()
     }
 
     QRect popupRect(mapToGlobal(QPoint(0, height())), m_stylesWidget->sizeHint());
-
     // Make sure the popup is not drawn outside the screen area
     QRect screenRect = QApplication::desktop()->availableGeometry(this);
     if (popupRect.right() > screenRect.right())
@@ -71,6 +82,13 @@ void SpecialButton::showPopup()
     m_stylesWidget->setGeometry(popupRect);
     m_stylesWidget->raise();
     m_stylesWidget->show();
+    isPopupVisible = true;
+}
+
+void SpecialButton::hidePopup()
+{
+    m_stylesWidget->hide();
+    isPopupVisible = false;
 }
 
 void SpecialButton::setStylesWidget(StylesWidget *stylesWidget)
@@ -80,6 +98,12 @@ void SpecialButton::setStylesWidget(StylesWidget *stylesWidget)
 
 void SpecialButton::mousePressEvent(QMouseEvent *)
 {
-    showPopup();
+    if (!isPopupVisible) {
+        showPopup();
+    }
+    else {
+        hidePopup();
+    }
 }
+
 #include <SpecialButton.moc>

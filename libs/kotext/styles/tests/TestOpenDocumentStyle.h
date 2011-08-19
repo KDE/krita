@@ -77,8 +77,8 @@ class TestOpenDocumentStyle : public QObject
         void testTableCellStyle_data();
         void testParagraphStyle();
         void testParagraphStyle_data();
-        /*void testCharacterStyle();
-        void testCharacterStyle_data();*/
+        void testCharacterStyle();
+        void testCharacterStyle_data();
 };
 
 #endif // TESTOPENDOCUMENTSTYLE_H

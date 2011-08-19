@@ -151,11 +151,15 @@ KisImage::~KisImage()
      */
     m_d->rootLayer = 0;
 
+
+    KisUpdateScheduler *scheduler = m_d->scheduler;
+    m_d->scheduler = 0;
+    delete scheduler;
+
     delete m_d->postExecutionUndoAdapter;
     delete m_d->legacyUndoAdapter;
     delete m_d->undoStore;
 
-    delete m_d->scheduler;
     delete m_d->signalRouter;
     delete m_d->perspectiveGrid;
     delete m_d->nserver;

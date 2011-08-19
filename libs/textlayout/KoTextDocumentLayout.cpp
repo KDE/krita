@@ -406,11 +406,9 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
                 d->anchoringState = Private::AnchoringMovingState;
                 if (d->anchoringCycle <= 10) // loop-protection
                     d->anchoringRootArea->setDirty(); // make sure we do the layout to flow around
-                d->anchoringIndex++;
-            } else {
-                break;
             }
             // move the index to next not positioned shape
+            d->anchoringIndex++;
         }
         break;
     }
@@ -457,7 +455,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 
 void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
 {
-    for(int i = d->anchoringIndex; i<d->textAnchors.size(); i++ ) {
+    for(int i = 0; i<d->textAnchors.size(); i++ ) {
         d->textAnchors[i]->setAnchorStrategy(0);
     }
 
@@ -563,7 +561,7 @@ bool KoTextDocumentLayout::doLayout()
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 finished = rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
-                    for(int i = d->anchoringIndex; i<d->textAnchors.size(); i++ ) {
+                    for(int i = 0; i<d->textAnchors.size(); i++ ) {
                          d->textAnchors[i]->setAnchorStrategy(0);
                      }
                      d->textAnchors.clear();
@@ -638,7 +636,7 @@ bool KoTextDocumentLayout::doLayout()
                 rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
                     //d->anchoringIndex = 0;
-                    for(int i = d->anchoringIndex; i<d->textAnchors.size(); i++ ) {
+                    for(int i = 0; i<d->textAnchors.size(); i++ ) {
                          d->textAnchors[i]->setAnchorStrategy(0);
                      }
                      d->textAnchors.clear();

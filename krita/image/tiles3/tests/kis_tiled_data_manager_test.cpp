@@ -90,6 +90,75 @@ bool KisTiledDataManagerTest::checkTilesNotShared(KisTiledDataManager *srcDM,
     return true;
 }
 
+void KisTiledDataManagerTest::testPurgedAndEmptyTransactions()
+{
+    quint8 defaultPixel = 0;
+    KisTiledDataManager srcDM(1, &defaultPixel);
+
+    quint8 oddPixel1 = 128;
+
+    QRect rect(0,0,512,512);
+    QRect clearRect1(50,50,100,100);
+    QRect clearRect2(150,50,100,100);
+
+    quint8 *buffer = new quint8[rect.width()*rect.height()];
+
+    // purged transaction
+
+    KisMementoSP memento0 = srcDM.getMemento();
+    srcDM.clear(clearRect1, &oddPixel1);
+    srcDM.purgeHistory(memento0);
+    memento0 = 0;
+
+    srcDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, clearRect1,
+                      defaultPixel, rect));
+
+    // one more purged transaction
+
+    KisMementoSP memento1 = srcDM.getMemento();
+    srcDM.clear(clearRect2, &oddPixel1);
+
+    srcDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, clearRect1 | clearRect2,
+                      defaultPixel, rect));
+
+    srcDM.purgeHistory(memento1);
+    memento1 = 0;
+
+    srcDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, clearRect1 | clearRect2,
+                      defaultPixel, rect));
+
+    // empty one
+
+    KisMementoSP memento2 = srcDM.getMemento();
+    srcDM.commit();
+    srcDM.rollback(memento2);
+
+    srcDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, clearRect1 | clearRect2,
+                      defaultPixel, rect));
+
+
+    // now check that everything works still
+
+    KisMementoSP memento3 = srcDM.getMemento();
+    srcDM.setExtent(clearRect2);
+    srcDM.commit();
+
+    srcDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, clearRect2,
+                      defaultPixel, rect));
+
+    srcDM.rollback(memento3);
+
+    srcDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, clearRect1 | clearRect2,
+                      defaultPixel, rect));
+
+
+}
 void KisTiledDataManagerTest::testUnversionedBitBlt()
 {
     quint8 defaultPixel = 0;

@@ -43,6 +43,7 @@ private:
     void benchmarkCOWImpl();
 
 private slots:
+    void testPurgedAndEmptyTransactions();
     void testUnversionedBitBlt();
     void testVersionedBitBlt();
     void testBitBltRough();

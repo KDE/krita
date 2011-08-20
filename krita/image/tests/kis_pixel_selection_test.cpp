@@ -32,6 +32,8 @@
 #include "kis_pixel_selection.h"
 #include "testutil.h"
 #include "kis_fill_painter.h"
+#include "kis_transaction.h"
+
 
 void KisPixelSelectionTest::testCreation()
 {
@@ -193,11 +195,42 @@ void KisPixelSelectionTest::testExactRectWithImage()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 200, 200, cs, "merge test");
-    
+
     image->setGlobalSelection();
     KisPixelSelectionSP selection =  image->globalSelection()->getOrCreatePixelSelection();
     selection->select(QRect(100, 50, 200, 100));
     QCOMPARE(selection->selectedExactRect(), QRect(100, 50, 200, 100));
+}
+
+
+
+void KisPixelSelectionTest::testUndo()
+{
+    KisPixelSelectionSP psel = new KisPixelSelection();
+
+    {
+        KisTransaction transaction("", psel);
+        psel->select(QRect(50, 50, 100, 100));
+        transaction.end();
+    }
+
+    QCOMPARE(psel->selectedExactRect(), QRect(50, 50, 100, 100));
+
+    {
+        KisTransaction transaction("", psel);
+        psel->select(QRect(150, 50, 100, 100));
+        transaction.end();
+    }
+
+    QCOMPARE(psel->selectedExactRect(), QRect(50, 50, 200, 100));
+
+    {
+        KisTransaction transaction("", psel);
+        psel->crop(QRect(75, 75, 10, 10));
+        transaction.revert();
+    }
+
+    QCOMPARE(psel->selectedExactRect(), QRect(50, 50, 200, 100));
 }
 
 QTEST_KDEMAIN(KisPixelSelectionTest, NoGUI)

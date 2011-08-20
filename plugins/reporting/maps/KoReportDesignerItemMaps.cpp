@@ -2,6 +2,7 @@
  * OpenRPT report writer and rendering engine
  * Copyright (C) 2001-2007 by OpenMFG, LLC (info@openmfg.com)
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2011 by Radoslaw Wicik (radoslaw@wicik.pl)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -135,6 +136,7 @@ void KoReportDesignerItemMaps::buildXML(QDomDocument & doc, QDomElement & parent
 
     // properties
     addPropertyAsAttribute(&entity, m_name);
+    addPropertyAsAttribute(&entity, m_controlSource);
     //addPropertyAsAttribute(&entity, m_resizeMode);
     entity.setAttribute("report:z-index", zValue());
     buildXMLRect(doc, entity, &m_pos, &m_size);

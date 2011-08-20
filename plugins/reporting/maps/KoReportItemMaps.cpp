@@ -1,6 +1,7 @@
 /*
  * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2011 by Radoslaw Wicik (radoslaw@wicik.pl)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,23 +31,24 @@
 #include <QImage>
 #include <QPixmap>
 
-#define myDebug() kDebug(44021)
+//#define myDebug() kDebug(44021)
+#define kDebug() kDebug(44021)
 
 KoReportItemMaps::KoReportItemMaps(QDomNode & element)
 {
-    myDebug() << "\e[35m======";
+    kDebug() << "======";
     createProperties();
     QDomNodeList nl = element.childNodes();
     QString n;
     QDomNode node;
 
     m_name->setValue(element.toElement().attribute("report:name"));
-    m_controlSource->setValue(element.toElement().attribute("report:Maps-data-source"));
+    m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
     //m_resizeMode->setValue(element.toElement().attribute("report:resize-mode", "stretch"));
     Z = element.toElement().attribute("report:z-index").toDouble();
 
     parseReportRect(element.toElement(), &m_pos, &m_size);
-    myDebug() << "\e[35m====== childgren:";
+    kDebug() << "====== childgren:";
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
@@ -55,7 +57,7 @@ KoReportItemMaps::KoReportItemMaps(QDomNode & element)
 // 
 //             setInlineImageData(node.firstChild().nodeValue().toLatin1());
 //         } else {
-            myDebug() << "\e[35m====== while parsing image element encountered unknow element: " << n;
+            kDebug() << "====== while parsing image element encountered unknow element: " << n;
 //         }
     }
     
@@ -164,6 +166,7 @@ void KoReportItemMaps::setColumn(const QString &c)
 
 QString KoReportItemMaps::itemDataSource() const
 {
+    kDebug() << m_controlSource->value().toString();
     return m_controlSource->value().toString();
 }
 
@@ -172,15 +175,16 @@ QString KoReportItemMaps::typeName() const
     return "report:maps";
 }
 
-int KoReportItemMaps::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemMaps::render(OROPage* page,
+                             OROSection* section,
+                             QPointF offset,
+                             QVariant data,
+                             KRScriptHandler *script)
 {
     Q_UNUSED(script)
     
-    ///@todo Remove this in real code
-    Q_UNUSED(data) 
-    
-    myDebug() << "Render";
-    myDebug() << "data:" << data;
+    kDebug() << "Render";
+    kDebug() << "data:" << data;
     deserializeData(data);
     
     //QPainter painter(m_mapImage);

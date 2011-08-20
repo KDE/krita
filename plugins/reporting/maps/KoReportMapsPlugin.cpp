@@ -1,6 +1,7 @@
 /*
    KoReport Library
    Copyright (C) 2010 by Adam Pigg (adam@piggz.co.uk)
+   Copyright (C) 2011 by Radoslaw Wicik (radoslaw@wicik.pl)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

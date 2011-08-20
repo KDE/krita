@@ -24,6 +24,8 @@
 #include <QBitArray>
 
 #include <kis_types.h>
+#include <kis_paint_device.h>
+
 
 #include "psd.h"
 #include "psd_header.h"
@@ -111,7 +113,17 @@ public:
 
 private:
 
+    bool doRGB(KisPaintDeviceSP dev ,QIODevice *io);
+    bool doCMYK(KisPaintDeviceSP dev ,QIODevice *io);
+    bool doLAB(KisPaintDeviceSP dev ,QIODevice *io);
+
     const PSDHeader m_header;
+    quint16 m_compression;
+    quint64 m_channelDataLength;
+    quint32 m_channelSize;
+
+    QVector<ChannelInfo> m_channelInfoRecords;
+    QVector<int> m_channelOffsets; // this doesn't need to be global
 };
 
 QDebug operator<<(QDebug dbg, const PSDLayerRecord& layer);

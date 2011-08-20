@@ -220,6 +220,12 @@ target_link_libraries(KisCropProcessingVisitorTest  ${KDE4_KDEUI_LIBS} kritaimag
 
 ########### next target ###############
 
+set(kis_processings_test_SRCS kis_processings_test.cpp )
+kde4_add_unit_test(KisProcessingsTest TESTNAME krita-image-KisProcessingsTest ${kis_processings_test_SRCS})
+target_link_libraries(KisProcessingsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_processing_applicator_test_SRCS kis_processing_applicator_test.cpp )
 kde4_add_unit_test(KisProcessingApplicatorTest TESTNAME krita-image-KisProcessingApplicatorTest ${kis_processing_applicator_test_SRCS})
 target_link_libraries(KisProcessingApplicatorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

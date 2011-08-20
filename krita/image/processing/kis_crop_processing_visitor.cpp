@@ -76,14 +76,14 @@ void KisCropProcessingVisitor::visit(KisGroupLayer *layer, KisUndoAdapter *undoA
 
 void KisCropProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter)
 {
-    layer->resetCache();
     cropNode(layer, undoAdapter);
+    layer->resetCache();
 }
 
 void KisCropProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter)
 {
-    layer->resetCache();
     cropNode(layer, undoAdapter);
+    layer->resetCache();
 }
 
 void KisCropProcessingVisitor::visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter)

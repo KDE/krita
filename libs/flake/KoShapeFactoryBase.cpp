@@ -225,7 +225,7 @@ void KoShapeFactoryBase::getDeferredPlugin()
     Q_ASSERT(offers.size() > 0);
 
     foreach(KSharedPtr<KService> service, offers) {
-        QString error = 0;
+        QString error = 0;  // FIXME: From where does error get a value?
         KoDeferredShapeFactoryBase *plugin = service->createInstance<KoDeferredShapeFactoryBase>(this);
         if (plugin) {
             d->deferredFactory = plugin;

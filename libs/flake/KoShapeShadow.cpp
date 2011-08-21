@@ -251,7 +251,7 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     imagePainter.end();
 
     //convert relative radius to absolute radius
-    qreal absRadius = converter.documentToViewX(KoUnit::ptToUnit(d->blur, KoUnit(KoUnit::Pixel)));
+    qreal absRadius = converter.documentToViewX(d->blur);
     d->blurShadow(sourceGraphic, absRadius, d->color);
     // Paint the result
     painter.save();

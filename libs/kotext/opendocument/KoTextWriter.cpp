@@ -1509,7 +1509,6 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     }
 
     bool splitRegionOpened = false;
-    int splitEndBlockNumber = -1;
 
     bool listStarted = false;
     int listChangeId = 0;
@@ -1526,7 +1525,8 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     }
 
     if (!headingLevel) {
-        do {
+      int splitEndBlockNumber = -1;
+      do {
             if (numberedParagraphLevel) {
                 TagInformation paraTagInformation;
                 paraTagInformation.setTagName("text:numbered-paragraph");

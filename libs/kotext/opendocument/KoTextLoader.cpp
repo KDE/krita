@@ -1766,7 +1766,6 @@ void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
 {
     int startPosition = cursor.position();
     int changeId = d->changeTracker->getLoadedChangeId(id);
-    int loadedTags = 0;
 
     QTextCharFormat charFormat = cursor.block().charFormat();
     QTextBlockFormat blockFormat = cursor.block().blockFormat();
@@ -1775,6 +1774,7 @@ void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
         KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
         KoXmlElement element = d->deleteChangeTable.value(id);
         KoXmlElement tag;
+        int loadedTags = 0;
         forEachElement(tag, element) {
             QString localName = tag.localName();
             if (localName == "p") {

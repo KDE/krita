@@ -20,6 +20,8 @@
 
 #include "KoTextLayoutObstruction.h"
 #include <KoShapeContainer.h>
+#include <KoShapeBorderModel.h>
+#include <KoShapeShadow.h>
 
 #include <qnumeric.h>
 
@@ -31,6 +33,28 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransfor
     m_runAroundThreshold(0)
 {
     QPainterPath path = shape->outline();
+
+    QRectF bb = shape->outlineRect();
+
+    if (m_shape->border()) {
+        KoInsets insets;
+        m_shape->border()->borderInsets(m_shape, insets);
+        QRectF bb = m_shape->outlineRect();
+        bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+        path = QPainterPath();
+        path.addRect(bb);
+    }
+
+    if (m_shape->shadow()) {
+        QTransform transform = m_shape->absoluteTransformation(0);
+        bb = transform.mapRect(bb);
+        KoInsets insets;
+        m_shape->shadow()->insets(insets);
+        bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+        path = QPainterPath();
+        path.addRect(bb);
+        path = transform.inverted().map(path);
+    }
 
     //TODO check if path is convex. otherwise do triangulation and create more convex obstructions
     init(matrix, path, shape->textRunAroundDistance());
@@ -106,7 +130,32 @@ qreal KoTextLayoutObstruction::xAtY(const QLineF &line, qreal y)
 void KoTextLayoutObstruction::changeMatrix(const QTransform &matrix)
 {
     m_edges.clear();
-    init(matrix, m_shape->outline(), m_distance);
+
+    QPainterPath path = m_shape->outline();
+
+    QRectF bb = m_shape->outlineRect();
+
+    if (m_shape->border()) {
+        KoInsets insets;
+        m_shape->border()->borderInsets(m_shape, insets);
+        QRectF bb = m_shape->outlineRect();
+        bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+        path = QPainterPath();
+        path.addRect(bb);
+    }
+
+    if (m_shape->shadow()) {
+        QTransform transform = m_shape->absoluteTransformation(0);
+        bb = transform.mapRect(bb);
+        KoInsets insets;
+        m_shape->shadow()->insets(insets);
+        bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+        path = QPainterPath();
+        path.addRect(bb);
+        path = transform.inverted().map(path);
+    }
+
+    init(matrix, path, m_distance);
 }
 
 QRectF KoTextLayoutObstruction::cropToLine(const QRectF &lineRect)

@@ -59,6 +59,7 @@
 KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Oilpaint..."))
 {
     setSupportsPainting(true);
+    setSupportsThreading(false);
 }
 
 void KisOilPaintFilter::process(KisPaintDeviceSP device,

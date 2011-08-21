@@ -24,6 +24,8 @@
 #include <qmath.h>
 #include <klocale.h>
 
+#include <QTransform>
+
 #include <KoProgressUpdater.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -66,6 +68,17 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
 
 KisTransformWorker::~KisTransformWorker()
 {
+}
+
+QTransform KisTransformWorker::transform() const
+{
+    QTransform TS = QTransform::fromTranslate(m_xshearOrigin, m_yshearOrigin);
+    QTransform S; S.shear(0, m_yshear); S.shear(m_xshear, 0);
+    QTransform SC = QTransform::fromScale(m_xscale, m_yscale);
+    QTransform R; R.rotateRadians(m_rotation);
+    QTransform T = QTransform::fromTranslate(m_xtranslate, m_ytranslate);
+
+    return TS.inverted() * S * TS * SC * R * T;
 }
 
 void KisTransformWorker::rotateNone(KisPaintDeviceSP src, KisPaintDeviceSP dst)

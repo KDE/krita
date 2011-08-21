@@ -95,6 +95,10 @@ public:
         }
     }
 
+    const QList<KisCloneLayerWSP> registeredClones() const {
+        return m_clonesList;
+    }
+
 private:
     QList<KisCloneLayerWSP> m_clonesList;
 };
@@ -247,6 +251,11 @@ void KisLayer::registerClone(KisCloneLayerWSP clone)
 void KisLayer::unregisterClone(KisCloneLayerWSP clone)
 {
     m_d->clonesList.removeClone(clone);
+}
+
+const QList<KisCloneLayerWSP> KisLayer::registeredClones() const
+{
+    return m_d->clonesList.registeredClones();
 }
 
 KisSelectionMaskSP KisLayer::selectionMask() const

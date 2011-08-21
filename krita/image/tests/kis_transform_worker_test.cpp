@@ -20,6 +20,7 @@
 
 #include <qtest_kde.h>
 #include <KoProgressUpdater.h>
+#include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_types.h"
@@ -524,6 +525,63 @@ void KisTransformWorkerTest::testYShear()
         QFAIL(QString("Failed to shear the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
 
+}
+
+
+bool fuzzyCompareRects(const QRectF rc1, const QRectF rc2, qreal accuracy)
+{
+    bool result =
+        qAbs(rc1.x() - rc2.x()) < accuracy &&
+        qAbs(rc1.y() - rc2.y()) < accuracy &&
+        qAbs(rc1.width() - rc2.width()) < 2 * accuracy &&
+        qAbs(rc1.height() - rc2.height()) < 2 * accuracy;
+
+    if(!result) {
+        qDebug() << "Failed to fuzzy compare rects";
+        qDebug() << "\t" << ppVar(accuracy);
+        qDebug() << "\t" << "actual  " << rc1;
+        qDebug() << "\t" << "expected" << rc2;
+        qDebug() << "+---------------------------+";
+    }
+
+    return result;
+}
+
+void KisTransformWorkerTest::testMatrices()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+    KisFilterStrategy *filter = new KisBoxFilterStrategy();
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    QRect fillRect(0,0,300,200);
+    KoColor fillColor(Qt::white, cs);
+    dev->fill(fillRect, fillColor);
+
+    qreal scaleX = 1.5, scaleY = 1.5;
+    qreal shearX = 1, shearY = 1.33;
+    qreal shearOrigX = 150, shearOrigY = 100;
+    qreal angle = M_PI/6;
+    qreal transX = 77, transY = 33;
+
+    KisTransaction t("test", dev);
+    KisTransformWorker tw(dev, scaleX, scaleY,
+                          shearX, shearY,
+                          shearOrigX, shearOrigY,
+                          angle,
+                          transX, transY,
+                          updater, filter, true);
+    tw.run();
+    t.end();
+
+    QPolygonF referencePolygon =
+        tw.transform().map(QPolygonF(QRectF(fillRect)));
+
+    QVERIFY(fuzzyCompareRects(dev->exactBounds(),
+                              referencePolygon.boundingRect(), 3));
 }
 
 

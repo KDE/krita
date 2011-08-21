@@ -37,7 +37,12 @@
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
 
-#include "kis_transaction.h"
+#include <KoProgressUpdater.h>
+#include "testutil.h"
+#include "kis_filter_strategy.h"
+#include "kis_transform_worker.h"
+#include "processing/kis_transform_processing_visitor.h"
+
 
 class BaseProcessingTest
 {
@@ -73,7 +78,8 @@ private:
         QRect imageRect = QRect(QPoint(0,0), sourceImage.size());
 
         QRect transpRect(50,50,300,300);
-        QRect blurRect(100,100,300,300);
+        QRect blurRect(66,66,300,300);
+        QPoint blurShift(34,34);
         QPoint cloneShift(75,75);
 
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -87,6 +93,8 @@ private:
         KisAdjustmentLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
         blur1->selection()->clear();
         blur1->selection()->getOrCreatePixelSelection()->select(blurRect);
+        blur1->setX(blurShift.x());
+        blur1->setY(blurShift.y());
 
         KisPaintLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
         paintLayer1->paintDevice()->convertFromQImage(sourceImage, "", 0, 0);
@@ -174,6 +182,25 @@ void KisProcessingsTest::testCropVisitor()
 
     BaseProcessingTest tester;
     tester.test("crop", visitor);
+}
+
+void KisProcessingsTest::testTransformVisitorScale()
+{
+    BaseProcessingTest tester;
+
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+
+    KisProcessingVisitorSP visitor =
+        new KisTransformProcessingVisitor(0.5, 0.5,
+                                          0,0,QPointF(),
+                                          0,
+                                          0,0,
+                                          updater,filter);
+
+    tester.test("transform_scale", visitor);
 }
 
 QTEST_KDEMAIN(KisProcessingsTest, GUI)

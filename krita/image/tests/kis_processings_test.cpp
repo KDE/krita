@@ -203,4 +203,23 @@ void KisProcessingsTest::testTransformVisitorScale()
     tester.test("transform_scale", visitor);
 }
 
+void KisProcessingsTest::testTransformVisitorScaleRotate()
+{
+    BaseProcessingTest tester;
+
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+
+    KisProcessingVisitorSP visitor =
+        new KisTransformProcessingVisitor(0.5, 0.5,
+                                          0,0,QPointF(),
+                                          M_PI,
+                                          320,221,
+                                          updater,filter);
+
+    tester.test("transform_scale_rotate", visitor);
+}
+
 QTEST_KDEMAIN(KisProcessingsTest, GUI)

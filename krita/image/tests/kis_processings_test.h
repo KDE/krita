@@ -27,6 +27,7 @@ class KisProcessingsTest : public QObject
 private slots:
     void testCropVisitor();
     void testTransformVisitorScale();
+    void testTransformVisitorScaleRotate();
 };
 
 #endif /* __KIS_PROCESSINGS_TEST_H */

@@ -164,8 +164,8 @@ void KisTransformWorkerTest::testScaleUp()
 
     QRect rc = dev->exactBounds();
 
-    QVERIFY(rc.width() == qRound(image.width() * 2.4));
-    QVERIFY(rc.height() == qRound(image.height() * 2.4));
+    QCOMPARE(rc.width(), qRound(image.width() * 2.4));
+    QCOMPARE(rc.height(), qRound(image.height() * 2.4));
 
     QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
     QPoint errpoint;
@@ -609,8 +609,8 @@ void KisTransformWorkerTest::testRotation()
 
     QRect rc = dev->exactBounds();
 
-    QVERIFY(rc.width() == 702);
-    QVERIFY(rc.height() == 629);
+    QCOMPARE(rc.width(), 702);
+    QCOMPARE(rc.height(), 628);
 
 //    KisTransaction t2("test", dev);
 //    KisRandomAccessorSP ac = dev->createRandomAccessorNG(rc.x(), rc.y());
@@ -630,6 +630,39 @@ void KisTransformWorkerTest::testRotation()
         result.save("rotate_result.png");
         QFAIL(QString("Failed to rotate the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
+}
+
+void KisTransformWorkerTest::testRotationSpecialCases()
+{
+    TestUtil::TestProgressBar bar;
+    KoProgressUpdater pu(&bar);
+    KoUpdaterPtr updater = pu.startSubtask();
+    KisFilterStrategy *filter = new KisBoxFilterStrategy();
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    QRect fillRect(0,0,600,300);
+    KoColor fillColor(Qt::white, cs);
+    dev->fill(fillRect, fillColor);
+
+    qreal scaleX = 0.5, scaleY = 0.5;
+    qreal shearX = 0, shearY = 0;
+    qreal shearOrigX = 0, shearOrigY = 0;
+    qreal angle = M_PI;
+    qreal transX = 300, transY = 150;
+
+    KisTransaction t("test", dev);
+    KisTransformWorker tw(dev, scaleX, scaleY,
+                          shearX, shearY,
+                          shearOrigX, shearOrigY,
+                          angle,
+                          transX, transY,
+                          updater, filter, true);
+    tw.run();
+    t.end();
+
+    QCOMPARE(dev->exactBounds(), QRect(0,0,300,150));
 }
 
 QTEST_KDEMAIN(KisTransformWorkerTest, GUI)

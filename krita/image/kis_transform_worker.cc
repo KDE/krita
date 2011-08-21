@@ -141,7 +141,7 @@ void KisTransformWorker::rotateRight90(KisPaintDeviceSP src, KisPaintDeviceSP ds
         }
     }
 
-    m_boundRect = QRect(- r.bottom(), r.x(), r.height(), r.width());
+    m_boundRect = QRect(- r.top() - r.height(), r.x(), r.height(), r.width());
 }
 
 void KisTransformWorker::rotateLeft90(KisPaintDeviceSP src, KisPaintDeviceSP dst)
@@ -211,7 +211,7 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
         }
     }
 
-    m_boundRect = QRect(- r.x() - r.width(), - r.bottom(), r.width(), r.height());
+    m_boundRect = QRect(- r.x() - r.width(), - r.top() - r.height(), r.width(), r.height());
 }
 
 template <class iter> iter createIterator(KisPaintDevice *dev, qint32 start, qint32 lineNum, qint32 len);
@@ -253,25 +253,43 @@ template <class iter> void updateBounds(QRect &boundRect, double floatscale, dou
 template <> void updateBounds <KisHLineIteratorPixel>
 (QRect &boundRect, double floatscale, double shear, qint32 dx)
 {
-    QPoint topLeft(qFloor(boundRect.left() * floatscale + boundRect.top() * shear + dx), boundRect.top());
-    QPoint topRight(qCeil(boundRect.right() * floatscale + boundRect.top() * shear + dx), boundRect.top());
-    QPoint bottomRight(qCeil(boundRect.right() * floatscale + boundRect.bottom() * shear + dx), boundRect.bottom());
-    QPoint bottomLeft(qFloor(boundRect.left() * floatscale + boundRect.bottom() * shear + dx), boundRect.bottom());
-    QPolygon p;
-    p << topLeft << topRight << bottomRight << bottomLeft;
-    boundRect = p.boundingRect();
+    // Do not use QRect::right()! Never! See Qt doc for info...
+
+    qreal x0 = boundRect.left() * floatscale + boundRect.top() * shear + dx;
+    qreal x1 = boundRect.left() * floatscale + (boundRect.top() + boundRect.height()) * shear + dx;
+    qreal x2 = (boundRect.left() + boundRect.width()) * floatscale + boundRect.top() * shear + dx;
+    qreal x3 = (boundRect.left() + boundRect.width()) * floatscale + (boundRect.top() + boundRect.height()) * shear + dx;
+
+    qreal min = qMin(qMin(qMin(x0, x1), x2), x3);
+    qreal max = qMax(qMax(qMax(x0, x1), x2), x3);
+
+    // working around Qt's "history reasons"
+    QRectF newRect(boundRect);
+    newRect.setLeft(min);
+    newRect.setRight(max);
+
+    boundRect = newRect.toAlignedRect();
 }
 
 template <> void updateBounds <KisVLineIteratorPixel>
 (QRect &boundRect, double floatscale, double shear, qint32 dx)
 {
-    QPoint topLeft(boundRect.left(), qFloor(boundRect.top() * floatscale + boundRect.left() * shear + dx));
-    QPoint topRight(boundRect.right(), qFloor(boundRect.top() * floatscale + boundRect.right() * shear + dx));
-    QPoint bottomRight(boundRect.right(), qCeil(boundRect.bottom() * floatscale + boundRect.right() * shear + dx));
-    QPoint bottomLeft(boundRect.left(), qCeil(boundRect.bottom() * floatscale + boundRect.left() * shear + dx));
-    QPolygon p;
-    p << topLeft << topRight << bottomRight << bottomLeft;
-    boundRect = p.boundingRect();
+    // Do not use QRect::bottom() as well! Never! See Qt doc for info...
+
+    qreal y0 = boundRect.top() * floatscale + boundRect.left() * shear + dx;
+    qreal y1 = boundRect.top() * floatscale + (boundRect.left() + boundRect.width()) * shear + dx;
+    qreal y2 = (boundRect.top() + boundRect.height()) * floatscale + boundRect.left() * shear + dx;
+    qreal y3 = (boundRect.top() + boundRect.height()) * floatscale + (boundRect.left() + boundRect.width()) * shear + dx;
+
+    qreal min = qMin(qMin(qMin(y0, y1), y2), y3);
+    qreal max = qMax(qMax(qMax(y0, y1), y2), y3);
+
+    // working around Qt's "history reasons"
+    QRectF newRect(boundRect);
+    newRect.setTop(min);
+    newRect.setBottom(max);
+
+    boundRect = newRect.toAlignedRect();
 }
 
 struct FilterValues {
@@ -599,7 +617,10 @@ bool KisTransformWorker::run()
 
     //// Handle simple move case possibly with rotation of 90,180,270
     if (rotation == 0.0 && xscale == 1.0 && yscale == 1.0) {
-        m_boundRect.translate(xtranslate, ytranslate);
+
+        updateBounds <KisHLineIteratorPixel>(m_boundRect, 1.0, 0, xtranslate);
+        updateBounds <KisVLineIteratorPixel>(m_boundRect, 1.0, 0, ytranslate);
+
         if (rotQuadrant == 0) {
             // When we didn't move the m_dev to a temp device we can simply just move its coords
             srcdev->move(srcdev->x() + xtranslate, srcdev->y() + ytranslate);
@@ -638,6 +659,8 @@ bool KisTransformWorker::run()
     } else {
         // No need to filter again when we are only scaling
         srcdev->move(srcdev->x() + xtranslate, srcdev->y());
+        updateBounds <KisHLineIteratorPixel>(m_boundRect, 1.0, 0, xtranslate);
+
         if (rotQuadrant != 0)  // no need to copy back if we have not copied the device in the first place
             rotateNone(srcdev, m_dev);
     }

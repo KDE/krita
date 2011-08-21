@@ -54,6 +54,7 @@ bool KoShapeGroup::hitTest(const QPointF &position) const
     return false;
 }
 
+//there is a bug when transform is applied to group so the size should be kept as zero
 QSizeF KoShapeGroup::size() const
 {
     return QSizeF(0, 0);

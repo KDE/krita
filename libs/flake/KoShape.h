@@ -623,7 +623,7 @@ public:
 
     /**
      * returns the outline of the shape in the form of a path.
-     * The outline returned will always have the position() of the shape as the origin, so
+     * The outline returned will always be relative to the position() of the shape, so
      * moving the shape will not alter the result.  The outline is used to draw the border
      * on, for example.
      * @returns the outline of the shape in the form of a path.
@@ -632,8 +632,9 @@ public:
 
     /**
      * returns the outline of the shape in the form of a rect.
-     * The outlineRect returned will always have the position() of the shape as the origin, so
-     * moving the shape will not alter the result.  The outline is used to calculate the boundingRect.
+     * The outlineRect returned will always be relative to the position() of the shape, so
+     * moving the shape will not alter the result.  The outline is used to calculate
+     * the boundingRect.
      * @returns the outline of the shape in the form of a rect.
      */
     virtual QRectF outlineRect() const;

@@ -230,7 +230,7 @@ KisConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, 
 
 KisFilterConfiguration* KisOilPaintFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
+    KisFilterConfiguration* config = new KisFilterConfiguration("oilpaint", 1);
     config->setProperty("brushSize", 1);
     config->setProperty("smooth", 30);
     return config;

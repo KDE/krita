@@ -23,7 +23,8 @@
 // ORODocument
 //
 ORODocument::ORODocument(const QString & pTitle)
-        : m_title(pTitle)
+        : m_title(pTitle),
+          m_parentRepView(0)
 {
 }
 
@@ -76,6 +77,11 @@ void ORODocument::addSection(OROSection* s)
 void ORODocument::setPageOptions(const ReportPageOptions & options)
 {
     m_pageOptions = options;
+}
+
+void ORODocument::setReportView(KPlato::ReportView* reportView){
+    if(m_parentRepView!= reportView)
+        m_parentRepView = reportView;
 }
 
 //

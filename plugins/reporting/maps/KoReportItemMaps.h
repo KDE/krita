@@ -32,8 +32,11 @@
 #include <kglobalsettings.h>
 #include <MarbleWidget.h>
 #include <RdfForward.h>
+#include <QMap>
+#include <reportview.h>
 
 class QImage;
+
 namespace Scripting
 {
 class Maps;
@@ -44,9 +47,11 @@ class Maps;
 */
 class KoReportItemMaps : public KoReportItemBase
 {
+    Q_OBJECT
 public:
     KoReportItemMaps() {
         createProperties();
+        m_report = 0;
     }
     KoReportItemMaps(QDomNode & element);
     virtual ~KoReportItemMaps();
@@ -56,9 +61,11 @@ public:
     using KoReportItemBase::render;
 
     virtual QString itemDataSource() const;
+public slots:
+    void requestRedraw();
 
 protected:
-    void initMarble();
+    Marble::MarbleWidget* initMarble();
     KoProperty::Property * m_controlSource;
     KoProperty::Property* m_resizeMode;
     KoProperty::Property* m_staticImage;
@@ -69,18 +76,15 @@ protected:
     QString mode() const;
     bool isInline() const;
     QByteArray inlineImageData() const;
-    Marble::MarbleWidget *m_marble;
+    QMap<QString,Marble::MarbleWidget*> m_marbles;
+    KPlato::ReportView* m_report;
+    ORODocument* m_oroDoc;
     QImage *m_mapImage;
     
 private:
     virtual void createProperties();
     void deserializeData(const QVariant& serialized);
-
-    
-    
     friend class Scripting::Maps;
-    
-    
 };
 
 #endif

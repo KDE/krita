@@ -30,14 +30,17 @@
 #include <MarbleModel.h>
 #include <QImage>
 #include <QPixmap>
+#include <QWaitCondition>
+#include <reportview.h>
 
-//#define myDebug() kDebug(44021)
-#define kDebug() kDebug(44021)
+#define myDebug() kDebug(44021)
+//#define kDebug() kDebug(44021)
 
 KoReportItemMaps::KoReportItemMaps(QDomNode & element)
 {
-    kDebug() << "======";
+    myDebug() << "======" << this;
     createProperties();
+    m_report = 0;
     QDomNodeList nl = element.childNodes();
     QString n;
     QDomNode node;
@@ -48,7 +51,7 @@ KoReportItemMaps::KoReportItemMaps(QDomNode & element)
     Z = element.toElement().attribute("report:z-index").toDouble();
 
     parseReportRect(element.toElement(), &m_pos, &m_size);
-    kDebug() << "====== childgren:";
+    myDebug() << "====== childgren:";
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
@@ -60,33 +63,34 @@ KoReportItemMaps::KoReportItemMaps(QDomNode & element)
             kDebug() << "====== while parsing image element encountered unknow element: " << n;
 //         }
     }
-    
-    initMarble();
-    
-}
-
-void KoReportItemMaps::initMarble()
-{
-    m_marble = new Marble::MarbleWidget();
-    //m_marble->setMapThemeId("earth/srtm/srtm.dgml");
-    
-    m_marble->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
-    
-    m_marble->centerOn(20.81,52.12, false);
-    m_marble->zoomView(2100);
-    m_marble->setShowOverviewMap(false);
-    m_marble->setFixedSize(m_size.toScene().toSize());
     m_mapImage = new QImage(m_size.toScene().toSize(), QImage::Format_ARGB32);
     m_mapImage->fill(QColor(200, 150, 5).rgb());
+}
+
+Marble::MarbleWidget* KoReportItemMaps::initMarble()
+{
+    Marble::MarbleWidget* marble = new Marble::MarbleWidget();
+    //marble->setMapThemeId("earth/srtm/srtm.dgml");
     
-//     connect(m_marble->model()->d)
+    marble->setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
+    
+    marble->centerOn(20.81,52.12, false);
+    marble->zoomView(2100);
+    marble->setShowOverviewMap(false);
+    marble->setFixedSize(m_size.toScene().toSize());
+    return marble;
 }
 
 
 KoReportItemMaps::~KoReportItemMaps()
 {
+    myDebug() << "DIE:" << this << m_marbles.count();
     delete m_set;
-    delete m_marble;
+    QMap<QString, Marble::MarbleWidget*>::iterator i = m_marbles.begin();
+    while(i != m_marbles.end()){
+        delete i.value();
+        i++;
+    }
 }
 
 // bool KoReportItemMaps::isInline() const
@@ -182,33 +186,30 @@ int KoReportItemMaps::render(OROPage* page,
                              KRScriptHandler *script)
 {
     Q_UNUSED(script)
+
+    if(m_report == 0){
+        myDebug() << "m_report" << m_report << "page:" << page << "section:" << section;
+        if(page){
+            m_oroDoc = page->document();
+            myDebug() << "ORODocument:" << page->document();
+            myDebug() << "reportView:" << page->document()->reportView();
+        }
+        if(section){
+            myDebug() << "ORODocument:" << section->document();
+            myDebug() << "reportView:" << section->document()->reportView();
+        }
+        if(page)
+            m_report = page->document()->reportView();
+        else if(section)
+            m_report = section->document()->reportView();
+    }
     
-    kDebug() << "Render";
-    kDebug() << "data:" << data;
+    myDebug() << this << "data:" << data;
     deserializeData(data);
-    
-    //QPainter painter(m_mapImage);
-    m_marble->render(m_mapImage);
-
-    /*QString uudata;
-    QByteArray imgdata;
-    if (!isInline()) {
-        imgdata = data.toByteArray();
-    } else {
-        uudata = inlineImageData();
-        imgdata = KCodecs::base64Decode(uudata.toLatin1());
-    }*/
-
-    //QImage img;
-    //img.loadFromData(imgdata);
     
     OROImage * id = new OROImage();
     id->setImage(*m_mapImage);
-    //if (mode().toLower() == "stretch") {
-        id->setScaled(false);
-        //id->setAspectRatioMode(Qt::KeepAspectRatio);
-        //id->setTransformationMode(Qt::SmoothTransformation);
-    //}
+    id->setScaled(false);
 
     id->setPosition(m_pos.toScene() + offset);
     id->setSize(m_size.toScene());
@@ -231,14 +232,35 @@ int KoReportItemMaps::render(OROPage* page,
 
 void KoReportItemMaps::deserializeData(const QVariant& serialized)
 {
-    kDebug() << "seting new data";
-    kDebug() << "serializedData:" << serialized;
-    QStringList dataList = serialized.toString().split(";");
-    kDebug() << "splited:" << dataList;
+    myDebug() << "serializedData:" << serialized;
+    QString dataKey = serialized.toString();
+    QStringList dataList = dataKey.split(";");
+    myDebug() << "splited:" << dataList;
+    Marble::MarbleWidget* marble;
     if(dataList.length()==3){
-        m_marble->setCenterLatitude(dataList[0].toDouble());
-        m_marble->setCenterLongitude(dataList[1].toDouble());
-        m_marble->zoomView(dataList[2].toInt());
+        if(m_marbles.count(dataKey)==0){ //no such marble yet
+            marble = initMarble();
+            m_marbles.insert(dataKey, marble);
+            connect(marble->model(), SIGNAL(modelChanged()), this, SLOT(requestRedraw()));
+            marble->setCenterLatitude(dataList[0].toDouble());
+            marble->setCenterLongitude(dataList[1].toDouble());
+            marble->zoomView(dataList[2].toInt());
+        }else{
+            marble = m_marbles[dataKey];
+        }
+        marble->render(m_mapImage);
+    }
+
+    
+}
+void KoReportItemMaps::requestRedraw()
+{
+    myDebug() << "=oroDoc->reportView" << m_oroDoc->reportView();
+    if(m_report){
+        myDebug() << "requesting Refresh";
+        m_report->refresh();
     }
 }
+
+
 

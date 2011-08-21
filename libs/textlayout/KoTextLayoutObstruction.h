@@ -79,6 +79,7 @@ private:
     QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
     KoShape *m_shape;
     qreal m_distance;
+    qreal m_borderHalfWidth;
     qreal m_runAroundThreshold;
 };
 

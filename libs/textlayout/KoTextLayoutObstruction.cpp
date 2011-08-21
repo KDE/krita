@@ -63,14 +63,17 @@ QPainterPath KoTextLayoutObstruction::decoratedOutline()
     QPainterPath path = m_shape->outline();
 
     QRectF bb = m_shape->outlineRect();
-
+    m_borderHalfWidth = 0;
+ 
     if (m_shape->border()) {
         KoInsets insets;
         m_shape->border()->borderInsets(m_shape, insets);
-        QRectF bb = m_shape->outlineRect();
+        /*
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
         path = QPainterPath();
         path.addRect(bb);
+        */
+        m_borderHalfWidth = qMax(qMax(insets.left, insets.top),qMax(insets.right, insets.bottom));
     }
 
     if (m_shape->shadow()) {
@@ -92,15 +95,16 @@ void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath 
     m_distance = distance;
     QPainterPath path =  matrix.map(obstruction);
     m_bounds = path.boundingRect();
+    distance += m_borderHalfWidth;
     if (distance >= 0.0) {
         QTransform grow = matrix;
         grow.translate(m_bounds.width() / 2.0, m_bounds.height() / 2.0);
-        qreal scaleX = distance;
+        qreal scaleX = 2 * distance;
         if (m_bounds.width() > 0)
-            scaleX = (m_bounds.width() + distance) / m_bounds.width();
-        qreal scaleY = distance;
+            scaleX = (m_bounds.width() + 2 * distance) / m_bounds.width();
+        qreal scaleY = 2 * distance;
         if (m_bounds.height() > 0)
-            scaleY = (m_bounds.height() + distance) / m_bounds.height();
+            scaleY = (m_bounds.height() + 2 * distance) / m_bounds.height();
         Q_ASSERT(!qIsNaN(scaleY));
         Q_ASSERT(!qIsNaN(scaleX));
         grow.scale(scaleX, scaleY);
@@ -124,7 +128,6 @@ void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath 
         m_edges.insert(line.y1(), line);
         prev = vtx;
     }
-
 }
 
 qreal KoTextLayoutObstruction::xAtY(const QLineF &line, qreal y)

@@ -309,7 +309,7 @@ void KoShapeShadow::insets(KoInsets &insets) const
         return;
     }
 
-    qreal expand = 3*d->blur;
+    qreal expand = d->blur;
 
     insets.left = (d->offset.x() < 0.0) ? qAbs(d->offset.x()) : 0.0;
     insets.top = (d->offset.y() < 0.0) ? qAbs(d->offset.y()) : 0.0;

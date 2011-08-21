@@ -68,6 +68,8 @@ public:
 
     static bool compareRectLeft(KoTextLayoutObstruction *o1, KoTextLayoutObstruction *o2);
 private:
+    QPainterPath decoratedOutline();
+
     enum Side { None, Left, Right, Empty, Both, Bigger, Enough };
     Side m_side;
     QRectF m_bounds;

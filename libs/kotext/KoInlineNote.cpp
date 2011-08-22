@@ -244,7 +244,6 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
         fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
         cursor.insertText(d->label,*fmat);
         fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
-        cursor.insertText(" ",*fmat);
     }
     else if (element.namespaceURI() == KoXmlNS::office && element.localName() == "annotation") {
         d->author = element.attributeNS(KoXmlNS::text, "dc-creator");
@@ -267,12 +266,10 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
         KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferFootNote);
 
         KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote)->saveOdf(xmlWriter);
-        qDebug()<<xmlBufferFootNote.data();
         context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles,xmlBufferFootNote.data());
 
         xmlWriter = new KoXmlWriter(&xmlBufferEndNote);
         KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote)->saveOdf(xmlWriter);
-        qDebug()<<xmlBufferEndNote.data();
         context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles,xmlBufferEndNote.data());
 
     }
@@ -291,11 +288,16 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
         writer->endElement();
 
         writer->startElement("text:note-body", false);
-        QTextCursor cursor(d->textFrame);
-        cursor.setPosition(d->textFrame->firstPosition());
-        cursor.movePosition(QTextCursor::WordRight);
         KoTextWriter textWriter(context);
+        QTextCursor cursor = d->textFrame->firstCursorPosition();
+        QTextFragment frag = cursor.block().begin().fragment();
+        cursor.setPosition(frag.position(),QTextCursor::MoveAnchor);
+        cursor.setPosition(frag.position()+frag.length(),QTextCursor::MoveAnchor);
         textWriter.write(d->textFrame->document(), cursor.position(),d->textFrame->lastPosition());
+        //shows what gets saved
+        cursor.setPosition(d->textFrame->lastPosition(),QTextCursor::KeepAnchor);
+        qDebug()<<"inside saveodf";
+        qDebug()<<cursor.selectedText();
         writer->endElement();
 
         writer->endElement();

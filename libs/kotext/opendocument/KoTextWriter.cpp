@@ -1669,9 +1669,14 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         QTextCursor cursor(block);
 
-        if (cursor.currentFrame()->format().hasProperty(KoText::SubFrameType)) {
-            break; // we've reached the "end" (end/footnotes saved in another way)
+        int frameType = cursor.currentFrame()->format().intProperty(KoText::SubFrameType);
+        if (frameType == KoText::EndNotesFrameType
+            || frameType == KoText::FootNotesFrameType) {
+            break; // we've reached the "end" (end/footnotes saved by themselves)
+                   // note how NoteFrameType passes through here so the notes can
+                  // call writeBlocks to save their contents.
         }
+
 
         QTextBlockFormat format = block.blockFormat();
         if (format.hasProperty(KoParagraphStyle::SectionStartings)) {
@@ -1686,6 +1691,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 }
             }
         }
+
         if (format.hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
             saveTableOfContents(document, listStyles, block);
             block = block.next();
@@ -1693,6 +1699,12 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         }
         int blockOutlineLevel = format.property(KoParagraphStyle::OutlineLevel).toInt();
 
+        if (cursor.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::FootNotesFrameType) {
+           block = cursor.currentFrame()->lastCursorPosition().block();
+           block = block.next();
+           qDebug()<<"inside if";
+           continue;
+        }
         if (cursor.currentTable() != currentTable) {
             // Call the code to save the table....
             saveTable(cursor.currentTable(), listStyles);

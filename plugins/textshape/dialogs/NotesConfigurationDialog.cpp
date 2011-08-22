@@ -159,6 +159,7 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
 
         //TODO
         //set citation text style
+        notesConfig->setCitationTextStyle("footnote");
 
         //set citation body text style
 

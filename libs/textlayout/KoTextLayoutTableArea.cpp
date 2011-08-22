@@ -506,7 +506,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             }
             maxBottom -= cellStyle.bottomPadding();
 
-            qreal areaTop = d->rowPositions[cell.row()] + cellStyle.topPadding();
+            qreal areaTop = d->rowPositions[qMax(cell.row(), d->startOfArea->row)] + cellStyle.topPadding();
 
             if (d->collapsing) {
                 areaTop += topBorderWidth;
@@ -560,16 +560,23 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
                 }
             }
 
-            if (cellFully) {
-                delete cursor->frameIterators[col];
-                cursor->frameIterators[col] = 0;
-            }
 
             d->lastRowHasSomething = true; // last row contains something (even if empty)
         }
 
         col += cell.columnSpan(); // Skip across column spans.
 
+    }
+
+    if (allCellsFullyDone) {
+        for (col = 0; col < d->table->columns(); col++) {
+            QTextTableCell cell = d->table->cellAt(row, col);
+
+            if (row == cell.row() + cell.rowSpan() - 1) {
+                delete cursor->frameIterators[col];
+                cursor->frameIterators[col] = 0;
+            }
+        }
     }
 
     if (anyCellTried && noCellsFitted && !rowHasExactHeight) {
@@ -645,7 +652,7 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
             cellArea->setReferenceRect(
                     left,
                     right,
-                    d->rowPositions[cell.row()] + cellStyle.topPadding() + cellStyle.topBorderWidth(),
+                    d->rowPositions[qMax(cell.row(), d->startOfArea->row)] + cellStyle.topPadding() + cellStyle.topBorderWidth(),
                     rowBottom - cellStyle.bottomPadding() - cellStyle.bottomBorderWidth());
 
             cellArea->setVirginPage(virginPage());
@@ -707,7 +714,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
 
-            int testRow = row == firstRow ? tableCell.row() : row;
+            int testRow = (row == firstRow ? tableCell.row() : row);
             if (d->cellAreas[testRow][column]) {
                 paintCell(painter, context, tableCell);
             }

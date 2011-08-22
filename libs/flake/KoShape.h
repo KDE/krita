@@ -302,7 +302,7 @@ public:
     /**
      * @brief Get the bounding box of the shape
      *
-     * This includes the line width but not the shadow of the shape
+     * This includes the line width and the shadow of the shape
      *
      * @return the bounding box of the shape
      */

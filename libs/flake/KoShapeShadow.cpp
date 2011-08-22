@@ -83,11 +83,19 @@ void KoShapeShadow::Private::paintGroupShadow(KoShapeGroup *group, QPainter &pai
 
 void KoShapeShadow::Private::paintShadow(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
 {
+    // calculate the shadow offset independent of shape transformation
+    QTransform tm;
+    tm.translate(offset.x(), offset.y());
+    QTransform tr = shape->absoluteTransformation(&converter);
+    QTransform offsetMatrix = tr * tm * tr.inverted();
+
     if (shape->background()) {
         painter.save();
         KoShape::applyConversion(painter, converter);
         // the shadow direction is independent of the shapes transformation
-        painter.translate(offset.x(), offset.y());
+        // please only change if you know what you are doing
+        painter.setTransform(offsetMatrix * painter.transform());
+
         painter.setBrush(QBrush(color));
         QPainterPath path(shape->outline());
         KoPathShape * pathShape = dynamic_cast<KoPathShape*>(shape);
@@ -103,7 +111,8 @@ void KoShapeShadow::Private::paintShadow(KoShape *shape, QPainter &painter, cons
         KoShape::applyConversion(painter, converter);
         QTransform newPainterMatrix = painter.transform();
         // the shadow direction is independent of the shapes transformation
-        painter.translate(offset.x(), offset.y());
+        // please only change if you know what you are doing
+        painter.setTransform(offsetMatrix * painter.transform());
         // compensate applyConversion call in paint
         QTransform scaleMatrix = newPainterMatrix * oldPainterMatrix.inverted();
         painter.setTransform(scaleMatrix.inverted() * painter.transform());

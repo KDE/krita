@@ -26,8 +26,25 @@
 
 #include <QTextCursor>
 
+const QList<QString> KoBibliographyInfo::bibTypes = QList<QString>() << "article" << "book" << "booklet" << "conference"
+                                                                     << "email" << "inbook" << "incollection"
+                                                                     << "inproceedings" << "journal" << "manual"
+                                                                     << "mastersthesis" << "misc" << "phdthesis"
+                                                                     << "proceedings" << "techreport" << "unpublished"
+                                                                     << "www" << "custom1" << "custom2"
+                                                                     << "custom3" << "custom4" << "custom5";
 
-
+const QList<QString> KoBibliographyInfo::bibDataFields = QList<QString>() << "address" << "annote" << "author"
+                                                                          << "bibliography-type" << "booktitle"
+                                                                          << "chapter" << "custom1" << "custom2"
+                                                                          << "custom3" << "custom4" << "custom5"
+                                                                          << "edition" << "editor" << "howpublished"
+                                                                          << "idenfier" << "institution" << "isbn"
+                                                                          << "issn" << "journal" << "month" << "note"
+                                                                          << "number" << "organizations" << "pages"
+                                                                          << "publisher" << "report-type" << "school"
+                                                                          << "series" << "title" << "url" << "volume"
+                                                                          << "year";
 int KoBibliographyInfo::styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName)
 {
     KoParagraphStyle * style = sharedLoadingData->paragraphStyle(styleName, true);

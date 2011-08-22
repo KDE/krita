@@ -56,6 +56,9 @@ public:
     IndexTitleTemplate m_indexTitleTemplate;
     QMap<QString, BibliographyEntryTemplate> m_entryTemplate;
 
+    static const QList<QString> bibTypes;
+    static const QList<QString> bibDataFields;
+
 private:
     int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
     BibliographyGeneratorInterface * m_generator;

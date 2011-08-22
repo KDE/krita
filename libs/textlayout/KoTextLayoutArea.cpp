@@ -476,18 +476,17 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 cursor->lineTextStart = -1; // fake we are done
                 cursor->currentSubFrameIterator = 0;
             } else if (block.blockFormat().hasProperty(KoParagraphStyle::BibliographyDocument)) {
-                qDebug() << "Bibliography block detected";
+
                 QVariant data = block.blockFormat().property(KoParagraphStyle::BibliographyDocument);
                 QTextDocument *bibDocument = data.value<QTextDocument *>();
 
                 data = block.blockFormat().property(KoParagraphStyle::BibliographyData);
                 KoBibliographyInfo *bibInfo = data.value<KoBibliographyInfo *>();
+
                 if (!bibInfo->generator()) {
-                    // The generator attaches itself to the bibInfo\
-                    qDebug() << "LOL BUG DETECTED\n\n";
+                    // The generator attaches itself to the bibInfo
                     new BibliographyGenerator(bibDocument, block, bibInfo, cursor->it.currentBlock().document());
                 }
-                //tocInfo->generator()->setMaxTabPosition(right() - left());
 
                 // Let's create KoTextLayoutArea and let to handle the Bibliography
                 KoTextLayoutArea *bibArea = new KoTextLayoutArea(this, documentLayout());

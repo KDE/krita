@@ -58,10 +58,9 @@ BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBl
     m_documentLayout = static_cast<KoTextDocumentLayout *>(m_block.document()->documentLayout());
     m_document = m_documentLayout->document();
 
-    connect(m_documentLayout, SIGNAL(finishedLayout()), this, SLOT(generate()));
-
-    // do a generate right now to have a Bibliography with placeholder numbers.
-    //generate();
+    if (m_block.blockFormat().property(KoParagraphStyle::AutoUpdateBibliography).value<bool *>()) {
+        connect(m_documentLayout, SIGNAL(finishedLayout()), this, SLOT(generate()));
+    }
 }
 
 BibliographyGenerator::~BibliographyGenerator()
@@ -98,21 +97,20 @@ void BibliographyGenerator::generate()
         titleStyle->applyStyle(titleTextBlock);
 
         cursor.insertText(m_bibInfo->m_indexTitleTemplate.text);
-        //cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
     }
 
+    qDebug() << "\n" << m_bibInfo->m_indexTitleTemplate.text;
     QTextBlock block = m_bibDocument->rootFrame()->firstCursorPosition().block();
     QTextCharFormat savedCharFormat = cursor.charFormat();
     QList<KoInlineCite*> citeList = KoTextDocument(document).inlineTextObjectManager()->citations(false).values();
 
-    qDebug() << "TOTAL CITES DETECTED AT BIB IS " <<citeList.size() << "\n" << m_bibInfo->m_indexTitleTemplate.text;
     foreach (KoInlineCite *cite, citeList)
     {
         KoParagraphStyle *bibTemplateStyle = 0;
         BibliographyEntryTemplate bibEntryTemplate;
         if (m_bibInfo->m_entryTemplate.keys().contains(cite->bibliographyType())) {
-            // List's index starts with 0, outline level starts with 0
-            bibEntryTemplate = m_bibInfo->m_entryTemplate.value(cite->bibliographyType());
+
+            bibEntryTemplate = m_bibInfo->m_entryTemplate[cite->bibliographyType()];
 
             bibTemplateStyle = styleManager->paragraphStyle(bibEntryTemplate.styleId);
             if (bibTemplateStyle == 0) {
@@ -122,20 +120,19 @@ void BibliographyGenerator::generate()
             qDebug() << "Bibliography meta-data has not BibliographyEntryTemplate for " << cite->bibliographyType();
             continue;
         }
-            \
-        cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
-        //cursor.insertBlock(cursor.blockFormat(),cursor.charFormat());
+
+        cursor.insertBlock(QTextBlockFormat(),QTextCharFormat());
 
         QTextBlock bibEntryTextBlock = cursor.block();
-        bibTemplateStyle->applyStyle( bibEntryTextBlock );
-        bool spanEnabled = false;           //true if data field value is not blank
-        QString deb;
+        bibTemplateStyle->applyStyle(bibEntryTextBlock);
+        bool spanEnabled = false;           //true if data field is not empty
+        QString debug;
         foreach (IndexEntry * entry, bibEntryTemplate.indexEntries) {
             switch(entry->name) {
                 case IndexEntry::BIBLIOGRAPHY: {
                     IndexEntryBibliography *indexEntry = static_cast<IndexEntryBibliography *>(entry);
                     cursor.insertText(cite->dataField(indexEntry->dataField));
-                    deb.append(cite->dataField(indexEntry->dataField));
+                    debug.append(cite->dataField(indexEntry->dataField));
                     spanEnabled = (cite->dataField(indexEntry->dataField).length()>0);
                     break;
                 }
@@ -143,7 +140,7 @@ void BibliographyGenerator::generate()
                     if(spanEnabled) {
                         IndexEntrySpan *span = static_cast<IndexEntrySpan*>(entry);
                         cursor.insertText(span->text);
-                        deb.append(span->text);
+                        debug.append(span->text);
                     }
                     break;
                 }
@@ -170,7 +167,7 @@ void BibliographyGenerator::generate()
                 }
             }
         }// foreach
-        qDebug() << "\t" << deb;
+        qDebug() << "\n\t" << debug;
     }
     cursor.setCharFormat(savedCharFormat);   // restore the cursor char format
 }

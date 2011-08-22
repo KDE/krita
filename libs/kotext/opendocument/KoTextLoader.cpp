@@ -2388,6 +2388,8 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
     info->m_name = element.attribute("name");
     info->m_styleName = element.attribute("style-name");
 
+    bool *autoUpdate = false;
+
     KoXmlElement e;
     forEachElement(e, element) {
         if (e.isNull() || e.namespaceURI() != KoXmlNS::text) {
@@ -2397,8 +2399,9 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
         if (e.localName() == "bibliography-source" && e.namespaceURI() == KoXmlNS::text) {
             info->loadOdf(d->textSharedData, e);
 
-            bibFormat.setProperty(KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info) );
-            bibFormat.setProperty(KoParagraphStyle::BibliographyDocument, QVariant::fromValue<QTextDocument*>(bibDocument) );
+            bibFormat.setProperty(KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info));
+            bibFormat.setProperty(KoParagraphStyle::BibliographyDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
+            bibFormat.setProperty(KoParagraphStyle::AutoUpdateBibliography, QVariant::fromValue<bool *>(autoUpdate));
             cursor.insertBlock(bibFormat);
             // We'll just try to find displayable elements and add them as paragraphs
         } else if (e.localName() == "index-body") {

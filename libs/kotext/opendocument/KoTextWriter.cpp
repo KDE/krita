@@ -1469,6 +1469,8 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, QHash<Q
 
 void KoTextWriter::Private::saveBibliography(QTextDocument *document, QHash<QTextList *, QString> &listStyles, QTextBlock bib)
 {
+    Q_UNUSED(document);
+
     writer->startElement("text:bibliography");
 
     KoBibliographyInfo *info = bib.blockFormat().property(KoParagraphStyle::BibliographyData).value<KoBibliographyInfo*>();

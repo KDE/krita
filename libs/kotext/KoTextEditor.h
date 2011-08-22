@@ -35,12 +35,9 @@
 class KoCharacterStyle;
 class KoInlineObject;
 class KoParagraphStyle;
-<<<<<<< HEAD
 class KoInlineCite;
 class KoBibliographyInfo;
-=======
 class KoCanvasBase;
->>>>>>> origin/master
 
 class QTextBlock;
 class QTextCharFormat;
@@ -272,7 +269,7 @@ public slots:
      */
     void insertTableOfContents();
 
-    QTextBlock insertBibliography();
+    void insertBibliography();
 
     KoInlineCite *insertCitation();
 
@@ -338,5 +335,5 @@ private:
 };
 
 Q_DECLARE_METATYPE(KoTextEditor*)
-
+Q_DECLARE_METATYPE(bool *)
 #endif // KOTEXTEDITOR_H

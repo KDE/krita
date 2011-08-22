@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>116</width>
-    <height>138</height>
+    <width>213</width>
+    <height>148</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -49,6 +49,13 @@
         </property>
         <property name="autoRaise">
          <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QToolButton" name="toolButton">
+        <property name="text">
+         <string>Configure</string>
         </property>
        </widget>
       </item>

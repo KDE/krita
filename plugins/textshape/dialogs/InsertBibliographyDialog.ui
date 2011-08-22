@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>InsertBibliographyDialog</class>
+ <widget class="QDialog" name="InsertBibliographyDialog">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>620</width>
+    <height>523</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Insert Bibliography</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_5">
+   <item>
+    <widget class="QGroupBox" name="titlegroupBox">
+     <property name="title">
+      <string>Bibliography title</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="titleLabel">
+        <property name="text">
+         <string>Title:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="title"/>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QCheckBox" name="protect">
+        <property name="text">
+         <string>Protect against manual changes</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QCheckBox" name="autoupdate">
+        <property name="text">
+         <string>Update with new bibliography entries</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Bibliography entries</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QLabel" name="bibTypesLabel">
+          <property name="text">
+           <string>Bibliography type:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListWidget" name="bibTypes">
+          <item>
+           <property name="text">
+            <string>Article</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Book</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Booklet</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Conference</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Email</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>In book</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>In collection</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>In proceedings</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Journal</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Manual</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Masters thesis</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Misc</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>PhD thesis</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Proceedings</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Tech report</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Unpublished</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>WWW</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>custom1</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>custom2</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>custom3</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>custom4</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>custom5</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QLabel" name="availableFieldsLabel">
+          <property name="text">
+           <string>Available fields </string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListWidget" name="availableFields"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QPushButton" name="add">
+          <property name="text">
+           <string>Add &gt;&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="remove">
+          <property name="text">
+           <string>&lt;&lt;Remove</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="addTabStop">
+          <property name="text">
+           <string>Tab stop &gt;&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="removeTabStop">
+          <property name="text">
+           <string>&lt;&lt; Tab stop</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QLabel" name="addedFieldsLabel">
+          <property name="text">
+           <string>Fields added</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListWidget" name="addedFields"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>InsertBibliographyDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>536</x>
+     <y>440</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>InsertBibliographyDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>468</x>
+     <y>434</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

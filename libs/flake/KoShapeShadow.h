@@ -29,6 +29,7 @@ class KoShape;
 class KoGenStyle;
 class KoShapeSavingContext;
 class QPainter;
+class QPointF;
 class QImage;
 class KoViewConverter;
 struct KoInsets;
@@ -49,8 +50,7 @@ public:
     /**
      * Paints the shadow of the shape.
      * @param shape the shape to paint around
-     * @param painter the painter to paint to, the painter will have the topleft of the
-     *       shape as its start coordinate.
+     * @param painter the painter to paint shadows to canvas
      * @param converter to convert between internal and view coordinates.
      */
     void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
@@ -107,7 +107,6 @@ public:
 private:
     class Private;
     Private * const d;
-    void blurShadow(QImage &image, int radius, const QColor& shadowColor);
 };
 
 #endif // KOSHAPESHADOW_H

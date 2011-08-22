@@ -304,6 +304,15 @@ bool KoPADocumentModel::setData(const QModelIndex &index, const QVariant &value,
 KoDocumentSectionModel::PropertyList KoPADocumentModel::properties( KoShape* shape ) const
 {
     PropertyList l;
+
+    if (KoPAPageBase *page = dynamic_cast<KoPAPageBase *>(shape)) {
+        // The idea is to display the page-number so users know what page-number/slide-number
+        // the shape has also in the case the slide has a name (in which case it's not named
+        // "Slide [slide-number]" any longer.
+        // Maybe we should better use KoTextPage::visiblePageNumber here?
+        l << Property(i18n("Slide"), QString::number(m_document->pageIndex(page) + 1));
+    }
+
     l << Property(i18n("Visible"), SmallIcon("14_layer_visible"), SmallIcon("14_layer_novisible"), shape->isVisible());
     l << Property(i18n("Locked"), SmallIcon("object-locked"), SmallIcon("object-unlocked"), shape->isGeometryProtected());
     return l;

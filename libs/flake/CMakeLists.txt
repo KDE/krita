@@ -52,7 +52,6 @@ set(flake_SRCS
     KoPathShapeFactory.cpp
     KoShapeFactoryBase.cpp
     KoShapeUserData.cpp
-    KoPointGroup.cpp
     KoParameterShape.cpp
     KoPointerEvent.cpp
     KoShapeController.cpp
@@ -212,13 +211,13 @@ set_target_properties(flake PROPERTIES
 ########### install files ###############
 
 install(TARGETS flake  ${INSTALL_TARGETS_DEFAULT_ARGS})
-install( FILES 
-    flake.desktop 
-    flaketool.desktop 
-    flakeshape.desktop 
-    flakedevice.desktop 
-    presentationeventaction.desktop 
-    scripteventaction.desktop 
+install( FILES
+    flake.desktop
+    flaketool.desktop
+    flakeshape.desktop
+    flakedevice.desktop
+    presentationeventaction.desktop
+    scripteventaction.desktop
     filtereffect.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR})
 

@@ -981,6 +981,10 @@ void DefaultTool::selectionGroup()
     canvas()->shapeController()->addShapeDirect(group, cmd);
     KoShapeGroupCommand::createCommand(group, groupedShapes, cmd);
     canvas()->addCommand(cmd);
+
+    // update selection so we can ungroup immediately again
+    selection->deselectAll();
+    selection->select(group);
 }
 
 void DefaultTool::selectionUngroup()

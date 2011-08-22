@@ -1498,6 +1498,7 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
         border->setLineWidth(pen.widthF());
         border->setJoinStyle(pen.joinStyle());
         border->setLineStyle(pen.style(), pen.dashPattern());
+        border->setCapStyle(pen.capStyle());
 
         return border;
 #ifndef NWORKAROUND_ODF_BUGS
@@ -1512,6 +1513,7 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
             border->setLineWidth(pen.widthF());
             border->setJoinStyle(pen.joinStyle());
             border->setLineStyle(pen.style(), pen.dashPattern());
+            border->setCapStyle(pen.capStyle());
             border->setColor(pen.color());
 
             return border;

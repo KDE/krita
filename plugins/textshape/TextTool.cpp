@@ -92,22 +92,20 @@ class TextToolSelection : public KoToolSelection
 {
 public:
 
-    TextToolSelection(KoTextEditor *editor)
+    TextToolSelection(QWeakPointer<KoTextEditor> editor)
         : m_editor(editor)
     {
     }
 
     bool hasSelection()
     {
-        if (m_editor) {
-            return m_editor->hasSelection();
+        if (!m_editor.isNull()) {
+            return m_editor.data()->hasSelection();
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
-    KoTextEditor *m_editor;
+    QWeakPointer<KoTextEditor> m_editor;
 };
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
@@ -537,7 +535,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 
     m_textEditor = new KoTextEditor(document);
     KoTextDocument(document).setTextEditor(m_textEditor.data());
-    m_toolSelection = new TextToolSelection(m_textEditor.data());
+    m_toolSelection = new TextToolSelection(m_textEditor);
 
     m_changeTracker = new KoChangeTracker();
     KoTextDocument(document).setChangeTracker(m_changeTracker);
@@ -1576,7 +1574,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
 
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
-    connect(this, SIGNAL(harFormatChanged(const QTextCharFormat &format)), scw, SLOT(setCurrentFormat(const QTextCharFormat &)));
+    connect(this, SIGNAL(charFormatChanged(QTextCharFormat)), scw, SLOT(setCurrentFormat(QTextCharFormat)));
     connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(scw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
 
@@ -1584,6 +1582,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     // Connect to/with simple paragraph widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), spw, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(blockChanged(const QTextBlock&)), spw, SLOT(setCurrentBlock(const QTextBlock&)));
+    connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), spw, SLOT(setCurrentFormat(QTextBlockFormat)));
     connect(spw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(spw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
     connect(spw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));

@@ -291,7 +291,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     }
 
     painter->translate(0, -m_verticalAlignOffset);
-    painter->translate(0, bottom() - top() - m_footNotesHeight);
+    painter->translate(0, bottom() - m_footNotesHeight);
     foreach(KoTextLayoutArea *footerArea, m_footNoteAreas) {
         footerArea->paint(painter, context);
         painter->translate(0, footerArea->bottom());
@@ -518,7 +518,6 @@ static qreal computeWidth(KoCharacterStyle::LineWeight weight, qreal width, cons
 void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &block)
 {
     QTextLayout *layout = block.layout();
-    QTextOption textOption = layout->textOption();
 
     QTextBlockFormat bf = block.blockFormat();
     QVariantList tabList = bf.property(KoParagraphStyle::TabPositions).toList();
@@ -527,32 +526,79 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
     QTextBlock::iterator it;
     int startOfBlock = -1;
     int currentTabStop = 0;
+
+//    qDebug() << "\n-------------------"
+//             << "\nGoing to decorate block\n"
+//             << block.text()
+//             << "\n-------------------";
+
     // loop over text fragments in this paragraph and draw the underline and line through.
     for (it = block.begin(); !it.atEnd(); ++it) {
         QTextFragment currentFragment = it.fragment();
         if (currentFragment.isValid()) {
+
+//            qDebug() << "\tGoing to layout fragment:" << currentFragment.text();
+
             QTextCharFormat fmt = currentFragment.charFormat();
             painter->setFont(fmt.font());
-            if (startOfBlock == -1)
+
+            // a block doesn't have a real start position, so use our own counter. Initialize
+            // it with the position of the first text fragment in the block.
+            if (startOfBlock == -1) {
                 startOfBlock = currentFragment.position(); // start of this block w.r.t. the document
+            }
+
+            // the start of our fragment in the block is the absolute position of the fragment
+            // in the document minus the start of the block in the document.
+            int startOfFragmentInBlock = currentFragment.position() - startOfBlock;
+
+            // a fragment can span multiple lines, but we paint the decorations per line.
             int firstLine = layout->lineForTextPosition(currentFragment.position() - startOfBlock).lineNumber();
             int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length()
                     - startOfBlock).lineNumber();
-            int startOfFragmentInBlock = currentFragment.position() - startOfBlock;
+
+//            qDebug() << "\tfirst line:" << firstLine << "last line:" << lastLine;
+
             for (int i = firstLine ; i <= lastLine ; ++i) {
                 QTextLine line = layout->lineAt(i);
+//                qDebug() << "\n\t\tcurrent line:" << i
+//                         << "\n\t\tline length:" << line.textLength() << "width:"<< line.width() << "natural width" << line.naturalTextWidth()
+//                         << "\n\t\tvalid:" << layout->isValidCursorPosition(currentFragment.position() - startOfBlock)
+//                         << "\n\t\tcurrentFragment.position:"  << currentFragment.position()
+//                         << "\n\t\tstartOfBlock:" << startOfBlock
+//                         << "\n\t\tstartOfFragmentInBlock:" << startOfFragmentInBlock;
+
                 if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
-                    int p1 = currentFragment.position() - startOfBlock;
-                    if (block.text().at(p1) != QChar::ObjectReplacementCharacter) {
+
+                    // the start position for painting the decoration is the position of the fragment
+                    // inside, but after the first line, the decoration always starts at the beginning
+                    // of the line.  See bug: 264471
+                    int p1 = startOfFragmentInBlock;
+                    if (i > firstLine) {
+                        p1 = line.textStart();
+                    }
+
+//                    qDebug() << "\n\t\tblock.text.length:" << block.text().length() << "p1" << p1;
+
+                    if (block.text().length() > p1 && block.text().at(p1) != QChar::ObjectReplacementCharacter) {
                         Q_ASSERT_X(line.isValid(), __FUNCTION__, QString("Invalid line=%1 first=%2 last=%3").arg(i).arg(firstLine).arg(lastLine).toLocal8Bit()); // see bug 278682
                         if (!line.isValid())
                             continue;
-                        int p2 = currentFragment.position() + currentFragment.length() - startOfBlock;
-                        int fragmentToLineOffset = qMax(currentFragment.position() - startOfBlock - line.textStart(),0);
+
+                        // end position: not that this can be smaller than p1 when we are handling RTL
+                        int p2 = startOfFragmentInBlock + currentFragment.length();
+                        int fragmentToLineOffset = qMax(startOfFragmentInBlock - line.textStart(), 0);
+
                         qreal x1 = line.cursorToX(p1);
                         qreal x2 = line.cursorToX(p2);
+
+//                        qDebug() << "\n\t\t\tp1:" << p1 << "x1:" << x1
+//                                 << "\n\t\t\tp2:" << p2 << "x2:" << x2;
+
+                        // Comment by sebsauer:
                         // Following line was supposed to fix bug 171686 (I cannot reproduce the original problem) but it opens bug 260159. So, deactivated for now.
-                        //x2 = qMin(x2, line.naturalTextWidth() + line.cursorToX(line.textStart()));
+                        // x2 = qMin(x2, line.naturalTextWidth() + line.cursorToX(line.textStart()));
+
                         drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         drawOverlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
@@ -668,6 +714,7 @@ void KoTextLayoutArea::drawOverlines(QPainter *painter, const QTextFragment &cur
 
 void KoTextLayoutArea::drawUnderlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const
 {
+
     QTextCharFormat fmt = currentFragment.charFormat();
     KoCharacterStyle::LineStyle fontUnderLineStyle = (KoCharacterStyle::LineStyle) fmt.intProperty(KoCharacterStyle::UnderlineStyle);
     KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::UnderlineType);

@@ -93,6 +93,7 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
 SimpleCharacterWidget::~SimpleCharacterWidget()
 {
     delete m_thumbnailer;
+    delete m_stylePopup;
 }
 
 void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
@@ -103,7 +104,7 @@ void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
 
 void SimpleCharacterWidget::hidePopup()
 {
-    m_stylePopup->hide();
+    widget.charFrame->hidePopup();
 }
 
 void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
@@ -115,7 +116,7 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
     int id = m_currentCharFormat.intProperty(KoCharacterStyle::StyleId);
     KoCharacterStyle *style(m_styleManager->characterStyle(id));
     if (style) {
-        widget.charFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->characterStyle(id), widget.charFrame->size()));
+        widget.charFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->characterStyle(id), widget.charFrame->contentsRect().size()));
     }
     m_stylePopup->setCurrentFormat(format);
 }

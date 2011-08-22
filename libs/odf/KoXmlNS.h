@@ -61,7 +61,7 @@ public:
     static const QString officeooo;
     static const QString ooo;
 
-    static const char* nsURI2NS(const QString nsURI);
+    static const char* nsURI2NS(const QString &nsURI);
     
     static const QString delta;
     static const QString split;

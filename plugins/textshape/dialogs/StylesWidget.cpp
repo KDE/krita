@@ -23,6 +23,7 @@
 #include "CharacterGeneral.h"
 
 #include <KoStyleManager.h>
+#include <KoStyleThumbnailer.h>
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
 
@@ -31,15 +32,24 @@
 #include <QHeaderView>
 #include <QFormLayout>
 #include <QRadioButton>
+#include <QScrollBar>
+#include <QHideEvent>
+#include <QShowEvent>
+
+#include <QModelIndex>
 
 StylesWidget::StylesWidget(QWidget *parent, bool paragraphMode, Qt::WindowFlags f)
         : QFrame(parent, f),
         m_styleManager(0),
+          m_styleThumbnailer(0),
         m_stylesModel(new StylesModel(0, paragraphMode)),
         m_stylesDelegate(new StylesDelegate()),
         m_blockSignals(false),
         m_isHovered(false)
 {
+    m_styleThumbnailer = new KoStyleThumbnailer();
+    m_styleThumbnailer->setThumbnailSize(QSize(250, 48));
+    m_stylesModel->setStyleThumbnailer(m_styleThumbnailer);
     widget.setupUi(this);
     widget.stylesView->setModel(m_stylesModel);
     widget.stylesView->setItemDelegate(m_stylesDelegate);
@@ -51,12 +61,16 @@ StylesWidget::StylesWidget(QWidget *parent, bool paragraphMode, Qt::WindowFlags 
     }
 }
 
-
-
 StylesWidget::~StylesWidget()
 {
     delete m_stylesDelegate;
     delete m_stylesModel;
+    delete m_styleThumbnailer;
+}
+
+QSize StylesWidget::sizeHint() const
+{
+    return QSize(widget.stylesView->sizeHint().width() + 2*widget.stylesView->verticalScrollBar()->width(), widget.stylesView->sizeHint().height());
 }
 
 void StylesWidget::setStyleManager(KoStyleManager *sm)
@@ -91,6 +105,7 @@ void StylesWidget::setCurrentFormat(const QTextBlockFormat &format)
     m_blockSignals = true;
     m_stylesModel->setCurrentParagraphStyle(id, unchanged);
     m_blockSignals = false;
+    widget.stylesView->setCurrentIndex(m_stylesModel->indexForParagraphStyle(*usedStyle));
 }
 
 void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
@@ -121,6 +136,7 @@ void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
     m_blockSignals = true;
     m_stylesModel->setCurrentCharacterStyle(id, unchanged);
     m_blockSignals = false;
+    widget.stylesView->setCurrentIndex(m_stylesModel->indexForCharacterStyle(*usedStyle));
 }
 
 void StylesWidget::applyParagraphStyle()

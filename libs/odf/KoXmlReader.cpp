@@ -1042,10 +1042,10 @@ namespace {
         ParseError() :errorLine(-1), errorColumn(-1), error(false) {}
     };
 
-    void parseElement(QXmlStreamReader &xml, KoXmlPackedDocument &doc);
+    void parseElement(QXmlStreamReader &xml, KoXmlPackedDocument &doc, bool stripSpaces = true);
 
     // parse one element as if this were a standalone xml document
-    ParseError parseDocument(QXmlStreamReader &xml, KoXmlPackedDocument &doc)
+    ParseError parseDocument(QXmlStreamReader &xml, KoXmlPackedDocument &doc, bool stripSpaces = true)
     {
         doc.clear();
         ParseError error;
@@ -1053,7 +1053,7 @@ namespace {
         while (!xml.atEnd() && xml.tokenType() != QXmlStreamReader::EndDocument) {
             switch (xml.tokenType()) {
             case QXmlStreamReader::StartElement:
-                parseElement(xml, doc);
+                parseElement(xml, doc, stripSpaces);
                 break;
             case QXmlStreamReader::DTD:
                 doc.addDTD(xml.dtdName().toString());
@@ -1086,6 +1086,46 @@ namespace {
     {
         xml.readNext();
         QString ws;
+        while (!xml.atEnd()) {
+            switch (xml.tokenType()) {
+            case QXmlStreamReader::EndElement:
+                // if an element contains only whitespace, put it in the dom
+                if (!ws.isEmpty()) {
+                    doc.addText(ws);
+                }
+                return;
+            case QXmlStreamReader::StartElement:
+                // The whitespaces between > and < are also a text element
+                if (!ws.isEmpty()) {
+                    doc.addText(ws);
+                    ws.clear();
+                }
+                // Do not strip spaces
+                parseElement(xml, doc, false);
+                break;
+            case QXmlStreamReader::Characters:
+                if (xml.isCDATA()) {
+                    doc.addCData(xml.text().toString());
+                } else if (!xml.isWhitespace()) {
+                    doc.addText(xml.text().toString());
+                } else {
+                    ws += xml.text();
+                }
+                break;
+            case QXmlStreamReader::ProcessingInstruction:
+                doc.addProcessingInstruction();
+                break;
+            default:
+                break;
+            }
+            xml.readNext();
+        }
+    }
+
+    void parseElementContentsStripSpaces(QXmlStreamReader &xml, KoXmlPackedDocument &doc)
+    {
+        xml.readNext();
+        QString ws;
         bool sawElement = false;
         while (!xml.atEnd()) {
             switch (xml.tokenType()) {
@@ -1097,7 +1137,8 @@ namespace {
                 return;
             case QXmlStreamReader::StartElement:
                 sawElement = true;
-                parseElement(xml, doc);
+                // Do strip spaces
+                parseElement(xml, doc, true);
                 break;
             case QXmlStreamReader::Characters:
                 if (xml.isCDATA()) {
@@ -1118,7 +1159,7 @@ namespace {
         }
     }
 
-    void parseElement(QXmlStreamReader &xml, KoXmlPackedDocument &doc)
+    void parseElement(QXmlStreamReader &xml, KoXmlPackedDocument &doc, bool stripSpaces)
     {
         // reader.tokenType() is now QXmlStreamReader::StartElement
         doc.addElement(xml.qualifiedName().toString(),
@@ -1131,7 +1172,10 @@ namespace {
                              a->value().toString());
             ++a;
         }
-        parseElementContents(xml, doc);
+        if (stripSpaces)
+          parseElementContentsStripSpaces(xml, doc);
+        else
+          parseElementContents(xml, doc);
         // reader.tokenType() is now QXmlStreamReader::EndElement
         doc.closeElement();
     }
@@ -1224,6 +1268,9 @@ public:
     // compatibility
     QDomNode asQDomNode(QDomDocument ownerDoc) const;
 
+    // to read the xml with or without spaces
+    bool stripSpaces;
+
 private:
     QHash<QString, QString> attr;
     QHash<KoXmlStringPair, QString> attrNS;
@@ -1238,7 +1285,7 @@ KoXmlNodeData::KoXmlNodeData() : nodeType(KoXmlNode::NullNode),
         nodeDepth(0),
 #endif
         count(1), emptyDocument(true), parent(0), prev(0), next(0), first(0), last(0),
-        packedDoc(0), nodeIndex(0), loaded(false)
+        packedDoc(0), nodeIndex(0), loaded(false), stripSpaces(true)
 {
 }
 
@@ -1428,7 +1475,7 @@ bool KoXmlNodeData::setContent(QXmlStreamReader* reader, QString* errorMsg, int*
     packedDoc = new KoXmlPackedDocument;
     packedDoc->processNamespace = reader->namespaceProcessing();
 
-    ParseError error = parseDocument(*reader, *packedDoc);
+    ParseError error = parseDocument(*reader, *packedDoc, stripSpaces);
     if (error.error) {
         // parsing error has occurred
         if (errorMsg) *errorMsg = error.errorMsg;
@@ -2411,9 +2458,10 @@ KoXmlDocumentType& KoXmlDocumentType::operator=(const KoXmlDocumentType & dt)
 //
 // ==================================================================
 
-KoXmlDocument::KoXmlDocument(): KoXmlNode()
+KoXmlDocument::KoXmlDocument(bool stripSpaces): KoXmlNode()
 {
     d->emptyDocument = false;
+    d->stripSpaces = stripSpaces;
 }
 
 KoXmlDocument::~KoXmlDocument()
@@ -2501,12 +2549,15 @@ bool KoXmlDocument::setContent(QXmlStreamReader *reader,
                                QString* errorMsg, int* errorLine, int* errorColumn)
 {
     if (d->nodeType != KoXmlNode::DocumentNode) {
+        bool stripSpaces = d->stripSpaces;
         d->unref();
         d = new KoXmlNodeData;
         d->nodeType = KoXmlNode::DocumentNode;
+        d->stripSpaces = stripSpaces;
     }
 
     dt = KoXmlDocumentType();
+
     bool result = d->setContent(reader, errorMsg, errorLine, errorColumn);
     if (result && !isNull()) {
         dt.d->nodeType = KoXmlNode::DocumentTypeNode;
@@ -2528,9 +2579,11 @@ bool KoXmlDocument::setContent(QIODevice* device, bool namespaceProcessing,
                                QString* errorMsg, int* errorLine, int* errorColumn)
 {
     if (d->nodeType != KoXmlNode::DocumentNode) {
+        bool stripSpaces = d->stripSpaces;
         d->unref();
         d = new KoXmlNodeData;
         d->nodeType = KoXmlNode::DocumentNode;
+        d->stripSpaces = stripSpaces;
     }
 
     if (!device->isOpen()) device->open(QIODevice::ReadOnly);
@@ -2562,9 +2615,11 @@ bool KoXmlDocument::setContent(const QString& text, bool namespaceProcessing,
                                QString *errorMsg, int *errorLine, int *errorColumn)
 {
     if (d->nodeType != KoXmlNode::DocumentNode) {
+        bool stripSpaces = d->stripSpaces;
         d->unref();
         d = new KoXmlNodeData;
         d->nodeType = KoXmlNode::DocumentNode;
+        d->stripSpaces = stripSpaces;
     }
 
     QXmlStreamReader reader(text);
@@ -2588,6 +2643,12 @@ bool KoXmlDocument::setContent(const QString& text,
 {
     return setContent(text, false, errorMsg, errorLine, errorColumn);
 }
+
+void  KoXmlDocument::setWhitespaceStripping(bool stripSpaces)
+{
+    d->stripSpaces = stripSpaces;
+}
+
 
 #endif
 

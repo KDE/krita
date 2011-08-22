@@ -263,13 +263,13 @@ DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeig
     QLineEdit* le = 0;
     if (sb) {
         le = sb->findChild<QLineEdit*>();
+        sb->setFrame(false);
     }
     if (le) {
         le->setAlignment(Qt::AlignLeft);
         le->setContentsMargins(0,0,0,0);
+        le->setFrame(false);
     }
-    sb->setFrame(false);
-    le->setFrame(false);
 /*    Factory::setTopAndBottomBordersUsingStyleSheet(sb, parent,
         QString::fromLatin1(
             "QDoubleSpinBox { border-left: 0; border-right: 0; } "

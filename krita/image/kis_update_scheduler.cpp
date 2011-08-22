@@ -116,8 +116,8 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
     KisBaseRectsWalkerSP walker = new KisFullRefreshWalker(cropRect);
     walker->collectRects(root, rc);
 
-    m_d->updaterContext->lock();
     lock();
+    m_d->updaterContext->lock();
 
     Q_ASSERT(m_d->updaterContext->isJobAllowed(walker));
     m_d->updaterContext->addMergeJob(walker);

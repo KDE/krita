@@ -2288,8 +2288,6 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     // make sure that the tag is table-of-content
     Q_ASSERT(element.tagName() == "table-of-content");
     QTextBlockFormat tocFormat;
-    tocFormat.setProperty(KoText::SubFrameType, KoText::TableOfContentsFrameType);
-
 
     // for "meta-information" about the TOC we use this class
     KoTableOfContentsGeneratorInfo *info = new KoTableOfContentsGeneratorInfo();

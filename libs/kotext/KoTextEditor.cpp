@@ -1371,7 +1371,6 @@ void KoTextEditor::insertTableOfContents()
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table Of Contents"));
 
     QTextBlockFormat tocFormat;
-    tocFormat.setProperty(KoText::SubFrameType, KoText::TableOfContentsFrameType);
     KoTableOfContentsGeneratorInfo *info = new KoTableOfContentsGeneratorInfo();
     QTextDocument *tocDocument = new QTextDocument();
     tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );

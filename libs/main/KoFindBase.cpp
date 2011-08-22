@@ -141,9 +141,22 @@ void KoFindBase::finished()
 
 void KoFindBase::replaceCurrent(const QVariant &value)
 {
-    if (d->currentMatch < d->matches.size()) {
-        replaceImplementation(d->matches.at(d->currentMatch), value);
+    if(d->matches.count() == 0) {
+        return;
     }
+
+    KoFindMatch match = d->matches.at(d->currentMatch);
+    d->matches.removeAt(d->currentMatch);
+    if (d->currentMatch < d->matches.count()) {
+        replaceImplementation(match, value);
+    }
+
+    if(d->matches.count() > 0) {
+        emit matchFound(d->matches.at(0));
+    } else {
+        emit noMatchFound();
+    }
+    emit updateCanvas();
 }
 
 void KoFindBase::replaceAll(const QVariant &value)
@@ -151,6 +164,12 @@ void KoFindBase::replaceAll(const QVariant &value)
     foreach(const KoFindMatch &match, d->matches) {
         replaceImplementation(match, value);
     }
+
+    //Intentionally not using clearMatches since we should not clear
+    //highlighting here.
+    d->matches.clear();
+    emit noMatchFound();
+    emit updateCanvas();
 }
 
 void KoFindBase::clearMatches()

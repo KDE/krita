@@ -178,7 +178,7 @@ private:
 void KisProcessingsTest::testCropVisitor()
 {
     KisProcessingVisitorSP visitor =
-        new KisCropProcessingVisitor(QRect(45,45,410,410), true);
+        new KisCropProcessingVisitor(QRect(45,45,410,410), true, true);
 
     BaseProcessingTest tester;
     tester.test("crop", visitor);

@@ -107,18 +107,11 @@ qint32 KisImageManager::importImage(const KUrl& urlArg)
     return rc;
 }
 
-void KisImageManager::resizeCurrentImage(qint32 w, qint32 h, bool cropLayers)
-{
-    if (!m_view->image()) return;
-
-    m_view->image()->resize(w, h, cropLayers);
-}
-
 void KisImageManager::resizeCurrentImage(qint32 w, qint32 h, qint32 xOffset, qint32 yOffset)
 {
     if (!m_view->image()) return;
 
-    m_view->image()->resizeWithOffset(w, h, xOffset, yOffset);
+    m_view->image()->cropImage(QRect(-xOffset, -yOffset, w, h));
 }
 
 void KisImageManager::scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy, bool scaleOnlyShapes)

@@ -62,7 +62,6 @@
 #include "kis_transaction.h"
 #include "kis_transform_visitor.h"
 #include "kis_types.h"
-#include "kis_crop_visitor.h"
 #include "kis_meta_data_merge_strategy.h"
 
 #include "kis_image_config.h"
@@ -401,7 +400,7 @@ void KisImage::setSize(const QSize& size)
     emitSizeChanged();
 }
 
-void KisImage::resize(const QRect& newRect, bool cropLayers)
+void KisImage::resizeImageImpl(const QRect& newRect, bool cropLayers)
 {
     if(newRect == bounds()) return;
 
@@ -411,23 +410,38 @@ void KisImage::resize(const QRect& newRect, bool cropLayers)
     emitSignals << SizeChangedSignal << ModifiedSignal;
 
     KisProcessingApplicator applicator(this, m_d->rootLayer, true, emitSignals, actionName);
-    if(cropLayers) {
+    if(cropLayers || !newRect.topLeft().isNull()) {
         KisProcessingVisitorSP visitor =
-            new KisCropProcessingVisitor(newRect, true);
+            new KisCropProcessingVisitor(newRect, cropLayers, true);
         applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
     }
     applicator.applyCommand(new KisImageResizeCommand(this, newRect.size()));
     applicator.end();
 }
 
-void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
+void KisImage::resizeImage(const QRect& newRect)
 {
-    resize(QRect(x, y, w, h), cropLayers);
+    resizeImageImpl(newRect, false);
 }
 
-void KisImage::resizeWithOffset(qint32 w, qint32 h, qint32 xOffset, qint32 yOffset)
+void KisImage::cropImage(const QRect& newRect)
 {
-    resize(QRect(-xOffset, -yOffset, w, h), true);
+    resizeImageImpl(newRect, true);
+}
+
+
+void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
+{
+    QString actionName = i18n("Crop Node");
+
+    KisImageSignalVector emitSignals;
+    emitSignals << ModifiedSignal;
+
+    KisProcessingApplicator applicator(this, node, false, emitSignals, actionName);
+    KisProcessingVisitorSP visitor =
+        new KisCropProcessingVisitor(newRect, true, false);
+    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    applicator.end();
 }
 
 void KisImage::emitSizeChanged()

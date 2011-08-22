@@ -199,7 +199,7 @@ void KisLayerManager::imageResizeToActiveLayer()
     KisImageWSP image = m_view->image();
 
     if (image && (layer = activeLayer())) {
-        image->resize(layer->exactBounds(), true);
+        image->cropImage(layer->exactBounds());
     }
 }
 

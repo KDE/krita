@@ -38,9 +38,11 @@
 #include "kis_undo_adapter.h"
 
 
-KisCropProcessingVisitor::KisCropProcessingVisitor(const QRect &rect, bool moveLayers)
+KisCropProcessingVisitor::KisCropProcessingVisitor(const QRect &rect, bool cropLayers, bool moveLayers)
     : m_rect(rect),
+      m_cropLayers(cropLayers),
       m_moveLayers(moveLayers)
+
 {
 }
 
@@ -108,9 +110,11 @@ void KisCropProcessingVisitor::cropNode(KisNode *node, KisUndoAdapter *undoAdapt
      * including the cropping of vector (!) selection.
      */
 
-    KisTransaction transaction(i18n("Crop"), node->paintDevice());
-    node->paintDevice()->crop(m_rect);
-    transaction.commit(undoAdapter);
+    if (m_cropLayers) {
+        KisTransaction transaction(i18n("Crop"), node->paintDevice());
+        node->paintDevice()->crop(m_rect);
+        transaction.commit(undoAdapter);
+    }
 
     if (m_moveLayers) {
         QPoint oldPos(node->x(), node->y());

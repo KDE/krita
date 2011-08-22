@@ -48,7 +48,7 @@ void KisCropProcessingVisitorTest::testUndo()
 
     undoAdapter.beginMacro("test");
 
-    KisCropProcessingVisitor visitor(cropRect, true);
+    KisCropProcessingVisitor visitor(cropRect, true, true);
     layer->accept(visitor, &undoAdapter);
 
     undoAdapter.endMacro();
@@ -83,7 +83,7 @@ void KisCropProcessingVisitorTest::testCropTransparencyMask()
     QCOMPARE(pixelSelection->selectedExactRect(), selectionRect);
 
     undoAdapter.beginMacro("test");
-    KisCropProcessingVisitor visitor(cropRect, true);
+    KisCropProcessingVisitor visitor(cropRect, true, true);
     mask->accept(visitor, &undoAdapter);
     undoAdapter.endMacro();
 
@@ -110,7 +110,7 @@ void KisCropProcessingVisitorTest::testWrappedInCommand()
     QImage image1 = device->convertToQImage(0, 0, 0, 300, 300);
 
 
-    KisProcessingVisitorSP visitor = new KisCropProcessingVisitor(cropRect, true);
+    KisProcessingVisitorSP visitor = new KisCropProcessingVisitor(cropRect, true, true);
 
     KisProcessingCommand command(visitor, layer);
 

@@ -689,7 +689,7 @@ void KisSelectionManager::imageResizeToSelection()
     KisImageWSP image = m_view->image();
 
     if (image && selection) {
-        image->resize(selection->selectedExactRect(), true);
+        image->cropImage(selection->selectedExactRect());
     }
 }
 

@@ -195,36 +195,29 @@ public:
     KisPerspectiveGrid* perspectiveGrid();
 
     /**
-     * Resize the image to the specified width and height. The resize
+     * Resize the image to the specified rect. The resize
      * method handles the creating on an undo step itself.
      *
-     * @param w the new width of the image
-     * @param h the new height of the image
-     * @param x the x position of the crop on all layer if cropLayers is true
-     * @param y the y position of the crop on all layer if cropLayers is true
-     * @param cropLayers if true, all layers are cropped to the new size.
+     * @param newRect the rect describing the new width, height and offset
+     *        of the image
      */
-    void resize(qint32 w, qint32 h, qint32 x = 0, qint32 y = 0,  bool cropLayers = false);
+    void resizeImage(const QRect& newRect);
 
     /**
-     * Resize the image to the specified width and height. The resize
+     * Crop the image to the specified rect. The crop
      * method handles the creating on an undo step itself.
      *
-     * @param rc the rect describing the new width and height of the image
-     * @param cropLayers if true, all layers are cropped to the new rect
+     * @param newRect the rect describing the new width, height and offset
+     *        of the image
      */
-    void resize(const QRect& rc, bool cropLayers = false);
+    void cropImage(const QRect& newRect);
+
 
     /**
-     * Resize the image to the specified width and height. The previous
-     * image is offset by the amount specified.
-     *
-     * @param w the width of the image
-     * @param h the height of the image
-     * @param xOffset the horizontal offset of the previous image
-     * @param yOffset the vertical offset of the previous image
+     * Crop a node to @newRect. The node will *not* be moved anywhere,
+     * it just drops some content
      */
-    void resizeWithOffset(qint32 w, qint32 h, qint32 xOffset = 0, qint32 yOffset = 0);
+    void cropNode(KisNodeSP node, const QRect& newRect);
 
     /**
      * Execute a scale transform on all layers in this image.
@@ -609,6 +602,8 @@ private:
     KisImage& operator=(const KisImage& rhs);
     void init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace);
     void emitSizeChanged();
+
+    void resizeImageImpl(const QRect& newRect, bool cropLayers);
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
     static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());

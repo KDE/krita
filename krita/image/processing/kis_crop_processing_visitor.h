@@ -26,7 +26,7 @@
 class KRITAIMAGE_EXPORT  KisCropProcessingVisitor : public KisProcessingVisitor
 {
 public:
-    KisCropProcessingVisitor(const QRect &rect, bool moveLayers = true);
+    KisCropProcessingVisitor(const QRect &rect, bool cropLayers, bool moveLayers);
 
     void visit(KisNode *node, KisUndoAdapter *undoAdapter);
     void visit(KisPaintLayer *layer, KisUndoAdapter *undoAdapter);
@@ -44,6 +44,7 @@ private:
 
 private:
     QRect m_rect;
+    bool m_cropLayers;
     bool m_moveLayers;
 };
 

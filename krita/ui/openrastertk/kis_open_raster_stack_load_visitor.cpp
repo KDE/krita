@@ -90,7 +90,7 @@ void KisOpenRasterStackLoadVisitor::loadImage()
                 height = subelem.attribute("h").toInt();
             }
             dbgFile << ppVar(width) << ppVar(height);
-            d->image->resize(width, height);
+            d->image->resizeImage(QRect(0,0,width,height));
         }
     }
     if (d->image->width() == 0 && d->image->height() == 0) {

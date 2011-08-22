@@ -110,7 +110,7 @@ void KisProcessingApplicatorTest::testNonRecursiveProcessing()
     {
         KisProcessingApplicator applicator(image, paintLayer1, false);
         KisProcessingVisitorSP visitor =
-            new KisCropProcessingVisitor(cropRect1, false);
+            new KisCropProcessingVisitor(cropRect1, true, false);
         applicator.applyVisitor(visitor);
         applicator.end();
         image->waitForDone();
@@ -121,7 +121,7 @@ void KisProcessingApplicatorTest::testNonRecursiveProcessing()
     {
         KisProcessingApplicator applicator(image, paintLayer2, false);
         KisProcessingVisitorSP visitor =
-            new KisCropProcessingVisitor(cropRect2, false);
+            new KisCropProcessingVisitor(cropRect2, true, false);
         applicator.applyVisitor(visitor);
         applicator.end();
         image->waitForDone();
@@ -152,7 +152,7 @@ void KisProcessingApplicatorTest::testRecursiveProcessing()
     {
         KisProcessingApplicator applicator(image, image->rootLayer(), true);
         KisProcessingVisitorSP visitor =
-            new KisCropProcessingVisitor(cropRect1, true);
+            new KisCropProcessingVisitor(cropRect1, true, true);
         applicator.applyVisitor(visitor);
         applicator.end();
         image->waitForDone();

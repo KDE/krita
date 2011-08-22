@@ -90,8 +90,6 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
     KisPaintDeviceSP dev = src->projection();
     if (!dev) return;
 
-    image->undoAdapter()->beginMacro(i18n("Add Drop Shadow"));
-
     KisPaintDeviceSP shadowDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     KisPaintDeviceSP bShadowDev;
     const KoColorSpace *rgb8cs = shadowDev->colorSpace();
@@ -124,6 +122,8 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
         shadowDev = bShadowDev;
     }
 
+    image->undoAdapter()->beginMacro(i18n("Add Drop Shadow"));
+
     if (!progressUpdater->interrupted()) {
         shadowDev->move(xoffset, yoffset);
 
@@ -135,32 +135,10 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
             QRect shadowBounds = shadowDev->exactBounds();
 
             if (!image->bounds().contains(shadowBounds)) {
-
                 QRect newImageSize = image->bounds() | shadowBounds;
-                image->resize(newImageSize.width(), newImageSize.height());
-
-                if (shadowBounds.left() < 0 || shadowBounds.top() < 0) {
-
-                    qint32 newRootX = image->rootLayer()->x();
-                    qint32 newRootY = image->rootLayer()->y();
-
-                    if (shadowBounds.left() < 0) {
-                        newRootX += -shadowBounds.left();
-                    }
-                    if (shadowBounds.top() < 0) {
-                        newRootY += -shadowBounds.top();
-                    }
-
-                    KUndo2Command *moveCommand = new KisNodeMoveCommand(image->rootLayer(),
-                            QPoint(image->rootLayer()->x(), image->rootLayer()->y()), QPoint(newRootX, newRootY), image);
-                    Q_ASSERT(moveCommand != 0);
-
-                    m_view->undoAdapter()->addCommand(moveCommand);
-                }
+                image->resizeImage(newImageSize);
             }
         }
-        l->setDirty();
-        m_view->image()->setModified();
     }
 
     image->undoAdapter()->endMacro();

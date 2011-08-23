@@ -215,8 +215,6 @@ qreal KisColorSelector::getLight(const QPointF& pt) const
         if(getNumLightPieces() > 1)
             return 1.0 - (qreal(clickedLightPiece) / qreal(getNumLightPieces()-1));
     
-        QPoint point = pt.toPoint() - m_lightStripArea.topLeft();
-        
         if(m_lightStripPos == LSP_LEFT || m_lightStripPos == LSP_RIGHT)
             return 1.0 - (qreal(pt.y()) / qreal(m_lightStripArea.height()));
         

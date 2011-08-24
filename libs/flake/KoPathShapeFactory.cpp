@@ -35,7 +35,7 @@ KoPathShapeFactory::KoPathShapeFactory(const QStringList&)
     setIcon("pathshape");
     QStringList elementNames;
     elementNames << "path" << "line" << "polyline" << "polygon";
-    setOdfElementNames(KoXmlNS::draw, elementNames);
+    setXmlElementNames(KoXmlNS::draw, elementNames);
     setLoadingPriority(0);
 }
 

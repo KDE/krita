@@ -19,11 +19,9 @@
 
 #include "ArtisticTextShapeFactory.h"
 #include "ArtisticTextShape.h"
-#include "ArtisticTextShapeConfigWidget.h"
 
 #include <KoXmlNS.h>
 #include <KoColorBackground.h>
-#include <KoShapeLoadingContext.h>
 
 #include <klocale.h>
 
@@ -33,7 +31,7 @@ ArtisticTextShapeFactory::ArtisticTextShapeFactory()
     setToolTip(i18n("A shape which shows a single text line"));
     setIcon( "text" );
     setLoadingPriority( 5 );
-    setOdfElementNames( KoXmlNS::draw, QStringList( "custom-shape" ) );
+    setXmlElementNames(KoXmlNS::svg, QStringList("text"));
 }
 
 KoShape *ArtisticTextShapeFactory::createDefaultShape(KoResourceManager *) const
@@ -44,17 +42,9 @@ KoShape *ArtisticTextShapeFactory::createDefaultShape(KoResourceManager *) const
     return text;
 }
 
-bool ArtisticTextShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool ArtisticTextShapeFactory::supports(const KoXmlElement &/*element*/, KoShapeLoadingContext &/*context*/) const
 {
-    Q_UNUSED(context);
-    if (!(e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw)) {
-        return false;
-    }
-
-    QString drawEngine = e.attributeNS( KoXmlNS::draw, "engine", "" );
-    if ( drawEngine.isEmpty() || drawEngine != "svg:text" ) {
-        return false;
-    }
-
-    return true;
+    // the artistic text shape is embedded as svg into an odf file
+    // so we tell the caller we do not support any element
+    return false;
 }

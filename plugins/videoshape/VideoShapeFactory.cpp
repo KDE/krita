@@ -36,7 +36,7 @@ VideoShapeFactory::VideoShapeFactory()
 {
     setToolTip(i18n("Video, embedded or fullscreen"));
     setIcon("video-x-generic");
-    setOdfElementNames(KoXmlNS::draw, QStringList("plugin"));
+    setXmlElementNames(KoXmlNS::draw, QStringList("plugin"));
     setLoadingPriority(1);
 }
 

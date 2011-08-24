@@ -27,6 +27,10 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>
+#include <SvgSavingContext.h>
+#include <SvgLoadingContext.h>
+#include <SvgUtil.h>
+#include <SvgStyleWriter.h>
 
 #include <math.h>
 
@@ -371,4 +375,55 @@ qreal EllipseShape::endAngle() const
 QString EllipseShape::pathShapeId() const
 {
     return EllipseShapeId;
+}
+
+bool EllipseShape::saveSvg(SvgSavingContext &context)
+{
+    if (type() == EllipseShape::Arc && startAngle() == endAngle()) {
+        const QSizeF size = this->size();
+        const bool isCircle = size.width() == size.height();
+        context.shapeWriter().startElement(isCircle ? "circle" : "ellipse");
+        context.shapeWriter().addAttribute("id", context.getID(this));
+        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+
+        if (isCircle) {
+            context.shapeWriter().addAttributePt("r", 0.5 * size.width());
+        } else {
+            context.shapeWriter().addAttributePt("rx", 0.5 * size.width());
+            context.shapeWriter().addAttributePt("ry", 0.5 * size.height());
+        }
+        context.shapeWriter().addAttributePt("cx", 0.5 * size.width());
+        context.shapeWriter().addAttributePt("cy", 0.5 * size.height());
+
+        SvgStyleWriter::saveSvgStyle(this, context);
+
+        context.shapeWriter().endElement();
+    } else {
+        // the svg writer takes care of saving this shape as a path shape
+        return false;
+    }
+
+    return true;
+}
+
+bool EllipseShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
+{
+    qreal rx = 0, ry = 0;
+    if (element.tagName() == "ellipse") {
+        rx = SvgUtil::parseUnitX(context.currentGC(), element.attribute("rx"));
+        ry = SvgUtil::parseUnitY(context.currentGC(), element.attribute("ry"));
+    } else if (element.tagName() == "circle") {
+        rx = ry = SvgUtil::parseUnitXY(context.currentGC(), element.attribute("r"));
+    } else {
+        return false;
+    }
+
+    const qreal cx = SvgUtil::parseUnitX(context.currentGC(), element.attribute("cx", "0"));
+    const qreal cy = SvgUtil::parseUnitY(context.currentGC(), element.attribute("cy", "0"));
+    setSize(QSizeF(2*rx, 2*ry));
+    setPosition(QPointF(cx - rx, cy - ry));
+    if (rx == 0.0 || ry == 0.0)
+        setVisible(false);
+
+    return true;
 }

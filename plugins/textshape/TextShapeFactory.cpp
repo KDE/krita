@@ -45,7 +45,7 @@ TextShapeFactory::TextShapeFactory()
     QList<QPair<QString, QStringList> > odfElements;
     odfElements.append(QPair<QString, QStringList>(KoXmlNS::draw, QStringList("text-box")));
     odfElements.append(QPair<QString, QStringList>(KoXmlNS::table, QStringList("table")));
-    setOdfElements(odfElements);
+    setXmlElements(odfElements);
     setLoadingPriority(1);
 
     KoShapeTemplate t;

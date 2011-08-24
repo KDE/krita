@@ -42,8 +42,12 @@ PictureShapeFactory::PictureShapeFactory()
 {
     setToolTip(i18n("Image shape that can display jpg, png etc."));
     setIcon("x-shape-image");
-    setOdfElementNames(KoXmlNS::draw, QStringList("image"));
     setLoadingPriority(1);
+
+    QList<QPair<QString, QStringList> > elementNamesList;
+    elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("image")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("image")));
+    setXmlElements(elementNamesList);
 }
 
 KoShape *PictureShapeFactory::createDefaultShape(KoResourceManager *documentResources) const

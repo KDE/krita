@@ -38,7 +38,7 @@ EnhancedPathShapeFactory::EnhancedPathShapeFactory()
 {
     setToolTip(i18n("An enhanced path"));
     setIcon("enhancedpath");
-    setOdfElementNames(KoXmlNS::draw, QStringList("custom-shape"));
+    setXmlElementNames(KoXmlNS::draw, QStringList("custom-shape"));
     setLoadingPriority(1);
 
     addCross();

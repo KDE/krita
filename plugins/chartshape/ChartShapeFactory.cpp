@@ -63,7 +63,7 @@ ChartShapePlugin::ChartShapePlugin( QObject * parent,  const QVariantList& )
 ChartShapeFactory::ChartShapeFactory()
     : KoShapeFactoryBase(ChartShapeId, i18n( "Chart" ) )
 {
-    setOdfElementNames( "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0", QStringList( "object" ) );
+    setXmlElementNames( "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0", QStringList( "object" ) );
     setToolTip( i18n( "Business charts" ) );
 
     KIconLoader::global()->addAppDir("kchart");

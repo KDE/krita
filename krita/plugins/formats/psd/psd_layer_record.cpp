@@ -507,193 +507,40 @@ bool PSDLayerRecord::readChannels(QIODevice *io, KisPaintDeviceSP device)
     psdread(io,&m_compression);
     quint64 start = io->pos();
     m_channelSize = m_header.channelDepth/8;
-    m_channelDataLength = m_header.height * m_header.width * m_channelSize;
+m_channelDataLength = m_header.height * m_header.width * m_channelSize;
 
-    switch (m_compression) {
 
-    case 0: // Uncompressed
-
-        for (int channel = 0; channel < m_header.nChannels; channel++) {
-            m_channelOffsets << 0;
-            ChannelInfo channelInfo;
-            channelInfo.channelId = channel;
-            channelInfo.compressionType = Compression::Uncompressed;
-            channelInfo.channelDataStart = start;
-            channelInfo.channelDataLength = m_header.width * m_header.height * m_channelSize;
-            start += channelInfo.channelDataLength;
-            m_channelInfoRecords.append(channelInfo);
-
-        }
-        for (int channel = 0; channel < m_header.nChannels; channel++) {
-
-            qDebug() << "Channel ID: " << m_channelInfoRecords[channel].channelId;
-            qDebug() << "Channel Compression Type: " << m_channelInfoRecords[channel].compressionType;
-            qDebug() << "Channel Data Start: " << m_channelInfoRecords[channel].channelDataStart;
-            qDebug() << "Channel Data Length: " << m_channelInfoRecords[channel].channelDataLength;
-            qDebug() << "---------------------------------------------------";
-
-        }
-        switch (m_header.colormode) {
-        case Bitmap:
-            break;
-        case Grayscale:
-            break;
-        case Indexed:
-            break;
-        case RGB:
-            qDebug()<<"RGB";
-            doRGB(device, io);
-            break;
-        case CMYK:
-            doCMYK(device,io);
-            break;
-        case MultiChannel:
-            break;
-        case DuoTone:
-            break;
-        case Lab:
-            doLAB(device, io);
-            break;
-        case UNKNOWN:
-            break;
-        default:
-            break;
-        }
-
+    switch (m_header.colormode) {
+    case Bitmap:
         break;
-
-    case 1: // RLE
-    {
-        qDebug()<<"RLE ENCODED";
-        quint32 rlelength = 0;
-
-        // The start of the actual channel data is _after_ the RLE rowlengths block
-        if (m_header.version == 1) {
-            start += m_header.nChannels * m_header.height * 2;
-        }
-        else if (m_header.version == 2) {
-            start += m_header.nChannels * m_header.height * 4;
-        }
-
-        for (int channel = 0; channel < m_header.nChannels; channel++) {
-            m_channelOffsets << 0;
-            quint32 sumrlelength = 0;
-            ChannelInfo channelInfo;
-            channelInfo.channelId = channel;
-            channelInfo.channelDataStart = start;
-            channelInfo.compressionType = Compression::RLE;
-            for (int row = 0; row < m_header.height; row++ ) {
-                if (m_header.version == 1) {
-                    psdread(io,(quint16*)&rlelength);
-                }
-                else if (m_header.version == 2) {
-                    psdread(io,&rlelength);
-                }
-                channelInfo.rleRowLengths.append(rlelength);
-                sumrlelength += rlelength;
-            }
-            channelInfo.channelDataLength = sumrlelength;
-            start += channelInfo.channelDataLength;
-            m_channelInfoRecords.append(channelInfo);
-        }
-
-        for (int channel = 0; channel < m_header.nChannels; channel++) {
-            qDebug() << "Channel offset" << m_channelOffsets[channel];
-            qDebug() << "Channel ID: " << m_channelInfoRecords[channel].channelId;
-            qDebug() << "Channel Compression Type: " << m_channelInfoRecords[channel].compressionType;
-            qDebug() << "Channel Data Start: " << m_channelInfoRecords[channel].channelDataStart;
-            qDebug() << "Channel Data Length: " << m_channelInfoRecords[channel].channelDataLength;
-            qDebug() << "Found " << m_channelInfoRecords[channel].rleRowLengths.size() << "rows";
-            qDebug() << "---------------------------------------------------";
-        }
-
-        switch (m_header.colormode) {
-        case Bitmap:
-            break;
-        case Grayscale:
-            break;
-        case Indexed:
-            break;
-        case RGB:
-            doRGB(device,io);
-            break;
-        case CMYK:
-            break;
-        case MultiChannel:
-            break;
-        case DuoTone:
-            break;
-        case Lab:
-            break;
-        case UNKNOWN:
-            break;
-        default:
-            break;
-        }
-
+    case Grayscale:
         break;
-    }
-    case 2: // ZIP without prediction
-        qDebug()<<"ZIP without prediction";
-
-        switch (m_header.colormode) {
-        case Bitmap:
-            break;
-        case Grayscale:
-            break;
-        case Indexed:
-            break;
-        case RGB:
-            break;
-        case CMYK:
-            break;
-        case MultiChannel:
-            break;
-        case DuoTone:
-            break;
-        case Lab:
-            break;
-        case UNKNOWN:
-            break;
-        default:
-            break;
-        }
+    case Indexed:
         break;
-
-    case 3: // ZIP with prediction
-        qDebug()<<"ZIP with prediction";
-
-        switch (m_header.colormode) {
-        case Bitmap:
-            break;
-        case Grayscale:
-            break;
-        case Indexed:
-            break;
-        case RGB:
-            break;
-        case CMYK:
-            break;
-        case MultiChannel:
-            break;
-        case DuoTone:
-            break;
-        case Lab:
-            break;
-        case UNKNOWN:
-            break;
-        default:
-            break;
-        }
-
+    case RGB:
+        qDebug()<<"RGB";
+        doRGB(device, io);
+        break;
+    case CMYK:
+        doCMYK(device,io);
+        break;
+    case MultiChannel:
+        break;
+    case DuoTone:
+        break;
+    case Lab:
+        doLAB(device, io);
+        break;
+    case UNKNOWN:
         break;
     default:
         break;
     }
 
-    //  io->seek(oldPos);
 
-    return true;
+        io->seek(oldPos);
+
+        return true;
 }
 
 bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io){
@@ -711,7 +558,7 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io){
 
             case Compression::Uncompressed:
 
-            {
+            {  qDebug() << "Uncompressed";
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[0]);
                 channelBytes.append(io->read(m_header.width*m_channelSize));
                 // Debug
@@ -721,6 +568,7 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io){
 
             case Compression::RLE:
             {
+                qDebug() << "Compression::RLE";
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[channel]);
                 int uncompressedLength = m_header.width * m_header.channelDepth / 8;
 
@@ -738,6 +586,7 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io){
             break;
 
             case Compression::ZIP:
+                qDebug() << "Compression::ZIP";
                 break;
 
             case Compression::ZIPWithPrediction:
@@ -754,7 +603,7 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io){
         }
 
         qDebug() << "------------------------------------------";
-        qDebug() << "channel offset:"<< m_channelOffsets[channelid] <<": "<<  channelid;
+        // qDebug() << "channel offset:"<< m_channelOffsets[channelid] <<": "<<  channelid;
 
         for (int col = 0; col < m_header.width; col++) {
 

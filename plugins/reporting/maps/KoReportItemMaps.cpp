@@ -30,17 +30,14 @@
 #include <MarbleModel.h>
 #include <QImage>
 #include <QPixmap>
-#include <QWaitCondition>
-#include <reportview.h>
+#include <sys/socket.h>
 
 #define myDebug() kDebug(44021)
-//#define kDebug() kDebug(44021)
 
 KoReportItemMaps::KoReportItemMaps(QDomNode & element)
 {
     myDebug() << "======" << this;
     createProperties();
-    m_report = 0;
     QDomNodeList nl = element.childNodes();
     QString n;
     QDomNode node;
@@ -186,26 +183,25 @@ int KoReportItemMaps::render(OROPage* page,
                              KRScriptHandler *script)
 {
     Q_UNUSED(script)
-
-    if(m_report == 0){
-        myDebug() << "m_report" << m_report << "page:" << page << "section:" << section;
-        if(page){
-            m_oroDoc = page->document();
-            myDebug() << "ORODocument:" << page->document();
-            myDebug() << "reportView:" << page->document()->reportView();
-        }
-        if(section){
-            myDebug() << "ORODocument:" << section->document();
-            myDebug() << "reportView:" << section->document()->reportView();
-        }
-        if(page)
-            m_report = page->document()->reportView();
-        else if(section)
-            m_report = section->document()->reportView();
-    }
     
     myDebug() << this << "data:" << data;
-    deserializeData(data);
+    QString dataKey = data.toString();
+    QStringList dataList = dataKey.split(";");
+    //myDebug() << "splited:" << dataList;
+    Marble::MarbleWidget* marble;
+    
+    if(m_marbles.count(dataKey)==0){ //no such marble yet
+        marble = initMarble();
+        m_marbles.insert(dataKey, marble);
+        connect(marble->model(), SIGNAL(modelChanged()), this, SLOT(requestRedraw()));
+        marble->setCenterLatitude(dataList[0].toDouble());
+        marble->setCenterLongitude(dataList[1].toDouble());
+        marble->zoomView(dataList[2].toInt());
+    }else{
+        marble = m_marbles[dataKey];
+    }
+
+    marble->render(m_mapImage);
     
     OROImage * id = new OROImage();
     id->setImage(*m_mapImage);
@@ -213,53 +209,44 @@ int KoReportItemMaps::render(OROPage* page,
 
     id->setPosition(m_pos.toScene() + offset);
     id->setSize(m_size.toScene());
+    OroIds oroIds;
     if (page) {
         page->addPrimitive(id);
+        oroIds.pageId = id;
+        myDebug() << "page:id=" <<id;
     }
     
     if (section) {
         OROImage *i2 = dynamic_cast<OROImage*>(id->clone());
         i2->setPosition(m_pos.toPoint());
         section->addPrimitive(i2);
+        oroIds.sectionId = i2;
+        myDebug() << "section:id=" << i2;
     }
     
     if (!page) {
         delete id;
+        oroIds.pageId=0;
     }
+    oroIds.marbleWidget = marble;
+    m_marbleImgs[marble->model()]=oroIds;
     
     return 0; //Item doesnt stretch the section height
 }
 
-void KoReportItemMaps::deserializeData(const QVariant& serialized)
-{
-    myDebug() << "serializedData:" << serialized;
-    QString dataKey = serialized.toString();
-    QStringList dataList = dataKey.split(";");
-    myDebug() << "splited:" << dataList;
-    Marble::MarbleWidget* marble;
-    if(dataList.length()==3){
-        if(m_marbles.count(dataKey)==0){ //no such marble yet
-            marble = initMarble();
-            m_marbles.insert(dataKey, marble);
-            connect(marble->model(), SIGNAL(modelChanged()), this, SLOT(requestRedraw()));
-            marble->setCenterLatitude(dataList[0].toDouble());
-            marble->setCenterLongitude(dataList[1].toDouble());
-            marble->zoomView(dataList[2].toInt());
-        }else{
-            marble = m_marbles[dataKey];
-        }
-        marble->render(m_mapImage);
-    }
-
-    
-}
 void KoReportItemMaps::requestRedraw()
 {
-    myDebug() << "=oroDoc->reportView" << m_oroDoc->reportView();
-    if(m_report){
-        myDebug() << "requesting Refresh";
-        m_report->refresh();
-    }
+    myDebug() << sender();
+    QImage tmpImg(*m_mapImage);
+    Marble::MarbleModel* marbleModel = dynamic_cast<Marble::MarbleModel*>(sender());
+    OroIds *oroIds = &m_marbleImgs[marbleModel];
+    oroIds->marbleWidget->render(&tmpImg);
+    if(oroIds->pageId)
+        oroIds->pageId->setImage(tmpImg);
+    if(oroIds->sectionId)
+        oroIds->sectionId->setImage(tmpImg);
+    myDebug() << "pageId sectionId marbleWidget";
+    myDebug() << oroIds->pageId << oroIds->sectionId << oroIds->marbleWidget;
 }
 
 

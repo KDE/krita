@@ -30,15 +30,9 @@
 #include <QPicture>
 
 #include <reportpageoptions.h>
-
 #include "krreportdata.h"
 #include "KoReportItemBase.h"
 #include "koreport_export.h"
-
-//#include <reportview.h>
-namespace KPlato{
-    class ReportView;
-}
 
 class ORODocument;
 class OROPage;
@@ -82,17 +76,11 @@ public:
         return m_pageOptions;
     };
 
-    void setReportView(KPlato::ReportView* reportView);
-    KPlato::ReportView* reportView() const {
-        return m_parentRepView;
-    }
-
 protected:
     QString m_title;
     QList<OROPage*> m_pages;
     QList<OROSection*> m_sections;
     ReportPageOptions m_pageOptions;
-    KPlato::ReportView* m_parentRepView;
 };
 
 //

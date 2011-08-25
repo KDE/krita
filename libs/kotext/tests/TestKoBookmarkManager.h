@@ -33,6 +33,7 @@ private slots:
 
     void testCreation();
     void testRetrieve();
+    void testRetrieveByEndmark();
     void testInsert();
     void testRemove();
     void testRename();

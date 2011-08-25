@@ -25,8 +25,11 @@
 #include <QTextDocument>
 #include <QList>
 
+#include <KoTextEditor.h>
+#include <KoInlineTextObjectManager.h>
 #include <KoBookmarkManager.h>
 #include <KoBookmark.h>
+#include <KoTextDocument.h>
 
 void TestKoBookmarkManager::testCreation()
 {
@@ -57,6 +60,44 @@ void TestKoBookmarkManager::testRetrieve()
 
     KoBookmark *bm = manager.retrieveBookmark("start!");
     Q_ASSERT(bm == startmark);
+}
+
+void TestKoBookmarkManager::testRetrieveByEndmark()
+{
+    QObject parent;
+
+    // create a document
+    QTextDocument doc;
+
+    KoInlineTextObjectManager inlineObjectManager(&parent);
+    KoTextDocument textDoc(&doc);
+    textDoc.setInlineTextObjectManager(&inlineObjectManager);
+
+    KoTextEditor editor(&doc);
+
+    // enter some lorem ipsum
+    editor.insertText("bla bla bla");
+
+    KoBookmark *startmark = new KoBookmark(editor.document());
+    startmark->setType(KoBookmark::StartBookmark);
+    startmark->setName("start!");
+    editor.insertInlineObject(startmark);
+
+    editor.insertText("bla bla bla");
+
+    KoBookmark *endmark = new KoBookmark(editor.document());
+    endmark->setType(KoBookmark::EndBookmark);
+    startmark->setEndBookmark(endmark);
+    Q_ASSERT(endmark->name() == startmark->name());
+    editor.insertInlineObject(endmark);
+    Q_ASSERT(endmark->name() == startmark->name());
+
+    editor.insertText("bla bla bla");
+
+    KoBookmark *mark= inlineObjectManager.bookmarkManager()->retrieveBookmark(endmark->name());
+    Q_ASSERT(mark);
+    Q_ASSERT(mark == startmark);
+    Q_ASSERT(mark != endmark);
 }
 
 void TestKoBookmarkManager::testInsert()

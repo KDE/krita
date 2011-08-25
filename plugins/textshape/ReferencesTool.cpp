@@ -121,8 +121,8 @@ void ReferencesTool::insertCitation()
 
 void ReferencesTool::insertBibliography()
 {
-    InsertBibliographyDialog *dialog = new InsertBibliographyDialog(textEditor(), canvas()->canvasWidget());
-    dialog->show();
+    //InsertBibliographyDialog *dialog = new InsertBibliographyDialog(textEditor(), canvas()->canvasWidget());
+    //dialog->show();
 }
 
 void ReferencesTool::formatTableOfContents()

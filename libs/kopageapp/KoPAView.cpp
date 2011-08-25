@@ -209,7 +209,6 @@ void KoPAView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 
         if (!shape) {
             kWarning(30003) << "Could not create a shape from the image";
-            delete shape;
             return;
         }
         shape->setPosition(pos);

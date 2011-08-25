@@ -29,6 +29,8 @@
 #include "KoShapeFactoryBase.h"
 #include "KoDeferredShapeFactoryBase.h"
 #include "KoShape.h"
+#include "KoShapeLoadingContext.h"
+#include <KoOdfLoadingContext.h>
 #include <KoProperties.h>
 
 #include <kdebug.h>
@@ -63,7 +65,7 @@ public:
     QString tooltip;
     QString iconName;
     int loadingPriority;
-    QList<QPair<QString, QStringList> > odfElements; // odf name space -> odf element names
+    QList<QPair<QString, QStringList> > xmlElements; // xml name space -> xml element names
     bool hidden;
     QList<KoResourceManager *> resourceManagers;
 };
@@ -106,7 +108,7 @@ int KoShapeFactoryBase::loadingPriority() const
 
 QList<QPair<QString, QStringList> > KoShapeFactoryBase::odfElements() const
 {
-    return d->odfElements;
+    return d->xmlElements;
 }
 
 void KoShapeFactoryBase::addTemplate(const KoShapeTemplate &params)
@@ -156,15 +158,15 @@ void KoShapeFactoryBase::setLoadingPriority(int priority)
     d->loadingPriority = priority;
 }
 
-void KoShapeFactoryBase::setOdfElementNames(const QString & nameSpace, const QStringList & names)
+void KoShapeFactoryBase::setXmlElementNames(const QString & nameSpace, const QStringList & names)
 {
-    d->odfElements.clear();
-    d->odfElements.append(QPair<QString, QStringList>(nameSpace, names));
+    d->xmlElements.clear();
+    d->xmlElements.append(QPair<QString, QStringList>(nameSpace, names));
 }
 
-void KoShapeFactoryBase::setOdfElements(const QList<QPair<QString, QStringList> > &elementNamesList)
+void KoShapeFactoryBase::setXmlElements(const QList<QPair<QString, QStringList> > &elementNamesList)
 {
-    d->odfElements = elementNamesList;
+    d->xmlElements = elementNamesList;
 }
 
 bool KoShapeFactoryBase::hidden() const
@@ -177,7 +179,7 @@ void KoShapeFactoryBase::setHidden(bool hidden)
     d->hidden = hidden;
 }
 
-void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager *manager)
+void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager *manager) const
 {
     d->resourceManagers.append(manager);
     connect(manager, SIGNAL(destroyed(QObject *)), this, SLOT(pruneDocumentResourceManager(QObject*)));
@@ -213,6 +215,26 @@ KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
     return createDefaultShape(documentResources);
 }
 
+KoShape *KoShapeFactoryBase::createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    KoShape *shape = createDefaultShape(context.documentResourceManager());
+    if (!shape)
+        return 0;
+
+    if (shape->shapeId().isEmpty())
+        shape->setShapeId(id());
+
+    context.odfLoadingContext().styleStack().save();
+    bool loaded = shape->loadOdf(element, context);
+    context.odfLoadingContext().styleStack().restore();
+
+    if (!loaded) {
+        delete shape;
+        return 0;
+    }
+
+    return shape;
+}
 
 void KoShapeFactoryBase::getDeferredPlugin()
 {

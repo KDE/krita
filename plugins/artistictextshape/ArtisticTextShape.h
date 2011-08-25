@@ -24,18 +24,20 @@
 #include "ArtisticTextRange.h"
 #include <KoShape.h>
 #include <KoPostscriptPaintDevice.h>
-
+#include <SvgShape.h>
 #include <QtGui/QFont>
 
 class QPainter;
 class KoPathShape;
+class ArtisticTextLoadingContext;
+class SvgGraphicsContext;
 
 #define ArtisticTextShapeID "ArtisticText"
 
 /// Character position within text shape (range index, range character index)
 typedef QPair<int, int> CharIndex;
 
-class ArtisticTextShape : public KoShape
+class ArtisticTextShape : public KoShape, public SvgShape
 {
 public:
     enum TextAnchor { AnchorStart, AnchorMiddle, AnchorEnd };
@@ -63,6 +65,10 @@ public:
     virtual void setSize( const QSizeF &size );
     /// reimplemented
     virtual QPainterPath outline() const;
+    /// reimplemented from SvgShape
+    virtual bool saveSvg(SvgSavingContext &context);
+    /// reimplemented from SvgShape
+    virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
 
     /// Sets the plain text to display
     void setPlainText(const QString &newText);
@@ -202,6 +208,15 @@ private:
 
     /// Returns the bounding box for an empty text shape
     QRectF nullBoundBox() const;
+
+    /// Saves svg font
+    void saveSvgFont(const QFont &font, SvgSavingContext &context);
+    /// Saves svg text range
+    void saveSvgTextRange(const ArtisticTextRange &range, SvgSavingContext &context, bool saveFont, qreal baselineOffset);
+    /// Parse nested text ranges
+    void parseTextRanges(const KoXmlElement &element, SvgLoadingContext &context, ArtisticTextLoadingContext &textContext);
+    /// Creates text range
+    ArtisticTextRange createTextRange(const QString &text, ArtisticTextLoadingContext &context, SvgGraphicsContext *gc);
 
     QList<ArtisticTextRange> m_ranges;
     KoPostscriptPaintDevice m_paintDevice;

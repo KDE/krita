@@ -34,8 +34,12 @@ RectangleShapeFactory::RectangleShapeFactory()
     setToolTip(i18n("A rectangle"));
     setIcon("rectangle-shape");
     setFamily("geometric");
-    setOdfElementNames(KoXmlNS::draw, QStringList("rect"));
     setLoadingPriority(1);
+
+    QList<QPair<QString, QStringList> > elementNamesList;
+    elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("rect")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("rect")));
+    setXmlElements(elementNamesList);
 }
 
 KoShape *RectangleShapeFactory::createDefaultShape(KoResourceManager *) const

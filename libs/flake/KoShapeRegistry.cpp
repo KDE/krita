@@ -31,6 +31,7 @@
 #include "KoShapeGroup.h"
 #include "KoShapeLayer.h"
 #include "KoUnavailShape.h"
+#include "SvgShapeFactory.h"
 
 #include <KoPluginLoader.h>
 #include <KoXmlReader.h>
@@ -53,7 +54,6 @@ public:
     void init(KoShapeRegistry *q);
 
     KoShape *createShapeInternal(const KoXmlElement &fullElement, KoShapeLoadingContext &context, const KoXmlElement &element) const;
-
 
     // Map namespace,tagname to priority:factory
     QHash<QPair<QString, QString>, QMultiMap<int, KoShapeFactoryBase*> > factoryMap;
@@ -86,9 +86,12 @@ void KoShapeRegistry::Private::init(KoShapeRegistry *q)
                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
                                      config);
 
-    // Also add our hard-coded basic shape
+    // Also add our hard-coded basic shapes
     q->add(new KoPathShapeFactory(QStringList()));
     q->add(new KoConnectionShapeFactory());
+    // As long as there is no shape dealing with embedded svg images
+    // we add the svg shape factory here by default
+    q->add(new SvgShapeFactory);
 
     // Now all shape factories are registered with us, determine their
     // assocated odf tagname & priority and prepare ourselves for
@@ -244,7 +247,7 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
 #ifndef NDEBUG
     kDebug(30006) << "Supported factories for=" << p;
     foreach (KoShapeFactoryBase *f, factories)
-        kDebug(30006) << f->id() << f->name();
+        kDebug(30006) << f->id() << f->name() << f->loadingPriority();
 #endif
 
     // Loop through all shape factories. If any of them supports this
@@ -262,16 +265,8 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
     for (int i = factories.size() - 1; i >= 0; --i) {
         KoShapeFactoryBase * factory = factories[i];
         if (factory->supports(element, context)) {
-            KoShape *shape = factory->createDefaultShape(context.documentResourceManager());
-
-            if (shape->shapeId().isEmpty())
-                shape->setShapeId(factory->id());
-
-            context.odfLoadingContext().styleStack().save();
-            bool loaded = shape->loadOdf(fullElement, context);
-            context.odfLoadingContext().styleStack().restore();
-
-            if (loaded) {
+            KoShape *shape = factory->createShapeFromOdf(fullElement, context);
+            if (shape) {
                 kDebug(30006) << "Shape found for factory " << factory->id() << factory->name();
                 // we return the top-level most shape as thats the one that we'll have to
                 // add to the KoShapeManager for painting later (and also to avoid memory leaks)
@@ -282,12 +277,25 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
 
                 return shape;
             }
-
             // Maybe a shape with a lower priority can load our
             // element, but this attempt has failed.
-            delete shape;
         }
     }
 
     return 0;
+}
+
+QList<KoShapeFactoryBase*> KoShapeRegistry::factoriesForElement(const QString &nameSpace, const QString &elementName)
+{
+    // Pair of namespace, tagname
+    QPair<QString, QString> p = QPair<QString, QString>(nameSpace, elementName);
+
+    QMultiMap<int, KoShapeFactoryBase*> priorityMap = d->factoryMap.value(p);
+    QList<KoShapeFactoryBase*> shapeFactories;
+    // sort list by priority
+    foreach(KoShapeFactoryBase *f, priorityMap.values()) {
+        shapeFactories.prepend(f);
+    }
+
+    return shapeFactories;
 }

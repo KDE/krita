@@ -69,8 +69,11 @@ class KoTextEditor;
  * FIXME: createXmlId() should consult with the Calligra codebase when
  * generating new xml:id values during save.
  */
-class KOTEXT_EXPORT KoTextInlineRdf
+class KOTEXT_EXPORT KoTextInlineRdf : public QObject
 {
+
+    Q_OBJECT
+
 public:
     KoTextInlineRdf(QTextDocument *doc, const QTextBlock &b);
     KoTextInlineRdf(QTextDocument *doc, KoBookmark *b);
@@ -138,7 +141,7 @@ public:
     /**
      * Create a new and unique xml:id
      */
-    QString createXmlId(KoXmlWriter *writer = 0);
+    QString createXmlId();
 
 private:
 

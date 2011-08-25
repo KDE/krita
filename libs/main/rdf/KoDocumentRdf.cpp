@@ -106,13 +106,6 @@ KoDocumentRdf *KoDocumentRdf::fromResourceManager(KoCanvasBase *host)
     return static_cast<KoDocumentRdf*>(rm->resource(KoText::DocumentRdf).value<void*>());
 }
 
-
-KoDocument *KoDocumentRdf::document() const
-{
-    return qobject_cast<KoDocument *>(parent());
-}
-
-
 KoRdfPrefixMapping *KoDocumentRdf::prefixMapping() const
 {
     return d->prefixMapping;
@@ -313,8 +306,6 @@ bool KoDocumentRdf::saveRdf(KoStore *store, KoXmlWriter *manifestWriter, const S
     }
     RDEBUG << "saving external file:" << fileName;
     if (!store->open(fileName)) {
-        document()->setErrorMessage(
-            i18n("Not able to write '%1'. Partition full?", (fileName)));
         return false;
     }
     KoStoreDevice dev(store);
@@ -1467,9 +1458,6 @@ void KoDocumentRdf::insertReflow(QMap<int, reflowItem> &col, KoRdfSemanticItem *
 
 void KoDocumentRdf::applyReflow(const QMap<int, reflowItem> &col)
 {
-    if (!document()) {
-        return;
-    }
     QMapIterator< int, reflowItem > i(col);
     i.toBack();
     while (i.hasPrevious()) {

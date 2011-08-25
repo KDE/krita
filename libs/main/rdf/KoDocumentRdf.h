@@ -159,15 +159,6 @@ public:
     static KoDocumentRdf *fromResourceManager(KoCanvasBase *host);
 
     /**
-     * Document containing this Rdf
-     *
-     * There is a 1-1 relationship between KoDocument and a
-     * KoDocumentRdf. Though not every KoDocument has a KoDocumentRdf
-     * object.
-     */
-    KoDocument *document() const;
-
-    /**
      * Load from an OASIS document
      * @param metaDoc the QDomDocument with the metaInformation
      * @return true if success

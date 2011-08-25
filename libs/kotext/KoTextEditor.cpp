@@ -111,8 +111,8 @@ void KoTextEditor::Private::documentCommandAdded()
     {
     public:
         UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
-        : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
-        m_document(document)
+            : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
+              m_document(document)
         {}
 
         void undo() {
@@ -241,7 +241,7 @@ void KoTextEditor::Private::runDirectionUpdater()
             KoText::Direction newDirection = KoText::AutoDirection;
             QTextBlockFormat format = block.blockFormat();
             KoText::Direction dir =
-                static_cast<KoText::Direction>(format.intProperty(KoParagraphStyle::TextProgressionDirection));
+                    static_cast<KoText::Direction>(format.intProperty(KoParagraphStyle::TextProgressionDirection));
 
             if (dir == KoText::AutoDirection || dir == KoText::PerhapsLeftRightTopBottom
                     || dir == KoText::PerhapsRightLeftTopBottom
@@ -259,9 +259,9 @@ void KoTextEditor::Private::runDirectionUpdater()
                 }
                 if (!isBidiDocument) {
                     if ((QApplication::isLeftToRight() && (newDirection == KoText::RightLeftTopBottom
-                                    || newDirection == KoText::PerhapsRightLeftTopBottom))
+                                                           || newDirection == KoText::PerhapsRightLeftTopBottom))
                             || (QApplication::isRightToLeft() && (newDirection == KoText::LeftRightTopBottom
-                                    || newDirection == KoText::PerhapsLeftRightTopBottom))) {
+                                                                  || newDirection == KoText::PerhapsLeftRightTopBottom))) {
                         isBidiDocument = true;
                         emit q->isBidiUpdated();
                     }
@@ -281,7 +281,7 @@ void KoTextEditor::Private::clearCharFormatProperty(int property)
             format.clearProperty(propertyId);
         }
 
-    int propertyId;
+        int propertyId;
     };
     PropertyWiper wiper(property);
     CharFormatVisitor::visitSelection(q, wiper,QString(), false);
@@ -298,7 +298,7 @@ void KoTextEditor::Private::clearCharFormatProperty(int property)
 
 KoTextEditor::KoTextEditor(QTextDocument *document)
     : QObject(document),
-    d (new Private(this, document))
+      d (new Private(this, document))
 {
     connect (d->document, SIGNAL (undoCommandAdded()), this, SLOT (documentCommandAdded()));
 }
@@ -1044,7 +1044,7 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
             // The 3 first are entire cells, the fourth is within a cell
 
             if (d->caret.selectionStart() <= table->lastPosition()
-                && d->caret.selectionEnd() >= table->firstPosition()) {
+                    && d->caret.selectionEnd() >= table->firstPosition()) {
                 // We have a selection somewhere 
                 QTextTableCell cell1 = table->cellAt(d->caret.selectionStart());
                 QTextTableCell cell2 = table->cellAt(d->caret.selectionEnd());
@@ -1065,7 +1065,7 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
 
                     for (int r = selectionRow; r < selectionRow + selectionRowSpan; r++) {
                         for (int c = selectionColumn; c < selectionColumn + 
-                                    selectionColumnSpan; c++) {
+                             selectionColumnSpan; c++) {
                             QTextTableCell cell = table->cellAt(r,c);
                             if (cell.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
                                 return true;
@@ -1092,7 +1092,7 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
             // TODO build up the section stack 
 
             if (d->caret.selectionStart() < block.position() + block.length()
-                && d->caret.selectionEnd() >= block.position()) {
+                    && d->caret.selectionEnd() >= block.position()) {
                 // We have a selection somewhere 
                 // TODO return true if block is protected by section
             }
@@ -1129,7 +1129,7 @@ void KoTextEditor::insertBlock()
         return;
     }
 
-//TODO
+    //TODO
 }
 
 void KoTextEditor::insertBlock(const QTextBlockFormat &format)
@@ -1139,7 +1139,7 @@ void KoTextEditor::insertBlock(const QTextBlockFormat &format)
     }
 
     Q_UNUSED(format)
-//TODO
+    //TODO
 }
 
 void KoTextEditor::insertBlock(const QTextBlockFormat &format, const QTextCharFormat &charFormat)
@@ -1150,7 +1150,7 @@ void KoTextEditor::insertBlock(const QTextBlockFormat &format, const QTextCharFo
 
     Q_UNUSED(format)
     Q_UNUSED(charFormat)
-//TODO
+    //TODO
 }
 
 void KoTextEditor::insertFragment(const QTextDocumentFragment &fragment)
@@ -1160,7 +1160,7 @@ void KoTextEditor::insertFragment(const QTextDocumentFragment &fragment)
     }
 
     Q_UNUSED(fragment)
-//TODO
+    //TODO
 }
 
 void KoTextEditor::insertTable(int rows, int columns)
@@ -1450,7 +1450,7 @@ void KoTextEditor::insertText(const QString &text, const QTextCharFormat &format
 
     Q_UNUSED(text)
     Q_UNUSED(format)
-//TODO
+    //TODO
 }
 
 void KoTextEditor::mergeBlockCharFormat(const QTextCharFormat &modifier)
@@ -1460,7 +1460,7 @@ void KoTextEditor::mergeBlockCharFormat(const QTextCharFormat &modifier)
     }
 
     Q_UNUSED(modifier)
-//TODO
+    //TODO
 }
 
 void KoTextEditor::mergeBlockFormat(const QTextBlockFormat &modifier)
@@ -1470,7 +1470,7 @@ void KoTextEditor::mergeBlockFormat(const QTextBlockFormat &modifier)
     }
 
     Q_UNUSED(modifier)
-//TODO
+    //TODO
 }
 
 void KoTextEditor::mergeCharFormat(const QTextCharFormat &modifier)
@@ -1480,7 +1480,7 @@ void KoTextEditor::mergeCharFormat(const QTextCharFormat &modifier)
     }
 
     Q_UNUSED(modifier)
-//TODO
+    //TODO
 }
 
 bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode, int n)
@@ -1577,7 +1577,70 @@ void KoTextEditor::removeSelectedText()
         return;
     }
 
+    // Remove the inline objects in the current selection
+    KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(d->document).inlineTextObjectManager();
+    KoBookmarkManager *bookmarkManager = inlineObjectManager->bookmarkManager();
+    QTextCursor cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), selectionStart());
+
+    // however, if bookmarks span beyond the selection, we shouldn't remove the bookmark inline objects
+    // but place them back after we've removed the selection.
+    QList<KoBookmark *> bookmarksToBeMoved;
+
+    while (!cursor.isNull() && cursor.position() <= selectionEnd()) {
+
+        QTextCharFormat fmt = cursor.charFormat();
+        KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
+
+        KoBookmark *bookmark = dynamic_cast<KoBookmark*>(obj);
+        if (bookmark &&
+                (     ( bookmark->type() == KoBookmark::StartBookmark &&
+                        bookmark->endBookmark()->position() > selectionEnd()) ||
+                      (    bookmark->type() == KoBookmark::EndBookmark &&
+                           bookmarkManager->retrieveBookmark(bookmark->name())->position() < selectionStart()
+                           )
+                      )
+                )
+        {
+            // start or end bookmarks with the end or start...
+            bookmarksToBeMoved << bookmark;
+        }
+        else {
+            if (bookmark) {
+                bookmarkManager->remove(bookmark->name());
+            }
+            inlineObjectManager->removeInlineObject(obj);
+            delete obj; // also deletes the rdf...
+        }
+        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position() + 1);
+    }
+
     d->caret.removeSelectedText();
+
+    int currentPosition = d->caret.position();
+
+    // now restore the bookmarks that spanned beyond the selection we removed
+    foreach(KoBookmark *bookmark, bookmarksToBeMoved) {
+
+        QTextCharFormat oldCf = d->caret.charFormat();
+        // create a new format out of the old so that the current formatting is
+        // also used for the inserted object.  KoVariables render text too ;)
+        QTextCharFormat cf(oldCf);
+        cf.setObjectType(QTextFormat::UserObject + 1);
+        cf.setProperty(KoInlineTextObjectManager::InlineInstanceId, bookmark->id());
+        cursor.insertText(QString(QChar::ObjectReplacementCharacter), cf);
+        // reset to use old format so that the InlineInstanceId is no longer set.
+        cursor.setCharFormat(oldCf);
+    }
+
+    // and, of course, every inline object after the current position has the wrong position
+    cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), currentPosition);
+    while (!cursor.isNull()) {
+        QTextCharFormat fmt = cursor.charFormat();
+        KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
+        obj->updatePosition(d->document, cursor.position(), fmt);
+        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position() + 1);
+    }
+
     emit cursorPositionChanged();
 }
 
@@ -1614,7 +1677,7 @@ void KoTextEditor::setBlockCharFormat(const QTextCharFormat &format)
     }
 
     Q_UNUSED(format)
-//TODO
+    //TODO
 }
 
 void KoTextEditor::setBlockFormat(const QTextBlockFormat &format)
@@ -1624,7 +1687,7 @@ void KoTextEditor::setBlockFormat(const QTextBlockFormat &format)
     }
 
     Q_UNUSED(format)
-//TODO
+    //TODO
 }
 
 void KoTextEditor::setCharFormat(const QTextCharFormat &format)
@@ -1634,7 +1697,7 @@ void KoTextEditor::setCharFormat(const QTextCharFormat &format)
     }
 
     Q_UNUSED(format)
-//TODO
+    //TODO
 }
 
 void KoTextEditor::setTableFormat(const QTextTableFormat &format)
@@ -1644,7 +1707,7 @@ void KoTextEditor::setTableFormat(const QTextTableFormat &format)
     }
 
     Q_UNUSED(format)
-//TODO
+    //TODO
 }
 
 void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode m)

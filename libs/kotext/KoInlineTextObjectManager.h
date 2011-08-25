@@ -42,8 +42,11 @@ class QAction;
 class KOTEXT_EXPORT KoInlineTextObjectManager : public QObject
 {
     Q_OBJECT
-// TODO, when to delete the inlineObject s
 public:
+    enum Properties {
+        InlineInstanceId = 577297549 // If you change this, don't forget to change KoCharacterStyle.h
+    };
+
     /// Constructor
     explicit KoInlineTextObjectManager(QObject *parent = 0);
     virtual ~KoInlineTextObjectManager();
@@ -155,9 +158,7 @@ signals:
     void propertyChanged(int, const QVariant &variant);
 
 private:
-    enum Properties {
-        InlineInstanceId = 577297549 // If you change this, don't forget to change KoCharacterStyle.h
-    };
+
 
     QHash<int, KoInlineObject*> m_objects;
     QList<KoInlineObject*> m_listeners; // holds objects also in m_objects, but which want propertyChanges

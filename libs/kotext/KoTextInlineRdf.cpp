@@ -33,6 +33,7 @@
 #include <kdebug.h>
 #include <QTextCursor>
 #include <QUuid>
+#include <QTextDocument>
 
 #ifdef SHOULD_BUILD_RDF
 #include <Soprano/Soprano>
@@ -112,22 +113,26 @@ public:
 };
 
 KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, const QTextBlock &b)
-        : d(new Private(doc, b))
+        : QObject(doc)
+        , d(new Private(doc, b))
 {
 }
 
 KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, KoBookmark *b)
-        : d(new Private(doc, b))
+        : QObject(doc)
+        , d(new Private(doc, b))
 {
 }
 
 KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, KoTextMeta *b)
-        : d(new Private(doc, b))
+        : QObject(doc)
+        , d(new Private(doc, b))
 {
 }
 
 KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, const QTextTableCell &b)
-        : d(new Private(doc, b))
+        :QObject(doc)
+        ,  d(new Private(doc, b))
 {
 }
 

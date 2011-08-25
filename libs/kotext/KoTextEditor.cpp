@@ -1579,6 +1579,7 @@ void KoTextEditor::removeSelectedText()
     }
 
     // TODO: make the deleting of the inline objects undoable.
+    // TODO: make work with complex selections
 
     // Remove the inline objects in the current selection
     KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(d->document).inlineTextObjectManager();

@@ -25,6 +25,11 @@
 
 #include <QtCore/QObject>
 
+class QTextDocument;
+class KoTextEditor;
+class KoDocumentRdf;
+class QString;
+
 class RdfTest : public QObject
 {
     Q_OBJECT
@@ -35,6 +40,14 @@ private slots:
     void testFindMarkers();
     void testEditAndFindMarkers();
     void testRemoveMarkers();
+
+private:
+
+    // @return the xml id for the inserted item
+    QString insertSemItem(KoTextEditor &editor,
+                          KoDocumentRdf &rdfDoc,
+                          QObject &parent,
+                          const QString name);
 };
 
 #endif // RDF_TEST_H

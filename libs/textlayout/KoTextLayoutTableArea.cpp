@@ -222,7 +222,7 @@ bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
         d->rowPositions[cursor->row] = d->rowPositions[d->headerRows] + d->headerOffsetY;
 
         // headerOffsetX should also be set
-        d->headerOffsetX = d->columnPositions[0] - cursor->headerPositionX;
+        d->headerOffsetX = cursor->headerPositionX - d->columnPositions[0];
     }
 
     bool complete = first;

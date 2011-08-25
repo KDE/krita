@@ -175,47 +175,47 @@ bool KoTextEditor::Private::deleteInlineObjects(bool backwards)
 {
     Q_UNUSED(backwards)
     return false;
-    // TODO don't just blindly delete, make this a command so we can undo it later.
-    // Also note that the below code needs unit testing since I found some issues already
-    /*
-    QTextCursor cursor(*d->caret);
 
-    KoInlineTextObjectManager *manager = KoTextocument(d->document).inlineObjectTextManager();
-    KoInlineObject *object;
-    bool found = false;
+//    // TODO don't just blindly delete, make this a command so we can undo it later.
+//    // Also note that the below code needs unit testing since I found some issues already
+//    QTextCursor cursor(*d->caret);
 
-    if (d->caret->hasSelection()) {
-   QString selected = cursor.selectedText();
-   cursor.setPosition(cursor.selectionStart() + 1);
-   int position = cursor.position();
-   const QChar *data = selected.constData();
-   for (int i = 0; i < selected.length(); i++) {
-   if (data->unicode() == QChar::ObjectReplacementCharacter) {
-   found = true;
-   cursor.setPosition(position);
-   object = manager->inlineTextObject(cursor);
+//    KoInlineTextObjectManager *manager = KoTextocument(d->document).inlineObjectTextManager();
+//    KoInlineObject *object;
+//    bool found = false;
 
-   if (object)
-   manager->removeInlineObject(cursor);
-}
-// if there is an inline object, the InlineTextObjectManager will also delete the char
-// so only need to update position if inline object not found
-else
-    position++;
-data++;
-}
-} else {
-    if (!backward)
-    cursor.movePosition(QTextCursor::Right);
-    object = manager->inlineTextObject(cursor);
+//    if (d->caret->hasSelection()) {
+//        QString selected = cursor.selectedText();
+//        cursor.setPosition(cursor.selectionStart() + 1);
+//        int position = cursor.position();
+//        const QChar *data = selected.constData();
+//        for (int i = 0; i < selected.length(); i++) {
+//            if (data->unicode() == QChar::ObjectReplacementCharacter) {
+//                found = true;
+//                cursor.setPosition(position);
+//                object = manager->inlineTextObject(cursor);
 
-    if (object) {
-   manager->removeInlineObject(cursor);
-   found = true;
-}
-}
-return found;
-*/
+//                if (object)
+//                    manager->removeInlineObject(cursor);
+//            }
+//            // if there is an inline object, the InlineTextObjectManager will also delete the char
+//            // so only need to update position if inline object not found
+//            else
+//                position++;
+//            data++;
+//        }
+//    } else {
+//        if (!backward)
+//            cursor.movePosition(QTextCursor::Right);
+//        object = manager->inlineTextObject(cursor);
+
+//        if (object) {
+//            manager->removeInlineObject(cursor);
+//            found = true;
+//        }
+//    }
+//    return found;
+
 }
 
 void KoTextEditor::Private::deleteSelection()
@@ -1573,9 +1573,11 @@ int KoTextEditor::position() const
 
 void KoTextEditor::removeSelectedText()
 {
-        if (isEditProtected()) {
-            return;
-        }
+    if (isEditProtected()) {
+        return;
+    }
+
+    // TODO: make the deleting of the inline objects undoable.
 
     // Remove the inline objects in the current selection
     KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(d->document).inlineTextObjectManager();

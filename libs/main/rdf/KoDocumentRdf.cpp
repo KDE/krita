@@ -1308,7 +1308,7 @@ Soprano::Model *KoDocumentRdf::findStatements(KoTextEditor *handler, int depth)
 KoTextInlineRdf *KoDocumentRdf::findInlineRdfByID(const QString &xmlid) const
 {
     RDEBUG << "xxx xmlid:" << xmlid;
-    foreach (KoTextInlineRdf *sp, d->inlineRdfObjects) {
+    foreach (KoTextInlineRdf *sp, d->inlineRdfObjects.keys()) {
         RDEBUG << "sp:" << (void*)sp;
         if (sp->xmlId() == xmlid) {
             return sp;
@@ -1324,7 +1324,7 @@ void KoDocumentRdf::rememberNewInlineRdfObject(KoTextInlineRdf *inlineRdf)
         return;
     }
     connect(inlineRdf, SIGNAL(destroyed(QObject*)), this, SLOT(forgetInlineRdf(QObject*)));
-    d->inlineRdfObjects << inlineRdf;
+    d->inlineRdfObjects[inlineRdf] = inlineRdf->xmlId();
 }
 
 void KoDocumentRdf::updateInlineRdfStatements(QTextDocument *qdoc)
@@ -1362,7 +1362,7 @@ void KoDocumentRdf::updateInlineRdfStatements(QTextDocument *qdoc)
     d->model->removeAllStatements(Soprano::Node(), Soprano::Node(), Soprano::Node(), context);
     RDEBUG << "adding, count:" << d->inlineRdfObjects.size();
     // add statements from inlineRdfObjects to model
-    foreach (KoTextInlineRdf *sp, d->inlineRdfObjects) {
+    foreach (KoTextInlineRdf *sp, d->inlineRdfObjects.keys()) {
         Soprano::Statement st = toStatement(sp);
         if (st.isValid()) {
             d->model->addStatement(st);
@@ -1487,5 +1487,14 @@ void KoDocumentRdf::setUserStyleSheetList(const QString& className,const QList<K
 
 void KoDocumentRdf::forgetInlineRdf(QObject *obj)
 {
-    d->inlineRdfObjects.removeAll(qobject_cast<KoTextInlineRdf*>(obj));
+    QString xmlid = d->inlineRdfObjects[qobject_cast<KoTextInlineRdf*>(obj)];
+    Soprano::Statement st(
+                Soprano::Node(),
+                Node::createResourceNode(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")),
+                Node::createLiteralNode(xmlid),
+                Soprano::Node());
+
+    d->model->removeAllStatements(st);
+
+    d->inlineRdfObjects.take(qobject_cast<KoTextInlineRdf*>(obj));
 }

@@ -277,7 +277,7 @@ void KoTextEditor::Private::clearCharFormatProperty(int property)
     class PropertyWiper : public CharFormatVisitor
     {
     public:
-        PropertyWiper(int propertyId) : propertyId(propertyId) {};
+        PropertyWiper(int propertyId) : propertyId(propertyId) {}
         void visit(QTextCharFormat &format) const {
             format.clearProperty(propertyId);
         }

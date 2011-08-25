@@ -36,6 +36,7 @@ class TestKoTextEditor : public QObject
 
 private slots:
 
+    void testInsertInlineObject();
     void testRemoveSelectedText();
 };
 

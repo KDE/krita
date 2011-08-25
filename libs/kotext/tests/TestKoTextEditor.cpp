@@ -41,6 +41,37 @@ const QString lorem(
     "deserunt mollit anim id est laborum.\n"
     );
 
+void TestKoTextEditor::testInsertInlineObject()
+{
+    QObject parent;
+
+    // create a document
+    QTextDocument doc;
+
+    KoInlineTextObjectManager inlineObjectManager(&parent);
+    KoTextDocument textDoc(&doc);
+    textDoc.setInlineTextObjectManager(&inlineObjectManager);
+
+    KoTextEditor editor(&doc);
+
+    // enter some lorem ipsum
+    editor.insertText(lorem);
+    KoBookmark *startmark = new KoBookmark(editor.document());
+    startmark->setType(KoBookmark::SinglePosition);
+    startmark->setName("single!");
+    editor.insertInlineObject(startmark);
+    Q_ASSERT(startmark->id() == 1);
+    Q_ASSERT(startmark->name() == "single!");
+    Q_ASSERT(startmark->position() == 444);
+
+    QTextCursor cursor = doc.find(QString(QChar::ObjectReplacementCharacter), 0);
+    Q_ASSERT(cursor.position() == 444);
+
+    KoInlineObject *obj = inlineObjectManager.inlineTextObject(cursor.charFormat());
+
+    Q_ASSERT(obj == startmark);
+
+}
 
 void TestKoTextEditor::testRemoveSelectedText()
 {

@@ -67,6 +67,12 @@ KoShape *PictureShapeFactory::createShape(const KoProperties *params, KoResource
         QImage image = params->property("qimage").value<QImage>();
         Q_ASSERT(!image.isNull());
 
+        // In karbon, the KoResourceManager doesn't have an imageCollection, so
+        // check for the absence, and if absent, add one.
+        if (!documentResources->imageCollection()) {
+            newDocumentResourceManager(documentResources);
+        }
+
         if (shape->imageCollection()) {
             KoImageData *data = shape->imageCollection()->createImageData(image);
             shape->setUserData(data);
@@ -115,7 +121,7 @@ QList<KoShapeConfigWidgetBase*> PictureShapeFactory::createShapeOptionPanels()
     return panels;
 }
 
-void PictureShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
+void PictureShapeFactory::newDocumentResourceManager(KoResourceManager *manager) const
 {
     if (!manager->imageCollection())
         manager->setImageCollection(new KoImageCollection(manager));

@@ -182,7 +182,7 @@ QList<KoShapeConfigWidgetBase*> ChartShapeFactory::createShapeOptionPanels()
     return QList<KoShapeConfigWidgetBase*>();
 }
 
-void ChartShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
+void ChartShapeFactory::newDocumentResourceManager(KoResourceManager *manager) const
 {
     Q_UNUSED(manager);
 }

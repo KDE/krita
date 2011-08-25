@@ -179,7 +179,7 @@ void KoShapeFactoryBase::setHidden(bool hidden)
     d->hidden = hidden;
 }
 
-void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager *manager)
+void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager *manager) const
 {
     d->resourceManagers.append(manager);
     connect(manager, SIGNAL(destroyed(QObject *)), this, SLOT(pruneDocumentResourceManager(QObject*)));

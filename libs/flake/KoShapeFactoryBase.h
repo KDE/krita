@@ -196,13 +196,16 @@ public:
      *
      * FIXME: this method is only used by Tables. We should refactor so
      * it is no longer necessary.
+     * 
+     * NOTE: this actually is also used somehow to create the imagecollection
+     *        for the picture shape?
      *
      * NOTE: we store the documentmanagers in a list, and remove them
      * from the list on delete.
      *
      * @param manager the new manager
      */
-    virtual void newDocumentResourceManager(KoResourceManager *manager);
+    virtual void newDocumentResourceManager(KoResourceManager *manager) const;
     QList<KoResourceManager *> documentResourceManagers() const;
 
     /**

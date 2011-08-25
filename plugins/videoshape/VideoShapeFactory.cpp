@@ -58,7 +58,7 @@ bool VideoShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &c
     return e.localName() == "plugin" && e.namespaceURI() == KoXmlNS::draw;
 }
 
-void VideoShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
+void VideoShapeFactory::newDocumentResourceManager(KoResourceManager *manager) const
 {
     QVariant variant;
     variant.setValue<void*>(new VideoCollection(manager));

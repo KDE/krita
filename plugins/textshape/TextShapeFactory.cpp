@@ -117,7 +117,7 @@ bool TextShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &c
         (e.localName() == "table" && e.namespaceURI() == KoXmlNS::table);
 }
 
-void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
+void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager) const
 {
     QVariant variant;
     variant.setValue<KoInlineTextObjectManager*>(new KoInlineTextObjectManager(manager));

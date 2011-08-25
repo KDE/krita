@@ -507,6 +507,10 @@ public:
     QList<KoSemanticStylesheet*> userStyleSheetList(const QString& className) const;
     void setUserStyleSheetList(const QString& className,const QList<KoSemanticStylesheet*>& l);
 
+private slots:
+
+    void forgetInlineRdf(QObject *obj);
+
 private:
     /// reimplemented
     virtual bool completeLoading(KoStore *store);

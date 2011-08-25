@@ -1323,6 +1323,7 @@ void KoDocumentRdf::rememberNewInlineRdfObject(KoTextInlineRdf *inlineRdf)
     if (!inlineRdf) {
         return;
     }
+    connect(inlineRdf, SIGNAL(destroyed(QObject*)), this, SLOT(forgetInlineRdf(QObject*)));
     d->inlineRdfObjects << inlineRdf;
 }
 
@@ -1482,4 +1483,9 @@ QList<KoSemanticStylesheet*> KoDocumentRdf::userStyleSheetList(const QString& cl
 void KoDocumentRdf::setUserStyleSheetList(const QString& className,const QList<KoSemanticStylesheet*>& l)
 {
     d->userStylesheets[className] = l;
+}
+
+void KoDocumentRdf::forgetInlineRdf(QObject *obj)
+{
+    d->inlineRdfObjects.removeAll(qobject_cast<KoTextInlineRdf*>(obj));
 }

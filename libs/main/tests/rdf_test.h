@@ -33,11 +33,12 @@ class QString;
 class RdfTest : public QObject
 {
     Q_OBJECT
-   
+
 private slots:
 
     void testCreateMarkers();
     void testFindMarkers();
+    void testFindByName();
     void testEditAndFindMarkers();
     void testRemoveMarkers();
 

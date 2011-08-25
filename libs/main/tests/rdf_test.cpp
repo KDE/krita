@@ -24,6 +24,7 @@
 #include <QString>
 #include <QTextDocument>
 #include <QTextTable>
+#include <QTextCharFormat>
 
 #include <KoRdfSemanticItem.h>
 #include <KoDocumentRdf.h>
@@ -51,16 +52,31 @@ public:
     TestSemanticItem(QObject *parent, const KoDocumentRdf *rdf = 0)
         : KoRdfSemanticItem(const_cast<KoDocumentRdf*>(rdf), parent)
         , PREDBASE("http://calligra-suite.org/testrdf/")
+        , m_uri(QUuid::createUuid().toString())
     {
-        updateTriple(m_uri, QUuid::createUuid().toString(), PREDBASE + "object");
+        Q_ASSERT(!m_uri.isEmpty());
+
+        m_linkingSubject = Soprano::Node::createResourceNode(m_uri);
+
+        Q_ASSERT(context().isValid());
+        Q_ASSERT(m_linkingSubject.isResource());
         setRdfType(PREDBASE + "testitem");
+        Q_ASSERT(documentRdf()->model()->statementCount() > 0);
+
+        updateTriple(m_payload, lorem,  PREDBASE + "payload");
     }
 
     TestSemanticItem(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
         : KoRdfSemanticItem(const_cast<KoDocumentRdf*>(rdf), it, parent)
     {
         m_uri = it.binding("object").toString();
+        Q_ASSERT(!m_uri.isNull());
+        m_linkingSubject = Soprano::Node::createResourceNode(m_uri);
+        Q_ASSERT(m_linkingSubject.isResource());
         m_name = it.binding("name").toString();
+        Q_ASSERT(!m_name.isNull());
+        m_payload = it.binding("payload").toString();
+        Q_ASSERT(!m_payload.isNull());
     }
 
     virtual ~TestSemanticItem()
@@ -110,7 +126,7 @@ public:
 
     Soprano::Node linkingSubject() const
     {
-        return Soprano::Node::createResourceNode(m_uri);
+        return m_linkingSubject;
     }
 
     static QList<TestSemanticItem*> allObjects(KoDocumentRdf* rdf, Soprano::Model *model = 0)
@@ -121,16 +137,43 @@ public:
         QString query =
                 "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
                 "prefix testrdf: <http://calligra-suite.org/testrdf/> \n"
-                "select distinct ?name ?object \n"
+                "select distinct ?name ?object ?payload \n"
                 "where { \n"
-                "    ?element rdf:type testrdf:testitem . \n"
-                "    ?element testrdf:name ?name . \n"
-                "    ?element testrdf:object ?object \n"
+                "    ?object rdf:type testrdf:testitem . \n"
+                "    ?object testrdf:name ?name . \n"
+                "    ?object testrdf:payload ?payload \n"
                 "}\n"
                 "    order by  DESC(?name) \n ";
 
         Soprano::QueryResultIterator it = m->executeQuery(query,
-                                                         Soprano::Query::QueryLanguageSparql);
+                                                          Soprano::Query::QueryLanguageSparql);
+
+        while (it.next()) {
+            TestSemanticItem *item = new TestSemanticItem(rdf, rdf, it);
+            result << item;
+        }
+        return result;
+    }
+
+    static QList<TestSemanticItem *> findItemsByName(const QString name, KoDocumentRdf* rdf, Soprano::Model *model = 0)
+    {
+        QList<TestSemanticItem*> result;
+        const Soprano::Model* m = model ? model : rdf->model();
+
+        QString query(
+                    "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
+                    "prefix testrdf: <http://calligra-suite.org/testrdf/> \n"
+                    "select distinct ?name ?object ?payload \n"
+                    "where { \n"
+                    "    ?object rdf:type testrdf:testitem . \n"
+                    "    ?object testrdf:name ?name . \n"
+                    "    ?object testrdf:payload ?payload . \n"
+                    "    filter (?name = %1) "
+                    "}\n"
+                    "    order by  DESC(?name) \n ");
+
+        Soprano::QueryResultIterator it = m->executeQuery(query.arg(Soprano::Node::literalToN3(name)),
+                                                          Soprano::Query::QueryLanguageSparql);
 
         while (it.next()) {
             TestSemanticItem *item = new TestSemanticItem(rdf, rdf, it);
@@ -140,8 +183,10 @@ public:
     }
 
 private:
+    Soprano::Node m_linkingSubject;
     QString m_name;
     QString m_uri;
+    QString m_payload;
 };
 
 QString RdfTest::insertSemItem(KoTextEditor &editor,
@@ -151,10 +196,8 @@ QString RdfTest::insertSemItem(KoTextEditor &editor,
 {
     editor.insertTable(5,10);
     QTextTable *table = editor.cursor()->currentTable();
-    table->setObjectName(name);
-
-    TestSemanticItem *testItem = new TestSemanticItem(&parent, &rdfDoc);
-    testItem->setName(table->objectName());
+    table->setObjectName(name); // Note: the objectname of a table is NOT saved to ODF. This
+                                // is done for testing purposes _only_.
 
     KoBookmark *startmark = new KoBookmark(editor.document());
     startmark->setType(KoBookmark::StartBookmark);
@@ -170,15 +213,17 @@ QString RdfTest::insertSemItem(KoTextEditor &editor,
     editor.movePosition(QTextCursor::PreviousCharacter);
     editor.insertInlineObject(startmark);
 
+    TestSemanticItem *testItem = new TestSemanticItem(&parent, &rdfDoc);
+    testItem->setName(name);
     Soprano::Statement st(
-          testItem->linkingSubject(), // subject
-          Soprano::Node::createResourceNode(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")), // predicate
-          Soprano::Node::createLiteralNode(newId), // object
-          rdfDoc.manifestRdfNode()); // manifest datastore
-
+                testItem->linkingSubject(), // subject
+                Soprano::Node::createResourceNode(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")), // predicate
+                Soprano::Node::createLiteralNode(newId), // object
+                rdfDoc.manifestRdfNode()); // manifest datastore
     const_cast<Soprano::Model*>(rdfDoc.model())->addStatement(st);
-
     rdfDoc.rememberNewInlineRdfObject(inlineRdf);
+
+    Q_ASSERT(rdfDoc.model()->statementCount() > 0);
 
     KoBookmark *endmark = new KoBookmark(editor.document());
     endmark->setName(newId);
@@ -243,8 +288,8 @@ void RdfTest::testCreateMarkers()
 
     // go back to the semitem
     editor.setPosition(position.first + 1);
-    QCOMPARE(newId, rdfDoc.findXmlId(&editor));
-    QCOMPARE(newId, rdfDoc.findXmlId(*editor.cursor()));
+    QCOMPARE(rdfDoc.findXmlId(&editor), newId);
+    QCOMPARE(rdfDoc.findXmlId(*editor.cursor()), newId);
 }
 
 void RdfTest::testFindMarkers()
@@ -296,8 +341,9 @@ void RdfTest::testFindMarkers()
     // add an extra semitem
     editor.movePosition(QTextCursor::End);
     QString newId2 = insertSemItem(editor, rdfDoc, parent, "test item2");
-        idList << newId2;
+    idList << newId2;
 
+    // get all semantic items and verify they are correct
     semItems = TestSemanticItem::allObjects(&rdfDoc);
     Q_ASSERT(semItems.length() == 2);
 
@@ -314,12 +360,127 @@ void RdfTest::testFindMarkers()
     }
 }
 
+void RdfTest::testFindByName()
+{
+    QObject parent;
+
+    // the rdf storage. In calligra, it's part of the KoDocument.
+    KoDocumentRdf rdfDoc;
+
+    // create a document
+    QTextDocument doc;
+
+    KoInlineTextObjectManager inlineObjectManager(&parent);
+    KoTextDocument textDoc(&doc);
+    textDoc.setInlineTextObjectManager(&inlineObjectManager);
+
+    KoTextEditor editor(&doc);
+
+    // enter some lorem ipsum
+    editor.insertText(lorem);
+    // enter a bit of marked text
+
+    QStringList idList;
+    QString newId = insertSemItem(editor, rdfDoc, parent, "test item1");
+    idList << newId;
+    idList << insertSemItem(editor, rdfDoc, parent, "test item2")
+           << insertSemItem(editor, rdfDoc, parent, "test item3")
+           << insertSemItem(editor, rdfDoc, parent, "test item4");
+
+
+    QList<TestSemanticItem*> results = TestSemanticItem::findItemsByName("test item1",
+                                                                         &rdfDoc);
+    Q_ASSERT(results.size() == 1);
+    QStringList xmlids = results[0]->xmlIdList();
+    Q_ASSERT(xmlids.size() == 1);
+    Q_ASSERT(xmlids[0] == newId);
+
+}
+
 void RdfTest::testEditAndFindMarkers()
 {
+    QObject parent;
+
+    // the rdf storage. In calligra, it's part of the KoDocument.
+    KoDocumentRdf rdfDoc;
+
+    // create a document
+    QTextDocument doc;
+
+    KoInlineTextObjectManager inlineObjectManager(&parent);
+    KoTextDocument textDoc(&doc);
+    textDoc.setInlineTextObjectManager(&inlineObjectManager);
+
+    KoTextEditor editor(&doc);
+
+    // enter some lorem ipsum
+    editor.insertText(lorem);
+    // enter a bit of marked text
+
+    QStringList idList;
+    QString newId = insertSemItem(editor, rdfDoc, parent, "test item1");
+    idList << newId;
+
+
 }
 
 void RdfTest::testRemoveMarkers()
 {
+    QObject parent;
+
+    // the rdf storage. In calligra, it's part of the KoDocument.
+    KoDocumentRdf rdfDoc;
+
+    // create a document
+    QTextDocument doc;
+
+    KoInlineTextObjectManager inlineObjectManager(&parent);
+    KoTextDocument textDoc(&doc);
+    textDoc.setInlineTextObjectManager(&inlineObjectManager);
+
+    KoTextEditor editor(&doc);
+
+    // enter some lorem ipsum
+    editor.insertText(lorem);
+    // enter a bit of marked text
+
+    QStringList idList;
+    idList << insertSemItem(editor, rdfDoc, parent, "test item1");
+    editor.insertText(lorem);
+    idList << insertSemItem(editor, rdfDoc, parent, "test item2");
+    editor.insertText(lorem);
+    QString newId = insertSemItem(editor, rdfDoc, parent, "test item3");
+    idList << newId;
+    editor.insertText(lorem);
+    idList << insertSemItem(editor, rdfDoc, parent, "test item4");
+    editor.insertText(lorem);
+
+    QList<TestSemanticItem*> results = TestSemanticItem::findItemsByName("test item3", &rdfDoc);
+    Q_ASSERT(results.size() == 1);
+    QStringList xmlids = results[0]->xmlIdList();
+    Q_ASSERT(xmlids.size() == 1);
+    Q_ASSERT(xmlids[0] == newId);
+
+    QPair<int, int> pos = rdfDoc.findExtent(newId);
+
+    editor.setPosition(pos.first, QTextCursor::MoveAnchor);
+    editor.setPosition(pos.second, QTextCursor::KeepAnchor);
+
+    Q_ASSERT(editor.hasSelection());
+
+    // remove the table + the markers from the document
+    editor.removeSelectedText();
+
+    results = TestSemanticItem::allObjects(&rdfDoc);
+    qDebug() << "we have" << results.count() << "items";
+    foreach(TestSemanticItem* item, results) {
+        Q_ASSERT(item->xmlIdList().length() == 1);
+        QPair<int,int> pos = rdfDoc.findExtent(item->xmlIdList().first());
+        qDebug() << item->name() << "pos:" << pos;
+        editor.setPosition(pos.first + 1);
+        qDebug() << "points to table" << editor.cursor()->currentTable();
+    }
+
 }
 
 QTEST_MAIN(RdfTest)

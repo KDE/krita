@@ -1573,9 +1573,9 @@ int KoTextEditor::position() const
 
 void KoTextEditor::removeSelectedText()
 {
-    if (isEditProtected()) {
-        return;
-    }
+        if (isEditProtected()) {
+            return;
+        }
 
     // Remove the inline objects in the current selection
     KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(d->document).inlineTextObjectManager();
@@ -1585,33 +1585,41 @@ void KoTextEditor::removeSelectedText()
     // however, if bookmarks span beyond the selection, we shouldn't remove the bookmark inline objects
     // but place them back after we've removed the selection.
     QList<KoBookmark *> bookmarksToBeMoved;
+    QList<KoInlineObject*> objectsToBeRemoved;
 
     while (!cursor.isNull() && cursor.position() <= selectionEnd()) {
 
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
-
         KoBookmark *bookmark = dynamic_cast<KoBookmark*>(obj);
-        if (bookmark &&
-                (     ( bookmark->type() == KoBookmark::StartBookmark &&
-                        bookmark->endBookmark()->position() > selectionEnd()) ||
-                      (    bookmark->type() == KoBookmark::EndBookmark &&
-                           bookmarkManager->retrieveBookmark(bookmark->name())->position() < selectionStart()
-                           )
-                      )
-                )
-        {
-            // start or end bookmarks with the end or start...
-            bookmarksToBeMoved << bookmark;
-        }
-        else {
-            if (bookmark) {
-                bookmarkManager->remove(bookmark->name());
+        if (bookmark) {
+
+            KoBookmark::BookmarkType type = bookmark->type();
+            if (type == KoBookmark::StartBookmark) {
+
+                KoBookmark *endmark = bookmark->endBookmark();
+                Q_ASSERT(endmark);
+                if (endmark && endmark->position() > selectionEnd()) {
+                    bookmarksToBeMoved << bookmark;
+                }
             }
-            inlineObjectManager->removeInlineObject(obj);
-            delete obj; // also deletes the rdf...
+            else if (type == KoBookmark::EndBookmark) {
+                KoBookmark *startmark = bookmarkManager->retrieveBookmark(bookmark->name());
+                Q_ASSERT(startmark);
+                if (startmark && startmark->position() < selectionStart()) {
+                    bookmarksToBeMoved << bookmark;
+                }
+
+            }
+        }
+        if (!bookmarksToBeMoved.contains(bookmark)) {
+            objectsToBeRemoved << obj;
         }
         cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position() + 1);
+    }
+    foreach(KoInlineObject *obj, objectsToBeRemoved) {
+        inlineObjectManager->removeInlineObject(obj); // does _not_ remove the character in the text doc
+        delete obj; // also deletes the rdf...
     }
 
     d->caret.removeSelectedText();

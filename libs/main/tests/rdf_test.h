@@ -34,12 +34,12 @@ class RdfTest : public QObject
 {
     Q_OBJECT
 
+private slots:
+
     void testCreateMarkers();
     void testFindMarkers();
     void testFindByName();
-    void testEditAndFindMarkers();
-private slots:
-
+    void testEditAndFindMarkers(); // XXX: implement
     void testRemoveMarkers();
 
 private:

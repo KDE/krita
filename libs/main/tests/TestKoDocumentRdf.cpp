@@ -46,8 +46,27 @@ const QString lorem(
 
 void TestKoDocumentRdf::testCreate()
 {
-    KoDocumentRdf rdfDoc;
+    KoDocumentRdf *rdfDoc = new KoDocumentRdf();
+    Q_ASSERT(rdfDoc->model());
+    delete rdfDoc;
+}
 
+void TestKoDocumentRdf::testRememberNewInlineRdfObject()
+{
+    KoDocumentRdf rdfDoc;
+    QTextDocument doc;
+
+    KoBookmark bm(&doc);
+    bm.setType(KoBookmark::SinglePosition);
+    bm.setName("test");
+    bm.setId(1);
+
+    KoTextInlineRdf inlineRdf(&doc, &bm);
+    inlineRdf.setXmlId(inlineRdf.createXmlId());
+
+    rdfDoc.rememberNewInlineRdfObject(&inlineRdf);
+
+    Q_ASSERT(&inlineRdf == rdfDoc.findInlineRdfByID(inlineRdf.xmlId()));
 }
 
 QTEST_MAIN(TestKoDocumentRdf)

@@ -37,6 +37,7 @@ class TestKoDocumentRdf : public QObject
 private slots:
     
     void testCreate();
+    void testRememberNewInlineRdfObject();
 
 };
 

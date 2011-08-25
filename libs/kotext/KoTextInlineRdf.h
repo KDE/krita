@@ -141,7 +141,7 @@ public:
     /**
      * Create a new and unique xml:id
      */
-    QString createXmlId(KoXmlWriter *writer = 0);
+    QString createXmlId();
 
 private:
 

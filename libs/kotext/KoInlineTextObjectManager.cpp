@@ -132,6 +132,7 @@ void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
 {
     if (object) {
         m_objects.remove(object->id());
+        m_listeners.removeAll(object);
     }
     // TODO dirty the document somehow
 }

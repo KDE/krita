@@ -63,7 +63,6 @@ StylesModel::StylesModel(KoStyleManager *manager, bool paragraphMode, QObject *p
 
 StylesModel::~StylesModel()
 {
-    delete m_styleThumbnailer;
     delete m_tmpTextShape;
 }
 
@@ -106,6 +105,9 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
         break;
     }
     case Qt::DecorationRole: {
+        if (!m_styleThumbnailer) {
+            return QPixmap();
+        }
         KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
         if (paragStyle) {
             return m_styleThumbnailer->thumbnail(paragStyle);
@@ -149,9 +151,29 @@ KoParagraphStyle *StylesModel::paragraphStyleForIndex(const QModelIndex &index) 
     return m_styleManager->paragraphStyle(index.internalId());
 }
 
+QModelIndex StylesModel::indexForParagraphStyle(const KoParagraphStyle &style) const
+{
+    if (&style) {
+        return createIndex(m_styleList.indexOf(style.styleId()), 0, style.styleId());;
+    }
+    else {
+        return QModelIndex();
+    }
+}
+
 KoCharacterStyle *StylesModel::characterStyleForIndex(const QModelIndex &index) const
 {
     return m_styleManager->characterStyle(index.internalId());
+}
+
+QModelIndex StylesModel::indexForCharacterStyle(const KoCharacterStyle &style) const
+{
+    if (&style) {
+        return createIndex(m_styleList.indexOf(style.styleId()), 0, style.styleId());
+    }
+    else {
+        return QModelIndex();
+    }
 }
 
 void StylesModel::setStyleManager(KoStyleManager *sm)
@@ -165,9 +187,6 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
         disconnect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
     }
     m_styleManager = sm;
-    if (!m_styleThumbnailer) {
-        m_styleThumbnailer = new KoStyleThumbnailer;
-    }
     if (m_styleManager == 0) {
         return;
     }
@@ -185,6 +204,11 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
     }
 }
 
+void StylesModel::setStyleThumbnailer(KoStyleThumbnailer *thumbnailer)
+{
+    m_styleThumbnailer = thumbnailer;
+}
+
 // called when the stylemanager adds a style
 void StylesModel::addParagraphStyle(KoParagraphStyle *style)
 {
@@ -197,6 +221,11 @@ void StylesModel::addParagraphStyle(KoParagraphStyle *style)
 // called when the stylemanager adds a style
 void StylesModel::addCharacterStyle(KoCharacterStyle *style)
 {
+    foreach(KoParagraphStyle *ps, m_styleManager->paragraphStyles()) {
+        if (style->styleId() == ps->characterStyle()->styleId()) {
+            return;
+        }
+    }
     Q_ASSERT(style);
     m_styleList.append(style->styleId());
     m_styleMapper->setMapping(style, style->styleId());

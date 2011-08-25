@@ -70,6 +70,9 @@ public:
 
     QTimer updateRtlTimer;
     QList<int> dirtyBlocks;
+
+    bool editProtected;
+    bool editProtectionCached;
 };
 
 class BlockFormatVisitor

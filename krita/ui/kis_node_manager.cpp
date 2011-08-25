@@ -82,7 +82,7 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
     // Set the selection on the shape manager to the active layer
     // and set call KoSelection::setActiveLayer( KoShapeLayer* layer )
     // with the parent of the active layer.
-    KoSelection * selection = view->canvasBase()->globalShapeManager()->selection();
+    KoSelection *selection = view->canvasBase()->globalShapeManager()->selection();
     Q_ASSERT(selection);
     selection->deselectAll();
 
@@ -92,6 +92,7 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
         maskManager->activateMask(0);
         layerManager->activateLayer(0);
     } else {
+
         KoShape * shape = view->document()->shapeForNode(node);
         if (!shape) {
             shape = view->document()->addShape(node);

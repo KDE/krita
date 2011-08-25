@@ -109,7 +109,7 @@ void KoPathPointMoveCommandPrivate::applyOffset(qreal factor)
 
         KoPathPoint *p = path->pointByIndex(it.key().pointIndex);
         if (p)
-            p->map(matrix, true);
+            p->map(matrix);
     }
 
     foreach (KoPathShape *path, paths) {

@@ -172,21 +172,39 @@ void ToCGenerator::generate()
     // Iterate through all blocks to generate TOC
     QTextBlock block = m_document->rootFrame()->firstCursorPosition().block();
     int blockId = 0;
-    while (block.isValid()) {
+    for (; block.isValid(); block = block.next()) {
         // Choose only TOC blocks
-        if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) {
-            int level = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
-            generateEntry(level, cursor, block, blockId);
-        } else if (m_ToCInfo->m_useIndexSourceStyles) {
+        if (m_ToCInfo->m_useOutlineLevel) {
+            if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) {
+                int level = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
+                generateEntry(level, cursor, block, blockId);
+                continue;
+            }
+        }
+
+        if (m_ToCInfo->m_useIndexSourceStyles) {
+            bool inserted = false;
             foreach (IndexSourceStyles indexSourceStyles, m_ToCInfo->m_indexSourceStyles) {
                 foreach (IndexSourceStyle indexStyle, indexSourceStyles.styles) {
                     if (indexStyle.styleId == block.blockFormat().intProperty(KoParagraphStyle::StyleId)) {
                         generateEntry(indexSourceStyles.outlineLevel, cursor, block, blockId);
+                        inserted = true;
+                        break;
                     }
                 }
+                if (inserted)
+                    break;
+            }
+            if (inserted)
+                continue;
+        }
+
+        if (m_ToCInfo->m_useIndexMarks) {
+            if (false) {
+                generateEntry(1, cursor, block, blockId);
+                continue;
             }
         }
-        block = block.next();
     }
     cursor.endEditBlock();
 
@@ -304,7 +322,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                         QTextBlockFormat blockFormat = cursor.blockFormat();
                         QList<QVariant> tabList;
                         if (tabEntry->m_position.isEmpty()) {
-                            tabEntry->tab.position = m_maxTabPosition;
+                            tabEntry->tab.position = m_maxTabPosition - tocTemplateStyle->leftMargin();
                         } else {
                             tabEntry->tab.position = tabEntry->m_position.toDouble();
                         }

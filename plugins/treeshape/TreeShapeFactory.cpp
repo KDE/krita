@@ -35,7 +35,7 @@ TreeShapeFactory::TreeShapeFactory()
     setToolTip(i18n("Tree for mind maps"));
     setIcon("x-shape-image");
     setLoadingPriority(2);
-    setOdfElementNames(KoXmlNS::draw, QStringList("tree"));
+    setXmlElementNames(KoXmlNS::draw, QStringList("tree"));
 }
 
 TreeShapeFactory::~TreeShapeFactory() {}

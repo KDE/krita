@@ -30,7 +30,11 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QLabel>
+#include <QTabBar>
 
+#include <KoShapeRegistry.h>
+#include <KoShapeFactoryBase.h>
+#include <KoProperties.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoResourceManager.h>
 #include <KoColorBackground.h>
@@ -135,6 +139,12 @@ public:
 
     KoPAViewMode *viewModeNormal;
 
+    // This tab bar hidden by default. It could be used to alternate between view modes
+    QTabBar *tabBar;
+
+    QGridLayout *tabBarLayout;
+    QWidget *insideWidget;
+
     // status bar
     QLabel *status;       ///< ordinary status
     QWidget *zoomActionWidget;
@@ -156,6 +166,8 @@ KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 
     if ( d->doc->pageCount() > 0 )
         doUpdateActivePage( d->doc->pageByIndex( 0, false ) );
+
+    setAcceptDrops(true);
 }
 
 KoPAView::~KoPAView()
@@ -173,12 +185,56 @@ KoPAView::~KoPAView()
     delete d;
 }
 
+void KoPAView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
+{
+    // get position from event and convert to document coordinates
+    QPointF pos = zoomHandler()->viewToDocument(insertAt)
+            + kopaCanvas()->documentOffset() - kopaCanvas()->documentOrigin();
+
+    // create a factory
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
+    if (!factory) {
+        kWarning(30003) << "No picture shape found, cannot drop images.";
+        return;
+    }
+
+    foreach(const QImage image, imageList) {
+
+        KoProperties params;
+        QVariant v;
+        v.setValue<QImage>(image);
+        params.setProperty("qimage", v);
+
+        KoShape *shape = factory->createShape(&params, d->doc->resourceManager());
+
+        if (!shape) {
+            kWarning(30003) << "Could not create a shape from the image";
+            return;
+        }
+        shape->setPosition(pos);
+        pos += QPointF(25,25); // increase the position for each shape we insert so the
+                               // user can see them all.
+        KUndo2Command *cmd = kopaCanvas()->shapeController()->addShapeDirect(shape);
+        if (cmd) {
+            KoSelection *selection = kopaCanvas()->shapeManager()->selection();
+            selection->deselectAll();
+            selection->select(shape);
+        }
+        kopaCanvas()->addCommand(cmd);
+    }
+}
+
+
 void KoPAView::initGUI()
 {
-    QGridLayout * gridLayout = new QGridLayout( this );
-    gridLayout->setMargin( 0 );
-    gridLayout->setSpacing( 0 );
-    setLayout( gridLayout );
+    d->tabBarLayout = new QGridLayout(this);
+    d->tabBarLayout->setMargin(0);
+    d->tabBarLayout->setSpacing(0);
+    d->insideWidget = new QWidget();
+    QGridLayout *gridLayout = new QGridLayout(d->insideWidget);
+    gridLayout->setMargin(0);
+    gridLayout->setSpacing(0);
+    setLayout(d->tabBarLayout);
 
     d->canvas = new KoPACanvas( this, d->doc, this );
     KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( actionCollection(), this );
@@ -222,10 +278,17 @@ void KoPAView::initGUI()
             d->horizontalRuler, SLOT(setUnit(const KoUnit&)));
     connect(d->doc, SIGNAL(unitChanged(const KoUnit&)),
             d->verticalRuler, SLOT(setUnit(const KoUnit&)));
+    //Layout a tab bar
+    d->tabBar = new QTabBar();
+    d->tabBarLayout->addWidget(d->insideWidget, 1, 1);
+    setTabBarPosition(Qt::Horizontal);
 
     gridLayout->addWidget(d->horizontalRuler, 0, 1);
     gridLayout->addWidget(d->verticalRuler, 1, 0);
-    gridLayout->addWidget(canvasController, 1, 1 );
+    gridLayout->addWidget(canvasController, 1, 1);
+
+    //tab bar is hidden by default a method is provided to acces to the tab bar
+    d->tabBar->hide();
 
     connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
             this, SLOT(pageOffsetChanged()));
@@ -1106,6 +1169,58 @@ void KoPAView::centerPage()
     d->canvasController->setPreferredCenter(documentCenter);
     d->canvasController->recenterPreferred();
 
+}
+
+QTabBar *KoPAView::tabBar() const
+{
+    return d->tabBar;
+}
+
+void KoPAView::replaceCentralWidget(QWidget *newWidget)
+{
+    // hide standard central widget
+    d->insideWidget->hide();
+    // If there is already a custom central widget, it's hided and removed from the layout
+    hideCustomCentralWidget();
+    // layout and show new custom widget
+    d->tabBarLayout->addWidget(newWidget, 2, 1);
+    newWidget->show();
+}
+
+void KoPAView::restoreCentralWidget()
+{
+    //hide custom central widget
+    hideCustomCentralWidget();
+    //show standard central widget
+    d->insideWidget->show();
+}
+
+void KoPAView::hideCustomCentralWidget()
+{
+    if (d->tabBarLayout->itemAtPosition(2, 1)) {
+        if (d->tabBarLayout->itemAtPosition(2, 1)->widget()) {
+            d->tabBarLayout->itemAtPosition(2, 1)->widget()->hide();
+        }
+        d->tabBarLayout->removeItem(d->tabBarLayout->itemAtPosition(2, 1));
+    }
+}
+
+void KoPAView::setTabBarPosition(Qt::Orientation orientation)
+{
+    switch (orientation) {
+    case Qt::Horizontal:
+        d->tabBarLayout->removeWidget(d->tabBar);
+        d->tabBar->setShape(QTabBar::RoundedNorth);
+        d->tabBarLayout->addWidget(d->tabBar, 0, 1);
+        break;
+    case Qt::Vertical:
+        d->tabBarLayout->removeWidget(d->tabBar);
+        d->tabBar->setShape(QTabBar::RoundedWest);
+        d->tabBarLayout->addWidget(d->tabBar, 1, 0, 2, 1, Qt::AlignTop);
+        break;
+    default:
+        break;
+    }
 }
 
 #include <KoPAView.moc>

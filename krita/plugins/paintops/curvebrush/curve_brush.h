@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,31 @@
 #include <kis_paint_information.h>
 #include <kis_random_accessor.h>
 #include <kis_painter.h>
+#include "kis_curve_paintop_settings_widget.h"
+#include <KoColorSpace.h>
+
+class CurveProperties;
+class Pen {
+public:
+    Pen():pos(QPointF(0,0)), rotation(0), scale(0)
+    {
+
+    }
+
+    Pen(QPointF ipos,qreal irotation, qreal iscale)
+        :pos(ipos),
+        rotation(irotation),
+        scale(iscale)
+    {
+
+    }
+
+    ~Pen() {}
+
+    QPointF pos;
+    qreal rotation;
+    qreal scale;
+};
 
 class CurveBrush
 {
@@ -33,44 +58,23 @@ public:
     CurveBrush();
     ~CurveBrush();
 
-    void paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
-
-    void setPainter(KisPainter *painter) {
-        m_painter = painter;
-    }
-
-    void setMinimalDistance(int mininmalDistance) {
-        m_minimalDistance = mininmalDistance;
-    }
-
-    void setMode(int mode) {
-        m_mode = mode;
-    }
-
-    void setInterval(int interval) {
-        m_interval = interval;
-    }
-
 private:
-
     QPointF getCubicBezier(const QPointF &p0, const QPointF &p1, const QPointF &p2, const QPointF &p3, qreal u);
     QPointF getQuadraticBezier(const QPointF &p0, const QPointF &p1, const QPointF &p2, qreal u);
     QPointF getLinearBezier(const QPointF &p1, const QPointF &p2, qreal u);
     void putPixel(QPointF pos, KoColor &color);
-    
-    KisPaintDeviceSP m_layer;
 
     KisRandomAccessor * m_writeAccessor;
+    KoColorSpace * cs;
     quint32 m_pixelSize;
 
     KisPainter * m_painter;
 
-    int m_counter;
-    int m_increment;
+    QList<Pen> m_pens;
+    int m_branch;
+    Pen m_newPen;
 
-    int m_interval;
-    int m_mode;
-    int m_minimalDistance;
+    void strokePens(QPointF pi1, QPointF pi2, KisPainter &painter);
 };
 
 #endif

@@ -40,7 +40,7 @@ public:
     };
     Q_DECLARE_FLAGS(StyleButtons, StyleButton)
 
-    explicit StyleButtonBox(QWidget* parent = 0L);
+    explicit StyleButtonBox(QWidget* parent = 0L, int rows = 1, int columns = 6);
     virtual ~StyleButtonBox();
 
 public slots:

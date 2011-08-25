@@ -36,7 +36,7 @@ public:
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
     bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
     /// reimplemented
-    virtual void newDocumentResourceManager(KoResourceManager *manager);
+    virtual void newDocumentResourceManager(KoResourceManager *manager) const;
 };
 
 #endif

@@ -54,6 +54,8 @@ protected slots:
 
     void previewCheckBoxChange(int state);
 
+    virtual void resizeEvent(QResizeEvent* );
+
 signals:
 
     void sigPleaseApplyFilter(KisNodeSP, KisFilterConfiguration*);

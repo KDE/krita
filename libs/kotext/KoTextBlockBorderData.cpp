@@ -157,8 +157,8 @@ void KoTextBlockBorderData::setEdge(Side side, const QTextBlockFormat &bf,
     switch (borderStyle) {
     case KoBorder::BorderDotted: edge.innerPen.setStyle(Qt::DotLine); break;
     case KoBorder::BorderDashed: edge.innerPen.setStyle(Qt::DashLine); break;
-    case KoBorder::BorderDashDotPattern: edge.innerPen.setStyle(Qt::DashDotLine); break;
-    case KoBorder::BorderDashDotDotPattern: edge.innerPen.setStyle(Qt::DashDotDotLine); break;
+    case KoBorder::BorderDashDot: edge.innerPen.setStyle(Qt::DashDotLine); break;
+    case KoBorder::BorderDashDotDot: edge.innerPen.setStyle(Qt::DashDotDotLine); break;
     case KoBorder::BorderGroove: /* TODO */ break;
     case KoBorder::BorderRidge: /* TODO */ break;
     case KoBorder::BorderInset: /* TODO */ break;

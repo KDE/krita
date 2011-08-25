@@ -117,7 +117,7 @@ private:
     mutable QMutex m_mutex;
     QCache<int, QImage> m_cache;
 
-    void render(const KoViewConverter &converter, bool asynchronous, const QRectF& rect) const;
+    QImage* render(const KoViewConverter &converter, bool asynchronous, bool useCache) const;
 };
 
 #endif

@@ -69,6 +69,14 @@ public:
      */
     KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
+    /**
+     * Returns a list of shape factories supporting the specified xml element.
+     * @param nameSpace the namespace of the xml element, see KoXmlNS for valid namespaces
+     * @param elementName the tag name of the element
+     * @return the list of shape factories supporting the specified xml element
+     */
+    QList<KoShapeFactoryBase*> factoriesForElement(const QString &nameSpace, const QString &elementName);
+
 private:
     KoShapeRegistry();
     KoShapeRegistry(const KoShapeRegistry&);

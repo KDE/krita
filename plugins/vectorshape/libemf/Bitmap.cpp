@@ -18,10 +18,7 @@
 #include "Bitmap.h"
 
 #include <QDataStream>
-//#include <QColor>
 #include <QImage>
-//#include <QRect> // also provides QSize
-//#include <QString>
 
 #include <KDebug>
 
@@ -49,7 +46,6 @@ Bitmap::Bitmap( QDataStream &stream,
                 quint32 cbBitsSrc) // size of source bitmap
     : m_hasImage(false)
     , m_header(0)
-      //, m_image(0)
     , m_imageIsValid(false)
 {
     // If necessary read away garbage before the bitmap header.
@@ -122,6 +118,25 @@ QImage Bitmap::image()
         }
     } else if ( m_header->bitCount() == BI_BITCOUNT_5 ) {
         format = QImage::Format_RGB888;
+    } else if ( m_header->bitCount() == BI_BITCOUNT_6 ) {
+        if (m_header->compression() == BI_RGB) {
+            format = QImage::Format_RGB32;
+            //format = QImage::Format_RGB888;
+        } else if (m_header->compression() == BI_BITFIELDS) {
+            // FIXME: The number of bits is correct, but we need to
+            //        handle the actual bits per colors specifically.
+            //
+            // The spec says (MS_WMF section 2.1.1.3):
+            //   If the Compression field of the BitmapInfoHeader
+            //   Object is set to BI_BITFIELDS, the Colors field
+            //   contains three DWORD color masks that specify the
+            //   red, green, and blue components, respectively, of
+            //   each pixel. Each DWORD in the bitmap array represents
+            //   a single pixel.
+            format = QImage::Format_RGB32;
+        }
+        else
+            return QImage();
     } else {
         //kDebug(31000) << "Unexpected format:" << m_header->bitCount();
         //Q_ASSERT(0);
@@ -134,6 +149,17 @@ QImage Bitmap::image()
         // This bitmap is a top-down bitmap without compression.
         m_image = QImage( (const uchar*)m_imageData.constData(),
                           m_header->width(), m_header->height(), format );
+
+        // This is a workaround around a strange bug.  Without this
+        // code it shows nothing.  Note that if we use Format_ARGB32
+        // to begin with, nothing is shown anyway.
+        //
+        // FIXME: Perhaps it could be tested again with a later
+        //        version of Qt (I have 4.6.3) /iw
+        if (m_header->bitCount() == BI_BITCOUNT_6 
+            && m_header->compression() == BI_RGB) {
+            m_image = m_image.convertToFormat(QImage::Format_ARGB32);
+        }
 
         // The WMF images are in the BGR color order.
         if (format == QImage::Format_RGB888)

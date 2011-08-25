@@ -33,6 +33,7 @@
 #include <QTextTable>
 #include <QTextTableFormat>
 
+#include <KoShadowStyle.h>
 #include <KoUnit.h>
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
@@ -204,6 +205,18 @@ void KoTableStyle::setKeepWithNext(bool keep)
 bool KoTableStyle::keepWithNext() const
 {
     return propertyBoolean(KeepWithNext);
+}
+
+void KoTableStyle::setShadow(const KoShadowStyle &shadow)
+{
+    d->setProperty(Shadow, QVariant::fromValue<KoShadowStyle>(shadow));
+}
+
+KoShadowStyle KoTableStyle::shadow() const
+{
+    if (hasProperty(Shadow))
+        return value(Shadow).value<KoShadowStyle>();
+    return KoShadowStyle();
 }
 
 void KoTableStyle::setMayBreakBetweenRows(bool allow)
@@ -519,6 +532,12 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
         setPageNumber(styleStack.property(KoXmlNS::style, "page-number").toInt());
     }
 
+    if (styleStack.hasProperty(KoXmlNS::style, "shadow")) {
+        KoShadowStyle shadow;
+        if (shadow.loadOdf(styleStack.property(KoXmlNS::style, "shadow")))
+            setShadow(shadow);
+    }
+
     // The fo:background-color attribute specifies the background color of a paragraph.
     if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
         const QString bgcolor = styleStack.property(KoXmlNS::fo, "background-color");
@@ -641,6 +660,8 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("style:page-number", "auto", KoGenStyle::TableType);
         } else if (key == TextProgressionDirection) {
             style.addProperty("style:writing-mode", KoText::directionToString(textDirection()), KoGenStyle::TableType);
+        } else if (key == KoTableStyle::Shadow) {
+            style.addProperty("style:shadow", shadow().saveOdf());
         }
     }
 }

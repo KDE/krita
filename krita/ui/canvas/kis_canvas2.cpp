@@ -510,6 +510,7 @@ void KisCanvas2::notifyZoomChanged()
         m_d->prescaledProjection->notifyZoomChanged();
     }
     emit scrollAreaSizeChanged();
+    updateCanvas(); // update the canvas, because that isn't done when zooming using KoZoomAction
 }
 
 void KisCanvas2::preScale()

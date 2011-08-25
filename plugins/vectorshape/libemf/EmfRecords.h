@@ -242,11 +242,8 @@ private:
     quint32 m_BitBltRasterOperation;
     qint32 m_cxDest;
     qint32 m_cyDest;
-    //BitmapHeader *m_BmiSrc; // The source bitmap
-    //QByteArray m_imageData;
-
+   
     Bitmap *m_bitmap; // The source bitmap
-    //QImage *m_image;
 };
 
 /*****************************************************************************/

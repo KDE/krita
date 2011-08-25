@@ -151,7 +151,6 @@ void KoReportDesignerItemRectBase::mouseMoveEvent(QGraphicsSceneMouseEvent * eve
         if (sceneRect().x() - p.x() + rect().width() >= 0 && h >= 0)
             setSceneRect(QPointF(p.x(), sceneRect().y()), QSizeF(sceneRect().x() - p.x() + rect().width(), h));
         break;
-        break;
     case 8:
         if (sceneRect().x() - p.x() + rect().width() >= 0)
             setSceneRect(QPointF(p.x(), sceneRect().y()), QSizeF(sceneRect().x() - p.x() + rect().width(), rect().height()));

@@ -1518,6 +1518,12 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
     if (d->loadSpanLevel++ == 0)
         d->loadSpanInitialPos = cursor.position();
 
+    if (element.firstChild().isNull()) {
+        // there's nothing in this span. Insert an invisible character to make sure the
+        // style is used. See bug: 264471.
+        cursor.insertText(QString(0x200B)); // invisible space
+    }
+
     for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
         KoXmlElement ts = node.toElement();
         const QString localName(ts.localName());
@@ -1759,7 +1765,6 @@ void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
 {
     int startPosition = cursor.position();
     int changeId = d->changeTracker->getLoadedChangeId(id);
-    int loadedTags = 0;
 
     QTextCharFormat charFormat = cursor.block().charFormat();
     QTextBlockFormat blockFormat = cursor.block().blockFormat();
@@ -1768,6 +1773,7 @@ void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
         KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
         KoXmlElement element = d->deleteChangeTable.value(id);
         KoXmlElement tag;
+        int loadedTags = 0;
         forEachElement(tag, element) {
             QString localName = tag.localName();
             if (localName == "p") {
@@ -1911,6 +1917,10 @@ void KoTextLoader::Private::processDeleteChange(QTextCursor &cursor)
 
     KoDeleteChangeMarker *marker;
     foreach (marker, markersList) {
+        if (!marker) {
+            kWarning() << "Empty KoDeleteChangeMarker in the markerslist.";
+            continue;
+        }
         int changeId = marker->changeId();
 
         KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
@@ -1962,6 +1972,9 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 
     if (d->changeTracker && d->changeStack.count()) {
         tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
+    }
+    if (tableElem.attributeNS(KoXmlNS::table, "protected", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::TableIsProtected, true);
     }
     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
     d->inTable = true;
@@ -2171,6 +2184,9 @@ void KoTextLoader::loadTableCell(KoXmlElement &rowTag, QTextTable *tbl, QList<QR
         if (cellStyle)
             cellStyle->applyStyle(cellFormat);
 
+        if (rowTag.attributeNS(KoXmlNS::table, "protected", "false") == "true") {
+            cellFormat.setProperty(KoTableCellStyle::CellIsProtected, true);
+        }
         if (d->changeTracker && d->changeStack.count()) {
             cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
         }
@@ -2271,8 +2287,6 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     // make sure that the tag is table-of-content
     Q_ASSERT(element.tagName() == "table-of-content");
     QTextBlockFormat tocFormat;
-    tocFormat.setProperty(KoText::SubFrameType, KoText::TableOfContentsFrameType);
-
 
     // for "meta-information" about the TOC we use this class
     KoTableOfContentsGeneratorInfo *info = new KoTableOfContentsGeneratorInfo();

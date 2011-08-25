@@ -196,13 +196,16 @@ public:
      *
      * FIXME: this method is only used by Tables. We should refactor so
      * it is no longer necessary.
+     * 
+     * NOTE: this actually is also used somehow to create the imagecollection
+     *        for the picture shape?
      *
      * NOTE: we store the documentmanagers in a list, and remove them
      * from the list on delete.
      *
      * @param manager the new manager
      */
-    virtual void newDocumentResourceManager(KoResourceManager *manager);
+    virtual void newDocumentResourceManager(KoResourceManager *manager) const;
     QList<KoResourceManager *> documentResourceManagers() const;
 
     /**
@@ -231,6 +234,16 @@ public:
      * @see KoShapeTemplate::properties
      */
     virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const;
+
+    /**
+     * This method provides the default implementation for creating a shape
+     * from a specified xml element of an odf document.
+     * Most derived factories do not need to reimplement this method, however if a factory
+     * has some special requirements or does something special it is still possible.
+     * One example is creating different shapes depending on the content of the passed
+     * xml element.
+     */
+    virtual KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 protected:
 
@@ -276,10 +289,10 @@ protected:
      * @param nameSpace the ODF name space (like
      * urn:oasis:names:tc:opendocument:xmlns:text:1.0,
      * take it from KoXmlNS.h)
-     * @param elementNames the name of the element itself, like "draw"
+     * @param elementNames the name of the element itself, like "path"
      *
      */
-    void setOdfElementNames(const QString &nameSpace, const QStringList &elementNames);
+    void setXmlElementNames(const QString &nameSpace, const QStringList &elementNames);
 
     /**
      * Set the namespaces and according element tags used for quick checking whether this shapefactory
@@ -288,9 +301,9 @@ protected:
      *
      * @param elementNamesList containing a list of namespace (like
      * urn:oasis:names:tc:opendocument:xmlns:text:1.0,
-     * take it from KoXmlNS.h) to a list of elementName of the element itself, like "draw"
+     * take it from KoXmlNS.h) to a list of elementName of the element itself, like "path"
      */
-    void setOdfElements(const QList<QPair<QString, QStringList> > &elementNamesList);
+    void setXmlElements(const QList<QPair<QString, QStringList> > &elementNamesList);
 
     /**
      * The hidden boolean requests if the shape should be hidden in the

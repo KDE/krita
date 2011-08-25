@@ -20,6 +20,7 @@
 
 #include "KoTextLayoutTableArea.h"
 
+#include "KoTextLayoutCellHelper.h"
 #include "TableIterator.h"
 #include "KoTextLayoutArea.h"
 #include "KoPointedAt.h"
@@ -50,16 +51,19 @@ public:
     QVector<QVector<KoTextLayoutArea *> > cellAreas;
     TableIterator *startOfArea;
     TableIterator *endOfArea;
+    bool lastRowHasSomething;
     QTextTable *table;
     int headerRows;
     qreal headerOffsetX;
     qreal headerOffsetY;
     KoTableColumnAndRowStyleManager carsManager;
     qreal tableWidth;
+    QVector<qreal> headerRowPositions; // we will only fill those that this area covers
     QVector<qreal> rowPositions; // we will only fill those that this area covers
     QVector<qreal> columnWidths;
     QVector<qreal> columnPositions;
     bool collapsing;
+    bool totalMisFit;
 };
 
 
@@ -75,13 +79,13 @@ KoTextLayoutTableArea::KoTextLayoutTableArea(QTextTable *table, KoTextLayoutArea
 
     // Resize geometry vectors for the table.
     d->rowPositions.resize(table->rows() + 1);
+    d->headerRowPositions.resize(table->rows() + 1);
     d->cellAreas.resize(table->rows());
     for (int row = 0; row < table->rows(); ++row) {
         d->cellAreas[row].resize(table->columns());
     }
     KoTableStyle tableStyle(d->table->format());
     d->collapsing = tableStyle.collapsingBorderModel();
-
 }
 
 KoTextLayoutTableArea::~KoTextLayoutTableArea()
@@ -101,7 +105,7 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
     int firstRow = qMax(d->startOfArea->row, d->headerRows);
     int lastRow = d->endOfArea->row;
 
-    if (d->endOfArea->frameIterators[0] == 0) {
+    if (d->lastRowHasSomething == false) {
         --lastRow;
     }
 
@@ -120,11 +124,11 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
     }
 
     // Test header row cells.
-    QPointF headerPoint = point + QPointF(d->headerOffsetX, d->headerOffsetY);
-    if (headerPoint.y() > d->rowPositions.first() && headerPoint.y() < d->rowPositions[d->headerRows + 1]) {
-        QVector<qreal>::const_iterator start = d->rowPositions.constBegin();
-        QVector<qreal>::const_iterator end = d->rowPositions.constBegin() + d->headerRows + 1;
-        int row = qLowerBound(start, end, headerPoint.y()) - d->rowPositions.constBegin() - 1;
+    QPointF headerPoint = point - QPointF(d->headerOffsetX, d->headerOffsetY);
+    if (headerPoint.y() > d->headerRowPositions.first() && headerPoint.y() < d->headerRowPositions[d->headerRows]) {
+        QVector<qreal>::const_iterator start = d->headerRowPositions.constBegin();
+        QVector<qreal>::const_iterator end = d->headerRowPositions.constBegin() + d->headerRows;
+        int row = qLowerBound(start, end, headerPoint.y()) - d->headerRowPositions.constBegin() - 1;
         int column = qLowerBound(d->columnPositions, headerPoint.x()) - d->columnPositions.constBegin() - 1;
         QTextTableCell cell = d->table->cellAt(row, qBound(0, column, d->table->columns() - 1));
         return d->cellAreas[cell.row()][cell.column()]->hitTest(headerPoint, accuracy);
@@ -136,7 +140,7 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
 QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
 {
     int lastRow = d->endOfArea->row;
-    if (d->endOfArea->frameIterators[0] == 0) {
+    if (d->lastRowHasSomething == false) {
         --lastRow;
     }
     if (lastRow <  d->startOfArea->row) {
@@ -148,7 +152,7 @@ QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
     QTextTableCell endTableCell = d->table->cellAt(cursor.selectionEnd());
 
     if (startTableCell == endTableCell) {
-        if (startTableCell.row() < firstRow || startTableCell.row() > lastRow) {
+        if (startTableCell.row() < d->startOfArea->row || startTableCell.row() > lastRow) {
             return QRectF(); // cell is not in this area
         }
         KoTextLayoutArea *area = d->cellAreas[startTableCell.row()][startTableCell.column()];
@@ -164,13 +168,13 @@ QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
         qreal top, bottom;
 
         if (selectionRow < d->headerRows) {
-            top = d->rowPositions[selectionRow] + d->headerOffsetY;
+            top = d->headerRowPositions[selectionRow] + d->headerOffsetY;
         } else {
             top = d->rowPositions[qMin(qMax(firstRow, selectionRow), lastRow)];
         }
 
         if (selectionRow + selectionRowSpan < d->headerRows) {
-            bottom = d->rowPositions[selectionRow + selectionRowSpan] + d->headerOffsetY;
+            bottom = d->headerRowPositions[selectionRow + selectionRowSpan] + d->headerOffsetY;
         } else {
             bottom = d->rowPositions[d->headerRows] + d->headerOffsetY;
             if (selectionRow + selectionRowSpan >= firstRow) {
@@ -187,6 +191,7 @@ bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
 {
     d->startOfArea = new TableIterator(cursor);
     d->headerRows = cursor->headerRows;
+    d->totalMisFit = false;
 
     // If table is done we create an empty area and return true
     if (cursor->row == d->table->rows()) {
@@ -205,7 +210,7 @@ bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
     } else {
         for (int row = 0; row < d->headerRows; ++row) {
             // Copy header rows
-            d->rowPositions[row] = cursor->headerRowPositions[row];
+            d->headerRowPositions[row] = cursor->headerRowPositions[row];
             for (int col = 0; col < d->table->columns(); ++col) {
                 d->cellAreas[row][col] = cursor->headerCellAreas[row][col];
             }
@@ -213,15 +218,15 @@ bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
 
         if (d->headerRows) {
             // Also set the position of the border below headers
-            d->rowPositions[d->headerRows] = cursor->headerRowPositions[d->headerRows];
+            d->headerRowPositions[d->headerRows] = cursor->headerRowPositions[d->headerRows];
         }
 
         // If headerRows == 0 then the following reduces to: d->rowPositions[cursor->row] = top()
-        d->headerOffsetY = top() - d->rowPositions[0];
-        d->rowPositions[cursor->row] = d->rowPositions[d->headerRows] + d->headerOffsetY;
+        d->headerOffsetY = top() - d->headerRowPositions[0];
+        d->rowPositions[cursor->row] = d->headerRowPositions[d->headerRows] + d->headerOffsetY;
 
         // headerOffsetX should also be set
-        d->headerOffsetX = d->columnPositions[0] - cursor->headerPositionX;
+        d->headerOffsetX = cursor->headerPositionX - d->columnPositions[0];
     }
 
     bool complete = first;
@@ -237,6 +242,8 @@ bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
         nextTopBorderWidth = 0;
         collectBorderThicknesss(cursor->row+1, bottomBorderWidth, nextTopBorderWidth);
 
+        d->lastRowHasSomething = false;
+
         complete = layoutRow(cursor, topBorderWidth, bottomBorderWidth);
 
         bottomBorderWidth = topBorderWidth;
@@ -247,17 +254,19 @@ bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
         if (complete) {
             setVirginPage(false);
             cursor->row++;
-            for (int col = 0; col < d->table->columns(); ++col) {
-                delete cursor->frameIterators[col];
-                cursor->frameIterators[col] = 0;
-            }
         }
     } while (complete && cursor->row < d->table->rows());
+
+    if (cursor->row == d->table->rows()) {
+        d->lastRowHasSomething = false;
+    }
+
 
     if (first) { // were we at the beginning of the table
         for (int row = 0; row < d->headerRows; ++row) {
             // Copy header rows
             cursor->headerRowPositions[row] = d->rowPositions[row];
+            d->headerRowPositions[row] = d->rowPositions[row];
             for (int col = 0; col < d->table->columns(); ++col) {
                 cursor->headerCellAreas[row][col] = d->cellAreas[row][col];
             }
@@ -265,8 +274,15 @@ bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
         if (d->headerRows) {
             // Also set the position of the border below headers
             cursor->headerRowPositions[d->headerRows] = d->rowPositions[d->headerRows];
+            d->headerRowPositions[d->headerRows] = d->rowPositions[d->headerRows];
         }
         cursor->headerPositionX = d->columnPositions[0];
+
+        if (!virginPage() && d->totalMisFit) {
+            //if we couldn't fit the header rows plus some then don't even try
+            cursor->row = 0;
+            nukeRow(cursor);
+        }
     }
 
     d->endOfArea = new TableIterator(cursor);
@@ -426,6 +442,7 @@ void KoTextLayoutTableArea::nukeRow(TableIterator *cursor)
         delete cursor->frameIterators[column];
         cursor->frameIterators[column] = 0;
     }
+    d->lastRowHasSomething = false;
 }
 
 bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidth, qreal bottomBorderWidth)
@@ -463,7 +480,6 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
     qreal rowHeight = rowStyle.rowHeight();
     bool rowHasExactHeight = rowStyle.hasProperty(KoTableRowStyle::RowHeight);
     qreal rowBottom;
-
 
     if (rowHasExactHeight) {
         rowBottom = d->rowPositions[row] + rowHeight;
@@ -503,7 +519,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             }
             maxBottom -= cellStyle.bottomPadding();
 
-            qreal areaTop = d->rowPositions[cell.row()] + cellStyle.topPadding();
+            qreal areaTop = d->rowPositions[qMax(cell.row(), d->startOfArea->row)] + cellStyle.topPadding();
 
             if (d->collapsing) {
                 areaTop += topBorderWidth;
@@ -556,8 +572,28 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
                     rowBottom = qMax(cellArea->bottom() + cellStyle.bottomPadding() + cellStyle.bottomBorderWidth(), rowBottom);
                 }
             }
+
+
+            d->lastRowHasSomething = true; // last row contains something (even if empty)
         }
+
         col += cell.columnSpan(); // Skip across column spans.
+
+    }
+
+    if (allCellsFullyDone) {
+        for (col = 0; col < d->table->columns(); col++) {
+            QTextTableCell cell = d->table->cellAt(row, col);
+
+            if (row == cell.row() + cell.rowSpan() - 1) {
+                delete cursor->frameIterators[col];
+                cursor->frameIterators[col] = 0;
+            }
+        }
+    }
+
+    if (noCellsFitted && row <= d->headerRows) {
+        d->totalMisFit = true;
     }
 
     if (anyCellTried && noCellsFitted && !rowHasExactHeight) {
@@ -633,13 +669,17 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
             cellArea->setReferenceRect(
                     left,
                     right,
-                    d->rowPositions[cell.row()] + cellStyle.topPadding() + cellStyle.topBorderWidth(),
+                    d->rowPositions[qMax(cell.row(), d->startOfArea->row)] + cellStyle.topPadding() + cellStyle.topBorderWidth(),
                     rowBottom - cellStyle.bottomPadding() - cellStyle.bottomBorderWidth());
 
             cellArea->setVirginPage(virginPage());
 
             FrameIterator *cellCursor =  cursor->frameIterator(col);
+
             cellArea->layout(cellCursor);
+            if (cellArea->top() < cellArea->bottom() && row == d->headerRows) {
+                d->totalMisFit = false;
+            }
         }
         col += cell.columnSpan(); // Skip across column spans.
     }
@@ -652,7 +692,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
         return;
 
     int lastRow = d->endOfArea->row;
-    if (d->endOfArea->frameIterators[0] == 0) {
+    if (d->lastRowHasSomething == false) {
         --lastRow;
     }
     if (lastRow <  d->startOfArea->row) {
@@ -662,16 +702,16 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     int firstRow = qMax(d->startOfArea->row, d->headerRows);
 
     // Draw table background
-    qreal topY = d->headerRows ?d->rowPositions[0] : d->rowPositions[firstRow];
+    qreal topY = d->headerRows ? d->rowPositions[0] : d->rowPositions[firstRow];
     QRectF tableRect(d->columnPositions[0], topY, d->tableWidth,
-                     d->rowPositions[d->headerRows] - d->rowPositions[0]
+                     d->headerRowPositions[d->headerRows] - d->headerRowPositions[0]
                      + d->rowPositions[lastRow+1] - d->rowPositions[firstRow]);
 
     painter->fillRect(tableRect, d->table->format().background());
 
     // Draw header row backgrounds
     for (int row = 0; row < d->headerRows; ++row) {
-        QRectF rowRect(d->columnPositions[0], d->rowPositions[row], d->tableWidth, d->rowPositions[row+1] - d->rowPositions[row]);
+        QRectF rowRect(d->columnPositions[0], d->headerRowPositions[row], d->tableWidth, d->headerRowPositions[row+1] - d->headerRowPositions[row]);
 
         KoTableRowStyle rowStyle = d->carsManager.rowStyle(row);
 
@@ -694,7 +734,8 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
 
-            if (d->cellAreas[row][column]) {
+            int testRow = (row == firstRow ? tableCell.row() : row);
+            if (d->cellAreas[testRow][column]) {
                 paintCell(painter, context, tableCell);
             }
         }
@@ -711,7 +752,8 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
 
-            if (d->cellAreas[row][column]) {
+            int testRow = row == firstRow ? tableCell.row() : row;
+            if (d->cellAreas[testRow][column]) {
                 paintCell(painter, context, tableCell);
 
                 painter->setRenderHint(QPainter::Antialiasing, true);
@@ -727,7 +769,6 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     painter->translate(-d->headerOffsetX, -d->headerOffsetY);
 
     // Draw cell borders.
-
     bool topRow = !d->headerRows && firstRow != 0; // are we top row in this area
 
     painter->setRenderHint(QPainter::Antialiasing, true);
@@ -735,16 +776,14 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
 
-            if (d->cellAreas[row][column]) {
+            int testRow = row == firstRow ? tableCell.row() : row;
+            if (d->cellAreas[testRow][column]) {
                 paintCellBorders(painter, context, tableCell, topRow, &accuBlankBorders);
             }
         }
         topRow = false;
     }
     painter->setRenderHint(QPainter::Antialiasing, hasAntialiasing);
-
-    if (d->collapsing && firstRow != 0) {
-    }
 
     QPen pen(painter->pen());
     painter->setPen(QPen(QColor(0,0,0,96)));
@@ -761,7 +800,7 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
     QRectF bRect(cellBoundingRect(tableCell));
 
     // Possibly paint the background of the cell
-    QVariant background(tableCell.format().property(KoTableBorderStyle::CellBackgroundBrush));
+    QVariant background(tableCell.format().property(KoTableCellStyle::CellBackgroundBrush));
     if (!background.isNull()) {
         painter->fillRect(bRect, qvariant_cast<QBrush>(background));
     }
@@ -801,14 +840,15 @@ void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocu
 
     // This is an actual cell we want to draw, and not a covered one.
     QTextTableCellFormat tfm(tableCell.format().toTableCellFormat());
-    KoTableBorderStyle cellStyle(tfm);
+    KoTableCellStyle cellStyle(tfm);
+    KoTextLayoutCellHelper cellStyleHelper(cellStyle);
 
     QRectF bRect = cellBoundingRect(tableCell);
 
     if (d->collapsing) {
         // First the horizontal borders
         if (row == 0) {
-            cellStyle.drawTopHorizontalBorder(*painter, bRect.x(), bRect.y(), bRect.width(), accuBlankBorders);
+            cellStyleHelper.drawTopHorizontalBorder(*painter, bRect.x(), bRect.y(), bRect.width(), accuBlankBorders);
         }
         if (topRow) {
             // in collapsing mode we need to also paint the top border of the area
@@ -819,14 +859,15 @@ void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocu
                 QRectF aboveBRect = cellBoundingRect(tableCellAbove);
                 qreal x = qMax(bRect.x(), aboveBRect.x());
                 qreal x2 = qMin(bRect.right(), aboveBRect.right());
-                KoTableBorderStyle cellAboveStyle(aboveTfm);
-                cellAboveStyle.drawSharedHorizontalBorder(*painter, cellStyle, x, bRect.y(), x2 - x, accuBlankBorders);
+                KoTableCellStyle cellAboveStyle(aboveTfm);
+                KoTextLayoutCellHelper cellAboveStyleHelper(cellAboveStyle);
+                cellAboveStyleHelper.drawSharedHorizontalBorder(*painter, cellStyle, x, bRect.y(), x2 - x, accuBlankBorders);
                 c = tableCellAbove.column() + tableCellAbove.columnSpan();
             }
         }
         if (row + tableCell.rowSpan() == d->table->rows()) {
             // we hit the bottom of the table so just draw the bottom border
-            cellStyle.drawBottomHorizontalBorder(*painter, bRect.x(), bRect.bottom(), bRect.width(), accuBlankBorders);
+            cellStyleHelper.drawBottomHorizontalBorder(*painter, bRect.x(), bRect.bottom(), bRect.width(), accuBlankBorders);
         } else {
             int c = column;
             while (c < column + tableCell.columnSpan()) {
@@ -836,38 +877,40 @@ void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocu
                 QRectF belowBRect = cellBoundingRect(tableCellBelow);
                 qreal x = qMax(bRect.x(), belowBRect.x());
                 qreal x2 = qMin(bRect.right(), belowBRect.right());
-                KoTableBorderStyle cellBelowStyle(belowTfm);
-                cellStyle.drawSharedHorizontalBorder(*painter, cellBelowStyle, x, bRect.bottom(), x2 - x, accuBlankBorders);
+                KoTableCellStyle cellBelowStyle(belowTfm);
+                KoTextLayoutCellHelper cellBelowStyleHelper(cellBelowStyle);
+                cellStyleHelper.drawSharedHorizontalBorder(*painter, cellBelowStyle, x, bRect.bottom(), x2 - x, accuBlankBorders);
                 c = tableCellBelow.column() + tableCellBelow.columnSpan();
             }
         }
 
         // And then the same treatment for vertical borders
         if (column == 0) {
-            cellStyle.drawLeftmostVerticalBorder(*painter, bRect.x(), bRect.y(), bRect.height() + cellStyle.bottomOuterBorderWidth(), accuBlankBorders);
+            cellStyleHelper.drawLeftmostVerticalBorder(*painter, bRect.x(), bRect.y(), bRect.height() + cellStyle.bottomOuterBorderWidth(), accuBlankBorders);
         }
         if (column + tableCell.columnSpan() == d->table->columns()) {
             // we hit the rightmost edge of the table so draw the rightmost border
-            cellStyle.drawRightmostVerticalBorder(*painter, bRect.right(), bRect.y(), bRect.height() + cellStyle.bottomOuterBorderWidth(), accuBlankBorders);
+            cellStyleHelper.drawRightmostVerticalBorder(*painter, bRect.right(), bRect.y(), bRect.height() + cellStyle.bottomOuterBorderWidth(), accuBlankBorders);
         } else {
             // we have cells to the right so draw sharedborders
             int r = row;
             while (r < row + tableCell.rowSpan()) {
                 QTextTableCell tableCellRight = d->table->cellAt(r, column + tableCell.columnSpan());
                 QTextTableCellFormat rightTfm(tableCellRight.format().toTableCellFormat());
-                KoTableBorderStyle cellBelowRight(rightTfm);
+                KoTableCellStyle cellBelowRight(rightTfm);
+                KoTextLayoutCellHelper cellBelowRightHelper(cellBelowRight);
                 QRectF rightBRect = cellBoundingRect(tableCellRight);
                 qreal y = qMax(bRect.y(), rightBRect.y());
                 qreal y2 = qMin(bRect.bottom() + cellStyle.bottomOuterBorderWidth(), rightBRect.bottom() + cellBelowRight.bottomOuterBorderWidth());
-                cellStyle.drawSharedVerticalBorder(*painter, cellBelowRight, bRect.right(), y, y2-y, accuBlankBorders);
+                cellBelowRightHelper.drawSharedVerticalBorder(*painter, cellBelowRight, bRect.right(), y, y2-y, accuBlankBorders);
                 r = tableCellRight.row() + rightTfm.tableCellRowSpan();
             }
         }
 
         // Paint diagonal borders for current cell
-        cellStyle.paintDiagonalBorders(*painter, bRect);
+        cellStyleHelper.paintDiagonalBorders(*painter, bRect);
     } else { // separating border model
-        cellStyle.paintBorders(*painter, bRect, accuBlankBorders);
+        cellStyleHelper.paintBorders(*painter, bRect, accuBlankBorders);
     }
 }
 
@@ -877,10 +920,11 @@ QRectF KoTextLayoutTableArea::cellBoundingRect(const QTextTableCell &cell) const
     int rowSpan = cell.rowSpan();
     const int column = cell.column();
     const int columnSpan = cell.columnSpan();
+    const qreal width = d->columnPositions[column + columnSpan] - d->columnPositions[column];
 
     if (row >= d->headerRows) {
         int lastRow = d->endOfArea->row;
-        if (d->endOfArea->frameIterators[0] == 0) {
+        if (d->lastRowHasSomething == false) {
             --lastRow;
         }
         if (lastRow <  d->startOfArea->row) {
@@ -895,9 +939,9 @@ QRectF KoTextLayoutTableArea::cellBoundingRect(const QTextTableCell &cell) const
         if (row + rowSpan - 1 > lastRow) {
             rowSpan = lastRow - row + 1;
         }
+        const qreal height = d->rowPositions[row + rowSpan] - d->rowPositions[row];
+        return QRectF(d->columnPositions[column], d->rowPositions[row], width, height);
+    } else {
+        return QRectF(d->columnPositions[column], d->headerRowPositions[row], width, d->headerRowPositions[row + rowSpan] - d->headerRowPositions[row]);
     }
-    const qreal width = d->columnPositions[column + columnSpan] - d->columnPositions[column];
-    const qreal height = d->rowPositions[row + rowSpan] - d->rowPositions[row];
-
-    return QRectF(d->columnPositions[column], d->rowPositions[row], width, height);
 }

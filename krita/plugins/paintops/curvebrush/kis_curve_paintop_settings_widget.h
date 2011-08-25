@@ -19,16 +19,12 @@
 #ifndef KIS_CURVE_PAINTOP_SETTINGS_WIDGET_H_
 #define KIS_CURVE_PAINTOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_settings_widget.h>
+#include <kis_paintop_options_widget.h>
 
-#include "ui_wdgcurveoptions.h"
-#include "widgets/kis_popup_button.h"
+class KisCurveOpOption;
+class KisPropertiesConfiguration;
 
-const QString CURVE_MIN_DISTANCE = "Curve/minimumDistance";
-const QString CURVE_MODE = "Curve/mode";
-const QString CURVE_INTERVAL = "Curve/interval";
-
-class KisCurvePaintOpSettingsWidget : public KisPaintOpSettingsWidget
+class KisCurvePaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {
     Q_OBJECT
 
@@ -36,14 +32,11 @@ public:
     KisCurvePaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisCurvePaintOpSettingsWidget();
 
-    void setConfiguration(const KisPropertiesConfiguration * config);
     KisPropertiesConfiguration* configuration() const;
-    void writeConfiguration(KisPropertiesConfiguration *config) const;
-    
-    int curveMode() const;
 
 private:
-    Ui::WdgCurveOptions* m_options;
+    KisCurveOpOption * m_options;
 };
+
 
 #endif

@@ -331,6 +331,7 @@ public:
      * ?s2 ?p2 ?s
      */
     void expandStatementsReferencingSubject(Soprano::Model *model) const;
+
     /**
      * If model contains ?s ?p ?o
      * look for and add
@@ -371,7 +372,14 @@ public:
      */
     void expandStatements(Soprano::Model *model) const;
 
+    /**
+     * XXXX? What does this do?
+     */
     KAction* createInsertSemanticObjectReferenceAction(KoCanvasBase *host);
+
+    /**
+     * XXXX? What does this do?
+     */
     QList<KAction*> createInsertSemanticObjectNewActions(KoCanvasBase *host);
 
     /**
@@ -384,12 +392,13 @@ public:
      * @see insertReflow()
      * @see applyReflow()
      */
-    struct reflowItem {
+    struct reflowItem
+    {
         KoRdfSemanticItem *m_si;
         KoSemanticStylesheet *m_ss;
         QString m_xmlid;
         QPair<int, int> m_extent;
-    public:
+
         reflowItem(KoRdfSemanticItem *si, const QString &xmlid, KoSemanticStylesheet *ss, const QPair<int, int> &extent);
     };
 
@@ -429,6 +438,31 @@ public:
      * For debugging, output the model and a header string for identification
      */
     void dumpModel(const QString &msg, Soprano::Model *m = 0) const;
+
+signals:
+    /**
+     * Emitted when a new semanticItem is created so that dockers can
+     * update themselves accordingly. It is expected that when
+     * semanticObjectViewSiteUpdated is emitted the view will take care
+     * of reflowing the semanitc item using it's stylesheet.
+     */
+    void semanticObjectAdded(KoRdfSemanticItem *item) const;
+    void semanticObjectUpdated(KoRdfSemanticItem *item) const;
+    void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid) const;
+
+public:
+    void emitSemanticObjectAdded(KoRdfSemanticItem *item) const;
+    void emitSemanticObjectUpdated(KoRdfSemanticItem *item);
+    void emitSemanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
+    void emitSemanticObjectAddedConst(KoRdfSemanticItem *const item) const;
+
+    /**
+     * You should use the KoRdfSemanticItem::userStylesheets() method instead of this one.
+     * This is mainly an internal method to allow user stylesheets to be managed per document.
+     */
+    QList<KoSemanticStylesheet*> userStyleSheetList(const QString& className) const;
+    void setUserStyleSheetList(const QString& className,const QList<KoSemanticStylesheet*>& l);
+
 
 private:
 
@@ -478,30 +512,6 @@ private:
      */
     void addLocations(Soprano::Model *m, QList<KoRdfLocation*> &ret,
                       bool isGeo84, const QString &sparql);
-
-signals:
-    /**
-     * Emitted when a new semanticItem is created so that dockers can
-     * update themselves accordingly. It is expected that when
-     * semanticObjectViewSiteUpdated is emitted the view will take care
-     * of reflowing the semanitc item using it's stylesheet.
-     */
-    void semanticObjectAdded(KoRdfSemanticItem *item) const;
-    void semanticObjectUpdated(KoRdfSemanticItem *item) const;
-    void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid) const;
-
-public:
-    void emitSemanticObjectAdded(KoRdfSemanticItem *item) const;
-    void emitSemanticObjectUpdated(KoRdfSemanticItem *item);
-    void emitSemanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
-    void emitSemanticObjectAddedConst(KoRdfSemanticItem *const item) const;
-
-    /**
-     * You should use the KoRdfSemanticItem::userStylesheets() method instead of this one.
-     * This is mainly an internal method to allow user stylesheets to be managed per document.
-     */
-    QList<KoSemanticStylesheet*> userStyleSheetList(const QString& className) const;
-    void setUserStyleSheetList(const QString& className,const QList<KoSemanticStylesheet*>& l);
 
 private:
     /// reimplemented

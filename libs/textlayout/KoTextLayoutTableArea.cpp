@@ -124,11 +124,11 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
     }
 
     // Test header row cells.
-    QPointF headerPoint = point + QPointF(d->headerOffsetX, d->headerOffsetY);
-    if (headerPoint.y() > d->rowPositions.first() && headerPoint.y() < d->rowPositions[d->headerRows + 1]) {
-        QVector<qreal>::const_iterator start = d->rowPositions.constBegin();
-        QVector<qreal>::const_iterator end = d->rowPositions.constBegin() + d->headerRows + 1;
-        int row = qLowerBound(start, end, headerPoint.y()) - d->rowPositions.constBegin() - 1;
+    QPointF headerPoint = point - QPointF(d->headerOffsetX, d->headerOffsetY);
+    if (headerPoint.y() > d->headerRowPositions.first() && headerPoint.y() < d->headerRowPositions[d->headerRows]) {
+        QVector<qreal>::const_iterator start = d->headerRowPositions.constBegin();
+        QVector<qreal>::const_iterator end = d->headerRowPositions.constBegin() + d->headerRows;
+        int row = qLowerBound(start, end, headerPoint.y()) - d->headerRowPositions.constBegin() - 1;
         int column = qLowerBound(d->columnPositions, headerPoint.x()) - d->columnPositions.constBegin() - 1;
         QTextTableCell cell = d->table->cellAt(row, qBound(0, column, d->table->columns() - 1));
         return d->cellAreas[cell.row()][cell.column()]->hitTest(headerPoint, accuracy);
@@ -152,7 +152,7 @@ QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
     QTextTableCell endTableCell = d->table->cellAt(cursor.selectionEnd());
 
     if (startTableCell == endTableCell) {
-        if (startTableCell.row() < firstRow || startTableCell.row() > lastRow) {
+        if (startTableCell.row() < d->startOfArea->row || startTableCell.row() > lastRow) {
             return QRectF(); // cell is not in this area
         }
         KoTextLayoutArea *area = d->cellAreas[startTableCell.row()][startTableCell.column()];
@@ -168,13 +168,13 @@ QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
         qreal top, bottom;
 
         if (selectionRow < d->headerRows) {
-            top = d->rowPositions[selectionRow] + d->headerOffsetY;
+            top = d->headerRowPositions[selectionRow] + d->headerOffsetY;
         } else {
             top = d->rowPositions[qMin(qMax(firstRow, selectionRow), lastRow)];
         }
 
         if (selectionRow + selectionRowSpan < d->headerRows) {
-            bottom = d->rowPositions[selectionRow + selectionRowSpan] + d->headerOffsetY;
+            bottom = d->headerRowPositions[selectionRow + selectionRowSpan] + d->headerOffsetY;
         } else {
             bottom = d->rowPositions[d->headerRows] + d->headerOffsetY;
             if (selectionRow + selectionRowSpan >= firstRow) {

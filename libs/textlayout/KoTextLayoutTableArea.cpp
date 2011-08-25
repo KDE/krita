@@ -62,6 +62,7 @@ public:
     QVector<qreal> columnWidths;
     QVector<qreal> columnPositions;
     bool collapsing;
+    bool totalMisFit;
 };
 
 
@@ -188,6 +189,7 @@ bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
 {
     d->startOfArea = new TableIterator(cursor);
     d->headerRows = cursor->headerRows;
+    d->totalMisFit = false;
 
     // If table is done we create an empty area and return true
     if (cursor->row == d->table->rows()) {
@@ -257,6 +259,7 @@ bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
         d->lastRowHasSomething = false;
     }
 
+
     if (first) { // were we at the beginning of the table
         for (int row = 0; row < d->headerRows; ++row) {
             // Copy header rows
@@ -270,6 +273,12 @@ bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
             cursor->headerRowPositions[d->headerRows] = d->rowPositions[d->headerRows];
         }
         cursor->headerPositionX = d->columnPositions[0];
+
+        if (!virginPage() && d->totalMisFit) {
+            //if we couldn't fit the header rows plus some then don't even try
+            cursor->row = 0;
+            nukeRow(cursor);
+        }
     }
 
     d->endOfArea = new TableIterator(cursor);
@@ -579,6 +588,10 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
         }
     }
 
+    if (noCellsFitted && row <= d->headerRows) {
+        d->totalMisFit = true;
+    }
+
     if (anyCellTried && noCellsFitted && !rowHasExactHeight) {
         d->rowPositions[row+1] = d->rowPositions[row];
         nukeRow(cursor);
@@ -660,6 +673,9 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
             FrameIterator *cellCursor =  cursor->frameIterator(col);
 
             cellArea->layout(cellCursor);
+            if (cellArea->top() < cellArea->bottom() && row == d->headerRows) {
+                d->totalMisFit = false;
+            }
         }
         col += cell.columnSpan(); // Skip across column spans.
     }

@@ -208,6 +208,17 @@ void TestKoInlineTextObjectManager::testRemoveInlineObject()
 
     // this should not crash, even though we were a listener
     manager.setProperty(KoInlineObject::User, "bla");
+
+    // now insert a bookmark and remove it. It should also be gone from the bookmark manager
+    KoBookmark *bm = new KoBookmark(&doc);
+    bm->setType(KoBookmark::SinglePosition);
+    bm->setName("single!");
+    manager.insertInlineObject(*editor.cursor(), bm);
+    Q_ASSERT(manager.bookmarkManager()->bookmarkNameList().contains("single!"));
+    manager.removeInlineObject(bm);
+    Q_ASSERT(!manager.bookmarkManager()->bookmarkNameList().contains("single!"));
+    Q_ASSERT(!manager.bookmarkManager()->retrieveBookmark("single!"));
+
 }
 
 void TestKoInlineTextObjectManager::testListenToProperties()

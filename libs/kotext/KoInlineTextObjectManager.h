@@ -85,6 +85,9 @@ public:
     /**
      * Remove an inline object from this manager (as well as the document).
      * This method will also remove the placeholder for the inline object.
+     * This method will try to smartly remove the bookmark from the bookmark manager if the object
+     * at the cursor position is a bookmark; the corresponding start or end bookmark will become
+     * a single bookmark.
      * @param cursor the cursor which indicated the document and the position in that document
      *      where the inline object will be deleted
      * @return returns true if the inline object in the cursor position has been successfully
@@ -92,7 +95,13 @@ public:
      */
     bool removeInlineObject(QTextCursor &cursor);
 
-    /// remove an inline object from this manager.
+    /**
+     * Remove an inline object from this manager. The object will also be removed from
+     * the bookmarkmanager if it is a bookmark. This is not done smart: you might end up
+     * with dangling start or end bookmarks.
+     * XXX: what about variables?
+     * @param the object to be removed
+     */
     void removeInlineObject(KoInlineObject *object);
 
     /**

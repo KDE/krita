@@ -103,14 +103,19 @@ public:
      * @see KoInlineObject::propertyChangeListener()
      */
     void setProperty(KoInlineObject::Property key, const QVariant &value);
+
     /// retrieve a propery
     QVariant property(KoInlineObject::Property key) const;
+
     /// retrieve an int property
     int intProperty(KoInlineObject::Property key) const;
+
     /// retrieve a bool property
     bool boolProperty(KoInlineObject::Property key) const;
+
     /// retrieve a string property
     QString stringProperty(KoInlineObject::Property key) const;
+
     /// remove a property from the store.
     void removeProperty(KoInlineObject::Property key);
 
@@ -131,7 +136,7 @@ public:
      * Create a list of actions that can be used to plug into a menu, for example.
      * This method internally uses KoInlineObjectRegistry::createInsertVariableActions() but extends
      * the list with all registered variable-names.
-     * Each of thse actions, when executed, will insert the relevant variable in the current text-position.
+     * Each of these actions, when executed, will insert the relevant variable in the current text-position.
      * The actions assume that the text tool is selected, if thats not the case then they will silently fail.
      * @param host the canvas for which these actions are created.  Note that the actions will get these
      *  actions as a parent (for memory management purposes) as well.
@@ -158,7 +163,6 @@ signals:
     void propertyChanged(int, const QVariant &variant);
 
 private:
-
 
     QHash<int, KoInlineObject*> m_objects;
     QList<KoInlineObject*> m_listeners; // holds objects also in m_objects, but which want propertyChanges

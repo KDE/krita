@@ -79,7 +79,7 @@ KoDocumentRdfPrivate::~KoDocumentRdfPrivate()
 }
 
 
-KoDocumentRdf::KoDocumentRdf(KoDocument *parent)
+KoDocumentRdf::KoDocumentRdf(QObject *parent)
         : KoDocumentRdfBase(parent)
         , d (new KoDocumentRdfPrivate())
 {

@@ -35,6 +35,8 @@
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
 
+#include "TestSemanticItem.h"
+
 const QString lorem(
     "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
     "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud"
@@ -44,150 +46,6 @@ const QString lorem(
     "deserunt mollit anim id est laborum.\n"
     );
 
-class TestSemanticItem : public KoRdfSemanticItem
-{
-public:
-    const QString PREDBASE;
-
-    TestSemanticItem(QObject *parent, const KoDocumentRdf *rdf = 0)
-        : KoRdfSemanticItem(const_cast<KoDocumentRdf*>(rdf), parent)
-        , PREDBASE("http://calligra-suite.org/testrdf/")
-        , m_uri(QUuid::createUuid().toString())
-    {
-        Q_ASSERT(!m_uri.isEmpty());
-
-        m_linkingSubject = Soprano::Node::createResourceNode(m_uri);
-
-        Q_ASSERT(context().isValid());
-        Q_ASSERT(m_linkingSubject.isResource());
-        setRdfType(PREDBASE + "testitem");
-        Q_ASSERT(documentRdf()->model()->statementCount() > 0);
-
-        updateTriple(m_payload, lorem,  PREDBASE + "payload");
-    }
-
-    TestSemanticItem(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
-        : KoRdfSemanticItem(const_cast<KoDocumentRdf*>(rdf), it, parent)
-    {
-        m_uri = it.binding("object").toString();
-        Q_ASSERT(!m_uri.isNull());
-        m_linkingSubject = Soprano::Node::createResourceNode(m_uri);
-        Q_ASSERT(m_linkingSubject.isResource());
-        m_name = it.binding("name").toString();
-        Q_ASSERT(!m_name.isNull());
-        m_payload = it.binding("payload").toString();
-        Q_ASSERT(!m_payload.isNull());
-    }
-
-    virtual ~TestSemanticItem()
-    {
-    }
-
-    virtual QWidget *createEditor(QWidget */*parent*/)
-    {
-        return 0;
-    }
-
-    virtual void updateFromEditorData()
-    {
-    }
-
-    virtual void exportToFile(const QString &/*fileName*/ = QString()) const
-    {
-    }
-
-    virtual void importFromData(const QByteArray &/*ba*/, KoDocumentRdf */*rdf*/ = 0, KoCanvasBase */*host*/ = 0)
-    {
-    }
-
-    void setName(const QString &name)
-    {
-        updateTriple(m_name, name, PREDBASE + "name");
-        if (documentRdf()) {
-            const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
-        }
-    }
-
-    virtual QString name() const
-    {
-        return m_name;
-    }
-
-    virtual QString className() const
-    {
-        return "TestSemanticItem";
-    }
-
-    virtual QList<KoSemanticStylesheet*> stylesheets() const
-    {
-        QList<KoSemanticStylesheet*> sheets;
-        return sheets;
-    }
-
-    Soprano::Node linkingSubject() const
-    {
-        return m_linkingSubject;
-    }
-
-    static QList<TestSemanticItem*> allObjects(KoDocumentRdf* rdf, Soprano::Model *model = 0)
-    {
-        QList<TestSemanticItem*> result;
-        const Soprano::Model* m = model ? model : rdf->model();
-
-        QString query =
-                "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-                "prefix testrdf: <http://calligra-suite.org/testrdf/> \n"
-                "select distinct ?name ?object ?payload \n"
-                "where { \n"
-                "    ?object rdf:type testrdf:testitem . \n"
-                "    ?object testrdf:name ?name . \n"
-                "    ?object testrdf:payload ?payload \n"
-                "}\n"
-                "    order by  DESC(?name) \n ";
-
-        Soprano::QueryResultIterator it = m->executeQuery(query,
-                                                          Soprano::Query::QueryLanguageSparql);
-
-        while (it.next()) {
-            TestSemanticItem *item = new TestSemanticItem(rdf, rdf, it);
-            result << item;
-        }
-        return result;
-    }
-
-    static QList<TestSemanticItem *> findItemsByName(const QString name, KoDocumentRdf* rdf, Soprano::Model *model = 0)
-    {
-        QList<TestSemanticItem*> result;
-        const Soprano::Model* m = model ? model : rdf->model();
-
-        QString query(
-                    "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-                    "prefix testrdf: <http://calligra-suite.org/testrdf/> \n"
-                    "select distinct ?name ?object ?payload \n"
-                    "where { \n"
-                    "    ?object rdf:type testrdf:testitem . \n"
-                    "    ?object testrdf:name ?name . \n"
-                    "    ?object testrdf:payload ?payload . \n"
-                    "    filter (?name = %1) "
-                    "}\n"
-                    "    order by  DESC(?name) \n ");
-
-        Soprano::QueryResultIterator it = m->executeQuery(query.arg(Soprano::Node::literalToN3(name)),
-                                                          Soprano::Query::QueryLanguageSparql);
-
-        while (it.next()) {
-            TestSemanticItem *item = new TestSemanticItem(rdf, rdf, it);
-            result << item;
-        }
-        return result;
-    }
-
-private:
-    Soprano::Node m_linkingSubject;
-    QString m_name;
-    QString m_uri;
-    QString m_payload;
-};
 
 QString RdfTest::insertSemItem(KoTextEditor &editor,
                                KoDocumentRdf &rdfDoc,
@@ -422,6 +280,7 @@ void RdfTest::testEditAndFindMarkers()
     idList << newId;
 
 
+    // XXX: finish test!
 }
 
 void RdfTest::testRemoveMarkers()
@@ -463,8 +322,9 @@ void RdfTest::testRemoveMarkers()
 
     QPair<int, int> pos = rdfDoc.findExtent(newId);
 
-    editor.setPosition(pos.first, QTextCursor::MoveAnchor);
-    editor.setPosition(pos.second, QTextCursor::KeepAnchor);
+    // move around the markers for this item.
+    editor.setPosition(pos.first - 10, QTextCursor::MoveAnchor);
+    editor.setPosition(pos.second + 10, QTextCursor::KeepAnchor);
 
     Q_ASSERT(editor.hasSelection());
 
@@ -472,6 +332,17 @@ void RdfTest::testRemoveMarkers()
     editor.removeSelectedText();
 
     results = TestSemanticItem::allObjects(&rdfDoc);
+
+    // we haven't rebuild the rdf database yet -- and we cannot do that from KoTextEditor,
+    // so there still are 4 items
+    Q_ASSERT(results.count() == 4);
+
+    // now redo the database
+    rdfDoc.updateInlineRdfStatements(&doc);
+
+    // and now there should be three
+    results = TestSemanticItem::allObjects(&rdfDoc);
+
     qDebug() << "we have" << results.count() << "items";
     foreach(TestSemanticItem* item, results) {
         Q_ASSERT(item->xmlIdList().length() == 1);
@@ -480,7 +351,6 @@ void RdfTest::testRemoveMarkers()
         editor.setPosition(pos.first + 1);
         qDebug() << "points to table" << editor.cursor()->currentTable();
     }
-
 }
 
 QTEST_MAIN(RdfTest)

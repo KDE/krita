@@ -20,8 +20,8 @@
 
 
 
-#ifndef RDF_TEST_H
-#define RDF_TEST_H
+#ifndef TEST_KO_DOCUMENT_RDF_H
+#define TEST_KO_DOCUMENT_RDF_H
 
 #include <QtCore/QObject>
 
@@ -30,25 +30,14 @@ class KoTextEditor;
 class KoDocumentRdf;
 class QString;
 
-class RdfTest : public QObject
+class TestKoDocumentRdf : public QObject
 {
     Q_OBJECT
-
-    void testCreateMarkers();
-    void testFindMarkers();
-    void testFindByName();
-    void testEditAndFindMarkers();
+    
 private slots:
+    
+    void testCreate();
 
-    void testRemoveMarkers();
-
-private:
-
-    // @return the xml id for the inserted item
-    QString insertSemItem(KoTextEditor &editor,
-                          KoDocumentRdf &rdfDoc,
-                          QObject &parent,
-                          const QString name);
 };
 
-#endif // RDF_TEST_H
+#endif // TEST_KO_DOCUMENT_RDF_H

@@ -54,7 +54,11 @@ public:
     };
 
     /**
-     * Constructor
+     * Constructor.
+     *
+     * By default a bookmark has the SinglePosition type and an empty name.
+     * The name is set when the book is inserted into the bookmark manager.
+     *
      * @param name the name for this bookmark
      * @param document the text document where this bookmark is located
      */

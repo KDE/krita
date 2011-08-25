@@ -53,6 +53,7 @@ KoBookmark::KoBookmark(const QTextDocument *document)
     : KoInlineObject(false),
       d(new Private(document))
 {
+    d->type = SinglePosition;
     d->endBookmark = 0;
 }
 

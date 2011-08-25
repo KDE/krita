@@ -31,8 +31,6 @@
 #include <QClipboard>
 #include <QLabel>
 #include <QTabBar>
-#include <QDropEvent>
-#include <QDragEnterEvent>
 
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
@@ -187,20 +185,10 @@ KoPAView::~KoPAView()
     delete d;
 }
 
-void KoPAView::dragEnterEvent(QDragEnterEvent *event)
-{
-    if (event->mimeData()->hasImage()
-            || event->mimeData()->hasUrls()) {
-        event->accept();
-    } else {
-        event->ignore();
-    }
-}
-
-void KoPAView::dropEvent(QDropEvent *event)
+void KoPAView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 {
     // get position from event and convert to document coordinates
-    QPointF pos = zoomHandler()->viewToDocument(event->pos())
+    QPointF pos = zoomHandler()->viewToDocument(insertAt)
             + kopaCanvas()->documentOffset() - kopaCanvas()->documentOrigin();
 
     // create a factory
@@ -210,37 +198,7 @@ void KoPAView::dropEvent(QDropEvent *event)
         return;
     }
 
-    // we can drop a list of urls from, for instance dolphin
-    QList<QImage> images;
-
-    if (event->mimeData()->hasImage()) {
-        images << event->mimeData()->imageData().value<QImage>();
-    }
-    else if (event->mimeData()->hasUrls()) {
-        QList<QUrl> urls = event->mimeData()->urls();
-        foreach (const QUrl url, urls) {
-            QImage image;
-            KUrl kurl(url);
-            // make sure we download the files before inserting them
-            if (!kurl.isLocalFile()) {
-                QString tmpFile;
-                if( KIO::NetAccess::download(kurl, tmpFile, this)) {
-                    image.load(tmpFile);
-                    KIO::NetAccess::removeTempFile(tmpFile);
-                } else {
-                    KMessageBox::error(this, KIO::NetAccess::lastErrorString());
-                }
-            }
-            else {
-                image.load(kurl.toLocalFile());
-            }
-            if (!image.isNull()) {
-                images << image;
-            }
-        }
-    }
-
-    foreach(const QImage image, images) {
+    foreach(const QImage image, imageList) {
 
         KoProperties params;
         QVariant v;
@@ -266,6 +224,7 @@ void KoPAView::dropEvent(QDropEvent *event)
         kopaCanvas()->addCommand(cmd);
     }
 }
+
 
 void KoPAView::initGUI()
 {

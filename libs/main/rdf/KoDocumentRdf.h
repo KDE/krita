@@ -181,11 +181,7 @@ public:
     /**
      * Find all the KoTextInlineRdf objects that exist in the
      * document and update the statements in the Soprano::model to
-     * reflect the current state of the inline Rdf. You should call
-     * KoDocument::updateInlineRdfStatements() instead which will pass
-     * the required arguments to the method for you.
-     *
-     * @see KoDocument::updateInlineRdfStatements()
+     * reflect the current state of the inline Rdf.
      */
     void updateInlineRdfStatements(QTextDocument *qdoc);
 

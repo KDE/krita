@@ -63,10 +63,6 @@ KoShape *PictureShapeFactory::createDefaultShape(KoResourceManager *documentReso
 
 KoShape *PictureShapeFactory::createShape(const KoProperties *params, KoResourceManager *documentResources) const
 {
-    if (!documentResources->imageCollection()) {
-        newDocumentResourceManager(documentResources);
-    }
-
     PictureShape *shape = static_cast<PictureShape*>(createDefaultShape(documentResources));
     if (params->contains("qimage")) {
         QImage image = params->property("qimage").value<QImage>();

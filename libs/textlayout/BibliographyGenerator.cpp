@@ -36,6 +36,7 @@
 
 #include <QTextFrame>
 #include <QTimer>
+#include "KoInlineCite.h"
 #include <KDebug>
 #include <KoBookmark.h>
 #include <KoInlineTextObjectManager.h>

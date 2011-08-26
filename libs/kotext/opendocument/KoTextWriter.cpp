@@ -1685,11 +1685,6 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             || frameType == KoText::FootNotesFrameType) {
             break; // we've reached the "end" (end/footnotes saved by themselves)
                    // note how NoteFrameType passes through here so the notes can
-<<<<<<< HEAD
-                  // call writeBlocks to save their contents.
-=======
-                   // call writeBlocks to save their contents.
->>>>>>> 90cb3e26578dae3b6fc45e2fd89d28ea93677743
         }
 
 

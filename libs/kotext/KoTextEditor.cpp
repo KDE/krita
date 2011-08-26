@@ -46,6 +46,8 @@
 #include "commands/DeleteTableColumnCommand.h"
 #include "commands/InsertTableRowCommand.h"
 #include "commands/InsertTableColumnCommand.h"
+#include "KoInlineCite.h"
+#include "KoBibliographyInfo.h"
 
 #include <KLocale>
 #include <kundo2stack.h>

@@ -25,8 +25,6 @@
 #include <KoGenChange.h>
 #include "KoText.h"
 #include <KoToolSelection.h>
-#include <KoInlineCite.h>
-#include <KoBibliographyInfo.h>
 #include <QClipboard>
 #include <QMetaType>
 #include <QTextCursor>

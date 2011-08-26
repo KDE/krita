@@ -36,7 +36,7 @@ VideoShapeFactory::VideoShapeFactory()
 {
     setToolTip(i18n("Video, embedded or fullscreen"));
     setIcon("video-x-generic");
-    setOdfElementNames(KoXmlNS::draw, QStringList("plugin"));
+    setXmlElementNames(KoXmlNS::draw, QStringList("plugin"));
     setLoadingPriority(1);
 }
 
@@ -58,7 +58,7 @@ bool VideoShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &c
     return e.localName() == "plugin" && e.namespaceURI() == KoXmlNS::draw;
 }
 
-void VideoShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
+void VideoShapeFactory::newDocumentResourceManager(KoResourceManager *manager) const
 {
     QVariant variant;
     variant.setValue<void*>(new VideoCollection(manager));

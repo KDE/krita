@@ -38,7 +38,7 @@ StarShapeFactory::StarShapeFactory()
     setIcon("star");
     QStringList elementNames;
     elementNames << "regular-polygon" << "custom-shape";
-    setOdfElementNames(KoXmlNS::draw, elementNames);
+    setXmlElementNames(KoXmlNS::draw, elementNames);
     setLoadingPriority(5);
 
     KoShapeTemplate t;

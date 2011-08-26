@@ -219,7 +219,6 @@ void KisImageView::slotImageClicked(const QPoint& pos)
 void KisImageView::slotRegionSelected(const QRect& rect)
 {
     QSizeF viewSize = viewportSize(true);
-    QSizeF imgSize  = m_imgViewport->imageSize();
     QRectF selRect  = rect;
         
     selRect = QRectF(selRect.topLeft() / m_scale, selRect.size() / m_scale);

@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "ToCDocumentLayout.h"
+#include "DummyDocumentLayout.h"
 
 #include <KoPostscriptPaintDevice.h>
 
@@ -26,29 +26,29 @@
 
 #include <kdebug.h>
 
-// ------------------- ToCDocumentLayout --------------------
-ToCDocumentLayout::ToCDocumentLayout(QTextDocument *doc)
+// ------------------- DummyDocumentLayout --------------------
+DummyDocumentLayout::DummyDocumentLayout(QTextDocument *doc)
         : QAbstractTextDocumentLayout(doc)
 {
     setPaintDevice(new KoPostscriptPaintDevice());
 }
 
-ToCDocumentLayout::~ToCDocumentLayout()
+DummyDocumentLayout::~DummyDocumentLayout()
 {
 }
 
-QRectF ToCDocumentLayout::blockBoundingRect(const QTextBlock &block) const
+QRectF DummyDocumentLayout::blockBoundingRect(const QTextBlock &block) const
 {
     Q_UNUSED(block);
     return QRect();
 }
 
-QSizeF ToCDocumentLayout::documentSize() const
+QSizeF DummyDocumentLayout::documentSize() const
 {
     return QSizeF();
 }
 
-void ToCDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context)
+void DummyDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context)
 {
     // WARNING Text shapes ask their root area directly to paint.
     // It saves a lot of extra traversal, that is quite costly for big
@@ -58,7 +58,7 @@ void ToCDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLayou
 }
 
 
-int ToCDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
+int DummyDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
 {
     Q_UNUSED(point);
     Q_UNUSED(accuracy);
@@ -66,17 +66,17 @@ int ToCDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accurac
     return -1;
 }
 
-QRectF ToCDocumentLayout::frameBoundingRect(QTextFrame*) const
+QRectF DummyDocumentLayout::frameBoundingRect(QTextFrame*) const
 {
     return QRectF();
 }
 
-int ToCDocumentLayout::pageCount() const
+int DummyDocumentLayout::pageCount() const
 {
     return 1;
 }
 
-void ToCDocumentLayout::documentChanged(int position, int charsRemoved, int charsAdded)
+void DummyDocumentLayout::documentChanged(int position, int charsRemoved, int charsAdded)
 {
     Q_UNUSED(position);
     Q_UNUSED(charsRemoved);
@@ -84,18 +84,18 @@ void ToCDocumentLayout::documentChanged(int position, int charsRemoved, int char
 }
 
 /*
-void ToCDocumentLayout::drawInlineObject(QPainter *, const QRectF &, QTextInlineObject , int , const QTextFormat &)
+void DummyDocumentLayout::drawInlineObject(QPainter *, const QRectF &, QTextInlineObject , int , const QTextFormat &)
 {
 }
 
 // This method is called by qt every time  QTextLine.setWidth()/setNumColums() is called
-void ToCDocumentLayout::positionInlineObject(QTextInlineObject , int , const QTextFormat &)
+void DummyDocumentLayout::positionInlineObject(QTextInlineObject , int , const QTextFormat &)
 {
 }
 
-void ToCDocumentLayout::resizeInlineObject(QTextInlineObject , int , const QTextFormat &)
+void DummyDocumentLayout::resizeInlineObject(QTextInlineObject , int , const QTextFormat &)
 {
 }
 */
 
-#include <ToCDocumentLayout.moc>
+#include <DummyDocumentLayout.moc>

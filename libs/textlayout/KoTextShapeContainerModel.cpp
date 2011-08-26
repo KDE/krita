@@ -187,10 +187,12 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
         QTextBlock block = relation.anchor->document()->findBlock(relation.anchor->positionInDocument());
         layout = block.layout();
         anchorPosInParag = relation.anchor->positionInDocument() - block.position();
-        QTextLine tl = layout->lineForTextPosition(anchorPosInParag);
-        relation.anchor->setOffset(QPointF(newPosition.x() - tl.cursorToX(anchorPosInParag)
-            + tl.x(), 0));
-        relayoutInlineObject(child);
+        if (layout) {
+            QTextLine tl = layout->lineForTextPosition(anchorPosInParag);
+            relation.anchor->setOffset(QPointF(newPosition.x() - tl.cursorToX(anchorPosInParag)
+                + tl.x(), 0));
+            relayoutInlineObject(child);
+        }
 
         // the rest of the code uses the shape baseline, at this time the bottom. So adjust
         newPosition.setY(newPosition.y() + child->size().height());

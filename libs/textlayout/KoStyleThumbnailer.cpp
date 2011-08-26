@@ -48,6 +48,7 @@
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTextLayout>
+#include <QTextLength>
 
 #include <kdebug.h>
 
@@ -95,6 +96,11 @@ QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size)
     pm.fill(Qt::transparent);
 
     KoParagraphStyle *clone = style->clone();
+    //TODO: make the following real options
+    //we ignore these properties when the thumbnail would not be sufficient to preview properly the whole paragraph with margins.
+    clone->setMargin(QTextLength(QTextLength::FixedLength, 0));
+    clone->setPadding(0);
+    //
     QTextCursor cursor(d->pixmapHelperDocument);
     cursor.select(QTextCursor::Document);
     cursor.setBlockFormat(QTextBlockFormat());
@@ -172,10 +178,8 @@ void KoStyleThumbnailer::layoutThumbnail(QSize size, QPixmap &pm)
         p.setFont(sizeHintFont);
         QRectF sizeHintRect(p.boundingRect(0, 0, 1, 1, Qt::AlignCenter, sizeHint));
         p.restore();
-
         //calculate the font reduction factor so that the text + the sizeHint fits
         qreal reductionFactor = qMin((size.width()-sizeHintRect.width())/documentSize.width(), size.height()/documentSize.height());
-
         QTextCharFormat fmt = cursor.charFormat();
         fmt.setFontPointSize((int)(fmt.fontPointSize()*reductionFactor));
         cursor.mergeCharFormat(fmt);
@@ -185,15 +189,16 @@ void KoStyleThumbnailer::layoutThumbnail(QSize size, QPixmap &pm)
         rootArea.setNoWrap(1E6);
         rootArea.layoutRoot(&frameCursor);
         documentSize = rootArea.boundingRect().size();
-
         //center the preview in the pixmap
-        int yOffset = (int)((size.height()-documentSize.height())/2);
+        qreal yOffset = (size.height()-documentSize.height())/2;
         if (yOffset) {
             p.translate(0, yOffset);
         }
-
         KoTextDocumentLayout::PaintContext pc;
         rootArea.paint(&p, pc);
+        if (yOffset) {
+            p.translate(0, -yOffset);
+        }
         p.save();
         p.setFont(sizeHintFont);
         p.drawText(QRectF(size.width()-sizeHintRect.width(), 0, sizeHintRect.width(),
@@ -202,7 +207,7 @@ void KoStyleThumbnailer::layoutThumbnail(QSize size, QPixmap &pm)
     }
     else {
         //center the preview in the pixmap
-        int yOffset = (int)((size.height()-documentSize.height())/2);
+        qreal yOffset = (size.height()-documentSize.height())/2;
         if (yOffset) {
             p.translate(0, yOffset);
         }

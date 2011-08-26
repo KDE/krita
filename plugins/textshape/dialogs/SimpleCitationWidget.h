@@ -32,7 +32,7 @@ class SimpleCitationWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleCitationWidget(QWidget *parent = 0);
+    explicit SimpleCitationWidget(TextTool *tool,QWidget *parent = 0);
 
 public slots:
     void setStyleManager(KoStyleManager *sm);

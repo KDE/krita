@@ -33,6 +33,7 @@
 #include <KoStyleManager.h>
 #include <KoTextEditor.h>
 #include <KoPostscriptPaintDevice.h>
+#include <KoInlineCite.h>
 
 #include <QTextFrame>
 #include <QTimer>

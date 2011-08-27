@@ -18,6 +18,7 @@
  */
 #include "SimpleTableOfContentsWidget.h"
 #include "ReferencesTool.h"
+#include "TableOfContentsConfigure.h"
 
 #include <KAction>
 #include <KDebug>
@@ -33,6 +34,7 @@ SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, Q
     widget.configureToC->setDefaultAction(tool->action("format_tableofcentents"));
 
     connect(widget.addToC, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.configureToC, SIGNAL(clicked(bool)), this, SIGNAL(showConfgureOptions()));
 }
 
 void SimpleTableOfContentsWidget::setStyleManager(KoStyleManager *sm)

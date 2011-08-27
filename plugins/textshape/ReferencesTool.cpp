@@ -23,6 +23,7 @@
 #include "dialogs/SimpleCitationWidget.h"
 #include "dialogs/SimpleFootEndNotesWidget.h"
 #include "dialogs/SimpleCaptionsWidget.h"
+#include "dialogs/TableOfContentsConfigure.h"
 
 #include <KoTextLayoutRootArea.h>
 #include <KoCanvasBase.h>
@@ -33,7 +34,9 @@
 #include <KLocale>
 #include <KAction>
 
-ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas)
+ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas),
+    m_configure(0),
+    m_stocw(0)
 {
     createActions();
 }
@@ -69,13 +72,13 @@ void ReferencesTool::deactivate()
 QList<QWidget*> ReferencesTool::createOptionWidgets()
 {
     QList<QWidget *> widgets;
-    SimpleTableOfContentsWidget *stocw = new SimpleTableOfContentsWidget(this, 0);
+    m_stocw = new SimpleTableOfContentsWidget(this, 0);
     //SimpleCitationWidget *scw = new SimpleCitationWidget(0);
     SimpleFootEndNotesWidget *sfenw = new SimpleFootEndNotesWidget(0);
     //SimpleCaptionsWidget *scapw = new SimpleCaptionsWidget(0);
 
     // Connect to/with simple table of contents option widget
-    connect(stocw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(m_stocw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
     // Connect to/with simple citation index option widget
     //connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
@@ -83,8 +86,8 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
     // Connect to/with simple citation index option widget
     connect(sfenw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
-    stocw->setWindowTitle(i18n("Table of Contents"));
-    widgets.append(stocw);
+    m_stocw->setWindowTitle(i18n("Table of Contents"));
+    widgets.append(m_stocw);
     sfenw->setWindowTitle(i18n("Footnotes & Endnotes"));
     widgets.append(sfenw);
     //widgets.insert(i18n("Citations"), scw);
@@ -99,6 +102,11 @@ void ReferencesTool::insertTableOfContents()
 
 void ReferencesTool::formatTableOfContents()
 {
+    //if(!m_configure)
+   // {
+    qDebug()<<"format";
+        m_configure = new TableOfContentsConfigure(textEditor(), m_stocw);
+    //}
 }
 
 #include <ReferencesTool.moc>

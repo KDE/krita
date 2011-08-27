@@ -23,6 +23,8 @@
 #include "TextTool.h"
 
 class KoCanvasBase;
+class TableOfContentsConfigure;
+class SimpleTableOfContentsWidget;
 class QPainter;
 
 /// This tool is the ui for inserting Table of Contents, Citations/bibliography, footnotes, endnotes, index, table of illustrations etc
@@ -52,6 +54,8 @@ private slots:
     void formatTableOfContents();
 
 private:
+        TableOfContentsConfigure *m_configure;
+        SimpleTableOfContentsWidget *m_stocw;
 };
 
 #endif // REFERENCESTOOL_H

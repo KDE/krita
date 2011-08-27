@@ -35,6 +35,7 @@ class KoCharacterStyle;
 class KoInlineObject;
 class KoParagraphStyle;
 class KoCanvasBase;
+class KoTableOfContentsGeneratorInfo;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -265,6 +266,8 @@ public slots:
      * Insert a table of Contents at the current cursor position.
      */
     void insertTableOfContents();
+
+    void updateTableOfContents(KoTableOfContentsGeneratorInfo *info,QTextBlock block);
 
     void insertText(const QString &text);
 

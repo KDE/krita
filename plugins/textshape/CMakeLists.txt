@@ -72,6 +72,8 @@ SET ( textshape_SRCS
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp
     dialogs/ChangeTrackingOptionsWidget.cpp
+    dialogs/TableOfContentsConfigure.cpp
+    dialogs/TableOfContentsStyleConfigure.cpp
 
     commands/ChangeListCommand.cpp
     commands/ChangeListLevelCommand.cpp
@@ -107,6 +109,8 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/CharacterHighlighting.ui
     dialogs/StyleManagerWelcome.ui
     dialogs/TableDialog.ui
+    dialogs/TableOfContentsConfigure.ui
+    dialogs/TableOfContentsStyleConfigure.ui
 
     dialogs/FontDecorations.ui
     dialogs/FontLayoutTab.ui

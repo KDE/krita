@@ -174,7 +174,7 @@ void ToCGenerator::generate()
     int blockId = 0;
     while (block.isValid()) {
         // Choose only TOC blocks
-        if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) {
+        if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel) && m_ToCInfo->m_useOutlineLevel) {
             int level = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
             generateEntry(level, cursor, block, blockId);
         } else if (m_ToCInfo->m_useIndexSourceStyles) {

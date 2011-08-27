@@ -39,6 +39,7 @@ public slots:
 
 signals:
     void doneWithFocus();
+    void showConfgureOptions();
     
 private:
     Ui::SimpleTableOfContentsWidget widget;

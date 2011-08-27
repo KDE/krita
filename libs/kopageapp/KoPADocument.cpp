@@ -189,6 +189,8 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore)
 
     updatePageCount();
 
+    loadOdfSettings(odfStore.settingsDoc());
+
     if (d->odfProgressUpdater) {
         d->odfProgressUpdater->setProgress(100);
     }

@@ -432,7 +432,7 @@ QHash<QString, KAction*> KoToolProxy::actions() const
 
 bool KoToolProxy::hasSelection() const
 {
-    return d->activeTool->hasSelection();
+    return d->activeTool ? d->activeTool->hasSelection() : false;
 }
 
 void KoToolProxy::cut()

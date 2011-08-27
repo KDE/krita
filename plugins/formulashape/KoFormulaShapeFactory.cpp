@@ -45,7 +45,7 @@ KoFormulaShapeFactory::KoFormulaShapeFactory()
     QList<QPair<QString, QStringList> > elementNamesList;
     elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("object")));
     elementNamesList.append(qMakePair(QString(KoXmlNS::math), QStringList("math")));
-    setOdfElements(elementNamesList);
+    setXmlElements(elementNamesList);
 
     setLoadingPriority( 1 );
 /*    KoShapeTemplate t;

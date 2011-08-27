@@ -272,7 +272,15 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
             // the content of a variable changed (see KoVariable::setValue which calls publicDocumentChanged). In
             // those cases we only need to relayout the root-area dirty where the variable is on.
             KoTextLayoutRootArea *toArea = fromArea ? rootAreaForPosition(position + qMax(charsRemoved, charsAdded)) : 0;
-            endIndex = (toArea && toArea != fromArea) ? qMax(startIndex, d->rootAreaList.indexOf(toArea)) : startIndex;
+            if (toArea) {
+                if (toArea != fromArea) {
+                    endIndex = qMax(startIndex, d->rootAreaList.indexOf(toArea));
+                } else {
+                    endIndex = startIndex;
+                }
+            } else {
+                endIndex = d->rootAreaList.count() - 1;
+            }
             // The previous and following root-area of that range are selected too cause they can also be affect by
             // changes done to the range of root-areas.
             if (startIndex >= 1)
@@ -532,7 +540,6 @@ bool KoTextDocumentLayout::doLayout()
         if (d->restartLayout) {
             return false; // Abort layouting to restart from the beginning.
         }
-
         bool shouldLayout = false;
 
         if (rootArea->top() != d->y) {
@@ -561,12 +568,7 @@ bool KoTextDocumentLayout::doLayout()
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 finished = rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
-                    for(int i = 0; i<d->textAnchors.size(); i++ ) {
-                         d->textAnchors[i]->setAnchorStrategy(0);
-                     }
-                     d->textAnchors.clear();
-                     d->anchoringIndex = 0;
-                    //d->anchoringIndex = 0;
+                    d->anchoringIndex = 0;
                     d->anchoringCycle++;
                     if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
                         d->anchoringState = Private::AnchoringFinalState;
@@ -635,12 +637,7 @@ bool KoTextDocumentLayout::doLayout()
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
-                    //d->anchoringIndex = 0;
-                    for(int i = 0; i<d->textAnchors.size(); i++ ) {
-                         d->textAnchors[i]->setAnchorStrategy(0);
-                     }
-                     d->textAnchors.clear();
-                     d->anchoringIndex = 0;
+                    d->anchoringIndex = 0;
                     d->anchoringCycle++;
                     if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
                         d->anchoringState = Private::AnchoringFinalState;

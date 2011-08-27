@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef TOCDOCUMENTLAYOUT_H
-#define TOCDOCUMENTLAYOUT_H
+#ifndef DUMMYDOCUMENTLAYOUT_H
+#define DUMMYDOCUMENTLAYOUT_H
 
 #include "textlayout_export.h"
 
@@ -26,21 +26,21 @@
 
 
 /**
- * Dummy TextLayouter that does nothing really, but without it the Table of Contents
- * can not be layout.
- * The real layout of the ToC still happens by the KoTextLayoutArea as part of
+ * Dummy TextLayouter that does nothing really, but without it the Table of Contents/Bibliography
+ * can not be layout.TextLayouter
+ * The real layout of the ToC/Bib still happens by the KoTextLayoutArea as part of
  * KoTextDocumentLayout of the main document
  *
  * You really shouldn't add anything to this class
  */
 
-class TEXTLAYOUT_EXPORT ToCDocumentLayout : public QAbstractTextDocumentLayout
+class TEXTLAYOUT_EXPORT DummyDocumentLayout : public QAbstractTextDocumentLayout
 {
     Q_OBJECT
 public:
     /// constructor
-    explicit ToCDocumentLayout(QTextDocument *doc);
-    virtual ~ToCDocumentLayout();
+    explicit DummyDocumentLayout(QTextDocument *doc);
+    virtual ~DummyDocumentLayout();
 
     /// Returns the bounding rectangle of block.
     virtual QRectF blockBoundingRect(const QTextBlock & block) const;

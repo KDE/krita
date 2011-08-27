@@ -22,6 +22,7 @@
 #define KORECTANGLESHAPE_H
 
 #include "KoParameterShape.h"
+#include <SvgShape.h>
 
 #define RectangleShapeId "RectangleShape"
 
@@ -30,7 +31,7 @@
  * The rectangle can have rounded corners, with different corner
  * radii in x- and y-direction.
  */
-class RectangleShape : public KoParameterShape
+class RectangleShape : public KoParameterShape, public SvgShape
 {
 public:
     RectangleShape();
@@ -70,6 +71,12 @@ public:
 
     /// reimplemented
     virtual QString pathShapeId() const;
+
+    /// reimplemented from SvgShape
+    virtual bool saveSvg(SvgSavingContext &context);
+
+    /// reimplemented from SvgShape
+    virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
 
 protected:
 

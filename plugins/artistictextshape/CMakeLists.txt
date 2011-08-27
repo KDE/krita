@@ -2,7 +2,7 @@ project( artistictextshape )
 
 include_directories( ${FLAKE_INCLUDES} )
 
-SET ( ArtisticTextShape_SRCS
+set ( ArtisticTextShape_SRCS
     ArtisticTextShapePlugin.cpp
     ArtisticTextShape.cpp
     ArtisticTextRange.cpp
@@ -13,6 +13,7 @@ SET ( ArtisticTextShape_SRCS
     ArtisticTextShapeConfigWidget.cpp
     ArtisticTextShapeOnPathWidget.cpp
     ArtisticTextShapeLoadingUpdater.cpp
+    ArtisticTextLoadingContext.cpp
     AttachTextToPathCommand.cpp
     DetachTextFromPathCommand.cpp
     ChangeTextOffsetCommand.cpp

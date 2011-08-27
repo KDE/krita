@@ -1,4 +1,4 @@
-include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES}  )
+include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} )
 
 add_subdirectory(pics)
 

@@ -39,6 +39,7 @@
 #include "KoTextLayoutObstruction.h"
 #include "FrameIterator.h"
 #include "ToCGenerator.h"
+#include "BibliographyGenerator.h"
 #include "KoPointedAt.h"
 
 #include <KoParagraphStyle.h>
@@ -59,6 +60,7 @@
 #include <KoTextSoftPageBreak.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTableOfContentsGeneratorInfo.h>
+#include <KoBibliographyInfo.h>
 
 #include <KDebug>
 
@@ -70,6 +72,7 @@
 #include <QTextFragment>
 #include <QTextLayout>
 #include <QTextCursor>
+#include <QMessageBox>
 
 extern int qt_defaultDpiY();
 
@@ -469,6 +472,54 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 expandBoundingRight(tocArea->boundingRect().right());
                 m_bottomSpacing = 0;
                 m_y = tocArea->bottom();
+                delete cursor->currentSubFrameIterator;
+                cursor->lineTextStart = -1; // fake we are done
+                cursor->currentSubFrameIterator = 0;
+            } else if (block.blockFormat().hasProperty(KoParagraphStyle::BibliographyDocument)) {
+
+                QVariant data = block.blockFormat().property(KoParagraphStyle::BibliographyDocument);
+                QTextDocument *bibDocument = data.value<QTextDocument *>();
+
+                data = block.blockFormat().property(KoParagraphStyle::BibliographyData);
+                KoBibliographyInfo *bibInfo = data.value<KoBibliographyInfo *>();
+
+                if (!bibInfo->generator()) {
+                    // The generator attaches itself to the bibInfo
+                    new BibliographyGenerator(bibDocument, block, bibInfo, cursor->it.currentBlock().document());
+                }
+
+                // Let's create KoTextLayoutArea and let to handle the Bibliography
+                KoTextLayoutArea *bibArea = new KoTextLayoutArea(this, documentLayout());
+                m_bibliographyAreas.append(bibArea);
+                m_y += m_bottomSpacing;
+                if (!m_blockRects.isEmpty()) {
+                    m_blockRects.last().setBottom(m_y);
+                }
+                bibArea->setVirginPage(virginPage());
+                bibArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
+                QTextLayout *blayout = block.layout();
+                blayout->beginLayout();
+                QTextLine line = blayout->createLine();
+                line.setNumColumns(0);
+                line.setPosition(QPointF(left(), m_y));
+                blayout->endLayout();
+
+                if (bibArea->layout(cursor->subFrameIterator(bibDocument->rootFrame())) == false) {
+                    cursor->lineTextStart = 1; // fake we are not done
+                    m_endOfArea = new FrameIterator(cursor);
+                    m_y = bibArea->bottom();
+                    setBottom(m_y + m_footNotesHeight);
+                    // Expand bounding rect so if we have content outside we show it
+                    expandBoundingLeft(bibArea->boundingRect().left());
+                    expandBoundingRight(bibArea->boundingRect().right());
+                    return false;
+                }
+                setVirginPage(false);
+                // Expand bounding rect so if we have content outside we show it
+                expandBoundingLeft(bibArea->boundingRect().left());
+                expandBoundingRight(bibArea->boundingRect().right());
+                m_bottomSpacing = 0;
+                m_y = bibArea->bottom();
                 delete cursor->currentSubFrameIterator;
                 cursor->lineTextStart = -1; // fake we are done
                 cursor->currentSubFrameIterator = 0;

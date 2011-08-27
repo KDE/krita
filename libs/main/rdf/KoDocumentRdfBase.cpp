@@ -28,7 +28,7 @@
 #include "KoTextSopranoRdfModel_p.h"
 #include <kdebug.h>
 
-KoDocumentRdfBase::KoDocumentRdfBase(KoDocument *parent)
+KoDocumentRdfBase::KoDocumentRdfBase(QObject *parent)
         : QObject(parent)
 {
 }

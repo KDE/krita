@@ -159,6 +159,17 @@ void KoOdfGraphicStyles::saveOdfStrokeStyle(KoGenStyle &styleStroke, KoGenStyles
         styleStroke.addProperty("calligra:stroke-miterlimit", QString("%1").arg(pen.miterLimit()));
         break;
     }
+    switch (pen.capStyle()) {
+    case Qt::RoundCap:
+        styleStroke.addProperty("svg:stroke-linecap", "round");
+        break;
+    case Qt::SquareCap:
+        styleStroke.addProperty("svg:stroke-linecap", "square");
+        break;
+    default:
+        styleStroke.addProperty("svg:stroke-linecap", "butt");
+        break;
+    }
 }
 
 QString KoOdfGraphicStyles::saveOdfHatchStyle(KoGenStyles& mainStyles, const QBrush &brush)
@@ -377,7 +388,7 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader &s
             gradient = new QRadialGradient(center, r, focalPoint );
         }
         if (! gradient)
-	   return QBrush();
+            return QBrush();
 
         gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
 
@@ -624,6 +635,18 @@ QPen KoOdfGraphicStyles::loadOdfStrokeStyle(const KoStyleStack &styleStack, cons
                     tmpPen.setMiterLimit(miterLimit.toDouble());
                 }
             }
+        }
+        if (styleStack.hasProperty(KoXmlNS::svg, "stroke-linecap")) {
+            const QString cap = styleStack.property(KoXmlNS::svg, "stroke-linecap");
+            if (cap == "round")
+                tmpPen.setCapStyle(Qt::RoundCap);
+            else if (cap == "square")
+                tmpPen.setCapStyle(Qt::SquareCap);
+            else
+                tmpPen.setCapStyle(Qt::FlatCap);
+        } else {
+            // default as per svg specification
+            tmpPen.setCapStyle(Qt::FlatCap);
         }
 
         if (stroke == "dash" && styleStack.hasProperty(KoXmlNS::draw, "stroke-dash")) {

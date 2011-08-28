@@ -1526,7 +1526,7 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
             if (d->stylesPrivate.value(key).toBool()) {
                 style.addProperty("fo:font-style", "italic", KoGenStyle::TextType);
             } else {
-                style.addProperty("fo:font-style", "", KoGenStyle::TextType);
+                style.addProperty("fo:font-style", "normal", KoGenStyle::TextType);
             }
         } else if (key == QTextFormat::FontFamily) {
             QString fontFamily = d->stylesPrivate.value(key).toString();

@@ -31,6 +31,8 @@
 #include <QImage>
 #include <QPixmap>
 #include <sys/socket.h>
+#include <QLabel>
+#include <QStringList>
 
 #define myDebug() kDebug(44021)
 
@@ -82,6 +84,7 @@ Marble::MarbleWidget* KoReportItemMaps::initMarble()
 KoReportItemMaps::~KoReportItemMaps()
 {
     myDebug() << "DIE:" << this << m_marbles.count();
+    delete m_mapImage;
     delete m_set;
     QMap<QString, Marble::MarbleWidget*>::iterator i = m_marbles.begin();
     while(i != m_marbles.end()){
@@ -194,9 +197,11 @@ int KoReportItemMaps::render(OROPage* page,
         marble = initMarble();
         m_marbles.insert(dataKey, marble);
         connect(marble->model(), SIGNAL(modelChanged()), this, SLOT(requestRedraw()));
-        marble->setCenterLatitude(dataList[0].toDouble());
-        marble->setCenterLongitude(dataList[1].toDouble());
-        marble->zoomView(dataList[2].toInt());
+        if(dataList.count()==3){
+            marble->setCenterLatitude(dataList[0].toDouble());
+            marble->setCenterLongitude(dataList[1].toDouble());
+            marble->zoomView(dataList[2].toInt());
+        }
     }else{
         marble = m_marbles[dataKey];
     }

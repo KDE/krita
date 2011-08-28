@@ -349,7 +349,7 @@ public:
      * gs.addChildElement( "...", elementContents );
      * @endcode
      *
-     * The value of @p elementName isn't used, except that it must be unique.
+     * The value of @p elementName is only used to set the order on how the child elements are written out.
      */
     void addChildElement(const QString &elementName, const QString& elementContents) {
         m_properties[ChildElement].insertMulti(elementName, elementContents);
@@ -365,6 +365,7 @@ public:
 
     /**
      * Same like \a addChildElement above but adds a child style which is not child of any of the properties
+     * The value of @p elementName is only used to set the order on how the child elements are written out.
      */
     void addStyleChildElement(const QString &elementName, const QString& elementContents) {
         m_properties[StyleChildElement].insertMulti(elementName, elementContents);
@@ -373,6 +374,7 @@ public:
     /**
      * Same like \a addStyleChildElement above but with QByteArray to explicit convert from QByteArray
      * to QString using utf8 to prevent a dirty pitfall.
+     * The value of @p elementName is only used to set the order on how the child elements are written out.
      */
     void addStyleChildElement(const QString &elementName, const QByteArray& elementContents) {
         m_properties[StyleChildElement].insertMulti(elementName, QString::fromUtf8(elementContents));

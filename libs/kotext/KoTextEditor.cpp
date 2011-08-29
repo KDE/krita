@@ -1418,7 +1418,6 @@ void KoTextEditor::insertBibliography()
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Bibliography"));
 
     QTextBlockFormat bibFormat;
-    bibFormat.setProperty(KoText::SubFrameType, KoText::BibliographyFrameType);
     KoBibliographyInfo *info = new KoBibliographyInfo();
     QTextDocument *bibDocument = new QTextDocument();
     bool *autoUpdate = new bool;

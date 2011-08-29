@@ -2378,8 +2378,6 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
     // make sure that the tag is bibliography
     Q_ASSERT(element.tagName() == "bibliography");
     QTextBlockFormat bibFormat;
-    bibFormat.setProperty(KoText::SubFrameType, KoText::BibliographyFrameType);
-
 
     // for "meta-information" about the bibliography we use this class
     KoBibliographyInfo *info = new KoBibliographyInfo();

@@ -44,11 +44,6 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
 
 void InsertBibliographyDialog::insert()
 {
-    if (m_editor->cursor()->blockFormat().property(KoText::SubFrameType) == KoText::BibliographyFrameType) {
-        QMessageBox::critical(this,"Insert Bibliography failed","Bibliography cannot be inserted in Bibliography block.",QMessageBox::Ok);
-        return;
-    }
-
     m_editor->insertBibliography();
     KoBibliographyInfo *bibInfo = m_editor->cursor()->block().blockFormat().property(KoParagraphStyle::BibliographyData).value<KoBibliographyInfo*>();
     QTextDocument *bibDocument = m_editor->cursor()->block().blockFormat().property(KoParagraphStyle::BibliographyDocument).value<QTextDocument*>();

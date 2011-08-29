@@ -1463,7 +1463,6 @@ KoInlineCite *KoTextEditor::insertCitation()
     KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
     manager->insertInlineObject(d->caret,cite);
 
-    cite->setMotherFrame(KoTextDocument(d->caret.block().document()).citationsFrame());
     d->updateState(KoTextEditor::Private::NoOp);
     return cite;
 }

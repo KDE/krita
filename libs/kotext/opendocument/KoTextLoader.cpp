@@ -1482,18 +1482,12 @@ void KoTextLoader::loadCite(const KoXmlElement &noteElem, QTextCursor &cursor)
 {
     KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
     if (textObjectManager) {
-
-        int position = cursor.position(); // need to store this as the following might move is
-
         //Now creating citation with default type KoInlineCite::Citation.
         KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
-        cite->setMotherFrame(KoTextDocument(cursor.block().document()).citationsFrame());
 
         if (cite->loadOdf(noteElem, d->context)) {
-            cursor.setPosition(position); // restore the position before inserting the note
             textObjectManager->insertInlineObject(cursor, cite);
         } else {
-            cursor.setPosition(position); // restore the position
             delete cite;
         }
     }

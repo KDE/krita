@@ -227,11 +227,6 @@ void KoTextEditor::Private::deleteSelection()
     QTextCursor delText = QTextCursor(caret);
     if (!delText.hasSelection())
         delText.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
-    // XXX: is there are reason for these two unused variables? Side effects? (boud)
-    QString text = delText.selectedText();
-    Q_UNUSED(text);
-    QTextDocumentFragment selection = delText.selection();
-    Q_UNUSED(selection);
     caret.deleteChar();
 }
 
@@ -991,10 +986,16 @@ void KoTextEditor::deleteChar()
     if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
         d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
 
+        QTextCharFormat charFormat = d->caret.charFormat();
+
         if (!d->caret.hasSelection())
             d->caret.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+
         d->deleteSelection();
+
+        d->caret.setCharFormat(charFormat);
     }
+
     emit cursorPositionChanged();
 }
 
@@ -1009,9 +1010,14 @@ void KoTextEditor::deletePreviousChar()
     if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
         d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
 
+        QTextCharFormat charFormat = d->caret.charFormat();
+
         if (!d->caret.hasSelection())
             d->caret.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+
         d->deleteSelection();
+
+        d->caret.setCharFormat(charFormat);
     }
     emit cursorPositionChanged();
 }

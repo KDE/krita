@@ -26,7 +26,7 @@
 #include <QTextBlock>
 
 InlineAnchorStrategy::InlineAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
-        : AnchorStrategy(anchor, rootArea)
+    : AnchorStrategy(anchor, rootArea)
 {
 }
 

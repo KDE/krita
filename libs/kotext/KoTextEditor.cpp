@@ -227,11 +227,6 @@ void KoTextEditor::Private::deleteSelection()
     QTextCursor delText = QTextCursor(caret);
     if (!delText.hasSelection())
         delText.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
-    // XXX: is there are reason for these two unused variables? Side effects? (boud)
-    QString text = delText.selectedText();
-    Q_UNUSED(text);
-    QTextDocumentFragment selection = delText.selection();
-    Q_UNUSED(selection);
     caret.deleteChar();
 }
 
@@ -991,10 +986,16 @@ void KoTextEditor::deleteChar()
     if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
         d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
 
+        QTextCharFormat charFormat = d->caret.charFormat();
+
         if (!d->caret.hasSelection())
             d->caret.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+
         d->deleteSelection();
+
+        d->caret.setCharFormat(charFormat);
     }
+
     emit cursorPositionChanged();
 }
 
@@ -1009,9 +1010,14 @@ void KoTextEditor::deletePreviousChar()
     if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
         d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
 
+        QTextCharFormat charFormat = d->caret.charFormat();
+
         if (!d->caret.hasSelection())
             d->caret.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+
         d->deleteSelection();
+
+        d->caret.setCharFormat(charFormat);
     }
     emit cursorPositionChanged();
 }
@@ -1412,7 +1418,6 @@ void KoTextEditor::insertBibliography()
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Bibliography"));
 
     QTextBlockFormat bibFormat;
-    bibFormat.setProperty(KoText::SubFrameType, KoText::BibliographyFrameType);
     KoBibliographyInfo *info = new KoBibliographyInfo();
     QTextDocument *bibDocument = new QTextDocument();
     bool *autoUpdate = new bool;
@@ -1457,7 +1462,6 @@ KoInlineCite *KoTextEditor::insertCitation()
     KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
     manager->insertInlineObject(d->caret,cite);
 
-    cite->setMotherFrame(KoTextDocument(d->caret.block().document()).citationsFrame());
     d->updateState(KoTextEditor::Private::NoOp);
     return cite;
 }

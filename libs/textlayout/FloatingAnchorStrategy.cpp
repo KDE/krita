@@ -33,9 +33,8 @@
 #include <QTextBlock>
 
 FloatingAnchorStrategy::FloatingAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
-        : AnchorStrategy(anchor, rootArea)
-        , m_anchor(anchor)
-        , m_obstruction(new KoTextLayoutObstruction(anchor->shape(), QTransform()))
+    : AnchorStrategy(anchor, rootArea)
+    , m_obstruction(new KoTextLayoutObstruction(anchor->shape(), QTransform()))
 {
 }
 

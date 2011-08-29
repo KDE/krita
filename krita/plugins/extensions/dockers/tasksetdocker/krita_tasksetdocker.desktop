@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Taskset Docker
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritatasksetdocker
+X-Krita-Version=4

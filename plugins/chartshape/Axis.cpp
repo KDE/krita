@@ -464,7 +464,7 @@ void Axis::Private::createBarDiagram()
     registerDiagram( kdBarDiagram );
     // By 'vertical', KDChart means the orientation of a chart's bars,
     // not the orientation of the x axis.
-    kdBarDiagram->setOrientation( plotArea->isVertical() ? Qt::Horizontal : Qt::Vertical );
+    kdBarDiagram->setOrientation( plotArea->isVertical() ? Qt::Vertical : Qt::Horizontal );
     kdBarDiagram->setPen( QPen( Qt::black, 0.0 ) );
 
     if ( plotAreaChartSubType == StackedChartSubtype )

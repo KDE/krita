@@ -243,9 +243,9 @@ public:
         TableCellType,
         /// PresentationType is always for presentation-properties.
         PresentationType,
-        /// DrawingPageType is always for presentation-properties.
+        /// DrawingPageType is always for drawing-page-properties.
         DrawingPageType,
-        /// ChartType is always for presentation-properties.
+        /// ChartType is always for chart-properties.
         ChartType,
         Reserved1, ///< @internal for binary compatible extensions
         /// For elements that are children of the style itself, not any of the properties

@@ -1189,7 +1189,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         b->fillStyle(style, context);
     }
     else {
-        style.addProperty("draw:stroke", "none");
+        style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
     }
     KoShapeShadow *s = shadow();
     if (s)
@@ -1200,7 +1200,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         bg->fillStyle(style, context);
     }
     else {
-        style.addProperty("draw:fill", "none");
+        style.addProperty("draw:fill", "none", KoGenStyle::GraphicType);
     }
 
     if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml)) {
@@ -1217,7 +1217,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         value += "content";
     }
     if (!value.isEmpty()) {
-        style.addProperty("style:protect", value);
+        style.addProperty("style:protect", value, KoGenStyle::GraphicType);
     }
 
     QMap<QByteArray, QString>::const_iterator it(d->additionalStyleAttributes.constBegin());
@@ -1238,7 +1238,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
 
         style.addProperty("fo:clip", QString("rect(%1pt, %2pt, %3pt, %4pt)")
                           .arg(top, 10, 'f').arg(right, 10, 'f')
-                          .arg(bottom, 10, 'f').arg(left, 10, 'f'));
+                          .arg(bottom, 10, 'f').arg(left, 10, 'f'), KoGenStyle::GraphicType);
 
     }
 
@@ -1266,9 +1266,9 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
             wrap = "run-through";
             break;
     }
-    style.addProperty("style:wrap", wrap);
-    style.addPropertyPt("style:wrap-dynamic-threshold", textRunAroundThreshold());
-    style.addPropertyPt("fo:margin", textRunAroundDistance());
+    style.addProperty("style:wrap", wrap, KoGenStyle::GraphicType);
+    style.addPropertyPt("style:wrap-dynamic-threshold", textRunAroundThreshold(), KoGenStyle::GraphicType);
+    style.addPropertyPt("fo:margin", textRunAroundDistance(), KoGenStyle::GraphicType);
 
     return context.mainStyles().insert(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
 }

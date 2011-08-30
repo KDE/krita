@@ -437,14 +437,14 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
     }
 
     if ( !legendElement.isNull() ) {
-        QString lp;
         int attributesToLoad = OdfAllAttributes;
-        if ( legendElement.hasAttributeNS( KoXmlNS::chart, "legend-position" ) ) {
+        QString lp = legendElement.attributeNS( KoXmlNS::chart, "legend-position", QString() );
+        if (!lp.isEmpty()) {
             attributesToLoad ^= OdfPosition;
-            lp = legendElement.attributeNS( KoXmlNS::chart, "legend-position", QString() );
         }
 
-        // The exact position defined in ODF overwrites the default layout position
+        // FIXME according to odf if legend-position is provided the x and y value should not be used
+        // FIXME also with and height are not supported at this place
         if ( legendElement.hasAttributeNS( KoXmlNS::svg, "x" ) ||
              legendElement.hasAttributeNS( KoXmlNS::svg, "y" ) ||
              legendElement.hasAttributeNS( KoXmlNS::svg, "width" ) ||
@@ -453,10 +453,7 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
 
         loadOdfAttributes( legendElement, context, attributesToLoad );
 
-        QString lalign;
-        if ( legendElement.hasAttributeNS( KoXmlNS::chart, "legend-align" ) ) {
-            lalign = legendElement.attributeNS( KoXmlNS::chart, "legend-align", QString() );
-        }
+        QString lalign = legendElement.attributeNS( KoXmlNS::chart, "legend-align", QString() );
 
         if ( legendElement.hasAttributeNS( KoXmlNS::style, "legend-expansion" ) ) {
             QString lexpansion = legendElement.attributeNS( KoXmlNS::style, "legend-expansion", QString() );
@@ -535,7 +532,7 @@ void Legend::saveOdf( KoShapeSavingContext &context ) const
 
     bodyWriter.startElement( "chart:legend" );
 
-    saveOdfAttributes( context, (OdfMandatories ^ OdfStyle) | OdfPosition );
+    saveOdfAttributes( context, OdfPosition );
 
     QString lp = PositionToString( d->position );
 
@@ -548,13 +545,10 @@ void Legend::saveOdf( KoShapeSavingContext &context ) const
         bodyWriter.addAttribute( "chart:legend-align", lalign );
     }
 
-    QString styleName = saveOdfFont( mainStyles, d->font, d->fontColor );
-    bodyWriter.addAttribute( "chart:style-name", styleName );
+    KoGenStyle style(KoGenStyle::ChartAutoStyle, "chart", 0);
+    saveOdfFont(style, d->font, d->fontColor);
 
-    KoGenStyle *style = ( KoGenStyle* )( mainStyles.style( styleName ) );
-    Q_ASSERT( style );
-    if ( style )
-        saveStyle( *style, context );
+    bodyWriter.addAttribute( "chart:style-name", saveStyle(style, context) );
 
     QString  lexpansion;
     switch ( expansion() ) {
@@ -569,7 +563,7 @@ void Legend::saveOdf( KoShapeSavingContext &context ) const
         break;
     };
 
-    bodyWriter.addAttribute( "office:legend-expansion", lexpansion );
+    bodyWriter.addAttribute( "style:legend-expansion", lexpansion );
     if ( !title().isEmpty() )
         bodyWriter.addAttribute( "office:title", title() );
     bodyWriter.endElement(); // chart:legend

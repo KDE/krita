@@ -215,10 +215,15 @@ public:
     qint32 rasterOperation() const { return m_BitBltRasterOperation; };
 
     quint32 usageSrc() const { return m_UsageSrc; };
+
     /**
        The image to display
     */
     QImage image();
+    /**
+       Whether there is a valid image in this StretchDiBitsRecord record
+    */
+    bool hasImage() const;
 
 private:
     // No copying for now, because we will get into trouble with the pointers.

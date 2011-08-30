@@ -229,7 +229,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
     QString tocEntryText = block.text();
     tocEntryText.remove(QChar::ObjectReplacementCharacter);
     // some headings contain tabs, replace all occurences with spaces
-    tocEntryText.replace('\t',' ');
+    tocEntryText.replace('\t',' ').remove(0x200B);
     tocEntryText = removeWhitespacePrefix(tocEntryText);
 
     // Add only blocks with text

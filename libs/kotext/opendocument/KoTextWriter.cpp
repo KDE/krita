@@ -969,11 +969,6 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                         if (!styleName.isEmpty()) {
                             writer->startElement("text:span", false);
                             writer->addAttribute("text:style-name", styleName);
-                            if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
-                                // Write xml:id here for Rdf
-                                kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
-                                inlineRdf->saveOdf(context, writer);
-                            }
                         }
                         else {
                             saveSpan = false;
@@ -1044,12 +1039,6 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 } else if (!styleName.isEmpty() /*&& !identical*/) {
                     fragmentTagInformation.setTagName("text:span");
                     fragmentTagInformation.addAttribute("text:style-name", styleName);
-                    if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
-                        // Write xml:id here for Rdf
-                        kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
-                        saveInlineRdf(inlineRdf, &fragmentTagInformation);
-                        //inlineRdf->saveOdf(context, writer);
-                    }
                 }
 
                 int changeId = openTagRegion(currentFragment.position(), KoTextWriter::Private::Span, fragmentTagInformation);

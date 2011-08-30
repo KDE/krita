@@ -213,6 +213,11 @@ QRect StretchDiBitsRecord::bounds() const
     return m_Bounds;
 }
 
+bool StretchDiBitsRecord::hasImage() const
+{
+    return m_bitmap && m_bitmap->hasImage();
+}
+
 QImage StretchDiBitsRecord::image() 
 {
     return m_bitmap->image();

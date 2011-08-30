@@ -600,7 +600,7 @@ void KisToolMultihand::endPaint()
             dynamic_cast<KisIndirectPaintingSupport*>(layer.data());
         Q_ASSERT(indirect);
 
-        indirect->mergeToLayer(layer, m_incrementalDirtyRegion.rects(), m_transactionText);
+        indirect->mergeToLayer(layer, m_incrementalDirtyRegion, m_transactionText);
 
         m_incrementalDirtyRegion = QRegion();
     } else {

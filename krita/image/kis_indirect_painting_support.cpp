@@ -109,7 +109,7 @@ bool KisIndirectPaintingSupport::hasTemporaryTarget() const
     return d->temporaryTarget;
 }
 
-void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QVector<QRect> &rects, const QString &transactionText)
+void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QRegion &region, const QString &transactionText)
 {
     /**
      * We do not apply selection here, because it has already
@@ -125,7 +125,7 @@ void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QVector<QR
         gc.beginTransaction(transactionText);
     }
 
-    foreach(const QRect& rc, rects) {
+    foreach(const QRect& rc, region.rects()) {
         gc.bitBlt(rc.topLeft(), d->temporaryTarget, rc);
     }
     d->temporaryTarget = 0;

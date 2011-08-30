@@ -34,6 +34,7 @@
 #include "InlineAnchorStrategy.h"
 #include "FloatingAnchorStrategy.h"
 #include "AnchorStrategy.h"
+#include "IndexGeneratorManager.h"
 
 #include <KoTextAnchor.h>
 #include <KoTextPage.h>
@@ -77,7 +78,6 @@ public:
        , continuousLayout(true)
        , layoutBlocked(false)
        , restartLayout(false)
-       , documentChangedCount(0)
     {
     }
     KoStyleManager *styleManager;
@@ -117,7 +117,6 @@ public:
         ,AnchoringFinalState
     };
     AnchoringState anchoringState;
-    int documentChangedCount;
 
 };
 
@@ -298,11 +297,6 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     // root-areas and if needed following ones which got dirty cause content moved to them. Also this will
     // created new root-areas using KoTextLayoutRootAreaProvider::provide if needed.
     emitLayoutIsDirty();
-}
-
-int KoTextDocumentLayout::documentChangedCount() const
-{
-    return d->documentChangedCount;
 }
 
 KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) const
@@ -498,14 +492,16 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
 
 void KoTextDocumentLayout::emitLayoutIsDirty()
 {
-    d->documentChangedCount++;
-
     emit layoutIsDirty();
 }
 
 void KoTextDocumentLayout::layout()
 {
     if (d->layoutBlocked) {
+        return;
+    }
+
+    if (IndexGeneratorManager::instance(document())->generate()) {
         return;
     }
 

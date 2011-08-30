@@ -46,7 +46,6 @@ KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo()
   , m_useIndexMarks(true)
   , m_useIndexSourceStyles(false)
   , m_useOutlineLevel(true)
-  , m_generator(0)
 {
     // index-title-template
     // m_indexTitleTemplate.text = "title";
@@ -95,8 +94,6 @@ KoTableOfContentsGeneratorInfo::~KoTableOfContentsGeneratorInfo()
     foreach (const TocEntryTemplate &entryTemplate, m_entryTemplate) {
         qDeleteAll(entryTemplate.indexEntries);
     }
-    delete m_generator;
-    m_generator = 0; // just to be safe
 }
 
 
@@ -130,7 +127,6 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
             m_indexTitleTemplate.text = p.text();
         // second child
         } else if (p.localName() == "table-of-content-entry-template") {
-            qDebug() <<"table-of-content-entry-template";
             TocEntryTemplate tocEntryTemplate;
             tocEntryTemplate.outlineLevel = p.attribute("outline-level").toInt();
             tocEntryTemplate.styleName = p.attribute("style-name");
@@ -234,13 +230,3 @@ void KoTableOfContentsGeneratorInfo::saveOdf(KoXmlWriter * writer) const
     writer->endElement(); // text:table-of-content-source
 }
 
-void KoTableOfContentsGeneratorInfo::setGenerator(ToCGeneratorInterface *generator)
-{
-    delete m_generator;
-    m_generator = generator;
-}
-
-ToCGeneratorInterface *KoTableOfContentsGeneratorInfo::generator() const
-{
-    return m_generator;
-}

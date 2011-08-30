@@ -27,6 +27,8 @@ set(textlayout_LIB_SRCS
     ToCGenerator.cpp
     BibliographyGenerator.cpp
     DummyDocumentLayout.cpp
+    IndexGeneratorManager.cpp
+    IndexGenerator.cpp
 )
 
 

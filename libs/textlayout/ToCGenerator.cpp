@@ -36,9 +36,9 @@
 #include <KoTextBlockData.h>
 #include <KoStyleManager.h>
 #include <KoTextEditor.h>
+#include <KoTableOfContentsGeneratorInfo.h>
 
 #include <QTextDocument>
-#include <QTimer>
 #include <KDebug>
 #include <KoBookmark.h>
 #include <KoInlineTextObjectManager.h>
@@ -46,29 +46,18 @@
 static const QString INVALID_HREF_TARGET = "INVALID_HREF";
 
 ToCGenerator::ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGeneratorInfo *tocInfo)
-    : QObject(tocDocument)
+    : IndexGenerator(tocDocument)
     , m_ToCDocument(tocDocument)
     , m_ToCInfo(tocInfo)
     , m_document(0)
     , m_documentLayout(0)
-    , m_generatedDocumentChangeCount(-1)
     , m_maxTabPosition(0.0)
 {
     Q_ASSERT(tocDocument);
     Q_ASSERT(tocInfo);
 
-    m_ToCInfo->setGenerator(this);
-
     tocDocument->setUndoRedoEnabled(false);
     tocDocument->setDocumentLayout(new DummyDocumentLayout(tocDocument));
-
-    // We cannot do generate right now to have a ToC with placeholder numbers cause we are in the middle
-    // of a layout-process when called what means that the document isn't ready and therefore it would
-    // not make sense to recreate the toc yet anyways cause required content may still missing. So, we
-    // need to wait till layouting is finished and our generate() method is called by the layouter.
-    //generate();
-
-    m_generatedDocumentChangeCount = -1; // we need one more intial layout to get pagenumbers
 }
 
 ToCGenerator::~ToCGenerator()
@@ -92,16 +81,9 @@ void ToCGenerator::setMaxTabPosition(qreal maxtabPosition)
 
 void ToCGenerator::setBlock(const QTextBlock &block)
 {
-    if (m_documentLayout) {
-        disconnect(m_documentLayout, SIGNAL(finishedLayout()), this, SLOT(generate()));
-    }
-
     m_block = block;
     m_documentLayout = static_cast<KoTextDocumentLayout *>(m_block.document()->documentLayout());
     m_document = m_documentLayout->document();
-
-    // connect to FinishedLayout
-    connect(m_documentLayout, SIGNAL(finishedLayout()), this, SLOT(generate()));
 }
 
 QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManager* inlineTextObjectManager)
@@ -140,14 +122,12 @@ static QString removeWhitespacePrefix(const QString& text)
 }
 
 
-void ToCGenerator::generate()
+bool ToCGenerator::generate()
 {
     if (!m_ToCInfo)
-        return;
+        return true;
 
-    if (m_documentLayout->documentChangedCount() == m_generatedDocumentChangeCount) {
-        return;
-    }
+    m_success = true;
 
     QTextCursor cursor = m_ToCDocument->rootFrame()->lastCursorPosition();
     cursor.setPosition(m_ToCDocument->rootFrame()->firstPosition(), QTextCursor::KeepAnchor);
@@ -155,7 +135,7 @@ void ToCGenerator::generate()
 
     KoStyleManager *styleManager = KoTextDocument(m_document).styleManager();
 
-    if (!m_ToCInfo->m_indexTitleTemplate.text.isNull()) {
+    if (!m_ToCInfo->m_indexTitleTemplate.text.isEmpty()) {
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_ToCInfo->m_indexTitleTemplate.styleId);
         if (!titleStyle) {
             titleStyle = styleManager->defaultParagraphStyle();
@@ -213,7 +193,7 @@ void ToCGenerator::generate()
         rootArea->setDirty();
     }
 
-    m_generatedDocumentChangeCount = m_documentLayout->documentChangedCount();
+    return m_success;
 }
 
 static bool compareTab(const QVariant &tab1, const QVariant &tab2)
@@ -363,6 +343,8 @@ QString ToCGenerator::resolvePageNumber(const QTextBlock &headingBlock)
             return QString::number(rootArea->page()->visiblePageNumber());
         }
     }
+    qDebug()<<"couldn't resolve pagenumber";
+    m_success = false;
     return "###";
 }
 

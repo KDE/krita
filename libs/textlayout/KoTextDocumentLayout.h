@@ -177,9 +177,6 @@ public:
     /// reimplemented from QAbstractTextDocumentLayout
     virtual void documentChanged(int position, int charsRemoved, int charsAdded);
 
-    /// returns a number that increases every time documentChanged is called
-    int documentChangedCount() const;
-
     /// Return a list of obstructions intersecting current root area (during layout)
     QList<KoTextLayoutObstruction *> currentObstructions();
 

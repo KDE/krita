@@ -426,21 +426,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 QVariant data = block.blockFormat().property(KoParagraphStyle::TableOfContentsDocument);
                 QTextDocument *tocDocument = data.value<QTextDocument *>();
 
-                data = block.blockFormat().property(KoParagraphStyle::TableOfContentsData);
-                KoTableOfContentsGeneratorInfo *tocInfo = data.value<KoTableOfContentsGeneratorInfo *>();
-
-                if (!tocInfo->generator()) {
-                    // The generator attaches itself to the tocInfo
-                    new ToCGenerator(tocDocument, tocInfo);
-                }
-                tocInfo->generator()->setMaxTabPosition(right() - left());
-
-                if (!cursor->currentSubFrameIterator) {
-                    // Let the generator know which QTextBlock it needs to ask for a relayout once the toc got generated.
-                    tocInfo->generator()->setBlock(block);
-                }
-
-                // Let's create KoTextLayoutArea and let to handle the ToC
+                // Let's create KoTextLayoutArea and let it handle the ToC
                 KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, documentLayout());
                 m_tableOfContentsAreas.append(tocArea);
                 m_y += m_bottomSpacing;

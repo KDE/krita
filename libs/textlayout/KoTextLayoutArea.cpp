@@ -1482,7 +1482,18 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
 {
     QTextBlockFormat format = block->blockFormat();
     KoParagraphStyle formatStyle(format, block->charFormat());
-    qreal spacing = qMax(m_bottomSpacing, formatStyle.topMargin());
+
+    // The AddParaTableSpacingAtStart config-item is used to be able to optionally prevent that
+    // defined fo:margin-top are applied to the first paragraph. If true then the fo:margin-top
+    // is applied to all except the first paragraph. If false fo:margin-top is applied to all
+    // paragraphs.
+    bool paraTableSpacingAtStart = KoTextDocument(m_documentLayout->document()).paraTableSpacingAtStart();
+
+    qreal topMargin = 0;
+    if (paraTableSpacingAtStart || block->previous().isValid()) {
+        topMargin = formatStyle.topMargin();
+    }
+    qreal spacing = qMax(m_bottomSpacing, topMargin);
 
     KoTextBlockBorderData border(QRectF(x(), m_y, width(), 1));
     border.setEdge(border.Left, format, KoParagraphStyle::LeftBorderStyle,
@@ -1510,7 +1521,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             // Merged mean we don't have inserts inbetween the blocks
             qreal divider = m_y;
             if (spacing) {
-                divider += spacing * m_bottomSpacing / (m_bottomSpacing + formatStyle.topMargin());
+                divider += spacing * m_bottomSpacing / (m_bottomSpacing + topMargin);
             }
             if (!m_blockRects.isEmpty()) {
                 m_blockRects.last().setBottom(divider);

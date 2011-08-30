@@ -144,7 +144,7 @@ private:
     bool m_explicitShowOutline;
 
 
-    QRegion m_incrementalDirtyRegion;
+    QVector<QRect> m_incrementalDirtyRegion;
     QList<FreehandPaintJob*> m_paintJobs;
     KisRecordedPathPaintAction* m_pathPaintAction;
     QThreadPool* m_executor;

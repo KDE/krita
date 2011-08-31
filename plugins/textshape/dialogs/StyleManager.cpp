@@ -35,7 +35,7 @@ StyleManager::StyleManager(QWidget *parent)
     widget.setupUi(this);
     layout()->setMargin(0);
 
-    connect(widget.styles, SIGNAL(paragraphStyleSelected(KoParagraphStyle *, bool)), this, SLOT(setParagraphStyle(KoParagraphStyle*,bool)));
+    connect(widget.styles, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)), this, SLOT(setParagraphStyle(KoParagraphStyle*)));
     connect(widget.styles, SIGNAL(characterStyleSelected(KoCharacterStyle *, bool)), this, SLOT(setCharacterStyle(KoCharacterStyle*,bool)));
 
     connect(widget.bNew, SIGNAL(pressed()), this, SLOT(buttonNewPressed()));
@@ -72,8 +72,9 @@ void StyleManager::setStyleManager(KoStyleManager *sm)
     connect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
 }
 
-void StyleManager::setParagraphStyle(KoParagraphStyle *style, bool canDelete)
+void StyleManager::setParagraphStyle(KoParagraphStyle *style)
 {
+
     m_selectedCharStyle = 0;
     m_selectedParagStyle = style;
     widget.characterStylePage->save();
@@ -88,7 +89,8 @@ void StyleManager::setParagraphStyle(KoParagraphStyle *style, bool canDelete)
 
     widget.paragraphStylePage->setStyle(localStyle);
     widget.stackedWidget->setCurrentWidget(widget.paragraphStylePage);
-    widget.bDelete->setEnabled(canDelete);
+ //   widget.bDelete->setEnabled(canDelete);
+
 }
 
 void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)

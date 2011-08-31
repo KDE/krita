@@ -949,12 +949,14 @@ void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const
             style.addProperty("fo:border-bottom", bottomBorderString, type);
     }
 
-    //if (tlbrBorderStyle() != BorderNone) {
-        style.addProperty("style:diagonal-tl-br", tlbrBorderString, type);
-    //}
-    //if (trblBorderStyle() != BorderNone) {
-        style.addProperty("style:diagonal-bl-tr", trblBorderString, type);
-    //}
+    if (style.type() != KoGenStyle::PageLayoutStyle) {
+        //if (tlbrBorderStyle() != BorderNone) {
+            style.addProperty("style:diagonal-tl-br", tlbrBorderString, type);
+        //}
+        //if (trblBorderStyle() != BorderNone) {
+            style.addProperty("style:diagonal-bl-tr", trblBorderString, type);
+        //}
+    }
 
     // Handle double borders
     QString leftBorderLineWidth = QString("%1pt %2pt %3pt")
@@ -1002,10 +1004,12 @@ void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const
             style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, type);
     }
 
-    if (tlbrBorderStyle() == BorderDouble) {
-        style.addProperty("style:diagonal-tl-br-widths", tlbrBorderLineWidth, type);
-    }
-    if (trblBorderStyle() == BorderDouble) {
-        style.addProperty("style:diagonal-bl-tr-widths", trblBorderLineWidth, type);
+    if (style.type() != KoGenStyle::PageLayoutStyle) {
+        if (tlbrBorderStyle() == BorderDouble) {
+            style.addProperty("style:diagonal-tl-br-widths", tlbrBorderLineWidth, type);
+        }
+        if (trblBorderStyle() == BorderDouble) {
+            style.addProperty("style:diagonal-bl-tr-widths", trblBorderLineWidth, type);
+        }
     }
 }

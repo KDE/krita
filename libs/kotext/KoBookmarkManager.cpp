@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,6 +45,11 @@ KoBookmarkManager::~KoBookmarkManager()
 
 void KoBookmarkManager::insert(const QString &name, KoBookmark *bookmark)
 {
+    // we don't manage end bookmarks here. And that breaks when renaming
+    if (bookmark->type() == KoBookmark::EndBookmark) {
+        return;
+    }
+    bookmark->setName(name);
     d->bookmarkHash[name] = bookmark;
     d->bookmarkNameList.append(name);
 }
@@ -62,6 +68,10 @@ void KoBookmarkManager::rename(const QString &oldName, const QString &newName)
         if (i.key() == oldName) {
             KoBookmark *bookmark = d->bookmarkHash.take(i.key());
             bookmark->setName(newName);
+            // endbookmarks must have the same name as the corresponding startbookmark.
+            if (bookmark->endBookmark()) {
+                bookmark->endBookmark()->setName(newName);
+            }
             d->bookmarkHash.insert(newName, bookmark);
             int listPos = d->bookmarkNameList.indexOf(oldName);
             d->bookmarkNameList.replace(listPos, newName);

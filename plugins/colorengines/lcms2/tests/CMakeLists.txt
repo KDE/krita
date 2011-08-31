@@ -1,3 +1,5 @@
+add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ../colorspaces/cmyk_u16
     ../colorspaces/cmyk_u8
@@ -38,4 +40,13 @@ set(TestKoColorSpaceRegistry_test_SRCS TestKoColorSpaceRegistry.cpp )
 kde4_add_unit_test(TestKoColorSpaceRegistry TESTNAME libs-pigment-TestKoColorSpaceRegistry  ${TestKoColorSpaceRegistry_test_SRCS})
 
 target_link_libraries(TestKoColorSpaceRegistry  ${KDE4_KDEUI_LIBS} pigmentcms ${LCMS2_LIBRARIES} ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestKoCompositeOps_test_SRCS TestKoCompositeOps.cpp )
+
+kde4_add_unit_test(TestKoCompositeOps TESTNAME libs-pigment-TestKoCompositeOps ${TestKoCompositeOps_test_SRCS})
+
+target_link_libraries(TestKoCompositeOps  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
+
 

@@ -57,8 +57,6 @@ public:
 
     bool visit(KisTransparencyMask *mask);
 
-    bool visit(KisTransformationMask *mask);
-
     bool visit(KisSelectionMask *mask);
 
 private:

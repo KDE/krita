@@ -24,7 +24,6 @@
 #include <KoDockRegistry.h>
 #include "kis_debug.h"
 
-#include "histogramdock_factory.h"
 #include "kis_birdeye_box.h"
 #include "kis_layer_box.h"
 #include "kis_palette_docker.h"
@@ -35,7 +34,6 @@ K_EXPORT_PLUGIN(KritaDefaultDockersPluginFactory("krita"))
 KritaDefaultDockersPlugin::KritaDefaultDockersPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //KoDockRegistry::instance()->add(new KisHistogramDockFactory());
     KoDockRegistry::instance()->add(new KisLayerBoxFactory());
     KoDockRegistry::instance()->add(new KisBirdEyeBoxFactory());
     KoDockRegistry::instance()->add(new KisPaletteDockerFactory());

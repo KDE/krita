@@ -30,7 +30,7 @@ class KoShapeLoadingContext;
 
 /**
  * Used to indicate an ODF text:meta container. This is very similar to a KoBookmark
- * in that a specific start-end is marked
+ * in that a specific start-end is marked.
  */
 class KOTEXT_EXPORT KoTextMeta : public KoInlineObject
 {
@@ -54,7 +54,7 @@ public:
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// reimplemented from super
-    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
+    virtual void updatePosition(const QTextDocument *document,
                                 int posInDocument, const QTextCharFormat &format);
     /// reimplemented from super
     virtual void resize(const QTextDocument *document, QTextInlineObject object,

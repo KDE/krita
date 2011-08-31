@@ -115,9 +115,6 @@ public:
     bool visit(KisTransparencyMask*) {
         return true;
     }
-    bool visit(KisTransformationMask*) {
-        return true;
-    }
     bool visit(KisSelectionMask*) {
         return true;
     }

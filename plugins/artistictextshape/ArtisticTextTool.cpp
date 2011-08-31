@@ -325,7 +325,6 @@ void ArtisticTextTool::mouseReleaseEvent( KoPointerEvent *event )
         m_currentStrategy = 0;
     }
     updateActions();
-    event->ignore();
 }
 
 void ArtisticTextTool::mouseDoubleClickEvent(KoPointerEvent */*event*/)

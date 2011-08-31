@@ -39,7 +39,7 @@ private slots:
     virtual void activated();
 
 protected:
-    KoTextEditor *editor() const;
+
     KoCanvasBase *m_canvas;
     KoDocumentRdf *m_rdf;
 };

@@ -50,7 +50,8 @@ public:
     enum FormatType {
         HighlightFormat,
         CurrentMatchFormat,
-        SelectionFormat
+        SelectionFormat,
+        ReplacedFormat
     };
 
     /**

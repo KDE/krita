@@ -223,8 +223,14 @@ void ConnectionTool::repaintDecorations()
 
 void ConnectionTool::mousePressEvent(KoPointerEvent * event)
 {
+
+    if (!m_currentShape) {
+        return;
+    }
+
     KoShape * hitShape = findShapeAtPosition(event->point);
     int hitHandle = handleAtPoint(m_currentShape, event->point);
+
 
     if (m_editMode == EditConnection && hitHandle >= 0) {
         // create connection handle change strategy

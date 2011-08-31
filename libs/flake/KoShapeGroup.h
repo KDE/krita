@@ -54,13 +54,14 @@ public:
     virtual bool hitTest(const QPointF &position) const;
     /// a group in flake doesn't have a size, this funcion just returns QSizeF(0,0)
     virtual QSizeF size() const;
+    /// a group's boundingRect
+    virtual QRectF boundingRect() const;
     /// reimplemented from KoShape
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
-    void shapeCountChanged();
     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
 };
 

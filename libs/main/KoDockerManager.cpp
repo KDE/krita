@@ -168,4 +168,9 @@ void KoDockerManager::newOptionWidgets(const QList<QWidget *> &optionWidgetList)
     d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
 }
 
+void KoDockerManager::resetToolDockerWidgets()
+{
+    d->toolOptionsDocker->resetWidgets();
+}
+
 #include <KoDockerManager.moc>

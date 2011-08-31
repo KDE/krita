@@ -22,13 +22,7 @@
 #include "kis_node.h"
 #include "krita_export.h"
 /**
- *
  * KisNodeFacade is the public interface to adding and removing nodes.
- *
- * XXX: also make this the public interface for setting node
- * properties so we don't need notifyPropertyChanged all over the
- * place?
- *
  */
 class KRITAIMAGE_EXPORT KisNodeFacade
 {

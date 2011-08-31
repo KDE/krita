@@ -466,12 +466,6 @@ target_link_libraries(KisShearVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QT
 
 ########### next target ###############
 
-set(kis_transformation_mask_test_SRCS kis_transformation_mask_test.cpp )
-kde4_add_unit_test(KisTransformationMaskTest TESTNAME krita-image-KisTransformationMaskTest ${kis_transformation_mask_test_SRCS})
-target_link_libraries(KisTransformationMaskTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_transform_visitor_test_SRCS kis_transform_visitor_test.cpp )
 kde4_add_unit_test(KisTransformVisitorTest TESTNAME krita-image-KisTransformVisitorTest ${kis_transform_visitor_test_SRCS})
 target_link_libraries(KisTransformVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

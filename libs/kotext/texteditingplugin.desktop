@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Text Editing plugin for the Calligra text tool
+Name[de]=Modul zur Textbearbeitung für das Calligra-Textwerkzeug
 Name[et]=Calligra tekstitööriista teksti redigeerimise plugin
 Name[it]=Estensione di modifica del testo per lo strumento di testo di Calligra
 Name[nb]=Programtillegg for tekstredigering for Calligra tekstverktøy
 Name[nds]=Textbewerk-Moduul för dat Calligra-Textwarktüüch
+Name[pl]=Wtyczka edycji tekstu dla narzędzia tekstu Calligra
 Name[pt]='Plugin' de edição de texto para a ferramenta de texto do Calligra
 Name[pt_BR]=Plug-in de edição de texto para a ferramenta de texto do Calligra
 Name[sv]=Insticksprogram med textredigering för Calligra textverktyg
@@ -34,6 +36,7 @@ Comment[nb]=Definisjon av et programtillegg for tekstredigering
 Comment[nds]=Definitschoon vun en Textbewerken-Moduul
 Comment[ne]=पाठ सम्पादन प्लगइनको परिभाषा
 Comment[nl]=Definitie van een tekstinvoerplug-in
+Comment[pl]=Definicja wtyczki edytowania tekstu
 Comment[pt]=Definição de um 'plugin' de edição de texto
 Comment[pt_BR]=Definição de um plug-in de edição de texto
 Comment[sv]=Definition av ett Insticksprogram för textredigering

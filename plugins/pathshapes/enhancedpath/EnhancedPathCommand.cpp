@@ -96,7 +96,7 @@ bool EnhancedPathCommand::execute()
         bool lineTo = m_command.unicode() == 'T';
 
         for (int i = 0; i < pointsCount; i+=3) {
-            const QPointF &radii = points[i+1]/2;
+            const QPointF &radii = points[i+1];
             const QPointF &angles = points[i+2] / rad2deg;
             // compute the ellipses starting point
             QPointF start(radii.x() * cos(angles.x()), -1 * radii.y() * sin(angles.x()));
@@ -126,14 +126,40 @@ bool EnhancedPathCommand::execute()
             QPointF center = bbox.center();
             qreal rx = 0.5 * bbox.width();
             qreal ry = 0.5 * bbox.height();
-            qreal startAngle = angleFromPoint(points[i+2] - center);
-            qreal stopAngle = angleFromPoint(points[i+3] - center);
+
+            if (rx == 0) {
+                rx = 1;
+            }
+
+            if (ry == 0) {
+                ry = 1;
+            }
+
+            QPointF startRadialVector = points[i+2] - center;
+            QPointF endRadialVector = points[i+3] - center;
+
+            // convert from ellipse space to unit-circle space
+            qreal x0 = startRadialVector.x() / rx;
+            qreal y0 = startRadialVector.y() / ry;
+
+            qreal x1 = endRadialVector.x() / rx;
+            qreal y1 = endRadialVector.y() / ry;
+
+            qreal startAngle = angleFromPoint(QPointF(x0,y0));
+            qreal stopAngle = angleFromPoint(QPointF(x1,y1));
+
             // we are moving counter-clockwise to the end angle
             qreal sweepAngle = radSweepAngle(startAngle, stopAngle, clockwise);
             // compute the starting point to draw the line to
+            // as the point x3 y3 is not on the ellipse, spec says the point define radial vector
             QPointF startPoint(rx * cos(startAngle), ry * sin(2*M_PI - startAngle));
 
-            if (lineTo) {
+            // if A or W is first command in enhanced path
+            // move to the starting point
+            bool isFirstCommandInPath = (m_parent->subpathCount() == 0);
+            bool isFirstCommandInSubpath = m_parent->isClosedSubpath( m_parent->subpathCount() - 1 );
+
+            if (lineTo && !isFirstCommandInPath && !isFirstCommandInSubpath) {
                 m_parent->lineTo(center + startPoint);
             } else {
                 m_parent->moveTo(center + startPoint);

@@ -173,9 +173,8 @@ KoTextAnchor::VerticalRel KoTextAnchor::verticalRel()
     return d->verticalRel;
 }
 
-void KoTextAnchor::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+void KoTextAnchor::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
 {
-    Q_UNUSED(object);
     Q_D(KoTextAnchor);
     d->document = document;
     d->position = posInDocument;

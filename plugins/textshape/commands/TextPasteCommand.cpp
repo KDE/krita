@@ -106,8 +106,7 @@ void TextPasteCommand::redo()
 
 #ifdef SHOULD_BUILD_RDF
                 if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
-                    KoTextEditor *e = KoDocumentRdf::ensureTextTool(m_tool->canvas());
-                    rdf->updateInlineRdfStatements(e->document());
+                    rdf->updateInlineRdfStatements(editor->document());
                 }
                 if (weOwnRdfModel && rdfModel) {
                     delete rdfModel;

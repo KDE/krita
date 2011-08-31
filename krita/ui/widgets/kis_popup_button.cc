@@ -22,14 +22,13 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
-
 #include <QFrame>
 #include <QHBoxLayout>
-
-#include <kis_debug.h>
-
 #include <QStyleOption>
 #include <QStylePainter>
+
+#include <kis_debug.h>
+#include <kis_paintop_presets_popup.h>
 
 
 struct KisPopupButton::Private {
@@ -78,6 +77,13 @@ void KisPopupButton::setPopupWidget(QWidget* widget)
         m_d->popupWidget = widget;
         m_d->popupWidget->setParent(m_d->frame);
         m_d->frameLayout->addWidget(m_d->popupWidget);
+
+        // Workaround for bug 279740, preset popup widget resizes after it's shown for the first time
+        // so we catch that and correct the position
+        KisPaintOpPresetsPopup* presetPopup = dynamic_cast<KisPaintOpPresetsPopup*>(widget);
+        if(presetPopup) {
+            connect(presetPopup, SIGNAL(sizeChanged()), this, SLOT(adjustPosition()));
+        }
     }
 }
 
@@ -91,22 +97,8 @@ void KisPopupButton::showPopupWidget()
     if (m_d->popupWidget) {
         m_d->frame->raise();
         m_d->frame->show();
-        QSize popSize = m_d->popupWidget->size();
-        QRect popupRect(this->mapToGlobal(QPoint(0, this->size().height())), popSize);
 
-        // Get the available geometry of the screen which contains this KisPopupButton
-        QDesktopWidget* desktopWidget = QApplication::desktop();
-        QRect screenRect = desktopWidget->availableGeometry(this);
-
-        // Make sure the popup is not drawn outside the screen area
-        if (popupRect.right() > screenRect.right())
-            popupRect.translate(screenRect.right() - popupRect.right(), 0);
-        if (popupRect.left() < screenRect.left())
-            popupRect.translate(screenRect.left() - popupRect.left(), 0);
-        //if (popupRect.bottom() > screenRect.bottom())
-        //    popupRect.translate(0, -m_d->frame->height());
-        m_d->frame->setGeometry(popupRect);
-
+        adjustPosition();
     }
 }
 
@@ -134,6 +126,25 @@ void KisPopupButton::paintPopupArrow()
     p.setBrush(Qt::black); // work around some theme that don't use QPalette::ButtonText like they  should, but instead the QPainter brushes and pen
     p.setPen(Qt::black);
     p.drawPrimitive(QStyle::PE_IndicatorArrowDown, option);
+}
+
+void KisPopupButton::adjustPosition()
+{
+    QSize popSize = m_d->popupWidget->size();
+    QRect popupRect(this->mapToGlobal(QPoint(0, this->size().height())), popSize);
+
+    // Get the available geometry of the screen which contains this KisPopupButton
+    QDesktopWidget* desktopWidget = QApplication::desktop();
+    QRect screenRect = desktopWidget->availableGeometry(this);
+
+    // Make sure the popup is not drawn outside the screen area
+    if (popupRect.right() > screenRect.right())
+        popupRect.translate(screenRect.right() - popupRect.right(), 0);
+    if (popupRect.left() < screenRect.left())
+        popupRect.translate(screenRect.left() - popupRect.left(), 0);
+    //if (popupRect.bottom() > screenRect.bottom())
+    //    popupRect.translate(0, -m_d->frame->height());
+    m_d->frame->setGeometry(popupRect);
 }
 
 #include "kis_popup_button.moc"

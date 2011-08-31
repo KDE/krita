@@ -36,6 +36,7 @@
 
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
+#include <KoShapeSavingContext.h>
 
 #include <QTimer>
 #include <QUrl>
@@ -103,17 +104,17 @@ KoStyleManager::~KoStyleManager()
     delete d;
 }
 
-void KoStyleManager::saveOdfDefaultStyles(KoGenStyles &mainStyles)
+void KoStyleManager::saveOdfDefaultStyles(KoShapeSavingContext &context)
 {
     KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
     style.setDefaultStyle(true);
-    d->defaultParagraphStyle->saveOdf(style, mainStyles);
-    mainStyles.insert(style);
+    d->defaultParagraphStyle->saveOdf(style, context);
+    context.mainStyles().insert(style);
 }
 
-void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
+void KoStyleManager::saveOdf(KoShapeSavingContext &context)
 {
-    saveOdfDefaultStyles(mainStyles);
+    saveOdfDefaultStyles(context);
 
     // don't save character styles that are already saved as part of a paragraph style
     QSet<KoCharacterStyle*> characterParagraphStyles;
@@ -128,8 +129,8 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
         }
 
         KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
-        paragraphStyle->saveOdf(style, mainStyles);
-        QString newName = mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
+        paragraphStyle->saveOdf(style, context);
+        QString newName = context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
         savedNames.insert(paragraphStyle, newName);
         characterParagraphStyles.insert(paragraphStyle->characterStyle());
     }
@@ -139,7 +140,7 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
             KoParagraphStyle *next = paragraphStyle(p->nextStyle());
             if (next == p) // this is the default
                 continue;
-            mainStyles.insertStyleRelation(savedNames.value(p), savedNames.value(next), "style:next-style-name");
+            context.mainStyles().insertStyleRelation(savedNames.value(p), savedNames.value(next), "style:next-style-name");
         }
     }
 
@@ -154,7 +155,7 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
 
         KoGenStyle style(KoGenStyle::ParagraphStyle, "text");
         characterStyle->saveOdf(style);
-        mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
+        context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
     foreach(KoListStyle *listStyle, d->listStyles) {
@@ -165,8 +166,8 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
             name = 'L';
 
         KoGenStyle style(KoGenStyle::ListStyle);
-        listStyle->saveOdf(style);
-        mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
+        listStyle->saveOdf(style, context);
+        context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
     foreach(KoTableStyle *tableStyle, d->tableStyles) {
@@ -176,7 +177,7 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
 
         KoGenStyle style(KoGenStyle::TableStyle);
         tableStyle->saveOdf(style);
-        mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
+        context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
     foreach(KoTableColumnStyle *tableColumnStyle, d->tableColumnStyles) {
@@ -186,7 +187,7 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
 
         KoGenStyle style(KoGenStyle::TableColumnStyle);
         tableColumnStyle->saveOdf(style);
-        mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
+        context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
     foreach(KoTableRowStyle *tableRowStyle, d->tableRowStyles) {
@@ -196,7 +197,7 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
 
         KoGenStyle style(KoGenStyle::TableRowStyle);
         tableRowStyle->saveOdf(style);
-        mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
+        context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
     foreach(KoTableCellStyle *tableCellStyle, d->tableCellStyles) {
@@ -206,7 +207,7 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
 
         KoGenStyle style(KoGenStyle::TableCellStyle);
         tableCellStyle->saveOdf(style);
-        mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
+        context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
     foreach(KoSectionStyle *sectionStyle, d->sectionStyles) {
@@ -216,7 +217,7 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
 
         KoGenStyle style(KoGenStyle::SectionStyle);
         sectionStyle->saveOdf(style);
-        mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
+        context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 }
 

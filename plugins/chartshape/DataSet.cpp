@@ -1486,12 +1486,9 @@ void DataSet::saveOdf( KoShapeSavingContext &context ) const
 
     bodyWriter.startElement( "chart:series" );
 
-    // We need GraphicsAutoStyle here so that KoOdfGraphicStyles::saveOdfFillStyle()
-    // uses <style:graphics-properties> as parent.
-    KoGenStyle style( KoGenStyle::GraphicAutoStyle, "chart" );
+    KoGenStyle style( KoGenStyle::ChartAutoStyle, "chart" );
 
-    style.addProperty( "chart:data-label-text", showLabels() ? "true" : "false", KoGenStyle::ChartType  );
-    style.addProperty( "chart:family", odfCharttype(d->effectiveChartType()), KoGenStyle::ChartType );
+    style.addProperty( "chart:data-label-text", showLabels() ? "true" : "false" );
 
     KoOdfGraphicStyles::saveOdfFillStyle( style, mainStyles, brush() );
     KoOdfGraphicStyles::saveOdfStrokeStyle( style, mainStyles, pen() );

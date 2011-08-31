@@ -45,7 +45,7 @@ TextShapeFactory::TextShapeFactory()
     QList<QPair<QString, QStringList> > odfElements;
     odfElements.append(QPair<QString, QStringList>(KoXmlNS::draw, QStringList("text-box")));
     odfElements.append(QPair<QString, QStringList>(KoXmlNS::table, QStringList("table")));
-    setOdfElements(odfElements);
+    setXmlElements(odfElements);
     setLoadingPriority(1);
 
     KoShapeTemplate t;
@@ -117,7 +117,7 @@ bool TextShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &c
         (e.localName() == "table" && e.namespaceURI() == KoXmlNS::table);
 }
 
-void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
+void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager) const
 {
     QVariant variant;
     variant.setValue<KoInlineTextObjectManager*>(new KoInlineTextObjectManager(manager));

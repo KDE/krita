@@ -35,7 +35,7 @@ KoPathShapeFactory::KoPathShapeFactory(const QStringList&)
     setIcon("pathshape");
     QStringList elementNames;
     elementNames << "path" << "line" << "polyline" << "polygon";
-    setOdfElementNames(KoXmlNS::draw, elementNames);
+    setXmlElementNames(KoXmlNS::draw, elementNames);
     setLoadingPriority(0);
 }
 
@@ -67,7 +67,7 @@ bool KoPathShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext 
     return false;
 }
 
-void KoPathShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
+void KoPathShapeFactory::newDocumentResourceManager(KoResourceManager *manager) const
 {
     // as we need an image collection for the pattern background
     // we want to make sure that there is always an image collection

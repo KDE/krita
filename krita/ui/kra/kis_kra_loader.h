@@ -74,8 +74,6 @@ private:
 
     KisNode* loadTransparencyMask(const KoXmlElement& elem);
 
-    KisNode* loadTransformationMask(const KoXmlElement& elem);
-
     KisNode* loadSelectionMask(KisImageWSP image, const KoXmlElement& elem);
 
 

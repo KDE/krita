@@ -88,6 +88,26 @@
 
 #include <rdf/KoDocumentRdfBase.h>
 
+class TextToolSelection : public KoToolSelection
+{
+public:
+
+    TextToolSelection(QWeakPointer<KoTextEditor> editor)
+        : m_editor(editor)
+    {
+    }
+
+    bool hasSelection()
+    {
+        if (!m_editor.isNull()) {
+            return m_editor.data()->hasSelection();
+        }
+        return false;
+    }
+
+    QWeakPointer<KoTextEditor> m_editor;
+};
+
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
 {
     foreach (const QKeySequence & ks, KStandardShortcut::shortcut(shortcut).toList()) {
@@ -110,15 +130,16 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_prevMouseSelectionStart(-1),
         m_prevMouseSelectionEnd(-1),
         m_caretTimer(this),
-        m_caretTimerState(true)
-        , m_currentCommand(0),
+        m_caretTimerState(true),
+        m_currentCommand(0),
         m_currentCommandHasChildren(false),
         m_specialCharacterDocker(0),
         m_textTyping(false),
         m_textDeleting(false),
         m_changeTipTimer(this),
-        m_changeTipCursorPos(0)
-        , m_delayedEnsureVisible(false)
+        m_changeTipCursorPos(0),
+        m_delayedEnsureVisible(false),
+        m_toolSelection(0)
 {
     setTextMode(true);
 
@@ -514,20 +535,12 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 
     m_textEditor = new KoTextEditor(document);
     KoTextDocument(document).setTextEditor(m_textEditor.data());
+    m_toolSelection = new TextToolSelection(m_textEditor);
 
     m_changeTracker = new KoChangeTracker();
     KoTextDocument(document).setChangeTracker(m_changeTracker);
 
     KoTextDocument(document).setUndoStack(new KUndo2Stack());
-
-#if 0
-    KoTextDocumentLayout *layout = new KoTextDocumentLayout(document);
-    document->setDocumentLayout(layout);
-#else
-    #ifdef __GNUC__
-        #warning FIXME: port to textlayout-rework
-    #endif
-#endif
 }
 #endif
 
@@ -629,22 +642,38 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 
             QTextLine tl = block.layout()->lineForTextPosition(m_textEditor.data()->position() - block.position());
             if (tl.isValid()) {
-                painter.setRenderHint(QPainter::Antialiasing,false);
+                painter.setRenderHint(QPainter::Antialiasing, false);
                 QRectF rect = caretRect(m_textEditor.data()->cursor());
+                QPointF baselinePoint;
                 if (tl.ascent() > 0) {
                     QFontMetricsF fm(m_textEditor.data()->charFormat().font(), painter.device());
                     rect.setY(rect.y() + tl.ascent() - qMin(tl.ascent(), fm.ascent()));
                     rect.setHeight(qMin(tl.ascent(), fm.ascent()) + qMin(tl.descent(), fm.descent()));
+                    baselinePoint = QPoint(rect.x(), rect.y() + tl.ascent());
                 } else {
                     //line only filled with characters-without-size (eg anchors)
                     // layout will make sure line has height of block font
                     QFontMetricsF fm(block.charFormat().font(), painter.device());
                     rect.setHeight(fm.ascent() + fm.descent());
+                    baselinePoint = QPoint(rect.x(), rect.y() + fm.ascent());
                 }
                 QRectF drawRect(shapeMatrix.map(rect.topLeft()), shapeMatrix.map(rect.bottomLeft()));
                 drawRect.setWidth(2);
                 painter.fillRect(drawRect, QColor(Qt::white));
                 painter.fillRect(drawRect, QBrush(Qt::black, Qt::Dense3Pattern));
+                if (m_textEditor.data()->isEditProtected(true)) {
+                    QRectF circleRect(shapeMatrix.map(baselinePoint),QSizeF(14, 14));
+                    circleRect.translate(-7.5, -7.5);
+                    QPen pen(Qt::red);
+                    pen.setWidthF(2.0);
+                    painter.setPen(Qt::NoPen);
+                    painter.setPen(pen);
+                    painter.setBrush(QBrush(QColor(255, 255, 255, 192)));
+                    painter.setRenderHint(QPainter::Antialiasing, true);
+                    painter.drawEllipse(circleRect);
+                    painter.drawLine(circleRect.topLeft() + QPointF(2,2),
+                                    circleRect.bottomRight() - QPointF(2,2));
+                }
             }
         }
     }
@@ -755,10 +784,17 @@ void TextTool::setShapeData(KoTextShapeData *data)
         return;
     connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
     if (docChanged) {
-        if (!m_textEditor.isNull())
+        if (!m_textEditor.isNull()) {
             disconnect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
+        }
         m_textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
         Q_ASSERT(m_textEditor.data());
+        if (!m_toolSelection) {
+            m_toolSelection = new TextToolSelection(m_textEditor.data());
+        }
+        else {
+            m_toolSelection->m_editor = m_textEditor.data();
+        }
         connect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
     }
     m_textEditor.data()->updateDefaultTextDirection(m_textShapeData->pageDirection());
@@ -992,11 +1028,11 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             if (!textEditor->blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
                 // backspace at beginning of numbered list item, makes it unnumbered
                 ListItemNumberingCommand *lin = new ListItemNumberingCommand(textEditor->block(), false);
-                addCommand(lin);
+                textEditor->addCommand(lin);
             } else {
                 // backspace on numbered, empty parag, removes numbering.
                 ChangeListCommand *clc = new ChangeListCommand(*textEditor->cursor(), KoListStyle::None, 0 /* level */);
-                addCommand(clc);
+                textEditor->addCommand(clc);
             }
         } else if (textEditor->position() > 0 || textEditor->hasSelection()) {
             if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) // delete prev word.
@@ -1012,13 +1048,13 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         && ((!textEditor->hasSelection() && (textEditor->position() == textEditor->block().position())) || (textEditor->block().document()->findBlock(textEditor->anchor()) != textEditor->block().document()->findBlock(textEditor->position()))) && textEditor->block().textList()) {
         ChangeListLevelCommand::CommandType type = ChangeListLevelCommand::IncreaseLevel;
         ChangeListLevelCommand *cll = new ChangeListLevelCommand(*textEditor->cursor(), type, 1);
-        addCommand(cll);
+        textEditor->addCommand(cll);
         editingPluginEvents();
     } else if ((event->key() == Qt::Key_Backtab)
         && ((!textEditor->hasSelection() && (textEditor->position() == textEditor->block().position())) || (textEditor->block().document()->findBlock(textEditor->anchor()) != textEditor->block().document()->findBlock(textEditor->position()))) && textEditor->block().textList() && !(m_actionRecordChanges->isChecked())) {
         ChangeListLevelCommand::CommandType type = ChangeListLevelCommand::DecreaseLevel;
         ChangeListLevelCommand *cll = new ChangeListLevelCommand(*textEditor->cursor(), type, 1);
-        addCommand(cll);
+        textEditor->addCommand(cll);
         editingPluginEvents();
     } else if (event->key() == Qt::Key_Delete) {
         if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) // delete next word.
@@ -1275,7 +1311,7 @@ void TextTool::updateActions()
     }
     m_actionFormatSuper->setChecked(super);
     m_actionFormatSub->setChecked(sub);
-    m_actionFormatFontSize->setFontSize(cf.fontPointSize());
+    m_actionFormatFontSize->setFontSize(cf.font().pointSizeF());
     m_actionFormatFontFamily->setFont(cf.font().family());
 
     KoTextShapeData::ResizeMethod resizemethod = KoTextShapeData::AutoResize;
@@ -1453,6 +1489,14 @@ void TextTool::repaintCaret()
         repaintRect.moveTop(repaintRect.top() - textShape->textShapeData()->documentOffset());
         if (repaintRect.isValid()) {
             repaintRect = textShape->absoluteTransformation(0).mapRect(repaintRect);
+
+            // Make sure there is enough space to show an icon
+            QRectF iconSize = canvas()->viewConverter()->viewToDocument(QRect(0,0,16, 16));
+            repaintRect.setX(repaintRect.x() - iconSize.width() / 2);
+            repaintRect.setWidth(iconSize.width());
+            repaintRect.moveTop(repaintRect.y() - iconSize.height() / 2);
+            repaintRect.moveBottom(repaintRect.bottom() + iconSize.height() / 2);
+
             canvas()->updateCanvas(repaintRect);
         }
     }
@@ -1509,7 +1553,7 @@ QRectF TextTool::textRect(QTextCursor &cursor) const
 
 KoToolSelection* TextTool::selection()
 {
-    return m_textEditor.data();
+    return m_toolSelection;
 }
 
 QList<QWidget *> TextTool::createOptionWidgets()
@@ -1521,6 +1565,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
 
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(this, SIGNAL(charFormatChanged(QTextCharFormat)), scw, SLOT(setCurrentFormat(QTextCharFormat)));
     connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(scw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
 
@@ -1528,6 +1573,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     // Connect to/with simple paragraph widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), spw, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(blockChanged(const QTextBlock&)), spw, SLOT(setCurrentBlock(const QTextBlock&)));
+    connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), spw, SLOT(setCurrentFormat(QTextBlockFormat)));
     connect(spw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(spw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
     connect(spw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
@@ -1551,75 +1597,6 @@ QList<QWidget *> TextTool::createOptionWidgets()
 void TextTool::returnFocusToCanvas()
 {
     canvas()->canvasWidget()->setFocus();
-}
-
-void TextTool::addUndoCommand()
-{
-    return;
-/*    if (! m_allowAddUndoCommand) return;
-    class UndoTextCommand : public KUndo2Command
-    {
-    public:
-        UndoTextCommand(QTextDocument *document, TextTool *tool, KUndo2Command *parent = 0)
-                : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
-                m_document(document),
-                m_tool(tool) {
-        }
-
-        void undo() {
-            if (m_document.isNull())
-                return;
-            if (!(m_tool.isNull()) && (m_tool->m_textShapeData) && (m_tool->m_textShapeData->document() == m_document)) {
-                m_tool->stopMacro();
-                m_tool->m_allowAddUndoCommand = false;
-
-
-                m_document->undo(&m_tool->m_caret);
-            } else
-                m_document->undo();
-            if (! m_tool.isNull())
-                m_tool->m_allowAddUndoCommand = true;
-        }
-
-        void redo() {
-            if (m_document.isNull())
-                return;
-
-            if (!(m_tool.isNull()) && (m_tool->m_textShapeData) && (m_tool->m_textShapeData->document() == m_document)) {
-                m_tool->m_allowAddUndoCommand = false;
-                m_document->redo(&m_tool->m_caret);
-            } else
-                m_document->redo();
-            if (! m_tool.isNull())
-                m_tool->m_allowAddUndoCommand = true;
-        }
-
-        QPointer<QTextDocument> m_document;
-        QPointer<TextTool> m_tool;
-    };
-    kDebug() << "in TextTool addCommand";
-    if (m_currentCommand) {
-        new UndoTextCommand(m_textShapeData->document(), this, m_currentCommand);
-        if (! m_currentCommandHasChildren)
-            canvas()->addCommand(m_currentCommand);
-        m_currentCommandHasChildren = true;
-    } else
-        canvas()->addCommand(new UndoTextCommand(m_textShapeData->document(), this));
-*/}
-
-void TextTool::addCommand(KUndo2Command *command)
-{
-/*    m_currentCommand = command;
-    TextCommandBase *cmd = dynamic_cast<TextCommandBase*>(command);
-    if (cmd)
-        cmd->setTool(this);
-    m_currentCommandHasChildren = true; //to avoid adding it again on the first child UndoTextCommand (infinite loop)
-    canvas()->addCommand(command); // will execute it.
-    m_currentCommand = 0;
-    m_currentCommandHasChildren = false;
-*/
-    Q_ASSERT(!m_textEditor.isNull());
-    m_textEditor.data()->addCommand(command);
 }
 
 void TextTool::startEditing(KUndo2Command* command)
@@ -1695,19 +1672,13 @@ void TextTool::lineBreak()
 void TextTool::alignLeft()
 {
     if (!m_allowActions || !m_textEditor.data()) return;
-    Qt::Alignment align = Qt::AlignLeading;
-    if (m_textEditor.data()->block().layout()->textOption().textDirection() != Qt::LeftToRight)
-        align |= Qt::AlignTrailing;
-    m_textEditor.data()->setHorizontalTextAlignment(align);
+    m_textEditor.data()->setHorizontalTextAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
 }
 
 void TextTool::alignRight()
 {
     if (!m_allowActions || !m_textEditor.data()) return;
-    Qt::Alignment align = Qt::AlignTrailing;
-    if (m_textEditor.data()->block().layout()->textOption().textDirection() == Qt::RightToLeft)
-        align = Qt::AlignLeading;
-    m_textEditor.data()->setHorizontalTextAlignment(align);
+    m_textEditor.data()->setHorizontalTextAlignment(Qt::AlignRight | Qt::AlignAbsolute);
 }
 
 void TextTool::alignCenter()
@@ -2024,6 +1995,13 @@ void TextTool::resourceChanged(int key, const QVariant &var)
 void TextTool::isBidiUpdated()
 {
     emit blockChanged(m_textEditor.data()->block()); // make sure that the dialogs follow this change
+}
+
+void TextTool::changeListStyle(ChangeListCommand *command)
+{
+    if (m_textEditor) {
+        m_textEditor.data()->addCommand(command);
+    }
 }
 
 void TextTool::insertSpecialCharacter()

@@ -42,6 +42,7 @@ set(kotext_LIB_SRCS
     KoBookmark.cpp
     KoBookmarkManager.cpp
     KoInlineNote.cpp
+    KoInlineCite.cpp
     KoTextSoftPageBreak.cpp
     FindDirection_p.cpp
     KoFindStrategy.cpp
@@ -55,7 +56,9 @@ set(kotext_LIB_SRCS
     KoTextInlineRdf.cpp
     KoTextMeta.cpp
 
+    ToCBibGeneratorInfo.cpp
     KoTableOfContentsGeneratorInfo.cpp
+    KoBibliographyInfo.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
@@ -64,13 +67,10 @@ set(kotext_LIB_SRCS
     styles/KoListStyle.cpp
     styles/KoListLevelProperties.cpp
     styles/ChangeFollower.cpp
-    styles/KoTableBorderStyle.cpp
     styles/KoTableStyle.cpp
     styles/KoTableColumnStyle.cpp
     styles/KoTableRowStyle.cpp
     styles/KoTableCellStyle.cpp
-    styles/KoTableFormat.cpp
-    styles/KoTableFormat_p.cpp
     styles/KoSectionStyle.cpp
     opendocument/KoTextSharedLoadingData.cpp
     opendocument/KoTextSharedSavingData.cpp
@@ -168,7 +168,6 @@ install(
     styles/KoTableColumnStyle.h
     styles/KoTableRowStyle.h
     styles/KoTableCellStyle.h
-    styles/KoTableFormat.h
     styles/KoSectionStyle.h
     styles/KoStyleManager.h
     styles/KoTableBorderStyle.h

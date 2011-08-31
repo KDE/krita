@@ -33,6 +33,8 @@
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
 #include <KoInlineNote.h>
+#include <KoInlineCite.h>
+#include <KoInlineBibliography.h>
 #include <KoInlineTextObjectManager.h>
 #include "KoList.h"
 #include <KoOdfLoadingContext.h>
@@ -56,6 +58,7 @@
 #include <KoXmlReader.h>
 #include "KoTextInlineRdf.h"
 #include "KoTableOfContentsGeneratorInfo.h"
+#include "KoBibliographyInfo.h"
 #include "KoSection.h"
 #include "KoTextSoftPageBreak.h"
 
@@ -697,6 +700,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                         loadSection(tag, cursor);
                     } else if (localName == "table-of-content") {
                         loadTableOfContents(tag, cursor);
+                    } else if (localName == "bibliography") {
+                        loadBibliography(tag, cursor);
                     } else {
                         KoInlineObject *obj = KoInlineObjectRegistry::instance()->createFromOdf(tag, d->context);
                         if (obj) {
@@ -1473,6 +1478,21 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
     }
 }
 
+void KoTextLoader::loadCite(const KoXmlElement &noteElem, QTextCursor &cursor)
+{
+    KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
+    if (textObjectManager) {
+        //Now creating citation with default type KoInlineCite::Citation.
+        KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
+
+        if (cite->loadOdf(noteElem, d->context)) {
+            textObjectManager->insertInlineObject(cursor, cite);
+        } else {
+            delete cite;
+        }
+    }
+}
+
 void KoTextLoader::loadText(const QString &fulltext, QTextCursor &cursor,
                             bool *stripLeadingSpace, bool isLastNode)
 {
@@ -1518,6 +1538,12 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
     Q_ASSERT(stripLeadingSpace);
     if (d->loadSpanLevel++ == 0)
         d->loadSpanInitialPos = cursor.position();
+
+    if (element.firstChild().isNull()) {
+        // there's nothing in this span. Insert an invisible character to make sure the
+        // style is used. See bug: 264471.
+        cursor.insertText(QString(0x200B)); // invisible space
+    }
 
     for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
         KoXmlElement ts = node.toElement();
@@ -1610,6 +1636,8 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 d->closeChangeRegion(ts);
         } else if ( (isTextNS && localName == "note")) { // text:note
             loadNote(ts, cursor);
+        } else if (isTextNS && localName == "bibliography-mark") { // text:bibliography-mark
+            loadCite(ts,cursor);
         } else if (isTextNS && localName == "tab") { // text:tab
             cursor.insertText("\t");
         } else if (isTextNS && localName == "a") { // text:a
@@ -1760,7 +1788,6 @@ void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
 {
     int startPosition = cursor.position();
     int changeId = d->changeTracker->getLoadedChangeId(id);
-    int loadedTags = 0;
 
     QTextCharFormat charFormat = cursor.block().charFormat();
     QTextBlockFormat blockFormat = cursor.block().blockFormat();
@@ -1769,6 +1796,7 @@ void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
         KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
         KoXmlElement element = d->deleteChangeTable.value(id);
         KoXmlElement tag;
+        int loadedTags = 0;
         forEachElement(tag, element) {
             QString localName = tag.localName();
             if (localName == "p") {
@@ -1855,7 +1883,7 @@ KoDeleteChangeMarker * KoTextLoader::Private::insertDeleteChangeMarker(QTextCurs
         changeElement->setChangeType(KoGenChange::DeleteChange);
         KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
         if (textObjectManager) {
-            deleteChangemarker->updatePosition(cursor.block().document(), QTextInlineObject(), cursor.position(), QTextCharFormat());
+            deleteChangemarker->updatePosition(cursor.block().document(), cursor.position(), QTextCharFormat());
             textObjectManager->insertInlineObject(cursor, deleteChangemarker);
         }
         retMarker = deleteChangemarker;
@@ -1912,6 +1940,10 @@ void KoTextLoader::Private::processDeleteChange(QTextCursor &cursor)
 
     KoDeleteChangeMarker *marker;
     foreach (marker, markersList) {
+        if (!marker) {
+            kWarning() << "Empty KoDeleteChangeMarker in the markerslist.";
+            continue;
+        }
         int changeId = marker->changeId();
 
         KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
@@ -1963,6 +1995,9 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 
     if (d->changeTracker && d->changeStack.count()) {
         tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
+    }
+    if (tableElem.attributeNS(KoXmlNS::table, "protected", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::TableIsProtected, true);
     }
     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
     d->inTable = true;
@@ -2172,6 +2207,9 @@ void KoTextLoader::loadTableCell(KoXmlElement &rowTag, QTextTable *tbl, QList<QR
         if (cellStyle)
             cellStyle->applyStyle(cellFormat);
 
+        if (rowTag.attributeNS(KoXmlNS::table, "protected", "false") == "true") {
+            cellFormat.setProperty(KoTableCellStyle::CellIsProtected, true);
+        }
         if (d->changeTracker && d->changeStack.count()) {
             cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
         }
@@ -2272,8 +2310,6 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     // make sure that the tag is table-of-content
     Q_ASSERT(element.tagName() == "table-of-content");
     QTextBlockFormat tocFormat;
-    tocFormat.setProperty(KoText::SubFrameType, KoText::TableOfContentsFrameType);
-
 
     // for "meta-information" about the TOC we use this class
     KoTableOfContentsGeneratorInfo *info = new KoTableOfContentsGeneratorInfo();
@@ -2337,6 +2373,73 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     cursor.movePosition(QTextCursor::Right);
 }
 
+void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cursor)
+{
+    // make sure that the tag is bibliography
+    Q_ASSERT(element.tagName() == "bibliography");
+    QTextBlockFormat bibFormat;
+
+    // for "meta-information" about the bibliography we use this class
+    KoBibliographyInfo *info = new KoBibliographyInfo();
+
+    QTextDocument *bibDocument = new QTextDocument();
+    KoTextDocument(bibDocument).setStyleManager(d->styleManager);
+
+    info->m_name = element.attribute("name");
+    info->m_styleName = element.attribute("style-name");
+
+    bool *autoUpdate = false;
+
+    KoXmlElement e;
+    forEachElement(e, element) {
+        if (e.isNull() || e.namespaceURI() != KoXmlNS::text) {
+            continue;
+        }
+
+        if (e.localName() == "bibliography-source" && e.namespaceURI() == KoXmlNS::text) {
+            info->loadOdf(d->textSharedData, e);
+
+            bibFormat.setProperty(KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info));
+            bibFormat.setProperty(KoParagraphStyle::BibliographyDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
+            bibFormat.setProperty(KoParagraphStyle::AutoUpdateBibliography, QVariant::fromValue<bool *>(autoUpdate));
+            cursor.insertBlock(bibFormat);
+            // We'll just try to find displayable elements and add them as paragraphs
+        } else if (e.localName() == "index-body") {
+            QTextCursor cursorFrame = bibDocument->rootFrame()->lastCursorPosition();
+
+            bool firstTime = true;
+            KoXmlElement p;
+            forEachElement(p, e) {
+                // All elem will be "p" instead of the title, which is particular
+                if (p.isNull() || p.namespaceURI() != KoXmlNS::text)
+                    continue;
+
+                if (!firstTime) {
+                    // use empty formats to not inherit from the prev parag
+                    QTextBlockFormat bf;
+                    QTextCharFormat cf;
+                    cursorFrame.insertBlock(bf, cf);
+                }
+                firstTime = false;
+
+                QTextBlock current = cursorFrame.block();
+                QTextBlockFormat blockFormat;
+
+                if (p.localName() == "p") {
+                    loadParagraph(p, cursorFrame);
+                } else if (p.localName() == "index-title") {
+                    loadBody(p, cursorFrame);
+                }
+
+                QTextCursor c(current);
+                c.mergeBlockFormat(blockFormat);
+            }
+
+        }// index-body
+    }
+    // Get out of the frame
+    cursor.movePosition(QTextCursor::Right);
+}
 
 void KoTextLoader::startBody(int total)
 {

@@ -35,10 +35,14 @@ EllipseShapeFactory::EllipseShapeFactory()
     setToolTip(i18n( "An ellipse"));
     setIcon("ellipse-shape");
     setFamily("geometric");
-    QStringList elementNames;
-    elementNames << "ellipse" << "circle";
-    setOdfElementNames(KoXmlNS::draw, elementNames);
     setLoadingPriority(1);
+
+    QList<QPair<QString, QStringList> > elementNamesList;
+    elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("circle")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("ellipse")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("circle")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("ellipse")));
+    setXmlElements(elementNamesList);
 }
 
 KoShape *EllipseShapeFactory::createDefaultShape(KoResourceManager *) const

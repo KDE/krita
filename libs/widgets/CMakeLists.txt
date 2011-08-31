@@ -3,6 +3,11 @@ add_subdirectory( pics )
 
 include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES})
 
+if(NEPOMUK)
+    include(SopranoAddOntology)
+    include_directories(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_INCLUDES})
+endif(NEPOMUK)
+
 set(kowidgets_LIB_SRCS
     KoAspectButton.cpp
     KoCsvImportDialog.cpp
@@ -48,6 +53,8 @@ set(kowidgets_LIB_SRCS
     KoLineStyleModel.cpp
     KoDockWidgetTitleBar.cpp
     KoDockWidgetTitleBarButton.cpp
+    KoSelectionManager.cpp
+    KoSelectionToggle.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
@@ -65,6 +72,10 @@ if(GHNS)
 else(GHNS)
     target_link_libraries(kowidgets kotext pigmentcms )
 endif (GHNS)
+
+if(NEPOMUK)
+    target_link_libraries(kowidgets kotext pigmentcms ${NEPOMUK_LIBRARIES} ${SOPRANO_LIBRARIES})
+endif(NEPOMUK)
 
 target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms ${KDE4_KDEUI_LIBS})
 

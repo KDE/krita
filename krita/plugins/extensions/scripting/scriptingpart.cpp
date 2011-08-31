@@ -58,7 +58,7 @@
 #include "kritacore/krs_module.h"
 #include "kritacore/krs_monitor.h"
 #include "kritacore/krs_progress.h"
-#include "kis_layer_manager.h"
+#include "kis_node_manager.h"
 #include "filter/kis_filter_registry.h"
 
 #include "kis_script_dock.h"
@@ -166,7 +166,7 @@ void ScriptingPart::myFinished(Kross::Action*)
 //     dbgKrita <<"ScriptingPart::executionFinished";
     d->view->document()->setModified(true);
 
-    d->view->layerManager()->activeLayer()->setDirty();
+    d->view->nodeManager()->activeLayer()->setDirty();
 
     static_cast< Scripting::Progress* >(d->module->progress())->progressDone();
     //d->module->deleteLater();

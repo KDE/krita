@@ -52,7 +52,6 @@
 
 #include "kis_canvas2.h"
 #include "kis_node_manager.h"
-#include "kis_layer_manager.h"
 #include "kis_view2.h"
 #include "kis_factory2.h"
 #include "kis_canvas_resource_provider.h"
@@ -250,8 +249,6 @@ void KisPaintopBox::updatePaintops(const KoColorSpace* colorSpace)
         KisPaintOpFactory * factory = KisPaintOpRegistry::instance()->get(paintopId);
         if (KisPaintOpRegistry::instance()->userVisible(KoID(factory->id(), factory->name()), colorSpace)){
             factoryList.append(factory);
-        }else{
-            kWarning() << "Brush engine " << factory->name() << " is not visible for colorspace" << colorSpace->name();
         }
     }
 

@@ -43,7 +43,6 @@
 #include "kis_pixel_selection.h"
 #include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
-#include "kis_transformation_mask.h"
 #include "kis_clone_layer.h"
 #include "kis_filter_mask.h"
 
@@ -133,10 +132,6 @@ public:
         return true;
     }
     bool visit(KisTransparencyMask* mask) {
-        transformMask(mask);
-        return true;
-    }
-    bool visit(KisTransformationMask* mask) {
         transformMask(mask);
         return true;
     }

@@ -67,13 +67,6 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
 
     connect(ui->minimalShadeSelectorPatchesPerLine, SIGNAL(valueChanged(int)),
             ui->minimalShadeSelectorLineSettings,   SIGNAL(setPatchCount(int)));
-
-
-    //load and save preferences
-    //if something in kritarc is missing, then the default from this load function will be used and saved back to kconfig.
-    //this way, cfg.readEntry() in any part won't be able to set its own default
-    loadPreferences();
-    savePreferences();
 }
 
 KisColorSelectorSettings::~KisColorSelectorSettings()
@@ -192,7 +185,7 @@ void KisColorSelectorSettings::loadPreferences()
 
     //it's not possible to set a radio box to false. additionally, we need to set shrunkenDonothing to true, in case..
     bool a = cfg.readEntry("shadeSelectorHideable", false);
-    bool b = cfg.readEntry("allowHorizontalLayout", false);
+    bool b = cfg.readEntry("allowHorizontalLayout", true);
     if(a)
         ui->shadeSelectorHideable->setChecked(true);
     else if(b)
@@ -245,7 +238,7 @@ void KisColorSelectorSettings::loadPreferences()
     ui->commonColorsAutoUpdate->setChecked(cfg.readEntry("commonColorsAutoUpdate", false));
 
     //shade selector
-    QString shadeSelectorType=cfg.readEntry("shadeSelectorType", "Minimal");
+    QString shadeSelectorType=cfg.readEntry("shadeSelectorType", "MyPaint");
     ui->shadeSelectorTypeMyPaint->setChecked(shadeSelectorType=="MyPaint");
     ui->shadeSelectorTypeMinimal->setChecked(shadeSelectorType=="Minimal");
     ui->shadeSelectorTypeHidden->setChecked(shadeSelectorType=="Hidden");
@@ -276,7 +269,7 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     //general
     ui->allowHorizontalLayout->setChecked(false);
     ui->shadeSelectorHideable->setChecked(false);
-    ui->shrunkenDoNothing->setChecked(true);
+    ui->allowHorizontalLayout->setChecked(true);
 
     ui->popupOnMouseClick->setChecked(true);
     ui->popupOnMouseOver->setChecked(false);
@@ -311,8 +304,8 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->commonColorsAutoUpdate->setChecked(false);
 
     //shade selector
-    ui->shadeSelectorTypeMyPaint->setChecked(false);
-    ui->shadeSelectorTypeMinimal->setChecked(true);
+    ui->shadeSelectorTypeMyPaint->setChecked(true);
+    ui->shadeSelectorTypeMinimal->setChecked(false);
     ui->shadeSelectorTypeHidden->setChecked(false);
 
     ui->shadeSelectorUpdateOnRightClick->setChecked(false);

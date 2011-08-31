@@ -37,6 +37,7 @@ class StylePrivate;
 class QTextBlock;
 class KoStyleStack;
 class KoShapeLoadingContext;
+class KoShadowStyle;
 class KoGenStyle;
 
 /**
@@ -67,7 +68,7 @@ public:
         StrikeOutText,
         OverlineStyle,
         OverlineType,
-	OverlineColor,
+        OverlineColor,
         OverlineWidth,
         OverlineWeight,
         OverlineMode,
@@ -83,6 +84,10 @@ public:
         TextRotationScale,
         TextScale,
         InlineRdf,  ///< KoTextInlineRdf pointer
+        TextShadow,
+        FontRelief,
+        TextEmphasizeStyle,
+        TextEmphasizePosition,
         PercentageFontSize, //font-size can be in % and this stores that value
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550, // Internal: Reserved for ChangeTracker
@@ -95,7 +100,28 @@ public:
         SingleLine,
         DoubleLine
     };
+    
+    /// List of possible font relief : none, embossed, engraved
+    enum ReliefType {
+        NoRelief,
+        Embossed,
+        Engraved
+    };
 
+    enum EmphasisStyle {
+        NoEmphasis,
+        AccentEmphasis,
+        CircleEmphasis,
+        DiscEmphasis,
+        DotEmphasis
+    };
+    
+    enum EmphasisPosition {
+        EmphasisAbove,
+        EmphasisBelow
+    };
+        
+    
     /// list of possible line style.
     enum LineStyle {
         NoLineStyle = Qt::NoPen,
@@ -311,7 +337,19 @@ public:
     void setTextScale(int scale);
     /// Get the current text scale of this KoCharacterStyle
     int textScale() const;
+    
+    KoShadowStyle textShadow() const;
+    void setTextShadow(const KoShadowStyle &shadow);
 
+    ReliefType fontRelief() const;
+    void setFontRelief(ReliefType relief);
+    
+    EmphasisStyle textEmphasizeStyle() const;
+    void setTextEmphasizeStyle(EmphasisStyle emphasis);
+    
+    EmphasisPosition textEmphasizePosition() const;
+    void setTextEmphasizePosition(EmphasisPosition position);
+    
     /// Set the country
     void setCountry(const QString &country);
     /// Set the language

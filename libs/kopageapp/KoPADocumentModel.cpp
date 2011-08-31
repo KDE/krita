@@ -38,6 +38,9 @@
 #include <KoShapeUngroupCommand.h>
 #include <KoShapeRenameCommand.h>
 #include <KoZoomHandler.h>
+#include <KoPAOdfPageSaveHelper.h>
+#include <KoDrag.h>
+#include <KoPAPastePage.h>
 
 #include <klocale.h>
 #include <kicon.h>
@@ -46,6 +49,9 @@
 
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QMimeData>
+#include <QApplication>
+#include <QClipboard>
+#include <QMenu>
 
 #include "commands/KoPAPageMoveCommand.h"
 
@@ -259,7 +265,17 @@ bool KoPADocumentModel::setData(const QModelIndex &index, const QVariant &value,
         case Qt::EditRole:
         {
             KUndo2Command * cmd = new KoShapeRenameCommand( shape, value.toString() );
-            // TODO 2.1 use different text for the command if e.g. it is a page/slide or layer
+            if (dynamic_cast<KoPAPageBase *>(shape)) {
+                if (m_document->pageType() == KoPageApp::Slide) {
+                    cmd->setText(i18n("Rename Slide"));
+                }
+                else {
+                    cmd->setText(i18n("Rename Page"));
+                }
+            }
+            else if (dynamic_cast<KoShapeLayer *>(shape)) {
+                cmd->setText(i18n("Rename Layer"));
+            }
             m_document->addCommand( cmd );
         }   break;
         case PropertiesRole:
@@ -288,6 +304,15 @@ bool KoPADocumentModel::setData(const QModelIndex &index, const QVariant &value,
 KoDocumentSectionModel::PropertyList KoPADocumentModel::properties( KoShape* shape ) const
 {
     PropertyList l;
+
+    if (KoPAPageBase *page = dynamic_cast<KoPAPageBase *>(shape)) {
+        // The idea is to display the page-number so users know what page-number/slide-number
+        // the shape has also in the case the slide has a name (in which case it's not named
+        // "Slide [slide-number]" any longer.
+        // Maybe we should better use KoTextPage::visiblePageNumber here?
+        l << Property(i18n("Slide"), QString::number(m_document->pageIndex(page) + 1));
+    }
+
     l << Property(i18n("Visible"), SmallIcon("14_layer_visible"), SmallIcon("14_layer_novisible"), shape->isVisible());
     l << Property(i18n("Locked"), SmallIcon("object-locked"), SmallIcon("object-unlocked"), shape->isGeometryProtected());
     return l;
@@ -471,21 +496,32 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
     }
 
     // dropping to root, only page(s) is allowed
-    if ( !parent.isValid() ) {
+    if (!parent.isValid()) {
         if ( !pages.isEmpty() ) {
             if ( row < 0 ) {
                 return false;
             }
-            KoPAPageBase *after = ( row != 0 ) ? m_document->pageByIndex( row - 1, false ) : 0;
-            KoPAPageMoveCommand *command = new KoPAPageMoveCommand( m_document, pages, after );
-            m_document->addCommand( command );
+            KoPAPageBase *after = (row != 0) ? m_document->pageByIndex(row - 1, false) : 0;
             kDebug(30010) << "KoPADocumentModel::dropMimeData parent = root, dropping page(s) as root, moving page(s)";
-            return true;
+            return doDrop(pages, after, action);
         }
         else {
             kDebug(30010) << "KoPADocumentModel::dropMimeData parent = root, dropping non-page as root, returning false";
             return false;
         }
+    }
+    else if (parent.isValid() && !pages.isEmpty()){
+        if (parent.row() < 0) {
+            return false;
+        }
+        KoPAPageBase *after;
+        if ((m_document->pageIndex(pages.first()) - 1) == parent.row()) {
+            after = (parent.row() != 0) ? m_document->pageByIndex(parent.row() - 1, false) : 0;
+        }
+        else {
+            after = (parent.row() > -1) ? m_document->pageByIndex(parent.row(), false) : 0;
+        }
+        return doDrop(pages, after, action);
     }
 
     KoShape *shape = static_cast<KoShape*>( parent.internalPointer() );
@@ -623,6 +659,101 @@ void KoPADocumentModel::setMasterMode(bool master)
 {
     m_master = master;
     update(); // Rebuild the model
+}
+
+bool KoPADocumentModel::doDrop(QList<KoPAPageBase *> pages, KoPAPageBase *pageAfter, Qt::DropAction action)
+{
+    Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
+    bool enableMove = true;
+
+    foreach (KoPAPageBase *page, pages) {
+        if (!m_document->pages(false).contains(page)) {
+            KoPAPageBase *newPage = page;
+            pages.replace(pages.indexOf(page), newPage);
+            enableMove = false;
+            break;
+        }
+    }
+
+    if (((modifiers & Qt::ControlModifier) == 0) &&
+        ((modifiers & Qt::ShiftModifier) == 0)) {
+           QMenu popup;
+           QString seq = QKeySequence(Qt::ShiftModifier).toString();
+           seq.chop(1);
+           QAction *popupMoveAction = new QAction(i18n("&Move Here") + '\t' + seq, this);
+           popupMoveAction->setIcon(KIcon("go-jump"));
+           seq = QKeySequence(Qt::ControlModifier).toString();
+           seq.chop(1);
+           QAction *popupCopyAction = new QAction(i18n("&Copy Here") + '\t' + seq, this);
+           popupCopyAction->setIcon(KIcon("edit-copy"));
+           seq = QKeySequence( Qt::ControlModifier + Qt::ShiftModifier ).toString();
+           seq.chop(1);
+           QAction *popupCancelAction = new QAction(i18n("C&ancel") + '\t' + QKeySequence(Qt::Key_Escape).toString(), this);
+           popupCancelAction->setIcon(KIcon("process-stop"));
+
+           if (enableMove) {
+               popup.addAction(popupMoveAction);
+           }
+           popup.addAction(popupCopyAction);
+           popup.addSeparator();
+           popup.addAction(popupCancelAction);
+
+           QAction *result = popup.exec(QCursor::pos());
+
+           if (result == popupCopyAction) {
+               action = Qt::CopyAction;
+           }
+           else if (result == popupMoveAction) {
+               action = Qt::MoveAction;
+           }
+           else {
+               return false;
+           }
+    }
+    else if ((modifiers & Qt::ControlModifier) != 0) {
+        action = Qt::CopyAction;
+    }
+    else if ((modifiers & Qt::ShiftModifier) != 0) {
+        action = Qt::MoveAction;
+    }
+    else {
+        return false;
+    }
+
+    switch (action) {
+    case Qt::MoveAction: {
+       KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_document, pages, pageAfter);
+       m_document->addCommand( command );
+       if ((m_document->pageIndex(pageAfter) + pages.count()) < m_document->pageCount()) {
+            emit requestPageSelection(m_document->pageIndex(pageAfter) + 1, pages.count());
+       }
+       return true;
+    }
+    case Qt::CopyAction: {
+       // Copy Pages
+       KoPAOdfPageSaveHelper saveHelper(m_document, pages);
+       KoDrag drag;
+       drag.setOdf(KoOdf::mimeType(m_document->documentType()), saveHelper);
+       drag.addToClipboard();
+       //Paste Pages
+       const QMimeData * data = QApplication::clipboard()->mimeData();
+       static const KoOdf::DocumentType documentTypes[] = { KoOdf::Graphics, KoOdf::Presentation };
+
+       for (unsigned int i = 0; i < sizeof(documentTypes) / sizeof(KoOdf::DocumentType); ++i) {
+           if (data->hasFormat( KoOdf::mimeType(documentTypes[i]))) {
+               KoPAPastePage paste(m_document, pageAfter);
+               paste.paste(documentTypes[i], data);
+               break;
+           }
+       }
+       emit requestPageSelection(m_document->pageIndex(pageAfter) + 1, sizeof(documentTypes) / sizeof(KoOdf::DocumentType) - 1);
+       return true;
+    }
+    default:
+       qDebug("Unknown action: %d ", (int)action);
+       return false;
+    }
+    return false;
 }
 
 #include <KoPADocumentModel.moc>

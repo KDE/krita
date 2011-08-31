@@ -68,6 +68,8 @@ public:
 
     static bool compareRectLeft(KoTextLayoutObstruction *o1, KoTextLayoutObstruction *o2);
 private:
+    QPainterPath decoratedOutline();
+
     enum Side { None, Left, Right, Empty, Both, Bigger, Enough };
     Side m_side;
     QRectF m_bounds;
@@ -77,6 +79,7 @@ private:
     QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
     KoShape *m_shape;
     qreal m_distance;
+    qreal m_borderHalfWidth;
     qreal m_runAroundThreshold;
 };
 

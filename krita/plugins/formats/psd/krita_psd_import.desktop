@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=
 Name=Krita PhotoShop Import Filter
+Name[bg]=Филтър за внасяне от PhotoShop в Krita
 Name[ca]=Filtre d'importació PhotoShop per al Krita
 Name[ca@valencia]=Filtre d'importació PhotoShop per al Krita
 Name[cs]=Importní filtr do PhotoShopu pro Kritu
@@ -20,8 +21,10 @@ Name[kk]=PhotoShop -> Krita импорт сүзгісі
 Name[nb]=PhotoShop importfilter for Krita
 Name[nds]=PhotoShop-Importfilter för Krita
 Name[nl]=Photoshop-importfilter voor Krita
+Name[pl]=Filtr importu PhotoShop do Krita
 Name[pt]=Filtro de Importação de PhotoShop para o Krita
 Name[pt_BR]=Filtro de importação de PhotoShop para o Krita
+Name[ru]=Фильтр импорта документов PhotoShop в Krita
 Name[sv]=Krita Photoshop-importfilter
 Name[uk]=Фільтр імпорту PhotoShop для Krita
 Name[wa]=Passete d' abagaedje PhotoShop di Krita

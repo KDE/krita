@@ -73,6 +73,7 @@
 #include <KoXmlWriter.h>
 #include <rdf/KoDocumentRdfBase.h>
 #include <KoTableOfContentsGeneratorInfo.h>
+#include <KoBibliographyInfo.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <Soprano/Soprano>
@@ -177,6 +178,7 @@ public:
     void saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles);
     QTextBlock& saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level, QTextTable *currentTable);
     void saveTableOfContents(QTextDocument *document, QHash<QTextList *, QString> &listStyles, QTextBlock toc);
+    void saveBibliography(QTextDocument *document, QHash<QTextList *, QString> &listStyles, QTextBlock bib);
     void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextList *currentList = 0);
     void saveInlineRdf(KoTextInlineRdf *rdf, TagInformation *tagInfos);
     int checkForBlockChange(const QTextBlock &block);
@@ -626,7 +628,7 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, co
         // therefore we would need to store that information in the saving context
         if (originalParagraphStyle != defaultParagraphStyle) {
             KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
-            originalParagraphStyle->saveOdf(style, context.mainStyles());
+            originalParagraphStyle->saveOdf(style, context);
             generatedName = context.mainStyles().insert(style, internalName, KoGenStyles::DontAddNumberToName);
         }
     } else { // There are manual changes... We'll have to store them then
@@ -635,7 +637,7 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, co
             style.setAutoStyleInStylesDotXml(true);
         if (originalParagraphStyle)
             paragStyle.removeDuplicates(*originalParagraphStyle);
-        paragStyle.saveOdf(style, context.mainStyles());
+        paragStyle.saveOdf(style, context);
         generatedName = context.mainStyles().insert(style, "P");
     }
     return generatedName;
@@ -800,8 +802,8 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
             KoListStyle *listStyle = list->style();
             bool automatic = listStyle->styleId() == 0;
             KoGenStyle style(automatic ? KoGenStyle::ListAutoStyle : KoGenStyle::ListStyle);
-            listStyle->saveOdf(style);
-            QString generatedName = context.mainStyles().insert(style, listStyle->name(), KoGenStyles::AllowDuplicates);
+            listStyle->saveOdf(style, context);
+            QString generatedName = context.mainStyles().insert(style, listStyle->name(), listStyle->isNumberingStyle() ? KoGenStyles::AllowDuplicates : KoGenStyles::DontAddNumberToName);
             listStyles[textList] = generatedName;
             generatedLists.insert(list, generatedName);
         } else {
@@ -811,7 +813,7 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
             KoGenStyle style(KoGenStyle::ListAutoStyle);
             KoListStyle listStyle;
             listStyle.setLevelProperties(llp);
-            listStyle.saveOdf(style);
+            listStyle.saveOdf(style, context);
             QString generatedName = context.mainStyles().insert(style, listStyle.name());
             listStyles[textList] = generatedName;
         }
@@ -967,11 +969,6 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                         if (!styleName.isEmpty()) {
                             writer->startElement("text:span", false);
                             writer->addAttribute("text:style-name", styleName);
-                            if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
-                                // Write xml:id here for Rdf
-                                kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
-                                inlineRdf->saveOdf(context, writer);
-                            }
                         }
                         else {
                             saveSpan = false;
@@ -1042,12 +1039,6 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 } else if (!styleName.isEmpty() /*&& !identical*/) {
                     fragmentTagInformation.setTagName("text:span");
                     fragmentTagInformation.addAttribute("text:style-name", styleName);
-                    if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
-                        // Write xml:id here for Rdf
-                        kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
-                        saveInlineRdf(inlineRdf, &fragmentTagInformation);
-                        //inlineRdf->saveOdf(context, writer);
-                    }
                 }
 
                 int changeId = openTagRegion(currentFragment.position(), KoTextWriter::Private::Span, fragmentTagInformation);
@@ -1341,6 +1332,10 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
     QString tableStyleName = saveTableStyle(*table);
     tableTagInformation.setTagName("table:table");
     tableTagInformation.addAttribute("table:style-name", tableStyleName);
+    if (table->format().boolProperty(KoTableStyle::TableIsProtected))
+    {
+        tableTagInformation.addAttribute("table:protected", "true");
+    }
     int changeId = openTagRegion(table->firstCursorPosition().position(), KoTextWriter::Private::Table, tableTagInformation);
 
     for (int c = 0 ; c < table->columns() ; c++) {
@@ -1384,13 +1379,17 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
             QTextTableCell cell = table->cellAt(r, c);
             int changeId = 0;
 
+            TagInformation tableCellInformation;
             if ((cell.row() == r) && (cell.column() == c)) {
-                TagInformation tableCellInformation;
                 tableCellInformation.setTagName("table:table-cell");
                 if (cell.rowSpan() > 1)
                     tableCellInformation.addAttribute("table:number-rows-spanned", cell.rowSpan());
                 if (cell.columnSpan() > 1)
                     tableCellInformation.addAttribute("table:number-columns-spanned", cell.columnSpan());
+                if (cell.format().boolProperty(KoTableCellStyle::CellIsProtected))
+                {
+                    tableCellInformation.addAttribute("table:protected", "true");
+                }
 
                 // Save the Rdf for the table cell
                 QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
@@ -1404,8 +1403,11 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
                 changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell, tableCellInformation);
                 writeBlocks(table->document(), cell.firstPosition(), cell.lastPosition(), listStyles, table);
             } else {
-                TagInformation tableCellInformation;
                 tableCellInformation.setTagName("table:covered-table-cell");
+                if (cell.format().boolProperty(KoTableCellStyle::CellIsProtected))
+                {
+                    tableCellInformation.addAttribute("table:protected", "true");
+                }
                 changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell, tableCellInformation);
             }
             closeTagRegion(changeId);
@@ -1426,6 +1428,8 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
 
 void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, QHash<QTextList *, QString> &listStyles, QTextBlock toc)
 {
+    Q_UNUSED(document);
+
     writer->startElement("text:table-of-content");
 
     KoTableOfContentsGeneratorInfo *info = toc.blockFormat().property(KoParagraphStyle::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
@@ -1450,6 +1454,36 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, QHash<Q
 
     writer->endElement(); // table:index-body
     writer->endElement(); // table:table-of-content
+}
+
+void KoTextWriter::Private::saveBibliography(QTextDocument *document, QHash<QTextList *, QString> &listStyles, QTextBlock bib)
+{
+    Q_UNUSED(document);
+
+    writer->startElement("text:bibliography");
+
+    KoBibliographyInfo *info = bib.blockFormat().property(KoParagraphStyle::BibliographyData).value<KoBibliographyInfo*>();
+    QTextDocument *bibDocument = bib.blockFormat().property(KoParagraphStyle::BibliographyDocument).value<QTextDocument*>();
+    if (!info->m_styleName.isNull()) {
+            writer->addAttribute("text:style-name",info->m_styleName);
+    }
+    writer->addAttribute("text:name",info->m_name);
+
+    info->saveOdf(writer);
+
+    writer->startElement("text:index-body");
+    // write the title (one p block)
+    QTextCursor localBlock = bibDocument->rootFrame()->firstCursorPosition();
+    localBlock.movePosition(QTextCursor::NextBlock);
+    int endTitle = localBlock.position();
+    writer->startElement("text:index-title");
+        writeBlocks(bibDocument, 0, endTitle, listStyles);
+    writer->endElement(); // text:index-title
+
+    writeBlocks(bibDocument, endTitle, -1, listStyles);
+
+    writer->endElement(); // table:index-body
+    writer->endElement(); // table:bibliography
 }
 
 QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level, QTextTable *currentTable)
@@ -1496,7 +1530,6 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     }
 
     bool splitRegionOpened = false;
-    int splitEndBlockNumber = -1;
 
     bool listStarted = false;
     int listChangeId = 0;
@@ -1513,7 +1546,8 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     }
 
     if (!headingLevel) {
-        do {
+      int splitEndBlockNumber = -1;
+      do {
             if (numberedParagraphLevel) {
                 TagInformation paraTagInformation;
                 paraTagInformation.setTagName("text:numbered-paragraph");
@@ -1667,8 +1701,12 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         QTextCursor cursor(block);
 
-        if (cursor.currentFrame()->format().hasProperty(KoText::SubFrameType)) {
-            break; // we've reached the "end" (end/footnotes saved in another way)
+        int frameType = cursor.currentFrame()->format().intProperty(KoText::SubFrameType);
+        if (frameType == KoText::EndNotesFrameType
+            || frameType == KoText::FootNotesFrameType) {
+            break; // we've reached the "end" (end/footnotes saved by themselves)
+                   // note how NoteFrameType passes through here so the notes can
+                   // call writeBlocks to save their contents.
         }
 
         QTextBlockFormat format = block.blockFormat();
@@ -1686,6 +1724,11 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         }
         if (format.hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
             saveTableOfContents(document, listStyles, block);
+            block = block.next();
+            continue;
+        }
+        if (format.hasProperty(KoParagraphStyle::BibliographyDocument)) {
+            saveBibliography(document, listStyles, block);
             block = block.next();
             continue;
         }

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=
 Name=Krita jp2 Export Filter
+Name[bg]=Филтър за изнасяне от Krita в jp2
 Name[ca]=Filtre d'exportació jp2 per al Krita
 Name[ca@valencia]=Filtre d'exportació jp2 per al Krita
 Name[cs]=Exportní filtr do formátu jp2 pro Kritu
@@ -20,8 +21,10 @@ Name[kk]=Krita -> jp2 экспорт сүзгісі
 Name[nb]=jp2 eksportfilter for Krita
 Name[nds]=JP2-Exportfilter för Krita
 Name[nl]=JP2-exportfilter voor Krita
+Name[pl]=Filtr eksportu jp2 z Krita
 Name[pt]=Filtro de Exportação para JP2 para o Krita
 Name[pt_BR]=Filtro de exportação de JP2 para o Krita
+Name[ru]=Фильтр экспорта рисунков Krita в jp2
 Name[sv]=Krita jp2-exportfilter
 Name[uk]=Фільтр експорту JP2 для Krita
 Name[wa]=Passete d' ebagaedje jp2 di Krita

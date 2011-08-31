@@ -50,7 +50,7 @@
 #include "kis_qpainter_canvas.h"
 #include "kis_group_layer.h"
 #include "flake/kis_shape_controller.h"
-#include "kis_layer_manager.h"
+#include "kis_node_manager.h"
 #include "kis_selection.h"
 #include "kis_selection_component.h"
 #include "flake/kis_shape_selection.h"
@@ -232,9 +232,9 @@ void KisCanvas2::stopMacro()
 KoShapeManager* KisCanvas2::shapeManager() const
 {
     if (!m_d->view) return m_d->shapeManager;
-    if (!m_d->view->layerManager()) return m_d->shapeManager;
+    if (!m_d->view->nodeManager()) return m_d->shapeManager;
 
-    KisLayerSP activeLayer = m_d->view->layerManager()->activeLayer();
+    KisLayerSP activeLayer = m_d->view->nodeManager()->activeLayer();
     if (activeLayer && activeLayer->isEditable()) {
         KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(activeLayer.data());
         if (shapeLayer) {
@@ -510,6 +510,7 @@ void KisCanvas2::notifyZoomChanged()
         m_d->prescaledProjection->notifyZoomChanged();
     }
     emit scrollAreaSizeChanged();
+    updateCanvas(); // update the canvas, because that isn't done when zooming using KoZoomAction
 }
 
 void KisCanvas2::preScale()

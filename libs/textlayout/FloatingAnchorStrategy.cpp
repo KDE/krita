@@ -33,9 +33,8 @@
 #include <QTextBlock>
 
 FloatingAnchorStrategy::FloatingAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
-        : AnchorStrategy(anchor, rootArea)
-        , m_anchor(anchor)
-        , m_obstruction(new KoTextLayoutObstruction(anchor->shape(), QTransform()))
+    : AnchorStrategy(anchor, rootArea)
+    , m_obstruction(new KoTextLayoutObstruction(anchor->shape(), QTransform()))
 {
 }
 
@@ -139,8 +138,11 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
          break;
 
      case KoTextAnchor::HParagraphContent:
-//FIXME         anchorBoundingRect.setX(state->x() + containerBoundingRect.x());
-//FIXME         anchorBoundingRect.setWidth(state->width());
+         //FIXME proper map style:horizontal-rel=paragraph-content to use the paragraph
+         //content. Currently we do the same MSWord2010 does and map it (as in to
+         //the same style:horizontal-rel=paragraph would do.
+         anchorBoundingRect.setX(containerBoundingRect.x());
+         anchorBoundingRect.setWidth(containerBoundingRect.width());
          break;
 
      case KoTextAnchor::HChar:

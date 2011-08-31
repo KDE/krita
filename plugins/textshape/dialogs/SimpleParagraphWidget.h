@@ -40,6 +40,7 @@ public:
 
 public slots:
     void setCurrentBlock(const QTextBlock &block);
+    void setCurrentFormat(const QTextBlockFormat& format);
     void setStyleManager(KoStyleManager *sm);
     void hidePopup();
 
@@ -68,6 +69,7 @@ private:
     KoStyleManager *m_styleManager;
     bool m_blockSignals;
     QTextBlock m_currentBlock;
+    QTextBlockFormat m_currentBlockFormat;
     TextTool *m_tool;
     DirectionButtonState m_directionButtonState;
     KoStyleThumbnailer *m_thumbnailer;

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=
 Name=Krita PPM Export Filter
+Name[bg]=Филтър за изнасяне от Krita в PPM
 Name[ca]=Filtre d'exportació PPM per al Krita
 Name[ca@valencia]=Filtre d'exportació PPM per al Krita
 Name[cs]=Exportní filtr do formátu PPM pro Krita
@@ -20,6 +21,7 @@ Name[kk]=Krita -> PPM экспорт сүзгісі
 Name[nb]=PPM-eksportfilter for Krita
 Name[nds]=PPM-Exportfilter för Krita
 Name[nl]=PPM-exportfilter voor Krita
+Name[pl]=Filtr eksportu PPM z Krita
 Name[pt]=Filtro de Exportação de PPM para o Krita
 Name[pt_BR]=Filtro de exportação de PPM para o Krita
 Name[ru]=Фильтр экспорта рисунков Krita в PPM

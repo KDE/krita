@@ -32,6 +32,7 @@
 
 class KoListLevelProperties;
 class KoShapeLoadingContext;
+class KoShapeSavingContext;
 class KoGenStyle;
 
 
@@ -66,6 +67,8 @@ public:
     typedef quintptr ListIdType;
 
     /// This list is used to specify what kind of list-style to use
+    /// If you add a style to that list you also need to check if you need to update
+    /// KoListStyle::isNumberingStyle(int)
     enum Style {
         /// Draw a square
         SquareItem = QTextListFormat::ListSquare,
@@ -144,7 +147,7 @@ public:
         MinimumDistance, ///< The minimum distance, in pt, between the counter and the text
         Width,          ///< The width, in pt, of  a picture bullet.
         Height,         ///< The height, in pt, of a picture bullet.
-        BulletImageKey, ///< Bullet image stored as a key for lookup in the imageCollection
+        BulletImage,    ///< Bullet image stored as a key for lookup in the imageCollection
         Margin,         ///< Stores the margin of the list
         TextIndent,     ///< Stores the text indent of list item
         AlignmentMode,   ///< Is true if list-level-position-and-space-mode=label-alignment
@@ -240,10 +243,15 @@ public:
     /**
      * Save the style to a KoGenStyle object using the OpenDocument format
      */
-    void saveOdf(KoGenStyle &style);
+    void saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const;
 
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(KoListStyle *other);
+
+    /**
+     * Check if list has numbering in one of it's list levels
+     */
+    bool isNumberingStyle() const;
 
     /// returns true if style is a numbering style
     static bool isNumberingStyle(int style);

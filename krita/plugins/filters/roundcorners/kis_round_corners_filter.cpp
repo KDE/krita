@@ -75,8 +75,6 @@ void KisRoundCornersFilter::process(KisPaintDeviceSP device,
     //read the filter configuration values from the KisFilterConfiguration object
     qint32 radius = qMax(1, config->getInt("radius" , 30));
 
-    quint32 pixelSize = device->pixelSize();
-
     if (progressUpdater) {
         progressUpdater->setRange(0, applyRect.height());
     }

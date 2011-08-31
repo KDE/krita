@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Calligra Docker Plugin
+Name[de]=Calligra Docker-Modul
 Name[et]=Calligra dokkide plugin
 Name[it]=Estensione per i ganci di Calligra
 Name[nb]=Calligra dokker-programtillegg
+Name[pl]=Wtyczka dokowania dla Calligra
 Name[pt]='Plugin' de Área Acoplável do Calligra
 Name[pt_BR]=Plugin acoplável do Calligra
 Name[sv]=Calligra-dockningsinsticksprogram
@@ -32,6 +34,7 @@ Comment[nb]=Et programtillegg som inneholder et såkalt «dokkelement»
 Comment[nds]=En Moduul, dat en so nöömt "Andockelement" bargt
 Comment[ne]='डकविजेट' भनिने समाविष्ट गर्ने एउटा प्लगइन
 Comment[nl]=Een plug-in, die een zogenaamde 'dockwidget' bevat
+Comment[pl]=Wtyczka zawierająca tak zwany 'dokowy element interfejsu'
 Comment[pt]=Um 'plugin' que contém um 'módulo acoplável'
 Comment[pt_BR]=Um plug-in que contém um 'módulo acoplável'
 Comment[sv]=Ett insticksprogram som innehåller en så kallad 'grafisk dockningskomponent'

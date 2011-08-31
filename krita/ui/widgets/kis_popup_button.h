@@ -62,6 +62,8 @@ public slots:
     void showPopupWidget();
 
     void hidePopupWidget();
+
+    void adjustPosition();
 protected:
     void paintEvent(QPaintEvent* event);
     

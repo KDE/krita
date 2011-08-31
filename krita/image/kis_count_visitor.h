@@ -34,7 +34,6 @@
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
-#include "kis_transformation_mask.h"
 #include "generator/kis_generator_layer.h"
 /**
  * The count visitor traverses the node stack for nodes that conform
@@ -96,10 +95,6 @@ public:
         return check(mask);
     }
 
-
-    bool visit(KisTransformationMask *mask) {
-        return check(mask);
-    }
 
     bool visit(KisGeneratorLayer * layer) {
         return check(layer);

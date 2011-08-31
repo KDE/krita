@@ -283,18 +283,22 @@ KisSelectionSP KisLayer::selection() const
 
 QList<KisEffectMaskSP> KisLayer::effectMasks() const
 {
-    KoProperties properties;
-    properties.setProperty("visible", true);
-    QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), properties);
     QList<KisEffectMaskSP> masks;
 
-    if (m_d->previewMask && m_d->previewMask->visible())
-        masks.append(m_d->previewMask);
+    if (childCount() > 0) {
+        KoProperties properties;
+        properties.setProperty("visible", true);
+        QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), properties);
 
-    foreach(const KisNodeSP& node,  nodes) {
-        KisEffectMaskSP mask = dynamic_cast<KisEffectMask*>(const_cast<KisNode*>(node.data()));
-        if (mask)
-            masks.append(mask);
+
+        if (m_d->previewMask && m_d->previewMask->visible())
+            masks.append(m_d->previewMask);
+
+        foreach(const KisNodeSP& node,  nodes) {
+            KisEffectMaskSP mask = dynamic_cast<KisEffectMask*>(const_cast<KisNode*>(node.data()));
+            if (mask)
+                masks.append(mask);
+        }
     }
     return masks;
 }
@@ -302,6 +306,7 @@ QList<KisEffectMaskSP> KisLayer::effectMasks() const
 bool KisLayer::hasEffectMasks() const
 {
     if (m_d->previewMask && m_d->previewMask->visible()) return true;
+    if (childCount() == 0) return false;
 
     KoProperties properties;
     properties.setProperty("visible", true);

@@ -274,10 +274,7 @@ void KoPAView::initGUI()
 
     new KoRulerController(d->horizontalRuler, d->canvas->resourceManager());
 
-    connect(d->doc, SIGNAL(unitChanged(const KoUnit&)),
-            d->horizontalRuler, SLOT(setUnit(const KoUnit&)));
-    connect(d->doc, SIGNAL(unitChanged(const KoUnit&)),
-            d->verticalRuler, SLOT(setUnit(const KoUnit&)));
+    connect(d->doc, SIGNAL(unitChanged(const KoUnit&)), this, SLOT(updateUnit(const KoUnit&)));
     //Layout a tab bar
     d->tabBar = new QTabBar();
     d->tabBarLayout->addWidget(d->insideWidget, 1, 1);
@@ -1221,6 +1218,13 @@ void KoPAView::setTabBarPosition(Qt::Orientation orientation)
     default:
         break;
     }
+}
+
+void KoPAView::updateUnit(const KoUnit &unit)
+{
+    d->horizontalRuler->setUnit(unit);
+    d->verticalRuler->setUnit(unit);
+    d->canvas->resourceManager()->setResource(KoCanvasResource::Unit, unit);
 }
 
 #include <KoPAView.moc>

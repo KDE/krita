@@ -148,21 +148,25 @@ static const ChartSubtype defaultSubtypes[ NUM_CHARTTYPES ] = {
 };
 
 
+void saveOdfFont(KoGenStyle &style, const QFont& font, const QColor& color)
+{
+    style.addProperty("fo:font-family", font.family(), KoGenStyle::TextType);
+    style.addPropertyPt("fo:font-size", font.pointSize(), KoGenStyle::TextType);
+    style.addProperty("fo:color", color.isValid() ? color.name() : "#000000", KoGenStyle::TextType);
+    int w = font.weight();
+    style.addProperty("fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( qRound(  w / 10 ) * 100 ), KoGenStyle::TextType);
+    style.addProperty("fo:font-style", font.italic() ? "italic" : "normal", KoGenStyle::TextType);
+}
+
 QString saveOdfFont( KoGenStyles& mainStyles,
                      const QFont& font,
                      const QColor& color )
 {
-    KoGenStyle::PropertyType tt = KoGenStyle::TextType;
-    KoGenStyle autoStyle( KoGenStyle::ParagraphAutoStyle, "chart", 0 );
-    autoStyle.addProperty( "fo:font-family", font.family(), tt );
-    autoStyle.addPropertyPt( "fo:font-size", font.pointSize(), tt );
-    autoStyle.addProperty( "fo:color", color.isValid() ? color.name() : "#000000", tt );
-    int w = font.weight();
-    autoStyle.addProperty( "fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( qRound(  w / 10 ) * 100 ), tt );
-    autoStyle.addProperty( "fo:font-style", font.italic() ? "italic" : "normal", tt );
-
+    KoGenStyle autoStyle(KoGenStyle::ParagraphAutoStyle, "chart", 0);
+    saveOdfFont(autoStyle, font, color);
     return mainStyles.insert( autoStyle, "ch" );
 }
+
 
 void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter,
                    KoGenStyles &mainStyles, LabelType labelType )
@@ -185,8 +189,6 @@ void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter,
 
     bodyWriter.addAttributePt( "svg:x", label->position().x() );
     bodyWriter.addAttributePt( "svg:y", label->position().y() );
-    bodyWriter.addAttributePt( "svg:width", label->size().width() );
-    bodyWriter.addAttributePt( "svg:height", label->size().height() );
     // TODO: Save text label color
     bodyWriter.addAttribute( "chart:style-name", saveOdfFont( mainStyles, labelData->document()->defaultFont(), QColor() ) );
 
@@ -1141,10 +1143,9 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
 
     bodyWriter.startElement( "chart:chart" );
 
-    saveOdfAttributes( context, OdfAllAttributes ^ OdfMandatories );
+    saveOdfAttributes( context, OdfSize );
 
-    KoGenStyle style;
-    style = KoGenStyle( KoGenStyle::GraphicAutoStyle, "chart" );
+    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "chart");
     bodyWriter.addAttribute( "chart:style-name", saveStyle( style, context ) );
 
     // 1. Write the chart type.

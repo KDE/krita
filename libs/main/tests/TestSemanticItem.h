@@ -55,7 +55,7 @@ public:
         setRdfType(PREDBASE + "testitem");
         Q_ASSERT(documentRdf()->model()->statementCount() > 0);
 
-        updateTriple(m_payload, lorem,  PREDBASE + "payload");
+        updateTriple(m_payload, "payload, payload, payload",  PREDBASE + "payload");
     }
 
     TestSemanticItem(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)

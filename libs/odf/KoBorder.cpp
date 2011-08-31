@@ -985,27 +985,27 @@ void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const
 
     if (leftBorderLineWidth == rightBorderLineWidth
         && leftBorderLineWidth == topBorderLineWidth
-        && leftBorderLineWidth == bottomBorderLineWidth/*
+        && leftBorderLineWidth == bottomBorderLineWidth
         && leftBorderStyle() == BorderDouble
         && rightBorderStyle() == BorderDouble
         && topBorderStyle() == BorderDouble
-        && bottomBorderStyle() == BorderDouble*/) {
+        && bottomBorderStyle() == BorderDouble) {
         style.addProperty("style:border-line-width", leftBorderLineWidth, type);
     } else {
-        //if (leftBorderStyle() == BorderDouble)
+        if (leftBorderStyle() == BorderDouble)
             style.addProperty("style:border-line-width-left", leftBorderLineWidth, type);
-        //if (rightBorderStyle() == BorderDouble)
+        if (rightBorderStyle() == BorderDouble)
             style.addProperty("style:border-line-width-right", rightBorderLineWidth, type);
-        //if (topBorderStyle() == BorderDouble)
+        if (topBorderStyle() == BorderDouble)
             style.addProperty("style:border-line-width-top", topBorderLineWidth, type);
-        //if (bottomBorderStyle() == BorderDouble)
+        if (bottomBorderStyle() == BorderDouble)
             style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, type);
     }
 
-    //if (tlbrBorderStyle() == BorderDouble) {
+    if (tlbrBorderStyle() == BorderDouble) {
         style.addProperty("style:diagonal-tl-br-widths", tlbrBorderLineWidth, type);
-    //}
-    //if (trblBorderStyle() == BorderDouble) {
+    }
+    if (trblBorderStyle() == BorderDouble) {
         style.addProperty("style:diagonal-bl-tr-widths", trblBorderLineWidth, type);
-   // }
+    }
 }

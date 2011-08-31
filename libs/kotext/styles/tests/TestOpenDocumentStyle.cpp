@@ -221,6 +221,9 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             result << "continuous" << "skip-white-space";
         } else if (reference == "fontWeight") {
             result << "normal" << "bold" << "100" << "200" << "300" << "400" << "500" << "600" << "700" << "800" << "900";
+            QStringList normal;
+            normal << "normal" << "500";
+            m_equivalences << normal;
         } else if (reference == "lineWidth") {
             result << "auto" << "normal" << "bold" << "thin" << "medium" << "thick";
         } else if (reference == "styleNameRef") {
@@ -242,6 +245,9 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             result << "fixed" << "variable";
         } else if (reference == "fontStyle") {
             result << "normal" << "italic" << "oblique";
+            QStringList italic;
+            italic << "italic" << "oblique";
+            m_equivalences << italic;
         } else if ((reference == "textEncoding") || (reference == "languageCode") || (reference == "countryCode") || (reference == "scriptCode") || (reference == "language"))  {
             // Sorry, I can't do it right now
             result << "";
@@ -526,8 +532,8 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     QString outputPropertyValue = properties.attribute(attribute->name());
     if (properties.attributeNames().count() > 1)
     {
-        kWarning(32500) << "Warning : got more than one attribute !";
-        kDebug(32500) << generatedXmlOutput;
+        //kWarning(32500) << "Warning : got more than one attribute !";
+        //kDebug(32500) << generatedXmlOutput;
     }
     if (attribute->hasReference("__border")) {
         KoBorder original, output;

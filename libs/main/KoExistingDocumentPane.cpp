@@ -29,6 +29,7 @@
 
 KoExistingDocumentPane::KoExistingDocumentPane(QWidget* parent, const QStringList& mimeFilter)
         : QWidget(parent)
+        , m_seen(false)
 {
     QGridLayout* layout = new QGridLayout(this);
     layout->setSpacing(KDialog::spacingHint());
@@ -52,6 +53,11 @@ KoExistingDocumentPane::KoExistingDocumentPane(QWidget* parent, const QStringLis
 
 void KoExistingDocumentPane::onAccepted()
 {
+    // When double clicked on a file, onAccepted will be called twice
+    // To overcome the problem, we set a flag to check onAccepted is called already
+    if(m_seen) return;
+
+    m_seen = true;
     m_fileWidget->accept();
     emit openExistingUrl(m_fileWidget->selectedUrl());
 }

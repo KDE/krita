@@ -46,6 +46,7 @@ void MockRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isN
 
 void MockRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
+    Q_UNUSED(afterThis);
 }
 
 QSizeF MockRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)

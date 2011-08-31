@@ -26,7 +26,14 @@
 #include <KoResource.h>
 #include <qdom.h>
 #include "kowidgets_export.h"
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+#include <KoConfig.h>
 
+
+#ifdef NEPOMUK
+#include <Nepomuk/Resource>
+#endif
 /**
  * KoResourceTagging allows to add and delete tags to resources and also search reources using tags
  */
@@ -51,9 +58,16 @@ public:
 
     QStringList searchTag(const QString& tag);
 
+
+    void setNepomukBool(bool nepomukOn);
+#ifdef NEPOMUK
+    void updateNepomukXML(bool nepomukOn);
+#endif
+
 private:
-    void readXMLFile();
-    void writeXMLFile();
+    void readXMLFile(bool serverIdentity=true);
+    void writeXMLFile(bool serverIdentity=true);
+
     /// To check whether the resource belongs to the present server or not
     bool isServerResource(QString resourceName);
     void addTag(const QString& fileName,const QString& tag);
@@ -62,12 +76,23 @@ private:
     /// Removes the adjustements before going to the server
     QStringList removeAdjustedFileNames(QStringList fileNamesList);
 
+#ifdef NEPOMUK
+    QList<Nepomuk::Resource> readNepomukRepo();
+    void writeNepomukRepo(bool serverIdentity=true);
+    void updateTagRepoFromNepomuk(bool serverIdentity=true);
+    void addNepomukTag(const QString& fileName,const QString& tag);
+    void delNepomukTag(const QString& fileName,const QString& tag);
+    QString adjustedNepomukFileName(QString fileName);
+    QString correctedNepomukFileName(QString fileName);
+#endif
+
     QMultiHash<QString, QString> m_tagRepo;
     QHash<QString, int> m_tagList;
     QString m_tagsXMLFile;
     QString m_serverExtensions;
 
-
+    bool m_nepomukOn;
+    KConfigGroup m_config;
 };
 
 

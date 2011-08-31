@@ -20,6 +20,9 @@
  */
 
 #include "PictureShape.h"
+#include "GreyscaleFilterEffect.h"
+#include "MonoFilterEffect.h"
+#include "WatermarkFilterEffect.h"
 
 #include <KoViewConverter.h>
 #include <KoImageCollection.h>
@@ -32,15 +35,17 @@
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
 #include <KoGenStyle.h>
+#include <KoFilterEffectStack.h>
+#include <SvgSavingContext.h>
+#include <SvgLoadingContext.h>
+#include <SvgUtil.h>
+
+#include <KDebug>
 
 #include <QPainter>
 #include <QTimer>
 #include <QPixmapCache>
-#include <kdebug.h>
-#include <KoFilterEffectStack.h>
-#include "GreyscaleFilterEffect.h"
-#include "MonoFilterEffect.h"
-#include "WatermarkFilterEffect.h"
+#include <QtCore/QBuffer>
 
 QString generate_key(qint64 key, const QSize & size)
 {
@@ -78,7 +83,9 @@ PictureShape::PictureShape()
     m_mode(Standard)
 {
     setKeepAspectRatio(true);
-    setFilterEffectStack(new KoFilterEffectStack());
+    KoFilterEffectStack * effectStack = new KoFilterEffectStack();
+    effectStack->setClipRect(QRectF(0, 0, 1, 1));
+    setFilterEffectStack(effectStack);
 }
 
 PictureShape::~PictureShape()
@@ -307,4 +314,72 @@ void PictureShape::setMode(PictureShape::PictureMode mode)
             filterEffectStack()->appendFilterEffect(filterMode);
         update();
     }
+}
+
+bool PictureShape::saveSvg(SvgSavingContext &context)
+{
+    KoImageData *imageData = qobject_cast<KoImageData*>(userData());
+    if (!imageData) {
+        qWarning() << "Picture has no image data. Omitting.";
+        return false;
+    }
+
+    context.shapeWriter().startElement("image");
+    context.shapeWriter().addAttribute("id", context.getID(this));
+
+    QTransform m = transformation();
+    if (m.type() == QTransform::TxTranslate) {
+        const QPointF pos = position();
+        context.shapeWriter().addAttributePt("x", pos.x());
+        context.shapeWriter().addAttributePt("y", pos.y());
+    } else {
+        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(m));
+    }
+
+    const QSizeF s = size();
+    context.shapeWriter().addAttributePt("width", s.width());
+    context.shapeWriter().addAttributePt("height", s.height());
+    context.shapeWriter().addAttribute("xlink:href", context.saveImage(imageData));
+    context.shapeWriter().endElement();
+
+    return true;
+}
+
+bool PictureShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &context)
+{
+    const qreal x = SvgUtil::parseUnitX(context.currentGC(), element.attribute("x", "0"));
+    const qreal y = SvgUtil::parseUnitY(context.currentGC(), element.attribute("y", "0"));
+    const qreal w = SvgUtil::parseUnitX(context.currentGC(), element.attribute("width", "0"));
+    const qreal h = SvgUtil::parseUnitY(context.currentGC(), element.attribute("height", "0"));
+
+    // zero width of height disables rendering this image (see svg spec)
+    if (w == 0.0 || h == 0.0)
+        return 0;
+
+    const QString href = element.attribute("xlink:href");
+
+    QImage image;
+
+    if (href.startsWith(QLatin1String("data:"))) {
+        int start = href.indexOf("base64,");
+        if (start <= 0)
+            return false;
+        if(!image.loadFromData(QByteArray::fromBase64(href.mid(start + 7).toLatin1())))
+            return false;
+    } else if (!image.load(context.absoluteFilePath(href))) {
+        return false;
+    }
+
+    KoImageCollection *imageCollection = context.imageCollection();
+    if (!imageCollection)
+        return false;
+
+    // TODO use it already for loading
+    KoImageData *data = imageCollection->createImageData(image);
+
+    setUserData(data);
+    setSize(QSizeF(w, h));
+    setPosition(QPointF(x, y));
+
+    return true;
 }

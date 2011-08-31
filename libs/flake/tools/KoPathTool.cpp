@@ -181,8 +181,9 @@ QList<QWidget *>  KoPathTool::createOptionWidgets()
     updateOptionsWidget();
     toolOptions->setWindowTitle(i18n("Line/Curve"));
     list.append(toolOptions);
-    d->canvas->createSnapGuideConfigWidget()->setWindowTitle(i18n("Snapping"));
-    list.append(d->canvas->createSnapGuideConfigWidget());
+    QWidget* widget = d->canvas->createSnapGuideConfigWidget();
+    widget->setWindowTitle(i18n("Snapping"));
+    list.append(widget);
 
     return list;
 }

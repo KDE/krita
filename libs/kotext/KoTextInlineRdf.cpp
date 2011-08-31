@@ -33,6 +33,7 @@
 #include <kdebug.h>
 #include <QTextCursor>
 #include <QUuid>
+#include <QTextDocument>
 
 #ifdef SHOULD_BUILD_RDF
 #include <Soprano/Soprano>
@@ -112,22 +113,26 @@ public:
 };
 
 KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, const QTextBlock &b)
-        : d(new Private(doc, b))
+        : QObject(doc)
+        , d(new Private(doc, b))
 {
 }
 
 KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, KoBookmark *b)
-        : d(new Private(doc, b))
+        : QObject(doc)
+        , d(new Private(doc, b))
 {
 }
 
 KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, KoTextMeta *b)
-        : d(new Private(doc, b))
+        : QObject(doc)
+        , d(new Private(doc, b))
 {
 }
 
 KoTextInlineRdf::KoTextInlineRdf(QTextDocument *doc, const QTextTableCell &b)
-        : d(new Private(doc, b))
+        :QObject(doc)
+        ,  d(new Private(doc, b))
 {
 }
 
@@ -159,7 +164,7 @@ bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer
     kDebug(30015) << " this:" << (void*)this << " xmlid:" << d->id;
     QString oldID = d->id;
     //KoSharedSavingData *sharedData = context.sharedData(KOTEXT_SHARED_SAVING_ID);
-    QString newID = createXmlId(writer);
+    QString newID = createXmlId();
     if (KoTextSharedSavingData *sharedData =
             dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID))) {
         sharedData->addRdfIdMapping(oldID, newID);
@@ -182,9 +187,8 @@ bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer
     return true;
 }
 
-QString KoTextInlineRdf::createXmlId(KoXmlWriter *writer)
+QString KoTextInlineRdf::createXmlId()
 {
-    Q_UNUSED(writer);
     QString uuid = QUuid::createUuid().toString();
     uuid.remove('{');
     uuid.remove('}');

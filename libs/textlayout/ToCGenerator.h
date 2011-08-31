@@ -44,7 +44,7 @@ public:
     virtual void setBlock(const QTextBlock &block);
 
 public slots:
-    virtual void generate();
+    void generate();
 
 private:
     QString resolvePageNumber(const QTextBlock &headingBlock);

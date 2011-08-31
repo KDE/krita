@@ -714,6 +714,7 @@ void KoPADocumentStructureDocker::selectPages(int start, int count)
     if ((start < 0) || (count < 1)) {
         return;
     }
+    emit pageChanged(m_doc->pageByIndex(start, false));
     m_sectionView->clearSelection();
     for (int i = start; i < (start + count); i++) {
         QModelIndex index = m_model->index(i, 0, QModelIndex());

@@ -142,8 +142,8 @@ QImage BitBltRecord::image()
 StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSize )
     : m_bitmap(0)
 {
-    kDebug(31000) << "stream position at the start: " << stream.device()->pos();
-    kDebug(31000) << "recordSize =" << recordSize;
+    //kDebug(31000) << "stream position at the start: " << stream.device()->pos();
+    //kDebug(31000) << "recordSize =" << recordSize;
 
     stream >> m_Bounds;
     stream >> m_xDest;
@@ -152,16 +152,20 @@ StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSiz
     stream >> m_ySrc;
     stream >> m_cxSrc;
     stream >> m_cySrc;
+
     stream >> m_offBmiSrc;
     stream >> m_cbBmiSrc;
     stream >> m_offBitsSrc;
     stream >> m_cbBitsSrc;
-    stream >> m_UsageSrc;
+
+    stream >> m_UsageSrc;       // How to interpret color table values.
     stream >> m_BitBltRasterOperation;
     stream >> m_cxDest;
     stream >> m_cyDest;
-
-#if 1
+#if 0
+    kDebug(31000) << "bounds:" << m_Bounds;
+    kDebug(31000) << "destination:" << QPoint(m_xDest, m_yDest) << QSize(m_cxDest, m_cyDest);
+    kDebug(31000) << "source:" << QPoint(m_xSrc, m_ySrc) << QSize(m_cxSrc, m_cySrc);
     kDebug(31000) << "header offset:" << m_offBmiSrc;
     kDebug(31000) << "header size:  " << m_cbBmiSrc;
     kDebug(31000) << "bitmap offset:" << m_offBitsSrc;
@@ -170,14 +174,14 @@ StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSiz
     kDebug(31000) << "m_BitBltRasterOperation =" << hex << m_BitBltRasterOperation << dec;
 #endif
 
-    kDebug(31000) << "stream position before the image: " << stream.device()->pos();
+    //kDebug(31000) << "stream position before the image: " << stream.device()->pos();
     if (m_cbBmiSrc > 0) {
         m_bitmap = new Bitmap( stream, recordSize, 8 + 18 * 4, // header + 18 ints
                                m_offBmiSrc, m_cbBmiSrc,
                                m_offBitsSrc, m_cbBitsSrc );
     }
 
-    kDebug(31000) << "stream position at the end: " << stream.device()->pos();
+    //kDebug(31000) << "stream position at the end: " << stream.device()->pos();
 #if 0
     // Read away those bytes that preceed the header.  These are undefined
     // according to the spec.  80 is the size of the record above.
@@ -202,13 +206,16 @@ StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSiz
 StretchDiBitsRecord::~StretchDiBitsRecord()
 {
     delete m_bitmap;
-    //delete m_image;
-    // delete m_BmiSrc;
 }
 
 QRect StretchDiBitsRecord::bounds() const
 {
     return m_Bounds;
+}
+
+bool StretchDiBitsRecord::hasImage() const
+{
+    return m_bitmap && m_bitmap->hasImage();
 }
 
 QImage StretchDiBitsRecord::image() 

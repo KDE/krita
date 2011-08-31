@@ -36,6 +36,7 @@ macro_optional_add_subdirectory( videoshape )
 macro_optional_add_subdirectory( textshape )
 macro_optional_add_subdirectory( pluginshape )
 macro_optional_add_subdirectory( treeshape )
+macro_optional_add_subdirectory( formulashape )
 
 # as the vector shape depends on filters subdir (not really intuitive) lets allow disabling
 macro_optional_add_subdirectory( vectorshape )

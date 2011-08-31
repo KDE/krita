@@ -27,7 +27,7 @@
 #include "KoTextDocumentLayout.h"
 #include "KoTextLayoutRootArea.h"
 #include "KoTextShapeData.h"
-#include "ToCDocumentLayout.h"
+#include "DummyDocumentLayout.h"
 
 #include <KoParagraphStyle.h>
 #include <KoTextPage.h>
@@ -39,7 +39,6 @@
 
 #include <QTextDocument>
 #include <QTimer>
-#include <QTime>
 #include <KDebug>
 #include <KoBookmark.h>
 #include <KoInlineTextObjectManager.h>
@@ -52,7 +51,7 @@ ToCGenerator::ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGenerato
     , m_ToCInfo(tocInfo)
     , m_document(0)
     , m_documentLayout(0)
-    , m_generatedDocumentChangeCount(-2) // generate 2 times, one for the items and one for the updating the pagenumbers
+    , m_generatedDocumentChangeCount(-1)
     , m_maxTabPosition(0.0)
 {
     Q_ASSERT(tocDocument);
@@ -61,7 +60,15 @@ ToCGenerator::ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGenerato
     m_ToCInfo->setGenerator(this);
 
     tocDocument->setUndoRedoEnabled(false);
-    tocDocument->setDocumentLayout(new ToCDocumentLayout(tocDocument));
+    tocDocument->setDocumentLayout(new DummyDocumentLayout(tocDocument));
+
+    // We cannot do generate right now to have a ToC with placeholder numbers cause we are in the middle
+    // of a layout-process when called what means that the document isn't ready and therefore it would
+    // not make sense to recreate the toc yet anyways cause required content may still missing. So, we
+    // need to wait till layouting is finished and our generate() method is called by the layouter.
+    //generate();
+
+    m_generatedDocumentChangeCount = -1; // we need one more intial layout to get pagenumbers
 }
 
 ToCGenerator::~ToCGenerator()
@@ -135,24 +142,12 @@ static QString removeWhitespacePrefix(const QString& text)
 
 void ToCGenerator::generate()
 {
-    if (!m_ToCInfo) {
+    if (!m_ToCInfo)
         return;
-    }
-    if (!m_block.isValid()) {
-        return;
-    }
+
     if (m_documentLayout->documentChangedCount() == m_generatedDocumentChangeCount) {
         return;
     }
-
-    /*
-    struct Timer {
-        QTime m_timer;
-        Timer() { m_timer.start(); }
-        ~Timer() { kDebug() << "************** elapsed=" << m_timer.elapsed(); }
-    };
-    Timer timer;
-    */
 
     QTextCursor cursor = m_ToCDocument->rootFrame()->lastCursorPosition();
     cursor.setPosition(m_ToCDocument->rootFrame()->firstPosition(), QTextCursor::KeepAnchor);
@@ -177,21 +172,39 @@ void ToCGenerator::generate()
     // Iterate through all blocks to generate TOC
     QTextBlock block = m_document->rootFrame()->firstCursorPosition().block();
     int blockId = 0;
-    while (block.isValid()) {
+    for (; block.isValid(); block = block.next()) {
         // Choose only TOC blocks
-        if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) {
-            int level = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
-            generateEntry(level, cursor, block, blockId);
-        } else if (m_ToCInfo->m_useIndexSourceStyles) {
+        if (m_ToCInfo->m_useOutlineLevel) {
+            if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) {
+                int level = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
+                generateEntry(level, cursor, block, blockId);
+                continue;
+            }
+        }
+
+        if (m_ToCInfo->m_useIndexSourceStyles) {
+            bool inserted = false;
             foreach (IndexSourceStyles indexSourceStyles, m_ToCInfo->m_indexSourceStyles) {
                 foreach (IndexSourceStyle indexStyle, indexSourceStyles.styles) {
                     if (indexStyle.styleId == block.blockFormat().intProperty(KoParagraphStyle::StyleId)) {
                         generateEntry(indexSourceStyles.outlineLevel, cursor, block, blockId);
+                        inserted = true;
+                        break;
                     }
                 }
+                if (inserted)
+                    break;
+            }
+            if (inserted)
+                continue;
+        }
+
+        if (m_ToCInfo->m_useIndexMarks) {
+            if (false) {
+                generateEntry(1, cursor, block, blockId);
+                continue;
             }
         }
-        block = block.next();
     }
     cursor.endEditBlock();
 
@@ -200,8 +213,7 @@ void ToCGenerator::generate()
         rootArea->setDirty();
     }
 
-    if (++m_generatedDocumentChangeCount >= 0)
-        m_generatedDocumentChangeCount = m_documentLayout->documentChangedCount();
+    m_generatedDocumentChangeCount = m_documentLayout->documentChangedCount();
 }
 
 static bool compareTab(const QVariant &tab1, const QVariant &tab2)
@@ -217,7 +229,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
     QString tocEntryText = block.text();
     tocEntryText.remove(QChar::ObjectReplacementCharacter);
     // some headings contain tabs, replace all occurences with spaces
-    tocEntryText.replace('\t',' ');
+    tocEntryText.replace('\t',' ').remove(0x200B);
     tocEntryText = removeWhitespacePrefix(tocEntryText);
 
     // Add only blocks with text

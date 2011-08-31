@@ -51,9 +51,13 @@ public:
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
     KoParagraphStyle *paragraphStyleForIndex(const QModelIndex &index) const;
+    QModelIndex indexForParagraphStyle(const KoParagraphStyle &style) const;
+
     KoCharacterStyle *characterStyleForIndex(const QModelIndex &index) const;
+    QModelIndex indexForCharacterStyle(const KoCharacterStyle &style) const;
 
     void setStyleManager(KoStyleManager *manager);
+    void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer);
 
 public slots:
     /**

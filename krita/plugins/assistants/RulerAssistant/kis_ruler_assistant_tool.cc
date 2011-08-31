@@ -281,6 +281,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
 
 void KisRulerAssistantTool::removeAllAssistants()
 {
+    m_canvas->view()->resourceProvider()->clearPerspectiveGrids();
     m_canvas->view()->paintingAssistantManager()->removeAll();
     m_handles = m_canvas->view()->paintingAssistantManager()->handles();
     m_canvas->updateCanvas();
@@ -398,6 +399,10 @@ void KisRulerAssistantTool::openFinish(KJob* job)
                 if (assistant) {
                     if (assistant->handles().size() == assistant->numHandles()) {
                         m_canvas->view()->paintingAssistantManager()->addAssistant(assistant);
+                        KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant);
+                        if (grid) {
+                            m_canvas->view()->resourceProvider()->addPerspectiveGrid(grid);
+                        }
                     } else {
                         errors = true;
                         delete assistant;

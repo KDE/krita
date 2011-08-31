@@ -54,7 +54,7 @@ const QString KoXmlNS::delta("http://www.deltaxml.com/ns/track-changes/delta-nam
 const QString KoXmlNS::split("http://www.deltaxml.com/ns/track-changes/split-namespace");
 const QString KoXmlNS::ac("http://www.deltaxml.com/ns/track-changes/attribute-change-namespace");
 
-const char* KoXmlNS::nsURI2NS(const QString nsURI)
+const char* KoXmlNS::nsURI2NS(const QString &nsURI)
 {
     if (nsURI == KoXmlNS::office)
         return "office";

@@ -36,6 +36,8 @@ class QTextTable;
 class KoStyleStack;
 class KoGenStyle;
 class KoGenStyles;
+class KoShadowStyle;
+
 #include "KoXmlReaderForward.h"
 class KoOdfLoadingContext;
 
@@ -54,18 +56,22 @@ public:
     enum Property {
         StyleId = QTextTableFormat::UserProperty + 100,
         // Linespacing properties
-        KeepWithNext,    ///< If true, keep table with next paragraph
-        BreakBefore,    ///< If true, insert a frame break before this table
-        BreakAfter,     ///< If true, insert a frame break after this table
-        MayBreakBetweenRows,     ///< If true, then the table is allowed to break between rows
-        ColumnAndRowStyleManager,     ///< QVariant of a KoColumnAndRowStyleManager
-                                                             /// It's not really a property of KoTableStyle but defined here for convenience
-        CollapsingBorders,     ///< If true, then the table has collapsing border model
-        MasterPageName,         ///< Optional name of the master-page
-        NumberHeadingRows,      ///< Count the number of heading rows
-        Visible,                ///< If true, the table is visible
-        PageNumber,             ///< The page number that is applied after the page break
-        TextProgressionDirection    ///< The direction of the text in the table
+        KeepWithNext,               ///< If true, keep table with next paragraph
+        BreakBefore,                ///< If true, insert a frame break before this table
+        BreakAfter,                 ///< If true, insert a frame break after this table
+        MayBreakBetweenRows,        ///< If true, then the table is allowed to break between rows
+        ColumnAndRowStyleManager,   ///< QVariant of a KoColumnAndRowStyleManager
+                                        /// It's not really a property of KoTableStyle but defined here for convenience
+        CollapsingBorders,          ///< If true, then the table has collapsing border model
+        MasterPageName,             ///< Optional name of the master-page
+        NumberHeadingRows,          ///< Count the number of heading rows
+        Visible,                    ///< If true, the table is visible
+        PageNumber,                 ///< The page number that is applied after the page break
+        TextProgressionDirection,   ///< The direction of the text in the table
+        TableIsProtected,           ///< boolean, if true, the table is protected against edits
+                                        /// It's not really a property of KoTableStyle but defined here for convenience
+        Shadow                      ///< KoShadowStyle, the table shadow
+        
     };
 
     /// Constructor
@@ -88,6 +94,11 @@ public:
     void setKeepWithNext(bool keep);
     
     bool keepWithNext() const;
+
+    /// This property describe the shadow of the table, if any
+    void setShadow (const KoShadowStyle &shadow);
+
+    KoShadowStyle shadow() const;
 
     /// The property specifies if the table should allow it to be break. Break within a row is specified per row
     void setMayBreakBetweenRows(bool allow);

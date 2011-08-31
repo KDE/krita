@@ -198,19 +198,19 @@ void TestBlockLayout::testAdvancedLineSpacing()
 
     block = block.next();
     QVERIFY(block.isValid()); // line3
-    style.setMinimumLineHeight(40.0);
+    style.setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 40.0));
     style.setLineHeightPercent(120);
     style.applyStyle(block);
 
     block = block.next();
     QVERIFY(block.isValid()); // line4
     style.remove(KoParagraphStyle::FixedLineHeight);
-    style.setMinimumLineHeight(5.0);
+    style.setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 5.0));
     style.applyStyle(block);
 
     block = block.next();
     QVERIFY(block.isValid()); // line5
-    style.setMinimumLineHeight(0.0);
+    style.setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 0.0));
     style.setLineSpacing(8.0);
     style.remove(KoParagraphStyle::PercentLineHeight);
     style.applyStyle(block);

@@ -1441,7 +1441,7 @@ void Axis::saveOdf( KoShapeSavingContext &context )
     KoGenStyles &mainStyles = context.mainStyles();
     bodyWriter.startElement( "chart:axis" );
 
-    KoGenStyle axisStyle( KoGenStyle::ParagraphAutoStyle, "chart" );
+    KoGenStyle axisStyle( KoGenStyle::ChartAutoStyle, "chart" );
     axisStyle.addProperty( "chart:display-label", "true" );
 
     const QString styleName = mainStyles.insert( axisStyle, "ch" );
@@ -1490,17 +1490,17 @@ void Axis::saveOdf( KoShapeSavingContext &context )
     bodyWriter.addAttributePt( "svg:y", d->title->position().y() );
     bodyWriter.addAttributePt( "svg:width", d->title->size().width() );
     bodyWriter.addAttributePt( "svg:height", d->title->size().height() );
-    if ( plotArea()->proxyModel()->categoryDataRegion().isValid() )
-    {
-        bodyWriter.startElement( "chart:categories" );
-          bodyWriter.addAttribute( "table:cell-range-address", plotArea()->proxyModel()->categoryDataRegion().toString() );
-        bodyWriter.endElement();
-    }
 
     bodyWriter.startElement( "text:p" );
     bodyWriter.addTextNode( d->titleData->document()->toPlainText() );
     bodyWriter.endElement(); // text:p
     bodyWriter.endElement(); // chart:title
+
+    if ( plotArea()->proxyModel()->categoryDataRegion().isValid() ) {
+        bodyWriter.startElement( "chart:categories" );
+        bodyWriter.addAttribute( "table:cell-range-address", plotArea()->proxyModel()->categoryDataRegion().toString() );
+        bodyWriter.endElement();
+    }
 
     if ( showMajorGrid() )
         saveOdfGrid( context, OdfMajorGrid );

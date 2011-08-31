@@ -28,6 +28,7 @@
 
 #include <KoXmlReaderForward.h>
 #include <KoBorder.h>
+#include <KoShadowStyle.h>
 
 #include <QObject>
 #include <QVector>
@@ -157,8 +158,13 @@ public:
         VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
 
         NormalLineHeight,         ///< bool, internal property for reserved usage
+        BibliographyData,
+        BibliographyDocument,
+        AutoUpdateBibliography,
+
         TableOfContentsData,      // set when block is instead a TableOfContents
-        TableOfContentsDocument   // set when block is instead a TableOfContents
+        TableOfContentsDocument,  // set when block is instead a TableOfContents
+        Shadow                    //< KoShadowStyle, the shadow of this paragraph
     };
 
     enum AutoSpace {
@@ -214,7 +220,7 @@ public:
      * You should consider doing a remove(KoParagraphStyle::FixedLineHeight); because if set, it will
      *  be used instead of this value.
      */
-    void setMinimumLineHeight(qreal height);
+    void setMinimumLineHeight(const QTextLength &height);
     /// @see setMinimumLineHeight
     qreal minimumLineHeight() const;
 
@@ -596,6 +602,17 @@ public:
     int lineNumberStartValue() const;
     void setLineNumberStartValue(int lineNumberStartValue);
 
+    /**
+     * 20.349 style:shadow
+     * The style:shadow attribute specifies a shadow effect.
+     * The defined values for this attribute are those defined in §7.16.5 of [XSL], except the value
+     * inherit.
+     * The shadow effect is not applied to the text content of an element, but depending on the element
+     * where the attribute appears, to a paragraph, a text box, a page body, a header, a footer, a table
+     * or a table cell.
+     */
+    KoShadowStyle shadow() const;
+    void setShadow (const KoShadowStyle &shadow);
 
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(const KoParagraphStyle *style);

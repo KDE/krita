@@ -71,6 +71,14 @@ public:
         MinimalMode
     };
 
+    virtual void paintEvent (QPaintEvent *event);
+
+    virtual void dropEvent(QDropEvent *ev);
+
+    virtual void dragMoveEvent(QDragMoveEvent *ev);
+
+    virtual void dragLeaveEvent(QDragLeaveEvent *e);
+
     /**
      * Set the display mode of the view to one of the options.
      *
@@ -119,6 +127,11 @@ protected:
     virtual void startDrag (Qt::DropActions supportedActions);
     QPixmap createDragPixmap() const;
 
+    /**
+     * Calculates the index of the nearest item to the cursor position
+     */
+    int cursorPageIndex() const;
+
 protected slots:
     virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous);
     virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
@@ -127,6 +140,22 @@ private slots:
     void slotActionToggled(bool on, const QPersistentModelIndex &index, int property);
 
 private:
+    /**
+     * Permit to know if a slide is draging
+     *
+     * @return boolean
+     */
+    bool isDraging() const;
+
+    /**
+     * Setter for the draging flag
+     *
+     * @param flag boolean
+     */
+    void setDragingFlag(bool flag = true);
+
+    bool m_dragingFlag;
+
     QStyleOptionViewItem optionForIndex(const QModelIndex &index) const;
     typedef KoDocumentSectionModel Model;
     class PropertyAction;

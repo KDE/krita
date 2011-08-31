@@ -61,6 +61,12 @@ FrameIterator::FrameIterator(FrameIterator *other)
         currentSubFrameIterator = 0;
 }
 
+FrameIterator::~FrameIterator()
+{
+    delete currentTableIterator;
+    delete currentSubFrameIterator;
+}
+
 bool FrameIterator::operator ==(const FrameIterator &other) const
 {
     if (it != other.it)

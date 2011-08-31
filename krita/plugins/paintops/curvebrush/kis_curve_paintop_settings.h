@@ -28,10 +28,7 @@ public:
     KisCurvePaintOpSettings();
     virtual ~KisCurvePaintOpSettings() {}
 
-    bool paintIncremental();
-   
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const;
+    virtual bool paintIncremental();
 
 #if defined(HAVE_OPENGL)
     inline QString modelName() const {

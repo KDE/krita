@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,10 +21,12 @@
 
 #include <kis_paintop.h>
 #include <kis_types.h>
-
 #include "curve_brush.h"
-
+#include "kis_curve_line_option.h"
 #include "kis_curve_paintop_settings.h"
+#include <kis_pressure_opacity_option.h>
+#include "kis_linewidth_option.h"
+#include "kis_curves_opacity_option.h"
 
 class KisPainter;
 
@@ -35,18 +37,24 @@ public:
     KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisCurvePaintOp();
 
-    virtual bool incremental() const {
-        return false;
-    }
-
     qreal paintAt(const KisPaintInformation& info);
     KisDistanceInformation paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist);
 
+private:
+    void paintLine(KisPaintDeviceSP dab, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
 
 private:
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
-    CurveBrush m_curveBrush;
+
+    CurveProperties m_curveProperties;
+    KisPressureOpacityOption m_opacityOption;
+    KisLineWidthOption m_lineWidthOption;
+    KisCurvesOpacityOption m_curvesOpacityOption;
+
+    QList<QPointF> m_points;
+    KisPainter * m_painter;
+
 };
 
 #endif // KIS_CURVEPAINTOP_H_

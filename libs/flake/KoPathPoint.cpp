@@ -21,7 +21,6 @@
 
 #include "KoPathPoint.h"
 #include "KoPathShape.h"
-#include "KoPointGroup.h"
 
 #include <KDebug>
 #include <QtGui/QPainter>
@@ -40,14 +39,13 @@ class KoPathPoint::Private
 {
 public:
     Private()
-            : shape(0), properties(Normal), pointGroup(0)
+            : shape(0), properties(Normal)
             , activeControlPoint1(false), activeControlPoint2(false) {}
     KoPathShape * shape;
     QPointF point;
     QPointF controlPoint1;
     QPointF controlPoint2;
     PointProperties properties;
-    KoPointGroup * pointGroup;
     bool activeControlPoint1;
     bool activeControlPoint2;
 };
@@ -94,7 +92,6 @@ KoPathPoint &KoPathPoint::operator=(const KoPathPoint &rhs)
     d->controlPoint1 = rhs.d->controlPoint1;
     d->controlPoint2 = rhs.d->controlPoint2;
     d->properties = rhs.d->properties;
-    //d->pointGroup = rhs.d->pointGroup;
     d->activeControlPoint1 = rhs.d->activeControlPoint1;
     d->activeControlPoint2 = rhs.d->activeControlPoint2;
 
@@ -248,15 +245,12 @@ bool KoPathPoint::activeControlPoint2() const
     return d->activeControlPoint2;
 }
 
-void KoPathPoint::map(const QTransform &matrix, bool mapGroup)
+void KoPathPoint::map(const QTransform &matrix)
 {
-    if (d->pointGroup && mapGroup) {
-        d->pointGroup->map(matrix);
-    } else {
-        d->point = matrix.map(d->point);
-        d->controlPoint1 = matrix.map(d->controlPoint1);
-        d->controlPoint2 = matrix.map(d->controlPoint2);
-    }
+    d->point = matrix.map(d->point);
+    d->controlPoint1 = matrix.map(d->controlPoint1);
+    d->controlPoint2 = matrix.map(d->controlPoint2);
+
     if (d->shape)
         d->shape->notifyChanged();
 }
@@ -387,22 +381,6 @@ bool KoPathPoint::isSmooth(KoPathPoint * prev, KoPathPoint * next) const
     return qFuzzyCompare(scalar, qreal(1.0));
 }
 
-void KoPathPoint::removeFromGroup()
-{
-    if (d->pointGroup)
-        d->pointGroup->remove(this);
-    d->pointGroup = 0;
-}
-
-void KoPathPoint::addToGroup(KoPointGroup *pointGroup)
-{
-    if (d->pointGroup && d->pointGroup != pointGroup) {
-        //TODO error message as this should not happen
-        removeFromGroup();
-    }
-    d->pointGroup = pointGroup;
-}
-
 KoPathPoint::PointProperties KoPathPoint::properties() const
 {
     return d->properties;
@@ -426,9 +404,4 @@ QPointF KoPathPoint::controlPoint2() const
 KoPathShape * KoPathPoint::parent() const
 {
     return d->shape;
-}
-
-KoPointGroup * KoPathPoint::group()
-{
-    return d->pointGroup;
 }

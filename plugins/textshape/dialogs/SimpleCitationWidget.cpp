@@ -24,14 +24,18 @@
 
 #include <QWidget>
 
-SimpleCitationWidget::SimpleCitationWidget(QWidget *parent)
+SimpleCitationWidget::SimpleCitationWidget(TextTool *tool, QWidget *parent)
         : QWidget(parent),
         m_blockSignals(false)
 {
     widget.setupUi(this);
 //    widget.addRowAbove->setDefaultAction(tool->action("insert_tablerow_above"));
 
+    widget.addCitation->setDefaultAction(tool->action("insert_citation"));
+    widget.addBibliography->setDefaultAction(tool->action("insert_bibliography"));
 //    connect(widget.addRowAbove, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.addCitation,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));
+    connect(widget.addBibliography,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));
 }
 
 void SimpleCitationWidget::setStyleManager(KoStyleManager *sm)

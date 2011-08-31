@@ -62,9 +62,6 @@ private:
 
     void updateObstruction(qreal documentOffset);
 
-    KoTextAnchor *const m_anchor;
-
-    bool m_finished; // true if shape position was found
     KoTextLayoutObstruction *m_obstruction; // the obstruction representation of the subject
 };
 

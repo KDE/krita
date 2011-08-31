@@ -189,6 +189,11 @@ private:
     void loadNote(const KoXmlElement &element, QTextCursor& cursor);
 
     /**
+     * Load a citation \p element into the \p cursor.
+     */
+    void loadCite(const KoXmlElement &element, QTextCursor& cursor);
+
+    /**
     * Load the shape element and assign hyperlink to it \p element into the \p cursor .
     */
     void loadShapeWithHyperLink(const KoXmlElement &element, QTextCursor& cursor);
@@ -202,6 +207,11 @@ private:
     * Load the table of content element \p element into the \p cursor .
     */
     void loadTableOfContents(const KoXmlElement &element, QTextCursor& cursor);
+
+    /**
+    * Load the bibliography element \p element into the \p cursor .
+    */
+    void loadBibliography(const KoXmlElement &element, QTextCursor& cursor);
 
     /**
     * This is called in loadBody before reading the body starts.

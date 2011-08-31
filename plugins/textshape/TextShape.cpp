@@ -341,16 +341,18 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
 
 bool TextShape::loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    // if the loadOdfFrame from the base class for draw:text-box failes check for table:table
+    // If the loadOdfFrame from the base class for draw:text-box fails, check 
+    // for table:table, because that is a legal child of draw:frame in ODF 1.2.
     if (!KoFrameShape::loadOdfFrame(element, context)) {
-        const KoXmlElement & frameElement(KoXml::namedItemNS(element, KoXmlNS::table, "table"));
-        if (frameElement.isNull()) {
+        const KoXmlElement &possibleTableElement(KoXml::namedItemNS(element, KoXmlNS::table, "table"));
+        if (possibleTableElement.isNull()) {
             return false;
         }
         else {
-            return loadOdfFrameElement(frameElement, context);
+            return loadOdfFrameElement(possibleTableElement, context);
         }
     }
+
     return true;
 }
 

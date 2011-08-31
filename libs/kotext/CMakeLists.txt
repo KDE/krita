@@ -42,6 +42,7 @@ set(kotext_LIB_SRCS
     KoBookmark.cpp
     KoBookmarkManager.cpp
     KoInlineNote.cpp
+    KoInlineCite.cpp
     KoTextSoftPageBreak.cpp
     FindDirection_p.cpp
     KoFindStrategy.cpp
@@ -55,7 +56,9 @@ set(kotext_LIB_SRCS
     KoTextInlineRdf.cpp
     KoTextMeta.cpp
 
+    ToCBibGeneratorInfo.cpp
     KoTableOfContentsGeneratorInfo.cpp
+    KoBibliographyInfo.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp

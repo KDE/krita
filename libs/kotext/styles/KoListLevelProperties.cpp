@@ -781,11 +781,13 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
     }
     else if (style() == KoListStyle::ImageItem) {
         KoImageData *imageData = d->stylesPrivate.value(KoListStyle::BulletImage).value<KoImageData *>();
-        writer->startElement("text:list-level-style-image");
-        writer->addAttribute("xlink:show", "embed");
-        writer->addAttribute("xlink:actuate", "onLoad");
-        writer->addAttribute("xlink:type", "simple");
-        writer->addAttribute("xlink:href", context.imageHref(imageData));
+        if (imageData) {
+            writer->startElement("text:list-level-style-image");
+            writer->addAttribute("xlink:show", "embed");
+            writer->addAttribute("xlink:actuate", "onLoad");
+            writer->addAttribute("xlink:type", "simple");
+            writer->addAttribute("xlink:href", context.imageHref(imageData));
+        }
     }
     else {
         writer->startElement("text:list-level-style-bullet");

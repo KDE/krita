@@ -38,6 +38,9 @@ class KAction;
 
 // Qt classes
 class QToolBar;
+class QDragEnterEvent;
+class QDropEvent;
+
 
 /**
  * This class is used to display a @ref KoDocument.
@@ -61,10 +64,36 @@ public:
      * @param parent   parent widget for this view.
      */
     explicit KoView(KoDocument *document, QWidget *parent = 0);
+
     /**
      * Destroys the view and unregisters at the document.
      */
     virtual ~KoView();
+
+    // QWidget overrides
+protected:
+
+    virtual void dragEnterEvent(QDragEnterEvent * event);
+
+    /**
+     * dropEvent by default calls addImages. Your KoView subclass might
+     * override dropEvent and if your app can also handle images, call this
+     * method.
+     */
+    virtual void dropEvent(QDropEvent * event);
+
+    // KoView api
+
+    /**
+     * Adds the given list of QImages as imageshapes to the view's document.
+     *
+     * @param imageList: a list of QImages that can be inserted
+     * @param insertPosition: the position in screen pixels where the images
+     * can be inserted.
+     */
+    virtual void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
+
+public:
 
     /**
      *  Retrieves the document object of this view.

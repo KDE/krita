@@ -18,8 +18,10 @@
 */
 
 #include "RdfSemanticTreeWidgetAction.h"
+
 #include <KoTextEditor.h>
-#include <KoToolProxy.h>
+#include <KoTextDocument.h>
+#include <KoTextEditor.h>
 #include <KoCanvasBase.h>
 
 RdfSemanticTreeWidgetAction::RdfSemanticTreeWidgetAction(QWidget *parent,
@@ -32,11 +34,6 @@ RdfSemanticTreeWidgetAction::RdfSemanticTreeWidgetAction(QWidget *parent,
 
 RdfSemanticTreeWidgetAction::~RdfSemanticTreeWidgetAction()
 {
-}
-
-KoTextEditor* RdfSemanticTreeWidgetAction::editor()
-{
-    return qobject_cast<KoTextEditor*>(m_canvas->toolProxy()->selection());
 }
 
 void RdfSemanticTreeWidgetAction::activated()

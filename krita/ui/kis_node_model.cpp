@@ -26,6 +26,7 @@
 
 #include <klocale.h>
 
+#include "kis_mimedata.h"
 #include <kis_debug.h>
 #include <kis_node.h>
 #include <kis_node_progress_proxy.h>
@@ -391,28 +392,16 @@ Qt::DropActions KisNodeModel::supportedDropActions() const
 QStringList KisNodeModel::mimeTypes() const
 {
     QStringList types;
-    types << QLatin1String("application/x-kritalayermodeldatalist");
+    types << QLatin1String("application/x-krita-node");
     return types;
 }
 
 QMimeData * KisNodeModel::mimeData(const QModelIndexList & indexes) const
 {
     //dbgUI <<"KisNodeModel::mimeData";
-    QMimeData* data = new QMimeData;
-    QByteArray encoded;
-    QBuffer buf(&encoded);
-    buf.open(QIODevice::WriteOnly);
-    QDataStream stream(&buf);
-
-    // encode the data
-    QModelIndexList::ConstIterator it = indexes.begin();
-    for (; it != indexes.end(); ++it) {
-        stream << qVariantFromValue(qulonglong(it->internalPointer()));
-    }
-
-    buf.close();
-
-    data->setData("application/x-kritalayermodeldatalist", encoded);
+    Q_ASSERT(indexes.count() == 1); // we only allow one node at a time to be stored as mimedata
+    KisMimeData* data = new KisMimeData();
+    data->setNode(const_cast<KisNodeModel*>(this)->nodeFromIndex(indexes[0]));
     return data;
 }
 
@@ -421,23 +410,18 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
 
     Q_UNUSED(row);
     Q_UNUSED(column);
-    dbgUI << "KisNodeModel::dropMimeData" << data->formats() << " row = " << row << " column = " << column;
-    if (! data->hasFormat("application/x-kritalayermodeldatalist")) {
-        dbgUI << "Does not have 'application/x-kritalayermodeldatalist'";
+
+    const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data);
+
+    KisNode *node = 0;
+    if (mimedata) {
+        node = mimedata->node().data();
+    }
+
+    if (!node) {
         return false;
     }
-    QByteArray encoded = data->data("application/x-kritalayermodeldatalist");
-    QDataStream stream(encoded);
-    QList<KisNode*> nodes;
-    while (! stream.atEnd()) {
-        QVariant v;
-        stream >> v;
-        nodes.push_back(static_cast<KisNode*>((void*)v.value<qulonglong>()));
-    }
 
-
-    /*    QByteArray encoded = data->data(format);
-        QDataStream stream(&encoded, QIODevice::ReadOnly);*/
     KisNodeSP activeNode = static_cast<KisNode*>(parent.internalPointer());
     KisNodeSP parentNode = 0;
     if (activeNode && activeNode->parent()) {
@@ -448,26 +432,23 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
     dbgUI << activeNode << " " << parentNode;
     if (action == Qt::CopyAction) {
         dbgUI << "KisNodeModel::dropMimeData copy action on " << activeNode;
-        foreach(KisNode* n, nodes) {
-            if (row >= 0) {
-                emit requestAddNode(n->clone(), parentNode, parentNode->childCount() - row);
-            } else if (activeNode) {
-                emit requestAddNode(n->clone(), activeNode);
-            } else {
-                emit requestAddNode(n->clone(), parentNode, 0);
-            }
+        if (row >= 0) {
+            emit requestAddNode(node->clone(), parentNode, parentNode->childCount() - row);
+        } else if (activeNode) {
+            emit requestAddNode(node->clone(), activeNode);
+        } else {
+            emit requestAddNode(node->clone(), parentNode, 0);
         }
         return true;
-    } else if (action == Qt::MoveAction) {
+    }
+    else if (action == Qt::MoveAction) {
         dbgUI << "KisNodeModel::dropMimeData move action on " << activeNode;
-        foreach(KisNode* n, nodes) {
-            if (row >= 0) {
-                emit requestMoveNode(n, parentNode, parentNode->childCount() - row);
-            } else if (activeNode) {
-                emit requestMoveNode(n, activeNode);
-            } else {
-                emit requestMoveNode(n, parentNode, 0);
-            }
+        if (row >= 0) {
+            emit requestMoveNode(node, parentNode, parentNode->childCount() - row);
+        } else if (activeNode) {
+            emit requestMoveNode(node, activeNode);
+        } else {
+            emit requestMoveNode(node, parentNode, 0);
         }
         return true;
     }

@@ -21,6 +21,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
 
+#include "kis_layer.h"
 #include "kis_filter_mask.h"
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
@@ -87,6 +88,9 @@ void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
     Q_ASSERT(filterConfig);
     delete m_d->filterConfig;
     m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(filterConfig);
+    if (parent() && parent()->inherits("KisLayer")) {
+        m_d->filterConfig->setChannelFlags(qobject_cast<KisLayer*>(parent().data())->channelFlags());
+    }
 }
 
 QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,

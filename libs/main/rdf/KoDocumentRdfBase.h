@@ -53,7 +53,7 @@ class KOMAIN_EXPORT KoDocumentRdfBase : public QObject, public KoDataCenterBase
     Q_OBJECT
 
 public:
-    KoDocumentRdfBase(KoDocument *parent);
+    KoDocumentRdfBase(QObject *parent);
 
     /**
      * Get the Soprano::Model that contains all the Rdf

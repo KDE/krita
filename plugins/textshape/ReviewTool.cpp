@@ -328,13 +328,12 @@ QList<QWidget*> ReviewTool::createOptionWidgets()
 
     QVBoxLayout *vLayout = new QVBoxLayout(widget);
     vLayout->addWidget(m_changesTreeView);
-    QHBoxLayout *hLayout = new QHBoxLayout(widget);
+    QHBoxLayout *hLayout = new QHBoxLayout;
     QPushButton *accept = new QPushButton(i18n("Accept"));
     QPushButton *reject = new QPushButton(i18n("Reject"));
     hLayout->addWidget(accept);
     hLayout->addWidget(reject);
     vLayout->addLayout(hLayout);
-    widget->setLayout(vLayout);
 
     connect(accept, SIGNAL(clicked(bool)), this, SLOT(acceptChange()));
     connect(reject, SIGNAL(clicked(bool)), this, SLOT(rejectChange()));

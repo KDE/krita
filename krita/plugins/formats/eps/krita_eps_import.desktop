@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Krita Encapsulated PostScript Import Filter
+Name[bg]=Филтър за внасяне на вграден PostScript в Krita
 Name[ca]=Filtre d'importació de PostScript encapsulat per al Krita
 Name[ca@valencia]=Filtre d'importació de PostScript encapsulat per al Krita
 Name[cs]=Importní filtr formátu Encapsulated PostScript pro Kritu
@@ -15,9 +16,11 @@ Name[fr]=Filtre d'importation PostScript encapsulé de Krita
 Name[gl]=Filtro de Importación de PostScript encapsulado de Krita
 Name[it]=Filtro di importazione Encapsulated PostScript per Krita
 Name[ja]=Krita Encapsulated PostScript インポートフィルタ
+Name[kk]=Encapsulated PostScript -> Krita импорт сүзгісі
 Name[nb]=Krita importfilter for EPS – Encapsulated PostScript
 Name[nds]=Inbett PostScript-Importfilter för Krita
 Name[nl]=Ingekapselde Postscript-importfilter voor Krita
+Name[pl]=Filtr importu Encapsulated PostScript do Krita
 Name[pt]=Filtro de Importação de PostScript Encapsulado para o Krita
 Name[pt_BR]=Filtro de importação de PostScript Encapsulado para o Krita
 Name[sv]=Krita importfilter för inkapslad Postscript

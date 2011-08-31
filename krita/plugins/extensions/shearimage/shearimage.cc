@@ -42,7 +42,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view2.h>
-#include <kis_layer_manager.h>
+#include <kis_node_manager.h>
 #include <kis_image_manager.h>
 
 
@@ -111,7 +111,7 @@ void ShearImage::slotShearLayer()
     if (dlgShearImage->exec() == QDialog::Accepted) {
         qint32 angleX = dlgShearImage->angleX();
         qint32 angleY = dlgShearImage->angleY();
-        m_view->layerManager()->shearLayer(angleX, angleY);
+        m_view->nodeManager()->shear(angleX, angleY);
 
     }
     delete dlgShearImage;

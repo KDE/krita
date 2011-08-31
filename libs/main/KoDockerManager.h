@@ -36,6 +36,8 @@ public:
     explicit KoDockerManager(KoMainWindow* mainWindow);
     ~KoDockerManager();
 
+    void resetToolDockerWidgets();
+
 public slots:
     //void removeUnusedOptionWidgets();
     /**

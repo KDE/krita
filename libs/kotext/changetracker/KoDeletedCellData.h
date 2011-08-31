@@ -30,17 +30,17 @@ class KoDeletedCellData
 
         ~KoDeletedCellData();
 
-        int rowNumber();
+        int rowNumber() const;
 
-        int columnNumber();
+        int columnNumber() const;
 
         void setCellFormat(const QTextTableCellFormat &cellFormat);
 
-        const QTextTableCellFormat& cellFormat();
+        const QTextTableCellFormat& cellFormat() const;
 
         void setCellContent(const QTextDocumentFragment &cellContent);
 
-        const QTextDocumentFragment& cellContent();
+        const QTextDocumentFragment& cellContent() const;
 
     private:
         int row_number;

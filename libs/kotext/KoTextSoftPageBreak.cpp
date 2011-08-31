@@ -49,11 +49,10 @@ void KoTextSoftPageBreak::saveOdf(KoShapeSavingContext &context)
     writer.endElement();
 }
 
-void KoTextSoftPageBreak::updatePosition(const QTextDocument *document, QTextInlineObject object,
+void KoTextSoftPageBreak::updatePosition(const QTextDocument *document,
                                          int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(document)
-    Q_UNUSED(object)
     Q_UNUSED(posInDocument)
     Q_UNUSED(format)
 }
@@ -66,8 +65,9 @@ void KoTextSoftPageBreak::resize(const QTextDocument *document, QTextInlineObjec
     Q_UNUSED(posInDocument)
     Q_UNUSED(format)
     Q_UNUSED(pd)
-    // set the width to 0 as otherwise it is negative which results in the text being moved to left
-    object.setWidth(0);
+    object.setWidth(0); // set the width to 0 as otherwise it is negative which results in the text being moved to left
+    object.setAscent(0);
+    object.setDescent(0);
 }
 
 void KoTextSoftPageBreak::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,

@@ -105,6 +105,11 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
     layer->setName(elem.attribute("name"));
     layer->setX(elem.attribute("x").toInt());
     layer->setY(elem.attribute("y").toInt());
+    if(elem.attribute("visibility") == "hidden") {
+        layer->setVisible(false);
+    } else {
+        layer->setVisible(true);
+    }
 
     QString compop = elem.attribute("composite-op");
     if (compop.startsWith("svg:")) {

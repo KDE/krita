@@ -136,7 +136,9 @@ public:
         }
 
         if (traversingDirection == Horizontal) {
-            const float maxProgressValue = 1.0 / (areaSize.width() - 1) * 100;
+            if(hasProgressUpdater) {
+                this->m_progress->setRange(0, areaSize.height());
+            }
             typename _IteratorFactory_::HLineIterator hitDst = _IteratorFactory_::createHLineIterator(this->m_painter->device(), dstPos.x(), dstPos.y(), areaSize.width(), dataRect);
             typename _IteratorFactory_::HLineIterator hitSrc = _IteratorFactory_::createHLineIterator(src, srcPos.x(), srcPos.y(), areaSize.width(), dataRect);
 
@@ -168,7 +170,7 @@ public:
                 moveKernelDown(khitSrc, m_pixelPtrCacheCopy);
 
                 if (hasProgressUpdater) {
-                    this->m_progress->setProgress(prow * maxProgressValue);
+                    this->m_progress->setValue(prow);
 
                     if (this->m_progress->interrupted()) {
                         cleanUp();
@@ -178,7 +180,9 @@ public:
 
             }
         } else if (traversingDirection == Vertical) {
-            const float maxProgressValue = 1.0 / (areaSize.height() - 1) * 100;
+            if(hasProgressUpdater) {
+                this->m_progress->setRange(0, areaSize.width());
+            }
             typename _IteratorFactory_::VLineIterator vitDst = _IteratorFactory_::createVLineIterator(this->m_painter->device(), dstPos.x(), dstPos.y(), areaSize.height(), dataRect);
             typename _IteratorFactory_::VLineIterator vitSrc = _IteratorFactory_::createVLineIterator(src, srcPos.x(), srcPos.y(), areaSize.height(), dataRect);
 
@@ -210,7 +214,7 @@ public:
                 moveKernelRight(kitSrc, m_pixelPtrCacheCopy);
 
                 if (hasProgressUpdater) {
-                    this->m_progress->setProgress(pcol * maxProgressValue);
+                    this->m_progress->setValue(pcol);
 
                     if (this->m_progress->interrupted()) {
                         cleanUp();

@@ -212,8 +212,11 @@ bool SvmParser::parse(const QByteArray &data)
         // Parse all actions.
         switch (actionType) {
         case META_NULL_ACTION:
+            break;
         case META_PIXEL_ACTION:
+            break;
         case META_POINT_ACTION:
+            break;
         case META_LINE_ACTION:
             break;
         case META_RECT_ACTION:
@@ -226,9 +229,13 @@ bool SvmParser::parse(const QByteArray &data)
             }
             break;
         case META_ROUNDRECT_ACTION:
+            break;
         case META_ELLIPSE_ACTION:
+            break;
         case META_ARC_ACTION:
+            break;
         case META_PIE_ACTION:
+            break;
         case META_CHORD_ACTION:
             break;
         case META_POLYLINE_ACTION:
@@ -261,30 +268,42 @@ bool SvmParser::parse(const QByteArray &data)
             {
                 quint16 polygonCount;
                 stream >> polygonCount;
-                
+                //kDebug(31000) << "Number of polygons:"  << polygonCount;
+
                 QList<QPolygon> polygons;
                 for (quint16 i = 0 ; i < polygonCount ; i++) {
                     QPolygon polygon;
                     parsePolygon(stream, polygon);
                     polygons << polygon;
+                    //kDebug(31000) << "Polygon:"  << polygon;
                 }
                 
                 if (version > 1) {
                     quint16 complexPolygonCount;
                     stream >> complexPolygonCount;
-                    for (quint16 i = 0 ; i < complexPolygonCount ; i++) {
+                    //kDebug(31000) << "Number of complex polygons:"  << complexPolygonCount;
+
+                    // Parse the so called "complex polygons". For
+                    // each one, there is an index and a polygon.  The
+                    // index tells which of the original polygons to
+                    // replace.
+                    for (quint16 i = 0; i < complexPolygonCount; i++) {
                         quint16 complexPolygonIndex;
                         stream >> complexPolygonIndex;
+
                         QPolygon polygon;
                         parsePolygon(stream, polygon);
-                        polygons[complexPolygonIndex] = polygon;
+                        //kDebug(31000) << "polygon index:"  << complexPolygonIndex << polygon;
+
+                        // FIXME: The so called complex polygons have something to do
+                        //        with modifying the polygons, but I have not yet been
+                        //        able to understand how.  So until I do, we'll disable
+                        //        this.
+                        //polygons[complexPolygonIndex] = polygon;
                     }
                 }
                 
-                foreach (QPolygon polygon, polygons) {
-                    kDebug(31000) << "Polygon:"  << polygon;
-                    mBackend->polygon(mContext, polygon);
-                }
+                mBackend->polyPolygon(mContext, polygons);
             }
             break;
         case META_TEXT_ACTION:
@@ -293,33 +312,82 @@ bool SvmParser::parse(const QByteArray &data)
             {
                 QPoint   startPoint;
                 QString  string;
+                quint16  startIndex;
+                quint16  len;
+                quint32  dxArrayLen;
+                qint32  *dxArray;
 
                 stream >> startPoint;
                 parseString(stream, string);
+                stream >> startIndex;
+                stream >> len;
+                stream >> dxArrayLen;
+                if (dxArrayLen > 0) {
+                    dxArray = new qint32[dxArrayLen];  // FIXME: Should cap to a reasonable value.
 
-                // FIXME: Much more here
+                    for (uint i = 0; i < dxArrayLen; ++i)
+                        stream >> dxArray[i];
+                }
 
-                kDebug(31000) << "Text: " << startPoint << string;
-                mBackend->textArray(mContext, startPoint, string);
+                if (version > 1) {
+                    quint16  len2;
+
+                    stream >> len2;
+                    // FIXME: More here
+                }
+
+#if 0
+                kDebug(31000) << "Text: " << startPoint << string
+                              << startIndex << len;
+                if (dxArrayLen > 0) {
+                    kDebug(31000) << "dxArrayLen:" << dxArrayLen;
+                    for (uint i = 0; i < dxArrayLen; ++i)
+                        kDebug(31000) << dxArray[i];
+                }
+                else
+                    kDebug(31000) << "dxArrayLen = 0";
+#endif
+                mBackend->textArray(mContext, startPoint, string, startIndex, len,
+                                    dxArrayLen, dxArray);
+
+                if (dxArrayLen)
+                    delete[] dxArray;
             }
             break;
         case META_STRETCHTEXT_ACTION:
+            break;
         case META_TEXTRECT_ACTION:
+            break;
         case META_BMP_ACTION:
+            break;
         case META_BMPSCALE_ACTION:
+            break;
         case META_BMPSCALEPART_ACTION:
+            break;
         case META_BMPEX_ACTION:
+            break;
         case META_BMPEXSCALE_ACTION:
+            break;
         case META_BMPEXSCALEPART_ACTION:
+            break;
         case META_MASK_ACTION:
+            break;
         case META_MASKSCALE_ACTION:
+            break;
         case META_MASKSCALEPART_ACTION:
+            break;
         case META_GRADIENT_ACTION:
+            break;
         case META_HATCH_ACTION:
+            break;
         case META_WALLPAPER_ACTION:
+            break;
         case META_CLIPREGION_ACTION:
+            break;
         case META_ISECTRECTCLIPREGION_ACTION:
+            break;
         case META_ISECTREGIONCLIPREGION_ACTION:
+            break;
         case META_MOVECLIPREGION_ACTION:
             break;
         case META_LINECOLOR_ACTION:
@@ -359,6 +427,7 @@ bool SvmParser::parse(const QByteArray &data)
                 kDebug(31000) << "Color:"  << mContext.textColor;
                 mContext.changedItems |= GCTextColor;
             }
+            break;
         case META_TEXTFILLCOLOR_ACTION:
             {
                 quint32  colorData;
@@ -366,7 +435,7 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> colorData;
                 stream >> mContext.textFillColorSet;
                 
-                kDebug(31000) << "Text fill color :" << colorData
+                kDebug(31000) << "Text fill color :" << hex << colorData << dec
                               << '(' << mContext.textFillColorSet << ')';
 
                 mContext.textFillColor = QColor::fromRgb(colorData);
@@ -422,15 +491,29 @@ bool SvmParser::parse(const QByteArray &data)
             }
             break;
         case META_RASTEROP_ACTION:
+            break;
         case META_TRANSPARENT_ACTION:
+            break;
         case META_EPS_ACTION:
+            break;
         case META_REFPOINT_ACTION:
+            break;
         case META_TEXTLINECOLOR_ACTION:
+            break;
         case META_TEXTLINE_ACTION:
+            break;
         case META_FLOATTRANSPARENT_ACTION:
+            break;
         case META_GRADIENTEX_ACTION:
+            break;
         case META_LAYOUTMODE_ACTION:
+            {
+                stream >> mContext.layoutMode;
+                kDebug(31000) << "New layout mode:" << hex << mContext.layoutMode << dec << "hex";
+            }
+            break;
         case META_TEXTLANGUAGE_ACTION:
+            break;
         case META_OVERLINECOLOR_ACTION:
             {
                 quint32  colorData;

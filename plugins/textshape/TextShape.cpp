@@ -33,6 +33,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
+#include <KoOdfWorkaround.h>
 #include <KoParagraphStyle.h>
 #include <KoPostscriptPaintDevice.h>
 #include <KoSelection.h>
@@ -133,7 +134,15 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     pc.viewConverter = &converter;
     pc.imageCollection = m_imageCollection;
 
-    painter.setClipRect(outlineRect(), Qt::IntersectClip);
+    // When clipping the painter we need to make sure not to cutoff cosmetic pens which
+    // may used to draw e.g. table-borders for user convenience when on screen (but not
+    // on e.g. printing). Such cosmetic pens are special cause they will always have the
+    // same pen-width (1 pixel) independent of zoom-factor or painter transformations and
+    // are not taken into account in any border-calculations.
+    QRectF clipRect = outlineRect();
+    qreal cosmeticPenX = 1 * 72. / painter.device()->logicalDpiX();
+    qreal cosmeticPenY = 1 * 72. / painter.device()->logicalDpiY();
+    painter.setClipRect(clipRect.adjusted(-cosmeticPenX, -cosmeticPenY, cosmeticPenX, cosmeticPenY), Qt::IntersectClip);
 
     painter.save();
     painter.translate(0, -m_textShapeData->documentOffset());
@@ -310,7 +319,19 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
         QTextCursor cursor(document);
         QTextBlock block = cursor.block();
         paragraphStyle.applyStyle(block, false);
-
+#ifndef NWORKAROUND_ODF_BUGS
+        KoTextShapeData::ResizeMethod method = m_textShapeData->resizeMethod();
+        if (KoOdfWorkaround::fixAutoGrow(method, context)) {
+            KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+            Q_ASSERT(lay);
+            if (lay) {
+                SimpleRootAreaProvider *provider = dynamic_cast<SimpleRootAreaProvider*>(lay->provider());
+                if (provider) {
+                    provider->m_fixAutogrow = true;
+                }
+            }
+        }
+#endif
     }
 
     bool answer = loadOdfFrame(element, context);
@@ -320,16 +341,18 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
 
 bool TextShape::loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    // if the loadOdfFrame from the base class for draw:text-box failes check for table:table
+    // If the loadOdfFrame from the base class for draw:text-box fails, check 
+    // for table:table, because that is a legal child of draw:frame in ODF 1.2.
     if (!KoFrameShape::loadOdfFrame(element, context)) {
-        const KoXmlElement & frameElement(KoXml::namedItemNS(element, KoXmlNS::table, "table"));
-        if (frameElement.isNull()) {
+        const KoXmlElement &possibleTableElement(KoXml::namedItemNS(element, KoXmlNS::table, "table"));
+        if (possibleTableElement.isNull()) {
             return false;
         }
         else {
-            return loadOdfFrameElement(frameElement, context);
+            return loadOdfFrameElement(possibleTableElement, context);
         }
     }
+
     return true;
 }
 

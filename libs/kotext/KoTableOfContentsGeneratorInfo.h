@@ -27,136 +27,21 @@
 #include <QList>
 #include <QString>
 #include <QVariant>
+#include <QTextDocument>
 
 #include <KoXmlReader.h>
 #include "KoText.h"
 #include <KoXmlWriter.h>
+#include "ToCBibGeneratorInfo.h"
 
 class KoTextSharedLoadingData;
-class ToCGenerator; // not actually defined in kotext, a textlayouter is free to define
 
-const int INVALID_OUTLINE_LEVEL = 0;
-
-class IndexEntry
-{
+class KOTEXT_EXPORT ToCGeneratorInterface {
 public:
-    enum IndexEntryName {UNKNOWN, LINK_START, CHAPTER, SPAN, TEXT, TAB_STOP, PAGE_NUMBER, LINK_END};
-
-    IndexEntry(QString _styleName, IndexEntryName _name = IndexEntry::UNKNOWN);
-    virtual ~IndexEntry();
-    virtual void addAttributes(KoXmlWriter * writer) const;
-    void saveOdf(KoXmlWriter * writer) const;
-
-    QString styleName;
-    IndexEntryName name;
-};
-
-
-class IndexEntryLinkStart : public IndexEntry
-{
-public:
-    IndexEntryLinkStart(QString _styleName);
-
-};
-
-
-class IndexEntryChapter : public IndexEntry
-{
-public:
-    IndexEntryChapter(QString _styleName);
-    virtual void addAttributes(KoXmlWriter* writer) const;
-
-    QString display;
-    int outlineLevel;
-};
-
-
-class IndexEntrySpan : public IndexEntry
-{
-public:
-    IndexEntrySpan(QString _styleName);
-    virtual void addAttributes(KoXmlWriter* writer) const;
-
-    QString text;
-};
-
-
-class IndexEntryText : public IndexEntry
-{
-public:
-    IndexEntryText(QString _styleName);
-};
-
-
-class IndexEntryTabStop : public IndexEntry
-{
-public:
-    IndexEntryTabStop(QString _styleName);
-    virtual void addAttributes(KoXmlWriter* writer) const;
-    // for saving let's save the original unit,
-    // for KoText::Tab we need to covert to PostScript points
-    void setPosition(const QString &position);
-
-    KoText::Tab tab;
-private:
-    QString m_position;
-};
-
-
-class IndexEntryPageNumber : public IndexEntry
-{
-public:
-    IndexEntryPageNumber(QString _styleName);
-};
-
-
-class IndexEntryLinkEnd : public IndexEntry
-{
-public:
-    IndexEntryLinkEnd(QString _styleName);
-};
-
-
-class TocEntryTemplate
-{
-public:
-    void saveOdf(KoXmlWriter * writer) const;
-
-    int outlineLevel;
-    QString styleName;
-    int styleId;
-    QList<IndexEntry*> indexEntries;
-};
-
-
-class IndexTitleTemplate
-{
-public:
-    void saveOdf(KoXmlWriter * writer) const;
-
-    QString styleName;
-    int styleId;
-    QString text;
-};
-
-
-class IndexSourceStyle
-{
-public:
-    void saveOdf(KoXmlWriter * writer) const;
-
-    QString styleName;
-    int styleId;
-};
-
-
-class IndexSourceStyles
-{
-public:
-    void saveOdf(KoXmlWriter * writer) const;
-
-    int outlineLevel;
-    QList<IndexSourceStyle> styles;
+    ToCGeneratorInterface() {}
+    virtual ~ToCGeneratorInterface() {}
+    virtual void setMaxTabPosition(qreal maxTabPosition) = 0;
+    virtual void setBlock(const QTextBlock &block) = 0;
 };
 
 class KOTEXT_EXPORT KoTableOfContentsGeneratorInfo
@@ -167,9 +52,9 @@ public:
     void loadOdf(KoTextSharedLoadingData *sharedLoadingData, const KoXmlElement &element);
     void saveOdf(KoXmlWriter *writer) const;
 
-    void setGenerator(ToCGenerator *generator);
+    void setGenerator(ToCGeneratorInterface *generator);
 
-    ToCGenerator *generator() const;
+    ToCGeneratorInterface *generator() const;
 
 
     QString m_name;
@@ -192,9 +77,10 @@ public:
 
 private:
     int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
-    ToCGenerator * m_generator;
+    ToCGeneratorInterface * m_generator;
 };
 
 Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *)
+Q_DECLARE_METATYPE(QTextDocument *)
 
 #endif

@@ -41,6 +41,7 @@ class KoColorSpace;
 class KoResourceSelector;
 class KoResource;
 class KoCompositeOp;
+class KoCanvasController;
 
 class KisView2;
 class KisCanvasResourceProvider;
@@ -49,8 +50,8 @@ class KisPaintOpPresetsPopup;
 class KisPaintOpPresetsChooserPopup;
 class KisPaintOpSettingsWidget;
 class KisPaintOpListWidget;
-class KisDoubleSliderSpinBox;
 class KisCompositeOpComboBox;
+class KisWidgetChooser;
 
 
 /**
@@ -66,6 +67,21 @@ class KisCompositeOpComboBox;
 class KisPaintopBox : public QWidget
 {
     Q_OBJECT
+    
+    enum {
+        ENABLE_PRESETS      = 0x0001,
+        DISABLE_PRESETS     = 0x0002,
+        ENABLE_COMPOSITEOP  = 0x0004,
+        DISABLE_COMPOSITEOP = 0x0008,
+        ENABLE_OPACITY      = 0x0010,
+        DISABLE_OPACITY     = 0x0020,
+        ENABLE_FLOW         = 0x0040,
+        DISABLE_FLOW        = 0x0080,
+        ENABLE_SIZE         = 0x0100,
+        DISABLE_SIZE        = 0x0200,
+        ENABLE_ALL          = 0x5555,
+        DISABLE_ALL         = 0xAAAA
+    };
 
 public:
     KisPaintopBox(KisView2* view, QWidget* parent, const char* name);
@@ -93,7 +109,10 @@ private:
     KisPaintOpPresetSP activePreset(const KoID& paintOp);
     void updateCompositeOp(QString compositeOpID);
     void updatePaintops(const KoColorSpace* colorSpace);
-
+    void setWidgetState(int flags);
+    void setSliderValue(const QString& sliderID, qreal value);
+    void sliderChanged(int n);
+    
 private slots:
     void slotNodeChanged(const KisNodeSP node);
     void slotToggleEraseMode(bool checked);
@@ -103,7 +122,9 @@ private slots:
     void slotWatchPresetNameLineEdit(const QString& text);
     void slotHorizontalMirrorChanged(bool value);
     void slotVerticalMirrorChanged(bool value);
-    void slotOpacityChanged(qreal value);
+    void slotSlider1Changed();
+    void slotSlider2Changed();
+    void slotToolChanged(KoCanvasController* canvas, int toolId);
     
 private:
     KisCanvasResourceProvider*           m_resourceProvider;
@@ -120,7 +141,7 @@ private:
     KisView2*                            m_view;
     QPushButton*                         m_paletteButton;
     KisPopupButton*                      m_workspaceWidget;
-    KisDoubleSliderSpinBox*              m_sliderOpacity;
+    KisWidgetChooser*                    m_sliderChooser[2];
     QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
 
     KisPaintOpPresetSP  m_activePreset;

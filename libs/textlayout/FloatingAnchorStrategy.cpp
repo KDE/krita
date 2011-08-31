@@ -33,9 +33,8 @@
 #include <QTextBlock>
 
 FloatingAnchorStrategy::FloatingAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
-        : AnchorStrategy(anchor, rootArea)
-        , m_anchor(anchor)
-        , m_obstruction(new KoTextLayoutObstruction(anchor->shape(), QTransform()))
+    : AnchorStrategy(anchor, rootArea)
+    , m_obstruction(new KoTextLayoutObstruction(anchor->shape(), QTransform()))
 {
 }
 
@@ -80,7 +79,6 @@ bool FloatingAnchorStrategy::moveSubject()
         return false; // let's fake we moved to force another relayout
     }
 
-    QRectF boundingRect = m_anchor->shape()->boundingRect();
     QRectF containerBoundingRect = m_anchor->shape()->parent()->boundingRect();
     QRectF anchorBoundingRect;
     QPointF newPosition;
@@ -140,8 +138,11 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
          break;
 
      case KoTextAnchor::HParagraphContent:
-//FIXME         anchorBoundingRect.setX(state->x() + containerBoundingRect.x());
-//FIXME         anchorBoundingRect.setWidth(state->width());
+         //FIXME proper map style:horizontal-rel=paragraph-content to use the paragraph
+         //content. Currently we do the same MSWord2010 does and map it (as in to
+         //the same style:horizontal-rel=paragraph would do.
+         anchorBoundingRect.setX(containerBoundingRect.x());
+         anchorBoundingRect.setWidth(containerBoundingRect.width());
          break;
 
      case KoTextAnchor::HChar:
@@ -287,7 +288,7 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
                 return false; // lets go for a second round.
             anchorBoundingRect.setY(top + containerBoundingRect.y()  - data->documentOffset());
             anchorBoundingRect.setHeight(tl.y() + tl.height() - top);
-            KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
+//             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
 //            if(blockData && m_anchor->verticalRel() == KoTextAnchor::VParagraph) {
 //                anchorBoundingRect.setY(paragraphRect().top() + containerBoundingRect.y()  - data->documentOffset());
 //            }

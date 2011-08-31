@@ -25,6 +25,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceTraits.h>
 
 #include "kis_types.h"
 #include "kis_paint_device.h"
@@ -175,8 +176,7 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
     int pixelSize = -1;
     QByteArray initialData;
     KisPaintDeviceSP dev = initAsymTestDevice(imageRect, pixelSize, initialData);
-
-
+    
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(filter, offset, factor);
     KisConvolutionPainter gc(dev);
@@ -206,7 +206,7 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
                 referencePixel.data()[j] = isFiltered && channelFlags[j] ?
                     filteredPixel.data()[j] : srcPtr[j];
             }
-
+            
             if(memcmp(resPtr, referencePixel.data(), pixelSize)) {
                 printPixel("Actual:  ", pixelSize, resPtr);
                 printPixel("Expected:", pixelSize, referencePixel.data());
@@ -230,7 +230,7 @@ void KisConvolutionPainterTest::testAsymmSkipRed()
 {
     QBitArray channelFlags =
         KoColorSpaceRegistry::instance()->rgb8()->channelFlags(true, true);
-    channelFlags[0] = false;
+    channelFlags[2] = false;
 
     testAsymmConvolutionImp(channelFlags);
 }
@@ -248,7 +248,7 @@ void KisConvolutionPainterTest::testAsymmSkipBlue()
 {
     QBitArray channelFlags =
         KoColorSpaceRegistry::instance()->rgb8()->channelFlags(true, true);
-    channelFlags[2] = false;
+    channelFlags[0] = false;
 
     testAsymmConvolutionImp(channelFlags);
 }

@@ -81,7 +81,11 @@ bool KoTosContainer::loadText(const KoXmlElement &element, KoShapeLoadingContext
                 textShape->setTransformation(transformation());
                 textShape->setPosition(QPointF(0, 0));
                 textShape->setRunThrough(runThrough());
-                setTextAlignment(Qt::AlignCenter);
+
+                // Don't overwrite the alignment that may already have been defined for the
+                // Tos-shape in a paragraph-style.
+                //setTextAlignment(Qt::AlignCenter);
+
                 return loadOdf;
             }
         }

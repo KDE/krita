@@ -26,6 +26,7 @@
 #include "KoViewConverter.h"
 #include "KoShapeController.h"
 #include "KoShapeControllerBase.h"
+#include "KoToolSelection.h"
 
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -194,7 +195,6 @@ QList<QWidget *>  KoToolBase::createOptionWidgets()
         if (widget->objectName().isEmpty()) {
             widget->setObjectName(toolId());
         }
-        widget->setWindowTitle(i18n("Tool Options"));
         ow.append(widget);
     }
     return ow;
@@ -301,6 +301,12 @@ bool KoToolBase::paste()
 
 void KoToolBase::copy() const
 {
+}
+
+bool KoToolBase::hasSelection()
+{
+    KoToolSelection *sel = selection();
+    return (sel && sel->hasSelection());
 }
 
 KoToolSelection *KoToolBase::selection()

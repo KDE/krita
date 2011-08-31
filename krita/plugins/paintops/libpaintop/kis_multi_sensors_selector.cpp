@@ -52,7 +52,7 @@ void KisMultiSensorsSelector::setCurrent(KisDynamicSensor* _sensor)
     d->model->setCurrentSensor(_sensor);
     d->form.sensorsList->setCurrentIndex(d->model->sensorIndex(_sensor)); // make sure the first element is selected
     KisDynamicSensor* sensor = currentHighlighted();
-    if(!sensor)
+    if (!sensor)
     {
         sensor = d->model->getSensor(d->model->index(0, 0));
     }
@@ -73,12 +73,14 @@ void KisMultiSensorsSelector::sensorActivated(const QModelIndex& index)
 {
     delete d->currentConfigWidget;
     KisDynamicSensor* sensor = d->model->getSensor(index);
-    d->currentConfigWidget = sensor->createConfigurationWidget(d->form.widgetConfiguration, this);
-    if(d->currentConfigWidget)
-    {
-        d->layout->addWidget(d->currentConfigWidget);
+    if (sensor) {
+        d->currentConfigWidget = sensor->createConfigurationWidget(d->form.widgetConfiguration, this);
+        if(d->currentConfigWidget)
+        {
+            d->layout->addWidget(d->currentConfigWidget);
+        }
+        emit(highlightedSensorChanged(sensor));
     }
-    emit(highlightedSensorChanged(sensor));
 }
 
 void KisMultiSensorsSelector::setCurrentCurve(const KisCubicCurve& curve, bool useSameCurve)

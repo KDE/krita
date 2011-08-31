@@ -27,6 +27,7 @@
 #include <ui_StylesWidget.h>
 
 class KoStyleManager;
+class KoStyleThumbnailer;
 class KoParagraphStyle;
 class KoCharacterStyle;
 class StylesModel;
@@ -39,6 +40,8 @@ public:
     explicit StylesWidget(QWidget *parent = 0,  bool paragraphMode=true, Qt::WindowFlags f = 0);
     virtual ~StylesWidget();
 
+    virtual QSize sizeHint() const;
+
 public slots:
     void setStyleManager(KoStyleManager *sm);
     void setCurrentFormat(const QTextBlockFormat &format);
@@ -50,7 +53,8 @@ signals:
     void characterStyleSelected(KoCharacterStyle *characterStyle, bool canDelete);
 
 private slots:
-    void applyStyle();
+    void applyParagraphStyle();
+    void applyCharacterStyle();
 
 signals:
     void paragraphStyleSelected(KoParagraphStyle *style);
@@ -59,6 +63,7 @@ signals:
 private:
     Ui::StylesWidget widget;
     KoStyleManager *m_styleManager;
+    KoStyleThumbnailer *m_styleThumbnailer;
 
     QTextBlockFormat m_currentBlockFormat;
     QTextCharFormat m_currentCharFormat;

@@ -112,7 +112,6 @@ void KoSemanticStylesheet::format(KoRdfSemanticItem *obj, KoTextEditor *editor, 
     const KoDocumentRdf *rdf = obj->documentRdf();
     Q_ASSERT(rdf);
     Q_ASSERT(editor);
-    Q_ASSERT(rdf->document());
     QPair<int, int> p;
     if (xmlid.size()) {
         p = rdf->findExtent(xmlid);

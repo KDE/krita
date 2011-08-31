@@ -42,7 +42,6 @@
 #include <kis_mask.h>
 #include <kis_filter_mask.h>
 #include <kis_transparency_mask.h>
-#include <kis_transformation_mask.h>
 #include <kis_selection_mask.h>
 #include <kis_selection_component.h>
 #include <kis_pixel_selection.h>
@@ -53,9 +52,8 @@
 
 using namespace KRA;
 
-KisKraSaveVisitor::KisKraSaveVisitor(KisImageWSP image, KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames)
+KisKraSaveVisitor::KisKraSaveVisitor(KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames)
         : KisNodeVisitor()
-        , m_image(image)
         , m_store(store)
         , m_external(false)
         , m_count(count)
@@ -138,13 +136,6 @@ bool KisKraSaveVisitor::visit(KisFilterMask *mask)
 }
 
 bool KisKraSaveVisitor::visit(KisTransparencyMask *mask)
-{
-    if (!saveSelection(mask)) return false;
-    m_count++;
-    return true;
-}
-
-bool KisKraSaveVisitor::visit(KisTransformationMask *mask)
 {
     if (!saveSelection(mask)) return false;
     m_count++;

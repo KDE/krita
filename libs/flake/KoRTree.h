@@ -424,7 +424,7 @@ void KoRTree<T>::remove(const T&data)
     //qDebug() << "KoRTree remove";
     LeafNode * leaf = m_leafMap[data];
     if (leaf == 0) {
-        kWarning(30003) << "KoRTree<T>::remove( const T&data) data not found";
+        kWarning(30006) << "KoRTree<T>::remove( const T&data) data not found";
         return;
     }
     m_leafMap.remove(data);

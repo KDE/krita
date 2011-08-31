@@ -43,7 +43,7 @@ KoPointedAt::KoPointedAt(KoPointedAt *other)
 void KoPointedAt::fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *inlineManager)
 {
     bookmark = 0;
-    externalHRef = QString();
+    externalHRef.clear();
 
     if (!inlineManager)
         return;
@@ -61,7 +61,7 @@ void KoPointedAt::fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *
             if (!href.isEmpty()) {
                 bookmark =  inlineManager->bookmarkManager()->retrieveBookmark(href);
                 QList<QString> bookmarks = inlineManager->bookmarkManager()->bookmarkNameList();
-qDebug()<<"hit"<<bookmarks.size();
+
                 // Is the href a bookmark ?
                 foreach(const QString& s, bookmarks) {
                     if (s == href) {

@@ -193,22 +193,24 @@ void TestBlockLayout::testAdvancedLineSpacing()
     QVERIFY(block.isValid()); //line2
     style.setLineHeightAbsolute(28.0); // removes the percentage
     style.applyStyle(block);
+    QCOMPARE(block.blockFormat().intProperty(KoParagraphStyle::PercentLineHeight), 0);
+    QCOMPARE(block.blockFormat().doubleProperty(KoParagraphStyle::FixedLineHeight), 28.0);
 
     block = block.next();
     QVERIFY(block.isValid()); // line3
-    style.setMinimumLineHeight(40.0);
+    style.setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 40.0));
     style.setLineHeightPercent(120);
     style.applyStyle(block);
 
     block = block.next();
     QVERIFY(block.isValid()); // line4
     style.remove(KoParagraphStyle::FixedLineHeight);
-    style.setMinimumLineHeight(5.0);
+    style.setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 5.0));
     style.applyStyle(block);
 
     block = block.next();
     QVERIFY(block.isValid()); // line5
-    style.setMinimumLineHeight(0.0);
+    style.setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 0.0));
     style.setLineSpacing(8.0);
     style.remove(KoParagraphStyle::PercentLineHeight);
     style.applyStyle(block);
@@ -222,44 +224,42 @@ void TestBlockLayout::testAdvancedLineSpacing()
     m_layout->layout();
     QTextLayout *blockLayout = m_block.layout();
     QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
-    qreal lineYAbove = blockLayout->lineAt(0).y();
+
     block = m_block.next(); // line2
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - lineYAbove - (12.0 * 0.8 + 28 - 12)) < ROUNDING);
-    lineYAbove += 9.6;
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 25.6) < ROUNDING);
+
     block = block.next(); // line3
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - lineYAbove - (28.0 + 28 - 12)) < ROUNDING);
-    lineYAbove += 28;
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 37.6) < ROUNDING);
+
     block = block.next(); // line4
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - lineYAbove - 40) < ROUNDING);
-    lineYAbove += 40;
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 52) < ROUNDING);
+
     block = block.next(); // line5
     QVERIFY(block.isValid());
     blockLayout = block.layout();
-    // qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - lineYAbove - qMax(12 * 1.2, 5.0)) < ROUNDING); // 92
-    lineYAbove += 14.4;
+    //qDebug() << blockLayout->lineAt(0).y();
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 66.39) < ROUNDING);
+
     block = block.next(); // line6
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QCOMPARE(blockLayout->lineAt(0).y(), 92.0 + 12 + 8);
-    lineYAbove += 20;
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 86.39) < ROUNDING);
 
-    qreal height = block.charFormat().fontPointSize() * 1.2; // 1.2 is the font stretch if setLineSpacingFromFont == true
     block = block.next(); // line 7
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (112 + height)) < ROUNDING); // 126,4
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 100.79) < ROUNDING);
 }
 
 // Test that spacing between blocks are the max of bottomMargin and topMargin

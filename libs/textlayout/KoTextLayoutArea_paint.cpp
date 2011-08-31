@@ -49,10 +49,10 @@
 #include <KoChangeTracker.h>
 #include <KoChangeTrackerElement.h>
 #include <KoImageData.h>
-#include <KoImageCollection.h>
 #include <KoInlineNote.h>
 #include <KoInlineNote.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTableOfContentsGeneratorInfo.h>
 
 #include <KDebug>
 
@@ -71,11 +71,6 @@ extern int qt_defaultDpiY();
 
 void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
-    painter->setPen(context.textContext.palette.color(QPalette::Text)); // for text that has no color.
-    const QRegion clipRegion = painter->clipRegion();
-    KoTextBlockBorderData *lastBorder = 0;
-    QRectF lastBorderRect;
-
     if (m_startOfArea == 0) // We have not been layouted yet
         return;
 
@@ -91,19 +86,28 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     painter->save();
     painter->translate(0, m_verticalAlignOffset);
 
+    painter->setPen(context.textContext.palette.color(QPalette::Text)); // for text that has no color.
+    const QRegion clipRegion = painter->clipRegion(); // fetch after painter->translate so the clipRegion is correct
+    KoTextBlockBorderData *lastBorder = 0;
+    QRectF lastBorderRect;
+
     QTextFrame::iterator it = m_startOfArea->it;
     QTextFrame::iterator stop = m_endOfArea->it;
-    if(!stop.currentBlock().isValid() || m_endOfArea->lineTextStart >= 0) {
+    if (!stop.currentBlock().isValid() || m_endOfArea->lineTextStart >= 0) {
         ++stop;
     }
+
     int tableAreaIndex = 0;
     int blockIndex = 0;
     int tocIndex = 0;
-    for (; it != stop; ++it) {
+    bool isAtEnd = false;
+    for (; it != stop && !isAtEnd; ++it) {
+        isAtEnd = it.atEnd();
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();
         QTextBlockFormat format = block.blockFormat();
+        //qDebug() << it.currentBlock().isValid() << table;
 
         if (!block.isValid()) {
             if (lastBorder) { // draw previous block's border
@@ -113,22 +117,49 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         }
 
         if (table) {
+            if (tableAreaIndex >= m_tableAreas.size()) {
+                continue;
+            }
             m_tableAreas[tableAreaIndex]->paint(painter, context);
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
             if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
                 m_endNotesArea->paint(painter, context);
-            } else if (subFrame->format().intProperty(KoText::SubFrameType) ==
-                                                    KoText::TableOfContentsFrameType) {
-                m_tableOfContentsAreas[tocIndex]->paint(painter, context);
-                ++tocIndex;
             }
             continue;
         } else {
             if (!block.isValid()) {
                 continue;
             }
+        }
+
+        if (block.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+            // Possibly paint the selection of the entire Table of Contents
+            // but since it's a secondary document we need to create a fake selection
+            QVariant data = block.blockFormat().property(KoParagraphStyle::TableOfContentsDocument);
+            QTextDocument *tocDocument = data.value<QTextDocument *>();
+
+            KoTextDocumentLayout::PaintContext tocContext = context;
+            tocContext.textContext.selections = QVector<QAbstractTextDocumentLayout::Selection>();
+
+            bool pure = true;
+            foreach(const QAbstractTextDocumentLayout::Selection & selection,   context.textContext.selections) {
+                if (selection.cursor.selectionStart()  <= block.position()
+                    && selection.cursor.selectionEnd() >= block.position()) {
+                    painter->fillRect(m_tableOfContentsAreas[tocIndex]->boundingRect(), selection.format.background());
+                    if (pure) {
+                        tocContext.textContext.selections.append(QAbstractTextDocumentLayout::Selection());
+                        tocContext.textContext.selections[0].cursor = QTextCursor(tocDocument);
+                        tocContext.textContext.selections[0].cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+                        tocContext.textContext.selections[0].format = selection.format;
+                        pure = false;
+                    }
+                }
+            }
+            m_tableOfContentsAreas[tocIndex]->paint(painter, tocContext);
+            ++tocIndex;
+            continue;
         }
 
         QTextLayout *layout = block.layout();
@@ -179,7 +210,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             paintStrategy->applyStrategy(painter);
             painter->save();
-            drawListItem(painter, block, context.imageCollection);
+            drawListItem(painter, block);
             painter->restore();
 
             QVector<QTextLayout::FormatRange> selections;
@@ -260,7 +291,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     }
 
     painter->translate(0, -m_verticalAlignOffset);
-    painter->translate(0, bottom() - top() - m_footNotesHeight);
+    painter->translate(0, bottom() - m_footNotesHeight);
     foreach(KoTextLayoutArea *footerArea, m_footNoteAreas) {
         footerArea->paint(painter, context);
         painter->translate(0, footerArea->bottom());
@@ -268,7 +299,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     painter->restore();
 }
 
-void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, KoImageCollection *imageCollection)
+void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
 {
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
     if (data == 0)
@@ -323,7 +354,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, 
             if (block.layout()->lineCount() > 0) {
                 // if there is text, then baseline align the counter.
                 QTextLine firstParagLine = block.layout()->lineAt(0);
-                if (KoListStyle::isNumberingStyle(listStyle)) {
+                if (KoListStyle::isNumberingStyle(listStyle) || listStyle == KoListStyle::CustomCharItem) {
                     //if numbered list baseline align
                     counterPosition += QPointF(0, firstParagLine.ascent() - layout.lineAt(0).ascent());
                 } else {
@@ -335,16 +366,16 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, 
         }
 
         KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
-        if (listStyle == KoListStyle::ImageItem && imageCollection) {
+        if (listStyle == KoListStyle::ImageItem) {
             QFontMetricsF fm(data->labelFormat().font(), m_documentLayout->paintDevice());
             qreal x = qMax(qreal(1), data->counterPosition().x());
             qreal width = qMax(listFormat.doubleProperty(KoListStyle::Width), (qreal)1.0);
             qreal height = qMax(listFormat.doubleProperty(KoListStyle::Height), (qreal)1.0);
             qreal y = data->counterPosition().y() + fm.ascent() - fm.xHeight()/2 - height/2; // centered
-            qint64 key = listFormat.property(KoListStyle::BulletImageKey).value<qint64>();
-            KoImageData idata;
-            imageCollection->fillFromKey(idata, key);
-            painter->drawPixmap(x, y, width, height, idata.pixmap());
+            KoImageData *idata = listFormat.property(KoListStyle::BulletImage).value<KoImageData *>();
+            if (idata) {
+                painter->drawPixmap(x, y, width, height, idata->pixmap());
+            }
         }
     }
 }
@@ -487,7 +518,6 @@ static qreal computeWidth(KoCharacterStyle::LineWeight weight, qreal width, cons
 void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &block)
 {
     QTextLayout *layout = block.layout();
-    QTextOption textOption = layout->textOption();
 
     QTextBlockFormat bf = block.blockFormat();
     QVariantList tabList = bf.property(KoParagraphStyle::TabPositions).toList();
@@ -496,29 +526,79 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
     QTextBlock::iterator it;
     int startOfBlock = -1;
     int currentTabStop = 0;
+
+//    qDebug() << "\n-------------------"
+//             << "\nGoing to decorate block\n"
+//             << block.text()
+//             << "\n-------------------";
+
     // loop over text fragments in this paragraph and draw the underline and line through.
     for (it = block.begin(); !it.atEnd(); ++it) {
         QTextFragment currentFragment = it.fragment();
         if (currentFragment.isValid()) {
+
+//            qDebug() << "\tGoing to layout fragment:" << currentFragment.text();
+
             QTextCharFormat fmt = currentFragment.charFormat();
             painter->setFont(fmt.font());
-            if (startOfBlock == -1)
+
+            // a block doesn't have a real start position, so use our own counter. Initialize
+            // it with the position of the first text fragment in the block.
+            if (startOfBlock == -1) {
                 startOfBlock = currentFragment.position(); // start of this block w.r.t. the document
+            }
+
+            // the start of our fragment in the block is the absolute position of the fragment
+            // in the document minus the start of the block in the document.
+            int startOfFragmentInBlock = currentFragment.position() - startOfBlock;
+
+            // a fragment can span multiple lines, but we paint the decorations per line.
             int firstLine = layout->lineForTextPosition(currentFragment.position() - startOfBlock).lineNumber();
             int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length()
                     - startOfBlock).lineNumber();
-            int startOfFragmentInBlock = currentFragment.position() - startOfBlock;
-            for (int i = firstLine ; i <= lastLine ; i++) {
+
+//            qDebug() << "\tfirst line:" << firstLine << "last line:" << lastLine;
+
+            for (int i = firstLine ; i <= lastLine ; ++i) {
                 QTextLine line = layout->lineAt(i);
+//                qDebug() << "\n\t\tcurrent line:" << i
+//                         << "\n\t\tline length:" << line.textLength() << "width:"<< line.width() << "natural width" << line.naturalTextWidth()
+//                         << "\n\t\tvalid:" << layout->isValidCursorPosition(currentFragment.position() - startOfBlock)
+//                         << "\n\t\tcurrentFragment.position:"  << currentFragment.position()
+//                         << "\n\t\tstartOfBlock:" << startOfBlock
+//                         << "\n\t\tstartOfFragmentInBlock:" << startOfFragmentInBlock;
+
                 if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
-                    int p1 = currentFragment.position() - startOfBlock;
-                    if (block.text().at(p1) != QChar::ObjectReplacementCharacter) {
-                        int p2 = currentFragment.position() + currentFragment.length() - startOfBlock;
-                        int fragmentToLineOffset = qMax(currentFragment.position() - startOfBlock - line.textStart(),0);
+
+                    // the start position for painting the decoration is the position of the fragment
+                    // inside, but after the first line, the decoration always starts at the beginning
+                    // of the line.  See bug: 264471
+                    int p1 = startOfFragmentInBlock;
+                    if (i > firstLine) {
+                        p1 = line.textStart();
+                    }
+
+//                    qDebug() << "\n\t\tblock.text.length:" << block.text().length() << "p1" << p1;
+
+                    if (block.text().length() > p1 && block.text().at(p1) != QChar::ObjectReplacementCharacter) {
+                        Q_ASSERT_X(line.isValid(), __FUNCTION__, QString("Invalid line=%1 first=%2 last=%3").arg(i).arg(firstLine).arg(lastLine).toLocal8Bit()); // see bug 278682
+                        if (!line.isValid())
+                            continue;
+
+                        // end position: not that this can be smaller than p1 when we are handling RTL
+                        int p2 = startOfFragmentInBlock + currentFragment.length();
+                        int fragmentToLineOffset = qMax(startOfFragmentInBlock - line.textStart(), 0);
+
                         qreal x1 = line.cursorToX(p1);
                         qreal x2 = line.cursorToX(p2);
+
+//                        qDebug() << "\n\t\t\tp1:" << p1 << "x1:" << x1
+//                                 << "\n\t\t\tp2:" << p2 << "x2:" << x2;
+
+                        // Comment by sebsauer:
                         // Following line was supposed to fix bug 171686 (I cannot reproduce the original problem) but it opens bug 260159. So, deactivated for now.
-                        //x2 = qMin(x2, line.naturalTextWidth() + line.cursorToX(line.textStart()));
+                        // x2 = qMin(x2, line.naturalTextWidth() + line.cursorToX(line.textStart()));
+
                         drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         drawOverlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
@@ -634,6 +714,7 @@ void KoTextLayoutArea::drawOverlines(QPainter *painter, const QTextFragment &cur
 
 void KoTextLayoutArea::drawUnderlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const
 {
+
     QTextCharFormat fmt = currentFragment.charFormat();
     KoCharacterStyle::LineStyle fontUnderLineStyle = (KoCharacterStyle::LineStyle) fmt.intProperty(KoCharacterStyle::UnderlineStyle);
     KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::UnderlineType);

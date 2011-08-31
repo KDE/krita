@@ -1,7 +1,7 @@
 [Desktop Entry]
 Icon=
 Name=Krita ora Import Filter
-Name[bg]=Филтър за импортиране от ora в Krita
+Name[bg]=Филтър за внасяне от ora в Krita
 Name[ca]=Filtre d'importació ORA per al Krita
 Name[ca@valencia]=Filtre d'importació ORA per al Krita
 Name[cs]=Importní filtr formátu ora pro Kritu
@@ -25,6 +25,7 @@ Name[lv]=Krita ora importa filtrs
 Name[nb]=ora-importfilter for Krita
 Name[nds]=ora-Importfilter för Krita
 Name[nl]=Ora-importfilter voor Krita
+Name[pl]=Filtr importu ora do Krita
 Name[pt]=Filtro de Importação de ORA para o Krita
 Name[pt_BR]=Filtro de importação de ORA para o Krita
 Name[sv]=Krita ora-importfilter

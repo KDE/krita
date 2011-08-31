@@ -84,24 +84,6 @@ protected:
 public:
     void clear() { m_categories.clear(); }
     
-    void fill(const QMap<TCategory,TEntry>& map) {
-        typedef typename QList<TCategory>::const_iterator       ListItr;
-        typedef typename QMap<TCategory,TEntry>::const_iterator MapItr;
-        
-        m_categories.clear();
-        QList<TCategory> categories = map.uniqueKeys();
-        
-        for(ListItr cat=categories.begin(); cat!=categories.end(); ++cat) {
-            MapItr beg = map.find(*cat);
-            MapItr end = beg + map.count(*cat);
-            
-            m_categories.push_back(*cat);
-            
-            for(; beg!=end; ++beg)
-                m_categories.last().entries.push_back(*beg);
-        }
-    }
-    
     void addCategory(const TCategory& category) {
         Iterator itr = qFind(m_categories.begin(), m_categories.end(), category);
         
@@ -119,6 +101,45 @@ public:
         else {
             m_categories.push_back(category);
             m_categories.back().entries.push_back(entry);
+        }
+    }
+    
+    void addEntries(const QMap<TCategory,TEntry>& map) {
+        typedef typename QList<TCategory>::const_iterator       ListItr;
+        typedef typename QMap<TCategory,TEntry>::const_iterator MapItr;
+        
+        QList<TCategory> categories = map.uniqueKeys();
+        
+        for(ListItr cat=categories.begin(); cat!=categories.end(); ++cat) {
+            MapItr   beg = map.find(*cat);
+            MapItr   end = beg + map.count(*cat);
+            Iterator itr = qFind(m_categories.begin(), m_categories.end(), *cat);
+            
+            if(itr == m_categories.end()) {
+                m_categories.push_back(*cat);
+                itr = m_categories.end() - 1;
+            }
+            
+            for(; beg!=end; ++beg)
+                itr->entries.push_back(*beg);
+        }
+    }
+    
+    void fill(const QMap<TCategory,TEntry>& map) {
+        typedef typename QList<TCategory>::const_iterator       ListItr;
+        typedef typename QMap<TCategory,TEntry>::const_iterator MapItr;
+        
+        clear();
+        QList<TCategory> categories = map.uniqueKeys();
+        
+        for(ListItr cat=categories.begin(); cat!=categories.end(); ++cat) {
+            MapItr beg = map.find(*cat);
+            MapItr end = beg + map.count(*cat);
+            
+            m_categories.push_back(*cat);
+            
+            for(; beg!=end; ++beg)
+                m_categories.last().entries.push_back(*beg);
         }
     }
     
@@ -190,6 +211,9 @@ public:
         if(role == CategoryEndRole)
             return getCategoryBegin(idx.row()) + m_categories[index.first].entries.size();
         
+        if(role == ExpandCategoryRole)
+            return m_categories[index.first].expanded;
+        
         if(isHeader(index)) {
             switch(role)
             {
@@ -197,8 +221,6 @@ public:
                 return categoryToString(m_categories[index.first].data);
             case IsHeaderRole:
                 return true;
-            case ExpandCategoryRole:
-                return m_categories[index.first].expanded;
             }
         }
         else {
@@ -221,9 +243,11 @@ public:
         Index index = getIndex(idx.row());
         
         if(role == ExpandCategoryRole && isHeader(index)) {
-            emit layoutAboutToBeChanged();
+            int beg = getCategoryBegin(idx.row());
+            int end = beg - 1 + m_categories[index.first].entries.size();
+            
             m_categories[index.first].expanded = value.toBool();
-            emit layoutChanged();
+            emit dataChanged(QAbstractListModel::index(beg), QAbstractListModel::index(end));
         }
         
         return false;

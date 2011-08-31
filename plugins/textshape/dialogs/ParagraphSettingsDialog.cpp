@@ -78,7 +78,7 @@ void ParagraphSettingsDialog::slotApply()
             flags = ChangeListCommand::MergeWithAdjacentList;
         ChangeListCommand *cmd = new ChangeListCommand(*m_cursor, chosenStyle.listStyle(),
                 chosenStyle.listStyle()->listLevels().first(), flags);
-        m_tool->addCommand(cmd);
+        m_tool->changeListStyle(cmd);
     } else {
         QTextList *list = m_cursor->block().textList();
         if (list) { // then remove it.

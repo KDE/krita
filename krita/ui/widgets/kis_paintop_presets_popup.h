@@ -77,6 +77,8 @@ public:
     ///@param image image that will be used, should be image of an existing preset resource
     void setPresetImage(const QImage& image);
 
+    virtual void resizeEvent(QResizeEvent* );
+
 
 protected:
     void contextMenuEvent(QContextMenuEvent *);
@@ -94,6 +96,8 @@ signals:
     void presetNameLineEditChanged(const QString& presetName);
     void paintopActivated(const QString& presetName);
     void signalResourceSelected(KoResource* resource);
+
+    void sizeChanged();
 
 private slots:
     void fillScratchPadGradient();

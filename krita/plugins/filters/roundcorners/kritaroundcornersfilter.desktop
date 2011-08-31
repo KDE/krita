@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Round Corners Filter
+Name[bg]=Филтър за заоблени ъгли
 Name[ca]=Filtre de cantonades arrodonides
 Name[ca@valencia]=Filtre de cantonades arrodonides
 Name[da]=Filter til afrundede hjørner
@@ -11,9 +12,11 @@ Name[et]=Ümarate nurkade filter
 Name[fr]=Filtre avec coins arrondis
 Name[it]=Filtro per angoli smussati
 Name[ja]=コーナー丸めフィルタ
+Name[kk]=Бұрыштарды дөңгелету сүзгісі
 Name[nb]=Runde hjørner-filter
 Name[nds]=Filter för't Afrunnen vun Ecken
 Name[nl]=Ronde-hoeken-filter
+Name[pl]=Filtr zaokrąglonych narożników
 Name[pt]=Filtro de Cantos Arredondados
 Name[pt_BR]=Filtro de Cantos Arredondados
 Name[sv]=Filter för rundade hörn

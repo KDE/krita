@@ -51,6 +51,7 @@
 #include <klocale.h>
 #include <khbox.h>
 #include <kicon.h>
+#include <kaction.h>
 
 #include <KoDocumentSectionView.h>
 #include <KoColorSpace.h>
@@ -70,12 +71,11 @@
 #include "kis_view2.h"
 #include "kis_node_manager.h"
 #include "kis_node_model.h"
-#include "kis_layer_manager.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_doc2.h"
 
 #include "ui_wdglayerbox.h"
-#include <KAction>
+
 
 KisLayerBox::KisLayerBox()
         : QDockWidget(i18n("Layers"))
@@ -115,13 +115,12 @@ KisLayerBox::KisLayerBox()
     }
     actions[1]->trigger(); //TODO save/load previous state
 
+    m_wdgLayerBox->bnAdd->setIcon(BarIcon("list-add"));
+
     m_wdgLayerBox->bnViewMode->setMenu(m_viewModeMenu);
     m_wdgLayerBox->bnViewMode->setPopupMode(QToolButton::InstantPopup);
     m_wdgLayerBox->bnViewMode->setIcon(KIcon("view-choose"));
     m_wdgLayerBox->bnViewMode->setText(i18n("View mode"));
-
-    m_wdgLayerBox->bnAdd->setIcon(BarIcon("list-add"));
-    m_wdgLayerBox->bnAdd->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnDelete->setIcon(BarIcon("list-remove"));
     m_wdgLayerBox->bnDelete->setIconSize(QSize(22, 22));
@@ -148,7 +147,6 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->bnDuplicate->setIcon(BarIcon("edit-copy"));
     m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
 
-    connect(m_wdgLayerBox->bnAdd, SIGNAL(clicked()), SLOT(slotNewPaintLayer()));
     connect(m_wdgLayerBox->bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
     // NOTE: this is _not_ a mistake. The layerbox shows the layers in the reverse order
     connect(m_wdgLayerBox->bnRaise, SIGNAL(clicked()), SLOT(slotLowerClicked()));
@@ -164,23 +162,32 @@ KisLayerBox::KisLayerBox()
     connect(&m_delayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
 
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(int)), SLOT(slotCompositeOpChanged(int)));
+    connect(m_wdgLayerBox->bnAdd, SIGNAL(clicked()), SLOT(slotNewPaintLayer()));
 
     m_newPainterLayerAction = new KAction(KIcon("document-new"), i18n("&Paint Layer"), this);
     connect(m_newPainterLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewPaintLayer()));
+
     m_newGroupLayerAction = new KAction(KIcon("folder-new"), i18n("&Group Layer"), this);
     connect(m_newGroupLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewGroupLayer()));
+
     m_newCloneLayerAction = new KAction(KIcon("edit-copy"), i18n("&Clone Layer"), this);
     connect(m_newCloneLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewCloneLayer()));
+
     m_newShapeLayerAction = new KAction(KIcon("bookmark-new"), i18n("&Shape Layer"), this);
     connect(m_newShapeLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewShapeLayer()));
+
     m_newAdjustmentLayerAction = new KAction(KIcon("view-filter"), i18n("&Filter Layer..."), this);
     connect(m_newAdjustmentLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewAdjustmentLayer()));
+
     m_newGeneratorLayerAction = new KAction(KIcon("view-filter"), i18n("&Generated Layer..."), this);
     connect(m_newGeneratorLayerAction, SIGNAL(triggered(bool)), this, SLOT(slotNewGeneratorLayer()));
+
     m_newTransparencyMaskAction = new KAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this);
     connect(m_newTransparencyMaskAction, SIGNAL(triggered(bool)), this, SLOT(slotNewTransparencyMask()));
+
     m_newEffectMaskAction = new KAction(KIcon("bookmarks"), i18n("&Filter Mask..."), this);
     connect(m_newEffectMaskAction, SIGNAL(triggered(bool)), this, SLOT(slotNewEffectMask()));
+
     m_newSelectionMaskAction = new KAction(KIcon("edit-paste"), i18n("&Local Selection"), this);
     connect(m_newSelectionMaskAction, SIGNAL(triggered(bool)), this, SLOT(slotNewSelectionMask()));
 
@@ -198,11 +205,12 @@ KisLayerBox::KisLayerBox()
     m_newLayerMenu->addAction(m_newTransparencyMaskAction);
     m_newLayerMenu->addAction(m_newEffectMaskAction);
 #if 0 // XXX_2.0
-    m_newLayerMenu->addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
+    m_newLayerMenu->addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMa
+    sk()));
 #endif
     m_newLayerMenu->addAction(m_newSelectionMaskAction);
 
-
+    
     m_nodeModel = new KisNodeModel(this);
 
     // connect model updateUI() to enable/disable controls
@@ -232,6 +240,12 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         connect(m_canvas, SIGNAL(imageChanged(KisImageWSP)), SLOT(setImage(KisImageWSP)));
         setImage(m_canvas->view()->image());
     }
+}    
+
+
+void KisLayerBox::unsetCanvas()
+{
+    m_canvas = 0;
 }
 
 void KisLayerBox::setImage(KisImageWSP image)
@@ -288,9 +302,11 @@ void KisLayerBox::updateUI()
 
     m_wdgLayerBox->bnDelete->setEnabled(active);
     m_wdgLayerBox->bnRaise->setEnabled(active && (active->nextSibling()
-                                           || (active->parent() && active->parent() != m_image->root())));
-
-    m_wdgLayerBox->bnLower->setEnabled(active && active->prevSibling());
+                                       || (active->parent() && active->parent() != m_image->root())));
+    m_wdgLayerBox->bnLower->setEnabled(active && (active->prevSibling()
+                                       || (active->parent() && active->parent() != m_image->root())));
+    m_wdgLayerBox->bnLeft->setEnabled(active);
+    m_wdgLayerBox->bnRight->setEnabled(active);
     m_wdgLayerBox->bnDuplicate->setEnabled(active);
     m_wdgLayerBox->bnProperties->setEnabled(active);
 
@@ -317,6 +333,7 @@ void KisLayerBox::updateUI()
     m_newEffectMaskAction->setEnabled(active);
     m_newSelectionMaskAction->setEnabled(active);
     m_newCloneLayerAction->setEnabled(active && !active->inherits("KisGroupLayer"));
+
 }
 
 void KisLayerBox::setCurrentNode(KisNodeSP node)
@@ -357,34 +374,25 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
     QMenu menu;
 
     if (index.isValid()) {
-        m_wdgLayerBox->listLayers->addPropertyActions(&menu, index);
         menu.addAction(KIcon("document-properties"), i18n("&Properties..."), this, SLOT(slotPropertiesClicked()));
         menu.addSeparator();
         menu.addAction(KIcon("edit-delete"), i18n("&Remove Layer"), this, SLOT(slotRmClicked()));
         menu.addAction(KIcon("edit-duplicate"), i18n("&Duplicate Layer or Mask"), this, SLOT(slotDuplicateClicked()));
         QAction* mergeLayerDown = menu.addAction(KIcon("edit-merge"), i18n("&Merge with Layer Below"), this, SLOT(slotMergeLayer()));
-        if (index.sibling(index.row() - 1, 0).isValid()) mergeLayerDown->setEnabled(false);
+        if (!index.sibling(index.row() + 1, 0).isValid()) mergeLayerDown->setEnabled(false);
         menu.addSeparator();
-
     }
-    menu.addAction(m_newPainterLayerAction);
-    menu.addAction(m_newGroupLayerAction);
-    menu.addAction(m_newCloneLayerAction);
-    menu.addAction(m_newShapeLayerAction);
-    menu.addAction(m_newAdjustmentLayerAction);
-    menu.addAction(m_newGeneratorLayerAction);
     menu.addSeparator();
     menu.addAction(m_newTransparencyMaskAction);
     menu.addAction(m_newEffectMaskAction);
-    //    menu.addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
     menu.addAction(m_newSelectionMaskAction);
 
     menu.exec(pos);
 }
 
-void KisLayerBox::slotMergeLayer()
+void KisLayerBox::slotMergeLayer()      
 {
-    m_nodeManager->layerManager()->mergeLayer();
+    m_nodeManager->mergeLayerDown();
 }
 
 void KisLayerBox::slotMinimalView()
@@ -445,12 +453,6 @@ void KisLayerBox::slotNewEffectMask()
 }
 
 
-void KisLayerBox::slotNewTransformationMask()
-{
-    m_nodeManager->createNode("KisTransformationMask");
-}
-
-
 void KisLayerBox::slotNewSelectionMask()
 {
     m_nodeManager->createNode("KisSelectionMask");
@@ -479,27 +481,49 @@ void KisLayerBox::slotRmClicked()
 
 void KisLayerBox::slotRaiseClicked()
 {
-    m_nodeManager->raiseNode();
+    KisNodeSP node = m_nodeManager->activeNode();
+    KisNodeSP parent = node->parent();
+    KisNodeSP grandParent = parent->parent();
+
+    if (!m_nodeManager->activeNode()->prevSibling()) {
+        if (!grandParent) return;  
+        if (!grandParent->parent() && node->inherits("KisMask")) return;
+        m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
+    } else {
+        m_nodeManager->raiseNode();
+    }
 }
 
 void KisLayerBox::slotLowerClicked()
 {
-    m_nodeManager->lowerNode();
+    KisNodeSP node = m_nodeManager->activeNode();
+    KisNodeSP parent = node->parent();
+    KisNodeSP grandParent = parent->parent();
+    
+    if (!m_nodeManager->activeNode()->nextSibling()) {
+        if (!grandParent) return;  
+        if (!grandParent->parent() && node->inherits("KisMask")) return;
+        m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
+    } else {
+        m_nodeManager->lowerNode();
+    }
 }
 
 void KisLayerBox::slotLeftClicked()
 {
     KisNodeSP node = m_nodeManager->activeNode();
-    KisNodeSP parent = m_nodeManager->activeNode()->parent();
+    KisNodeSP parent = node->parent();
     KisNodeSP grandParent = parent->parent();
+    quint16 nodeIndex = parent->index(node);
     
     if (!grandParent) return;  
     if (!grandParent->parent() && node->inherits("KisMask")) return;
 
-    /* By the principle of least surprise, placing the node at
-    grandParent->index(parent) + 1 ensures that the node appears
-    just outside and above the parent on the Layer Box widget */
-    m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
+    if (nodeIndex <= parent->childCount() / 2) {
+        m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
+    } else {
+        m_nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
+    }
 }
 
 void KisLayerBox::slotRightClicked()
@@ -513,13 +537,13 @@ void KisLayerBox::slotRightClicked()
 
     if (parent->at(indexBelow) && parent->at(indexBelow)->allowAsChild(node)) {
         newParent = parent->at(indexBelow);
+        m_nodeManager->moveNodeAt(node, newParent, newParent->childCount());
     } else if (parent->at(indexAbove) && parent->at(indexAbove)->allowAsChild(node)) {
         newParent = parent->at(indexAbove);
+        m_nodeManager->moveNodeAt(node, newParent, 0);
     } else {
         return;
     }
-
-    m_nodeManager->moveNodeAt(node, newParent, 0);
 }
 
 void KisLayerBox::slotPropertiesClicked()

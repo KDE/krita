@@ -22,6 +22,7 @@
 #define KOELLIPSESHAPE_H
 
 #include "KoParameterShape.h"
+#include <SvgShape.h>
 
 #define EllipseShapeId "EllipseShape"
 
@@ -31,7 +32,7 @@
  * of the ellipse shape which can be changed with the setSize
  * method.
  */
-class EllipseShape : public KoParameterShape
+class EllipseShape : public KoParameterShape, public SvgShape
 {
 public:
     /// the possible ellipse types
@@ -77,6 +78,12 @@ public:
 
     /// reimplemented
     virtual QString pathShapeId() const;
+
+    /// reimplemented from SvgShape
+    virtual bool saveSvg(SvgSavingContext &context);
+
+    /// reimplemented from SvgShape
+    virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
 
 protected:
     // reimplemented

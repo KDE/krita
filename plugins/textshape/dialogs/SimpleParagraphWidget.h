@@ -27,20 +27,27 @@
 
 class TextTool;
 class KoStyleManager;
+class KoParagraphStyle;
+class StylesWidget;
+class KoStyleThumbnailer;
 
 class SimpleParagraphWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit SimpleParagraphWidget(TextTool *tool, QWidget *parent = 0);
+    virtual ~SimpleParagraphWidget();
 
 public slots:
     void setCurrentBlock(const QTextBlock &block);
+    void setCurrentFormat(const QTextBlockFormat& format);
     void setStyleManager(KoStyleManager *sm);
+    void hidePopup();
 
 signals:
     void doneWithFocus();
     void insertTableQuick(int, int);
+    void paragraphStyleSelected(KoParagraphStyle *);
 
 private slots:
     void directionChangeRequested();
@@ -62,8 +69,11 @@ private:
     KoStyleManager *m_styleManager;
     bool m_blockSignals;
     QTextBlock m_currentBlock;
+    QTextBlockFormat m_currentBlockFormat;
     TextTool *m_tool;
     DirectionButtonState m_directionButtonState;
+    KoStyleThumbnailer *m_thumbnailer;
+    StylesWidget *m_stylePopup;
 };
 
 #endif

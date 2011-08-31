@@ -53,6 +53,9 @@ class FontSizeAction;
 class KUndo2Command;
 
 class MockCanvas;
+class TextToolSelection;
+
+class ChangeListCommand;
 
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
@@ -135,8 +138,6 @@ protected:
 public slots:
     /// start the textedit-plugin.
     void startTextEditingPlugin(const QString &pluginId);
-    /// add a command to the undo stack, executing it as well.
-    void addCommand(KUndo2Command *command);
     /// reimplemented from KoToolBase
     virtual void resourceChanged(int key, const QVariant &res);
     //When enabled, display changes
@@ -147,6 +148,9 @@ public slots:
     void configureChangeTracking();
     /// call this when the 'is-bidi' boolean has been changed.
     void isBidiUpdated();
+
+    /// call this in order to change the list style
+    void changeListStyle(ChangeListCommand *command);
 
 signals:
     /// emitted every time a different styleManager is set.
@@ -159,6 +163,8 @@ signals:
     void blockChanged(const QTextBlock &block);
 
 private slots:
+    /// paste text from the clipboard without formatting
+    void pasteAsText();
     /// make the selected text bold or not
     void bold(bool);
     /// make the selected text italic or not
@@ -201,7 +207,7 @@ private slots:
     void setFontSize(qreal size);
     /// Default Format
     void setDefaultFormat();
-    /// see KoTextSelectionHandler::insertIndexMarker
+    /// see KoTextEditor::insertIndexMarker
     void insertIndexMarker();
     /// shows a dialog to insert a table
     void insertTable();
@@ -243,9 +249,6 @@ private slots:
     void setStyle(KoParagraphStyle *syle);
     /// set the characterStyle of the current selection. see above.
     void setStyle(KoCharacterStyle *style);
-
-    /// add a KoDocument wide undo command which will call undo on the qtextdocument.
-    void addUndoCommand();
 
     /// slot to call when a series of commands is started that together need to become 1 undo action.
     void startMacro(const QString &title);
@@ -314,9 +317,11 @@ private:
     bool m_trackChanges;
     bool m_allowResourceManagerUpdates;
     int m_prevCursorPosition; /// used by editingPluginEvents
+    int m_prevMouseSelectionStart, m_prevMouseSelectionEnd;
 
     QTimer m_caretTimer;
     bool m_caretTimerState;
+    KAction *m_actionPasteAsText;
     KAction *m_actionFormatBold;
     KAction *m_actionFormatItalic;
     KAction *m_actionFormatUnderline;
@@ -363,6 +368,8 @@ private:
     int m_changeTipCursorPos;
     QPoint m_changeTipPos;
     bool m_delayedEnsureVisible;
+    
+    TextToolSelection *m_toolSelection;
 };
 
 #endif

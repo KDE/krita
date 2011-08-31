@@ -54,7 +54,11 @@ public:
     };
 
     /**
-     * Constructor
+     * Constructor.
+     *
+     * By default a bookmark has the SinglePosition type and an empty name.
+     * The name is set when the book is inserted into the bookmark manager.
+     *
      * @param name the name for this bookmark
      * @param document the text document where this bookmark is located
      */
@@ -64,12 +68,14 @@ public:
 
     /// reimplemented from super
     void saveOdf(KoShapeSavingContext &context);
+
     /// reimplemented from super
-    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
+    virtual void updatePosition(const QTextDocument *document,
                                 int posInDocument, const QTextCharFormat &format);
     /// reimplemented from super
     virtual void resize(const QTextDocument *document, QTextInlineObject object,
                         int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+
     /// reimplemented from super
     virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
                        const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);

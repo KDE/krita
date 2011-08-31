@@ -20,9 +20,9 @@ Boston, MA 02110-1301, USA.
 #define KOFILTERVERTEX_H
 
 #include "KoFilterChain.h"
-#include "PriorityQueue_p.h"
 
 namespace CalligraFilter {
+template <typename T> class PriorityQueue;
 /**
  * An internal class representing a mime type (=node, vertex) in the filter graph.
  * @internal

@@ -26,7 +26,9 @@
 #include <cmath>
 #include <ctime>
 
-const int STEPS = 200; 
+#include "kis_curve_line_option.h"
+
+const int STEPS = 200;
 
 #if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand
@@ -36,13 +38,19 @@ inline double drand48()
 }
 #endif
 
-CurveBrush::CurveBrush() : m_counter(1), m_increment(1)
+CurveBrush::CurveBrush() :
+    m_painter(0),
+    m_branch(0)
 {
     srand48(time(0));
+#if QT_VERSION >= 0x040700
+    m_pens.reserve(1024);
+#endif
 }
 
 CurveBrush::~CurveBrush()
 {
+    delete m_painter;
 }
 
 QPointF CurveBrush::getLinearBezier(const QPointF &p1, const QPointF &p2, qreal u)
@@ -88,72 +96,6 @@ QPointF CurveBrush::getCubicBezier(const QPointF &p0, const QPointF &p1, const Q
 }
 
 
-void CurveBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2)
-{
-    qreal x1 = pi1.pos().x();
-    qreal y1 = pi1.pos().y();
-
-    qreal x2 = pi2.pos().x();
-    qreal y2 = pi2.pos().y();
-
-    qreal dx = x2 - x1;
-    qreal dy = y2 - y1;
-    //qreal angle = atan2(dy, dx);
-    qreal distance = sqrt(dx * dx + dy * dy);
-
-    KisRandomAccessor accessor = dab->createRandomAccessor((int) x1, (int) y1);
-    m_writeAccessor = &accessor;
-
-    m_layer = layer;
-    m_pixelSize = dab->colorSpace()->pixelSize();
-    
-    KoColor pcolor = m_painter->paintColor();
-    // end of initialization
-
-    qreal midPointX, midPointY;
-    midPointX = ((x1 + x2) / 2.0);
-    midPointY = ((y1 + y2) / 2.0);
-    
-    qreal midPointOffset = 0.0;
-    switch (m_mode) {
-    case 1: midPointOffset = ((drand48() * m_interval) - m_interval);
-        break;
-    case 2: midPointOffset = drand48() * m_counter;
-        break;
-    case 3: midPointOffset = m_counter;
-        break;
-    }
-
-    if (distance > m_minimalDistance) {
-        if (x1 == x2) {
-            midPointX += midPointOffset;
-        } else if (y1 == y2) {
-            midPointY += midPointOffset;
-        } else if (fabs(dx) > fabs(dy)) {
-            // horizontal
-            midPointY += midPointOffset;
-        } else {
-            midPointX += midPointOffset;
-        }
-    }
-
-    QPointF p0 = pi1.pos();
-    QPointF p2 = pi2.pos();
-    QPointF p1(midPointX, midPointY);
-
-    QPointF result;
-    for (int i = 0 ; i <= STEPS; i++) {
-        result = getQuadraticBezier(p0, p1, p2, i / (qreal)STEPS);
-        putPixel(result,pcolor);
-    }
-
-    m_counter += m_increment;
-    if (abs(m_counter) - 1 == m_interval) {
-        m_increment *= -1;
-    }
-
-}
-
 void CurveBrush::putPixel(QPointF pos, KoColor &color)
 {
         int ipx = int (pos.x());
@@ -168,26 +110,71 @@ void CurveBrush::putPixel(QPointF pos, KoColor &color)
 
         color.setOpacity(btl);
         m_writeAccessor->moveTo(ipx  , ipy);
-        if (m_layer->colorSpace()->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
+        if (cs->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
             memcpy(m_writeAccessor->rawData(), color.data(), m_pixelSize);
         }
 
         color.setOpacity(btr);
         m_writeAccessor->moveTo(ipx + 1, ipy);
-        if (m_layer->colorSpace()->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
+        if (cs->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
             memcpy(m_writeAccessor->rawData(), color.data(), m_pixelSize);
         }
 
         color.setOpacity(bbl);
         m_writeAccessor->moveTo(ipx, ipy + 1);
-        if (m_layer->colorSpace()->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
+        if (cs->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
             memcpy(m_writeAccessor->rawData(), color.data(), m_pixelSize);
         }
 
         color.setOpacity(bbr);
         m_writeAccessor->moveTo(ipx + 1, ipy + 1);
-        if (m_layer->colorSpace()->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
+        if (cs->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
             memcpy(m_writeAccessor->rawData(), color.data(), m_pixelSize);
         }
+}
+
+void CurveBrush::strokePens(QPointF pi1, QPointF pi2, KisPainter &painter) {
+    if (m_pens.isEmpty()) {
+        m_pens.append(Pen(pi1,0.0,1.0));
+    }
+
+    qreal dx = pi2.x() - pi1.x();
+    qreal dy = pi2.y() - pi1.y();
+    for (int i = 0; i < m_pens.length(); i++){
+        Pen &pen = m_pens[i];
+
+        QPointF endPoint(dx, dy);
+
+        QPainterPath path;
+        path.moveTo(0,0);
+        path.lineTo(dx, dy);
+
+        QTransform transform;
+        transform.reset();
+        transform.translate(pen.pos.x(), pen.pos.y());
+        transform.scale(pen.scale, pen.scale);
+        transform.rotate(pen.rotation);
+
+        path = transform.map(path);
+        //m_painter->drawPainterPath(path, QPen(Qt::white, 1.0));
+
+        endPoint = transform.map(endPoint);
+        m_painter->drawThickLine(pen.pos, endPoint, 1.0, 1.0);
+        pen.pos = endPoint;
+    }
+
+    qreal branchThreshold = 0.5;
+    if ((m_branch * drand48() > branchThreshold) && (m_pens.length() < 1024)){
+         int index = floor(drand48() * (m_pens.length()-1));
+
+         m_newPen.pos = m_pens.at(index).pos;
+         m_newPen.rotation = drand48() * M_PI/32;//atan(dy/dx) + (drand48() - 0.5) * M_PI/32;
+         m_newPen.scale = drand48() * m_pens.at(index).scale;
+         m_pens.append(m_newPen);
+         qDebug() << m_pens.length();
+         m_branch = 0;
+      } else {
+         m_branch++;
+      }
 }
 

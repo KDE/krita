@@ -51,7 +51,6 @@
 #include <kis_selection.h>
 #include <kis_selection_mask.h>
 #include <kis_shape_layer.h>
-#include <kis_transformation_mask.h>
 #include <kis_transparency_mask.h>
 
 
@@ -316,8 +315,6 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
         node = loadFilterMask(element);
     else if (nodeType == TRANSPARENCY_MASK)
         node = loadTransparencyMask(element);
-    else if (nodeType == TRANSFORMATION_MASK)
-        node = loadTransformationMask(element);
     else if (nodeType == SELECTION_MASK)
         node = loadSelectionMask(image, element);
     else
@@ -543,30 +540,6 @@ KisNode* KisKraLoader::loadTransparencyMask(const KoXmlElement& element)
     Q_UNUSED(element);
     KisTransparencyMask* mask = new KisTransparencyMask();
     Q_CHECK_PTR(mask);
-
-    return mask;
-}
-
-KisNode* KisKraLoader::loadTransformationMask(const KoXmlElement& element)
-{
-    KisTransformationMask* mask = new KisTransformationMask();
-    Q_CHECK_PTR(mask);
-
-
-    mask->setXScale(element.attribute(X_SCALE, "1.0").toDouble());
-    mask->setYScale(element.attribute(Y_SCALE, "1.0").toDouble());
-    mask->setXShear(element.attribute(X_SHEAR, "1.0").toDouble());
-    mask->setYShear(element.attribute(Y_SHEAR, "1.0").toDouble());
-    mask->setRotation(element.attribute(ROTATION, "0.0").toDouble());
-    mask->setXTranslation(element.attribute(X_TRANSLATION, "0").toInt());
-    mask->setYTranslation(element.attribute(Y_TRANSLATION, "0").toInt());
-
-    KisFilterStrategy* filterStrategy = 0;
-    QString filterStrategyName = element.attribute(FILTER_STATEGY, "Mitchell");
-    filterStrategy = KisFilterStrategyRegistry::instance()->get(filterStrategyName);
-    mask->setFilterStrategy(filterStrategy);
-
-
 
     return mask;
 }

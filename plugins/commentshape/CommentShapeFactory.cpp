@@ -29,7 +29,7 @@
 CommentShapeFactory::CommentShapeFactory()
 : KoShapeFactoryBase(COMMENTSHAPEID, i18n("Comment"))
 {
-    setOdfElementNames(KoXmlNS::officeooo, QStringList("annotation"));
+    setXmlElementNames(KoXmlNS::officeooo, QStringList("annotation"));
     setHidden(true);
 }
 

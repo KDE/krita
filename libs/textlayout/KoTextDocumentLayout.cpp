@@ -69,6 +69,7 @@ public:
        ,layoutPosition(0)
        ,anchoringRootArea(0)
        , anchoringIndex(0)
+       , referencedLayout(0)
        , defaultTabSizing(0)
        , y(0)
        , isLayouting(false)
@@ -76,6 +77,7 @@ public:
        , continuousLayout(true)
        , layoutBlocked(false)
        , restartLayout(false)
+       , documentChangedCount(0)
     {
     }
     KoStyleManager *styleManager;
@@ -91,13 +93,15 @@ public:
     QHash<int, KoInlineObjectExtent> inlineObjectExtents; // maps text-position to whole-line-height of an inline object
     int inlineObjectOffset;
     QList<KoTextAnchor *> textAnchors; // list of all inserted inline objects
+    KoTextLayoutRootArea *anchoringRootArea;
     int anchoringIndex; // index of last not positioned inline object inside textAnchors
     int anchoringCycle; // how many times have we cycled in iterative mode;
     QRectF anchoringParagraphRect;
 
     QHash<KoShape*,KoTextLayoutObstruction*> anchoredObstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
     QList<KoTextLayoutObstruction*> freeObstructions; // obstructions affecting the current rootArea, and not anchored
-    KoTextLayoutRootArea *anchoringRootArea;
+
+    KoTextDocumentLayout *referencedLayout;
 
     qreal defaultTabSizing;
     qreal y;
@@ -113,6 +117,8 @@ public:
         ,AnchoringFinalState
     };
     AnchoringState anchoringState;
+    int documentChangedCount;
+
 };
 
 
@@ -266,7 +272,15 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
             // the content of a variable changed (see KoVariable::setValue which calls publicDocumentChanged). In
             // those cases we only need to relayout the root-area dirty where the variable is on.
             KoTextLayoutRootArea *toArea = fromArea ? rootAreaForPosition(position + qMax(charsRemoved, charsAdded)) : 0;
-            endIndex = (toArea && toArea != fromArea) ? qMax(startIndex, d->rootAreaList.indexOf(toArea)) : startIndex;
+            if (toArea) {
+                if (toArea != fromArea) {
+                    endIndex = qMax(startIndex, d->rootAreaList.indexOf(toArea));
+                } else {
+                    endIndex = startIndex;
+                }
+            } else {
+                endIndex = d->rootAreaList.count() - 1;
+            }
             // The previous and following root-area of that range are selected too cause they can also be affect by
             // changes done to the range of root-areas.
             if (startIndex >= 1)
@@ -284,6 +298,11 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     // root-areas and if needed following ones which got dirty cause content moved to them. Also this will
     // created new root-areas using KoTextLayoutRootAreaProvider::provide if needed.
     emitLayoutIsDirty();
+}
+
+int KoTextDocumentLayout::documentChangedCount() const
+{
+    return d->documentChangedCount;
 }
 
 KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) const
@@ -395,11 +414,9 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
                 d->anchoringState = Private::AnchoringMovingState;
                 if (d->anchoringCycle <= 10) // loop-protection
                     d->anchoringRootArea->setDirty(); // make sure we do the layout to flow around
-                d->anchoringIndex++;
-            } else {
-                break;
             }
             // move the index to next not positioned shape
+            d->anchoringIndex++;
         }
         break;
     }
@@ -414,6 +431,9 @@ void KoTextDocumentLayout::setAnchoringParagraphRect(const QRectF &paragraphRect
 // This method is called by qt every time  QTextLine.setWidth()/setNumColums() is called
 void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format)
 {
+    // Note: "item" used to be what was positioned. We don't actually use qtextinlineobjects anymore
+    // for our inline objects, but get the id from the format.
+    Q_UNUSED(item);
     //We are called before layout so that we can position objects
     Q_ASSERT(format.isCharFormat());
     if (d->inlineTextObjectManager == 0)
@@ -432,18 +452,18 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
                 anchor->setAnchorStrategy(new FloatingAnchorStrategy(anchor, d->anchoringRootArea));
             }
             d->textAnchors.append(anchor);
-            anchor->updatePosition(document(), item, position, cf);
+            anchor->updatePosition(document(), position, cf);
         }
         static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setParagraphRect(d->anchoringParagraphRect);
     }
     else if (obj) {
-        obj->updatePosition(document(), item, position, cf);
+        obj->updatePosition(document(), position, cf);
     }
 }
 
 void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
 {
-    for(int i = d->anchoringIndex; i<d->textAnchors.size(); i++ ) {
+    for(int i = 0; i<d->textAnchors.size(); i++ ) {
         d->textAnchors[i]->setAnchorStrategy(0);
     }
 
@@ -478,6 +498,8 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
 
 void KoTextDocumentLayout::emitLayoutIsDirty()
 {
+    d->documentChangedCount++;
+
     emit layoutIsDirty();
 }
 
@@ -513,13 +535,11 @@ bool KoTextDocumentLayout::doLayout()
     d->y = 0;
     d->layoutScheduled = false;
     d->restartLayout = false;
-    KoTextLayoutRootArea *previousRootArea = 0;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         if (d->restartLayout) {
             return false; // Abort layouting to restart from the beginning.
         }
-
         bool shouldLayout = false;
 
         if (rootArea->top() != d->y) {
@@ -548,12 +568,7 @@ bool KoTextDocumentLayout::doLayout()
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 finished = rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
-                    for(int i = d->anchoringIndex; i<d->textAnchors.size(); i++ ) {
-                         d->textAnchors[i]->setAnchorStrategy(0);
-                     }
-                     d->textAnchors.clear();
-                     d->anchoringIndex = 0;
-                    //d->anchoringIndex = 0;
+                    d->anchoringIndex = 0;
                     d->anchoringCycle++;
                     if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
                         d->anchoringState = Private::AnchoringFinalState;
@@ -596,7 +611,6 @@ bool KoTextDocumentLayout::doLayout()
         }
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
                                                // 50 just to seperate pages
-        previousRootArea = rootArea;
     }
 
     while (d->layoutPosition->it != document()->rootFrame()->end()) {
@@ -623,12 +637,7 @@ bool KoTextDocumentLayout::doLayout()
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
-                    //d->anchoringIndex = 0;
-                    for(int i = d->anchoringIndex; i<d->textAnchors.size(); i++ ) {
-                         d->textAnchors[i]->setAnchorStrategy(0);
-                     }
-                     d->textAnchors.clear();
-                     d->anchoringIndex = 0;
+                    d->anchoringIndex = 0;
                     d->anchoringCycle++;
                     if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
                         d->anchoringState = Private::AnchoringFinalState;
@@ -703,6 +712,16 @@ void KoTextDocumentLayout::setBlockLayout(bool block)
 bool KoTextDocumentLayout::layoutBlocked() const
 {
     return d->layoutBlocked;
+}
+
+KoTextDocumentLayout* KoTextDocumentLayout::referencedLayout() const
+{
+    return d->referencedLayout;
+}
+
+void KoTextDocumentLayout::setReferencedLayout(KoTextDocumentLayout *layout)
+{
+    d->referencedLayout = layout;
 }
 
 QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame*) const

@@ -1,7 +1,14 @@
 [Desktop Entry]
 Name=Calligra Painting and Image Editor Component
+Name[bg]=Компонент за рисуване и редактиране на изображения в Calligra
+Name[de]=Calligra-Komponente für Malen und Bildbearbeitung
+Name[et]=Calligra joonistamise ja pilditöötluse komponent
+Name[it]=Componente per il disegno e la manipolazione di immagini di Calligra
+Name[nb]=Calligra-komponent for maling og bildemanipulasjon
+Name[pl]=Składnik malowania i edycji obrazu dla Calligry
 Name[pt]=Componente de Edição e Pintura de Imagens do Calligra
 Name[pt_BR]=Componente de Edição e Pintura de Imagens do Calligra
+Name[ru]=Компонент рисования и редактирования изображений Calligra
 Name[sv]=Calligra målnings- och bildredigeringskomponent
 Name[uk]=Компонент Calligra для малювання і редагування зображень
 Name[x-test]=xxCalligra Painting and Image Editor Componentxx
@@ -44,7 +51,7 @@ GenericName[nb]=Bildeobjekt
 GenericName[nds]=Bildobjekt
 GenericName[ne]=छवि वस्तु
 GenericName[nl]=Afbeelding
-GenericName[pl]=Obrazek
+GenericName[pl]=Obiekt obrazu
 GenericName[pt]=Objecto de Imagem
 GenericName[pt_BR]=Objeto de Imagem
 GenericName[ru]=Рисунок

@@ -73,6 +73,11 @@ KisToolLine::~KisToolLine()
 {
 }
 
+int KisToolLine::flags() const
+{
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
+}
+
 QWidget* KisToolLine::createOptionWidget()
 {
     QWidget* widget = KisToolPaint::createOptionWidget();
@@ -81,13 +86,13 @@ QWidget* KisToolLine::createOptionWidget()
     m_cbRotation     = new QCheckBox(i18n("Rotation"));
     m_cbTangPressure = new QCheckBox(i18n("Tangential Pressure"));
     m_bnVaryingEnds  = new QPushButton(i18n("Varying End-Points"));
-    
+
     m_cbPressure->setChecked(true);
     m_cbTilt->setChecked(true);
     m_cbRotation->setChecked(true);
     m_cbTangPressure->setChecked(true);
     m_bnVaryingEnds->setCheckable(true);
-    
+
     addOptionWidgetOption(m_cbPressure);
     addOptionWidgetOption(m_cbTilt);
     addOptionWidgetOption(m_cbRotation);
@@ -99,7 +104,7 @@ QWidget* KisToolLine::createOptionWidget()
 void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
-    
+
     if (mode() == KisTool::PAINT_MODE) {
         paintLine(gc, QRect());
     }
@@ -111,8 +116,12 @@ void KisToolLine::mousePressEvent(KoPointerEvent *event)
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
 
+        if (nodePaintAbility() == NONE) {
+           return;
+        }
+
         setMode(KisTool::PAINT_MODE);
-    
+
         m_startPos = KisPaintInformation(
             convertToPixelCoord(event),
             PRESSURE_DEFAULT,
@@ -149,7 +158,7 @@ void KisToolLine::mouseMoveEvent(KoPointerEvent *event)
         } else {
             m_endPos.setPos(pos);
         }
-        
+
         m_maxPressure = qMax(m_maxPressure, float(pressureToCurve(event->pressure())));
         updatePreview();
     }
@@ -166,7 +175,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
         updatePreview();
 
         QPointF pos = convertToPixelCoord(event);
-        
+
         if(m_bnVaryingEnds->isChecked()) {
             m_endPos = KisPaintInformation(
                 m_endPos.pos(),
@@ -191,12 +200,16 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
 
         if (m_startPos.pos() == m_endPos.pos())
             return;
-        
+
         if(m_cbPressure->isChecked()) {
             m_startPos.setPressure(m_maxPressure);
             m_endPos.setPressure(m_maxPressure);
         }
 
+        NodePaintAbility nodeAbility = nodePaintAbility();
+        if (nodeAbility == NONE) {
+           return;
+        }
 #ifdef ENABLE_RECORDING
         if (image()) {
             KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
@@ -205,10 +218,6 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
             image()->actionRecorder()->addAction(linePaintAction);
         }
 #endif
-        NodePaintAbility nodeAbility = nodePaintAbility();
-        if (nodeAbility == NONE) {
-           return;
-        }
 
         if (nodeAbility == PAINT) {
                 KisPaintDeviceSP device = currentNode()->paintDevice();
@@ -220,10 +229,9 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
                 setupPainter(m_painter);
                 m_painter->paintLine(m_startPos, m_endPos);
 
-                QRegion dirtyRegion = m_painter->takeDirtyRegion();
                 m_painter->endTransaction(image()->undoAdapter());
 
-                device->setDirty(dirtyRegion);
+                device->setDirty(m_painter->takeDirtyRegion());
                 notifyModified();
 
                 delete m_painter;

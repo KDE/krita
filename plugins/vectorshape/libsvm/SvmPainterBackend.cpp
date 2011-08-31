@@ -125,14 +125,37 @@ void SvmPainterBackend::polygon( SvmGraphicsContext &context, const QPolygon &po
     m_painter->drawPolygon(polygon);
 }
 
+void SvmPainterBackend::polyPolygon(SvmGraphicsContext &context,
+                                    const QList<QPolygon> &polyPolygon)
+{
+    updateFromGraphicscontext(context);
+
+    QPainterPath  path;
+
+    path.setFillRule(Qt::OddEvenFill);
+    //path.setFillRule(Qt::WindingFill);
+    foreach (const QPolygon &polygon, polyPolygon) {
+        path.addPolygon(polygon);
+    }
+    m_painter->drawPath(path);
+}
+
 void SvmPainterBackend::textArray(SvmGraphicsContext &context,
-                                  const QPoint &point, const QString &string)
+                                  const QPoint &point, const QString &string,
+                                  quint16 startIndex, quint16 len,
+                                  quint32 dxArrayLen, qint32 *dxArray)
 {
     updateFromGraphicscontext(context);
 
     m_painter->save();
     m_painter->setPen(context.textColor);
-    m_painter->drawText(point, string);
+    // FIXME: Handle text background color.  How do we get the area? A testfile would be nice.
+    m_painter->drawText(point, string.mid(startIndex, len));
+
+    // FIXME: DxArray not handled yet.
+    Q_UNUSED(dxArrayLen);
+    Q_UNUSED(dxArray);
+
     m_painter->restore();
 }
 
@@ -171,18 +194,12 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
             kDebug(31000) << "*** Unsetting fill color";
 #endif
     }
-    if (context.changedItems & GCTextColor) {
-        m_painter->setPen(context.textColor);
-#if DEBUG_SVMPAINT
-        kDebug(31000) << "*** Setting text color to" << context.textColor;
-#endif
-    }
-    if (context.changedItems & GCTextFillColor) {
-        // FIXME
-    }
-    if (context.changedItems & GCTextAlign) {
-        // FIXME: Probably don't need to do anything here.
-    }
+    // GCTextColor: We don't need to do anything here since text color
+    //              is set when the text is drawn.
+    // GCTextFillColor: We don't need to do anything here since text
+    //              fill color is set when the text is drawn.
+    // GCTextAlign: We don't need to do anything here since text
+    //              alignment is only used when the text is drawn.
     if (context.changedItems & GCMapMode) {
         // Reset the transform and then apply the new mapmode to it.
         m_painter->setTransform(m_outputTransform);

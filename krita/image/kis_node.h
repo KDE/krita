@@ -22,7 +22,11 @@
 #include "kis_base_node.h"
 #include "krita_export.h"
 
+#include <QVector>
+
+class QRect;
 class QStringList;
+
 class KoProperties;
 
 class KisNodeVisitor;
@@ -81,11 +85,10 @@ public:
     virtual bool accept(KisNodeVisitor &v);
 
     /**
-     * Re-implement this method to add constraints for the node
-     * subclasses that can be added as to this subclass of KisNode.
+     * Re-implement this method to add constraints for the
+     * subclasses that can be added as children to this node
      *
-     * @return false if the given node is not allowed as a subclass to
-     * this node
+     * @return false if the given node is not allowed as a child to this node
      */
     virtual bool allowAsChild(KisNodeSP) const = 0;
 
@@ -106,11 +109,18 @@ public:
     }
 
     /**
+     * Add the given rects to the set of dirty rects for this node;
+     * this percolates up to parent nodes all the way to the root
+     * node.
+     */
+    virtual void setDirty(const QVector<QRect> &rects);
+
+    /**
      * Add the given region to the set of dirty rects for this node;
      * this percolates up to parent nodes all the way to the root
      * node, if propagate is true;
      */
-    virtual void setDirty(const QRegion & region);
+    virtual void setDirty(const QRegion &region);
 
     /**
      * Some filters will cause a change of pixels those are outside
@@ -128,7 +138,7 @@ public:
      * See \ref changeRect
      */
     virtual QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
-    
+
     virtual void setSystemLocked(bool l, bool update = true);
 
 public: // Graph methods

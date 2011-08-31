@@ -42,6 +42,7 @@ KoTextBlockBorderData::KoTextBlockBorderData(const QRectF &paragRect)
         : d(new Private())
 {
     ///TODO Remove parameter paragRect and update references to this constructor.
+    Q_UNUSED(paragRect);
 }
 
 KoTextBlockBorderData::~KoTextBlockBorderData()
@@ -64,11 +65,11 @@ bool KoTextBlockBorderData::hasBorders() const
     return false;
 }
 
-bool KoTextBlockBorderData::operator==(const KoTextBlockBorderData &border)
+bool KoTextBlockBorderData::operator==(const KoTextBlockBorderData &border) const
 {
     return equals(border);
 }
-bool KoTextBlockBorderData::equals(const KoTextBlockBorderData &border)
+bool KoTextBlockBorderData::equals(const KoTextBlockBorderData &border) const
 {
     for (int i = Top; i <= Right; i++) {
         if (d->edges[i].outerPen != border.d->edges[i].outerPen)
@@ -156,8 +157,8 @@ void KoTextBlockBorderData::setEdge(Side side, const QTextBlockFormat &bf,
     switch (borderStyle) {
     case KoBorder::BorderDotted: edge.innerPen.setStyle(Qt::DotLine); break;
     case KoBorder::BorderDashed: edge.innerPen.setStyle(Qt::DashLine); break;
-    case KoBorder::BorderDashDotPattern: edge.innerPen.setStyle(Qt::DashDotLine); break;
-    case KoBorder::BorderDashDotDotPattern: edge.innerPen.setStyle(Qt::DashDotDotLine); break;
+    case KoBorder::BorderDashDot: edge.innerPen.setStyle(Qt::DashDotLine); break;
+    case KoBorder::BorderDashDotDot: edge.innerPen.setStyle(Qt::DashDotDotLine); break;
     case KoBorder::BorderGroove: /* TODO */ break;
     case KoBorder::BorderRidge: /* TODO */ break;
     case KoBorder::BorderInset: /* TODO */ break;

@@ -41,8 +41,7 @@ KoShapeRenameCommand::KoShapeRenameCommand(KoShape *shape, const QString &newNam
 : KUndo2Command(parent)
 , d(new Private(shape, newName))
 {
-    // TODO 2.1 add "Rename Shape"
-    //setText();
+    setText(i18n("Rename Shape"));
 }
 
 KoShapeRenameCommand::~KoShapeRenameCommand()

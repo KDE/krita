@@ -89,13 +89,9 @@ public:
     * instance likes to load an ODF element.
     *
     * @param element the element to start loadingat
-    * @param cursor the text cursor to insert the body after
-    * @param section If non-zero, all the following text belongs with this section. The
-    *                section is added to the first block of the body.
-    *
+    * @param cursor the text cursor to insert the body after    *
     */
     void loadBody(const KoXmlElement &element, QTextCursor &cursor);
-    void loadBody(const KoXmlElement &element, QTextCursor &cursor, KoSection *section);
 
 signals:
 
@@ -193,6 +189,11 @@ private:
     void loadNote(const KoXmlElement &element, QTextCursor& cursor);
 
     /**
+     * Load a citation \p element into the \p cursor.
+     */
+    void loadCite(const KoXmlElement &element, QTextCursor& cursor);
+
+    /**
     * Load the shape element and assign hyperlink to it \p element into the \p cursor .
     */
     void loadShapeWithHyperLink(const KoXmlElement &element, QTextCursor& cursor);
@@ -206,6 +207,11 @@ private:
     * Load the table of content element \p element into the \p cursor .
     */
     void loadTableOfContents(const KoXmlElement &element, QTextCursor& cursor);
+
+    /**
+    * Load the bibliography element \p element into the \p cursor .
+    */
+    void loadBibliography(const KoXmlElement &element, QTextCursor& cursor);
 
     /**
     * This is called in loadBody before reading the body starts.

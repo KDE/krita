@@ -87,7 +87,7 @@ public:
 
 protected:
 
-    void paint(QPainter &painter, const QRectF paintRect);
+    void paint(QPainter &painter, const QRectF &paintRect);
 
 private:
     class Private;

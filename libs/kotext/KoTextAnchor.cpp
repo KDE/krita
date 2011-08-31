@@ -173,9 +173,8 @@ KoTextAnchor::VerticalRel KoTextAnchor::verticalRel()
     return d->verticalRel;
 }
 
-void KoTextAnchor::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+void KoTextAnchor::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
 {
-    Q_UNUSED(object);
     Q_D(KoTextAnchor);
     d->document = document;
     d->position = posInDocument;
@@ -230,10 +229,6 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
             }
         } else {
             qreal boundTop = fm.ascent();
-            qreal boundBottom = 0;
-            if (d->verticalRel == VChar) {
-                boundBottom = fm.descent();
-            }
             switch (d->verticalPos) {
             case VFromTop:
                  object.setAscent(qMax((qreal) 0, -d->distance.y()));

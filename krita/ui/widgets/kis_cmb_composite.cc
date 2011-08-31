@@ -31,9 +31,8 @@
 KisCompositeOpListWidget::KisCompositeOpListWidget(QWidget* parent):
     KisCategorizedListView(parent)
 {
-    m_model    = new KisCompositeOpListModel();
+    m_model    = KisCompositeOpListModel::sharedInstance();
     m_delegate = new KisCategorizedItemDelegate(m_model, true);
-    m_model->fill(KoCompositeOpRegistry::instance().getCompositeOps());
     
     setModel(m_model);
     setItemDelegate(m_delegate);
@@ -42,7 +41,6 @@ KisCompositeOpListWidget::KisCompositeOpListWidget(QWidget* parent):
 
 KisCompositeOpListWidget::~KisCompositeOpListWidget()
 {
-    delete m_model;
     delete m_delegate;
 }
 
@@ -53,10 +51,9 @@ KisCompositeOpListWidget::~KisCompositeOpListWidget()
 KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
     QComboBox(parent)
 {
+    m_model    = KisCompositeOpListModel::sharedInstance();
     m_view     = new KisCategorizedListView();
-    m_model    = new KisCompositeOpListModel();
     m_delegate = new KisCategorizedItemDelegate(m_model, true);
-    m_model->fill(KoCompositeOpRegistry::instance().getCompositeOps());
     
     setMaxVisibleItems(100);
     setSizeAdjustPolicy(AdjustToContents);
@@ -72,7 +69,6 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
 KisCompositeOpComboBox::~KisCompositeOpComboBox()
 {
     delete m_view;
-    delete m_model;
     delete m_delegate;
 }
 
@@ -88,5 +84,3 @@ void KisCompositeOpComboBox::slotCategoryToggled(const QModelIndex& index, bool 
     //      Thre is nothing written about this in the docs.
     showPopup();
 }
-
-#include "kis_cmb_composite.moc"

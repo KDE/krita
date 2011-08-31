@@ -93,15 +93,11 @@ void StackedLineDiagram::paint(  PaintContext* ctx )
 {
     reverseMapper().clear();
 
-    const QPair<QPointF, QPointF> boundaries = diagram()->dataBoundaries();
-    const QPointF bottomLeft = boundaries.first;
-    const QPointF topRight = boundaries.second;
-
     const int columnCount = compressor().modelDataColumns();
     const int rowCount = compressor().modelDataRows();
 
 // FIXME integrate column index retrieval to compressor:
-    int maxFound = 0;
+//    int maxFound = 0;
 //    {   // find the last column number that is not hidden
 //        for( int iColumn =  datasetDimension() - 1;
 //             iColumn <  columnCount;
@@ -109,7 +105,7 @@ void StackedLineDiagram::paint(  PaintContext* ctx )
 //            if( ! diagram()->isHidden( iColumn ) )
 //                maxFound = iColumn;
 //    }
-    maxFound = columnCount;
+//    maxFound = columnCount;
     // ^^^ temp
 
     DataValueTextInfoList list;

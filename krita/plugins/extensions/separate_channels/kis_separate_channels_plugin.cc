@@ -41,7 +41,7 @@
 #include <kis_paint_device.h>
 #include <kis_layer.h>
 #include <kis_statusbar.h>
-#include <kis_layer_manager.h>
+#include <kis_node_manager.h>
 #include <widgets/kis_progress_widget.h>
 
 #include "kis_channel_separator.h"
@@ -73,7 +73,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisLayerSP l = m_view->layerManager()->activeLayer();
+    KisLayerSP l = m_view->nodeManager()->activeLayer();
     if (!l) return;
 
     KisPaintDeviceSP dev = l->paintDevice();

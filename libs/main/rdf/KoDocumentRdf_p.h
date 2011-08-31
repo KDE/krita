@@ -22,12 +22,13 @@
 
 #include "KoDocumentRdf.h"
 
+#include <QWeakPointer>
+
 class KoDocumentRdfPrivate
 {
 public:
     Soprano::Model *model; ///< Main Model containing all Rdf for doc
-    typedef QList<KoTextInlineRdf*> m_inlineRdfObjects_t;
-    m_inlineRdfObjects_t inlineRdfObjects;  ///< Cache of weak pointers to inline Rdf
+    QMap<QString, QWeakPointer<KoTextInlineRdf> > inlineRdfObjects;  ///< Cache of weak pointers to inline Rdf
     KoRdfPrefixMapping *prefixMapping;     ///< prefix -> URI mapping
 
     QList<KoRdfFoaF*> foafObjects;

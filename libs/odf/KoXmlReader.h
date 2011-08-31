@@ -264,7 +264,7 @@ private:
 class KOODF_EXPORT KoXmlDocument: public KoXmlNode
 {
 public:
-    KoXmlDocument();
+    KoXmlDocument(bool stripSpaces = true);
     KoXmlDocument(const KoXmlDocument& node);
     KoXmlDocument& operator=(const KoXmlDocument& node);
     bool operator==(const KoXmlDocument&) const;
@@ -292,6 +292,12 @@ public:
     // no namespace processing
     bool setContent(const QString& text,
                     QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+     /**
+     * Change the way an XMLDocument will be read: <a> <b/> <a/>
+     * if stripSpaces = true then a will only have one child
+     * if stripSpaces = false then a will have 3 children.
+     */
+    void setWhitespaceStripping(bool stripSpaces);
 
 private:
     friend class KoXmlNode;

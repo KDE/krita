@@ -64,14 +64,15 @@ RdfSemanticTreeWidgetApplyStylesheet::~RdfSemanticTreeWidgetApplyStylesheet()
 void RdfSemanticTreeWidgetApplyStylesheet::activated()
 {
     kDebug(30015) << "apply selected stylesheet for semantic item...";
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
     const KoDocumentRdf *rdf = si->documentRdf();
-    QString xmlid = rdf->findXmlId(editor());
+    QString xmlid = rdf->findXmlId(editor);
     kDebug(30015) << "semItem:" << si->name() << "xmlid:" << xmlid;
     KoRdfSemanticItemViewSite vs(si, xmlid);
     if (ss) {
         kDebug(30015) << "apply stylesheet, format(), sheet:" << ss->name()
                 << " xmlid:" << xmlid;
-        vs.applyStylesheet(editor(), ss);
+        vs.applyStylesheet(editor, ss);
     } else {
         vs.disassociateStylesheet();
     }
@@ -98,7 +99,7 @@ void KoRdfSemanticTreeWidgetItem::addApplyStylesheetActions(QWidget *parent,
     if (!host) {
         return;
     }
-    KoTextEditor *editor = KoDocumentRdf::ensureTextTool(host);
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(host);
     kDebug(30015) << " semanticItem:" << semanticItem();
     kDebug(30015) << " semanticItem.name:" << semanticItem()->name();
     if (!editor) {

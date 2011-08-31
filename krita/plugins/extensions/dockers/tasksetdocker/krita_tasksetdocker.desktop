@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Taskset Docker
+Name[sv]=Dockningsfönster för aktivitetsuppsättning
+Name[uk]=Панель набору завдань
+Name[x-test]=xxTaskset Dockerxx
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritatasksetdocker
+X-Krita-Version=4

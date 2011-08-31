@@ -26,6 +26,10 @@
 #include "KoText.h"
 #include "kotext_export.h"
 
+#include <KoXmlReaderForward.h>
+#include <KoBorder.h>
+#include <KoShadowStyle.h>
+
 #include <QObject>
 #include <QVector>
 #include <QString>
@@ -40,9 +44,8 @@ class QTextBlock;
 class KoStyleStack;
 class KoGenStyle;
 class KoGenStyles;
-#include "KoXmlReaderForward.h"
 class KoShapeLoadingContext;
-#include "KoBorder.h"
+class KoShapeSavingContext;
 
 /**
  * A container for all properties for the paragraph wide style.
@@ -130,12 +133,12 @@ public:
         // numbering
         LineNumbering,           ///< bool, specifies whether lines should be numbered in this paragraph
         LineNumberStartValue,    ///< integer value that specifies the number for the first line in the paragraph
-        SectionStart,            ///< section definition
-        SectionEnd,               ///< end of a named section
+        SectionStartings,            ///< list of section definitions
+        SectionEndings,               ///< list <end of a named section>
 // do 15.5.24
 // continue at 15.5.28
         ForceDisablingList,       ///< bool, for compatibility with the weird text:enable-numbering attribute not used anymore by OpenOffice.org
-        
+
         // other properties
         BackgroundTransparency,   ///< qreal between 0 and 1, background transparency
         SnapToLayoutGrid,         ///< bool, snap the paragraph to the layout grid of the page
@@ -153,8 +156,15 @@ public:
         HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
         PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
         VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
-        
-        NormalLineHeight          ///< bool, internal property for reserved usage
+
+        NormalLineHeight,         ///< bool, internal property for reserved usage
+        BibliographyData,
+        BibliographyDocument,
+        AutoUpdateBibliography,
+
+        TableOfContentsData,      // set when block is instead a TableOfContents
+        TableOfContentsDocument,  // set when block is instead a TableOfContents
+        Shadow                    //< KoShadowStyle, the shadow of this paragraph
     };
 
     enum AutoSpace {
@@ -210,7 +220,7 @@ public:
      * You should consider doing a remove(KoParagraphStyle::FixedLineHeight); because if set, it will
      *  be used instead of this value.
      */
-    void setMinimumLineHeight(qreal height);
+    void setMinimumLineHeight(const QTextLength &height);
     /// @see setMinimumLineHeight
     qreal minimumLineHeight() const;
 
@@ -223,6 +233,15 @@ public:
     void setLineSpacing(qreal spacing);
     /// @see setLineSpacing
     qreal lineSpacing() const;
+
+    /**
+     * Set the line-height to "normal". This overwrites a line-height set before either
+     * with \a setLineHeightAbsolute or \a setMinimumLineHeight . If set then a value
+     * set with \a setLineSpacing will be ignored.
+     */
+    void setNormalLineHeight();
+    /// @see setNormalLineHeight
+    bool hasNormalLineHeight() const;
 
     /**
      * If set to true the font-encoded height will be used instead of the font-size propery
@@ -391,59 +410,59 @@ public:
     void setVerticalAlignment(VerticalAlign value);
     
     void setBreakBefore(KoText::KoTextBreakProperty value);
-    KoText::KoTextBreakProperty breakBefore();
+    KoText::KoTextBreakProperty breakBefore() const;
     void setBreakAfter(KoText::KoTextBreakProperty value);
-    KoText::KoTextBreakProperty breakAfter();
+    KoText::KoTextBreakProperty breakAfter() const;
     void setLeftPadding(qreal padding);
-    qreal leftPadding();
+    qreal leftPadding() const;
     void setTopPadding(qreal padding);
-    qreal topPadding();
+    qreal topPadding() const;
     void setRightPadding(qreal padding);
-    qreal rightPadding();
+    qreal rightPadding() const;
     void setBottomPadding(qreal padding);
-    qreal bottomPadding();
+    qreal bottomPadding() const;
     void setPadding(qreal padding);
 
     void setLeftBorderWidth(qreal width);
-    qreal leftBorderWidth();
+    qreal leftBorderWidth() const;
     void setLeftInnerBorderWidth(qreal width);
-    qreal leftInnerBorderWidth();
+    qreal leftInnerBorderWidth() const;
     void setLeftBorderSpacing(qreal width);
-    qreal leftBorderSpacing();
+    qreal leftBorderSpacing() const;
     void setLeftBorderStyle(KoBorder::BorderStyle style);
-    KoBorder::BorderStyle leftBorderStyle();
+    KoBorder::BorderStyle leftBorderStyle() const;
     void setLeftBorderColor(const QColor &color);
-    QColor leftBorderColor();
+    QColor leftBorderColor() const;
     void setTopBorderWidth(qreal width);
-    qreal topBorderWidth();
+    qreal topBorderWidth() const;
     void setTopInnerBorderWidth(qreal width);
-    qreal topInnerBorderWidth();
+    qreal topInnerBorderWidth() const;
     void setTopBorderSpacing(qreal width);
-    qreal topBorderSpacing();
+    qreal topBorderSpacing() const;
     void setTopBorderStyle(KoBorder::BorderStyle style);
-    KoBorder::BorderStyle topBorderStyle();
+    KoBorder::BorderStyle topBorderStyle() const;
     void setTopBorderColor(const QColor &color);
-    QColor topBorderColor();
+    QColor topBorderColor() const;
     void setRightBorderWidth(qreal width);
-    qreal rightBorderWidth();
+    qreal rightBorderWidth() const;
     void setRightInnerBorderWidth(qreal width);
-    qreal rightInnerBorderWidth();
+    qreal rightInnerBorderWidth() const;
     void setRightBorderSpacing(qreal width);
-    qreal rightBorderSpacing();
+    qreal rightBorderSpacing() const;
     void setRightBorderStyle(KoBorder::BorderStyle style);
-    KoBorder::BorderStyle rightBorderStyle();
+    KoBorder::BorderStyle rightBorderStyle() const;
     void setRightBorderColor(const QColor &color);
-    QColor rightBorderColor();
+    QColor rightBorderColor() const;
     void setBottomBorderWidth(qreal width);
-    qreal bottomBorderWidth();
+    qreal bottomBorderWidth() const;
     void setBottomInnerBorderWidth(qreal width);
-    qreal bottomInnerBorderWidth();
+    qreal bottomInnerBorderWidth() const;
     void setBottomBorderSpacing(qreal width);
-    qreal bottomBorderSpacing();
+    qreal bottomBorderSpacing() const;
     void setBottomBorderStyle(KoBorder::BorderStyle style);
-    KoBorder::BorderStyle bottomBorderStyle();
+    KoBorder::BorderStyle bottomBorderStyle() const;
     void setBottomBorderColor(const QColor &color);
-    QColor bottomBorderColor();
+    QColor bottomBorderColor() const;
     
     bool joinBorder() const;
     void setJoinBorder(bool value);
@@ -583,6 +602,17 @@ public:
     int lineNumberStartValue() const;
     void setLineNumberStartValue(int lineNumberStartValue);
 
+    /**
+     * 20.349 style:shadow
+     * The style:shadow attribute specifies a shadow effect.
+     * The defined values for this attribute are those defined in §7.16.5 of [XSL], except the value
+     * inherit.
+     * The shadow effect is not applied to the text content of an element, but depending on the element
+     * where the attribute appears, to a paragraph, a text box, a page body, a header, a footer, a table
+     * or a table cell.
+     */
+    KoShadowStyle shadow() const;
+    void setShadow (const KoShadowStyle &shadow);
 
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(const KoParagraphStyle *style);
@@ -643,7 +673,7 @@ public:
      */
     void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context);
 
-    void saveOdf(KoGenStyle &style, KoGenStyles &mainStyles);
+    void saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const;
 
     /**
      * Returns true if this paragraph style has the property set.

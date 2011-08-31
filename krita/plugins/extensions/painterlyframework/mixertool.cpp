@@ -240,7 +240,7 @@ void MixerTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void MixerTool::setDirty(const QRegion& region)
 {
-    m_d->mixer->updateCanvas(region);
+    m_d->mixer->updateCanvas(region.rects());
 }
 
 

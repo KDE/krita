@@ -32,7 +32,7 @@ install(TARGETS calligragoogledocs  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  googledocs-kpresenter.rc  DESTINATION ${DATA_INSTALL_DIR}/kpresenter/kpartplugins)
+install( FILES  googledocs-kpresenter.rc  DESTINATION ${DATA_INSTALL_DIR}/stage/kpartplugins)
 install( FILES  googledocs-words.rc  DESTINATION ${DATA_INSTALL_DIR}/words/kpartplugins)
 
 

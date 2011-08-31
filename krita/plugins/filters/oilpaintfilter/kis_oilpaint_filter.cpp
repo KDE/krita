@@ -47,6 +47,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
@@ -58,6 +59,7 @@
 KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Oilpaint..."))
 {
     setSupportsPainting(true);
+    setSupportsThreading(false);
 }
 
 void KisOilPaintFilter::process(KisPaintDeviceSP device,
@@ -66,8 +68,6 @@ void KisOilPaintFilter::process(KisPaintDeviceSP device,
                          KoUpdater* progressUpdater
                                ) const
 {
-    Q_UNUSED(progressUpdater);
-
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(!device.isNull());
 #if 1
@@ -80,7 +80,7 @@ void KisOilPaintFilter::process(KisPaintDeviceSP device,
     quint32 smooth = config->getInt("smooth", 30);
 
 
-    OilPaint(device, device, srcTopLeft, applyRect.topLeft(), width, height, brushSize, smooth);
+    OilPaint(device, device, srcTopLeft, applyRect.topLeft(), width, height, brushSize, smooth, progressUpdater);
 #endif
 }
 
@@ -98,37 +98,39 @@ void KisOilPaintFilter::process(KisPaintDeviceSP device,
  *                     a matrix and simply write at the original position.
  */
 
-void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint& srcTopLeft, const QPoint& dstTopLeft, int w, int h, int BrushSize, int Smoothness) const
+void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint& srcTopLeft, const QPoint& dstTopLeft, int w, int h,
+                                 int BrushSize, int Smoothness, KoUpdater* progressUpdater) const
 {
-//     setProgressTotalSteps(h);
-//     setProgressStage(i18n("Applying oilpaint filter..."),0);
+    if (progressUpdater) {
+        progressUpdater->setRange(0, w * h);
+    }
 
     QRect bounds(srcTopLeft.x(), srcTopLeft.y(), w, h);
 
     KisHLineConstIteratorPixel it = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), w);
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), w);
 
+    int progress = 0;
     for (qint32 yOffset = 0; yOffset < h; yOffset++) {
 
 
         while (!it.isDone()) {  //&& !cancelRequested()) {
 
-            if (it.isSelected()) {
+//             if (it.isSelected()) {
 
 //                 uint color =
                 MostFrequentColor(src, dstIt.rawData(), bounds, it.x(), it.y(), BrushSize, Smoothness);
 //                 dst->colorSpace()->fromQColor(QColor(qRed(color), qGreen(color), qBlue(color)), qAlpha(color), dstIt.rawData());
-            }
+//             }
 
             ++it;
             ++dstIt;
         }
         it.nextRow();
         dstIt.nextRow();
-//         setProgress(yOffset);
-    }
 
-    //    setProgressDone();
+        if (progressUpdater) progressUpdater->setValue(progress += w);
+    }
 }
 
 // This method has been ported from Pieter Z. Voloshyn's algorithm code in Digikam.
@@ -229,7 +231,7 @@ KisConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, 
 
 KisFilterConfiguration* KisOilPaintFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
+    KisFilterConfiguration* config = new KisFilterConfiguration("oilpaint", 1);
     config->setProperty("brushSize", 1);
     config->setProperty("smooth", 30);
     return config;

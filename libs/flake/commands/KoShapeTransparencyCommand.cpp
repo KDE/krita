@@ -85,7 +85,7 @@ void KoShapeTransparencyCommand::redo()
     foreach(KoShape *shape, d->shapes) {
         shape->setTransparency(*transparencyIt);
         shape->update();
-        transparencyIt++;
+        ++transparencyIt;
     }
 }
 
@@ -96,6 +96,6 @@ void KoShapeTransparencyCommand::undo()
     foreach(KoShape *shape, d->shapes) {
         shape->setTransparency(*transparencyIt);
         shape->update();
-        transparencyIt++;
+        ++transparencyIt;
     }
 }

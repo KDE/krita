@@ -1263,7 +1263,6 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     // 'loadedDomainElements' that is either 0, 1 or 2.
     bool maybeCompleteDataDefinition = false;
     // FIXME: This variable is unused.
-    bool fullDataDefinition = false;
     
     if ( /*bubbleChart &&*/ n.hasChildNodes() ){
         KoXmlNode cn = n.firstChild();
@@ -1274,7 +1273,6 @@ bool DataSet::loadOdf( const KoXmlElement &n,
                 if ( maybeCompleteDataDefinition ){
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
                     setXDataRegion( CellRegion( helper->tableSource, region ) );
-                    fullDataDefinition = true;
                 }else{
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );                    
                     // as long as there is not default table for missing data series the same region is used twice
@@ -1488,12 +1486,9 @@ void DataSet::saveOdf( KoShapeSavingContext &context ) const
 
     bodyWriter.startElement( "chart:series" );
 
-    // We need GraphicsAutoStyle here so that KoOdfGraphicStyles::saveOdfFillStyle()
-    // uses <style:graphics-properties> as parent.
-    KoGenStyle style( KoGenStyle::GraphicAutoStyle, "chart" );
+    KoGenStyle style( KoGenStyle::ChartAutoStyle, "chart" );
 
-    style.addProperty( "chart:data-label-text", showLabels() ? "true" : "false", KoGenStyle::ChartType  );
-    style.addProperty( "chart:family", odfCharttype(d->effectiveChartType()), KoGenStyle::ChartType );
+    style.addProperty( "chart:data-label-text", showLabels() ? "true" : "false" );
 
     KoOdfGraphicStyles::saveOdfFillStyle( style, mainStyles, brush() );
     KoOdfGraphicStyles::saveOdfStrokeStyle( style, mainStyles, pen() );

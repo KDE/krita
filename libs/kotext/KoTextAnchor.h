@@ -68,7 +68,7 @@ public:
  * <li> Position the anchor with updatePosition() what will attach the KoTextAnchor-instance to
  *    the TextShape's \a KoTextShapeContainerModel . </ol>
  * The position of the shape relative to the anchor is called the offset. It's loaded by loadOdf().
- * @see KWAnchorStrategy for more information about the layout of anchors/shapes in Words.
+ * @see AnchorStrategy for more information about the layout of anchors/shapes in Words.
  */
 class KOTEXT_EXPORT KoTextAnchor : public KoInlineObject
 {
@@ -166,7 +166,7 @@ public:
     const QTextDocument *document() const;
 
     /// reimplemented from KoInlineObject
-    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
+    virtual void updatePosition(const QTextDocument *document,
                                 int posInDocument, const QTextCharFormat &format);
     /// reimplemented from KoInlineObject
     virtual void resize(const QTextDocument *document, QTextInlineObject object,

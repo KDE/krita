@@ -190,7 +190,6 @@ Qt::PenStyle KoStrokeConfigWidget::lineStyle() const
     return d->lineStyle->lineStyle();
 }
 
-
 QVector<qreal> KoStrokeConfigWidget::lineDashes() const
 {
     return d->lineStyle->lineDashes();
@@ -219,6 +218,7 @@ void KoStrokeConfigWidget::updateControls(KoLineBorder &border)
     d->lineWidth->changeValue(border.lineWidth());
     d->miterLimit->changeValue(border.miterLimit());
     d->lineStyle->setLineStyle(border.lineStyle(), border.lineDashes());
+    d->miterLimit->setEnabled(border.joinStyle() == Qt::MiterJoin);
 
     blockChildSignals(false);
 }

@@ -341,9 +341,7 @@ qreal KoReportPreRendererPrivate::renderSectionSize(const KRSectionData & sectio
         return intHeight;
 
     QList<KoReportItemBase*> objects = sectionData.objects();
-    KoReportItemBase * elemThis;
     foreach(KoReportItemBase *ob, objects) {
-        elemThis = ob;
         QPointF offset(m_leftMargin, m_yOffset);
         QVariant itemData = m_kodata->value(ob->itemDataSource());
 
@@ -383,9 +381,7 @@ qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionDat
     m_page->addPrimitive(bg, true);
 
     QList<KoReportItemBase*> objects = sectionData.objects();
-    KoReportItemBase * elemThis;
     foreach(KoReportItemBase *ob, objects) {
-        elemThis = ob;
         QPointF offset(m_leftMargin, m_yOffset);
         QVariant itemData = m_kodata->value(ob->itemDataSource());
 
@@ -394,10 +390,10 @@ qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionDat
         } else {
             itemHeight = ob->render(m_page, sec, offset, itemData, m_scriptHandler);
         }
-        
+
         if (itemHeight > sectionHeight) {
             sectionHeight = itemHeight;
-        }        
+        }
     }
     for (int i = 0; i < m_page->primitives(); ++i) {
         OROPrimitive *prim = m_page->primitive(i);

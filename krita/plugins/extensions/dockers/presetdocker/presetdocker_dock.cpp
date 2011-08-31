@@ -33,7 +33,9 @@
 #include <kis_paintop_preset.h>
 
 
-PresetDockerDock::PresetDockerDock( ) : QDockWidget(i18n("Preset docker")), m_canvas(0)
+PresetDockerDock::PresetDockerDock( )
+    : QDockWidget(i18n("Preset docker"))
+    , m_canvas(0)
 {
     m_presetChooser = new KisPaintOpPresetsChooserPopup(this);
     m_presetChooser->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -58,11 +60,13 @@ void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
             m_canvas->view()->paintOpBox(), SLOT(resourceSelected(KoResource*)));
 }
 
-void PresetDockerDock::resourceChanged(int key, const QVariant& v)
+void PresetDockerDock::resourceChanged(int /*key*/, const QVariant& /*v*/)
 {
-    KisPaintOpPresetSP preset = m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-    if (preset) {
-        m_presetChooser->setPresetFilter(preset->paintOp());
+    if (m_canvas) {
+        KisPaintOpPresetSP preset = m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        if (preset) {
+            m_presetChooser->setPresetFilter(preset->paintOp());
+        }
     }
 }
 

@@ -44,32 +44,44 @@ public:
     KisMaskManager(KisView2 * view);
     ~KisMaskManager() {}
 
-    void setup(KActionCollection * actionCollection);
-    void updateGUI();
+signals:
+
+    void sigMaskActivated(KisMaskSP mask);
+
+private slots:
+    
+    /**
+     * Create a new global selection from the active mask.
+     */
+    void maskToSelection();
 
     /**
-     * @return the active mask, if there is one
+     * Create a new layer from the current mask. The user can choose
+     * the colorspace of the new layer and which channels should be
+     * filled from the mask channel.
      */
-    KisMaskSP activeMask();
+    void maskToLayer();
 
+    void changeActivity(KisSelectionMask *mask,bool active);
+
+private:
+    
+    friend class KisNodeManager;
+    
+    void setup(KActionCollection * actionCollection);
+
+    void updateGUI();
+    
     /**
      * @return the paint device associated with the currently
      *         active mask, if there is one.
      */
     KisPaintDeviceSP activeDevice();
 
-signals:
-
-    void sigMaskActivated(KisMaskSP mask);
-
-public slots:
-
-
     /**
-     * Add a pre-existing mask to the graph; for instance, a preview
-     * mask that has been made definitive.
+     * @return the active mask, if there is one
      */
-    void addEffectMask(KisNodeSP parent, KisEffectMaskSP mask);
+    KisMaskSP activeMask();
 
     /**
      * Create a new transparency mask.
@@ -81,40 +93,11 @@ public slots:
      */
     void createFilterMask();
 
-    /**
-     * create a new transformation mask. If the transform tool is
-     * active, get the current transformation and selection and create
-     * the mask from that.
-     */
-    void createTransformationMask();
-
-    /**
-     * Create a local, i.e., per-layer selection object.
-     */
-    void createSelectionmask();
-
-    /**
-     * Create a new local selection from the active mask.
-     */
-    void maskToSelection();
-
-    /**
-     * Create a new layer from the current mask. The user can choose
-     * the colorspace of the new layer and which channels should be
-     * filled from the mask channel.
-     */
-    void maskToLayer();
 
     /**
      * Create an exact duplicate of the current mask.
      */
     void duplicateMask();
-
-    /**
-     * Show the mask as an overlay. The mask properties determine the
-     * color and opacity of the mask.
-     */
-    void showMask();
 
     /**
      * Delete the mask
@@ -167,12 +150,6 @@ public slots:
      */
     void masksUpdated();
 
-    void changeActivity(KisSelectionMask *mask,bool active);
-
-private:
-
-    friend class KisNodeManager;
-
     /**
      * Activate a new mask. There can be only one mask active per
      * view; and if the mask is active, it becomes the paint device.
@@ -180,11 +157,9 @@ private:
     void activateMask(KisMaskSP mask);
 
     void createSelectionMask(KisNodeSP parent, KisNodeSP above);
-    void createTransformationMask(KisNodeSP parent, KisNodeSP above);
     void createFilterMask(KisNodeSP parent, KisNodeSP above);
     void createTransparencyMask(KisNodeSP parent, KisNodeSP above);
 
-private:
     KisView2 * m_view;
 
     KisMaskSP m_activeMask;

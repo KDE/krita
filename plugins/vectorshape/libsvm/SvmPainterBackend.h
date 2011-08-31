@@ -89,12 +89,16 @@ public:
        \note the line is not meant to be closed (i.e. do not connect
        the last point to the first point) or filled.
     */
-    virtual void polyLine( SvmGraphicsContext &context, const QPolygon &polyline );
+    virtual void polyLine(SvmGraphicsContext &context, const QPolygon &polyline);
 
-    virtual void polygon( SvmGraphicsContext &context, const QPolygon &polygon );
+    virtual void polygon(SvmGraphicsContext &context, const QPolygon &polygon);
+
+    virtual void polyPolygon(SvmGraphicsContext &context, const QList<QPolygon> &polyPolygon);
 
     virtual void textArray(SvmGraphicsContext &context,
-                           const QPoint &point, const QString &string);
+                           const QPoint &point, const QString &string,
+                           quint16 startIndex, quint16 len,
+                           quint32 dxArrayLen, qint32 *dxArray);
 
  private:
     void updateFromGraphicscontext(SvmGraphicsContext &context);

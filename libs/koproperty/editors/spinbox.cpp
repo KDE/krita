@@ -263,13 +263,13 @@ DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeig
     QLineEdit* le = 0;
     if (sb) {
         le = sb->findChild<QLineEdit*>();
+        sb->setFrame(false);
     }
     if (le) {
         le->setAlignment(Qt::AlignLeft);
         le->setContentsMargins(0,0,0,0);
+        le->setFrame(false);
     }
-    sb->setFrame(false);
-    le->setFrame(false);
 /*    Factory::setTopAndBottomBordersUsingStyleSheet(sb, parent,
         QString::fromLatin1(
             "QDoubleSpinBox { border-left: 0; border-right: 0; } "
@@ -537,7 +537,7 @@ QString DoubleSpinBoxDelegate::displayTextForProperty( const Property* prop ) co
             if (unit.isEmpty())
                 return minValueText;
             else
-                return minValueText + " " + unit;
+                return minValueText + ' ' + unit;
         }
     }
 //! @todo precision?
@@ -545,7 +545,7 @@ QString DoubleSpinBoxDelegate::displayTextForProperty( const Property* prop ) co
     QString display;
 #ifdef KOPROPERTY_USE_KOLIBS
     if (!unit.isEmpty()) {
-        return KGlobal::locale()->formatNumber(KoUnit::unit(unit).toUserValue(prop->value().toDouble())) + " " + unit;
+        return KGlobal::locale()->formatNumber(KoUnit::unit(unit).toUserValue(prop->value().toDouble())) + ' ' + unit;
     }
 #endif
     return KGlobal::locale()->formatNumber(prop->value().toDouble());

@@ -121,10 +121,9 @@ KoInlineNote::Type KoInlineNote::type() const
     return d->type;
 }
 
-void KoInlineNote::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+void KoInlineNote::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(document);
-    Q_UNUSED(object);
     Q_UNUSED(posInDocument);
     Q_UNUSED(format);
 }
@@ -133,13 +132,17 @@ void KoInlineNote::resize(const QTextDocument *document, QTextInlineObject objec
 {
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
-    if (d->label.isEmpty())
-        return;
-    Q_ASSERT(format.isCharFormat());
-    QFontMetricsF fm(format.font(), pd);
-    object.setWidth(fm.width(d->label));
-    object.setAscent(fm.ascent());
-    object.setDescent(fm.descent());
+    if (d->label.isEmpty()) {
+        object.setWidth(0);
+        object.setAscent(0);
+        object.setDescent(0);
+    } else {
+        Q_ASSERT(format.isCharFormat());
+        QFontMetricsF fm(format.font(), pd);
+        object.setWidth(fm.width(d->label));
+        object.setAscent(fm.ascent());
+        object.setDescent(fm.descent());
+    }
 }
 
 void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)

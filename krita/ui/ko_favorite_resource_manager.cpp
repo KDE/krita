@@ -48,7 +48,7 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, 
         ,m_colorList(0)
 {
 
-    connect(paintopBox, SIGNAL(signalPaintopChanged(KisPaintOpPresetSP)), this, SLOT(slotChangePaintopLabel(KisPaintOpPresetSP)));
+    //connect(paintopBox, SIGNAL(signalPaintopChanged(KisPaintOpPresetSP)), this, SLOT(slotChangePaintopLabel(KisPaintOpPresetSP)));
 
     //take favorite brushes from a file then append to QList
     KConfigGroup group(KGlobal::config(), "favoriteList");
@@ -57,7 +57,7 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, 
     m_popupPalette = new KisPopupPalette(this, popupParent);
     m_popupPalette->showPopupPalette(false);
     m_colorList = new KisColorDataList();
-    
+
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     rServer->addObserver(this);
 }
@@ -272,11 +272,11 @@ void KoFavoriteResourceManager::removingResource(KisPaintOpPreset* resource)
     removeFavoritePreset(resource->name());
 }
 
-void KoFavoriteResourceManager::resourceAdded(KisPaintOpPreset* resource)
+void KoFavoriteResourceManager::resourceAdded(KisPaintOpPreset* /*resource*/)
 {
 }
 
-void KoFavoriteResourceManager::resourceChanged(KisPaintOpPreset* resource)
+void KoFavoriteResourceManager::resourceChanged(KisPaintOpPreset* /*resource*/)
 {
 }
 

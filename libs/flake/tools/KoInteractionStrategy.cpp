@@ -35,6 +35,7 @@ void KoInteractionStrategy::cancelInteraction()
 {
     KUndo2Command *cmd = createCommand();
     if (cmd) {
+        cmd->redo(); //some applications rely an redo being called here
         cmd->undo();
         delete cmd;
     }

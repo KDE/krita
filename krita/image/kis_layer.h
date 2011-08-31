@@ -134,7 +134,7 @@ public:
      * the colorspace this layer is in, or be empty, in which case all
      * channels are active.
      */
-    void setChannelFlags(const QBitArray & channelFlags);
+    virtual void setChannelFlags(const QBitArray & channelFlags);
 
     /**
      * Return a bit array where each bit indicates whether a

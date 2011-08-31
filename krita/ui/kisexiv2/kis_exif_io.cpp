@@ -15,6 +15,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+ #ifdef _MSC_VER // this removes KDEWIN extensions to stdint.h: required by exiv2
+#define KDEWIN_STDINT_H
+#endif
+
 #include "kis_exif_io.h"
 
 #include <exiv2/exif.hpp>
@@ -212,7 +216,7 @@ Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
     }
     qint16* dataIt = reinterpret_cast<qint16*>(array.data() + index);
     for (QList<KisMetaData::Value>::iterator it = values.begin();
-            it != values.end(); it++) {
+            it != values.end(); ++it) {
         dataIt[0] = it->asRational().numerator;
         dataIt[1] = it->asRational().denominator;
         dataIt += 2;

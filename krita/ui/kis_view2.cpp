@@ -5,7 +5,7 @@
  *                1999 Michael Koch    <koch@kde.org>
  *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *                2002 Patrick Julien <freak@codepimps.org>
- *                2003-2010 Boudewijn Rempt <boud@valdyas.org>
+ *                2003-2011 Boudewijn Rempt <boud@valdyas.org>
  *                2004 Clarence Dang <dang@kde.org>
  *                2011 José Luis Vergara <pentalis@gmail.com>
  *
@@ -38,6 +38,8 @@
 #include <QApplication>
 #include <QPrintDialog>
 #include <QObject>
+#include <QByteArray>
+#include <QBuffer>
 #include <QScrollBar>
 
 #include <kio/netaccess.h>
@@ -61,6 +63,7 @@
 #include <ktemporaryfile.h>
 #include <kactioncollection.h>
 
+#include <KoStore.h>
 #include <KoMainWindow.h>
 #include <KoSelection.h>
 #include <KoToolBoxFactory.h>
@@ -80,6 +83,7 @@
 #include <kis_undo_adapter.h>
 #include <kis_layer.h>
 
+#include "kra/kis_kra_loader.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_statusbar.h"
@@ -94,7 +98,6 @@
 #include "kis_image_manager.h"
 #include "kis_control_frame.h"
 #include "kis_paintop_box.h"
-#include "kis_layer_manager.h"
 #include "kis_zoom_manager.h"
 #include "canvas/kis_grid_manager.h"
 #include "canvas/kis_perspective_grid_manager.h"
@@ -126,8 +129,8 @@ class BlockingUserInputEventFilter : public QObject
     {
         Q_UNUSED(watched);
         if(dynamic_cast<QWheelEvent*>(event)
-            || dynamic_cast<QKeyEvent*>(event)
-            || dynamic_cast<QMouseEvent*>(event)) {
+                || dynamic_cast<QKeyEvent*>(event)
+                || dynamic_cast<QMouseEvent*>(event)) {
             return true;
         }
         else {
@@ -205,7 +208,7 @@ public:
 
 KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     : KoView(doc, parent),
-    m_d(new KisView2Private())
+      m_d(new KisView2Private())
 {
 
     setFocusPolicy(Qt::NoFocus);
@@ -256,16 +259,16 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
 
     // krita/krita.rc must also be modified to add actions to the menu entries
-    
+
     m_d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
     actionCollection()->addAction("save_incremental_version", m_d->saveIncremental);
     connect(m_d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
     connect(shell(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
-    
+
     if (koDocument()->localFilePath().isNull()) {
         m_d->saveIncremental->setEnabled(false);
     }
-    
+
     m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
     actionCollection()->addAction("total_refresh", m_d->totalRefresh);
     m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
@@ -311,7 +314,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     tAction->setCheckedState(KGuiItem(i18n("Return to Window")));
     tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
     QList<QKeySequence> shortcuts;
-    shortcuts << QKeySequence("Ctrl+h") << QKeySequence("ctrl+Shift+f");
+    shortcuts << QKeySequence("Ctrl+h");
     tAction->setShortcuts(shortcuts);
     tAction->setChecked(false);
     actionCollection()->addAction("view_show_just_the_canvas", tAction);
@@ -327,13 +330,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     //Workaround, by default has the same shortcut as hide/show dockers
     action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_toggledockers"));
-    if (action) {
-        action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
-        action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
-    }
-
-    //Workaround, by default has the same shortcut as full-screen
-    action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_fullscreen"));
     if (action) {
         action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
         action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
@@ -355,16 +351,17 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->resourceProvider, SLOT(slotNodeActivated(KisNodeSP)));
 
-
-    connect(layerManager(), SIGNAL(currentColorSpaceChanged(const KoColorSpace*)),
-            m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
-
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
 
     connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(const KoInputDevice &)),
             m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(const KoInputDevice &)));
 
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
+            m_d->controlFrame->paintopBox(), SLOT(slotToolChanged(KoCanvasController*,int)));
+
+    // 25 px is a distance that works well for Tablet and Mouse events
+    qApp->setStartDragDistance(25);
     show();
 
 
@@ -381,6 +378,19 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     connect(m_d->canvas, SIGNAL(scrollAreaSizeChanged()), m_d->zoomManager, SLOT(slotScrollAreaSizeChanged()));
 
     setAcceptDrops(true);
+
+#if 0
+    //check for colliding shortcuts
+    QSet<QKeySequence> existingShortcuts;
+    foreach(QAction* action, actionCollection()->actions()) {
+        if(action->shortcut() == QKeySequence("")) {
+            continue;
+        }
+        dbgUI << "shortcut " << action->text() << " " << action->shortcut();
+        Q_ASSERT(!existingShortcuts.contains(action->shortcut()));
+        existingShortcuts.insert(action->shortcut());
+    }
+#endif
 }
 
 
@@ -395,7 +405,9 @@ void KisView2::dragEnterEvent(QDragEnterEvent *event)
     dbgUI << "KisView2::dragEnterEvent";
     // Only accept drag if we're not busy, particularly as we may
     // be showing a progress bar and calling qApp->processEvents().
-    if (event->mimeData()->hasImage()) {
+    if (event->mimeData()->hasImage()
+            || event->mimeData()->hasUrls()
+            || event->mimeData()->hasFormat("application/x-krita-node")) {
         event->accept();
     } else {
         event->ignore();
@@ -404,81 +416,108 @@ void KisView2::dragEnterEvent(QDragEnterEvent *event)
 
 void KisView2::dropEvent(QDropEvent *event)
 {
-    if (event->mimeData()->hasImage()) {
-        QImage qimage = qvariant_cast<QImage>(event->mimeData()->imageData());
-        KisImageWSP kisimage = image();
+    KisImageWSP kisimage = image();
+    QPointF pos = kisimage->documentToIntPixel(m_d->viewConverter->viewToDocument(event->pos() + m_d->canvas->documentOffset() - m_d->canvas->documentOrigin()));
 
-        if (kisimage) {
-            KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-            device->convertFromQImage(qimage, "");
-            KisLayerSP layer = new KisPaintLayer(kisimage.data(), kisimage->nextLayerName(), OPACITY_OPAQUE_U8, device);
+    if (event->mimeData()->hasFormat("application/x-krita-node") || event->mimeData()->hasImage())
+    {
+        KisNodeSP node;
 
-            QPointF pos = kisimage->documentToIntPixel(m_d->viewConverter->viewToDocument(event->pos() + m_d->canvas->documentOffset() - m_d->canvas->documentOrigin()));
-            layer->setX(pos.x());
-            layer->setY(pos.y());
+        if (event->mimeData()->hasFormat("application/x-krita-node")) {
 
-            if (layer) {
-                KisNodeCommandsAdapter adapter(this);
-                if (!m_d->nodeManager->layerManager()->activeLayer()) {
-                    adapter.addNode(layer.data(), kisimage->rootLayer().data() , 0);
-                } else {
-                    adapter.addNode(layer.data(), m_d->nodeManager->layerManager()->activeLayer()->parent().data(), m_d->nodeManager->layerManager()->activeLayer().data());
-                }
-                layer->setDirty();
-                canvas()->update();
-                nodeManager()->activateNode(layer);
+            QByteArray ba = event->mimeData()->data("application/x-krita-node");
+
+            KisDoc2 tmpDoc;
+            tmpDoc.loadNativeFormatFromStore(ba);
+
+            node = tmpDoc.image()->rootLayer()->firstChild();
+            node->setName(i18n("Pasted Layer"));
+        }
+        else if (event->mimeData()->hasImage()) {
+            QImage qimage = qvariant_cast<QImage>(event->mimeData()->imageData());
+
+            if (kisimage) {
+                KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+                device->convertFromQImage(qimage, "");
+                node = new KisPaintLayer(kisimage.data(), kisimage->nextLayerName(), OPACITY_OPAQUE_U8, device);
             }
         }
+
+        if (node) {
+
+            // Set the image on layers before adding them, otherwise we get a crash
+            if (qobject_cast<KisLayer*>(node.data())) {
+                qobject_cast<KisLayer*>(node.data())->setImage(kisimage);
+            }
+
+            node->setX(pos.x() - node->projection()->exactBounds().width());
+            node->setY(pos.y() - node->projection()->exactBounds().height());
+
+            KisNodeCommandsAdapter adapter(this);
+            if (!m_d->nodeManager->activeLayer()) {
+                adapter.addNode(node, kisimage->rootLayer() , 0);
+            } else {
+                adapter.addNode(node,
+                                m_d->nodeManager->activeLayer()->parent(),
+                                m_d->nodeManager->activeLayer());
+            }
+            node->setDirty();
+            canvas()->update();
+            nodeManager()->activateNode(node);
+        }
+
         return;
+
     }
 
-    QList<QUrl> urls = event->mimeData()->urls();
-    if (urls.length() > 0) {
+    if (event->mimeData()->hasUrls()) {
+        QList<QUrl> urls = event->mimeData()->urls();
+        if (urls.length() > 0) {
 
-        KMenu popup;
-        popup.setObjectName("drop_popup");
+            KMenu popup;
+            popup.setObjectName("drop_popup");
 
-        QAction *insertAsNewLayer = new KAction(i18n("Insert as New Layer"), &popup);
-        QAction *insertAsNewLayers = new KAction(i18n("Insert as New Layers"), &popup);
+            QAction *insertAsNewLayer = new KAction(i18n("Insert as New Layer"), &popup);
+            QAction *insertAsNewLayers = new KAction(i18n("Insert as New Layers"), &popup);
 
-        QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
-        QAction *openInNewDocuments = new KAction(i18n("Open in New Documents"), &popup);
+            QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
+            QAction *openInNewDocuments = new KAction(i18n("Open in New Documents"), &popup);
 
-        QAction *cancel = new KAction(i18n("Cancel"), &popup);
+            QAction *cancel = new KAction(i18n("Cancel"), &popup);
 
-        if (urls.count() == 1) {
-            if (!image().isNull()) {
-                popup.addAction(insertAsNewLayer);
+            if (urls.count() == 1) {
+                if (!image().isNull()) {
+                    popup.addAction(insertAsNewLayer);
+                }
+                popup.addAction(openInNewDocument);
+            } else {
+                if (!image().isNull()) {
+                    popup.addAction(insertAsNewLayers);
+                }
+                popup.addAction(openInNewDocuments);
             }
-            popup.addAction(openInNewDocument);
-        } else {
-            if (!image().isNull()) {
-                popup.addAction(insertAsNewLayers);
-            }
-            popup.addAction(openInNewDocuments);
-        }
 
-        popup.addSeparator();
-        popup.addAction(cancel);
+            popup.addSeparator();
+            popup.addAction(cancel);
 
-        QAction *action = popup.exec(QCursor::pos());
+            QAction *action = popup.exec(QCursor::pos());
 
-        if (action != 0 && action != cancel) {
-            foreach(QUrl url, urls) {
+            if (action != 0 && action != cancel) {
+                foreach(QUrl url, urls) {
 
-                if (action == insertAsNewLayer || action == insertAsNewLayers) {
-                    m_d->imageManager->importImage(KUrl(url));
-                } else {
-                    Q_ASSERT(action == openInNewDocument || action == openInNewDocuments);
+                    if (action == insertAsNewLayer || action == insertAsNewLayers) {
+                        m_d->imageManager->importImage(KUrl(url));
+                    } else {
+                        Q_ASSERT(action == openInNewDocument || action == openInNewDocuments);
 
-                    if (shell() != 0) {
-                        shell()->openDocument(url);
+                        if (shell() != 0) {
+                            shell()->openDocument(url);
+                        }
                     }
                 }
             }
         }
     }
-
 }
 
 KoZoomController *KisView2::zoomController() const
@@ -534,22 +573,6 @@ KoCanvasController * KisView2::canvasController()
     return m_d->canvasController;
 }
 
-KisLayerManager * KisView2::layerManager()
-{
-    if (m_d->nodeManager)
-        return m_d->nodeManager->layerManager();
-    else
-        return 0;
-}
-
-KisMaskManager * KisView2::maskManager()
-{
-    if (m_d->nodeManager)
-        return m_d->nodeManager->maskManager();
-    else
-        return 0;
-}
-
 KisNodeSP KisView2::activeNode()
 {
     if (m_d->nodeManager)
@@ -560,8 +583,8 @@ KisNodeSP KisView2::activeNode()
 
 KisLayerSP KisView2::activeLayer()
 {
-    if (m_d->nodeManager && m_d->nodeManager->layerManager())
-        return m_d->nodeManager->layerManager()->activeLayer();
+    if (m_d->nodeManager)
+        return m_d->nodeManager->activeLayer();
     else
         return 0;
 }
@@ -883,14 +906,14 @@ void KisView2::slotSaveIncremental()
 {
     KoDocument* pDoc = koDocument();
     if (!pDoc) return;
-    
+
     bool foundVersion;
     bool fileAlreadyExists;
     QString version = "000";
     QString newVersion;
     QString letter;
     QString fileName = pDoc->localFilePath();
-    
+
     // Find current version filenames
     QRegExp regex("_\\d{1,5}[.]|_\\d{1,4}[a-z][.]"); //  Regexp to find incremental versions in the filename
     regex.indexIn(fileName);     //  Perform the search
@@ -950,9 +973,9 @@ void KisView2::slotSaveIncremental()
         KMessageBox::error(this, "Alternative names exhausted, try saving with a higher number", "Couldn't save incremental version");
         return;
     }
-    
+
     pDoc->saveAs(fileName);
-    
+
     shell()->updateCaption();
 }
 

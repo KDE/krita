@@ -91,7 +91,6 @@ void PercentLyingBarDiagram::paint( PaintContext* ctx )
     double barWidth = 0;
     double maxDepth = 0;
     double width = boundLeft.y() - boundRight.y();
-    QPointF testVector = boundRight - boundLeft;
     double groupWidth = width/ (rowCount + 2);
     double spaceBetweenBars = 0;
     double spaceBetweenGroups = 0;

@@ -2,7 +2,8 @@
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2011 Pavol Korinek <pavol.korinek@ixonos.com>
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
-
+ * Copyright (C) 2011 Ko GmbH <cbo@kogmbh.com>
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -26,28 +27,36 @@
 #include <QTextBlock>
 
 #include <KoTableOfContentsGeneratorInfo.h>
+
 class KoInlineTextObjectManager;
+class KoTextDocumentLayout;
 
-class QTextFrame;
+class QTextDocument;
 
-class ToCGenerator : public QObject
+class ToCGenerator : public QObject, public ToCGeneratorInterface
 {
     Q_OBJECT
 public:
-    explicit ToCGenerator(QTextFrame *tocFrame, KoTableOfContentsGeneratorInfo *tocInfo);
+    explicit ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGeneratorInfo *tocInfo);
     virtual ~ToCGenerator();
 
-    // TODO API to be called when the shape is printed so we can guarentee
-    // the TOC is up-to-date on printing time.
+    virtual void setMaxTabPosition(qreal maxTabPosition);
+    virtual void setBlock(const QTextBlock &block);
 
 public slots:
     void generate();
 
 private:
     QString resolvePageNumber(const QTextBlock &headingBlock);
+    void generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlock block, int &blockId);
 
-    QTextFrame *m_ToCFrame;
+    QTextDocument *m_ToCDocument;
     KoTableOfContentsGeneratorInfo *m_ToCInfo;
+    QTextBlock m_block;
+    QTextDocument *m_document;
+    KoTextDocumentLayout *m_documentLayout;
+    int m_generatedDocumentChangeCount;
+    qreal m_maxTabPosition;
 
     // Return the ref (name) of the first KoBookmark in the block, if KoBookmark not found, null QString is returned
     QString fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManager * inlineTextObjectManager);

@@ -168,13 +168,11 @@ void KisLayerManager::updateGUI()
 
     KisLayerSP layer;
     qint32 nlayers = 0;
-    qint32 nvisible = 0;
 
 
     if (image) {
         layer = m_activeLayer;
         nlayers = image->nlayers();
-        nvisible = nlayers - image->nHiddenLayers();
     }
 
     bool enable = image && layer && layer->visible() && !layer->userLocked() && !layer->systemLocked();
@@ -218,14 +216,6 @@ void KisLayerManager::layerProperties()
     KisLayerSP layer = m_activeLayer;
 
     if (!layer) return;
-
-    const KoColorSpace * cs = 0;
-    KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(layer.data());
-    if (pl) {
-        cs = pl->paintDevice()->colorSpace();
-    } else {
-        cs = layer->image()->colorSpace();
-    }
 
 
     if (KisAdjustmentLayerSP alayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data()))) {
@@ -285,47 +275,12 @@ void KisLayerManager::layerProperties()
             }
 
         }
-    } else {
-        KisDlgLayerProperties dlg(layer->name(),
-                                  layer->opacity(),
-                                  layer->compositeOp(),
-                                  cs,
-                                  layer->channelFlags());
-        dlg.resize(dlg.minimumSizeHint());
-
-        if (dlg.exec() == QDialog::Accepted) {
-
-            QBitArray newChannelFlags = dlg.getChannelFlags();
-            for (int i = 0; i < newChannelFlags.size(); ++i) {
-                dbgUI << "we got flags: " << i << " is " << newChannelFlags.testBit(i);
-            }
-            QBitArray oldChannelFlags = layer->channelFlags();
-            for (int i = 0; i < oldChannelFlags.size(); ++i) {
-                dbgUI << "the old ones were: " << i << " is " << oldChannelFlags.testBit(i);
-            }
-
-            dbgUI << " and are they the same: " << (oldChannelFlags == newChannelFlags);
-
-            if (layer->name() != dlg.getName() ||
-                    layer->opacity() != dlg.getOpacity() ||
-                    layer->compositeOp()->id() != dlg.getCompositeOp()
-               ) {
-                QApplication::setOverrideCursor(KisCursor::waitCursor());
-                m_view->undoAdapter()->addCommand(new KisLayerPropsCommand(layer,
-                                                  layer->opacity(), dlg.getOpacity(),
-                                                  layer->compositeOpId(), dlg.getCompositeOp(),
-                                                  layer->name(), dlg.getName(),
-                                                  oldChannelFlags, newChannelFlags));
-                QApplication::restoreOverrideCursor();
-                m_doc->setModified(true);
-            }
-            if (oldChannelFlags != newChannelFlags) {
-                layer->setChannelFlags(newChannelFlags);
-                layer->setDirty();
-            }
-        }
+    } else { // If layer == normal painting layer, shape layer, or group layer
+        KisDlgLayerProperties *dialog = new KisDlgLayerProperties(layer, m_view, m_doc);
+        dialog->resize(dialog->minimumSizeHint());
+        dialog->setAttribute(Qt::WA_DeleteOnClose);
+        dialog->show();
     }
-
 }
 
 void KisLayerManager::layerAdd()
@@ -638,21 +593,6 @@ void KisLayerManager::layerBack()
     layer->parent()->setDirty();
 }
 
-void KisLayerManager::rotateLayer180()
-{
-    rotateLayer(M_PI);
-}
-
-void KisLayerManager::rotateLayerLeft90()
-{
-    rotateLayer(M_PI / 2 - 2*M_PI);
-}
-
-void KisLayerManager::rotateLayerRight90()
-{
-    rotateLayer(M_PI / 2);
-}
-
 void KisLayerManager::mirrorLayerX()
 {
     KisLayerSP layer = activeLayer();
@@ -826,7 +766,7 @@ void KisLayerManager::mergeLayer()
     const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view);
     if (!strategy) return;
 
-    KisLayerSP  newLayer = image->mergeLayer(layer, strategy);
+    KisLayerSP  newLayer = image->mergeDown(layer, strategy);
     if (newLayer) {
         newLayer->setDirty();
     }

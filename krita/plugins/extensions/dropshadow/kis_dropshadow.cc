@@ -58,7 +58,7 @@
 #include <KoChannelInfo.h>
 #include <kis_convolution_painter.h>
 #include <commands/kis_node_commands.h>
-#include <kis_layer_manager.h>
+#include <kis_node_manager.h>
 #include <kis_node_commands_adapter.h>
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
@@ -182,7 +182,7 @@ void KisDropshadow::gaussianblur(KoUpdater * progressUpdater, KisPaintDeviceSP s
     double *val_p = NULL;
     double *val_m = NULL;
     double *vp, *vm;
-    qint32 x1, y1, x2, y2;
+    qint32 x1, y1;
     qint32 i, j;
     qint32 row, col, b;
     qint32 terms;
@@ -203,8 +203,6 @@ void KisDropshadow::gaussianblur(KoUpdater * progressUpdater, KisPaintDeviceSP s
     y1 = (qint32)(rect.y() - vert);
     width = (qint32)(rect.width() + 2 * horz);
     height = (qint32)(rect.height() + 2 * vert);
-    x2 = x1 + width;
-    y2 = y1 + height;
 
     if (width < 1 || height < 1) return;
 

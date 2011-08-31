@@ -34,7 +34,6 @@
 class KoStyleManager;
 class KoTextDocumentLayout;
 class KoTextBlockData;
-class KoImageCollection;
 class KoInlineNote;
 class KoPointedAt;
 class QTextList;
@@ -44,15 +43,20 @@ class KoTextLayoutTableArea;
 class FrameIterator;
 
 /**
- * When layout'ing text it is chopped into physical area of space.
- * Example of such areas are:
- *  RootArea (corresponds to a text shape, or a spreadsheet cell)
- *  TableArea (the kind of table that appears in text documents)
- *  SectionArea, that splits text into columns
- * Each of these are implemeted through subclasses, and this is just the interface
+ * When layouting text the text is chopped up into physical area of space.
+ *
+ * Examples of such areas are:
+ * <ul>
+ *  <li>RootArea (corresponds to a text shape, or a spreadsheet cell)
+ *  <li>TableArea (the kind of table that appears in text documents)
+ *  <li>SectionArea, that splits text into columns
+ * </ul>
+ *
+ * Each of these are implemented through subclasses, and this is just the interface.
  *
  * Layout happens until maximalAllowedY() is reached. That maximum may be set by
- * the RootArea, but it may also be set by for example a row in a table with fixed height.
+ * the RootArea, but it may also be set by, for example, a row in a table with
+ * fixed height.
  */
 class TEXTLAYOUT_EXPORT KoTextLayoutArea
 {
@@ -173,7 +177,7 @@ private:
 
     void clearPreregisteredFootNotes();
 
-    void drawListItem(QPainter *painter, const QTextBlock &block, KoImageCollection *imageCollection);
+    void drawListItem(QPainter *painter, const QTextBlock &block);
 
     void decorateParagraph(QPainter *painter, const QTextBlock &block);
 
@@ -225,6 +229,7 @@ private:
     QList<KoTextLayoutArea *> m_footNoteAreas;
     KoTextLayoutEndNotesArea *m_endNotesArea;
     QList<KoTextLayoutArea *> m_tableOfContentsAreas;
+    QList<KoTextLayoutArea *> m_bibliographyAreas;
 };
 
 #endif

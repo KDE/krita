@@ -35,7 +35,7 @@ KoConnectionShapeFactory::KoConnectionShapeFactory()
 {
     setToolTip(i18n("A connection between two other shapes"));
     setIcon("x-shape-connection");
-    setOdfElementNames(KoXmlNS::draw, QStringList("connector"));
+    setXmlElementNames(KoXmlNS::draw, QStringList("connector"));
     setLoadingPriority(1);
 }
 

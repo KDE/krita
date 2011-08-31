@@ -81,7 +81,7 @@ KisToneMappingOperatorConfigurationWidget* KisToneMappingOperator::createConfigu
     return 0;
 }
 
-QString KisToneMappingOperator::configEntryGroup()
+QString KisToneMappingOperator::configEntryGroup() const
 {
     return id() + "_tone_mapping_operator_bookmarks";
 }

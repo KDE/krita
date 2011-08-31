@@ -78,7 +78,6 @@ void KisFloodFillBenchmark::benchmarkFlood()
 
     QBENCHMARK
     {
-        QRegion dirty;
         KisFillPainter fillPainter(m_device);
         //setupPainter(&fillPainter);
         fillPainter.setBounds( QRect(0,0,GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT) );
@@ -100,7 +99,6 @@ void KisFloodFillBenchmark::benchmarkFlood()
         // fill twice
         fillPainter.fillColor(1, 1, 0);
 
-        dirty = fillPainter.takeDirtyRegion();
         fillPainter.deleteTransaction();
     }
 

@@ -22,6 +22,9 @@
 
 #include "KDChartBackgroundAttributes.h"
 #include <QPixmap>
+#if !defined(QT_NO_DEBUG_STREAM)
+#include <QVariant>
+#endif
 
 #include <KDABLibFakes>
 
@@ -150,7 +153,7 @@ QDebug operator<<(QDebug dbg, const KDChart::BackgroundAttributes& ba)
 	<< "visible="<<ba.isVisible()
 	<< "brush="<<ba.brush()
 	<< "pixmapmode="<<ba.pixmapMode()
-	<< "pixmap="<<ba.pixmap()
+	<< "pixmap="<<QVariant(ba.pixmap())
 	<< ")";
     return dbg;
 }

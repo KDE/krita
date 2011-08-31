@@ -270,8 +270,6 @@ bool StarShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & co
         return false;
     }
 
-    QPointF loadedPosition = position();
-
     m_radius[tip] = 50;
     m_center = QPointF(50,50);
 

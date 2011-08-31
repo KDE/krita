@@ -195,12 +195,13 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
         llp.setTextIndent(unit->fromUserValue(widget.doubleSpinBox_3->value())-unit->fromUserValue(widget.doubleSpinBox_2->value()));
     }
 
-    if (!KoListStyle::isNumberingStyle(style)) {
+    if (style == KoListStyle::CustomCharItem) {
+        llp.setBulletCharacter(currentRow == m_blankCharIndex ? QChar() : widget.customCharacter->text().remove('&').at(0));
+    }
+    // it is important to not use 45 for CustomCharItem as it is also char based
+    else if (!KoListStyle::isNumberingStyle(style)) {
         llp.setRelativeBulletSize(45); //for non-numbering bullets the default relative bullet size is 45%(The spec does not say it; we take it)
     }
-
-    if (style == KoListStyle::CustomCharItem)
-        llp.setBulletCharacter(currentRow == m_blankCharIndex ? QChar() : widget.customCharacter->text().remove('&').at(0));
 
     Qt::Alignment align;
     switch (widget.alignment->currentIndex()) {

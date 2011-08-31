@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007-2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2009,2011 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008-2010 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -46,9 +46,9 @@
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerAdapter.h>
 #include <KoColorPopupAction.h>
+#include <KoSliderCombo.h>
 
 #include <klocale.h>
-#include <KNumInput>
 
 #include <QtGui/QGridLayout>
 #include <QtGui/QStackedWidget>
@@ -73,30 +73,31 @@ StyleDocker::StyleDocker(QWidget * parent)
     setWindowTitle(i18n("Stroke and Fill"));
 
     QWidget *mainWidget = new QWidget(this);
-    m_layout = new QGridLayout(mainWidget);
 
     m_preview = new StylePreview(mainWidget);
-    m_layout->addWidget(m_preview, 0, 0, 2, 1);
 
-    m_buttons = new StyleButtonBox(mainWidget);
+    m_buttons = new StyleButtonBox(mainWidget, 2, 3);
     m_buttons->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    m_layout->addWidget(m_buttons, 0, 1);
 
     m_stack = new QStackedWidget(mainWidget);
     m_stack->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    m_layout->addWidget(m_stack, 1, 1);
 
-    m_layout->addWidget(new QLabel(i18n("Opacity:")), 2, 0);
-
-    m_opacity = new KDoubleNumInput(mainWidget);
+    m_opacity = new KoSliderCombo(mainWidget);
     m_opacity->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    m_opacity->setRange(0.0, 1.0, 0.05, true);
-    m_opacity->setValue(1.0);
-    m_layout->addWidget(m_opacity, 2, 1);
+    m_opacity->setMinimum(0);
+    m_opacity->setMaximum(100);
+    m_opacity->setValue(100);
+    m_opacity->setDecimals(0);
 
     m_spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
-    m_layout->addItem(m_spacer, 2, 2);
 
+    m_layout = new QGridLayout(mainWidget);
+    m_layout->addWidget(m_preview, 0, 0, 2, 1);
+    m_layout->addWidget(m_buttons, 0, 1, 2, 1);
+    m_layout->addWidget(m_stack, 0, 2, 1, 2);
+    m_layout->addWidget(new QLabel(i18n("Opacity:")), 1, 2);
+    m_layout->addWidget(m_opacity, 1, 3);
+    m_layout->addItem(m_spacer, 2, 2);
     m_layout->setMargin(0);
     m_layout->setVerticalSpacing(0);
     m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
@@ -110,16 +111,20 @@ StyleDocker::StyleDocker(QWidget * parent)
     KoResourceSelector * gradientSelector = new KoResourceSelector(gradientResourceAdapter, m_stack);
     gradientSelector->setColumnCount(1);
     gradientSelector->setRowHeight(20);
+    gradientSelector->setMinimumWidth(100);
 
     KoAbstractResourceServerAdapter * patternResourceAdapter = new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer(), this);
     KoResourceSelector * patternSelector = new KoResourceSelector(patternResourceAdapter, m_stack);
     patternSelector->setColumnCount(5);
     patternSelector->setRowHeight(30);
+    patternSelector->setMinimumWidth(100);
 
     m_stack->addWidget(m_colorSelector);
     m_stack->addWidget(gradientSelector);
     m_stack->addWidget(patternSelector);
     m_stack->setContentsMargins(0, 0, 0, 0);
+    m_stack->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    m_stack->setMinimumWidth(100);
 
     connect(m_preview, SIGNAL(fillSelected()), this, SLOT(fillSelected()));
     connect(m_preview, SIGNAL(strokeSelected()), this, SLOT(strokeSelected()));
@@ -136,7 +141,7 @@ StyleDocker::StyleDocker(QWidget * parent)
              this, SLOT(updatePattern(KoResource*)));
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
              this, SLOT(locationChanged(Qt::DockWidgetArea)));
-    connect(m_opacity, SIGNAL(valueChanged(double)), this, SLOT(updateOpacity(double)));
+    connect(m_opacity, SIGNAL(valueChanged(qreal, bool)), this, SLOT(updateOpacity(qreal)));
 
     setWidget(mainWidget);
 }
@@ -207,11 +212,11 @@ void StyleDocker::updateStyle()
     KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
     if (shape) {
         updateStyle(shape->border(), shape->background());
-        m_opacity->setValue(1.0-shape->transparency());
+        m_opacity->setValue(100-shape->transparency()*100);
     }
     else {
         updateStyle(0, 0);
-        m_opacity->setValue(1.0);
+        m_opacity->setValue(100);
     }
     m_opacity->blockSignals(false);
 }
@@ -529,7 +534,7 @@ void StyleDocker::updateFillRule(Qt::FillRule fillRule)
         m_canvas->addCommand(new KoPathFillRuleCommand(pathsToChange, fillRule));
 }
 
-void StyleDocker::updateOpacity(double opacity)
+void StyleDocker::updateOpacity(qreal opacity)
 {
     if (! m_canvas)
         return;
@@ -542,7 +547,7 @@ void StyleDocker::updateOpacity(double opacity)
     if (!selectedShapes.count())
         return;
 
-    m_canvas->addCommand(new KoShapeTransparencyCommand(selectedShapes, 1.0-opacity));
+    m_canvas->addCommand(new KoShapeTransparencyCommand(selectedShapes, 1.0-opacity/100));
 }
 
 QList<KoPathShape*> StyleDocker::selectedPathShapes()

@@ -958,14 +958,14 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
     const QString &text = textObject.textString();
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << "Ref point: " << textObject.referencePoint()
+    kDebug(31000) << "Ref point: " << referencePoint
                   << "options: " << hex << textObject.options() << dec
                   << "rectangle: " << textObject.rectangle()
                   << "text: " << textObject.textString();
 #endif
 
-    int  x = textObject.referencePoint().x();
-    int  y = textObject.referencePoint().y();
+    int  x = referencePoint.x();
+    int  y = referencePoint.y();
 
     // The TA_UPDATECP flag tells us to use the current position
     if (m_textAlignMode & TA_UPDATECP) {
@@ -1027,14 +1027,14 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
     // when fonts are switched, the replacement fonts are sometimes
     // wider than the original fonts.
     QRect  worldRect(m_worldTransform.mapRect(QRect(x, y, textWidth, textHeight)));
-    kDebug(31000) << "rects:" << QRect(x, y, textWidth, textHeight) << worldRect;
+    //kDebug(31000) << "rects:" << QRect(x, y, textWidth, textHeight) << worldRect;
     qreal  scaleX = qreal(1.0);
     qreal  scaleY = qreal(1.0);
     if (bounds.width() < worldRect.width())
         scaleX = qreal(bounds.width()) / qreal(worldRect.width());
     if (bounds.height() < worldRect.height())
         scaleY = qreal(bounds.height()) / qreal(worldRect.height());
-    kDebug(31000) << "scale:" << scaleX << scaleY;
+    //kDebug(31000) << "scale:" << scaleX << scaleY;
 
     if (scaleX < qreal(1.0) || scaleY < qreal(1.0)) {
         m_painter->translate(-x, -y);
@@ -1352,11 +1352,14 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
     kDebug(31000) << "After transformation:";
     kDebug(31000) << "    target" << target;
     kDebug(31000) << "    source" << source;
+    QImage image = record.image();
+    kDebug(31000) << "Image" << image.size();
+
 #endif
 
     QPainter::RenderHints      oldRenderHints = m_painter->renderHints();
+    QPainter::CompositionMode  oldCompMode    = m_painter->compositionMode();
     m_painter->setRenderHints(0); // Antialiasing makes composition modes invalid
-    QPainter::CompositionMode  oldCompMode = m_painter->compositionMode();
     m_painter->setCompositionMode(rasteropToQtComposition(record.rasterOperation()));
     m_painter->drawImage(target, record.image(), source);
     m_painter->setCompositionMode(oldCompMode);

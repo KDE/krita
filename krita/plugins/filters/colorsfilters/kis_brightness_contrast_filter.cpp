@@ -67,7 +67,6 @@ void KisBrightnessContrastFilterConfiguration::fromLegacyXML(const QDomElement& 
 void KisBrightnessContrastFilterConfiguration::fromXML(const QDomElement& root)
 {
     KisCubicCurve curve;
-    quint16 numTransfers = 0;
     int version;
     version  = root.attribute("version").toInt();
 
@@ -75,9 +74,7 @@ void KisBrightnessContrastFilterConfiguration::fromXML(const QDomElement& root)
     QString attributeName;
 
     while (!e.isNull()) {
-        if ((attributeName = e.attribute("name")) == "nTransfers") {
-            numTransfers = e.text().toUShort();
-        } else {
+        if ((attributeName = e.attribute("name")) != "nTransfers") {
             QRegExp rx("curve(\\d+)");
             if (rx.indexIn(attributeName, 0) != -1) {
                 quint16 index = rx.cap(1).toUShort();

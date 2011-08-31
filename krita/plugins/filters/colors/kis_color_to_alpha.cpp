@@ -65,7 +65,6 @@ void KisFilterColorToAlpha::process(KisPaintDeviceSP device,
                                     KoUpdater* progressUpdater
                                    ) const
 {
-    QPoint srcTopLeft = rect.topLeft();
     Q_ASSERT(device != 0);
 
     if (config == 0) config = new KisFilterConfiguration("colortoalpha", 1);

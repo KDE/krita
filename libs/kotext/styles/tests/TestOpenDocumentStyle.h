@@ -37,6 +37,7 @@ class Attribute : public QObject
         QString name();
         QStringList listValues();
         bool compare (const QString &initialValue, const QString &outputValue);
+        bool hasReference (const QString &reference);
 
     private:
         QStringList listValuesFromNode(const QDomElement &element);
@@ -76,6 +77,8 @@ class TestOpenDocumentStyle : public QObject
         void testTableCellStyle_data();
         void testParagraphStyle();
         void testParagraphStyle_data();
+        void testCharacterStyle();
+        void testCharacterStyle_data();
 };
 
 #endif // TESTOPENDOCUMENTSTYLE_H

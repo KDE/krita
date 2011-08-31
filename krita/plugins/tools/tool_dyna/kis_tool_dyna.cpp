@@ -54,7 +54,7 @@
 #define MAXIMUM_MAGNETISM 1000
 
 KisToolDyna::KisToolDyna(KoCanvasBase * canvas)
-        : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18n("Dyna"))
+        : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18nc("(qtundo-format)", "Dyna"))
 {
     setObjectName("tool_dyna");
 
@@ -62,7 +62,7 @@ KisToolDyna::KisToolDyna(KoCanvasBase * canvas)
     m_timer = new QTimer(this);
     Q_CHECK_PTR(m_timer);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
-    
+
     initDyna();
 }
 
@@ -94,9 +94,7 @@ void KisToolDyna::timeoutPaint()
 
     if (currentImage() && m_painter) {
         paintAt(m_previousPaintInformation);
-        QRegion r = m_painter->takeDirtyRegion();
-        dbgPlugins << "Timeout paint dirty region:" << r;
-        currentNode()->setDirty(r);
+        currentNode()->setDirty(m_painter->takeDirtyRegion());
     }
 
 }
@@ -105,14 +103,14 @@ void KisToolDyna::timeoutPaint()
 void KisToolDyna::initPaint(KoPointerEvent *e)
 {
     m_rate = currentPaintOpPreset()->settings()->rate();
-    
+
     QRectF imageSize = QRectF(QPointF(0.0,0.0),currentImage()->size());
     QRectF documentSize = currentImage()->pixelToDocument(imageSize);
     m_surfaceWidth = documentSize.width();
     m_surfaceHeight = documentSize.height();
     setMousePosition(e->point);
     m_mouse.init(m_mousePos.x(), m_mousePos.y());
-    
+
     KisToolFreehand::initPaint(e);
 
     if (!m_painter) {
@@ -138,7 +136,7 @@ void KisToolDyna::mousePressEvent(KoPointerEvent *e)
     m_mouse.init(m_mousePos.x(), m_mousePos.y());
     m_odelx = m_mousePos.x();
     m_odely = m_mousePos.y();
-    
+
     KisToolFreehand::mousePressEvent(e);
 }
 
@@ -279,10 +277,10 @@ KoPointerEvent KisToolDyna::filterEvent(KoPointerEvent* event)
 
     m_pressure =  m_mouse.vel * 100;
     m_pressure = qBound<qreal>(0.0,m_pressure, 1.0);
-    
+
     m_odelx = delx;
     m_odely = dely;
-    
+
     // how to change pressure in the KoPointerEvent???
     return KoPointerEvent(event,now);
 }

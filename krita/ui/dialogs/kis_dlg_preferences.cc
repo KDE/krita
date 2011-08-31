@@ -35,6 +35,8 @@
 #include <QToolButton>
 #include <QThread>
 #include <QGridLayout>
+#include <QRadioButton>
+#include <QGroupBox>
 
 #ifdef HAVE_OPENGL
 #include <qgl.h>
@@ -55,6 +57,14 @@
 #include <kicon.h>
 #include <kvbox.h>
 #include <kundo2stack.h>
+#include <KoConfig.h>
+
+#ifdef NEPOMUK
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+#include <KoResourceServer.h>
+#include <KoResourceServerProvider.h>
+#endif
 
 #include "widgets/squeezedcombobox.h"
 #include "kis_clipboard.h"
@@ -82,6 +92,12 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbCursorShape->addItem("3D Brush Model");
 #endif
 
+#ifdef NEPOMUK
+    grpResourceTagging->show();
+#else
+    grpResourceTagging->hide();
+#endif
+
     m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
     chkShowRootLayer->setChecked(cfg.showRootLayer());
     chkZoomWithWheel->setChecked(cfg.zoomWithWheel());
@@ -93,6 +109,20 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_undoStackSize->setValue(cfg.undoStackLimit());
     m_backupFileCheckBox->setChecked(cfg.backupFile());
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
+
+#ifdef NEPOMUK
+    KConfigGroup tagConfig = KConfigGroup( KGlobal::config(), "resource tagging" );
+    bool val = tagConfig.readEntry("nepomuk_usage_for_resource_tagging", false);
+    if(!val) {
+        radioXml->setChecked(true);
+    }
+    else {
+        radioNepomuk->setChecked(true);
+    }
+
+    connect(radioNepomuk,SIGNAL(toggled(bool)),SLOT(tagBackendChange(bool)));
+#endif
+
 }
 
 void GeneralTab::setDefault()
@@ -134,6 +164,21 @@ int GeneralTab::undoStackSize()
 bool GeneralTab::showOutlineWhilePainting()
 {
     return m_showOutlinePainting->isChecked();
+}
+
+void GeneralTab::tagBackendChange(bool on)
+{
+#ifdef NEPOMUK
+    KoResourceServer<KoPattern>* tagServer = KoResourceServerProvider::instance()->patternServer();
+
+    if(radioNepomuk->isChecked()) {
+        tagServer->updateNepomukXML(on);
+    }
+
+    if (radioXml->isChecked()){
+        tagServer->updateNepomukXML(on);
+    }
+#endif
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -303,6 +348,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 {
     KisConfig cfg;
 
+    labelWarning->setPixmap(KIcon("dialog-warning").pixmap(32, 32));
 #ifdef HAVE_OPENGL
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
@@ -560,8 +606,8 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 
     // full-screen mode
     vbox = new KVBox();
-    page = new KPageWidgetItem(vbox, i18n("Full-screen settings"));
-    page->setHeader(i18n("Full-screen"));
+    page = new KPageWidgetItem(vbox, i18n("Canvas-only settings"));
+    page->setHeader(i18n("Canvas-only"));
     page->setIcon(KIcon("preferences-system-performance"));
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);

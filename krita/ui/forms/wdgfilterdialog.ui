@@ -14,6 +14,9 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item row="0" column="0" colspan="5">
     <widget class="KisFilterSelectorWidget" name="filterSelection" native="true">
      <property name="sizePolicy">

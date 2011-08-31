@@ -39,6 +39,7 @@
 #include <qdom.h>
 #include "KoResource.h"
 #include "KoResourceServerObserver.h"
+#include "KoResourceTagging.h"
 
 #include "kowidgets_export.h"
 
@@ -101,11 +102,13 @@ public:
         , m_deleteResource(deleteResource)
         {
             blackListFile = KStandardDirs::locateLocal("data", "krita/" + type + ".blacklist");
+            m_tagObject = new KoResourceTagging(extensions);
         }
 
     virtual ~KoResourceServer()
         {
             qDeleteAll(m_resources);
+            delete m_tagObject;
         }
 
    /**
@@ -210,35 +213,15 @@ public:
             return false;
         }
 
-        bool removedFromDisk = true;
-
-        QFile file( resource->filename() );
-        if( ! file.remove() ) {
-
-            // Don't do anything, it's probably write protected. In
-            // //future, we should store in config which read-only
-            // //resources the user has removed and blacklist them on
-            // app-start. But if we cannot remove a resource from the
-            // disk, remove it from the chooser at least.
-
-            removedFromDisk = false;
-            kWarning(30009) << "Could not remove resource!";
-        }
-
-
-          m_resourcesByName.remove(resource->name());
-          m_resourcesByFilename.remove(resource->shortFilename());
-          m_resources.removeAt(m_resources.indexOf(resource));
-          notifyRemovingResource(resource);
-            if (m_deleteResource) {
-                delete resource;
-            }
-
-         if(!removedFromDisk) {
-            writeBlackListFile(resource->filename());
-        }
-
-        return true;
+       m_resourcesByName.remove(resource->name());
+       m_resourcesByFilename.remove(resource->shortFilename());
+       m_resources.removeAt(m_resources.indexOf(resource));
+       notifyRemovingResource(resource);
+       writeBlackListFile(resource->filename());
+       if (m_deleteResource && resource) {
+          delete resource;
+       }
+       return true;
     }
 
     QList<T*> resources() {
@@ -378,6 +361,43 @@ public:
         return blackListFileNames;
     }
 
+    /// the below functions helps to access tagObject functions
+    QStringList getAssignedTagsList( KoResource* resource )
+    {
+        return m_tagObject->getAssignedTagsList(resource);
+    }
+
+    QStringList getTagNamesList()
+    {
+        return m_tagObject->getTagNamesList();
+    }
+
+    void addTag( KoResource* resource,const QString& tag)
+    {
+        m_tagObject->addTag(resource,tag);
+    }
+
+    void delTag( KoResource* resource,const QString& tag)
+    {
+        m_tagObject->delTag(resource,tag);
+    }
+
+    QStringList searchTag(const QString& lineEditText)
+    {
+        return m_tagObject->searchTag(lineEditText);
+    }
+
+
+#ifdef NEPOMUK
+    void updateNepomukXML(bool nepomukOn)
+    {
+        KoResourceTagging* tagObject = new KoResourceTagging(extensions());
+        tagObject->setNepomukBool(nepomukOn);
+        tagObject->updateNepomukXML(nepomukOn);
+        delete tagObject;
+        m_tagObject->setNepomukBool(nepomukOn);
+    }
+#endif
 protected:
 
     /**
@@ -454,37 +474,51 @@ protected:
     void writeBlackListFile(QString fileName)
     {
        QFile f(blackListFile);
-       if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+       bool fileExists = f.exists();
+
+       if (!f.open(QIODevice::ReadWrite | QIODevice::Text)) {
             kWarning() << "Cannot write meta information to '" << blackListFile << "'." << endl;
             return;
        }
 
-       QDomDocument doc("blackListFile");
-       doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
-       QDomElement root = doc.createElement("resourceFilesList");
-       doc.appendChild(root);
+       QDomDocument doc;
+       QDomElement root;
 
-       if(!blackListFileNames.contains(fileName)){
-           blackListFileNames.append(fileName);
+       if (!fileExists) {
+           QDomDocument docTemp("blackListFile");
+           doc = docTemp;
+           doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+           root = doc.createElement("resourceFilesList");
+           doc.appendChild(root);
+       }
+       else {
+           if (!doc.setContent(&f)) {
+               kWarning() << "The file could not be parsed.";
+               return;
+           }
+
+           root = doc.documentElement();
+           if (root.tagName() != "resourceFilesList") {
+               kWarning() << "The file doesn't seem to be of interest.";
+               return;
+           }
        }
 
-       foreach(QString file, blackListFileNames) {
+       QDomElement fileEl = doc.createElement("file");
+       QDomElement nameEl = doc.createElement("name");
+       QDomText nameText = doc.createTextNode(fileName);
+       nameEl.appendChild(nameText);
+       fileEl.appendChild(nameEl);
+       root.appendChild(fileEl);
 
-           QDomElement fileEl = doc.createElement("file");
-           QDomElement nameEl = doc.createElement("name");
-           QDomText nameText = doc.createTextNode(file);
-           nameEl.appendChild(nameText);
-           fileEl.appendChild(nameEl);
-           root.appendChild(fileEl);
+       f.remove();
+       if(!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+             kWarning() << "Cannot write meta information to '" << blackListFile << "'." << endl;
        }
-
        QTextStream metastream(&f);
        metastream << doc.toByteArray();
-
        f.close();
-
     }
-
 private:
 
     QHash<QString, T*> m_resourcesByName;
@@ -495,6 +529,7 @@ private:
     bool m_deleteResource;
     QString blackListFile;
     QStringList blackListFileNames;
+    KoResourceTagging* m_tagObject;
 
 };
 

@@ -29,7 +29,6 @@
 #include "kis_paint_layer.h"
 #include "kis_adjustment_layer.h"
 
-#include "kis_transformation_mask.h"
 #include "kis_transparency_mask.h"
 #include "kis_filter_mask.h"
 #include "kis_selection_mask.h"
@@ -103,9 +102,6 @@ public:
         return cropPaintDeviceNode((KisNode*)mask);
     }
     bool visit(KisTransparencyMask *mask) {
-        return cropPaintDeviceNode(mask);
-    }
-    bool visit(KisTransformationMask *mask) {
         return cropPaintDeviceNode(mask);
     }
     bool visit(KisSelectionMask *mask) {

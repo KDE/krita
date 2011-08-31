@@ -51,7 +51,7 @@ MusicShapeFactory::MusicShapeFactory()
     setToolTip( i18n( "A shape which provides a music editor" ) );
     ///@todo setIcon( "musicflake" );
     setIcon( "music-note-16th" );
-    setOdfElementNames( "http://www.calligra-suite.org/music", QStringList("shape") );
+    setXmlElementNames( "http://www.calligra-suite.org/music", QStringList("shape") );
     setLoadingPriority( 1 );
 }
 

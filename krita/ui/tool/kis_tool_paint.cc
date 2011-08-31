@@ -78,7 +78,6 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     m_optionWidgetLayout = 0;
 
     m_opacity = OPACITY_OPAQUE_U8;
-    m_compositeOp = 0;
 
     updateTabletPressureSamples();
 
@@ -96,8 +95,6 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     connect(m_darkerColor, SIGNAL(activated()), SLOT(makeColorDarker()));
     addAction("make_brush_color_darker", m_darkerColor);
 
-
-    connect(kiscanvas->view()->resourceProvider(), SIGNAL(sigCompositeOpChanged(QString)), this, SLOT(slotSetCompositeMode(QString)));
     connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), kiscanvas, SIGNAL(favoritePaletteCalled(const QPoint&)));
     connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->view()->resourceProvider(), SLOT(slotPainting()));
 }
@@ -107,14 +104,16 @@ KisToolPaint::~KisToolPaint()
 {
 }
 
+int KisToolPaint::flags() const
+{
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP;
+}
+
 void KisToolPaint::resourceChanged(int key, const QVariant& v)
 {
     KisTool::resourceChanged(key, v);
 
     switch(key){
-        case(KisCanvasResourceProvider::CurrentKritaNode):
-            slotSetCompositeMode(canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentCompositeOp).toString());
-            break;
         case(KisCanvasResourceProvider::Opacity):
             slotSetOpacity(v.toDouble());
             break;
@@ -131,8 +130,6 @@ void KisToolPaint::resourceChanged(int key, const QVariant& v)
 void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
-    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-    slotSetCompositeMode(kiscanvas->view()->resourceProvider()->currentCompositeOp());
     resetCursorStyle();
 }
 
@@ -322,16 +319,16 @@ void KisToolPaint::slotSetOpacity(qreal opacity)
     m_opacity = quint8(opacity * OPACITY_OPAQUE_U8);
 }
 
-void KisToolPaint::slotSetCompositeMode(const QString& compositeOp)
+const KoCompositeOp* KisToolPaint::compositeOp()
 {
-    Q_ASSERT(!compositeOp.isEmpty());
     if (currentNode()) {
         KisPaintDeviceSP device = currentNode()->paintDevice();
-
         if (device) {
-            m_compositeOp = device->colorSpace()->compositeOp(compositeOp);
+            QString op = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentCompositeOp).toString();
+            return device->colorSpace()->compositeOp(op);
         }
     }
+    return 0;
 }
 
 void KisToolPaint::slotPopupQuickHelp()
@@ -384,7 +381,7 @@ void KisToolPaint::setupPainter(KisPainter* painter)
 {
     KisTool::setupPainter(painter);
     painter->setOpacity(m_opacity);
-    painter->setCompositeOp(m_compositeOp);
+    painter->setCompositeOp(compositeOp());
 
     QPointF axisCenter = canvas()->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxisCenter).toPointF();
     if (axisCenter.isNull()){
@@ -399,8 +396,9 @@ void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)
 {
     KisTool::setupPaintAction(action);
     action->setOpacity(m_opacity / qreal(255.0));
-    if (m_compositeOp) {
-        action->setCompositeOp(m_compositeOp->id());
+    const KoCompositeOp* op = compositeOp();
+    if (op) {
+        action->setCompositeOp(op->id());
     }
 }
 

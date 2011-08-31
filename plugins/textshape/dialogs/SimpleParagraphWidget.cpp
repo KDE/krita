@@ -22,6 +22,8 @@
 #include <ListItemsHelper.h>
 #include "../commands/ChangeListCommand.h"
 #include "FormattingButton.h"
+#include "StylesWidget.h"
+#include "SpecialButton.h"
 
 #include <KAction>
 #include <KoTextBlockData.h>
@@ -29,6 +31,8 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextDocumentLayout.h>
 #include <KoZoomHandler.h>
+#include <KoStyleThumbnailer.h>
+#include <KoStyleManager.h>
 
 #include <KDebug>
 
@@ -75,8 +79,24 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     connect(widget.bulletListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
     connect(widget.numberedListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
     connect(widget.reversedText, SIGNAL(clicked()), this, SLOT(directionChangeRequested()));
+
+    m_stylePopup = new StylesWidget(this, true, Qt::Popup);
+    m_stylePopup->setFrameShape(QFrame::StyledPanel);
+    m_stylePopup->setFrameShadow(QFrame::Raised);
+    widget.blockFrame->setStylesWidget(m_stylePopup);
+
+    connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)));
+    connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(doneWithFocus()));
+    connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(hidePopup()));
+
+    m_thumbnailer = new KoStyleThumbnailer();
 }
 
+SimpleParagraphWidget::~SimpleParagraphWidget()
+{
+    delete m_thumbnailer;
+    delete m_stylePopup;
+}
 
 void SimpleParagraphWidget::directionChangeRequested()
 {
@@ -183,7 +203,7 @@ void SimpleParagraphWidget::fillListButtons()
                 lay->layout();
 
             textShape.paintComponent(p, zoomHandler);
-            if(listStyle.isNumberingStyle(item.style)) {
+            if(KoListStyle::isNumberingStyle(item.style)) {
                 widget.numberedListButton->addItem(pm, static_cast<int> (item.style));
             } else {
                 widget.bulletListButton->addItem(pm, static_cast<int> (item.style));
@@ -217,11 +237,40 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
             break;
         }
     }
+
+    QTextBlockFormat format;
+
+    int id = format.intProperty(KoParagraphStyle::StyleId);
+    KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
+    if (style) {
+        widget.blockFrame->setStylePreview(m_thumbnailer->thumbnail(style, widget.blockFrame->size()));
+    }
+    m_stylePopup->setCurrentFormat(format);
+}
+
+void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
+{
+    if (format == m_currentBlockFormat)
+        return;
+    m_currentBlockFormat = format;
+
+    int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
+    KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
+    if (style) {
+        widget.blockFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->paragraphStyle(id), widget.blockFrame->contentsRect().size()));
+    }
+    m_stylePopup->setCurrentFormat(format);
 }
 
 void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
+    m_stylePopup->setStyleManager(sm);
+}
+
+void SimpleParagraphWidget::hidePopup()
+{
+    widget.blockFrame->hidePopup();
 }
 
 void SimpleParagraphWidget::listStyleChanged(int id)
@@ -229,7 +278,7 @@ void SimpleParagraphWidget::listStyleChanged(int id)
     emit doneWithFocus();
     if (m_blockSignals) return;
 
-    m_tool->addCommand( new ChangeListCommand (m_tool->cursor(), static_cast<KoListStyle::Style> (id)));
+    m_tool->changeListStyle(new ChangeListCommand (m_tool->cursor(), static_cast<KoListStyle::Style> (id)));
 }
 
 #include <SimpleParagraphWidget.moc>

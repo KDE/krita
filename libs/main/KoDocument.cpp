@@ -1097,8 +1097,7 @@ bool KoDocument::saveOasisPreview(KoStore *store, KoXmlWriter *manifestWriter)
 bool KoDocument::savePreview(KoStore *store)
 {
     QPixmap pix = generatePreview(QSize(256, 256));
-    // Reducing to 8bpp reduces file sizes quite a lot.
-    const QImage preview(pix.toImage().convertToFormat(QImage::Format_Indexed8, Qt::AvoidDither | Qt::DiffuseDither));
+    const QImage preview(pix.toImage().convertToFormat(QImage::Format_ARGB32, Qt::ColorOnly));
     KoStoreDevice io(store);
     if (!io.open(QIODevice::WriteOnly))
         return false;

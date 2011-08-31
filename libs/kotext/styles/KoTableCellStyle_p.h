@@ -22,9 +22,7 @@
 #ifndef KOTABLECELLSTYLE_P_H
 #define KOTABLECELLSTYLE_P_H
 
-#include "KoTableBorderStyle_p.h"
-
-class KoTableCellStylePrivate : public KoTableBorderStylePrivate
+class KoTableCellStylePrivate
 {
 public:
     KoTableCellStylePrivate();

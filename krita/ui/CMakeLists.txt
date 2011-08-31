@@ -38,7 +38,6 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_image_properties.cc
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
-    dialogs/kis_dlg_transformation_effect.cpp
     flake/kis_layer_container_shape.cc 
     flake/kis_node_shape.cpp
     flake/kis_shape_controller.cpp
@@ -76,6 +75,7 @@ set(kritaui_LIB_SRCS
     kis_import_catcher.cc 
     kis_layer_manager.cc
     kis_mask_manager.cc
+    kis_mimedata.cpp
     kis_node_commands_adapter.cpp
     kis_node_manager.cpp 
     kis_node_model.cpp
@@ -165,6 +165,10 @@ set(kritaui_LIB_SRCS
     widgets/kis_workspace_chooser.cpp
     widgets/squeezedcombobox.cpp
     widgets/kis_categorized_list_view.cpp
+    widgets/kis_widget_chooser.cpp
+    widgets/kis_tool_button.cpp
+#    widgets/kis_light_source.cpp
+#    widgets/kis_light_stage.cpp
 )
 
 if(HAVE_OPENGL)
@@ -210,7 +214,6 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgshapeoptions.ui
     forms/wdgnewimage.ui
     forms/wdgimageproperties.ui
-    forms/wdgtransformationeffect.ui
     forms/wdgmaskfromselection.ui
     forms/wdgmasksource.ui
     forms/wdgfilterdialog.ui

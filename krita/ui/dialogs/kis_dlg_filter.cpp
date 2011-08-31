@@ -37,6 +37,8 @@
 #include "kis_undo_adapter.h"
 #include "ui_wdgfilterdialog.h"
 #include <kis_config.h>
+#include <kis_canvas2.h>
+#include <kis_view2.h>
 
 struct KisFilterDialog::Private {
     Private()
@@ -55,7 +57,6 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP im
         QDialog(parent),
         d(new Private)
 {
-    QRect rc = node->extent();
     setModal(false);
 
     d->uiFilterDialog.setupUi(this);
@@ -122,6 +123,9 @@ void KisFilterDialog::apply()
     if (!d->currentFilter) return;
 
     KisFilterConfiguration* config = d->uiFilterDialog.filterSelection->configuration();
+    if (d->node->inherits("KisLayer")) {
+        config->setChannelFlags(qobject_cast<KisLayer*>(d->node.data())->channelFlags());
+    }
     emit(sigPleaseApplyFilter(d->node, config));
     d->uiFilterDialog.pushButtonOk->setEnabled(false);
 }
@@ -159,6 +163,22 @@ void KisFilterDialog::previewCheckBoxChange(int state)
     group.writeEntry("showPreview", d->uiFilterDialog.checkBoxPreview->isChecked());
     group.config()->sync();
 }
+
+void KisFilterDialog::resizeEvent(QResizeEvent* event)
+{
+    QDialog::resizeEvent(event);
+
+    KisView2* view = dynamic_cast<KisView2*>(parentWidget());
+    if(view) {
+        QWidget* canvas = dynamic_cast<KisView2*>(parentWidget())->canvas();
+        QRect rect(canvas->mapToGlobal(canvas->geometry().topLeft()), size());
+        int deltaX = (canvas->geometry().width() - geometry().width())/2;
+        int deltaY = (canvas->geometry().height() - geometry().height())/2;
+        rect.translate(deltaX, deltaY);
+        setGeometry(rect);
+    }
+}
+
 
 
 #include "kis_dlg_filter.moc"

@@ -901,7 +901,6 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
 
 void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const
 {
-    kWarning(32500) << "Saving border";
     // Get the strings that describe respective borders.
     QString leftBorderString = QString("%1pt %2 %3")
                                  .arg(QString::number(leftBorderWidth()),

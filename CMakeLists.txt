@@ -234,7 +234,7 @@ endif( Soprano_FOUND )
 ## Test for marble
 ##
 macro_optional_find_package(Marble)
-macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget" "http://techbase.kde.org/Projects/Marble/" FALSE "" "Required to show locations on a map")
+macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "" "Required by RDF, Kexi Forms and Reports to show locations on a map")
 if(NOT MARBLE_FOUND)
     set(CAN_USE_MARBLE FALSE)
     set(MARBLE_INCLUDE_DIR "")
@@ -483,11 +483,6 @@ endif (NOT QT_QTDECLARATIVE_FOUND)
 option(BUILD_kexi   "Build directory kexi" ON)
 option(BUILD_koreport "Build directory libs/koreport" ON)
 ### HACK ###
-
-### Reports and Kexi: marble
-macro_optional_find_package(Marble)
-macro_log_feature(MARBLE_FOUND "Marble" "Marble maps libraries" "" FALSE ""
-                  "Required by maps reporting plugin used by Kexi")
 
 if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     ##

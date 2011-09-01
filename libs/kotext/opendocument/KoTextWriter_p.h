@@ -135,8 +135,11 @@ public:
 
     ~Private() {}
 
+    void writeBlocks(QTextDocument *document, int from, int to,
+                     QHash<QTextList *, QString> &listStyles,
+                     QTextTable *currentTable = 0,
+                     QTextList *currentList = 0);
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
-    void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextList *currentList = 0);
     void saveChange(int changeId);
 
 private:

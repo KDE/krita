@@ -38,15 +38,146 @@ KoTextWriter::Private::Private(KoShapeSavingContext &context)
 }
 
 
-void KoTextWriter::Private::saveChange(QTextCharFormat format)
+void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextList *currentList)
 {
-    if (!changeTracker /*&& changeTracker->isEnabled()*/)
-        return;//The change tracker exist and we are allowed to save tracked changes
+    QTextBlock block = document->findBlock(from);
+    int sectionLevel = 0;
 
-    int changeId = format.property(KoCharacterStyle::ChangeTrackerId).toInt();
-    if (changeId) { //There is a tracked change
-        saveChange(changeId);
+    while (block.isValid() && ((to == -1) || (block.position() <= to))) {
+
+        QTextCursor cursor(block);
+
+        int frameType = cursor.currentFrame()->format().intProperty(KoText::SubFrameType);
+        if (frameType == KoText::EndNotesFrameType
+            || frameType == KoText::FootNotesFrameType) {
+            break; // we've reached the "end" (end/footnotes saved by themselves)
+                   // note how NoteFrameType passes through here so the notes can
+                   // call writeBlocks to save their contents.
+        }
+
+        QTextBlockFormat format = block.blockFormat();
+        if (format.hasProperty(KoParagraphStyle::SectionStartings)) {
+            QVariant v = format.property(KoParagraphStyle::SectionStartings);
+            QList<QVariant> sectionStarts = v.value<QList<QVariant> >();
+
+            foreach (QVariant sv, sectionStarts) {
+                KoSection* section = (KoSection*)(sv.value<void*>());
+                if (section) {
+                    ++sectionLevel;
+                    section->saveOdf(context);
+                }
+            }
+        }
+        if (format.hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+            saveTableOfContents(document, listStyles, block);
+            block = block.next();
+            continue;
+        }
+        if (format.hasProperty(KoParagraphStyle::BibliographyDocument)) {
+            saveBibliography(document, listStyles, block);
+            block = block.next();
+            continue;
+        }
+        int blockOutlineLevel = format.property(KoParagraphStyle::OutlineLevel).toInt();
+
+        if (cursor.currentTable() != currentTable) {
+            // Call the code to save the table....
+            saveTable(cursor.currentTable(), listStyles);
+            // We skip to the end of the table.
+            block = cursor.currentTable()->lastCursorPosition().block();
+            block = block.next();
+            continue;
+        }
+
+        if (cursor.currentList() != currentList) {
+            int previousBlockNumber = block.blockNumber();
+            block = saveList(block, listStyles, 1, currentTable);
+            int blockNumberToProcess = block.blockNumber();
+            if (blockNumberToProcess != previousBlockNumber)
+                continue;
+        }
+
+        if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
+            if (!deleteMergeRegionOpened && !cursor.currentTable() && (!cursor.currentList() || blockOutlineLevel)) {
+                deleteMergeEndBlockNumber = checkForDeleteMerge(block);
+                if (deleteMergeEndBlockNumber != -1) {
+                    deleteMergeRegionOpened = true;
+                    openSplitMergeRegion();
+                }
+            }
+        }
+
+        saveParagraph(block, from, to);
+
+        if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
+            if (deleteMergeRegionOpened && (block.blockNumber() == deleteMergeEndBlockNumber) && (!cursor.currentList() || blockOutlineLevel)) {
+                closeSplitMergeRegion();
+                deleteMergeRegionOpened = false;
+                deleteMergeEndBlockNumber = -1;
+                postProcessDeleteMergeXml();
+            }
+        }
+
+        if (format.hasProperty(KoParagraphStyle::SectionEndings)) {
+            QVariant v = format.property(KoParagraphStyle::SectionEndings);
+            QList<QVariant> sectionEndings = v.value<QList<QVariant> >();
+            KoSectionEnd sectionEnd;
+            foreach (QVariant sv, sectionEndings) {
+                if (sectionLevel >= 1) {
+                    --sectionLevel;
+                    sectionEnd.saveOdf(context);
+                }
+            }
+        }
+
+
+        block = block.next();
+    } // while
+
+    while (sectionLevel >= 1) {
+        --sectionLevel;
+        KoSectionEnd sectionEnd;
+        sectionEnd.saveOdf(context);
     }
+}
+
+
+QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock block, int to)
+{
+    QHash<KoList *, QString> generatedLists;
+    QHash<QTextList *, QString> listStyles;
+
+    for (;block.isValid() && ((to == -1) || (block.position() < to)); block = block.next()) {
+        QTextList *textList = block.textList();
+        if (!textList)
+            continue;
+        KoListStyle::ListIdType listId = ListId(textList->format());
+        if (KoList *list = KoTextDocument(document).list(listId)) {
+            if (generatedLists.contains(list)) {
+                if (!listStyles.contains(textList))
+                    listStyles.insert(textList, generatedLists.value(list));
+                continue;
+            }
+            KoListStyle *listStyle = list->style();
+            bool automatic = listStyle->styleId() == 0;
+            KoGenStyle style(automatic ? KoGenStyle::ListAutoStyle : KoGenStyle::ListStyle);
+            listStyle->saveOdf(style, context);
+            QString generatedName = context.mainStyles().insert(style, listStyle->name(), listStyle->isNumberingStyle() ? KoGenStyles::AllowDuplicates : KoGenStyles::DontAddNumberToName);
+            listStyles[textList] = generatedName;
+            generatedLists.insert(list, generatedName);
+        } else {
+            if (listStyles.contains(textList))
+                continue;
+            KoListLevelProperties llp = KoListLevelProperties::fromTextList(textList);
+            KoGenStyle style(KoGenStyle::ListAutoStyle);
+            KoListStyle listStyle;
+            listStyle.setLevelProperties(llp);
+            listStyle.saveOdf(style, context);
+            QString generatedName = context.mainStyles().insert(style, listStyle.name());
+            listStyles[textList] = generatedName;
+        }
+    }
+    return listStyles;
 }
 
 void KoTextWriter::Private::saveChange(int changeId)
@@ -71,6 +202,19 @@ void KoTextWriter::Private::saveChange(int changeId)
     changeTracker->saveInlineChange(changeId, change);
     QString changeName = sharedData->genChanges().insert(change);
     changeTransTable.insert(changeId, changeName);
+}
+
+//---------------------------- PRIVATE -----------------------------------------------------------
+
+void KoTextWriter::Private::saveChange(QTextCharFormat format)
+{
+    if (!changeTracker /*&& changeTracker->isEnabled()*/)
+        return;//The change tracker exist and we are allowed to save tracked changes
+
+    int changeId = format.property(KoCharacterStyle::ChangeTrackerId).toInt();
+    if (changeId) { //There is a tracked change
+        saveChange(changeId);
+    }
 }
 
 void KoTextWriter::Private::saveODF12Change(QTextCharFormat format)
@@ -480,43 +624,6 @@ static KoListStyle::ListIdType ListId(const QTextListFormat &format)
     return listId;
 }
 
-QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock block, int to)
-{
-    QHash<KoList *, QString> generatedLists;
-    QHash<QTextList *, QString> listStyles;
-
-    for (;block.isValid() && ((to == -1) || (block.position() < to)); block = block.next()) {
-        QTextList *textList = block.textList();
-        if (!textList)
-            continue;
-        KoListStyle::ListIdType listId = ListId(textList->format());
-        if (KoList *list = KoTextDocument(document).list(listId)) {
-            if (generatedLists.contains(list)) {
-                if (!listStyles.contains(textList))
-                    listStyles.insert(textList, generatedLists.value(list));
-                continue;
-            }
-            KoListStyle *listStyle = list->style();
-            bool automatic = listStyle->styleId() == 0;
-            KoGenStyle style(automatic ? KoGenStyle::ListAutoStyle : KoGenStyle::ListStyle);
-            listStyle->saveOdf(style, context);
-            QString generatedName = context.mainStyles().insert(style, listStyle->name(), listStyle->isNumberingStyle() ? KoGenStyles::AllowDuplicates : KoGenStyles::DontAddNumberToName);
-            listStyles[textList] = generatedName;
-            generatedLists.insert(list, generatedName);
-        } else {
-            if (listStyles.contains(textList))
-                continue;
-            KoListLevelProperties llp = KoListLevelProperties::fromTextList(textList);
-            KoGenStyle style(KoGenStyle::ListAutoStyle);
-            KoListStyle listStyle;
-            listStyle.setLevelProperties(llp);
-            listStyle.saveOdf(style, context);
-            QString generatedName = context.mainStyles().insert(style, listStyle.name());
-            listStyles[textList] = generatedName;
-        }
-    }
-    return listStyles;
-}
 
 void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* tagInfos)
 {
@@ -756,7 +863,6 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         }
     }
 
-    //kDebug(30015) << "pairedInlineObjectStack.sz:" << pairedInlineObjectStack.size();
     if (to !=-1 && to < block.position() + block.length()) {
         foreach (KoInlineObject* inlineObject, pairedInlineObjectStack) {
             inlineObject->saveOdf(context);
@@ -1389,108 +1495,6 @@ void KoTextWriter::Private::postProcessListItemSplit(int changeId)
     writer->addCompleteElement(outputXml.toUtf8());
 }
 
-void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextList *currentList)
-{
-    QTextBlock block = document->findBlock(from);
-    int sectionLevel = 0;
-
-    while (block.isValid() && ((to == -1) || (block.position() <= to))) {
-
-        QTextCursor cursor(block);
-
-        int frameType = cursor.currentFrame()->format().intProperty(KoText::SubFrameType);
-        if (frameType == KoText::EndNotesFrameType
-            || frameType == KoText::FootNotesFrameType) {
-            break; // we've reached the "end" (end/footnotes saved by themselves)
-                   // note how NoteFrameType passes through here so the notes can
-                   // call writeBlocks to save their contents.
-        }
-
-        QTextBlockFormat format = block.blockFormat();
-        if (format.hasProperty(KoParagraphStyle::SectionStartings)) {
-            QVariant v = format.property(KoParagraphStyle::SectionStartings);
-            QList<QVariant> sectionStarts = v.value<QList<QVariant> >();
-
-            foreach (QVariant sv, sectionStarts) {
-                KoSection* section = (KoSection*)(sv.value<void*>());
-                if (section) {
-                    ++sectionLevel;
-                    section->saveOdf(context);
-                }
-            }
-        }
-        if (format.hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
-            saveTableOfContents(document, listStyles, block);
-            block = block.next();
-            continue;
-        }
-        if (format.hasProperty(KoParagraphStyle::BibliographyDocument)) {
-            saveBibliography(document, listStyles, block);
-            block = block.next();
-            continue;
-        }
-        int blockOutlineLevel = format.property(KoParagraphStyle::OutlineLevel).toInt();
-
-        if (cursor.currentTable() != currentTable) {
-            // Call the code to save the table....
-            saveTable(cursor.currentTable(), listStyles);
-            // We skip to the end of the table.
-            block = cursor.currentTable()->lastCursorPosition().block();
-            block = block.next();
-            continue;
-        }
-
-        if (cursor.currentList() != currentList) {
-            int previousBlockNumber = block.blockNumber();
-            block = saveList(block, listStyles, 1, currentTable);
-            int blockNumberToProcess = block.blockNumber();
-            if (blockNumberToProcess != previousBlockNumber)
-                continue;
-        }
-
-        if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
-            if (!deleteMergeRegionOpened && !cursor.currentTable() && (!cursor.currentList() || blockOutlineLevel)) {
-                deleteMergeEndBlockNumber = checkForDeleteMerge(block);
-                if (deleteMergeEndBlockNumber != -1) {
-                    deleteMergeRegionOpened = true;
-                    openSplitMergeRegion();
-                }
-            }
-        }
-
-        saveParagraph(block, from, to);
-
-        if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
-            if (deleteMergeRegionOpened && (block.blockNumber() == deleteMergeEndBlockNumber) && (!cursor.currentList() || blockOutlineLevel)) {
-                closeSplitMergeRegion();
-                deleteMergeRegionOpened = false;
-                deleteMergeEndBlockNumber = -1;
-                postProcessDeleteMergeXml();
-            }
-        }
-
-        if (format.hasProperty(KoParagraphStyle::SectionEndings)) {
-            QVariant v = format.property(KoParagraphStyle::SectionEndings);
-            QList<QVariant> sectionEndings = v.value<QList<QVariant> >();
-            KoSectionEnd sectionEnd;
-            foreach (QVariant sv, sectionEndings) {
-                if (sectionLevel >= 1) {
-                    --sectionLevel;
-                    sectionEnd.saveOdf(context);
-                }
-            }
-        }
-
-
-        block = block.next();
-    } // while
-
-    while (sectionLevel >= 1) {
-        --sectionLevel;
-        KoSectionEnd sectionEnd;
-        sectionEnd.saveOdf(context);
-    }
-}
 
 int KoTextWriter::Private::checkForSplit(const QTextBlock &block)
 {

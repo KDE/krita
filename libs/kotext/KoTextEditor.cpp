@@ -881,6 +881,21 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     emit cursorPositionChanged();
 }
 
+void KoTextEditor::updateInlineObjectPosition(int start, int end)
+{
+    KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(d->document).inlineTextObjectManager();
+    // and, of course, every inline object after the current position has the wrong position
+    QTextCursor cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), start);
+    while (!cursor.isNull() && (end > -1 && cursor.position() < end )) {
+        QTextCharFormat fmt = cursor.charFormat();
+        KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
+        obj->updatePosition(d->document, cursor.position(), fmt);
+        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position() + 1);
+    }
+
+}
+
+
 void KoTextEditor::insertFrameBreak()
 {
     if (isEditProtected()) {
@@ -1706,14 +1721,7 @@ void KoTextEditor::removeSelectedText()
         cursor.setCharFormat(oldCf);
     }
 
-    // and, of course, every inline object after the current position has the wrong position
-    cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), currentPosition);
-    while (!cursor.isNull()) {
-        QTextCharFormat fmt = cursor.charFormat();
-        KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
-        obj->updatePosition(d->document, cursor.position(), fmt);
-        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position() + 1);
-    }
+    updateInlineObjectPosition(currentPosition);
 
     emit cursorPositionChanged();
 }

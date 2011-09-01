@@ -890,7 +890,7 @@ void KoTextEditor::updateInlineObjectPosition(int start, int end)
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
         obj->updatePosition(d->document, cursor.position(), fmt);
-        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position() + 1);
+        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position());
     }
 
 }
@@ -1696,7 +1696,7 @@ void KoTextEditor::removeSelectedText()
         if (!bookmarksToBeMoved.contains(bookmark)) {
             objectsToBeRemoved << obj;
         }
-        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position() + 1);
+        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position());
     }
     foreach(KoInlineObject *obj, objectsToBeRemoved) {
         inlineObjectManager->removeInlineObject(obj); // does _not_ remove the character in the text doc

@@ -66,20 +66,21 @@
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
 #include <KoXmlWriter.h>
-#include <rdf/KoDocumentRdfBase.h>
 #include <KoTableOfContentsGeneratorInfo.h>
 #include <KoBibliographyInfo.h>
 #include <KoTextWriter.h>
+#include <KoTableRowStyle.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <Soprano/Soprano>
 #endif
-#include <KoTableRowStyle.h>
+
+#include <rdf/KoDocumentRdfBase.h>
 
 /**
  * XXX: Apidox!
  */
-class KoTextWriter::TagInformation
+class TagInformation
 {
     public:
         TagInformation():tagName(0), attributeList()
@@ -122,28 +123,15 @@ class KoTextWriter::TagInformation
         QVector<QPair<QString, QString> > attributeList;
 };
 
+
 /**
  * XXX: Apidox!
  */
 class KoTextWriter::Private
 {
 public:
-    explicit Private(KoShapeSavingContext &context)
-        : context(context)
-        , sharedData(0)
-        ,  writer(0)
-        ,  styleManager(0)
-        ,  changeTracker(0)
-        ,  rdfData(0)
-        ,  splitEndBlockNumber(-1)
-        ,  splitRegionOpened(false)
-        ,  splitIdCounter(1)
-        ,  deleteMergeRegionOpened(false)
-        ,  deleteMergeEndBlockNumber(-1)
-    {
-        writer = &context.xmlWriter();
-        changeStack.push(0);
-    }
+
+    explicit Private(KoShapeSavingContext &context);
 
     ~Private() {}
 
@@ -163,9 +151,8 @@ public:
     void saveChange(int changeId);
     void saveODF12Change(QTextCharFormat format);
     QString generateDeleteChangeXml(KoDeleteChangeMarker *marker);
-    int openTagRegion(int position, ElementType elementType, KoTextWriter::TagInformation& tagInformation);
+    int openTagRegion(int position, ElementType elementType, TagInformation& tagInformation);
     void closeTagRegion(int changeId);
-    QStack<const char *> openedTagStack;
 
     QString saveParagraphStyle(const QTextBlock &block);
     QString saveParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat);
@@ -189,33 +176,8 @@ public:
     int checkForTableRowChange(int position);
     int checkForTableColumnChange(int position);
 
-    KoShapeSavingContext &context;
-    KoTextSharedSavingData *sharedData;
-    KoXmlWriter *writer;
-
-    KoStyleManager *styleManager;
-    KoChangeTracker *changeTracker;
-    KoDocumentRdfBase *rdfData;
-    QTextDocument *document;
-
-    QStack<int> changeStack;
-    QMap<int, QString> changeTransTable;
-    QList<int> savedDeleteChanges;
-
-    // Things like bookmarks need to be properly turn down
-    // during a cut and paste operation when their end marker
-    // is not included in the selection.
-    QList<KoInlineObject*> pairedInlineObjectStack;
-
     // For saving of paragraph or header splits
     int checkForSplit(const QTextBlock &block);
-    int splitEndBlockNumber;
-    bool splitRegionOpened;
-    bool splitIdCounter;
-
-    //For saving of delete-changes that result in a merge between two elements
-    bool deleteMergeRegionOpened;
-    int deleteMergeEndBlockNumber;
     int checkForDeleteMerge(const QTextBlock &block);
     void openSplitMergeRegion();
     void closeSplitMergeRegion();
@@ -226,11 +188,6 @@ public:
     //Method used by both split and merge
     int checkForMergeOrSplit(const QTextBlock &block, KoGenChange::Type changeType);
     void addNameSpaceDefinitions(QString &generatedXmlString);
-
-    KoXmlWriter *oldXmlWriter;
-    KoXmlWriter *newXmlWriter;
-    QByteArray generatedXmlArray;
-    QBuffer generatedXmlBuffer;
 
     void postProcessDeleteMergeXml();
     void generateFinalXml(QTextStream &outputXmlStream, const KoXmlElement &element);
@@ -246,7 +203,7 @@ public:
     void generateListForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                        QString &mergeResultElement, QString &changeId, int &endIdCounter, bool removeLeavingContent);
     void generateListItemForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element,
-                                       QString &mergeResultElement, QString &changeId, int &endIdCounter, bool removeLeavingContent);
+                                           QString &mergeResultElement, QString &changeId, int &endIdCounter, bool removeLeavingContent);
 
     // For Handling <list-item> with <p> merges
     int deleteStartDepth;
@@ -254,7 +211,7 @@ public:
     void generateListForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                        QString &changeId, int &endIdCounter, bool removeLeavingContent);
     void generateListItemForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element,
-                                       QString &changeId, int &endIdCounter, bool removeLeavingContent);
+                                           QString &changeId, int &endIdCounter, bool removeLeavingContent);
     bool checkForDeleteStartInListItem(KoXmlElement &element, bool checkRecursively = true);
 
     void handleListWithListMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
@@ -263,9 +220,9 @@ public:
     void handleListItemWithListItemMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
     QString findChangeIdForListItemMerge(const KoXmlElement &element);
     void generateListForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element,
-                                       QString &changeId, int &endIdCounter, bool listMergeStart, bool listMergeEnd);
+                                      QString &changeId, int &endIdCounter, bool listMergeStart, bool listMergeEnd);
     void generateListItemForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element,
-                                       QString &changeId, int &endIdCounter, bool listItemMergeStart, bool listItemMergeEnd);
+                                          QString &changeId, int &endIdCounter, bool listItemMergeStart, bool listItemMergeEnd);
     bool checkForDeleteEndInListItem(KoXmlElement &element, bool checkRecursively = true);
 
     // Common methods
@@ -274,6 +231,46 @@ public:
     void removeLeavingContentStart(QTextStream &outputXmlStream, KoXmlElement &element, QString &changeId, int endIdCounter);
     void removeLeavingContentEnd(QTextStream &outputXmlStream, int endIdCounter);
     void insertAroundContent(QTextStream &outputXmlStream, KoXmlElement &element, QString &changeId);
+
+
+public:
+
+    KoDocumentRdfBase *rdfData;
+    KoTextSharedSavingData *sharedData;
+    KoStyleManager *styleManager;
+    KoChangeTracker *changeTracker;
+
+    QTextDocument *document;
+
+private:
+
+    KoXmlWriter *writer;
+
+    QStack<const char *> openedTagStack;
+
+    KoShapeSavingContext &context;
+
+    QStack<int> changeStack;
+    QMap<int, QString> changeTransTable;
+    QList<int> savedDeleteChanges;
+
+    // Things like bookmarks need to be properly turn down
+    // during a cut and paste operation when their end marker
+    // is not included in the selection.
+    QList<KoInlineObject*> pairedInlineObjectStack;
+
+    int splitEndBlockNumber;
+    bool splitRegionOpened;
+    bool splitIdCounter;
+
+    //For saving of delete-changes that result in a merge between two elements
+    bool deleteMergeRegionOpened;
+    int deleteMergeEndBlockNumber;
+
+    KoXmlWriter *oldXmlWriter;
+    KoXmlWriter *newXmlWriter;
+    QByteArray generatedXmlArray;
+    QBuffer generatedXmlBuffer;
 };
 
 #endif // KOTEXTWRITER_P_H

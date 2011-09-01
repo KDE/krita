@@ -19,6 +19,25 @@
 
 #include "KoTextWriter_p.h"
 
+KoTextWriter::Private::Private(KoShapeSavingContext &context)
+    : rdfData(0)
+    , sharedData(0)
+    , styleManager(0)
+    , changeTracker(0)
+    , document(0)
+    , writer(0)
+    , context(context)
+    , splitEndBlockNumber(-1)
+    , splitRegionOpened(false)
+    , splitIdCounter(1)
+    , deleteMergeRegionOpened(false)
+    , deleteMergeEndBlockNumber(-1)
+{
+    writer = &context.xmlWriter();
+    changeStack.push(0);
+}
+
+
 void KoTextWriter::Private::saveChange(QTextCharFormat format)
 {
     if (!changeTracker /*&& changeTracker->isEnabled()*/)
@@ -128,7 +147,7 @@ QString KoTextWriter::Private::generateDeleteChangeXml(KoDeleteChangeMarker *mar
     return generatedXmlString;
 }
 
-int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, KoTextWriter::TagInformation& tagInformation)
+int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, TagInformation& tagInformation)
 {
     int changeId = 0, returnChangeId = 0;
 
@@ -499,7 +518,7 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
     return listStyles;
 }
 
-void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, KoTextWriter::TagInformation* tagInfos)
+void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* tagInfos)
 {
     QBuffer rdfXmlData;
     KoXmlWriter *rdfXmlWriter = new KoXmlWriter(&rdfXmlData);

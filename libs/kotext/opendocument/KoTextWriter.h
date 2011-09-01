@@ -73,7 +73,6 @@ public:
 private:
     class Private;
     Private* const d;
-    class TagInformation;
 };
 
 #endif

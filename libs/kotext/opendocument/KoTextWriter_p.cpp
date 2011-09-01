@@ -935,7 +935,7 @@ int KoTextWriter::Private::checkForListChange(const QTextBlock &listBlock)
     return changeId;
 }
 
-//Check if the whole of table row is a part of a singke change
+//Check if the whole of table row is a part of a single change
 //If so return the changeId else return 0
 int KoTextWriter::Private::checkForTableRowChange(int position)
 {

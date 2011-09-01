@@ -1411,7 +1411,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             QVariant v = format.property(KoParagraphStyle::SectionStartings);
             QList<QVariant> sectionStarts = v.value<QList<QVariant> >();
 
-        foreach (QVariant sv, sectionStarts) {
+            foreach (QVariant sv, sectionStarts) {
                 KoSection* section = (KoSection*)(sv.value<void*>());
                 if (section) {
                     ++sectionLevel;

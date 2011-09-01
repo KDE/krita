@@ -225,7 +225,7 @@ void RdfTest::testFindMarkers()
     table = editor.cursor()->currentTable();
     Q_ASSERT(table);
 
-    // check there's only one range in the document, so only two bookmarks
+    // check there's two ranges in the document, so only four bookmarks
     QCOMPARE(inlineObjectManager.bookmarkManager()->bookmarkNameList().length(), 2);
     QCOMPARE(inlineObjectManager.inlineTextObjects().length(), 4);
     int bookmarksFound = 0;

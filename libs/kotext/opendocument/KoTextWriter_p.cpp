@@ -1505,7 +1505,6 @@ int KoTextWriter::Private::checkForDeleteMerge(const QTextBlock &block)
 int KoTextWriter::Private::checkForMergeOrSplit(const QTextBlock &block, KoGenChange::Type changeType)
 {
     QTextBlock endBlock = block;
-    QTextCursor cursor(block);
     int endBlockNumber = -1;
 
     int splitMergeChangeId = 0, changeId = 0;

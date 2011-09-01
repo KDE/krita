@@ -39,7 +39,6 @@
 #include <QBuffer>
 #include <QDomDocument>
 #include <QDomElement>
-#include <krita/plugins/extensions/tonemapping/operators/trilateral/memory.h>
 
 Attribute::Attribute(const QDomElement& element)
     : m_references()

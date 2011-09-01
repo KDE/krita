@@ -731,7 +731,11 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
             (hasWidget && canvas()->canvasWidget()->hasFocus()) ||
             (hasItem && canvas()->canvasItem()->hasFocus())) {
             QEvent event(QEvent::RequestSoftwareInputPanel);
-            QApplication::sendEvent(hasWidget ? canvas()->canvasWidget() : canvas()->canvasItem(), &event);
+            if (hasWidget) {
+                QApplication::sendEvent(canvas()->canvasWidget(), &event);
+            } else {
+                QApplication::sendEvent(canvas()->canvasItem(), &event);
+            }
         }
     }
 

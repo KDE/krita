@@ -897,11 +897,17 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QList<QTextOption::Tab> qTabs;
     ///@TODO: don't do this kind of conversion, we lose data for layout.
     foreach (KoText::Tab kTab, tabs) {
+        qreal value = kTab.position;
+        if (value > MaximumTabPos - 1000) {
+            value += right() - left() - MaximumTabPos;
+        }
+        value = (value + tabOffset) * qt_defaultDpiY() / 72. -1;
+
 #if QT_VERSION >= 0x040700
-        qTabs.append(QTextOption::Tab((kTab.position + tabOffset) * qt_defaultDpiY() / 72. -1, kTab.type, kTab.delimiter));
+        qTabs.append(QTextOption::Tab(value, kTab.type, kTab.delimiter));
 #else
         QTextOption::Tab tab;
-        tab.position = (kTab.position + tabOffset) * qt_defaultDpiY() / 72. -1;
+        tab.position = value;
         tab.type = kTab.type;
         tab.delimiter = kTab.delimiter;
         qTabs.append(tab);

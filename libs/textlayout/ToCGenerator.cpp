@@ -74,11 +74,6 @@ static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int
     return style;
 }
 
-void ToCGenerator::setMaxTabPosition(qreal maxtabPosition)
-{
-    m_maxTabPosition = maxtabPosition;
-}
-
 void ToCGenerator::setBlock(const QTextBlock &block)
 {
     m_block = block;
@@ -302,7 +297,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                         QTextBlockFormat blockFormat = cursor.blockFormat();
                         QList<QVariant> tabList;
                         if (tabEntry->m_position.isEmpty()) {
-                            tabEntry->tab.position = m_maxTabPosition - tocTemplateStyle->leftMargin();
+                            tabEntry->tab.position = KoTextLayoutArea::MaximumTabPos - tocTemplateStyle->leftMargin();
                         } else {
                             tabEntry->tab.position = tabEntry->m_position.toDouble();
                         }

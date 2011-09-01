@@ -40,7 +40,6 @@ public:
     explicit ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGeneratorInfo *tocInfo);
     virtual ~ToCGenerator();
 
-    virtual void setMaxTabPosition(qreal maxTabPosition);
     virtual void setBlock(const QTextBlock &block);
 
     bool generate();

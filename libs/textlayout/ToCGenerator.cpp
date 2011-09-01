@@ -338,7 +338,6 @@ QString ToCGenerator::resolvePageNumber(const QTextBlock &headingBlock)
             return QString::number(rootArea->page()->visiblePageNumber());
         }
     }
-    qDebug()<<"couldn't resolve pagenumber";
     m_success = false;
     return "###";
 }

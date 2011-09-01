@@ -15,7 +15,6 @@ set(kritadefaultdockers_PART_HEADERS
 )
 
 kde4_add_ui_files(kritadefaultdockers_PART_SRCS
-    wdgpalettechooser.ui
     wdgbirdeye.ui
     wdglayerbox.ui
 )

@@ -41,4 +41,3 @@ target_link_libraries(TestKoBookmarkManager kotext  ${QT_QTTEST_LIBRARY})
 set(TestKoInlineTextObjectManager_test_SRCS TestKoInlineTextObjectManager.cpp)
 kde4_add_unit_test(TestKoInlineTextObjectManager TESTNAME libs-kotext-TestKoInlineTextObjectManager  ${TestKoInlineTextObjectManager_test_SRCS})
 target_link_libraries(TestKoInlineTextObjectManager kotext  ${QT_QTTEST_LIBRARY})
-

@@ -197,25 +197,50 @@ void RdfTest::testFindMarkers()
     }
 
     // add an extra semitem
+    editor.insertText(lorem);
     editor.movePosition(QTextCursor::End);
     QString newId2 = insertSemItem(editor, rdfDoc, parent, "test item2");
     idList << newId2;
 
+    editor.insertText(lorem);
+
     // get all semantic items and verify they are correct
     semItems = TestSemanticItem::allObjects(&rdfDoc);
-    Q_ASSERT(semItems.length() == 2);
+    QCOMPARE(semItems.length(), 2);
 
-    foreach(TestSemanticItem *semItem, semItems) {
-        QStringList xmlidlist = semItem->xmlIdList();
-        Q_ASSERT(xmlidlist.length() == 1);
-        foreach(const QString xmlid, xmlidlist) {
-            Q_ASSERT(idList.contains(xmlid));
-            QPair<int, int> position = rdfDoc.findExtent(xmlid);
-            editor.setPosition(position.first + 1);
-            QTextTable *table = editor.cursor()->currentTable();
-            Q_ASSERT(table);
+    // find the extents from the xml-id's in the semantic items
+    QCOMPARE(semItems[0]->xmlIdList().length(), 1);
+    QPair<int, int> position = rdfDoc.findExtent(semItems[0]->xmlIdList()[0]);
+    QCOMPARE(position.first, 940);
+    QCOMPARE(position.second, 992);
+    editor.setPosition(position.first + 1);
+    QTextTable *table = editor.cursor()->currentTable();
+    Q_ASSERT(table);
+
+    QCOMPARE(semItems[1]->xmlIdList().length(), 1);
+    position = rdfDoc.findExtent(semItems[1]->xmlIdList()[0]);
+    QCOMPARE(position.first, 444);
+    QCOMPARE(position.second, 496);
+    editor.setPosition(position.first + 1);
+    table = editor.cursor()->currentTable();
+    Q_ASSERT(table);
+
+    // check there's two ranges in the document, so only four bookmarks
+    QCOMPARE(inlineObjectManager.bookmarkManager()->bookmarkNameList().length(), 2);
+    QCOMPARE(inlineObjectManager.inlineTextObjects().length(), 4);
+    int bookmarksFound = 0;
+    QTextCursor cursor = doc.find(QString(QChar::ObjectReplacementCharacter), 0);
+    while (!cursor.isNull()) {
+        QTextCharFormat fmt = cursor.charFormat();
+        KoInlineObject *obj = inlineObjectManager.inlineTextObject(fmt);
+        KoBookmark *bm = dynamic_cast<KoBookmark*>(obj);
+        if (bm) {
+            qDebug() << "found bookmark" << bm->name() << cursor.position();
+            bookmarksFound++;
         }
+        cursor = doc.find(QString(QChar::ObjectReplacementCharacter), cursor.position());
     }
+    QCOMPARE(bookmarksFound, 4);
 }
 
 void RdfTest::testFindByName()

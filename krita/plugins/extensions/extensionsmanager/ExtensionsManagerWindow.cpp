@@ -27,6 +27,7 @@ ExtensionsManagerWindow::ExtensionsManagerWindow() : m_emWidget(new Ui_Extension
     m_emWidget->setupUi(this);
     connect(m_emWidget->pushButtonInstall, SIGNAL(released()), SLOT(installFromFile()));
     connect(m_emWidget->pushButtonClose, SIGNAL(released()), SLOT(close()));
+    m_emWidget->pushButtonClose->setGuiItem(KStandardGuiItem::Close);
 }
 
 ExtensionsManagerWindow::~ExtensionsManagerWindow()

@@ -246,7 +246,6 @@ public:
     KoTextSharedSavingData *sharedData;
     KoStyleManager *styleManager;
     KoChangeTracker *changeTracker;
-
     QTextDocument *document;
 
 private:
@@ -261,10 +260,11 @@ private:
     QMap<int, QString> changeTransTable;
     QList<int> savedDeleteChanges;
 
-    // Things like bookmarks need to be properly turn down
-    // during a cut and paste operation when their end marker
-    // is not included in the selection.
-    QList<KoInlineObject*> pairedInlineObjectStack;
+    // Things like bookmarks need to be properly turn down during a cut and paste operation
+    // when their end markeris not included in the selection. However, when recursing into
+    // e.g. the QTextDocument of a table, we need have a clean slate. Hence, a stack of stacks.
+    QStack< QStack<KoInlineObject*> *> pairedInlineObjectsStackStack;
+    QStack<KoInlineObject*> *currentPairedInlineObjectsStack;
 
     int splitEndBlockNumber;
     bool splitRegionOpened;

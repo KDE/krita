@@ -19,6 +19,22 @@
 
 #include "KoTextWriter_p.h"
 
+// A convenience function to get a listId from a list-format
+static KoListStyle::ListIdType ListId(const QTextListFormat &format)
+{
+    KoListStyle::ListIdType listId;
+
+    if (sizeof(KoListStyle::ListIdType) == sizeof(uint))
+        listId = format.property(KoListStyle::ListId).toUInt();
+    else
+        listId = format.property(KoListStyle::ListId).toULongLong();
+
+    return listId;
+}
+
+
+
+
 KoTextWriter::Private::Private(KoShapeSavingContext &context)
     : rdfData(0)
     , sharedData(0)
@@ -33,6 +49,7 @@ KoTextWriter::Private::Private(KoShapeSavingContext &context)
     , deleteMergeRegionOpened(false)
     , deleteMergeEndBlockNumber(-1)
 {
+    currentPairedInlineObjectsStack = new QStack<KoInlineObject*>();
     writer = &context.xmlWriter();
     changeStack.push(0);
 }
@@ -40,6 +57,8 @@ KoTextWriter::Private::Private(KoShapeSavingContext &context)
 
 void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextList *currentList)
 {
+    pairedInlineObjectsStackStack.push(currentPairedInlineObjectsStack);
+    currentPairedInlineObjectsStack = new QStack<KoInlineObject*>();
     QTextBlock block = document->findBlock(from);
     int sectionLevel = 0;
 
@@ -139,6 +158,9 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         KoSectionEnd sectionEnd;
         sectionEnd.saveOdf(context);
     }
+
+    Q_ASSERT(!pairedInlineObjectsStackStack.isEmpty());
+    currentPairedInlineObjectsStack = pairedInlineObjectsStackStack.pop();
 }
 
 
@@ -611,20 +633,6 @@ QString KoTextWriter::Private::saveTableCellStyle(const QTextTableCellFormat& ce
     return generatedName;
 }
 
-// A convenience function to get a listId from a list-format
-static KoListStyle::ListIdType ListId(const QTextListFormat &format)
-{
-    KoListStyle::ListIdType listId;
-
-    if (sizeof(KoListStyle::ListIdType) == sizeof(uint))
-        listId = format.property(KoListStyle::ListId).toUInt();
-    else
-        listId = format.property(KoListStyle::ListId).toULongLong();
-
-    return listId;
-}
-
-
 void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, TagInformation* tagInfos)
 {
     QBuffer rdfXmlData;
@@ -814,16 +822,16 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     if (KoTextMeta* z = dynamic_cast<KoTextMeta*>(inlineObject)) {
                         kDebug(30015) << "found kometa, type:" << z->type();
                         if (z->type() == KoTextMeta::StartBookmark)
-                            pairedInlineObjectStack.append(z->endBookmark());
+                            currentPairedInlineObjectsStack->push(z->endBookmark());
                         if (z->type() == KoTextMeta::EndBookmark
-                                && !pairedInlineObjectStack.isEmpty())
-                            pairedInlineObjectStack.removeLast();
+                                && !currentPairedInlineObjectsStack->isEmpty())
+                            currentPairedInlineObjectsStack->pop();
                     } else if (KoBookmark* z = dynamic_cast<KoBookmark*>(inlineObject)) {
                         if (z->type() == KoBookmark::StartBookmark)
-                            pairedInlineObjectStack.append(z->endBookmark());
+                            currentPairedInlineObjectsStack->push(z->endBookmark());
                         if (z->type() == KoBookmark::EndBookmark
-                                && !pairedInlineObjectStack.isEmpty())
-                            pairedInlineObjectStack.removeLast();
+                                && !currentPairedInlineObjectsStack->isEmpty())
+                            currentPairedInlineObjectsStack->pop();
                     }
                 }
             } else {
@@ -864,7 +872,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     }
 
     if (to !=-1 && to < block.position() + block.length()) {
-        foreach (KoInlineObject* inlineObject, pairedInlineObjectStack) {
+        foreach (KoInlineObject* inlineObject, *currentPairedInlineObjectsStack) {
             inlineObject->saveOdf(context);
         }
     }
@@ -1280,7 +1288,7 @@ void KoTextWriter::Private::saveBibliography(QTextDocument *document, QHash<QTex
     localBlock.movePosition(QTextCursor::NextBlock);
     int endTitle = localBlock.position();
     writer->startElement("text:index-title");
-        writeBlocks(bibDocument, 0, endTitle, listStyles);
+    writeBlocks(bibDocument, 0, endTitle, listStyles);
     writer->endElement(); // text:index-title
 
     writeBlocks(bibDocument, endTitle, -1, listStyles);

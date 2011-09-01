@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
-
 #ifndef TEST_KO_BOOKMARK_MANAGER_H
 #define TEST_KO_BOOKMARK_MANAGER_H
 

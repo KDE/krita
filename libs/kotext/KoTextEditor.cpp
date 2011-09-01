@@ -881,6 +881,21 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     emit cursorPositionChanged();
 }
 
+void KoTextEditor::updateInlineObjectPosition(int start, int end)
+{
+    KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(d->document).inlineTextObjectManager();
+    // and, of course, every inline object after the current position has the wrong position
+    QTextCursor cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), start);
+    while (!cursor.isNull() && (end > -1 && cursor.position() < end )) {
+        QTextCharFormat fmt = cursor.charFormat();
+        KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
+        obj->updatePosition(d->document, cursor.position(), fmt);
+        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position());
+    }
+
+}
+
+
 void KoTextEditor::insertFrameBreak()
 {
     if (isEditProtected()) {
@@ -1596,7 +1611,7 @@ void KoTextEditor::newLine()
     d->caret.clearSelection();
     QTextBlockFormat bf = d->caret.blockFormat();
     QVariant direction = bf.property(KoParagraphStyle::TextProgressionDirection);
-    bf.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
+    bf.clearProperty(KoParagraphStyle::BreakBefore);
     bf.clearProperty(KoParagraphStyle::ListStartValue);
     bf.clearProperty(KoParagraphStyle::UnnumberedListItem);
     bf.clearProperty(KoParagraphStyle::IsListHeader);
@@ -1681,7 +1696,7 @@ void KoTextEditor::removeSelectedText()
         if (!bookmarksToBeMoved.contains(bookmark)) {
             objectsToBeRemoved << obj;
         }
-        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position() + 1);
+        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position());
     }
     foreach(KoInlineObject *obj, objectsToBeRemoved) {
         inlineObjectManager->removeInlineObject(obj); // does _not_ remove the character in the text doc
@@ -1706,14 +1721,7 @@ void KoTextEditor::removeSelectedText()
         cursor.setCharFormat(oldCf);
     }
 
-    // and, of course, every inline object after the current position has the wrong position
-    cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), currentPosition);
-    while (!cursor.isNull()) {
-        QTextCharFormat fmt = cursor.charFormat();
-        KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
-        obj->updatePosition(d->document, cursor.position(), fmt);
-        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position() + 1);
-    }
+    updateInlineObjectPosition(currentPosition);
 
     emit cursorPositionChanged();
 }

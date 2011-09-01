@@ -70,7 +70,9 @@ KisToneMappingDialog::KisToneMappingDialog(QWidget* parent, KisLayerSP _layer) :
     connect(d->uiToneMappingDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
     connect(d->uiToneMappingDialog.comboBoxPresets, SIGNAL(activated(int)), SLOT(slotBookmarkedToneMappingConfigurationSelected(int)));
     connect(d->uiToneMappingDialog.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));
-
+    d->uiToneMappingDialog.pushButtonApply->setGuiItem(KStandardGuiItem::Apply);
+    d->uiToneMappingDialog.pushButtonCancel->setGuiItem(KStandardGuiItem::Cancel);
+    d->uiToneMappingDialog.pushButtonOk->setGuiItem(KStandardGuiItem::Ok);
 
     d->operatorsModel = new KoGenericRegistryModel<KisToneMappingOperator*>(KisToneMappingOperatorsRegistry::instance());
     d->uiToneMappingDialog.comboBoxOperators->setModel(d->operatorsModel);

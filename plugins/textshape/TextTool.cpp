@@ -86,7 +86,7 @@
 #include <QTextDocumentFragment>
 #include <QToolTip>
 
-#include <rdf/KoDocumentRdfBase.h>
+#include <KoDocumentRdfBase.h>
 
 class TextToolSelection : public KoToolSelection
 {

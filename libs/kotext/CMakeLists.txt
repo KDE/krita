@@ -8,6 +8,7 @@ add_subdirectory( opendocument/tests )
 
 ########### next target ###############
 set(kotext_LIB_SRCS
+    KoDocumentRdfBase.cpp
     KoText.cpp
     KoTextBlockData.cpp
     KoTextBlockBorderData.cpp
@@ -129,6 +130,7 @@ install( FILES texteditingplugin.desktop inlinetextobject.desktop textvariablepl
 install(
     FILES
     kotext_export.h
+    KoDocumentRdfBase.h
     KoInlineObject.h
     KoTextEditor.h
     KoTextEditingFactory.h

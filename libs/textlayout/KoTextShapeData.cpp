@@ -41,7 +41,7 @@
 #include <KoGenStyles.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
-#include <rdf/KoDocumentRdfBase.h>
+#include <KoDocumentRdfBase.h>
 
 #include <KoXmlWriter.h>
 

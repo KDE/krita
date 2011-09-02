@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Marble Map Shape
+Name[en_GB]=Marble Map Shape
+X-KDE-ServiceTypes=Calligra/Shape
+Type=Service
+X-KDE-Library=marblemapshape
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

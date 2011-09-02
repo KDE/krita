@@ -160,6 +160,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
     }
 
     Q_ASSERT(!pairedInlineObjectsStackStack.isEmpty());
+    delete currentPairedInlineObjectsStack;
     currentPairedInlineObjectsStack = pairedInlineObjectsStackStack.pop();
 }
 

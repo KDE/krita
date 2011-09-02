@@ -351,8 +351,8 @@ bool KoDocumentRdf::saveOasis(KoStore *store, KoXmlWriter *manifestWriter)
         return false;
     }
     bool ok = true;
-    NodeIterator contextier = model()->listContexts();
-    QList<Node> contexts = contextier.allElements();
+    NodeIterator contextIter = model()->listContexts();
+    QList<Node> contexts = contextIter.allElements();
     foreach (Soprano::Node n, contexts) {
         saveRdf(store, manifestWriter, n);
     }

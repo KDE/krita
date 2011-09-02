@@ -19,7 +19,6 @@
 
 #include "KoRdfFoaFTreeWidgetItem.h"
 #include "KoDocumentRdf.h"
-#include "KoDocumentRdf_p.h"
 #include "RdfSemanticTreeWidgetSelectAction.h"
 
 #include <kdebug.h>

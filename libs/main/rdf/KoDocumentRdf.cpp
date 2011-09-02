@@ -19,7 +19,6 @@
 */
 
 #include "KoDocumentRdf.h"
-#include "KoDocumentRdf_p.h"
 #include "KoRdfPrefixMapping.h"
 #include "RdfSemanticTreeWidgetSelectAction.h"
 
@@ -56,6 +55,10 @@
 #include <klocale.h>
 #include <kuser.h>
 
+
+#include <QWeakPointer>
+
+
 #define DEBUG_RDF
 
 #ifdef DEBUG_RDF
@@ -66,17 +69,33 @@
 
 using namespace Soprano;
 
-KoDocumentRdfPrivate::KoDocumentRdfPrivate()
-        : model(Soprano::createModel())
-        , prefixMapping(0)
-{
-}
 
-KoDocumentRdfPrivate::~KoDocumentRdfPrivate()
+class KoDocumentRdfPrivate
 {
-    delete prefixMapping;
-    delete model;
-}
+public:
+
+    KoDocumentRdfPrivate()
+            : model(Soprano::createModel())
+            , prefixMapping(0)
+    {
+    }
+
+    ~KoDocumentRdfPrivate()
+    {
+        delete prefixMapping;
+        delete model;
+    }
+
+    Soprano::Model *model; ///< Main Model containing all Rdf for doc
+    QMap<QString, QWeakPointer<KoTextInlineRdf> > inlineRdfObjects;  ///< Cache of weak pointers to inline Rdf
+    KoRdfPrefixMapping *prefixMapping;     ///< prefix -> URI mapping
+
+    QList<KoRdfFoaF*> foafObjects;
+    QList<KoRdfCalendarEvent*> calObjects;
+    QList<KoRdfLocation*> locObjects;
+
+    QMap<QString,QList<KoSemanticStylesheet*> > userStylesheets;
+};
 
 
 KoDocumentRdf::KoDocumentRdf(QObject *parent)

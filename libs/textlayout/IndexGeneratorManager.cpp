@@ -18,7 +18,6 @@
  */
 
 #include "IndexGeneratorManager.h"
-#include "IndexGenerator.h"
 
 #include "KoTextDocumentLayout.h"
 #include "ToCGenerator.h"

@@ -27,7 +27,6 @@
 
 class QTextDocument;
 class KoTextDocumentLayout;
-class IndexGenerator;
 class KoTableOfContentsGeneratorInfo;
 class ToCGenerator;
 

@@ -22,10 +22,10 @@
 #ifndef TOCGENERATOR_H
 #define TOCGENERATOR_H
 
-#include "IndexGenerator.h"
 
 #include <QList>
 #include <QTextBlock>
+#include <QObject>
 
 class KoInlineTextObjectManager;
 class KoTextDocumentLayout;
@@ -33,7 +33,7 @@ class KoTableOfContentsGeneratorInfo;
 
 class QTextDocument;
 
-class ToCGenerator : public IndexGenerator
+class ToCGenerator : public QObject
 {
     Q_OBJECT
 public:

@@ -183,11 +183,7 @@ bool ToCGenerator::generate()
     }
     cursor.endEditBlock();
 
-    KoTextLayoutRootArea *rootArea = m_documentLayout->rootAreaForPosition(m_block.previous().position());
-    if (rootArea) {
-        rootArea->setDirty();
-    }
-
+    m_documentLayout->documentChanged(m_block.position(),1,1);
     return m_success;
 }
 

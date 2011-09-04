@@ -20,7 +20,6 @@
 #include "KoRdfSemanticTreeWidgetItem.h"
 
 #include "KoDocumentRdf.h"
-#include "KoDocumentRdf_p.h"
 
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>

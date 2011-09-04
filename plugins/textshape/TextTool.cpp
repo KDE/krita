@@ -86,7 +86,7 @@
 #include <QTextDocumentFragment>
 #include <QToolTip>
 
-#include <rdf/KoDocumentRdfBase.h>
+#include <KoDocumentRdfBase.h>
 
 class TextToolSelection : public KoToolSelection
 {
@@ -718,6 +718,27 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
 {
     if (m_textEditor.isNull())
         return;
+
+    // request the software keyboard, if any
+    if (event->button() == Qt::LeftButton && qApp->autoSipEnabled()) {
+        QStyle::RequestSoftwareInputPanel behavior = QStyle::RequestSoftwareInputPanel(qApp->style()->styleHint(QStyle::SH_RequestSoftwareInputPanel));
+        // the two following bools just make it all a lot easier to read in the following if()
+        // basically, we require a widget for this to work (passing NULL to QApplication::sendEvent
+        // crashes) and there are three tests any one of which can be true to trigger the event
+        const bool hasWidget = canvas()->canvasWidget();
+        const bool hasItem = canvas()->canvasItem();
+        if ((behavior == QStyle::RSIP_OnMouseClick && (hasWidget || hasItem)) ||
+            (hasWidget && canvas()->canvasWidget()->hasFocus()) ||
+            (hasItem && canvas()->canvasItem()->hasFocus())) {
+            QEvent event(QEvent::RequestSoftwareInputPanel);
+            if (hasWidget) {
+                QApplication::sendEvent(canvas()->canvasWidget(), &event);
+            } else {
+                QApplication::sendEvent(canvas()->canvasItem(), &event);
+            }
+        }
+    }
+
     if (event->button() != Qt::RightButton)
         updateSelectedShape(event->point);
     KoSelection *selection = canvas()->shapeManager()->selection();

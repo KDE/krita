@@ -22,7 +22,6 @@
 #include "KoRdfLocationEditWidget.h"
 #include "KoRdfSemanticItem_p.h"
 #include "KoDocumentRdf.h"
-#include "KoDocumentRdf_p.h"
 #include "KoTextRdfCore.h"
 #include "KoRdfLocationTreeWidgetItem.h"
 

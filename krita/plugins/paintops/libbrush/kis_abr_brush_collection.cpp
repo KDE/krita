@@ -261,8 +261,8 @@ static bool abr_read_content(QDataStream & abr, AbrInfo *abr_hdr)
 
 static QString abr_read_ucs2_text (QDataStream & abr)
 {
-    quint64 name_size;
-    quint64 buf_size;
+    quint32 name_size;
+    quint32 buf_size;
     uint   i;
     /* two-bytes characters encoded (UCS-2)
     *  format:
@@ -459,6 +459,10 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12 (QDataStream & abr, AbrInfo *ab
             KisAbrBrush* abrBrush = new KisAbrBrush(name);
             abrBrush->setImage(convertToQImage(buffer, width, height));
             // XXX: call extra setters on abrBrush for other options of ABR brushes   free (buffer);
+            abrBrush->setValid(true);
+            abrBrush->setName(name);
+            m_abrBrushes.append(abrBrush);
+            layer_ID = 1;
         }
     }
     else {

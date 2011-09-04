@@ -641,7 +641,6 @@ bool KoInlineCite::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 
         //Now checking for cloned citation (with same identifier)
         if (manager()->citations(true).keys().count(d->identifier) > 1) {
-
             this->setType(KoInlineCite::ClonedCitation);
         }
     }

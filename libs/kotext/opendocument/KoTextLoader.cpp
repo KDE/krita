@@ -1485,6 +1485,8 @@ void KoTextLoader::loadCite(const KoXmlElement &noteElem, QTextCursor &cursor)
         //Now creating citation with default type KoInlineCite::Citation.
         KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
 
+        // the manager is needed during loading so set it now
+        cite->setManager(textObjectManager);
         if (cite->loadOdf(noteElem, d->context)) {
             textObjectManager->insertInlineObject(cursor, cite);
         } else {

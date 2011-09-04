@@ -20,7 +20,6 @@
 
 #include "KoRdfLocationEditWidget.h"
 #include "KoDocumentRdf.h"
-#include "KoDocumentRdf_p.h"
 
 #include <kdebug.h>
 

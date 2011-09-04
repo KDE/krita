@@ -102,7 +102,6 @@ void BibliographyGenerator::generate()
     }
 
     qDebug() << "\n" << m_bibInfo->m_indexTitleTemplate.text;
-    QTextBlock block = m_bibDocument->rootFrame()->firstCursorPosition().block();
     QTextCharFormat savedCharFormat = cursor.charFormat();
     QList<KoInlineCite*> citeList = KoTextDocument(document).inlineTextObjectManager()->citations(false).values();
 

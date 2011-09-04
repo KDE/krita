@@ -40,7 +40,7 @@
 #include <KoTextOdfSaveHelper.h>
 #include <KoTextDrag.h>
 #include <KoOdf.h>
-#include <rdf/KoDocumentRdfBase.h>
+#include <KoDocumentRdfBase.h>
 #include <QTextDocumentFragment>
 #include <kundo2command.h>
 

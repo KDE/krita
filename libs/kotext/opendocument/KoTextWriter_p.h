@@ -75,7 +75,7 @@
 #include <Soprano/Soprano>
 #endif
 
-#include <rdf/KoDocumentRdfBase.h>
+#include "KoDocumentRdfBase.h"
 
 /**
  * XXX: Apidox!

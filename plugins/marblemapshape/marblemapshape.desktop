@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Marble Map Shape
+Name[pt]=Forma de Mapa do Marble
+Name[pt_BR]=Forma de mapa do Marble
+Name[sv]=Marble-kartform
+Name[uk]=Форма карти Marble
+Name[x-test]=xxMarble Map Shapexx
+X-KDE-ServiceTypes=Calligra/Shape
+Type=Service
+X-KDE-Library=marblemapshape
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

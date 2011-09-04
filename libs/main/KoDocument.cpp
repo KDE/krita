@@ -32,7 +32,6 @@
 #include "KoDocumentInfo.h"
 #include "KoCanvasController.h"
 #include "KoCanvasControllerWidget.h"
-#include "rdf/KoDocumentRdfBase.h"
 #ifdef SHOULD_BUILD_RDF
 #include "rdf/KoDocumentRdf.h"
 #endif
@@ -46,7 +45,7 @@
 #include <KoProgressProxy.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
-
+#include <KoDocumentRdfBase.h>
 #include <KoDpi.h>
 #include <KoXmlWriter.h>
 
@@ -826,33 +825,26 @@ bool KoDocument::saveNativeFormat(const QString & file)
     //kDebug(30003) <<"Saving to store";
 
     KoStore::Backend backend = KoStore::Auto;
-#if 0
-    if (d->specialOutputFlag == SaveAsCalligra1dot1) {
-        kDebug(30003) << "Saving as Calligra-1.1 format, using a tar.gz";
-        backend = KoStore::Tar; // Calligra-1.0/1.1 used tar.gz for the native mimetype
-        //// TODO more backwards compat stuff (embedded docs etc.)
-    } else
-#endif
-        if (d->specialOutputFlag == SaveAsDirectoryStore) {
-            backend = KoStore::Directory;
-            kDebug(30003) << "Saving as uncompressed XML, using directory store.";
-        }
+    if (d->specialOutputFlag == SaveAsDirectoryStore) {
+        backend = KoStore::Directory;
+        kDebug(30003) << "Saving as uncompressed XML, using directory store.";
+    }
 #ifdef QCA2
-        else if (d->specialOutputFlag == SaveEncrypted) {
-            backend = KoStore::Encrypted;
-            kDebug(30003) << "Saving using encrypted backend.";
-        }
+    else if (d->specialOutputFlag == SaveEncrypted) {
+        backend = KoStore::Encrypted;
+        kDebug(30003) << "Saving using encrypted backend.";
+    }
 #endif
-        else if (d->specialOutputFlag == SaveAsFlatXML) {
-            kDebug(30003) << "Saving as a flat XML file.";
-            QFile f(file);
-            if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-                bool success = saveToStream(&f);
-                f.close();
-                return success;
-            } else
-                return false;
-        }
+    else if (d->specialOutputFlag == SaveAsFlatXML) {
+        kDebug(30003) << "Saving as a flat XML file.";
+        QFile f(file);
+        if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            bool success = saveToStream(&f);
+            f.close();
+            return success;
+        } else
+            return false;
+    }
 
     kDebug(30003) << "KoDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType();
     // OLD: bool oasis = d->specialOutputFlag == SaveAsOASIS;

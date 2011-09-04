@@ -119,34 +119,43 @@ public:
      */
     void loadResources(QStringList filenames) {
         kDebug(30009) << "loading  resources for type " << type();
+        QStringList uniqueFiles;
+
         while (!filenames.empty() && !m_cancelled)
         {
             QString front = filenames.first();
             filenames.pop_front();
 
             QString fname = QFileInfo(front).fileName();
-            m_loadLock.lock();
-            QList<T*> resources = createResources(front);
-            foreach(T* resource, resources) {
-                Q_CHECK_PTR(resource);
-                if (resource->load() && resource->valid()) {
 
-                    m_resourcesByFilename[resource->shortFilename()] = resource;
+            //kDebug(30009) << "Loading " << fname << " of type " << type();
+            // XXX: Don't load resources with the same filename. Actually, we should look inside
+            //      the resource to find out whether they are really the same, but for now this
+            //      will prevent the same brush etc. showing up twice.
+            if (uniqueFiles.empty() || uniqueFiles.indexOf(fname) == -1) {
+                m_loadLock.lock();
+                uniqueFiles.append(fname);
+                QList<T*> resources = createResources(front);
+                foreach(T* resource, resources) {
+                    Q_CHECK_PTR(resource);
+                    if (resource->load() && resource->valid()) {
 
-                    if ( resource->name().isNull() ) {
-                        resource->setName( fname );
+                        m_resourcesByFilename[resource->shortFilename()] = resource;
+
+                        if ( resource->name().isNull() ) {
+                            resource->setName( fname );
+                        }
+                        m_resourcesByName[resource->name()] = resource;
+                        m_resources.append(resource);
+
+                        notifyResourceAdded(resource);
                     }
-                    m_resourcesByName[resource->name()] = resource;
-                    m_resources.append(resource);
-
-                    notifyResourceAdded(resource);
+                    else {
+                        delete resource;
+                    }
                 }
-                else {
-                    delete resource;
-                }
+                m_loadLock.unlock();
             }
-            m_loadLock.unlock();
-
         }
         kDebug(30009) << "done loading  resources for type " << type();
     }

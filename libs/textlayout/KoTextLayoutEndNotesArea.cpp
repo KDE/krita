@@ -85,6 +85,26 @@ bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)
         }
     }
 }
+KoPointedAt KoTextLayoutEndNotesArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) const
+{
+    KoPointedAt pointedAt;
+    int endNoteIndex = 0;
+    while (endNoteIndex<d->endNoteAreas.length()) {
+        // check if p is over end notes area
+        if (p.y() > d->endNoteAreas[endNoteIndex]->top()
+                && p.y() < d->endNoteAreas[endNoteIndex]->bottom()) {
+            pointedAt = d->endNoteAreas[endNoteIndex]->hitTest(p, accuracy);
+            return pointedAt;
+        }
+        ++endNoteIndex;
+    }
+    return KoPointedAt();
+}
+
+QRectF KoTextLayoutEndNotesArea::selectionBoundingBox(QTextCursor &cursor) const
+{
+
+}
 
 void KoTextLayoutEndNotesArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {

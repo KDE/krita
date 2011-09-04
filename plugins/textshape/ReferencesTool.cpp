@@ -128,6 +128,10 @@ void ReferencesTool::formatTableOfContents()
 void ReferencesTool::insertFootNote()
 {
     //connect(textEditor()->document(),SIGNAL(cursorPositionChanged(QTextCursor)),this,SLOT(disableButtons(QTextCursor)));
+    KoInlineTextObjectManager *manager = KoTextDocument(textEditor()->document()).inlineTextObjectManager();
+    if (manager->footNotes().count() == 0) {
+        openSettings();
+    }
     note = textEditor()->insertFootNote();
     note->setAutoNumbering(sfenw->widget.autoNumbering->isChecked());
     if(note->autoNumbering()) {
@@ -161,6 +165,10 @@ void ReferencesTool::insertFootNote()
 
 void ReferencesTool::insertEndNote()
 {
+    KoInlineTextObjectManager *manager = KoTextDocument(textEditor()->document()).inlineTextObjectManager();
+    if (manager->endNotes().count() == 0) {
+        openSettings();
+    }
     note = textEditor()->insertEndNote();
     note->setAutoNumbering(sfenw->widget.autoNumbering->isChecked());
     if(note->autoNumbering()) {

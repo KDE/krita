@@ -426,21 +426,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 QVariant data = block.blockFormat().property(KoParagraphStyle::TableOfContentsDocument);
                 QTextDocument *tocDocument = data.value<QTextDocument *>();
 
-                data = block.blockFormat().property(KoParagraphStyle::TableOfContentsData);
-                KoTableOfContentsGeneratorInfo *tocInfo = data.value<KoTableOfContentsGeneratorInfo *>();
-
-                if (!tocInfo->generator()) {
-                    // The generator attaches itself to the tocInfo
-                    new ToCGenerator(tocDocument, tocInfo);
-                }
-                tocInfo->generator()->setMaxTabPosition(right() - left());
-
-                if (!cursor->currentSubFrameIterator) {
-                    // Let the generator know which QTextBlock it needs to ask for a relayout once the toc got generated.
-                    tocInfo->generator()->setBlock(block);
-                }
-
-                // Let's create KoTextLayoutArea and let to handle the ToC
+                // Let's create KoTextLayoutArea and let it handle the ToC
                 KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, documentLayout());
                 m_tableOfContentsAreas.append(tocArea);
                 m_y += m_bottomSpacing;
@@ -911,11 +897,17 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QList<QTextOption::Tab> qTabs;
     ///@TODO: don't do this kind of conversion, we lose data for layout.
     foreach (KoText::Tab kTab, tabs) {
+        qreal value = kTab.position;
+        if (value > MaximumTabPos - 1000) {
+            value += right() - left() - MaximumTabPos;
+        }
+        value = (value + tabOffset) * qt_defaultDpiY() / 72. -1;
+
 #if QT_VERSION >= 0x040700
-        qTabs.append(QTextOption::Tab((kTab.position + tabOffset) * qt_defaultDpiY() / 72. -1, kTab.type, kTab.delimiter));
+        qTabs.append(QTextOption::Tab(value, kTab.type, kTab.delimiter));
 #else
         QTextOption::Tab tab;
-        tab.position = (kTab.position + tabOffset) * qt_defaultDpiY() / 72. -1;
+        tab.position = value;
         tab.type = kTab.type;
         tab.delimiter = kTab.delimiter;
         qTabs.append(tab);
@@ -1072,15 +1064,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         expandBoundingLeft(line.x());
         expandBoundingRight(line.x() + line.naturalTextWidth());
 
-        // during fit is where documentLayout->positionInlineObjects is called
-        //so now is a good time to position the obstructions
-        int oldObstructionCount = documentLayout()->currentObstructions().size();
-
         documentLayout()->positionAnchoredObstructions();
-
-        if (oldObstructionCount < documentLayout()->currentObstructions().size()) {
-            return false;
-        }
 
         // line fitted so try and do the next one
         line = layout->createLine();
@@ -1482,7 +1466,18 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
 {
     QTextBlockFormat format = block->blockFormat();
     KoParagraphStyle formatStyle(format, block->charFormat());
-    qreal spacing = qMax(m_bottomSpacing, formatStyle.topMargin());
+
+    // The AddParaTableSpacingAtStart config-item is used to be able to optionally prevent that
+    // defined fo:margin-top are applied to the first paragraph. If true then the fo:margin-top
+    // is applied to all except the first paragraph. If false fo:margin-top is applied to all
+    // paragraphs.
+    bool paraTableSpacingAtStart = KoTextDocument(m_documentLayout->document()).paraTableSpacingAtStart();
+
+    qreal topMargin = 0;
+    if (paraTableSpacingAtStart || block->previous().isValid()) {
+        topMargin = formatStyle.topMargin();
+    }
+    qreal spacing = qMax(m_bottomSpacing, topMargin);
 
     KoTextBlockBorderData border(QRectF(x(), m_y, width(), 1));
     border.setEdge(border.Left, format, KoParagraphStyle::LeftBorderStyle,
@@ -1510,7 +1505,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             // Merged mean we don't have inserts inbetween the blocks
             qreal divider = m_y;
             if (spacing) {
-                divider += spacing * m_bottomSpacing / (m_bottomSpacing + formatStyle.topMargin());
+                divider += spacing * m_bottomSpacing / (m_bottomSpacing + topMargin);
             }
             if (!m_blockRects.isEmpty()) {
                 m_blockRects.last().setBottom(divider);

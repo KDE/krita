@@ -60,9 +60,7 @@ private:
     QTextCharFormat m_format;
     bool m_multipleFormatDeletion;
 
-    virtual void deleteChar();
-    virtual void deletePreviousChar();
-    virtual void deleteSelection();
+    virtual void doDelete();
     virtual void deleteInlineObjects();
     virtual void deleteTextAnchor(KoInlineObject *object);
     virtual bool checkMerge(const KUndo2Command *command);

@@ -149,6 +149,8 @@ public:
     /// or invalid if not
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
+    static const int MaximumTabPos = 10000;
+
 protected:
     void setBottom(qreal bottom);
 

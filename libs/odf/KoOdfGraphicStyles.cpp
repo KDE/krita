@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
-   Copyright (C) 2007-2008,2010 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007-2008,2010-2011 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
 
    This library is free software; you can redistribute it and/or
@@ -42,47 +42,51 @@
 
 void KoOdfGraphicStyles::saveOdfFillStyle(KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush)
 {
+    KoGenStyle::Type type = styleFill.type();
+    KoGenStyle::PropertyType propertyType = (type == KoGenStyle::GraphicStyle || type == KoGenStyle::GraphicAutoStyle ||
+                                             type == KoGenStyle::DrawingPageStyle || type == KoGenStyle::DrawingPageAutoStyle )
+                                            ? KoGenStyle::DefaultType : KoGenStyle::GraphicType;
     switch (brush.style()) {
     case Qt::Dense1Pattern:
-        styleFill.addProperty("draw:transparency", "94%");
-        styleFill.addProperty("draw:fill", "solid");
-        styleFill.addProperty("draw:fill-color", brush.color().name());
+        styleFill.addProperty("draw:transparency", "94%", propertyType);
+        styleFill.addProperty("draw:fill", "solid", propertyType);
+        styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense2Pattern:
-        styleFill.addProperty("draw:transparency", "88%");
-        styleFill.addProperty("draw:fill", "solid");
-        styleFill.addProperty("draw:fill-color", brush.color().name());
+        styleFill.addProperty("draw:transparency", "88%", propertyType);
+        styleFill.addProperty("draw:fill", "solid", propertyType);
+        styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense3Pattern:
-        styleFill.addProperty("draw:transparency", "63%");
-        styleFill.addProperty("draw:fill", "solid");
-        styleFill.addProperty("draw:fill-color", brush.color().name());
+        styleFill.addProperty("draw:transparency", "63%", propertyType);
+        styleFill.addProperty("draw:fill", "solid", propertyType);
+        styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense4Pattern:
-        styleFill.addProperty("draw:transparency", "50%");
-        styleFill.addProperty("draw:fill", "solid");
-        styleFill.addProperty("draw:fill-color", brush.color().name());
+        styleFill.addProperty("draw:transparency", "50%", propertyType);
+        styleFill.addProperty("draw:fill", "solid", propertyType);
+        styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense5Pattern:
-        styleFill.addProperty("draw:transparency", "37%");
-        styleFill.addProperty("draw:fill", "solid");
-        styleFill.addProperty("draw:fill-color", brush.color().name());
+        styleFill.addProperty("draw:transparency", "37%", propertyType);
+        styleFill.addProperty("draw:fill", "solid", propertyType);
+        styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense6Pattern:
-        styleFill.addProperty("draw:transparency", "12%");
-        styleFill.addProperty("draw:fill", "solid");
-        styleFill.addProperty("draw:fill-color", brush.color().name());
+        styleFill.addProperty("draw:transparency", "12%", propertyType);
+        styleFill.addProperty("draw:fill", "solid", propertyType);
+        styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense7Pattern:
-        styleFill.addProperty("draw:transparency", "6%");
-        styleFill.addProperty("draw:fill", "solid");
-        styleFill.addProperty("draw:fill-color", brush.color().name());
+        styleFill.addProperty("draw:transparency", "6%", propertyType);
+        styleFill.addProperty("draw:fill", "solid", propertyType);
+        styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::LinearGradientPattern:
     case Qt::RadialGradientPattern:
     case Qt::ConicalGradientPattern:
-        styleFill.addProperty("draw:fill", "gradient");
-        styleFill.addProperty("draw:fill-gradient-name", saveOdfGradientStyle(mainStyles, brush));
+        styleFill.addProperty("draw:fill", "gradient", propertyType);
+        styleFill.addProperty("draw:fill-gradient-name", saveOdfGradientStyle(mainStyles, brush), propertyType);
         break;
     case Qt::HorPattern:
     case Qt::VerPattern:
@@ -90,18 +94,18 @@ void KoOdfGraphicStyles::saveOdfFillStyle(KoGenStyle &styleFill, KoGenStyles& ma
     case Qt::BDiagPattern:
     case Qt::FDiagPattern:
     case Qt::DiagCrossPattern:
-        styleFill.addProperty("draw:fill", "hatch");
-        styleFill.addProperty("draw:fill-hatch-name", saveOdfHatchStyle(mainStyles, brush));
+        styleFill.addProperty("draw:fill", "hatch", propertyType);
+        styleFill.addProperty("draw:fill-hatch-name", saveOdfHatchStyle(mainStyles, brush), propertyType);
         break;
     case Qt::SolidPattern:
-        styleFill.addProperty("draw:fill", "solid");
-        styleFill.addProperty("draw:fill-color", brush.color().name());
+        styleFill.addProperty("draw:fill", "solid", propertyType);
+        styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         if (! brush.isOpaque())
-            styleFill.addProperty("draw:opacity", QString("%1%").arg(brush.color().alphaF() * 100.0));
+            styleFill.addProperty("draw:opacity", QString("%1%").arg(brush.color().alphaF() * 100.0), propertyType);
         break;
     case Qt::NoBrush:
     default:
-        styleFill.addProperty("draw:fill", "none");
+        styleFill.addProperty("draw:fill", "none", propertyType);
         break;
     }
 }
@@ -111,13 +115,13 @@ void KoOdfGraphicStyles::saveOdfStrokeStyle(KoGenStyle &styleStroke, KoGenStyles
     // TODO implement all possibilities
     switch (pen.style()) {
     case Qt::NoPen:
-        styleStroke.addProperty("draw:stroke", "none");
+        styleStroke.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
         return;
     case Qt::SolidLine:
-        styleStroke.addProperty("draw:stroke", "solid");
+        styleStroke.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
         break;
     default: { // must be a dashed line
-        styleStroke.addProperty("draw:stroke", "dash");
+        styleStroke.addProperty("draw:stroke", "dash", KoGenStyle::GraphicType);
         // save stroke dash (14.14.7) which is severly limited, but still
         KoGenStyle dashStyle(KoGenStyle::StrokeDashStyle);
         dashStyle.addAttribute("draw:style", "rect");
@@ -130,44 +134,44 @@ void KoOdfGraphicStyles::saveOdfStrokeStyle(KoGenStyle &styleStroke, KoGenStyles
             dashStyle.addAttributePt("draw:dots2-length", dashes[2]*pen.widthF());
         }
         QString dashStyleName = mainStyles.insert(dashStyle, "dash");
-        styleStroke.addProperty("draw:stroke-dash", dashStyleName);
+        styleStroke.addProperty("draw:stroke-dash", dashStyleName, KoGenStyle::GraphicType);
         break;
     }
     }
 
     if (pen.brush().gradient()) {
-        styleStroke.addProperty("calligra:stroke-gradient", saveOdfGradientStyle(mainStyles, pen.brush()));
+        styleStroke.addProperty("calligra:stroke-gradient", saveOdfGradientStyle(mainStyles, pen.brush()), KoGenStyle::GraphicType);
     }
     else {
-        styleStroke.addProperty("svg:stroke-color", pen.color().name());
-        styleStroke.addProperty("svg:stroke-opacity", QString("%1").arg(pen.color().alphaF()));
+        styleStroke.addProperty("svg:stroke-color", pen.color().name(), KoGenStyle::GraphicType);
+        styleStroke.addProperty("svg:stroke-opacity", QString("%1").arg(pen.color().alphaF()), KoGenStyle::GraphicType);
     }
-    styleStroke.addPropertyPt("svg:stroke-width", pen.widthF());
+    styleStroke.addPropertyPt("svg:stroke-width", pen.widthF(), KoGenStyle::GraphicType);
 
     switch (pen.joinStyle()) {
     case Qt::MiterJoin:
-        styleStroke.addProperty("draw:stroke-linejoin", "miter");
+        styleStroke.addProperty("draw:stroke-linejoin", "miter", KoGenStyle::GraphicType);
         break;
     case Qt::BevelJoin:
-        styleStroke.addProperty("draw:stroke-linejoin", "bevel");
+        styleStroke.addProperty("draw:stroke-linejoin", "bevel", KoGenStyle::GraphicType);
         break;
     case Qt::RoundJoin:
-        styleStroke.addProperty("draw:stroke-linejoin", "round");
+        styleStroke.addProperty("draw:stroke-linejoin", "round", KoGenStyle::GraphicType);
         break;
     default:
-        styleStroke.addProperty("draw:stroke-linejoin", "miter");
-        styleStroke.addProperty("calligra:stroke-miterlimit", QString("%1").arg(pen.miterLimit()));
+        styleStroke.addProperty("draw:stroke-linejoin", "miter", KoGenStyle::GraphicType);
+        styleStroke.addProperty("calligra:stroke-miterlimit", QString("%1").arg(pen.miterLimit()), KoGenStyle::GraphicType);
         break;
     }
     switch (pen.capStyle()) {
     case Qt::RoundCap:
-        styleStroke.addProperty("svg:stroke-linecap", "round");
+        styleStroke.addProperty("svg:stroke-linecap", "round", KoGenStyle::GraphicType);
         break;
     case Qt::SquareCap:
-        styleStroke.addProperty("svg:stroke-linecap", "square");
+        styleStroke.addProperty("svg:stroke-linecap", "square", KoGenStyle::GraphicType);
         break;
     default:
-        styleStroke.addProperty("svg:stroke-linecap", "butt");
+        styleStroke.addProperty("svg:stroke-linecap", "butt", KoGenStyle::GraphicType);
         break;
     }
 }

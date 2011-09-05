@@ -47,7 +47,7 @@ private slots:
     void addCharacterStyle(KoCharacterStyle*);
     void removeParagraphStyle(KoParagraphStyle*);
     void removeCharacterStyle(KoCharacterStyle*);
-    void setParagraphStyle(KoParagraphStyle *style, bool canDelete);
+    void setParagraphStyle(KoParagraphStyle *style);
     void setCharacterStyle(KoCharacterStyle *style, bool canDelete);
 
 private:

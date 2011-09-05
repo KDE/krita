@@ -53,3 +53,9 @@ kde4_add_unit_test(TestKoDocumentRdf TESTNAME libs-komain-TestKoDocumentRdf ${Te
 target_link_libraries(TestKoDocumentRdf komain ${QT_QTTEST_LIBRARY})
 
 
+########### next target ###############
+
+set(rdf_test_SRCS rdf_test.cpp )
+kde4_add_unit_test(rdf_test TESTNAME libs-komain-rdf_test ${rdf_test_SRCS})
+target_link_libraries(rdf_test komain ${QT_QTTEST_LIBRARY})
+

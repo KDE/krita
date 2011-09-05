@@ -36,14 +36,6 @@
 
 class KoTextSharedLoadingData;
 
-class KOTEXT_EXPORT ToCGeneratorInterface {
-public:
-    ToCGeneratorInterface() {}
-    virtual ~ToCGeneratorInterface() {}
-    virtual void setMaxTabPosition(qreal maxTabPosition) = 0;
-    virtual void setBlock(const QTextBlock &block) = 0;
-};
-
 class KOTEXT_EXPORT KoTableOfContentsGeneratorInfo
 {
 public:
@@ -51,11 +43,6 @@ public:
     ~KoTableOfContentsGeneratorInfo();
     void loadOdf(KoTextSharedLoadingData *sharedLoadingData, const KoXmlElement &element);
     void saveOdf(KoXmlWriter *writer) const;
-
-    void setGenerator(ToCGeneratorInterface *generator);
-
-    ToCGeneratorInterface *generator() const;
-
 
     QString m_name;
     QString m_styleName;
@@ -77,7 +64,6 @@ public:
 
 private:
     int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
-    ToCGeneratorInterface * m_generator;
 };
 
 Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *)

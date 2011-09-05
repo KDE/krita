@@ -28,7 +28,6 @@ class KoShapeLoadingContext;
 class KoChangeTracker;
 class KoStyleManager;
 
-class QTextFrame;
 class QTextCursor;
 
 /**
@@ -58,13 +57,6 @@ public:
     bool hasSameData(KoInlineCite *cite) const;
 
     void copyFrom(KoInlineCite *cite);
-
-    /**
-     * Set the textframe where we will create our own textframe within
-     * Our textframe is the one containing the real cite contents.
-     * @param text the new text
-     */
-    void setMotherFrame(QTextFrame *text);
 
     void setIdentifier(const QString &identifier);
 
@@ -193,11 +185,6 @@ public:
     QString custom4() const;
 
     QString custom5() const;
-
-    /// return the current text frame
-    QTextFrame *textFrame() const;
-
-    QTextCursor textCursor() const;
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 

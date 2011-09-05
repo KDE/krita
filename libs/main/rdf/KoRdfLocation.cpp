@@ -22,7 +22,6 @@
 #include "KoRdfLocationEditWidget.h"
 #include "KoRdfSemanticItem_p.h"
 #include "KoDocumentRdf.h"
-#include "KoDocumentRdf_p.h"
 #include "KoTextRdfCore.h"
 #include "KoRdfLocationTreeWidgetItem.h"
 
@@ -294,3 +293,123 @@ double KoRdfLocation::dlong() const
     return m_dlong;
 }
 
+void KoRdfLocation::setName(const QString &name)
+{
+    QString rdfBase  = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+
+    if (!m_linkSubject.isValid()) {
+        m_linkSubject = createNewUUIDNode();
+    }
+    if (!m_isGeo84) {
+        if (!m_joiner.isValid()) {
+            QString tmp = "";
+            Node newV = createNewUUIDNode();
+
+            Soprano::Model* m = const_cast<Soprano::Model*>(m_rdf->model());
+            Node pred = Node::createResourceNode(QUrl(rdfBase + "rest"));
+
+            m->addStatement(linkingSubject(), pred, newV,
+                            m_rdf->manifestRdfNode());
+            m_joiner = newV;
+        }
+    }
+    QString dcBase = "http://purl.org/dc/elements/1.1/";
+
+    if (m_isGeo84) {
+        //
+        // http://www.w3.org/2003/01/geo/wgs84_pos ontology
+        //
+        setRdfType("uri:geo84");
+        updateTriple(m_name, name, dcBase + "title");
+    } else {
+        //
+        // RDF ical has support for pointing to a linked list of lat, long, NIL
+        //
+        setRdfType("uri:rdfcal-geolocation");
+        updateTriple(m_name, name, dcBase + "title");
+    }
+    if (documentRdf()) {
+        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
+    }
+
+}
+
+void KoRdfLocation::setDlat(double dlat)
+{
+    QString rdfBase  = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+
+    if (!m_linkSubject.isValid()) {
+        m_linkSubject = createNewUUIDNode();
+    }
+    if (!m_isGeo84) {
+        if (!m_joiner.isValid()) {
+            QString tmp = "";
+            Node newV = createNewUUIDNode();
+
+            Soprano::Model* m = const_cast<Soprano::Model*>(m_rdf->model());
+            Node pred = Node::createResourceNode(QUrl(rdfBase + "rest"));
+
+            m->addStatement(linkingSubject(), pred, newV,
+                            m_rdf->manifestRdfNode());
+            m_joiner = newV;
+        }
+    }
+    if (m_isGeo84) {
+        //
+        // http://www.w3.org/2003/01/geo/wgs84_pos ontology
+        //
+        QString wgs84Base = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+        setRdfType("uri:geo84");
+        updateTriple(m_dlat, dlat,  wgs84Base + "lat",  linkingSubject());
+    } else {
+        //
+        // RDF ical has support for pointing to a linked list of lat, long, NIL
+        //
+        setRdfType("uri:rdfcal-geolocation");
+        updateTriple(m_dlat, dlat,  rdfBase + "first", linkingSubject());
+    }
+
+    if (documentRdf()) {
+        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
+    }
+
+}
+
+void KoRdfLocation::setDlong(double dlong)
+{
+    QString rdfBase  = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+
+    if (!m_linkSubject.isValid()) {
+        m_linkSubject = createNewUUIDNode();
+    }
+    if (!m_isGeo84) {
+        if (!m_joiner.isValid()) {
+            Node newV = createNewUUIDNode();
+
+            Soprano::Model* m = const_cast<Soprano::Model*>(m_rdf->model());
+            Node pred = Node::createResourceNode(QUrl(rdfBase + "rest"));
+
+            m->addStatement(linkingSubject(), pred, newV, m_rdf->manifestRdfNode());
+            m_joiner = newV;
+        }
+    }
+
+    if (m_isGeo84) {
+        //
+        // http://www.w3.org/2003/01/geo/wgs84_pos ontology
+        //
+        QString wgs84Base = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+        setRdfType("uri:geo84");
+        updateTriple(m_dlong, dlong, wgs84Base + "long", linkingSubject());
+    } else {
+        //
+        // RDF ical has support for pointing to a linked list of lat, long, NIL
+        //
+        updateTriple(m_dlong, dlong, rdfBase + "first", m_joiner);
+    }
+
+    if (documentRdf()) {
+        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
+    }
+
+}

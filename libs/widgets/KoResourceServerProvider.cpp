@@ -45,17 +45,17 @@ public:
         KoStopGradient* gradient = new KoStopGradient("");
         gradient->setType(QGradient::LinearGradient);
         gradient->setName("Foreground to Background");
-        
+
         QList<KoGradientStop> stops;
         stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(Qt::white, cs));
         gradient->setStops(stops);
         gradient->setValid(true);
         addResource(gradient, false);
-        
+
         gradient = new KoStopGradient("");
         gradient->setType(QGradient::LinearGradient);
         gradient->setName("Foreground to Transparent");
-        
+
         stops.clear();
         stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs));
         gradient->setStops(stops);
@@ -115,7 +115,8 @@ QStringList KoResourceLoaderThread::getFileNames( const QString & extensions)
     QStringList fileNames;
 
     foreach (const QString &extension, extensionList) {
-        fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_server->type().toAscii(), extension);
+        fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_server->type().toAscii(), extension, KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
+
     }
     return fileNames;
 }
@@ -125,7 +126,7 @@ struct KoResourceServerProvider::Private
     KoResourceServer<KoPattern>* m_patternServer;
     KoResourceServer<KoAbstractGradient>* m_gradientServer;
     KoResourceServer<KoColorSet>* m_paletteServer;
-    
+
     QThread * paletteThread;
     QThread * gradientThread;
     QThread * patternThread;
@@ -143,6 +144,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     KGlobal::mainComponent().dirs()->addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
 
     KGlobal::mainComponent().dirs()->addResourceType("ko_palettes", "data", "krita/palettes/");
+    KGlobal::mainComponent().dirs()->addResourceType("ko_palettes", "data", "karbon/palettes/");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", "/usr/share/create/swatches");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
 

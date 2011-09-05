@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=KoReport_Maps
+Name[pt]=KoReport_Maps
+Name[pt_BR]=KoReport_Maps
+Name[sv]=Koffice rapportkartor
+Name[uk]=Карти KoReport
+Name[x-test]=xxKoReport_Mapsxx
+Comment=Calligra Reports Maps Plugin
+Comment[pt]='Plugin' de Mapas dos Relatórios do Calligra
+Comment[pt_BR]=Plug-in de mapas dos relatórios do Calligra
+Comment[sv]=Calligra-insticksprogram för rapportkartor
+Comment[uk]=Додаток карт у звітах Calligra
+Comment[x-test]=xxCalligra Reports Maps Pluginxx
+X-KDE-Library=koreport_mapsplugin
+X-KDE-ServiceTypes=KoReport/ItemPlugin
+Type=Service

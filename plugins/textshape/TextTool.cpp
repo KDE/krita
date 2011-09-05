@@ -86,7 +86,7 @@
 #include <QTextDocumentFragment>
 #include <QToolTip>
 
-#include <rdf/KoDocumentRdfBase.h>
+#include <KoDocumentRdfBase.h>
 
 class TextToolSelection : public KoToolSelection
 {
@@ -541,15 +541,6 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     KoTextDocument(document).setChangeTracker(m_changeTracker);
 
     KoTextDocument(document).setUndoStack(new KUndo2Stack());
-
-#if 0
-    KoTextDocumentLayout *layout = new KoTextDocumentLayout(document);
-    document->setDocumentLayout(layout);
-#else
-    #ifdef __GNUC__
-        #warning FIXME: port to textlayout-rework
-    #endif
-#endif
 }
 #endif
 
@@ -727,6 +718,27 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
 {
     if (m_textEditor.isNull())
         return;
+
+    // request the software keyboard, if any
+    if (event->button() == Qt::LeftButton && qApp->autoSipEnabled()) {
+        QStyle::RequestSoftwareInputPanel behavior = QStyle::RequestSoftwareInputPanel(qApp->style()->styleHint(QStyle::SH_RequestSoftwareInputPanel));
+        // the two following bools just make it all a lot easier to read in the following if()
+        // basically, we require a widget for this to work (passing NULL to QApplication::sendEvent
+        // crashes) and there are three tests any one of which can be true to trigger the event
+        const bool hasWidget = canvas()->canvasWidget();
+        const bool hasItem = canvas()->canvasItem();
+        if ((behavior == QStyle::RSIP_OnMouseClick && (hasWidget || hasItem)) ||
+            (hasWidget && canvas()->canvasWidget()->hasFocus()) ||
+            (hasItem && canvas()->canvasItem()->hasFocus())) {
+            QEvent event(QEvent::RequestSoftwareInputPanel);
+            if (hasWidget) {
+                QApplication::sendEvent(canvas()->canvasWidget(), &event);
+            } else {
+                QApplication::sendEvent(canvas()->canvasItem(), &event);
+            }
+        }
+    }
+
     if (event->button() != Qt::RightButton)
         updateSelectedShape(event->point);
     KoSelection *selection = canvas()->shapeManager()->selection();
@@ -1037,11 +1049,11 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             if (!textEditor->blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
                 // backspace at beginning of numbered list item, makes it unnumbered
                 ListItemNumberingCommand *lin = new ListItemNumberingCommand(textEditor->block(), false);
-                addCommand(lin);
+                textEditor->addCommand(lin);
             } else {
                 // backspace on numbered, empty parag, removes numbering.
                 ChangeListCommand *clc = new ChangeListCommand(*textEditor->cursor(), KoListStyle::None, 0 /* level */);
-                addCommand(clc);
+                textEditor->addCommand(clc);
             }
         } else if (textEditor->position() > 0 || textEditor->hasSelection()) {
             if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) // delete prev word.
@@ -1057,13 +1069,13 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         && ((!textEditor->hasSelection() && (textEditor->position() == textEditor->block().position())) || (textEditor->block().document()->findBlock(textEditor->anchor()) != textEditor->block().document()->findBlock(textEditor->position()))) && textEditor->block().textList()) {
         ChangeListLevelCommand::CommandType type = ChangeListLevelCommand::IncreaseLevel;
         ChangeListLevelCommand *cll = new ChangeListLevelCommand(*textEditor->cursor(), type, 1);
-        addCommand(cll);
+        textEditor->addCommand(cll);
         editingPluginEvents();
     } else if ((event->key() == Qt::Key_Backtab)
         && ((!textEditor->hasSelection() && (textEditor->position() == textEditor->block().position())) || (textEditor->block().document()->findBlock(textEditor->anchor()) != textEditor->block().document()->findBlock(textEditor->position()))) && textEditor->block().textList() && !(m_actionRecordChanges->isChecked())) {
         ChangeListLevelCommand::CommandType type = ChangeListLevelCommand::DecreaseLevel;
         ChangeListLevelCommand *cll = new ChangeListLevelCommand(*textEditor->cursor(), type, 1);
-        addCommand(cll);
+        textEditor->addCommand(cll);
         editingPluginEvents();
     } else if (event->key() == Qt::Key_Delete) {
         if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) // delete next word.
@@ -1608,75 +1620,6 @@ void TextTool::returnFocusToCanvas()
     canvas()->canvasWidget()->setFocus();
 }
 
-void TextTool::addUndoCommand()
-{
-    return;
-/*    if (! m_allowAddUndoCommand) return;
-    class UndoTextCommand : public KUndo2Command
-    {
-    public:
-        UndoTextCommand(QTextDocument *document, TextTool *tool, KUndo2Command *parent = 0)
-                : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
-                m_document(document),
-                m_tool(tool) {
-        }
-
-        void undo() {
-            if (m_document.isNull())
-                return;
-            if (!(m_tool.isNull()) && (m_tool->m_textShapeData) && (m_tool->m_textShapeData->document() == m_document)) {
-                m_tool->stopMacro();
-                m_tool->m_allowAddUndoCommand = false;
-
-
-                m_document->undo(&m_tool->m_caret);
-            } else
-                m_document->undo();
-            if (! m_tool.isNull())
-                m_tool->m_allowAddUndoCommand = true;
-        }
-
-        void redo() {
-            if (m_document.isNull())
-                return;
-
-            if (!(m_tool.isNull()) && (m_tool->m_textShapeData) && (m_tool->m_textShapeData->document() == m_document)) {
-                m_tool->m_allowAddUndoCommand = false;
-                m_document->redo(&m_tool->m_caret);
-            } else
-                m_document->redo();
-            if (! m_tool.isNull())
-                m_tool->m_allowAddUndoCommand = true;
-        }
-
-        QPointer<QTextDocument> m_document;
-        QPointer<TextTool> m_tool;
-    };
-    kDebug() << "in TextTool addCommand";
-    if (m_currentCommand) {
-        new UndoTextCommand(m_textShapeData->document(), this, m_currentCommand);
-        if (! m_currentCommandHasChildren)
-            canvas()->addCommand(m_currentCommand);
-        m_currentCommandHasChildren = true;
-    } else
-        canvas()->addCommand(new UndoTextCommand(m_textShapeData->document(), this));
-*/}
-
-void TextTool::addCommand(KUndo2Command *command)
-{
-/*    m_currentCommand = command;
-    TextCommandBase *cmd = dynamic_cast<TextCommandBase*>(command);
-    if (cmd)
-        cmd->setTool(this);
-    m_currentCommandHasChildren = true; //to avoid adding it again on the first child UndoTextCommand (infinite loop)
-    canvas()->addCommand(command); // will execute it.
-    m_currentCommand = 0;
-    m_currentCommandHasChildren = false;
-*/
-    Q_ASSERT(!m_textEditor.isNull());
-    m_textEditor.data()->addCommand(command);
-}
-
 void TextTool::startEditing(KUndo2Command* command)
 {
     m_currentCommand = command;
@@ -2073,6 +2016,13 @@ void TextTool::resourceChanged(int key, const QVariant &var)
 void TextTool::isBidiUpdated()
 {
     emit blockChanged(m_textEditor.data()->block()); // make sure that the dialogs follow this change
+}
+
+void TextTool::changeListStyle(ChangeListCommand *command)
+{
+    if (m_textEditor) {
+        m_textEditor.data()->addCommand(command);
+    }
 }
 
 void TextTool::insertSpecialCharacter()

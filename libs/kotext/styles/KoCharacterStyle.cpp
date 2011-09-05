@@ -34,6 +34,7 @@
 #include <KoXmlReader.h>
 #include <KoUnit.h>
 #include <KoGenStyle.h>
+#include <KoShadowStyle.h>
 #include <KoShapeLoadingContext.h>
 #include "KoTextSharedLoadingData.h"
 
@@ -1049,6 +1050,58 @@ int KoCharacterStyle::textScale() const
     return d->propertyInt(TextScale);
 }
 
+void KoCharacterStyle::setTextShadow(const KoShadowStyle& shadow)
+{
+    d->setProperty(TextShadow, qVariantFromValue<KoShadowStyle>(shadow));
+}
+
+KoShadowStyle KoCharacterStyle::textShadow() const
+{
+    if (hasProperty(TextShadow)) {
+        QVariant shadow = d->stylesPrivate.value(TextShadow);
+        if (shadow.canConvert<KoShadowStyle>())
+            return shadow.value<KoShadowStyle>();
+    }
+    return KoShadowStyle();
+}
+
+void KoCharacterStyle::setFontRelief(KoCharacterStyle::ReliefType relief)
+{
+    d->setProperty(FontRelief, relief);
+}
+
+KoCharacterStyle::ReliefType KoCharacterStyle::fontRelief() const
+{
+    if (hasProperty(FontRelief))
+        return (KoCharacterStyle::ReliefType) d->propertyInt(FontRelief);
+    return KoCharacterStyle::NoRelief;
+}
+
+
+KoCharacterStyle::EmphasisPosition KoCharacterStyle::textEmphasizePosition() const
+{
+    if (hasProperty(TextEmphasizePosition))
+        return (KoCharacterStyle::EmphasisPosition) d->propertyInt(TextEmphasizePosition);
+    return KoCharacterStyle::EmphasisAbove;
+}
+
+void KoCharacterStyle::setTextEmphasizePosition(KoCharacterStyle::EmphasisPosition position)
+{
+    d->setProperty(TextEmphasizePosition, position);
+}
+
+KoCharacterStyle::EmphasisStyle KoCharacterStyle::textEmphasizeStyle() const
+{
+    if (hasProperty(TextEmphasizeStyle))
+        return (KoCharacterStyle::EmphasisStyle) d->propertyInt(TextEmphasizeStyle);
+    return KoCharacterStyle::NoEmphasis;
+}
+
+void KoCharacterStyle::setTextEmphasizeStyle(KoCharacterStyle::EmphasisStyle emphasis)
+{
+    d->setProperty(TextEmphasizeStyle, emphasis);
+}
+
 void KoCharacterStyle::setPercentageFontSize(qreal percent)
 {
     d->setProperty(KoCharacterStyle::PercentageFontSize,percent);
@@ -1448,17 +1501,56 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
         const int scale = (textScale.endsWith('%') ? textScale.left(textScale.length()-1) : textScale).toInt();
         setTextScale(scale);
     }
+    
+    const QString textShadow(styleStack.property(KoXmlNS::fo, "text-shadow"));
+    if (!textShadow.isEmpty()) {
+        KoShadowStyle shadow;
+        if (shadow.loadOdf(textShadow))
+            setTextShadow(shadow);
+    }
+    
+    const QString fontRelief(styleStack.property(KoXmlNS::style, "font-relief"));
+    if (!fontRelief.isEmpty()) {
+        if (fontRelief == "none")
+            setFontRelief(KoCharacterStyle::NoRelief);
+        else if (fontRelief == "embossed")
+            setFontRelief(KoCharacterStyle::Embossed);
+        else if (fontRelief == "engraved")
+            setFontRelief(KoCharacterStyle::Engraved);
+    }
+    
+    const QString fontEmphasize(styleStack.property(KoXmlNS::style, "text-emphasize"));
+    if (!fontEmphasize.isEmpty()) {
+        QString style, position;
+        QStringList parts = fontEmphasize.split(' ');
+        style = parts[0];
+        if (parts.length() > 1)
+            position = parts[1];
+        
+        if (style == "none") {
+            setTextEmphasizeStyle(NoEmphasis);
+        } else if (style == "accent") {
+            setTextEmphasizeStyle(AccentEmphasis);
+        } else if (style == "circle") {
+            setTextEmphasizeStyle(CircleEmphasis);
+        } else if (style == "disc") {
+            setTextEmphasizeStyle(DiscEmphasis);
+        } else if (style == "dot") {
+            setTextEmphasizeStyle(DotEmphasis);
+        }
+        
+        if (position == "below") {
+            setTextEmphasizePosition(EmphasisBelow);
+        } else if (position == "above") {
+            setTextEmphasizePosition(EmphasisAbove);
+        }
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::fo, "hyphenate"))
+        setHasHyphenation(styleStack.property(KoXmlNS::fo, "hyphenate") == "true");
 
 //TODO
 #if 0
-    if (styleStack.hasProperty(KoXmlNS::fo, "text-shadow")) {    // 3.10.21
-        parseShadowFromCss(styleStack.property(KoXmlNS::fo, "text-shadow"));
-    }
-
-    d->m_bHyphenation = true;
-    if (styleStack.hasProperty(KoXmlNS::fo, "hyphenate"))     // it's a character property in OASIS (but not in OO-1.1)
-        d->m_bHyphenation = styleStack.property(KoXmlNS::fo, "hyphenate") == "true";
-
     /*
       Missing properties:
       style:font-style-name, 3.10.11 - can be ignored, says DV, the other ways to specify a font are more precise
@@ -1526,7 +1618,7 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
             if (d->stylesPrivate.value(key).toBool()) {
                 style.addProperty("fo:font-style", "italic", KoGenStyle::TextType);
             } else {
-                style.addProperty("fo:font-style", "", KoGenStyle::TextType);
+                style.addProperty("fo:font-style", "normal", KoGenStyle::TextType);
             }
         } else if (key == QTextFormat::FontFamily) {
             QString fontFamily = d->stylesPrivate.value(key).toString();
@@ -1686,6 +1778,57 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
         } else if (key == KoCharacterStyle::TextScale) {
             int scale = textScale();
             style.addProperty("style:text-scale", QString::number(scale) + '%', KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::TextShadow) {
+            KoShadowStyle shadow = textShadow();
+            style.addProperty("fo:text-shadow", shadow.saveOdf(), KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::FontRelief) {
+            KoCharacterStyle::ReliefType relief = fontRelief();
+            switch (relief)
+            {
+                case KoCharacterStyle::NoRelief:
+                    style.addProperty("style:font-relief", "none", KoGenStyle::TextType);
+                    break;
+                case KoCharacterStyle::Embossed:
+                    style.addProperty("style:font-relief", "embossed", KoGenStyle::TextType);
+                    break;
+                case KoCharacterStyle::Engraved:
+                    style.addProperty("style:font-relief", "engraved", KoGenStyle::TextType);
+                    break;
+            }
+        } else if (key == KoCharacterStyle::TextEmphasizeStyle) {
+            KoCharacterStyle::EmphasisStyle emphasisStyle = textEmphasizeStyle();
+            KoCharacterStyle::EmphasisPosition position = textEmphasizePosition();
+            QString odfEmphasis;
+            switch (emphasisStyle)
+            {
+                case KoCharacterStyle::NoEmphasis:
+                    odfEmphasis = "none";
+                    break;
+                case KoCharacterStyle::AccentEmphasis:
+                    odfEmphasis = "accent";
+                    break;
+                case KoCharacterStyle::CircleEmphasis:
+                    odfEmphasis = "circle";
+                    break;
+                case KoCharacterStyle::DiscEmphasis:
+                    odfEmphasis = "disc";
+                    break;
+                case KoCharacterStyle::DotEmphasis:
+                    odfEmphasis = "dot";
+                    break;
+            }
+            if (hasProperty(KoCharacterStyle::TextEmphasizePosition)) {
+                if (position == KoCharacterStyle::EmphasisAbove)
+                    odfEmphasis += " above";
+                else
+                    odfEmphasis += " below";
+            }
+            style.addProperty("style:text-emphasize", odfEmphasis, KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::HasHyphenation) {
+            if (hasHyphenation())
+                style.addProperty("fo:hyphenate", "true", KoGenStyle::TextType);
+            else
+                style.addProperty("fo:hyphenate", "false", KoGenStyle::TextType);
         }
     }
     //TODO: font name and family

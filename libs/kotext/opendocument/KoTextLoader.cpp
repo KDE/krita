@@ -1482,18 +1482,14 @@ void KoTextLoader::loadCite(const KoXmlElement &noteElem, QTextCursor &cursor)
 {
     KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
     if (textObjectManager) {
-
-        int position = cursor.position(); // need to store this as the following might move is
-
         //Now creating citation with default type KoInlineCite::Citation.
         KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
-        cite->setMotherFrame(KoTextDocument(cursor.block().document()).citationsFrame());
 
+        // the manager is needed during loading so set it now
+        cite->setManager(textObjectManager);
         if (cite->loadOdf(noteElem, d->context)) {
-            cursor.setPosition(position); // restore the position before inserting the note
             textObjectManager->insertInlineObject(cursor, cite);
         } else {
-            cursor.setPosition(position); // restore the position
             delete cite;
         }
     }
@@ -2384,8 +2380,6 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
     // make sure that the tag is bibliography
     Q_ASSERT(element.tagName() == "bibliography");
     QTextBlockFormat bibFormat;
-    bibFormat.setProperty(KoText::SubFrameType, KoText::BibliographyFrameType);
-
 
     // for "meta-information" about the bibliography we use this class
     KoBibliographyInfo *info = new KoBibliographyInfo();

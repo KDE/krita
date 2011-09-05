@@ -43,11 +43,9 @@ class KoInlineCite::Private
 {
 public:
     Private(KoInlineCite::Type t)
-        : textFrame(0),
-          type(t)
+        : type(t)
     {
     }
-    QTextFrame *textFrame;
     KoInlineCite::Type type;
     QString bibliographyType;
     QString identifier;
@@ -173,15 +171,6 @@ QString KoInlineCite::dataField(QString fieldName) const
     } else {
         return QString();
     }
-}
-
-void KoInlineCite::setMotherFrame(QTextFrame *motherFrame)
-{
-    QTextCursor cursor(motherFrame->lastCursorPosition());
-    QTextFrameFormat format;
-    format.setProperty(KoText::SubFrameType, KoText::CitationFrameType);
-
-    d->textFrame = cursor.insertFrame(format);
 }
 
 void KoInlineCite::setIdentifier(const QString &identifier)
@@ -342,16 +331,6 @@ void KoInlineCite::setVolume(const QString &volume)
 void KoInlineCite::setYear(const QString &year)
 {
     d->year = year;
-}
-
-QTextCursor KoInlineCite::textCursor() const
-{
-    return (d->textFrame->lastCursorPosition());
-}
-
-QTextFrame *KoInlineCite::textFrame() const
-{
-    return d->textFrame;
 }
 
 QString KoInlineCite::identifier() const
@@ -661,9 +640,7 @@ bool KoInlineCite::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
         d->custom5 = element.attributeNS(KoXmlNS::text, "custom5");
 
         //Now checking for cloned citation (with same identifier)
-        if (KoTextDocument(d->textFrame->document())
-                .inlineTextObjectManager()->citations(true).keys().count(d->identifier) > 1) {
-
+        if (manager()->citations(true).keys().count(d->identifier) > 1) {
             this->setType(KoInlineCite::ClonedCitation);
         }
     }
@@ -676,8 +653,6 @@ bool KoInlineCite::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 void KoInlineCite::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
-
-    QTextCursor cursor(d->textFrame);
 
     writer->startElement("text:bibliography-mark", false);
 

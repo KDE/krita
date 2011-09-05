@@ -227,11 +227,6 @@ void KoTextEditor::Private::deleteSelection()
     QTextCursor delText = QTextCursor(caret);
     if (!delText.hasSelection())
         delText.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
-    // XXX: is there are reason for these two unused variables? Side effects? (boud)
-    QString text = delText.selectedText();
-    Q_UNUSED(text);
-    QTextDocumentFragment selection = delText.selection();
-    Q_UNUSED(selection);
     caret.deleteChar();
 }
 
@@ -886,6 +881,21 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     emit cursorPositionChanged();
 }
 
+void KoTextEditor::updateInlineObjectPosition(int start, int end)
+{
+    KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(d->document).inlineTextObjectManager();
+    // and, of course, every inline object after the current position has the wrong position
+    QTextCursor cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), start);
+    while (!cursor.isNull() && (end > -1 && cursor.position() < end )) {
+        QTextCharFormat fmt = cursor.charFormat();
+        KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
+        obj->updatePosition(d->document, cursor.position(), fmt);
+        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position());
+    }
+
+}
+
+
 void KoTextEditor::insertFrameBreak()
 {
     if (isEditProtected()) {
@@ -991,10 +1001,16 @@ void KoTextEditor::deleteChar()
     if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
         d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
 
+        QTextCharFormat charFormat = d->caret.charFormat();
+
         if (!d->caret.hasSelection())
             d->caret.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+
         d->deleteSelection();
+
+        d->caret.setCharFormat(charFormat);
     }
+
     emit cursorPositionChanged();
 }
 
@@ -1009,9 +1025,14 @@ void KoTextEditor::deletePreviousChar()
     if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
         d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
 
+        QTextCharFormat charFormat = d->caret.charFormat();
+
         if (!d->caret.hasSelection())
             d->caret.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+
         d->deleteSelection();
+
+        d->caret.setCharFormat(charFormat);
     }
     emit cursorPositionChanged();
 }
@@ -1430,7 +1451,6 @@ void KoTextEditor::insertBibliography()
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Bibliography"));
 
     QTextBlockFormat bibFormat;
-    bibFormat.setProperty(KoText::SubFrameType, KoText::BibliographyFrameType);
     KoBibliographyInfo *info = new KoBibliographyInfo();
     QTextDocument *bibDocument = new QTextDocument();
     bool *autoUpdate = new bool;
@@ -1475,7 +1495,6 @@ KoInlineCite *KoTextEditor::insertCitation()
     KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
     manager->insertInlineObject(d->caret,cite);
 
-    cite->setMotherFrame(KoTextDocument(d->caret.block().document()).citationsFrame());
     d->updateState(KoTextEditor::Private::NoOp);
     return cite;
 }
@@ -1610,7 +1629,7 @@ void KoTextEditor::newLine()
     d->caret.clearSelection();
     QTextBlockFormat bf = d->caret.blockFormat();
     QVariant direction = bf.property(KoParagraphStyle::TextProgressionDirection);
-    bf.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
+    bf.clearProperty(KoParagraphStyle::BreakBefore);
     bf.clearProperty(KoParagraphStyle::ListStartValue);
     bf.clearProperty(KoParagraphStyle::UnnumberedListItem);
     bf.clearProperty(KoParagraphStyle::IsListHeader);
@@ -1695,7 +1714,7 @@ void KoTextEditor::removeSelectedText()
         if (!bookmarksToBeMoved.contains(bookmark)) {
             objectsToBeRemoved << obj;
         }
-        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position() + 1);
+        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position());
     }
     foreach(KoInlineObject *obj, objectsToBeRemoved) {
         inlineObjectManager->removeInlineObject(obj); // does _not_ remove the character in the text doc
@@ -1720,14 +1739,7 @@ void KoTextEditor::removeSelectedText()
         cursor.setCharFormat(oldCf);
     }
 
-    // and, of course, every inline object after the current position has the wrong position
-    cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), currentPosition);
-    while (!cursor.isNull()) {
-        QTextCharFormat fmt = cursor.charFormat();
-        KoInlineObject *obj = inlineObjectManager->inlineTextObject(fmt);
-        obj->updatePosition(d->document, cursor.position(), fmt);
-        cursor = d->document->find(QString(QChar::ObjectReplacementCharacter), cursor.position() + 1);
-    }
+    updateInlineObjectPosition(currentPosition);
 
     emit cursorPositionChanged();
 }

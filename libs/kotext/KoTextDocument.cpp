@@ -51,11 +51,12 @@ const QUrl KoTextDocument::FootNotesConfigurationURL = QUrl("kotext://footnotesc
 const QUrl KoTextDocument::LineNumberingConfigurationURL = QUrl("kotext://linenumberingconfiguration");
 const QUrl KoTextDocument::EndNotesFrameURL = QUrl("kotext://endnotesframe");
 const QUrl KoTextDocument::FootNotesFrameURL = QUrl("kotext://footnotesframe");
-const QUrl KoTextDocument::CitationsFrameURL = QUrl("kotext://citationsframe");
 const QUrl KoTextDocument::RelativeTabsURL = QUrl("kotext://relativetabs");
 const QUrl KoTextDocument::HeadingListURL = QUrl("kotext://headingList");
 const QUrl KoTextDocument::SelectionsURL = QUrl("kotext://selections");
 const QUrl KoTextDocument::LayoutTextPageUrl = QUrl("kotext://layoutTextPage");
+const QUrl KoTextDocument::ParaTableSpacingAtStartUrl = QUrl("kotext://spacingAtStart");
+const QUrl KoTextDocument::IndexGeneratorManagerUrl = QUrl("kotext://indexGeneratorManager");
 
 Q_DECLARE_METATYPE(QTextFrame*)
 
@@ -337,27 +338,6 @@ QTextFrame *KoTextDocument::endNotesFrame()
     return frame;
 }
 
-QTextFrame *KoTextDocument::citationsFrame()
-{
-    QVariant resource = m_document->resource(KoTextDocument::CitationsFrame,
-            CitationsFrameURL);
-
-    QTextFrame *frame = resource.value<QTextFrame *>();
-
-    if (frame == 0) {
-        QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
-        //cursor.movePosition(QTextCursor::Left);
-        QTextFrameFormat format;
-        format.setProperty(KoText::SubFrameType, KoText::CitationFrameType);
-
-        frame = cursor.insertFrame(format);
-
-        resource.setValue(frame);
-        m_document->addResource(KoTextDocument::CitationsFrame, CitationsFrameURL, resource);
-    }
-    return frame;
-}
-
 void KoTextDocument::setRelativeTabs(bool relative)
 {
     QVariant v(relative);
@@ -371,4 +351,19 @@ bool KoTextDocument::relativeTabs() const
         return resource.toBool();
     else
         return true;
+}
+
+void KoTextDocument::setParaTableSpacingAtStart(bool spacingAtStart)
+{
+    QVariant v(spacingAtStart);
+    m_document->addResource(KoTextDocument::ParaTableSpacingAtStart, ParaTableSpacingAtStartUrl, v);
+}
+
+bool KoTextDocument::paraTableSpacingAtStart() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::ParaTableSpacingAtStart, ParaTableSpacingAtStartUrl);
+    if (resource.isValid())
+        return resource.toBool();
+    else
+        return false;
 }

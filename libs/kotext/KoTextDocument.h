@@ -148,8 +148,6 @@ public:
 
     QTextFrame* endNotesFrame();
 
-    QTextFrame* citationsFrame();
-
     /**
      * Specifies if tabs are relative to paragraph indent.
      *
@@ -165,6 +163,9 @@ public:
      * @see setRelativeTabs
      */
     bool relativeTabs() const;
+
+    void setParaTableSpacingAtStart(bool spacingAtStart);
+    bool paraTableSpacingAtStart() const;
 
     /**
      * Clears the text in the document. Unlike QTextDocument::clear(), this
@@ -190,7 +191,9 @@ public:
         RelativeTabs,
         HeadingList,
         Selections,
-        LayoutTextPage /// this is used for setting the correct page variable on the first resize and should not be used for other purposes
+        LayoutTextPage, /// this is used for setting the correct page variable on the first resize and should not be used for other purposes
+        ParaTableSpacingAtStart, /// this is used during layouting to specify if at the first paragraph margin-top should be applied.
+        IndexGeneratorManager
     };
 
     static const QUrl StyleManagerURL;
@@ -209,6 +212,8 @@ public:
     static const QUrl HeadingListURL;
     static const QUrl SelectionsURL;
     static const QUrl LayoutTextPageUrl;
+    static const QUrl ParaTableSpacingAtStartUrl;
+    static const QUrl IndexGeneratorManagerUrl;
 
 private:
     QTextDocument *m_document;

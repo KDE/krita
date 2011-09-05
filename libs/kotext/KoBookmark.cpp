@@ -197,8 +197,9 @@ void KoBookmark::saveOdf(KoShapeSavingContext &context)
         nodeName = "text:bookmark";
     else if (d->type == StartBookmark)
         nodeName = "text:bookmark-start";
-    else if (d->type == EndBookmark)
+    else if (d->type == EndBookmark) {
         nodeName = "text:bookmark-end";
+    }
     writer->startElement(nodeName.toLatin1(), false);
     writer->addAttribute("text:name", d->name.toLatin1());
 

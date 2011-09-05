@@ -485,9 +485,9 @@ if (NOT QT_QTDECLARATIVE_FOUND)
     set(SHOULD_BUILD_ACTIVE FALSE)
 endif (NOT QT_QTDECLARATIVE_FOUND)
 
-if(NOT QIMAGEBLITZ_FOUND)
-    set (SHOULD_BUILD_KEXI FALSE)
-endif(NOT QIMAGEBLITZ_FOUND)
+#if(NOT QIMAGEBLITZ_FOUND)
+#    set (SHOULD_BUILD_KEXI FALSE)
+#endif(NOT QIMAGEBLITZ_FOUND)
 
 ### HACK ###
 # Those BUILD_ are illegally used below before they are defined, which cause problem on a first build

@@ -1064,15 +1064,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         expandBoundingLeft(line.x());
         expandBoundingRight(line.x() + line.naturalTextWidth());
 
-        // during fit is where documentLayout->positionInlineObjects is called
-        //so now is a good time to position the obstructions
-        int oldObstructionCount = documentLayout()->currentObstructions().size();
-
         documentLayout()->positionAnchoredObstructions();
-
-        if (oldObstructionCount < documentLayout()->currentObstructions().size()) {
-            return false;
-        }
 
         // line fitted so try and do the next one
         line = layout->createLine();

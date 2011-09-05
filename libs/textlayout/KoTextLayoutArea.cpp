@@ -986,7 +986,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         qreal bottomOfText = line.y() + line.height();
 
         bool softBreak = false;
-        if (acceptsPageBreak() && !format.nonBreakableLines() && bottomOfText > maximumAllowedBottom() - 150) {
+        bool moreInMiddle = m_y > maximumAllowedBottom() - 150;
+        if (acceptsPageBreak() && !format.nonBreakableLines() && moreInMiddle) {
             int softBreakPos = -1;
             QString text = block.text();
             int pos = text.indexOf(QChar::ObjectReplacementCharacter, line.textStart());
@@ -1008,14 +1009,18 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             if (softBreakPos >= 0 && softBreakPos < line.textStart() + line.textLength()) {
                 line.setNumColumns(softBreakPos - line.textStart() + 1, line.width());
                 softBreak = true;
+//FIXME doesn't work this way cause it's the wrong pos to do so
+#if 0
                 // if the softBreakPos is at the start of the line stop here so
                 // we don't add a line here. That fixes the problem that e.g. the counter is before
                 // the page break and the text is after the page break
                 if (!virginPage() && softBreakPos == 0) {
                     return false;
                 }
+#endif
             }
         }
+
         findFootNotes(block, line);
         if (bottomOfText > maximumAllowedBottom()) {
             // We can not fit line within our allowed space

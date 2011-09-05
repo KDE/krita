@@ -395,7 +395,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     // We need some special treatment for anchors as they need to position their object during
     // layout and not this early
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(obj);
-    if (anchor) {
+    if (anchor && d->anchoringRootArea->associatedShape()) {
         // if there is no anchor strategy set then create one
         if (!anchor->anchorStrategy()) {
             if (anchor->behavesAsCharacter()) {

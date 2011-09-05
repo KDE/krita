@@ -335,8 +335,8 @@ endif(QT_QTWEBKIT_FOUND)
 ##
 ## QImageBlitz (for Kexi)
 ##
-macro_optional_find_package(QImageBlitz)
-macro_log_feature(QIMAGEBLITZ_FOUND "QImageBlitz" "Fast, smooth scaling of QImages" "sourceforge.net/projects/qimageblitz/" FALSE "" "Required for Kexi")
+#macro_optional_find_package(QImageBlitz)
+#macro_log_feature(QIMAGEBLITZ_FOUND "QImageBlitz" "Fast, smooth scaling of QImages" "sourceforge.net/projects/qimageblitz/" FALSE "" "Required for Kexi")
 
 ##
 ## Test endianess

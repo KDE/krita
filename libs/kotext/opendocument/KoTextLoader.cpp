@@ -33,6 +33,8 @@
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
 #include <KoInlineNote.h>
+#include <KoInlineCite.h>
+#include <KoInlineBibliography.h>
 #include <KoInlineTextObjectManager.h>
 #include "KoList.h"
 #include <KoOdfLoadingContext.h>
@@ -56,6 +58,7 @@
 #include <KoXmlReader.h>
 #include "KoTextInlineRdf.h"
 #include "KoTableOfContentsGeneratorInfo.h"
+#include "KoBibliographyInfo.h"
 #include "KoSection.h"
 #include "KoTextSoftPageBreak.h"
 
@@ -697,6 +700,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                         loadSection(tag, cursor);
                     } else if (localName == "table-of-content") {
                         loadTableOfContents(tag, cursor);
+                    } else if (localName == "bibliography") {
+                        loadBibliography(tag, cursor);
                     } else {
                         KoInlineObject *obj = KoInlineObjectRegistry::instance()->createFromOdf(tag, d->context);
                         if (obj) {
@@ -1472,6 +1477,23 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
     }
 }
 
+void KoTextLoader::loadCite(const KoXmlElement &noteElem, QTextCursor &cursor)
+{
+    KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
+    if (textObjectManager) {
+        //Now creating citation with default type KoInlineCite::Citation.
+        KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
+
+        // the manager is needed during loading so set it now
+        cite->setManager(textObjectManager);
+        if (cite->loadOdf(noteElem, d->context)) {
+            textObjectManager->insertInlineObject(cursor, cite);
+        } else {
+            delete cite;
+        }
+    }
+}
+
 void KoTextLoader::loadText(const QString &fulltext, QTextCursor &cursor,
                             bool *stripLeadingSpace, bool isLastNode)
 {
@@ -1615,6 +1637,8 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 d->closeChangeRegion(ts);
         } else if ( (isTextNS && localName == "note")) { // text:note
             loadNote(ts, cursor);
+        } else if (isTextNS && localName == "bibliography-mark") { // text:bibliography-mark
+            loadCite(ts,cursor);
         } else if (isTextNS && localName == "tab") { // text:tab
             cursor.insertText("\t");
         } else if (isTextNS && localName == "a") { // text:a
@@ -2350,6 +2374,73 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     cursor.movePosition(QTextCursor::Right);
 }
 
+void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cursor)
+{
+    // make sure that the tag is bibliography
+    Q_ASSERT(element.tagName() == "bibliography");
+    QTextBlockFormat bibFormat;
+
+    // for "meta-information" about the bibliography we use this class
+    KoBibliographyInfo *info = new KoBibliographyInfo();
+
+    QTextDocument *bibDocument = new QTextDocument();
+    KoTextDocument(bibDocument).setStyleManager(d->styleManager);
+
+    info->m_name = element.attribute("name");
+    info->m_styleName = element.attribute("style-name");
+
+    bool *autoUpdate = false;
+
+    KoXmlElement e;
+    forEachElement(e, element) {
+        if (e.isNull() || e.namespaceURI() != KoXmlNS::text) {
+            continue;
+        }
+
+        if (e.localName() == "bibliography-source" && e.namespaceURI() == KoXmlNS::text) {
+            info->loadOdf(d->textSharedData, e);
+
+            bibFormat.setProperty(KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info));
+            bibFormat.setProperty(KoParagraphStyle::BibliographyDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
+            bibFormat.setProperty(KoParagraphStyle::AutoUpdateBibliography, QVariant::fromValue<bool *>(autoUpdate));
+            cursor.insertBlock(bibFormat);
+            // We'll just try to find displayable elements and add them as paragraphs
+        } else if (e.localName() == "index-body") {
+            QTextCursor cursorFrame = bibDocument->rootFrame()->lastCursorPosition();
+
+            bool firstTime = true;
+            KoXmlElement p;
+            forEachElement(p, e) {
+                // All elem will be "p" instead of the title, which is particular
+                if (p.isNull() || p.namespaceURI() != KoXmlNS::text)
+                    continue;
+
+                if (!firstTime) {
+                    // use empty formats to not inherit from the prev parag
+                    QTextBlockFormat bf;
+                    QTextCharFormat cf;
+                    cursorFrame.insertBlock(bf, cf);
+                }
+                firstTime = false;
+
+                QTextBlock current = cursorFrame.block();
+                QTextBlockFormat blockFormat;
+
+                if (p.localName() == "p") {
+                    loadParagraph(p, cursorFrame);
+                } else if (p.localName() == "index-title") {
+                    loadBody(p, cursorFrame);
+                }
+
+                QTextCursor c(current);
+                c.mergeBlockFormat(blockFormat);
+            }
+
+        }// index-body
+    }
+    // Get out of the frame
+    cursor.movePosition(QTextCursor::Right);
+}
 
 void KoTextLoader::startBody(int total)
 {

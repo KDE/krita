@@ -35,12 +35,12 @@ class RdfTest : public QObject
     Q_OBJECT
 
 private slots:
-
-    void testCreateMarkers();
     void testFindMarkers();
+    void testCreateMarkers();
     void testFindByName();
     void testEditAndFindMarkers(); // XXX: implement
     void testRemoveMarkers();
+
 
 private:
 

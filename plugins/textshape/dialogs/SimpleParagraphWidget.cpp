@@ -278,7 +278,7 @@ void SimpleParagraphWidget::listStyleChanged(int id)
     emit doneWithFocus();
     if (m_blockSignals) return;
 
-    m_tool->addCommand( new ChangeListCommand (m_tool->cursor(), static_cast<KoListStyle::Style> (id)));
+    m_tool->changeListStyle(new ChangeListCommand (m_tool->cursor(), static_cast<KoListStyle::Style> (id)));
 }
 
 #include <SimpleParagraphWidget.moc>

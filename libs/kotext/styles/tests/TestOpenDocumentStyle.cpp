@@ -52,6 +52,21 @@ Attribute::Attribute(const QDomElement& element)
     }
     m_name = element.attribute("name");
     m_values = listValuesFromNode(element);
+    if (m_name == "style:border-line-width")
+        m_requiredExtraAttributes["fo:border"] = "double";
+    else if (m_name == "style:border-line-width-left")
+        m_requiredExtraAttributes["fo:border-left"] = "double";
+    else if (m_name == "style:border-line-width-right")
+        m_requiredExtraAttributes["fo:border-right"] = "double";
+    else if (m_name == "style:border-line-width-top")
+        m_requiredExtraAttributes["fo:border-top"] = "double";
+    else if (m_name == "style:border-line-width-bottom")
+        m_requiredExtraAttributes["fo:border-bottom"] = "double";
+    else if (m_name == "style:diagonal-tl-br-widths")
+        m_requiredExtraAttributes["style:diagonal-tl-br"] = "double";
+    else if (m_name == "style:diagonal-bl-tr-widths")
+        m_requiredExtraAttributes["style:diagonal-bl-tr"] = "double";
+    
 }
 
 QString Attribute::name()
@@ -67,6 +82,11 @@ QStringList Attribute::listValues()
 bool Attribute::hasReference (const QString &ref)
 {
     return m_references.contains(ref);
+}
+
+QMap< QString, QString > Attribute::requiredExtraAttributes() const
+{
+    return m_requiredExtraAttributes;
 }
 
 QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
@@ -221,6 +241,9 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             result << "continuous" << "skip-white-space";
         } else if (reference == "fontWeight") {
             result << "normal" << "bold" << "100" << "200" << "300" << "400" << "500" << "600" << "700" << "800" << "900";
+            QStringList normal;
+            normal << "normal" << "500";
+            m_equivalences << normal;
         } else if (reference == "lineWidth") {
             result << "auto" << "normal" << "bold" << "thin" << "medium" << "thick";
         } else if (reference == "styleNameRef") {
@@ -242,6 +265,9 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             result << "fixed" << "variable";
         } else if (reference == "fontStyle") {
             result << "normal" << "italic" << "oblique";
+            QStringList italic;
+            italic << "italic" << "oblique";
+            m_equivalences << italic;
         } else if ((reference == "textEncoding") || (reference == "languageCode") || (reference == "countryCode") || (reference == "scriptCode") || (reference == "language"))  {
             // Sorry, I can't do it right now
             result << "";
@@ -406,7 +432,9 @@ QList<Attribute*> TestOpenDocumentStyle::listAttributesFromRNGName(const QString
     return result;
 }
 
-QByteArray TestOpenDocumentStyle::generateStyleNodeWithAttribute(const QString& styleFamily, const QString& attributeName, const QString& attributeValue)
+
+
+QByteArray TestOpenDocumentStyle::generateStyleNodeWithAttribute(const QString& styleFamily, const QString& attributeName, const QString& attributeValue, const Attribute &attribute)
 {
     QBuffer xmlOutputBuffer;
     KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlOutputBuffer);
@@ -423,6 +451,14 @@ QByteArray TestOpenDocumentStyle::generateStyleNodeWithAttribute(const QString& 
     else
         xmlWriter->startElement(("style:" + styleFamily + "-properties").toLatin1());
     xmlWriter->addAttribute(attributeName.toLatin1(), attributeValue);
+    
+    QMap< QString, QString >  extras = attribute.requiredExtraAttributes();
+    QMapIterator<QString, QString> i(extras);
+    while (i.hasNext()) {
+        i.next();
+        xmlWriter->addAttribute(i.key().toLatin1(), i.value());
+    }
+    
     xmlWriter->endElement();
     xmlWriter->endElement();
     xmlWriter->endDocument();
@@ -501,7 +537,7 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     KoOdfStylesReader stylesReader;
     KoOdfLoadingContext loadCtxt(stylesReader, 0);
 
-    QByteArray xmlOutputData = this->generateStyleNodeWithAttribute(familyName, attribute->name(), value);
+    QByteArray xmlOutputData = this->generateStyleNodeWithAttribute(familyName, attribute->name(), value, *attribute);
     KoXmlDocument *xmlReader = new KoXmlDocument;
     xmlReader->setContent(xmlOutputData, true);
     KoXmlElement mainElement = xmlReader->documentElement();
@@ -526,8 +562,8 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     QString outputPropertyValue = properties.attribute(attribute->name());
     if (properties.attributeNames().count() > 1)
     {
-        kWarning(32500) << "Warning : got more than one attribute !";
-        kDebug(32500) << generatedXmlOutput;
+        //kWarning(32500) << "Warning : got more than one attribute !";
+        //kDebug(32500) << generatedXmlOutput;
     }
     if (attribute->hasReference("__border")) {
         KoBorder original, output;

@@ -901,7 +901,6 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
 
 void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const
 {
-    kWarning(32500) << "Saving border";
     // Get the strings that describe respective borders.
     QString leftBorderString = QString("%1pt %2 %3")
                                  .arg(QString::number(leftBorderWidth()),
@@ -949,12 +948,14 @@ void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const
             style.addProperty("fo:border-bottom", bottomBorderString, type);
     }
 
-    //if (tlbrBorderStyle() != BorderNone) {
-        style.addProperty("style:diagonal-tl-br", tlbrBorderString, type);
-    //}
-    //if (trblBorderStyle() != BorderNone) {
-        style.addProperty("style:diagonal-bl-tr", trblBorderString, type);
-    //}
+    if (style.type() != KoGenStyle::PageLayoutStyle) {
+        //if (tlbrBorderStyle() != BorderNone) {
+            style.addProperty("style:diagonal-tl-br", tlbrBorderString, type);
+        //}
+        //if (trblBorderStyle() != BorderNone) {
+            style.addProperty("style:diagonal-bl-tr", trblBorderString, type);
+        //}
+    }
 
     // Handle double borders
     QString leftBorderLineWidth = QString("%1pt %2pt %3pt")
@@ -985,27 +986,29 @@ void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const
 
     if (leftBorderLineWidth == rightBorderLineWidth
         && leftBorderLineWidth == topBorderLineWidth
-        && leftBorderLineWidth == bottomBorderLineWidth/*
+        && leftBorderLineWidth == bottomBorderLineWidth
         && leftBorderStyle() == BorderDouble
         && rightBorderStyle() == BorderDouble
         && topBorderStyle() == BorderDouble
-        && bottomBorderStyle() == BorderDouble*/) {
+        && bottomBorderStyle() == BorderDouble) {
         style.addProperty("style:border-line-width", leftBorderLineWidth, type);
     } else {
-        //if (leftBorderStyle() == BorderDouble)
+        if (leftBorderStyle() == BorderDouble)
             style.addProperty("style:border-line-width-left", leftBorderLineWidth, type);
-        //if (rightBorderStyle() == BorderDouble)
+        if (rightBorderStyle() == BorderDouble)
             style.addProperty("style:border-line-width-right", rightBorderLineWidth, type);
-        //if (topBorderStyle() == BorderDouble)
+        if (topBorderStyle() == BorderDouble)
             style.addProperty("style:border-line-width-top", topBorderLineWidth, type);
-        //if (bottomBorderStyle() == BorderDouble)
+        if (bottomBorderStyle() == BorderDouble)
             style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, type);
     }
 
-    //if (tlbrBorderStyle() == BorderDouble) {
-        style.addProperty("style:diagonal-tl-br-widths", tlbrBorderLineWidth, type);
-    //}
-    //if (trblBorderStyle() == BorderDouble) {
-        style.addProperty("style:diagonal-bl-tr-widths", trblBorderLineWidth, type);
-   // }
+    if (style.type() != KoGenStyle::PageLayoutStyle) {
+        if (tlbrBorderStyle() == BorderDouble) {
+            style.addProperty("style:diagonal-tl-br-widths", tlbrBorderLineWidth, type);
+        }
+        if (trblBorderStyle() == BorderDouble) {
+            style.addProperty("style:diagonal-bl-tr-widths", trblBorderLineWidth, type);
+        }
+    }
 }

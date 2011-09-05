@@ -28,6 +28,7 @@
 #include "KoInlineNote.h"
 #include "KoOdfNotesConfiguration.h"
 #include "KoTextDocument.h"
+#include "KoInlineCite.h"
 
 #include <QTextCursor>
 #include <QPainter>
@@ -355,6 +356,19 @@ KoInlineNote *KoInlineTextObjectManager::getFirstNote(QTextBlock block) const
         block = block.next();
     }
     return (KoInlineNote*)0;
+}
+
+QMap<QString, KoInlineCite*> KoInlineTextObjectManager::citations(bool duplicatesEnabled) const
+{
+    QMap<QString, KoInlineCite*> answers;
+    foreach(KoInlineObject* object, m_objects) {
+        KoInlineCite* cite = dynamic_cast<KoInlineCite*>(object);
+        if (cite && (cite->type() == KoInlineCite::Citation ||
+                     (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
+            answers.insert(cite->identifier(),cite);
+        }
+    }
+    return answers;
 }
 
 void KoInlineTextObjectManager::documentInformationUpdated(const QString &info, const QString &data)

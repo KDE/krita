@@ -226,7 +226,7 @@ bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
         d->rowPositions[cursor->row] = d->headerRowPositions[d->headerRows] + d->headerOffsetY;
 
         // headerOffsetX should also be set
-        d->headerOffsetX = cursor->headerPositionX - d->columnPositions[0];
+        d->headerOffsetX = d->columnPositions[0] - cursor->headerPositionX;
     }
 
     bool complete = first;
@@ -715,7 +715,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
 
         KoTableRowStyle rowStyle = d->carsManager.rowStyle(row);
 
-        rowRect.translate(d->headerOffsetX, d->headerOffsetY);
+        rowRect.translate(0, d->headerOffsetY);
 
         painter->fillRect(rowRect, rowStyle.background());
     }
@@ -741,7 +741,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
         }
     }
 
-    painter->translate(d->headerOffsetX, d->headerOffsetY);
+    painter->translate(0, d->headerOffsetY);
 
     QVector<QLineF> accuBlankBorders;
 
@@ -763,10 +763,10 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
         }
     }
     for (int i = 0; i < accuBlankBorders.size(); ++i) {
-        accuBlankBorders[i].translate(d->headerOffsetX, d->headerOffsetY);
+        accuBlankBorders[i].translate(0, d->headerOffsetY);
     }
 
-    painter->translate(-d->headerOffsetX, -d->headerOffsetY);
+    painter->translate(0, -d->headerOffsetY);
 
     // Draw cell borders.
     bool topRow = !d->headerRows && firstRow != 0; // are we top row in this area
@@ -828,7 +828,13 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
     }
 
     // Paint the content of the cellArea
-    d->cellAreas[row][column]->paint(painter, context);
+    if (row < d->headerRows) {
+        painter->translate(d->headerOffsetX, 0);
+        d->cellAreas[row][column]->paint(painter, context);
+        painter->translate(-d->headerOffsetX, 0);
+    } else {
+        d->cellAreas[row][column]->paint(painter, context);
+    }
 }
 
 void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell, bool topRow, QVector<QLineF> *accuBlankBorders)

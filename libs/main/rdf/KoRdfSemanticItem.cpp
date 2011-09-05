@@ -19,7 +19,6 @@
 
 #include "KoRdfSemanticItem.h"
 #include "KoDocumentRdf.h"
-#include "KoDocumentRdf_p.h"
 #include "KoRdfFoaF.h"
 #include "KoRdfCalendarEvent.h"
 #include "KoRdfLocation.h"

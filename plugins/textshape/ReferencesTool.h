@@ -51,7 +51,10 @@ protected:
 private slots:
     /// insert a table of contents
     void insertTableOfContents();
-
+    /// insert a citation
+    void insertCitation();
+    /// insert a bibliography
+    void insertBibliography();
     /// format the table of contents template
     void formatTableOfContents();
 

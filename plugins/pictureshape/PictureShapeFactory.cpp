@@ -63,17 +63,10 @@ KoShape *PictureShapeFactory::createDefaultShape(KoResourceManager *documentReso
 
 KoShape *PictureShapeFactory::createShape(const KoProperties *params, KoResourceManager *documentResources) const
 {
-    if (!documentResources->imageCollection()) {
-        newDocumentResourceManager(documentResources);
-    }
-
     PictureShape *shape = static_cast<PictureShape*>(createDefaultShape(documentResources));
     if (params->contains("qimage")) {
         QImage image = params->property("qimage").value<QImage>();
         Q_ASSERT(!image.isNull());
-
-        // In karbon, the KoResourceManager doesn't have an imageCollection, so
-        // check for the absence, and if absent, add one.
 
         if (shape->imageCollection()) {
             KoImageData *data = shape->imageCollection()->createImageData(image);

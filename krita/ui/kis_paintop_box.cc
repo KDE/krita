@@ -249,8 +249,6 @@ void KisPaintopBox::updatePaintops(const KoColorSpace* colorSpace)
         KisPaintOpFactory * factory = KisPaintOpRegistry::instance()->get(paintopId);
         if (KisPaintOpRegistry::instance()->userVisible(KoID(factory->id(), factory->name()), colorSpace)){
             factoryList.append(factory);
-        }else{
-            kWarning() << "Brush engine " << factory->name() << " is not visible for colorspace" << colorSpace->name();
         }
     }
 

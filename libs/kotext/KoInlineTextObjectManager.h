@@ -32,6 +32,7 @@
 class KoCanvasBase;
 class KoTextLocator;
 class KoInlineNote;
+class KoInlineCite;
 class QAction;
 
 /**
@@ -170,6 +171,8 @@ public:
     int displayedNotes(QTextBlock block) const;
 
     KoInlineNote *getFirstNote(QTextBlock block) const;
+
+    QMap<QString, KoInlineCite*> citations(bool duplicatesEnabled = true) const;
 
 public slots:
     void documentInformationUpdated(const QString &info, const QString &data);

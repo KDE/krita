@@ -333,6 +333,7 @@ QString ToCGenerator::resolvePageNumber(const QTextBlock &headingBlock)
         if (rootArea->page()) {
             return QString::number(rootArea->page()->visiblePageNumber());
         }
+    else qDebug()<<"had root but no page";
     }
     m_success = false;
     return "###";

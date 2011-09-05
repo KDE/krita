@@ -42,10 +42,15 @@ IndexGeneratorManager::IndexGeneratorManager(QTextDocument *document)
     connect(m_documentLayout, SIGNAL(layoutIsDirty()), this, SLOT(requestGeneration()));
 
     // connect to FinishedLayout
-    connect(m_documentLayout, SIGNAL(finishedLayout()), this, SLOT(layoutDone()));
+    connect(m_documentLayout, SIGNAL(finishedLayout()), this, SLOT(startDoneTimer()));
 
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(timeout()));
     m_updateTimer.setInterval(5000); // after 5 seconds of pause we update
+    m_updateTimer.setSingleShot(true);
+
+    connect(&m_doneTimer, SIGNAL(timeout()), this, SLOT(layoutDone()));
+    m_doneTimer.setInterval(1000); // after 1 seconds of silence we assume layout is done
+    m_doneTimer.setSingleShot(true);
 }
 
 IndexGeneratorManager::~IndexGeneratorManager()
@@ -79,6 +84,15 @@ void IndexGeneratorManager::requestGeneration()
     }
     m_updateTimer.stop();
     m_updateTimer.start();
+}
+
+void IndexGeneratorManager::startDoneTimer()
+{
+    //we delay acting on the finishedLayout signal by 1 second. This way we
+    // don't act on it until every header has had a chance to be layouted
+    // in words (we assume that a new finishedLayout signal will arrive within that
+    // 1 second)
+    m_doneTimer.start();
 }
 
 void IndexGeneratorManager::timeout()

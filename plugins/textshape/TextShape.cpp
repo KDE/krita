@@ -256,6 +256,7 @@ void TextShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &co
     KoShape::loadStyle(element, context);
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.setTypeProperties("graphic");
+
     QString verticalAlign(styleStack.property(KoXmlNS::draw, "textarea-vertical-align"));
     Qt::Alignment alignment(Qt::AlignTop);
     if (verticalAlign == "bottom") {
@@ -271,19 +272,36 @@ void TextShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &co
 
     m_textShapeData->setVerticalAlignment(alignment);
 
-    const QString autoGrowWidth = styleStack.property(KoXmlNS::draw, "auto-grow-width");
-    const QString autoGrowHeight = styleStack.property(KoXmlNS::draw, "auto-grow-height");
     const QString fitToSize = styleStack.property(KoXmlNS::draw, "fit-to-size");
     KoTextShapeData::ResizeMethod resize = KoTextShapeData::NoResize;
     if (fitToSize == "true" || fitToSize == "shrink-to-fit") { // second is buggy value from impress
         resize = KoTextShapeData::ShrinkToFitResize;
     }
-    else if (autoGrowWidth == "true") {
-        resize = autoGrowHeight != "false" ? KoTextShapeData::AutoGrowWidthAndHeight : KoTextShapeData::AutoGrowWidth;
+    else {
+        // An explicit svg:width or svg:height defined do change the default value (means those value
+        // used if not explicit defined otherwise) for auto-grow-height and auto-grow-height. So
+        // they are mutable exclusive.
+        // It is not clear (means we did not test and took care of it) what happens if both are
+        // defined and are in conflict with each other or how the fit-to-size is related to this.
+
+        QString autoGrowWidth = styleStack.property(KoXmlNS::draw, "auto-grow-width");
+        if (autoGrowWidth.isEmpty()) {
+            autoGrowWidth = element.hasAttributeNS(KoXmlNS::svg, "width") ? "false" : "true";
+        }
+
+        QString autoGrowHeight = styleStack.property(KoXmlNS::draw, "auto-grow-height");
+        if (autoGrowHeight.isEmpty()) {
+            autoGrowHeight = element.hasAttributeNS(KoXmlNS::svg, "height") ? "false" : "true";
+        }
+
+        if (autoGrowWidth == "true") {
+            resize = autoGrowHeight == "true" ? KoTextShapeData::AutoGrowWidthAndHeight : KoTextShapeData::AutoGrowWidth;
+        }
+        else if (autoGrowHeight == "true") {
+            resize = KoTextShapeData::AutoGrowHeight;
+        }
     }
-    else if (autoGrowHeight != "false") {
-        resize = KoTextShapeData::AutoGrowHeight;
-    }
+
     m_textShapeData->setResizeMethod(resize);
 }
 

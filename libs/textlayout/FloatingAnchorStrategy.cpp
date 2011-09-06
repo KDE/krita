@@ -26,6 +26,7 @@
 #include <KoShapeContainer.h>
 #include <KoTextShapeData.h>
 #include <KoTextBlockData.h>
+#include <KoTextLayoutRootArea.h>
 
 #include <kdebug.h>
 
@@ -103,6 +104,8 @@ bool FloatingAnchorStrategy::moveSubject()
 
     //check the border of page an move the shape back to have it visible
     checkPageBorder(newPosition, containerBoundingRect);
+
+    checkStacking(newPosition);
 
     if (newPosition == m_anchor->shape()->position()) {
         if (m_anchor->shape()->textRunAroundSide() != KoShape::RunThrough) {
@@ -241,8 +244,8 @@ void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anc
         }
         break;
     }
-    case KoTextAnchor::HFromLeft:
     case KoTextAnchor::HLeft:
+    case KoTextAnchor::HFromLeft:
         newPosition.setX(anchorBoundingRect.x() - containerBoundingRect.x());
         break;
 
@@ -393,5 +396,33 @@ void FloatingAnchorStrategy::checkPageBorder(QPointF &newPosition, QRectF contai
     //check bottom border and move the shape back to have the whole shape visible
     if ((newPosition.y() + m_anchor->shape()->size().height()) > (pageRect().y() + pageRect().height() - containerBoundingRect.y())) {
         newPosition.setY(pageRect().y() + pageRect().height() - m_anchor->shape()->size().height() - containerBoundingRect.y());
+    }
+}
+
+// If the horizontal-pos is Left or Right then we need to check if there are other
+// objects anchored with horizontal-pos left or right. If there are then we need
+// to "stack" our object on them what means that rather then floating this object
+// over the other it is needed to adjust the position to be sure they are not
+// floating over each other.
+void FloatingAnchorStrategy::checkStacking(QPointF &newPosition)
+{
+    if (m_anchor->horizontalPos() != KoTextAnchor::HLeft && m_anchor->horizontalPos() != KoTextAnchor::HRight)
+        return;
+
+    int idx = m_rootArea->documentLayout()->textAnchors().indexOf(m_anchor);
+    Q_ASSERT_X(idx >= 0, __FUNCTION__, QString("WTF? How can our anchor not be in the anchor-list but still be called?").toLocal8Bit());
+
+    //for(int i = idx - 1; i >= 0; --i) {
+    for(int i = 0; i < idx; ++i) {
+        KoTextAnchor *a = m_rootArea->documentLayout()->textAnchors()[i];
+
+        QRectF thisRect(newPosition, m_anchor->shape()->size());
+        QRectF r(a->shape()->position(), a->shape()->size());
+        if (thisRect.intersects(r)) {
+            if (m_anchor->horizontalPos() == KoTextAnchor::HLeft)
+                newPosition.setX(a->shape()->position().x() + a->shape()->size().width());
+            else // KoTextAnchor::HRight
+                newPosition.setX(a->shape()->position().x() - m_anchor->shape()->size().width());
+        }
     }
 }

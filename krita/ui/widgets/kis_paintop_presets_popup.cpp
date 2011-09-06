@@ -273,13 +273,19 @@ void KisPaintOpPresetsPopup::switchDetached()
 
 void KisPaintOpPresetsPopup::hideScratchPad()
 {
-    m_d->uiWdgPaintOpPresetSettings.scratchPad->setVisible(false);
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->setEnabled(false);
+    m_d->uiWdgPaintOpPresetSettings.fillGradient->setEnabled(false);
+    m_d->uiWdgPaintOpPresetSettings.fillSolid->setEnabled(false);
+    m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setEnabled(false);
 }
 
 
 void KisPaintOpPresetsPopup::showScratchPad()
 {
-    m_d->uiWdgPaintOpPresetSettings.scratchPad->setVisible(true);
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->setEnabled(true);
+    m_d->uiWdgPaintOpPresetSettings.fillGradient->setEnabled(true);
+    m_d->uiWdgPaintOpPresetSettings.fillSolid->setEnabled(true);
+    m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setEnabled(true);
 }
 
 void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)

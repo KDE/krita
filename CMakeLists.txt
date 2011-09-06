@@ -333,6 +333,12 @@ if(QT_QTWEBKIT_FOUND)
 endif(QT_QTWEBKIT_FOUND)
 
 ##
+## QImageBlitz (for Kexi)
+##
+#macro_optional_find_package(QImageBlitz)
+#macro_log_feature(QIMAGEBLITZ_FOUND "QImageBlitz" "Fast, smooth scaling of QImages" "sourceforge.net/projects/qimageblitz/" FALSE "" "Required for Kexi")
+
+##
 ## Test endianess
 ##
 include (TestBigEndian)
@@ -470,7 +476,6 @@ if (NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
 endif (NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
 
 
-
 ### Active: only build with Qt 4.7.0 or better 
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
     set(SHOULD_BUILD_ACTIVE FALSE)
@@ -480,6 +485,9 @@ if (NOT QT_QTDECLARATIVE_FOUND)
     set(SHOULD_BUILD_ACTIVE FALSE)
 endif (NOT QT_QTDECLARATIVE_FOUND)
 
+#if(NOT QIMAGEBLITZ_FOUND)
+#    set (SHOULD_BUILD_KEXI FALSE)
+#endif(NOT QIMAGEBLITZ_FOUND)
 
 ### HACK ###
 # Those BUILD_ are illegally used below before they are defined, which cause problem on a first build

@@ -81,10 +81,10 @@ public:
 
 protected:
     KoTextAnchor * const m_anchor;
+    KoTextLayoutRootArea *m_rootArea;
 
 private:
     KoTextShapeContainerModel *m_model;
-    KoTextLayoutRootArea *m_rootArea;
     QRectF m_pageRect;
     QRectF m_pageContentRect;
     QRectF m_paragraphRect;

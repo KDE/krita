@@ -143,7 +143,10 @@ void KoTextShapeContainerModel::containerChanged(KoShapeContainer *container, Ko
 
 void KoTextShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType type)
 {
-    if (((type == KoShape::RotationChanged || type == KoShape::ScaleChanged || type == KoShape::ShearChanged ||
+    if (((type == KoShape::RotationChanged ||
+          type == KoShape::ScaleChanged ||
+          type == KoShape::ShearChanged ||
+          type == KoShape::PositionChanged ||
           type == KoShape::SizeChanged) && child->textRunAroundSide() != KoShape::RunThrough) ||
           type == KoShape::TextRunAroundChanged) {
 
@@ -189,6 +192,7 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
         anchorPosInParag = relation.anchor->positionInDocument() - block.position();
         if (layout) {
             QTextLine tl = layout->lineForTextPosition(anchorPosInParag);
+            Q_ASSERT(tl.isValid());
             relation.anchor->setOffset(QPointF(newPosition.x() - tl.cursorToX(anchorPosInParag)
                 + tl.x(), 0));
             relayoutInlineObject(child);
@@ -205,6 +209,7 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
             KoTextShapeData *data = qobject_cast<KoTextShapeData*>(child->parent()->userData());
             Q_ASSERT(data);
             QTextLine tl = layout->lineForTextPosition(anchorPosInParag);
+            Q_ASSERT(tl.isValid());
             qreal y = tl.y() - data->documentOffset() - newPosition.y() + child->size().height();
             relation.anchor->setOffset(QPointF(relation.anchor->offset().x(), -y));
             relayoutInlineObject(child);

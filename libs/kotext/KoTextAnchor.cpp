@@ -125,6 +125,12 @@ KoShape *KoTextAnchor::shape() const
     return d->shape;
 }
 
+QString KoTextAnchor::anchorType() const
+{
+    Q_D(const KoTextAnchor);
+    return d->anchorType;
+}
+
 void KoTextAnchor::setHorizontalPos(HorizontalPos hp)
 {
     Q_D(KoTextAnchor);

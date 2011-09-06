@@ -48,27 +48,27 @@ void NotesConfigurationDialog::setStyleManager(KoStyleManager *sm)
 
 void NotesConfigurationDialog::footnoteSetup(bool on)
 {
-    widget.location_footnote->setEnabled(on);
+    //widget.location_footnote->setEnabled(on);
     if(on) {
         widget.numStyleCombo->setCurrentIndex(0);
-        widget.paragraphCombo->setCurrentIndex(7);
+        /*widget.paragraphCombo->setCurrentIndex(7);
         widget.pageCombo->setCurrentIndex(7);
         widget.textareaCombo->setCurrentIndex(8);
-        widget.noteareaCombo->setCurrentIndex(9);
+        widget.noteareaCombo->setCurrentIndex(9);*/
     }
 }
 
 void NotesConfigurationDialog::endnoteSetup(bool on)
 {
-    widget.location_endnote->setEnabled(on);
+    //widget.location_endnote->setEnabled(on);
     widget.dockWidget_5->setHidden(on);
     widget.beginAtCombo->setDisabled(on);
     if(on) {
         widget.numStyleCombo->setCurrentIndex(3);
-        widget.paragraphCombo->setCurrentIndex(3);
+        /*widget.paragraphCombo->setCurrentIndex(3);
         widget.pageCombo->setCurrentIndex(8);
         widget.textareaCombo->setCurrentIndex(5);
-        widget.noteareaCombo->setCurrentIndex(6);
+        widget.noteareaCombo->setCurrentIndex(6);*/
     }
 
 }
@@ -124,7 +124,7 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
             break;
         };
         //set Foot notes Position
-        if(notesConfig->noteClass() == KoOdfNotesConfiguration::Footnote) {
+        /*if(notesConfig->noteClass() == KoOdfNotesConfiguration::Footnote) {
             switch(widget.location_footnote->currentIndex()) {
             case 0:
                 notesConfig->setFootnotesPosition(KoOdfNotesConfiguration::Page);
@@ -136,7 +136,7 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
                 notesConfig->setFootnotesPosition(KoOdfNotesConfiguration::Document);
 
             }
-        }
+        }*/
         //set start value
         notesConfig->setStartValue(widget.startAtSpinBox->value());
         //set Numbering Scheme
@@ -159,7 +159,6 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
 
         //TODO
         //set citation text style
-        notesConfig->setCitationTextStyle("footnote");
 
         //set citation body text style
 

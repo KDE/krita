@@ -27,6 +27,7 @@
 #include <KoInlineNote.h>
 #include <KoToolSelection.h>
 #include <KoInlineNote.h>
+
 #include <QClipboard>
 #include <QMetaType>
 #include <QTextCursor>

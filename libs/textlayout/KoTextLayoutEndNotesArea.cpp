@@ -101,10 +101,10 @@ KoPointedAt KoTextLayoutEndNotesArea::hitTest(const QPointF &p, Qt::HitTestAccur
     return KoPointedAt();
 }
 
-QRectF KoTextLayoutEndNotesArea::selectionBoundingBox(QTextCursor &cursor) const
+/*QRectF KoTextLayoutEndNotesArea::selectionBoundingBox(QTextCursor &cursor) const
 {
 
-}
+}*/
 
 void KoTextLayoutEndNotesArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {

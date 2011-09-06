@@ -25,6 +25,7 @@
 
 #include <QDialog>
 #include <QTextDocument>
+#include <QObject>
 
 class KoStyleManager;
 

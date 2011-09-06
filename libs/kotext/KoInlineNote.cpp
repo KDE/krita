@@ -240,9 +240,15 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
             }
         }
         cursor.setPosition(cursor.currentFrame()->firstPosition());
+        KoOdfNotesConfiguration *notesConfig;
+        if (d->type == Footnote)
+            notesConfig = KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
+        else notesConfig = KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
         QTextCharFormat *fmat = new QTextCharFormat();
         fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-        cursor.insertText(d->label,*fmat);
+        if (d->autoNumbering)
+            cursor.insertText(notesConfig->numberFormat().prefix()+notesConfig->numberFormat().formattedNumber(d->label.toInt()+notesConfig->startValue()-1)+notesConfig->numberFormat().suffix(),*fmat);
+        else cursor.insertText(notesConfig->numberFormat().prefix()+d->label+notesConfig->numberFormat().suffix(),*fmat);
         fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
     }
     else if (element.namespaceURI() == KoXmlNS::office && element.localName() == "annotation") {

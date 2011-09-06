@@ -73,7 +73,7 @@ void ReferencesTool::createActions()
     connect(action, SIGNAL(triggered()), this, SLOT(insertEndNote()));
 
     action = new KAction(this);
-    QIcon *icon = new QIcon("/home/brijesh/kde/src/calligra/plugins/textshape/pics/settings-icon1_1.png");
+    QIcon *icon = new QIcon("/home/erione/kde/src/calligra/plugins/textshape/pics/settings-icon1_1.png");
     action->setIcon( *icon );
     addAction("notes_settings",action);
     action->setToolTip(i18n("Footnote/Endnote Settings"));
@@ -155,13 +155,9 @@ void ReferencesTool::formatTableOfContents()
 void ReferencesTool::insertFootNote()
 {
     //connect(textEditor()->document(),SIGNAL(cursorPositionChanged(QTextCursor)),this,SLOT(disableButtons(QTextCursor)));
-    KoInlineTextObjectManager *manager = KoTextDocument(textEditor()->document()).inlineTextObjectManager();
-    if (manager->footNotes().count() == 0) {
-        openSettings();
-    }
     note = textEditor()->insertFootNote();
     note->setAutoNumbering(sfenw->widget.autoNumbering->isChecked());
-    if(note->autoNumbering()) {
+    if (note->autoNumbering()) {
         note->setLabel(QString().number(note->manager()->footNotes().count()));
     }
     else {
@@ -171,10 +167,9 @@ void ReferencesTool::insertFootNote()
     QTextCursor cursor(note->textCursor());
     KoOdfNotesConfiguration *notesConfig;
     notesConfig = KoTextDocument(textEditor()->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
-
     QTextCharFormat *cfmat = new QTextCharFormat();
     cfmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-    if(note->autoNumbering())
+    if (note->autoNumbering())
         cursor.insertText(notesConfig->numberFormat().prefix()+notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)+notesConfig->numberFormat().suffix(),*cfmat);
     else cursor.insertText(notesConfig->numberFormat().prefix()+note->label()+notesConfig->numberFormat().suffix(),*cfmat);
     cfmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
@@ -193,9 +188,6 @@ void ReferencesTool::insertFootNote()
 void ReferencesTool::insertEndNote()
 {
     KoInlineTextObjectManager *manager = KoTextDocument(textEditor()->document()).inlineTextObjectManager();
-    if (manager->endNotes().count() == 0) {
-        openSettings();
-    }
     note = textEditor()->insertEndNote();
     note->setAutoNumbering(sfenw->widget.autoNumbering->isChecked());
     if(note->autoNumbering()) {
@@ -208,7 +200,6 @@ void ReferencesTool::insertEndNote()
     QTextCursor cursor(note->textCursor());    
     KoOdfNotesConfiguration *notesConfig;
     notesConfig = KoTextDocument(textEditor()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
-
     QTextCharFormat *cfmat = new QTextCharFormat();
     cfmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     if(note->autoNumbering())

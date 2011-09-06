@@ -266,7 +266,6 @@ void KoInlineTextObjectManager::reNumbering(QTextBlock block)
                     cursor.setPosition(frag.position(),QTextCursor::MoveAnchor);
                     cursor.setPosition(frag.position()+frag.length(),QTextCursor::KeepAnchor);
                     cursor.removeSelectedText();
-                  //  qDebug()<<cursor.document()->pageCount();
                     cursor.insertText(notesConfig->numberFormat().prefix()+notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)+notesConfig->numberFormat().suffix(),*fmat);
                     i++;
                 }

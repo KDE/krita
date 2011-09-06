@@ -25,7 +25,6 @@ set(textlayout_LIB_SRCS
     InlineAnchorStrategy.cpp
     AnchorStrategy.cpp
     ToCGenerator.cpp
-    BibliographyGenerator.cpp
     DummyDocumentLayout.cpp
 )
 

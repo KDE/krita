@@ -36,8 +36,10 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
     connect(dialog.buttonBox,SIGNAL(accepted()),this,SLOT(insert()));
     connect(dialog.add,SIGNAL(clicked()),this,SLOT(addField()));
     connect(dialog.remove,SIGNAL(clicked()),this,SLOT(removeField()));
-    connect(dialog.addTabStop,SIGNAL(clicked()),this,SLOT(insertTabStop()));
-    connect(dialog.removeTabStop,SIGNAL(clicked()),this,SLOT(removeTabStop()));
+    /*  To do : handle tab stops
+    */
+    //connect(dialog.addTabStop,SIGNAL(clicked()),this,SLOT(insertTabStop()));
+    //connect(dialog.removeTabStop,SIGNAL(clicked()),this,SLOT(removeTabStop()));
 
     setDefaultIndexEntries();
 }
@@ -45,16 +47,20 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
 void InsertBibliographyDialog::insert()
 {
     m_editor->insertBibliography();
-    KoBibliographyInfo *bibInfo = m_editor->cursor()->block().blockFormat().property(KoParagraphStyle::BibliographyData).value<KoBibliographyInfo*>();
-    QTextDocument *bibDocument = m_editor->cursor()->block().blockFormat().property(KoParagraphStyle::BibliographyDocument).value<QTextDocument*>();
+    KoBibliographyInfo *bibInfo =
+            m_editor->cursor()->block().blockFormat().property(KoParagraphStyle::BibliographyData).value<KoBibliographyInfo*>();
+    QTextDocument *bibDocument =
+            m_editor->cursor()->block().blockFormat().property(KoParagraphStyle::BibliographyDocument).value<QTextDocument*>();
 
-    bibInfo->m_entryTemplate = QMap<QString,BibliographyEntryTemplate>(m_bibInfo->m_entryTemplate);
+    bibInfo->m_entryTemplate = m_bibInfo->m_entryTemplate;
     bibInfo->m_indexTitleTemplate.text = dialog.title->text();
 
     bool *autoUpdate = m_editor->cursor()->block().blockFormat().property(KoParagraphStyle::AutoUpdateBibliography).value<bool *>();
     *autoUpdate = dialog.autoupdate->isChecked();
 
-    BibliographyGenerator *generator = new BibliographyGenerator(bibDocument, m_editor->cursor()->block(), bibInfo, m_editor->document());
+    BibliographyGenerator *generator =
+            new BibliographyGenerator(bibDocument, m_editor->cursor()->block(), bibInfo);
+
     if (!(*autoUpdate)) {          //if autoUpdate is disabled then do a forced generate on insertion
         generator->generate();
     }
@@ -173,4 +179,5 @@ void InsertBibliographyDialog::setDefaultIndexEntries()
 
         m_bibInfo->m_entryTemplate[bibType] = bibEntryTemplate;
     }
+    dialog.bibTypes->setCurrentRow(0,QItemSelectionModel::Select);
 }

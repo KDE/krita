@@ -214,20 +214,6 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QPushButton" name="addTabStop">
-          <property name="text">
-           <string>Tab stop &gt;&gt;</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="removeTabStop">
-          <property name="text">
-           <string>&lt;&lt; Tab stop</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </item>
       <item>

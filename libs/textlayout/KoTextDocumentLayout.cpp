@@ -330,6 +330,11 @@ void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rec
         obj->paint(*painter, paintDevice(), document(), rect, object, position, cf);
 }
 
+QList<KoTextAnchor *> KoTextDocumentLayout::textAnchors() const
+{
+    return d->textAnchors;
+}
+
 void KoTextDocumentLayout::registerAnchoredObstruction(KoTextLayoutObstruction *obstruction)
 {
     d->anchoredObstructions.insert(obstruction->shape(), obstruction);

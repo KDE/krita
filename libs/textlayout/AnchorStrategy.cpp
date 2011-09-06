@@ -33,8 +33,8 @@
 
 AnchorStrategy::AnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
         : m_anchor(anchor)
-        , m_model(0)
         , m_rootArea(rootArea)
+        , m_model(0)
         , m_pageRect(0,0,10,10)
         , m_pageContentRect(0,0,10,10)
         , m_paragraphRect(0,0,0,0)

@@ -122,6 +122,8 @@ public:
     /// reimplemented to always return 1
     virtual int pageCount() const;
 
+    QList<KoTextAnchor *> textAnchors() const;
+
     /**
      * Register the anchored obstruction  for run around
      *

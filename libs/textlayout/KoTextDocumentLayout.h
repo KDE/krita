@@ -145,6 +145,9 @@ public:
     /// remove all anchors and associated obstructions and set up for collecting new ones
     void beginAnchorCollecting(KoTextLayoutRootArea *rootArea);
 
+    /// allow  positionInlineObject() to do anything (incl saving anchors)
+    void allowPositionInlineObject(bool allow);
+
     /// Sets the paragraph rect that will be applied to anchorStrategies being created in
     /// positionInlineObject()
     void setAnchoringParagraphRect(const QRectF &paragraphRect);
@@ -176,9 +179,6 @@ public:
 
     /// reimplemented from QAbstractTextDocumentLayout
     virtual void documentChanged(int position, int charsRemoved, int charsAdded);
-
-    /// returns a number that increases every time documentChanged is called
-    int documentChangedCount() const;
 
     /// Return a list of obstructions intersecting current root area (during layout)
     QList<KoTextLayoutObstruction *> currentObstructions();

@@ -426,21 +426,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 QVariant data = block.blockFormat().property(KoParagraphStyle::TableOfContentsDocument);
                 QTextDocument *tocDocument = data.value<QTextDocument *>();
 
-                data = block.blockFormat().property(KoParagraphStyle::TableOfContentsData);
-                KoTableOfContentsGeneratorInfo *tocInfo = data.value<KoTableOfContentsGeneratorInfo *>();
-
-                if (!tocInfo->generator()) {
-                    // The generator attaches itself to the tocInfo
-                    new ToCGenerator(tocDocument, tocInfo);
-                }
-                tocInfo->generator()->setMaxTabPosition(right() - left());
-
-                if (!cursor->currentSubFrameIterator) {
-                    // Let the generator know which QTextBlock it needs to ask for a relayout once the toc got generated.
-                    tocInfo->generator()->setBlock(block);
-                }
-
-                // Let's create KoTextLayoutArea and let to handle the ToC
+                // Let's create KoTextLayoutArea and let it handle the ToC
                 KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, documentLayout());
                 m_tableOfContentsAreas.append(tocArea);
                 m_y += m_bottomSpacing;
@@ -600,7 +586,7 @@ struct LineKeeper
     QPointF position;
 };
 
-QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
+QTextLine KoTextLayoutArea::restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
 {
     QList<LineKeeper> lineKeeps;
     QTextLine line;
@@ -616,6 +602,7 @@ QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
         lineKeeps.append(lk);
     }
     layout->clearLayout();
+    documentLayout()->allowPositionInlineObject(false);
     layout->beginLayout();
     foreach(const LineKeeper &lk, lineKeeps) {
         line = layout->createLine();
@@ -624,6 +611,7 @@ QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
         line.setNumColumns(lk.columns, lk.lineWidth);
         line.setPosition(lk.position);
     }
+    documentLayout()->allowPositionInlineObject(true);
     return line;
 }
 
@@ -911,11 +899,17 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QList<QTextOption::Tab> qTabs;
     ///@TODO: don't do this kind of conversion, we lose data for layout.
     foreach (KoText::Tab kTab, tabs) {
+        qreal value = kTab.position;
+        if (value > MaximumTabPos - 1000) {
+            value += right() - left() - MaximumTabPos;
+        }
+        value = (value + tabOffset) * qt_defaultDpiY() / 72. -1;
+
 #if QT_VERSION >= 0x040700
-        qTabs.append(QTextOption::Tab((kTab.position + tabOffset) * qt_defaultDpiY() / 72. -1, kTab.type, kTab.delimiter));
+        qTabs.append(QTextOption::Tab(value, kTab.type, kTab.delimiter));
 #else
         QTextOption::Tab tab;
-        tab.position = (kTab.position + tabOffset) * qt_defaultDpiY() / 72. -1;
+        tab.position = value;
         tab.type = kTab.type;
         tab.delimiter = kTab.delimiter;
         qTabs.append(tab);
@@ -994,7 +988,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         qreal bottomOfText = line.y() + line.height();
 
         bool softBreak = false;
-        if (acceptsPageBreak() && !format.nonBreakableLines() && bottomOfText > maximumAllowedBottom() - 150) {
+        bool moreInMiddle = m_y > maximumAllowedBottom() - 150;
+        if (acceptsPageBreak() && !format.nonBreakableLines() && moreInMiddle) {
             int softBreakPos = -1;
             QString text = block.text();
             int pos = text.indexOf(QChar::ObjectReplacementCharacter, line.textStart());
@@ -1016,14 +1011,18 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             if (softBreakPos >= 0 && softBreakPos < line.textStart() + line.textLength()) {
                 line.setNumColumns(softBreakPos - line.textStart() + 1, line.width());
                 softBreak = true;
+//FIXME doesn't work this way cause it's the wrong pos to do so
+#if 0
                 // if the softBreakPos is at the start of the line stop here so
                 // we don't add a line here. That fixes the problem that e.g. the counter is before
                 // the page break and the text is after the page break
                 if (!virginPage() && softBreakPos == 0) {
                     return false;
                 }
+#endif
             }
         }
+
         findFootNotes(block, line);
         if (bottomOfText > maximumAllowedBottom()) {
             // We can not fit line within our allowed space
@@ -1072,15 +1071,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         expandBoundingLeft(line.x());
         expandBoundingRight(line.x() + line.naturalTextWidth());
 
-        // during fit is where documentLayout->positionInlineObjects is called
-        //so now is a good time to position the obstructions
-        int oldObstructionCount = documentLayout()->currentObstructions().size();
-
         documentLayout()->positionAnchoredObstructions();
-
-        if (oldObstructionCount < documentLayout()->currentObstructions().size()) {
-            return false;
-        }
 
         // line fitted so try and do the next one
         line = layout->createLine();

@@ -22,29 +22,27 @@
 #ifndef TOCGENERATOR_H
 #define TOCGENERATOR_H
 
-#include <QObject>
+
 #include <QList>
 #include <QTextBlock>
-
-#include <KoTableOfContentsGeneratorInfo.h>
+#include <QObject>
 
 class KoInlineTextObjectManager;
 class KoTextDocumentLayout;
+class KoTableOfContentsGeneratorInfo;
 
 class QTextDocument;
 
-class ToCGenerator : public QObject, public ToCGeneratorInterface
+class ToCGenerator : public QObject
 {
     Q_OBJECT
 public:
     explicit ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGeneratorInfo *tocInfo);
     virtual ~ToCGenerator();
 
-    virtual void setMaxTabPosition(qreal maxTabPosition);
     virtual void setBlock(const QTextBlock &block);
 
-public slots:
-    void generate();
+    bool generate();
 
 private:
     QString resolvePageNumber(const QTextBlock &headingBlock);
@@ -55,8 +53,8 @@ private:
     QTextBlock m_block;
     QTextDocument *m_document;
     KoTextDocumentLayout *m_documentLayout;
-    int m_generatedDocumentChangeCount;
     qreal m_maxTabPosition;
+    bool m_success;
 
     // Return the ref (name) of the first KoBookmark in the block, if KoBookmark not found, null QString is returned
     QString fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManager * inlineTextObjectManager);

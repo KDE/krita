@@ -327,7 +327,16 @@ endif(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
 ##
 ## Test for Qt Webkit
 ##
-macro_log_feature(QT_QTWEBKIT_FOUND "Qt Webkit" "Qt binding for Webkit, the HTML engine." "http://qt.nokia.com" FALSE "" "Required for the web shape")
+macro_log_feature(QT_QTWEBKIT_FOUND "Qt Webkit" "Qt binding for Webkit, the HTML engine." "http://qt.nokia.com" FALSE "" "Required for the web shape, web Kexi widget and web report element")
+if(QT_QTWEBKIT_FOUND)
+    add_definitions( -DCAN_USE_QTWEBKIT )
+endif(QT_QTWEBKIT_FOUND)
+
+##
+## QImageBlitz (for Kexi)
+##
+#macro_optional_find_package(QImageBlitz)
+#macro_log_feature(QIMAGEBLITZ_FOUND "QImageBlitz" "Fast, smooth scaling of QImages" "sourceforge.net/projects/qimageblitz/" FALSE "" "Required for Kexi")
 
 ##
 ## Test endianess
@@ -467,7 +476,6 @@ if (NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
 endif (NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
 
 
-
 ### Active: only build with Qt 4.7.0 or better 
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
     set(SHOULD_BUILD_ACTIVE FALSE)
@@ -477,6 +485,9 @@ if (NOT QT_QTDECLARATIVE_FOUND)
     set(SHOULD_BUILD_ACTIVE FALSE)
 endif (NOT QT_QTDECLARATIVE_FOUND)
 
+#if(NOT QIMAGEBLITZ_FOUND)
+#    set (SHOULD_BUILD_KEXI FALSE)
+#endif(NOT QIMAGEBLITZ_FOUND)
 
 ### HACK ###
 # Those BUILD_ are illegally used below before they are defined, which cause problem on a first build

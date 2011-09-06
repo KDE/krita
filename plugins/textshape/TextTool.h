@@ -280,7 +280,7 @@ private slots:
     /// print debug about the details of the styles on the current text document
     void debugTextStyles();
 
-    void ensureCursorVisible();
+    void ensureCursorVisible(bool moveView = true);
 
     void testSlot(bool);
 

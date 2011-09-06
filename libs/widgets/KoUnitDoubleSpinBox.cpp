@@ -25,6 +25,7 @@
 #include <KLocale>
 
 // #define DEBUG_VALIDATOR
+// #define DEBUG_VALUEFROMTEXT
 
 class KoUnitDoubleSpinBox::Private {
 public:
@@ -216,10 +217,12 @@ double KoUnitDoubleSpinBox::valueFromText( const QString& str ) const
     str2.remove( KoUnit::unitName( d->unit ) );
     bool ok;
     const double dbl = KGlobal::locale()->readNumber( str2, &ok );
+#ifdef DEBUG_VALUEFROMTEXT
     if ( ok )
       kDebug(30004) <<"valueFromText:" << str <<": => :" << str2 <<": =>" << QString::number( dbl, 'f', 12 );
     else
         kWarning(30004) << "valueFromText error:" << str << ": => :" << str2 << ":";
+#endif
     return dbl;
 }
 

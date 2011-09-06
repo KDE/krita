@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2011 Smit Patel <smitpatel24@gmail.com>
-
+ * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -16,6 +17,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "ToCBibGeneratorInfo.h"
 
 IndexEntry::IndexEntry(QString _styleName, IndexEntry::IndexEntryName _name)
@@ -23,6 +25,12 @@ IndexEntry::IndexEntry(QString _styleName, IndexEntry::IndexEntryName _name)
             name(_name)
 {
 
+}
+
+IndexEntry *IndexEntry::clone()
+{
+    IndexEntry *newIndexEntry = new IndexEntry(styleName, name);
+    return newIndexEntry;
 }
 
 IndexEntry::~IndexEntry()
@@ -82,6 +90,12 @@ IndexEntryBibliography::IndexEntryBibliography(QString _styleName)
 
 }
 
+IndexEntry *IndexEntryBibliography::clone()
+{
+    IndexEntryBibliography *newIndexEntry = new IndexEntryBibliography(styleName);
+    newIndexEntry->dataField = dataField;
+    return newIndexEntry;
+}
 
 void IndexEntryBibliography::addAttributes(KoXmlWriter* writer) const
 {
@@ -96,6 +110,12 @@ IndexEntrySpan::IndexEntrySpan(QString _styleName): IndexEntry(_styleName, Index
     text = QString();
 }
 
+IndexEntry *IndexEntrySpan::clone()
+{
+    IndexEntrySpan *newIndexEntry = new IndexEntrySpan(styleName);
+    newIndexEntry->text = text;
+    return newIndexEntry;
+}
 
 void IndexEntrySpan::addAttributes(KoXmlWriter* writer) const
 {
@@ -109,6 +129,13 @@ IndexEntryTabStop::IndexEntryTabStop(QString _styleName): IndexEntry(_styleName,
 
 }
 
+IndexEntry *IndexEntryTabStop::clone()
+{
+    IndexEntryTabStop *newIndexEntry = new IndexEntryTabStop(styleName);
+    newIndexEntry->tab = tab;
+    newIndexEntry->m_position = m_position;
+    return newIndexEntry;
+}
 
 void IndexEntryTabStop::addAttributes(KoXmlWriter* writer) const
 {
@@ -153,6 +180,16 @@ void IndexTitleTemplate::saveOdf(KoXmlWriter* writer) const
     writer->endElement();
 }
 
+IndexSourceStyle::IndexSourceStyle()
+{
+}
+
+IndexSourceStyle::IndexSourceStyle(const IndexSourceStyle& indexSourceStyle)
+{
+    styleName = indexSourceStyle.styleName;
+    styleId = indexSourceStyle.styleId;
+}
+
 void IndexSourceStyle::saveOdf(KoXmlWriter* writer) const
 {
     writer->startElement("text:index-source-styles");
@@ -162,6 +199,18 @@ void IndexSourceStyle::saveOdf(KoXmlWriter* writer) const
     writer->endElement();
 }
 
+IndexSourceStyles::IndexSourceStyles()
+{
+}
+
+IndexSourceStyles::IndexSourceStyles(const IndexSourceStyles &indexSourceStyles)
+{
+    outlineLevel = indexSourceStyles.outlineLevel;
+
+    foreach (IndexSourceStyle style, indexSourceStyles.styles) {
+        styles.append(style);
+    }
+}
 
 void IndexSourceStyles::saveOdf(KoXmlWriter* writer) const
 {
@@ -178,11 +227,37 @@ IndexEntryPageNumber::IndexEntryPageNumber(QString _styleName): IndexEntry(_styl
 
 }
 
+IndexEntry *IndexEntryPageNumber::clone()
+{
+    IndexEntryPageNumber *newIndexEntry = new IndexEntryPageNumber(styleName);
+    return newIndexEntry;
+}
+
 IndexEntryLinkEnd::IndexEntryLinkEnd(QString _styleName): IndexEntry(_styleName, IndexEntry::LINK_END)
 {
 
 }
 
+IndexEntry *IndexEntryLinkEnd::clone()
+{
+    IndexEntryLinkEnd *newIndexEntry = new IndexEntryLinkEnd(styleName);
+    return newIndexEntry;
+}
+
+TocEntryTemplate::TocEntryTemplate()
+{
+}
+
+TocEntryTemplate::TocEntryTemplate(const TocEntryTemplate &entryTemplate)
+{
+    outlineLevel = entryTemplate.outlineLevel;
+    styleName = QString(entryTemplate.styleName);
+    styleId = entryTemplate.styleId;
+
+    foreach (IndexEntry *entry, entryTemplate.indexEntries) {
+        indexEntries.append(entry->clone());
+    }
+}
 
 void TocEntryTemplate::saveOdf(KoXmlWriter* writer) const
 {
@@ -202,10 +277,21 @@ IndexEntryText::IndexEntryText(QString _styleName): IndexEntry(_styleName,IndexE
 
 }
 
+IndexEntry *IndexEntryText::clone()
+{
+    IndexEntryText *newIndexEntry = new IndexEntryText(styleName);
+    return newIndexEntry;
+}
+
 IndexEntryLinkStart::IndexEntryLinkStart(QString _styleName)
     : IndexEntry(_styleName, IndexEntry::LINK_START)
 {
 
+}
+
+IndexEntry *IndexEntryLinkStart::clone()
+{
+    return new IndexEntryLinkStart(styleName);
 }
 
 
@@ -217,6 +303,13 @@ IndexEntryChapter::IndexEntryChapter(QString _styleName)
 
 }
 
+IndexEntry *IndexEntryChapter::clone()
+{
+    IndexEntryChapter *newIndexEntry = new IndexEntryChapter(styleName);
+    newIndexEntry->outlineLevel = outlineLevel;
+    newIndexEntry->display = display;
+    return newIndexEntry;
+}
 
 void IndexEntryChapter::addAttributes(KoXmlWriter* writer) const
 {

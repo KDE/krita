@@ -53,7 +53,6 @@ public:
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
     KLineEdit *tagSearchLineEdit, *tagOpLineEdit;
-    KoResource *curResource;
     QString knsrcFile;
     QCompleter *tagCompleter;
 };
@@ -310,14 +309,10 @@ void KoResourceItemChooser::setProxyModel( QAbstractProxyModel* proxyModel )
 
 void KoResourceItemChooser::activated( const QModelIndex & index )
 {
-    if( ! index.isValid() )
-        return;
-
-    d->curResource = resourceFromModelIndex(index);
-
-    if( d->curResource ) {
-        emit resourceSelected( d->curResource );
-        setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource ));
+    KoResource* resource = currentResource();
+    if( resource ) {
+        emit resourceSelected( resource );
+        setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(resource));
     }
 
     updateButtonState();
@@ -397,29 +392,37 @@ void KoResourceItemChooser::tagOpLineEditActivated(QString lineEditText)
         tagsListNew.removeAll("");
     }
 
-    QStringList tagsList = d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource);
+    KoResource* resource = currentResource();
+    if(!resource) {
+        return;
+    }
+    QStringList tagsList = d->model->resourceServerAdapter()->getAssignedTagsList(resource);
 
     foreach(const QString& tag, tagsListNew) {
         if(!tagsList.contains(tag)) {
-            d->model->resourceServerAdapter()->addTag(d->curResource, tag);
+            d->model->resourceServerAdapter()->addTag(resource, tag);
         }
      }
 
      foreach(const QString& tag, tagsList) {
         if(!tagsListNew.contains(tag)) {
-            d->model->resourceServerAdapter()->delTag(d->curResource, tag);
+            d->model->resourceServerAdapter()->delTag(resource, tag);
         }
      }
 
-    setTagOpLineEdit( d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource));
+    setTagOpLineEdit( d->model->resourceServerAdapter()->getAssignedTagsList(resource));
 }
 
 void KoResourceItemChooser::tagOpLineEditTextChanged(QString lineEditText)
 {
+    KoResource* resource = currentResource();
+    if(!resource) {
+        return;
+    }
     if(lineEditText.isEmpty()) {
-        QStringList assignedTagsList = d->model->resourceServerAdapter()->getAssignedTagsList(d->curResource);
+        QStringList assignedTagsList = d->model->resourceServerAdapter()->getAssignedTagsList(resource);
         foreach(const QString& tag, assignedTagsList) {
-            d->model->resourceServerAdapter()->delTag(d->curResource, tag);
+            d->model->resourceServerAdapter()->delTag(resource, tag);
         }
     }
     d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);

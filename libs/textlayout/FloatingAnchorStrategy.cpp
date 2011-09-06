@@ -412,7 +412,6 @@ void FloatingAnchorStrategy::checkStacking(QPointF &newPosition)
     int idx = m_rootArea->documentLayout()->textAnchors().indexOf(m_anchor);
     Q_ASSERT_X(idx >= 0, __FUNCTION__, QString("WTF? How can our anchor not be in the anchor-list but still be called?").toLocal8Bit());
 
-    //for(int i = idx - 1; i >= 0; --i) {
     for(int i = 0; i < idx; ++i) {
         KoTextAnchor *a = m_rootArea->documentLayout()->textAnchors()[i];
         if (m_anchor->horizontalPos() != a->horizontalPos())

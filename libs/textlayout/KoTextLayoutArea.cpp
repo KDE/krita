@@ -602,7 +602,7 @@ QTextLine KoTextLayoutArea::restartLayout(QTextLayout *layout, int lineTextStart
         lineKeeps.append(lk);
     }
     layout->clearLayout();
-    documentLayout()->setSuppressAnchorAdding(true);
+    documentLayout()->allowPositionInlineObject(false);
     layout->beginLayout();
     foreach(const LineKeeper &lk, lineKeeps) {
         line = layout->createLine();
@@ -611,7 +611,7 @@ QTextLine KoTextLayoutArea::restartLayout(QTextLayout *layout, int lineTextStart
         line.setNumColumns(lk.columns, lk.lineWidth);
         line.setPosition(lk.position);
     }
-    documentLayout()->setSuppressAnchorAdding(false);
+    documentLayout()->allowPositionInlineObject(true);
     return line;
 }
 

@@ -70,7 +70,7 @@ public:
        ,layoutPosition(0)
        ,anchoringRootArea(0)
        , anchoringIndex(0)
-       , suppressAnchorAdding(false)
+       , allowPositionInlineObject(true)
        , referencedLayout(0)
        , defaultTabSizing(0)
        , y(0)
@@ -97,7 +97,7 @@ public:
     KoTextLayoutRootArea *anchoringRootArea;
     int anchoringIndex; // index of last not positioned inline object inside textAnchors
     QRectF anchoringParagraphRect;
-    bool suppressAnchorAdding;
+    bool allowPositionInlineObject;
 
     QHash<KoShape*,KoTextLayoutObstruction*> anchoredObstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
     QList<KoTextLayoutObstruction*> freeObstructions; // obstructions affecting the current rootArea, and not anchored
@@ -381,9 +381,9 @@ void KoTextDocumentLayout::setAnchoringParagraphRect(const QRectF &paragraphRect
     d->anchoringParagraphRect = paragraphRect;
 }
 
-void KoTextDocumentLayout::setSuppressAnchorAdding(bool suppress)
+void KoTextDocumentLayout::allowPositionInlineObject(bool allow)
 {
-    d->suppressAnchorAdding = suppress;
+    d->allowPositionInlineObject = allow;
 }
 
 // This method is called by qt every time  QTextLine.setWidth()/setNumColums() is called
@@ -396,12 +396,14 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     Q_ASSERT(format.isCharFormat());
     if (d->inlineTextObjectManager == 0)
         return;
+    if (!d->allowPositionInlineObject)
+        return;
     QTextCharFormat cf = format.toCharFormat();
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
     // We need some special treatment for anchors as they need to position their object during
     // layout and not this early
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(obj);
-    if (anchor && d->anchoringRootArea->associatedShape() && !d->suppressAnchorAdding) {
+    if (anchor && d->anchoringRootArea->associatedShape()) {
         // if there is no anchor strategy set then create one
         if (!anchor->anchorStrategy()) {
             if (anchor->behavesAsCharacter()) {
@@ -431,7 +433,7 @@ void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
 
     d->anchoringIndex = 0;
     d->anchoringRootArea = rootArea;
-    d->suppressAnchorAdding = false;
+    d->allowPositionInlineObject = true;
 }
 
 void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format)

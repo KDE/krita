@@ -1428,6 +1428,26 @@ void KoTextEditor::insertTableOfContents()
     emit cursorPositionChanged();
 }
 
+void KoTextEditor::updateTableOfContents(KoTableOfContentsGeneratorInfo *info, QTextBlock block)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    KoTableOfContentsGeneratorInfo *newToCInfo=info->clone();
+
+    d->updateState(KoTextEditor::Private::Custom, i18n("Modify Table Of Contents"));    
+
+    QTextCursor cursor(block);
+    QTextBlockFormat tocBlockFormat=block.blockFormat();
+
+    tocBlockFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(newToCInfo) );
+    cursor.setBlockFormat(tocBlockFormat);
+
+    d->updateState(KoTextEditor::Private::NoOp);
+    emit cursorPositionChanged();
+}
+
 void KoTextEditor::insertBibliography()
 {
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Bibliography"));

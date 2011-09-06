@@ -335,15 +335,15 @@ void KoTextDocumentLayout::registerAnchoredObstruction(KoTextLayoutObstruction *
     d->anchoredObstructions.insert(obstruction->shape(), obstruction);
 }
 
-void KoTextDocumentLayout::positionAnchoredObstructions()
+bool KoTextDocumentLayout::positionAnchoredObstructions()
 {
     if (!d->anchoringRootArea)
-        return;
+        return false;
     KoTextPage *page = d->anchoringRootArea->page();
     if (!page)
-        return;
+        return false;
     if (d->anAnchorIsPlaced)
-        return;
+        return false;
 
     // The specs define 3 different anchor modes using the
     // draw:wrap-influence-on-position. We only implement the
@@ -376,8 +376,11 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
         if (strategy->moveSubject()) {
             ++d->anchoringIndex;
             d->anAnchorIsPlaced = true;
+            return true;
         }
     }
+
+    return false;
 }
 
 void KoTextDocumentLayout::setAnchoringParagraphRect(const QRectF &paragraphRect)

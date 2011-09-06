@@ -67,9 +67,10 @@ public:
        , changeTracker(0)
        , inlineTextObjectManager(0)
        , provider(0)
-       ,layoutPosition(0)
-       ,anchoringRootArea(0)
+       , layoutPosition(0)
+       , anchoringRootArea(0)
        , anchoringIndex(0)
+       , anAnchorIsPlaced(false)
        , allowPositionInlineObject(true)
        , referencedLayout(0)
        , defaultTabSizing(0)
@@ -96,6 +97,7 @@ public:
     QList<KoTextAnchor *> textAnchors; // list of all inserted inline objects
     KoTextLayoutRootArea *anchoringRootArea;
     int anchoringIndex; // index of last not positioned inline object inside textAnchors
+    bool anAnchorIsPlaced;
     QRectF anchoringParagraphRect;
     bool allowPositionInlineObject;
 
@@ -340,6 +342,8 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
     KoTextPage *page = d->anchoringRootArea->page();
     if (!page)
         return;
+    if (d->anAnchorIsPlaced)
+        return;
 
     // The specs define 3 different anchor modes using the
     // draw:wrap-influence-on-position. We only implement the
@@ -370,8 +374,8 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
         strategy->setPageNumber(page->pageNumber());
 
         if (strategy->moveSubject()) {
-            //d->anchoringRootArea->setDirty(); // make sure we do the layout to flow around
             ++d->anchoringIndex;
+            d->anAnchorIsPlaced = true;
         }
     }
 }
@@ -432,6 +436,7 @@ void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
     d->textAnchors.clear();
 
     d->anchoringIndex = 0;
+    d->anAnchorIsPlaced = false;
     d->anchoringRootArea = rootArea;
     d->allowPositionInlineObject = true;
 }
@@ -528,6 +533,11 @@ bool KoTextDocumentLayout::doLayout()
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 finished = rootArea->layoutRoot(tmpPosition);
+                if (d->anAnchorIsPlaced) {
+                    d->anAnchorIsPlaced = false;
+                } else {
+                    ++d->anchoringIndex;
+                }
             } while (d->anchoringIndex < d->textAnchors.count());
             if (d->textAnchors.count() > 0) {
                 delete tmpPosition;
@@ -594,6 +604,11 @@ bool KoTextDocumentLayout::doLayout()
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 rootArea->layoutRoot(tmpPosition);
+                if (d->anAnchorIsPlaced) {
+                    d->anAnchorIsPlaced = false;
+                } else {
+                    ++d->anchoringIndex;
+                }
             } while (d->anchoringIndex < d->textAnchors.count());
             if (d->textAnchors.count() > 0) {
                 delete tmpPosition;

@@ -108,8 +108,12 @@ QVariant TableOfContentsStyleModel::data(const QModelIndex &index, int role) con
         KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
         switch (role) {
         case Qt::DisplayRole: {
-            if (paragStyle)
-                return QVariant(static_cast< QPair<int, int> *>(index.internalPointer())->second);
+            if (paragStyle) {
+                if(QVariant(static_cast< QPair<int, int> *>(index.internalPointer())->second).value<int>() == 0)
+                    return QVariant(i18n("Disabled"));
+                else
+                    return QVariant(static_cast< QPair<int, int> *>(index.internalPointer())->second);
+            }
         }
         case Qt::EditRole: {
             if (paragStyle)

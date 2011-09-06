@@ -19,6 +19,8 @@
 
 #include "TableOfContentsStyleDelegate.h"
 
+#include <KLocale>
+
 #include <QSpinBox>
 
 TableOfContentsStyleDelegate::TableOfContentsStyleDelegate():
@@ -49,6 +51,7 @@ void TableOfContentsStyleDelegate::setEditorData(QWidget *editor,
     QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
     spinBox->setMinimum(0);
     spinBox->setMaximum(10);
+    spinBox->setSpecialValueText(i18n("Disabled"));
     spinBox->setValue(value);
 }
 

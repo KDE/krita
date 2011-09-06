@@ -415,6 +415,8 @@ void FloatingAnchorStrategy::checkStacking(QPointF &newPosition)
     //for(int i = idx - 1; i >= 0; --i) {
     for(int i = 0; i < idx; ++i) {
         KoTextAnchor *a = m_rootArea->documentLayout()->textAnchors()[i];
+        if (m_anchor->horizontalPos() != a->horizontalPos())
+            continue;
 
         QRectF thisRect(newPosition, m_anchor->shape()->size());
         QRectF r(a->shape()->position(), a->shape()->size());

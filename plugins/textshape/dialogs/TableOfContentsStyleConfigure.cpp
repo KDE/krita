@@ -36,6 +36,7 @@ TableOfContentsStyleConfigure::TableOfContentsStyleConfigure(KoStyleManager *man
     ui(new Ui::TableOfContentsStyleConfigure)
 {
     ui->setupUi(this);
+    setWindowTitle(i18n("Table of Contents - Configure Styles"));
 
     Q_ASSERT(manager);
 

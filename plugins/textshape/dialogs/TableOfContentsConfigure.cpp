@@ -26,8 +26,6 @@
 #include <KoTextEditor.h>
 #include <KoParagraphStyle.h>
 
-
-
 TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, QTextBlock block, QWidget *parent) :
     QDialog(parent),
     m_textEditor(editor),
@@ -37,6 +35,8 @@ TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, QTextBl
     m_block(block)
 {
     ui.setupUi(this);
+
+    setWindowTitle(i18n("Table of Contents - Configure"));
 
     ui.lineEditTitle->setText(i18n("Table Title"));
     ui.useOutline->setText(i18n("Use outline"));

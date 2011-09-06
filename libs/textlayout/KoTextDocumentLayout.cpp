@@ -415,12 +415,35 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     if (anchor && d->anchoringRootArea->associatedShape()) {
         // if there is no anchor strategy set then create one
         if (!anchor->anchorStrategy()) {
+            int index = d->textAnchors.count();
             if (anchor->behavesAsCharacter()) {
                 anchor->setAnchorStrategy(new InlineAnchorStrategy(anchor, d->anchoringRootArea));
             } else {
                 anchor->setAnchorStrategy(new FloatingAnchorStrategy(anchor, d->anchoringRootArea));
+
+                // The purpose of following code-block is to be sure that our paragraph-anchors are
+                // proper sorted according to there z-index so the FloatingAnchorStrategy::checkStacking
+                // logic does stack in the proper order. Bug 274512 has a testdoc for this attached.
+                if (index > 0 &&
+                    anchor->anchorType() == "paragraph" &&
+                    (anchor->horizontalRel() == KoTextAnchor::HParagraph || anchor->horizontalRel() == KoTextAnchor::HParagraphContent) &&
+                    (anchor->horizontalPos() == KoTextAnchor::HLeft || anchor->horizontalPos() == KoTextAnchor::HRight)) {
+                    QTextBlock anchorBlock = document()->findBlock(position);
+                    for(int i = index - 1; i >= 0; --i) {
+                        KoTextAnchor *a = d->textAnchors[i];
+                        if (a->anchorType() != anchor->anchorType())
+                            break;
+                        if (a->horizontalPos() != anchor->horizontalPos())
+                            break;
+                        if (document()->findBlock(a->positionInDocument()) != anchorBlock)
+                            break;
+                        if (a->shape()->zIndex() < anchor->shape()->zIndex())
+                            break;
+                        --index;
+                    }
+                }
             }
-            d->textAnchors.append(anchor);
+            d->textAnchors.insert(index, anchor);
             anchor->updatePosition(document(), position, cf);
         }
         static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setParagraphRect(d->anchoringParagraphRect);

@@ -101,10 +101,23 @@ KoPointedAt KoTextLayoutEndNotesArea::hitTest(const QPointF &p, Qt::HitTestAccur
     return KoPointedAt();
 }
 
-/*QRectF KoTextLayoutEndNotesArea::selectionBoundingBox(QTextCursor &cursor) const
+QRectF KoTextLayoutEndNotesArea::selectionBoundingBox(QTextCursor &cursor) const
 {
-
-}*/
+    QTextFrame::iterator it = d->startOfArea->it;
+    QTextFrame *subFrame;
+    int endNoteIndex = 0;
+    while (endNoteIndex<d->endNoteAreas.length()) {
+        subFrame = it.currentFrame();
+        if (subFrame != 0) {
+            if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
+                return d->endNoteAreas[endNoteIndex]->selectionBoundingBox(cursor);
+            }
+            ++endNoteIndex;
+        }
+        ++it;
+    }
+    return QRectF();
+}
 
 void KoTextLayoutEndNotesArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {

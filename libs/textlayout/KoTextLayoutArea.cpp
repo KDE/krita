@@ -586,7 +586,7 @@ struct LineKeeper
     QPointF position;
 };
 
-QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
+QTextLine KoTextLayoutArea::restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
 {
     QList<LineKeeper> lineKeeps;
     QTextLine line;
@@ -602,6 +602,7 @@ QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
         lineKeeps.append(lk);
     }
     layout->clearLayout();
+    documentLayout()->setSuppressAnchorAdding(true);
     layout->beginLayout();
     foreach(const LineKeeper &lk, lineKeeps) {
         line = layout->createLine();
@@ -610,6 +611,7 @@ QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
         line.setNumColumns(lk.columns, lk.lineWidth);
         line.setPosition(lk.position);
     }
+    documentLayout()->setSuppressAnchorAdding(false);
     return line;
 }
 

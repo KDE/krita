@@ -145,6 +145,9 @@ public:
     /// remove all anchors and associated obstructions and set up for collecting new ones
     void beginAnchorCollecting(KoTextLayoutRootArea *rootArea);
 
+    /// supress saving/adding the anchors in positionInlineObject() 
+    void setSuppressAnchorAdding(bool suppress);
+
     /// Sets the paragraph rect that will be applied to anchorStrategies being created in
     /// positionInlineObject()
     void setAnchoringParagraphRect(const QRectF &paragraphRect);

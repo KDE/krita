@@ -169,6 +169,9 @@ protected:
     void expandBoundingRight(qreal x);
 
 private:
+    /// utility method to restartlayout of a block
+    QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep);
+
     bool layoutBlock(FrameIterator *cursor);
 
     /// Returns vertical height of line

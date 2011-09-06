@@ -154,8 +154,9 @@ public:
     /// positionInlineObject()
     void setAnchoringParagraphRect(const QRectF &paragraphRect);
 
-    /// Positions the current anchored obstruction
-    bool positionAnchoredObstructions();
+    /// Positions all anchored obstructions
+    /// the paragraphRect should be in textDocument coords and not global/document coords
+    void positionAnchoredObstructions();
 
     /// remove inline object
     void removeInlineObject(KoTextAnchor *textAnchor);

@@ -1068,14 +1068,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         expandBoundingLeft(line.x());
         expandBoundingRight(line.x() + line.naturalTextWidth());
 
-        if (documentLayout()->positionAnchoredObstructions()) {
-            // Here we could either return false or true. That doesn't matter cause we will
-            // be called again to continue relayouting from the beginning. That is needed
-            // cause after successfully positioning the anchored object we need to restart
-            // all of the layouting again to proper let the text wrap around the now
-            // positioned object.
-            return true;
-        }
+        documentLayout()->positionAnchoredObstructions();
 
         // line fitted so try and do the next one
         line = layout->createLine();

@@ -24,21 +24,23 @@
 #include "KoStyleManager.h"
 #include "KoParagraphStyle.h"
 
-#include <QStandardItemModel>
+#include <QTableView>
+#include <QHeaderView>
 
 TableOfContentsStyleConfigure::TableOfContentsStyleConfigure(KoStyleManager *manager, QWidget *parent) :
     QDialog(parent),
     m_stylesTree(0),
     m_styleManager(manager),
+    m_stylesModel(0),
+    m_tocInfo(0),
     ui(new Ui::TableOfContentsStyleConfigure)
 {
     ui->setupUi(this);
 
     Q_ASSERT(manager);
-    ui->stylesAvailableLabel->setText(i18n("Styles available"));
-    ui->tocLevels->setText(i18n("Levels"));
 
-    ui->treeView->setHeaderHidden(true);
+    ui->stylesAvailableLabel->setText(i18n("Styles available"));
+    connect(this, SIGNAL(accepted()), this, SLOT(save()));
 }
 
 TableOfContentsStyleConfigure::~TableOfContentsStyleConfigure()
@@ -47,51 +49,49 @@ TableOfContentsStyleConfigure::~TableOfContentsStyleConfigure()
 }
 
 
-void TableOfContentsStyleConfigure::initializeUi()
+void TableOfContentsStyleConfigure::initializeUi(KoTableOfContentsGeneratorInfo *info)
 {
+    Q_ASSERT(info);
 
-    QList<KoParagraphStyle*> paragraphStyleList= m_styleManager->paragraphStyles();
+    m_tocInfo = info;
 
-            foreach(KoParagraphStyle *style, paragraphStyleList) {
-                ui->listWidget->addItem(style->name());
-            }
+    connect(this, SIGNAL(accepted()), this, SLOT(save()));
+    connect(this, SIGNAL(rejected()), this, SLOT(discardChanges()));
 
-    if(!m_stylesTree)
-    {
-        m_stylesTree= new QStandardItemModel(this);
-    }
-    m_stylesTree->clear();
-    m_stylesTree->setColumnCount(1);
-    m_stylesTree->setRowCount(10);
+    m_stylesModel = new TableOfContentsStyleModel(m_styleManager, m_tocInfo);
+    ui->tableView->setModel(m_stylesModel);
 
-    for( int r=0; r<10; r++ )
-    {
-        QStandardItem *item = new QStandardItem( QString("Level %0").arg(r+1) );
+    ui->tableView->setItemDelegateForColumn(1, &m_delegate);
 
-        if(r==0 || r==1 || r==5) {
-            for( int i=0; i<3; i++ )
-            {
-                QStandardItem *child = new QStandardItem( QString("Item %0").arg(i) );
-                child->setEditable( false );
-                item->appendRow( child );
-            }
-        }
-
-        m_stylesTree->setItem(r, 0, item);
-    }
-
-    ui->treeView->setModel(m_stylesTree);
-
-    //expands the tree only if there are styles at that level
-    for( int r=0; r<10; r++ )
-    {
-        if(m_stylesTree->hasChildren(m_stylesTree->index(r,0))) {
-            ui->treeView->setExpanded(m_stylesTree->index(r,0),true);
-        } else {
-            ui->treeView->setExpanded(m_stylesTree->index(r,0),false);
-        }
-
-}
+    ui->tableView->setShowGrid(false);
+    ui->tableView->verticalHeader()->hide();
+    ui->tableView->setEditTriggers(QAbstractItemView::CurrentChanged | QAbstractItemView::DoubleClicked | QAbstractItemView::SelectedClicked);
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    ui->tableView->horizontalHeader()->resizeSection(1, 100);
 
     this->setVisible(true);
+}
+
+void TableOfContentsStyleConfigure::save()
+{
+    if(m_stylesModel) {
+        m_stylesModel->saveData();
+        delete m_stylesModel;
+        m_stylesModel = 0;
+    }
+
+    disconnect(this, SIGNAL(accepted()), this, SLOT(save()));
+    disconnect(this, SIGNAL(rejected()), this, SLOT(discardChanges()));
+}
+
+void TableOfContentsStyleConfigure::discardChanges()
+{
+    if(m_stylesModel) {
+        delete m_stylesModel;
+        m_stylesModel = 0;
+    }
+
+    disconnect(this, SIGNAL(accepted()), this, SLOT(save()));
+    disconnect(this, SIGNAL(rejected()), this, SLOT(discardChanges()));
 }

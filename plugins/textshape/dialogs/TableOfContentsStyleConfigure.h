@@ -21,6 +21,9 @@
 #ifndef TABLEOFCONTENTSSTYLECONFIGURE_H
 #define TABLEOFCONTENTSSTYLECONFIGURE_H
 
+#include "TableOfContentsStyleModel.h"
+#include "TableOfContentsStyleDelegate.h"
+
 #include <QDialog>
 
 namespace Ui {
@@ -29,6 +32,8 @@ namespace Ui {
 
 class QStandardItemModel;
 class KoStyleManager;
+class TableOfContentsStyleModel;
+class KoTableOfContentsGeneratorInfo;
 
 
 class TableOfContentsStyleConfigure : public QDialog
@@ -38,12 +43,19 @@ class TableOfContentsStyleConfigure : public QDialog
 public:
     explicit TableOfContentsStyleConfigure(KoStyleManager *manager, QWidget *parent = 0);
     ~TableOfContentsStyleConfigure();
-    void initializeUi();
+    void initializeUi(KoTableOfContentsGeneratorInfo *info);
+
+public slots:
+    void save();
+    void discardChanges();
 
 private:
     Ui::TableOfContentsStyleConfigure *ui;
     QStandardItemModel *m_stylesTree;
     KoStyleManager *m_styleManager;
+    KoTableOfContentsGeneratorInfo *m_tocInfo;
+    TableOfContentsStyleModel *m_stylesModel;
+    TableOfContentsStyleDelegate m_delegate;
 };
 
 #endif // TABLEOFCONTENTSSTYLECONFIGURE_H

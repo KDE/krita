@@ -55,6 +55,8 @@ private slots:
     void insertBibliography();
     /// format the table of contents template
     void formatTableOfContents();
+    ///shows the configuration dialog for a ToC
+    void showConfigureDialog(QAction *action);
 
 private:
         TableOfContentsConfigure *m_configure;

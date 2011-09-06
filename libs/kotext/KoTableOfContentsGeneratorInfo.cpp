@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
  * Copyright (C) 2011 Ko GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,7 +39,7 @@ int KoTableOfContentsGeneratorInfo::styleNameToStyleId(KoTextSharedLoadingData *
 }
 
 
-KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo()
+KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo(bool generateEntryTemplate)
   : 
    m_indexScope("document")
   , m_outlineLevel(10)
@@ -49,43 +50,44 @@ KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo()
 {
     // index-title-template
     // m_indexTitleTemplate.text = "title";
+    if (generateEntryTemplate) {
+        // table-of-content-entry-template
+        for (int level = 1; level <= m_outlineLevel; level++)  {
+            TocEntryTemplate tocEntryTemplate;
+            tocEntryTemplate.outlineLevel = level;
 
-    // table-of-content-entry-template
-    for (int level = 1; level <= m_outlineLevel; level++)  {
-        TocEntryTemplate tocEntryTemplate;
-        tocEntryTemplate.outlineLevel = level;
+            // index-entry-link-start
+            IndexEntryLinkStart *link = new IndexEntryLinkStart(QString());
+            tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(link));
 
-        // index-entry-link-start
-        IndexEntryLinkStart *link = new IndexEntryLinkStart(QString());
-        tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(link));
+            // index-entry-chapter
+            // use null String if the style name is not present, it means that we inherit it from the parent
+            IndexEntryChapter *entryChapter = new IndexEntryChapter(QString());
+            entryChapter->display = "number-and-name";
+            entryChapter->outlineLevel = level;
+            tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryChapter));
 
-        // index-entry-chapter
-        // use null String if the style name is not present, it means that we inherit it from the parent
-        IndexEntryChapter *entryChapter = new IndexEntryChapter(QString());
-        entryChapter->display = "number-and-name";
-        entryChapter->outlineLevel = level;
-        tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryChapter));
+            // index-entry-text
+            IndexEntryText *entryText = new IndexEntryText(QString());
+            tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryText));
 
-        // index-entry-text
-        IndexEntryText *entryText = new IndexEntryText(QString());
-        tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryText));
+            // index-entry-tab-stop
+            IndexEntryTabStop *entryTabStop = new IndexEntryTabStop(QString());
+            entryTabStop->tab.type = QTextOption::RightTab;
+            entryTabStop->setPosition("");
+            entryTabStop->tab.leaderText = '.';
+            tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryTabStop));
 
-        // index-entry-tab-stop
-        IndexEntryTabStop *entryTabStop = new IndexEntryTabStop(QString());
-        entryTabStop->tab.type = QTextOption::RightTab;
-        entryTabStop->setPosition("");
-        entryTabStop->tab.leaderText = '.';
-        tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryTabStop));
+            // index-entry-page-number
+            IndexEntryPageNumber *entryPageNumber = new IndexEntryPageNumber(QString());
+            tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryPageNumber) );
 
-        // index-entry-page-number
-        IndexEntryPageNumber *entryPageNumber = new IndexEntryPageNumber(QString());
-        tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryPageNumber) );
+            // index-entry-link-end
+            IndexEntryLinkEnd *linkend = new IndexEntryLinkEnd(QString());
+            tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(linkend));
 
-        // index-entry-link-end
-        IndexEntryLinkEnd *linkend = new IndexEntryLinkEnd(QString());
-        tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(linkend));
-
-        m_entryTemplate.append(tocEntryTemplate);
+            m_entryTemplate.append(tocEntryTemplate);
+        }
     }
 }
 
@@ -228,5 +230,30 @@ void KoTableOfContentsGeneratorInfo::saveOdf(KoXmlWriter * writer) const
         }
 
     writer->endElement(); // text:table-of-content-source
+}
+
+KoTableOfContentsGeneratorInfo *KoTableOfContentsGeneratorInfo::clone()
+{
+    KoTableOfContentsGeneratorInfo *newToCInfo=new KoTableOfContentsGeneratorInfo(false);
+    newToCInfo->m_entryTemplate.clear();
+    newToCInfo->m_name = QString(m_name);
+    newToCInfo->m_styleName = QString(m_name);
+    newToCInfo->m_indexScope = QString(m_indexScope);
+    newToCInfo->m_outlineLevel = m_outlineLevel;
+    newToCInfo->m_relativeTabStopPosition = m_relativeTabStopPosition;
+    newToCInfo->m_useIndexMarks = m_useIndexMarks;
+    newToCInfo->m_useIndexSourceStyles = m_useIndexSourceStyles;
+    newToCInfo->m_useOutlineLevel = m_useOutlineLevel;
+    newToCInfo->m_indexTitleTemplate = m_indexTitleTemplate;
+
+    foreach (const TocEntryTemplate &tocTemplate, m_entryTemplate) {
+        newToCInfo->m_entryTemplate.append(tocTemplate);
+    }
+
+    foreach (const IndexSourceStyles &indexSourceStyles, m_indexSourceStyles) {
+        newToCInfo->m_indexSourceStyles.append(indexSourceStyles);
+    }
+
+    return newToCInfo;
 }
 

@@ -18,35 +18,43 @@
  */
 
 
-#include<KoTextEditor.h>
-
 #include "TableOfContentsConfigure.h"
 #include "TableOfContentsStyleConfigure.h"
 #include "KoTableOfContentsGeneratorInfo.h"
 #include "KoTextDocument.h"
 
-#include "KoParagraphStyle.h"
+#include <KoTextEditor.h>
+#include <KoParagraphStyle.h>
 
-#include <QListWidgetItem>
 
-TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, QWidget *parent) :
+
+TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, QTextBlock block, QWidget *parent) :
     QDialog(parent),
     m_textEditor(editor),
-    document(0),
-    m_tocStyleConfigure(0)
+    m_document(0),
+    m_tocStyleConfigure(0),
+    m_tocInfo(0),
+    m_block(block)
 {
     ui.setupUi(this);
 
     ui.lineEditTitle->setText(i18n("Table Title"));
     ui.useOutline->setText(i18n("Use outline"));
+    ui.useStyles->setText(i18n("Use styles"));
     ui.configureStyles->setText(i18n("Configure"));
 
-    connect(this,SIGNAL(accepted()),this,SLOT(save()));
-    connect(ui.tocList,SIGNAL(currentRowChanged(int)),this,SLOT(tocListIndexChanged(int)));
-    connect(ui.configureStyles,SIGNAL(clicked(bool)),this,SLOT(showStyleConfiguration(bool)));
-    setDisplay();
+    ui.tocPreview->setStyleManager(KoTextDocument(m_textEditor->document()).styleManager());
 
-    this->setVisible(true);
+    connect(this, SIGNAL(accepted()), this, SLOT(save()));
+    connect(this, SIGNAL(rejected()), this, SLOT(cleanUp()));
+    connect(ui.configureStyles, SIGNAL(clicked(bool)), this, SLOT(showStyleConfiguration(bool)));
+    connect(ui.lineEditTitle, SIGNAL(returnPressed()), this, SLOT(updatePreview()));
+
+    KoTableOfContentsGeneratorInfo *info = block.blockFormat().property(KoParagraphStyle::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
+    m_tocInfo = info->clone();
+
+    setVisible(true);
+    setDisplay();
 }
 
 TableOfContentsConfigure::~TableOfContentsConfigure()
@@ -55,47 +63,73 @@ TableOfContentsConfigure::~TableOfContentsConfigure()
 
 void TableOfContentsConfigure::setDisplay()
 {
-    document=m_textEditor->document();
-    int i=0;
-    for (QTextBlock it = document->begin(); it != document->end(); it = it.next(), i++)
-    {
-        if (it.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
-            KoTableOfContentsGeneratorInfo *info = it.blockFormat().property(KoParagraphStyle::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
-            QListWidgetItem *tocItem= new QListWidgetItem(info->m_name, ui.tocList);
-            tocItem->setData(Qt::UserRole+1, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info));
-            tocItem->setData(Qt::UserRole+2, QVariant::fromValue<QTextBlock>(it));
+    ui.lineEditTitle->setText(m_tocInfo->m_indexTitleTemplate.text);
+    ui.useOutline->setCheckState(m_tocInfo->m_useOutlineLevel ? Qt::Checked : Qt::Unchecked);
+    ui.useStyles->setCheckState(m_tocInfo->m_useIndexSourceStyles ? Qt::Checked : Qt::Unchecked);
 
-            ui.tocList->addItem(tocItem);
-        }
-    }
+    connect(ui.lineEditTitle, SIGNAL(textChanged(const QString &)), this, SLOT(titleTextChanged(const QString&)));
+    connect(ui.useOutline, SIGNAL(stateChanged(int )), this, SLOT(useOutline(int)));
+    connect(ui.useStyles, SIGNAL(stateChanged(int )), this, SLOT(useIndexSourceStyles(int)));
 
-    ui.tocList->setCurrentRow(0);
+    connect(this, SIGNAL(accepted()), this, SLOT(save()));
+    connect(this, SIGNAL(rejected()), this, SLOT(cleanUp()));
+
+    updatePreview();
 }
 
 void TableOfContentsConfigure::save()
 {
+    m_tocInfo->m_name = ui.lineEditTitle->text();
+    m_tocInfo->m_indexTitleTemplate.text = ui.lineEditTitle->text();
+    m_tocInfo->m_useOutlineLevel = ui.useOutline->checkState() == Qt::Checked ? true : false;
+    m_tocInfo->m_useIndexSourceStyles = ui.useStyles->checkState() == Qt::Checked ? true : false;
 
-    KoTableOfContentsGeneratorInfo *info=ui.tocList->item(0)->data(Qt::UserRole+1).value<KoTableOfContentsGeneratorInfo*>();
-    info->m_name=ui.lineEditTitle->text();
-    info->m_indexTitleTemplate.text=ui.lineEditTitle->text();
-    info->m_useOutlineLevel=ui.useOutline->checkState()==Qt::Checked?true:false;
-
-    m_textEditor->updateTableOfContents(info,ui.tocList->item(0)->data(Qt::UserRole+2).value<QTextBlock>());
-}
-
-void TableOfContentsConfigure::tocListIndexChanged(int index)
-{
-    KoTableOfContentsGeneratorInfo *info = ui.tocList->item(index)->data(Qt::UserRole+1).value<KoTableOfContentsGeneratorInfo*>();
-    ui.lineEditTitle->setText(info->m_indexTitleTemplate.text);
-    ui.useOutline->setCheckState(info->m_useOutlineLevel?Qt::Checked:Qt::Unchecked);
+    m_textEditor->updateTableOfContents(m_tocInfo, m_block);
+    cleanUp();
 }
 
 void TableOfContentsConfigure::showStyleConfiguration(bool show)
 {
-    Q_ASSERT(document);
-    if(!m_tocStyleConfigure) {
-        m_tocStyleConfigure=new TableOfContentsStyleConfigure(KoTextDocument(document).styleManager(), this);
+    if (!m_tocStyleConfigure) {
+        m_tocStyleConfigure = new TableOfContentsStyleConfigure(KoTextDocument(m_textEditor->document()).styleManager(), this);
     }
-m_tocStyleConfigure->initializeUi();
+    m_tocStyleConfigure->initializeUi(m_tocInfo);
 
 }
+
+void TableOfContentsConfigure::titleTextChanged(const QString &text)
+{
+    m_tocInfo->m_indexTitleTemplate.text = text;
+    updatePreview();
+}
+
+void TableOfContentsConfigure::useOutline(int state)
+{
+    m_tocInfo->m_useOutlineLevel = ui.useOutline->checkState() == Qt::Checked ? true : false;
+    updatePreview();
+}
+
+void TableOfContentsConfigure::useIndexSourceStyles(int state)
+{
+    m_tocInfo->m_useIndexSourceStyles = ui.useStyles->checkState() == Qt::Checked ? true : false;
+    updatePreview();
+}
+
+void TableOfContentsConfigure::updatePreview()
+{
+    ui.tocPreview->updatePreview(m_tocInfo);
+}
+
+void TableOfContentsConfigure::cleanUp()
+{
+    disconnect(ui.lineEditTitle, SIGNAL(textChanged (const QString &)), this, SLOT(titleTextChanged(const QString &)));
+    disconnect(ui.useOutline, SIGNAL(stateChanged(int )), this, SLOT(useOutline(int)));
+    disconnect(ui.useStyles, SIGNAL(stateChanged(int )), this, SLOT(useIndexSourceStyles(int)));
+
+    disconnect(this, SIGNAL(accepted()), this, SLOT(save()));
+    disconnect(this, SIGNAL(rejected()), this, SLOT(cleanUp()));
+
+    delete m_tocInfo;
+    m_tocInfo=0;
+}
+

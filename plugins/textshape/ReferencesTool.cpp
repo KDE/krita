@@ -25,16 +25,20 @@
 #include "dialogs/SimpleCaptionsWidget.h"
 #include "dialogs/TableOfContentsConfigure.h"
 #include "dialogs/CitationInsertionDialog.h"
-#include "dialogs/InsertBibliographyDialog.h"
+//#include "dialogs/InsertBibliographyDialog.h"
 
 #include <KoTextLayoutRootArea.h>
 #include <KoCanvasBase.h>
 #include <KoTextEditor.h>
+#include <KoParagraphStyle.h>
+#include <KoTableOfContentsGeneratorInfo.h>
 
 #include <kdebug.h>
 
 #include <KLocale>
 #include <KAction>
+
+#include <QMenu>
 
 ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas),
     m_configure(0),
@@ -132,8 +136,39 @@ void ReferencesTool::formatTableOfContents()
     //if(!m_configure)
    // {
     qDebug()<<"format";
-        m_configure = new TableOfContentsConfigure(textEditor(), m_stocw);
-    //}
+    QTextDocument *m_document = textEditor()->document();
+    QMenu *tocList = new QMenu(m_stocw);
+    int i = 0;
+    QTextBlock firstToCTextBlock;
+    for (QTextBlock it = m_document->begin(); it != m_document->end(); it = it.next())
+    {
+        if (it.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+            KoTableOfContentsGeneratorInfo *info = it.blockFormat().property(KoParagraphStyle::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
+            if (i == 0) {
+                firstToCTextBlock = it;
+            }
+            QAction *action = new QAction(info->m_indexTitleTemplate.text, tocList);
+            action->setData(QVariant::fromValue<QTextBlock>(it));
+            tocList->addAction(action);
+            i++;
+        }
+    }
+
+    if (i == 0) {
+        //no ToCs in the document
+        return;
+    } else if (i == 1 && firstToCTextBlock.isValid()) {
+        m_configure = new TableOfContentsConfigure(textEditor(), firstToCTextBlock, m_stocw);
+    } else {
+        m_stocw->setToCConfigureMenu(tocList);
+        connect(m_stocw->ToCConfigureMenu(), SIGNAL(triggered(QAction *)), SLOT(showConfigureDialog(QAction*)));
+        m_stocw->showMenu();
+    }
+}
+
+void ReferencesTool::showConfigureDialog(QAction *action)
+{
+    m_configure = new TableOfContentsConfigure(textEditor(), action->data().value<QTextBlock>(), m_stocw);
 }
 
 #include <ReferencesTool.moc>

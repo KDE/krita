@@ -21,39 +21,52 @@
 #ifndef TABLEOFCONTENTSCONFIGURE_H
 #define TABLEOFCONTENTSCONFIGURE_H
 
-#include <QDialog>
 #include "ui_TableOfContentsConfigure.h"
+
+#include <KoZoomHandler.h>
+
+#include <QDialog>
+#include <QTextBlock>
 
 namespace Ui {
     class TableOfContentsConfigure;
 }
 
-class KoTextEditor;
 class QTextBlock;
 class TableOfContentsStyleConfigure;
+class TextShape;
+class KoTableOfContentsGeneratorInfo;
+class KoStyleManager;
+class KoTextEditor;
 
 class TableOfContentsConfigure : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit TableOfContentsConfigure(KoTextEditor *editor, QWidget *parent = 0);
+    explicit TableOfContentsConfigure(KoTextEditor *editor, QTextBlock block, QWidget *parent = 0);
     ~TableOfContentsConfigure();
 
 public slots:
     void setDisplay();
     void save();
+    void cleanUp();
+    void updatePreview();
 
 private slots:
-    void tocListIndexChanged(int index);
     void showStyleConfiguration(bool show);
+    void titleTextChanged(const QString &text );
+    void useOutline(int state);
+    void useIndexSourceStyles(int state);
 
 private:
 
     Ui::TableOfContentsConfigure ui;
     KoTextEditor *m_textEditor;
     TableOfContentsStyleConfigure *m_tocStyleConfigure;
-    QTextDocument *document;
+    KoTableOfContentsGeneratorInfo *m_tocInfo;
+    QTextBlock m_block;
+    QTextDocument *m_document;
 };
 
 Q_DECLARE_METATYPE(QTextBlock)

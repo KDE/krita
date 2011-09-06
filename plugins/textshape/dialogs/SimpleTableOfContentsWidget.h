@@ -27,12 +27,16 @@
 
 class ReferencesTool;
 class KoStyleManager;
+class QMenu;
 
 class SimpleTableOfContentsWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit SimpleTableOfContentsWidget(ReferencesTool *tool, QWidget *parent = 0);
+    void setToCConfigureMenu(QMenu *tocMenu);
+    QMenu *ToCConfigureMenu();
+    void showMenu();
 
 public slots:
     void setStyleManager(KoStyleManager *sm);

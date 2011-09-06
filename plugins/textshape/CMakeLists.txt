@@ -76,6 +76,9 @@ SET ( textshape_SRCS
     dialogs/ChangeTrackingOptionsWidget.cpp
     dialogs/TableOfContentsConfigure.cpp
     dialogs/TableOfContentsStyleConfigure.cpp
+    dialogs/TableOfContentsStyleModel.cpp
+    dialogs/TableOfContentsStyleDelegate.cpp
+    dialogs/TableOfContentsPreview.cpp
 
     commands/ChangeListCommand.cpp
     commands/ChangeListLevelCommand.cpp

@@ -24,6 +24,7 @@
 #include <KDebug>
 
 #include <QWidget>
+#include <QMenu>
 
 SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, QWidget *parent)
         : QWidget(parent),
@@ -40,6 +41,25 @@ SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, Q
 void SimpleTableOfContentsWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
+}
+
+void SimpleTableOfContentsWidget::setToCConfigureMenu(QMenu *tocMenu)
+{
+    if (widget.configureToC->menu()) {
+        widget.configureToC->menu()->disconnect();
+    }
+
+    widget.configureToC->setMenu(tocMenu);
+}
+
+QMenu *SimpleTableOfContentsWidget::ToCConfigureMenu()
+{
+    return widget.configureToC->menu();
+}
+
+void SimpleTableOfContentsWidget::showMenu()
+{
+    widget.configureToC->showMenu();
 }
 
 #include <SimpleTableOfContentsWidget.moc>

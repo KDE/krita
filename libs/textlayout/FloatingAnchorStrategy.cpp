@@ -254,8 +254,9 @@ void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anc
         if (pageNumber()%2 == 1) {
             newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x());
         } else {
+            QSizeF size = m_anchor->shape()->boundingRect().size();
             newPosition.setX(anchorBoundingRect.x() - containerBoundingRect.x() +
-                             m_anchor->shape()->size().width() - 2*(m_anchor->offset().x() + m_anchor->shape()->size().width()) );
+                             size.width() - 2*(m_anchor->offset().x() + size.width()) );
         }
         break;
     }
@@ -301,9 +302,10 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
         QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
         if (!tl.isValid())
             return false; // lets go for a second round.
-        anchorBoundingRect.setY(tl.y() - m_anchor->shape()->size().height()
+        QSizeF size = m_anchor->shape()->boundingRect().size();
+        anchorBoundingRect.setY(tl.y() - size.height()
                         + containerBoundingRect.y() - data->documentOffset());
-        anchorBoundingRect.setHeight(2*m_anchor->shape()->size().height());
+        anchorBoundingRect.setHeight(2*size.height());
     }
     break;
 
@@ -327,9 +329,10 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
          QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
          if (!tl.isValid())
              return false; // lets go for a second round.
-         anchorBoundingRect.setY(tl.y() + tl.ascent() - m_anchor->shape()->size().height()
+         QSizeF size = m_anchor->shape()->boundingRect().size();
+         anchorBoundingRect.setY(tl.y() + tl.ascent() - size.height()
             + containerBoundingRect.y() - data->documentOffset());
-         anchorBoundingRect.setHeight(2*m_anchor->shape()->size().height());
+         anchorBoundingRect.setHeight(2*size.height());
      }
      break;
     default :
@@ -366,14 +369,16 @@ void FloatingAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF ancho
 
 void FloatingAnchorStrategy::checkPageBorder(QPointF &newPosition, QRectF containerBoundingRect)
 {
+    QSizeF size = m_anchor->shape()->boundingRect().size();
+
     //check left border and move the shape back to have the whole shape visible
     if (newPosition.x() < pageRect().x() - containerBoundingRect.x()) {
         newPosition.setX(pageRect().x() - containerBoundingRect.x());
     }
 
     //check right border and move the shape back to have the whole shape visible
-    if ((newPosition.x() + m_anchor->shape()->size().width()) > (pageRect().x() + pageRect().width() - containerBoundingRect.x())) {
-        newPosition.setX(pageRect().x() + pageRect().width() - m_anchor->shape()->size().width() - containerBoundingRect.x());
+    if ((newPosition.x() + size.width()) > (pageRect().x() + pageRect().width() - containerBoundingRect.x())) {
+        newPosition.setX(pageRect().x() + pageRect().width() - size.width() - containerBoundingRect.x());
     }
 
     //check top border and move the shape back to have the whole shape visible
@@ -382,8 +387,8 @@ void FloatingAnchorStrategy::checkPageBorder(QPointF &newPosition, QRectF contai
     }
 
     //check bottom border and move the shape back to have the whole shape visible
-    if ((newPosition.y() + m_anchor->shape()->size().height()) > (pageRect().y() + pageRect().height() - containerBoundingRect.y())) {
-        newPosition.setY(pageRect().y() + pageRect().height() - m_anchor->shape()->size().height() - containerBoundingRect.y());
+    if ((newPosition.y() + size.height()) > (pageRect().y() + pageRect().height() - containerBoundingRect.y())) {
+        newPosition.setY(pageRect().y() + pageRect().height() - size.height() - containerBoundingRect.y());
     }
 }
 
@@ -400,18 +405,19 @@ void FloatingAnchorStrategy::checkStacking(QPointF &newPosition)
     int idx = m_rootArea->documentLayout()->textAnchors().indexOf(m_anchor);
     Q_ASSERT_X(idx >= 0, __FUNCTION__, QString("WTF? How can our anchor not be in the anchor-list but still be called?").toLocal8Bit());
 
+    QSizeF size = m_anchor->shape()->boundingRect().size();
     for(int i = 0; i < idx; ++i) {
         KoTextAnchor *a = m_rootArea->documentLayout()->textAnchors()[i];
         if (m_anchor->anchorType() != a->anchorType() || m_anchor->horizontalPos() != a->horizontalPos())
             continue;
 
-        QRectF thisRect(newPosition, m_anchor->shape()->size());
-        QRectF r(a->shape()->position(), a->shape()->size());
+        QRectF thisRect(newPosition, size);
+        QRectF r(a->shape()->boundingRect());
         if (thisRect.intersects(r)) {
             if (m_anchor->horizontalPos() == KoTextAnchor::HLeft)
-                newPosition.setX(a->shape()->position().x() + a->shape()->size().width());
+                newPosition.setX(a->shape()->position().x() + r.width());
             else // KoTextAnchor::HRight
-                newPosition.setX(a->shape()->position().x() - m_anchor->shape()->size().width());
+                newPosition.setX(a->shape()->position().x() - size.width());
         }
     }
 }

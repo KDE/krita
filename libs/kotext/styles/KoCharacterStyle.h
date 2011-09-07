@@ -92,6 +92,8 @@ public:
         TextCombine,    ///< TextCombineType
         TextCombineStartChar,    ///< QChar
         TextCombineEndChar,    ///< QChar
+        HyphenationPushCharCount,   ///< int
+        HyphenationRemainCharCount, ///< int
         PercentageFontSize, //font-size can be in % and this stores that value
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550, // Internal: Reserved for ChangeTracker
@@ -383,6 +385,12 @@ public:
     void setHasHyphenation(bool on);
     bool hasHyphenation() const;
 
+    void setHyphenationPushCharCount(int count);
+    int hyphenationPushCharCount() const;
+    
+    void setHyphenationRemainCharCount(int count);
+    int hyphenationRemainCharCount() const;
+    
     void setPercentageFontSize(qreal percent);
     qreal percentageFontSize();
 

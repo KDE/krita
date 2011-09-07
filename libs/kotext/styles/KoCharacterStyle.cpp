@@ -744,6 +744,37 @@ bool KoCharacterStyle::hasHyphenation() const
 {
     return d->propertyBoolean(HasHyphenation);
 }
+
+void KoCharacterStyle::setHyphenationPushCharCount(int count)
+{
+    if (count > 0)
+        d->setProperty(HyphenationPushCharCount, count);
+    else
+        d->stylesPrivate.remove(HyphenationPushCharCount);
+}
+
+int KoCharacterStyle::hyphenationPushCharCount() const
+{
+    if (hasProperty(HyphenationPushCharCount))
+        return d->propertyInt(HyphenationPushCharCount);
+    return 0;
+}
+
+void KoCharacterStyle::setHyphenationRemainCharCount(int count)
+{
+    if (count > 0)
+        d->setProperty(HyphenationRemainCharCount, count);
+    else
+        d->stylesPrivate.remove(HyphenationRemainCharCount);
+}
+
+int KoCharacterStyle::hyphenationRemainCharCount() const
+{
+    if (hasProperty(HyphenationRemainCharCount))
+        return d->propertyInt(HyphenationRemainCharCount);
+    return 0;
+}
+
 void KoCharacterStyle::setStrikeOutStyle(KoCharacterStyle::LineStyle strikeOut)
 {
     d->setProperty(StrikeOutStyle, strikeOut);
@@ -1614,6 +1645,18 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::fo, "hyphenate"))
         setHasHyphenation(styleStack.property(KoXmlNS::fo, "hyphenate") == "true");
 
+    if (styleStack.hasProperty(KoXmlNS::fo, "hyphenation-remain-char-count")) {
+        bool ok = false;
+        int count = styleStack.property(KoXmlNS::fo, "hyphenation-remain-char-count").toInt(&ok);
+        if (ok)
+            setHyphenationRemainCharCount(count);
+    }
+    if (styleStack.hasProperty(KoXmlNS::fo, "hyphenation-push-char-count")) {
+        bool ok = false;
+        int count = styleStack.property(KoXmlNS::fo, "hyphenation-push-char-count").toInt(&ok);
+        if (ok)
+            setHyphenationPushCharCount(count);
+    }
 //TODO
 #if 0
     /*
@@ -1913,6 +1956,10 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:hyphenate", "true", KoGenStyle::TextType);
             else
                 style.addProperty("fo:hyphenate", "false", KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::HyphenationPushCharCount) {
+            style.addProperty("fo:hyphenation-push-char-count", hyphenationPushCharCount(), KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::HyphenationRemainCharCount) {
+            style.addProperty("fo:hyphenation-remain-char-count", hyphenationRemainCharCount(), KoGenStyle::TextType);
         }
     }
     //TODO: font name and family

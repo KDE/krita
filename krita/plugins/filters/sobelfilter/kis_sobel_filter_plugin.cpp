@@ -32,7 +32,6 @@ K_EXPORT_PLUGIN(KisSobelFilterPluginFactory("krita"))
 KisSobelFilterPlugin::KisSobelFilterPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KisSobelFilterPluginFactory::componentData());
     KisFilterRegistry::instance()->add(new KisSobelFilter());
 }
 

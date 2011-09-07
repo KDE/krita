@@ -44,8 +44,6 @@ K_EXPORT_PLUGIN(ToolTransformFactory("krita"))
 ToolTransform::ToolTransform(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(ToolTransformFactory::componentData());
-
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolTransformFactory(QStringList()));
 

@@ -46,8 +46,6 @@ K_EXPORT_PLUGIN(ToolPolylineFactory("krita"))
 ToolPolyline::ToolPolyline(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(ToolPolylineFactory::componentData());
-
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolPolylineFactory(QStringList()));
 

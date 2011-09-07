@@ -55,7 +55,6 @@ K_EXPORT_PLUGIN(KritaColorGeneratorFactory("krita"))
 KritaColorGenerator::KritaColorGenerator(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaColorGeneratorFactory::componentData());
     KisGeneratorRegistry::instance()->add(new KisColorGenerator());
 }
 

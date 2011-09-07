@@ -31,7 +31,6 @@ K_EXPORT_PLUGIN(UnsharpPluginFactory("krita"))
 UnsharpPlugin::UnsharpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(UnsharpPluginFactory::componentData());
     KisFilterRegistry::instance()->add(new KisUnsharpFilter());
 
 }

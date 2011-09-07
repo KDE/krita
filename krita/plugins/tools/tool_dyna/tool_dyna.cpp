@@ -48,8 +48,6 @@ K_EXPORT_PLUGIN(ToolDynaFactory("krita"))
 ToolDyna::ToolDyna(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(ToolDynaFactory::componentData());
-
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolDynaFactory(QStringList()));
 }

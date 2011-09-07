@@ -40,8 +40,6 @@ K_EXPORT_PLUGIN(HatchingPaintOpPluginFactory("krita"))
 HatchingPaintOpPlugin::HatchingPaintOpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //
-    //setComponentData(HatchingPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisSimplePaintOpFactory<KisHatchingPaintOp, KisHatchingPaintOpSettings, KisHatchingPaintOpSettingsWidget>("hatchingbrush", i18n("Hatching brush"),
                                                                                                                          KisPaintOpFactory::categoryStable() ,"krita-hatching.png"));

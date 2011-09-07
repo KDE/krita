@@ -31,8 +31,6 @@ K_EXPORT_PLUGIN(KritaExtensionsColorsFactory("krita"))
 KritaExtensionsColors::KritaExtensionsColors(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaExtensionsColorsFactory::componentData());
-
     KisFilterRegistry * manager = KisFilterRegistry::instance();
     manager->add(new KisFilterMax());
     manager->add(new KisFilterMin());

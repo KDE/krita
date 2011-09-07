@@ -406,7 +406,7 @@ void FloatingAnchorStrategy::checkPageBorder(QPointF &newPosition, QRectF contai
 // floating over each other.
 void FloatingAnchorStrategy::checkStacking(QPointF &newPosition)
 {
-    if (m_anchor->horizontalPos() != KoTextAnchor::HLeft && m_anchor->horizontalPos() != KoTextAnchor::HRight)
+    if (m_anchor->anchorType() != "paragraph" || (m_anchor->horizontalPos() != KoTextAnchor::HLeft && m_anchor->horizontalPos() != KoTextAnchor::HRight))
         return;
 
     int idx = m_rootArea->documentLayout()->textAnchors().indexOf(m_anchor);
@@ -414,7 +414,7 @@ void FloatingAnchorStrategy::checkStacking(QPointF &newPosition)
 
     for(int i = 0; i < idx; ++i) {
         KoTextAnchor *a = m_rootArea->documentLayout()->textAnchors()[i];
-        if (m_anchor->horizontalPos() != a->horizontalPos())
+        if (m_anchor->anchorType() != a->anchorType() || m_anchor->horizontalPos() != a->horizontalPos())
             continue;
 
         QRectF thisRect(newPosition, m_anchor->shape()->size());

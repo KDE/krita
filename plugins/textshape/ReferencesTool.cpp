@@ -80,7 +80,7 @@ void ReferencesTool::createActions()
     connect(action, SIGNAL(triggered()), this, SLOT(insertEndNote()));
 
     action = new KAction(this);
-    QIcon *icon = new QIcon("/home/erione/kde/src/calligra/plugins/textshape/pics/settings-icon1_1.png");
+    QIcon *icon = new QIcon("/home/erione/kde4/src/calligra/plugins/textshape/pics/settings-icon1_1.png");
     action->setIcon( *icon );
     addAction("notes_settings",action);
     action->setToolTip(i18n("Footnote/Endnote Settings"));

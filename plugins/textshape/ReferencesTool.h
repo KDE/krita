@@ -59,12 +59,8 @@ private slots:
     void insertBibliography();
     /// format the table of contents template
     void formatTableOfContents();
-    ///shows the configuration dialog for a ToC
+    /// shows the configuration dialog for a ToC
     void showConfigureDialog(QAction *action);
-
-private:
-        TableOfContentsConfigure *m_configure;
-        SimpleTableOfContentsWidget *m_stocw;
     /// insert a footnote
     void insertFootNote();
     /// insert an endnote
@@ -75,8 +71,10 @@ private:
     void disableButtons(QTextCursor cursor);
 
 private:
-    SimpleFootEndNotesWidget *sfenw;
-    KoInlineNote *note;
+        TableOfContentsConfigure *m_configure;
+        SimpleTableOfContentsWidget *m_stocw;
+        SimpleFootEndNotesWidget *sfenw;
+        KoInlineNote *note;
 };
 
 #endif // REFERENCESTOOL_H

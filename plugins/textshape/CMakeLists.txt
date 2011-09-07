@@ -43,6 +43,7 @@ SET ( textshape_SRCS
     dialogs/CitationInsertionDialog.cpp
     dialogs/InsertBibliographyDialog.cpp
     dialogs/SimpleFootEndNotesWidget.cpp
+    dialogs/NotesConfigurationDialog.cpp
     dialogs/SimpleCaptionsWidget.cpp
     dialogs/ParagraphLayout.cpp
     dialogs/ParagraphIndentSpacing.cpp
@@ -103,6 +104,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/CitationInsertionDialog.ui
     dialogs/InsertBibliographyDialog.ui
     dialogs/SimpleFootEndNotesWidget.ui
+    dialogs/NotesConfigurationDialog.ui
     dialogs/SimpleCaptionsWidget.ui
     dialogs/StylesWidget.ui
     dialogs/ParagraphLayout.ui

@@ -26,10 +26,13 @@
 #include "KoTextLocator.h"
 #include "KoBookmark.h"
 #include "KoInlineNote.h"
+#include "KoOdfNotesConfiguration.h"
+#include "KoTextDocument.h"
 #include "KoInlineCite.h"
 
 #include <QTextCursor>
 #include <QPainter>
+#include <QTextDocument>
 
 KoInlineTextObjectManager::KoInlineTextObjectManager(QObject *parent)
         : QObject(parent),
@@ -225,7 +228,75 @@ QList<KoTextLocator*> KoInlineTextObjectManager::textLocators() const
     return answers;
 }
 
-QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
+QList<KoInlineNote*> KoInlineTextObjectManager::autoNumberedFootNotes() const
+{
+    QList<KoInlineNote*> answers;
+    foreach(KoInlineObject* object, m_objects) {
+        KoInlineNote* note = dynamic_cast<KoInlineNote*>(object);
+        if (note && note->type() == KoInlineNote::Footnote) {
+            if (note->autoNumbering()) {
+                answers.append(note);
+            }
+        }
+    }
+    return answers;
+}
+
+void KoInlineTextObjectManager::reNumberingNotes(QTextBlock block)
+{
+    int i=1,j=1;
+
+    while (block.isValid()) {
+        QString text = block.text();
+        int pos = text.indexOf(QChar::ObjectReplacementCharacter);
+        KoOdfNotesConfiguration *notesConfig;
+        while (pos >= 0 && pos <= block.length() ) {
+            QTextCursor c1(block);
+            c1.setPosition(block.position() + pos);
+            c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
+            //renumber autonumbered notes
+            KoInlineNote *note = dynamic_cast<KoInlineNote*>(this->inlineTextObject(c1));
+            if (note && note->type() == KoInlineNote::Footnote) {
+                if(note->autoNumbering()) {
+                    note->setLabel(QString().number(i));
+                    notesConfig = KoTextDocument(note->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
+                    QTextCharFormat *fmat = new QTextCharFormat();
+                    fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+                    QTextCursor cursor = note->textFrame()->firstCursorPosition();
+                    QTextFragment frag = cursor.block().begin().fragment();
+                    cursor.setPosition(frag.position(),QTextCursor::MoveAnchor);
+                    cursor.setPosition(frag.position()+frag.length(),QTextCursor::KeepAnchor);
+                    cursor.removeSelectedText();
+                    cursor.insertText(notesConfig->numberFormat().prefix()
+                                      +notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)
+                                      +notesConfig->numberFormat().suffix(),*fmat);
+                    i++;
+                }
+            }
+            else if (note && note->type() == KoInlineNote::Endnote) {
+                if(note->autoNumbering()) {
+                    note->setLabel(QString().number(j));
+                    notesConfig = KoTextDocument(note->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
+                    QTextCharFormat *fmat = new QTextCharFormat();
+                    fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+                    QTextCursor cursor = note->textFrame()->firstCursorPosition();
+                    QTextFragment frag = cursor.block().begin().fragment();
+                    cursor.setPosition(frag.position(),QTextCursor::MoveAnchor);
+                    cursor.setPosition(frag.position()+frag.length(),QTextCursor::KeepAnchor);
+                    cursor.removeSelectedText();
+                    cursor.insertText(notesConfig->numberFormat().prefix()
+                                      +notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)
+                                      +notesConfig->numberFormat().suffix(),*fmat);
+                    j++;
+                }
+            }
+            pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
+        }
+        block = block.next();
+    }
+}
+
+QList<KoInlineNote*> KoInlineTextObjectManager::autoNumberedEndNotes() const
 {
     QList<KoInlineNote*> answers;
     foreach(KoInlineObject* object, m_objects) {
@@ -235,6 +306,59 @@ QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
         }
     }
     return answers;
+}
+
+int KoInlineTextObjectManager::visibleAutoNumberedNotes(QTextBlock block) const
+{
+    int i=1;
+
+    while (block.isValid()) {
+        QString text = block.text();
+        int pos = text.indexOf(QChar::ObjectReplacementCharacter);
+
+        while (pos >= 0 && pos <= block.length() ) {
+            QTextCursor c1(block);
+            c1.setPosition(block.position() + pos);
+            c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
+
+            KoInlineNote *note = dynamic_cast<KoInlineNote*>(this->inlineTextObject(c1));
+            if ((note && note->type() == KoInlineNote::Footnote)||(note && note->type() == KoInlineNote::Endnote)) {
+                if(note->autoNumbering()) {
+                    i++;
+                }
+            }
+
+            pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
+        }
+        block = block.next();
+    }
+    return i;//returns count of all visible autonumbered notes
+}
+
+KoInlineNote *KoInlineTextObjectManager::getFirstNote(QTextBlock block) const
+{
+    while(block.isValid()) {
+        QString text = block.text();
+        int pos = text.indexOf(QChar::ObjectReplacementCharacter);
+
+        while (pos >= 0 && pos <= block.length() ) {
+            QTextCursor c1(block);
+            c1.setPosition(block.position() + pos);
+            c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
+
+            KoInlineNote *note = dynamic_cast<KoInlineNote*>(this->inlineTextObject(c1));
+            if (note && note->type() == KoInlineNote::Footnote) {
+                return note;
+            }
+            else if (note && note->type() == KoInlineNote::Endnote) {
+                return note;
+            }
+
+            pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
+        }
+        block = block.next();
+    }
+    return (KoInlineNote*)0;
 }
 
 QMap<QString, KoInlineCite*> KoInlineTextObjectManager::citations(bool duplicatesEnabled) const

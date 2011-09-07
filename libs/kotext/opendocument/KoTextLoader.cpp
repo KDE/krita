@@ -1462,8 +1462,7 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
         if (className == "footnote") {
             note = new KoInlineNote(KoInlineNote::Footnote);
             note->setMotherFrame(KoTextDocument(cursor.block().document()).footNotesFrame());
-        }
-        else {
+        } else {
             note = new KoInlineNote(KoInlineNote::Endnote);
             note->setMotherFrame(KoTextDocument(cursor.block().document()).endNotesFrame());
         }

@@ -27,6 +27,7 @@
 // Qt + kde
 #include <QHash>
 #include <QTextCharFormat>
+#include <QTextBlock>
 
 class KoCanvasBase;
 class KoTextLocator;
@@ -157,11 +158,23 @@ public:
     QList<KoTextLocator*> textLocators() const;
     /**
      * Note: once document sections are implemented, we need to be able
-     * to retrieve the endnotes for a particular section only.
-     *
-     * @return a list of all inline objects that are endnotes
+     * to retrieve the autonumbered footnotes and endnotes for a particular section only.
+     * And also we need to renumber autonumbered notes whenever an autonumbered note is inserted
      */
-    QList<KoInlineNote*> endNotes() const;
+    /**
+     * @return a list of all inline objects that are autonumbered footnotes
+     */
+    QList<KoInlineNote*> autoNumberedFootNotes() const;
+
+    void reNumberingNotes(QTextBlock block);
+    /**
+     * @return a list of all inline objects that are autonumbered endnotes
+     */
+    QList<KoInlineNote*> autoNumberedEndNotes() const;
+
+    int visibleAutoNumberedNotes(QTextBlock block) const;
+
+    KoInlineNote *getFirstNote(QTextBlock block) const;
 
     QMap<QString, KoInlineCite*> citations(bool duplicatesEnabled = true) const;
 

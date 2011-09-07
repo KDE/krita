@@ -24,7 +24,10 @@
 
 #include <KoGenChange.h>
 #include "KoText.h"
+#include <KoInlineNote.h>
 #include <KoToolSelection.h>
+#include <KoInlineNote.h>
+
 #include <QClipboard>
 #include <QMetaType>
 #include <QTextCursor>
@@ -270,7 +273,19 @@ public slots:
      */
     void splitTableCells();
 
-     /**
+    /**
+     * Insert a footnote at the current cursor position
+     * @return a pointer to the inserted footnote
+     */
+    KoInlineNote *insertFootNote();
+
+    /**
+     * Insert an endnote at the current cursor position
+     * @return a pointer to the inserted endnote
+     */
+    KoInlineNote *insertEndNote();
+
+    /**
      * Insert a table of Contents at the current cursor position.
      */
     void insertTableOfContents();

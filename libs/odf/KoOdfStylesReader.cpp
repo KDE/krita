@@ -286,9 +286,23 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
         notesConfiguration.loadOdf(e);
         if (notesConfiguration.noteClass() == KoOdfNotesConfiguration::Footnote) {
             d->globalFootnoteConfiguration = notesConfiguration;
+            if (d->globalFootnoteConfiguration.numberFormat().formatSpecification() == KoOdfNumberDefinition::Empty) {
+                KoOdfNumberDefinition numFormat;
+                numFormat.setFormatSpecification(KoOdfNumberDefinition::Numeric);
+                d->globalFootnoteConfiguration.setNumberFormat(numFormat);
+                d->globalFootnoteConfiguration.setStartValue(1);
+            }
+
         }
         else if (notesConfiguration.noteClass() == KoOdfNotesConfiguration::Endnote) {
             d->globalEndnoteConfiguration = notesConfiguration;
+            if (d->globalEndnoteConfiguration.numberFormat().formatSpecification() == KoOdfNumberDefinition::RomanLowerCase) {
+                KoOdfNumberDefinition numFormat;
+                numFormat.setFormatSpecification(KoOdfNumberDefinition::RomanLowerCase);
+                d->globalEndnoteConfiguration.setNumberFormat(numFormat);
+                d->globalEndnoteConfiguration.setStartValue(1);
+            }
+
         }
     } else if (ns == KoXmlNS::text && localName == "linenumbering-configuration") {
         d->lineNumberingConfiguration.loadOdf(e);

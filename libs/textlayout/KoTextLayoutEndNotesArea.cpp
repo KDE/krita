@@ -56,7 +56,7 @@ bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)
     d->startOfArea = new FrameIterator(cursor);
     d->endOfArea = 0;
 
-    qreal y = top();
+    qreal y = top()+15;
     setBottom(y);
 
     while (true) {
@@ -85,6 +85,39 @@ bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)
         }
     }
 }
+KoPointedAt KoTextLayoutEndNotesArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) const
+{
+    KoPointedAt pointedAt;
+    int endNoteIndex = 0;
+    while (endNoteIndex<d->endNoteAreas.length()) {
+        // check if p is over end notes area
+        if (p.y() > d->endNoteAreas[endNoteIndex]->top()
+                && p.y() < d->endNoteAreas[endNoteIndex]->bottom()) {
+            pointedAt = d->endNoteAreas[endNoteIndex]->hitTest(p, accuracy);
+            return pointedAt;
+        }
+        ++endNoteIndex;
+    }
+    return KoPointedAt();
+}
+
+QRectF KoTextLayoutEndNotesArea::selectionBoundingBox(QTextCursor &cursor) const
+{
+    QTextFrame::iterator it = d->startOfArea->it;
+    QTextFrame *subFrame;
+    int endNoteIndex = 0;
+    while (endNoteIndex<d->endNoteAreas.length()) {
+        subFrame = it.currentFrame();
+        if (subFrame != 0) {
+            if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
+                return d->endNoteAreas[endNoteIndex]->selectionBoundingBox(cursor);
+            }
+            ++endNoteIndex;
+        }
+        ++it;
+    }
+    return QRectF();
+}
 
 void KoTextLayoutEndNotesArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
@@ -92,7 +125,7 @@ void KoTextLayoutEndNotesArea::paint(QPainter *painter, const KoTextDocumentLayo
         return;
 
     if (!d->endNoteAreas.isEmpty()) {
-        painter->drawLine(left(), top(), right(), top());
+        painter->drawLine(2, top()+10, 150, top()+10);
     }
     foreach(KoTextLayoutArea *area, d->endNoteAreas) {
         area->paint(painter, context);

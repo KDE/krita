@@ -222,6 +222,7 @@ private:
     QList<KoTextLayoutTableArea *> m_tableAreas;
     FrameIterator *m_startOfArea;
     FrameIterator *m_endOfArea;
+    FrameIterator *m_footNotesStartOfArea;
 
     bool m_acceptsPageBreak;
     bool m_virginPage;

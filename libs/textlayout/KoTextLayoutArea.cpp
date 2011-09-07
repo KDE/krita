@@ -91,6 +91,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_dropCapsWidth(0)
  , m_startOfArea(0)
  , m_endOfArea(0)
+ , m_footNotesStartOfArea(0)
  , m_acceptsPageBreak(false)
  , m_virginPage(true)
  , m_verticalAlignOffset(0)
@@ -126,6 +127,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
     }
     int tableAreaIndex = 0;
     int tocIndex = 0;
+    int footNoteIndex = 0;
     bool atEnd = false;
     for (; it != stop && !atEnd; ++it) {
         atEnd = it.atEnd();
@@ -145,6 +147,13 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
+            if (it.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
+                if (point.y() > m_endNotesArea->top()
+                        && point.y() < m_endNotesArea->bottom()) {
+                    pointedAt = m_endNotesArea->hitTest(point, accuracy);
+                    return pointedAt;
+                }
+            }
             continue;
         } else {
             if (!block.isValid())
@@ -206,6 +215,17 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             return pointedAt;
         }
     }
+    point -= QPointF(0,this->bottom() - m_footNotesHeight);
+    while (footNoteIndex<m_footNoteAreas.length()) {
+        // check if p is over foot notes area
+        if (point.y() > m_footNoteAreas[footNoteIndex]->top()
+                && point.y() < m_footNoteAreas[footNoteIndex]->bottom()) {
+            pointedAt = m_footNoteAreas[footNoteIndex]->hitTest(point, accuracy);
+            return pointedAt;
+        }
+        point -= QPointF(0,m_footNoteAreas[footNoteIndex]->bottom());
+        ++footNoteIndex;
+    }
     return pointedAt;
 }
 
@@ -226,6 +246,7 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
 
     int tableAreaIndex = 0;
     int tocIndex = 0;
+    int footNoteIndex = 0;
 
     bool atEnd = false;
     for (; it != stop && !atEnd; ++it) {
@@ -257,7 +278,18 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
-            continue;
+            if (it.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
+                if (cursor.selectionEnd() < subFrame->firstPosition()) {
+                    return retval.translated(0, m_verticalAlignOffset);
+                }
+                if (cursor.selectionStart() > subFrame->lastPosition()) {
+                    continue;
+                }
+                if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
+                    return m_endNotesArea->selectionBoundingBox(cursor).translated(0, m_verticalAlignOffset);
+                }
+                continue;
+            }
         } else {
             if (!block.isValid())
                 continue;
@@ -301,6 +333,21 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
             }
         }
     }
+
+    /*if (m_footNotesStartOfArea != 0) {
+        it = m_footNotesStartOfArea->it;
+        QTextFrame *subFrame;
+        while (footNoteIndex<m_footNoteAreas.length()) {
+            subFrame = it.currentFrame();
+            if (subFrame!=0) {
+                if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
+                    return m_footNoteAreas[footNoteIndex]->selectionBoundingBox(cursor);
+                }
+                ++footNoteIndex;
+            }
+            ++it;
+        }
+    }*/
     return retval.translated(0, m_verticalAlignOffset);
 }
 

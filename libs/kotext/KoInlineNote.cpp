@@ -27,7 +27,8 @@
 #include <KoTextWriter.h>
 #include <KoTextDocument.h>
 #include <KoText.h>
-
+#include <KoInlineTextObjectManager.h>
+#include <KoGenStyles.h>
 #include <KDebug>
 
 #include <QTextDocument>
@@ -39,6 +40,7 @@
 #include <QTextOption>
 #include <QDateTime>
 #include <QWeakPointer>
+#include <QBuffer>
 
 class KoInlineNote::Private
 {
@@ -58,6 +60,7 @@ public:
     bool autoNumbering;
     KoInlineNote::Type type;
 };
+int KoInlineNote::count;
 
 KoInlineNote::KoInlineNote(Type type)
     : KoInlineObject(true)
@@ -70,6 +73,11 @@ KoInlineNote::~KoInlineNote()
     delete d;
 }
 
+QTextCursor KoInlineNote::textCursor() const
+{
+    return (d->textFrame->lastCursorPosition());
+}
+
 void KoInlineNote::setMotherFrame(QTextFrame *motherFrame)
 {
     // We create our own subframe
@@ -77,7 +85,6 @@ void KoInlineNote::setMotherFrame(QTextFrame *motherFrame)
     QTextCursor cursor(motherFrame->lastCursorPosition());
     QTextFrameFormat format;
     format.setProperty(KoText::SubFrameType, KoText::NoteFrameType);
-
     d->textFrame = cursor.insertFrame(format);
 }
 
@@ -153,16 +160,42 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
 
     if (d->label.isEmpty())
         return;
-
+    //if footnotes count changes make sure we renumber the notes
+    if (KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->visibleAutoNumberedNotes(d->textFrame->document()->begin()) != KoInlineNote::count) {
+         KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->reNumberingNotes(d->textFrame->document()->begin());
+         KoInlineNote::count = KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->visibleAutoNumberedNotes(d->textFrame->document()->begin());
+    }
     QFont font(format.font(), pd);
-    QTextLayout layout(d->label, font, pd);
+    QString s;
+    KoOdfNotesConfiguration *notesConfig;
+    //set bookmark name TODO make it unique
+    if (d->type == KoInlineNote::Footnote) {
+        s.append("Foot");
+        notesConfig = KoTextDocument(this->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
+    } else if (d->type == KoInlineNote::Endnote) {
+        s.append("End");
+        notesConfig = KoTextDocument(this->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
+    }
+    s.append(d->label);
+    //assigning a formatted label to notes
+    QString cite;
+    if (d->autoNumbering)
+        cite = notesConfig->numberFormat().formattedNumber(d->label.toInt()+notesConfig->startValue()-1);
+    else cite = d->label;
+    QTextLayout layout(cite, font, pd);
     layout.setCacheEnabled(true);
     QList<QTextLayout::FormatRange> layouts;
     QTextLayout::FormatRange range;
     range.start = 0;
-    range.length = d->label.length();
+    range.length = cite.length();
     range.format = format;
     range.format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    //set bookmark link
+    range.format.setAnchor(true);
+    range.format.setAnchorHref('#' + s);
+    QBrush *brush = new QBrush(Qt::SolidPattern);
+    brush->setColor(Qt::lightGray);
+    range.format.setBackground(*brush);
     layouts.append(range);
     layout.setAdditionalFormats(layouts);
 
@@ -173,6 +206,7 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     layout.createLine();
     layout.endLayout();
     layout.draw(&painter, rect.topLeft());
+    cite.clear();
 }
 
 bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
@@ -195,7 +229,6 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
 
         d->id = element.attributeNS(KoXmlNS::text, "id");
         for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
-            setAutoNumbering(false);
             KoXmlElement ts = node.toElement();
             if (ts.namespaceURI() != KoXmlNS::text)
                 continue;
@@ -209,6 +242,23 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
                 }
             }
         }
+        cursor.setPosition(cursor.currentFrame()->firstPosition());
+        KoOdfNotesConfiguration *notesConfig;
+        if (d->type == Footnote) {
+            notesConfig = KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
+        } else {
+            notesConfig = KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
+        }
+        QTextCharFormat *fmat = new QTextCharFormat();
+        fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+        if (d->autoNumbering) {
+            cursor.insertText(notesConfig->numberFormat().prefix()
+                              +notesConfig->numberFormat().formattedNumber(d->label.toInt()+notesConfig->startValue()-1)
+                              +notesConfig->numberFormat().suffix(),*fmat);
+        } else {
+            cursor.insertText(notesConfig->numberFormat().prefix()+d->label+notesConfig->numberFormat().suffix(),*fmat);
+        }
+        fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
     }
     else if (element.namespaceURI() == KoXmlNS::office && element.localName() == "annotation") {
         d->author = element.attributeNS(KoXmlNS::text, "dc-creator");
@@ -225,25 +275,43 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
 void KoInlineNote::saveOdf(KoShapeSavingContext & context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
+    //save note configuration in styles.xml
+    if(KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->getFirstNote(d->textFrame->document()->begin())->id() == this->id()) {
+        QBuffer xmlBufferFootNote,xmlBufferEndNote;
+        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferFootNote);
 
-    QTextCursor cursor(d->textFrame);
+        KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote)->saveOdf(xmlWriter);
+        context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles,xmlBufferFootNote.data());
+
+        xmlWriter = new KoXmlWriter(&xmlBufferEndNote);
+        KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote)->saveOdf(xmlWriter);
+        context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles,xmlBufferEndNote.data());
+
+    }
 
     if (d->type == Footnote || d->type == Endnote) {
         writer->startElement("text:note", false);
-        if (d->type == Footnote)
+        if (d->type == Footnote) {
             writer->addAttribute("text:note-class", "footnote");
-        else
+        } else {
             writer->addAttribute("text:note-class", "endnote");
+        }
         writer->addAttribute("text:id", d->id);
         writer->startElement("text:note-citation", false);
-        if (!autoNumbering())
+        if (!autoNumbering()) {
             writer->addAttribute("text:label", d->label);
+        }
         writer->addTextNode(d->label);
         writer->endElement();
 
         writer->startElement("text:note-body", false);
         KoTextWriter textWriter(context);
-        textWriter.write(d->textFrame->document(), d->textFrame->firstPosition(),d->textFrame->lastPosition());
+        QTextCursor cursor = d->textFrame->firstCursorPosition();
+        QTextFragment frag = cursor.block().begin().fragment();
+        cursor.setPosition(frag.position(),QTextCursor::MoveAnchor);
+        cursor.setPosition(frag.position()+frag.length(),QTextCursor::MoveAnchor);
+        textWriter.write(d->textFrame->document(), cursor.position(),d->textFrame->lastPosition());
+        cursor.setPosition(d->textFrame->lastPosition(),QTextCursor::KeepAnchor);
         writer->endElement();
 
         writer->endElement();

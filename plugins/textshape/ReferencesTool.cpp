@@ -24,6 +24,7 @@
 #include "dialogs/SimpleFootEndNotesWidget.h"
 #include "dialogs/SimpleCaptionsWidget.h"
 #include "dialogs/TableOfContentsConfigure.h"
+#include "dialogs/NotesConfigurationDialog.h"
 #include "dialogs/CitationInsertionDialog.h"
 //#include "dialogs/InsertBibliographyDialog.h"
 
@@ -32,11 +33,16 @@
 #include <KoTextEditor.h>
 #include <KoParagraphStyle.h>
 #include <KoTableOfContentsGeneratorInfo.h>
+#include <KoBookmark.h>
+#include <KoInlineNote.h>
+#include <KoTextDocumentLayout.h>
+#include <KoInlineTextObjectManager.h>
 
 #include <kdebug.h>
 
 #include <KLocale>
 #include <KAction>
+#include <QTextDocument>
 
 #include <QMenu>
 
@@ -62,6 +68,23 @@ void ReferencesTool::createActions()
     addAction("format_tableofcentents", action);
     action->setToolTip(i18n("Configure the Table of Contents"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
+
+    action = new KAction(i18n("Footnote"),this);
+    addAction("insert_footnote",action);
+    action->setToolTip(i18n("Insert a Foot Note into the document."));
+    connect(action, SIGNAL(triggered()), this, SLOT(insertFootNote()));
+
+    action = new KAction(i18n("Endnote"),this);
+    addAction("insert_endnote",action);
+    action->setToolTip(i18n("Insert an End Note into the document."));
+    connect(action, SIGNAL(triggered()), this, SLOT(insertEndNote()));
+
+    action = new KAction(this);
+    QIcon *icon = new QIcon("/home/erione/kde/src/calligra/plugins/textshape/pics/settings-icon1_1.png");
+    action->setIcon( *icon );
+    addAction("notes_settings",action);
+    action->setToolTip(i18n("Footnote/Endnote Settings"));
+    connect(action, SIGNAL(triggered()), this, SLOT(openSettings()));
 
     action = new KAction(i18n("Insert"),this);
     addAction("insert_citation",action);
@@ -90,7 +113,7 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
     QList<QWidget *> widgets;
     m_stocw = new SimpleTableOfContentsWidget(this, 0);
     //SimpleCitationWidget *scw = new SimpleCitationWidget(0);
-    SimpleFootEndNotesWidget *sfenw = new SimpleFootEndNotesWidget(0);
+    sfenw = new SimpleFootEndNotesWidget(this,0);
     //SimpleCaptionsWidget *scapw = new SimpleCaptionsWidget(0);
     SimpleCitationWidget *scw = new SimpleCitationWidget(this,0);
     // Connect to/with simple table of contents option widget
@@ -169,6 +192,96 @@ void ReferencesTool::formatTableOfContents()
 void ReferencesTool::showConfigureDialog(QAction *action)
 {
     m_configure = new TableOfContentsConfigure(textEditor(), action->data().value<QTextBlock>(), m_stocw);
+}
+
+void ReferencesTool::insertFootNote()
+{
+    //connect(textEditor()->document(),SIGNAL(cursorPositionChanged(QTextCursor)),this,SLOT(disableButtons(QTextCursor)));
+    note = textEditor()->insertFootNote();
+    note->setAutoNumbering(sfenw->widget.autoNumbering->isChecked());
+    if (note->autoNumbering()) {
+        note->setLabel(QString().number(note->manager()->autoNumberedFootNotes().count()));
+    }
+    else {
+        note->setLabel(sfenw->widget.characterEdit->text());
+    }
+
+    QTextCursor cursor(note->textCursor());
+    KoOdfNotesConfiguration *notesConfig;
+    notesConfig = KoTextDocument(textEditor()->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
+    QTextCharFormat *cfmat = new QTextCharFormat();
+    cfmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    if (note->autoNumbering()) {
+        cursor.insertText(notesConfig->numberFormat().prefix()
+                          +notesConfig->numberFormat().formattedNumber(note->label().toInt()
+                          +notesConfig->startValue()-1)+notesConfig->numberFormat().suffix(),*cfmat);
+    } else {
+        cursor.insertText(notesConfig->numberFormat().prefix()
+                          +note->label()
+                          +notesConfig->numberFormat().suffix(),*cfmat);
+    }
+    cfmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
+    cursor.insertText(" ",*cfmat);
+    //inserts a bookmark at the cursor
+    QString s;
+    s.append("Foot");
+    s.append(note->label());
+    KoBookmark *bookmark = new KoBookmark(note->textFrame()->document());
+    bookmark->setName(s);
+    bookmark->setType(KoBookmark::SinglePosition);
+    note->manager()->insertInlineObject(cursor, bookmark);
+}
+
+void ReferencesTool::insertEndNote()
+{
+    KoInlineTextObjectManager *manager = KoTextDocument(textEditor()->document()).inlineTextObjectManager();
+    note = textEditor()->insertEndNote();
+    note->setAutoNumbering(sfenw->widget.autoNumbering->isChecked());
+    if (note->autoNumbering()) {
+        note->setLabel(QString().number(note->manager()->autoNumberedEndNotes().count()));
+    }
+    else {
+        note->setLabel(sfenw->widget.characterEdit->text());
+    }
+
+    QTextCursor cursor(note->textCursor());    
+    KoOdfNotesConfiguration *notesConfig;
+    notesConfig = KoTextDocument(textEditor()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
+    QTextCharFormat *cfmat = new QTextCharFormat();
+    cfmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    if (note->autoNumbering()) {
+        cursor.insertText(notesConfig->numberFormat().prefix()
+                          +notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)
+                          +notesConfig->numberFormat().suffix(),*cfmat);
+    }
+    else cursor.insertText(notesConfig->numberFormat().prefix()+note->label()+notesConfig->numberFormat().suffix(),*cfmat);
+    cfmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
+    cursor.insertText(" ",*cfmat);
+
+    QString s;
+    s.append("End");
+    s.append(note->label());
+    KoBookmark *bookmark = new KoBookmark(note->textFrame()->document());
+    bookmark->setType(KoBookmark::SinglePosition);
+    bookmark->setName(s);
+    note->manager()->insertInlineObject(cursor, bookmark);
+}
+
+void ReferencesTool::openSettings()
+{
+    NotesConfigurationDialog *dialog = new NotesConfigurationDialog(textEditor()->document(),0);
+    dialog->exec();
+}
+
+void ReferencesTool::disableButtons(QTextCursor cursor)
+{
+    if(cursor.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::NoteFrameType) {
+        sfenw->widget.addFootnote->setEnabled(false);
+        sfenw->widget.addEndnote->setEnabled(false);
+    } else {
+        sfenw->widget.addFootnote->setEnabled(true);
+        sfenw->widget.addEndnote->setEnabled(true);
+    }
 }
 
 #include <ReferencesTool.moc>

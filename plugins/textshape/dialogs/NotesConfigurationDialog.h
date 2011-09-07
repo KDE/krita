@@ -39,8 +39,17 @@ public:
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
+    /**
+     * sets up the footnote's default configuration in the dialog box
+     */
     void footnoteSetup( bool on );
+    /**
+     * sets up the endnote's default configuration in the dialog box
+     */
     void endnoteSetup( bool on );
+    /**
+     * stores the applied notes' configuration as globalnotesconfiguration of the document
+     */
     void apply(QAbstractButton*);
 
 signals:

@@ -64,7 +64,7 @@ void NotesConfigurationDialog::endnoteSetup(bool on)
     widget.dockWidget_5->setHidden(on);
     widget.beginAtCombo->setDisabled(on);
     if(on) {
-        widget.numStyleCombo->setCurrentIndex(3);
+        widget.numStyleCombo->setCurrentIndex(5);
         /*widget.paragraphCombo->setCurrentIndex(3);
         widget.pageCombo->setCurrentIndex(8);
         widget.textareaCombo->setCurrentIndex(5);
@@ -75,13 +75,14 @@ void NotesConfigurationDialog::endnoteSetup(bool on)
 
 void NotesConfigurationDialog::apply(QAbstractButton *button)
 {
-    if(widget.buttonBox->standardButton(button) == widget.buttonBox->Apply) {
-        qDebug()<<"inside apply notesconfiguration";
+    if (widget.buttonBox->standardButton(button) == widget.buttonBox->Apply) {
         notesConfig = new KoOdfNotesConfiguration();
         //set Note Class
-        if(widget.footnote->isChecked())
+        if (widget.footnote->isChecked()) {
             notesConfig->setNoteClass(KoOdfNotesConfiguration::Footnote);
-        else notesConfig->setNoteClass(KoOdfNotesConfiguration::Endnote);
+        } else {
+            notesConfig->setNoteClass(KoOdfNotesConfiguration::Endnote);
+        }
         //set Number Format
         KoOdfNumberDefinition *numFormat = new KoOdfNumberDefinition();
         //set prefix
@@ -169,11 +170,9 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
         KoTextDocument(document).setNotesConfiguration(notesConfig);
         this->close();
     }
-    else if(widget.buttonBox->standardButton(button) == widget.buttonBox->Discard) {
+    else if (widget.buttonBox->standardButton(button) == widget.buttonBox->Discard) {
         this->close();
-        qDebug()<<"discarding changes";
     }
-
 }
 
 #include <NotesConfigurationDialog.moc>

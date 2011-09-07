@@ -57,10 +57,13 @@ private slots:
     void insertBibliography();
     /// format the table of contents template
     void formatTableOfContents();
-
+    /// insert a footnote
     void insertFootNote();
+    /// insert an endnote
     void insertEndNote();
+    /// open notes configuration dialog box
     void openSettings();
+    /// disable insert notes' buttons when already in notes' body
     void disableButtons(QTextCursor cursor);
 
 private:

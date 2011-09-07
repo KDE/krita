@@ -169,12 +169,18 @@ void ReferencesTool::insertFootNote()
     notesConfig = KoTextDocument(textEditor()->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
     QTextCharFormat *cfmat = new QTextCharFormat();
     cfmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-    if (note->autoNumbering())
-        cursor.insertText(notesConfig->numberFormat().prefix()+notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)+notesConfig->numberFormat().suffix(),*cfmat);
-    else cursor.insertText(notesConfig->numberFormat().prefix()+note->label()+notesConfig->numberFormat().suffix(),*cfmat);
+    if (note->autoNumbering()) {
+        cursor.insertText(notesConfig->numberFormat().prefix()
+                          +notesConfig->numberFormat().formattedNumber(note->label().toInt()
+                          +notesConfig->startValue()-1)+notesConfig->numberFormat().suffix(),*cfmat);
+    } else {
+        cursor.insertText(notesConfig->numberFormat().prefix()
+                          +note->label()
+                          +notesConfig->numberFormat().suffix(),*cfmat);
+    }
     cfmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
     cursor.insertText(" ",*cfmat);
-
+    //inserts a bookmark at the cursor
     QString s;
     s.append("Foot");
     s.append(note->label());
@@ -182,7 +188,6 @@ void ReferencesTool::insertFootNote()
     bookmark->setName(s);
     bookmark->setType(KoBookmark::SinglePosition);
     note->manager()->insertInlineObject(cursor, bookmark);
-
 }
 
 void ReferencesTool::insertEndNote()
@@ -190,7 +195,7 @@ void ReferencesTool::insertEndNote()
     KoInlineTextObjectManager *manager = KoTextDocument(textEditor()->document()).inlineTextObjectManager();
     note = textEditor()->insertEndNote();
     note->setAutoNumbering(sfenw->widget.autoNumbering->isChecked());
-    if(note->autoNumbering()) {
+    if (note->autoNumbering()) {
         note->setLabel(QString().number(note->manager()->endNotes().count()));
     }
     else {
@@ -202,8 +207,11 @@ void ReferencesTool::insertEndNote()
     notesConfig = KoTextDocument(textEditor()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
     QTextCharFormat *cfmat = new QTextCharFormat();
     cfmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-    if(note->autoNumbering())
-        cursor.insertText(notesConfig->numberFormat().prefix()+notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)+notesConfig->numberFormat().suffix(),*cfmat);
+    if (note->autoNumbering()) {
+        cursor.insertText(notesConfig->numberFormat().prefix()
+                          +notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)
+                          +notesConfig->numberFormat().suffix(),*cfmat);
+    }
     else cursor.insertText(notesConfig->numberFormat().prefix()+note->label()+notesConfig->numberFormat().suffix(),*cfmat);
     cfmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
     cursor.insertText(" ",*cfmat);
@@ -215,9 +223,6 @@ void ReferencesTool::insertEndNote()
     bookmark->setType(KoBookmark::SinglePosition);
     bookmark->setName(s);
     note->manager()->insertInlineObject(cursor, bookmark);
-
-
-
 }
 
 void ReferencesTool::openSettings()

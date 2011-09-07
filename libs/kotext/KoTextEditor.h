@@ -272,8 +272,16 @@ public slots:
      */
     void splitTableCells();
 
+    /**
+     * Insert a footnote at the current cursor position
+     * @return a pointer to the inserted footnote
+     */
     KoInlineNote *insertFootNote();
 
+    /**
+     * Insert an endnote at the current cursor position
+     * @return a pointer to the inserted endnote
+     */
     KoInlineNote *insertEndNote();
 
     /**

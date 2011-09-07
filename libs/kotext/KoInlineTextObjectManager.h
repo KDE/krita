@@ -158,17 +158,21 @@ public:
     QList<KoTextLocator*> textLocators() const;
     /**
      * Note: once document sections are implemented, we need to be able
-     * to retrieve the endnotes for a particular section only.
-     *
-     * @return a list of all inline objects that are endnotes
+     * to retrieve the autonumbered footnotes and endnotes for a particular section only.
+     * And also we need to renumber autonumbered notes whenever an autonumbered note is inserted
      */
-    QList<KoInlineNote*> footNotes() const;
+    /**
+     * @return a list of all inline objects that are autonumbered footnotes
+     */
+    QList<KoInlineNote*> autoNumberedFootNotes() const;
 
-    void reNumbering(QTextBlock block);
+    void reNumberingNotes(QTextBlock block);
+    /**
+     * @return a list of all inline objects that are autonumbered endnotes
+     */
+    QList<KoInlineNote*> autoNumberedEndNotes() const;
 
-    QList<KoInlineNote*> endNotes() const;
-
-    int displayedNotes(QTextBlock block) const;
+    int visibleAutoNumberedNotes(QTextBlock block) const;
 
     KoInlineNote *getFirstNote(QTextBlock block) const;
 

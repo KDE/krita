@@ -228,24 +228,25 @@ QList<KoTextLocator*> KoInlineTextObjectManager::textLocators() const
     return answers;
 }
 
-QList<KoInlineNote*> KoInlineTextObjectManager::footNotes() const
+QList<KoInlineNote*> KoInlineTextObjectManager::autoNumberedFootNotes() const
 {
     QList<KoInlineNote*> answers;
     foreach(KoInlineObject* object, m_objects) {
         KoInlineNote* note = dynamic_cast<KoInlineNote*>(object);
         if (note && note->type() == KoInlineNote::Footnote) {
-            if(note->autoNumbering())
+            if (note->autoNumbering()) {
                 answers.append(note);
+            }
         }
     }
     return answers;
 }
 
-void KoInlineTextObjectManager::reNumbering(QTextBlock block)
+void KoInlineTextObjectManager::reNumberingNotes(QTextBlock block)
 {
     int i=1,j=1;
 
-    while(block.isValid()) {
+    while (block.isValid()) {
         QString text = block.text();
         int pos = text.indexOf(QChar::ObjectReplacementCharacter);
         KoOdfNotesConfiguration *notesConfig;
@@ -253,7 +254,7 @@ void KoInlineTextObjectManager::reNumbering(QTextBlock block)
             QTextCursor c1(block);
             c1.setPosition(block.position() + pos);
             c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
-
+            //renumber autonumbered notes
             KoInlineNote *note = dynamic_cast<KoInlineNote*>(this->inlineTextObject(c1));
             if (note && note->type() == KoInlineNote::Footnote) {
                 if(note->autoNumbering()) {
@@ -266,7 +267,9 @@ void KoInlineTextObjectManager::reNumbering(QTextBlock block)
                     cursor.setPosition(frag.position(),QTextCursor::MoveAnchor);
                     cursor.setPosition(frag.position()+frag.length(),QTextCursor::KeepAnchor);
                     cursor.removeSelectedText();
-                    cursor.insertText(notesConfig->numberFormat().prefix()+notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)+notesConfig->numberFormat().suffix(),*fmat);
+                    cursor.insertText(notesConfig->numberFormat().prefix()
+                                      +notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)
+                                      +notesConfig->numberFormat().suffix(),*fmat);
                     i++;
                 }
             }
@@ -281,18 +284,19 @@ void KoInlineTextObjectManager::reNumbering(QTextBlock block)
                     cursor.setPosition(frag.position(),QTextCursor::MoveAnchor);
                     cursor.setPosition(frag.position()+frag.length(),QTextCursor::KeepAnchor);
                     cursor.removeSelectedText();
-                    cursor.insertText(notesConfig->numberFormat().prefix()+notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)+notesConfig->numberFormat().suffix(),*fmat);
+                    cursor.insertText(notesConfig->numberFormat().prefix()
+                                      +notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)
+                                      +notesConfig->numberFormat().suffix(),*fmat);
                     j++;
                 }
             }
-
             pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
         }
         block = block.next();
     }
 }
 
-QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
+QList<KoInlineNote*> KoInlineTextObjectManager::autoNumberedEndNotes() const
 {
     QList<KoInlineNote*> answers;
     foreach(KoInlineObject* object, m_objects) {
@@ -304,11 +308,11 @@ QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
     return answers;
 }
 
-int KoInlineTextObjectManager::displayedNotes(QTextBlock block) const
+int KoInlineTextObjectManager::visibleAutoNumberedNotes(QTextBlock block) const
 {
     int i=1;
 
-    while(block.isValid()) {
+    while (block.isValid()) {
         QString text = block.text();
         int pos = text.indexOf(QChar::ObjectReplacementCharacter);
 
@@ -328,7 +332,7 @@ int KoInlineTextObjectManager::displayedNotes(QTextBlock block) const
         }
         block = block.next();
     }
-    return i;
+    return i;//returns count of all visible autonumbered notes
 }
 
 KoInlineNote *KoInlineTextObjectManager::getFirstNote(QTextBlock block) const

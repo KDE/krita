@@ -29,6 +29,7 @@
 #include <QVector>
 #include <QVariant>
 #include <QString>
+#include <QChar>
 #include <QTextCharFormat>
 #include "kotext_export.h"
 
@@ -88,12 +89,22 @@ public:
         FontRelief,
         TextEmphasizeStyle,
         TextEmphasizePosition,
+        TextCombine,    ///< TextCombineType
+        TextCombineStartChar,    ///< QChar
+        TextCombineEndChar,    ///< QChar
         PercentageFontSize, //font-size can be in % and this stores that value
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550, // Internal: Reserved for ChangeTracker
         FontStretch = 577297551 // Internal: Ratio between Linux font pt size and Windows font height
     };
 
+    /// List of possible combine mode
+    enum TextCombineType {
+        NoTextCombine,
+        TextCombineLetters,
+        TextCombineLines
+    };
+    
     /// list of possible line type : no line, single line, double line
     enum LineType {
         NoLineType,
@@ -341,6 +352,16 @@ public:
     KoShadowStyle textShadow() const;
     void setTextShadow(const KoShadowStyle &shadow);
 
+    TextCombineType textCombine() const;
+    void setTextCombine(TextCombineType type);
+    
+    QChar textCombineStartChar() const;
+    void setTextCombineStartChar(const QChar &character);
+    
+    QChar textCombineEndChar() const;
+    void setTextCombineEndChar(const QChar &character);
+    
+    
     ReliefType fontRelief() const;
     void setFontRelief(ReliefType relief);
     

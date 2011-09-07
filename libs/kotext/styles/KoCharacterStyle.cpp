@@ -1065,6 +1065,49 @@ KoShadowStyle KoCharacterStyle::textShadow() const
     return KoShadowStyle();
 }
 
+void KoCharacterStyle::setTextCombine(KoCharacterStyle::TextCombineType type)
+{
+    d->setProperty(TextCombine, type);
+}
+
+KoCharacterStyle::TextCombineType KoCharacterStyle::textCombine() const
+{
+    if (hasProperty(TextCombine)) {
+        return (KoCharacterStyle::TextCombineType) d->propertyInt(TextCombine);
+    }
+    return NoTextCombine;
+}
+
+QChar KoCharacterStyle::textCombineEndChar() const
+{
+    if (hasProperty(TextCombineEndChar)) {
+        QString val = d->propertyString(TextCombineEndChar);
+        if (val.length() > 0)
+            return val.at(0);
+    }
+    return QChar();
+}
+
+void KoCharacterStyle::setTextCombineEndChar(const QChar& character)
+{
+    d->setProperty(TextCombineEndChar, character);
+}
+
+QChar KoCharacterStyle::textCombineStartChar() const
+{
+    if (hasProperty(TextCombineStartChar)) {
+        QString val = d->propertyString(TextCombineStartChar);
+        if (val.length() > 0)
+            return val.at(0);
+    }
+    return QChar();
+}
+
+void KoCharacterStyle::setTextCombineStartChar(const QChar& character)
+{
+    d->setProperty(TextCombineStartChar, character);
+}
+
 void KoCharacterStyle::setFontRelief(KoCharacterStyle::ReliefType relief)
 {
     d->setProperty(FontRelief, relief);
@@ -1414,6 +1457,8 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
                 setFontCapitalization(QFont::AllLowercase);
             else if (textTransform == "capitalize")
                 setFontCapitalization(QFont::Capitalize);
+            else if (textTransform == "none")
+                setFontCapitalization(QFont::MixedCase);
         }
     }
 
@@ -1508,6 +1553,26 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
         if (shadow.loadOdf(textShadow))
             setTextShadow(shadow);
     }
+    
+    const QString textCombine(styleStack.property(KoXmlNS::style, "text-combine"));
+    if (!textCombine.isEmpty()) {
+        if (textCombine == "letters")
+            setTextCombine(TextCombineLetters);
+        else if (textCombine == "lines")
+            setTextCombine(TextCombineLines);
+        else if (textCombine == "none")
+            setTextCombine(NoTextCombine);
+    }
+    
+    const QString textCombineEndChar(styleStack.property(KoXmlNS::style, "text-combine-end-char"));
+    if (!textCombineEndChar.isEmpty()) {
+        setTextCombineEndChar(textCombineEndChar.at(0));
+    }
+    const QString textCombineStartChar(styleStack.property(KoXmlNS::style, "text-combine-start-char"));
+    if (!textCombineStartChar.isEmpty()) {
+        setTextCombineStartChar(textCombineStartChar.at(0));
+    }
+    
     
     const QString fontRelief(styleStack.property(KoXmlNS::style, "font-relief"));
     if (!fontRelief.isEmpty()) {
@@ -1640,6 +1705,7 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
                 break;
             case QFont::MixedCase:
                 style.addProperty("fo:font-variant", "normal", KoGenStyle::TextType);
+                style.addProperty("fo:text-transform", "none", KoGenStyle::TextType);
                 break;
             case QFont::AllUppercase:
                 style.addProperty("fo:text-transform", "uppercase", KoGenStyle::TextType);
@@ -1781,6 +1847,24 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
         } else if (key == KoCharacterStyle::TextShadow) {
             KoShadowStyle shadow = textShadow();
             style.addProperty("fo:text-shadow", shadow.saveOdf(), KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::TextCombine) {
+            KoCharacterStyle::TextCombineType textCombineType = textCombine();
+            switch (textCombineType)
+            {
+                case KoCharacterStyle::NoTextCombine:
+                    style.addProperty("style:text-combine", "none", KoGenStyle::TextType);
+                    break;
+                case KoCharacterStyle::TextCombineLetters:
+                    style.addProperty("style:text-combine", "letters", KoGenStyle::TextType);
+                    break;
+                case KoCharacterStyle::TextCombineLines:
+                    style.addProperty("style:text-combine", "lines", KoGenStyle::TextType);
+                    break;
+            }
+        } else if (key == KoCharacterStyle::TextCombineEndChar) {
+            style.addProperty("style:text-combine-end-char", textCombineEndChar(), KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::TextCombineStartChar) {
+            style.addProperty("style:text-combine-start-char", textCombineStartChar(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::FontRelief) {
             KoCharacterStyle::ReliefType relief = fontRelief();
             switch (relief)

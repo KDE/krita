@@ -1,5 +1,7 @@
+#ifndef TABLEOFCONTENTSPREVIEW_H
+#define TABLEOFCONTENTSPREVIEW_H
 /* This file is part of the KDE project
- * Copyright (C) 2011 Smit Patel <smitpatel24@gmail.com>
+ * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,39 +18,41 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef INSERTBIBLIOGRAPHYDIALOG_H
-#define INSERTBIBLIOGRAPHYDIALOG_H
 
-#include "ui_InsertBibliographyDialog.h"
+#include <KoZoomHandler.h>
+#include <KoInlineTextObjectManager.h>
 
-#include <QDialog>
-#include <QTextBlock>
+#include <QFrame>
 
-#include <KoTextEditor.h>
+class TextShape;
+class KoTableOfContentsGeneratorInfo;
+class KoStyleManager;
 
-class KoInlineCite;
-class KoBibliographyInfo;
-
-class InsertBibliographyDialog : public QDialog
+class TableOfContentsPreview : public QFrame
 {
     Q_OBJECT
 public:
-    explicit InsertBibliographyDialog(KoTextEditor *editor , QWidget *parent = 0);
-    void setDefaultIndexEntries();
+    explicit TableOfContentsPreview(QWidget *parent = 0);
+    void setStyleManager(KoStyleManager *styleManager);
+
+protected:
+    void paintEvent(QPaintEvent *event);
+
+signals:
+
 public slots:
-    void insert();
-    void updateFields();
-    void addField();
-    void removeField();
-    void insertTabStop();
-    void removeTabStop();
+    void updatePreview(KoTableOfContentsGeneratorInfo *info);
+
+private slots:
+    void finishedPreviewLayout();
 
 private:
-    Ui::InsertBibliographyDialog dialog;
-    bool m_blockSignals;
-    KoTextEditor *m_editor;
-    KoBibliographyInfo *m_bibInfo;
+    TextShape *m_textShape;
+    QPixmap *m_pm;
+    KoZoomHandler m_zoomHandler;
+    KoStyleManager *m_styleManager;
+    KoInlineTextObjectManager m_itom;
+
 };
 
-Q_DECLARE_METATYPE(QTextDocument *);
-#endif // INSERTBIBLIOGRAPHYDIALOG_H
+#endif // TABLEOFCONTENTSPREVIEW_H

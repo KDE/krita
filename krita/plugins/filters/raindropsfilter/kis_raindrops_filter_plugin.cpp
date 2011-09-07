@@ -32,7 +32,6 @@ K_EXPORT_PLUGIN(KisRainDropsFilterPluginFactory("krita"))
 
 KisRainDropsFilterPlugin::KisRainDropsFilterPlugin(QObject *parent, const QVariantList &) : QObject(parent)
 {
-    //setComponentData(KisRainDropsFilterPluginFactory::componentData());
     KisFilterRegistry::instance()->add(new KisRainDropsFilter());
 
 }

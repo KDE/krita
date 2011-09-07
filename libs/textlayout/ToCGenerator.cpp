@@ -159,8 +159,8 @@ bool ToCGenerator::generate()
 
         if (m_ToCInfo->m_useIndexSourceStyles) {
             bool inserted = false;
-            foreach (IndexSourceStyles indexSourceStyles, m_ToCInfo->m_indexSourceStyles) {
-                foreach (IndexSourceStyle indexStyle, indexSourceStyles.styles) {
+            foreach (const IndexSourceStyles &indexSourceStyles, m_ToCInfo->m_indexSourceStyles) {
+                foreach (const IndexSourceStyle &indexStyle, indexSourceStyles.styles) {
                     if (indexStyle.styleId == block.blockFormat().intProperty(KoParagraphStyle::StyleId)) {
                         generateEntry(indexSourceStyles.outlineLevel, cursor, block, blockId);
                         inserted = true;
@@ -210,15 +210,15 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
         if (outlineLevel >= 1 && (outlineLevel-1) < m_ToCInfo->m_entryTemplate.size()
                     && outlineLevel <= m_ToCInfo->m_outlineLevel) {
             // List's index starts with 0, outline level starts with 0
-            TocEntryTemplate tocEntryTemplate = m_ToCInfo->m_entryTemplate.at(outlineLevel - 1);
+            const TocEntryTemplate *tocEntryTemplate = &m_ToCInfo->m_entryTemplate.at(outlineLevel - 1);
 
             // ensure that we fetched correct entry template
-            Q_ASSERT(tocEntryTemplate.outlineLevel == outlineLevel);
-            if (tocEntryTemplate.outlineLevel != outlineLevel) {
+            Q_ASSERT(tocEntryTemplate->outlineLevel == outlineLevel);
+            if (tocEntryTemplate->outlineLevel != outlineLevel) {
                 qDebug() << "TOC outline level not found correctly " << outlineLevel;
             }
 
-            tocTemplateStyle = styleManager->paragraphStyle(tocEntryTemplate.styleId);
+            tocTemplateStyle = styleManager->paragraphStyle(tocEntryTemplate->styleId);
             if (tocTemplateStyle == 0) {
                 tocTemplateStyle = generateTemplateStyle(styleManager, outlineLevel);
             }
@@ -232,7 +232,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
 
             // save the current style due to hyperlinks
             QTextCharFormat savedCharFormat = cursor.charFormat();
-            foreach (IndexEntry * entry, tocEntryTemplate.indexEntries) {
+            foreach (IndexEntry * entry, tocEntryTemplate->indexEntries) {
                 switch(entry->name) {
                     case IndexEntry::LINK_START: {
                         //IndexEntryLinkStart *linkStart = static_cast<IndexEntryLinkStart*>(entry);

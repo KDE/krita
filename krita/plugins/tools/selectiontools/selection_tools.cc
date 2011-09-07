@@ -46,8 +46,6 @@ K_EXPORT_PLUGIN(SelectionToolsFactory("krita"))
 SelectionTools::SelectionTools(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(SelectionToolsFactory::componentData());
-
     KoToolRegistry * r = KoToolRegistry::instance();
 
     r->add(new KisToolSelectOutlineFactory(QStringList()));

@@ -33,8 +33,6 @@ K_EXPORT_PLUGIN(BlurFilterPluginFactory("krita"))
 BlurFilterPlugin::BlurFilterPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(BlurFilterPluginFactory::componentData());
-
     KisFilterRegistry::instance()->add(new KisBlurFilter());
     KisFilterRegistry::instance()->add(new KisGaussianBlurFilter());
     KisFilterRegistry::instance()->add(new KisMotionBlurFilter());

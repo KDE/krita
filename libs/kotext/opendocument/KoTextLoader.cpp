@@ -34,7 +34,6 @@
 #include <KoBookmarkManager.h>
 #include <KoInlineNote.h>
 #include <KoInlineCite.h>
-#include <KoInlineBibliography.h>
 #include <KoInlineTextObjectManager.h>
 #include "KoList.h"
 #include <KoOdfLoadingContext.h>

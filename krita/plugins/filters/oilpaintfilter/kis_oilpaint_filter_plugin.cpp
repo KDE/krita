@@ -31,7 +31,6 @@ K_EXPORT_PLUGIN(KisOilPaintFilterPluginFactory("krita"))
 
 KisOilPaintFilterPlugin::KisOilPaintFilterPlugin(QObject *parent, const QVariantList &) : QObject(parent)
 {
-    //setComponentData(KisOilPaintFilterPluginFactory::componentData());
     KisFilterRegistry::instance()->add(new KisOilPaintFilter());
 
 }

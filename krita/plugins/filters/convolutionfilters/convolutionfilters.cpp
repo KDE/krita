@@ -45,7 +45,6 @@ K_EXPORT_PLUGIN(KritaConvolutionFiltersFactory("krita"))
 KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaConvolutionFiltersFactory::componentData());
     KisFilterRegistry * manager = KisFilterRegistry::instance();
     manager->add(new KisSharpenFilter());
     manager->add(new KisMeanRemovalFilter());

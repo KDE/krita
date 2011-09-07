@@ -47,8 +47,6 @@ K_EXPORT_PLUGIN(ToolStarFactory("krita"))
 ToolStar::ToolStar(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(ToolStarFactory::componentData());
-
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolStarFactory(QStringList()));
 

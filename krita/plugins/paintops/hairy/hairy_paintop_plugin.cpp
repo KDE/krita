@@ -41,8 +41,6 @@ K_EXPORT_PLUGIN(HairyPaintOpPluginFactory("krita"))
 HairyPaintOpPlugin::HairyPaintOpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-
-    //setComponentData(HairyPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisSimplePaintOpFactory<KisHairyPaintOp, KisHairyPaintOpSettings, KisHairyPaintOpSettingsWidget>("hairybrush", i18n("Hairy brush"), KisPaintOpFactory::categoryStable(),"krita-sumi.png"));
 

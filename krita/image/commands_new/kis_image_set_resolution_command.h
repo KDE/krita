@@ -16,25 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_image_set_resolution_command.h"
-#include <kis_image.h>
+#ifndef KIS_IMAGE_SET_RESOLUTION_COMMAND_H
+#define KIS_IMAGE_SET_RESOLUTION_COMMAND_H
 
-KisImageSetResolutionCommand::KisImageSetResolutionCommand(KisImageSP image, double newXRes, double newYRes)
-    : KisImageCommand("", image)
-    , m_newXRes(newXRes)
-    , m_newYRes(newYRes)
+#include "krita_export.h"
+#include "kis_types.h"
+
+#include <kundo2command.h>
+
+
+class KRITAIMAGE_EXPORT KisImageSetResolutionCommand : public KUndo2Command
 {
-    m_oldXRes = image->xRes();
-    m_oldYRes = image->yRes();
-}
+public:
+    KisImageSetResolutionCommand(KisImageWSP image, qreal newXRes, qreal newYRes);
+    void undo();
+    void redo();
 
-void KisImageSetResolutionCommand::undo()
-{
-    m_image->setResolution(m_oldXRes, m_oldYRes);
-}
+private:
+    KisImageWSP m_image;
 
-void KisImageSetResolutionCommand::redo()
-{
-    m_image->setResolution(m_newXRes, m_newYRes);
-}
+    qreal m_newXRes;
+    qreal m_newYRes;
+    qreal m_oldXRes;
+    qreal m_oldYRes;
+};
 
+#endif // KIS_IMAGE_SET_RESOLUTION_COMMAND_H

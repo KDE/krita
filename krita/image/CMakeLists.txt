@@ -77,7 +77,6 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_node_to_bottom_command.cpp
    commands/kis_image_node_to_top_command.cpp
    commands/kis_image_lock_command.cpp
-   commands/kis_image_set_resolution_command.cpp
    commands/kis_layer_command.cpp
    commands/kis_layer_props_command.cpp
    commands/kis_node_command.cpp
@@ -91,6 +90,7 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_processing_command.cpp
    commands_new/kis_node_move_command2.cpp
    commands_new/kis_image_resize_command.cpp
+   commands_new/kis_image_set_resolution_command.cpp
    commands_new/kis_update_command.cpp
    processing/kis_crop_processing_visitor.cpp
    processing/kis_transform_processing_visitor.cpp

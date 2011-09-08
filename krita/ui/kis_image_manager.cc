@@ -114,16 +114,24 @@ void KisImageManager::resizeCurrentImage(qint32 w, qint32 h, qint32 xOffset, qin
     m_view->image()->cropImage(QRect(-xOffset, -yOffset, w, h));
 }
 
-void KisImageManager::scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy, bool scaleOnlyShapes)
+void KisImageManager::scaleCurrentImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy)
 {
     if (!m_view->image()) return;
 
-    KoProgressUpdater* updater = m_view->createProgressUpdater();
-    updater->start(100, "Scale Image");
-    KoUpdaterPtr up = updater->startSubtask();
+    //KoProgressUpdater* updater = m_view->createProgressUpdater();
+    //updater->start(100, "Scale Image");
+    //KoUpdaterPtr up = updater->startSubtask();
+    KoUpdaterPtr up = 0;
 
-    m_view->image()->scale(sx, sy, up, filterStrategy, scaleOnlyShapes);
-    updater->deleteLater();
+    m_view->image()->scaleImage(size, xres, yres, filterStrategy, up);
+
+    /**
+     * FIXME: scaling is done in separate threads, so it is done
+     * asynchronously, but the updater should be deleted anyway.
+     * It should be done as a king of shared pointer to be deleted
+     * after execution
+     */
+    // updater->deleteLater();
 }
 
 void KisImageManager::rotateCurrentImage(double radians)

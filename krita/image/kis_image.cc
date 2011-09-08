@@ -74,7 +74,9 @@
 
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
+#include "processing/kis_transform_processing_visitor.h"
 #include "commands_new/kis_image_resize_command.h"
+#include "commands_new/kis_image_set_resolution_command.h"
 
 
 // #define SANITY_CHECKS
@@ -453,31 +455,52 @@ void KisImage::emitSizeChanged()
     }
 }
 
-void KisImage::scale(double sx, double sy, KoUpdater *progress, KisFilterStrategy *filterStrategy, bool scaleOnlyShapes)
+void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy, KoUpdater *progress)
 {
-    // New image size. XXX: Pass along to discourage rounding errors?
-    qint32 w, h;
-    w = (qint32)((width() * sx) + 0.5);
-    h = (qint32)((height() * sy) + 0.5);
+    bool resolutionChanged = xres != xRes() && yres != yRes();
+    bool sizeChanged = size != this->size();
 
-    QSize newSize(w, h);
-    if(newSize == size()) return;
-
-    undoAdapter()->beginMacro(i18n("Scale Image"));
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-
-    if(!scaleOnlyShapes) {
-        undoAdapter()->addCommand(new KisImageResizeCommand(KisImageWSP(this), newSize));
+    if(!resolutionChanged && !sizeChanged) {
+        progress->setProgress(100);
+        return;
     }
 
-    KisTransformVisitor visitor(KisImageWSP(this), sx, sy, 0.0, 0.0, 0.0, 0, 0, progress, filterStrategy, scaleOnlyShapes);
-    m_d->rootLayer->accept(visitor);
+    KisImageSignalVector emitSignals;
+    if(resolutionChanged) emitSignals << ResolutionChangedSignal;
+    if(sizeChanged) emitSignals << SizeChangedSignal;
+    emitSignals << ModifiedSignal;
 
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-    undoAdapter()->endMacro();
+    QString actionName = sizeChanged ? "Scale Image" : "Change Image Resolution";
 
-    setModified();
+    KisProcessingApplicator applicator(this, m_d->rootLayer, true, emitSignals, actionName);
+
+    if(resolutionChanged) {
+        applicator.applyCommand(new KisImageSetResolutionCommand(this, xres, yres));
+    }
+
+    if(sizeChanged) {
+        applicator.applyCommand(new KisImageResizeCommand(this, size));
+    }
+
+    bool scaleOnlyShapes = resolutionChanged && !sizeChanged;
+
+    qreal sx = qreal(size.width()) / this->size().width();
+    qreal sy = qreal(size.height()) / this->size().height();
+
+    KisProcessingVisitorSP visitor =
+        new KisTransformProcessingVisitor(sx, sy,
+                                          0, 0,
+                                          QPointF(),
+                                          0,
+                                          0, 0,
+                                          progress,
+                                          filterStrategy,
+                                          scaleOnlyShapes);
+
+    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    applicator.end();
 }
+
 void KisImage::rotate(double radians, KoUpdater *progress)
 {
     qint32 w = width();

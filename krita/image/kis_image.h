@@ -219,15 +219,7 @@ public:
      */
     void cropNode(KisNodeSP node, const QRect& newRect);
 
-    /**
-     * Execute a scale transform on all layers in this image.
-     * @param sx x-axis scale factor
-     * @param sy y-axis scale factor
-     * @param m_progress progress updater
-     * @param filterStrategy filtering strategy be used to scaling pixels 
-     * @param scaleOnlyShapes only scale shapes, but not image and pixels
-     */
-    void scale(double sx, double sy, KoUpdater *m_progress, KisFilterStrategy *filterStrategy, bool scaleOnlyShapes = false);
+    void scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy, KoUpdater *progress);
 
     /**
      * Execute a rotate transform on all layers in this image.

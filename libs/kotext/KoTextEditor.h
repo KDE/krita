@@ -102,10 +102,15 @@ private:
 
     friend class KoTextPaste;
     friend class CharFormatVisitor;
+
+    // all these commands, including the ones in the textshape, should move to KoText
     friend class DeleteTableRowCommand;
     friend class DeleteTableColumnCommand;
     friend class InsertTableRowCommand;
     friend class InsertTableColumnCommand;
+    friend class ChangeTrackedDeleteCommand;
+    friend class DeleteCommand;
+
     friend class TestKoInlineTextObjectManager;
 
     // temporary...

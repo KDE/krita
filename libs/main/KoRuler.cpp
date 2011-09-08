@@ -982,12 +982,13 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
         int i = 0;
         int x;
         foreach (const Tab & t, d->tabs) {
-            if (d->rightToLeft)
-                x = int(d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd() - t.position)
-                        + d->offset);
-            else
-                x = int(d->viewConverter->documentToViewX(d->effectiveActiveRangeStart() + t.position)
-                        + d->offset);
+            if (d->rightToLeft) {
+                x = d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd()
+                        - (d->relativeTabs ? d->paragraphIndent : 0) - t.position) + d->offset;
+            } else {
+                x = d->viewConverter->documentToViewX(d->effectiveActiveRangeStart()
+                        + (d->relativeTabs ? d->paragraphIndent : 0) + t.position) + d->offset;
+            }
             if (pos.x() >= x-6 && pos.x() <= x+6) {
                 d->selected = KoRulerPrivate::Tab;
                 d->selectOffset = x - pos.x();
@@ -1011,8 +1012,14 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
 
     if (d->showTabs && d->selected == KoRulerPrivate::None) {
         // still haven't found something so let assume the user wants to add a tab
-        qreal tabpos = d->viewConverter->viewToDocumentX(pos.x() - d->offset)
-                    - d->effectiveActiveRangeStart();
+        qreal tabpos;
+        if (d->rightToLeft) {
+            tabpos = d->viewConverter->viewToDocumentX(pos.x() - d->offset)
+                    + d->effectiveActiveRangeEnd() + (d->relativeTabs ? d->paragraphIndent : 0);
+        } else {
+            tabpos = d->viewConverter->viewToDocumentX(pos.x() - d->offset)
+                    - d->effectiveActiveRangeStart() - (d->relativeTabs ? d->paragraphIndent : 0);
+        }
         Tab t = {tabpos, d->tabChooser->type()};
         d->tabs.append(t);
         d->selectOffset = 0;

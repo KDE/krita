@@ -943,8 +943,6 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
 
 void KoTableCellStyle::setEdge(KoTableBorderStyle::Side side, KoBorder::BorderStyle style, qreal width, QColor color)
 {
-    Q_D(KoTableCellStyle);
-
     KoTableBorderStyle::Edge edge;
     qreal innerWidth = 0;
     qreal middleWidth = 0;
@@ -1069,8 +1067,6 @@ void KoTableCellStyle::setEdgeDoubleBorderValues(KoTableBorderStyle::Side side, 
 
 bool KoTableCellStyle::hasBorders() const
 {
-    Q_D(const KoTableCellStyle);
-
     for (int i = KoTableBorderStyle::Top; i <= KoTableBorderStyle::BottomLeftToTopRight; i++)
         if (getEdge(KoTableBorderStyle::Side(i)).outerPen.widthF() > 0.0)
             return true;

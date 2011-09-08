@@ -165,13 +165,7 @@ public:
         ContinuousLineMode,
         SkipWhiteSpaceLineMode
     };
-
-    enum RotationAngle {
-        Zero,
-        Ninety = 90,
-        TwoHundredSeventy = 270
-    };
-
+    
     enum RotationScale {
         Fixed,
         LineHeight
@@ -335,9 +329,9 @@ public:
     LineMode underlineMode() const;
 
     /// Apply text rotation angle to this KoCharacterStyle
-    void setTextRotationAngle(RotationAngle angle);
+    void setTextRotationAngle(qreal angle);
     /// Get the current text rotation angle of this KoCharacterStyle
-    RotationAngle textRotationAngle() const;
+    qreal textRotationAngle() const;
     /**
      *  RotationScale pecifies whether for rotated text the width of the text
      *  should be scaled to fit into the current line height or the width of the text

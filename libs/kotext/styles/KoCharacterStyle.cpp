@@ -1011,28 +1011,6 @@ bool KoCharacterStyle::hasProperty(int key) const
     return d->stylesPrivate.contains(key);
 }
 
-static KoCharacterStyle::RotationAngle intToRotationAngle(int angle)
-{
-    KoCharacterStyle::RotationAngle rotationAngle = KoCharacterStyle::Zero;
-    if (angle == 90) {
-        rotationAngle = KoCharacterStyle::Ninety;
-    } else if (angle == 270) {
-        rotationAngle = KoCharacterStyle::TwoHundredSeventy;
-    }
-    return rotationAngle;
-}
-
-static int rotationAngleToInt(KoCharacterStyle::RotationAngle rotationAngle)
-{
-    int angle = 0;
-    if (rotationAngle == KoCharacterStyle::Ninety) {
-        angle = 90;
-    } else if (rotationAngle == KoCharacterStyle::TwoHundredSeventy) {
-        angle = 270;
-    }
-    return angle;
-}
-
 static QString rotationScaleToString(KoCharacterStyle::RotationScale rotationScale)
 {
     QString scale = "line-height";
@@ -1051,14 +1029,14 @@ static KoCharacterStyle::RotationScale stringToRotationScale(const QString &scal
     return rotationScale;
 }
 
-void KoCharacterStyle::setTextRotationAngle(RotationAngle angle)
+void KoCharacterStyle::setTextRotationAngle(qreal angle)
 {
-    d->setProperty(TextRotationAngle, rotationAngleToInt(angle));
+    d->setProperty(TextRotationAngle, angle);
 }
 
-KoCharacterStyle::RotationAngle KoCharacterStyle::textRotationAngle() const
+qreal KoCharacterStyle::textRotationAngle() const
 {
-    return intToRotationAngle(d->propertyInt(TextRotationAngle));
+    return d->propertyDouble(TextRotationAngle);
 }
 
 void KoCharacterStyle::setTextRotationScale(RotationScale scale)
@@ -1563,8 +1541,7 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
 
     const QString textRotationAngle(styleStack.property(KoXmlNS::style, "text-rotation-angle"));
     if (!textRotationAngle.isEmpty()) {
-        int angle = textRotationAngle.toInt();
-        setTextRotationAngle(intToRotationAngle(angle));
+        setTextRotationAngle(KoUnit::parseAngle(textRotationAngle));
     }
 
     const QString textRotationScale(styleStack.property(KoXmlNS::style, "text-rotation-scale"));
@@ -1879,8 +1856,7 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
         } else if (key == KoCharacterStyle::FontCharset) {
             style.addProperty("style:font-charset", d->stylesPrivate.value(KoCharacterStyle::FontCharset).toString(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::TextRotationAngle) {
-            RotationAngle angle = textRotationAngle();
-            style.addProperty("style:text-rotation-angle", rotationAngleToInt(angle), KoGenStyle::TextType);
+            style.addProperty("style:text-rotation-angle", QString::number(textRotationAngle()), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::TextRotationScale) {
             RotationScale scale = textRotationScale();
             style.addProperty("style:text-rotation-scale", rotationScaleToString(scale), KoGenStyle::TextType);

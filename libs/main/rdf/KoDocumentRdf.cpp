@@ -1121,7 +1121,7 @@ void KoDocumentRdf::rememberNewInlineRdfObject(KoTextInlineRdf *inlineRdf)
     d->inlineRdfObjects[inlineRdf->xmlId()] = inlineRdf;
 }
 
-void KoDocumentRdf::updateInlineRdfStatements(QTextDocument *qdoc)
+void KoDocumentRdf::updateInlineRdfStatements(const QTextDocument *qdoc)
 {
     RDEBUG << "top";
     KoInlineTextObjectManager *textObjectManager = KoTextDocument(qdoc).inlineTextObjectManager();

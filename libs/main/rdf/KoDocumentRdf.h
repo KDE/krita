@@ -182,7 +182,7 @@ public:
      * document and update the statements in the Soprano::model to
      * reflect the current state of the inline Rdf.
      */
-    void updateInlineRdfStatements(QTextDocument *qdoc);
+    void updateInlineRdfStatements(const QTextDocument *qdoc);
 
     /**
      * During a save(), various Rdf objects in the document will

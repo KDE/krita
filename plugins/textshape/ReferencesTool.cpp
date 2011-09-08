@@ -136,11 +136,11 @@ void ReferencesTool::formatTableOfContents()
     //if(!m_configure)
    // {
     qDebug()<<"format";
-    QTextDocument *m_document = textEditor()->document();
+    const QTextDocument *document = textEditor()->document();
     QMenu *tocList = new QMenu(m_stocw);
     int i = 0;
     QTextBlock firstToCTextBlock;
-    for (QTextBlock it = m_document->begin(); it != m_document->end(); it = it.next())
+    for (QTextBlock it = document->begin(); it != document->end(); it = it.next())
     {
         if (it.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
             KoTableOfContentsGeneratorInfo *info = it.blockFormat().property(KoParagraphStyle::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();

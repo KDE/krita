@@ -108,6 +108,7 @@ private:
     friend class InsertTableRowCommand;
     friend class InsertTableColumnCommand;
     friend class TestKoInlineTextObjectManager;
+
     /**
      * This should be used only as read-only cursor or within a KUndo2Command sub-class which
      * will be added to the textEditor with addCommand. For examples of proper implementation of
@@ -294,6 +295,7 @@ public:
 
     void insertText(const QString &text, const QTextCharFormat &format);
 
+    void insertHtml(const QString &html);
 //    void joinPreviousEditBlock ();
 
     void mergeBlockCharFormat( const QTextCharFormat &modifier);

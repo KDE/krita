@@ -1551,6 +1551,16 @@ void KoTextEditor::insertText(const QString &text, const QTextCharFormat &format
     //TODO
 }
 
+void KoTextEditor::insertHtml(const QString &html)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    // XXX: do the changetracking and everything!
+    d->caret.insertHtml(html);
+}
+
 void KoTextEditor::mergeBlockCharFormat(const QTextCharFormat &modifier)
 {
     if (isEditProtected()) {

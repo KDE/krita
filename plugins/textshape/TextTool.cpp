@@ -546,6 +546,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 
 TextTool::~TextTool()
 {
+    delete m_toolSelection;
 }
 
 void TextTool::showChangeTip()

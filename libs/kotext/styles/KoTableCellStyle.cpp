@@ -893,8 +893,6 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
         } else if (key == DecimalPlaces) {
             style.addProperty("style:decimal-places", decimalPlaces(), KoGenStyle::TableCellType);
         } else if (key == RotationAngle) {
-            QString str;
-            str.setNum(rotationAngle(), 'f', DBL_DIG);
             style.addProperty("style:rotation-angle", QString::number(rotationAngle()), KoGenStyle::TableCellType);
         } else if (key == Wrap) {
             if (wrap())

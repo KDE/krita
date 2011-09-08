@@ -75,13 +75,13 @@ void RulerTabChooser::paintEvent(QPaintEvent *)
     switch (m_type) {
     case QTextOption::LeftTab:
         polygon << QPointF(x+0.5, height() - 8.5)
-            << QPointF(x-5.5, height() - 2.5)
+            << QPointF(x+6.5, height() - 2.5)
             << QPointF(x+0.5, height() - 2.5);
         painter.drawPolygon(polygon);
         break;
     case QTextOption::RightTab:
         polygon << QPointF(x+0.5, height() - 8.5)
-            << QPointF(x+6.5, height() - 2.5)
+            << QPointF(x-5.5, height() - 2.5)
             << QPointF(x+0.5, height() - 2.5);
         painter.drawPolygon(polygon);
         break;
@@ -154,26 +154,30 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
     painter.setBrush(d->ruler->palette().color(QPalette::Text));
     painter.setRenderHint( QPainter::Antialiasing );
 
+    qreal position=0;
+
     foreach (const KoRuler::Tab & t, d->tabs) {
         qreal x;
-        if (d->rightToLeft)
+        if (d->rightToLeft) {
             x = d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd()
                     - (d->relativeTabs ? d->paragraphIndent : 0) - t.position) + d->offset;
-        else
+        } else {
             x = d->viewConverter->documentToViewX(d->effectiveActiveRangeStart()
                     + (d->relativeTabs ? d->paragraphIndent : 0) + t.position) + d->offset;
+        }
+        position = qMax(position, t.position);
 
         polygon.clear();
         switch (t.type) {
         case QTextOption::LeftTab:
             polygon << QPointF(x+0.5, d->ruler->height() - 8.5)
-                << QPointF(x-5.5, d->ruler->height() - 2.5)
+                << QPointF(x+6.5, d->ruler->height() - 2.5)
                 << QPointF(x+0.5, d->ruler->height() - 2.5);
             painter.drawPolygon(polygon);
             break;
         case QTextOption::RightTab:
             polygon << QPointF(x+0.5, d->ruler->height() - 8.5)
-                << QPointF(x+6.5, d->ruler->height() - 2.5)
+                << QPointF(x-5.5, d->ruler->height() - 2.5)
                 << QPointF(x+0.5, d->ruler->height() - 2.5);
             painter.drawPolygon(polygon);
             break;
@@ -185,15 +189,41 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
             break;
         case QTextOption::DelimiterTab:
             polygon << QPointF(x-5.5, d->ruler->height() - 2.5)
-                << QPointF(x+0.5, d->ruler->height() - 8.5)
                 << QPointF(x+6.5, d->ruler->height() - 2.5);
+            painter.drawPolyline(polygon);
+            polygon << QPointF(x+0.5, d->ruler->height() - 2.5)
+                << QPointF(x+0.5, d->ruler->height() - 8.5);
             painter.drawPolyline(polygon);
             break;
         default:
             break;
         }
     }
-    //painter.setRenderHint( QPainter::Antialiasing, false );
+
+    // and also draw the regular interval tab that are non editable
+    if (d->tabDistance > 0.0) {
+        position = (int(position / d->tabDistance) + 1) * d->tabDistance;
+        position += (d->relativeTabs ? d->paragraphIndent : 0);
+        while (position < d->effectiveActiveRangeEnd() - d->effectiveActiveRangeStart()
+                - d->endIndent) {
+            qreal x;
+            if (d->rightToLeft) {
+                x = d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd()
+                        - position) + d->offset;
+            } else {
+                x = d->viewConverter->documentToViewX(d->effectiveActiveRangeStart()
+                        + position) + d->offset;
+            }
+
+            polygon.clear();
+            polygon << QPointF(x+0.5, d->ruler->height() - 5.5)
+                << QPointF(x+4.5, d->ruler->height() - 2.5)
+                << QPointF(x+0.5, d->ruler->height() - 2.5);
+            painter.drawPolygon(polygon);
+
+            position += d->tabDistance;
+        }
+    }
 }
 
 void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle)
@@ -942,9 +972,10 @@ void KoRuler::setRelativeTabs(bool relative)
     d->relativeTabs = relative;
 }
 
-void KoRuler::updateTabs(const QList<KoRuler::Tab> &tabs)
+void KoRuler::updateTabs(const QList<KoRuler::Tab> &tabs, qreal tabDistance)
 {
     d->tabs = tabs;
+    d->tabDistance = tabDistance;
 }
 
 QList<KoRuler::Tab> KoRuler::tabs() const

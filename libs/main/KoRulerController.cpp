@@ -94,7 +94,11 @@ public:
                 tabs.append(tab);
             }
         }
-        ruler->updateTabs(tabs);
+        qreal tabStopDistance = format.doubleProperty(KoParagraphStyle::TabStopDistance);
+/*        if (tabStopDistance <= 0) {
+            tabStopDistance = block.document()->documentLayout()->defaultTabSpacing();
+        }*/
+        ruler->updateTabs(tabs, tabStopDistance);
     }
 
     void indentsChanged() {

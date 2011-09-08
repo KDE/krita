@@ -919,14 +919,14 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             // note: we subtract right margin as this is where the tab should be
             // note: we subtract indent so tab is not relative to it
             // note: we subtract left margin so tab is not relative to it
-            // if rtl the above reasons swap but formula stays the same
-            value = right() - left() - leftMargin - rightMargin- m_indent;
+            // if rtl the above left/right reasons swap but formula stays the same
+            value = right() - left() - leftMargin - rightMargin - m_indent;
         } else {
             value += tabOffset;
         }
         // conversion here is required because Qt thinks in device units and we don't
-        // -0.126 (qt works in fixedpoint) is to avoid some text wrapping to the next line
-        value = value * qt_defaultDpiY() / 72.0 - 0.126;
+        // -2 is to avoid some text wrapping to the next line
+        value = value * qt_defaultDpiY() / 72.0 - 2;
 
 #if QT_VERSION >= 0x040700
         qTabs.append(QTextOption::Tab(value, kTab.type, kTab.delimiter));

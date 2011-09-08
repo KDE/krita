@@ -102,6 +102,7 @@ QTextDocument *TestChangeTracking::documentFromOdt(const QString &odt, const QSt
 
     KoStyleManager *styleManager = new KoStyleManager;
     KoChangeTracker *changeTracker = new KoChangeTracker;
+    KoInlineTextObjectManager *inlineTextObjectManager = new KoInlineTextObjectManager;
     if (changeFormat == "DeltaXML")
         changeTracker->setSaveFormat(KoChangeTracker::DELTAXML);
     else
@@ -115,7 +116,7 @@ QTextDocument *TestChangeTracking::documentFromOdt(const QString &odt, const QSt
     shapeLoadingContext.addSharedData(KOTEXT_SHARED_LOADING_ID, textSharedLoadingData);
 
     QTextDocument *document = new QTextDocument;
-    KoTextDocument(document).setInlineTextObjectManager(new KoInlineTextObjectManager()); // required while saving
+    KoTextDocument(document).setInlineTextObjectManager(inlineTextObjectManager); // required while saving
     KoTextDocument(document).setStyleManager(styleManager);
     KoTextDocument(document).setChangeTracker(changeTracker);
 
@@ -127,7 +128,7 @@ QTextDocument *TestChangeTracking::documentFromOdt(const QString &odt, const QSt
     return document;
 }
 
-QString TestChangeTracking::documentToOdt(QTextDocument *document)
+QString TestChangeTracking::documentToOdt(const QString &testCase, QTextDocument *document)
 {
     QString odt("test.odt");
     if (QFile::exists(odt))
@@ -183,6 +184,7 @@ QString TestChangeTracking::documentToOdt(QTextDocument *document)
     KoTextDocument(document).setInlineTextObjectManager(new KoInlineTextObjectManager()); // required while saving
     KoStyleManager *styleManager = new KoStyleManager;
     KoTextDocument(document).setStyleManager(styleManager);
+    KoTextDocument(document).setTextEditor(new KoTextEditor(document));
 
     KoTextWriter writer(context, 0);
     writer.write(document, 0, -1);
@@ -227,7 +229,7 @@ void TestChangeTracking::testChangeTracking()
     testFileName.prepend(QString(FILES_DATA_DIR));
 
     QTextDocument *originalDocument = documentFromOdt(testFileName, changeFormat);
-    QString roundTripFileName = documentToOdt(originalDocument);
+    QString roundTripFileName = documentToOdt(testcase, originalDocument);
 
     QVERIFY(verifyContentXml(testFileName, roundTripFileName));
 }

@@ -90,11 +90,10 @@ class KoRdfFoaF;
  * useful if you want to find the contacts in the users current
  * "selection" in the document.
  *
- * For example, to find the foaf entries related to the current cursor:
+ * For example, to find the foaf entries related to the current KoTextEditor
  *
- * QTextCursor cursor = ...;
- * Soprano::Model* model = rdf->findStatements( cursor );
- g* KoRdfFoaFList foaflist = rdf->foaf( model );
+ * Soprano::Model* model = rdf->findStatements( editor );
+ * KoRdfFoaFList foaflist = rdf->foaf( model );
  *
  * Using the Soprano::Model directly is covered in a latter section of
  * this comment.
@@ -233,7 +232,6 @@ public:
      *
      * <start-a> ... <start-b> ... cursor ... <end-b> ... <end-a>
      */
-    QPair<int, int> findExtent(QTextCursor &cursor) const;
     QPair<int, int> findExtent(KoTextEditor *handler) const;
 
     /**
@@ -241,7 +239,6 @@ public:
      * findExtent() this will be only the most nested semitem.
      * @see findExtent()
      */
-    QString findXmlId(QTextCursor &cursor) const;
     QString findXmlId(KoTextEditor *cursor) const;
 
 
@@ -265,7 +262,6 @@ public:
      *
      * Note that the returned model is owned by the caller, you must delete it.
      */
-    Soprano::Model *findStatements(QTextCursor &cursor, int depth = 1);
     Soprano::Model *findStatements(const QString &xmlid, int depth = 1);
     Soprano::Model *findStatements(KoTextEditor *handler, int depth = 1);
 

@@ -100,12 +100,21 @@ public:
 
 public slots:
 
+private:
+
+    friend class CharFormatVisitor;
+    friend class DeleteTableRowCommand;
+    friend class DeleteTableColumnCommand;
+    friend class InsertTableRowCommand;
+    friend class InsertTableColumnCommand;
+    friend class TestKoInlineTextObjectManager;
     /**
      * This should be used only as read-only cursor or within a KUndo2Command sub-class which
      * will be added to the textEditor with addCommand. For examples of proper implementation of
      * such undoCommands, see the TextShape commands.
      */
     QTextCursor* cursor();
+public:
 
     void addCommand(KUndo2Command *command, bool addCommandToStack = true);
 
@@ -209,7 +218,7 @@ public slots:
 
     void deletePreviousChar();
 
-    QTextDocument *document() const;
+    const QTextDocument *document() const;
 
     void endEditBlock();
 
@@ -326,6 +335,10 @@ public slots:
     bool visualNavigation() const;
 
     bool isBidiDocument() const;
+
+    const QTextFrame *currentFrame () const;
+    const QTextList *currentList () const;
+    const QTextTable *currentTable () const;
 
 signals:
     void isBidiUpdated();

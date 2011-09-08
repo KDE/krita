@@ -1037,7 +1037,7 @@ void KoTextEditor::deletePreviousChar()
     emit cursorPositionChanged();
 }
 
-QTextDocument* KoTextEditor::document() const
+const QTextDocument *KoTextEditor::document() const
 {
     return d->caret.document();
 }
@@ -1833,6 +1833,22 @@ bool KoTextEditor::isBidiDocument() const
 {
     return d->isBidiDocument;
 }
+
+const QTextFrame *KoTextEditor::currentFrame () const
+{
+    return d->caret.currentFrame();
+}
+
+const QTextList *KoTextEditor::currentList () const
+{
+    return d->caret.currentList();
+}
+
+const QTextTable *KoTextEditor::currentTable () const
+{
+    return d->caret.currentTable();
+}
+
 
 void KoTextEditor::beginEditBlock()
 {

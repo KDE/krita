@@ -1132,8 +1132,6 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
                 d->paintingStrategy = d->distancesPaintingStrategy;
         }
 
-        if (d->paragraphIndent < 0)
-            d->paragraphIndent = 0;
         if (d->paragraphIndent + d->endIndent > activeLength)
             d->paragraphIndent = activeLength - d->endIndent;;
         emit indentsChanged(false);
@@ -1153,8 +1151,6 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
                 d->paintingStrategy = d->distancesPaintingStrategy;
         }
 
-        if (d->endIndent < 0)
-            d->endIndent = 0;
         if (d->paragraphIndent + d->endIndent > activeLength)
             d->endIndent = activeLength - d->paragraphIndent;;
         emit indentsChanged(false);

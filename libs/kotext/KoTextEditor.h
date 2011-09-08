@@ -98,10 +98,9 @@ public:
 
     bool operator>=(const QTextCursor &other) const;
 
-public slots:
-
 private:
 
+    friend class KoTextPaste;
     friend class CharFormatVisitor;
     friend class DeleteTableRowCommand;
     friend class DeleteTableColumnCommand;
@@ -109,13 +108,18 @@ private:
     friend class InsertTableColumnCommand;
     friend class TestKoInlineTextObjectManager;
 
+    // temporary...
+    friend class TextShape;
+    friend class TextTool;
+
     /**
      * This should be used only as read-only cursor or within a KUndo2Command sub-class which
      * will be added to the textEditor with addCommand. For examples of proper implementation of
      * such undoCommands, see the TextShape commands.
      */
     QTextCursor* cursor();
-public:
+
+public slots:
 
     void addCommand(KUndo2Command *command, bool addCommandToStack = true);
 

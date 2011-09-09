@@ -154,7 +154,7 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
     painter.setBrush(d->ruler->palette().color(QPalette::Text));
     painter.setRenderHint( QPainter::Antialiasing );
 
-    qreal position=0;
+    qreal position = -10000;
 
     foreach (const KoRuler::Tab & t, d->tabs) {
         qreal x;
@@ -202,17 +202,22 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
 
     // and also draw the regular interval tab that are non editable
     if (d->tabDistance > 0.0) {
-        position = (int(position / d->tabDistance) + 1) * d->tabDistance;
-        position += (d->relativeTabs ? d->paragraphIndent : 0);
+        // first possible position
+        position = qMax(position, d->relativeTabs ? 0 : d->paragraphIndent);
+        if (position < 0) {
+            position = int(position / d->tabDistance) * d->tabDistance;
+        } else {
+            position = (int(position / d->tabDistance) + 1) * d->tabDistance;
+        }
         while (position < d->effectiveActiveRangeEnd() - d->effectiveActiveRangeStart()
                 - d->endIndent) {
             qreal x;
             if (d->rightToLeft) {
                 x = d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd()
-                        - position) + d->offset;
+                        - (d->relativeTabs ? d->paragraphIndent : 0) - position) + d->offset;
             } else {
                 x = d->viewConverter->documentToViewX(d->effectiveActiveRangeStart()
-                        + position) + d->offset;
+                        + (d->relativeTabs ? d->paragraphIndent : 0) + position) + d->offset;
             }
 
             polygon.clear();

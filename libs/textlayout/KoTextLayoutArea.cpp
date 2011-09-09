@@ -881,11 +881,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QList<KoText::Tab> tabs = pStyle.tabPositions();
 
     // Handle tabs relative to leftMargin
-    qreal tabOffset;
-    if (m_documentLayout->relativeTabs(block)) {
-        tabOffset = m_isRtl ? 0.0 : -m_indent;
-    } else {
-        tabOffset = m_isRtl ? -rightMargin : -leftMargin - m_indent;
+    qreal tabOffset = 0;
+    if (!m_documentLayout->relativeTabs(block)) {
+        tabOffset = m_isRtl ? -rightMargin : -leftMargin;
     }
 
     // Regular interval tabs. Since Qt doesn't handle regular interval tabs offset
@@ -896,11 +894,16 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         tabStopDistance = m_documentLayout->defaultTabSpacing();
     }
 
-    qreal position = 0;
+    qreal position = -tabOffset; // first possible position
     if (!tabs.isEmpty()) {
-        position += tabs.last().position;
+        position = tabs.last().position;
     }
-    position = (int(position / tabStopDistance) + 1) * tabStopDistance;
+
+    if (position < 0) {
+        position = int(position / tabStopDistance) * tabStopDistance;
+    } else {
+        position = (int(position / tabStopDistance) + 1) * tabStopDistance;
+    }
     while (position < MaximumTabPos) {
         KoText::Tab tab;
 

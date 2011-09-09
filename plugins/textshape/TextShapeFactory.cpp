@@ -99,10 +99,12 @@ KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceMan
     TextShape *shape = static_cast<TextShape*>(createDefaultShape(documentResources));
     shape->textShapeData()->document()->setUndoRedoEnabled(false);
     shape->setSize(QSizeF(300, 200));
+    /*
     QString text("text");
     if (params->contains(text)) {
         KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(shape->userData());
     }
+    */
     if (documentResources) {
         shape->setImageCollection(documentResources->imageCollection());
     }

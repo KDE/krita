@@ -31,8 +31,8 @@ TableOfContentsStyleConfigure::TableOfContentsStyleConfigure(KoStyleManager *man
     QDialog(parent),
     m_stylesTree(0),
     m_styleManager(manager),
-    m_stylesModel(0),
     m_tocInfo(0),
+    m_stylesModel(0),
     ui(new Ui::TableOfContentsStyleConfigure)
 {
     ui->setupUi(this);

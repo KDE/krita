@@ -35,7 +35,7 @@ class TEXTLAYOUT_EXPORT KoTextLayoutObstruction
 public:
     KoTextLayoutObstruction(KoShape *shape, const QTransform &matrix);
 
-    void init(const QTransform &matrix, const QPainterPath &obstruction, qreal distance);
+    void init(const QTransform &matrix, const QPainterPath &obstruction, qreal distance, qreal borderHalfWidth);
 
     QRectF limit(const QRectF &content);
 
@@ -68,7 +68,7 @@ public:
 
     static bool compareRectLeft(KoTextLayoutObstruction *o1, KoTextLayoutObstruction *o2);
 private:
-    QPainterPath decoratedOutline();
+    QPainterPath decoratedOutline(const KoShape *shape, qreal &borderHalfWidth) const;
 
     enum Side { None, Left, Right, Empty, Both, Bigger, Enough };
     Side m_side;

@@ -135,6 +135,7 @@ set(kritaimage_LIB_SRCS
    kis_strokes_queue.cpp
    kis_simple_update_queue.cpp
    kis_update_scheduler.cpp
+   kis_queues_progress_updater.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
    kis_histogram.cc

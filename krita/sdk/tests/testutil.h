@@ -56,16 +56,36 @@ void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
     }
 }
 
-struct TestProgressBar : public KoProgressProxy {
+class TestProgressBar : public KoProgressProxy {
+public:
+    TestProgressBar()
+        : m_min(0), m_max(0), m_value(0)
+    {}
+
     int maximum() const {
-        return 0;
+        return m_max;
     }
     void setValue(int value) {
-        Q_UNUSED(value);
-        //qDebug() << "Progress (" << this << "): " << value ;
+        m_value = value;
     }
-    void setRange(int, int) {}
-    void setFormat(const QString &) {}
+    void setRange(int min, int max) {
+        m_min = min;
+        m_max = max;
+    }
+    void setFormat(const QString &format) {
+        m_format = format;
+    }
+
+    int min() { return m_min; }
+    int max() { return m_max; }
+    int value() { return m_value; }
+    QString format() { return m_format; }
+
+private:
+    int m_min;
+    int m_max;
+    int m_value;
+    QString m_format;
 };
 
 

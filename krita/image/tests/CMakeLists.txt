@@ -388,6 +388,12 @@ target_link_libraries(KisStrokesQueueTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QT
 
 ########### next target ###############
 
+set(kis_queues_progress_updater_test_SRCS kis_queues_progress_updater_test.cpp )
+kde4_add_unit_test(KisQueuesProgressUpdaterTest TESTNAME krita-image-KisQueuesProgressUpdaterTest ${kis_queues_progress_updater_test_SRCS})
+target_link_libraries(KisQueuesProgressUpdaterTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_macro_test_SRCS kis_macro_test.cpp )
 kde4_add_unit_test(KisMacroTest TESTNAME krita-image-KisMacroTest ${kis_macro_test_SRCS})
 target_link_libraries(KisMacroTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

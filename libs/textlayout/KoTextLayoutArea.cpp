@@ -862,18 +862,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     m_x = left() + (m_isRtl ? rightMargin : leftMargin);
 
     m_documentLayout->clearInlineObjectRegistry(block);
-    m_indent = 0;
+    m_indent = textIndent(block, textList);
     QTextLine line;
-    bool anyLineAdded = false;
-    if (cursor->lineTextStart == -1) {
-        layout->beginLayout();
-        m_indent = textIndent(block, textList);
-
-        line = layout->createLine();
-        cursor->fragmentIterator = block.begin();
-    } else {
-        line = restartLayout(layout, cursor->lineTextStart);
-    }
 
     //========
     // Tabs
@@ -881,9 +871,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QList<KoText::Tab> tabs = pStyle.tabPositions();
 
     // Handle tabs relative to leftMargin
-    qreal tabOffset = 0;
+    qreal tabOffset = -m_indent;
     if (!m_documentLayout->relativeTabs(block)) {
-        tabOffset = m_isRtl ? -rightMargin : -leftMargin;
+        tabOffset += m_isRtl ? -rightMargin : -leftMargin;
     }
 
     // Regular interval tabs. Since Qt doesn't handle regular interval tabs offset
@@ -894,7 +884,11 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         tabStopDistance = m_documentLayout->defaultTabSpacing();
     }
 
-    qreal position = -tabOffset; // first possible position
+    qreal position = 0; // first possible position
+    if (!m_documentLayout->relativeTabs(block)) {
+        position = m_isRtl ? rightMargin : leftMargin;
+    }
+
     if (!tabs.isEmpty()) {
         position = tabs.last().position;
     }
@@ -923,10 +917,12 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             // note: we subtract indent so tab is not relative to it
             // note: we subtract left margin so tab is not relative to it
             // if rtl the above left/right reasons swap but formula stays the same
-            value = right() - left() - leftMargin - rightMargin - m_indent;
-        } else {
-            value += tabOffset;
-        }
+            // -tabOfset is just to cancel that we add it next
+            value = right() - left() - leftMargin - rightMargin - m_indent - tabOffset;
+        } 
+
+        value += tabOffset;
+
         // conversion here is required because Qt thinks in device units and we don't
         // -2 is to avoid some text wrapping to the next line
         value = value * qt_defaultDpiY() / 72.0 - 2;
@@ -945,11 +941,22 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // We need to sort as the MaximumTabPos may be converted to a value that really
     // should be in the middle of the list
     qSort(qTabs.begin(), qTabs.end(), compareTab);
-
     option.setTabs(qTabs);
+
     // conversion here is required because Qt thinks in device units and we don't
     option.setTabStop(tabStopDistance * qt_defaultDpiY() / 72.);
 
+
+    layout->setTextOption(option);
+
+    if (cursor->lineTextStart == -1) {
+        layout->beginLayout();
+        line = layout->createLine();
+        cursor->fragmentIterator = block.begin();
+    } else {
+        line = restartLayout(layout, cursor->lineTextStart);
+        m_indent = 0;
+    }
 
     // ==============
     // Now once we know the physical context we can work on the borders of the paragraph
@@ -1012,8 +1019,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     }
 
 
-    layout->setTextOption(option);
-
     // ==============
     // Create the lines of this paragraph
     // ==============
@@ -1021,6 +1026,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     runAroundHelper.setObstructions(documentLayout()->currentObstructions());
     qreal maxLineHeight = 0;
     qreal y_justBelowDropCaps = 0;
+    bool anyLineAdded = false;
 
     while (line.isValid()) {
         runAroundHelper.setLine(this, line);

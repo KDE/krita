@@ -624,7 +624,7 @@ KisQImagemaskSP KisBrush::createMask(double scale, double subPixelX, double subP
 
     if (belowBrush != 0) {
 #if 0 
-        Interpolation showed artifacts
+        // Interpolation showed artifacts
         
         // We're in between two masks. Interpolate between them.
 
@@ -637,10 +637,11 @@ KisQImagemaskSP KisBrush::createMask(double scale, double subPixelX, double subP
         double t = (scale - belowBrush->scale()) / (aboveBrush->scale() - belowBrush->scale());
 
         outputMask = KisQImagemask::interpolate(scaledBelowMask, scaledAboveMask, t);
-#endif
+#else
         double t = (scale - belowBrush->scale()) / (aboveBrush->scale() - belowBrush->scale());
         
         outputMask = scaleMask( (t >= 0.5) ? aboveBrush : belowBrush, scale, subPixelX, subPixelY);
+#endif
     } else {
         if (Eigen::ei_isApprox(scale, aboveBrush->scale())) {
             // Exact match.

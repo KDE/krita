@@ -565,19 +565,19 @@ void TestBlockLayout::testTabs()
         m_layout->layout();
         for (int pos=0; pos<4; pos++) {
             if (pos!=0)
-                QCOMPARE(blockLayout->lineAt(0).cursorToX(pos*2), testcases[i].expected+(pos-1)*50.0);
+                QVERIFY(qAbs(blockLayout->lineAt(0).cursorToX(pos*2) - (testcases[i].expected+(pos-1)*50.0)) < ROUNDING);
         }
         if (testcases[i].textIndent == 0.0) {
             // these tests would currently fail if textIndent != 0.0
             for (int pos=0; pos<4; pos++) {
                 // pos==0 is known to fail see https://bugs.kde.org/show_bug.cgi?id=239819
                 if (pos!=0)
-                    QCOMPARE(blockLayout->lineAt(1).cursorToX(pos*2+8), testcases[i].expected+(pos-1)*50.0);
+                    QVERIFY(qAbs(blockLayout->lineAt(1).cursorToX(pos*2+8)- (testcases[i].expected+(pos-1)*50.0)) < ROUNDING);
             }
             for (int pos=0; pos<4; pos++) {
                 // pos==0 is known to fail see https://bugs.kde.org/show_bug.cgi?id=239819
                 if (pos!=0)
-                    QCOMPARE(blockLayout->lineAt(2).cursorToX(pos*2+16), testcases[i].expected+(pos-1)*50.0);
+                    QVERIFY(qAbs(blockLayout->lineAt(2).cursorToX(pos*2+16)- (testcases[i].expected+(pos-1)*50.0)) < ROUNDING);
             }
         }
     }

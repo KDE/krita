@@ -181,6 +181,7 @@ void KoRdfSemanticItem::updateTriple(double &toModify,
 void KoRdfSemanticItem::setRdfType(const QString &t)
 {
     Soprano::Model *m = const_cast<Soprano::Model*>(documentRdf()->model());
+    Q_ASSERT(m);
     Node pred = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"));
     m->addStatement(linkingSubject(), pred, Node::createResourceNode(t), context());
 }

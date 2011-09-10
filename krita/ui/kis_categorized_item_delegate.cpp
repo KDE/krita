@@ -31,7 +31,7 @@ KisCategorizedItemDelegate::KisCategorizedItemDelegate(QAbstractListModel* model
 
 void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    qint32 border = 4;
+    qint32 border = 0;//4;
     qint32 xpos   = border + option.rect.x() + option.rect.height();
     qint32 ypos   = option.rect.y();
     qint32 size   = option.rect.height();
@@ -40,6 +40,7 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
     painter->resetTransform();
     
     if(!m_model->data(index, IsHeaderRole).toBool()) {
+// 		QStyledItemDelegate::paint(painter, option, index);
         QStyleOptionViewItem sovi = option;
         
         if(m_indicateError)

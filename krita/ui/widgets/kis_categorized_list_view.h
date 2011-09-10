@@ -30,6 +30,8 @@ class KRITAUI_EXPORT KisCategorizedListView: public QListView
     Q_OBJECT
 public:
     KisCategorizedListView(QWidget* parent=0);
+	virtual void setModel(QAbstractItemModel* model);
+	void updateRows(int begin, int end);
     
 signals:
     void sigCategoryToggled(const QModelIndex& index, bool toggled);
@@ -37,6 +39,8 @@ signals:
 protected slots:
     void slotIndexChanged(const QModelIndex& index);
     virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+	virtual void rowsInserted(const QModelIndex& parent, int start, int end);
+// 	virtual void mousePressEvent(QMouseEvent* event);
 };
 
 

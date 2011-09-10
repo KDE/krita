@@ -35,8 +35,9 @@ int KoProgressBar::maximum() const
 
 void KoProgressBar::setValue(int value)
 {
+    QProgressBar::setValue(value);
+
     if (value >= minimum() && value < maximum()) {
-        QProgressBar::setValue(value);
         setVisible( true );
     } else {
         emit done();

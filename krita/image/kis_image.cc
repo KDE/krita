@@ -77,6 +77,7 @@
 #include "processing/kis_transform_processing_visitor.h"
 #include "commands_new/kis_image_resize_command.h"
 #include "commands_new/kis_image_set_resolution_command.h"
+#include "kis_composite_progress_proxy.h"
 
 
 // #define SANITY_CHECKS
@@ -128,6 +129,8 @@ public:
     KisImageSignalRouter *signalRouter;
     KisUpdateScheduler *scheduler;
 
+    KisCompositeProgressProxy *compositeProgressProxy;
+
     bool startProjection;
 };
 
@@ -160,6 +163,7 @@ KisImage::~KisImage()
     delete m_d->postExecutionUndoAdapter;
     delete m_d->legacyUndoAdapter;
     delete m_d->undoStore;
+    delete m_d->compositeProgressProxy;
 
     delete m_d->signalRouter;
     delete m_d->perspectiveGrid;
@@ -298,10 +302,18 @@ void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const 
 
     m_d->recorder = new KisActionRecorder(this);
 
+    m_d->compositeProgressProxy = new KisCompositeProgressProxy();
+
     m_d->scheduler = 0;
     if (m_d->startProjection) {
         m_d->scheduler = new KisUpdateScheduler(this);
+        m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
     }
+}
+
+KisCompositeProgressProxy* KisImage::compositeProgressProxy()
+{
+    return m_d->compositeProgressProxy;
 }
 
 bool KisImage::locked() const

@@ -81,6 +81,7 @@
 
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
+#include "kis_composite_progress_proxy.h"
 #include <kis_layer.h>
 
 #include "kra/kis_kra_loader.h"
@@ -751,6 +752,13 @@ void KisView2::connectCurrentImage()
         connect(image(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageSizeChanged()));
         connect(image()->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));
 
+        /**
+         * WARNING: Currently we access the global progress bar in two ways:
+         * connecting to composite progress proxy (strokes) and creating
+         * progress updaters. The latter way should be depracated in favour
+         * of displaying the status of the global strokes queue
+         */
+        image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
     }
 
     m_d->canvas->connectCurrentImage();

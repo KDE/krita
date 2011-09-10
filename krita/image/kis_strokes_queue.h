@@ -44,6 +44,7 @@ public:
     bool isEmpty() const;
 
     qint32 sizeMetric() const;
+    QString currentStrokeName() const;
 
 private:
     bool processOneJob(KisUpdaterContext &updaterContext, bool externalJobsPending);

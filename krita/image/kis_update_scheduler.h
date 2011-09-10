@@ -26,6 +26,7 @@
 #include "kis_image_interfaces.h"
 
 class QRect;
+class KoProgressProxy;
 class KisProjectionUpdateListener;
 
 
@@ -36,6 +37,15 @@ class KRITAIMAGE_EXPORT KisUpdateScheduler : public QObject, public KisStrokesFa
 public:
     KisUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener);
     virtual ~KisUpdateScheduler();
+
+    /**
+     * Sets the proxy that is going to be notified about the progress
+     * of processing of the queues. If you want to switch the proxy
+     * on runtime, you should do it under the lock held.
+     *
+     * \see lock(), unlock()
+     */
+    void setProgressProxy(KoProgressProxy *progressProxy);
 
     /**
      * Blocks processing of the queues.
@@ -134,6 +144,9 @@ private:
     bool haveUpdatesRunning();
     void tryProcessUpdatesQueue();
     void wakeUpWaitingThreads();
+
+    void progressUpdate();
+    void progressNotifyJobDone();
 
 protected:
     class Private;

@@ -35,6 +35,7 @@ public:
 
     void addJob(KisStrokeJobData *data);
 
+    QString name() const;
     bool hasJobs() const;
     qint32 numJobs() const;
     KisStrokeJob* popOneJob();

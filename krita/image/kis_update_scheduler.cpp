@@ -26,6 +26,8 @@
 #include "kis_simple_update_queue.h"
 #include "kis_strokes_queue.h"
 
+#include "kis_queues_progress_updater.h"
+
 #include <QReadWriteLock>
 #include "kis_lazy_wait_condition.h"
 
@@ -46,7 +48,8 @@ struct KisUpdateScheduler::Private {
     Private() : updatesQueue(0), strokesQueue(0),
                 updaterContext(0), processingBlocked(false),
                 balancingRatio(1.0),
-                projectionUpdateListener(0) {}
+                projectionUpdateListener(0),
+                progressUpdater(0) {}
 
     KisSimpleUpdateQueue *updatesQueue;
     KisStrokesQueue *strokesQueue;
@@ -54,6 +57,7 @@ struct KisUpdateScheduler::Private {
     bool processingBlocked;
     qreal balancingRatio; // updates-queue-size/strokes-queue-size
     KisProjectionUpdateListener *projectionUpdateListener;
+    KisQueuesProgressUpdater *progressUpdater;
 
     QAtomicInt updatesLockCounter;
     QReadWriteLock updatesStartLock;
@@ -84,6 +88,7 @@ KisUpdateScheduler::~KisUpdateScheduler()
     delete m_d->updaterContext;
     delete m_d->updatesQueue;
     delete m_d->strokesQueue;
+    delete m_d->progressUpdater;
 }
 
 void KisUpdateScheduler::connectSignals()
@@ -97,6 +102,32 @@ void KisUpdateScheduler::connectSignals()
 
     connect(m_d->updaterContext, SIGNAL(sigSpareThreadAppeared()),
             SLOT(spareThreadAppeared()), Qt::DirectConnection);
+}
+
+void KisUpdateScheduler::setProgressProxy(KoProgressProxy *progressProxy)
+{
+    delete m_d->progressUpdater;
+    m_d->progressUpdater = new KisQueuesProgressUpdater(progressProxy);
+}
+
+void KisUpdateScheduler::progressUpdate()
+{
+    if(m_d->progressUpdater) {
+        QString jobName = m_d->strokesQueue->currentStrokeName();
+        if(jobName.isEmpty()) {
+            jobName = "Update";
+        }
+
+        int sizeMetric = m_d->strokesQueue->sizeMetric() + m_d->updatesQueue->sizeMetric();
+        m_d->progressUpdater->updateProgress(sizeMetric, jobName);
+    }
+}
+
+void KisUpdateScheduler::progressNotifyJobDone()
+{
+    if(m_d->progressUpdater) {
+        m_d->progressUpdater->notifyJobDone(1);
+    }
 }
 
 void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect)
@@ -236,6 +267,8 @@ void KisUpdateScheduler::processQueues()
                                         !m_d->updatesQueue->isEmpty());
 
     }
+
+    progressUpdate();
 }
 
 void KisUpdateScheduler::blockUpdates()
@@ -294,6 +327,7 @@ void KisUpdateScheduler::doSomeUsefulWork()
 
 void KisUpdateScheduler::spareThreadAppeared()
 {
+    progressNotifyJobDone();
     processQueues();
 }
 

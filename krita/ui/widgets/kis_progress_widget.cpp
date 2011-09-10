@@ -41,6 +41,10 @@ public:
     }
 
     void keyReleaseEvent(QKeyEvent *e) {
+        /**
+         * FIXME: this shotcut doesn't work, because it is
+         * overridden somewhere
+         */
         if (e->key() == Qt::Key_Escape) {
             emit clicked();
         }
@@ -54,10 +58,15 @@ KisProgressWidget::KisProgressWidget(QWidget* parent)
     QHBoxLayout* layout = new QHBoxLayout(this);
     m_cancelButton = new EscapeButton(this);
     m_cancelButton->setIcon(SmallIcon("process-stop"));
+
+    QSizePolicy sizePolicy = m_cancelButton->sizePolicy();
+    sizePolicy.setVerticalPolicy(QSizePolicy::Ignored);
+    m_cancelButton->setSizePolicy(sizePolicy);
+
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
 
     m_progressBar = new KoProgressBar(this);
-    connect(m_progressBar, SIGNAL(done()), this, SLOT(hide()));
+    connect(m_progressBar, SIGNAL(valueChanged(int)), SLOT(correctVisibility(int)));
     layout->addWidget(m_progressBar);
     layout->addWidget(m_cancelButton);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -68,9 +77,13 @@ KisProgressWidget::~KisProgressWidget()
     cancel();
 }
 
+KoProgressProxy* KisProgressWidget::progressProxy()
+{
+    return m_progressBar;
+}
+
 KoProgressUpdater* KisProgressWidget::createUpdater(KoProgressUpdater::Mode mode)
 {
-    setVisible(this);
     KoProgressUpdater* updater = new KisProgressUpdater(this, m_progressBar, mode);
     return updater;
 }
@@ -80,6 +93,12 @@ void KisProgressWidget::cancel()
     foreach(KoProgressUpdater* updater, m_activeUpdaters) {
         updater->cancel();
     }
+}
+
+void KisProgressWidget::correctVisibility(int progressValue)
+{
+    setVisible(progressValue >= m_progressBar->minimum() &&
+               progressValue < m_progressBar->maximum());
 }
 
 void KisProgressWidget::detachUpdater(KoProgressUpdater* updater)

@@ -116,6 +116,14 @@ qint32 KisStrokesQueue::sizeMetric() const
     return m_d->strokesQueue.head()->numJobs() * m_d->strokesQueue.size();
 }
 
+QString KisStrokesQueue::currentStrokeName() const
+{
+    QMutexLocker locker(&m_d->mutex);
+    if(m_d->strokesQueue.isEmpty()) return QString();
+
+    return m_d->strokesQueue.head()->name();
+}
+
 bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext,
                                     bool externalJobsPending)
 {

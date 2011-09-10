@@ -74,6 +74,11 @@ KisStrokeJob* KisStroke::popOneJob()
     return job;
 }
 
+QString KisStroke::name() const
+{
+    return m_strokeStrategy->name();
+}
+
 bool KisStroke::hasJobs() const
 {
     return !m_jobsQueue.isEmpty();

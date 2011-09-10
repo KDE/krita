@@ -46,6 +46,8 @@ public:
     virtual ~KisProgressWidget();
 
 public:
+    KoProgressProxy* progressProxy();
+
 
     /**
      * create a new KoProgressUpdater instance that is
@@ -61,7 +63,7 @@ public:
 public slots:
 
     void cancel();
-
+    void correctVisibility(int progressValue);
 
 private:
 

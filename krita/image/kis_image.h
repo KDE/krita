@@ -41,6 +41,7 @@ class KoColorSpace;
 class KoCompositeOp;
 class KoColor;
 
+class KisCompositeProgressProxy;
 class KisActionRecorder;
 class KisUndoStore;
 class KisUndoAdapter;
@@ -566,6 +567,7 @@ signals:
     void sigAboutToBeDeleted();
 
 public slots:
+    KisCompositeProgressProxy* compositeProgressProxy();
 
     void barrierLock();
     bool tryBarrierLock();

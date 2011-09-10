@@ -162,12 +162,12 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
         return;
     //if footnotes count changes make sure we renumber the notes
     if (KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->visibleAutoNumberedNotes(d->textFrame->document()->begin()) != KoInlineNote::count) {
-         KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->reNumberingNotes(d->textFrame->document()->begin());
+         KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->renumberNotes(d->textFrame->document()->begin());
          KoInlineNote::count = KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->visibleAutoNumberedNotes(d->textFrame->document()->begin());
     }
     QFont font(format.font(), pd);
     QString s;
-    KoOdfNotesConfiguration *notesConfig;
+    KoOdfNotesConfiguration *notesConfig = 0;
     //set bookmark name TODO make it unique
     if (d->type == KoInlineNote::Footnote) {
         s.append("Foot");
@@ -242,23 +242,7 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
                 }
             }
         }
-        cursor.setPosition(cursor.currentFrame()->firstPosition());
-        KoOdfNotesConfiguration *notesConfig;
-        if (d->type == Footnote) {
-            notesConfig = KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
-        } else {
-            notesConfig = KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
-        }
-        QTextCharFormat *fmat = new QTextCharFormat();
-        fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-        if (d->autoNumbering) {
-            cursor.insertText(notesConfig->numberFormat().prefix()
-                              +notesConfig->numberFormat().formattedNumber(d->label.toInt()+notesConfig->startValue()-1)
-                              +notesConfig->numberFormat().suffix(),*fmat);
-        } else {
-            cursor.insertText(notesConfig->numberFormat().prefix()+d->label+notesConfig->numberFormat().suffix(),*fmat);
-        }
-        fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
+        paintNotesBody(cursor);
     }
     else if (element.namespaceURI() == KoXmlNS::office && element.localName() == "annotation") {
         d->author = element.attributeNS(KoXmlNS::text, "dc-creator");
@@ -276,16 +260,16 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
     //save note configuration in styles.xml
-    if(KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->getFirstNote(d->textFrame->document()->begin())->id() == this->id()) {
-        QBuffer xmlBufferFootNote,xmlBufferEndNote;
+    if (KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->getFirstNote(d->textFrame->document()->begin())->id() == this->id()) {
+        QBuffer xmlBufferFootNote, xmlBufferEndNote;
         KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferFootNote);
 
         KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote)->saveOdf(xmlWriter);
-        context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles,xmlBufferFootNote.data());
+        context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferFootNote.data());
 
         xmlWriter = new KoXmlWriter(&xmlBufferEndNote);
         KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote)->saveOdf(xmlWriter);
-        context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles,xmlBufferEndNote.data());
+        context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferEndNote.data());
 
     }
 
@@ -334,4 +318,25 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
 
         writer->endElement();
     }
+}
+
+void KoInlineNote::paintNotesBody(QTextCursor &cursor)
+{
+    KoOdfNotesConfiguration *notesConfig = 0;
+    if (d->type == Footnote) {
+        notesConfig = KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
+    } else {
+        notesConfig = KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
+    }
+    QTextCharFormat *fmat = new QTextCharFormat();
+    fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    cursor.setPosition(cursor.currentFrame()->firstPosition());
+    if (d->autoNumbering) {
+        cursor.insertText(notesConfig->numberFormat().prefix()
+                          +notesConfig->numberFormat().formattedNumber(d->label.toInt()+notesConfig->startValue()-1)
+                          +notesConfig->numberFormat().suffix(), *fmat);
+    } else {
+        cursor.insertText(notesConfig->numberFormat().prefix()+d->label+notesConfig->numberFormat().suffix(), *fmat);
+    }
+    fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
 }

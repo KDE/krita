@@ -138,22 +138,22 @@ QString KoOdfNumberDefinition::formattedNumber(int number) const
 
     case AlphabeticLowerCase:
     {
-        QString alpha = "";
-        QChar letter;
-
         if(d->letterSynchronization) {
-            int i,loop,rem;
+            int loop, rem;
             loop = (number-1)/26;
             rem = (number-1)%26;
+            QChar letter;
             letter = (char)(rem+97);
-
-            for(i=0;i<=loop;i++) {
+            QString alpha = "";
+            for(int i=0;i<=loop;i++) {
                 alpha.append(letter);
             }
             return alpha;
         } else {
-            int rem,loop;
+            int rem, loop;
             loop = (number-1)/26;
+            QChar letter;
+            QString alpha = "";
             if(loop>0) {
                 letter = (char)(loop+96);
                 alpha.append(letter);
@@ -167,27 +167,27 @@ QString KoOdfNumberDefinition::formattedNumber(int number) const
     }
     case AlphabeticUpperCase:
     {
-        QString alpha = "";
-        QChar letter;
-
         if(d->letterSynchronization) {
-            int i,loop,rem;
+            int loop, rem;
             loop = (number-1)/26;
             rem = (number-1)%26;
+            QChar letter;
             letter = (char)(rem+65);
-
-            for(i=0;i<=loop;i++) {
+            QString alpha = "";
+            for(int i=0;i<=loop;i++) {
                 alpha.append(letter);
             }
             return alpha;
         } else {
-            int rem,loop;
+            int loop;
             loop = (number-1)/26;
+            QChar letter;
+            QString alpha = "";
             if(loop>0) {
                 letter = (char)(loop+64);
                 alpha.append(letter);
             }
-            rem = (number -1)%26;
+            int rem = (number -1)%26;
             letter = (char)(rem+65);
             alpha.append(letter);
             return alpha;
@@ -197,43 +197,43 @@ QString KoOdfNumberDefinition::formattedNumber(int number) const
     case RomanLowerCase:
     {
         QString roman = "";
-        int loop,i;
+        int loop;
         loop = number/1000;
-        for(i=1;i<=loop && number/1000!=0;i++) {
+        for(int i=1;i<=loop && number/1000!=0;i++) {
              roman.append("m");
         }
         number = number%1000;
         loop = number/500;
-        for(i=1;i<=loop && number/500!=0;i++) {
+        for(int i=1;i<=loop && number/500!=0;i++) {
             roman.append("d");
         }
         number = number%500;
         loop = number/100;
-        for(i=1;i<=loop && number/100!=0;i++) {
+        for(int i=1;i<=loop && number/100!=0;i++) {
             roman.append("c");
         }
         number = number%100;
         loop = number/50;
-        for(i=1;i<=loop && number/50!=0;i++) {
+        for(int i=1;i<=loop && number/50!=0;i++) {
              roman.append("l");
         }
         number = number%50;
         loop = number/10;
-        for(i=1;i<=loop && number/10!=0;i++) {
+        for(int i=1;i<=loop && number/10!=0;i++) {
              roman.append("x");
         }
         number = number%10;
         if(number>=5 && number<=8) {
              loop = number%5;
              roman.append("v");
-             for(i=1;i<=loop;i++)
+             for(int i=1;i<=loop;i++)
                 roman.append("i");
         }
         else if(number==9) {
              roman.append("ix");
         }
         else if(number>=1 && number<=3) {
-             for(i=1;i<=number;i++)
+             for(int i=1;i<=number;i++)
                 roman.append("i");
         }
         else if (number==4)
@@ -245,50 +245,49 @@ QString KoOdfNumberDefinition::formattedNumber(int number) const
     case RomanUpperCase:
     {
         QString roman = "";
-        int loop,i;
+        int loop;
         loop = number/1000;
-        for(i=1;i<=loop && number/1000!=0;i++) {
+        for(int i=1;i<=loop && number/1000!=0;i++) {
              roman.append("M");
         }
         number = number%1000;
         loop = number/500;
-        for(i=1;i<=loop && number/500!=0;i++) {
+        for(int i=1;i<=loop && number/500!=0;i++) {
             roman.append("D");
         }
         number = number%500;
         loop = number/100;
-        for(i=1;i<=loop && number/100!=0;i++) {
+        for(int i=1;i<=loop && number/100!=0;i++) {
             roman.append("C");
         }
         number = number%100;
         loop = number/50;
-        for(i=1;i<=loop && number/50!=0;i++) {
+        for(int i=1;i<=loop && number/50!=0;i++) {
              roman.append("L");
         }
         number = number%50;
         loop = number/10;
-        for(i=1;i<=loop && number/10!=0;i++) {
+        for(int i=1;i<=loop && number/10!=0;i++) {
              roman.append("X");
         }
         number = number%10;
         if(number>=5 && number<=8) {
              loop = number%5;
              roman.append("V");
-             for(i=1;i<=loop;i++)
+             for(int i=1;i<=loop;i++)
                 roman.append("I");
         }
         else if(number==9) {
              roman.append("IX");
         }
         else if(number>=1 && number<=3) {
-             for(i=1;i<=number;i++)
+             for(int i=1;i<=number;i++)
                 roman.append("I");
         }
         else if (number==4)
             roman.append("IV");
 
         return roman;
-        break;
     }
     case Empty:
         break;

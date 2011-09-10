@@ -53,7 +53,7 @@ public:
     // destructor
     virtual ~KoInlineNote();
 
-    QTextCursor textCursor(void) const;
+    QTextCursor textCursor() const;
 
     /**
      * Set the textframe where we will create our own textframe within
@@ -101,6 +101,8 @@ public:
 
     ///reimplemented
     void saveOdf(KoShapeSavingContext &context);
+
+    void paintNotesBody(QTextCursor &cursor);
 
     static int count;
 

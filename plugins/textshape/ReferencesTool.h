@@ -21,13 +21,11 @@
 #define REFERENCESTOOL_H
 
 #include "TextTool.h"
-#include "dialogs/SimpleTableOfContentsWidget.h"
-#include "dialogs/SimpleFootEndNotesWidget.h"
-
 
 class KoCanvasBase;
 class TableOfContentsConfigure;
 class SimpleTableOfContentsWidget;
+class SimpleFootEndNotesWidget;
 class KoInlineNote;
 class QPainter;
 
@@ -73,8 +71,8 @@ private slots:
 private:
         TableOfContentsConfigure *m_configure;
         SimpleTableOfContentsWidget *m_stocw;
-        SimpleFootEndNotesWidget *sfenw;
-        KoInlineNote *note;
+        SimpleFootEndNotesWidget *m_sfenw;
+        KoInlineNote *m_note;
 };
 
 #endif // REFERENCESTOOL_H

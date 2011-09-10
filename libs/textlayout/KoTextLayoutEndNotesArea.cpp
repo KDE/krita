@@ -55,8 +55,8 @@ bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)
 
     d->startOfArea = new FrameIterator(cursor);
     d->endOfArea = 0;
-
-    qreal y = top()+15;
+    int shiftDown = 15;
+    qreal y = top()+shiftDown;
     setBottom(y);
 
     while (true) {
@@ -125,7 +125,10 @@ void KoTextLayoutEndNotesArea::paint(QPainter *painter, const KoTextDocumentLayo
         return;
 
     if (!d->endNoteAreas.isEmpty()) {
-        painter->drawLine(2, top()+10, 150, top()+10);
+        int left = 2;
+        int right = 150;
+        int shiftDown = 10;
+        painter->drawLine(left, top()+shiftDown, right, top()+shiftDown);
     }
     foreach(KoTextLayoutArea *area, d->endNoteAreas) {
         area->paint(painter, context);

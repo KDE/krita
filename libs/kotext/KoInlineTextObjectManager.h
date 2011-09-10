@@ -166,7 +166,7 @@ public:
      */
     QList<KoInlineNote*> autoNumberedFootNotes() const;
 
-    void reNumberingNotes(QTextBlock block);
+    void renumberNotes(QTextBlock block);
     /**
      * @return a list of all inline objects that are autonumbered endnotes
      */

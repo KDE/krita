@@ -24,9 +24,7 @@
 
 #include <KoGenChange.h>
 #include "KoText.h"
-#include <KoInlineNote.h>
 #include <KoToolSelection.h>
-#include <KoInlineNote.h>
 
 #include <QClipboard>
 #include <QMetaType>
@@ -36,6 +34,7 @@
 class KoCharacterStyle;
 class KoInlineObject;
 class KoParagraphStyle;
+class KoInlineNote;
 class KoInlineCite;
 class KoBibliographyInfo;
 class KoCanvasBase;

@@ -33,20 +33,20 @@ class NotesConfigurationDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit NotesConfigurationDialog(QTextDocument *doc,QWidget *parent = 0);
+    explicit NotesConfigurationDialog(QTextDocument *doc, QWidget *parent = 0);
     Ui::NotesConfigurationDialog widget;
-    KoOdfNotesConfiguration *notesConfiguration( void );
+    KoOdfNotesConfiguration *notesConfiguration() const;
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
     /**
      * sets up the footnote's default configuration in the dialog box
      */
-    void footnoteSetup( bool on );
+    void footnoteSetup(bool on);
     /**
      * sets up the endnote's default configuration in the dialog box
      */
-    void endnoteSetup( bool on );
+    void endnoteSetup(bool on);
     /**
      * stores the applied notes' configuration as globalnotesconfiguration of the document
      */

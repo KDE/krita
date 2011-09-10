@@ -510,6 +510,15 @@ private:
                       bool isGeo84, const QString &sparql);
 
 private:
+
+    /**
+     * Test whether a model is present that supports:
+     * - context / graphs
+     *  - querying on graphs
+     *  - storage in memory.
+     */
+    bool backendIsSane();
+
     /// reimplemented
     virtual bool completeLoading(KoStore *store);
 

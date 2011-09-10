@@ -102,6 +102,9 @@ KoDocumentRdf::KoDocumentRdf(QObject *parent)
         : KoDocumentRdfBase(parent)
         , d (new KoDocumentRdfPrivate())
 {
+    if (!backendIsSane()) {
+        kWarning() << "Looks like the backend is not sane!";
+    }
     d->prefixMapping = new KoRdfPrefixMapping(this);
 }
 
@@ -382,7 +385,7 @@ bool KoDocumentRdf::saveOasis(KoStore *store, KoXmlWriter *manifestWriter)
 
 void KoDocumentRdf::updateXmlIdReferences(const QMap<QString, QString> &m)
 {
-    RDEBUG << "KoDocumentRdf::updateXmlIdReferences() m.size:" << m.size();
+    qDebug() << "KoDocumentRdf::updateXmlIdReferences() m.size:" << m.size();
     Q_ASSERT(d->model);
 
     QList<Soprano::Statement> removeList;
@@ -1284,4 +1287,53 @@ QList<KoSemanticStylesheet*> KoDocumentRdf::userStyleSheetList(const QString& cl
 void KoDocumentRdf::setUserStyleSheetList(const QString& className,const QList<KoSemanticStylesheet*>& l)
 {
     d->userStylesheets[className] = l;
+}
+
+bool KoDocumentRdf::backendIsSane()
+{
+    const Soprano::Backend *backend = Soprano::discoverBackendByFeatures(
+            Soprano::BackendFeatureContext |
+            Soprano::BackendFeatureQuery |
+            Soprano::BackendFeatureStorageMemory);
+    if (backend == NULL) {
+        // without a backend with the desired features, this test fails
+        kWarning() << "No suitable backend found.";
+        return false;
+    }
+    kWarning() << "Found a backend: " << backend->pluginName();
+
+    Soprano::setUsedBackend(backend);
+    Soprano::BackendSettings backendSettings;
+    backendSettings << Soprano::BackendOptionStorageMemory;
+    Soprano::StorageModel* model = backend->createModel(backendSettings);
+    if (model == NULL) {
+        // if model creation failed, this test fails
+        kWarning() << "No model could be created.";
+        return false;
+    }
+
+    model->addStatement(Soprano::Statement(
+            QUrl("subject"), QUrl("predicate"), QUrl("object"),
+            QUrl("context")));
+
+    Soprano::QueryResultIterator it = model->executeQuery(
+            "SELECT ?g ?s ?p ?o WHERE { GRAPH ?g { ?s ?p ?o } }",
+            Soprano::Query::QueryLanguageSparql);
+
+    if (!it.next()) {
+        // there should be exactly one result statement
+        kWarning() << "Query returned too few results.";
+        delete model;
+        return false;
+    }
+    if (it.next()) {
+        // there should be exactly one result statement
+        kWarning() << "Query returned too many results.";
+        delete model;
+        return false;
+    }
+
+    delete model;
+    return true;
+
 }

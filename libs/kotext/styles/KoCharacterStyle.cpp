@@ -1358,6 +1358,8 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     QString overLineColor = styleStack.property(KoXmlNS::style, "text-overline-color");   // OO 3.10.23, OASIS 14.4.31
     if (!overLineColor.isEmpty() && overLineColor != "font-color") {
         setOverlineColor(QColor(overLineColor));
+    } else if (overLineColor == "font-color") {
+        setOverlineColor(QColor());
     }
     
     // underline modes
@@ -1391,6 +1393,8 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     QString underLineColor = styleStack.property(KoXmlNS::style, "text-underline-color");   // OO 3.10.23, OASIS 14.4.31
     if (!underLineColor.isEmpty() && underLineColor != "font-color") {
         setUnderlineColor(QColor(underLineColor));
+    } else if (underLineColor == "font-color") {
+        setUnderlineColor(QColor());
     }
 
 
@@ -1751,9 +1755,10 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
 	    }
         } else if (key == OverlineColor) {
             QColor color = d->stylesPrivate.value(key).value<QColor>();
-            if (color.isValid()) {
+            if (color.isValid())
                 style.addProperty("style:text-overline-color", color.name(), KoGenStyle::TextType);
-	    }
+            else
+                style.addProperty("style:text-overline-color", "font-color", KoGenStyle::TextType);
         } else if (key == OverlineMode) {
             bool ok = false;
             int mode = d->stylesPrivate.value(key).toInt(&ok);
@@ -1779,6 +1784,8 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
             QColor color = d->stylesPrivate.value(key).value<QColor>();
             if (color.isValid())
                 style.addProperty("style:text-underline-color", color.name(), KoGenStyle::TextType);
+            else
+                style.addProperty("style:text-underline-color", "font-color", KoGenStyle::TextType);
         } else if (key == UnderlineMode) {
             bool ok = false;
             int mode = d->stylesPrivate.value(key).toInt(&ok);

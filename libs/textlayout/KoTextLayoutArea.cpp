@@ -962,6 +962,11 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // Now once we know the physical context we can work on the borders of the paragraph
     // ==============
     handleBordersAndSpacing(blockData, &block);
+
+    // Expand bounding rect so if we have content outside we show it
+    expandBoundingLeft(m_blockRects.last().x());
+    expandBoundingRight(m_blockRects.last().right());
+
     m_blockRects.last().setLeft(m_blockRects.last().left() + qMin(m_indent, qreal(0.0)));
 
     // ==============
@@ -1112,10 +1117,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 m_dropCapsWidth = 0;
             }
         }
-        // Expand bounding rect so if we have content outside we show it
-        expandBoundingLeft(line.x());
-        expandBoundingRight(line.x() + line.naturalTextWidth());
-
         documentLayout()->positionAnchoredObstructions();
 
         // line fitted so try and do the next one
@@ -1524,6 +1525,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
     // is applied to all except the first paragraph. If false fo:margin-top is applied to all
     // paragraphs.
     bool paraTableSpacingAtStart = KoTextDocument(m_documentLayout->document()).paraTableSpacingAtStart();
+    bool paddingExpandsBorders = false;//KoTextDocument(m_documentLayout->document()).paddingExpandsBorders();
 
     qreal topMargin = 0;
     if (paraTableSpacingAtStart || block->previous().isValid()) {
@@ -1576,7 +1578,12 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
                 m_blockRects.last().setBottom(m_y);
             }
             m_y += spacing;
-            m_blockRects.append(QRectF(m_x, m_y, m_width, 1.0));
+            if (paddingExpandsBorders) {
+                m_blockRects.append(QRectF(m_x - format.doubleProperty(KoParagraphStyle::LeftPadding), m_y,
+                    m_width + format.doubleProperty(KoParagraphStyle::LeftPadding) + format.doubleProperty(KoParagraphStyle::RightPadding), 1.0));
+            } else {
+                m_blockRects.append(QRectF(m_x, m_y, m_width, 1.0));
+            }
             m_y += newBorder->inset(KoTextBlockBorderData::Top);
             m_y += format.doubleProperty(KoParagraphStyle::TopPadding);
         }
@@ -1598,10 +1605,12 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
         m_y += spacing;
         m_blockRects.append(QRectF(m_x, m_y, m_width, 1.0));
     }
-    // add padding inside the border
-    m_x += format.doubleProperty(KoParagraphStyle::LeftPadding);
-    m_width -= format.doubleProperty(KoParagraphStyle::LeftPadding);
-    m_width -= format.doubleProperty(KoParagraphStyle::RightPadding);
+    if (!paddingExpandsBorders) {
+        // add padding inside the border
+        m_x += format.doubleProperty(KoParagraphStyle::LeftPadding);
+        m_width -= format.doubleProperty(KoParagraphStyle::LeftPadding);
+        m_width -= format.doubleProperty(KoParagraphStyle::RightPadding);
+    }
 
     m_prevBorder = blockData->border();
     m_prevBorderPadding = format.doubleProperty(KoParagraphStyle::BottomPadding);

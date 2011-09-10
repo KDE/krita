@@ -299,6 +299,8 @@ void TestBlockLayout::testBlockSpacing()
     QTextLayout *block3Layout = block3.layout();
     int lastLineNum = block1Layout->lineCount() - 1;
     const qreal lineSpacing = 12.0 * 1.2;
+    KoTextDocument(m_doc).setParaTableSpacingAtStart(false);
+    bool paraTableSpacingAtStart = KoTextDocument(m_doc).paraTableSpacingAtStart();
 
     qreal spaces[3] = {0.0, 3.0, 6.0};
     for (int t1 = 0; t1 < 3; ++t1) {
@@ -320,7 +322,55 @@ void TestBlockLayout::testBlockSpacing()
 
                             // Now lets do the actual testing
                             //Above first block is just plain
-                            QVERIFY(qAbs(block1Layout->lineAt(0).y() - spaces[t1]) < ROUNDING);
+                            if (paraTableSpacingAtStart) {
+                                QVERIFY(qAbs(block1Layout->lineAt(0).y() - spaces[t1]) < ROUNDING);
+                            } else {
+                                QVERIFY(qAbs(block1Layout->lineAt(0).y() - 0.0) < ROUNDING);
+                            }
+
+                            // Between 1st and 2nd block is max of spaces
+                            QVERIFY(qAbs((block2Layout->lineAt(0).y() - block1Layout->lineAt(lastLineNum).y() - lineSpacing) - qMax(spaces[b1], spaces[t2])) < ROUNDING);
+
+
+                            // Between 2nd and 3rd block is max of spaces
+                            QVERIFY(qAbs((block3Layout->lineAt(0).y() - block2Layout->lineAt(lastLineNum).y() - lineSpacing) - qMax(spaces[b2], spaces[t3])) < ROUNDING);
+
+                            //Below 3rd block is just plain
+                            //QVERIFY(qAbs(bottom()-block3Layout->lineAt(lastLineNum).y() - lineSpacing - spaces[t1]) < ROUNDING);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    KoTextDocument(m_doc).setParaTableSpacingAtStart(true);
+    paraTableSpacingAtStart = KoTextDocument(m_doc).paraTableSpacingAtStart();
+
+    for (int t1 = 0; t1 < 3; ++t1) {
+        for (int t2 = 0; t2 < 3; ++t2) {
+            for (int t3 = 0; t3 < 3; ++t3) {
+                for (int b1 = 0; b1 < 3; ++b1) {
+                    bf1.setTopMargin(spaces[t1]);
+                    bf1.setBottomMargin(spaces[b1]);
+                    cursor1.setBlockFormat(bf1);
+                    for (int b2 = 0; b2 < 3; ++b2) {
+                        bf2.setTopMargin(spaces[t2]);
+                        bf2.setBottomMargin(spaces[b2]);
+                        cursor2.setBlockFormat(bf2);
+                        for (int b3 = 0; b3 < 3; ++b3) {
+                            bf3.setTopMargin(spaces[t3]);
+                            bf3.setBottomMargin(spaces[b3]);
+                            cursor3.setBlockFormat(bf3);
+                            m_layout->layout();
+
+                            // Now lets do the actual testing
+                            //Above first block is just plain
+                            if (paraTableSpacingAtStart) {
+                                QVERIFY(qAbs(block1Layout->lineAt(0).y() - spaces[t1]) < ROUNDING);
+                            } else {
+                                QVERIFY(qAbs(block1Layout->lineAt(0).y() - 0.0) < ROUNDING);
+                            }
 
                             // Between 1st and 2nd block is max of spaces
                             QVERIFY(qAbs((block2Layout->lineAt(0).y() - block1Layout->lineAt(lastLineNum).y() - lineSpacing) - qMax(spaces[b1], spaces[t2])) < ROUNDING);

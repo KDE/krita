@@ -142,7 +142,7 @@ void ReferencesTool::formatTableOfContents()
     QTextBlock firstToCTextBlock;
     for (QTextBlock it = document->begin(); it != document->end(); it = it.next())
     {
-        if (it.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+        if (it.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsData)) {
             KoTableOfContentsGeneratorInfo *info = it.blockFormat().property(KoParagraphStyle::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
             if (i == 0) {
                 firstToCTextBlock = it;

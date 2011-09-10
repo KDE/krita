@@ -46,7 +46,7 @@ void InsertBibliographyDialog::insert()
 {
     m_editor->insertBibliography();
     KoBibliographyInfo *bibInfo = m_editor->block().blockFormat().property(KoParagraphStyle::BibliographyData).value<KoBibliographyInfo*>();
-    QTextDocument *bibDocument = m_editor->block().blockFormat().property(KoParagraphStyle::BibliographyDocument).value<QTextDocument*>();
+    QTextDocument *bibDocument = m_editor->block().blockFormat().property(KoParagraphStyle::GeneratedDocument).value<QTextDocument*>();
 
     bibInfo->m_entryTemplate = QMap<QString,BibliographyEntryTemplate>(m_bibInfo->m_entryTemplate);
     bibInfo->m_indexTitleTemplate.text = dialog.title->text();

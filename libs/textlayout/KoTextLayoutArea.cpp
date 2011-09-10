@@ -150,11 +150,11 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             if (!block.isValid())
                 continue;
         }
-        if (block.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+        if (block.blockFormat().hasProperty(KoParagraphStyle::GeneratedDocument)) {
             // check if p is over table of content
-            if (point.y() > m_tableOfContentsAreas[tocIndex]->top()
-                    && point.y() < m_tableOfContentsAreas[tocIndex]->bottom()) {
-                pointedAt = m_tableOfContentsAreas[tocIndex]->hitTest(point, accuracy);
+            if (point.y() > m_generatedDocAreas[tocIndex]->top()
+                    && point.y() < m_generatedDocAreas[tocIndex]->bottom()) {
+                pointedAt = m_generatedDocAreas[tocIndex]->hitTest(point, accuracy);
                 pointedAt.position = block.position();
                 return pointedAt;
             }
@@ -262,10 +262,10 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
             if (!block.isValid())
                 continue;
         }
-        if (block.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+        if (block.blockFormat().hasProperty(KoParagraphStyle::GeneratedDocument)) {
             if (cursor.selectionStart()  <= block.position()
                 && cursor.selectionEnd() >= block.position()) {
-                retval |= m_tableOfContentsAreas[tocIndex]->boundingRect();
+                retval |= m_generatedDocAreas[tocIndex]->boundingRect();
             }
             ++tocIndex;
             continue;
@@ -332,8 +332,8 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_footNoteAreas.clear();
     qDeleteAll(m_preregisteredFootNoteAreas);
     m_preregisteredFootNoteAreas.clear();
-    qDeleteAll(m_tableOfContentsAreas);
-    m_tableOfContentsAreas.clear();
+    qDeleteAll(m_generatedDocAreas);
+    m_generatedDocAreas.clear();
     m_blockRects.clear();
     delete m_endNotesArea;
     m_endNotesArea=0;
@@ -422,19 +422,19 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 cursor->currentSubFrameIterator = 0;
             }
         } else if (block.isValid()) {
-            if (block.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
-                QVariant data = block.blockFormat().property(KoParagraphStyle::TableOfContentsDocument);
-                QTextDocument *tocDocument = data.value<QTextDocument *>();
+            if (block.blockFormat().hasProperty(KoParagraphStyle::GeneratedDocument)) {
+                QVariant data = block.blockFormat().property(KoParagraphStyle::GeneratedDocument);
+                QTextDocument *generatedDocument = data.value<QTextDocument *>();
 
-                // Let's create KoTextLayoutArea and let it handle the ToC
-                KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, documentLayout());
-                m_tableOfContentsAreas.append(tocArea);
+                // Let's create KoTextLayoutArea and let it handle the generated document
+                KoTextLayoutArea *area = new KoTextLayoutArea(this, documentLayout());
+                m_generatedDocAreas.append(area);
                 m_y += m_bottomSpacing;
                 if (!m_blockRects.isEmpty()) {
                     m_blockRects.last().setBottom(m_y);
                 }
-                tocArea->setVirginPage(virginPage());
-                tocArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
+                area->setVirginPage(virginPage());
+                area->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
                 QTextLayout *blayout = block.layout();
                 blayout->beginLayout();
                 QTextLine line = blayout->createLine();
@@ -442,70 +442,22 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 line.setPosition(QPointF(left(), m_y));
                 blayout->endLayout();
 
-                if (tocArea->layout(cursor->subFrameIterator(tocDocument->rootFrame())) == false) {
+                if (area->layout(cursor->subFrameIterator(generatedDocument->rootFrame())) == false) {
                     cursor->lineTextStart = 1; // fake we are not done
                     m_endOfArea = new FrameIterator(cursor);
-                    m_y = tocArea->bottom();
+                    m_y = area->bottom();
                     setBottom(m_y + m_footNotesHeight);
                     // Expand bounding rect so if we have content outside we show it
-                    expandBoundingLeft(tocArea->boundingRect().left());
-                    expandBoundingRight(tocArea->boundingRect().right());
+                    expandBoundingLeft(area->boundingRect().left());
+                    expandBoundingRight(area->boundingRect().right());
                     return false;
                 }
                 setVirginPage(false);
                 // Expand bounding rect so if we have content outside we show it
-                expandBoundingLeft(tocArea->boundingRect().left());
-                expandBoundingRight(tocArea->boundingRect().right());
+                expandBoundingLeft(area->boundingRect().left());
+                expandBoundingRight(area->boundingRect().right());
                 m_bottomSpacing = 0;
-                m_y = tocArea->bottom();
-                delete cursor->currentSubFrameIterator;
-                cursor->lineTextStart = -1; // fake we are done
-                cursor->currentSubFrameIterator = 0;
-            } else if (block.blockFormat().hasProperty(KoParagraphStyle::BibliographyDocument)) {
-
-                QVariant data = block.blockFormat().property(KoParagraphStyle::BibliographyDocument);
-                QTextDocument *bibDocument = data.value<QTextDocument *>();
-
-                data = block.blockFormat().property(KoParagraphStyle::BibliographyData);
-                KoBibliographyInfo *bibInfo = data.value<KoBibliographyInfo *>();
-
-                if (!bibInfo->generator()) {
-                    // The generator attaches itself to the bibInfo
-                    new BibliographyGenerator(bibDocument, block, bibInfo, cursor->it.currentBlock().document());
-                }
-
-                // Let's create KoTextLayoutArea and let to handle the Bibliography
-                KoTextLayoutArea *bibArea = new KoTextLayoutArea(this, documentLayout());
-                m_bibliographyAreas.append(bibArea);
-                m_y += m_bottomSpacing;
-                if (!m_blockRects.isEmpty()) {
-                    m_blockRects.last().setBottom(m_y);
-                }
-                bibArea->setVirginPage(virginPage());
-                bibArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
-                QTextLayout *blayout = block.layout();
-                blayout->beginLayout();
-                QTextLine line = blayout->createLine();
-                line.setNumColumns(0);
-                line.setPosition(QPointF(left(), m_y));
-                blayout->endLayout();
-
-                if (bibArea->layout(cursor->subFrameIterator(bibDocument->rootFrame())) == false) {
-                    cursor->lineTextStart = 1; // fake we are not done
-                    m_endOfArea = new FrameIterator(cursor);
-                    m_y = bibArea->bottom();
-                    setBottom(m_y + m_footNotesHeight);
-                    // Expand bounding rect so if we have content outside we show it
-                    expandBoundingLeft(bibArea->boundingRect().left());
-                    expandBoundingRight(bibArea->boundingRect().right());
-                    return false;
-                }
-                setVirginPage(false);
-                // Expand bounding rect so if we have content outside we show it
-                expandBoundingLeft(bibArea->boundingRect().left());
-                expandBoundingRight(bibArea->boundingRect().right());
-                m_bottomSpacing = 0;
-                m_y = bibArea->bottom();
+                m_y = area->bottom();
                 delete cursor->currentSubFrameIterator;
                 cursor->lineTextStart = -1; // fake we are done
                 cursor->currentSubFrameIterator = 0;

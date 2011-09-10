@@ -233,8 +233,7 @@ private:
     QList<KoTextLayoutArea *> m_preregisteredFootNoteAreas;
     QList<KoTextLayoutArea *> m_footNoteAreas;
     KoTextLayoutEndNotesArea *m_endNotesArea;
-    QList<KoTextLayoutArea *> m_tableOfContentsAreas;
-    QList<KoTextLayoutArea *> m_bibliographyAreas;
+    QList<KoTextLayoutArea *> m_generatedDocAreas;
 };
 
 #endif

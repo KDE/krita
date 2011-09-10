@@ -72,7 +72,7 @@ void TableOfContentsPreview::updatePreview(KoTableOfContentsGeneratorInfo *newTo
    // info->m_useOutlineLevel = newToCInfo->m_useOutlineLevel;
 
     tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
-    tocFormat.setProperty(KoParagraphStyle::TableOfContentsDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
+    tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
 
     m_textShape = new TextShape(&m_itom);
     m_textShape->setSize(size());

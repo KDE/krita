@@ -66,6 +66,9 @@ private slots:
     /// Test first line indent of paragraphs.
     void testTextIndent();
 
+    /// Test tabs.
+    void testTabs();
+
     void testBasicTextAlignments();
     void testTextAlignments();
 

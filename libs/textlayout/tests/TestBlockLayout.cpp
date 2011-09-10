@@ -420,6 +420,125 @@ void TestBlockLayout::testTextIndent()
     QCOMPARE(block2Layout->lineAt(1).width(), 185.0);
 }
 
+void TestBlockLayout::testTabs()
+{
+    setupTest("x\tx\tx\tx\tx\tx\tx\tx\tx\tx\tx\tx\tx\tx\tx\te");
+    QTextCursor cursor(m_doc);
+    QTextBlockFormat bf = cursor.blockFormat();
+    cursor.setBlockFormat(bf);
+
+    m_layout->layout();
+    QTextLayout *blockLayout = m_block.layout();
+
+    struct {
+        bool relativeTabs;
+        qreal leftMargin;
+        qreal textIndent;
+        qreal rightMargin;
+    } testcases[] = {
+        { true, 0, 0, 0},
+        { true, 0, 10, 0},
+        { true, 0, 10, 5},
+        { true, 0, 0, 5},
+        { true, 20, 0, 0},
+        { true, 20, 10, 0},
+        { true, 20, 10, 5},
+        { true, 20, 0, 5},
+        { true, 0, 0, 0},
+        { true, 0, -10, 0},
+        { true, 0, -10, 5},
+        { true, 0, 0, 5},
+        { true, -20, 0, 0+20}, //+20 to avoid extra tab fitting in 
+        { true, -20, -10, 0+20}, //+20 to avoid extra tab fitting in 
+        { true, -20, -10, 5+20}, //+20 to avoid extra tab fitting in 
+        { true, -20, 0, 5+20}, //+20 to avoid extra tab fitting in 
+        { true, 0, 0, 0},
+        { true, 0, 10, 0},
+        { true, 0, 10, 5},
+        { true, 0, 0, 5},
+        { true, -20, 0, 0+20}, //+20 to avoid extra tab fitting in 
+        { true, -20, 10, 0+20}, //+20 to avoid extra tab fitting in 
+        { true, -20, 10, 5+20}, //+20 to avoid extra tab fitting in 
+        { true, -20, 0, 5+20}, //+20 to avoid extra tab fitting in 
+        { true, 0, 0, 0},
+        { true, 0, -10, 0},
+        { true, 0, -10, 5},
+        { true, 0, 0, 5},
+        { true, 20, 0, 0},
+        { true, 20, -10, 0},
+        { true, 20, -10, 5},
+        { true, 20, 0, 5},
+
+        { false, 0, 0, 0},
+        { false, 0, 10, 0},
+        { false, 0, 10, 5},
+        { false, 0, 0, 5},
+        { false, 20, 0, 0},
+        { false, 20, 10, 0},
+        { false, 20, 10, 5},
+        { false, 20, 0, 5},
+        { false, 0, 0, 0},
+        { false, 0, -10, 0},
+        { false, 0, -10, 5},
+        { false, 0, 0, 5},
+        { false, -20, 0, 0+20}, //+20 to avoid extra tab fitting in 
+        { false, -20, -10, 0+20}, //+20 to avoid extra tab fitting in 
+        { false, -20, -10, 5+20}, //+20 to avoid extra tab fitting in 
+        { false, -20, 0, 5+20}, //+20 to avoid extra tab fitting in 
+        { false, 0, 0, 0},
+        { false, 0, 10, 0},
+        { false, 0, 10, 5},
+        { false, 0, 0, 5},
+        { false, -20, 0, 0+20}, //+20 to avoid extra tab fitting in 
+        { false, -20, 10, 0+20}, //+20 to avoid extra tab fitting in 
+        { false, -20, 10, 5+20}, //+20 to avoid extra tab fitting in 
+        { false, -20, 0, 5+20}, //+20 to avoid extra tab fitting in 
+        { false, 0, 0, 0},
+        { false, 0, -10, 0},
+        { false, 0, -10, 5},
+        { false, 0, 0, 5},
+        { false, 20, 0, 0},
+        { false, 20, -10, 0},
+        { false, 20, -10, 5},
+        { false, 20, 0, 5}
+    };
+
+    m_layout->setTabSpacing(50.0);
+
+    for (int i=0; i<64; i++) {
+        KoTextDocument(m_doc).setRelativeTabs(testcases[i].relativeTabs);
+        bf.setLeftMargin(testcases[i].leftMargin);
+        bf.setTextIndent(testcases[i].textIndent);
+        bf.setRightMargin(testcases[i].rightMargin);
+        cursor.setBlockFormat(bf);
+        m_layout->layout();
+        qDebug()<<testcases[i].relativeTabs<<testcases[i].leftMargin<<testcases[i].textIndent<<testcases[i].rightMargin;
+        for (int pos=0; pos<4; pos++) {
+            qreal cmpVal = pos ? pos*50.0-1.5 : 0.0;
+            if (testcases[i].relativeTabs || pos==0)
+                cmpVal += testcases[i].leftMargin;
+            if(pos==0)
+                cmpVal += testcases[i].textIndent; //first char is indented
+            QCOMPARE(blockLayout->lineAt(0).cursorToX(pos*2), cmpVal);
+        }
+        if (testcases[i].textIndent == 0.0) {
+            // these tests would currently fail if textIndent != 0.0
+            for (int pos=0; pos<4; pos++) {
+                qreal cmpVal = pos ? pos*50.0-1.5 : 0.0;
+                if (testcases[i].relativeTabs)
+                    cmpVal += testcases[i].leftMargin;
+                QCOMPARE(blockLayout->lineAt(1).cursorToX(pos*2+8), cmpVal);
+            }
+            for (int pos=0; pos<4; pos++) {
+                qreal cmpVal = pos ? pos*50.0-1.5 : 0.0;
+                if (testcases[i].relativeTabs)
+                    cmpVal += testcases[i].leftMargin;
+                QCOMPARE(blockLayout->lineAt(2).cursorToX(pos*2+16), cmpVal);
+            }
+        }
+    }
+}
+
 void TestBlockLayout::testBasicTextAlignments()
 {
     setupTest("Left\nCenter\nRight");

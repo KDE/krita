@@ -70,6 +70,12 @@ KisProgressWidget::KisProgressWidget(QWidget* parent)
     layout->addWidget(m_progressBar);
     layout->addWidget(m_cancelButton);
     layout->setContentsMargins(0, 0, 0, 0);
+
+    m_progressBar->setVisible(false);
+    m_cancelButton->setVisible(false);
+
+    setMaximumWidth(225);
+    setMinimumWidth(225);
 }
 
 KisProgressWidget::~KisProgressWidget()
@@ -97,8 +103,11 @@ void KisProgressWidget::cancel()
 
 void KisProgressWidget::correctVisibility(int progressValue)
 {
-    setVisible(progressValue >= m_progressBar->minimum() &&
-               progressValue < m_progressBar->maximum());
+    bool visibility = progressValue >= m_progressBar->minimum() &&
+        progressValue < m_progressBar->maximum();
+
+    m_progressBar->setVisible(visibility);
+    m_cancelButton->setVisible(visibility);
 }
 
 void KisProgressWidget::detachUpdater(KoProgressUpdater* updater)

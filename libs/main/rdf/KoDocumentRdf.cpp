@@ -1295,7 +1295,7 @@ bool KoDocumentRdf::backendIsSane()
             Soprano::BackendFeatureContext |
             Soprano::BackendFeatureQuery |
             Soprano::BackendFeatureStorageMemory);
-    if (backend == NULL) {
+    if (!backend) {
         // without a backend with the desired features, this test fails
         kWarning() << "No suitable backend found.";
         return false;
@@ -1306,7 +1306,7 @@ bool KoDocumentRdf::backendIsSane()
     Soprano::BackendSettings backendSettings;
     backendSettings << Soprano::BackendOptionStorageMemory;
     Soprano::StorageModel* model = backend->createModel(backendSettings);
-    if (model == NULL) {
+    if (!model) {
         // if model creation failed, this test fails
         kWarning() << "No model could be created.";
         return false;

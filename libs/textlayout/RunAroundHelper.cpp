@@ -31,17 +31,12 @@ RunAroundHelper::RunAroundHelper()
     m_updateValidObstructions = false;
     m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
     m_stayOnBaseline = false;
-    m_restartOnNextShape = false;
+    m_nothingWillEverFit = false;
 }
 
 void RunAroundHelper::setLine(KoTextLayoutArea *area, QTextLine l) {
     m_area = area;
     line = l;
-}
-
-void RunAroundHelper::setRestartOnNextShape(bool restartOnNextShape)
-{
-    m_restartOnNextShape = restartOnNextShape;
 }
 
 void RunAroundHelper::setObstructions(const QList<KoTextLayoutObstruction*> &obstructions)
@@ -62,43 +57,34 @@ void RunAroundHelper::updateObstruction(KoTextLayoutObstruction *obstruction)
     }
 }
 
-void RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft, QPointF position)
+bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft, QPointF position)
 {
     Q_ASSERT(line.isValid());
     if (resetHorizontalPosition) {
         m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
         m_stayOnBaseline = false;
+        m_nothingWillEverFit = false;
     }
     const qreal maxLineWidth = m_area->width();
-    // Make sure at least some text is fitted if the basic width (page, table cell, column)
-    // is too small
-    if (maxLineWidth <= 0.) {
-        // we need to make sure that something like "line.setLineWidth(0.0);" is called here to prevent
-        // the QTextLine from being removed again and leading at a later point to crashes. It seems
-        // following if-condition including the setNumColumns call was added to do exactly that. But
-        // it's not clear for what the if-condition was added. In any case that condition is wrong or
-        // incompleted cause things can still crash with m_state->layout->text().length() == 0 (see the
-        // document attached to bug 244411).
 
-        //if (m_state->layout->lineCount() > 1 || m_state->layout->text().length() > 0)
-            line.setNumColumns(1);
-
-        line.setPosition(position);
-        return;
-    }
-
-    // Too little width because of  wrapping is handled in the remainder of this method
     line.setLineWidth(maxLineWidth);
     const qreal maxLineHeight = line.height();
     const qreal maxNaturalTextWidth = line.naturalTextWidth();
     QRectF lineRect(position, QSizeF(maxLineWidth, maxLineHeight));
     QRectF lineRectPart;
     qreal movedDown = 0;
-//FIXME    if (m_state->maxLineHeight() > 0) {
-//        movedDown = m_state->maxLineHeight();
-//    } else {
-        movedDown = 10;
-//    }
+
+    lineRectPart = getLineRect(lineRect, maxNaturalTextWidth);
+
+    // getLineRect as a sideeffect also sets m_nothingWillEverFit, so test
+    if (m_nothingWillEverFit) {
+        // If the basic width (page, table cell, column) is too small to fit even the
+        // first char then caller should make the line contain the rest of the block
+        // and hide the line
+        line.setNumColumns(1);
+        line.setPosition(position);
+        return false;
+    }
 
     while (!lineRectPart.isValid()) {
         // The line rect could be split into no further linerectpart, so we have
@@ -108,13 +94,11 @@ void RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
         // obstructions, so new parts are completely different. if there are no obstructions, then we
         // have only one line part which is full line rect
 
+        m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
+        lineRect = QRectF(position, QSizeF(maxLineWidth, maxLineHeight));
+        lineRect.setY(lineRect.y() + movedDown);
+        movedDown += 10;
         lineRectPart = getLineRect(lineRect, maxNaturalTextWidth);
-        if (!lineRectPart.isValid()) {
-            m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
-            lineRect = QRectF(position, QSizeF(maxLineWidth, maxLineHeight));
-            lineRect.setY(lineRect.y() + movedDown);
-            movedDown += 10;
-        }
     }
 
     if (isRightToLeft && line.naturalTextWidth() > m_textWidth) {
@@ -129,6 +113,7 @@ void RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
     line.setLineWidth(m_textWidth);
     line.setPosition(QPointF(lineRectPart.x(), lineRectPart.y()));
     checkEndOfLine(lineRectPart, maxNaturalTextWidth);
+    return true;
 }
 
 void RunAroundHelper::validateObstructions()
@@ -215,6 +200,8 @@ void RunAroundHelper::createLineParts()
     }
 }
 
+// Figure out what the height of a line with only the first letter is
+// The lineRect is set to have this minimally needed height
 QRectF RunAroundHelper::minimizeHeightToLeastNeeded(const QRectF &lineRect)
 {
     Q_ASSERT(line.isValid());
@@ -224,6 +211,7 @@ QRectF RunAroundHelper::minimizeHeightToLeastNeeded(const QRectF &lineRect)
     // Make sure width is not wider than the area allows.
     if (m_textWidth > m_area->width()) {
         m_textWidth = m_area->width();
+        m_nothingWillEverFit = true;
     }
     line.setLineWidth(m_textWidth);
     // Base linerect height on the width calculated above.

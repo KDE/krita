@@ -10,6 +10,12 @@
     <height>294</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>100</width>
+    <height>100</height>
+   </size>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">

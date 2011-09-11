@@ -66,7 +66,7 @@ void TextPasteCommand::redo()
         KUndo2Command::redo();
     } else {
         //kDebug() << "begin paste command";
-        editor->cursor()->beginEditBlock();
+        editor->beginEditBlock();
         m_first = false;
         if (editor->hasSelection()) { //TODO
             if (m_tool->m_actionShowChanges->isChecked())
@@ -86,11 +86,12 @@ void TextPasteCommand::redo()
             }
             
             if (m_pasteAsText) {
-                editor->cursor()->insertText(data->text());
+                editor->insertText(data->text());
             } else {
-                bool weOwnRdfModel = true;
+
                 const Soprano::Model *rdfModel = 0;
 #ifdef SHOULD_BUILD_RDF
+                bool weOwnRdfModel = true;
                 rdfModel = Soprano::createModel();
                 if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
                     delete rdfModel;
@@ -100,7 +101,7 @@ void TextPasteCommand::redo()
 #endif
 
                 //kDebug() << "pasting odf text";
-                KoTextPaste paste(*editor->cursor(), m_tool->canvas(), rdfModel);
+                KoTextPaste paste(editor, m_tool->canvas(), rdfModel);
                 paste.paste(odfType, data);
                 //kDebug() << "done with pasting odf";
 
@@ -115,13 +116,13 @@ void TextPasteCommand::redo()
             }
         } else if (!m_pasteAsText && data->hasHtml()) {
             //kDebug() << "pasting html";
-            editor->cursor()->insertHtml(data->html());
+            editor->insertHtml(data->html());
             //kDebug() << "done with pasting";
         } else if (m_pasteAsText || data->hasText()) {
             //kDebug() << "pasting text";
-            editor->cursor()->insertText(data->text());
+            editor->insertText(data->text());
             //kDebug() << "done with pasting";
         }
-        editor->cursor()->endEditBlock();
+        editor->endEditBlock();
     }
 }

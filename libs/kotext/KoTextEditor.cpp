@@ -29,7 +29,6 @@
 #include "KoTextDrag.h"
 #include "KoTextLocator.h"
 #include "KoTextOdfSaveHelper.h"
-#include "KoTextPaste.h"
 #include "KoTableOfContentsGeneratorInfo.h"
 #include "KoBibliographyInfo.h"
 #include "changetracker/KoChangeTracker.h"
@@ -1037,7 +1036,7 @@ void KoTextEditor::deletePreviousChar()
     emit cursorPositionChanged();
 }
 
-QTextDocument* KoTextEditor::document() const
+const QTextDocument *KoTextEditor::document() const
 {
     return d->caret.document();
 }
@@ -1399,7 +1398,7 @@ void KoTextEditor::insertTableOfContents()
     KoTableOfContentsGeneratorInfo *info = new KoTableOfContentsGeneratorInfo();
     QTextDocument *tocDocument = new QTextDocument();
     tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
-    tocFormat.setProperty(KoParagraphStyle::TableOfContentsDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
+    tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (changeTracker && changeTracker->recordChanges()) {
@@ -1428,6 +1427,26 @@ void KoTextEditor::insertTableOfContents()
     emit cursorPositionChanged();
 }
 
+void KoTextEditor::updateTableOfContents(KoTableOfContentsGeneratorInfo *info, QTextBlock block)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    KoTableOfContentsGeneratorInfo *newToCInfo=info->clone();
+
+    d->updateState(KoTextEditor::Private::Custom, i18n("Modify Table Of Contents"));    
+
+    QTextCursor cursor(block);
+    QTextBlockFormat tocBlockFormat=block.blockFormat();
+
+    tocBlockFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(newToCInfo) );
+    cursor.setBlockFormat(tocBlockFormat);
+
+    d->updateState(KoTextEditor::Private::NoOp);
+    emit cursorPositionChanged();
+}
+
 void KoTextEditor::insertBibliography()
 {
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Bibliography"));
@@ -1439,7 +1458,7 @@ void KoTextEditor::insertBibliography()
     *autoUpdate = false;
 
     bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info));
-    bibFormat.setProperty( KoParagraphStyle::BibliographyDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
+    bibFormat.setProperty( KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
     bibFormat.setProperty( KoParagraphStyle::AutoUpdateBibliography, QVariant::fromValue<bool *>(autoUpdate));
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
@@ -1529,6 +1548,16 @@ void KoTextEditor::insertText(const QString &text, const QTextCharFormat &format
     Q_UNUSED(text)
     Q_UNUSED(format)
     //TODO
+}
+
+void KoTextEditor::insertHtml(const QString &html)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    // XXX: do the changetracking and everything!
+    d->caret.insertHtml(html);
 }
 
 void KoTextEditor::mergeBlockCharFormat(const QTextCharFormat &modifier)
@@ -1813,6 +1842,22 @@ bool KoTextEditor::isBidiDocument() const
 {
     return d->isBidiDocument;
 }
+
+const QTextFrame *KoTextEditor::currentFrame () const
+{
+    return d->caret.currentFrame();
+}
+
+const QTextList *KoTextEditor::currentList () const
+{
+    return d->caret.currentList();
+}
+
+const QTextTable *KoTextEditor::currentTable () const
+{
+    return d->caret.currentTable();
+}
+
 
 void KoTextEditor::beginEditBlock()
 {

@@ -48,6 +48,7 @@ target_link_libraries(testfindmatch komain ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
+if( Soprano_FOUND )
 set(TestKoDocumentRdf_SRCS TestKoDocumentRdf.cpp )
 kde4_add_unit_test(TestKoDocumentRdf TESTNAME libs-komain-TestKoDocumentRdf ${TestKoDocumentRdf_SRCS})
 target_link_libraries(TestKoDocumentRdf komain ${QT_QTTEST_LIBRARY})
@@ -58,4 +59,4 @@ target_link_libraries(TestKoDocumentRdf komain ${QT_QTTEST_LIBRARY})
 set(rdf_test_SRCS rdf_test.cpp )
 kde4_add_unit_test(rdf_test TESTNAME libs-komain-rdf_test ${rdf_test_SRCS})
 target_link_libraries(rdf_test komain ${QT_QTTEST_LIBRARY})
-
+endif( Soprano_FOUND )

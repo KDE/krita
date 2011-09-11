@@ -192,7 +192,8 @@ public:
         HeadingList,
         Selections,
         LayoutTextPage, /// this is used for setting the correct page variable on the first resize and should not be used for other purposes
-        ParaTableSpacingAtStart /// this is used during layouting to specify if at the first paragraph margin-top should be applied.
+        ParaTableSpacingAtStart, /// this is used during layouting to specify if at the first paragraph margin-top should be applied.
+        IndexGeneratorManager
     };
 
     static const QUrl StyleManagerURL;
@@ -212,6 +213,7 @@ public:
     static const QUrl SelectionsURL;
     static const QUrl LayoutTextPageUrl;
     static const QUrl ParaTableSpacingAtStartUrl;
+    static const QUrl IndexGeneratorManagerUrl;
 
 private:
     QTextDocument *m_document;

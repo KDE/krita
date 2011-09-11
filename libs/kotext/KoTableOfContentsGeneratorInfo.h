@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
+ * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,26 +37,14 @@
 
 class KoTextSharedLoadingData;
 
-class KOTEXT_EXPORT ToCGeneratorInterface {
-public:
-    ToCGeneratorInterface() {}
-    virtual ~ToCGeneratorInterface() {}
-    virtual void setMaxTabPosition(qreal maxTabPosition) = 0;
-    virtual void setBlock(const QTextBlock &block) = 0;
-};
-
 class KOTEXT_EXPORT KoTableOfContentsGeneratorInfo
 {
 public:
-    KoTableOfContentsGeneratorInfo();
+    KoTableOfContentsGeneratorInfo(bool generateEntryTemplate = true);
     ~KoTableOfContentsGeneratorInfo();
     void loadOdf(KoTextSharedLoadingData *sharedLoadingData, const KoXmlElement &element);
     void saveOdf(KoXmlWriter *writer) const;
-
-    void setGenerator(ToCGeneratorInterface *generator);
-
-    ToCGeneratorInterface *generator() const;
-
+    KoTableOfContentsGeneratorInfo *clone();
 
     QString m_name;
     QString m_styleName;
@@ -77,10 +66,9 @@ public:
 
 private:
     int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
-    ToCGeneratorInterface * m_generator;
 };
 
-Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *)
-Q_DECLARE_METATYPE(QTextDocument *)
+Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *);
+Q_DECLARE_METATYPE(QTextDocument *);
 
 #endif

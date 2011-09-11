@@ -95,7 +95,6 @@ private:
 }; KritaWaveFilter::KritaWaveFilter(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaWaveFilterFactory::componentData());
     KisFilterRegistry::instance()->add(new KisFilterWave());
 }
 

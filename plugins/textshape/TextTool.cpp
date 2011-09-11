@@ -45,6 +45,7 @@
 #include "commands/AutoResizeCommand.h"
 #include "FontSizeAction.h"
 
+#include <KoOdf.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoSelection.h>
@@ -60,7 +61,6 @@
 #include <KoStyleManager.h>
 #include <KoTextOdfSaveHelper.h>
 #include <KoTextDrag.h>
-#include <KoTextPaste.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 #include <KoGlobal.h>
@@ -546,6 +546,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 
 TextTool::~TextTool()
 {
+    delete m_toolSelection;
 }
 
 void TextTool::showChangeTip()
@@ -1109,17 +1110,13 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             }
         } else if (hit(item, KStandardShortcut::Prior)) { // page up
             // Scroll up one page. Default: Prior
-            QPointF point = caretRect(textEditor->cursor()).topLeft();
-            qreal moveDistance = canvas()->viewConverter()->viewToDocument(QSizeF(0,canvas()->canvasController()->visibleHeight())).height() * 0.8;
-            point.setY(point.y() - moveDistance);
-            destinationPosition = m_textShapeData->rootArea()->hitTest(point, Qt::FuzzyHit).position;
+            event->ignore(); // let app level actions handle it
+            return;
         }
         else if (hit(item, KStandardShortcut::Next)) {
             // Scroll down one page. Default: Next
-            QPointF point = caretRect(textEditor->cursor()).topLeft();
-            qreal moveDistance = canvas()->viewConverter()->viewToDocument(QSizeF(0,canvas()->canvasController()->visibleHeight())).height() * 0.8;
-            point.setY(point.y() + moveDistance);
-            destinationPosition = m_textShapeData->rootArea()->hitTest(point, Qt::FuzzyHit).position;
+            event->ignore(); // let app level actions handle it
+            return;
         }
         else if (hit(item, KStandardShortcut::BeginningOfLine))
             // Goto beginning of current line. Default: Home
@@ -1263,14 +1260,13 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
         keyPressEvent(&ke);
         layout->setPreeditArea(-1, QString());
     } else {
-        layout->setPreeditArea(textEditor->position() - block.position(),
-                event->preeditString());
-        textEditor->document()->markContentsDirty(textEditor->position(), 1);
+        layout->setPreeditArea(textEditor->position() - block.position(), event->preeditString());
+        const_cast<QTextDocument*>(textEditor->document())->markContentsDirty(textEditor->position(), 1);
     }
     event->accept();
 }
 
-void TextTool::ensureCursorVisible()
+void TextTool::ensureCursorVisible(bool moveView)
 {
     KoTextEditor *textEditor = m_textEditor.data();
     if (!textEditor || !m_textShapeData)
@@ -1290,6 +1286,10 @@ void TextTool::ensureCursorVisible()
         m_textShapeData = static_cast<KoTextShapeData*>(m_textShape->userData());
         Q_ASSERT(m_textShapeData);
         connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
+    }
+
+    if (!moveView) {
+        return;
     }
 
     QRectF cursorPos = caretRect(textEditor->cursor());
@@ -1499,6 +1499,8 @@ void TextTool::repaintCaret()
             ensureCursorVisible();
             return;
         }
+
+        ensureCursorVisible(false); // ensures the various vars are updated
 
         TextShape *textShape = static_cast<TextShape*>(rootArea->associatedShape());
         if (!textShape)

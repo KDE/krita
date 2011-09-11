@@ -304,6 +304,13 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
     if (m_cutoutOverlay.isValid()) {
         gc.drawRect(m_cutoutOverlay);
     }
+
+    if(!isEnabled()) {
+        QColor color(Qt::lightGray);
+        color.setAlphaF(0.5);
+        QBrush disabledBrush(color);
+        gc.fillRect(rc, disabledBrush);
+    }
     gc.end();
 }
 

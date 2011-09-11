@@ -60,7 +60,6 @@ K_EXPORT_PLUGIN(KritaRandomPickFilterFactory("krita"))
 KritaRandomPickFilter::KritaRandomPickFilter(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaRandomPickFilterFactory::componentData());
     KisFilterRegistry::instance()->add(new KisFilterRandomPick());
 }
 

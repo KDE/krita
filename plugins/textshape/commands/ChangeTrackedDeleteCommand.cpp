@@ -81,7 +81,7 @@ void ChangeTrackedDeleteCommand::undo()
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
 
-    QTextDocument *document = m_tool->m_textEditor.data()->document();
+    const QTextDocument *document = m_tool->m_textEditor.data()->document();
     KoTextDocument(document).changeTracker()->elementById(m_addedChangeElement)->setValid(false);
     foreach (int changeId, m_removedElements) {
       KoTextDocument(document).changeTracker()->elementById(changeId)->setValid(true);
@@ -96,7 +96,7 @@ void ChangeTrackedDeleteCommand::redo()
     if (!m_first) {
         TextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
-        QTextDocument *document = m_tool->m_textEditor.data()->document();
+        const QTextDocument *document = m_tool->m_textEditor.data()->document();
         KoTextDocument(document).changeTracker()->elementById(m_addedChangeElement)->setValid(true);
         foreach (int changeId, m_removedElements) {
           KoTextDocument(document).changeTracker()->elementById(changeId)->setValid(false);
@@ -146,7 +146,7 @@ void ChangeTrackedDeleteCommand::deletePreviousChar()
 void ChangeTrackedDeleteCommand::handleListItemDelete(QTextCursor &selection)
 {
     m_canMerge = false;
-    QTextDocument *document = selection.document();
+    const QTextDocument *document = selection.document();
 
     bool numberedListItem = false;
     if (!selection.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem))
@@ -199,7 +199,7 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(QTextCursor &selection)
 
 void ChangeTrackedDeleteCommand::deleteSelection(QTextCursor &selection)
 {
-    QTextDocument *document = m_tool->m_textEditor.data()->document();
+    const QTextDocument *document = m_tool->m_textEditor.data()->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineTextObjectManager());
@@ -346,13 +346,13 @@ bool ChangeTrackedDeleteCommand::mergeWith( const KUndo2Command *command)
         {}
 
         void undo() {
-            QTextDocument *doc = m_document.data();
+            QTextDocument *doc = const_cast<QTextDocument*>(m_document.data());
             if (doc)
                 doc->undo(KoTextDocument(doc).textEditor()->cursor());
         }
 
         void redo() {
-            QTextDocument *doc = m_document.data();
+            QTextDocument *doc = const_cast<QTextDocument*>(m_document.data());
             if (doc)
                 doc->redo(KoTextDocument(doc).textEditor()->cursor());
         }
@@ -382,7 +382,7 @@ bool ChangeTrackedDeleteCommand::mergeWith( const KUndo2Command *command)
         m_length = other->m_length;
 
         for(int i=0; i < command->childCount(); i++)
-            new UndoTextCommand(m_tool->m_textEditor.data()->document(), this);
+            new UndoTextCommand(const_cast<QTextDocument*>(m_tool->m_textEditor.data()->document()), this);
 
         return true;
     }
@@ -392,7 +392,7 @@ bool ChangeTrackedDeleteCommand::mergeWith( const KUndo2Command *command)
 void ChangeTrackedDeleteCommand::updateListIds(QTextCursor &cursor)
 {
     m_newListIds.clear();
-    QTextDocument *document = m_tool->m_textEditor.data()->document();
+    QTextDocument *document = const_cast<QTextDocument*>(m_tool->m_textEditor.data()->document());
     QTextCursor tempCursor(document);
     QTextBlock startBlock = document->findBlock(cursor.anchor());
     QTextBlock endBlock = document->findBlock(cursor.position());
@@ -409,7 +409,7 @@ void ChangeTrackedDeleteCommand::updateListIds(QTextCursor &cursor)
 }
 void ChangeTrackedDeleteCommand::updateListChanges()
 {
-    QTextDocument *document = m_tool->m_textEditor.data()->document();
+    QTextDocument *document = const_cast<QTextDocument*>(m_tool->m_textEditor.data()->document());
     QTextCursor tempCursor(document);
     QTextBlock startBlock = document->findBlock(m_position);
     QTextBlock endBlock = document->findBlock(m_position + m_length);
@@ -444,7 +444,7 @@ ChangeTrackedDeleteCommand::~ChangeTrackedDeleteCommand()
 
 void ChangeTrackedDeleteCommand::removeChangeElement(int changeId)
 {
-    QTextDocument *document = m_tool->m_textEditor.data()->document();
+    const QTextDocument *document = m_tool->m_textEditor.data()->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     KoChangeTrackerElement *element = KoTextDocument(document).changeTracker()->elementById(changeId);
     KoDeleteChangeMarker *marker = element->getDeleteChangeMarker();

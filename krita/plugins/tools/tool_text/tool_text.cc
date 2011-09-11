@@ -45,8 +45,6 @@ K_EXPORT_PLUGIN(ToolTextFactory("krita"))
 ToolText::ToolText(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(ToolTextFactory::componentData());
-
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolTextFactory(QStringList()));
 

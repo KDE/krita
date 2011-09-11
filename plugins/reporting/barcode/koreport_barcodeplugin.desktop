@@ -24,6 +24,7 @@ Name[wa]=Côde bår KoReport
 Name[x-test]=xxKoReport_Barcodexx
 Name[zh_TW]=KoReport_Barcode
 Comment=KoReport Barcode Plugin
+Comment[da]=Stregkode-plugin til KoReport
 Comment[it]=Estensione per codici a barre di KoReport
 Comment[nb]=KoReport strekkode-programtillegg
 Comment[pt]='Plugin' de Códigos de Barras do KoReport

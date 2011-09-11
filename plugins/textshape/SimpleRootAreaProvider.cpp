@@ -47,6 +47,7 @@ KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextDocumentLayout *docu
 
 void SimpleRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
+    Q_UNUSED(afterThis);
 }
 
 void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)
@@ -129,6 +130,8 @@ QSizeF SimpleRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
 
 QList<KoTextLayoutObstruction *> SimpleRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)
 {
+    Q_UNUSED(rootArea);
+
     QList<KoTextLayoutObstruction*> obstructions;
 /*
     m_textShape->boundingRect();

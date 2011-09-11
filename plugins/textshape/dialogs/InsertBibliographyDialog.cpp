@@ -47,15 +47,13 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
 void InsertBibliographyDialog::insert()
 {
     m_editor->insertBibliography();
-    KoBibliographyInfo *bibInfo =
-            m_editor->cursor()->block().blockFormat().property(KoParagraphStyle::BibliographyData).value<KoBibliographyInfo*>();
-    QTextDocument *bibDocument =
-            m_editor->cursor()->block().blockFormat().property(KoParagraphStyle::BibliographyDocument).value<QTextDocument*>();
+    KoBibliographyInfo *bibInfo = m_editor->block().blockFormat().property(KoParagraphStyle::BibliographyData).value<KoBibliographyInfo*>();
+    QTextDocument *bibDocument = m_editor->block().blockFormat().property(KoParagraphStyle::GeneratedDocument).value<QTextDocument*>();
 
     bibInfo->m_entryTemplate = m_bibInfo->m_entryTemplate;
     bibInfo->m_indexTitleTemplate.text = dialog.title->text();
 
-    bool *autoUpdate = m_editor->cursor()->block().blockFormat().property(KoParagraphStyle::AutoUpdateBibliography).value<bool *>();
+    bool *autoUpdate = m_editor->block().blockFormat().property(KoParagraphStyle::AutoUpdateBibliography).value<bool *>();
     *autoUpdate = dialog.autoupdate->isChecked();
 
     BibliographyGenerator *generator =

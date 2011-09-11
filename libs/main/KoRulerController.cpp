@@ -68,18 +68,16 @@ public:
         ruler->setOverrideActiveRange(activeRange.left(), activeRange.right());
         ruler->setShowIndents(true);
         ruler->setShowTabs(true);
-        if (block.position() <= lastPosition && block.position() + block.length() > lastPosition)
-            return; // nothing changed.
         lastPosition = block.position();
         currentTabIndex = -2;
         tabList.clear();
 
         QTextBlockFormat format = block.blockFormat();
         ruler->setShowIndents(true);
-        ruler->setParagraphIndent(format.leftMargin());
-        ruler->setFirstLineIndent(format.textIndent());
-        ruler->setEndIndent(format.rightMargin());
         ruler->setRightToLeft(block.layout()->textOption().textDirection() == Qt::RightToLeft);
+        ruler->setParagraphIndent(format.property(QTextFormat::BlockLeftMargin).value<QTextLength>().value(0));
+        ruler->setFirstLineIndent(format.property(QTextFormat::TextIndent).value<QTextLength>().value(0));
+        ruler->setEndIndent(format.property(QTextFormat::BlockRightMargin).value<QTextLength>().value(0));
         ruler->setShowTabs(true);
         ruler->setRelativeTabs(relativeTabs());
 
@@ -94,7 +92,12 @@ public:
                 tabs.append(tab);
             }
         }
-        ruler->updateTabs(tabs);
+        qreal tabStopDistance = format.doubleProperty(KoParagraphStyle::TabStopDistance);
+/*        if (tabStopDistance <= 0) {
+// kotextdocumentlayout hardly reachable from here :(
+    tabStopDistance = block.document()->documentLayout()->defaultTabSpacing();
+        } */
+        ruler->updateTabs(tabs, tabStopDistance);
     }
 
     void indentsChanged() {

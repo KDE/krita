@@ -79,7 +79,6 @@ K_EXPORT_PLUGIN(KritaBumpmapFactory("krita"))
 KritaBumpmap::KritaBumpmap(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaBumpmapFactory::componentData());
     KisFilterRegistry::instance()->add(new KisFilterBumpmap());
 
 }

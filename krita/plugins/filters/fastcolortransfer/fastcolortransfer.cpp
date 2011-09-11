@@ -49,7 +49,6 @@ K_EXPORT_PLUGIN(KritaFastColorTransferFactory("krita"))
 FastColorTransferPlugin::FastColorTransferPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaFastColorTransferFactory::componentData());
     KisFilterRegistry::instance()->add(new KisFilterFastColorTransfer());
 
 }

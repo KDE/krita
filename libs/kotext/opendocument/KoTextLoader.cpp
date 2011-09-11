@@ -34,7 +34,6 @@
 #include <KoBookmarkManager.h>
 #include <KoInlineNote.h>
 #include <KoInlineCite.h>
-#include <KoInlineBibliography.h>
 #include <KoInlineTextObjectManager.h>
 #include "KoList.h"
 #include <KoOdfLoadingContext.h>
@@ -2334,7 +2333,7 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
             // uncomment to see what has been loaded
             //info.tableOfContentData()->dump();
             tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
-            tocFormat.setProperty(KoParagraphStyle::TableOfContentsDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
+            tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
             cursor.insertBlock(tocFormat);
 
             // We'll just try to find displayable elements and add them as paragraphs
@@ -2402,7 +2401,7 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
             info->loadOdf(d->textSharedData, e);
 
             bibFormat.setProperty(KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info));
-            bibFormat.setProperty(KoParagraphStyle::BibliographyDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
+            bibFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
             bibFormat.setProperty(KoParagraphStyle::AutoUpdateBibliography, QVariant::fromValue<bool *>(autoUpdate));
             cursor.insertBlock(bibFormat);
             // We'll just try to find displayable elements and add them as paragraphs

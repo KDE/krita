@@ -40,8 +40,6 @@ K_EXPORT_PLUGIN(SketchPaintOpPluginFactory("krita"))
 SketchPaintOpPlugin::SketchPaintOpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //
-    //setComponentData(SketchPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisSimplePaintOpFactory<KisSketchPaintOp, KisSketchPaintOpSettings, KisSketchPaintOpSettingsWidget>("sketchbrush", i18n("Sketch brush"), KisPaintOpFactory::categoryExperimental(), "krita-sketch.png"));
 

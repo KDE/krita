@@ -116,13 +116,14 @@ void SpellCheck::checkSection(QTextDocument *document, int startPosition, int en
     m_spellCheckMenu->setVisible(true);
 }
 
-void SpellCheck::setDocument(QTextDocument *document)
+void SpellCheck::setDocument(const QTextDocument *document)
 {
     if (m_document == document)
         return;
     if (m_document)
         disconnect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
-    m_document = document;
+    // XXX: evil!
+    m_document = const_cast<QTextDocument*>(document);
     connect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
 }
 
@@ -360,7 +361,7 @@ void SpellCheck::finishedRun()
     QTimer::singleShot(0, this, SLOT(runQueue()));
 }
 
-void SpellCheck::setCurrentCursorPosition(QTextDocument *document, int cursorPosition)
+void SpellCheck::setCurrentCursorPosition(const QTextDocument *document, int cursorPosition)
 {
     setDocument(document);
     if (m_enableSpellCheck) {

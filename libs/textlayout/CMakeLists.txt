@@ -26,6 +26,7 @@ set(textlayout_LIB_SRCS
     AnchorStrategy.cpp
     ToCGenerator.cpp
     DummyDocumentLayout.cpp
+    IndexGeneratorManager.cpp
 )
 
 

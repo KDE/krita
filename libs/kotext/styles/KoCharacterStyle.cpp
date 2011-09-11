@@ -744,6 +744,37 @@ bool KoCharacterStyle::hasHyphenation() const
 {
     return d->propertyBoolean(HasHyphenation);
 }
+
+void KoCharacterStyle::setHyphenationPushCharCount(int count)
+{
+    if (count > 0)
+        d->setProperty(HyphenationPushCharCount, count);
+    else
+        d->stylesPrivate.remove(HyphenationPushCharCount);
+}
+
+int KoCharacterStyle::hyphenationPushCharCount() const
+{
+    if (hasProperty(HyphenationPushCharCount))
+        return d->propertyInt(HyphenationPushCharCount);
+    return 0;
+}
+
+void KoCharacterStyle::setHyphenationRemainCharCount(int count)
+{
+    if (count > 0)
+        d->setProperty(HyphenationRemainCharCount, count);
+    else
+        d->stylesPrivate.remove(HyphenationRemainCharCount);
+}
+
+int KoCharacterStyle::hyphenationRemainCharCount() const
+{
+    if (hasProperty(HyphenationRemainCharCount))
+        return d->propertyInt(HyphenationRemainCharCount);
+    return 0;
+}
+
 void KoCharacterStyle::setStrikeOutStyle(KoCharacterStyle::LineStyle strikeOut)
 {
     d->setProperty(StrikeOutStyle, strikeOut);
@@ -980,28 +1011,6 @@ bool KoCharacterStyle::hasProperty(int key) const
     return d->stylesPrivate.contains(key);
 }
 
-static KoCharacterStyle::RotationAngle intToRotationAngle(int angle)
-{
-    KoCharacterStyle::RotationAngle rotationAngle = KoCharacterStyle::Zero;
-    if (angle == 90) {
-        rotationAngle = KoCharacterStyle::Ninety;
-    } else if (angle == 270) {
-        rotationAngle = KoCharacterStyle::TwoHundredSeventy;
-    }
-    return rotationAngle;
-}
-
-static int rotationAngleToInt(KoCharacterStyle::RotationAngle rotationAngle)
-{
-    int angle = 0;
-    if (rotationAngle == KoCharacterStyle::Ninety) {
-        angle = 90;
-    } else if (rotationAngle == KoCharacterStyle::TwoHundredSeventy) {
-        angle = 270;
-    }
-    return angle;
-}
-
 static QString rotationScaleToString(KoCharacterStyle::RotationScale rotationScale)
 {
     QString scale = "line-height";
@@ -1020,14 +1029,14 @@ static KoCharacterStyle::RotationScale stringToRotationScale(const QString &scal
     return rotationScale;
 }
 
-void KoCharacterStyle::setTextRotationAngle(RotationAngle angle)
+void KoCharacterStyle::setTextRotationAngle(qreal angle)
 {
-    d->setProperty(TextRotationAngle, rotationAngleToInt(angle));
+    d->setProperty(TextRotationAngle, angle);
 }
 
-KoCharacterStyle::RotationAngle KoCharacterStyle::textRotationAngle() const
+qreal KoCharacterStyle::textRotationAngle() const
 {
-    return intToRotationAngle(d->propertyInt(TextRotationAngle));
+    return d->propertyDouble(TextRotationAngle);
 }
 
 void KoCharacterStyle::setTextRotationScale(RotationScale scale)
@@ -1063,6 +1072,49 @@ KoShadowStyle KoCharacterStyle::textShadow() const
             return shadow.value<KoShadowStyle>();
     }
     return KoShadowStyle();
+}
+
+void KoCharacterStyle::setTextCombine(KoCharacterStyle::TextCombineType type)
+{
+    d->setProperty(TextCombine, type);
+}
+
+KoCharacterStyle::TextCombineType KoCharacterStyle::textCombine() const
+{
+    if (hasProperty(TextCombine)) {
+        return (KoCharacterStyle::TextCombineType) d->propertyInt(TextCombine);
+    }
+    return NoTextCombine;
+}
+
+QChar KoCharacterStyle::textCombineEndChar() const
+{
+    if (hasProperty(TextCombineEndChar)) {
+        QString val = d->propertyString(TextCombineEndChar);
+        if (val.length() > 0)
+            return val.at(0);
+    }
+    return QChar();
+}
+
+void KoCharacterStyle::setTextCombineEndChar(const QChar& character)
+{
+    d->setProperty(TextCombineEndChar, character);
+}
+
+QChar KoCharacterStyle::textCombineStartChar() const
+{
+    if (hasProperty(TextCombineStartChar)) {
+        QString val = d->propertyString(TextCombineStartChar);
+        if (val.length() > 0)
+            return val.at(0);
+    }
+    return QChar();
+}
+
+void KoCharacterStyle::setTextCombineStartChar(const QChar& character)
+{
+    d->setProperty(TextCombineStartChar, character);
 }
 
 void KoCharacterStyle::setFontRelief(KoCharacterStyle::ReliefType relief)
@@ -1306,6 +1358,8 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     QString overLineColor = styleStack.property(KoXmlNS::style, "text-overline-color");   // OO 3.10.23, OASIS 14.4.31
     if (!overLineColor.isEmpty() && overLineColor != "font-color") {
         setOverlineColor(QColor(overLineColor));
+    } else if (overLineColor == "font-color") {
+        setOverlineColor(QColor());
     }
     
     // underline modes
@@ -1339,6 +1393,8 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     QString underLineColor = styleStack.property(KoXmlNS::style, "text-underline-color");   // OO 3.10.23, OASIS 14.4.31
     if (!underLineColor.isEmpty() && underLineColor != "font-color") {
         setUnderlineColor(QColor(underLineColor));
+    } else if (underLineColor == "font-color") {
+        setUnderlineColor(QColor());
     }
 
 
@@ -1414,6 +1470,8 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
                 setFontCapitalization(QFont::AllLowercase);
             else if (textTransform == "capitalize")
                 setFontCapitalization(QFont::Capitalize);
+            else if (textTransform == "none")
+                setFontCapitalization(QFont::MixedCase);
         }
     }
 
@@ -1487,8 +1545,7 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
 
     const QString textRotationAngle(styleStack.property(KoXmlNS::style, "text-rotation-angle"));
     if (!textRotationAngle.isEmpty()) {
-        int angle = textRotationAngle.toInt();
-        setTextRotationAngle(intToRotationAngle(angle));
+        setTextRotationAngle(KoUnit::parseAngle(textRotationAngle));
     }
 
     const QString textRotationScale(styleStack.property(KoXmlNS::style, "text-rotation-scale"));
@@ -1508,6 +1565,26 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
         if (shadow.loadOdf(textShadow))
             setTextShadow(shadow);
     }
+    
+    const QString textCombine(styleStack.property(KoXmlNS::style, "text-combine"));
+    if (!textCombine.isEmpty()) {
+        if (textCombine == "letters")
+            setTextCombine(TextCombineLetters);
+        else if (textCombine == "lines")
+            setTextCombine(TextCombineLines);
+        else if (textCombine == "none")
+            setTextCombine(NoTextCombine);
+    }
+    
+    const QString textCombineEndChar(styleStack.property(KoXmlNS::style, "text-combine-end-char"));
+    if (!textCombineEndChar.isEmpty()) {
+        setTextCombineEndChar(textCombineEndChar.at(0));
+    }
+    const QString textCombineStartChar(styleStack.property(KoXmlNS::style, "text-combine-start-char"));
+    if (!textCombineStartChar.isEmpty()) {
+        setTextCombineStartChar(textCombineStartChar.at(0));
+    }
+    
     
     const QString fontRelief(styleStack.property(KoXmlNS::style, "font-relief"));
     if (!fontRelief.isEmpty()) {
@@ -1549,6 +1626,18 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::fo, "hyphenate"))
         setHasHyphenation(styleStack.property(KoXmlNS::fo, "hyphenate") == "true");
 
+    if (styleStack.hasProperty(KoXmlNS::fo, "hyphenation-remain-char-count")) {
+        bool ok = false;
+        int count = styleStack.property(KoXmlNS::fo, "hyphenation-remain-char-count").toInt(&ok);
+        if (ok)
+            setHyphenationRemainCharCount(count);
+    }
+    if (styleStack.hasProperty(KoXmlNS::fo, "hyphenation-push-char-count")) {
+        bool ok = false;
+        int count = styleStack.property(KoXmlNS::fo, "hyphenation-push-char-count").toInt(&ok);
+        if (ok)
+            setHyphenationPushCharCount(count);
+    }
 //TODO
 #if 0
     /*
@@ -1640,6 +1729,7 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
                 break;
             case QFont::MixedCase:
                 style.addProperty("fo:font-variant", "normal", KoGenStyle::TextType);
+                style.addProperty("fo:text-transform", "none", KoGenStyle::TextType);
                 break;
             case QFont::AllUppercase:
                 style.addProperty("fo:text-transform", "uppercase", KoGenStyle::TextType);
@@ -1665,9 +1755,10 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
 	    }
         } else if (key == OverlineColor) {
             QColor color = d->stylesPrivate.value(key).value<QColor>();
-            if (color.isValid()) {
+            if (color.isValid())
                 style.addProperty("style:text-overline-color", color.name(), KoGenStyle::TextType);
-	    }
+            else
+                style.addProperty("style:text-overline-color", "font-color", KoGenStyle::TextType);
         } else if (key == OverlineMode) {
             bool ok = false;
             int mode = d->stylesPrivate.value(key).toInt(&ok);
@@ -1693,6 +1784,8 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
             QColor color = d->stylesPrivate.value(key).value<QColor>();
             if (color.isValid())
                 style.addProperty("style:text-underline-color", color.name(), KoGenStyle::TextType);
+            else
+                style.addProperty("style:text-underline-color", "font-color", KoGenStyle::TextType);
         } else if (key == UnderlineMode) {
             bool ok = false;
             int mode = d->stylesPrivate.value(key).toInt(&ok);
@@ -1770,8 +1863,7 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
         } else if (key == KoCharacterStyle::FontCharset) {
             style.addProperty("style:font-charset", d->stylesPrivate.value(KoCharacterStyle::FontCharset).toString(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::TextRotationAngle) {
-            RotationAngle angle = textRotationAngle();
-            style.addProperty("style:text-rotation-angle", rotationAngleToInt(angle), KoGenStyle::TextType);
+            style.addProperty("style:text-rotation-angle", QString::number(textRotationAngle()), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::TextRotationScale) {
             RotationScale scale = textRotationScale();
             style.addProperty("style:text-rotation-scale", rotationScaleToString(scale), KoGenStyle::TextType);
@@ -1781,6 +1873,24 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
         } else if (key == KoCharacterStyle::TextShadow) {
             KoShadowStyle shadow = textShadow();
             style.addProperty("fo:text-shadow", shadow.saveOdf(), KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::TextCombine) {
+            KoCharacterStyle::TextCombineType textCombineType = textCombine();
+            switch (textCombineType)
+            {
+                case KoCharacterStyle::NoTextCombine:
+                    style.addProperty("style:text-combine", "none", KoGenStyle::TextType);
+                    break;
+                case KoCharacterStyle::TextCombineLetters:
+                    style.addProperty("style:text-combine", "letters", KoGenStyle::TextType);
+                    break;
+                case KoCharacterStyle::TextCombineLines:
+                    style.addProperty("style:text-combine", "lines", KoGenStyle::TextType);
+                    break;
+            }
+        } else if (key == KoCharacterStyle::TextCombineEndChar) {
+            style.addProperty("style:text-combine-end-char", textCombineEndChar(), KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::TextCombineStartChar) {
+            style.addProperty("style:text-combine-start-char", textCombineStartChar(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::FontRelief) {
             KoCharacterStyle::ReliefType relief = fontRelief();
             switch (relief)
@@ -1829,6 +1939,10 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:hyphenate", "true", KoGenStyle::TextType);
             else
                 style.addProperty("fo:hyphenate", "false", KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::HyphenationPushCharCount) {
+            style.addProperty("fo:hyphenation-push-char-count", hyphenationPushCharCount(), KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::HyphenationRemainCharCount) {
+            style.addProperty("fo:hyphenation-remain-char-count", hyphenationRemainCharCount(), KoGenStyle::TextType);
         }
     }
     //TODO: font name and family

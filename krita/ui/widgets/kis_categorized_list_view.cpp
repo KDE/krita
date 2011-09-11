@@ -25,6 +25,22 @@ KisCategorizedListView::KisCategorizedListView(QWidget* parent):
     connect(this, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotIndexChanged(const QModelIndex&)));
 }
 
+void KisCategorizedListView::setModel(QAbstractItemModel* model)
+{
+	QListView::setModel(model);
+	updateRows(0, model->rowCount());
+}
+
+void KisCategorizedListView::updateRows(int begin, int end)
+{
+	for(; begin!=end; ++begin) {
+        QModelIndex index    = model()->index(begin, 0);
+        bool        isHeader = model()->data(index, IsHeaderRole).toBool();
+        bool        expanded = model()->data(index, ExpandCategoryRole).toBool();
+        setRowHidden(begin, !expanded && !isHeader);
+    }
+}
+
 void KisCategorizedListView::slotIndexChanged(const QModelIndex& index)
 {
     if(model()->data(index, IsHeaderRole).toBool()) {
@@ -37,15 +53,14 @@ void KisCategorizedListView::slotIndexChanged(const QModelIndex& index)
 void KisCategorizedListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
     QListView::dataChanged(topLeft, bottomRight);
-    
-    int beg = topLeft.row();
-    int end = bottomRight.row();
-    
-    for(; beg<=end; ++beg) {
-        QModelIndex index    = model()->index(beg, 0);
-        bool        isHeader = model()->data(index, IsHeaderRole).toBool();
-        bool        expanded = model()->data(index, ExpandCategoryRole).toBool();
-        setRowHidden(beg, !expanded && !isHeader);
-    }
+    updateRows(topLeft.row(), bottomRight.row()+1);
 }
 
+void KisCategorizedListView::rowsInserted(const QModelIndex& parent, int start, int end)
+{
+	QListView::rowsInserted(parent, start, end);
+	updateRows(0, model()->rowCount());
+}
+// void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
+// {
+// }

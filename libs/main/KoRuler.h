@@ -189,9 +189,10 @@ public slots:
 
     /**
      * Update the tabs
-     * @param tabs a list of tabs that is shown on the ruler the first selection border in points
+     * @param tabs a list of tabs that is shown on the ruler
+     * @param tabDistance the distncte between regular interval tabs
      */
-    void updateTabs(const QList<Tab> &tabs);
+    void updateTabs(const QList<Tab> &tabs, qreal tabDistance);
 
     /***
      * Return the list of tabs set on this ruler.

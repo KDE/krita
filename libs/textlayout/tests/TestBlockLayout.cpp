@@ -564,22 +564,21 @@ void TestBlockLayout::testTabs()
         cursor.setBlockFormat(bf);
         m_layout->layout();
         for (int pos=0; pos<4; pos++) {
-            qDebug()<<blockLayout->lineAt(0).cursorToX(pos*2);
             if (pos==0)
                 QCOMPARE(blockLayout->lineAt(0).cursorToX(pos*2), testcases[i].leftMargin + testcases[i].textIndent);
             else
-                QVERIFY(qAbs(blockLayout->lineAt(0).cursorToX(pos*2) - (testcases[i].expected+(pos-1)*50.0)) < ROUNDING);
+                QVERIFY(qAbs(blockLayout->lineAt(0).cursorToX(pos*2) - (testcases[i].expected+(pos-1)*50.0)) < 1.0);
         }
         if (testcases[i].textIndent == 0.0) { // excluding known fails
             for (int pos=0; pos<4; pos++) {
                 // pos==0 is known to fail see https://bugs.kde.org/show_bug.cgi?id=239819
                 if (pos!=0)
-                    QVERIFY(qAbs(blockLayout->lineAt(1).cursorToX(pos*2+8)- (testcases[i].expected+(pos-1)*50.0)) < ROUNDING);
+                    QVERIFY(qAbs(blockLayout->lineAt(1).cursorToX(pos*2+8)- (testcases[i].expected+(pos-1)*50.0)) < 1.0);
             }
             for (int pos=0; pos<4; pos++) {
                 // pos==0 is known to fail see https://bugs.kde.org/show_bug.cgi?id=239819
                 if (pos!=0)
-                    QVERIFY(qAbs(blockLayout->lineAt(2).cursorToX(pos*2+16)- (testcases[i].expected+(pos-1)*50.0)) < ROUNDING);
+                    QVERIFY(qAbs(blockLayout->lineAt(2).cursorToX(pos*2+16)- (testcases[i].expected+(pos-1)*50.0)) < 1.0);
             }
         }
     }

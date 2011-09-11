@@ -564,6 +564,7 @@ void TestBlockLayout::testTabs()
         cursor.setBlockFormat(bf);
         m_layout->layout();
         for (int pos=0; pos<4; pos++) {
+            qDebug()<<blockLayout->lineAt(0).cursorToX(pos*2);
             if (pos==0)
                 QCOMPARE(blockLayout->lineAt(0).cursorToX(pos*2), testcases[i].leftMargin + testcases[i].textIndent);
             else

@@ -487,71 +487,71 @@ void TestBlockLayout::testTabs()
         qreal rightMargin;
         qreal expected; // expected value of pos=2 of each line
     } testcases[] = {
-        { true, 0, 0, 0, 48.5},
-        { true, 0, 10, 0, 48.5},
-        { true, 0, 10, 5, 48.5},
-        { true, 0, 0, 5, 48.5},
-        { true, 20, 0, 0, 68.5},
-        { true, 20, 10, 0, 68.5},
-        { true, 20, 10, 5, 68.5},
-        { true, 20, 0, 5, 68.5},
-        { true, 0, 0, 0, 48.5},
-        { true, 0, -10, 0, 48.5},
-        { true, 0, -10, 5, 48.5},
-        { true, 0, 0, 5, 48.5},
-        { true, -20, 0, 0+20, 28.5}, //+20 to avoid extra tab fitting in 
-        { true, -20, -10, 0+20, 28.5}, //+20 to avoid extra tab fitting in 
-        { true, -20, -10, 5+20, 28.5}, //+20 to avoid extra tab fitting in 
-        { true, -20, 0, 5+20, 28.5}, //+20 to avoid extra tab fitting in 
-        { true, 0, 0, 0, 48.5},
-        { true, 0, 10, 0, 48.5},
-        { true, 0, 10, 5, 48.5},
-        { true, 0, 0, 5, 48.5},
-        { true, -20, 0, 0+20, 28.5}, //+20 to avoid extra tab fitting in 
-        { true, -20, 10, 0+20, 28.5}, //+20 to avoid extra tab fitting in 
-        { true, -20, 10, 5+20, 28.5}, //+20 to avoid extra tab fitting in 
-        { true, -20, 0, 5+20, 28.5}, //+20 to avoid extra tab fitting in 
-        { true, 0, 0, 0, 48.5},
-        { true, 0, -10, 0, 48.5},
-        { true, 0, -10, 5, 48.5},
-        { true, 0, 0, 5, 48.5},
-        { true, 20, 0, 0, 68.5},
-        { true, 20, -10, 0, 68.5},
-        { true, 20, -10, 5, 68.5},
-        { true, 20, 0, 5, 68.5},
+        { true, 0, 0, 0, 50},
+        { true, 0, 10, 0, 50},
+        { true, 0, 10, 5, 50},
+        { true, 0, 0, 5, 50},
+        { true, 20, 0, 0, 70},
+        { true, 20, 10, 0, 70},
+        { true, 20, 10, 5, 70},
+        { true, 20, 0, 5, 70},
+        { true, 0, 0, 0, 50},
+        { true, 0, -10, 0, 50},
+        { true, 0, -10, 5, 50},
+        { true, 0, 0, 5, 50},
+        { true, -20, 0, 0+20, 30}, //+20 to avoid extra tab fitting in 
+        { true, -20, -10, 0+20, 30}, //+20 to avoid extra tab fitting in 
+        { true, -20, -10, 5+20, 30}, //+20 to avoid extra tab fitting in 
+        { true, -20, 0, 5+20, 30}, //+20 to avoid extra tab fitting in 
+        { true, 0, 0, 0, 50},
+        { true, 0, 10, 0, 50},
+        { true, 0, 10, 5, 50},
+        { true, 0, 0, 5, 50},
+        { true, -20, 0, 0+20, 30}, //+20 to avoid extra tab fitting in 
+        { true, -20, 10, 0+20, 30}, //+20 to avoid extra tab fitting in 
+        { true, -20, 10, 5+20, 30}, //+20 to avoid extra tab fitting in 
+        { true, -20, 0, 5+20, 30}, //+20 to avoid extra tab fitting in 
+        { true, 0, 0, 0, 50},
+        { true, 0, -10, 0, 50},
+        { true, 0, -10, 5, 50},
+        { true, 0, 0, 5, 50},
+        { true, 20, 0, 0, 70},
+        { true, 20, -10, 0, 70},
+        { true, 20, -10, 5, 70},
+        { true, 20, 0, 5, 70},
 
-        { false, 0, 0, 0, 48.5},
-        { false, 0, 10, 0, 48.5},
-        { false, 0, 10, 5, 48.5},
-        { false, 0, 0, 5, 48.5},
-        { false, 20, 0, 0, 48.5},
-        { false, 20, 10, 0, 48.5},
-        { false, 20, 10, 5, 48.5},
-        { false, 20, 0, 5, 48.5},
-        { false, 0, 0, 0, 48.5},
-        { false, 0, -10, 0, 48.5},
-        { false, 0, -10, 5, 48.5},
-        { false, 0, 0, 5, 48.5},
-        { false, -20, 0, 0+70, -1.5}, //+70 to avoid extra tab fitting in 
-        { false, -20, -10, 0+70, -1.5}, //+70 to avoid extra tab fitting in 
-        { false, -20, -10, 5+70, -1.5}, //+70 to avoid extra tab fitting in 
-        { false, -20, 0, 5+70, -1.5}, //+70 to avoid extra tab fitting in 
-        { false, 0, 0, 0, 48.5},
-        { false, 0, 10, 0, 48.5},
-        { false, 0, 10, 5, 48.5},
-        { false, 0, 0, 5, 48.5},
-        { false, -20, 0, 0+70, -1.5}, //+70 to avoid extra tab fitting in 
-        { false, -20, 10, 0+70, -1.5}, //+70 to avoid extra tab fitting in 
-        { false, -20, 10, 5+70, -1.5}, //+70 to avoid extra tab fitting in 
-        { false, -20, 0, 5+70, -1.5}, //+70 to avoid extra tab fitting in 
-        { false, 0, 0, 0, 48.5},
-        { false, 0, -10, 0, 48.5},
-        { false, 0, -10, 5, 48.5},
-        { false, 0, 0, 5, 48.5},
-        { false, 20, 0, 0, 48.5},
-        { false, 20, -10, 0, 48.5},
-        { false, 20, -10, 5, 48.5},
-        { false, 20, 0, 5, 48.5}
+        { false, 0, 0, 0, 50},
+        { false, 0, 10, 0, 50},
+        { false, 0, 10, 5, 50},
+        { false, 0, 0, 5, 50},
+        { false, 20, 0, 0, 50},
+        { false, 20, 10, 0, 50},
+        { false, 20, 10, 5, 50},
+        { false, 20, 0, 5, 50},
+        { false, 0, 0, 0, 50},
+        { false, 0, -10, 0, 50},
+        { false, 0, -10, 5, 50},
+        { false, 0, 0, 5, 50},
+        { false, -20, 0, 0+70, 0}, //+70 to avoid extra tab fitting in 
+        { false, -20, -10, 0+70, 0}, //+70 to avoid extra tab fitting in 
+        { false, -20, -10, 5+70, 0}, //+70 to avoid extra tab fitting in 
+        { false, -20, 0, 5+70, 0}, //+70 to avoid extra tab fitting in 
+        { false, 0, 0, 0, 50},
+        { false, 0, 10, 0, 50},
+        { false, 0, 10, 5, 50},
+        { false, 0, 0, 5, 50},
+        { false, -20, 0, 0+70, 0}, //+70 to avoid extra tab fitting in 
+        { false, -20, 10, 0+70, 0}, //+70 to avoid extra tab fitting in 
+        { false, -20, 10, 5+70, 0}, //+70 to avoid extra tab fitting in 
+        { false, -20, 0, 5+70, 0}, //+70 to avoid extra tab fitting in 
+        { false, 0, 0, 0, 50},
+        { false, 0, -10, 0, 50},
+        { false, 0, -10, 5, 50},
+        { false, 0, 0, 5, 50},
+        { false, 20, 0, 0, 50},
+        { false, 20, -10, 0, 50},
+        { false, 20, -10, 5, 50},
+        { false, 20, 0, 5, 50}
     };
 
     m_layout->setTabSpacing(50.0);
@@ -564,11 +564,12 @@ void TestBlockLayout::testTabs()
         cursor.setBlockFormat(bf);
         m_layout->layout();
         for (int pos=0; pos<4; pos++) {
-            if (pos!=0)
+            if (pos==0)
+                QCOMPARE(blockLayout->lineAt(0).cursorToX(pos*2), testcases[i].leftMargin + testcases[i].textIndent);
+            else
                 QVERIFY(qAbs(blockLayout->lineAt(0).cursorToX(pos*2) - (testcases[i].expected+(pos-1)*50.0)) < ROUNDING);
         }
-        if (testcases[i].textIndent == 0.0) {
-            // these tests would currently fail if textIndent != 0.0
+        if (testcases[i].textIndent == 0.0) { // excluding known fails
             for (int pos=0; pos<4; pos++) {
                 // pos==0 is known to fail see https://bugs.kde.org/show_bug.cgi?id=239819
                 if (pos!=0)

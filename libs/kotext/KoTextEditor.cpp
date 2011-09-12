@@ -1072,7 +1072,7 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
                 // We have a selection somewhere 
                 QTextTableCell cell1 = table->cellAt(d->caret.selectionStart());
                 QTextTableCell cell2 = table->cellAt(d->caret.selectionEnd());
-                if (cell1 != cell2) {
+                if (cell1 != cell2 || !cell1.isValid() || !cell2.isValid()) {
                     // And the selection is complex or entire table
                     int selectionRow;
                     int selectionColumn;

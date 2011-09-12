@@ -940,12 +940,12 @@ KoCharacterStyle::LineMode KoCharacterStyle::underlineMode() const
 
 void KoCharacterStyle::setFontLetterSpacing(qreal spacing)
 {
-    d->setProperty(QTextCharFormat::FontLetterSpacing, spacing);
+    d->setProperty(KoCharacterStyle::FontLetterSpacing, spacing);
 }
 
 qreal KoCharacterStyle::fontLetterSpacing() const
 {
-    return d->propertyDouble(QTextCharFormat::FontLetterSpacing);
+    return d->propertyDouble(KoCharacterStyle::FontLetterSpacing);
 }
 
 void KoCharacterStyle::setFontWordSpacing(qreal spacing)
@@ -1526,11 +1526,7 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     const QString letterSpacing(styleStack.property(KoXmlNS::fo, "letter-spacing"));
     if ((!letterSpacing.isEmpty()) && (letterSpacing != "normal")) {
         qreal space = KoUnit::parseValue(letterSpacing);
-        QFont styleFont = font();
-        if (styleFont != QFont()) {
-            QFontMetricsF fm(font());
-            setFontLetterSpacing(100+100*space/fm.averageCharWidth());
-        }
+        setFontLetterSpacing(space);
     }
 
     const QString textOutline(styleStack.property(KoXmlNS::style, "text-outline"));
@@ -1853,9 +1849,8 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
             style.addProperty("fo:country", d->stylesPrivate.value(KoCharacterStyle::Country).toString(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::Language) {
             style.addProperty("fo:language", d->stylesPrivate.value(KoCharacterStyle::Language).toString(), KoGenStyle::TextType);
-        } else if (key == QTextCharFormat::FontLetterSpacing) {
-            QFontMetricsF fm(font());
-            qreal space = (fontLetterSpacing() - 100) * fm.averageCharWidth() / 100;
+        } else if (key == KoCharacterStyle::FontLetterSpacing) {
+            qreal space = fontLetterSpacing();
             style.addPropertyPt("fo:letter-spacing", space, KoGenStyle::TextType);
         } else if (key == QTextFormat::TextOutline) {
             QPen outline = textOutline();

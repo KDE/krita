@@ -94,6 +94,7 @@ public:
         TextCombineEndChar,    ///< QChar
         HyphenationPushCharCount,   ///< int
         HyphenationRemainCharCount, ///< int
+        FontLetterSpacing,          ///< qreal, not the same format as the FontLetterSpacing in QTextFormat
         PercentageFontSize, //font-size can be in % and this stores that value
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550, // Internal: Reserved for ChangeTracker

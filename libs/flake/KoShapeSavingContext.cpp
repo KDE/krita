@@ -29,6 +29,7 @@
 #include <KoXmlWriter.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
+#include <KoSharedSavingData.h>
 
 #include <kmimetype.h>
 #include <kdebug.h>

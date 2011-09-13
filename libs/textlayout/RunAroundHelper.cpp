@@ -67,8 +67,16 @@ bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
     // Make sure at least some text is fitted if the basic width (page, table cell, column)
     // is too small
     if (maxLineWidth <= 0.) {
-        // document attached to bug 244411
-        line.setNumColumns(1);
+        // we need to make sure that something like "line.setLineWidth(0.0);" is called here to prevent
+        // the QTextLine from being removed again and leading at a later point to crashes. It seems
+        // following if-condition including the setNumColumns call was added to do exactly that. But
+        // it's not clear for what the if-condition was added. In any case that condition is wrong or
+        // incompleted cause things can still crash with m_state->layout->text().length() == 0 (see the
+        // document attached to bug 244411).
+
+        //if (m_state->layout->lineCount() > 1 || m_state->layout->text().length() > 0)
+            line.setNumColumns(1);
+
         line.setPosition(position);
         return false;
     }

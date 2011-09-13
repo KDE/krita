@@ -171,6 +171,7 @@ QRectF TextShape::outlineRect() const
 void TextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
+    KoShapeContainer::shapeChanged(type, shape);
     if (type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
         m_textShapeData->setDirty();
     }

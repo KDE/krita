@@ -312,6 +312,7 @@ public:
         if(isHeader(index)) {
             switch(role)
             {
+			case Qt::ToolTipRole:
             case Qt::DisplayRole:
                 return categoryToString(m_categories[index.first].data);
             case IsHeaderRole:
@@ -321,6 +322,7 @@ public:
         else {
             switch(role)
             {
+			case Qt::ToolTipRole:
             case Qt::DisplayRole:
                 return entryToString(m_categories[index.first].entries[index.second].data);
             case IsHeaderRole:

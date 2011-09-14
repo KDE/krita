@@ -102,9 +102,9 @@ KoDocumentRdf::KoDocumentRdf(QObject *parent)
         : KoDocumentRdfBase(parent)
         , d (new KoDocumentRdfPrivate())
 {
-    if (!backendIsSane()) {
-        kWarning() << "Looks like the backend is not sane!";
-    }
+//    if (!backendIsSane()) {
+//        kWarning() << "Looks like the backend is not sane!";
+//    }
     d->prefixMapping = new KoRdfPrefixMapping(this);
 }
 

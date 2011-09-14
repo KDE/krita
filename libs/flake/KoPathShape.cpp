@@ -175,6 +175,14 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
     setPosition(pos);
 
     loadOdfAttributes(element, context, OdfTransformation);
+
+    // now that the correct transformation is set up
+    // apply that matrix to the path geometry so that
+    // we don't transform the stroke
+    d->map(transformation());
+    setTransformation(QTransform());
+    normalize();
+
     loadText(element, context);
 
     return true;

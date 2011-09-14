@@ -120,6 +120,13 @@ public:
         VText
     };
 
+    enum AnchoringType {
+        AnchorAsCharacter,
+        AnchorToCharacter,
+        AnchorParagraph,
+        AnchorPage
+    };
+
     /**
      * Constructor for an in-place anchor.
      * @param shape the anchored shape that this anchor links to.

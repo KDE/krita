@@ -44,6 +44,9 @@ inline double drand48() {
 #include "kis_mask_generator.h"
 #include "kis_boundary.h"
 
+// 3x3 supersampling
+#define SUPERSAMPLING 3
+
 struct MaskProcessor
 {
     MaskProcessor(KisFixedPaintDeviceSP device, const KoColorSpace* cs, qreal randomness, qreal density,
@@ -79,16 +82,23 @@ struct MaskProcessor
         int offset = (m_device->bounds().width() - rect.width()) * m_pixelSize;
         for (int y = rect.y(); y < rect.y() + rect.height(); y++) {
             for (int x = rect.x(); x < rect.x() + rect.width(); x++) {
-                double x_ = (x - m_centerX) * m_invScaleX;
-                double y_ = (y - m_centerY) * m_invScaleY;
-                double maskX = m_cosa * x_ - m_sina * y_;
-                double maskY = m_sina * x_ + m_cosa * y_;
+                int value = 0;
+                for (int sy = 0; sy < SUPERSAMPLING; sy++) {
+                    for (int sx = 0; sx < SUPERSAMPLING; sx++) {
+                        double x_ = (x + (sx + 0.5) / SUPERSAMPLING - m_centerX) * m_invScaleX;
+                        double y_ = (y + (sy + 0.5) / SUPERSAMPLING - m_centerY) * m_invScaleY;
+                        double maskX = m_cosa * x_ - m_sina * y_;
+                        double maskY = m_sina * x_ + m_cosa * y_;
+                        value += m_shape->valueAt(maskX, maskY);
+                    }
+                }
+                value /= SUPERSAMPLING*SUPERSAMPLING;
 
                 if (m_randomness!= 0.0){
                     random = (1.0 - m_randomness) + m_randomness * float(rand()) / RAND_MAX;
                 }
 
-                alphaValue = quint8( (OPACITY_OPAQUE_U8 - m_shape->valueAt(maskX, maskY)) * random);
+                alphaValue = quint8( (OPACITY_OPAQUE_U8 - value) * random);
 
                 // avoid computation of random numbers if density is full
                 if (m_density != 1.0){
@@ -239,9 +249,16 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         d->shape->setSoftness(softnessFactor);
         for (int y = 0; y < halfHeight; y++){
             for (int x = 0; x < halfWidth; x++, pos++){
-                double maskX = x * invScaleX;
-                double maskY = y * invScaleY;
-                d->precomputedQuarter[pos] = d->shape->valueAt(maskX, maskY);
+                int value = 0;
+                for (int sy = 0; sy < SUPERSAMPLING; sy++) {
+                    for (int sx = 0; sx < SUPERSAMPLING; sx++) {
+                        double maskX = (x + (sx + 0.5) / SUPERSAMPLING) * invScaleX;
+                        double maskY = (y + (sy + 0.5) / SUPERSAMPLING) * invScaleY;
+                        value += d->shape->valueAt(maskX, maskY);
+                    }
+                }
+                value /= SUPERSAMPLING * SUPERSAMPLING;
+                d->precomputedQuarter[pos] = value;
             }
         }
 

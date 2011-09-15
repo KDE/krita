@@ -29,10 +29,10 @@
 TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, QTextBlock block, QWidget *parent) :
     QDialog(parent),
     m_textEditor(editor),
-    m_document(0),
     m_tocStyleConfigure(0),
     m_tocInfo(0),
-    m_block(block)
+    m_block(block),
+    m_document(0)
 {
     ui.setupUi(this);
 

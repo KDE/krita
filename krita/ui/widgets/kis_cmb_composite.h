@@ -44,11 +44,15 @@ public:
      KisCompositeOpComboBox(QWidget* parent=0);
     ~KisCompositeOpComboBox();
     
+    virtual void hidePopup();
+    
 private slots:
     void slotCategoryToggled(const QModelIndex& index, bool toggled);
+    void slotEntryChecked(const QModelIndex& index);
     
 private:
     KisCategorizedListView* m_view;
+    bool                    m_allowToHidePopup;
 };
 
 #endif // KIS_COMPOSITEOP_WIDGETS_H_

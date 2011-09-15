@@ -17,17 +17,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_composite_ops_model.h"
 #include <KoCompositeOp.h>
-
-#include <kcategorizedsortfilterproxymodel.h>
+#include "kis_composite_ops_model.h"
 #include "kis_debug.h"
+#include "kis_config.h"
 
 struct CompositeOpModelInitializer
 {
     CompositeOpModelInitializer() {
+        model.addEntries(KoCompositeOpRegistry::instance().getCompositeOps(), false, true);
+		model.expandAllCategories(false);
         model.addCategory(KoID("favorites", i18n("Favorites")));
-        model.addEntries(KoCompositeOpRegistry::instance().getCompositeOps());
+        model.readFavriteCompositeOpsFromConfig();
+        model.expandCategory(KoID("favorites"), true);
     }
     
     KisCompositeOpListModel model;
@@ -53,4 +55,49 @@ void KisCompositeOpListModel::validateCompositeOps(const KoColorSpace* colorSpac
     }
     
     emit layoutChanged();
+}
+
+bool KisCompositeOpListModel::setData(const QModelIndex& idx, const QVariant& value, int role)
+{
+	KoID entry;
+	bool result = BaseClass::setData(idx, value, role);
+	
+	if(role == Qt::CheckStateRole && BaseClass::entryAt(entry, idx.row())) {
+		if(value.toInt() == Qt::Checked)
+			BaseClass::addEntry(KoID("favorites"), entry);
+		else
+			BaseClass::removeEntry(KoID("favorites"), entry);
+		
+		writeFavoriteCompositeOpsToConfig();
+	}
+	
+	return result;
+}
+
+void KisCompositeOpListModel::readFavriteCompositeOpsFromConfig()
+{
+	KisConfig   config;
+	QStringList compositeOps = config.favoriteCompositeOps();
+	
+	BaseClass::clearCategory(KoID("favorites"));
+	
+	for(QStringList::iterator i=compositeOps.begin(); i!=compositeOps.end(); ++i) {
+		KoID entry = KoCompositeOpRegistry::instance().getKoID(*i);
+		setData(BaseClass::indexOf(entry), Qt::Checked, Qt::CheckStateRole);
+	}
+}
+
+void KisCompositeOpListModel::writeFavoriteCompositeOpsToConfig() const
+{
+	QList<KoID> compositeOps;
+	
+	if(BaseClass::getCategory(compositeOps, KoID("favorites"))) {
+		QStringList list;
+		KisConfig   config;
+		
+		for(QList<KoID>::iterator i=compositeOps.begin(); i!=compositeOps.end(); ++i)
+			list.push_back(i->id());
+		
+		config.setFavoriteCompositeOps(list);
+	}
 }

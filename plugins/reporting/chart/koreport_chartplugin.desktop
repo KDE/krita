@@ -24,6 +24,7 @@ Name[wa]=Grafike KoReport
 Name[x-test]=xxKoReport_Chartxx
 Name[zh_TW]=KoReport_Chart
 Comment=KoReport Chart Plugin
+Comment[da]=Diagram-plugin til KoReport
 Comment[it]=Estensione per i grafici di KoReport
 Comment[nb]=KoReport programtillegg for diagrammer
 Comment[pt]='Plugin' de Gráficos do KoReport

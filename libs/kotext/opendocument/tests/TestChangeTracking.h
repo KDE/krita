@@ -44,7 +44,7 @@ private:
 
 private:
     QTextDocument *documentFromOdt(const QString &odt, const QString &changeFormat);
-    QString documentToOdt(QTextDocument *);
+    QString documentToOdt(const QString &testCase, QTextDocument *);
     KComponentData *componentData;
 };
 

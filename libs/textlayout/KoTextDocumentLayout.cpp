@@ -150,9 +150,10 @@ KoTextLayoutRootAreaProvider *KoTextDocumentLayout::provider() const
     return d->provider;
 }
 
-bool KoTextDocumentLayout::relativeTabs() const
+bool KoTextDocumentLayout::relativeTabs(QTextBlock block) const
 {
-    return KoTextDocument(document()).relativeTabs();
+    return KoTextDocument(document()).relativeTabs() 
+                && KoTextDocument(block.document()).relativeTabs();
 }
 
 KoInlineTextObjectManager *KoTextDocumentLayout::inlineTextObjectManager() const

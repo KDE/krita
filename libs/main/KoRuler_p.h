@@ -156,6 +156,7 @@ public:
     int originalIndex; //index of selected tab before we started dragging it.
     int currentIndex; //index of selected tab or selected HotSpot - only valid when selected indicates tab or hotspot
     KoRuler::Tab deletedTab;
+    qreal tabDistance;
 
     struct HotSpotData {
         qreal position;

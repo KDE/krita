@@ -3,6 +3,7 @@ Type=Service
 Name=Krita ODG Import Filter
 Name[bg]=Филтър за внасяне от ODG в Krita
 Name[cs]=Importní filtr formátu ODG pro Kritu
+Name[da]=ODG-importfilter til Krita
 Name[de]=Krita-ODG-Importfilter
 Name[el]=Φίλτρο εισαγωγής ODG του Krita
 Name[en_GB]=Krita ODG Import Filter

@@ -49,7 +49,6 @@ K_EXPORT_PLUGIN(KritaImageEnhancementFactory("krita"))
 KritaImageEnhancement::KritaImageEnhancement(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaImageEnhancementFactory::componentData());
     KisFilterRegistry::instance()->add(new KisSimpleNoiseReducer());
     KisFilterRegistry::instance()->add(new KisWaveletNoiseReduction());
 }

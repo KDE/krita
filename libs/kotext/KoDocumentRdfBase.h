@@ -72,7 +72,7 @@ public:
     static KoDocumentRdfBase *fromResourceManager(KoCanvasBase *host);
     virtual void linkToResourceManager(KoResourceManager *rm);
 
-    virtual void updateInlineRdfStatements(QTextDocument *qdoc);
+    virtual void updateInlineRdfStatements(const QTextDocument *qdoc);
     virtual void updateXmlIdReferences(const QMap<QString, QString> &m);
     virtual bool loadOasis(KoStore *store);
     virtual bool saveOasis(KoStore *store, KoXmlWriter *manifestWriter);

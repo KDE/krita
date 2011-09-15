@@ -75,10 +75,10 @@ class KOTEXT_EXPORT KoTextInlineRdf : public QObject
     Q_OBJECT
 
 public:
-    KoTextInlineRdf(QTextDocument *doc, const QTextBlock &b);
-    KoTextInlineRdf(QTextDocument *doc, KoBookmark *b);
-    KoTextInlineRdf(QTextDocument *doc, KoTextMeta *b);
-    KoTextInlineRdf(QTextDocument *doc, const QTextTableCell &b);
+    KoTextInlineRdf(const QTextDocument *doc, const QTextBlock &b);
+    KoTextInlineRdf(const QTextDocument *doc, KoBookmark *b);
+    KoTextInlineRdf(const QTextDocument *doc, KoTextMeta *b);
+    KoTextInlineRdf(const QTextDocument *doc, const QTextTableCell &b);
 
     virtual ~KoTextInlineRdf();
 

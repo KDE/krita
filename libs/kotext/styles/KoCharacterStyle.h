@@ -29,6 +29,7 @@
 #include <QVector>
 #include <QVariant>
 #include <QString>
+#include <QChar>
 #include <QTextCharFormat>
 #include "kotext_export.h"
 
@@ -88,12 +89,26 @@ public:
         FontRelief,
         TextEmphasizeStyle,
         TextEmphasizePosition,
+        TextCombine,    ///< TextCombineType
+        TextCombineStartChar,    ///< QChar
+        TextCombineEndChar,    ///< QChar
+        HyphenationPushCharCount,   ///< int
+        HyphenationRemainCharCount, ///< int
+        FontLetterSpacing,          ///< qreal, not the same format as the FontLetterSpacing in QTextFormat
+        FontPitch,                  ///< FontPitchMode
         PercentageFontSize, //font-size can be in % and this stores that value
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550, // Internal: Reserved for ChangeTracker
         FontStretch = 577297551 // Internal: Ratio between Linux font pt size and Windows font height
     };
 
+    /// List of possible combine mode
+    enum TextCombineType {
+        NoTextCombine,
+        TextCombineLetters,
+        TextCombineLines
+    };
+    
     /// list of possible line type : no line, single line, double line
     enum LineType {
         NoLineType,
@@ -152,18 +167,17 @@ public:
         ContinuousLineMode,
         SkipWhiteSpaceLineMode
     };
-
-    enum RotationAngle {
-        Zero,
-        Ninety = 90,
-        TwoHundredSeventy = 270
-    };
-
+    
     enum RotationScale {
         Fixed,
         LineHeight
     };
 
+    enum FontPitchMode {
+        FixedWidth,
+        VariableWidth
+    };
+    
     /**
      * Constructor. Initializes with standard size/font properties.
      * @param parent the parent object for memory management purposes.
@@ -322,9 +336,9 @@ public:
     LineMode underlineMode() const;
 
     /// Apply text rotation angle to this KoCharacterStyle
-    void setTextRotationAngle(RotationAngle angle);
+    void setTextRotationAngle(qreal angle);
     /// Get the current text rotation angle of this KoCharacterStyle
-    RotationAngle textRotationAngle() const;
+    qreal textRotationAngle() const;
     /**
      *  RotationScale pecifies whether for rotated text the width of the text
      *  should be scaled to fit into the current line height or the width of the text
@@ -341,6 +355,16 @@ public:
     KoShadowStyle textShadow() const;
     void setTextShadow(const KoShadowStyle &shadow);
 
+    TextCombineType textCombine() const;
+    void setTextCombine(TextCombineType type);
+    
+    QChar textCombineStartChar() const;
+    void setTextCombineStartChar(const QChar &character);
+    
+    QChar textCombineEndChar() const;
+    void setTextCombineEndChar(const QChar &character);
+    
+    
     ReliefType fontRelief() const;
     void setFontRelief(ReliefType relief);
     
@@ -349,6 +373,9 @@ public:
     
     EmphasisPosition textEmphasizePosition() const;
     void setTextEmphasizePosition(EmphasisPosition position);
+    
+    FontPitchMode fontPitch() const;
+    void setFontPitch(FontPitchMode mode);
     
     /// Set the country
     void setCountry(const QString &country);
@@ -362,6 +389,12 @@ public:
     void setHasHyphenation(bool on);
     bool hasHyphenation() const;
 
+    void setHyphenationPushCharCount(int count);
+    int hyphenationPushCharCount() const;
+    
+    void setHyphenationRemainCharCount(int count);
+    int hyphenationRemainCharCount() const;
+    
     void setPercentageFontSize(qreal percent);
     qreal percentageFontSize();
 

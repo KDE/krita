@@ -19,36 +19,48 @@
 
 #include "kis_categorized_item_delegate.h"
 #include "kis_categorized_list_model.h"
-#include <QPainter>
 
-KisCategorizedItemDelegate::KisCategorizedItemDelegate(QAbstractListModel* model, bool indicateError):
-    m_model(model),
+// #include <kicon.h>
+// #include <kstandardguiitem.h>
+
+#include <QPainter>
+#include <QStyle>
+#include <QStyleOptionMenuItem>
+#include <QApplication>
+
+KisCategorizedItemDelegate::KisCategorizedItemDelegate(bool indicateError):
     m_indicateError(indicateError),
     m_minimumItemHeight(0)
 {
+//     m_errorIcon = KStandardGuiItem::cancel().icon();//KIcon("dialog-warning");//QIcon::fromTheme("dialog-warning");
     m_errorIcon = QIcon::fromTheme("dialog-warning");
 }
 
 void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    qint32 border = 4;
-    qint32 xpos   = border + option.rect.x() + option.rect.height();
-    qint32 ypos   = option.rect.y();
-    qint32 size   = option.rect.height();
-    QRect  rect(xpos, ypos, option.rect.width()-xpos, option.rect.height());
-    
     painter->resetTransform();
     
-    if(!m_model->data(index, IsHeaderRole).toBool()) {
-        QStyleOptionViewItem sovi = option;
-        
-        if(m_indicateError)
-            sovi.rect = rect;
-        
-        QStyledItemDelegate::paint(painter, sovi, index);
-        
-        if(m_indicateError && !(m_model->flags(index) & Qt::ItemIsEnabled))
-            m_errorIcon.paint(painter, 0, ypos, size, size, Qt::AlignCenter, QIcon::Normal, QIcon::On);
+    if(!index.data(IsHeaderRole).toBool()) {
+		if(m_indicateError) {
+			QStyleOptionMenuItem item;
+			item.text        = index.data().toString();
+			item.rect        = option.rect;
+			item.font        = option.font;
+			item.state       = option.state;
+			item.palette     = option.palette;
+			item.fontMetrics = option.fontMetrics;
+			
+			if(!(index.flags() & Qt::ItemIsEnabled))
+				item.icon = m_errorIcon;
+			
+			if(index.flags() & Qt::ItemIsUserCheckable) {
+				item.checked   = (index.data(Qt::CheckStateRole).toInt() == Qt::Checked);
+				item.checkType = QStyleOptionMenuItem::NonExclusive;
+			}
+			
+			QApplication::style()->drawControl(QStyle::CE_MenuItem, &item, painter);
+		}
+		else QStyledItemDelegate::paint(painter, option, index);
     }
     else {
         if(option.state & QStyle::State_MouseOver)
@@ -56,14 +68,14 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
         else
             painter->fillRect(option.rect, Qt::lightGray);
         
-        painter->drawText(option.rect, m_model->data(index).toString(), QTextOption(Qt::AlignVCenter|Qt::AlignHCenter));
+        painter->drawText(option.rect, index.data().toString(), QTextOption(Qt::AlignVCenter|Qt::AlignHCenter));
         
         paintTriangle(
             painter,
             option.rect.x(),
             option.rect.y(),
-            size,
-            !m_model->data(index, ExpandCategoryRole).toBool()
+            option.rect.height(),
+            !index.data(ExpandCategoryRole).toBool()
         );
     }
     

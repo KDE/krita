@@ -119,7 +119,7 @@ public:
     void setNoWrap(qreal maximumAllowedWidth);
 
     qreal listIndent() const;
-    qreal textIndent(QTextBlock block, QTextList *textList) const;
+    qreal textIndent(QTextBlock block, QTextList *textList, const KoParagraphStyle &pStyle) const;
     qreal x() const;
     qreal width() const;
 
@@ -233,8 +233,7 @@ private:
     QList<KoTextLayoutArea *> m_preregisteredFootNoteAreas;
     QList<KoTextLayoutArea *> m_footNoteAreas;
     KoTextLayoutEndNotesArea *m_endNotesArea;
-    QList<KoTextLayoutArea *> m_tableOfContentsAreas;
-    QList<KoTextLayoutArea *> m_bibliographyAreas;
+    QList<KoTextLayoutArea *> m_generatedDocAreas;
 };
 
 #endif

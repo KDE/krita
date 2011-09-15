@@ -90,11 +90,10 @@ class KoRdfFoaF;
  * useful if you want to find the contacts in the users current
  * "selection" in the document.
  *
- * For example, to find the foaf entries related to the current cursor:
+ * For example, to find the foaf entries related to the current KoTextEditor
  *
- * QTextCursor cursor = ...;
- * Soprano::Model* model = rdf->findStatements( cursor );
- g* KoRdfFoaFList foaflist = rdf->foaf( model );
+ * Soprano::Model* model = rdf->findStatements( editor );
+ * KoRdfFoaFList foaflist = rdf->foaf( model );
  *
  * Using the Soprano::Model directly is covered in a latter section of
  * this comment.
@@ -183,7 +182,7 @@ public:
      * document and update the statements in the Soprano::model to
      * reflect the current state of the inline Rdf.
      */
-    void updateInlineRdfStatements(QTextDocument *qdoc);
+    void updateInlineRdfStatements(const QTextDocument *qdoc);
 
     /**
      * During a save(), various Rdf objects in the document will
@@ -233,7 +232,6 @@ public:
      *
      * <start-a> ... <start-b> ... cursor ... <end-b> ... <end-a>
      */
-    QPair<int, int> findExtent(QTextCursor &cursor) const;
     QPair<int, int> findExtent(KoTextEditor *handler) const;
 
     /**
@@ -241,7 +239,6 @@ public:
      * findExtent() this will be only the most nested semitem.
      * @see findExtent()
      */
-    QString findXmlId(QTextCursor &cursor) const;
     QString findXmlId(KoTextEditor *cursor) const;
 
 
@@ -265,7 +262,6 @@ public:
      *
      * Note that the returned model is owned by the caller, you must delete it.
      */
-    Soprano::Model *findStatements(QTextCursor &cursor, int depth = 1);
     Soprano::Model *findStatements(const QString &xmlid, int depth = 1);
     Soprano::Model *findStatements(KoTextEditor *handler, int depth = 1);
 
@@ -514,6 +510,15 @@ private:
                       bool isGeo84, const QString &sparql);
 
 private:
+
+    /**
+     * Test whether a model is present that supports:
+     * - context / graphs
+     *  - querying on graphs
+     *  - storage in memory.
+     */
+    bool backendIsSane();
+
     /// reimplemented
     virtual bool completeLoading(KoStore *store);
 

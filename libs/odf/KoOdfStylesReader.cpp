@@ -51,7 +51,7 @@ public:
     QHash < QString /*name*/, KoXmlElement* > styles; // page-layout, font-face etc.
     QHash < QString /*name*/, KoXmlElement* > masterPages;
     QHash < QString /*name*/, KoXmlElement* > presentationPageLayouts;
-    QHash < QString /*name*/, KoXmlElement* > drawStyles;
+    QHash < QString /*drawType*/, QHash< QString /*name*/, KoXmlElement* > > drawStyles;
 
     KoXmlElement           officeStyle;
     KoXmlElement           layerSet;
@@ -87,7 +87,9 @@ KoOdfStylesReader::~KoOdfStylesReader()
     qDeleteAll(d->styles);
     qDeleteAll(d->masterPages);
     qDeleteAll(d->presentationPageLayouts);
-    qDeleteAll(d->drawStyles);
+    foreach(const AutoStylesMap& map, d->drawStyles) {
+        qDeleteAll(map);
+    }
     delete d;
 }
 
@@ -201,10 +203,14 @@ void KoOdfStylesReader::insertOfficeStyles(const KoXmlElement& styles)
             || (ns == KoXmlNS::calligra && (
                     localName == "conicalGradient"))
             ) {
+            QString drawType = localName;
+            if (drawType.endsWith("Gradient")) {
+                drawType = "gradient";
+            }
             const QString name = e.attributeNS(KoXmlNS::draw, "name", QString());
             Q_ASSERT(!name.isEmpty());
             KoXmlElement* ep = new KoXmlElement(e);
-            d->drawStyles.insert(name, ep);
+            d->drawStyles[drawType].insert(name, ep);
         } else
             insertStyle(e, CustomInStyles);
     }
@@ -321,9 +327,9 @@ QHash<QString, KoXmlElement*> KoOdfStylesReader::presentationPageLayouts() const
     return d->presentationPageLayouts;
 }
 
-QHash<QString, KoXmlElement*> KoOdfStylesReader::drawStyles() const
+QHash<QString, KoXmlElement*> KoOdfStylesReader::drawStyles(const QString &drawType) const
 {
-    return d->drawStyles;
+    return d->drawStyles.value(drawType);
 }
 
 const KoXmlElement* KoOdfStylesReader::findStyle(const QString& name) const

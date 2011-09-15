@@ -36,20 +36,20 @@
 class KoTextPaste::Private
 {
 public:
-    Private(QTextCursor &cursor,
+    Private(KoTextEditor *editor,
             KoCanvasBase *canvas, const Soprano::Model *_rdfModel)
-            : cursor(cursor)
+            : editor(editor)
             , canvas(canvas)
             , rdfModel(_rdfModel) {}
 
-    QTextCursor &cursor;
+    KoTextEditor *editor;
     KoCanvasBase *canvas;
     const Soprano::Model *rdfModel;
 };
 
-KoTextPaste::KoTextPaste(QTextCursor &cursor,
+KoTextPaste::KoTextPaste(KoTextEditor *editor,
                          KoCanvasBase *canvas, const Soprano::Model *rdfModel)
-        : d(new Private(cursor, canvas, rdfModel))
+        : d(new Private(editor, canvas, rdfModel))
 {
 }
 
@@ -67,7 +67,8 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
     KoTextLoader loader(context);
 
     kDebug(30015) << "text paste";
-    loader.loadBody(body, d->cursor);   // now let's load the body from the ODF KoXmlElement.
+    // load the paste directly into the editor's cursor -- which breaks encapsulation
+    loader.loadBody(body, *d->editor->cursor());   // now let's load the body from the ODF KoXmlElement.
 
 #ifdef SHOULD_BUILD_RDF
     // RDF: Grab RDF metadata from ODF file if present & load it into rdfModel

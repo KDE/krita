@@ -59,8 +59,8 @@ private slots:
     void showConfigureDialog(QAction *action);
 
 private:
-        TableOfContentsConfigure *m_configure;
-        SimpleTableOfContentsWidget *m_stocw;
+    TableOfContentsConfigure *m_configure;
+    SimpleTableOfContentsWidget *m_stocw;
 };
 
 #endif // REFERENCESTOOL_H

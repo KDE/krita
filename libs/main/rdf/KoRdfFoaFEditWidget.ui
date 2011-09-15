@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>560</width>
-    <height>381</height>
+    <width>397</width>
+    <height>142</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -23,21 +23,30 @@
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Name</string>
+      <string>&amp;Name:</string>
+     </property>
+     <property name="buddy">
+      <cstring>name</cstring>
      </property>
     </widget>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Nick</string>
+      <string>&amp;Nick:</string>
+     </property>
+     <property name="buddy">
+      <cstring>nick</cstring>
      </property>
     </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Phone Number</string>
+      <string>&amp;Phone Number:</string>
+     </property>
+     <property name="buddy">
+      <cstring>phone</cstring>
      </property>
     </widget>
    </item>
@@ -47,9 +56,25 @@
    <item row="3" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>Home Page</string>
+      <string>&amp;Home Page:</string>
+     </property>
+     <property name="buddy">
+      <cstring>url</cstring>
      </property>
     </widget>
+   </item>
+   <item row="4" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

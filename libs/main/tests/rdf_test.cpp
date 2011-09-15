@@ -53,9 +53,7 @@ QString RdfTest::insertSemItem(KoTextEditor &editor,
                                const QString name)
 {
     editor.insertTable(5,10);
-    QTextTable *table = editor.cursor()->currentTable();
-    table->setObjectName(name); // Note: the objectname of a table is NOT saved to ODF. This
-                                // is done for testing purposes _only_.
+    const QTextTable *table = editor.currentTable();
 
     KoBookmark *startmark = new KoBookmark(editor.document());
     startmark->setType(KoBookmark::StartBookmark);
@@ -131,23 +129,16 @@ void RdfTest::testCreateMarkers()
     QPair<int,int> position2 = rdfDoc.findExtent(&editor);
     Q_ASSERT(position == position2);
 
-    QPair<int,int> position3 = rdfDoc.findExtent(*editor.cursor());
-    Q_ASSERT(position2 == position3);
-
     // verify that we don't find markers where there aren't any
     editor.setPosition(10);
     QPair<int,int> position4 = rdfDoc.findExtent(&editor);
     Q_ASSERT(position4.first == 0);
     Q_ASSERT(position4.second == 0);
 
-    QPair<int,int> position5 = rdfDoc.findExtent(*editor.cursor());
-    Q_ASSERT(position5.first == 0);
-    Q_ASSERT(position5.second == 0);
 
     // go back to the semitem
     editor.setPosition(position.first + 1);
     QCOMPARE(rdfDoc.findXmlId(&editor), newId);
-    QCOMPARE(rdfDoc.findXmlId(*editor.cursor()), newId);
 }
 
 void RdfTest::testFindMarkers()
@@ -190,9 +181,8 @@ void RdfTest::testFindMarkers()
             Q_ASSERT(position.first == 444);
             Q_ASSERT(position.second == 496);
             editor.setPosition(position.first + 1);
-            QTextTable *table = editor.cursor()->currentTable();
+            const QTextTable *table = editor.currentTable();
             Q_ASSERT(table);
-            Q_ASSERT(table->objectName() == QString("test item1"));
         }
     }
 
@@ -214,7 +204,7 @@ void RdfTest::testFindMarkers()
     QCOMPARE(position.first, 940);
     QCOMPARE(position.second, 992);
     editor.setPosition(position.first + 1);
-    QTextTable *table = editor.cursor()->currentTable();
+    const QTextTable *table = editor.currentTable();
     Q_ASSERT(table);
 
     QCOMPARE(semItems[1]->xmlIdList().length(), 1);
@@ -222,7 +212,7 @@ void RdfTest::testFindMarkers()
     QCOMPARE(position.first, 444);
     QCOMPARE(position.second, 496);
     editor.setPosition(position.first + 1);
-    table = editor.cursor()->currentTable();
+    table = editor.currentTable();
     Q_ASSERT(table);
 
     // check there's two ranges in the document, so only four bookmarks
@@ -374,7 +364,7 @@ void RdfTest::testRemoveMarkers()
         QPair<int,int> pos = rdfDoc.findExtent(item->xmlIdList().first());
         qDebug() << item->name() << "pos:" << pos;
         editor.setPosition(pos.first + 1);
-        qDebug() << "points to table" << editor.cursor()->currentTable();
+        qDebug() << "points to table" << editor.currentTable();
     }
 }
 

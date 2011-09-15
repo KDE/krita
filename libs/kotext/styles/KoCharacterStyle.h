@@ -95,6 +95,7 @@ public:
         HyphenationPushCharCount,   ///< int
         HyphenationRemainCharCount, ///< int
         FontLetterSpacing,          ///< qreal, not the same format as the FontLetterSpacing in QTextFormat
+        FontPitch,                  ///< FontPitchMode
         PercentageFontSize, //font-size can be in % and this stores that value
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550, // Internal: Reserved for ChangeTracker
@@ -172,6 +173,11 @@ public:
         LineHeight
     };
 
+    enum FontPitchMode {
+        FixedWidth,
+        VariableWidth
+    };
+    
     /**
      * Constructor. Initializes with standard size/font properties.
      * @param parent the parent object for memory management purposes.
@@ -367,6 +373,9 @@ public:
     
     EmphasisPosition textEmphasizePosition() const;
     void setTextEmphasizePosition(EmphasisPosition position);
+    
+    FontPitchMode fontPitch() const;
+    void setFontPitch(FontPitchMode mode);
     
     /// Set the country
     void setCountry(const QString &country);

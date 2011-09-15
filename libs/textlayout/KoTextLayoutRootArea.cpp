@@ -69,7 +69,7 @@ void KoTextLayoutRootArea::setAssociatedShape(KoShape *shape)
     d->shape = shape;
 }
 
-KoShape *KoTextLayoutRootArea::associatedShape()
+KoShape *KoTextLayoutRootArea::associatedShape() const
 {
     return d->shape;
 }

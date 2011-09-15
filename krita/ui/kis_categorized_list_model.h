@@ -95,8 +95,11 @@ public:
 	}
 	
 	QModelIndex lastIndex() const {
-		int end = getCategoryBegin(m_categories.size()-1) + m_categories.last().entries.size() - 1;
-		return QAbstractListModel::index(end);
+        if(!m_categories.empty()) {
+            int end = getCategoryBegin(m_categories.size()-1) + m_categories.last().entries.size() - 1;
+            return QAbstractListModel::index(end);
+        }
+        return QAbstractListModel::index(0);
 	}
 	
 	void expandCategory(const TCategory& category, bool expand) {

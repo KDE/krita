@@ -25,11 +25,11 @@
 struct CompositeOpModelInitializer
 {
     CompositeOpModelInitializer() {
-        model.addCategory(KoID("favorites", i18n("Favorites")));
         model.addEntries(KoCompositeOpRegistry::instance().getCompositeOps(), false, true);
-		model.readFavriteCompositeOpsFromConfig();
 		model.expandAllCategories(false);
-		model.expandCategory(KoID("favorites"), true);
+        model.addCategory(KoID("favorites", i18n("Favorites")));
+        model.readFavriteCompositeOpsFromConfig();
+        model.expandCategory(KoID("favorites"), true);
     }
     
     KisCompositeOpListModel model;

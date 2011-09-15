@@ -475,8 +475,8 @@ static void parseOdfLineWidth(const QString &width, KoCharacterStyle::LineWeight
         lineWeight = KoCharacterStyle::PercentLineWeight;
         lineWidth = width.mid(0, width.length() - 1).toDouble();
     } else if (width[width.length()-1].isNumber()) {
-        lineWeight = KoCharacterStyle::PercentLineWeight;
-        lineWidth = 100 * width.toDouble();
+        lineWeight = KoCharacterStyle::LengthLineWeight;
+        lineWidth = width.toDouble();
     } else {
         lineWeight = KoCharacterStyle::LengthLineWeight;
         lineWidth = KoUnit::parseValue(width);

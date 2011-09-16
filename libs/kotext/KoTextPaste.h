@@ -24,7 +24,7 @@
 #include "kotext_export.h"
 
 class KoTextEditor;
-class KoCanvasBase;
+class KoResourceManager;
 
 #include <QSharedPointer>
 namespace Soprano
@@ -39,7 +39,7 @@ public:
      * Note: RdfModel ownership is not taken. You must ensure that it remains
      * valid for the lifetime of the object.
      */
-    KoTextPaste(KoTextEditor *editor, KoCanvasBase *canvas, const Soprano::Model *rdfModel);
+    KoTextPaste(KoTextEditor *editor, KoResourceManager *resourceManager, const Soprano::Model *rdfModel);
     virtual ~KoTextPaste();
 
 protected:

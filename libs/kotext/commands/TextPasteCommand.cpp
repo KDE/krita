@@ -101,7 +101,7 @@ void TextPasteCommand::redo()
 #endif
 
                 //kDebug() << "pasting odf text";
-                KoTextPaste paste(editor, m_tool->canvas(), rdfModel);
+                KoTextPaste paste(editor, m_tool->canvas()->resourceManager(), rdfModel);
                 paste.paste(odfType, data);
                 //kDebug() << "done with pasting odf";
 

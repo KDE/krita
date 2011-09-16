@@ -26,6 +26,7 @@
 #include "KoPointedAt.h"
 
 #include <KoToolBase.h>
+#include <KoTextCommandBase.h>
 
 #include <QClipboard>
 #include <QHash>
@@ -60,7 +61,7 @@ class ChangeListCommand;
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
  */
-class TextTool : public KoToolBase
+class TextTool : public KoToolBase, public KoUndoableTool
 {
     Q_OBJECT
 public:
@@ -92,6 +93,10 @@ public:
     virtual void deactivate();
     /// reimplemented from superclass
     virtual void copy() const;
+
+    /// reimplemented from KoUndoableTool
+    virtual void setAddUndoCommandAllowed(bool allowed) { m_allowAddUndoCommand = allowed; }
+
     ///reimplemented
     virtual void deleteSelection();
     /// reimplemented from superclass

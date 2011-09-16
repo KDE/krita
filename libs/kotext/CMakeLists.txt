@@ -100,6 +100,7 @@ set(kotext_LIB_SRCS
     commands/DeleteCommand.cpp
     commands/ChangeTrackedDeleteCommand.cpp
     commands/ChangeListCommand.cpp
+    commands/ListItemNumberingCommand.cpp
     KoTextCommandBase.cpp
 )
 

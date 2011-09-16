@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +29,7 @@
 
 #include <KoLineBorder.h>
 #include <KoPathShape.h>
+#include <KoShapeGroup.h>
 #include <KoCompositeOp.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoShapeManager.h>
@@ -428,9 +430,13 @@ KUndo2Command* KisShapeSelection::transform(double  xscale, double  yscale, doub
     foreach(const KoShape* shape, shapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
-
-
-        newTransformations.append(oldTransform*matrix);
+        if (dynamic_cast<const KoShapeGroup*>(shape)) {
+            newTransformations.append(oldTransform);
+        } else {
+            QTransform globalTransform = shape->absoluteTransformation(0);
+            QTransform localTransform = globalTransform * matrix * globalTransform.inverted();
+            newTransformations.append(localTransform*oldTransform);
+        }
     }
 
     return new KoShapeTransformCommand(shapes, oldTransformations, newTransformations);

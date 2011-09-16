@@ -74,12 +74,12 @@ public:
 public: // KoToolSelection overloads
 
     /// returns true if the wrapped QTextCursor has a selection.
-    bool hasSelection();
+    bool hasSelection() const;
 
     /** returns true if the current cursor position is protected from editing
      * @param cached use cached value if available.
      */
-    bool isEditProtected(bool useCached = false);
+    bool isEditProtected(bool useCached = false) const;
 
 public:
 
@@ -190,13 +190,12 @@ public slots:
     void addBookmark(const QString &name);
 
     /**
-    * Insert a frame break at the cursor position, moving the rest of the text to the next frame.
-    */
+     * Insert a frame break at the cursor position, moving the rest of the text to the next frame.
+     */
     void insertFrameBreak();
 
     /// delete all inline objects in current cursor position or selection
     bool deleteInlineObjects(bool backward = false);
-
 
     // Wrapped QTextCursor methods
 
@@ -374,7 +373,7 @@ signals:
     void cursorPositionChanged();
 
 protected:
-    bool recursiveProtectionCheck(QTextFrame::iterator it);
+    bool recursiveProtectionCheck(QTextFrame::iterator it) const;
 
 private:
     Q_PRIVATE_SLOT(d, void documentCommandAdded())

@@ -159,7 +159,7 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(QTextCursor &selection)
     // Copy the marked item
     int from = selection.anchor();
     int to = selection.position();
-    KoTextOdfSaveHelper saveHelper(m_tool->m_textShapeData, from, to);
+    KoTextOdfSaveHelper saveHelper(m_tool->m_textShapeData->document(), from, to);
     KoTextDrag drag;
 
     if (KoDocumentRdfBase *rdf = KoDocumentRdfBase::fromResourceManager(m_tool->canvas())) {

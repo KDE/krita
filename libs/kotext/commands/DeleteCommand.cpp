@@ -167,10 +167,10 @@ void DeleteCommand::deleteTextAnchor(KoInlineObject *object)
     if (object) {
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
         if (anchor) {
-                KoShape *shape = anchor->shape();
-                KUndo2Command *shapeDeleteCommand = m_tool->canvas()->shapeController()->removeShape(shape);
-                shapeDeleteCommand->redo();
-                m_shapeDeleteCommands.push_back(shapeDeleteCommand);
+            KoShape *shape = anchor->shape();
+            KUndo2Command *shapeDeleteCommand = m_tool->canvas()->shapeController()->removeShape(shape);
+            shapeDeleteCommand->redo();
+            m_shapeDeleteCommands.push_back(shapeDeleteCommand);
         }
     }
 }

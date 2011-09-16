@@ -27,12 +27,13 @@ class QTextDocument;
 class KoDocumentRdfBase;
 class KoShapeController;
 class KoResourceManager;
+class QMimeData;
 
 class TextPasteCommand : public KUndo2Command
 {
 public:
 
-    TextPasteCommand(QClipboard::Mode mode,
+    TextPasteCommand(const QMimeData *mimeData,
                      QTextDocument *document,
                      KoDocumentRdfBase *rdf,
                      KoShapeController *shapeController,
@@ -45,6 +46,7 @@ public:
     virtual void redo();
 
 private:
+    const QMimeData *m_mimeData;
     QTextDocument *m_document;
     KoDocumentRdfBase *m_rdf;
     KoShapeController *m_shapeController;

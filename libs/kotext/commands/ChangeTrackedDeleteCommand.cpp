@@ -48,6 +48,8 @@
 #include <KDebug>
 #include <QDebug>
 #include <QWeakPointer>
+#include <QApplication>
+#include <QClipboard>
 
 //A convenience function to get a ListIdType from a format
 
@@ -185,9 +187,9 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(KoTextEditor *editor)
     // Mark it as inserted content
     QTextCharFormat format = editor->charFormat();
     editor->registerTrackedChange(*editor->cursor(), KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
-    //Paste the selected text
+    //Paste the selected text from the clipboard... (XXX: is this really correct here?)
     TextPasteCommand *pasteCommand =
-            new TextPasteCommand(QClipboard::Clipboard,
+            new TextPasteCommand(QApplication::clipboard()->mimeData(QClipboard::Clipboard),
                                  m_document,
                                  m_rdf,
                                  m_shapeController,

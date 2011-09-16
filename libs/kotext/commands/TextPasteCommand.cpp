@@ -42,20 +42,20 @@
 #include "KoTextSopranoRdfModel_p.h"
 #endif
 
-TextPasteCommand::TextPasteCommand(QClipboard::Mode mode,
+TextPasteCommand::TextPasteCommand(const QMimeData *mimeData,
                                    QTextDocument *document,
                                    KoDocumentRdfBase *rdf,
                                    KoShapeController *shapeController,
                                    KoResourceManager *resourceManager,
                                    KUndo2Command *parent, bool pasteAsText)
     : KUndo2Command (parent),
+      m_mimeData(mimeData),
       m_document(document),
       m_rdf(rdf),
       m_shapeController(shapeController),
       m_resourceManager(resourceManager),
       m_pasteAsText(pasteAsText),
-      m_first(true),
-      m_mode(mode)
+      m_first(true)
 {
     if (m_pasteAsText)
         setText(i18n("Paste As Text"));
@@ -90,17 +90,15 @@ void TextPasteCommand::redo()
         }
 
         // check for mime type
-        const QMimeData *data = QApplication::clipboard()->mimeData(m_mode);
-
-        if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))
-                        || data->hasFormat(KoOdf::mimeType(KoOdf::OpenOfficeClipboard)) ) {
+        if (m_mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text))
+                        || m_mimeData->hasFormat(KoOdf::mimeType(KoOdf::OpenOfficeClipboard)) ) {
             KoOdf::DocumentType odfType = KoOdf::Text;
-            if (!data->hasFormat(KoOdf::mimeType(odfType))) {
+            if (!m_mimeData->hasFormat(KoOdf::mimeType(odfType))) {
                 odfType = KoOdf::OpenOfficeClipboard;
             }
             
             if (m_pasteAsText) {
-                editor->insertText(data->text());
+                editor->insertText(m_mimeData->text());
             } else {
 
                 const Soprano::Model *rdfModel = 0;
@@ -116,7 +114,7 @@ void TextPasteCommand::redo()
 
                 //kDebug() << "pasting odf text";
                 KoTextPaste paste(editor, m_resourceManager, rdfModel);
-                paste.paste(odfType, data);
+                paste.paste(odfType, m_mimeData);
                 //kDebug() << "done with pasting odf";
 
 #ifdef SHOULD_BUILD_RDF
@@ -128,13 +126,13 @@ void TextPasteCommand::redo()
                 }
 #endif
             }
-        } else if (!m_pasteAsText && data->hasHtml()) {
+        } else if (!m_pasteAsText && m_mimeData->hasHtml()) {
             //kDebug() << "pasting html";
-            editor->insertHtml(data->html());
+            editor->insertHtml(m_mimeData->html());
             //kDebug() << "done with pasting";
-        } else if (m_pasteAsText || data->hasText()) {
+        } else if (m_pasteAsText || m_mimeData->hasText()) {
             //kDebug() << "pasting text";
-            editor->insertText(data->text());
+            editor->insertText(m_mimeData->text());
             //kDebug() << "done with pasting";
         }
         editor->endEditBlock();

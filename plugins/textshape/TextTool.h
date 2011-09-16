@@ -306,7 +306,7 @@ private:
 
 private:
     friend class UndoTextCommand;
-    friend class TextCommandBase;
+    friend class KoTextCommandBase;
     friend class ChangeTracker;
     friend class TextPasteCommand;
     friend class TextCutCommand;

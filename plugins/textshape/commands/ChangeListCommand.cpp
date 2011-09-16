@@ -32,7 +32,7 @@
 
 ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Style style, int level,
                                      ChangeFlags flags, KUndo2Command *parent)
-                                         : TextCommandBase(parent),
+                                         : KoTextCommandBase(parent),
                                          m_flags(flags),
                                          m_first(true),
                                          m_alignmentMode(false)
@@ -85,7 +85,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Sty
 
 ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level,
                                      ChangeFlags flags, KUndo2Command *parent)
-                                         : TextCommandBase(parent),
+                                         : KoTextCommandBase(parent),
                                          m_flags(flags),
                                          m_first(true),
                                          m_alignmentMode(false)
@@ -238,7 +238,7 @@ void ChangeListCommand::redo()
                 }
             }
         }
-        TextCommandBase::redo();
+        KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
         for (int i = 0; i < m_blocks.size(); ++i) {
             if ((m_actions.value(i) == ChangeListCommand::ModifyExisting) || (m_actions.value(i) == ChangeListCommand::CreateNew)
@@ -287,7 +287,7 @@ void ChangeListCommand::redo()
 
 void ChangeListCommand::undo()
 {
-    TextCommandBase::undo();
+    KoTextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
 
     for (int i = 0; i < m_blocks.size(); ++i) {

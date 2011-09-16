@@ -36,7 +36,7 @@
 #include <QTextDocument>
 #include <QTextFragment>
 
-AcceptChangeCommand::AcceptChangeCommand (int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, KUndo2Command* parent) : TextCommandBase(parent),
+AcceptChangeCommand::AcceptChangeCommand (int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, KUndo2Command* parent) : KoTextCommandBase(parent),
     m_first(true),
     m_changeId(changeId),
     m_changeRanges(changeRanges),
@@ -90,7 +90,7 @@ void AcceptChangeCommand::redo()
     }
     else {
         m_changeTracker->acceptRejectChange(m_changeId, true);
-        TextCommandBase::redo();
+        KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
     }
     emit acceptRejectChange();
@@ -99,7 +99,7 @@ void AcceptChangeCommand::redo()
 void AcceptChangeCommand::undo()
 {
     m_changeTracker->acceptRejectChange(m_changeId, false);
-    TextCommandBase::undo();
+    KoTextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
     emit acceptRejectChange();
 }

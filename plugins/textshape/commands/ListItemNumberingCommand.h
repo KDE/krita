@@ -20,14 +20,14 @@
 #ifndef LISTITEMNUMBERINGCOMMAND
 #define LISTITEMNUMBERINGCOMMAND
 
-#include "TextCommandBase.h"
+#include "KoTextCommandBase.h"
 
 #include <QTextBlock>
 
 /**
  * This command is useful to mark a block as numbered or unnumbered list-item.
  */
-class ListItemNumberingCommand : public TextCommandBase
+class ListItemNumberingCommand : public KoTextCommandBase
 {
 public:
     /**

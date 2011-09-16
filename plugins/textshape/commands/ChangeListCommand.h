@@ -21,7 +21,7 @@
 #ifndef CHANGELISTCOMMAND
 #define CHANGELISTCOMMAND
 
-#include "TextCommandBase.h"
+#include "KoTextCommandBase.h"
 #include <KoListStyle.h>
 #include <KoList.h>
 #include <KoListLevelProperties.h>
@@ -33,7 +33,7 @@
 /**
  * This command is useful to alter the list-association of a single textBlock.
  */
-class ChangeListCommand : public TextCommandBase
+class ChangeListCommand : public KoTextCommandBase
 {
 public:
     enum ChangeFlag {

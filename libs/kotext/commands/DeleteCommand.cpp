@@ -20,9 +20,10 @@
  * Boston, MA 02110-1301, USA.*/
 
 #include "DeleteCommand.h"
+
 #include <klocale.h>
-#include <TextTool.h>
 #include <kundo2command.h>
+
 #include <KoTextEditor.h>
 #include <KoTextDocument.h>
 #include <KoTextDocumentLayout.h>
@@ -33,20 +34,25 @@
 
 #include <QWeakPointer>
 
-DeleteCommand::DeleteCommand(DeleteMode mode, TextTool *tool, KUndo2Command *parent) :
-    TextCommandBase (parent),
-    m_tool(tool),
-    m_first(true),
-    m_undone(false),
-    m_mode(mode)
+DeleteCommand::DeleteCommand(DeleteMode mode,
+                             QTextDocument *document,
+                             KoShapeController *shapeController,
+                             KUndo2Command *parent)
+    : TextCommandBase (parent)
+    , m_document(document)
+    , m_shapeController(shapeController)
+    , m_first(true)
+    , m_undone(false)
+    , m_mode(mode)
 {
     setText(i18nc("(qtundo-format)", "Delete"));
 }
 
 void DeleteCommand::undo()
 {
-    foreach (KUndo2Command *command, m_shapeDeleteCommands)
+    foreach (KUndo2Command *command, m_shapeDeleteCommands) {
         command->undo();
+    }
 
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
@@ -65,7 +71,7 @@ void DeleteCommand::redo()
         UndoRedoFinalizer finalizer(this);
     } else {
         m_first = false;
-        KoTextEditor *textEditor = m_tool->m_textEditor.data();
+        KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
         if (textEditor) {
             textEditor->beginEditBlock();
 
@@ -78,7 +84,7 @@ void DeleteCommand::redo()
 
 void DeleteCommand::doDelete()
 {
-    KoTextEditor *textEditor = m_tool->m_textEditor.data();
+    KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
     Q_ASSERT(textEditor);
     QTextCursor *caret = textEditor->cursor();
     QTextCursor cursor(*caret);
@@ -125,7 +131,7 @@ void DeleteCommand::doDelete()
 
 void DeleteCommand::deleteInlineObjects()
 {
-    KoTextEditor *textEditor = m_tool->m_textEditor.data();
+    KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
     Q_ASSERT(textEditor);
     QTextCursor *caret = textEditor->cursor();
     QTextCursor cursor(*caret);
@@ -168,7 +174,7 @@ void DeleteCommand::deleteTextAnchor(KoInlineObject *object)
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
         if (anchor) {
             KoShape *shape = anchor->shape();
-            KUndo2Command *shapeDeleteCommand = m_tool->canvas()->shapeController()->removeShape(shape);
+            KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape);
             shapeDeleteCommand->redo();
             m_shapeDeleteCommands.push_back(shapeDeleteCommand);
         }
@@ -206,7 +212,7 @@ bool DeleteCommand::mergeWith(const KUndo2Command *command)
         QWeakPointer<QTextDocument> m_document;
     };
 
-    KoTextEditor *textEditor = m_tool->m_textEditor.data();
+    KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
     if (textEditor == 0)
         return false;
 
@@ -254,7 +260,7 @@ bool DeleteCommand::checkMerge( const KUndo2Command *command )
 
 void DeleteCommand::updateListChanges()
 {
-    KoTextEditor *textEditor = m_tool->m_textEditor.data();
+    KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
     if (textEditor == 0)
         return;
     QTextDocument *document = const_cast<QTextDocument*>(textEditor->document());
@@ -288,7 +294,7 @@ void DeleteCommand::updateListChanges()
 DeleteCommand::~DeleteCommand()
 {
     if (!m_undone) {
-        KoTextEditor *textEditor = m_tool->m_textEditor.data();
+        KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
         if (textEditor == 0)
             return;
         foreach (KoInlineObject *object, m_invalidInlineObjects) {

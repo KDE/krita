@@ -26,10 +26,12 @@
 #include <QList>
 #include <QSet>
 
-class TextTool;
-class QTextCursor;
+class QTextDocument;
+class KoShapeController;
 class KoInlineObject;
 class KoShape;
+
+class QTextCursor;
 
 class DeleteCommand : public TextCommandBase
 {
@@ -39,7 +41,7 @@ public:
         NextChar
     };
 
-    DeleteCommand(DeleteMode mode, TextTool *tool, KUndo2Command* parent = 0);
+    DeleteCommand(DeleteMode mode, QTextDocument *document, KoShapeController *shapeController, KUndo2Command* parent = 0);
     ~DeleteCommand();
 
     virtual void undo();
@@ -49,7 +51,9 @@ public:
     virtual bool mergeWith(const KUndo2Command *command);
 
 private:
-    TextTool *m_tool;
+    QTextDocument *m_document;
+    KoShapeController *m_shapeController;
+
     QList<KUndo2Command *> m_shapeDeleteCommands;
     QSet<KoInlineObject *> m_invalidInlineObjects;
     bool m_first;

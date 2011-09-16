@@ -1,6 +1,7 @@
 /*
  This file is part of the KDE project
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,33 +21,41 @@
 #include "TextPasteCommand.h"
 
 #include <KoTextEditor.h>
-
 #include <KoTextDocument.h>
 #include <KoTextPaste.h>
-#include "TextTool.h"
+#include <KoChangeTracker.h>
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <KAction>
 
+#include <QTextDocument>
 #include <QApplication>
 #include <QMimeData>
+
 #include "ChangeTrackedDeleteCommand.h"
 #include "DeleteCommand.h"
-#include <KAction>
 
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>
 #else
-#include "KoTextSopranoRdfModel_p.h" // TODO get rid of this include.
-                    // we can't include a private header from kotext outside of kotext.
+#include "KoTextSopranoRdfModel_p.h"
 #endif
 
-TextPasteCommand::TextPasteCommand(QClipboard::Mode mode, TextTool *tool, KUndo2Command *parent, bool pasteAsText)
+TextPasteCommand::TextPasteCommand(QClipboard::Mode mode,
+                                   QTextDocument *document,
+                                   KoDocumentRdfBase *rdf,
+                                   KoShapeController *shapeController,
+                                   KoResourceManager *resourceManager,
+                                   KUndo2Command *parent, bool pasteAsText)
     : KUndo2Command (parent),
-    m_tool(tool),
-    m_pasteAsText(pasteAsText),
-    m_first(true),
-    m_mode(mode)
+      m_document(document),
+      m_rdf(rdf),
+      m_shapeController(shapeController),
+      m_resourceManager(resourceManager),
+      m_pasteAsText(pasteAsText),
+      m_first(true),
+      m_mode(mode)
 {
     if (m_pasteAsText)
         setText(i18n("Paste As Text"));
@@ -61,7 +70,9 @@ void TextPasteCommand::undo()
 
 void TextPasteCommand::redo()
 {
-    KoTextEditor *editor = KoTextDocument(m_tool->m_textShapeData->document()).textEditor();
+    KoTextDocument textDocument(m_document);
+    KoTextEditor *editor = textDocument.textEditor();
+
     if (!m_first) {
         KUndo2Command::redo();
     } else {
@@ -69,10 +80,13 @@ void TextPasteCommand::redo()
         editor->beginEditBlock();
         m_first = false;
         if (editor->hasSelection()) { //TODO
-            if (m_tool->m_actionShowChanges->isChecked())
-                editor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_tool));
-            else
-                editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_tool));
+            // XXX: this was m_tool->m_actionShowChanges.isChecked -- but shouldn't we check
+            // whether we should record changes here, instead of showing?
+            if (textDocument.changeTracker()->recordChanges()) {
+                editor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_document, m_rdf, m_shapeController, m_resourceManager));
+            } else {
+                editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_document, m_shapeController));
+            }
         }
 
         // check for mime type
@@ -93,21 +107,21 @@ void TextPasteCommand::redo()
 #ifdef SHOULD_BUILD_RDF
                 bool weOwnRdfModel = true;
                 rdfModel = Soprano::createModel();
-                if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
+                if (m_rdf) {
                     delete rdfModel;
-                    rdfModel = rdf->model();
+                    rdfModel = m_rdf->model();
                     weOwnRdfModel = false;
                 }
 #endif
 
                 //kDebug() << "pasting odf text";
-                KoTextPaste paste(editor, m_tool->canvas()->resourceManager(), rdfModel);
+                KoTextPaste paste(editor, m_resourceManager, rdfModel);
                 paste.paste(odfType, data);
                 //kDebug() << "done with pasting odf";
 
 #ifdef SHOULD_BUILD_RDF
-                if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
-                    rdf->updateInlineRdfStatements(editor->document());
+                if (m_rdf) {
+                    m_rdf->updateInlineRdfStatements(editor->document());
                 }
                 if (weOwnRdfModel && rdfModel) {
                     delete rdfModel;

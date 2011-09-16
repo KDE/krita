@@ -26,13 +26,15 @@
 #include <QList>
 #include <QTextList>
 
-class TextTool;
 class QTextDocument;
 class QTextCursor;
 class QTextDocumentFragment;
 class KoChangeTrackerElement;
+class KoShapeController;
+class KoDocumentRdfBase;
 class KoDeleteChangeMarker;
 class KoInlineTextObjectManager;
+class KoResourceManager;
 
 class ChangeTrackedDeleteCommand : public KoTextCommandBase
 {
@@ -42,7 +44,12 @@ public:
         NextChar
     };
 
-    ChangeTrackedDeleteCommand(DeleteMode mode, TextTool *tool, KUndo2Command* parent = 0);
+    ChangeTrackedDeleteCommand(DeleteMode mode,
+                               QTextDocument *document,
+                               KoDocumentRdfBase *rdf,
+                               KoShapeController *shapeController,
+                               KoResourceManager *resourceManager,
+                               KUndo2Command* parent = 0);
     ~ChangeTrackedDeleteCommand();
 
     virtual void undo();
@@ -52,7 +59,10 @@ public:
     virtual bool mergeWith ( const KUndo2Command *command);
 
 private:
-    TextTool *m_tool;
+    QTextDocument *m_document;
+    KoDocumentRdfBase *m_rdf;
+    KoShapeController *m_shapeController;
+    KoResourceManager *m_resourceManager;
     bool m_first;
     bool m_undone;
     bool m_canMerge;
@@ -64,11 +74,11 @@ private:
 
     virtual void deleteChar();
     virtual void deletePreviousChar();
-    virtual void deleteSelection(QTextCursor &selection);
+    virtual void deleteSelection(KoTextEditor *editor);
     virtual void removeChangeElement(int changeId);
-    virtual void updateListIds(QTextCursor &cursor);
+    virtual void updateListIds(KoTextEditor *editor);
     virtual void updateListChanges();
-    virtual void handleListItemDelete(QTextCursor &cursor);
+    virtual void handleListItemDelete(KoTextEditor *editor);
 };
 
-#endif // CHANGETRACKEDDELTECOMMAND_H
+#endif // CHANGETRACKEDDELETECOMMAND_H

@@ -31,6 +31,7 @@
 #include <QTextCursor>
 #include <QTextFrame>
 
+class KoDocumentRdfBase;
 class KoCharacterStyle;
 class KoInlineObject;
 class KoParagraphStyle;
@@ -196,6 +197,14 @@ public slots:
 
     /// delete all inline objects in current cursor position or selection
     bool deleteInlineObjects(bool backward = false);
+
+    /**
+     * Insert the selection from the given KoTextEditor
+     * @param editor the KoTextEditor instance. If there is no selection, the entire content is
+     *   used.
+     * @returns true if the operation succeeded
+     */
+    bool insert(const KoTextEditor *editor, KoDocumentRdfBase *rdf = 0);
 
     // Wrapped QTextCursor methods
 

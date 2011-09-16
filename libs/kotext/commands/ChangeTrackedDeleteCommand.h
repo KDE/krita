@@ -35,6 +35,7 @@ class KoDocumentRdfBase;
 class KoDeleteChangeMarker;
 class KoInlineTextObjectManager;
 class KoResourceManager;
+class KoTextEditor;
 
 class ChangeTrackedDeleteCommand : public KoTextCommandBase
 {
@@ -50,7 +51,7 @@ public:
                                KoShapeController *shapeController,
                                KoResourceManager *resourceManager,
                                KUndo2Command* parent = 0);
-    ~ChangeTrackedDeleteCommand();
+    virtual ~ChangeTrackedDeleteCommand();
 
     virtual void undo();
     virtual void redo();
@@ -76,7 +77,7 @@ private:
     virtual void deletePreviousChar();
     virtual void deleteSelection(KoTextEditor *editor);
     virtual void removeChangeElement(int changeId);
-    virtual void updateListIds(KoTextEditor *editor);
+    virtual void updateListIds(QTextCursor &cursor);
     virtual void updateListChanges();
     virtual void handleListItemDelete(KoTextEditor *editor);
 };

@@ -25,7 +25,9 @@
 #include <KoShapeLoadingContext.h>
 #include <KoShapeControllerBase.h>
 #include <KoShapeController.h>
+
 #include "KoTextDocument.h"
+#include "KoDocumentRdfBase.h"
 #include "opendocument/KoTextLoader.h"
 
 #include <kdebug.h>

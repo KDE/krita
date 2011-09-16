@@ -88,19 +88,20 @@ set(kotext_LIB_SRCS
     changetracker/KoDeletedRowData.cpp
     changetracker/KoDeletedColumnData.cpp
     changetracker/KoDeletedCellData.cpp
-    KoTextDrag.cpp
 
-    commands/DeleteTableRowCommand.cpp
+    commands/ChangeListCommand.cpp
+    commands/ChangeTrackedDeleteCommand.cpp
+    commands/DeleteCommand.cpp
     commands/DeleteTableColumnCommand.cpp
-    commands/InsertTableRowCommand.cpp
-    commands/InsertTableColumnCommand.cpp
+    commands/DeleteTableRowCommand.cpp
     commands/InsertDeleteChangesCommand.cpp
+    commands/InsertTableColumnCommand.cpp
+    commands/InsertTableRowCommand.cpp
+    commands/ListItemNumberingCommand.cpp
     commands/RemoveDeleteChangesCommand.cpp
     commands/TextPasteCommand.cpp
-    commands/DeleteCommand.cpp
-    commands/ChangeTrackedDeleteCommand.cpp
-    commands/ChangeListCommand.cpp
-    commands/ListItemNumberingCommand.cpp
+
+    KoTextDrag.cpp
     KoTextCommandBase.cpp
 )
 

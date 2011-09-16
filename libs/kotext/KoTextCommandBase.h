@@ -26,6 +26,7 @@
 
 class KOTEXT_EXPORT KoUndoableTool {
 public:
+    virtual ~KoUndoableTool(){}
     virtual void setAddUndoCommandAllowed(bool allowed) = 0;
 };
 
@@ -51,16 +52,16 @@ void MyCommand::undo() {
 @endcode
  * @see TextTool::addCommand()
  */
-class KOTEXT_EXPORT TextCommandBase : public KUndo2Command
+class KOTEXT_EXPORT KoTextCommandBase : public KUndo2Command
 {
 public:
 
     /// constructor
-    TextCommandBase(KUndo2Command *parent)
+    KoTextCommandBase(KUndo2Command *parent)
         : KUndo2Command(parent)
         , m_tool(0) {}
 
-    virtual ~TextCommandBase() {}
+    virtual ~KoTextCommandBase() {}
 
     /// method called by the tool.
     void setTool(KoUndoableTool *tool) {
@@ -80,10 +81,10 @@ protected:
     class UndoRedoFinalizer
     {
     public:
-        UndoRedoFinalizer(TextCommandBase* parent) : m_parent(parent) {}
+        UndoRedoFinalizer(KoTextCommandBase* parent) : m_parent(parent) {}
         ~UndoRedoFinalizer();
     private:
-        TextCommandBase* m_parent;
+        KoTextCommandBase* m_parent;
     };
 
     KoUndoableTool *m_tool;

@@ -21,7 +21,7 @@
 #define DELETECOMMAND_H
 
 #include <kundo2qstack.h>
-#include "TextCommandBase.h"
+#include "KoTextCommandBase.h"
 #include <QTextCharFormat>
 #include <QList>
 #include <QSet>
@@ -33,7 +33,7 @@ class KoShape;
 
 class QTextCursor;
 
-class DeleteCommand : public TextCommandBase
+class DeleteCommand : public KoTextCommandBase
 {
 public:
     enum DeleteMode {
@@ -42,7 +42,7 @@ public:
     };
 
     DeleteCommand(DeleteMode mode, QTextDocument *document, KoShapeController *shapeController, KUndo2Command* parent = 0);
-    ~DeleteCommand();
+    virtual ~DeleteCommand();
 
     virtual void undo();
     virtual void redo();

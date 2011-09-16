@@ -923,6 +923,83 @@ bool KoTextEditor::deleteInlineObjects(bool backward)
     return d->deleteInlineObjects(backward);
 }
 
+bool KoTextEditor::insert(const KoTextEditor *editor, KoDocumentRdfBase *rdf)
+{
+#if 0
+    Q_ASSERT(editor);
+    Q_ASSERT(editor != this);
+
+    if (!editor->hasSelection()) {
+        editor->setPosition(0);
+        editor->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    }
+
+    Q_ASSERT(editor->hasSelection());
+
+    from = editor->position();
+    to = editor->anchor();
+    KoTextOdfSaveHelper saveHelper(editor->document(), from, to);
+    KoTextDrag drag;
+
+    if (rdf) {
+        saveHelper.setRdfModel(rdf->model());
+    }
+
+    drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+
+
+    editor->beginEditBlock();
+
+    m_first = false;
+    if (hasSelection()) {
+        editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_tool));
+    }
+
+    // check for mime type
+    const QMimeData *data = drag.mimeData();
+
+    if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))
+                    || data->hasFormat(KoOdf::mimeType(KoOdf::OpenOfficeClipboard)) ) {
+        KoOdf::DocumentType odfType = KoOdf::Text;
+        if (!data->hasFormat(KoOdf::mimeType(odfType))) {
+            odfType = KoOdf::OpenOfficeClipboard;
+        }
+
+        if (m_pasteAsText) {
+            editor->insertText(data->text());
+        } else {
+
+            const Soprano::Model *rdfModel = 0;
+#ifdef SHOULD_BUILD_RDF
+            bool weOwnRdfModel = true;
+            rdfModel = Soprano::createModel();
+            if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
+                delete rdfModel;
+                rdfModel = rdf->model();
+                weOwnRdfModel = false;
+            }
+#endif
+
+            //kDebug() << "pasting odf text";
+            KoTextPaste paste(editor, m_tool->canvas()->resourceManager(), rdfModel);
+            paste.paste(odfType, data);
+            //kDebug() << "done with pasting odf";
+
+#ifdef SHOULD_BUILD_RDF
+            if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
+                rdf->updateInlineRdfStatements(editor->document());
+            }
+            if (weOwnRdfModel && rdfModel) {
+                delete rdfModel;
+            }
+#endif
+        }
+    }
+
+    endEditBlock();
+#endif
+    return false;
+}
 
 int KoTextEditor::anchor() const
 {

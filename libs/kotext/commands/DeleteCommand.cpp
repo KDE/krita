@@ -26,7 +26,6 @@
 
 #include <KoTextEditor.h>
 #include <KoTextDocument.h>
-#include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextAnchor.h>
 #include <KoCanvasBase.h>
@@ -38,7 +37,7 @@ DeleteCommand::DeleteCommand(DeleteMode mode,
                              QTextDocument *document,
                              KoShapeController *shapeController,
                              KUndo2Command *parent)
-    : TextCommandBase (parent)
+    : KoTextCommandBase (parent)
     , m_document(document)
     , m_shapeController(shapeController)
     , m_first(true)
@@ -54,7 +53,7 @@ void DeleteCommand::undo()
         command->undo();
     }
 
-    TextCommandBase::undo();
+    KoTextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
     updateListChanges();
     m_undone = true;
@@ -67,7 +66,7 @@ void DeleteCommand::redo()
         foreach (KUndo2Command *command, m_shapeDeleteCommands)
             command->redo();
 
-        TextCommandBase::redo();
+        KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
     } else {
         m_first = false;
@@ -131,15 +130,12 @@ void DeleteCommand::doDelete()
 
 void DeleteCommand::deleteInlineObjects()
 {
-    KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
+    KoTextDocument textDocument(m_document);
+    KoTextEditor *textEditor = textDocument.textEditor();
     Q_ASSERT(textEditor);
     QTextCursor *caret = textEditor->cursor();
     QTextCursor cursor(*caret);
-    const QTextDocument *document = textEditor->document();
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
-    Q_ASSERT(layout);
-
-    KoInlineTextObjectManager *manager = layout->inlineTextObjectManager();
+    KoInlineTextObjectManager *manager = textDocument.inlineTextObjectManager();
     KoInlineObject *object;
 
     if (cursor.hasSelection()) {
@@ -183,7 +179,7 @@ void DeleteCommand::deleteTextAnchor(KoInlineObject *object)
 
 int DeleteCommand::id() const
 {
-    // Should be an enum declared somewhere. TextCommandBase.h ???
+    // Should be an enum declared somewhere. KoTextCommandBase.h ???
     return 56789;
 }
 
@@ -298,9 +294,8 @@ DeleteCommand::~DeleteCommand()
         if (textEditor == 0)
             return;
         foreach (KoInlineObject *object, m_invalidInlineObjects) {
-            const QTextDocument *document = textEditor->document();
-            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
-            KoInlineTextObjectManager *manager = layout->inlineTextObjectManager();
+            KoTextDocument textDocument(m_document);
+            KoInlineTextObjectManager *manager = textDocument.inlineTextObjectManager();
             manager->removeInlineObject(object);
             delete object;
         }

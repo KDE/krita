@@ -18,10 +18,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "TextCommandBase.h"
-#include "TextTool.h"
+#include "KoTextCommandBase.h"
 
-void TextCommandBase::redo()
+void KoTextCommandBase::redo()
 {
     KUndo2Command::redo();
     if (m_tool) {
@@ -29,7 +28,7 @@ void TextCommandBase::redo()
     }
 }
 
-void TextCommandBase::undo()
+void KoTextCommandBase::undo()
 {
     KUndo2Command::undo();
     if (m_tool) {
@@ -37,14 +36,14 @@ void TextCommandBase::undo()
     }
 }
 
-void TextCommandBase::setAllow(bool set)
+void KoTextCommandBase::setAllow(bool set)
 {
     if (m_tool) {
         m_tool->setAddUndoCommandAllowed(set);
     }
 }
 
-TextCommandBase::UndoRedoFinalizer::~UndoRedoFinalizer()
+KoTextCommandBase::UndoRedoFinalizer::~UndoRedoFinalizer()
 {
     if (m_parent) {
         m_parent->setAllow(true);

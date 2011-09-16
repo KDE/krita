@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,25 +24,29 @@
 void TextCommandBase::redo()
 {
     KUndo2Command::redo();
-    if (m_tool)
-        m_tool->m_allowAddUndoCommand = false;
+    if (m_tool) {
+        m_tool->setAddUndoCommandAllowed(false);
+    }
 }
 
 void TextCommandBase::undo()
 {
     KUndo2Command::undo();
-    if (m_tool)
-        m_tool->m_allowAddUndoCommand = false;
+    if (m_tool) {
+        m_tool->setAddUndoCommandAllowed(false);
+    }
 }
 
 void TextCommandBase::setAllow(bool set)
 {
-    if (m_tool)
-        m_tool->m_allowAddUndoCommand = set;
+    if (m_tool) {
+        m_tool->setAddUndoCommandAllowed(set);
+    }
 }
 
 TextCommandBase::UndoRedoFinalizer::~UndoRedoFinalizer()
 {
-    if (m_parent)
+    if (m_parent) {
         m_parent->setAllow(true);
+    }
 }

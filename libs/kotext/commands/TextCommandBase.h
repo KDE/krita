@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,16 +17,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
 #ifndef ABSTRACTTEXTCOMMMAND_H
 #define ABSTRACTTEXTCOMMMAND_H
 
 #include <kundo2command.h>
 
-class TextTool;
+#include "kotext_export.h"
+
+class KOTEXT_EXPORT KoUndoableTool {
+public:
+    virtual void setAddUndoCommandAllowed(bool allowed) = 0;
+};
 
 /**
- * Base class for all commands that work together with the textTool.
+ * Base class for all commands that work together with a tool that needs to handle undo/redo
+ * in a tricky way.
  * Due to the fact that QTextDocument has its own undo queue we need to do some trickery
  * to integrate that into the apps.
  * If your command in some way changes the document, it will create unwanted undo commands in the undoStack
@@ -45,14 +51,19 @@ void MyCommand::undo() {
 @endcode
  * @see TextTool::addCommand()
  */
-class TextCommandBase : public KUndo2Command
+class KOTEXT_EXPORT TextCommandBase : public KUndo2Command
 {
 public:
+
     /// constructor
-    TextCommandBase(KUndo2Command *parent) : KUndo2Command(parent), m_tool(0) {}
+    TextCommandBase(KUndo2Command *parent)
+        : KUndo2Command(parent)
+        , m_tool(0) {}
+
     virtual ~TextCommandBase() {}
+
     /// method called by the tool.
-    void setTool(TextTool *tool) {
+    void setTool(KoUndoableTool *tool) {
         m_tool = tool;
     }
 
@@ -63,7 +74,9 @@ public:
 
     /// Sets the m_allowAddUndoCommand of the associated tool
     void setAllow(bool set);
+
 protected:
+
     class UndoRedoFinalizer
     {
     public:
@@ -73,7 +86,7 @@ protected:
         TextCommandBase* m_parent;
     };
 
-    TextTool *m_tool;
+    KoUndoableTool *m_tool;
 };
 
 #endif

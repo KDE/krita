@@ -98,6 +98,9 @@ set(kotext_LIB_SRCS
     commands/RemoveDeleteChangesCommand.cpp
     commands/TextPasteCommand.cpp
     commands/DeleteCommand.cpp
+    commands/ChangeTrackedDeleteCommand.cpp
+    commands/ChangeListCommand.cpp
+    KoTextCommandBase.cpp
 )
 
 if( Soprano_FOUND )
@@ -162,6 +165,7 @@ install(
     KoTextMeta.h
     KoTextSoftPageBreak.cpp
     KoSection.h
+    KoTextCommandBase.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel

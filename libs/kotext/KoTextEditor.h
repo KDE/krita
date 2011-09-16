@@ -242,7 +242,9 @@ public slots:
 
     void insertBlock(const QTextBlockFormat &format, const QTextCharFormat &charFormat);
 
-    void insertFragment(const QTextDocumentFragment &fragment);
+// NOT part of the api, since QTextDocumentFragment translates to html, losing all formatting.
+// so intentionally not exposed.
+//    void insertFragment(const QTextDocumentFragment &fragment);
 
      /**
      * Insert a table at the current cursor position.
@@ -345,13 +347,15 @@ public slots:
 
     int selectionStart() const;
 
-    void setBlockCharFormat(const QTextCharFormat &format);
+// intentionally commented out: these  are unimplemented.
 
-    void setBlockFormat(const QTextBlockFormat &format);
+//    void setBlockCharFormat(const QTextCharFormat &format);
 
-    void setCharFormat(const QTextCharFormat &format);
+//    void setBlockFormat(const QTextBlockFormat &format);
 
-    void setTableFormat(const QTextTableFormat &format);
+//    void setCharFormat(const QTextCharFormat &format);
+
+//    void setTableFormat(const QTextTableFormat &format);
 
     void setPosition(int pos, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
 

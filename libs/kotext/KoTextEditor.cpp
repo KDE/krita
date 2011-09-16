@@ -1211,16 +1211,6 @@ void KoTextEditor::insertBlock(const QTextBlockFormat &format, const QTextCharFo
     //TODO
 }
 
-void KoTextEditor::insertFragment(const QTextDocumentFragment &fragment)
-{
-    if (isEditProtected()) {
-        return;
-    }
-
-    Q_UNUSED(fragment)
-    //TODO
-}
-
 void KoTextEditor::insertTable(int rows, int columns)
 {
     if (isEditProtected()) {
@@ -1856,45 +1846,45 @@ int KoTextEditor::selectionStart() const
     return d->caret.selectionStart();
 }
 
-void KoTextEditor::setBlockCharFormat(const QTextCharFormat &format)
-{
-    if (isEditProtected()) {
-        return;
-    }
+//void KoTextEditor::setBlockCharFormat(const QTextCharFormat &format)
+//{
+//    if (isEditProtected()) {
+//        return;
+//    }
 
-    Q_UNUSED(format)
-    //TODO
-}
+//    Q_UNUSED(format)
+//    //TODO
+//}
 
-void KoTextEditor::setBlockFormat(const QTextBlockFormat &format)
-{
-    if (isEditProtected()) {
-        return;
-    }
+//void KoTextEditor::setBlockFormat(const QTextBlockFormat &format)
+//{
+//    if (isEditProtected()) {
+//        return;
+//    }
 
-    Q_UNUSED(format)
-    //TODO
-}
+//    Q_UNUSED(format)
+//    //TODO
+//}
 
-void KoTextEditor::setCharFormat(const QTextCharFormat &format)
-{
-    if (isEditProtected()) {
-        return;
-    }
+//void KoTextEditor::setCharFormat(const QTextCharFormat &format)
+//{
+//    if (isEditProtected()) {
+//        return;
+//    }
 
-    Q_UNUSED(format)
-    //TODO
-}
+//    Q_UNUSED(format)
+//    //TODO
+//}
 
-void KoTextEditor::setTableFormat(const QTextTableFormat &format)
-{
-    if (isEditProtected()) {
-        return;
-    }
+//void KoTextEditor::setTableFormat(const QTextTableFormat &format)
+//{
+//    if (isEditProtected()) {
+//        return;
+//    }
 
-    Q_UNUSED(format)
-    //TODO
-}
+//    Q_UNUSED(format)
+//    //TODO
+//}
 
 void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode mode)
 {

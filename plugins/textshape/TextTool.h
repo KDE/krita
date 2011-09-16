@@ -308,11 +308,9 @@ private:
     friend class UndoTextCommand;
     friend class KoTextCommandBase;
     friend class ChangeTracker;
-    friend class TextPasteCommand;
     friend class TextCutCommand;
     friend class ShowChangesCommand;
-    friend class ChangeTrackedDeleteCommand;
-    friend class DeleteCommand;
+
     TextShape *m_textShape; // where caret of m_textEditor currently is
     KoTextShapeData *m_textShapeData; // where caret of m_textEditor currently is
     QWeakPointer<KoTextEditor> m_textEditor;

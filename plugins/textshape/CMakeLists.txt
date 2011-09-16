@@ -87,7 +87,6 @@ SET ( textshape_SRCS
     commands/ListItemNumberingCommand.cpp
     commands/TextCutCommand.cpp
     commands/ShowChangesCommand.cpp
-    commands/ChangeTrackedDeleteCommand.cpp
     commands/AcceptChangeCommand.cpp
     commands/RejectChangeCommand.cpp
     commands/AutoResizeCommand.cpp

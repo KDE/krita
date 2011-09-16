@@ -21,7 +21,7 @@
 #define CHANGETRACKEDDELETECOMMAND_H
 
 #include <kundo2qstack.h>
-#include "TextCommandBase.h"
+#include "KoTextCommandBase.h"
 #include <KoListStyle.h>
 #include <QList>
 #include <QTextList>
@@ -34,7 +34,7 @@ class KoChangeTrackerElement;
 class KoDeleteChangeMarker;
 class KoInlineTextObjectManager;
 
-class ChangeTrackedDeleteCommand : public TextCommandBase
+class ChangeTrackedDeleteCommand : public KoTextCommandBase
 {
 public:
     enum DeleteMode {

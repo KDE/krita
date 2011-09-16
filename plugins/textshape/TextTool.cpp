@@ -35,13 +35,7 @@
 #include "dialogs/ChangeTrackingOptionsWidget.h"
 #include "dialogs/SimpleTableWidget.h"
 #include "commands/TextCutCommand.h"
-#include "commands/TextPasteCommand.h"
-#include "commands/ChangeListCommand.h"
-#include "commands/ChangeListLevelCommand.h"
-#include "commands/ListItemNumberingCommand.h"
 #include "commands/ShowChangesCommand.h"
-#include "commands/ChangeTrackedDeleteCommand.h"
-#include "commands/DeleteCommand.h"
 #include "commands/AutoResizeCommand.h"
 #include "FontSizeAction.h"
 
@@ -790,10 +784,10 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
     }
 }
 
-const QTextCursor TextTool::cursor()
-{
-    return *(m_textEditor.data()->cursor());
-}
+//const QTextCursor TextTool::cursor()
+//{
+//    return *(m_textEditor.data()->cursor());
+//}
 
 void TextTool::setShapeData(KoTextShapeData *data)
 {

@@ -127,7 +127,7 @@ public:
 
     void stopEditing();
 
-    const QTextCursor cursor();
+//    const QTextCursor cursor();
 
     void setShapeData(KoTextShapeData *data);
 
@@ -306,7 +306,6 @@ private:
 
 private:
     friend class UndoTextCommand;
-    friend class KoTextCommandBase;
     friend class ChangeTracker;
     friend class TextCutCommand;
     friend class ShowChangesCommand;

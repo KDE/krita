@@ -34,14 +34,8 @@ target_link_libraries(TestDocumentLayout ${EXTRA_LIBS} komain ${QT_QTTEST_LIBRAR
 
 set(TestChangeListCommand_test_SRCS
     TestChangeListCommand.cpp
-    ../commands/ChangeListCommand.cpp
-    ../commands/ChangeListLevelCommand.cpp
-    ../commands/ListItemNumberingCommand.cpp
     ../commands/TextCommandBase.cpp
-    ../commands/TextPasteCommand.cpp
     ../commands/TextCutCommand.cpp
-    ../commands/ChangeTrackedDeleteCommand.cpp
-    ../commands/DeleteCommand.cpp
     ../commands/ShowChangesCommand.cpp
     ../commands/AcceptChangeCommand.cpp
     ../commands/RejectChangeCommand.cpp

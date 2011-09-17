@@ -74,6 +74,18 @@ bool KisCompositeOpListModel::setData(const QModelIndex& idx, const QVariant& va
 	return result;
 }
 
+QVariant KisCompositeOpListModel::data(const QModelIndex& idx, int role) const
+{
+    if(idx.isValid() && role == Qt::DecorationRole) {
+        BaseClass::Index index = BaseClass::getIndex(idx.row());
+        
+        if(!BaseClass::isHeader(index) && BaseClass::m_categories[index.first].entries[index.second].disabled)
+            return QIcon::fromTheme("dialog-warning");
+    }
+    
+    return BaseClass::data(idx, role);
+}
+
 void KisCompositeOpListModel::readFavriteCompositeOpsFromConfig()
 {
 	KisConfig   config;

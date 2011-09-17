@@ -45,7 +45,7 @@ BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBl
     m_bibInfo->setGenerator(this);
 
     bibDocument->setUndoRedoEnabled(false);
-    //generate();
+    generate();
 }
 
 BibliographyGenerator::~BibliographyGenerator()
@@ -81,7 +81,8 @@ void BibliographyGenerator::generate()
         QTextBlock titleTextBlock = cursor.block();
         titleStyle->applyStyle(titleTextBlock);
 
-        cursor.insertText(m_bibInfo->m_indexTitleTemplate.text.append("\n"));
+        cursor.insertText(m_bibInfo->m_indexTitleTemplate.text);
+        cursor.insertBlock();
     }
 
     qDebug() << "\n" << m_bibInfo->m_indexTitleTemplate.text;
@@ -105,7 +106,7 @@ void BibliographyGenerator::generate()
             continue;
         }
 
-        //cursor.insertBlock(QTextBlockFormat(),QTextCharFormat());
+        cursor.insertBlock(QTextBlockFormat(),QTextCharFormat());
 
         QTextBlock bibEntryTextBlock = cursor.block();
         bibTemplateStyle->applyStyle(bibEntryTextBlock);

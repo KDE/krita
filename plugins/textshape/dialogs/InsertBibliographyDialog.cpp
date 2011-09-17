@@ -21,7 +21,6 @@
 #include <ToCBibGeneratorInfo.h>
 #include <BibliographyGenerator.h>
 #include <KoParagraphStyle.h>
-#include <ToCBibGeneratorInfo.h>
 
 #include <QMessageBox>
 
@@ -47,21 +46,16 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
 void InsertBibliographyDialog::insert()
 {
     m_editor->insertBibliography();
+
+    m_editor->movePosition(QTextCursor::Left);
     KoBibliographyInfo *bibInfo = m_editor->block().blockFormat().property(KoParagraphStyle::BibliographyData).value<KoBibliographyInfo*>();
     QTextDocument *bibDocument = m_editor->block().blockFormat().property(KoParagraphStyle::GeneratedDocument).value<QTextDocument*>();
+    m_editor->movePosition(QTextCursor::Right);
 
-    bibInfo->m_entryTemplate = m_bibInfo->m_entryTemplate;
+    bibInfo->setEntryTemplates(m_bibInfo->m_entryTemplate);
     bibInfo->m_indexTitleTemplate.text = dialog.title->text();
 
-    bool *autoUpdate = m_editor->block().blockFormat().property(KoParagraphStyle::AutoUpdateBibliography).value<bool *>();
-    *autoUpdate = dialog.autoupdate->isChecked();
-
-    BibliographyGenerator *generator =
-            new BibliographyGenerator(bibDocument, m_editor->block(), bibInfo);
-
-    if (!(*autoUpdate)) {          //if autoUpdate is disabled then do a forced generate on insertion
-        generator->generate();
-    }
+    new BibliographyGenerator(bibDocument, m_editor->block(), bibInfo);
 }
 
 void InsertBibliographyDialog::updateFields()

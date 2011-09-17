@@ -28,6 +28,8 @@ const int INVALID_OUTLINE_LEVEL = 0;
 
 class BibliographyGenerator;
 class ToCGenerator;
+class KoBibliographyInfo;
+class KoTableOfContentsGeneratorInfo;
 
 class KOTEXT_EXPORT IndexEntry
 {
@@ -183,4 +185,7 @@ public:
     QString bibliographyType;
 };
 
+Q_DECLARE_METATYPE(KoBibliographyInfo *);
+Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *);
+Q_DECLARE_METATYPE(QTextDocument *);
 #endif // TOCBIBGENERATORINFO_H

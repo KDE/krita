@@ -1454,12 +1454,9 @@ void KoTextEditor::insertBibliography()
     QTextBlockFormat bibFormat;
     KoBibliographyInfo *info = new KoBibliographyInfo();
     QTextDocument *bibDocument = new QTextDocument();
-    bool *autoUpdate = new bool;
-    *autoUpdate = false;
 
     bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info));
     bibFormat.setProperty( KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
-    bibFormat.setProperty( KoParagraphStyle::AutoUpdateBibliography, QVariant::fromValue<bool *>(autoUpdate));
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (changeTracker && changeTracker->recordChanges()) {
@@ -1481,6 +1478,8 @@ void KoTextEditor::insertBibliography()
         bibFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
     }
 
+    d->caret.insertBlock();
+    d->caret.movePosition(QTextCursor::Left);
     d->caret.insertBlock(bibFormat);
     d->caret.movePosition(QTextCursor::Right);
 

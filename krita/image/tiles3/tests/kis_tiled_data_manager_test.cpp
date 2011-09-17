@@ -90,6 +90,29 @@ bool KisTiledDataManagerTest::checkTilesNotShared(KisTiledDataManager *srcDM,
     return true;
 }
 
+void KisTiledDataManagerTest::testUndoingNewTiles()
+{
+    // "growing extent bug"
+
+    const QRect nullRect(qint32_MAX,qint32_MAX,0,0);
+
+    quint8 defaultPixel = 0;
+    KisTiledDataManager srcDM(1, &defaultPixel);
+
+    KisTileSP emptyTile = srcDM.getTile(0, 0, false);
+
+    QCOMPARE(srcDM.extent(), nullRect);
+
+    KisMementoSP memento0 = srcDM.getMemento();
+    KisTileSP createdTile = srcDM.getTile(0, 0, true);
+    srcDM.commit();
+
+    QCOMPARE(srcDM.extent(), QRect(0,0,64,64));
+
+    srcDM.rollback(memento0);
+    QCOMPARE(srcDM.extent(), nullRect);
+}
+
 void KisTiledDataManagerTest::testPurgedAndEmptyTransactions()
 {
     quint8 defaultPixel = 0;

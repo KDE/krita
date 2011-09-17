@@ -22,6 +22,8 @@
 #include "kis_node.h"
 #include "krita_export.h"
 
+class KoUpdater;
+class KoProgressUpdater;
 class KisUndoAdapter;
 class KisPaintLayer;
 class KisGroupLayer;
@@ -47,6 +49,18 @@ public:
     virtual void visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter) = 0;
+
+protected:
+    class ProgressHelper {
+    public:
+        ProgressHelper(const KisNode *node);
+        ~ProgressHelper();
+
+        KoUpdater* updater() const;
+    private:
+        KoProgressUpdater *m_progressUpdater;
+        KoUpdater *m_updater;
+    };
 };
 
 #endif /* __KIS_PROCESSING_VISITOR_H */

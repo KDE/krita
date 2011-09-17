@@ -18,6 +18,36 @@
 
 #include "kis_processing_visitor.h"
 
+#include <KoUpdater.h>
+#include <KoProgressUpdater.h>
+#include "kis_node_progress_proxy.h"
+
+KisProcessingVisitor::ProgressHelper::ProgressHelper(const KisNode *node)
+{
+    KisNodeProgressProxy *progressProxy = node->nodeProgressProxy();
+
+    if(progressProxy) {
+        m_progressUpdater = new KoProgressUpdater(progressProxy);
+        m_progressUpdater->start();
+        m_updater = m_progressUpdater->startSubtask();
+        m_progressUpdater->moveToThread(node->thread());
+    }
+    else {
+        m_progressUpdater = 0;
+        m_updater = 0;
+    }
+}
+
+KisProcessingVisitor::ProgressHelper::~ProgressHelper()
+{
+    delete m_progressUpdater;
+}
+
+KoUpdater* KisProcessingVisitor::ProgressHelper::updater() const
+{
+    return m_updater;
+}
+
 
 KisProcessingVisitor::~KisProcessingVisitor()
 {

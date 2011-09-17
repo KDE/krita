@@ -20,6 +20,8 @@
 
 #include "klocale.h"
 
+#include <KoUpdater.h>
+
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_clone_layer.h"
@@ -45,7 +47,7 @@ KisTransformProcessingVisitor(qreal  xscale, qreal  yscale,
                               const QPointF &shearOrigin,
                               qreal angle,
                               qint32  tx, qint32  ty,
-                              KoUpdater *progress, KisFilterStrategy *filter,
+                              KisFilterStrategy *filter,
                               bool scaleOnlyShapes)
     : m_sx(xscale), m_sy(yscale)
     , m_tx(tx), m_ty(ty)
@@ -53,7 +55,6 @@ KisTransformProcessingVisitor(qreal  xscale, qreal  yscale,
     , m_shearOrigin(shearOrigin)
     , m_filter(filter)
     , m_angle(angle)
-    , m_progress(progress)
     , m_scaleOnlyShapes(scaleOnlyShapes)
 {
 }
@@ -66,7 +67,7 @@ void KisTransformProcessingVisitor::visit(KisNode *node, KisUndoAdapter *undoAda
 
 void KisTransformProcessingVisitor::visit(KisPaintLayer *layer, KisUndoAdapter *undoAdapter)
 {
-    transformPaintDevice(layer->paintDevice(), undoAdapter);
+    transformPaintDevice(layer->paintDevice(), undoAdapter, ProgressHelper(layer));
     transformClones(layer, undoAdapter);
 }
 
@@ -79,7 +80,7 @@ void KisTransformProcessingVisitor::visit(KisGroupLayer *layer, KisUndoAdapter *
 
 void KisTransformProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter)
 {
-    transformSelection(layer->selection(), undoAdapter);
+    transformSelection(layer->selection(), undoAdapter, ProgressHelper(layer));
     layer->resetCache();
     transformClones(layer, undoAdapter);
 }
@@ -98,7 +99,8 @@ void KisTransformProcessingVisitor::visit(KisExternalLayer *layer, KisUndoAdapte
 
 void KisTransformProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter)
 {
-    transformSelection(layer->selection(), undoAdapter);
+    ProgressHelper helper(layer);
+    transformSelection(layer->selection(), undoAdapter, ProgressHelper(layer));
     layer->resetCache();
     transformClones(layer, undoAdapter);
 }
@@ -110,17 +112,17 @@ void KisTransformProcessingVisitor::visit(KisCloneLayer *layer, KisUndoAdapter *
 
 void KisTransformProcessingVisitor::visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter)
 {
-    transformSelection(mask->selection(), undoAdapter);
+    transformSelection(mask->selection(), undoAdapter, ProgressHelper(mask));
 }
 
 void KisTransformProcessingVisitor::visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter)
 {
-    transformSelection(mask->selection(), undoAdapter);
+    transformSelection(mask->selection(), undoAdapter, ProgressHelper(mask));
 }
 
 void KisTransformProcessingVisitor::visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter)
 {
-    transformSelection(mask->selection(), undoAdapter);
+    transformSelection(mask->selection(), undoAdapter, ProgressHelper(mask));
 }
 
 void KisTransformProcessingVisitor::transformClones(KisLayer *layer, KisUndoAdapter *undoAdapter)
@@ -132,9 +134,12 @@ void KisTransformProcessingVisitor::transformClones(KisLayer *layer, KisUndoAdap
         // so check validity first
         if(!clone) continue;
 
+        ProgressHelper helper(clone);
+
         KisTransformWorker tw(clone->projection(), m_sx, m_sy, m_shearx, m_sheary,
                               m_shearOrigin.x(), m_shearOrigin.y(),
-                              m_angle, m_tx, m_ty, m_progress, m_filter, true);
+                              m_angle, m_tx, m_ty, helper.updater(),
+                              m_filter, true);
 
         QTransform trans  = tw.transform();
         QTransform offsetTrans = QTransform::fromTranslate(clone->x(), clone->y());
@@ -148,7 +153,7 @@ void KisTransformProcessingVisitor::transformClones(KisLayer *layer, KisUndoAdap
     }
 }
 
-void KisTransformProcessingVisitor::transformPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *adapter)
+void KisTransformProcessingVisitor::transformPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *adapter, const ProgressHelper &helper)
 {
     // FIXME: check whether this is still used
     if(m_scaleOnlyShapes) return;
@@ -157,16 +162,16 @@ void KisTransformProcessingVisitor::transformPaintDevice(KisPaintDeviceSP device
 
     KisTransformWorker tw(device, m_sx, m_sy, m_shearx, m_sheary,
                           m_shearOrigin.x(), m_shearOrigin.y(),
-                          m_angle, m_tx, m_ty, m_progress, m_filter, true);
+                          m_angle, m_tx, m_ty, helper.updater(),
+                          m_filter, true);
     tw.run();
-
     transaction.commit(adapter);
 }
 
-void KisTransformProcessingVisitor::transformSelection(KisSelectionSP selection, KisUndoAdapter *adapter)
+void KisTransformProcessingVisitor::transformSelection(KisSelectionSP selection, KisUndoAdapter *adapter, const ProgressHelper &helper)
 {
     if(selection->hasPixelSelection()) {
-        transformPaintDevice(selection->pixelSelection(), adapter);
+        transformPaintDevice(selection->pixelSelection(), adapter, helper);
     }
 
     if (selection->hasShapeSelection()) {

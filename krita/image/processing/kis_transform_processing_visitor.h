@@ -21,7 +21,6 @@
 
 #include "kis_processing_visitor.h"
 
-class KoUpdater;
 class KisFilterStrategy;
 
 
@@ -31,7 +30,7 @@ public:
     KisTransformProcessingVisitor(qreal  xscale, qreal  yscale,
                                   qreal  xshear, qreal  yshear, const QPointF &shearOrigin, qreal angle,
                                   qint32  tx, qint32  ty,
-                                  KoUpdater *progress, KisFilterStrategy *filter,
+                                  KisFilterStrategy *filter,
                                   bool scaleOnlyShapes = false);
 
     void visit(KisNode *node, KisUndoAdapter *undoAdapter);
@@ -47,8 +46,8 @@ public:
 
 private:
     void transformClones(KisLayer *layer, KisUndoAdapter *undoAdapter);
-    void transformPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *adapter);
-    void transformSelection(KisSelectionSP selection, KisUndoAdapter *adapter);
+    void transformPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *adapter, const ProgressHelper &helper);
+    void transformSelection(KisSelectionSP selection, KisUndoAdapter *adapter, const ProgressHelper &helper);
 
 private:
     qreal m_sx, m_sy;
@@ -57,7 +56,6 @@ private:
     QPointF m_shearOrigin;
     KisFilterStrategy *m_filter;
     qreal m_angle;
-    KoUpdater *m_progress;
     bool m_scaleOnlyShapes;
 };
 

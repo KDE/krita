@@ -467,15 +467,12 @@ void KisImage::emitSizeChanged()
     }
 }
 
-void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy, KoUpdater *progress)
+void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy)
 {
     bool resolutionChanged = xres != xRes() && yres != yRes();
     bool sizeChanged = size != this->size();
 
-    if(!resolutionChanged && !sizeChanged) {
-        progress->setProgress(100);
-        return;
-    }
+    if(!resolutionChanged && !sizeChanged) return;
 
     KisImageSignalVector emitSignals;
     if(resolutionChanged) emitSignals << ResolutionChangedSignal;
@@ -505,7 +502,6 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
                                           QPointF(),
                                           0,
                                           0, 0,
-                                          progress,
                                           filterStrategy,
                                           scaleOnlyShapes);
 

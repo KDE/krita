@@ -188,9 +188,6 @@ void KisProcessingsTest::testTransformVisitorScale()
 {
     BaseProcessingTest tester;
 
-    TestUtil::TestProgressBar bar;
-    KoProgressUpdater pu(&bar);
-    KoUpdaterPtr updater = pu.startSubtask();
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
     KisProcessingVisitorSP visitor =
@@ -198,7 +195,7 @@ void KisProcessingsTest::testTransformVisitorScale()
                                           0,0,QPointF(),
                                           0,
                                           0,0,
-                                          updater,filter);
+                                          filter);
 
     tester.test("transform_scale", visitor);
 }
@@ -207,9 +204,6 @@ void KisProcessingsTest::testTransformVisitorScaleRotate()
 {
     BaseProcessingTest tester;
 
-    TestUtil::TestProgressBar bar;
-    KoProgressUpdater pu(&bar);
-    KoUpdaterPtr updater = pu.startSubtask();
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
     KisProcessingVisitorSP visitor =
@@ -217,7 +211,7 @@ void KisProcessingsTest::testTransformVisitorScaleRotate()
                                           0,0,QPointF(),
                                           M_PI,
                                           320,221,
-                                          updater,filter);
+                                          filter);
 
     tester.test("transform_scale_rotate", visitor);
 }

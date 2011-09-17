@@ -75,12 +75,9 @@ public:
     explicit KoPAView( KoPADocument * document, QWidget * parent = 0 );
     virtual ~KoPAView();
 
-// QWidget overrides
+    //  KoPAViewBase/KoView overrides
 
-    virtual void dragEnterEvent(QDragEnterEvent * event);
-    virtual void dropEvent(QDropEvent * event);
-
-//  KoPAViewBase/KoView overrides
+    void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
 
     KoZoomController* zoomController() const;
 
@@ -282,6 +279,11 @@ protected slots:
      * Configure kopapage apps
      */
     void configure();
+
+    /**
+     * This is called when the unit of the document changes
+     */
+    void updateUnit(const KoUnit &unit);
 
 private:
     class Private;

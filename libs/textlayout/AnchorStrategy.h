@@ -79,10 +79,12 @@ public:
     /// HFromInside)
     void setPageNumber(int pageNumber);
 
-private:
-    KoTextShapeContainerModel *m_model;
+protected:
     KoTextAnchor * const m_anchor;
     KoTextLayoutRootArea *m_rootArea;
+
+private:
+    KoTextShapeContainerModel *m_model;
     QRectF m_pageRect;
     QRectF m_pageContentRect;
     QRectF m_paragraphRect;

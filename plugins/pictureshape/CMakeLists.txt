@@ -1,4 +1,4 @@
-include_directories(  )
+include_directories( ${FLAKE_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
@@ -17,7 +17,7 @@ SET (pictureshape_LIB_SRCS
 
 kde4_add_plugin(pictureshape ${pictureshape_LIB_SRCS})
 
-target_link_libraries(pictureshape komain)
+target_link_libraries(pictureshape komain flake)
 install(TARGETS pictureshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

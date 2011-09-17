@@ -62,7 +62,6 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     kDebug(31000) << "Initializing the lcms engine plugin";
-    //setComponentData(LcmsEnginePluginFactory::componentData());
     KGlobal::locale()->insertCatalog("kocolorspaces");
 
     // Set the lmcs error reporting function

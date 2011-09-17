@@ -35,6 +35,12 @@ target_link_libraries(TestXmlReader koodf ${QT_QTTEST_LIBRARY}  ${KDE4_KDEUI_LIB
 
 ########### next target ###############
 
+set(xmlreadertestwithoutspaces_SRCS TestXmlReaderWithoutSpaces.cpp )
+kde4_add_unit_test(TestXmlReaderWithoutSpaces TESTNAME libs-store-testxmlreader ${xmlreadertestwithoutspaces_SRCS})
+target_link_libraries(TestXmlReaderWithoutSpaces koodf ${QT_QTTEST_LIBRARY}  ${KDE4_KDEUI_LIBS})
+
+########### next target ###############
+
 set(storedroptest_SRCS storedroptest.cpp )
 
 kde4_add_executable(storedroptest TEST ${storedroptest_SRCS})

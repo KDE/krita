@@ -58,7 +58,6 @@ K_EXPORT_PLUGIN(KritaNoiseFilterFactory("krita"))
 KritaNoiseFilter::KritaNoiseFilter(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaNoiseFilterFactory::componentData());
     KisFilterRegistry::instance()->add(new KisFilterNoise());
 
 }

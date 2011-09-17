@@ -55,6 +55,8 @@ const QUrl KoTextDocument::RelativeTabsURL = QUrl("kotext://relativetabs");
 const QUrl KoTextDocument::HeadingListURL = QUrl("kotext://headingList");
 const QUrl KoTextDocument::SelectionsURL = QUrl("kotext://selections");
 const QUrl KoTextDocument::LayoutTextPageUrl = QUrl("kotext://layoutTextPage");
+const QUrl KoTextDocument::ParaTableSpacingAtStartUrl = QUrl("kotext://spacingAtStart");
+const QUrl KoTextDocument::IndexGeneratorManagerUrl = QUrl("kotext://indexGeneratorManager");
 
 Q_DECLARE_METATYPE(QTextFrame*)
 
@@ -349,4 +351,19 @@ bool KoTextDocument::relativeTabs() const
         return resource.toBool();
     else
         return true;
+}
+
+void KoTextDocument::setParaTableSpacingAtStart(bool spacingAtStart)
+{
+    QVariant v(spacingAtStart);
+    m_document->addResource(KoTextDocument::ParaTableSpacingAtStart, ParaTableSpacingAtStartUrl, v);
+}
+
+bool KoTextDocument::paraTableSpacingAtStart() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::ParaTableSpacingAtStart, ParaTableSpacingAtStartUrl);
+    if (resource.isValid())
+        return resource.toBool();
+    else
+        return false;
 }

@@ -1,0 +1,68 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2011 Smit Patel <smitpatel24@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+#ifndef KOBIBLIOGRAPHYINFO_H
+#define KOBIBLIOGRAPHYINFO_H
+
+#include "kotext_export.h"
+#include "KoText.h"
+#include "KoXmlReaderForward.h"
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
+#include "ToCBibGeneratorInfo.h"
+
+class KoTextSharedLoadingData;
+class BibliographyGenerator;
+
+class KOTEXT_EXPORT BibliographyGeneratorInterface {
+public:
+    BibliographyGeneratorInterface() {}
+    virtual ~BibliographyGeneratorInterface() {}
+    //virtual void setMaxTabPosition(qreal maxTabPosition) = 0;
+};
+
+class KOTEXT_EXPORT KoBibliographyInfo
+{
+public:
+    KoBibliographyInfo();
+
+    ~KoBibliographyInfo();
+
+    void loadOdf(KoTextSharedLoadingData *sharedLoadingData, const KoXmlElement &element);
+    void saveOdf(KoXmlWriter *writer) const;
+
+    void setGenerator(BibliographyGeneratorInterface *generator);
+    void setEntryTemplates(QMap<QString, BibliographyEntryTemplate> &entryTemplates);
+
+    BibliographyGeneratorInterface *generator() const;
+
+    QString m_name;
+    QString m_styleName;
+    IndexTitleTemplate m_indexTitleTemplate;
+    QMap<QString, BibliographyEntryTemplate> m_entryTemplate;
+
+    static const QList<QString> bibTypes;
+    static const QList<QString> bibDataFields;
+
+private:
+    int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
+    BibliographyGeneratorInterface * m_generator;
+};
+
+Q_DECLARE_METATYPE(KoBibliographyInfo *);       //to avail KoBibliographyInfo * to all template based function.(QVarient)
+#endif // KOBIBLIOGRAPHYINFO_H

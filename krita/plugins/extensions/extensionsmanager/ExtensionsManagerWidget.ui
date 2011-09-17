@@ -14,7 +14,7 @@
    <string>Extensions manager</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" rowspan="4">
+   <item row="0" column="0" rowspan="5">
     <widget class="QListView" name="listView"/>
    </item>
    <item row="0" column="1">
@@ -37,13 +37,6 @@
      </property>
     </spacer>
    </item>
-   <item row="3" column="1">
-    <widget class="QPushButton" name="pushButtonClose">
-     <property name="text">
-      <string>Close</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="1">
     <widget class="QPushButton" name="pushButtonUninstall">
      <property name="text">
@@ -51,8 +44,18 @@
      </property>
     </widget>
    </item>
+   <item row="3" column="1">
+    <widget class="KPushButton" name="pushButtonClose"/>
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

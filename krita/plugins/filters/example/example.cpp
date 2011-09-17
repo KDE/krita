@@ -46,8 +46,6 @@ K_EXPORT_PLUGIN(KritaExampleFactory("krita"))
 KritaExample::KritaExample(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaExampleFactory::componentData());
-
     KisFilterRegistry::instance()->add(KisFilterSP(new KisFilterInvert()));
 }
 

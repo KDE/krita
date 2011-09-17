@@ -158,8 +158,11 @@ public:
         VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
 
         NormalLineHeight,         ///< bool, internal property for reserved usage
+        BibliographyData,
+        AutoUpdateBibliography,
+
         TableOfContentsData,      // set when block is instead a TableOfContents
-        TableOfContentsDocument,  // set when block is instead a TableOfContents
+        GeneratedDocument,  // set when block is instead a generated document
         Shadow                    //< KoShadowStyle, the shadow of this paragraph
     };
 

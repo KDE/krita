@@ -55,6 +55,7 @@ private:
 
     //check the border of page an move the shape back to have it visible
     inline void checkPageBorder(QPointF &newPosition, QRectF containerBoundingRect);
+    inline void checkStacking(QPointF &newPosition);
 
     // true if shape is inside layouted text area
     inline bool checkTextIntersection(QPointF &relayoutPos, QRectF shpRect, QRectF contRect,
@@ -62,9 +63,6 @@ private:
 
     void updateObstruction(qreal documentOffset);
 
-    KoTextAnchor *const m_anchor;
-
-    bool m_finished; // true if shape position was found
     KoTextLayoutObstruction *m_obstruction; // the obstruction representation of the subject
 };
 

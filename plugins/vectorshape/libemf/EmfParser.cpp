@@ -797,7 +797,9 @@ bool Parser::readRecord( QDataStream &stream )
     case EMR_STRETCHDIBITS:
 	{
 	    StretchDiBitsRecord stretchDiBitsRecord( stream, size );
-	    mOutput->stretchDiBits( stretchDiBitsRecord );
+        if (stretchDiBitsRecord.hasImage()) {
+            mOutput->stretchDiBits( stretchDiBitsRecord );
+        }
 	}
 	break;
     case EMR_EXTCREATEFONTINDIRECTW:

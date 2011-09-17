@@ -16,6 +16,7 @@ install( FILES
     paintbrush.kpp
     colorsmudge.kpp
     sketchbrush.kpp
+    hatchingbrush.kpp
     DESTINATION  ${DATA_INSTALL_DIR}/krita/defaultpresets)
 
 

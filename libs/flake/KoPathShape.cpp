@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2011 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2007-2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@
 #include "KoPathShape.h"
 #include "KoPathShape_p.h"
 #include "KoPathPoint.h"
-#include "KoPointGroup.h"
 #include "KoShapeBorderModel.h"
 #include "KoViewConverter.h"
 #include "KoPathShapeLoader.h"
@@ -90,8 +89,6 @@ void KoPathShapePrivate::applyViewboxTransformation(const KoXmlElement &element)
     }
 }
 
-
-/////////////////////////
 KoPathShape::KoPathShape()
     :KoTosContainer(*(new KoPathShapePrivate(this)))
 {
@@ -176,6 +173,14 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
     setPosition(pos);
 
     loadOdfAttributes(element, context, OdfTransformation);
+
+    // now that the correct transformation is set up
+    // apply that matrix to the path geometry so that
+    // we don't transform the stroke
+    d->map(transformation());
+    setTransformation(QTransform());
+    normalize();
+
     loadText(element, context);
 
     return true;
@@ -206,8 +211,6 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
         KoOdfWorkaround::fixMissingFillRule(d->fillRule, context);
 #endif
     }
-
-
 }
 
 QRectF KoPathShape::loadOdfViewbox(const KoXmlElement & element) const
@@ -268,10 +271,7 @@ void KoPathShapePrivate::paintDebug(QPainter &painter)
             r.translate(-2.5, -2.5);
             QPen pen(Qt::black);
             painter.setPen(pen);
-            if (point->group()) {
-                QBrush b(Qt::blue);
-                painter.setBrush(b);
-            } else if (point->activeControlPoint1() && point->activeControlPoint2()) {
+            if (point->activeControlPoint1() && point->activeControlPoint2()) {
                 QBrush b(Qt::red);
                 painter.setBrush(b);
             } else if (point->activeControlPoint1()) {
@@ -295,7 +295,7 @@ void KoPathShapePrivate::debugPath() const
     for (; pathIt != q->m_subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
         for (; it != (*pathIt)->constEnd(); ++it) {
-            kDebug(30006) << "p:" << (*pathIt) << "," << *it << "," << (*it)->point() << "," << (*it)->properties() << "," << (*it)->group();
+            kDebug(30006) << "p:" << (*pathIt) << "," << *it << "," << (*it)->point() << "," << (*it)->properties();
         }
     }
 }
@@ -318,7 +318,6 @@ QPainterPath KoPathShape::outline() const
 {
     QPainterPath path;
     foreach(KoSubpath * subpath, m_subpaths) {
-//qDebug() << "Inside foreach in KoPathShape::outline()";
         KoPathPoint * lastPoint = subpath->first();
         bool activeCP = false;
         foreach(KoPathPoint * currPoint, *subpath) {
@@ -635,14 +634,6 @@ void KoPathShapePrivate::updateLast(KoPathPoint **lastPoint)
         KoPathPoint * newLastPoint = new KoPathPoint(*subpathStart);
         // ... and make it a normal point
         newLastPoint->setProperties(KoPathPoint::Normal);
-        // make a point group of the first point and its clone
-        KoPointGroup * group = subpathStart->group();
-        if (group == 0) {
-            group = new KoPointGroup();
-            group->add(subpathStart);
-        }
-        group->add(newLastPoint);
-
         // now start a new subpath with the cloned start point
         KoSubpath *path = new KoSubpath;
         path->push_back(newLastPoint);

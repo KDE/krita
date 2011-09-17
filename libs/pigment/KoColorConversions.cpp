@@ -94,10 +94,9 @@ void hsv_to_rgb(int H, int S, int V, int *R, int *G, int *B)
         unsigned int f = H % 60;
         H /= 60;
         unsigned int p = static_cast<unsigned int>(2 * V * (255 - S) + 255) / 510;
-        unsigned int q, t;
 
         if (H & 1) {
-            q = static_cast<unsigned int>(2 * V * (15300 - S * f) + 15300) / 30600;
+            unsigned int q = static_cast<unsigned int>(2 * V * (15300 - S * f) + 15300) / 30600;
             switch (H) {
             case 1:
                 *R = static_cast<int>(q);
@@ -116,7 +115,7 @@ void hsv_to_rgb(int H, int S, int V, int *R, int *G, int *B)
                 break;
             }
         } else {
-            t = static_cast<unsigned int>(2 * V * (15300 - (S * (60 - f))) + 15300) / 30600;
+            unsigned int t = static_cast<unsigned int>(2 * V * (15300 - (S * (60 - f))) + 15300) / 30600;
             switch (H) {
             case 0:
                 *R = static_cast<int>(V);

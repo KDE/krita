@@ -33,11 +33,10 @@ class RunAroundHelper
 public:
     RunAroundHelper();
     void setLine(KoTextLayoutArea *area, QTextLine l);
-    void setRestartOnNextShape(bool restartOnNextShape);
     void setObstructions(const QList<KoTextLayoutObstruction *> &obstructions);
     bool stayOnBaseline();
     void updateObstruction(KoTextLayoutObstruction *obstruction);
-    void fit(bool resetHorizontalPosition, bool isRightToLeft, QPointF position);
+    bool fit(bool resetHorizontalPosition, bool isRightToLeft, QPointF position);
     QTextLine line;
 private:
     KoTextLayoutArea *m_area;
@@ -49,7 +48,6 @@ private:
     bool m_updateValidObstructions;
     bool m_stayOnBaseline;
     qreal m_textWidth;
-    bool m_restartOnNextShape;
     void validateObstructions();
     void validateObstruction(KoTextLayoutObstruction *obstruction);
     void createLineParts();

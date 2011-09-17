@@ -217,11 +217,10 @@ public:
        m_resourcesByFilename.remove(resource->shortFilename());
        m_resources.removeAt(m_resources.indexOf(resource));
        notifyRemovingResource(resource);
-       if (m_deleteResource) {
+       writeBlackListFile(resource->filename());
+       if (m_deleteResource && resource) {
           delete resource;
        }
-
-       writeBlackListFile(resource->filename());
        return true;
     }
 
@@ -475,35 +474,50 @@ protected:
     void writeBlackListFile(QString fileName)
     {
        QFile f(blackListFile);
-       if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+       bool fileExists = f.exists();
+
+       if (!f.open(QIODevice::ReadWrite | QIODevice::Text)) {
             kWarning() << "Cannot write meta information to '" << blackListFile << "'." << endl;
             return;
        }
 
-       QDomDocument doc("blackListFile");
-       doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
-       QDomElement root = doc.createElement("resourceFilesList");
-       doc.appendChild(root);
+       QDomDocument doc;
+       QDomElement root;
 
-       if(!blackListFileNames.contains(fileName)){
-           blackListFileNames.append(fileName);
+       if (!fileExists) {
+           QDomDocument docTemp("blackListFile");
+           doc = docTemp;
+           doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+           root = doc.createElement("resourceFilesList");
+           doc.appendChild(root);
+       }
+       else {
+           if (!doc.setContent(&f)) {
+               kWarning() << "The file could not be parsed.";
+               return;
+           }
+
+           root = doc.documentElement();
+           if (root.tagName() != "resourceFilesList") {
+               kWarning() << "The file doesn't seem to be of interest.";
+               return;
+           }
        }
 
-       foreach(QString file, blackListFileNames) {
+       QDomElement fileEl = doc.createElement("file");
+       QDomElement nameEl = doc.createElement("name");
+       QDomText nameText = doc.createTextNode(fileName);
+       nameEl.appendChild(nameText);
+       fileEl.appendChild(nameEl);
+       root.appendChild(fileEl);
 
-           QDomElement fileEl = doc.createElement("file");
-           QDomElement nameEl = doc.createElement("name");
-           QDomText nameText = doc.createTextNode(file);
-           nameEl.appendChild(nameText);
-           fileEl.appendChild(nameEl);
-           root.appendChild(fileEl);
+       f.remove();
+       if(!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+             kWarning() << "Cannot write meta information to '" << blackListFile << "'." << endl;
        }
-
        QTextStream metastream(&f);
        metastream << doc.toByteArray();
-
        f.close();
-
     }
 private:
 

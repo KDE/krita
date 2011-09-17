@@ -2,6 +2,7 @@
  *  Copyright (c) 2006-2008 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,6 +54,7 @@
 #include <KoProperties.h>
 #include <KoShapeContainer.h>
 #include <KoShapeLayer.h>
+#include <KoShapeGroup.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
@@ -474,9 +476,13 @@ KUndo2Command* KisShapeLayer::transform(double  xscale, double  yscale, double  
     foreach(const KoShape* shape, shapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
-
-
-        newTransformations.append(oldTransform*matrix);
+        if (dynamic_cast<const KoShapeGroup*>(shape)) {
+            newTransformations.append(oldTransform);
+        } else {
+            QTransform globalTransform = shape->absoluteTransformation(0);
+            QTransform localTransform = globalTransform * matrix * globalTransform.inverted();
+            newTransformations.append(localTransform*oldTransform);
+        }
     }
 
     return new KoShapeTransformCommand(shapes, oldTransformations, newTransformations);

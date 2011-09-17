@@ -39,9 +39,6 @@ private:
 
     bool countHorizontalPos(QPointF &newPosition, QTextBlock &block, QTextLayout *layout);
     bool countVerticalPos(QPointF &newPosition, KoTextShapeData *data, QTextBlock &block, QTextLayout *layout);
-    KoTextAnchor *const m_anchor;
-
-    bool m_finished; // true if shape position was found
 };
 
 #endif /* INLINEANCHORSTRATEGY_H_ */

@@ -182,7 +182,7 @@ KoGuidesData * KoPACanvasBase::guidesData()
     return &d->doc->guidesData();
 }
 
-void KoPACanvasBase::paint(QPainter &painter, const QRectF paintRect) {
+void KoPACanvasBase::paint(QPainter &painter, const QRectF &paintRect) {
 
     KoPAPageBase *activePage(d->view->activePage());
     if (d->view->activePage()) {

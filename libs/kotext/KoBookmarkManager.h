@@ -52,7 +52,9 @@ public:
 
 public slots:
     /**
-     * Insert a new bookmark to this manager
+     * Insert a new bookmark to this manager. The name of the bookmark
+     * will be set to @param name, no matter what name has been set on
+     * it.
      * @param name the name of the bookmark
      * @param bookmark the bookmark object to insert
      */

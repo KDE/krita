@@ -38,6 +38,7 @@ class Attribute : public QObject
         QStringList listValues();
         bool compare (const QString &initialValue, const QString &outputValue);
         bool hasReference (const QString &reference);
+        QMap<QString, QString> requiredExtraAttributes() const;
 
     private:
         QStringList listValuesFromNode(const QDomElement &element);
@@ -45,6 +46,7 @@ class Attribute : public QObject
         QString m_name;
         QStringList m_values;
         QList<QStringList> m_equivalences;
+        QMap<QString, QString> m_requiredExtraAttributes;
 };
 
 Q_DECLARE_METATYPE(Attribute*);
@@ -56,7 +58,7 @@ class TestOpenDocumentStyle : public QObject
         TestOpenDocumentStyle();
 
     private:
-        QByteArray generateStyleNodeWithAttribute(const QString &styleFamily, const QString &attributeName, const QString &attributeValue);
+        QByteArray generateStyleNodeWithAttribute(const QString &styleFamily, const QString &attributeName, const QString &attributeValue, const Attribute &attribute);
         QByteArray generateStyleProperties(const KoGenStyle &genStyle, const QString &styleFamily);
         QList<Attribute*> listAttributesFromRNGName(const QString &name);
 
@@ -77,8 +79,8 @@ class TestOpenDocumentStyle : public QObject
         void testTableCellStyle_data();
         void testParagraphStyle();
         void testParagraphStyle_data();
-        /*void testCharacterStyle();
-        void testCharacterStyle_data();*/
+        void testCharacterStyle();
+        void testCharacterStyle_data();
 };
 
 #endif // TESTOPENDOCUMENTSTYLE_H

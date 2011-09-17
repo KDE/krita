@@ -45,7 +45,6 @@ public:
     const QTextDocument *document;
     int posInDocument;
     KoBookmark *endBookmark;
-    bool selection;
     QString name;
     BookmarkType type;
 };
@@ -54,7 +53,7 @@ KoBookmark::KoBookmark(const QTextDocument *document)
     : KoInlineObject(false),
       d(new Private(document))
 {
-    d->selection = false;
+    d->type = SinglePosition;
     d->endBookmark = 0;
 }
 
@@ -92,7 +91,7 @@ void KoBookmark::setName(const QString &name)
     // Yeah... but usually, you create your startbookmark, give it a name,
     // insert it, then create your endbookmark and set the end on this. I
     // don't think this is particularly useful, but it cannot hurt.
-    if (d->selection) {
+    if (d->endBookmark) {
         d->endBookmark->setName(name);
     }
 }
@@ -105,7 +104,6 @@ QString KoBookmark::name() const
 void KoBookmark::setType(BookmarkType type)
 {
     if (type == SinglePosition) {
-        d->selection = false;
         d->endBookmark = 0;
     }
     d->type = type;
@@ -126,7 +124,6 @@ void KoBookmark::setEndBookmark(KoBookmark *bookmark)
     // The text:name attribute specifies matching names for bookmarks.
     // so let's set the endname to the startname.
     d->endBookmark->setName(name());
-    d->selection = true;
 }
 
 KoBookmark *KoBookmark::endBookmark()
@@ -141,7 +138,7 @@ int KoBookmark::position()
 
 bool KoBookmark::hasSelection()
 {
-    return d->selection;
+    return (d->endBookmark != 0);
 }
 
 bool KoBookmark::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -200,8 +197,9 @@ void KoBookmark::saveOdf(KoShapeSavingContext &context)
         nodeName = "text:bookmark";
     else if (d->type == StartBookmark)
         nodeName = "text:bookmark-start";
-    else if (d->type == EndBookmark)
+    else if (d->type == EndBookmark) {
         nodeName = "text:bookmark-end";
+    }
     writer->startElement(nodeName.toLatin1(), false);
     writer->addAttribute("text:name", d->name.toLatin1());
 

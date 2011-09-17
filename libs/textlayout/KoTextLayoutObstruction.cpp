@@ -20,6 +20,9 @@
 
 #include "KoTextLayoutObstruction.h"
 #include <KoShapeContainer.h>
+#include <KoShapeBorderModel.h>
+#include <KoShapeShadow.h>
+#include <KoShapeGroup.h>
 
 #include <qnumeric.h>
 
@@ -30,10 +33,11 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransfor
     m_shape(shape),
     m_runAroundThreshold(0)
 {
-    QPainterPath path = shape->outline();
+    qreal borderHalfWidth;
+    QPainterPath path = decoratedOutline(m_shape, borderHalfWidth);
 
     //TODO check if path is convex. otherwise do triangulation and create more convex obstructions
-    init(matrix, path, shape->textRunAroundDistance());
+    init(matrix, path, shape->textRunAroundDistance(), borderHalfWidth);
 
     if (shape->textRunAroundSide() == KoShape::NoRunAround) {
         // make the shape take the full width of the text area
@@ -56,20 +60,63 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransfor
     }
 }
 
-void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath &obstruction, qreal distance)
+QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qreal &borderHalfWidth) const
+{
+    const KoShapeGroup *shapeGroup = dynamic_cast<const KoShapeGroup *>(shape);
+    if (shapeGroup) {
+        QPainterPath groupPath;
+
+        foreach (const KoShape *child, shapeGroup->shapes()) {
+            groupPath += decoratedOutline(child, borderHalfWidth);
+        }
+        return groupPath;
+    }
+
+    QPainterPath path = shape->outline();
+
+    QRectF bb = shape->outlineRect();
+    borderHalfWidth = 0;
+ 
+    if (shape->border()) {
+        KoInsets insets;
+        shape->border()->borderInsets(shape, insets);
+        /*
+        bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+        path = QPainterPath();
+        path.addRect(bb);
+        */
+        borderHalfWidth = qMax(qMax(insets.left, insets.top),qMax(insets.right, insets.bottom));
+    }
+
+    if (shape->shadow()) {
+        QTransform transform = shape->absoluteTransformation(0);
+        bb = transform.mapRect(bb);
+        KoInsets insets;
+        shape->shadow()->insets(insets);
+        bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+        path = QPainterPath();
+        path.addRect(bb);
+        path = transform.inverted().map(path);
+    }
+
+    return path;
+}
+
+void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath &obstruction, qreal distance, qreal borderHalfWidth)
 {
     m_distance = distance;
     QPainterPath path =  matrix.map(obstruction);
     m_bounds = path.boundingRect();
+    distance += borderHalfWidth;
     if (distance >= 0.0) {
         QTransform grow = matrix;
         grow.translate(m_bounds.width() / 2.0, m_bounds.height() / 2.0);
-        qreal scaleX = distance;
+        qreal scaleX = 2 * distance;
         if (m_bounds.width() > 0)
-            scaleX = (m_bounds.width() + distance) / m_bounds.width();
-        qreal scaleY = distance;
+            scaleX = (m_bounds.width() + 2 * distance) / m_bounds.width();
+        qreal scaleY = 2 * distance;
         if (m_bounds.height() > 0)
-            scaleY = (m_bounds.height() + distance) / m_bounds.height();
+            scaleY = (m_bounds.height() + 2 * distance) / m_bounds.height();
         Q_ASSERT(!qIsNaN(scaleY));
         Q_ASSERT(!qIsNaN(scaleX));
         grow.scale(scaleX, scaleY);
@@ -93,7 +140,6 @@ void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath 
         m_edges.insert(line.y1(), line);
         prev = vtx;
     }
-
 }
 
 qreal KoTextLayoutObstruction::xAtY(const QLineF &line, qreal y)
@@ -106,7 +152,11 @@ qreal KoTextLayoutObstruction::xAtY(const QLineF &line, qreal y)
 void KoTextLayoutObstruction::changeMatrix(const QTransform &matrix)
 {
     m_edges.clear();
-    init(matrix, m_shape->outline(), m_distance);
+
+    qreal borderHalfWidth;
+    QPainterPath path = decoratedOutline(m_shape, borderHalfWidth);
+
+    init(matrix, path, m_distance, borderHalfWidth);
 }
 
 QRectF KoTextLayoutObstruction::cropToLine(const QRectF &lineRect)

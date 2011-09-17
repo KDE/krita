@@ -29,7 +29,6 @@ class QPointF;
 class QTransform;
 class QRectF;
 class QPainter;
-class KoPointGroup;
 
 /**
  * @brief A KoPathPoint represents a point in a path.
@@ -200,10 +199,8 @@ public:
      * This does a matrix multiplication on all points of the point
      *
      * @param matrix which will be applied to all points
-     * @param mapGroup true when the matrix should be also applied to
-     *                 all points of the group the point belongs to
      */
-    void map(const QTransform &matrix, bool mapGroup = false);
+    void map(const QTransform &matrix);
 
     /**
      * Paints the path point with the actual brush and pen
@@ -263,12 +260,7 @@ public:
     bool isSmooth(KoPathPoint *previous, KoPathPoint *next) const;
 
 protected:
-    friend class KoPointGroup;
-    friend class KoPathShape;
     friend class KoPathShapePrivate;
-    void removeFromGroup();
-    void addToGroup(KoPointGroup *pointGroup);
-    KoPointGroup * group();
 private:
     class Private;
     Private * const d;

@@ -261,6 +261,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     // krita/krita.rc must also be modified to add actions to the menu entries
 
     m_d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
+    m_d->saveIncremental->setShortcut(Qt::Key_F2);
     actionCollection()->addAction("save_incremental_version", m_d->saveIncremental);
     connect(m_d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
     connect(shell(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));

@@ -32,7 +32,7 @@
  */
 class KOFORMULA_EXPORT NumberElement : public TokenElement {
 public:
-    /// Standart constructor
+    /// Standard constructor
     NumberElement( BasicElement* parent = 0 );
 
     /// @return The element's ElementType

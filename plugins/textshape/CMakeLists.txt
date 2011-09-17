@@ -40,6 +40,8 @@ SET ( textshape_SRCS
     dialogs/SimpleTableWidget.cpp
     dialogs/SimpleTableOfContentsWidget.cpp
     dialogs/SimpleCitationWidget.cpp
+    dialogs/CitationInsertionDialog.cpp
+    dialogs/InsertBibliographyDialog.cpp
     dialogs/SimpleFootEndNotesWidget.cpp
     dialogs/SimpleCaptionsWidget.cpp
     dialogs/ParagraphLayout.cpp
@@ -72,6 +74,11 @@ SET ( textshape_SRCS
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp
     dialogs/ChangeTrackingOptionsWidget.cpp
+    dialogs/TableOfContentsConfigure.cpp
+    dialogs/TableOfContentsStyleConfigure.cpp
+    dialogs/TableOfContentsStyleModel.cpp
+    dialogs/TableOfContentsStyleDelegate.cpp
+    dialogs/TableOfContentsPreview.cpp
 
     commands/ChangeListCommand.cpp
     commands/ChangeListLevelCommand.cpp
@@ -93,6 +100,8 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/SimpleTableWidget.ui
     dialogs/SimpleTableOfContentsWidget.ui
     dialogs/SimpleCitationWidget.ui
+    dialogs/CitationInsertionDialog.ui
+    dialogs/InsertBibliographyDialog.ui
     dialogs/SimpleFootEndNotesWidget.ui
     dialogs/SimpleCaptionsWidget.ui
     dialogs/StylesWidget.ui
@@ -107,6 +116,8 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/CharacterHighlighting.ui
     dialogs/StyleManagerWelcome.ui
     dialogs/TableDialog.ui
+    dialogs/TableOfContentsConfigure.ui
+    dialogs/TableOfContentsStyleConfigure.ui
 
     dialogs/FontDecorations.ui
     dialogs/FontLayoutTab.ui

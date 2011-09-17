@@ -38,13 +38,20 @@
 #include <kparts/event.h>
 #include <kstatusbar.h>
 #include <kdebug.h>
+#include <kurl.h>
+#include <kmessagebox.h>
+#include <kio/netaccess.h>
+#include <ktemporaryfile.h>
+
 #include <QTimer>
 #include <QtGui/QDockWidget>
 #include <QToolBar>
 #include <QApplication>
 #include <QList>
-
-
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QImage>
+#include <QUrl>
 //static
 QString KoView::newObjectName()
 {
@@ -196,6 +203,60 @@ KoView::~KoView()
         }
     }
     delete d;
+}
+
+
+void KoView::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasImage()
+            || event->mimeData()->hasUrls()) {
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
+void KoView::dropEvent(QDropEvent *event)
+{
+    // we can drop a list of urls from, for instance dolphin
+    QList<QImage> images;
+
+    if (event->mimeData()->hasImage()) {
+        images << event->mimeData()->imageData().value<QImage>();
+    }
+    else if (event->mimeData()->hasUrls()) {
+        QList<QUrl> urls = event->mimeData()->urls();
+        foreach (const QUrl url, urls) {
+            QImage image;
+            KUrl kurl(url);
+            // make sure we download the files before inserting them
+            if (!kurl.isLocalFile()) {
+                QString tmpFile;
+                if( KIO::NetAccess::download(kurl, tmpFile, this)) {
+                    image.load(tmpFile);
+                    KIO::NetAccess::removeTempFile(tmpFile);
+                } else {
+                    KMessageBox::error(this, KIO::NetAccess::lastErrorString());
+                }
+            }
+            else {
+                image.load(kurl.toLocalFile());
+            }
+            if (!image.isNull()) {
+                images << image;
+            }
+        }
+    }
+
+    if (!images.isEmpty()) {
+        addImages(images, event->pos());
+    }
+}
+
+
+void KoView::addImages(const QList<QImage> &, const QPoint &)
+{
+    // override in your application
 }
 
 KoDocument *KoView::koDocument() const

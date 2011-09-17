@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Taskset Docker
+Name[da]=Taskset-dokker
+Name[pt]=Área dos Conjuntos de Tarefas
+Name[pt_BR]=Área dos conjuntos de tarefas
+Name[sv]=Dockningsfönster för aktivitetsuppsättning
+Name[uk]=Панель набору завдань
+Name[x-test]=xxTaskset Dockerxx
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritatasksetdocker
+X-Krita-Version=4

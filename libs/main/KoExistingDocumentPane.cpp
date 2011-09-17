@@ -29,6 +29,7 @@
 
 KoExistingDocumentPane::KoExistingDocumentPane(QWidget* parent, const QStringList& mimeFilter)
         : QWidget(parent)
+        , m_seen(false)
 {
     QGridLayout* layout = new QGridLayout(this);
     layout->setSpacing(KDialog::spacingHint());
@@ -52,8 +53,19 @@ KoExistingDocumentPane::KoExistingDocumentPane(QWidget* parent, const QStringLis
 
 void KoExistingDocumentPane::onAccepted()
 {
-    m_fileWidget->accept();
-    emit openExistingUrl(m_fileWidget->selectedUrl());
+    // When double clicked on a file, onAccepted will be called twice
+    // To overcome the problem, we set a flag to check onAccepted is called already
+    if (!m_seen) {
+        m_seen = true;
+        m_fileWidget->accept();
+        emit openExistingUrl(m_fileWidget->selectedUrl());
+    } else {
+        // Flag needs to be reset, As while importing the document we can cancel
+        // the dialog and come back to the same window
+        m_seen = false;
+    }
+    // Don't set the flag after emiting Signal, Then end up emiting the signal twice
+    // before settiing the falg
 }
 
 #include <KoExistingDocumentPane.moc>

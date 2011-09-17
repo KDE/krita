@@ -90,11 +90,10 @@ class KoRdfFoaF;
  * useful if you want to find the contacts in the users current
  * "selection" in the document.
  *
- * For example, to find the foaf entries related to the current cursor:
+ * For example, to find the foaf entries related to the current KoTextEditor
  *
- * QTextCursor cursor = ...;
- * Soprano::Model* model = rdf->findStatements( cursor );
- g* KoRdfFoaFList foaflist = rdf->foaf( model );
+ * Soprano::Model* model = rdf->findStatements( editor );
+ * KoRdfFoaFList foaflist = rdf->foaf( model );
  *
  * Using the Soprano::Model directly is covered in a latter section of
  * this comment.
@@ -151,21 +150,12 @@ public:
      * The constructor
      * @param parent a pointer to the parent object
      */
-    KoDocumentRdf(KoDocument *parent = 0);
+    KoDocumentRdf(QObject *parent = 0);
 
     /** The destructor */
     ~KoDocumentRdf();
 
     static KoDocumentRdf *fromResourceManager(KoCanvasBase *host);
-
-    /**
-     * Document containing this Rdf
-     *
-     * There is a 1-1 relationship between KoDocument and a
-     * KoDocumentRdf. Though not every KoDocument has a KoDocumentRdf
-     * object.
-     */
-    KoDocument *document() const;
 
     /**
      * Load from an OASIS document
@@ -190,13 +180,9 @@ public:
     /**
      * Find all the KoTextInlineRdf objects that exist in the
      * document and update the statements in the Soprano::model to
-     * reflect the current state of the inline Rdf. You should call
-     * KoDocument::updateInlineRdfStatements() instead which will pass
-     * the required arguments to the method for you.
-     *
-     * @see KoDocument::updateInlineRdfStatements()
+     * reflect the current state of the inline Rdf.
      */
-    void updateInlineRdfStatements(QTextDocument *qdoc);
+    void updateInlineRdfStatements(const QTextDocument *qdoc);
 
     /**
      * During a save(), various Rdf objects in the document will
@@ -246,7 +232,6 @@ public:
      *
      * <start-a> ... <start-b> ... cursor ... <end-b> ... <end-a>
      */
-    QPair<int, int> findExtent(QTextCursor &cursor) const;
     QPair<int, int> findExtent(KoTextEditor *handler) const;
 
     /**
@@ -254,7 +239,6 @@ public:
      * findExtent() this will be only the most nested semitem.
      * @see findExtent()
      */
-    QString findXmlId(QTextCursor &cursor) const;
     QString findXmlId(KoTextEditor *cursor) const;
 
 
@@ -278,7 +262,6 @@ public:
      *
      * Note that the returned model is owned by the caller, you must delete it.
      */
-    Soprano::Model *findStatements(QTextCursor &cursor, int depth = 1);
     Soprano::Model *findStatements(const QString &xmlid, int depth = 1);
     Soprano::Model *findStatements(KoTextEditor *handler, int depth = 1);
 
@@ -344,6 +327,7 @@ public:
      * ?s2 ?p2 ?s
      */
     void expandStatementsReferencingSubject(Soprano::Model *model) const;
+
     /**
      * If model contains ?s ?p ?o
      * look for and add
@@ -384,7 +368,14 @@ public:
      */
     void expandStatements(Soprano::Model *model) const;
 
+    /**
+     * XXXX? What does this do?
+     */
     KAction* createInsertSemanticObjectReferenceAction(KoCanvasBase *host);
+
+    /**
+     * XXXX? What does this do?
+     */
     QList<KAction*> createInsertSemanticObjectNewActions(KoCanvasBase *host);
 
     /**
@@ -397,12 +388,13 @@ public:
      * @see insertReflow()
      * @see applyReflow()
      */
-    struct reflowItem {
+    struct reflowItem
+    {
         KoRdfSemanticItem *m_si;
         KoSemanticStylesheet *m_ss;
         QString m_xmlid;
         QPair<int, int> m_extent;
-    public:
+
         reflowItem(KoRdfSemanticItem *si, const QString &xmlid, KoSemanticStylesheet *ss, const QPair<int, int> &extent);
     };
 
@@ -442,6 +434,31 @@ public:
      * For debugging, output the model and a header string for identification
      */
     void dumpModel(const QString &msg, Soprano::Model *m = 0) const;
+
+signals:
+    /**
+     * Emitted when a new semanticItem is created so that dockers can
+     * update themselves accordingly. It is expected that when
+     * semanticObjectViewSiteUpdated is emitted the view will take care
+     * of reflowing the semanitc item using it's stylesheet.
+     */
+    void semanticObjectAdded(KoRdfSemanticItem *item) const;
+    void semanticObjectUpdated(KoRdfSemanticItem *item) const;
+    void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid) const;
+
+public:
+    void emitSemanticObjectAdded(KoRdfSemanticItem *item) const;
+    void emitSemanticObjectUpdated(KoRdfSemanticItem *item);
+    void emitSemanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
+    void emitSemanticObjectAddedConst(KoRdfSemanticItem *const item) const;
+
+    /**
+     * You should use the KoRdfSemanticItem::userStylesheets() method instead of this one.
+     * This is mainly an internal method to allow user stylesheets to be managed per document.
+     */
+    QList<KoSemanticStylesheet*> userStyleSheetList(const QString& className) const;
+    void setUserStyleSheetList(const QString& className,const QList<KoSemanticStylesheet*>& l);
+
 
 private:
 
@@ -492,31 +509,16 @@ private:
     void addLocations(Soprano::Model *m, QList<KoRdfLocation*> &ret,
                       bool isGeo84, const QString &sparql);
 
-signals:
-    /**
-     * Emitted when a new semanticItem is created so that dockers can
-     * update themselves accordingly. It is expected that when
-     * semanticObjectViewSiteUpdated is emitted the view will take care
-     * of reflowing the semanitc item using it's stylesheet.
-     */
-    void semanticObjectAdded(KoRdfSemanticItem *item) const;
-    void semanticObjectUpdated(KoRdfSemanticItem *item) const;
-    void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid) const;
-
-public:
-    void emitSemanticObjectAdded(KoRdfSemanticItem *item) const;
-    void emitSemanticObjectUpdated(KoRdfSemanticItem *item);
-    void emitSemanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
-    void emitSemanticObjectAddedConst(KoRdfSemanticItem *const item) const;
-
-    /**
-     * You should use the KoRdfSemanticItem::userStylesheets() method instead of this one.
-     * This is mainly an internal method to allow user stylesheets to be managed per document.
-     */
-    QList<KoSemanticStylesheet*> userStyleSheetList(const QString& className) const;
-    void setUserStyleSheetList(const QString& className,const QList<KoSemanticStylesheet*>& l);
-
 private:
+
+    /**
+     * Test whether a model is present that supports:
+     * - context / graphs
+     *  - querying on graphs
+     *  - storage in memory.
+     */
+    bool backendIsSane();
+
     /// reimplemented
     virtual bool completeLoading(KoStore *store);
 

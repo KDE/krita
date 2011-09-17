@@ -75,7 +75,6 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
 
             relative = false;
 
-            //std::cout << "Command : " << command << std::endl;
             switch (command) {
             case 'm':
                 relative = true;

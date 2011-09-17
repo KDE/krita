@@ -32,9 +32,9 @@
 
 
 AnchorStrategy::AnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
-        : m_model(0)
-        , m_anchor(anchor)
+        : m_anchor(anchor)
         , m_rootArea(rootArea)
+        , m_model(0)
         , m_pageRect(0,0,10,10)
         , m_pageContentRect(0,0,10,10)
         , m_paragraphRect(0,0,0,0)
@@ -108,6 +108,7 @@ void AnchorStrategy::updatePosition(KoShape *shape, const QTextDocument *documen
         shape->setParent(0);
         return;
     }
+
     KoTextShapeContainerModel *theModel = dynamic_cast<KoTextShapeContainerModel*>(container->model());
     if (theModel != m_model) {
         if (m_model)

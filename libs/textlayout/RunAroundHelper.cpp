@@ -31,17 +31,11 @@ RunAroundHelper::RunAroundHelper()
     m_updateValidObstructions = false;
     m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
     m_stayOnBaseline = false;
-    m_restartOnNextShape = false;
 }
 
 void RunAroundHelper::setLine(KoTextLayoutArea *area, QTextLine l) {
     m_area = area;
     line = l;
-}
-
-void RunAroundHelper::setRestartOnNextShape(bool restartOnNextShape)
-{
-    m_restartOnNextShape = restartOnNextShape;
 }
 
 void RunAroundHelper::setObstructions(const QList<KoTextLayoutObstruction*> &obstructions)
@@ -62,7 +56,7 @@ void RunAroundHelper::updateObstruction(KoTextLayoutObstruction *obstruction)
     }
 }
 
-void RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft, QPointF position)
+bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft, QPointF position)
 {
     Q_ASSERT(line.isValid());
     if (resetHorizontalPosition) {
@@ -84,7 +78,7 @@ void RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
             line.setNumColumns(1);
 
         line.setPosition(position);
-        return;
+        return false;
     }
 
     // Too little width because of  wrapping is handled in the remainder of this method
@@ -93,12 +87,7 @@ void RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
     const qreal maxNaturalTextWidth = line.naturalTextWidth();
     QRectF lineRect(position, QSizeF(maxLineWidth, maxLineHeight));
     QRectF lineRectPart;
-    qreal movedDown = 0;
-//FIXME    if (m_state->maxLineHeight() > 0) {
-//        movedDown = m_state->maxLineHeight();
-//    } else {
-        movedDown = 10;
-//    }
+    qreal movedDown = 10;
 
     while (!lineRectPart.isValid()) {
         // The line rect could be split into no further linerectpart, so we have
@@ -129,6 +118,7 @@ void RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
     line.setLineWidth(m_textWidth);
     line.setPosition(QPointF(lineRectPart.x(), lineRectPart.y()));
     checkEndOfLine(lineRectPart, maxNaturalTextWidth);
+    return true;
 }
 
 void RunAroundHelper::validateObstructions()

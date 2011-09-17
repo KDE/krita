@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="31">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="37">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -157,14 +157,22 @@
 <ToolBar name="BrushesAndStuff" position="top">
      <Text>Brushes and Stuff</Text>
      <Action name="gradients"/>
-     <Separator/>
      <Action name="patterns"/>
      <Separator/>
      <Action name="dual"/>
      <Separator/>
      <Action name="paintops"/>
      <Action name="paintop_options"/>
+     <Action name="composite_actions"/>
+     <Separator/>
+     <Action name="brushslider1"/>
+     <Action name="brushslider2"/>
+     <Separator/>
+     <Action name="mirror_actions"/>
+     <Separator/>
      <Action name="palette_manager"/>
+     <Separator/>
+     <Action name="workspaces"/>
 </ToolBar>
 
 <Menu name="image_popup">

@@ -31,8 +31,6 @@
 #include <QClipboard>
 #include <QLabel>
 #include <QTabBar>
-#include <QDropEvent>
-#include <QDragEnterEvent>
 
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
@@ -187,20 +185,10 @@ KoPAView::~KoPAView()
     delete d;
 }
 
-void KoPAView::dragEnterEvent(QDragEnterEvent *event)
-{
-    if (event->mimeData()->hasImage()
-            || event->mimeData()->hasUrls()) {
-        event->accept();
-    } else {
-        event->ignore();
-    }
-}
-
-void KoPAView::dropEvent(QDropEvent *event)
+void KoPAView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 {
     // get position from event and convert to document coordinates
-    QPointF pos = zoomHandler()->viewToDocument(event->pos())
+    QPointF pos = zoomHandler()->viewToDocument(insertAt)
             + kopaCanvas()->documentOffset() - kopaCanvas()->documentOrigin();
 
     // create a factory
@@ -210,37 +198,7 @@ void KoPAView::dropEvent(QDropEvent *event)
         return;
     }
 
-    // we can drop a list of urls from, for instance dolphin
-    QList<QImage> images;
-
-    if (event->mimeData()->hasImage()) {
-        images << event->mimeData()->imageData().value<QImage>();
-    }
-    else if (event->mimeData()->hasUrls()) {
-        QList<QUrl> urls = event->mimeData()->urls();
-        foreach (const QUrl url, urls) {
-            QImage image;
-            KUrl kurl(url);
-            // make sure we download the files before inserting them
-            if (!kurl.isLocalFile()) {
-                QString tmpFile;
-                if( KIO::NetAccess::download(kurl, tmpFile, this)) {
-                    image.load(tmpFile);
-                    KIO::NetAccess::removeTempFile(tmpFile);
-                } else {
-                    KMessageBox::error(this, KIO::NetAccess::lastErrorString());
-                }
-            }
-            else {
-                image.load(kurl.toLocalFile());
-            }
-            if (!image.isNull()) {
-                images << image;
-            }
-        }
-    }
-
-    foreach(const QImage image, images) {
+    foreach(const QImage image, imageList) {
 
         KoProperties params;
         QVariant v;
@@ -251,7 +209,6 @@ void KoPAView::dropEvent(QDropEvent *event)
 
         if (!shape) {
             kWarning(30003) << "Could not create a shape from the image";
-            delete shape;
             return;
         }
         shape->setPosition(pos);
@@ -266,6 +223,7 @@ void KoPAView::dropEvent(QDropEvent *event)
         kopaCanvas()->addCommand(cmd);
     }
 }
+
 
 void KoPAView::initGUI()
 {
@@ -316,10 +274,7 @@ void KoPAView::initGUI()
 
     new KoRulerController(d->horizontalRuler, d->canvas->resourceManager());
 
-    connect(d->doc, SIGNAL(unitChanged(const KoUnit&)),
-            d->horizontalRuler, SLOT(setUnit(const KoUnit&)));
-    connect(d->doc, SIGNAL(unitChanged(const KoUnit&)),
-            d->verticalRuler, SLOT(setUnit(const KoUnit&)));
+    connect(d->doc, SIGNAL(unitChanged(const KoUnit&)), this, SLOT(updateUnit(const KoUnit&)));
     //Layout a tab bar
     d->tabBar = new QTabBar();
     d->tabBarLayout->addWidget(d->insideWidget, 1, 1);
@@ -1263,6 +1218,13 @@ void KoPAView::setTabBarPosition(Qt::Orientation orientation)
     default:
         break;
     }
+}
+
+void KoPAView::updateUnit(const KoUnit &unit)
+{
+    d->horizontalRuler->setUnit(unit);
+    d->verticalRuler->setUnit(unit);
+    d->canvas->resourceManager()->setResource(KoCanvasResource::Unit, unit);
 }
 
 #include <KoPAView.moc>

@@ -68,7 +68,7 @@ public:
  * <li> Position the anchor with updatePosition() what will attach the KoTextAnchor-instance to
  *    the TextShape's \a KoTextShapeContainerModel . </ol>
  * The position of the shape relative to the anchor is called the offset. It's loaded by loadOdf().
- * @see KWAnchorStrategy for more information about the layout of anchors/shapes in Words.
+ * @see AnchorStrategy for more information about the layout of anchors/shapes in Words.
  */
 class KOTEXT_EXPORT KoTextAnchor : public KoInlineObject
 {
@@ -135,6 +135,31 @@ public:
      */
     KoShape *shape() const;
 
+    /**
+     * Returns the type of the anchor.
+     *
+     * The text:anchor-type attribute specifies how a frame is bound to a
+     * text document. The anchor position is the point at which a frame is
+     * bound to a text document. The defined values for the text:anchor-type
+     * attribute are;
+     *
+     * - as-char
+     *   There is no anchor position. The drawing shape behaves like a
+     *   character.
+     * - char
+     *   The character after the drawing shape element.
+     * - frame
+     *   The parent text box that the current drawing shape element is
+     *   contained in.
+     * - page
+     *   The page that has the same physical page number as the value of the
+     *   text:anchor-page-number attribute that is attached to the drawing
+     *   shape element.
+     * - paragraph
+     *   The paragraph that the current drawing shape element is contained in.
+     */
+    QString anchorType() const;
+
     /// set the current vertical-pos
     void setHorizontalPos(HorizontalPos);
 
@@ -158,6 +183,9 @@ public:
 
     /// return the current horizontal-rel
     VerticalRel verticalRel();
+
+    /// return the wrap influence on position
+    QString wrapInfluenceOnPosition() const;
 
     /// returns the cursor position in the document where this anchor is positioned.
     int positionInDocument() const;

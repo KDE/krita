@@ -52,6 +52,21 @@ Attribute::Attribute(const QDomElement& element)
     }
     m_name = element.attribute("name");
     m_values = listValuesFromNode(element);
+    if (m_name == "style:border-line-width")
+        m_requiredExtraAttributes["fo:border"] = "double";
+    else if (m_name == "style:border-line-width-left")
+        m_requiredExtraAttributes["fo:border-left"] = "double";
+    else if (m_name == "style:border-line-width-right")
+        m_requiredExtraAttributes["fo:border-right"] = "double";
+    else if (m_name == "style:border-line-width-top")
+        m_requiredExtraAttributes["fo:border-top"] = "double";
+    else if (m_name == "style:border-line-width-bottom")
+        m_requiredExtraAttributes["fo:border-bottom"] = "double";
+    else if (m_name == "style:diagonal-tl-br-widths")
+        m_requiredExtraAttributes["style:diagonal-tl-br"] = "double";
+    else if (m_name == "style:diagonal-bl-tr-widths")
+        m_requiredExtraAttributes["style:diagonal-bl-tr"] = "double";
+    
 }
 
 QString Attribute::name()
@@ -69,13 +84,18 @@ bool Attribute::hasReference (const QString &ref)
     return m_references.contains(ref);
 }
 
+QMap< QString, QString > Attribute::requiredExtraAttributes() const
+{
+    return m_requiredExtraAttributes;
+}
+
 QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
 {
     QStringList result;
     if (m_references.size() == 0) {
         // Parse the content of the attribute
         QDomElement content = m_node.firstChildElement();
-        if (content.tagName() == "choice") {
+        if ((content.tagName() == "choice") && (m_name != "style:text-emphasize")) {
             QDomElement valueChild = content.firstChildElement();
             do {
                 if (valueChild.tagName() == "value") {
@@ -142,11 +162,21 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                         result << mergedAllowedValues;
                     }
                 } else {
+                    kWarning() << "On line " << valueChild.lineNumber() << ":";
                     kFatal() << "Unrecognized choice element in " << m_name << " : " << valueChild.tagName();
                 }
                 valueChild = valueChild.nextSiblingElement();
             } while (!valueChild.isNull());
+        } else if (m_name == "style:text-position") {
+            // That is a too complicated attribute for that parser...
+            m_references << "styleTextPosition";
+        } else if (m_name == "style:text-emphasize") {
+            // That is a too complicated attribute for that parser...
+            m_references << "styleTextEmphasize";
+        } else if (content.tagName() == "value") {
+            m_values << content.text();
         } else {
+            kWarning() << "On line " << content.lineNumber() << ":";
             kFatal() << "Unhandled attribute value node " << content.tagName();
         }
     }
@@ -163,6 +193,10 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
     if ((m_references.contains("string")) && ((m_name == "fo:border") || (m_name == "fo:border-top") || (m_name == "fo:border-bottom") || (m_name == "fo:border-right") || (m_name == "fo:border-left") || (m_name == "style:diagonal-tl-br") || (m_name == "style:diagonal-bl-tr"))) {
         m_references.removeOne("string");
         m_references << "__border";
+    }
+
+    if (m_references.contains("lineWidth")) {
+        m_references << "positiveInteger" << "percent" << "positiveLength";
     }
     
     foreach (QString reference, m_references) {
@@ -197,6 +231,52 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             result << "0%" << "10%" << "100%" << "13.37%" << "42.73%";
         } else if (reference == "__border") {
             result << "12px" << "42px solid" << "24px red" << "32px double red" << "solid black" << "dashed"  << "#ABCDEF";
+        } else if (reference == "fontVariant") {
+            result << "normal" << "small-caps";
+        } else if (reference == "lineType") {
+            result << "none" << "single" << "double";
+        } else if (reference == "lineStyle") {
+            result << "none" << "solid" << "dotted" << "dash" << "long-dash" << "dot-dash" << "dot-dot-dash" << "wave";
+        } else if (reference == "lineMode") {
+            result << "continuous" << "skip-white-space";
+        } else if (reference == "fontWeight") {
+            result << "normal" << "bold" << "100" << "200" << "300" << "400" << "500" << "600" << "700" << "800" << "900";
+            QStringList normal;
+            normal << "normal" << "500";
+            m_equivalences << normal;
+        } else if (reference == "lineWidth") {
+            result << "auto" << "normal" << "bold" << "thin" << "medium" << "thick";
+        } else if (reference == "styleNameRef") {
+            result << "myBeautifulStyleName";
+        } else if ((reference == "string") && (m_name == "style:text-line-through-text")) {
+            result << "Hello world";
+        } else if (reference == "styleTextPosition") {
+            result << "super" << "sub" << "-42%" << "25%" << "100%" << "sub 42%" << "super 10%" << "73% 42%";
+        } else if (reference == "styleTextEmphasize") {
+            result << "none";
+            QStringList base;
+            base << "none" << "accent" << "dot" << "circle" << "disc";
+            foreach (QString _base, base) {
+                result << _base + " above" << _base + " below";
+            }
+        } else if (reference == "fontFamilyGeneric") {
+            result << "roman" << "swiss" << "modern" << "decorative" << "script" << "system";
+        } else if (reference == "fontPitch") {
+            result << "fixed" << "variable";
+        } else if (reference == "fontStyle") {
+            result << "normal" << "italic" << "oblique";
+            QStringList italic;
+            italic << "italic" << "oblique";
+            m_equivalences << italic;
+        } else if (reference == "languageCode") {
+            result << "fr" << "en" << "pl" << "nl" << "da";
+        } else if (reference == "countryCode") {
+            result << "fr" << "gb" << "pl" << "nl" << "dk";
+        } else if ((reference == "textEncoding") || (reference == "scriptCode") || (reference == "language"))  {
+            // Sorry, I can't do it right now
+            result << "";
+        } else if (reference == "character") {
+            result << "C" << "a" << "l" << "L" << "i" <<"G" << "r" << "A";
         } else if (reference == "string") {
             // Now, that sucks !
             kWarning() << "Found a string reference in " << m_name;
@@ -322,7 +402,32 @@ QList<Attribute*> TestOpenDocumentStyle::listAttributesFromRNGName(const QString
                     }
                     optionChild = optionChild.nextSiblingElement();
                 } while (!optionChild.isNull());
+            } else if (child.tagName() == "choice") {
+                QDomElement choiceChild = child.firstChildElement();
+                do {
+                    if (choiceChild.tagName() == "attribute") {
+                        result << new Attribute(choiceChild);
+                    } else if (choiceChild.tagName() == "group") {
+                        QDomElement subChoiceChild = choiceChild.firstChildElement();
+                        do {
+                            if (subChoiceChild.tagName() == "attribute") {
+                                result << new Attribute(subChoiceChild);
+                            //} else if (subChoiceChild.tagName() == "choice") {
+                            //    kFatal() << name << child.tagName();
+                            } else {
+                                kFatal() << "Unrecognized choice element : " << subChoiceChild.tagName() << child.tagName() << name;
+                            }
+                            subChoiceChild = subChoiceChild.nextSiblingElement();
+                        } while (!subChoiceChild.isNull());
+                    } else if (choiceChild.tagName() == "empty") {
+                        // EMPTY !
+                    } else {
+                        kFatal() << "Unrecognized choice element : " << choiceChild.tagName() << child.tagName() << name;
+                    }
+                    choiceChild = choiceChild.nextSiblingElement();
+                } while (!choiceChild.isNull());
             } else {
+                kWarning() << "On line " << child.lineNumber() << ":";
                 kFatal() << "Unrecognized element : " << child.tagName();
             }
             child = child.nextSiblingElement();
@@ -331,7 +436,9 @@ QList<Attribute*> TestOpenDocumentStyle::listAttributesFromRNGName(const QString
     return result;
 }
 
-QByteArray TestOpenDocumentStyle::generateStyleNodeWithAttribute(const QString& styleFamily, const QString& attributeName, const QString& attributeValue)
+
+
+QByteArray TestOpenDocumentStyle::generateStyleNodeWithAttribute(const QString& styleFamily, const QString& attributeName, const QString& attributeValue, const Attribute &attribute)
 {
     QBuffer xmlOutputBuffer;
     KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlOutputBuffer);
@@ -343,8 +450,19 @@ QByteArray TestOpenDocumentStyle::generateStyleNodeWithAttribute(const QString& 
     xmlWriter->addAttribute("xmlns:text", KoXmlNS::text);
     xmlWriter->addAttribute("style:name", "TestStyle");
     xmlWriter->addAttribute("style:family", styleFamily);
-    xmlWriter->startElement(("style:" + styleFamily + "-properties").toLatin1());
+    if (styleFamily == "character")
+        xmlWriter->startElement("style:text-properties");
+    else
+        xmlWriter->startElement(("style:" + styleFamily + "-properties").toLatin1());
     xmlWriter->addAttribute(attributeName.toLatin1(), attributeValue);
+    
+    QMap< QString, QString >  extras = attribute.requiredExtraAttributes();
+    QMapIterator<QString, QString> i(extras);
+    while (i.hasNext()) {
+        i.next();
+        xmlWriter->addAttribute(i.key().toLatin1(), i.value());
+    }
+    
     xmlWriter->endElement();
     xmlWriter->endElement();
     xmlWriter->endDocument();
@@ -391,6 +509,8 @@ void loadOdf<KoParagraphStyle>(KoParagraphStyle* genStyle, const KoXmlElement *m
 template<>
 void loadOdf<KoCharacterStyle>(KoCharacterStyle* genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
 {
+    loadCtxt.addStyles(mainElement, "text");
+    loadCtxt.styleStack().setTypeProperties("text");
     KoShapeLoadingContext shapeCtxt(loadCtxt, 0);
     genStyle->loadOdf(shapeCtxt);
 }
@@ -421,7 +541,7 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     KoOdfStylesReader stylesReader;
     KoOdfLoadingContext loadCtxt(stylesReader, 0);
 
-    QByteArray xmlOutputData = this->generateStyleNodeWithAttribute(familyName, attribute->name(), value);
+    QByteArray xmlOutputData = this->generateStyleNodeWithAttribute(familyName, attribute->name(), value, *attribute);
     KoXmlDocument *xmlReader = new KoXmlDocument;
     xmlReader->setContent(xmlOutputData, true);
     KoXmlElement mainElement = xmlReader->documentElement();
@@ -446,8 +566,8 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     QString outputPropertyValue = properties.attribute(attribute->name());
     if (properties.attributeNames().count() > 1)
     {
-        kWarning(32500) << "Warning : got more than one attribute !";
-        kDebug(32500) << generatedXmlOutput;
+        //kWarning(32500) << "Warning : got more than one attribute !";
+        //kDebug(32500) << generatedXmlOutput;
     }
     if (attribute->hasReference("__border")) {
         KoBorder original, output;
@@ -563,10 +683,10 @@ void TestOpenDocumentStyle::testParagraphStyle()
     QVERIFY(basicTestFunction<KoParagraphStyle>(KoGenStyle::ParagraphStyle, "paragraph", attribute, value));
 }
 
-/*
+
 void TestOpenDocumentStyle::testCharacterStyle_data()
 {
-    QList<Attribute*> attributes = listAttributesFromRNGName("style-text-properties");
+    QList<Attribute*> attributes = listAttributesFromRNGName("style-text-properties-attlist");
     QTest::addColumn<Attribute*>("attribute");
     QTest::addColumn<QString>("value");
     foreach (Attribute *attribute, attributes) {
@@ -580,10 +700,8 @@ void TestOpenDocumentStyle::testCharacterStyle()
 {
     QFETCH(Attribute*, attribute);
     QFETCH(QString, value);
-
     QVERIFY(basicTestFunction<KoCharacterStyle>(KoGenStyle::TextStyle, "character", attribute, value));
 }
-*/
 
 QTEST_MAIN(TestOpenDocumentStyle)
 #include <TestOpenDocumentStyle.moc>

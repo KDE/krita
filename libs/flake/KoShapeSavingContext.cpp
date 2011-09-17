@@ -29,6 +29,7 @@
 #include <KoXmlWriter.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
+#include <KoSharedSavingData.h>
 
 #include <kmimetype.h>
 #include <kdebug.h>
@@ -37,6 +38,7 @@
 class KoShapeSavingContextPrivate {
 public:
     KoShapeSavingContextPrivate(KoXmlWriter&, KoGenStyles&, KoEmbeddedDocumentSaver&);
+    ~KoShapeSavingContextPrivate();
 
     KoXmlWriter *xmlWriter;
     KoShapeSavingContext::ShapeSavingOptions savingOptions;
@@ -66,6 +68,13 @@ KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w,
         mainStyles(s),
         embeddedSaver(e)
 {
+}
+
+KoShapeSavingContextPrivate::~KoShapeSavingContextPrivate()
+{
+    foreach(KoSharedSavingData * data, sharedData) {
+        delete data;
+    }
 }
 
 KoShapeSavingContext::KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainStyles,

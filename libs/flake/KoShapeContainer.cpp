@@ -73,7 +73,6 @@ void KoShapeContainer::addShape(KoShape *shape)
         shape->parent()->removeShape(shape);
     d->model->add(shape);
     shape->setParent(this);
-    shapeCountChanged();
 }
 
 void KoShapeContainer::removeShape(KoShape *shape)
@@ -84,7 +83,6 @@ void KoShapeContainer::removeShape(KoShape *shape)
         return;
     d->model->remove(shape);
     shape->setParent(0);
-    shapeCountChanged();
 
     KoShapeContainer * grandparent = parent();
     if (grandparent) {
@@ -102,7 +100,6 @@ void KoShapeContainer::removeAllShapes()
         d->model->remove(shape);
         shape->setParent(0);
     }
-    shapeCountChanged();
 
     KoShapeContainer * grandparent = parent();
     if (grandparent) {
@@ -211,7 +208,6 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
 void KoShapeContainer::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_D(KoShapeContainer);
-    Q_UNUSED(shape);
     if (d->model == 0)
         return;
     if (!(type == RotationChanged || type == ScaleChanged || type == ShearChanged

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +26,7 @@
 #include "KoTextLocator.h"
 #include "KoBookmark.h"
 #include "KoInlineNote.h"
+#include "KoInlineCite.h"
 
 #include <QTextCursor>
 #include <QPainter>
@@ -81,9 +83,9 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
     KoBookmark *bookmark = dynamic_cast<KoBookmark *>(object);
     if (bookmark
             && (bookmark->type() == KoBookmark::StartBookmark
-                || bookmark->type() == KoBookmark::SinglePosition))
+                || bookmark->type() == KoBookmark::SinglePosition)) {
         m_bookmarkManager.insert(bookmark->name(), bookmark);
-
+    }
     // reset to use old format so that the InlineInstanceId is no longer set.
     cursor.setCharFormat(oldCf);
 }
@@ -132,6 +134,11 @@ void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
 {
     if (object) {
         m_objects.remove(object->id());
+        m_listeners.removeAll(object);
+        KoBookmark *bookmark = dynamic_cast<KoBookmark *>(object);
+        if (bookmark) {
+            m_bookmarkManager.remove(bookmark->name());
+        }
     }
     // TODO dirty the document somehow
 }
@@ -230,6 +237,18 @@ QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
     return answers;
 }
 
+QMap<QString, KoInlineCite*> KoInlineTextObjectManager::citations(bool duplicatesEnabled) const
+{
+    QMap<QString, KoInlineCite*> answers;
+    foreach(KoInlineObject* object, m_objects) {
+        KoInlineCite* cite = dynamic_cast<KoInlineCite*>(object);
+        if (cite && (cite->type() == KoInlineCite::Citation ||
+                     (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
+            answers.insert(cite->identifier(),cite);
+        }
+    }
+    return answers;
+}
 
 void KoInlineTextObjectManager::documentInformationUpdated(const QString &info, const QString &data)
 {

@@ -20,7 +20,6 @@
 
 #include "KoRdfSemanticTree.h"
 #include "KoDocumentRdf.h"
-#include "KoDocumentRdf_p.h"
 #include "KoRdfSemanticTreeWidgetItem.h"
 #include <kdebug.h>
 #include <klocale.h>

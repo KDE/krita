@@ -119,7 +119,7 @@ public:
     void setNoWrap(qreal maximumAllowedWidth);
 
     qreal listIndent() const;
-    qreal textIndent(QTextBlock block, QTextList *textList) const;
+    qreal textIndent(QTextBlock block, QTextList *textList, const KoParagraphStyle &pStyle) const;
     qreal x() const;
     qreal width() const;
 
@@ -149,6 +149,8 @@ public:
     /// or invalid if not
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
+    static const int MaximumTabPos = 10000;
+
 protected:
     void setBottom(qreal bottom);
 
@@ -167,6 +169,9 @@ protected:
     void expandBoundingRight(qreal x);
 
 private:
+    /// utility method to restartlayout of a block
+    QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep);
+
     bool layoutBlock(FrameIterator *cursor);
 
     /// Returns vertical height of line
@@ -228,7 +233,7 @@ private:
     QList<KoTextLayoutArea *> m_preregisteredFootNoteAreas;
     QList<KoTextLayoutArea *> m_footNoteAreas;
     KoTextLayoutEndNotesArea *m_endNotesArea;
-    QList<KoTextLayoutArea *> m_tableOfContentsAreas;
+    QList<KoTextLayoutArea *> m_generatedDocAreas;
 };
 
 #endif

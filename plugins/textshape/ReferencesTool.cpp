@@ -200,7 +200,7 @@ void ReferencesTool::insertFootNote()
     m_note = textEditor()->insertFootNote();
     m_note->setAutoNumbering(m_sfenw->widget.autoNumbering->isChecked());
     if (m_note->autoNumbering()) {
-        m_note->setLabel(QString().number(m_note->manager()->autoNumberedFootNotes().count()));
+        m_note->setLabel("1");
     }
     else {
         m_note->setLabel(m_sfenw->widget.characterEdit->text());
@@ -218,20 +218,16 @@ void ReferencesTool::insertFootNote()
 
 void ReferencesTool::insertEndNote()
 {
-    KoInlineTextObjectManager *manager = KoTextDocument(textEditor()->document()).inlineTextObjectManager();
     m_note = textEditor()->insertEndNote();
     m_note->setAutoNumbering(m_sfenw->widget.autoNumbering->isChecked());
     if (m_note->autoNumbering()) {
-        m_note->setLabel(QString().number(m_note->manager()->autoNumberedEndNotes().count()));
+        m_note->setLabel("1");
     }
     else {
         m_note->setLabel(m_sfenw->widget.characterEdit->text());
     }
 
     QTextCursor cursor(m_note->textCursor());
-    m_note->paintNotesBody(cursor);
-    QTextCharFormat *fmat = new QTextCharFormat();
-    cursor.insertText(" ", *fmat);
     //inserts a bookmark at the cursor
     QString s;
     s.append("End");

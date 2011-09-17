@@ -156,19 +156,8 @@ public:
     QList<QAction*> createInsertVariableActions(KoCanvasBase *host) const;
 
     QList<KoTextLocator*> textLocators() const;
-    /**
-     * Note: once document sections are implemented, we need to be able
-     * to retrieve the autonumbered footnotes and endnotes for a particular section only.
-     */
-    /**
-     * @return a list of all inline objects that are autonumbered footnotes
-     */
-    QList<KoInlineNote*> autoNumberedFootNotes() const;
 
-    /**
-     * @return a list of all inline objects that are autonumbered endnotes
-     */
-    QList<KoInlineNote*> autoNumberedEndNotes() const;
+    QList<KoInlineNote*> endNotes() const;
 
     KoInlineNote *getFirstNote(QTextBlock block) const;
 

@@ -1153,14 +1153,19 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList) const
         // return an indent approximately 3-characters wide as per current font
         QTextCursor blockCursor(block);
         qreal guessGlyphWidth = QFontMetricsF(blockCursor.charFormat().font()).width('x');
-        return guessGlyphWidth * 3;
+        return guessGlyphWidth * 3 + m_extraTextIndent;
     }
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
         if (! block.blockFormat().hasProperty(KoParagraphStyle::ListLevel)) {
-            return textList->format().doubleProperty(KoListStyle::TextIndent);
+            return textList->format().doubleProperty(KoListStyle::TextIndent) + m_extraTextIndent;
         }
     }
-    return format.textIndent().value(width());
+    return format.textIndent().value(width()) + m_extraTextIndent;
+}
+
+void KoTextLayoutArea::setExtraTextIndent(qreal extraTextIndent)
+{
+    m_extraTextIndent = extraTextIndent;
 }
 
 qreal KoTextLayoutArea::x() const

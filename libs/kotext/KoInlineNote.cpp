@@ -59,8 +59,8 @@ public:
     QDateTime date;
     bool autoNumbering;
     KoInlineNote::Type type;
+    int posInDocument;
 };
-int KoInlineNote::count;
 
 KoInlineNote::KoInlineNote(Type type)
     : KoInlineObject(true)
@@ -131,8 +131,8 @@ KoInlineNote::Type KoInlineNote::type() const
 void KoInlineNote::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(document);
-    Q_UNUSED(posInDocument);
     Q_UNUSED(format);
+    d->posInDocument = posInDocument;
 }
 
 void KoInlineNote::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
@@ -161,36 +161,25 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     if (d->label.isEmpty())
         return;
     QFont font(format.font(), pd);
-    QString s;
     KoOdfNotesConfiguration *notesConfig = 0;
-    //set bookmark name TODO make it unique
     if (d->type == KoInlineNote::Footnote) {
-        s.append("Foot");
         notesConfig = KoTextDocument(this->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
     } else if (d->type == KoInlineNote::Endnote) {
-        s.append("End");
         notesConfig = KoTextDocument(this->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
     }
-    s.append(d->label);
     //assigning a formatted label to notes
-    QString cite;
+    QString label;
     if (d->autoNumbering)
-        cite = notesConfig->numberFormat().formattedNumber(d->label.toInt()+notesConfig->startValue()-1);
-    else cite = d->label;
-    QTextLayout layout(cite, font, pd);
+        label = notesConfig->numberFormat().formattedNumber(d->label.toInt()+notesConfig->startValue()-1);
+    else label = d->label;
+    QTextLayout layout(label, font, pd);
     layout.setCacheEnabled(true);
     QList<QTextLayout::FormatRange> layouts;
     QTextLayout::FormatRange range;
     range.start = 0;
-    range.length = cite.length();
+    range.length = label.length();
     range.format = format;
     range.format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-    //set bookmark link
-    range.format.setAnchor(true);
-    range.format.setAnchorHref('#' + s);
-    QBrush *brush = new QBrush(Qt::SolidPattern);
-    brush->setColor(Qt::lightGray);
-    range.format.setBackground(*brush);
     layouts.append(range);
     layout.setAdditionalFormats(layouts);
 
@@ -201,7 +190,7 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     layout.createLine();
     layout.endLayout();
     layout.draw(&painter, rect.topLeft());
-    cite.clear();
+    label.clear();
 }
 
 bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
@@ -237,7 +226,6 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
                 }
             }
         }
-        paintNotesBody(cursor);
     }
     else if (element.namespaceURI() == KoXmlNS::office && element.localName() == "annotation") {
         d->author = element.attributeNS(KoXmlNS::text, "dc-creator");
@@ -334,4 +322,9 @@ void KoInlineNote::paintNotesBody(QTextCursor &cursor)
         cursor.insertText(notesConfig->numberFormat().prefix()+d->label+notesConfig->numberFormat().suffix(), *fmat);
     }
     fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
+}
+
+int KoInlineNote::getPosInDocument()
+{
+    return d->posInDocument;
 }

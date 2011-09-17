@@ -104,7 +104,7 @@ public:
 
     void paintNotesBody(QTextCursor &cursor);
 
-    static int count;
+    int getPosInDocument();
 
 protected:
     /// reimplemented

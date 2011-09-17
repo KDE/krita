@@ -229,24 +229,12 @@ QList<KoTextLocator*> KoInlineTextObjectManager::textLocators() const
     return answers;
 }
 
-QList<KoInlineNote*> KoInlineTextObjectManager::autoNumberedFootNotes() const
+QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
 {
     QList<KoInlineNote*> answers;
     foreach(KoInlineObject* object, m_objects) {
         KoInlineNote* note = dynamic_cast<KoInlineNote*>(object);
-        if (note && note->type() == KoInlineNote::Footnote && note->autoNumbering()) {
-            answers.append(note);
-        }
-    }
-    return answers;
-}
-
-QList<KoInlineNote*> KoInlineTextObjectManager::autoNumberedEndNotes() const
-{
-    QList<KoInlineNote*> answers;
-    foreach(KoInlineObject* object, m_objects) {
-        KoInlineNote* note = dynamic_cast<KoInlineNote*>(object);
-        if (note && note->type() == KoInlineNote::Endnote && note->autoNumbering()) {
+        if (note && note->type() == KoInlineNote::Endnote) {
             answers.append(note);
         }
     }

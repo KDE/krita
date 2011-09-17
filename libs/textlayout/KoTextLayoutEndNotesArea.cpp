@@ -18,11 +18,19 @@
  */
 
 #include "KoTextLayoutEndNotesArea.h"
+#include "KoTextLayoutNoteArea.h"
+#include "KoInlineTextObjectManager.h"
+#include "KoInlineNote.h"
 #include "FrameIterator.h"
 
 #include <KoTextPage.h>
 
 #include <QPainter>
+
+bool beforeThan(KoInlineNote *note1, KoInlineNote *note2)
+{
+    return (note1->getPosInDocument() < note2->getPosInDocument());
+}
 
 class KoTextLayoutEndNotesArea::Private
 {
@@ -31,15 +39,18 @@ public:
         : startOfArea(0)
     {
     }
-    QList<KoTextLayoutArea *> endNoteAreas;
+    QList<KoTextLayoutNoteArea *> endNoteAreas;
+    QList<QTextFrame *> endNoteFrames;
     FrameIterator *startOfArea;
     FrameIterator *endOfArea;
+    int endNoteAutoCount;
 };
 
 KoTextLayoutEndNotesArea::KoTextLayoutEndNotesArea(KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout)
   : KoTextLayoutArea(parent, documentLayout)
   , d(new Private)
 {
+    d->endNoteAutoCount = 0;
 }
 
 KoTextLayoutEndNotesArea::~KoTextLayoutEndNotesArea()
@@ -52,6 +63,8 @@ bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)
 {
     qDeleteAll(d->endNoteAreas);
     d->endNoteAreas.clear();
+    qDeleteAll(d->endNoteFrames);
+    d->endNoteFrames.clear();
 
     d->startOfArea = new FrameIterator(cursor);
     d->endOfArea = 0;
@@ -59,31 +72,34 @@ bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)
     qreal y = top()+shiftDown;
     setBottom(y);
 
-    while (true) {
-        QTextFrame *subFrame = cursor->it.currentFrame();
-        if (subFrame) {
-            // This is an actual endNote frame. Just use a normal Area to layout
-            KoTextLayoutArea *noteArea = new KoTextLayoutArea(this, documentLayout());
-            d->endNoteAreas.append(noteArea);
-            noteArea->setReferenceRect(left(), right(), y, maximumAllowedBottom());
-            if (noteArea->layout(cursor->subFrameIterator(subFrame)) == false) {
-                d->endOfArea = new FrameIterator(cursor);
-                setBottom(noteArea->bottom());
-                return false;
-            }
-            y = noteArea->bottom();
-            setBottom(y);
-            delete cursor->currentSubFrameIterator;
-            cursor->currentSubFrameIterator = 0;
+    KoInlineTextObjectManager *manager = KoTextDocument(documentLayout()->document()).inlineTextObjectManager();
+    QList<KoInlineNote *> list = QList<KoInlineNote *>(manager->endNotes());
+    qSort(list.begin(), list.end(), beforeThan); //making a list of endnotes in the order they appear
+
+    while(cursor->endNoteIndex < list.length())
+    {
+        KoInlineNote *note = list[cursor->endNoteIndex];
+        if(note->autoNumbering()) {
+            note->setLabel(QString::number(++d->endNoteAutoCount));
         }
-
-        ++(cursor->it);
-
-        if (cursor->it.atEnd()) {
+        QTextFrame *subFrame = note->textFrame();
+        KoTextLayoutNoteArea *noteArea = new KoTextLayoutNoteArea(note, this, documentLayout());
+        d->endNoteAreas.append(noteArea);
+        d->endNoteFrames.append(subFrame);
+        noteArea->setReferenceRect(left(), right(), y, maximumAllowedBottom());
+        if (noteArea->layout(cursor->subFrameIterator(subFrame)) == false) {
             d->endOfArea = new FrameIterator(cursor);
-            return true; // we have layouted till the end of the frame
+            setBottom(noteArea->bottom());
+            return false;
         }
+        y = noteArea->bottom();
+        setBottom(y);
+        delete cursor->currentSubFrameIterator;
+        cursor->currentSubFrameIterator = 0;
+        cursor->endNoteIndex++;
     }
+    d->endOfArea = new FrameIterator(cursor);
+    return true;
 }
 KoPointedAt KoTextLayoutEndNotesArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) const
 {
@@ -103,18 +119,16 @@ KoPointedAt KoTextLayoutEndNotesArea::hitTest(const QPointF &p, Qt::HitTestAccur
 
 QRectF KoTextLayoutEndNotesArea::selectionBoundingBox(QTextCursor &cursor) const
 {
-    QTextFrame::iterator it = d->startOfArea->it;
     QTextFrame *subFrame;
     int endNoteIndex = 0;
-    while (endNoteIndex<d->endNoteAreas.length()) {
-        subFrame = it.currentFrame();
+    while (endNoteIndex<d->endNoteFrames.length()) {
+        subFrame = d->endNoteFrames[endNoteIndex];
         if (subFrame != 0) {
             if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
                 return d->endNoteAreas[endNoteIndex]->selectionBoundingBox(cursor);
             }
             ++endNoteIndex;
         }
-        ++it;
     }
     return QRectF();
 }
@@ -130,7 +144,7 @@ void KoTextLayoutEndNotesArea::paint(QPainter *painter, const KoTextDocumentLayo
         int shiftDown = 10;
         painter->drawLine(left, top()+shiftDown, right, top()+shiftDown);
     }
-    foreach(KoTextLayoutArea *area, d->endNoteAreas) {
+    foreach(KoTextLayoutNoteArea *area, d->endNoteAreas) {
         area->paint(painter, context);
     }
 }

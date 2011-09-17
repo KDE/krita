@@ -18,7 +18,7 @@
  */
 
 #include "KoTextLayoutNoteArea.h"
-
+#include "FrameIterator.h"
 #include <QPainter>
 
 class KoTextLayoutNoteArea::Private
@@ -28,6 +28,7 @@ public:
     {
     }
     KoInlineNote *note;
+    QTextLayout *textLayout;
 };
 
 KoTextLayoutNoteArea::KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout)
@@ -48,5 +49,43 @@ KoTextLayoutNoteArea::~KoTextLayoutNoteArea()
 void KoTextLayoutNoteArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
     KoTextLayoutArea::paint(painter, context);
-    painter->drawText(left(), top(), d->note->label());
+    QRectF rect = QRectF( left(), top(), 0.0, 0.0);
+    d->textLayout->draw(painter, rect.topLeft());
+}
+
+bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
+{
+    KoOdfNotesConfiguration *notesConfig = 0;
+    if (d->note->type() == KoInlineNote::Footnote) {
+        notesConfig = KoTextDocument(d->note->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
+    } else if (d->note->type() == KoInlineNote::Endnote) {
+        notesConfig = KoTextDocument(d->note->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
+    }
+    QString label;  //assigning a formatted label to notes
+    if (d->note->autoNumbering())
+        label = notesConfig->numberFormat().formattedNumber(d->note->label().toInt()+notesConfig->startValue()-1);
+    else label = d->note->label();
+    label.prepend(notesConfig->numberFormat().prefix());
+    label.append(notesConfig->numberFormat().suffix());
+    QPaintDevice *pd = documentLayout()->paintDevice();
+    QTextCharFormat format = cursor->it.currentBlock().charFormat();
+    QFont font(format.font(), pd);
+    d->textLayout = new QTextLayout(label, font, pd);
+    QList<QTextLayout::FormatRange> layouts;
+    QTextLayout::FormatRange range;
+    range.start = 0;
+    range.length = label.length();
+    range.format = format;
+    range.format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    layouts.append(range);
+    d->textLayout->setAdditionalFormats(layouts);
+
+    QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
+    //option.setTextDirection();
+    d->textLayout->setTextOption(option);
+    d->textLayout->beginLayout();
+    QTextLine line = d->textLayout->createLine();
+    d->textLayout->endLayout();
+    KoTextLayoutArea::setExtraTextIndent(line.naturalTextWidth());
+    return KoTextLayoutArea::layout(cursor);
 }

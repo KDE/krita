@@ -33,6 +33,8 @@ public:
 
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 
+    bool layout(FrameIterator *cursor);
+
 private:
     class Private;
     Private * const d;

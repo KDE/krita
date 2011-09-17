@@ -121,6 +121,7 @@ public:
 
     qreal listIndent() const;
     qreal textIndent(QTextBlock block, QTextList *textList) const;
+    void setExtraTextIndent(qreal extraTextIndent);
     qreal x() const;
     qreal width() const;
 
@@ -233,6 +234,7 @@ private:
     qreal m_preregisteredFootNotesHeight;
     qreal m_footNotesHeight;
     int m_footNoteAutoCount;
+    qreal m_extraTextIndent;
     QList<KoTextLayoutNoteArea *> m_preregisteredFootNoteAreas;
     QList<KoTextLayoutNoteArea *> m_footNoteAreas;
     KoTextLayoutEndNotesArea *m_endNotesArea;

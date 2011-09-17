@@ -54,10 +54,16 @@ bool KoShapeGroup::hitTest(const QPointF &position) const
     return false;
 }
 
-//there is a bug when transform is applied to group so the size should be kept as zero
 QSizeF KoShapeGroup::size() const
 {
-    return QSizeF(0, 0);
+    QRectF bound;
+    foreach(KoShape *shape, shapes()) {
+        if (bound.isEmpty())
+            bound = shape->transformation().mapRect(shape->outlineRect());
+        else
+            bound |= shape->transformation().mapRect(shape->outlineRect());
+    }
+    return bound.size();
 }
 
 QRectF KoShapeGroup::boundingRect() const
@@ -151,6 +157,7 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
 void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
+    KoShapeContainer::shapeChanged(type, shape);
     switch (type) {
     case KoShape::BorderChanged:
     {

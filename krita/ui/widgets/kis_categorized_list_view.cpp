@@ -18,6 +18,7 @@
 
 #include "kis_categorized_list_view.h"
 #include "../kis_categorized_list_model.h"
+#include <QMouseEvent>
 
 KisCategorizedListView::KisCategorizedListView(QWidget* parent):
     QListView(parent)
@@ -61,6 +62,23 @@ void KisCategorizedListView::rowsInserted(const QModelIndex& parent, int start, 
 	QListView::rowsInserted(parent, start, end);
 	updateRows(0, model()->rowCount());
 }
-// void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
-// {
-// }
+
+void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
+{
+	QModelIndex index = QListView::indexAt(event->pos());
+	
+    if(index.isValid() && (event->pos().x() < 25) && (model()->flags(index) & Qt::ItemIsUserCheckable)) {
+		int role = model()->data(index, Qt::CheckStateRole).toInt();
+		
+		if(role == Qt::Checked) { model()->setData(index, Qt::Unchecked, Qt::CheckStateRole); }
+		else                    { model()->setData(index, Qt::Checked  , Qt::CheckStateRole); }
+		
+		emit sigEntryChecked(index);
+	}
+	else QListView::mousePressEvent(event);
+}
+
+void KisCategorizedListView::mouseReleaseEvent(QMouseEvent* event)
+{
+	QListView::mouseReleaseEvent(event);
+}

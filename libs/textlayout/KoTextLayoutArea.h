@@ -119,7 +119,7 @@ public:
     void setNoWrap(qreal maximumAllowedWidth);
 
     qreal listIndent() const;
-    qreal textIndent(QTextBlock block, QTextList *textList) const;
+    qreal textIndent(QTextBlock block, QTextList *textList, const KoParagraphStyle &pStyle) const;
     qreal x() const;
     qreal width() const;
 

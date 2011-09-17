@@ -814,7 +814,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     m_x = left() + (m_isRtl ? rightMargin : leftMargin);
 
     m_documentLayout->clearInlineObjectRegistry(block);
-    m_indent = textIndent(block, textList);
+    m_indent = textIndent(block, textList, pStyle);
     QTextLine line;
 
     //========
@@ -1096,9 +1096,8 @@ qreal KoTextLayoutArea::listIndent() const
     return m_listIndent;
 }
 
-qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList) const
+qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const KoParagraphStyle &pStyle) const
 {
-    KoParagraphStyle pStyle (block.blockFormat(), block.charFormat());
     if (pStyle.autoTextIndent()) {
         // if auto-text-indent is set,
         // return an indent approximately 3-characters wide as per current font

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2011 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2007-2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -89,8 +89,6 @@ void KoPathShapePrivate::applyViewboxTransformation(const KoXmlElement &element)
     }
 }
 
-
-/////////////////////////
 KoPathShape::KoPathShape()
     :KoTosContainer(*(new KoPathShapePrivate(this)))
 {
@@ -175,6 +173,14 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
     setPosition(pos);
 
     loadOdfAttributes(element, context, OdfTransformation);
+
+    // now that the correct transformation is set up
+    // apply that matrix to the path geometry so that
+    // we don't transform the stroke
+    d->map(transformation());
+    setTransformation(QTransform());
+    normalize();
+
     loadText(element, context);
 
     return true;
@@ -205,8 +211,6 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
         KoOdfWorkaround::fixMissingFillRule(d->fillRule, context);
 #endif
     }
-
-
 }
 
 QRectF KoPathShape::loadOdfViewbox(const KoXmlElement & element) const
@@ -314,7 +318,6 @@ QPainterPath KoPathShape::outline() const
 {
     QPainterPath path;
     foreach(KoSubpath * subpath, m_subpaths) {
-//qDebug() << "Inside foreach in KoPathShape::outline()";
         KoPathPoint * lastPoint = subpath->first();
         bool activeCP = false;
         foreach(KoPathPoint * currPoint, *subpath) {

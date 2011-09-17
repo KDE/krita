@@ -113,8 +113,7 @@ bool TreeShape::hitTest(const QPointF &position) const
 
 // void TreeShape::shapeChanged(ChangeType type, KoShape *shape)
 // {
-//     Q_UNUSED(shape);
-//     Q_UNUSED(type);
+//     KoShapeContainer::shapeChanged(type, shape);
 //     kDebug() << "";
 // }
 

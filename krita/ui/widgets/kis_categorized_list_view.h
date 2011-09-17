@@ -35,12 +35,17 @@ public:
     
 signals:
     void sigCategoryToggled(const QModelIndex& index, bool toggled);
+    void sigEntryChecked(const QModelIndex& index);
     
 protected slots:
     void slotIndexChanged(const QModelIndex& index);
     virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 	virtual void rowsInserted(const QModelIndex& parent, int start, int end);
-// 	virtual void mousePressEvent(QMouseEvent* event);
+	virtual void mousePressEvent(QMouseEvent* event);
+	virtual void mouseReleaseEvent(QMouseEvent* event);
+	
+private:
+	bool m_EntryWasChecked;
 };
 
 

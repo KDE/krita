@@ -95,8 +95,11 @@ public:
 	}
 	
 	QModelIndex lastIndex() const {
-		int end = getCategoryBegin(m_categories.size()-1) + m_categories.last().entries.size() - 1;
-		return QAbstractListModel::index(end);
+        if(!m_categories.empty()) {
+            int end = getCategoryBegin(m_categories.size()-1) + m_categories.last().entries.size() - 1;
+            return QAbstractListModel::index(end);
+        }
+        return QAbstractListModel::index(0);
 	}
 	
 	void expandCategory(const TCategory& category, bool expand) {
@@ -312,6 +315,7 @@ public:
         if(isHeader(index)) {
             switch(role)
             {
+			case Qt::ToolTipRole:
             case Qt::DisplayRole:
                 return categoryToString(m_categories[index.first].data);
             case IsHeaderRole:
@@ -321,6 +325,7 @@ public:
         else {
             switch(role)
             {
+			case Qt::ToolTipRole:
             case Qt::DisplayRole:
                 return entryToString(m_categories[index.first].entries[index.second].data);
             case IsHeaderRole:

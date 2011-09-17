@@ -251,7 +251,7 @@ QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack, KoOdfLoading
 {
     QString styleName = styleStack.property(KoXmlNS::draw, "fill-image-name");
 
-    KoXmlElement* e = context.stylesReader().drawStyles()[styleName];
+    KoXmlElement* e = context.stylesReader().drawStyles("fill-image")[styleName];
     if (! e)
         return QBrush();
 

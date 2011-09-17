@@ -184,6 +184,9 @@ public:
     /// return the current horizontal-rel
     VerticalRel verticalRel();
 
+    /// return the wrap influence on position
+    QString wrapInfluenceOnPosition() const;
+
     /// returns the cursor position in the document where this anchor is positioned.
     int positionInDocument() const;
 

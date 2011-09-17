@@ -25,7 +25,7 @@
 #include "dialogs/SimpleCaptionsWidget.h"
 #include "dialogs/TableOfContentsConfigure.h"
 #include "dialogs/CitationInsertionDialog.h"
-//#include "dialogs/InsertBibliographyDialog.h"
+#include "dialogs/InsertBibliographyDialog.h"
 
 #include <KoTextLayoutRootArea.h>
 #include <KoCanvasBase.h>

@@ -57,7 +57,7 @@ void InsertBibliographyDialog::insert()
     *autoUpdate = dialog.autoupdate->isChecked();
 
     BibliographyGenerator *generator =
-            new BibliographyGenerator(bibDocument, m_editor->cursor()->block(), bibInfo);
+            new BibliographyGenerator(bibDocument, m_editor->block(), bibInfo);
 
     if (!(*autoUpdate)) {          //if autoUpdate is disabled then do a forced generate on insertion
         generator->generate();

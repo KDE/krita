@@ -50,5 +50,5 @@ private:
     KoBibliographyInfo *m_bibInfo;
 };
 
-Q_DECLARE_METATYPE(QTextDocument *);
+Q_DECLARE_METATYPE(QTextDocument *)
 #endif // INSERTBIBLIOGRAPHYDIALOG_H

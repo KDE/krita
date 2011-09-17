@@ -54,12 +54,11 @@ public:
             shape(s),
             document(0),
             position(-1),
-            behaveAsCharacter(false),
             verticalPos(KoTextAnchor::VTop),
             verticalRel(KoTextAnchor::VLine),
             horizontalPos(KoTextAnchor::HLeft),
             horizontalRel(KoTextAnchor::HChar),
-            anchorType("char"),
+            anchorType(KoTextAnchor::AnchorToCharacter),
             anchorStrategy(0),
             inlineObjectAscent(0),
             inlineObjectDescent(0)
@@ -84,13 +83,12 @@ public:
     int position;
     QTextCharFormat format;
     QPointF distance;
-    bool behaveAsCharacter;
     KoTextAnchor::VerticalPos verticalPos;
     KoTextAnchor::VerticalRel verticalRel;
     KoTextAnchor::HorizontalPos horizontalPos;
     KoTextAnchor::HorizontalRel horizontalRel;
     QString wrapInfluenceOnPosition;
-    QString anchorType;
+    KoTextAnchor::AnchorType anchorType;
     bool fakeAsChar;
     KoAnchorStrategy *anchorStrategy;
     qreal inlineObjectAscent;
@@ -126,7 +124,7 @@ KoShape *KoTextAnchor::shape() const
     return d->shape;
 }
 
-QString KoTextAnchor::anchorType() const
+KoTextAnchor::AnchorType KoTextAnchor::anchorType() const
 {
     Q_D(const KoTextAnchor);
     return d->anchorType;
@@ -215,7 +213,7 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
 
     // important detail; top of anchored shape is at the baseline.
     QFontMetricsF fm(format.font(), pd);
-    if (d->behaveAsCharacter == true) {
+    if (d->anchorType == AnchorAsCharacter) {
         d->distance.setX(0);
         object.setWidth(d->shape->size().width());
         if (d->verticalRel == VBaseline) {
@@ -354,7 +352,23 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext &context)
 {
     Q_D(KoTextAnchor);
 
-    shape()->setAdditionalAttribute("text:anchor-type", d->anchorType);
+    // anchor-type
+    switch (d->anchorType) {
+    case AnchorToCharacter:
+        shape()->setAdditionalStyleAttribute("text:anchor-type", "char");
+        break;
+    case AnchorAsCharacter:
+        shape()->setAdditionalStyleAttribute("text:anchor-type", "as-char");
+        break;
+    case AnchorParagraph:
+        shape()->setAdditionalStyleAttribute("text:anchor-type", "paragraph");
+        break;
+    case AnchorPage:
+        shape()->setAdditionalStyleAttribute("text:anchor-type", "page");
+        break;
+    default:
+        break;
+    }
 
     // vertical-pos
     switch (d->verticalPos) {
@@ -514,7 +528,16 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 
     if (! shape()->hasAdditionalAttribute("text:anchor-type"))
         return false;
-    d->anchorType = shape()->additionalAttribute("text:anchor-type");
+    QString anchorType = shape()->additionalAttribute("text:anchor-type");
+    if (anchorType == "char") {
+        d->anchorType = AnchorToCharacter;
+    } else if (anchorType == "char") {
+        d->anchorType = AnchorAsCharacter;
+    } else if (anchorType == "paragraph") {
+        d->anchorType = AnchorParagraph;
+    } else if (anchorType == "page") {
+        d->anchorType = AnchorPage;
+    }
 
     // load settings from graphic style
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
@@ -674,8 +697,7 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
         d->distance = QPointF();
      }
 
-    if (d->anchorType == "as-char") {
-        d->behaveAsCharacter = true;
+    if (d->anchorType == AnchorAsCharacter) {
         d->horizontalRel = HChar;
         d->horizontalPos = HLeft;
     }
@@ -684,11 +706,11 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     return true;
 }
 
-void KoTextAnchor::setBehavesAsCharacter(bool aschar)
+void KoTextAnchor::setAnchorType(KoTextAnchor::AnchorType type)
 {
     Q_D(KoTextAnchor);
-    d->behaveAsCharacter = aschar;
-    if (aschar == true) {
+    d->anchorType = type;
+    if (type == AnchorAsCharacter) {
         d->horizontalRel = HChar;
         d->horizontalPos = HLeft;
     }
@@ -699,7 +721,7 @@ bool KoTextAnchor::behavesAsCharacter() const
     Q_D(const KoTextAnchor);
     if (d->fakeAsChar)
         return true;
-    return d->behaveAsCharacter;
+    return d->anchorType == AnchorAsCharacter;
 }
 
 void KoTextAnchor::detachFromModel()

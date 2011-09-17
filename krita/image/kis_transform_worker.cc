@@ -668,9 +668,11 @@ bool KisTransformWorker::run()
     //CBRm_dev->setDirty();
 
     // Progress info
-    if (!m_progressUpdater.isNull()) m_progressUpdater->setProgress(100);
-    if (!m_progressUpdater.isNull()) return m_progressUpdater->interrupted();
-    
+    if (!m_progressUpdater.isNull()) {
+        m_progressUpdater->setProgress(100);
+        return !m_progressUpdater->interrupted();
+    }
+
     return true;
 }
 

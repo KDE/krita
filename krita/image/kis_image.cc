@@ -483,18 +483,10 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
 
     KisProcessingApplicator applicator(this, m_d->rootLayer, true, emitSignals, actionName);
 
-    if(resolutionChanged) {
-        applicator.applyCommand(new KisImageSetResolutionCommand(this, xres, yres));
-    }
-
-    if(sizeChanged) {
-        applicator.applyCommand(new KisImageResizeCommand(this, size));
-    }
-
-    bool scaleOnlyShapes = resolutionChanged && !sizeChanged;
-
     qreal sx = qreal(size.width()) / this->size().width();
     qreal sy = qreal(size.height()) / this->size().height();
+
+    bool scaleOnlyShapes = resolutionChanged && !sizeChanged;
 
     KisProcessingVisitorSP visitor =
         new KisTransformProcessingVisitor(sx, sy,
@@ -506,6 +498,15 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
                                           scaleOnlyShapes);
 
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+
+    if(resolutionChanged) {
+        applicator.applyCommand(new KisImageSetResolutionCommand(this, xres, yres));
+    }
+
+    if(sizeChanged) {
+        applicator.applyCommand(new KisImageResizeCommand(this, size));
+    }
+
     applicator.end();
 }
 

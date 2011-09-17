@@ -241,56 +241,6 @@ QList<KoInlineNote*> KoInlineTextObjectManager::autoNumberedFootNotes() const
     return answers;
 }
 
-void KoInlineTextObjectManager::renumberNotes(QTextBlock block)
-{
-    int footNoteNumber=1,endNoteNumber=1;
-
-    while (block.isValid()) {
-        QString text = block.text();
-        int pos = text.indexOf(QChar::ObjectReplacementCharacter);
-        KoOdfNotesConfiguration *notesConfig;
-        while (pos >= 0 && pos <= block.length() ) {
-            QTextCursor c1(block);
-            c1.setPosition(block.position() + pos);
-            c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
-            //renumber autonumbered notes
-            KoInlineNote *note = dynamic_cast<KoInlineNote*>(this->inlineTextObject(c1));
-            if (note && note->type() == KoInlineNote::Footnote && note->autoNumbering()) {
-                note->setLabel(QString().number(footNoteNumber));
-                notesConfig = KoTextDocument(note->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
-                QTextCharFormat *fmat = new QTextCharFormat();
-                fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-                QTextCursor cursor = note->textFrame()->firstCursorPosition();
-                QTextFragment frag = cursor.block().begin().fragment();
-                cursor.setPosition(frag.position(),QTextCursor::MoveAnchor);
-                cursor.setPosition(frag.position()+frag.length(),QTextCursor::KeepAnchor);
-                cursor.removeSelectedText();
-                cursor.insertText(notesConfig->numberFormat().prefix()
-                                  +notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)
-                                  +notesConfig->numberFormat().suffix(),*fmat);
-                footNoteNumber++;
-            }
-            else if (note && note->type() == KoInlineNote::Endnote) {
-                note->setLabel(QString().number(endNoteNumber));
-                notesConfig = KoTextDocument(note->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
-                QTextCharFormat *fmat = new QTextCharFormat();
-                fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-                QTextCursor cursor = note->textFrame()->firstCursorPosition();
-                QTextFragment frag = cursor.block().begin().fragment();
-                cursor.setPosition(frag.position(),QTextCursor::MoveAnchor);
-                cursor.setPosition(frag.position()+frag.length(),QTextCursor::KeepAnchor);
-                cursor.removeSelectedText();
-                cursor.insertText(notesConfig->numberFormat().prefix()
-                                  +notesConfig->numberFormat().formattedNumber(note->label().toInt()+notesConfig->startValue()-1)
-                                  +notesConfig->numberFormat().suffix(),*fmat);
-                endNoteNumber++;
-            }
-            pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
-        }
-        block = block.next();
-    }
-}
-
 QList<KoInlineNote*> KoInlineTextObjectManager::autoNumberedEndNotes() const
 {
     QList<KoInlineNote*> answers;
@@ -301,33 +251,6 @@ QList<KoInlineNote*> KoInlineTextObjectManager::autoNumberedEndNotes() const
         }
     }
     return answers;
-}
-
-int KoInlineTextObjectManager::visibleAutoNumberedNotes(QTextBlock block) const
-{
-    int i=1;
-
-    while (block.isValid()) {
-        QString text = block.text();
-        int pos = text.indexOf(QChar::ObjectReplacementCharacter);
-
-        while (pos >= 0 && pos <= block.length() ) {
-            QTextCursor c1(block);
-            c1.setPosition(block.position() + pos);
-            c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
-
-            KoInlineNote *note = dynamic_cast<KoInlineNote*>(this->inlineTextObject(c1));
-            if ((note && note->type() == KoInlineNote::Footnote)||(note && note->type() == KoInlineNote::Endnote)) {
-                if(note->autoNumbering()) {
-                    i++;
-                }
-            }
-
-            pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
-        }
-        block = block.next();
-    }
-    return i;//returns count of all visible autonumbered notes
 }
 
 KoInlineNote *KoInlineTextObjectManager::getFirstNote(QTextBlock block) const

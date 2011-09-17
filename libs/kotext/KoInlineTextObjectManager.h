@@ -159,20 +159,16 @@ public:
     /**
      * Note: once document sections are implemented, we need to be able
      * to retrieve the autonumbered footnotes and endnotes for a particular section only.
-     * And also we need to renumber autonumbered notes whenever an autonumbered note is inserted
      */
     /**
      * @return a list of all inline objects that are autonumbered footnotes
      */
     QList<KoInlineNote*> autoNumberedFootNotes() const;
 
-    void renumberNotes(QTextBlock block);
     /**
      * @return a list of all inline objects that are autonumbered endnotes
      */
     QList<KoInlineNote*> autoNumberedEndNotes() const;
-
-    int visibleAutoNumberedNotes(QTextBlock block) const;
 
     KoInlineNote *getFirstNote(QTextBlock block) const;
 

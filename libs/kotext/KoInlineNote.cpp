@@ -160,11 +160,6 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
 
     if (d->label.isEmpty())
         return;
-    //if footnotes count changes make sure we renumber the notes
-    if (KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->visibleAutoNumberedNotes(d->textFrame->document()->begin()) != KoInlineNote::count) {
-         KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->renumberNotes(d->textFrame->document()->begin());
-         KoInlineNote::count = KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->visibleAutoNumberedNotes(d->textFrame->document()->begin());
-    }
     QFont font(format.font(), pd);
     QString s;
     KoOdfNotesConfiguration *notesConfig = 0;

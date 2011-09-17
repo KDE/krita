@@ -32,6 +32,7 @@
 
 #include "KoTextLayoutEndNotesArea.h"
 #include "KoTextLayoutTableArea.h"
+#include "KoTextLayoutNoteArea.h"
 #include "TableIterator.h"
 #include "ListItemsHelper.h"
 #include "RunAroundHelper.h"
@@ -97,6 +98,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_verticalAlignOffset(0)
  , m_preregisteredFootNotesHeight(0)
  , m_footNotesHeight(0)
+ , m_footNoteAutoCount(0)
  , m_endNotesArea(0)
 {
 }
@@ -393,6 +395,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_y = top();
     setBottom(top());
     m_bottomSpacing = 0;
+    m_footNoteAutoCount = 0;
     m_footNotesHeight = 0;
     m_preregisteredFootNotesHeight = 0;
     m_prevBorder = 0;
@@ -1444,7 +1447,6 @@ void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line)
     if (m_documentLayout->inlineTextObjectManager() == 0) {
         return;
     }
-
     QString text = block.text();
     int pos = text.indexOf(QChar::ObjectReplacementCharacter, line.textStart());
 
@@ -1455,6 +1457,8 @@ void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line)
 
         KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_documentLayout->inlineTextObjectManager()->inlineTextObject(c1));
         if (note && note->type() == KoInlineNote::Footnote) {
+            if(note->autoNumbering())
+                note->setLabel(QString::number(++m_footNoteAutoCount));
             preregisterFootNote(note);
         }
 
@@ -1469,7 +1473,7 @@ qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note)
         // where we need to add some extra condition
 
         FrameIterator iter(note->textFrame());
-        KoTextLayoutArea *footNoteArea = new KoTextLayoutArea(this, m_documentLayout);
+        KoTextLayoutNoteArea *footNoteArea = new KoTextLayoutNoteArea(note, this, m_documentLayout);
 
         footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom() - bottom());
         footNoteArea->layout(&iter);

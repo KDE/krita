@@ -32,6 +32,7 @@
 
 #include "KoTextLayoutEndNotesArea.h"
 #include "KoTextLayoutTableArea.h"
+#include "KoTextLayoutNoteArea.h"
 #include "TableIterator.h"
 #include "ListItemsHelper.h"
 #include "RunAroundHelper.h"
@@ -292,7 +293,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
     painter->translate(0, -m_verticalAlignOffset);
     painter->translate(0, bottom() - m_footNotesHeight);
-    foreach(KoTextLayoutArea *footerArea, m_footNoteAreas) {
+    foreach(KoTextLayoutNoteArea *footerArea, m_footNoteAreas) {
         footerArea->paint(painter, context);
         painter->translate(0, footerArea->bottom());
     }

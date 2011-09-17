@@ -207,10 +207,6 @@ void ReferencesTool::insertFootNote()
     }
 
     QTextCursor cursor(m_note->textCursor());
-    m_note->paintNotesBody(cursor);
-    QTextCharFormat *fmat = new QTextCharFormat();
-    cursor.insertText(" ", *fmat);
-    //inserts a bookmark at the cursor
     QString s;
     s.append("Foot");
     s.append(m_note->label());

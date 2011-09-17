@@ -40,6 +40,7 @@ class QTextList;
 class KoTextBlockBorderData;
 class KoTextLayoutEndNotesArea;
 class KoTextLayoutTableArea;
+class KoTextLayoutNoteArea;
 class FrameIterator;
 
 /**
@@ -231,8 +232,9 @@ private:
 
     qreal m_preregisteredFootNotesHeight;
     qreal m_footNotesHeight;
-    QList<KoTextLayoutArea *> m_preregisteredFootNoteAreas;
-    QList<KoTextLayoutArea *> m_footNoteAreas;
+    int m_footNoteAutoCount;
+    QList<KoTextLayoutNoteArea *> m_preregisteredFootNoteAreas;
+    QList<KoTextLayoutNoteArea *> m_footNoteAreas;
     KoTextLayoutEndNotesArea *m_endNotesArea;
     QList<KoTextLayoutArea *> m_tableOfContentsAreas;
     QList<KoTextLayoutArea *> m_bibliographyAreas;

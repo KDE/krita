@@ -224,7 +224,6 @@ private:
     QList<KoTextLayoutTableArea *> m_tableAreas;
     FrameIterator *m_startOfArea;
     FrameIterator *m_endOfArea;
-    FrameIterator *m_footNotesStartOfArea;
 
     bool m_acceptsPageBreak;
     bool m_virginPage;
@@ -237,6 +236,8 @@ private:
     qreal m_extraTextIndent;
     QList<KoTextLayoutNoteArea *> m_preregisteredFootNoteAreas;
     QList<KoTextLayoutNoteArea *> m_footNoteAreas;
+    QList<QTextFrame *> m_preregisteredFootNoteFrames;
+    QList<QTextFrame *> m_footNoteFrames;
     KoTextLayoutEndNotesArea *m_endNotesArea;
     QList<KoTextLayoutArea *> m_generatedDocAreas;
 };

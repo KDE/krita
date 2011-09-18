@@ -234,7 +234,7 @@ QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
     QList<KoInlineNote*> answers;
     foreach(KoInlineObject* object, m_objects) {
         KoInlineNote* note = dynamic_cast<KoInlineNote*>(object);
-        if (note && note->type() == KoInlineNote::Endnote) {
+        if (note && note->type() == KoInlineNote::Endnote && note->isVisible()) {
             answers.append(note);
         }
     }

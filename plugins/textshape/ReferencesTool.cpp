@@ -205,15 +205,6 @@ void ReferencesTool::insertFootNote()
     else {
         m_note->setLabel(m_sfenw->widget.characterEdit->text());
     }
-
-    QTextCursor cursor(m_note->textCursor());
-    QString s;
-    s.append("Foot");
-    s.append(m_note->label());
-    KoBookmark *bookmark = new KoBookmark(m_note->textFrame()->document());
-    bookmark->setName(s);
-    bookmark->setType(KoBookmark::SinglePosition);
-    m_note->manager()->insertInlineObject(cursor, bookmark);
 }
 
 void ReferencesTool::insertEndNote()
@@ -226,16 +217,6 @@ void ReferencesTool::insertEndNote()
     else {
         m_note->setLabel(m_sfenw->widget.characterEdit->text());
     }
-
-    QTextCursor cursor(m_note->textCursor());
-    //inserts a bookmark at the cursor
-    QString s;
-    s.append("End");
-    s.append(m_note->label());
-    KoBookmark *bookmark = new KoBookmark(m_note->textFrame()->document());
-    bookmark->setType(KoBookmark::SinglePosition);
-    bookmark->setName(s);
-    m_note->manager()->insertInlineObject(cursor, bookmark);
 }
 
 void ReferencesTool::openSettings()

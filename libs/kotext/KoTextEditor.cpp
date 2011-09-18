@@ -1389,7 +1389,7 @@ void KoTextEditor::splitTableCells()
 
 KoInlineNote *KoTextEditor::insertFootNote()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Footnote"));
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Footnote"));
     KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
     KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
     manager->insertInlineObject(d->caret,note);
@@ -1400,7 +1400,7 @@ KoInlineNote *KoTextEditor::insertFootNote()
 
 KoInlineNote *KoTextEditor::insertEndNote()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Endnote"));
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Endnote"));
     KoInlineNote *note = new KoInlineNote(KoInlineNote::Endnote);
     KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
     manager->insertInlineObject(d->caret,note);

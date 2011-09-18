@@ -75,11 +75,10 @@ bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)
     KoInlineTextObjectManager *manager = KoTextDocument(documentLayout()->document()).inlineTextObjectManager();
     QList<KoInlineNote *> list = QList<KoInlineNote *>(manager->endNotes());
     qSort(list.begin(), list.end(), beforeThan); //making a list of endnotes in the order they appear
-
-    while(cursor->endNoteIndex < list.length())
+    while (cursor->endNoteIndex < list.length())
     {
         KoInlineNote *note = list[cursor->endNoteIndex];
-        if(note->autoNumbering()) {
+        if (note->autoNumbering()) {
             note->setLabel(QString::number(++d->endNoteAutoCount));
         }
         QTextFrame *subFrame = note->textFrame();

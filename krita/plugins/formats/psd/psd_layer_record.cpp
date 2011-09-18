@@ -496,16 +496,22 @@ bool PSDLayerRecord::valid()
 
 bool PSDLayerRecord::readChannels(QIODevice *io, KisPaintDeviceSP device)
 {
-    quint64 oldPos = io->pos();
 
+    quint64 start = io->pos();
     // Your Code Goes Here :P
     // copy from doRGB...
     foreach(ChannelInfo *channelInfo, channelInfoRecords) {
         qDebug() << "channel" << channelInfo->channelId << channelInfo->channelDataStart << channelInfo->channelDataLength;
     }
 
-    io->seek(oldPos);
+    qDebug() << "Position before read " << io->pos();
+    psdread(io, &m_compression);
+    qDebug() << "COMPRESSION TYPE " << m_compression;
 
+    m_channelSize = m_header.channelDepth/8;
+    m_channelDataLength = (bottom-top) * (right-left )* m_channelSize;
+    qDebug()<<"Height" << bottom-top << "Width:"<< right-left;
+    io->seek(start);
     return true;
 }
 

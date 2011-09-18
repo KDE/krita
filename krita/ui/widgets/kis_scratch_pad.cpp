@@ -207,7 +207,6 @@ void KisScratchPad::beginStroke(KoPointerEvent *event)
 
 void KisScratchPad::doStroke(KoPointerEvent *event)
 {
-    Q_UNUSED(event);
     m_helper->paint(event);
 }
 
@@ -319,7 +318,7 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
         QColor color(Qt::lightGray);
         color.setAlphaF(0.5);
         QBrush disabledBrush(color);
-        gc.fillRect(rc, disabledBrush);
+        gc.fillRect(event->rect(), disabledBrush);
     }
     gc.end();
 }

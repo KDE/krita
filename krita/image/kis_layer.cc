@@ -285,7 +285,7 @@ QList<KisEffectMaskSP> KisLayer::effectMasks() const
 {
     QList<KisEffectMaskSP> masks;
 
-    if (childCount() > 0) {
+    if (childCount() > 0 || m_d->previewMask) {
         KoProperties properties;
         properties.setProperty("visible", true);
         QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), properties);

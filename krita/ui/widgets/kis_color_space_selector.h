@@ -1,5 +1,6 @@
 /*
  *  Copyright (C) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,6 +50,9 @@ private slots:
     void fillCmbProfiles();
     void colorSpaceChanged();
     void installProfile();
+    void uploadProfile();
+    void downloadProfile();
+    void buttonUpdate();
 private:
     struct Private;
     Private * const d;

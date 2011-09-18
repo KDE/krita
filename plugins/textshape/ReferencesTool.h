@@ -69,8 +69,8 @@ private slots:
     void disableButtons(QTextCursor cursor);
 
 private:
-        TableOfContentsConfigure *m_configure;
-        SimpleTableOfContentsWidget *m_stocw;
+    TableOfContentsConfigure *m_configure;
+    SimpleTableOfContentsWidget *m_stocw;
         SimpleFootEndNotesWidget *m_sfenw;
         KoInlineNote *m_note;
 };

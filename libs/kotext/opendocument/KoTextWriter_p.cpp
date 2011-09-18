@@ -87,12 +87,12 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 }
             }
         }
-        if (format.hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+        if (format.hasProperty(KoParagraphStyle::TableOfContentsData)) {
             saveTableOfContents(document, listStyles, block);
             block = block.next();
             continue;
         }
-        if (format.hasProperty(KoParagraphStyle::BibliographyDocument)) {
+        if (format.hasProperty(KoParagraphStyle::BibliographyData)) {
             saveBibliography(document, listStyles, block);
             block = block.next();
             continue;
@@ -1245,7 +1245,7 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, QHash<Q
     writer->startElement("text:table-of-content");
 
     KoTableOfContentsGeneratorInfo *info = toc.blockFormat().property(KoParagraphStyle::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
-    QTextDocument *tocDocument = toc.blockFormat().property(KoParagraphStyle::TableOfContentsDocument).value<QTextDocument*>();
+    QTextDocument *tocDocument = toc.blockFormat().property(KoParagraphStyle::GeneratedDocument).value<QTextDocument*>();
     if (!info->m_styleName.isNull()) {
             writer->addAttribute("text:style-name",info->m_styleName);
     }
@@ -1275,7 +1275,7 @@ void KoTextWriter::Private::saveBibliography(QTextDocument *document, QHash<QTex
     writer->startElement("text:bibliography");
 
     KoBibliographyInfo *info = bib.blockFormat().property(KoParagraphStyle::BibliographyData).value<KoBibliographyInfo*>();
-    QTextDocument *bibDocument = bib.blockFormat().property(KoParagraphStyle::BibliographyDocument).value<QTextDocument*>();
+    QTextDocument *bibDocument = bib.blockFormat().property(KoParagraphStyle::GeneratedDocument).value<QTextDocument*>();
     if (!info->m_styleName.isNull()) {
             writer->addAttribute("text:style-name",info->m_styleName);
     }

@@ -268,7 +268,11 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             QStringList italic;
             italic << "italic" << "oblique";
             m_equivalences << italic;
-        } else if ((reference == "textEncoding") || (reference == "languageCode") || (reference == "countryCode") || (reference == "scriptCode") || (reference == "language"))  {
+        } else if (reference == "languageCode") {
+            result << "fr" << "en" << "pl" << "nl" << "da";
+        } else if (reference == "countryCode") {
+            result << "fr" << "gb" << "pl" << "nl" << "dk";
+        } else if ((reference == "textEncoding") || (reference == "scriptCode") || (reference == "language"))  {
             // Sorry, I can't do it right now
             result << "";
         } else if (reference == "character") {

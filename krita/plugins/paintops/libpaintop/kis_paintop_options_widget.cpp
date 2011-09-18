@@ -47,7 +47,7 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
     setObjectName("KisPaintOpPresetsWidget");
     
     m_d->model       = new KisPaintOpOptionListModel();
-    m_d->delegate    = new KisCategorizedItemDelegate(m_d->model, false);
+    m_d->delegate    = new KisCategorizedItemDelegate(false);
     m_d->optionsList = new KisCategorizedListView();
     m_d->optionsList->setModel(m_d->model);
     m_d->optionsList->setItemDelegate(m_d->delegate);

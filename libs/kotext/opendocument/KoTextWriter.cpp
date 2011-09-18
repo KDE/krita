@@ -27,6 +27,10 @@
 
 #include <KoTextWriter_p.h>
 
+#include <commands/InsertDeleteChangesCommand.h>
+#include <commands/RemoveDeleteChangesCommand.h>
+
+
 KoTextWriter::KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData)
     : d(new Private(context))
 {
@@ -52,6 +56,41 @@ KoTextWriter::KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdf
 KoTextWriter::~KoTextWriter()
 {
     delete d;
+}
+
+void KoTextWriter::saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData, QTextDocument *document, int from, int to)
+{
+    InsertDeleteChangesCommand *insertCommand = new InsertDeleteChangesCommand(document);
+    RemoveDeleteChangesCommand *removeCommand = new RemoveDeleteChangesCommand(document);
+
+    KoChangeTracker *changeTracker = KoTextDocument(document).changeTracker();
+    KoChangeTracker::ChangeSaveFormat changeSaveFormat = KoChangeTracker::UNKNOWN;
+    if (changeTracker) {
+        changeSaveFormat = changeTracker->saveFormat();
+        if (!changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::DELTAXML)) {
+            KoTextDocument(document).textEditor()->addCommand(insertCommand, false);
+        }
+
+        if (changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::ODF_1_2)) {
+            KoTextDocument(document).textEditor()->addCommand(removeCommand, false);
+        }
+    }
+
+    KoTextWriter writer(context, rdfData);
+    writer.write(document, from, to);
+
+    if (changeTracker) {
+        changeSaveFormat = changeTracker->saveFormat();
+        if (!changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::DELTAXML)) {
+            insertCommand->undo();
+            delete insertCommand;
+        }
+
+        if (changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::ODF_1_2)) {
+            removeCommand->undo();
+            delete removeCommand;
+        }
+    }
 }
 
 QString KoTextWriter::saveParagraphStyle(const QTextBlock &block, KoStyleManager *styleManager, KoShapeSavingContext &context)

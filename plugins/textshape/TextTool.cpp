@@ -45,6 +45,7 @@
 #include "commands/AutoResizeCommand.h"
 #include "FontSizeAction.h"
 
+#include <KoOdf.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoSelection.h>
@@ -60,7 +61,6 @@
 #include <KoStyleManager.h>
 #include <KoTextOdfSaveHelper.h>
 #include <KoTextDrag.h>
-#include <KoTextPaste.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 #include <KoGlobal.h>
@@ -546,6 +546,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 
 TextTool::~TextTool()
 {
+    delete m_toolSelection;
 }
 
 void TextTool::showChangeTip()
@@ -1259,9 +1260,8 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
         keyPressEvent(&ke);
         layout->setPreeditArea(-1, QString());
     } else {
-        layout->setPreeditArea(textEditor->position() - block.position(),
-                event->preeditString());
-        textEditor->document()->markContentsDirty(textEditor->position(), 1);
+        layout->setPreeditArea(textEditor->position() - block.position(), event->preeditString());
+        const_cast<QTextDocument*>(textEditor->document())->markContentsDirty(textEditor->position(), 1);
     }
     event->accept();
 }

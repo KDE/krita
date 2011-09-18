@@ -72,6 +72,8 @@ public:
      */
     virtual void findPrevious();
 
+    virtual void setCurrentCursor(const QTextCursor &cursor);
+
     /**
      * Set the format use. 
      *

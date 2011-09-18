@@ -93,6 +93,8 @@ set(kotext_LIB_SRCS
     commands/DeleteTableColumnCommand.cpp
     commands/InsertTableRowCommand.cpp
     commands/InsertTableColumnCommand.cpp
+    commands/InsertDeleteChangesCommand.cpp
+    commands/RemoveDeleteChangesCommand.cpp
 )
 
 if( Soprano_FOUND )

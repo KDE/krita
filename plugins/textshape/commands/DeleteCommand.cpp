@@ -129,7 +129,7 @@ void DeleteCommand::deleteInlineObjects()
     Q_ASSERT(textEditor);
     QTextCursor *caret = textEditor->cursor();
     QTextCursor cursor(*caret);
-    QTextDocument *document = textEditor->document();
+    const QTextDocument *document = textEditor->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     Q_ASSERT(layout);
 
@@ -225,7 +225,7 @@ bool DeleteCommand::mergeWith(const KUndo2Command *command)
     other->m_invalidInlineObjects.clear();
 
     for (int i=0; i < command->childCount(); i++)
-        new UndoTextCommand(textEditor->document(), this);
+        new UndoTextCommand(const_cast<QTextDocument*>(textEditor->document()), this);
 
     return true;
 }
@@ -257,7 +257,7 @@ void DeleteCommand::updateListChanges()
     KoTextEditor *textEditor = m_tool->m_textEditor.data();
     if (textEditor == 0)
         return;
-    QTextDocument *document = textEditor->document();
+    QTextDocument *document = const_cast<QTextDocument*>(textEditor->document());
     QTextCursor tempCursor(document);
     QTextBlock startBlock = document->findBlock(m_position);
     QTextBlock endBlock = document->findBlock(m_position + m_length);
@@ -292,7 +292,7 @@ DeleteCommand::~DeleteCommand()
         if (textEditor == 0)
             return;
         foreach (KoInlineObject *object, m_invalidInlineObjects) {
-            QTextDocument *document = textEditor->document();
+            const QTextDocument *document = textEditor->document();
             KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
             KoInlineTextObjectManager *manager = layout->inlineTextObjectManager();
             manager->removeInlineObject(object);

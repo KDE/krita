@@ -59,6 +59,7 @@ public:
 
     QList<QTextDocument*> documents;
 
+    QTextCursor currentCursor;
     QTextCursor selection;
     QHash<QTextDocument*, QVector<QAbstractTextDocumentLayout::Selection> > selections;
 
@@ -119,12 +120,18 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
         return;
     }
 
+    bool before = !d->currentCursor.isNull();
+    QList<KoFindMatch> matchBefore;
     foreach(QTextDocument* document, d->documents) {
         QTextCursor cursor = document->find(pattern, start, flags);
         QVector<QAbstractTextDocumentLayout::Selection> selections;
         while(!cursor.isNull()) {
             if(findInSelection && d->selectionEnd <= cursor.position()) {
                 break;
+            }
+
+            if (before && document == d->currentCursor.document() && d->currentCursor < cursor) {
+                before = false;
             }
 
             QAbstractTextDocumentLayout::Selection selection;
@@ -135,12 +142,21 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
             KoFindMatch match;
             match.setContainer(QVariant::fromValue(document));
             match.setLocation(QVariant::fromValue(cursor));
-            matchList.append(match);
+            if (before) {
+                matchBefore.append(match);
+            }
+            else {
+                matchList.append(match);
+            }
 
             cursor = document->find(pattern, cursor, flags);
         }
+        if (before && document == d->currentCursor.document()) {
+            before = false;
+        }
         d->selections.insert(document, selections);
     }
+    matchList.append(matchBefore);
 
     if (hasMatches()) {
         setCurrentMatch(0);
@@ -214,6 +230,11 @@ void KoFindText::findPrevious()
     KoFindBase::findPrevious();
     d->updateCurrentMatch(currentMatchIndex());
     d->updateSelections();
+}
+
+void KoFindText::setCurrentCursor(const QTextCursor &cursor)
+{
+    d->currentCursor = cursor;
 }
 
 void KoFindText::addDocuments(const QList<QTextDocument*> &documents)

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1105</width>
-    <height>722</height>
+    <width>382</width>
+    <height>297</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -51,12 +51,6 @@
         </attribute>
         <attribute name="verticalHeaderVisible">
          <bool>false</bool>
-        </attribute>
-        <attribute name="verticalHeaderVisible">
-         <bool>false</bool>
-        </attribute>
-        <attribute name="horizontalHeaderStretchLastSection">
-         <bool>true</bool>
         </attribute>
         <column>
          <property name="text">

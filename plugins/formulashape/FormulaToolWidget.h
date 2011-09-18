@@ -38,10 +38,10 @@ class QTableWidgetItem;
 class FormulaToolWidget : public QTabWidget, Ui::mainTabWidget {
 Q_OBJECT
 public:
-    /// Standart constructor
+    /// Standard constructor
     explicit FormulaToolWidget( KoFormulaTool* tool, QWidget* parent = 0 );
 
-    /// Standart destructor
+    /// Standard destructor
     ~FormulaToolWidget();
 
     /// Set the KoFormulaTool @p tool this options widget belongs to

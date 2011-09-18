@@ -108,7 +108,7 @@ public:
     void setTabSpacing(qreal spacing);
 
     /// are the tabs relative to indent or not
-    bool relativeTabs() const;
+    bool relativeTabs(QTextBlock block) const;
 
     /// Calc a bounding box rect of the selection
     QRectF selectionBoundingBox(QTextCursor &cursor) const;

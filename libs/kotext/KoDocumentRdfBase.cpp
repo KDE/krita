@@ -52,7 +52,7 @@ void KoDocumentRdfBase::linkToResourceManager(KoResourceManager *rm)
     rm->setResource(KoText::DocumentRdf, variant);
 }
 
-void KoDocumentRdfBase::updateInlineRdfStatements(QTextDocument *qdoc)
+void KoDocumentRdfBase::updateInlineRdfStatements(const QTextDocument *qdoc)
 {
     Q_UNUSED(qdoc);
 }

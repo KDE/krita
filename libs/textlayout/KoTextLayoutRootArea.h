@@ -48,7 +48,7 @@ public:
     void setAssociatedShape(KoShape *shape);
 
     /// Retruns the shape set with setAssociatedShape()
-    KoShape *associatedShape();
+    KoShape *associatedShape() const;
 
     /**
      * Set the \p page this root area is on.

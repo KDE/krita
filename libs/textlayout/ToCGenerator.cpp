@@ -58,6 +58,7 @@ ToCGenerator::ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGenerato
 
     tocDocument->setUndoRedoEnabled(false);
     tocDocument->setDocumentLayout(new DummyDocumentLayout(tocDocument));
+    KoTextDocument(tocDocument).setRelativeTabs(tocInfo->m_relativeTabStopPosition);
 }
 
 ToCGenerator::~ToCGenerator()
@@ -291,15 +292,13 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                         cursor.insertText("\t");
 
                         QTextBlockFormat blockFormat = cursor.blockFormat();
-                        QList<QVariant> tabList;
+                        QList<QVariant> tabList =            (blockFormat.property(KoParagraphStyle::TabPositions)).value<QList<QVariant> >();
+
                         if (tabEntry->m_position.isEmpty()) {
-                            tabEntry->tab.position = KoTextLayoutArea::MaximumTabPos - tocTemplateStyle->leftMargin();
-                        } else {
-                            tabEntry->tab.position = tabEntry->m_position.toDouble();
-                        }
+                            tabEntry->tab.position = KoTextLayoutArea::MaximumTabPos;
+                        } // else the position is already parsed into tab.position
                         tabList.append(QVariant::fromValue<KoText::Tab>(tabEntry->tab));
                         qSort(tabList.begin(), tabList.end(), compareTab);
-
                         blockFormat.setProperty(KoParagraphStyle::TabPositions, QVariant::fromValue<QList<QVariant> >(tabList));
                         cursor.setBlockFormat(blockFormat);
                         break;

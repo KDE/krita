@@ -89,6 +89,7 @@ public:
     KoTextAnchor::VerticalRel verticalRel;
     KoTextAnchor::HorizontalPos horizontalPos;
     KoTextAnchor::HorizontalRel horizontalRel;
+    QString wrapInfluenceOnPosition;
     QString anchorType;
     bool fakeAsChar;
     KoAnchorStrategy *anchorStrategy;
@@ -171,6 +172,12 @@ void KoTextAnchor::setVerticalRel(VerticalRel vr)
 {
     Q_D(KoTextAnchor);
     d->verticalRel = vr;
+}
+
+QString KoTextAnchor::wrapInfluenceOnPosition() const
+{
+    Q_D(const KoTextAnchor);
+    return d->wrapInfluenceOnPosition;
 }
 
 KoTextAnchor::VerticalRel KoTextAnchor::verticalRel()
@@ -478,6 +485,10 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext &context)
         break;
     }
 
+    if (!d->wrapInfluenceOnPosition.isEmpty()) {
+        shape()->setAdditionalStyleAttribute("draw:wrap-influence-on-position", d->wrapInfluenceOnPosition);
+    }
+
     if (shape()->parent()) {// an anchor may not yet have been layout-ed
         QTransform parentMatrix = shape()->parent()->absoluteTransformation(0).inverted();
         QTransform shapeMatrix = shape()->absoluteTransformation(0);;
@@ -516,6 +527,7 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     QString verticalRel = styleStack.property(KoXmlNS::style, "vertical-rel");
     QString horizontalPos = styleStack.property(KoXmlNS::style, "horizontal-pos");
     QString horizontalRel = styleStack.property(KoXmlNS::style, "horizontal-rel");
+    d->wrapInfluenceOnPosition = styleStack.property(KoXmlNS::draw, "wrap-influence-on-position");
     styleStack.restore();
 
     // vertical-pos

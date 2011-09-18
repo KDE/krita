@@ -166,7 +166,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     if (!hasColorSpaceInfo) {
         if (components == 3) {
             image->color_space = CLRSPC_SRGB;
-        } else if (components == 3) {
+        } else if (components == 1) {
             image->color_space = CLRSPC_GRAY;
         }
     }

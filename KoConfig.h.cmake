@@ -30,7 +30,10 @@
 
 /* Defines if you have GL (Mesa, OpenGL, ...) and Qt GL support */
 #cmakedefine HAVE_OPENGL 1
-/* This file contains all the paths that change when changing the installation prefix */
 
+/* Defines if we use lcms2 */
+#cmakedefine HAVE_LCMS2 1
+
+/* This file contains all the paths that change when changing the installation prefix */
 #define CALLIGRAPREFIX "${CMAKE_INSTALL_PREFIX}"
 

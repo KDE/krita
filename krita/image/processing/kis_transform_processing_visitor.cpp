@@ -48,14 +48,14 @@ KisTransformProcessingVisitor(qreal  xscale, qreal  yscale,
                               qreal angle,
                               qint32  tx, qint32  ty,
                               KisFilterStrategy *filter,
-                              bool scaleOnlyShapes)
+                              const QTransform &shapesCorrection)
     : m_sx(xscale), m_sy(yscale)
     , m_tx(tx), m_ty(ty)
     , m_shearx(xshear), m_sheary(yshear)
     , m_shearOrigin(shearOrigin)
     , m_filter(filter)
     , m_angle(angle)
-    , m_scaleOnlyShapes(scaleOnlyShapes)
+    , m_shapesCorrection(shapesCorrection)
 {
 }
 
@@ -87,9 +87,12 @@ void KisTransformProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdap
 
 void KisTransformProcessingVisitor::visit(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
 {
-    KUndo2Command* command =
-        layer->transform(m_sx, m_sy, m_shearx, m_sheary,
-                         m_angle, m_tx, m_ty);
+    KisTransformWorker tw(layer->projection(), m_sx, m_sy, m_shearx, m_sheary,
+                          m_shearOrigin.x(), m_shearOrigin.y(),
+                          m_angle, m_tx, m_ty, 0,
+                          m_filter, true);
+
+    KUndo2Command* command = layer->transform(tw.transform() * m_shapesCorrection);
     if(command) {
         undoAdapter->addCommand(command);
     }
@@ -134,11 +137,9 @@ void KisTransformProcessingVisitor::transformClones(KisLayer *layer, KisUndoAdap
         // so check validity first
         if(!clone) continue;
 
-        ProgressHelper helper(clone);
-
         KisTransformWorker tw(clone->projection(), m_sx, m_sy, m_shearx, m_sheary,
                               m_shearOrigin.x(), m_shearOrigin.y(),
-                              m_angle, m_tx, m_ty, helper.updater(),
+                              m_angle, m_tx, m_ty, 0,
                               m_filter, true);
 
         QTransform trans  = tw.transform();
@@ -155,9 +156,6 @@ void KisTransformProcessingVisitor::transformClones(KisLayer *layer, KisUndoAdap
 
 void KisTransformProcessingVisitor::transformPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *adapter, const ProgressHelper &helper)
 {
-    // FIXME: check whether this is still used
-    if(m_scaleOnlyShapes) return;
-
     KisTransaction transaction(i18n("Transform Node"), device);
 
     KisTransformWorker tw(device, m_sx, m_sy, m_shearx, m_sheary,
@@ -175,8 +173,13 @@ void KisTransformProcessingVisitor::transformSelection(KisSelectionSP selection,
     }
 
     if (selection->hasShapeSelection()) {
+        KisTransformWorker tw(selection->projection(), m_sx, m_sy, m_shearx, m_sheary,
+                              m_shearOrigin.x(), m_shearOrigin.y(),
+                              m_angle, m_tx, m_ty, 0,
+                              m_filter, true);
+
         KUndo2Command* command =
-            selection->shapeSelection()->transform(m_sx, m_sy, m_shearx, m_sheary, m_angle, m_tx, m_ty);
+            selection->shapeSelection()->transform(tw.transform() * m_shapesCorrection);
         if (command) {
             adapter->addCommand(command);
         }

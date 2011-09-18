@@ -78,7 +78,7 @@ public:
     void moveX(qint32 x);
     void moveY(qint32 y);
     
-    KUndo2Command* transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey);
+    KUndo2Command* transform(const QTransform &transform);
         
 
 protected:

@@ -28,7 +28,7 @@
 class KRITAIMAGE_EXPORT KisImageSetResolutionCommand : public KUndo2Command
 {
 public:
-    KisImageSetResolutionCommand(KisImageWSP image, qreal newXRes, qreal newYRes);
+    KisImageSetResolutionCommand(KisImageWSP image, qreal newXRes, qreal newYRes, KUndo2Command *parent = 0);
     void undo();
     void redo();
 
@@ -39,6 +39,31 @@ private:
     qreal m_newYRes;
     qreal m_oldXRes;
     qreal m_oldYRes;
+};
+
+/**
+ * A special workaround command for updating the shapes.  It resets
+ * shapes always (for both undo() and redo() actions) after all the
+ * child commands are finished. Usually, it should have the only child
+ * KisImageSetResolutionCommand.
+ *
+ * Usecase: When you change the resolution of the image, the
+ * projection of the shape layer is still rendered in old
+ * resolution. So you should reset it and render again.
+ */
+class KRITAIMAGE_EXPORT KisResetShapesCommand : public KUndo2Command
+{
+public:
+    KisResetShapesCommand(KisNodeSP rootNode);
+
+    void undo();
+    void redo();
+
+private:
+    void resetNode(KisNodeSP node);
+
+private:
+    KisNodeSP m_rootNode;
 };
 
 #endif // KIS_IMAGE_SET_RESOLUTION_COMMAND_H

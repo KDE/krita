@@ -31,7 +31,7 @@ public:
                                   qreal  xshear, qreal  yshear, const QPointF &shearOrigin, qreal angle,
                                   qint32  tx, qint32  ty,
                                   KisFilterStrategy *filter,
-                                  bool scaleOnlyShapes = false);
+                                  const QTransform &shapesCorrection = QTransform());
 
     void visit(KisNode *node, KisUndoAdapter *undoAdapter);
     void visit(KisPaintLayer *layer, KisUndoAdapter *undoAdapter);
@@ -56,7 +56,7 @@ private:
     QPointF m_shearOrigin;
     KisFilterStrategy *m_filter;
     qreal m_angle;
-    bool m_scaleOnlyShapes;
+    QTransform m_shapesCorrection;
 };
 
 #endif /* __KIS_TRANSFORM_PROCESSING_VISITOR_H */

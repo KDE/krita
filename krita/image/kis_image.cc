@@ -486,7 +486,11 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
     qreal sx = qreal(size.width()) / this->size().width();
     qreal sy = qreal(size.height()) / this->size().height();
 
-    bool scaleOnlyShapes = resolutionChanged && !sizeChanged;
+    QTransform shapesCorrection;
+
+    if(resolutionChanged) {
+        shapesCorrection = QTransform::fromScale(xRes() / xres, yRes() / yres);
+    }
 
     KisProcessingVisitorSP visitor =
         new KisTransformProcessingVisitor(sx, sy,
@@ -495,12 +499,15 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
                                           0,
                                           0, 0,
                                           filterStrategy,
-                                          scaleOnlyShapes);
+                                          shapesCorrection);
 
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
 
     if(resolutionChanged) {
-        applicator.applyCommand(new KisImageSetResolutionCommand(this, xres, yres));
+        KUndo2Command *parent =
+            new KisResetShapesCommand(m_d->rootLayer);
+        new KisImageSetResolutionCommand(this, xres, yres, parent);
+        applicator.applyCommand(parent);
     }
 
     if(sizeChanged) {

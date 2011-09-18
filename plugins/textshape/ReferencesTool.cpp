@@ -240,7 +240,7 @@ void ReferencesTool::insertEndNote()
 
 void ReferencesTool::openSettings()
 {
-    NotesConfigurationDialog *dialog = new NotesConfigurationDialog(textEditor()->document(),0);
+    NotesConfigurationDialog *dialog = new NotesConfigurationDialog((QTextDocument *)textEditor()->document(),0);
     dialog->exec();
 }
 

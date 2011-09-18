@@ -303,27 +303,6 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
     }
 }
 
-void KoInlineNote::paintNotesBody(QTextCursor &cursor)
-{
-    KoOdfNotesConfiguration *notesConfig = 0;
-    if (d->type == Footnote) {
-        notesConfig = KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
-    } else {
-        notesConfig = KoTextDocument(d->textFrame->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
-    }
-    QTextCharFormat *fmat = new QTextCharFormat();
-    fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-    cursor.setPosition(cursor.currentFrame()->firstPosition());
-    if (d->autoNumbering) {
-        cursor.insertText(notesConfig->numberFormat().prefix()
-                          +notesConfig->numberFormat().formattedNumber(d->label.toInt()+notesConfig->startValue()-1)
-                          +notesConfig->numberFormat().suffix(), *fmat);
-    } else {
-        cursor.insertText(notesConfig->numberFormat().prefix()+d->label+notesConfig->numberFormat().suffix(), *fmat);
-    }
-    fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
-}
-
 int KoInlineNote::getPosInDocument()
 {
     return d->posInDocument;

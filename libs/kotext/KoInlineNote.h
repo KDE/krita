@@ -102,8 +102,6 @@ public:
     ///reimplemented
     void saveOdf(KoShapeSavingContext &context);
 
-    void paintNotesBody(QTextCursor &cursor);
-
     int getPosInDocument();
 
 protected:

@@ -531,7 +531,7 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     QString anchorType = shape()->additionalAttribute("text:anchor-type");
     if (anchorType == "char") {
         d->anchorType = AnchorToCharacter;
-    } else if (anchorType == "char") {
+    } else if (anchorType == "as-char") {
         d->anchorType = AnchorAsCharacter;
     } else if (anchorType == "paragraph") {
         d->anchorType = AnchorParagraph;

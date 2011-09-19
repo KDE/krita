@@ -61,7 +61,8 @@ public:
             anchorType(KoTextAnchor::AnchorToCharacter),
             anchorStrategy(0),
             inlineObjectAscent(0),
-            inlineObjectDescent(0)
+            inlineObjectDescent(0),
+            pageNumber(-1)
     {
         Q_ASSERT(shape);
     }
@@ -93,14 +94,13 @@ public:
     KoAnchorStrategy *anchorStrategy;
     qreal inlineObjectAscent;
     qreal inlineObjectDescent;
+    int pageNumber;
 };
 
 KoTextAnchor::KoTextAnchor(KoShape *shape)
     : KoInlineObject(*(new KoTextAnchorPrivate(this, shape)), false)
 {
     Q_D(KoTextAnchor);
-    shape->setAnchored(true);
-    shape->setVisible(false);
     d->fakeAsChar = false;
 }
 
@@ -182,6 +182,24 @@ KoTextAnchor::VerticalRel KoTextAnchor::verticalRel()
 {
     Q_D(const KoTextAnchor);
     return d->verticalRel;
+}
+
+int KoTextAnchor::pageNumber() const
+{
+    Q_D(const KoTextAnchor);
+    return d->pageNumber;
+}
+
+const QPointF &KoTextAnchor::offset() const
+{
+    Q_D(const KoTextAnchor);
+    return d->distance;
+}
+
+void KoTextAnchor::setOffset(const QPointF &offset)
+{
+    Q_D(KoTextAnchor);
+    d->distance = offset;
 }
 
 void KoTextAnchor::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
@@ -334,18 +352,6 @@ const QTextDocument *KoTextAnchor::document() const
 {
     Q_D(const KoTextAnchor);
     return d->document;
-}
-
-const QPointF &KoTextAnchor::offset() const
-{
-    Q_D(const KoTextAnchor);
-    return d->distance;
-}
-
-void KoTextAnchor::setOffset(const QPointF &offset)
-{
-    Q_D(KoTextAnchor);
-    d->distance = offset;
 }
 
 void KoTextAnchor::saveOdf(KoShapeSavingContext &context)
@@ -537,6 +543,18 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
         d->anchorType = AnchorParagraph;
     } else if (anchorType == "page") {
         d->anchorType = AnchorPage;
+    }
+
+    if (anchorType == "page" && shape()->hasAdditionalAttribute("text:anchor-page-number")) {
+        d->pageNumber = shape()->additionalAttribute("text:anchor-page-number").toInt();
+        if (d->pageNumber <= 0) {
+            // invalid if the page-number is invalid (OO.org does the same)
+            // see http://bugs.kde.org/show_bug.cgi?id=281869
+            d->pageNumber = -1;
+            shape()->setVisible(false);
+        }
+    } else {
+        d->pageNumber = -1;
     }
 
     // load settings from graphic style

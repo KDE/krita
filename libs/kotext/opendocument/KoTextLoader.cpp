@@ -2260,24 +2260,18 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
         return 0;
     }
 
-    QString anchorType;
-    if (shape->hasAdditionalAttribute("text:anchor-type"))
-        anchorType = shape->additionalAttribute("text:anchor-type");
-    else if (element.hasAttributeNS(KoXmlNS::text, "anchor-type"))
-        anchorType = element.attributeNS(KoXmlNS::text, "anchor-type");
-    else
-        anchorType = "as-char"; // default value
+    KoTextAnchor *anchor = new KoTextAnchor(shape);
+    anchor->loadOdf(element, d->context);
+    d->textSharedData->shapeInserted(shape, element, d->context, anchor);
 
     // page anchored shapes are handled differently
-    if (anchorType == "page" && shape->hasAdditionalAttribute("text:anchor-page-number")) {
-        d->textSharedData->shapeInserted(shape, element, d->context);
+    if (anchor->anchorType() == KoTextAnchor::AnchorPage && shape->hasAdditionalAttribute("text:anchor-page-number")) {
+        // nothing else to do
     } else {
-        KoTextAnchor *anchor = new KoTextAnchor(shape);
+        shape->setVisible(false); // make it invisible until layouting
         if (d->inTable) {
             anchor->fakeAsChar();
         }
-        anchor->loadOdf(element, d->context);
-        d->textSharedData->shapeInserted(shape, element, d->context);
 
         KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
         if (textObjectManager) {

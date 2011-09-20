@@ -32,6 +32,7 @@ Comment[pt_BR]=Plugin de gráficos do KoReport
 Comment[sv]=Insticksprogram för Koffice rapportdiagram
 Comment[uk]=Додаток діаграм KoReport
 Comment[x-test]=xxKoReport Chart Pluginxx
+Comment[zh_TW]=KoReport 圖表外掛程式
 X-KDE-Library=koreport_chartplugin
 X-KDE-ServiceTypes=KoReport/ItemPlugin
 Type=Service

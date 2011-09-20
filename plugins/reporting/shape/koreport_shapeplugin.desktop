@@ -32,6 +32,7 @@ Comment[pt_BR]=Plugin de formas do KoReport
 Comment[sv]=Insticksprogram för Koffice rapportform
 Comment[uk]=Додаток форм KoReport
 Comment[x-test]=xxKoReport Shape Pluginxx
+Comment[zh_TW]=KoReport 元件外掛程式
 X-KDE-Library=koreport_shapeplugin
 X-KDE-ServiceTypes=KoReport/ItemPlugin
 Type=Service

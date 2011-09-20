@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>BibliographyConfigureDialog</class>
+ <widget class="QDialog" name="BibliographyConfigureDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>346</width>
+    <height>310</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Formatting of bibliography entries</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="prefixLabel">
+          <property name="text">
+           <string>Prefix:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="prefix">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="suffixLabel">
+          <property name="text">
+           <string>Suffix:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="suffix">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="numberedEntries">
+        <property name="text">
+         <string>Number entries</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Sort</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="sortByPosition">
+        <property name="text">
+         <string>Sort by position</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="sortByLabel">
+          <property name="text">
+           <string>Sort by</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="sortKey">
+          <item>
+           <property name="text">
+            <string>address</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>annote</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>author</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>bibliography-type</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>booktitle</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>chapter</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>custom1</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>custom2</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>custom3</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>custom4</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>custom5</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>edition</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>editor</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>howpublished</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>identifier</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>institution</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>isbn</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>issn</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>journal</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>month</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>note</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>number</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>organizations</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>pages</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>publisher</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>report-type</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>school</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>series</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>title</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>url</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>volume</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>year</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="sortAlgorithmLabel">
+          <property name="text">
+           <string>Sort algorithm:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="sortAlgorithm">
+          <item>
+           <property name="text">
+            <string>Alphanumeric</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Discard</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>BibliographyConfigureDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>BibliographyConfigureDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

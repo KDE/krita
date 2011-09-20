@@ -117,6 +117,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/CharacterHighlighting.ui
     dialogs/StyleManagerWelcome.ui
     dialogs/TableDialog.ui
+    dialogs/BibliographyConfigureDialog.ui
     dialogs/TableOfContentsConfigure.ui
     dialogs/TableOfContentsStyleConfigure.ui
 

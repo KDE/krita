@@ -480,6 +480,12 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                                 .lineNumberingConfiguration());
     KoTextDocument(document).setLineNumberingConfiguration(lineNumberingConfiguration);
 
+    KoOdfBibliographyConfiguration *bibConfiguration =
+            new KoOdfBibliographyConfiguration(d->context.odfLoadingContext()
+                                               .stylesReader()
+                                               .globalBibliographyConfiguration());
+    KoTextDocument(document).setBibliographyConfiguration(bibConfiguration);
+
     d->styleManager = KoTextDocument(document).styleManager();
     d->changeTracker = KoTextDocument(document).changeTracker();
     //    if (!d->changeTracker)

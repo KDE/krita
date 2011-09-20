@@ -74,6 +74,7 @@ SET ( textshape_SRCS
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp
     dialogs/ChangeTrackingOptionsWidget.cpp
+    dialogs/BibliographyConfigureDialog.cpp
     dialogs/TableOfContentsConfigure.cpp
     dialogs/TableOfContentsStyleConfigure.cpp
     dialogs/TableOfContentsStyleModel.cpp

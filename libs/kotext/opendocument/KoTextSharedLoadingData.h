@@ -42,6 +42,7 @@ class KoStyleManager;
 class KoShape;
 class KoShapeLoadingContext;
 class KoOdfNotesConfiguration;
+class KoOdfBibliographyConfiguration;
 
 #define KOTEXT_SHARED_LOADING_ID "KoTextSharedLoadingId"
 
@@ -166,6 +167,12 @@ public:
     KoOdfNotesConfiguration endnotesConfiguration() const;
 
     /**
+     * Get the document-wide configuration for bibliography this contains information
+     * about prefix, suffix, sort by position, sort algorithm etc.
+     */
+    KoOdfBibliographyConfiguration bibliographyConfiguration() const;
+
+    /**
      * Set the appication default style
      *
      * This is done so the application default style needs to be loaded only once.
@@ -244,6 +251,8 @@ private:
     void addOutlineStyle(KoShapeLoadingContext & context, KoStyleManager *styleManager);
 
     void addNotesConfiguration(KoShapeLoadingContext &context);
+
+    void addBibliographyConfiguration(KoShapeLoadingContext &context);
 
     class Private;
     Private * const d;

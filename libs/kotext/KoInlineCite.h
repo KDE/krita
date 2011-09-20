@@ -24,6 +24,8 @@
 
 #include "KoXmlReaderForward.h"
 
+#include <QTextFrame>
+
 class KoShapeLoadingContext;
 class KoChangeTracker;
 class KoStyleManager;
@@ -51,6 +53,8 @@ public:
     Type type() const;        //return type of cite
 
     void setType(Type t);
+
+    void setMotherFrame(QTextFrame *motherFrame);
 
     QString dataField(QString fieldName) const;     //returns bibliography-data-field with name fieldName
 

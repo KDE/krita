@@ -97,7 +97,8 @@ enum KoTextFrameProperty {
 enum KoSubFrameType {
     EndNotesFrameType = 1,
     FootNotesFrameType,
-    NoteFrameType
+    NoteFrameType,
+    CitationFrameType
 };
 
 /// Text in the objects will be positioned according to the direction.

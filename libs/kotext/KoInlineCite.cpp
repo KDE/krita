@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/* This file is part of the  KDE project
  * Copyright (C) 2011 Smit Patel <smitpatel24@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -28,7 +28,8 @@
 #include <KoTextWriter.h>
 #include <KoTextDocument.h>
 #include <KoText.h>
-
+#include <KoOdfBibliographyConfiguration.h>
+#include <KoGenStyles.h>
 #include <KDebug>
 
 #include <QTextDocument>
@@ -38,6 +39,8 @@
 #include <QTextInlineObject>
 #include <QFontMetricsF>
 #include <QTextOption>
+#include <QBuffer>
+#include <QMap>
 //#include <QMessageBox>
 
 class KoInlineCite::Private
@@ -47,6 +50,8 @@ public:
         : type(t)
     {
     }
+
+    QTextFrame *textFrame;
     KoInlineCite::Type type;
     QString bibliographyType;
     QString identifier;
@@ -101,6 +106,18 @@ KoInlineCite::Type KoInlineCite::type() const
 void KoInlineCite::setType(Type t)
 {
     d->type = t;
+}
+
+void KoInlineCite::setMotherFrame(QTextFrame *motherFrame)
+{
+    //creating our subframe
+
+    QTextCursor cursor(motherFrame->lastCursorPosition());
+
+    QTextFrameFormat format;
+    format.setProperty(KoText::SubFrameType,KoText::CitationFrameType);
+
+    d->textFrame = cursor.insertFrame(format);
 }
 
 QString KoInlineCite::dataField(QString fieldName) const
@@ -576,7 +593,8 @@ void KoInlineCite::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     if (d->identifier.isEmpty())
         return;
 
-    QString citeLabel = QString("[%1]").arg(d->identifier);
+    KoOdfBibliographyConfiguration *bibConfiguration = KoTextDocument(document).bibliographyConfiguration();
+    QString citeLabel = QString("%1%2%3").arg(bibConfiguration->prefix()).arg(d->identifier).arg(bibConfiguration->suffix());
 
     QFont font(format.font(), pd);
     QTextLayout layout(citeLabel, font, pd);
@@ -654,6 +672,14 @@ bool KoInlineCite::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 void KoInlineCite::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
+
+    if (KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->citations(true)[0]->id() == this->id()) {
+            QBuffer xmlBuffer;
+            KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBuffer);
+
+            KoTextDocument(d->textFrame->document()).bibliographyConfiguration()->saveOdf(xmlWriter);
+            context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBuffer.data());
+    }
 
     writer->startElement("text:bibliography-mark", false);
 

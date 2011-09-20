@@ -209,7 +209,7 @@ public:
     void clearCategory(const TCategory& category) {
 		Iterator itr = qFind(m_categories.begin(), m_categories.end(), category);
         
-        if(itr != m_categories.end()) {
+        if(itr != m_categories.end() && !itr->entries.empty()) {
 			int pos = getCategoryBegin(itr);
 			emit beginRemoveRows(QModelIndex(), pos, pos + itr->entries.size() - 1);
 			itr->entries.clear();

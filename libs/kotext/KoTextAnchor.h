@@ -83,7 +83,7 @@ public:
         HRight
     };
 
-    enum HorizontalRel {
+    enum HorizontalRel { //NOTE: update KWAnchoringProperties if you change this
         HChar,
         HPage,
         HPageContent,
@@ -107,7 +107,7 @@ public:
         VTop
     };
 
-    enum VerticalRel {
+    enum VerticalRel { //NOTE: update KWAnchoringProperties if you change this
         VBaseline,
         VChar,
         VFrame,
@@ -118,6 +118,13 @@ public:
         VParagraph,
         VParagraphContent,
         VText
+    };
+
+    enum AnchorType {
+        AnchorAsCharacter,
+        AnchorToCharacter,
+        AnchorParagraph,
+        AnchorPage
     };
 
     /**
@@ -158,7 +165,7 @@ public:
      * - paragraph
      *   The paragraph that the current drawing shape element is contained in.
      */
-    QString anchorType() const;
+    AnchorType anchorType() const;
 
     /// set the current vertical-pos
     void setHorizontalPos(HorizontalPos);
@@ -222,9 +229,9 @@ public:
     bool behavesAsCharacter() const;
 
     /**
-     * Set if the anchor should behave as a character
+     * Set how the anchor behaves
      */
-    void setBehavesAsCharacter(bool);
+    void setAnchorType(KoTextAnchor::AnchorType type);
 
     /// \internal make sure that the anchor has no KoTextShapeContainerModel references anymore.
     void detachFromModel();

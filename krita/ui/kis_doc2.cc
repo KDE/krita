@@ -453,10 +453,6 @@ void KisDoc2::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
             QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
         }
 
-        QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", "krita_first_start.kra");
-        if (!fname.isEmpty()) {
-            openUrl(fname);
-        }
         cfg.setFirstRun(false);
     }
 }

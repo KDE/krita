@@ -951,16 +951,50 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 if (textList->format().hasProperty(KoListStyle::TabStopPosition)) {
                     qreal listTab = textList->format().doubleProperty(KoListStyle::TabStopPosition);
                     if (!m_documentLayout->relativeTabs(block)) {
-                        listTab += leftMargin + m_indent;
+                        // How list tab is defined if fixed tabs:
+                        //        listTab
+                        //|>-------------------------|
+                        //           m_indent
+                        //         |---------<|
+                        //       m_listIndent
+                        //     |-------------<|
+                        //     LABEL                 TEXT STARTS HERE AND GOES ON
+                        //                    TO THE NEXT LINE
+                        //|>------------------|
+                        //     leftMargin
+                        listTab -= leftMargin + m_indent;
                     } else {
-                        listTab -= leftMargin + m_indent; // express it relatively like other tabs
+                        // How list tab is defined if relative tabs:
+                        //                    listTab
+                        //                    |>-----|
+                        //           m_indent
+                        //         |---------<|
+                        //       m_listIndent
+                        //     |-------------<|
+                        //     LABEL                 TEXT STARTS HERE AND GOES ON
+                        //                    TO THE NEXT LINE
+                        //|>------------------|
+                        //     leftMargin
+                        listTab -= m_indent;
                     }
+                    //How we want it:
+                    //         x()
+                    //         |     listTab
+                    //         |>---------------|
+                    //           m_indent
+                    //         |---------<|
+                    //       m_listIndent
+                    //     |-------------<|
+                    //     LABEL                 TEXT STARTS HERE AND GOES ON
+                    //                    TO THE NEXT LINE
+                    //|>------------------|
+                    //     leftMargin
 
                     foreach(KoText::Tab tab, tabs) {
                         qreal position = tab.position  * 72. / qt_defaultDpiY();
-                        if (position > listLabelIndent) {
+                        if (position > 0.0) {
                             // found the relevant normal tab
-                            if (position > listTab && listTab > listLabelIndent) {
+                            if (position > listTab) {
                                 // But special tab is more relevant
                                 position = listTab;
                             }

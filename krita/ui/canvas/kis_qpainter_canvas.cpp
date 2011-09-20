@@ -60,7 +60,7 @@
 #include "kis_config_notifier.h"
 #include "kis_group_layer.h"
 
-//#define DEBUG_REPAINT
+#define DEBUG_REPAINT
 #include <KoCanvasController.h>
 
 class KisQPainterCanvas::Private

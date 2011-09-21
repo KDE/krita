@@ -556,15 +556,12 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io){
             for (int channel = 0; channel < m_header.nChannels; channel++) {
 
 
-                switch (m_compression) {
+                switch (channelInfo->compressionType) {
 
                 case Compression::Uncompressed:
 
                 {
-                    io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[0]);
-                    channelBytes.append(io->read(m_header.width*m_channelSize));
-                    // Debug
-                    qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
+                    qDebug()<<"Uncompressed";
                 }
                 break;
 
@@ -586,20 +583,10 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io){
                 }
                 break;
 
-                case Compression::ZIP:
-                    break;
-
-                case Compression::ZIPWithPrediction:
-                    break;
-
                 default:
                     break;
                 }
 
-            }
-
-            if (m_channelInfoRecords[channelid].compressionType == 0){
-                m_channelOffsets[channelid] += (m_header.width * m_channelSize);
             }
 
             qDebug() << "------------------------------------------";
@@ -619,37 +606,7 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io){
                     KoRgbU8Traits::setBlue(it.rawData(), blue);
 
                 }
-
-                else if (m_channelSize == 1) {
-
-                    quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
-                    KoRgbU16Traits::setRed(it.rawData(), red);
-
-                    quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
-                    KoRgbU16Traits::setGreen(it.rawData(), green);
-
-                    quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
-                    KoRgbU16Traits::setBlue(it.rawData(), blue);
-
-                }
-
-                // XXX see implementation Openexr
-                else if (m_channelSize == 4) {
-
-                    quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                    KoRgbU16Traits::setRed(it.rawData(), red);
-
-                    quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                    KoRgbU16Traits::setGreen(it.rawData(), green);
-
-                    quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                    KoRgbU16Traits::setBlue(it.rawData(), blue);
-
-                }
-
-                dev->colorSpace()->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
-                ++it;
-            }
+}
 
         }
 

@@ -34,6 +34,8 @@
 #include "KoShape.h"
 #include "KoToolManager.h"
 
+#include <QObject>
+
 #include <kpagedialog.h>
 #include <klocale.h>
 
@@ -78,6 +80,7 @@ public:
                     delete widget;
                     continue;
                 }
+                widget->connect(widget, SIGNAL(accept()), dialog, SLOT(accept()));
                 widgets.append(widget);
                 widget->setResourceManager(canvas->resourceManager());
                 widget->setUnit(canvas->unit());
@@ -88,6 +91,7 @@ public:
                 if (! panel->showOnShapeCreate())
                     continue;
                 panel->open(shape);
+                panel->connect(panel, SIGNAL(accept()), dialog, SLOT(accept()));
                 widgets.append(panel);
                 panel->setResourceManager(canvas->resourceManager());
                 panel->setUnit(canvas->unit());

@@ -50,7 +50,7 @@ void KisCmbIDList::setIDList(const QList<KoID>  & list)
 KoID KisCmbIDList::currentItem() const
 {
     qint32 i = QComboBox::currentIndex();
-    if (i > m_list.count() - 1) return KoID();
+    if (i > m_list.count() - 1 || i < 0) return KoID();
 
     return m_list[i];
 }

@@ -42,6 +42,7 @@ class KoStyleManager;
 class KoShape;
 class KoShapeLoadingContext;
 class KoOdfNotesConfiguration;
+class KoTextAnchor;
 
 #define KOTEXT_SHARED_LOADING_ID "KoTextSharedLoadingId"
 
@@ -186,7 +187,7 @@ protected:
      * @param shape a shape that has finished loading.
      * @param element the xml element that represents the shape being inserted.
      */
-    virtual void shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual void shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context, KoTextAnchor *anchor);
 
 private:
     enum StyleType {

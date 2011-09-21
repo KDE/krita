@@ -54,15 +54,15 @@ public:
             shape(s),
             document(0),
             position(-1),
-            behaveAsCharacter(false),
             verticalPos(KoTextAnchor::VTop),
             verticalRel(KoTextAnchor::VLine),
             horizontalPos(KoTextAnchor::HLeft),
             horizontalRel(KoTextAnchor::HChar),
-            anchorType("char"),
+            anchorType(KoTextAnchor::AnchorToCharacter),
             anchorStrategy(0),
             inlineObjectAscent(0),
-            inlineObjectDescent(0)
+            inlineObjectDescent(0),
+            pageNumber(-1)
     {
         Q_ASSERT(shape);
     }
@@ -84,26 +84,22 @@ public:
     int position;
     QTextCharFormat format;
     QPointF distance;
-    bool behaveAsCharacter;
     KoTextAnchor::VerticalPos verticalPos;
     KoTextAnchor::VerticalRel verticalRel;
     KoTextAnchor::HorizontalPos horizontalPos;
     KoTextAnchor::HorizontalRel horizontalRel;
     QString wrapInfluenceOnPosition;
-    QString anchorType;
-    bool fakeAsChar;
+    KoTextAnchor::AnchorType anchorType;
     KoAnchorStrategy *anchorStrategy;
     qreal inlineObjectAscent;
     qreal inlineObjectDescent;
+    int pageNumber;
 };
 
 KoTextAnchor::KoTextAnchor(KoShape *shape)
     : KoInlineObject(*(new KoTextAnchorPrivate(this, shape)), false)
 {
     Q_D(KoTextAnchor);
-    shape->setAnchored(true);
-    shape->setVisible(false);
-    d->fakeAsChar = false;
 }
 
 KoTextAnchor::~KoTextAnchor()
@@ -114,19 +110,13 @@ KoTextAnchor::~KoTextAnchor()
     }
 }
 
-void KoTextAnchor::fakeAsChar()
-{
-    Q_D(KoTextAnchor);
-    d->fakeAsChar = true;
-}
-
 KoShape *KoTextAnchor::shape() const
 {
     Q_D(const KoTextAnchor);
     return d->shape;
 }
 
-QString KoTextAnchor::anchorType() const
+KoTextAnchor::AnchorType KoTextAnchor::anchorType() const
 {
     Q_D(const KoTextAnchor);
     return d->anchorType;
@@ -186,6 +176,24 @@ KoTextAnchor::VerticalRel KoTextAnchor::verticalRel()
     return d->verticalRel;
 }
 
+int KoTextAnchor::pageNumber() const
+{
+    Q_D(const KoTextAnchor);
+    return d->pageNumber;
+}
+
+const QPointF &KoTextAnchor::offset() const
+{
+    Q_D(const KoTextAnchor);
+    return d->distance;
+}
+
+void KoTextAnchor::setOffset(const QPointF &offset)
+{
+    Q_D(KoTextAnchor);
+    d->distance = offset;
+}
+
 void KoTextAnchor::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
 {
     Q_D(KoTextAnchor);
@@ -215,7 +223,7 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
 
     // important detail; top of anchored shape is at the baseline.
     QFontMetricsF fm(format.font(), pd);
-    if (d->behaveAsCharacter == true) {
+    if (d->anchorType == AnchorAsCharacter) {
         d->distance.setX(0);
         object.setWidth(d->shape->size().width());
         if (d->verticalRel == VBaseline) {
@@ -269,13 +277,6 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
         object.setWidth(0);
         object.setAscent(0);
         object.setDescent(0);
-    }
-    if (d->fakeAsChar) {
-        object.setAscent(d->shape->size().height());
-        object.setDescent(0);
-
-        d->inlineObjectAscent = object.ascent();
-        d->inlineObjectDescent = object.descent();
     }
 }
 
@@ -338,23 +339,27 @@ const QTextDocument *KoTextAnchor::document() const
     return d->document;
 }
 
-const QPointF &KoTextAnchor::offset() const
-{
-    Q_D(const KoTextAnchor);
-    return d->distance;
-}
-
-void KoTextAnchor::setOffset(const QPointF &offset)
-{
-    Q_D(KoTextAnchor);
-    d->distance = offset;
-}
-
 void KoTextAnchor::saveOdf(KoShapeSavingContext &context)
 {
     Q_D(KoTextAnchor);
 
-    shape()->setAdditionalAttribute("text:anchor-type", d->anchorType);
+    // anchor-type
+    switch (d->anchorType) {
+    case AnchorToCharacter:
+        shape()->setAdditionalStyleAttribute("text:anchor-type", "char");
+        break;
+    case AnchorAsCharacter:
+        shape()->setAdditionalStyleAttribute("text:anchor-type", "as-char");
+        break;
+    case AnchorParagraph:
+        shape()->setAdditionalStyleAttribute("text:anchor-type", "paragraph");
+        break;
+    case AnchorPage:
+        shape()->setAdditionalStyleAttribute("text:anchor-type", "page");
+        break;
+    default:
+        break;
+    }
 
     // vertical-pos
     switch (d->verticalPos) {
@@ -514,7 +519,28 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 
     if (! shape()->hasAdditionalAttribute("text:anchor-type"))
         return false;
-    d->anchorType = shape()->additionalAttribute("text:anchor-type");
+    QString anchorType = shape()->additionalAttribute("text:anchor-type");
+    if (anchorType == "char") {
+        d->anchorType = AnchorToCharacter;
+    } else if (anchorType == "as-char") {
+        d->anchorType = AnchorAsCharacter;
+    } else if (anchorType == "paragraph") {
+        d->anchorType = AnchorParagraph;
+    } else if (anchorType == "page") {
+        d->anchorType = AnchorPage;
+    }
+
+    if (anchorType == "page" && shape()->hasAdditionalAttribute("text:anchor-page-number")) {
+        d->pageNumber = shape()->additionalAttribute("text:anchor-page-number").toInt();
+        if (d->pageNumber <= 0) {
+            // invalid if the page-number is invalid (OO.org does the same)
+            // see http://bugs.kde.org/show_bug.cgi?id=281869
+            d->pageNumber = -1;
+            shape()->setVisible(false);
+        }
+    } else {
+        d->pageNumber = -1;
+    }
 
     // load settings from graphic style
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
@@ -674,8 +700,7 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
         d->distance = QPointF();
      }
 
-    if (d->anchorType == "as-char") {
-        d->behaveAsCharacter = true;
+    if (d->anchorType == AnchorAsCharacter) {
         d->horizontalRel = HChar;
         d->horizontalPos = HLeft;
     }
@@ -684,22 +709,14 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     return true;
 }
 
-void KoTextAnchor::setBehavesAsCharacter(bool aschar)
+void KoTextAnchor::setAnchorType(KoTextAnchor::AnchorType type)
 {
     Q_D(KoTextAnchor);
-    d->behaveAsCharacter = aschar;
-    if (aschar == true) {
+    d->anchorType = type;
+    if (type == AnchorAsCharacter) {
         d->horizontalRel = HChar;
         d->horizontalPos = HLeft;
     }
-}
-
-bool KoTextAnchor::behavesAsCharacter() const
-{
-    Q_D(const KoTextAnchor);
-    if (d->fakeAsChar)
-        return true;
-    return d->behaveAsCharacter;
 }
 
 void KoTextAnchor::detachFromModel()

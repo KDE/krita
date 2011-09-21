@@ -61,7 +61,7 @@ public:
 
     /// set content rectangle coordinates to which this text anchor is anchored (needed for
     /// HPageContent)
-    void setPageContentRect(QRectF &marginRect);
+    void setPageContentRect(const QRectF &marginRect);
 
     /// get paragraph rectangle coordinates to which this text anchor is anchored (needed for
     /// HParagraphContent, HParagraphStartMargin, HParagraphEndMargin, VParagraph)

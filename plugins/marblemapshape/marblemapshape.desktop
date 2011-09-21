@@ -7,6 +7,7 @@ Name[ru]=Карта Marble
 Name[sv]=Marble-kartform
 Name[uk]=Форма карти Marble
 Name[x-test]=xxMarble Map Shapexx
+Name[zh_TW]=Marble 地圖元件
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-Library=marblemapshape

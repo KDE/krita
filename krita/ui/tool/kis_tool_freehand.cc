@@ -440,9 +440,9 @@ void KisToolFreehand::endPaint()
                 dynamic_cast<KisIndirectPaintingSupport*>(layer.data());
             Q_ASSERT(indirect);
 
-            indirect->mergeToLayer(layer, m_incrementalDirtyRegion, m_transactionText);
+            indirect->mergeToLayer(layer, QRegion(m_incrementalDirtyRegion), m_transactionText);
 
-            m_incrementalDirtyRegion = QRegion();
+            m_incrementalDirtyRegion = QRect();
         } else {
             m_painter->endTransaction(image()->undoAdapter());
         }
@@ -517,7 +517,7 @@ void KisToolFreehand::setDirty(const QVector<QRect> &rects)
     currentNode()->setDirty(rects);
     if (!m_paintIncremental) {
         foreach(const QRect &rc, rects) {
-            m_incrementalDirtyRegion += rc;
+            m_incrementalDirtyRegion |= rc;
         }
     }
 }
@@ -531,7 +531,7 @@ void KisToolFreehand::setDirty(const QRegion& region)
     currentNode()->setDirty(region);
 
     if (!m_paintIncremental) {
-        m_incrementalDirtyRegion += region;
+        m_incrementalDirtyRegion |= region.boundingRect();
     }
 }
 

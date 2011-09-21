@@ -7,6 +7,7 @@ Name[pt_BR]=Seletor de cores artísticas
 Name[sv]=Artistisk färgväljare
 Name[uk]=Художній вибір кольору
 Name[x-test]=xxArtistic color selectorxx
+Name[zh_TW]=精美顏色選擇器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritaartisticcolorselector

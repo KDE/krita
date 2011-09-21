@@ -33,7 +33,7 @@ class FrameIterator
 {
 public:
     FrameIterator(QTextFrame *frame);
-    FrameIterator(QTextTableCell frame);
+    FrameIterator(const QTextTableCell &frame);
     FrameIterator(FrameIterator *other);
     ~FrameIterator();
 

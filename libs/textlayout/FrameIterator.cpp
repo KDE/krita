@@ -36,7 +36,7 @@ FrameIterator::FrameIterator(QTextFrame *frame)
     lineTextStart = -1;
 }
 
-FrameIterator::FrameIterator(QTextTableCell cell)
+FrameIterator::FrameIterator(const QTextTableCell &cell)
 {
     it = cell.begin();
     currentTableIterator = 0;

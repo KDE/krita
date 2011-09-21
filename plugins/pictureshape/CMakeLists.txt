@@ -17,7 +17,8 @@ SET (pictureshape_LIB_SRCS
 
 kde4_add_plugin(pictureshape ${pictureshape_LIB_SRCS})
 
-target_link_libraries(pictureshape komain flake)
+target_link_libraries(pictureshape komain flake    ${KDE4_KFILE_LIBRARY}
+)
 install(TARGETS pictureshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

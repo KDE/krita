@@ -858,6 +858,7 @@ void TextTool::copy() const
     KoTextOdfSaveHelper saveHelper(m_textShapeData, from, to);
     KoTextDrag drag;
 
+    kDebug(30015) << "xxx canvas" << canvas() << "rdf" << KoDocumentRdfBase::fromResourceManager(canvas());
     if (KoDocumentRdfBase *rdf = KoDocumentRdfBase::fromResourceManager(canvas())) {
         saveHelper.setRdfModel(rdf->model());
     }

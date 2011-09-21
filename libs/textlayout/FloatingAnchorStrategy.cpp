@@ -139,18 +139,22 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
         anchorBoundingRect.setWidth(pageRect().width());
         break;
 
-    case KoTextAnchor::HParagraph:
     case KoTextAnchor::HPageContent:
         anchorBoundingRect.setX(containerBoundingRect.x());
         anchorBoundingRect.setWidth(containerBoundingRect.width());
+        break;
+
+    case KoTextAnchor::HParagraph:
+        anchorBoundingRect.setX(paragraphRect().x() + containerBoundingRect.x());
+        anchorBoundingRect.setWidth(paragraphRect().width());
         break;
 
     case KoTextAnchor::HParagraphContent:
         //FIXME proper map style:horizontal-rel=paragraph-content to use the paragraph
         //content. Currently we do the same MSWord2010 does and map it (as in to
         //the same style:horizontal-rel=paragraph would do.
-        anchorBoundingRect.setX(containerBoundingRect.x());
-        anchorBoundingRect.setWidth(containerBoundingRect.width());
+        anchorBoundingRect.setX(paragraphRect().x() + containerBoundingRect.x());
+        anchorBoundingRect.setWidth(paragraphRect().width());
         break;
 
     case KoTextAnchor::HChar: {
@@ -314,14 +318,8 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
          QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
          if (!tl.isValid())
              return false; // lets go for a second round.
-         if (m_anchor->behavesAsCharacter() && m_anchor->verticalRel() == KoTextAnchor::VChar) {
-             //char relative is behaving in a special way when as-char
-             anchorBoundingRect.setY(tl.y() + containerBoundingRect.y() - data->documentOffset());
-             anchorBoundingRect.setHeight(tl.height());
-         } else {
-             anchorBoundingRect.setY(tl.y() + containerBoundingRect.y() - data->documentOffset());
-             anchorBoundingRect.setHeight(tl.height());
-         }
+         anchorBoundingRect.setY(tl.y() + containerBoundingRect.y() - data->documentOffset());
+         anchorBoundingRect.setHeight(tl.height());
      }
      break;
 
@@ -367,7 +365,7 @@ void FloatingAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF ancho
 
 }
 
-void FloatingAnchorStrategy::checkPageBorder(QPointF &newPosition, QRectF containerBoundingRect)
+void FloatingAnchorStrategy::checkPageBorder(QPointF &newPosition, const QRectF &containerBoundingRect)
 {
     QSizeF size = m_anchor->shape()->boundingRect().size();
 
@@ -399,7 +397,7 @@ void FloatingAnchorStrategy::checkPageBorder(QPointF &newPosition, QRectF contai
 // floating over each other.
 void FloatingAnchorStrategy::checkStacking(QPointF &newPosition)
 {
-    if (m_anchor->anchorType() != "paragraph" || (m_anchor->horizontalPos() != KoTextAnchor::HLeft && m_anchor->horizontalPos() != KoTextAnchor::HRight))
+    if (m_anchor->anchorType() != KoTextAnchor::AnchorParagraph || (m_anchor->horizontalPos() != KoTextAnchor::HLeft && m_anchor->horizontalPos() != KoTextAnchor::HRight))
         return;
 
     int idx = m_rootArea->documentLayout()->textAnchors().indexOf(m_anchor);

@@ -334,6 +334,12 @@ public:
     /// return all the sectionStyles registered.
     QList<KoSectionStyle*> sectionStyles() const;
 
+    /// returns the default style for the ToC entries for the specified outline level
+    KoParagraphStyle *defaultTableOfContentsEntryStyle(int outlineLevel);
+
+    /// returns the default style for the ToC title
+    KoParagraphStyle *defaultTableOfcontentsTitleStyle();
+
 signals:
     void styleAdded(KoParagraphStyle*);
     void styleAdded(KoCharacterStyle*);

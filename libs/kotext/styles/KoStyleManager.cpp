@@ -76,6 +76,7 @@ public:
     KoParagraphStyle *defaultParagraphStyle;
     KoListStyle *defaultListStyle;
     KoListStyle *outlineStyle;
+    QList<int> defaultToCEntriesStyleId;
 };
 
 // static
@@ -97,6 +98,17 @@ KoStyleManager::KoStyleManager(QObject *parent)
     llp.setStyle(KoListStyle::DecimalItem);
     llp.setListItemSuffix(".");
     d->defaultListStyle->setLevelProperties(llp);
+
+    //default styles for ToCs
+    int maxOutLineLevel = 10;
+    for (int outlineLevel = 1; outlineLevel <= maxOutLineLevel; outlineLevel++) {
+        KoParagraphStyle *style = new KoParagraphStyle();
+        style->setName("Contents " + QString::number(outlineLevel));
+        style->setLeftMargin(QTextLength(QTextLength::FixedLength, (outlineLevel - 1) * 8));
+        add(style);
+        d->defaultToCEntriesStyleId.append(style->styleId());
+    }
+
 }
 
 KoStyleManager::~KoStyleManager()
@@ -716,6 +728,17 @@ QList<KoTableCellStyle*> KoStyleManager::tableCellStyles() const
 QList<KoSectionStyle*> KoStyleManager::sectionStyles() const
 {
     return d->sectionStyles.values();
+}
+
+KoParagraphStyle *KoStyleManager::defaultTableOfContentsEntryStyle(int outlineLevel)
+{
+    KoParagraphStyle *style = paragraphStyle(d->defaultToCEntriesStyleId.at(outlineLevel - 1));
+    return style;
+}
+
+KoParagraphStyle *KoStyleManager::defaultTableOfcontentsTitleStyle()
+{
+    return defaultParagraphStyle();
 }
 
 #include <KoStyleManager.moc>

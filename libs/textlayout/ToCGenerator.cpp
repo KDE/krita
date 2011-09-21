@@ -66,15 +66,6 @@ ToCGenerator::~ToCGenerator()
     delete m_ToCInfo;
 }
 
-static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int outlineLevel) {
-    KoParagraphStyle *style = new KoParagraphStyle();
-    style->setName("Contents " + QString::number(outlineLevel));
-    style->setParent(styleManager->paragraphStyle("Standard"));
-    style->setLeftMargin(QTextLength(QTextLength::FixedLength, (outlineLevel - 1) * 8));
-    styleManager->add(style);
-    return style;
-}
-
 void ToCGenerator::setBlock(const QTextBlock &block)
 {
     m_block = block;
@@ -134,7 +125,7 @@ bool ToCGenerator::generate()
     if (!m_ToCInfo->m_indexTitleTemplate.text.isEmpty()) {
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_ToCInfo->m_indexTitleTemplate.styleId);
         if (!titleStyle) {
-            titleStyle = styleManager->defaultParagraphStyle();
+            titleStyle = styleManager->defaultTableOfcontentsTitleStyle();
         }
 
         QTextBlock titleTextBlock = cursor.block();
@@ -221,7 +212,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
 
             tocTemplateStyle = styleManager->paragraphStyle(tocEntryTemplate->styleId);
             if (tocTemplateStyle == 0) {
-                tocTemplateStyle = generateTemplateStyle(styleManager, outlineLevel);
+                tocTemplateStyle = styleManager->defaultTableOfContentsEntryStyle(outlineLevel);
             }
 
             cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());

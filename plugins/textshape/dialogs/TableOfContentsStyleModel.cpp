@@ -153,24 +153,12 @@ void TableOfContentsStyleModel::saveData()
 {
     int row = 0;
 
-    foreach (const IndexSourceStyles &indexSourceStyles, m_tocInfo->m_indexSourceStyles) {
-        foreach (IndexSourceStyle indexStyle, indexSourceStyles.styles) {
-            qDebug()<<"before style id"<<indexStyle.styleId<<"    "<<indexStyle.styleName<<"   "<<indexSourceStyles.outlineLevel;
-        }
-    }
-
     foreach(const int styleId, m_styleList) {
         KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(styleId);
         if (paragStyle) {
             setOutlineLevel(styleId, m_outlineLevel[row]);
         }
         row++;
-    }
-
-    foreach (IndexSourceStyles indexSourceStyles, m_tocInfo->m_indexSourceStyles) {
-        foreach (IndexSourceStyle indexStyle, indexSourceStyles.styles) {
-            qDebug()<<"after style id"<<indexStyle.styleId<<"    "<<indexStyle.styleName<<"   "<<indexSourceStyles.outlineLevel;
-        }
     }
 }
 

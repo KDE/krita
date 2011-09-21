@@ -65,7 +65,7 @@ void TableOfContentsPreview::paintEvent(QPaintEvent *event)
 void TableOfContentsPreview::updatePreview(KoTableOfContentsGeneratorInfo *newToCInfo)
 {
     QTextBlockFormat tocFormat;
-    QTextDocument *tocDocument = new QTextDocument();
+    QTextDocument *tocDocument = new QTextDocument(this);
     KoTextDocument(tocDocument).setStyleManager(m_styleManager);
     KoTableOfContentsGeneratorInfo *info = newToCInfo->clone();
    // info->m_indexTitleTemplate.text = newToCInfo->m_indexTitleTemplate.text;

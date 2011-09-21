@@ -36,7 +36,6 @@
 #include <KoBookmark.h>
 #include <KoInlineNote.h>
 #include <KoTextDocumentLayout.h>
-#include <KoInlineTextObjectManager.h>
 
 #include <kdebug.h>
 
@@ -80,11 +79,9 @@ void ReferencesTool::createActions()
     connect(action, SIGNAL(triggered()), this, SLOT(insertEndNote()));
 
     action = new KAction(this);
-    QIcon *icon = new QIcon("/home/erione/kde4/src/calligra/plugins/textshape/pics/settings-icon1_1.png");
-    action->setIcon( *icon );
-    addAction("notes_settings",action);
-    action->setToolTip(i18n("Footnote/Endnote Settings"));
-    connect(action, SIGNAL(triggered()), this, SLOT(openSettings()));
+    addAction("format_notes",action);
+    action->setToolTip(i18n("Configure"));
+    connect(action, SIGNAL(triggered()), this, SLOT(showNotesConfigureDialog()));
 
     action = new KAction(i18n("Insert"),this);
     addAction("insert_citation",action);
@@ -112,9 +109,9 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
 {
     QList<QWidget *> widgets;
     m_stocw = new SimpleTableOfContentsWidget(this, 0);
-    //SimpleCitationWidget *scw = new SimpleCitationWidget(0);
+
     m_sfenw = new SimpleFootEndNotesWidget(this,0);
-    //SimpleCaptionsWidget *scapw = new SimpleCaptionsWidget(0);
+
     SimpleCitationWidget *scw = new SimpleCitationWidget(this,0);
     // Connect to/with simple table of contents option widget
     connect(m_stocw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
@@ -130,10 +127,11 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
 
     m_sfenw->setWindowTitle(i18n("Footnotes & Endnotes"));
     widgets.append(m_sfenw);
+
     scw->setWindowTitle(i18n("Citations and Bibliography"));
     widgets.append(scw);
-    //widgets.insert(i18n("Citations"), scw);
     //widgets.insert(i18n("Captions"), scapw);
+    connect(textEditor()->document(), SIGNAL(cursorPositionChanged(QTextCursor)), this, SLOT(disableButtons(QTextCursor)));
     return widgets;
 }
 
@@ -196,13 +194,9 @@ void ReferencesTool::showConfigureDialog(QAction *action)
 
 void ReferencesTool::insertFootNote()
 {
-    //connect(textEditor()->document(),SIGNAL(cursorPositionChanged(QTextCursor)),this,SLOT(disableButtons(QTextCursor)));
     m_note = textEditor()->insertFootNote();
     m_note->setAutoNumbering(m_sfenw->widget.autoNumbering->isChecked());
-    if (m_note->autoNumbering()) {
-        m_note->setLabel("1");
-    }
-    else {
+    if (!m_note->autoNumbering()) {
         m_note->setLabel(m_sfenw->widget.characterEdit->text());
     }
 }
@@ -211,15 +205,12 @@ void ReferencesTool::insertEndNote()
 {
     m_note = textEditor()->insertEndNote();
     m_note->setAutoNumbering(m_sfenw->widget.autoNumbering->isChecked());
-    if (m_note->autoNumbering()) {
-        m_note->setLabel("1");
-    }
-    else {
+    if (!m_note->autoNumbering()) {
         m_note->setLabel(m_sfenw->widget.characterEdit->text());
     }
 }
 
-void ReferencesTool::openSettings()
+void ReferencesTool::showNotesConfigureDialog()
 {
     NotesConfigurationDialog *dialog = new NotesConfigurationDialog((QTextDocument *)textEditor()->document(),0);
     dialog->exec();
@@ -227,7 +218,7 @@ void ReferencesTool::openSettings()
 
 void ReferencesTool::disableButtons(QTextCursor cursor)
 {
-    if(cursor.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::NoteFrameType) {
+    if (cursor.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::NoteFrameType) {
         m_sfenw->widget.addFootnote->setEnabled(false);
         m_sfenw->widget.addEndnote->setEnabled(false);
     } else {

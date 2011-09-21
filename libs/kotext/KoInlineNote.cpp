@@ -60,7 +60,6 @@ public:
     bool autoNumbering;
     KoInlineNote::Type type;
     int posInDocument;
-    bool isVisible;
 };
 
 KoInlineNote::KoInlineNote(Type type)
@@ -129,7 +128,6 @@ void KoInlineNote::updatePosition(const QTextDocument *document, int posInDocume
     Q_UNUSED(document);
     Q_UNUSED(format);
     d->posInDocument = posInDocument;
-    d->isVisible = true;
 }
 
 void KoInlineNote::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
@@ -187,8 +185,6 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     layout.createLine();
     layout.endLayout();
     layout.draw(&painter, rect.topLeft());
-    label.clear();
-    d->isVisible = false;
 }
 
 bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
@@ -304,9 +300,4 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
 int KoInlineNote::getPosInDocument()
 {
     return d->posInDocument;
-}
-
-bool KoInlineNote::isVisible()
-{
-    return d->isVisible;
 }

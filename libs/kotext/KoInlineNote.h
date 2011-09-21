@@ -91,8 +91,6 @@ public:
      */
     void setAutoNumbering(bool on);
 
-    bool isVisible();
-
     /// return the type of note.
     Type type() const;
 

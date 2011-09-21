@@ -49,8 +49,7 @@ KoTextLayoutNoteArea::~KoTextLayoutNoteArea()
 void KoTextLayoutNoteArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
     KoTextLayoutArea::paint(painter, context);
-    QRectF rect = QRectF( left(), top(), 0.0, 0.0);
-    d->textLayout->draw(painter, rect.topLeft());
+    d->textLayout->draw(painter, QPointF(left(), top()));
 }
 
 bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
@@ -62,9 +61,11 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
         notesConfig = KoTextDocument(d->note->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
     }
     QString label;  //assigning a formatted label to notes
-    if (d->note->autoNumbering())
+    if (d->note->autoNumbering()) {
         label = notesConfig->numberFormat().formattedNumber(d->note->label().toInt()+notesConfig->startValue()-1);
-    else label = d->note->label();
+    } else {
+        label = d->note->label();
+    }
     label.prepend(notesConfig->numberFormat().prefix());
     label.append(notesConfig->numberFormat().suffix());
     QPaintDevice *pd = documentLayout()->paintDevice();

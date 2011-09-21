@@ -157,6 +157,9 @@ public:
 
     QList<KoTextLocator*> textLocators() const;
 
+    /**
+      * It returns a list of all end notes in the document
+      */
     QList<KoInlineNote*> endNotes() const;
 
     KoInlineNote *getFirstNote(QTextBlock block) const;

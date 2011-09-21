@@ -100,7 +100,6 @@ bool KoInlineTextObjectManager::removeInlineObject(QTextCursor &cursor)
         int position = m_listeners.indexOf(object);
         m_listeners.removeAt(position);
     }
-    qDebug()<<"remove cursor";
     // what if a KoTextLocator is removed? what to do with KoTextReference?
     QTextCharFormat format = cursor.charFormat();
     int id = format.intProperty(InlineInstanceId);
@@ -144,7 +143,6 @@ void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
         }
     }
     // TODO dirty the document somehow
-    qDebug()<<"remove object";
 }
 
 void KoInlineTextObjectManager::setProperty(KoInlineObject::Property key, const QVariant &value)
@@ -234,7 +232,7 @@ QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
     QList<KoInlineNote*> answers;
     foreach(KoInlineObject* object, m_objects) {
         KoInlineNote* note = dynamic_cast<KoInlineNote*>(object);
-        if (note && note->type() == KoInlineNote::Endnote && note->isVisible()) {
+        if (note && note->type() == KoInlineNote::Endnote) {
             answers.append(note);
         }
     }

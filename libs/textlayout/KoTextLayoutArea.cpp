@@ -216,7 +216,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             return pointedAt;
         }
     }
-    point -= QPointF(0,this->bottom() - m_footNotesHeight);
+    point -= QPointF(0, bottom() - m_footNotesHeight);
     while (footNoteIndex<m_footNoteAreas.length()) {
         // check if p is over foot notes area
         if (point.y() > m_footNoteAreas[footNoteIndex]->top()
@@ -243,6 +243,18 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
     QTextFrame::iterator stop = m_endOfArea->it;
     if(!stop.currentBlock().isValid() || m_endOfArea->lineTextStart >= 0) {
         ++stop;
+    }
+
+    QTextFrame *subFrame;
+    int footNoteIndex = 0;
+    qreal offset = bottom() - m_footNotesHeight;
+    while (footNoteIndex < m_footNoteAreas.length()) {
+        subFrame = m_footNoteFrames[footNoteIndex];
+        if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
+            return m_footNoteAreas[footNoteIndex]->selectionBoundingBox(cursor).translated(0, offset) ;
+        }
+        offset += m_footNoteAreas[footNoteIndex]->bottom();
+        ++footNoteIndex;
     }
 
     int tableAreaIndex = 0;
@@ -333,18 +345,6 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
             }
         }
     }
-    //make sure that cursor blinks in foot note areas
-    QTextFrame *subFrame;
-    int footNoteIndex = 0;
-    while (footNoteIndex<m_footNoteFrames.length()) {
-        subFrame = m_footNoteFrames[footNoteIndex];
-        if (subFrame != 0) {
-            if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
-                return m_footNoteAreas[footNoteIndex]->selectionBoundingBox(cursor);
-            }
-            ++footNoteIndex;
-        }
-    }
     return retval.translated(0, m_verticalAlignOffset);
 }
 
@@ -376,9 +376,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_footNoteAreas.clear();
     qDeleteAll(m_preregisteredFootNoteAreas);
     m_preregisteredFootNoteAreas.clear();
-    qDeleteAll(m_footNoteFrames);
     m_footNoteFrames.clear();
-    qDeleteAll(m_preregisteredFootNoteFrames);
     m_preregisteredFootNoteFrames.clear();
     qDeleteAll(m_generatedDocAreas);
     m_generatedDocAreas.clear();
@@ -1479,12 +1477,12 @@ qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note)
         FrameIterator iter(subFrame);
         KoTextLayoutNoteArea *footNoteArea = new KoTextLayoutNoteArea(note, this, m_documentLayout);
 
+        m_preregisteredFootNoteFrames.append(subFrame);
         footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom() - bottom());
         footNoteArea->layout(&iter);
 
         m_preregisteredFootNotesHeight += footNoteArea->bottom();
         m_preregisteredFootNoteAreas.append(footNoteArea);
-        m_preregisteredFootNoteFrames.append(subFrame);
         return footNoteArea->bottom();
     }
     qreal h = m_parent->preregisterFootNote(note);

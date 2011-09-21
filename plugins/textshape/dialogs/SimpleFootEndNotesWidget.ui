@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>231</width>
-    <height>129</height>
+    <width>248</width>
+    <height>154</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -96,10 +96,6 @@
         </property>
         <property name="text">
          <string/>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>../pics/settings-icon1_1.png</normaloff>../pics/settings-icon1_1.png</iconset>
         </property>
         <property name="iconSize">
          <size>

@@ -63,10 +63,11 @@ private slots:
     void insertFootNote();
     /// insert an endnote
     void insertEndNote();
-    /// open notes configuration dialog box
-    void openSettings();
+    /// show the configuration dialog for notes
+    void showNotesConfigureDialog();
     /// disable insert notes' buttons when already in notes' body
     void disableButtons(QTextCursor cursor);
+
 
 private:
     TableOfContentsConfigure *m_configure;

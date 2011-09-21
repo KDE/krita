@@ -27,7 +27,7 @@
 
 #include <QPainter>
 
-bool beforeThan(KoInlineNote *note1, KoInlineNote *note2)
+static bool beforeThan(KoInlineNote *note1, KoInlineNote *note2)
 {
     return (note1->getPosInDocument() < note2->getPosInDocument());
 }
@@ -63,13 +63,12 @@ bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)
 {
     qDeleteAll(d->endNoteAreas);
     d->endNoteAreas.clear();
-    qDeleteAll(d->endNoteFrames);
     d->endNoteFrames.clear();
 
     d->startOfArea = new FrameIterator(cursor);
     d->endOfArea = 0;
     int shiftDown = 15;
-    qreal y = top()+shiftDown;
+    qreal y = top() + shiftDown;
     setBottom(y);
 
     KoInlineTextObjectManager *manager = KoTextDocument(documentLayout()->document()).inlineTextObjectManager();
@@ -104,7 +103,7 @@ KoPointedAt KoTextLayoutEndNotesArea::hitTest(const QPointF &p, Qt::HitTestAccur
 {
     KoPointedAt pointedAt;
     int endNoteIndex = 0;
-    while (endNoteIndex<d->endNoteAreas.length()) {
+    while (endNoteIndex < d->endNoteAreas.length()) {
         // check if p is over end notes area
         if (p.y() > d->endNoteAreas[endNoteIndex]->top()
                 && p.y() < d->endNoteAreas[endNoteIndex]->bottom()) {
@@ -120,7 +119,7 @@ QRectF KoTextLayoutEndNotesArea::selectionBoundingBox(QTextCursor &cursor) const
 {
     QTextFrame *subFrame;
     int endNoteIndex = 0;
-    while (endNoteIndex<d->endNoteFrames.length()) {
+    while (endNoteIndex < d->endNoteFrames.length()) {
         subFrame = d->endNoteFrames[endNoteIndex];
         if (subFrame != 0) {
             if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {

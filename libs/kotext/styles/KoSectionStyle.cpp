@@ -362,7 +362,6 @@ void KoSectionStyle::saveOdf(KoGenStyle &style)
             style.addPropertyPt("fo:margin-right", rightMargin(), KoGenStyle::DefaultType);
       }
     }
-
 }
 
 #include <KoSectionStyle.moc>

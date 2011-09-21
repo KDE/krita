@@ -33,13 +33,13 @@ SimpleFootEndNotesWidget::SimpleFootEndNotesWidget(TextTool *tool ,QWidget *pare
     widget.setupUi(this);
     widget.addFootnote->setDefaultAction(tool->action("insert_footnote"));
     widget.addEndnote->setDefaultAction(tool->action("insert_endnote"));
-    widget.settings->setDefaultAction(tool->action("notes_settings"));
+    widget.settings->setDefaultAction(tool->action("format_notes"));
     widget.autoNumbering->setChecked(true);
 
     connect(widget.addFootnote, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.addEndnote, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.settings,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));
-    connect(widget.characterEdit,SIGNAL(cursorPositionChanged(int,int)),this,SLOT(setCharacterEditEnabled()));
+    connect(widget.settings, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.characterEdit, SIGNAL(cursorPositionChanged(int,int)), this, SLOT(setCharacterEditEnabled()));
 }
 
 void SimpleFootEndNotesWidget::setStyleManager(KoStyleManager *sm)

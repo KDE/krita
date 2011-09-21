@@ -90,7 +90,6 @@ public:
     KoTextAnchor::HorizontalRel horizontalRel;
     QString wrapInfluenceOnPosition;
     KoTextAnchor::AnchorType anchorType;
-    bool fakeAsChar;
     KoAnchorStrategy *anchorStrategy;
     qreal inlineObjectAscent;
     qreal inlineObjectDescent;
@@ -101,7 +100,6 @@ KoTextAnchor::KoTextAnchor(KoShape *shape)
     : KoInlineObject(*(new KoTextAnchorPrivate(this, shape)), false)
 {
     Q_D(KoTextAnchor);
-    d->fakeAsChar = false;
 }
 
 KoTextAnchor::~KoTextAnchor()
@@ -110,12 +108,6 @@ KoTextAnchor::~KoTextAnchor()
     if (d->anchorStrategy != 0) {
         delete d->anchorStrategy;
     }
-}
-
-void KoTextAnchor::fakeAsChar()
-{
-    Q_D(KoTextAnchor);
-    d->fakeAsChar = true;
 }
 
 KoShape *KoTextAnchor::shape() const
@@ -285,13 +277,6 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
         object.setWidth(0);
         object.setAscent(0);
         object.setDescent(0);
-    }
-    if (d->fakeAsChar) {
-        object.setAscent(d->shape->size().height());
-        object.setDescent(0);
-
-        d->inlineObjectAscent = object.ascent();
-        d->inlineObjectDescent = object.descent();
     }
 }
 
@@ -732,14 +717,6 @@ void KoTextAnchor::setAnchorType(KoTextAnchor::AnchorType type)
         d->horizontalRel = HChar;
         d->horizontalPos = HLeft;
     }
-}
-
-bool KoTextAnchor::behavesAsCharacter() const
-{
-    Q_D(const KoTextAnchor);
-    if (d->fakeAsChar)
-        return true;
-    return d->anchorType == AnchorAsCharacter;
 }
 
 void KoTextAnchor::detachFromModel()

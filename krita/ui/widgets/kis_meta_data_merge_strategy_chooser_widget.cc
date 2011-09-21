@@ -28,7 +28,7 @@ struct KisMetaDataMergeStrategyChooserWidget::Private {
 };
 
 KisMetaDataMergeStrategyChooserWidget::KisMetaDataMergeStrategyChooserWidget(QWidget* parent)
-        : d(new Private)
+    : d(new Private)
 {
     Q_UNUSED(parent);
     setObjectName("KisMetadataMergeStrategyChooserWidget");
@@ -43,7 +43,7 @@ KisMetaDataMergeStrategyChooserWidget::KisMetaDataMergeStrategyChooserWidget(QWi
         d->uiWdg.mergeStrategy->setCurrentIndex(initial);
     }
     setCurrentDescription(d->uiWdg.mergeStrategy->currentIndex());
-    connect(d->uiWdg.mergeStrategy, SIGNAL(currentIndexChanged(int)), SLOT(setCurrentDescription(int)));
+    connect(d->uiWdg.mergeStrategy, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentDescription(int)));
 }
 
 KisMetaDataMergeStrategyChooserWidget::~KisMetaDataMergeStrategyChooserWidget()
@@ -80,5 +80,7 @@ void KisMetaDataMergeStrategyChooserWidget::setCurrentDescription(int index)
 const KisMetaData::MergeStrategy* KisMetaDataMergeStrategyChooserWidget::mergeStrategy(int index)
 {
     return KisMetaData::MergeStrategyRegistry::instance()->get(
-               d->uiWdg.mergeStrategy->itemData(index).toString());
+                d->uiWdg.mergeStrategy->itemData(index).toString());
 }
+
+#include "kis_meta_data_merge_strategy_chooser_widget.moc"

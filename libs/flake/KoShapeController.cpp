@@ -113,7 +113,7 @@ public:
         }
 
         // set the active layer as parent if there is not yet a parent.
-        if (!shape->parent()) {
+        if (canvas && !shape->parent()) {
             shape->setParent(canvas->shapeManager()->selection()->activeLayer());
         }
 

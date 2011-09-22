@@ -778,7 +778,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         // on windows we do not have data if we try to paste this selection
         if (data) {
             m_prevCursorPosition = m_textEditor.data()->position();
-            m_textEditor.data()->addCommand(new TextPasteCommand(QClipboard::Selection, this));
+            m_textEditor.data()->paste(data,canvas()->shapeController(), canvas()->resourceManager());
             editingPluginEvents();
         }
     }
@@ -880,7 +880,7 @@ bool TextTool::paste()
     if (!data) return false;
 
     m_prevCursorPosition = m_textEditor.data()->position();
-    m_textEditor.data()->addCommand(new TextPasteCommand(QClipboard::Clipboard, this));
+    m_textEditor.data()->paste(data, canvas()->shapeController(), canvas()->resourceManager());
     editingPluginEvents();
     return true;
 }
@@ -1638,7 +1638,7 @@ void TextTool::pasteAsText()
     if (!data) return;
 
     m_prevCursorPosition = m_textEditor.data()->position();
-    textEditor->addCommand(new TextPasteCommand(QClipboard::Clipboard, this, 0, true));
+    textEditor->paste(data, canvas()->shapeController(), canvas()->resourceManager(), true);
     editingPluginEvents();
 }
 

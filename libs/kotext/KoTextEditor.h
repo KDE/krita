@@ -415,7 +415,7 @@ public slots:
 
 //    void setBlockCharFormat(const QTextCharFormat &format);
 
-//    void setBlockFormat(const QTextBlockFormat &format);
+   void setBlockFormat(const QTextBlockFormat &format);
 
 //    void setCharFormat(const QTextCharFormat &format);
 

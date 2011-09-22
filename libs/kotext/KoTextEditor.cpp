@@ -2015,15 +2015,15 @@ int KoTextEditor::selectionStart() const
 //    //TODO
 //}
 
-//void KoTextEditor::setBlockFormat(const QTextBlockFormat &format)
-//{
-//    if (isEditProtected()) {
-//        return;
-//    }
+void KoTextEditor::setBlockFormat(const QTextBlockFormat &format)
+{
+    if (isEditProtected()) {
+        return;
+    }
 
-//    Q_UNUSED(format)
-//    //TODO
-//}
+    Q_UNUSED(format)
+    d->caret.setBlockFormat(format);
+}
 
 //void KoTextEditor::setCharFormat(const QTextCharFormat &format)
 //{

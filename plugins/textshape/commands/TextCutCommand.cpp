@@ -21,8 +21,6 @@
 
 #include <KoTextEditor.h>
 #include <TextTool.h>
-#include "ChangeTrackedDeleteCommand.h"
-#include "DeleteCommand.h"
 #include <KAction>
 #include <klocale.h>
 
@@ -49,9 +47,10 @@ void TextCutCommand::redo()
         KoTextEditor *te = m_tool->m_textEditor.data();
         if (te == 0)
             return;
-        if (m_tool->m_actionShowChanges->isChecked())
-            te->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_tool));
-        else
-            te->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_tool));
+
+        te->deleteChar(KoTextEditor::NextChar,
+                       m_tool->m_actionShowChanges->isChecked(),
+                       m_tool->canvas()->shapeController(),
+                       m_tool->canvas()->resourceManager());
     }
 }

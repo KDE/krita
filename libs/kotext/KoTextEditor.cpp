@@ -49,6 +49,8 @@
 #include "commands/InsertTableColumnCommand.h"
 #include "commands/TextPasteCommand.h"
 #include "commands/ChangeTrackedDeleteCommand.h"
+#include "commands/ListItemNumberingCommand.h"
+#include "commands/ChangeListCommand.h"
 #include "commands/DeleteCommand.h"
 #include "KoInlineCite.h"
 #include "KoBibliographyInfo.h"
@@ -1053,6 +1055,15 @@ void KoTextEditor::deleteChar(MoveOperation direction, bool trackChanges, KoShap
                                          shapeController));
         }
     }
+}
+
+void KoTextEditor::toggleListNumbering(bool numberingEnabled)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    addCommand(new ListItemNumberingCommand(block(), numberingEnabled));
 }
 
 int KoTextEditor::anchor() const

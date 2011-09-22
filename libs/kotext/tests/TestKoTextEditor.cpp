@@ -116,6 +116,11 @@ void TestKoTextEditor::testRemoveSelectedText()
     Q_ASSERT(inlineObjectManager.inlineTextObjects().length() == 0);
 }
 
+void TestKoTextEditor::testPaste()
+{
+
+}
+
 QTEST_MAIN(TestKoTextEditor)
 
 #include "TestKoTextEditor.moc"

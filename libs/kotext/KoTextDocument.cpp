@@ -80,6 +80,8 @@ QTextDocument *KoTextDocument::document() const
 
 void KoTextDocument::setTextEditor (KoTextEditor* textEditor)
 {
+    Q_ASSERT(textEditor->document() == this);
+
     QVariant v;
     v.setValue(textEditor);
     m_document->addResource(KoTextDocument::TextEditor, TextEditorURL, v);

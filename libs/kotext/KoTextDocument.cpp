@@ -80,7 +80,7 @@ QTextDocument *KoTextDocument::document() const
 
 void KoTextDocument::setTextEditor (KoTextEditor* textEditor)
 {
-    Q_ASSERT(textEditor->document() == this);
+    Q_ASSERT(textEditor->document() == m_document);
 
     QVariant v;
     v.setValue(textEditor);

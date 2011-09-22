@@ -42,6 +42,7 @@
 
 #include <KoOdf.h>
 #include <KoCanvasBase.h>
+#include <KoShapeController.h>
 #include <KoCanvasController.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -853,10 +854,15 @@ void TextTool::copy() const
     KoTextOdfSaveHelper saveHelper(m_textShapeData->document(), from, to);
     KoTextDrag drag;
 
-    kDebug(30015) << "xxx canvas" << canvas() << "rdf" << KoDocumentRdfBase::fromResourceManager(canvas());
-    if (KoDocumentRdfBase *rdf = KoDocumentRdfBase::fromResourceManager(canvas())) {
+    KoResourceManager *rm = canvas()->resourceManager();
+    if (canvas()->shapeController()) {
+        rm = canvas()->shapeController()->resourceManager();
+    }
+    if (rm->hasResource(KoText::DocumentRdf)) {
+        KoDocumentRdfBase *rdf = rm->resource(KoText::DocumentRdf).value<KoDocumentRdfBase*>();
         saveHelper.setRdfModel(rdf->model());
     }
+
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
     QTextDocumentFragment fragment = m_textEditor.data()->selection();
     drag.setData("text/html", fragment.toHtml("utf-8").toUtf8());

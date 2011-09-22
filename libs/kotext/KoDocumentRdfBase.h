@@ -61,16 +61,6 @@ public:
      * You do not own the model, do not delete it.
      */
     virtual const Soprano::Model *model() const;
-
-    /**
-     * Convenience method to get the KoDocumentRdf given a CanvasBase
-     * pointer. The resource manager is the canvas is used to get back
-     * the KoDoucmentRdf if there is one for the canvas.
-     *
-     * Note that this method can return either a valid KoDocumentRdf
-     * pointer or a NULL pointer if there is no Rdf for the canvas.
-     */
-    static KoDocumentRdfBase *fromResourceManager(KoCanvasBase *host);
     virtual void linkToResourceManager(KoResourceManager *rm);
 
     virtual void updateInlineRdfStatements(const QTextDocument *qdoc);

@@ -37,20 +37,6 @@ const Soprano::Model *KoDocumentRdfBase::model() const
     return 0;
 }
 
-KoDocumentRdfBase *KoDocumentRdfBase::fromResourceManager(KoCanvasBase *host)
-{
-    KoResourceManager *rm = host->resourceManager();
-    if( host->shapeController() ) {
-        rm = host->shapeController()->resourceManager();
-    }
-    kDebug(30015) << "host" << host << " rm" << rm;
-    
-    if (!rm->hasResource(KoText::DocumentRdf)) {
-        return 0;
-    }
-    return static_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<void*>());
-}
-
 void KoDocumentRdfBase::linkToResourceManager(KoResourceManager *rm)
 {
     QVariant variant;

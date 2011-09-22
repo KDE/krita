@@ -67,6 +67,10 @@ public:
     virtual void updateXmlIdReferences(const QMap<QString, QString> &m);
     virtual bool loadOasis(KoStore *store);
     virtual bool saveOasis(KoStore *store, KoXmlWriter *manifestWriter);
+
+    // reimplemented in komain/rdf/KoDocumentRdf
+    virtual bool completeLoading(KoStore */*store*/) {return false;}
+    virtual bool completeSaving(KoStore */*store*/, KoXmlWriter */*manifestWriter*/, KoShapeSavingContext */*context*/) {return false;}
 };
 
 Q_DECLARE_METATYPE(KoDocumentRdfBase*)

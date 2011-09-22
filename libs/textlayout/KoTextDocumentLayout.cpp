@@ -417,7 +417,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
         // if there is no anchor strategy set then create one
         if (!anchor->anchorStrategy()) {
             int index = d->textAnchors.count();
-            if (anchor->behavesAsCharacter()) {
+            if (anchor->anchorType() == KoTextAnchor::AnchorAsCharacter) {
                 anchor->setAnchorStrategy(new InlineAnchorStrategy(anchor, d->anchoringRootArea));
             } else {
                 anchor->setAnchorStrategy(new FloatingAnchorStrategy(anchor, d->anchoringRootArea));

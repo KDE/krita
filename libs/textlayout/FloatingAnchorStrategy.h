@@ -54,7 +54,8 @@ private:
     inline void countVerticalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect);
 
     //check the border of page an move the shape back to have it visible
-    inline void checkPageBorder(QPointF &newPosition, QRectF containerBoundingRect);
+    inline void checkPageBorder(QPointF &newPosition, const QRectF &containerBoundingRect);
+    //check stacking and reorder to proper position objects according to there z-index
     inline void checkStacking(QPointF &newPosition);
 
     // true if shape is inside layouted text area

@@ -24,11 +24,31 @@ if(NOT WIN32)
 endif(NOT WIN32)
 
   FIND_PATH(WPD_INCLUDE_DIR libwpd/libwpd.h
-    /usr/include/libwpd-0.8
-    /usr/include/libwpd-0.9
+    PATHS
+	  ${WPD_INCLUDE_DIR}
+      /usr/include/libwpd-0.8
+      /usr/include/libwpd-0.9
+	PATH_SUFFIXES
+	  libwpd-0.8
+	  libwpd-0.9
   )
 
+  IF(NOT WPD_LIBRARIES)
+    FIND_LIBRARY(WPD_LIBRARY
+	  NAMES
+	    wpd
+		libwpd
+	)
 
+	FIND_LIBRARY(WPD_STREAM_LIBRARY
+	  NAMES
+	    wpd-stream
+		libwpd-stream
+	)
+	
+	set(WPD_LIBRARIES ${WPD_LIBRARY} ${WPD_STREAM_LIBRARY})
+  ENDIF(NOT WPD_LIBRARIES)
+  
   include(FindPackageHandleStandardArgs)
   FIND_PACKAGE_HANDLE_STANDARD_ARGS(WPD DEFAULT_MSG WPD_INCLUDE_DIR WPD_LIBRARIES )
 

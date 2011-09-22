@@ -22,17 +22,30 @@ ELSE (LIBWPG_INCLUDE_DIR AND LIBWPG_LIBRARIES)
     pkg_check_modules(LIBWPG libwpg-0.2)
   ENDIF (NOT WIN32)
 
-  FIND_LIBRARY(LIBWPG_STREAM_LIBRARIES NAMES libwpg-stream-0.1 wpg-stream-0.1 libwpd-stream-0.9 wpd-stream-0.9
+  FIND_LIBRARY(LIBWPG_LIBRARY
+    NAMES 
+	  wpg libwpg wpg-0.1 libwpg-0.1
+	)
+  FIND_LIBRARY(LIBWPG_STREAM_LIBRARY
+    NAMES 
+	  libwpg-stream-0.1 
+	  wpg-stream-0.1 
+	  libwpd-stream-0.9 
+	  wpd-stream-0.9
+	  libwpd-stream
+	  wpd-stream
     PATHS
-    ${LIBWPG_LIBRARIES}
+      ${LIBWPG_LIBRARIES}
     )
 
   FIND_PATH(LIBWPG_INCLUDE_DIR libwpg/libwpg.h
     PATHS
     ${LIBWPG_INCLUDE_DIRS}
-    PATH_SUFFIXES libwpg
+	PATH_SUFFIXES libwpg-0.1 libwpg-0.2 libwpg 
     )
 
+  SET(LIBWPG_LIBRARIES ${LIBWPG_LIBRARY} ${LIBWPG_STREAM_LIBRARY})
+  
   IF (LIBWPG_INCLUDE_DIR AND LIBWPG_LIBRARIES)
     SET(LIBWPG_FOUND TRUE)
   ELSE (LIBWPG_INCLUDE_DIR AND LIBWPG_LIBRARIES)

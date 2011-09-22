@@ -68,7 +68,7 @@ QRectF AnchorStrategy::pageContentRect()
     return m_pageContentRect;
 }
 
-void AnchorStrategy::setPageContentRect(QRectF &pageContentRect)
+void AnchorStrategy::setPageContentRect(const QRectF &pageContentRect)
 {
     m_pageContentRect = pageContentRect;
 }

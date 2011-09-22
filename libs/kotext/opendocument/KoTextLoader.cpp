@@ -160,8 +160,6 @@ public:
     bool checkForListItemSplit(const KoXmlElement &element);
     KoXmlNode loadListItemSplit(const KoXmlElement &element, QString *generatedXmlString);
 
-    bool inTable;
-
     explicit Private(KoShapeLoadingContext &context, KoShape *s)
         : context(context),
           textSharedData(0),
@@ -182,8 +180,7 @@ public:
           loadSpanLevel(0),
           loadSpanInitialPos(0),
           openedElements(0),
-          deleteMergeStarted(false),
-          inTable(false)
+          deleteMergeStarted(false)
     {
         progressTime.start();
     }
@@ -2002,7 +1999,6 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
         tableFormat.setProperty(KoTableStyle::TableIsProtected, true);
     }
     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
-    d->inTable = true;
 
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(tbl);
     int rows = 0;
@@ -2085,7 +2081,6 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     }
     cursor = tbl->lastCursorPosition();
     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
-    d->inTable = false;
 }
 
 void KoTextLoader::loadTableColumn(KoXmlElement &tblTag, QTextTable *tbl, int &columns)
@@ -2270,9 +2265,6 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
         // nothing else to do
     } else {
         shape->setVisible(false); // make it invisible until layouting
-        if (d->inTable) {
-            anchor->fakeAsChar();
-        }
 
         KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
         if (textObjectManager) {

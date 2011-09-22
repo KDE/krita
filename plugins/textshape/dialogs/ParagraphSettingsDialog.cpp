@@ -73,7 +73,11 @@ void ParagraphSettingsDialog::slotApply()
     chosenStyle.applyStyle(format);
     m_cursor->mergeBlockFormat(format);
     if (chosenStyle.listStyle()) {
-        m_tool->textEditor()->setListProperties(chosenStyle.listStyle(), chosenStyle.listStyle()->listLevels().first(), KoTextEditor::AutoListStyle);
+        KoTextEditor::ChangeListFlags flags(KoTextEditor::AutoListStyle);
+// XXX: re-enable when I've figured out what is broken here!
+//        m_tool->textEditor()->setListProperties(*chosenStyle.listStyle(),
+//                                                chosenStyle.listStyle()->listLevels().first(),
+//                                                flags);
 
     } else {
         QTextList *list = m_cursor->block().textList();

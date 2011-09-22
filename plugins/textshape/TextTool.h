@@ -136,8 +136,9 @@ public:
 protected:
     virtual void createActions();
 
-    friend class SimplePagraphWidget;
+    friend class SimpleParagraphWidget;
     friend class ParagraphSettingsDialog;
+
     KoTextEditor *textEditor() { return m_textEditor.data(); }
 
 public slots:

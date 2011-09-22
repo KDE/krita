@@ -79,6 +79,7 @@ public:
     KoListStyle *outlineStyle;
     KoOdfNotesConfiguration *footNotesConfiguration;
     KoOdfNotesConfiguration *endNotesConfiguration;
+    KoOdfNotesConfiguration *defaultNotesConfiguration;
 };
 
 // static
@@ -686,12 +687,13 @@ KoSectionStyle *KoStyleManager::sectionStyle(const QString &name) const
 
 KoOdfNotesConfiguration *KoStyleManager::notesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const
 {
-    if (noteClass == KoOdfNotesConfiguration::Footnote) {
-        return d->footNotesConfiguration;
-    } else if (noteClass == KoOdfNotesConfiguration::Endnote) {
+    switch (noteClass) {
+    case (KoOdfNotesConfiguration::Endnote):
         return d->endNotesConfiguration;
-    } else {
-        return (KoOdfNotesConfiguration *)0;
+    case (KoOdfNotesConfiguration::Footnote):
+        return d->footNotesConfiguration;
+    default:
+        return d->defaultNotesConfiguration;
     }
 }
 

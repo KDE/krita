@@ -31,11 +31,11 @@
 #define MARGIN_DEFAULT 10 // we consider it the default value
 
 ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Style style, int level,
-                                     ChangeFlags flags, KUndo2Command *parent)
-                                         : KoTextCommandBase(parent),
-                                         m_flags(flags),
-                                         m_first(true),
-                                         m_alignmentMode(false)
+                                     KoTextEditor::ChangeListFlags flags, KUndo2Command *parent)
+    : KoTextCommandBase(parent),
+      m_flags(flags),
+      m_first(true),
+      m_alignmentMode(false)
 {
     const bool styleCompletelySetAlready = extractTextBlocks(cursor, level, style);
     QSet<int> levels = m_levels.values().toSet();
@@ -84,11 +84,11 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Sty
 }
 
 ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level,
-                                     ChangeFlags flags, KUndo2Command *parent)
-                                         : KoTextCommandBase(parent),
-                                         m_flags(flags),
-                                         m_first(true),
-                                         m_alignmentMode(false)
+                                     KoTextEditor::ChangeListFlags flags, KUndo2Command *parent)
+    : KoTextCommandBase(parent),
+      m_flags(flags),
+      m_first(true),
+      m_alignmentMode(false)
 {
     Q_ASSERT(style);
     extractTextBlocks(cursor, level); // don't care about return value
@@ -150,7 +150,7 @@ int ChangeListCommand::detectLevel(const QTextBlock &block, int givenLevel)
 
 bool ChangeListCommand::formatsEqual(const KoListLevelProperties &llp, const QTextListFormat &format)
 {
-    if (m_flags & MergeExactly) {
+    if (m_flags & KoTextEditor::MergeExactly) {
         QTextListFormat listFormat;
         llp.applyStyle(listFormat);
         return listFormat == format;
@@ -166,7 +166,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
     KoList *mergeableList = 0;
     KoList *newList = 0;
     //First check if we could merge with previous or next list
-    if (m_flags & MergeWithAdjacentList) {
+    if (m_flags & KoTextEditor::MergeWithAdjacentList) {
         QSet<int> levels = m_levels.values().toSet();
         // attempt to merge with previous block
         QTextBlock prev = m_blocks.value(0).previous();
@@ -203,7 +203,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
         }
         // Then check if we want to modify an existing list.
         // The behaviour chosen for modifying a list is the following. If the selection contains more than one block, a new list is always created. If the selection only contains one block, the behaviour depends on the flag.
-        if ((m_flags & ModifyExistingList) && (m_blocks.size() == 1)) {
+        if ((m_flags & KoTextEditor::ModifyExistingList) && (m_blocks.size() == 1)) {
             m_list.insert(i, document.list(m_blocks.at(i)));
             if (m_list.value(i)) {
                 m_actions.insert(i, ChangeListCommand::ModifyExisting);
@@ -217,7 +217,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
             continue;
         }
         // All else failing, we need to create a new list.
-        KoList::Type type = m_flags & CreateNumberedParagraph ? KoList::NumberedParagraph : KoList::TextList;
+        KoList::Type type = m_flags & KoTextEditor::CreateNumberedParagraph ? KoList::NumberedParagraph : KoList::TextList;
         if (!newList)
             newList = new KoList(m_blocks.at(i).document(), listStyle, type);
         m_list.insert(i, newList);
@@ -231,18 +231,18 @@ void ChangeListCommand::redo()
         for (int i = 0; i < m_blocks.size(); ++i) { // We invalidate the lists before calling redo on the QTextDocument
             if (m_actions.value(i) == ChangeListCommand::RemoveList)
                 for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
-                if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
-                    if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
-                        userData->setCounterWidth(-1.0);
-                    break;
+                    if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
+                        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
+                            userData->setCounterWidth(-1.0);
+                        break;
+                    }
                 }
-            }
         }
         KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
         for (int i = 0; i < m_blocks.size(); ++i) {
             if ((m_actions.value(i) == ChangeListCommand::ModifyExisting) || (m_actions.value(i) == ChangeListCommand::CreateNew)
-                || (m_actions.value(i) == ChangeListCommand::MergeList)) {
+                    || (m_actions.value(i) == ChangeListCommand::MergeList)) {
                 m_list.value(i)->updateStoredList(m_blocks.at(i));
                 KoListStyle *listStyle = m_list.value(i)->style();
                 listStyle->refreshLevelProperties(m_newProperties.value(i));
@@ -294,7 +294,7 @@ void ChangeListCommand::undo()
         // command to undo:
         if (m_actions.value(i) == ChangeListCommand::RemoveList) {
             m_oldList.value(i)->updateStoredList(m_blocks.at(i));
-            if ((m_flags & ModifyExistingList) && (m_formerProperties.value(i).style() != KoListStyle::None)) {
+            if ((m_flags & KoTextEditor::ModifyExistingList) && (m_formerProperties.value(i).style() != KoListStyle::None)) {
                 KoListStyle *listStyle = m_oldList.value(i)->style();
                 listStyle->refreshLevelProperties(m_formerProperties.value(i));
             }
@@ -308,7 +308,7 @@ void ChangeListCommand::undo()
         }
         else if (m_actions.value(i) == ChangeListCommand::ModifyExisting) {
             m_list.value(i)->updateStoredList(m_blocks.at(i));
-            if ((m_flags & ModifyExistingList) && (m_formerProperties.value(i).style() != KoListStyle::None)) {
+            if ((m_flags & KoTextEditor::ModifyExistingList) && (m_formerProperties.value(i).style() != KoListStyle::None)) {
                 KoListStyle *listStyle = m_oldList.value(i)->style();
                 listStyle->refreshLevelProperties(m_formerProperties.value(i));
             }

@@ -1066,6 +1066,18 @@ void KoTextEditor::toggleListNumbering(bool numberingEnabled)
     addCommand(new ListItemNumberingCommand(block(), numberingEnabled));
 }
 
+void KoTextEditor::setListProperties(KoListStyle::Style style,
+                                     int level,
+                                     ChangeListFlags flags)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    addCommand(new ChangeListCommand(d->caret, style, level, flags));
+}
+
+
 int KoTextEditor::anchor() const
 {
     return d->caret.anchor();

@@ -202,7 +202,7 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(KoTextEditor *editor)
         changeNumberingCommand->redo();
     } else {
         ChangeListCommand *changeListCommand = new ChangeListCommand(*editor->cursor(), KoListStyle::None, 0,
-                                                                     ChangeListCommand::ModifyExistingList | ChangeListCommand::MergeWithAdjacentList, 
+                                                                     KoTextEditor::ModifyExistingList | KoTextEditor::MergeWithAdjacentList,
                                                                      this);
         changeListCommand->redo();
     }

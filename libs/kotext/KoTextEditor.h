@@ -24,6 +24,7 @@
 
 #include <KoGenChange.h>
 #include "KoText.h"
+#include "styles/KoListStyle.h"
 #include <KoToolSelection.h>
 
 #include <QClipboard>
@@ -64,6 +65,14 @@ public:
         NextChar
     };
 
+    enum ChangeListFlag {
+        NoFlags = 0,
+        ModifyExistingList = 1,
+        MergeWithAdjacentList = 2,
+        MergeExactly = 4,
+        CreateNumberedParagraph = 8
+    };
+    Q_DECLARE_FLAGS(ChangeListFlags, ChangeListFlag)
 
     KoTextEditor(QTextDocument *document);
 
@@ -242,6 +251,13 @@ public slots:
      * @param numberingEnabled when true, we will enable numbering for the current paragraph (block).
      */
     void toggleListNumbering(bool numberingEnabled);
+
+    /**
+     * change the current block's list properties
+     */
+    void setListProperties(KoListStyle::Style style,
+                           int level = 0,
+                           ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList));
 
     // -------------------------------------------------------------
     // Wrapped QTextCursor methods
@@ -433,4 +449,6 @@ private:
 
 Q_DECLARE_METATYPE(KoTextEditor*)
 Q_DECLARE_METATYPE(bool *)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoTextEditor::ChangeListFlags)
+
 #endif // KOTEXTEDITOR_H

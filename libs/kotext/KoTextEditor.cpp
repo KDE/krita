@@ -2025,15 +2025,14 @@ void KoTextEditor::setBlockFormat(const QTextBlockFormat &format)
     d->caret.setBlockFormat(format);
 }
 
-//void KoTextEditor::setCharFormat(const QTextCharFormat &format)
-//{
-//    if (isEditProtected()) {
-//        return;
-//    }
+void KoTextEditor::setCharFormat(const QTextCharFormat &format)
+{
+    if (isEditProtected()) {
+        return;
+    }
 
-//    Q_UNUSED(format)
-//    //TODO
-//}
+    d->caret.setCharFormat(format);
+}
 
 //void KoTextEditor::setTableFormat(const QTextTableFormat &format)
 //{

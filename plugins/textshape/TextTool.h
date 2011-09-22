@@ -56,8 +56,6 @@ class KUndo2Command;
 class MockCanvas;
 class TextToolSelection;
 
-class ChangeListCommand;
-
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
  */
@@ -138,6 +136,8 @@ public:
 protected:
     virtual void createActions();
 
+    friend class SimplePagraphWidget;
+    friend class ParagraphSettingsDialog;
     KoTextEditor *textEditor() { return m_textEditor.data(); }
 
 public slots:
@@ -153,9 +153,6 @@ public slots:
     void configureChangeTracking();
     /// call this when the 'is-bidi' boolean has been changed.
     void isBidiUpdated();
-
-    /// call this in order to change the list style
-    void changeListStyle(ChangeListCommand *command);
 
 signals:
     /// emitted every time a different styleManager is set.

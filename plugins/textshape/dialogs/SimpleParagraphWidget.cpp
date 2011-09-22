@@ -20,7 +20,6 @@
 #include "SimpleParagraphWidget.h"
 #include "TextTool.h"
 #include <ListItemsHelper.h>
-#include "../commands/ChangeListCommand.h"
 #include "FormattingButton.h"
 #include "StylesWidget.h"
 #include "SpecialButton.h"
@@ -277,8 +276,7 @@ void SimpleParagraphWidget::listStyleChanged(int id)
 {
     emit doneWithFocus();
     if (m_blockSignals) return;
-
-    m_tool->changeListStyle(new ChangeListCommand (m_tool->cursor(), static_cast<KoListStyle::Style> (id)));
+    m_tool->textEditor()->setListProperties(static_cast<KoListStyle::Style> (id));
 }
 
 #include <SimpleParagraphWidget.moc>

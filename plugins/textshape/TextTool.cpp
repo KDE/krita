@@ -37,6 +37,7 @@
 #include "commands/TextCutCommand.h"
 #include "commands/ShowChangesCommand.h"
 #include "commands/AutoResizeCommand.h"
+#include "commands/ChangeListLevelCommand.h"
 #include "FontSizeAction.h"
 
 #include <KoOdf.h>
@@ -1046,8 +1047,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 textEditor->toggleListNumbering(false);
             } else {
                 // backspace on numbered, empty parag, removes numbering.
-                ChangeListCommand *clc = new ChangeListCommand(*textEditor->cursor(), KoListStyle::None, 0 /* level */);
-                textEditor->addCommand(clc);
+                textEditor->setListProperties(KoListStyle::None, 0 /* level */);
             }
         } else if (textEditor->position() > 0 || textEditor->hasSelection()) {
             if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) { // delete prev word.
@@ -2009,13 +2009,6 @@ void TextTool::resourceChanged(int key, const QVariant &var)
 void TextTool::isBidiUpdated()
 {
     emit blockChanged(m_textEditor.data()->block()); // make sure that the dialogs follow this change
-}
-
-void TextTool::changeListStyle(ChangeListCommand *command)
-{
-    if (m_textEditor) {
-        m_textEditor.data()->addCommand(command);
-    }
 }
 
 void TextTool::insertSpecialCharacter()

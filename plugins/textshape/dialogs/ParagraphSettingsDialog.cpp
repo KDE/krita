@@ -20,11 +20,11 @@
 #include "ParagraphSettingsDialog.h"
 
 #include "ParagraphGeneral.h"
-#include "../commands/ChangeListCommand.h"
 #include "../TextTool.h"
 
 #include <KoParagraphStyle.h>
 #include <KoTextDocument.h>
+#include <KoTextEditor.h>
 
 #include <QTextBlock>
 #include <QTimer>
@@ -73,12 +73,8 @@ void ParagraphSettingsDialog::slotApply()
     chosenStyle.applyStyle(format);
     m_cursor->mergeBlockFormat(format);
     if (chosenStyle.listStyle()) {
-        ChangeListCommand::ChangeFlags flags;
-        if (m_cursor->block().textList() == 0)
-            flags = ChangeListCommand::MergeWithAdjacentList;
-        ChangeListCommand *cmd = new ChangeListCommand(*m_cursor, chosenStyle.listStyle(),
-                chosenStyle.listStyle()->listLevels().first(), flags);
-        m_tool->changeListStyle(cmd);
+        m_tool->textEditor()->setListProperties(chosenStyle.listStyle(), chosenStyle.listStyle()->listLevels().first(), KoTextEditor::AutoListStyle);
+
     } else {
         QTextList *list = m_cursor->block().textList();
         if (list) { // then remove it.

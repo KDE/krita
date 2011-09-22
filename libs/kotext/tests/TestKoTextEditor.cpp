@@ -129,13 +129,20 @@ public:
 
     TestDocument()
     {
-        KoTextDocument textDoc(&m_document);
-        KoTextEditor editor(&m_document);
+        m_document = new QTextDocument();
+
+        KoTextDocument textDoc(m_document);
+        KoTextEditor *editor = new KoTextEditor(m_document);
 
         textDoc.setInlineTextObjectManager(&m_inlineObjectManager);
         textDoc.setStyleManager(new KoStyleManager());
-        textDoc.setTextEditor(&editor);
+        textDoc.setTextEditor(editor);
 
+    }
+
+    virtual ~TestDocument()
+    {
+        delete m_document;
     }
 
     virtual void addShape(KoShape *shape)
@@ -150,25 +157,32 @@ public:
 
     KoTextEditor *textEditor()
     {
-        return KoTextDocument(&m_document).textEditor();
+        return KoTextDocument(m_document).textEditor();
     }
 
     QList<KoShape *> m_shapes;
 
-    QTextDocument m_document;
+    QTextDocument *m_document;
     KoInlineTextObjectManager m_inlineObjectManager;
     KoDocumentRdfBase m_rdfBase;
 };
 
 void TestKoTextEditor::testPaste()
 {
-    TestDocument source;
-    TestDocument destination;
+    TestDocument *source = new TestDocument();
+    TestDocument *destination = new TestDocument();
 
-    KoShapeController shapeController(0, &destination);
+    Q_ASSERT(source->textEditor() != destination->textEditor());
+
+    KoShapeController shapeController(0, destination);
     KoResourceManager resourceManager;
 
-    destination.textEditor()->paste(source.textEditor(), &shapeController, &resourceManager);
+    source->textEditor()->insertText("bla");
+
+    destination->textEditor()->paste(source->textEditor(), &shapeController, &resourceManager);
+
+    Q_ASSERT(destination->m_document->toPlainText() == "bla");
+
 
 }
 

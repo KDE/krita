@@ -154,10 +154,8 @@ KUndo2Command* KoShapeController::removeShapes(const QList<KoShape*> &shapes, KU
     return new KoShapeDeleteCommand(d->shapeController, shapes, parent);
 }
 
-void KoShapeController::setShapeControllerBase(KoShapeControllerBase *shapeControllerBase,
-                                               KoCanvasBase *canvas)
+void KoShapeController::setShapeControllerBase(KoShapeControllerBase *shapeControllerBase)
 {
-    KoToolManager::instance()->updateShapeControllerBase(shapeControllerBase, canvas->canvasController());
     d->shapeController = shapeControllerBase;
 }
 

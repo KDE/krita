@@ -99,13 +99,15 @@ public:
     KUndo2Command* removeShapes(const QList<KoShape*> &shapes, KUndo2Command *parent = 0);
 
     /**
-     * @brief Set the KoShapeControllerBase used to add/remove shapes
+     * @brief Set the KoShapeControllerBase used to add/remove shapes.
+     *
+     * NOTE: only Tables uses this method. Do not use it in your application. Tables
+     * has to also call:
+     * <code>KoToolManager::instance()->updateShapeControllerBase(shapeControllerBase, canvas->canvasController());</code>
      *
      * @param shapeControllerBase the new shapeControllerBase.
-     * @param canvas the canvas for which we set the shapecontrollerbase
      */
-    void setShapeControllerBase(KoShapeControllerBase *shapeControllerBase,
-                                KoCanvasBase *canvas);
+    void setShapeControllerBase(KoShapeControllerBase *shapeControllerBase);
 
     /**
      * Return a pointer to the resource manager associated with the

@@ -25,13 +25,19 @@
 #include <QTextDocument>
 #include <QTextTable>
 #include <QTextCharFormat>
+#include <QList>
 
+#include <KoShapeBasedDocumentBase.h>
+#include <KoShape.h>
 #include <KoStyleManager.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 #include <KoBookmark.h>
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoShapeController.h>
+#include <KoResourceManager.h>
+#include <KoDocumentRdfBase.h>
 
 const QString lorem(
     "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
@@ -117,20 +123,52 @@ void TestKoTextEditor::testRemoveSelectedText()
     Q_ASSERT(inlineObjectManager.inlineTextObjects().length() == 0);
 }
 
+class TestDocument : public KoShapeBasedDocumentBase
+{
+public:
+
+    TestDocument()
+    {
+        KoTextDocument textDoc(&m_document);
+        KoTextEditor editor(&m_document);
+
+        textDoc.setInlineTextObjectManager(&m_inlineObjectManager);
+        textDoc.setStyleManager(new KoStyleManager());
+        textDoc.setTextEditor(&editor);
+
+    }
+
+    virtual void addShape(KoShape *shape)
+    {
+        m_shapes << shape;
+    }
+
+    virtual void removeShape(KoShape *shape)
+    {
+        m_shapes.removeAll(shape);
+    }
+
+    KoTextEditor *textEditor()
+    {
+        return KoTextDocument(&m_document).textEditor();
+    }
+
+    QList<KoShape *> m_shapes;
+
+    QTextDocument m_document;
+    KoInlineTextObjectManager m_inlineObjectManager;
+    KoDocumentRdfBase m_rdfBase;
+};
+
 void TestKoTextEditor::testPaste()
 {
-    QObject parent;
+    TestDocument source;
+    TestDocument destination;
 
-    // create a document
-    QTextDocument doc;
-    KoTextEditor editor(&doc);
+    KoShapeController shapeController(0, &destination);
+    KoResourceManager resourceManager;
 
-    KoInlineTextObjectManager inlineObjectManager(&parent);
-    KoTextDocument textDoc(&doc);
-    textDoc.setInlineTextObjectManager(&inlineObjectManager);
-    textDoc.setStyleManager(new KoStyleManager());
-    textDoc.setTextEditor(&editor);
-
+    destination.textEditor()->paste(source.textEditor(), &shapeController, &resourceManager);
 
 }
 

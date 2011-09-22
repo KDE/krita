@@ -44,12 +44,12 @@ class KoShapeController::Private
 public:
     Private()
         : canvas(0),
-        shapeController(0)
+        shapeControllerBase(0)
     {
     }
 
     KoCanvasBase *canvas;
-    KoShapeControllerBase *shapeController;
+    KoShapeControllerBase *shapeControllerBase;
 
     KUndo2Command* addShape(KoShape *shape, bool showDialog, KUndo2Command *parent) {
         Q_ASSERT(canvas->shapeManager());
@@ -118,15 +118,15 @@ public:
             shape->setParent(canvas->shapeManager()->selection()->activeLayer());
         }
 
-        return new KoShapeCreateCommand(shapeController, shape, parent);
+        return new KoShapeCreateCommand(shapeControllerBase, shape, parent);
     }
 };
 
-KoShapeController::KoShapeController(KoCanvasBase *canvas, KoShapeControllerBase *shapeController)
+KoShapeController::KoShapeController(KoCanvasBase *canvas, KoShapeControllerBase *shapeControllerBase)
         : d(new Private())
 {
     d->canvas = canvas;
-    d->shapeController = shapeController;
+    shapeControllerBase = shapeControllerBase;
 }
 
 KoShapeController::~KoShapeController()
@@ -146,22 +146,22 @@ KUndo2Command* KoShapeController::addShapeDirect(KoShape *shape, KUndo2Command *
 
 KUndo2Command* KoShapeController::removeShape(KoShape *shape, KUndo2Command *parent)
 {
-    return new KoShapeDeleteCommand(d->shapeController, shape, parent);
+    return new KoShapeDeleteCommand(shapeControllerBase, shape, parent);
 }
 
 KUndo2Command* KoShapeController::removeShapes(const QList<KoShape*> &shapes, KUndo2Command *parent)
 {
-    return new KoShapeDeleteCommand(d->shapeController, shapes, parent);
+    return new KoShapeDeleteCommand(shapeControllerBase, shapes, parent);
 }
 
 void KoShapeController::setShapeControllerBase(KoShapeControllerBase *shapeControllerBase)
 {
-    d->shapeController = shapeControllerBase;
+    shapeControllerBase = shapeControllerBase;
 }
 
 KoResourceManager *KoShapeController::resourceManager() const
 {
-    if (!d->shapeController)
+    if (!shapeControllerBase)
         return 0;
-    return d->shapeController->resourceManager();
+    return shapeControllerBase->resourceManager();
 }

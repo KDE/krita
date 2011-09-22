@@ -1043,8 +1043,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             && !(m_actionRecordChanges->isChecked())) {
             if (!textEditor->blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
                 // backspace at beginning of numbered list item, makes it unnumbered
-                ListItemNumberingCommand *lin = new ListItemNumberingCommand(textEditor->block(), false);
-                textEditor->addCommand(lin);
+                textEditor->toggleListNumbering(false);
             } else {
                 // backspace on numbered, empty parag, removes numbering.
                 ChangeListCommand *clc = new ChangeListCommand(*textEditor->cursor(), KoListStyle::None, 0 /* level */);

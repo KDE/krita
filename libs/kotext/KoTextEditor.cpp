@@ -1074,6 +1074,9 @@ void KoTextEditor::setListProperties(KoListStyle::Style style,
         return;
     }
 
+    if (flags & AutoListStyle && d->caret.block().textList() == 0) {
+        flags = MergeWithAdjacentList;
+    }
     addCommand(new ChangeListCommand(d->caret, style, level, flags));
 }
 

@@ -70,7 +70,8 @@ public:
         ModifyExistingList = 1,
         MergeWithAdjacentList = 2,
         MergeExactly = 4,
-        CreateNumberedParagraph = 8
+        CreateNumberedParagraph = 8,
+        AutoListStyle = 16
     };
     Q_DECLARE_FLAGS(ChangeListFlags, ChangeListFlag)
 

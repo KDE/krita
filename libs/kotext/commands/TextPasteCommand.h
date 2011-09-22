@@ -35,7 +35,6 @@ public:
 
     TextPasteCommand(const QMimeData *mimeData,
                      QTextDocument *document,
-                     KoDocumentRdfBase *rdf,
                      KoShapeController *shapeController,
                      KoResourceManager *resourceManager,
                      KUndo2Command *parent = 0,

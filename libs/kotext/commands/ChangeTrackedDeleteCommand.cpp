@@ -68,13 +68,12 @@ static KoListStyle::ListIdType ListId(const QTextListFormat &format)
 using namespace std;
 ChangeTrackedDeleteCommand::ChangeTrackedDeleteCommand(DeleteMode mode,
                                                        QTextDocument *document,
-                                                       KoDocumentRdfBase *rdf,
                                                        KoShapeController *shapeController,
                                                        KoResourceManager *resourceManager,
                                                        KUndo2Command *parent) :
     KoTextCommandBase (parent),
     m_document(document),
-    m_rdf(rdf),
+    m_rdf(0),
     m_shapeController(shapeController),
     m_resourceManager(resourceManager),
     m_first(true),
@@ -84,6 +83,7 @@ ChangeTrackedDeleteCommand::ChangeTrackedDeleteCommand(DeleteMode mode,
     m_removedElements()
 {
       setText(i18nc("(qtundo-format)", "Delete"));
+      m_rdf = dynamic_cast<KoDocumentRdfBase*>(m_resourceManager->resource(KoText::DocumentRdf).value<KoDocumentRdfBase*>());
 }
 
 void ChangeTrackedDeleteCommand::undo()
@@ -191,7 +191,6 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(KoTextEditor *editor)
     TextPasteCommand *pasteCommand =
             new TextPasteCommand(QApplication::clipboard()->mimeData(QClipboard::Clipboard),
                                  m_document,
-                                 m_rdf,
                                  m_shapeController,
                                  m_resourceManager,
                                  this);

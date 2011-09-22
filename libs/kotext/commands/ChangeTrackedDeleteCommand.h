@@ -47,7 +47,6 @@ public:
 
     ChangeTrackedDeleteCommand(DeleteMode mode,
                                QTextDocument *document,
-                               KoDocumentRdfBase *rdf,
                                KoShapeController *shapeController,
                                KoResourceManager *resourceManager,
                                KUndo2Command* parent = 0);

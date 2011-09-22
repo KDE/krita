@@ -35,7 +35,6 @@
 #include "styles/KoParagraphStyle.h"
 #include "KoList.h"
 #include "KoOdfLineNumberingConfiguration.h"
-#include "KoOdfNotesConfiguration.h"
 #include "changetracker/KoChangeTracker.h"
 
 Q_DECLARE_METATYPE(QAbstractTextDocumentLayout::Selection)
@@ -46,8 +45,6 @@ const QUrl KoTextDocument::InlineObjectTextManagerURL = QUrl("kotext://inlineObj
 const QUrl KoTextDocument::UndoStackURL = QUrl("kotext://undoStack");
 const QUrl KoTextDocument::ChangeTrackerURL = QUrl("kotext://changetracker");
 const QUrl KoTextDocument::TextEditorURL = QUrl("kotext://textEditor");
-const QUrl KoTextDocument::EndNotesConfigurationURL = QUrl("kotext://endnotesconfiguration");
-const QUrl KoTextDocument::FootNotesConfigurationURL = QUrl("kotext://footnotesconfiguration");
 const QUrl KoTextDocument::LineNumberingConfigurationURL = QUrl("kotext://linenumberingconfiguration");
 const QUrl KoTextDocument::EndNotesFrameURL = QUrl("kotext://endnotesframe");
 const QUrl KoTextDocument::FootNotesFrameURL = QUrl("kotext://footnotesframe");
@@ -131,31 +128,6 @@ KoChangeTracker *KoTextDocument::changeTracker() const
     }
     else {
         return 0;
-    }
-}
-
-void KoTextDocument::setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration)
-{
-    notesConfiguration->setParent(m_document);
-    QVariant v;
-    v.setValue(notesConfiguration);
-    if (notesConfiguration->noteClass() == KoOdfNotesConfiguration::Footnote) {
-        m_document->addResource(KoTextDocument::FootNotesConfiguration, FootNotesConfigurationURL, v);
-    }
-    else {
-        m_document->addResource(KoTextDocument::EndNotesConfiguration, EndNotesConfigurationURL, v);
-    }
-}
-
-KoOdfNotesConfiguration *KoTextDocument::notesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const
-{
-    if (noteClass == KoOdfNotesConfiguration::Endnote) {
-        return m_document->resource(KoTextDocument::EndNotesConfiguration, EndNotesConfigurationURL)
-                .value<KoOdfNotesConfiguration*>();
-    }
-    else {
-        return m_document->resource(KoTextDocument::FootNotesConfiguration, FootNotesConfigurationURL)
-                .value<KoOdfNotesConfiguration*>();
     }
 }
 

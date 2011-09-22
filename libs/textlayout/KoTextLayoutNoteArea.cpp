@@ -19,6 +19,7 @@
 
 #include "KoTextLayoutNoteArea.h"
 #include "FrameIterator.h"
+#include "KoStyleManager.h"
 #include <QPainter>
 
 class KoTextLayoutNoteArea::Private
@@ -56,9 +57,9 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
 {
     KoOdfNotesConfiguration *notesConfig = 0;
     if (d->note->type() == KoInlineNote::Footnote) {
-        notesConfig = KoTextDocument(d->note->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Footnote);
+        notesConfig = KoTextDocument(d->note->textFrame()->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
     } else if (d->note->type() == KoInlineNote::Endnote) {
-        notesConfig = KoTextDocument(d->note->textFrame()->document()).notesConfiguration(KoOdfNotesConfiguration::Endnote);
+        notesConfig = KoTextDocument(d->note->textFrame()->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
     }
     QString label;  //assigning a formatted label to notes
     if (d->note->autoNumbering()) {

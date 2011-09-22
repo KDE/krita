@@ -162,8 +162,6 @@ public:
       */
     QList<KoInlineNote*> endNotes() const;
 
-    KoInlineNote *getFirstNote(QTextBlock block) const;
-
     QMap<QString, KoInlineCite*> citations(bool duplicatesEnabled = true) const;
 
 public slots:

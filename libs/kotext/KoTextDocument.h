@@ -81,12 +81,6 @@ public:
     KoChangeTracker *changeTracker() const;
 
     /// set the notes configuration of the document
-    void setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration);
-
-    /// @return the notes configuration
-    KoOdfNotesConfiguration *notesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const;
-
-    /// set the notes configuration of the document
     void setLineNumberingConfiguration(KoOdfLineNumberingConfiguration *lineNumberingConfiguration);
 
     /// @return the notes configuration
@@ -181,8 +175,6 @@ public:
         ChangeTrackerResource,
         UndoStack,
         TextEditor,
-        FootNotesConfiguration,
-        EndNotesConfiguration,
         LineNumberingConfiguration,
         EndNotesFrame,
         FootNotesFrame,
@@ -202,8 +194,6 @@ public:
     static const QUrl ChangeTrackerURL;
     static const QUrl UndoStackURL;
     static const QUrl TextEditorURL;
-    static const QUrl FootNotesConfigurationURL;
-    static const QUrl EndNotesConfigurationURL;
     static const QUrl LineNumberingConfigurationURL;
     static const QUrl EndNotesFrameURL;
     static const QUrl FootNotesFrameURL;

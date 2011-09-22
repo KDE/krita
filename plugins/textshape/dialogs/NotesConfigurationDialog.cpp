@@ -18,6 +18,7 @@
  */
 #include "NotesConfigurationDialog.h"
 #include "KoTextDocument.h"
+#include "KoStyleManager.h"
 
 #include <KAction>
 
@@ -156,7 +157,8 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
 
         //set note paragraph style
 
-        KoTextDocument(document).setNotesConfiguration(notesConfig);
+        //KoTextDocument(document).setNotesConfiguration(notesConfig);
+        KoTextDocument(document).styleManager()->setNotesConfiguration(notesConfig);
         this->close();
     }
     else if (widget.buttonBox->standardButton(button) == widget.buttonBox->Discard) {

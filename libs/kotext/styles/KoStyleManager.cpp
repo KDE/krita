@@ -45,6 +45,7 @@
 #include <QTextCursor>
 #include <QPixmap>
 #include <QMap>
+#include <QBuffer>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -76,6 +77,8 @@ public:
     KoParagraphStyle *defaultParagraphStyle;
     KoListStyle *defaultListStyle;
     KoListStyle *outlineStyle;
+    KoOdfNotesConfiguration *footNotesConfiguration;
+    KoOdfNotesConfiguration *endNotesConfiguration;
 };
 
 // static
@@ -97,6 +100,8 @@ KoStyleManager::KoStyleManager(QObject *parent)
     llp.setStyle(KoListStyle::DecimalItem);
     llp.setListItemSuffix(".");
     d->defaultListStyle->setLevelProperties(llp);
+    d->footNotesConfiguration = 0;
+    d->endNotesConfiguration = 0;
 }
 
 KoStyleManager::~KoStyleManager()
@@ -219,6 +224,21 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         sectionStyle->saveOdf(style);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
+
+    //save note configuration in styles.xml
+    if (d->footNotesConfiguration) {
+        QBuffer xmlBufferFootNote;
+        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferFootNote);
+        d->footNotesConfiguration->saveOdf(xmlWriter);
+        context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferFootNote.data());
+    }
+
+    if (d->endNotesConfiguration) {
+        QBuffer xmlBufferEndNote;
+        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferEndNote);
+        d->endNotesConfiguration->saveOdf(xmlWriter);
+        context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferEndNote.data());
+    }
 }
 
 void KoStyleManager::add(KoCharacterStyle *style)
@@ -322,6 +342,15 @@ void KoStyleManager::add(KoSectionStyle *style)
     style->setStyleId(d->s_stylesNumber);
     d->sectionStyles.insert(d->s_stylesNumber++, style);
     emit styleAdded(style);
+}
+
+void KoStyleManager::setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration)
+{
+    if (notesConfiguration->noteClass() == KoOdfNotesConfiguration::Footnote) {
+        d->footNotesConfiguration = notesConfiguration;
+    } else if (notesConfiguration->noteClass() == KoOdfNotesConfiguration::Endnote) {
+        d->endNotesConfiguration = notesConfiguration;
+    }
 }
 
 void KoStyleManager::remove(KoCharacterStyle *style)
@@ -653,6 +682,17 @@ KoSectionStyle *KoStyleManager::sectionStyle(const QString &name) const
             return style;
     }
     return 0;
+}
+
+KoOdfNotesConfiguration *KoStyleManager::notesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const
+{
+    if (noteClass == KoOdfNotesConfiguration::Footnote) {
+        return d->footNotesConfiguration;
+    } else if (noteClass == KoOdfNotesConfiguration::Endnote) {
+        return d->endNotesConfiguration;
+    } else {
+        return (KoOdfNotesConfiguration *)0;
+    }
 }
 
 KoParagraphStyle *KoStyleManager::defaultParagraphStyle() const

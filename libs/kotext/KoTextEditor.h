@@ -40,6 +40,7 @@ class KoInlineCite;
 class KoBibliographyInfo;
 class KoCanvasBase;
 class KoTableOfContentsGeneratorInfo;
+class KoShapeController;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -199,14 +200,24 @@ public slots:
     bool deleteInlineObjects(bool backward = false);
 
     /**
+     * paste the given mimedata object at the current position
+     */
+    void paste(const QMimeData *mimeData,
+               KoShapeController *shapeController,
+               KoResourceManager *resourceManager,
+               bool pasteAsText=false);
+
+    /**
      * Insert the selection from the given KoTextEditor
      * @param editor the KoTextEditor instance. If there is no selection, the entire content is
      *   used.
      * @returns true if the operation succeeded
      */
-    bool insert(const KoTextEditor *editor, KoDocumentRdfBase *rdf = 0);
+    bool paste(const KoTextEditor *editor, KoDocumentRdfBase *rdf = 0);
 
+    // -------------------------------------------------------------
     // Wrapped QTextCursor methods
+    // -------------------------------------------------------------
 
     int anchor() const;
 

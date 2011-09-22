@@ -47,6 +47,7 @@
 #include "commands/DeleteTableColumnCommand.h"
 #include "commands/InsertTableRowCommand.h"
 #include "commands/InsertTableColumnCommand.h"
+#include "commands/TextPasteCommand.h"
 #include "KoInlineCite.h"
 #include "KoBibliographyInfo.h"
 
@@ -923,7 +924,20 @@ bool KoTextEditor::deleteInlineObjects(bool backward)
     return d->deleteInlineObjects(backward);
 }
 
-bool KoTextEditor::insert(const KoTextEditor *editor, KoDocumentRdfBase *rdf)
+void KoTextEditor::paste(const QMimeData *mimeData,
+                         KoShapeController *shapeController,
+                         KoResourceManager *resourceManager,
+                         bool pasteAsText)
+{
+    addCommand(new TextPasteCommand(mimeData,
+                                    d->document,
+                                    shapeController,
+                                    resourceManager,
+                                    0,
+                                    pasteAsText));
+}
+
+bool KoTextEditor::paste(const KoTextEditor *editor, KoDocumentRdfBase *rdf)
 {
 #if 0
     Q_ASSERT(editor);

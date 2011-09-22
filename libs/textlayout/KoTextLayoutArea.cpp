@@ -88,6 +88,8 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_bottom(0.0)
  , m_maximalAllowedBottom(0.0)
  , m_maximumAllowedWidth(0.0)
+ , m_isLayoutEnvironment(false)
+ , m_actsHorizontally(false)
  , m_dropCapsWidth(0)
  , m_startOfArea(0)
  , m_endOfArea(0)
@@ -1350,6 +1352,35 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
     }
 
     return height;
+}
+
+void KoTextLayoutArea::setLayoutEnvironmentResctictions(bool isLayoutEnvironment, bool actsHorizontally)
+{
+    m_isLayoutEnvironment = isLayoutEnvironment;
+    m_actsHorizontally = actsHorizontally;
+}
+
+QRectF KoTextLayoutArea::layoutEnvironmentRect(bool &actsHorizontally) const
+{
+    QRectF rect(-5e10, -5e10, 10e10, 10e10);
+
+    if (m_parent) {
+        rect = m_parent->layoutEnvironmentRect(actsHorizontally);
+        actsHorizontally |= m_actsHorizontally;
+    } else {
+        actsHorizontally = m_actsHorizontally;
+    }
+
+    if (m_isLayoutEnvironment) {
+        if (m_actsHorizontally) {
+            rect.setLeft(left());
+            rect.setRight(right());
+        }
+        rect.setTop(top());
+        rect.setBottom(maximumAllowedBottom());
+    }
+
+    return rect;
 }
 
 QRectF KoTextLayoutArea::boundingRect() const

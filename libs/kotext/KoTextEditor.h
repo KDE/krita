@@ -58,6 +58,13 @@ class KOTEXT_EXPORT KoTextEditor: public QObject
 {
     Q_OBJECT
 public:
+
+    enum MoveOperation {
+        PreviousChar,
+        NextChar
+    };
+
+
     KoTextEditor(QTextDocument *document);
 
     virtual ~KoTextEditor();
@@ -214,6 +221,17 @@ public slots:
      * @returns true if the operation succeeded
      */
     bool paste(const KoTextEditor *editor, KoDocumentRdfBase *rdf = 0);
+
+    /**
+     * Delete one character in the specified direction.
+     * @param direction the direction into which we delete. Valid values are
+     * @param trackChanges if true, track this deletion in the changetracker
+     * @param shapeController the current shapeController.
+     * @param resourceManager the resourceManager that contains the rdf doc, if present
+     */
+    void deleteChar(MoveOperation direction, bool trackChanges,
+                    KoShapeController *shapeController,
+                    KoResourceManager *resourceManager);
 
     // -------------------------------------------------------------
     // Wrapped QTextCursor methods

@@ -48,6 +48,8 @@
 #include "commands/InsertTableRowCommand.h"
 #include "commands/InsertTableColumnCommand.h"
 #include "commands/TextPasteCommand.h"
+#include "commands/ChangeTrackedDeleteCommand.h"
+#include "commands/DeleteCommand.h"
 #include "KoInlineCite.h"
 #include "KoBibliographyInfo.h"
 
@@ -929,6 +931,10 @@ void KoTextEditor::paste(const QMimeData *mimeData,
                          KoResourceManager *resourceManager,
                          bool pasteAsText)
 {
+    if (isEditProtected()) {
+        return;
+    }
+
     addCommand(new TextPasteCommand(mimeData,
                                     d->document,
                                     shapeController,
@@ -1013,6 +1019,40 @@ bool KoTextEditor::paste(const KoTextEditor *editor, KoDocumentRdfBase *rdf)
     endEditBlock();
 #endif
     return false;
+}
+
+void KoTextEditor::deleteChar(MoveOperation direction, bool trackChanges, KoShapeController *shapeController, KoResourceManager *resourceManager)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    if (trackChanges) {
+        if (direction == PreviousChar) {
+            addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar,
+                                                      d->document,
+                                                      shapeController,
+                                                      resourceManager));
+        }
+        else {
+            addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar,
+                                                      d->document,
+                                                      shapeController,
+                                                      resourceManager));
+        }
+    }
+    else {
+        if (direction == PreviousChar) {
+            addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
+                                         d->document,
+                                         shapeController));
+        }
+        else {
+            addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
+                                         d->document,
+                                         shapeController));
+        }
+    }
 }
 
 int KoTextEditor::anchor() const

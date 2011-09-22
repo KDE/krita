@@ -20,7 +20,7 @@
 #ifndef REJECTCHANGECOMMAND_H
 #define REJECTCHANGECOMMAND_H
 
-#include "commands/KoTextCommandBase.h"
+#include <KoTextCommandBase.h>
 
 #include <QPair>
 

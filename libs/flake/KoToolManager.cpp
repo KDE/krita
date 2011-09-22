@@ -833,7 +833,7 @@ void KoToolManager::removeCanvasController(KoCanvasController *controller)
     disconnect(controller->proxyObject, SIGNAL(canvasSet(KoCanvasController*)), this, SLOT(attachCanvas(KoCanvasController*)));
 }
 
-void KoToolManager::updateShapeControllerBase(KoShapeControllerBase *shapeController, KoCanvasController *canvasController)
+void KoToolManager::updateShapeControllerBase(KoShapeBasedDocumentBase *shapeController, KoCanvasController *canvasController)
 {
     if (!d->canvasses.keys().contains(canvasController))
         return;

@@ -20,7 +20,7 @@
  */
 
 #include "KoShapeController.h"
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeManager.h"
 #include "KoShapeLayer.h"
@@ -44,17 +44,16 @@ class KoShapeController::Private
 public:
     Private()
         : canvas(0),
-        shapeControllerBase(0)
+          shapeBasedDocument(0)
     {
     }
 
     KoCanvasBase *canvas;
-    KoShapeControllerBase *shapeControllerBase;
+    KoShapeBasedDocumentBase *shapeBasedDocument;
 
     KUndo2Command* addShape(KoShape *shape, bool showDialog, KUndo2Command *parent) {
-        Q_ASSERT(canvas->shapeManager());
 
-        if (showDialog) {
+        if (canvas && showDialog) {
             KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(shape->shapeId());
             Q_ASSERT(factory);
             int z = 0;
@@ -118,15 +117,15 @@ public:
             shape->setParent(canvas->shapeManager()->selection()->activeLayer());
         }
 
-        return new KoShapeCreateCommand(shapeControllerBase, shape, parent);
+        return new KoShapeCreateCommand(shapeBasedDocument, shape, parent);
     }
 };
 
-KoShapeController::KoShapeController(KoCanvasBase *canvas, KoShapeControllerBase *shapeControllerBase)
-        : d(new Private())
+KoShapeController::KoShapeController(KoCanvasBase *canvas, KoShapeBasedDocumentBase *shapeBasedDocument)
+    : d(new Private())
 {
     d->canvas = canvas;
-    shapeControllerBase = shapeControllerBase;
+    d->shapeBasedDocument = shapeBasedDocument;
 }
 
 KoShapeController::~KoShapeController()
@@ -146,22 +145,22 @@ KUndo2Command* KoShapeController::addShapeDirect(KoShape *shape, KUndo2Command *
 
 KUndo2Command* KoShapeController::removeShape(KoShape *shape, KUndo2Command *parent)
 {
-    return new KoShapeDeleteCommand(shapeControllerBase, shape, parent);
+    return new KoShapeDeleteCommand(d->shapeBasedDocument, shape, parent);
 }
 
 KUndo2Command* KoShapeController::removeShapes(const QList<KoShape*> &shapes, KUndo2Command *parent)
 {
-    return new KoShapeDeleteCommand(shapeControllerBase, shapes, parent);
+    return new KoShapeDeleteCommand(d->shapeBasedDocument, shapes, parent);
 }
 
-void KoShapeController::setShapeControllerBase(KoShapeControllerBase *shapeControllerBase)
+void KoShapeController::setShapeControllerBase(KoShapeBasedDocumentBase *shapeBasedDocument)
 {
-    shapeControllerBase = shapeControllerBase;
+    d->shapeBasedDocument = shapeBasedDocument;
 }
 
 KoResourceManager *KoShapeController::resourceManager() const
 {
-    if (!shapeControllerBase)
+    if (!d->shapeBasedDocument)
         return 0;
-    return shapeControllerBase->resourceManager();
+    return d->shapeBasedDocument->resourceManager();
 }

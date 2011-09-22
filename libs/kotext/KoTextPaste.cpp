@@ -23,7 +23,7 @@
 #include <KoOdfReadStore.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoShapeController.h>
 
 #include "KoTextDocument.h"

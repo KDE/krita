@@ -33,7 +33,7 @@
 #include "KoShapeLayer.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeManager.h"
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
 #include "KoShapeRegistry.h"
 #include "KoCanvasController.h"
 #include "KoResourceManager.h"

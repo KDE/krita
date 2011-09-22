@@ -26,7 +26,7 @@
 #include "flake_export.h"
 
 class KoPathShape;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 
 /// The undo / redo command for separating subpaths into different paths
 class FLAKE_EXPORT KoPathSeparateCommand : public KUndo2Command
@@ -38,7 +38,7 @@ public:
      * @param paths the list of paths to separate
      * @param parent the parent command used for macro commands
      */
-    KoPathSeparateCommand(KoShapeControllerBase *controller, const QList<KoPathShape*> &paths,
+    KoPathSeparateCommand(KoShapeBasedDocumentBase *controller, const QList<KoPathShape*> &paths,
                           KUndo2Command *parent = 0);
     virtual ~KoPathSeparateCommand();
     /// redo the command

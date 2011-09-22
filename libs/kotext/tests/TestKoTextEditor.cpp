@@ -26,6 +26,7 @@
 #include <QTextTable>
 #include <QTextCharFormat>
 
+#include <KoStyleManager.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 #include <KoBookmark.h>
@@ -118,6 +119,18 @@ void TestKoTextEditor::testRemoveSelectedText()
 
 void TestKoTextEditor::testPaste()
 {
+    QObject parent;
+
+    // create a document
+    QTextDocument doc;
+    KoTextEditor editor(&doc);
+
+    KoInlineTextObjectManager inlineObjectManager(&parent);
+    KoTextDocument textDoc(&doc);
+    textDoc.setInlineTextObjectManager(&inlineObjectManager);
+    textDoc.setStyleManager(new KoStyleManager());
+    textDoc.setTextEditor(&editor);
+
 
 }
 

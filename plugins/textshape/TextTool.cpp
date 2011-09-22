@@ -1278,8 +1278,7 @@ void TextTool::ensureCursorVisible(bool moveView)
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
     KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(position);
-
-    if (rootArea && m_textShapeData->rootArea() != rootArea) {
+    if (rootArea && rootArea->associatedShape() && m_textShapeData->rootArea() != rootArea) {
         // If we have changed root area we need to update m_textShape and m_textShapeData
         m_textShape = static_cast<TextShape*>(rootArea->associatedShape());
         Q_ASSERT(m_textShape);

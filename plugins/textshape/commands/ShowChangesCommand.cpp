@@ -102,10 +102,9 @@ void ShowChangesCommand::enableDisableStates(bool showChanges)
 {
     m_changeTracker->setDisplayChanges(showChanges);
 
-// XXX: KoTextEditor::setCharFormat is not implemented
-//    QTextCharFormat format = m_textEditor->charFormat();
-//    format.clearProperty(KoCharacterStyle::ChangeTrackerId);
-//    m_textEditor->setCharFormat(format);
+    QTextCharFormat format = m_textEditor->charFormat();
+    format.clearProperty(KoCharacterStyle::ChangeTrackerId);
+    m_textEditor->setCharFormat(format);
 }
 
 bool isPositionLessThan(KoChangeTrackerElement *element1, KoChangeTrackerElement *element2)

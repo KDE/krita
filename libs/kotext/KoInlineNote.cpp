@@ -158,9 +158,9 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     QFont font(format.font(), pd);
     KoOdfNotesConfiguration *notesConfig = 0;
     if (d->type == KoInlineNote::Footnote) {
-        notesConfig = KoTextDocument(this->textFrame()->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
+        notesConfig = KoTextDocument(d->textFrame->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
     } else if (d->type == KoInlineNote::Endnote) {
-        notesConfig = KoTextDocument(this->textFrame()->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
+        notesConfig = KoTextDocument(d->textFrame->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
     }
     //assigning a formatted label to notes
     QString label;

@@ -174,6 +174,7 @@ KoOdfNotesConfiguration KoOdfStylesReader::globalNotesConfiguration(KoOdfNotesCo
     case (KoOdfNotesConfiguration::Footnote):
         return d->globalFootnoteConfiguration;
     default:
+        d->defaultNoteConfiguration.setNoteClass(noteClass);
         return d->defaultNoteConfiguration;
     }
 }

@@ -22,9 +22,10 @@
 
 #include "kotext_export.h"
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QString>
+#include <QObject>
+#include <QMap>
+#include <QString>
+#include <QMetaType>
 
 #include <KoDataCenterBase.h>
 
@@ -77,6 +78,8 @@ public:
     virtual bool loadOasis(KoStore *store);
     virtual bool saveOasis(KoStore *store, KoXmlWriter *manifestWriter);
 };
+
+Q_DECLARE_METATYPE(KoDocumentRdfBase*)
 
 #endif
 

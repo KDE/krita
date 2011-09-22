@@ -232,10 +232,13 @@ public slots:
     /**
      * Insert the selection from the given KoTextEditor
      * @param editor the KoTextEditor instance. If there is no selection, the entire content is
-     *   used.
+     *   used. This changes the cursor position of the editor instance.
      * @returns true if the operation succeeded
      */
-    bool paste(const KoTextEditor *editor, KoDocumentRdfBase *rdf = 0);
+    bool paste(KoTextEditor *editor,
+               KoShapeController *shapeController,
+               KoResourceManager *resourceManager,
+               bool pasteAsText = false);
 
     /**
      * Delete one character in the specified direction.

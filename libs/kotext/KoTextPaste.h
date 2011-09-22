@@ -38,6 +38,10 @@ public:
     /**
      * Note: RdfModel ownership is not taken. You must ensure that it remains
      * valid for the lifetime of the object.
+     *
+     * @param editor the KoTextEditor the text will be read into
+     * @param resourceManager the resourceManager used while loading the text into the document
+     * @param rdfModel the rdfModel we'll insert the tuples into
      */
     KoTextPaste(KoTextEditor *editor, KoResourceManager *resourceManager, const Soprano::Model *rdfModel);
     virtual ~KoTextPaste();

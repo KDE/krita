@@ -64,7 +64,7 @@
 #include <KoChangeTrackerElement.h>
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
-
+#include <KoListLevelProperties.h>
 #include <KoTextLayoutRootArea.h>
 
 #include <kdebug.h>

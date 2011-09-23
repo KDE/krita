@@ -77,11 +77,6 @@ private:
     KoRuler * m_verticalRuler;
     QAction *m_showRulersAction;
     KoZoomAction * m_zoomAction;
-    KAction * m_zoomIn;
-    KAction * m_zoomOut;
-    KAction * m_actualPixels;
-    KAction * m_actualSize;
-    KAction * m_fitToCanvas;
     QWidget * m_zoomActionWidget;
 };
 

@@ -54,11 +54,6 @@ KisZoomManager::KisZoomManager(KisView2 * view, KoZoomHandler * zoomHandler,
         , m_horizontalRuler(0)
         , m_verticalRuler(0)
         , m_zoomAction(0)
-        , m_zoomIn(0)
-        , m_zoomOut(0)
-        , m_actualPixels(0)
-        , m_actualSize(0)
-        , m_fitToCanvas(0)
         , m_zoomActionWidget(0)
 {
 }

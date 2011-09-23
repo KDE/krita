@@ -79,7 +79,6 @@ public:
     KoListStyle *outlineStyle;
     KoOdfNotesConfiguration *footNotesConfiguration;
     KoOdfNotesConfiguration *endNotesConfiguration;
-    KoOdfNotesConfiguration *defaultNotesConfiguration;
 };
 
 // static
@@ -687,13 +686,26 @@ KoSectionStyle *KoStyleManager::sectionStyle(const QString &name) const
 
 KoOdfNotesConfiguration *KoStyleManager::notesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const
 {
-    switch (noteClass) {
-    case (KoOdfNotesConfiguration::Endnote):
+    if (noteClass == KoOdfNotesConfiguration::Endnote) {
+        if (!d->endNotesConfiguration) {
+            d->endNotesConfiguration = new KoOdfNotesConfiguration();
+            d->endNotesConfiguration->setNoteClass(noteClass);
+            KoOdfNumberDefinition *numFormat = new KoOdfNumberDefinition();
+            numFormat->setFormatSpecification(KoOdfNumberDefinition::RomanLowerCase);
+            d->endNotesConfiguration->setNumberFormat(*numFormat);
+        }
         return d->endNotesConfiguration;
-    case (KoOdfNotesConfiguration::Footnote):
+    } else if (noteClass == KoOdfNotesConfiguration::Footnote) {
+        if (!d->footNotesConfiguration) {
+            d->footNotesConfiguration = new KoOdfNotesConfiguration();
+            d->footNotesConfiguration->setNoteClass(noteClass);
+            KoOdfNumberDefinition *numFormat = new KoOdfNumberDefinition();
+            numFormat->setFormatSpecification(KoOdfNumberDefinition::Numeric);
+            d->footNotesConfiguration->setNumberFormat(*numFormat);
+        }
         return d->footNotesConfiguration;
-    default:
-        return d->defaultNotesConfiguration;
+    } else {
+        return 0;
     }
 }
 

@@ -71,6 +71,12 @@ public:
     /// HParagraphStartMargin, HParagraphEndMargin, VParagraph)
     void setParagraphRect(const QRectF &paragraphRect);
 
+    /// get layout environment rectangle @see odf attribute style:flow-with-text
+    QRectF layoutEnvironmentRect();
+
+     /// set layout environment rect @see odf attribute style:flow-with-text
+    void setLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect);
+
     /// get number of page to which this text anchor is anchored (needed for HOutside, HInside,
     /// HFromInside)
     int pageNumber();
@@ -88,6 +94,7 @@ private:
     QRectF m_pageRect;
     QRectF m_pageContentRect;
     QRectF m_paragraphRect;
+    QRectF m_layoutEnvironmentRect;
     int m_pageNumber;
 };
 

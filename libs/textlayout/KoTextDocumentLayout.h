@@ -154,6 +154,10 @@ public:
     /// positionInlineObject()
     void setAnchoringParagraphRect(const QRectF &paragraphRect);
 
+    /// Sets the layoutEnvironment rect that will be applied to anchorStrategies being created in
+    /// positionInlineObject()
+    void setAnchoringLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect);
+
     /// Positions all anchored obstructions
     /// the paragraphRect should be in textDocument coords and not global/document coords
     void positionAnchoredObstructions();

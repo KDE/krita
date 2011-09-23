@@ -1074,6 +1074,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         runAroundHelper.setLine(this, line);
         runAroundHelper.setObstructions(documentLayout()->currentObstructions());
         documentLayout()->setAnchoringParagraphRect(m_blockRects.last());
+        documentLayout()->setAnchoringLayoutEnvironmentRect(layoutEnvironmentRect());
         runAroundHelper.fit( /* resetHorizontalPosition */ false, /* rightToLeft */ m_isRtl, QPointF(x(), m_y));
         qreal bottomOfText = line.y() + line.height();
 
@@ -1414,15 +1415,12 @@ void KoTextLayoutArea::setLayoutEnvironmentResctictions(bool isLayoutEnvironment
     m_actsHorizontally = actsHorizontally;
 }
 
-QRectF KoTextLayoutArea::layoutEnvironmentRect(bool &actsHorizontally) const
+QRectF KoTextLayoutArea::layoutEnvironmentRect() const
 {
-    QRectF rect(-5e10, -5e10, 10e10, 10e10);
+    QRectF rect(-5e10, -5e10, 10e10, 10e20); // large values that never really restrict anything
 
     if (m_parent) {
-        rect = m_parent->layoutEnvironmentRect(actsHorizontally);
-        actsHorizontally |= m_actsHorizontally;
-    } else {
-        actsHorizontally = m_actsHorizontally;
+        rect = m_parent->layoutEnvironmentRect();
     }
 
     if (m_isLayoutEnvironment) {

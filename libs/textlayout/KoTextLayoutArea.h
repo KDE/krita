@@ -123,7 +123,7 @@ public:
     void setLayoutEnvironmentResctictions(bool isLayoutEnvironment, bool actsHorizontally);
 
     /// Returns the rect of the layout environment (see odf style:flow-with-text).
-    QRectF layoutEnvironmentRect(bool &actsHorizontally) const;
+    QRectF layoutEnvironmentRect() const;
 
     qreal listIndent() const;
     qreal textIndent(QTextBlock block, QTextList *textList, const KoParagraphStyle &pStyle) const;

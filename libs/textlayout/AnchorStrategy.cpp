@@ -83,6 +83,16 @@ void AnchorStrategy::setParagraphRect(const QRectF &paragraphRect)
     m_paragraphRect = paragraphRect;
 }
 
+QRectF AnchorStrategy::layoutEnvironmentRect()
+{
+    return m_layoutEnvironmentRect;
+}
+
+void AnchorStrategy::setLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect)
+{
+    m_layoutEnvironmentRect = layoutEnvironmentRect;
+}
+
 int AnchorStrategy::pageNumber()
 {
     return m_pageNumber;

@@ -232,7 +232,7 @@ public slots:
     /**
      * Insert the selection from the given KoTextEditor. If there is no selection, the entire
      * content of the document behind the editor is used. This changes the cursor position of
-     * the editor instance.
+     * the editor instance. Note that this is another text editor, preferably on another document!
      *
      * @param editor the KoTextEditor instance.
      * @returns true if the operation succeeded

@@ -55,6 +55,7 @@ KisZoomManager::KisZoomManager(KisView2 * view, KoZoomHandler * zoomHandler,
         , m_verticalRuler(0)
         , m_zoomAction(0)
         , m_zoomActionWidget(0)
+        , m_100pct(0)
 {
 }
 
@@ -189,6 +190,11 @@ void KisZoomManager::pageOffsetChanged()
 {
     m_horizontalRuler->setOffset(m_canvasController->canvasOffsetX() + m_view->canvasBase()->documentOrigin().x());
     m_verticalRuler->setOffset(m_canvasController->canvasOffsetY() + m_view->canvasBase()->documentOrigin().y());
+}
+
+void KisZoomManager::zoomTo100()
+{
+    m_zoomHandler->setZoom(1.0);
 }
 
 

@@ -12,6 +12,7 @@ Name[ru]=Текст
 Name[sv]=Textverktyg
 Name[uk]=Інструмент тексту
 Name[x-test]=xxText Toolxx
+Name[zh_TW]=文字工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatooltext

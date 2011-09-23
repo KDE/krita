@@ -51,7 +51,6 @@ set(komain_LIB_SRCS
     KoFilterEdge.cpp
     KoFilterChainLink.cpp
     KoFilterChainLinkList.cpp
-    KoImageSelectionWidget.cpp
     KoStandardAction.cpp
     KoUndoStackAction.cpp
     config/KoConfigDocumentPage.cpp
@@ -219,7 +218,6 @@ install( FILES
     KoVersionDialog.h
     KoView.h
     KoViewAdaptor.h
-    KoImageSelectionWidget.h
     calligraversion.h
     KoProgressUpdater.h
     KoProgressBar.h

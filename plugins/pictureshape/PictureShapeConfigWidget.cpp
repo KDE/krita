@@ -21,40 +21,50 @@
 #include "PictureShape.h"
 
 #include <KoImageData.h>
-#include <KoImageSelectionWidget.h>
+#include <KoImageCollection.h>
 
 #include <KDebug>
+#include <KFileWidget>
+#include <KJob>
+#include <KIO/Job>
+
 #include <QGridLayout>
 
 PictureShapeConfigWidget::PictureShapeConfigWidget()
     : m_shape(0),
-    m_selectionWidget(0)
+    m_fileWidget(0)
 {
 }
 
 PictureShapeConfigWidget::~PictureShapeConfigWidget()
 {
+    delete m_fileWidget;
 }
 
 void PictureShapeConfigWidget::open(KoShape *shape)
 {
     m_shape = dynamic_cast<PictureShape*>(shape);
     Q_ASSERT(m_shape);
-    delete m_selectionWidget;
+    delete m_fileWidget;
     QVBoxLayout *layout = new QVBoxLayout(this);
-    m_selectionWidget = new KoImageSelectionWidget(m_shape->imageCollection(), this);
-    layout->addWidget(m_selectionWidget);
+    m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenDialog"), this);
+    m_fileWidget->setOperationMode(KFileWidget::Opening);
+    m_fileWidget->setFilter("image/png image/jpeg image/gif");
+    layout->addWidget(m_fileWidget);
     setLayout(layout);
+    connect(m_fileWidget, SIGNAL(accepted()), this, SIGNAL(accept()));
 }
 
 void PictureShapeConfigWidget::save()
 {
     if (!m_shape)
         return;
-    KoImageData *data = m_selectionWidget->imageData();
-    if (data) {
-        m_shape->setUserData(data);
-        m_shape->setSize(data->imageSize());
+    m_fileWidget->accept();
+    KUrl url = m_fileWidget->selectedUrl();
+    if (!url.isEmpty()) {
+        KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
+        LoadWaiter *waiter = new LoadWaiter(m_shape);
+        connect(job, SIGNAL(result(KJob*)), waiter, SLOT(setImageData(KJob*)));
     }
 }
 

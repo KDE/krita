@@ -160,8 +160,6 @@ public:
     bool checkForListItemSplit(const KoXmlElement &element);
     KoXmlNode loadListItemSplit(const KoXmlElement &element, QString *generatedXmlString);
 
-    bool inTable;
-
     explicit Private(KoShapeLoadingContext &context, KoShape *s)
         : context(context),
           textSharedData(0),
@@ -182,8 +180,7 @@ public:
           loadSpanLevel(0),
           loadSpanInitialPos(0),
           openedElements(0),
-          deleteMergeStarted(false),
-          inTable(false)
+          deleteMergeStarted(false)
     {
         progressTime.start();
     }
@@ -2001,7 +1998,6 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
         tableFormat.setProperty(KoTableStyle::TableIsProtected, true);
     }
     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
-    d->inTable = true;
 
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(tbl);
     int rows = 0;
@@ -2084,7 +2080,6 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     }
     cursor = tbl->lastCursorPosition();
     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
-    d->inTable = false;
 }
 
 void KoTextLoader::loadTableColumn(KoXmlElement &tblTag, QTextTable *tbl, int &columns)
@@ -2260,24 +2255,15 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
         return 0;
     }
 
-    QString anchorType;
-    if (shape->hasAdditionalAttribute("text:anchor-type"))
-        anchorType = shape->additionalAttribute("text:anchor-type");
-    else if (element.hasAttributeNS(KoXmlNS::text, "anchor-type"))
-        anchorType = element.attributeNS(KoXmlNS::text, "anchor-type");
-    else
-        anchorType = "as-char"; // default value
+    KoTextAnchor *anchor = new KoTextAnchor(shape);
+    anchor->loadOdf(element, d->context);
+    d->textSharedData->shapeInserted(shape, element, d->context, anchor);
 
     // page anchored shapes are handled differently
-    if (anchorType == "page" && shape->hasAdditionalAttribute("text:anchor-page-number")) {
-        d->textSharedData->shapeInserted(shape, element, d->context);
+    if (anchor->anchorType() == KoTextAnchor::AnchorPage && shape->hasAdditionalAttribute("text:anchor-page-number")) {
+        // nothing else to do
     } else {
-        KoTextAnchor *anchor = new KoTextAnchor(shape);
-        if (d->inTable) {
-            anchor->fakeAsChar();
-        }
-        anchor->loadOdf(element, d->context);
-        d->textSharedData->shapeInserted(shape, element, d->context);
+        shape->setVisible(false); // make it invisible until layouting
 
         KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
         if (textObjectManager) {

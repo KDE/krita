@@ -836,7 +836,9 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
 
     KisPaintLayerSP mergedLayer = new KisPaintLayer(this, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
     Q_CHECK_PTR(mergedLayer);
-
+    mergedLayer->setCompositeOp(prevLayer->compositeOp()->id());
+    mergedLayer->setOpacity(prevLayer->opacity());
+    mergedLayer->setChannelFlags(prevLayer->channelFlags());
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;
@@ -854,7 +856,7 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     dbgImage << ppVar(parent);
 
     // XXX: merge the masks!
-    // AAA: do you really think you need it? ;)
+    // AAA: do you really think you need it? ;) -- yes, we don't want to lose the masks
 
     // FIXME: "Merge Down"?
     undoAdapter()->beginMacro(i18n("Merge with Layer Below"));

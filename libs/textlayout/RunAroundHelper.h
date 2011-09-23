@@ -32,11 +32,11 @@ class RunAroundHelper
 {
 public:
     RunAroundHelper();
-    void setLine(KoTextLayoutArea *area, QTextLine l);
+    void setLine(KoTextLayoutArea *area, const QTextLine &l);
     void setObstructions(const QList<KoTextLayoutObstruction *> &obstructions);
     bool stayOnBaseline();
     void updateObstruction(KoTextLayoutObstruction *obstruction);
-    bool fit(bool resetHorizontalPosition, bool isRightToLeft, QPointF position);
+    bool fit(bool resetHorizontalPosition, bool isRightToLeft, const QPointF &position);
     QTextLine line;
 private:
     KoTextLayoutArea *m_area;

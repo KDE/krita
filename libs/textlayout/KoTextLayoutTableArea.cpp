@@ -553,6 +553,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
                     maxBottom);
 
             cellArea->setVirginPage(virginPage());
+            cellArea->setLayoutEnvironmentResctictions(true, true);
 
             FrameIterator *cellCursor = cursor->frameIterator(col);
 
@@ -673,6 +674,7 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
                     rowBottom - cellStyle.bottomPadding() - cellStyle.bottomBorderWidth());
 
             cellArea->setVirginPage(virginPage());
+            cellArea->setLayoutEnvironmentResctictions(true, true);
 
             FrameIterator *cellCursor =  cursor->frameIterator(col);
 

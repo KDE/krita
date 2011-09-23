@@ -25,7 +25,13 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include <lcms.h>
+
+#include <KoConfig.h>
+#ifdef HAVE_LCMS2
+#   include <lcms2.h>
+#else
+#   include <lcms.h>
+#endif
 
 extern "C" {
 #include <iccjpeg.h>
@@ -170,7 +176,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     if (read_icc_profile(&cinfo, &profile_data, &profile_len)) {
         profile_rawdata.resize(profile_len);
         memcpy(profile_rawdata.data(), profile_data, profile_len);
-        cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, (DWORD)profile_len);
+        cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, profile_len);
 
         if (hProfile != (cmsHPROFILE) NULL) {
             profile = KoColorSpaceRegistry::instance()->createColorProfile(modelId, Integer8BitsColorDepthID.id(), profile_rawdata);

@@ -766,6 +766,7 @@ void KisLayerManager::mergeLayer()
     KisLayerSP  newLayer = image->mergeDown(layer, strategy);
     if (newLayer) {
         newLayer->setDirty();
+        m_view->nodeManager()->activateNode(newLayer);
     }
 
     m_view->updateGUI();

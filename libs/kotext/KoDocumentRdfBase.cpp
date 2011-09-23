@@ -23,6 +23,7 @@
 #include <KoText.h>
 #include <KoXmlWriter.h>
 #include <KoStoreDevice.h>
+#include <KoShapeController.h>
 
 #include <kdebug.h>
 
@@ -39,6 +40,11 @@ const Soprano::Model *KoDocumentRdfBase::model() const
 KoDocumentRdfBase *KoDocumentRdfBase::fromResourceManager(KoCanvasBase *host)
 {
     KoResourceManager *rm = host->resourceManager();
+    if( host->shapeController() ) {
+        rm = host->shapeController()->resourceManager();
+    }
+    kDebug(30015) << "host" << host << " rm" << rm;
+    
     if (!rm->hasResource(KoText::DocumentRdf)) {
         return 0;
     }
@@ -50,6 +56,17 @@ void KoDocumentRdfBase::linkToResourceManager(KoResourceManager *rm)
     QVariant variant;
     variant.setValue<void*>(this);
     rm->setResource(KoText::DocumentRdf, variant);
+
+    kDebug(30015) << "setrm, rm" << rm;
+    
+    // // DEBUG
+    // {
+    //     if (!rm->hasResource(KoText::DocumentRdf)) {
+    //         kDebug(30015) << "can not read back!";
+    //     }
+    //     KoDocumentRdfBase* b = static_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<void*>());
+    //     kDebug(30015) << "read back" << b;
+    // }
 }
 
 void KoDocumentRdfBase::updateInlineRdfStatements(const QTextDocument *qdoc)

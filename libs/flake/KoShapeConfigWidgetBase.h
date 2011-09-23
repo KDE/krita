@@ -92,6 +92,9 @@ signals:
     /// is emitted after one of the config options has changed
     void propertyChanged();
 
+    /// is emitted when the dialog should be accepted ie a file double clicked in a filebrowser
+    void accept();
+
 protected:
     KoResourceManager *m_resourceManager; ///< the resource provider with data for this canvas
 };

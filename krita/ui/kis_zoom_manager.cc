@@ -54,12 +54,8 @@ KisZoomManager::KisZoomManager(KisView2 * view, KoZoomHandler * zoomHandler,
         , m_horizontalRuler(0)
         , m_verticalRuler(0)
         , m_zoomAction(0)
-        , m_zoomIn(0)
-        , m_zoomOut(0)
-        , m_actualPixels(0)
-        , m_actualSize(0)
-        , m_fitToCanvas(0)
         , m_zoomActionWidget(0)
+        , m_100pct(0)
 {
 }
 
@@ -96,6 +92,11 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
                                           "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers."));
     connect(m_showRulersAction, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));
 
+    m_100pct = new KAction(i18n("Zoom 100"), this);
+    actionCollection->addAction("zoom_to_100pct", m_100pct);
+    m_100pct->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
+    connect(m_100pct, SIGNAL(triggered()), SLOT(zoomTo100()));
+
     // Put the canvascontroller in a layout so it resizes with us
     QGridLayout * layout = new QGridLayout(m_view);
     layout->setSpacing(0);
@@ -114,6 +115,8 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_verticalRuler->setUnit(KoUnit(KoUnit::Point));
     m_verticalRuler->setVisible(show);
     m_showRulersAction->setChecked(show);
+
+
 
     layout->addWidget(m_horizontalRuler, 0, 1);
     layout->addWidget(m_verticalRuler, 1, 0);
@@ -194,6 +197,11 @@ void KisZoomManager::pageOffsetChanged()
 {
     m_horizontalRuler->setOffset(m_canvasController->canvasOffsetX() + m_view->canvasBase()->documentOrigin().x());
     m_verticalRuler->setOffset(m_canvasController->canvasOffsetY() + m_view->canvasBase()->documentOrigin().y());
+}
+
+void KisZoomManager::zoomTo100()
+{
+    m_zoomHandler->setZoom(1.0);
 }
 
 

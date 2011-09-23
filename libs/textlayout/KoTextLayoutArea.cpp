@@ -88,6 +88,8 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_bottom(0.0)
  , m_maximalAllowedBottom(0.0)
  , m_maximumAllowedWidth(0.0)
+ , m_isLayoutEnvironment(false)
+ , m_actsHorizontally(false)
  , m_dropCapsWidth(0)
  , m_startOfArea(0)
  , m_endOfArea(0)
@@ -951,16 +953,50 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 if (textList->format().hasProperty(KoListStyle::TabStopPosition)) {
                     qreal listTab = textList->format().doubleProperty(KoListStyle::TabStopPosition);
                     if (!m_documentLayout->relativeTabs(block)) {
-                        listTab += leftMargin + m_indent;
+                        // How list tab is defined if fixed tabs:
+                        //        listTab
+                        //|>-------------------------|
+                        //           m_indent
+                        //         |---------<|
+                        //       m_listIndent
+                        //     |-------------<|
+                        //     LABEL                 TEXT STARTS HERE AND GOES ON
+                        //                    TO THE NEXT LINE
+                        //|>------------------|
+                        //     leftMargin
+                        listTab -= leftMargin + m_indent;
                     } else {
-                        listTab -= leftMargin + m_indent; // express it relatively like other tabs
+                        // How list tab is defined if relative tabs:
+                        //                    listTab
+                        //                    |>-----|
+                        //           m_indent
+                        //         |---------<|
+                        //       m_listIndent
+                        //     |-------------<|
+                        //     LABEL                 TEXT STARTS HERE AND GOES ON
+                        //                    TO THE NEXT LINE
+                        //|>------------------|
+                        //     leftMargin
+                        listTab -= m_indent;
                     }
+                    //How we want it:
+                    //         x()
+                    //         |     listTab
+                    //         |>---------------|
+                    //           m_indent
+                    //         |---------<|
+                    //       m_listIndent
+                    //     |-------------<|
+                    //     LABEL                 TEXT STARTS HERE AND GOES ON
+                    //                    TO THE NEXT LINE
+                    //|>------------------|
+                    //     leftMargin
 
                     foreach(KoText::Tab tab, tabs) {
                         qreal position = tab.position  * 72. / qt_defaultDpiY();
-                        if (position > listLabelIndent) {
+                        if (position > 0.0) {
                             // found the relevant normal tab
-                            if (position > listTab && listTab > listLabelIndent) {
+                            if (position > listTab) {
                                 // But special tab is more relevant
                                 position = listTab;
                             }
@@ -1316,6 +1352,35 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
     }
 
     return height;
+}
+
+void KoTextLayoutArea::setLayoutEnvironmentResctictions(bool isLayoutEnvironment, bool actsHorizontally)
+{
+    m_isLayoutEnvironment = isLayoutEnvironment;
+    m_actsHorizontally = actsHorizontally;
+}
+
+QRectF KoTextLayoutArea::layoutEnvironmentRect(bool &actsHorizontally) const
+{
+    QRectF rect(-5e10, -5e10, 10e10, 10e10);
+
+    if (m_parent) {
+        rect = m_parent->layoutEnvironmentRect(actsHorizontally);
+        actsHorizontally |= m_actsHorizontally;
+    } else {
+        actsHorizontally = m_actsHorizontally;
+    }
+
+    if (m_isLayoutEnvironment) {
+        if (m_actsHorizontally) {
+            rect.setLeft(left());
+            rect.setRight(right());
+        }
+        rect.setTop(top());
+        rect.setBottom(maximumAllowedBottom());
+    }
+
+    return rect;
 }
 
 QRectF KoTextLayoutArea::boundingRect() const

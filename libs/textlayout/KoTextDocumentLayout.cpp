@@ -417,7 +417,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
         // if there is no anchor strategy set then create one
         if (!anchor->anchorStrategy()) {
             int index = d->textAnchors.count();
-            if (anchor->behavesAsCharacter()) {
+            if (anchor->anchorType() == KoTextAnchor::AnchorAsCharacter) {
                 anchor->setAnchorStrategy(new InlineAnchorStrategy(anchor, d->anchoringRootArea));
             } else {
                 anchor->setAnchorStrategy(new FloatingAnchorStrategy(anchor, d->anchoringRootArea));
@@ -426,7 +426,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
                 // proper sorted according to there z-index so the FloatingAnchorStrategy::checkStacking
                 // logic does stack in the proper order. Bug 274512 has a testdoc for this attached.
                 if (index > 0 &&
-                    anchor->anchorType() == "paragraph" &&
+                    anchor->anchorType() == KoTextAnchor::AnchorParagraph &&
                     (anchor->horizontalRel() == KoTextAnchor::HParagraph || anchor->horizontalRel() == KoTextAnchor::HParagraphContent) &&
                     (anchor->horizontalPos() == KoTextAnchor::HLeft || anchor->horizontalPos() == KoTextAnchor::HRight)) {
                     QTextBlock anchorBlock = document()->findBlock(position);

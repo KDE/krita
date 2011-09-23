@@ -94,8 +94,6 @@ public:
 
     qreal textRunAroundThreshold;
 
-    bool anchored;
-
     /// Convert connection point position from shape coordinates, taking alignment into account
     void convertFromShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;
 

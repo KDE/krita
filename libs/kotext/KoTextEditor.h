@@ -230,9 +230,11 @@ public slots:
                bool pasteAsText=false);
 
     /**
-     * Insert the selection from the given KoTextEditor
-     * @param editor the KoTextEditor instance. If there is no selection, the entire content is
-     *   used. This changes the cursor position of the editor instance.
+     * Insert the selection from the given KoTextEditor. If there is no selection, the entire
+     * content of the document behind the editor is used. This changes the cursor position of
+     * the editor instance.
+     *
+     * @param editor the KoTextEditor instance.
      * @returns true if the operation succeeded
      */
     bool paste(KoTextEditor *editor,

@@ -968,8 +968,6 @@ bool KoTextEditor::paste(KoTextEditor *editor,
         editor->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     }
 
-    if (!editor->hasComplexSelection()) return;
-
     int from = editor->position();
     int to = editor->anchor();
     KoTextOdfSaveHelper saveHelper(editor->document(), from, to);
@@ -983,10 +981,10 @@ bool KoTextEditor::paste(KoTextEditor *editor,
 
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
 
-    editor->beginEditBlock();
+    beginEditBlock();
 
     if (hasSelection()) {
-        editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, d->document, shapeController));
+        addCommand(new DeleteCommand(DeleteCommand::NextChar, d->document, shapeController));
     }
 
     // check for mime type
@@ -1000,7 +998,7 @@ bool KoTextEditor::paste(KoTextEditor *editor,
         }
 
         if (pasteAsText) {
-            editor->insertText(data->text());
+            insertText(data->text());
         } else {
             const Soprano::Model *rdfModel = 0;
 #ifdef SHOULD_BUILD_RDF

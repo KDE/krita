@@ -278,16 +278,20 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
 {
     switch (m_anchor->verticalRel()) {
     case KoTextAnchor::VPage:
-     anchorBoundingRect.setY(pageRect().y());
-     anchorBoundingRect.setHeight(pageRect().height());
-     break;
+        anchorBoundingRect.setY(pageRect().y());
+        anchorBoundingRect.setHeight(pageRect().height());
+        break;
 
     case KoTextAnchor::VPageContent:
-     anchorBoundingRect.setY(pageContentRect().y());
-     anchorBoundingRect.setHeight(pageContentRect().height());
-     break;
+        anchorBoundingRect.setY(pageContentRect().y());
+        anchorBoundingRect.setHeight(pageContentRect().height());
+        break;
 
     case KoTextAnchor::VParagraph:
+        anchorBoundingRect.setY(paragraphRect().y() + containerBoundingRect.y()  - data->documentOffset());
+        anchorBoundingRect.setHeight(paragraphRect().height());
+        break;
+
     case KoTextAnchor::VParagraphContent: {
         qreal top = layout->lineAt(0).y();
         QTextLine tl = layout->lineAt(layout->lineCount() - 1);
@@ -295,10 +299,6 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
             return false; // lets go for a second round.
         anchorBoundingRect.setY(top + containerBoundingRect.y()  - data->documentOffset());
         anchorBoundingRect.setHeight(tl.y() + tl.height() - top);
-//             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
-//            if(blockData && m_anchor->verticalRel() == KoTextAnchor::VParagraph) {
-//                anchorBoundingRect.setY(paragraphRect().top() + containerBoundingRect.y()  - data->documentOffset());
-//            }
     }
     break;
 

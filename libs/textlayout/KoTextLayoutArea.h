@@ -119,6 +119,12 @@ public:
     /// to maximumAllowedWidth
     void setNoWrap(qreal maximumAllowedWidth);
 
+    /// Set if and how this area acts as a layout environment
+    void setLayoutEnvironmentResctictions(bool isLayoutEnvironment, bool actsHorizontally);
+
+    /// Returns the rect of the layout environment (see odf style:flow-with-text).
+    QRectF layoutEnvironmentRect(bool &actsHorizontally) const;
+
     qreal listIndent() const;
     qreal textIndent(QTextBlock block, QTextList *textList, const KoParagraphStyle &pStyle) const;
     void setExtraTextIndent(qreal extraTextIndent);
@@ -209,6 +215,8 @@ private:
     qreal m_maximalAllowedBottom;
     qreal m_maximumAllowedWidth; // 0 indicates wrapping is allowed
     QRectF m_boundingRect;
+    bool m_isLayoutEnvironment;
+    bool m_actsHorizontally;
     KoTextBlockBorderData *m_prevBorder;
     qreal m_prevBorderPadding;
 

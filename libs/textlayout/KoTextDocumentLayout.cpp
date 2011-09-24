@@ -354,8 +354,7 @@ qreal KoTextDocumentLayout::maxYOfAnchoredObstructions(int firstCursorPosition, 
 
         if (textAnchor->flowWithText() && textAnchor->positionInDocument() >= firstCursorPosition
                             && textAnchor->positionInDocument() <= lastCursorPosition) {
-                y = qMax(y, textAnchor->shape()->boundingRect().bottom() - textAnchor->shape()->parent()->boundingRect().y());
-            }
+            y = qMax(y, textAnchor->shape()->boundingRect().bottom() - textAnchor->shape()->parent()->boundingRect().y());
         }
         ++index;
     }

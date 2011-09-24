@@ -109,7 +109,7 @@ void TableOfContentsConfigure::save()
         m_tocEntryStyleModel->saveData();
     }
 
-    m_textEditor->updateTableOfContents(m_tocInfo, m_block);
+    m_textEditor->setTableOfContentsConfig(m_tocInfo, m_block);
     cleanUp();
 }
 

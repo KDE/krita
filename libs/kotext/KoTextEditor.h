@@ -294,7 +294,10 @@ public slots:
      */
     void insertTableOfContents();
 
-    void updateTableOfContents(KoTableOfContentsGeneratorInfo *info,QTextBlock block);
+    /**
+     * Configures various values of a ToC to the one passed in info
+     */
+    void setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, QTextBlock block);
 
     void insertBibliography();
 

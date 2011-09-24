@@ -1427,7 +1427,7 @@ void KoTextEditor::insertTableOfContents()
     emit cursorPositionChanged();
 }
 
-void KoTextEditor::updateTableOfContents(KoTableOfContentsGeneratorInfo *info, QTextBlock block)
+void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, QTextBlock block)
 {
     if (isEditProtected()) {
         return;

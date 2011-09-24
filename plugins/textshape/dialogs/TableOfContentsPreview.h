@@ -33,6 +33,7 @@ class TableOfContentsPreview : public QFrame
     Q_OBJECT
 public:
     explicit TableOfContentsPreview(QWidget *parent = 0);
+    ~TableOfContentsPreview();
     void setStyleManager(KoStyleManager *styleManager);
 
 protected:
@@ -52,6 +53,8 @@ private:
     KoZoomHandler m_zoomHandler;
     KoStyleManager *m_styleManager;
     KoInlineTextObjectManager m_itom;
+
+    void deleteTextShape();
 
 };
 

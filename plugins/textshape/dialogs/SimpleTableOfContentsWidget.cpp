@@ -31,8 +31,8 @@ SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, Q
         m_blockSignals(false)
 {
     widget.setupUi(this);
-    widget.addToC->setDefaultAction(tool->action("insert_tableofcentents"));
-    widget.configureToC->setDefaultAction(tool->action("format_tableofcentents"));
+    widget.addToC->setDefaultAction(tool->action("insert_tableofcontents"));
+    widget.configureToC->setDefaultAction(tool->action("format_tableofcontents"));
 
     connect(widget.addToC, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.configureToC, SIGNAL(clicked(bool)), this, SIGNAL(showConfgureOptions()));

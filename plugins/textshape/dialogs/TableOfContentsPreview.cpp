@@ -37,6 +37,11 @@ TableOfContentsPreview::TableOfContentsPreview(QWidget *parent) :
 {
 }
 
+TableOfContentsPreview::~TableOfContentsPreview()
+{
+    deleteTextShape();
+}
+
 void TableOfContentsPreview::setStyleManager(KoStyleManager *styleManager)
 {
     m_styleManager = styleManager;
@@ -56,7 +61,10 @@ void TableOfContentsPreview::paintEvent(QPaintEvent *event)
     QRect rectang = rect();
     rectang.adjust(-4,-4,-4,-4);
     p->fillRect(rectang, QBrush(QColor(Qt::white)));
-    m_textShape->paintComponent(*p, m_zoomHandler);
+    if (m_textShape) {
+        m_textShape->setSize(size());
+        m_textShape->paintComponent(*p, m_zoomHandler);
+    }
     p->restore();
 
     delete p;
@@ -73,6 +81,8 @@ void TableOfContentsPreview::updatePreview(KoTableOfContentsGeneratorInfo *newTo
 
     tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
     tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
+
+    deleteTextShape();
 
     m_textShape = new TextShape(&m_itom);
     m_textShape->setSize(size());
@@ -114,11 +124,25 @@ void TableOfContentsPreview::updatePreview(KoTableOfContentsGeneratorInfo *newTo
 
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShape->textShapeData()->document()->documentLayout());
     connect(lay, SIGNAL(finishedLayout()), this, SLOT(finishedPreviewLayout()));
-    if(lay)
+    if (lay) {
         lay->layout();
+    }
 }
 
 void TableOfContentsPreview::finishedPreviewLayout()
 {
     update();
+}
+
+void TableOfContentsPreview::deleteTextShape()
+{
+    if (m_textShape) {
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout *>(m_textShape->textShapeData()->document()->documentLayout());
+        if (lay) {
+            lay->setContinuousLayout(false);
+            lay->setBlockLayout(true);
+        }
+        delete m_textShape;
+        m_textShape = 0;
+    }
 }

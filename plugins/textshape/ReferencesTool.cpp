@@ -54,12 +54,12 @@ ReferencesTool::~ReferencesTool()
 void ReferencesTool::createActions()
 {
     KAction *action = new KAction(i18n("Insert"), this);
-    addAction("insert_tableofcentents", action);
+    addAction("insert_tableofcontents", action);
     action->setToolTip(i18n("Insert a Table of Contents into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertTableOfContents()));
 
     action = new KAction(i18n("Configure..."), this);
-    addAction("format_tableofcentents", action);
+    addAction("format_tableofcontents", action);
     action->setToolTip(i18n("Configure the Table of Contents"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
 
@@ -135,7 +135,6 @@ void ReferencesTool::formatTableOfContents()
 {
     //if(!m_configure)
    // {
-    qDebug()<<"format";
     const QTextDocument *document = textEditor()->document();
     QMenu *tocList = new QMenu(m_stocw);
     int i = 0;
@@ -159,6 +158,7 @@ void ReferencesTool::formatTableOfContents()
         return;
     } else if (i == 1 && firstToCTextBlock.isValid()) {
         m_configure = new TableOfContentsConfigure(textEditor(), firstToCTextBlock, m_stocw);
+        connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
     } else {
         m_stocw->setToCConfigureMenu(tocList);
         connect(m_stocw->ToCConfigureMenu(), SIGNAL(triggered(QAction *)), SLOT(showConfigureDialog(QAction*)));
@@ -169,6 +169,13 @@ void ReferencesTool::formatTableOfContents()
 void ReferencesTool::showConfigureDialog(QAction *action)
 {
     m_configure = new TableOfContentsConfigure(textEditor(), action->data().value<QTextBlock>(), m_stocw);
+    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+}
+
+void ReferencesTool::hideCofigureDialog(int result)
+{
+    disconnect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+    m_configure->deleteLater();
 }
 
 #include <ReferencesTool.moc>

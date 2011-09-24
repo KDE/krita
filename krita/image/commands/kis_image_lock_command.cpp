@@ -26,26 +26,16 @@
 KisImageLockCommand::KisImageLockCommand(KisImageWSP image, bool lockImage)
         : KisImageCommand("lock image", image)  // Not for translation, this is only ever used inside a macro command.
 {
-    m_lockImage = lockImage;
+    Q_UNUSED(lockImage)
 }
 
 void KisImageLockCommand::redo()
 {
-    if (m_lockImage) {
-        m_image->lock();
-    } else {
-        m_image->unlock();
-    }
     m_image->refreshGraph();
 }
 
 void KisImageLockCommand::undo()
 {
-    if (m_lockImage) {
-        m_image->unlock();
-    } else {
-        m_image->lock();
-    }
     m_image->refreshGraph();
 }
 

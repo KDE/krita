@@ -61,7 +61,9 @@ public:
     /**
      * Automatically called by Kis..HashTable. It means that
      * this mementoItem is a root item of parental hierarchy.
-     * So m_parent should be NULL.
+     * So m_parent should be NULL. Taking into account the tile
+     * was not present before, the status of the item
+     * should be 'DELETED'.
      * This memmento item is considered as committed, so we acquire
      * the tile data right at the beginning.
      */
@@ -72,7 +74,7 @@ public:
         m_tileData->acquire();
         m_col = col;
         m_row = row;
-        m_type = CHANGED;
+        m_type = DELETED;
         m_parent = 0;
         m_committedFlag = true; /* yes, we've committed it */
     }

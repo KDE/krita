@@ -43,7 +43,7 @@ QString OraSaveContext::saveDeviceData(KisPaintLayerSP layer)
             dbgFile << "Could not open for writing:" << filename;
             return "";
         }
-        KisPNGConverter pngconv(0, layer->image()->undoAdapter());
+        KisPNGConverter pngconv(0);
         vKisAnnotationSP_it annotIt = 0;
         KisMetaData::Store* store = new KisMetaData::Store(*layer->metaData());
         if (pngconv.buildFile(&io, layer->image(), layer->paintDevice(), annotIt, annotIt, KisPNGOptions(), store) != KisImageBuilder_RESULT_OK) {

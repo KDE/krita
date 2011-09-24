@@ -25,6 +25,9 @@
 #include "kis_types.h"
 #include <KoViewConverter.h>
 
+class QTransform;
+
+
 /**
  * ViewConverter to convert from flake-internal points to
  * krita-internal pixels and back. You can use this class whereever
@@ -42,28 +45,22 @@ public:
      */
     KisImageViewConverter(const KisImageWSP image);
 
-    /// convert from flake to krita units
-    inline qreal documentToViewX(qreal documentX) const {
-        return documentX * m_image->xRes();
-    }
+    QTransform documentToView() const;
+    QTransform viewToDocument() const;
 
-    /// convert from flake to krita units
-    inline qreal documentToViewY(qreal documentY) const {
-        return documentY * m_image->yRes();
-    }
-
-    /// convert from krita to flake units
-    inline qreal viewToDocumentX(qreal viewX) const {
-        return viewX / m_image->xRes();
-    }
-
-    /// convert from krita to flake units
-    inline qreal viewToDocumentY(qreal viewY) const {
-        return viewY / m_image->yRes();
-    }
+    using KoViewConverter::documentToView;
+    using KoViewConverter::viewToDocument;
 
     /// reimplemented from superclass
     void zoom(qreal *zoomX, qreal *zoomY) const;
+
+    qreal documentToViewX(qreal documentX) const;
+    qreal documentToViewY(qreal documentY) const;
+    qreal viewToDocumentX(qreal viewX) const;
+    qreal viewToDocumentY(qreal viewY) const;
+
+    // This method shouldn't be used for image
+    qreal zoom() const;
 
 private:
     const KisImageWSP m_image;

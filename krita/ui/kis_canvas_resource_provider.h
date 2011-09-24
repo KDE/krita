@@ -70,6 +70,7 @@ public:
     ~KisCanvasResourceProvider();
 
     void setResourceManager(KoResourceManager *resourceManager);
+    KoResourceManager* resourceManager();
 
     KoCanvasBase * canvas() const;
 
@@ -132,8 +133,11 @@ public slots:
      * Set the image size in pixels. The resource provider will store
      * the image size in postscript points.
      */
+    // FIXME: this slot doesn't catch the case when image resolution is changed
     void slotImageSizeChanged();
     void slotSetDisplayProfile(const KoColorProfile * profile);
+
+    void slotOnScreenResolutionChanged();
 
     // This is a flag to handle a bug:
     // If pop up palette is visible and a new colour is selected, the new colour
@@ -158,6 +162,7 @@ signals:
     void sigGeneratorConfigurationChanged(KisFilterConfiguration * generatorConfiguration);
     void sigFGColorUsed(const KoColor&);
     void sigCompositeOpChanged(const QString &);
+    void sigOnScreenResolutionChanged(qreal scaleX, qreal scaleY);
 
 private:
 

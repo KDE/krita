@@ -9,7 +9,6 @@
 
 #include "kis_types.h"
 class KisDoc2;
-class KisUndoAdapter;
 
 /**
  * Image import/export plugins can use these results to report about success or failure.
@@ -34,7 +33,7 @@ enum KisImageBuilder_Result {
 class %{APPNAME}Converter : public QObject {
         Q_OBJECT
     public:
-        %{APPNAME}Converter(KisDoc2 *doc, KisUndoAdapter *adapter);
+        %{APPNAME}Converter(KisDoc2 *doc);
         virtual ~%{APPNAME}Converter();
     public:
         KisImageBuilder_Result buildImage(const KUrl& uri);
@@ -50,7 +49,6 @@ class %{APPNAME}Converter : public QObject {
     private:
         KisImageWSP m_image;
         KisDoc2 *m_doc;
-        KisUndoAdapter *m_adapter;
         bool m_stop;
         KIO::TransferJob *m_job;
 };

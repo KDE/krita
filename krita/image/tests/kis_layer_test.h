@@ -86,6 +86,8 @@ public:
         return QRect();
     }
 
+    using KisLayer::accept;
+
     bool accept(KisNodeVisitor& v) {
         return v.visit(this);
     }

@@ -8,12 +8,11 @@
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
-#include <kis_undo_adapter.h>
 
-%{APPNAME}Converter::%{APPNAME}Converter(KisDoc2 *doc, KisUndoAdapter *adapter)
+
+%{APPNAME}Converter::%{APPNAME}Converter(KisDoc2 *doc)
 {
     m_doc = doc;
-    m_adapter = adapter;
     m_job = 0;
     m_stop = false;
 }
@@ -33,7 +32,7 @@ KisImageBuilder_Result %{APPNAME}Converter::decode(const KUrl& uri)
     }
     // Creating the KisImageWSP
     if(!m_image) {
-        m_image = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
+        m_image = new KisImage(m_doc->createUndoStore(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
         Q_CHECK_PTR(m_image);
         m_image->lock();
     }

@@ -41,7 +41,8 @@ private slots:
     void testXShear();
     void testYShear();
     void testRotation();
-
+    void testMatrices();
+    void testRotationSpecialCases();
 
 };
 

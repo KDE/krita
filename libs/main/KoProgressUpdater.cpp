@@ -46,6 +46,7 @@ public:
         , currentProgress(0)
         , updated(false)
         , output(output_)
+        , updateGuiTimer(_parent)
         , canceled(false)
     {
     }

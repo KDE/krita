@@ -51,7 +51,7 @@ public:
     /// calls update on the shape where the border is.
     void updateBorder();
 
-    QSizeF size; // size in pt
+    mutable QSizeF size; // size in pt
     QString shapeId;
     QString name; ///< the shapes names
 

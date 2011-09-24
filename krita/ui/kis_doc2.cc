@@ -22,6 +22,7 @@
  */
 
 #include "kis_doc2.h"
+#include "kis_doc2_p.h"
 
 #include <QApplication>
 #include <QDomDocument>
@@ -79,6 +80,7 @@
 #include <kis_painter.h>
 #include <kis_selection.h>
 #include <kis_fill_painter.h>
+#include <kis_undo_stores.h>
 
 // Local
 #include "kis_factory2.h"
@@ -87,7 +89,6 @@
 #include "kis_config.h"
 #include "widgets/kis_custom_image_widget.h"
 #include "canvas/kis_canvas2.h"
-#include "kis_undo_adapter.h"
 #include "flake/kis_shape_controller.h"
 #include "kra/kis_kra_loader.h"
 #include "kra/kis_kra_saver.h"
@@ -111,8 +112,7 @@ class KisDoc2::KisDocPrivate
 public:
 
     KisDocPrivate()
-            : undoAdapter(0)
-            , nserver(0)
+            : nserver(0)
             , macroNestDepth(0)
             , kraLoader(0)
             , dieOnError(false)
@@ -121,11 +121,9 @@ public:
 
     ~KisDocPrivate() {
         // Don't delete m_d->shapeController because it's in a QObject hierarchy.
-        delete undoAdapter;
         delete nserver;
     }
 
-    KisUndoAdapter *undoAdapter;
     KisNameServer *nserver;
     qint32 macroNestDepth;
 
@@ -142,7 +140,7 @@ public:
 
 
 KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
-        : KoDocument(parentWidget, parent, singleViewMode)
+    : KoDocument(parentWidget, parent, singleViewMode, new UndoStack(this))
         , m_d(new KisDocPrivate())
 {
     setComponentData(KisFactory2::componentData(), false);
@@ -194,14 +192,10 @@ void KisDoc2::openTemplate(const KUrl& url)
 
 bool KisDoc2::init()
 {
-    delete m_d->undoAdapter;
-    m_d->undoAdapter = 0;
     delete m_d->nserver;
     m_d->nserver = 0;
 
-    m_d->undoAdapter = new KisUndoAdapter(this);
     connect(undoStack(), SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));
-    Q_CHECK_PTR(m_d->undoAdapter);
 
     m_d->nserver = new KisNameServer(1);
     Q_CHECK_PTR(m_d->nserver);
@@ -318,7 +312,6 @@ bool KisDoc2::completeLoading(KoStore *store)
     m_d->kraLoader = 0;
 
     setModified(false);
-    m_d->image->setUndoAdapter(m_d->undoAdapter);
     m_d->shapeController->setImage(m_d->image);
 
     connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
@@ -384,7 +377,7 @@ bool KisDoc2::newImage(const QString& name,
 
     qApp->setOverrideCursor(Qt::BusyCursor);
 
-    image = new KisImage(m_d->undoAdapter, width, height, cs, name);
+    image = new KisImage(createUndoStore(), width, height, cs, name);
     Q_CHECK_PTR(image);
     image->lock();
 
@@ -399,7 +392,6 @@ bool KisDoc2::newImage(const QString& name,
 
     layer->paintDevice()->setDefaultPixel(bgColor.data());
     image->addNode(layer.data(), image->rootLayer().data());
-
     image->unlock();
     setCurrentImage(image);
 
@@ -525,7 +517,6 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
         m_d->image->disconnect(this);
     }
     m_d->image = image;
-    m_d->image->setUndoAdapter(m_d->undoAdapter);
     m_d->shapeController->setImage(image);
 
     setModified(false);
@@ -542,17 +533,24 @@ void KisDoc2::initEmpty()
     newImage("", cfg.defImageWidth(), cfg.defImageHeight(), rgb);
 }
 
-KisUndoAdapter* KisDoc2::undoAdapter() const
+KisUndoStore* KisDoc2::createUndoStore()
 {
-    return m_d->undoAdapter;
+    return new KisDocumentUndoStore(this);
 }
 
 void KisDoc2::undoIndexChanged(int idx)
 {
     const KUndo2Command* command = undoStack()->command(idx);
-    if (command) {
-        m_d->undoAdapter->notifyCommandExecuted(undoStack()->command(idx));
-    }
+    if (!command) return;
+
+    KisImageWSP image = this->image();
+    if(!image) return;
+
+    KisDocumentUndoStore *undoStore =
+        dynamic_cast<KisDocumentUndoStore*>(image->undoStore());
+    Q_ASSERT(undoStore);
+
+    undoStore->notifyCommandExecuted(command);
 }
 
 

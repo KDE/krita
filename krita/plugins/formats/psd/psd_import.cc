@@ -60,7 +60,7 @@ KoFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArra
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        PSDLoader ib(doc, doc->undoAdapter());
+        PSDLoader ib(doc);
 
         KisImageBuilder_Result result = ib.buildImage(url);
 

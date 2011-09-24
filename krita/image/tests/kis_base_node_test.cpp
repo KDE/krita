@@ -28,6 +28,8 @@
 
 class TestNode : public KisBaseNode
 {
+    using KisBaseNode::accept;
+
     bool accept(KisNodeVisitor &) {
         return false;
     }

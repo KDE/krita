@@ -199,10 +199,7 @@ void KisLayerManager::imageResizeToActiveLayer()
     KisImageWSP image = m_view->image();
 
     if (image && (layer = activeLayer())) {
-
-        undoAdapter->beginMacro(i18n("Resize Image to Size of Current Layer"));
-        image->resize(layer->exactBounds(), true);
-        undoAdapter->endMacro();
+        image->cropImage(layer->exactBounds());
     }
 }
 
@@ -860,7 +857,7 @@ void KisLayerManager::saveLayerAsImage()
     KisDoc2 d;
     d.prepareForImport();
 
-    KisImageWSP dst = new KisImage(d.undoAdapter(), r.width(), r.height(), image->colorSpace(), l->name());
+    KisImageWSP dst = new KisImage(d.createUndoStore(), r.width(), r.height(), image->colorSpace(), l->name());
     dst->setResolution(image->xRes(), image->yRes());
     d.setCurrentImage(dst);
     KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", l->opacity());

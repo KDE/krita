@@ -85,6 +85,9 @@ public:
                                   KisPaintDeviceSP projection,
                                   const QRect& rect) const;
 
+    using KisLayer::setDirty;
+    void setDirty(const QRect & rect);
+
     QIcon icon() const;
     void setImage(KisImageWSP image);
 
@@ -97,7 +100,8 @@ public:
     QRect exactBounds() const;
 
     bool accept(KisNodeVisitor &v);
-    
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
+
     /**
      * set the channelflags for locking certain channels (used by painting tools)
      * for this layer to the specified bit array.

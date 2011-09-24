@@ -62,7 +62,7 @@ KoFilter::ConversionStatus exrImport::convert(const QByteArray&, const QByteArra
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        exrConverter ib(doc, doc -> undoAdapter());
+        exrConverter ib(doc);
 
 
         switch (ib.buildImage(url)) {

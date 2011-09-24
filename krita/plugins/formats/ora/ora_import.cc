@@ -60,7 +60,7 @@ KoFilter::ConversionStatus OraImport::convert(const QByteArray&, const QByteArra
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        OraConverter ib(doc, doc -> undoAdapter());
+        OraConverter ib(doc);
 
 
         switch (ib.buildImage(url)) {

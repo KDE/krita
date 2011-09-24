@@ -64,7 +64,7 @@ KoFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&, const QByte
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        KisJPEGConverter ib(doc, doc->undoAdapter());
+        KisJPEGConverter ib(doc);
 
 //        if (view != 0)
 //            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);

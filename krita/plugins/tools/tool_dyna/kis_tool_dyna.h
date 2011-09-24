@@ -26,7 +26,6 @@
 
 #include <flake/kis_node_shape.h>
 
-class QTimer;
 class QCheckBox;
 class QComboBox;
 class QGridLayout;
@@ -89,14 +88,10 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *e);
 
 protected:
-
-    virtual void initPaint(KoPointerEvent *e);
-    virtual void endPaint();
-
+    virtual void initStroke(KoPointerEvent *event);
 
 private slots:
 
-    void timeoutPaint();
     void slotSetDynaWidth(double width);
     void slotSetMass(double mass);
     void slotSetDrag(double drag);
@@ -106,8 +101,9 @@ private slots:
     void slotSetFixedAngle(bool fixedAngle);
 
 private:
-    qint32 m_rate;
-    QTimer * m_timer;
+    // FIXME: investigate why this variable is needed
+    double m_dragDist;
+
     QGridLayout* m_optionLayout;
 
     // dyna gui
@@ -119,15 +115,12 @@ private:
     QDoubleSpinBox * m_yAngleSPBox;
     QDoubleSpinBox * m_widthRangeSPBox;
 
-    qreal m_previousPressure;
-
     // dyna algorithm
     QVector<QPointF> m_prevPosition;
     qreal m_odelx, m_odely;
 
     // mouse info
     QPointF m_mousePos;
-    bool first;
 
     qreal m_surfaceWidth;
     qreal m_surfaceHeight;

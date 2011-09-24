@@ -33,7 +33,6 @@
 #include "kis_global.h"
 #include "kis_annotation.h"
 class KisDoc2;
-class KisUndoAdapter;
 
 /**
  * Image import/export plugins can use these results to report about success or failure.
@@ -70,7 +69,7 @@ class KisTIFFConverter : public QObject
 {
     Q_OBJECT
 public:
-    KisTIFFConverter(KisDoc2 *doc, KisUndoAdapter *adapter);
+    KisTIFFConverter(KisDoc2 *doc);
     virtual ~KisTIFFConverter();
 public:
     KisImageBuilder_Result buildImage(const KUrl& uri);
@@ -86,7 +85,6 @@ private:
 private:
     KisImageWSP m_image;
     KisDoc2 *m_doc;
-    KisUndoAdapter *m_adapter;
     bool m_stop;
     KIO::TransferJob *m_job;
 };

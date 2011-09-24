@@ -27,10 +27,11 @@
 class KoStyleManager;
 class KoTableOfContentsGeneratorInfo;
 
-class TableOfContentsEntryModel:public QAbstractTableModel
+class TableOfContentsEntryModel : public QAbstractTableModel
 {
+    Q_OBJECT
 public:
-        enum ModelColumns { Levels = 0, Styles = 1 };
+    enum ModelColumns { Levels = 0, Styles = 1 };
     TableOfContentsEntryModel(KoStyleManager *manager, KoTableOfContentsGeneratorInfo *info);
 
     virtual int rowCount(const QModelIndex &parent) const;
@@ -42,6 +43,9 @@ public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const ;
 
     void saveData();
+
+signals:
+    void tocEntryDataChanged();
 
 private:
 

@@ -121,6 +121,11 @@ bool TableOfContentsEntryModel::setData(const QModelIndex &index, const QVariant
     static_cast< QPair<int, int> *>(index.internalPointer())->second = value.toInt();
     QAbstractTableModel::setData(index, value, role);
     m_tocEntries[index.row()].second = value.toInt();
+
+    //show data in preview
+    saveData();
+    emit tocEntryDataChanged();
+
     return true;
 }
 

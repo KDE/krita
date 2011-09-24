@@ -79,6 +79,8 @@ void TableOfContentsConfigure::setDisplay()
     connect(ui.useStyles, SIGNAL(stateChanged(int )), this, SLOT(useIndexSourceStyles(int)));
 
     m_tocEntryStyleModel = new TableOfContentsEntryModel(KoTextDocument(m_textEditor->document()).styleManager(), m_tocInfo);
+    connect(m_tocEntryStyleModel, SIGNAL(tocEntryDataChanged()), this, SLOT(updatePreview()));
+
     m_tocEntryConfigureDelegate = new TableOfContentsEntryDelegate(KoTextDocument(m_textEditor->document()).styleManager());
 
     ui.configureToCEntryStyle->setModel(m_tocEntryStyleModel);

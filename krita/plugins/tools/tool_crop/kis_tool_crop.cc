@@ -46,7 +46,6 @@
 #include <KoPointerEvent.h>
 #include <kis_selection.h>
 #include <kis_layer.h>
-#include <kis_crop_visitor.h>
 #include <kis_canvas2.h>
 #include <kis_view2.h>
 #include <KoZoomController.h>
@@ -449,19 +448,9 @@ void KisToolCrop::crop()
 
     // The visitor adds the undo steps to the macro
     if (m_optWidget->cmbType->currentIndex() == 0 && currentNode()->paintDevice()) {
-        // The layer(s) under the current layer will take care of adding
-        // undo information to the Crop macro.
-        currentImage()->undoAdapter()->beginMacro(i18n("Crop"));
-
-        KisCropVisitor v(cropRect, false);
-        KisNodeSP node = currentNode();
-        node->accept(v);
-
-        currentImage()->undoAdapter()->endMacro();
-
+        currentImage()->cropNode(currentNode(), cropRect);
     } else {
-        // Resize creates the undo macro itself
-        currentImage()->resize(cropRect, true);
+        currentImage()->cropImage(cropRect);
     }
 
     m_rectCrop = QRect(0, 0, 0, 0);

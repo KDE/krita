@@ -256,13 +256,12 @@ void decode_meta_data(png_textp text, KisMetaData::Store* store, QString type, i
 }
 }
 
-KisPNGConverter::KisPNGConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
+KisPNGConverter::KisPNGConverter(KisDoc2 *doc)
 {
 //     Q_ASSERT(doc);
 //     Q_ASSERT(adapter);
 
     m_doc = doc;
-    m_adapter = adapter;
     m_stop = false;
     m_max_row = 0;
     m_image = 0;
@@ -547,7 +546,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
     // Creating the KisImageWSP
     if (m_image == 0) {
-        m_image = new KisImage(m_adapter, width, height, cs, "built image");
+        m_image = new KisImage(m_doc->createUndoStore(), width, height, cs, "built image");
         Q_CHECK_PTR(m_image);
         m_image->lock();
     }

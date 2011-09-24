@@ -68,12 +68,12 @@ public: // KisAbstractCanvasWidget
      */
     QColor borderColor() const;
 
-protected:
     /**
      * Returns one check of the background checkerboard pattern.
      */
-    QImage checkImage(qint32 checkSize = -1);
+    static QImage checkImage(qint32 checkSize = -1);
 
+protected:
     KisCanvas2 *canvas() const;
 
     KisCoordinatesConverter* coordinatesConverter();

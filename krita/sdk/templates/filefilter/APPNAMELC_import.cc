@@ -44,7 +44,7 @@ KoFilter::ConversionStatus %{APPNAME}Import::convert(const QByteArray&, const QB
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        %{APPNAME}Converter ib(doc, doc -> undoAdapter());
+        %{APPNAME}Converter ib(doc);
 
 
         switch (ib.buildImage(url)) {

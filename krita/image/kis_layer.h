@@ -177,6 +177,13 @@ public:
      * \see registerClone()
      */
     void unregisterClone(KisCloneLayerWSP clone);
+
+    /**
+     * Return the list of the clones of this node. Be careful
+     * with the list, because it is not thread safe.
+     */
+    const QList<KisCloneLayerWSP> registeredClones() const;
+
 public:
     qint32 x() const;
     qint32 y() const;

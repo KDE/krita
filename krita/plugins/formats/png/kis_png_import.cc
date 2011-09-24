@@ -64,7 +64,7 @@ KoFilter::ConversionStatus KisPNGImport::convert(const QByteArray&, const QByteA
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        KisPNGConverter ib(doc, doc -> undoAdapter());
+        KisPNGConverter ib(doc);
 
 //        if (view != 0)
 //            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);

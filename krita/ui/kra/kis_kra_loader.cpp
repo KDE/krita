@@ -155,7 +155,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             return KisImageWSP(0);
         }
 
-        image = new KisImage(m_d->document->undoAdapter(), width, height, cs, name);
+        image = new KisImage(m_d->document->createUndoStore(), width, height, cs, name);
         image->lock();
         image->setResolution(xres, yres);
 

@@ -69,11 +69,13 @@ public:
      * removed and added successfully
      */
     virtual void nodeHasBeenMoved(KisNode * parent, int oldIndex, int newIndex) = 0;
-    
+
+    virtual void nodeChanged(KisNode * node) = 0;
+
     /**
      * Inform the model that a node has been changed (setDirty)
      */
-    virtual void nodeChanged(KisNode * node) = 0;
+    virtual void requestProjectionUpdate(KisNode * node, const QRect& rect) = 0;
 };
 
 #endif

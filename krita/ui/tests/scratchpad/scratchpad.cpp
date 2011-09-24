@@ -62,16 +62,15 @@ int main(int argc, char** argv)
             KisPaintOpPresetSP preset = new KisPaintOpPreset(fileName);
             preset->load();
             if (preset->valid()) {
-                scratchpad->setPreset(preset);
+//                scratchpad->setPreset(preset);
             }
         }
     }
 
     const KoColorProfile* profile = KoColorSpaceRegistry::instance()->rgb8()->profile();
-    scratchpad->setColorSpace(KoColorSpaceRegistry::instance()->rgb16());
-    scratchpad->setDisplayProfile(profile);
-    scratchpad->setCanvasColor(Qt::white);
-    scratchpad->setPaintColor(Qt::black);
+//    scratchpad->setColorSpace(KoColorSpaceRegistry::instance()->rgb16());
+//    scratchpad->setDisplayProfile(profile);
+//    scratchpad->setCanvasColor(Qt::white);
     scratchpad->show();
     return app.exec();
 }

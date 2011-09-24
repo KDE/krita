@@ -47,6 +47,7 @@ class KoColor;
 class KoCompositeOp;
 
 class KisUndoAdapter;
+class KisPostExecutionUndoAdapter;
 class KisTransaction;
 class KisPattern;
 class KisFilterConfiguration;
@@ -108,8 +109,19 @@ public:
     /// Begin an undoable paint operation
     void beginTransaction(const QString& transactionName = "");
 
+    /// Return the transaction's text message
+    QString transactionText();
+
+    /// Cancel all the changes made by the painter
+    void revertTransaction();
+
     /// Finish the undoable paint operation
     void endTransaction(KisUndoAdapter *undoAdapter);
+
+    /**
+     * Finish transaction and load it to a special adapter for strokes
+     */
+    void endTransaction(KisPostExecutionUndoAdapter *undoAdapter);
 
     /**
      * Finish the transaction and delete it's undo information.

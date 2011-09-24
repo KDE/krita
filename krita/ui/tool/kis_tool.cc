@@ -87,7 +87,6 @@ struct KisTool::Private {
     KoAbstractGradient * currentGradient;
     KoColor currentFgColor;
     KoColor currentBgColor;
-    QString currentPaintOp;
     KisPaintOpPresetSP currentPaintOpPreset;
     KisNodeSP currentNode;
     float currentExposure;

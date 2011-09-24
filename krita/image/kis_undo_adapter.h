@@ -19,72 +19,48 @@
 #ifndef KIS_UNDO_ADAPTER_H_
 #define KIS_UNDO_ADAPTER_H_
 
-#include <QString>
-#include <QVector>
 #include <QObject>
 
 #include <krita_export.h>
+#include "kis_types.h"
+#include "kis_undo_store.h"
 
-class KUndo2Command;
-class KoDocument;
-
-/**
- * Undo listeners want to be notified of undo and redo actions.
- * add notification is given _before_ the command is added to the
- * stack.
- * execute notification is given on undo and redo
- */
-class KisCommandHistoryListener
-{
-
-public:
-
-    KisCommandHistoryListener() {}
-    virtual ~KisCommandHistoryListener() {}
-    virtual void notifyCommandAdded(const KUndo2Command * cmd) = 0;
-    virtual void notifyCommandExecuted(const KUndo2Command * cmd) = 0;
-};
 
 class KRITAIMAGE_EXPORT KisUndoAdapter : public QObject
 {
     Q_OBJECT
 
 public:
-    KisUndoAdapter(KoDocument* doc);
+    KisUndoAdapter(KisUndoStore *undoStore);
     virtual ~KisUndoAdapter();
 
 public:
-
-    virtual void setCommandHistoryListener(KisCommandHistoryListener * l);
-    virtual void removeCommandHistoryListener(KisCommandHistoryListener * l);
-
-    /**
-     * FIXME: Are both of these functions really used?
-     */
-    virtual void notifyCommandAdded(const KUndo2Command *command);
-    virtual void notifyCommandExecuted(const KUndo2Command *command);
-
-    virtual const KUndo2Command * presentCommand();
-    virtual void addCommand(KUndo2Command *cmd);
-    virtual void undoLastCommand();
-
-    /// XXX: is this actually threadsafe?
-    virtual void beginMacro(const QString& macroName);
-
-    /// XXX: is this actually threadsafe?
-    virtual void endMacro();
-
     void emitSelectionChanged();
+
+    void setCommandHistoryListener(KisCommandHistoryListener *listener);
+    void removeCommandHistoryListener(KisCommandHistoryListener *listener);
+
+    virtual const KUndo2Command* presentCommand() = 0;
+    virtual void undoLastCommand() = 0;
+    virtual void addCommand(KUndo2Command *cmd) = 0;
+    virtual void beginMacro(const QString& macroName) = 0;
+    virtual void endMacro() = 0;
+
+    inline void setUndoStore(KisUndoStore *undoStore) {
+        m_undoStore = undoStore;
+    }
 
 signals:
     void selectionChanged();
 
-private:
-    KisUndoAdapter(const KisUndoAdapter&);
-    KisUndoAdapter& operator=(const KisUndoAdapter&);
+protected:
+    inline KisUndoStore* undoStore() {
+        return m_undoStore;
+    }
 
-    QVector<KisCommandHistoryListener*> m_undoListeners;
-    KoDocument* m_doc;
+private:
+    Q_DISABLE_COPY(KisUndoAdapter);
+    KisUndoStore *m_undoStore;
 };
 
 

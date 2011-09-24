@@ -107,30 +107,17 @@ qint32 KisImageManager::importImage(const KUrl& urlArg)
     return rc;
 }
 
-void KisImageManager::resizeCurrentImage(qint32 w, qint32 h, bool cropLayers)
-{
-    if (!m_view->image()) return;
-
-    m_view->image()->resize(w, h, cropLayers);
-}
-
 void KisImageManager::resizeCurrentImage(qint32 w, qint32 h, qint32 xOffset, qint32 yOffset)
 {
     if (!m_view->image()) return;
 
-    m_view->image()->resizeWithOffset(w, h, xOffset, yOffset);
+    m_view->image()->cropImage(QRect(-xOffset, -yOffset, w, h));
 }
 
-void KisImageManager::scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy, bool scaleOnlyShapes)
+void KisImageManager::scaleCurrentImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy)
 {
     if (!m_view->image()) return;
-
-    KoProgressUpdater* updater = m_view->createProgressUpdater();
-    updater->start(100, "Scale Image");
-    KoUpdaterPtr up = updater->startSubtask();
-
-    m_view->image()->scale(sx, sy, up, filterStrategy, scaleOnlyShapes);
-    updater->deleteLater();
+    m_view->image()->scaleImage(size, xres, yres, filterStrategy);
 }
 
 void KisImageManager::rotateCurrentImage(double radians)

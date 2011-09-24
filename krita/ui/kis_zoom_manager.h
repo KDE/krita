@@ -65,6 +65,7 @@ private slots:
     void mousePositionChanged(const QPoint &pos);
     void changeAspectMode(bool aspectMode);
     void pageOffsetChanged();
+    void zoomTo100();
 
 
 private:
@@ -77,12 +78,8 @@ private:
     KoRuler * m_verticalRuler;
     QAction *m_showRulersAction;
     KoZoomAction * m_zoomAction;
-    KAction * m_zoomIn;
-    KAction * m_zoomOut;
-    KAction * m_actualPixels;
-    KAction * m_actualSize;
-    KAction * m_fitToCanvas;
     QWidget * m_zoomActionWidget;
+    KAction *m_100pct;
 };
 
 #endif

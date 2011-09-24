@@ -57,6 +57,7 @@ KisNodeModel::KisNodeModel(QObject * parent)
     updateSettings();
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(updateSettings()));
     m_d->updateTimer = new QTimer(this);
+    m_d->updateTimer->setSingleShot(true);
     connect(m_d->updateTimer, SIGNAL(timeout()), SLOT(updateNodes()));
 }
 
@@ -65,15 +66,42 @@ KisNodeModel::~KisNodeModel()
     delete m_d;
 }
 
+void KisNodeModel::connectNode(KisNodeSP node, bool needConnect)
+{
+    KisNodeProgressProxy *progressProxy = node->nodeProgressProxy();
+    if(progressProxy) {
+        if(needConnect) {
+            connect(progressProxy, SIGNAL(percentageChanged(int, const KisNodeSP&)),
+                    SLOT(progressPercentageChanged(int, const KisNodeSP&)));
+        } else {
+            progressProxy->disconnect(this);
+        }
+    }
+}
+
+void KisNodeModel::connectNodes(KisNodeSP node, bool needConnect)
+{
+    connectNode(node, needConnect);
+
+    node = node->firstChild();
+    while(node) {
+        connectNodes(node, needConnect);
+        node = node->nextSibling();
+    }
+}
+
 void KisNodeModel::setImage(KisImageWSP image)
 {
     if (m_d->image) {
         m_d->image->disconnect(this);
+        connectNodes(m_d->image->root(), false);
     }
 
     m_d->image = image;
 
     if(m_d->image) {
+        connectNodes(m_d->image->root(), true);
+
         connect(m_d->image, SIGNAL(sigPostLayersChanged(KisGroupLayerSP)),
                 SLOT(layersChanged()));
         connect(m_d->image, SIGNAL(sigAboutToAddANode(KisNode*, int)),
@@ -361,10 +389,8 @@ void KisNodeModel::beginInsertNodes(KisNode * parent, int index)
 void KisNodeModel::endInsertNodes(KisNode * parent, int index)
 {
     KisNodeSP node = parent->at(index);
-    if (node->nodeProgressProxy()) {
-        connect(node->nodeProgressProxy(), SIGNAL(percentageChanged(int, const KisNodeSP&)), SLOT(progressPercentageChanged(int, const KisNodeSP&)));
+    connectNode(node, true);
 
-    }
     //dbgUI <<"KisNodeModel::endInsertNodes";
     endInsertRows();
 }
@@ -378,8 +404,11 @@ void KisNodeModel::beginRemoveNodes(KisNode * parent, int index)
     beginRemoveRows(indexFromNode(parent), parent->childCount() - 1 - index, parent->childCount() - 1 - index);
 }
 
-void KisNodeModel::endRemoveNodes(KisNode *, int)
+void KisNodeModel::endRemoveNodes(KisNode *parent, int index)
 {
+    KisNodeSP node = parent->at(index);
+    connectNode(node, false);
+
     //dbgUI <<"KisNodeModel::endRemoveNodes";
     endRemoveRows();
 }
@@ -493,7 +522,6 @@ void KisNodeModel::updateNodes()
         QModelIndex index = indexFromNode(node);
         emit dataChanged(index, index);
     }
-    m_d->updateTimer->stop();
     m_d->updateQueue.clear();
 }
 

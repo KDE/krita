@@ -169,10 +169,17 @@ void KisMementoManager::registerTileDeleted(KisTile *tile)
 void KisMementoManager::commit()
 {
     if (m_index.isEmpty()) {
-        if(namedTransactionInProgress())
+        if(namedTransactionInProgress()) {
             warnTiles << "Named Transaction is empty";
-        m_currentMemento = 0;
-        return;
+            /**
+             * We still need to continue commit, because
+             * a named transaction may be reverted by the user
+             */
+        }
+        else {
+            m_currentMemento = 0;
+            return;
+        }
     }
 
     KisMementoItemList revisionList;
@@ -325,8 +332,7 @@ void KisMementoManager::rollforward(KisTileHashTable *ht)
 void KisMementoManager::purgeHistory(KisMementoSP oldestMemento)
 {
     if (m_currentMemento == oldestMemento) {
-        resetIndex();
-        oldestMemento = m_revisions.size() ? m_revisions.last().memento : 0;
+        commit();
     }
 
     qint32 revisionIndex = findRevisionByMemento(oldestMemento);
@@ -353,12 +359,6 @@ qint32 KisMementoManager::findRevisionByMemento(KisMementoSP memento) const
         }
     }
     return index;
-}
-
-void KisMementoManager::resetIndex()
-{
-    m_index.clear();
-    m_currentMemento = 0;
 }
 
 void KisMementoManager::resetRevisionHistory(KisMementoItemList list)

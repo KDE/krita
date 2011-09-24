@@ -176,8 +176,8 @@ QString SmartMergeStrategy::name() const
 
 QString SmartMergeStrategy::description() const
 {
-    return i18n("This merge strategy attempts to find the best solution for merging,"
-                "for instance by merging the list of authors together, or keeping"
+    return i18n("This merge strategy attempts to find the best solution for merging, "
+                "for instance by merging the list of authors together, or keeping "
                 "identical photographic information.");
 }
 

@@ -33,9 +33,7 @@ KisImageNodeToTopCommand::KisImageNodeToTopCommand(KisImageWSP image, KisNodeSP 
 
 void KisImageNodeToTopCommand::redo()
 {
-    m_image->lock();
     m_image->toTop(m_node);
-    m_image->unlock();
 
     m_image->refreshGraph(m_prevParent);
     m_prevParent->setDirty(m_image->bounds());
@@ -43,9 +41,7 @@ void KisImageNodeToTopCommand::redo()
 
 void KisImageNodeToTopCommand::undo()
 {
-    m_image->lock();
     m_image->moveNode(m_node, m_prevParent, m_prevAbove);
-    m_image->unlock();
 
     m_image->refreshGraph(m_prevParent);
     m_prevParent->setDirty(m_image->bounds());

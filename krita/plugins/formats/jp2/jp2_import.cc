@@ -61,7 +61,7 @@ KoFilter::ConversionStatus jp2Import::convert(const QByteArray&, const QByteArra
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        jp2Converter ib(doc, doc -> undoAdapter());
+        jp2Converter ib(doc);
 
 
         switch (ib.buildImage(url)) {

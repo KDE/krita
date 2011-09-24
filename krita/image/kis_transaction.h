@@ -30,6 +30,7 @@
 #include "kis_paint_device.h"
 
 #include "kis_undo_adapter.h"
+#include "kis_post_execution_undo_adapter.h"
 
 class KisTransaction
 {
@@ -53,6 +54,24 @@ public:
         m_transactionData->endTransaction();
         undoAdapter->addCommand(m_transactionData);
         m_transactionData = 0;
+    }
+
+    void commit(KisPostExecutionUndoAdapter* undoAdapter) {
+        Q_ASSERT_X(m_transactionData, "KisTransaction::commit()",
+                   "the transaction has been tried to be committed twice");
+
+        m_transactionData->endTransaction();
+        m_transactionData->redo();
+        undoAdapter->addCommand(KUndo2CommandSP(m_transactionData));
+        m_transactionData = 0;
+    }
+
+    KUndo2Command* endAndTake() {
+        Q_ASSERT_X(m_transactionData, "KisTransaction::endAndTake()",
+                   "the transaction has been tried to be committed twice");
+
+        m_transactionData->endTransaction();
+        return m_transactionData;
     }
 
     void end() {
@@ -79,6 +98,13 @@ public:
         m_transactionData->undo();
         delete m_transactionData;
         m_transactionData = 0;
+    }
+
+    QString text() const {
+        Q_ASSERT_X(m_transactionData, "KisTransaction::name()",
+                   "the name has been requested after the transaction"
+                   "has already been ended");
+        return m_transactionData->text();
     }
 
 protected:

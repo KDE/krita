@@ -61,13 +61,10 @@ void KisNodeMoveCommand::moveTo(const QPoint& pos)
      * when the offset varies. When it is fixed, remove the locking.
      * see: KisIterator::stressTest(), KisToolMove::mousePressEvent()
      */
-    m_image->lock();
     m_node->setX(pos.x());
     m_node->setY(pos.y());
-    m_image->unlock();
-
     m_node->setDirty(m_updateRect);
-    
+
     if(m_image && m_node->inherits("KisSelectionMask")) {
         m_image->undoAdapter()->emitSelectionChanged();
     }

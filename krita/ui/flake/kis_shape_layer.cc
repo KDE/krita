@@ -77,6 +77,7 @@
 #include "kis_image_view_converter.h"
 #include <kis_painter.h>
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 #include "kis_effect_mask.h"
 
 #include "kis_shape_layer_paste.h"
@@ -230,6 +231,11 @@ void KisShapeLayer::setY(qint32 y)
 bool KisShapeLayer::accept(KisNodeVisitor& visitor)
 {
     return visitor.visit(this);
+}
+
+void KisShapeLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
 }
 
 KoShapeManager* KisShapeLayer::shapeManager() const
@@ -433,6 +439,16 @@ void KisShapeLayer::selectionChanged()
     emit selectionChanged(m_d->canvas->shapeManager()->selection()->selectedShapes());
 }
 
+void KisShapeLayer::resetCache()
+{
+    m_d->paintDevice->clear();
+
+    QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
+    foreach(const KoShape* shape, shapes) {
+        shape->update();
+    }
+}
+
 KUndo2Command* KisShapeLayer::crop(const QRect & rect) {
     QRectF croppedRect = m_d->converter->viewToDocument(rect);
     QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
@@ -448,19 +464,13 @@ KUndo2Command* KisShapeLayer::crop(const QRect & rect) {
     return new KoShapeMoveCommand(shapes, previousPositions, newPositions);
 }
 
-KUndo2Command* KisShapeLayer::transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
-
-    Q_UNUSED(xshear);
-    Q_UNUSED(yshear);
-    QPointF transF = m_d->converter->viewToDocument(QPoint(translatex, translatey));
+KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
     QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
-    if(shapes.isEmpty())
-        return 0;
+    if(shapes.isEmpty()) return 0;
 
-    QTransform matrix;
-    matrix.translate(transF.x(), transF.y());
-    matrix.scale(xscale,yscale);
-    matrix.rotate(angle*180/M_PI);
+    KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(m_d->converter);
+    QTransform realTransform = converter->documentToView() *
+        transform * converter->viewToDocument();
 
     QList<QTransform> oldTransformations;
     QList<QTransform> newTransformations;
@@ -474,7 +484,7 @@ KUndo2Command* KisShapeLayer::transform(double  xscale, double  yscale, double  
             newTransformations.append(oldTransform);
         } else {
             QTransform globalTransform = shape->absoluteTransformation(0);
-            QTransform localTransform = globalTransform * matrix * globalTransform.inverted();
+            QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
             newTransformations.append(localTransform*oldTransform);
         }
     }

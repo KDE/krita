@@ -25,6 +25,7 @@
 
 #include "kis_types.h"
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 #include "kis_debug.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
@@ -151,6 +152,11 @@ KisPaintDeviceSP KisGroupLayer::original() const
 bool KisGroupLayer::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
+}
+
+void KisGroupLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
 }
 
 qint32 KisGroupLayer::x() const

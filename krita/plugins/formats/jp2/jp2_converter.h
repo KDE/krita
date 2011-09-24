@@ -27,7 +27,6 @@
 
 #include "kis_types.h"
 class KisDoc2;
-class KisUndoAdapter;
 
 struct JP2ConvertOptions {
   int rate;
@@ -64,7 +63,7 @@ private:
         JPT_CFMT = 2
     };
 public:
-    jp2Converter(KisDoc2 *doc, KisUndoAdapter *adapter);
+    jp2Converter(KisDoc2 *doc);
     virtual ~jp2Converter();
 public:
     KisImageBuilder_Result buildImage(const KUrl& uri);
@@ -82,7 +81,6 @@ private:
 private:
     KisImageWSP m_image;
     KisDoc2 *m_doc;
-    KisUndoAdapter *m_adapter;
     bool m_stop;
     KIO::TransferJob *m_job;
 };

@@ -26,6 +26,7 @@
 struct KisDistanceInformation {
     KisDistanceInformation() : distance(0), spacing(0) {}
     KisDistanceInformation(double _distance, double _spacing) : distance(_distance), spacing(_spacing) {}
+    void clear() { distance = 0; spacing = 0;}
     double distance;
     double spacing;
 };

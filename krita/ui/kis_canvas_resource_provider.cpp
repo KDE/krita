@@ -63,6 +63,11 @@ KisCanvasResourceProvider::~KisCanvasResourceProvider()
     disconnect(); // in case Qt gets confused
 }
 
+KoResourceManager* KisCanvasResourceProvider::resourceManager()
+{
+    return m_resourceManager;
+}
+
 void KisCanvasResourceProvider::setResourceManager(KoResourceManager *resourceManager)
 {
     m_resourceManager = resourceManager;
@@ -264,6 +269,22 @@ void KisCanvasResourceProvider::slotSetDisplayProfile(const KoColorProfile * pro
 {
     m_displayProfile = const_cast<KoColorProfile*>(profile);
     emit sigDisplayProfileChanged(profile);
+}
+
+void KisCanvasResourceProvider::slotOnScreenResolutionChanged()
+{
+    KisImageWSP image = m_view->image();
+    KisCanvas2 *canvas = m_view->canvasBase();
+
+    if(!image || !canvas) return;
+
+    qreal zoomX, zoomY;
+    canvas->coordinatesConverter()->zoom(&zoomX, &zoomY);
+
+    qreal scaleX = zoomX / image->xRes();
+    qreal scaleY = zoomY / image->yRes();
+
+    emit sigOnScreenResolutionChanged(scaleX, scaleY);
 }
 
 void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & res)

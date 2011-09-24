@@ -101,6 +101,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_footNotesHeight(0)
  , m_footNoteAutoCount(0)
  , m_endNotesArea(0)
+ , m_extraTextIndent(0)
 {
 }
 
@@ -538,6 +539,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                     m_blockRects.last().setBottom(m_y);
                     return false;
                 }
+                m_extraTextIndent = 0;
 
                 if (acceptsPageBreak()
                     && (block.blockFormat().intProperty(KoParagraphStyle::BreakAfter) & KoText::PageBreak)) {

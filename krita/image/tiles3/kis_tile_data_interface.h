@@ -62,7 +62,7 @@ public:
     KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store);
 
 private:
-    KisTileData(const KisTileData& rhs);
+    KisTileData(const KisTileData& rhs, bool checkFreeMemory = true);
 
 public:
     ~KisTileData();

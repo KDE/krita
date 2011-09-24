@@ -134,7 +134,7 @@ void KisTileDataPooler::cloneTileData(KisTileData *td, qint32 numClones) const
     if (numClones > 0) {
         td->blockSwapping();
         for (qint32 i = 0; i < numClones; i++) {
-            td->m_clonesStack.push(new KisTileData(*td));
+            td->m_clonesStack.push(new KisTileData(*td, false));
         }
         td->unblockSwapping();
     } else {

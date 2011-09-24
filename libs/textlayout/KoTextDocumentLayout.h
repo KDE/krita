@@ -158,6 +158,9 @@ public:
     /// positionInlineObject()
     void setAnchoringLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect);
 
+    /// Calculates the maximum y of anchored obstructions
+    qreal maxYOfAnchoredObstructions(int firstCursorPosition, int lastCursorPosition) const;
+
     /// Positions all anchored obstructions
     /// the paragraphRect should be in textDocument coords and not global/document coords
     void positionAnchoredObstructions();
@@ -166,6 +169,7 @@ public:
     void removeInlineObject(KoTextAnchor *textAnchor);
 
     void clearInlineObjectRegistry(QTextBlock block);
+
     KoInlineObjectExtent inlineObjectExtent(const QTextFragment&);
 
     /**

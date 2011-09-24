@@ -41,6 +41,7 @@
 #include <KoInsets.h>
 #include <KoPostscriptPaintDevice.h>
 #include <KoShape.h>
+#include <KoShapeContainer.h>
 
 #include <kdebug.h>
 #include <QTextBlock>
@@ -340,6 +341,25 @@ QList<KoTextAnchor *> KoTextDocumentLayout::textAnchors() const
 void KoTextDocumentLayout::registerAnchoredObstruction(KoTextLayoutObstruction *obstruction)
 {
     d->anchoredObstructions.insert(obstruction->shape(), obstruction);
+}
+
+qreal KoTextDocumentLayout::maxYOfAnchoredObstructions(int firstCursorPosition, int lastCursorPosition) const
+{
+    qreal y = 0.0;
+    int index = 0;
+
+    while (index < d->anchoringIndex) {
+        Q_ASSERT(index < d->textAnchors.count());
+        KoTextAnchor *textAnchor = d->textAnchors[index];
+
+        if (textAnchor->flowWithText() && textAnchor->positionInDocument() >= firstCursorPosition
+                            && textAnchor->positionInDocument() <= lastCursorPosition) {
+                y = qMax(y, textAnchor->shape()->boundingRect().bottom() - textAnchor->shape()->parent()->boundingRect().y());
+            }
+        }
+        ++index;
+    }
+    return y;
 }
 
 void KoTextDocumentLayout::positionAnchoredObstructions()

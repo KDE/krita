@@ -46,7 +46,7 @@
 #include "commands/InsertTableRowCommand.h"
 #include "commands/InsertTableColumnCommand.h"
 #include "KoInlineCite.h"
-#include "KoBibliographyInfo.h"
+#include <KoTextLayoutScheduler.h>
 
 #include <KLocale>
 #include <kundo2stack.h>
@@ -1445,6 +1445,7 @@ void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info
 
     d->updateState(KoTextEditor::Private::NoOp);
     emit cursorPositionChanged();
+    KoTextLayoutScheduler::markDocumentChanged(document(), document()->firstBlock().position(), 0 , 0);
 }
 
 void KoTextEditor::insertBibliography()

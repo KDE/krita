@@ -61,6 +61,8 @@ set(kotext_LIB_SRCS
     KoTableOfContentsGeneratorInfo.cpp
     KoBibliographyInfo.cpp
 
+    KoTextLayoutScheduler.cpp
+
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
     styles/KoParagraphStyle.cpp

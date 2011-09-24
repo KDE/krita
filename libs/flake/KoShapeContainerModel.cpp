@@ -38,11 +38,13 @@ void KoShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
 void KoShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType type)
 {
     Q_UNUSED(type);
-    KoShapeContainer * parent = child->parent();
-    Q_ASSERT(parent);
-    // propagate the change up the hierarchy
-    KoShapeContainer * grandparent = parent->parent();
-    if (grandparent) {
-        grandparent->model()->childChanged(parent, KoShape::ChildChanged);
+    if (type != KoShape::CollisionDetected) {
+        KoShapeContainer * parent = child->parent();
+        Q_ASSERT(parent);
+        // propagate the change up the hierarchy
+        KoShapeContainer * grandparent = parent->parent();
+        if (grandparent) {
+            grandparent->model()->childChanged(parent, KoShape::ChildChanged);
+        }
     }
 }

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=KoReport_Web
+Comment=Calligra Reports web Plugin
+X-KDE-Library=koreport_webplugin
+X-KDE-ServiceTypes=KoReport/ItemPlugin
+Type=Service

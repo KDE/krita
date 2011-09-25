@@ -1,5 +1,4 @@
 /*
-   KoReport Library
    Copyright (C) 2010 by Adam Pigg (adam@piggz.co.uk)
    Copyright (C) 2011 by Radoslaw Wicik (radoslaw@wicik.pl)
 

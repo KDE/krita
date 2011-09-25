@@ -1,5 +1,4 @@
 /*
- * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  * Copyright (C) 2011 by Radoslaw Wicik (radoslaw@wicik.pl)
  *

@@ -1,5 +1,4 @@
 /*
-   KoReport Library
    Copyright (C) 2010 by Adam Pigg (adam@piggz.co.uk)
    Copyright (C) 2011 by Radoslaw Wicik (radoslaw@wicik.pl)
 
@@ -38,9 +37,9 @@ KoReportMapsPlugin::KoReportMapsPlugin(QObject *parent, const QVariantList &args
     
     myDebug() << "\e[35m======\e[0m";
     KoReportPluginInfo *info = new KoReportPluginInfo();
-    info->setClassName("report:maps");
+    info->setClassName("report:map");
     info->setIcon(KIcon("marbleicon"));
-    info->setName(i18n("Map Browser "));
+    info->setName(i18n("Map"));
     info->setPriority(40);
     setInfo(info);
 }

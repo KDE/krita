@@ -51,7 +51,7 @@ KoReportItemWeb::KoReportItemWeb(QDomNode &element)
     QString n;
     QDomNode node;
     QDomElement e = element.toElement();
-    url->setValue(e.attribute("report:Url"));
+    url->setValue(e.attribute("report:url"));
     m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
     m_name->setValue(element.toElement().attribute("report:name"));
     Z = element.toElement().attribute("report:z-index").toDouble();

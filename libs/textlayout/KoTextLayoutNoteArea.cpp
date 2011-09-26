@@ -20,6 +20,8 @@
 #include "KoTextLayoutNoteArea.h"
 #include "FrameIterator.h"
 #include "KoStyleManager.h"
+#include "KoParagraphStyle.h"
+
 #include <QPainter>
 
 class KoTextLayoutNoteArea::Private
@@ -30,6 +32,7 @@ public:
     }
     KoInlineNote *note;
     QTextLayout *textLayout;
+    qreal labelIndent;
 };
 
 KoTextLayoutNoteArea::KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout)
@@ -50,7 +53,7 @@ KoTextLayoutNoteArea::~KoTextLayoutNoteArea()
 void KoTextLayoutNoteArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
     KoTextLayoutArea::paint(painter, context);
-    d->textLayout->draw(painter, QPointF(left(), top()));
+    d->textLayout->draw(painter, QPointF(left() + d->labelIndent, top()));
 }
 
 bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
@@ -84,5 +87,9 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     QTextLine line = d->textLayout->createLine();
     d->textLayout->endLayout();
     KoTextLayoutArea::setExtraTextIndent(line.naturalTextWidth());
+
+    KoParagraphStyle pStyle(d->note->textFrame()->begin().currentBlock().blockFormat(), QTextCharFormat());
+    d->labelIndent = pStyle.leftMargin();
+
     return KoTextLayoutArea::layout(cursor);
 }

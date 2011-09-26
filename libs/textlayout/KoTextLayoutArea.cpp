@@ -1524,8 +1524,6 @@ void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line)
 
         KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_documentLayout->inlineTextObjectManager()->inlineTextObject(c1));
         if (note && note->type() == KoInlineNote::Footnote) {
-            if(note->autoNumbering())
-                note->setAutoNumber(m_footNoteAutoCount++);
             preregisterFootNote(note);
         }
 
@@ -1538,6 +1536,9 @@ qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note)
     if (m_parent == 0) {
         // TODO to support footnotes at end of document this is
         // where we need to add some extra condition
+        if(note->autoNumbering())
+            note->setAutoNumber(m_footNoteAutoCount++);
+
         QTextFrame *subFrame = note->textFrame();
         FrameIterator iter(subFrame);
         KoTextLayoutNoteArea *footNoteArea = new KoTextLayoutNoteArea(note, this, m_documentLayout);

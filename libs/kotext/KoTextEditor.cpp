@@ -25,6 +25,7 @@
 #include "KoBookmark.h"
 #include "KoInlineTextObjectManager.h"
 #include <KoOdf.h>
+#include <KoInlineNote.h>
 #include "KoTextDocument.h"
 #include "KoTextDrag.h"
 #include "KoTextLocator.h"
@@ -1384,6 +1385,30 @@ void KoTextEditor::splitTableCells()
     }
 
     d->updateState(KoTextEditor::Private::NoOp);
+}
+
+KoInlineNote *KoTextEditor::insertFootNote()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Footnote"));
+    KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
+    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
+    manager->insertInlineObject(d->caret,note);
+    note->setMotherFrame(KoTextDocument(d->caret.document()).footNotesFrame());
+    cursor()->setPosition(note->textFrame()->lastPosition());
+    d->updateState(KoTextEditor::Private::NoOp);
+    return note;
+}
+
+KoInlineNote *KoTextEditor::insertEndNote()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Endnote"));
+    KoInlineNote *note = new KoInlineNote(KoInlineNote::Endnote);
+    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
+    manager->insertInlineObject(d->caret,note);
+    note->setMotherFrame(KoTextDocument(d->caret.document()).endNotesFrame());
+    cursor()->setPosition(note->textFrame()->lastPosition());
+    d->updateState(KoTextEditor::Private::NoOp);
+    return note;
 }
 
 void KoTextEditor::insertTableOfContents()

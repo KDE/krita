@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2011 Brijesh Patel <brijesh3105@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,39 +17,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOTEXTLAYOUTENDNOTESAREA_H
-#define KOTEXTLAYOUTENDNOTESAREA_H
-
-#include "textlayout_export.h"
+#ifndef KOTEXTLAYOUTNOTEAREA_H
+#define KOTEXTLAYOUTNOTEAREA_H
 
 #include "KoTextLayoutArea.h"
 
-#include <QRectF>
+#include <KoTextDocumentLayout.h>
+#include <KoInlineNote.h>
 
-
-/**
- * When laying out text it happens in areas that can occupy space of various size.
- */
-class TEXTLAYOUT_EXPORT KoTextLayoutEndNotesArea : public KoTextLayoutArea
+class TEXTLAYOUT_EXPORT KoTextLayoutNoteArea : public KoTextLayoutArea
 {
 public:
-    /// constructor
-    explicit KoTextLayoutEndNotesArea(KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout);
-    virtual ~KoTextLayoutEndNotesArea();
-
-    /// Layouts as much as it can
-    /// Returns true if it has reached the end of the frame
-    bool layout(FrameIterator *cursor);
-
-    KoPointedAt hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) const;
-
-    QRectF selectionBoundingBox(QTextCursor &cursor) const;
+    explicit KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout);
+    virtual ~KoTextLayoutNoteArea();
 
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
+
+    bool layout(FrameIterator *cursor);
 
 private:
     class Private;
     Private * const d;
 };
 
-#endif
+#endif // KOTEXTLAYOUTNOTEAREA_H

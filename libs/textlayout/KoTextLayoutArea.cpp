@@ -32,6 +32,7 @@
 
 #include "KoTextLayoutEndNotesArea.h"
 #include "KoTextLayoutTableArea.h"
+#include "KoTextLayoutNoteArea.h"
 #include "TableIterator.h"
 #include "ListItemsHelper.h"
 #include "RunAroundHelper.h"
@@ -98,7 +99,9 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_verticalAlignOffset(0)
  , m_preregisteredFootNotesHeight(0)
  , m_footNotesHeight(0)
+ , m_footNoteAutoCount(0)
  , m_endNotesArea(0)
+ , m_extraTextIndent(0)
 {
 }
 
@@ -128,6 +131,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
     }
     int tableAreaIndex = 0;
     int tocIndex = 0;
+    int footNoteIndex = 0;
     bool atEnd = false;
     for (; it != stop && !atEnd; ++it) {
         atEnd = it.atEnd();
@@ -147,6 +151,13 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
+            if (it.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
+                if (point.y() > m_endNotesArea->top()
+                        && point.y() < m_endNotesArea->bottom()) {
+                    pointedAt = m_endNotesArea->hitTest(point, accuracy);
+                    return pointedAt;
+                }
+            }
             continue;
         } else {
             if (!block.isValid())
@@ -208,6 +219,17 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             return pointedAt;
         }
     }
+    point -= QPointF(0, bottom() - m_footNotesHeight);
+    while (footNoteIndex<m_footNoteAreas.length()) {
+        // check if p is over foot notes area
+        if (point.y() > m_footNoteAreas[footNoteIndex]->top()
+                && point.y() < m_footNoteAreas[footNoteIndex]->bottom()) {
+            pointedAt = m_footNoteAreas[footNoteIndex]->hitTest(point, accuracy);
+            return pointedAt;
+        }
+        point -= QPointF(0,m_footNoteAreas[footNoteIndex]->bottom());
+        ++footNoteIndex;
+    }
     return pointedAt;
 }
 
@@ -224,6 +246,18 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
     QTextFrame::iterator stop = m_endOfArea->it;
     if(!stop.currentBlock().isValid() || m_endOfArea->lineTextStart >= 0) {
         ++stop;
+    }
+
+    QTextFrame *subFrame;
+    int footNoteIndex = 0;
+    qreal offset = bottom() - m_footNotesHeight;
+    while (footNoteIndex < m_footNoteAreas.length()) {
+        subFrame = m_footNoteFrames[footNoteIndex];
+        if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
+            return m_footNoteAreas[footNoteIndex]->selectionBoundingBox(cursor).translated(0, offset) ;
+        }
+        offset += m_footNoteAreas[footNoteIndex]->bottom();
+        ++footNoteIndex;
     }
 
     int tableAreaIndex = 0;
@@ -259,7 +293,18 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
-            continue;
+            if (it.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
+                if (cursor.selectionEnd() < subFrame->firstPosition()) {
+                    return retval.translated(0, m_verticalAlignOffset);
+                }
+                if (cursor.selectionStart() > subFrame->lastPosition()) {
+                    continue;
+                }
+                if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
+                    return m_endNotesArea->selectionBoundingBox(cursor).translated(0, m_verticalAlignOffset);
+                }
+                continue;
+            }
         } else {
             if (!block.isValid())
                 continue;
@@ -334,6 +379,8 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_footNoteAreas.clear();
     qDeleteAll(m_preregisteredFootNoteAreas);
     m_preregisteredFootNoteAreas.clear();
+    m_footNoteFrames.clear();
+    m_preregisteredFootNoteFrames.clear();
     qDeleteAll(m_generatedDocAreas);
     m_generatedDocAreas.clear();
     m_blockRects.clear();
@@ -348,6 +395,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_y = top();
     setBottom(top());
     m_bottomSpacing = 0;
+    m_footNoteAutoCount = 0;
     m_footNotesHeight = 0;
     m_preregisteredFootNotesHeight = 0;
     m_prevBorder = 0;
@@ -491,6 +539,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                     m_blockRects.last().setBottom(m_y);
                     return false;
                 }
+                m_extraTextIndent = 0;
 
                 if (acceptsPageBreak()
                     && (block.blockFormat().intProperty(KoParagraphStyle::BreakAfter) & KoText::PageBreak)) {
@@ -1140,14 +1189,19 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const 
         // return an indent approximately 3-characters wide as per current font
         QTextCursor blockCursor(block);
         qreal guessGlyphWidth = QFontMetricsF(blockCursor.charFormat().font()).width('x');
-        return guessGlyphWidth * 3;
+        return guessGlyphWidth * 3 + m_extraTextIndent;
     }
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
         if (! block.blockFormat().hasProperty(KoParagraphStyle::ListLevel)) {
-            return textList->format().doubleProperty(KoListStyle::TextIndent);
+            return textList->format().doubleProperty(KoListStyle::TextIndent) + m_extraTextIndent;
         }
     }
-    return pStyle.textIndent().value(width());
+    return pStyle.textIndent().value(width()) + m_extraTextIndent;
+}
+
+void KoTextLayoutArea::setExtraTextIndent(qreal extraTextIndent)
+{
+    m_extraTextIndent = extraTextIndent;
 }
 
 qreal KoTextLayoutArea::x() const
@@ -1460,7 +1514,6 @@ void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line)
     if (m_documentLayout->inlineTextObjectManager() == 0) {
         return;
     }
-
     QString text = block.text();
     int pos = text.indexOf(QChar::ObjectReplacementCharacter, line.textStart());
 
@@ -1483,10 +1536,14 @@ qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note)
     if (m_parent == 0) {
         // TODO to support footnotes at end of document this is
         // where we need to add some extra condition
+        if(note->autoNumbering())
+            note->setAutoNumber(m_footNoteAutoCount++);
 
-        FrameIterator iter(note->textFrame());
-        KoTextLayoutArea *footNoteArea = new KoTextLayoutArea(this, m_documentLayout);
+        QTextFrame *subFrame = note->textFrame();
+        FrameIterator iter(subFrame);
+        KoTextLayoutNoteArea *footNoteArea = new KoTextLayoutNoteArea(note, this, m_documentLayout);
 
+        m_preregisteredFootNoteFrames.append(subFrame);
         footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom() - bottom());
         footNoteArea->layout(&iter);
 
@@ -1503,8 +1560,10 @@ void KoTextLayoutArea::confirmFootNotes()
 {
     m_footNotesHeight += m_preregisteredFootNotesHeight;
     m_footNoteAreas.append(m_preregisteredFootNoteAreas);
+    m_footNoteFrames.append(m_preregisteredFootNoteFrames);
     m_preregisteredFootNotesHeight = 0;
     m_preregisteredFootNoteAreas.clear();
+    m_preregisteredFootNoteFrames.clear();
     if (m_parent) {
         m_parent->confirmFootNotes();
     }
@@ -1524,6 +1583,7 @@ void KoTextLayoutArea::clearPreregisteredFootNotes()
 {
     m_preregisteredFootNotesHeight = 0;
     m_preregisteredFootNoteAreas.clear();
+    m_preregisteredFootNoteFrames.clear();
     if (m_parent) {
         m_parent->clearPreregisteredFootNotes();
     }

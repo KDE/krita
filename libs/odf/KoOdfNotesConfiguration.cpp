@@ -103,7 +103,7 @@ void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
     d->citationBodyTextStyle = element.attributeNS(KoXmlNS::text, "citation-body-style-name", QString::null);
     d->defaultNoteParagraphStyle = element.attributeNS(KoXmlNS::text, "default-style-name", QString::null);
     d->masterPageName = element.attributeNS(KoXmlNS::text, "master-page-name", QString::null);
-    d->startValue = KoUnit::parseValue(element.attributeNS(KoXmlNS::text, "start-value", "0"));
+    d->startValue = qMax(1, element.attributeNS(KoXmlNS::text, "start-value").toInt());
 
     d->numberFormat.loadOdf(element);
 
@@ -138,6 +138,8 @@ void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
 
 void KoOdfNotesConfiguration::saveOdf(KoXmlWriter *writer) const
 {
+    writer->startElement("text:notes-configuration");
+
     if (d->noteClass == Footnote) {
         writer->addAttribute("text:note-class", "footnote");
     }
@@ -148,7 +150,7 @@ void KoOdfNotesConfiguration::saveOdf(KoXmlWriter *writer) const
     if (!d->citationBodyTextStyle.isNull()) {writer->addAttribute("text:citation-body-style-name", d->citationBodyTextStyle); }
     if (!d->defaultNoteParagraphStyle.isNull()) {writer->addAttribute("text:default-style-name", d->defaultNoteParagraphStyle); }
     if (!d->masterPageName.isNull()) {writer->addAttribute("text:master-page-name", d->masterPageName); }
-    if (d->startValue != 0) { writer->addAttribute("text:start-varlue", d->startValue); }
+    if (d->startValue != 0) { writer->addAttribute("text:start-value", d->startValue); }
 
     d->numberFormat.saveOdf(writer);
     switch(d->numberingScheme) {
@@ -177,7 +179,9 @@ void KoOdfNotesConfiguration::saveOdf(KoXmlWriter *writer) const
         break;
     }
     if (!d->footnotesContinuationForward.isNull()) {writer->addAttribute("text:note-continuation-notice-forward", d->footnotesContinuationForward); }
-    if (!d->footnotesContinuationBackward.isNull()) {writer->addAttribute("text:note-continuation-notice-forward", d->footnotesContinuationBackward); }
+    if (!d->footnotesContinuationBackward.isNull()) {writer->addAttribute("text:note-continuation-notice-backward", d->footnotesContinuationBackward); }
+
+    writer->endElement(); //text:notes-configuration
 }
 
 
@@ -240,7 +244,7 @@ int KoOdfNotesConfiguration::startValue() const
 
 void KoOdfNotesConfiguration::setStartValue(int startValue)
 {
-    d->startValue = startValue;
+    d->startValue = qMax(1, startValue);
 }
 
 

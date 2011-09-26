@@ -463,13 +463,15 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
             new KoOdfNotesConfiguration(d->context.odfLoadingContext()
                                         .stylesReader()
                                         .globalNotesConfiguration(KoOdfNotesConfiguration::Endnote));
-    KoTextDocument(document).setNotesConfiguration(notesConfiguration);
+    //KoTextDocument(document).setNotesConfiguration(notesConfiguration);
+    KoTextDocument(document).styleManager()->setNotesConfiguration(notesConfiguration);
 
     notesConfiguration =
             new KoOdfNotesConfiguration(d->context.odfLoadingContext()
                                         .stylesReader()
                                         .globalNotesConfiguration(KoOdfNotesConfiguration::Footnote));
-    KoTextDocument(document).setNotesConfiguration(notesConfiguration);
+    //KoTextDocument(document).setNotesConfiguration(notesConfiguration);
+    KoTextDocument(document).styleManager()->setNotesConfiguration(notesConfiguration);
 
     KoOdfLineNumberingConfiguration *lineNumberingConfiguration =
             new KoOdfLineNumberingConfiguration(d->context.odfLoadingContext()
@@ -1459,8 +1461,7 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
         if (className == "footnote") {
             note = new KoInlineNote(KoInlineNote::Footnote);
             note->setMotherFrame(KoTextDocument(cursor.block().document()).footNotesFrame());
-        }
-        else {
+        } else {
             note = new KoInlineNote(KoInlineNote::Endnote);
             note->setMotherFrame(KoTextDocument(cursor.block().document()).endNotesFrame());
         }

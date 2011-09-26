@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Brijesh Patel <brijesh3105@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,40 +16,50 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef SIMPLEFOOTENDNOTESWIDGET_H
-#define SIMPLEFOOTENDNOTESWIDGET_H
+#ifndef NOTESCONFIGURATIONDIALOG_H
+#define NOTESCONFIGURATIONDIALOG_H
 
-#include <ui_SimpleFootEndNotesWidget.h>
+#include <ui_NotesConfigurationDialog.h>
 #include <KoListStyle.h>
+#include <KoOdfNotesConfiguration.h>
 
-#include <QWidget>
-#include <QTextBlock>
-#include <KoInlineNote.h>
+#include <QDialog>
+#include <QTextDocument>
+#include <QObject>
 
-class TextTool;
-class ReferencesTool;
 class KoStyleManager;
 
-class SimpleFootEndNotesWidget : public QWidget
+class NotesConfigurationDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit SimpleFootEndNotesWidget(TextTool *tool,QWidget *parent = 0);
-    Ui::SimpleFootEndNotesWidget widget;
+    explicit NotesConfigurationDialog(QTextDocument *doc, QWidget *parent = 0);
+    Ui::NotesConfigurationDialog widget;
+    KoOdfNotesConfiguration *notesConfiguration() const;
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
-    void setCharacterEditEnabled();
+    /**
+     * sets up the footnote's default configuration in the dialog box
+     */
+    void footnoteSetup(bool on);
+    /**
+     * sets up the endnote's default configuration in the dialog box
+     */
+    void endnoteSetup(bool on);
+    /**
+     * stores the applied notes' configuration as globalnotesconfiguration of the document
+     */
+    void apply(QAbstractButton*);
 
 signals:
     void doneWithFocus();
-    
+
 private:
+
+    KoOdfNotesConfiguration *notesConfig;
     KoStyleManager *m_styleManager;
-    bool m_blockSignals;
-    bool m_comboboxHasBidiItems;
-    QTextBlock m_currentBlock;
-    TextTool *m_tool;
+    QTextDocument *document;
 };
 
 #endif

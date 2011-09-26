@@ -103,7 +103,7 @@ void KoOdfNotesConfiguration::loadOdf(const KoXmlElement &element)
     d->citationBodyTextStyle = element.attributeNS(KoXmlNS::text, "citation-body-style-name", QString::null);
     d->defaultNoteParagraphStyle = element.attributeNS(KoXmlNS::text, "default-style-name", QString::null);
     d->masterPageName = element.attributeNS(KoXmlNS::text, "master-page-name", QString::null);
-    d->startValue = KoUnit::parseValue(element.attributeNS(KoXmlNS::text, "start-value", "1"));
+    d->startValue = qMax(1, element.attributeNS(KoXmlNS::text, "start-value").toInt());
 
     d->numberFormat.loadOdf(element);
 
@@ -244,7 +244,7 @@ int KoOdfNotesConfiguration::startValue() const
 
 void KoOdfNotesConfiguration::setStartValue(int startValue)
 {
-    d->startValue = startValue;
+    d->startValue = qMax(1, startValue);
 }
 
 

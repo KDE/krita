@@ -61,12 +61,7 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     } else if (d->note->type() == KoInlineNote::Endnote) {
         notesConfig = KoTextDocument(d->note->textFrame()->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
     }
-    QString label;  //assigning a formatted label to notes
-    if (d->note->autoNumbering()) {
-        label = notesConfig->numberFormat().formattedNumber(d->note->label().toInt()+notesConfig->startValue()-1);
-    } else {
-        label = d->note->label();
-    }
+    QString label = d->note->label();
     label.prepend(notesConfig->numberFormat().prefix());
     label.append(notesConfig->numberFormat().suffix());
     QPaintDevice *pd = documentLayout()->paintDevice();

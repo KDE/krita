@@ -78,7 +78,7 @@ bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)
     {
         KoInlineNote *note = list[cursor->endNoteIndex];
         if (note->autoNumbering()) {
-            note->setLabel(QString::number(++d->endNoteAutoCount));
+            note->setAutoNumber(d->endNoteAutoCount++);
         }
         QTextFrame *subFrame = note->textFrame();
         KoTextLayoutNoteArea *noteArea = new KoTextLayoutNoteArea(note, this, documentLayout());

@@ -1525,7 +1525,7 @@ void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line)
         KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_documentLayout->inlineTextObjectManager()->inlineTextObject(c1));
         if (note && note->type() == KoInlineNote::Footnote) {
             if(note->autoNumbering())
-                note->setLabel(QString::number(++m_footNoteAutoCount));
+                note->setAutoNumber(m_footNoteAutoCount++);
             preregisterFootNote(note);
         }
 

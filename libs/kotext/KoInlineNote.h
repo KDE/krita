@@ -66,6 +66,12 @@ public:
     void setLabel(const QString &text);
 
     /**
+     * Indirectly set the label that is shown at the spot this inline note is inserted.
+     * @param autoNumber the number that the label will portray. 0 should be the first
+     */
+    void setAutoNumber(int autoNumber);
+
+    /**
      * Set the id that is used to reference this note.
      * @param id the new id
      */

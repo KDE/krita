@@ -88,6 +88,19 @@ void KoInlineNote::setLabel(const QString &text)
     d->label = text;
 }
 
+void KoInlineNote::setAutoNumber(int autoNumber)
+{
+    if (d->autoNumbering) {
+        KoOdfNotesConfiguration *notesConfig = 0;
+        if (d->type == KoInlineNote::Footnote) {
+            notesConfig = KoTextDocument(d->textFrame->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
+        } else if (d->type == KoInlineNote::Endnote) {
+            notesConfig = KoTextDocument(d->textFrame->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
+        }
+        d->label = notesConfig->numberFormat().formattedNumber(autoNumber + notesConfig->startValue());
+    }
+}
+
 void KoInlineNote::setId(const QString &id)
 {
     d->id = id;
@@ -156,23 +169,12 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     if (d->label.isEmpty())
         return;
     QFont font(format.font(), pd);
-    KoOdfNotesConfiguration *notesConfig = 0;
-    if (d->type == KoInlineNote::Footnote) {
-        notesConfig = KoTextDocument(d->textFrame->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
-    } else if (d->type == KoInlineNote::Endnote) {
-        notesConfig = KoTextDocument(d->textFrame->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
-    }
-    //assigning a formatted label to notes
-    QString label;
-    if (d->autoNumbering)
-        label = notesConfig->numberFormat().formattedNumber(d->label.toInt()+notesConfig->startValue()-1);
-    else label = d->label;
-    QTextLayout layout(label, font, pd);
+    QTextLayout layout(d->label, font, pd);
     layout.setCacheEnabled(true);
     QList<QTextLayout::FormatRange> layouts;
     QTextLayout::FormatRange range;
     range.start = 0;
-    range.length = label.length();
+    range.length = d->label.length();
     range.format = format;
     range.format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     layouts.append(range);

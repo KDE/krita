@@ -1034,9 +1034,9 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
         if (isSwitch) {
             // if we are parsing a switch check the requiredFeatures, requiredExtensions
             // and systemLanguage attributes
-            QString features = b.attribute("requiredFeatures");
+            QString features = b.attribute("requiredFeatures", "").simplified();
             // TODO: evaluate feature list
-            if (features.isEmpty() || features.simplified().isEmpty()) {
+            if (features.isEmpty()) {
                 continue;
             }
             if (b.hasAttribute("requiredExtensions")) {

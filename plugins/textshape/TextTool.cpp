@@ -854,13 +854,15 @@ void TextTool::copy() const
     KoTextOdfSaveHelper saveHelper(m_textShapeData->document(), from, to);
     KoTextDrag drag;
 
-    KoResourceManager *rm = canvas()->resourceManager();
+    KoResourceManager *rm = 0;
     if (canvas()->shapeController()) {
         rm = canvas()->shapeController()->resourceManager();
     }
-    if (rm->hasResource(KoText::DocumentRdf)) {
-        KoDocumentRdfBase *rdf = rm->resource(KoText::DocumentRdf).value<KoDocumentRdfBase*>();
-        saveHelper.setRdfModel(rdf->model());
+    if (rm && rm->hasResource(KoText::DocumentRdf)) {
+        KoDocumentRdfBase *rdf = static_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<void*>());
+        if (rdf) {
+            saveHelper.setRdfModel(rdf->model());
+        }
     }
 
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);

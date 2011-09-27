@@ -971,11 +971,8 @@ bool KoTextEditor::paste(KoTextEditor *editor,
     KoTextOdfSaveHelper saveHelper(editor->document(), from, to);
     KoTextDrag drag;
 
-    KoDocumentRdfBase *rdf = dynamic_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<KoDocumentRdfBase*>());
-    if (rdf) {
-        saveHelper.setRdfModel(rdf->model());
-    }
-
+    KoDocumentRdfBase *rdf = static_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<void*>());
+    saveHelper.setRdfModel(rdf->model());
 
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
 

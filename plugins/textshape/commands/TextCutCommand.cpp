@@ -50,7 +50,6 @@ void TextCutCommand::redo()
 
         te->deleteChar(KoTextEditor::NextChar,
                        m_tool->m_actionShowChanges->isChecked(),
-                       m_tool->canvas()->shapeController(),
-                       m_tool->canvas()->resourceManager());
+                       m_tool->canvas()->shapeController());
     }
 }

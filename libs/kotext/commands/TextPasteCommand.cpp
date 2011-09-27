@@ -24,6 +24,7 @@
 #include <KoTextDocument.h>
 #include <KoTextPaste.h>
 #include <KoChangeTracker.h>
+#include <KoShapeController.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -45,18 +46,16 @@
 TextPasteCommand::TextPasteCommand(const QMimeData *mimeData,
                                    QTextDocument *document,
                                    KoShapeController *shapeController,
-                                   KoResourceManager *resourceManager,
                                    KUndo2Command *parent, bool pasteAsText)
     : KUndo2Command (parent),
       m_mimeData(mimeData),
       m_document(document),
       m_rdf(0),
       m_shapeController(shapeController),
-      m_resourceManager(resourceManager),
       m_pasteAsText(pasteAsText),
       m_first(true)
 {
-    m_rdf = dynamic_cast<KoDocumentRdfBase*>(m_resourceManager->resource(KoText::DocumentRdf).value<KoDocumentRdfBase*>());
+    m_rdf = dynamic_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<KoDocumentRdfBase*>());
 
     if (m_pasteAsText)
         setText(i18n("Paste As Text"));
@@ -84,7 +83,7 @@ void TextPasteCommand::redo()
             // XXX: this was m_tool->m_actionShowChanges.isChecked -- but shouldn't we check
             // whether we should record changes here, instead of showing?
             if (textDocument.changeTracker()->recordChanges()) {
-                editor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_document, m_shapeController, m_resourceManager));
+                editor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_document, m_shapeController));
             } else {
                 editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_document, m_shapeController));
             }
@@ -97,7 +96,7 @@ void TextPasteCommand::redo()
             if (!m_mimeData->hasFormat(KoOdf::mimeType(odfType))) {
                 odfType = KoOdf::OpenOfficeClipboard;
             }
-            
+
             if (m_pasteAsText) {
                 editor->insertText(m_mimeData->text());
             } else {
@@ -114,7 +113,7 @@ void TextPasteCommand::redo()
 #endif
 
                 //kDebug() << "pasting odf text";
-                KoTextPaste paste(editor, m_resourceManager, rdfModel);
+                KoTextPaste paste(editor, m_shapeController, rdfModel);
                 paste.paste(odfType, m_mimeData);
                 //kDebug() << "done with pasting odf";
 

@@ -28,6 +28,7 @@
 #include <KoOdf.h>
 #include <KoInlineNote.h>
 #include <KoTextPaste.h>
+#include <KoShapeController.h>
 #include <KoTextOdfSaveHelper.h>
 #include "KoTextDocument.h"
 #include "KoTextDrag.h"
@@ -939,7 +940,6 @@ bool KoTextEditor::deleteInlineObjects(bool backward)
 
 void KoTextEditor::paste(const QMimeData *mimeData,
                          KoShapeController *shapeController,
-                         KoResourceManager *resourceManager,
                          bool pasteAsText)
 {
     if (isEditProtected()) {
@@ -949,14 +949,12 @@ void KoTextEditor::paste(const QMimeData *mimeData,
     addCommand(new TextPasteCommand(mimeData,
                                     d->document,
                                     shapeController,
-                                    resourceManager,
                                     0,
                                     pasteAsText));
 }
 
 bool KoTextEditor::paste(KoTextEditor *editor,
                          KoShapeController *shapeController,
-                         KoResourceManager *resourceManager,
                          bool pasteAsText)
 {
 
@@ -973,11 +971,11 @@ bool KoTextEditor::paste(KoTextEditor *editor,
     KoTextOdfSaveHelper saveHelper(editor->document(), from, to);
     KoTextDrag drag;
 
-    KoDocumentRdfBase *rdf = dynamic_cast<KoDocumentRdfBase*>(resourceManager->resource(KoText::DocumentRdf).value<KoDocumentRdfBase*>());
-
+    KoDocumentRdfBase *rdf = dynamic_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<KoDocumentRdfBase*>());
     if (rdf) {
         saveHelper.setRdfModel(rdf->model());
     }
+
 
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
 
@@ -1012,7 +1010,7 @@ bool KoTextEditor::paste(KoTextEditor *editor,
 #endif
 
             //kDebug() << "pasting odf text";
-            KoTextPaste paste(this, resourceManager, rdfModel);
+            KoTextPaste paste(this, shapeController, rdfModel);
             paste.paste(odfType, data);
             //kDebug() << "done with pasting odf";
 
@@ -1032,7 +1030,7 @@ bool KoTextEditor::paste(KoTextEditor *editor,
     return true;
 }
 
-void KoTextEditor::deleteChar(MoveOperation direction, bool trackChanges, KoShapeController *shapeController, KoResourceManager *resourceManager)
+void KoTextEditor::deleteChar(MoveOperation direction, bool trackChanges, KoShapeController *shapeController)
 {
     if (isEditProtected()) {
         return;
@@ -1042,14 +1040,12 @@ void KoTextEditor::deleteChar(MoveOperation direction, bool trackChanges, KoShap
         if (direction == PreviousChar) {
             addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar,
                                                       d->document,
-                                                      shapeController,
-                                                      resourceManager));
+                                                      shapeController));
         }
         else {
             addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar,
                                                       d->document,
-                                                      shapeController,
-                                                      resourceManager));
+                                                      shapeController));
         }
     }
     else {
@@ -1271,7 +1267,7 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it) const
 
             if (d->caret.selectionStart() <= table->lastPosition()
                     && d->caret.selectionEnd() >= table->firstPosition()) {
-                // We have a selection somewhere 
+                // We have a selection somewhere
                 QTextTableCell cell1 = table->cellAt(d->caret.selectionStart());
                 QTextTableCell cell2 = table->cellAt(d->caret.selectionEnd());
                 if (cell1 != cell2 || !cell1.isValid() || !cell2.isValid()) {
@@ -1290,7 +1286,7 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it) const
                     }
 
                     for (int r = selectionRow; r < selectionRow + selectionRowSpan; r++) {
-                        for (int c = selectionColumn; c < selectionColumn + 
+                        for (int c = selectionColumn; c < selectionColumn +
                              selectionColumnSpan; c++) {
                             QTextTableCell cell = table->cellAt(r,c);
                             if (cell.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
@@ -1315,15 +1311,15 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it) const
             }
         } if (subFrame) {
         } else {
-            // TODO build up the section stack 
+            // TODO build up the section stack
 
             if (d->caret.selectionStart() < block.position() + block.length()
                     && d->caret.selectionEnd() >= block.position()) {
-                // We have a selection somewhere 
+                // We have a selection somewhere
                 // TODO return true if block is protected by section
             }
 
-            // TODO tear down the section stack 
+            // TODO tear down the section stack
 
             if (d->caret.selectionEnd() < block.position() + block.length()) {
                 return false;
@@ -1651,7 +1647,7 @@ void KoTextEditor::updateTableOfContents(KoTableOfContentsGeneratorInfo *info, Q
 
     KoTableOfContentsGeneratorInfo *newToCInfo=info->clone();
 
-    d->updateState(KoTextEditor::Private::Custom, i18n("Modify Table Of Contents"));    
+    d->updateState(KoTextEditor::Private::Custom, i18n("Modify Table Of Contents"));
 
     QTextCursor cursor(block);
     QTextBlockFormat tocBlockFormat=block.blockFormat();

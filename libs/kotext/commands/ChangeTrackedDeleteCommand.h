@@ -48,7 +48,6 @@ public:
     ChangeTrackedDeleteCommand(DeleteMode mode,
                                QTextDocument *document,
                                KoShapeController *shapeController,
-                               KoResourceManager *resourceManager,
                                KUndo2Command* parent = 0);
     virtual ~ChangeTrackedDeleteCommand();
 
@@ -62,7 +61,6 @@ private:
     QTextDocument *m_document;
     KoDocumentRdfBase *m_rdf;
     KoShapeController *m_shapeController;
-    KoResourceManager *m_resourceManager;
     bool m_first;
     bool m_undone;
     bool m_canMerge;

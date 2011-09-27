@@ -36,7 +36,6 @@ public:
     TextPasteCommand(const QMimeData *mimeData,
                      QTextDocument *document,
                      KoShapeController *shapeController,
-                     KoResourceManager *resourceManager,
                      KUndo2Command *parent = 0,
                      bool pasteAsText = false);
 
@@ -49,7 +48,6 @@ private:
     QTextDocument *m_document;
     KoDocumentRdfBase *m_rdf;
     KoShapeController *m_shapeController;
-    KoResourceManager *m_resourceManager;
     bool m_pasteAsText;
     bool m_first;
     QClipboard::Mode m_mode;

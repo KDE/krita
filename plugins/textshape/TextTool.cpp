@@ -873,8 +873,7 @@ void TextTool::copy() const
 void TextTool::deleteSelection()
 {
     m_textEditor.data()->deleteChar(KoTextEditor::NextChar, m_actionRecordChanges->isChecked(),
-                                    canvas()->shapeController(),
-                                    canvas()->resourceManager());
+                                    canvas()->shapeController());
     editingPluginEvents();
 }
 
@@ -886,7 +885,7 @@ bool TextTool::paste()
     if (!data) return false;
 
     m_prevCursorPosition = m_textEditor.data()->position();
-    m_textEditor.data()->paste(data, canvas()->shapeController(), canvas()->resourceManager());
+    m_textEditor.data()->paste(data, canvas()->shapeController());
     editingPluginEvents();
     return true;
 }
@@ -1060,8 +1059,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 textEditor->movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
             }
             textEditor->deleteChar(KoTextEditor::PreviousChar, m_actionRecordChanges->isChecked(),
-                                       canvas()->shapeController(),
-                                       canvas()->resourceManager());
+                                       canvas()->shapeController());
 
             editingPluginEvents();
         }
@@ -1084,8 +1082,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         // the event only gets through when the Del is not used in the app
         // if the app forwards Del then deleteSelection is used
         textEditor->deleteChar(KoTextEditor::NextChar, m_actionRecordChanges->isChecked(),
-                                   canvas()->shapeController(),
-                                   canvas()->resourceManager());
+                                   canvas()->shapeController());
         editingPluginEvents();
     } else if ((event->key() == Qt::Key_Left) && (event->modifiers() & Qt::ControlModifier) == 0) {
         moveOperation = QTextCursor::Left;
@@ -1246,8 +1243,7 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
         textEditor->setPosition(textEditor->position() + event->replacementStart());
         for (int i = event->replacementLength(); i > 0; --i) {
             textEditor->deleteChar(KoTextEditor::NextChar, m_actionRecordChanges->isChecked(),
-                                       canvas()->shapeController(),
-                                       canvas()->resourceManager());
+                                       canvas()->shapeController());
         }
     }
     QTextBlock block = textEditor->block();
@@ -1641,7 +1637,7 @@ void TextTool::pasteAsText()
     if (!data) return;
 
     m_prevCursorPosition = m_textEditor.data()->position();
-    textEditor->paste(data, canvas()->shapeController(), canvas()->resourceManager(), true);
+    textEditor->paste(data, canvas()->shapeController(), true);
     editingPluginEvents();
 }
 

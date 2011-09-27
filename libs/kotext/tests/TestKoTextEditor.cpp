@@ -179,7 +179,7 @@ void TestKoTextEditor::testPaste()
 
     source->textEditor()->insertText("bla");
 
-    destination->textEditor()->paste(source->textEditor(), &shapeController, &resourceManager);
+    destination->textEditor()->paste(source->textEditor(), &shapeController);
 
     Q_ASSERT(destination->m_document->toPlainText() == "bla");
 

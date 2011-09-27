@@ -69,13 +69,11 @@ using namespace std;
 ChangeTrackedDeleteCommand::ChangeTrackedDeleteCommand(DeleteMode mode,
                                                        QTextDocument *document,
                                                        KoShapeController *shapeController,
-                                                       KoResourceManager *resourceManager,
                                                        KUndo2Command *parent) :
     KoTextCommandBase (parent),
     m_document(document),
     m_rdf(0),
     m_shapeController(shapeController),
-    m_resourceManager(resourceManager),
     m_first(true),
     m_undone(false),
     m_canMerge(true),
@@ -83,7 +81,7 @@ ChangeTrackedDeleteCommand::ChangeTrackedDeleteCommand(DeleteMode mode,
     m_removedElements()
 {
       setText(i18nc("(qtundo-format)", "Delete"));
-      m_rdf = dynamic_cast<KoDocumentRdfBase*>(m_resourceManager->resource(KoText::DocumentRdf).value<KoDocumentRdfBase*>());
+      m_rdf = dynamic_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<KoDocumentRdfBase*>());
 }
 
 void ChangeTrackedDeleteCommand::undo()
@@ -157,8 +155,8 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(KoTextEditor *editor)
     m_canMerge = false;
     bool numberedListItem = false;
     if (!editor->blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem))
-         numberedListItem = true;      
- 
+         numberedListItem = true;
+
     // Mark the complete list-item
     QTextBlock block = m_document->findBlock(editor->position());
     editor->movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, (block.length() - 1));
@@ -192,7 +190,6 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(KoTextEditor *editor)
             new TextPasteCommand(QApplication::clipboard()->mimeData(QClipboard::Clipboard),
                                  m_document,
                                  m_shapeController,
-                                 m_resourceManager,
                                  this);
     pasteCommand->redo();
 
@@ -247,7 +244,7 @@ void ChangeTrackedDeleteCommand::deleteSelection(KoTextEditor *editor)
                 KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineTextObjectManager->inlineTextObject(checker));
                 if (anchor)
                     shapesInSelection.push_back(anchor->shape());
-           } 
+           }
         }
         checker.setPosition(checker.position());
     }
@@ -318,7 +315,7 @@ void ChangeTrackedDeleteCommand::deleteSelection(KoTextEditor *editor)
     inlineTextObjectManager->insertInlineObject(*selection, deleteChangemarker);
 
     m_addedChangeElement = changeId;
-    
+
     //Insert the deleted data again after the marker with the charformat set to the change-id
     if (KoTextDocument(m_document).changeTracker()->displayChanges()) {
         int startPosition = selection->position();

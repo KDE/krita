@@ -38,9 +38,9 @@
 class KoTextPaste::Private
 {
 public:
-    Private(KoTextEditor *editor, KoResourceManager *resourceManager, const Soprano::Model *_rdfModel)
+    Private(KoTextEditor *editor, KoShapeController *shapeController, const Soprano::Model *_rdfModel)
         : editor(editor)
-        , resourceManager(resourceManager)
+        , resourceManager(shapeController->resourceManager())
         , rdfModel(_rdfModel)
     {
     }
@@ -50,8 +50,8 @@ public:
     const Soprano::Model *rdfModel;
 };
 
-KoTextPaste::KoTextPaste(KoTextEditor *editor, KoResourceManager *resourceManager, const Soprano::Model *rdfModel)
-        : d(new Private(editor, resourceManager, rdfModel))
+KoTextPaste::KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, const Soprano::Model *rdfModel)
+        : d(new Private(editor, shapeController, rdfModel))
 {
 }
 

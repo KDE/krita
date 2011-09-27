@@ -125,8 +125,6 @@ public:
 
     void stopEditing();
 
-//    const QTextCursor cursor();
-
     void setShapeData(KoTextShapeData *data);
 
     QRectF caretRect(QTextCursor *cursor) const;
@@ -368,7 +366,7 @@ private:
     int m_changeTipCursorPos;
     QPoint m_changeTipPos;
     bool m_delayedEnsureVisible;
-    
+
     TextToolSelection *m_toolSelection;
 };
 

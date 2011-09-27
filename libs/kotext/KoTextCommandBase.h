@@ -57,16 +57,11 @@ class KOTEXT_EXPORT KoTextCommandBase : public KUndo2Command
 public:
 
     /// constructor
-    KoTextCommandBase(KUndo2Command *parent)
-        : KUndo2Command(parent)
-        , m_tool(0) {}
-
-    virtual ~KoTextCommandBase() {}
+    KoTextCommandBase(KUndo2Command *parent);
+    virtual ~KoTextCommandBase();
 
     /// method called by the tool.
-    void setTool(KoUndoableTool *tool) {
-        m_tool = tool;
-    }
+    void setTool(KoUndoableTool *tool);
 
     // reimplemented from KUndo2Command
     virtual void redo();

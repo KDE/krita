@@ -100,8 +100,8 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_preregisteredFootNotesHeight(0)
  , m_footNotesHeight(0)
  , m_footNoteAutoCount(0)
- , m_endNotesArea(0)
  , m_extraTextIndent(0)
+ , m_endNotesArea(0)
 {
 }
 

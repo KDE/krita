@@ -53,70 +53,71 @@ public:
 
     KUndo2Command* addShape(KoShape *shape, bool showDialog, KUndo2Command *parent) {
 
-        if (canvas && showDialog) {
-            KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(shape->shapeId());
-            Q_ASSERT(factory);
-            int z = 0;
-            foreach(KoShape *sh, canvas->shapeManager()->shapes())
-                z = qMax(z, sh->zIndex());
-            shape->setZIndex(z + 1);
+        if (canvas) {
+            if (showDialog) {
+                KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(shape->shapeId());
+                Q_ASSERT(factory);
+                int z = 0;
+                foreach(KoShape *sh, canvas->shapeManager()->shapes())
+                    z = qMax(z, sh->zIndex());
+                shape->setZIndex(z + 1);
 
-            // show config dialog.
-            KPageDialog *dialog = new KPageDialog(canvas->canvasWidget());
-            dialog->setCaption(i18n("%1 Options", factory->name()));
+                // show config dialog.
+                KPageDialog *dialog = new KPageDialog(canvas->canvasWidget());
+                dialog->setCaption(i18n("%1 Options", factory->name()));
 
-            int pageCount = 0;
-            QList<KoShapeConfigFactoryBase*> panels = factory->panelFactories();
-            qSort(panels.begin(), panels.end(), KoShapeConfigFactoryBase::compare);
-            QList<KoShapeConfigWidgetBase*> widgets;
-            foreach(KoShapeConfigFactoryBase *panelFactory, panels) {
-                if (! panelFactory->showForShapeId(shape->shapeId()))
-                    continue;
-                KoShapeConfigWidgetBase *widget = panelFactory->createConfigWidget(shape);
-                if (widget == 0)
-                    continue;
-                if (! widget->showOnShapeCreate()) {
-                    delete widget;
-                    continue;
+                int pageCount = 0;
+                QList<KoShapeConfigFactoryBase*> panels = factory->panelFactories();
+                qSort(panels.begin(), panels.end(), KoShapeConfigFactoryBase::compare);
+                QList<KoShapeConfigWidgetBase*> widgets;
+                foreach(KoShapeConfigFactoryBase *panelFactory, panels) {
+                    if (! panelFactory->showForShapeId(shape->shapeId()))
+                        continue;
+                    KoShapeConfigWidgetBase *widget = panelFactory->createConfigWidget(shape);
+                    if (widget == 0)
+                        continue;
+                    if (! widget->showOnShapeCreate()) {
+                        delete widget;
+                        continue;
+                    }
+                    widget->connect(widget, SIGNAL(accept()), dialog, SLOT(accept()));
+                    widgets.append(widget);
+                    widget->setResourceManager(canvas->resourceManager());
+                    widget->setUnit(canvas->unit());
+                    dialog->addPage(widget, panelFactory->name());
+                    pageCount ++;
                 }
-                widget->connect(widget, SIGNAL(accept()), dialog, SLOT(accept()));
-                widgets.append(widget);
-                widget->setResourceManager(canvas->resourceManager());
-                widget->setUnit(canvas->unit());
-                dialog->addPage(widget, panelFactory->name());
-                pageCount ++;
-            }
-            foreach(KoShapeConfigWidgetBase* panel, factory->createShapeOptionPanels()) {
-                if (! panel->showOnShapeCreate())
-                    continue;
-                panel->open(shape);
-                panel->connect(panel, SIGNAL(accept()), dialog, SLOT(accept()));
-                widgets.append(panel);
-                panel->setResourceManager(canvas->resourceManager());
-                panel->setUnit(canvas->unit());
-                QString title = panel->windowTitle().isEmpty() ? panel->objectName() : panel->windowTitle();
-                dialog->addPage(panel, title);
-                pageCount ++;
-            }
-
-            if (pageCount > 0) {
-                if (pageCount > 1)
-                    dialog->setFaceType(KPageDialog::Tabbed);
-                if (dialog->exec() != KPageDialog::Accepted) {
-                    delete dialog;
-                    return 0;
+                foreach(KoShapeConfigWidgetBase* panel, factory->createShapeOptionPanels()) {
+                    if (! panel->showOnShapeCreate())
+                        continue;
+                    panel->open(shape);
+                    panel->connect(panel, SIGNAL(accept()), dialog, SLOT(accept()));
+                    widgets.append(panel);
+                    panel->setResourceManager(canvas->resourceManager());
+                    panel->setUnit(canvas->unit());
+                    QString title = panel->windowTitle().isEmpty() ? panel->objectName() : panel->windowTitle();
+                    dialog->addPage(panel, title);
+                    pageCount ++;
                 }
-                foreach(KoShapeConfigWidgetBase *widget, widgets)
-                    widget->save();
+
+                if (pageCount > 0) {
+                    if (pageCount > 1)
+                        dialog->setFaceType(KPageDialog::Tabbed);
+                    if (dialog->exec() != KPageDialog::Accepted) {
+                        delete dialog;
+                        return 0;
+                    }
+                    foreach(KoShapeConfigWidgetBase *widget, widgets)
+                        widget->save();
+                }
+                delete dialog;
             }
-            delete dialog;
-        }
 
-        // set the active layer as parent if there is not yet a parent.
-        if (canvas && !shape->parent()) {
-            shape->setParent(canvas->shapeManager()->selection()->activeLayer());
+            // set the active layer as parent if there is not yet a parent.
+            if (!shape->parent()) {
+                shape->setParent(canvas->shapeManager()->selection()->activeLayer());
+            }
         }
-
         return new KoShapeCreateCommand(shapeBasedDocument, shape, parent);
     }
 };

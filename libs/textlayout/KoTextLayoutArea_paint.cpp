@@ -345,6 +345,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
             }
 
             layout.setTextOption(option);
+
             layout.beginLayout();
 
             QTextLine line = layout.createLine();
@@ -352,6 +353,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
             layout.endLayout();
 
             QPointF counterPosition = data->counterPosition();
+
             if (block.layout()->lineCount() > 0) {
                 // if there is text, then baseline align the counter.
                 QTextLine firstParagLine = block.layout()->lineAt(0);
@@ -363,6 +365,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
                     counterPosition += QPointF(0, (firstParagLine.height() - layout.lineAt(0).height())/2.0);
                 }
             }
+
             layout.draw(painter, counterPosition);
         }
 

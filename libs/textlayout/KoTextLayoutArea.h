@@ -125,7 +125,6 @@ public:
     /// Returns the rect of the layout environment (see odf style:flow-with-text).
     QRectF layoutEnvironmentRect() const;
 
-    qreal listIndent() const;
     qreal textIndent(QTextBlock block, QTextList *textList, const KoParagraphStyle &pStyle) const;
     void setExtraTextIndent(qreal extraTextIndent);
     qreal x() const;

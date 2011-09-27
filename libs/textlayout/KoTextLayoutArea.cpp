@@ -100,8 +100,8 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_preregisteredFootNotesHeight(0)
  , m_footNotesHeight(0)
  , m_footNoteAutoCount(0)
- , m_endNotesArea(0)
  , m_extraTextIndent(0)
+ , m_endNotesArea(0)
 {
 }
 
@@ -657,8 +657,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     // initialize list item stuff for this parag.
     QTextList *textList = block.textList();
+    QTextListFormat listFormat;
     if (textList) {
-        QTextListFormat listFormat = textList->format();
+        listFormat = textList->format();
 
         KoCharacterStyle *cs = 0;
         if (m_documentLayout->styleManager()) {
@@ -850,12 +851,12 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         if (!m_isRtl) {
             listLabelIndent = blockData->counterSpacing() + blockData->counterWidth();
         }
-        if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
-            m_listIndent = textList->format().doubleProperty(KoListStyle::Indent) + listLabelIndent;
+        if (listFormat.boolProperty(KoListStyle::AlignmentMode) == false) {
+            m_listIndent = listFormat.doubleProperty(KoListStyle::Indent) + listLabelIndent;
         } else {
             if (!pStyle.hasProperty(KoParagraphStyle::ListLevel)) {
-                leftMargin = textList->format().doubleProperty(KoListStyle::Margin);
-                m_listIndent = textList->format().doubleProperty(KoListStyle::Indent);
+                leftMargin = listFormat.doubleProperty(KoListStyle::Margin);
+                m_listIndent = listFormat.doubleProperty(KoListStyle::Indent);
             }
         }
     }
@@ -981,61 +982,66 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         // account for them.
         if (m_isRtl) {
             m_width -= blockData->counterWidth() + blockData->counterSpacing() + m_listIndent;
-            if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
+            if (listFormat.boolProperty(KoListStyle::AlignmentMode) == false) {
                 blockData->setCounterPosition(QPointF(right() -
                                                       blockData->counterWidth() - leftMargin, m_y));
             } else {
                 blockData->setCounterPosition(QPointF(right() - leftMargin, m_y));
             }
         } else {
-            if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
+            if (listFormat.boolProperty(KoListStyle::AlignmentMode) == false) {
                 m_x += m_listIndent;
                 m_width -= m_listIndent;
                 blockData->setCounterPosition(QPointF(x() - listLabelIndent, m_y));
             } else {
-                blockData->setCounterPosition(QPointF(x(), m_y));
+                Qt::Alignment align = static_cast<Qt::Alignment>(listFormat.intProperty(KoListStyle::Alignment));
+                if (align & Qt::AlignLeft) {
+                    blockData->setCounterPosition(QPointF(x(), m_y));
+                    m_indent += listLabelIndent;
+                } else if (align & Qt::AlignHCenter) {
+                    listLabelIndent /= 2;
+                    blockData->setCounterPosition(QPointF(x() - listLabelIndent, m_y));
+                    m_indent += listLabelIndent/2;
+                } else {
+                    blockData->setCounterPosition(QPointF(x() - listLabelIndent, m_y));
+                }
             }
         }
 
-        if (textList->format().boolProperty(KoListStyle::AlignmentMode)) {
+        if (listFormat.boolProperty(KoListStyle::AlignmentMode)) {
             if (block.blockFormat().intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
-                if (textList->format().hasProperty(KoListStyle::TabStopPosition)) {
-                    qreal listTab = textList->format().doubleProperty(KoListStyle::TabStopPosition);
+                if (listFormat.hasProperty(KoListStyle::TabStopPosition)) {
+                    qreal listTab = listFormat.doubleProperty(KoListStyle::TabStopPosition);
                     if (!m_documentLayout->relativeTabs(block)) {
                         // How list tab is defined if fixed tabs:
                         //        listTab
                         //|>-------------------------|
                         //           m_indent
                         //         |---------<|
-                        //       m_listIndent
-                        //     |-------------<|
                         //     LABEL                 TEXT STARTS HERE AND GOES ON
                         //                    TO THE NEXT LINE
                         //|>------------------|
                         //     leftMargin
-                        listTab -= leftMargin + m_indent;
-                    } else {
-                        // How list tab is defined if relative tabs:
-                        //                    listTab
-                        //                    |>-----|
-                        //           m_indent
-                        //         |---------<|
-                        //       m_listIndent
-                        //     |-------------<|
-                        //     LABEL                 TEXT STARTS HERE AND GOES ON
-                        //                    TO THE NEXT LINE
-                        //|>------------------|
-                        //     leftMargin
-                        listTab -= m_indent;
+                        listTab -= leftMargin;
                     }
-                    //How we want it:
+                    // How list tab is defined now (aka relative tabs):
+                    //                    listTab
+                    //                    |>-----|
+                    //           m_indent
+                    //         |---------<|
+                    //     LABEL                 TEXT STARTS HERE AND GOES ON
+                    //                    TO THE NEXT LINE
+                    //|>------------------|
+                    //     leftMargin
+
+                    listTab -= m_indent;
+
+                    // And now listTab is like this:
                     //         x()
                     //         |     listTab
                     //         |>---------------|
                     //           m_indent
                     //         |---------<|
-                    //       m_listIndent
-                    //     |-------------<|
                     //     LABEL                 TEXT STARTS HERE AND GOES ON
                     //                    TO THE NEXT LINE
                     //|>------------------|
@@ -1045,7 +1051,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                         qreal position = tab.position  * 72. / qt_defaultDpiY();
                         if (position > 0.0) {
                             // found the relevant normal tab
-                            if (position > listTab) {
+                            if (position > listTab && listTab > 0.0) {
                                 // But special tab is more relevant
                                 position = listTab;
                             }
@@ -1053,6 +1059,15 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                             break;
                         }
                     }
+
+                    //And finally it's like this:
+                    //                          x()
+                    //                    m_indent
+                    //                    |>-----|
+                    //     LABEL                 TEXT STARTS HERE AND GOES ON
+                    //                    TO THE NEXT LINE
+                    //|>------------------|
+                    //     leftMargin
                 } else {
                     m_indent = 0;
                 }
@@ -1175,11 +1190,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     setVirginPage(false);
     cursor->lineTextStart = -1; //set lineTextStart to -1 and returning true indicate new block
     return true;
-}
-
-qreal KoTextLayoutArea::listIndent() const
-{
-    return m_listIndent;
 }
 
 qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const KoParagraphStyle &pStyle) const

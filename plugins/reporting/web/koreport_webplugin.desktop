@@ -1,6 +1,14 @@
 [Desktop Entry]
 Name=KoReport_Web
+Name[pt]=KoReport_Web
+Name[sv]=Koffice rapportwebb
+Name[uk]=Веб-KoReport
+Name[x-test]=xxKoReport_Webxx
 Comment=Calligra Reports web Plugin
+Comment[pt]='Plugin' Web de Relatórios do Calligra
+Comment[sv]=Calligra-insticksprogram för rapportwebb
+Comment[uk]=Інтернет-додаток звітів Calligra
+Comment[x-test]=xxCalligra Reports web Pluginxx
 X-KDE-Library=koreport_webplugin
 X-KDE-ServiceTypes=KoReport/ItemPlugin
 Type=Service

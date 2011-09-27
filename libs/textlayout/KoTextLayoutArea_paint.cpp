@@ -366,13 +366,6 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
                 }
             }
 
-            if (listFormat.boolProperty(KoListStyle::AlignmentMode)) {
-                if (align & Qt::AlignRight) {
-                    counterPosition += QPointF(-data->counterWidth(), 0);
-                } else if (align & Qt::AlignHCenter) {
-                    counterPosition += QPointF(-data->counterWidth()/2, 0);
-                }
-            }
             layout.draw(painter, counterPosition);
         }
 

@@ -223,6 +223,10 @@ public slots:
 
     /**
      * paste the given mimedata object at the current position
+     * @param mimeData: the mimedata containing text, html or odf
+     * @param shapeController the canvas' shapeController
+     * @param resourceManager: the document resourcemanager (not the canvas resourcemanager)
+     * @param pasteAsText: if true, paste without formatting
      */
     void paste(const QMimeData *mimeData,
                KoShapeController *shapeController,
@@ -235,6 +239,9 @@ public slots:
      * the editor instance. Note that this is another text editor, preferably on another document!
      *
      * @param editor the KoTextEditor instance.
+     * @param shapeController the canvas' shapeController
+     * @param resourceManager: the document resourcemanager (not the canvas resourcemanager)
+     * @param pasteAsText: if true, paste without formatting
      * @returns true if the operation succeeded
      */
     bool paste(KoTextEditor *editor,
@@ -246,8 +253,8 @@ public slots:
      * Delete one character in the specified direction.
      * @param direction the direction into which we delete. Valid values are
      * @param trackChanges if true, track this deletion in the changetracker
-     * @param shapeController the current shapeController.
-     * @param resourceManager the resourceManager that contains the rdf doc, if present
+     * @param shapeController the canvas' shapeController
+     * @param resourceManager: the document resourcemanager (not the canvas resourcemanager)
      */
     void deleteChar(MoveOperation direction, bool trackChanges,
                     KoShapeController *shapeController,

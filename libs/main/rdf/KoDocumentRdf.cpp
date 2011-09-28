@@ -83,8 +83,8 @@ public:
 
     ~KoDocumentRdfPrivate()
     {
-        delete prefixMapping;
-        delete model;
+        prefixMapping->deleteLater();
+        model->deleteLater();
     }
 
     Soprano::Model *model; ///< Main Model containing all Rdf for doc

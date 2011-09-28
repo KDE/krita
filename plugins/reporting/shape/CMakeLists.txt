@@ -25,3 +25,4 @@ target_link_libraries(koreport_shapeplugin ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LI
 
 install(TARGETS koreport_shapeplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  koreport_shapeplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+kde4_install_icons(${DATA_INSTALL_DIR}/calligra/icons)

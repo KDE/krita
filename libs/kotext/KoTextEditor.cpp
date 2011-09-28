@@ -1618,9 +1618,27 @@ void KoTextEditor::mergeCharFormat(const QTextCharFormat &modifier)
 bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode, int n)
 {
     d->editProtectionCached = false;
-    bool b = d->caret.movePosition (operation, mode, n);
-    emit cursorPositionChanged();
-    return b;
+
+    // We need protection against moving in and out of note areas
+    QTextCursor after(d->caret);
+    bool b = after.movePosition (operation, mode, n);
+ 
+    QTextFrame *beforeFrame = d->caret.currentFrame();
+    while (qobject_cast<QTextTable *>(beforeFrame)) {
+        beforeFrame = beforeFrame->parentFrame();
+    }
+
+    QTextFrame *afterFrame = after.currentFrame();
+    while (qobject_cast<QTextTable *>(afterFrame)) {
+        afterFrame = afterFrame->parentFrame();
+    }
+
+    if (beforeFrame == afterFrame) {
+        d->caret = after;
+        emit cursorPositionChanged();
+        return b;
+    }
+    return false;
 }
 
 void KoTextEditor::newLine()

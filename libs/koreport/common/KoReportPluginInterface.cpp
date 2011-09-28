@@ -21,11 +21,8 @@
 #include "KoReportPluginInterface.h"
 #include "KoReportPluginInfo.h"
 
-KoReportPluginInterface::KoReportPluginInterface() : m_pluginInfo(0)
-{
-}
-
-KoReportPluginInterface::KoReportPluginInterface(QObject* parent, const QVariantList& args): QObject(parent)
+KoReportPluginInterface::KoReportPluginInterface(QObject* parent, const QVariantList& args)
+ : QObject(parent), m_pluginInfo(0)
 {
     Q_UNUSED(args)
 }

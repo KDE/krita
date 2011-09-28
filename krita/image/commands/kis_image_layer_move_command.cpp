@@ -59,13 +59,11 @@ KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP 
 
 void KisImageLayerMoveCommand::redo()
 {
-    m_image->lock();
     if (m_newAbove || m_index == quint32(-1)) {
         m_image->moveNode(m_layer, m_newParent, m_newAbove);
     } else {
         m_image->moveNode(m_layer, m_newParent, m_index);
     }
-    m_image->unlock();
 
     m_image->refreshGraph(m_prevParent);
     m_prevParent->setDirty(m_image->bounds());
@@ -75,9 +73,7 @@ void KisImageLayerMoveCommand::redo()
 
 void KisImageLayerMoveCommand::undo()
 {
-    m_image->lock();
     m_image->moveNode(m_layer, m_prevParent, m_prevAbove);
-    m_image->unlock();
 
     m_image->refreshGraph(m_newParent);
     m_newParent->setDirty(m_image->bounds());

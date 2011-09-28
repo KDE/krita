@@ -53,6 +53,7 @@ public:
                        const QRect & rc) const;
     QIcon icon() const;
     bool accept(KisNodeVisitor &v);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     QRect extent() const;
     QRect exactBounds() const;

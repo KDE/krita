@@ -22,6 +22,9 @@
 #include "kis_types.h"
 #include "kis_tool_paint.h"
 #include "kis_paint_information.h"
+#include "kis_resources_snapshot.h"
+#include "kis_paintop_settings.h"
+#include "kis_distance_information.h"
 
 #include "krita_export.h"
 
@@ -35,12 +38,11 @@ class KoCanvasBase;
 
 class KisPainter;
 
-class QThreadPool;
-class FreehandPaintJob;
-class KisRecordedPathPaintAction;
-class FreehandPaintJobExecutor;
 
-#include "kis_paintop_settings.h"
+class KisPaintingInformationBuilder;
+class KisToolFreehandHelper;
+class KisRecordingAdapter;
+
 
 class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
 {
@@ -53,8 +55,6 @@ public:
     KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText);
     virtual ~KisToolFreehand();
     virtual int flags() const;
-    virtual void setDirty(const QVector<QRect> &rects);
-    virtual void setDirty(const QRegion &region);
 
 protected:
     void gesture(const QPointF &offsetInDocPixels,
@@ -68,59 +68,52 @@ protected:
     virtual bool wantsAutoScroll() const;
     virtual void deactivate();
 
+    virtual void initStroke(KoPointerEvent *event);
+    virtual void doStroke(KoPointerEvent *event);
+    virtual void endStroke();
 
-    /// Paint a single brush footprint on the current layer
-    virtual void paintAt(const KisPaintInformation &pi);
-
-    /// Paint a line between the specified positions on the current layer
-    virtual void paintLine(const KisPaintInformation &pi1,
-                           const KisPaintInformation &pi2);
-
-    virtual void paintBezierCurve(const KisPaintInformation &pi1,
-                                  const QPointF &control1,
-                                  const QPointF &control2,
-                                  const KisPaintInformation &pi2);
-
-    virtual void initPaint(KoPointerEvent *e);
-    virtual void endPaint();
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
+
+
+    KisPaintingInformationBuilder* paintingInformationBuilder() const;
+    KisRecordingAdapter* recordingAdapter() const;
+    void resetHelper(KisToolFreehandHelper *helper);
+    void updateOutlineDocPoint(const QPointF &point);
 
 protected slots:
 
     void setSmooth(bool smooth);
     void setAssistant(bool assistant);
-    void finishStroke();
 
 private:
+    friend class KisToolPaintingInformationBuilder;
+
     /**
-     * adjust a coordinates according to a KisPaintingAssitant, if available.
+     * Adjusts a coordinates according to a KisPaintingAssitant,
+     * if available.
      */
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
-    void queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* previousJob);
+
+    /**
+     * Calculates a coefficient for KisPaintInformation
+     * according to perspective grid values
+     */
+    qreal calculatePerspective(const QPointF &documentPoint);
+
     void showOutlineTemporary();
 
     void updateOutlineRect();
     QPainterPath getOutlinePath(const QPointF &documentPos,
                                 KisPaintOpSettings::OutlineMode outlineMode);
 
+
+
 private slots:
     void increaseBrushSize();
     void decreaseBrushSize();
     void hideOutline();
+
 protected:
-
-    QTimer m_strokeTimer;
-    KisPaintInformation m_olderPaintInformation;
-    KisPaintInformation m_previousPaintInformation;
-    bool m_haveTangent;
-    QPointF m_previousTangent;
-    double m_dragDist;
-    QPointF m_strokeBegin;
-
-    bool m_paintIncremental;
-
-    QString m_transactionText;
-    KisPainter *m_painter;
     bool m_smooth;
     double m_smoothness;
     bool m_assistant;
@@ -143,18 +136,12 @@ private:
     QRectF m_oldOutlineRect;
     bool m_explicitShowOutline;
 
-
-    QRegion m_incrementalDirtyRegion;
-    QList<FreehandPaintJob*> m_paintJobs;
-    KisRecordedPathPaintAction* m_pathPaintAction;
-    QThreadPool* m_executor;
-
-    QTime m_strokeTimeMeasure;
-
     KAction* m_increaseBrushSize;
     KAction* m_decreaseBrushSize;
 
-    bool m_hasPaintAtLeastOnce; ///< this indicates whether mouseReleaseEvent should call paintAt or not
+    KisPaintingInformationBuilder *m_infoBuilder;
+    KisToolFreehandHelper *m_helper;
+    KisRecordingAdapter *m_recordingAdapter;
 };
 
 

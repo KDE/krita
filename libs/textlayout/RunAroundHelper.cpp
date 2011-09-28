@@ -33,7 +33,7 @@ RunAroundHelper::RunAroundHelper()
     m_stayOnBaseline = false;
 }
 
-void RunAroundHelper::setLine(KoTextLayoutArea *area, QTextLine l) {
+void RunAroundHelper::setLine(KoTextLayoutArea *area, const QTextLine &l) {
     m_area = area;
     line = l;
 }
@@ -56,7 +56,7 @@ void RunAroundHelper::updateObstruction(KoTextLayoutObstruction *obstruction)
     }
 }
 
-bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft, QPointF position)
+bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft, const QPointF &position)
 {
     Q_ASSERT(line.isValid());
     if (resetHorizontalPosition) {

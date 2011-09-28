@@ -25,6 +25,7 @@
 #define KOSTYLEMANAGER_H
 
 #include "kotext_export.h"
+#include "KoOdfNotesConfiguration.h"
 
 #include <QObject>
 #include <QMetaType>
@@ -106,6 +107,10 @@ public:
      * Add a new sewction style, automatically giving it a new styleId.
      */
     void add(KoSectionStyle *style);
+    /**
+     * set the notes configuration of the document
+     */
+    void setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration);
 
     /**
      * Remove a style.
@@ -293,6 +298,11 @@ public:
      * show this style in their document-level configure dialogs.
      */
     KoParagraphStyle *defaultParagraphStyle() const;
+
+    /**
+      * @return the notes configuration
+      */
+    KoOdfNotesConfiguration *notesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const;
 
     /**
      * Returns the default list style to be used for lists, headers, paragraphs

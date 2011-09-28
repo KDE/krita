@@ -83,7 +83,7 @@ public:
     void resetCache(const KoColorSpace *colorSpace = 0);
 
     /**
-     * for KisLayer::setDirty() and KisLayer::setDirty(const QRegion&)
+     * for KisLayer::setDirty(const QRegion&)
      */
     using KisLayer::setDirty;
 
@@ -92,6 +92,7 @@ public:
      * as our extent() function doesn't fit for this
      */
     void setDirty();
+    void setDirty(const QRect & rect);
 
 public:
 

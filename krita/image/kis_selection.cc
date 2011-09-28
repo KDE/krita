@@ -168,6 +168,8 @@ void KisSelection::updateProjection()
     KisPixelSelectionSP currentProjection = projection();
     if(currentProjection == m_d->pixelSelection) return;
 
+    currentProjection->clear();
+
     if(m_d->pixelSelection) {
         if(*(m_d->pixelSelection->defaultPixel()) !=
            *(currentProjection->defaultPixel())) {
@@ -175,7 +177,6 @@ void KisSelection::updateProjection()
             quint8 defPixel = *(m_d->pixelSelection->defaultPixel());
             currentProjection->setDefaultPixel(&defPixel);
         }
-        currentProjection->clear();
         m_d->pixelSelection->renderToProjection(currentProjection.data());
     }
 

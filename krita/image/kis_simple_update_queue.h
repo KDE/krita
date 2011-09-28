@@ -19,33 +19,39 @@
 #ifndef __KIS_SIMPLE_UPDATE_QUEUE_H
 #define __KIS_SIMPLE_UPDATE_QUEUE_H
 
-#include "kis_abstract_update_queue.h"
-
 #include <QMutex>
+#include "kis_updater_context.h"
 
 typedef QList<KisBaseRectsWalkerSP> KisWalkersList;
 typedef QListIterator<KisBaseRectsWalkerSP> KisWalkersListIterator;
 typedef QMutableListIterator<KisBaseRectsWalkerSP> KisMutableWalkersListIterator;
 
-class KRITAIMAGE_EXPORT KisSimpleUpdateQueue : public KisAbstractUpdateQueue
+
+class KRITAIMAGE_EXPORT KisSimpleUpdateQueue
 {
 public:
     KisSimpleUpdateQueue();
-    ~KisSimpleUpdateQueue();
+    virtual ~KisSimpleUpdateQueue();
 
-    void addJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
+    void processQueue(KisUpdaterContext &updaterContext);
+
+    void addUpdateJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
+    void addFullRefreshJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
 
     void optimize();
 
-    bool isEmpty();
+    bool isEmpty() const;
+    qint32 sizeMetric() const;
 
     void updateSettings();
 
 protected:
+    void addJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, KisBaseRectsWalker::UpdateType type);
+
     bool processOneJob(KisUpdaterContext &updaterContext);
 
-    bool trySplitJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
-    bool tryMergeJob(KisNodeSP node, const QRect& rc);
+    bool trySplitJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, KisBaseRectsWalker::UpdateType type);
+    bool tryMergeJob(KisNodeSP node, const QRect& rc, KisBaseRectsWalker::UpdateType type);
 
     void collectJobs(KisBaseRectsWalkerSP &baseWalker, QRect baseRect,
                      const KisNodeSP &baseNode, const qreal maxAlpha);
@@ -53,7 +59,7 @@ protected:
 
 protected:
 
-    QMutex m_lock;
+    mutable QMutex m_lock;
     KisWalkersList m_list;
 
     /**

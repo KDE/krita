@@ -290,7 +290,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
         return KoFilter::CreationError;
     }
 
-    KisImageSP image = new KisImage(doc->undoAdapter(), width, height, colorSpace, "built image");
+    KisImageSP image = new KisImage(doc->createUndoStore(), width, height, colorSpace, "built image");
     image->lock();
 
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);

@@ -1,0 +1,66 @@
+/*
+ *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#ifndef __KIS_PROCESSING_VISITOR_H
+#define __KIS_PROCESSING_VISITOR_H
+
+#include "kis_node.h"
+#include "krita_export.h"
+
+class KoUpdater;
+class KoProgressUpdater;
+class KisUndoAdapter;
+class KisPaintLayer;
+class KisGroupLayer;
+class KisAdjustmentLayer;
+class KisExternalLayer;
+class KisCloneLayer;
+class KisFilterMask;
+class KisTransparencyMask;
+class KisSelectionMask;
+
+class KRITAIMAGE_EXPORT KisProcessingVisitor : public KisShared
+{
+public:
+    virtual ~KisProcessingVisitor();
+
+    virtual void visit(KisNode *node, KisUndoAdapter *undoAdapter) = 0;
+    virtual void visit(KisPaintLayer *layer, KisUndoAdapter *undoAdapter) = 0;
+    virtual void visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter) = 0;
+    virtual void visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter) = 0;
+    virtual void visit(KisExternalLayer *layer, KisUndoAdapter *undoAdapter) = 0;
+    virtual void visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter) = 0;
+    virtual void visit(KisCloneLayer *layer, KisUndoAdapter *undoAdapter) = 0;
+    virtual void visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter) = 0;
+    virtual void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter) = 0;
+    virtual void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter) = 0;
+
+protected:
+    class ProgressHelper {
+    public:
+        ProgressHelper(const KisNode *node);
+        ~ProgressHelper();
+
+        KoUpdater* updater() const;
+    private:
+        KoProgressUpdater *m_progressUpdater;
+        KoUpdater *m_updater;
+    };
+};
+
+#endif /* __KIS_PROCESSING_VISITOR_H */

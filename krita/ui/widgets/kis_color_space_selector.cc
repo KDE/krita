@@ -87,8 +87,13 @@ void KisColorSpaceSelector::fillCmbProfiles()
 
 void KisColorSpaceSelector::fillCmbDepths(const KoID& id)
 {
+    KoID activeDepth = d->colorSpaceSelector->cmbColorDepth->currentItem();
     d->colorSpaceSelector->cmbColorDepth->clear();
-    d->colorSpaceSelector->cmbColorDepth->setIDList(KoColorSpaceRegistry::instance()->colorDepthList(id, KoColorSpaceRegistry::OnlyUserVisible));
+    QList<KoID> depths = KoColorSpaceRegistry::instance()->colorDepthList(id, KoColorSpaceRegistry::OnlyUserVisible);
+    d->colorSpaceSelector->cmbColorDepth->setIDList(depths);
+    if (depths.contains(activeDepth)) {
+        d->colorSpaceSelector->cmbColorDepth->setCurrent(activeDepth);
+    }
 }
 
 const KoColorSpace* KisColorSpaceSelector::currentColorSpace()

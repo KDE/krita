@@ -56,22 +56,6 @@ const KisMetaData::MergeStrategy* KisMetaDataMergeStrategyChooserWidget::current
     return mergeStrategy(d->uiWdg.mergeStrategy->currentIndex());
 }
 
-const KisMetaData::MergeStrategy* KisMetaDataMergeStrategyChooserWidget::showDialog(QWidget* parent)
-{
-    KDialog dlg(parent);
-    dlg.setCaption(i18n("Choose meta data merge strategy"));
-    dlg.setButtons(KDialog::Ok | KDialog::Cancel);
-    dlg.setDefaultButton(KDialog::Ok);
-
-    KisMetaDataMergeStrategyChooserWidget* wdg = new KisMetaDataMergeStrategyChooserWidget(&dlg);
-    dlg.setMainWidget(wdg);
-    if (dlg.exec() == QDialog::Accepted) {
-        return wdg->currentStrategy();
-    }
-
-    return 0;
-}
-
 void KisMetaDataMergeStrategyChooserWidget::setCurrentDescription(int index)
 {
     d->uiWdg.description->setText(mergeStrategy(index)->description());
@@ -82,3 +66,21 @@ const KisMetaData::MergeStrategy* KisMetaDataMergeStrategyChooserWidget::mergeSt
     return KisMetaData::MergeStrategyRegistry::instance()->get(
                d->uiWdg.mergeStrategy->itemData(index).toString());
 }
+
+const KisMetaData::MergeStrategy* KisMetaDataMergeStrategyChooserWidget::showDialog(QWidget* parent)
+{
+    KDialog dlg(parent);
+    dlg.setCaption(i18n("Choose meta data merge strategy"));
+    dlg.setButtons(KDialog::Ok | KDialog::Cancel);
+    dlg.setDefaultButton(KDialog::Ok);
+
+    KisMetaDataMergeStrategyChooserWidget* wdg = new KisMetaDataMergeStrategyChooserWidget(&dlg);
+    wdg->setMinimumSize(wdg->sizeHint());
+    dlg.setMainWidget(wdg);
+    if (dlg.exec() == QDialog::Accepted) {
+        return wdg->currentStrategy();
+    }
+
+    return 0;
+}
+

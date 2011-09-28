@@ -458,10 +458,7 @@ void KisSelectionManager::pasteNew()
     KisDoc2* doc = dynamic_cast<KisDoc2*>(entry.createDoc());
     if (!doc) return;
 
-    Q_ASSERT(doc->undoAdapter());
-
-
-    KisImageWSP image = new KisImage(doc->undoAdapter(),
+    KisImageWSP image = new KisImage(doc->createUndoStore(),
                                      rect.width(),
                                      rect.height(),
                                      clip->colorSpace(),
@@ -692,9 +689,7 @@ void KisSelectionManager::imageResizeToSelection()
     KisImageWSP image = m_view->image();
 
     if (image && selection) {
-        image->undoAdapter()->beginMacro(i18n("Resize Image to Size of Selection"));
-        image->resize(selection->selectedExactRect(), true);
-        image->undoAdapter()->endMacro();
+        image->cropImage(selection->selectedExactRect());
     }
 }
 

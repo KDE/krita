@@ -130,7 +130,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     KUrl url;
     url.setPath(filename);
 
-    KisPNGConverter kpc(output, output->undoAdapter());
+    KisPNGConverter kpc(output);
 
     vKisAnnotationSP_it beginIt = image->beginAnnotations();
     vKisAnnotationSP_it endIt = image->endAnnotations();

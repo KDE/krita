@@ -335,7 +335,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     preset->settings()->setNode(m_resourceProvider->currentNode());
 
     m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
-    m_presetsPopup->setPreset(preset);
     m_presetsChooserPopup->setPresetFilter(paintop);
 
     Q_ASSERT(m_optionWidget && m_presetWidget);

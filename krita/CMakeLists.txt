@@ -1,9 +1,6 @@
 project(krita)
 
 
-# turn on QImage as buffer for QPainter based canvas
-add_definitions(-DINDEPENDENT_CANVAS)
-
 # 
 # The reason for this mode is that the Debug mode disable inlining
 #

@@ -27,6 +27,7 @@
 #include "generator/kis_generator_registry.h"
 #include "generator/kis_generator.h"
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 
 class KisGeneratorLayer::Private
 {
@@ -99,6 +100,11 @@ void KisGeneratorLayer::update()
 bool KisGeneratorLayer::accept(KisNodeVisitor & v)
 {
     return v.visit(this);
+}
+
+void KisGeneratorLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
 }
 
 QIcon KisGeneratorLayer::icon() const

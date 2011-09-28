@@ -48,9 +48,6 @@ public:
 
     virtual void redo();
     virtual void undo();
-
-private:
-    bool m_lockImage;
 };
 
 

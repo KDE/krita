@@ -48,8 +48,14 @@ KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataSt
  * Duplicating tiledata
  * + new object loaded in memory
  * + it's unlocked and has refCount==0
+ *
+ * NOTE: the memory allocated by the pooler for clones is not counted
+ * by the store in memoryHardLimit. The pooler has it's own slice of
+ * memory and keeps track of the its size itself. So we should be able
+ * to disable the memory check with checkFreeMemory, otherwise, there
+ * is a deadlock.
  */
-KisTileData::KisTileData(const KisTileData& rhs)
+KisTileData::KisTileData(const KisTileData& rhs, bool checkFreeMemory)
     : m_state(NORMAL),
       m_mementoFlag(0),
       m_age(0),
@@ -58,7 +64,9 @@ KisTileData::KisTileData(const KisTileData& rhs)
       m_pixelSize(rhs.m_pixelSize),
       m_store(rhs.m_store)
 {
-    m_store->checkFreeMemory();
+    if(checkFreeMemory) {
+        m_store->checkFreeMemory();
+    }
     m_data = allocateData(m_pixelSize);
 
     memcpy(m_data, rhs.data(), m_pixelSize * WIDTH * HEIGHT);

@@ -41,6 +41,7 @@
 #include <KoInsets.h>
 #include <KoPostscriptPaintDevice.h>
 #include <KoShape.h>
+#include <KoShapeContainer.h>
 
 #include <kdebug.h>
 #include <QTextBlock>
@@ -99,6 +100,7 @@ public:
     int anchoringIndex; // index of last not positioned inline object inside textAnchors
     bool anAnchorIsPlaced;
     QRectF anchoringParagraphRect;
+    QRectF anchoringLayoutEnvironmentRect;
     bool allowPositionInlineObject;
 
     QHash<KoShape*,KoTextLayoutObstruction*> anchoredObstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
@@ -341,6 +343,24 @@ void KoTextDocumentLayout::registerAnchoredObstruction(KoTextLayoutObstruction *
     d->anchoredObstructions.insert(obstruction->shape(), obstruction);
 }
 
+qreal KoTextDocumentLayout::maxYOfAnchoredObstructions(int firstCursorPosition, int lastCursorPosition) const
+{
+    qreal y = 0.0;
+    int index = 0;
+
+    while (index < d->anchoringIndex) {
+        Q_ASSERT(index < d->textAnchors.count());
+        KoTextAnchor *textAnchor = d->textAnchors[index];
+
+        if (textAnchor->flowWithText() && textAnchor->positionInDocument() >= firstCursorPosition
+                            && textAnchor->positionInDocument() <= lastCursorPosition) {
+            y = qMax(y, textAnchor->shape()->boundingRect().bottom() - textAnchor->shape()->parent()->boundingRect().y());
+        }
+        ++index;
+    }
+    return y;
+}
+
 void KoTextDocumentLayout::positionAnchoredObstructions()
 {
     if (!d->anchoringRootArea)
@@ -391,6 +411,11 @@ void KoTextDocumentLayout::setAnchoringParagraphRect(const QRectF &paragraphRect
     d->anchoringParagraphRect = paragraphRect;
 }
 
+void KoTextDocumentLayout::setAnchoringLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect)
+{
+    d->anchoringLayoutEnvironmentRect = layoutEnvironmentRect;
+}
+
 void KoTextDocumentLayout::allowPositionInlineObject(bool allow)
 {
     d->allowPositionInlineObject = allow;
@@ -417,7 +442,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
         // if there is no anchor strategy set then create one
         if (!anchor->anchorStrategy()) {
             int index = d->textAnchors.count();
-            if (anchor->behavesAsCharacter()) {
+            if (anchor->anchorType() == KoTextAnchor::AnchorAsCharacter) {
                 anchor->setAnchorStrategy(new InlineAnchorStrategy(anchor, d->anchoringRootArea));
             } else {
                 anchor->setAnchorStrategy(new FloatingAnchorStrategy(anchor, d->anchoringRootArea));
@@ -448,6 +473,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
             anchor->updatePosition(document(), position, cf);
         }
         static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setParagraphRect(d->anchoringParagraphRect);
+        static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setLayoutEnvironmentRect(d->anchoringLayoutEnvironmentRect);
     }
     else if (obj) {
         obj->updatePosition(document(), position, cf);

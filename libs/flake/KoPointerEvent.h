@@ -225,6 +225,7 @@ public:
 
 protected:
     friend class KoToolProxy;
+    friend class KisScratchPadEventFilter;
     /// called by KoToolProxy to set which button was pressed.
     void setTabletButton(Qt::MouseButton button);
 private:

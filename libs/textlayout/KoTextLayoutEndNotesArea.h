@@ -41,6 +41,10 @@ public:
     /// Returns true if it has reached the end of the frame
     bool layout(FrameIterator *cursor);
 
+    KoPointedAt hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) const;
+
+    QRectF selectionBoundingBox(QTextCursor &cursor) const;
+
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 
 private:

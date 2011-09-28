@@ -87,7 +87,6 @@ struct KisTool::Private {
     KoAbstractGradient * currentGradient;
     KoColor currentFgColor;
     KoColor currentBgColor;
-    QString currentPaintOp;
     KisPaintOpPresetSP currentPaintOpPreset;
     KisNodeSP currentNode;
     float currentExposure;
@@ -656,14 +655,12 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
     }
     else
 #endif
-#ifdef INDEPENDENT_CANVAS
     if (m_outlinePaintMode==XOR_MODE && !(isCanvasOpenGL() && useWorkaround)) {
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
         painter->drawPath(path);
     }
     else/* if (m_outlinePaintMode==BW_MODE)*/
-#endif
     {
         QPen pen = painter->pen();
         pen.setWidth(3);

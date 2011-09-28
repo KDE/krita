@@ -121,9 +121,8 @@ private slots:
     void slotConfigChanged();
 
 private:
-#ifdef INDEPENDENT_CANVAS
     QImage m_buffer;
-#endif
+
     class Private;
     Private * const m_d;
 };

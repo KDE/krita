@@ -25,6 +25,8 @@
 #include "kis_node.h"
 
 class QBitArray;
+class KisUndoAdapter;
+class KisPostExecutionUndoAdapter;
 
 /**
  * For classes that support indirect painting.
@@ -48,12 +50,15 @@ public:
     void setTemporaryOpacity(quint8 o);
     void setTemporaryChannelFlags(const QBitArray& channelFlags);
 
+    void setDirty(const QRect &rect);
+
     /**
      * Writes the temporary target into the paint device of the layer.
      * This action will lock the temporary target itself.
      */
-    void mergeToLayer(KisLayerSP layer, const QRegion &region,
-                      const QString &transactionText);
+    void mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText);
+    void mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const QString &transactionText);
+
 
     /**
      * Lock the temporary target.
@@ -77,9 +82,23 @@ public:
     const QBitArray& temporaryChannelFlags() const;
 
 private:
+    /**
+     * Adds a dirty rect to the list of rects those should be
+     * merged to the layer after the indirect painting is finished
+     * WARNING: should be called with the lock held
+     *
+     * \see lockTemporaryTarget()
+     */
+    void addIndirectlyDirtyRect(const QRect &rect);
+    QRegion indirectlyDirtyRegion();
+
+    template<class UndoAdapter>
+        void mergeToLayerImpl(KisLayerSP layer,
+                              UndoAdapter *undoAdapter,
+                              const QString &transactionText);
+private:
     struct Private;
     Private* const d;
-
 };
 
 

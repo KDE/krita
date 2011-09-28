@@ -76,6 +76,7 @@ public:
        @return true if the operation succeeded, false if it failed.
     */
     bool accept(KisNodeVisitor &v);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
 protected:
     KisPaintDeviceSP tryObligeChild() const;

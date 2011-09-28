@@ -55,18 +55,9 @@ public slots:
      */
     qint32 importImage(const KUrl& url = KUrl());
 
-    void resizeCurrentImage(qint32 w, qint32 h, bool cropLayers = false);
     void resizeCurrentImage(qint32 w, qint32 h, qint32 xOffset, qint32 yOffset);
-    
-    /**
-     * Scale the current image
-     *
-     * @param sx x-axis scale factor
-     * @param sy y-axis scale factor
-     * @param filterStrategy filtering strategy be used to scaling pixels 
-     * @param scaleOnlyShapes only scale shapes, but not image and pixels
-     */
-    void scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy, bool scaleOnlyShapes = false);
+    void scaleCurrentImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);
+
     void rotateCurrentImage(double radians);
     void shearCurrentImage(double angleX, double angleY);
     void slotImageProperties();

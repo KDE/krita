@@ -99,7 +99,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         }
         int blockOutlineLevel = format.property(KoParagraphStyle::OutlineLevel).toInt();
 
-        if (cursor.currentTable() != currentTable) {
+        if (cursor.currentTable() && cursor.currentTable() != currentTable) {
             // Call the code to save the table....
             saveTable(cursor.currentTable(), listStyles);
             // We skip to the end of the table.
@@ -108,7 +108,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             continue;
         }
 
-        if (cursor.currentList() != currentList) {
+        if (cursor.currentList() && cursor.currentList() != currentList) {
             int previousBlockNumber = block.blockNumber();
             block = saveList(block, listStyles, 1, currentTable);
             int blockNumberToProcess = block.blockNumber();

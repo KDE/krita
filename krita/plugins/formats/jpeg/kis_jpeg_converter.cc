@@ -117,10 +117,9 @@ QString getColorSpaceModelForColorType(J_COLOR_SPACE color_type)
 
 }
 
-KisJPEGConverter::KisJPEGConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
+KisJPEGConverter::KisJPEGConverter(KisDoc2 *doc)
 {
     m_doc = doc;
-    m_adapter = adapter;
     m_job = 0;
     m_stop = false;
 }
@@ -226,7 +225,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     // Creating the KisImageWSP
     if (! m_image) {
-        m_image = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
+        m_image = new KisImage(m_doc->createUndoStore(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
         Q_CHECK_PTR(m_image);
         m_image->lock();
     }

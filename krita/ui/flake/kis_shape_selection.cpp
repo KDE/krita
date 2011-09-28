@@ -408,19 +408,12 @@ void KisShapeSelection::moveY(qint32 y)
 }
 
 // TODO same code as in shape layer, refactor!
-KUndo2Command* KisShapeSelection::transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
-
-    Q_UNUSED(xshear);
-    Q_UNUSED(yshear);
-    QPointF transF =  m_converter->viewToDocument(QPoint(translatex, translatey));
+KUndo2Command* KisShapeSelection::transform(const QTransform &transform) {
     QList<KoShape*> shapes = m_canvas->shapeManager()->shapes();
-    if(shapes.isEmpty())
-        return 0;
+    if(shapes.isEmpty()) return 0;
 
-    QTransform matrix;
-    matrix.translate(transF.x(), transF.y());
-    matrix.scale(xscale,yscale);
-    matrix.rotate(angle*180/M_PI);
+    QTransform realTransform = m_converter->documentToView() *
+        transform * m_converter->viewToDocument();
 
     QList<QTransform> oldTransformations;
     QList<QTransform> newTransformations;
@@ -434,7 +427,7 @@ KUndo2Command* KisShapeSelection::transform(double  xscale, double  yscale, doub
             newTransformations.append(oldTransform);
         } else {
             QTransform globalTransform = shape->absoluteTransformation(0);
-            QTransform localTransform = globalTransform * matrix * globalTransform.inverted();
+            QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
             newTransformations.append(localTransform*oldTransform);
         }
     }

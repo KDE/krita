@@ -175,7 +175,6 @@ void TestKoTextEditor::testPaste()
     Q_ASSERT(source->textEditor() != destination->textEditor());
 
     KoShapeController shapeController(0, destination);
-    KoResourceManager resourceManager;
 
     source->textEditor()->insertText("bla");
 

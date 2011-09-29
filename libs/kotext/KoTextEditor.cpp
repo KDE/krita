@@ -971,8 +971,11 @@ bool KoTextEditor::paste(KoTextEditor *editor,
     KoTextOdfSaveHelper saveHelper(editor->document(), from, to);
     KoTextDrag drag;
 
-    KoDocumentRdfBase *rdf = static_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<void*>());
-    saveHelper.setRdfModel(rdf->model());
+    KoDocumentRdfBase *rdf = 0;
+    if (shapeController->resourceManager()->hasResource(KoText::DocumentRdf)) {
+        rdf = static_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<void*>());
+        saveHelper.setRdfModel(rdf->model());
+    }
 
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
 
@@ -1805,7 +1808,7 @@ bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCurso
     // We need protection against moving in and out of note areas
     QTextCursor after(d->caret);
     bool b = after.movePosition (operation, mode, n);
- 
+
     QTextFrame *beforeFrame = d->caret.currentFrame();
     while (qobject_cast<QTextTable *>(beforeFrame)) {
         beforeFrame = beforeFrame->parentFrame();

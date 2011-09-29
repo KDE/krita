@@ -57,6 +57,10 @@ KoReportDesignerItemWeb::KoReportDesignerItemWeb(KoReportDesigner *rw, QGraphics
     init(scene);
     m_size.setSceneSize(QSizeF(100, 100));
     m_pos.setScenePos(pos);
+    
+    setSceneRect(m_pos.toScene(), m_size.toScene());
+    
+    kDebug() << m_size.toScene() << m_pos.toScene();
     m_name->setValue(m_reportDesigner->suggestEntityName("web"));
 }
 
@@ -90,7 +94,14 @@ void KoReportDesignerItemWeb::paint(QPainter *painter, const KoViewConverter &co
 //    qreal cz = target.width() / size().width();
 //    m_webPage->mainFrame()->setZoomFactor(m_zoom * cz);
 //    m_webPage->mainFrame()->setScrollPosition(m_scrollPosition.toPoint());
+    m_webPage->mainFrame()->load(QUrl("http://www.google.com"));
     m_webPage->mainFrame()->render(painter);
+    
+    kDebug() << QGraphicsRectItem::rect();
+    
+    painter->drawRect(QGraphicsRectItem::rect());
+    
+    drawHandles(painter);
 }
 
 void KoReportDesignerItemWeb::buildXML(QDomDocument &doc, QDomElement &parent)
@@ -99,10 +110,11 @@ void KoReportDesignerItemWeb::buildXML(QDomDocument &doc, QDomElement &parent)
     QDomElement entity = doc.createElement("report:web");
 
     // properties
-    addPropertyAsAttribute(&entity, url);
+    //addPropertyAsAttribute(&entity, url);
     addPropertyAsAttribute(&entity, m_controlSource);
     entity.setAttribute("report:z-index", zValue());
     buildXMLRect(doc, entity, &m_pos, &m_size);
+    parent.appendChild(entity);
 }
 
 void KoReportDesignerItemWeb::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)

@@ -72,6 +72,7 @@ public:
        , anchoringRootArea(0)
        , anchoringIndex(0)
        , anAnchorIsPlaced(false)
+       , anchoringSoftBreak(INT_MAX)
        , allowPositionInlineObject(true)
        , referencedLayout(0)
        , defaultTabSizing(0)
@@ -96,9 +97,11 @@ public:
     QHash<int, KoInlineObjectExtent> inlineObjectExtents; // maps text-position to whole-line-height of an inline object
     int inlineObjectOffset;
     QList<KoTextAnchor *> textAnchors; // list of all inserted inline objects
+    QList<KoTextAnchor *> foundAnchors; // anchors found in an iteration run
     KoTextLayoutRootArea *anchoringRootArea;
     int anchoringIndex; // index of last not positioned inline object inside textAnchors
     bool anAnchorIsPlaced;
+    int anchoringSoftBreak;
     QRectF anchoringParagraphRect;
     QRectF anchoringLayoutEnvironmentRect;
     bool allowPositionInlineObject;
@@ -361,6 +364,10 @@ qreal KoTextDocumentLayout::maxYOfAnchoredObstructions(int firstCursorPosition, 
     return y;
 }
 
+int KoTextDocumentLayout::anchoringSoftBreak() const
+{
+    return d->anchoringSoftBreak;
+}
 void KoTextDocumentLayout::positionAnchoredObstructions()
 {
     if (!d->anchoringRootArea)
@@ -439,6 +446,8 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     // layout and not this early
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(obj);
     if (anchor && d->anchoringRootArea->associatedShape()) {
+        d->foundAnchors.append(anchor);
+
         // if there is no anchor strategy set then create one
         if (!anchor->anchorStrategy()) {
             int index = d->textAnchors.count();
@@ -494,6 +503,7 @@ void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
     d->anAnchorIsPlaced = false;
     d->anchoringRootArea = rootArea;
     d->allowPositionInlineObject = true;
+    d->anchoringSoftBreak = INT_MAX;
 }
 
 void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format)
@@ -585,6 +595,7 @@ bool KoTextDocumentLayout::doLayout()
             bool finished;
             FrameIterator *tmpPosition = 0;
             do {
+                d->foundAnchors.clear();
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 finished = rootArea->layoutRoot(tmpPosition);
@@ -594,6 +605,13 @@ bool KoTextDocumentLayout::doLayout()
                     ++d->anchoringIndex;
                 }
             } while (d->anchoringIndex < d->textAnchors.count());
+                foreach (KoTextAnchor *anchor, d->textAnchors) {
+                    if (!d->foundAnchors.contains(anchor)) {
+                        qDebug() << "an anchor has disappeared"<<anchor->positionInDocument();
+                        d->anchoredObstructions.remove(anchor->shape());
+                        d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
+                    }
+                }
             if (d->textAnchors.count() > 0) {
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
@@ -656,6 +674,7 @@ bool KoTextDocumentLayout::doLayout()
             // Layout all that can fit into that root area
             FrameIterator *tmpPosition = 0;
             do {
+                d->foundAnchors.clear();
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 rootArea->layoutRoot(tmpPosition);
@@ -665,6 +684,13 @@ bool KoTextDocumentLayout::doLayout()
                     ++d->anchoringIndex;
                 }
             } while (d->anchoringIndex < d->textAnchors.count());
+                foreach (KoTextAnchor *anchor, d->textAnchors) {
+                    if (!d->foundAnchors.contains(anchor)) {
+                        qDebug() << "an anchor has disappeared"<<anchor->positionInDocument();
+                        d->anchoredObstructions.remove(anchor->shape());
+                        d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
+                    }
+                }
             if (d->textAnchors.count() > 0) {
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);

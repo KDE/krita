@@ -1140,6 +1140,18 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             }
         }
 
+        if (documentLayout()->anchoringSoftBreak() <= block.position() + line.textStart() + line.textLength()) {
+            //don't add an anchor that has been moved away 
+            line.setNumColumns(documentLayout()->anchoringSoftBreak() - block.position() - line.textStart(), line.width());
+            softBreak = true;
+            // if the softBreakPos is at the start of the block stop here so
+            // we don't add a line here. That fixes the problem that e.g. the counter is before
+            // the page break and the text is after the page break
+            if (!virginPage() && documentLayout()->anchoringSoftBreak() == block.position()) {
+                return false;
+            }
+        }
+
         findFootNotes(block, line);
         if (bottomOfText > maximumAllowedBottom()) {
             // We can not fit line within our allowed space

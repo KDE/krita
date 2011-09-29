@@ -180,7 +180,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
         QTextLayout *layout = block.layout();
         QTextFrame::iterator next = it;
         ++next;
-        if (next != stop && point.y() > layout->boundingRect().bottom()) {
+        if (next != stop && next.currentFrame() == 0 && point.y() > layout->boundingRect().bottom()) {
             // just skip this block.
             continue;
         }

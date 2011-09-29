@@ -158,7 +158,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
                     return pointedAt;
                 }
             }
-            continue;
+            break;
         } else {
             if (!block.isValid())
                 continue;
@@ -298,12 +298,12 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
                     return retval.translated(0, m_verticalAlignOffset);
                 }
                 if (cursor.selectionStart() > subFrame->lastPosition()) {
-                    continue;
+                    break;
                 }
                 if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
                     return m_endNotesArea->selectionBoundingBox(cursor).translated(0, m_verticalAlignOffset);
                 }
-                continue;
+                break;
             }
         } else {
             if (!block.isValid())
@@ -470,6 +470,12 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 m_y = m_endNotesArea->bottom();
                 delete cursor->currentSubFrameIterator;
                 cursor->currentSubFrameIterator = 0;
+
+                // we have layouted till the end of the document except for a blank block
+                // which we should ignore
+                ++(cursor->it);
+                ++(cursor->it);
+                break;
             }
         } else if (block.isValid()) {
             if (block.blockFormat().hasProperty(KoParagraphStyle::GeneratedDocument)) {

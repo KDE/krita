@@ -567,7 +567,6 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         bool atEnd = cursor->it.atEnd();
         if (!atEnd) {
             ++(cursor->it);
-            atEnd = cursor->it.atEnd();
         }
     }
     m_endOfArea = new FrameIterator(cursor);

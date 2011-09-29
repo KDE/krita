@@ -204,5 +204,5 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
     }
 
     QHash<QTextList *, QString> listStyles = d->saveListStyles(fromblock, to);
-    d->writeBlocks(document, from, to, listStyles, currentTable, currentList);
+    d->writeBlocks(const_cast<QTextDocument *>(document), from, to, listStyles, currentTable, currentList);
 }

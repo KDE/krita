@@ -222,14 +222,6 @@ bool KoTextEditor::Private::deleteInlineObjects(bool backwards)
 
 }
 
-void KoTextEditor::Private::deleteSelection()
-{
-    QTextCursor delText = QTextCursor(caret);
-    if (!delText.hasSelection())
-        delText.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
-    caret.deleteChar();
-}
-
 void KoTextEditor::Private::runDirectionUpdater()
 {
     while (! dirtyBlocks.isEmpty()) {
@@ -1006,7 +998,7 @@ void KoTextEditor::deleteChar()
         if (!d->caret.hasSelection())
             d->caret.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
 
-        d->deleteSelection();
+        d->caret.deleteChar();
 
         d->caret.setCharFormat(charFormat);
     }
@@ -1030,7 +1022,7 @@ void KoTextEditor::deletePreviousChar()
         if (!d->caret.hasSelection())
             d->caret.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
 
-        d->deleteSelection();
+        d->caret.deleteChar();
 
         d->caret.setCharFormat(charFormat);
     }

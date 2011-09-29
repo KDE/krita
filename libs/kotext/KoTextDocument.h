@@ -138,9 +138,7 @@ public:
     /// Set the KoInlineTextObjectManager
     void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
-    QTextFrame* footNotesFrame();
-
-    QTextFrame* endNotesFrame();
+    QTextFrame* auxillaryFrame();
 
     /**
      * Specifies if tabs are relative to paragraph indent.
@@ -176,10 +174,7 @@ public:
         UndoStack,
         TextEditor,
         LineNumberingConfiguration,
-        EndNotesFrame,
-        FootNotesFrame,
-        CitationsFrame,
-        BibliographyFrame,
+        AuxillaryFrame,
         RelativeTabs,
         HeadingList,
         Selections,
@@ -195,9 +190,7 @@ public:
     static const QUrl UndoStackURL;
     static const QUrl TextEditorURL;
     static const QUrl LineNumberingConfigurationURL;
-    static const QUrl EndNotesFrameURL;
-    static const QUrl FootNotesFrameURL;
-    static const QUrl CitationsFrameURL;
+    static const QUrl AuxillaryFrameURL;
     static const QUrl RelativeTabsURL;
     static const QUrl HeadingListURL;
     static const QUrl SelectionsURL;

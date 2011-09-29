@@ -67,8 +67,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         QTextCursor cursor(block);
 
         int frameType = cursor.currentFrame()->format().intProperty(KoText::SubFrameType);
-        if (frameType == KoText::EndNotesFrameType
-            || frameType == KoText::FootNotesFrameType) {
+        if (frameType == KoText::AuxillaryFrameType) {
             break; // we've reached the "end" (end/footnotes saved by themselves)
                    // note how NoteFrameType passes through here so the notes can
                    // call writeBlocks to save their contents.

@@ -1580,7 +1580,7 @@ KoInlineNote *KoTextEditor::insertFootNote()
     KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
     KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
     manager->insertInlineObject(d->caret,note);
-    note->setMotherFrame(KoTextDocument(d->caret.document()).footNotesFrame());
+    note->setMotherFrame(KoTextDocument(d->caret.document()).auxillaryFrame());
     cursor()->setPosition(note->textFrame()->lastPosition());
     d->updateState(KoTextEditor::Private::NoOp);
     return note;
@@ -1592,7 +1592,7 @@ KoInlineNote *KoTextEditor::insertEndNote()
     KoInlineNote *note = new KoInlineNote(KoInlineNote::Endnote);
     KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
     manager->insertInlineObject(d->caret,note);
-    note->setMotherFrame(KoTextDocument(d->caret.document()).endNotesFrame());
+    note->setMotherFrame(KoTextDocument(d->caret.document()).auxillaryFrame());
     cursor()->setPosition(note->textFrame()->lastPosition());
     d->updateState(KoTextEditor::Private::NoOp);
     return note;

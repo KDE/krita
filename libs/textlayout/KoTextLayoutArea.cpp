@@ -151,7 +151,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
-            if (it.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
+            if (it.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
                 if (point.y() > m_endNotesArea->top()
                         && point.y() < m_endNotesArea->bottom()) {
                     pointedAt = m_endNotesArea->hitTest(point, accuracy);
@@ -293,7 +293,7 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
-            if (it.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
+            if (it.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
                 if (cursor.selectionEnd() < subFrame->firstPosition()) {
                     return retval.translated(0, m_verticalAlignOffset);
                 }
@@ -444,7 +444,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             delete cursor->currentTableIterator;
             cursor->currentTableIterator = 0;
         } else if (subFrame) {
-            if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
+            if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
                 Q_ASSERT(m_endNotesArea == 0);
                 m_endNotesArea = new KoTextLayoutEndNotesArea(this, m_documentLayout);
                 m_y += m_bottomSpacing;

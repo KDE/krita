@@ -40,6 +40,7 @@ struct ChannelInfo {
     quint64 channelDataStart;
     quint64 channelDataLength;
     QVector<quint32> rleRowLengths;
+    int channelOffset;
 };
 
 class PSDLayerRecord
@@ -116,14 +117,10 @@ private:
     bool doRGB(KisPaintDeviceSP dev ,QIODevice *io);
     bool doCMYK(KisPaintDeviceSP dev ,QIODevice *io);
     bool doLAB(KisPaintDeviceSP dev ,QIODevice *io);
+    bool doGray(KisPaintDeviceSP dev ,QIODevice *io);
 
     const PSDHeader m_header;
-    quint16 m_compression;
-    quint64 m_channelDataLength;
-    quint32 m_channelSize;
 
-    QVector<ChannelInfo> m_channelInfoRecords;
-    QVector<int> m_channelOffsets; // this doesn't need to be global
 };
 
 QDebug operator<<(QDebug dbg, const PSDLayerRecord& layer);

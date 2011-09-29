@@ -375,7 +375,7 @@ bool PSDLayerRecord::read(QIODevice* io)
             return false;
         }
 
-        qDebug() << "blending block data length" << blendingDataLength << ", pos" << io->pos();
+        //qDebug() << "blending block data length" << blendingDataLength << ", pos" << io->pos();
 
         blendingRanges.data = io->read(blendingDataLength);
         if ((quint32)blendingRanges.data.size() != blendingDataLength) {
@@ -496,125 +496,149 @@ bool PSDLayerRecord::valid()
 
 bool PSDLayerRecord::readChannels(QIODevice *io, KisPaintDeviceSP device)
 {
-
-    quint64 start = io->pos();
-    // Your Code Goes Here :P
-    // copy from doRGB...
-    foreach(ChannelInfo *channelInfo, channelInfoRecords) {
-        qDebug() << "channel" << channelInfo->channelId << channelInfo->channelDataStart << channelInfo->channelDataLength<<"COMPRESSION TYPE " << channelInfo->compressionType;
-
-    }
-    qDebug() << "Position before read " << io->pos();
-    m_channelSize = m_header.channelDepth/8;
-    m_channelDataLength = (bottom-top) * (right-left )* m_channelSize;
-    qDebug()<<"Height" << bottom-top << "Width:"<< right-left;
-    // io->seek(start);
-
     switch (m_header.colormode) {
     case Bitmap:
-        break;
+        return false; // Not supported;
     case Grayscale:
-        break;
+        return doGray(device, io);
     case Indexed:
         break;
     case RGB:
-
-        doRGB(device, io);
-        break;
+        return doRGB(device, io);
     case CMYK:
-        //    doCMYK(dev,io);
-        break;
+        return doCMYK(device,io);
     case MultiChannel:
-        break;
+        return false; // Not supported
     case DuoTone:
-        break;
+        return false; // Not supported
     case Lab:
-        //  doLAB(dev, io);
-        break;
+        return doLAB(device, io);
     case UNKNOWN:
-        break;
     default:
-        break;
+        return false;
     }
 
-    return true;
+    return false;
 }
 
-bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io){
-    m_channelSize = m_header.channelDepth/8;
-    m_channelDataLength = (bottom-top) * (right-left )* m_channelSize;
-    qDebug()<< "I went in doRGB";
-    foreach(ChannelInfo *channelInfo, channelInfoRecords) {
-        qDebug() << "channel" << channelInfo->channelId <<"COMPRESSION TYPE " << channelInfo->compressionType;
-        int channelid = 0;
+bool PSDLayerRecord::doGray(KisPaintDeviceSP dev, QIODevice *io)
+{
+    return false;
+}
 
-        for (int row = 0; row < m_header.height; row++) {
+bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
+{
+    quint64 oldPosition = io->pos();
 
-            KisHLineIterator it = dev->createHLineIterator(0, row, m_header.width);
-            QVector<QByteArray> channelBytes;
+    int width = right - left;
+    int channelSize = m_header.channelDepth / 8;
+    int uncompressedLength = width * channelSize;
 
-            for (int channel = 0; channel < m_header.nChannels; channel++) {
+    if (channelInfoRecords.first()->compressionType == Compression::ZIP
+            || channelInfoRecords.first()->compressionType == Compression::ZIPWithPrediction) {
+
+        // Zip needs to be implemented here.
+        return false;
+    }
 
 
-                switch (channelInfo->compressionType) {
+    for (int row = top ; row < bottom; row++)
+    {
+        KisHLineIterator it = dev->createHLineIterator(left, row, width);
+        QMap<quint16, QByteArray> channelBytes;
 
-                case Compression::Uncompressed:
+        foreach(ChannelInfo *channelInfo, channelInfoRecords) {
 
-                {
-                    qDebug()<<"Uncompressed";
+            io->seek(channelInfo->channelDataStart + channelInfo->channelOffset);
+
+            if (channelInfo->compressionType == Compression::Uncompressed) {
+                channelBytes[channelInfo->channelId] = io->read(uncompressedLength);
+                channelInfo->channelOffset += uncompressedLength;
+            }
+            else if (channelInfo->compressionType == Compression::RLE) {
+                int rleLength = channelInfo->rleRowLengths[row - top];
+                QByteArray compressedBytes = io->read(rleLength);
+                QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType);
+                channelBytes.insert(channelInfo->channelId, uncompressedBytes);
+                channelInfo->channelOffset += rleLength;
+
+            }
+        }
+
+        for (quint64 col = 0; col < width; col++){
+
+            if (channelSize == 1) {
+                quint8 opacity = OPACITY_OPAQUE_U8;
+                if (!channelBytes.contains(-1)) {
+                    opacity = channelBytes[-1].constData()[col];
                 }
-                break;
+                KoRgbU8Traits::setOpacity(it.rawData(), opacity, 1);
 
-                case Compression::RLE:
-                {
-                    io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[channel]);
-                    int uncompressedLength = m_header.width * m_header.channelDepth / 8;
+                quint8 red = channelBytes[0].constData()[col];
+                KoRgbU8Traits::setRed(it.rawData(), red);
 
-                    qDebug() << "channel" << channel << "row" << row << "rle length" << m_channelInfoRecords[channel].rleRowLengths[row] << "uncompressed length" << uncompressedLength;
+                quint8 green = channelBytes[1].constData()[col];
+                KoRgbU8Traits::setGreen(it.rawData(), green);
 
-                    QByteArray compressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
-                    QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, m_channelInfoRecords[channel].compressionType);
-                    qDebug() << "uncompressedBytes" << uncompressedBytes.length();
-                    channelBytes.append(uncompressedBytes);
-
-                    m_channelOffsets[channel] +=  m_channelInfoRecords[channel].rleRowLengths[row];
-                    qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
-
-                }
-                break;
-
-                default:
-                    break;
-                }
+                quint8 blue = channelBytes[2].constData()[col];
+                KoRgbU8Traits::setBlue(it.rawData(), blue);
 
             }
 
-            qDebug() << "------------------------------------------";
-            qDebug() << "channel offset:"<< m_channelOffsets[channelid] <<": "<<  channelid;
+            else if (channelSize == 2) {
 
-            for (int col = 0; col < m_header.width; col++) {
-
-                if (m_channelSize == 1) {
-
-                    quint8 red = channelBytes[0].constData()[col];
-                    KoRgbU8Traits::setRed(it.rawData(), red);
-
-                    quint8 green = channelBytes[1].constData()[col];
-                    KoRgbU8Traits::setGreen(it.rawData(), green);
-
-                    quint8 blue = channelBytes[2].constData()[col];
-                    KoRgbU8Traits::setBlue(it.rawData(), blue);
-
+                quint16 opacity = quint16_MAX;
+                if (!channelBytes.contains(-1)) {
+                    opacity = channelBytes[-1].constData()[col];
                 }
-}
+                // We don't have a convenient setOpacity function :-(
+                memcpy(it.rawData() + KoRgbU16Traits::alpha_pos, &opacity, sizeof(quint16));
 
+                quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
+                KoRgbU16Traits::setRed(it.rawData(), red);
+
+                quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
+                KoRgbU16Traits::setGreen(it.rawData(), green);
+
+                quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
+                KoRgbU16Traits::setBlue(it.rawData(), blue);
+
+            }
+            else {
+                // Unsupported channel sizes for now
+                return false;
+            }
+/*
+            // XXX see implementation Openexr
+            else if (channelSize == 4) {
+
+                quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
+                KoRgbU16Traits::setRed(it.rawData(), red);
+
+                quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
+                KoRgbU16Traits::setGreen(it.rawData(), green);
+
+                quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
+                KoRgbU16Traits::setBlue(it.rawData(), blue);
+            }
+*/
+            ++it;
         }
-
-        qDebug()<<"IO Position: "<<io->pos();
     }
+    // go back to the old position, because we've been seeking all over the place
+    io->seek(oldPosition);
     return true;
 }
 
+bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
+{
+    return false;
+}
+
+bool PSDLayerRecord::doLAB(KisPaintDeviceSP dev, QIODevice *io)
+{
+    return false;
+}
 
 
 QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)

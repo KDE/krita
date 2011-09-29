@@ -56,7 +56,7 @@ bool PSDColorModeBlock::read(QIODevice* io)
         for (int i=0; i<=767;)
         {
           colormap.append(qRgb(data[i],data[i++],data[i++]));
-          qDebug()<<colormap<<i;
+          //qDebug()<<colormap<<i;
         }
 
 

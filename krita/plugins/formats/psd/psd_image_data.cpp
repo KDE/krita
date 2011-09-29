@@ -43,13 +43,13 @@ PSDImageData::~PSDImageData() {
 
 bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
 
-    qDebug() << "Position before read " << io->pos();
+    //qDebug() << "Position before read " << io->pos();
     psdread(io, &m_compression);
-    qDebug() << "COMPRESSION TYPE " << m_compression;
+    //qDebug() << "COMPRESSION TYPE " << m_compression;
     quint64 start = io->pos();
     m_channelSize = m_header->channelDepth/8;
     m_channelDataLength = m_header->height * m_header->width * m_channelSize;
-    qDebug()<<"Height" << m_header->height << "Width:"<< m_header->width;
+    //qDebug()<<"Height" << m_header->height << "Width:"<< m_header->width;
     switch (m_compression) {
 
     case 0: // Uncompressed
@@ -68,11 +68,11 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
 
         for (int channel = 0; channel < m_header->nChannels; channel++) {
 
-            qDebug() << "Channel ID: " << m_channelInfoRecords[channel].channelId;
-            qDebug() << "Channel Compression Type: " << m_channelInfoRecords[channel].compressionType;
-            qDebug() << "Channel Data Start: " << m_channelInfoRecords[channel].channelDataStart;
-            qDebug() << "Channel Data Length: " << m_channelInfoRecords[channel].channelDataLength;
-            qDebug() << "---------------------------------------------------";
+            //qDebug() << "Channel ID: " << m_channelInfoRecords[channel].channelId;
+            //qDebug() << "Channel Compression Type: " << m_channelInfoRecords[channel].compressionType;
+            //qDebug() << "Channel Data Start: " << m_channelInfoRecords[channel].channelDataStart;
+            //qDebug() << "Channel Data Length: " << m_channelInfoRecords[channel].channelDataLength;
+            //qDebug() << "---------------------------------------------------";
 
         }
 
@@ -84,7 +84,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         case Indexed:
             break;
         case RGB:
-            qDebug()<<"RGB";
+            //qDebug()<<"RGB";
             doRGB(dev, io);
             break;
         case CMYK:
@@ -107,7 +107,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
 
     case 1: // RLE
     {
-        qDebug()<<"RLE ENCODED";
+        //qDebug()<<"RLE ENCODED";
         quint32 rlelength = 0;        
         
         // The start of the actual channel data is _after_ the RLE rowlengths block
@@ -141,13 +141,13 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         }
 
         for (int channel = 0; channel < m_header->nChannels; channel++) {
-            qDebug() << "Channel offset" << m_channelOffsets[channel];
-            qDebug() << "Channel ID: " << m_channelInfoRecords[channel].channelId;
-            qDebug() << "Channel Compression Type: " << m_channelInfoRecords[channel].compressionType;
-            qDebug() << "Channel Data Start: " << m_channelInfoRecords[channel].channelDataStart;
-            qDebug() << "Channel Data Length: " << m_channelInfoRecords[channel].channelDataLength;
-            qDebug() << "Found " << m_channelInfoRecords[channel].rleRowLengths.size() << "rows";
-            qDebug() << "---------------------------------------------------";
+            //qDebug() << "Channel offset" << m_channelOffsets[channel];
+            //qDebug() << "Channel ID: " << m_channelInfoRecords[channel].channelId;
+            //qDebug() << "Channel Compression Type: " << m_channelInfoRecords[channel].compressionType;
+            //qDebug() << "Channel Data Start: " << m_channelInfoRecords[channel].channelDataStart;
+            //qDebug() << "Channel Data Length: " << m_channelInfoRecords[channel].channelDataLength;
+            //qDebug() << "Found " << m_channelInfoRecords[channel].rleRowLengths.size() << "rows";
+            //qDebug() << "---------------------------------------------------";
         }
 
         switch (m_header->colormode) {
@@ -177,7 +177,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         break;
     }
     case 2: // ZIP without prediction
-        qDebug()<<"ZIP without prediction";
+        //qDebug()<<"ZIP without prediction";
 
         switch (m_header->colormode) {
         case Bitmap:
@@ -204,7 +204,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         break;
 
     case 3: // ZIP with prediction
-        qDebug()<<"ZIP with prediction";
+        //qDebug()<<"ZIP with prediction";
 
         switch (m_header->colormode) {
         case Bitmap:
@@ -257,7 +257,7 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[0]);
                 channelBytes.append(io->read(m_header->width*m_channelSize));
                 // Debug
-                qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
+                //qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
             }
                 break;
 
@@ -266,15 +266,15 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[channel]);
                 int uncompressedLength = m_header->width * m_header->channelDepth / 8;
 
-                qDebug() << "channel" << channel << "row" << row << "rle length" << m_channelInfoRecords[channel].rleRowLengths[row] << "uncompressed length" << uncompressedLength;
+                //qDebug() << "channel" << channel << "row" << row << "rle length" << m_channelInfoRecords[channel].rleRowLengths[row] << "uncompressed length" << uncompressedLength;
 
                 QByteArray compressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
                 QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, m_channelInfoRecords[channel].compressionType);
-                qDebug() << "uncompressedBytes" << uncompressedBytes.length();
+                //qDebug() << "uncompressedBytes" << uncompressedBytes.length();
                 channelBytes.append(uncompressedBytes);
 
                 m_channelOffsets[channel] +=  m_channelInfoRecords[channel].rleRowLengths[row];
-                qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
+                //qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
 
             }
                 break;
@@ -295,8 +295,8 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
             m_channelOffsets[channelid] += (m_header->width * m_channelSize);
         }
 
-        qDebug() << "------------------------------------------";
-        qDebug() << "channel offset:"<< m_channelOffsets[channelid] <<": "<<  channelid;
+        //qDebug() << "------------------------------------------";
+        //qDebug() << "channel offset:"<< m_channelOffsets[channelid] <<": "<<  channelid;
 
         for (int col = 0; col < m_header->width; col++) {
 
@@ -346,7 +346,7 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 
     }
 
-    qDebug()<<"IO Position: "<<io->pos();
+    //qDebug()<<"IO Position: "<<io->pos();
     return true;
 }
 
@@ -363,13 +363,13 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
 
             io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets);
             channelBytes.append(io->read(m_header->width*m_channelSize));
-            qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
+            //qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
 
         }
         m_channelOffsets += (m_header->width * m_channelSize);
 
-        qDebug() << "------------------------------------------";
-        qDebug() << "channel offset:"<< m_channelOffsets ;
+        //qDebug() << "------------------------------------------";
+        //qDebug() << "channel offset:"<< m_channelOffsets ;
 
         for (int col = 0; col < m_header->width; col++) {
 
@@ -441,14 +441,14 @@ bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io) {
 
             io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets);
             channelBytes.append(io->read(m_header->width*m_channelSize));
-            qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
+            //qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
 
         }
         m_channelOffsets += (m_header->width * m_channelSize);
 
-        qDebug() << "------------------------------------------";
-        qDebug() << "channel offset:"<< m_channelOffsets ;
-        qDebug() << "------------------------------------------";
+        //qDebug() << "------------------------------------------";
+        //qDebug() << "channel offset:"<< m_channelOffsets ;
+        //qDebug() << "------------------------------------------";
 
         for (int col = 0; col < m_header->width; col++) {
 

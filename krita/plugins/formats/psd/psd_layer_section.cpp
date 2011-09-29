@@ -183,7 +183,7 @@ bool PSDLayerSection::read(QIODevice* io)
                             return 0;
                         }
                     }
-                    //qDebug() << "rle byte count" << byteCount;
+                    ////qDebug() << "rle byte count" << byteCount;
                     channelInfo->rleRowLengths << byteCount;
                 }
             }

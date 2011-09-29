@@ -164,16 +164,17 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
             dbgFile << "Going to read channels for layer " << i << layerRecord->layerName;
 
             KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
-
+  layer->setCompositeOp(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
             if (!layerRecord->readChannels(&f, layer->paintDevice())) {
                 dbgFile << "failed reading channels for layer: " << layerRecord->layerName << layerRecord->error;
                 return KisImageBuilder_RESULT_FAILURE;
             }
 
+            layer->setDirty();
             m_image->addNode(layer, m_image->rootLayer());
         }
     }
-
+    m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 

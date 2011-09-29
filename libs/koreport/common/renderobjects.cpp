@@ -116,6 +116,8 @@ OROPrimitive* OROPage::primitive(int idx)
 
 void OROPage::addPrimitive(OROPrimitive* p, bool atBeginning)
 {
+    kDebug() << "Adding primitive" << p->type() << "to page" << page();
+    
     if (p == 0)
         return;
 

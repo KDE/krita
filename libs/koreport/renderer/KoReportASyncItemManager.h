@@ -49,6 +49,7 @@ public:
     
 private:
     QQueue<RenderData*> m_renderList;
+    QList<KoReportASyncItemBase*> m_itemList;
     
 private slots:
     void itemFinished();

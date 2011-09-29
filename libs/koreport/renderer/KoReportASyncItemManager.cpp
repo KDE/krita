@@ -20,6 +20,7 @@
 
 #include "KoReportASyncItemManager.h"
 #include "common/KoReportASyncItemBase.h"
+#include <kdebug.h>
 
 KoReportASyncItemManager::KoReportASyncItemManager(QObject* parent): QObject(parent)
 {
@@ -43,13 +44,20 @@ void KoReportASyncItemManager::addItem(KoReportASyncItemBase* item, OROPage* pag
     
     m_renderList.enqueue(rdata);
     
-    connect(item, SIGNAL(finishedRendering()), this, SLOT(itemFinished()));
+    //Just connect the first instance
+    if (!m_itemList.contains(item)) {
+        m_itemList.append(item);
+        connect(item, SIGNAL(finishedRendering()), this, SLOT(itemFinished()));
+    }    
+    kDebug() << m_renderList.count();
 }
 
 void KoReportASyncItemManager::itemFinished()
 {
+    kDebug();
     if (m_renderList.count() > 0) {
         RenderData *rdata = m_renderList.dequeue();
+        rdata->item->render(rdata->page, rdata->section, rdata->offset, rdata->data, rdata->script);
     } else {
         emit(finished());
     }
@@ -57,6 +65,7 @@ void KoReportASyncItemManager::itemFinished()
 
 void KoReportASyncItemManager::startRendering()
 {
+    kDebug();
     if (m_renderList.count() > 0) {
         RenderData *rdata = m_renderList.dequeue();
         rdata->item->render(rdata->page, rdata->section, rdata->offset, rdata->data, rdata->script);

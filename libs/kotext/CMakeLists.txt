@@ -185,6 +185,7 @@ install(
     styles/KoSectionStyle.h
     styles/KoStyleManager.h
     styles/KoTableBorderStyle.h
+    styles/KoTableStyle.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/styles COMPONENT Devel
 )

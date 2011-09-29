@@ -74,6 +74,8 @@ void KoVariable::setValue(const QString &value)
     Q_D(KoVariable);
     if (d->value == value)
         return;
+    if (value.startsWith("2"))
+        qDebug();
     d->value = value;
     d->modified = true;
     if (d->document) {

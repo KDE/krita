@@ -9,6 +9,8 @@ include_directories(
 
 set(textvariables_SRCS
     VariablesPlugin.cpp
+    UserVariable.cpp
+    UserVariableFactory.cpp
     DateVariable.cpp
     DateVariableFactory.cpp
     FixedDateFormat.cpp

@@ -698,6 +698,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                         loadSection(tag, cursor);
                     } else if (localName == "table-of-content") {
                         loadTableOfContents(tag, cursor);
+                    } else if (localName == "user-field-decls") {
+                        loadVariableDeclarations(tag, cursor);
                     } else if (localName == "bibliography") {
                         loadBibliography(tag, cursor);
                     } else {
@@ -2359,6 +2361,46 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     }
     // Get out of the frame
     cursor.movePosition(QTextCursor::Right);
+}
+
+void KoTextLoader::loadVariableDeclarations(const KoXmlElement &element, QTextCursor& cursor)
+{
+    KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
+    if (textObjectManager) {
+        KoVariableManager *variableManager = textObjectManager->variableManager();
+        if (variableManager) {
+            KoXmlElement e;
+            forEachElement(e, element) {
+                QString name = e.attributeNS(KoXmlNS::text, "name");
+                QString type = e.attributeNS(KoXmlNS::office, "value-type");
+                QString value;
+                if (type == "string") {
+                    if (e.hasAttributeNS(KoXmlNS::office, "string-value"))
+                        value = e.attributeNS(KoXmlNS::office, "string-value");
+                    else // if the string-value is not present then the content defines the value
+                        value = e.toText().data();
+                } else if (type == "boolean") {
+                    value = e.attributeNS(KoXmlNS::office, "boolean-value");
+                } else if (type == "currency") {
+                    value = e.attributeNS(KoXmlNS::office, "currency");
+                } else if (type == "date") {
+                    value = e.attributeNS(KoXmlNS::office, "date-value");
+                } else if (type == "float") {
+                    value = e.attributeNS(KoXmlNS::office, "value");
+                } else if (type == "percentage") {
+                    value = e.attributeNS(KoXmlNS::office, "value");
+                } else if (type == "time") {
+                    value = e.attributeNS(KoXmlNS::office, "time-value");
+                } else if (type == "void") {
+                    value = e.attributeNS(KoXmlNS::office, "value");
+                } else {
+                    kWarning(32500) << "Unknown user-field-decl value-type=" << type;
+                    continue;
+                }
+                variableManager->setValue(name, value, true /* user defined? */ );
+            }
+        }
+    }
 }
 
 void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cursor)

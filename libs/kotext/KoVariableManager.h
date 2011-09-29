@@ -52,8 +52,11 @@ public:
      * Set or create a variable to the new value.
      * @param name the name of the variable.
      * @param value the new value.
+     * @param userDefined if true then the variable will not be added to the
+     * list of variables (means the @a variables method will not include
+     * the variable) cause the variable is a user defined variable.
      */
-    void setValue(const QString &name, const QString &value);
+    void setValue(const QString &name, const QString &value, bool userDefined = false);
 
     /**
      * Remove a variable from the store.
@@ -87,6 +90,8 @@ public:
 
     /// return a list of all variable names.
     QList<QString> variables() const;
+    /// return a list of all user defined variable names.
+    QList<QString> userVariables() const;
 
 signals:
 	void valueChanged();

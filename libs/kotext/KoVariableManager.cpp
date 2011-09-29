@@ -27,6 +27,7 @@ public:
             : lastId(KoInlineObject::VariableManagerStart) { }
     KoInlineTextObjectManager *inlineObjectManager;
     QHash<QString, int> variableMapping;
+    QStringList variableNames, userVariableNames;
     int lastId;
 };
 
@@ -41,7 +42,7 @@ KoVariableManager::~KoVariableManager()
     delete d;
 }
 
-void KoVariableManager::setValue(const QString &name, const QString &value)
+void KoVariableManager::setValue(const QString &name, const QString &value, bool userDefined)
 {
     int key;
     // we store the mapping from name to key
@@ -50,6 +51,10 @@ void KoVariableManager::setValue(const QString &name, const QString &value)
     else {
         key = d->lastId++;
         d->variableMapping.insert(name, key);
+        if (userDefined)
+            d->userVariableNames.append(name);
+        else
+            d->variableNames.append(name);
     }
     // the variable manager stores the actual value of the variable.
     d->inlineObjectManager->setProperty(static_cast<KoInlineObject::Property>(key), value);
@@ -70,6 +75,7 @@ void KoVariableManager::remove(const QString &name)
     if (key == 0)
         return;
     d->variableMapping.remove(name);
+    d->variableNames.removeOne(name);
     d->inlineObjectManager->removeProperty(static_cast<KoInlineObject::Property>(key));
 }
 
@@ -90,5 +96,10 @@ KoVariable *KoVariableManager::createVariable(const QString &name) const
 
 QList<QString> KoVariableManager::variables() const
 {
-    return d->variableMapping.keys();
+    return d->variableNames;
+}
+
+QList<QString> KoVariableManager::userVariables() const
+{
+    return d->userVariableNames;
 }

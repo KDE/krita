@@ -87,19 +87,15 @@ KoReportDesignerItemWeb::~KoReportDesignerItemWeb() //done,compared
     // do we need to clean anything up?
 }
 
-void KoReportDesignerItemWeb::paint(QPainter *painter, const KoViewConverter &converter)
+void KoReportDesignerItemWeb::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-    QRectF target = converter.documentToView(QRectF(QPointF(0, 0), QPointF(500, 500)));
-    m_webPage->setViewportSize(target.size().toSize());
-//    qreal cz = target.width() / size().width();
-//    m_webPage->mainFrame()->setZoomFactor(m_zoom * cz);
-//    m_webPage->mainFrame()->setScrollPosition(m_scrollPosition.toPoint());
-    m_webPage->mainFrame()->load(QUrl("http://www.google.com"));
-    m_webPage->mainFrame()->render(painter);
-    
-    kDebug() << QGraphicsRectItem::rect();
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
     
     painter->drawRect(QGraphicsRectItem::rect());
+    painter->drawText(rect(), 0, dataSourceAndObjectTypeName(itemDataSource(), "web-view"));
+    
+    painter->setBackgroundMode(Qt::TransparentMode);
     
     drawHandles(painter);
 }

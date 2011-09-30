@@ -38,7 +38,7 @@ public:
     void init(QGraphicsScene *scene);
     virtual ~KoReportDesignerItemWeb();
     virtual void buildXML(QDomDocument &doc, QDomElement &parent);
-    virtual void paint(QPainter *painter, const KoViewConverter &converter);
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
     virtual KoReportDesignerItemWeb *clone();
 
     using QGraphicsRectItem::paint;

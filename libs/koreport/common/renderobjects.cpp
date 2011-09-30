@@ -80,7 +80,7 @@ void ORODocument::setPageOptions(const ReportPageOptions & options)
 
 void ORODocument::notifyChange(int pageNo)
 {
-        emit(updated(pageNo));
+    emit(updated(pageNo));
 }
 
 //

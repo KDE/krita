@@ -34,7 +34,7 @@ KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
     setAttribute(Qt::WA_NoBackground);
     kDebug() << "CREATED PAGE";
     m_reportDocument = document;
-    m_page = 1;
+    m_page = 0;
     int pageWidth = 0;
     int pageHeight = 0;
 
@@ -56,11 +56,13 @@ KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
     setFixedSize(pageWidth, pageHeight);
 
     kDebug() << "PAGE IS " << pageWidth << "x" << pageHeight;
-    m_repaint = true;
+
     m_pixmap = new QPixmap(pageWidth, pageHeight);
     setAutoFillBackground(true);
 
     m_renderer = m_factory.createInstance("screen");
+    
+    connect(m_reportDocument, SIGNAL(updated(int)), this, SLOT(pageUpdated(int)));
 
     renderPage(1);
 }
@@ -79,18 +81,24 @@ void KoReportPage::paintEvent(QPaintEvent*)
 
 void KoReportPage::renderPage(int page)
 {
-    kDebug() << page;
-//js: is m_page needed?
-    m_page = page;
+    m_page = page - 1;
     m_pixmap->fill();
     QPainter qp(m_pixmap);
     if (m_reportDocument) {
         KoReportRendererContext cxt;
         cxt.painter = &qp;
-        m_renderer->render(cxt, m_reportDocument, m_page - 1);
+        m_renderer->render(cxt, m_reportDocument, m_page);
     }
-    m_repaint = true;
     repaint();
+}
+
+void KoReportPage::pageUpdated(int pageNo)
+{
+    //Refresh this page if any of the surrounding pages change
+    //!TODO A small hack becuase not every update seems to work
+    if (m_page - 1 <= pageNo  <= m_page + 1) {
+        renderPage(m_page + 1);
+    }
 }
 
 #include "KoReportPage.moc"

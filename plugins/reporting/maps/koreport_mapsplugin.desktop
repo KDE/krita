@@ -1,12 +1,17 @@
 [Desktop Entry]
 Name=Maps Report Plugin
+Name[pt]='Plugin' de Relatório de Mapas
+Name[sv]=Insticksprogram för kartrapport
+Name[uk]=Додаток карт звіту
+Name[x-test]=xxMaps Report Pluginxx
+Name[zh_TW]=地圖報告外掛程式
 Comment=Calligra Reports Maps Plugin
 Comment[da]=Kort-plugin til Calligra Reports
 Comment[es]=Complemento de mapas de informes de Calligra
 Comment[nb]=Kart-programtillegg for Calligra-rapporter
 Comment[pt]='Plugin' de Mapas dos Relatórios do Calligra
 Comment[pt_BR]=Plug-in de mapas dos relatórios do Calligra
-Comment[sv]=Calligra-insticksprogram för rapportkartor
+Comment[sv]=Calligra-insticksprogram för kartrapport
 Comment[uk]=Додаток карт у звітах Calligra
 Comment[x-test]=xxCalligra Reports Maps Pluginxx
 Comment[zh_TW]=Calligra 報告地圖外掛程式

@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Chart Report Plugin
+Name[pt]='Plugin' Web de Relatórios de Gráficos
+Name[sv]=Insticksprogram för diagramrapport
+Name[uk]=Додаток діаграм звіту
+Name[x-test]=xxChart Report Pluginxx
+Name[zh_TW]=圖表報告外掛程式
 Comment=KoReport Chart Plugin
 Comment[da]=Diagram-plugin til KoReport
 Comment[es]=Complemento de diagramas de KoReport
@@ -7,7 +12,7 @@ Comment[it]=Estensione per i grafici di KoReport
 Comment[nb]=KoReport programtillegg for diagrammer
 Comment[pt]='Plugin' de Gráficos do KoReport
 Comment[pt_BR]=Plugin de gráficos do KoReport
-Comment[sv]=Insticksprogram för Koffice rapportdiagram
+Comment[sv]=Insticksprogram för Koffice diagramrapport
 Comment[uk]=Додаток діаграм KoReport
 Comment[x-test]=xxKoReport Chart Pluginxx
 Comment[zh_TW]=KoReport 圖表外掛程式

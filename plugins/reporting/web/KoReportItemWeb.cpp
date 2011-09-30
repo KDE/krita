@@ -101,7 +101,7 @@ void KoReportItemWeb::loadFinished(bool)
     kDebug () << m_rendering;
     if (m_rendering) {
         OROPicture * pic = new OROPicture();
-        m_webPage->setViewportSize(m_webPage->mainFrame()->contentsSize());
+        m_webPage->setViewportSize(m_size.toScene().toSize());
             
         QPainter p(pic->picture());
         
@@ -114,7 +114,7 @@ void KoReportItemWeb::loadFinished(bool)
         
         pic->setPosition(pos);
         pic->setSize(size);
-        if (m_targetPage) m_targetPage->addPrimitive(pic);
+        if (m_targetPage) m_targetPage->addPrimitive(pic, false, true);
         
         OROPicture *p2 = dynamic_cast<OROPicture*>(pic->clone());
         p2->setPosition(m_pos.toPoint());

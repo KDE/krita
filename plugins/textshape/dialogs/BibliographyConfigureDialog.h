@@ -26,17 +26,16 @@
 
 #include "KoOdfBibliographyConfiguration.h"
 
-namespace Ui {
-    class BibliographyConfigureDialog;
-}
-
 class BibliographyConfigureDialog : public QDialog
 {
     Q_OBJECT
 
 public:
     explicit BibliographyConfigureDialog(QTextDocument *document, QWidget *parent = 0);
-    ~BibliographyConfigureDialog();
+
+public slots:
+    save();
+
 
 private:
     Ui::BibliographyConfigureDialog dialog;

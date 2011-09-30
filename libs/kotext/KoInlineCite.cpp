@@ -51,7 +51,6 @@ public:
     {
     }
 
-    QTextFrame *textFrame;
     KoInlineCite::Type type;
     QString bibliographyType;
     QString identifier;
@@ -106,18 +105,6 @@ KoInlineCite::Type KoInlineCite::type() const
 void KoInlineCite::setType(Type t)
 {
     d->type = t;
-}
-
-void KoInlineCite::setMotherFrame(QTextFrame *motherFrame)
-{
-    //creating our subframe
-
-    QTextCursor cursor(motherFrame->lastCursorPosition());
-
-    QTextFrameFormat format;
-    format.setProperty(KoText::SubFrameType,KoText::CitationFrameType);
-
-    d->textFrame = cursor.insertFrame(format);
 }
 
 QString KoInlineCite::dataField(QString fieldName) const
@@ -673,11 +660,11 @@ void KoInlineCite::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
 
-    if (KoTextDocument(d->textFrame->document()).inlineTextObjectManager()->citations(true)[0]->id() == this->id()) {
+    if (manager()->citations(true)[0]->id() == this->id()) {
             QBuffer xmlBuffer;
             KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBuffer);
 
-            KoTextDocument(d->textFrame->document()).bibliographyConfiguration()->saveOdf(xmlWriter);
+            //KoTextDocument(d->textFrame->document()).bibliographyConfiguration()->saveOdf(xmlWriter);
             context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBuffer.data());
     }
 

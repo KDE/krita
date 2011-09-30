@@ -155,8 +155,6 @@ public:
 
     QTextFrame* endNotesFrame();
 
-    QTextFrame* citationsFrame();
-
     /**
      * Specifies if tabs are relative to paragraph indent.
      *
@@ -196,8 +194,6 @@ public:
         BibliographyConfiguration,
         EndNotesFrame,
         FootNotesFrame,
-        CitationsFrame,
-        BibliographyFrame,
         RelativeTabs,
         HeadingList,
         Selections,
@@ -218,7 +214,6 @@ public:
     static const QUrl BibliographyConfigurationURL;
     static const QUrl EndNotesFrameURL;
     static const QUrl FootNotesFrameURL;
-    static const QUrl CitationsFrameURL;
     static const QUrl RelativeTabsURL;
     static const QUrl HeadingListURL;
     static const QUrl SelectionsURL;

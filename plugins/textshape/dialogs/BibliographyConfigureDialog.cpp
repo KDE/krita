@@ -16,17 +16,14 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "BibliographyConfigureDialog.h"
+
 #include "ui_BibliographyConfigureDialog.h"
 
-BibliographyConfigureDialog::BibliographyConfigureDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::BibliographyConfigureDialog)
-{
-    ui->setupUi(this);
-}
+#include "BibliographyConfigureDialog.h"
 
-BibliographyConfigureDialog::~BibliographyConfigureDialog()
+BibliographyConfigureDialog::BibliographyConfigureDialog(QTextDocument *document, QWidget *parent) :
+    QDialog(parent),
+    m_document(document)
 {
-    delete ui;
+    dialog.setupUi(this);
 }

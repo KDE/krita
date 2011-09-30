@@ -222,14 +222,6 @@ bool KoTextEditor::Private::deleteInlineObjects(bool backwards)
 
 }
 
-void KoTextEditor::Private::deleteSelection()
-{
-    QTextCursor delText = QTextCursor(caret);
-    if (!delText.hasSelection())
-        delText.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
-    caret.deleteChar();
-}
-
 void KoTextEditor::Private::runDirectionUpdater()
 {
     while (! dirtyBlocks.isEmpty()) {
@@ -996,8 +988,28 @@ void KoTextEditor::deleteChar()
         return;
     }
 
-    if (!d->caret.hasSelection() && d->caret.atEnd())
-        return;
+    if (!d->caret.hasSelection()) {
+        if (d->caret.atEnd())
+            return;
+
+        // We also need to refuse delete if it will delete a note frame
+        QTextCursor after(d->caret);
+        after.movePosition(QTextCursor::NextCharacter);
+
+        QTextFrame *beforeFrame = d->caret.currentFrame();
+        while (qobject_cast<QTextTable *>(beforeFrame)) {
+            beforeFrame = beforeFrame->parentFrame();
+        }
+
+        QTextFrame *afterFrame = after.currentFrame();
+        while (qobject_cast<QTextTable *>(afterFrame)) {
+            afterFrame = afterFrame->parentFrame();
+        }
+        if (beforeFrame != afterFrame) {
+            return;
+        }
+    }
+
     if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
         d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
 
@@ -1006,7 +1018,7 @@ void KoTextEditor::deleteChar()
         if (!d->caret.hasSelection())
             d->caret.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
 
-        d->deleteSelection();
+        d->caret.deleteChar();
 
         d->caret.setCharFormat(charFormat);
     }
@@ -1020,8 +1032,29 @@ void KoTextEditor::deletePreviousChar()
         return;
     }
 
-    if (!d->caret.hasSelection() && d->caret.atStart())
-        return;
+    if (!d->caret.hasSelection()) {
+        if (d->caret.atEnd())
+            return;
+
+        // We also need to refuse delete if it will delete a note frame
+        QTextCursor after(d->caret);
+        after.movePosition(QTextCursor::PreviousCharacter);
+
+        QTextFrame *beforeFrame = d->caret.currentFrame();
+        while (qobject_cast<QTextTable *>(beforeFrame)) {
+            beforeFrame = beforeFrame->parentFrame();
+        }
+
+        QTextFrame *afterFrame = after.currentFrame();
+        while (qobject_cast<QTextTable *>(afterFrame)) {
+            afterFrame = afterFrame->parentFrame();
+        }
+
+        if (beforeFrame != afterFrame) {
+            return;
+        }
+    }
+
     if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
         d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
 
@@ -1030,7 +1063,7 @@ void KoTextEditor::deletePreviousChar()
         if (!d->caret.hasSelection())
             d->caret.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
 
-        d->deleteSelection();
+        d->caret.deleteChar();
 
         d->caret.setCharFormat(charFormat);
     }
@@ -1864,11 +1897,33 @@ void KoTextEditor::setTableFormat(const QTextTableFormat &format)
     //TODO
 }
 
-void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode m)
+void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode mode)
 {
     d->editProtectionCached = false;
-    d->caret.setPosition (pos, m);
-    emit cursorPositionChanged();
+
+    if (mode == QTextCursor::MoveAnchor) {
+        d->caret.setPosition (pos, mode);
+        emit cursorPositionChanged();
+    }
+
+    // We need protection against moving in and out of note areas
+    QTextCursor after(d->caret);
+    after.setPosition (pos, mode);
+ 
+    QTextFrame *beforeFrame = d->caret.currentFrame();
+    while (qobject_cast<QTextTable *>(beforeFrame)) {
+        beforeFrame = beforeFrame->parentFrame();
+    }
+
+    QTextFrame *afterFrame = after.currentFrame();
+    while (qobject_cast<QTextTable *>(afterFrame)) {
+        afterFrame = afterFrame->parentFrame();
+    }
+
+    if (beforeFrame == afterFrame) {
+        d->caret = after;
+        emit cursorPositionChanged();
+    }
 }
 
 void KoTextEditor::setVisualNavigation(bool b)

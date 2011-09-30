@@ -855,8 +855,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             m_listIndent = listFormat.doubleProperty(KoListStyle::Indent) + listLabelIndent;
         } else {
             // according to odf 1.2 17.20 list margin should be used when paragraph margin is
-            // not specified
-            if (!pStyle.hasProperty(QTextFormat::BlockLeftMargin)) {
+            // not specified (additionally LO/OO uses 0 as condition so we do too)
+            if (pStyle.leftMargin() == 0) {
                 leftMargin = listFormat.doubleProperty(KoListStyle::Margin);
             }
         }
@@ -1140,6 +1140,18 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             }
         }
 
+        if (documentLayout()->anchoringSoftBreak() <= block.position() + line.textStart() + line.textLength()) {
+            //don't add an anchor that has been moved away 
+            line.setNumColumns(documentLayout()->anchoringSoftBreak() - block.position() - line.textStart(), line.width());
+            softBreak = true;
+            // if the softBreakPos is at the start of the block stop here so
+            // we don't add a line here. That fixes the problem that e.g. the counter is before
+            // the page break and the text is after the page break
+            if (!virginPage() && documentLayout()->anchoringSoftBreak() == block.position()) {
+                return false;
+            }
+        }
+
         findFootNotes(block, line);
         if (bottomOfText > maximumAllowedBottom()) {
             // We can not fit line within our allowed space
@@ -1217,8 +1229,8 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const 
     }
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
         // according to odf 1.2 17.20 list text indent should be used when paragraph text indent is
-        // not specified
-        if (!block.blockFormat().hasProperty(QTextFormat::TextIndent)) {
+        // not specified (additionally LO/OO uses 0 as condition so we do too)
+        if (pStyle.textIndent().value(width()) == 0) {
             return textList->format().doubleProperty(KoListStyle::TextIndent) + m_extraTextIndent;
         }
     }

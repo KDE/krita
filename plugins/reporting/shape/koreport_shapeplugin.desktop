@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Shape Report Plugin
+Name[pt]='Plugin' de Relatório de Formas
+Name[sv]=Insticksprogram för formrapport
+Name[uk]=Додаток форм звіту
+Name[x-test]=xxShape Report Pluginxx
+Name[zh_TW]=元件報告外掛程式
 Comment=KoReport Shape Plugin
 Comment[da]=Form-plugin til KoReport
 Comment[es]=Complemento de forma de KoReport
@@ -7,7 +12,7 @@ Comment[it]=Estensione per le forme di KoReport
 Comment[nb]=Programtillegg for KoReport form
 Comment[pt]='Plugin' de Formas Gráficas do KoReport
 Comment[pt_BR]=Plugin de formas do KoReport
-Comment[sv]=Insticksprogram för Koffice rapportform
+Comment[sv]=Insticksprogram för Koffice formrapport
 Comment[uk]=Додаток форм KoReport
 Comment[x-test]=xxKoReport Shape Pluginxx
 Comment[zh_TW]=KoReport 元件外掛程式

@@ -759,7 +759,7 @@ void KisView2::connectCurrentImage()
          * progress updaters. The latter way should be depracated in favour
          * of displaying the status of the global strokes queue
          */
-        image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
+        //image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
     }
 
     m_d->canvas->connectCurrentImage();

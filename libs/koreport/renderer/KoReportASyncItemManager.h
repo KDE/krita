@@ -47,16 +47,16 @@ public:
     
     void startRendering();
     
-private:
-    QQueue<RenderData*> m_renderList;
-    QList<KoReportASyncItemBase*> m_itemList;
-    
+signals:
+    void finished();
+   
 private slots:
     void itemFinished();
     
-signals:
-    void finished();
-    
+   
+private:
+    QQueue<RenderData*> m_renderList;
+    QList<KoReportASyncItemBase*> m_itemList;
 };
 
 #endif // KOREPORTASYNCITEMMANAGER_H

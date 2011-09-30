@@ -1665,8 +1665,7 @@ bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCurso
     while (qobject_cast<QTextTable *>(afterFrame)) {
         afterFrame = afterFrame->parentFrame();
     }
-
-    if (beforeFrame == afterFrame) {
+    if (beforeFrame == afterFrame && after.selectionEnd() != after.document()->characterCount() -1) {
         d->caret = after;
         emit cursorPositionChanged();
         return b;
@@ -1900,6 +1899,9 @@ void KoTextEditor::setTableFormat(const QTextTableFormat &format)
 void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode mode)
 {
     d->editProtectionCached = false;
+
+    if (pos == d->caret.document()->characterCount() -1)
+        return;
 
     if (mode == QTextCursor::MoveAnchor) {
         d->caret.setPosition (pos, mode);

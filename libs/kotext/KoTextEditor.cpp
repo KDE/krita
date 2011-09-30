@@ -25,6 +25,7 @@
 #include "KoBookmark.h"
 #include "KoInlineTextObjectManager.h"
 #include <KoOdf.h>
+#include <KoInlineNote.h>
 #include "KoTextDocument.h"
 #include "KoTextDrag.h"
 #include "KoTextLocator.h"
@@ -219,14 +220,6 @@ bool KoTextEditor::Private::deleteInlineObjects(bool backwards)
 //    }
 //    return found;
 
-}
-
-void KoTextEditor::Private::deleteSelection()
-{
-    QTextCursor delText = QTextCursor(caret);
-    if (!delText.hasSelection())
-        delText.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
-    caret.deleteChar();
 }
 
 void KoTextEditor::Private::runDirectionUpdater()
@@ -995,8 +988,28 @@ void KoTextEditor::deleteChar()
         return;
     }
 
-    if (!d->caret.hasSelection() && d->caret.atEnd())
-        return;
+    if (!d->caret.hasSelection()) {
+        if (d->caret.atEnd())
+            return;
+
+        // We also need to refuse delete if it will delete a note frame
+        QTextCursor after(d->caret);
+        after.movePosition(QTextCursor::NextCharacter);
+
+        QTextFrame *beforeFrame = d->caret.currentFrame();
+        while (qobject_cast<QTextTable *>(beforeFrame)) {
+            beforeFrame = beforeFrame->parentFrame();
+        }
+
+        QTextFrame *afterFrame = after.currentFrame();
+        while (qobject_cast<QTextTable *>(afterFrame)) {
+            afterFrame = afterFrame->parentFrame();
+        }
+        if (beforeFrame != afterFrame) {
+            return;
+        }
+    }
+
     if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
         d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
 
@@ -1005,7 +1018,7 @@ void KoTextEditor::deleteChar()
         if (!d->caret.hasSelection())
             d->caret.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
 
-        d->deleteSelection();
+        d->caret.deleteChar();
 
         d->caret.setCharFormat(charFormat);
     }
@@ -1019,8 +1032,29 @@ void KoTextEditor::deletePreviousChar()
         return;
     }
 
-    if (!d->caret.hasSelection() && d->caret.atStart())
-        return;
+    if (!d->caret.hasSelection()) {
+        if (d->caret.atEnd())
+            return;
+
+        // We also need to refuse delete if it will delete a note frame
+        QTextCursor after(d->caret);
+        after.movePosition(QTextCursor::PreviousCharacter);
+
+        QTextFrame *beforeFrame = d->caret.currentFrame();
+        while (qobject_cast<QTextTable *>(beforeFrame)) {
+            beforeFrame = beforeFrame->parentFrame();
+        }
+
+        QTextFrame *afterFrame = after.currentFrame();
+        while (qobject_cast<QTextTable *>(afterFrame)) {
+            afterFrame = afterFrame->parentFrame();
+        }
+
+        if (beforeFrame != afterFrame) {
+            return;
+        }
+    }
+
     if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
         d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
 
@@ -1029,7 +1063,7 @@ void KoTextEditor::deletePreviousChar()
         if (!d->caret.hasSelection())
             d->caret.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
 
-        d->deleteSelection();
+        d->caret.deleteChar();
 
         d->caret.setCharFormat(charFormat);
     }
@@ -1386,6 +1420,30 @@ void KoTextEditor::splitTableCells()
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
+KoInlineNote *KoTextEditor::insertFootNote()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Footnote"));
+    KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
+    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
+    manager->insertInlineObject(d->caret,note);
+    note->setMotherFrame(KoTextDocument(d->caret.document()).footNotesFrame());
+    cursor()->setPosition(note->textFrame()->lastPosition());
+    d->updateState(KoTextEditor::Private::NoOp);
+    return note;
+}
+
+KoInlineNote *KoTextEditor::insertEndNote()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Endnote"));
+    KoInlineNote *note = new KoInlineNote(KoInlineNote::Endnote);
+    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
+    manager->insertInlineObject(d->caret,note);
+    note->setMotherFrame(KoTextDocument(d->caret.document()).endNotesFrame());
+    cursor()->setPosition(note->textFrame()->lastPosition());
+    d->updateState(KoTextEditor::Private::NoOp);
+    return note;
+}
+
 void KoTextEditor::insertTableOfContents()
 {
     if (isEditProtected()) {
@@ -1592,9 +1650,27 @@ void KoTextEditor::mergeCharFormat(const QTextCharFormat &modifier)
 bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode, int n)
 {
     d->editProtectionCached = false;
-    bool b = d->caret.movePosition (operation, mode, n);
-    emit cursorPositionChanged();
-    return b;
+
+    // We need protection against moving in and out of note areas
+    QTextCursor after(d->caret);
+    bool b = after.movePosition (operation, mode, n);
+ 
+    QTextFrame *beforeFrame = d->caret.currentFrame();
+    while (qobject_cast<QTextTable *>(beforeFrame)) {
+        beforeFrame = beforeFrame->parentFrame();
+    }
+
+    QTextFrame *afterFrame = after.currentFrame();
+    while (qobject_cast<QTextTable *>(afterFrame)) {
+        afterFrame = afterFrame->parentFrame();
+    }
+
+    if (beforeFrame == afterFrame) {
+        d->caret = after;
+        emit cursorPositionChanged();
+        return b;
+    }
+    return false;
 }
 
 void KoTextEditor::newLine()
@@ -1820,11 +1896,33 @@ void KoTextEditor::setTableFormat(const QTextTableFormat &format)
     //TODO
 }
 
-void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode m)
+void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode mode)
 {
     d->editProtectionCached = false;
-    d->caret.setPosition (pos, m);
-    emit cursorPositionChanged();
+
+    if (mode == QTextCursor::MoveAnchor) {
+        d->caret.setPosition (pos, mode);
+        emit cursorPositionChanged();
+    }
+
+    // We need protection against moving in and out of note areas
+    QTextCursor after(d->caret);
+    after.setPosition (pos, mode);
+ 
+    QTextFrame *beforeFrame = d->caret.currentFrame();
+    while (qobject_cast<QTextTable *>(beforeFrame)) {
+        beforeFrame = beforeFrame->parentFrame();
+    }
+
+    QTextFrame *afterFrame = after.currentFrame();
+    while (qobject_cast<QTextTable *>(afterFrame)) {
+        afterFrame = afterFrame->parentFrame();
+    }
+
+    if (beforeFrame == afterFrame) {
+        d->caret = after;
+        emit cursorPositionChanged();
+    }
 }
 
 void KoTextEditor::setVisualNavigation(bool b)

@@ -66,7 +66,7 @@ KisImageWSP KisOpenRasterStackLoadVisitor::image()
 
 void KisOpenRasterStackLoadVisitor::loadImage()
 {
-    d->image = new KisImage(d->doc->undoAdapter(), 0, 0, KoColorSpaceRegistry::instance()->rgb8(), "OpenRaster Image (name)");
+    d->image = new KisImage(d->doc->createUndoStore(), 0, 0, KoColorSpaceRegistry::instance()->rgb8(), "OpenRaster Image (name)");
 
     QDomDocument doc = d->loadContext->loadStack();
 
@@ -90,7 +90,7 @@ void KisOpenRasterStackLoadVisitor::loadImage()
                 height = subelem.attribute("h").toInt();
             }
             dbgFile << ppVar(width) << ppVar(height);
-            d->image->resize(width, height);
+            d->image->resizeImage(QRect(0,0,width,height));
         }
     }
     if (d->image->width() == 0 && d->image->height() == 0) {

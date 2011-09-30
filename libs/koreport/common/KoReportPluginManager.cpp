@@ -20,12 +20,14 @@
 
 #include "KoReportPluginManager.h"
 #include "KoReportPluginManagerPrivate.h"
-
-#include <kicon.h>
-#include <QAction>
 #include "KoReportPluginInfo.h"
+
+#include <KIcon>
 #include <KService>
 #include <KServiceTypeTrader>
+#include <KIconLoader>
+
+#include <QAction>
 
 //Include the static items
 #include "../items/label/KoReportLabelPlugin.h"
@@ -42,6 +44,7 @@ KoReportPluginManager* KoReportPluginManager::self()
 
 KoReportPluginManager::KoReportPluginManager() : d(new KoReportPluginManagerPrivate())
 {
+    KIconLoader::global()->addAppDir("calligra");
 }
 
 KoReportPluginManager::~KoReportPluginManager()

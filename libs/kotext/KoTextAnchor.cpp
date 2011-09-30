@@ -58,10 +58,12 @@ public:
             verticalRel(KoTextAnchor::VLine),
             horizontalPos(KoTextAnchor::HLeft),
             horizontalRel(KoTextAnchor::HChar),
+            flowWithText(true),
             anchorType(KoTextAnchor::AnchorToCharacter),
             anchorStrategy(0),
             inlineObjectAscent(0),
-            inlineObjectDescent(0)
+            inlineObjectDescent(0),
+            pageNumber(-1)
     {
         Q_ASSERT(shape);
     }
@@ -88,20 +90,17 @@ public:
     KoTextAnchor::HorizontalPos horizontalPos;
     KoTextAnchor::HorizontalRel horizontalRel;
     QString wrapInfluenceOnPosition;
+    bool flowWithText;
     KoTextAnchor::AnchorType anchorType;
-    bool fakeAsChar;
     KoAnchorStrategy *anchorStrategy;
     qreal inlineObjectAscent;
     qreal inlineObjectDescent;
+    int pageNumber;
 };
 
 KoTextAnchor::KoTextAnchor(KoShape *shape)
     : KoInlineObject(*(new KoTextAnchorPrivate(this, shape)), false)
 {
-    Q_D(KoTextAnchor);
-    shape->setAnchored(true);
-    shape->setVisible(false);
-    d->fakeAsChar = false;
 }
 
 KoTextAnchor::~KoTextAnchor()
@@ -110,12 +109,6 @@ KoTextAnchor::~KoTextAnchor()
     if (d->anchorStrategy != 0) {
         delete d->anchorStrategy;
     }
-}
-
-void KoTextAnchor::fakeAsChar()
-{
-    Q_D(KoTextAnchor);
-    d->fakeAsChar = true;
 }
 
 KoShape *KoTextAnchor::shape() const
@@ -172,16 +165,40 @@ void KoTextAnchor::setVerticalRel(VerticalRel vr)
     d->verticalRel = vr;
 }
 
+KoTextAnchor::VerticalRel KoTextAnchor::verticalRel()
+{
+    Q_D(const KoTextAnchor);
+    return d->verticalRel;
+}
+
 QString KoTextAnchor::wrapInfluenceOnPosition() const
 {
     Q_D(const KoTextAnchor);
     return d->wrapInfluenceOnPosition;
 }
 
-KoTextAnchor::VerticalRel KoTextAnchor::verticalRel()
+bool KoTextAnchor::flowWithText() const
 {
     Q_D(const KoTextAnchor);
-    return d->verticalRel;
+    return d->flowWithText;
+}
+
+int KoTextAnchor::pageNumber() const
+{
+    Q_D(const KoTextAnchor);
+    return d->pageNumber;
+}
+
+const QPointF &KoTextAnchor::offset() const
+{
+    Q_D(const KoTextAnchor);
+    return d->distance;
+}
+
+void KoTextAnchor::setOffset(const QPointF &offset)
+{
+    Q_D(KoTextAnchor);
+    d->distance = offset;
 }
 
 void KoTextAnchor::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
@@ -268,13 +285,6 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
         object.setAscent(0);
         object.setDescent(0);
     }
-    if (d->fakeAsChar) {
-        object.setAscent(d->shape->size().height());
-        object.setDescent(0);
-
-        d->inlineObjectAscent = object.ascent();
-        d->inlineObjectDescent = object.descent();
-    }
 }
 
 void KoTextAnchor::paint(QPainter &painter, QPaintDevice *, const QTextDocument *document, const QRectF &rect, QTextInlineObject , int , const QTextCharFormat &)
@@ -334,18 +344,6 @@ const QTextDocument *KoTextAnchor::document() const
 {
     Q_D(const KoTextAnchor);
     return d->document;
-}
-
-const QPointF &KoTextAnchor::offset() const
-{
-    Q_D(const KoTextAnchor);
-    return d->distance;
-}
-
-void KoTextAnchor::setOffset(const QPointF &offset)
-{
-    Q_D(KoTextAnchor);
-    d->distance = offset;
 }
 
 void KoTextAnchor::saveOdf(KoShapeSavingContext &context)
@@ -503,6 +501,12 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext &context)
         shape()->setAdditionalStyleAttribute("draw:wrap-influence-on-position", d->wrapInfluenceOnPosition);
     }
 
+    if (d->flowWithText) {
+        shape()->setAdditionalStyleAttribute("style:flow-with-text", "true");
+    } else {
+        shape()->setAdditionalStyleAttribute("style:flow-with-text", "false");
+    }
+
     if (shape()->parent()) {// an anchor may not yet have been layout-ed
         QTransform parentMatrix = shape()->parent()->absoluteTransformation(0).inverted();
         QTransform shapeMatrix = shape()->absoluteTransformation(0);;
@@ -539,6 +543,18 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
         d->anchorType = AnchorPage;
     }
 
+    if (anchorType == "page" && shape()->hasAdditionalAttribute("text:anchor-page-number")) {
+        d->pageNumber = shape()->additionalAttribute("text:anchor-page-number").toInt();
+        if (d->pageNumber <= 0) {
+            // invalid if the page-number is invalid (OO.org does the same)
+            // see http://bugs.kde.org/show_bug.cgi?id=281869
+            d->pageNumber = -1;
+            shape()->setVisible(false);
+        }
+    } else {
+        d->pageNumber = -1;
+    }
+
     // load settings from graphic style
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
@@ -551,6 +567,8 @@ bool KoTextAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     QString horizontalPos = styleStack.property(KoXmlNS::style, "horizontal-pos");
     QString horizontalRel = styleStack.property(KoXmlNS::style, "horizontal-rel");
     d->wrapInfluenceOnPosition = styleStack.property(KoXmlNS::draw, "wrap-influence-on-position");
+    QString flowWithText = styleStack.property(KoXmlNS::style, "flow-with-text");
+    d->flowWithText = flowWithText.isEmpty() ? false : flowWithText == "true";
     styleStack.restore();
 
     // vertical-pos
@@ -714,14 +732,6 @@ void KoTextAnchor::setAnchorType(KoTextAnchor::AnchorType type)
         d->horizontalRel = HChar;
         d->horizontalPos = HLeft;
     }
-}
-
-bool KoTextAnchor::behavesAsCharacter() const
-{
-    Q_D(const KoTextAnchor);
-    if (d->fakeAsChar)
-        return true;
-    return d->anchorType == AnchorAsCharacter;
 }
 
 void KoTextAnchor::detachFromModel()

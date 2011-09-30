@@ -182,7 +182,9 @@ void KoOdfLoadingContext::parseGenerator() const
                     d->generatorType = Calligra;
                 }
                 // NeoOffice is a port of OpenOffice to Mac OS X
-                else if (d->generator.startsWith("OpenOffice.org") || d->generator.startsWith("NeoOffice") || d->generator.startsWith("LibreOffice") || d->generator.startsWith("StarOffice")) {
+                else if (d->generator.startsWith("OpenOffice.org") || d->generator.startsWith("NeoOffice") ||
+                         d->generator.startsWith("LibreOffice") || d->generator.startsWith("StarOffice") ||
+                         d->generator.startsWith("Lotus Symphony")) {
                     d->generatorType = OpenOffice;
                 }
                 else if (d->generator.startsWith("MicrosoftOffice")) {

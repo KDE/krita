@@ -41,6 +41,7 @@
 #include <KoInsets.h>
 #include <KoPostscriptPaintDevice.h>
 #include <KoShape.h>
+#include <KoShapeContainer.h>
 
 #include <kdebug.h>
 #include <QTextBlock>
@@ -71,6 +72,7 @@ public:
        , anchoringRootArea(0)
        , anchoringIndex(0)
        , anAnchorIsPlaced(false)
+       , anchoringSoftBreak(INT_MAX)
        , allowPositionInlineObject(true)
        , referencedLayout(0)
        , defaultTabSizing(0)
@@ -95,10 +97,13 @@ public:
     QHash<int, KoInlineObjectExtent> inlineObjectExtents; // maps text-position to whole-line-height of an inline object
     int inlineObjectOffset;
     QList<KoTextAnchor *> textAnchors; // list of all inserted inline objects
+    QList<KoTextAnchor *> foundAnchors; // anchors found in an iteration run
     KoTextLayoutRootArea *anchoringRootArea;
     int anchoringIndex; // index of last not positioned inline object inside textAnchors
     bool anAnchorIsPlaced;
+    int anchoringSoftBreak;
     QRectF anchoringParagraphRect;
+    QRectF anchoringLayoutEnvironmentRect;
     bool allowPositionInlineObject;
 
     QHash<KoShape*,KoTextLayoutObstruction*> anchoredObstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
@@ -341,6 +346,28 @@ void KoTextDocumentLayout::registerAnchoredObstruction(KoTextLayoutObstruction *
     d->anchoredObstructions.insert(obstruction->shape(), obstruction);
 }
 
+qreal KoTextDocumentLayout::maxYOfAnchoredObstructions(int firstCursorPosition, int lastCursorPosition) const
+{
+    qreal y = 0.0;
+    int index = 0;
+
+    while (index < d->anchoringIndex) {
+        Q_ASSERT(index < d->textAnchors.count());
+        KoTextAnchor *textAnchor = d->textAnchors[index];
+
+        if (textAnchor->flowWithText() && textAnchor->positionInDocument() >= firstCursorPosition
+                            && textAnchor->positionInDocument() <= lastCursorPosition) {
+            y = qMax(y, textAnchor->shape()->boundingRect().bottom() - textAnchor->shape()->parent()->boundingRect().y());
+        }
+        ++index;
+    }
+    return y;
+}
+
+int KoTextDocumentLayout::anchoringSoftBreak() const
+{
+    return d->anchoringSoftBreak;
+}
 void KoTextDocumentLayout::positionAnchoredObstructions()
 {
     if (!d->anchoringRootArea)
@@ -391,6 +418,11 @@ void KoTextDocumentLayout::setAnchoringParagraphRect(const QRectF &paragraphRect
     d->anchoringParagraphRect = paragraphRect;
 }
 
+void KoTextDocumentLayout::setAnchoringLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect)
+{
+    d->anchoringLayoutEnvironmentRect = layoutEnvironmentRect;
+}
+
 void KoTextDocumentLayout::allowPositionInlineObject(bool allow)
 {
     d->allowPositionInlineObject = allow;
@@ -414,10 +446,12 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     // layout and not this early
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(obj);
     if (anchor && d->anchoringRootArea->associatedShape()) {
+        d->foundAnchors.append(anchor);
+
         // if there is no anchor strategy set then create one
         if (!anchor->anchorStrategy()) {
             int index = d->textAnchors.count();
-            if (anchor->behavesAsCharacter()) {
+            if (anchor->anchorType() == KoTextAnchor::AnchorAsCharacter) {
                 anchor->setAnchorStrategy(new InlineAnchorStrategy(anchor, d->anchoringRootArea));
             } else {
                 anchor->setAnchorStrategy(new FloatingAnchorStrategy(anchor, d->anchoringRootArea));
@@ -448,6 +482,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
             anchor->updatePosition(document(), position, cf);
         }
         static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setParagraphRect(d->anchoringParagraphRect);
+        static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setLayoutEnvironmentRect(d->anchoringLayoutEnvironmentRect);
     }
     else if (obj) {
         obj->updatePosition(document(), position, cf);
@@ -468,6 +503,7 @@ void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
     d->anAnchorIsPlaced = false;
     d->anchoringRootArea = rootArea;
     d->allowPositionInlineObject = true;
+    d->anchoringSoftBreak = INT_MAX;
 }
 
 void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format)
@@ -559,6 +595,7 @@ bool KoTextDocumentLayout::doLayout()
             bool finished;
             FrameIterator *tmpPosition = 0;
             do {
+                d->foundAnchors.clear();
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 finished = rootArea->layoutRoot(tmpPosition);
@@ -568,6 +605,13 @@ bool KoTextDocumentLayout::doLayout()
                     ++d->anchoringIndex;
                 }
             } while (d->anchoringIndex < d->textAnchors.count());
+                foreach (KoTextAnchor *anchor, d->textAnchors) {
+                    if (!d->foundAnchors.contains(anchor)) {
+                        qDebug() << "an anchor has disappeared"<<anchor->positionInDocument();
+                        d->anchoredObstructions.remove(anchor->shape());
+                        d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
+                    }
+                }
             if (d->textAnchors.count() > 0) {
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
@@ -630,6 +674,7 @@ bool KoTextDocumentLayout::doLayout()
             // Layout all that can fit into that root area
             FrameIterator *tmpPosition = 0;
             do {
+                d->foundAnchors.clear();
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 rootArea->layoutRoot(tmpPosition);
@@ -639,6 +684,13 @@ bool KoTextDocumentLayout::doLayout()
                     ++d->anchoringIndex;
                 }
             } while (d->anchoringIndex < d->textAnchors.count());
+                foreach (KoTextAnchor *anchor, d->textAnchors) {
+                    if (!d->foundAnchors.contains(anchor)) {
+                        qDebug() << "an anchor has disappeared"<<anchor->positionInDocument();
+                        d->anchoredObstructions.remove(anchor->shape());
+                        d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
+                    }
+                }
             if (d->textAnchors.count() > 0) {
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);

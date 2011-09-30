@@ -71,16 +71,24 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
     loader.loadBody(body, *d->editor->cursor());   // now let's load the body from the ODF KoXmlElement.
 
 #ifdef SHOULD_BUILD_RDF
+    kDebug(30015) << "text paste, rdf handling" << d->rdfModel;
     // RDF: Grab RDF metadata from ODF file if present & load it into rdfModel
-    if (d->rdfModel) {
+    if (d->rdfModel)
+    {
         Soprano::Model *tmpmodel(Soprano::createModel());
         ok = KoTextRdfCore::loadManifest(odfStore.store(), tmpmodel);
-        kDebug(30015) << "ok:" << ok << " model.sz:" << tmpmodel->statementCount();
+        kDebug(30015) << "ok:" << ok << " tmpmodel.sz:" << tmpmodel->statementCount();
+        kDebug(30015) << "existing rdf model.sz:" << d->rdfModel->statementCount();
 #ifndef NDEBUG
         KoTextRdfCore::dumpModel("RDF from C+P", tmpmodel);
 #endif
         const_cast<Soprano::Model*>(d->rdfModel)->addStatements(tmpmodel->listStatements().allElements());
         delete tmpmodel;
+
+        kDebug(30015) << "done... existing rdf model.sz:" << d->rdfModel->statementCount();
+#ifndef NDEBUG
+        KoTextRdfCore::dumpModel("Imported RDF after C+P", const_cast<Soprano::Model*>(d->rdfModel));
+#endif
     }
 #endif
 

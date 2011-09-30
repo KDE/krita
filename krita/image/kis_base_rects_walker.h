@@ -30,6 +30,12 @@ typedef KisSharedPtr<KisBaseRectsWalker> KisBaseRectsWalkerSP;
 class KRITAIMAGE_EXPORT KisBaseRectsWalker : public KisShared
 {
 public:
+    enum UpdateType {
+        UPDATE,
+        FULL_REFRESH
+    };
+
+
     typedef qint32 NodePosition;
     enum NodePositionValues {
         /**
@@ -69,10 +75,6 @@ public:
     typedef QStack<JobItem> NodeStack;
 
 public:
-    KisBaseRectsWalker(QRect cropRect) {
-        setCropRect(cropRect);
-    }
-
     virtual ~KisBaseRectsWalker() {
     }
 
@@ -131,6 +133,8 @@ public:
     inline const QRect& requestedRect() const {
         return m_requestedRect;
     }
+
+    virtual UpdateType type() const = 0;
 
 protected:
 

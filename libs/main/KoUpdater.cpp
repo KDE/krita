@@ -29,7 +29,8 @@
 #include <kdebug.h>
 
 KoUpdater::KoUpdater(KoUpdaterPrivate *p)
-    : m_progressPercent(0)
+    : QObject(p),
+      m_progressPercent(0)
 {
     d = p;
     Q_ASSERT(p);

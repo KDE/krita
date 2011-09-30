@@ -40,6 +40,7 @@ KoShadowConfigWidget::KoShadowConfigWidget( QWidget * parent )
     d->widget.setupUi(this);
     d->widget.shadowOffset->setValue( 0.02 );
     d->widget.shadowBlur->setValue( 8.0 );
+    d->widget.shadowBlur->setMinimum( 0.0 );
     d->widget.shadowAngle->setValue( 315.0 );
     d->widget.shadowAngle->setMinimum( 0.0 );
     d->widget.shadowAngle->setMaximum( 360.0 );
@@ -50,11 +51,11 @@ KoShadowConfigWidget::KoShadowConfigWidget( QWidget * parent )
 
     connect( d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SLOT(visibilityChanged()) );
     connect( d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SIGNAL(shadowVisibilityChanged(bool)) );
-    connect( d->actionShadowColor, SIGNAL(colorChanged(const KoColor&)), 
+    connect( d->actionShadowColor, SIGNAL(colorChanged(const KoColor&)),
         this, SIGNAL(shadowColorChanged(const KoColor&)));
     connect( d->widget.shadowAngle, SIGNAL(valueChanged(qreal,bool)), this, SLOT(offsetChanged()));
     connect( d->widget.shadowOffset, SIGNAL(valueChangedPt(qreal)), this, SLOT(offsetChanged()));
-    connect( d->widget.shadowBlur, SIGNAL(valueChangedPt(qreal)), this, SLOT(blurChanged()));
+    connect( d->widget.shadowBlur, SIGNAL(valueChangedPt(qreal)), this, SIGNAL(shadowBlurChanged(qreal)));
 }
 
 KoShadowConfigWidget::~KoShadowConfigWidget()
@@ -107,8 +108,7 @@ void KoShadowConfigWidget::setShadowBlur( const qreal &blur )
 
 qreal KoShadowConfigWidget::shadowBlur() const
 {
-    qreal blur( d->widget.shadowBlur->value() );
-    return blur;
+    return d->widget.shadowBlur->value();
 }
 
 void KoShadowConfigWidget::setShadowVisible( bool visible )
@@ -132,11 +132,6 @@ void KoShadowConfigWidget::visibilityChanged()
 void KoShadowConfigWidget::offsetChanged()
 {
     emit shadowOffsetChanged( shadowOffset() );
-}
-
-void KoShadowConfigWidget::blurChanged()
-{
-    emit shadowBlurChanged( shadowBlur() );
 }
 
 void KoShadowConfigWidget::setUnit( const KoUnit &unit )

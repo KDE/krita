@@ -21,22 +21,35 @@
 
 #include <KAction>
 #include <KDebug>
+#include <KoInlineNote.h>
 
 #include <QWidget>
 
-SimpleFootEndNotesWidget::SimpleFootEndNotesWidget(QWidget *parent)
+
+SimpleFootEndNotesWidget::SimpleFootEndNotesWidget(TextTool *tool ,QWidget *parent)
         : QWidget(parent),
         m_blockSignals(false)
 {
     widget.setupUi(this);
-//    widget.splitCells->setDefaultAction(tool->action("split_tablecells"));
+    widget.addFootnote->setDefaultAction(tool->action("insert_footnote"));
+    widget.addEndnote->setDefaultAction(tool->action("insert_endnote"));
+    widget.settings->setDefaultAction(tool->action("format_notes"));
+    widget.autoNumbering->setChecked(true);
 
-//    connect(widget.addRowAbove, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.addFootnote, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.addEndnote, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.settings, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.characterEdit, SIGNAL(cursorPositionChanged(int,int)), this, SLOT(setCharacterEditEnabled()));
 }
 
 void SimpleFootEndNotesWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
+}
+
+void SimpleFootEndNotesWidget::setCharacterEditEnabled()
+{
+    widget.label->setChecked(true);
 }
 
 #include <SimpleFootEndNotesWidget.moc>

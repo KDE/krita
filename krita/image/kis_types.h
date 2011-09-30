@@ -223,6 +223,22 @@ typedef KisSharedPtr<KisPaintOp> KisPaintOpSP;
 class KoID;
 typedef QList<KoID> KoIDList;
 
+class KisProcessingVisitor;
+typedef KisSharedPtr<KisProcessingVisitor> KisProcessingVisitorSP;
+
+template<class T> class QSharedPointer;
+template<class T> class QWeakPointer;
+
+class KUndo2Command;
+typedef QSharedPointer<KUndo2Command> KUndo2CommandSP;
+
+class KisStroke;
+typedef QSharedPointer<KisStroke> KisStrokeSP;
+typedef QWeakPointer<KisStroke> KisStrokeWSP;
+typedef KisStrokeWSP KisStrokeId;
+
+#include <QSharedPointer>
+#include <QWeakPointer>
 #include <kis_shared_ptr.h>
 
 #endif // KISTYPES_H_

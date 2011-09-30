@@ -32,6 +32,7 @@ typedef QPointer<KoUpdater> KoUpdaterPtr;
 class KisPaintDevice;
 class KisFilterStrategy;
 class KisSelection;
+class QTransform;
 
 class KRITAIMAGE_EXPORT KisTransformWorker
 {
@@ -73,6 +74,27 @@ public:
 
     // returns false if interrupted
     bool run();
+
+    /**
+     * Returns a matrix of the transformation executed by the worker.
+     * Resulting transformation has the following form (in Qt's matrix
+     * notation (all the matrices are trasposed)):
+     *
+     * transform = TS.inverted() * S * TS * SC * R * T
+     *
+     * ,where:
+     * TS - shear origin transpose
+     * S  - shear itself (shearX * shearY)
+     * SC - scale
+     * R  - rotation (@rotation parameter)
+     * T  - transpose (@xtranslate, @ytranslate)
+     *
+     * WARNING: due to some rounding problems in the worker
+     * the work it does does not correspond to the matrix exactly!
+     * The result always differs 1-3 pixel. So be careful with it
+     * (or fix it)
+     */
+    QTransform transform() const;
 
 private:
     // XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?

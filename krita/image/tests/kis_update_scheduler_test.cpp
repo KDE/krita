@@ -22,7 +22,11 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
+#include "scheduler_utils.h"
 #include "kis_update_scheduler.h"
+#include "kis_updater_context.h"
+#include "kis_update_job_item.h"
+#include "kis_simple_update_queue.h"
 
 #include "../../sdk/tests/testutil.h"
 
@@ -68,7 +72,7 @@ void KisUpdateSchedulerTest::testMerge()
     QCOMPARE(paintLayer1->name(), QString("paint1"));
 
 
-    KisUpdateScheduler scheduler(image);
+    KisUpdateScheduler scheduler(image.data());
 
     /**
      * Test synchronous Full Refresh
@@ -126,7 +130,7 @@ void KisUpdateSchedulerTest::benchmarkOverlappedMerge()
     QCOMPARE(paintLayer1->name(), QString("paint1"));
     QCOMPARE(imageRect, QRect(0,0,640,441));
 
-    KisUpdateScheduler scheduler(image);
+    KisUpdateScheduler scheduler(image.data());
 
     const qint32 xShift = 10;
     const qint32 yShift = 0;
@@ -144,6 +148,232 @@ void KisUpdateSchedulerTest::benchmarkOverlappedMerge()
         scheduler.waitForDone();
     }
 }
+
+void KisUpdateSchedulerTest::testLocking()
+{
+    KisImageSP image = buildTestingImage();
+    KisNodeSP rootLayer = image->rootLayer();
+    KisNodeSP paintLayer1 = rootLayer->firstChild();
+    QRect imageRect = image->bounds();
+
+    QCOMPARE(paintLayer1->name(), QString("paint1"));
+    QCOMPARE(imageRect, QRect(0,0,640,441));
+
+    KisTestableUpdateScheduler scheduler(image.data(), 2);
+
+    QRect dirtyRect1(0,0,50,100);
+    QRect dirtyRect2(0,0,100,100);
+    QRect dirtyRect3(50,0,50,100);
+    QRect dirtyRect4(150,150,50,50);
+
+
+    KisTestableUpdaterContext *context = scheduler.updaterContext();
+    QVector<KisUpdateJobItem*> jobs;
+
+    scheduler.updateProjection(paintLayer1, imageRect, imageRect);
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), false);
+    QVERIFY(checkWalker(jobs[0]->walker(), imageRect));
+
+    context->clear();
+
+    scheduler.lock();
+
+    scheduler.updateProjection(paintLayer1, dirtyRect1, imageRect);
+    scheduler.updateProjection(paintLayer1, dirtyRect2, imageRect);
+    scheduler.updateProjection(paintLayer1, dirtyRect3, imageRect);
+    scheduler.updateProjection(paintLayer1, dirtyRect4, imageRect);
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), false);
+    QCOMPARE(jobs[1]->isRunning(), false);
+
+    scheduler.unlock();
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), true);
+    QVERIFY(checkWalker(jobs[0]->walker(), dirtyRect2));
+    QVERIFY(checkWalker(jobs[1]->walker(), dirtyRect4));
+}
+
+void KisUpdateSchedulerTest::testExclusiveStrokes()
+{
+    KisImageSP image = buildTestingImage();
+    KisNodeSP rootLayer = image->rootLayer();
+    KisNodeSP paintLayer1 = rootLayer->firstChild();
+    QRect imageRect = image->bounds();
+
+    QCOMPARE(paintLayer1->name(), QString("paint1"));
+    QCOMPARE(imageRect, QRect(0,0,640,441));
+
+    QRect dirtyRect1(0,0,50,100);
+
+    KisTestableUpdateScheduler scheduler(image.data(), 2);
+    KisTestableUpdaterContext *context = scheduler.updaterContext();
+    QVector<KisUpdateJobItem*> jobs;
+
+    scheduler.updateProjection(paintLayer1, dirtyRect1, imageRect);
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), false);
+    QVERIFY(checkWalker(jobs[0]->walker(), dirtyRect1));
+
+    KisStrokeId id = scheduler.startStroke(new KisTestingStrokeStrategy("excl_", true, false));
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), false);
+    QVERIFY(checkWalker(jobs[0]->walker(), dirtyRect1));
+
+    context->clear();
+    scheduler.endStroke(id);
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), false);
+    COMPARE_NAME(jobs[0], "excl_init");
+
+    scheduler.updateProjection(paintLayer1, dirtyRect1, imageRect);
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), false);
+    COMPARE_NAME(jobs[0], "excl_init");
+
+    context->clear();
+    scheduler.processQueues();
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), false);
+    COMPARE_NAME(jobs[0], "excl_finish");
+
+    context->clear();
+    scheduler.processQueues();
+
+    jobs = context->getJobs();
+    QCOMPARE(jobs[0]->isRunning(), true);
+    QCOMPARE(jobs[1]->isRunning(), false);
+    QVERIFY(checkWalker(jobs[0]->walker(), dirtyRect1));
+}
+
+void KisUpdateSchedulerTest::testEmptyStroke()
+{
+    KisImageSP image = buildTestingImage();
+
+    KisStrokeId id = image->startStroke(new KisStrokeStrategy());
+    image->addJob(id, 0);
+    image->endStroke(id);
+    image->waitForDone();
+}
+
+#include "kis_lazy_wait_condition.h"
+
+void KisUpdateSchedulerTest::testLazyWaitCondition()
+{
+    {
+        qDebug() << "Not initialized";
+        KisLazyWaitCondition condition;
+        QVERIFY(!condition.wait(50));
+    }
+
+    {
+        qDebug() << "Initialized, not awake";
+        KisLazyWaitCondition condition;
+        condition.initWaiting();
+        QVERIFY(!condition.wait(50));
+        condition.endWaiting();
+    }
+
+    {
+        qDebug() << "Initialized, awake";
+        KisLazyWaitCondition condition;
+        condition.initWaiting();
+        condition.wakeAll();
+        QVERIFY(condition.wait(50));
+        condition.endWaiting();
+    }
+
+    {
+        qDebug() << "Initialized, not awake, then awake";
+        KisLazyWaitCondition condition;
+        condition.initWaiting();
+        QVERIFY(!condition.wait(50));
+        condition.wakeAll();
+        QVERIFY(condition.wait(50));
+        condition.endWaiting();
+    }
+
+    {
+        qDebug() << "Doublewait";
+        KisLazyWaitCondition condition;
+        condition.initWaiting();
+        condition.initWaiting();
+        QVERIFY(!condition.wait(50));
+        condition.wakeAll();
+        QVERIFY(condition.wait(50));
+        QVERIFY(condition.wait(50));
+        condition.endWaiting();
+    }
+}
+
+#define NUM_THREADS 10
+#define NUM_CYCLES 500
+#define NTH_CHECK 3
+
+class UpdatesBlockTester : public QRunnable
+{
+public:
+    UpdatesBlockTester(KisUpdateScheduler *scheduler, KisNodeSP node)
+        : m_scheduler(scheduler), m_node(node)
+    {
+    }
+
+    void run() {
+        for (int i = 0; i < NUM_CYCLES; i++) {
+            if(i % NTH_CHECK == 0) {
+                m_scheduler->blockUpdates();
+                QTest::qSleep(1); // a bit of salt for crashiness ;)
+                Q_ASSERT(!m_scheduler->haveUpdatesRunning());
+                m_scheduler->unblockUpdates();
+            }
+            else {
+                QRect updateRect(0,0,100,100);
+                updateRect.moveTopLeft(QPoint((i%10)*100, (i%10)*100));
+                m_scheduler->updateProjection(m_node, updateRect, QRect(0,0,1100,1100));
+            }
+        }
+    }
+private:
+    KisUpdateScheduler *m_scheduler;
+    KisNodeSP m_node;
+};
+
+void KisUpdateSchedulerTest::testBlockUpdates()
+{
+    KisImageSP image = buildTestingImage();
+    KisNodeSP rootLayer = image->rootLayer();
+    KisNodeSP paintLayer1 = rootLayer->firstChild();
+
+    KisUpdateScheduler scheduler(image.data());
+
+    QThreadPool threadPool;
+    threadPool.setMaxThreadCount(NUM_THREADS);
+
+    for(int i = 0; i< NUM_THREADS; i++) {
+        UpdatesBlockTester *tester =
+            new UpdatesBlockTester(&scheduler, paintLayer1);
+
+        threadPool.start(tester);
+    }
+
+    threadPool.waitForDone();
+}
+
 
 QTEST_KDEMAIN(KisUpdateSchedulerTest, NoGUI)
 #include "kis_update_scheduler_test.moc"

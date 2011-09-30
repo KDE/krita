@@ -33,13 +33,20 @@
 #include "kis_node_graph_listener.h"
 #include "kis_node_facade.h"
 #include "kis_default_bounds.h"
+#include "kis_image_interfaces.h"
 
+
+class KoDocument;
 class KoColorSpace;
 class KoCompositeOp;
 class KoColor;
 
+class KisCompositeProgressProxy;
 class KisActionRecorder;
+class KisUndoStore;
 class KisUndoAdapter;
+class KisImageSignalRouter;
+class KisPostExecutionUndoAdapter;
 class KisFilterStrategy;
 class KoColorProfile;
 class KoUpdater;
@@ -55,7 +62,7 @@ class MergeStrategy;
  * meta information about the image. And it also provides some
  * functions to manipulate the whole image.
  */
-class KRITAIMAGE_EXPORT KisImage : public QObject, public KisNodeFacade, public KisNodeGraphListener, public KisShared
+class KRITAIMAGE_EXPORT KisImage : public QObject, public KisStrokesFacade, public KisUpdatesFacade, public KisProjectionUpdateListener, public KisNodeFacade, public KisNodeGraphListener, public KisShared
 {
 
     Q_OBJECT
@@ -63,8 +70,7 @@ class KRITAIMAGE_EXPORT KisImage : public QObject, public KisNodeFacade, public 
 public:
 
     /// @param colorSpace can be null. in that case it will be initialised to a default color space.
-    KisImage(KisUndoAdapter * adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true);
-    KisImage(const KisImage& rhs);
+    KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true);
     virtual ~KisImage();
 
 public: // KisNodeGraphListener implementation
@@ -76,6 +82,10 @@ public: // KisNodeGraphListener implementation
     void aboutToMoveNode(KisNode * parent, int oldIndex, int newIndex);
     void nodeHasBeenMoved(KisNode * parent, int oldIndex, int newIndex);
     void nodeChanged(KisNode * node);
+    void requestProjectionUpdate(KisNode *node, const QRect& rect);
+
+public: // KisProjectionUpdateListener implementation
+    void notifyProjectionUpdated(const QRect &rc);
 
 public:
 
@@ -186,46 +196,31 @@ public:
     KisPerspectiveGrid* perspectiveGrid();
 
     /**
-     * Resize the image to the specified width and height. The resize
+     * Resize the image to the specified rect. The resize
      * method handles the creating on an undo step itself.
      *
-     * @param w the new width of the image
-     * @param h the new height of the image
-     * @param x the x position of the crop on all layer if cropLayers is true
-     * @param y the y position of the crop on all layer if cropLayers is true
-     * @param cropLayers if true, all layers are cropped to the new size.
+     * @param newRect the rect describing the new width, height and offset
+     *        of the image
      */
-    void resize(qint32 w, qint32 h, qint32 x = 0, qint32 y = 0,  bool cropLayers = false);
+    void resizeImage(const QRect& newRect);
 
     /**
-     * Resize the image to the specified width and height. The resize
+     * Crop the image to the specified rect. The crop
      * method handles the creating on an undo step itself.
      *
-     * @param rc the rect describing the new width and height of the image
-     * @param cropLayers if true, all layers are cropped to the new rect
+     * @param newRect the rect describing the new width, height and offset
+     *        of the image
      */
-    void resize(const QRect& rc, bool cropLayers = false);
+    void cropImage(const QRect& newRect);
+
 
     /**
-     * Resize the image to the specified width and height. The previous
-     * image is offset by the amount specified.
-     *
-     * @param w the width of the image
-     * @param h the height of the image
-     * @param xOffset the horizontal offset of the previous image
-     * @param yOffset the vertical offset of the previous image
+     * Crop a node to @newRect. The node will *not* be moved anywhere,
+     * it just drops some content
      */
-    void resizeWithOffset(qint32 w, qint32 h, qint32 xOffset = 0, qint32 yOffset = 0);
+    void cropNode(KisNodeSP node, const QRect& newRect);
 
-    /**
-     * Execute a scale transform on all layers in this image.
-     * @param sx x-axis scale factor
-     * @param sy y-axis scale factor
-     * @param m_progress progress updater
-     * @param filterStrategy filtering strategy be used to scaling pixels 
-     * @param scaleOnlyShapes only scale shapes, but not image and pixels
-     */
-    void scale(double sx, double sy, KoUpdater *m_progress, KisFilterStrategy *filterStrategy, bool scaleOnlyShapes = false);
+    void scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);
 
     /**
      * Execute a rotate transform on all layers in this image.
@@ -265,16 +260,34 @@ public:
     void assignImageProfile(const KoColorProfile *profile);
 
     /**
-     * Replace the current undo adapter with the specified undo adapter.
-     * The current undo adapter will _not_ be deleted.
+     * Returns the current undo adapter. You can add new commands to the
+     * undo stack using the adapter. This adapter is used for a backward
+     * compatibility for old commands created before strokes. It blocks
+     * all the porcessing at the scheduler, waits until it's finished
+     * adn executes commands exclusively.
      */
-    void setUndoAdapter(KisUndoAdapter * undoAdapter);
+    KisUndoAdapter* undoAdapter() const;
 
     /**
-     * Returns the current undo adapter. You can add new commands to the
-     * undo stack using the adapter
+     * This adapter is used by the strokes system. The commands are added
+     * to it *after* redo() is done (in the scheduler context). They are
+     * wrapped into a special command and added to the undo stack. redo()
+     * in not called.
      */
-    KisUndoAdapter *undoAdapter() const;
+    KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const;
+
+    /**
+     * Replace current undo store with the new one. The old store
+     * will be deleted.
+     * This method is used by KisDoc2 for dropping all the commands
+     * during file loading.
+     */
+    void setUndoStore(KisUndoStore *undoStore);
+
+    /**
+     * Return current undo store of the image
+     */
+    KisUndoStore* undoStore();
 
     /**
      * @return the action recorder associated with this image
@@ -478,6 +491,8 @@ public:
      */
     void notifyAboutToBeDeleted();
 
+    KisImageSignalRouter* signalRouter();
+
 signals:
 
     /**
@@ -552,9 +567,23 @@ signals:
     void sigAboutToBeDeleted();
 
 public slots:
+    KisCompositeProgressProxy* compositeProgressProxy();
 
-    void slotProjectionUpdated(const QRect & rc);
-    void updateProjection(KisNodeSP node, const QRect& rc);
+    void barrierLock();
+    bool tryBarrierLock();
+    void waitForDone();
+
+    KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);
+    void addJob(KisStrokeId id, KisStrokeJobData *data);
+    void endStroke(KisStrokeId id);
+    bool cancelStroke(KisStrokeId id);
+
+    void blockUpdates();
+    void unblockUpdates();
+
+    void refreshGraphAsync(KisNodeSP root = 0);
+    void refreshGraphAsync(KisNodeSP root, const QRect &rc);
+    void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect);
 
     /**
      * Triggers synchronous recomposition of the projection
@@ -563,9 +592,12 @@ public slots:
     void refreshGraph(KisNodeSP root, const QRect& rc, const QRect &cropRect);
 
 private:
+    KisImage(const KisImage& rhs);
     KisImage& operator=(const KisImage& rhs);
-    void init(KisUndoAdapter * adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace);
+    void init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace);
     void emitSizeChanged();
+
+    void resizeImageImpl(const QRect& newRect, bool cropLayers);
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
     static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());

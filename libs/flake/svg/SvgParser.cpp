@@ -1034,9 +1034,9 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
         if (isSwitch) {
             // if we are parsing a switch check the requiredFeatures, requiredExtensions
             // and systemLanguage attributes
-            QString features = b.attribute("requiredFeatures");
+            QString features = b.attribute("requiredFeatures", "").simplified();
             // TODO: evaluate feature list
-            if (features.isEmpty() || features.simplified().isEmpty()) {
+            if (features.isEmpty()) {
                 continue;
             }
             if (b.hasAttribute("requiredExtensions")) {
@@ -1112,7 +1112,14 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
         } else if (b.tagName() == "use") {
             shapes += parseUse(b);
         } else {
-            continue;
+            // this is an unkown element, so try to load it anyway
+            // there might be a shape that handles that element
+            KoShape *shape = createObject(b);
+            if (shape) {
+                shapes.append(shape);
+            } else {
+                continue;
+            }
         }
 
         // if we are parsing a switch, stop after the first supported element

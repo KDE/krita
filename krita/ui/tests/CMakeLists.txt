@@ -4,6 +4,7 @@ include_directories(  ${KOMAIN_INCLUDES}   ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 add_subdirectory(scratchpad)
 
 add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+add_definitions(-DFILES_OUTPUT_DIR="\\"${CMAKE_CURRENT_BINARY_DIR}\\"")
 
 ########### next target ###############
 
@@ -107,3 +108,9 @@ target_link_libraries(KisCoordinatesConverterTest  ${KDE4_KDEUI_LIBS}  komain kr
 set(kis_clipboard_test_SRCS kis_clipboard_test.cpp )
 kde4_add_unit_test(KisClipboardTest TESTNAME krita-ui-KisClipboardTest  ${kis_clipboard_test_SRCS})
 target_link_libraries(KisClipboardTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(freehand_stroke_test_SRCS freehand_stroke_test.cpp ../../sdk/tests/stroke_testing_utils.cpp)
+kde4_add_unit_test(FreehandStrokeTest TESTNAME krita-ui-FreehandStrokeTest  ${freehand_stroke_test_SRCS})
+target_link_libraries(FreehandStrokeTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})

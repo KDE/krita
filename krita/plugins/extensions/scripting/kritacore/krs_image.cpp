@@ -76,12 +76,13 @@ bool Image::convertToColorSpace(const QString& model, const QString& depth)
 
 void Image::resize(int width, int height, int x, int y)
 {
-    m_image->resize(width, height, x, y);
+    m_image->resizeImage(QRect(x, y, width, height));
 }
 
 void Image::scale(double widthfactor, double heightfactor)
 {
-    m_image->scale(widthfactor, heightfactor, 0, KisFilterStrategyRegistry::instance()->value("Mitchell"));
+    QSize newSize(m_image->width() * widthfactor, m_image->height() * heightfactor);
+    m_image->scaleImage(newSize, m_image->xRes(), m_image->yRes(), KisFilterStrategyRegistry::instance()->value("Mitchell"));
 }
 
 void Image::rotate(double angle)

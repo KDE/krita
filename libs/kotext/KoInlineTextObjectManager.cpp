@@ -26,10 +26,13 @@
 #include "KoTextLocator.h"
 #include "KoBookmark.h"
 #include "KoInlineNote.h"
+#include "KoOdfNotesConfiguration.h"
+#include "KoTextDocument.h"
 #include "KoInlineCite.h"
 
 #include <QTextCursor>
 #include <QPainter>
+#include <QTextDocument>
 
 KoInlineTextObjectManager::KoInlineTextObjectManager(QObject *parent)
         : QObject(parent),
@@ -97,7 +100,6 @@ bool KoInlineTextObjectManager::removeInlineObject(QTextCursor &cursor)
         int position = m_listeners.indexOf(object);
         m_listeners.removeAt(position);
     }
-
     // what if a KoTextLocator is removed? what to do with KoTextReference?
     QTextCharFormat format = cursor.charFormat();
     int id = format.intProperty(InlineInstanceId);

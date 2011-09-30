@@ -83,6 +83,7 @@ public:
     virtual KisNodeSP clone() const = 0;
 
     virtual bool accept(KisNodeVisitor &v);
+    virtual void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     /**
      * Re-implement this method to add constraints for the
@@ -104,9 +105,7 @@ public:
      * this percolates up to parent nodes all the way to the root
      * node.
      */
-    virtual void setDirty(const QRect & rect) {
-        Q_UNUSED(rect);
-    }
+    virtual void setDirty(const QRect & rect);
 
     /**
      * Add the given rects to the set of dirty rects for this node;

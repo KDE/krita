@@ -19,36 +19,16 @@
  */
 
 #include "kis_tool_dyna.h"
-#include <QEvent>
-#include <QLabel>
-#include <QLayout>
-#include <QWidget>
-#include <QTimer>
-#include <QPushButton>
-#include <QPainter>
-#include <QRect>
-#include <QCheckBox>
-#include <QGridLayout>
-#include <QSlider>
-#include <QComboBox>
 
-#include <kis_debug.h>
+#include <QCheckBox>
+#include <QDoubleSpinBox>
+
 #include <klocale.h>
 
 #include "KoPointerEvent.h"
-#include "KoCanvasBase.h"
-
-#include "kis_config.h"
-#include "kis_paintop_preset.h"
-#include "kis_paintop_registry.h"
-#include "kis_paint_information.h"
 
 #include "kis_cursor.h"
-#include "kis_painter.h"
 
-#include "kis_paint_device.h"
-#include "kis_layer.h"
-#include <QDoubleSpinBox>
 
 #define MAXIMUM_SMOOTHNESS 1000
 #define MAXIMUM_MAGNETISM 1000
@@ -57,11 +37,6 @@ KisToolDyna::KisToolDyna(KoCanvasBase * canvas)
         : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18nc("(qtundo-format)", "Dyna"))
 {
     setObjectName("tool_dyna");
-
-    m_rate = 200; // Conveniently hardcoded for now
-    m_timer = new QTimer(this);
-    Q_CHECK_PTR(m_timer);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
 
     initDyna();
 }
@@ -77,57 +52,23 @@ void KisToolDyna::initDyna()
     m_xangle = 0.60;
     m_yangle = 0.20;
     m_widthRange = 0.05;
-
-    m_previousPressure = 0.5;
 }
 
 
 KisToolDyna::~KisToolDyna()
 {
-    delete m_timer;
-    m_timer = 0;
 }
 
-void KisToolDyna::timeoutPaint()
+void KisToolDyna::initStroke(KoPointerEvent *event)
 {
-    Q_ASSERT(currentPaintOpPreset()->settings()->isAirbrushing());
-
-    if (currentImage() && m_painter) {
-        paintAt(m_previousPaintInformation);
-        currentNode()->setDirty(m_painter->takeDirtyRegion());
-    }
-
-}
-
-
-void KisToolDyna::initPaint(KoPointerEvent *e)
-{
-    m_rate = currentPaintOpPreset()->settings()->rate();
-
     QRectF imageSize = QRectF(QPointF(0.0,0.0),currentImage()->size());
     QRectF documentSize = currentImage()->pixelToDocument(imageSize);
     m_surfaceWidth = documentSize.width();
     m_surfaceHeight = documentSize.height();
-    setMousePosition(e->point);
+    setMousePosition(event->point);
     m_mouse.init(m_mousePos.x(), m_mousePos.y());
 
-    KisToolFreehand::initPaint(e);
-
-    if (!m_painter) {
-        warnKrita << "Didn't create a painter! Something is wrong!";
-        return;
-    }
-
-    if (currentPaintOpPreset()->settings()->isAirbrushing()) {
-        m_timer->start(m_rate);
-    }
-}
-
-
-void KisToolDyna::endPaint()
-{
-    m_timer->stop();
-    KisToolFreehand::endPaint();
+    KisToolFreehand::initStroke(event);
 }
 
 void KisToolDyna::mousePressEvent(KoPointerEvent *e)
@@ -153,10 +94,6 @@ void KisToolDyna::mouseMoveEvent(KoPointerEvent *e)
     if (applyFilter(m_mousePos.x(), m_mousePos.y())) {
         KoPointerEvent newEvent = filterEvent(e);
         KisToolFreehand::mouseMoveEvent(&newEvent);
-    }
-
-    if (m_painter && m_painter->paintOp() && currentPaintOpPreset()->settings()->isAirbrushing()) {
-        m_timer->start(m_rate);
     }
 }
 

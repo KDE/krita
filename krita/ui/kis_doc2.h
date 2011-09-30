@@ -39,7 +39,8 @@ class KoShape;
 class KoShapeControllerBase;
 class KisView2;
 class KisChildDoc;
-class KisUndoAdapter;
+class KisUndoStore;
+
 /**
  * The class that represents a Krita document containing content and
    settings.
@@ -128,7 +129,7 @@ public:
      */
     void setCurrentImage(KisImageWSP image);
 
-    KisUndoAdapter * undoAdapter() const;
+    KisUndoStore* createUndoStore();
 
     /**
      * The shape controller matches internal krita image layers with
@@ -169,7 +170,7 @@ private:
     bool init();
 
 private:
-
+    class UndoStack;
     class KisDocPrivate;
     KisDocPrivate * const m_d;
 

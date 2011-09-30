@@ -35,8 +35,7 @@ class KOREPORT_EXPORT KoReportPluginInterface : public QObject
 {
     Q_OBJECT
     public:
-        KoReportPluginInterface(QObject *parent, const QVariantList &args = QVariantList());
-        KoReportPluginInterface();
+        explicit KoReportPluginInterface(QObject *parent = 0, const QVariantList &args = QVariantList());
     
         virtual ~KoReportPluginInterface();
         

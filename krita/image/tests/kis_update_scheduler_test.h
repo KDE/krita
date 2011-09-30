@@ -33,6 +33,11 @@ private:
 private slots:
     void testMerge();
     void benchmarkOverlappedMerge();
+    void testLocking();
+    void testExclusiveStrokes();
+    void testEmptyStroke();
+    void testLazyWaitCondition();
+    void testBlockUpdates();
 };
 
 #endif /* KIS_UPDATE_SCHEDULER_TEST_H */

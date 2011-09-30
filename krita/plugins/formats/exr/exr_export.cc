@@ -84,7 +84,7 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
     KisImageWSP image = output->image();
     Q_CHECK_PTR(image);
 
-    exrConverter kpc(output, output->undoAdapter());
+    exrConverter kpc(output);
 
     if (widget.flatten->isChecked()) {
         image->refreshGraph();

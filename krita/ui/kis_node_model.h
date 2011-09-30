@@ -81,6 +81,11 @@ private slots:
     void nodeChanged(KisNode * node);
     
     void updateNodes();
+
+private:
+    void connectNode(KisNodeSP node, bool needConnect);
+    void connectNodes(KisNodeSP node, bool needConnect);
+
 private:
 
     class Private;

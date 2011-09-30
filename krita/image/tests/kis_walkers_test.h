@@ -87,6 +87,8 @@ public:
         return QRect();
     }
 
+    using KisLayer::accept;
+
     bool accept(KisNodeVisitor& v) {
         return v.visit(this);
     }
@@ -153,6 +155,8 @@ public:
         return QRect();
     }
 
+    using KisLayer::accept;
+
     bool accept(KisNodeVisitor& v) {
         return v.visit(this);
     }
@@ -202,6 +206,7 @@ class KisWalkersTest : public QObject
 private slots:
     void testUsualVisiting();
     void testMergeVisiting();
+    void testRefreshSubtreeVisiting();
     void testFullRefreshVisiting();
     void testCachedVisiting();
     void testMasksVisiting();

@@ -65,7 +65,7 @@ KoFilter::ConversionStatus KisTIFFImport::convert(const QByteArray&, const QByte
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        KisTIFFConverter ib(doc, doc -> undoAdapter());
+        KisTIFFConverter ib(doc);
 
 //        if (view != 0)
 //            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);

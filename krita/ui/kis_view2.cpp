@@ -81,6 +81,7 @@
 
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
+#include "kis_composite_progress_proxy.h"
 #include <kis_layer.h>
 
 #include "kra/kis_kra_loader.h"
@@ -106,7 +107,6 @@
 #include "kis_group_layer.h"
 #include "kis_custom_palette.h"
 #include "kis_resource_server_provider.h"
-#include "kis_projection.h"
 #include "kis_node.h"
 #include "kis_node_manager.h"
 #include "kis_selection.h"
@@ -625,7 +625,10 @@ KisSelectionSP KisView2::selection()
 
 KisUndoAdapter * KisView2::undoAdapter()
 {
-    return m_d->doc->undoAdapter();
+    KisImageWSP image = m_d->doc->image();
+    Q_ASSERT(image);
+
+    return image->undoAdapter();
 }
 
 
@@ -740,10 +743,23 @@ void KisView2::connectCurrentImage()
 
         }
         connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->resourceProvider, SLOT(slotImageSizeChanged()));
+
+        connect(image(), SIGNAL(sigResolutionChanged(double, double)),
+                m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
+        connect(zoomManager()->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
+                m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
+
         connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), this, SLOT(slotImageSizeChanged()));
         connect(image(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageSizeChanged()));
         connect(image()->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));
 
+        /**
+         * WARNING: Currently we access the global progress bar in two ways:
+         * connecting to composite progress proxy (strokes) and creating
+         * progress updaters. The latter way should be depracated in favour
+         * of displaying the status of the global strokes queue
+         */
+        //image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
     }
 
     m_d->canvas->connectCurrentImage();

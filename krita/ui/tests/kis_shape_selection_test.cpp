@@ -30,13 +30,12 @@
 #include "kis_pixel_selection.h"
 #include "flake/kis_shape_selection.h"
 #include "kis_image.h"
-#include "kis_undo_adapter.h"
 #include "testutil.h"
 
 void KisShapeSelectionTest::testAddChild()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(new KisUndoAdapter(0), 300, 300, cs, "test");
+    KisImageSP image = new KisImage(0, 300, 300, cs, "test");
 
     KisSelectionSP selection = new KisSelection();
     QVERIFY(selection->hasPixelSelection() == false);

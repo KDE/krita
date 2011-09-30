@@ -69,7 +69,7 @@ signals:
     void shadowOffsetChanged( const QPointF &offset );
 
     /// Is emitted whenever the shadow blur radius has changed
-    void shadowBlurChanged( const qreal &blur );
+    void shadowBlurChanged(qreal blur);
 
     /// Is emitted whenever the shadow visibility has changed
     void shadowVisibilityChanged( bool visible );
@@ -77,7 +77,7 @@ signals:
 private slots:
     void visibilityChanged();
     void offsetChanged();
-    void blurChanged();
+
 private:
     class Private;
     Private * const d;

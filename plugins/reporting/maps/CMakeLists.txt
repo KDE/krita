@@ -32,3 +32,4 @@ target_link_libraries(${MAPS_PLUG} ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kore
 
 install(TARGETS ${MAPS_PLUG}  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  koreport_mapsplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+kde4_install_icons(${DATA_INSTALL_DIR}/calligra/icons)

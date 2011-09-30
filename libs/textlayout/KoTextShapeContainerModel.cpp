@@ -186,7 +186,7 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
     QTextLayout *layout = 0;
     int anchorPosInParag = -1;
 
-    if (relation.anchor->behavesAsCharacter()) {
+    if (relation.anchor->anchorType() == KoTextAnchor::AnchorAsCharacter) {
         QTextBlock block = relation.anchor->document()->findBlock(relation.anchor->positionInDocument());
         layout = block.layout();
         anchorPosInParag = relation.anchor->positionInDocument() - block.position();

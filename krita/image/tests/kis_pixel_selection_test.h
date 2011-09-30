@@ -40,6 +40,7 @@ private slots:
     void testTotally();
     void testUpdateProjection();
     void testExactRectWithImage();
+    void testUndo();
 };
 
 #endif

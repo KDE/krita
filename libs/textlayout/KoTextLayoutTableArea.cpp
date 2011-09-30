@@ -553,6 +553,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
                     maxBottom);
 
             cellArea->setVirginPage(virginPage());
+            cellArea->setLayoutEnvironmentResctictions(true, true);
 
             FrameIterator *cellCursor = cursor->frameIterator(col);
 
@@ -571,6 +572,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
                 } else {
                     rowBottom = qMax(cellArea->bottom() + cellStyle.bottomPadding() + cellStyle.bottomBorderWidth(), rowBottom);
                 }
+                rowBottom = qMax(rowBottom, documentLayout()->maxYOfAnchoredObstructions(cell.firstCursorPosition().position(), cell.lastCursorPosition().position()));
             }
 
 
@@ -673,6 +675,7 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
                     rowBottom - cellStyle.bottomPadding() - cellStyle.bottomBorderWidth());
 
             cellArea->setVirginPage(virginPage());
+            cellArea->setLayoutEnvironmentResctictions(true, true);
 
             FrameIterator *cellCursor =  cursor->frameIterator(col);
 

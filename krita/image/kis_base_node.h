@@ -30,6 +30,8 @@ class KoProperties;
 class KoColorSpace;
 class KoCompositeOp;
 class KisNodeVisitor;
+class KisProcessingVisitor;
+class KisUndoAdapter;
 
 /**
  * A KisBaseNode is the base class for all components of an image:
@@ -214,6 +216,21 @@ public:
      */
     virtual bool accept(KisNodeVisitor &) {
         return false;
+    }
+
+    /**
+     * Accept the KisNodeVisitor (for the Visitor design pattern),
+     * should call the correct function on the KisProcessingVisitor
+     * for this node type, so you need to override it for all leaf
+     * classes in the node inheritance hierarchy.
+     *
+     * The processing visitor differs from node visitor in the way
+     * that it accepts undo adapter, that allows the processing to
+     * be multithreaded
+     */
+    virtual void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) {
+        Q_UNUSED(visitor);
+        Q_UNUSED(undoAdapter);
     }
 
     /**

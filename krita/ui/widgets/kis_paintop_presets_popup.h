@@ -60,10 +60,6 @@ public:
      */
     QString getPresetName() const;
 
-    ///Set preset for the scratchpad
-    ///@param preset that will be used in the scratchpad
-    void setPreset(KisPaintOpPresetSP preset);
-
     ///Image for preset preview
     ///@return image cut out from the scratchpad
     QImage cutOutOverlay();
@@ -100,9 +96,6 @@ signals:
     void sizeChanged();
 
 private slots:
-    void fillScratchPadGradient();
-    void fillScratchPadSolid();
-    void fillScratchPadLayer();
     void slotCheckPresetValidity();
 
 

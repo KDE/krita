@@ -60,6 +60,7 @@ public:
     void setSelection(KisSelectionSP selection);
 
     bool accept(KisNodeVisitor &v);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     /**
      * @return the deselected selection or 0 if no selection was deselected

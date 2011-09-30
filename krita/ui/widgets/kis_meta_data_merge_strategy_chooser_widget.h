@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Boudewijn Rempot <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,25 +33,30 @@ class MergeStrategy;
  */
 class KisMetaDataMergeStrategyChooserWidget : public QWidget
 {
+    Q_OBJECT
 public:
     /**
      * Creates a widget to select a merge strategy.
      */
     KisMetaDataMergeStrategyChooserWidget(QWidget* parent);
     ~KisMetaDataMergeStrategyChooserWidget();
-public:
+
     const KisMetaData::MergeStrategy* currentStrategy();
-public:
+
     /**
      * Show a dialog which embed that widget, and have an Ok and Cancel button.
      * @return 0 if no merge strategy was selected, or the selected merge strategy
      */
     static const KisMetaData::MergeStrategy* showDialog(QWidget* parent);
+
 private slots:
+
     void setCurrentDescription(int index);
+
 private:
+
     const KisMetaData::MergeStrategy* mergeStrategy(int index);
-private:
+
     struct Private;
     Private* const d;
 };

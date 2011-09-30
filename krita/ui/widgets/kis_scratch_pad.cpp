@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
- * Copyright 2010 (C) Boudewijn Rempt <boud@valdyas.org> *
+ * Copyright 2010 (C) Boudewijn Rempt <boud@valdyas.org>
+ * Copyright 2011 (C) Dmitry Kazakov <dimula73@gmail.com>
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -17,287 +19,294 @@
  */
 #include "kis_scratch_pad.h"
 
-#include <QRect>
-#include <QPaintEvent>
-#include <QMouseEvent>
-#include <QTabletEvent>
+#include <QMutex>
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoPointerEvent.h>
 #include <KoAbstractGradient.h>
 
-#include <kis_config.h>
-#include <kis_color_picker_utils.h>
-#include <kis_vec.h>
 #include <kis_cursor.h>
+#include <kis_color_picker_utils.h>
+#include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_gradient_painter.h>
-#include <kis_paintop_settings.h>
 #include <kis_default_bounds.h>
-#include <kis_dumb_undo_adapter.h>
 #include <kis_canvas_resource_provider.h>
+
+#include "kis_undo_stores.h"
+#include "kis_update_scheduler.h"
+#include "kis_post_execution_undo_adapter.h"
+#include "kis_scratch_pad_event_filter.h"
+#include "kis_painting_information_builder.h"
+#include "kis_tool_freehand_helper.h"
+#include "kis_image_patch.h"
+#include "kis_canvas_widget_base.h"
+
+
+class KisScratchPadNodeListener : public KisNodeGraphListener
+{
+public:
+    KisScratchPadNodeListener(KisScratchPad *scratchPad)
+        : m_scratchPad(scratchPad)
+    {
+    }
+
+    void aboutToAddANode(KisNode *, int) {}
+    void nodeHasBeenAdded(KisNode *, int) {}
+    void aboutToRemoveANode(KisNode *, int) {}
+    void nodeHasBeenRemoved(KisNode *, int) {}
+    void aboutToMoveNode(KisNode *, int, int) {}
+    void nodeHasBeenMoved(KisNode *, int, int) {}
+    void nodeChanged(KisNode*) {}
+
+    void requestProjectionUpdate(KisNode *node, const QRect& rect) {
+        Q_UNUSED(node);
+
+        QMutexLocker locker(&m_lock);
+        m_scratchPad->imageUpdated(rect);
+    }
+
+private:
+    KisScratchPad *m_scratchPad;
+    QMutex m_lock;
+};
+
 
 class KisScratchPadDefaultBounds : public KisDefaultBounds
 {
 public:
-    QRect bounds() const
+
+    KisScratchPadDefaultBounds(KisScratchPad *scratchPad)
+        : m_scratchPad(scratchPad)
     {
-        return QRect(0,0,0,0);
     }
+
+    QRect bounds() const {
+        return m_scratchPad->imageBounds();
+    }
+
+private:
+    KisScratchPad *m_scratchPad;
 };
 
 
 KisScratchPad::KisScratchPad(QWidget *parent)
     : QWidget(parent)
-    , m_colorSpace(0)
-    , m_backgroundColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8())
-    , m_canvasColor(Qt::white)
     , m_toolMode(HOVERING)
-    , m_paintDevice(0)
     , m_paintLayer(0)
-    , m_backgroundMode(SOLID_COLOR)
     , m_displayProfile(0)
-    , m_painter(0)
-    , m_compositeOp(0)
-    , m_scale(1.0)
-    , m_opacity(OPACITY_OPAQUE_U8)
     , m_resourceProvider(0)
 {
     setAutoFillBackground(false);
 
     m_cursor = KisCursor::load("tool_freehand_cursor.png", 5, 5);
+    setCursor(m_cursor);
 
-    KisConfig cfg;
-    int checkSize = cfg.checkSize();
-    QImage tile(checkSize * 2, checkSize * 2, QImage::Format_RGB32);
-    QPainter pt(&tile);
-    pt.fillRect(tile.rect(), Qt::white);
-    pt.fillRect(0, 0, checkSize, checkSize, cfg.checkersColor());
-    pt.fillRect(checkSize, checkSize, checkSize, checkSize, cfg.checkersColor());
-    pt.end();
-    m_checkBrush = QBrush(tile);
+    QImage checkImage = KisCanvasWidgetBase::checkImage();
+    m_checkBrush = QBrush(checkImage);
+
+
+    // We are not supposed to use updates here,
+    // so just set the listener to null
+    m_updateScheduler = new KisUpdateScheduler(0);
+    m_undoStore = new KisSurrogateUndoStore();
+    m_undoAdapter = new KisPostExecutionUndoAdapter(m_undoStore, m_updateScheduler);
+    m_nodeListener = new KisScratchPadNodeListener(this);
+
+    connect(this, SIGNAL(sigUpdateCanvas(const QRect&)), SLOT(slotUpdateCanvas(const QRect&)), Qt::QueuedConnection);
+
+    // filter will be deleted by the QObject hierarchy
+    m_eventFilter = new KisScratchPadEventFilter(this);
+    connect(m_eventFilter, SIGNAL(mousePressSignal(KoPointerEvent*)),
+            SLOT(slotMousePress(KoPointerEvent*)), Qt::DirectConnection);
+    connect(m_eventFilter, SIGNAL(mouseReleaseSignal(KoPointerEvent*)),
+            SLOT(slotMouseRelease(KoPointerEvent*)), Qt::DirectConnection);
+    connect(m_eventFilter, SIGNAL(mouseMoveSignal(KoPointerEvent*)),
+            SLOT(slotMouseMove(KoPointerEvent*)), Qt::DirectConnection);
+
+    m_infoBuilder = new KisPaintingInformationBuilder();
+    m_helper = new KisToolFreehandHelper(m_infoBuilder);
+
+    m_scaleBorderWidth = 1;
 }
 
 KisScratchPad::~KisScratchPad() {
-    delete m_painter;
+    delete m_helper;
+    delete m_infoBuilder;
+
+    delete m_undoAdapter;
+    delete m_undoStore;
+    delete m_updateScheduler;
+    delete m_nodeListener;
 }
 
-
-void KisScratchPad::setCutoutOverlay(const QRect& rc)  {
-
-    m_cutoutOverlay = rc;
-}
-
-QImage KisScratchPad::cutoutOverlay() const {
-
-    QRect rc = m_cutoutOverlay.translated(m_offset);
-    QImage img = m_paintDevice->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
-    return img;
-}
-
-
-void KisScratchPad::setPaintColor(const QColor& paintColor) {
-
-    KoColor c(m_colorSpace);
-    c.fromQColor(paintColor);
-    m_paintColor = c;
-}
-
-void KisScratchPad::setPaintColor(const KoColor& paintColor) {
-
-    m_paintColor = paintColor;
-    m_paintColor.convertTo(m_colorSpace);
-}
-
-void KisScratchPad::setPreset(KisPaintOpPresetSP preset) {
-
-    m_preset = preset;
-}
-
-void KisScratchPad::setBackgroundColor(const KoColor& backgroundColor) {
-
-    m_backgroundColor = backgroundColor;
-}
-
-void KisScratchPad::setCanvasColor(const QColor& canvasColor)
+void KisScratchPad::slotMousePress(KoPointerEvent *event)
 {
-    m_canvasColor = canvasColor;
-    clear();
-}
-
-void KisScratchPad::setBackgroundTile(const QImage& tile) {
-
-    m_backgroundTile = tile;
-}
-
-void KisScratchPad::setColorSpace(const KoColorSpace *colorSpace) {
-
-    m_colorSpace = colorSpace;
-    m_paintDevice = new KisPaintDevice(colorSpace, "scratchpad");
-    m_paintLayer = new KisPaintLayer(0, "ScratchPad", OPACITY_OPAQUE_U8, m_paintDevice);
-    m_paintDevice->setDefaultBounds(new KisScratchPadDefaultBounds());
-
-    m_compositeOp = m_colorSpace->compositeOp(COMPOSITE_OVER);
-    clear();
-}
-
-void KisScratchPad::setDisplayProfile(const KoColorProfile *colorProfile) {
-
-    m_displayProfile = colorProfile;
-    QWidget::update();
-}
-
-void KisScratchPad::clear() {
-
-    if (m_paintDevice) {
-        m_paintDevice->clear();
-        switch(m_backgroundMode) {
-        case TILED:
-        case STRETCHED:
-        case CENTERED:
-        case GRADIENT:
-        case SOLID_COLOR:
-        default:
-            KoColor c(m_paintDevice->colorSpace());
-            c.fromQColor(m_canvasColor);
-            m_paintDevice->setDefaultPixel(c.data());
-            m_paintLayer->updateProjection(rect().translated(m_offset));
-        }
-    }
-    update();
-}
-
-void KisScratchPad::fillGradient(KoAbstractGradient* gradient)
-{
-    if (!m_paintDevice) return;
-    KisGradientPainter painter(m_paintDevice);
-    painter.setGradient(gradient);
-    painter.paintGradient(QPointF(0,0)+m_offset, QPointF(width(), height())+m_offset,
-                          KisGradientPainter::GradientShapeLinear, KisGradientPainter::GradientRepeatNone,
-                          0.2, false,
-                          m_offset.x(), m_offset.y(), width(), height());
-
-    m_paintLayer->updateProjection(rect().translated(m_offset));
-    update();
-}
-
-void KisScratchPad::fillSolid(const KoColor& color)
-{
-    if (!m_paintDevice) return;
-    KoColor csColor(color, m_paintDevice->colorSpace());
-    m_paintDevice->fill(m_offset.x(), m_offset.y(), width(), height(), csColor.data());
-    m_paintDevice->setDirty(QRect(0, 0, width(), height()).translated(m_offset));
-    m_paintLayer->updateProjection(rect().translated(m_offset));
-    update();
-}
-
-void KisScratchPad::setPresetImage(const QImage& image)
-{
-    KisPaintDeviceSP device = new KisPaintDevice(m_paintDevice->colorSpace());
-    device->convertFromQImage(image, "");
-    KisPainter painter(m_paintDevice);
-    painter.bitBlt(m_cutoutOverlay.x(), m_cutoutOverlay.y(), device, 0, 0, m_cutoutOverlay.width(), m_cutoutOverlay.height());
-    update();
-}
-
-void KisScratchPad::setCanvasResourceProvider(KisCanvasResourceProvider* resourceProvider)
-{
-    m_resourceProvider = resourceProvider;
-}
-
-void KisScratchPad::contextMenuEvent ( QContextMenuEvent * event ) {
-
-    QWidget::contextMenuEvent(event);
-}
-
-void KisScratchPad::keyPressEvent ( QKeyEvent * event ) {
-
-    QWidget::keyPressEvent(event);
-}
-
-void KisScratchPad::keyReleaseEvent ( QKeyEvent * event ) {
-
-    QWidget::keyReleaseEvent(event);
-}
-
-void KisScratchPad::mouseDoubleClickEvent ( QMouseEvent * event ) {
-
-    QWidget::mouseDoubleClickEvent(event);
-}
-
-void KisScratchPad::mouseMoveEvent ( QMouseEvent * event ) {
-
-    if (!m_paintDevice) return;
-
-    m_currentMousePosition = event->pos();
-
-    switch (m_toolMode) {
-    case PAINTING:
-        paint(event);
-        break;
-    case PANNING:
-        pan(event);
-        break;
-    case PICKING:
-        pick(event);
-        break;
-    case HOVERING:
-    default:
-        event->ignore();
-    }
-}
-
-void KisScratchPad::mousePressEvent ( QMouseEvent * event ) {
-
-    if (!m_paintDevice) return;
-
-    m_currentMousePosition = event->pos();
     if (event->button() == Qt::LeftButton) {
-        initPainting(event);
+        m_toolMode = PAINTING;
+        beginStroke(event);
         event->accept();
-        return;
     }
     else if (event->button() == Qt::MidButton) {
-        // start panning
         m_toolMode = PANNING;
-        initPan(event);
+        beginPan(event);
         event->accept();
-        return;
     }
     else if (event->button() == Qt::RightButton) {
-        // start picking
         m_toolMode = PICKING;
+        event->accept();
     }
-
-
 }
 
-void KisScratchPad::mouseReleaseEvent ( QMouseEvent * event ) {
-
+void KisScratchPad::slotMouseRelease(KoPointerEvent *event)
+{
     if (m_toolMode == PAINTING) {
-        endPaint(event);
+        endStroke(event);
+        m_toolMode = HOVERING;
+        event->accept();
     }
     else if (m_toolMode == PANNING) {
         endPan(event);
+        m_toolMode = HOVERING;
+        event->accept();
     }
-    QWidget::mouseReleaseEvent(event);
+    else if (m_toolMode == PICKING) {
+        event->accept();
+        m_toolMode = HOVERING;
+    }
+}
+
+void KisScratchPad::slotMouseMove(KoPointerEvent *event)
+{
+    if (m_toolMode == PAINTING) {
+        doStroke(event);
+        event->accept();
+    }
+    else if (m_toolMode == PANNING) {
+        doPan(event);
+        event->accept();
+    }
+    else if (m_toolMode == PICKING) {
+        pick(event);
+        event->accept();
+    }
+}
+
+void KisScratchPad::beginStroke(KoPointerEvent *event)
+{
+    KoResourceManager *resourceManager = m_resourceProvider->resourceManager();
+
+    m_helper->initPaint(event, resourceManager,
+                        0,
+                        m_updateScheduler,
+                        m_undoAdapter,
+                        m_paintLayer);
+}
+
+void KisScratchPad::doStroke(KoPointerEvent *event)
+{
+    m_helper->paint(event);
+}
+
+void KisScratchPad::endStroke(KoPointerEvent *event)
+{
+    Q_UNUSED(event);
+    m_helper->endPaint();
+}
+
+void KisScratchPad::beginPan(KoPointerEvent *event)
+{
+    setCursor(QCursor(Qt::ClosedHandCursor));
+    m_panDocPoint = event->point;
+}
+
+void KisScratchPad::doPan(KoPointerEvent *event)
+{
+    QPointF docOffset = event->point - m_panDocPoint;
+
+    m_translateTransform.translate(-docOffset.x(), -docOffset.y());
+    updateTransformations();
+    update();
+}
+
+void KisScratchPad::endPan(KoPointerEvent *event)
+{
+    Q_UNUSED(event);
+    setCursor(m_cursor);
+}
+
+void KisScratchPad::pick(KoPointerEvent *event)
+{
+    emit colorSelected(KisToolUtils::pick(m_paintLayer->projection(), event->point.toPoint()));
+}
+
+void KisScratchPad::setOnScreenResolution(qreal scaleX, qreal scaleY)
+{
+    m_scaleBorderWidth = BORDER_SIZE(qMax(scaleX, scaleY));
+
+    m_scaleTransform = QTransform::fromScale(scaleX, scaleY);
+    updateTransformations();
+    update();
+}
+
+QTransform KisScratchPad::documentToWidget() const
+{
+    return m_translateTransform.inverted() * m_scaleTransform;
+}
+
+QTransform KisScratchPad::widgetToDocument() const
+{
+    return m_scaleTransform.inverted() * m_translateTransform;
+}
+
+void KisScratchPad::updateTransformations()
+{
+    m_eventFilter->setWidgetToDocumentTransform(widgetToDocument());
+}
+
+QRect KisScratchPad::imageBounds() const
+{
+    return widgetToDocument().mapRect(rect());
+}
+
+void KisScratchPad::imageUpdated(const QRect &rect)
+{
+    emit sigUpdateCanvas(documentToWidget().mapRect(QRectF(rect)).toAlignedRect());
+}
+
+void KisScratchPad::slotUpdateCanvas(const QRect &rect)
+{
+    update(rect);
 }
 
 void KisScratchPad::paintEvent ( QPaintEvent * event ) {
+    if(!m_paintLayer) return;
 
-    if (m_colorSpace == 0 || m_paintDevice == 0) {
-        return;
-    }
-    QRect rc = event->rect();
-    QPainter gc(this);
-    gc.fillRect(rc, m_checkBrush);
+    QRectF imageRect = widgetToDocument().mapRect(QRectF(event->rect()));
+
+    QRect alignedImageRect =
+        imageRect.adjusted(-m_scaleBorderWidth, -m_scaleBorderWidth,
+                           m_scaleBorderWidth, m_scaleBorderWidth).toAlignedRect();
+
+    QPointF offset = alignedImageRect.topLeft();
+
+    m_paintLayer->updateProjection(alignedImageRect);
     KisPaintDeviceSP projection = m_paintLayer->projection();
-    gc.drawImage(rc, projection->convertToQImage(m_displayProfile,
-                                                    rc.x() + m_offset.x(),
-                                                    rc.y() + m_offset.y(),
-                                                    rc.width(),
-                                                    rc.height()));
+
+    QImage image = projection->convertToQImage(m_displayProfile,
+                                               alignedImageRect.x(),
+                                               alignedImageRect.y(),
+                                               alignedImageRect.width(),
+                                               alignedImageRect.height());
+
+    QPainter gc(this);
+    gc.fillRect(event->rect(), m_checkBrush);
+
+    gc.setRenderHints(QPainter::SmoothPixmapTransform);
+    gc.drawImage(QRectF(event->rect()), image, imageRect.translated(-offset));
+
     QBrush brush(Qt::lightGray);
     QPen pen(brush, 1, Qt::DotLine);
     gc.setPen(pen);
@@ -309,226 +318,132 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
         QColor color(Qt::lightGray);
         color.setAlphaF(0.5);
         QBrush disabledBrush(color);
-        gc.fillRect(rc, disabledBrush);
+        gc.fillRect(event->rect(), disabledBrush);
     }
     gc.end();
 }
 
-void KisScratchPad::resizeEvent ( QResizeEvent * event ) {
-    QWidget::resizeEvent(event);
+void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
+                                    const QColor &defaultColor)
+{
+    m_resourceProvider = resourceProvider;
+
+    setDisplayProfile(m_resourceProvider->currentDisplayProfile());
+    connect(m_resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)),
+            SLOT(setDisplayProfile(const KoColorProfile*)));
+
+    connect(m_resourceProvider, SIGNAL(sigOnScreenResolutionChanged(qreal, qreal)),
+            SLOT(setOnScreenResolution(qreal, qreal)));
+
+    m_defaultColor = KoColor(defaultColor, KoColorSpaceRegistry::instance()->rgb8());
+
+    KisPaintDeviceSP paintDevice =
+        new KisPaintDevice(m_defaultColor.colorSpace(), "scratchpad");
+
+    m_paintLayer = new KisPaintLayer(0, "ScratchPad", OPACITY_OPAQUE_U8, paintDevice);
+    m_paintLayer->setGraphListener(m_nodeListener);
+    paintDevice->setDefaultBounds(new KisScratchPadDefaultBounds(this));
+
+    fillDefault();
 }
 
-void KisScratchPad::tabletEvent ( QTabletEvent * event ) {
-
-    if (!m_paintDevice) return;
-
-    if (event->type() == QEvent::TabletPress) {
-        initPainting(event);
-    }
-    else if (event->type() == QEvent::TabletMove && m_toolMode == PAINTING) {
-        paint(event);
-    }
-    else if (event->type() == QEvent::TabletRelease && m_toolMode == PAINTING) {
-        endPaint(event);
-    }
-
+void KisScratchPad::setCutoutOverlayRect(const QRect& rc)
+{
+    m_cutoutOverlay = rc;
 }
 
-void KisScratchPad::wheelEvent ( QWheelEvent * event ) {
-    QWidget::wheelEvent(event);
+QImage KisScratchPad::cutoutOverlay() const
+{
+    if(!m_paintLayer) return QImage();
+    KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
+
+    QRect rc = widgetToDocument().mapRect(m_cutoutOverlay);
+    QImage rawImage = paintDevice->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+
+    QImage scaledImage = rawImage.scaled(m_cutoutOverlay.size(),
+                                         Qt::IgnoreAspectRatio,
+                                         Qt::SmoothTransformation);
+
+    return scaledImage;
 }
 
-void KisScratchPad::initPainting(QEvent* event) {
-    Q_ASSERT(m_resourceProvider);
-    if (currentPaintOpPreset() && currentPaintOpPreset()->settings()) {
-        m_paintIncremental = currentPaintOpPreset()->settings()->paintIncremental();
-        /// todo: create a KoPointerEvent and use it here
-        /// will be done probably, when when using a common class with kistoolfreehand
-//        currentPaintOpPreset()->settings()->mousePressEvent(e);
-//        if (e->isAccepted()) {
-//            return;
-//        }
-    }
-    m_toolMode = PAINTING;
-    m_dragDist = 0;
-
-    KisPaintDeviceSP paintDevice = currentNode()->paintDevice();
-    KisPaintDeviceSP targetDevice;
-
-    if (!m_compositeOp)
-        m_compositeOp = paintDevice->colorSpace()->compositeOp(COMPOSITE_OVER);
-
-
-    if (!m_paintIncremental) {
-        KisIndirectPaintingSupport* indirect =
-            dynamic_cast<KisIndirectPaintingSupport*>(currentNode().data());
-
-        if (indirect) {
-            targetDevice = new KisPaintDevice(currentNode().data(), paintDevice->colorSpace());
-//            targetDevice->setDefaultBounds(KisDefaultBounds(QRect(0,0,1,1)));
-            indirect->setTemporaryTarget(targetDevice);
-            indirect->setTemporaryCompositeOp(m_compositeOp);
-            indirect->setTemporaryOpacity(m_opacity);
-        }
-        else {
-            m_paintIncremental = true;
-        }
-    }
-
-    if (!targetDevice)
-        targetDevice = paintDevice;
-
-    delete m_painter;
-
-    m_painter = new KisPainter(targetDevice);
-    m_painter->beginTransaction("scratchpad stroke");
-
-    if (m_paintIncremental) {
-        m_painter->setCompositeOp(m_compositeOp);
-        m_painter->setOpacity(m_opacity);
-    } else {
-        m_painter->setCompositeOp(paintDevice->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
-        m_painter->setOpacity(OPACITY_OPAQUE_U8);
-    }
-
-    m_painter->setPaintColor(m_paintColor);
-    m_painter->setBackgroundColor(m_backgroundColor);
-    m_painter->setGradient(m_resourceProvider->currentGradient());
-    m_painter->setPattern(m_resourceProvider->currentPattern());
-    m_painter->setPaintOpPreset(m_preset, 0);
-
-    QPointF pos;
-    if (QTabletEvent* tabletEvent = dynamic_cast<QTabletEvent*>(event)) {
-        pos = tabletEvent->hiResGlobalPos() - mapToGlobal(QPoint(0, 0));
-        m_previousPaintInformation = KisPaintInformation(QPointF(pos.x() + m_offset.x(), pos.y() + m_offset.y()),
-                                                         tabletEvent->pressure(),
-                                                         tabletEvent->xTilt(),
-                                                         tabletEvent->yTilt(),
-                                                         KisVector2D::Zero(),
-                                                         tabletEvent->rotation(),
-                                                         tabletEvent->tangentialPressure());
-    }
-    else if (QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event)) {
-        pos = mouseEvent->pos();
-        m_previousPaintInformation = KisPaintInformation(pos + m_offset);
-    }
-    m_distanceInformation.spacing = m_painter->paintAt(m_previousPaintInformation);
-    m_distanceInformation.distance = 0.0;
-
-
-    QRect bounds;
-    foreach(const QRect &rc, m_painter->takeDirtyRegion()) {
-        bounds |= rc;
-    }
-
-    update(pos.x() - bounds.width(), pos.y() - bounds.height(), bounds.width() * 2, bounds.height() *2);
+void KisScratchPad::setPresetImage(const QImage& image)
+{
+    m_presetImage = image;
 }
 
-void KisScratchPad::paint(QEvent* event) {
+void KisScratchPad::paintPresetImage()
+{
+    if(!m_paintLayer) return;
+    KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
-    if (!m_painter) {
-        return;
-    }
+    QRect overlayRect = widgetToDocument().mapRect(m_cutoutOverlay);
+    QRect imageRect(QPoint(), overlayRect.size());
 
-    KisPaintInformation info;
-    QPointF pos;
-    if (QTabletEvent* tabletEvent = dynamic_cast<QTabletEvent*>(event)) {
-        pos = tabletEvent->hiResGlobalPos() - mapToGlobal(QPoint(0, 0));
-        QPointF dragVec = pos - m_previousPaintInformation.pos();
-        info = KisPaintInformation(QPointF(pos.x() + m_offset.x(), pos.y() + m_offset.y()),
-                                   tabletEvent->pressure(),
-                                   tabletEvent->xTilt(),
-                                   tabletEvent->yTilt(),
-                                   toKisVector2D(dragVec),
-                                   tabletEvent->rotation(),
-                                   tabletEvent->tangentialPressure());
+    QImage scaledImage = m_presetImage.scaled(overlayRect.size(),
+                                              Qt::IgnoreAspectRatio,
+                                              Qt::SmoothTransformation);
 
-    }
-    else if (QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event)) {
-        pos = mouseEvent->pos();
-        info = KisPaintInformation(pos + m_offset);
-    }
+    KisPaintDeviceSP device = new KisPaintDevice(paintDevice->colorSpace());
+    device->convertFromQImage(scaledImage, "");
 
-    m_distanceInformation = m_painter->paintLine(m_previousPaintInformation, info, m_distanceInformation);
-    m_previousPaintInformation = info;
-
-    QRect bounds;
-    foreach(const QRect &rc, m_painter->takeDirtyRegion()) {
-        bounds |= rc;
-        m_incrementalDirtyRegion += rc;
-    }
-
-    m_paintLayer->updateProjection(bounds);
-    update(pos.x() - bounds.width(), pos.y() - bounds.height(), bounds.width() * 2, bounds.height() *2);
+    KisPainter painter(paintDevice);
+    painter.bitBlt(overlayRect.topLeft(), device, imageRect);
+    update();
 }
 
-void KisScratchPad::endPaint(QEvent *event) {
+void KisScratchPad::setDisplayProfile(const KoColorProfile *colorProfile) {
 
-    Q_UNUSED(event);
-    m_toolMode = HOVERING;
-
-    if (m_painter) {
-        // If painting in mouse release, make sure painter
-        // is destructed or end()ed
-
-        // XXX: For now, only layers can be painted on in non-incremental mode
-        KisLayerSP layer = dynamic_cast<KisLayer*>(currentNode().data());
-
-        if (layer && !m_paintIncremental) {
-            m_painter->deleteTransaction();
-
-            KisIndirectPaintingSupport *indirect =
-                dynamic_cast<KisIndirectPaintingSupport*>(layer.data());
-            Q_ASSERT(indirect);
-
-            indirect->mergeToLayer(layer, m_incrementalDirtyRegion, QString("scratchpaint"));
-            m_incrementalDirtyRegion = QRegion();
-        } else {
-            KisDumbUndoAdapter dua;
-            m_painter->endTransaction(&dua);
-        }
-    }
-
-
-    QRect bounds;
-    foreach(const QRect &rc, m_painter->takeDirtyRegion()) {
-        bounds |= rc;
-    }
-
-    update(bounds.translated(m_currentMousePosition));
-
-    delete m_painter;
-    m_painter = 0;
-}
-
-void KisScratchPad::pick(QMouseEvent* event) {
-
-    emit colorSelected(KisToolUtils::pick(m_paintDevice, event->pos()));
-}
-
-void KisScratchPad::initPan(QMouseEvent* event) {
-
-    m_toolMode = PANNING;
-    m_lastPosition = event->pos();
-    setCursor(QCursor(Qt::ClosedHandCursor));
-    event->accept();
-}
-
-void KisScratchPad::pan(QMouseEvent* event) {
-
-    QPoint actualPosition = event->pos();
-    QPoint distance = m_lastPosition - actualPosition;
-
-    m_offset += distance;
+    m_displayProfile = colorProfile;
     QWidget::update();
-
-    m_lastPosition = actualPosition;
-    event->accept();
 }
 
-void KisScratchPad::endPan(QMouseEvent* event) {
+void KisScratchPad::fillDefault()
+{
+    if(!m_paintLayer) return;
+    KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
-    m_toolMode = HOVERING;
-    setCursor(m_cursor);
-    event->ignore();
+    paintDevice->setDefaultPixel(m_defaultColor.data());
+    paintDevice->clear();
+    update();
+}
+
+void KisScratchPad::fillGradient()
+{
+    if(!m_paintLayer) return;
+    KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
+
+    KoAbstractGradient* gradient = m_resourceProvider->currentGradient();
+    QRect gradientRect = widgetToDocument().mapRect(rect());
+
+    paintDevice->clear();
+
+    KisGradientPainter painter(paintDevice);
+
+    painter.setGradient(gradient);
+    painter.paintGradient(gradientRect.topLeft(),
+                          gradientRect.bottomRight(),
+                          KisGradientPainter::GradientShapeLinear,
+                          KisGradientPainter::GradientRepeatNone,
+                          0.2, false,
+                          gradientRect.left(), gradientRect.top(),
+                          gradientRect.width(), gradientRect.height());
+
+    update();
+}
+
+void KisScratchPad::fillBackground()
+{
+    if(!m_paintLayer) return;
+    KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
+
+    KoColor c(m_resourceProvider->bgColor(), paintDevice->colorSpace());
+    paintDevice->setDefaultPixel(c.data());
+    paintDevice->clear();
+    update();
+}
+
+void KisScratchPad::fillLayer()
+{
+    // TODO
 }

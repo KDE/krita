@@ -54,7 +54,7 @@
  * @ingroup CalligraMacros
  * @brief Release version of Calligra, at compile time
 */
-#define CALLIGRA_VERSION_RELEASE 81
+#define CALLIGRA_VERSION_RELEASE 82
 
 /**
  * @ingroup CalligraMacros
@@ -77,7 +77,7 @@
  * @ingroup CalligraMacros
  * @brief If defined, indicates at compile time that Calligra is in beta stage
  */
-#define CALLIGRA_BETA 1
+#define CALLIGRA_BETA 2
 
 /**
  * @def CALLIGRA_RC

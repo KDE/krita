@@ -69,8 +69,8 @@ public:
     virtual bool saveOasis(KoStore *store, KoXmlWriter *manifestWriter);
 
     // reimplemented in komain/rdf/KoDocumentRdf
-    virtual bool completeLoading(KoStore */*store*/) {return false;}
-    virtual bool completeSaving(KoStore */*store*/, KoXmlWriter */*manifestWriter*/, KoShapeSavingContext */*context*/) {return false;}
+    virtual bool completeLoading(KoStore *store);
+    virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context);
 };
 
 Q_DECLARE_METATYPE(KoDocumentRdfBase*)

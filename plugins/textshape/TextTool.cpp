@@ -786,11 +786,6 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
     }
 }
 
-//const QTextCursor TextTool::cursor()
-//{
-//    return *(m_textEditor.data()->cursor());
-//}
-
 void TextTool::setShapeData(KoTextShapeData *data)
 {
     bool docChanged = !data || !m_textShapeData || m_textShapeData->document() != data->document();

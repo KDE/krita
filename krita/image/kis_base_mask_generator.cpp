@@ -55,6 +55,11 @@ void KisMaskGenerator::init()
     d->empty = (d->ratio == 0.0 || d->diameter == 0.0);
 }
 
+bool KisMaskGenerator::shouldSupersample() const
+{
+    return false;
+}
+
 void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 {
     Q_UNUSED(doc);

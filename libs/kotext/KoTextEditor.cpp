@@ -1197,7 +1197,7 @@ void KoTextEditor::deletePreviousChar()
     }
 
     if (!d->caret.hasSelection()) {
-        if (d->caret.atEnd())
+        if (d->caret.atStart())
             return;
 
         // We also need to refuse delete if it will delete a note frame
@@ -1818,7 +1818,14 @@ bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCurso
     while (qobject_cast<QTextTable *>(afterFrame)) {
         afterFrame = afterFrame->parentFrame();
     }
-    if (beforeFrame == afterFrame && after.selectionEnd() != after.document()->characterCount() -1) {
+    if (beforeFrame == afterFrame) {
+        if (after.selectionEnd() == after.document()->characterCount() -1) {
+            QVariant resource = after.document()->resource(KoTextDocument::AuxillaryFrame,
+            KoTextDocument::AuxillaryFrameURL);
+            if (resource.isValid()) {
+                return false;
+            }
+        }
         d->caret = after;
         emit cursorPositionChanged();
         return b;
@@ -2052,8 +2059,13 @@ void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode mode)
 {
     d->editProtectionCached = false;
 
-    if (pos == d->caret.document()->characterCount() -1)
-        return;
+    if (pos == d->caret.document()->characterCount() -1) {
+        QVariant resource = d->caret.document()->resource(KoTextDocument::AuxillaryFrame,
+        KoTextDocument::AuxillaryFrameURL);
+        if (resource.isValid()) {
+            return;
+        }
+    }
 
     if (mode == QTextCursor::MoveAnchor) {
         d->caret.setPosition (pos, mode);

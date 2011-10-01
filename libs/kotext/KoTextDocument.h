@@ -190,13 +190,8 @@ public:
     static const QUrl UndoStackURL;
     static const QUrl TextEditorURL;
     static const QUrl LineNumberingConfigurationURL;
-<<<<<<< HEAD
     static const QUrl BibliographyConfigurationURL;
-    static const QUrl EndNotesFrameURL;
-    static const QUrl FootNotesFrameURL;
-=======
     static const QUrl AuxillaryFrameURL;
->>>>>>> Merge the footnotes and endnotes frame areas into a single auxillary frame. It still contains
     static const QUrl RelativeTabsURL;
     static const QUrl HeadingListURL;
     static const QUrl SelectionsURL;

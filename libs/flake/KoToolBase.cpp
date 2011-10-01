@@ -36,25 +36,14 @@ KoToolBase::KoToolBase(KoCanvasBase *canvas)
     : d_ptr(new KoToolBasePrivate(this, canvas))
 {
     Q_D(KoToolBase);
-    if (d->canvas) { // in the case of KoToolManagers dummytool it can be zero :(
-        KoResourceManager * crp = d->canvas->resourceManager();
-        Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No Canvas KoResourceManager");
-        if (crp)
-            connect(crp, SIGNAL(resourceChanged(int, const QVariant &)),
-                    this, SLOT(resourceChanged(int, const QVariant &)));
-
-        // can be 0 in the case of Tables
-        KoResourceManager *scrm = d->canvas->shapeController()->resourceManager();
-        if (scrm) {
-            connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                    this, SLOT(resourceChanged(int, const QVariant &)));
-        }
-    }
+    d->connectSignals();
 }
 
 KoToolBase::KoToolBase(KoToolBasePrivate &dd)
     : d_ptr(&dd)
 {
+    Q_D(KoToolBase);
+    d->connectSignals();
 }
 
 KoToolBase::~KoToolBase()

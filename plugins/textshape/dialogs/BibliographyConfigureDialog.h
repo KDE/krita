@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Smit Patel <smitpatel24@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,37 +16,31 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef SIMPLECITATIONINDEXWIDGET_H
-#define SIMPLECITATIONINDEXWIDGET_H
+#ifndef BIBLIOGRAPHYCONFIGUREDIALOG_H
+#define BIBLIOGRAPHYCONFIGUREDIALOG_H
 
-#include <ui_SimpleCitationWidget.h>
-#include <KoListStyle.h>
+#include "ui_BibliographyConfigureDialog.h"
 
-#include <QWidget>
-#include <QTextBlock>
+#include <QDialog>
+#include <QTextDocument>
 
-class TextTool;
-class KoStyleManager;
+#include "KoOdfBibliographyConfiguration.h"
 
-class SimpleCitationWidget : public QWidget
+class BibliographyConfigureDialog : public QDialog
 {
     Q_OBJECT
+
 public:
-    explicit SimpleCitationWidget(TextTool *tool,QWidget *parent = 0);
+    explicit BibliographyConfigureDialog(const QTextDocument *document, QWidget *parent = 0);
 
 public slots:
-    void setStyleManager(KoStyleManager *sm);
+    void save(QAbstractButton *);
 
-signals:
-    void doneWithFocus();
-    
+
 private:
-    Ui::SimpleCitationWidget widget;
-    KoStyleManager *m_styleManager;
-    bool m_blockSignals;
-    bool m_comboboxHasBidiItems;
-    QTextBlock m_currentBlock;
-    TextTool *m_tool;
+    Ui::BibliographyConfigureDialog dialog;
+    const QTextDocument *m_document;
+
 };
 
-#endif
+#endif // BIBLIOGRAPHYCONFIGUREDIALOG_H

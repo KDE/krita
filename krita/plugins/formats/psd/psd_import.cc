@@ -82,9 +82,9 @@ KoFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArra
             doc -> setCurrentImage( ib.image());
             return KoFilter::OK;
         default:
-            qDebug() << "Result was: " << result;
+            return KoFilter::StorageCreationError;
+            //qDebug() << "Result was: " << result;
         }
-
     }
     return KoFilter::StorageCreationError;
 }

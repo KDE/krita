@@ -30,6 +30,7 @@
 
 #include <KoXmlReader.h>
 #include <KoOdfNotesConfiguration.h>
+#include <KoOdfBibliographyConfiguration.h>
 
 class KoOdfStylesReader::Private
 {
@@ -58,10 +59,12 @@ public:
 
     DataFormatsMap         dataFormats;
 
-    // XXX: there can als be notes configuration objects _per_ section.
+    // XXX: there can also be notes configuration objects _per_ section.
     KoOdfNotesConfiguration globalFootnoteConfiguration;
     KoOdfNotesConfiguration globalEndnoteConfiguration;
     KoOdfNotesConfiguration defaultNoteConfiguration;
+
+    KoOdfBibliographyConfiguration globalBibliographyConfiguration;
 
     KoOdfLineNumberingConfiguration lineNumberingConfiguration;
 
@@ -177,6 +180,11 @@ KoOdfNotesConfiguration KoOdfStylesReader::globalNotesConfiguration(KoOdfNotesCo
         d->defaultNoteConfiguration.setNoteClass(noteClass);
         return d->defaultNoteConfiguration;
     }
+}
+
+KoOdfBibliographyConfiguration KoOdfStylesReader::globalBibliographyConfiguration() const
+{
+    return d->globalBibliographyConfiguration;
 }
 
 KoOdfLineNumberingConfiguration KoOdfStylesReader::lineNumberingConfiguration() const
@@ -313,8 +321,11 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
         }
     } else if (ns == KoXmlNS::text && localName == "linenumbering-configuration") {
         d->lineNumberingConfiguration.loadOdf(e);
+    } else if (ns == KoXmlNS::text && localName == "bibliography-configuration") {
+        KoOdfBibliographyConfiguration bibConfiguration;
+        bibConfiguration.loadOdf(e);
+        d->globalBibliographyConfiguration = bibConfiguration;
     }
-
 }
 
 KoXmlElement *KoOdfStylesReader::defaultStyle(const QString &family) const

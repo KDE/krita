@@ -46,8 +46,7 @@ const QUrl KoTextDocument::UndoStackURL = QUrl("kotext://undoStack");
 const QUrl KoTextDocument::ChangeTrackerURL = QUrl("kotext://changetracker");
 const QUrl KoTextDocument::TextEditorURL = QUrl("kotext://textEditor");
 const QUrl KoTextDocument::LineNumberingConfigurationURL = QUrl("kotext://linenumberingconfiguration");
-const QUrl KoTextDocument::EndNotesFrameURL = QUrl("kotext://endnotesframe");
-const QUrl KoTextDocument::FootNotesFrameURL = QUrl("kotext://footnotesframe");
+const QUrl KoTextDocument::AuxillaryFrameURL = QUrl("kotext://auxillaryframe");
 const QUrl KoTextDocument::RelativeTabsURL = QUrl("kotext://relativetabs");
 const QUrl KoTextDocument::HeadingListURL = QUrl("kotext://headingList");
 const QUrl KoTextDocument::SelectionsURL = QUrl("kotext://selections");
@@ -61,6 +60,7 @@ KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
 {
     Q_ASSERT(m_document);
+    auxillaryFrame(); // make sure the document will have an AuxillaryFrame
 }
 
 KoTextDocument::KoTextDocument(const QTextDocument *document)
@@ -80,6 +80,8 @@ QTextDocument *KoTextDocument::document() const
 
 void KoTextDocument::setTextEditor (KoTextEditor* textEditor)
 {
+    Q_ASSERT(textEditor->document() == m_document);
+
     QVariant v;
     v.setValue(textEditor);
     m_document->addResource(KoTextDocument::TextEditor, TextEditorURL, v);
@@ -268,44 +270,22 @@ KoInlineTextObjectManager *KoTextDocument::inlineTextObjectManager() const
     return resource.value<KoInlineTextObjectManager *>();
 }
 
-QTextFrame *KoTextDocument::footNotesFrame()
+QTextFrame *KoTextDocument::auxillaryFrame()
 {
-    QVariant resource = m_document->resource(KoTextDocument::FootNotesFrame,
-            FootNotesFrameURL);
+    QVariant resource = m_document->resource(KoTextDocument::AuxillaryFrame,
+            AuxillaryFrameURL);
 
     QTextFrame *frame = resource.value<QTextFrame *>();
 
     if (frame == 0) {
         QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
         QTextFrameFormat format;
-        format.setProperty(KoText::SubFrameType, KoText::FootNotesFrameType);
+        format.setProperty(KoText::SubFrameType, KoText::AuxillaryFrameType);
 
         frame = cursor.insertFrame(format);
 
         resource.setValue(frame);
-        m_document->addResource(KoTextDocument::FootNotesFrame, FootNotesFrameURL, resource);
-    }
-    return frame;
-}
-
-QTextFrame *KoTextDocument::endNotesFrame()
-{
-    QVariant resource = m_document->resource(KoTextDocument::EndNotesFrame,
-            EndNotesFrameURL);
-
-    QTextFrame *frame = resource.value<QTextFrame *>();
-
-    if (frame == 0) {
-        QTextFrame *fnFrame = footNotesFrame();
-        QTextCursor cursor(fnFrame->firstCursorPosition());
-        cursor.movePosition(QTextCursor::Left);
-        QTextFrameFormat format;
-        format.setProperty(KoText::SubFrameType, KoText::EndNotesFrameType);
-
-        frame = cursor.insertFrame(format);
-
-        resource.setValue(frame);
-        m_document->addResource(KoTextDocument::EndNotesFrame, EndNotesFrameURL, resource);
+        m_document->addResource(KoTextDocument::AuxillaryFrame, AuxillaryFrameURL, resource);
     }
     return frame;
 }

@@ -26,7 +26,7 @@
 #include "KoPathShape.h"
 #include "flake_export.h"
 
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 
 /// The undo / redo command for combining two or more paths into one
 class FLAKE_EXPORT KoPathCombineCommand : public KUndo2Command
@@ -38,7 +38,7 @@ public:
      * @param paths the list of paths to combine
      * @param parent the parent command used for macro commands
      */
-    KoPathCombineCommand(KoShapeControllerBase *controller, const QList<KoPathShape*> &paths, KUndo2Command *parent = 0);
+    KoPathCombineCommand(KoShapeBasedDocumentBase *controller, const QList<KoPathShape*> &paths, KUndo2Command *parent = 0);
     virtual ~KoPathCombineCommand();
     /// redo the command
     void redo();

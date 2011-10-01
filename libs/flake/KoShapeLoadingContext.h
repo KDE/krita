@@ -31,7 +31,7 @@
 class KoOdfLoadingContext;
 class KoShapeLayer;
 class KoShape;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 class KoLoadingShapeUpdater;
 class KoImageCollection;
 class KoSharedLoadingData;
@@ -177,7 +177,7 @@ public:
     KoResourceManager *documentResourceManager() const;
 
 private:
-    // to allow only the KoShapeRegistry access to the KoShapeControllerBase
+    // to allow only the KoShapeRegistry access to the KoShapeBasedDocumentBase
     class Private;
     Private * const d;
 };

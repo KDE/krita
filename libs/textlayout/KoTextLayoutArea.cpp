@@ -151,14 +151,14 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
-            if (it.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
+            if (it.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
                 if (point.y() > m_endNotesArea->top()
                         && point.y() < m_endNotesArea->bottom()) {
                     pointedAt = m_endNotesArea->hitTest(point, accuracy);
                     return pointedAt;
                 }
             }
-            continue;
+            break;
         } else {
             if (!block.isValid())
                 continue;
@@ -180,7 +180,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
         QTextLayout *layout = block.layout();
         QTextFrame::iterator next = it;
         ++next;
-        if (next != stop && point.y() > layout->boundingRect().bottom()) {
+        if (next != stop && next.currentFrame() == 0 && point.y() > layout->boundingRect().bottom()) {
             // just skip this block.
             continue;
         }
@@ -293,17 +293,17 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
-            if (it.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
+            if (it.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
                 if (cursor.selectionEnd() < subFrame->firstPosition()) {
                     return retval.translated(0, m_verticalAlignOffset);
                 }
                 if (cursor.selectionStart() > subFrame->lastPosition()) {
-                    continue;
+                    break;
                 }
                 if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
                     return m_endNotesArea->selectionBoundingBox(cursor).translated(0, m_verticalAlignOffset);
                 }
-                continue;
+                break;
             }
         } else {
             if (!block.isValid())
@@ -444,7 +444,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             delete cursor->currentTableIterator;
             cursor->currentTableIterator = 0;
         } else if (subFrame) {
-            if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
+            if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
                 Q_ASSERT(m_endNotesArea == 0);
                 m_endNotesArea = new KoTextLayoutEndNotesArea(this, m_documentLayout);
                 m_y += m_bottomSpacing;
@@ -470,6 +470,12 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 m_y = m_endNotesArea->bottom();
                 delete cursor->currentSubFrameIterator;
                 cursor->currentSubFrameIterator = 0;
+
+                // we have layouted till the end of the document except for a blank block
+                // which we should ignore
+                ++(cursor->it);
+                ++(cursor->it);
+                break;
             }
         } else if (block.isValid()) {
             if (block.blockFormat().hasProperty(KoParagraphStyle::GeneratedDocument)) {
@@ -561,7 +567,6 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         bool atEnd = cursor->it.atEnd();
         if (!atEnd) {
             ++(cursor->it);
-            atEnd = cursor->it.atEnd();
         }
     }
     m_endOfArea = new FrameIterator(cursor);

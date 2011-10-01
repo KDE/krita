@@ -29,6 +29,7 @@
 #include "KoOdfNumberStyles.h"
 #include "KoOdfNotesConfiguration.h"
 #include "KoOdfLineNumberingConfiguration.h"
+#include "KoOdfBibliographyConfiguration.h"
 
 /**
  * Repository of styles used during loading of OASIS/OOo file
@@ -150,6 +151,10 @@ public:
      */
     KoOdfLineNumberingConfiguration lineNumberingConfiguration() const;
 
+    /**
+     * return the bibliography configuration for this document.
+     */
+    KoOdfBibliographyConfiguration globalBibliographyConfiguration() const;
 
 private:
     enum TypeAndLocation {

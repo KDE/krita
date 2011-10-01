@@ -18,33 +18,23 @@
  */
 
 #include "BibliographyGenerator.h"
-#include "DummyDocumentLayout.h"
+#include "KoInlineCite.h"
+
 #include <klocale.h>
 #include <kdebug.h>
+#include <KDebug>
 
-#include "KoTextDocumentLayout.h"
-#include "KoTextLayoutRootArea.h"
-#include "KoTextShapeData.h"
+#include <KoInlineTextObjectManager.h>
 #include <KoParagraphStyle.h>
-#include <KoTextPage.h>
-#include <KoShape.h>
 #include <KoTextDocument.h>
-#include <KoTextBlockData.h>
 #include <KoStyleManager.h>
 #include <KoTextEditor.h>
-#include <KoPostscriptPaintDevice.h>
 #include <KoInlineCite.h>
 
 #include <QTextFrame>
-#include <QTimer>
-#include "KoInlineCite.h"
-#include <KDebug>
-#include <KoBookmark.h>
-#include <KoInlineTextObjectManager.h>
 
-BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block, KoBibliographyInfo *bibInfo, const QTextDocument *doc)
+BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block, KoBibliographyInfo *bibInfo)
     : QObject(bibDocument)
-    , document(doc)
     , m_bibDocument(bibDocument)
     , m_bibInfo(bibInfo)
     , m_block(block)
@@ -55,14 +45,7 @@ BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBl
     m_bibInfo->setGenerator(this);
 
     bibDocument->setUndoRedoEnabled(false);
-    bibDocument->setDocumentLayout(new DummyDocumentLayout(bibDocument));
-
-    m_documentLayout = static_cast<KoTextDocumentLayout *>(m_block.document()->documentLayout());
-    m_document = m_documentLayout->document();
-
-    if (m_block.blockFormat().property(KoParagraphStyle::AutoUpdateBibliography).value<bool *>()) {
-        connect(m_documentLayout, SIGNAL(finishedLayout()), this, SLOT(generate()));
-    }
+    generate();
 }
 
 BibliographyGenerator::~BibliographyGenerator()
@@ -87,7 +70,7 @@ void BibliographyGenerator::generate()
     cursor.setPosition(m_bibDocument->rootFrame()->firstPosition(), QTextCursor::KeepAnchor);
     cursor.beginEditBlock();
 
-    KoStyleManager *styleManager = KoTextDocument(m_document).styleManager();
+    KoStyleManager *styleManager = KoTextDocument(m_block.document()).styleManager();
 
     if (!m_bibInfo->m_indexTitleTemplate.text.isNull()) {
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_bibInfo->m_indexTitleTemplate.styleId);
@@ -99,11 +82,12 @@ void BibliographyGenerator::generate()
         titleStyle->applyStyle(titleTextBlock);
 
         cursor.insertText(m_bibInfo->m_indexTitleTemplate.text);
+        cursor.insertBlock();
     }
 
     qDebug() << "\n" << m_bibInfo->m_indexTitleTemplate.text;
     QTextCharFormat savedCharFormat = cursor.charFormat();
-    QList<KoInlineCite*> citeList = KoTextDocument(document).inlineTextObjectManager()->citations(false).values();
+    QList<KoInlineCite*> citeList = KoTextDocument(m_block.document()).inlineTextObjectManager()->citations(false).values();
 
     foreach (KoInlineCite *cite, citeList)
     {

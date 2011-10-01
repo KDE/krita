@@ -120,19 +120,6 @@ const Soprano::Model *KoDocumentRdf::model() const
     return d->model;
 }
 
-KoDocumentRdf *KoDocumentRdf::fromResourceManager(KoCanvasBase *host)
-{
-    KoResourceManager *rm = host->resourceManager();
-    if( host->shapeController() ) 
-    {
-        rm = host->shapeController()->resourceManager();
-    }
-    if (!rm->hasResource(KoText::DocumentRdf)) {
-        return 0;
-    }
-    return static_cast<KoDocumentRdf*>(rm->resource(KoText::DocumentRdf).value<void*>());
-}
-
 KoRdfPrefixMapping *KoDocumentRdf::prefixMapping() const
 {
     return d->prefixMapping;

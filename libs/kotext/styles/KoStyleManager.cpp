@@ -79,6 +79,7 @@ public:
     KoListStyle *outlineStyle;
     KoOdfNotesConfiguration *footNotesConfiguration;
     KoOdfNotesConfiguration *endNotesConfiguration;
+    KoOdfBibliographyConfiguration *bibliographyConfiguration;
 };
 
 // static
@@ -102,6 +103,7 @@ KoStyleManager::KoStyleManager(QObject *parent)
     d->defaultListStyle->setLevelProperties(llp);
     d->footNotesConfiguration = 0;
     d->endNotesConfiguration = 0;
+    d->bibliographyConfiguration = 0;
 }
 
 KoStyleManager::~KoStyleManager()
@@ -239,6 +241,13 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         d->endNotesConfiguration->saveOdf(xmlWriter);
         context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferEndNote.data());
     }
+
+    if (d->bibliographyConfiguration) {
+        QBuffer xmlBufferBib;
+        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferBib);
+        d->bibliographyConfiguration->saveOdf(xmlWriter);
+        context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferBib.data());
+    }
 }
 
 void KoStyleManager::add(KoCharacterStyle *style)
@@ -351,6 +360,11 @@ void KoStyleManager::setNotesConfiguration(KoOdfNotesConfiguration *notesConfigu
     } else if (notesConfiguration->noteClass() == KoOdfNotesConfiguration::Endnote) {
         d->endNotesConfiguration = notesConfiguration;
     }
+}
+
+void KoStyleManager::setBibliographyConfiguration(KoOdfBibliographyConfiguration *bibliographyConfiguration)
+{
+    d->bibliographyConfiguration = bibliographyConfiguration;
 }
 
 void KoStyleManager::remove(KoCharacterStyle *style)
@@ -707,6 +721,11 @@ KoOdfNotesConfiguration *KoStyleManager::notesConfiguration(KoOdfNotesConfigurat
     } else {
         return 0;
     }
+}
+
+KoOdfBibliographyConfiguration *KoStyleManager::bibliographyConfiguration() const
+{
+    return d->bibliographyConfiguration;
 }
 
 KoParagraphStyle *KoStyleManager::defaultParagraphStyle() const

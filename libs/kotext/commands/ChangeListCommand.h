@@ -21,10 +21,11 @@
 #ifndef CHANGELISTCOMMAND
 #define CHANGELISTCOMMAND
 
-#include "TextCommandBase.h"
-#include <KoListStyle.h>
-#include <KoList.h>
-#include <KoListLevelProperties.h>
+#include "KoTextCommandBase.h"
+#include "KoListStyle.h"
+#include "KoTextEditor.h"
+#include "KoList.h"
+#include "KoListLevelProperties.h"
 
 #include <QTextBlock>
 #include <QList>
@@ -33,18 +34,9 @@
 /**
  * This command is useful to alter the list-association of a single textBlock.
  */
-class ChangeListCommand : public TextCommandBase
+class ChangeListCommand : public KoTextCommandBase
 {
 public:
-    enum ChangeFlag {
-        NoFlags = 0,
-        ModifyExistingList = 1,
-        MergeWithAdjacentList = 2,
-        MergeExactly = 4,
-        CreateNumberedParagraph = 8
-    };
-
-    Q_DECLARE_FLAGS(ChangeFlags, ChangeFlag)
 
     /**
      * Change the list property of 'block'.
@@ -52,8 +44,10 @@ public:
      * @param style indicates which style to use.
      * @param parent the parent undo command for macro functionality
      */
-    ChangeListCommand(const QTextCursor &cursor, KoListStyle::Style style, int level = 0,
-                      ChangeFlags flags = ChangeFlags(ModifyExistingList | MergeWithAdjacentList),
+    ChangeListCommand(const QTextCursor &cursor,
+                      KoListStyle::Style style,
+                      int level,
+                      KoTextEditor::ChangeListFlags flags,
                       KUndo2Command *parent = 0);
 
     /**
@@ -63,8 +57,8 @@ public:
      * @param exact if true then the actual style 'style' should be set, if false we possibly  merge with another similar style that is near the block
      * @param parent the parent undo command for macro functionality
      */
-    ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level = 0,
-                      ChangeFlags flags = ChangeFlags(ModifyExistingList | MergeWithAdjacentList | MergeExactly),
+    ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level,
+                      KoTextEditor::ChangeListFlags flags,
                       KUndo2Command *parent = 0);
     ~ChangeListCommand();
 
@@ -106,6 +100,6 @@ private:
     QHash<int, CommandAction> m_actions;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeListCommand::ChangeFlags)
+
 
 #endif

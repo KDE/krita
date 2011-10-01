@@ -35,18 +35,14 @@
 #include "dialogs/ChangeTrackingOptionsWidget.h"
 #include "dialogs/SimpleTableWidget.h"
 #include "commands/TextCutCommand.h"
-#include "commands/TextPasteCommand.h"
-#include "commands/ChangeListCommand.h"
-#include "commands/ChangeListLevelCommand.h"
-#include "commands/ListItemNumberingCommand.h"
 #include "commands/ShowChangesCommand.h"
-#include "commands/ChangeTrackedDeleteCommand.h"
-#include "commands/DeleteCommand.h"
 #include "commands/AutoResizeCommand.h"
+#include "commands/ChangeListLevelCommand.h"
 #include "FontSizeAction.h"
 
 #include <KoOdf.h>
 #include <KoCanvasBase.h>
+#include <KoShapeController.h>
 #include <KoCanvasController.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -68,7 +64,7 @@
 #include <KoChangeTrackerElement.h>
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
-
+#include <KoListLevelProperties.h>
 #include <KoTextLayoutRootArea.h>
 
 #include <kdebug.h>
@@ -784,15 +780,10 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         // on windows we do not have data if we try to paste this selection
         if (data) {
             m_prevCursorPosition = m_textEditor.data()->position();
-            m_textEditor.data()->addCommand(new TextPasteCommand(QClipboard::Selection, this));
+            m_textEditor.data()->paste(data,canvas()->shapeController(), canvas()->resourceManager());
             editingPluginEvents();
         }
     }
-}
-
-const QTextCursor TextTool::cursor()
-{
-    return *(m_textEditor.data()->cursor());
 }
 
 void TextTool::setShapeData(KoTextShapeData *data)
@@ -855,13 +846,20 @@ void TextTool::copy() const
         return;
     int from = m_textEditor.data()->position();
     int to = m_textEditor.data()->anchor();
-    KoTextOdfSaveHelper saveHelper(m_textShapeData, from, to);
+    KoTextOdfSaveHelper saveHelper(m_textShapeData->document(), from, to);
     KoTextDrag drag;
 
-    kDebug(30015) << "xxx canvas" << canvas() << "rdf" << KoDocumentRdfBase::fromResourceManager(canvas());
-    if (KoDocumentRdfBase *rdf = KoDocumentRdfBase::fromResourceManager(canvas())) {
-        saveHelper.setRdfModel(rdf->model());
+    KoResourceManager *rm = 0;
+    if (canvas()->shapeController()) {
+        rm = canvas()->shapeController()->resourceManager();
     }
+    if (rm && rm->hasResource(KoText::DocumentRdf)) {
+        KoDocumentRdfBase *rdf = static_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<void*>());
+        if (rdf) {
+            saveHelper.setRdfModel(rdf->model());
+        }
+    }
+
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
     QTextDocumentFragment fragment = m_textEditor.data()->selection();
     drag.setData("text/html", fragment.toHtml("utf-8").toUtf8());
@@ -871,10 +869,8 @@ void TextTool::copy() const
 
 void TextTool::deleteSelection()
 {
-    if (m_actionRecordChanges->isChecked())
-      m_textEditor.data()->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, this));
-    else
-      m_textEditor.data()->addCommand(new DeleteCommand(DeleteCommand::NextChar, this));
+    m_textEditor.data()->deleteChar(KoTextEditor::NextChar, m_actionRecordChanges->isChecked(),
+                                    canvas()->shapeController());
     editingPluginEvents();
 }
 
@@ -886,7 +882,7 @@ bool TextTool::paste()
     if (!data) return false;
 
     m_prevCursorPosition = m_textEditor.data()->position();
-    m_textEditor.data()->addCommand(new TextPasteCommand(QClipboard::Clipboard, this));
+    m_textEditor.data()->paste(data, canvas()->shapeController());
     editingPluginEvents();
     return true;
 }
@@ -1050,21 +1046,18 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             && !(m_actionRecordChanges->isChecked())) {
             if (!textEditor->blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
                 // backspace at beginning of numbered list item, makes it unnumbered
-                ListItemNumberingCommand *lin = new ListItemNumberingCommand(textEditor->block(), false);
-                textEditor->addCommand(lin);
+                textEditor->toggleListNumbering(false);
             } else {
                 // backspace on numbered, empty parag, removes numbering.
-                ChangeListCommand *clc = new ChangeListCommand(*textEditor->cursor(), KoListStyle::None, 0 /* level */);
-                textEditor->addCommand(clc);
+                textEditor->setListProperties(KoListStyle::None, 0 /* level */);
             }
         } else if (textEditor->position() > 0 || textEditor->hasSelection()) {
-            if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) // delete prev word.
+            if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) { // delete prev word.
                 textEditor->movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
-            if (m_actionRecordChanges->isChecked())
-                textEditor->addCommand(new ChangeTrackedDeleteCommand(
-                            ChangeTrackedDeleteCommand::PreviousChar, this));
-            else
-                textEditor->addCommand(new DeleteCommand(DeleteCommand::PreviousChar, this));
+            }
+            textEditor->deleteChar(KoTextEditor::PreviousChar, m_actionRecordChanges->isChecked(),
+                                       canvas()->shapeController());
+
             editingPluginEvents();
         }
     } else if ((event->key() == Qt::Key_Tab)
@@ -1080,14 +1073,13 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         textEditor->addCommand(cll);
         editingPluginEvents();
     } else if (event->key() == Qt::Key_Delete) {
-        if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) // delete next word.
+        if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) {// delete next word.
             textEditor->movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
+        }
         // the event only gets through when the Del is not used in the app
         // if the app forwards Del then deleteSelection is used
-        if (m_actionRecordChanges->isChecked())
-          textEditor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, this));
-        else
-          textEditor->addCommand(new DeleteCommand(DeleteCommand::NextChar, this));
+        textEditor->deleteChar(KoTextEditor::NextChar, m_actionRecordChanges->isChecked(),
+                                   canvas()->shapeController());
         editingPluginEvents();
     } else if ((event->key() == Qt::Key_Left) && (event->modifiers() & Qt::ControlModifier) == 0) {
         moveOperation = QTextCursor::Left;
@@ -1247,10 +1239,8 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
     if (event->replacementLength() > 0) {
         textEditor->setPosition(textEditor->position() + event->replacementStart());
         for (int i = event->replacementLength(); i > 0; --i) {
-            if (m_actionRecordChanges->isChecked())
-              textEditor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, this));
-            else
-              textEditor->addCommand(new DeleteCommand(DeleteCommand::NextChar, this));
+            textEditor->deleteChar(KoTextEditor::NextChar, m_actionRecordChanges->isChecked(),
+                                       canvas()->shapeController());
         }
     }
     QTextBlock block = textEditor->block();
@@ -1644,7 +1634,7 @@ void TextTool::pasteAsText()
     if (!data) return;
 
     m_prevCursorPosition = m_textEditor.data()->position();
-    textEditor->addCommand(new TextPasteCommand(QClipboard::Clipboard, this, 0, true));
+    textEditor->paste(data, canvas()->shapeController(), true);
     editingPluginEvents();
 }
 
@@ -2018,13 +2008,6 @@ void TextTool::resourceChanged(int key, const QVariant &var)
 void TextTool::isBidiUpdated()
 {
     emit blockChanged(m_textEditor.data()->block()); // make sure that the dialogs follow this change
-}
-
-void TextTool::changeListStyle(ChangeListCommand *command)
-{
-    if (m_textEditor) {
-        m_textEditor.data()->addCommand(command);
-    }
 }
 
 void TextTool::insertSpecialCharacter()

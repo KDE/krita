@@ -27,7 +27,7 @@
 
 class KoShape;
 class QString;
-class KoShapeControllerBasePrivate;
+class KoShapeBasedDocumentBasePrivate;
 class KoResourceManager;
 
 /**
@@ -35,11 +35,11 @@ class KoResourceManager;
  * that controls the shapes should implement.  This tends to be the document.
  * @see KoShapeDeleteCommand, KoShapeCreateCommand
  */
-class FLAKE_EXPORT KoShapeControllerBase
+class FLAKE_EXPORT KoShapeBasedDocumentBase
 {
 public:
-    KoShapeControllerBase();
-    virtual ~KoShapeControllerBase();
+    KoShapeBasedDocumentBase();
+    virtual ~KoShapeBasedDocumentBase();
 
     /**
      * Add a shape to the shape controller, allowing it to be seen and saved.
@@ -66,7 +66,7 @@ public:
     virtual KoResourceManager *resourceManager() const;
 
 private:
-    KoShapeControllerBasePrivate * d;
+    KoShapeBasedDocumentBasePrivate * d;
 };
 
 #endif

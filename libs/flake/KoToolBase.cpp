@@ -25,7 +25,7 @@
 #include "KoResourceManager.h"
 #include "KoViewConverter.h"
 #include "KoShapeController.h"
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
 #include "KoToolSelection.h"
 
 #include <klocale.h>
@@ -52,7 +52,7 @@ KoToolBase::~KoToolBase()
 }
 
 /// Ultimately only called from Tables
-void KoToolBase::updateShapeController(KoShapeControllerBase *shapeController)
+void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController)
 {
     if (shapeController) {
         KoResourceManager *scrm = shapeController->resourceManager();

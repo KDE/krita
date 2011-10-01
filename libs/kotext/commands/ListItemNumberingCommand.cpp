@@ -26,7 +26,7 @@
 #include <QTextCursor>
 
 ListItemNumberingCommand::ListItemNumberingCommand(const QTextBlock &block, bool numbered, KUndo2Command *parent)
-    : TextCommandBase(parent),
+    : KoTextCommandBase(parent),
       m_block(block),
       m_numbered(numbered),
       m_first(true)
@@ -58,7 +58,7 @@ void ListItemNumberingCommand::setNumbered(bool numbered)
 void ListItemNumberingCommand::redo()
 {
     if (!m_first) {
-        TextCommandBase::redo();
+        KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
         KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_block.userData());
         if (userData)
@@ -71,7 +71,7 @@ void ListItemNumberingCommand::redo()
 
 void ListItemNumberingCommand::undo()
 {
-    TextCommandBase::undo();
+    KoTextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
 
     KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_block.userData());

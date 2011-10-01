@@ -19,17 +19,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
 #include "KoResourceManager.h"
 #include "KoShapeRegistry.h"
 #include <KGlobal>
 #include <KConfig>
 #include <KConfigGroup>
 
-class KoShapeControllerBasePrivate
+class KoShapeBasedDocumentBasePrivate
 {
 public:
-    KoShapeControllerBasePrivate()
+    KoShapeBasedDocumentBasePrivate()
         : resourceManager(new KoResourceManager())
     {
         KoShapeRegistry *registry = KoShapeRegistry::instance();
@@ -52,7 +52,7 @@ public:
         }
     }
 
-    ~KoShapeControllerBasePrivate()
+    ~KoShapeBasedDocumentBasePrivate()
     {
         delete resourceManager;
     }
@@ -60,17 +60,17 @@ public:
     KoResourceManager *resourceManager;
 };
 
-KoShapeControllerBase::KoShapeControllerBase()
-    : d(new KoShapeControllerBasePrivate())
+KoShapeBasedDocumentBase::KoShapeBasedDocumentBase()
+    : d(new KoShapeBasedDocumentBasePrivate())
 {
 }
 
-KoShapeControllerBase::~KoShapeControllerBase()
+KoShapeBasedDocumentBase::~KoShapeBasedDocumentBase()
 {
     delete d;
 }
 
-KoResourceManager *KoShapeControllerBase::resourceManager() const
+KoResourceManager *KoShapeBasedDocumentBase::resourceManager() const
 {
     return d->resourceManager;
 }

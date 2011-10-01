@@ -35,7 +35,7 @@ class QDomElement;
 class QString;
 class KoStore;
 class KoViewConverter;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 
 const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 /**
@@ -55,11 +55,11 @@ class KRITAUI_EXPORT KisShapeLayer : public KisExternalLayer, public KoShapeLaye
 
 public:
 
-    KisShapeLayer(KoShapeContainer * parent, KoShapeControllerBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity);
+    KisShapeLayer(KoShapeContainer * parent, KoShapeBasedDocumentBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity);
     KisShapeLayer(const KisShapeLayer& _rhs);
     virtual ~KisShapeLayer();
 private:
-    void initShapeLayer(KoShapeControllerBase* controller);
+    void initShapeLayer(KoShapeBasedDocumentBase* controller);
 public:
     KisNodeSP clone() const {
         return new KisShapeLayer(*this);

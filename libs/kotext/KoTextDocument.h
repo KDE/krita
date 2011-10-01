@@ -33,6 +33,7 @@
 #include <KoCanvasBase.h>
 #include <KoTextEditor.h>
 #include "KoOdfNotesConfiguration.h"
+#include "KoOdfBibliographyConfiguration.h"
 
 class KoStyleManager;
 class KoInlineTextObjectManager;
@@ -80,7 +81,6 @@ public:
     ///Returns the change tracker of the document
     KoChangeTracker *changeTracker() const;
 
-    /// set the notes configuration of the document
     void setLineNumberingConfiguration(KoOdfLineNumberingConfiguration *lineNumberingConfiguration);
 
     /// @return the notes configuration
@@ -138,9 +138,7 @@ public:
     /// Set the KoInlineTextObjectManager
     void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
-    QTextFrame* footNotesFrame();
-
-    QTextFrame* endNotesFrame();
+    QTextFrame* auxillaryFrame();
 
     /**
      * Specifies if tabs are relative to paragraph indent.
@@ -176,10 +174,7 @@ public:
         UndoStack,
         TextEditor,
         LineNumberingConfiguration,
-        EndNotesFrame,
-        FootNotesFrame,
-        CitationsFrame,
-        BibliographyFrame,
+        AuxillaryFrame,
         RelativeTabs,
         HeadingList,
         Selections,
@@ -195,9 +190,8 @@ public:
     static const QUrl UndoStackURL;
     static const QUrl TextEditorURL;
     static const QUrl LineNumberingConfigurationURL;
-    static const QUrl EndNotesFrameURL;
-    static const QUrl FootNotesFrameURL;
-    static const QUrl CitationsFrameURL;
+    static const QUrl BibliographyConfigurationURL;
+    static const QUrl AuxillaryFrameURL;
     static const QUrl RelativeTabsURL;
     static const QUrl HeadingListURL;
     static const QUrl SelectionsURL;

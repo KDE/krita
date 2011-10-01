@@ -24,6 +24,8 @@
 
 #include "KoXmlReaderForward.h"
 
+#include <QTextFrame>
+
 class KoShapeLoadingContext;
 class KoChangeTracker;
 class KoStyleManager;

@@ -481,7 +481,7 @@ QPixmap KisDoc2::generatePreview(const QSize& size)
     return QPixmap(size);
 }
 
-KoShapeControllerBase * KisDoc2::shapeController() const
+KoShapeBasedDocumentBase * KisDoc2::shapeController() const
 {
     return m_d->shapeController;
 }

@@ -35,7 +35,7 @@ class KoPointerEvent;
 class KoViewConverter;
 class KoToolSelection;
 class KoToolBasePrivate;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 
 class KAction;
 class QAction;
@@ -75,7 +75,7 @@ public:
      *
      * @param shapeController the new shape controller
      */
-    void updateShapeController(KoShapeControllerBase *shapeController);
+    void updateShapeController(KoShapeBasedDocumentBase *shapeController);
 
     /**
      * request a repaint of the decorations to be made. This triggers

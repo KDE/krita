@@ -23,20 +23,31 @@
 #include <QClipboard>
 #include <kundo2qstack.h>
 
-class TextTool;
+class QTextDocument;
+class KoDocumentRdfBase;
+class KoShapeController;
+class KoResourceManager;
+class QMimeData;
 
 class TextPasteCommand : public KUndo2Command
 {
 public:
 
-    TextPasteCommand(QClipboard::Mode mode, TextTool *tool, KUndo2Command *parent = 0, bool pasteAsText = false);
+    TextPasteCommand(const QMimeData *mimeData,
+                     QTextDocument *document,
+                     KoShapeController *shapeController,
+                     KUndo2Command *parent = 0,
+                     bool pasteAsText = false);
 
     virtual void undo();
 
     virtual void redo();
 
 private:
-    TextTool *m_tool;
+    const QMimeData *m_mimeData;
+    QTextDocument *m_document;
+    KoDocumentRdfBase *m_rdf;
+    KoShapeController *m_shapeController;
     bool m_pasteAsText;
     bool m_first;
     QClipboard::Mode m_mode;

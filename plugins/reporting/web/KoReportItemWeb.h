@@ -20,7 +20,7 @@
 #ifndef KOREPORTITEMWEB_H
 #define KOREPORTITEMWEB_H
 
-#include <KoReportItemBase.h>
+#include <KoReportASyncItemBase.h>
 #include "krpos.h"
 #include "krsize.h"
 #include "KoReportData.h"
@@ -52,7 +52,7 @@ class Web;
 /**
  @author Shreya Pandit
 */
-class KoReportItemWeb : public KoReportItemBase
+class KoReportItemWeb : public KoReportASyncItemBase
 {
     Q_OBJECT
 public:
@@ -63,7 +63,8 @@ public:
 
     virtual int render(OROPage *page, OROSection *section,  QPointF offset,
                        QVariant data, KRScriptHandler *script);
-    using KoReportItemBase::render;
+   
+    virtual QString itemDataSource() const;
 
 public slots:
     void setUrl(const QString &url);
@@ -73,7 +74,11 @@ private slots:
     void loadFinished(bool);
 private:
     void init();
-    bool m_loaded;
+    bool m_rendering;
+    
+    OROPage *m_targetPage;
+    OROSection *m_targetSection;
+    QPointF m_targetOffset;
 
 protected:
     KoProperty::Property *url;

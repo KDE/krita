@@ -12,11 +12,12 @@ include_directories( ${KOMAIN_INCLUDES}
 )
 
 #build a shared library
-set(koreport_LIB_SRCS
+set(koreport_LIB_SRCS 
     common/krutils.cpp
     common/krpos.cpp
     common/krsize.cpp
     common/KoReportItemBase.cpp
+    common/KoReportASyncItemBase.cpp
     common/krsectiondata.cpp
     common/labelsizeinfo.cpp
     common/reportpageoptions.cpp
@@ -31,6 +32,7 @@ set(koreport_LIB_SRCS
 
     renderer/KoReportPrintRenderer.cpp
     renderer/KoReportPreRenderer.cpp
+    renderer/KoReportASyncItemManager.cpp
     renderer/KoReportScreenRenderer.cpp
     renderer/KoReportHTMLTableRenderer.cpp
     renderer/KoReportHTMLCSSRenderer.cpp

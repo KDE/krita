@@ -57,6 +57,10 @@ KoReportDesignerItemWeb::KoReportDesignerItemWeb(KoReportDesigner *rw, QGraphics
     init(scene);
     m_size.setSceneSize(QSizeF(100, 100));
     m_pos.setScenePos(pos);
+    
+    setSceneRect(m_pos.toScene(), m_size.toScene());
+    
+    kDebug() << m_size.toScene() << m_pos.toScene();
     m_name->setValue(m_reportDesigner->suggestEntityName("web"));
 }
 
@@ -83,14 +87,17 @@ KoReportDesignerItemWeb::~KoReportDesignerItemWeb() //done,compared
     // do we need to clean anything up?
 }
 
-void KoReportDesignerItemWeb::paint(QPainter *painter, const KoViewConverter &converter)
+void KoReportDesignerItemWeb::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-    QRectF target = converter.documentToView(QRectF(QPointF(0, 0), QPointF(500, 500)));
-    m_webPage->setViewportSize(target.size().toSize());
-//    qreal cz = target.width() / size().width();
-//    m_webPage->mainFrame()->setZoomFactor(m_zoom * cz);
-//    m_webPage->mainFrame()->setScrollPosition(m_scrollPosition.toPoint());
-    m_webPage->mainFrame()->render(painter);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+    
+    painter->drawRect(QGraphicsRectItem::rect());
+    painter->drawText(rect(), 0, dataSourceAndObjectTypeName(itemDataSource(), "web-view"));
+    
+    painter->setBackgroundMode(Qt::TransparentMode);
+    
+    drawHandles(painter);
 }
 
 void KoReportDesignerItemWeb::buildXML(QDomDocument &doc, QDomElement &parent)
@@ -99,10 +106,11 @@ void KoReportDesignerItemWeb::buildXML(QDomDocument &doc, QDomElement &parent)
     QDomElement entity = doc.createElement("report:web");
 
     // properties
-    addPropertyAsAttribute(&entity, url);
+    //addPropertyAsAttribute(&entity, url);
     addPropertyAsAttribute(&entity, m_controlSource);
     entity.setAttribute("report:z-index", zValue());
     buildXMLRect(doc, entity, &m_pos, &m_size);
+    parent.appendChild(entity);
 }
 
 void KoReportDesignerItemWeb::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)

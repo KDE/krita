@@ -615,7 +615,7 @@ bool KoTextDocumentLayout::doLayout()
             if (d->textAnchors.count() > 0) {
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
-                rootArea->layoutRoot(tmpPosition);
+                finished = rootArea->layoutRoot(tmpPosition);
             }
 
             delete d->layoutPosition;

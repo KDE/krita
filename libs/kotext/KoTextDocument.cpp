@@ -60,7 +60,6 @@ KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
 {
     Q_ASSERT(m_document);
-    auxillaryFrame(); // make sure the document will have an AuxillaryFrame
 }
 
 KoTextDocument::KoTextDocument(const QTextDocument *document)

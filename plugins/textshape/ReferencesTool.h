@@ -26,6 +26,7 @@ class KoCanvasBase;
 class TableOfContentsConfigure;
 class SimpleTableOfContentsWidget;
 class SimpleFootEndNotesWidget;
+class SimpleCitationBibliographyWidget;
 class KoInlineNote;
 class QPainter;
 
@@ -55,6 +56,8 @@ private slots:
     void insertCitation();
     /// insert a bibliography
     void insertBibliography();
+    /// configure a bibliography
+    void configureBibliography();
     /// format the table of contents template
     void formatTableOfContents();
     /// shows the configuration dialog for a ToC
@@ -74,6 +77,7 @@ private:
     SimpleTableOfContentsWidget *m_stocw;
         SimpleFootEndNotesWidget *m_sfenw;
         KoInlineNote *m_note;
+    SimpleCitationBibliographyWidget *m_scbw;
 };
 
 #endif // REFERENCESTOOL_H

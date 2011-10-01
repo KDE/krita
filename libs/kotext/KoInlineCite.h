@@ -54,8 +54,6 @@ public:
 
     void setType(Type t);
 
-    void setMotherFrame(QTextFrame *motherFrame);
-
     QString dataField(QString fieldName) const;     //returns bibliography-data-field with name fieldName
 
     bool hasSameData(KoInlineCite *cite) const;

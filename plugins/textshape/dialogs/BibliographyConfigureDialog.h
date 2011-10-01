@@ -31,15 +31,15 @@ class BibliographyConfigureDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit BibliographyConfigureDialog(QTextDocument *document, QWidget *parent = 0);
+    explicit BibliographyConfigureDialog(const QTextDocument *document, QWidget *parent = 0);
 
 public slots:
-    save();
+    void save(QAbstractButton *);
 
 
 private:
     Ui::BibliographyConfigureDialog dialog;
-    QTextDocument *m_document;
+    const QTextDocument *m_document;
 
 };
 

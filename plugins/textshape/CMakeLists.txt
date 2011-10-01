@@ -39,7 +39,7 @@ SET ( textshape_SRCS
     dialogs/SimpleParagraphWidget.cpp
     dialogs/SimpleTableWidget.cpp
     dialogs/SimpleTableOfContentsWidget.cpp
-    dialogs/SimpleCitationWidget.cpp
+    dialogs/SimpleCitationBibliographyWidget.cpp
     dialogs/CitationInsertionDialog.cpp
     dialogs/InsertBibliographyDialog.cpp
     dialogs/SimpleFootEndNotesWidget.cpp
@@ -101,7 +101,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/SimpleParagraphWidget.ui
     dialogs/SimpleTableWidget.ui
     dialogs/SimpleTableOfContentsWidget.ui
-    dialogs/SimpleCitationWidget.ui
+    dialogs/SimpleCitationBibliographyWidget.ui
     dialogs/CitationInsertionDialog.ui
     dialogs/InsertBibliographyDialog.ui
     dialogs/SimpleFootEndNotesWidget.ui

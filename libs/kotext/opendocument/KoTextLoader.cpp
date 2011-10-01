@@ -483,7 +483,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
             new KoOdfBibliographyConfiguration(d->context.odfLoadingContext()
                                                .stylesReader()
                                                .globalBibliographyConfiguration());
-    KoTextDocument(document).setBibliographyConfiguration(bibConfiguration);
+    KoTextDocument(document).styleManager()->setBibliographyConfiguration(bibConfiguration);
 
     d->styleManager = KoTextDocument(document).styleManager();
     d->changeTracker = KoTextDocument(document).changeTracker();

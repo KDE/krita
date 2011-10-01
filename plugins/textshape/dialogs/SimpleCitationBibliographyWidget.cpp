@@ -16,7 +16,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "SimpleCitationWidget.h"
+#include "SimpleCitationBibliographyWidget.h"
 #include "TextTool.h"
 
 #include <KAction>
@@ -24,7 +24,7 @@
 
 #include <QWidget>
 
-SimpleCitationWidget::SimpleCitationWidget(TextTool *tool, QWidget *parent)
+SimpleCitationBibliographyWidget::SimpleCitationBibliographyWidget(TextTool *tool, QWidget *parent)
         : QWidget(parent),
         m_blockSignals(false)
 {
@@ -33,14 +33,16 @@ SimpleCitationWidget::SimpleCitationWidget(TextTool *tool, QWidget *parent)
 
     widget.addCitation->setDefaultAction(tool->action("insert_citation"));
     widget.addBibliography->setDefaultAction(tool->action("insert_bibliography"));
+    widget.configureBibliography->setDefaultAction(tool->action("configure_bibliography"));
 //    connect(widget.addRowAbove, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.addCitation,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));
     connect(widget.addBibliography,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));
+    connect(widget.configureBibliography,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));
 }
 
-void SimpleCitationWidget::setStyleManager(KoStyleManager *sm)
+void SimpleCitationBibliographyWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
 }
 
-#include <SimpleCitationWidget.moc>
+#include <SimpleCitationBibliographyWidget.moc>

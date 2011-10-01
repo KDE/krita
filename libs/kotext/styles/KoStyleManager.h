@@ -26,6 +26,7 @@
 
 #include "kotext_export.h"
 #include "KoOdfNotesConfiguration.h"
+#include "KoOdfBibliographyConfiguration.h"
 
 #include <QObject>
 #include <QMetaType>
@@ -111,7 +112,10 @@ public:
      * set the notes configuration of the document
      */
     void setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration);
-
+    /**
+     * set the notes configuration of the document
+     */
+    void setBibliographyConfiguration(KoOdfBibliographyConfiguration *bibliographyConfiguration);
     /**
      * Remove a style.
      */
@@ -303,6 +307,11 @@ public:
       * @return the notes configuration
       */
     KoOdfNotesConfiguration *notesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const;
+
+    /**
+      * @return the bibliography configuration
+      */
+    KoOdfBibliographyConfiguration *bibliographyConfiguration() const;
 
     /**
      * Returns the default list style to be used for lists, headers, paragraphs

@@ -19,7 +19,7 @@
 #ifndef SIMPLECITATIONINDEXWIDGET_H
 #define SIMPLECITATIONINDEXWIDGET_H
 
-#include <ui_SimpleCitationWidget.h>
+#include <ui_SimpleCitationBibliographyWidget.h>
 #include <KoListStyle.h>
 
 #include <QWidget>
@@ -28,11 +28,11 @@
 class TextTool;
 class KoStyleManager;
 
-class SimpleCitationWidget : public QWidget
+class SimpleCitationBibliographyWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleCitationWidget(TextTool *tool,QWidget *parent = 0);
+    explicit SimpleCitationBibliographyWidget(TextTool *tool,QWidget *parent = 0);
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
@@ -41,7 +41,7 @@ signals:
     void doneWithFocus();
     
 private:
-    Ui::SimpleCitationWidget widget;
+    Ui::SimpleCitationBibliographyWidget widget;
     KoStyleManager *m_styleManager;
     bool m_blockSignals;
     bool m_comboboxHasBidiItems;

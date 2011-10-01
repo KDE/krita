@@ -607,7 +607,6 @@ bool KoTextDocumentLayout::doLayout()
             } while (d->anchoringIndex < d->textAnchors.count());
                 foreach (KoTextAnchor *anchor, d->textAnchors) {
                     if (!d->foundAnchors.contains(anchor)) {
-                        qDebug() << "an anchor has disappeared"<<anchor->positionInDocument();
                         d->anchoredObstructions.remove(anchor->shape());
                         d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
                     }
@@ -686,7 +685,6 @@ bool KoTextDocumentLayout::doLayout()
             } while (d->anchoringIndex < d->textAnchors.count());
                 foreach (KoTextAnchor *anchor, d->textAnchors) {
                     if (!d->foundAnchors.contains(anchor)) {
-                        qDebug() << "an anchor has disappeared"<<anchor->positionInDocument();
                         d->anchoredObstructions.remove(anchor->shape());
                         d->anchoringSoftBreak = qMin(d->anchoringSoftBreak, anchor->positionInDocument());
                     }

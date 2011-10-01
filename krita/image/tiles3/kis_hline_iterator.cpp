@@ -158,9 +158,12 @@ void KisHLineIterator2::switchToTile(qint32 xInTile)
     m_data = m_tilesCache[m_index].data;
     m_oldData = m_tilesCache[m_index].oldData;
 
-    m_data += m_pixelSize * (m_yInTile * KisTileData::WIDTH);
+    int offset_row = m_pixelSize * (m_yInTile * KisTileData::WIDTH);
+    m_data += offset_row;
     m_dataRight = m_data + m_tileWidth;
-    m_data  += m_pixelSize * xInTile;
+    int offset_col = m_pixelSize * xInTile;
+    m_data  += offset_col;
+    m_oldData += offset_row + offset_col;
 }
 
 

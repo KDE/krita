@@ -21,7 +21,7 @@
 
 #include "KoModeBox_p.h"
 
-#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 #include <KoToolManager.h>
 #include <KoShapeLayer.h>
 #include <KoInteractionTool.h>
@@ -31,7 +31,11 @@
 #include <QList>
 #include <QToolButton>
 #include <QHash>
+#include <QSet>
 #include <QRect>
+#include <QLabel>
+#include <QFrame>
+#include <QGridLayout>
 
 
 class KoModeBox::Private
@@ -45,6 +49,8 @@ public:
     KoCanvasBase *canvas;
     QList<KoToolButton> buttons;
     QList<KoToolButton> addedButtons;
+    QList<QWidget *> addedWidgets;
+    QSet<QWidget *> currentAuxWidgets;
 };
 
 static bool compareButton(const KoToolButton &b1, const KoToolButton &b2)
@@ -68,7 +74,7 @@ static bool compareButton(const KoToolButton &b1, const KoToolButton &b2)
 }
 
 
-KoModeBox::KoModeBox(KoCanvasController *canvas)
+KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas)
     : QToolBox()
     , d(new Private(canvas))
 {
@@ -83,6 +89,7 @@ KoModeBox::KoModeBox(KoCanvasController *canvas)
     updateShownTools(canvas, QList<QString>());
 
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(toolSelected(int)));
+
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*, int)),
             this, SLOT(setActiveTool(KoCanvasController*, int)));
     connect(KoToolManager::instance(), SIGNAL(currentLayerChanged(const KoCanvasController*,const KoShapeLayer*)),
@@ -92,6 +99,9 @@ KoModeBox::KoModeBox(KoCanvasController *canvas)
     connect(KoToolManager::instance(),
             SIGNAL(addedTool(const KoToolButton, KoCanvasController*)),
             this, SLOT(toolAdded(const KoToolButton, KoCanvasController*)));
+
+    connect(canvas, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+         this, SLOT(setOptionWidgets(const QList<QWidget *> &)));
 }
 
 KoModeBox::~KoModeBox()
@@ -112,6 +122,16 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
     }
 }
 
+void KoModeBox::addItem(const KoToolButton button)
+{
+    QWidget *widget = new QWidget();
+    QToolBox::addItem(widget, button.button->icon(), button.button->toolTip());
+    d->addedButtons.append(button);
+    d->addedWidgets.append(widget);
+    QGridLayout *layout = new QGridLayout();
+    widget->setLayout(layout);
+}
+
 void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<QString> &codes)
 {
     if (canvas->canvas() != d->canvas) {
@@ -125,34 +145,69 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
     }
 
     d->addedButtons.clear();
+    d->addedWidgets.clear();
 
     foreach (const KoToolButton button, d->buttons) {
         QString code = button.visibilityCode;
 
         if (code.startsWith(QLatin1String("flake/"))) {
-            addItem(new QWidget(), button.button->icon(), button.button->toolTip());
-            d->addedButtons.append(button);
+            addItem(button);
             continue;
         }
 
         if (button.section.contains("words")) {
-            addItem(new QWidget(), button.button->icon(), button.button->toolTip());
-            d->addedButtons.append(button);
+            addItem(button);
             continue;
         }
 
         if (code.endsWith( QLatin1String( "/always"))) {
-            addItem(new QWidget(), button.button->icon(), button.button->toolTip());
-            d->addedButtons.append(button);
+            addItem(button);
         } else if (code.isEmpty() && codes.count() != 0) {
-            addItem(new QWidget(), button.button->icon(), button.button->toolTip());
-            d->addedButtons.append(button);
+            addItem(button);
         } else if (codes.contains(code)) {
-            addItem(new QWidget(), button.button->icon(), button.button->toolTip());
-            d->addedButtons.append(button);
+            addItem(button);
         }
     }
     blockSignals(false);
+}
+
+void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
+{
+    /*
+    foreach(QWidget* widget, d->addedWidgets[currentIndex()].childWidgets()) {
+        widget->setParent(0);
+    }
+*/
+    qDeleteAll(d->currentAuxWidgets);
+    d->currentAuxWidgets.clear();
+
+    int cnt = 0;
+    QGridLayout *layout = (QGridLayout *)d->addedWidgets[currentIndex()]->layout();
+    layout->setColumnMinimumWidth(0, 16);
+    layout->setColumnStretch(1, 1);
+    layout->setColumnStretch(2, 2);
+    layout->setColumnStretch(3, 1);
+    layout->setHorizontalSpacing(0);
+    layout->setVerticalSpacing(2);
+    foreach(QWidget *widget, optionWidgetList) {
+        if (widget->objectName().isEmpty()) {
+            Q_ASSERT(!(widget->objectName().isEmpty()));
+            continue; // skip this docker in release build when assert don't crash
+        }
+        if (!widget->windowTitle().isEmpty()) {
+            QLabel *l;
+            layout->addWidget(l = new QLabel(widget->windowTitle()), cnt++, 1, 1, 3, Qt::AlignHCenter);
+            d->currentAuxWidgets.insert(l);
+        }
+        layout->addWidget(widget, cnt++, 1, 1, 3);
+        widget->show();
+        if (widget != optionWidgetList.last()) {
+            QFrame *s;
+            layout->addWidget(s = new QFrame(), cnt++, 2, 1, 1);
+            s->setFrameShape(QFrame::HLine);
+            d->currentAuxWidgets.insert(s);
+        }
+    }
 }
 
 void KoModeBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer *layer)

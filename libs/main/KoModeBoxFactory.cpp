@@ -24,11 +24,11 @@
 
 class KoModeBoxFactory::Private {
 public:
-    KoCanvasController *canvasController;
+    KoCanvasControllerWidget *canvasController;
 };
 
 
-KoModeBoxFactory::KoModeBoxFactory(KoCanvasController *canvasController, const QString& title)
+KoModeBoxFactory::KoModeBoxFactory(KoCanvasControllerWidget *canvasController, const QString& title)
     : d( new Private())
 {
     d->canvasController = canvasController;

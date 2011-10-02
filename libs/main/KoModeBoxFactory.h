@@ -28,7 +28,7 @@
 #include <QString>
 #include <QDockWidget>
 
-class KoCanvasController;
+class KoCanvasControllerWidget;
 
 /**
  * Factory class to create a new KoModeBox that contains a QToolBox which acts
@@ -37,7 +37,7 @@ class KoCanvasController;
 class KOMAIN_EXPORT KoModeBoxFactory : public KoDockFactoryBase
 {
 public:
-    explicit KoModeBoxFactory(KoCanvasController *canvas, const QString& appName);
+    explicit KoModeBoxFactory(KoCanvasControllerWidget *canvas, const QString& appName);
     ~KoModeBoxFactory();
 
     virtual QString id() const;

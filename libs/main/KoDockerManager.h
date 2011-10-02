@@ -38,8 +38,9 @@ public:
 
     void resetToolDockerWidgets();
 
+    void removeToolOptionsDocker();
+
 public slots:
-    //void removeUnusedOptionWidgets();
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */

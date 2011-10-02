@@ -34,6 +34,7 @@
 #include <KoToolManager.h>
 
 class QToolButton;
+class KoCanvasControllerWidget;
 class KoCanvasController;
 class KoCanvasBase;
 class KoShapeLayer;
@@ -54,7 +55,7 @@ class KoModeBox : public QToolBox {
     Q_OBJECT
 public:
     /// constructor
-    explicit KoModeBox(KoCanvasController *canvas);
+    explicit KoModeBox(KoCanvasControllerWidget *canvas);
     ~KoModeBox();
 
     /**
@@ -91,6 +92,8 @@ public slots:
      */
     void updateShownTools(const KoCanvasController *canvas, const QList<QString> &codes);
 
+    void setOptionWidgets(const QList<QWidget *> &optionWidgetList);
+
     /// set the canvas this docker should listen to for changes.
     void setCanvas(KoCanvasBase *canvas);
     void unsetCanvas();
@@ -104,6 +107,8 @@ private slots:
     /// slot for when a new item have been selected in the QToolBox
     void toolSelected(int index);
 
+private:
+    void addItem(const KoToolButton button);
 
 private:
     class Private;

@@ -197,14 +197,29 @@ void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
          * Change it only in case, you really know what you are doing.
          */
         m_listLock.lock();
-        td->m_swapLock.lockForWrite();
+
+        /**
+         * If someone has managed to load the td from swap, then, most
+         * probably, they have already taken the swap lock. This may
+         * lead to a deadlock, because COW mechanism breaks lock
+         * ordering rules in duplicateTileData() (it takes m_listLock
+         * while the swap lock is held). In our case it is enough just
+         * to check whether the other thread has already fetched the
+         * data. Please notice that we do not take both of the locks
+         * while checking this, because holding m_listLock is
+         * enough. Nothing can happen to the tile while we hold
+         * m_listLock.
+         */
 
         if(!td->data()) {
+            td->m_swapLock.lockForWrite();
+
             m_swappedStore.swapInTileData(td);
             registerTileDataImp(td);
+
+            td->m_swapLock.unlock();
         }
 
-        td->m_swapLock.unlock();
         m_listLock.unlock();
 
         /**

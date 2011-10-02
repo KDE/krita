@@ -29,7 +29,7 @@ ReferencesToolFactory::ReferencesToolFactory()
         : KoToolFactoryBase("ReferencesToolFactory_ID")
 {
     setToolTip(i18n("References tool"));
-    setToolType(dynamicToolType());
+    setToolType(dynamicToolType()+",words");
     setIcon("tool-references");
     setPriority(3);
     setActivationShapeId(TextShape_SHAPEID);

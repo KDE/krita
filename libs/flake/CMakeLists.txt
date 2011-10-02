@@ -29,7 +29,7 @@ set(flake_SRCS
     KoPathSegment.cpp
     KoSelection.cpp
     KoShape.cpp
-    KoShapeControllerBase.cpp
+    KoShapeBasedDocumentBase.cpp
     KoShapeApplicationData.cpp
     KoShapeContainer.cpp
     KoShapeContainerModel.cpp
@@ -272,7 +272,7 @@ install(
     KoShapeContainerModel.h
     KoShapeContainerDefaultModel.h
     KoShapeController.h
-    KoShapeControllerBase.h
+    KoShapeBasedDocumentBase.h
     KoShapeFactoryBase.h
     KoShapeGroup.h
     KoShapeLayer.h

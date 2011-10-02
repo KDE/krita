@@ -60,6 +60,7 @@ set(kotext_LIB_SRCS
     ToCBibGeneratorInfo.cpp
     KoTableOfContentsGeneratorInfo.cpp
     KoBibliographyInfo.cpp
+    BibliographyGenerator.cpp
 
     KoTextLayoutScheduler.cpp
 
@@ -89,14 +90,21 @@ set(kotext_LIB_SRCS
     changetracker/KoDeletedRowData.cpp
     changetracker/KoDeletedColumnData.cpp
     changetracker/KoDeletedCellData.cpp
-    KoTextDrag.cpp
 
-    commands/DeleteTableRowCommand.cpp
+    commands/ChangeListCommand.cpp
+    commands/ChangeTrackedDeleteCommand.cpp
+    commands/DeleteCommand.cpp
     commands/DeleteTableColumnCommand.cpp
-    commands/InsertTableRowCommand.cpp
-    commands/InsertTableColumnCommand.cpp
+    commands/DeleteTableRowCommand.cpp
     commands/InsertDeleteChangesCommand.cpp
+    commands/InsertTableColumnCommand.cpp
+    commands/InsertTableRowCommand.cpp
+    commands/ListItemNumberingCommand.cpp
     commands/RemoveDeleteChangesCommand.cpp
+    commands/TextPasteCommand.cpp
+
+    KoTextDrag.cpp
+    KoTextCommandBase.cpp
 )
 
 if( Soprano_FOUND )
@@ -161,6 +169,7 @@ install(
     KoTextMeta.h
     KoTextSoftPageBreak.cpp
     KoSection.h
+    KoTextCommandBase.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
@@ -178,6 +187,7 @@ install(
     styles/KoSectionStyle.h
     styles/KoStyleManager.h
     styles/KoTableBorderStyle.h
+    styles/KoTableStyle.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/styles COMPONENT Devel
 )

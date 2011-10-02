@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,11 +22,12 @@
 
 #include <KoOdfReadStore.h>
 #include <KoOdfLoadingContext.h>
-#include <KoCanvasBase.h>
 #include <KoShapeLoadingContext.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoShapeController.h>
+
 #include "KoTextDocument.h"
+#include "KoDocumentRdfBase.h"
 #include "opendocument/KoTextLoader.h"
 
 #include <kdebug.h>
@@ -36,20 +38,20 @@
 class KoTextPaste::Private
 {
 public:
-    Private(KoTextEditor *editor,
-            KoCanvasBase *canvas, const Soprano::Model *_rdfModel)
-            : editor(editor)
-            , canvas(canvas)
-            , rdfModel(_rdfModel) {}
+    Private(KoTextEditor *editor, KoShapeController *shapeController, const Soprano::Model *_rdfModel)
+        : editor(editor)
+        , resourceManager(shapeController->resourceManager())
+        , rdfModel(_rdfModel)
+    {
+    }
 
     KoTextEditor *editor;
-    KoCanvasBase *canvas;
+    KoResourceManager *resourceManager;
     const Soprano::Model *rdfModel;
 };
 
-KoTextPaste::KoTextPaste(KoTextEditor *editor,
-                         KoCanvasBase *canvas, const Soprano::Model *rdfModel)
-        : d(new Private(editor, canvas, rdfModel))
+KoTextPaste::KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, const Soprano::Model *rdfModel)
+        : d(new Private(editor, shapeController, rdfModel))
 {
 }
 
@@ -62,7 +64,7 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
 {
     bool ok = true;
     KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-    KoShapeLoadingContext context(loadingContext, d->canvas->shapeController()->resourceManager());
+    KoShapeLoadingContext context(loadingContext, d->resourceManager);
 
     KoTextLoader loader(context);
 

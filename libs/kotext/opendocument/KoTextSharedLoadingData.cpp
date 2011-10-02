@@ -46,6 +46,7 @@
 #include "styles/KoTableCellStyle.h"
 #include "styles/KoSectionStyle.h"
 #include "KoOdfNotesConfiguration.h"
+#include "KoOdfBibliographyConfiguration.h"
 
 class KoTextSharedLoadingData::Private
 {
@@ -97,6 +98,7 @@ public:
     QHash<QString, KoParagraphStyle*> namedParagraphStyles;
     KoOdfNotesConfiguration footnotesConfiguration;
     KoOdfNotesConfiguration endnotesConfiguration;
+    KoOdfBibliographyConfiguration bibliographyConfiguration;
     KoCharacterStyle *applicationDefaultStyle;
 };
 
@@ -618,6 +620,11 @@ KoOdfNotesConfiguration KoTextSharedLoadingData::endnotesConfiguration() const
     return d->endnotesConfiguration;
 }
 
+KoOdfBibliographyConfiguration KoTextSharedLoadingData::bibliographyConfiguration() const
+{
+    return d->bibliographyConfiguration;
+}
+
 void KoTextSharedLoadingData::setApplicationDefaultStyle(KoCharacterStyle *applicationDefaultStyle)
 {
     d->applicationDefaultStyle = applicationDefaultStyle;
@@ -641,4 +648,10 @@ void KoTextSharedLoadingData::addNotesConfiguration(KoShapeLoadingContext &conte
             context.odfLoadingContext().stylesReader().globalNotesConfiguration(KoOdfNotesConfiguration::Footnote);
     d->endnotesConfiguration =
             context.odfLoadingContext().stylesReader().globalNotesConfiguration(KoOdfNotesConfiguration::Endnote);
+}
+
+void KoTextSharedLoadingData::addBibliographyConfiguration(KoShapeLoadingContext &context)
+{
+    d->bibliographyConfiguration =
+            context.odfLoadingContext().stylesReader().globalBibliographyConfiguration();
 }

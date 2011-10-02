@@ -22,9 +22,10 @@
 
 #include "kotext_export.h"
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QString>
+#include <QObject>
+#include <QMap>
+#include <QString>
+#include <QMetaType>
 
 #include <KoDataCenterBase.h>
 
@@ -53,30 +54,26 @@ class KOTEXT_EXPORT KoDocumentRdfBase : public QObject, public KoDataCenterBase
     Q_OBJECT
 
 public:
-    KoDocumentRdfBase(QObject *parent);
+    KoDocumentRdfBase(QObject *parent = 0);
 
     /**
      * Get the Soprano::Model that contains all the Rdf
      * You do not own the model, do not delete it.
      */
     virtual const Soprano::Model *model() const;
-
-    /**
-     * Convenience method to get the KoDocumentRdf given a CanvasBase
-     * pointer. The resource manager is the canvas is used to get back
-     * the KoDoucmentRdf if there is one for the canvas.
-     *
-     * Note that this method can return either a valid KoDocumentRdf
-     * pointer or a NULL pointer if there is no Rdf for the canvas.
-     */
-    static KoDocumentRdfBase *fromResourceManager(KoCanvasBase *host);
     virtual void linkToResourceManager(KoResourceManager *rm);
 
     virtual void updateInlineRdfStatements(const QTextDocument *qdoc);
     virtual void updateXmlIdReferences(const QMap<QString, QString> &m);
     virtual bool loadOasis(KoStore *store);
     virtual bool saveOasis(KoStore *store, KoXmlWriter *manifestWriter);
+
+    // reimplemented in komain/rdf/KoDocumentRdf
+    virtual bool completeLoading(KoStore *store);
+    virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context);
 };
+
+Q_DECLARE_METATYPE(KoDocumentRdfBase*)
 
 #endif
 

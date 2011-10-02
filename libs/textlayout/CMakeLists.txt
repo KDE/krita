@@ -9,6 +9,7 @@ set(textlayout_LIB_SRCS
     KoTextLayoutArea_paint.cpp
     KoTextLayoutEndNotesArea.cpp
     KoTextLayoutTableArea.cpp
+    KoTextLayoutNoteArea.cpp
     KoTextLayoutRootArea.cpp
     KoTextLayoutRootAreaProvider.cpp
     KoTextDocumentLayout.cpp
@@ -25,7 +26,6 @@ set(textlayout_LIB_SRCS
     InlineAnchorStrategy.cpp
     AnchorStrategy.cpp
     ToCGenerator.cpp
-    BibliographyGenerator.cpp
     DummyDocumentLayout.cpp
     IndexGeneratorManager.cpp
 )

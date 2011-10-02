@@ -104,10 +104,11 @@ enum DocumentResource {
 }
 
 /**
- * The KoResourceManager contains a set of per-canvas
+ * The KoResourceManager contains a set of per-canvas <i>or</i> per-document
  * properties, like current foreground color, current background
  * color and more. All tools belonging to the current canvas are
  * notified when a Resource changes (is set).
+ *
  * The properties come from the KoCanvasResource::CanvasResource enum or the
  * KoDocumentResource::DocumentResource depending on which manager you got.
  * See KoCanvasBase::resourceManager KoShapeController::resourceManager
@@ -225,14 +226,14 @@ public:
     void setPasteOffset(qreal pasteOffset);
     /// Returns the current paste offset
     qreal pasteOffset() const;
-    
+
     /**
      * Enables/disables pasting shape at cursor position
      */
     void enablePasteAtCursor(bool enable);
     /// Returns current state of paste at cursor setting
     bool pasteAtCursor() const;
-    
+
     /// Sets the border resource
     void setActiveBorder(const KoLineBorder &border);
 

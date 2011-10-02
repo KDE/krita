@@ -30,6 +30,7 @@
 
 #include <KoXmlReader.h>
 #include <KoOdfNotesConfiguration.h>
+#include <KoOdfBibliographyConfiguration.h>
 
 class KoOdfStylesReader::Private
 {
@@ -58,10 +59,12 @@ public:
 
     DataFormatsMap         dataFormats;
 
-    // XXX: there can als be notes configuration objects _per_ section.
+    // XXX: there can also be notes configuration objects _per_ section.
     KoOdfNotesConfiguration globalFootnoteConfiguration;
     KoOdfNotesConfiguration globalEndnoteConfiguration;
     KoOdfNotesConfiguration defaultNoteConfiguration;
+
+    KoOdfBibliographyConfiguration globalBibliographyConfiguration;
 
     KoOdfLineNumberingConfiguration lineNumberingConfiguration;
 
@@ -174,8 +177,14 @@ KoOdfNotesConfiguration KoOdfStylesReader::globalNotesConfiguration(KoOdfNotesCo
     case (KoOdfNotesConfiguration::Footnote):
         return d->globalFootnoteConfiguration;
     default:
+        d->defaultNoteConfiguration.setNoteClass(noteClass);
         return d->defaultNoteConfiguration;
     }
+}
+
+KoOdfBibliographyConfiguration KoOdfStylesReader::globalBibliographyConfiguration() const
+{
+    return d->globalBibliographyConfiguration;
 }
 
 KoOdfLineNumberingConfiguration KoOdfStylesReader::lineNumberingConfiguration() const
@@ -292,14 +301,31 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
         notesConfiguration.loadOdf(e);
         if (notesConfiguration.noteClass() == KoOdfNotesConfiguration::Footnote) {
             d->globalFootnoteConfiguration = notesConfiguration;
+            if (d->globalFootnoteConfiguration.numberFormat().formatSpecification() == KoOdfNumberDefinition::Empty) {
+                KoOdfNumberDefinition numFormat;
+                numFormat.setFormatSpecification(KoOdfNumberDefinition::Numeric);
+                d->globalFootnoteConfiguration.setNumberFormat(numFormat);
+                d->globalFootnoteConfiguration.setStartValue(1);
+            }
+
         }
         else if (notesConfiguration.noteClass() == KoOdfNotesConfiguration::Endnote) {
             d->globalEndnoteConfiguration = notesConfiguration;
+            if (d->globalEndnoteConfiguration.numberFormat().formatSpecification() == KoOdfNumberDefinition::RomanLowerCase) {
+                KoOdfNumberDefinition numFormat;
+                numFormat.setFormatSpecification(KoOdfNumberDefinition::RomanLowerCase);
+                d->globalEndnoteConfiguration.setNumberFormat(numFormat);
+                d->globalEndnoteConfiguration.setStartValue(1);
+            }
+
         }
     } else if (ns == KoXmlNS::text && localName == "linenumbering-configuration") {
         d->lineNumberingConfiguration.loadOdf(e);
+    } else if (ns == KoXmlNS::text && localName == "bibliography-configuration") {
+        KoOdfBibliographyConfiguration bibConfiguration;
+        bibConfiguration.loadOdf(e);
+        d->globalBibliographyConfiguration = bibConfiguration;
     }
-
 }
 
 KoXmlElement *KoOdfStylesReader::defaultStyle(const QString &family) const

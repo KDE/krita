@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,7 +22,6 @@
 
 #include <KoXmlWriter.h>
 #include <KoOdf.h>
-#include <KoTextShapeDataBase.h>
 #include "KoTextWriter.h"
 #include <KoGenChanges.h>
 #include <KoShapeSavingContext.h>
@@ -29,17 +29,20 @@
 #include <opendocument/KoTextSharedSavingData.h>
 #include "KoTextSopranoRdfModel_p.h"
 
+#include <QTextDocument>
+
 struct KoTextOdfSaveHelper::Private {
-    Private(KoTextShapeDataBase *shapeData, int from, int to)
-        : shapeData(shapeData),
-        from(from),
-        to(to),
-        rdfModel(0)
+    Private(const QTextDocument *document, int from, int to)
+        : context(0)
+        , document(document)
+        , from(from)
+        , to(to)
+        , rdfModel(0)
     {
     }
 
     KoShapeSavingContext *context;
-    KoTextShapeDataBase *shapeData;
+    const QTextDocument *document;
 
     int from;
     int to;
@@ -48,8 +51,8 @@ struct KoTextOdfSaveHelper::Private {
 };
 
 
-KoTextOdfSaveHelper::KoTextOdfSaveHelper(KoTextShapeDataBase * shapeData, int from, int to)
-        : d(new Private(shapeData, from, to))
+KoTextOdfSaveHelper::KoTextOdfSaveHelper(const QTextDocument *document, int from, int to)
+        : d(new Private(document, from, to))
 {
 }
 
@@ -60,26 +63,26 @@ KoTextOdfSaveHelper::~KoTextOdfSaveHelper()
 
 bool KoTextOdfSaveHelper::writeBody()
 {
-    if (d->to < d->from)
+    if (d->to < d->from) {
         qSwap(d->to, d->from);
-
+    }
+    Q_ASSERT(d->context);
     KoXmlWriter & bodyWriter = d->context->xmlWriter();
     bodyWriter.startElement("office:body");
     bodyWriter.startElement(KoOdf::bodyContentElement(KoOdf::Text, true));
 
-//    d->shapeData->saveOdf(*d->context, 0, d->from, d->to);
     KoTextWriter writer(*d->context, 0);
-    writer.write(d->shapeData->document(), d->from, d->to);
+    writer.write(d->document, d->from, d->to);
 
     bodyWriter.endElement(); // office:element
     bodyWriter.endElement(); // office:body
     return true;
 }
 
-KoShapeSavingContext * KoTextOdfSaveHelper::context(KoXmlWriter * bodyWriter, KoGenStyles & mainStyles, KoEmbeddedDocumentSaver & embeddedSaver)
+KoShapeSavingContext * KoTextOdfSaveHelper::context(KoXmlWriter * bodyWriter,
+                                                    KoGenStyles & mainStyles,
+                                                    KoEmbeddedDocumentSaver & embeddedSaver)
 {
-//    Q_ASSERT(d->context == 0);
-
     d->context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);
     return d->context;
 }

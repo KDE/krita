@@ -32,6 +32,7 @@
 
 #include "KoTextLayoutEndNotesArea.h"
 #include "KoTextLayoutTableArea.h"
+#include "KoTextLayoutNoteArea.h"
 #include "TableIterator.h"
 #include "ListItemsHelper.h"
 #include "RunAroundHelper.h"
@@ -98,6 +99,8 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_verticalAlignOffset(0)
  , m_preregisteredFootNotesHeight(0)
  , m_footNotesHeight(0)
+ , m_footNoteAutoCount(0)
+ , m_extraTextIndent(0)
  , m_endNotesArea(0)
 {
 }
@@ -128,6 +131,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
     }
     int tableAreaIndex = 0;
     int tocIndex = 0;
+    int footNoteIndex = 0;
     bool atEnd = false;
     for (; it != stop && !atEnd; ++it) {
         atEnd = it.atEnd();
@@ -147,7 +151,14 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
-            continue;
+            if (it.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
+                if (point.y() > m_endNotesArea->top()
+                        && point.y() < m_endNotesArea->bottom()) {
+                    pointedAt = m_endNotesArea->hitTest(point, accuracy);
+                    return pointedAt;
+                }
+            }
+            break;
         } else {
             if (!block.isValid())
                 continue;
@@ -169,7 +180,7 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
         QTextLayout *layout = block.layout();
         QTextFrame::iterator next = it;
         ++next;
-        if (next != stop && point.y() > layout->boundingRect().bottom()) {
+        if (next != stop && next.currentFrame() == 0 && point.y() > layout->boundingRect().bottom()) {
             // just skip this block.
             continue;
         }
@@ -208,6 +219,17 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             return pointedAt;
         }
     }
+    point -= QPointF(0, bottom() - m_footNotesHeight);
+    while (footNoteIndex<m_footNoteAreas.length()) {
+        // check if p is over foot notes area
+        if (point.y() > m_footNoteAreas[footNoteIndex]->top()
+                && point.y() < m_footNoteAreas[footNoteIndex]->bottom()) {
+            pointedAt = m_footNoteAreas[footNoteIndex]->hitTest(point, accuracy);
+            return pointedAt;
+        }
+        point -= QPointF(0,m_footNoteAreas[footNoteIndex]->bottom());
+        ++footNoteIndex;
+    }
     return pointedAt;
 }
 
@@ -224,6 +246,18 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
     QTextFrame::iterator stop = m_endOfArea->it;
     if(!stop.currentBlock().isValid() || m_endOfArea->lineTextStart >= 0) {
         ++stop;
+    }
+
+    QTextFrame *subFrame;
+    int footNoteIndex = 0;
+    qreal offset = bottom() - m_footNotesHeight;
+    while (footNoteIndex < m_footNoteAreas.length()) {
+        subFrame = m_footNoteFrames[footNoteIndex];
+        if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
+            return m_footNoteAreas[footNoteIndex]->selectionBoundingBox(cursor).translated(0, offset) ;
+        }
+        offset += m_footNoteAreas[footNoteIndex]->bottom();
+        ++footNoteIndex;
     }
 
     int tableAreaIndex = 0;
@@ -259,7 +293,18 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
-            continue;
+            if (it.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
+                if (cursor.selectionEnd() < subFrame->firstPosition()) {
+                    return retval.translated(0, m_verticalAlignOffset);
+                }
+                if (cursor.selectionStart() > subFrame->lastPosition()) {
+                    break;
+                }
+                if (cursor.selectionStart() >= subFrame->firstPosition() && cursor.selectionEnd() <= subFrame->lastPosition()) {
+                    return m_endNotesArea->selectionBoundingBox(cursor).translated(0, m_verticalAlignOffset);
+                }
+                break;
+            }
         } else {
             if (!block.isValid())
                 continue;
@@ -334,6 +379,8 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_footNoteAreas.clear();
     qDeleteAll(m_preregisteredFootNoteAreas);
     m_preregisteredFootNoteAreas.clear();
+    m_footNoteFrames.clear();
+    m_preregisteredFootNoteFrames.clear();
     qDeleteAll(m_generatedDocAreas);
     m_generatedDocAreas.clear();
     m_blockRects.clear();
@@ -348,6 +395,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_y = top();
     setBottom(top());
     m_bottomSpacing = 0;
+    m_footNoteAutoCount = 0;
     m_footNotesHeight = 0;
     m_preregisteredFootNotesHeight = 0;
     m_prevBorder = 0;
@@ -396,7 +444,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             delete cursor->currentTableIterator;
             cursor->currentTableIterator = 0;
         } else if (subFrame) {
-            if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
+            if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
                 Q_ASSERT(m_endNotesArea == 0);
                 m_endNotesArea = new KoTextLayoutEndNotesArea(this, m_documentLayout);
                 m_y += m_bottomSpacing;
@@ -422,6 +470,12 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 m_y = m_endNotesArea->bottom();
                 delete cursor->currentSubFrameIterator;
                 cursor->currentSubFrameIterator = 0;
+
+                // we have layouted till the end of the document except for a blank block
+                // which we should ignore
+                ++(cursor->it);
+                ++(cursor->it);
+                break;
             }
         } else if (block.isValid()) {
             if (block.blockFormat().hasProperty(KoParagraphStyle::GeneratedDocument)) {
@@ -491,6 +545,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                     m_blockRects.last().setBottom(m_y);
                     return false;
                 }
+                m_extraTextIndent = 0;
 
                 if (acceptsPageBreak()
                     && (block.blockFormat().intProperty(KoParagraphStyle::BreakAfter) & KoText::PageBreak)) {
@@ -512,7 +567,6 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         bool atEnd = cursor->it.atEnd();
         if (!atEnd) {
             ++(cursor->it);
-            atEnd = cursor->it.atEnd();
         }
     }
     m_endOfArea = new FrameIterator(cursor);
@@ -608,8 +662,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     // initialize list item stuff for this parag.
     QTextList *textList = block.textList();
+    QTextListFormat listFormat;
     if (textList) {
-        QTextListFormat listFormat = textList->format();
+        listFormat = textList->format();
 
         KoCharacterStyle *cs = 0;
         if (m_documentLayout->styleManager()) {
@@ -801,12 +856,13 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         if (!m_isRtl) {
             listLabelIndent = blockData->counterSpacing() + blockData->counterWidth();
         }
-        if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
-            m_listIndent = textList->format().doubleProperty(KoListStyle::Indent) + listLabelIndent;
+        if (listFormat.boolProperty(KoListStyle::AlignmentMode) == false) {
+            m_listIndent = listFormat.doubleProperty(KoListStyle::Indent) + listLabelIndent;
         } else {
-            if (!pStyle.hasProperty(KoParagraphStyle::ListLevel)) {
-                leftMargin = textList->format().doubleProperty(KoListStyle::Margin);
-                m_listIndent = textList->format().doubleProperty(KoListStyle::Indent);
+            // according to odf 1.2 17.20 list margin should be used when paragraph margin is
+            // not specified (additionally LO/OO uses 0 as condition so we do too)
+            if (pStyle.leftMargin() == 0) {
+                leftMargin = listFormat.doubleProperty(KoListStyle::Margin);
             }
         }
     }
@@ -932,61 +988,79 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         // account for them.
         if (m_isRtl) {
             m_width -= blockData->counterWidth() + blockData->counterSpacing() + m_listIndent;
-            if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
+            if (listFormat.boolProperty(KoListStyle::AlignmentMode) == false) {
                 blockData->setCounterPosition(QPointF(right() -
                                                       blockData->counterWidth() - leftMargin, m_y));
             } else {
                 blockData->setCounterPosition(QPointF(right() - leftMargin, m_y));
             }
         } else {
-            if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
+            if (listFormat.boolProperty(KoListStyle::AlignmentMode) == false) {
                 m_x += m_listIndent;
                 m_width -= m_listIndent;
                 blockData->setCounterPosition(QPointF(x() - listLabelIndent, m_y));
             } else {
-                blockData->setCounterPosition(QPointF(x(), m_y));
+                Qt::Alignment align = static_cast<Qt::Alignment>(listFormat.intProperty(KoListStyle::Alignment));
+                if (align & Qt::AlignLeft) {
+                    blockData->setCounterPosition(QPointF(x(), m_y));
+                    m_indent += listLabelIndent;
+                } else if (align & Qt::AlignHCenter) {
+                    listLabelIndent /= 2;
+                    blockData->setCounterPosition(QPointF(x() - listLabelIndent, m_y));
+                    m_indent += listLabelIndent/2;
+                } else {
+                    blockData->setCounterPosition(QPointF(x() - listLabelIndent, m_y));
+                }
             }
         }
 
-        if (textList->format().boolProperty(KoListStyle::AlignmentMode)) {
+        if (listFormat.boolProperty(KoListStyle::AlignmentMode)) {
             if (block.blockFormat().intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
-                if (textList->format().hasProperty(KoListStyle::TabStopPosition)) {
-                    qreal listTab = textList->format().doubleProperty(KoListStyle::TabStopPosition);
+                if (listFormat.hasProperty(KoListStyle::TabStopPosition)) {
+                    qreal listTab = listFormat.doubleProperty(KoListStyle::TabStopPosition);
                     if (!m_documentLayout->relativeTabs(block)) {
                         // How list tab is defined if fixed tabs:
                         //        listTab
                         //|>-------------------------|
                         //           m_indent
                         //         |---------<|
-                        //       m_listIndent
-                        //     |-------------<|
                         //     LABEL                 TEXT STARTS HERE AND GOES ON
                         //                    TO THE NEXT LINE
                         //|>------------------|
                         //     leftMargin
-                        listTab -= leftMargin + m_indent;
+                        listTab -= leftMargin;
                     } else {
                         // How list tab is defined if relative tabs:
-                        //                    listTab
-                        //                    |>-----|
-                        //           m_indent
-                        //         |---------<|
-                        //       m_listIndent
-                        //     |-------------<|
-                        //     LABEL                 TEXT STARTS HERE AND GOES ON
-                        //                    TO THE NEXT LINE
-                        //|>------------------|
-                        //     leftMargin
-                        listTab -= m_indent;
+                        // It's relative to leftMargin - list.leftMargin
+                        //              listTab
+                        //       |>-------------------|
+                        //             m_indent
+                        //           |---------<|
+                        //       LABEL                 TEXT STARTS HERE AND GOES ON
+                        //                      TO THE NEXT LINE
+                        //|>--------------------|
+                        //     leftMargin       |
+                        //       |>-------------|
+                        //          list.margin
+                        listTab -= listFormat.doubleProperty(KoListStyle::Margin);
                     }
-                    //How we want it:
+                    // How list tab is defined now:
+                    //                    listTab
+                    //                    |>-----|
+                    //           m_indent
+                    //         |---------<|
+                    //     LABEL                 TEXT STARTS HERE AND GOES ON
+                    //                    TO THE NEXT LINE
+                    //|>------------------|
+                    //     leftMargin
+                    listTab -= m_indent;
+
+                    // And now listTab is like this:
                     //         x()
                     //         |     listTab
                     //         |>---------------|
                     //           m_indent
                     //         |---------<|
-                    //       m_listIndent
-                    //     |-------------<|
                     //     LABEL                 TEXT STARTS HERE AND GOES ON
                     //                    TO THE NEXT LINE
                     //|>------------------|
@@ -996,7 +1070,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                         qreal position = tab.position  * 72. / qt_defaultDpiY();
                         if (position > 0.0) {
                             // found the relevant normal tab
-                            if (position > listTab) {
+                            if (position > listTab && listTab > 0.0) {
                                 // But special tab is more relevant
                                 position = listTab;
                             }
@@ -1004,6 +1078,15 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                             break;
                         }
                     }
+
+                    //And finally it's like this:
+                    //                          x()
+                    //                    m_indent
+                    //                    |>-----|
+                    //     LABEL                 TEXT STARTS HERE AND GOES ON
+                    //                    TO THE NEXT LINE
+                    //|>------------------|
+                    //     leftMargin
                 } else {
                     m_indent = 0;
                 }
@@ -1025,6 +1108,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         runAroundHelper.setLine(this, line);
         runAroundHelper.setObstructions(documentLayout()->currentObstructions());
         documentLayout()->setAnchoringParagraphRect(m_blockRects.last());
+        documentLayout()->setAnchoringLayoutEnvironmentRect(layoutEnvironmentRect());
         runAroundHelper.fit( /* resetHorizontalPosition */ false, /* rightToLeft */ m_isRtl, QPointF(x(), m_y));
         qreal bottomOfText = line.y() + line.height();
 
@@ -1058,6 +1142,18 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 if (!virginPage() && softBreakPos == 0) {
                     return false;
                 }
+            }
+        }
+
+        if (documentLayout()->anchoringSoftBreak() <= block.position() + line.textStart() + line.textLength()) {
+            //don't add an anchor that has been moved away 
+            line.setNumColumns(documentLayout()->anchoringSoftBreak() - block.position() - line.textStart(), line.width());
+            softBreak = true;
+            // if the softBreakPos is at the start of the block stop here so
+            // we don't add a line here. That fixes the problem that e.g. the counter is before
+            // the page break and the text is after the page break
+            if (!virginPage() && documentLayout()->anchoringSoftBreak() == block.position()) {
+                return false;
             }
         }
 
@@ -1127,11 +1223,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     return true;
 }
 
-qreal KoTextLayoutArea::listIndent() const
-{
-    return m_listIndent;
-}
-
 qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const KoParagraphStyle &pStyle) const
 {
     if (pStyle.autoTextIndent()) {
@@ -1139,14 +1230,21 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const 
         // return an indent approximately 3-characters wide as per current font
         QTextCursor blockCursor(block);
         qreal guessGlyphWidth = QFontMetricsF(blockCursor.charFormat().font()).width('x');
-        return guessGlyphWidth * 3;
+        return guessGlyphWidth * 3 + m_extraTextIndent;
     }
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
-        if (! block.blockFormat().hasProperty(KoParagraphStyle::ListLevel)) {
-            return textList->format().doubleProperty(KoListStyle::TextIndent);
+        // according to odf 1.2 17.20 list text indent should be used when paragraph text indent is
+        // not specified (additionally LO/OO uses 0 as condition so we do too)
+        if (pStyle.textIndent().value(width()) == 0) {
+            return textList->format().doubleProperty(KoListStyle::TextIndent) + m_extraTextIndent;
         }
     }
-    return pStyle.textIndent().value(width());
+    return pStyle.textIndent().value(width()) + m_extraTextIndent;
+}
+
+void KoTextLayoutArea::setExtraTextIndent(qreal extraTextIndent)
+{
+    m_extraTextIndent = extraTextIndent;
 }
 
 qreal KoTextLayoutArea::x() const
@@ -1360,15 +1458,12 @@ void KoTextLayoutArea::setLayoutEnvironmentResctictions(bool isLayoutEnvironment
     m_actsHorizontally = actsHorizontally;
 }
 
-QRectF KoTextLayoutArea::layoutEnvironmentRect(bool &actsHorizontally) const
+QRectF KoTextLayoutArea::layoutEnvironmentRect() const
 {
-    QRectF rect(-5e10, -5e10, 10e10, 10e10);
+    QRectF rect(-5e10, -5e10, 10e10, 10e20); // large values that never really restrict anything
 
     if (m_parent) {
-        rect = m_parent->layoutEnvironmentRect(actsHorizontally);
-        actsHorizontally |= m_actsHorizontally;
-    } else {
-        actsHorizontally = m_actsHorizontally;
+        rect = m_parent->layoutEnvironmentRect();
     }
 
     if (m_isLayoutEnvironment) {
@@ -1462,7 +1557,6 @@ void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line)
     if (m_documentLayout->inlineTextObjectManager() == 0) {
         return;
     }
-
     QString text = block.text();
     int pos = text.indexOf(QChar::ObjectReplacementCharacter, line.textStart());
 
@@ -1485,10 +1579,14 @@ qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note)
     if (m_parent == 0) {
         // TODO to support footnotes at end of document this is
         // where we need to add some extra condition
+        if(note->autoNumbering())
+            note->setAutoNumber(m_footNoteAutoCount++);
 
-        FrameIterator iter(note->textFrame());
-        KoTextLayoutArea *footNoteArea = new KoTextLayoutArea(this, m_documentLayout);
+        QTextFrame *subFrame = note->textFrame();
+        FrameIterator iter(subFrame);
+        KoTextLayoutNoteArea *footNoteArea = new KoTextLayoutNoteArea(note, this, m_documentLayout);
 
+        m_preregisteredFootNoteFrames.append(subFrame);
         footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom() - bottom());
         footNoteArea->layout(&iter);
 
@@ -1505,8 +1603,10 @@ void KoTextLayoutArea::confirmFootNotes()
 {
     m_footNotesHeight += m_preregisteredFootNotesHeight;
     m_footNoteAreas.append(m_preregisteredFootNoteAreas);
+    m_footNoteFrames.append(m_preregisteredFootNoteFrames);
     m_preregisteredFootNotesHeight = 0;
     m_preregisteredFootNoteAreas.clear();
+    m_preregisteredFootNoteFrames.clear();
     if (m_parent) {
         m_parent->confirmFootNotes();
     }
@@ -1526,6 +1626,7 @@ void KoTextLayoutArea::clearPreregisteredFootNotes()
 {
     m_preregisteredFootNotesHeight = 0;
     m_preregisteredFootNoteAreas.clear();
+    m_preregisteredFootNoteFrames.clear();
     if (m_parent) {
         m_parent->clearPreregisteredFootNotes();
     }

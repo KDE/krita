@@ -463,19 +463,27 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
             new KoOdfNotesConfiguration(d->context.odfLoadingContext()
                                         .stylesReader()
                                         .globalNotesConfiguration(KoOdfNotesConfiguration::Endnote));
-    KoTextDocument(document).setNotesConfiguration(notesConfiguration);
+    //KoTextDocument(document).setNotesConfiguration(notesConfiguration);
+    KoTextDocument(document).styleManager()->setNotesConfiguration(notesConfiguration);
 
     notesConfiguration =
             new KoOdfNotesConfiguration(d->context.odfLoadingContext()
                                         .stylesReader()
                                         .globalNotesConfiguration(KoOdfNotesConfiguration::Footnote));
-    KoTextDocument(document).setNotesConfiguration(notesConfiguration);
+    //KoTextDocument(document).setNotesConfiguration(notesConfiguration);
+    KoTextDocument(document).styleManager()->setNotesConfiguration(notesConfiguration);
 
     KoOdfLineNumberingConfiguration *lineNumberingConfiguration =
             new KoOdfLineNumberingConfiguration(d->context.odfLoadingContext()
                                                 .stylesReader()
                                                 .lineNumberingConfiguration());
     KoTextDocument(document).setLineNumberingConfiguration(lineNumberingConfiguration);
+
+    KoOdfBibliographyConfiguration *bibConfiguration =
+            new KoOdfBibliographyConfiguration(d->context.odfLoadingContext()
+                                               .stylesReader()
+                                               .globalBibliographyConfiguration());
+    KoTextDocument(document).styleManager()->setBibliographyConfiguration(bibConfiguration);
 
     d->styleManager = KoTextDocument(document).styleManager();
     d->changeTracker = KoTextDocument(document).changeTracker();
@@ -1458,11 +1466,10 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
         int position = cursor.position(); // need to store this as the following might move is
         if (className == "footnote") {
             note = new KoInlineNote(KoInlineNote::Footnote);
-            note->setMotherFrame(KoTextDocument(cursor.block().document()).footNotesFrame());
-        }
-        else {
+            note->setMotherFrame(KoTextDocument(cursor.block().document()).auxillaryFrame());
+        } else {
             note = new KoInlineNote(KoInlineNote::Endnote);
-            note->setMotherFrame(KoTextDocument(cursor.block().document()).endNotesFrame());
+            note->setMotherFrame(KoTextDocument(cursor.block().document()).auxillaryFrame());
         }
         if (note->loadOdf(noteElem, d->context)) {
             cursor.setPosition(position); // restore the position before inserting the note
@@ -2375,8 +2382,6 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
     info->m_name = element.attribute("name");
     info->m_styleName = element.attribute("style-name");
 
-    bool *autoUpdate = false;
-
     KoXmlElement e;
     forEachElement(e, element) {
         if (e.isNull() || e.namespaceURI() != KoXmlNS::text) {
@@ -2388,7 +2393,7 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
 
             bibFormat.setProperty(KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info));
             bibFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
-            bibFormat.setProperty(KoParagraphStyle::AutoUpdateBibliography, QVariant::fromValue<bool *>(autoUpdate));
+
             cursor.insertBlock(bibFormat);
             // We'll just try to find displayable elements and add them as paragraphs
         } else if (e.localName() == "index-body") {

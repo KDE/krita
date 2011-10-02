@@ -22,9 +22,14 @@
 #include "KoTextEditor.h"
 #include "KoTextEditor_p.h"
 
+#include "KoDocumentRdfBase.h"
 #include "KoBookmark.h"
 #include "KoInlineTextObjectManager.h"
 #include <KoOdf.h>
+#include <KoInlineNote.h>
+#include <KoTextPaste.h>
+#include <KoShapeController.h>
+#include <KoTextOdfSaveHelper.h>
 #include "KoTextDocument.h"
 #include "KoTextDrag.h"
 #include "KoTextLocator.h"
@@ -45,6 +50,11 @@
 #include "commands/DeleteTableColumnCommand.h"
 #include "commands/InsertTableRowCommand.h"
 #include "commands/InsertTableColumnCommand.h"
+#include "commands/TextPasteCommand.h"
+#include "commands/ChangeTrackedDeleteCommand.h"
+#include "commands/ListItemNumberingCommand.h"
+#include "commands/ChangeListCommand.h"
+#include "commands/DeleteCommand.h"
 #include "KoInlineCite.h"
 #include <KoTextLayoutScheduler.h>
 
@@ -66,6 +76,13 @@
 #include <kundo2command.h>
 
 #include <kdebug.h>
+
+#ifdef SHOULD_BUILD_RDF
+#include <rdf/KoDocumentRdf.h>
+#else
+#include "KoTextSopranoRdfModel_p.h"
+#endif
+
 
 static bool isRightToLeft(const QString &text)
 {
@@ -219,14 +236,6 @@ bool KoTextEditor::Private::deleteInlineObjects(bool backwards)
 //    }
 //    return found;
 
-}
-
-void KoTextEditor::Private::deleteSelection()
-{
-    QTextCursor delText = QTextCursor(caret);
-    if (!delText.hasSelection())
-        delText.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
-    caret.deleteChar();
 }
 
 void KoTextEditor::Private::runDirectionUpdater()
@@ -929,6 +938,154 @@ bool KoTextEditor::deleteInlineObjects(bool backward)
     return d->deleteInlineObjects(backward);
 }
 
+void KoTextEditor::paste(const QMimeData *mimeData,
+                         KoShapeController *shapeController,
+                         bool pasteAsText)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    addCommand(new TextPasteCommand(mimeData,
+                                    d->document,
+                                    shapeController,
+                                    0,
+                                    pasteAsText));
+}
+
+bool KoTextEditor::paste(KoTextEditor *editor,
+                         KoShapeController *shapeController,
+                         bool pasteAsText)
+{
+
+    Q_ASSERT(editor);
+    Q_ASSERT(editor != this);
+
+    if (!editor->hasSelection()) {
+        editor->setPosition(0);
+        editor->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    }
+
+    int from = editor->position();
+    int to = editor->anchor();
+    KoTextOdfSaveHelper saveHelper(editor->document(), from, to);
+    KoTextDrag drag;
+
+    KoDocumentRdfBase *rdf = 0;
+    if (shapeController->resourceManager()->hasResource(KoText::DocumentRdf)) {
+        rdf = static_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<void*>());
+        saveHelper.setRdfModel(rdf->model());
+    }
+
+    drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+
+    beginEditBlock();
+
+    if (hasSelection()) {
+        addCommand(new DeleteCommand(DeleteCommand::NextChar, d->document, shapeController));
+    }
+
+    // check for mime type
+    const QMimeData *data = drag.mimeData();
+
+    if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))
+                    || data->hasFormat(KoOdf::mimeType(KoOdf::OpenOfficeClipboard)) ) {
+        KoOdf::DocumentType odfType = KoOdf::Text;
+        if (!data->hasFormat(KoOdf::mimeType(odfType))) {
+            odfType = KoOdf::OpenOfficeClipboard;
+        }
+
+        if (pasteAsText) {
+            insertText(data->text());
+        } else {
+            const Soprano::Model *rdfModel = 0;
+#ifdef SHOULD_BUILD_RDF
+            bool weOwnRdfModel = true;
+            rdfModel = Soprano::createModel();
+            if (rdf) {
+                delete rdfModel;
+                rdfModel = rdf->model();
+                weOwnRdfModel = false;
+            }
+#endif
+
+            //kDebug() << "pasting odf text";
+            KoTextPaste paste(this, shapeController, rdfModel);
+            paste.paste(odfType, data);
+            //kDebug() << "done with pasting odf";
+
+#ifdef SHOULD_BUILD_RDF
+            if (rdf) {
+                rdf->updateInlineRdfStatements(d->document);
+            }
+            if (weOwnRdfModel && rdfModel) {
+                delete rdfModel;
+            }
+#endif
+        }
+    }
+
+    endEditBlock();
+
+    return true;
+}
+
+void KoTextEditor::deleteChar(MoveOperation direction, bool trackChanges, KoShapeController *shapeController)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    if (trackChanges) {
+        if (direction == PreviousChar) {
+            addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar,
+                                                      d->document,
+                                                      shapeController));
+        }
+        else {
+            addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar,
+                                                      d->document,
+                                                      shapeController));
+        }
+    }
+    else {
+        if (direction == PreviousChar) {
+            addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
+                                         d->document,
+                                         shapeController));
+        }
+        else {
+            addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
+                                         d->document,
+                                         shapeController));
+        }
+    }
+}
+
+void KoTextEditor::toggleListNumbering(bool numberingEnabled)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    addCommand(new ListItemNumberingCommand(block(), numberingEnabled));
+}
+
+void KoTextEditor::setListProperties(KoListStyle::Style style,
+                                     int level,
+                                     ChangeListFlags flags)
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    if (flags & AutoListStyle && d->caret.block().textList() == 0) {
+        flags = MergeWithAdjacentList;
+    }
+    addCommand(new ChangeListCommand(d->caret, style, level, flags));
+}
+
+
 int KoTextEditor::anchor() const
 {
     return d->caret.anchor();
@@ -995,8 +1152,28 @@ void KoTextEditor::deleteChar()
         return;
     }
 
-    if (!d->caret.hasSelection() && d->caret.atEnd())
-        return;
+    if (!d->caret.hasSelection()) {
+        if (d->caret.atEnd())
+            return;
+
+        // We also need to refuse delete if it will delete a note frame
+        QTextCursor after(d->caret);
+        after.movePosition(QTextCursor::NextCharacter);
+
+        QTextFrame *beforeFrame = d->caret.currentFrame();
+        while (qobject_cast<QTextTable *>(beforeFrame)) {
+            beforeFrame = beforeFrame->parentFrame();
+        }
+
+        QTextFrame *afterFrame = after.currentFrame();
+        while (qobject_cast<QTextTable *>(afterFrame)) {
+            afterFrame = afterFrame->parentFrame();
+        }
+        if (beforeFrame != afterFrame) {
+            return;
+        }
+    }
+
     if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
         d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
 
@@ -1005,7 +1182,7 @@ void KoTextEditor::deleteChar()
         if (!d->caret.hasSelection())
             d->caret.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
 
-        d->deleteSelection();
+        d->caret.deleteChar();
 
         d->caret.setCharFormat(charFormat);
     }
@@ -1019,8 +1196,29 @@ void KoTextEditor::deletePreviousChar()
         return;
     }
 
-    if (!d->caret.hasSelection() && d->caret.atStart())
-        return;
+    if (!d->caret.hasSelection()) {
+        if (d->caret.atStart())
+            return;
+
+        // We also need to refuse delete if it will delete a note frame
+        QTextCursor after(d->caret);
+        after.movePosition(QTextCursor::PreviousCharacter);
+
+        QTextFrame *beforeFrame = d->caret.currentFrame();
+        while (qobject_cast<QTextTable *>(beforeFrame)) {
+            beforeFrame = beforeFrame->parentFrame();
+        }
+
+        QTextFrame *afterFrame = after.currentFrame();
+        while (qobject_cast<QTextTable *>(afterFrame)) {
+            afterFrame = afterFrame->parentFrame();
+        }
+
+        if (beforeFrame != afterFrame) {
+            return;
+        }
+    }
+
     if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
         d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
 
@@ -1029,7 +1227,7 @@ void KoTextEditor::deletePreviousChar()
         if (!d->caret.hasSelection())
             d->caret.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
 
-        d->deleteSelection();
+        d->caret.deleteChar();
 
         d->caret.setCharFormat(charFormat);
     }
@@ -1046,14 +1244,14 @@ bool KoTextEditor::hasComplexSelection() const
     return d->caret.hasComplexSelection();
 }
 
-bool KoTextEditor::hasSelection()
+bool KoTextEditor::hasSelection() const
 {
     return d->caret.hasSelection();
 }
 
 // To figure out if a selection is write protected we need to traverse the entire document
 // as sections build up the protectiveness recursively.
-bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
+bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it) const
 {
     do {
         QTextBlock block = it.currentBlock();
@@ -1069,7 +1267,7 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
 
             if (d->caret.selectionStart() <= table->lastPosition()
                     && d->caret.selectionEnd() >= table->firstPosition()) {
-                // We have a selection somewhere 
+                // We have a selection somewhere
                 QTextTableCell cell1 = table->cellAt(d->caret.selectionStart());
                 QTextTableCell cell2 = table->cellAt(d->caret.selectionEnd());
                 if (cell1 != cell2 || !cell1.isValid() || !cell2.isValid()) {
@@ -1088,7 +1286,7 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
                     }
 
                     for (int r = selectionRow; r < selectionRow + selectionRowSpan; r++) {
-                        for (int c = selectionColumn; c < selectionColumn + 
+                        for (int c = selectionColumn; c < selectionColumn +
                              selectionColumnSpan; c++) {
                             QTextTableCell cell = table->cellAt(r,c);
                             if (cell.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
@@ -1113,15 +1311,15 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
             }
         } if (subFrame) {
         } else {
-            // TODO build up the section stack 
+            // TODO build up the section stack
 
             if (d->caret.selectionStart() < block.position() + block.length()
                     && d->caret.selectionEnd() >= block.position()) {
-                // We have a selection somewhere 
+                // We have a selection somewhere
                 // TODO return true if block is protected by section
             }
 
-            // TODO tear down the section stack 
+            // TODO tear down the section stack
 
             if (d->caret.selectionEnd() < block.position() + block.length()) {
                 return false;
@@ -1134,7 +1332,7 @@ bool KoTextEditor::recursiveProtectionCheck(QTextFrame::iterator it)
     return false;
 }
 
-bool KoTextEditor::isEditProtected(bool useCached)
+bool KoTextEditor::isEditProtected(bool useCached) const
 {
     if (useCached) {
         if (! d->editProtectionCached) {
@@ -1174,16 +1372,6 @@ void KoTextEditor::insertBlock(const QTextBlockFormat &format, const QTextCharFo
 
     Q_UNUSED(format)
     Q_UNUSED(charFormat)
-    //TODO
-}
-
-void KoTextEditor::insertFragment(const QTextDocumentFragment &fragment)
-{
-    if (isEditProtected()) {
-        return;
-    }
-
-    Q_UNUSED(fragment)
     //TODO
 }
 
@@ -1386,6 +1574,30 @@ void KoTextEditor::splitTableCells()
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
+KoInlineNote *KoTextEditor::insertFootNote()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Footnote"));
+    KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
+    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
+    manager->insertInlineObject(d->caret,note);
+    note->setMotherFrame(KoTextDocument(d->caret.document()).auxillaryFrame());
+    cursor()->setPosition(note->textFrame()->lastPosition());
+    d->updateState(KoTextEditor::Private::NoOp);
+    return note;
+}
+
+KoInlineNote *KoTextEditor::insertEndNote()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Endnote"));
+    KoInlineNote *note = new KoInlineNote(KoInlineNote::Endnote);
+    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
+    manager->insertInlineObject(d->caret,note);
+    note->setMotherFrame(KoTextDocument(d->caret.document()).auxillaryFrame());
+    cursor()->setPosition(note->textFrame()->lastPosition());
+    d->updateState(KoTextEditor::Private::NoOp);
+    return note;
+}
+
 void KoTextEditor::insertTableOfContents()
 {
     if (isEditProtected()) {
@@ -1435,7 +1647,7 @@ void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info
 
     KoTableOfContentsGeneratorInfo *newToCInfo=info->clone();
 
-    d->updateState(KoTextEditor::Private::Custom, i18n("Modify Table Of Contents"));    
+    d->updateState(KoTextEditor::Private::Custom, i18n("Modify Table Of Contents"));
 
     QTextCursor cursor(block);
     QTextBlockFormat tocBlockFormat=block.blockFormat();
@@ -1455,12 +1667,9 @@ void KoTextEditor::insertBibliography()
     QTextBlockFormat bibFormat;
     KoBibliographyInfo *info = new KoBibliographyInfo();
     QTextDocument *bibDocument = new QTextDocument();
-    bool *autoUpdate = new bool;
-    *autoUpdate = false;
 
     bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info));
     bibFormat.setProperty( KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
-    bibFormat.setProperty( KoParagraphStyle::AutoUpdateBibliography, QVariant::fromValue<bool *>(autoUpdate));
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (changeTracker && changeTracker->recordChanges()) {
@@ -1482,6 +1691,8 @@ void KoTextEditor::insertBibliography()
         bibFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
     }
 
+    d->caret.insertBlock();
+    d->caret.movePosition(QTextCursor::Left);
     d->caret.insertBlock(bibFormat);
     d->caret.movePosition(QTextCursor::Right);
 
@@ -1594,9 +1805,33 @@ void KoTextEditor::mergeCharFormat(const QTextCharFormat &modifier)
 bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode, int n)
 {
     d->editProtectionCached = false;
-    bool b = d->caret.movePosition (operation, mode, n);
-    emit cursorPositionChanged();
-    return b;
+
+    // We need protection against moving in and out of note areas
+    QTextCursor after(d->caret);
+    bool b = after.movePosition (operation, mode, n);
+
+    QTextFrame *beforeFrame = d->caret.currentFrame();
+    while (qobject_cast<QTextTable *>(beforeFrame)) {
+        beforeFrame = beforeFrame->parentFrame();
+    }
+
+    QTextFrame *afterFrame = after.currentFrame();
+    while (qobject_cast<QTextTable *>(afterFrame)) {
+        afterFrame = afterFrame->parentFrame();
+    }
+    if (beforeFrame == afterFrame) {
+        if (after.selectionEnd() == after.document()->characterCount() -1) {
+            QVariant resource = after.document()->resource(KoTextDocument::AuxillaryFrame,
+            KoTextDocument::AuxillaryFrameURL);
+            if (resource.isValid()) {
+                return false;
+            }
+        }
+        d->caret = after;
+        emit cursorPositionChanged();
+        return b;
+    }
+    return false;
 }
 
 void KoTextEditor::newLine()
@@ -1782,15 +2017,15 @@ int KoTextEditor::selectionStart() const
     return d->caret.selectionStart();
 }
 
-void KoTextEditor::setBlockCharFormat(const QTextCharFormat &format)
-{
-    if (isEditProtected()) {
-        return;
-    }
+//void KoTextEditor::setBlockCharFormat(const QTextCharFormat &format)
+//{
+//    if (isEditProtected()) {
+//        return;
+//    }
 
-    Q_UNUSED(format)
-    //TODO
-}
+//    Q_UNUSED(format)
+//    //TODO
+//}
 
 void KoTextEditor::setBlockFormat(const QTextBlockFormat &format)
 {
@@ -1799,7 +2034,7 @@ void KoTextEditor::setBlockFormat(const QTextBlockFormat &format)
     }
 
     Q_UNUSED(format)
-    //TODO
+    d->caret.setBlockFormat(format);
 }
 
 void KoTextEditor::setCharFormat(const QTextCharFormat &format)
@@ -1808,25 +2043,54 @@ void KoTextEditor::setCharFormat(const QTextCharFormat &format)
         return;
     }
 
-    Q_UNUSED(format)
-    //TODO
+    d->caret.setCharFormat(format);
 }
 
-void KoTextEditor::setTableFormat(const QTextTableFormat &format)
-{
-    if (isEditProtected()) {
-        return;
-    }
+//void KoTextEditor::setTableFormat(const QTextTableFormat &format)
+//{
+//    if (isEditProtected()) {
+//        return;
+//    }
 
-    Q_UNUSED(format)
-    //TODO
-}
+//    Q_UNUSED(format)
+//    //TODO
+//}
 
-void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode m)
+void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode mode)
 {
     d->editProtectionCached = false;
-    d->caret.setPosition (pos, m);
-    emit cursorPositionChanged();
+
+    if (pos == d->caret.document()->characterCount() -1) {
+        QVariant resource = d->caret.document()->resource(KoTextDocument::AuxillaryFrame,
+        KoTextDocument::AuxillaryFrameURL);
+        if (resource.isValid()) {
+            return;
+        }
+    }
+
+    if (mode == QTextCursor::MoveAnchor) {
+        d->caret.setPosition (pos, mode);
+        emit cursorPositionChanged();
+    }
+
+    // We need protection against moving in and out of note areas
+    QTextCursor after(d->caret);
+    after.setPosition (pos, mode);
+ 
+    QTextFrame *beforeFrame = d->caret.currentFrame();
+    while (qobject_cast<QTextTable *>(beforeFrame)) {
+        beforeFrame = beforeFrame->parentFrame();
+    }
+
+    QTextFrame *afterFrame = after.currentFrame();
+    while (qobject_cast<QTextTable *>(afterFrame)) {
+        afterFrame = afterFrame->parentFrame();
+    }
+
+    if (beforeFrame == afterFrame) {
+        d->caret = after;
+        emit cursorPositionChanged();
+    }
 }
 
 void KoTextEditor::setVisualNavigation(bool b)

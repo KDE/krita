@@ -21,7 +21,7 @@
 
 #include <KoShapeFactoryBase.h>
 
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 
 class CollectionShapeFactory : public KoShapeFactoryBase
 {

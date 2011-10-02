@@ -40,7 +40,7 @@
 #include <QList>
 
 ShowChangesCommand::ShowChangesCommand(bool showChanges, QTextDocument *document, KoCanvasBase *canvas, KUndo2Command *parent) :
-    TextCommandBase (parent),
+    KoTextCommandBase (parent),
     m_document(document),
     m_first(true),
     m_showChanges(showChanges),
@@ -57,7 +57,7 @@ ShowChangesCommand::ShowChangesCommand(bool showChanges, QTextDocument *document
 
 void ShowChangesCommand::undo()
 {
-    TextCommandBase::undo();
+    KoTextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
     foreach (KUndo2Command *shapeCommand, m_shapeCommands)
         shapeCommand->undo();
@@ -68,7 +68,7 @@ void ShowChangesCommand::undo()
 void ShowChangesCommand::redo()
 {
     if (!m_first) {
-        TextCommandBase::redo();
+        KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
         foreach (KUndo2Command *shapeCommand, m_shapeCommands)
             shapeCommand->redo();

@@ -94,7 +94,7 @@ KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResourc
     return text;
 }
 
-KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceManager *documentResources) const
+KoShape *TextShapeFactory::createShape(const KoProperties */*params*/, KoResourceManager *documentResources) const
 {
     TextShape *shape = static_cast<TextShape*>(createDefaultShape(documentResources));
     shape->textShapeData()->document()->setUndoRedoEnabled(false);

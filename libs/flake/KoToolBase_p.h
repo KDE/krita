@@ -21,6 +21,9 @@
 #ifndef KOTOOLPRIVATE_H
 #define KOTOOLPRIVATE_H
 
+#include "KoResourceManager.h"
+#include "KoCanvasBase.h"
+#include "KoShapeController.h"
 #include <QMap>
 #include <QHash>
 #include <QWidget>
@@ -55,6 +58,24 @@ public:
             optionWidgets.clear();
         } else {
             qDeleteAll(optionWidgets);
+        }
+    }
+
+    void connectSignals()
+    {
+        if (canvas) { // in the case of KoToolManagers dummytool it can be zero :(
+            KoResourceManager * crp = canvas->resourceManager();
+            Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No Canvas KoResourceManager");
+            if (crp)
+                q->connect(crp, SIGNAL(resourceChanged(int, const QVariant &)),
+                        SLOT(resourceChanged(int, const QVariant &)));
+
+            // can be 0 in the case of Tables
+            KoResourceManager *scrm = canvas->shapeController()->resourceManager();
+            if (scrm) {
+                q->connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
+                        SLOT(resourceChanged(int, const QVariant &)));
+            }
         }
     }
 

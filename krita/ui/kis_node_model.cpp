@@ -400,15 +400,15 @@ void KisNodeModel::beginRemoveNodes(KisNode * parent, int index)
     m_d->updateTimer->stop();
     m_d->updateQueue.clear();
 
+    KisNodeSP node = parent->at(index);
+    connectNode(node, false);
+
     //dbgUI <<"KisNodeModel::beginRemoveNodes parent=" << parent << ", index=" << index;
     beginRemoveRows(indexFromNode(parent), parent->childCount() - 1 - index, parent->childCount() - 1 - index);
 }
 
 void KisNodeModel::endRemoveNodes(KisNode *parent, int index)
 {
-    KisNodeSP node = parent->at(index);
-    connectNode(node, false);
-
     //dbgUI <<"KisNodeModel::endRemoveNodes";
     endRemoveRows();
 }

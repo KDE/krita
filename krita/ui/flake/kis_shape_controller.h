@@ -21,7 +21,7 @@
 #include <QObject>
 #include <QMap>
 
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 
 #include "kis_types.h"
 #include <krita_export.h>
@@ -38,7 +38,7 @@ class KoDataCenterBase;
  * selections -- everything that needs to be wrapped as a shape for
  * the tools to work on.
  */
-class KRITAUI_EXPORT KisShapeController : public QObject, public KoShapeControllerBase
+class KRITAUI_EXPORT KisShapeController : public QObject, public KoShapeBasedDocumentBase
 {
 
     Q_OBJECT

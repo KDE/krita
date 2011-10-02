@@ -107,7 +107,12 @@ bool FloatingAnchorStrategy::moveSubject()
 
     newPosition = newPosition + m_anchor->offset();
 
-    //check the border of page an move the shape back to have it visible
+    //check the border of layout environment and move the shape back to have it within
+    if (m_anchor->flowWithText()) {
+        checkLayoutEnvironment(newPosition, data);
+    }
+
+    //check the border of page and move the shape back to have it visible
     checkPageBorder(newPosition, containerBoundingRect);
 
     checkStacking(newPosition);
@@ -363,6 +368,31 @@ void FloatingAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF ancho
         kDebug(32002) << "vertical-pos not handled";
     }
 
+}
+
+void FloatingAnchorStrategy::checkLayoutEnvironment(QPointF &newPosition, KoTextShapeData *data)
+{
+    QSizeF size = m_anchor->shape()->boundingRect().size();
+
+    //check left border and move the shape back to have the whole shape within
+    if (newPosition.x() < layoutEnvironmentRect().x()) {
+        newPosition.setX(layoutEnvironmentRect().x());
+    }
+
+    //check right border and move the shape back to have the whole shape within
+    if (newPosition.x() + size.width() > layoutEnvironmentRect().right()) {
+        newPosition.setX(layoutEnvironmentRect().right() - size.width());
+    }
+
+    //check top border and move the shape back to have the whole shape within
+    if (newPosition.y() < layoutEnvironmentRect().y()) {
+        newPosition.setY(layoutEnvironmentRect().y());
+    }
+
+    //check bottom border and move the shape back to have the whole shape within
+    if (newPosition.y() + size.height() > layoutEnvironmentRect().bottom()) {
+        newPosition.setY(layoutEnvironmentRect().bottom() - size.height());
+    }
 }
 
 void FloatingAnchorStrategy::checkPageBorder(QPointF &newPosition, const QRectF &containerBoundingRect)

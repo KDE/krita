@@ -45,6 +45,7 @@
 #include <QTextCursor>
 #include <QPixmap>
 #include <QMap>
+#include <QBuffer>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -77,6 +78,9 @@ public:
     KoListStyle *defaultListStyle;
     KoListStyle *outlineStyle;
     QList<int> defaultToCEntriesStyleId;
+    KoOdfNotesConfiguration *footNotesConfiguration;
+    KoOdfNotesConfiguration *endNotesConfiguration;
+    KoOdfBibliographyConfiguration *bibliographyConfiguration;
 };
 
 // static
@@ -109,6 +113,9 @@ KoStyleManager::KoStyleManager(QObject *parent)
         d->defaultToCEntriesStyleId.append(style->styleId());
     }
 
+    d->footNotesConfiguration = 0;
+    d->endNotesConfiguration = 0;
+    d->bibliographyConfiguration = 0;
 }
 
 KoStyleManager::~KoStyleManager()
@@ -231,6 +238,28 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         sectionStyle->saveOdf(style);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
+
+    //save note configuration in styles.xml
+    if (d->footNotesConfiguration) {
+        QBuffer xmlBufferFootNote;
+        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferFootNote);
+        d->footNotesConfiguration->saveOdf(xmlWriter);
+        context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferFootNote.data());
+    }
+
+    if (d->endNotesConfiguration) {
+        QBuffer xmlBufferEndNote;
+        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferEndNote);
+        d->endNotesConfiguration->saveOdf(xmlWriter);
+        context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferEndNote.data());
+    }
+
+    if (d->bibliographyConfiguration) {
+        QBuffer xmlBufferBib;
+        KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlBufferBib);
+        d->bibliographyConfiguration->saveOdf(xmlWriter);
+        context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferBib.data());
+    }
 }
 
 void KoStyleManager::add(KoCharacterStyle *style)
@@ -334,6 +363,20 @@ void KoStyleManager::add(KoSectionStyle *style)
     style->setStyleId(d->s_stylesNumber);
     d->sectionStyles.insert(d->s_stylesNumber++, style);
     emit styleAdded(style);
+}
+
+void KoStyleManager::setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration)
+{
+    if (notesConfiguration->noteClass() == KoOdfNotesConfiguration::Footnote) {
+        d->footNotesConfiguration = notesConfiguration;
+    } else if (notesConfiguration->noteClass() == KoOdfNotesConfiguration::Endnote) {
+        d->endNotesConfiguration = notesConfiguration;
+    }
+}
+
+void KoStyleManager::setBibliographyConfiguration(KoOdfBibliographyConfiguration *bibliographyConfiguration)
+{
+    d->bibliographyConfiguration = bibliographyConfiguration;
 }
 
 void KoStyleManager::remove(KoCharacterStyle *style)
@@ -665,6 +708,36 @@ KoSectionStyle *KoStyleManager::sectionStyle(const QString &name) const
             return style;
     }
     return 0;
+}
+
+KoOdfNotesConfiguration *KoStyleManager::notesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const
+{
+    if (noteClass == KoOdfNotesConfiguration::Endnote) {
+        if (!d->endNotesConfiguration) {
+            d->endNotesConfiguration = new KoOdfNotesConfiguration();
+            d->endNotesConfiguration->setNoteClass(noteClass);
+            KoOdfNumberDefinition *numFormat = new KoOdfNumberDefinition();
+            numFormat->setFormatSpecification(KoOdfNumberDefinition::RomanLowerCase);
+            d->endNotesConfiguration->setNumberFormat(*numFormat);
+        }
+        return d->endNotesConfiguration;
+    } else if (noteClass == KoOdfNotesConfiguration::Footnote) {
+        if (!d->footNotesConfiguration) {
+            d->footNotesConfiguration = new KoOdfNotesConfiguration();
+            d->footNotesConfiguration->setNoteClass(noteClass);
+            KoOdfNumberDefinition *numFormat = new KoOdfNumberDefinition();
+            numFormat->setFormatSpecification(KoOdfNumberDefinition::Numeric);
+            d->footNotesConfiguration->setNumberFormat(*numFormat);
+        }
+        return d->footNotesConfiguration;
+    } else {
+        return 0;
+    }
+}
+
+KoOdfBibliographyConfiguration *KoStyleManager::bibliographyConfiguration() const
+{
+    return d->bibliographyConfiguration;
 }
 
 KoParagraphStyle *KoStyleManager::defaultParagraphStyle() const

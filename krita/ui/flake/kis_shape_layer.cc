@@ -60,7 +60,7 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoStore.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoStoreDevice.h>
 #include <KoViewConverter.h>
 #include <KoXmlNS.h>
@@ -110,12 +110,12 @@ public:
     KoViewConverter * converter;
     KisPaintDeviceSP paintDevice;
     KisShapeLayerCanvas * canvas;
-    KoShapeControllerBase* controller;
+    KoShapeBasedDocumentBase* controller;
 };
 
 
 KisShapeLayer::KisShapeLayer(KoShapeContainer * parent,
-                             KoShapeControllerBase* controller,
+                             KoShapeBasedDocumentBase* controller,
                              KisImageWSP image,
                              const QString &name,
                              quint8 opacity)
@@ -165,7 +165,7 @@ KisShapeLayer::~KisShapeLayer()
     delete m_d;
 }
 
-void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller)
+void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
 {
     setShapeId(KIS_SHAPE_LAYER_ID);
 

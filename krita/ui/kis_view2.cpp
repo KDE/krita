@@ -193,6 +193,7 @@ public:
     KAction* mirrorCanvas;
     KAction* createTemplate;
     KAction *saveIncremental;
+    KAction *saveIncrementalBackup;
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
     KisNodeManager * nodeManager;
@@ -264,10 +265,17 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->saveIncremental->setShortcut(Qt::Key_F2);
     actionCollection()->addAction("save_incremental_version", m_d->saveIncremental);
     connect(m_d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
+    
+    m_d->saveIncrementalBackup = new KAction(i18n("Save Incremental Backup"), this);
+    m_d->saveIncrementalBackup->setShortcut(Qt::Key_F4);
+    actionCollection()->addAction("save_incremental_backup", m_d->saveIncrementalBackup);
+    connect(m_d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
+    
     connect(shell(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
 
     if (koDocument()->localFilePath().isNull()) {
         m_d->saveIncremental->setEnabled(false);
+        m_d->saveIncrementalBackup->setEnabled(false);
     }
 
     m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
@@ -759,7 +767,7 @@ void KisView2::connectCurrentImage()
          * progress updaters. The latter way should be depracated in favour
          * of displaying the status of the global strokes queue
          */
-        image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
+        //image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
     }
 
     m_d->canvas->connectCurrentImage();
@@ -917,6 +925,7 @@ void KisView2::slotCreateTemplate()
 void KisView2::slotDocumentSaved()
 {
     m_d->saveIncremental->setEnabled(true);
+    m_d->saveIncrementalBackup->setEnabled(true);
 }
 
 void KisView2::slotSaveIncremental()
@@ -926,16 +935,27 @@ void KisView2::slotSaveIncremental()
 
     bool foundVersion;
     bool fileAlreadyExists;
+    bool isBackup;
     QString version = "000";
     QString newVersion;
     QString letter;
     QString fileName = pDoc->localFilePath();
 
     // Find current version filenames
-    QRegExp regex("_\\d{1,5}[.]|_\\d{1,4}[a-z][.]"); //  Regexp to find incremental versions in the filename
+    // v v Regexp to find incremental versions in the filename, taking our backup scheme into account as well
+    // Considering our incremental version and backup scheme, format is filename_001~001.ext
+    QRegExp regex("_\\d{1,4}[.]|_\\d{1,4}[a-z][.]|_\\d{1,4}[~]|_\\d{1,4}[a-z][~]");
     regex.indexIn(fileName);     //  Perform the search
     QStringList matches = regex.capturedTexts();
     foundVersion = matches.at(0).isEmpty() ? false : true;
+    
+    // Ensure compatibility with Save Incremental Backup
+    // If this regex is not kept separate, the entire algorithm needs modification;
+    // It's simpler to just add this.
+    QRegExp regexAux("_\\d{1,4}[~]|_\\d{1,4}[a-z][~]");
+    regexAux.indexIn(fileName);     //  Perform the search
+    QStringList matchesAux = regexAux.capturedTexts();
+    isBackup = matchesAux.at(0).isEmpty() ? false : true;
 
     // If the filename has a version, prepare it for incrementation
     if (foundVersion) {
@@ -972,7 +992,11 @@ void KisView2::slotSaveIncremental()
         newVersion = baseNewVersion;
         newVersion.prepend("_");
         if (!letter.isNull()) newVersion.append(letter);
-        newVersion.append(".");
+        if (isBackup) {
+            newVersion.append("~");
+        } else {
+            newVersion.append(".");
+        }
         fileName.replace(regex, newVersion);
         fileAlreadyExists = KIO::NetAccess::exists(fileName, KIO::NetAccess::DestinationSide, this);
         if (fileAlreadyExists) {
@@ -987,13 +1011,120 @@ void KisView2::slotSaveIncremental()
     } while (fileAlreadyExists && letter != "{");  // x, y, z, {...
 
     if (letter == "{") {
-        KMessageBox::error(this, "Alternative names exhausted, try saving with a higher number", "Couldn't save incremental version");
+        KMessageBox::error(this, "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental version");
         return;
     }
 
     pDoc->saveAs(fileName);
 
     shell()->updateCaption();
+}
+
+void KisView2::slotSaveIncrementalBackup()
+{
+    KoDocument* pDoc = koDocument();
+    if (!pDoc) return;
+
+    bool workingOnBackup;
+    bool fileAlreadyExists;
+    QString version = "000";
+    QString newVersion;
+    QString letter;
+    QString fileName = pDoc->localFilePath();
+
+    // First, discover if working on a backup file, or a normal file
+    QRegExp regex("~\\d{1,4}[.]|~\\d{1,4}[a-z][.]");
+    regex.indexIn(fileName);     //  Perform the search
+    QStringList matches = regex.capturedTexts();
+    workingOnBackup = matches.at(0).isEmpty() ? false : true;
+
+    if (workingOnBackup) {
+        // Try to save incremental version (of backup), use letter for alt versions
+        version = matches.at(matches.count() - 1);     //  Look at the last index, we don't care about other matches
+        if (version.contains(QRegExp("[a-z]"))) {
+            version.chop(1);             //  Trim "."
+            letter = version.right(1);   //  Save letter
+            version.chop(1);             //  Trim letter
+        } else {
+            version.chop(1);             //  Trim "."
+        }
+        version.remove(0, 1);            //  Trim "~"     
+        
+        // Prepare the base for new version filename
+        int intVersion = version.toInt(0);
+        ++intVersion;
+        QString baseNewVersion = QString::number(intVersion);
+        while (baseNewVersion.length() < version.length()) {
+            baseNewVersion.prepend("0");
+        }
+
+        // Check if the file exists under the new name and search until options are exhausted (test appending a to z)
+        do {
+            newVersion = baseNewVersion;
+            newVersion.prepend("~");
+            if (!letter.isNull()) newVersion.append(letter);
+            newVersion.append(".");
+            fileName.replace(regex, newVersion);
+            fileAlreadyExists = KIO::NetAccess::exists(fileName, KIO::NetAccess::DestinationSide, this);
+            if (fileAlreadyExists) {
+                if (!letter.isNull()) {
+                    char letterCh = letter.at(0).toLatin1();
+                    ++letterCh;
+                    letter = QString(QChar(letterCh));
+                } else {
+                    letter = "a";
+                }
+            }
+        } while (fileAlreadyExists && letter != "{");  // x, y, z, {...
+
+        if (letter == "{") {
+            KMessageBox::error(this, "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental backup");
+            return;
+        }
+        pDoc->saveAs(fileName);
+        
+        shell()->updateCaption();
+    }
+    else { // if NOT working on a backup...
+        // Navigate directory searching for latest backup version, ignore letters
+        const quint8 HARDCODED_DIGIT_COUNT = 3;
+        QString baseNewVersion = "000";
+        QString backupFileName = pDoc->localFilePath();
+        QRegExp regex2("[.][a-z]{2,4}$");  //  Heuristic to find file extension
+        regex2.indexIn(backupFileName);
+        QStringList matches2 = regex2.capturedTexts();
+        QString extensionPlusVersion = matches2.at(0);
+        extensionPlusVersion.prepend(baseNewVersion);
+        extensionPlusVersion.prepend("~");
+        backupFileName.replace(regex2, extensionPlusVersion);
+        
+        // Save version with 1 number higher than the highest version found ignoring letters
+        do {
+            newVersion = baseNewVersion;
+            newVersion.prepend("~");
+            newVersion.append(".");
+            qDebug() << backupFileName << " version1";
+            backupFileName.replace(regex, newVersion);
+            qDebug() << backupFileName << " version2";
+            fileAlreadyExists = KIO::NetAccess::exists(backupFileName, KIO::NetAccess::DestinationSide, this);
+            if (fileAlreadyExists) {
+                // Prepare the base for new version filename, increment by 1
+                int intVersion = baseNewVersion.toInt(0);
+                ++intVersion;
+                baseNewVersion = QString::number(intVersion);
+                while (baseNewVersion.length() < HARDCODED_DIGIT_COUNT) {
+                    baseNewVersion.prepend("0");
+                }
+            }
+            qDebug() << "idiot";
+        } while (fileAlreadyExists);
+        
+        // Save both as backup and on current file for interapplication workflow
+        pDoc->saveAs(backupFileName);
+        pDoc->saveAs(fileName);
+
+        shell()->updateCaption();
+    }
 }
 
 void KisView2::disableControls()

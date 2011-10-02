@@ -31,9 +31,9 @@
 
 // marble for geolocation
 #ifdef CAN_USE_MARBLE
-#include <marble/LatLonEdit.h>
-#include <marble/MarbleWidget.h>
-#include <marble/MarbleWidgetInputHandler.h>
+#include <LatLonEdit.h>
+#include <MarbleWidget.h>
+#include <MarbleWidgetInputHandler.h>
 #endif
 
 using namespace Soprano;

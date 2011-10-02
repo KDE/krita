@@ -1,0 +1,140 @@
+/*
+ This file is part of the KDE project
+ * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@kde.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.*/
+
+#include "TextPasteCommand.h"
+
+#include <KoTextEditor.h>
+#include <KoTextDocument.h>
+#include <KoTextPaste.h>
+#include <KoChangeTracker.h>
+#include <KoShapeController.h>
+
+#include <klocale.h>
+#include <kdebug.h>
+#include <KAction>
+
+#include <QTextDocument>
+#include <QApplication>
+#include <QMimeData>
+
+#include "ChangeTrackedDeleteCommand.h"
+#include "DeleteCommand.h"
+
+#ifdef SHOULD_BUILD_RDF
+#include <rdf/KoDocumentRdf.h>
+#else
+#include "KoTextSopranoRdfModel_p.h"
+#endif
+
+TextPasteCommand::TextPasteCommand(const QMimeData *mimeData,
+                                   QTextDocument *document,
+                                   KoShapeController *shapeController,
+                                   KUndo2Command *parent, bool pasteAsText)
+    : KUndo2Command (parent),
+      m_mimeData(mimeData),
+      m_document(document),
+      m_rdf(0),
+      m_shapeController(shapeController),
+      m_pasteAsText(pasteAsText),
+      m_first(true)
+{
+    m_rdf = static_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<void*>());
+
+    if (m_pasteAsText)
+        setText(i18n("Paste As Text"));
+    else
+        setText(i18nc("(qtundo-format)", "Paste"));
+}
+
+void TextPasteCommand::undo()
+{
+    KUndo2Command::undo();
+}
+
+void TextPasteCommand::redo()
+{
+    KoTextDocument textDocument(m_document);
+    KoTextEditor *editor = textDocument.textEditor();
+
+    if (!m_first) {
+        KUndo2Command::redo();
+    } else {
+        //kDebug() << "begin paste command";
+        editor->beginEditBlock();
+        m_first = false;
+        if (editor->hasSelection()) { //TODO
+            // XXX: this was m_tool->m_actionShowChanges.isChecked -- but shouldn't we check
+            // whether we should record changes here, instead of showing?
+            if (textDocument.changeTracker()->recordChanges()) {
+                editor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_document, m_shapeController));
+            } else {
+                editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_document, m_shapeController));
+            }
+        }
+
+        // check for mime type
+        if (m_mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text))
+                        || m_mimeData->hasFormat(KoOdf::mimeType(KoOdf::OpenOfficeClipboard)) ) {
+            KoOdf::DocumentType odfType = KoOdf::Text;
+            if (!m_mimeData->hasFormat(KoOdf::mimeType(odfType))) {
+                odfType = KoOdf::OpenOfficeClipboard;
+            }
+
+            if (m_pasteAsText) {
+                editor->insertText(m_mimeData->text());
+            } else {
+
+                const Soprano::Model *rdfModel = 0;
+#ifdef SHOULD_BUILD_RDF
+                bool weOwnRdfModel = true;
+                rdfModel = Soprano::createModel();
+                if (m_rdf) {
+                    delete rdfModel;
+                    rdfModel = m_rdf->model();
+                    weOwnRdfModel = false;
+                }
+#endif
+
+                //kDebug() << "pasting odf text";
+                KoTextPaste paste(editor, m_shapeController, rdfModel);
+                paste.paste(odfType, m_mimeData);
+                //kDebug() << "done with pasting odf";
+
+#ifdef SHOULD_BUILD_RDF
+                if (m_rdf) {
+                    m_rdf->updateInlineRdfStatements(editor->document());
+                }
+                if (weOwnRdfModel && rdfModel) {
+                    delete rdfModel;
+                }
+#endif
+            }
+        } else if (!m_pasteAsText && m_mimeData->hasHtml()) {
+            //kDebug() << "pasting html";
+            editor->insertHtml(m_mimeData->html());
+            //kDebug() << "done with pasting";
+        } else if (m_pasteAsText || m_mimeData->hasText()) {
+            //kDebug() << "pasting text";
+            editor->insertText(m_mimeData->text());
+            //kDebug() << "done with pasting";
+        }
+        editor->endEditBlock();
+    }
+}

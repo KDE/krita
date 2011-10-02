@@ -288,9 +288,10 @@ QColor KoShapeShadow::color() const
     return d->color;
 }
 
-void KoShapeShadow::setBlur(const qreal &blur)
+void KoShapeShadow::setBlur(qreal blur)
 {
-    d->blur = blur;
+    // force positive blur radius
+    d->blur = qAbs(blur);
 }
 
 qreal KoShapeShadow::blur() const

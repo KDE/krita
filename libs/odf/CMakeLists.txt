@@ -45,6 +45,7 @@ set(koodf_LIB_SRCS
     KoProperties.cpp
     KoUnit.cpp
     KoOdfNotesConfiguration.cpp
+    KoOdfBibliographyConfiguration.cpp
     KoOdfNumberDefinition.cpp
     KoOdfLineNumberingConfiguration.cpp
     KoCell.cpp
@@ -89,6 +90,7 @@ install( FILES
     KoOasisSettings.h
     KoOdfStylesReader.h
     KoOdfNotesConfiguration.h
+    KoOdfBibliographyConfiguration.h
     KoOdfNumberStyles.h
     KoOdfNumberDefinition.h
     KoOdfLineNumberingConfiguration.h

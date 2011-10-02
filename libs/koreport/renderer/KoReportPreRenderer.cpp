@@ -33,6 +33,7 @@
 #include "scripting/krscripthandler.h"
 #include <krreportdata.h>
 #include <krdetailsectiondata.h>
+#include "KoReportASyncItemManager.h"
 
 //
 // KoReportPreRendererPrivate
@@ -78,6 +79,11 @@ public:
     ///Scripting Stuff
     KRScriptHandler *m_scriptHandler;
     void initEngine();
+    
+    KoReportASyncItemManager* asyncManager;
+    
+private slots:
+    void asyncItemsFinished();
 
 signals:
     void enteredGroup(const QString&, const QVariant&);
@@ -97,6 +103,9 @@ KoReportPreRendererPrivate::KoReportPreRendererPrivate()
     m_pageCounter = 0;
     m_maxHeight = m_maxWidth = 0.0;
     m_kodata = 0;
+    asyncManager = new KoReportASyncItemManager(this);
+    
+    connect(asyncManager, SIGNAL(finished()), this, SLOT(asyncItemsFinished()));
 }
 
 KoReportPreRendererPrivate::~KoReportPreRendererPrivate()
@@ -344,11 +353,16 @@ qreal KoReportPreRendererPrivate::renderSectionSize(const KRSectionData & sectio
     foreach(KoReportItemBase *ob, objects) {
         QPointF offset(m_leftMargin, m_yOffset);
         QVariant itemData = m_kodata->value(ob->itemDataSource());
-
-        itemHeight = ob->render(0, 0, offset, itemData, m_scriptHandler);
-
-        if (itemHeight > intHeight) {
-            intHeight = itemHeight;
+        
+        //ASync objects cannot alter the section height
+        KoReportASyncItemBase *async_ob = qobject_cast<KoReportASyncItemBase*>(ob);
+        
+        if (!async_ob) { 
+            itemHeight = ob->render(0, 0, offset, itemData, m_scriptHandler);
+           
+            if (itemHeight > intHeight) {
+                intHeight = itemHeight;
+            }
         }
     }
 
@@ -386,9 +400,16 @@ qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionDat
         QVariant itemData = m_kodata->value(ob->itemDataSource());
 
         if (ob->supportsSubQuery()) {
-            itemHeight = ob->render(m_page, sec, offset, m_kodata, m_scriptHandler);
+           itemHeight = ob->render(m_page, sec, offset, m_kodata, m_scriptHandler);
         } else {
-            itemHeight = ob->render(m_page, sec, offset, itemData, m_scriptHandler);
+            KoReportASyncItemBase *async_ob = qobject_cast<KoReportASyncItemBase*>(ob);
+            if (async_ob){
+                kDebug() << "async object";
+                asyncManager->addItem(async_ob, m_page, sec, offset, itemData, m_scriptHandler);
+            } else {
+                kDebug() << "sync object";
+                itemHeight = ob->render(m_page, sec, offset, itemData, m_scriptHandler);
+            }
         }
 
         if (itemHeight > sectionHeight) {
@@ -419,6 +440,11 @@ void KoReportPreRendererPrivate::initEngine()
 
     connect(this, SIGNAL(renderingSection(KRSectionData*, OROPage*, QPointF)), m_scriptHandler, SLOT(slotEnteredSection(KRSectionData*, OROPage*, QPointF)));
 }
+
+void KoReportPreRendererPrivate::asyncItemsFinished(){
+    kDebug() << "Finished rendering async items";
+}
+
 
 //===========================KoReportPreRenderer===============================
 
@@ -617,6 +643,8 @@ ORODocument* KoReportPreRenderer::generate()
 
         tb->setText(d->m_scriptHandler->evaluate(tb->text()).toString());
     }
+    
+    d->asyncManager->startRendering();
 
     d->m_scriptHandler->displayErrors();
 
@@ -665,4 +693,4 @@ void KoReportPreRenderer::registerScriptObject(QObject* obj, const QString& name
     m_scriptObjects[name] = obj;
 }
 
-#include <orprerenderprivate.moc>
+#include "KoReportPreRenderer.moc"

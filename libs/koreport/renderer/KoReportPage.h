@@ -42,6 +42,8 @@ public:
 
 public slots:
     virtual void paintEvent(QPaintEvent*);
+    
+    void pageUpdated(int pageNo);
 
 private:
     ORODocument *m_reportDocument;

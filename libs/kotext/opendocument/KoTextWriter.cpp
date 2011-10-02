@@ -133,13 +133,11 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, co
     return generatedName;
 }
 
-void KoTextWriter::write(QTextDocument *document, int from, int to)
+void KoTextWriter::write(const QTextDocument *document, int from, int to)
 {
-    d->document = document;
+    d->document = const_cast<QTextDocument*>(document);
     d->styleManager = KoTextDocument(document).styleManager();
     d->changeTracker = KoTextDocument(document).changeTracker();
-
-    QTextBlock block = document->findBlock(from);
 
     QVector<int> changesVector;
     if (d->changeTracker) {
@@ -149,6 +147,62 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
         d->saveChange(changeId);
     }
 
-    QHash<QTextList *, QString> listStyles = d->saveListStyles(block, to);
-    d->writeBlocks(document, from, to, listStyles);
+    QTextBlock fromblock = document->findBlock(from);
+    QTextBlock toblock = document->findBlock(to);
+
+    QTextCursor fromcursor(fromblock);
+
+    QTextTable *currentTable = fromcursor.currentTable();
+    QTextList *currentList = fromcursor.currentList();
+
+    // NOTE even better would be if we create a new table/list out of multiple selected
+    // tablecells/listitems thta contain only the selected cells/items. But following
+    // at least enables copying a whole list/table while still being able to copy/paste
+    // only parts of the text within a list/table (see also bug 275990).
+    if (currentTable || currentList) {
+        if (from == 0 && to < 0) {
+            // save everything means also save current table and list
+            currentTable = 0;
+            currentList = 0;
+        } else {
+            QTextCursor tocursor(toblock);
+            //fromcursor.setPosition(from, QTextCursor::KeepAnchor);
+            tocursor.setPosition(to, QTextCursor::KeepAnchor);
+
+            if (!fromcursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor)) {
+                fromcursor = QTextCursor();
+            }
+            if (!tocursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor)) {
+                tocursor = QTextCursor();
+            }
+
+            // save the whole table if all cells are selected
+            if (currentTable) {
+                QTextTableCell fromcell = currentTable->cellAt(from);
+                QTextTableCell tocell = currentTable->cellAt(to);
+                if ((fromcursor.isNull() || fromcursor.currentTable() != currentTable) &&
+                    (tocursor.isNull() || tocursor.currentTable() != currentTable) &&
+                    fromcell.column() == 0 && fromcell.row() == 0 &&
+                    tocell.column() == currentTable->columns()-1 && tocell.row() == currentTable->rows()-1
+                ) {
+                    currentTable = 0;
+                }
+            }
+
+            // save the whole list if all list-items are selected
+            if (currentList) {
+                int fromindex = currentList->itemNumber(fromblock);
+                int toindex = currentList->itemNumber(toblock);
+                if ((fromcursor.isNull() || fromcursor.currentList() != currentList) &&
+                    (tocursor.isNull() || tocursor.currentList() != currentList) &&
+                    fromindex <= 0 && (toindex < 0 || toindex == currentList->count()-1)
+                ) {
+                    currentList = 0;
+                }
+            }
+        }
+    }
+
+    QHash<QTextList *, QString> listStyles = d->saveListStyles(fromblock, to);
+    d->writeBlocks(const_cast<QTextDocument *>(document), from, to, listStyles, currentTable, currentList);
 }

@@ -572,6 +572,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
                 } else {
                     rowBottom = qMax(cellArea->bottom() + cellStyle.bottomPadding() + cellStyle.bottomBorderWidth(), rowBottom);
                 }
+                rowBottom = qMax(rowBottom, documentLayout()->maxYOfAnchoredObstructions(cell.firstCursorPosition().position(), cell.lastCursorPosition().position()));
             }
 
 

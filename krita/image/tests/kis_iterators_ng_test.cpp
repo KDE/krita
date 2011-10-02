@@ -166,6 +166,10 @@ void KisIteratorTest::rectIter(const KoColorSpace * colorSpace)
     } while (it->nextPixel());
     QCOMPARE(dev.extent(), QRect(10, -15, 128, 192));
     QCOMPARE(dev.exactBounds(), QRect(10, 10, 128, 128));
+    
+    it = dev.createRectIteratorNG(10, 10, 128, 128);
+    QCOMPARE(it->rawData(), it->oldRawData());
+    
 
     delete[] bytes;
 }
@@ -225,7 +229,11 @@ void KisIteratorTest::hLineIter(const KoColorSpace * colorSpace)
 
     QCOMPARE(dev.extent(), QRect(10, -15, 128, 64));
     QCOMPARE(dev.exactBounds(), QRect(10, 10, 128, 1));
-
+    
+    it = dev.createHLineIteratorNG(10, 10, 128);
+    it->nextRow();
+    QCOMPARE(it->rawData(), it->oldRawData());
+    
     delete[] bytes;
 }
 
@@ -284,6 +292,10 @@ void KisIteratorTest::vLineIter(const KoColorSpace * colorSpace)
     QCOMPARE(dev.extent(), QRect(10, -15, 64, 192));
     QCOMPARE(dev.exactBounds(), QRect(10, 10, 1, 128));
 
+    it = dev.createVLineIteratorNG(10, 10, 128);
+    it->nextColumn();
+    QCOMPARE(it->rawData(), it->oldRawData());
+    
     delete[] bytes;
 
 }

@@ -25,6 +25,9 @@
 class KoCanvasBase;
 class TableOfContentsConfigure;
 class SimpleTableOfContentsWidget;
+class SimpleFootEndNotesWidget;
+class SimpleCitationBibliographyWidget;
+class KoInlineNote;
 class QPainter;
 
 /// This tool is the ui for inserting Table of Contents, Citations/bibliography, footnotes, endnotes, index, table of illustrations etc
@@ -53,16 +56,29 @@ private slots:
     void insertCitation();
     /// insert a bibliography
     void insertBibliography();
+    /// configure a bibliography
+    void configureBibliography();
     /// format the table of contents template
     void formatTableOfContents();
     /// shows the configuration dialog for a ToC
     void showConfigureDialog(QAction *action);
     /// hides the configuration dialog for ToC
     void hideCofigureDialog(int result);
+    /// insert a footnote
+    void insertFootNote();
+    /// insert an endnote
+    void insertEndNote();
+    /// show the configuration dialog for notes
+    void showNotesConfigureDialog();
+    /// disable insert notes' buttons when already in notes' body
+    void disableButtons(QTextCursor cursor);
 
 private:
     TableOfContentsConfigure *m_configure;
     SimpleTableOfContentsWidget *m_stocw;
+        SimpleFootEndNotesWidget *m_sfenw;
+        KoInlineNote *m_note;
+    SimpleCitationBibliographyWidget *m_scbw;
 };
 
 #endif // REFERENCESTOOL_H

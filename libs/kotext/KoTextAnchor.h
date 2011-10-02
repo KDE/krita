@@ -204,6 +204,9 @@ public:
     /// return the wrap influence on position
     QString wrapInfluenceOnPosition() const;
 
+    /// return if flow-with-text (odf attribute)
+    bool flowWithText() const;
+
     /// return the page number of the shape (valid with page anchoring, -1 indicates auto).
     int pageNumber() const;
 

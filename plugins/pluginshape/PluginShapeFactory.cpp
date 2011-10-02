@@ -27,7 +27,7 @@
 
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
 
 #include <klocale.h>
 #include <kdebug.h>

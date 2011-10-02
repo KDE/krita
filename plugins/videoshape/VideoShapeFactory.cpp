@@ -24,7 +24,7 @@
 #include "VideoShapeConfigWidget.h"
 
 #include <KoXmlNS.h>
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
 #include <KoShapeLoadingContext.h>
 #include "VideoCollection.h"
 

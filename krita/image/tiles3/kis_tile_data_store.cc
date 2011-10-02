@@ -289,11 +289,9 @@ void KisTileDataStore::debugSwapAll()
     }
     endIteration(iter);
 
-    qDebug() << "Number of tiles:" << numTiles();
-    qDebug() << "Tiles in memory:" << numTilesInMemory();
-
-
-    m_swappedStore.debugStatistics();
+//    qDebug() << "Number of tiles:" << numTiles();
+//    qDebug() << "Tiles in memory:" << numTilesInMemory();
+//    m_swappedStore.debugStatistics();
 }
 
 void KisTileDataStore::debugClear()

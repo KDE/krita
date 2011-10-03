@@ -53,6 +53,7 @@
 
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
         : m_view(view)
+        , m_displayProfile(0)
 {
     m_fGChanged = true;
     m_enablefGChange = true;    // default to true, so that colour history is working without popup palette
@@ -150,13 +151,13 @@ void KisCanvasResourceProvider::resetDisplayProfile()
         QString monitorProfileName = cfg.monitorProfile();
         m_displayProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
     }
+
     emit sigDisplayProfileChanged(m_displayProfile);
 }
 
 const KoColorProfile * KisCanvasResourceProvider::currentDisplayProfile() const
 {
     return m_displayProfile;
-
 }
 
 KisImageWSP KisCanvasResourceProvider::currentImage() const

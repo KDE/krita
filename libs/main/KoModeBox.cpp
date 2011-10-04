@@ -150,12 +150,16 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
     foreach (const KoToolButton button, d->buttons) {
         QString code = button.visibilityCode;
 
-        if (code.startsWith(QLatin1String("flake/"))) {
+        if (button.section.contains("words")) {
             addItem(button);
+            continue;
+        } else if (!button.section.contains("dynamic")
+            && !button.section.contains("main")
+            && !button.section.contains("navigation")) {
             continue;
         }
 
-        if (button.section.contains("words")) {
+        if (code.startsWith(QLatin1String("flake/"))) {
             addItem(button);
             continue;
         }

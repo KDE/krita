@@ -83,6 +83,7 @@
 #include "KoTextSopranoRdfModel_p.h"
 #endif
 
+Q_DECLARE_METATYPE(QTextFrame*)
 
 static bool isRightToLeft(const QString &text)
 {
@@ -1818,11 +1819,18 @@ bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCurso
     while (qobject_cast<QTextTable *>(afterFrame)) {
         afterFrame = afterFrame->parentFrame();
     }
+
     if (beforeFrame == afterFrame) {
         if (after.selectionEnd() == after.document()->characterCount() -1) {
             QVariant resource = after.document()->resource(KoTextDocument::AuxillaryFrame,
             KoTextDocument::AuxillaryFrameURL);
-            if (resource.isValid()) {
+            QTextFrame *auxFrame = resource.value<QTextFrame *>();
+            if (auxFrame) {
+                if (operation == QTextCursor::End) {
+                    d->caret.setPosition(auxFrame->firstPosition() - 1, mode);
+                    emit cursorPositionChanged();
+                    return true;
+                }
                 return false;
             }
         }

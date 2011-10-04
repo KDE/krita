@@ -1104,6 +1104,15 @@ bool KoTextEditor::atBlockStart() const
 
 bool KoTextEditor::atEnd() const
 {
+    QVariant resource = d->caret.document()->resource(KoTextDocument::AuxillaryFrame,
+    KoTextDocument::AuxillaryFrameURL);
+    QTextFrame *auxFrame = resource.value<QTextFrame *>();
+    if (auxFrame) {
+        if (d->caret.position() == auxFrame->firstPosition() - 1) {
+            return true;
+        }
+        return false;
+    }
     return d->caret.atEnd();
 }
 

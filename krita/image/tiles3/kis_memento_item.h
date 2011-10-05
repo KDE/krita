@@ -99,6 +99,10 @@ public:
         releaseTileData();
     }
 
+    void notifyDead() {
+        // just to resemple KisTile...
+    }
+
     void reset() {
         releaseTileData();
         m_tileData = 0;

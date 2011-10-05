@@ -84,7 +84,7 @@ public:
                 for (int i = 0; i < m_numTiles; i++) {
                     KisTileSP voidTile = m_srcDM.getTile(i, 0, false);
                     voidTile->lockForRead();
-//                    char temp = *voidTile->data();
+                    char temp = *voidTile->data();
                     QTest::qSleep(1);
                     voidTile->unlock();
                 }
@@ -99,7 +99,7 @@ public:
                 for (int i = 0; i < m_numTiles; i++) {
                     KisTileSP voidTile = m_dstDM.getTile(i, 0, false);
                     voidTile->lockForRead();
-//                    char temp = *voidTile->data();
+                    char temp = *voidTile->data();
                     QTest::qSleep(1);
                     voidTile->unlock();
                 }

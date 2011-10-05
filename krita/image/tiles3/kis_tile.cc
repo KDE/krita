@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+//#define DEAD_TILES_SANITY_CHECK
+
 #include "kis_tile_data.h"
 #include "kis_tile_data_store.h"
 #include "kis_tile.h"
@@ -71,10 +73,24 @@ KisTile::~KisTile()
 {
     Q_ASSERT(!m_lockCounter);
 
-    if (m_mementoManager)
-        m_mementoManager->registerTileDeleted(this);
+#ifdef DEAD_TILES_SANITY_CHECK
+    /**
+     * We should have been disconnected from the memento manager in notifyDead().
+     * otherwise, there is a bug
+     */
+    Q_ASSERT(!m_mementoManager);
+#endif
 
     m_tileData->release();
+}
+
+void KisTile::notifyDead()
+{
+    if (m_mementoManager) {
+        KisMementoManager *manager = m_mementoManager;
+        m_mementoManager = 0;
+        manager->registerTileDeleted(this);
+    }
 }
 
 //#define DEBUG_TILE_LOCKING

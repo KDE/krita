@@ -35,9 +35,10 @@ class FormattingButton : public QToolButton
 {
     Q_OBJECT
 public:
-    FormattingButton( QWidget *parent = 0 );
+    FormattingButton(QWidget *parent = 0 );
 
-    QString example(KoListStyle::Style type) const;
+    void setNumColumns(int columns);
+
     void addItem(QPixmap pm, int id);
     void addAction(QAction *action);
     void addSeparator();
@@ -53,6 +54,7 @@ private:
     QMenu *m_menu;
     QMap<QObject *, int > m_styleMap;
     ItemChooserAction *m_styleAction;
+    int m_columns;
 };
 
 #endif

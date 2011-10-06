@@ -71,7 +71,9 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 
     widget.bulletListButton->setDefaultAction(tool->action("format_bulletlist"));
     widget.numberedListButton->setDefaultAction(tool->action("format_numberlist"));
-
+    widget.bulletListButton->setNumColumns(3);
+    widget.numberedListButton->setNumColumns(3);
+ 
     fillListButtons();
     widget.bulletListButton->addSeparator();
     //widget.bulletListButton->addAction(new QAction("fgfd",0));

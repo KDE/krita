@@ -45,6 +45,7 @@ public:
 
 signals:
     void itemTriggered(int id);
+    void doneWithFocus();
 
 private slots:
     void itemSelected();

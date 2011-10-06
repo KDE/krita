@@ -76,6 +76,7 @@ FormattingButton::FormattingButton(QWidget *parent)
     setPopupMode(MenuButtonPopup);
     setMenu(m_menu);
     connect(this, SIGNAL(released()), this, SLOT(itemSelected()));
+    connect(m_menu, SIGNAL(aboutToHide()), this, SIGNAL(doneWithFocus()));
 }
 
 void FormattingButton::setNumColumns(int columns)

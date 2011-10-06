@@ -28,7 +28,7 @@
 class KoShape;
 class QString;
 class KoShapeBasedDocumentBasePrivate;
-class KoResourceManager;
+class KoDocumentResourceManager;
 
 /**
  * The shape controller is an abstract interface that the applications class
@@ -61,9 +61,8 @@ public:
      * shape-set (typically a document). The resource manager contains
      * document wide resources * such as variable managers, the image
      * collection and others.
-     * @see KoCanvasBase::resourceManager()
      */
-    virtual KoResourceManager *resourceManager() const;
+    virtual KoDocumentResourceManager *resourceManager() const;
 
 private:
     KoShapeBasedDocumentBasePrivate * d;

@@ -39,7 +39,7 @@ KoConnectionShapeFactory::KoConnectionShapeFactory()
     setLoadingPriority(1);
 }
 
-KoShape* KoConnectionShapeFactory::createDefaultShape(KoResourceManager *) const
+KoShape* KoConnectionShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     KoConnectionShape * shape = new KoConnectionShape();
     shape->setBorder(new KoLineBorder());

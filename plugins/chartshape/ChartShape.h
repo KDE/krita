@@ -47,7 +47,7 @@ class QColor;
 class QString;
 class QFont;
 
-class KoResourceManager;
+class KoDocumentResourceManager;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoStore;
@@ -104,7 +104,7 @@ class CHARTSHAPELIB_EXPORT ChartShape
     Q_INTERFACES(KoChart::ChartInterface)
 
 public:
-    ChartShape(KoResourceManager *documentResourceManager);
+    ChartShape(KoDocumentResourceManager *documentResourceManager);
     ~ChartShape();
 
     // Getter methods
@@ -230,7 +230,7 @@ public:
     void requestRepaint() const;
 
     /// the document resource manager we got on construction
-    KoResourceManager *resourceManager() const;
+    KoDocumentResourceManager *resourceManager() const;
 
 signals:
     void chartTypeChanged( ChartType );

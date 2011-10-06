@@ -45,7 +45,7 @@
 #include <KoDrag.h>
 #include <KoDocument.h>
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoShapeRubberSelectStrategy.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeDeleteCommand.h>
@@ -1040,9 +1040,9 @@ void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
 
     // single selected shape is automatically aligned to document rect
     if (editableShapes.count() == 1 ) {
-        if (!canvas()->resourceManager()->hasResource(KoCanvasResource::PageSize))
+        if (!canvas()->resourceManager()->hasResource(KoCanvasResourceManager::PageSize))
             return;
-        bb = QRectF(QPointF(0,0), canvas()->resourceManager()->sizeResource(KoCanvasResource::PageSize));
+        bb = QRectF(QPointF(0,0), canvas()->resourceManager()->sizeResource(KoCanvasResourceManager::PageSize));
     } else {
         foreach( KoShape * shape, editableShapes ) {
             bb |= shape->boundingRect();
@@ -1248,7 +1248,7 @@ void DefaultTool::updateActions()
     action("object_order_raise")->setEnabled(enable);
     action("object_order_lower")->setEnabled(enable);
     action("object_order_back")->setEnabled(enable);
-    enable = (editableShapes.count () > 1) || (enable && canvas()->resourceManager()->hasResource(KoCanvasResource::PageSize));
+    enable = (editableShapes.count () > 1) || (enable && canvas()->resourceManager()->hasResource(KoCanvasResourceManager::PageSize));
     action("object_align_horizontal_left")->setEnabled(enable);
     action("object_align_horizontal_center")->setEnabled(enable);
     action("object_align_horizontal_right")->setEnabled(enable);

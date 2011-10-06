@@ -59,14 +59,14 @@ struct KisResourcesSnapshot::Private {
     const KoCompositeOp *compositeOp;
 };
 
-KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUndoAdapter *undoAdapter, KoResourceManager *resourceManager)
+KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager)
     : m_d(new Private())
 {
     m_d->image = image;
     m_d->bounds = new KisDefaultBounds(image);
     m_d->undoAdapter = undoAdapter;
-    m_d->currentFgColor = resourceManager->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
-    m_d->currentBgColor = resourceManager->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
+    m_d->currentFgColor = resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
+    m_d->currentBgColor = resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
     m_d->currentPattern = static_cast<KisPattern*>(resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<void*>());
     m_d->currentGradient = static_cast<KoAbstractGradient*>(resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<void*>());
     m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();

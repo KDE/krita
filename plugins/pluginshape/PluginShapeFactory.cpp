@@ -42,7 +42,7 @@ PluginShapeFactory::PluginShapeFactory()
     setHidden(true);
 }
 
-KoShape *PluginShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *PluginShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     Q_UNUSED(documentResources);
     PluginShape *defaultShape = new PluginShape();

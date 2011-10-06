@@ -25,7 +25,7 @@
 
 class SvgGraphicsContext;
 class SvgStyleParser;
-class KoResourceManager;
+class KoDocumentResourceManager;
 class KoImageCollection;
 class KoShape;
 
@@ -33,7 +33,7 @@ class KoShape;
 class FLAKE_EXPORT SvgLoadingContext
 {
 public:
-    SvgLoadingContext(KoResourceManager *documentResourceManager);
+    SvgLoadingContext(KoDocumentResourceManager *documentResourceManager);
     ~SvgLoadingContext();
 
     /// Returns the current graphics context

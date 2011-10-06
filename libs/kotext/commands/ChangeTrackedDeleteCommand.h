@@ -34,7 +34,7 @@ class KoShapeController;
 class KoDocumentRdfBase;
 class KoDeleteChangeMarker;
 class KoInlineTextObjectManager;
-class KoResourceManager;
+class KoDocumentResourceManager;
 class KoTextEditor;
 
 class ChangeTrackedDeleteCommand : public KoTextCommandBase

@@ -23,7 +23,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoTextLayoutRootArea.h>
 
-ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoResourceManager *documentResources)
+ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoDocumentResourceManager *documentResources)
     : KoShapeContainer(*(new ShrinkToFitShapeContainerPrivate(this, childShape)))
 {
     Q_UNUSED(documentResources);
@@ -82,7 +82,7 @@ void ShrinkToFitShapeContainer::saveOdf(KoShapeSavingContext &context) const
     d->childShape->saveOdf(context);
 }
 
-ShrinkToFitShapeContainer* ShrinkToFitShapeContainer::wrapShape(KoShape *shape, KoResourceManager *documentResourceManager)
+ShrinkToFitShapeContainer* ShrinkToFitShapeContainer::wrapShape(KoShape *shape, KoDocumentResourceManager *documentResourceManager)
 {
     Q_ASSERT(dynamic_cast<KoTextShapeData*>(shape->userData()));
     Q_ASSERT(qobject_cast<KoTextDocumentLayout*>(dynamic_cast<KoTextShapeData*>(shape->userData())->document()->documentLayout()));

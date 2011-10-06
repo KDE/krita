@@ -24,7 +24,6 @@
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
 #include <commands/KoShapeSizeCommand.h>
 #include <commands/KoShapeTransformCommand.h>
 #include <KoSnapGuide.h>
@@ -156,7 +155,7 @@ void ShapeResizeStrategy::handleCustomEvent( KoPointerEvent * event )
 void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zoomY )
 {
     QTransform matrix;
-    matrix.translate(center.x(), center.y()); // translate to 
+    matrix.translate(center.x(), center.y()); // translate to
     matrix.scale(zoomX, zoomY);
     matrix.translate(-center.x(), -center.y()); // and back
 
@@ -165,13 +164,13 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
 
     // the resizing transformation without the mirroring part
     QTransform resizeMatrix;
-    resizeMatrix.translate(center.x(), center.y()); // translate to 
+    resizeMatrix.translate(center.x(), center.y()); // translate to
     resizeMatrix.scale( qAbs(zoomX), qAbs(zoomY) );
     resizeMatrix.translate(-center.x(), -center.y()); // and back
 
     // the mirroring part of the resizing transformation
     QTransform mirrorMatrix;
-    mirrorMatrix.translate(center.x(), center.y()); // translate to 
+    mirrorMatrix.translate(center.x(), center.y()); // translate to
     mirrorMatrix.scale( zoomX < 0 ? -1 : 1, zoomY < 0 ? -1 : 1 );
     mirrorMatrix.translate(-center.x(), -center.y()); // and back
 

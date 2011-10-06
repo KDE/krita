@@ -26,7 +26,6 @@
 #include <KoShapeManager.h>
 #include <KoShapeContainer.h>
 #include <KoShapeContainerModel.h>
-#include <KoResourceManager.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <KoSnapGuide.h>
 #include <KoPointerEvent.h>

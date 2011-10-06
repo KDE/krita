@@ -23,7 +23,6 @@
 
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
-#include <KoResourceManager.h>
 
 #include "HistoryDock.h"
 

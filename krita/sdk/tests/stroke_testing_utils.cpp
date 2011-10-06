@@ -55,19 +55,19 @@ KisImageSP utils::createImage(KisUndoStore *undoStore, const QSize &imageSize) {
     return image;
 }
 
-KoResourceManager* utils::createResourceManager(KisImageWSP image,
+KoCanvasResourceManager* utils::createResourceManager(KisImageWSP image,
                                                 KisNodeSP node,
                                                 const QString &presetFileName)
 {
-    KoResourceManager *manager = new KoResourceManager();
+    KoCanvasResourceManager *manager = new KoCanvasResourceManager();
 
     QVariant i;
 
     i.setValue(KoColor(Qt::black, image->colorSpace()));
-    manager->setResource(KoCanvasResource::ForegroundColor, i);
+    manager->setResource(KoCanvasResourceManager::ForegroundColor, i);
 
     i.setValue(KoColor(Qt::white, image->colorSpace()));
-    manager->setResource(KoCanvasResource::BackgroundColor, i);
+    manager->setResource(KoCanvasResourceManager::BackgroundColor, i);
 
     i.setValue(static_cast<void*>(0));
     manager->setResource(KisCanvasResourceProvider::CurrentPattern, i);
@@ -224,7 +224,7 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
                                      bool needQImage)
 {
     KisImageSP image = utils::createImage(0, m_imageSize);
-    KoResourceManager *manager = utils::createResourceManager(image, 0, m_presetFilename);
+    KoCanvasResourceManager *manager = utils::createResourceManager(image, 0, m_presetFilename);
 
     KisPainter *painter = new KisPainter();
     KisResourcesSnapshotSP resources =

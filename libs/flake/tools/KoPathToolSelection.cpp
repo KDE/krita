@@ -27,7 +27,7 @@
 #include <KoPathPointData.h>
 #include <KoViewConverter.h>
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoShapeController.h>
 #include <QtGui/QPainter>
 

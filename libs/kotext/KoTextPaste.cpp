@@ -46,7 +46,7 @@ public:
     }
 
     KoTextEditor *editor;
-    KoResourceManager *resourceManager;
+    KoDocumentResourceManager *resourceManager;
     const Soprano::Model *rdfModel;
 };
 

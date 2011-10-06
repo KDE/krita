@@ -22,7 +22,8 @@
 #include "KoToolBase_p.h"
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
-#include "KoResourceManager.h"
+#include "KoDocumentResourceManager.h"
+#include "KoCanvasResourceManager.h"
 #include "KoViewConverter.h"
 #include "KoShapeController.h"
 #include "KoShapeBasedDocumentBase.h"
@@ -55,7 +56,7 @@ KoToolBase::~KoToolBase()
 void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController)
 {
     if (shapeController) {
-        KoResourceManager *scrm = shapeController->resourceManager();
+        KoDocumentResourceManager *scrm = shapeController->resourceManager();
         if (scrm) {
             connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
                     this, SLOT(resourceChanged(int, const QVariant &)));

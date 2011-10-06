@@ -415,7 +415,7 @@ KoTextLoader::KoTextLoader(KoShapeLoadingContext &context, KoShape *shape)
 
     if (!d->textSharedData) {
         d->textSharedData = new KoTextSharedLoadingData();
-        KoResourceManager *rm = context.documentResourceManager();
+        KoDocumentResourceManager *rm = context.documentResourceManager();
         KoStyleManager *styleManager = rm->resource(KoText::StyleManager).value<KoStyleManager*>();
         d->textSharedData->loadOdfStyles(context, styleManager);
         if (!sharedData) {

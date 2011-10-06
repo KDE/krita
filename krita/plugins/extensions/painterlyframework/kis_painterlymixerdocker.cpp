@@ -23,7 +23,7 @@
 #include <KLocale>
 
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoColor.h>
 
 #include "kis_painterlymixer.h"
@@ -55,9 +55,9 @@ void KisPainterlyMixerDocker::setCanvas(KoCanvasBase* canvas)
     if (m_currentCanvas) {
         m_currentCanvas->disconnectCanvasObserver(this);
     }
-    
+
     m_currentCanvas = canvas;
-    
+
     if (m_currentCanvas) {
         connect(m_currentCanvas->resourceManager(), SIGNAL(resourceChanged(int,QVariant)), this, SLOT(resourceChanged(int,QVariant)));
     }
@@ -70,7 +70,7 @@ void KisPainterlyMixerDocker::colorChanged(const KoColor& color)
 
 void KisPainterlyMixerDocker::resourceChanged(int key, const QVariant& value)
 {
-    if (key == KoCanvasResource::ForegroundColor) {
+    if (key == KoCanvasResourceManager::ForegroundColor) {
         m_painterlyMixer->setColor(value.value<KoColor>());
     }
 }

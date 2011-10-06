@@ -45,7 +45,7 @@ EllipseShapeFactory::EllipseShapeFactory()
     setXmlElements(elementNamesList);
 }
 
-KoShape *EllipseShapeFactory::createDefaultShape(KoResourceManager *) const
+KoShape *EllipseShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     EllipseShape *ellipse = new EllipseShape();
 

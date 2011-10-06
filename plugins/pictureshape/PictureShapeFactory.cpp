@@ -32,6 +32,7 @@
 #include "KoShapeBasedDocumentBase.h"
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
+#include <KoDocumentResourceManager.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
 #include <KoProperties.h>
@@ -51,7 +52,7 @@ PictureShapeFactory::PictureShapeFactory()
     setXmlElements(elementNamesList);
 }
 
-KoShape *PictureShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *PictureShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     PictureShape * defaultShape = new PictureShape();
     defaultShape->setShapeId(PICTURESHAPEID);
@@ -61,7 +62,7 @@ KoShape *PictureShapeFactory::createDefaultShape(KoResourceManager *documentReso
     return defaultShape;
 }
 
-KoShape *PictureShapeFactory::createShape(const KoProperties *params, KoResourceManager *documentResources) const
+KoShape *PictureShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
 {
     PictureShape *shape = static_cast<PictureShape*>(createDefaultShape(documentResources));
     if (params->contains("qimage")) {
@@ -116,7 +117,7 @@ QList<KoShapeConfigWidgetBase*> PictureShapeFactory::createShapeOptionPanels()
     return panels;
 }
 
-void PictureShapeFactory::newDocumentResourceManager(KoResourceManager *manager) const
+void PictureShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
     if (!manager->imageCollection())
         manager->setImageCollection(new KoImageCollection(manager));

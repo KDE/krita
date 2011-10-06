@@ -46,7 +46,7 @@ CollectionShapeFactory::~CollectionShapeFactory()
     delete m_shape;
 }
 
-KoShape *CollectionShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *CollectionShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     QList<KoShape*> shapes;
 

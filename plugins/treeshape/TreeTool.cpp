@@ -39,7 +39,6 @@
 #include <KoDrag.h>
 #include <KoDocument.h>
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
 #include <KoShapeRubberSelectStrategy.h>
 #include <TreeShapeMoveCommand.h>
 #include <commands/KoShapeDeleteCommand.h>
@@ -121,7 +120,7 @@ void TreeTool::changeShape(int index)
 //         TreeShape::RootType type = static_cast<TreeShape::RootType>(index);
 //         new TreeChangeShapeCommand(tree, type, command);
 //     }
-// 
+//
 //     canvas()->addCommand(command);
 }
 

@@ -30,7 +30,7 @@
 #include <KoDataCenterBase.h>
 
 class KoCanvasBase;
-class KoResourceManager;
+class KoDocumentResourceManager;
 class QTextDocument;
 class KoStore;
 class KoXmlWriter;
@@ -61,7 +61,7 @@ public:
      * You do not own the model, do not delete it.
      */
     virtual const Soprano::Model *model() const;
-    virtual void linkToResourceManager(KoResourceManager *rm);
+    virtual void linkToResourceManager(KoDocumentResourceManager *rm);
 
     virtual void updateInlineRdfStatements(const QTextDocument *qdoc);
     virtual void updateXmlIdReferences(const QMap<QString, QString> &m);

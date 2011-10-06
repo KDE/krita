@@ -26,7 +26,7 @@
 class QTextDocument;
 class KoDocumentRdfBase;
 class KoShapeController;
-class KoResourceManager;
+class KoDocumentResourceManager;
 class QMimeData;
 
 class TextPasteCommand : public KUndo2Command

@@ -28,7 +28,8 @@
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoLineBorder.h>
@@ -226,8 +227,8 @@ void StyleDocker::updateStyle(KoShapeBorderModel * stroke, KoShapeBackground * f
     if (! m_canvas)
         return;
 
-    KoResourceManager * provider = m_canvas->resourceManager();
-    int activeStyle = provider->resource(KoCanvasResource::ActiveStyleType).toInt();
+    KoCanvasResourceManager * provider = m_canvas->resourceManager();
+    int activeStyle = provider->resource(KoCanvasResourceManager::ActiveStyleType).toInt();
 
     QColor qColor;
     if (activeStyle == KoFlake::Foreground) {
@@ -254,7 +255,7 @@ void StyleDocker::fillSelected()
     if (! m_canvas)
         return;
 
-    m_canvas->resourceManager()->setResource(KoCanvasResource::ActiveStyleType, KoFlake::Background);
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ActiveStyleType, KoFlake::Background);
     updateStyleButtons(KoFlake::Background);
 }
 
@@ -263,15 +264,15 @@ void StyleDocker::strokeSelected()
     if (! m_canvas)
         return;
 
-    m_canvas->resourceManager()->setResource(KoCanvasResource::ActiveStyleType, KoFlake::Foreground);
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ActiveStyleType, KoFlake::Foreground);
     updateStyleButtons(KoFlake::Foreground);
 }
 
 void StyleDocker::resourceChanged(int key, const QVariant&)
 {
     switch (key) {
-        case KoCanvasResource::ForegroundColor:
-        case KoCanvasResource::BackgroundColor:
+        case KoCanvasResourceManager::ForegroundColor:
+        case KoCanvasResourceManager::BackgroundColor:
             updateStyle();
             break;
     }
@@ -287,12 +288,12 @@ void StyleDocker::styleButtonPressed(int buttonId)
         {
             resetColorCommands();
 
-            KoResourceManager * provider = m_canvas->resourceManager();
+            KoCanvasResourceManager * provider = m_canvas->resourceManager();
             KoSelection *selection = m_canvas->shapeManager()->selection();
             if (! selection || ! selection->count())
                 break;
 
-            if (provider->resource(KoCanvasResource::ActiveStyleType).toInt() == KoFlake::Background)
+            if (provider->resource(KoCanvasResourceManager::ActiveStyleType).toInt() == KoFlake::Background)
                 m_canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), 0));
             else
                 m_canvas->addCommand(new KoShapeBorderCommand(selection->selectedShapes(), 0));
@@ -332,8 +333,8 @@ void StyleDocker::updateColor(const KoColor &c)
             updateColor(c.toQColor(), shapes);
         }
         else {
-            KoResourceManager * provider = m_canvas->resourceManager();
-            int activeStyle = provider->resource(KoCanvasResource::ActiveStyleType).toInt();
+            KoCanvasResourceManager * provider = m_canvas->resourceManager();
+            int activeStyle = provider->resource(KoCanvasResourceManager::ActiveStyleType).toInt();
 
             if (activeStyle == KoFlake::Foreground)
                 m_canvas->resourceManager()->setForegroundColor(c);
@@ -356,8 +357,8 @@ void StyleDocker::updateColor(const QColor &c, const QList<KoShape*> & selectedS
 
     KoColor kocolor(c, KoColorSpaceRegistry::instance()->rgb8());
 
-    KoResourceManager * provider = m_canvas->resourceManager();
-    int activeStyle = provider->resource(KoCanvasResource::ActiveStyleType).toInt();
+    KoCanvasResourceManager * provider = m_canvas->resourceManager();
+    int activeStyle = provider->resource(KoCanvasResourceManager::ActiveStyleType).toInt();
 
     // check which color to set foreground == border, background == fill
     if (activeStyle == KoFlake::Foreground) {
@@ -446,8 +447,8 @@ void StyleDocker::updateGradient(KoResource * item)
     QGradientStops newStops = newGradient->stops();
     delete newGradient;
 
-    KoResourceManager * provider = m_canvas->resourceManager();
-    int activeStyle = provider->resource(KoCanvasResource::ActiveStyleType).toInt();
+    KoCanvasResourceManager * provider = m_canvas->resourceManager();
+    int activeStyle = provider->resource(KoCanvasResourceManager::ActiveStyleType).toInt();
 
     // check which color to set foreground == border, background == fill
     if (activeStyle == KoFlake::Background) {

@@ -20,7 +20,7 @@
 #define __STROKE_TESTING_UTILS_H
 
 #include <QString>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include "kis_node.h"
 #include "kis_types.h"
 #include "kis_stroke_strategy.h"
@@ -33,7 +33,7 @@ class KisUndoStore;
 namespace utils {
 
     KisImageSP createImage(KisUndoStore *undoStore, const QSize &imageSize);
-    KoResourceManager* createResourceManager(KisImageWSP image,
+    KoCanvasResourceManager* createResourceManager(KisImageWSP image,
                                              KisNodeSP node = 0,
                                              const QString &presetFileName = "autobrush_300px.kpp");
 

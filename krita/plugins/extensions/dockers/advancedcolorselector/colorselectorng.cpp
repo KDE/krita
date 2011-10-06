@@ -23,7 +23,6 @@
 
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
-#include <KoResourceManager.h>
 
 #include "kis_color_selector_ng_dock.h"
 #include "kis_color_selector_settings.h"
@@ -82,7 +81,7 @@ ColorSelectorNgPlugin::ColorSelectorNgPlugin(QObject *parent, const QVariantList
 
 ColorSelectorNgPlugin::~ColorSelectorNgPlugin()
 {
-    
+
 }
 
 #include "colorselectorng.moc"

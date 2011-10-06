@@ -24,7 +24,7 @@
 
 #include <KoInteractionTool.h>
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <commands/KoShapeMoveCommand.h>
@@ -72,7 +72,7 @@ void DefaultToolTransformWidget::setUnit( const KoUnit &unit )
 
 void DefaultToolTransformWidget::resourceChanged( int key, const QVariant & res )
 {
-    if (key == KoCanvasResource::Unit)
+    if (key == KoCanvasResourceManager::Unit)
         setUnit(res.value<KoUnit>());
 }
 

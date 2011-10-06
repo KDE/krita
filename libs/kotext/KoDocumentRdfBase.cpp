@@ -18,7 +18,7 @@
 */
 
 #include "KoDocumentRdfBase.h"
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoCanvasBase.h>
 #include <KoText.h>
 #include <KoXmlWriter.h>
@@ -37,7 +37,7 @@ const Soprano::Model *KoDocumentRdfBase::model() const
     return 0;
 }
 
-void KoDocumentRdfBase::linkToResourceManager(KoResourceManager *rm)
+void KoDocumentRdfBase::linkToResourceManager(KoDocumentResourceManager *rm)
 {
     QVariant variant;
     variant.setValue<void*>(this);

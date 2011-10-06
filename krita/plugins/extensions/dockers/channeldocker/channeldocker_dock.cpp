@@ -22,7 +22,6 @@
 #include <QHeaderView>
 #include <klocale.h>
 
-#include <KoResourceManager.h>
 #include <KoCanvasBase.h>
 #include "channelmodel.h"
 #include <kis_view2.h>

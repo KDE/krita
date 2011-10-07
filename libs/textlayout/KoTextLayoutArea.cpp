@@ -566,12 +566,12 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 }
 
                 if (layoutBlock(cursor) == false) {
-                   /* if (cursor->lineTextStart == -1) {
+                    if (cursor->lineTextStart == -1) {
                         //Nothing was added so lets backtrack keep-with-next
                         backtrackKeepWithNext(cursor);
                         m_endOfArea = new FrameIterator(cursor);
                         return false;
-                    }*/
+                    }
                     m_endOfArea = new FrameIterator(cursor);
                     setBottom(m_y + m_footNotesHeight);
                     m_blockRects.last().setBottom(m_y);

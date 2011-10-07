@@ -70,13 +70,13 @@ void DeleteCommand::redo()
         UndoRedoFinalizer finalizer(this);
     } else {
         m_first = false;
-        KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
-        if (textEditor) {
-            textEditor->beginEditBlock();
-
-            doDelete();
-
-            textEditor->endEditBlock();
+        if (m_document) {
+            KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
+            if (textEditor) {
+                textEditor->beginEditBlock();
+                doDelete();
+                textEditor->endEditBlock();
+            }
         }
     }
 }

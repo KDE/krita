@@ -23,6 +23,7 @@
 #define KOTEXTDOCUMENT_H
 
 #include <QTextDocument>
+#include <QWeakPointer>
 #include <QAbstractTextDocumentLayout>
 #include <QUrl>
 
@@ -56,6 +57,8 @@ public:
     KoTextDocument(QTextDocument *document);
     /// Constructor
     KoTextDocument(const QTextDocument *document);
+    /// Constructor
+    KoTextDocument(QWeakPointer<QTextDocument> document);
 
     /// Destructor
     ~KoTextDocument();

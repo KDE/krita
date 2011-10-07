@@ -70,6 +70,8 @@ void TextPasteCommand::undo()
 
 void TextPasteCommand::redo()
 {
+    if (m_document.isNull()) return;
+
     KoTextDocument textDocument(m_document);
     KoTextEditor *editor = textDocument.textEditor();
 
@@ -83,9 +85,9 @@ void TextPasteCommand::redo()
             // XXX: this was m_tool->m_actionShowChanges.isChecked -- but shouldn't we check
             // whether we should record changes here, instead of showing?
             if (textDocument.changeTracker()->recordChanges()) {
-                editor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_document, m_shapeController));
+                editor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_document.data(), m_shapeController));
             } else {
-                editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_document, m_shapeController));
+                editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_document.data(), m_shapeController));
             }
         }
 

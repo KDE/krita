@@ -371,6 +371,32 @@ QTextFrame::iterator KoTextLayoutArea::endTextFrameIterator() const
     return m_endOfArea->it;
 }
 
+void KoTextLayoutArea::backtrackKeepWithNext(FrameIterator *cursor)
+{
+    QTextFrame::iterator it = cursor->it;
+
+    while (!(it == m_startOfArea->it)) {
+        --it;
+        QTextBlock block = it.currentBlock();
+        QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
+        QTextFrame *subFrame = it.currentFrame();
+        bool keepWithNext = false;
+        if (table) {
+            keepWithNext = table->format().boolProperty(KoTableStyle::KeepWithNext);
+            //setBottom(tableArea->bottom() + m_footNotesHeight);
+        } else if (subFrame) {
+            Q_ASSERT(false); // there should never be an aux frame before normal layouted stuff
+        } else if (block.isValid()) {
+            keepWithNext = block.blockFormat().boolProperty(KoParagraphStyle::KeepWithNext);
+            //setBottom(m_blockRects.last()->bottom() + m_footNotesHeight);
+        }
+        if (!keepWithNext) {
+            break;
+        }
+        --(cursor->it);
+    }
+}
+
 bool KoTextLayoutArea::layout(FrameIterator *cursor)
 {
     qDeleteAll(m_tableAreas);
@@ -540,6 +566,12 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 }
 
                 if (layoutBlock(cursor) == false) {
+                   /* if (cursor->lineTextStart == -1) {
+                        //Nothing was added so lets backtrack keep-with-next
+                        backtrackKeepWithNext(cursor);
+                        m_endOfArea = new FrameIterator(cursor);
+                        return false;
+                    }*/
                     m_endOfArea = new FrameIterator(cursor);
                     setBottom(m_y + m_footNotesHeight);
                     m_blockRects.last().setBottom(m_y);
@@ -1103,6 +1135,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     qreal maxLineHeight = 0;
     qreal y_justBelowDropCaps = 0;
     bool anyLineAdded = false;
+    int numBaselineShifts = 0;
 
     while (line.isValid()) {
         runAroundHelper.setLine(this, line);
@@ -1171,6 +1204,14 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 clearPreregisteredFootNotes();
                 return false; //to indicate block was not done!
             }
+            if (!virginPage() && pStyle.orphanThreshold() != 0
+                              && pStyle.orphanThreshold() > numBaselineShifts) {
+                line.setPosition(QPointF(x(), m_maximalAllowedBottom));
+                cursor->lineTextStart = -1;
+                layout->endLayout();
+                clearPreregisteredFootNotes();
+                return false; //to indicate block was not done!
+            }
             if (!virginPage() || anyLineAdded) {
                 line.setPosition(QPointF(x(), m_maximalAllowedBottom));
                 clearPreregisteredFootNotes();
@@ -1185,6 +1226,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             m_y += maxLineHeight;
             maxLineHeight = 0;
             m_indent = 0;
+            ++numBaselineShifts;
         }
         // drop caps
         if (m_dropCapsNChars > 0) { // we just laid out the dropped chars

@@ -235,6 +235,8 @@ private:
     QReadWriteLock m_swapLock;
 
 private:
+    friend class KisLowMemoryTests;
+
     /**
      * FIXME: We should be able to work in const environment
      * even when actual data is swapped out to disk

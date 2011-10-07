@@ -85,6 +85,7 @@ public:
                     KisTileSP voidTile = m_srcDM.getTile(i, 0, false);
                     voidTile->lockForRead();
                     char temp = *voidTile->data();
+                    Q_UNUSED(temp);
                     QTest::qSleep(1);
                     voidTile->unlock();
                 }
@@ -100,6 +101,7 @@ public:
                     KisTileSP voidTile = m_dstDM.getTile(i, 0, false);
                     voidTile->lockForRead();
                     char temp = *voidTile->data();
+                    Q_UNUSED(temp);
                     QTest::qSleep(1);
                     voidTile->unlock();
                 }
@@ -143,6 +145,71 @@ void KisLowMemoryTests::readWriteOnSharedTiles()
     }
 
     pool.waitForDone();
+}
+
+void KisLowMemoryTests::hangingTilesTest()
+{
+    quint8 defaultPixel = 0;
+    KisTiledDataManager srcDM(1, &defaultPixel);
+
+    KisTileSP srcTile = srcDM.getTile(0, 0, true);
+
+    srcTile->lockForWrite();
+    srcTile->lockForRead();
+
+
+    KisTiledDataManager dstDM(1, &defaultPixel);
+    dstDM.bitBlt(&srcDM, QRect(0,0,64,64));
+
+    KisTileSP dstTile = dstDM.getTile(0, 0, true);
+
+    dstTile->lockForRead();
+    KisTileData *weirdTileData = dstTile->tileData();
+    quint8 *weirdData = dstTile->data();
+
+    QCOMPARE(weirdTileData, srcTile->tileData());
+    QCOMPARE(weirdData, srcTile->data());
+
+    KisTileDataStore::instance()->debugSwapAll();
+    QCOMPARE(srcTile->tileData(), weirdTileData);
+    QCOMPARE(dstTile->tileData(), weirdTileData);
+    QCOMPARE(srcTile->data(), weirdData);
+    QCOMPARE(dstTile->data(), weirdData);
+
+    dstTile->lockForWrite();
+    KisTileData *cowedTileData = dstTile->tileData();
+    quint8 *cowedData = dstTile->data();
+
+    QVERIFY(cowedTileData != weirdTileData);
+
+    KisTileDataStore::instance()->debugSwapAll();
+    QCOMPARE(srcTile->tileData(), weirdTileData);
+    QCOMPARE(dstTile->tileData(), cowedTileData);
+    QCOMPARE(srcTile->data(), weirdData);
+    QCOMPARE(dstTile->data(), cowedData);
+
+    QCOMPARE((int)weirdTileData->m_usersCount, 2);
+
+    srcTile->unlock();
+    srcTile->unlock();
+    srcTile = 0;
+
+    srcDM.clear();
+
+    KisTileDataStore::instance()->debugSwapAll();
+    QCOMPARE(dstTile->tileData(), cowedTileData);
+    QCOMPARE(dstTile->data(), cowedData);
+
+    // two crash tests
+    QCOMPARE(weirdTileData->data(), weirdData);
+    quint8 testPixel = *weirdData;
+    QCOMPARE(testPixel, defaultPixel);
+
+    QCOMPARE((int)weirdTileData->m_usersCount, 1);
+
+    dstTile->unlock();
+    dstTile->unlock();
+    dstTile = 0;
 }
 
 QTEST_KDEMAIN(KisLowMemoryTests, GUI)

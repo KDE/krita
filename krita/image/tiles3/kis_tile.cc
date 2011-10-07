@@ -131,8 +131,30 @@ inline void KisTile::unblockSwapping() const
 {
     QMutexLocker locker(&m_swapBarrierLock);
 
-    if(--m_lockCounter == 0)
+    if(--m_lockCounter == 0) {
         m_tileData->unblockSwapping();
+
+        if(!m_oldTileData.isEmpty()) {
+            foreach(KisTileData *td, m_oldTileData) {
+                td->unblockSwapping();
+                td->release();
+            }
+            m_oldTileData.clear();
+        }
+    }
+}
+
+inline void KisTile::safeReleaseOldTileData(KisTileData *td)
+{
+    QMutexLocker locker(&m_swapBarrierLock);
+
+    if(m_lockCounter > 0) {
+        m_oldTileData.push(td);
+    }
+    else {
+        td->unblockSwapping();
+        td->release();
+    }
 }
 
 void KisTile::lockForRead() const
@@ -164,8 +186,7 @@ void KisTile::lockForWrite()
             tileData->blockSwapping();
             KisTileData *oldTileData = m_tileData;
             m_tileData = tileData;
-            oldTileData->unblockSwapping();
-            oldTileData->release();
+            safeReleaseOldTileData(oldTileData);
 
             DEBUG_COWING(tileData);
 

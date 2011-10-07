@@ -1412,20 +1412,6 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
     setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
     useCursor(Qt::IBeamCursor);
 
-    // restore the selection from a previous time we edited this document.
-    for (int i = 0; i < m_previousSelections.count(); i++) {
-        TextSelection selection = m_previousSelections.at(i);
-        if (selection.document == m_textShapeData->document()) {
-            KoTextEditor *textEditor = m_textEditor.data();
-            if (textEditor) {
-                textEditor->setPosition(selection.anchor);
-                textEditor->setPosition(selection.position, QTextCursor::KeepAnchor);
-            }
-            m_previousSelections.removeAt(i);
-            break;
-        }
-    }
-
     repaintSelection();
     updateSelectionHandler();
     updateActions();
@@ -1448,16 +1434,7 @@ void TextTool::deactivate()
     // No shape means no active range
     canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, QVariant(QRectF()));
 
-    if (m_textEditor.data() && m_textShapeData) {
-        TextSelection selection;
-        selection.document = m_textShapeData->document();
-        selection.position = m_textEditor.data()->position();
-        selection.anchor = m_textEditor.data()->anchor();
-        m_previousSelections.append(selection);
-    }
     setShapeData(0);
-    if (m_previousSelections.count() > 20) // don't let it grow indefinitely
-        m_previousSelections.removeAt(0);
 
     updateSelectionHandler();
     if (m_specialCharacterDocker) {

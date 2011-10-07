@@ -347,14 +347,6 @@ private:
 
     bool m_currentCommandHasChildren;
 
-    /// structure that allows us to remember the text position and selection of previously edited documents.
-    struct TextSelection {
-        QTextDocument *document; // be warned that this may end up being a dangling pointer, so don't use.
-        int position;
-        int anchor;
-    };
-    QList<TextSelection> m_previousSelections;
-
     InsertCharacter *m_specialCharacterDocker;
 
     TextEditingPluginContainer *m_textEditingPlugins;

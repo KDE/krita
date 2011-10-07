@@ -1,6 +1,4 @@
 ########### install files ###############
-add_subdirectory(eci)
-
 install(FILES
     Adobe.icm 
     Apple.icm 

@@ -64,14 +64,18 @@ private slots:
     void showConfigureDialog(QAction *action);
     /// hides the configuration dialog for ToC
     void hideCofigureDialog(int result);
-    /// insert a footnote
-    void insertFootNote();
-    /// insert an endnote
-    void insertEndNote();
+    /// insert an autonumbered footnote
+    void insertAutoFootNote();
+    /// insert a labeled footnote
+    void insertLabeledFootNote(QString label);
+    /// insert an autonumbered endnote
+    void insertAutoEndNote();
+    /// insert a labeled endnote
+    void insertLabeledEndNote(QString label);
     /// show the configuration dialog for notes
     void showNotesConfigureDialog();
-    /// disable insert notes' buttons when already in notes' body
-    void disableButtons(QTextCursor cursor);
+    /// enable/disable buttons if cursor in notes' body or not
+    void updateButtons();
 
 private:
     TableOfContentsConfigure *m_configure;
@@ -79,6 +83,27 @@ private:
         SimpleFootEndNotesWidget *m_sfenw;
         KoInlineNote *m_note;
     SimpleCitationBibliographyWidget *m_scbw;
+};
+
+class KAction;
+class QLineEdit;
+
+class LabeledNoteWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    LabeledNoteWidget(KAction *action);
+    KAction *m_action;
+    QLineEdit *m_lineEdit;
+
+signals:
+    void triggered(QString label);
+
+private slots:
+    void returnPressed();
+
+protected:
+    virtual void enterEvent(QEvent *event);
 };
 
 #endif // REFERENCESTOOL_H

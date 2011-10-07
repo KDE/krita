@@ -21,8 +21,8 @@
 #include "kis_debug.h"
 #include "kis_global.h"
 
+//#define SHARED_TILES_SANITY_CHECK
 
-//#define SANITY_CHECKS
 
 template<class T>
 KisTileHashTableTraits<T>::KisTileHashTableTraits(KisMementoManager *mm)
@@ -109,7 +109,7 @@ void KisTileHashTableTraits<T>::linkTile(TileTypeSP tile)
     qint32 idx = calculateHash(tile->col(), tile->row());
     TileTypeSP firstTile = m_hashTable[idx];
 
-#ifdef SANITY_CHECKS
+#ifdef SHARED_TILES_SANITY_CHECK
     Q_ASSERT_X(!tile->next(), "KisTileHashTableTraits<T>::linkTile",
                "A tile can't be shared by several hash tables, sorry.");
 #endif
@@ -137,19 +137,15 @@ KisTileHashTableTraits<T>::unlinkTile(qint32 col, qint32 row)
                 /* optimize here*/
                 m_hashTable[idx] = tile->next();
 
-#ifdef SANITY_CHECKS
+            /**
+             * The shared pointer may still be accessed by someone, so
+             * we need to disconnects the tile from memento manager
+             * explicitly
+             */
             tile->setNext(0);
-            TileTypeWSP checkTile = tile;
+            tile->notifyDead();
             tile = 0;
-            Q_ASSERT_X(!m_mementoManager || !checkTile.isValid(),
-                       "KisTileHashTableTraits::unlinkTile()",
-                       "sanity check failed: "
-                       "the tile is going to be unlinked from "
-                       "the hash table, while still being accessed "
-                       "from the outer world. It can (will) lead to wrong "
-                       "history registered by KisMementoManager. "
-                       "We'll better crash right now!");
-#endif
+
             m_numTiles--;
             return tile;
         }
@@ -266,13 +262,16 @@ void KisTileHashTableTraits<T>::clear()
         tile = m_hashTable[i];
 
         while (tile) {
-#ifdef SANITY_CHECKS
             TileTypeSP tmp = tile;
             tile = tile->next();
+
+            /**
+             * About disconnection of tiles see a comment in unlinkTile()
+             */
+
             tmp->setNext(0);
-#else
-            tile = tile->next();
-#endif
+            tmp->notifyDead();
+            tmp = 0;
 
             m_numTiles--;
         }

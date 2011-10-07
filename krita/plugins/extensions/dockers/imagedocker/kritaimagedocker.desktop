@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Image Docker
+Name[cs]=Dok obrázků
 Name[da]=Billed-dokker
 Name[nb]=Bildedokker
+Name[nds]=Bild-Andocker
 Name[pt]=Área de Imagens
 Name[pt_BR]=Acoplador de imagem
 Name[sv]=Bilddockningsfönster
@@ -9,6 +11,7 @@ Name[uk]=Панель швартування зображень
 Name[x-test]=xxImage Dockerxx
 Name[zh_TW]=影像嵌入器
 Comment=Docker for reference images
+Comment[cs]=Dok pro referenční obrázky
 Comment[da]=Dokker til referencebilleder
 Comment[nb]=Dokker for referansebilder
 Comment[pt]=Área das imagens de referência

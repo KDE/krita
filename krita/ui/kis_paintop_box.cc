@@ -40,6 +40,7 @@
 #include <KoResourceSelector.h>
 #include <KoResourceServerAdapter.h>
 #include <KoToolManager.h>
+#include <QTemporaryFile>
 
 #include <kis_paint_device.h>
 #include <kis_paintop_registry.h>
@@ -486,8 +487,17 @@ void KisPaintopBox::slotSaveActivePreset()
     QString name = m_presetsPopup->getPresetName();
     QFileInfo fileInfo(saveLocation + name + newPreset->defaultFileExtension());
 
-    if (fileInfo.exists())
+    QStringList blacklistFileNames = rServer->blackListedFiles();
+
+    if (fileInfo.exists() && blacklistFileNames.contains(fileInfo.filePath())) {
+        QTemporaryFile file(saveLocation + name + newPreset->defaultFileExtension());
+        if (file.open()) {
+            fileInfo.setFile(file.fileName());
+        }
+     }
+     else if (fileInfo.exists()) {
         rServer->removeResource(rServer->getResourceByName(name));
+    }
 
     newPreset->setImage(m_presetsPopup->cutOutOverlay());
     newPreset->setFilename(fileInfo.filePath());

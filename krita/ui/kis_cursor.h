@@ -37,6 +37,7 @@ public:
     static QCursor arrowCursor();         // standard arrow cursor
     static QCursor upArrowCursor();       // upwards arrow
     static QCursor crossCursor();         // crosshair
+    static QCursor roundCursor();         // small open circle
     static QCursor waitCursor();          // hourglass/watch
     static QCursor ibeamCursor();         // ibeam/text entry
     static QCursor sizeVerCursor();       // vertical resize

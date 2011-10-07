@@ -598,7 +598,7 @@ void KisTool::setupPainter(KisPainter* painter)
     painter->setGradient(currentGradient());
     painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
 
-    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) 
+    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data()))
         painter->setChannelFlags(l->channelLockFlags());
 }
 
@@ -683,6 +683,9 @@ void KisTool::resetCursorStyle()
         break;
     case CURSOR_STYLE_CROSSHAIR:
         useCursor(KisCursor::crossCursor());
+        break;
+    case CURSOR_STYLE_SMALL_ROUND:
+        useCursor(KisCursor::roundCursor());
         break;
     case CURSOR_STYLE_POINTER:
         useCursor(KisCursor::upArrowCursor());

@@ -55,7 +55,6 @@ KisPaintingInformationBuilder::startStroke(KoPointerEvent *event,
                                            int timeElapsed)
 {
     m_startPoint = event->point;
-    QPointF adjusted = adjustDocumentPoint(event->point);
     return createPaintingInformation(event, QPointF(), timeElapsed);
 
 }

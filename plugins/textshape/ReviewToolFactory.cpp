@@ -30,7 +30,7 @@
 ReviewToolFactory::ReviewToolFactory()
         : KoToolFactoryBase("ReviewToolFactory_ID")
 {
-    setToolTip(i18n("Review tool"));
+    setToolTip(i18n("Review"));
     setToolType(dynamicToolType());
     setIcon("tool-changetracking");
     setPriority(3);

@@ -90,7 +90,7 @@ bool KoDocumentResourceManager::boolResource(int key) const
 
 int KoDocumentResourceManager::intResource(int key) const
 {
-    return d->manager.boolResource(key);
+    return d->manager.intResource(key);
 }
 
 QString KoDocumentResourceManager::stringResource(int key) const

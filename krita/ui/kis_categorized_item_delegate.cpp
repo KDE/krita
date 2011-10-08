@@ -38,13 +38,13 @@ KisCategorizedItemDelegate::KisCategorizedItemDelegate(bool indicateError):
 void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     painter->resetTransform();
-    
+
     if(!index.data(IsHeaderRole).toBool()) {
         QStyleOptionViewItem sovi(option);
-        
+
         if(m_indicateError)
             sovi.decorationPosition = QStyleOptionViewItem::Right;
-        
+
         QStyledItemDelegate::paint(painter, sovi, index);
     }
     else {
@@ -52,9 +52,9 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
             painter->fillRect(option.rect, Qt::gray);
         else
             painter->fillRect(option.rect, Qt::lightGray);
-        
+
         painter->drawText(option.rect, index.data().toString(), QTextOption(Qt::AlignVCenter|Qt::AlignHCenter));
-        
+
         paintTriangle(
             painter,
             option.rect.x(),
@@ -63,20 +63,20 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
             !index.data(ExpandCategoryRole).toBool()
         );
     }
-    
+
     painter->resetTransform();
 }
 
 QSize KisCategorizedItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    //on first calling this calculates the mininmal height of the items
-    if(m_minimumItemHeight == 0) {
+    //on first calling this calculates the minimal height of the items
+    if (m_minimumItemHeight == 0) {
         for(int i=0; i<index.model()->rowCount(); i++) {
             QSize indexSize = QStyledItemDelegate::sizeHint(option, index.model()->index(i, 0));
             m_minimumItemHeight = qMax(m_minimumItemHeight, indexSize.height());
         }
     }
-    
+
     return QSize(QStyledItemDelegate::sizeHint(option, index).width(), m_minimumItemHeight);
 }
 
@@ -86,13 +86,13 @@ void KisCategorizedItemDelegate::paintTriangle(QPainter* painter, qint32 x, qint
     triangle.push_back(QPointF(-0.2,-0.2));
     triangle.push_back(QPointF( 0.2,-0.2));
     triangle.push_back(QPointF( 0.0, 0.2));
-    
+
     painter->translate(x + size/2, y + size/2);
     painter->scale(size, size);
-    
+
     if(rotate)
         painter->rotate(-90);
-    
+
     painter->setBrush(QBrush(Qt::black));
     painter->drawPolygon(triangle);
 }

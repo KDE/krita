@@ -94,7 +94,9 @@ void KoReportItemWeb::loadFinished(bool)
     if (m_rendering) {
         OROPicture * pic = new OROPicture();
         m_webPage->setViewportSize(m_size.toScene().toSize());
-            
+        m_webPage->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+        m_webPage->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
+        
         QPainter p(pic->picture());
         
         m_webPage->mainFrame()->render(&p);

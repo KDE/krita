@@ -26,14 +26,6 @@
 
 struct KisQueuesProgressUpdater::Private
 {
-    Private()
-        : queuedSizeMetric(0)
-        , trackingStarted(false)
-        , timerFiredOnce(false)
-        , progressProxy(0)
-    {
-    }
-
     QMutex mutex;
     QTimer timer;
 
@@ -73,35 +65,35 @@ void KisQueuesProgressUpdater::notifyJobDone(int sizeMetric)
 
 void KisQueuesProgressUpdater::updateProgress(int queueSizeMetric, const QString &jobName)
 {
-//    QMutexLocker locker(&m_d->mutex);
-//    m_d->queuedSizeMetric = queueSizeMetric;
-//    m_d->jobName = jobName;
+    QMutexLocker locker(&m_d->mutex);
+    m_d->queuedSizeMetric = queueSizeMetric;
+    m_d->jobName = jobName;
 
-//    if(m_d->queuedSizeMetric && !m_d->timer.isActive()) {
-//        m_d->trackingStarted = true;
-//        m_d->timerFiredOnce = false;
-//        m_d->timer.start();
-//    }
-//    else if(!m_d->queuedSizeMetric && !m_d->timerFiredOnce) {
-//            m_d->trackingStarted = false;
-//            m_d->timer.stop();
-//            m_d->doneSizeMetric = 0;
-//    }
+    if(m_d->queuedSizeMetric && !m_d->timer.isActive()) {
+        m_d->trackingStarted = true;
+        m_d->timerFiredOnce = false;
+        m_d->timer.start();
+    }
+    else if(!m_d->queuedSizeMetric && !m_d->timerFiredOnce) {
+            m_d->trackingStarted = false;
+            m_d->timer.stop();
+            m_d->doneSizeMetric = 0;
+    }
 }
 
 void KisQueuesProgressUpdater::updateProxy()
 {
-//    QMutexLocker locker(&m_d->mutex);
+    QMutexLocker locker(&m_d->mutex);
 
-//    if(!m_d->trackingStarted) return;
-//    m_d->timerFiredOnce = true;
+    if(!m_d->trackingStarted) return;
+    m_d->timerFiredOnce = true;
 
-//    m_d->progressProxy->setRange(0, m_d->doneSizeMetric + m_d->queuedSizeMetric);
-//    m_d->progressProxy->setValue(m_d->doneSizeMetric);
-//    m_d->progressProxy->setFormat(m_d->jobName);
+    m_d->progressProxy->setRange(0, m_d->doneSizeMetric + m_d->queuedSizeMetric);
+    m_d->progressProxy->setValue(m_d->doneSizeMetric);
+    m_d->progressProxy->setFormat(m_d->jobName);
 
-//    if(!m_d->queuedSizeMetric) {
-//        m_d->timer.stop();
-//        m_d->doneSizeMetric = 0;
-//    }
+    if(!m_d->queuedSizeMetric) {
+        m_d->timer.stop();
+        m_d->doneSizeMetric = 0;
+    }
 }

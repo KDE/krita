@@ -89,7 +89,10 @@ void ReferencesTool::createActions()
     KAction *action = new KAction(i18n("Insert"), this);
     addAction("insert_tableofcontents", action);
     action->setToolTip(i18n("Insert a Table of Contents into the document."));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertTableOfContents()));
+
+    action = new KAction(i18n("Insert Custom"), this);
+    addAction("insert_configure_tableofcontents", action);
+    action->setToolTip(i18n("Insert a custom Table of Contents into the document."));
 
     action = new KAction(i18n("Configure..."), this);
     addAction("format_tableofcontents", action);
@@ -176,11 +179,6 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
     //widgets.insert(i18n("Captions"), scapw);
     connect(textEditor(), SIGNAL(cursorPositionChanged()), this, SLOT(updateButtons()));
     return widgets;
-}
-
-void ReferencesTool::insertTableOfContents()
-{
-    textEditor()->insertTableOfContents();
 }
 
 void ReferencesTool::insertCitation()
@@ -286,6 +284,25 @@ void ReferencesTool::updateButtons()
     } else {
         m_sfenw->widget.addFootnote->setEnabled(true);
         m_sfenw->widget.addEndnote->setEnabled(true);
+    }
+}
+
+KoTextEditor *ReferencesTool::editor()
+{
+    return textEditor();
+}
+
+void ReferencesTool::insertCustomToC(KoTableOfContentsGeneratorInfo *defaultTemplate)
+{
+    m_configure = new TableOfContentsConfigure(textEditor(), defaultTemplate, m_stocw);
+    connect(m_configure, SIGNAL(accepted()), this, SLOT(customToCGenerated()));
+    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+}
+
+void ReferencesTool::customToCGenerated()
+{
+    if (m_configure) {
+        textEditor()->insertTableOfContents(m_configure->currentToCData());
     }
 }
 

@@ -47,7 +47,9 @@ class TableOfContentsConfigure : public QDialog
 
 public:
     explicit TableOfContentsConfigure(KoTextEditor *editor, QTextBlock block, QWidget *parent = 0);
+    TableOfContentsConfigure(KoTextEditor *editor, KoTableOfContentsGeneratorInfo *info, QWidget *parent = 0);
     ~TableOfContentsConfigure();
+    KoTableOfContentsGeneratorInfo *currentToCData();
 
 public slots:
     void setDisplay();
@@ -71,6 +73,8 @@ private:
     QTextDocument *m_document;
     TableOfContentsEntryModel *m_tocEntryStyleModel;
     TableOfContentsEntryDelegate *m_tocEntryConfigureDelegate;
+
+    void init();
 };
 
 Q_DECLARE_METATYPE(QTextBlock)

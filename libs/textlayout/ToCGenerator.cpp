@@ -124,6 +124,12 @@ bool ToCGenerator::generate()
 
     if (!m_ToCInfo->m_indexTitleTemplate.text.isEmpty()) {
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_ToCInfo->m_indexTitleTemplate.styleId);
+
+        // titleStyle == 0? then it might be in unused styles
+        if (!titleStyle) {
+            titleStyle = styleManager->unusedStyle(m_ToCInfo->m_indexTitleTemplate.styleId); // this should return true only for ToC template preview
+        }
+
         if (!titleStyle) {
             titleStyle = styleManager->defaultTableOfcontentsTitleStyle();
         }

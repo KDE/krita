@@ -19,22 +19,32 @@
 #include "SimpleTableOfContentsWidget.h"
 #include "ReferencesTool.h"
 #include "TableOfContentsConfigure.h"
+#include "TableOfContentsTemplate.h"
+#include "TableOfContentsPreview.h"
+
+#include <KoTableOfContentsGeneratorInfo.h>
 
 #include <KAction>
 #include <KDebug>
 
 #include <QWidget>
 #include <QMenu>
+#include <QSignalMapper>
 
 SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, QWidget *parent)
         : QWidget(parent),
-        m_blockSignals(false)
+        m_blockSignals(false),
+        m_referenceTool(tool),
+        m_signalMapper(0)
 {
     widget.setupUi(this);
+    Q_ASSERT(tool);
     widget.addToC->setDefaultAction(tool->action("insert_tableofcontents"));
     widget.configureToC->setDefaultAction(tool->action("format_tableofcontents"));
-
+    widget.addToC->setNumColumns(1);
     connect(widget.addToC, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.addToC, SIGNAL(aboutToShowMenu()), this, SLOT(prepareTemplateMenu()));
+    connect(widget.addToC, SIGNAL(itemTriggered(int)), this, SLOT(applyTemplate(int)));
     connect(widget.configureToC, SIGNAL(clicked(bool)), this, SIGNAL(showConfgureOptions()));
 }
 
@@ -60,6 +70,66 @@ QMenu *SimpleTableOfContentsWidget::ToCConfigureMenu()
 void SimpleTableOfContentsWidget::showMenu()
 {
     widget.configureToC->showMenu();
+}
+
+void SimpleTableOfContentsWidget::prepareTemplateMenu()
+{
+    m_previewGenerator.clear();
+    if (m_signalMapper) {
+        delete m_signalMapper;
+        m_signalMapper = 0;
+    }
+    qDeleteAll(m_templateList.begin(), m_templateList.end());
+    m_templateList.clear();
+
+    m_signalMapper = new QSignalMapper();
+
+    TableOfContentsTemplate *templateGenerator = new TableOfContentsTemplate(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
+    m_templateList = templateGenerator->templates();
+
+    connect(m_signalMapper, SIGNAL(mapped(int)), this, SLOT(pixmapReady(int)));
+
+    int index = 0;
+    foreach (KoTableOfContentsGeneratorInfo *info, m_templateList) {
+        TableOfContentsPreview *preview = new TableOfContentsPreview();
+        preview->setStyleManager(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
+        preview->setPreviewSize(QSize(200,120));
+        preview->updatePreview(info);
+        connect(preview, SIGNAL(pixmapGenerated()), m_signalMapper, SLOT(map()));
+        m_signalMapper->setMapping(preview, index);
+        m_previewGenerator.append(preview);
+        ++index;
+
+        //put dummy pixmaps until the actual pixmap previews are generated and added in pixmapReady()
+        if (! widget.addToC->hasItemId(index)) {
+            QPixmap pmm(QSize(200,120));
+            pmm.fill(Qt::white);
+            widget.addToC->addItem(pmm, index);
+        }        
+    }
+    if (widget.addToC->isFirstTimeMenuShown()) {
+        widget.addToC->addSeparator();
+        widget.addToC->addAction(m_referenceTool->action("insert_configure_tableofcontents"));
+        connect(m_referenceTool->action("insert_configure_tableofcontents"), SIGNAL(triggered()), this, SLOT(insertCustomToC()));
+    }
+}
+
+void SimpleTableOfContentsWidget::pixmapReady(int templateId)
+{
+    // +1 to the templateId is because formattingButton does not allow id = 0
+    widget.addToC->addItem(m_previewGenerator.at(templateId)->previewPixmap(), templateId + 1);
+    disconnect(m_previewGenerator.at(templateId), SIGNAL(pixmapGenerated()), m_signalMapper, SLOT(map()));
+    m_previewGenerator.at(templateId)->deleteLater();
+}
+
+void SimpleTableOfContentsWidget::applyTemplate(int templateId)
+{
+    m_referenceTool->editor()->insertTableOfContents(m_templateList.at(templateId - 1));
+}
+
+void SimpleTableOfContentsWidget::insertCustomToC()
+{
+    m_referenceTool->insertCustomToC(m_templateList.at(0));
 }
 
 #include <SimpleTableOfContentsWidget.moc>

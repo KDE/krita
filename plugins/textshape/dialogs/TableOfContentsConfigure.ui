@@ -112,8 +112,6 @@
         <widget class="QTableView" name="configureToCEntryStyle"/>
        </item>
       </layout>
-      <zorder>buttonBox</zorder>
-      <zorder>configureToCEntryStyle</zorder>
      </widget>
     </widget>
    </item>

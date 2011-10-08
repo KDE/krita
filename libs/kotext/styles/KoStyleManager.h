@@ -359,6 +359,14 @@ public:
     /// returns the default style for the ToC title
     KoParagraphStyle *defaultTableOfcontentsTitleStyle();
 
+    /// adds a paragraph style to unused paragraph style list
+    void addUnusedStyle(KoParagraphStyle *style);
+
+    /// moves a style from the unused list to the used list i.e paragStyles list
+    void moveToUsedStyles(int id);
+
+    KoParagraphStyle *unusedStyle(int id);
+
 signals:
     void styleAdded(KoParagraphStyle*);
     void styleAdded(KoCharacterStyle*);

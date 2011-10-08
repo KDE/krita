@@ -21,13 +21,18 @@
 
 #include <ui_SimpleTableOfContentsWidget.h>
 #include <KoListStyle.h>
+#include "FormattingButton.h"
 
 #include <QWidget>
 #include <QTextBlock>
+#include <QList>
 
 class ReferencesTool;
 class KoStyleManager;
 class QMenu;
+class KoTableOfContentsGeneratorInfo;
+class TableOfContentsPreview;
+class QSignalMapper;
 
 class SimpleTableOfContentsWidget : public QWidget
 {
@@ -40,16 +45,27 @@ public:
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
+    void prepareTemplateMenu();
+    void pixmapReady(int templateId);
 
 signals:
     void doneWithFocus();
     void showConfgureOptions();
+
+private slots:
+    void applyTemplate(int templateId);
+    void insertCustomToC();
     
 private:
     Ui::SimpleTableOfContentsWidget widget;
     KoStyleManager *m_styleManager;
     bool m_blockSignals;
     QTextBlock m_currentBlock;
+    QList<KoTableOfContentsGeneratorInfo *> m_templateList;
+    //each template in the template list will have have a previewGenerator that will be deleted after preview is generated
+    QList<TableOfContentsPreview *> m_previewGenerator;
+    ReferencesTool *m_referenceTool;
+    QSignalMapper *m_signalMapper;
 };
 
 #endif

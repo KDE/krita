@@ -23,6 +23,7 @@
 #include <KoInlineTextObjectManager.h>
 
 #include <QFrame>
+#include <QPixmap>
 
 class TextShape;
 class KoTableOfContentsGeneratorInfo;
@@ -35,12 +36,15 @@ public:
     explicit TableOfContentsPreview(QWidget *parent = 0);
     ~TableOfContentsPreview();
     void setStyleManager(KoStyleManager *styleManager);
+    /// sets the size of the generated preview pixmap if not set then it takes the widget's size
+    void setPreviewSize(const QSize &size);
+    QPixmap previewPixmap();
 
 protected:
     void paintEvent(QPaintEvent *event);
 
 signals:
-
+    void pixmapGenerated();
 public slots:
     void updatePreview(KoTableOfContentsGeneratorInfo *info);
 
@@ -53,6 +57,7 @@ private:
     KoZoomHandler m_zoomHandler;
     KoStyleManager *m_styleManager;
     KoInlineTextObjectManager m_itom;
+    QSize m_previewPixSize;
 
     void deleteTextShape();
 

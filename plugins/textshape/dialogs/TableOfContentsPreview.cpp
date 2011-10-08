@@ -33,13 +33,19 @@ TableOfContentsPreview::TableOfContentsPreview(QWidget *parent) :
     QFrame(parent),
     m_styleManager(0),
     m_pm(0),
-    m_textShape(0)
+    m_textShape(0),
+    m_previewPixSize(QSize(0,0))
 {
 }
 
 TableOfContentsPreview::~TableOfContentsPreview()
 {
     deleteTextShape();
+
+    if (m_pm) {
+        delete m_pm;
+        m_pm = 0;
+    }
 }
 
 void TableOfContentsPreview::setStyleManager(KoStyleManager *styleManager)
@@ -51,20 +57,19 @@ void TableOfContentsPreview::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
-    m_zoomHandler.setZoom(0.9);
-    m_zoomHandler.setDpi(72, 72);
-
     QPainter *p = new QPainter(this);
     p->save();
     p->translate(5.5, 1.5);
     p->setRenderHint(QPainter::Antialiasing);
     QRect rectang = rect();
     rectang.adjust(-4,-4,-4,-4);
-    p->fillRect(rectang, QBrush(QColor(Qt::white)));
-    if (m_textShape) {
-        m_textShape->setSize(size());
-        m_textShape->paintComponent(*p, m_zoomHandler);
+
+    if (m_pm) {
+        p->drawPixmap(rectang, *m_pm, m_pm->rect());
+    } else {
+        p->fillRect(rectang, QBrush(QColor(Qt::white)));
     }
+
     p->restore();
 
     delete p;
@@ -85,7 +90,11 @@ void TableOfContentsPreview::updatePreview(KoTableOfContentsGeneratorInfo *newTo
     deleteTextShape();
 
     m_textShape = new TextShape(&m_itom);
-    m_textShape->setSize(size());
+    if (m_previewPixSize.isEmpty()) {
+        m_textShape->setSize(size());
+    } else {
+        m_textShape->setSize(m_previewPixSize);
+    }
     QTextCursor cursor(m_textShape->textShapeData()->document());
 
     QTextCharFormat textCharFormat = cursor.blockCharFormat();
@@ -131,7 +140,36 @@ void TableOfContentsPreview::updatePreview(KoTableOfContentsGeneratorInfo *newTo
 
 void TableOfContentsPreview::finishedPreviewLayout()
 {
+    if (m_pm) {
+        delete m_pm;
+        m_pm = 0;
+    }
+
+    if (m_previewPixSize.isEmpty()) {
+        m_pm = new QPixmap(size());
+    } else {
+        m_pm = new QPixmap(m_previewPixSize);
+    }
+    m_pm->fill(Qt::white);
+    m_zoomHandler.setZoom(0.9);
+    m_zoomHandler.setDpi(72, 72);
+    QPainter p(m_pm);
+
+    if (m_textShape) {
+        if (m_previewPixSize.isEmpty()) {
+            m_textShape->setSize(size());
+        } else {
+            m_textShape->setSize(m_previewPixSize);
+        }
+        m_textShape->paintComponent(p, m_zoomHandler);
+    }
+    emit pixmapGenerated();
     update();
+}
+
+QPixmap TableOfContentsPreview::previewPixmap()
+{
+    return QPixmap(*m_pm);
 }
 
 void TableOfContentsPreview::deleteTextShape()
@@ -145,4 +183,9 @@ void TableOfContentsPreview::deleteTextShape()
         delete m_textShape;
         m_textShape = 0;
     }
+}
+
+void TableOfContentsPreview::setPreviewSize(const QSize &size)
+{
+    m_previewPixSize = size;
 }

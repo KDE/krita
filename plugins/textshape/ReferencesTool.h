@@ -28,6 +28,7 @@ class SimpleTableOfContentsWidget;
 class SimpleFootEndNotesWidget;
 class SimpleCitationBibliographyWidget;
 class KoInlineNote;
+class KoTextEditor;
 class QPainter;
 
 /// This tool is the ui for inserting Table of Contents, Citations/bibliography, footnotes, endnotes, index, table of illustrations etc
@@ -45,13 +46,15 @@ public:
 
     virtual void createActions();
 
+    KoTextEditor *editor();
+    /// inserts a ToC and open a configure dialog for customization
+    void insertCustomToC(KoTableOfContentsGeneratorInfo *defaultTemplate);
+
 protected:
     /// reimplemented from superclass
     virtual QList<QWidget *> createOptionWidgets();
 
 private slots:
-    /// insert a table of contents
-    void insertTableOfContents();
     /// insert a citation
     void insertCitation();
     /// insert a bibliography
@@ -76,6 +79,8 @@ private slots:
     void showNotesConfigureDialog();
     /// enable/disable buttons if cursor in notes' body or not
     void updateButtons();
+
+    void customToCGenerated();
 
 private:
     TableOfContentsConfigure *m_configure;

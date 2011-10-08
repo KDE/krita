@@ -378,7 +378,7 @@ public slots:
     /**
      * Insert a table of Contents at the current cursor position.
      */
-    void insertTableOfContents();
+    void insertTableOfContents(KoTableOfContentsGeneratorInfo *info);
 
     /**
      * Configures various values of a ToC to the one passed in info

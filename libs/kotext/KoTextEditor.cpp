@@ -1608,7 +1608,7 @@ KoInlineNote *KoTextEditor::insertEndNote()
     return note;
 }
 
-void KoTextEditor::insertTableOfContents()
+void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
 {
     if (isEditProtected()) {
         return;
@@ -1617,10 +1617,10 @@ void KoTextEditor::insertTableOfContents()
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table Of Contents"));
 
     QTextBlockFormat tocFormat;
-    KoTableOfContentsGeneratorInfo *info = new KoTableOfContentsGeneratorInfo();
+    KoTableOfContentsGeneratorInfo *newToCInfo = info->clone();
     QTextDocument *tocDocument = new QTextDocument();
-    tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
-    tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
+    tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo *>(newToCInfo) );
+    tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument));
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (changeTracker && changeTracker->recordChanges()) {

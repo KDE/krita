@@ -20,8 +20,8 @@
 #include "../kis_categorized_list_model.h"
 #include <QMouseEvent>
 
-KisCategorizedListView::KisCategorizedListView(QWidget* parent):
-    QListView(parent)
+KisCategorizedListView::KisCategorizedListView(bool useCheckBoxHack, QWidget* parent):
+    QListView(parent), m_useCheckBoxHack(useCheckBoxHack)
 {
     connect(this, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotIndexChanged(const QModelIndex&)));
 }
@@ -65,17 +65,21 @@ void KisCategorizedListView::rowsInserted(const QModelIndex& parent, int start, 
 
 void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
 {
-    QModelIndex index = QListView::indexAt(event->pos());
+    if (m_useCheckBoxHack) {
+        QModelIndex index = QListView::indexAt(event->pos());
 
-    if(index.isValid() && (event->pos().x() < 25) && (model()->flags(index) & Qt::ItemIsUserCheckable)) {
-        int role = model()->data(index, Qt::CheckStateRole).toInt();
-
-        if(role == Qt::Checked) { model()->setData(index, Qt::Unchecked, Qt::CheckStateRole); }
-        else                    { model()->setData(index, Qt::Checked  , Qt::CheckStateRole); }
-
-        emit sigEntryChecked(index);
+        if (index.isValid() && (event->pos().x() < 25) && (model()->flags(index) & Qt::ItemIsUserCheckable)) {
+            int role = model()->data(index, Qt::CheckStateRole).toInt();
+            
+            if (role == Qt::Checked) { model()->setData(index, Qt::Unchecked, Qt::CheckStateRole); }
+            else                     { model()->setData(index, Qt::Checked  , Qt::CheckStateRole); }
+            
+            emit sigEntryChecked(index);
+            return;
+        }
     }
-    else QListView::mousePressEvent(event);
+    
+    QListView::mousePressEvent(event);
 }
 
 void KisCategorizedListView::mouseReleaseEvent(QMouseEvent* event)

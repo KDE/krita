@@ -29,7 +29,7 @@ class KRITAUI_EXPORT KisCategorizedListView: public QListView
 {
     Q_OBJECT
 public:
-    KisCategorizedListView(QWidget* parent=0);
+    KisCategorizedListView(bool useCheckBoxHack=false, QWidget* parent=0);
     virtual void setModel(QAbstractItemModel* model);
     void updateRows(int begin, int end);
 
@@ -45,7 +45,7 @@ protected slots:
     virtual void mouseReleaseEvent(QMouseEvent* event);
 
 private:
-    bool m_EntryWasChecked;
+    bool m_useCheckBoxHack;
 };
 
 

@@ -62,9 +62,6 @@ public:
                        QVariant data, KRScriptHandler *script);
     virtual QString itemDataSource() const;
 
-public slots:
-//    void setUrl(const QString &url);
-
 private slots:
     void loadFinished(bool);
 

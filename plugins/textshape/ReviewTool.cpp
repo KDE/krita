@@ -55,7 +55,6 @@
 #include <QLabel>
 
 ReviewTool::ReviewTool(KoCanvasBase* canvas): KoToolBase(canvas),
-    m_disableShowChangesOnExit(false),
     m_textEditor(0),
     m_textShapeData(0),
     m_canvas(canvas),
@@ -267,12 +266,6 @@ void ReviewTool::setShapeData(KoTextShapeData *data)
 //            disconnect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
     }
 */
-    if (!data) {
-        if (m_disableShowChangesOnExit) {
-            ShowChangesCommand *command = new ShowChangesCommand(false, m_textShapeData->document(), m_canvas);
-            m_textEditor->addCommand(command);
-        }
-    }
     m_textShapeData = data;
     if (m_textShapeData == 0)
         return;
@@ -290,11 +283,7 @@ void ReviewTool::setShapeData(KoTextShapeData *data)
         }
     }
     m_textEditor->updateDefaultTextDirection(m_textShapeData->pageDirection());
-    if (!KoTextDocument(m_textShapeData->document()).changeTracker()->displayChanges()) {
-        m_disableShowChangesOnExit = true;
-        ShowChangesCommand *command = new ShowChangesCommand(true, m_textShapeData->document(), m_canvas);
-        m_textEditor->addCommand(command);
-    }
+
     if (m_model) {
         disconnect(m_changesTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(selectedChangeChanged(QModelIndex,QModelIndex)));
         delete m_model;

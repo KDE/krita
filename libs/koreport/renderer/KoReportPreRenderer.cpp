@@ -443,6 +443,9 @@ void KoReportPreRendererPrivate::initEngine()
 
 void KoReportPreRendererPrivate::asyncItemsFinished(){
     kDebug() << "Finished rendering async items";
+    
+    delete asyncManager;
+    
 }
 
 

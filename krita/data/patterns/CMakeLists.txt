@@ -1,68 +1,40 @@
-
-
-
-
-
 ########### install files ###############
 
 install(FILES
-    3dgreen.pat 
-    Craters.pat 
-    Moonfoot.pat 
-    Stripes1px.pat 
-    Stripes2px.pat 
-    amethyst.pat 
-    bark.pat 
-    blue.pat 
-    bluegrid.pat 
-    bluesquares.pat 
-    blueweb.pat 
-    brick.pat 
-    burlap.pat 
-    burlwood.pat 
-    choc_swirl.pat 
-    corkboard.pat 
-    cracked.pat 
-    crinklepaper.pat 
-    electric.pat 
-    fibers.pat 
-    granite1.pat 
-    ground1.pat 
-    ice.pat 
-    java.pat 
-    leather.pat 
-    leaves.pat 
-    leopard.pat 
-    lightning.pat 
-    marble1.pat 
-    marble2.pat 
-    marble3.pat 
-    nops.pat 
-    paper.pat 
-    parque1.pat 
-    parque2.pat 
-    parque3.pat 
-    pastel.pat 
-    pine.pat 
-    pink_marble.pat 
-    pool.pat 
-    qube1.pat 
-    rain.pat 
-    recessed.pat 
-    redcube.pat 
-    rock.pat 
-    sky.pat 
-    slate.pat 
-    sm_squares.pat 
-    starfield.pat 
-    stone33.pat 
-    terra.pat 
-    walnut.pat 
-    warning.pat 
-    wood1.pat 
-    wood2.pat 
-    wood3.pat 
-    wood4.pat 
-    wood5.pat
+Canvas_01.pat
+Canvas_02.pat
+Canvas_03.pat
+Canvas_04.pat
+Canvas_covered.pat
+Circuit_01.pat
+CMakeLists.txt
+fractal_pattern.pat
+Galvplat_01.pat
+generic_paper1.pat
+generic_paper2.pat
+generic_paper3.pat
+generic_paper4.pat
+granite1b.pat
+Granite_1c.pat
+Hexacol__1_5.pat
+hexacolBW__2_5.pat
+hexacolBW__2b.pat
+hexacolBW__2.pat
+hexacolBW__3.pat
+HR_Canvas_01.pat
+HR_Canvas_02.pat
+HR_Cork.pat
+HR_Deco_Paper.pat
+HR_PastelPaper_01.pat
+HR_PastelPaper_02.pat
+HR_RoughPaper.pat
+HR_SketchPaper_01.pat
+HR_SketchPaper_02.pat
+HR_Wall_Paper.pat
+HR_Water_Color.pat
+metal_01.pat
+Rock_01.pat
+solid_noise.pat
+walnut2.pat
     DESTINATION ${DATA_INSTALL_DIR}/krita/patterns)
 

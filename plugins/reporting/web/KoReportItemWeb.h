@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright Shreya Pandit <shreya@shreyapandit.com>
-
+   Copyright 2011 Adam Pigg <adam@piggz.co.uk>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -24,14 +25,10 @@
 #include "krpos.h"
 #include "krsize.h"
 #include "KoReportData.h"
+
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
-
-#include <KoGlobal.h>
 #include <kdebug.h>
-#include <klocalizedstring.h>
-#include <kglobalsettings.h>
-
 #include <QRect>
 #include <QGraphicsScene>
 #include <QtGui/QWidget>
@@ -59,34 +56,31 @@ public:
     KoReportItemWeb();
     KoReportItemWeb(QDomNode &element);
     virtual ~KoReportItemWeb();
+    
     virtual QString typeName() const;
-
     virtual int render(OROPage *page, OROSection *section,  QPointF offset,
                        QVariant data, KRScriptHandler *script);
-   
     virtual QString itemDataSource() const;
 
 public slots:
-    void setUrl(const QString &url);
-    //   void rendering();
+//    void setUrl(const QString &url);
+
 private slots:
-    //void update();
     void loadFinished(bool);
+
 private:
     void init();
-    bool m_rendering;
     
+    bool m_rendering;
     OROPage *m_targetPage;
     OROSection *m_targetSection;
     QPointF m_targetOffset;
 
 protected:
-    KoProperty::Property *url;
-    KoProperty::Property *m_controlSource;
-    QUrl m_url;
-    QWebPage *m_webPage;
     virtual void createProperties();
-    QImage *m_webImage;
+    
+    KoProperty::Property *m_controlSource;
+    QWebPage *m_webPage;
 
     friend class Scripting::Web;
 };

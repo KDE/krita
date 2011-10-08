@@ -34,7 +34,7 @@ enum
     IsHeaderRole       = Qt::UserRole + 1,
     ExpandCategoryRole = Qt::UserRole + 2,
     CategoryBeginRole  = Qt::UserRole + 3,
-    CategoryEndRole    = Qt::UserRole + 4,
+    CategoryEndRole    = Qt::UserRole + 4
 };
 
 template<class TCategory, class TEntry>

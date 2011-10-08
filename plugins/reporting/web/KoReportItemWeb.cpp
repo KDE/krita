@@ -130,8 +130,13 @@ int KoReportItemWeb::render(OROPage *page, OROSection *section,  QPointF offset,
     m_targetSection = section;
     m_targetOffset = offset;
     
-    m_webPage->mainFrame()->load(QUrl(data.toString()));
-
+    QUrl url = QUrl::fromUserInput(data.toString());
+    if (url.isValid()) {
+        m_webPage->mainFrame()->load(url);
+    } else {
+        m_webPage->mainFrame()->setHtml(data.toString());
+    }
+    
     return 0; //Item doesnt stretch the section height
 }
 

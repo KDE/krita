@@ -27,6 +27,7 @@
 
 #include <renderobjects.h>
 #include <QPainter>
+#include <QTimer>
 
 KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
         : QWidget(parent)
@@ -64,6 +65,10 @@ KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
     
     connect(m_reportDocument, SIGNAL(updated(int)), this, SLOT(pageUpdated(int)));
 
+    m_renderTimer = new QTimer();
+    m_renderTimer->setSingleShot(true);
+    connect(m_renderTimer, SIGNAL(timeout()), this, SLOT(renderCurrentPage()));
+    
     renderPage(1);
 }
 
@@ -71,6 +76,7 @@ KoReportPage::~KoReportPage()
 {
     delete m_renderer;
     delete m_pixmap;
+    delete m_renderTimer;
 }
 
 void KoReportPage::paintEvent(QPaintEvent*)
@@ -89,16 +95,23 @@ void KoReportPage::renderPage(int page)
         cxt.painter = &qp;
         m_renderer->render(cxt, m_reportDocument, m_page);
     }
-    repaint();
+    update();
 }
 
 void KoReportPage::pageUpdated(int pageNo)
 {
-    //Refresh this page if any of the surrounding pages change
-    //!TODO A small hack becuase not every update seems to work
-    if (m_page - 1 <= pageNo  <= m_page + 1) {
-        renderPage(m_page + 1);
+    kDebug() << pageNo << m_page;
+    //Refresh this page if it changes
+    if (pageNo == m_page) {
+        kDebug() << "Current page updated";
+        m_renderTimer->start(100);
     }
 }
+
+void KoReportPage::renderCurrentPage()
+{
+    renderPage(m_page + 1);
+}
+
 
 #include "KoReportPage.moc"

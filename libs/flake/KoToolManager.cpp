@@ -380,11 +380,12 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
         }
     }
 
+    emit q->changedTool(canvasData->canvas, uniqueToolIds.value(canvasData->activeTool));
+
     KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
     if (canvasControllerWidget) {
         canvasControllerWidget->setToolOptionWidgets(optionWidgetList);
     }
-    emit q->changedTool(canvasData->canvas, uniqueToolIds.value(canvasData->activeTool));
 }
 
 void KoToolManager::Private::toolActivated(ToolHelper *tool)

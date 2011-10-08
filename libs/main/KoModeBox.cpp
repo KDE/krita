@@ -2,6 +2,7 @@
  * Copyright (c) 2005-2009 Thomas Zander <zander@kde.org>
  * Copyright (c) 2009 Peter Simonsson <peter.simonsson@gmail.com>
  * Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -43,14 +44,16 @@ class KoModeBox::Private
 public:
     Private(KoCanvasController *c)
         : canvas(c->canvas())
+        , activeId(-1)
     {
     }
 
     KoCanvasBase *canvas;
-    QList<KoToolButton> buttons;
-    QList<KoToolButton> addedButtons;
-    QList<QWidget *> addedWidgets;
+    QList<KoToolButton> buttons; // buttons maintained by toolmanager
+    QList<KoToolButton> addedButtons; //buttons in the order added to QToolBox
+    QMap<int, QWidget *> addedWidgets;
     QSet<QWidget *> currentAuxWidgets;
+    int activeId;
 };
 
 static bool compareButton(const KoToolButton &b1, const KoToolButton &b2)
@@ -117,19 +120,41 @@ void KoModeBox::addButton(const KoToolButton &button)
 
 void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
 {
-    if (canvas->canvas() != d->canvas) {
+    if (canvas->canvas() == d->canvas) {
+        d->activeId = id;
+        blockSignals(true);
+        int i = 0;
+        foreach (const KoToolButton button, d->addedButtons) {
+            if (button.buttonGroupId == d->activeId) {
+                setCurrentIndex(i);
+                break;
+            }
+            ++i;
+        }
+        blockSignals(false);
         return;
     }
 }
 
 void KoModeBox::addItem(const KoToolButton button)
 {
-    QWidget *widget = new QWidget();
+    QWidget *oldwidget = d->addedWidgets[button.buttonGroupId];
+    QWidget *widget;
+
+    // We need to create a new widget in all cases as QToolBox seeems to crash if we reuse
+    // a widget (even though the item had been removed)
+    QLayout *layout;
+    if (!oldwidget) {
+        layout = new QGridLayout();
+    } else {
+        layout = oldwidget->layout();
+    }
+    widget = new QWidget();
+    widget->setLayout(layout);
+    d->addedWidgets[button.buttonGroupId] = widget;
+
     QToolBox::addItem(widget, button.button->icon(), button.button->toolTip());
     d->addedButtons.append(button);
-    d->addedWidgets.append(widget);
-    QGridLayout *layout = new QGridLayout();
-    widget->setLayout(layout);
 }
 
 void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<QString> &codes)
@@ -145,11 +170,14 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
     }
 
     d->addedButtons.clear();
-    d->addedWidgets.clear();
 
+    int newIndex = -1;
     foreach (const KoToolButton button, d->buttons) {
         QString code = button.visibilityCode;
 
+        if (button.buttonGroupId == d->activeId) {
+            newIndex = d->addedButtons.length();
+        }
         if (button.section.contains("words")) {
             addItem(button);
             continue;
@@ -172,21 +200,20 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
             addItem(button);
         }
     }
+    if (newIndex != -1) {
+        setCurrentIndex(newIndex);
+    }
     blockSignals(false);
 }
 
 void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
 {
-    /*
-    foreach(QWidget* widget, d->addedWidgets[currentIndex()].childWidgets()) {
-        widget->setParent(0);
-    }
-*/
+    if (! d->addedWidgets.contains(d->activeId)) return;
     qDeleteAll(d->currentAuxWidgets);
     d->currentAuxWidgets.clear();
 
     int cnt = 0;
-    QGridLayout *layout = (QGridLayout *)d->addedWidgets[currentIndex()]->layout();
+    QGridLayout *layout = (QGridLayout *)d->addedWidgets[d->activeId]->layout();
     layout->setColumnMinimumWidth(0, 16);
     layout->setColumnStretch(1, 1);
     layout->setColumnStretch(2, 2);
@@ -242,6 +269,7 @@ void KoModeBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas
 
 void KoModeBox::toolSelected(int index)
 {
-    if (index != -1)
+    if (index != -1) {
         d->addedButtons[index].button->click();
+    }
 }

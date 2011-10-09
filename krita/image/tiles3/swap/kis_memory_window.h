@@ -21,7 +21,7 @@
 
 #include "krita_export.h"
 
-#include <QTemporaryFile>
+#include <KTemporaryFile>
 #include "kis_chunk_allocator.h"
 
 
@@ -30,7 +30,11 @@
 class KRITAIMAGE_EXPORT KisMemoryWindow
 {
 public:
-    KisMemoryWindow(quint64 writeWindowSize = DEFAULT_WINDOW_SIZE);
+    /**
+     * @param swapDir. A non-default directory for swap. If empty, the default directory will
+     *     be used.
+     */
+    KisMemoryWindow(const QString &swapDir, quint64 writeWindowSize = DEFAULT_WINDOW_SIZE);
     ~KisMemoryWindow();
 
     inline quint8* getReadChunkPtr(KisChunk readChunk) {
@@ -49,7 +53,7 @@ private:
                       KisChunkData *windowChunk, quint64 windowSize);
 
 private:
-    QTemporaryFile m_file;
+    KTemporaryFile m_file;
     KisChunkData m_readWindowChunk;
     KisChunkData m_writeWindowChunk;
 

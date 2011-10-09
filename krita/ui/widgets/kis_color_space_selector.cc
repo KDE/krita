@@ -183,8 +183,9 @@ void KisColorSpaceSelector::installProfile()
     QString saveLocation = KGlobal::mainComponent().dirs()->saveLocation("icc_profiles");
 
     foreach (QString profileName, profileNames) {
-        KIO::copy(KUrl(profileName), saveLocation);
-        iccEngine->addProfile(saveLocation + profileName);
+        KUrl file(profileName);
+        KIO::copy(file, saveLocation);
+        iccEngine->addProfile(saveLocation + file.fileName());
     }
 
     fillCmbProfiles();
@@ -196,10 +197,14 @@ void KisColorSpaceSelector::downloadProfile()
     dialog.exec();
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);
-    foreach (const KNS3::Entry& e, dialog.installedEntries()) {
+    foreach (const KNS3::Entry& e, dialog.changedEntries()) {
         foreach(const QString &file, e.installedFiles()) {
             QFileInfo fi(file);
             iccEngine->addProfile( fi.absolutePath()+'/'+fi.fileName());
+        }
+        foreach(const QString &file, e.uninstalledFiles()) {
+            QFileInfo fi(file);
+            iccEngine->removeProfile( fi.absolutePath()+'/'+fi.fileName());
         }
     }
     fillCmbProfiles();

@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
  *  Copyright (c) 2004,2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

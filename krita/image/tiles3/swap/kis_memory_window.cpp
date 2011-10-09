@@ -37,7 +37,6 @@ KisMemoryWindow::KisMemoryWindow(quint64 writeWindowSize)
     m_writeWindowSize = writeWindowSize;
     m_readWindowSize = writeWindowSize / 4;
 
-    cleanOldFiles();
     m_file.open();
 
     m_readWindow = 0;
@@ -46,18 +45,6 @@ KisMemoryWindow::KisMemoryWindow(quint64 writeWindowSize)
 
 KisMemoryWindow::~KisMemoryWindow()
 {
-}
-
-void KisMemoryWindow::cleanOldFiles()
-{
-    QDir directory(SWAP_FILE_PATH());
-    directory.setNameFilters(QStringList(QString(SWAP_FILE_PATTERN())));
-
-    QStringList filesList = directory.entryList();
-
-    foreach(QString path, filesList) {
-        directory.remove(path);
-    }
 }
 
 quint8* KisMemoryWindow::getReadChunkPtr(const KisChunkData &readChunk)

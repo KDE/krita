@@ -45,7 +45,6 @@ public:
     quint8* getWriteChunkPtr(const KisChunkData &writeChunk);
 
 private:
-    void cleanOldFiles();
     void adjustWindow(const KisChunkData &requestedChunk, quint8 **window,
                       KisChunkData *windowChunk, quint64 windowSize);
 

@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "HistoryDock.h"
-
+#include <KoDocumentResourceManager.h>
 HistoryDock::HistoryDock() : QDockWidget(), historyCanvas(0) {
     undoView = new KisUndoView(this);
     setWidget(undoView);
@@ -26,9 +26,9 @@ HistoryDock::HistoryDock() : QDockWidget(), historyCanvas(0) {
 }
 
 void HistoryDock::setCanvas(KoCanvasBase *canvas) {
-    
+
     KisCanvas2* myCanvas = dynamic_cast<KisCanvas2*>( canvas );
-    
+
     KUndo2Stack* undoStack = canvas->shapeController()->resourceManager()->undoStack();
 
     undoView->setStack(undoStack);

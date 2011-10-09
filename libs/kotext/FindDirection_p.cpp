@@ -20,12 +20,12 @@
 #include "FindDirection_p.h"
 
 #include <QTextCursor>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 
 #include "KoText.h"
 #include "KoFind_p.h"
 
-FindDirection::FindDirection(KoResourceManager *provider)
+FindDirection::FindDirection(KoCanvasResourceManager *provider)
         : m_provider(provider)
 {
 }
@@ -34,7 +34,7 @@ FindDirection::~FindDirection()
 {
 }
 
-FindForward::FindForward(KoResourceManager *provider)
+FindForward::FindForward(KoCanvasResourceManager *provider)
         : FindDirection(provider)
 {
 }
@@ -64,7 +64,7 @@ void FindForward::nextDocument(QTextDocument *document, KoFindPrivate *findPriva
     findPrivate->findDocumentSetNext(document);
 }
 
-FindBackward::FindBackward(KoResourceManager *provider)
+FindBackward::FindBackward(KoCanvasResourceManager *provider)
         : FindDirection(provider)
 {
 }

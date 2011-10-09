@@ -30,7 +30,7 @@ class KoCanvasBase;
 class KoShape;
 class KoShapeBasedDocumentBase;
 class KUndo2Command;
-class KoResourceManager;
+class KoDocumentResourceManager;
 
 /**
  * Class used by tools to maintain the list of shapes.
@@ -114,9 +114,8 @@ public:
      * shape-set (typically a document). The resource manager contains
      * document wide resources * such as variable managers, the image
      * collection and others.
-     * @see KoCanvasBase::resourceManager()
      */
-    KoResourceManager *resourceManager() const;
+    KoDocumentResourceManager *resourceManager() const;
 
 private:
     class Private;

@@ -107,6 +107,8 @@ void KoSemanticStylesheet::templateString(const QString &v)
 
 void KoSemanticStylesheet::format(KoRdfSemanticItem *obj, KoTextEditor *editor, const QString &xmlid)
 {
+    Q_ASSERT(obj);
+    Q_ASSERT(editor);
     kDebug(30015) << "formating obj:" << obj << " name:" << obj->name();
     kDebug(30015) << "xmlid:" << xmlid << " editor:" << editor << " sheet-name:" << name();
     const KoDocumentRdf *rdf = obj->documentRdf();

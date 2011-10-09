@@ -53,7 +53,7 @@ KisOpenRasterStackSaveVisitor::~KisOpenRasterStackSaveVisitor()
 void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* layer)
 {
     elt.setAttribute("name", layer->name());
-    elt.setAttribute("opacity", layer->opacity() / 255.0);
+    elt.setAttribute("opacity", QString().setNum(layer->opacity() / 255.0));
     elt.setAttribute("visibility", layer->visible() ? "visible" : "hidden");
 
     QString compop = layer->compositeOpId();

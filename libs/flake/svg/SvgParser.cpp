@@ -34,7 +34,7 @@
 #include <KoShapeContainer.h>
 #include <KoShapeGroup.h>
 #include <KoPathShape.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoPathShapeLoader.h>
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
@@ -55,7 +55,7 @@
 #include <QtGui/QColor>
 
 
-SvgParser::SvgParser(KoResourceManager *documentResourceManager)
+SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)
     : m_context(documentResourceManager)
     , m_documentResourceManager(documentResourceManager)
 {

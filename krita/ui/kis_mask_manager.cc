@@ -136,7 +136,7 @@ void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
 
     connect(mask,SIGNAL(changeActivity(KisSelectionMask*,bool)),this,SLOT(changeActivity(KisSelectionMask*,bool)));
 
-    //counting number of KisSelectionMask    
+    //counting number of KisSelectionMask
     QList<KisNodeSP> selectionMasks = layer->childNodes(QStringList("KisSelectionMask"),KoProperties());
 
     mask->setName(i18n("Selection ")+QString::number(selectionMasks.count()+1));
@@ -183,9 +183,12 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
 
     if (dialog.exec() == QDialog::Accepted) {
         KisFilterConfiguration *filter = dialog.filterConfiguration();
-        QString name = dialog.layerName();
-        mask->setFilter(filter);
-        activateMask(mask);
+        if (filter) {
+            QString name = dialog.layerName();
+            mask->setFilter(filter);
+            mask->setName(name);
+            activateMask(mask);
+        }
     } else {
         m_commandsAdapter->undoLastCommand();
     }

@@ -707,7 +707,7 @@ void TextTool::updateSelectedShape(const QPointF &point)
         QRectF rect(QPoint(), m_textShape->size());
         rect = m_textShape->absoluteTransformation(0).mapRect(rect);
         v.setValue(rect);
-        canvas()->resourceManager()->setResource(KoCanvasResource::ActiveRange, v);
+        canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, v);
     }
 }
 
@@ -824,7 +824,7 @@ void TextTool::updateSelectionHandler()
         }
     }
 
-    KoResourceManager *p = canvas()->resourceManager();
+    KoCanvasResourceManager *p = canvas()->resourceManager();
     m_allowResourceManagerUpdates = false;
     if (m_textEditor && m_textShapeData) {
         p->setResource(KoText::CurrentTextPosition, m_textEditor.data()->position());
@@ -849,7 +849,7 @@ void TextTool::copy() const
     KoTextOdfSaveHelper saveHelper(m_textShapeData->document(), from, to);
     KoTextDrag drag;
 
-    KoResourceManager *rm = 0;
+    KoDocumentResourceManager *rm = 0;
     if (canvas()->shapeController()) {
         rm = canvas()->shapeController()->resourceManager();
     }
@@ -1397,7 +1397,7 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
         emit done();
         // This is how we inform the rulers of the active range
         // No shape means no active range
-        canvas()->resourceManager()->setResource(KoCanvasResource::ActiveRange, QVariant(QRectF()));
+        canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, QVariant(QRectF()));
         return;
     }
 
@@ -1407,24 +1407,10 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
     QRectF rect(QPoint(), m_textShape->size());
     rect = m_textShape->absoluteTransformation(0).mapRect(rect);
     v.setValue(rect);
-    canvas()->resourceManager()->setResource(KoCanvasResource::ActiveRange, v);
+    canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, v);
 
     setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
     useCursor(Qt::IBeamCursor);
-
-    // restore the selection from a previous time we edited this document.
-    for (int i = 0; i < m_previousSelections.count(); i++) {
-        TextSelection selection = m_previousSelections.at(i);
-        if (selection.document == m_textShapeData->document()) {
-            KoTextEditor *textEditor = m_textEditor.data();
-            if (textEditor) {
-                textEditor->setPosition(selection.anchor);
-                textEditor->setPosition(selection.position, QTextCursor::KeepAnchor);
-            }
-            m_previousSelections.removeAt(i);
-            break;
-        }
-    }
 
     repaintSelection();
     updateSelectionHandler();
@@ -1446,18 +1432,9 @@ void TextTool::deactivate()
 
     // This is how we inform the rulers of the active range
     // No shape means no active range
-    canvas()->resourceManager()->setResource(KoCanvasResource::ActiveRange, QVariant(QRectF()));
+    canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, QVariant(QRectF()));
 
-    if (m_textEditor.data() && m_textShapeData) {
-        TextSelection selection;
-        selection.document = m_textShapeData->document();
-        selection.position = m_textEditor.data()->position();
-        selection.anchor = m_textEditor.data()->anchor();
-        m_previousSelections.append(selection);
-    }
     setShapeData(0);
-    if (m_previousSelections.count() > 20) // don't let it grow indefinitely
-        m_previousSelections.removeAt(0);
 
     updateSelectionHandler();
     if (m_specialCharacterDocker) {

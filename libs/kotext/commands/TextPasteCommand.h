@@ -21,12 +21,13 @@
 #define TEXTPASTECOMMAND_H
 
 #include <QClipboard>
+#include <QWeakPointer>
 #include <kundo2qstack.h>
 
 class QTextDocument;
 class KoDocumentRdfBase;
 class KoShapeController;
-class KoResourceManager;
+class KoDocumentResourceManager;
 class QMimeData;
 
 class TextPasteCommand : public KUndo2Command
@@ -45,7 +46,7 @@ public:
 
 private:
     const QMimeData *m_mimeData;
-    QTextDocument *m_document;
+    QWeakPointer<QTextDocument> m_document;
     KoDocumentRdfBase *m_rdf;
     KoShapeController *m_shapeController;
     bool m_pasteAsText;

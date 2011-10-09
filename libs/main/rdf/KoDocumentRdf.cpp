@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
    Copyright (C) 2011 Ben Martin hacking for fun!
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -31,7 +31,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoStoreDevice.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoTextEditor.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -477,12 +477,12 @@ QList<KoRdfFoaF*> KoDocumentRdf::foaf(Soprano::Model *m)
                 break;
             }
         }
-        
+
         if (newItem) {
             d->foafObjects << newItem;
         }
     }
-    
+
     foreach (KoRdfFoaF *semItem, lastKnownObjects) {
         d->foafObjects.removeAll(semItem);
     }
@@ -499,7 +499,7 @@ QList<KoRdfFoaF*> KoDocumentRdf::foaf(Soprano::Model *m)
         }
     }
 #endif
-    
+
     return d->foafObjects;
 }
 
@@ -1031,7 +1031,7 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
 
         if( cursor.position() <= 0 )
             break;
-        
+
         // else continue with the next inline object
         cursor = document->find(QString(QChar::ObjectReplacementCharacter),
                                 cursor.position()-1,

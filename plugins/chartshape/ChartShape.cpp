@@ -265,7 +265,7 @@ public:
 
     ChartShape *shape;		// The chart that owns this ChartShape::Private
 
-    KoResourceManager *resourceManager;
+    KoDocumentResourceManager *resourceManager;
 };
 
 
@@ -365,7 +365,7 @@ void ChartShape::Private::setChildVisible( KoShape *child, bool doShow )
 // ================================================================
 
 
-ChartShape::ChartShape(KoResourceManager *resourceManager)
+ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     : KoFrameShape( KoXmlNS::draw, "object" )
     , KoShapeContainer( new ChartLayout )
     , d ( new Private( this ) )
@@ -1290,7 +1290,7 @@ void ChartShape::requestRepaint() const
     d->plotArea->requestRepaint();
 }
 
-KoResourceManager *ChartShape::resourceManager() const
+KoDocumentResourceManager *ChartShape::resourceManager() const
 {
     return d->resourceManager;
 }

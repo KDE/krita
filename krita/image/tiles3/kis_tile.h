@@ -24,6 +24,7 @@
 #include <QMutex>
 
 #include <QRect>
+#include <QStack>
 
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>
@@ -119,8 +120,11 @@ private:
     inline void blockSwapping() const;
     inline void unblockSwapping() const;
 
+    inline void safeReleaseOldTileData(KisTileData *td);
+
 private:
     KisTileData *m_tileData;
+    mutable QStack<KisTileData*> m_oldTileData;
     mutable volatile int m_lockCounter;
 
     qint32 m_col;

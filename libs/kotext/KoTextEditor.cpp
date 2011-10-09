@@ -1044,7 +1044,7 @@ void KoTextEditor::deleteChar(MoveOperation direction, bool trackChanges, KoShap
                                                       shapeController));
         }
         else {
-            addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar,
+            addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar,
                                                       d->document,
                                                       shapeController));
         }
@@ -1056,7 +1056,7 @@ void KoTextEditor::deleteChar(MoveOperation direction, bool trackChanges, KoShap
                                          shapeController));
         }
         else {
-            addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
+            addCommand(new DeleteCommand(DeleteCommand::NextChar,
                                          d->document,
                                          shapeController));
         }

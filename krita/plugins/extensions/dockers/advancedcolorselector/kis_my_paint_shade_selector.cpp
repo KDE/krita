@@ -41,7 +41,7 @@
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
-#include "KoResourceManager.h"
+#include "KoCanvasResourceManager.h"
 
 inline int sqr(int x);
 inline qreal sqr2(qreal x);
@@ -256,8 +256,8 @@ void KisMyPaintShadeSelector::resourceChanged(int key, const QVariant &v)
     bool onForeground = cfg.readEntry("shadeSelectorUpdateOnForeground", false);
     bool onBackground = cfg.readEntry("shadeSelectorUpdateOnBackground", true);
 
-    if ((key == KoCanvasResource::ForegroundColor && onForeground)
-        || (key == KoCanvasResource::BackgroundColor && onBackground)) {
+    if ((key == KoCanvasResourceManager::ForegroundColor && onForeground)
+        || (key == KoCanvasResourceManager::BackgroundColor && onBackground)) {
         setColor(findGeneratingColor(v.value<KoColor>()));
     }
 }

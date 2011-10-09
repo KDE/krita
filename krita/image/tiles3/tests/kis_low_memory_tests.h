@@ -28,6 +28,7 @@ private slots:
     void initTestCase();
 
     void readWriteOnSharedTiles();
+    void hangingTilesTest();
 };
 
 #endif /* __KIS_LOW_MEMORY_TESTS_H */

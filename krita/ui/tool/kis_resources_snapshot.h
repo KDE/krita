@@ -25,7 +25,7 @@
 #include "krita_export.h"
 
 
-class KoResourceManager;
+class KoCanvasResourceManager;
 class KoCompositeOp;
 class KisPainter;
 class KisPostExecutionUndoAdapter;
@@ -35,7 +35,7 @@ class KisRecordedPaintAction;
 class KRITAUI_EXPORT KisResourcesSnapshot : public KisShared
 {
 public:
-    KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUndoAdapter *undoAdapter, KoResourceManager *resourceManager);
+    KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager);
     ~KisResourcesSnapshot();
 
     void setupPainter(KisPainter *painter);

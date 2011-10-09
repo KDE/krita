@@ -24,7 +24,6 @@
 #include "SpellCheckMenu.h"
 
 #include <KoCharacterStyle.h>
-#include <KoResourceManager.h>
 
 #include <KLocale>
 #include <KDebug>
@@ -370,7 +369,7 @@ void SpellCheck::setCurrentCursorPosition(const QTextDocument *document, int cur
         if (block.isValid() && block.layout()->additionalFormats().count() > 0) {
             QList<QTextLayout::FormatRange> ranges = block.layout()->additionalFormats();
             foreach (const QTextLayout::FormatRange &range, ranges) {
-                if (cursorPosition >= block.position() + range.start 
+                if (cursorPosition >= block.position() + range.start
                         && cursorPosition <= block.position() + range.start + range.length
                         && range.format == m_defaultMisspelledFormat) {
                     QString word = block.text().mid(range.start, range.length);
@@ -426,7 +425,7 @@ void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition)
     QTextCursor cursor(m_document);
     cursor.setPosition(startPosition);
     cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
-    //if the replaced word and the suggestion had the same number of chars, 
+    //if the replaced word and the suggestion had the same number of chars,
     //we must clear highlighting manually, see 'documentChanged'
     if ((cursor.selectionEnd() - cursor.selectionStart()) == word.length())
         clearHighlightMisspelled(startPosition);

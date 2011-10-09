@@ -132,6 +132,7 @@ private:
     void freeRegisteredTiles();
 
     friend class DeadlockyThread;
+    friend class KisLowMemoryTests;
     void debugSwapAll();
     void debugClear();
 

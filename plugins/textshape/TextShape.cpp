@@ -28,7 +28,7 @@
 #include <KoTextEditor.h>
 
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoChangeTracker.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoOdfLoadingContext.h>
@@ -360,7 +360,7 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
 
 bool TextShape::loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    // If the loadOdfFrame from the base class for draw:text-box fails, check 
+    // If the loadOdfFrame from the base class for draw:text-box fails, check
     // for table:table, because that is a legal child of draw:frame in ODF 1.2.
     if (!KoFrameShape::loadOdfFrame(element, context)) {
         const KoXmlElement &possibleTableElement(KoXml::namedItemNS(element, KoXmlNS::table, "table"));

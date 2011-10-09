@@ -35,7 +35,7 @@ class KoShapeBasedDocumentBase;
 class KoLoadingShapeUpdater;
 class KoImageCollection;
 class KoSharedLoadingData;
-class KoResourceManager;
+class KoDocumentResourceManager;
 
 /**
  * Context passed to shapes during loading.
@@ -74,7 +74,7 @@ public:
      * @param context the context created for generic ODF loading.
      * @param documentResources the data of the shape controller.
      */
-    KoShapeLoadingContext(KoOdfLoadingContext &context, KoResourceManager *documentResources);
+    KoShapeLoadingContext(KoOdfLoadingContext &context, KoDocumentResourceManager *documentResources);
 
     /// destructor
     ~KoShapeLoadingContext();
@@ -174,7 +174,7 @@ public:
      */
     static QSet<AdditionalAttributeData> additionalAttributeData();
 
-    KoResourceManager *documentResourceManager() const;
+    KoDocumentResourceManager *documentResourceManager() const;
 
 private:
     // to allow only the KoShapeRegistry access to the KoShapeBasedDocumentBase

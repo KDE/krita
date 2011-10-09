@@ -176,6 +176,9 @@ protected:
     void expandBoundingRight(qreal x);
 
 private:
+    /// remove tables and paragraphs that are keep-with-next
+    void backtrackKeepWithNext(FrameIterator *cursor);
+
     /// utility method to restartlayout of a block
     QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep);
 

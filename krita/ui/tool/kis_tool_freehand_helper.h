@@ -26,7 +26,7 @@
 #include "kis_paint_information.h"
 
 class KoPointerEvent;
-class KoResourceManager;
+class KoCanvasResourceManager;
 class KisPaintingInformationBuilder;
 class KisRecordingAdapter;
 class KisStrokesFacade;
@@ -47,7 +47,7 @@ public:
     void setSmoothness(bool smooth, qreal smoothness);
 
     void initPaint(KoPointerEvent *event,
-                   KoResourceManager *resourceManager,
+                   KoCanvasResourceManager *resourceManager,
                    KisImageWSP image,
                    KisStrokesFacade *strokesFacade,
                    KisPostExecutionUndoAdapter *undoAdapter,

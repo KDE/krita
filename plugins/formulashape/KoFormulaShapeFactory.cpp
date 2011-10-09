@@ -61,7 +61,7 @@ KoFormulaShapeFactory::KoFormulaShapeFactory()
 KoFormulaShapeFactory::~KoFormulaShapeFactory()
 {}
 
-KoShape *KoFormulaShapeFactory::createDefaultShape(KoResourceManager *resourceManager) const
+KoShape *KoFormulaShapeFactory::createDefaultShape(KoDocumentResourceManager *resourceManager) const
 {
     KoFormulaShape* formula = new KoFormulaShape(resourceManager);
     formula->setShapeId( KoFormulaShapeId );
@@ -77,7 +77,7 @@ bool KoFormulaShapeFactory::supports(const KoXmlElement& e, KoShapeLoadingContex
                        && e.namespaceURI() == KoXmlNS::draw));
 
     // Should be 39001 (kformula) instead of 31000 (calligra)
-    //kDebug(31000) << e.nodeName() << " - "<< e.namespaceURI(); 
+    //kDebug(31000) << e.nodeName() << " - "<< e.namespaceURI();
     //kDebug(31000) << "Return value = " << retval;
 
     return retval;

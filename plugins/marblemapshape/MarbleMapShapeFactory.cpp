@@ -23,7 +23,7 @@
 #include "MarbleMapShapeFactory.h"
 #include "MarbleMapShape.h"
 #include <KoXmlNS.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoShapeLoadingContext.h>
 
 #include <KLocale>
@@ -51,7 +51,7 @@ bool MarbleMapShapeFactory::supports(const KoXmlElement& element, KoShapeLoading
             && element.namespaceURI() == KoXmlNS::calligra);
 }
 
-KoShape* MarbleMapShapeFactory::createDefaultShape(KoResourceManager* documentResources) const
+KoShape* MarbleMapShapeFactory::createDefaultShape(KoDocumentResourceManager* documentResources) const
 {
     MarbleMapShape *shape = new MarbleMapShape();
     shape->setShapeId(MARBLEMAPSHAPEID);

@@ -197,7 +197,7 @@ void KisScratchPad::slotMouseMove(KoPointerEvent *event)
 
 void KisScratchPad::beginStroke(KoPointerEvent *event)
 {
-    KoResourceManager *resourceManager = m_resourceProvider->resourceManager();
+    KoCanvasResourceManager *resourceManager = m_resourceProvider->resourceManager();
 
     m_helper->initPaint(event, resourceManager,
                         0,

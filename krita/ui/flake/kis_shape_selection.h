@@ -74,12 +74,12 @@ public:
     virtual QPainterPath selectionOutline();
 
     KoShapeManager *shapeManager() const;
-    
+
     void moveX(qint32 x);
     void moveY(qint32 y);
-    
+
     KUndo2Command* transform(const QTransform &transform);
-        
+
 
 protected:
 
@@ -107,7 +107,7 @@ public:
     KisShapeSelectionFactory();
     ~KisShapeSelectionFactory() {}
 
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const {
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const {
         Q_UNUSED(documentResources);
         return 0;
     }

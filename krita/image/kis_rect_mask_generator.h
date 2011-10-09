@@ -37,6 +37,8 @@ public:
     KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes);
     virtual ~KisRectangleMaskGenerator();
 
+    virtual bool shouldSupersample() const;
+    
     virtual quint8 valueAt(qreal x, qreal y) const;
 
     virtual void toXML(QDomDocument& , QDomElement&) const;

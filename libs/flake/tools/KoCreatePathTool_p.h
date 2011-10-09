@@ -30,7 +30,6 @@
 #include "KoParameterShape.h"
 #include "KoViewConverter.h"
 #include "KoShapeManager.h"
-#include "KoResourceManager.h"
 #include "KoSnapStrategy.h"
 #include "KoToolBase_p.h"
 

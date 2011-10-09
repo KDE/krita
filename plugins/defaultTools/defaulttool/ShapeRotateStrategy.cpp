@@ -27,7 +27,6 @@
 #include <KoSelection.h>
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>
-#include <KoResourceManager.h>
 #include <commands/KoShapeTransformCommand.h>
 
 #include <QPointF>

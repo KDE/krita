@@ -20,7 +20,7 @@
 */
 
 #include "KoShapeBasedDocumentBase.h"
-#include "KoResourceManager.h"
+#include "KoDocumentResourceManager.h"
 #include "KoShapeRegistry.h"
 #include <KGlobal>
 #include <KConfig>
@@ -30,7 +30,7 @@ class KoShapeBasedDocumentBasePrivate
 {
 public:
     KoShapeBasedDocumentBasePrivate()
-        : resourceManager(new KoResourceManager())
+        : resourceManager(new KoDocumentResourceManager())
     {
         KoShapeRegistry *registry = KoShapeRegistry::instance();
         foreach (const QString &id, registry->keys()) {
@@ -57,7 +57,7 @@ public:
         delete resourceManager;
     }
 
-    KoResourceManager *resourceManager;
+    KoDocumentResourceManager *resourceManager;
 };
 
 KoShapeBasedDocumentBase::KoShapeBasedDocumentBase()
@@ -70,7 +70,7 @@ KoShapeBasedDocumentBase::~KoShapeBasedDocumentBase()
     delete d;
 }
 
-KoResourceManager *KoShapeBasedDocumentBase::resourceManager() const
+KoDocumentResourceManager *KoShapeBasedDocumentBase::resourceManager() const
 {
     return d->resourceManager;
 }

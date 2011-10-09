@@ -31,7 +31,6 @@
 
 class QTextDocument;
 class QTextCharFormat;
-class KoResourceManager;
 class KoCanvasBase;
 class KoShape;
 /**
@@ -75,7 +74,7 @@ public:
     virtual void setCurrentCursor(const QTextCursor &cursor);
 
     /**
-     * Set the format use. 
+     * Set the format use.
      *
      * USe this function if you want to overwrite the default formating options.
      */
@@ -87,7 +86,7 @@ public:
      * This method will search the list of shapes passed to it recursively for any
      * text shapes. If it encounters any text shapes it will add the QTextDocument
      * object used by that shape to the list passed.
-     * 
+     *
      * \param shapes The shapes to search for text.
      * \param append A list to append the found QTextDocument objects to.
      */

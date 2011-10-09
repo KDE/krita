@@ -36,7 +36,7 @@
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoShapeController.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoDocumentRdfBase.h>
 
 const QString lorem(

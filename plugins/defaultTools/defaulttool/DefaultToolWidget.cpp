@@ -25,7 +25,7 @@
 
 #include <KoInteractionTool.h>
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <commands/KoShapeMoveCommand.h>
@@ -58,7 +58,7 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     updatePosition();
     updateSize();
 
-    connect( positionSelector, SIGNAL( positionSelected(KoFlake::Position) ), 
+    connect( positionSelector, SIGNAL( positionSelected(KoFlake::Position) ),
         this, SLOT( positionSelected(KoFlake::Position) ) );
 
     connect( positionXSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
@@ -245,7 +245,7 @@ void DefaultToolWidget::setUnit( const KoUnit &unit )
 
 void DefaultToolWidget::resourceChanged( int key, const QVariant & res )
 {
-    if( key == KoCanvasResource::Unit )
+    if( key == KoCanvasResourceManager::Unit )
         setUnit(res.value<KoUnit>());
     else if( key == DefaultTool::HotPosition )
     {

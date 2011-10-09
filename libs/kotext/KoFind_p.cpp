@@ -21,7 +21,7 @@
 
 #include "KoFind_p.h"
 
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 
 #include <KWindowSystem>
 #include <KFindDialog>
@@ -53,7 +53,7 @@ private:
     bool & m_variable;
 };
 
-KoFindPrivate::KoFindPrivate(KoFind *find, KoResourceManager *crp, QWidget *w)
+KoFindPrivate::KoFindPrivate(KoFind *find, KoCanvasResourceManager *crp, QWidget *w)
         : findNext(0)
         , findPrev(0)
         , q(find)

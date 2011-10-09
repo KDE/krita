@@ -29,6 +29,7 @@
 
 class KoPAMasterPage;
 class KoPAPage;
+class KoDocumentResourceManager;
 
 /// Context needed for loading the data of a pageapp
 class KOPAGEAPP_EXPORT KoPALoadingContext : public KoShapeLoadingContext
@@ -40,7 +41,7 @@ public:
      * @param context Context for loading oasis docs.
      * @param context The shape controller.
      */
-     KoPALoadingContext(KoOdfLoadingContext &context, KoResourceManager *documentResources);
+     KoPALoadingContext(KoOdfLoadingContext &context, KoDocumentResourceManager *documentResources);
      ~KoPALoadingContext();
 
     /**

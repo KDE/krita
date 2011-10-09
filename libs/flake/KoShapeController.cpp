@@ -159,7 +159,7 @@ void KoShapeController::setShapeControllerBase(KoShapeBasedDocumentBase *shapeBa
     d->shapeBasedDocument = shapeBasedDocument;
 }
 
-KoResourceManager *KoShapeController::resourceManager() const
+KoDocumentResourceManager *KoShapeController::resourceManager() const
 {
     if (!d->shapeBasedDocument)
         return 0;

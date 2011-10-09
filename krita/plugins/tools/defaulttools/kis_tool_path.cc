@@ -126,7 +126,7 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
     // Get painting options
     KisPaintOpPresetSP preset = kiscanvas->resourceManager()->
                                 resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-    KoColor paintColor = canvas()->resourceManager()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+    KoColor paintColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
 
     // Compute the outline
     KisImageWSP image = kiscanvas->view()->image();

@@ -22,7 +22,7 @@
 #define TREESHAPE_H
 
 #include "KoShapeContainer.h"
-#include "KoResourceManager.h"
+#include "KoDocumentResourceManager.h"
 #include <KoConnectionShape.h>
 
 #define TREESHAPEID "TreeShape"
@@ -54,8 +54,8 @@ public:
     };
 
 
-    TreeShape(KoResourceManager *documentResources=0);
-    TreeShape(KoShape *root, KoResourceManager *documentResources=0);
+    TreeShape(KoDocumentResourceManager *documentResources=0);
+    TreeShape(KoShape *root, KoDocumentResourceManager *documentResources=0);
     virtual ~TreeShape();
     virtual void setZIndex(int zIndex);
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
@@ -82,7 +82,7 @@ private:
 //     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
     virtual TreeLayout *layout() const;
 
-    KoResourceManager *m_documentResources;
+    KoDocumentResourceManager *m_documentResources;
     KoShape *m_nextShape;
 };
 

@@ -21,10 +21,13 @@
 #define DELETECOMMAND_H
 
 #include <kundo2qstack.h>
+
 #include "KoTextCommandBase.h"
+
 #include <QTextCharFormat>
 #include <QList>
 #include <QSet>
+#include <QWeakPointer>
 
 class QTextDocument;
 class KoShapeController;
@@ -51,7 +54,7 @@ public:
     virtual bool mergeWith(const KUndo2Command *command);
 
 private:
-    QTextDocument *m_document;
+    QWeakPointer<QTextDocument> m_document;
     KoShapeController *m_shapeController;
 
     QList<KUndo2Command *> m_shapeDeleteCommands;

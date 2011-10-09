@@ -50,7 +50,6 @@
 #include <KoXmlWriter.h>
 
 #include <kdialog.h>
-#include <kundo2stack.h>
 #include <kfileitem.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
@@ -332,7 +331,7 @@ namespace {
     };
 }
 
-KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMode)
+KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMode, KUndo2Stack *undoStack)
         : KParts::ReadWritePart(parent)
         , d(new Private)
 {
@@ -378,7 +377,8 @@ KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     d->pageLayout.leftMargin = 0;
     d->pageLayout.rightMargin = 0;
 
-    d->undoStack = new KUndo2Stack(this);
+    d->undoStack = undoStack;
+    d->undoStack->setParent(this);
 
     KConfigGroup cfgGrp(componentData().config(), "Undo");
     d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));
@@ -2544,7 +2544,7 @@ QString KoDocument::unitName() const
     return KoUnit::unitName(unit());
 }
 
-void KoDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
+void KoDocument::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
 {
 #ifndef NDEBUG
     if (d->templateType.isEmpty())
@@ -2580,15 +2580,16 @@ void KoDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
         }
     }
 
-    parent->factory()->container("mainToolBar", parent)->hide();
+    mainWindow->factory()->container("mainToolBar", mainWindow)->hide();
 
     if (d->startUpWidget) {
         d->startUpWidget->show();
     } else {
-        d->startUpWidget = createOpenPane(parent->centralWidget(), componentData(), d->templateType);
+        d->startUpWidget = createOpenPane(mainWindow, componentData(), d->templateType);
+        mainWindow->setCentralWidget(d->startUpWidget);
     }
 
-    parent->setDocToOpen(this);
+    mainWindow->setDocToOpen(this);
 }
 
 void KoDocument::openExistingFile(const KUrl& url)

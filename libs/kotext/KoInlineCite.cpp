@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/* This file is part of the  KDE project
  * Copyright (C) 2011 Smit Patel <smitpatel24@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -22,12 +22,15 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
+#include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoTextLoader.h>
 #include <KoTextWriter.h>
 #include <KoTextDocument.h>
 #include <KoText.h>
-
+#include <KoOdfBibliographyConfiguration.h>
+#include <KoGenStyles.h>
+#include <KoStyleManager.h>
 #include <KDebug>
 
 #include <QTextDocument>
@@ -37,6 +40,8 @@
 #include <QTextInlineObject>
 #include <QFontMetricsF>
 #include <QTextOption>
+#include <QBuffer>
+#include <QMap>
 //#include <QMessageBox>
 
 class KoInlineCite::Private
@@ -46,7 +51,10 @@ public:
         : type(t)
     {
     }
+
     KoInlineCite::Type type;
+    QString label;
+
     QString bibliographyType;
     QString identifier;
     QString address;
@@ -558,10 +566,13 @@ void KoInlineCite::resize(const QTextDocument *document, QTextInlineObject objec
     if (d->identifier.isEmpty())
         return;
 
-    QString citeLabel = QString("[%1]").arg(d->identifier);
+    KoOdfBibliographyConfiguration *bibConfiguration = KoTextDocument(document).styleManager()->bibliographyConfiguration();
+    d->label = QString("%1%2%3").arg(bibConfiguration->prefix())
+                                .arg(d->identifier)
+                                .arg(bibConfiguration->suffix());
     Q_ASSERT(format.isCharFormat());
     QFontMetricsF fm(format.font(), pd);
-    object.setWidth(fm.width(citeLabel));
+    object.setWidth(fm.width(d->label));
     object.setAscent(fm.ascent());
     object.setDescent(fm.descent());
 }
@@ -575,15 +586,18 @@ void KoInlineCite::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     if (d->identifier.isEmpty())
         return;
 
-    QString citeLabel = QString("[%1]").arg(d->identifier);
+    KoOdfBibliographyConfiguration *bibConfiguration = KoTextDocument(document).styleManager()->bibliographyConfiguration();
+    d->label = QString("%1%2%3").arg(bibConfiguration->prefix())
+                                .arg(d->identifier)
+                                .arg(bibConfiguration->suffix());
 
     QFont font(format.font(), pd);
-    QTextLayout layout(citeLabel, font, pd);
+    QTextLayout layout(d->label, font, pd);
     layout.setCacheEnabled(true);
     QList<QTextLayout::FormatRange> layouts;
     QTextLayout::FormatRange range;
     range.start = 0;
-    range.length = citeLabel.length();
+    range.length = d->label.length();
     range.format = format;
     range.format.setVerticalAlignment(QTextCharFormat::AlignNormal);
     QBrush *brush = new QBrush(Qt::SolidPattern);
@@ -653,7 +667,6 @@ bool KoInlineCite::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 void KoInlineCite::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
-
     writer->startElement("text:bibliography-mark", false);
 
     if (!d->identifier.isEmpty())

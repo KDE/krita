@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SimpleCitationBibliographyWidget</class>
+ <widget class="QWidget" name="SimpleCitationBibliographyWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>174</width>
+    <height>92</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetMinAndMaxSize</enum>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QToolButton" name="addCitation">
+     <property name="toolTip">
+      <string>Insert citation at current position</string>
+     </property>
+     <property name="text">
+      <string>Insert Citation</string>
+     </property>
+     <property name="autoRaise">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QToolButton" name="addBibliography">
+     <property name="toolTip">
+      <string>Insert bibliography at current position</string>
+     </property>
+     <property name="text">
+      <string>Insert Bibliography</string>
+     </property>
+     <property name="autoRaise">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QToolButton" name="configureBibliography">
+     <property name="toolTip">
+      <string>Configure bibiliography</string>
+     </property>
+     <property name="text">
+      <string>Configure Bibliography</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>0</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

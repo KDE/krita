@@ -38,6 +38,7 @@ private slots:
 
     void testInsertInlineObject();
     void testRemoveSelectedText();
+    void testPaste();
 };
 
 #endif // TEST_KO_TEXT_EDITOR_H

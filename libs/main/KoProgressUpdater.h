@@ -41,7 +41,7 @@ class QTime;
  *
  * This class is created specifically with threading in mind so that subtasks
  * can report their progress from their personal subthread and the progress bar
- * will be updated correctly and not more often then repaints can return.
+ * will be updated correctly and not more often than repaints can occur.
  *
  * Typical usage can be:
  * @code
@@ -52,7 +52,7 @@ class QTime;
   KoUpdater scale = pu->startSubtask(5);
   KoUpdater cleanup = pu->startSubtask(1);
   @endcode
- * Doing an smooth.setProgress(50) will move the progress bar to 50% of the share
+ * Doing a smooth.setProgress(50) will move the progress bar to 50% of the share
  * of task 'smooth' which is 5 / 11 of the total and thus to 22.
  *
  * KoProgressUpdater should be created in the main thread;

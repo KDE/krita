@@ -111,7 +111,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     image->refreshGraph();
     image->lock();
 
-    KisTIFFConverter ktc(output, output->undoAdapter());
+    KisTIFFConverter ktc(output);
     /*    vKisAnnotationSP_it beginIt = image->beginAnnotations();
         vKisAnnotationSP_it endIt = image->endAnnotations();*/
     KisImageBuilder_Result res;

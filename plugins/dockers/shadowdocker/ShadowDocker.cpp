@@ -64,7 +64,7 @@ ShadowDocker::ShadowDocker()
 
     connect( d->widget, SIGNAL(shadowColorChanged(const KoColor&)), this, SLOT(shadowChanged()));
     connect( d->widget, SIGNAL(shadowOffsetChanged(const QPointF&)), this, SLOT(shadowChanged()));
-    connect( d->widget, SIGNAL(shadowBlurChanged(const qreal&)), this, SLOT(shadowChanged()));
+    connect( d->widget, SIGNAL(shadowBlurChanged(qreal)), this, SLOT(shadowChanged()));
     connect( d->widget, SIGNAL(shadowVisibilityChanged(bool)), this, SLOT(shadowChanged()));
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )),
              this, SLOT(locationChanged(Qt::DockWidgetArea)));

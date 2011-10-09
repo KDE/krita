@@ -26,14 +26,17 @@
 class KisMergeWalker;
 typedef KisSharedPtr<KisMergeWalker> KisMergeWalkerSP;
 
-class KRITAIMAGE_EXPORT KisMergeWalker : public KisBaseRectsWalker
+class KRITAIMAGE_EXPORT KisMergeWalker : public virtual KisBaseRectsWalker
 {
 
 public:
     KisMergeWalker(QRect cropRect);
     virtual ~KisMergeWalker();
 
+    UpdateType type() const;
+
 protected:
+    KisMergeWalker() {}
 
     /**
      * Begins visiting nodes starting with @startWith.

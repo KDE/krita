@@ -35,7 +35,6 @@ K_EXPORT_PLUGIN(KisPixelizeFilterPluginFactory("krita"))
 KisPixelizeFilterPlugin::KisPixelizeFilterPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KisPixelizeFilterPluginFactory::componentData());
     KisFilterRegistry::instance()->add(new KisPixelizeFilter());
 }
 

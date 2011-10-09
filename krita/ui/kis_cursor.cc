@@ -54,6 +54,11 @@ QCursor KisCursor::crossCursor()
     return load("cursor-cross.xpm");
 }
 
+QCursor KisCursor::roundCursor()
+{
+    return load("cursor-round.xpm");
+}
+
 QCursor KisCursor::waitCursor()
 {
     return Qt::WaitCursor;

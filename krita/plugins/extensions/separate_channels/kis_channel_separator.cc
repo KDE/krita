@@ -262,7 +262,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 KisDoc2 d;
                 d.prepareForImport();
 
-                KisImageWSP dst = KisImageWSP(new KisImage(d.undoAdapter(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));
+                KisImageWSP dst = KisImageWSP(new KisImage(d.createUndoStore(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));
                 d.setCurrentImage(dst);
                 dst->addNode(l->clone().data(), dst->rootLayer());
 

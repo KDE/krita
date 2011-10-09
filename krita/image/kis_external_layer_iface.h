@@ -41,23 +41,21 @@ class KisExternalLayer : public KisLayer
 public:
     KisExternalLayer(KisImageWSP image, const QString &name, quint8 opacity)
             : KisLayer(image, name, opacity) {}
+
     virtual QIcon icon() const {
         return KIcon("system-run");
     }
-    
+
+    virtual void resetCache() {
+    }
+
     virtual KUndo2Command* crop(const QRect & rect) {
         Q_UNUSED(rect);
         return 0;
     }
-    
-    virtual KUndo2Command* transform(double xscale, double yscale, double xshear, double yshear, double angle, qint32 translatex, qint32 translatey) {
-        Q_UNUSED(xscale);
-        Q_UNUSED(yscale);
-        Q_UNUSED(xshear);
-        Q_UNUSED(yshear);
-        Q_UNUSED(angle);
-        Q_UNUSED(translatex);
-        Q_UNUSED(translatey);
+
+    virtual KUndo2Command* transform(const QTransform &transform) {
+        Q_UNUSED(transform);
         return 0;
     }
 

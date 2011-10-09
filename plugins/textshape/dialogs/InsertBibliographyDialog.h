@@ -25,11 +25,9 @@
 #include <QTextBlock>
 
 #include <KoTextEditor.h>
-#include <ToCBibGeneratorInfo.h>
 
 class KoInlineCite;
 class KoBibliographyInfo;
-class BibliographyGenerator;
 
 class InsertBibliographyDialog : public QDialog
 {
@@ -52,5 +50,5 @@ private:
     KoBibliographyInfo *m_bibInfo;
 };
 
-Q_DECLARE_METATYPE(QTextDocument *);
+
 #endif // INSERTBIBLIOGRAPHYDIALOG_H

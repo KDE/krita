@@ -28,6 +28,8 @@
 #include "KoSelection.h"
 #include "commands/KoPathPointMergeCommand.h"
 #include "SnapGuideConfigWidget.h"
+#include "KoCanvasResourceManager.h"
+#include "KoDocumentResourceManager.h"
 
 #include <KNumInput>
 
@@ -316,7 +318,7 @@ void KoCreatePathTool::resourceChanged(int key, const QVariant & res)
     Q_D(KoCreatePathTool);
 
     switch (key) {
-    case KoDocumentResource::HandleRadius: {
+    case KoDocumentResourceManager::HandleRadius: {
         d->handleRadius = res.toUInt();
     }
     break;

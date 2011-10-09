@@ -22,7 +22,7 @@
 #include "KoInteractionStrategy_p.h"
 #include "KoCanvasBase.h"
 #include "KoShapeController.h"
-#include "KoResourceManager.h"
+#include "KoDocumentResourceManager.h"
 
 #include <kundo2command.h>
 

@@ -29,7 +29,7 @@
 #include <QList>
 
 class KoCanvasController;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 class KoToolFactoryBase;
 class KoCanvasBase;
 class KoToolBase;
@@ -148,7 +148,7 @@ public:
      * @param shapecontroller the new shape controller
      * @param canvasController the canvas
      */
-    void updateShapeControllerBase(KoShapeControllerBase *shapeController, KoCanvasController *canvasController);
+    void updateShapeControllerBase(KoShapeBasedDocumentBase *shapeController, KoCanvasController *canvasController);
 
     /**
      * Return the tool that is able to create shapes for this param canvas.

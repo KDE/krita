@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>523</width>
-    <height>462</height>
+    <height>570</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -17,14 +17,20 @@
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Summary</string>
+      <string>&amp;Summary:</string>
+     </property>
+     <property name="buddy">
+      <cstring>summary</cstring>
      </property>
     </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Location</string>
+      <string>&amp;Location:</string>
+     </property>
+     <property name="buddy">
+      <cstring>location</cstring>
      </property>
     </widget>
    </item>
@@ -34,14 +40,23 @@
    <item row="3" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Start</string>
+      <string>&amp;Start:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="buddy">
+      <cstring>startTime</cstring>
      </property>
     </widget>
    </item>
    <item row="6" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>End</string>
+      <string>&amp;End:</string>
+     </property>
+     <property name="buddy">
+      <cstring>endDate</cstring>
      </property>
     </widget>
    </item>
@@ -89,9 +104,6 @@
          <attribute name="headerShowSortIndicator" stdset="0">
           <bool>true</bool>
          </attribute>
-         <attribute name="headerShowSortIndicator" stdset="0">
-          <bool>true</bool>
-         </attribute>
          <column>
           <property name="text">
            <string notr="true">1</string>
@@ -117,14 +129,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KTimeZoneWidget</class>
-   <extends>QTreeWidget</extends>
-   <header>ktimezonewidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>KDatePicker</class>
    <extends>QFrame</extends>
    <header>kdatepicker.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KTimeZoneWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>ktimezonewidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -32,3 +32,4 @@ target_link_libraries(koreport_barcodeplugin ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_
 
 install(TARGETS koreport_barcodeplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  koreport_barcodeplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+kde4_install_icons(${DATA_INSTALL_DIR}/calligra/icons)

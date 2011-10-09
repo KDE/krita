@@ -40,6 +40,7 @@
 #include <KoResourceSelector.h>
 #include <KoResourceServerAdapter.h>
 #include <KoToolManager.h>
+#include <QTemporaryFile>
 
 #include <kis_paint_device.h>
 #include <kis_paintop_registry.h>
@@ -157,7 +158,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     labelMode->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     m_cmbCompositeOp  = new KisCompositeOpComboBox();
     m_paletteButton   = new QPushButton(i18n("Save to Palette"));
-    m_workspaceWidget = new KisPopupButton(this);
+    m_workspaceWidget = new KisPopupButton(view);
     m_workspaceWidget->setIcon(KIcon("document-multiple"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
     m_workspaceWidget->setFixedSize(32, 32);
@@ -166,25 +167,48 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     QHBoxLayout* baseLayout = new QHBoxLayout(this);
     m_paintopWidget = new QWidget(this);
     baseLayout->addWidget(m_paintopWidget);
+    baseLayout->setContentsMargins(0, 0, 0, 0);
 
+    KAction* action;
     m_layout = new QHBoxLayout(m_paintopWidget);
     m_layout->addWidget(m_settingsWidget);
     m_layout->addWidget(m_presetWidget);
-    m_layout->addWidget(labelMode);
-    m_layout->addWidget(m_cmbCompositeOp);
-    m_layout->addWidget(m_eraseModeButton);
-    m_layout->addWidget(m_sliderChooser[0]);
-    m_layout->addWidget(m_sliderChooser[1]);
-    m_layout->addWidget(new KSeparator(Qt::Vertical, this));
-    m_layout->addWidget(hMirrorButton);
-    m_layout->addWidget(vMirrorButton);
-    m_layout->addWidget(new KSeparator(Qt::Vertical, this));
-    m_layout->addWidget(m_paletteButton);
-    m_layout->addSpacerItem(new QSpacerItem(10, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
     m_layout->setContentsMargins(0, 0, 0, 0);
 
-    baseLayout->addWidget(m_workspaceWidget);
-    baseLayout->setContentsMargins(0, 0, 0, 0);
+    QWidget* compositeActions = new QWidget(this);
+    QHBoxLayout* compositeLayout = new QHBoxLayout(compositeActions);
+    compositeLayout->addWidget(labelMode);
+    compositeLayout->addWidget(m_cmbCompositeOp);
+    compositeLayout->addWidget(m_eraseModeButton);
+    compositeLayout->setContentsMargins(0, 0, 0, 0);
+    action = new KAction(i18n("Brush composite"), this);
+    view->actionCollection()->addAction("composite_actions", action);
+    action->setDefaultWidget(compositeActions);
+
+    action = new KAction(i18n("Brush option slider 1"), this);
+    view->actionCollection()->addAction("brushslider1", action);
+    action->setDefaultWidget(m_sliderChooser[0]);
+
+    action = new KAction(i18n("Brush option slider 2"), this);
+    view->actionCollection()->addAction("brushslider2", action);
+    action->setDefaultWidget(m_sliderChooser[1]);
+
+    QWidget* mirrorActions = new QWidget(this);
+    QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
+    mirrorLayout->addWidget(hMirrorButton);
+    mirrorLayout->addWidget(vMirrorButton);
+    mirrorLayout->setContentsMargins(0, 0, 0, 0);
+    action = new KAction(i18n("Mirror"), this);
+    view->actionCollection()->addAction("mirror_actions", action);
+    action->setDefaultWidget(mirrorActions);
+
+    action = new KAction(i18n("Add to palette"), this);
+    view->actionCollection()->addAction("palette_manager", action);
+    action->setDefaultWidget(m_paletteButton);
+
+    action = new KAction(i18n("Workspaces"), this);
+    view->actionCollection()->addAction("workspaces", action);
+    action->setDefaultWidget(m_workspaceWidget);
 
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_settingsWidget->setPopupWidget(m_presetsPopup);
@@ -312,7 +336,6 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     preset->settings()->setNode(m_resourceProvider->currentNode());
 
     m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
-    m_presetsPopup->setPreset(preset);
     m_presetsChooserPopup->setPresetFilter(paintop);
 
     Q_ASSERT(m_optionWidget && m_presetWidget);
@@ -464,8 +487,17 @@ void KisPaintopBox::slotSaveActivePreset()
     QString name = m_presetsPopup->getPresetName();
     QFileInfo fileInfo(saveLocation + name + newPreset->defaultFileExtension());
 
-    if (fileInfo.exists())
+    QStringList blacklistFileNames = rServer->blackListedFiles();
+
+    if (fileInfo.exists() && blacklistFileNames.contains(fileInfo.filePath())) {
+        QTemporaryFile file(saveLocation + name + newPreset->defaultFileExtension());
+        if (file.open()) {
+            fileInfo.setFile(file.fileName());
+        }
+     }
+     else if (fileInfo.exists()) {
         rServer->removeResource(rServer->getResourceByName(name));
+    }
 
     newPreset->setImage(m_presetsPopup->cutOutOverlay());
     newPreset->setFilename(fileInfo.filePath());

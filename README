@@ -76,9 +76,6 @@ kspread/
 words/
 kivio/
 
-kchart/      source code of two applications who are now available as shapes.
-kformula/
-
 kounavail    a shape that is used when an application that handles a
              certain embedded datatype is not available
 

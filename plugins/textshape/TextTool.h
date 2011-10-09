@@ -26,6 +26,7 @@
 #include "KoPointedAt.h"
 
 #include <KoToolBase.h>
+#include <KoTextCommandBase.h>
 
 #include <QClipboard>
 #include <QHash>
@@ -55,12 +56,10 @@ class KUndo2Command;
 class MockCanvas;
 class TextToolSelection;
 
-class ChangeListCommand;
-
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
  */
-class TextTool : public KoToolBase
+class TextTool : public KoToolBase, public KoUndoableTool
 {
     Q_OBJECT
 public:
@@ -92,6 +91,10 @@ public:
     virtual void deactivate();
     /// reimplemented from superclass
     virtual void copy() const;
+
+    /// reimplemented from KoUndoableTool
+    virtual void setAddUndoCommandAllowed(bool allowed) { m_allowAddUndoCommand = allowed; }
+
     ///reimplemented
     virtual void deleteSelection();
     /// reimplemented from superclass
@@ -122,8 +125,6 @@ public:
 
     void stopEditing();
 
-    const QTextCursor cursor();
-
     void setShapeData(KoTextShapeData *data);
 
     QRectF caretRect(QTextCursor *cursor) const;
@@ -132,6 +133,9 @@ public:
 
 protected:
     virtual void createActions();
+
+    friend class SimpleParagraphWidget;
+    friend class ParagraphSettingsDialog;
 
     KoTextEditor *textEditor() { return m_textEditor.data(); }
 
@@ -148,9 +152,6 @@ public slots:
     void configureChangeTracking();
     /// call this when the 'is-bidi' boolean has been changed.
     void isBidiUpdated();
-
-    /// call this in order to change the list style
-    void changeListStyle(ChangeListCommand *command);
 
 signals:
     /// emitted every time a different styleManager is set.
@@ -301,13 +302,10 @@ private:
 
 private:
     friend class UndoTextCommand;
-    friend class TextCommandBase;
     friend class ChangeTracker;
-    friend class TextPasteCommand;
     friend class TextCutCommand;
     friend class ShowChangesCommand;
-    friend class ChangeTrackedDeleteCommand;
-    friend class DeleteCommand;
+
     TextShape *m_textShape; // where caret of m_textEditor currently is
     KoTextShapeData *m_textShapeData; // where caret of m_textEditor currently is
     QWeakPointer<KoTextEditor> m_textEditor;
@@ -349,14 +347,6 @@ private:
 
     bool m_currentCommandHasChildren;
 
-    /// structure that allows us to remember the text position and selection of previously edited documents.
-    struct TextSelection {
-        QTextDocument *document; // be warned that this may end up being a dangling pointer, so don't use.
-        int position;
-        int anchor;
-    };
-    QList<TextSelection> m_previousSelections;
-
     InsertCharacter *m_specialCharacterDocker;
 
     TextEditingPluginContainer *m_textEditingPlugins;
@@ -368,7 +358,7 @@ private:
     int m_changeTipCursorPos;
     QPoint m_changeTipPos;
     bool m_delayedEnsureVisible;
-    
+
     TextToolSelection *m_toolSelection;
 };
 

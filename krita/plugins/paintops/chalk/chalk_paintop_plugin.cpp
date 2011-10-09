@@ -40,8 +40,6 @@ K_EXPORT_PLUGIN(ChalkPaintOpPluginFactory("krita"))
 ChalkPaintOpPlugin::ChalkPaintOpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //
-    //setComponentData(ChalkPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisSimplePaintOpFactory<KisChalkPaintOp, KisChalkPaintOpSettings, KisChalkPaintOpSettingsWidget>("chalkbrush", i18n("Chalk brush"), 
                                                                                                                 KisPaintOpFactory::categoryExperimental(), "krita-chalk.png"));

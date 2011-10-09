@@ -152,7 +152,7 @@ bool PSDLayerSection::read(QIODevice* io)
                 return false;
             }
 
-            PSDLayerRecord::ChannelInfo* channelInfo = layerRecord->channelInfoRecords.at(j);
+            ChannelInfo* channelInfo = layerRecord->channelInfoRecords.at(j);
 
             quint16 compressionType;
             if (!psdread(io, &compressionType)) {
@@ -183,7 +183,7 @@ bool PSDLayerSection::read(QIODevice* io)
                             return 0;
                         }
                     }
-                    //qDebug() << "rle byte count" << byteCount;
+                    ////qDebug() << "rle byte count" << byteCount;
                     channelInfo->rleRowLengths << byteCount;
                 }
             }

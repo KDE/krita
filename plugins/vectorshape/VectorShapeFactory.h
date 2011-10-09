@@ -35,7 +35,7 @@ public:
     VectorShapeFactory();
     ~VectorShapeFactory() {}
 
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
 
     /// Reimplemented
     virtual bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const;

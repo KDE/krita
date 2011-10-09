@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,30 +22,54 @@
 
 #include <ui_SimpleTableOfContentsWidget.h>
 #include <KoListStyle.h>
+#include "FormattingButton.h"
 
 #include <QWidget>
 #include <QTextBlock>
+#include <QList>
 
 class ReferencesTool;
 class KoStyleManager;
+class QMenu;
+class KoTableOfContentsGeneratorInfo;
+class TableOfContentsPreview;
+class QSignalMapper;
+class TableOfContentsTemplate;
 
 class SimpleTableOfContentsWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit SimpleTableOfContentsWidget(ReferencesTool *tool, QWidget *parent = 0);
+    ~SimpleTableOfContentsWidget();
+    void setToCConfigureMenu(QMenu *tocMenu);
+    QMenu *ToCConfigureMenu();
+    void showMenu();
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
+    void prepareTemplateMenu();
+    void pixmapReady(int templateId);
 
 signals:
     void doneWithFocus();
+    void showConfgureOptions();
+
+private slots:
+    void applyTemplate(int templateId);
+    void insertCustomToC();
     
 private:
     Ui::SimpleTableOfContentsWidget widget;
     KoStyleManager *m_styleManager;
     bool m_blockSignals;
     QTextBlock m_currentBlock;
+    QList<KoTableOfContentsGeneratorInfo *> m_templateList;
+    //each template in the template list will have have a previewGenerator that will be deleted after preview is generated
+    QList<TableOfContentsPreview *> m_previewGenerator;
+    ReferencesTool *m_referenceTool;
+    QSignalMapper *m_signalMapper;
+    TableOfContentsTemplate *m_templateGenerator;
 };
 
 #endif

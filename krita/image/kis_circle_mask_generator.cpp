@@ -44,6 +44,11 @@ KisCircleMaskGenerator::~KisCircleMaskGenerator()
     delete d;
 }
 
+bool KisCircleMaskGenerator::shouldSupersample() const
+{
+    return width() < 10 || KisMaskGenerator::d->ratio * width() < 10;
+}
+
 quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
 {
     if (KisMaskGenerator::d->empty) return 255;

@@ -30,6 +30,7 @@
 #include "kis_processing_information.h"
 #include "kis_node.h"
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 #include "kis_node_progress_proxy.h"
 #include "kis_transaction.h"
 #include "kis_painter.h"
@@ -137,6 +138,11 @@ QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
 bool KisFilterMask::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
+}
+
+void KisFilterMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
 }
 
 /**

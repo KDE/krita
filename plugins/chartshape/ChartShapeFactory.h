@@ -54,8 +54,8 @@ public:
 
     bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
-    virtual void newDocumentResourceManager(KoResourceManager *manager) const;
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
+    virtual void newDocumentResourceManager(KoDocumentResourceManager *manager) const;
 
     QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };

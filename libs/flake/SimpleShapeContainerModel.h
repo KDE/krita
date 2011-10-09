@@ -49,12 +49,12 @@ public:
     void containerChanged(KoShapeContainer *, KoShape::ChangeType) { }
     bool isChildLocked(const KoShape *child) const {
         Q_ASSERT(child->parent());
-	if (child->parent()) {
-	   return child->isGeometryProtected() || child->parent()->isGeometryProtected();
-	}
-	else {
-	    return child->isGeometryProtected();
-	}
+        if (child->parent()) {
+           return child->isGeometryProtected() || child->parent()->isGeometryProtected();
+        }
+        else {
+            return child->isGeometryProtected();
+        }
     }
     void setInheritsTransform(const KoShape *, bool ) { }
     bool inheritsTransform(const KoShape *) const {

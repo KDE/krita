@@ -29,6 +29,7 @@
 #include "KoOdfNumberStyles.h"
 #include "KoOdfNotesConfiguration.h"
 #include "KoOdfLineNumberingConfiguration.h"
+#include "KoOdfBibliographyConfiguration.h"
 
 /**
  * Repository of styles used during loading of OASIS/OOo file
@@ -112,8 +113,15 @@ public:
     /// @return all presentation page layouts ("presentation-page-layout" elements), hashed by name
     QHash<QString, KoXmlElement*> presentationPageLayouts() const;
 
-    /// @return draw styles, hashed by name
-    QHash<QString, KoXmlElement*> drawStyles() const;
+    /**
+     * Get the draw styles for a specified type. 
+     *
+     * @param drawType The type of the wanted drawStyles
+     *                 Available types: gradient(returns gradient, linearGradient, radialGradient and conicalGradient styles),
+     *                 hatch, fill-image, marker, stroke-dash, opacity
+     * @return draw styles of the specified type, hashed by name
+     */
+    QHash<QString, KoXmlElement*> drawStyles(const QString &drawType) const;
 
     /// @return all custom styles ("style:style" elements) for a given family, hashed by name
     QHash<QString, KoXmlElement*> customStyles(const QString& family) const;
@@ -143,6 +151,10 @@ public:
      */
     KoOdfLineNumberingConfiguration lineNumberingConfiguration() const;
 
+    /**
+     * return the bibliography configuration for this document.
+     */
+    KoOdfBibliographyConfiguration globalBibliographyConfiguration() const;
 
 private:
     enum TypeAndLocation {

@@ -24,6 +24,7 @@
 #include <QMutex>
 
 #include <QRect>
+#include <QStack>
 
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>
@@ -55,6 +56,15 @@ public:
     KisTile(const KisTile& rhs);
     ~KisTile();
 
+    /**
+     * This method is called by the hash table when the tile is
+     * disconnected from it. It means that from now on the tile is not
+     * associated with any particular datamanager. All the users of
+     * the tile (via shared pointers) may silently finish they work on
+     * this tile and leave it. No result will be saved. Used for
+     * threading purposes
+     */
+    void notifyDead();
 
 public:
 
@@ -110,8 +120,11 @@ private:
     inline void blockSwapping() const;
     inline void unblockSwapping() const;
 
+    inline void safeReleaseOldTileData(KisTileData *td);
+
 private:
     KisTileData *m_tileData;
+    mutable QStack<KisTileData*> m_oldTileData;
     mutable volatile int m_lockCounter;
 
     qint32 m_col;
@@ -127,7 +140,12 @@ private:
      */
     KisTileSP m_nextTile;
 
+#ifdef DEAD_TILES_SANITY_CHECK
+    QAtomicPointer<KisMementoManager> m_mementoManager;
+#else
     KisMementoManager *m_mementoManager;
+#endif
+
 
     /**
      * This is a special mutex for guarding copy-on-write

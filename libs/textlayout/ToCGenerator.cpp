@@ -58,20 +58,12 @@ ToCGenerator::ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGenerato
 
     tocDocument->setUndoRedoEnabled(false);
     tocDocument->setDocumentLayout(new DummyDocumentLayout(tocDocument));
+    KoTextDocument(tocDocument).setRelativeTabs(tocInfo->m_relativeTabStopPosition);
 }
 
 ToCGenerator::~ToCGenerator()
 {
     delete m_ToCInfo;
-}
-
-static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int outlineLevel) {
-    KoParagraphStyle *style = new KoParagraphStyle();
-    style->setName("Contents " + QString::number(outlineLevel));
-    style->setParent(styleManager->paragraphStyle("Standard"));
-    style->setLeftMargin(QTextLength(QTextLength::FixedLength, (outlineLevel - 1) * 8));
-    styleManager->add(style);
-    return style;
 }
 
 void ToCGenerator::setBlock(const QTextBlock &block)
@@ -132,8 +124,14 @@ bool ToCGenerator::generate()
 
     if (!m_ToCInfo->m_indexTitleTemplate.text.isEmpty()) {
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_ToCInfo->m_indexTitleTemplate.styleId);
+
+        // titleStyle == 0? then it might be in unused styles
         if (!titleStyle) {
-            titleStyle = styleManager->defaultParagraphStyle();
+            titleStyle = styleManager->unusedStyle(m_ToCInfo->m_indexTitleTemplate.styleId); // this should return true only for ToC template preview
+        }
+
+        if (!titleStyle) {
+            titleStyle = styleManager->defaultTableOfcontentsTitleStyle();
         }
 
         QTextBlock titleTextBlock = cursor.block();
@@ -159,8 +157,8 @@ bool ToCGenerator::generate()
 
         if (m_ToCInfo->m_useIndexSourceStyles) {
             bool inserted = false;
-            foreach (IndexSourceStyles indexSourceStyles, m_ToCInfo->m_indexSourceStyles) {
-                foreach (IndexSourceStyle indexStyle, indexSourceStyles.styles) {
+            foreach (const IndexSourceStyles &indexSourceStyles, m_ToCInfo->m_indexSourceStyles) {
+                foreach (const IndexSourceStyle &indexStyle, indexSourceStyles.styles) {
                     if (indexStyle.styleId == block.blockFormat().intProperty(KoParagraphStyle::StyleId)) {
                         generateEntry(indexSourceStyles.outlineLevel, cursor, block, blockId);
                         inserted = true;
@@ -210,17 +208,17 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
         if (outlineLevel >= 1 && (outlineLevel-1) < m_ToCInfo->m_entryTemplate.size()
                     && outlineLevel <= m_ToCInfo->m_outlineLevel) {
             // List's index starts with 0, outline level starts with 0
-            TocEntryTemplate tocEntryTemplate = m_ToCInfo->m_entryTemplate.at(outlineLevel - 1);
+            const TocEntryTemplate *tocEntryTemplate = &m_ToCInfo->m_entryTemplate.at(outlineLevel - 1);
 
             // ensure that we fetched correct entry template
-            Q_ASSERT(tocEntryTemplate.outlineLevel == outlineLevel);
-            if (tocEntryTemplate.outlineLevel != outlineLevel) {
+            Q_ASSERT(tocEntryTemplate->outlineLevel == outlineLevel);
+            if (tocEntryTemplate->outlineLevel != outlineLevel) {
                 qDebug() << "TOC outline level not found correctly " << outlineLevel;
             }
 
-            tocTemplateStyle = styleManager->paragraphStyle(tocEntryTemplate.styleId);
+            tocTemplateStyle = styleManager->paragraphStyle(tocEntryTemplate->styleId);
             if (tocTemplateStyle == 0) {
-                tocTemplateStyle = generateTemplateStyle(styleManager, outlineLevel);
+                tocTemplateStyle = styleManager->defaultTableOfContentsEntryStyle(outlineLevel);
             }
 
             cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
@@ -232,7 +230,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
 
             // save the current style due to hyperlinks
             QTextCharFormat savedCharFormat = cursor.charFormat();
-            foreach (IndexEntry * entry, tocEntryTemplate.indexEntries) {
+            foreach (IndexEntry * entry, tocEntryTemplate->indexEntries) {
                 switch(entry->name) {
                     case IndexEntry::LINK_START: {
                         //IndexEntryLinkStart *linkStart = static_cast<IndexEntryLinkStart*>(entry);
@@ -291,15 +289,13 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                         cursor.insertText("\t");
 
                         QTextBlockFormat blockFormat = cursor.blockFormat();
-                        QList<QVariant> tabList;
+                        QList<QVariant> tabList =            (blockFormat.property(KoParagraphStyle::TabPositions)).value<QList<QVariant> >();
+
                         if (tabEntry->m_position.isEmpty()) {
-                            tabEntry->tab.position = KoTextLayoutArea::MaximumTabPos - tocTemplateStyle->leftMargin();
-                        } else {
-                            tabEntry->tab.position = tabEntry->m_position.toDouble();
-                        }
+                            tabEntry->tab.position = KoTextLayoutArea::MaximumTabPos;
+                        } // else the position is already parsed into tab.position
                         tabList.append(QVariant::fromValue<KoText::Tab>(tabEntry->tab));
                         qSort(tabList.begin(), tabList.end(), compareTab);
-
                         blockFormat.setProperty(KoParagraphStyle::TabPositions, QVariant::fromValue<QList<QVariant> >(tabList));
                         cursor.setBlockFormat(blockFormat);
                         break;

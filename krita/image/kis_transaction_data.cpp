@@ -37,7 +37,6 @@
 class KisTransactionData::Private
 {
 public:
-    QString name;
     KisPaintDeviceSP device;
     KisMementoSP memento;
     bool firstRedo;

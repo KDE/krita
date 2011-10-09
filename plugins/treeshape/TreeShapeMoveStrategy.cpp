@@ -31,7 +31,6 @@
 #include <KoShapeManager.h>
 #include <KoShapeContainer.h>
 #include <KoShapeContainerModel.h>
-#include <KoResourceManager.h>
 #include <KoSnapGuide.h>
 #include <KoPointerEvent.h>
 #include <KoToolBase.h>

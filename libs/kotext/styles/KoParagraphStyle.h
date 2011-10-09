@@ -159,11 +159,9 @@ public:
 
         NormalLineHeight,         ///< bool, internal property for reserved usage
         BibliographyData,
-        BibliographyDocument,
-        AutoUpdateBibliography,
 
         TableOfContentsData,      // set when block is instead a TableOfContents
-        TableOfContentsDocument,  // set when block is instead a TableOfContents
+        GeneratedDocument,  // set when block is instead a generated document
         Shadow                    //< KoShadowStyle, the shadow of this paragraph
     };
 

@@ -20,7 +20,6 @@
 #include "SimpleParagraphWidget.h"
 #include "TextTool.h"
 #include <ListItemsHelper.h>
-#include "../commands/ChangeListCommand.h"
 #include "FormattingButton.h"
 #include "StylesWidget.h"
 #include "SpecialButton.h"
@@ -33,6 +32,7 @@
 #include <KoZoomHandler.h>
 #include <KoStyleThumbnailer.h>
 #include <KoStyleManager.h>
+#include <KoListLevelProperties.h>
 
 #include <KDebug>
 
@@ -71,7 +71,9 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 
     widget.bulletListButton->setDefaultAction(tool->action("format_bulletlist"));
     widget.numberedListButton->setDefaultAction(tool->action("format_numberlist"));
-
+    widget.bulletListButton->setNumColumns(3);
+    widget.numberedListButton->setNumColumns(3);
+ 
     fillListButtons();
     widget.bulletListButton->addSeparator();
     //widget.bulletListButton->addAction(new QAction("fgfd",0));
@@ -100,7 +102,7 @@ SimpleParagraphWidget::~SimpleParagraphWidget()
 
 void SimpleParagraphWidget::directionChangeRequested()
 {
-    QTextCursor cursor = m_tool->cursor();
+    KoTextEditor *editor = m_tool->textEditor();
     QTextBlockFormat format;
     KoText::Direction dir = static_cast<KoText::Direction>(m_currentBlock.blockFormat()
             .intProperty(KoParagraphStyle::TextProgressionDirection));
@@ -119,15 +121,15 @@ void SimpleParagraphWidget::directionChangeRequested()
     case KoText::RightLeftTopBottom: {
         updateDirection(Auto);
         // clearProperty won't have any effect on merge below.
-        int start = qMin(cursor.position(), cursor.anchor());
-        int end = qMax(cursor.position(), cursor.anchor());
+        int start = qMin(editor->position(), editor->anchor());
+        int end = qMax(editor->position(), editor->anchor());
         Q_ASSERT(start >= 0);
-        cursor.setPosition(start);
-        while (cursor.position() <= end) {
-            QTextBlockFormat bf = cursor.blockFormat();
+        editor->setPosition(start);
+        while (editor->position() <= end) {
+            QTextBlockFormat bf = editor->blockFormat();
             bf.clearProperty(KoParagraphStyle::TextProgressionDirection);
-            cursor.setBlockFormat(bf);
-            if (!cursor.movePosition(QTextCursor::NextBlock))
+            editor->setBlockFormat(bf);
+            if (!editor->movePosition(QTextCursor::NextBlock))
                 break;
         }
         emit doneWithFocus();
@@ -136,7 +138,7 @@ void SimpleParagraphWidget::directionChangeRequested()
     case KoText::TopBottomRightLeft: ;// Unhandled.
         break;
     };
-    cursor.mergeBlockFormat(format);
+    editor->mergeBlockFormat(format);
     emit doneWithFocus();
 }
 
@@ -277,8 +279,7 @@ void SimpleParagraphWidget::listStyleChanged(int id)
 {
     emit doneWithFocus();
     if (m_blockSignals) return;
-
-    m_tool->changeListStyle(new ChangeListCommand (m_tool->cursor(), static_cast<KoListStyle::Style> (id)));
+    m_tool->textEditor()->setListProperties(static_cast<KoListStyle::Style> (id));
 }
 
 #include <SimpleParagraphWidget.moc>

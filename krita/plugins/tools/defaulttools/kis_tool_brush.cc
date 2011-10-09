@@ -19,102 +19,28 @@
  */
 
 #include "kis_tool_brush.h"
-#include <QEvent>
-#include <QLabel>
-#include <QLayout>
-#include <QWidget>
-#include <QTimer>
-#include <QPushButton>
-#include <QPainter>
-#include <QRect>
-#include <QCheckBox>
-#include <QGridLayout>
-#include <QComboBox>
-#include <QSizePolicy>
 
-#include <kis_debug.h>
+#include <QCheckBox>
+
 #include <klocale.h>
 
-#include "KoPointerEvent.h"
-#include "KoCanvasBase.h"
+#include "kis_cursor.h"
 #include "kis_slider_spin_box.h"
 
-#include "kis_config.h"
-#include "kis_paintop_preset.h"
-#include "kis_paintop_registry.h"
-#include "kis_cursor.h"
-#include "kis_painter.h"
-#include "kis_slider_spin_box.h"
-#include "kis_paint_device.h"
-#include "kis_layer.h"
 
 #define MAXIMUM_SMOOTHNESS 1000
 #define MAXIMUM_MAGNETISM 1000
 
-const int MAXIMUM_RATE = 1000;  // 1 second for rate? Just quick test
 
 KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
         : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18nc("(qtundo-format)", "Brush"))
 {
     setObjectName("tool_brush");
-
-    m_isAirbrushing = false;
-    m_rate = 100;
-    m_timer = new QTimer(this);
-    Q_CHECK_PTR(m_timer);
-
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
 }
 
 KisToolBrush::~KisToolBrush()
 {
-    delete m_timer;
-    m_timer = 0;
 }
-
-void KisToolBrush::timeoutPaint()
-{
-    Q_ASSERT(currentPaintOpPreset()->settings()->isAirbrushing());
-    if (currentImage() && m_painter) {
-        paintAt(m_previousPaintInformation);
-        currentNode()->setDirty(m_painter->takeDirtyRegion());
-    }
-}
-
-
-void KisToolBrush::initPaint(KoPointerEvent *e)
-{
-    KisToolFreehand::initPaint(e);
-
-    m_rate = currentPaintOpPreset()->settings()->rate();
-    m_isAirbrushing = currentPaintOpPreset()->settings()->isAirbrushing();
-
-    if (!m_painter) {
-        warnKrita << "Didn't create a painter! Something is wrong!";
-        return;
-    }
-
-    if (m_isAirbrushing) {
-        m_timer->start(m_rate);
-    }
-}
-
-
-void KisToolBrush::endPaint()
-{
-    m_timer->stop();
-    KisToolFreehand::endPaint();
-}
-
-
-void KisToolBrush::mouseMoveEvent(KoPointerEvent *e)
-{
-    KisToolFreehand::mouseMoveEvent(e);
-    if (m_painter && m_painter->paintOp() && m_isAirbrushing) {
-        m_timer->start(m_rate);
-    }
-}
-
 
 void KisToolBrush::slotSetSmoothness(int smoothness)
 {

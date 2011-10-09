@@ -23,8 +23,8 @@
 #include <KoOdfPaste.h>
 #include "kotext_export.h"
 
-class QTextCursor;
-class KoCanvasBase;
+class KoTextEditor;
+class KoShapeController;
 
 #include <QSharedPointer>
 namespace Soprano
@@ -38,9 +38,12 @@ public:
     /**
      * Note: RdfModel ownership is not taken. You must ensure that it remains
      * valid for the lifetime of the object.
+     *
+     * @param editor the KoTextEditor the text will be read into
+     * @param shapeController the shapecontroller that gives access to the document's shapes and resourcemanager
+     * @param rdfModel the rdfModel we'll insert the tuples into
      */
-    KoTextPaste(QTextCursor &cursor,
-                KoCanvasBase *canvas, const Soprano::Model *rdfModel);
+    KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, const Soprano::Model *rdfModel);
     virtual ~KoTextPaste();
 
 protected:

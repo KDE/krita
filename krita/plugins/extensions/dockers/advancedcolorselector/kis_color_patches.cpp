@@ -28,7 +28,7 @@
 #include <KGlobal>
 
 #include "kis_canvas2.h"
-#include "KoResourceManager.h"
+#include "KoCanvasResourceManager.h"
 
 KisColorPatches::KisColorPatches(QString configPrefix, QWidget *parent) :
     KisColorSelectorBase(parent), m_allowColorListChangeGuard(true), m_scrollValue(0), m_configPrefix(configPrefix)

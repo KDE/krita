@@ -22,6 +22,7 @@
 #include <KoShapeContainer.h>
 #include <KoShapeBorderModel.h>
 #include <KoShapeShadow.h>
+#include <KoShapeGroup.h>
 
 #include <qnumeric.h>
 
@@ -32,10 +33,11 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransfor
     m_shape(shape),
     m_runAroundThreshold(0)
 {
-    QPainterPath path = decoratedOutline();
+    qreal borderHalfWidth;
+    QPainterPath path = decoratedOutline(m_shape, borderHalfWidth);
 
     //TODO check if path is convex. otherwise do triangulation and create more convex obstructions
-    init(matrix, path, shape->textRunAroundDistance());
+    init(matrix, path, shape->textRunAroundDistance(), borderHalfWidth);
 
     if (shape->textRunAroundSide() == KoShape::NoRunAround) {
         // make the shape take the full width of the text area
@@ -58,29 +60,39 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransfor
     }
 }
 
-QPainterPath KoTextLayoutObstruction::decoratedOutline()
+QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qreal &borderHalfWidth) const
 {
-    QPainterPath path = m_shape->outline();
+    const KoShapeGroup *shapeGroup = dynamic_cast<const KoShapeGroup *>(shape);
+    if (shapeGroup) {
+        QPainterPath groupPath;
 
-    QRectF bb = m_shape->outlineRect();
-    m_borderHalfWidth = 0;
+        foreach (const KoShape *child, shapeGroup->shapes()) {
+            groupPath += decoratedOutline(child, borderHalfWidth);
+        }
+        return groupPath;
+    }
+
+    QPainterPath path = shape->outline();
+
+    QRectF bb = shape->outlineRect();
+    borderHalfWidth = 0;
  
-    if (m_shape->border()) {
+    if (shape->border()) {
         KoInsets insets;
-        m_shape->border()->borderInsets(m_shape, insets);
+        shape->border()->borderInsets(shape, insets);
         /*
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
         path = QPainterPath();
         path.addRect(bb);
         */
-        m_borderHalfWidth = qMax(qMax(insets.left, insets.top),qMax(insets.right, insets.bottom));
+        borderHalfWidth = qMax(qMax(insets.left, insets.top),qMax(insets.right, insets.bottom));
     }
 
-    if (m_shape->shadow()) {
-        QTransform transform = m_shape->absoluteTransformation(0);
+    if (shape->shadow()) {
+        QTransform transform = shape->absoluteTransformation(0);
         bb = transform.mapRect(bb);
         KoInsets insets;
-        m_shape->shadow()->insets(insets);
+        shape->shadow()->insets(insets);
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
         path = QPainterPath();
         path.addRect(bb);
@@ -90,12 +102,12 @@ QPainterPath KoTextLayoutObstruction::decoratedOutline()
     return path;
 }
 
-void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath &obstruction, qreal distance)
+void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath &obstruction, qreal distance, qreal borderHalfWidth)
 {
     m_distance = distance;
     QPainterPath path =  matrix.map(obstruction);
     m_bounds = path.boundingRect();
-    distance += m_borderHalfWidth;
+    distance += borderHalfWidth;
     if (distance >= 0.0) {
         QTransform grow = matrix;
         grow.translate(m_bounds.width() / 2.0, m_bounds.height() / 2.0);
@@ -141,9 +153,10 @@ void KoTextLayoutObstruction::changeMatrix(const QTransform &matrix)
 {
     m_edges.clear();
 
-    QPainterPath path = decoratedOutline();
+    qreal borderHalfWidth;
+    QPainterPath path = decoratedOutline(m_shape, borderHalfWidth);
 
-    init(matrix, path, m_distance);
+    init(matrix, path, m_distance, borderHalfWidth);
 }
 
 QRectF KoTextLayoutObstruction::cropToLine(const QRectF &lineRect)

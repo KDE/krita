@@ -35,7 +35,7 @@ SpiralShapeFactory::SpiralShapeFactory()
     setLoadingPriority(1);
 }
 
-KoShape *SpiralShapeFactory::createDefaultShape(KoResourceManager *) const
+KoShape *SpiralShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     SpiralShape *spiral = new SpiralShape();
 

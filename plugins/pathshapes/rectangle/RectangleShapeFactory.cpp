@@ -42,7 +42,7 @@ RectangleShapeFactory::RectangleShapeFactory()
     setXmlElements(elementNamesList);
 }
 
-KoShape *RectangleShapeFactory::createDefaultShape(KoResourceManager *) const
+KoShape *RectangleShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     RectangleShape *rect = new RectangleShape();
 

@@ -46,6 +46,7 @@
 #include "styles/KoTableCellStyle.h"
 #include "styles/KoSectionStyle.h"
 #include "KoOdfNotesConfiguration.h"
+#include "KoOdfBibliographyConfiguration.h"
 
 class KoTextSharedLoadingData::Private
 {
@@ -97,6 +98,7 @@ public:
     QHash<QString, KoParagraphStyle*> namedParagraphStyles;
     KoOdfNotesConfiguration footnotesConfiguration;
     KoOdfNotesConfiguration endnotesConfiguration;
+    KoOdfBibliographyConfiguration bibliographyConfiguration;
     KoCharacterStyle *applicationDefaultStyle;
 };
 
@@ -563,6 +565,11 @@ KoParagraphStyle *KoTextSharedLoadingData::paragraphStyle(const QString &name, b
     return stylesDotXml ? d->paragraphStylesDotXmlStyles.value(name) : d->paragraphContentDotXmlStyles.value(name);
 }
 
+QList<KoParagraphStyle *> KoTextSharedLoadingData::paragraphStyles(bool stylesDotXml) const
+{
+    return stylesDotXml ? d->paragraphStylesDotXmlStyles.values() : d->paragraphStylesDotXmlStyles.values();
+}
+
 KoCharacterStyle *KoTextSharedLoadingData::characterStyle(const QString &name, bool stylesDotXml) const
 {
     return stylesDotXml ? d->characterStylesDotXmlStyles.value(name) : d->characterContentDotXmlStyles.value(name);
@@ -613,6 +620,11 @@ KoOdfNotesConfiguration KoTextSharedLoadingData::endnotesConfiguration() const
     return d->endnotesConfiguration;
 }
 
+KoOdfBibliographyConfiguration KoTextSharedLoadingData::bibliographyConfiguration() const
+{
+    return d->bibliographyConfiguration;
+}
+
 void KoTextSharedLoadingData::setApplicationDefaultStyle(KoCharacterStyle *applicationDefaultStyle)
 {
     d->applicationDefaultStyle = applicationDefaultStyle;
@@ -623,10 +635,11 @@ KoCharacterStyle *KoTextSharedLoadingData::applicationDefaultStyle() const
     return d->applicationDefaultStyle;
 }
 
-void KoTextSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &/*context*/)
+void KoTextSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &/*context*/, KoTextAnchor *anchor)
 {
     Q_UNUSED(shape);
     Q_UNUSED(element);
+    Q_UNUSED(anchor);
 }
 
 void KoTextSharedLoadingData::addNotesConfiguration(KoShapeLoadingContext &context)
@@ -635,4 +648,10 @@ void KoTextSharedLoadingData::addNotesConfiguration(KoShapeLoadingContext &conte
             context.odfLoadingContext().stylesReader().globalNotesConfiguration(KoOdfNotesConfiguration::Footnote);
     d->endnotesConfiguration =
             context.odfLoadingContext().stylesReader().globalNotesConfiguration(KoOdfNotesConfiguration::Endnote);
+}
+
+void KoTextSharedLoadingData::addBibliographyConfiguration(KoShapeLoadingContext &context)
+{
+    d->bibliographyConfiguration =
+            context.odfLoadingContext().stylesReader().globalBibliographyConfiguration();
 }

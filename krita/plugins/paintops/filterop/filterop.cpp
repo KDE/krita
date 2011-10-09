@@ -38,7 +38,6 @@ K_EXPORT_PLUGIN(FilterOpFactory("krita"))
 FilterOp::FilterOp(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(FilterOpFactory::componentData());
     QStringList whiteList;
     whiteList << COMPOSITE_COPY;
 

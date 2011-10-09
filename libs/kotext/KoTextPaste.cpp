@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,11 +22,12 @@
 
 #include <KoOdfReadStore.h>
 #include <KoOdfLoadingContext.h>
-#include <KoCanvasBase.h>
 #include <KoShapeLoadingContext.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoShapeController.h>
+
 #include "KoTextDocument.h"
+#include "KoDocumentRdfBase.h"
 #include "opendocument/KoTextLoader.h"
 
 #include <kdebug.h>
@@ -36,20 +38,20 @@
 class KoTextPaste::Private
 {
 public:
-    Private(QTextCursor &cursor,
-            KoCanvasBase *canvas, const Soprano::Model *_rdfModel)
-            : cursor(cursor)
-            , canvas(canvas)
-            , rdfModel(_rdfModel) {}
+    Private(KoTextEditor *editor, KoShapeController *shapeController, const Soprano::Model *_rdfModel)
+        : editor(editor)
+        , resourceManager(shapeController->resourceManager())
+        , rdfModel(_rdfModel)
+    {
+    }
 
-    QTextCursor &cursor;
-    KoCanvasBase *canvas;
+    KoTextEditor *editor;
+    KoDocumentResourceManager *resourceManager;
     const Soprano::Model *rdfModel;
 };
 
-KoTextPaste::KoTextPaste(QTextCursor &cursor,
-                         KoCanvasBase *canvas, const Soprano::Model *rdfModel)
-        : d(new Private(cursor, canvas, rdfModel))
+KoTextPaste::KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, const Soprano::Model *rdfModel)
+        : d(new Private(editor, shapeController, rdfModel))
 {
 }
 
@@ -62,24 +64,33 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
 {
     bool ok = true;
     KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-    KoShapeLoadingContext context(loadingContext, d->canvas->shapeController()->resourceManager());
+    KoShapeLoadingContext context(loadingContext, d->resourceManager);
 
     KoTextLoader loader(context);
 
     kDebug(30015) << "text paste";
-    loader.loadBody(body, d->cursor);   // now let's load the body from the ODF KoXmlElement.
+    // load the paste directly into the editor's cursor -- which breaks encapsulation
+    loader.loadBody(body, *d->editor->cursor());   // now let's load the body from the ODF KoXmlElement.
 
 #ifdef SHOULD_BUILD_RDF
+    kDebug(30015) << "text paste, rdf handling" << d->rdfModel;
     // RDF: Grab RDF metadata from ODF file if present & load it into rdfModel
-    if (d->rdfModel) {
+    if (d->rdfModel)
+    {
         Soprano::Model *tmpmodel(Soprano::createModel());
         ok = KoTextRdfCore::loadManifest(odfStore.store(), tmpmodel);
-        kDebug(30015) << "ok:" << ok << " model.sz:" << tmpmodel->statementCount();
+        kDebug(30015) << "ok:" << ok << " tmpmodel.sz:" << tmpmodel->statementCount();
+        kDebug(30015) << "existing rdf model.sz:" << d->rdfModel->statementCount();
 #ifndef NDEBUG
         KoTextRdfCore::dumpModel("RDF from C+P", tmpmodel);
 #endif
         const_cast<Soprano::Model*>(d->rdfModel)->addStatements(tmpmodel->listStatements().allElements());
         delete tmpmodel;
+
+        kDebug(30015) << "done... existing rdf model.sz:" << d->rdfModel->statementCount();
+#ifndef NDEBUG
+        KoTextRdfCore::dumpModel("Imported RDF after C+P", const_cast<Soprano::Model*>(d->rdfModel));
+#endif
     }
 #endif
 

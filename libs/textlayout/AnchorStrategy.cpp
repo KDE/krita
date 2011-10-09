@@ -33,8 +33,8 @@
 
 AnchorStrategy::AnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
         : m_anchor(anchor)
-        , m_model(0)
         , m_rootArea(rootArea)
+        , m_model(0)
         , m_pageRect(0,0,10,10)
         , m_pageContentRect(0,0,10,10)
         , m_paragraphRect(0,0,0,0)
@@ -68,7 +68,7 @@ QRectF AnchorStrategy::pageContentRect()
     return m_pageContentRect;
 }
 
-void AnchorStrategy::setPageContentRect(QRectF &pageContentRect)
+void AnchorStrategy::setPageContentRect(const QRectF &pageContentRect)
 {
     m_pageContentRect = pageContentRect;
 }
@@ -81,6 +81,16 @@ QRectF AnchorStrategy::paragraphRect()
 void AnchorStrategy::setParagraphRect(const QRectF &paragraphRect)
 {
     m_paragraphRect = paragraphRect;
+}
+
+QRectF AnchorStrategy::layoutEnvironmentRect()
+{
+    return m_layoutEnvironmentRect;
+}
+
+void AnchorStrategy::setLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect)
+{
+    m_layoutEnvironmentRect = layoutEnvironmentRect;
 }
 
 int AnchorStrategy::pageNumber()

@@ -201,7 +201,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
     dbgFile << XCF.version << "width = " << XCF.width << "height = " << XCF.height << "layers = " << XCF.numLayers;
 
     // Create the image
-    KisImageSP image = new KisImage(doc->undoAdapter(), XCF.width, XCF.height, KoColorSpaceRegistry::instance()->rgb8(), "built image");
+    KisImageSP image = new KisImage(doc->createUndoStore(), XCF.width, XCF.height, KoColorSpaceRegistry::instance()->rgb8(), "built image");
     image->lock();
 
     // Read layers

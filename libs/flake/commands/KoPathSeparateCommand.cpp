@@ -19,14 +19,14 @@
  */
 
 #include "KoPathSeparateCommand.h"
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
 #include "KoPathShape.h"
 #include <klocale.h>
 
 class KoPathSeparateCommand::Private
 {
 public:
-    Private(KoShapeControllerBase *c, const QList<KoPathShape*> &p)
+    Private(KoShapeBasedDocumentBase *c, const QList<KoPathShape*> &p)
             : controller(c),
             paths(p),
             isSeparated(false) {
@@ -42,14 +42,14 @@ public:
         }
     }
 
-    KoShapeControllerBase *controller;
+    KoShapeBasedDocumentBase *controller;
     QList<KoPathShape*> paths;
     QList<KoPathShape*> separatedPaths;
     bool isSeparated;
 };
 
 
-KoPathSeparateCommand::KoPathSeparateCommand(KoShapeControllerBase *controller, const QList<KoPathShape*> &paths, KUndo2Command *parent)
+KoPathSeparateCommand::KoPathSeparateCommand(KoShapeBasedDocumentBase *controller, const QList<KoPathShape*> &paths, KUndo2Command *parent)
         : KUndo2Command(parent),
         d(new Private(controller, paths))
 {

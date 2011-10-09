@@ -43,7 +43,6 @@
 #include <kis_paint_device.h>
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
-#include <kis_undo_adapter.h>
 
 #include <metadata/kis_meta_data_entry.h>
 #include <metadata/kis_meta_data_schema.h>
@@ -51,10 +50,9 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_value.h>
 
-exrConverter::exrConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
+exrConverter::exrConverter(KisDoc2 *doc)
 {
     m_doc = doc;
-    m_adapter = adapter;
     m_job = 0;
     m_stop = false;
 }
@@ -436,7 +434,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     }
 
     // Create the image
-    m_image = new KisImage(m_adapter, width, height, colorSpace, "");
+    m_image = new KisImage(m_doc->createUndoStore(), width, height, colorSpace, "");
 
     if (!m_image) {
         return KisImageBuilder_RESULT_FAILURE;

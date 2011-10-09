@@ -67,6 +67,8 @@ public:
      */
     virtual quint8 valueAt(qreal x, qreal y) const = 0;
 
+    virtual bool shouldSupersample() const;
+
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
     /**

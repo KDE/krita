@@ -108,7 +108,7 @@ public:
     void setTabSpacing(qreal spacing);
 
     /// are the tabs relative to indent or not
-    bool relativeTabs() const;
+    bool relativeTabs(QTextBlock block) const;
 
     /// Calc a bounding box rect of the selection
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
@@ -121,6 +121,8 @@ public:
 
     /// reimplemented to always return 1
     virtual int pageCount() const;
+
+    QList<KoTextAnchor *> textAnchors() const;
 
     /**
      * Register the anchored obstruction  for run around
@@ -152,6 +154,15 @@ public:
     /// positionInlineObject()
     void setAnchoringParagraphRect(const QRectF &paragraphRect);
 
+    /// Sets the layoutEnvironment rect that will be applied to anchorStrategies being created in
+    /// positionInlineObject()
+    void setAnchoringLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect);
+
+    /// Calculates the maximum y of anchored obstructions
+    qreal maxYOfAnchoredObstructions(int firstCursorPosition, int lastCursorPosition) const;
+
+    int anchoringSoftBreak() const;
+
     /// Positions all anchored obstructions
     /// the paragraphRect should be in textDocument coords and not global/document coords
     void positionAnchoredObstructions();
@@ -160,6 +171,7 @@ public:
     void removeInlineObject(KoTextAnchor *textAnchor);
 
     void clearInlineObjectRegistry(QTextBlock block);
+
     KoInlineObjectExtent inlineObjectExtent(const QTextFragment&);
 
     /**

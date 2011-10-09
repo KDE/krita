@@ -29,7 +29,6 @@
 #include <klocale.h>
 #include <KActionCollection>
 
-#include <KoResourceManager.h>
 #include <KoCanvasBase.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
@@ -75,7 +74,7 @@ void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionVie
     }
 
     painter->setPen(Qt::black);
-    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, taskset->name());      
+    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, taskset->name());
 
 }
 
@@ -91,7 +90,7 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     clearButton->setIcon(KIcon("edit-delete"));
     saveButton->setIcon(KIcon("document-save"));
     saveButton->setEnabled(false);
-    
+
     chooserButton->setIcon(KIcon("document-multiple"));
 
     KGlobal::mainComponent().dirs()->addResourceType("kis_taskset", "data", "krita/taskset/");
@@ -100,7 +99,7 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     m_taskThread = new KoResourceLoaderThread(m_rserver);
     connect(m_taskThread, SIGNAL(finished()), this, SLOT(tasksetThreadDone()));
     m_taskThread->start();
-    
+
     KoResourceItemChooser* itemChooser = new KoResourceItemChooser(adapter, this);
     itemChooser->setItemDelegate(new KisTasksetResourceDelegate(this));
     itemChooser->setFixedSize(500, 250);
@@ -111,9 +110,9 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
 
     connect(itemChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
-    
+
     setWidget(widget);
-    
+
     connect( tasksetView, SIGNAL(clicked( const QModelIndex & ) ),
             this, SLOT(activated ( const QModelIndex & ) ) );
 
@@ -178,9 +177,9 @@ void TasksetDockerDock::saveClicked()
     if (!ok) {
         return;
     }
-    
+
     TasksetResource* taskset = new TasksetResource("");
-    
+
     QStringList actionNames;
     foreach(QAction* action, m_model->actions()) {
         actionNames.append(action->objectName());
@@ -188,14 +187,14 @@ void TasksetDockerDock::saveClicked()
     taskset->setActionList(actionNames);
     taskset->setValid(true);
     QString saveLocation = m_rserver->saveLocation();
-    
+
     bool newName = false;
     if(name.isEmpty()) {
         newName = true;
         name = i18n("Taskset");
     }
     QFileInfo fileInfo(saveLocation + name + taskset->defaultFileExtension());
-    
+
     int i = 1;
     while (fileInfo.exists()) {
         fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + taskset->defaultFileExtension());

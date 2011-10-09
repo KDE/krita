@@ -34,7 +34,7 @@ ArtisticTextShapeFactory::ArtisticTextShapeFactory()
     setXmlElementNames(KoXmlNS::svg, QStringList("text"));
 }
 
-KoShape *ArtisticTextShapeFactory::createDefaultShape(KoResourceManager *) const
+KoShape *ArtisticTextShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     ArtisticTextShape * text = new ArtisticTextShape();
     text->setBackground( new KoColorBackground( QColor( Qt::black) ) );

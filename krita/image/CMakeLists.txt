@@ -77,8 +77,6 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_node_to_bottom_command.cpp
    commands/kis_image_node_to_top_command.cpp
    commands/kis_image_lock_command.cpp
-   commands/kis_image_resize_command.cpp
-   commands/kis_image_set_resolution_command.cpp
    commands/kis_layer_command.cpp
    commands/kis_layer_props_command.cpp
    commands/kis_node_command.cpp
@@ -88,6 +86,14 @@ set(kritaimage_LIB_SRCS
    commands/kis_node_property_list_command.cpp
    commands/kis_reselect_global_selection_command.cpp
    commands/kis_set_global_selection_command.cpp
+   commands_new/kis_saved_commands.cpp
+   commands_new/kis_processing_command.cpp
+   commands_new/kis_node_move_command2.cpp
+   commands_new/kis_image_resize_command.cpp
+   commands_new/kis_image_set_resolution_command.cpp
+   commands_new/kis_update_command.cpp
+   processing/kis_crop_processing_visitor.cpp
+   processing/kis_transform_processing_visitor.cpp
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc
    filter/kis_filter_job.cpp
@@ -120,14 +126,23 @@ set(kritaimage_LIB_SRCS
    kis_iterator_ng.cpp
    kis_merge_walker.cc
    kis_updater_context.cpp
-   kis_abstract_update_queue.cpp
+   kis_update_job_item.cpp
+   kis_stroke_strategy_undo_command_based.cpp
+   kis_simple_stroke_strategy.cpp
+   kis_stroke_job_strategy.cpp
+   kis_stroke_strategy.cpp
+   kis_stroke.cpp
+   kis_strokes_queue.cpp
    kis_simple_update_queue.cpp
-   kis_abstract_update_scheduler.cpp
    kis_update_scheduler.cpp
+   kis_queues_progress_updater.cpp
+   kis_composite_progress_proxy.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
    kis_histogram.cc
+   kis_image_interfaces.cpp
    kis_image.cc
+   kis_image_signal_router.cpp
    kis_image_config.cpp
    kis_iterator.cc
    kis_layer.cc
@@ -153,7 +168,6 @@ set(kritaimage_LIB_SRCS
    kis_perspective_math.cpp
    kis_pixel_selection.cpp
    kis_processing_information.cpp
-   kis_projection.cc
    kis_properties_configuration.cc
    kis_random_accessor.cpp
    kis_random_accessor_ng.cpp
@@ -172,9 +186,15 @@ set(kritaimage_LIB_SRCS
    kis_perspectivetransform_worker.cpp
    kis_warptransform_worker.cc
    kis_transparency_mask.cc
-   kis_undo_adapter.cc
+   kis_undo_store.cpp
+   kis_undo_stores.cpp
+   kis_undo_adapter.cpp
+   kis_surrogate_undo_adapter.cpp
+   kis_legacy_undo_adapter.cpp
+   kis_post_execution_undo_adapter.cpp
+   kis_processing_visitor.cpp
+   kis_processing_applicator.cpp
    krita_utils.cpp
-   kis_dumb_undo_adapter.cpp
    kis_outline_generator.cpp
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_filter.cc

@@ -34,7 +34,7 @@
 
 ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, ChangeListLevelCommand::CommandType type,
                                                int coef, KUndo2Command *parent)
-    : TextCommandBase(parent),
+    : KoTextCommandBase(parent),
       m_type(type),
       m_coefficient(coef),
       m_first(true)
@@ -81,7 +81,7 @@ int ChangeListLevelCommand::effectiveLevel(int level)
 void ChangeListLevelCommand::redo()
 {
     if (!m_first) {
-        TextCommandBase::redo();
+        KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
         for (int i = 0; i < m_blocks.size(); ++i) {
             m_lists.value(i)->updateStoredList(m_blocks.at(i));
@@ -104,7 +104,7 @@ void ChangeListLevelCommand::redo()
 
 void ChangeListLevelCommand::undo()
 {
-    TextCommandBase::undo();
+    KoTextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
     for (int i = 0; i < m_blocks.size(); ++i) {
         if (m_blocks.at(i).textList())

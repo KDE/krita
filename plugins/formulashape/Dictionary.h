@@ -43,7 +43,7 @@ enum Form {
  */
 class Dictionary {
 public:
-    /// Standart constructor sets default values to operator attributes
+    /// Standard constructor sets default values to operator attributes
     Dictionary();
 
     /// @return The mapped entity represented as a QChar

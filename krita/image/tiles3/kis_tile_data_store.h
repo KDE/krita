@@ -131,6 +131,8 @@ private:
     inline void unregisterTileDataImp(KisTileData *td);
     void freeRegisteredTiles();
 
+    friend class DeadlockyThread;
+    friend class KisLowMemoryTests;
     void debugSwapAll();
     void debugClear();
 

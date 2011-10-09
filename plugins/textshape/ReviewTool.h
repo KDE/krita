@@ -71,7 +71,6 @@ private:
     QRectF textRect(QTextCursor &cursor) const;
     void updateSelectedShape(const QPointF &point);
 
-    bool m_disableShowChangesOnExit;
     KoTextEditor *m_textEditor;
     KoTextShapeData *m_textShapeData;
     KoCanvasBase *m_canvas;

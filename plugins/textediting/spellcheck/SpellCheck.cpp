@@ -24,7 +24,6 @@
 #include "SpellCheckMenu.h"
 
 #include <KoCharacterStyle.h>
-#include <KoResourceManager.h>
 
 #include <KLocale>
 #include <KDebug>
@@ -116,13 +115,14 @@ void SpellCheck::checkSection(QTextDocument *document, int startPosition, int en
     m_spellCheckMenu->setVisible(true);
 }
 
-void SpellCheck::setDocument(QTextDocument *document)
+void SpellCheck::setDocument(const QTextDocument *document)
 {
     if (m_document == document)
         return;
     if (m_document)
         disconnect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
-    m_document = document;
+    // XXX: evil!
+    m_document = const_cast<QTextDocument*>(document);
     connect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
 }
 
@@ -360,7 +360,7 @@ void SpellCheck::finishedRun()
     QTimer::singleShot(0, this, SLOT(runQueue()));
 }
 
-void SpellCheck::setCurrentCursorPosition(QTextDocument *document, int cursorPosition)
+void SpellCheck::setCurrentCursorPosition(const QTextDocument *document, int cursorPosition)
 {
     setDocument(document);
     if (m_enableSpellCheck) {
@@ -369,7 +369,7 @@ void SpellCheck::setCurrentCursorPosition(QTextDocument *document, int cursorPos
         if (block.isValid() && block.layout()->additionalFormats().count() > 0) {
             QList<QTextLayout::FormatRange> ranges = block.layout()->additionalFormats();
             foreach (const QTextLayout::FormatRange &range, ranges) {
-                if (cursorPosition >= block.position() + range.start 
+                if (cursorPosition >= block.position() + range.start
                         && cursorPosition <= block.position() + range.start + range.length
                         && range.format == m_defaultMisspelledFormat) {
                     QString word = block.text().mid(range.start, range.length);
@@ -425,7 +425,7 @@ void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition)
     QTextCursor cursor(m_document);
     cursor.setPosition(startPosition);
     cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
-    //if the replaced word and the suggestion had the same number of chars, 
+    //if the replaced word and the suggestion had the same number of chars,
     //we must clear highlighting manually, see 'documentChanged'
     if ((cursor.selectionEnd() - cursor.selectionStart()) == word.length())
         clearHighlightMisspelled(startPosition);

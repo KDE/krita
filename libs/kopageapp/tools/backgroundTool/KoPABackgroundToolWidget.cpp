@@ -28,6 +28,7 @@
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 #include <KoShapeBackgroundCommand.h>
+#include <KoDocumentResourceManager.h>
 
 #include "KoPABackgroundTool.h"
 #include "KoPageApp.h"

@@ -22,7 +22,7 @@
 
 #include <KoShapeGroup.h>
 #include <KoCanvasBase.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoShapeContainerModel.h>
 #include <QPainter>
 #include "KoShapeManager.h"
@@ -77,8 +77,8 @@ class KoToolProxy;
 class MockCanvas : public KoCanvasBase
 {
 public:
-    MockCanvas(KoShapeControllerBase *aKoShapeControllerBase =0)//made for TestSnapStrategy.cpp
-            : KoCanvasBase(aKoShapeControllerBase), m_shapeManager(new KoShapeManager(this)), m_guideData(0) {}
+    MockCanvas(KoShapeBasedDocumentBase *aKoShapeBasedDocumentBase =0)//made for TestSnapStrategy.cpp
+            : KoCanvasBase(aKoShapeBasedDocumentBase), m_shapeManager(new KoShapeManager(this)), m_guideData(0) {}
     ~MockCanvas() {}
     void setHorz(qreal pHorz){
         m_horz = pHorz;
@@ -128,7 +128,7 @@ public:
         KoGuidesData *m_guideData;
 };
 
-class MockShapeController : public KoShapeControllerBase
+class MockShapeController : public KoShapeBasedDocumentBase
 {
 public:
     void addShape(KoShape* shape) {

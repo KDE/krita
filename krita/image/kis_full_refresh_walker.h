@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,132 +19,73 @@
 #ifndef __KIS_FULL_REFRESH_WALKER_H
 #define __KIS_FULL_REFRESH_WALKER_H
 
-#include "kis_node.h"
-#include "kis_types.h"
-#include "kis_clone_layer.h"
-#include "kis_base_rects_walker.h"
+#include "kis_merge_walker.h"
+#include "kis_refresh_subtree_walker.h"
 
 
-class KRITAIMAGE_EXPORT KisFullRefreshWalker : public KisBaseRectsWalker
+class KisFullRefreshWalker : public KisRefreshSubtreeWalker, public KisMergeWalker
 {
-
 public:
     KisFullRefreshWalker(QRect cropRect)
-        : KisBaseRectsWalker(cropRect)
+        : m_firstRun(true)
     {
+        setCropRect(cropRect);
     }
 
-    virtual ~KisFullRefreshWalker()
-    {
-    }
-
-private:
-    inline bool canHaveChildLayers(KisNodeSP node) {
-        return qobject_cast<KisGroupLayer*>(node.data());
-    }
-    static inline bool isRootNode(KisNodeSP node) {
-        return !node->parent();
-    }
-
-protected:
-
-    QRect calculateChangeRect(KisNodeSP startWith,
-                              const QRect &requestedRect,
-                              bool *changeRectVaries) {
-
-        if(!isLayer(startWith))
-            return requestedRect;
-
-        QRect childrenRect;
-        QRect tempRect = requestedRect;
-
-        KisNodeSP currentNode = startWith->firstChild();
-        KisNodeSP prevNode;
-        KisNodeSP nextNode;
-
-        while(currentNode) {
-            nextNode = currentNode->nextSibling();
-
-            if(isLayer(currentNode)) {
-                tempRect = calculateChangeRect(currentNode, tempRect, changeRectVaries);
-
-                if(!*changeRectVaries)
-                    *changeRectVaries = tempRect != requestedRect;
-
-                childrenRect = tempRect;
-                prevNode = currentNode;
-            }
-
-            currentNode = nextNode;
-        }
-
-        tempRect = startWith->changeRect(requestedRect | childrenRect);
-
-        if(!*changeRectVaries)
-            *changeRectVaries = tempRect != requestedRect;
-
-        return tempRect;
+    UpdateType type() const {
+        return FULL_REFRESH;
     }
 
     void startTrip(KisNodeSP startWith) {
+        if(m_firstRun) {
+            m_firstRun = false;
 
-        bool changeRectVaries = false;
-        QRect changeRect = calculateChangeRect(startWith, requestedRect(), &changeRectVaries);
-        setExplicitChangeRect(changeRect, changeRectVaries);
+            m_currentUpdateType = UPDATE;
+            KisMergeWalker::startTrip(startWith);
 
-        if(startWith == startNode()) {
-            NodePosition pos = N_FILTHY;
-            if(!startWith->nextSibling()) pos |= N_TOPMOST;
-            if(!startWith->prevSibling()) pos |= N_BOTTOMMOST;
-            registerNeedRect(startWith, N_TOPMOST | N_FILTHY);
+            m_currentUpdateType = FULL_REFRESH;
+            KisRefreshSubtreeWalker::startTrip(startWith);
+
+            m_firstRun = true;
         }
-
-
-        KisNodeSP currentNode = startWith->lastChild();
-        if(!currentNode) return;
-
-        registerNeedRect(currentNode, N_TOPMOST | N_FILTHY);
-
-        KisNodeSP prevNode = currentNode->prevSibling();
-        while ((currentNode = prevNode)) {
-            prevNode = currentNode->prevSibling();
-            registerNeedRect(currentNode,
-                             (!prevNode ? N_BOTTOMMOST : N_NORMAL) | N_FILTHY);
-        }
-
-        currentNode = startWith->lastChild();
-        do {
-            if(canHaveChildLayers(currentNode))
-                startTrip(currentNode);
-        } while ((currentNode = currentNode->prevSibling()));
-    }
-
-    void registerNeedRect(KisNodeSP node, NodePosition position) {
-        KisBaseRectsWalker::registerNeedRect(node, position);
-
-        KisCloneLayerSP cloneLayer = qobject_cast<KisCloneLayer*>(node.data());
-        if(cloneLayer) {
-            /**
-             * We need to check whether the source of the clone is going
-             * to be updated after the clone itself. If so we need to
-             * pre-update it manually. This can be checked by the precedence
-             * of the source in the nodes stack
-             */
-            if(isRegistered(cloneLayer->copyFrom())) {
-                registerNeedRect(cloneLayer->copyFrom(), N_EXTRA | N_FILTHY);
+        else {
+            if(m_currentUpdateType == FULL_REFRESH) {
+                KisRefreshSubtreeWalker::startTrip(startWith);
+            }
+            else {
+                KisMergeWalker::startTrip(startWith);
             }
         }
     }
 
-    bool isRegistered(KisNodeSP node) {
-        foreach(const JobItem &item, nodeStack()) {
-            if(item.m_node == node)
-                return true;
+    void registerChangeRect(KisNodeSP node, NodePosition position) {
+        if(m_currentUpdateType == FULL_REFRESH) {
+            KisRefreshSubtreeWalker::registerChangeRect(node, position);
         }
-        return false;
+        else {
+            KisMergeWalker::registerChangeRect(node, position);
+        }
     }
+    void registerNeedRect(KisNodeSP node, NodePosition position) {
+        if(m_currentUpdateType == FULL_REFRESH) {
+            KisRefreshSubtreeWalker::registerNeedRect(node, position);
+        }
+        else {
+            KisMergeWalker::registerNeedRect(node, position);
+        }
+    }
+    void adjustMasksChangeRect(KisNodeSP firstMask) {
+        if(m_currentUpdateType == FULL_REFRESH) {
+            KisRefreshSubtreeWalker::adjustMasksChangeRect(firstMask);
+        }
+        else {
+            KisMergeWalker::adjustMasksChangeRect(firstMask);
+        }
+    }
+
+private:
+    UpdateType m_currentUpdateType;
+    bool m_firstRun;
 };
 
-
 #endif /* __KIS_FULL_REFRESH_WALKER_H */
-

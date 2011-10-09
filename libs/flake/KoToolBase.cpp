@@ -22,10 +22,11 @@
 #include "KoToolBase_p.h"
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
-#include "KoResourceManager.h"
+#include "KoDocumentResourceManager.h"
+#include "KoCanvasResourceManager.h"
 #include "KoViewConverter.h"
 #include "KoShapeController.h"
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
 #include "KoToolSelection.h"
 
 #include <klocale.h>
@@ -36,25 +37,14 @@ KoToolBase::KoToolBase(KoCanvasBase *canvas)
     : d_ptr(new KoToolBasePrivate(this, canvas))
 {
     Q_D(KoToolBase);
-    if (d->canvas) { // in the case of KoToolManagers dummytool it can be zero :(
-        KoResourceManager * crp = d->canvas->resourceManager();
-        Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No Canvas KoResourceManager");
-        if (crp)
-            connect(crp, SIGNAL(resourceChanged(int, const QVariant &)),
-                    this, SLOT(resourceChanged(int, const QVariant &)));
-
-        // can be 0 in the case of Tables
-        KoResourceManager *scrm = d->canvas->shapeController()->resourceManager();
-        if (scrm) {
-            connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                    this, SLOT(resourceChanged(int, const QVariant &)));
-        }
-    }
+    d->connectSignals();
 }
 
 KoToolBase::KoToolBase(KoToolBasePrivate &dd)
     : d_ptr(&dd)
 {
+    Q_D(KoToolBase);
+    d->connectSignals();
 }
 
 KoToolBase::~KoToolBase()
@@ -63,10 +53,10 @@ KoToolBase::~KoToolBase()
 }
 
 /// Ultimately only called from Tables
-void KoToolBase::updateShapeController(KoShapeControllerBase *shapeController)
+void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController)
 {
     if (shapeController) {
-        KoResourceManager *scrm = shapeController->resourceManager();
+        KoDocumentResourceManager *scrm = shapeController->resourceManager();
         if (scrm) {
             connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
                     this, SLOT(resourceChanged(int, const QVariant &)));

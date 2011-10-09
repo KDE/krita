@@ -20,7 +20,7 @@
 #ifndef ACCEPTCHANGECOMMAND_H
 #define ACCEPTCHANGECOMMAND_H
 
-#include "commands/TextCommandBase.h"
+#include <KoTextCommandBase.h>
 
 #include <QPair>
 
@@ -28,7 +28,7 @@ class KoChangeTracker;
 
 class QTextDocument;
 
-class AcceptChangeCommand : public QObject, public TextCommandBase
+class AcceptChangeCommand : public QObject, public KoTextCommandBase
 {
     Q_OBJECT
 public:

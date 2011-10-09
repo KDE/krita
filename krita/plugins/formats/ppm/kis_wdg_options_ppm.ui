@@ -10,7 +10,7 @@
     <height>94</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QFormLayout" name="formLayout">
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -23,6 +23,12 @@
    </item>
    <item row="0" column="1">
     <widget class="QComboBox" name="type">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <item>
       <property name="text">
        <string>Binary</string>

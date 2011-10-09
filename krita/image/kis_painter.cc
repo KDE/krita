@@ -203,7 +203,35 @@ void KisPainter::beginTransaction(const QString& transactionName)
     Q_CHECK_PTR(d->transaction);
 }
 
+QString KisPainter::transactionText()
+{
+    Q_ASSERT_X(d->transaction, "KisPainter::transactionText()",
+               "No transaction is in progress");
+
+    return d->transaction->text();
+}
+
+void KisPainter::revertTransaction()
+{
+    Q_ASSERT_X(d->transaction, "KisPainter::revertTransaction()",
+               "No transaction is in progress");
+
+    d->transaction->revert();
+    delete d->transaction;
+    d->transaction = 0;
+}
+
 void KisPainter::endTransaction(KisUndoAdapter *undoAdapter)
+{
+    Q_ASSERT_X(d->transaction, "KisPainter::endTransaction()",
+               "No transaction is in progress");
+
+    d->transaction->commit(undoAdapter);
+    delete d->transaction;
+    d->transaction = 0;
+}
+
+void KisPainter::endTransaction(KisPostExecutionUndoAdapter *undoAdapter)
 {
     Q_ASSERT_X(d->transaction, "KisPainter::endTransaction()",
                "No transaction is in progress");
@@ -251,7 +279,7 @@ QVector<QRect> KisPainter::takeDirtyRegion()
 void KisPainter::addDirtyRect(const QRect & rc)
 {
     QRect r = rc.normalized();
-    if (r.isValid() && r.width() > 0 && r.height() > 0) {
+    if (r.isValid()) {
         d->dirtyRects.append(rc);
     }
 }

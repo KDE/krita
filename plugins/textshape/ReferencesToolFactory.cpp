@@ -28,7 +28,7 @@
 ReferencesToolFactory::ReferencesToolFactory()
         : KoToolFactoryBase("ReferencesToolFactory_ID")
 {
-    setToolTip(i18n("References tool"));
+    setToolTip(i18n("References"));
     setToolType(dynamicToolType());
     setIcon("tool-references");
     setPriority(3);

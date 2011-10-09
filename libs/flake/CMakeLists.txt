@@ -13,7 +13,9 @@ add_subdirectory(pics)
 set(flake_SRCS
     KoFlake.cpp
     KoCanvasBase.cpp
-    KoResourceManager.cpp
+    KoResourceManager_p.cpp
+    KoCanvasResourceManager.cpp
+    KoDocumentResourceManager.cpp
     KoCanvasObserverBase.cpp
     KoCanvasSupervisor.cpp
     KoCutController.cpp
@@ -29,7 +31,7 @@ set(flake_SRCS
     KoPathSegment.cpp
     KoSelection.cpp
     KoShape.cpp
-    KoShapeControllerBase.cpp
+    KoShapeBasedDocumentBase.cpp
     KoShapeApplicationData.cpp
     KoShapeContainer.cpp
     KoShapeContainerModel.cpp
@@ -244,7 +246,8 @@ install(
     KoCanvasControllerWidget.h
     KoCanvasObserverBase.h
     KoCanvasSupervisor.h
-    KoResourceManager.h
+    KoCanvasResourceManager.h
+    KoDocumentResourceManager.h
     KoConnectionPoint.h
     KoCopyController.h
     KoCutController.h
@@ -272,7 +275,7 @@ install(
     KoShapeContainerModel.h
     KoShapeContainerDefaultModel.h
     KoShapeController.h
-    KoShapeControllerBase.h
+    KoShapeBasedDocumentBase.h
     KoShapeFactoryBase.h
     KoShapeGroup.h
     KoShapeLayer.h

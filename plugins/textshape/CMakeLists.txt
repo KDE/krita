@@ -39,10 +39,11 @@ SET ( textshape_SRCS
     dialogs/SimpleParagraphWidget.cpp
     dialogs/SimpleTableWidget.cpp
     dialogs/SimpleTableOfContentsWidget.cpp
-    dialogs/SimpleCitationWidget.cpp
+    dialogs/SimpleCitationBibliographyWidget.cpp
     dialogs/CitationInsertionDialog.cpp
     dialogs/InsertBibliographyDialog.cpp
     dialogs/SimpleFootEndNotesWidget.cpp
+    dialogs/NotesConfigurationDialog.cpp
     dialogs/SimpleCaptionsWidget.cpp
     dialogs/ParagraphLayout.cpp
     dialogs/ParagraphIndentSpacing.cpp
@@ -74,16 +75,19 @@ SET ( textshape_SRCS
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp
     dialogs/ChangeTrackingOptionsWidget.cpp
+    dialogs/BibliographyConfigureDialog.cpp
+    dialogs/TableOfContentsConfigure.cpp
+    dialogs/TableOfContentsStyleConfigure.cpp
+    dialogs/TableOfContentsStyleModel.cpp
+    dialogs/TableOfContentsStyleDelegate.cpp
+    dialogs/TableOfContentsPreview.cpp
+    dialogs/TableOfContentsEntryDelegate.cpp
+    dialogs/TableOfContentsEntryModel.cpp
+    dialogs/TableOfContentsTemplate.cpp
 
-    commands/ChangeListCommand.cpp
     commands/ChangeListLevelCommand.cpp
-    commands/ListItemNumberingCommand.cpp
-    commands/TextCommandBase.cpp
-    commands/TextPasteCommand.cpp
     commands/TextCutCommand.cpp
     commands/ShowChangesCommand.cpp
-    commands/ChangeTrackedDeleteCommand.cpp
-    commands/DeleteCommand.cpp
     commands/AcceptChangeCommand.cpp
     commands/RejectChangeCommand.cpp
     commands/AutoResizeCommand.cpp
@@ -94,10 +98,11 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/SimpleParagraphWidget.ui
     dialogs/SimpleTableWidget.ui
     dialogs/SimpleTableOfContentsWidget.ui
-    dialogs/SimpleCitationWidget.ui
+    dialogs/SimpleCitationBibliographyWidget.ui
     dialogs/CitationInsertionDialog.ui
     dialogs/InsertBibliographyDialog.ui
     dialogs/SimpleFootEndNotesWidget.ui
+    dialogs/NotesConfigurationDialog.ui
     dialogs/SimpleCaptionsWidget.ui
     dialogs/StylesWidget.ui
     dialogs/ParagraphLayout.ui
@@ -111,6 +116,9 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/CharacterHighlighting.ui
     dialogs/StyleManagerWelcome.ui
     dialogs/TableDialog.ui
+    dialogs/BibliographyConfigureDialog.ui
+    dialogs/TableOfContentsConfigure.ui
+    dialogs/TableOfContentsStyleConfigure.ui
 
     dialogs/FontDecorations.ui
     dialogs/FontLayoutTab.ui

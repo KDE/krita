@@ -36,10 +36,11 @@ class KoColorSpace;
 class KoColor;
 class KoShape;
 
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 class KisView2;
 class KisChildDoc;
-class KisUndoAdapter;
+class KisUndoStore;
+
 /**
  * The class that represents a Krita document containing content and
    settings.
@@ -128,13 +129,13 @@ public:
      */
     void setCurrentImage(KisImageWSP image);
 
-    KisUndoAdapter * undoAdapter() const;
+    KisUndoStore* createUndoStore();
 
     /**
      * The shape controller matches internal krita image layers with
      * the flake shape hierarchy.
      */
-    KoShapeControllerBase * shapeController() const;
+    KoShapeBasedDocumentBase * shapeController() const;
 
     KoShape * shapeForNode(KisNodeSP layer) const;
 
@@ -169,7 +170,7 @@ private:
     bool init();
 
 private:
-
+    class UndoStack;
     class KisDocPrivate;
     KisDocPrivate * const m_d;
 

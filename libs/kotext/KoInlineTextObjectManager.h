@@ -27,6 +27,7 @@
 // Qt + kde
 #include <QHash>
 #include <QTextCharFormat>
+#include <QTextBlock>
 
 class KoCanvasBase;
 class KoTextLocator;
@@ -155,12 +156,10 @@ public:
     QList<QAction*> createInsertVariableActions(KoCanvasBase *host) const;
 
     QList<KoTextLocator*> textLocators() const;
+
     /**
-     * Note: once document sections are implemented, we need to be able
-     * to retrieve the endnotes for a particular section only.
-     *
-     * @return a list of all inline objects that are endnotes
-     */
+      * It returns a list of all end notes in the document
+      */
     QList<KoInlineNote*> endNotes() const;
 
     QMap<QString, KoInlineCite*> citations(bool duplicatesEnabled = true) const;

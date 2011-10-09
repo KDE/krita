@@ -32,7 +32,7 @@ KoReportBarcodePlugin::KoReportBarcodePlugin(QObject *parent, const QVariantList
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:barcode");
-    info->setIcon(KIcon("view-barcode"));
+    info->setIcon(KIcon("report_barcode_element"));
     info->setName(i18n("Barcode"));
     info->setPriority(50);
     setInfo(info);

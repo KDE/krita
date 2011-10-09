@@ -27,7 +27,7 @@
 #include <KComponentData>
 #include <KGlobal>
 
-#include "KoResourceManager.h"
+#include "KoCanvasResourceManager.h"
 
 #include "kis_shade_selector_line.h"
 
@@ -147,8 +147,8 @@ void KisMinimalShadeSelector::resourceChanged(int key, const QVariant &v)
     bool onForeground = cfg.readEntry("shadeSelectorUpdateOnForeground", false);
     bool onBackground = cfg.readEntry("shadeSelectorUpdateOnBackground", true);
 
-    if ((key == KoCanvasResource::ForegroundColor && onForeground)
-        || (key == KoCanvasResource::BackgroundColor && onBackground)) {
+    if ((key == KoCanvasResourceManager::ForegroundColor && onForeground)
+        || (key == KoCanvasResourceManager::BackgroundColor && onBackground)) {
         setColor(findGeneratingColor(v.value<KoColor>()));
     }
 }

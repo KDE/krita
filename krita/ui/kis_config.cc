@@ -721,3 +721,14 @@ void KisConfig::setHideToolbarFullscreen(const int value) const
 {
     m_cfg.writeEntry("hideToolbarFullscreen", value);
 }
+
+
+QStringList KisConfig::favoriteCompositeOps() const
+{
+	return m_cfg.readEntry("favoriteCompositeOps", QStringList());
+}
+
+void KisConfig::setFavoriteCompositeOps(const QStringList& compositeOps)
+{
+	m_cfg.writeEntry("favoriteCompositeOps", compositeOps);
+}

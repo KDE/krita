@@ -77,7 +77,7 @@ public:
      * Sets the shadow blur radius of the shape
      * @param blur the shadow blur radius
      */
-    void setBlur(const qreal &blur);
+    void setBlur(qreal blur);
 
     /// Returns the shadow blur radius
     qreal blur() const;

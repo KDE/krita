@@ -39,7 +39,7 @@
 
 #include "kdebug.h"
 
-TreeShape::TreeShape(KoResourceManager *documentResources)
+TreeShape::TreeShape(KoDocumentResourceManager *documentResources)
             : KoShapeContainer(new TreeLayout(this))
             , m_documentResources(documentResources)
 {
@@ -61,7 +61,7 @@ TreeShape::TreeShape(KoResourceManager *documentResources)
     }
 }
 
-TreeShape::TreeShape(KoShape *shape, KoResourceManager *documentResources)
+TreeShape::TreeShape(KoShape *shape, KoDocumentResourceManager *documentResources)
             : KoShapeContainer(new TreeLayout(this))
             , m_documentResources(documentResources)
 {
@@ -113,8 +113,7 @@ bool TreeShape::hitTest(const QPointF &position) const
 
 // void TreeShape::shapeChanged(ChangeType type, KoShape *shape)
 // {
-//     Q_UNUSED(shape);
-//     Q_UNUSED(type);
+//     KoShapeContainer::shapeChanged(type, shape);
 //     kDebug() << "";
 // }
 
@@ -281,7 +280,7 @@ bool TreeShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
 //         } else
 //             bound = bound.united(shape->boundingRect());
 //     }
-// 
+//
 //     kDebug() << bound;
 //     setPosition(bound.topLeft());
 

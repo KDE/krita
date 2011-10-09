@@ -25,7 +25,7 @@
 #include <KoFrameShape.h>
 
 class KoStore;
-class KoResourceManager;
+class KoDocumentResourceManager;
 class KoOdfLoadingContext;
 
 class BasicElement;
@@ -48,7 +48,7 @@ class FormulaDocument;
 class KoFormulaShape : public KoShape, public KoFrameShape {
 public:
     /// The basic constructor
-    KoFormulaShape(KoResourceManager *documentResourceManager);
+    KoFormulaShape(KoDocumentResourceManager *documentResourceManager);
     //KoFormulaShape();
 
     /// The basic destructor
@@ -93,7 +93,7 @@ public:
      */
     void saveOdf( KoShapeSavingContext& context ) const;
 
-    KoResourceManager *resourceManager() const;
+    KoDocumentResourceManager *resourceManager() const;
 
 private:
     bool loadEmbeddedDocument(KoStore *store,const KoXmlElement &objectElement,
@@ -109,7 +109,7 @@ private:
     bool m_isInline;
 
     FormulaDocument *m_document;
-    KoResourceManager *m_resourceManager;
+    KoDocumentResourceManager *m_resourceManager;
 };
 
 #endif // KOFORMULASHAPE_H

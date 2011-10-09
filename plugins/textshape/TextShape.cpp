@@ -28,7 +28,7 @@
 #include <KoTextEditor.h>
 
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoChangeTracker.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoOdfLoadingContext.h>
@@ -120,16 +120,16 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         }
     }
 
-    KoTextEditor *textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
-
     KoTextDocumentLayout::PaintContext pc;
+
     QAbstractTextDocumentLayout::Selection selection;
+    KoTextEditor *textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
     selection.cursor = *(textEditor->cursor());
     QPalette palette = pc.textContext.palette;
     selection.format.setBackground(palette.brush(QPalette::Highlight));
     selection.format.setForeground(palette.brush(QPalette::HighlightedText));
-
     pc.textContext.selections.append(selection);
+
     pc.textContext.selections += KoTextDocument(doc).selections();
     pc.viewConverter = &converter;
     pc.imageCollection = m_imageCollection;
@@ -171,6 +171,7 @@ QRectF TextShape::outlineRect() const
 void TextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
+    KoShapeContainer::shapeChanged(type, shape);
     if (type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
         m_textShapeData->setDirty();
     }
@@ -256,6 +257,7 @@ void TextShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &co
     KoShape::loadStyle(element, context);
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.setTypeProperties("graphic");
+
     QString verticalAlign(styleStack.property(KoXmlNS::draw, "textarea-vertical-align"));
     Qt::Alignment alignment(Qt::AlignTop);
     if (verticalAlign == "bottom") {
@@ -271,19 +273,36 @@ void TextShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &co
 
     m_textShapeData->setVerticalAlignment(alignment);
 
-    const QString autoGrowWidth = styleStack.property(KoXmlNS::draw, "auto-grow-width");
-    const QString autoGrowHeight = styleStack.property(KoXmlNS::draw, "auto-grow-height");
     const QString fitToSize = styleStack.property(KoXmlNS::draw, "fit-to-size");
     KoTextShapeData::ResizeMethod resize = KoTextShapeData::NoResize;
     if (fitToSize == "true" || fitToSize == "shrink-to-fit") { // second is buggy value from impress
         resize = KoTextShapeData::ShrinkToFitResize;
     }
-    else if (autoGrowWidth == "true") {
-        resize = autoGrowHeight != "false" ? KoTextShapeData::AutoGrowWidthAndHeight : KoTextShapeData::AutoGrowWidth;
+    else {
+        // An explicit svg:width or svg:height defined do change the default value (means those value
+        // used if not explicit defined otherwise) for auto-grow-height and auto-grow-height. So
+        // they are mutable exclusive.
+        // It is not clear (means we did not test and took care of it) what happens if both are
+        // defined and are in conflict with each other or how the fit-to-size is related to this.
+
+        QString autoGrowWidth = styleStack.property(KoXmlNS::draw, "auto-grow-width");
+        if (autoGrowWidth.isEmpty()) {
+            autoGrowWidth = element.hasAttributeNS(KoXmlNS::svg, "width") ? "false" : "true";
+        }
+
+        QString autoGrowHeight = styleStack.property(KoXmlNS::draw, "auto-grow-height");
+        if (autoGrowHeight.isEmpty()) {
+            autoGrowHeight = element.hasAttributeNS(KoXmlNS::svg, "height") ? "false" : "true";
+        }
+
+        if (autoGrowWidth == "true") {
+            resize = autoGrowHeight == "true" ? KoTextShapeData::AutoGrowWidthAndHeight : KoTextShapeData::AutoGrowWidth;
+        }
+        else if (autoGrowHeight == "true") {
+            resize = KoTextShapeData::AutoGrowHeight;
+        }
     }
-    else if (autoGrowHeight != "false") {
-        resize = KoTextShapeData::AutoGrowHeight;
-    }
+
     m_textShapeData->setResizeMethod(resize);
 }
 
@@ -341,7 +360,7 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
 
 bool TextShape::loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    // If the loadOdfFrame from the base class for draw:text-box fails, check 
+    // If the loadOdfFrame from the base class for draw:text-box fails, check
     // for table:table, because that is a legal child of draw:frame in ODF 1.2.
     if (!KoFrameShape::loadOdfFrame(element, context)) {
         const KoXmlElement &possibleTableElement(KoXml::namedItemNS(element, KoXmlNS::table, "table"));

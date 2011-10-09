@@ -29,6 +29,7 @@
 
 class KoImageCollection;
 class RenderQueue;
+class KJob;
 
 class PictureShape : public KoTosContainer, public KoFrameShape, public SvgShape
 {
@@ -94,6 +95,19 @@ public slots:
 private:
     KoShape *m_pictureShape;
     QList<QSize> m_wantedImageSize;
+};
+
+class LoadWaiter : public QObject
+{
+    Q_OBJECT
+public:
+    LoadWaiter(PictureShape *shape) : m_pictureShape(shape) { }
+
+public slots:
+    void setImageData(KJob *job);
+
+private:
+    PictureShape *m_pictureShape;
 };
 
 #endif

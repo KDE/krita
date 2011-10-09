@@ -67,8 +67,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         QTextCursor cursor(block);
 
         int frameType = cursor.currentFrame()->format().intProperty(KoText::SubFrameType);
-        if (frameType == KoText::EndNotesFrameType
-            || frameType == KoText::FootNotesFrameType) {
+        if (frameType == KoText::AuxillaryFrameType) {
             break; // we've reached the "end" (end/footnotes saved by themselves)
                    // note how NoteFrameType passes through here so the notes can
                    // call writeBlocks to save their contents.
@@ -87,19 +86,19 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 }
             }
         }
-        if (format.hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+        if (format.hasProperty(KoParagraphStyle::TableOfContentsData)) {
             saveTableOfContents(document, listStyles, block);
             block = block.next();
             continue;
         }
-        if (format.hasProperty(KoParagraphStyle::BibliographyDocument)) {
+        if (format.hasProperty(KoParagraphStyle::BibliographyData)) {
             saveBibliography(document, listStyles, block);
             block = block.next();
             continue;
         }
         int blockOutlineLevel = format.property(KoParagraphStyle::OutlineLevel).toInt();
 
-        if (cursor.currentTable() != currentTable) {
+        if (cursor.currentTable() && cursor.currentTable() != currentTable) {
             // Call the code to save the table....
             saveTable(cursor.currentTable(), listStyles);
             // We skip to the end of the table.
@@ -108,7 +107,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             continue;
         }
 
-        if (cursor.currentList() != currentList) {
+        if (cursor.currentList() && cursor.currentList() != currentList) {
             int previousBlockNumber = block.blockNumber();
             block = saveList(block, listStyles, 1, currentTable);
             int blockNumberToProcess = block.blockNumber();
@@ -1245,7 +1244,7 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, QHash<Q
     writer->startElement("text:table-of-content");
 
     KoTableOfContentsGeneratorInfo *info = toc.blockFormat().property(KoParagraphStyle::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
-    QTextDocument *tocDocument = toc.blockFormat().property(KoParagraphStyle::TableOfContentsDocument).value<QTextDocument*>();
+    QTextDocument *tocDocument = toc.blockFormat().property(KoParagraphStyle::GeneratedDocument).value<QTextDocument*>();
     if (!info->m_styleName.isNull()) {
             writer->addAttribute("text:style-name",info->m_styleName);
     }
@@ -1275,7 +1274,7 @@ void KoTextWriter::Private::saveBibliography(QTextDocument *document, QHash<QTex
     writer->startElement("text:bibliography");
 
     KoBibliographyInfo *info = bib.blockFormat().property(KoParagraphStyle::BibliographyData).value<KoBibliographyInfo*>();
-    QTextDocument *bibDocument = bib.blockFormat().property(KoParagraphStyle::BibliographyDocument).value<QTextDocument*>();
+    QTextDocument *bibDocument = bib.blockFormat().property(KoParagraphStyle::GeneratedDocument).value<QTextDocument*>();
     if (!info->m_styleName.isNull()) {
             writer->addAttribute("text:style-name",info->m_styleName);
     }

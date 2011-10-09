@@ -54,7 +54,7 @@
 
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoDataCenterBase.h>
 #include <commands/kis_image_layer_add_command.h>
 #include <kis_undo_adapter.h>

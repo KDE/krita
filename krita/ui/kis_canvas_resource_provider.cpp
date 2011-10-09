@@ -53,6 +53,7 @@
 
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
         : m_view(view)
+        , m_displayProfile(0)
 {
     m_fGChanged = true;
     m_enablefGChange = true;    // default to true, so that colour history is working without popup palette
@@ -63,16 +64,21 @@ KisCanvasResourceProvider::~KisCanvasResourceProvider()
     disconnect(); // in case Qt gets confused
 }
 
-void KisCanvasResourceProvider::setResourceManager(KoResourceManager *resourceManager)
+KoCanvasResourceManager* KisCanvasResourceProvider::resourceManager()
+{
+    return m_resourceManager;
+}
+
+void KisCanvasResourceProvider::setResourceManager(KoCanvasResourceManager *resourceManager)
 {
     m_resourceManager = resourceManager;
 
     QVariant v;
     v.setValue(KoColor(Qt::black, m_view->image()->colorSpace()));
-    m_resourceManager->setResource(KoCanvasResource::ForegroundColor, v);
+    m_resourceManager->setResource(KoCanvasResourceManager::ForegroundColor, v);
 
     v.setValue(KoColor(Qt::white, m_view->image()->colorSpace()));
-    m_resourceManager->setResource(KoCanvasResource::BackgroundColor, v);
+    m_resourceManager->setResource(KoCanvasResourceManager::BackgroundColor, v);
 
     setCurrentCompositeOp(COMPOSITE_OVER);
     resetDisplayProfile();
@@ -93,12 +99,12 @@ KoCanvasBase * KisCanvasResourceProvider::canvas() const
 
 KoColor KisCanvasResourceProvider::bgColor() const
 {
-    return m_resourceManager->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
+    return m_resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
 }
 
 KoColor KisCanvasResourceProvider::fgColor() const
 {
-    return m_resourceManager->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+    return m_resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
 }
 
 float KisCanvasResourceProvider::HDRExposure() const
@@ -145,13 +151,13 @@ void KisCanvasResourceProvider::resetDisplayProfile()
         QString monitorProfileName = cfg.monitorProfile();
         m_displayProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
     }
+
     emit sigDisplayProfileChanged(m_displayProfile);
 }
 
 const KoColorProfile * KisCanvasResourceProvider::currentDisplayProfile() const
 {
     return m_displayProfile;
-
 }
 
 KisImageWSP KisCanvasResourceProvider::currentImage() const
@@ -216,7 +222,7 @@ void KisCanvasResourceProvider::setBGColor(const KoColor& c)
 
     QVariant v;
     v.setValue(c);
-    m_resourceManager->setResource(KoCanvasResource::BackgroundColor, v);
+    m_resourceManager->setResource(KoCanvasResourceManager::BackgroundColor, v);
     emit sigBGColorChanged(c);
 }
 
@@ -226,7 +232,7 @@ void KisCanvasResourceProvider::setFGColor(const KoColor& c)
 
     QVariant v;
     v.setValue(c);
-    m_resourceManager->setResource(KoCanvasResource::ForegroundColor, v);
+    m_resourceManager->setResource(KoCanvasResourceManager::ForegroundColor, v);
     emit sigFGColorChanged(c);
 }
 
@@ -256,7 +262,7 @@ void KisCanvasResourceProvider::slotImageSizeChanged()
         float fh = image->height() / image->yRes();
 
         QSizeF postscriptSize(fw, fh);
-        m_resourceManager->setResource(KoCanvasResource::PageSize, postscriptSize);
+        m_resourceManager->setResource(KoCanvasResourceManager::PageSize, postscriptSize);
     }
 }
 
@@ -266,9 +272,25 @@ void KisCanvasResourceProvider::slotSetDisplayProfile(const KoColorProfile * pro
     emit sigDisplayProfileChanged(profile);
 }
 
+void KisCanvasResourceProvider::slotOnScreenResolutionChanged()
+{
+    KisImageWSP image = m_view->image();
+    KisCanvas2 *canvas = m_view->canvasBase();
+
+    if(!image || !canvas) return;
+
+    qreal zoomX, zoomY;
+    canvas->coordinatesConverter()->zoom(&zoomX, &zoomY);
+
+    qreal scaleX = zoomX / image->xRes();
+    qreal scaleY = zoomY / image->yRes();
+
+    emit sigOnScreenResolutionChanged(scaleX, scaleY);
+}
+
 void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & res)
 {
-    if(key == KoCanvasResource::ForegroundColor || key == KoCanvasResource::BackgroundColor) {
+    if(key == KoCanvasResourceManager::ForegroundColor || key == KoCanvasResourceManager::BackgroundColor) {
         KoAbstractGradient* resource = KoResourceServerProvider::instance()->gradientServer()->resources()[0];
         KoStopGradient* stopGradient = dynamic_cast<KoStopGradient*>(resource);
         if(stopGradient) {
@@ -287,11 +309,11 @@ void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & re
         }
     }
     switch (key) {
-    case(KoCanvasResource::ForegroundColor):
+    case(KoCanvasResourceManager::ForegroundColor):
         m_fGChanged = true;
         emit sigFGColorChanged(res.value<KoColor>());
         break;
-    case(KoCanvasResource::BackgroundColor):
+    case(KoCanvasResourceManager::BackgroundColor):
         emit sigBGColorChanged(res.value<KoColor>());
         break;
     case(CurrentPattern):

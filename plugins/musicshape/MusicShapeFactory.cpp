@@ -55,7 +55,7 @@ MusicShapeFactory::MusicShapeFactory()
     setLoadingPriority( 1 );
 }
 
-KoShape *MusicShapeFactory::createDefaultShape(KoResourceManager *) const
+KoShape *MusicShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     static bool loadedFont = false;
     if (!loadedFont) {

@@ -51,6 +51,9 @@ public:
     */
     ~KoTextWriter();
 
+    /// XXX: APIDOX!
+    static void saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData, QTextDocument *document, int from, int to);
+
     /**
      * Save a paragraph style used in a text block
      *
@@ -73,7 +76,7 @@ public:
      * @param from the start position in characters from which we save
      * @param to the end position in characters up to whcih we save. If -1, we save to the end
      */
-    void write(QTextDocument *document, int from, int to = -1);
+    void write(const QTextDocument *document, int from, int to = -1);
 
 private:
     class Private;

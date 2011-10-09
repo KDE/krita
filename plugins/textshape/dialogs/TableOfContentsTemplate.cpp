@@ -31,6 +31,9 @@ TableOfContentsTemplate::TableOfContentsTemplate(KoStyleManager *manager):
 
 QList<KoTableOfContentsGeneratorInfo *> TableOfContentsTemplate::templates()
 {
+    //if you are adding your own custom styles specifically for ToC, add it as an unused style in KoStyleManager
+    // when the ToC is used the style will be automatically move to the usedStyle section
+
     QList<KoTableOfContentsGeneratorInfo *> predefinedTemplates;
     KoTableOfContentsGeneratorInfo *firstTemplate = new KoTableOfContentsGeneratorInfo();
     firstTemplate->m_indexTitleTemplate.text = "Table Of Contents";
@@ -57,4 +60,17 @@ QList<KoTableOfContentsGeneratorInfo *> TableOfContentsTemplate::templates()
     predefinedTemplates.append(firstTemplate);
     predefinedTemplates.append(secondTemplate);
     return predefinedTemplates;
+}
+
+void TableOfContentsTemplate::moveTemplateToUsed(KoTableOfContentsGeneratorInfo *info)
+{
+    if (m_manager->unusedStyle(info->m_indexTitleTemplate.styleId)) {
+        m_manager->moveToUsedStyles(info->m_indexTitleTemplate.styleId);
+    }
+
+    for (int level = 1; level <= info->m_outlineLevel; level++) {
+        if (m_manager->unusedStyle(info->m_entryTemplate[level - 1].styleId)) {
+            m_manager->moveToUsedStyles(info->m_entryTemplate[level - 1].styleId);
+        }
+    }
 }

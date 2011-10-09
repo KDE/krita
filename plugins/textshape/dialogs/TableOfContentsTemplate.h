@@ -32,6 +32,9 @@ public:
 
     QList<KoTableOfContentsGeneratorInfo *> templates();
 
+    /// this method moves the styles used in info ToC from unused styles list to used
+    void moveTemplateToUsed(KoTableOfContentsGeneratorInfo *info);
+
 private:
     KoStyleManager *m_manager;
 };

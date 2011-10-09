@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,6 +40,9 @@ SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, Q
 {
     widget.setupUi(this);
     Q_ASSERT(tool);
+
+    m_templateGenerator = new TableOfContentsTemplate(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
+
     widget.addToC->setDefaultAction(tool->action("insert_tableofcontents"));
     widget.configureToC->setDefaultAction(tool->action("format_tableofcontents"));
     widget.addToC->setNumColumns(1);
@@ -46,6 +50,11 @@ SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, Q
     connect(widget.addToC, SIGNAL(aboutToShowMenu()), this, SLOT(prepareTemplateMenu()));
     connect(widget.addToC, SIGNAL(itemTriggered(int)), this, SLOT(applyTemplate(int)));
     connect(widget.configureToC, SIGNAL(clicked(bool)), this, SIGNAL(showConfgureOptions()));
+}
+
+SimpleTableOfContentsWidget::~SimpleTableOfContentsWidget()
+{
+    delete m_templateGenerator;
 }
 
 void SimpleTableOfContentsWidget::setStyleManager(KoStyleManager *sm)
@@ -84,8 +93,7 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
 
     m_signalMapper = new QSignalMapper();
 
-    TableOfContentsTemplate *templateGenerator = new TableOfContentsTemplate(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
-    m_templateList = templateGenerator->templates();
+    m_templateList = m_templateGenerator->templates();
 
     connect(m_signalMapper, SIGNAL(mapped(int)), this, SLOT(pixmapReady(int)));
 
@@ -110,7 +118,7 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
     if (widget.addToC->isFirstTimeMenuShown()) {
         widget.addToC->addSeparator();
         widget.addToC->addAction(m_referenceTool->action("insert_configure_tableofcontents"));
-        connect(m_referenceTool->action("insert_configure_tableofcontents"), SIGNAL(triggered()), this, SLOT(insertCustomToC()));
+        connect(m_referenceTool->action("insert_configure_tableofcontents"), SIGNAL(triggered()), this, SLOT(insertCustomToC()), Qt::UniqueConnection);
     }
 }
 
@@ -124,11 +132,13 @@ void SimpleTableOfContentsWidget::pixmapReady(int templateId)
 
 void SimpleTableOfContentsWidget::applyTemplate(int templateId)
 {
+    m_templateGenerator->moveTemplateToUsed(m_templateList.at(templateId - 1));
     m_referenceTool->editor()->insertTableOfContents(m_templateList.at(templateId - 1));
 }
 
 void SimpleTableOfContentsWidget::insertCustomToC()
 {
+    m_templateGenerator->moveTemplateToUsed(m_templateList.at(0));
     m_referenceTool->insertCustomToC(m_templateList.at(0));
 }
 

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,12 +34,14 @@ class QMenu;
 class KoTableOfContentsGeneratorInfo;
 class TableOfContentsPreview;
 class QSignalMapper;
+class TableOfContentsTemplate;
 
 class SimpleTableOfContentsWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit SimpleTableOfContentsWidget(ReferencesTool *tool, QWidget *parent = 0);
+    ~SimpleTableOfContentsWidget();
     void setToCConfigureMenu(QMenu *tocMenu);
     QMenu *ToCConfigureMenu();
     void showMenu();
@@ -66,6 +69,7 @@ private:
     QList<TableOfContentsPreview *> m_previewGenerator;
     ReferencesTool *m_referenceTool;
     QSignalMapper *m_signalMapper;
+    TableOfContentsTemplate *m_templateGenerator;
 };
 
 #endif

@@ -90,7 +90,7 @@ void ReferencesTool::createActions()
     addAction("insert_tableofcontents", action);
     action->setToolTip(i18n("Insert a Table of Contents into the document."));
 
-    action = new KAction(i18n("Insert Custom"), this);
+    action = new KAction(i18n("Insert Custom ..."), this);
     addAction("insert_configure_tableofcontents", action);
     action->setToolTip(i18n("Insert a custom Table of Contents into the document."));
 

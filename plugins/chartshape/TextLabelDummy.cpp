@@ -21,7 +21,7 @@
 
 #include "TextLabelDummy.h"
 
-void TextLabelDummy::paint( QPainter&, const KoViewConverter& )
+void TextLabelDummy::paint( QPainter&, const KoViewConverter&, KoShapePaintingContext &)
 {
 }
 

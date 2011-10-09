@@ -58,7 +58,7 @@ public:
     KoSelection();
     virtual ~KoSelection();
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
     /**
      * Adds a shape to the selection.

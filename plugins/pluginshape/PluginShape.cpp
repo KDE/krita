@@ -44,7 +44,7 @@ PluginShape::~PluginShape()
 {
 }
 
-void PluginShape::paint(QPainter &painter, const KoViewConverter &converter)
+void PluginShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     QRectF pixelsF = converter.documentToView(QRectF(QPointF(0,0), size()));
     painter.fillRect(pixelsF, QColor(Qt::yellow));

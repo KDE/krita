@@ -101,7 +101,7 @@ KoShapeGroup::~KoShapeGroup()
 {
 }
 
-void KoShapeGroup::paintComponent(QPainter &painter, const KoViewConverter &converter)
+void KoShapeGroup::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);

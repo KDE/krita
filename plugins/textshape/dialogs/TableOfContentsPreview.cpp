@@ -27,6 +27,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoParagraphStyle.h>
 #include <KoPageProvider.h>
+#include <KoShapePaintingContext.h>
 
 
 TableOfContentsPreview::TableOfContentsPreview(QWidget *parent) :
@@ -161,7 +162,8 @@ void TableOfContentsPreview::finishedPreviewLayout()
         } else {
             m_textShape->setSize(m_previewPixSize);
         }
-        m_textShape->paintComponent(p, m_zoomHandler);
+        KoShapePaintingContext paintContext; //FIXME
+        m_textShape->paintComponent(p, m_zoomHandler, paintContext);
     }
     emit pixmapGenerated();
     update();

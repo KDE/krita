@@ -38,6 +38,7 @@
 #include <KoConnectionShape.h>
 #include <KoShapeController.h>
 #include <KoGradientBackground.h>
+#include <KoShapePaintingContext.h>
 
 TreeShapeMoveStrategy::TreeShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
     : KoInteractionStrategy(tool),
@@ -147,7 +148,8 @@ void TreeShapeMoveStrategy::paint( QPainter &painter, const KoViewConverter &con
     SelectionDecorator decorator;
     decorator.setSelection(tool()->canvas()->shapeManager()->selection());
     decorator.paint(painter, converter);
-    m_connector->paint(painter, converter);
+    KoShapePaintingContext paintContext;
+    m_connector->paint(painter, converter, paintContext);
 }
 
 TreeShape* TreeShapeMoveStrategy::proposeParent()

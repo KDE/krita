@@ -33,7 +33,7 @@ class MockShape : public KoShape
 {
 public:
     MockShape() : paintedCount(0) {}
-    void paint(QPainter &painter, const KoViewConverter &converter) {
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
         //qDebug() << "Shape" << kBacktrace( 10 );
@@ -50,7 +50,7 @@ class MockContainer : public KoShapeContainer
 {
 public:
     MockContainer(KoShapeContainerModel *model = 0) : KoShapeContainer(model), paintedCount(0) {}
-    void paintComponent(QPainter &painter, const KoViewConverter &converter) {
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
         //qDebug() << "Container:" << kBacktrace( 10 );
@@ -66,7 +66,7 @@ public:
 
 class MockGroup : public KoShapeGroup
 {
-    void paintComponent(QPainter &painter, const KoViewConverter &converter) {
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
     }

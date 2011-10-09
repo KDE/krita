@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-
-   Copyright 2008 Johannes Simon <johannes.simon@gmail.com>
+   Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,23 +14,27 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+ * Boston, MA 02110-1301, USA.
 */
 
+#ifndef KOSHAPEPAINTINGCONTEXT_H
+#define KOSHAPEPAINTINGCONTEXT_H
 
-#ifndef TEXTLABELDUMMY_H
-#define TEXTLABELDUMMY_H
+#include <QSet>
+#include <QString>
+#include <QVariant>
 
+#include "flake_export.h"
 
-#include <KoShape.h>
-
-
-class TextLabelDummy : public KoShape
+/**
+ * Context passed to shapes during painting.
+ */
+class FLAKE_EXPORT KoShapePaintingContext
 {
 public:
-    void paint( QPainter&, const KoViewConverter&, KoShapePaintingContext &paintcontext);
-    bool loadOdf( const KoXmlElement&, KoShapeLoadingContext& );
-    void saveOdf( KoShapeSavingContext& ) const;
+    KoShapePaintingContext();
+
+    ~KoShapePaintingContext();
 };
 
-#endif
+#endif /* KOSHAPEPAINTINGCONTEXT_H */

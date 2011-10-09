@@ -243,7 +243,7 @@ void RenderThread::drawSvm(QPainter &painter) const
     svmParser.parse(m_shape->m_contents);
 }
 
-void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
+void VectorShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
 #ifdef VECTORSHAPE_PAINT_UNCACHED
     bool useCache = false;

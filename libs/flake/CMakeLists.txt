@@ -39,6 +39,7 @@ set(flake_SRCS
     KoShapeGroup.cpp
     KoShapeManagerPaintingStrategy.cpp
     KoShapeManager.cpp
+    KoShapePaintingContext.cpp
     KoShapePainter.cpp
     KoFrameShape.cpp
     KoUnavailShape.cpp

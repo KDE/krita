@@ -71,7 +71,8 @@ public:
         MergeWithAdjacentList = 2,
         MergeExactly = 4,
         CreateNumberedParagraph = 8,
-        AutoListStyle = 16
+        AutoListStyle = 16,
+        DontUnsetIfSame = 32 /// do not unset the current list style if it is already been set the same
     };
     Q_DECLARE_FLAGS(ChangeListFlags, ChangeListFlag)
 

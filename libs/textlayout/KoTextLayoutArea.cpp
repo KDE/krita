@@ -695,6 +695,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // initialize list item stuff for this parag.
     QTextList *textList = block.textList();
     QTextListFormat listFormat;
+    QTextCharFormat labelFormat;
     if (textList) {
         listFormat = textList->format();
 
@@ -712,7 +713,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
 
         // use format from the actual block of the list item
-        QTextCharFormat labelFormat;
         if ( cs && cs->hasProperty(QTextFormat::FontPointSize) ) {
                 cs->applyStyle(labelFormat);
         } else {
@@ -1048,7 +1048,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
 
         if (listFormat.boolProperty(KoListStyle::AlignmentMode)) {
-            if (block.blockFormat().intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
+            if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
                 if (listFormat.hasProperty(KoListStyle::TabStopPosition)) {
                     qreal listTab = listFormat.doubleProperty(KoListStyle::TabStopPosition);
                     if (!m_documentLayout->relativeTabs(block)) {
@@ -1123,6 +1123,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 } else {
                     m_indent = 0;
                 }
+            } else if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::Space) {
+                 QFontMetrics fm(labelFormat.font(), m_documentLayout->paintDevice());
+                 m_indent += fm.width(' ');
             }
         }
     }

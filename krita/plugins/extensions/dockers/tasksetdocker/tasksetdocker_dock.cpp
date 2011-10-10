@@ -97,7 +97,6 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     m_rserver = new KoResourceServer<TasksetResource>("kis_taskset", "*.kts");
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<TasksetResource>(m_rserver);
     m_taskThread = new KoResourceLoaderThread(m_rserver);
-    connect(m_taskThread, SIGNAL(finished()), this, SLOT(tasksetThreadDone()));
     m_taskThread->start();
 
     KoResourceItemChooser* itemChooser = new KoResourceItemChooser(adapter, this);
@@ -119,6 +118,12 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     connect( recordButton, SIGNAL(toggled(bool)), this, SLOT(recordClicked()));
     connect( clearButton, SIGNAL(clicked(bool)), this, SLOT(clearClicked()));
     connect( saveButton, SIGNAL(clicked(bool)), this, SLOT(saveClicked()));
+}
+
+TasksetDockerDock::~TasksetDockerDock()
+{
+    delete m_taskThread;
+    delete m_rserver;
 }
 
 void TasksetDockerDock::setCanvas(KoCanvasBase * canvas)
@@ -178,6 +183,8 @@ void TasksetDockerDock::saveClicked()
         return;
     }
 
+    m_taskThread->barrier();
+
     TasksetResource* taskset = new TasksetResource("");
 
     QStringList actionNames;
@@ -212,12 +219,6 @@ void TasksetDockerDock::clearClicked()
 {
     saveButton->setEnabled(false);
     m_model->clear();
-}
-
-void TasksetDockerDock::tasksetThreadDone()
-{
-    delete m_taskThread;
-    m_taskThread = 0;
 }
 
 void TasksetDockerDock::resourceSelected(KoResource* resource)

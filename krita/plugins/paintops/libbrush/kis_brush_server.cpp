@@ -144,13 +144,13 @@ KisBrushServer::KisBrushServer()
 
     m_brushServer = new BrushResourceServer();
     m_brushThread = new KoResourceLoaderThread(m_brushServer);
-    connect(m_brushThread, SIGNAL(finished()), this, SLOT(brushThreadDone()));
     m_brushThread->start();
 }
 
 KisBrushServer::~KisBrushServer()
 {
     dbgRegistry << "deleting KisBrushServer";
+    delete m_brushThread;
     delete m_brushServer;
 }
 
@@ -163,13 +163,8 @@ KisBrushServer* KisBrushServer::instance()
 
 KoResourceServer<KisBrush>* KisBrushServer::brushServer()
 {
+    m_brushThread->barrier();
     return m_brushServer;
-}
-
-void KisBrushServer::brushThreadDone()
-{
-    delete m_brushThread;
-    m_brushThread = 0;
 }
 
 #include "kis_brush_server.moc"

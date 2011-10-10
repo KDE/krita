@@ -18,12 +18,17 @@
 
 #include "kis_action_recorder_test.h"
 
+#include "testutil.h"
 #include <QDomDocument>
 #include <qtest_kde.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColor.h>
+#include <KoProgressUpdater.h>
+#include <KoUpdater.h>
 #include "kis_types.h"
 #include "kis_image.h"
+#include "kis_paint_layer.h"
 #include "recorder/kis_action_recorder.h"
 #include "recorder/kis_macro.h"
 
@@ -47,6 +52,10 @@ void KisActionRecorderTest::testCreation()
 
 void KisActionRecorderTest::testFiles()
 {
+    TestUtil::TestProgressBar progressProxy;
+    KoProgressUpdater progressUpdater(&progressProxy);
+    progressUpdater.start(100);
+
     QDir dirSources(QString(FILES_DATA_DIR) + "/actionrecorder/sources");
     foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
         if (!sourceFileInfo.isHidden() && !sourceFileInfo.isDir()) {
@@ -58,7 +67,12 @@ void KisActionRecorderTest::testFiles()
             // Create an image and the document
             QDomDocument domDoc;
 
-            KisImage image(0, 200, 200, KoColorSpaceRegistry::instance()->rgb8(), "");
+            const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+            KisImageSP image = new KisImage(0, 200, 200, cs, "");
+            KoColor white(Qt::white, cs);
+            KisPaintLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+            paintLayer1->paintDevice()->setDefaultPixel(white.data());
+            image->addNode(paintLayer1);
 
             // Load recorded action
             QString err;
@@ -73,34 +87,20 @@ void KisActionRecorderTest::testFiles()
             KisMacro m;
             m.fromXML(docElem, 0);
             // Play
-            KisMacroPlayer player(&m, KisPlayInfo(&image, image.root()));
+            KoUpdater *updater = progressUpdater.startSubtask();
+            KisMacroPlayer player(&m, KisPlayInfo(image, paintLayer1), updater);
             player.start();
             player.wait();
-            QImage sourceImage = image.convertToQImage(0, 0, 200, 200, 0);
+            QImage sourceImage = image->convertToQImage(0, 0, 200, 200, 0);
             // load what we should have get from the hard drive
             QImage resultImage(resultFileInfo.absoluteFilePath());
             resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);
-            QVERIFY(resultImage.width() == sourceImage.width());
-            QVERIFY(resultImage.height() == sourceImage.height());
-            QCOMPARE(resultImage.numBytes(), sourceImage.numBytes());
-            if (memcmp(resultImage.bits(), sourceImage.bits(), sourceImage.numBytes()) != 0) {
-                for (int i = 0; i < sourceImage.numBytes(); i += 4) {
-                    if (resultImage.bits()[i + 3] == sourceImage.bits()[i + 3] && resultImage.bits()[i + 3] != 0) {
-                        for (int j = 0; j < 4; j++) {
-                            /*                            QVERIFY2( resultImage.bits()[i+j] == sourceImage.bits()[i+j],
-                                                                QString("byte %1 is different : result: %2 krita: %3 in file %4").arg(i+j)
-                                                                .arg((int)resultImage.bits()[i+j])
-                                                                .arg((int)sourceImage.bits()[i+j])
-                                                                .arg(sourceFileInfo.fileName()).toAscii().data());*/
-                            // TODO figure out why sometimes there is a slight difference between original and replay
-                            QVERIFY2(qAbs(resultImage.bits()[i+j] - sourceImage.bits()[i+j]) <= 4,
-                                     QString("byte %1 is different : result: %2 krita: %3 in file %4").arg(i + j)
-                                     .arg((int)resultImage.bits()[i+j])
-                                     .arg((int)sourceImage.bits()[i+j])
-                                     .arg(sourceFileInfo.fileName()).toAscii().data());
-                        }
-                    }
-                }
+
+            if(sourceImage != resultImage) {
+                sourceImage.save("action_recorder_source.png");
+                resultImage.save("action_recorder_result.png");
+                qCritical() << "Failed to play action:" << sourceFileInfo.fileName();
+                QFAIL("Images do not coincide");
             }
         }
     }

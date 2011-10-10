@@ -1,4 +1,4 @@
-/* Part of Calligra Suite - Marble Map Shape
+/* Part of Calligra Suite - Map Shape
    Copyright 2007 Montel Laurent <montel@kde.org>
    Copyright 2008 Simon Schmeisser <mail_to_wrt@gmx.de>
    Copyright (C) 2011  Radosław Wicik <radoslaw@wicik.pl>
@@ -27,7 +27,7 @@
 #include <global.h>
 
 
-class MarbleMapShape;
+class MapShape;
 namespace Marble  {
     class MarbleControlBox;
     class MapThemeManager;
@@ -35,15 +35,15 @@ namespace Marble  {
 }
 
 class QModelIndex;
-class MarbleMapToolPrivate;
+class MapToolPrivate;
 
-class MarbleMapTool : public KoToolBase
+class MapTool : public KoToolBase
 {
     Q_OBJECT
     typedef Marble::Projection Projection;
 public:
-    explicit MarbleMapTool(KoCanvasBase* canvas);
-    virtual ~MarbleMapTool();
+    explicit MapTool(KoCanvasBase* canvas);
+    virtual ~MapTool();
 
     /// reimplemented from KoToolBase
     virtual void paint(QPainter& , const KoViewConverter&) {}
@@ -74,7 +74,7 @@ public Q_SLOTS:
     void zoomChanged(int zoom);
 
 private:
-    MarbleMapToolPrivate *d;
+    MapToolPrivate *d;
 };
 
 #endif

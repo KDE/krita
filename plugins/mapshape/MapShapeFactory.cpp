@@ -1,4 +1,4 @@
-/*  Part of Calligra Suite - Marble Map Shape
+/*  Part of Calligra Suite - Map Shape
     Copyright (C) 2007 Thomas Zander <zander@kde.org>
     Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
     Copyright (C) 2008 Simon Schmeißer <mail_to_wrt@gmx.de>
@@ -20,8 +20,8 @@
 */
 
 
-#include "MarbleMapShapeFactory.h"
-#include "MarbleMapShape.h"
+#include "MapShapeFactory.h"
+#include "MapShape.h"
 #include <KoXmlNS.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeLoadingContext.h>
@@ -29,34 +29,33 @@
 #include <KLocale>
 #include <QStringList>
 
-MarbleMapShapeFactory::MarbleMapShapeFactory()
-    :KoShapeFactoryBase(MARBLEMAPSHAPEID, i18n("Marble Map Shape"))
+MapShapeFactory::MapShapeFactory()
+    :KoShapeFactoryBase(MAPSHAPEID, i18n("Map Shape"))
 {
-    setToolTip(i18n("A shape which displays Marble map"));
-    setIcon("marble");
+    setToolTip(i18n("A shape which displays map"));
+    setIcon("map_shape");
     QList<QPair<QString, QStringList> > elementNamesList;
-    elementNamesList.append(qMakePair(QString(KoXmlNS::calligra), QStringList("marblemap")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::calligra), QStringList("map")));
     setXmlElements(elementNamesList);
     setLoadingPriority(1);
 }
 
-MarbleMapShapeFactory::~MarbleMapShapeFactory()
+MapShapeFactory::~MapShapeFactory()
 {
 
 }
 
-
-bool MarbleMapShapeFactory::supports(const KoXmlElement& element, KoShapeLoadingContext& context) const
+bool MapShapeFactory::supports(const KoXmlElement& element, KoShapeLoadingContext& context) const
 {
     Q_UNUSED(context)
-    return (element.localName() == "marblemap"
+    return (element.localName() == "map"
             && element.namespaceURI() == KoXmlNS::calligra);
 }
 
-KoShape* MarbleMapShapeFactory::createDefaultShape(KoDocumentResourceManager* documentResources) const
+KoShape* MapShapeFactory::createDefaultShape(KoDocumentResourceManager* documentResources) const
 {
-    MarbleMapShape *shape = new MarbleMapShape();
-    shape->setShapeId(MARBLEMAPSHAPEID);
+    MapShape *shape = new MapShape();
+    shape->setShapeId(MAPSHAPEID);
     if(documentResources)
         shape->setImageCollection(documentResources->imageCollection());
     return shape;

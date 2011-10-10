@@ -1,4 +1,4 @@
-/* Part of Calligra Suite - Marble Map Shape
+/* Part of Calligra Suite - Map Shape
    Copyright 2008 Simon Schmeisser <mail_to_wrt@gmx.de>
    Copyright (C) 2011  Radosław Wicik <radoslaw@wicik.pl>
 
@@ -18,12 +18,12 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "MarbleMapShapeCommandSetMapThemeId.h"
-#include "MarbleMapShape.h"
+#include "MapShapeCommandSetMapThemeId.h"
+#include "MapShape.h"
 
 #include <MarbleWidget.h>
 
-MarbleMapShapeCommandSetMapThemeId::MarbleMapShapeCommandSetMapThemeId(MarbleMapShape * shape, const QString& mapThemeId, KUndo2Command *parent)
+MapShapeCommandSetMapThemeId::MapShapeCommandSetMapThemeId(MapShape * shape, const QString& mapThemeId, KUndo2Command *parent)
 : KUndo2Command(parent)
 {
     m_shape = shape;
@@ -35,7 +35,7 @@ MarbleMapShapeCommandSetMapThemeId::MarbleMapShapeCommandSetMapThemeId(MarbleMap
     redo();
 }
 
-void MarbleMapShapeCommandSetMapThemeId::redo()
+void MapShapeCommandSetMapThemeId::redo()
 {
     if (m_shape) {
         m_shape->marbleWidget()->setMapThemeId(m_new_mapThemeId);
@@ -43,7 +43,7 @@ void MarbleMapShapeCommandSetMapThemeId::redo()
     }
 }
 
-void MarbleMapShapeCommandSetMapThemeId::undo()
+void MapShapeCommandSetMapThemeId::undo()
 {
     if (m_shape) {
         m_shape->marbleWidget()->setMapThemeId(m_old_mapThemeId);

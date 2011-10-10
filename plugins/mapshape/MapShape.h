@@ -1,5 +1,5 @@
 /*
-    Part of Calligra Suite - Marble Map Shape
+    Part of Calligra Suite - Map Shape
     Copyright (C) 2007 Thomas Zander <zander@kde.org>
     Copyright (C) 2008-2009 Simon Schmeißer <mail_to_wrt@gmx.de>
     Copyright (C) 2011  Radosław Wicik <radoslaw@wicik.pl>
@@ -20,27 +20,27 @@
 */
 
 
-#ifndef MARBLEMAPSHAPE_H
-#define MARBLEMAPSHAPE_H
+#ifndef MAPSHAPE_H
+#define MAPSHAPE_H
 
 #include <KoShape.h>
 #include <KoFrameShape.h>
 
-#define MARBLEMAPSHAPEID "MarbleMapShape"
+#define MAPSHAPEID "MapShape"
 
-class MarbleMapShapePrivate;
+class MapShapePrivate;
 class KoImageCollection;
 
-namespace Marble{
+namespace Marble {
     class MarbleWidget;
 }
 
-class MarbleMapShape :public QObject, public KoShape, public KoFrameShape
+class MapShape :public QObject, public KoShape, public KoFrameShape
 {
     Q_OBJECT
 public:
-    explicit MarbleMapShape();
-    virtual ~MarbleMapShape();
+    explicit MapShape();
+    virtual ~MapShape();
 
     virtual void paint(QPainter& painter, const KoViewConverter& converter);
     virtual bool loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context);
@@ -54,7 +54,7 @@ public slots:
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement& element, KoShapeLoadingContext& context);
 private:
-     MarbleMapShapePrivate * const d;
+    MapShapePrivate * const d;
 };
 
 #endif // MARBLEMAPSHAPE_H

@@ -1,4 +1,4 @@
-/* Part of Calligra Suite - Marble Map Shape
+/* Part of Calligra Suite - Map Shape
    Copyright 2008 Simon Schmeisser <mail_to_wrt@gmx.de>
    Copyright (C) 2011  Radosław Wicik <radoslaw@wicik.pl>
 
@@ -26,11 +26,10 @@
 #include <QtGui/QUndoCommand>
 #include <kundo2command.h>
 
-class MarbleMapShape;
-//enum Projection {};
+class MapShape;
 
 /// The undo / redo command for changing the projection
-class MarbleMapShapeCommandChangeProjection : public KUndo2Command
+class MapShapeCommandChangeProjection : public KUndo2Command
 {
 public:
     /**
@@ -40,7 +39,7 @@ public:
     * @param projection projection that is wanted
     * @param parent the parent command used for macro commands
      */
-    MarbleMapShapeCommandChangeProjection(MarbleMapShape * shape, Marble::Projection projection, KUndo2Command *parent = 0);
+    MapShapeCommandChangeProjection(MapShape * shape, Marble::Projection projection, KUndo2Command *parent = 0);
 
     /// redo the command
     void redo();
@@ -48,7 +47,7 @@ public:
     void undo();
 
 private:
-    MarbleMapShape *m_shape;
+    MapShape *m_shape;
     Marble::Projection m_old_projection;
     Marble::Projection m_new_projection;
 };

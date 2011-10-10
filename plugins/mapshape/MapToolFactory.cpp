@@ -1,5 +1,7 @@
-/* Part of Calligra Suite - Marble Map Shape
+/* Part of Calligra Suite - Map Shape
+   Copyright 2007 Montel Laurent <montel@kde.org>
    Copyright 2008 Simon Schmeisser <mail_to_wrt@gmx.de>
+   Copyright (C) 2008 Inge Wallin  <inge@lysator.liu.se.de>
    Copyright (C) 2011  Radosław Wicik <radoslaw@wicik.pl>
 
    This library is free software; you can redistribute it and/or
@@ -18,36 +20,32 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "MarbleMapShapeCommandZoom.h"
-#include "MarbleMapShape.h"
 
-#include <MarbleWidget.h>
+// Own
+#include "MapToolFactory.h"
 
+// KDE
+#include <klocale.h>
 
-MarbleMapShapeCommandZoom::MarbleMapShapeCommandZoom(MarbleMapShape * shape, signed int value, KUndo2Command *parent)
-: KUndo2Command(parent)
+// GeoShape
+#include "MapShape.h"
+#include "MapTool.h"
+
+MapToolFactory::MapToolFactory()
+    : KoToolFactoryBase("MapToolFactoryId")
 {
-    m_shape = shape;
-    m_new_value = value;
-
-    if (m_shape)
-        m_old_value = m_shape->marbleWidget()->zoom();
-
-    redo();
+    setToolTip(i18n("Map editing tool"));
+    setIcon("map_shape");
+    setToolType(dynamicToolType());
+    setPriority(1);
+    setActivationShapeId(MAPSHAPEID);
 }
 
-void MarbleMapShapeCommandZoom::redo()
+MapToolFactory::~MapToolFactory()
 {
-    if (m_shape) {
-        m_shape->marbleWidget()->zoomView(m_new_value);
-        m_shape->update();
-    }
 }
 
-void MarbleMapShapeCommandZoom::undo()
+KoToolBase *MapToolFactory::createTool(KoCanvasBase *canvas)
 {
-    if (m_shape) {
-        m_shape->marbleWidget()->zoomView(m_old_value);
-        m_shape->update();
-    }
+    return new MapTool(canvas);
 }

@@ -1,4 +1,4 @@
-/* Part of Calligra Suite - Marble Map Shape
+/* Part of Calligra Suite - Map Shape
    Copyright 2008 Simon Schmeisser <mail_to_wrt@gmx.de>
    Copyright (C) 2011  Radosław Wicik <radoslaw@wicik.pl>
 
@@ -25,10 +25,10 @@
 
 #include <kundo2command.h>
 
-class MarbleMapShape;
+class MapShape;
 
 /// The undo / redo command for setting the map theme
-class MarbleMapShapeCommandSetMapThemeId : public KUndo2Command
+class MapShapeCommandSetMapThemeId : public KUndo2Command
 {
 public:
     /**
@@ -38,7 +38,7 @@ public:
     * @param mapThemeId MapTheme that is wanted
     * @param parent the parent command used for macro commands
      */
-    MarbleMapShapeCommandSetMapThemeId(MarbleMapShape * shape, const QString& MapThemeId, KUndo2Command *parent = 0);
+    MapShapeCommandSetMapThemeId(MapShape * shape, const QString& MapThemeId, KUndo2Command *parent = 0);
 
     /// redo the command
     void redo();
@@ -46,7 +46,7 @@ public:
     void undo();
 
     private:
-    MarbleMapShape *m_shape;
+    MapShape *m_shape;
     QString m_old_mapThemeId;
     QString m_new_mapThemeId;
 };

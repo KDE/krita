@@ -1,4 +1,4 @@
-/*  Part of Calligra Suite - Marble Map Shape
+/*  Part of Calligra Suite - Map Shape
     Copyright (C) 2011  Radosław Wicik <radoslaw@wicik.pl>
 
     This library is free software; you can redistribute it and/or
@@ -17,15 +17,15 @@
 */
 
 
-#include "MarbleMapShapeCommandContentChange.h"
+#include "MapShapeCommandContentChange.h"
 
-#include "MarbleMapShape.h"
+#include "MapShape.h"
 #include <MarbleWidget.h>
 #include <QPointF>
 
 
-MarbleMapShapeCommandContentChange::MarbleMapShapeCommandContentChange(
-    MarbleMapShape* shape,
+MapShapeCommandContentChange::MapShapeCommandContentChange(
+    MapShape* shape,
     QPointF value,
     KUndo2Command* parent)
     : KUndo2Command(parent)
@@ -41,7 +41,7 @@ MarbleMapShapeCommandContentChange::MarbleMapShapeCommandContentChange(
 }
 
 
-void MarbleMapShapeCommandContentChange::undo()
+void MapShapeCommandContentChange::undo()
 {
     if (m_shape) {
         m_shape->marbleWidget()->centerOn(m_new_value.x(), m_new_value.y());
@@ -49,7 +49,7 @@ void MarbleMapShapeCommandContentChange::undo()
     }
 }
 
-void MarbleMapShapeCommandContentChange::redo()
+void MapShapeCommandContentChange::redo()
 {
     if (m_shape) {
         m_shape->marbleWidget()->centerOn(m_old_value.x(), m_old_value.y());

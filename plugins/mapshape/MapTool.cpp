@@ -1,4 +1,4 @@
-/* Part of Calligra Suite - Marble Map Shape
+/* Part of Calligra Suite - Map Shape
    Copyright 2007 Montel Laurent <montel@kde.org>
    Copyright 2008 Simon Schmeisser <mail_to_wrt@gmx.de>
    Copyright (C) 2011  Radosław Wicik <radoslaw@wicik.pl>
@@ -19,13 +19,13 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "MarbleMapTool.h"
-#include "MarbleMapShape.h"
+#include "MapTool.h"
+#include "MapShape.h"
 
-#include "MarbleMapShapeCommandZoom.h"
-#include "MarbleMapShapeCommandChangeProjection.h"
-#include "MarbleMapShapeCommandSetMapThemeId.h"
-#include "MarbleMapShapeCommandContentChange.h"
+#include "MapShapeCommandZoom.h"
+#include "MapShapeCommandChangeProjection.h"
+#include "MapShapeCommandSetMapThemeId.h"
+#include "MapShapeCommandContentChange.h"
 
 #include <QToolButton>
 #include <QGridLayout>
@@ -48,144 +48,144 @@
 
 #include <GeoDataCoordinates.h>
 
-class MarbleMapToolPrivate{
+class MapToolPrivate {
 public:
-    MarbleMapToolPrivate()
-        :m_marbleMapShape(0),
-         m_marbleControlBox(0)//,
+    MapToolPrivate()
+        :m_shape(0),
+         m_controlBox(0)//,
          //m_mapThemeManager(0)
     {
     }
     
-    ~MarbleMapToolPrivate(){
+    ~MapToolPrivate() {
         //if(m_mapThemeManager)
         //    delete m_mapThemeManager;
     }
-    MarbleMapShape *m_marbleMapShape;
-    Marble::MarbleControlBox *m_marbleControlBox;
+    MapShape *m_shape;
+    Marble::MarbleControlBox *m_controlBox;
     //Marble::MapThemeManager *m_mapThemeManager;
 };
 
-MarbleMapTool::MarbleMapTool(KoCanvasBase* canvas)
+MapTool::MapTool(KoCanvasBase* canvas)
     : KoToolBase(canvas),
-    d(new MarbleMapToolPrivate)
+    d(new MapToolPrivate)
 {
 }
 
-MarbleMapTool::~MarbleMapTool()
+MapTool::~MapTool()
 {
     delete d;
 }
 
-void MarbleMapTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void MapTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     Q_UNUSED(toolActivation);
 
     foreach (KoShape* shape, shapes) {
-        d->m_marbleMapShape = dynamic_cast<MarbleMapShape*>(shape);
-        if (d->m_marbleMapShape)
+        d->m_shape = dynamic_cast<MapShape*>(shape);
+        if (d->m_shape)
             break;
     }
-    if (!d->m_marbleMapShape) {
+    if (!d->m_shape) {
         emit done();
         return;
     }
 
-    if (d->m_marbleControlBox) {
-        d->m_marbleControlBox->addMarbleWidget(d->m_marbleMapShape->marbleWidget());
+    if (d->m_controlBox) {
+        d->m_controlBox->addMarbleWidget(d->m_shape->marbleWidget());
     }
     useCursor(Qt::ArrowCursor);
 }
 
-void MarbleMapTool::deactivate()
+void MapTool::deactivate()
 {
-  d->m_marbleMapShape = 0;
+  d->m_shape = 0;
 }
 
-QWidget * MarbleMapTool::createOptionWidget()
+QWidget * MapTool::createOptionWidget()
 {
 
     QWidget *optionWidget = new QWidget();
     QGridLayout *layout = new QGridLayout(optionWidget);
 
-    d->m_marbleControlBox = new Marble::MarbleControlBox(optionWidget);
-    d->m_marbleControlBox->addMarbleWidget(d->m_marbleMapShape->marbleWidget());
+    d->m_controlBox = new Marble::MarbleControlBox(optionWidget);
+    d->m_controlBox->addMarbleWidget(d->m_shape->marbleWidget());
 
-    layout->addWidget(d->m_marbleControlBox, 0, 0);
+    layout->addWidget(d->m_controlBox, 0, 0);
 
-    connect(d->m_marbleMapShape->marbleWidget(), SIGNAL(visibleLatLonAltBoxChanged(Marble::GeoDataLatLonAltBox&)),
+    connect(d->m_shape->marbleWidget(), SIGNAL(visibleLatLonAltBoxChanged(Marble::GeoDataLatLonAltBox&)),
             this, SLOT(mapContentChanged(Marble::GeoDataLatLonAltBox&)));
 
-    connect(d->m_marbleMapShape->marbleWidget(), SIGNAL(zoomChanged(int)), this, SLOT(zoomChanged(int)));
+    connect(d->m_shape->marbleWidget(), SIGNAL(zoomChanged(int)), this, SLOT(zoomChanged(int)));
     
-    connect(d->m_marbleMapShape->marbleWidget(), SIGNAL(projectionChanged(Projection)),
+    connect(d->m_shape->marbleWidget(), SIGNAL(projectionChanged(Projection)),
             this, SLOT(setProjection(Projection)));
-    connect(d->m_marbleMapShape->marbleWidget(), SIGNAL(setMapThemeId(QString&)),
+    connect(d->m_shape->marbleWidget(), SIGNAL(setMapThemeId(QString&)),
             this, SLOT(setMapThemeId(const QString&)));
 
     return optionWidget;
 }
 
-// void MarbleMapTool::zoomIn() {
+// void MapTool::zoomIn() {
 //     canvas()->addCommand(
 //         new GeoShapeZoomCommand(m_geoshape, false, +1));
 // }
 // 
-// void MarbleMapTool::zoomOut() {
+// void MapTool::zoomOut() {
 //     canvas()->addCommand(
 //         new GeoShapeZoomCommand(m_geoshape, false, -1));
 // }
 // 
-// void MarbleMapTool::moveLeft() {
+// void MapTool::moveLeft() {
 //     canvas()->addCommand(
 //         new GeoShapeMoveLeftCommand(m_geoshape));
 // }
 // 
-// void MarbleMapTool::moveRight() {
+// void MapTool::moveRight() {
 //     canvas()->addCommand(
 //         new GeoShapeMoveRightCommand(m_geoshape));
 // }
 // 
-// void MarbleMapTool::moveUp() {
+// void MapTool::moveUp() {
 //     canvas()->addCommand(
 //         new GeoShapeMoveUpCommand(m_geoshape));
 // }
 // 
-// void MarbleMapTool::moveDown() {
+// void MapTool::moveDown() {
 //     canvas()->addCommand(
 //         new GeoShapeMoveDownCommand(m_geoshape));
 // }
 // 
 
-void MarbleMapTool::setProjection(Projection projection) {
+void MapTool::setProjection(Projection projection) {
     canvas()->addCommand(
-        new MarbleMapShapeCommandChangeProjection(d->m_marbleMapShape, projection));
+        new MapShapeCommandChangeProjection(d->m_shape, projection));
 }
  
-void MarbleMapTool::setMapThemeId(const QString& theme)
+void MapTool::setMapThemeId(const QString& theme)
 {
     canvas()->addCommand(
-        new MarbleMapShapeCommandSetMapThemeId(d->m_marbleMapShape, theme));
+        new MapShapeCommandSetMapThemeId(d->m_shape, theme));
 }
 
-void MarbleMapTool::zoomChanged(int zoom)
+void MapTool::zoomChanged(int zoom)
 {
     canvas()->addCommand(
-        new MarbleMapShapeCommandZoom(d->m_marbleMapShape, zoom));
+        new MapShapeCommandZoom(d->m_shape, zoom));
 }
 
-void MarbleMapTool::mapContentChanged(Marble::GeoDataLatLonAltBox& geoData)
+void MapTool::mapContentChanged(Marble::GeoDataLatLonAltBox& geoData)
 {
     QPointF newPos;
     newPos.setX(geoData.center().longitude(Marble::GeoDataCoordinates::Degree));
     newPos.setY(geoData.center().latitude(Marble::GeoDataCoordinates::Degree));
     canvas()->addCommand(
-        new MarbleMapShapeCommandContentChange(d->m_marbleMapShape,newPos));
+        new MapShapeCommandContentChange(d->m_shape,newPos));
 }
 
 
 // 
-// void MarbleMapTool::centerOn(const QModelIndex& index) {
+// void MapTool::centerOn(const QModelIndex& index) {
 //     // FIXME: needs to be an QUndoCommand
 //     if (m_geoshape) {
 //         m_geoshape->marbleMap()->centerOn(index);
@@ -195,8 +195,8 @@ void MarbleMapTool::mapContentChanged(Marble::GeoDataLatLonAltBox& geoData)
 
 
 
-void MarbleMapTool::mouseDoubleClickEvent(KoPointerEvent *event) {
-    if (canvas()->shapeManager()->shapeAt(event->point) != d->m_marbleMapShape) {
+void MapTool::mouseDoubleClickEvent(KoPointerEvent *event) {
+    if (canvas()->shapeManager()->shapeAt(event->point) != d->m_shape) {
         event->ignore(); // allow the event to be used by another
         return;
     }
@@ -211,4 +211,4 @@ void MarbleMapTool::mouseDoubleClickEvent(KoPointerEvent *event) {
 
 
 
-#include "MarbleMapTool.moc"
+#include "MapTool.moc"

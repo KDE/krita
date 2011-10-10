@@ -1,4 +1,4 @@
-/* TPart of Calligra Suite - Marble Map Shape
+/* Part of Calligra Suite - Map Shape
    Copyright 2008 Simon Schmeisser <mail_to_wrt@gmx.de>
    Copyright (C) 2011  Radosław Wicik <radoslaw@wicik.pl>
 
@@ -18,35 +18,36 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "MarbleMapShapeCommandChangeProjection.h"
-#include "MarbleMapShape.h"
+#include "MapShapeCommandZoom.h"
+#include "MapShape.h"
 
 #include <MarbleWidget.h>
 
-MarbleMapShapeCommandChangeProjection::MarbleMapShapeCommandChangeProjection(MarbleMapShape * shape, Marble::Projection projection, KUndo2Command *parent)
+
+MapShapeCommandZoom::MapShapeCommandZoom(MapShape * shape, signed int value, KUndo2Command *parent)
 : KUndo2Command(parent)
 {
     m_shape = shape;
-    m_new_projection = projection;
+    m_new_value = value;
 
     if (m_shape)
-        m_old_projection = m_shape->marbleWidget()->projection();
+        m_old_value = m_shape->marbleWidget()->zoom();
 
     redo();
 }
 
-void MarbleMapShapeCommandChangeProjection::redo()
+void MapShapeCommandZoom::redo()
 {
     if (m_shape) {
-        m_shape->marbleWidget()->setProjection(m_new_projection);
+        m_shape->marbleWidget()->zoomView(m_new_value);
         m_shape->update();
     }
 }
 
-void MarbleMapShapeCommandChangeProjection::undo()
+void MapShapeCommandZoom::undo()
 {
     if (m_shape) {
-        m_shape->marbleWidget()->setProjection(m_old_projection);
+        m_shape->marbleWidget()->zoomView(m_old_value);
         m_shape->update();
     }
 }

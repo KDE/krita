@@ -1,7 +1,6 @@
-/* Part of Calligra Suite - Marble Map Shape
+/* Part of Calligra Suite - Map Shape
    Copyright 2007 Montel Laurent <montel@kde.org>
    Copyright 2008 Simon Schmeisser <mail_to_wrt@gmx.de>
-   Copyright (C) 2008 Inge Wallin  <inge@lysator.liu.se.de>
    Copyright (C) 2011  Radosław Wicik <radoslaw@wicik.pl>
 
    This library is free software; you can redistribute it and/or
@@ -20,38 +19,18 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef MAPTOOLFACTORY_H
+#define MAPTOOLFACTORY_H
 
-// Own
-#include "MarbleMapToolFactory.h"
+#include <KoToolFactoryBase.h>
 
-// KDE
-#include <klocale.h>
-
-// GeoShape
-#include "MarbleMapShape.h"
-#include "MarbleMapTool.h"
-
-
-
-MarbleMapToolFactory::MarbleMapToolFactory()
-    : KoToolFactoryBase("MarbleMapToolFactoryId")
+class MapToolFactory : public KoToolFactoryBase
 {
-    setToolTip(i18n("Marble Map editing tool"));
-    setIcon("marble"); ///FIXME: set proper icon.
-    setToolType(dynamicToolType());
-    setPriority(1);
-    setActivationShapeId(MARBLEMAPSHAPEID);
-}
+public:
+    MapToolFactory();
+    ~MapToolFactory();
 
-MarbleMapToolFactory::~MarbleMapToolFactory()
-{
-}
+    KoToolBase *createTool(KoCanvasBase *canvas);
+};
 
-KoToolBase *MarbleMapToolFactory::createTool(KoCanvasBase *canvas)
-{
-    return new MarbleMapTool(canvas);
-}
-
-#include "MarbleMapToolFactory.moc"
-
-
+#endif

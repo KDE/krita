@@ -1,5 +1,4 @@
-/* Part of Calligra Suite - Marble Map Shape
-   Copyright 2007 Montel Laurent <montel@kde.org>
+/* Part of Calligra Suite - Map Shape
    Copyright 2008 Simon Schmeisser <mail_to_wrt@gmx.de>
    Copyright (C) 2011  Radosław Wicik <radoslaw@wicik.pl>
 
@@ -19,19 +18,36 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef GEO_TOOL_FACTORY
-#define GEO_TOOL_FACTORY
+#ifndef GEO_SHAPE_ZOOM_COMMAND
+#define GEO_SHAPE_ZOOM_COMMAND
 
-#include <KoToolFactoryBase.h>
+#include <kundo2command.h>
 
-class MarbleMapToolFactory : public KoToolFactoryBase
+class MapShape;
+
+/// The undo / redo command for zooming the map
+class MapShapeCommandZoom : public KUndo2Command
 {
-    //Q_OBJECT
 public:
-    explicit MarbleMapToolFactory();
-    ~MarbleMapToolFactory();
+    /**
+    * Command to zoom a map.
+    *
+    * @param shape the shape where we want to zoom
+    * @param absolute zoom to value or simply zoom in (>0) or out (<0)
+    * @param value absolute zoom value or direction
+    * @param parent the parent command used for macro commands
+     */
+    MapShapeCommandZoom(MapShape * shape, signed int value, KUndo2Command *parent = 0);
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
+
+private:
+    MapShape *m_shape;
+    signed int m_old_value;
+    signed int m_new_value;
 };
 
 

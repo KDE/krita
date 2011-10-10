@@ -1,4 +1,7 @@
-/*  Part of Calligra Suite - Marble Map Shape
+/*
+    Part of Calligra Suite - Map Shape
+    Copyright (C) 2007 Thomas Zander <zander@kde.org>
+    Copyright (C) 2008 Simon Schmeißer <mail_to_wrt@gmx.de>
     Copyright (C) 2011  Radosław Wicik <radoslaw@wicik.pl>
 
     This library is free software; you can redistribute it and/or
@@ -17,25 +20,20 @@
 */
 
 
-#ifndef MARBLEMAPSHAPECOMMANDCONTENTCHANGE_H
-#define MARBLEMAPSHAPECOMMANDCONTENTCHANGE_H
+#ifndef MAPSHAPEFACTORY_H
+#define MAPSHAPEFACTORY_H
 
-#include <kundo2command.h>
+#include <KoShapeFactoryBase.h>
 
-class MarbleMapShape;
-class QPointF;
 
-class MarbleMapShapeCommandContentChange : public KUndo2Command
+class MapShapeFactory : public KoShapeFactoryBase
 {
 
 public:
-    explicit MarbleMapShapeCommandContentChange(MarbleMapShape * shape, QPointF value, KUndo2Command* parent = 0);
-    virtual void undo();
-    virtual void redo();
-private:
-    MarbleMapShape *m_shape;
-    QPointF m_old_value;
-    QPointF m_new_value;
+    explicit MapShapeFactory();
+    virtual ~MapShapeFactory();
+    virtual bool supports(const KoXmlElement& element, KoShapeLoadingContext& context) const;
+    virtual KoShape* createDefaultShape(KoDocumentResourceManager* documentResources = 0) const;
 };
 
-#endif // MARBLEMAPSHAPECOMMANDCONTENTCHANGE_H
+#endif // MAPSHAPEFACTORY_H

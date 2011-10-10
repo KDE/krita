@@ -1,4 +1,4 @@
-/* Part of Calligra Suite - Marble Map Shape
+/* Part of Calligra Suite - Map Shape
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Simon Schmeißer <mail_to_wrt@gmx.de>
  * Copyright (C) 2011  Radosław Wicik <radoslaw@wicik.pl>
@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "Plugin.h"
-#include "MarbleMapShapeFactory.h"
-#include "MarbleMapToolFactory.h"
+#include "MapShapeFactory.h"
+#include "MapToolFactory.h"
 
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
@@ -28,19 +28,14 @@
 #include <kgenericfactory.h>
 #include <KDebug>
 
-
-//K_EXPORT_COMPONENT_FACTORY(marblemapshape, KGenericFactory<MarbleMapPlugin>("MarbleMapShape"))
 K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
-K_EXPORT_PLUGIN(PluginFactory("MarbleMapShape"))
+K_EXPORT_PLUGIN(PluginFactory("MapShape"))
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    //kDebug() << "Regisering MarbleMapShapeFactory";
-    KoShapeRegistry::instance()->add(new MarbleMapShapeFactory());
-    //kDebug() << "Regisering MarbleMapToolFactory";
-    KoToolRegistry::instance()->add(new MarbleMapToolFactory());
+    KoShapeRegistry::instance()->add(new MapShapeFactory());
+    KoToolRegistry::instance()->add(new MapToolFactory());
 }
 
 #include "Plugin.moc"
-

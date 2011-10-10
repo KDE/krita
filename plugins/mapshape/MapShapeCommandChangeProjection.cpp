@@ -1,4 +1,4 @@
-/* Part of Calligra Suite - Marble Map Shape
+/* TPart of Calligra Suite - Map Shape
    Copyright 2008 Simon Schmeisser <mail_to_wrt@gmx.de>
    Copyright (C) 2011  Radosław Wicik <radoslaw@wicik.pl>
 
@@ -18,37 +18,35 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef GEO_SHAPE_ZOOM_COMMAND
-#define GEO_SHAPE_ZOOM_COMMAND
+#include "MapShapeCommandChangeProjection.h"
+#include "MapShape.h"
 
-#include <kundo2command.h>
+#include <MarbleWidget.h>
 
-class MarbleMapShape;
-
-/// The undo / redo command for zooming the map
-class MarbleMapShapeCommandZoom : public KUndo2Command
+MapShapeCommandChangeProjection::MapShapeCommandChangeProjection(MapShape * shape, Marble::Projection projection, KUndo2Command *parent)
+: KUndo2Command(parent)
 {
-public:
-    /**
-    * Command to zoom a map.
-    *
-    * @param shape the shape where we want to zoom
-    * @param absolute zoom to value or simply zoom in (>0) or out (<0)
-    * @param value absolute zoom value or direction
-    * @param parent the parent command used for macro commands
-     */
-    MarbleMapShapeCommandZoom(MarbleMapShape * shape, signed int value, KUndo2Command *parent = 0);
+    m_shape = shape;
+    m_new_projection = projection;
 
-    /// redo the command
-    void redo();
-    /// revert the actions done in redo
-    void undo();
+    if (m_shape)
+        m_old_projection = m_shape->marbleWidget()->projection();
 
-private:
-    MarbleMapShape *m_shape;
-    signed int m_old_value;
-    signed int m_new_value;
-};
+    redo();
+}
 
+void MapShapeCommandChangeProjection::redo()
+{
+    if (m_shape) {
+        m_shape->marbleWidget()->setProjection(m_new_projection);
+        m_shape->update();
+    }
+}
 
-#endif
+void MapShapeCommandChangeProjection::undo()
+{
+    if (m_shape) {
+        m_shape->marbleWidget()->setProjection(m_old_projection);
+        m_shape->update();
+    }
+}

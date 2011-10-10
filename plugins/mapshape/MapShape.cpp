@@ -1,5 +1,5 @@
 /*
-    Part of Calligra Suite - Marble Map Shape
+    Part of Calligra Suite - Map Shape
     Copyright (C) 2007 Thomas Zander <zander@kde.org>
     Copyright (C) 2008-2009 Simon Schmeißer <mail_to_wrt@gmx.de>
     Copyright (C) 2011  Radosław Wicik <radoslaw@wicik.pl>
@@ -20,7 +20,7 @@
 */
 
 
-#include "MarbleMapShape.h"
+#include "MapShape.h"
 #include <MarbleWidget.h>
 #include <MarbleModel.h>
 #include <KoImageData.h>
@@ -34,9 +34,9 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 
-class MarbleMapShapePrivate{
+class MapShapePrivate {
 public:
-    MarbleMapShapePrivate(){
+    MapShapePrivate() {
         m_marbleWidget = new Marble::MarbleWidget();
         m_marbleWidget->setMapThemeId("earth/srtm/srtm.dgml");
         m_marbleWidget->setProjection(Marble::Equirectangular);
@@ -45,7 +45,7 @@ public:
         m_marbleWidget->setShowOverviewMap(false);
         m_screenSize = QSize(0, 0);
     }
-    ~MarbleMapShapePrivate(){
+    ~MapShapePrivate(){
         delete m_marbleWidget;
     }
     Marble::MarbleWidget* m_marbleWidget;
@@ -55,23 +55,23 @@ public:
     KoImageCollection *m_imageCollection;
 };
 
-MarbleMapShape::MarbleMapShape()
-    :KoFrameShape(KoXmlNS::calligra, "marblemap"),
-    d(new MarbleMapShapePrivate())
+MapShape::MapShape()
+    : KoFrameShape(KoXmlNS::calligra, "map"),
+    d(new MapShapePrivate())
 {
     connect(d->m_marbleWidget->model(), SIGNAL(modelChanged()), this, SIGNAL(requestUpdate()));
 }
-MarbleMapShape::~MarbleMapShape()
+MapShape::~MapShape()
 {
     delete d;
 }
 
-void MarbleMapShape::requestUpdate()
+void MapShape::requestUpdate()
 {
     update();
 }
 
-void MarbleMapShape::paint(QPainter& painter, const KoViewConverter& converter)
+void MapShape::paint(QPainter& painter, const KoViewConverter& converter)
 {
     QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
     QSize newSize = target.size().toSize();
@@ -93,7 +93,7 @@ void MarbleMapShape::paint(QPainter& painter, const KoViewConverter& converter)
     painter.drawImage(target.toRect(), d->m_cacheImage);
 }
 
-void MarbleMapShape::saveOdf(KoShapeSavingContext& context) const
+void MapShape::saveOdf(KoShapeSavingContext& context) const
 {
     kDebug() << "saveOdf: size of the image " << d->m_screenSize ;
     KoImageData *data = d->m_imageCollection->createImageData(d->m_cacheImage);
@@ -106,7 +106,7 @@ void MarbleMapShape::saveOdf(KoShapeSavingContext& context) const
     saveOdfAttributes(context, OdfAllAttributes);
     // first comes the real map object, it should be loaded if possible
     // OpenOffice (2.x?) will ignore and remove this
-    writer.startElement("calligra:marblemap");
+    writer.startElement("calligra:map");
     writer.addAttribute("mapThemeId", d->m_marbleWidget->mapThemeId());
     switch(d->m_marbleWidget->projection()){
         case Marble::Spherical:
@@ -138,14 +138,14 @@ void MarbleMapShape::saveOdf(KoShapeSavingContext& context) const
     context.addDataCenter(d->m_imageCollection);
 }
 
-bool MarbleMapShape::loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context)
+bool MapShape::loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context)
 {
     loadOdfAttributes(element, context, OdfAllAttributes);
     return loadOdfFrame(element, context);
 }
 
 
-bool MarbleMapShape::loadOdfFrameElement(const KoXmlElement& element, KoShapeLoadingContext& context)
+bool MapShape::loadOdfFrameElement(const KoXmlElement& element, KoShapeLoadingContext& context)
 {
     Q_UNUSED(context)
     const QString mapThemeId = element.attribute("mapThemeId");
@@ -184,24 +184,17 @@ bool MarbleMapShape::loadOdfFrameElement(const KoXmlElement& element, KoShapeLoa
     return true;
 }
 
-KoImageCollection* MarbleMapShape::imageCollection() const
+KoImageCollection* MapShape::imageCollection() const
 {
     return d->m_imageCollection;
 }
 
-void MarbleMapShape::setImageCollection(KoImageCollection* collection)
+void MapShape::setImageCollection(KoImageCollection* collection)
 {
     d->m_imageCollection = collection;
 }
 
-Marble::MarbleWidget* MarbleMapShape::marbleWidget() const
+Marble::MarbleWidget* MapShape::marbleWidget() const
 {
     return d->m_marbleWidget;
 }
-
-//#include "MarbleMapsShape.moc"
-
-
-
-
-

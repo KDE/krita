@@ -34,7 +34,9 @@ MarbleMapShapeFactory::MarbleMapShapeFactory()
 {
     setToolTip(i18n("A shape which displays Marble map"));
     setIcon("marble");
-    setOdfElementNames(KoXmlNS::calligra, QStringList("marblemap"));
+    QList<QPair<QString, QStringList> > elementNamesList;
+    elementNamesList.append(qMakePair(QString(KoXmlNS::calligra), QStringList("marblemap")));
+    setXmlElements(elementNamesList);
     setLoadingPriority(1);
 }
 

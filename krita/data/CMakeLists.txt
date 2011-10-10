@@ -29,4 +29,5 @@ install( FILES
     kritabrushes.knsrc
     kritapatterns.knsrc
     kritagradients.knsrc
+    kritaiccprofiles.knsrc
     DESTINATION ${CONFIG_INSTALL_DIR} )

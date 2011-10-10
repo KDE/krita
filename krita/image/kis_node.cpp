@@ -25,7 +25,6 @@
 #include <QRect>
 
 #include <ksharedconfig.h>
-#include <kconfiggroup.h>
 
 #include <KoProperties.h>
 

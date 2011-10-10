@@ -73,7 +73,7 @@ void ParagraphSettingsDialog::slotApply()
     chosenStyle.applyStyle(format);
     m_cursor->mergeBlockFormat(format);
     if (chosenStyle.listStyle()) {
-        KoTextEditor::ChangeListFlags flags(KoTextEditor::AutoListStyle);
+        KoTextEditor::ChangeListFlags flags(KoTextEditor::AutoListStyle | KoTextEditor::DontUnsetIfSame);
         m_tool->textEditor()->setListProperties(static_cast<KoListStyle::Style>(chosenStyle.listStyle()->styleId()),
                                                 chosenStyle.listStyle()->listLevels().first(),
                                                 flags);

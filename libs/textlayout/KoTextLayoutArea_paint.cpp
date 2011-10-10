@@ -275,6 +275,14 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             //imprtatnt for paragraph splt acrosse two pages.
             painter->setClipRect(br.adjusted(-2,-2,2,2), Qt::IntersectClip);
 
+            //Now let's set the show formatting
+            QTextOption to = layout->textOption();
+            if (context.showFormattingCharacters) {
+                to.setFlags(to.flags()|QTextOption::ShowTabsAndSpaces | QTextOption::ShowLineAndParagraphSeparators);
+            } else {
+                to.setFlags(to.flags() & ~(QTextOption::ShowTabsAndSpaces | QTextOption::ShowLineAndParagraphSeparators));
+            }
+            layout->setTextOption(to);
             layout->draw(painter, QPointF(0, 0), selections, br);
 
             decorateParagraph(painter, block);

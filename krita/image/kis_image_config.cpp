@@ -155,6 +155,11 @@ void KisImageConfig::setMemoryPoolLimitPercent(qreal value)
     m_config.writeEntry("memoryPoolLimitPercent", value);
 }
 
+QString KisImageConfig::swapDir()
+{
+    return m_config.readEntry("swaplocation", QString());
+}
+
 
 #if defined Q_OS_LINUX
 #include <sys/sysinfo.h>

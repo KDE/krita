@@ -26,6 +26,8 @@
 
 #include "flake_export.h"
 
+class KoCanvasBase;
+
 /**
  * Context passed to shapes during painting.
  */
@@ -33,8 +35,14 @@ class FLAKE_EXPORT KoShapePaintingContext
 {
 public:
     KoShapePaintingContext();
+    KoShapePaintingContext(KoCanvasBase *canvas, bool forPrint);
 
     ~KoShapePaintingContext();
+
+    bool showFormattingCharacters;
+    bool showTextShapeOutlines;
+    bool showTableBorders;
+    bool showSpellChecking;
 };
 
 #endif /* KOSHAPEPAINTINGCONTEXT_H */

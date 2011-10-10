@@ -48,8 +48,6 @@ KOTEXT_EXPORT QString valignmentToString(Qt::Alignment align);
 
 /// This enum contains values to be used as keys in KoCanvasResourceManager
 enum CanvasResource {
-    ShowTextFrames =  278622039, ///< boolean that enables painting of frame outlines
-    ShowFormattingCharacters,         ///< boolean that enables painting of formatting characters
     CurrentTextDocument = 382490375, ///< set by the text plugin whenever the document is changed
     CurrentTextPosition = 183523,   ///<  used by the text plugin whenever the position is changed
     CurrentTextAnchor = 341899485,   ///<  used by the text plugin whenever the anchor-position is changed

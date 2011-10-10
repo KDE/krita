@@ -788,10 +788,12 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     }
     painter->setRenderHint(QPainter::Antialiasing, hasAntialiasing);
 
-    QPen pen(painter->pen());
-    painter->setPen(QPen(QColor(0,0,0,96)));
-    painter->drawLines(accuBlankBorders);
-    painter->setPen(pen);
+    if (context.showTableBorders) {
+        QPen pen(painter->pen());
+        painter->setPen(QPen(QColor(0,0,0,96)));
+        painter->drawLines(accuBlankBorders);
+        painter->setPen(pen);
+    }
 }
 
 void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell)

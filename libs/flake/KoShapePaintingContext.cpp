@@ -19,8 +19,25 @@
 
 #include "KoShapePaintingContext.h"
 
+#include "KoCanvasBase.h"
+#include "KoCanvasResourceManager.h"
+
 KoShapePaintingContext::KoShapePaintingContext()
+    : showFormattingCharacters(false)
+    , showTextShapeOutlines(false)
+    , showTableBorders(false)
+    , showSpellChecking(false)
 {
+}
+
+KoShapePaintingContext::KoShapePaintingContext(KoCanvasBase *canvas, bool forPrint)
+{
+    KoCanvasResourceManager *rm = canvas->resourceManager();
+
+    showFormattingCharacters = rm->boolResource(KoCanvasResourceManager::ShowFormattingCharacters);
+    showTextShapeOutlines = rm->boolResource(KoCanvasResourceManager::ShowTextShapeOutlines);
+    showTableBorders = rm->boolResource(KoCanvasResourceManager::ShowTableBorders);
+    showSpellChecking = true;
 }
 
 KoShapePaintingContext::~KoShapePaintingContext()

@@ -40,6 +40,7 @@
 #include <KoShapeBackground.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeManager.h>
+#include <KoShapePaintingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoText.h>
 #include <KoTextDocument.h>
@@ -87,10 +88,9 @@ TextShape::~TextShape()
 {
 }
 
-void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
+void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
-    bool showTextFrames = true;;
-    if (showTextFrames) {
+    if (paintContext.showTextShapeOutlines) {
         painter.save();
         applyConversion(painter, converter);
         if (qAbs(rotation()) > 1)
@@ -148,7 +148,9 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     pc.textContext.selections += KoTextDocument(doc).selections();
     pc.viewConverter = &converter;
     pc.imageCollection = m_imageCollection;
-    pc.showFormattingCharacters = false;
+    pc.showFormattingCharacters = paintContext.showFormattingCharacters;
+    pc.showTableBorders = paintContext.showTableBorders;
+    pc.showSpellChecking = paintContext.showSpellChecking;
 
     // When clipping the painter we need to make sure not to cutoff cosmetic pens which
     // may used to draw e.g. table-borders for user convenience when on screen (but not

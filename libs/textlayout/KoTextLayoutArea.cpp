@@ -774,6 +774,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         // justified. Seems for right-to-left we have to accept that justified text will not look proper justified then.
         option.setFlags(QTextOption::IncludeTrailingSpaces);
     } else {
+        option.setFlags(0);
         option.setTextDirection(Qt::LeftToRight);
     }
 

@@ -333,7 +333,7 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
         KoClipPath::applyClipping(shape, painter, converter);
 
         // let the painting strategy paint the shape
-        KoShapePaintingContext paintContext; //FIXME
+        KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
         d->strategy->paint(shape, painter, converter, paintContext);
 
         painter.restore();
@@ -351,7 +351,7 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
 #endif
 
     if (! forPrint) {
-        KoShapePaintingContext paintContext; //FIXME
+        KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
         d->selection->paint(painter, converter, paintContext);
     }
 }

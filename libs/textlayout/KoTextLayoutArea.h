@@ -194,7 +194,7 @@ private:
 
     void drawListItem(QPainter *painter, const QTextBlock &block);
 
-    void decorateParagraph(QPainter *painter, const QTextBlock &block);
+    void decorateParagraph(QPainter *painter, const QTextBlock &block, bool showFormattingCharacter);
 
     void drawStrikeOuts(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 
@@ -202,7 +202,7 @@ private:
 
     void drawUnderlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 
-    int decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock, int currentTabStop);
+    int decorateTabsAndFormatting(QPainter *painter, const QTextFragment& currentFragment, const QTextLine &line, const int startOfFragmentInBlock, const QVariantList& tabList, int currentTabStop, bool showFormattingCharacter);
 
     void handleBordersAndSpacing(KoTextBlockData *blockData, QTextBlock *block);
 

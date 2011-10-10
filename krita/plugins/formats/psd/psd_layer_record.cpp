@@ -608,7 +608,7 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
                 // Unsupported channel sizes for now
                 return false;
             }
-/*
+            /*
             // XXX see implementation Openexr
             else if (channelSize == 4) {
 
@@ -632,7 +632,117 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
 
 bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
 {
-    return false;
+    quint64 oldPosition = io->pos();
+
+    int width = right - left;
+    int channelSize = m_header.channelDepth / 8;
+    int uncompressedLength = width * channelSize;
+
+    if (channelInfoRecords.first()->compressionType == Compression::ZIP
+            || channelInfoRecords.first()->compressionType == Compression::ZIPWithPrediction) {
+
+        // Zip needs to be implemented here.
+        return false;
+    }
+
+
+    for (int row = top ; row < bottom; row++)
+    {
+        KisHLineIterator it = dev->createHLineIterator(left, row, width);
+        QMap<quint16, QByteArray> channelBytes;
+
+        foreach(ChannelInfo *channelInfo, channelInfoRecords) {
+
+            io->seek(channelInfo->channelDataStart + channelInfo->channelOffset);
+
+            if (channelInfo->compressionType == Compression::Uncompressed) {
+                channelBytes[channelInfo->channelId] = io->read(uncompressedLength);
+                channelInfo->channelOffset += uncompressedLength;
+            }
+            else if (channelInfo->compressionType == Compression::RLE) {
+                int rleLength = channelInfo->rleRowLengths[row - top];
+                QByteArray compressedBytes = io->read(rleLength);
+                QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType);
+                channelBytes.insert(channelInfo->channelId, uncompressedBytes);
+                channelInfo->channelOffset += rleLength;
+
+            }
+        }
+
+        for (quint64 col = 0; col < width; col++){
+
+            if (channelSize == 1) {
+                quint8 opacity = OPACITY_OPAQUE_U8;
+                if (channelBytes.contains(-1)) {
+                    opacity = channelBytes[-1].constData()[col];
+
+                }
+                KoCmykTraits<quint8>::setOpacity(it.rawData(), opacity, 1);
+
+                //   quint8 C = ntohs(reinterpret_cast<const quint8 *>(channelBytes[0].constData())[col]);
+                KoCmykTraits<quint8>::setC(it.rawData(),channelBytes[0].constData()[col]);
+
+                // quint8 M = ntohs(reinterpret_cast<const quint8 *>(channelBytes[1].constData())[col]);
+                KoCmykTraits<quint8>::setM(it.rawData(),channelBytes[1].constData()[col]);
+
+                // quint8 Y = ntohs(reinterpret_cast<const quint8 *>(channelBytes[2].constData())[col]);
+                KoCmykTraits<quint8>::setY(it.rawData(),channelBytes[2].constData()[col]);
+
+                // quint8 K = ntohs(reinterpret_cast<const quint8 *>(channelBytes[3].constData())[col]);
+                KoCmykTraits<quint8>::setK(it.rawData(),channelBytes[3].constData()[col]);
+
+
+            }
+
+            else if (channelSize == 2) {
+
+                quint16 opacity = quint16_MAX;
+                if (channelBytes.contains(-1)) {
+                    opacity = channelBytes[-1].constData()[col];
+                }
+                // We don't have a convenient setOpacity function :-(
+                memcpy(it.rawData() + KoRgbU16Traits::alpha_pos, &opacity, sizeof(quint16));
+                quint16 C = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
+                KoCmykTraits<quint16>::setC(it.rawData(),C);
+
+                quint16 M = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
+                KoCmykTraits<quint16>::setM(it.rawData(),M);
+
+                quint16 Y = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
+                KoCmykTraits<quint16>::setY(it.rawData(),Y);
+
+                quint16 K = ntohs(reinterpret_cast<const quint16 *>(channelBytes[3].constData())[col]);
+                KoCmykTraits<quint16>::setK(it.rawData(),K);
+
+            }
+
+
+            // XXX see implementation Openexr
+            else if (channelSize == 4) {
+
+                quint32 C = ntohs(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);
+                KoCmykTraits<quint32>::setC(it.rawData(),C);
+
+                quint32 M = ntohs(reinterpret_cast<const quint32 *>(channelBytes[1].constData())[col]);
+                KoCmykTraits<quint32>::setM(it.rawData(),M);
+
+                quint32 Y = ntohs(reinterpret_cast<const quint32 *>(channelBytes[2].constData())[col]);
+                KoCmykTraits<quint32>::setY(it.rawData(),Y);
+
+                quint32 K = ntohs(reinterpret_cast<const quint32 *>(channelBytes[3].constData())[col]);
+                KoCmykTraits<quint32>::setK(it.rawData(),K);
+            }
+
+            else {
+                // Unsupported channel sizes for now
+                return false;
+            }
+            ++it;
+        }
+    }
+    // go back to the old position, because we've been seeking all over the place
+    io->seek(oldPosition);
+    return true;
 }
 
 bool PSDLayerRecord::doLAB(KisPaintDeviceSP dev, QIODevice *io)

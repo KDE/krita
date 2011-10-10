@@ -215,7 +215,7 @@ bool PSDLayerRecord::read(QIODevice* io)
 
         if (!psdread(io, &info->channelId)) {
             error = "could not read channel id";
-	    delete info;
+            delete info;
             return false;
         }
         bool r;
@@ -229,7 +229,7 @@ bool PSDLayerRecord::read(QIODevice* io)
         }
         if (!r) {
             error = "Could not read length for channel data";
-	    delete info;
+            delete info;
             return false;
         }
 
@@ -569,7 +569,7 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
 
             if (channelSize == 1) {
                 quint8 opacity = OPACITY_OPAQUE_U8;
-                if (!channelBytes.contains(-1)) {
+                if (channelBytes.contains(-1)) {
                     opacity = channelBytes[-1].constData()[col];
                 }
                 KoRgbU8Traits::setOpacity(it.rawData(), opacity, 1);
@@ -588,7 +588,7 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
             else if (channelSize == 2) {
 
                 quint16 opacity = quint16_MAX;
-                if (!channelBytes.contains(-1)) {
+                if (channelBytes.contains(-1)) {
                     opacity = channelBytes[-1].constData()[col];
                 }
                 // We don't have a convenient setOpacity function :-(

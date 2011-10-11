@@ -61,6 +61,7 @@ MapShape::MapShape()
 {
     connect(d->m_marbleWidget->model(), SIGNAL(modelChanged()), this, SIGNAL(requestUpdate()));
 }
+
 MapShape::~MapShape()
 {
     delete d;
@@ -71,8 +72,10 @@ void MapShape::requestUpdate()
     update();
 }
 
-void MapShape::paint(QPainter& painter, const KoViewConverter& converter)
+void MapShape::paint(QPainter& painter, const KoViewConverter& converter,
+                     KoShapePaintingContext &paintcontext)
 {
+    Q_UNUSED(paintcontext);
     QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
     QSize newSize = target.size().toSize();
     
@@ -82,14 +85,13 @@ void MapShape::paint(QPainter& painter, const KoViewConverter& converter)
     if ((newSize != d->m_screenSize) && (zoomX > 0.5)){
         d->m_screenSize = newSize;
         d->m_marbleWidget->setFixedSize(d->m_screenSize.width(), d->m_screenSize.height());
-        kDebug() << "paint: size of the image: " << d->m_screenSize ;
+        //kDebug() << "paint: size of the image: " << d->m_screenSize;
     }
 
     d->m_cacheImage = QImage(d->m_screenSize, QImage::Format_ARGB32);
     d->m_cacheImage.fill(Qt::transparent);
     d->m_marbleWidget->render(&d->m_cacheImage);
     
-    //painter.drawPixmap(target.toRect(), d->m_cacheImage);
     painter.drawImage(target.toRect(), d->m_cacheImage);
 }
 

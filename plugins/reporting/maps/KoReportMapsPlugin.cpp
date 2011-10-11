@@ -36,7 +36,6 @@ KoReportMapsPlugin::KoReportMapsPlugin(QObject *parent, const QVariantList &args
     Q_UNUSED(args)
     
     myDebug() << "\e[35m======\e[0m";
-    KGlobal::locale()->insertCatalog("ReportingMapsPlugin");
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:map");
     info->setIcon(KIcon("report_map_element"));

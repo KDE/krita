@@ -29,7 +29,6 @@ K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportShapePlugin, shapeplugin)
 
 KoReportShapePlugin::KoReportShapePlugin(QObject *parent, const QVariantList &/*args*/) : KoReportPluginInterface(parent)
 {
-    KGlobal::locale()->insertCatalog("ReportingShapePlugin");
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:shape");
     info->setIcon(KIcon("report_shape_element"));

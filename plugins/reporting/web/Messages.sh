@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT `find . -name \*.cpp ` -o $podir/ReportingWebPlugin.pot
+$XGETTEXT `find . -name \*.cpp ` -o $podir/koreport_webplugin.pot

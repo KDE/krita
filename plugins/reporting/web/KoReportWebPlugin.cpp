@@ -29,7 +29,6 @@ KoReportWebPlugin::KoReportWebPlugin(QObject *parent, const QVariantList &args)
 {
     Q_UNUSED(args)
 
-    KGlobal::locale()->insertCatalog("ReportingWebPlugin");
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:web");
     info->setName(i18n("Web"));

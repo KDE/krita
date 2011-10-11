@@ -30,6 +30,7 @@ K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportChartPlugin, chartplugin)
 
 KoReportChartPlugin::KoReportChartPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
+    KGlobal::locale()->insertCatalog("ReportingChartPlugin");
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:chart");
     info->setIcon(KIcon("office-chart-area"));

@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT `find . -name \*.cpp ` -o $podir/ShapePlugin.pot
+$XGETTEXT `find . -name \*.cpp ` -o $podir/ReportingShapePlugin.pot

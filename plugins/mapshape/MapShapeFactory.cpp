@@ -32,6 +32,7 @@
 MapShapeFactory::MapShapeFactory()
     :KoShapeFactoryBase(MAPSHAPEID, i18n("Map Shape"))
 {
+    KGlobal::locale()->insertCatalog("MapShape");
     setToolTip(i18n("A shape which displays map"));
     setIcon("map_shape");
     QList<QPair<QString, QStringList> > elementNamesList;

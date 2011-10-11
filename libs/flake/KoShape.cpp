@@ -69,6 +69,7 @@
 #include <kdebug.h>
 
 #include <limits>
+#include "KoOdfGradientBackground.h"
 
 // KoShapePrivate
 
@@ -1439,9 +1440,16 @@ KoShapeBackground *KoShape::loadOdfFill(KoShapeLoadingContext &context) const
     if (fill == "solid" || fill == "hatch") {
         bg = new KoColorBackground();
     } else if (fill == "gradient") {
-        QGradient *gradient = new QLinearGradient();
-        gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
-        bg = new KoGradientBackground(gradient);
+        QString styleName = KoShapePrivate::getStyleProperty("fill-gradient-name", context);
+        KoXmlElement * e = context.odfLoadingContext().stylesReader().drawStyles("gradient")[styleName];
+        QString style(e->attributeNS(KoXmlNS::draw, "style", QString()));
+        if ((style == "rectangular") || (style == "square")) {
+            bg = new KoOdfGradientBackground();
+        } else {
+            QGradient *gradient = new QLinearGradient();
+            gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
+            bg = new KoGradientBackground(gradient);
+        }
     } else if (fill == "bitmap") {
         bg = new KoPatternBackground(context.imageCollection());
 #ifndef NWORKAROUND_ODF_BUGS

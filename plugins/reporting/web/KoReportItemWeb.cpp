@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright Shreya Pandit <shreya@shreyapandit.com>
-
+   Copyright 2011 Adam Pigg <adam@piggz.co.uk>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -37,7 +38,7 @@
 #include <QtGui/QWidget>
 #include <QtGui/QApplication>
 
-KoReportItemWeb::KoReportItemWeb(): m_loaded(false)
+KoReportItemWeb::KoReportItemWeb(): m_rendering(false)
 {
     createProperties();
     init();
@@ -51,7 +52,7 @@ KoReportItemWeb::KoReportItemWeb(QDomNode &element)
     QString n;
     QDomNode node;
     QDomElement e = element.toElement();
-    url->setValue(e.attribute("report:url"));
+
     m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
     m_name->setValue(element.toElement().attribute("report:name"));
     Z = element.toElement().attribute("report:z-index").toDouble();
@@ -65,25 +66,17 @@ KoReportItemWeb::KoReportItemWeb(QDomNode &element)
 void KoReportItemWeb::init()
 {
     m_webPage = new QWebPage();
-    connect(m_webPage, SIGNAL(loadFinished(bool)),
-            this, SLOT(loadFinished(bool)));
-    //connect(m_webPage, SIGNAL(loadFinished(bool)),
-    //        this, SLOT(render(OROPage*,OROSection*,QPointF,QVariant,KRScriptHandler)));
-    //setUrl("http://www.kde.org");
-    m_webImage = new QImage(m_size.toScene().toSize(), QImage::Format_ARGB32);
+    connect(m_webPage, SIGNAL(loadFinished(bool)), this, SLOT(loadFinished(bool)));
 }
 
 void KoReportItemWeb::createProperties()
 {
     m_set = new KoProperty::Set(0, "web");
-    url = new KoProperty::Property("url", QStringList(), QStringList(), QString(), i18n("Url"));
+
     m_controlSource = new KoProperty::Property("item-data-source", QStringList(), 
                                                QStringList(), QString(), i18n("Data Source"));
     m_set->addProperty(m_controlSource);
     addDefaultProperties();
-    m_set->addProperty(m_controlSource);
-    m_set->addProperty(url);
-
 }
 
 KoReportItemWeb::~KoReportItemWeb()
@@ -95,42 +88,64 @@ QString KoReportItemWeb::typeName() const
     return "web";
 }
 
-void KoReportItemWeb::setUrl(const QString &url)
-{
-    m_url = QUrl(url);
-    m_webPage->mainFrame()->load(url);
-}
-
 void KoReportItemWeb::loadFinished(bool)
-{
-    m_loaded = true;
+{       
+    kDebug () << m_rendering;
+    if (m_rendering) {
+        OROPicture * pic = new OROPicture();
+        m_webPage->setViewportSize(m_size.toScene().toSize());
+        m_webPage->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+        m_webPage->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
+        
+        QPainter p(pic->picture());
+        
+        m_webPage->mainFrame()->render(&p);
+        
+        QPointF pos = m_pos.toScene();
+        QSizeF size = m_size.toScene();
+        
+        pos += m_targetOffset;
+        
+        pic->setPosition(pos);
+        pic->setSize(size);
+        if (m_targetPage) m_targetPage->addPrimitive(pic, false, true);
+        
+        OROPicture *p2 = dynamic_cast<OROPicture*>(pic->clone());
+        p2->setPosition(m_pos.toPoint());
+        if (m_targetSection) m_targetSection->addPrimitive(p2);
+    
+        m_rendering = false;
+        emit(finishedRendering());
+    }
 }
 
 int KoReportItemWeb::render(OROPage *page, OROSection *section,  QPointF offset,
                             QVariant data, KRScriptHandler *script)
 {
-    Q_UNUSED(section);
-    Q_UNUSED(data);
     Q_UNUSED(script);
-
-    QPainter painter(m_webImage);
-    m_webPage->mainFrame()->render(&painter);
-    painter.end();
-    OROImage *id = new OROImage();
-    id->setImage(*m_webImage);
-    id->setScaled(false);
-    id->setPosition(m_pos.toScene() + offset);
-    id->setSize(m_size.toScene());
-    if (page) {
-        page->addPrimitive(id);
+ 
+    m_rendering = true;
+    
+    kDebug() << data;
+    
+    m_targetPage = page;
+    m_targetSection = section;
+    m_targetOffset = offset;
+    
+    QUrl url = QUrl::fromUserInput(data.toString());
+    if (url.isValid()) {
+        m_webPage->mainFrame()->load(url);
+    } else {
+        m_webPage->mainFrame()->setHtml(data.toString());
     }
-
-
-    if (!page) {
-        delete id;
-    }
-
+    
     return 0; //Item doesnt stretch the section height
 }
+
+QString KoReportItemWeb::itemDataSource() const
+{
+    return m_controlSource->value().toString();
+}
+
 
 #include "KoReportItemWeb.moc"

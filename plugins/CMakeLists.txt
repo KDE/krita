@@ -27,10 +27,7 @@ IF (NOT TINY)
     macro_optional_add_subdirectory( commentshape )
     macro_optional_add_subdirectory( staging )
     if(MARBLE_FOUND)
-        # disabled because of following compile error:
-        # plugins/marblemapshape/MarbleMapShapeFactory.cpp: In constructor 'MarbleMapShapeFactory::MarbleMapShapeFactory()':
-        # plugins/marblemapshape/MarbleMapShapeFactory.cpp:37:67: error: 'setOdfElementNames' was not declared in this scope
-        #TEMP DISABLED, PLEASE FIX: macro_optional_add_subdirectory( marblemapshape )
+        macro_optional_add_subdirectory( mapshape )
     endif(MARBLE_FOUND)
 ENDIF (NOT TINY)
 macro_optional_add_subdirectory( variables )

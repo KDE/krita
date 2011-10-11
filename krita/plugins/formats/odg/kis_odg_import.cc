@@ -39,7 +39,7 @@
 #include <KoShapeRegistry.h>
 
 
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoColorSpaceRegistry.h>
 
 K_PLUGIN_FACTORY(ODGImportFactory, registerPlugin<KisODGImport>();)

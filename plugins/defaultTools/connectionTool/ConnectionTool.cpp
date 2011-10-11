@@ -38,7 +38,7 @@
 #include <KoShapeRegistry.h>
 #include <KoSelection.h>
 #include <KoLineBorder.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoInteractionStrategy.h>
 #include <KoShapeConfigWidgetBase.h>
 #include <KoPathConnectionPointStrategy.h>

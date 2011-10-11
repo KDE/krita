@@ -18,6 +18,7 @@
  */
 #include "SimpleFootEndNotesWidget.h"
 #include "TextTool.h"
+#include "FormattingButton.h"
 
 #include <KAction>
 #include <KDebug>
@@ -27,29 +28,18 @@
 
 
 SimpleFootEndNotesWidget::SimpleFootEndNotesWidget(TextTool *tool ,QWidget *parent)
-        : QWidget(parent),
-        m_blockSignals(false)
+        : QWidget(parent)
 {
     widget.setupUi(this);
-    widget.addFootnote->setDefaultAction(tool->action("insert_footnote"));
-    widget.addEndnote->setDefaultAction(tool->action("insert_endnote"));
+    widget.addFootnote->addAction(tool->action("insert_autofootnote"));
+    widget.addFootnote->addAction(tool->action("insert_labeledfootnote"));
+    widget.addEndnote->addAction(tool->action("insert_autoendnote"));
+    widget.addEndnote->addAction(tool->action("insert_labeledendnote"));
     widget.settings->setDefaultAction(tool->action("format_notes"));
-    widget.autoNumbering->setChecked(true);
 
-    connect(widget.addFootnote, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.addEndnote, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.addFootnote, SIGNAL(doneWithFocus()), this, SIGNAL(doneWithFocus()));
+    connect(widget.addEndnote, SIGNAL(doneWithFocus()), this, SIGNAL(doneWithFocus()));
     connect(widget.settings, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.characterEdit, SIGNAL(cursorPositionChanged(int,int)), this, SLOT(setCharacterEditEnabled()));
-}
-
-void SimpleFootEndNotesWidget::setStyleManager(KoStyleManager *sm)
-{
-    m_styleManager = sm;
-}
-
-void SimpleFootEndNotesWidget::setCharacterEditEnabled()
-{
-    widget.label->setChecked(true);
 }
 
 #include <SimpleFootEndNotesWidget.moc>

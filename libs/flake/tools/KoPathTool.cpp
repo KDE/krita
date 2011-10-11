@@ -26,7 +26,7 @@
 #include "KoPathToolHandle.h"
 #include "KoCanvasBase.h"
 #include "KoShapeManager.h"
-#include "KoResourceManager.h"
+#include "KoDocumentResourceManager.h"
 #include "KoViewConverter.h"
 #include "KoSelection.h"
 #include "KoPointerEvent.h"
@@ -663,7 +663,7 @@ void KoPathTool::keyPressEvent(QKeyEvent *event)
         switch (event->key()) {
 // TODO move these to the actions in the constructor.
         case Qt::Key_I: {
-            KoResourceManager *rm = d->canvas->shapeController()->resourceManager();
+            KoDocumentResourceManager *rm = d->canvas->shapeController()->resourceManager();
             int handleRadius = rm->handleRadius();
             if (event->modifiers() & Qt::ControlModifier)
                 handleRadius--;
@@ -941,7 +941,7 @@ void KoPathTool::deactivate()
 
 void KoPathTool::resourceChanged(int key, const QVariant & res)
 {
-    if (key == KoDocumentResource::HandleRadius) {
+    if (key == KoDocumentResourceManager::HandleRadius) {
         int oldHandleRadius = m_handleRadius;
 
         m_handleRadius = res.toUInt();

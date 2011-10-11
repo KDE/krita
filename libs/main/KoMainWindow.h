@@ -282,18 +282,6 @@ public slots:
     virtual void slotToolbarToggled(bool toggle);
 
     /**
-     * View splitting stuff
-     */
-    virtual void slotSplitView();
-    virtual void slotRemoveView();
-    virtual void slotSetOrientation();
-
-    /**
-     * Close all views
-     */
-    virtual void slotCloseAllViews();
-
-    /**
      * Toggle full screen on/off.
      */
     virtual void viewFullscreen(bool fullScreen);

@@ -1,53 +1,210 @@
 install( FILES
-    A---13B-Airbrush-big.vbr
-    A--13b-Airbrush.vbr
-    A--13c-Airbrush.vbr
-    A---1-Basic-Big.vbr
-    A---1-Blending-brush.vbr
-    A-1-Knife-1.vbr
-    A---1-simple-round.vbr
-    A--1-Speed-Knife.vbr
-    A-abstract-textured1.gih
-    A-abstract-textured2.gih
-    A-bamboo.gih
-    A-bamboo-leaves.gih
-    A-Braids-b.gih
-    A-Braids-.gih
-    A-Chain.gih
-    A-cloudy.gih
-    A-concrete.gih
-    A-crackled.gih
-    A-crayon.gih
-    A-dirty-brush.gih
-    A-dirty-spot.gih
-    A-dynamic-brush.gih
-    A-eroded-cercle-anim2.gih
-    A-eroded-cercle-anim.gih
-    A-eroded-chinese-anim.gih
-    A-eroded-dirtybrush-anim.gih
-    A-eroded-knife-anim.gih
-    A-fairy-dust.gih
-    A-forest.gih
-    A-fur.gih
-    A-herbs.gih
-    A-leaves.gih
-    A-lucky_star.gbr
-    A-mineral-cristal.gih
-    A-provencal.gih
-    A-Rake.gih
-    A-random-vegetal.gih
-    A-reptile-skin.gih
-    A-rocks.gih
-    A-Round.vbr
-    A-smoke.gih
-    A-sparkle1.gbr
-    A-sparkle2.gbr
-    A-sparkle3.gbr
-    A-splat1.gih
-    A-splat2.gih
-    A-starfield2.gih
-    A-starfield.gih
-    A-wall-texture.gih
-    A-Zend.gbr
-    Z-Test-pressure.gih
+A_--13B-Airbrush-big.vbr
+A_-13b-Airbrush.vbr
+A_-13c-Airbrush.vbr
+A_--1-Basic-Big.vbr
+A_--1-Blending-brush.vbr
+A_1-Knife-1.vbr
+A_--1-simple-round.vbr
+A_-1-Speed-Knife.vbr
+A_abstract-textured1.gih
+A_abstract-textured2.gih
+A_Angular_box_2.gih
+A_Angular_box.gih
+A_Angular_box_soft.gih
+A_Angular_church.gih
+A_Angular_church_HR.gih
+A_bamboo.gih
+A_bamboo-leaves.gih
+A_bokey.gbr
+A_Braids-b.gih
+A_Braids-.gih
+A_Chain.gih
+A_cloudy.gih
+A_concrete.gih
+A_crackled.gih
+A_craqules.gih
+A_crayon.gih
+A_dirty-brush.gih
+A_dirty-spot.gih
+A_distant-mountain.gih
+A_dynamic-brush3.gih
+A_dynamic-brush.gih
+A_eroded-brush2.gih
+A_eroded-cercle-anim2.gih
+A_eroded-cercle-anim.gih
+A_eroded-chinese-anim.gih
+A_eroded-dirtybrush-anim.gih
+A_eroded-knife-anim.gih
+A_fairy-dust.gih
+A_floor.gih
+A_flowers.gih
+A_forest.gih
+A_fur.gih
+A_grass-floor.gih
+A_herbs.gih
+A_leaves.gih
+A_leaves-mapple.gih
+A_lucky_star.gbr
+A_mineral-cristal.gih
+A_mountain-texture.gih
+A_Nice_sketch2.gbr
+A_Nice_sketch.gbr
+A_pin.gih
+A_provencal.gih
+A_Rake.gih
+A_random-vegetal2.gih
+A_random-vegetal3.gih
+A_random-vegetal.gih
+A_reptile-skin.gih
+A_rocks-floor-neg.gih
+A_rocks.gih
+A_Round.vbr
+A_smoke.gih
+A_snow-pack.gih
+A_sparkle1.gbr
+A_sparkle2.gbr
+A_sparkle3.gbr
+A_splat1.gih
+A_splat2.gih
+A_starfield2.gih
+A_starfield.gih
+A_wall-texture.gih
+A_Zend.gbr
+C_Cloud_1.gih
+C_Dirty_Spot.gih
+D_Dust_1.gih
+D_Dust_Particles.gih
+D_Normal_dust.gbr
+F_Fast_Block-Brush_20.vbr
+F_Fast_Block_Brush_40.vbr
+F_Fast_Block_Brush_80.vbr
+F_Furr_fast.gbr
+G_Sparks.gih
+K_Fine_Knife.vbr
+L_Coroballs.gih
+L_Foliage_1.gih
+LJF_Foliage_Brush_01.gih
+LJF_Foliage_Brush_02.gih
+LJF_smoke_c.gih
+LJF_Water_Brush_02.gih
+LJF_Water_Brush_03.gih
+L_Leaf_2.gih
+L_Leaf_3.gih
+L_Trees.gih
+M_01.gih
+M_02.gih
+M_03.gih
+M_04.gih
+M_05.gih
+M_06.gbr
+M_07.gih
+M_08.gbr
+M_09.gih
+M_Arrow.gih
+M_Bulb.gih
+M_Cage.gih
+M_Pipe_1.gih
+M_Pipe_2.gih
+M_Pipe_3.gih
+mz_galhos01.gih
+mz_galhos.gih
+N_Grass_1.gih
+N_Grass_2.gih
+Normal_Nib-1.vbr
+nubes.vbr
+O_Oils_1.gbr
+O_Oils_1_GP.gbr
+O_Oil_Soft.gbr
+O_Oils_Softer.gbr
+P_2B_Pencil_Angled.gih
+P_6B_Pencil_Angled.gih
+P_Graphite_Black_Grass.gih
+P_Graphite_Pencil.gih
+P_Graphite_Pencil_grainb.gih
+P_Graphite_Pencil_grain.gih
+P_RealPencil10x10.gih
+P_RealPencil16x16.gih
+rake_textured_01.gih
+rake_textured_02.gih
+Real_oil_1.gbr
+Real_oil_1.gih
+Real_Oil_2b.gih
+Real_Oil_2.gih
+Round_-001.vbr
+Round_-003.vbr
+Round_-005.vbr
+Round_-010.vbr
+Round_-025.vbr
+Round_-040.vbr
+Round_-080.vbr
+Round_-100.vbr
+Round_-200.vbr
+Round_-400.vbr
+Rounded_Stretched-040.vbr
+Rounded_Stretched-080.vbr
+Round_-midle-soft-010.vbr
+Round_-midle-soft-025.vbr
+Round_-midle-soft-040.vbr
+Round_-midle-soft-080.vbr
+Round_-midle-soft-100.vbr
+Round_-midle-soft-200.vbr
+Round_-midle-soft-400.vbr
+Round_-soft-025_1.vbr
+Round_-soft-050.vbr
+Round_-soft-100.vbr
+R_Rake1.gih
+R_Rake2.gih
+R_Rake3.gih
+R_Rake4.gih
+R_Rake_small.gih
+Sc_Scratches_2.gbr
+Sc_Scratches_3.gbr
+Sc_Scratches.gbr
+Sc_Scratch.gih
+Smoke_particle.vbr
+Soft_Nib-1.vbr
+Soft_Nib-2.vbr
+S_Smudge_Cheese.gbr
+S_splats_02.gih
+Te_Techno_1.gih
+Te_Techno_Angular_Cross.gih
+T_Fibers_1.gih
+T_Fibers_2.gih
+T_Texture_1.gih
+T_Texture_2.gih
+T_Texture_3.gih
+T_Texture_4.gih
+T_Texture_5.gih
+T_Texture_6.gih
+T_Texture_7.gih
+U_Circle_circuit.gbr
+U_Circle_shape_1.gbr
+U_Circle_shape_2.gbr
+U_Circle_shape_3.gbr
+U_Circle_shape_4.gbr
+U_Circle_shape_5b.gbr
+U_Circle_shape_5c.gbr
+U_Circle_shape_5.gbr
+V_Vyle_Rock.gih
+W_9spikes.vbr
+W_aspa.vbr
+W_Fat_Star-_gr.vbr
+W_triangle_copy.vbr
+W_triangle.vbr
+Z_Chain_1.gih
+Z_Pixel_1.gbr
+Z_Pixel__4_pix__45a.gbr
+Z_Pixel_4x4_rounded.gbr
+Z_Pixel_Cross.gbr
+Z_smudge_soft.vbr
+z_study_pencil_2Hb.gih
+z_study_pencil_2H.gih
+z_study_pencil_2H_horiz.gih
+z_study_pencil_H.gih
+z_study_pencil_H_h.gih
+Ztemp.vbr
+Z_Test-pressure.gih
+Z_Triangle_shape_1.gih
+Z_Triangle_shape_2.gih
 DESTINATION  ${DATA_INSTALL_DIR}/krita/brushes)

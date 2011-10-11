@@ -26,7 +26,7 @@
 TextToolFactory::TextToolFactory()
         : KoToolFactoryBase("TextToolFactory_ID")
 {
-    setToolTip(i18n("Text editing tool"));
+    setToolTip(i18n("Text editing"));
     setToolType(dynamicToolType());
     setIcon("tool-text");
     setPriority(1);

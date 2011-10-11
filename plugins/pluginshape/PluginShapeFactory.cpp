@@ -27,7 +27,7 @@
 
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -42,7 +42,7 @@ PluginShapeFactory::PluginShapeFactory()
     setHidden(true);
 }
 
-KoShape *PluginShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *PluginShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     Q_UNUSED(documentResources);
     PluginShape *defaultShape = new PluginShape();

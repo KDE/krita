@@ -20,7 +20,7 @@
 #include <KoOdf.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfPaste.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoShapeOdfSaveHelper.h>
 #include "kis_shape_layer.h"
 #include "kis_shape_selection.h"
@@ -28,7 +28,7 @@
 class KisShapeLayerShapePaste : public KoOdfPaste
 {
 public:
-    KisShapeLayerShapePaste(KoShapeLayer* _container, KoShapeControllerBase* _controller)
+    KisShapeLayerShapePaste(KoShapeLayer* _container, KoShapeBasedDocumentBase* _controller)
             : m_container(_container)
             , m_controller(_controller) {
     }
@@ -58,5 +58,5 @@ public:
     }
 private:
     KoShapeLayer* m_container;
-    KoShapeControllerBase* m_controller;
+    KoShapeBasedDocumentBase* m_controller;
 };

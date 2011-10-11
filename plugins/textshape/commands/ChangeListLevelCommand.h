@@ -20,7 +20,7 @@
 #ifndef CHANGELISTLEVELCOMMAND
 #define CHANGELISTLEVELCOMMAND
 
-#include "TextCommandBase.h"
+#include "KoTextCommandBase.h"
 
 #include <QTextBlock>
 #include <QList>
@@ -31,7 +31,7 @@ class KoList;
 /**
  * This command is used the change level of a list-item.
  */
-class ChangeListLevelCommand : public TextCommandBase
+class ChangeListLevelCommand : public KoTextCommandBase
 {
 public:
     enum CommandType {

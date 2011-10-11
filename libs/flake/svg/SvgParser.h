@@ -39,13 +39,13 @@
 class KoShape;
 class KoShapeContainer;
 class KoShapeGroup;
-class KoResourceManager;
+class KoDocumentResourceManager;
 class SvgTextHelper;
 
 class FLAKE_EXPORT SvgParser
 {
 public:
-    SvgParser(KoResourceManager *documentResourceManager);
+    SvgParser(KoDocumentResourceManager *documentResourceManager);
     virtual ~SvgParser();
 
     /// Parses a svg fragment, returning the list of top level child shapes
@@ -134,7 +134,7 @@ private:
     QMap<QString, SvgPatternHelper> m_patterns;
     QMap<QString, SvgFilterHelper> m_filters;
     QMap<QString, SvgClipPathHelper> m_clipPaths;
-    KoResourceManager *m_documentResourceManager;
+    KoDocumentResourceManager *m_documentResourceManager;
     QList<KoShape*> m_shapes;
     QList<KoShape*> m_toplevelShapes;
 };

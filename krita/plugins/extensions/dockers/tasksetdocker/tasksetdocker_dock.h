@@ -26,6 +26,7 @@
 #include "taskset_resource.h"
 
 
+class KoResourceLoaderThread;
 class TasksetModel;
 class QListView;
 class QThread;
@@ -35,6 +36,8 @@ class TasksetDockerDock : public QDockWidget, public KoCanvasObserverBase, publi
     Q_OBJECT
 public:
     TasksetDockerDock();
+    ~TasksetDockerDock();
+
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
     
@@ -46,13 +49,12 @@ private slots:
     void clearClicked();
     void resourceSelected( KoResource * resource );
 
-    void tasksetThreadDone();
 private:
     KisCanvas2 *m_canvas;
     TasksetModel *m_model;
     bool m_blocked;
     KoResourceServer<TasksetResource>* m_rserver;
-    QThread * m_taskThread;
+    KoResourceLoaderThread *m_taskThread;
 };
 
 

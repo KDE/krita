@@ -28,7 +28,6 @@
 
 #include <KoShapeController.h>
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
 #include "kis_types.h"
 #include "kis_canvas2.h"
 #include "kis_view2.h"

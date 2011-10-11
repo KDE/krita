@@ -26,8 +26,7 @@
 #include <KComponentData>
 #include <KGlobal>
 #include <KLocale>
-
-#include "KoResourceManager.h"
+#include <KoColor.h>
 #include "KoColorSpaceRegistry.h"
 
 #include "kis_canvas2.h"

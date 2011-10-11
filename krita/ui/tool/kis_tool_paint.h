@@ -29,7 +29,7 @@
 #include <QVariant>
 #include <QTimer>
 
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoToolBase.h>
 #include <KoAbstractGradient.h>
 

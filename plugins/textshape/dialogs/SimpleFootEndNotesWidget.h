@@ -37,17 +37,10 @@ public:
     explicit SimpleFootEndNotesWidget(TextTool *tool,QWidget *parent = 0);
     Ui::SimpleFootEndNotesWidget widget;
 
-public slots:
-    void setStyleManager(KoStyleManager *sm);
-    void setCharacterEditEnabled();
-
 signals:
     void doneWithFocus();
-    
+
 private:
-    KoStyleManager *m_styleManager;
-    bool m_blockSignals;
-    bool m_comboboxHasBidiItems;
     QTextBlock m_currentBlock;
     TextTool *m_tool;
 };

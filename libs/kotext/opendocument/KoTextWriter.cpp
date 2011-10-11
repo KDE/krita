@@ -133,9 +133,9 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, co
     return generatedName;
 }
 
-void KoTextWriter::write(QTextDocument *document, int from, int to)
+void KoTextWriter::write(const QTextDocument *document, int from, int to)
 {
-    d->document = document;
+    d->document = const_cast<QTextDocument*>(document);
     d->styleManager = KoTextDocument(document).styleManager();
     d->changeTracker = KoTextDocument(document).changeTracker();
 
@@ -204,5 +204,5 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
     }
 
     QHash<QTextList *, QString> listStyles = d->saveListStyles(fromblock, to);
-    d->writeBlocks(document, from, to, listStyles, currentTable, currentList);
+    d->writeBlocks(const_cast<QTextDocument *>(document), from, to, listStyles, currentTable, currentList);
 }

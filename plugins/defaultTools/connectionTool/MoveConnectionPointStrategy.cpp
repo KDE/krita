@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@
 #include <KoShape.h>
 #include <KoToolBase.h>
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
 
 MoveConnectionPointStrategy::MoveConnectionPointStrategy(KoShape *shape, int connectionPointId, KoToolBase* parent)
 : KoInteractionStrategy(parent), m_shape(shape), m_connectionPointId(connectionPointId)

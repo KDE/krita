@@ -40,7 +40,7 @@ TreeShapeFactory::TreeShapeFactory()
 
 TreeShapeFactory::~TreeShapeFactory() {}
 
-KoShape *TreeShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *TreeShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     TreeShape *defaultShape = new TreeShape(documentResources);
     defaultShape->setShapeId(TREESHAPEID);

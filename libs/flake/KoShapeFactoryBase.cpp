@@ -25,7 +25,7 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include "KoShapeFactoryBase.h"
 #include "KoDeferredShapeFactoryBase.h"
 #include "KoShape.h"
@@ -67,7 +67,7 @@ public:
     int loadingPriority;
     QList<QPair<QString, QStringList> > xmlElements; // xml name space -> xml element names
     bool hidden;
-    QList<KoResourceManager *> resourceManagers;
+    QList<KoDocumentResourceManager *> resourceManagers;
 };
 
 
@@ -179,18 +179,18 @@ void KoShapeFactoryBase::setHidden(bool hidden)
     d->hidden = hidden;
 }
 
-void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager *manager) const
+void KoShapeFactoryBase::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
     d->resourceManagers.append(manager);
     connect(manager, SIGNAL(destroyed(QObject *)), this, SLOT(pruneDocumentResourceManager(QObject*)));
 }
 
-QList<KoResourceManager *> KoShapeFactoryBase::documentResourceManagers() const
+QList<KoDocumentResourceManager *> KoShapeFactoryBase::documentResourceManagers() const
 {
     return d->resourceManagers;
 }
 
-KoShape *KoShapeFactoryBase::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *KoShapeFactoryBase::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     if (!d->deferredPluginName.isEmpty()) {
         const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
@@ -203,7 +203,7 @@ KoShape *KoShapeFactoryBase::createDefaultShape(KoResourceManager *documentResou
 }
 
 KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
-                                         KoResourceManager *documentResources) const
+                                         KoDocumentResourceManager *documentResources) const
 {
     if (!d->deferredPluginName.isEmpty()) {
         const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
@@ -261,6 +261,6 @@ void KoShapeFactoryBase::getDeferredPlugin()
 
 void KoShapeFactoryBase::pruneDocumentResourceManager(QObject *obj)
 {
-    KoResourceManager *r = qobject_cast<KoResourceManager*>(obj);
+    KoDocumentResourceManager *r = qobject_cast<KoDocumentResourceManager*>(obj);
     d->resourceManagers.removeAll(r);
 }

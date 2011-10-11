@@ -2544,7 +2544,7 @@ QString KoDocument::unitName() const
     return KoUnit::unitName(unit());
 }
 
-void KoDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
+void KoDocument::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
 {
 #ifndef NDEBUG
     if (d->templateType.isEmpty())
@@ -2580,15 +2580,16 @@ void KoDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
         }
     }
 
-    parent->factory()->container("mainToolBar", parent)->hide();
+    mainWindow->factory()->container("mainToolBar", mainWindow)->hide();
 
     if (d->startUpWidget) {
         d->startUpWidget->show();
     } else {
-        d->startUpWidget = createOpenPane(parent->centralWidget(), componentData(), d->templateType);
+        d->startUpWidget = createOpenPane(mainWindow, componentData(), d->templateType);
+        mainWindow->setCentralWidget(d->startUpWidget);
     }
 
-    parent->setDocToOpen(this);
+    mainWindow->setDocToOpen(this);
 }
 
 void KoDocument::openExistingFile(const KUrl& url)

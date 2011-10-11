@@ -134,8 +134,8 @@ void MixerTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
     Q_UNUSED(toolActivation)
     m_d->state = HOVER;
     useCursor(m_d->cursor);
-    m_d->foregroundColor = canvas()->resourceManager()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
-    m_d->backgroundColor = canvas()->resourceManager()->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
+    m_d->foregroundColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
+    m_d->backgroundColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
 }
 
 void MixerTool::deactivate()
@@ -145,10 +145,10 @@ void MixerTool::deactivate()
 void MixerTool::resourceChanged(int key, const QVariant & res)
 {
     switch(key) {
-    case KoCanvasResource::ForegroundColor:
+    case KoCanvasResourceManager::ForegroundColor:
         m_d->foregroundColor = res.value<KoColor>();
         break;
-    case KoCanvasResource::BackgroundColor:
+    case KoCanvasResourceManager::BackgroundColor:
         m_d->backgroundColor = res.value<KoColor>();
         break;
     default:
@@ -235,7 +235,7 @@ void MixerTool::mouseReleaseEvent(KoPointerEvent *event)
         m_d->mixer->device()->convertToQImage(0).save("canvas.png");
 
     }
-    m_d->mixer->resourceManager()->setResource(KoCanvasResource::ForegroundColor, event->pos());
+    m_d->mixer->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, event->pos());
 }
 
 void MixerTool::setDirty(const QRegion& region)

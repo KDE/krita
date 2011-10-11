@@ -24,7 +24,7 @@
 #include <KoUnit.h>
 #include <KoDocument.h>
 #include <KoUnitDoubleSpinBox.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 
 #include <kcomponentdata.h>
 #include <kcombobox.h>
@@ -41,13 +41,13 @@
 class KoConfigMiscPage::Private
 {
 public:
-    Private(KoDocument* doc, KoResourceManager *documentResources)
+    Private(KoDocument* doc, KoDocumentResourceManager *documentResources)
             : doc(doc), docResources(documentResources)
     {}
 
     KoDocument* doc;
     KSharedConfigPtr config;
-    KoResourceManager *docResources;
+    KoDocumentResourceManager *docResources;
 
     KoUnit oldUnit;
     QComboBox *unit;
@@ -61,7 +61,7 @@ public:
     bool oldPasteAtCursor;
 };
 
-KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoResourceManager *documentResources, char* name)
+KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *documentResources, char* name)
         : d(new Private(doc, documentResources))
 {
     setObjectName(name);

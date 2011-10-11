@@ -99,14 +99,21 @@ KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server)
     }
 }
 
+KoResourceLoaderThread::~KoResourceLoaderThread()
+{
+    barrier();
+}
+
 void KoResourceLoaderThread::run()
 {
     m_server->loadResources(m_fileNames);
 }
 
-void KoResourceLoaderThread::cancel()
+void KoResourceLoaderThread::barrier()
 {
-    m_server->cancel();
+    if(isRunning()) {
+        wait();
+    }
 }
 
 QStringList KoResourceLoaderThread::getFileNames( const QString & extensions)
@@ -127,9 +134,9 @@ struct KoResourceServerProvider::Private
     KoResourceServer<KoAbstractGradient>* m_gradientServer;
     KoResourceServer<KoColorSet>* m_paletteServer;
 
-    QThread * paletteThread;
-    QThread * gradientThread;
-    QThread * patternThread;
+    KoResourceLoaderThread *paletteThread;
+    KoResourceLoaderThread *gradientThread;
+    KoResourceLoaderThread *patternThread;
 };
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
@@ -150,26 +157,28 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 
     d->m_patternServer = new KoResourceServer<KoPattern>("ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
     d->patternThread = new KoResourceLoaderThread(d->m_patternServer);
-    connect(d->patternThread, SIGNAL(finished()), this, SLOT(patternThreadDone()));
     d->patternThread->start();
 
     d->m_gradientServer = new GradientResourceServer("ko_gradients", "*.kgr:*.svg:*.ggr");
     d->gradientThread = new KoResourceLoaderThread(d->m_gradientServer);
-    connect(d->gradientThread, SIGNAL(finished()), this, SLOT(gradientThreadDone()));
     d->gradientThread->start();
 
     d->m_paletteServer = new KoResourceServer<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act");
     d->paletteThread = new KoResourceLoaderThread(d->m_paletteServer);
-    connect(d->paletteThread, SIGNAL(finished()), this, SLOT(paletteThreadDone()));
     d->paletteThread->start();
 
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()
 {
+    delete d->patternThread;
+    delete d->gradientThread;
+    delete d->paletteThread;
+
     delete d->m_patternServer;
     delete d->m_gradientServer;
     delete d->m_paletteServer;
+
     delete d;
 }
 
@@ -181,34 +190,18 @@ KoResourceServerProvider* KoResourceServerProvider::instance()
 
 KoResourceServer<KoPattern>* KoResourceServerProvider::patternServer()
 {
+    d->patternThread->barrier();
     return d->m_patternServer;
 }
 
 KoResourceServer<KoAbstractGradient>* KoResourceServerProvider::gradientServer()
 {
+    d->patternThread->barrier();
     return d->m_gradientServer;
 }
 
 KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer()
 {
+    d->patternThread->barrier();
     return d->m_paletteServer;
-}
-
-
-void KoResourceServerProvider::paletteThreadDone()
-{
-    delete d->paletteThread;
-    d->paletteThread = 0;
-}
-
-void KoResourceServerProvider::patternThreadDone()
-{
-    delete d->patternThread;
-    d->patternThread = 0;
-}
-
-void KoResourceServerProvider::gradientThreadDone()
-{
-    delete d->gradientThread;
-    d->gradientThread = 0;
 }

@@ -25,7 +25,7 @@
 #include <KoResource.h>
 #include <KoColorSet.h>
 #include <KoColorSetWidget.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoColorSpaceRegistry.h>
 
 KisPaletteDocker::KisPaletteDocker()

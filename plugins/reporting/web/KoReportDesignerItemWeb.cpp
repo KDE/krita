@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright Shreya Pandit <shreya@shreyapandit.com>
-
+   Copyright 2011 Adam Pigg <adam@piggz.co.uk>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -44,7 +45,7 @@ void KoReportDesignerItemWeb::init(QGraphicsScene *scene) //done,compared,add fu
     if (scene)
         scene->addItem(this);
 
-//    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)), this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)), this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
     KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);
     setZValue(Z);
 }
@@ -57,6 +58,10 @@ KoReportDesignerItemWeb::KoReportDesignerItemWeb(KoReportDesigner *rw, QGraphics
     init(scene);
     m_size.setSceneSize(QSizeF(100, 100));
     m_pos.setScenePos(pos);
+    
+    setSceneRect(m_pos.toScene(), m_size.toScene());
+    
+    kDebug() << m_size.toScene() << m_pos.toScene();
     m_name->setValue(m_reportDesigner->suggestEntityName("web"));
 }
 
@@ -83,14 +88,17 @@ KoReportDesignerItemWeb::~KoReportDesignerItemWeb() //done,compared
     // do we need to clean anything up?
 }
 
-void KoReportDesignerItemWeb::paint(QPainter *painter, const KoViewConverter &converter)
+void KoReportDesignerItemWeb::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-    QRectF target = converter.documentToView(QRectF(QPointF(0, 0), QPointF(500, 500)));
-    m_webPage->setViewportSize(target.size().toSize());
-//    qreal cz = target.width() / size().width();
-//    m_webPage->mainFrame()->setZoomFactor(m_zoom * cz);
-//    m_webPage->mainFrame()->setScrollPosition(m_scrollPosition.toPoint());
-    m_webPage->mainFrame()->render(painter);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+    
+    painter->drawRect(QGraphicsRectItem::rect());
+    painter->drawText(rect(), 0, dataSourceAndObjectTypeName(itemDataSource(), "web-view"));
+    
+    painter->setBackgroundMode(Qt::TransparentMode);
+    
+    drawHandles(painter);
 }
 
 void KoReportDesignerItemWeb::buildXML(QDomDocument &doc, QDomElement &parent)
@@ -99,10 +107,11 @@ void KoReportDesignerItemWeb::buildXML(QDomDocument &doc, QDomElement &parent)
     QDomElement entity = doc.createElement("report:web");
 
     // properties
-    addPropertyAsAttribute(&entity, url);
     addPropertyAsAttribute(&entity, m_controlSource);
+    addPropertyAsAttribute(&entity, m_name);
     entity.setAttribute("report:z-index", zValue());
     buildXMLRect(doc, entity, &m_pos, &m_size);
+    parent.appendChild(entity);
 }
 
 void KoReportDesignerItemWeb::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
@@ -114,9 +123,6 @@ void KoReportDesignerItemWeb::slotPropertyChanged(KoProperty::Set &s, KoProperty
         else {
             m_oldName = p.value().toString();
         }
-    }
-    else {
-        setUrl(m_oldName);
     }
 
     KoReportDesignerItemRectBase::propertyChanged(s, p);

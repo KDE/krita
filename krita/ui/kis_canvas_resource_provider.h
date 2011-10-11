@@ -23,7 +23,7 @@
 
 #include <KoColor.h>
 #include <KoID.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 
 #include "kis_types.h"
 #include "krita_export.h"
@@ -50,7 +50,7 @@ class KRITAUI_EXPORT KisCanvasResourceProvider : public QObject
 public:
 
     enum Resources {
-        HdrExposure = KoCanvasResource::KritaStart + 1,
+        HdrExposure = KoCanvasResourceManager::KritaStart + 1,
         CurrentPattern,
         CurrentGradient,
         CurrentDisplayProfile,
@@ -69,8 +69,8 @@ public:
     KisCanvasResourceProvider(KisView2 * view);
     ~KisCanvasResourceProvider();
 
-    void setResourceManager(KoResourceManager *resourceManager);
-    KoResourceManager* resourceManager();
+    void setResourceManager(KoCanvasResourceManager *resourceManager);
+    KoCanvasResourceManager* resourceManager();
 
     KoCanvasBase * canvas() const;
 
@@ -167,7 +167,7 @@ signals:
 private:
 
     KisView2 * m_view;
-    KoResourceManager * m_resourceManager;
+    KoCanvasResourceManager * m_resourceManager;
     const KoColorProfile * m_displayProfile;
     bool m_fGChanged;
     QList<KisAbstractPerspectiveGrid*> m_perspectiveGrids;

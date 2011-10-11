@@ -21,7 +21,7 @@
 #ifndef SHOWCHANGECOMMAND_H
 #define SHOWCHANGECOMMAND_H
 
-#include "TextCommandBase.h"
+#include "KoTextCommandBase.h"
 #include <QObject>
 #include <QList>
 
@@ -34,7 +34,7 @@ class QTextDocument;
 class QTextDocumentFragment;
 class QTextCursor;
 
-class ShowChangesCommand : public QObject, public TextCommandBase
+class ShowChangesCommand : public QObject, public KoTextCommandBase
 {
     Q_OBJECT
 public:

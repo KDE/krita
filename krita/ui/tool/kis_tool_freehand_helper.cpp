@@ -21,7 +21,7 @@
 #include <QTimer>
 
 #include <KoPointerEvent.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 
 #include "kis_distance_information.h"
 #include "kis_painting_information_builder.h"
@@ -89,7 +89,7 @@ void KisToolFreehandHelper::setSmoothness(bool smooth, qreal smoothness)
 }
 
 void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
-                                      KoResourceManager *resourceManager,
+                                      KoCanvasResourceManager *resourceManager,
                                       KisImageWSP image,
                                       KisStrokesFacade *strokesFacade,
                                       KisPostExecutionUndoAdapter *undoAdapter,

@@ -35,6 +35,7 @@
 #include <kis_default_bounds.h>
 #include <kis_canvas_resource_provider.h>
 
+#include "kis_config.h"
 #include "kis_undo_stores.h"
 #include "kis_update_scheduler.h"
 #include "kis_post_execution_undo_adapter.h"
@@ -196,7 +197,7 @@ void KisScratchPad::slotMouseMove(KoPointerEvent *event)
 
 void KisScratchPad::beginStroke(KoPointerEvent *event)
 {
-    KoResourceManager *resourceManager = m_resourceProvider->resourceManager();
+    KoCanvasResourceManager *resourceManager = m_resourceProvider->resourceManager();
 
     m_helper->initPaint(event, resourceManager,
                         0,
@@ -327,8 +328,8 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
                                     const QColor &defaultColor)
 {
     m_resourceProvider = resourceProvider;
-
-    setDisplayProfile(m_resourceProvider->currentDisplayProfile());
+    KisConfig cfg;
+    setDisplayProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));
     connect(m_resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)),
             SLOT(setDisplayProfile(const KoColorProfile*)));
 
@@ -392,8 +393,8 @@ void KisScratchPad::paintPresetImage()
     update();
 }
 
-void KisScratchPad::setDisplayProfile(const KoColorProfile *colorProfile) {
-
+void KisScratchPad::setDisplayProfile(const KoColorProfile *colorProfile)
+{
     m_displayProfile = colorProfile;
     QWidget::update();
 }

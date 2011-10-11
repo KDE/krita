@@ -45,7 +45,7 @@
 
 #define TextShapeId "TextShapeID"
 
-CommentShape::CommentShape(KoResourceManager* resourceManager)
+CommentShape::CommentShape(KoDocumentResourceManager* resourceManager)
 : KoShapeContainer()
 , m_active(false)
 {

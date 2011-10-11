@@ -36,20 +36,6 @@
       <item row="0" column="1">
        <widget class="QLineEdit" name="title"/>
       </item>
-      <item row="1" column="0" colspan="2">
-       <widget class="QCheckBox" name="protect">
-        <property name="text">
-         <string>Protect against manual changes</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QCheckBox" name="autoupdate">
-        <property name="text">
-         <string>Update with new bibliography entries</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -211,20 +197,6 @@
          <widget class="QPushButton" name="remove">
           <property name="text">
            <string>&lt;&lt;Remove</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="addTabStop">
-          <property name="text">
-           <string>Tab stop &gt;&gt;</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="removeTabStop">
-          <property name="text">
-           <string>&lt;&lt; Tab stop</string>
           </property>
          </widget>
         </item>

@@ -23,7 +23,7 @@
 #include "SvgCssHelper.h"
 #include "SvgStyleParser.h"
 
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 
 #include <KDebug>
 
@@ -51,14 +51,14 @@ public:
     QStack<SvgGraphicsContext*> gcStack;
     QString initialXmlBaseDir;
     int zIndex;
-    KoResourceManager *documentResourceManager;
+    KoDocumentResourceManager *documentResourceManager;
     QHash<QString, KoShape*> loadedShapes;
     QHash<QString, KoXmlElement> definitions;
     SvgCssHelper cssStyles;
     SvgStyleParser *styleParser;
 };
 
-SvgLoadingContext::SvgLoadingContext(KoResourceManager *documentResourceManager)
+SvgLoadingContext::SvgLoadingContext(KoDocumentResourceManager *documentResourceManager)
     : d(new Private())
 {
     d->documentResourceManager = documentResourceManager;

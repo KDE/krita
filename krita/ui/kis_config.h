@@ -246,10 +246,10 @@ public:
 
     int hideToolbarFullscreen();
     void setHideToolbarFullscreen(const int value) const;
-	
-	QStringList favoriteCompositeOps() const;
-	void setFavoriteCompositeOps(const QStringList& compositeOps);
-	
+
+    QStringList favoriteCompositeOps() const;
+    void setFavoriteCompositeOps(const QStringList& compositeOps);
+
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

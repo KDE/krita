@@ -23,7 +23,7 @@
 #include "komain_export.h"
 
 class KoRuler;
-class KoResourceManager;
+class KoCanvasResourceManager;
 
 /**
  * This class combines text options with the KoRuler object.
@@ -42,7 +42,7 @@ public:
      *  Will also be used as QObject parent for memory management purposes.
      * @param crp the resource provider for the canvas this ruler and the text tool belong to.
      */
-    KoRulerController(KoRuler *horizontalRuler, KoResourceManager *crp);
+    KoRulerController(KoRuler *horizontalRuler, KoCanvasResourceManager *crp);
     ~KoRulerController();
 
 private:

@@ -19,10 +19,13 @@
 
 #include "psd.h"
 #include "psd_utils.h"
+#include <QtCore/QByteArray>
+#include <qrgb.h>
+#include <QColor>
 
 PSDColorModeBlock::PSDColorModeBlock(PSDColorMode colormode)
-    : blocksize(0)
-    , colormode(colormode)
+        : blocksize(0)
+        , colormode(colormode)
 {
 }
 
@@ -49,8 +52,14 @@ bool PSDColorModeBlock::read(QIODevice* io)
     if ((quint32)data.size() != blocksize) return false;
 
     if (colormode == Indexed) {
-        qFatal("TODO: Compute the colormap");
-        return false;
+
+        for (int i=0; i<=767;)
+        {
+          colormap.append(qRgb(data[i],data[i++],data[i++]));
+          //qDebug()<<colormap<<i;
+        }
+
+
     }
     return valid();
 }

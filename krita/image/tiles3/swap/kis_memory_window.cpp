@@ -21,23 +21,25 @@
 
 #include <QDir>
 
-#define SWP_PREFIX "KRITA_SWAP_FILE."
-#define SWP_PATH QDir::tempPath()
+#define SWP_PREFIX "KRITA_SWAP_FILE_XXXXXX"
 
-#define SWAP_FILE_PATH() (SWP_PATH)
-#define SWAP_FILE_PATTERN() (SWP_PREFIX "*")
-#define SWAP_FILE_TEMPLATE() (SWP_PATH + QDir::separator() + SWP_PREFIX + "XXXXXX")
-
-
-KisMemoryWindow::KisMemoryWindow(quint64 writeWindowSize)
-    : m_file(SWAP_FILE_TEMPLATE()),
-      m_readWindowChunk(0,0),
+KisMemoryWindow::KisMemoryWindow(const QString &swapDir, quint64 writeWindowSize)
+    : m_readWindowChunk(0,0),
       m_writeWindowChunk(0,0)
 {
+    if (!swapDir.isEmpty() && QDir::isAbsolutePath(swapDir)) {
+        QString swapFileTemplate = swapDir + QDir::separator() + SWP_PREFIX;
+        m_file.setFileTemplate(swapFileTemplate);
+    }
+    else {
+        m_file.setPrefix(SWP_PREFIX);
+    }
+
+    m_file.setAutoRemove(true);
+
     m_writeWindowSize = writeWindowSize;
     m_readWindowSize = writeWindowSize / 4;
 
-    cleanOldFiles();
     m_file.open();
 
     m_readWindow = 0;
@@ -46,18 +48,6 @@ KisMemoryWindow::KisMemoryWindow(quint64 writeWindowSize)
 
 KisMemoryWindow::~KisMemoryWindow()
 {
-}
-
-void KisMemoryWindow::cleanOldFiles()
-{
-    QDir directory(SWAP_FILE_PATH());
-    directory.setNameFilters(QStringList(QString(SWAP_FILE_PATTERN())));
-
-    QStringList filesList = directory.entryList();
-
-    foreach(QString path, filesList) {
-        directory.remove(path);
-    }
 }
 
 quint8* KisMemoryWindow::getReadChunkPtr(const KisChunkData &readChunk)

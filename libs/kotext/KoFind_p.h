@@ -29,7 +29,7 @@
 #include "FindDirection_p.h"
 
 class KoFind;
-class KoResourceManager;
+class KoCanvasResourceManager;
 class QAction;
 class QTextDocument;
 class QVariant;
@@ -38,7 +38,7 @@ class QWidget;
 class KoFindPrivate
 {
 public:
-    KoFindPrivate(KoFind *find, KoResourceManager *crp, QWidget *w);
+    KoFindPrivate(KoFind *find, KoCanvasResourceManager *crp, QWidget *w);
 
     void resourceChanged(int key, const QVariant &variant);
 
@@ -67,7 +67,7 @@ protected:
 
 private:
     KoFind * q;
-    KoResourceManager *provider;
+    KoCanvasResourceManager *provider;
     KoFindStrategy findStrategy; /// strategy used for find
     KoReplaceStrategy replaceStrategy; /// strategy used for replace
     KoFindStrategyBase * strategy; /// the current strategy used

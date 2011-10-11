@@ -190,6 +190,7 @@ private slots:
     void slotCreateTemplate();
     void slotDocumentSaved();
     void slotSaveIncremental();
+    void slotSaveIncrementalBackup();
     void slotFirstRun();
     void showStatusBar(bool toggled);
     void showJustTheCanvas(bool toggled);

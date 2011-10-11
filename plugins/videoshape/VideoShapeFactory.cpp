@@ -23,8 +23,9 @@
 #include "VideoShape.h"
 #include "VideoShapeConfigWidget.h"
 
+#include <KoDocumentResourceManager.h>
 #include <KoXmlNS.h>
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
 #include <KoShapeLoadingContext.h>
 #include "VideoCollection.h"
 
@@ -40,7 +41,7 @@ VideoShapeFactory::VideoShapeFactory()
     setLoadingPriority(1);
 }
 
-KoShape *VideoShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *VideoShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     VideoShape * defaultShape = new VideoShape();
     defaultShape->setShapeId(VIDEOSHAPEID);
@@ -58,7 +59,7 @@ bool VideoShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &c
     return e.localName() == "plugin" && e.namespaceURI() == KoXmlNS::draw;
 }
 
-void VideoShapeFactory::newDocumentResourceManager(KoResourceManager *manager) const
+void VideoShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
     QVariant variant;
     variant.setValue<void*>(new VideoCollection(manager));

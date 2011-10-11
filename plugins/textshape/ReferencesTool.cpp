@@ -20,13 +20,14 @@
 #include "ReferencesTool.h"
 #include "TextShape.h"
 #include "dialogs/SimpleTableOfContentsWidget.h"
-#include "dialogs/SimpleCitationWidget.h"
+#include "dialogs/SimpleCitationBibliographyWidget.h"
 #include "dialogs/SimpleFootEndNotesWidget.h"
 #include "dialogs/SimpleCaptionsWidget.h"
 #include "dialogs/TableOfContentsConfigure.h"
 #include "dialogs/NotesConfigurationDialog.h"
 #include "dialogs/CitationInsertionDialog.h"
-//#include "dialogs/InsertBibliographyDialog.h"
+#include "dialogs/InsertBibliographyDialog.h"
+#include "dialogs/BibliographyConfigureDialog.h"
 
 #include <KoTextLayoutRootArea.h>
 #include <KoCanvasBase.h>
@@ -42,8 +43,35 @@
 #include <KLocale>
 #include <KAction>
 #include <QTextDocument>
-
+#include <QLineEdit>
+#include <QBoxLayout>
 #include <QMenu>
+
+LabeledNoteWidget::LabeledNoteWidget(KAction *action)
+    : QWidget()
+    , m_action(action)
+{
+    setMouseTracking(true);
+    QHBoxLayout *layout = new QHBoxLayout();
+    layout->addWidget(new QLabel(i18n("Insert with label:")));
+    m_lineEdit = new QLineEdit();
+    layout->addWidget(m_lineEdit);
+    setLayout(layout);
+
+    connect(m_lineEdit, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
+}
+
+void LabeledNoteWidget::returnPressed()
+{
+    emit triggered(m_lineEdit->text());
+}
+
+
+void LabeledNoteWidget::enterEvent(QEvent *event)
+{
+    m_action->activate(QAction::Hover);
+    QWidget::enterEvent(event);
+}
 
 ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas),
     m_configure(0),
@@ -59,39 +87,57 @@ ReferencesTool::~ReferencesTool()
 void ReferencesTool::createActions()
 {
     KAction *action = new KAction(i18n("Insert"), this);
-    addAction("insert_tableofcentents", action);
+    addAction("insert_tableofcontents", action);
     action->setToolTip(i18n("Insert a Table of Contents into the document."));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertTableOfContents()));
+
+    action = new KAction(i18n("Insert Custom ..."), this);
+    addAction("insert_configure_tableofcontents", action);
+    action->setToolTip(i18n("Insert a custom Table of Contents into the document."));
 
     action = new KAction(i18n("Configure..."), this);
-    addAction("format_tableofcentents", action);
+    addAction("format_tableofcontents", action);
     action->setToolTip(i18n("Configure the Table of Contents"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
 
-    action = new KAction(i18n("Footnote"),this);
-    addAction("insert_footnote",action);
-    action->setToolTip(i18n("Insert a FootNote into the document."));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertFootNote()));
+    action = new KAction(i18n("Insert with auto number"),this);
+    addAction("insert_autofootnote",action);
+    connect(action, SIGNAL(triggered()), this, SLOT(insertAutoFootNote()));
 
-    action = new KAction(i18n("Endnote"),this);
-    addAction("insert_endnote",action);
-    action->setToolTip(i18n("Insert an EndNote into the document."));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertEndNote()));
+    action = new KAction(this);
+    QWidget *w = new LabeledNoteWidget(action);
+    action->setDefaultWidget(w);
+    addAction("insert_labeledfootnote", action);
+    connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledFootNote(QString)));
+
+    action = new KAction(i18n("Insert with auto number"),this);
+    addAction("insert_autoendnote",action);
+    connect(action, SIGNAL(triggered()), this, SLOT(insertAutoEndNote()));
+
+    action = new KAction(this);
+    w = new LabeledNoteWidget(action);
+    action->setDefaultWidget(w);
+    addAction("insert_labeledendnote", action);
+    connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledEndNote(QString)));
 
     action = new KAction(this);
     addAction("format_notes",action);
     action->setToolTip(i18n("Configure"));
     connect(action, SIGNAL(triggered()), this, SLOT(showNotesConfigureDialog()));
 
-    action = new KAction(i18n("Insert"),this);
+    action = new KAction(i18n("Insert Citation"),this);
     addAction("insert_citation",action);
     action->setToolTip(i18n("Insert a citation into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertCitation()));
 
-    action = new KAction(i18n("Insert"),this);
+    action = new KAction(i18n("Insert Bibliography"),this);
     addAction("insert_bibliography",action);
     action->setToolTip(i18n("Insert a bibliography into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertBibliography()));
+
+    action = new KAction(i18n("Configure"),this);
+    addAction("configure_bibliography",action);
+    action->setToolTip(i18n("Configure the bibliography"));
+    connect(action, SIGNAL(triggered()), this, SLOT(configureBibliography()));
 }
 
 void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -112,7 +158,7 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
 
     m_sfenw = new SimpleFootEndNotesWidget(this,0);
 
-    SimpleCitationWidget *scw = new SimpleCitationWidget(this,0);
+    m_scbw = new SimpleCitationBibliographyWidget(this,0);
     // Connect to/with simple table of contents option widget
     connect(m_stocw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
@@ -128,35 +174,33 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
     m_sfenw->setWindowTitle(i18n("Footnotes & Endnotes"));
     widgets.append(m_sfenw);
 
-    scw->setWindowTitle(i18n("Citations and Bibliography"));
-    widgets.append(scw);
+    m_scbw->setWindowTitle(i18n("Citations and Bibliography"));
+    widgets.append(m_scbw);
     //widgets.insert(i18n("Captions"), scapw);
-    connect(textEditor()->document(), SIGNAL(cursorPositionChanged(QTextCursor)), this, SLOT(disableButtons(QTextCursor)));
+    connect(textEditor(), SIGNAL(cursorPositionChanged()), this, SLOT(updateButtons()));
     return widgets;
-}
-
-void ReferencesTool::insertTableOfContents()
-{
-    textEditor()->insertTableOfContents();
 }
 
 void ReferencesTool::insertCitation()
 {
-    CitationInsertionDialog *dialog = new CitationInsertionDialog(textEditor(),canvas()->canvasWidget());
+    CitationInsertionDialog *dialog = new CitationInsertionDialog(textEditor(), m_scbw);
     dialog->show();
 }
 
 void ReferencesTool::insertBibliography()
 {
-    //InsertBibliographyDialog *dialog = new InsertBibliographyDialog(textEditor(), canvas()->canvasWidget());
-    //dialog->show();
+    InsertBibliographyDialog *dialog = new InsertBibliographyDialog(textEditor(), m_scbw);
+    dialog->show();
+}
+
+void ReferencesTool::configureBibliography()
+{
+    BibliographyConfigureDialog *dialog = new BibliographyConfigureDialog(textEditor()->document(), m_scbw);
+    dialog->show();
 }
 
 void ReferencesTool::formatTableOfContents()
 {
-    //if(!m_configure)
-   // {
-    qDebug()<<"format";
     const QTextDocument *document = textEditor()->document();
     QMenu *tocList = new QMenu(m_stocw);
     int i = 0;
@@ -180,6 +224,7 @@ void ReferencesTool::formatTableOfContents()
         return;
     } else if (i == 1 && firstToCTextBlock.isValid()) {
         m_configure = new TableOfContentsConfigure(textEditor(), firstToCTextBlock, m_stocw);
+        connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
     } else {
         m_stocw->setToCConfigureMenu(tocList);
         connect(m_stocw->ToCConfigureMenu(), SIGNAL(triggered(QAction *)), SLOT(showConfigureDialog(QAction*)));
@@ -190,24 +235,39 @@ void ReferencesTool::formatTableOfContents()
 void ReferencesTool::showConfigureDialog(QAction *action)
 {
     m_configure = new TableOfContentsConfigure(textEditor(), action->data().value<QTextBlock>(), m_stocw);
+    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
 }
 
-void ReferencesTool::insertFootNote()
+void ReferencesTool::hideCofigureDialog(int result)
+{
+    disconnect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+    m_configure->deleteLater();
+}
+
+void ReferencesTool::insertAutoFootNote()
 {
     m_note = textEditor()->insertFootNote();
-    m_note->setAutoNumbering(m_sfenw->widget.autoNumbering->isChecked());
-    if (!m_note->autoNumbering()) {
-        m_note->setLabel(m_sfenw->widget.characterEdit->text());
-    }
+    m_note->setAutoNumbering(true);
 }
 
-void ReferencesTool::insertEndNote()
+void ReferencesTool::insertLabeledFootNote(QString label)
+{
+    m_note = textEditor()->insertFootNote();
+    m_note->setAutoNumbering(false);
+    m_note->setLabel(label);
+}
+
+void ReferencesTool::insertAutoEndNote()
 {
     m_note = textEditor()->insertEndNote();
-    m_note->setAutoNumbering(m_sfenw->widget.autoNumbering->isChecked());
-    if (!m_note->autoNumbering()) {
-        m_note->setLabel(m_sfenw->widget.characterEdit->text());
-    }
+    m_note->setAutoNumbering(true);
+}
+
+void ReferencesTool::insertLabeledEndNote(QString label)
+{
+    m_note = textEditor()->insertEndNote();
+    m_note->setAutoNumbering(false);
+    m_note->setLabel(label);
 }
 
 void ReferencesTool::showNotesConfigureDialog()
@@ -216,14 +276,33 @@ void ReferencesTool::showNotesConfigureDialog()
     dialog->exec();
 }
 
-void ReferencesTool::disableButtons(QTextCursor cursor)
+void ReferencesTool::updateButtons()
 {
-    if (cursor.currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::NoteFrameType) {
+    if (textEditor()->currentFrame()->format().intProperty(KoText::SubFrameType) == KoText::NoteFrameType) {
         m_sfenw->widget.addFootnote->setEnabled(false);
         m_sfenw->widget.addEndnote->setEnabled(false);
     } else {
         m_sfenw->widget.addFootnote->setEnabled(true);
         m_sfenw->widget.addEndnote->setEnabled(true);
+    }
+}
+
+KoTextEditor *ReferencesTool::editor()
+{
+    return textEditor();
+}
+
+void ReferencesTool::insertCustomToC(KoTableOfContentsGeneratorInfo *defaultTemplate)
+{
+    m_configure = new TableOfContentsConfigure(textEditor(), defaultTemplate, m_stocw);
+    connect(m_configure, SIGNAL(accepted()), this, SLOT(customToCGenerated()));
+    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+}
+
+void ReferencesTool::customToCGenerated()
+{
+    if (m_configure) {
+        textEditor()->insertTableOfContents(m_configure->currentToCData());
     }
 }
 

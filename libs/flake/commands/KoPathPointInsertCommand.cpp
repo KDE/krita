@@ -73,6 +73,7 @@ KoPathPointInsertCommand::KoPathPointInsertCommand(const QList<KoPathPointData> 
         QPointF cp2 = splitSegments.second.second()->controlPoint1();
         d->controlPoints.append(QPair<QPointF, QPointF>(cp1, cp2));
     }
+    setText(i18nc("(qtundo-format)", "Insert points"));
 }
 
 KoPathPointInsertCommand::~KoPathPointInsertCommand()

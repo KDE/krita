@@ -133,8 +133,8 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
     resetCursorStyle();
 
-    d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
-    d->currentBgColor = canvas()->resourceManager()->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
+    d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
+    d->currentBgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
     d->currentPattern = static_cast<KisPattern *>(canvas()->resourceManager()->
                         resource(KisCanvasResourceProvider::CurrentPattern).value<void *>());
     d->currentGradient = static_cast<KoAbstractGradient *>(canvas()->resourceManager()->
@@ -164,10 +164,10 @@ void KisTool::resourceChanged(int key, const QVariant & v)
 {
 
     switch (key) {
-    case(KoCanvasResource::ForegroundColor):
+    case(KoCanvasResourceManager::ForegroundColor):
         d->currentFgColor = v.value<KoColor>();
         break;
-    case(KoCanvasResource::BackgroundColor):
+    case(KoCanvasResourceManager::BackgroundColor):
         d->currentBgColor = v.value<KoColor>();
         break;
     case(KisCanvasResourceProvider::CurrentPattern):
@@ -598,7 +598,7 @@ void KisTool::setupPainter(KisPainter* painter)
     painter->setGradient(currentGradient());
     painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
 
-    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) 
+    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data()))
         painter->setChannelFlags(l->channelLockFlags());
 }
 
@@ -684,6 +684,9 @@ void KisTool::resetCursorStyle()
     case CURSOR_STYLE_CROSSHAIR:
         useCursor(KisCursor::crossCursor());
         break;
+    case CURSOR_STYLE_SMALL_ROUND:
+        useCursor(KisCursor::roundCursor());
+        break;
     case CURSOR_STYLE_POINTER:
         useCursor(KisCursor::upArrowCursor());
         break;
@@ -709,7 +712,7 @@ void KisTool::resetCursorStyle()
 
 void KisTool::slotToggleFgBg()
 {
-    KoResourceManager* resourceManager = canvas()->resourceManager();
+    KoCanvasResourceManager* resourceManager = canvas()->resourceManager();
     KoColor c = resourceManager->foregroundColor();
     resourceManager->setForegroundColor(resourceManager->backgroundColor());
     resourceManager->setBackgroundColor(c);
@@ -717,7 +720,7 @@ void KisTool::slotToggleFgBg()
 
 void KisTool::slotResetFgBg()
 {
-    KoResourceManager* resourceManager = canvas()->resourceManager();
+    KoCanvasResourceManager* resourceManager = canvas()->resourceManager();
     resourceManager->setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
     resourceManager->setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
 }

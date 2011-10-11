@@ -21,7 +21,7 @@
 
 #include <klocale.h>
 
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
 
 

@@ -29,7 +29,6 @@
 #include <QTabletEvent>
 #include <kundo2command.h>
 
-#include <KoResourceManager.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoShapeManager.h>

@@ -26,7 +26,7 @@
 
 class KoShape;
 class KoPathShape;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 
 /// The undo / redo command for setting the shape clip path
 class FLAKE_EXPORT KoShapeClipCommand : public KUndo2Command
@@ -39,7 +39,7 @@ public:
      * @param clipPathShapes the path shapes to be used a clipping path
      * @param parent the parent command used for macro commands
      */
-    KoShapeClipCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes, const QList<KoPathShape*> &clipPathShapes, KUndo2Command *parent = 0);
+    KoShapeClipCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape*> &shapes, const QList<KoPathShape*> &clipPathShapes, KUndo2Command *parent = 0);
 
     /**
      * Command to set a new shape clipping path for a single shape
@@ -48,7 +48,7 @@ public:
      * @param clipPathShapes the path shapes to be used a clipping path
      * @param parent the parent command used for macro commands
      */
-    KoShapeClipCommand(KoShapeControllerBase *controller, KoShape *shape, const QList<KoPathShape*> &clipPathShapes, KUndo2Command *parent = 0);
+    KoShapeClipCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, const QList<KoPathShape*> &clipPathShapes, KUndo2Command *parent = 0);
 
     /// Destroys the command
     virtual ~KoShapeClipCommand();

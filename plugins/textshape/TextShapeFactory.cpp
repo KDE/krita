@@ -27,7 +27,7 @@
 #include <KoTextShapeData.h>
 #include <KoXmlNS.h>
 #include <KoStyleManager.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoInlineTextObjectManager.h>
 #include <changetracker/KoChangeTracker.h>
 #include <KoImageCollection.h>
@@ -58,7 +58,7 @@ TextShapeFactory::TextShapeFactory()
     addTemplate(t);
 }
 
-KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     KoInlineTextObjectManager *manager = 0;
     if (documentResources && documentResources->hasResource(KoText::InlineTextObjectManager)) {
@@ -94,7 +94,7 @@ KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResourc
     return text;
 }
 
-KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceManager *documentResources) const
+KoShape *TextShapeFactory::createShape(const KoProperties */*params*/, KoDocumentResourceManager *documentResources) const
 {
     TextShape *shape = static_cast<TextShape*>(createDefaultShape(documentResources));
     shape->textShapeData()->document()->setUndoRedoEnabled(false);
@@ -119,13 +119,13 @@ bool TextShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &c
         (e.localName() == "table" && e.namespaceURI() == KoXmlNS::table);
 }
 
-void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager) const
+void TextShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
     QVariant variant;
     variant.setValue<KoInlineTextObjectManager*>(new KoInlineTextObjectManager(manager));
     manager->setResource(KoText::InlineTextObjectManager, variant);
 
-    if (!manager->hasResource(KoDocumentResource::UndoStack)) {
+    if (!manager->hasResource(KoDocumentResourceManager::UndoStack)) {
         kWarning(32500) << "No KUndo2Stack found in the document resource manager, creating a new one";
         manager->setUndoStack(new KUndo2Stack(manager));
     }

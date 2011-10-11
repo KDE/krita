@@ -46,6 +46,7 @@
 #include "psd_resource_section.h"
 #include "psd_layer_section.h"
 #include "psd_resource_block.h"
+#include "psd_image_data.h"
 
 PSDLoader::PSDLoader(KisDoc2 *doc)
 {
@@ -141,12 +142,19 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     // read the projection into our single layer
     if (layerSection.nLayers == 0) {
         dbgFile << "Position" << f.pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
+
         KisPaintLayerSP layer = new KisPaintLayer(m_image, i18n("Background"), OPACITY_OPAQUE_U8);
         KisTransaction("", layer -> paintDevice());
+
+        PSDImageData imageData(&header);
+        imageData.read(layer->paintDevice(), &f);
+
         //readLayerData(&f, layer->paintDevice(), f.pos(), QRect(0, 0, header.width, header.height));
         m_image->addNode(layer, m_image->rootLayer());
+
     }
     else {
+
         // read the channels for the various layers
         for(int i = 0; i < layerSection.nLayers; ++i) {
 
@@ -156,27 +164,17 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
             dbgFile << "Going to read channels for layer " << i << layerRecord->layerName;
 
             KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
-
-            QMap<int, QByteArray> planes;
-            foreach(PSDLayerRecord::ChannelInfo *channel, layerRecord->channelInfoRecords) {
-                planes[channel->channelId] = layerRecord->readChannelData(&f, channel);
-                if (planes[channel->channelId].length() == 0) {
-                    dbgFile << layerRecord->error;
-                    return KisImageBuilder_RESULT_BAD_FETCH;
-                }
-                // XXX: make sure the order is ok. In photoshop, the first channel is alpha
-
+            layer->setCompositeOp(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
+            if (!layerRecord->readChannels(&f, layer->paintDevice())) {
+                dbgFile << "failed reading channels for layer: " << layerRecord->layerName << layerRecord->error;
+                return KisImageBuilder_RESULT_FAILURE;
             }
-            //                layer->paintDevice()->writePlanarBytes(planes.values(),
-            //                                                       layerRecord->left,
-            //                                                       row,
-            //                                                       layerRecord->right - layerRecord->left,
-            //                                                       layerRecord->bottom - layerRecord->top);
 
+            layer->setDirty();
             m_image->addNode(layer, m_image->rootLayer());
         }
     }
-
+    m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 

@@ -33,7 +33,6 @@
 #include <KDE/KDebug>
 #include <KDE/KLocalizedString>
 
-#include <KoResourceManager.h>
 #include <KoText.h>
 #include <KoTextDocument.h>
 #include <KoShape.h>
@@ -186,7 +185,7 @@ void KoFindText::replaceImplementation(const KoFindMatch &match, const QVariant 
 
     cursor.insertText(value.toString());
     cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, value.toString().length());
-    
+
     selections[index].cursor = cursor;
     selections[index].format = d->replacedFormat;
     d->selections.insert(match.container().value<QTextDocument*>(), selections);

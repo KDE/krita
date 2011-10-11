@@ -27,11 +27,15 @@
 
 KoZoomHandler::KoZoomHandler()
     : KoViewConverter()
+    , m_zoomMode(KoZoomMode::ZOOM_CONSTANT)
+    , m_resolutionX(0)
+    , m_resolutionY(0)
+    , m_zoomedResolutionX(0)
+    , m_zoomedResolutionY(0)
 {
     setZoom(1.0);
     setZoomMode( KoZoomMode::ZOOM_CONSTANT );
     setDpi(KoDpi::dpiX(), KoDpi::dpiY());
-
 }
 
 KoZoomHandler::~KoZoomHandler()
@@ -43,7 +47,7 @@ void KoZoomHandler::setResolutionToStandard()
     setDpi(KoDpi::dpiX(), KoDpi::dpiY());
 }
 
-void KoZoomHandler::setDpi(int dpiX, int dpiY) 
+void KoZoomHandler::setDpi(int dpiX, int dpiY)
 {
     setResolution(POINT_TO_INCH(static_cast<qreal>(dpiX)),
                   POINT_TO_INCH(static_cast<qreal>(dpiY)));

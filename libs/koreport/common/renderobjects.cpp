@@ -78,6 +78,11 @@ void ORODocument::setPageOptions(const ReportPageOptions & options)
     m_pageOptions = options;
 }
 
+void ORODocument::notifyChange(int pageNo)
+{
+    emit(updated(pageNo));
+}
+
 //
 // OROPage
 //
@@ -114,8 +119,10 @@ OROPrimitive* OROPage::primitive(int idx)
     return m_primitives.at(idx);
 }
 
-void OROPage::addPrimitive(OROPrimitive* p, bool atBeginning)
+void OROPage::addPrimitive(OROPrimitive* p, bool atBeginning, bool notify)
 {
+    kDebug() << "Adding primitive" << p->type() << "to page" << page();
+    
     if (p == 0)
         return;
 
@@ -126,6 +133,10 @@ void OROPage::addPrimitive(OROPrimitive* p, bool atBeginning)
         m_primitives.prepend(p);
     } else {
         m_primitives.append(p);
+    }
+    
+    if (notify) {
+        document()->notifyChange(page());
     }
 }
 

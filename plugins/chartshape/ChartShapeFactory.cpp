@@ -34,6 +34,7 @@
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>
+#include <KoDocumentResourceManager.h>
 
 // Chart shape
 #include "ChartToolFactory.h"
@@ -84,7 +85,7 @@ bool ChartShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingCont
         && element.tagName() == "object";
 }
 
-KoShape *ChartShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *ChartShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     ChartShape* shape = new ChartShape(documentResources);
     ChartProxyModel *proxyModel = shape->proxyModel();
@@ -182,7 +183,7 @@ QList<KoShapeConfigWidgetBase*> ChartShapeFactory::createShapeOptionPanels()
     return QList<KoShapeConfigWidgetBase*>();
 }
 
-void ChartShapeFactory::newDocumentResourceManager(KoResourceManager *manager) const
+void ChartShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
     Q_UNUSED(manager);
 }

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright Shreya Pandit <shreya@shreyapandit.com>
+   Copyright 2011 Adam Pigg <adam@piggz.co.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,13 +36,13 @@ class KoReportDesignerItemWeb : public KoReportItemWeb, public KoReportDesignerI
 public:
     KoReportDesignerItemWeb(KoReportDesigner *rw, QGraphicsScene *scene, const QPointF &pos);
     KoReportDesignerItemWeb(QDomNode &element, KoReportDesigner *rw, QGraphicsScene *scene);
-    void init(QGraphicsScene *scene);
     virtual ~KoReportDesignerItemWeb();
+    
+    void init(QGraphicsScene *scene);
+    
     virtual void buildXML(QDomDocument &doc, QDomElement &parent);
-    virtual void paint(QPainter *painter, const KoViewConverter &converter);
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
     virtual KoReportDesignerItemWeb *clone();
-
-    using QGraphicsRectItem::paint;
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);

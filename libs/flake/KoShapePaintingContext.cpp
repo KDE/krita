@@ -37,7 +37,7 @@ KoShapePaintingContext::KoShapePaintingContext(KoCanvasBase *canvas, bool forPri
     showFormattingCharacters = rm->boolResource(KoCanvasResourceManager::ShowFormattingCharacters);
     showTextShapeOutlines = rm->boolResource(KoCanvasResourceManager::ShowTextShapeOutlines);
     showTableBorders = rm->boolResource(KoCanvasResourceManager::ShowTableBorders);
-    showSpellChecking = true;
+    showSpellChecking = !forPrint;
 }
 
 KoShapePaintingContext::~KoShapePaintingContext()

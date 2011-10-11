@@ -276,8 +276,13 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             //imprtatnt for paragraph splt acrosse two pages.
             painter->setClipRect(br.adjusted(-2,-2,2,2), Qt::IntersectClip);
 
-            layout->draw(painter, QPointF(0, 0), selections, br);
-
+            if (context.showSpellChecking) {
+                layout->draw(painter, QPointF(0, 0), selections, br);
+            } else {
+                QList<QTextLayout::FormatRange> misspellings = layout->additionalFormats();
+                layout->draw(painter, QPointF(0, 0), selections, br);
+                layout->setAdditionalFormats(misspellings);
+            }
             decorateParagraph(painter, block, context.showFormattingCharacters);
 
             painter->restore();

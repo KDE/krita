@@ -171,7 +171,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         QRectF br = m_blockRects[blockIndex];
         ++blockIndex;
 
-        if (!painter->hasClipping() || clipRegion.intersects(layout->boundingRect().toRect())) {
+        if (!painter->hasClipping() || clipRegion.intersects(br.toRect())) {
             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
             KoTextBlockPaintStrategyBase *paintStrategy = 0;
             if (blockData) {

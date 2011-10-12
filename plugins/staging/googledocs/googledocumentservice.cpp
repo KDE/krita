@@ -35,8 +35,8 @@ const QString GoogleDocumentService::GOOGLE_SPREADSHEET_URL = "spreadsheets.goog
 GoogleDocumentService::GoogleDocumentService()
         : newInformation(true)
           , waitingForDoc(false)
-          , loggedin(false)
           , documentList(0)
+          , loggedin(false)
 {
     connect(&networkManager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(handleNetworkData(QNetworkReply*)));

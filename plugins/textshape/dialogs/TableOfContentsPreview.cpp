@@ -32,9 +32,9 @@
 
 TableOfContentsPreview::TableOfContentsPreview(QWidget *parent) :
     QFrame(parent),
-    m_styleManager(0),
-    m_pm(0),
     m_textShape(0),
+    m_pm(0),
+    m_styleManager(0),
     m_previewPixSize(QSize(0,0))
 {
 }

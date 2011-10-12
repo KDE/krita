@@ -1350,20 +1350,32 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
 
     if (blockData && block.textList() && block.layout()->lineCount() == 1) {
         // first line, lets check where the line ended up and adjust the positioning of the counter.
-        if ((format.alignment() & Qt::AlignHCenter) == Qt::AlignHCenter) {
-            const qreal padding = (line.width() - line.naturalTextWidth() ) / 2;
-            qreal newX;
-            if (m_isRtl) {
-                newX = line.x() + line.width() - padding + blockData->counterSpacing();
-            } else {
-                newX = line.x() + padding - blockData->counterWidth() - blockData->counterSpacing();
+        if (block.textList()->format().boolProperty(KoListStyle::AlignmentMode)) {
+            if ((format.alignment() & Qt::AlignHCenter) == Qt::AlignHCenter) {
+                const qreal padding = (line.width() - line.naturalTextWidth()) / 2;
+                qreal newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
+                blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
+            } if ((format.alignment() & Qt::AlignRight) == Qt::AlignRight) {
+                const qreal padding = line.width() - line.naturalTextWidth();
+                qreal newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
+                blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
             }
-            blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
-        } else if (!m_isRtl && x() < line.x()) {// move the counter more left.
-            blockData->setCounterPosition(blockData->counterPosition() + QPointF(line.x() - x(), 0));
-        } else if (m_isRtl && x() + width() > line.x() + line.width() + 0.1) { // 0.1 to account for qfixed rounding
-            const qreal newX = line.x() + line.width() + blockData->counterSpacing();
-            blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
+        } else {
+            if ((format.alignment() & Qt::AlignHCenter) == Qt::AlignHCenter) {
+                const qreal padding = (line.width() - line.naturalTextWidth() ) / 2;
+                qreal newX;
+                if (m_isRtl) {
+                    newX = line.x() + line.width() - padding + blockData->counterSpacing();
+                } else {
+                    newX = line.x() + padding - blockData->counterWidth() - blockData->counterSpacing();
+                }
+                blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
+            } else if (!m_isRtl && x() < line.x()) {// move the counter more left.
+                blockData->setCounterPosition(blockData->counterPosition() + QPointF(line.x() - x(), 0));
+            } else if (m_isRtl && x() + width() > line.x() + line.width() + 0.1) { // 0.1 to account for qfixed rounding
+                const qreal newX = line.x() + line.width() + blockData->counterSpacing();
+                blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
+            }
         }
     }
 

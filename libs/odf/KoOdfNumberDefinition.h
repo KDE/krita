@@ -54,7 +54,7 @@ public:
     /**
      * create a string representation of the specified number.
      */
-    QString formattedNumber(int number) const;
+    QString formattedNumber(int number, KoOdfNumberDefinition *defaultDefinition = 0) const;
 
     /**
      * The style:num-prefix and style:num-suffix attributes specify what to display before and

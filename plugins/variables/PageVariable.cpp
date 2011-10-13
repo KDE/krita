@@ -110,7 +110,8 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject objec
             QString currentValue = value();
             if (currentValue.isEmpty() || ! m_fixed) {
                 pagenumber = page->visiblePageNumber(m_pageselect, m_pageadjust);
-                QString newValue = pagenumber >= 0 ? m_numberFormat.formattedNumber(pagenumber) : QString();
+                KoOdfNumberDefinition defaultDefinition; // FIXME Should fetch from pagestyle
+                QString newValue = pagenumber >= 0 ? m_numberFormat.formattedNumber(pagenumber, &defaultDefinition) : QString();
                 // only update value when changed
                 if (currentValue != newValue) {
                      setValue(newValue);

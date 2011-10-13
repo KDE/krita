@@ -655,7 +655,6 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                         // The <style:list-level-label-alignment> element and the fo:text-align attribute are used to define
                         // the position and spacing of the list label and the list item. The values of the attributes for
                         // text:space-before, text:min-label-width and text:min-label-distance are assumed to be 0.
-
                         setAlignmentMode(true);
 
                         QString textindent(p.attributeNS(KoXmlNS::fo, "text-indent"));

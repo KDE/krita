@@ -885,12 +885,24 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     qreal labelBoxWidth = 0;
     if (textList) {
         if (listFormat.boolProperty(KoListStyle::AlignmentMode)) {
-            labelBoxWidth = blockData->counterWidth();
             // according to odf 1.2 17.20 list margin should be used when paragraph margin is
-            // not specified (additionally LO/OO uses 0 as condition so we do too)
-            if (pStyle.leftMargin() == 0) {
+            // not specified by the auto style (additionally LO/OO uses 0 as condition so we do too)
+            int id = pStyle.styleId();
+            bool set = false;
+            if (id) {
+                KoParagraphStyle *originalParagraphStyle = m_documentLayout->styleManager()->paragraphStyle(id);
+                if (originalParagraphStyle->leftMargin() != leftMargin) {
+                    set = (leftMargin != 0);
+                }
+            } else {
+                set = (leftMargin != 0);
+            }
+            if (! set) {
                 leftMargin = listFormat.doubleProperty(KoListStyle::Margin);
             }
+
+            labelBoxWidth = blockData->counterWidth();
+
             Qt::Alignment align = static_cast<Qt::Alignment>(listFormat.intProperty(KoListStyle::Alignment));
             if (align & Qt::AlignLeft) {
                 m_indent += labelBoxWidth;
@@ -1262,14 +1274,27 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const 
         qreal guessGlyphWidth = QFontMetricsF(blockCursor.charFormat().font()).width('x');
         return guessGlyphWidth * 3 + m_extraTextIndent;
     }
+
+    qreal pStyleTextIndent = pStyle.textIndent().value(width());
+
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
         // according to odf 1.2 17.20 list text indent should be used when paragraph text indent is
         // not specified (additionally LO/OO uses 0 as condition so we do too)
-        if (pStyle.textIndent().value(width()) == 0) {
+        int id = pStyle.styleId();
+        bool set = false;
+        if (id) {
+            KoParagraphStyle *originalParagraphStyle = m_documentLayout->styleManager()->paragraphStyle(id);
+            if (originalParagraphStyle->textIndent().value(width()) != pStyleTextIndent) {
+                set = (pStyleTextIndent != 0);
+            }
+        } else {
+            set = (pStyleTextIndent != 0);
+        }
+        if (! set) {
             return textList->format().doubleProperty(KoListStyle::TextIndent) + m_extraTextIndent;
         }
     }
-    return pStyle.textIndent().value(width()) + m_extraTextIndent;
+    return pStyleTextIndent + m_extraTextIndent;
 }
 
 void KoTextLayoutArea::setExtraTextIndent(qreal extraTextIndent)

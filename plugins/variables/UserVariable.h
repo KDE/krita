@@ -53,8 +53,8 @@ private Q_SLOTS:
     void nameChanged(QWidget *configWidget);
     void typeChanged(QWidget *configWidget);
     void valueChanged(QWidget *configWidget);
-    void newClicked();
-    void deleteClicked();
+    void newClicked(QWidget *configWidget);
+    void deleteClicked(QWidget *configWidget);
     void valueChanged();
 
 private:
@@ -66,12 +66,14 @@ private:
     QComboBox* typeEdit(QWidget *configWidget) const;
     QLineEdit* valueEdit(QWidget *configWidget) const;
 
+    void updateNameEdit(QWidget *configWidget);
+
     KoVariableManager *m_variableManager;
     int m_property;
     QString m_name;
 
     KoOdfNumberStyles::NumericStyleFormat m_numberstyle;
-    QSignalMapper m_nameMapper, m_typeMapper, m_valueMapper;
+    QSignalMapper m_nameMapper, m_typeMapper, m_valueMapper, m_newMapper, m_deleteMapper;
 };
 
 #endif

@@ -79,6 +79,8 @@ public:
 
         KoImageCollection *imageCollection;
         bool showFormattingCharacters;
+        bool showTableBorders;
+        bool showSpellChecking;
     };
 
     /// constructor

@@ -38,7 +38,7 @@ public:
     virtual ~PluginShape();
 
     // reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     // reimplemented
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented

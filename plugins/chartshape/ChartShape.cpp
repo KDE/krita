@@ -720,7 +720,7 @@ void ChartShape::setThreeD( bool threeD )
 
 
 void ChartShape::paintComponent( QPainter &painter,
-                                 const KoViewConverter &converter )
+                                 const KoViewConverter &converter, KoShapePaintingContext &)
 {
     // Only does a relayout if scheduled
     layout()->layout();

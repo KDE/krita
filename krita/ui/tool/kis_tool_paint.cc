@@ -88,11 +88,13 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     m_lighterColor = new KAction(i18n("Make Brush color lighter"), this);
     m_lighterColor->setShortcut(Qt::Key_L);
     connect(m_lighterColor, SIGNAL(activated()), SLOT(makeColorLighter()));
+    m_lighterColor->setEnabled(false);
     addAction("make_brush_color_lighter", m_lighterColor);
 
     m_darkerColor = new KAction(i18n("Make Brush color darker"), this);
     m_darkerColor->setShortcut(Qt::Key_K);
     connect(m_darkerColor, SIGNAL(activated()), SLOT(makeColorDarker()));
+    m_darkerColor->setEnabled(false);
     addAction("make_brush_color_darker", m_darkerColor);
 
     connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), kiscanvas, SIGNAL(favoritePaletteCalled(const QPoint&)));
@@ -131,6 +133,14 @@ void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> 
 {
     KisTool::activate(toolActivation, shapes);
     resetCursorStyle();
+    m_lighterColor->setEnabled(true);
+    m_darkerColor->setEnabled(true);
+}
+
+void KisToolPaint::deactivate()
+{
+    m_lighterColor->setEnabled(false);
+    m_darkerColor->setEnabled(false);
 }
 
 

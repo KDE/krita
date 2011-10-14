@@ -476,11 +476,8 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
             counterSpacing = qMax(format.doubleProperty(KoListStyle::MinimumDistance), m_fm.width(' '));
             width = qMax(format.doubleProperty(KoListStyle::MinimumWidth), width);
         } else {
-            //here counter spacing contains the offset of the list text from the list label
+            // for aligmentmode spacing should be 0
             counterSpacing = 0;
-            if (format.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::Space) {
-                counterSpacing = m_fm.width(' ');
-            }
         }
     }
     data->setCounterWidth(width);

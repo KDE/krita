@@ -41,7 +41,7 @@ bool InitialsCommentShape::loadOdf(const KoXmlElement& /*element*/, KoShapeLoadi
     return false;
 }
 
-void InitialsCommentShape::paint(QPainter& painter, const KoViewConverter& converter)
+void InitialsCommentShape::paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
 {
     applyConversion(painter, converter);
 

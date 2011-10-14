@@ -82,6 +82,7 @@ public:
 
     void activateToolActions()
     {
+        disabledDisabledActions.clear();
         disabledActions.clear();
         // we do several things here
         // 1. enable the actions of the active tool
@@ -96,8 +97,12 @@ public:
                 if (action) {
                     ac->takeAction(action);
                     if (action != it.value()) {
-                        action->setEnabled(false);
-                        disabledActions.append(action);
+                        if (action->isEnabled()) {
+                            action->setEnabled(false);
+                            disabledActions.append(action);
+                        } else  {
+                            disabledDisabledActions.append(action);
+                        }
                     }
                     it.value()->setShortcut(action->shortcut());
                 }
@@ -118,6 +123,12 @@ public:
         // enable actions which where disables on activating the active tool
         // and re-add them to the action collection
         KActionCollection *ac = canvas->actionCollection();
+        foreach(QAction *action, disabledDisabledActions) {
+            if(ac) {
+                ac->addAction(action->objectName(), action);
+            }
+        }
+        disabledDisabledActions.clear();
         foreach(QAction *action, disabledActions) {
             action->setEnabled(true);
             if(ac) {
@@ -137,6 +148,7 @@ public:
     QWidget *dummyToolWidget;  // the widget shown in the toolDocker.
     QLabel *dummyToolLabel;
     QList<QAction*> disabledActions; ///< disabled conflicting actions
+    QList<QAction*> disabledDisabledActions; ///< disabled conflicting actions that were already disabled
 };
 
 KoToolManager::Private::Private(KoToolManager *qq)
@@ -369,16 +381,6 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
 
     // Activate the actions for the currently active tool
     canvasData->activateToolActions();
-    QList<CanvasData*> items = canvasses[canvasData->canvas];
-    foreach(CanvasData *cd, items) {
-        foreach(KoToolBase* tool, cd->allTools) {
-            if(tool == canvasData->activeTool)
-                continue;
-            foreach(KAction* action, tool->actions()) {
-                action->setEnabled(false);
-            }
-        }
-    }
 
     KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
     if (canvasControllerWidget) {

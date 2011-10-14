@@ -42,7 +42,7 @@ public:
     virtual ~KoTosContainer();
 
     // reimplemented
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
     // reimplemented
     virtual bool loadText(const KoXmlElement &element, KoShapeLoadingContext &context);

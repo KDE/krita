@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Map Shape
+Name[pt]=Forma de Mapa
+Name[sv]=Kartform
+Name[uk]=Форма карти
+Name[x-test]=xxMap Shapexx
+Name[zh_TW]=地圖元件
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-Library=mapshape

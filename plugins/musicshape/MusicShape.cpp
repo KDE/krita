@@ -113,7 +113,7 @@ void MusicShape::setSize( const QSizeF &newSize )
     engrave(false);
 }
 
-void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
+void MusicShape::paint( QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
 {
     constPaint( painter, converter );
 }

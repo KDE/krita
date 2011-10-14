@@ -85,7 +85,7 @@ public:
     // reimplemented methods.
 
     /// reimplemented from KoShape
-    void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     /// reimplemented from KoShape
     virtual void saveOdf(KoShapeSavingContext & context) const;
     /// reimplemented from KoShape

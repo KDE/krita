@@ -92,7 +92,7 @@ void TreeShape::setZIndex(int zIndex)
     KoShape::setZIndex(zIndex);
 }
 
-void TreeShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
+void TreeShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     //kDebug() << "start" << this->shapeId();
     Q_UNUSED(painter);

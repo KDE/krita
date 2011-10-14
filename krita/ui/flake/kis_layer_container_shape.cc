@@ -85,7 +85,7 @@ QRectF KisLayerContainerShape::boundingRect() const
 
 }
 
-void KisLayerContainerShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
+void KisLayerContainerShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);

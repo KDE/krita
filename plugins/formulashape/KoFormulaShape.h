@@ -55,7 +55,7 @@ public:
     ~KoFormulaShape();
 
     /// inherited from KoShape
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
     void updateLayout();
 

@@ -569,8 +569,6 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                     if (cursor->lineTextStart == -1) {
                         //Nothing was added so lets backtrack keep-with-next
                         backtrackKeepWithNext(cursor);
-                        m_endOfArea = new FrameIterator(cursor);
-                        return false;
                     }
                     m_endOfArea = new FrameIterator(cursor);
                     setBottom(m_y + m_footNotesHeight);
@@ -695,6 +693,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // initialize list item stuff for this parag.
     QTextList *textList = block.textList();
     QTextListFormat listFormat;
+    QTextCharFormat labelFormat;
     if (textList) {
         listFormat = textList->format();
 
@@ -712,7 +711,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
 
         // use format from the actual block of the list item
-        QTextCharFormat labelFormat;
         if ( cs && cs->hasProperty(QTextFormat::FontPointSize) ) {
                 cs->applyStyle(labelFormat);
         } else {
@@ -774,6 +772,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         // justified. Seems for right-to-left we have to accept that justified text will not look proper justified then.
         option.setFlags(QTextOption::IncludeTrailingSpaces);
     } else {
+        option.setFlags(0);
         option.setTextDirection(Qt::LeftToRight);
     }
 
@@ -1047,7 +1046,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
 
         if (listFormat.boolProperty(KoListStyle::AlignmentMode)) {
-            if (block.blockFormat().intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
+            if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
                 if (listFormat.hasProperty(KoListStyle::TabStopPosition)) {
                     qreal listTab = listFormat.doubleProperty(KoListStyle::TabStopPosition);
                     if (!m_documentLayout->relativeTabs(block)) {
@@ -1122,6 +1121,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 } else {
                     m_indent = 0;
                 }
+            } else if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::Space) {
+                 QFontMetrics fm(labelFormat.font(), m_documentLayout->paintDevice());
+                 m_indent += fm.width(' ');
             }
         }
     }
@@ -1348,20 +1350,32 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
 
     if (blockData && block.textList() && block.layout()->lineCount() == 1) {
         // first line, lets check where the line ended up and adjust the positioning of the counter.
-        if ((format.alignment() & Qt::AlignHCenter) == Qt::AlignHCenter) {
-            const qreal padding = (line.width() - line.naturalTextWidth() ) / 2;
-            qreal newX;
-            if (m_isRtl) {
-                newX = line.x() + line.width() - padding + blockData->counterSpacing();
-            } else {
-                newX = line.x() + padding - blockData->counterWidth() - blockData->counterSpacing();
+        if (block.textList()->format().boolProperty(KoListStyle::AlignmentMode)) {
+            if ((format.alignment() & Qt::AlignHCenter) == Qt::AlignHCenter) {
+                const qreal padding = (line.width() - line.naturalTextWidth()) / 2;
+                qreal newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
+                blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
+            } if ((format.alignment() & Qt::AlignRight) == Qt::AlignRight) {
+                const qreal padding = line.width() - line.naturalTextWidth();
+                qreal newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
+                blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
             }
-            blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
-        } else if (!m_isRtl && x() < line.x()) {// move the counter more left.
-            blockData->setCounterPosition(blockData->counterPosition() + QPointF(line.x() - x(), 0));
-        } else if (m_isRtl && x() + width() > line.x() + line.width() + 0.1) { // 0.1 to account for qfixed rounding
-            const qreal newX = line.x() + line.width() + blockData->counterSpacing();
-            blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
+        } else {
+            if ((format.alignment() & Qt::AlignHCenter) == Qt::AlignHCenter) {
+                const qreal padding = (line.width() - line.naturalTextWidth() ) / 2;
+                qreal newX;
+                if (m_isRtl) {
+                    newX = line.x() + line.width() - padding + blockData->counterSpacing();
+                } else {
+                    newX = line.x() + padding - blockData->counterWidth() - blockData->counterSpacing();
+                }
+                blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
+            } else if (!m_isRtl && x() < line.x()) {// move the counter more left.
+                blockData->setCounterPosition(blockData->counterPosition() + QPointF(line.x() - x(), 0));
+            } else if (m_isRtl && x() + width() > line.x() + line.width() + 0.1) { // 0.1 to account for qfixed rounding
+                const qreal newX = line.x() + line.width() + blockData->counterSpacing();
+                blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
+            }
         }
     }
 
@@ -1375,9 +1389,9 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         if (useFontProperties) {
             //stretch line height to powerpoint size
             fontStretch = PresenterFontStretch;
-        } else if ( block.charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+        } else if ( block.charFormat().hasProperty(KoCharacterStyle::FontYStretch)) {
             // stretch line height to ms-word size
-            fontStretch = block.charFormat().property(KoCharacterStyle::FontStretch).toDouble();
+            fontStretch = block.charFormat().property(KoCharacterStyle::FontYStretch).toDouble();
         }
         height = block.charFormat().fontPointSize() * fontStretch;
     } else {
@@ -1385,9 +1399,9 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         if (useFontProperties) {
             //stretch line height to powerpoint size
             fontStretch = PresenterFontStretch;
-        } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+        } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontYStretch)) {
             // stretch line height to ms-word size
-            fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
+            fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontYStretch).toDouble();
         }
         // read max font height
         height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);
@@ -1413,9 +1427,9 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
                 if (useFontProperties) {
                     //stretch line height to powerpoint size
                     fontStretch = PresenterFontStretch;
-                } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+                } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontYStretch)) {
                     // stretch line height to ms-word size
-                    fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
+                    fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontYStretch).toDouble();
                 }
                 // read max font height
                 height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);

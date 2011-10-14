@@ -23,6 +23,8 @@
 #include <QtGui>
 #include "KoShapeContainer.h"
 #include "KoShapeManager.h"
+#include "KoShapePaintingContext.h"
+
 #include <MockShapes.h>
 
 #include <kcomponentdata.h>
@@ -63,7 +65,8 @@ void TestShapePainting::testPaintShape()
     shape1.paintedCount = 0;
     shape2.paintedCount = 0;
     container.paintedCount = 0;
-    container.paint(painter, vc);
+    KoShapePaintingContext paintContext;
+    container.paint(painter, vc, paintContext);
     QCOMPARE(shape1.paintedCount, 0);
     QCOMPARE(shape2.paintedCount, 0);
     QCOMPARE(container.paintedCount, 1);
@@ -132,9 +135,9 @@ void TestShapePainting::testPaintOrder()
     class OrderedMockShape : public MockShape {
     public:
         OrderedMockShape(QList<MockShape*> &list) : order(list) {}
-        void paint(QPainter &painter, const KoViewConverter &converter) {
+        void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) {
             order.append(this);
-            MockShape::paint(painter, converter);
+            MockShape::paint(painter, converter, paintcontext);
         }
         QList<MockShape*> &order;
     };

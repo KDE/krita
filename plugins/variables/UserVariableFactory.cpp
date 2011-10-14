@@ -31,9 +31,9 @@ UserVariableFactory::UserVariableFactory()
 {
     KoInlineObjectTemplate var1;
     var1.id = "userfieldget";
-    var1.name = i18n("User Field");
+    var1.name = i18n("Custom");
     KoProperties *props = new KoProperties();
-    props->setProperty("vartype", 1);
+    props->setProperty("varproperty", KoInlineObject::UserGet);
     props->setProperty("varname", QString());
     var1.properties = props;
     addTemplate(var1);
@@ -41,9 +41,9 @@ UserVariableFactory::UserVariableFactory()
     /*
     KoInlineObjectTemplate var2;
     var2.id = "userfieldinput";
-    var2.name = i18n("User Field");
+    var2.name = i18n("User Input");
     props = new KProperties();
-    props->setProperty("vartype", 2);
+    props->setProperty("varproperty", KoInlineObject::UserField);
     var2.properties = props;
     addTemplate(var2);
     */

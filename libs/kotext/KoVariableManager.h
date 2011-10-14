@@ -52,11 +52,20 @@ public:
      * Set or create a variable to the new value.
      * @param name the name of the variable.
      * @param value the new value.
-     * @param userDefined if true then the variable will not be added to the
-     * list of variables (means the @a variables method will not include
-     * the variable) cause the variable is a user defined variable.
+     * @param type The type of the value. This is only set for user-defined variables.
+     * For non user defined variables the value is empty. If set then it should be one
+     * of the following values;
+     * \li string
+     * \li boolean
+     * \li currency
+     * \li date
+     * \li float
+     * \li percentage
+     * \li time
+     * \li void
+     * \li formula
      */
-    void setValue(const QString &name, const QString &value, bool userDefined = false);
+    void setValue(const QString &name, const QString &value, const QString &type = QString());
 
     /**
      * Remove a variable from the store.
@@ -72,10 +81,10 @@ public:
     QString value(const QString &name) const;
 
     /**
-     * Return how many InlineObjects that show this variable are present in documents.
-     * @param name the named variable
+     * Return the type of a user defined variable. If the variable does not exist or
+     * is not a user defined variable then an empty string is returned.
      */
-    int usageCount(const QString &name) const;
+    QString userType(const QString &name);
 
     /**
      * Create a new variable that can be inserted into the document using

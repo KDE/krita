@@ -2399,11 +2399,14 @@ void KoTextLoader::loadVariableDeclarations(const KoXmlElement &element, QTextCu
                     value = e.attributeNS(KoXmlNS::office, "time-value");
                 } else if (type == "void") {
                     value = e.attributeNS(KoXmlNS::office, "value");
+                } else if (e.hasAttributeNS(KoXmlNS::text, "formula")) {
+                    type = "formula";
+                    value = e.attributeNS(KoXmlNS::text, "formula");
                 } else {
                     kWarning(32500) << "Unknown user-field-decl value-type=" << type;
                     continue;
                 }
-                variableManager->setValue(name, value, true /* user defined? */ );
+                variableManager->setValue(name, value, type);
             }
         }
     }

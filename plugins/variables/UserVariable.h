@@ -21,8 +21,12 @@
 #define PAGEVARIABLE_H
 
 #include <QObject>
+#include <QSignalMapper>
 #include <KoVariable.h>
+#include <KoOdfNumberStyles.h>
 
+class QLineEdit;
+class QComboBox;
 class KoShapeSavingContext;
 class KoVariableManager;
 
@@ -46,18 +50,28 @@ public:
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext & context);
 
 private Q_SLOTS:
-    void nameChanged(const QString &name);
+    void nameChanged(QWidget *configWidget);
+    void typeChanged(QWidget *configWidget);
+    void valueChanged(QWidget *configWidget);
+    void newClicked();
+    void deleteClicked();
     void valueChanged();
 
 private:
-    KoVariableManager *m_variableManager;
     KoVariableManager *variableManager();
 
     void resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
 
-    int m_type;
+    QComboBox* nameEdit(QWidget *configWidget) const;
+    QComboBox* typeEdit(QWidget *configWidget) const;
+    QLineEdit* valueEdit(QWidget *configWidget) const;
+
+    KoVariableManager *m_variableManager;
+    int m_property;
     QString m_name;
-    
+
+    KoOdfNumberStyles::NumericStyleFormat m_numberstyle;
+    QSignalMapper m_nameMapper, m_typeMapper, m_valueMapper;
 };
 
 #endif

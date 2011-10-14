@@ -27,7 +27,9 @@ public:
             : lastId(KoInlineObject::VariableManagerStart) { }
     KoInlineTextObjectManager *inlineObjectManager;
     QHash<QString, int> variableMapping;
-    QStringList variableNames, userVariableNames;
+    QHash<int, QString> userTypes;
+    QStringList variableNames;
+    QStringList userVariableNames;
     int lastId;
 };
 
@@ -42,19 +44,23 @@ KoVariableManager::~KoVariableManager()
     delete d;
 }
 
-void KoVariableManager::setValue(const QString &name, const QString &value, bool userDefined)
+void KoVariableManager::setValue(const QString &name, const QString &value, const QString &type)
 {
     int key;
     // we store the mapping from name to key
-    if (d->variableMapping.contains(name))
+    if (d->variableMapping.contains(name)) {
         key = d->variableMapping.value(name);
-    else {
+    } else {
         key = d->lastId++;
         d->variableMapping.insert(name, key);
-        if (userDefined)
-            d->userVariableNames.append(name);
-        else
+        if (type.isEmpty()) {
             d->variableNames.append(name);
+        } else {
+            d->userVariableNames.append(name);
+        }
+    }
+    if (!type.isEmpty()) {
+        d->userTypes.insert(key, type);
     }
     // the variable manager stores the actual value of the variable.
     d->inlineObjectManager->setProperty(static_cast<KoInlineObject::Property>(key), value);
@@ -64,33 +70,40 @@ void KoVariableManager::setValue(const QString &name, const QString &value, bool
 QString KoVariableManager::value(const QString &name) const
 {
     int key = d->variableMapping.value(name);
-    if (key == 0)
+    if (key == 0) {
         return QString();
+    }
     return d->inlineObjectManager->stringProperty(static_cast<KoInlineObject::Property>(key));
+}
+
+QString KoVariableManager::userType(const QString &name)
+{
+    int key = d->variableMapping.value(name);
+    if (key == 0 || !d->userTypes.contains(key)) {
+        return QString();
+    }
+    return d->userTypes[key];
 }
 
 void KoVariableManager::remove(const QString &name)
 {
     int key = d->variableMapping.value(name);
-    if (key == 0)
+    if (key == 0) {
         return;
+    }
     d->variableMapping.remove(name);
+    d->userTypes.remove(key);
     d->variableNames.removeOne(name);
+    d->userVariableNames.removeOne(name);
     d->inlineObjectManager->removeProperty(static_cast<KoInlineObject::Property>(key));
-}
-
-int KoVariableManager::usageCount(const QString &name) const
-{
-    Q_UNUSED(name);
-    // TODO
-    return 0;
 }
 
 KoVariable *KoVariableManager::createVariable(const QString &name) const
 {
     int key = d->variableMapping.value(name);
-    if (key == 0)
+    if (key == 0) {
         return 0;
+    }
     return new KoNamedVariable(static_cast<KoInlineObject::Property>(key), name);
 }
 

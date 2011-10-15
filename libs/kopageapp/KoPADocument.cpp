@@ -44,6 +44,7 @@
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <KoDocumentInfo.h>
+#include <KoVariableManager.h>
 
 #include "KoPACanvas.h"
 #include "KoPAView.h"
@@ -212,6 +213,11 @@ bool KoPADocument::saveOdf( SavingContext & documentContext )
 
     bodyWriter->startElement( "office:body" );
     bodyWriter->startElement( odfTagName( true ) );
+
+    // Save user defined variable declarations
+    if (KoVariableManager *variableManager = inlineTextObjectManager()->variableManager()) {
+        variableManager->saveOdf(bodyWriter);
+    }
 
     if ( !saveOdfProlog( paContext ) ) {
         return false;

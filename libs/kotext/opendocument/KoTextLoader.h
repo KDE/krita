@@ -209,11 +209,6 @@ private:
     void loadTableOfContents(const KoXmlElement &element, QTextCursor& cursor);
 
     /**
-     * Load user-defined variables at \p element into the variable manager of the document in \p cursor .
-     */
-    void loadVariableDeclarations(const KoXmlElement &element, QTextCursor& cursor);
-
-    /**
     * Load the bibliography element \p element into the \p cursor .
     */
     void loadBibliography(const KoXmlElement &element, QTextCursor& cursor);

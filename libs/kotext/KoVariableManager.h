@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008, 2011 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2011 Robert Mathias Marmorstein <robert@narnia.homeunix.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,6 +26,8 @@
 #include <QObject>
 #include <QString>
 
+class KoXmlElement;
+class KoXmlWriter;
 class KoVariable;
 class KoInlineTextObjectManager;
 class KoVariableManagerPrivate;
@@ -101,6 +105,9 @@ public:
     QList<QString> variables() const;
     /// return a list of all user defined variable names.
     QList<QString> userVariables() const;
+
+    void loadOdf(const KoXmlElement &element);
+    void saveOdf(KoXmlWriter *bodyWriter);
 
 signals:
 	void valueChanged();

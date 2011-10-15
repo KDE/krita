@@ -218,13 +218,14 @@ void UserVariable::newClicked(QWidget *configWidget)
         Validator(KoVariableManager *variableManager) : m_variableManager(variableManager) {}
         virtual State validate(QString &input, int &) const
         {
-            return input.isEmpty() || m_variableManager->userVariables().contains(input) ? Intermediate : Acceptable;
+            QString s = input.trimmed();
+            return s.isEmpty() || m_variableManager->userVariables().contains(s) ? Intermediate : Acceptable;
         }
     private:
         KoVariableManager *m_variableManager;
     };
     Validator validator(variableManager());
-    QString name = KInputDialog::getText(i18n("New Variable"), i18n("Name for new variable:"), QString(), 0, configWidget, &validator);
+    QString name = KInputDialog::getText(i18n("New Variable"), i18n("Name for new variable:"), QString(), 0, configWidget, &validator).trimmed();
     if (name.isEmpty()) {
         return;
     }
@@ -241,10 +242,12 @@ void UserVariable::deleteClicked(QWidget *configWidget)
         return;
     }
     if (KMessageBox::questionYesNo(configWidget,
-            i18n("Delete custom variable '%1'?", m_name),
+            i18n("Delete variable <b>%1</b>?", m_name),
             i18n("Delete Variable"),
             KStandardGuiItem::yes(),
-            KStandardGuiItem::cancel()) != KMessageBox::Yes) {
+            KStandardGuiItem::cancel(),
+            QString(),
+            KMessageBox::Dangerous | KMessageBox::Notify) != KMessageBox::Yes) {
         return;
     }
     variableManager()->remove(m_name);

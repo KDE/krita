@@ -201,7 +201,7 @@ public:
     void setThreeD( bool threeD );
 
     /// reimplemented
-    void paintComponent( QPainter &painter, const KoViewConverter &converter );
+    void paintComponent( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     void paintDecorations( QPainter &painter, const KoViewConverter &converter,
                            const KoCanvasBase *canvas );
 

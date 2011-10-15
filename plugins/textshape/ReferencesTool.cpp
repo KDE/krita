@@ -87,12 +87,15 @@ ReferencesTool::~ReferencesTool()
 void ReferencesTool::createActions()
 {
     KAction *action = new KAction(i18n("Insert"), this);
-    addAction("insert_tableofcentents", action);
+    addAction("insert_tableofcontents", action);
     action->setToolTip(i18n("Insert a Table of Contents into the document."));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertTableOfContents()));
+
+    action = new KAction(i18n("Insert Custom ..."), this);
+    addAction("insert_configure_tableofcontents", action);
+    action->setToolTip(i18n("Insert a custom Table of Contents into the document."));
 
     action = new KAction(i18n("Configure..."), this);
-    addAction("format_tableofcentents", action);
+    addAction("format_tableofcontents", action);
     action->setToolTip(i18n("Configure the Table of Contents"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
 
@@ -178,11 +181,6 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
     return widgets;
 }
 
-void ReferencesTool::insertTableOfContents()
-{
-    textEditor()->insertTableOfContents();
-}
-
 void ReferencesTool::insertCitation()
 {
     CitationInsertionDialog *dialog = new CitationInsertionDialog(textEditor(), m_scbw);
@@ -226,6 +224,7 @@ void ReferencesTool::formatTableOfContents()
         return;
     } else if (i == 1 && firstToCTextBlock.isValid()) {
         m_configure = new TableOfContentsConfigure(textEditor(), firstToCTextBlock, m_stocw);
+        connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
     } else {
         m_stocw->setToCConfigureMenu(tocList);
         connect(m_stocw->ToCConfigureMenu(), SIGNAL(triggered(QAction *)), SLOT(showConfigureDialog(QAction*)));
@@ -236,6 +235,13 @@ void ReferencesTool::formatTableOfContents()
 void ReferencesTool::showConfigureDialog(QAction *action)
 {
     m_configure = new TableOfContentsConfigure(textEditor(), action->data().value<QTextBlock>(), m_stocw);
+    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+}
+
+void ReferencesTool::hideCofigureDialog(int result)
+{
+    disconnect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+    m_configure->deleteLater();
 }
 
 void ReferencesTool::insertAutoFootNote()
@@ -278,6 +284,25 @@ void ReferencesTool::updateButtons()
     } else {
         m_sfenw->widget.addFootnote->setEnabled(true);
         m_sfenw->widget.addEndnote->setEnabled(true);
+    }
+}
+
+KoTextEditor *ReferencesTool::editor()
+{
+    return textEditor();
+}
+
+void ReferencesTool::insertCustomToC(KoTableOfContentsGeneratorInfo *defaultTemplate)
+{
+    m_configure = new TableOfContentsConfigure(textEditor(), defaultTemplate, m_stocw);
+    connect(m_configure, SIGNAL(accepted()), this, SLOT(customToCGenerated()));
+    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog(int)));
+}
+
+void ReferencesTool::customToCGenerated()
+{
+    if (m_configure) {
+        textEditor()->insertTableOfContents(m_configure->currentToCData());
     }
 }
 

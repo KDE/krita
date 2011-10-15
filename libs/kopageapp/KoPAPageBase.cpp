@@ -65,7 +65,7 @@ KoPAPageBase::~KoPAPageBase()
     }
 }
 
-void KoPAPageBase::paintComponent(QPainter& painter, const KoViewConverter& converter)
+void KoPAPageBase::paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);

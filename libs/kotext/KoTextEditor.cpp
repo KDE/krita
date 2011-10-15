@@ -56,7 +56,7 @@
 #include "commands/ChangeListCommand.h"
 #include "commands/DeleteCommand.h"
 #include "KoInlineCite.h"
-#include "KoBibliographyInfo.h"
+#include <KoTextLayoutScheduler.h>
 
 #include <KLocale>
 #include <kundo2stack.h>
@@ -1608,7 +1608,7 @@ KoInlineNote *KoTextEditor::insertEndNote()
     return note;
 }
 
-void KoTextEditor::insertTableOfContents()
+void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
 {
     if (isEditProtected()) {
         return;
@@ -1617,10 +1617,10 @@ void KoTextEditor::insertTableOfContents()
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table Of Contents"));
 
     QTextBlockFormat tocFormat;
-    KoTableOfContentsGeneratorInfo *info = new KoTableOfContentsGeneratorInfo();
+    KoTableOfContentsGeneratorInfo *newToCInfo = info->clone();
     QTextDocument *tocDocument = new QTextDocument();
-    tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
-    tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
+    tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo *>(newToCInfo) );
+    tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument));
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (changeTracker && changeTracker->recordChanges()) {
@@ -1649,7 +1649,7 @@ void KoTextEditor::insertTableOfContents()
     emit cursorPositionChanged();
 }
 
-void KoTextEditor::updateTableOfContents(KoTableOfContentsGeneratorInfo *info, QTextBlock block)
+void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, QTextBlock block)
 {
     if (isEditProtected()) {
         return;
@@ -1667,6 +1667,7 @@ void KoTextEditor::updateTableOfContents(KoTableOfContentsGeneratorInfo *info, Q
 
     d->updateState(KoTextEditor::Private::NoOp);
     emit cursorPositionChanged();
+    KoTextLayoutScheduler::markDocumentChanged(document(), document()->firstBlock().position(), 0 , 0);
 }
 
 void KoTextEditor::insertBibliography()

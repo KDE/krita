@@ -116,7 +116,7 @@ public:
     // this font stretch is needed if we want to have exact line height as in ms-word and oo
     //
     // font_size * font_stretch = windows_font_height
-    qreal calculateFontStretch(QString fontFamily);
+    qreal calculateFontYStretch(QString fontFamily);
 
 
     StylePrivate hardCodedDefaultStyle;
@@ -131,7 +131,7 @@ KoCharacterStyle::Private::Private()
     hardCodedDefaultStyle.add(QTextFormat::FontFamily, QString("Sans Serif"));
     hardCodedDefaultStyle.add(QTextFormat::FontPointSize, 12.0);
     hardCodedDefaultStyle.add(QTextFormat::ForegroundBrush, QBrush(Qt::black));
-    hardCodedDefaultStyle.add(KoCharacterStyle::FontStretch, 1);
+    hardCodedDefaultStyle.add(KoCharacterStyle::FontYStretch, 1);
 }
 
 
@@ -178,7 +178,7 @@ void KoCharacterStyle::Private::ensureMinimalProperties(QTextCursor &cursor, boo
         cursor.mergeBlockCharFormat(format);
 }
 
-qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
+qreal KoCharacterStyle::Private::calculateFontYStretch(QString fontFamily)
 {
     qreal stretch = 1;
 #ifdef SHOULD_BUILD_FONT_CONVERSION
@@ -618,7 +618,7 @@ static QString exportOdfFontStyleHint(QFont::StyleHint hint)
 void KoCharacterStyle::setFontFamily(const QString &family)
 {
     d->setProperty(QTextFormat::FontFamily, family);
-    setFontStretch(d->calculateFontStretch(family));
+    setFontYStretch(d->calculateFontYStretch(family));
 }
 QString KoCharacterStyle::fontFamily() const
 {
@@ -972,14 +972,14 @@ QFont::Capitalization KoCharacterStyle::fontCapitalization() const
 }
 
 
-void KoCharacterStyle::setFontStretch(qreal stretch)
+void KoCharacterStyle::setFontYStretch(qreal stretch)
 {
-    d->setProperty(KoCharacterStyle::FontStretch, stretch);
+    d->setProperty(KoCharacterStyle::FontYStretch, stretch);
 }
 
-qreal KoCharacterStyle::fontStretch() const
+qreal KoCharacterStyle::fontYStretch() const
 {
-    return d->propertyDouble(KoCharacterStyle::FontStretch);
+    return d->propertyDouble(KoCharacterStyle::FontYStretch);
 }
 
 void KoCharacterStyle::setCountry(const QString &country)

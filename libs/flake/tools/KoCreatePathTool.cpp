@@ -30,6 +30,7 @@
 #include "SnapGuideConfigWidget.h"
 #include "KoCanvasResourceManager.h"
 #include "KoDocumentResourceManager.h"
+#include "KoShapePaintingContext.h"
 
 #include <KNumInput>
 
@@ -107,7 +108,9 @@ void KoCreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, cons
     Q_D(KoCreatePathTool);
     painter.setTransform(pathShape.absoluteTransformation(&converter) * painter.transform());
     painter.save();
-    pathShape.paint(painter, converter);
+
+    KoShapePaintingContext paintContext; //FIXME
+    pathShape.paint(painter, converter, paintContext);
     painter.restore();
     if (pathShape.border()) {
         painter.save();

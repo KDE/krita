@@ -1,0 +1,22 @@
+[Desktop Entry]
+Name=Spreadsheet
+Name[cs]=Sešit
+Name[pt]=Folha de cálculo
+Name[sv]=Kalkylark
+Name[uk]=Електронні таблиці
+Name[x-test]=xxSpreadsheetxx
+Name[zh_TW]=試算表
+Comment=Spreadsheet Import Plugin for Kexi
+Comment[pt]='Plugin' de Importação de Folhas de Cálculo para o Kexi
+Comment[sv]=Importinsticksprogram av kalkylark för Kexi
+Comment[uk]=Додаток імпортування даних з електронної таблиці для Kexi
+Comment[x-test]=xxSpreadsheet Import Plugin for Kexixx
+Comment[zh_TW]=Kexi 的試算表匯入外掛程式
+X-KDE-Library=keximigrate_spreadsheet
+X-KDE-ServiceTypes=Kexi/MigrationDriver
+Type=Service
+InitialPreference=8
+X-Kexi-MigrationDriverName=Spreadsheet
+X-Kexi-MigrationDriverType=File
+X-Kexi-FileDBDriverMime=application/vnd.oasis.opendocument.spreadsheet
+X-Kexi-KexiMigrationVersion=1.1

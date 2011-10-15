@@ -99,7 +99,7 @@ public:
         PercentageFontSize, //font-size can be in % and this stores that value
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550, // Internal: Reserved for ChangeTracker
-        FontStretch = 577297551 // Internal: Ratio between Linux font pt size and Windows font height
+        FontYStretch = 577297551 // Internal: Ratio between Linux font pt size and Windows font height
     };
 
     /// List of possible combine mode
@@ -239,10 +239,10 @@ public:
     void setFontCapitalization(QFont::Capitalization capitalization);
     /// Return how the text should be capitalized
     QFont::Capitalization fontCapitalization() const;
-    /// Set font stretch
-    void setFontStretch(qreal stretch);
-    /// Return font stretch
-    qreal fontStretch() const;
+    /// Set font Y stretch
+    void setFontYStretch(qreal stretch);
+    /// Return font Y stretch (value relevant for MS compatability)
+    qreal fontYStretch() const;
 
 
     /// See similar named method on QTextCharFormat

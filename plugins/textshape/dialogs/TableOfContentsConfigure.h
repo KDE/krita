@@ -34,6 +34,8 @@ namespace Ui {
 
 class QTextBlock;
 class TableOfContentsStyleConfigure;
+class TableOfContentsEntryModel;
+class TableOfContentsEntryDelegate;
 class TextShape;
 class KoTableOfContentsGeneratorInfo;
 class KoStyleManager;
@@ -45,7 +47,9 @@ class TableOfContentsConfigure : public QDialog
 
 public:
     explicit TableOfContentsConfigure(KoTextEditor *editor, QTextBlock block, QWidget *parent = 0);
+    TableOfContentsConfigure(KoTextEditor *editor, KoTableOfContentsGeneratorInfo *info, QWidget *parent = 0);
     ~TableOfContentsConfigure();
+    KoTableOfContentsGeneratorInfo *currentToCData();
 
 public slots:
     void setDisplay();
@@ -67,6 +71,10 @@ private:
     KoTableOfContentsGeneratorInfo *m_tocInfo;
     QTextBlock m_block;
     QTextDocument *m_document;
+    TableOfContentsEntryModel *m_tocEntryStyleModel;
+    TableOfContentsEntryDelegate *m_tocEntryConfigureDelegate;
+
+    void init();
 };
 
 Q_DECLARE_METATYPE(QTextBlock)

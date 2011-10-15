@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
  *  Copyright (c) 2004,2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -69,6 +70,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
     // prepare a list of the ICC profiles
     KGlobal::mainComponent().dirs()->addResourceType("icc_profiles", 0, "share/color/icc/");
+    KGlobal::mainComponent().dirs()->addResourceDir("icc_profiles", QDir::homePath() + QString("/.kde/share/apps/krita/profiles/"));
 
     QStringList profileFilenames;
     profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.icm",  KStandardDirs::Recursive);

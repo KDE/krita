@@ -26,7 +26,6 @@
 #include <QHash>
 
 #include <klocale.h>
-#include <kconfiggroup.h>
 
 #include <KoColorProfile.h>
 #include <KoColor.h>

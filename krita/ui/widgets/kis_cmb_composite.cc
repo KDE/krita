@@ -54,7 +54,7 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
     QComboBox(parent), m_allowToHidePopup(true)
 {
     m_model    = KisCompositeOpListModel::sharedInstance();
-    m_view     = new KisCategorizedListView();
+    m_view     = new KisCategorizedListView(true);
     m_delegate = new KisCategorizedItemDelegate(true);
     
     setMaxVisibleItems(100);

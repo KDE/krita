@@ -40,8 +40,6 @@
 #include <kis_debug.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
 
 #include <KoColorSpace.h>
 #include <KoColor.h>

@@ -69,6 +69,7 @@ public:
     QHash<int, KoTableRowStyle *> tableRowStyles;
     QHash<int, KoTableCellStyle *> tableCellStyles;
     QHash<int, KoSectionStyle *> sectionStyles;
+    QHash<int, KoParagraphStyle *> unusedParagraphStyles;
     QList<ChangeFollower*> documentUpdaterProxies;
 
     bool updateTriggered;
@@ -77,6 +78,7 @@ public:
     KoParagraphStyle *defaultParagraphStyle;
     KoListStyle *defaultListStyle;
     KoListStyle *outlineStyle;
+    QList<int> defaultToCEntriesStyleId;
     KoOdfNotesConfiguration *footNotesConfiguration;
     KoOdfNotesConfiguration *endNotesConfiguration;
     KoOdfBibliographyConfiguration *bibliographyConfiguration;
@@ -101,6 +103,17 @@ KoStyleManager::KoStyleManager(QObject *parent)
     llp.setStyle(KoListStyle::DecimalItem);
     llp.setListItemSuffix(".");
     d->defaultListStyle->setLevelProperties(llp);
+
+    //default styles for ToCs
+    int maxOutLineLevel = 10;
+    for (int outlineLevel = 1; outlineLevel <= maxOutLineLevel; outlineLevel++) {
+        KoParagraphStyle *style = new KoParagraphStyle();
+        style->setName("Contents " + QString::number(outlineLevel));
+        style->setLeftMargin(QTextLength(QTextLength::FixedLength, (outlineLevel - 1) * 8));
+        add(style);
+        d->defaultToCEntriesStyleId.append(style->styleId());
+    }
+
     d->footNotesConfiguration = 0;
     d->endNotesConfiguration = 0;
     d->bibliographyConfiguration = 0;
@@ -789,6 +802,69 @@ QList<KoTableCellStyle*> KoStyleManager::tableCellStyles() const
 QList<KoSectionStyle*> KoStyleManager::sectionStyles() const
 {
     return d->sectionStyles.values();
+}
+
+KoParagraphStyle *KoStyleManager::defaultTableOfContentsEntryStyle(int outlineLevel)
+{
+    KoParagraphStyle *style = paragraphStyle(d->defaultToCEntriesStyleId.at(outlineLevel - 1));
+    return style;
+}
+
+KoParagraphStyle *KoStyleManager::defaultTableOfcontentsTitleStyle()
+{
+    return defaultParagraphStyle();
+}
+
+void KoStyleManager::addUnusedStyle(KoParagraphStyle *style)
+{
+    if (d->unusedParagraphStyles.key(style, -1) != -1)
+        return;
+    style->setParent(this);
+    style->setStyleId(d->s_stylesNumber);
+    d->unusedParagraphStyles.insert(d->s_stylesNumber++, style);
+
+    KoParagraphStyle *root = style;
+    while (root->parentStyle()) {
+        root = root->parentStyle();
+        if (root->styleId() == 0)
+            addUnusedStyle(root);
+    }
+    if (root != d->defaultParagraphStyle && root->parentStyle() == 0)
+        root->setParentStyle(d->defaultParagraphStyle);
+}
+
+void KoStyleManager::moveToUsedStyles(int id)
+{
+    if (d->paragStyles.contains(id))
+        return;
+
+    KoParagraphStyle *style = d->unusedParagraphStyles.value(id);
+    d->unusedParagraphStyles.remove(id);
+
+    d->paragStyles.insert(style->styleId(), style);
+    if (style->characterStyle()) {
+        add(style->characterStyle());
+        if (style->characterStyle()->name().isEmpty())
+            style->characterStyle()->setName(style->name());
+    }
+    if (style->listStyle() && style->listStyle()->styleId() == 0)
+        add(style->listStyle());
+    KoParagraphStyle *root = style;
+    while (root->parentStyle()) {
+        root = root->parentStyle();
+        if (d->paragStyles.contains(id) == false)
+            moveToUsedStyles(root->styleId());
+    }
+
+    if (root != d->defaultParagraphStyle && root->parentStyle() == 0)
+        root->setParentStyle(d->defaultParagraphStyle);
+
+    emit styleAdded(style);
+}
+
+KoParagraphStyle *KoStyleManager::unusedStyle(int id)
+{
+    return d->unusedParagraphStyles.value(id);
 }
 
 #include <KoStyleManager.moc>

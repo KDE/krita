@@ -301,7 +301,7 @@ QPainterPath KisShapeSelection::selectionOutline()
     return m_outline;
 }
 
-void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter& converter)
+void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);

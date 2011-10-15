@@ -71,7 +71,7 @@ public:
     virtual KoPageLayout & pageLayout() = 0;
     virtual const KoPageLayout & pageLayout() const = 0;
 
-    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
+    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
 
     /**
      * @brief Paint background

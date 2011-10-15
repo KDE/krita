@@ -26,7 +26,6 @@
 #include "TreeTool.h"
 #include "SelectionDecorator.h"
 #include "TreeShapeMoveStrategy.h"
-#include "KoGradientBackground.h"
 
 #include <KoPointerEvent.h>
 #include <KoToolSelection.h>

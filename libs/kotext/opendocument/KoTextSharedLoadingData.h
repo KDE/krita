@@ -83,6 +83,14 @@ public:
     KoParagraphStyle *paragraphStyle(const QString &name, bool stylesDotXml) const;
 
     /**
+     * Return all paragraph styles.
+     *
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
+     * @return All paragraph styles from the given file
+     */
+    QList<KoParagraphStyle *> paragraphStyles(bool stylesDotXml) const;
+
+    /**
      * Get the character style for the given name
      *
      * The name is the style:name given in the file
@@ -97,7 +105,7 @@ public:
      * Return all character styles.
      *
      * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
-     * @return All character styles from the givin file
+     * @return All character styles from the given file
      */
     QList<KoCharacterStyle*> characterStyles(bool stylesDotXml) const;
 

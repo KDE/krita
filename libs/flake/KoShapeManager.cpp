@@ -40,6 +40,7 @@
 #include "KoShapeBackground.h"
 #include <KoRTree.h>
 #include "KoClipPath.h"
+#include "KoShapePaintingContext.h"
 
 #include <QPainter>
 #include <QTimer>
@@ -73,7 +74,7 @@ public:
      * This is needed for filter effects on group shapes where the filter effect
      * applies to all the children of the group shape at once
      */
-    void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, bool forPrint);
+    void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
 
     class DetectCollision
     {
@@ -149,7 +150,7 @@ void KoShapeManager::Private::updateTree()
     }
 }
 
-void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, bool forPrint)
+void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     QList<KoShape*> shapes = group->shapes();
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
@@ -159,10 +160,10 @@ void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter,
             continue;
         KoShapeGroup *childGroup = dynamic_cast<KoShapeGroup*>(child);
         if (childGroup) {
-            paintGroup(childGroup, painter, converter, forPrint);
+            paintGroup(childGroup, painter, converter, paintContext);
         } else {
             painter.save();
-            strategy->paint(child, painter, converter, forPrint);
+            strategy->paint(child, painter, converter, paintContext);
             painter.restore();
         }
     }
@@ -332,7 +333,8 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
         KoClipPath::applyClipping(shape, painter, converter);
 
         // let the painting strategy paint the shape
-        d->strategy->paint(shape, painter, converter, forPrint);
+        KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
+        d->strategy->paint(shape, painter, converter, paintContext);
 
         painter.restore();
     }
@@ -348,11 +350,13 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
     painter.restore();
 #endif
 
-    if (! forPrint)
-        d->selection->paint(painter, converter);
+    if (! forPrint) {
+        KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
+        d->selection->paint(painter, converter, paintContext);
+    }
 }
 
-void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, bool forPrint)
+void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     qreal transparency = shape->transparency(true);
     if (transparency > 0.0) {
@@ -366,7 +370,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
     }
     if (!shape->filterEffectStack() || shape->filterEffectStack()->isEmpty()) {
         painter.save();
-        shape->paint(painter, converter);
+        shape->paint(painter, converter, paintContext);
         painter.restore();
         if (shape->border()) {
             painter.save();
@@ -405,10 +409,10 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
                 // the childrens matrix contains the groups matrix as well
                 // so we have to compensate for that before painting the children
                 imagePainter.setTransform(group->absoluteTransformation(&converter).inverted(), true);
-                d->paintGroup(group, imagePainter, converter, forPrint);
+                d->paintGroup(group, imagePainter, converter, paintContext);
             } else {
                 imagePainter.save();
-                shape->paint(imagePainter, converter);
+                shape->paint(imagePainter, converter, paintContext);
                 imagePainter.restore();
                 if (shape->border()) {
                     imagePainter.save();
@@ -482,10 +486,6 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
         painter.save();
         painter.drawImage(clippingOffset, imageBuffers.value(lastEffect->output()));
         painter.restore();
-    }
-    if (!forPrint) {
-        painter.setRenderHint(QPainter::Antialiasing, false);
-        shape->paintDecorations(painter, converter, d->canvas);
     }
 }
 

@@ -189,7 +189,7 @@ KoUnavailShape::~KoUnavailShape()
 }
 
 
-void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter)
+void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     applyConversion(painter, converter);
 
@@ -209,7 +209,7 @@ void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter)
     }
 }
 
-void KoUnavailShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
+void KoUnavailShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);

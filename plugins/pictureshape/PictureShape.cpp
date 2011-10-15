@@ -112,7 +112,7 @@ PictureShape::~PictureShape()
     delete m_renderQueue;
 }
 
-void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
+void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     QRectF pixelsF = converter.documentToView(QRectF(QPointF(0,0), size()));
     KoImageData *imageData = qobject_cast<KoImageData*>(userData());

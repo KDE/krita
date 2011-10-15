@@ -65,13 +65,22 @@ class TEXTLAYOUT_EXPORT KoTextDocumentLayout : public QAbstractTextDocumentLayou
 public:
     /// This struct is a helper for painting of kotext texts.
     struct PaintContext {
-        PaintContext() : viewConverter(0), imageCollection(0) { }
+        PaintContext()
+            : viewConverter(0)
+            , imageCollection(0)
+            , showFormattingCharacters(false)
+        {
+        }
+
         /// the QText context
         QAbstractTextDocumentLayout::PaintContext textContext;
         /// A view converter, when set, is used to find out when the zoom is so low that painting of text is unneeded
         const KoViewConverter *viewConverter;
 
         KoImageCollection *imageCollection;
+        bool showFormattingCharacters;
+        bool showTableBorders;
+        bool showSpellChecking;
     };
 
     /// constructor

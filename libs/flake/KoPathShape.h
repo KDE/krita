@@ -83,7 +83,7 @@ public:
     virtual ~KoPathShape();
 
     /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     virtual void paintPoints(QPainter &painter, const KoViewConverter &converter, int handleRadius);
     /// reimplemented
     virtual QPainterPath outline() const;

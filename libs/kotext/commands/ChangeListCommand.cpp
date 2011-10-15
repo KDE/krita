@@ -42,7 +42,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Sty
     KoListStyle listStyle;
 
     // If the style is already completely set, we unset it instead
-    if (styleCompletelySetAlready)
+    if (styleCompletelySetAlready && !(m_flags & KoTextEditor::DontUnsetIfSame))
         style = KoListStyle::None;
 
     int margin=MARGIN_DEFAULT;

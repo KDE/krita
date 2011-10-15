@@ -56,7 +56,7 @@ KoTosContainer::KoTosContainer(KoTosContainerPrivate &dd)
 {
 }
 
-void KoTosContainer::paintComponent(QPainter &, const KoViewConverter &)
+void KoTosContainer::paintComponent(QPainter &, const KoViewConverter &, KoShapePaintingContext &)
 {
 }
 

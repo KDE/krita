@@ -58,7 +58,7 @@ public:
     TreeShape(KoShape *root, KoDocumentResourceManager *documentResources=0);
     virtual ~TreeShape();
     virtual void setZIndex(int zIndex);
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     virtual bool hitTest(const QPointF &position) const;
     virtual void saveOdf(KoShapeSavingContext &context) const;
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);

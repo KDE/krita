@@ -81,6 +81,9 @@ SET ( textshape_SRCS
     dialogs/TableOfContentsStyleModel.cpp
     dialogs/TableOfContentsStyleDelegate.cpp
     dialogs/TableOfContentsPreview.cpp
+    dialogs/TableOfContentsEntryDelegate.cpp
+    dialogs/TableOfContentsEntryModel.cpp
+    dialogs/TableOfContentsTemplate.cpp
 
     commands/ChangeListLevelCommand.cpp
     commands/TextCutCommand.cpp

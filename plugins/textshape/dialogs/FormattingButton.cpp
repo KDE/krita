@@ -20,8 +20,6 @@
 
 #include "FormattingButton.h"
 
-#include "ListItemsHelper.h"
-
 #include <QMenu>
 #include <QFrame>
 #include <QGridLayout>
@@ -39,6 +37,7 @@ public:
     int m_cnt;
     int m_columns;
     QToolButton *addItem(QPixmap pm);
+    void updateItem(QObject *button, QPixmap pm);
 };
 
 ItemChooserAction::ItemChooserAction(int columns)
@@ -65,18 +64,29 @@ QToolButton *ItemChooserAction::addItem(QPixmap pm)
     return b;
 }
 
+void ItemChooserAction::updateItem(QObject *button, QPixmap pm)
+{
+    if (dynamic_cast<QToolButton *> (button)) {
+        dynamic_cast<QToolButton *> (button)->setIcon(QIcon(pm));
+        dynamic_cast<QToolButton *> (button)->setIconSize(pm.size());
+    }
+}
+
 
 FormattingButton::FormattingButton(QWidget *parent)
     : QToolButton(parent)
     , m_lastId(0)
     , m_styleAction(0)
     , m_columns(1)
+    , m_menuShownFirstTime(true)
 {
     m_menu = new QMenu();
     setPopupMode(MenuButtonPopup);
     setMenu(m_menu);
     connect(this, SIGNAL(released()), this, SLOT(itemSelected()));
     connect(m_menu, SIGNAL(aboutToHide()), this, SIGNAL(doneWithFocus()));
+    connect(m_menu, SIGNAL(aboutToShow()), this, SIGNAL(aboutToShowMenu()));
+    connect(m_menu, SIGNAL(aboutToHide()), this, SLOT(menuShown()));
 }
 
 void FormattingButton::setNumColumns(int columns)
@@ -86,14 +96,20 @@ void FormattingButton::setNumColumns(int columns)
 
 void FormattingButton::addItem(QPixmap pm, int id)
 {
+    //Note: Do not 0 as the item id, because that will break the m_lastId functionality
+    Q_ASSERT(id != 0);
+
     if(m_styleAction == 0) {
         m_styleAction = new ItemChooserAction(m_columns);
         m_menu->addAction(m_styleAction);
     }
-    QToolButton *b = m_styleAction->addItem(pm);
-    m_styleMap[b] = id;
-    connect(b, SIGNAL(released()), this, SLOT(itemSelected()));
-
+    if (m_styleMap.contains(id)) {
+        m_styleAction->updateItem(m_styleMap.value(id), pm);
+    } else {
+        QToolButton *b = m_styleAction->addItem(pm);
+        m_styleMap.insert(id, b);
+        connect(b, SIGNAL(released()), this, SLOT(itemSelected()));
+    }
     if (!m_lastId) {
         m_lastId = id;
     }
@@ -111,11 +127,36 @@ void FormattingButton::addSeparator()
 
 void FormattingButton::itemSelected()
 {
+    if (sender() != this && m_styleMap.key(sender()) == 0) {
+        // this means that the sender() is not in the m_styleMap. Have you missed something?
+        return;
+    }
+
+    if (sender() == this && m_lastId == 0) {
+        //menu not yet populated
+        return;
+    }
+
     if(sender() != this) {
-        m_lastId = m_styleMap[sender()];
+        m_lastId = m_styleMap.key(sender());
     }
     m_menu->hide();
     emit itemTriggered(m_lastId);
+}
+
+bool FormattingButton::hasItemId(int id)
+{
+    return m_styleMap.contains(id);
+}
+
+void FormattingButton::menuShown()
+{
+    m_menuShownFirstTime = false;
+}
+
+bool FormattingButton::isFirstTimeMenuShown()
+{
+    return m_menuShownFirstTime;
 }
 
 #include <FormattingButton.moc>

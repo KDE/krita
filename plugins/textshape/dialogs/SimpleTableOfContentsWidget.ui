@@ -29,7 +29,13 @@
       <number>2</number>
      </property>
      <item row="0" column="0">
-      <widget class="QToolButton" name="addToC">
+      <widget class="FormattingButton" name="addToC">
+       <property name="popupMode">
+        <enum>QToolButton::InstantPopup</enum>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextOnly</enum>
+       </property>
        <property name="autoRaise">
         <bool>false</bool>
        </property>
@@ -74,6 +80,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FormattingButton</class>
+   <extends>QToolButton</extends>
+   <header>dialogs/FormattingButton.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>addToC</tabstop>
  </tabstops>

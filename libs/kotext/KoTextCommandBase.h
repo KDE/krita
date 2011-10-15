@@ -73,7 +73,7 @@ public:
 
 protected:
 
-    class UndoRedoFinalizer
+    class KOTEXT_EXPORT UndoRedoFinalizer
     {
     public:
         UndoRedoFinalizer(KoTextCommandBase* parent) : m_parent(parent) {}

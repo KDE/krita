@@ -30,6 +30,7 @@
 #include <KoCreateShapesTool.h>
 #include <KoShape.h>
 #include <KoZoomHandler.h>
+#include <KoShapePaintingContext.h>
 
 #include <klocale.h>
 #include <kcombobox.h>
@@ -529,7 +530,8 @@ QIcon ShapeCollectionDocker::generateShapeIcon(KoShape* shape)
     QPainter painter(&pixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.translate(1, 1);
-    shape->paint(painter, converter);
+    KoShapePaintingContext paintContext; //FIXME
+    shape->paint(painter, converter, paintContext);
     painter.end();
 
     return QIcon(pixmap);

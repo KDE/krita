@@ -39,10 +39,10 @@ class RulerAttributes::Private
 public:
     Private();
 private:
-    QPen pen;
     QPen tickMarkPen;
     QPen majorTickMarkPen;
     QPen minorTickMarkPen;
+    QPen pen;
 
     bool showRulerLine;
     

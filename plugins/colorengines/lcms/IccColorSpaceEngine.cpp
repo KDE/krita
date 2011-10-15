@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2007-2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -127,12 +128,25 @@ void IccColorSpaceEngine::addProfile(const QString &filename)
     profile->load();
     if (profile->valid()) {
         kDebug(31000) << "Valid profile : " << profile->fileName() << profile->name();
-        registry->addProfileToMap(profile);
+        registry->addProfile(profile);
     } else {
         kDebug(31000) << "Invalid profile : " << profile->fileName() << profile->name();
         delete profile;
     }
 
+}
+
+void IccColorSpaceEngine::removeProfile(const QString &filename)
+{
+    KoColorSpaceRegistry* registry = KoColorSpaceRegistry::instance();
+
+    KoColorProfile *profile = new IccColorProfile(filename);
+    Q_CHECK_PTR(profile);
+    profile->load();
+
+    if (profile->valid() && registry->profileByName(profile->name())) {
+        registry->removeProfile(profile);
+    }
 }
 
 

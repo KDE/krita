@@ -1806,7 +1806,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
         m_width -= format.doubleProperty(KoParagraphStyle::RightPadding);
     }
     if (blockData && blockData->hasCounterData()) {
-        blockData->setCounterPosition(blockData->counterPosition() + QPointF(dx, 0.00));
+        blockData->setCounterPosition(QPointF(blockData->counterPosition().x() + dx, m_y));
     }
     m_prevBorder = blockData->border();
     m_prevBorderPadding = format.doubleProperty(KoParagraphStyle::BottomPadding);

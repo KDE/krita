@@ -38,6 +38,7 @@
 #include <QTimer>
 #include <QStyle>
 #include <QStyleOptionFrameV3>
+#include <QApplication>
 
 #include "math.h"
 #include <KoDockWidgetTitleBar.h>
@@ -111,10 +112,22 @@ void KoToolBox::addButton(QToolButton *button, const QString &section, int prior
     // ensure same L&F
     button->setCheckable(true);
     button->setAutoRaise(true);
-    Section *sectionWidget = d->sections.value(section);
+
+    QString sectionToBeAddedTo;
+    if (section.contains(qApp->applicationName())) {
+        sectionToBeAddedTo = "main";
+    } else if (section.contains("main")) {
+        sectionToBeAddedTo = "main";
+    }  else if (section.contains("dynamic")) {
+        sectionToBeAddedTo = "dynamic";
+    } else {
+        sectionToBeAddedTo = section;
+    }
+
+    Section *sectionWidget = d->sections.value(sectionToBeAddedTo);
     if (sectionWidget == 0) {
         sectionWidget = new Section(this);
-        d->addSection(sectionWidget, section);
+        d->addSection(sectionWidget, sectionToBeAddedTo);
     }
     sectionWidget->addButton(button, priority);
 

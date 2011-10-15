@@ -327,20 +327,9 @@ private:
                 }
             }
         }
-        // Now, if all bits in the channelflags are true, pass an empty channel flags bitarray
-        // because otherwise the compositeops cannot optimize
-        bool allChannelsSet = true;
-        for (int i = 0; i < channelFlags.size(); ++i) {
-            if (!channelFlags.testBit(i)) {
-                allChannelsSet = false;
-                break;
-            }
-        }
-
         KisPainter gc(m_currentProjection);
-        if (!allChannelsSet) {
-            gc.setChannelFlags(channelFlags);
-        }
+        gc.setChannelFlags(channelFlags);
+
         gc.setCompositeOp(layer->compositeOp());
         gc.setOpacity(layer->opacity());
         gc.bitBlt(needRect.topLeft(), device, needRect);

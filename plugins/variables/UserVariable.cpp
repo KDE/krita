@@ -260,18 +260,15 @@ void UserVariable::valueChanged()
 {
     QString value = variableManager()->value(m_name);
 
-    /* TODO make following reusable and apply also in plugins/variables/DateVariable.cpp:96
-    */
-
-    /* TODO handle also
-    KoOdfNumberStyles::Scientific:
-    KoOdfNumberStyles::Fraction:
-    KoOdfNumberStyles::Currency:
-    KoOdfNumberStyles::Percentage:
-    */
-
+    //TODO make following reusable and apply also in plugins/variables/DateVariable.cpp:96
     if (m_numberstyle.type == KoOdfNumberStyles::Number) {
-        value = m_numberstyle.prefix + QString::number(value.toInt()) + m_numberstyle.suffix;
+        bool ok;
+        int v = value.toInt(&ok);
+        if (ok) {
+            value = m_numberstyle.prefix + QString::number(v) + m_numberstyle.suffix;
+        } else {
+            value = m_numberstyle.prefix + value + m_numberstyle.suffix;
+        }
     } else if (m_numberstyle.type == KoOdfNumberStyles::Boolean) {
         bool isTrue = false;
         int booleanNumber = value.toInt(&isTrue);
@@ -280,13 +277,27 @@ void UserVariable::valueChanged()
         }
         value = m_numberstyle.prefix + (isTrue ? "TRUE" : "FALSE") + m_numberstyle.suffix;
     } else if (m_numberstyle.type == KoOdfNumberStyles::Date) {
-        QDateTime dt(QDate(1899, 12, 30));
+        QDateTime dt(QDate(1899, 12, 30)); // reference date
         dt = dt.addDays(value.toInt());
         value = dt.toString(m_numberstyle.prefix + m_numberstyle.formatStr + m_numberstyle.suffix);
     } else if (m_numberstyle.type == KoOdfNumberStyles::Time) {
-        QTime t = QTime::fromString(value);
+        QTime t(0,0,0);
+        t = t.addSecs(qRound(value.toDouble() * 86400.0)); // 24 hours
         value = t.toString(m_numberstyle.prefix + m_numberstyle.formatStr + m_numberstyle.suffix);
+    } else if (m_numberstyle.type == KoOdfNumberStyles::Percentage) {
+        value = m_numberstyle.prefix + QString::number(value.toInt()) + m_numberstyle.suffix;
+    } else if (m_numberstyle.type == KoOdfNumberStyles::Currency) {
+        //TODO use m_numberstyle.formatStr
+        value = m_numberstyle.prefix + KGlobal::locale()->formatMoney(value.toDouble(), m_numberstyle.currencySymbol.isEmpty() ? KGlobal::locale()->currencySymbol() : m_numberstyle.currencySymbol, m_numberstyle.precision) + m_numberstyle.suffix;
+    } else if (m_numberstyle.type == KoOdfNumberStyles::Scientific) {
+        const QString decimalSymbol = KGlobal::locale()->decimalSymbol();
+        value = QString::number(value.toDouble(), 'E', m_numberstyle.precision);
+        int pos = value.indexOf('.');
+        if (pos != -1) {
+            value = value.replace(pos, 1, decimalSymbol);
+        }
     } else {
+        //TODO handle KoOdfNumberStyles::Fraction
         value = m_numberstyle.prefix + value + m_numberstyle.suffix;
     }
 

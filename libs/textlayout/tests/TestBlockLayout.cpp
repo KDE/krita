@@ -488,75 +488,47 @@ void TestBlockLayout::testTabs()
         qreal expected; // expected value of pos=2 of each line
     } testcases[] = {
         { true, 0, 0, 0, 50},
+        { true, 0, 0, 5, 50},
         { true, 0, 10, 0, 50},
         { true, 0, 10, 5, 50},
-        { true, 0, 0, 5, 50},
+        { true, 0, -10, 0, 0},
+        { true, 0, -10, 5, 0},
         { true, 20, 0, 0, 70},
+        { true, 20, 0, 5, 70},
         { true, 20, 10, 0, 70},
         { true, 20, 10, 5, 70},
-        { true, 20, 0, 5, 70},
-        { true, 0, 0, 0, 50},
-        { true, 0, -10, 0, 50},
-        { true, 0, -10, 5, 50},
-        { true, 0, 0, 5, 50},
+        { true, 20, -10, 0, 20},
+        { true, 20, -10, 5, 20},
         { true, -20, 0, 0+20, 30}, //+20 to avoid extra tab fitting in 
-        { true, -20, -10, 0+20, 30}, //+20 to avoid extra tab fitting in 
-        { true, -20, -10, 5+20, 30}, //+20 to avoid extra tab fitting in 
         { true, -20, 0, 5+20, 30}, //+20 to avoid extra tab fitting in 
-        { true, 0, 0, 0, 50},
-        { true, 0, 10, 0, 50},
-        { true, 0, 10, 5, 50},
-        { true, 0, 0, 5, 50},
-        { true, -20, 0, 0+20, 30}, //+20 to avoid extra tab fitting in 
         { true, -20, 10, 0+20, 30}, //+20 to avoid extra tab fitting in 
         { true, -20, 10, 5+20, 30}, //+20 to avoid extra tab fitting in 
-        { true, -20, 0, 5+20, 30}, //+20 to avoid extra tab fitting in 
-        { true, 0, 0, 0, 50},
-        { true, 0, -10, 0, 50},
-        { true, 0, -10, 5, 50},
-        { true, 0, 0, 5, 50},
-        { true, 20, 0, 0, 70},
-        { true, 20, -10, 0, 70},
-        { true, 20, -10, 5, 70},
-        { true, 20, 0, 5, 70},
+        { true, -20, -10, 0+20, -20}, //+20 to avoid extra tab fitting in 
+        { true, -20, -10, 5+20, -20}, //+20 to avoid extra tab fitting in 
 
         { false, 0, 0, 0, 50},
+        { false, 0, 0, 5, 50},
         { false, 0, 10, 0, 50},
         { false, 0, 10, 5, 50},
-        { false, 0, 0, 5, 50},
+        { false, 0, -10, 0, 0},
+        { false, 0, -10, 5, 0},
         { false, 20, 0, 0, 50},
+        { false, 20, 0, 5, 50},
         { false, 20, 10, 0, 50},
         { false, 20, 10, 5, 50},
-        { false, 20, 0, 5, 50},
-        { false, 0, 0, 0, 50},
-        { false, 0, -10, 0, 50},
-        { false, 0, -10, 5, 50},
-        { false, 0, 0, 5, 50},
-        { false, -20, 0, 0+70, 0}, //+70 to avoid extra tab fitting in 
-        { false, -20, -10, 0+70, 0}, //+70 to avoid extra tab fitting in 
-        { false, -20, -10, 5+70, 0}, //+70 to avoid extra tab fitting in 
-        { false, -20, 0, 5+70, 0}, //+70 to avoid extra tab fitting in 
-        { false, 0, 0, 0, 50},
-        { false, 0, 10, 0, 50},
-        { false, 0, 10, 5, 50},
-        { false, 0, 0, 5, 50},
-        { false, -20, 0, 0+70, 0}, //+70 to avoid extra tab fitting in 
-        { false, -20, 10, 0+70, 0}, //+70 to avoid extra tab fitting in 
-        { false, -20, 10, 5+70, 0}, //+70 to avoid extra tab fitting in 
-        { false, -20, 0, 5+70, 0}, //+70 to avoid extra tab fitting in 
-        { false, 0, 0, 0, 50},
-        { false, 0, -10, 0, 50},
-        { false, 0, -10, 5, 50},
-        { false, 0, 0, 5, 50},
-        { false, 20, 0, 0, 50},
         { false, 20, -10, 0, 50},
         { false, 20, -10, 5, 50},
-        { false, 20, 0, 5, 50}
+        { false, -20, 0, 0+70, 0}, //+70 to avoid extra tab fitting in 
+        { false, -20, 0, 5+70, 0}, //+70 to avoid extra tab fitting in 
+        { false, -20, 10, 0+70, 0}, //+70 to avoid extra tab fitting in 
+        { false, -20, 10, 5+70, 0}, //+70 to avoid extra tab fitting in 
+        { false, -20, -10, 0+70, 0}, //+70 to avoid extra tab fitting in 
+        { false, -20, -10, 5+70, 0}, //+70 to avoid extra tab fitting in 
     };
 
     m_layout->setTabSpacing(50.0);
 
-    for (int i=0; i<64; i++) {
+    for (int i=0; i<36; i++) {
         KoTextDocument(m_doc).setRelativeTabs(testcases[i].relativeTabs);
         bf.setLeftMargin(testcases[i].leftMargin);
         bf.setTextIndent(testcases[i].textIndent);

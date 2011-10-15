@@ -260,26 +260,35 @@ void UserVariable::valueChanged()
 {
     QString value = variableManager()->value(m_name);
 
-    /* TODO seems we do not support custom formats at all :-/
-       see also the "TODO see 6.2.1 Date Fields" at plugins/variables/DateVariable.cpp:96
-
-    switch (m_numberstyle.type) {
-        case KoOdfNumberStyles::Date:
-        case KoOdfNumberStyles::Time: {
-            //QDateTime dt = QDateTime::fromTime_t(value.toUInt())
-            value = dt.toString(m_numberstyle.prefix + m_numberstyle.formatStr + m_numberstyle.suffix);
-        } break;
-        case KoOdfNumberStyles::Scientific:
-        case KoOdfNumberStyles::Fraction:
-        case KoOdfNumberStyles::Currency:
-        case KoOdfNumberStyles::Percentage:
-        case KoOdfNumberStyles::Boolean:
-        case KoOdfNumberStyles::Number:
-        case KoOdfNumberStyles::Text:
-            value = m_numberstyle.prefix + value + m_numberstyle.suffix;
-            break;
-    }
+    /* TODO make following reusable and apply also in plugins/variables/DateVariable.cpp:96
     */
+
+    /* TODO handle also
+    KoOdfNumberStyles::Scientific:
+    KoOdfNumberStyles::Fraction:
+    KoOdfNumberStyles::Currency:
+    KoOdfNumberStyles::Percentage:
+    */
+
+    if (m_numberstyle.type == KoOdfNumberStyles::Number) {
+        value = m_numberstyle.prefix + QString::number(value.toInt()) + m_numberstyle.suffix;
+    } else if (m_numberstyle.type == KoOdfNumberStyles::Boolean) {
+        bool isTrue = false;
+        int booleanNumber = value.toInt(&isTrue);
+        if (isTrue) {
+            isTrue = (booleanNumber != 0);
+        }
+        value = m_numberstyle.prefix + (isTrue ? "TRUE" : "FALSE") + m_numberstyle.suffix;
+    } else if (m_numberstyle.type == KoOdfNumberStyles::Date) {
+        QDateTime dt(QDate(1899, 12, 30));
+        dt = dt.addDays(value.toInt());
+        value = dt.toString(m_numberstyle.prefix + m_numberstyle.formatStr + m_numberstyle.suffix);
+    } else if (m_numberstyle.type == KoOdfNumberStyles::Time) {
+        QTime t = QTime::fromString(value);
+        value = t.toString(m_numberstyle.prefix + m_numberstyle.formatStr + m_numberstyle.suffix);
+    } else {
+        value = m_numberstyle.prefix + value + m_numberstyle.suffix;
+    }
 
     //kDebug() << m_name << value;
     setValue(value);

@@ -106,7 +106,14 @@ public:
     /// return a list of all user defined variable names.
     QList<QString> userVariables() const;
 
+    /**
+     * Load user defined variable declarations from the ODF element.
+     */
     void loadOdf(const KoXmlElement &element);
+
+    /**
+     * Save user defined variable declarations into the ODF writer.
+     */
     void saveOdf(KoXmlWriter *bodyWriter);
 
 signals:

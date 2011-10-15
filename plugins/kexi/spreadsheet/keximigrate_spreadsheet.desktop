@@ -2,12 +2,14 @@
 Name=Spreadsheet
 Name[cs]=Sešit
 Name[pt]=Folha de cálculo
+Name[pt_BR]=Planilha
 Name[sv]=Kalkylark
 Name[uk]=Електронні таблиці
 Name[x-test]=xxSpreadsheetxx
 Name[zh_TW]=試算表
 Comment=Spreadsheet Import Plugin for Kexi
 Comment[pt]='Plugin' de Importação de Folhas de Cálculo para o Kexi
+Comment[pt_BR]=Plugin de Importação de Planilha para o Kexi
 Comment[sv]=Importinsticksprogram av kalkylark för Kexi
 Comment[uk]=Додаток імпортування даних з електронної таблиці для Kexi
 Comment[x-test]=xxSpreadsheet Import Plugin for Kexixx

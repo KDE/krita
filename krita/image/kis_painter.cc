@@ -2237,7 +2237,13 @@ KisPaintDeviceSP KisPainter::device()
 void KisPainter::setChannelFlags(QBitArray channelFlags)
 {
     Q_ASSERT(channelFlags.isEmpty() || quint32(channelFlags.size()) == d->colorSpace->channelCount());
+    // Now, if all bits in the channelflags are true, pass an empty channel flags bitarray
+    // because otherwise the compositeops cannot optimize.
     d->paramInfo.channelFlags = channelFlags;
+
+    if (!channelFlags.isEmpty() && channelFlags == QBitArray(channelFlags.size(), true)) {
+        d->paramInfo.channelFlags = QBitArray();
+    }
 }
 
 QBitArray KisPainter::channelFlags()

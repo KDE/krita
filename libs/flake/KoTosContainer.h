@@ -27,7 +27,7 @@
 #include "flake_export.h"
 
 class KoTosContainerPrivate;
-class KoResourceManager;
+class KoDocumentResourceManager;
 
 
 /**
@@ -42,7 +42,7 @@ public:
     virtual ~KoTosContainer();
 
     // reimplemented
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
     // reimplemented
     virtual bool loadText(const KoXmlElement &element, KoShapeLoadingContext &context);
@@ -89,7 +89,7 @@ public:
      * @param documentResources
      * @return The created text shape or 0 in case it failed
      */
-    KoShape *createTextShape(KoResourceManager *documentResources = 0);
+    KoShape *createTextShape(KoDocumentResourceManager *documentResources = 0);
 
     virtual void setRunThrough(short int runThrough);
 

@@ -99,7 +99,9 @@ QList<QImage> KoFavoriteResourceManager::favoritePresetImages()
         if(!resource) {
             removeFavoritePreset(name);
         }
-        images.append(resource->image());
+        else {
+            images.append(resource->image());
+        }
     }
     return images;
 }

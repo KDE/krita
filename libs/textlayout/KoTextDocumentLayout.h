@@ -65,13 +65,22 @@ class TEXTLAYOUT_EXPORT KoTextDocumentLayout : public QAbstractTextDocumentLayou
 public:
     /// This struct is a helper for painting of kotext texts.
     struct PaintContext {
-        PaintContext() : viewConverter(0), imageCollection(0) { }
+        PaintContext()
+            : viewConverter(0)
+            , imageCollection(0)
+            , showFormattingCharacters(false)
+        {
+        }
+
         /// the QText context
         QAbstractTextDocumentLayout::PaintContext textContext;
         /// A view converter, when set, is used to find out when the zoom is so low that painting of text is unneeded
         const KoViewConverter *viewConverter;
 
         KoImageCollection *imageCollection;
+        bool showFormattingCharacters;
+        bool showTableBorders;
+        bool showSpellChecking;
     };
 
     /// constructor
@@ -108,7 +117,7 @@ public:
     void setTabSpacing(qreal spacing);
 
     /// are the tabs relative to indent or not
-    bool relativeTabs() const;
+    bool relativeTabs(QTextBlock block) const;
 
     /// Calc a bounding box rect of the selection
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
@@ -154,6 +163,15 @@ public:
     /// positionInlineObject()
     void setAnchoringParagraphRect(const QRectF &paragraphRect);
 
+    /// Sets the layoutEnvironment rect that will be applied to anchorStrategies being created in
+    /// positionInlineObject()
+    void setAnchoringLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect);
+
+    /// Calculates the maximum y of anchored obstructions
+    qreal maxYOfAnchoredObstructions(int firstCursorPosition, int lastCursorPosition) const;
+
+    int anchoringSoftBreak() const;
+
     /// Positions all anchored obstructions
     /// the paragraphRect should be in textDocument coords and not global/document coords
     void positionAnchoredObstructions();
@@ -162,6 +180,7 @@ public:
     void removeInlineObject(KoTextAnchor *textAnchor);
 
     void clearInlineObjectRegistry(QTextBlock block);
+
     KoInlineObjectExtent inlineObjectExtent(const QTextFragment&);
 
     /**

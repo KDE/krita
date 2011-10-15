@@ -29,7 +29,7 @@
 #include <QVariant>
 #include <QTimer>
 
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoToolBase.h>
 #include <KoAbstractGradient.h>
 
@@ -133,6 +133,7 @@ protected:
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void deactivate();
 
 private slots:
 

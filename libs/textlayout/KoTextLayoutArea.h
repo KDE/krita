@@ -40,6 +40,7 @@ class QTextList;
 class KoTextBlockBorderData;
 class KoTextLayoutEndNotesArea;
 class KoTextLayoutTableArea;
+class KoTextLayoutNoteArea;
 class FrameIterator;
 
 /**
@@ -118,8 +119,14 @@ public:
     /// to maximumAllowedWidth
     void setNoWrap(qreal maximumAllowedWidth);
 
-    qreal listIndent() const;
-    qreal textIndent(QTextBlock block, QTextList *textList) const;
+    /// Set if and how this area acts as a layout environment
+    void setLayoutEnvironmentResctictions(bool isLayoutEnvironment, bool actsHorizontally);
+
+    /// Returns the rect of the layout environment (see odf style:flow-with-text).
+    QRectF layoutEnvironmentRect() const;
+
+    qreal textIndent(QTextBlock block, QTextList *textList, const KoParagraphStyle &pStyle) const;
+    void setExtraTextIndent(qreal extraTextIndent);
     qreal x() const;
     qreal width() const;
 
@@ -169,6 +176,9 @@ protected:
     void expandBoundingRight(qreal x);
 
 private:
+    /// remove tables and paragraphs that are keep-with-next
+    void backtrackKeepWithNext(FrameIterator *cursor);
+
     /// utility method to restartlayout of a block
     QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep);
 
@@ -184,7 +194,7 @@ private:
 
     void drawListItem(QPainter *painter, const QTextBlock &block);
 
-    void decorateParagraph(QPainter *painter, const QTextBlock &block);
+    void decorateParagraph(QPainter *painter, const QTextBlock &block, bool showFormattingCharacter);
 
     void drawStrikeOuts(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 
@@ -192,7 +202,7 @@ private:
 
     void drawUnderlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 
-    int decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock, int currentTabStop);
+    int decorateTabsAndFormatting(QPainter *painter, const QTextFragment& currentFragment, const QTextLine &line, const int startOfFragmentInBlock, const QVariantList& tabList, int currentTabStop, bool showFormattingCharacter);
 
     void handleBordersAndSpacing(KoTextBlockData *blockData, QTextBlock *block);
 
@@ -207,13 +217,14 @@ private:
     qreal m_maximalAllowedBottom;
     qreal m_maximumAllowedWidth; // 0 indicates wrapping is allowed
     QRectF m_boundingRect;
+    bool m_isLayoutEnvironment;
+    bool m_actsHorizontally;
     KoTextBlockBorderData *m_prevBorder;
     qreal m_prevBorderPadding;
 
     qreal m_x; // text area starts here as defined by margins (so not == m_left)
     qreal m_y;
     qreal m_width; // of text area as defined by margins (so not == m_right - m_left)
-    qreal m_listIndent;
     qreal m_indent;
     qreal m_dropCapsWidth;
     int m_dropCapsNChars;
@@ -230,11 +241,14 @@ private:
 
     qreal m_preregisteredFootNotesHeight;
     qreal m_footNotesHeight;
-    QList<KoTextLayoutArea *> m_preregisteredFootNoteAreas;
-    QList<KoTextLayoutArea *> m_footNoteAreas;
+    int m_footNoteAutoCount;
+    qreal m_extraTextIndent;
+    QList<KoTextLayoutNoteArea *> m_preregisteredFootNoteAreas;
+    QList<KoTextLayoutNoteArea *> m_footNoteAreas;
+    QList<QTextFrame *> m_preregisteredFootNoteFrames;
+    QList<QTextFrame *> m_footNoteFrames;
     KoTextLayoutEndNotesArea *m_endNotesArea;
-    QList<KoTextLayoutArea *> m_tableOfContentsAreas;
-    QList<KoTextLayoutArea *> m_bibliographyAreas;
+    QList<KoTextLayoutArea *> m_generatedDocAreas;
 };
 
 #endif

@@ -39,7 +39,7 @@
 #include <KoShapeRegistry.h>
 
 
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoColorSpaceRegistry.h>
 
 K_PLUGIN_FACTORY(ODGImportFactory, registerPlugin<KisODGImport>();)
@@ -131,7 +131,7 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
     KoShapeLoadingContext shapeContext(context, doc->shapeController()->resourceManager());
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(doc->undoAdapter(), width, height, cs, "built image");
+    KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
     doc->setCurrentImage(image);
     image->lock();
     

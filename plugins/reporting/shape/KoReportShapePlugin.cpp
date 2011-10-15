@@ -31,7 +31,7 @@ KoReportShapePlugin::KoReportShapePlugin(QObject *parent, const QVariantList &/*
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:shape");
-    info->setIcon(KIcon("shapes"));
+    info->setIcon(KIcon("report_shape_element"));
     info->setName(i18n("Shape"));
     info->setPriority(0);
     setInfo(info);

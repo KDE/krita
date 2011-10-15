@@ -1,5 +1,4 @@
 /*
- * OpenRPT report writer and rendering engine
  * Copyright (C) 2001-2007 by OpenMFG, LLC (info@openmfg.com)
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  * Copyright (C) 2011 by Radoslaw Wicik (radoslaw@wicik.pl)

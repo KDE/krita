@@ -29,7 +29,7 @@ class KoShape;
  *
  * This class is a part of the FormulaShape plugin and provides a generic
  * way to obtain instances of the KoFormulaShape class.
- * It follows the factory design pattern and implements the two virtual methods 
+ * It follows the factory design pattern and implements the two virtual methods
  * createDefaultShape() and createShape() of KoShapeFactoryBase.
  */
 class KoFormulaShapeFactory : public KoShapeFactoryBase {
@@ -41,7 +41,7 @@ public:
     ~KoFormulaShapeFactory();
 
     /// reimplemented
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
 
     virtual bool supports(const KoXmlElement& e, KoShapeLoadingContext &context) const;
 };

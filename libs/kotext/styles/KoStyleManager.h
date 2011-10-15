@@ -25,6 +25,8 @@
 #define KOSTYLEMANAGER_H
 
 #include "kotext_export.h"
+#include "KoOdfNotesConfiguration.h"
+#include "KoOdfBibliographyConfiguration.h"
 
 #include <QObject>
 #include <QMetaType>
@@ -106,7 +108,14 @@ public:
      * Add a new sewction style, automatically giving it a new styleId.
      */
     void add(KoSectionStyle *style);
-
+    /**
+     * set the notes configuration of the document
+     */
+    void setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration);
+    /**
+     * set the notes configuration of the document
+     */
+    void setBibliographyConfiguration(KoOdfBibliographyConfiguration *bibliographyConfiguration);
     /**
      * Remove a style.
      */
@@ -295,6 +304,16 @@ public:
     KoParagraphStyle *defaultParagraphStyle() const;
 
     /**
+      * @return the notes configuration
+      */
+    KoOdfNotesConfiguration *notesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const;
+
+    /**
+      * @return the bibliography configuration
+      */
+    KoOdfBibliographyConfiguration *bibliographyConfiguration() const;
+
+    /**
      * Returns the default list style to be used for lists, headers, paragraphs
      * that do not specify a list-style
      */
@@ -333,6 +352,20 @@ public:
 
     /// return all the sectionStyles registered.
     QList<KoSectionStyle*> sectionStyles() const;
+
+    /// returns the default style for the ToC entries for the specified outline level
+    KoParagraphStyle *defaultTableOfContentsEntryStyle(int outlineLevel);
+
+    /// returns the default style for the ToC title
+    KoParagraphStyle *defaultTableOfcontentsTitleStyle();
+
+    /// adds a paragraph style to unused paragraph style list
+    void addUnusedStyle(KoParagraphStyle *style);
+
+    /// moves a style from the unused list to the used list i.e paragStyles list
+    void moveToUsedStyles(int id);
+
+    KoParagraphStyle *unusedStyle(int id);
 
 signals:
     void styleAdded(KoParagraphStyle*);

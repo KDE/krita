@@ -24,19 +24,24 @@
 
 #include <KoGenChange.h>
 #include "KoText.h"
+#include "styles/KoListStyle.h"
 #include <KoToolSelection.h>
+
 #include <QClipboard>
 #include <QMetaType>
 #include <QTextCursor>
 #include <QTextFrame>
 
+class KoDocumentRdfBase;
 class KoCharacterStyle;
 class KoInlineObject;
 class KoParagraphStyle;
+class KoInlineNote;
 class KoInlineCite;
 class KoBibliographyInfo;
 class KoCanvasBase;
 class KoTableOfContentsGeneratorInfo;
+class KoShapeController;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -54,6 +59,23 @@ class KOTEXT_EXPORT KoTextEditor: public QObject
 {
     Q_OBJECT
 public:
+
+    enum MoveOperation {
+        PreviousChar,
+        NextChar
+    };
+
+    enum ChangeListFlag {
+        NoFlags = 0,
+        ModifyExistingList = 1,
+        MergeWithAdjacentList = 2,
+        MergeExactly = 4,
+        CreateNumberedParagraph = 8,
+        AutoListStyle = 16,
+        DontUnsetIfSame = 32 /// do not unset the current list style if it is already been set the same
+    };
+    Q_DECLARE_FLAGS(ChangeListFlags, ChangeListFlag)
+
     KoTextEditor(QTextDocument *document);
 
     virtual ~KoTextEditor();
@@ -72,12 +94,12 @@ public:
 public: // KoToolSelection overloads
 
     /// returns true if the wrapped QTextCursor has a selection.
-    bool hasSelection();
+    bool hasSelection() const;
 
     /** returns true if the current cursor position is protected from editing
      * @param cached use cached value if available.
      */
-    bool isEditProtected(bool useCached = false);
+    bool isEditProtected(bool useCached = false) const;
 
 public:
 
@@ -98,7 +120,28 @@ public:
 
     bool operator>=(const QTextCursor &other) const;
 
-public slots:
+private:
+
+    // for the call to KoTextLoader::loadBody, which has a QTextCursor
+    friend class KoTextPaste;
+
+    // from KoTextEditor_p.h
+    friend class CharFormatVisitor;
+
+    // our commands can have access to us
+    friend class DeleteTableRowCommand;
+    friend class DeleteTableColumnCommand;
+    friend class InsertTableRowCommand;
+    friend class InsertTableColumnCommand;
+    friend class ChangeTrackedDeleteCommand;
+    friend class DeleteCommand;
+
+    // for unittests
+    friend class TestKoInlineTextObjectManager;
+
+    // temporary...
+    friend class TextShape;
+    friend class TextTool;
 
     /**
      * This should be used only as read-only cursor or within a KUndo2Command sub-class which
@@ -107,6 +150,9 @@ public slots:
      */
     QTextCursor* cursor();
 
+public slots:
+
+    // XXX: make this private as  well
     void addCommand(KUndo2Command *command, bool addCommandToStack = true);
 
     void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
@@ -169,15 +215,61 @@ public slots:
     void addBookmark(const QString &name);
 
     /**
-    * Insert a frame break at the cursor position, moving the rest of the text to the next frame.
-    */
+     * Insert a frame break at the cursor position, moving the rest of the text to the next frame.
+     */
     void insertFrameBreak();
 
     /// delete all inline objects in current cursor position or selection
     bool deleteInlineObjects(bool backward = false);
 
+    /**
+     * paste the given mimedata object at the current position
+     * @param mimeData: the mimedata containing text, html or odf
+     * @param shapeController the canvas' shapeController
+     * @param pasteAsText: if true, paste without formatting
+     */
+    void paste(const QMimeData *mimeData,
+               KoShapeController *shapeController,
+               bool pasteAsText=false);
 
+    /**
+     * Insert the selection from the given KoTextEditor. If there is no selection, the entire
+     * content of the document behind the editor is used. This changes the cursor position of
+     * the editor instance. Note that this is another text editor, preferably on another document!
+     *
+     * @param editor the KoTextEditor instance.
+     * @param shapeController the canvas' shapeController
+     * @param pasteAsText: if true, paste without formatting
+     * @returns true if the operation succeeded
+     */
+    bool paste(KoTextEditor *editor,
+               KoShapeController *shapeController,
+               bool pasteAsText = false);
+
+    /**
+     * Delete one character in the specified direction.
+     * @param direction the direction into which we delete. Valid values are
+     * @param trackChanges if true, track this deletion in the changetracker
+     * @param shapeController the canvas' shapeController
+     */
+    void deleteChar(MoveOperation direction, bool trackChanges,
+                    KoShapeController *shapeController);
+
+    /**
+     * @param numberingEnabled when true, we will enable numbering for the current paragraph (block).
+     */
+    void toggleListNumbering(bool numberingEnabled);
+
+    /**
+     * change the current block's list properties
+     */
+    void setListProperties(KoListStyle::Style style,
+                           int level = 0,
+                           ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList));
+
+    // -------------------------------------------------------------
     // Wrapped QTextCursor methods
+    // -------------------------------------------------------------
 
     int anchor() const;
 
@@ -209,7 +301,7 @@ public slots:
 
     void deletePreviousChar();
 
-    QTextDocument *document() const;
+    const QTextDocument *document() const;
 
     void endEditBlock();
 
@@ -221,7 +313,9 @@ public slots:
 
     void insertBlock(const QTextBlockFormat &format, const QTextCharFormat &charFormat);
 
-    void insertFragment(const QTextDocumentFragment &fragment);
+// NOT part of the api, since QTextDocumentFragment translates to html, losing all formatting.
+// so intentionally not exposed.
+//    void insertFragment(const QTextDocumentFragment &fragment);
 
      /**
      * Insert a table at the current cursor position.
@@ -270,12 +364,27 @@ public slots:
      */
     void splitTableCells();
 
-     /**
+    /**
+     * Insert a footnote at the current cursor position
+     * @return a pointer to the inserted footnote
+     */
+    KoInlineNote *insertFootNote();
+
+    /**
+     * Insert an endnote at the current cursor position
+     * @return a pointer to the inserted endnote
+     */
+    KoInlineNote *insertEndNote();
+
+    /**
      * Insert a table of Contents at the current cursor position.
      */
-    void insertTableOfContents();
+    void insertTableOfContents(KoTableOfContentsGeneratorInfo *info);
 
-    void updateTableOfContents(KoTableOfContentsGeneratorInfo *info,QTextBlock block);
+    /**
+     * Configures various values of a ToC to the one passed in info
+     */
+    void setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, QTextBlock block);
 
     void insertBibliography();
 
@@ -285,6 +394,7 @@ public slots:
 
     void insertText(const QString &text, const QTextCharFormat &format);
 
+    void insertHtml(const QString &html);
 //    void joinPreviousEditBlock ();
 
     void mergeBlockCharFormat( const QTextCharFormat &modifier);
@@ -311,13 +421,15 @@ public slots:
 
     int selectionStart() const;
 
-    void setBlockCharFormat(const QTextCharFormat &format);
+// intentionally commented out: these  are unimplemented.
 
-    void setBlockFormat(const QTextBlockFormat &format);
+//    void setBlockCharFormat(const QTextCharFormat &format);
 
-    void setCharFormat(const QTextCharFormat &format);
+   void setBlockFormat(const QTextBlockFormat &format);
 
-    void setTableFormat(const QTextTableFormat &format);
+   void setCharFormat(const QTextCharFormat &format);
+
+//    void setTableFormat(const QTextTableFormat &format);
 
     void setPosition(int pos, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
 
@@ -327,12 +439,16 @@ public slots:
 
     bool isBidiDocument() const;
 
+    const QTextFrame *currentFrame () const;
+    const QTextList *currentList () const;
+    const QTextTable *currentTable () const;
+
 signals:
     void isBidiUpdated();
     void cursorPositionChanged();
 
 protected:
-    bool recursiveProtectionCheck(QTextFrame::iterator it);
+    bool recursiveProtectionCheck(QTextFrame::iterator it) const;
 
 private:
     Q_PRIVATE_SLOT(d, void documentCommandAdded())
@@ -344,4 +460,6 @@ private:
 
 Q_DECLARE_METATYPE(KoTextEditor*)
 Q_DECLARE_METATYPE(bool *)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoTextEditor::ChangeListFlags)
+
 #endif // KOTEXTEDITOR_H

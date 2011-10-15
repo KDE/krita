@@ -25,62 +25,11 @@
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_node.h"
-#include "kis_node_graph_listener.h"
-
-class TestGraphListener : public KisNodeGraphListener
-{
-public:
-
-    virtual void aboutToAddANode(KisNode *, int) {
-        beforeInsertRow = true;
-    }
-
-    virtual void nodeHasBeenAdded(KisNode *, int) {
-        afterInsertRow = true;
-    }
-
-    virtual void aboutToRemoveANode(KisNode *, int) {
-        beforeRemoveRow  = true;
-    }
-
-    virtual void nodeHasBeenRemoved(KisNode *, int) {
-        afterRemoveRow = true;
-    }
-
-
-    virtual void aboutToMoveNode(KisNode *, int, int) {
-        beforeMove = true;
-    }
-
-    virtual void nodeHasBeenMoved(KisNode *, int, int) {
-        afterMove = true;
-    }
-
-    virtual void nodeChanged(KisNode*) {
-
-    }
-
-
-    bool beforeInsertRow;
-    bool afterInsertRow;
-    bool beforeRemoveRow;
-    bool afterRemoveRow;
-    bool beforeMove;
-    bool afterMove;
-
-    void resetBools() {
-        beforeRemoveRow = false;
-        afterRemoveRow = false;
-        beforeInsertRow = false;
-        afterInsertRow = false;
-        beforeMove = false;
-        afterMove = false;
-    }
-};
+#include "testutil.h"
 
 void KisNodeFacadeTest::testCreation()
 {
-    TestGraphListener graphListener;
+    TestUtil::TestGraphListener graphListener;
 
     KisNodeSP node = new TestNodeA();
     QVERIFY(node->graphListener() == 0);
@@ -119,7 +68,7 @@ void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
 
 void KisNodeFacadeTest::testOrdering()
 {
-    TestGraphListener graphListener;
+    TestUtil::TestGraphListener graphListener;
 
     KisNodeSP root = new TestNodeA();
     root->setGraphListener(&graphListener);
@@ -384,7 +333,7 @@ void KisNodeFacadeTest::testOrdering()
 
 void KisNodeFacadeTest::testMove()
 {
-    TestGraphListener graphListener;
+    TestUtil::TestGraphListener graphListener;
 
     KisNodeSP root = new TestNodeA();
     root->setGraphListener(&graphListener);

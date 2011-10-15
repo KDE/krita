@@ -28,6 +28,9 @@
 #include "KoSelection.h"
 #include "commands/KoPathPointMergeCommand.h"
 #include "SnapGuideConfigWidget.h"
+#include "KoCanvasResourceManager.h"
+#include "KoDocumentResourceManager.h"
+#include "KoShapePaintingContext.h"
 
 #include <KNumInput>
 
@@ -105,7 +108,9 @@ void KoCreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, cons
     Q_D(KoCreatePathTool);
     painter.setTransform(pathShape.absoluteTransformation(&converter) * painter.transform());
     painter.save();
-    pathShape.paint(painter, converter);
+
+    KoShapePaintingContext paintContext; //FIXME
+    pathShape.paint(painter, converter, paintContext);
     painter.restore();
     if (pathShape.border()) {
         painter.save();
@@ -316,7 +321,7 @@ void KoCreatePathTool::resourceChanged(int key, const QVariant & res)
     Q_D(KoCreatePathTool);
 
     switch (key) {
-    case KoDocumentResource::HandleRadius: {
+    case KoDocumentResourceManager::HandleRadius: {
         d->handleRadius = res.toUInt();
     }
     break;

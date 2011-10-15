@@ -35,7 +35,7 @@ class QDomElement;
 class QString;
 class KoStore;
 class KoViewConverter;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 
 const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 /**
@@ -55,11 +55,11 @@ class KRITAUI_EXPORT KisShapeLayer : public KisExternalLayer, public KoShapeLaye
 
 public:
 
-    KisShapeLayer(KoShapeContainer * parent, KoShapeControllerBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity);
+    KisShapeLayer(KoShapeContainer * parent, KoShapeBasedDocumentBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity);
     KisShapeLayer(const KisShapeLayer& _rhs);
     virtual ~KisShapeLayer();
 private:
-    void initShapeLayer(KoShapeControllerBase* controller);
+    void initShapeLayer(KoShapeBasedDocumentBase* controller);
 public:
     KisNodeSP clone() const {
         return new KisShapeLayer(*this);
@@ -75,6 +75,7 @@ public:
 
     // KisExternalLayer implementation
     QIcon icon() const;
+    void resetCache();
 
     KisPaintDeviceSP original() const;
     KisPaintDeviceSP paintDevice() const;
@@ -85,6 +86,7 @@ public:
     void setY(qint32);
 
     bool accept(KisNodeVisitor&);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     KoShapeManager *shapeManager() const;
 
@@ -92,7 +94,7 @@ public:
     bool loadLayer(KoStore* store);
 
     KUndo2Command* crop(const QRect & rect);
-    KUndo2Command* transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey);
+    KUndo2Command* transform(const QTransform &transform);
 
     bool visible(bool recursive = false) const;
     void setVisible(bool visible);

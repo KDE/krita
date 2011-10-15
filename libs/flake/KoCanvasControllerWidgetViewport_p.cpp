@@ -31,6 +31,7 @@
 #include "KoCanvasBase.h"
 #include "KoShapeLayer.h"
 #include "KoShapePaste.h"
+#include "KoShapePaintingContext.h"
 
 #include <KoProperties.h>
 
@@ -272,7 +273,8 @@ void Viewport::handlePaintEvent(QPainter &painter, QPaintEvent *event)
         painter.setOpacity(0.6);
         painter.translate(offset.x(), offset.y());
         painter.setRenderHint(QPainter::Antialiasing);
-        m_draggedShape->paint(painter, *vc);
+        KoShapePaintingContext paintContext; //FIXME
+        m_draggedShape->paint(painter, *vc, paintContext);
         painter.restore();
     }
 }

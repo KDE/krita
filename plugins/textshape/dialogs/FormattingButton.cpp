@@ -20,8 +20,6 @@
 
 #include "FormattingButton.h"
 
-#include "ListItemsHelper.h"
-
 #include <QMenu>
 #include <QFrame>
 #include <QGridLayout>
@@ -33,16 +31,19 @@
 class ItemChooserAction : public QWidgetAction
 {
 public:
-    ItemChooserAction();
+    ItemChooserAction(int columns);
     QWidget *m_widget;
     QGridLayout *m_containerLayout;
     int m_cnt;
+    int m_columns;
     QToolButton *addItem(QPixmap pm);
+    void updateItem(QObject *button, QPixmap pm);
 };
 
-ItemChooserAction::ItemChooserAction()
+ItemChooserAction::ItemChooserAction(int columns)
  : QWidgetAction(0)
  , m_cnt(0)
+ , m_columns(columns)
 {
     m_widget = new QWidget;
     m_containerLayout = new QGridLayout();
@@ -56,34 +57,59 @@ QToolButton *ItemChooserAction::addItem(QPixmap pm)
 {
     QToolButton *b = new QToolButton();
     b->setIcon(QIcon(pm));
-    b->setIconSize(QSize(48,48));
+    b->setIconSize(pm.size());
     b->setAutoRaise(true);
-    m_containerLayout->addWidget(b, m_cnt/3, m_cnt%3);
+    m_containerLayout->addWidget(b, m_cnt / m_columns, m_cnt % m_columns);
     ++m_cnt;
     return b;
 }
 
+void ItemChooserAction::updateItem(QObject *button, QPixmap pm)
+{
+    if (dynamic_cast<QToolButton *> (button)) {
+        dynamic_cast<QToolButton *> (button)->setIcon(QIcon(pm));
+        dynamic_cast<QToolButton *> (button)->setIconSize(pm.size());
+    }
+}
 
-FormattingButton::FormattingButton( QWidget *parent)
+
+FormattingButton::FormattingButton(QWidget *parent)
     : QToolButton(parent)
     , m_lastId(0)
     , m_styleAction(0)
+    , m_columns(1)
+    , m_menuShownFirstTime(true)
 {
     m_menu = new QMenu();
     setPopupMode(MenuButtonPopup);
     setMenu(m_menu);
-    if(m_styleAction==0)
-        m_styleAction = new ItemChooserAction();
-    m_menu->addAction(m_styleAction);
     connect(this, SIGNAL(released()), this, SLOT(itemSelected()));
+    connect(m_menu, SIGNAL(aboutToHide()), this, SIGNAL(doneWithFocus()));
+    connect(m_menu, SIGNAL(aboutToShow()), this, SIGNAL(aboutToShowMenu()));
+    connect(m_menu, SIGNAL(aboutToHide()), this, SLOT(menuShown()));
+}
+
+void FormattingButton::setNumColumns(int columns)
+{
+    m_columns = columns;
 }
 
 void FormattingButton::addItem(QPixmap pm, int id)
 {
-    QToolButton *b = m_styleAction->addItem(pm);
-    m_styleMap[b] = id;
-    connect(b, SIGNAL(released()), this, SLOT(itemSelected()));
+    //Note: Do not 0 as the item id, because that will break the m_lastId functionality
+    Q_ASSERT(id != 0);
 
+    if(m_styleAction == 0) {
+        m_styleAction = new ItemChooserAction(m_columns);
+        m_menu->addAction(m_styleAction);
+    }
+    if (m_styleMap.contains(id)) {
+        m_styleAction->updateItem(m_styleMap.value(id), pm);
+    } else {
+        QToolButton *b = m_styleAction->addItem(pm);
+        m_styleMap.insert(id, b);
+        connect(b, SIGNAL(released()), this, SLOT(itemSelected()));
+    }
     if (!m_lastId) {
         m_lastId = id;
     }
@@ -101,44 +127,36 @@ void FormattingButton::addSeparator()
 
 void FormattingButton::itemSelected()
 {
+    if (sender() != this && m_styleMap.key(sender()) == 0) {
+        // this means that the sender() is not in the m_styleMap. Have you missed something?
+        return;
+    }
+
+    if (sender() == this && m_lastId == 0) {
+        //menu not yet populated
+        return;
+    }
+
     if(sender() != this) {
-        m_lastId = m_styleMap[sender()];
+        m_lastId = m_styleMap.key(sender());
     }
     m_menu->hide();
     emit itemTriggered(m_lastId);
 }
 
-QString FormattingButton::example(KoListStyle::Style type) const {
-    int value=1;
-    switch( type ) {
-        case KoListStyle::DecimalItem:
-            return QString::number(value);
-        case KoListStyle::AlphaLowerItem:
-            return Lists::intToAlpha(value, Lists::Lowercase, false);
-        case KoListStyle::UpperAlphaItem:
-            return Lists::intToAlpha(value, Lists::Uppercase, false);
-        case KoListStyle::RomanLowerItem:
-            return Lists::intToRoman(value);
-        case KoListStyle::UpperRomanItem:
-            return Lists::intToRoman(value).toUpper();
-        case KoListStyle::Bengali:
-        case KoListStyle::Gujarati:
-        case KoListStyle::Gurumukhi:
-        case KoListStyle::Kannada:
-        case KoListStyle::Malayalam:
-        case KoListStyle::Oriya:
-        case KoListStyle::Tamil:
-        case KoListStyle::Telugu:
-        case KoListStyle::Tibetan:
-        case KoListStyle::Thai:
-            return Lists::intToScript(value, type);
-        case KoListStyle::Abjad:
-        case KoListStyle::ArabicAlphabet:
-        case KoListStyle::AbjadMinor:
-            return Lists::intToScriptList(value, type);
-        default:  // others we ignore.
-            return "hmmX";
-    }
+bool FormattingButton::hasItemId(int id)
+{
+    return m_styleMap.contains(id);
+}
+
+void FormattingButton::menuShown()
+{
+    m_menuShownFirstTime = false;
+}
+
+bool FormattingButton::isFirstTimeMenuShown()
+{
+    return m_menuShownFirstTime;
 }
 
 #include <FormattingButton.moc>

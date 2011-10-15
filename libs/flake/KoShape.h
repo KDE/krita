@@ -55,7 +55,7 @@ class KoShapeSavingContext;
 class KoCanvasBase;
 class KoShapeLoadingContext;
 class KoGenStyle;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 class KoDataCenterBase;
 class KoShapeShadow;
 class KoEventAction;
@@ -63,6 +63,7 @@ class KoShapePrivate;
 class KoFilterEffectStack;
 class KoSnapData;
 class KoClipPath;
+class KoShapePaintingContext;
 
 /**
  *
@@ -175,19 +176,9 @@ public:
      * @param painter used for painting the shape
      * @param converter to convert between internal and view coordinates.
      * @see applyConversion()
+     * @param paintcontext the painting context.
      */
-    virtual void paint(QPainter &painter, const KoViewConverter &converter) = 0;
-
-    /**
-     * Paint non-print decorations specific for this type of shape.
-     * The default implementation is empty.
-     *
-     * @param painter used for painting the shape
-     * @param converter to convert between internal and view coordinates.
-     * @param canvas the canvas that requested this paint.  This can be used to retrieve canvas specific properties
-     *      like selection and get a reference to the KoResourceManager.
-     */
-    virtual void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) = 0;
 
     /**
      * Load a shape from odf
@@ -408,18 +399,6 @@ public:
      * @param threshold the new threshold
      */
     void setTextRunAroundThreshold(qreal threshold);
-
-    /**
-     * Set an indication if the shape is anchored by text.
-     * @param anchored if the shape is anchored by text
-     */
-    void setAnchored(bool anchored);
-
-    /**
-     * Return if the shape is anchored by text
-     * @return true if the shape is anchored by text
-     */
-    bool isAnchored() const;
 
     /**
      * Set the background of the shape.

@@ -23,7 +23,8 @@
 
 #include "kotext_export.h"
 
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
+#include <KoDocumentResourceManager.h>
 
 #include <QtCore/QStringList>
 #include <QtCore/QChar>
@@ -45,22 +46,14 @@ KOTEXT_EXPORT QString alignmentToString(Qt::Alignment align);
 KOTEXT_EXPORT Qt::Alignment valignmentFromString(const QString &align);
 KOTEXT_EXPORT QString valignmentToString(Qt::Alignment align);
 
-/// This enum contains values to be used as keys in the canvas KoResourceManager
+/// This enum contains values to be used as keys in KoCanvasResourceManager
 enum CanvasResource {
-    ShowTextFrames =  278622039, ///< boolean that enables painting of frame outlines
-    ShowSpaces,         ///< boolean that enables painting of spaces
-    ShowTabs,           ///< boolean that enables painting of tabs
-    ShowEnters,         ///< boolean that enables painting of enters (linefeed chars)
-    ShowSpecialCharacters,  ///< boolean that enables painting of special characters (nbsp etc)
     CurrentTextDocument = 382490375, ///< set by the text plugin whenever the document is changed
     CurrentTextPosition = 183523,   ///<  used by the text plugin whenever the position is changed
     CurrentTextAnchor = 341899485,   ///<  used by the text plugin whenever the anchor-position is changed
     SelectedTextPosition = 21314576,   ///<  used by the text plugin whenever the alternative selection is changed
     ///  used by the text plugin whenever the alternative selection anchor-position is changed
-    SelectedTextAnchor = 3344189,
-    /** The KoDocumentRdf for the document,
-     this will be a KoDocumentRdfBase when Soprano support is not compiled in. */
-    DocumentRdf
+    SelectedTextAnchor = 3344189
 };
 
 /// For paragraphs each tab definition is represented by this struct.
@@ -81,13 +74,17 @@ struct KOTEXT_EXPORT Tab {
 
 /**
  * Text resources per calligra-document.
- * \sa KoResourceManager KoShapeController::resourceManager()
+ * \sa KoDocumentResourceManager KoShapeController::resourceManager()
  */
 enum DocumentResource {
-    ChangeTracker = KoDocumentResource::KoTextStart + 1, ///< KoChangeTracker
+    ChangeTracker = KoDocumentResourceManager::KoTextStart + 1, ///< KoChangeTracker
     InlineTextObjectManager, ///< The KoText inline-text-object manager. KoInlineTextObjectManager
     StyleManager,           ///< The KoStyleManager
-    PageProvider            ///< The KoPageProvider
+    PageProvider,            ///< The KoPageProvider
+    /** The KoDocumentRdf for the document,
+        this will be a KoDocumentRdfBase when Soprano support is not compiled in. */
+    DocumentRdf
+
 };
 
 enum KoTextFrameProperty {
@@ -95,8 +92,7 @@ enum KoTextFrameProperty {
 };
 
 enum KoSubFrameType {
-    EndNotesFrameType = 1,
-    FootNotesFrameType,
+    AuxillaryFrameType = 1,
     NoteFrameType
 };
 

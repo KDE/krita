@@ -28,8 +28,6 @@
 #include "mypaint_paintop_settings.h"
 #include "mypaint_paintop.h"
 
-#include <QThread>
-
 #include "mypaint_brush_resource.h"
 #include <kis_paintop_registry.h>
 #include <kis_resource_server_provider.h>
@@ -37,7 +35,7 @@
 class MyPaintFactory::Private {
 public:
 
-    KoResourceServer<MyPaintBrushResource>* brushServer;
+    KoResourceServer<MyPaintBrushResource> *brushServer;
     QMap<QString, MyPaintBrushResource*> brushes;
 };
 
@@ -50,13 +48,13 @@ MyPaintFactory::MyPaintFactory()
     KGlobal::mainComponent().dirs()->addResourceDir("mypaint_brushes", "/usr/share/mypaint/brushes/");
 
     m_d->brushServer = new KoResourceServer<MyPaintBrushResource>("mypaint_brushes", "*.myb");
-    KoResourceLoaderThread thread(m_d->brushServer);
 
     QStringList extensionList = m_d->brushServer->extensions().split(':');
     QStringList fileNames;
 
     foreach (const QString &extension, extensionList) {
-        fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_d->brushServer->type().toAscii(), extension);
+        fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_d->brushServer->type().toAscii(), extension,
+                                                                       KStandardDirs::Recursive | KStandardDirs::NoDuplicates);;
     }
 
     m_d->brushServer->loadResources(fileNames);

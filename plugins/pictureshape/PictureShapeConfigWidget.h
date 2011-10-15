@@ -25,7 +25,8 @@
 #include <QtGui/QWidget>
 
 class PictureShape;
-class KoImageSelectionWidget;
+class KFileWidget;
+class KJob;
 
 class PictureShapeConfigWidget : public KoShapeConfigWidgetBase
 {
@@ -45,7 +46,7 @@ public:
 
 private:
     PictureShape *m_shape;
-    KoImageSelectionWidget *m_selectionWidget;
+    KFileWidget *m_fileWidget;
 };
 
 #endif //PICTURESHAPECONFIGWIDGET_H

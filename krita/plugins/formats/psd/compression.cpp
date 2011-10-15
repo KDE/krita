@@ -135,9 +135,9 @@ quint32 decode_packbits(const char *src, char* dst, quint16 packed_len, quint32 
 
 QByteArray unRLE(int nBytes, QByteArray bytes)
 {
-    char * dst = new char[nBytes];
+    char *dst = new char[nBytes];
     decode_packbits(bytes.constData(), dst, bytes.length(), nBytes);
-    return QByteArray(dst);
+    return QByteArray(dst, nBytes);
 }
 
 QByteArray unzip(quint32 nBytes, QByteArray bytes)

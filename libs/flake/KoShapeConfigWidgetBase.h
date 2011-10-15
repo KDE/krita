@@ -20,7 +20,7 @@
 #ifndef KOSHAPECONFIGWIDGETBASE_H
 #define KOSHAPECONFIGWIDGETBASE_H
 
-#include "KoResourceManager.h"
+#include "KoCanvasResourceManager.h"
 
 #include <QWidget>
 
@@ -77,7 +77,7 @@ public:
     virtual void setUnit(KoUnit unit);
 
     /// called to set the canvas resource manager of the canvas the user used to insert the new shape.
-    void setResourceManager(KoResourceManager *rm);
+    void setResourceManager(KoCanvasResourceManager *rm);
 
     /// Return true if the shape config panel should be shown after the shape is created
     virtual bool showOnShapeCreate();
@@ -92,8 +92,11 @@ signals:
     /// is emitted after one of the config options has changed
     void propertyChanged();
 
+    /// is emitted when the dialog should be accepted ie a file double clicked in a filebrowser
+    void accept();
+
 protected:
-    KoResourceManager *m_resourceManager; ///< the resource provider with data for this canvas
+    KoCanvasResourceManager *m_resourceManager; ///< the resource provider with data for this canvas
 };
 
 #endif

@@ -33,10 +33,10 @@ public:
     /// constructor
     KoPathShapeFactory(const QStringList&);
     ~KoPathShapeFactory() {}
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
     bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
     /// reimplemented
-    virtual void newDocumentResourceManager(KoResourceManager *manager) const;
+    virtual void newDocumentResourceManager(KoDocumentResourceManager *manager) const;
 };
 
 #endif

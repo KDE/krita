@@ -29,7 +29,7 @@ KoDeferredShapeFactoryBase::~KoDeferredShapeFactoryBase()
 
 }
 
-KoShape *KoDeferredShapeFactoryBase::createShape(const KoProperties *, KoResourceManager *documentResources) const
+KoShape *KoDeferredShapeFactoryBase::createShape(const KoProperties *, KoDocumentResourceManager *documentResources) const
 {
     return createDefaultShape(documentResources);
 }

@@ -41,7 +41,7 @@ class KoCanvasControllerProxyObject;
 
 /**
  * KoCanvasController is the base class for wrappers around your canvas
- * that provides scrolling and zoomming for your canvas.
+ * that provides scrolling and zooming for your canvas.
  *
  * Flake does not provide a canvas, the application will have to
  * implement a canvas themselves. You canvas can be QWidget-based, QGraphicsItem-based

@@ -30,9 +30,20 @@
 
 int KoTableOfContentsGeneratorInfo::styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName)
 {
+    //find styleId of a style based on its style:name property
     KoParagraphStyle * style = sharedLoadingData->paragraphStyle(styleName, true);
     if (style) {
         return style->styleId();
+    }
+
+    //if the previous way of finding styles fails fall back on using style:display-name property of a style
+    QList<KoParagraphStyle *> paragraphStyles = sharedLoadingData->paragraphStyles(true);
+    QList<KoParagraphStyle *>::const_iterator iter = paragraphStyles.constBegin();
+
+    for (; iter != paragraphStyles.constEnd(); ++iter) {
+        if ((*iter)->name() == styleName) {
+            return (*iter)->styleId();
+        }
     }
 
     return 0;

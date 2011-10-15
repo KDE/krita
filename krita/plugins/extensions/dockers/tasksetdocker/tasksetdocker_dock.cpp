@@ -29,7 +29,6 @@
 #include <klocale.h>
 #include <KActionCollection>
 
-#include <KoResourceManager.h>
 #include <KoCanvasBase.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
@@ -75,7 +74,7 @@ void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionVie
     }
 
     painter->setPen(Qt::black);
-    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, taskset->name());      
+    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, taskset->name());
 
 }
 
@@ -91,16 +90,15 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     clearButton->setIcon(KIcon("edit-delete"));
     saveButton->setIcon(KIcon("document-save"));
     saveButton->setEnabled(false);
-    
+
     chooserButton->setIcon(KIcon("document-multiple"));
 
     KGlobal::mainComponent().dirs()->addResourceType("kis_taskset", "data", "krita/taskset/");
     m_rserver = new KoResourceServer<TasksetResource>("kis_taskset", "*.kts");
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<TasksetResource>(m_rserver);
     m_taskThread = new KoResourceLoaderThread(m_rserver);
-    connect(m_taskThread, SIGNAL(finished()), this, SLOT(tasksetThreadDone()));
     m_taskThread->start();
-    
+
     KoResourceItemChooser* itemChooser = new KoResourceItemChooser(adapter, this);
     itemChooser->setItemDelegate(new KisTasksetResourceDelegate(this));
     itemChooser->setFixedSize(500, 250);
@@ -111,15 +109,21 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
 
     connect(itemChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
-    
+
     setWidget(widget);
-    
+
     connect( tasksetView, SIGNAL(clicked( const QModelIndex & ) ),
             this, SLOT(activated ( const QModelIndex & ) ) );
 
     connect( recordButton, SIGNAL(toggled(bool)), this, SLOT(recordClicked()));
     connect( clearButton, SIGNAL(clicked(bool)), this, SLOT(clearClicked()));
     connect( saveButton, SIGNAL(clicked(bool)), this, SLOT(saveClicked()));
+}
+
+TasksetDockerDock::~TasksetDockerDock()
+{
+    delete m_taskThread;
+    delete m_rserver;
 }
 
 void TasksetDockerDock::setCanvas(KoCanvasBase * canvas)
@@ -178,9 +182,11 @@ void TasksetDockerDock::saveClicked()
     if (!ok) {
         return;
     }
-    
+
+    m_taskThread->barrier();
+
     TasksetResource* taskset = new TasksetResource("");
-    
+
     QStringList actionNames;
     foreach(QAction* action, m_model->actions()) {
         actionNames.append(action->objectName());
@@ -188,14 +194,14 @@ void TasksetDockerDock::saveClicked()
     taskset->setActionList(actionNames);
     taskset->setValid(true);
     QString saveLocation = m_rserver->saveLocation();
-    
+
     bool newName = false;
     if(name.isEmpty()) {
         newName = true;
         name = i18n("Taskset");
     }
     QFileInfo fileInfo(saveLocation + name + taskset->defaultFileExtension());
-    
+
     int i = 1;
     while (fileInfo.exists()) {
         fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + taskset->defaultFileExtension());
@@ -213,12 +219,6 @@ void TasksetDockerDock::clearClicked()
 {
     saveButton->setEnabled(false);
     m_model->clear();
-}
-
-void TasksetDockerDock::tasksetThreadDone()
-{
-    delete m_taskThread;
-    m_taskThread = 0;
 }
 
 void TasksetDockerDock::resourceSelected(KoResource* resource)

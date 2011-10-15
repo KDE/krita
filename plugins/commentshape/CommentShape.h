@@ -21,7 +21,7 @@
 #define COMMENTSHAPE_H
 
 #include <KoShapeContainer.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 
 #include <QDate>
 
@@ -31,14 +31,14 @@ class InitialsCommentShape;
 class CommentShape : public KoShapeContainer
 {
 public:
-    CommentShape(KoResourceManager* resourceManager);
+    CommentShape(KoDocumentResourceManager* resourceManager);
     virtual ~CommentShape();
 
     virtual bool loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context);
     virtual void saveOdf(KoShapeSavingContext& context) const;
     virtual void setSize(const QSizeF& size);
 
-    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
+    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
 
     void toogleActive();
     void setActive(bool active);

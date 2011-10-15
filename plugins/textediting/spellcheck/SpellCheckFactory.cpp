@@ -26,7 +26,7 @@ SpellCheckFactory::SpellCheckFactory()
     : KoTextEditingFactory("spellcheck")
 {
     setShowInMenu(true);
-    setTitle(i18n("Spell Check"));
+    setTitle(i18n("Check Spelling"));
 }
 
 KoTextEditingPlugin *SpellCheckFactory::create() const

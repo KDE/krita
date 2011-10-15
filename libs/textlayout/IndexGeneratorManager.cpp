@@ -134,7 +134,7 @@ bool IndexGeneratorManager::generate()
             QVariant data = format.property(KoParagraphStyle::TableOfContentsData);
             KoTableOfContentsGeneratorInfo *tocInfo = data.value<KoTableOfContentsGeneratorInfo *>();
 
-            data = format.property(KoParagraphStyle::TableOfContentsDocument);
+            data = format.property(KoParagraphStyle::GeneratedDocument);
             QTextDocument *tocDocument = data.value<QTextDocument *>();
 
             ToCGenerator *generator = m_generators[tocInfo];

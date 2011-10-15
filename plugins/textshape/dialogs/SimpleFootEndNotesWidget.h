@@ -24,27 +24,23 @@
 
 #include <QWidget>
 #include <QTextBlock>
+#include <KoInlineNote.h>
 
 class TextTool;
+class ReferencesTool;
 class KoStyleManager;
 
 class SimpleFootEndNotesWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleFootEndNotesWidget(QWidget *parent = 0);
-
-public slots:
-    void setStyleManager(KoStyleManager *sm);
+    explicit SimpleFootEndNotesWidget(TextTool *tool,QWidget *parent = 0);
+    Ui::SimpleFootEndNotesWidget widget;
 
 signals:
     void doneWithFocus();
-    
+
 private:
-    Ui::SimpleFootEndNotesWidget widget;
-    KoStyleManager *m_styleManager;
-    bool m_blockSignals;
-    bool m_comboboxHasBidiItems;
     QTextBlock m_currentBlock;
     TextTool *m_tool;
 };

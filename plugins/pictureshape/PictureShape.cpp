@@ -41,6 +41,8 @@
 #include <SvgUtil.h>
 
 #include <KDebug>
+#include <KJob>
+#include <KIO/Job>
 
 #include <QPainter>
 #include <QTimer>
@@ -50,6 +52,23 @@
 QString generate_key(qint64 key, const QSize & size)
 {
     return QString("%1-%2-%3").arg(key).arg(size.width()).arg(size.height());
+}
+
+void LoadWaiter::setImageData(KJob *job)
+{
+    if (m_pictureShape == 0)
+        return; // ugh, the shape got deleted meanwhile
+    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
+    Q_ASSERT(transferJob);
+
+    if (m_pictureShape->imageCollection()) {
+        KoImageData *data = m_pictureShape->imageCollection()->createImageData(transferJob->data());
+        if (data) {
+            m_pictureShape->setUserData(data);
+            m_pictureShape->setSize(data->imageSize());
+        }
+    }
+    deleteLater();
 }
 
 void RenderQueue::renderImage()
@@ -93,7 +112,7 @@ PictureShape::~PictureShape()
     delete m_renderQueue;
 }
 
-void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
+void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     QRectF pixelsF = converter.documentToView(QRectF(QPointF(0,0), size()));
     KoImageData *imageData = qobject_cast<KoImageData*>(userData());

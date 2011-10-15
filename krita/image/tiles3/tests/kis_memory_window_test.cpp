@@ -25,7 +25,7 @@
 
 void KisMemoryWindowTest::testWindow()
 {
-    KisMemoryWindow memory(1024);
+    KisMemoryWindow memory(QString(), 1024);
 
     quint8 oddValue = 0xee;
     const quint8 chunkLength = 10;

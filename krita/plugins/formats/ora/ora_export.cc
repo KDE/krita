@@ -68,7 +68,7 @@ KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByt
     KisImageWSP image = output->image();
     Q_CHECK_PTR(image);
 
-    OraConverter kpc(output, output->undoAdapter());
+    OraConverter kpc(output);
 
     KisImageBuilder_Result res;
 

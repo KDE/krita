@@ -28,7 +28,7 @@
 #include <KoTextEditor.h>
 
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoChangeTracker.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoOdfLoadingContext.h>
@@ -40,6 +40,7 @@
 #include <KoShapeBackground.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeManager.h>
+#include <KoShapePaintingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoText.h>
 #include <KoTextDocument.h>
@@ -87,8 +88,22 @@ TextShape::~TextShape()
 {
 }
 
-void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
+void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
+    if (paintContext.showTextShapeOutlines) {
+        painter.save();
+        applyConversion(painter, converter);
+        if (qAbs(rotation()) > 1)
+            painter.setRenderHint(QPainter::Antialiasing);
+
+        QPen pen(QColor(210, 210, 210)); // use cosmetic pen
+        QPointF onePixel = converter.viewToDocument(QPointF(1.0, 1.0));
+        QRectF rect(QPointF(0.0, 0.0), size() - QSizeF(onePixel.x(), onePixel.y()));
+        painter.setPen(pen);
+        painter.drawRect(rect);
+        painter.restore();
+    }
+
     if (m_textShapeData->isDirty()) { // not layouted yet.
         return;
     }
@@ -120,19 +135,22 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         }
     }
 
-    KoTextEditor *textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
-
     KoTextDocumentLayout::PaintContext pc;
+
     QAbstractTextDocumentLayout::Selection selection;
+    KoTextEditor *textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
     selection.cursor = *(textEditor->cursor());
     QPalette palette = pc.textContext.palette;
     selection.format.setBackground(palette.brush(QPalette::Highlight));
     selection.format.setForeground(palette.brush(QPalette::HighlightedText));
-
     pc.textContext.selections.append(selection);
+
     pc.textContext.selections += KoTextDocument(doc).selections();
     pc.viewConverter = &converter;
     pc.imageCollection = m_imageCollection;
+    pc.showFormattingCharacters = paintContext.showFormattingCharacters;
+    pc.showTableBorders = paintContext.showTableBorders;
+    pc.showSpellChecking = paintContext.showSpellChecking;
 
     // When clipping the painter we need to make sure not to cutoff cosmetic pens which
     // may used to draw e.g. table-borders for user convenience when on screen (but not
@@ -171,27 +189,9 @@ QRectF TextShape::outlineRect() const
 void TextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
+    KoShapeContainer::shapeChanged(type, shape);
     if (type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
         m_textShapeData->setDirty();
-    }
-}
-
-void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
-{
-    bool showTextFrames = canvas->resourceManager()->boolResource(KoText::ShowTextFrames);
-
-    if (showTextFrames) {
-        painter.save();
-        applyConversion(painter, converter);
-        if (qAbs(rotation()) > 1)
-            painter.setRenderHint(QPainter::Antialiasing);
-
-        QPen pen(QColor(210, 210, 210)); // use cosmetic pen
-        QPointF onePixel = converter.viewToDocument(QPointF(1.0, 1.0));
-        QRectF rect(QPointF(0.0, 0.0), size() - QSizeF(onePixel.x(), onePixel.y()));
-        painter.setPen(pen);
-        painter.drawRect(rect);
-        painter.restore();
     }
 }
 
@@ -359,7 +359,7 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
 
 bool TextShape::loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    // If the loadOdfFrame from the base class for draw:text-box fails, check 
+    // If the loadOdfFrame from the base class for draw:text-box fails, check
     // for table:table, because that is a legal child of draw:frame in ODF 1.2.
     if (!KoFrameShape::loadOdfFrame(element, context)) {
         const KoXmlElement &possibleTableElement(KoXml::namedItemNS(element, KoXmlNS::table, "table"));

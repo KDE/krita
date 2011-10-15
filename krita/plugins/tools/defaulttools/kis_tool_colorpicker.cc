@@ -150,9 +150,9 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
 
         if (m_updateColor) {
             if (m_toForegroundColor)
-                canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor, m_pickedColor);
+                canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, m_pickedColor);
             else
-                canvas()->resourceManager()->setResource(KoCanvasResource::BackgroundColor, m_pickedColor);
+                canvas()->resourceManager()->setResource(KoCanvasResourceManager::BackgroundColor, m_pickedColor);
         }
 
         if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {

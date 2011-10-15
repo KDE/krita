@@ -30,10 +30,10 @@ TreeToolFactory::TreeToolFactory()
     : KoToolFactoryBase("TreeToolFactoryId")
 {
     setToolTip(i18n("Tree editing tool"));
-    setToolType(mainToolType());
+    setToolType("flow,braindump");
     setPriority(1);
-    setActivationShapeId("flake/always");
-    //setActivationShapeId(TREESHAPEID);
+    //setActivationShapeId("flake/always");
+    setActivationShapeId(TREESHAPEID);
 }
 
 TreeToolFactory::~TreeToolFactory()

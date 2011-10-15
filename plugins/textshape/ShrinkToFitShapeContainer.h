@@ -36,7 +36,7 @@
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 
 /**
  * \internal d-pointer class for the \a ShrinkToFitShapeContainer class.
@@ -55,11 +55,11 @@ public:
 class ShrinkToFitShapeContainer : public KoShapeContainer
 {
 public:
-    explicit ShrinkToFitShapeContainer(KoShape *childShape, KoResourceManager *documentResources = 0);
+    explicit ShrinkToFitShapeContainer(KoShape *childShape, KoDocumentResourceManager *documentResources = 0);
     virtual ~ShrinkToFitShapeContainer();
 
     // reimplemented
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     // reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     // reimplemented
@@ -68,7 +68,7 @@ public:
     /**
      * Factory function to create and return a ShrinkToFitShapeContainer instance that wraps the \a shape with it.
      */
-    static ShrinkToFitShapeContainer* wrapShape(KoShape *shape, KoResourceManager *documentResourceManager = 0);
+    static ShrinkToFitShapeContainer* wrapShape(KoShape *shape, KoDocumentResourceManager *documentResourceManager = 0);
 
     /**
      * Try to load text-on-shape from \a element and wrap \a shape with it.

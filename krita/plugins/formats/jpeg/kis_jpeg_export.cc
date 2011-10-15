@@ -115,7 +115,7 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     image->refreshGraph();
     image->lock();
 
-    KisJPEGConverter kpc(output, output->undoAdapter());
+    KisJPEGConverter kpc(output);
 
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
     image->unlock();

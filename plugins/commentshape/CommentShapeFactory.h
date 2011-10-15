@@ -31,7 +31,7 @@ public:
     virtual ~CommentShapeFactory();
 
     virtual bool supports(const KoXmlElement& element, KoShapeLoadingContext &context) const;
-    virtual KoShape* createDefaultShape(KoResourceManager* documentResources = 0) const;
+    virtual KoShape* createDefaultShape(KoDocumentResourceManager* documentResources = 0) const;
 };
 
 #endif // COMMENTSHAPEFACTORY_H

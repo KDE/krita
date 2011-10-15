@@ -25,13 +25,13 @@
 #include <QRect>
 
 #include <ksharedconfig.h>
-#include <kconfiggroup.h>
 
 #include <KoProperties.h>
 
 #include "kis_global.h"
 #include "kis_node_graph_listener.h"
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 #include "kis_node_progress_proxy.h"
 
 #include "kis_safe_read_list.h"
@@ -120,6 +120,11 @@ void KisNode::setSystemLocked(bool l, bool update)
 bool KisNode::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
+}
+
+void KisNode::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
 }
 
 KisNodeGraphListener *KisNode::graphListener() const
@@ -329,12 +334,15 @@ void KisNode::setDirty(const QVector<QRect> &rects)
     }
 }
 
-void KisNode::setDirty(const QRegion & region)
+void KisNode::setDirty(const QRegion &region)
 {
-    if (region.isEmpty()) return;
+    setDirty(region.rects());
+}
 
-    foreach(const QRect &rc, region.rects()) {
-        setDirty(rc);
+void KisNode::setDirty(const QRect & rect)
+{
+    if(m_d->graphListener) {
+        m_d->graphListener->requestProjectionUpdate(this, rect);
     }
 }
 

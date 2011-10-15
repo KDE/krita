@@ -1,18 +1,25 @@
 [Desktop Entry]
 Name=Image Docker
+Name[cs]=Dok obrázků
+Name[da]=Billed-dokker
 Name[nb]=Bildedokker
+Name[nds]=Bild-Andocker
 Name[pt]=Área de Imagens
 Name[pt_BR]=Acoplador de imagem
 Name[sv]=Bilddockningsfönster
 Name[uk]=Панель швартування зображень
 Name[x-test]=xxImage Dockerxx
+Name[zh_TW]=影像嵌入器
 Comment=Docker for reference images
+Comment[cs]=Dok pro referenční obrázky
+Comment[da]=Dokker til referencebilleder
 Comment[nb]=Dokker for referansebilder
 Comment[pt]=Área das imagens de referência
 Comment[pt_BR]=Acoplador para imagens de referência
 Comment[sv]=Dockningsfönster för referensbilder
 Comment[uk]=Панель для еталонних зображень
 Comment[x-test]=xxDocker for reference imagesxx
+Comment[zh_TW]=參考影像的嵌入器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritaimagedocker

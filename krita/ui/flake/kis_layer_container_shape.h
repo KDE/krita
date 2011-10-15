@@ -51,7 +51,7 @@ public:
     KisLayerSP groupLayer();
 
     // KoShapeContainer implementation
-    void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
     // KoShape overrides
     bool isSelectable() const {

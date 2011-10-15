@@ -33,7 +33,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 
 #include "FormulaDocument.h"
 #include "FormulaData.h"
@@ -41,7 +41,7 @@
 #include "FormulaRenderer.h"
 
 
-KoFormulaShape::KoFormulaShape(KoResourceManager *documentResourceManager)
+KoFormulaShape::KoFormulaShape(KoDocumentResourceManager *documentResourceManager)
   : KoFrameShape( KoXmlNS::draw, "object" )
 {
     FormulaElement* element= new FormulaElement();
@@ -59,7 +59,7 @@ KoFormulaShape::~KoFormulaShape()
     delete m_formulaRenderer;
 }
 
-void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter )
+void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     painter.save();
     applyConversion( painter, converter );   // apply zooming and coordinate translation
@@ -289,7 +289,7 @@ void KoFormulaShape::saveOdf( KoShapeSavingContext& context ) const
     writer.endElement(); // draw:frame
 }
 
-KoResourceManager *KoFormulaShape::resourceManager() const
+KoDocumentResourceManager *KoFormulaShape::resourceManager() const
 {
     return m_resourceManager;
 }

@@ -36,7 +36,7 @@
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoSelection.h>
 #include <KoShapeOdfSaveHelper.h>
 #include <KoPAOdfPageSaveHelper.h>
@@ -643,12 +643,17 @@ void KoPADocumentStructureDocker::contextMenuEvent(QContextMenuEvent* event)
     QMenu menu( this );
 
     // Not connected yet
-    menu.addAction( SmallIcon( "document-new" ), i18n("Add a new slide"), this, SLOT( addPage() ) );
-    menu.addAction( i18n("Delete selected objects"), this, SLOT( deleteItem() ));
-
-    menu.addAction( i18n( "Cut" ) ,this,  SLOT( editCut() ) );
-    menu.addAction( i18n( "Copy" ), this,  SLOT( editCopy() ));
-    menu.addAction( i18n( "Paste" ), this, SLOT( editPaste() ) );
+    if (m_doc->pageType() == KoPageApp::Slide) {
+        menu.addAction(KIcon("document-new"), i18n("Add a new slide"), this, SLOT(addPage()));
+    }
+    else {
+        menu.addAction(KIcon("document-new"), i18n("Add a new page"), this, SLOT(addPage()));
+    }
+    menu.addAction(KIcon("edit-delete"), i18n("Delete selected objects"), this, SLOT(deleteItem()));
+    menu.addSeparator();
+    menu.addAction(KIcon("edit-cut"), i18n("Cut"), this, SLOT(editCut()));
+    menu.addAction(KIcon("edit-copy"), i18n("Copy"), this, SLOT(editCopy()));
+    menu.addAction(KIcon("edit-paste"), i18n("Paste"), this, SLOT(editPaste()));
 
     menu.exec(event->globalPos());
 }

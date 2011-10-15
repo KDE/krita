@@ -52,9 +52,7 @@ public:
     virtual ~ArtisticTextShape();
 
     /// reimplemented
-    void paint(QPainter &painter, const KoViewConverter &converter);
-    /// reimplemented to be empty (this shape is fully printing)
-    void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     /// reimplemented
     virtual void saveOdf(KoShapeSavingContext & context) const;
     /// reimplemented

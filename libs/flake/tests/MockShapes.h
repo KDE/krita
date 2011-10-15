@@ -22,7 +22,7 @@
 
 #include <KoShapeGroup.h>
 #include <KoCanvasBase.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoShapeContainerModel.h>
 #include <QPainter>
 #include "KoShapeManager.h"
@@ -33,7 +33,7 @@ class MockShape : public KoShape
 {
 public:
     MockShape() : paintedCount(0) {}
-    void paint(QPainter &painter, const KoViewConverter &converter) {
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
         //qDebug() << "Shape" << kBacktrace( 10 );
@@ -50,7 +50,7 @@ class MockContainer : public KoShapeContainer
 {
 public:
     MockContainer(KoShapeContainerModel *model = 0) : KoShapeContainer(model), paintedCount(0) {}
-    void paintComponent(QPainter &painter, const KoViewConverter &converter) {
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
         //qDebug() << "Container:" << kBacktrace( 10 );
@@ -66,7 +66,7 @@ public:
 
 class MockGroup : public KoShapeGroup
 {
-    void paintComponent(QPainter &painter, const KoViewConverter &converter) {
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
     }
@@ -77,8 +77,8 @@ class KoToolProxy;
 class MockCanvas : public KoCanvasBase
 {
 public:
-    MockCanvas(KoShapeControllerBase *aKoShapeControllerBase =0)//made for TestSnapStrategy.cpp
-            : KoCanvasBase(aKoShapeControllerBase), m_shapeManager(new KoShapeManager(this)), m_guideData(0) {}
+    MockCanvas(KoShapeBasedDocumentBase *aKoShapeBasedDocumentBase =0)//made for TestSnapStrategy.cpp
+            : KoCanvasBase(aKoShapeBasedDocumentBase), m_shapeManager(new KoShapeManager(this)), m_guideData(0) {}
     ~MockCanvas() {}
     void setHorz(qreal pHorz){
         m_horz = pHorz;
@@ -128,7 +128,7 @@ public:
         KoGuidesData *m_guideData;
 };
 
-class MockShapeController : public KoShapeControllerBase
+class MockShapeController : public KoShapeBasedDocumentBase
 {
 public:
     void addShape(KoShape* shape) {

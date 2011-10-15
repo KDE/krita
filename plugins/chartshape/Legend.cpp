@@ -370,7 +370,7 @@ void Legend::paintPixmap( QPainter &painter, const KoViewConverter &converter )
     d->kdLegend->paint( &pixmapPainter );
 }
 
-void Legend::paint( QPainter &painter, const KoViewConverter &converter )
+void Legend::paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     //painter.save();
 

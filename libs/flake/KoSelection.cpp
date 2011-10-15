@@ -119,7 +119,7 @@ KoSelection::~KoSelection()
 {
 }
 
-void KoSelection::paint(QPainter &painter, const KoViewConverter &converter)
+void KoSelection::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);

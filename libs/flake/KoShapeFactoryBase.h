@@ -38,7 +38,7 @@ class KoShapeConfigFactoryBase;
 class KoShapeConfigWidgetBase;
 class KoShapeLoadingContext;
 class KoDataCenterBase;
-class KoResourceManager;
+class KoDocumentResourceManager;
 
 #define SHAPETEMPLATE_MIMETYPE "application/x-flake-shapetemplate"
 #define SHAPEID_MIMETYPE "application/x-flake-shapeId"
@@ -205,8 +205,8 @@ public:
      *
      * @param manager the new manager
      */
-    virtual void newDocumentResourceManager(KoResourceManager *manager) const;
-    QList<KoResourceManager *> documentResourceManagers() const;
+    virtual void newDocumentResourceManager(KoDocumentResourceManager *manager) const;
+    QList<KoDocumentResourceManager *> documentResourceManagers() const;
 
     /**
      * This method should be implemented by factories to create a shape that the user
@@ -219,7 +219,7 @@ public:
      * @return a new shape
      * @see createShape() newDocumentResourceManager()
      */
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
 
     /**
      * This method should be implemented by factories to create a shape based on a set of
@@ -233,7 +233,7 @@ public:
      * @see createDefaultShape() newDocumentResourceManager()
      * @see KoShapeTemplate::properties
      */
-    virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const;
+    virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const;
 
     /**
      * This method provides the default implementation for creating a shape
@@ -319,7 +319,7 @@ private:
 
 private slots:
 
-    /// called whenever a document KoResourceManager is deleted
+    /// called whenever a document KoDocumentResourceManager is deleted
     void pruneDocumentResourceManager(QObject *);
 
 private:

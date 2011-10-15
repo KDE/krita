@@ -41,19 +41,28 @@ class KOWIDGETS_EXPORT KoResourceLoaderThread : public QThread {
 public:
 
     /**
-    * Constructs a KoResourceLoaderThread for a server
-    * @param server the server the resources will be loaded for
-    */
+     * Constructs a KoResourceLoaderThread for a server
+     * @param server the server the resources will be loaded for
+     */
     KoResourceLoaderThread(KoResourceServerBase * server);
+    ~KoResourceLoaderThread();
 
-    /// loads the resources
+    /**
+     * Checks whether the thread has finished loading and waits
+     * until it is finished if nessesary
+     */
+    void barrier();
+
+protected:
+    /**
+     * Overridden from QThread
+     */
     void run();
-    void cancel();
+
 private:
     QStringList getFileNames( const QString & extensions);
     KoResourceServerBase * m_server;
     QStringList m_fileNames;
-
 };
 
 
@@ -76,12 +85,6 @@ private:
     KoResourceServerProvider();
     KoResourceServerProvider(const KoResourceServerProvider&);
     KoResourceServerProvider operator=(const KoResourceServerProvider&);
-
-private slots:
-
-    void paletteThreadDone();
-    void patternThreadDone();
-    void gradientThreadDone();
 
 private:
     struct Private;

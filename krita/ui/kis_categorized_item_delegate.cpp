@@ -19,67 +19,64 @@
 
 #include "kis_categorized_item_delegate.h"
 #include "kis_categorized_list_model.h"
-#include <QPainter>
 
-KisCategorizedItemDelegate::KisCategorizedItemDelegate(QAbstractListModel* model, bool indicateError):
-    m_model(model),
+// #include <kicon.h>
+// #include <kstandardguiitem.h>
+
+#include <QPainter>
+#include <QStyle>
+#include <QStyleOptionMenuItem>
+#include <QStyleOptionViewItemV4>
+#include <QApplication>
+
+KisCategorizedItemDelegate::KisCategorizedItemDelegate(bool indicateError):
     m_indicateError(indicateError),
     m_minimumItemHeight(0)
 {
-    m_errorIcon = QIcon::fromTheme("dialog-warning");
 }
 
 void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    qint32 border = 4;
-    qint32 xpos   = border + option.rect.x() + option.rect.height();
-    qint32 ypos   = option.rect.y();
-    qint32 size   = option.rect.height();
-    QRect  rect(xpos, ypos, option.rect.width()-xpos, option.rect.height());
-    
     painter->resetTransform();
-    
-    if(!m_model->data(index, IsHeaderRole).toBool()) {
-        QStyleOptionViewItem sovi = option;
-        
+
+    if(!index.data(IsHeaderRole).toBool()) {
+        QStyleOptionViewItem sovi(option);
+
         if(m_indicateError)
-            sovi.rect = rect;
-        
+            sovi.decorationPosition = QStyleOptionViewItem::Right;
+
         QStyledItemDelegate::paint(painter, sovi, index);
-        
-        if(m_indicateError && !(m_model->flags(index) & Qt::ItemIsEnabled))
-            m_errorIcon.paint(painter, 0, ypos, size, size, Qt::AlignCenter, QIcon::Normal, QIcon::On);
     }
     else {
         if(option.state & QStyle::State_MouseOver)
             painter->fillRect(option.rect, Qt::gray);
         else
             painter->fillRect(option.rect, Qt::lightGray);
-        
-        painter->drawText(option.rect, m_model->data(index).toString(), QTextOption(Qt::AlignVCenter|Qt::AlignHCenter));
-        
+
+        painter->drawText(option.rect, index.data().toString(), QTextOption(Qt::AlignVCenter|Qt::AlignHCenter));
+
         paintTriangle(
             painter,
             option.rect.x(),
             option.rect.y(),
-            size,
-            !m_model->data(index, ExpandCategoryRole).toBool()
+            option.rect.height(),
+            !index.data(ExpandCategoryRole).toBool()
         );
     }
-    
+
     painter->resetTransform();
 }
 
 QSize KisCategorizedItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    //on first calling this calculates the mininmal height of the items
-    if(m_minimumItemHeight == 0) {
+    //on first calling this calculates the minimal height of the items
+    if (m_minimumItemHeight == 0) {
         for(int i=0; i<index.model()->rowCount(); i++) {
             QSize indexSize = QStyledItemDelegate::sizeHint(option, index.model()->index(i, 0));
             m_minimumItemHeight = qMax(m_minimumItemHeight, indexSize.height());
         }
     }
-    
+
     return QSize(QStyledItemDelegate::sizeHint(option, index).width(), m_minimumItemHeight);
 }
 
@@ -89,13 +86,13 @@ void KisCategorizedItemDelegate::paintTriangle(QPainter* painter, qint32 x, qint
     triangle.push_back(QPointF(-0.2,-0.2));
     triangle.push_back(QPointF( 0.2,-0.2));
     triangle.push_back(QPointF( 0.0, 0.2));
-    
+
     painter->translate(x + size/2, y + size/2);
     painter->scale(size, size);
-    
+
     if(rotate)
         painter->rotate(-90);
-    
+
     painter->setBrush(QBrush(Qt::black));
     painter->drawPolygon(triangle);
 }

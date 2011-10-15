@@ -66,14 +66,14 @@ KisNodeSP KisNodeShape::node()
     return m_d->node;
 }
 
-void KisNodeShape::paint(QPainter &painter, const KoViewConverter &converter)
+void KisNodeShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
 }
 
 
-void KisNodeShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
+void KisNodeShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);

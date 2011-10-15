@@ -78,7 +78,12 @@ public:
     bool visit(KisExternalLayer * layer) {
         KisUndoAdapter* undoAdapter = layer->image()->undoAdapter();
 
-        KUndo2Command* command = layer->transform(m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty);
+        KisTransformWorker tw(layer->projection(), m_sx, m_sy,
+                              0, 0, 0, 0,
+                              m_angle, m_tx, m_ty, 0,
+                              m_filter, true);
+
+        KUndo2Command* command = layer->transform(tw.transform());
         if (command)
             undoAdapter->addCommand(command);
         visitAll(layer);
@@ -171,7 +176,9 @@ private:
             transaction.commit(m_image->undoAdapter());
         }
         if (selection->hasShapeSelection()) {
-            KUndo2Command* command = selection->shapeSelection()->transform(m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty);
+            KisTransformWorker tw(selection->projection(), m_sx, m_sy, 0.0, 0.0, 0.0, 0.0, m_angle, m_tx, m_ty, 0, m_filter, true);
+
+            KUndo2Command* command = selection->shapeSelection()->transform(tw.transform());
             if (command)
                 m_image->undoAdapter()->addCommand(command);
         }

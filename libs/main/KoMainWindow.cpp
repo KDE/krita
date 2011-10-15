@@ -69,7 +69,6 @@
 #include <QLayout>
 #include <QLabel>
 #include <QProgressBar>
-#include <QSplitter>
 #include <QTabBar>
 #include <QtGui/QPrinter>
 #include <QtGui/QPrintDialog>
@@ -104,12 +103,8 @@ public:
         manager = 0;
         mainWindowGuiIsBuilt = false;
         forQuit = false;
-        splitted = false;
         activePart = 0;
         activeView = 0;
-        splitter = 0;
-        orientation = 0;
-        removeView = 0;
         firstTime = true;
         progress = 0;
         showDocumentInfo = 0;
@@ -173,18 +168,9 @@ public:
     QLabel * statusBarLabel;
     QProgressBar *progress;
 
-    QList<QAction *> splitViewActionList;
-    // This additional list is needed, because we don't plug
-    // the first list, when an embedded view gets activated (Werner)
-    QList<QAction *> veryHackyActionList;
-    QSplitter *splitter;
-    KSelectAction *orientation;
-    QAction *removeView;
-
     QList<QAction *> toolbarList;
 
     bool mainWindowGuiIsBuilt;
-    bool splitted;
     bool forQuit;
     bool firstTime;
     bool windowSizeDirty;
@@ -227,7 +213,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 {
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
-
+    
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
@@ -305,45 +291,11 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->exportPdf->setEnabled(false);
     d->closeFile->setEnabled(false);
 
-    d->splitter = new QSplitter(Qt::Horizontal, this);
-    d->splitter->setObjectName("mw-splitter");
-    setCentralWidget(d->splitter);
-
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
-    KAction *closeAllViews  = new KAction(KIcon("window-close"), i18n("&Close All Views"), this);
-    actionCollection()->addAction("view_closeallviews", closeAllViews);
-    closeAllViews->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_W));
-    connect(closeAllViews, SIGNAL(triggered(bool)), this, SLOT(slotCloseAllViews()));
-    d->veryHackyActionList.append(closeAllViews);
-
-    // set up the action list for the splitter stuff
-    KAction * splitView  = new KAction(KIcon("view_split"), i18n("&Split View"), this);
-    actionCollection()->addAction("view_split", splitView);
-    connect(splitView, SIGNAL(triggered(bool)), this, SLOT(slotSplitView()));
-    d->splitViewActionList.append(splitView);
-
-    d->removeView  = new KAction(KIcon("view-close"), i18n("&Remove View"), this);
-    actionCollection()->addAction("view_rsplitter", d->removeView);
-    connect(d->removeView, SIGNAL(triggered(bool)), this, SLOT(slotRemoveView()));
-    d->splitViewActionList.append(d->removeView);
-    d->removeView->setEnabled(false);
-
     KToggleAction *fullscreenAction  = new KToggleAction(KIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
     actionCollection()->addAction("view_fullscreen", fullscreenAction);
     fullscreenAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
     connect(fullscreenAction, SIGNAL(toggled(bool)), this, SLOT(viewFullscreen(bool)));
-
-    d->orientation  = new KSelectAction(KIcon("view_orientation"), i18n("Splitter &Orientation"), this);
-    actionCollection()->addAction("view_splitter_orientation", d->orientation);
-    connect(d->orientation, SIGNAL(triggered(int)), this, SLOT(slotSetOrientation()));
-    QStringList items;
-    items << i18n("&Horizontal") << i18n("&Vertical");
-    d->orientation->setItems(items);
-    d->orientation->setCurrentItem(static_cast<int>(d->splitter->orientation()-1));
-    d->splitViewActionList.append(d->orientation);
-    QAction *sep = new QAction(this);
-    sep->setSeparator(true);
-    d->splitViewActionList.append(sep);
 
     d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
     d->toggleDockers->setChecked(true);
@@ -468,7 +420,8 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
         d->dockWidgetMenu->setVisible(true);
         doc->setSelectable(false);
         //d->manager->addPart( doc, false ); // done by KoView::setPartManager
-        KoView *view = doc->createView(d->splitter);
+        KoView *view = doc->createView(this);
+        setCentralWidget(view);
         d->rootViews.append(view);
         view->setPartManager(d->manager);
         view->show();
@@ -476,8 +429,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
         // The addShell has been done already if using openUrl
         if (!d->rootDoc->shells().contains(this))
             d->rootDoc->addShell(this);
-        d->removeView->setEnabled(false);
-        d->orientation->setEnabled(false);
+;
     }
 
     bool enable = d->rootDoc != 0 ? true : false;
@@ -1431,14 +1383,6 @@ void KoMainWindow::slotNewToolbarConfig()
     if (!d->activeView)
         return;
 
-    // This gets plugged in even for embedded views
-    factory->plugActionList(d->activeView, "view_closeallviews",
-                            d->veryHackyActionList);
-
-    // This one only for root views
-    if (d->rootViews.indexOf(d->activeView) != -1)
-        factory->plugActionList(d->activeView, "view_split",
-                                d->splitViewActionList);
     plugActionList("toolbarlist", d->toolbarList);
 }
 
@@ -1487,67 +1431,6 @@ void KoMainWindow::showToolbar(const char * tbName, bool shown)
     }
 }
 
-void KoMainWindow::slotSplitView()
-{
-    d->splitted = true;
-    KoView *current = currentView();
-    KoView *newView = d->rootDoc->createView(d->splitter);
-    // hide status bar widgets of new view
-    newView->showAllStatusBarItems(false);
-    d->rootViews.append(newView);
-    current->show();
-    current->setPartManager(d->manager);
-    d->manager->setActivePart(d->rootDoc, current);
-    d->removeView->setEnabled(true);
-    d->orientation->setEnabled(true);
-}
-
-void KoMainWindow::slotCloseAllViews()
-{
-    d->forQuit = true;
-    if (queryClose()) {
-        hide();
-        d->rootDoc->removeShell(this);
-        QList<KoMainWindow*> shells = d->rootDoc->shells();
-        d->rootDoc = 0;
-        while (!shells.isEmpty()) {
-            KoMainWindow* window = shells.takeFirst();
-            window->hide();
-            delete window;
-        }
-        close();  // close this window (and quit the app if necessary)
-    }
-    d->forQuit = false;
-}
-
-void KoMainWindow::slotRemoveView()
-{
-    KoView *view;
-    if (d->rootViews.indexOf(d->activeView) != -1)
-        view = currentView();
-    else
-        view = d->rootViews.first();
-
-    view->hide();
-
-    if (d->rootViews.indexOf(view) == -1) {
-        kWarning() << "view not found in d->rootViews!";
-    }
-
-    d->rootViews.removeAll(view);
-    delete view;
-    view = 0;
-
-    d->rootViews.first()->setPartManager(d->manager);
-    d->manager->setActivePart(d->rootDoc, d->rootViews.first());
-
-    if (d->rootViews.count() == 1) {
-        d->removeView->setEnabled(false);
-        d->orientation->setEnabled(false);
-        d->splitted = false;
-    }
-}
-
 void KoMainWindow::viewFullscreen(bool fullScreen)
 {
     if (fullScreen) {
@@ -1555,12 +1438,6 @@ void KoMainWindow::viewFullscreen(bool fullScreen)
     } else {
         setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
     }
-}
-
-void KoMainWindow::slotSetOrientation()
-{
-    d->splitter->setOrientation(static_cast<Qt::Orientation>
-                                  (d->orientation->currentItem()+1));
 }
 
 void KoMainWindow::slotProgress(int value)
@@ -1612,7 +1489,7 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
     //kDebug(30003) <<"KoMainWindow::slotActivePartChanged( Part * newPart) newPart =" << newPart;
     //kDebug(30003) <<"current active part is" << d->activePart;
 
-    if (d->activePart && d->activePart == newPart && !d->splitted) {
+    if (d->activePart && d->activePart == newPart) {
         //kDebug(30003) <<"no need to change the GUI";
         return;
     }
@@ -1650,14 +1527,6 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         //kDebug(30003) <<"new active part is" << d->activePart;
 
         factory->addClient(d->activeView);
-
-
-        // This gets plugged in even for embedded views
-        factory->plugActionList(d->activeView, "view_closeallviews",
-                                d->veryHackyActionList);
-        // This one only for root views
-        if (d->rootViews.indexOf(d->activeView) != -1)
-            factory->plugActionList(d->activeView, "view_split", d->splitViewActionList);
 
         // Position and show toolbars according to user's preference
         setAutoSaveSettings(newPart->componentData().componentName(), false);

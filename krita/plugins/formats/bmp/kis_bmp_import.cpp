@@ -96,7 +96,7 @@ KoFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const Q
         QImage img(localFile);
 
         const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-        KisImageSP image = new KisImage(doc->undoAdapter(), img.width(), img.height(), colorSpace, "imported from bmp");
+        KisImageSP image = new KisImage(doc->createUndoStore(), img.width(), img.height(), colorSpace, "imported from bmp");
         image->lock();
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);

@@ -1,0 +1,129 @@
+<RecordedActions>
+  <RecordedAction opacity="1" strokeStyle="Brush" compositeOp="normal" id="PathPaintAction" name="Path" paintIncremental="0" fillStyle="None">
+    <PaintopPreset name="pixelbrush" paintopid="paintbrush">
+      <param name="AirbrushOption/isAirbrushing">false</param>
+      <param name="AirbrushOption/rate">100</param>
+      <param name="ColorSource/Type"><![CDATA[plain]]></param>
+      <param name="CompositeOp"><![CDATA[normal]]></param>
+      <param name="CurveDarken"><![CDATA[0,0;1,1;]]></param>
+      <param name="CurveMix"><![CDATA[0,0;1,1;]]></param>
+      <param name="CurveOpacity"><![CDATA[0,0;1,1;]]></param>
+      <param name="CurveRotation"><![CDATA[0,0;1,1;]]></param>
+      <param name="CurveSize"><![CDATA[0,0;1,1;]]></param>
+      <param name="CustomDarken"><![CDATA[true]]></param>
+      <param name="CustomMix"><![CDATA[true]]></param>
+      <param name="CustomOpacity"><![CDATA[true]]></param>
+      <param name="CustomRotation"><![CDATA[true]]></param>
+      <param name="CustomSize"><![CDATA[true]]></param>
+      <param name="DarkenSensor"><![CDATA[<!DOCTYPE params>
+<params id="pressure">
+ <curve>0,0;1,1;</curve>
+</params>
+]]></param>
+      <param name="DarkenUseCurve">true</param>
+      <param name="DarkenValue">1</param>
+      <param name="FlowValue">1</param>
+      <param name="HorizontalMirrorEnabled">false</param>
+      <param name="MirrorSensor"><![CDATA[<!DOCTYPE params>
+<params id="pressure"/>
+]]></param>
+      <param name="MirrorUseCurve">true</param>
+      <param name="MirrorValue">1</param>
+      <param name="MixSensor"><![CDATA[<!DOCTYPE params>
+<params id="pressure">
+ <curve>0,0;1,1;</curve>
+</params>
+]]></param>
+      <param name="MixUseCurve">true</param>
+      <param name="MixValue">1</param>
+      <param name="OpacitySensor"><![CDATA[<!DOCTYPE params>
+<params id="pressure">
+ <curve>0,0;1,1;</curve>
+</params>
+]]></param>
+      <param name="OpacityUseCurve">true</param>
+      <param name="OpacityValue">1</param>
+      <param name="PaintOpAction">2</param>
+      <param name="PressureDarken">false</param>
+      <param name="PressureMirror">false</param>
+      <param name="PressureMix">false</param>
+      <param name="PressureOpacity"><![CDATA[true]]></param>
+      <param name="PressureRotation">false</param>
+      <param name="PressureScatter">false</param>
+      <param name="PressureSharpness">false</param>
+      <param name="PressureSize">true</param>
+      <param name="PressureSoftness">false</param>
+      <param name="PressureSpacing">false</param>
+      <param name="Pressureh">false</param>
+      <param name="Pressures">false</param>
+      <param name="Pressurev">false</param>
+      <param name="RotationSensor"><![CDATA[<!DOCTYPE params>
+<params id="pressure">
+ <curve>0,0;1,1;</curve>
+</params>
+]]></param>
+      <param name="RotationUseCurve">true</param>
+      <param name="RotationValue">1</param>
+      <param name="ScatterSensor"><![CDATA[<!DOCTYPE params>
+<params id="pressure"/>
+]]></param>
+      <param name="ScatterUseCurve">true</param>
+      <param name="ScatterValue">5</param>
+      <param name="Scattering/AxisX">true</param>
+      <param name="Scattering/AxisY">true</param>
+      <param name="Sharpness/threshold">4</param>
+      <param name="SharpnessSensor"><![CDATA[<!DOCTYPE params>
+<params id="pressure"/>
+]]></param>
+      <param name="SharpnessUseCurve">true</param>
+      <param name="SharpnessValue">1</param>
+      <param name="SizeSensor"><![CDATA[<!DOCTYPE params>
+<params id="pressure">
+ <curve>0,0;1,1;</curve>
+</params>
+]]></param>
+      <param name="SizeUseCurve">true</param>
+      <param name="SizeValue">1</param>
+      <param name="SoftnessSensor"><![CDATA[<!DOCTYPE params>
+<params id="pressure"/>
+]]></param>
+      <param name="SoftnessUseCurve">true</param>
+      <param name="SoftnessValue">1</param>
+      <param name="SpacingSensor"><![CDATA[<!DOCTYPE params>
+<params id="pressure"/>
+]]></param>
+      <param name="SpacingUseCurve">true</param>
+      <param name="SpacingValue">1</param>
+      <param name="VerticalMirrorEnabled">false</param>
+      <param name="brush_definition"><![CDATA[<Brush type="auto_brush" randomness="0" density="1" BrushVersion="2" spacing="0.1" angle="0">
+ <MaskGenerator ratio="1" type="circle" vfade="0.5" id="default" spikes="2" hfade="0.5" diameter="11"/>
+</Brush>
+]]></param>
+      <param name="hSensor"><![CDATA[<!DOCTYPE params>
+<params id="pressure"/>
+]]></param>
+      <param name="hUseCurve">true</param>
+      <param name="hValue">1</param>
+      <param name="paintop"><![CDATA[paintbrush]]></param>
+      <param name="sSensor"><![CDATA[<!DOCTYPE params>
+<params id="pressure"/>
+]]></param>
+      <param name="sUseCurve">true</param>
+      <param name="sValue">1</param>
+      <param name="vSensor"><![CDATA[<!DOCTYPE params>
+<params id="pressure"/>
+]]></param>
+      <param name="vUseCurve">true</param>
+      <param name="vValue">1</param>
+    </PaintopPreset>
+    <ForegroundColor>
+      <RGB space="sRGB built-in - (lcms internal)" g="0" r="0" b="0"/>
+    </ForegroundColor>
+    <BackgroundColor>
+      <RGB space="sRGB built-in - (lcms internal)" g="1" r="1" b="1"/>
+    </BackgroundColor>
+    <Slices>
+      <Point rotation="0" perspective="1" pointX="50" pointY="57.5268817204301" xTilt="0" movementX="0" tangentialPressure="0" pressure="1" yTilt="0" movementY="0" time="1"/>
+    </Slices>
+  </RecordedAction>
+</RecordedActions>

@@ -24,8 +24,8 @@
 
 
 // Calligra
-#include <KoShape.h>
 #include <KoFrameShape.h>
+#include <KoShapeContainer.h>
 
 
 class QPainter;
@@ -40,13 +40,16 @@ class QPainter;
  * The KoUnavailShape stores the data associated with the frame, even
  * if this data is stored in embedded files inside the ODF container.
  * To the user, it shows an empty frame with an indicator that there
- * is an object here.  In the future it may try to dig out any preview
- * picture embedded into the object.
+ * is an object here. If a preview of some type is available, the
+ * Unavail shape will attempt to load them read-only, in a fallback
+ * manner and show them in that frame. If no shape is found at all
+ * which supports any of the fallbacks, it will show a placeholder
+ * graphic, to indicate the fact that it is an unknown item.
  *
  * The KoUnavailShape always has to be present, and is the only shape
  * that is not implemented as a plugin.
  */
-class KoUnavailShape : public KoShape, public KoFrameShape {
+class KoUnavailShape : public KoFrameShape, public KoShapeContainer {
 public:
     KoUnavailShape();
     virtual ~KoUnavailShape();
@@ -54,7 +57,9 @@ public:
     // Inherited methods
 
     /// reimplemented
-    void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    /// reimplemented from KoShapeContainer
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     /// reimplemented
     virtual void saveOdf(KoShapeSavingContext & context) const;
     /// reimplemented
@@ -66,9 +71,6 @@ public:
 private:
     class Private;
     Private * const d;
-
-    void draw(QPainter &painter) const;
-    void drawNull(QPainter &painter) const;
 };
 
 #endif

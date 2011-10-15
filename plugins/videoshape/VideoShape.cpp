@@ -50,7 +50,7 @@ VideoShape::~VideoShape()
 {
 }
 
-void VideoShape::paint(QPainter &painter, const KoViewConverter &converter)
+void VideoShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     QRectF pixelsF = converter.documentToView(QRectF(QPointF(0,0), size()));
     VideoData *videoData = qobject_cast<VideoData*>(userData());

@@ -74,7 +74,6 @@ SpecificColorSelectorPlugin::SpecificColorSelectorPlugin(QObject *parent, const 
 {
     dbgPlugins << "SpecificColorSelectorPlugin";
 
-    //setComponentData(SpecificColorSelectorPluginFactory::componentData());
     KoDockRegistry::instance()->add(new SpecificColorSelectorDockFactory());
 }
 

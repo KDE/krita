@@ -20,12 +20,17 @@
 
 
 KisMergeWalker::KisMergeWalker(QRect cropRect)
-    : KisBaseRectsWalker(cropRect)
 {
+    setCropRect(cropRect);
 }
 
 KisMergeWalker::~KisMergeWalker()
 {
+}
+
+KisBaseRectsWalker::UpdateType KisMergeWalker::type() const
+{
+    return KisBaseRectsWalker::UPDATE;
 }
 
 void KisMergeWalker::startTrip(KisNodeSP startWith)

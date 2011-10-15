@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef LISTSTYLEBUTTON_H
-#define LISTSTYLEBUTTON_H
+#ifndef FORMATTINGBUTTON_H
+#define FORMATTINGBUTTON_H
 
 #include <KoListStyle.h>
 
@@ -35,24 +35,32 @@ class FormattingButton : public QToolButton
 {
     Q_OBJECT
 public:
-    FormattingButton( QWidget *parent = 0 );
+    FormattingButton(QWidget *parent = 0 );
 
-    QString example(KoListStyle::Style type) const;
+    void setNumColumns(int columns);
+
     void addItem(QPixmap pm, int id);
     void addAction(QAction *action);
     void addSeparator();
+    bool hasItemId(int id);
+    bool isFirstTimeMenuShown();
 
 signals:
     void itemTriggered(int id);
+    void doneWithFocus();
+    void aboutToShowMenu();
 
 private slots:
     void itemSelected();
+    void menuShown();
 
 private:
     int m_lastId ;
     QMenu *m_menu;
-    QMap<QObject *, int > m_styleMap;
+    QMap<int, QObject *> m_styleMap;
     ItemChooserAction *m_styleAction;
+    int m_columns;
+    bool m_menuShownFirstTime;
 };
 
-#endif
+#endif  //FORMATTINGBUTTON_H

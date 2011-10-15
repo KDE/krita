@@ -22,19 +22,10 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
-#include "kis_merge_walker.h"
+#include "kis_update_job_item.h"
 #include "kis_simple_update_queue.h"
+#include "scheduler_utils.h"
 
-bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect) {
-    if(walker->requestedRect() == rect) {
-        return true;
-    }
-    else {
-        qDebug() << "walker rect:" << walker->requestedRect();
-        qDebug() << "expected rect:" << rect;
-        return false;
-    }
-}
 
 void KisSimpleUpdateQueueTest::testJobProcessing()
 {
@@ -66,10 +57,10 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
 
     KisTestableSimpleUpdateQueue queue;
 
-    queue.addJob(paintLayer, dirtyRect1, imageRect);
-    queue.addJob(paintLayer, dirtyRect2, imageRect);
-    queue.addJob(paintLayer, dirtyRect3, imageRect);
-    queue.addJob(paintLayer, dirtyRect4, imageRect);
+    queue.addUpdateJob(paintLayer, dirtyRect1, imageRect);
+    queue.addUpdateJob(paintLayer, dirtyRect2, imageRect);
+    queue.addUpdateJob(paintLayer, dirtyRect3, imageRect);
+    queue.addUpdateJob(paintLayer, dirtyRect4, imageRect);
 
     queue.processQueue(context);
 
@@ -82,34 +73,19 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
     walkersList = queue.getWalkersList();
 
     QCOMPARE(walkersList.size(), 0);
-
-
-    /**
-     * Test blocking the process
-     */
-
-    context.clear();
-
-    queue.blockProcessing(context);
-
-    queue.addJob(paintLayer, dirtyRect1, imageRect);
-    queue.addJob(paintLayer, dirtyRect2, imageRect);
-    queue.addJob(paintLayer, dirtyRect3, imageRect);
-    queue.addJob(paintLayer, dirtyRect4, imageRect);
-
-    jobs = context.getJobs();
-    QCOMPARE(jobs[0]->walker(), KisBaseRectsWalkerSP(0));
-    QCOMPARE(jobs[1]->walker(), KisBaseRectsWalkerSP(0));
-
-    queue.startProcessing(context);
-
-    jobs = context.getJobs();
-
-    QVERIFY(checkWalker(jobs[0]->walker(), dirtyRect2));
-    QVERIFY(checkWalker(jobs[1]->walker(), dirtyRect4));
 }
 
-void KisSimpleUpdateQueueTest::testSplit()
+void KisSimpleUpdateQueueTest::testSplitUpdate()
+{
+    testSplit(false);
+}
+
+void KisSimpleUpdateQueueTest::testSplitFullRefresh()
+{
+    testSplit(true);
+}
+
+void KisSimpleUpdateQueueTest::testSplit(bool useFullRefresh)
 {
     QRect imageRect(0,0,1024,1024);
 
@@ -127,7 +103,12 @@ void KisSimpleUpdateQueueTest::testSplit()
     KisTestableSimpleUpdateQueue queue;
     KisWalkersList& walkersList = queue.getWalkersList();
 
-    queue.addJob(paintLayer, dirtyRect1, imageRect);
+    if(!useFullRefresh) {
+        queue.addUpdateJob(paintLayer, dirtyRect1, imageRect);
+    }
+    else {
+        queue.addFullRefreshJob(paintLayer, dirtyRect1, imageRect);
+    }
 
     QCOMPARE(walkersList.size(), 4);
 
@@ -171,7 +152,7 @@ void KisSimpleUpdateQueueTest::testChecksum()
     KisTestableSimpleUpdateQueue queue;
     KisWalkersList& walkersList = queue.getWalkersList();
 
-    queue.addJob(adjustmentLayer, dirtyRect, imageRect);
+    queue.addUpdateJob(adjustmentLayer, dirtyRect, imageRect);
     QCOMPARE(walkersList[0]->checksumValid(), true);
 
     adjustmentLayer->setFilter(configuration);
@@ -185,6 +166,40 @@ void KisSimpleUpdateQueueTest::testChecksum()
 
     QCOMPARE(jobs[0]->walker()->checksumValid(), true);
 
+}
+
+void KisSimpleUpdateQueueTest::testMixingTypes()
+{
+    QRect imageRect(0,0,1024,1024);
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, imageRect.width(), imageRect.height(), cs, "merge test");
+
+    KisPaintLayerSP paintLayer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
+
+    image->lock();
+    image->addNode(paintLayer);
+    image->unlock();
+
+    QRect dirtyRect1(0,0,200,200);
+    QRect dirtyRect2(0,0,200,200);
+    QRect dirtyRect3(20,20,200,200);
+
+    KisTestableSimpleUpdateQueue queue;
+    KisWalkersList& walkersList = queue.getWalkersList();
+
+    queue.addUpdateJob(paintLayer, dirtyRect1, imageRect);
+    queue.addFullRefreshJob(paintLayer, dirtyRect2, imageRect);
+    queue.addFullRefreshJob(paintLayer, dirtyRect3, imageRect);
+
+
+    QCOMPARE(walkersList.size(), 2);
+
+    QVERIFY(checkWalker(walkersList[0], QRect(0,0,200,200)));
+    QVERIFY(checkWalker(walkersList[1], QRect(0,0,220,220)));
+
+    QCOMPARE(walkersList[0]->type(), KisBaseRectsWalker::UPDATE);
+    QCOMPARE(walkersList[1]->type(), KisBaseRectsWalker::FULL_REFRESH);
 }
 
 QTEST_KDEMAIN(KisSimpleUpdateQueueTest, NoGUI)

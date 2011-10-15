@@ -22,7 +22,8 @@
 #include <qtest_kde.h>
 #include <kstandarddirs.h>
 #include "kis_doc2.h"
-#include "kis_undo_adapter.h"
+#include "kis_image.h"
+#include "kis_undo_store.h"
 #include "kis_factory2.h"
 #include <KoDocumentEntry.h>
 #include <KoMainWindow.h>
@@ -87,19 +88,21 @@ public:
 void KisDoc2Test::testUndoRedoNotify()
 {
     KisDoc2 doc;
+    doc.initEmpty();
 
     KUndo2Command *testCommand1 = new TestCommand();
     KUndo2Command *testCommand2 = new TestCommand();
 
+    KisUndoStore *undoStore = doc.image()->undoStore();
     KisCommandHistoryListenerFake listener;
 
-    doc.undoAdapter()->setCommandHistoryListener(&listener);
+    undoStore->setCommandHistoryListener(&listener);
 
     qDebug() << "Undo index:" << doc.undoStack()->index();
 
     qDebug() << "Adding one command";
     listener.reset();
-    doc.undoAdapter()->addCommand(testCommand1);
+    undoStore->addCommand(testCommand1);
     QVERIFY(listener.wasAdded());
     QVERIFY(!listener.wasExecuted());
     QCOMPARE(listener.command(), testCommand1);
@@ -107,7 +110,7 @@ void KisDoc2Test::testUndoRedoNotify()
 
     qDebug() << "Adding one more command";
     listener.reset();
-    doc.undoAdapter()->addCommand(testCommand2);
+    undoStore->addCommand(testCommand2);
     QVERIFY(listener.wasAdded());
     QVERIFY(!listener.wasExecuted());
     QCOMPARE(listener.command(), testCommand2);
@@ -128,6 +131,15 @@ void KisDoc2Test::testUndoRedoNotify()
     QVERIFY(listener.wasExecuted());
     QCOMPARE(listener.command(), testCommand1);
     qDebug() << "Undo index:" << doc.undoStack()->index();
+
+
+    /**
+     * FIXME: Here is a bug in undo listeners framework
+     * notifyCommandExecuted works wrong with redo(),
+     * because KUndo2Stack->index() returns "the command
+     * that will be executed on the next redo()", but
+     * not the undone command
+     */
 
     qDebug() << "Redo";
     listener.reset();

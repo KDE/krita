@@ -30,7 +30,6 @@ K_EXPORT_PLUGIN(KisCubismFilterPluginFactory("krita"))
 
 KisCubismFilterPlugin::KisCubismFilterPlugin(QObject *parent, const QVariantList &) : QObject(parent)
 {
-    //setComponentData(KisCubismFilterPluginFactory::componentData());
     KisFilterRegistry::instance()->add(new KisCubismFilter());
 
 }

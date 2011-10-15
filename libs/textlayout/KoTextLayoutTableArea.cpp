@@ -553,6 +553,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
                     maxBottom);
 
             cellArea->setVirginPage(virginPage());
+            cellArea->setLayoutEnvironmentResctictions(true, true);
 
             FrameIterator *cellCursor = cursor->frameIterator(col);
 
@@ -571,6 +572,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
                 } else {
                     rowBottom = qMax(cellArea->bottom() + cellStyle.bottomPadding() + cellStyle.bottomBorderWidth(), rowBottom);
                 }
+                rowBottom = qMax(rowBottom, documentLayout()->maxYOfAnchoredObstructions(cell.firstCursorPosition().position(), cell.lastCursorPosition().position()));
             }
 
 
@@ -673,6 +675,7 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
                     rowBottom - cellStyle.bottomPadding() - cellStyle.bottomBorderWidth());
 
             cellArea->setVirginPage(virginPage());
+            cellArea->setLayoutEnvironmentResctictions(true, true);
 
             FrameIterator *cellCursor =  cursor->frameIterator(col);
 
@@ -785,10 +788,12 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     }
     painter->setRenderHint(QPainter::Antialiasing, hasAntialiasing);
 
-    QPen pen(painter->pen());
-    painter->setPen(QPen(QColor(0,0,0,96)));
-    painter->drawLines(accuBlankBorders);
-    painter->setPen(pen);
+    if (context.showTableBorders) {
+        QPen pen(painter->pen());
+        painter->setPen(QPen(QColor(0,0,0,96)));
+        painter->drawLines(accuBlankBorders);
+        painter->setPen(pen);
+    }
 }
 
 void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell)

@@ -22,7 +22,7 @@
 #include "KoShape.h"
 #include "KoShapeContainer.h"
 #include "KoPathShape.h"
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
 #include "KoShapeRegistry.h"
 #include "KoCanvasController.h"
 #include "KoToolManager.h"
@@ -39,7 +39,7 @@
 class KoShapeUnclipCommand::Private : public KoOdfPaste
 {
 public:
-    Private(KoShapeControllerBase *c)
+    Private(KoShapeBasedDocumentBase *c)
             : controller(c), executed(false) {
     }
 
@@ -107,12 +107,12 @@ public:
     QList<KoClipPath*> oldClipPaths;
     QList<KoPathShape*> clipPathShapes;
     QList<KoShapeContainer*> clipPathParents;
-    KoShapeControllerBase *controller;
+    KoShapeBasedDocumentBase *controller;
 
     bool executed;
 };
 
-KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes, KUndo2Command *parent)
+KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape*> &shapes, KUndo2Command *parent)
         : KUndo2Command(parent), d(new Private(controller))
 {
     d->shapesToUnclip = shapes;
@@ -123,7 +123,7 @@ KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeControllerBase *controller, co
     setText(i18nc("(qtundo-format)", "Unclip Shape"));
 }
 
-KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeControllerBase *controller, KoShape *shape, KUndo2Command *parent)
+KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, KUndo2Command *parent)
         : KUndo2Command(parent), d(new Private(controller))
 {
     d->shapesToUnclip.append(shape);
@@ -149,7 +149,7 @@ void KoShapeUnclipCommand::redo()
 
     const uint clipPathCount = d->clipPathShapes.count();
     for (uint i = 0; i < clipPathCount; ++i) {
-        // the parent has to be there when it is added to the KoShapeControllerBase
+        // the parent has to be there when it is added to the KoShapeBasedDocumentBase
         if (d->clipPathParents.at(i))
             d->clipPathParents.at(i)->addShape(d->clipPathShapes[i]);
         d->controller->addShape(d->clipPathShapes[i]);

@@ -2,6 +2,7 @@
  *  Copyright (c) 2006-2008 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,12 +54,13 @@
 #include <KoProperties.h>
 #include <KoShapeContainer.h>
 #include <KoShapeLayer.h>
+#include <KoShapeGroup.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoStore.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoStoreDevice.h>
 #include <KoViewConverter.h>
 #include <KoXmlNS.h>
@@ -75,6 +77,7 @@
 #include "kis_image_view_converter.h"
 #include <kis_painter.h>
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 #include "kis_effect_mask.h"
 
 #include "kis_shape_layer_paste.h"
@@ -107,12 +110,12 @@ public:
     KoViewConverter * converter;
     KisPaintDeviceSP paintDevice;
     KisShapeLayerCanvas * canvas;
-    KoShapeControllerBase* controller;
+    KoShapeBasedDocumentBase* controller;
 };
 
 
 KisShapeLayer::KisShapeLayer(KoShapeContainer * parent,
-                             KoShapeControllerBase* controller,
+                             KoShapeBasedDocumentBase* controller,
                              KisImageWSP image,
                              const QString &name,
                              quint8 opacity)
@@ -162,7 +165,7 @@ KisShapeLayer::~KisShapeLayer()
     delete m_d;
 }
 
-void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller)
+void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
 {
     setShapeId(KIS_SHAPE_LAYER_ID);
 
@@ -228,6 +231,11 @@ void KisShapeLayer::setY(qint32 y)
 bool KisShapeLayer::accept(KisNodeVisitor& visitor)
 {
     return visitor.visit(this);
+}
+
+void KisShapeLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
 }
 
 KoShapeManager* KisShapeLayer::shapeManager() const
@@ -431,6 +439,16 @@ void KisShapeLayer::selectionChanged()
     emit selectionChanged(m_d->canvas->shapeManager()->selection()->selectedShapes());
 }
 
+void KisShapeLayer::resetCache()
+{
+    m_d->paintDevice->clear();
+
+    QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
+    foreach(const KoShape* shape, shapes) {
+        shape->update();
+    }
+}
+
 KUndo2Command* KisShapeLayer::crop(const QRect & rect) {
     QRectF croppedRect = m_d->converter->viewToDocument(rect);
     QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
@@ -446,19 +464,13 @@ KUndo2Command* KisShapeLayer::crop(const QRect & rect) {
     return new KoShapeMoveCommand(shapes, previousPositions, newPositions);
 }
 
-KUndo2Command* KisShapeLayer::transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
-
-    Q_UNUSED(xshear);
-    Q_UNUSED(yshear);
-    QPointF transF = m_d->converter->viewToDocument(QPoint(translatex, translatey));
+KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
     QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
-    if(shapes.isEmpty())
-        return 0;
+    if(shapes.isEmpty()) return 0;
 
-    QTransform matrix;
-    matrix.translate(transF.x(), transF.y());
-    matrix.scale(xscale,yscale);
-    matrix.rotate(angle*180/M_PI);
+    KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(m_d->converter);
+    QTransform realTransform = converter->documentToView() *
+        transform * converter->viewToDocument();
 
     QList<QTransform> oldTransformations;
     QList<QTransform> newTransformations;
@@ -468,9 +480,13 @@ KUndo2Command* KisShapeLayer::transform(double  xscale, double  yscale, double  
     foreach(const KoShape* shape, shapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
-
-
-        newTransformations.append(oldTransform*matrix);
+        if (dynamic_cast<const KoShapeGroup*>(shape)) {
+            newTransformations.append(oldTransform);
+        } else {
+            QTransform globalTransform = shape->absoluteTransformation(0);
+            QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
+            newTransformations.append(localTransform*oldTransform);
+        }
     }
 
     return new KoShapeTransformCommand(shapes, oldTransformations, newTransformations);

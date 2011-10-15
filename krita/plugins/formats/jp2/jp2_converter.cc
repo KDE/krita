@@ -33,7 +33,6 @@
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
-#include <kis_undo_adapter.h>
 #include <QFileInfo>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceTraits.h>
@@ -42,10 +41,9 @@
 #include <KoColorModelStandardIds.h>
 #include <KMessageBox>
 
-jp2Converter::jp2Converter(KisDoc2 *doc, KisUndoAdapter *adapter)
+jp2Converter::jp2Converter(KisDoc2 *doc)
 {
     m_doc = doc;
-    m_adapter = adapter;
     m_job = 0;
     m_stop = false;
 }
@@ -166,7 +164,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     if (!hasColorSpaceInfo) {
         if (components == 3) {
             image->color_space = CLRSPC_SRGB;
-        } else if (components == 3) {
+        } else if (components == 1) {
             image->color_space = CLRSPC_GRAY;
         }
     }
@@ -224,7 +222,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
 
     // Create the image
     if (m_image == 0) {
-        m_image = new KisImage(m_adapter, image->x1, image->y1, colorSpace, "built image");
+        m_image = new KisImage(m_doc->createUndoStore(), image->x1, image->y1, colorSpace, "built image");
         m_image->lock();
     }
 

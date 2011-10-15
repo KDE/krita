@@ -162,9 +162,9 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         if(m_image && m_overlayModeOption.isChecked() && !m_colorRateOption.isChecked()) {
             painter()->setCompositeOp(COMPOSITE_COPY);
             painter()->setOpacity(OPACITY_OPAQUE_U8);
-            m_image->lock();
+            m_image->blockUpdates();
             painter()->bitBlt(x, y, m_image->projection(), x, y, m_maskBounds.width(), m_maskBounds.height());
-            m_image->unlock();
+            m_image->unblockUpdates();
         }
         
         // set opacity calculated by the rate option
@@ -184,9 +184,9 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     if(m_image && m_overlayModeOption.isChecked()) {
         m_tempPainter->setCompositeOp(COMPOSITE_COPY);
         m_tempPainter->setOpacity(OPACITY_OPAQUE_U8);
-        m_image->lock();
+        m_image->blockUpdates();
         m_tempPainter->bitBlt(0, 0, m_image->projection(), x, y, m_maskBounds.width(), m_maskBounds.height());
-        m_image->unlock();
+        m_image->unblockUpdates();
     }
     else {
         // IMPORTANT: clear the temporary painting device to color black with zero opacity

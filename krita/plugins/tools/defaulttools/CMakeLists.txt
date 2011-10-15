@@ -1,3 +1,5 @@
+add_subdirectory(tests)
+
 set(kritadefaulttools_PART_SRCS
     default_tools.cc
     kis_tool_colorpicker.cc
@@ -10,9 +12,9 @@ set(kritadefaulttools_PART_SRCS
     kis_tool_measure.cc
     kis_tool_path.cc
     kis_tool_move.cc
+    strokes/move_stroke_strategy.cpp
     kis_tool_pan.cpp
     kis_tool_multihand.cpp
-    kis_tool_multihand_p.cpp
     )
 
 kde4_add_ui_files(kritadefaulttools_PART_SRCS wdgcolorpicker.ui wdgmovetool.ui)

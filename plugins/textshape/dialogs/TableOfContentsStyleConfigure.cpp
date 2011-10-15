@@ -29,11 +29,11 @@
 
 TableOfContentsStyleConfigure::TableOfContentsStyleConfigure(KoStyleManager *manager, QWidget *parent) :
     QDialog(parent),
+    ui(new Ui::TableOfContentsStyleConfigure),
     m_stylesTree(0),
     m_styleManager(manager),
-    m_stylesModel(0),
     m_tocInfo(0),
-    ui(new Ui::TableOfContentsStyleConfigure)
+    m_stylesModel(0)
 {
     ui->setupUi(this);
     setWindowTitle(i18n("Table of Contents - Configure Styles"));

@@ -29,7 +29,6 @@ KAction *KoStandardAction::create(StandardAction id, const QObject *recvr, const
     switch (id) {
     case ShowGuides: {
         KToggleAction *toggle = new KToggleAction(i18n("Show Guides"), parent);
-        toggle->setCheckedState(KGuiItem(i18n("Hide Guides")));
         toggle->setToolTip(i18n("Shows or hides guides"));
         newAction = toggle;
         break;

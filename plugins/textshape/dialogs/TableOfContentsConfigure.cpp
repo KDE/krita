@@ -20,6 +20,9 @@
 
 #include "TableOfContentsConfigure.h"
 #include "TableOfContentsStyleConfigure.h"
+#include "TableOfContentsEntryDelegate.h"
+#include "TableOfContentsEntryModel.h"
+#include "TableOfContentsStyleModel.h"
 #include "KoTableOfContentsGeneratorInfo.h"
 #include "KoTextDocument.h"
 
@@ -29,10 +32,43 @@
 TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, QTextBlock block, QWidget *parent) :
     QDialog(parent),
     m_textEditor(editor),
-    m_document(0),
     m_tocStyleConfigure(0),
     m_tocInfo(0),
-    m_block(block)
+    m_block(block),
+    m_document(0),
+    m_tocEntryStyleModel(0),
+    m_tocEntryConfigureDelegate(0)
+{
+    init();
+
+    KoTableOfContentsGeneratorInfo *info = block.blockFormat().property(KoParagraphStyle::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
+    m_tocInfo = info->clone();
+
+    setDisplay();
+}
+
+TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, KoTableOfContentsGeneratorInfo *info, QWidget *parent) :
+    QDialog(parent),
+    m_textEditor(editor),
+    m_tocStyleConfigure(0),
+    m_tocInfo(0),
+    m_document(0),
+    m_tocEntryStyleModel(0),
+    m_tocEntryConfigureDelegate(0)
+{
+    init();
+    m_tocInfo = info->clone();
+    setDisplay();
+}
+
+TableOfContentsConfigure::~TableOfContentsConfigure()
+{
+    if (m_tocInfo) {
+        delete m_tocInfo;
+    }
+}
+
+void TableOfContentsConfigure::init()
 {
     ui.setupUi(this);
 
@@ -42,6 +78,9 @@ TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, QTextBl
     ui.useOutline->setText(i18n("Use outline"));
     ui.useStyles->setText(i18n("Use styles"));
     ui.configureStyles->setText(i18n("Configure"));
+    ui.tabWidget->setTabText(0, i18n("Index"));
+    ui.tabWidget->setTabText(1, i18n("Styles"));
+    ui.tabWidget->setCurrentIndex(0);
 
     ui.tocPreview->setStyleManager(KoTextDocument(m_textEditor->document()).styleManager());
 
@@ -49,20 +88,12 @@ TableOfContentsConfigure::TableOfContentsConfigure(KoTextEditor *editor, QTextBl
     connect(this, SIGNAL(rejected()), this, SLOT(cleanUp()));
     connect(ui.configureStyles, SIGNAL(clicked(bool)), this, SLOT(showStyleConfiguration(bool)));
     connect(ui.lineEditTitle, SIGNAL(returnPressed()), this, SLOT(updatePreview()));
-
-    KoTableOfContentsGeneratorInfo *info = block.blockFormat().property(KoParagraphStyle::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
-    m_tocInfo = info->clone();
-
-    setVisible(true);
-    setDisplay();
-}
-
-TableOfContentsConfigure::~TableOfContentsConfigure()
-{
 }
 
 void TableOfContentsConfigure::setDisplay()
 {
+    setVisible(true);
+
     ui.lineEditTitle->setText(m_tocInfo->m_indexTitleTemplate.text);
     ui.useOutline->setCheckState(m_tocInfo->m_useOutlineLevel ? Qt::Checked : Qt::Unchecked);
     ui.useStyles->setCheckState(m_tocInfo->m_useIndexSourceStyles ? Qt::Checked : Qt::Unchecked);
@@ -70,6 +101,22 @@ void TableOfContentsConfigure::setDisplay()
     connect(ui.lineEditTitle, SIGNAL(textChanged(const QString &)), this, SLOT(titleTextChanged(const QString&)));
     connect(ui.useOutline, SIGNAL(stateChanged(int )), this, SLOT(useOutline(int)));
     connect(ui.useStyles, SIGNAL(stateChanged(int )), this, SLOT(useIndexSourceStyles(int)));
+
+    m_tocEntryStyleModel = new TableOfContentsEntryModel(KoTextDocument(m_textEditor->document()).styleManager(), m_tocInfo);
+    connect(m_tocEntryStyleModel, SIGNAL(tocEntryDataChanged()), this, SLOT(updatePreview()));
+
+    m_tocEntryConfigureDelegate = new TableOfContentsEntryDelegate(KoTextDocument(m_textEditor->document()).styleManager());
+
+    ui.configureToCEntryStyle->setModel(m_tocEntryStyleModel);
+
+    ui.configureToCEntryStyle->setItemDelegateForColumn(1, m_tocEntryConfigureDelegate);
+
+    ui.configureToCEntryStyle->setShowGrid(false);
+    ui.configureToCEntryStyle->verticalHeader()->hide();
+    ui.configureToCEntryStyle->setEditTriggers(QAbstractItemView::CurrentChanged | QAbstractItemView::DoubleClicked | QAbstractItemView::SelectedClicked);
+    ui.configureToCEntryStyle->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui.configureToCEntryStyle->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
+    ui.configureToCEntryStyle->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
 
     connect(this, SIGNAL(accepted()), this, SLOT(save()));
     connect(this, SIGNAL(rejected()), this, SLOT(cleanUp()));
@@ -84,7 +131,13 @@ void TableOfContentsConfigure::save()
     m_tocInfo->m_useOutlineLevel = ui.useOutline->checkState() == Qt::Checked ? true : false;
     m_tocInfo->m_useIndexSourceStyles = ui.useStyles->checkState() == Qt::Checked ? true : false;
 
-    m_textEditor->updateTableOfContents(m_tocInfo, m_block);
+    if (m_tocEntryStyleModel) {
+        m_tocEntryStyleModel->saveData();
+    }
+
+    if (m_block.isValid()) {
+        m_textEditor->setTableOfContentsConfig(m_tocInfo, m_block);
+    }
     cleanUp();
 }
 
@@ -129,7 +182,19 @@ void TableOfContentsConfigure::cleanUp()
     disconnect(this, SIGNAL(accepted()), this, SLOT(save()));
     disconnect(this, SIGNAL(rejected()), this, SLOT(cleanUp()));
 
-    delete m_tocInfo;
-    m_tocInfo=0;
+    if(m_tocEntryStyleModel) {
+        delete m_tocEntryStyleModel;
+        m_tocEntryStyleModel = 0;
+    }
+
+    if(m_tocEntryConfigureDelegate) {
+        delete m_tocEntryConfigureDelegate;
+        m_tocEntryConfigureDelegate = 0;
+    }
 }
 
+
+KoTableOfContentsGeneratorInfo *TableOfContentsConfigure::currentToCData()
+{
+    return m_tocInfo;
+}

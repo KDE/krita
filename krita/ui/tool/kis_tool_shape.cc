@@ -28,7 +28,7 @@
 #include <KoShapeController.h>
 #include <KoColorBackground.h>
 #include <KoPatternBackground.h>
-
+#include <KoDocumentResourceManager.h>
 #include <kis_debug.h>
 #include <klocale.h>
 

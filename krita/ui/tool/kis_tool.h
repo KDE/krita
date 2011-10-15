@@ -24,7 +24,7 @@
 #include <KoColor.h>
 #include <KoToolBase.h>
 #include <KoID.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <krita_export.h>
 #include <kis_types.h>
 
@@ -86,9 +86,9 @@ public:
 
     KisTool(KoCanvasBase * canvas, const QCursor & cursor);
     virtual ~KisTool();
-    
+
     virtual int flags() const { return 0; }
-    
+
     void deleteSelection();
 // KoToolBase Implementation.
 
@@ -179,7 +179,7 @@ protected:
 
     /// convenience method to fill the painter's settings with all the current resources
     virtual void setupPainter(KisPainter * painter);
-    
+
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 
     /// paint the path which is in view coordinates, default paint mode is XOR_MODE, BW_MODE is also possible
@@ -196,7 +196,7 @@ protected:
     /// Call after finishing use of native OpenGL commands when painting this tool's decorations.
     /// This is a convenience method that calls endOpenGL() on the OpenGL canvas object.
     void endOpenGL();
-    
+
     /// Sets the systemLocked for the current node, this will not deactivate the tool buttons
     void setCurrentNodeLocked(bool locked);
 

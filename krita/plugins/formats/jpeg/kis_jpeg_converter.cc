@@ -25,7 +25,13 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include <lcms.h>
+
+#include <KoConfig.h>
+#ifdef HAVE_LCMS2
+#   include <lcms2.h>
+#else
+#   include <lcms.h>
+#endif
 
 extern "C" {
 #include <iccjpeg.h>
@@ -111,10 +117,9 @@ QString getColorSpaceModelForColorType(J_COLOR_SPACE color_type)
 
 }
 
-KisJPEGConverter::KisJPEGConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
+KisJPEGConverter::KisJPEGConverter(KisDoc2 *doc)
 {
     m_doc = doc;
-    m_adapter = adapter;
     m_job = 0;
     m_stop = false;
 }
@@ -171,7 +176,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     if (read_icc_profile(&cinfo, &profile_data, &profile_len)) {
         profile_rawdata.resize(profile_len);
         memcpy(profile_rawdata.data(), profile_data, profile_len);
-        cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, (DWORD)profile_len);
+        cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, profile_len);
 
         if (hProfile != (cmsHPROFILE) NULL) {
             profile = KoColorSpaceRegistry::instance()->createColorProfile(modelId, Integer8BitsColorDepthID.id(), profile_rawdata);
@@ -220,7 +225,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     // Creating the KisImageWSP
     if (! m_image) {
-        m_image = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
+        m_image = new KisImage(m_doc->createUndoStore(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
         Q_CHECK_PTR(m_image);
         m_image->lock();
     }

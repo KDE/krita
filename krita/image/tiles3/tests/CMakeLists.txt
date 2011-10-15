@@ -8,6 +8,11 @@ kde4_add_unit_test(KisTiledDataManagerTest TESTNAME krita-image-KisTiledDataMana
 target_link_libraries(KisTiledDataManagerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
+set(kis_low_memory_tests_SRCS kis_low_memory_tests.cpp )
+kde4_add_unit_test(KisLowMemoryTests TESTNAME krita-image-KisLowMemoryTests  ${kis_low_memory_tests_SRCS})
+target_link_libraries(KisLowMemoryTests  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
 set(kis_tile_compressors_test_SRCS kis_tile_compressors_test.cpp )
 kde4_add_unit_test(KisTileCompressorsTest TESTNAME krita-image-KisTileCompressorsTest  ${kis_tile_compressors_test_SRCS})
 target_link_libraries(KisTileCompressorsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -56,3 +61,4 @@ target_link_libraries(KisStoreLimitsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTT
 set(kis_tile_data_pooler_test_SRCS kis_tile_data_pooler_test.cpp ../kis_tile_data.cc ../kis_tile_data_pooler.cc )
 kde4_add_unit_test(KisTileDataPoolerTest TESTNAME krita-image-KisTileDataPoolerTest  ${kis_tile_data_pooler_test_SRCS})
 target_link_libraries(KisTileDataPoolerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+

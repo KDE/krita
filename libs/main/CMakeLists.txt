@@ -51,7 +51,6 @@ set(komain_LIB_SRCS
     KoFilterEdge.cpp
     KoFilterChainLink.cpp
     KoFilterChainLinkList.cpp
-    KoImageSelectionWidget.cpp
     KoStandardAction.cpp
     KoUndoStackAction.cpp
     config/KoConfigDocumentPage.cpp
@@ -162,6 +161,7 @@ if( Soprano_FOUND )
     target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
 if( MARBLE_FOUND )
+    include_directories(${MARBLE_INCLUDE_DIR})
     target_link_libraries(komain ${MARBLE_LIBRARIES})
     target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
 endif( MARBLE_FOUND )
@@ -219,7 +219,6 @@ install( FILES
     KoVersionDialog.h
     KoView.h
     KoViewAdaptor.h
-    KoImageSelectionWidget.h
     calligraversion.h
     KoProgressUpdater.h
     KoProgressBar.h

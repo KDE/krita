@@ -157,11 +157,14 @@ void KisVLineIterator2::switchToTile(qint32 yInTile)
     Q_ASSERT(m_index < m_tilesCacheSize);
     Q_ASSERT(m_index >= 0);
 
+    int offset_row = m_pixelSize * m_xInTile;
     m_data = m_tilesCache[m_index].data;
     m_oldData = m_tilesCache[m_index].oldData;
-    m_data += m_pixelSize * m_xInTile;
+    m_data += offset_row;
     m_dataBottom = m_data + m_tileSize;
-    m_data  += m_pixelSize * yInTile * KisTileData::WIDTH;
+    int offset_col = m_pixelSize * yInTile * KisTileData::WIDTH;
+    m_data  += offset_col;
+    m_oldData += offset_row + offset_col;
 }
 
 

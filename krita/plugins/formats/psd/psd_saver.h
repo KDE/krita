@@ -26,7 +26,6 @@
 
 #include "kis_types.h"
 class KisDoc2;
-class KisUndoAdapter;
 
 /**
  * Image import/export plugins can use these results to report about success or failure.
@@ -54,7 +53,7 @@ class PSDSaver : public QObject {
 
 public:
 
-    PSDSaver(KisDoc2 *doc, KisUndoAdapter *adapter);
+    PSDSaver(KisDoc2 *doc);
     virtual ~PSDSaver();
 
 public:
@@ -71,7 +70,6 @@ private:
 
     KisImageWSP m_image;
     KisDoc2 *m_doc;
-    KisUndoAdapter *m_adapter;
     bool m_stop;
     KIO::TransferJob *m_job;
 };

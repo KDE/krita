@@ -62,7 +62,7 @@ public:
     KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store);
 
 private:
-    KisTileData(const KisTileData& rhs);
+    KisTileData(const KisTileData& rhs, bool checkFreeMemory = true);
 
 public:
     ~KisTileData();
@@ -235,6 +235,8 @@ private:
     QReadWriteLock m_swapLock;
 
 private:
+    friend class KisLowMemoryTests;
+
     /**
      * FIXME: We should be able to work in const environment
      * even when actual data is swapped out to disk

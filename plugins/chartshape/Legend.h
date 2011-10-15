@@ -71,7 +71,7 @@ public:
     void setLegendPosition( Position position );
     void setSize( const QSizeF &size );
 
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     void paintPixmap( QPainter &painter, const KoViewConverter &converter );
 
     bool loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &context );

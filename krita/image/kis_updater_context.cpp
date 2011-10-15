@@ -21,6 +21,8 @@
 #include <QThread>
 #include <QThreadPool>
 
+#include "kis_update_job_item.h"
+
 
 KisUpdaterContext::KisUpdaterContext(qint32 threadCount)
 {
@@ -31,7 +33,7 @@ KisUpdaterContext::KisUpdaterContext(qint32 threadCount)
 
     m_jobs.resize(threadCount);
     for(qint32 i = 0; i < m_jobs.size(); i++) {
-        m_jobs[i] = new KisUpdateJobItem();
+        m_jobs[i] = new KisUpdateJobItem(&m_exclusiveJobLock);
         connect(m_jobs[i], SIGNAL(sigContinueUpdate(const QRect&)),
                 SIGNAL(sigContinueUpdate(const QRect&)),
                 Qt::DirectConnection);
@@ -49,6 +51,22 @@ KisUpdaterContext::~KisUpdaterContext()
     m_threadPool.waitForDone();
     for(qint32 i = 0; i < m_jobs.size(); i++)
         delete m_jobs[i];
+}
+
+void KisUpdaterContext::getJobsSnapshot(qint32 &numMergeJobs,
+                                        qint32 &numStrokeJobs)
+{
+    numMergeJobs = 0;
+    numStrokeJobs = 0;
+
+    foreach(const KisUpdateJobItem *item, m_jobs) {
+        if(item->type() == KisUpdateJobItem::MERGE) {
+            numMergeJobs++;
+        }
+        else if(item->type() == KisUpdateJobItem::STROKE) {
+            numStrokeJobs++;
+        }
+    }
 }
 
 bool KisUpdaterContext::hasSpareThread()
@@ -79,13 +97,14 @@ bool KisUpdaterContext::isJobAllowed(KisBaseRectsWalkerSP walker)
 }
 
 /**
- * NOTE: In theory, isJobAllowed() and addJob() should be merged into
+ * NOTE: In theory, isJobAllowed() and addMergeJob() should be merged into
  * one atomic method like `bool push()`, because this implementation
  * of KisUpdaterContext will not work in case of multiple
  * producers. But currently we have only one producer (one thread
- * in a time), that is guaranteed by the mutex in KisSimpleUpdateQueue.
+ * in a time), that is guaranteed by the lock()/unlock() pair in
+ * KisAbstractUpdateQueue::processQueue.
  */
-void KisUpdaterContext::addJob(KisBaseRectsWalkerSP walker)
+void KisUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
 {
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
@@ -97,12 +116,33 @@ void KisUpdaterContext::addJob(KisBaseRectsWalkerSP walker)
 /**
  * This variant is for use in a testing suite only
  */
-void KisTestableUpdaterContext::addJob(KisBaseRectsWalkerSP walker)
+void KisTestableUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
 {
     qint32 jobIndex = findSpareThread();
     Q_ASSERT(jobIndex >= 0);
 
     m_jobs[jobIndex]->setWalker(walker);
+    // HINT: Not calling start() here
+}
+
+void KisUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
+{
+    qint32 jobIndex = findSpareThread();
+    Q_ASSERT(jobIndex >= 0);
+
+    m_jobs[jobIndex]->setStrokeJob(strokeJob);
+    m_threadPool.start(m_jobs[jobIndex]);
+}
+
+/**
+ * This variant is for use in a testing suite only
+ */
+void KisTestableUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
+{
+    qint32 jobIndex = findSpareThread();
+    Q_ASSERT(jobIndex >= 0);
+
+    m_jobs[jobIndex]->setStrokeJob(strokeJob);
     // HINT: Not calling start() here
 }
 
@@ -148,6 +188,10 @@ KisTestableUpdaterContext::KisTestableUpdaterContext(qint32 threadCount)
 {
 }
 
+KisTestableUpdaterContext::~KisTestableUpdaterContext() {
+    clear();
+}
+
 const QVector<KisUpdateJobItem*> KisTestableUpdaterContext::getJobs()
 {
     return m_jobs;
@@ -155,7 +199,8 @@ const QVector<KisUpdateJobItem*> KisTestableUpdaterContext::getJobs()
 
 void KisTestableUpdaterContext::clear()
 {
-    foreach(KisUpdateJobItem *item, m_jobs)
-        item->setDone();
+    foreach(KisUpdateJobItem *item, m_jobs) {
+        item->testingSetDone();
+    }
 }
 

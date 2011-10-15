@@ -50,7 +50,6 @@
     (scX < (value) - EPSILON && scY < (value) - EPSILON)
 #define SCALE_MORE_OR_EQUAL_TO(scX, scY, value) \
     (scX > (value) - EPSILON && scY > (value) - EPSILON)
-#define BORDER_SIZE(scale) (ceil(scale * 2))
 
 inline void copyQImageBuffer(uchar* dst, const uchar* src , qint32 deltaX, qint32 width)
 {

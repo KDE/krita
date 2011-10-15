@@ -48,6 +48,11 @@ KisRectangleMaskGenerator::~KisRectangleMaskGenerator()
     delete d;
 }
 
+bool KisRectangleMaskGenerator::shouldSupersample() const
+{
+    return width() < 10 || height() < 10;
+}
+
 quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
 {
     if (KisMaskGenerator::d->empty) return 255;

@@ -74,16 +74,16 @@ public:
     virtual QPainterPath selectionOutline();
 
     KoShapeManager *shapeManager() const;
-    
+
     void moveX(qint32 x);
     void moveY(qint32 y);
-    
-    KUndo2Command* transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey);
-        
+
+    KUndo2Command* transform(const QTransform &transform);
+
 
 protected:
 
-    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
+    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
 
 private:
 
@@ -107,7 +107,7 @@ public:
     KisShapeSelectionFactory();
     ~KisShapeSelectionFactory() {}
 
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const {
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const {
         Q_UNUSED(documentResources);
         return 0;
     }

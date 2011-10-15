@@ -124,7 +124,10 @@ set(kritaui_LIB_SRCS
     tool/kis_shape_tool_helper.cpp 
     tool/kis_tool.cc 
     tool/kis_tool_freehand.cc 
-    tool/kis_tool_freehand_p.cpp
+    tool/kis_painting_information_builder.cpp
+    tool/kis_tool_freehand_helper.cpp
+    tool/kis_tool_multihand_helper.cpp
+    tool/kis_recording_adapter.cpp
     tool/kis_tool_paint.cc 
     tool/kis_tool_shape.cc
     tool/kis_tool_select_base.cpp
@@ -132,6 +135,9 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_rectangle_base.cpp
     tool/kis_tool_polyline_base.cpp
     tool/kis_color_picker_utils.cpp
+    tool/kis_resources_snapshot.cpp
+    tool/strokes/freehand_stroke.cpp
+    tool/strokes/kis_painter_based_stroke_strategy.cpp
     widgets/kis_channelflags_widget.cpp 
     widgets/kis_cmb_composite.cc
     widgets/kis_paintop_list_widget.cpp
@@ -158,6 +164,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_progress_widget.cpp
     widgets/kis_selection_options.cc 
     widgets/kis_scratch_pad.cpp
+    widgets/kis_scratch_pad_event_filter.cpp
     widgets/kis_preset_selector_strip.cpp
     widgets/kis_tree_view_popup.cc 
     widgets/kis_slider_spin_box.cpp
@@ -231,7 +238,11 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
-target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+if(GHNS)
+    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+else(GHNS)
+    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+endif (GHNS)
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})

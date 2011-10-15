@@ -29,9 +29,6 @@ public:
     KisImageConfig();
     ~KisImageConfig();
 
-    bool useUpdateScheduler() const;
-    void setUseUpdateScheduler(bool useUpdateScheduler);
-
     int updatePatchHeight() const;
     void setUpdatePatchHeight(int value);
     int updatePatchWidth() const;
@@ -40,6 +37,8 @@ public:
     qreal maxCollectAlpha() const;
     qreal maxMergeAlpha() const;
     qreal maxMergeCollectAlpha() const;
+    qreal schedulerBalancingRatio() const;
+    void setSchedulerBalancingRatio(qreal value);
 
     int maxSwapSize() const;
     void setMaxSwapSize(int value);
@@ -62,6 +61,12 @@ public:
     void setMemoryPoolLimitPercent(qreal value);
 
     static int totalRAM(); // MiB
+
+    /**
+     * @return a specific directory for the swapfile, if set. If not set, return an
+     * empty QString and use the default KDE directory.
+     */
+    QString swapDir();
 
 private:
     Q_DISABLE_COPY(KisImageConfig);

@@ -29,14 +29,23 @@ class KRITAUI_EXPORT KisCategorizedListView: public QListView
 {
     Q_OBJECT
 public:
-    KisCategorizedListView(QWidget* parent=0);
-    
+    KisCategorizedListView(bool useCheckBoxHack=false, QWidget* parent=0);
+    virtual void setModel(QAbstractItemModel* model);
+    void updateRows(int begin, int end);
+
 signals:
     void sigCategoryToggled(const QModelIndex& index, bool toggled);
-    
+    void sigEntryChecked(const QModelIndex& index);
+
 protected slots:
     void slotIndexChanged(const QModelIndex& index);
     virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+    virtual void rowsInserted(const QModelIndex& parent, int start, int end);
+    virtual void mousePressEvent(QMouseEvent* event);
+    virtual void mouseReleaseEvent(QMouseEvent* event);
+
+private:
+    bool m_useCheckBoxHack;
 };
 
 
@@ -46,13 +55,13 @@ class KRITAUI_EXPORT KisCategorizedWidgetBase
 public:
     KisCategorizedWidgetBase():
         m_model(0), m_delegate(0) { }
-    
+
     int  indexOf(const KoID& entry)       const { return m_model->indexOf(entry).row();  }
     bool entryAt(KoID& result, int index) const { return m_model->entryAt(result,index); }
-    
+
     const TModel* getModel() const { return m_model; }
     TModel*       getModel()       { return m_model; }
-    
+
 protected:
     TModel*              m_model;
     QStyledItemDelegate* m_delegate;

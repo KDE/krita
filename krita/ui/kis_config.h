@@ -19,6 +19,7 @@
 #define KIS_CONFIG_H_
 
 #include <QString>
+#include <QStringList>
 #include <QColor>
 
 #include <ksharedconfig.h>
@@ -245,6 +246,10 @@ public:
 
     int hideToolbarFullscreen();
     void setHideToolbarFullscreen(const int value) const;
+
+    QStringList favoriteCompositeOps() const;
+    void setFavoriteCompositeOps(const QStringList& compositeOps);
+
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

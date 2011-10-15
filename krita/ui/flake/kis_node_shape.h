@@ -45,7 +45,7 @@ public:
     KisNodeSP node();
 
     // Shape overrides
-    void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
     bool isSelectable() const {
         return false;
@@ -58,7 +58,7 @@ public:
     void setPosition(const QPointF & position);
 
     // KoShapeContainer implementation
-    void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
     /// reimplemented
     virtual void saveOdf(KoShapeSavingContext & context) const;

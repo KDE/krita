@@ -20,6 +20,7 @@
 
 #include "kis_base_rects_walker.h"
 #include "kis_merge_walker.h"
+#include "kis_refresh_subtree_walker.h"
 #include "kis_full_refresh_walker.h"
 
 #include <qtest_kde.h>
@@ -364,6 +365,71 @@ void KisWalkersTest::testMergeVisiting()
 
 }
 
+class TestingRefreshSubtreeWalker : public KisRefreshSubtreeWalker
+{
+public:
+    TestingRefreshSubtreeWalker(QRect cropRect) : KisRefreshSubtreeWalker(cropRect) {}
+    UpdateType type() const { return FULL_REFRESH; }
+};
+
+
+    /*
+      +----------+
+      |root      |
+      | layer 5  |
+      | cplx  2  |
+      | group    |
+      |  paint 4 |
+      |  paint 3 |
+      |  cplx  1 |
+      |  paint 2 |
+      | paint 1  |
+      +----------+
+     */
+
+void KisWalkersTest::testRefreshSubtreeVisiting()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE_U8);
+
+    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE_U8);
+    KisLayerSP complexRectsLayer1 = new ComplexRectsLayer(image, "cplx1", OPACITY_OPAQUE_U8);
+    KisLayerSP complexRectsLayer2 = new ComplexRectsLayer(image, "cplx2", OPACITY_OPAQUE_U8);
+
+    image->addNode(paintLayer1, image->rootLayer());
+    image->addNode(groupLayer, image->rootLayer());
+    image->addNode(complexRectsLayer2, image->rootLayer());
+    image->addNode(paintLayer5, image->rootLayer());
+
+    image->addNode(paintLayer2, groupLayer);
+    image->addNode(complexRectsLayer1, groupLayer);
+    image->addNode(paintLayer3, groupLayer);
+    image->addNode(paintLayer4, groupLayer);
+
+    QRect testRect(10,10,10,10);
+    // Empty rect to show we don't need any cropping
+    QRect cropRect;
+
+    TestingRefreshSubtreeWalker walker(cropRect);
+
+    {
+        QString order("root,paint5,cplx2,group,paint1,"
+                      "paint4,paint3,cplx1,paint2");
+        QStringList orderList = order.split(",");
+        QRect accessRect(-10,-10,50,50);
+
+        reportStartWith("root");
+        walker.collectRects(image->rootLayer(), testRect);
+        verifyResult(walker, orderList, accessRect, true, true);
+    }
+}
+
     /*
       +----------+
       |root      |
@@ -411,12 +477,12 @@ void KisWalkersTest::testFullRefreshVisiting()
 
     {
         QString order("root,paint5,cplx2,group,paint1,"
-                      "paint4,paint3,cplx1,paint2");
+                      "group,paint4,paint3,cplx1,paint2");
         QStringList orderList = order.split(",");
-        QRect accessRect(-10,-10,50,50);
+        QRect accessRect(-7,-7,44,44);
 
         reportStartWith("root");
-        walker.collectRects(image->rootLayer(), testRect);
+        walker.collectRects(groupLayer, testRect);
         verifyResult(walker, orderList, accessRect, true, true);
     }
 }

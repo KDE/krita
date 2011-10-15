@@ -26,7 +26,7 @@
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoViewConverter.h>
 #include <KoGuidesData.h>
 #include <KoToolManager.h>
@@ -241,7 +241,7 @@ void GuidesTool::createGuideLine(Qt::Orientation orientation, qreal position)
     m_mode = AddGuide;
 
     KoToolManager::instance()->switchToolRequested(GuidesToolId);
-    
+
     // grab the mouse so we get mouse events as the dragging started on a ruler
     canvas()->canvasWidget()->grabMouse();
 }
@@ -374,7 +374,7 @@ GuidesTool::GuideLine GuidesTool::guideLineAtPosition(const QPointF &position)
 
 void GuidesTool::resourceChanged(int key, const QVariant &res)
 {
-    if (key == KoCanvasResource::Unit) {
+    if (key == KoCanvasResourceManager::Unit) {
         if (m_options)
             m_options->setUnit(res.value<KoUnit>());
     }
@@ -403,7 +403,7 @@ QList<QWidget*> GuidesTool::createOptionWidgets()
 void GuidesTool::insertorCreateGuidesSlot(GuidesTransaction *result)
 {
     KoGuidesData *guidesData = canvas()->guidesData();
-    const QSizeF pageSize = canvas()->resourceManager()->sizeResource(KoCanvasResource::PageSize);
+    const QSizeF pageSize = canvas()->resourceManager()->sizeResource(KoCanvasResourceManager::PageSize);
 
     QList< qreal > verticalLines;
     QList< qreal > horizontalLines;

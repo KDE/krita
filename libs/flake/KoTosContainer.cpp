@@ -56,7 +56,7 @@ KoTosContainer::KoTosContainer(KoTosContainerPrivate &dd)
 {
 }
 
-void KoTosContainer::paintComponent(QPainter &, const KoViewConverter &)
+void KoTosContainer::paintComponent(QPainter &, const KoViewConverter &, KoShapePaintingContext &)
 {
 }
 
@@ -201,7 +201,7 @@ QRectF KoTosContainer::preferredTextRect() const
     return d->preferredTextRect;
 }
 
-KoShape *KoTosContainer::createTextShape(KoResourceManager *documentResources)
+KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentResources)
 {
     if (!documentResources) {
         return 0;

@@ -16,7 +16,7 @@
  */
 
 #include <klocale.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
 
 #include <QWidget>
@@ -52,27 +52,27 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock():
     m_resetMenu     = new QMenu();
     m_preferencesUI = new ColorPreferencesPopupUI();
     m_selectorUI    = new ArtisticColorSelectorUI();
-    
+
     m_resetMenu->addAction(i18n("Reset All Rings"))->setData(ACTION_RESET_EVERY_RING);
     m_resetMenu->addAction(i18n("Reset Selected Ring"))->setData(ACTION_RESET_SELECTED_RING);
     m_resetMenu->addAction(i18n("Reset Light"))->setData(ACTION_RESET_LIGHT);
     m_resetMenu->addAction(i18n("Reset Everything"))->setData(ACTION_RESET_EVERYTHING);
-    
+
     m_selectorUI->bnColorPrefs->setPopupWidget(m_preferencesUI);
     m_selectorUI->bnReset->setMenu(m_resetMenu);
-    
+
     m_hsxButtons->addButton(m_preferencesUI->bnHsy, KisColor::HSY);
     m_hsxButtons->addButton(m_preferencesUI->bnHsi, KisColor::HSI);
     m_hsxButtons->addButton(m_preferencesUI->bnHsl, KisColor::HSL);
     m_hsxButtons->addButton(m_preferencesUI->bnHsv, KisColor::HSV);
-    
+
     m_preferencesUI->numPiecesSlider->setRange(1, 48);
     m_preferencesUI->numPiecesSlider->setValue(12);
     m_preferencesUI->numRingsSlider->setRange(1, 20);
     m_preferencesUI->numRingsSlider->setValue(11);
     m_preferencesUI->numLightPiecesSlider->setRange(1, 30);
     m_preferencesUI->numLightPiecesSlider->setValue(19);
-    
+
     connect(m_preferencesUI->numLightPiecesSlider, SIGNAL(valueChanged(int))                      , SLOT(slotPreferenceChanged()));
     connect(m_preferencesUI->numPiecesSlider     , SIGNAL(valueChanged(int))                      , SLOT(slotPreferenceChanged()));
     connect(m_preferencesUI->numRingsSlider      , SIGNAL(valueChanged(int))                      , SLOT(slotPreferenceChanged()));
@@ -85,7 +85,7 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock():
     connect(m_resetMenu                          , SIGNAL(triggered(QAction*))                    , SLOT(slotMenuActionTriggered(QAction*)));
     connect(this                                 , SIGNAL(topLevelChanged(bool))                  , SLOT(slotTopLevelChanged(bool)));
     connect(this                                 , SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
-    
+
     setWidget(m_selectorUI);
     slotColorSpaceSelected(KisColor::HSY);
     slotPreferenceChanged();
@@ -102,7 +102,7 @@ void ArtisticColorSelectorDock::setCanvas(KoCanvasBase* canvas)
     // "Every connection you make emits a signal, so duplicate connections emit two signals"
     if(m_canvas)
         m_canvas->disconnectCanvasObserver(this);
-    
+
     m_canvas = canvas;
     m_selectorUI->colorSelector->setFgColor(m_canvas->resourceManager()->foregroundColor().toQColor());
     m_selectorUI->colorSelector->setBgColor(m_canvas->resourceManager()->backgroundColor().toQColor());
@@ -111,10 +111,10 @@ void ArtisticColorSelectorDock::setCanvas(KoCanvasBase* canvas)
 
 void ArtisticColorSelectorDock::slotResourceChanged(int key, const QVariant& value)
 {
-    if(key == KoCanvasResource::ForegroundColor)
+    if(key == KoCanvasResourceManager::ForegroundColor)
         m_selectorUI->colorSelector->setFgColor(value.value<KoColor>().toQColor());
-    
-    if(key == KoCanvasResource::BackgroundColor)
+
+    if(key == KoCanvasResourceManager::BackgroundColor)
         m_selectorUI->colorSelector->setBgColor(value.value<KoColor>().toQColor());
 }
 
@@ -152,15 +152,15 @@ void ArtisticColorSelectorDock::slotMenuActionTriggered(QAction* action)
     case ACTION_RESET_SELECTED_RING:
         m_selectorUI->colorSelector->resetSelectedRing();
         break;
-        
+
     case ACTION_RESET_EVERY_RING:
         m_selectorUI->colorSelector->resetRings();
         break;
-        
+
     case ACTION_RESET_LIGHT:
         m_selectorUI->colorSelector->resetLight();
         break;
-        
+
     case ACTION_RESET_EVERYTHING:
         m_selectorUI->colorSelector->resetLight();
         m_selectorUI->colorSelector->resetRings();
@@ -174,12 +174,12 @@ void ArtisticColorSelectorDock::slotResetDefaultSettings()
     m_preferencesUI->numRingsSlider->blockSignals(true);
     m_preferencesUI->numRingsSlider->setValue(7);
     m_preferencesUI->numRingsSlider->blockSignals(false);
-    
+
     m_selectorUI->colorSelector->setNumPieces(12);
     m_preferencesUI->numPiecesSlider->blockSignals(true);
     m_preferencesUI->numPiecesSlider->setValue(12);
     m_preferencesUI->numPiecesSlider->blockSignals(false);
-    
+
     m_selectorUI->colorSelector->setNumLightPieces(9);
     m_preferencesUI->numLightPiecesSlider->blockSignals(true);
     m_preferencesUI->numLightPiecesSlider->setValue(9);
@@ -199,7 +199,7 @@ void ArtisticColorSelectorDock::slotDockLocationChanged(Qt::DockWidgetArea area)
     else {
         if(area & Qt::LeftDockWidgetArea)
             m_selectorUI->colorSelector->setLightStripPosition(KisColorSelector::LSP_RIGHT);
-        
+
         if(area & Qt::RightDockWidgetArea)
             m_selectorUI->colorSelector->setLightStripPosition(KisColorSelector::LSP_LEFT);
     }

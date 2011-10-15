@@ -1045,7 +1045,7 @@ void PlotArea::paintPixmap( QPainter &painter, const KoViewConverter &converter 
     }
 }
 
-void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
+void PlotArea::paint( QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
 {
     //painter.save();
 

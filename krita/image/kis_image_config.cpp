@@ -32,16 +32,6 @@ KisImageConfig::~KisImageConfig()
     m_config.sync();
 }
 
-bool KisImageConfig::useUpdateScheduler() const
-{
-    return m_config.readEntry("useUpdateScheduler", true);
-}
-
-void KisImageConfig::setUseUpdateScheduler(bool value)
-{
-    m_config.writeEntry("useUpdateScheduler", value);
-}
-
 int KisImageConfig::updatePatchHeight() const
 {
     return m_config.readEntry("updatePatchHeight", 512);
@@ -75,6 +65,19 @@ qreal KisImageConfig::maxMergeAlpha() const
 qreal KisImageConfig::maxMergeCollectAlpha() const
 {
     return m_config.readEntry("maxMergeCollectAlpha", 1.5);
+}
+
+qreal KisImageConfig::schedulerBalancingRatio() const
+{
+    /**
+     * updates-queue-size / strokes-queue-size
+     */
+    return m_config.readEntry("schedulerBalancingRatio", 100.);
+}
+
+void KisImageConfig::setSchedulerBalancingRatio(qreal value)
+{
+    m_config.writeEntry("schedulerBalancingRatio", value);
 }
 
 int KisImageConfig::maxSwapSize() const
@@ -150,6 +153,11 @@ qreal KisImageConfig::memoryPoolLimitPercent() const
 void KisImageConfig::setMemoryPoolLimitPercent(qreal value)
 {
     m_config.writeEntry("memoryPoolLimitPercent", value);
+}
+
+QString KisImageConfig::swapDir()
+{
+    return m_config.readEntry("swaplocation", QString());
 }
 
 

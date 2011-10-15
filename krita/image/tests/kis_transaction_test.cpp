@@ -28,34 +28,12 @@
 #include "kis_transform_worker.h"
 #include "kis_paint_device.h"
 #include "kis_transaction.h"
+#include "kis_surrogate_undo_adapter.h"
 
-class KisTestingUndoAdapter : public KisUndoAdapter
-{
-public:
-    KisTestingUndoAdapter()
-        : KisUndoAdapter(0)
-    {}
-
-    void addCommand(KUndo2Command *command) {
-        m_stack.push(command);
-    }
-
-    void undo() {
-        m_stack.undo();
-    }
-
-    void redo() {
-        m_stack.redo();
-    }
-
-private:
-    KUndo2QStack m_stack;
-};
 
 void KisTransactionTest::testUndo()
 {
-    KisTestingUndoAdapter undoAdapter;
-
+    KisSurrogateUndoAdapter undoAdapter;
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
@@ -95,7 +73,7 @@ void KisTransactionTest::testUndo()
 
 void KisTransactionTest::testRedo()
 {
-    KisTestingUndoAdapter undoAdapter;
+    KisSurrogateUndoAdapter undoAdapter;
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);

@@ -43,7 +43,7 @@ enum CopyLayerType {
  * changes too. The copy layer can be positioned differently from the
  * original layer.
  **/
-class KRITAIMAGE_EXPORT KisCloneLayer : public KisLayer, public KisIndirectPaintingSupport
+class KRITAIMAGE_EXPORT KisCloneLayer : public KisLayer
 {
 
     Q_OBJECT
@@ -84,6 +84,7 @@ public:
     QRect exactBounds() const;
 
     bool accept(KisNodeVisitor &);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     /**
      * Used when loading: loading is done in two passes, and the copy
@@ -104,12 +105,6 @@ public:
      * us that it is dirty
      */
     void setDirtyOriginal(const QRect &rect);
-
-public slots:
-    // KisIndirectPaintingSupport
-    KisLayer* layer() {
-        return this;
-    }
 
 private:
 

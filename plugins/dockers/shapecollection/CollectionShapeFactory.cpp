@@ -24,7 +24,7 @@
 #include <KoShapeOdfSaveHelper.h>
 #include <KoOdf.h>
 #include <KoShapeLoadingContext.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoOdfLoadingContext.h>
 #include <KoStore.h>
 #include <KoOdfReadStore.h>
@@ -46,7 +46,7 @@ CollectionShapeFactory::~CollectionShapeFactory()
     delete m_shape;
 }
 
-KoShape *CollectionShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *CollectionShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     QList<KoShape*> shapes;
 

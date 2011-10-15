@@ -27,6 +27,7 @@
 
 #include <renderobjects.h>
 #include <QPainter>
+#include <QTimer>
 
 KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
         : QWidget(parent)
@@ -34,7 +35,7 @@ KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
     setAttribute(Qt::WA_NoBackground);
     kDebug() << "CREATED PAGE";
     m_reportDocument = document;
-    m_page = 1;
+    m_page = 0;
     int pageWidth = 0;
     int pageHeight = 0;
 
@@ -56,12 +57,18 @@ KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
     setFixedSize(pageWidth, pageHeight);
 
     kDebug() << "PAGE IS " << pageWidth << "x" << pageHeight;
-    m_repaint = true;
+
     m_pixmap = new QPixmap(pageWidth, pageHeight);
     setAutoFillBackground(true);
 
     m_renderer = m_factory.createInstance("screen");
+    
+    connect(m_reportDocument, SIGNAL(updated(int)), this, SLOT(pageUpdated(int)));
 
+    m_renderTimer = new QTimer();
+    m_renderTimer->setSingleShot(true);
+    connect(m_renderTimer, SIGNAL(timeout()), this, SLOT(renderCurrentPage()));
+    
     renderPage(1);
 }
 
@@ -69,6 +76,7 @@ KoReportPage::~KoReportPage()
 {
     delete m_renderer;
     delete m_pixmap;
+    delete m_renderTimer;
 }
 
 void KoReportPage::paintEvent(QPaintEvent*)
@@ -79,18 +87,31 @@ void KoReportPage::paintEvent(QPaintEvent*)
 
 void KoReportPage::renderPage(int page)
 {
-    kDebug() << page;
-//js: is m_page needed?
-    m_page = page;
+    m_page = page - 1;
     m_pixmap->fill();
     QPainter qp(m_pixmap);
     if (m_reportDocument) {
         KoReportRendererContext cxt;
         cxt.painter = &qp;
-        m_renderer->render(cxt, m_reportDocument, m_page - 1);
+        m_renderer->render(cxt, m_reportDocument, m_page);
     }
-    m_repaint = true;
-    repaint();
+    update();
 }
+
+void KoReportPage::pageUpdated(int pageNo)
+{
+    kDebug() << pageNo << m_page;
+    //Refresh this page if it changes
+    if (pageNo == m_page) {
+        kDebug() << "Current page updated";
+        m_renderTimer->start(100);
+    }
+}
+
+void KoReportPage::renderCurrentPage()
+{
+    renderPage(m_page + 1);
+}
+
 
 #include "KoReportPage.moc"

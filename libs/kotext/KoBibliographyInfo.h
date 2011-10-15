@@ -64,5 +64,4 @@ private:
     BibliographyGeneratorInterface * m_generator;
 };
 
-Q_DECLARE_METATYPE(KoBibliographyInfo *);       //to avail KoBibliographyInfo * to all template based function.(QVarient)
 #endif // KOBIBLIOGRAPHYINFO_H

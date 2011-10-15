@@ -44,7 +44,7 @@ const qint32 DEFAULT_MAX_TILES_MEM = 5000;
 }
 
 KisConfig::KisConfig()
-        : m_cfg(KGlobal::config()->group(""))
+    : m_cfg(KGlobal::config()->group(""))
 {
 }
 
@@ -512,7 +512,7 @@ bool KisConfig::backupFile()
 
 void KisConfig::setBackupFile(bool backupFile)
 {
-     m_cfg.writeEntry("CreateBackupFile", backupFile);
+    m_cfg.writeEntry("CreateBackupFile", backupFile);
 }
 
 bool KisConfig::showFilterGallery()
@@ -720,4 +720,15 @@ int KisConfig::hideToolbarFullscreen()
 void KisConfig::setHideToolbarFullscreen(const int value) const
 {
     m_cfg.writeEntry("hideToolbarFullscreen", value);
+}
+
+
+QStringList KisConfig::favoriteCompositeOps() const
+{
+    return m_cfg.readEntry("favoriteCompositeOps", QStringList());
+}
+
+void KisConfig::setFavoriteCompositeOps(const QStringList& compositeOps)
+{
+    m_cfg.writeEntry("favoriteCompositeOps", compositeOps);
 }

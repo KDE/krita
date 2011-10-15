@@ -26,7 +26,6 @@
 #include <QHash>
 
 #include <klocale.h>
-#include <kconfiggroup.h>
 
 #include <KoColorProfile.h>
 #include <KoColor.h>
@@ -297,6 +296,13 @@ void KisPaintDevice::makeCloneFromRough(KisPaintDeviceSP src, const QRect &minim
     fastBitBltRough(src, minimalRect);
 }
 
+void KisPaintDevice::setDirty()
+{
+    m_d->cache.invalidate();
+    if (m_d->parent.isValid())
+        m_d->parent->setDirty();
+}
+
 void KisPaintDevice::setDirty(const QRect & rc)
 {
     m_d->cache.invalidate();
@@ -309,13 +315,6 @@ void KisPaintDevice::setDirty(const QRegion & region)
     m_d->cache.invalidate();
     if (m_d->parent.isValid())
         m_d->parent->setDirty(region);
-}
-
-void KisPaintDevice::setDirty()
-{
-    m_d->cache.invalidate();
-    if (m_d->parent.isValid())
-        m_d->parent->setDirty();
 }
 
 void KisPaintDevice::setDirty(const QVector<QRect> rects)

@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+//#define DEAD_TILES_SANITY_CHECK
+
 #include "kis_tile_data.h"
 #include "kis_tile_data_store.h"
 #include "kis_tile.h"
@@ -71,10 +73,24 @@ KisTile::~KisTile()
 {
     Q_ASSERT(!m_lockCounter);
 
-    if (m_mementoManager)
-        m_mementoManager->registerTileDeleted(this);
+#ifdef DEAD_TILES_SANITY_CHECK
+    /**
+     * We should have been disconnected from the memento manager in notifyDead().
+     * otherwise, there is a bug
+     */
+    Q_ASSERT(!m_mementoManager);
+#endif
 
     m_tileData->release();
+}
+
+void KisTile::notifyDead()
+{
+    if (m_mementoManager) {
+        KisMementoManager *manager = m_mementoManager;
+        m_mementoManager = 0;
+        manager->registerTileDeleted(this);
+    }
 }
 
 //#define DEBUG_TILE_LOCKING
@@ -115,8 +131,30 @@ inline void KisTile::unblockSwapping() const
 {
     QMutexLocker locker(&m_swapBarrierLock);
 
-    if(--m_lockCounter == 0)
+    if(--m_lockCounter == 0) {
         m_tileData->unblockSwapping();
+
+        if(!m_oldTileData.isEmpty()) {
+            foreach(KisTileData *td, m_oldTileData) {
+                td->unblockSwapping();
+                td->release();
+            }
+            m_oldTileData.clear();
+        }
+    }
+}
+
+inline void KisTile::safeReleaseOldTileData(KisTileData *td)
+{
+    QMutexLocker locker(&m_swapBarrierLock);
+
+    if(m_lockCounter > 0) {
+        m_oldTileData.push(td);
+    }
+    else {
+        td->unblockSwapping();
+        td->release();
+    }
 }
 
 void KisTile::lockForRead() const
@@ -148,8 +186,7 @@ void KisTile::lockForWrite()
             tileData->blockSwapping();
             KisTileData *oldTileData = m_tileData;
             m_tileData = tileData;
-            oldTileData->unblockSwapping();
-            oldTileData->release();
+            safeReleaseOldTileData(oldTileData);
 
             DEBUG_COWING(tileData);
 

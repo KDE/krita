@@ -36,7 +36,8 @@
 #include <KoShapeFactoryBase.h>
 #include <KoProperties.h>
 #include <KoCanvasControllerWidget.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoColorBackground.h>
 #include <KoFind.h>
 #include <KoTextDocumentLayout.h>
@@ -711,7 +712,7 @@ void KoPAView::doUpdateActivePage( KoPAPageBase * page )
     // the page is in the center of the canvas
     d->zoomController->setDocumentSize(pageSize * 3);
     d->zoomController->setPageSize(pageSize);
-    d->canvas->resourceManager()->setResource( KoCanvasResource::PageSize, pageSize );
+    d->canvas->resourceManager()->setResource( KoCanvasResourceManager::PageSize, pageSize );
 
     d->canvas->update();
 
@@ -766,7 +767,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     }
 
     // Set the current page number in the canvas resource provider
-    d->canvas->resourceManager()->setResource( KoCanvasResource::CurrentPage, d->doc->pageIndex(d->activePage)+1 );
+    d->canvas->resourceManager()->setResource( KoCanvasResourceManager::CurrentPage, d->doc->pageIndex(d->activePage)+1 );
 }
 
 void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )
@@ -1224,7 +1225,7 @@ void KoPAView::updateUnit(const KoUnit &unit)
 {
     d->horizontalRuler->setUnit(unit);
     d->verticalRuler->setUnit(unit);
-    d->canvas->resourceManager()->setResource(KoCanvasResource::Unit, unit);
+    d->canvas->resourceManager()->setResource(KoCanvasResourceManager::Unit, unit);
 }
 
 #include <KoPAView.moc>

@@ -23,7 +23,7 @@
 
 #include <KoColor.h>
 #include <KoID.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 
 #include "kis_types.h"
 #include "krita_export.h"
@@ -50,7 +50,7 @@ class KRITAUI_EXPORT KisCanvasResourceProvider : public QObject
 public:
 
     enum Resources {
-        HdrExposure = KoCanvasResource::KritaStart + 1,
+        HdrExposure = KoCanvasResourceManager::KritaStart + 1,
         CurrentPattern,
         CurrentGradient,
         CurrentDisplayProfile,
@@ -69,7 +69,8 @@ public:
     KisCanvasResourceProvider(KisView2 * view);
     ~KisCanvasResourceProvider();
 
-    void setResourceManager(KoResourceManager *resourceManager);
+    void setResourceManager(KoCanvasResourceManager *resourceManager);
+    KoCanvasResourceManager* resourceManager();
 
     KoCanvasBase * canvas() const;
 
@@ -132,8 +133,11 @@ public slots:
      * Set the image size in pixels. The resource provider will store
      * the image size in postscript points.
      */
+    // FIXME: this slot doesn't catch the case when image resolution is changed
     void slotImageSizeChanged();
     void slotSetDisplayProfile(const KoColorProfile * profile);
+
+    void slotOnScreenResolutionChanged();
 
     // This is a flag to handle a bug:
     // If pop up palette is visible and a new colour is selected, the new colour
@@ -158,11 +162,12 @@ signals:
     void sigGeneratorConfigurationChanged(KisFilterConfiguration * generatorConfiguration);
     void sigFGColorUsed(const KoColor&);
     void sigCompositeOpChanged(const QString &);
+    void sigOnScreenResolutionChanged(qreal scaleX, qreal scaleY);
 
 private:
 
     KisView2 * m_view;
-    KoResourceManager * m_resourceManager;
+    KoCanvasResourceManager * m_resourceManager;
     const KoColorProfile * m_displayProfile;
     bool m_fGChanged;
     QList<KisAbstractPerspectiveGrid*> m_perspectiveGrids;

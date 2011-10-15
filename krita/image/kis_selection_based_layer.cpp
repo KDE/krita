@@ -229,11 +229,17 @@ void KisSelectionBasedLayer::setY(qint32 y)
     }
 }
 
+void KisSelectionBasedLayer::setDirty(const QRect & rect)
+{
+    KisIndirectPaintingSupport::setDirty(rect);
+    KisLayer::setDirty(rect);
+}
+
 void KisSelectionBasedLayer::setDirty()
 {
     Q_ASSERT(image());
 
-    KisLayer::setDirty(image()->bounds());
+    setDirty(image()->bounds());
 }
 
 QRect KisSelectionBasedLayer::extent() const

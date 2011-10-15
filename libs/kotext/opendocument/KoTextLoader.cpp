@@ -34,7 +34,6 @@
 #include <KoBookmarkManager.h>
 #include <KoInlineNote.h>
 #include <KoInlineCite.h>
-#include <KoInlineBibliography.h>
 #include <KoInlineTextObjectManager.h>
 #include "KoList.h"
 #include <KoOdfLoadingContext.h>
@@ -161,8 +160,6 @@ public:
     bool checkForListItemSplit(const KoXmlElement &element);
     KoXmlNode loadListItemSplit(const KoXmlElement &element, QString *generatedXmlString);
 
-    bool inTable;
-
     explicit Private(KoShapeLoadingContext &context, KoShape *s)
         : context(context),
           textSharedData(0),
@@ -183,8 +180,7 @@ public:
           loadSpanLevel(0),
           loadSpanInitialPos(0),
           openedElements(0),
-          deleteMergeStarted(false),
-          inTable(false)
+          deleteMergeStarted(false)
     {
         progressTime.start();
     }
@@ -419,7 +415,7 @@ KoTextLoader::KoTextLoader(KoShapeLoadingContext &context, KoShape *shape)
 
     if (!d->textSharedData) {
         d->textSharedData = new KoTextSharedLoadingData();
-        KoResourceManager *rm = context.documentResourceManager();
+        KoDocumentResourceManager *rm = context.documentResourceManager();
         KoStyleManager *styleManager = rm->resource(KoText::StyleManager).value<KoStyleManager*>();
         d->textSharedData->loadOdfStyles(context, styleManager);
         if (!sharedData) {
@@ -467,19 +463,27 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
             new KoOdfNotesConfiguration(d->context.odfLoadingContext()
                                         .stylesReader()
                                         .globalNotesConfiguration(KoOdfNotesConfiguration::Endnote));
-    KoTextDocument(document).setNotesConfiguration(notesConfiguration);
+    //KoTextDocument(document).setNotesConfiguration(notesConfiguration);
+    KoTextDocument(document).styleManager()->setNotesConfiguration(notesConfiguration);
 
     notesConfiguration =
             new KoOdfNotesConfiguration(d->context.odfLoadingContext()
                                         .stylesReader()
                                         .globalNotesConfiguration(KoOdfNotesConfiguration::Footnote));
-    KoTextDocument(document).setNotesConfiguration(notesConfiguration);
+    //KoTextDocument(document).setNotesConfiguration(notesConfiguration);
+    KoTextDocument(document).styleManager()->setNotesConfiguration(notesConfiguration);
 
     KoOdfLineNumberingConfiguration *lineNumberingConfiguration =
             new KoOdfLineNumberingConfiguration(d->context.odfLoadingContext()
                                                 .stylesReader()
                                                 .lineNumberingConfiguration());
     KoTextDocument(document).setLineNumberingConfiguration(lineNumberingConfiguration);
+
+    KoOdfBibliographyConfiguration *bibConfiguration =
+            new KoOdfBibliographyConfiguration(d->context.odfLoadingContext()
+                                               .stylesReader()
+                                               .globalBibliographyConfiguration());
+    KoTextDocument(document).styleManager()->setBibliographyConfiguration(bibConfiguration);
 
     d->styleManager = KoTextDocument(document).styleManager();
     d->changeTracker = KoTextDocument(document).changeTracker();
@@ -1462,11 +1466,10 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
         int position = cursor.position(); // need to store this as the following might move is
         if (className == "footnote") {
             note = new KoInlineNote(KoInlineNote::Footnote);
-            note->setMotherFrame(KoTextDocument(cursor.block().document()).footNotesFrame());
-        }
-        else {
+            note->setMotherFrame(KoTextDocument(cursor.block().document()).auxillaryFrame());
+        } else {
             note = new KoInlineNote(KoInlineNote::Endnote);
-            note->setMotherFrame(KoTextDocument(cursor.block().document()).endNotesFrame());
+            note->setMotherFrame(KoTextDocument(cursor.block().document()).auxillaryFrame());
         }
         if (note->loadOdf(noteElem, d->context)) {
             cursor.setPosition(position); // restore the position before inserting the note
@@ -2002,7 +2005,6 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
         tableFormat.setProperty(KoTableStyle::TableIsProtected, true);
     }
     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
-    d->inTable = true;
 
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(tbl);
     int rows = 0;
@@ -2085,7 +2087,6 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     }
     cursor = tbl->lastCursorPosition();
     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
-    d->inTable = false;
 }
 
 void KoTextLoader::loadTableColumn(KoXmlElement &tblTag, QTextTable *tbl, int &columns)
@@ -2261,24 +2262,15 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
         return 0;
     }
 
-    QString anchorType;
-    if (shape->hasAdditionalAttribute("text:anchor-type"))
-        anchorType = shape->additionalAttribute("text:anchor-type");
-    else if (element.hasAttributeNS(KoXmlNS::text, "anchor-type"))
-        anchorType = element.attributeNS(KoXmlNS::text, "anchor-type");
-    else
-        anchorType = "as-char"; // default value
+    KoTextAnchor *anchor = new KoTextAnchor(shape);
+    anchor->loadOdf(element, d->context);
+    d->textSharedData->shapeInserted(shape, element, d->context, anchor);
 
     // page anchored shapes are handled differently
-    if (anchorType == "page" && shape->hasAdditionalAttribute("text:anchor-page-number")) {
-        d->textSharedData->shapeInserted(shape, element, d->context);
+    if (anchor->anchorType() == KoTextAnchor::AnchorPage && shape->hasAdditionalAttribute("text:anchor-page-number")) {
+        // nothing else to do
     } else {
-        KoTextAnchor *anchor = new KoTextAnchor(shape);
-        if (d->inTable) {
-            anchor->fakeAsChar();
-        }
-        anchor->loadOdf(element, d->context);
-        d->textSharedData->shapeInserted(shape, element, d->context);
+        shape->setVisible(false); // make it invisible until layouting
 
         KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
         if (textObjectManager) {
@@ -2334,7 +2326,7 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
             // uncomment to see what has been loaded
             //info.tableOfContentData()->dump();
             tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
-            tocFormat.setProperty(KoParagraphStyle::TableOfContentsDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
+            tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
             cursor.insertBlock(tocFormat);
 
             // We'll just try to find displayable elements and add them as paragraphs
@@ -2390,8 +2382,6 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
     info->m_name = element.attribute("name");
     info->m_styleName = element.attribute("style-name");
 
-    bool *autoUpdate = false;
-
     KoXmlElement e;
     forEachElement(e, element) {
         if (e.isNull() || e.namespaceURI() != KoXmlNS::text) {
@@ -2402,8 +2392,8 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
             info->loadOdf(d->textSharedData, e);
 
             bibFormat.setProperty(KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info));
-            bibFormat.setProperty(KoParagraphStyle::BibliographyDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
-            bibFormat.setProperty(KoParagraphStyle::AutoUpdateBibliography, QVariant::fromValue<bool *>(autoUpdate));
+            bibFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
+
             cursor.insertBlock(bibFormat);
             // We'll just try to find displayable elements and add them as paragraphs
         } else if (e.localName() == "index-body") {

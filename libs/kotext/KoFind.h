@@ -25,7 +25,7 @@
 #include <QObject>
 
 class QTextDocument;
-class KoResourceManager;
+class KoCanvasResourceManager;
 class KActionCollection;
 class KoFindPrivate;
 
@@ -45,7 +45,7 @@ public:
      * @param provider the resource provider for the canvas, used to signal the text shape.
      * @param ac the action collection that the find actions can be added to.
      */
-    KoFind(QWidget *parent, KoResourceManager *provider, KActionCollection *ac);
+    KoFind(QWidget *parent, KoCanvasResourceManager *provider, KActionCollection *ac);
     /// destructor
     ~KoFind();
 

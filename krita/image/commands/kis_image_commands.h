@@ -26,6 +26,5 @@
 #include "kis_image_layer_move_command.h"
 #include "kis_image_layer_remove_command.h"
 #include "kis_image_lock_command.h"
-#include "kis_image_resize_command.h"
 
 #endif

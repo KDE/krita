@@ -34,7 +34,7 @@
 #include <KoShapeContainer.h>
 #include <KoShapeGroup.h>
 #include <KoPathShape.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoPathShapeLoader.h>
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
@@ -55,7 +55,7 @@
 #include <QtGui/QColor>
 
 
-SvgParser::SvgParser(KoResourceManager *documentResourceManager)
+SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)
     : m_context(documentResourceManager)
     , m_documentResourceManager(documentResourceManager)
 {
@@ -1034,9 +1034,8 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
         if (isSwitch) {
             // if we are parsing a switch check the requiredFeatures, requiredExtensions
             // and systemLanguage attributes
-            QString features = b.attribute("requiredFeatures");
             // TODO: evaluate feature list
-            if (features.isEmpty() || features.simplified().isEmpty()) {
+            if (b.hasAttribute("requiredFeatures")) {
                 continue;
             }
             if (b.hasAttribute("requiredExtensions")) {
@@ -1112,7 +1111,14 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
         } else if (b.tagName() == "use") {
             shapes += parseUse(b);
         } else {
-            continue;
+            // this is an unkown element, so try to load it anyway
+            // there might be a shape that handles that element
+            KoShape *shape = createObject(b);
+            if (shape) {
+                shapes.append(shape);
+            } else {
+                continue;
+            }
         }
 
         // if we are parsing a switch, stop after the first supported element

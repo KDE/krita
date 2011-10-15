@@ -21,6 +21,7 @@
 #include <qwidget.h>
 #include <KoReportRendererBase.h>
 
+class QTimer;
 class QPixmap;
 class ORODocument;
 
@@ -42,7 +43,12 @@ public:
 
 public slots:
     virtual void paintEvent(QPaintEvent*);
+    
+    void pageUpdated(int pageNo);
 
+private slots:
+    void renderCurrentPage();
+    
 private:
     ORODocument *m_reportDocument;
     int m_page;
@@ -50,6 +56,8 @@ private:
     QPixmap *m_pixmap;
     KoReportRendererFactory m_factory;
     KoReportRendererBase *m_renderer;
+    
+    QTimer *m_renderTimer;
 };
 
 #endif

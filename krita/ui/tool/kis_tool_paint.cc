@@ -42,7 +42,7 @@
 
 #include <KoShape.h>
 #include <KoShapeManager.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoColorSpace.h>
 #include <KoPointerEvent.h>
 #include <KoColor.h>
@@ -88,11 +88,13 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     m_lighterColor = new KAction(i18n("Make Brush color lighter"), this);
     m_lighterColor->setShortcut(Qt::Key_L);
     connect(m_lighterColor, SIGNAL(activated()), SLOT(makeColorLighter()));
+    m_lighterColor->setEnabled(false);
     addAction("make_brush_color_lighter", m_lighterColor);
 
     m_darkerColor = new KAction(i18n("Make Brush color darker"), this);
     m_darkerColor->setShortcut(Qt::Key_K);
     connect(m_darkerColor, SIGNAL(activated()), SLOT(makeColorDarker()));
+    m_darkerColor->setEnabled(false);
     addAction("make_brush_color_darker", m_darkerColor);
 
     connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), kiscanvas, SIGNAL(favoritePaletteCalled(const QPoint&)));
@@ -131,6 +133,14 @@ void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> 
 {
     KisTool::activate(toolActivation, shapes);
     resetCursorStyle();
+    m_lighterColor->setEnabled(true);
+    m_darkerColor->setEnabled(true);
+}
+
+void KisToolPaint::deactivate()
+{
+    m_lighterColor->setEnabled(false);
+    m_darkerColor->setEnabled(false);
 }
 
 
@@ -246,7 +256,7 @@ void KisToolPaint::pickColor(const QPointF &documentPixel,
     }
 
     int resource = toForegroundColor ?
-        KoCanvasResource::ForegroundColor : KoCanvasResource::BackgroundColor;
+        KoCanvasResourceManager::ForegroundColor : KoCanvasResourceManager::BackgroundColor;
 
     KisPaintDeviceSP device = fromCurrentNode ?
         currentNode()->paintDevice() : image()->projection();
@@ -419,7 +429,7 @@ KisToolPaint::NodePaintAbility KisToolPaint::nodePaintAbility()
 
 void KisToolPaint::transformColor(int step)
 {
-    KoColor color = canvas()->resourceManager()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+    KoColor color = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     QColor rgb = color.toQColor();
     int h = 0, s = 0, v = 0;
     rgb.getHsv(&h,&s,&v);
@@ -432,7 +442,7 @@ void KisToolPaint::transformColor(int step)
     }
     rgb.setHsv(h,s,v);
     color.fromQColor(rgb);
-    canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor, color);
+    canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, color);
 }
 
 void KisToolPaint::makeColorDarker()

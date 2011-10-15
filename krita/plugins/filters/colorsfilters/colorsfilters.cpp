@@ -69,8 +69,6 @@ K_EXPORT_PLUGIN(ColorsFiltersFactory("krita"))
 ColorsFilters::ColorsFilters(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(ColorsFiltersFactory::componentData());
-
     KisFilterRegistry * manager = KisFilterRegistry::instance();
     manager->add(new KisBrightnessContrastFilter());
     manager->add(new KisAutoContrast());

@@ -28,6 +28,7 @@
 
 class KoShapeSavingContext;
 class KoShapeLoadingContext;
+class KoShapeGroupPrivate;
 
 /**
  * Provide grouping for shapes.
@@ -49,7 +50,7 @@ public:
     /// destructor
     virtual ~KoShapeGroup();
     /// This implementation is empty since a group is itself not visible.
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     /// always returns false since the group itself can't be selected or hit
     virtual bool hitTest(const QPointF &position) const;
     /// a group in flake doesn't have a size, this funcion just returns QSizeF(0,0)
@@ -61,8 +62,19 @@ public:
     // reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
+    /**
+     * @brief Invalidate the size cache of the group
+     *
+     * The group shape caches the size of itself as it can be quite expensive to recalculate
+     * the size if there are a lot of subshapes. This function is called when the cache needs
+     * to be invalidated.
+     */
+    void invalidateSizeCache();
+
 private:
     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
+
+    Q_DECLARE_PRIVATE(KoShapeGroup)
 };
 
 #endif

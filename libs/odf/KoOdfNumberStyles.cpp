@@ -30,6 +30,8 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
+#include <math.h>
+
 namespace KoOdfNumberStyles
 {
 
@@ -39,6 +41,95 @@ namespace KoOdfNumberStyles
     static void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString &format, QString &text);
     static void addCalligraNumericStyleExtension(KoXmlWriter &elementWriter, const QString &_suffix, const QString &_prefix);
 
+QString formatFraction(qreal value, const QString &format)
+{
+    QString prefix = value < 0 ? "-" : "";
+    value = fabs(value);
+    qreal result = value - floor(value);
+
+    if (result == 0) // return w/o fraction part if not necessary
+        return prefix + QString::number(value);
+
+    int index = 0;
+    int limit = 0;
+    if (format.endsWith("/2")) {
+        index = 2;
+    } else if (format.endsWith("/4")) {
+        index = 4;
+    } else if (format.endsWith("/8")) {
+        index = 8;
+    } else if (format.endsWith("/16")) {
+        index = 16;
+    } else if (format.endsWith("/10")) {
+        index = 10;
+    } else if (format.endsWith("/100")) {
+        index = 100;
+    } else if (format.endsWith("/?")) {
+        index = 3;
+        limit = 9;
+    } else if (format.endsWith("/??")) {
+        index = 4;
+        limit = 99;
+    } else if (format.endsWith("/???")) {
+        index = 5;
+        limit = 999;
+    } else { // fallback
+        return prefix + QString::number(value);
+    }
+
+    // handle halves, quarters, tenths, ...
+    if (!format.endsWith("/?") && !format.endsWith("/??") && !format.endsWith("/???")) {
+        qreal calc = 0;
+        int index1 = 0;
+        qreal diff = result;
+        for (int i = 1; i <= index; i++) {
+            calc = i * 1.0 / index;
+            if (fabs(result - calc) < diff) {
+                index1 = i;
+                diff = fabs(result - calc);
+            }
+        }
+        if (index1 == 0)
+            return prefix + QString("%1").arg(floor(value));
+        if (index1 == index)
+            return prefix + QString("%1").arg(floor(value) + 1);
+        if (floor(value) == 0)
+            return prefix + QString("%1/%2").arg(index1).arg(index);
+        return prefix + QString("%1 %2/%3").arg(floor(value)).arg(index1).arg(index);
+    }
+
+    // handle Format::fraction_one_digit, Format::fraction_two_digit and Format::fraction_three_digit style
+    qreal target = result;
+    qreal numerator = 1;
+    qreal denominator = 1;
+    qreal bestNumerator = 0;
+    qreal bestDenominator = 1;
+    qreal bestDist = target;
+
+    // as soon as either numerator or denominator gets above the limit, we're done
+    while (numerator <= limit && denominator <= limit) {
+        qreal dist = fabs((numerator / denominator) - target);
+        if (dist < bestDist) {
+            bestDist = dist;
+            bestNumerator = numerator;
+            bestDenominator = denominator;
+        }
+        if (numerator / denominator > target) {
+            ++denominator;
+        } else {
+            ++numerator;
+        }
+    }
+
+    if (bestNumerator == 0)
+        return prefix + QString().setNum(floor(value));
+    if (bestDenominator == bestNumerator)
+        return prefix + QString().setNum(floor(value + 1));
+    if (floor(value) == 0)
+        return prefix + QString("%1/%2").arg(bestNumerator).arg(bestDenominator);
+    return prefix + QString("%1 %2/%3").arg(floor(value)).arg(bestNumerator).arg(bestDenominator);
+
+}
 
 // OO spec 2.5.4. p68. Conversion to Qt format: see qdate.html
 // OpenCalcImport::loadFormat has similar code, but slower, intermixed with other stuff,

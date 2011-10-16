@@ -59,6 +59,8 @@ namespace KoOdfNumberStyles
         QList<QPair<QString,QString> > styleMaps; // conditional formatting, first=condition, second=applyStyleName
     };
 
+    KOODF_EXPORT QString formatFraction(qreal value, const QString &format);
+
     KOODF_EXPORT QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent);
 
     KOODF_EXPORT QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &format, bool klocaleFormat, const QString &prefix = QString(), const QString &suffix = QString());

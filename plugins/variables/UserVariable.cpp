@@ -138,7 +138,6 @@ QWidget* UserVariable::createOptionsWidget()
     layout->addWidget(valueEdit, 2, 1);
 
     updateNameEdit(configWidget);
-    nameChanged(configWidget);
 
     return configWidget;
 }
@@ -232,7 +231,6 @@ void UserVariable::newClicked(QWidget *configWidget)
     m_name = name;
     variableManager()->setValue(m_name, QString(), QLatin1String("string"));
     updateNameEdit(configWidget);
-    nameChanged(configWidget);
     valueEdit(configWidget)->setFocus();
 }
 
@@ -253,7 +251,6 @@ void UserVariable::deleteClicked(QWidget *configWidget)
     variableManager()->remove(m_name);
     m_name.clear();
     updateNameEdit(configWidget);
-    nameChanged(configWidget);
 }
 
 void UserVariable::valueChanged()
@@ -284,12 +281,16 @@ void UserVariable::valueChanged()
         } break;
         case KoOdfNumberStyles::Percentage: {
             value = m_numberstyle.prefix +
-                    (value.contains('.') ? m_numberstyle.prefix + QString::number(value.toDouble(), 'f', m_numberstyle.precision) + m_numberstyle.suffix : QString::number(value.toInt())) +
+                    (value.contains('.') ? m_numberstyle.prefix + QString::number(value.toDouble() * 100., 'f', m_numberstyle.precision) + m_numberstyle.suffix : QString::number(value.toInt())) +
+                    QLatin1String("%") +
                     m_numberstyle.suffix;
         } break;
         case KoOdfNumberStyles::Currency: {
-            //TODO use m_numberstyle.formatStr
-            value = m_numberstyle.prefix + KGlobal::locale()->formatMoney(value.toDouble(), m_numberstyle.currencySymbol.isEmpty() ? KGlobal::locale()->currencySymbol() : m_numberstyle.currencySymbol, m_numberstyle.precision) + m_numberstyle.suffix;
+            if (m_numberstyle.formatStr.isEmpty()) {
+                value = m_numberstyle.prefix + KGlobal::locale()->formatMoney(value.toDouble(), m_numberstyle.currencySymbol.isEmpty() ? KGlobal::locale()->currencySymbol() : m_numberstyle.currencySymbol, m_numberstyle.precision) + m_numberstyle.suffix;
+            } else {
+                value = KoOdfNumberStyles::formatNumber(value.toDouble(), m_numberstyle.formatStr);                
+            }
         } break;
         case KoOdfNumberStyles::Scientific: {
             value = QString::number(value.toDouble(), 'E', m_numberstyle.precision);
@@ -323,6 +324,7 @@ void UserVariable::updateNameEdit(QWidget *configWidget)
         m_name = names.first();
     }
     nameedit->setCurrentIndex(qMax(0, names.indexOf(m_name)));
+    nameChanged(configWidget);
 }
 
 void UserVariable::readProperties(const KoProperties *props)

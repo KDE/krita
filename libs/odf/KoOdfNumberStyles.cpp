@@ -41,6 +41,116 @@ namespace KoOdfNumberStyles
     static void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString &format, QString &text);
     static void addCalligraNumericStyleExtension(KoXmlWriter &elementWriter, const QString &_suffix, const QString &_prefix);
 
+QString formatNumber(qreal value, const QString &format)
+{
+    QString result;
+    int start = 0;
+    bool showNegative = format.startsWith('-');
+    if (showNegative)
+        start = 1;
+    for (int i = start; i < format.length(); ++i) {
+        const char c = format[ i ].toLatin1();
+        switch (c) {
+            case '.':
+            case ',':
+            case '#':
+            case '0':
+            case '?': {
+                bool grouping = false;
+                bool gotDot = false;
+                bool gotE = false;
+                bool gotFraction = false;
+                int decimalPlaces = 0;
+                int integerDigits = 0;
+                int optionalDecimalPlaces = 0;
+                int optionalIntegerDigits = 0;
+                int exponentDigits = 0;
+                int numeratorDigits = 0;
+                int denominatorDigits = 0;
+                char ch = format[ i ].toLatin1();
+                do {
+                    if (ch == '.') {
+                        gotDot = true;
+                    } else if (ch == ',') {
+                        grouping = true;
+                    } else if (ch == 'E' || ch == 'e') {
+                        //SET_TYPE_OR_RETURN(KoGenStyle::NumericScientificStyle);
+
+                        if (i >= format.length() - 1) break;
+                        const char chN = format[ i + 1 ].toLatin1();
+                        if (chN == '-' || chN == '+') {
+                            gotE = true;
+                            ++i;
+                        }
+                    } else if (ch == '0' && gotE) {
+                        ++exponentDigits;
+                    } else if (ch == '0' && !gotDot && !gotFraction) {
+                        ++integerDigits;
+                    } else if (ch == '#' && !gotDot && !gotFraction) {
+                        ++optionalIntegerDigits;
+                    } else if (ch == '0' && gotDot && !gotFraction) {
+                        ++decimalPlaces;
+                    } else if (ch == '#' && gotDot && !gotFraction) {
+                        ++optionalDecimalPlaces;
+                    } else if (ch == '?' && !gotFraction) {
+                        ++numeratorDigits;
+                    } else if (ch == '?' && gotFraction) {
+                        ++denominatorDigits;
+                    } else if (ch == '/') {
+                        //SET_TYPE_OR_RETURN(KoGenStyle::NumericFractionStyle);
+                        if (gotDot) return QString(); // invalid
+                        gotFraction = true;
+                    }
+
+                    if (i >= format.length() - 1) break;
+                    ch = format[ ++i ].toLatin1();
+
+                    if (ch == ' ') {
+                        // spaces are not allowed - but there's an exception: if this is a fraction. Let's check for '?' or '/'
+                        const char c = format[ i + 1 ].toLatin1();
+                        if (c == '?' || c == '/')
+                            ch = format[ ++i ].toLatin1();
+                    }
+                } while (i < format.length() && (ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' || ch == '/'));
+                if (!(ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' || ch == '/')) {
+                    --i;
+                }
+
+                QString v(QString::number(qAbs(value)));
+                int p = v.indexOf('.');
+                QString integerValue = p >= 0 ? v.left(p) : v;
+                QString decimalValue =  p >= 0 ? v.mid(p + 1) : QString();
+
+                if (integerValue.length() > optionalIntegerDigits + integerDigits)
+                    integerValue = integerValue.left(optionalIntegerDigits + integerDigits);
+                else if (integerValue.length() < integerDigits)
+                    integerValue.prepend(QString().fill('0', integerDigits - integerValue.length()));
+
+                if (decimalValue.length() > optionalDecimalPlaces + decimalPlaces)
+                    decimalValue = decimalValue.left(optionalDecimalPlaces + decimalPlaces);
+                else if (decimalValue.length() < decimalPlaces)
+                    decimalValue.append(QString().fill('0', decimalPlaces - decimalValue.length()));
+
+                if (showNegative && value < 0)
+                    result.append('-');
+                result.append(integerValue);
+                if (!decimalValue.isEmpty())
+                    result.append('.' + decimalValue);
+            } break;
+            case '\\': { // backslash escapes the next char
+                if (i < format.length() - 1) {
+                    result.append(format[ ++i ]);
+                }
+            } break;
+            default:
+                result.append(c);
+                break;
+        }
+    }
+
+    return result;
+}
+
 QString formatFraction(qreal value, const QString &format)
 {
     QString prefix = value < 0 ? "-" : "";

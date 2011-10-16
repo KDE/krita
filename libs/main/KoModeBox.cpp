@@ -182,8 +182,7 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
             addItem(button);
             continue;
         } else if (!button.section.contains("dynamic")
-            && !button.section.contains("main")
-            && !button.section.contains("navigation")) {
+            && !button.section.contains("main")) {
             continue;
         }
 

@@ -41,7 +41,7 @@ namespace KoOdfNumberStyles
     static void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString &format, QString &text);
     static void addCalligraNumericStyleExtension(KoXmlWriter &elementWriter, const QString &_suffix, const QString &_prefix);
 
-QString formatNumber(qreal value, const QString &format)
+QString formatNumber(qreal value, const QString &format, int precision)
 {
     QString result;
     int start = 0;
@@ -116,19 +116,13 @@ QString formatNumber(qreal value, const QString &format)
                     --i;
                 }
 
-                QString v(QString::number(qAbs(value)));
+                QString v(QString::number(qAbs(value), 'f', precision >= 0 ? precision : (optionalDecimalPlaces + decimalPlaces)));
                 int p = v.indexOf('.');
                 QString integerValue = p >= 0 ? v.left(p) : v;
-                QString decimalValue =  p >= 0 ? v.mid(p + 1) : QString();
-
-                if (integerValue.length() > optionalIntegerDigits + integerDigits)
-                    integerValue = integerValue.left(optionalIntegerDigits + integerDigits);
-                else if (integerValue.length() < integerDigits)
+                if (integerValue.length() < integerDigits)
                     integerValue.prepend(QString().fill('0', integerDigits - integerValue.length()));
-
-                if (decimalValue.length() > optionalDecimalPlaces + decimalPlaces)
-                    decimalValue = decimalValue.left(optionalDecimalPlaces + decimalPlaces);
-                else if (decimalValue.length() < decimalPlaces)
+                QString decimalValue =  p >= 0 ? v.mid(p + 1) : QString();
+                if (decimalValue.length() < decimalPlaces)
                     decimalValue.append(QString().fill('0', decimalPlaces - decimalValue.length()));
 
                 if (showNegative && value < 0)

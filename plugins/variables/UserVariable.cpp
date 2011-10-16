@@ -286,10 +286,12 @@ void UserVariable::valueChanged()
                     m_numberstyle.suffix;
         } break;
         case KoOdfNumberStyles::Currency: {
-            if (m_numberstyle.formatStr.isEmpty()) {
+            if (m_numberstyle.currencySymbol == "CCC") { // undocumented hack, see doc attached to comment 6 at bug 282972
+                value = m_numberstyle.prefix + KGlobal::locale()->formatMoney(value.toDouble(), "USD", m_numberstyle.precision) + m_numberstyle.suffix;
+            } else if (m_numberstyle.formatStr.isEmpty()) { // no format means locale format
                 value = m_numberstyle.prefix + KGlobal::locale()->formatMoney(value.toDouble(), m_numberstyle.currencySymbol.isEmpty() ? KGlobal::locale()->currencySymbol() : m_numberstyle.currencySymbol, m_numberstyle.precision) + m_numberstyle.suffix;
             } else {
-                value = KoOdfNumberStyles::formatNumber(value.toDouble(), m_numberstyle.formatStr);                
+                value = KoOdfNumberStyles::formatNumber(value.toDouble(), m_numberstyle.formatStr, m_numberstyle.precision);
             }
         } break;
         case KoOdfNumberStyles::Scientific: {

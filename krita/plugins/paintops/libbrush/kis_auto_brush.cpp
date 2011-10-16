@@ -446,9 +446,9 @@ QPainterPath KisAutoBrush::outline() const
     if (simpleOutline){
         QPainterPath path;
         QRectF brushBoundingbox(0,0,width(), height());
-        if (maskGenerator()->type() == KisMaskGenerator::CIRCLE){
+        if (maskGenerator()->type() == KisMaskGenerator::CIRCLE) {
             path.addEllipse(brushBoundingbox);
-        }else // if (maskGenerator()->type() == KisMaskGenerator::RECTANGLE)
+        } else // if (maskGenerator()->type() == KisMaskGenerator::RECTANGLE)
         {
             path.addRect(brushBoundingbox);
         }

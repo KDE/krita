@@ -62,12 +62,14 @@ namespace KoOdfNumberStyles
     KOODF_EXPORT QString formatFraction(qreal value, const QString &format);
 
     KOODF_EXPORT QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent);
+    KOODF_EXPORT QString saveOdfNumberStyle(KoGenStyles &mainStyles, NumericStyleFormat format);
 
     KOODF_EXPORT QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &format, bool klocaleFormat, const QString &prefix = QString(), const QString &suffix = QString());
     KOODF_EXPORT QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString &format, bool klocaleFormat, const QString &prefix = QString(), const QString &suffix = QString());
     KOODF_EXPORT QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString &format, const QString &prefix = QString(), const QString &suffix = QString());
     KOODF_EXPORT QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &format, const QString &prefix = QString(), const QString &suffix = QString(), bool thousandsSep = false);
     KOODF_EXPORT QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString &format, const QString &prefix = QString(), const QString &suffix = QString(), bool thousandsSep = false);
+    KOODF_EXPORT QString saveOdfBooleanStyle(KoGenStyles &mainStyles, const QString &format, const QString &prefix = QString(), const QString &suffix = QString());
     KOODF_EXPORT QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString &format, const QString &prefix = QString(), const QString &suffix = QString());
     KOODF_EXPORT QString saveOdfCurrencyStyle(KoGenStyles &mainStyles, const QString &format, const QString &symbol, const QString &prefix = QString(), const QString &suffix = QString());
     KOODF_EXPORT QString saveOdfTextStyle(KoGenStyles &mainStyles, const QString &format, const QString &prefix = QString(), const QString &suffix = QString());

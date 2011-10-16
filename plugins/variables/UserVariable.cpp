@@ -261,40 +261,50 @@ void UserVariable::valueChanged()
     QString value = variableManager()->value(m_name);
 
     //TODO make following reusable and apply also in plugins/variables/DateVariable.cpp:96
-    if (m_numberstyle.type == KoOdfNumberStyles::Number) {
-        bool ok;
-        int v = value.toInt(&ok);
-        value = m_numberstyle.prefix + (ok ? QString::number(v) : value) + m_numberstyle.suffix;
-    } else if (m_numberstyle.type == KoOdfNumberStyles::Boolean) {
-        bool ok = false;
-        int v = value.toInt(&ok);
-        value = m_numberstyle.prefix + (ok && v != 0 ? "TRUE" : "FALSE") + m_numberstyle.suffix;
-    } else if (m_numberstyle.type == KoOdfNumberStyles::Date) {
-        QDateTime dt(QDate(1899, 12, 30)); // reference date
-        dt = dt.addDays(value.toInt());
-        value = dt.toString(m_numberstyle.prefix + m_numberstyle.formatStr + m_numberstyle.suffix);
-    } else if (m_numberstyle.type == KoOdfNumberStyles::Time) {
-        QTime t(0,0,0);
-        t = t.addSecs(qRound(value.toDouble() * 86400.0)); // 24 hours
-        value = t.toString(m_numberstyle.prefix + m_numberstyle.formatStr + m_numberstyle.suffix);
-    } else if (m_numberstyle.type == KoOdfNumberStyles::Percentage) {
-        value = m_numberstyle.prefix +
-                (value.contains('.') ? m_numberstyle.prefix + QString::number(value.toDouble(), 'f', m_numberstyle.precision) + m_numberstyle.suffix : QString::number(value.toInt())) +
-                m_numberstyle.suffix;
-    } else if (m_numberstyle.type == KoOdfNumberStyles::Currency) {
-        //TODO use m_numberstyle.formatStr
-        value = m_numberstyle.prefix + KGlobal::locale()->formatMoney(value.toDouble(), m_numberstyle.currencySymbol.isEmpty() ? KGlobal::locale()->currencySymbol() : m_numberstyle.currencySymbol, m_numberstyle.precision) + m_numberstyle.suffix;
-    } else if (m_numberstyle.type == KoOdfNumberStyles::Scientific) {
-        value = QString::number(value.toDouble(), 'E', m_numberstyle.precision);
-        int pos = value.indexOf('.');
-        if (pos != -1) {
-            value = value.replace(pos, 1, KGlobal::locale()->decimalSymbol());
-        }
-    } else if (m_numberstyle.type == KoOdfNumberStyles::Fraction) {
-        value = KoOdfNumberStyles::formatFraction(value.toDouble(), m_numberstyle.formatStr);
-    } else {
-        //TODO handle formula
-        value = m_numberstyle.prefix + value + m_numberstyle.suffix;
+    switch (m_numberstyle.type) {
+        case KoOdfNumberStyles::Number: {
+            bool ok;
+            int v = value.toInt(&ok);
+            value = m_numberstyle.prefix + (ok ? QString::number(v) : value) + m_numberstyle.suffix;
+        } break;
+        case KoOdfNumberStyles::Boolean: {
+            bool ok = false;
+            int v = value.toInt(&ok);
+            value = m_numberstyle.prefix + (ok && v != 0 ? "TRUE" : "FALSE") + m_numberstyle.suffix;
+        } break;
+        case KoOdfNumberStyles::Date: {
+            QDateTime dt(QDate(1899, 12, 30)); // reference date
+            dt = dt.addDays(value.toInt());
+            value = dt.toString(m_numberstyle.prefix + m_numberstyle.formatStr + m_numberstyle.suffix);
+        } break;
+        case KoOdfNumberStyles::Time: {
+            QTime t(0,0,0);
+            t = t.addSecs(qRound(value.toDouble() * 86400.0)); // 24 hours
+            value = t.toString(m_numberstyle.prefix + m_numberstyle.formatStr + m_numberstyle.suffix);
+        } break;
+        case KoOdfNumberStyles::Percentage: {
+            value = m_numberstyle.prefix +
+                    (value.contains('.') ? m_numberstyle.prefix + QString::number(value.toDouble(), 'f', m_numberstyle.precision) + m_numberstyle.suffix : QString::number(value.toInt())) +
+                    m_numberstyle.suffix;
+        } break;
+        case KoOdfNumberStyles::Currency: {
+            //TODO use m_numberstyle.formatStr
+            value = m_numberstyle.prefix + KGlobal::locale()->formatMoney(value.toDouble(), m_numberstyle.currencySymbol.isEmpty() ? KGlobal::locale()->currencySymbol() : m_numberstyle.currencySymbol, m_numberstyle.precision) + m_numberstyle.suffix;
+        } break;
+        case KoOdfNumberStyles::Scientific: {
+            value = QString::number(value.toDouble(), 'E', m_numberstyle.precision);
+            int pos = value.indexOf('.');
+            if (pos != -1) {
+                value = value.replace(pos, 1, KGlobal::locale()->decimalSymbol());
+            }
+        } break;
+        case KoOdfNumberStyles::Fraction: {
+            value = KoOdfNumberStyles::formatFraction(value.toDouble(), m_numberstyle.formatStr);
+        } break;
+        case KoOdfNumberStyles::Text: {
+            //TODO handle formula
+            value = m_numberstyle.prefix + value + m_numberstyle.suffix;
+        } break;
     }
 
     //kDebug() << m_name << value;
@@ -332,25 +342,25 @@ void UserVariable::propertyChanged(Property property, const QVariant &value)
 
 void UserVariable::saveOdf(KoShapeSavingContext &context)
 {
+    if (m_property == 0 && !variableManager()->userVariables().contains(m_name))
+        return;
+
     KoXmlWriter *writer = &context.xmlWriter();
-    switch (m_property) {
-        case KoInlineObject::UserGet: {
-            writer->startElement("text:user-field-get", false);
-            if (!m_name.isEmpty())
-                writer->addAttribute("text:name", m_name);
-            writer->addTextNode(value());
-            writer->endElement();
-        } break;
-        case KoInlineObject::UserInput: {
-            writer->startElement("text:user-field-input", false);
-            if (!m_name.isEmpty())
-                writer->addAttribute("text:name", m_name);
-            writer->addTextNode(value());
-            writer->endElement();
-        } break;
-        default:
-            break;
-    }
+
+    if (m_property == KoInlineObject::UserGet)
+        writer->startElement("text:user-field-get", false);
+    else
+        writer->startElement("text:user-field-input", false);
+
+    if (!m_name.isEmpty())
+        writer->addAttribute("text:name", m_name);
+
+    QString styleName = KoOdfNumberStyles::saveOdfNumberStyle(context.mainStyles(), m_numberstyle);
+    if (!styleName.isEmpty())
+        writer->addAttribute("style:data-style-name", styleName);
+
+    writer->addTextNode(value());
+    writer->endElement();
 }
 
 bool UserVariable::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)

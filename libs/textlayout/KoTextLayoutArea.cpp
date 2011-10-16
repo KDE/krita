@@ -726,6 +726,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             QVariant v = listFormat.property(KoListStyle::MarkCharacterStyleId);
             QSharedPointer<KoCharacterStyle> textPropertiesCharStyle = v.value< QSharedPointer<KoCharacterStyle> >();
             if (!textPropertiesCharStyle.isNull()) {
+                textPropertiesCharStyle->applyStyle(labelFormat);
+
                 //calculate the correct font point size taking into account the current
                 // block format and the relative font size percent if the size is not absolute
                 if (!textPropertiesCharStyle->hasProperty(QTextFormat::FontPointSize)) {
@@ -735,9 +737,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                     } else {
                         listFormat.setProperty(KoListStyle::RelativeBulletSize, percent);
                     }
-                    textPropertiesCharStyle->setFontPointSize((percent*labelFormat.fontPointSize())/100.00);
+                    labelFormat.setFontPointSize((percent*labelFormat.fontPointSize())/100.00);
                 }
-                textPropertiesCharStyle->applyStyle(labelFormat);
             }
         }
 

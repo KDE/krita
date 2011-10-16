@@ -214,14 +214,40 @@ KisNodeSP KisKraLoadVisitor::findNodeByName(const QString &name,
     return result;
 }
 
+KisNodeSP KisKraLoadVisitor::findNodeByUuid(const QUuid &uuid,
+                                            KisNodeSP rootNode)
+{
+    if(rootNode->uuid() == uuid)
+        return rootNode;
+
+    KisNodeSP result;
+    KisNodeSP child = rootNode->firstChild();
+    while(child) {
+        result = findNodeByUuid(uuid, child);
+        if(result) break;
+
+        child = child->nextSibling();
+    }
+
+    return result;
+}
+
 bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
 {
     if (!loadMetaData(layer)) {
         return false;
     }
 
-    KisNodeSP srcNode = findNodeByName(layer->copyFromName(),
-                                        m_image->rootLayer());
+    KisNodeSP srcNode;
+    if (layer->copyFromUuid().isNull())
+    {
+        srcNode = findNodeByName(layer->copyFromName(),
+                                 m_image->rootLayer());
+    } else
+    {
+        srcNode = findNodeByUuid(layer->copyFromUuid(),
+                                 m_image->rootLayer());
+    }
     KisLayerSP srcLayer = dynamic_cast<KisLayer*>(srcNode.data());
     Q_ASSERT(srcLayer);
 

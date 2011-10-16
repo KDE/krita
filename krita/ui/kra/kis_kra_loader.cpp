@@ -257,6 +257,8 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
 
     QString name = element.attribute(NAME, "No Name");
 
+    QUuid id = QUuid(element.attribute(UUID, QUuid().toString()));
+
     qint32 x = element.attribute(X, "0").toInt();
     qint32 y = element.attribute(Y, "0").toInt();
 
@@ -329,6 +331,9 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
     node->setX(x);
     node->setY(y);
     node->setName(name);
+
+    if (! id.isNull())          // if no uuid in file, new one has been generated already
+        node->setUuid(id);
 
     if (node->inherits("KisLayer")) {
         KisLayer* layer           = qobject_cast<KisLayer*>(node);
@@ -489,10 +494,14 @@ KisNode* KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageWSP i
 
     KisCloneLayer* layer = new KisCloneLayer(0, image, name, opacity);
 
-    if ((element.attribute(CLONE_FROM)).isNull()) {
-        return 0;
+    if (! (element.attribute(CLONE_FROM_UUID)).isNull()) {
+        layer->setCopyFromUuid(QUuid(element.attribute(CLONE_FROM_UUID)));
     } else {
-        layer->setCopyFromName(element.attribute(CLONE_FROM));
+        if ((element.attribute(CLONE_FROM)).isNull()) {
+            return 0;
+        } else {
+            layer->setCopyFromName(element.attribute(CLONE_FROM));
+        }
     }
 
     if ((element.attribute(CLONE_TYPE)).isNull()) {

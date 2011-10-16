@@ -91,6 +91,9 @@ public:
      * from layer is set when all layers have been created, not during
      * loading.
      */
+    void setCopyFromUuid(const QUuid& layerUuid);
+    QUuid copyFromUuid() const;
+    
     void setCopyFromName(const QString& layerName);
     QString copyFromName() const;
 

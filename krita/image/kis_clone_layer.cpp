@@ -35,7 +35,8 @@ class KisCloneLayer::Private
 {
 public:
     KisLayerSP copyFrom;
-    QString copyFromName; // Used during loading only
+    QUuid copyFromUuid; // Used during loading only
+    QString copyFromName; // Used during loading only (for old files)
     CopyLayerType type;
     qint32 x;
     qint32 y;
@@ -186,6 +187,17 @@ void KisCloneLayer::setCopyType(CopyLayerType type)
 CopyLayerType KisCloneLayer::copyType() const
 {
     return m_d->type;
+}
+
+void KisCloneLayer::setCopyFromUuid(const QUuid& layerUuid)
+{
+    Q_ASSERT(!m_d->copyFrom);
+    m_d->copyFromUuid = layerUuid;
+}
+
+QUuid KisCloneLayer::copyFromUuid() const
+{
+    return m_d->copyFrom ? m_d->copyFrom->uuid() : m_d->copyFromUuid;
 }
 
 void KisCloneLayer::setCopyFromName(const QString& layerName)

@@ -57,10 +57,18 @@ namespace KoOdfNumberStyles
         QString currencySymbol;
         bool thousandsSep;
         QList<QPair<QString,QString> > styleMaps; // conditional formatting, first=condition, second=applyStyleName
+        NumericStyleFormat() : precision(-1), thousandsSep(false) {}
     };
 
+    KOODF_EXPORT QString format(const QString &value, NumericStyleFormat format);
     KOODF_EXPORT QString formatNumber(qreal value, const QString &format, int precision = -1);
+    KOODF_EXPORT QString formatBoolean(const QString &value, const QString &format);
+    KOODF_EXPORT QString formatDate(int value, const QString &format);
+    KOODF_EXPORT QString formatTime(qreal value, const QString &format);
+    KOODF_EXPORT QString formatCurrency(qreal value, const QString &format, const QString& currencySymbol, int precision = -1);
+    KOODF_EXPORT QString formatScientific(qreal value, const QString &format, int precision = -1);
     KOODF_EXPORT QString formatFraction(qreal value, const QString &format);
+    KOODF_EXPORT QString formatPercent(const QString &value, const QString &format, int precision = -1);
 
     KOODF_EXPORT QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent);
     KOODF_EXPORT QString saveOdfNumberStyle(KoGenStyles &mainStyles, NumericStyleFormat format);

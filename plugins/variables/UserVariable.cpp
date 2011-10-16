@@ -30,7 +30,6 @@
 #include <KoVariableManager.h>
 #include <KoTextDocument.h>
 
-#include <QDateTime>
 #include <QTextInlineObject>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -255,62 +254,10 @@ void UserVariable::deleteClicked(QWidget *configWidget)
 
 void UserVariable::valueChanged()
 {
+    //TODO apply following also to plugins/variables/DateVariable.cpp:96
+    //TODO handle formula
     QString value = variableManager()->value(m_name);
-
-    //TODO make following reusable and apply also in plugins/variables/DateVariable.cpp:96
-    switch (m_numberstyle.type) {
-        case KoOdfNumberStyles::Number: {
-            bool ok;
-            int v = value.toInt(&ok);
-            value = m_numberstyle.prefix + (ok ? QString::number(v) : value) + m_numberstyle.suffix;
-        } break;
-        case KoOdfNumberStyles::Boolean: {
-            bool ok = false;
-            int v = value.toInt(&ok);
-            value = m_numberstyle.prefix + (ok && v != 0 ? "TRUE" : "FALSE") + m_numberstyle.suffix;
-        } break;
-        case KoOdfNumberStyles::Date: {
-            QDateTime dt(QDate(1899, 12, 30)); // reference date
-            dt = dt.addDays(value.toInt());
-            value = dt.toString(m_numberstyle.prefix + m_numberstyle.formatStr + m_numberstyle.suffix);
-        } break;
-        case KoOdfNumberStyles::Time: {
-            QTime t(0,0,0);
-            t = t.addSecs(qRound(value.toDouble() * 86400.0)); // 24 hours
-            value = t.toString(m_numberstyle.prefix + m_numberstyle.formatStr + m_numberstyle.suffix);
-        } break;
-        case KoOdfNumberStyles::Percentage: {
-            value = m_numberstyle.prefix +
-                    (value.contains('.') ? m_numberstyle.prefix + QString::number(value.toDouble() * 100., 'f', m_numberstyle.precision) + m_numberstyle.suffix : QString::number(value.toInt())) +
-                    QLatin1String("%") +
-                    m_numberstyle.suffix;
-        } break;
-        case KoOdfNumberStyles::Currency: {
-            if (m_numberstyle.currencySymbol == "CCC") { // undocumented hack, see doc attached to comment 6 at bug 282972
-                value = m_numberstyle.prefix + KGlobal::locale()->formatMoney(value.toDouble(), "USD", m_numberstyle.precision) + m_numberstyle.suffix;
-            } else if (m_numberstyle.formatStr.isEmpty()) { // no format means locale format
-                value = m_numberstyle.prefix + KGlobal::locale()->formatMoney(value.toDouble(), m_numberstyle.currencySymbol.isEmpty() ? KGlobal::locale()->currencySymbol() : m_numberstyle.currencySymbol, m_numberstyle.precision) + m_numberstyle.suffix;
-            } else {
-                value = KoOdfNumberStyles::formatNumber(value.toDouble(), m_numberstyle.formatStr, m_numberstyle.precision);
-            }
-        } break;
-        case KoOdfNumberStyles::Scientific: {
-            value = QString::number(value.toDouble(), 'E', m_numberstyle.precision);
-            int pos = value.indexOf('.');
-            if (pos != -1) {
-                value = value.replace(pos, 1, KGlobal::locale()->decimalSymbol());
-            }
-        } break;
-        case KoOdfNumberStyles::Fraction: {
-            value = KoOdfNumberStyles::formatFraction(value.toDouble(), m_numberstyle.formatStr);
-        } break;
-        case KoOdfNumberStyles::Text: {
-            //TODO handle formula
-            value = m_numberstyle.prefix + value + m_numberstyle.suffix;
-        } break;
-    }
-
-    //kDebug() << m_name << value;
+    value = KoOdfNumberStyles::format(value, m_numberstyle);
     setValue(value);
 }
 

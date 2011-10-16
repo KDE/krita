@@ -24,8 +24,12 @@
 #include "KoXmlNS.h"
 
 #include <QtCore/QBuffer>
+#include <QtCore/QDateTime>
+#include <QtCore/QTime>
 
-#include <kdebug.h>
+#include <KGlobal>
+#include <KLocale>
+#include <KDebug>
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -40,6 +44,43 @@ namespace KoOdfNumberStyles
     static bool saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &text);
     static void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString &format, QString &text);
     static void addCalligraNumericStyleExtension(KoXmlWriter &elementWriter, const QString &_suffix, const QString &_prefix);
+
+QString format(const QString &value, NumericStyleFormat format)
+{
+    QString result;
+    switch (format.type) {
+        case Number: {
+            bool ok;
+            int v = value.toInt(&ok);
+            result = ok ? QString::number(v) : value;
+        } break;
+        case Boolean: {
+            result = formatBoolean(value, format.formatStr);
+        } break;
+        case Date: {
+            result = formatDate(value.toInt(), format.formatStr);
+        } break;
+        case Time: {
+            result = formatTime(value.toDouble(), format.formatStr);
+        } break;
+        case Percentage: {
+            result = formatPercent(value, format.formatStr, format.precision);
+        } break;
+        case Currency: {
+            result = formatCurrency(value.toDouble(), format.formatStr, format.currencySymbol, format.precision);
+        } break;
+        case Scientific: {
+            result = formatScientific(value.toDouble(), format.formatStr, format.precision);
+        } break;
+        case Fraction: {
+            result = formatFraction(value.toDouble(), format.formatStr);
+        } break;
+        case Text: {
+            result = value;
+        } break;
+    }
+    return result;
+}
 
 QString formatNumber(qreal value, const QString &format, int precision)
 {
@@ -145,6 +186,48 @@ QString formatNumber(qreal value, const QString &format, int precision)
     return result;
 }
 
+QString formatBoolean(const QString &value, const QString &format)
+{
+    Q_UNUSED(format);
+    bool ok = false;
+    int v = value.toInt(&ok);
+    return ok && v != 0 ? "TRUE" : "FALSE";
+}
+
+QString formatDate(int value, const QString &format)
+{
+    QDateTime dt(QDate(1899, 12, 30)); // reference date
+    dt = dt.addDays(value);
+    return dt.toString(format);
+}
+
+QString formatTime(qreal value, const QString &format)
+{
+    QTime t(0,0,0);
+    t = t.addSecs(qRound(value * 86400.0)); // 24 hours
+    return t.toString(format);
+}
+
+QString formatCurrency(qreal value, const QString &format, const QString& currencySymbol, int precision)
+{
+    if (currencySymbol == "CCC") // undocumented hack, see doc attached to comment 6 at bug 282972
+        return KGlobal::locale()->formatMoney(value, "USD", precision);
+    if (format.isEmpty()) // no format means use locale format
+        return KGlobal::locale()->formatMoney(value, currencySymbol.isEmpty() ? KGlobal::locale()->currencySymbol() : currencySymbol, precision);
+    return formatNumber(value, format, precision);
+}
+
+QString formatScientific(qreal value, const QString &format, int precision)
+{
+    Q_UNUSED(format);
+    QString v(QString::number(value, 'E', precision));
+    int pos = v.indexOf('.');
+    if (pos != -1) {
+        v = v.replace(pos, 1, KGlobal::locale()->decimalSymbol());
+    }
+    return v;
+}
+
 QString formatFraction(qreal value, const QString &format)
 {
     QString prefix = value < 0 ? "-" : "";
@@ -233,6 +316,11 @@ QString formatFraction(qreal value, const QString &format)
         return prefix + QString("%1/%2").arg(bestNumerator).arg(bestDenominator);
     return prefix + QString("%1 %2/%3").arg(floor(value)).arg(bestNumerator).arg(bestDenominator);
 
+}
+
+QString formatPercent(const QString &value, const QString &format, int precision)
+{
+    return value.contains('.') ? QString::number(value.toDouble() * 100., 'f', precision) + QLatin1String("%") : QString::number(value.toInt());
 }
 
 // OO spec 2.5.4. p68. Conversion to Qt format: see qdate.html
@@ -519,11 +607,11 @@ QString saveOdfNumberStyle(KoGenStyles &mainStyles, NumericStyleFormat format)
             styleName = KoOdfNumberStyles::saveOdfBooleanStyle(mainStyles, format.formatStr, format.prefix, format.suffix);
         } break;
         case KoOdfNumberStyles::Date: {
-            bool localeFormat = false;
+            bool localeFormat = format.formatStr.isEmpty();
             styleName = KoOdfNumberStyles::saveOdfDateStyle(mainStyles, format.formatStr, localeFormat, format.prefix, format.suffix);
         } break;
         case KoOdfNumberStyles::Time: {
-            bool localeFormat = false;
+            bool localeFormat = format.formatStr.isEmpty();
             styleName = KoOdfNumberStyles::saveOdfTimeStyle(mainStyles, format.formatStr, localeFormat, format.prefix, format.suffix);
         } break;
         case KoOdfNumberStyles::Percentage: {

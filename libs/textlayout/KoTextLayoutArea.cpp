@@ -890,7 +890,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             // not specified by the auto style (additionally LO/OO uses 0 as condition so we do too)
             int id = pStyle.styleId();
             bool set = false;
-            if (id) {
+            if (id && m_documentLayout->styleManager()) {
                 KoParagraphStyle *originalParagraphStyle = m_documentLayout->styleManager()->paragraphStyle(id);
                 if (originalParagraphStyle->leftMargin() != leftMargin) {
                     set = (leftMargin != 0);
@@ -1280,7 +1280,7 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const 
         // not specified (additionally LO/OO uses 0 as condition so we do too)
         int id = pStyle.styleId();
         bool set = false;
-        if (id) {
+        if (id && m_documentLayout->styleManager()) {
             KoParagraphStyle *originalParagraphStyle = m_documentLayout->styleManager()->paragraphStyle(id);
             if (originalParagraphStyle->textIndent().value(width()) != pStyleTextIndent) {
                 set = (pStyleTextIndent != 0);

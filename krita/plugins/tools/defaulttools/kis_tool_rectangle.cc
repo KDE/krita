@@ -62,6 +62,7 @@ KisToolRectangle::~KisToolRectangle()
 
 void KisToolRectangle::finishRect(const QRectF &rect)
 {
+    setCurrentNodeLocked(true);
     if (rect.isNull())
         return;
 
@@ -89,6 +90,7 @@ void KisToolRectangle::finishRect(const QRectF &rect)
         KoShape* shape = KisShapeToolHelper::createRectangleShape(r);
         addShape(shape);
     }
+    setCurrentNodeLocked(false);
 }
 
 #include "kis_tool_rectangle.moc"

@@ -33,6 +33,7 @@ public:
     KisBaseNodeSP linkedTo;
     bool systemLocked;
     KoDocumentSectionModel::Property hack_visible; //HACK
+    QUuid id;
 };
 
 KisBaseNode::KisBaseNode()
@@ -53,6 +54,8 @@ KisBaseNode::KisBaseNode()
     setSystemLocked(false);
     m_d->linkedTo = 0;
     m_d->compositeOp = COMPOSITE_OVER;
+    
+    setUuid(QUuid::createUuid());
 }
 
 
@@ -68,6 +71,8 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
     }
     m_d->linkedTo = rhs.m_d->linkedTo;
     m_d->compositeOp = rhs.m_d->compositeOp;
+    
+    setUuid(QUuid::createUuid());
 }
 
 KisBaseNode::~KisBaseNode()
@@ -222,6 +227,16 @@ void KisBaseNode::setSystemLocked(bool locked, bool update)
 bool KisBaseNode::isEditable() const
 {
     return (visible(true) && !userLocked() && !systemLocked());
+}
+
+QUuid KisBaseNode::uuid() const
+{
+    return m_d->id;
+}
+
+void KisBaseNode::setUuid(const QUuid& id)
+{
+    m_d->id = id;
 }
 
 #include "kis_base_node.moc"

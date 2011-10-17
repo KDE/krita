@@ -726,6 +726,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             QVariant v = listFormat.property(KoListStyle::MarkCharacterStyleId);
             QSharedPointer<KoCharacterStyle> textPropertiesCharStyle = v.value< QSharedPointer<KoCharacterStyle> >();
             if (!textPropertiesCharStyle.isNull()) {
+                textPropertiesCharStyle->applyStyle(labelFormat);
+
                 //calculate the correct font point size taking into account the current
                 // block format and the relative font size percent if the size is not absolute
                 if (!textPropertiesCharStyle->hasProperty(QTextFormat::FontPointSize)) {
@@ -735,9 +737,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                     } else {
                         listFormat.setProperty(KoListStyle::RelativeBulletSize, percent);
                     }
-                    textPropertiesCharStyle->setFontPointSize((percent*labelFormat.fontPointSize())/100.00);
+                    labelFormat.setFontPointSize((percent*labelFormat.fontPointSize())/100.00);
                 }
-                textPropertiesCharStyle->applyStyle(labelFormat);
             }
         }
 
@@ -889,7 +890,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             // not specified by the auto style (additionally LO/OO uses 0 as condition so we do too)
             int id = pStyle.styleId();
             bool set = false;
-            if (id) {
+            if (id && m_documentLayout->styleManager()) {
                 KoParagraphStyle *originalParagraphStyle = m_documentLayout->styleManager()->paragraphStyle(id);
                 if (originalParagraphStyle->leftMargin() != leftMargin) {
                     set = (leftMargin != 0);
@@ -1279,7 +1280,7 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const 
         // not specified (additionally LO/OO uses 0 as condition so we do too)
         int id = pStyle.styleId();
         bool set = false;
-        if (id) {
+        if (id && m_documentLayout->styleManager()) {
             KoParagraphStyle *originalParagraphStyle = m_documentLayout->styleManager()->paragraphStyle(id);
             if (originalParagraphStyle->textIndent().value(width()) != pStyleTextIndent) {
                 set = (pStyleTextIndent != 0);

@@ -24,11 +24,9 @@ KisPreferenceSetRegistry ::KisPreferenceSetRegistry ()
 }
 
 KisPreferenceSetRegistry ::~KisPreferenceSetRegistry ()
-{ 
-    foreach(QString id, keys()) {
-        delete get(id);
-    }
-    dbgRegistry << "deleting KisPreferenceSetRegistry ";
+{
+    // the preference items are owned by the preferences dialog,
+    // so we shouldn't delete them on shutdown.
 }
 
 KisPreferenceSetRegistry * KisPreferenceSetRegistry ::instance()

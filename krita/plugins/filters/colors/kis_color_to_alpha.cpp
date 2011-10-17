@@ -94,7 +94,6 @@ void KisFilterColorToAlpha::process(KisPaintDeviceSP device,
         } else {
             newOpacity = d / thresholdF;
         }
-        memcpy(it->rawData(), it->rawData(), pixelsize);
         if(newOpacity < cs->opacityF(it->rawData()))
         {
           cs->setOpacity(it->rawData(), newOpacity, 1);

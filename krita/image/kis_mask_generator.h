@@ -22,6 +22,9 @@
 #include "kis_circle_mask_generator.h"
 #include "kis_rect_mask_generator.h"
 
+#include "kis_gauss_circle_mask_generator.h"
+#include "kis_gauss_rect_mask_generator.h"
+
 #include "kis_curve_circle_mask_generator.h"
 #include "kis_curve_rect_mask_generator.h"
 

@@ -137,7 +137,7 @@ public:
      <tr>
         <td>"comma separated list of application names"</td>
         <td>see main type</td>
-        <td>Similar to the 'main' item if the appliction name matches with the current application. Otherwise it's similar to 'dynamic', but segmented in its own section. If the list includes 'dynamic' it's even added to the dynamic section, when not matching the applicationname</td></tr>
+        <td>Similar to the 'main' item if the application name matches with the current application. Otherwise it's similar to 'dynamic', but segmented in its own section. If the list includes 'dynamic' it's even added to the dynamic section, when not matching the application name</td></tr>
      <tr>
         <td>'other'</td>
         <td>any</td>

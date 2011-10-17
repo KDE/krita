@@ -280,6 +280,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                 layout->draw(painter, QPointF(0, 0), selections, br);
             } else {
                 QList<QTextLayout::FormatRange> misspellings = layout->additionalFormats();
+                layout->clearAdditionalFormats();
                 layout->draw(painter, QPointF(0, 0), selections, br);
                 layout->setAdditionalFormats(misspellings);
             }

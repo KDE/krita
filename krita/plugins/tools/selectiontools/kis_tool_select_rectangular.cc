@@ -72,6 +72,7 @@ QWidget* KisToolSelectRectangular::createOptionWidget()
 
 void KisToolSelectRectangular::LocalTool::finishRect(const QRectF& rect)
 {
+    setCurrentNodeLocked(true);
     QRect rc(rect.toRect());
     rc = rc.intersected(currentImage()->bounds());
     rc = rc.normalized();
@@ -94,6 +95,7 @@ void KisToolSelectRectangular::LocalTool::finishRect(const QRectF& rect)
         QRectF documentRect = convertToPt(rect);
         helper.addSelectionShape(KisShapeToolHelper::createRectangleShape(documentRect));
     }
+    setCurrentNodeLocked(false);
 }
 
 #include "kis_tool_select_rectangular.moc"

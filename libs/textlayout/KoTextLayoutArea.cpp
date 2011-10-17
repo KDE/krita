@@ -726,6 +726,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             QVariant v = listFormat.property(KoListStyle::MarkCharacterStyleId);
             QSharedPointer<KoCharacterStyle> textPropertiesCharStyle = v.value< QSharedPointer<KoCharacterStyle> >();
             if (!textPropertiesCharStyle.isNull()) {
+                textPropertiesCharStyle->applyStyle(labelFormat);
+
                 //calculate the correct font point size taking into account the current
                 // block format and the relative font size percent if the size is not absolute
                 if (!textPropertiesCharStyle->hasProperty(QTextFormat::FontPointSize)) {
@@ -735,9 +737,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                     } else {
                         listFormat.setProperty(KoListStyle::RelativeBulletSize, percent);
                     }
-                    textPropertiesCharStyle->setFontPointSize((percent*labelFormat.fontPointSize())/100.00);
+                    labelFormat.setFontPointSize((percent*labelFormat.fontPointSize())/100.00);
                 }
-                textPropertiesCharStyle->applyStyle(labelFormat);
             }
         }
 
@@ -876,24 +877,41 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     }
 
     //========
-    // Margins (and restart a paragraph continuing from previous other area)
+    // Margins
     //========
     qreal leftMargin = pStyle.leftMargin();
     qreal rightMargin = pStyle.rightMargin();
+    m_indent = textIndent(block, textList, pStyle);
 
-    m_listIndent = 0;
-    qreal listLabelIndent = 0;
+    qreal labelBoxWidth = 0;
     if (textList) {
-        if (!m_isRtl) {
-            listLabelIndent = blockData->counterSpacing() + blockData->counterWidth();
-        }
-        if (listFormat.boolProperty(KoListStyle::AlignmentMode) == false) {
-            m_listIndent = listFormat.doubleProperty(KoListStyle::Indent) + listLabelIndent;
-        } else {
+        if (listFormat.boolProperty(KoListStyle::AlignmentMode)) {
             // according to odf 1.2 17.20 list margin should be used when paragraph margin is
-            // not specified (additionally LO/OO uses 0 as condition so we do too)
-            if (pStyle.leftMargin() == 0) {
+            // not specified by the auto style (additionally LO/OO uses 0 as condition so we do too)
+            int id = pStyle.styleId();
+            bool set = false;
+            if (id && m_documentLayout->styleManager()) {
+                KoParagraphStyle *originalParagraphStyle = m_documentLayout->styleManager()->paragraphStyle(id);
+                if (originalParagraphStyle->leftMargin() != leftMargin) {
+                    set = (leftMargin != 0);
+                }
+            } else {
+                set = (leftMargin != 0);
+            }
+            if (! set) {
                 leftMargin = listFormat.doubleProperty(KoListStyle::Margin);
+            }
+
+            labelBoxWidth = blockData->counterWidth();
+            Qt::Alignment align = static_cast<Qt::Alignment>(listFormat.intProperty(KoListStyle::Alignment));
+            if (align & Qt::AlignLeft) {
+                m_indent += labelBoxWidth;
+            } else if (align & Qt::AlignHCenter) {
+                m_indent += labelBoxWidth/2;
+            }
+        } else {
+            if (!m_isRtl) {
+                labelBoxWidth = blockData->counterSpacing() + blockData->counterWidth();
             }
         }
     }
@@ -903,8 +921,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     m_x = left() + (m_isRtl ? rightMargin : leftMargin);
 
     m_documentLayout->clearInlineObjectRegistry(block);
-    m_indent = textIndent(block, textList, pStyle);
-    QTextLine line;
 
     //========
     // Tabs
@@ -917,37 +933,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         tabOffset += m_isRtl ? -rightMargin : -leftMargin;
     }
 
-    // Regular interval tabs. Since Qt doesn't handle regular interval tabs offset
-    // by a fixed number (which we need in all cases, we need to create the regular tabs
-    // ourselves.
-    qreal tabStopDistance = pStyle.tabStopDistance();
-    if (tabStopDistance <= 0) {
-        tabStopDistance = m_documentLayout->defaultTabSpacing();
-    }
-
-    qreal position = 0; // first possible position
-    if (!m_documentLayout->relativeTabs(block)) {
-        position = m_isRtl ? rightMargin : leftMargin;
-    }
-
-    if (!tabs.isEmpty()) {
-        position = tabs.last().position;
-    }
-
-    if (position < 0) {
-        position = int(position / tabStopDistance) * tabStopDistance;
-    } else {
-        position = (int(position / tabStopDistance) + 1) * tabStopDistance;
-    }
-    while (position < MaximumTabPos) {
-        KoText::Tab tab;
-
-        tab.position = position;
-        tabs.append(tab);
-        position += tabStopDistance;
-    }
-
-    // Finally make a list of tabs that Qt can use
+    // Make a list of tabs that Qt can use
     QList<QTextOption::Tab> qTabs;
     // Note: Converting to Qt tabs is needed as long as we use Qt for layout, but we
     // loose the posibility to do leader chars.
@@ -968,28 +954,115 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         value += tabOffset * qt_defaultDpiY() / 72.0;
 
-#if QT_VERSION >= 0x040700
-        qTabs.append(QTextOption::Tab(value, kTab.type, kTab.delimiter));
-#else
         QTextOption::Tab tab;
         tab.position = value;
         tab.type = kTab.type;
         tab.delimiter = kTab.delimiter;
         qTabs.append(tab);
-#endif
+    }
+
+    // For some lists we need to add a special list tab according to odf 1.2 19.830 
+    if (textList && listFormat.hasProperty(KoListStyle::TabStopPosition)) {
+        qreal listTab = listFormat.doubleProperty(KoListStyle::TabStopPosition);
+        if (!m_documentLayout->relativeTabs(block)) {
+            // How list tab is defined if fixed tabs:
+            //        listTab
+            //|>-------------------------|
+            //           m_indent
+            //         |---------<|
+            //     LABEL                 TEXT STARTS HERE AND GOES ON
+            //                    TO THE NEXT LINE
+            //|>------------------|
+            //     leftMargin
+            listTab -= leftMargin;
+        } else {
+            // How list tab is defined if relative tabs:
+            // It's relative to leftMargin - list.leftMargin
+            //              listTab
+            //       |>-------------------|
+            //             m_indent
+            //           |---------<|
+            //       LABEL                 TEXT STARTS HERE AND GOES ON
+            //                      TO THE NEXT LINE
+            //|>--------------------|
+            //     leftMargin       |
+            //       |>-------------|
+            //          list.margin
+            listTab -= listFormat.doubleProperty(KoListStyle::Margin);
+        }
+        // How list tab is defined now:
+        //                    listTab
+        //                    |>-----|
+        //           m_indent
+        //         |---------<|
+        //     LABEL                 TEXT STARTS HERE AND GOES ON
+        //                    TO THE NEXT LINE
+        //|>------------------|
+        //     leftMargin
+        listTab -= m_indent;
+
+        // And now listTab is like this:
+        //         x()
+        //         |     listTab
+        //         |>---------------|
+        //           m_indent
+        //         |---------<|
+        //     LABEL                 TEXT STARTS HERE AND GOES ON
+        //                    TO THE NEXT LINE
+        //|>------------------|
+        //     leftMargin
+
+        // conversion here is required because Qt thinks in device units and we don't
+        listTab *= qt_defaultDpiY() / 72.0;
+
+        QTextOption::Tab tab;
+        tab.position = listTab;
+        tab.type = m_isRtl ? QTextOption::RightTab : QTextOption::LeftTab;
+        qTabs.append(tab);
     }
 
     // We need to sort as the MaximumTabPos may be converted to a value that really
-    // should be in the middle of the list
+    // should be in the middle, and listtab needs to be sorted in too
     qSort(qTabs.begin(), qTabs.end(), compareTab);
+
+    // Regular interval tabs. Since Qt doesn't handle regular interval tabs offset
+    // by a fixed number we need to create the regular tabs ourselves.
+    qreal tabStopDistance = pStyle.tabStopDistance() * qt_defaultDpiY() / 72.0;
+    if (tabStopDistance <= 0) {
+        tabStopDistance = m_documentLayout->defaultTabSpacing() * qt_defaultDpiY() / 72.0;
+    }
+
+    qreal regularSpacedTabPos = 0; // first possible position
+    if (!qTabs.isEmpty()) {
+        regularSpacedTabPos = qTabs.last().position;
+    }
+
+    regularSpacedTabPos -= tabOffset * qt_defaultDpiY() / 72.0;
+    if (regularSpacedTabPos < 0) {
+        regularSpacedTabPos = -int(-regularSpacedTabPos / tabStopDistance) * tabStopDistance;
+    } else {
+        regularSpacedTabPos = (int(regularSpacedTabPos / tabStopDistance) + 1) * tabStopDistance;
+    }
+    regularSpacedTabPos += tabOffset * qt_defaultDpiY() / 72.0;
+
+    while (regularSpacedTabPos < MaximumTabPos) {
+        QTextOption::Tab tab;
+        tab.position = regularSpacedTabPos;
+        qTabs.append(tab);
+        regularSpacedTabPos += tabStopDistance;
+    }
+
     option.setTabs(qTabs);
 
     // conversion here is required because Qt thinks in device units and we don't
     option.setTabStop(tabStopDistance * qt_defaultDpiY() / 72.);
 
-
     layout->setTextOption(option);
 
+    // ==============
+    // Setup line and possibly restart paragraph continuing from previous other area
+    // ==============
+    QTextLine line;
     if (cursor->lineTextStart == -1) {
         layout->beginLayout();
         line = layout->createLine();
@@ -1000,127 +1073,42 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     }
 
     // ==============
-    // Now once we know the physical context we can work on the borders of the paragraph
-    // ==============
-    handleBordersAndSpacing(blockData, &block);
-
-    // Expand bounding rect so if we have content outside we show it
-    expandBoundingLeft(m_blockRects.last().x());
-    expandBoundingRight(m_blockRects.last().right());
-
-    m_blockRects.last().setLeft(m_blockRects.last().left() + qMin(m_indent, qreal(0.0)));
-
-    // ==============
-    // List counter position
+    // List label/counter positioning
     // ==============
     if (textList && block.layout()->lineCount() == 1) {
         // If first line in a list then set the counterposition. Following lines in the same
         // list-item have nothing to do with the counter. Do this after borders so we can
         // account for them.
-        if (m_isRtl) {
-            m_width -= blockData->counterWidth() + blockData->counterSpacing() + m_listIndent;
-            if (listFormat.boolProperty(KoListStyle::AlignmentMode) == false) {
+        if (listFormat.boolProperty(KoListStyle::AlignmentMode) == false) {
+            if (m_isRtl) {
+                m_width -= blockData->counterWidth() + blockData->counterSpacing() + listFormat.doubleProperty(KoListStyle::Indent) + labelBoxWidth;
                 blockData->setCounterPosition(QPointF(right() -
                                                       blockData->counterWidth() - leftMargin, m_y));
             } else {
-                blockData->setCounterPosition(QPointF(right() - leftMargin, m_y));
+                m_x += listFormat.doubleProperty(KoListStyle::Indent) + labelBoxWidth;
+                m_width -= listFormat.doubleProperty(KoListStyle::Indent) + labelBoxWidth;
+                blockData->setCounterPosition(QPointF(x() - labelBoxWidth, m_y));
             }
-        } else {
-            if (listFormat.boolProperty(KoListStyle::AlignmentMode) == false) {
-                m_x += m_listIndent;
-                m_width -= m_listIndent;
-                blockData->setCounterPosition(QPointF(x() - listLabelIndent, m_y));
-            } else {
-                Qt::Alignment align = static_cast<Qt::Alignment>(listFormat.intProperty(KoListStyle::Alignment));
-                if (align & Qt::AlignLeft) {
-                    blockData->setCounterPosition(QPointF(x(), m_y));
-                    m_indent += listLabelIndent;
-                } else if (align & Qt::AlignHCenter) {
-                    listLabelIndent /= 2;
-                    blockData->setCounterPosition(QPointF(x() - listLabelIndent, m_y));
-                    m_indent += listLabelIndent/2;
-                } else {
-                    blockData->setCounterPosition(QPointF(x() - listLabelIndent, m_y));
-                }
-            }
-        }
+        } else if (labelBoxWidth > 0.0) { // Alignmentmode and there is a label
+            blockData->setCounterPosition(QPointF(x() - labelBoxWidth, m_y));
 
-        if (listFormat.boolProperty(KoListStyle::AlignmentMode)) {
             if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
-                if (listFormat.hasProperty(KoListStyle::TabStopPosition)) {
-                    qreal listTab = listFormat.doubleProperty(KoListStyle::TabStopPosition);
-                    if (!m_documentLayout->relativeTabs(block)) {
-                        // How list tab is defined if fixed tabs:
-                        //        listTab
-                        //|>-------------------------|
-                        //           m_indent
-                        //         |---------<|
-                        //     LABEL                 TEXT STARTS HERE AND GOES ON
-                        //                    TO THE NEXT LINE
-                        //|>------------------|
-                        //     leftMargin
-                        listTab -= leftMargin;
-                    } else {
-                        // How list tab is defined if relative tabs:
-                        // It's relative to leftMargin - list.leftMargin
-                        //              listTab
-                        //       |>-------------------|
-                        //             m_indent
-                        //           |---------<|
-                        //       LABEL                 TEXT STARTS HERE AND GOES ON
-                        //                      TO THE NEXT LINE
-                        //|>--------------------|
-                        //     leftMargin       |
-                        //       |>-------------|
-                        //          list.margin
-                        listTab -= listFormat.doubleProperty(KoListStyle::Margin);
+                foreach(QTextOption::Tab tab, qTabs) {
+                    qreal position = tab.position  * 72. / qt_defaultDpiY();
+                    if (position > 0.0) {
+                        m_indent += position;
+                        break;
                     }
-                    // How list tab is defined now:
-                    //                    listTab
-                    //                    |>-----|
-                    //           m_indent
-                    //         |---------<|
-                    //     LABEL                 TEXT STARTS HERE AND GOES ON
-                    //                    TO THE NEXT LINE
-                    //|>------------------|
-                    //     leftMargin
-                    listTab -= m_indent;
-
-                    // And now listTab is like this:
-                    //         x()
-                    //         |     listTab
-                    //         |>---------------|
-                    //           m_indent
-                    //         |---------<|
-                    //     LABEL                 TEXT STARTS HERE AND GOES ON
-                    //                    TO THE NEXT LINE
-                    //|>------------------|
-                    //     leftMargin
-
-                    foreach(KoText::Tab tab, tabs) {
-                        qreal position = tab.position  * 72. / qt_defaultDpiY();
-                        if (position > 0.0) {
-                            // found the relevant normal tab
-                            if (position > listTab && listTab > 0.0) {
-                                // But special tab is more relevant
-                                position = listTab;
-                            }
-                            m_indent += position;
-                            break;
-                        }
-                    }
-
-                    //And finally it's like this:
-                    //                          x()
-                    //                    m_indent
-                    //                    |>-----|
-                    //     LABEL                 TEXT STARTS HERE AND GOES ON
-                    //                    TO THE NEXT LINE
-                    //|>------------------|
-                    //     leftMargin
-                } else {
-                    m_indent = 0;
                 }
+
+                //And finally it's like this:
+                //                          x()
+                //                    m_indent
+                //                    |>-----|
+                //     LABEL                 TEXT STARTS HERE AND GOES ON
+                //                    TO THE NEXT LINE
+                //|>------------------|
+                //     leftMargin
             } else if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::Space) {
                  QFontMetrics fm(labelFormat.font(), m_documentLayout->paintDevice());
                  m_indent += fm.width(' ');
@@ -1128,6 +1116,14 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
     }
 
+    // ==============
+    // Now once we know the physical context we can work on the borders of the paragraph
+    // ==============
+    handleBordersAndSpacing(blockData, &block);
+
+    // Expand bounding rect so if we have content outside we show it
+    expandBoundingLeft(m_blockRects.last().x());
+    expandBoundingRight(m_blockRects.last().right());
 
     // ==============
     // Create the lines of this paragraph
@@ -1276,14 +1272,27 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const 
         qreal guessGlyphWidth = QFontMetricsF(blockCursor.charFormat().font()).width('x');
         return guessGlyphWidth * 3 + m_extraTextIndent;
     }
+
+    qreal pStyleTextIndent = pStyle.textIndent().value(width());
+
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
         // according to odf 1.2 17.20 list text indent should be used when paragraph text indent is
         // not specified (additionally LO/OO uses 0 as condition so we do too)
-        if (pStyle.textIndent().value(width()) == 0) {
+        int id = pStyle.styleId();
+        bool set = false;
+        if (id && m_documentLayout->styleManager()) {
+            KoParagraphStyle *originalParagraphStyle = m_documentLayout->styleManager()->paragraphStyle(id);
+            if (originalParagraphStyle->textIndent().value(width()) != pStyleTextIndent) {
+                set = (pStyleTextIndent != 0);
+            }
+        } else {
+            set = (pStyleTextIndent != 0);
+        }
+        if (! set) {
             return textList->format().doubleProperty(KoListStyle::TextIndent) + m_extraTextIndent;
         }
     }
-    return pStyle.textIndent().value(width()) + m_extraTextIndent;
+    return pStyleTextIndent + m_extraTextIndent;
 }
 
 void KoTextLayoutArea::setExtraTextIndent(qreal extraTextIndent)
@@ -1705,8 +1714,19 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
         topMargin = formatStyle.topMargin();
     }
     qreal spacing = qMax(m_bottomSpacing, topMargin);
+    qreal dx = 0.0;
+    qreal x = m_x;
+    qreal width = m_width;
+    if (m_indent < 0) {
+        x += m_indent;
+        width -= m_indent;
+    }
+    if (blockData && blockData->hasCounterData() && blockData->counterPosition().x() < x) {
+       width += x - blockData->counterPosition().x();
+       x = blockData->counterPosition().x();
+    }
 
-    KoTextBlockBorderData border(QRectF(x(), m_y, width(), 1));
+    KoTextBlockBorderData border(QRectF(x, m_y, width, 1));
     border.setEdge(border.Left, format, KoParagraphStyle::LeftBorderStyle,
                    KoParagraphStyle::LeftBorderWidth, KoParagraphStyle::LeftBorderColor,
                    KoParagraphStyle::LeftBorderSpacing, KoParagraphStyle::LeftInnerBorderWidth);
@@ -1738,7 +1758,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
                 m_blockRects.last().setBottom(divider);
             }
             m_y += spacing;
-            m_blockRects.append(QRectF(m_x, divider, m_width, 1.0));
+            m_blockRects.append(QRectF(x, divider, width, 1.0));
         } else {
             // can't merge; then these are our new borders.
             KoTextBlockBorderData *newBorder = new KoTextBlockBorderData(border);
@@ -1752,17 +1772,18 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             }
             m_y += spacing;
             if (paddingExpandsBorders) {
-                m_blockRects.append(QRectF(m_x - format.doubleProperty(KoParagraphStyle::LeftPadding), m_y,
-                    m_width + format.doubleProperty(KoParagraphStyle::LeftPadding) + format.doubleProperty(KoParagraphStyle::RightPadding), 1.0));
+                m_blockRects.append(QRectF(x - format.doubleProperty(KoParagraphStyle::LeftPadding), m_y,
+                    width + format.doubleProperty(KoParagraphStyle::LeftPadding) + format.doubleProperty(KoParagraphStyle::RightPadding), 1.0));
             } else {
-                m_blockRects.append(QRectF(m_x, m_y, m_width, 1.0));
+                m_blockRects.append(QRectF(x, m_y, width, 1.0));
             }
             m_y += newBorder->inset(KoTextBlockBorderData::Top);
             m_y += format.doubleProperty(KoParagraphStyle::TopPadding);
         }
 
         // finally, horizontal components of the borders
-        m_x += border.inset(KoTextBlockBorderData::Left);
+        dx = border.inset(KoTextBlockBorderData::Left);
+        m_x += dx;
         m_width -= border.inset(KoTextBlockBorderData::Left);
         m_width -= border.inset(KoTextBlockBorderData::Right);
     } else { // this parag has no border.
@@ -1776,15 +1797,18 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             m_blockRects.last().setBottom(m_y);
         }
         m_y += spacing;
-        m_blockRects.append(QRectF(m_x, m_y, m_width, 1.0));
+        m_blockRects.append(QRectF(x, m_y, width, 1.0));
     }
     if (!paddingExpandsBorders) {
         // add padding inside the border
+        dx += format.doubleProperty(KoParagraphStyle::LeftPadding);
         m_x += format.doubleProperty(KoParagraphStyle::LeftPadding);
         m_width -= format.doubleProperty(KoParagraphStyle::LeftPadding);
         m_width -= format.doubleProperty(KoParagraphStyle::RightPadding);
     }
-
+    if (blockData && blockData->hasCounterData()) {
+        blockData->setCounterPosition(QPointF(blockData->counterPosition().x() + dx, m_y));
+    }
     m_prevBorder = blockData->border();
     m_prevBorderPadding = format.doubleProperty(KoParagraphStyle::BottomPadding);
 }

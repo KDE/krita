@@ -1419,8 +1419,11 @@ KoShapeBackground *KoShape::loadOdfFill(KoShapeLoadingContext &context) const
         bg = new KoColorBackground();
     } else if (fill == "gradient") {
         QString styleName = KoShapePrivate::getStyleProperty("fill-gradient-name", context);
-        KoXmlElement * e = context.odfLoadingContext().stylesReader().drawStyles("gradient")[styleName];
-        QString style(e->attributeNS(KoXmlNS::draw, "style", QString()));
+        KoXmlElement *e = context.odfLoadingContext().stylesReader().drawStyles("gradient")[styleName];
+        QString style;
+        if (e) {
+            style = e->attributeNS(KoXmlNS::draw, "style", QString());
+        }
         if ((style == "rectangular") || (style == "square")) {
             bg = new KoOdfGradientBackground();
         } else {

@@ -225,7 +225,6 @@ private:
     qreal m_x; // text area starts here as defined by margins (so not == m_left)
     qreal m_y;
     qreal m_width; // of text area as defined by margins (so not == m_right - m_left)
-    qreal m_listIndent;
     qreal m_indent;
     qreal m_dropCapsWidth;
     int m_dropCapsNChars;

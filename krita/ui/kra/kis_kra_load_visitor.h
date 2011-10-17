@@ -67,6 +67,8 @@ private:
 
     static KisNodeSP findNodeByName(const QString &name,
                                     KisNodeSP rootNode);
+    static KisNodeSP findNodeByUuid(const QUuid &uuid,
+                                    KisNodeSP rootNode);
 
 private:
     KisImageWSP m_image;

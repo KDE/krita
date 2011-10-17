@@ -25,6 +25,7 @@
 #include "kis_shared.h"
 #include "krita_export.h"
 #include "KoDocumentSectionModel.h"
+#include <QUuid>
 
 class KoProperties;
 class KoColorSpace;
@@ -132,6 +133,17 @@ public:
      * dirty.
      */
     void setCompositeOp(const QString& compositeOpId);
+
+    /**
+     * @return unique id, which is now used by clone layers.
+     */
+    QUuid uuid() const;
+
+    /**
+     * Set the uuid of node. This should only be used when loading
+     * existing node and in constructor.
+     */
+    void setUuid(const QUuid& id);
 
     /**
      * return the name of this node. This is the same as the

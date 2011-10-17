@@ -56,6 +56,7 @@ public:
 private slots:
 
     void paramChanged();
+    void setStackedWidget(int);
     void spinBoxHorizontalChanged(qreal);
     void spinBoxVerticalChanged(qreal);
     void linkFadeToggled(bool);

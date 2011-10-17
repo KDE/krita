@@ -37,6 +37,7 @@
 #include <QLabel>
 #include <QFrame>
 #include <QGridLayout>
+#include <QApplication>
 
 
 class KoModeBox::Private
@@ -61,9 +62,9 @@ static bool compareButton(const KoToolButton &b1, const KoToolButton &b2)
     if (b1.section == b2.section) {
         return b1.priority < b2.priority;
     } else {
-        if (b1.section.contains("words")) {
+        if (b1.section.contains(qApp->applicationName())) {
             return true;
-        } else if (b2.section.contains("words")) {
+        } else if (b2.section.contains(qApp->applicationName())) {
             return false;
         }
 
@@ -178,7 +179,7 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
         if (button.buttonGroupId == d->activeId) {
             newIndex = d->addedButtons.length();
         }
-        if (button.section.contains("words")) {
+        if (button.section.contains(qApp->applicationName())) {
             addItem(button);
             continue;
         } else if (!button.section.contains("dynamic")

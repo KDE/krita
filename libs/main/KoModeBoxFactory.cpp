@@ -53,6 +53,8 @@ QDockWidget* KoModeBoxFactory::createDockWidget()
     KoModeBox *box = new KoModeBox(d->canvasController);
     QDockWidget *docker = new QDockWidget(i18n("Mode"));
     docker->setWidget(box);
+    docker->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    docker->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     docker->setWindowTitle("");
     docker->setObjectName("ModeBox");
 

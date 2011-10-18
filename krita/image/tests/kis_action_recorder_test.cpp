@@ -96,10 +96,11 @@ void KisActionRecorderTest::testFiles()
             QImage resultImage(resultFileInfo.absoluteFilePath());
             resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);
 
-            if(sourceImage != resultImage) {
-                sourceImage.save("action_recorder_source.png");
-                resultImage.save("action_recorder_result.png");
-                qCritical() << "Failed to play action:" << sourceFileInfo.fileName();
+            QPoint pt;
+            if(!TestUtil::compareQImages(pt, sourceImage, resultImage, 40)) {
+                sourceImage.save("action_recorder_source_" + sourceFileInfo.fileName() + ".png");
+                resultImage.save("action_recorder_result_" + sourceFileInfo.fileName() + ".png");
+                qCritical() << "Failed to play action:" << sourceFileInfo.fileName() << "image differs at point" << pt;
                 QFAIL("Images do not coincide");
             }
         }

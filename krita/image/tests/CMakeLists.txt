@@ -153,10 +153,12 @@ kde4_add_unit_test(KisPaintLayerTest TESTNAME krita-image-KisPaintLayerTest ${ki
 target_link_libraries(KisPaintLayerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
-
+# action recorder results vary with the version of lcms
+if(LCMS2_FOUND)
 set(kis_action_recorder_test_SRCS kis_action_recorder_test.cpp )
 kde4_add_unit_test(KisActionRecorderTest TESTNAME krita-image-KisActionRecorderTest ${kis_action_recorder_test_SRCS})
 target_link_libraries(KisActionRecorderTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+endif(LCMS2_FOUND)
 
 ########### next target ###############
 

@@ -1,4 +1,4 @@
-kk/*
+/*
  *  Copyright (c) 2006-2008 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>

@@ -1032,7 +1032,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         tabStopDistance = m_documentLayout->defaultTabSpacing() * qt_defaultDpiY() / 72.0;
     }
 
-    qreal regularSpacedTabPos = 0; // first possible position
+    qreal regularSpacedTabPos = -m_indent * qt_defaultDpiY() / 72.0 -0.1; // first possible position
     if (!qTabs.isEmpty()) {
         regularSpacedTabPos = qTabs.last().position;
     }

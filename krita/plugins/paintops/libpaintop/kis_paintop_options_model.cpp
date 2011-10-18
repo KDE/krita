@@ -38,31 +38,31 @@ QString KisPaintOpOptionListModel::entryToString(const KisOptionInfo& val) const
 
 QVariant KisPaintOpOptionListModel::data(const QModelIndex& idx, int role) const
 {
-    if(idx.isValid() && role == Qt::CheckStateRole) {
+    if (idx.isValid() && role == Qt::CheckStateRole) {
         KisOptionInfo info;
-        
-        if(BaseClass::entryAt(info, idx.row()) && info.option->isCheckable())
+
+        if (BaseClass::entryAt(info, idx.row()) && info.option->isCheckable())
             return info.option->isChecked() ? Qt::Checked : Qt::Unchecked;
-        
+
         return QVariant();
     }
-    
+
     return BaseClass::data(idx, role);
 }
 
 bool KisPaintOpOptionListModel::setData(const QModelIndex& idx, const QVariant& value, int role)
 {
-    if(idx.isValid() && role == Qt::CheckStateRole) {
+    if (idx.isValid() && role == Qt::CheckStateRole) {
         KisOptionInfo info;
-        
-        if(BaseClass::entryAt(info, idx.row()) && info.option->isCheckable()) {
+
+        if (BaseClass::entryAt(info, idx.row()) && info.option->isCheckable()) {
             info.option->setChecked(value.toInt() == Qt::Checked);
             return true;
         }
-        
+
         return false;
     }
-    
+
     return BaseClass::setData(idx, value, role);
 }
 
@@ -70,11 +70,11 @@ Qt::ItemFlags KisPaintOpOptionListModel::flags(const QModelIndex& idx) const
 {
     Qt::ItemFlags flags = 0;
     KisOptionInfo info;
-    
-    if(idx.isValid() && BaseClass::entryAt(info, idx.row())) {
-        if(info.option->isCheckable())
+
+    if (idx.isValid() && BaseClass::entryAt(info, idx.row())) {
+        if (info.option->isCheckable())
             flags |= Qt::ItemIsUserCheckable;
     }
-    
+
     return BaseClass::flags(idx) | flags;
 }

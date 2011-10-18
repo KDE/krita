@@ -1092,7 +1092,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         } else if (labelBoxWidth > 0.0) { // Alignmentmode and there is a label
             blockData->setCounterPosition(QPointF(x() - labelBoxWidth, m_y));
 
-            if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
+            if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab
+                && !presentationListTabWorkaround(textIndent(block, textList, pStyle), labelBoxWidth)) {
                 foreach(QTextOption::Tab tab, qTabs) {
                     qreal position = tab.position  * 72. / qt_defaultDpiY();
                     if (position > 0.0) {
@@ -1113,6 +1114,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                  QFontMetrics fm(labelFormat.font(), m_documentLayout->paintDevice());
                  m_indent += fm.width(' ');
             }
+            // default needs to be no space so presentationListTabWorkaround above makes us go here
         }
     }
 
@@ -1261,6 +1263,18 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     setVirginPage(false);
     cursor->lineTextStart = -1; //set lineTextStart to -1 and returning true indicate new block
     return true;
+}
+
+bool KoTextLayoutArea::presentationListTabWorkaround(qreal indent, qreal labelBoxWidth)
+{
+    if (!m_documentLayout->wordprocessingMode() && indent < 0.0) {
+        // Impress / Powerpoint expects the label to be before the text
+        if (indent + labelBoxWidth >= 0.0) {
+            // but here is an unforseen overlap with normal text
+            return true;
+        }
+    }
+    return false;
 }
 
 qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const KoParagraphStyle &pStyle) const

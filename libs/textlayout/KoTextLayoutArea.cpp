@@ -1381,7 +1381,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
                 const qreal padding = (line.width() - line.naturalTextWidth()) / 2;
                 qreal newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
                 blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
-            } if ((format.alignment() & Qt::AlignRight) == Qt::AlignRight) {
+            } else if ((format.alignment() & Qt::AlignRight) == Qt::AlignRight) {
                 const qreal padding = line.width() - line.naturalTextWidth();
                 qreal newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
                 blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));

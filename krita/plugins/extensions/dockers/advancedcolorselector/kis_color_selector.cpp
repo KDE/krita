@@ -286,7 +286,8 @@ void KisColorSelector::mouseEvent(QMouseEvent *e)
         m_grabbingComponent->mouseEvent(e->x(), e->y());
 
         m_currentColor=m_mainComponent->currentColor();
-        updateColorPreview(m_currentColor);
+        KoColor kocolor(m_currentColor, colorSpace());
+        updateColorPreview(kocolor.toQColor());
     }
 }
 

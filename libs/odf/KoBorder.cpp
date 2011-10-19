@@ -55,9 +55,9 @@ KoBorderPrivate::~KoBorderPrivate()
 
 KoBorder::BorderData::BorderData()
     : style(KoBorder::BorderNone),
-    width(0),
-    innerWidth(0),
-    spacing(0)
+    spacing(0),
+    innerPen(QPen()),
+    outerPen(QPen())
 {
 }
 
@@ -108,15 +108,13 @@ bool KoBorder::operator==(const KoBorder &other) const
     else {
         // Here we know that the border styles are the same, now
         // compare the rest of the values.
-        if (d->leftBorder.width != other.d->leftBorder.width)
-            return false;
-        if (d->leftBorder.color != other.d->leftBorder.color)
+        if (d->leftBorder.outerPen != other.d->leftBorder.outerPen)
             return false;
 
         // If the border style == BorderDouble, then compare a couple
         // of other values too.
         if (d->leftBorder.style == BorderDouble) {
-            if (d->leftBorder.innerWidth != other.d->leftBorder.innerWidth)
+            if (d->leftBorder.innerPen != other.d->leftBorder.innerPen)
                 return false;
             if (d->leftBorder.spacing != other.d->leftBorder.spacing)
                 return false;
@@ -137,15 +135,13 @@ bool KoBorder::operator==(const KoBorder &other) const
     else {
         // Here we know that the border styles are the same, now
         // compare the rest of the values.
-        if (d->topBorder.width != other.d->topBorder.width)
-            return false;
-        if (d->topBorder.color != other.d->topBorder.color)
+        if (d->topBorder.outerPen != other.d->topBorder.outerPen)
             return false;
 
         // If the border style == BorderDouble, then compare a couple
         // of other values too.
         if (d->topBorder.style == BorderDouble) {
-            if (d->topBorder.innerWidth != other.d->topBorder.innerWidth)
+            if (d->topBorder.innerPen != other.d->topBorder.innerPen)
                 return false;
             if (d->topBorder.spacing != other.d->topBorder.spacing)
                 return false;
@@ -166,15 +162,13 @@ bool KoBorder::operator==(const KoBorder &other) const
     else {
         // Here we know that the border styles are the same, now
         // compare the rest of the values.
-        if (d->rightBorder.width != other.d->rightBorder.width)
-            return false;
-        if (d->rightBorder.color != other.d->rightBorder.color)
+        if (d->rightBorder.outerPen != other.d->rightBorder.outerPen)
             return false;
 
         // If the border style == BorderDouble, then compare a couple
         // of other values too.
         if (d->rightBorder.style == BorderDouble) {
-            if (d->rightBorder.innerWidth != other.d->rightBorder.innerWidth)
+            if (d->rightBorder.innerPen != other.d->rightBorder.innerPen)
                 return false;
             if (d->rightBorder.spacing != other.d->rightBorder.spacing)
                 return false;
@@ -195,15 +189,13 @@ bool KoBorder::operator==(const KoBorder &other) const
     else {
         // Here we know that the border styles are the same, now
         // compare the rest of the values.
-        if (d->bottomBorder.width != other.d->bottomBorder.width)
-            return false;
-        if (d->bottomBorder.color != other.d->bottomBorder.color)
+        if (d->bottomBorder.outerPen != other.d->bottomBorder.outerPen)
             return false;
 
         // If the border style == BorderDouble, then compare a couple
         // of other values too.
         if (d->bottomBorder.style == BorderDouble) {
-            if (d->bottomBorder.innerWidth != other.d->bottomBorder.innerWidth)
+            if (d->bottomBorder.innerPen != other.d->bottomBorder.innerPen)
                 return false;
             if (d->bottomBorder.spacing != other.d->bottomBorder.spacing)
                 return false;
@@ -309,32 +301,32 @@ KoBorder::BorderStyle KoBorder::leftBorderStyle() const
 
 void KoBorder::setLeftBorderColor(const QColor &color)
 {
-    d->leftBorder.color = color;
+    d->leftBorder.outerPen.setColor(color);
 }
 
 QColor KoBorder::leftBorderColor() const
 {
-    return d->leftBorder.color;
+    return d->leftBorder.outerPen.color();
 }
 
 void KoBorder::setLeftBorderWidth(qreal width)
 {
-    d->leftBorder.width = width;
+    d->leftBorder.outerPen.setWidthF(width);
 }
 
 qreal KoBorder::leftBorderWidth() const
 {
-    return d->leftBorder.width;
+    return d->leftBorder.outerPen.widthF();
 }
 
 void KoBorder::setLeftInnerBorderWidth(qreal width)
 {
-    d->leftBorder.innerWidth = width;
+    d->leftBorder.innerPen.setWidthF(width);
 }
 
 qreal KoBorder::leftInnerBorderWidth() const
 {
-    return d->leftBorder.innerWidth;
+    return d->leftBorder.innerPen.widthF();
 }
 
 void KoBorder::setLeftBorderSpacing(qreal width)
@@ -360,32 +352,32 @@ KoBorder::BorderStyle KoBorder::topBorderStyle() const
 
 void KoBorder::setTopBorderColor(const QColor &color)
 {
-    d->topBorder.color = color;
+    d->topBorder.outerPen.setColor(color);
 }
 
 QColor KoBorder::topBorderColor() const
 {
-    return d->topBorder.color;
+    return d->topBorder.outerPen.color();
 }
 
 void KoBorder::setTopBorderWidth(qreal width)
 {
-    d->topBorder.width = width;
+    d->topBorder.outerPen.setWidthF(width);
 }
 
 qreal KoBorder::topBorderWidth() const
 {
-    return d->topBorder.width;
+    return d->topBorder.outerPen.widthF();
 }
 
 void KoBorder::setTopInnerBorderWidth(qreal width)
 {
-    d->topBorder.innerWidth = width;
+    d->topBorder.innerPen.setWidthF(width);
 }
 
 qreal KoBorder::topInnerBorderWidth() const
 {
-    return d->topBorder.innerWidth;
+    return d->topBorder.innerPen.widthF();
 }
 
 void KoBorder::setTopBorderSpacing(qreal width)
@@ -411,32 +403,32 @@ KoBorder::BorderStyle KoBorder::rightBorderStyle() const
 
 void KoBorder::setRightBorderColor(const QColor &color)
 {
-    d->rightBorder.color = color;
+    d->rightBorder.outerPen.setColor(color);
 }
 
 QColor KoBorder::rightBorderColor() const
 {
-    return d->rightBorder.color;
+    return d->rightBorder.outerPen.color();
 }
 
 void KoBorder::setRightBorderWidth(qreal width)
 {
-    d->rightBorder.width = width;
+    d->rightBorder.outerPen.setWidthF(width);
 }
 
 qreal KoBorder::rightBorderWidth() const
 {
-    return d->rightBorder.width;
+    return d->rightBorder.outerPen.widthF();
 }
 
 void KoBorder::setRightInnerBorderWidth(qreal width)
 {
-    d->rightBorder.innerWidth = width;
+    d->rightBorder.innerPen.setWidthF(width);
 }
 
 qreal KoBorder::rightInnerBorderWidth() const
 {
-    return d->rightBorder.innerWidth;
+    return d->rightBorder.innerPen.widthF();
 }
 
 void KoBorder::setRightBorderSpacing(qreal width)
@@ -462,32 +454,32 @@ KoBorder::BorderStyle KoBorder::bottomBorderStyle() const
 
 void KoBorder::setBottomBorderColor(const QColor &color)
 {
-    d->bottomBorder.color = color;
+    d->bottomBorder.outerPen.setColor(color);
 }
 
 QColor KoBorder::bottomBorderColor() const
 {
-    return d->bottomBorder.color;
+    return d->bottomBorder.outerPen.color();
 }
 
 void KoBorder::setBottomBorderWidth(qreal width)
 {
-    d->bottomBorder.width = width;
+    d->bottomBorder.outerPen.setWidthF(width);
 }
 
 qreal KoBorder::bottomBorderWidth() const
 {
-    return d->bottomBorder.width;
+    return d->bottomBorder.outerPen.widthF();
 }
 
 void KoBorder::setBottomInnerBorderWidth(qreal width)
 {
-    d->bottomBorder.innerWidth = width;
+    d->bottomBorder.innerPen.setWidthF(width);
 }
 
 qreal KoBorder::bottomInnerBorderWidth() const
 {
-    return d->bottomBorder.innerWidth;
+    return d->bottomBorder.innerPen.widthF();
 }
 
 void KoBorder::setBottomBorderSpacing(qreal width)
@@ -512,32 +504,32 @@ KoBorder::BorderStyle KoBorder::tlbrBorderStyle() const
 
 void KoBorder::setTlbrBorderColor(const QColor &color)
 {
-    d->tlbrBorder.color = color;
+    d->tlbrBorder.outerPen.setColor(color);
 }
 
 QColor KoBorder::tlbrBorderColor() const
 {
-    return d->tlbrBorder.color;
+    return d->tlbrBorder.outerPen.color();
 }
 
 void KoBorder::setTlbrBorderWidth(qreal width)
 {
-    d->tlbrBorder.width = width;
+    d->tlbrBorder.outerPen.setWidthF(width);
 }
 
 qreal KoBorder::tlbrBorderWidth() const
 {
-    return d->tlbrBorder.width;
+    return d->tlbrBorder.outerPen.widthF();
 }
 
 void KoBorder::setTlbrInnerBorderWidth(qreal width)
 {
-    d->tlbrBorder.innerWidth = width;
+    d->tlbrBorder.innerPen.setWidthF(width);
 }
 
 qreal KoBorder::tlbrInnerBorderWidth() const
 {
-    return d->tlbrBorder.innerWidth;
+    return d->tlbrBorder.innerPen.widthF();
 }
 
 void KoBorder::setTlbrBorderSpacing(qreal width)
@@ -562,32 +554,32 @@ KoBorder::BorderStyle KoBorder::trblBorderStyle() const
 
 void KoBorder::setTrblBorderColor(const QColor &color)
 {
-    d->trblBorder.color = color;
+    d->trblBorder.outerPen.setColor(color);
 }
 
 QColor KoBorder::trblBorderColor() const
 {
-    return d->trblBorder.color;
+    return d->trblBorder.outerPen.color();
 }
 
 void KoBorder::setTrblBorderWidth(qreal width)
 {
-    d->trblBorder.width = width;
+    d->trblBorder.outerPen.setWidthF(width);
 }
 
 qreal KoBorder::trblBorderWidth() const
 {
-    return d->trblBorder.width;
+    return d->trblBorder.outerPen.widthF();
 }
 
 void KoBorder::setTrblInnerBorderWidth(qreal width)
 {
-    d->trblBorder.innerWidth = width;
+    d->trblBorder.innerPen.setWidthF(width);
 }
 
 qreal KoBorder::trblInnerBorderWidth() const
 {
-    return d->trblBorder.innerWidth;
+    return d->trblBorder.innerPen.widthF();
 }
 
 void KoBorder::setTrblBorderSpacing(qreal width)
@@ -605,9 +597,19 @@ KoBorder::BorderData KoBorder::leftBorderData() const
     return d->leftBorder;
 }
 
+void KoBorder::setLeftBorderData(const KoBorder::BorderData& data)
+{
+    d->leftBorder = data;
+}
+
 KoBorder::BorderData KoBorder::topBorderData() const
 {
     return d->topBorder;
+}
+
+void KoBorder::setTopBorderData(const KoBorder::BorderData& data)
+{
+    d->topBorder = data;
 }
 
 KoBorder::BorderData KoBorder::rightBorderData() const
@@ -615,9 +617,19 @@ KoBorder::BorderData KoBorder::rightBorderData() const
     return d->rightBorder;
 }
 
+void KoBorder::setRightBorderData(const KoBorder::BorderData& data)
+{
+    d->rightBorder = data;
+}
+
 KoBorder::BorderData KoBorder::bottomBorderData() const
 {
     return d->bottomBorder;
+}
+
+void KoBorder::setBottomBorderData(const KoBorder::BorderData& data)
+{
+    d->bottomBorder = data;
 }
 
 KoBorder::BorderData KoBorder::trblBorderData() const
@@ -625,9 +637,36 @@ KoBorder::BorderData KoBorder::trblBorderData() const
     return d->trblBorder;
 }
 
+void KoBorder::setTrblBorderData(const KoBorder::BorderData& data)
+{
+    d->trblBorder = data;
+}
+
 KoBorder::BorderData KoBorder::tlbrBorderData() const
 {
     return d->tlbrBorder;
+}
+
+void KoBorder::setTlbrBorderData(const KoBorder::BorderData& data)
+{
+    d->tlbrBorder = data;
+}
+
+bool KoBorder::hasBorder() const
+{
+    if (d->leftBorder.outerPen.widthF() > 0.0)
+        return true;
+    if (d->topBorder.outerPen.widthF() > 0.0)
+        return true;
+    if (d->rightBorder.outerPen.widthF() > 0.0)
+        return true;
+    if (d->bottomBorder.outerPen.widthF() > 0.0)
+        return true;
+    if (d->tlbrBorder.outerPen.widthF() > 0.0)
+        return true;
+    if (d->trblBorder.outerPen.widthF() > 0.0)
+        return true;
+    return false;
 }
 
 void parseOdfBorder (const QString &border, QColor *color, KoBorder::BorderStyle *borderStyle, bool *hasBorderStyle, qreal *borderWidth, bool *hasBorderWidth)

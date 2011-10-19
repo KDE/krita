@@ -962,33 +962,36 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     }
 
     // For some lists we need to add a special list tab according to odf 1.2 19.830 
-    if (textList && listFormat.hasProperty(KoListStyle::TabStopPosition)) {
-        qreal listTab = listFormat.doubleProperty(KoListStyle::TabStopPosition);
-        if (!m_documentLayout->relativeTabs(block)) {
-            // How list tab is defined if fixed tabs:
-            //        listTab
-            //|>-------------------------|
-            //           m_indent
-            //         |---------<|
-            //     LABEL                 TEXT STARTS HERE AND GOES ON
-            //                    TO THE NEXT LINE
-            //|>------------------|
-            //     leftMargin
-            listTab -= leftMargin;
-        } else {
-            // How list tab is defined if relative tabs:
-            // It's relative to leftMargin - list.leftMargin
-            //              listTab
-            //       |>-------------------|
-            //             m_indent
-            //           |---------<|
-            //       LABEL                 TEXT STARTS HERE AND GOES ON
-            //                      TO THE NEXT LINE
-            //|>--------------------|
-            //     leftMargin       |
-            //       |>-------------|
-            //          list.margin
-            listTab -= listFormat.doubleProperty(KoListStyle::Margin);
+    if (textList && listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
+        qreal listTab = 0;
+        if (listFormat.hasProperty(KoListStyle::TabStopPosition)) {
+            listTab = listFormat.doubleProperty(KoListStyle::TabStopPosition);
+            if (!m_documentLayout->relativeTabs(block)) {
+                // How list tab is defined if fixed tabs:
+                //        listTab
+                //|>-------------------------|
+                //           m_indent
+                //         |---------<|
+                //     LABEL                 TEXT STARTS HERE AND GOES ON
+                //                    TO THE NEXT LINE
+                //|>------------------|
+                //     leftMargin
+                listTab -= leftMargin;
+            } else {
+                // How list tab is defined if relative tabs:
+                // It's relative to leftMargin - list.leftMargin
+                //              listTab
+                //       |>-------------------|
+                //             m_indent
+                //           |---------<|
+                //       LABEL                 TEXT STARTS HERE AND GOES ON
+                //                      TO THE NEXT LINE
+                //|>--------------------|
+                //     leftMargin       |
+                //       |>-------------|
+                //          list.margin
+                listTab -= listFormat.doubleProperty(KoListStyle::Margin);
+            }
         }
         // How list tab is defined now:
         //                    listTab

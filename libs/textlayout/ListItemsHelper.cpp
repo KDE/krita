@@ -473,7 +473,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     qreal counterSpacing = 0;
     if (listStyle != KoListStyle::None) {
         if (format.boolProperty(KoListStyle::AlignmentMode) == false) {
-            counterSpacing = qMax(format.doubleProperty(KoListStyle::MinimumDistance), m_fm.width(' '));
+            counterSpacing = format.doubleProperty(KoListStyle::MinimumDistance);
             width = qMax(format.doubleProperty(KoListStyle::MinimumWidth), width);
         } else {
             // for aligmentmode spacing should be 0

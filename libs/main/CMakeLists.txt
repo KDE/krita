@@ -133,17 +133,17 @@ if(Soprano_FOUND)
        rdf/KoSemanticStylesheetsEditor.ui
     )
 
-    if(MARBLE_FOUND)
-        kde4_add_ui_files( komain_LIB_SRCS
-           rdf/KoRdfLocationEditWidgetMarble.ui
-           rdf/KoRdfLocationViewWidgetMarble.ui
-        )
-    else(MARBLE_FOUND)
+#    if(MARBLE_FOUND)
+#        kde4_add_ui_files( komain_LIB_SRCS
+#           rdf/KoRdfLocationEditWidgetMarble.ui
+#           rdf/KoRdfLocationViewWidgetMarble.ui
+#        )
+#    else(MARBLE_FOUND)
         kde4_add_ui_files( komain_LIB_SRCS
            rdf/KoRdfLocationEditWidget.ui
            rdf/KoRdfLocationViewWidget.ui
         )
-    endif(MARBLE_FOUND)
+#    endif(MARBLE_FOUND)
 
 endif(Soprano_FOUND)
 
@@ -162,11 +162,11 @@ if( Soprano_FOUND )
     target_link_libraries(komain ${SOPRANO_LIBRARIES})
     target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
-if( MARBLE_FOUND )
-    include_directories(${MARBLE_INCLUDE_DIR})
-    target_link_libraries(komain ${MARBLE_LIBRARIES})
-    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
-endif( MARBLE_FOUND )
+#if( MARBLE_FOUND )
+#    include_directories(${MARBLE_INCLUDE_DIR})
+#    target_link_libraries(komain ${MARBLE_LIBRARIES})
+#    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
+#endif( MARBLE_FOUND )
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})
 

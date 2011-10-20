@@ -143,7 +143,7 @@ void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
         m_bookmarkManager.remove(bookmark->name());
     }
 
-    m_deletedObjects[object->id()] == object;
+    m_deletedObjects[object->id()] = object;
     // TODO dirty the document somehow
 }
 

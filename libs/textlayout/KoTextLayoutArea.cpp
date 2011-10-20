@@ -727,18 +727,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             QSharedPointer<KoCharacterStyle> textPropertiesCharStyle = v.value< QSharedPointer<KoCharacterStyle> >();
             if (!textPropertiesCharStyle.isNull()) {
                 textPropertiesCharStyle->applyStyle(labelFormat);
-
-                //calculate the correct font point size taking into account the current
-                // block format and the relative font size percent if the size is not absolute
-                if (!textPropertiesCharStyle->hasProperty(QTextFormat::FontPointSize)) {
-                    qreal percent = 100.0;
-                    if (listFormat.hasProperty(KoListStyle::RelativeBulletSize)) {
-                        percent = listFormat.property(KoListStyle::RelativeBulletSize).toDouble();
-                    } else {
-                        listFormat.setProperty(KoListStyle::RelativeBulletSize, percent);
-                    }
-                    labelFormat.setFontPointSize((percent*labelFormat.fontPointSize())/100.00);
-                }
             }
         }
 

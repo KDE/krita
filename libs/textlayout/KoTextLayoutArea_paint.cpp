@@ -332,6 +332,16 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
             format.length = data->counterText().length();
             format.format = data->labelFormat();
 
+            //calculate the correct font point size taking into account the current
+            // block format and the relative font size percent if the size is not absolute
+            if (!format.format.hasProperty(QTextFormat::FontPointSize)) {
+                qreal percent = 100.0;
+                if (listFormat.hasProperty(KoListStyle::RelativeBulletSize)) {
+                    percent = listFormat.property(KoListStyle::RelativeBulletSize).toDouble();
+                }
+                format.format.setFontPointSize((percent*format.format.fontPointSize())/100.00);
+            }
+
             layouts.append(format);
             layout.setAdditionalFormats(layouts);
 

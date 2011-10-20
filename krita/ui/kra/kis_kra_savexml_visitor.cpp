@@ -146,8 +146,8 @@ bool KisSaveXmlVisitor::visit(KisCloneLayer *layer)
 {
     QDomElement layerElement = m_doc.createElement(LAYER);
     saveLayer(layerElement, CLONE_LAYER, layer);
-    layerElement.setAttribute(CLONE_FROM, layer->copyFromName());
-    layerElement.setAttribute(CLONE_FROM_UUID, layer->copyFromUuid().toString());
+    layerElement.setAttribute(CLONE_FROM, layer->copyFromInfo().name());
+    layerElement.setAttribute(CLONE_FROM_UUID, layer->copyFromInfo().uuid().toString());
     layerElement.setAttribute(CLONE_TYPE, layer->copyType());
     m_elem.appendChild(layerElement);
 

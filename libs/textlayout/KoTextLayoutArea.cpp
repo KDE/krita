@@ -1080,7 +1080,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 m_width -= listFormat.doubleProperty(KoListStyle::Indent) + labelBoxWidth;
                 blockData->setCounterPosition(QPointF(x() - labelBoxWidth, m_y));
             }
-        } else if (labelBoxWidth > 0.0) { // Alignmentmode and there is a label
+        } else if (blockData->counterText().length() > 0) { // Alignmentmode and there is a label
             blockData->setCounterPosition(QPointF(x() - labelBoxWidth, m_y));
 
             if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab

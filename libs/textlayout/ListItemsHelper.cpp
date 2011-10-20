@@ -464,6 +464,8 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         width = m_fm.width(item);
     index++;
 
+    width += m_fm.width(prefix + suffix);
+
     qreal counterSpacing = 0;
     if (listStyle != KoListStyle::None) {
         if (format.boolProperty(KoListStyle::AlignmentMode)) {

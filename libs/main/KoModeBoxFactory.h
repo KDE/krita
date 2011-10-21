@@ -1,6 +1,7 @@
-/* This file is part of the KDE project
- *
- * Copyright (c) 2008 Casper Boemann <cbr@boemann.dk>
+/*
+ * Copyright (c) 2006 Peter Simonsson <peter.simonsson@gmail.com>
+ * Copyright (c) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (c) 2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,40 +18,34 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef DOCKER_MANAGER_H
-#define DOCKER_MANAGER_H
 
+#ifndef KOMODEBOXFACTORY_H
+#define KOMODEBOXFACTORY_H
+
+#include <KoDockFactoryBase.h>
 #include "komain_export.h"
 
-#include <QObject>
+#include <QString>
+#include <QDockWidget>
 
-class KoMainWindow;
+class KoCanvasControllerWidget;
 
 /**
-   The docker manager makes sure that tool option widgets are shown at the right time.
+ * Factory class to create a new KoModeBox that contains a QToolBox which acts
+ * as a replacement for KoToolBox and KoDockerManagers options docker.
  */
-class KOMAIN_EXPORT KoDockerManager : public QObject
+class KOMAIN_EXPORT KoModeBoxFactory : public KoDockFactoryBase
 {
-    Q_OBJECT
 public:
-    explicit KoDockerManager(KoMainWindow* mainWindow);
-    ~KoDockerManager();
+    explicit KoModeBoxFactory(KoCanvasControllerWidget *canvas, const QString& appName);
+    ~KoModeBoxFactory();
 
-    void resetToolDockerWidgets();
-
-    void removeToolOptionsDocker();
-
-public slots:
-    /**
-     * Update the option widgets to the argument ones, removing the currently set widgets.
-     */
-    void newOptionWidgets(const QList<QWidget *> & optionWidgetList);
-
+    virtual QString id() const;
+    KoDockFactoryBase::DockPosition defaultDockPosition() const;
+    QDockWidget* createDockWidget();
+    virtual bool isCollapsable() const { return false; }
 
 private:
-    Q_PRIVATE_SLOT(d, void moveToolBarsBack())
-    Q_PRIVATE_SLOT(d, void moveToolBars())
-    Q_PRIVATE_SLOT(d, void restoringDone())
     class Private;
     Private * const d;
 };

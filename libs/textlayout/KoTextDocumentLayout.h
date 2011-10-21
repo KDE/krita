@@ -116,6 +116,12 @@ public:
     /// set default tab size for this document
     void setTabSpacing(qreal spacing);
 
+    /// set if this is for a word processor (slight changes in layout may occur)
+    void setWordprocessingMode();
+
+    /// is it for a word processor (slight changes in layout may occur)
+    bool wordprocessingMode();
+
     /// are the tabs relative to indent or not
     bool relativeTabs(QTextBlock block) const;
 

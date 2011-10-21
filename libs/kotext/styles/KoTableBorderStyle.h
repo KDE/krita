@@ -58,23 +58,6 @@ public:
         BottomLeftToTopRightBorderInnerPen, ///< the bottom letf to top right diagonal inner pen
         BottomLeftToTopRightBorderStyle,    ///< the bottom letf to top right borderstyle
     };
-
-    enum Side {
-        Top = 0, ///< References the border at the top of the cell
-        Left,    ///< References the border at the left side of the cell
-        Bottom,  ///< References the border at the bottom of the cell
-        Right,   ///< References the border at the right side of the paragraph
-        TopLeftToBottomRight, ///< References the border from top, left corner to bottom, right corner of cell
-        BottomLeftToTopRight  ///< References the border from bottom, left corner to top, right corner of cell
-    };
-
-    struct Edge {
-        Edge() : innerPen(), outerPen(), spacing(0.0) { }
-
-        QPen innerPen;
-        QPen outerPen;
-        qreal spacing;
-    };
 };
 
 #endif // KOTABLEBORDERSTYLE_H

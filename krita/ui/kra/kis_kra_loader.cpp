@@ -494,15 +494,17 @@ KisNode* KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageWSP i
 
     KisCloneLayer* layer = new KisCloneLayer(0, image, name, opacity);
 
+    KisCloneInfo info;
     if (! (element.attribute(CLONE_FROM_UUID)).isNull()) {
-        layer->setCopyFromUuid(QUuid(element.attribute(CLONE_FROM_UUID)));
+        info = KisCloneInfo(QUuid(element.attribute(CLONE_FROM_UUID)));
     } else {
         if ((element.attribute(CLONE_FROM)).isNull()) {
             return 0;
         } else {
-            layer->setCopyFromName(element.attribute(CLONE_FROM));
+            info = KisCloneInfo(element.attribute(CLONE_FROM));
         }
     }
+    layer->setCopyFromInfo(info);
 
     if ((element.attribute(CLONE_TYPE)).isNull()) {
         return 0;

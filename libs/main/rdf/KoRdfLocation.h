@@ -22,13 +22,13 @@
 
 #include "KoRdfSemanticItem.h"
 
-#ifdef CAN_USE_MARBLE
-#include <ui_KoRdfLocationEditWidgetMarble.h>
-#include <ui_KoRdfLocationViewWidgetMarble.h>
-#else
+// #ifdef CAN_USE_MARBLE
+// #include <ui_KoRdfLocationEditWidgetMarble.h>
+// #include <ui_KoRdfLocationViewWidgetMarble.h>
+// #else
 #include <ui_KoRdfLocationEditWidget.h>
 #include <ui_KoRdfLocationViewWidget.h>
-#endif
+// #endif
 
 #include "komain_export.h"
 

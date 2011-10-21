@@ -65,11 +65,6 @@ private:
     KisSelectionSP loadSelection(const QString& location);
     QString getLocation(KisNode* node, const QString& suffix = "");
 
-    static KisNodeSP findNodeByName(const QString &name,
-                                    KisNodeSP rootNode);
-    static KisNodeSP findNodeByUuid(const QUuid &uuid,
-                                    KisNodeSP rootNode);
-
 private:
     KisImageWSP m_image;
     KoStore *m_store;

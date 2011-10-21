@@ -1425,10 +1425,10 @@ void KoTextEditor::insertTable(int rows, int columns)
             QTextTableCell cell = table->cellAt(row, col);
             QTextTableCellFormat format;
             KoTableCellStyle cellStyle;
-            cellStyle.setEdge(KoTableBorderStyle::Top, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoTableBorderStyle::Left, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoTableBorderStyle::Bottom, KoBorder::BorderSolid, 2, QColor(Qt::black));
-            cellStyle.setEdge(KoTableBorderStyle::Right, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::Top, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::Left, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::Bottom, KoBorder::BorderSolid, 2, QColor(Qt::black));
+            cellStyle.setEdge(KoBorder::Right, KoBorder::BorderSolid, 2, QColor(Qt::black));
             cellStyle.setPadding(5);
 
             cellStyle.applyStyle(format);
@@ -1982,7 +1982,9 @@ void KoTextEditor::removeSelectedText()
     }
     foreach(KoInlineObject *obj, objectsToBeRemoved) {
         inlineObjectManager->removeInlineObject(obj); // does _not_ remove the character in the text doc
-        delete obj; // also deletes the rdf...
+        // Note: do not delete the object here. Deleted objects are stored by the bookmark manager
+        //       for future use. Also, start bookmarks might still have a reference to the end bookmark
+        //       that is being deleted.
     }
 
     d->caret.removeSelectedText();
@@ -2093,7 +2095,7 @@ void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode mode)
     // We need protection against moving in and out of note areas
     QTextCursor after(d->caret);
     after.setPosition (pos, mode);
- 
+
     QTextFrame *beforeFrame = d->caret.currentFrame();
     while (qobject_cast<QTextTable *>(beforeFrame)) {
         beforeFrame = beforeFrame->parentFrame();

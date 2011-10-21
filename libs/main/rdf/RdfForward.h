@@ -34,11 +34,11 @@ namespace Ui
 {
     class KoRdfLocationEditWidget;
 }
-namespace Marble
-{
-    class MarbleWidget;
-    class LatLonEdit;
-}
+// namespace Marble
+// {
+//     class MarbleWidget;
+//     class LatLonEdit;
+// }
 namespace Soprano
 {
     class Model;

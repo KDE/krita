@@ -184,6 +184,8 @@ private:
 
     bool layoutBlock(FrameIterator *cursor);
 
+    bool presentationListTabWorkaround(qreal indent, qreal labelBoxWidth, qreal presentationListTabValue);
+
     /// Returns vertical height of line
     qreal addLine(QTextLine &line, FrameIterator *cursor, KoTextBlockData *blockData);
 

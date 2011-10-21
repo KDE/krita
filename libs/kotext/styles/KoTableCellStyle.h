@@ -297,7 +297,7 @@ public:
      * @param totalWidth the thickness of the border. Sum of outerwidth, spacing and innerwidth for double borders
      * @param color the color of the border line(s).
      */
-    void setEdge(KoTableBorderStyle::Side side, KoBorder::BorderStyle style, qreal totalWidth, QColor color);
+    void setEdge(KoBorder::Side side, KoBorder::BorderStyle style, qreal totalWidth, QColor color);
 
     /**
      * Set the properties of a double border.
@@ -309,7 +309,7 @@ public:
      * @param space the amount of spacing between the outer border and the inner border in case of style being double
      * @param innerWidth the thickness of the inner border line in case of style being double
      */
-    void setEdgeDoubleBorderValues(KoTableBorderStyle::Side side, qreal innerWidth, qreal space);
+    void setEdgeDoubleBorderValues(KoBorder::Side side, qreal innerWidth, qreal space);
 
     /**
      * Check if the border data has any borders.
@@ -333,8 +333,8 @@ public:
     qreal topOuterBorderWidth() const;
     qreal bottomOuterBorderWidth() const;
 
-    KoTableBorderStyle::Edge getEdge(KoTableBorderStyle::Side side) const;
-    KoBorder::BorderStyle getBorderStyle(KoTableBorderStyle::Side side) const;
+    KoBorder::BorderData getEdge(KoBorder::Side side) const;
+    KoBorder::BorderStyle getBorderStyle(KoBorder::Side side) const;
 signals:
     void nameChanged(const QString &newName);
 
@@ -361,7 +361,7 @@ private:
      * @param style the border style for this side.
      * @param edge the Edge that hold the properties values
      */
-    void setEdge(KoTableBorderStyle::Side side, const KoTableBorderStyle::Edge &edge, KoBorder::BorderStyle style);
+    void setEdge(KoBorder::Side side, const KoBorder::BorderData &edge, KoBorder::BorderStyle style);
 
     Q_DECLARE_PRIVATE(KoTableCellStyle)
 

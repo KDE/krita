@@ -31,7 +31,7 @@ ReviewToolFactory::ReviewToolFactory()
         : KoToolFactoryBase("ReviewToolFactory_ID")
 {
     setToolTip(i18n("Review"));
-    setToolType(dynamicToolType());
+    setToolType(dynamicToolType()+",calligrawords");
     setIcon("tool-changetracking");
     setPriority(3);
     setActivationShapeId(TextShape_SHAPEID);

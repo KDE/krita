@@ -1,5 +1,7 @@
-/* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+/*
+ * Copyright (c) 2005-2009 Thomas Zander <zander@kde.org>
+ * Copyright (c) 2009 Peter Simonsson <peter.simonsson@gmail.com>
+ * Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,27 +19,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "TextToolFactory.h"
-#include "TextTool.h"
-#include "TextShape.h"
+#include "KoModeBoxDocker_p.h"
+#include "KoModeBox_p.h"
+#include <KoCanvasController.h>
 
-#include <klocale.h>
+#include <KDebug>
 
-TextToolFactory::TextToolFactory()
-        : KoToolFactoryBase("TextToolFactory_ID")
+
+KoModeBoxDocker::KoModeBoxDocker(KoModeBox *modeBox)
+    : m_modeBox(modeBox)
 {
-    setToolTip(i18n("Text editing"));
-    setToolType(dynamicToolType()+",calligrawords");
-    setIcon("tool-text");
-    setPriority(1);
-    setActivationShapeId(TextShape_SHAPEID);
+    setWidget(modeBox);
+    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+    setWindowTitle("");
+    setObjectName("ModeBox");
 }
 
-TextToolFactory::~TextToolFactory()
+void KoModeBoxDocker::setCanvas(KoCanvasBase *canvas)
 {
+    m_modeBox->setCanvas(canvas);
 }
 
-KoToolBase * TextToolFactory::createTool(KoCanvasBase *canvas)
+void KoModeBoxDocker::unsetCanvas()
 {
-    return new TextTool(canvas);
+    m_modeBox->unsetCanvas();
 }

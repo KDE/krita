@@ -39,7 +39,7 @@ struct KisOptionInfo
  */
 class KisPaintOpOptionListModel: public KisCategorizedListModel<QString,KisOptionInfo>
 {
-    typedef KisCategorizedListModel<QString,KisOptionInfo> BaseCalss;
+    typedef KisCategorizedListModel<QString,KisOptionInfo> BaseClass;
     
 public:
     void addPaintOpOption(KisPaintOpOption* option, int widgetIndex);

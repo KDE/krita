@@ -21,6 +21,7 @@
 #include "KoModeBoxFactory.h"
 #include <klocale.h>
 #include "KoModeBox_p.h"
+#include "KoModeBoxDocker_p.h"
 
 class KoModeBoxFactory::Private {
 public:
@@ -51,12 +52,7 @@ KoDockFactoryBase::DockPosition KoModeBoxFactory::defaultDockPosition() const
 QDockWidget* KoModeBoxFactory::createDockWidget()
 {
     KoModeBox *box = new KoModeBox(d->canvasController);
-    QDockWidget *docker = new QDockWidget(i18n("Mode"));
-    docker->setWidget(box);
-    docker->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    docker->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-    docker->setWindowTitle("");
-    docker->setObjectName("ModeBox");
+    QDockWidget *docker = new KoModeBoxDocker(box);
 
     return docker;
 }

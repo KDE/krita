@@ -33,6 +33,7 @@ set(komain_LIB_SRCS
     KoRulerController.cpp
     KoRuler.cpp
     KoModeBox.cpp
+    KoModeBoxDocker.cpp
     KoModeBoxFactory.cpp
     KoToolBox.cpp
     KoToolBoxDocker.cpp

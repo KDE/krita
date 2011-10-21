@@ -23,6 +23,7 @@
 #include "KoModeBox_p.h"
 
 #include <KoCanvasControllerWidget.h>
+#include <KoCanvasBase.h>
 #include <KoToolManager.h>
 #include <KoShapeLayer.h>
 #include <KoInteractionTool.h>
@@ -243,12 +244,27 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
 
 void KoModeBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer *layer)
 {
+    Q_UNUSED(canvas);
+    Q_UNUSED(layer);
     //Since tageted application don't use this we won't bother implemeting
 }
 
 void KoModeBox::setCanvas(KoCanvasBase *canvas)
 {
+    KoCanvasControllerWidget *ccwidget;
+
+    if (d->canvas) {
+        ccwidget = dynamic_cast<KoCanvasControllerWidget *>(d->canvas->canvasController());
+        disconnect(ccwidget, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+                    this, SLOT(setOptionWidgets(const QList<QWidget *> &)));
+    }
+
     d->canvas = canvas;
+
+    ccwidget = dynamic_cast<KoCanvasControllerWidget *>(d->canvas->canvasController());
+    connect(
+        ccwidget, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+         this, SLOT(setOptionWidgets(const QList<QWidget *> &)));
 }
 
 void KoModeBox::unsetCanvas()

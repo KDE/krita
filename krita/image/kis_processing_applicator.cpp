@@ -26,6 +26,32 @@
 #include "kis_stroke_strategy_undo_command_based.h"
 
 
+class DisableUIUpdatesCommand : public KUndo2Command
+{
+public:
+    DisableUIUpdatesCommand(KisImageWSP image,
+                          bool finalUpdate)
+        : m_image(image),
+          m_finalUpdate(finalUpdate)
+    {
+    }
+
+    void redo() {
+        if(m_finalUpdate) m_image->enableUIUpdates();
+        else m_image->disableUIUpdates();
+    }
+
+    void undo() {
+        if(!m_finalUpdate) m_image->enableUIUpdates();
+        else m_image->disableUIUpdates();
+    }
+
+private:
+    KisImageWSP m_image;
+    bool m_finalUpdate;
+};
+
+
 class UpdateCommand : public KUndo2Command
 {
 public:
@@ -127,6 +153,10 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
         applyCommand(new EmitImageSignalsCommand(m_image, m_emitSignals, false), KisStrokeJobData::BARRIER);
     }
 
+    if(m_flags.testFlag(NO_UI_UPDATES)) {
+        applyCommand(new DisableUIUpdatesCommand(m_image, false), KisStrokeJobData::BARRIER);
+    }
+
     applyCommand(new UpdateCommand(m_image, m_node, m_flags, false));
 }
 
@@ -180,6 +210,10 @@ void KisProcessingApplicator::applyCommand(KUndo2Command *command,
 void KisProcessingApplicator::end()
 {
     applyCommand(new UpdateCommand(m_image, m_node, m_flags, true));
+
+    if(m_flags.testFlag(NO_UI_UPDATES)) {
+        applyCommand(new DisableUIUpdatesCommand(m_image, true), KisStrokeJobData::BARRIER);
+    }
 
     if(!m_emitSignals.isEmpty()) {
         applyCommand(new EmitImageSignalsCommand(m_image, m_emitSignals, true), KisStrokeJobData::BARRIER);

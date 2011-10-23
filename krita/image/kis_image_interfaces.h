@@ -44,6 +44,9 @@ public:
     virtual void blockUpdates() = 0;
     virtual void unblockUpdates() = 0;
 
+    virtual void disableUIUpdates() = 0;
+    virtual void enableUIUpdates() = 0;
+
     virtual void refreshGraphAsync(KisNodeSP root = 0) = 0;
     virtual void refreshGraphAsync(KisNodeSP root, const QRect &rc) = 0;
     virtual void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect) = 0;

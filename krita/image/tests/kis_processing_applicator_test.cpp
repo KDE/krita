@@ -171,4 +171,36 @@ void KisProcessingApplicatorTest::testRecursiveProcessing()
     QVERIFY(checkLayers(image, "recursive_initial"));
 }
 
+void KisProcessingApplicatorTest::testNoUIUpdates()
+{
+    KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
+    KisPaintLayerSP paintLayer1;
+    KisPaintLayerSP paintLayer2;
+    KisImageSP image = createImage(undoStore, paintLayer1, paintLayer2);
+    QSignalSpy uiSignalsCounter(image.data(), SIGNAL(sigImageUpdated(const QRect&)));
+
+    QRect cropRect1(40,40,86,86);
+
+    {
+        KisProcessingApplicator applicator(image, image->rootLayer(),
+                                           KisProcessingApplicator::RECURSIVE |
+                                           KisProcessingApplicator::NO_UI_UPDATES);
+
+        KisProcessingVisitorSP visitor =
+            new KisCropProcessingVisitor(cropRect1, true, true);
+        applicator.applyVisitor(visitor);
+        applicator.end();
+        image->waitForDone();
+    }
+
+    QCOMPARE(uiSignalsCounter.size(), 0);
+
+    uiSignalsCounter.clear();
+
+    undoStore->undo();
+    image->waitForDone();
+
+    QCOMPARE(uiSignalsCounter.size(), 0);
+}
+
 QTEST_KDEMAIN(KisProcessingApplicatorTest, GUI)

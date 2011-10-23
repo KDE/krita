@@ -32,6 +32,7 @@ public:
     enum ProcessingFlag {
         NONE = 0x0,
         RECURSIVE = 0x1,
+        NO_UI_UPDATES = 0x2
     };
 
     Q_DECLARE_FLAGS(ProcessingFlags, ProcessingFlag)

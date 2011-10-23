@@ -604,11 +604,13 @@ void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColor
 {
     if (*m_d->colorSpace == *dstColorSpace) return;
 
+    const KoColorSpace *srcColorSpace = m_d->colorSpace;
+
     undoAdapter()->beginMacro(i18n("Convert Image Color Space"));
     undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
     undoAdapter()->addCommand(new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstColorSpace));
 
-    KisColorSpaceConvertVisitor visitor(this, dstColorSpace, renderingIntent);
+    KisColorSpaceConvertVisitor visitor(this, srcColorSpace, dstColorSpace, renderingIntent);
     m_d->rootLayer->accept(visitor);
 
     undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), false));

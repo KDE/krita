@@ -33,6 +33,7 @@ set(pigmentcms_SRCS
     KoColorTransformationFactory.cpp
     KoColorTransformationFactoryRegistry.cpp
     KoCompositeOp.cpp
+    KoCompositeOpRegistry.cpp
     KoCopyColorConversionTransformation.cpp
     KoFallBackColorTransformation.cpp
     KoHistogramProducer.cpp

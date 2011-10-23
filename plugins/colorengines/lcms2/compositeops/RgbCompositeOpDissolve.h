@@ -30,8 +30,8 @@ class RgbCompositeOpDissolve : public KoCompositeOp
 
 public:
 
-    RgbCompositeOpDissolve(KoColorSpace * cs, const bool userVisible = true)
-            : KoCompositeOp(cs, COMPOSITE_DISSOLVE, i18n("Dissolve"), "", userVisible) {
+    RgbCompositeOpDissolve(KoColorSpace * cs)
+            : KoCompositeOp(cs, COMPOSITE_DISSOLVE, i18n("Dissolve"), "") {
     }
 
     using KoCompositeOp::composite;

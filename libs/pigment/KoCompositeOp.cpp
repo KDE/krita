@@ -46,7 +46,6 @@ struct KoCompositeOp::Private {
     QString id;
     QString description;
     QString category;
-    bool userVisible;
     QBitArray defaultChannelFlags;
 };
 
@@ -60,13 +59,12 @@ KoCompositeOp::~KoCompositeOp()
     delete d;
 }
 
-KoCompositeOp::KoCompositeOp(const KoColorSpace * cs, const QString& id,  const QString& description, const QString & category, const bool userVisible)
+KoCompositeOp::KoCompositeOp(const KoColorSpace * cs, const QString& id,  const QString& description, const QString & category)
         : d(new Private)
 {
     d->colorSpace = cs;
     d->id = id;
     d->description = description;
-    d->userVisible = userVisible;
     d->category = category;
     if (d->category.isEmpty()) {
         d->category = categoryMisc();
@@ -122,9 +120,4 @@ QString KoCompositeOp::description() const
 const KoColorSpace * KoCompositeOp::colorSpace() const
 {
     return d->colorSpace;
-}
-
-bool KoCompositeOp::userVisible() const
-{
-    return d->userVisible;
 }

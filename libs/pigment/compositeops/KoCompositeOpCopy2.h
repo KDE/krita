@@ -39,7 +39,7 @@ class KoCompositeOpCopy2: public KoCompositeOpBase< Traits, KoCompositeOpCopy2<T
 
 public:
     KoCompositeOpCopy2(const KoColorSpace* cs)
-        : base_class(cs, COMPOSITE_COPY, i18n("Copy"), KoCompositeOp::categoryMisc(), true) { }
+        : base_class(cs, COMPOSITE_COPY, i18n("Copy"), KoCompositeOp::categoryMisc()) { }
 
 public:
     template<bool alphaLocked, bool allChannelFlags>

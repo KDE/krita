@@ -33,8 +33,8 @@ class RgbCompositeOpIn : public KoCompositeOp
 
 public:
 
-    RgbCompositeOpIn(KoColorSpace * cs, const bool userVisible = false)
-            : KoCompositeOp(cs, COMPOSITE_IN, i18n("In"), "", userVisible) {
+    RgbCompositeOpIn(KoColorSpace * cs)
+            : KoCompositeOp(cs, COMPOSITE_IN, i18n("In"), "") {
     }
 
     using KoCompositeOp::composite;

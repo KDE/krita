@@ -423,7 +423,10 @@ void KisImage::resizeImageImpl(const QRect& newRect, bool cropLayers)
     KisImageSignalVector emitSignals;
     emitSignals << SizeChangedSignal << ModifiedSignal;
 
-    KisProcessingApplicator applicator(this, m_d->rootLayer, true, emitSignals, actionName);
+    KisProcessingApplicator applicator(this, m_d->rootLayer,
+                                       KisProcessingApplicator::RECURSIVE,
+                                       emitSignals, actionName);
+
     if(cropLayers || !newRect.topLeft().isNull()) {
         KisProcessingVisitorSP visitor =
             new KisCropProcessingVisitor(newRect, cropLayers, true);
@@ -451,7 +454,10 @@ void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
 
-    KisProcessingApplicator applicator(this, node, false, emitSignals, actionName);
+    KisProcessingApplicator applicator(this, node,
+                                       KisProcessingApplicator::NONE,
+                                       emitSignals, actionName);
+
     KisProcessingVisitorSP visitor =
         new KisCropProcessingVisitor(newRect, true, false);
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
@@ -481,7 +487,9 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
 
     QString actionName = sizeChanged ? "Scale Image" : "Change Image Resolution";
 
-    KisProcessingApplicator applicator(this, m_d->rootLayer, true, emitSignals, actionName);
+    KisProcessingApplicator applicator(this, m_d->rootLayer,
+                                       KisProcessingApplicator::RECURSIVE,
+                                       emitSignals, actionName);
 
     qreal sx = qreal(size.width()) / this->size().width();
     qreal sy = qreal(size.height()) / this->size().height();

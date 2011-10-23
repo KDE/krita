@@ -108,7 +108,9 @@ void KisProcessingApplicatorTest::testNonRecursiveProcessing()
     QVERIFY(checkLayers(image, "initial"));
 
     {
-        KisProcessingApplicator applicator(image, paintLayer1, false);
+        KisProcessingApplicator applicator(image, paintLayer1,
+                                           KisProcessingApplicator::NONE);
+
         KisProcessingVisitorSP visitor =
             new KisCropProcessingVisitor(cropRect1, true, false);
         applicator.applyVisitor(visitor);
@@ -119,7 +121,9 @@ void KisProcessingApplicatorTest::testNonRecursiveProcessing()
     QVERIFY(checkLayers(image, "crop_l1"));
 
     {
-        KisProcessingApplicator applicator(image, paintLayer2, false);
+        KisProcessingApplicator applicator(image, paintLayer2,
+                                           KisProcessingApplicator::NONE);
+
         KisProcessingVisitorSP visitor =
             new KisCropProcessingVisitor(cropRect2, true, false);
         applicator.applyVisitor(visitor);
@@ -150,7 +154,9 @@ void KisProcessingApplicatorTest::testRecursiveProcessing()
     QVERIFY(checkLayers(image, "recursive_initial"));
 
     {
-        KisProcessingApplicator applicator(image, image->rootLayer(), true);
+        KisProcessingApplicator applicator(image, image->rootLayer(),
+                                           KisProcessingApplicator::RECURSIVE);
+
         KisProcessingVisitorSP visitor =
             new KisCropProcessingVisitor(cropRect1, true, true);
         applicator.applyVisitor(visitor);

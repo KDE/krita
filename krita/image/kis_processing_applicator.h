@@ -29,9 +29,17 @@
 class KRITAIMAGE_EXPORT KisProcessingApplicator
 {
 public:
+    enum ProcessingFlag {
+        NONE = 0x0,
+        RECURSIVE = 0x1,
+    };
+
+    Q_DECLARE_FLAGS(ProcessingFlags, ProcessingFlag)
+
+public:
     KisProcessingApplicator(KisImageWSP image,
                             KisNodeSP node,
-                            bool recursive = false,
+                            ProcessingFlags flags = NONE,
                             KisImageSignalVector emitSignals = KisImageSignalVector(),
                             const QString &name = QString());
 
@@ -56,9 +64,12 @@ private:
 private:
     KisImageWSP m_image;
     KisNodeSP m_node;
-    bool m_recursive;
+    ProcessingFlags m_flags;
     KisImageSignalVector m_emitSignals;
     KisStrokeId m_strokeId;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisProcessingApplicator::ProcessingFlags)
+
 
 #endif /* __KIS_PROCESSING_APPLICATOR_H */

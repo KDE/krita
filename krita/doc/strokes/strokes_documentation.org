@@ -618,7 +618,10 @@
         (1) KisImageSignalVector emitSignals;
         (2) emitSignals << SizeChangedSignal << ModifiedSignal;
 
-        (3) KisProcessingApplicator applicator(this, m_d->rootLayer, true, emitSignals, actionName);
+        (3) KisProcessingApplicator applicator(this, m_d->rootLayer,
+                                               KisProcessingApplicator::RECURSIVE,
+                                               emitSignals, actionName);
+
             if(cropLayers || !newRect.topLeft().isNull()) {
         (4)     KisProcessingVisitorSP visitor =
                     new KisCropProcessingVisitor(newRect, cropLayers, true);

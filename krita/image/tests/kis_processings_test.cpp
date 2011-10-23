@@ -58,7 +58,9 @@ public:
 
         QVERIFY(checkLayers(image, "initial"));
 
-        KisProcessingApplicator applicator(image, image->root(), true);
+        KisProcessingApplicator applicator(image, image->root(),
+                                           KisProcessingApplicator::RECURSIVE);
+
         applicator.applyVisitor(visitor);
         applicator.end();
         image->waitForDone();

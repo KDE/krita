@@ -30,25 +30,26 @@ class UpdateCommand : public KUndo2Command
 {
 public:
     UpdateCommand(KisImageWSP image, KisNodeSP node,
-                  bool recursive, bool finalUpdate)
+                  KisProcessingApplicator::ProcessingFlags flags,
+                  bool finalUpdate)
         : m_image(image),
           m_node(node),
-          m_recursive(recursive),
+          m_flags(flags),
           m_finalUpdate(finalUpdate)
     {
     }
 
     void redo() {
-        if(m_finalUpdate) doUpdate();
+        if(m_finalUpdate) finalize();
     }
 
     void undo() {
-        if(!m_finalUpdate) doUpdate();
+        if(!m_finalUpdate) finalize();
     }
 
 private:
-    void doUpdate() {
-        if(m_recursive) {
+    void finalize() {
+        if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
             m_image->refreshGraphAsync(m_node);
         }
 
@@ -58,7 +59,7 @@ private:
 private:
     KisImageWSP m_image;
     KisNodeSP m_node;
-    bool m_recursive;
+    KisProcessingApplicator::ProcessingFlags m_flags;
     bool m_finalUpdate;
 };
 
@@ -109,12 +110,12 @@ private:
 
 KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
                                                  KisNodeSP node,
-                                                 bool recursive,
+                                                 ProcessingFlags flags,
                                                  KisImageSignalVector emitSignals,
                                                  const QString &name)
     : m_image(image),
       m_node(node),
-      m_recursive(recursive),
+      m_flags(flags),
       m_emitSignals(emitSignals)
 {
     KisStrokeStrategyUndoCommandBased *strategy =
@@ -125,7 +126,8 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
     if(!m_emitSignals.isEmpty()) {
         applyCommand(new EmitImageSignalsCommand(m_image, m_emitSignals, false), KisStrokeJobData::BARRIER);
     }
-    applyCommand(new UpdateCommand(m_image, m_node, m_recursive, false));
+
+    applyCommand(new UpdateCommand(m_image, m_node, m_flags, false));
 }
 
 KisProcessingApplicator::~KisProcessingApplicator()
@@ -137,7 +139,7 @@ void KisProcessingApplicator::applyVisitor(KisProcessingVisitorSP visitor,
                                            KisStrokeJobData::Sequentiality sequentiality,
                                            KisStrokeJobData::Exclusivity exclusivity)
 {
-    if(!m_recursive) {
+    if(!m_flags.testFlag(RECURSIVE)) {
         applyCommand(new KisProcessingCommand(visitor, m_node),
                      sequentiality, exclusivity);
     }
@@ -177,7 +179,8 @@ void KisProcessingApplicator::applyCommand(KUndo2Command *command,
 
 void KisProcessingApplicator::end()
 {
-    applyCommand(new UpdateCommand(m_image, m_node, m_recursive, true));
+    applyCommand(new UpdateCommand(m_image, m_node, m_flags, true));
+
     if(!m_emitSignals.isEmpty()) {
         applyCommand(new EmitImageSignalsCommand(m_image, m_emitSignals, true), KisStrokeJobData::BARRIER);
     }

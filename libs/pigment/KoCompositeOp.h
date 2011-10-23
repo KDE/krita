@@ -134,10 +134,10 @@ class PIGMENTCMS_EXPORT KoCompositeOpRegistry
     typedef QMultiMap<KoID,KoID> KoIDMap;
     typedef QList<KoID>          KoIDList;
     KoCompositeOpRegistry();
-    
+
 public:
     static const KoCompositeOpRegistry& instance();
-    
+
     KoID     getDefaultCompositeOp() const;
     KoID     getKoID(const QString& compositeOpID) const;
     KoIDMap  getCompositeOps() const;
@@ -145,19 +145,19 @@ public:
     KoIDList getCompositeOps(const KoColorSpace* colorSpace) const;
     KoIDList getCompositeOps(const KoID& category, const KoColorSpace* colorSpace=0) const;
     bool     colorSpaceHasCompositeOp(const KoColorSpace* colorSpace, const KoID& compositeOp) const;
-    
+
     template<class TKoIdIterator>
     KoIDList filterCompositeOps(TKoIdIterator begin, TKoIdIterator end, const KoColorSpace* colorSpace, bool removeInvaliOps=true) const {
         KoIDList list;
-        
-        for(; begin!=end; ++begin){ 
+
+        for(; begin!=end; ++begin){
             if( colorSpaceHasCompositeOp(colorSpace, *begin) == removeInvaliOps)
                 list.push_back(*begin);
         }
-        
+
         return list;
     }
-    
+
 private:
     KoIDList m_categories;
     KoIDMap  m_map;
@@ -170,7 +170,7 @@ class PIGMENTCMS_EXPORT KoCompositeOp
 {
 public:
     static QString categoryColor();
-    
+
     static QString categoryArithmetic();
     static QString categoryNegative();
     static QString categoryLight();
@@ -181,7 +181,7 @@ public:
     static QString categoryHSV();
     static QString categoryMix();
     static QString categoryMisc();
-    
+
     struct ParameterInfo
     {
         quint8*       dstRowStart;
@@ -196,7 +196,7 @@ public:
         float         flow;
         QBitArray     channelFlags;
     };
-    
+
 public:
 
     /**
@@ -230,11 +230,11 @@ public:
      * @return the category associated with the composite op
      */
     QString category() const;
-    
+
     // WARNING: A derived class needs to overwrite at least one
     //          of the following virtual methods or a call to
     //          composite(...) will lead to an endless recursion/stack overflow
-    
+
     /**
      * @param dstRowStart pointer to the start of the byte array we will composite the source on
      * @param dstRowStride length of the rows of the block of destination pixels in bytes
@@ -255,12 +255,12 @@ public:
                             const quint8 *maskRowStart, qint32 maskRowStride,
                             qint32 rows, qint32 numColumns,
                             quint8 opacity, const QBitArray& channelFlags=QBitArray()) const;
-    
+
     /**
     * Same as previous, but uses a parameter structure
     */
     virtual void composite(const ParameterInfo& params) const;
-    
+
 private:
     KoCompositeOp();
     struct Private;

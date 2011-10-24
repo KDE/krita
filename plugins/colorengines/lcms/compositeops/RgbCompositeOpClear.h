@@ -30,7 +30,7 @@ class RgbCompositeOpClear : public KoCompositeOp
 
 public:
 
-    RgbCompositeOpClear(KoColorSpace * cs, true)
+    RgbCompositeOpClear(KoColorSpace * cs)
             : KoCompositeOp(cs, COMPOSITE_CLEAR, i18n("Clear"), "") {
     }
 

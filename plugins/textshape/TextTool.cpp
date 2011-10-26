@@ -89,7 +89,8 @@ class TextToolSelection : public KoToolSelection
 public:
 
     TextToolSelection(QWeakPointer<KoTextEditor> editor)
-        : m_editor(editor)
+        : KoToolSelection(0)
+        , m_editor(editor)
     {
     }
 

@@ -1085,13 +1085,18 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         m_indent = 0;
     }
 
+    if (block.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
+        // Unnumbered list items act like "following lines" in a numbered block
+        m_indent = 0;
+    }
+
     // ==============
     // List label/counter positioning
     // ==============
-    if (textList && block.layout()->lineCount() == 1) {
+    if (textList && block.layout()->lineCount() == 1
+        && ! block.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
         // If first line in a list then set the counterposition. Following lines in the same
-        // list-item have nothing to do with the counter. Do this after borders so we can
-        // account for them.
+        // list-item have nothing to do with the counter.
         if (listFormat.boolProperty(KoListStyle::AlignmentMode) == false) {
             if (m_isRtl) {
                 m_width -= blockData->counterWidth() + blockData->counterSpacing() + listFormat.doubleProperty(KoListStyle::Indent) + labelBoxWidth;

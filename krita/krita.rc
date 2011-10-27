@@ -87,6 +87,7 @@
   	<Action name="insert_image_as_layer"/>
   	<Action name="cut_selection_to_new_layer"/>
   	<Action name="copy_selection_to_new_layer"/>
+    <Action name="create_layer_from_mask"/>
   </Menu>
   <Action name="resizelayertoowner"/>
   <Separator/>

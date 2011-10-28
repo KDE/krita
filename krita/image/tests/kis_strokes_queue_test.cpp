@@ -305,5 +305,26 @@ void KisStrokesQueueTest::testStrokesOverlapping()
     VERIFY_EMPTY(jobs[1]);
 }
 
+void KisStrokesQueueTest::testOpenedStrokeCounter()
+{
+    KisStrokesQueue queue;
+
+    QVERIFY(!queue.hasOpenedStrokes());
+    KisStrokeId id0 = queue.startStroke(new KisTestingStrokeStrategy("0"));
+    QVERIFY(queue.hasOpenedStrokes());
+    KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy("1"));
+    QVERIFY(queue.hasOpenedStrokes());
+    queue.endStroke(id0);
+    QVERIFY(queue.hasOpenedStrokes());
+    queue.endStroke(id1);
+    QVERIFY(!queue.hasOpenedStrokes());
+
+    KisTestableUpdaterContext context(2);
+    queue.processQueue(context, false); context.clear();
+    queue.processQueue(context, false); context.clear();
+    queue.processQueue(context, false); context.clear();
+    queue.processQueue(context, false); context.clear();
+}
+
 QTEST_KDEMAIN(KisStrokesQueueTest, NoGUI)
 #include "kis_strokes_queue_test.moc"

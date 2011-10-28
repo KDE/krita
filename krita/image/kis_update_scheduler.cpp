@@ -112,7 +112,7 @@ void KisUpdateScheduler::setProgressProxy(KoProgressProxy *progressProxy)
 
 void KisUpdateScheduler::progressUpdate()
 {
-    if(m_d->progressUpdater) {
+    if(m_d->progressUpdater && !m_d->strokesQueue->hasOpenedStrokes()) {
         QString jobName = m_d->strokesQueue->currentStrokeName();
         if(jobName.isEmpty()) {
             jobName = "Update";
@@ -120,6 +120,9 @@ void KisUpdateScheduler::progressUpdate()
 
         int sizeMetric = m_d->strokesQueue->sizeMetric() + m_d->updatesQueue->sizeMetric();
         m_d->progressUpdater->updateProgress(sizeMetric, jobName);
+    }
+    else {
+        m_d->progressUpdater->hide();
     }
 }
 

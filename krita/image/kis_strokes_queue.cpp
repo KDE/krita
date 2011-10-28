@@ -25,10 +25,11 @@
 #include "kis_updater_context.h"
 
 struct KisStrokesQueue::Private {
-    Private() : needsExclusiveAccess(false) {}
+    Private() : needsExclusiveAccess(false), openedStrokesCounter(0) {}
 
     QQueue<KisStrokeSP> strokesQueue;
     bool needsExclusiveAccess;
+    int openedStrokesCounter;
     QMutex mutex;
 };
 
@@ -51,6 +52,7 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
     KisStrokeId id(stroke);
     strokeStrategy->setCancelStrokeId(id);
     m_d->strokesQueue.enqueue(stroke);
+    m_d->openedStrokesCounter++;
     return id;
 }
 
@@ -70,6 +72,7 @@ void KisStrokesQueue::endStroke(KisStrokeId id)
     KisStrokeSP stroke = id.toStrongRef();
     Q_ASSERT(stroke);
     stroke->endStroke();
+    m_d->openedStrokesCounter--;
 }
 
 bool KisStrokesQueue::cancelStroke(KisStrokeId id)
@@ -79,6 +82,7 @@ bool KisStrokesQueue::cancelStroke(KisStrokeId id)
     KisStrokeSP stroke = id.toStrongRef();
     if(stroke) {
         stroke->cancelStroke();
+        m_d->openedStrokesCounter--;
     }
     return stroke;
 }
@@ -122,6 +126,12 @@ QString KisStrokesQueue::currentStrokeName() const
     if(m_d->strokesQueue.isEmpty()) return QString();
 
     return m_d->strokesQueue.head()->name();
+}
+
+bool KisStrokesQueue::hasOpenedStrokes() const
+{
+    QMutexLocker locker(&m_d->mutex);
+    return m_d->openedStrokesCounter;
 }
 
 bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext,

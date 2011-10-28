@@ -81,6 +81,22 @@ void KisQueuesProgressUpdater::updateProgress(int queueSizeMetric, const QString
     }
 }
 
+void KisQueuesProgressUpdater::hide()
+{
+    {
+        /**
+         * It's not so important to ensure the state of this variable
+         * turns over while the lock is unheld. This is only a
+         * feedback so the next call will hide it.
+         */
+
+        QMutexLocker locker(&m_d->mutex);
+        if(!m_d->trackingStarted) return;
+    }
+
+    updateProgress(0, "");
+}
+
 void KisQueuesProgressUpdater::updateProxy()
 {
     QMutexLocker locker(&m_d->mutex);

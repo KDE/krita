@@ -35,6 +35,7 @@ public:
 
     void notifyJobDone(int sizeMetric);
     void updateProgress(int queueSizeMetric, const QString &jobName);
+    void hide();
 
 private slots:
     void updateProxy();

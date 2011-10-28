@@ -390,10 +390,9 @@ target_link_libraries(KisStrokesQueueTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QT
 
 ########### next target ###############
 
-message("KisQueuesProgressUpdaterTest disabled for 2.4 release. Re-enable after 2.4 and fix the progress updater")
-#set(kis_queues_progress_updater_test_SRCS kis_queues_progress_updater_test.cpp )
-#kde4_add_unit_test(KisQueuesProgressUpdaterTest TESTNAME krita-image-KisQueuesProgressUpdaterTest ${kis_queues_progress_updater_test_SRCS})
-#target_link_libraries(KisQueuesProgressUpdaterTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+set(kis_queues_progress_updater_test_SRCS kis_queues_progress_updater_test.cpp )
+kde4_add_unit_test(KisQueuesProgressUpdaterTest TESTNAME krita-image-KisQueuesProgressUpdaterTest ${kis_queues_progress_updater_test_SRCS})
+target_link_libraries(KisQueuesProgressUpdaterTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

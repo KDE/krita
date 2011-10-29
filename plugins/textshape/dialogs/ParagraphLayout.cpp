@@ -44,6 +44,8 @@ void ParagraphLayout::slotAlignChanged()
     else
         align = Qt::AlignLeft;
 
+    m_alignmentInherited = false;
+
     emit horizontalAlignmentChanged(align);
 }
 
@@ -59,6 +61,8 @@ void ParagraphLayout::setDisplay(KoParagraphStyle *style)
         widget.left->setChecked(true); break;
     }
 
+    m_alignmentInherited = !style->hasProperty(QTextFormat::BlockAlignment);
+
     widget.keepTogether->setChecked(style->nonBreakableLines());
     widget.breakBefore->setChecked(style->breakBefore());
     widget.breakAfter->setChecked(style->breakAfter());
@@ -66,16 +70,19 @@ void ParagraphLayout::setDisplay(KoParagraphStyle *style)
 
 void ParagraphLayout::save(KoParagraphStyle *style)
 {
-    Qt::Alignment align;
-    if (widget.right->isChecked())
-        align = Qt::AlignRight;
-    else if (widget.center->isChecked())
-        align = Qt::AlignHCenter;
-    else if (widget.justify->isChecked())
-        align = Qt::AlignJustify;
-    else
-        align = Qt::AlignLeft;
-    style->setAlignment(align);
+    if (!m_alignmentInherited) {
+        Qt::Alignment align;
+        if (widget.right->isChecked())
+            align = Qt::AlignRight;
+        else if (widget.center->isChecked())
+            align = Qt::AlignHCenter;
+        else if (widget.justify->isChecked())
+            align = Qt::AlignJustify;
+        else
+            align = Qt::AlignLeft;
+        style->setAlignment(align);
+    }
+
     style->setNonBreakableLines(widget.keepTogether->isChecked());
     if (widget.breakBefore->isChecked())
         style->setBreakBefore(KoText::PageBreak);

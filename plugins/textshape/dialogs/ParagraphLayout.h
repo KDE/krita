@@ -44,6 +44,7 @@ private slots:
 
 private:
     Ui::ParagraphLayout widget;
+    bool m_alignmentInherited;
 };
 
 #endif

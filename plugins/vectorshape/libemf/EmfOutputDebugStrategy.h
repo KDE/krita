@@ -23,7 +23,6 @@
 
 #include <QList>
 #include <QPainter>
-#include <QPixmap>
 #include <QRect> // also provides QSize, QPoint
 #include <QString>
 #include <QVariant>

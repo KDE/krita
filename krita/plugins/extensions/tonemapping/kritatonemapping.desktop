@@ -62,4 +62,4 @@ Comment[zh_TW]=tonemapping
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritatonemapping
-X-Krita-Version=4
+X-Krita-Version=5

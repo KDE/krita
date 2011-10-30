@@ -64,4 +64,4 @@ Comment[zh_TW]=濾鏡工具
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritafilterop
-X-Krita-Version=4
+X-Krita-Version=5

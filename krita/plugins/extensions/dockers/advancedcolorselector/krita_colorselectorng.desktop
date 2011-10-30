@@ -23,4 +23,4 @@ Name[zh_TW]=ColorSelectorNG
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritacolorselectorng
-X-Krita-Version=4
+X-Krita-Version=5

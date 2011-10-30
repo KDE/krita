@@ -59,7 +59,7 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 {
     K_GLOBAL_STATIC(KisPaintOpRegistry, s_instance);
     if (!s_instance.exists()) {
-        KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 4)");
+        KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 5)");
         foreach(const QString id, s_instance->keys()) {
             s_instance->get(id)->processAfterLoading();
         }

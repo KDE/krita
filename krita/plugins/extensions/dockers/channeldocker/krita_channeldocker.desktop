@@ -19,4 +19,4 @@ Name[zh_TW]=頻道嵌入器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritachanneldocker
-X-Krita-Version=4
+X-Krita-Version=5

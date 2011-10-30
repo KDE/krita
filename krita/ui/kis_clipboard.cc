@@ -187,7 +187,9 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
     const QMimeData *cbData = cb->mimeData();
     KisPaintDeviceSP clip;
 
+    bool asKrita = false;
     if (cbData && cbData->hasFormat(mimeType)) {
+        asKrita = true;
         dbgUI << "Use clip as x-krita-selection";
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
@@ -233,17 +235,23 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
         }
 
         const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(csModel, csDepth, profile);
+        if (!cs) {
+            // we failed to create a colorspace, so let's try later on with the qimage part of the clip
+            asKrita = false;
+        }
+        if (asKrita) {
+            clip = new KisPaintDevice(cs);
 
-        clip = new KisPaintDevice(cs);
-
-        if (store->hasFile("layerdata")) {
-            store->open("layerdata");
-            clip->read(store);
-            store->close();
+            if (store->hasFile("layerdata")) {
+                store->open("layerdata");
+                asKrita = clip->read(store);
+                store->close();
+            }
         }
         delete store;
     }
-    else {
+
+    if (!asKrita) {
         dbgUI << "Use clip as QImage";
         QImage qimage = cb->image();
 
@@ -255,7 +263,7 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
         quint32 behaviour = cfg.pasteBehaviour();
 
         if (behaviour == PASTE_ASK) {
-            // Ask user each time
+            // Ask user each time.
             behaviour = QMessageBox::question(0, i18n("Pasting data from simple source"), i18n("The image data you are trying to paste has no color profile information.\n\nOn the web and in simple applications the data are supposed to be in sRGB color format.\nImporting as web will show it as it is supposed to look.\nMost monitors are not perfect though so if you made the image yourself\nyou might want to import it as it looked on you monitor.\n\nHow do you want to interpret these data?"), i18n("As &Web"), i18n("As on &Monitor"));
         }
 

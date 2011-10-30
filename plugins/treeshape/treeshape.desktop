@@ -21,5 +21,5 @@ Name[zh_TW]=心智圖
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-Library=treeshape
-X-Flake-MinVersion=0
+X-Flake-MinVersion=4
 X-Flake-PluginVersion=4

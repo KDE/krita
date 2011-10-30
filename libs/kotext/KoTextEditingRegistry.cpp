@@ -30,7 +30,7 @@ void KoTextEditingRegistry::init()
     config.blacklist = "TextEditingPluginsDisabled";
     config.group = "calligra";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Text-EditingPlugin"),
-                                     QString::fromLatin1("[X-KoText-MinVersion] <= 0"), config);
+                                     QString::fromLatin1("[X-KoText-MinVersion] <= 4"), config);
 }
 
 KoTextEditingRegistry* KoTextEditingRegistry::instance()

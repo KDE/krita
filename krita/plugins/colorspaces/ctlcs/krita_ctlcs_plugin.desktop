@@ -58,5 +58,5 @@ Comment[zh_TW]=使用色彩轉換語言（Color Transformation Language）撰寫
 X-KDE-ServiceTypes=Calligra/ColorSpace
 Type=Service
 X-KDE-Library=krita_ctlcs_plugin
-X-Pigment-MinVersion=0
+X-Pigment-MinVersion=4
 X-Flake-PluginVersion=4

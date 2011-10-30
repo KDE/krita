@@ -31,4 +31,4 @@ X-KDE-ServiceTypes=Calligra/Device
 Type=Service
 X-KDE-Library=spacenavigator
 X-Flake-MinVersion=0
-X-Flake-PluginVersion=1
+X-Flake-PluginVersion=4

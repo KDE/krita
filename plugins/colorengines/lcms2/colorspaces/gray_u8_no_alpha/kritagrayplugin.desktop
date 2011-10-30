@@ -98,4 +98,4 @@ X-KDE-ServiceTypes=Calligra/ColorSpace
 Type=Service
 X-KDE-Library=kritagrayplugin
 X-Pigment-MinVersion=0
-X-Flake-PluginVersion=1
+X-Flake-PluginVersion=4

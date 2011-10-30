@@ -70,5 +70,5 @@ Comment[zh_TW]=顏色空間的一些延伸
 X-KDE-ServiceTypes=Calligra/ColorSpaceExtension
 Type=Service
 X-Pigment-MinVersion=0
-X-Flake-PluginVersion=1
+X-Flake-PluginVersion=4
 X-KDE-Library=krita_colorspaces_extensions

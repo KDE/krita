@@ -44,4 +44,4 @@ X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-Library=chartshape
 X-Flake-MinVersion=0
-X-Flake-PluginVersion=1
+X-Flake-PluginVersion=4

@@ -35,4 +35,4 @@ X-KDE-ServiceTypes=Calligra/Tool
 Type=Service
 X-KDE-Library=paragraphtool
 X-Flake-MinVersion=0
-X-Flake-PluginVersion=1
+X-Flake-PluginVersion=4

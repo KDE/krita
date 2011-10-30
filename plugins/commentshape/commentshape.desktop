@@ -30,4 +30,4 @@ X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-Library=commentshape
 X-Flake-MinVersion=0
-X-Flake-PluginVersion=0
+X-Flake-PluginVersion=4

@@ -18,4 +18,4 @@ X-KDE-ServiceTypes=Calligra/Dock
 Type=Service
 X-KDE-Library=calligradockers
 X-Flake-MinVersion=0
-X-Flake-PluginVersion=1
+X-Flake-PluginVersion=4

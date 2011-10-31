@@ -88,6 +88,9 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             m_colorPickerDelayTimer.start(100);
         }
 
+        if (!currentNode())
+            return;
+        
         KisPaintDeviceSP dev = currentNode()->paintDevice();
         if (!dev) return;
 

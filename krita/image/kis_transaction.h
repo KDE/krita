@@ -111,7 +111,7 @@ public:
     }
 
 protected:
-    KisTransaction() {}
+    KisTransaction() : m_transactionData(0) {}
     KisTransactionData* m_transactionData;
 };
 

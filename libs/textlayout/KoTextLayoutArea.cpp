@@ -967,7 +967,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         qTabs.append(tab);
     }
 
-    qreal presentationListTabValue; // for use in presentationListTabWorkaround
+    qreal presentationListTabValue(0.0); // for use in presentationListTabWorkaround
 
     // For some lists we need to add a special list tab according to odf 1.2 19.830 
     if (textList && listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {

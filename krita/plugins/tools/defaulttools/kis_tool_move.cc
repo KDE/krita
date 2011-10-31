@@ -188,8 +188,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
 
         if(!node) {
             node = currentNode();
-            if (!node)
-            {
+            if (!node) {
                 m_strokeId.clear();
                 return;
             }
@@ -243,8 +242,10 @@ void KisToolMove::mouseMoveEvent(KoPointerEvent *event)
 {
     if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         if (!m_strokeId)
+        {
             return;
-        
+        }
+
         QPoint pos = convertToPixelCoord(event).toPoint();
         if ((event->modifiers() & Qt::AltModifier) ||
             (event->modifiers() & Qt::ControlModifier)) {
@@ -267,8 +268,10 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *event)
 {
     if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
         if (!m_strokeId)
+        {
             return;
-        
+        }
+
         setMode(KisTool::HOVER_MODE);
 
         QPoint pos = convertToPixelCoord(event).toPoint();
@@ -276,6 +279,7 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *event)
 
         KisImageWSP image = currentImage();
         image->endStroke(m_strokeId);
+        m_strokeId.clear();
 
         currentImage()->setModified();
     }

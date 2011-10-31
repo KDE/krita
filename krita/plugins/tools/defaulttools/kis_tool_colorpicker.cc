@@ -89,8 +89,10 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
         }
 
         if (!currentNode())
+        {
             return;
-        
+        }
+
         KisPaintDeviceSP dev = currentNode()->paintDevice();
         if (!dev) return;
 

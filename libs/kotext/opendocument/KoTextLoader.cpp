@@ -1969,15 +1969,6 @@ void KoTextLoader::Private::processDeleteChange(QTextCursor &cursor)
 
 void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 {
-    //add block before table,
-    // **************This Should Be fixed: Just Commenting out for now***************
-    // An Empty block before a table would result in a <p></p> before a table
-    // After n round-trips we would end-up with n <p></p> before table.
-    // ******************************************************************************
-    //if (cursor.block().blockNumber() != 0) {
-    //    cursor.insertBlock(QTextBlockFormat());
-    //}
-
     QTextTableFormat tableFormat;
     QString tableStyleName = tableElem.attributeNS(KoXmlNS::table, "style-name", "");
     if (!tableStyleName.isEmpty()) {
@@ -1986,17 +1977,16 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
             tblStyle->applyStyle(tableFormat);
     }
 
-    // if table has master page style property, copy it to block before table, because this block belongs to table
-    // **************This Should Be fixed: Just Commenting out for now***************
-    // An Empty block before a table would result in a <p></p> before a table
-    // After n round-trips we would end-up with n <p></p> before table.
-    // ******************************************************************************
-    //QVariant masterStyle = tableFormat.property(KoTableStyle::MasterPageName);
-    //if (!masterStyle.isNull()) {
-    //    QTextBlockFormat textBlockFormat;
-    //    textBlockFormat.setProperty(KoParagraphStyle::MasterPageName,masterStyle);
-    //    cursor.setBlockFormat(textBlockFormat);
-    //}
+    // if table is being inserted at start of document and it has master page style property,
+    // copy it to block before table, because this block shouldn't really be there but Qt
+    // doesn't allow us to get rid of it. But at least make it belongs to the same masterpage
+    // so we don't end up with a blank page
+    QVariant masterStyle = tableFormat.property(KoTableStyle::MasterPageName);
+    if (!masterStyle.isNull() && cursor.block().blockNumber() == 0) {
+        QTextBlockFormat textBlockFormat;
+        textBlockFormat.setProperty(KoParagraphStyle::MasterPageName,masterStyle);
+        cursor.setBlockFormat(textBlockFormat);
+    }
 
     if (d->changeTracker && d->changeStack.count()) {
         tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());

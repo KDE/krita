@@ -15,11 +15,12 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "kis_image_pyramid.h"
+
+#include <KoCompositeOp.h>
+#include <KoColorSpaceRegistry.h>
+
 #include "kis_painter.h"
-#include "KoCompositeOp.h"
-#include "KoColorSpaceRegistry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_datamanager.h"
 
@@ -117,8 +118,9 @@ void KisImagePyramid::rebuildPyramid()
 
 void KisImagePyramid::clearPyramid()
 {
-    for (qint32 i = 0; i < m_pyramidHeight; i++)
+    for (qint32 i = 0; i < m_pyramidHeight; i++) {
         m_pyramid[i]->clear();
+    }
 }
 
 void KisImagePyramid::setImage(KisImageWSP newImage)

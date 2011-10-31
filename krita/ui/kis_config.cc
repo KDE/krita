@@ -28,11 +28,10 @@
 #include <QFont>
 #include <QThread>
 #include <QStringList>
-
+#include "kis_canvas_resource_provider.h"
 #include "kis_global.h"
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
-
 
 namespace
 {
@@ -170,6 +169,15 @@ void KisConfig::setMonitorProfile(const QString & monitorProfile)
     m_cfg.writeEntry("monitorProfile", monitorProfile);
 }
 
+const KoColorProfile *KisConfig::displayProfile(int screen)
+{
+    const KoColorProfile *  profile = KisCanvasResourceProvider::getScreenProfile(screen);
+    if (!profile) {
+        QString monitorProfileName = monitorProfile();
+        profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
+    }
+    return profile;
+}
 
 QString KisConfig::workingColorSpace() const
 {

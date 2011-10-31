@@ -44,7 +44,7 @@ void KisFilterMaskTest::testCreation()
 
 #define initImage(image, layer, device, mask) do {                      \
     image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, 0, "tests");     \
-    layer = new KisPaintLayer(image, "", 100, device);         \
+    layer = new KisPaintLayer(image, 0, 100, device);         \
     image->addNode(layer);                                              \
     image->addNode(mask, layer);                                        \
     } while(0)

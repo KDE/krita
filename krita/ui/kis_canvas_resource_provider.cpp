@@ -81,7 +81,6 @@ void KisCanvasResourceProvider::setResourceManager(KoCanvasResourceManager *reso
     m_resourceManager->setResource(KoCanvasResourceManager::BackgroundColor, v);
 
     setCurrentCompositeOp(COMPOSITE_OVER);
-    resetDisplayProfile();
 
     setMirrorHorizontal(false);
     setMirrorVertical(false);
@@ -141,10 +140,10 @@ KoAbstractGradient* KisCanvasResourceProvider::currentGradient() const
 }
 
 
-void KisCanvasResourceProvider::resetDisplayProfile()
+void KisCanvasResourceProvider::resetDisplayProfile(int screen)
 {
     // XXX: The X11 monitor profile overrides the settings
-    m_displayProfile = KisCanvasResourceProvider::getScreenProfile();
+    m_displayProfile = KisCanvasResourceProvider::getScreenProfile(screen);
 
     if (m_displayProfile == 0) {
         KisConfig cfg;

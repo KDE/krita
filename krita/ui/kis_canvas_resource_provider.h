@@ -87,7 +87,7 @@ public:
 
     KoAbstractGradient *currentGradient() const;
 
-    void resetDisplayProfile();
+    void resetDisplayProfile(int screen = -1);
     const KoColorProfile * currentDisplayProfile() const;
 
     KisImageWSP currentImage() const;

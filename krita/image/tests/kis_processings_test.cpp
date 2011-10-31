@@ -99,7 +99,7 @@ private:
         blur1->setY(blurShift.y());
 
         KisPaintLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
-        paintLayer1->paintDevice()->convertFromQImage(sourceImage, "", 0, 0);
+        paintLayer1->paintDevice()->convertFromQImage(sourceImage, 0, 0, 0);
 
         KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();
         transparencyMask1->setName("tmask1");

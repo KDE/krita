@@ -64,7 +64,7 @@ bool hasVisibleWidgets()
 
 KoFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    dbgFile << "BMP import! From:" << from << ", To:" << to << "";
+    dbgFile << "BMP import! From:" << from << ", To:" << to << 0;
 
     if (!(from == "image/bmp" || from == "image/x-xpixmap" || from == "image/gif" || from == "image/x-xbitmap"))
         return KoFilter::NotImplemented;
@@ -100,8 +100,8 @@ KoFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const Q
         image->lock();
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
-        KisTransaction("", layer->paintDevice());
-        layer->paintDevice()->convertFromQImage(img, "", 0, 0);
+        KisTransaction(0, layer->paintDevice());
+        layer->paintDevice()->convertFromQImage(img, 0, 0, 0);
         image->addNode(layer.data(), image->rootLayer().data());
 
         image->unlock();

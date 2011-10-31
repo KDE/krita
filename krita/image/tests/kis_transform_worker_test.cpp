@@ -53,7 +53,7 @@ void KisTransformWorkerTest::testMirrorX()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
-    dev2->convertFromQImage(image, "");
+    dev2->convertFromQImage(image, 0);
     KisTransformWorker::mirrorX(dev2);
     KisTransformWorker::mirrorX(dev2);
     KisTransformWorker::mirrorX(dev2);
@@ -76,7 +76,7 @@ void KisTransformWorkerTest::testMirrorY()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
-    dev2->convertFromQImage(image, "");
+    dev2->convertFromQImage(image, 0);
     KisTransformWorker::mirrorY(dev2);
     KisTransformWorker::mirrorY(dev2);
     KisTransformWorker::mirrorY(dev2);
@@ -98,7 +98,7 @@ void KisTransformWorkerTest::testMirrorTransactionX()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
-    dev2->convertFromQImage(image, "");
+    dev2->convertFromQImage(image, 0);
 
     KisTransaction t("mirror", dev2);
     KisTransformWorker::mirrorX(dev2);
@@ -122,7 +122,7 @@ void KisTransformWorkerTest::testMirrorTransactionY()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
-    dev2->convertFromQImage(image, "");
+    dev2->convertFromQImage(image, 0);
 
     KisTransaction t("mirror", dev2);
     KisTransformWorker::mirrorY(dev2);
@@ -150,7 +150,7 @@ void KisTransformWorkerTest::testScaleUp()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
     KisTransaction t("test", dev);
@@ -187,7 +187,7 @@ void KisTransformWorkerTest::testXScaleUp()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
     KisTransaction t("test", dev);
@@ -223,7 +223,7 @@ void KisTransformWorkerTest::testYScaleUp()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
@@ -260,7 +260,7 @@ void KisTransformWorkerTest::testIdentity()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
     KisTransaction t("test", dev);
@@ -295,7 +295,7 @@ void KisTransformWorkerTest::testScaleDown()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
     KisTransaction t("test", dev);
@@ -342,7 +342,7 @@ void KisTransformWorkerTest::testXScaleDown()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
@@ -394,7 +394,7 @@ void KisTransformWorkerTest::testYScaleDown()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
     KisTransaction t("test", dev);
@@ -440,7 +440,7 @@ void KisTransformWorkerTest::testXShear()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
@@ -488,7 +488,7 @@ void KisTransformWorkerTest::testYShear()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 
@@ -594,7 +594,7 @@ void KisTransformWorkerTest::testRotation()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
 
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
 

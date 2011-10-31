@@ -161,8 +161,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
     if (makeExchangeClip) {
         QImage qimage;
         KisConfig cfg;
-        QString monitorProfileName = cfg.monitorProfile();
-        const KoColorProfile *  monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
+        const KoColorProfile *monitorProfile = cfg.displayProfile();
         qimage = dev->convertToQImage(monitorProfile);
         if (!qimage.isNull() && mimeData) {
             mimeData->setImageData(qimage);
@@ -268,19 +267,19 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
         }
 
         const KoColorSpace * cs;
-        QString profileName("");
+        const KoColorProfile *profile = 0;
         if (behaviour == PASTE_ASSUME_MONITOR)
-            profileName = cfg.monitorProfile();
+            profile = cfg.displayProfile();
 
-        cs = KoColorSpaceRegistry::instance()->rgb8(profileName);
+        cs = KoColorSpaceRegistry::instance()->rgb8(profile);
         if (!cs) {
             cs = KoColorSpaceRegistry::instance()->rgb8();
-            profileName = cs->profile()->name();
+            profile = cs->profile();
         }
 
         clip = new KisPaintDevice(cs);
         Q_CHECK_PTR(clip);
-        clip->convertFromQImage(qimage, profileName);
+        clip->convertFromQImage(qimage, profile);
     }
     if (!customTopLeft) {
         QRect exactBounds = clip->exactBounds();

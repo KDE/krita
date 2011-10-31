@@ -59,8 +59,8 @@ void KisAsyncMergerTest::testMerger()
 
     KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
     KisPaintDeviceSP device2 = new KisPaintDevice(colorSpace);
-    device1->convertFromQImage(sourceImage1, "", 0, 0);
-    device2->convertFromQImage(sourceImage2, "", 0, 0);
+    device1->convertFromQImage(sourceImage1, 0, 0, 0);
+    device2->convertFromQImage(sourceImage2, 0, 0, 0);
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
@@ -144,7 +144,7 @@ void KisAsyncMergerTest::debugObligeChild()
 
     QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
-    device1->convertFromQImage(sourceImage1, "", 0, 0);
+    device1->convertFromQImage(sourceImage1, 0, 0, 0);
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
     KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE_U8);

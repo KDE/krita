@@ -130,7 +130,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
             }
         }
         if( cs )
-            thePublic->setColorSet(new KoColorSet(*cs));
+            thePublic->setColorSet(cs);
         // colorSetContainer->setFixedSize(colorSetLayout->sizeHint());
         // thePublic->setFixedSize(mainLayout->sizeHint());
     }
@@ -222,7 +222,11 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
 KoColorSetWidget::~KoColorSetWidget()
 {
-    delete d->colorSet;
+    KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
+    QList<KoColorSet*> palettes = srv->resources();
+    if (!palettes.contains(d->colorSet)) {
+        delete d->colorSet;
+    }
     delete d;
 }
 

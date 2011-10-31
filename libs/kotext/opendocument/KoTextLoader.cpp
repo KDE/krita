@@ -1309,11 +1309,8 @@ void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level)
             c.setBlockFormat(blockFormat);
             d->currentList->add(c.block(), level);
         }
-    } else {
-        QTextBlockFormat fmt = cursor.blockFormat();
-        fmt.clearProperty(KoParagraphStyle::ForceDisablingList);
-        cursor.setBlockFormat(fmt);
     }
+
     if (!e.attributeNS(KoXmlNS::delta, "insertion-type").isEmpty())
         d->closeChangeRegion(e);
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());

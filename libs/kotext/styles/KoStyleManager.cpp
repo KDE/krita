@@ -52,7 +52,7 @@
 class KoStyleManager::Private
 {
 public:
-    Private() : updateTriggered(false), defaultParagraphStyle(0), defaultListStyle(0), outlineStyle(0)
+    Private() : updateTriggered(false), defaultCharacterStyle(0), defaultParagraphStyle(0), defaultListStyle(0), outlineStyle(0)
     {
     }
     ~Private() {
@@ -75,6 +75,7 @@ public:
     bool updateTriggered;
     QList<int> updateQueue;
 
+    KoCharacterStyle *defaultCharacterStyle;
     KoParagraphStyle *defaultParagraphStyle;
     KoListStyle *defaultListStyle;
     KoListStyle *outlineStyle;
@@ -90,6 +91,11 @@ int KoStyleManager::Private::s_stylesNumber = 100;
 KoStyleManager::KoStyleManager(QObject *parent)
         : QObject(parent), d(new Private())
 {
+    d->defaultCharacterStyle = new KoCharacterStyle(this);
+    d->defaultCharacterStyle->setName(i18n("Default"));
+
+    add(d->defaultCharacterStyle);
+
     d->defaultParagraphStyle = new KoParagraphStyle(this);
     d->defaultParagraphStyle->setName(i18n("Default"));
 
@@ -126,10 +132,16 @@ KoStyleManager::~KoStyleManager()
 
 void KoStyleManager::saveOdfDefaultStyles(KoShapeSavingContext &context)
 {
-    KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
-    style.setDefaultStyle(true);
-    d->defaultParagraphStyle->saveOdf(style, context);
-    context.mainStyles().insert(style);
+    KoGenStyle pstyle(KoGenStyle::ParagraphStyle, "paragraph");
+    pstyle.setDefaultStyle(true);
+    d->defaultParagraphStyle->saveOdf(pstyle, context);
+    context.mainStyles().insert(pstyle);
+
+    KoGenStyle tstyle(KoGenStyle::TextStyle, "text");
+    tstyle.setDefaultStyle(true);
+    d->defaultCharacterStyle->saveOdf(tstyle);
+    context.mainStyles().insert(tstyle);
+
 }
 
 void KoStyleManager::saveOdf(KoShapeSavingContext &context)
@@ -137,7 +149,6 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
     saveOdfDefaultStyles(context);
 
     // don't save character styles that are already saved as part of a paragraph style
-    QSet<KoCharacterStyle*> characterParagraphStyles;
     QHash<KoParagraphStyle*, QString> savedNames;
     foreach(KoParagraphStyle *paragraphStyle, d->paragStyles) {
         if (paragraphStyle == d->defaultParagraphStyle)
@@ -152,7 +163,6 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         paragraphStyle->saveOdf(style, context);
         QString newName = context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
         savedNames.insert(paragraphStyle, newName);
-        characterParagraphStyles.insert(paragraphStyle->characterStyle());
     }
 
     foreach(KoParagraphStyle *p, d->paragStyles) {
@@ -165,7 +175,7 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
     }
 
     foreach(KoCharacterStyle *characterStyle, d->charStyles) {
-        if (characterStyle == d->defaultParagraphStyle->characterStyle() || characterParagraphStyles.contains(characterStyle))
+        if (characterStyle == d->defaultCharacterStyle)
             continue;
 
         QString name(QString(QUrl::toPercentEncoding(characterStyle->name(), "", " ")).replace('%', '_'));
@@ -281,11 +291,7 @@ void KoStyleManager::add(KoParagraphStyle *style)
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
     d->paragStyles.insert(d->s_stylesNumber++, style);
-    if (style->characterStyle()) {
-        add(style->characterStyle());
-        if (style->characterStyle()->name().isEmpty())
-            style->characterStyle()->setName(style->name());
-    }
+
     if (style->listStyle() && style->listStyle()->styleId() == 0)
         add(style->listStyle());
     KoParagraphStyle *root = style;
@@ -294,8 +300,6 @@ void KoStyleManager::add(KoParagraphStyle *style)
         if (root->styleId() == 0)
             add(root);
     }
-    if (root != d->defaultParagraphStyle && root->parentStyle() == 0)
-        root->setParentStyle(d->defaultParagraphStyle);
 
     emit styleAdded(style);
 }
@@ -741,6 +745,11 @@ KoOdfBibliographyConfiguration *KoStyleManager::bibliographyConfiguration() cons
     return d->bibliographyConfiguration;
 }
 
+KoCharacterStyle *KoStyleManager::defaultCharacterStyle() const
+{
+    return d->defaultCharacterStyle;
+}
+
 KoParagraphStyle *KoStyleManager::defaultParagraphStyle() const
 {
     return d->defaultParagraphStyle;
@@ -842,11 +851,7 @@ void KoStyleManager::moveToUsedStyles(int id)
     d->unusedParagraphStyles.remove(id);
 
     d->paragStyles.insert(style->styleId(), style);
-    if (style->characterStyle()) {
-        add(style->characterStyle());
-        if (style->characterStyle()->name().isEmpty())
-            style->characterStyle()->setName(style->name());
-    }
+
     if (style->listStyle() && style->listStyle()->styleId() == 0)
         add(style->listStyle());
     KoParagraphStyle *root = style;

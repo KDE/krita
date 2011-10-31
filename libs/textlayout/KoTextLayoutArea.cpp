@@ -704,6 +704,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         listFormat = textList->format();
 
         KoCharacterStyle *cs = 0;
+
         if (m_documentLayout->styleManager()) {
             const int id = listFormat.intProperty(KoListStyle::CharacterStyleId);
             cs = m_documentLayout->styleManager()->characterStyle(id);
@@ -711,7 +712,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 KoParagraphStyle *ps = m_documentLayout->styleManager()->paragraphStyle(
                                        block.blockFormat().intProperty(KoParagraphStyle::StyleId));
                 if (ps && !ps->hasDefaults()) {
-                    cs = ps->characterStyle();
+                    cs = (KoCharacterStyle*)ps;
                 }
             }
         }

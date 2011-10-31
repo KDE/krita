@@ -551,8 +551,7 @@ void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
     loadOdfProperties(scontext, context.styleStack());
     
     KoCharacterStyle *charstyle = characterStyle();
-    context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
-    charstyle->loadOdf(scontext);   // load the KoCharacterStyle from the stylestack
+    charstyle->loadOdf(element, scontext);   // load the KoCharacterStyle from the stylestack
 
     context.styleStack().setTypeProperties("graphic");
     loadOdfProperties(scontext, context.styleStack());

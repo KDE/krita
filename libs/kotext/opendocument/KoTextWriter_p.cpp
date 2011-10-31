@@ -517,7 +517,7 @@ QString KoTextWriter::Private::saveParagraphStyle(const QTextBlockFormat &blockF
 
 QString KoTextWriter::Private::saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat)
 {
-    KoCharacterStyle *defaultCharStyle = styleManager->defaultParagraphStyle()->characterStyle();
+    KoCharacterStyle *defaultCharStyle = styleManager->defaultCharacterStyle();
 
     KoCharacterStyle *originalCharStyle = styleManager->characterStyle(charFormat.intProperty(KoCharacterStyle::StyleId));
     if (!originalCharStyle)

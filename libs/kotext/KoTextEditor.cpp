@@ -791,9 +791,8 @@ void KoTextEditor::setDefaultFormat()
 {
     d->updateState(KoTextEditor::Private::Format, i18n("Set default format"));
     if (KoStyleManager *styleManager = KoTextDocument(d->document).styleManager()) {
-        KoCharacterStyle *defaultCharStyle = styleManager->defaultParagraphStyle()->characterStyle();
         QTextCharFormat format;
-        defaultCharStyle->applyStyle(format);
+        ((KoCharacterStyle *)styleManager->defaultParagraphStyle())->applyStyle(format);
         QTextCharFormat prevFormat(d->caret.charFormat());
         d->caret.setCharFormat(format);
         registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set default format"), format, prevFormat, false);

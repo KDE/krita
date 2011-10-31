@@ -331,12 +331,17 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
 
     if (style) {
         KoParagraphStyle paragraphStyle;
-        paragraphStyle.loadOdf(style, context);
-
+        paragraphStyle.loadOdf(style, context, true);
         QTextDocument *document = m_textShapeData->document();
         QTextCursor cursor(document);
-        QTextBlock block = cursor.block();
-        paragraphStyle.applyStyle(block, false);
+    QTextBlockFormat format;
+    paragraphStyle.applyStyle(format);
+    cursor.setBlockFormat(format);
+    QTextCharFormat cformat;
+    paragraphStyle.KoCharacterStyle::applyStyle(cformat);
+    cursor.setCharFormat(cformat);
+    cursor.setBlockCharFormat(cformat);
+
 #ifndef NWORKAROUND_ODF_BUGS
         KoTextShapeData::ResizeMethod method = m_textShapeData->resizeMethod();
         if (KoOdfWorkaround::fixAutoGrow(method, context)) {

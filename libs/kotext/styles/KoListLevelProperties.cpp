@@ -729,11 +729,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
 
         } else if (localName == "text-properties") {
             QSharedPointer<KoCharacterStyle> charStyle = QSharedPointer<KoCharacterStyle>(new KoCharacterStyle);
-            context.styleStack().save();
-            context.styleStack().push(style);
-            context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
-            charStyle->loadOdf(scontext);
-            context.styleStack().restore();
+            charStyle->loadOdf(&style, scontext);
             //if not set in bullet-relative-size or any where before then set it now
             if (!hasBulletRelativeSize && charStyle->hasProperty(KoCharacterStyle::PercentageFontSize)) {
                 setRelativeBulletSize((int)charStyle->percentageFontSize());

@@ -509,10 +509,8 @@ void loadOdf<KoParagraphStyle>(KoParagraphStyle* genStyle, const KoXmlElement *m
 template<>
 void loadOdf<KoCharacterStyle>(KoCharacterStyle* genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
 {
-    loadCtxt.addStyles(mainElement, "text");
-    loadCtxt.styleStack().setTypeProperties("text");
     KoShapeLoadingContext shapeCtxt(loadCtxt, 0);
-    genStyle->loadOdf(shapeCtxt);
+    genStyle->loadOdf(mainElement, shapeCtxt);
 }
 
 template<class T>

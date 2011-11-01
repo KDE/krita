@@ -189,7 +189,6 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
         if(!node) {
             node = currentNode();
             if (!node) {
-                m_strokeId.clear();
                 return;
             }
         }
@@ -267,12 +266,12 @@ void KisToolMove::mouseMoveEvent(KoPointerEvent *event)
 void KisToolMove::mouseReleaseEvent(KoPointerEvent *event)
 {
     if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
+        
         if (!m_strokeId)
         {
             return;
         }
-
-        setMode(KisTool::HOVER_MODE);
 
         QPoint pos = convertToPixelCoord(event).toPoint();
         drag(pos);

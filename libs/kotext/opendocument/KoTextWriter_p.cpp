@@ -425,12 +425,11 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
                 KoTextStyleChangeInformation *textStyleChangeInformation = static_cast<KoTextStyleChangeInformation *>(formatChangeInformation);
                 QString styleName = saveCharacterStyle(textStyleChangeInformation->previousCharFormat(), cursor.blockCharFormat());
                 if (!styleName.isEmpty()) {
-                   writer->startElement("text:span", false);
-                   writer->addAttribute("text:style-name", styleName);
+                    writer->startElement("text:span", false);
+                    writer->addAttribute("text:style-name", styleName);
+                    writer->endElement();
                 }
                 writer->endElement();
-                writer->endElement();
-
             }
 
             tagInformation.addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
@@ -732,6 +731,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         inlineRdf->saveOdf(context, writer);
     }
 
+    QString previousFragmentLink;
+    int linkTagChangeId = -1;
     for (it = block.begin(); !(it.atEnd()); ++it) {
         QTextFragment currentFragment = it.fragment();
         const int fragmentStart = currentFragment.position();
@@ -747,9 +748,31 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
                 saveODF12Change(charFormat);
             }
-
+            
+            if ((!previousFragmentLink.isEmpty()) && (charFormat.anchorHref() != previousFragmentLink || !charFormat.isAnchor())) {
+                // Close the current text:a
+                closeTagRegion(linkTagChangeId);
+                previousFragmentLink = "";
+            }
+            
+            if (charFormat.isAnchor() && charFormat.anchorHref() != previousFragmentLink) {
+                // Open a text:a
+                previousFragmentLink = charFormat.anchorHref();
+                TagInformation linkTagInformation;
+                linkTagInformation.setTagName("text:a");
+                linkTagInformation.addAttribute("xlink:type", "simple");
+                linkTagInformation.addAttribute("xlink:href", charFormat.anchorHref());
+                if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
+                    // Write xml:id here for Rdf
+                    kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
+                    saveInlineRdf(inlineRdf, &linkTagInformation);
+                }
+                linkTagChangeId = openTagRegion(currentFragment.position(), KoTextWriter::Private::Span, linkTagInformation);
+            }
+            
             KoInlineTextObjectManager *textObjectManager = KoTextDocument(document).inlineTextObjectManager();
             KoInlineObject *inlineObject = textObjectManager ? textObjectManager->inlineTextObject(charFormat) : 0;
+            // If we are in an inline object
             if (currentFragment.length() == 1 && inlineObject
                     && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
                 if (!dynamic_cast<KoDeleteChangeMarker*>(inlineObject)) {
@@ -835,20 +858,11 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     }
                 }
             } else {
+                // Normal block, easier to handle
                 QString styleName = saveCharacterStyle(charFormat, blockCharFormat);
 
                 TagInformation fragmentTagInformation;
-                if (charFormat.isAnchor()) {
-                    fragmentTagInformation.setTagName("text:a");
-                    fragmentTagInformation.addAttribute("xlink:type", "simple");
-                    fragmentTagInformation.addAttribute("xlink:href", charFormat.anchorHref());
-                    if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
-                        // Write xml:id here for Rdf
-                        kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
-                        saveInlineRdf(inlineRdf, &fragmentTagInformation);
-                        //inlineRdf->saveOdf(context, writer);
-                    }
-                } else if (!styleName.isEmpty() /*&& !identical*/) {
+                if (!styleName.isEmpty() /*&& !identical*/) {
                     fragmentTagInformation.setTagName("text:span");
                     fragmentTagInformation.addAttribute("text:style-name", styleName);
                 }
@@ -869,6 +883,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
             previousCharFormat = charFormat;
         }
+    }
+    if (!previousFragmentLink.isEmpty()) {
+        writer->endElement();
     }
 
     if (to !=-1 && to < block.position() + block.length()) {

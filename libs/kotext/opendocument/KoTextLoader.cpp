@@ -1646,24 +1646,25 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             if (!ts.attributeNS(KoXmlNS::delta, "insertion-type").isEmpty())
                 d->openChangeRegion(ts);
             QString target = ts.attributeNS(KoXmlNS::xlink, "href");
+            QString styleName = ts.attributeNS(KoXmlNS::text, "style-name", QString());
             QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
-            if (!target.isEmpty()) {
-                QTextCharFormat linkCf(cf);   // and copy it to alter it
-                linkCf.setAnchor(true);
-                linkCf.setAnchorHref(target);
-
-                // TODO make configurable ? Ho, and it will interfere with saving :/
-                QBrush foreground = linkCf.foreground();
-                foreground.setColor(Qt::blue);
-                //                 foreground.setStyle(Qt::Dense1Pattern);
-                linkCf.setForeground(foreground);
-                linkCf.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
-                linkCf.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
-
-                cursor.setCharFormat(linkCf);
+            
+            if (!styleName.isEmpty()) {
+                KoCharacterStyle *characterStyle = d->textSharedData->characterStyle(styleName, d->stylesDotXml);
+                if (characterStyle) {
+                    characterStyle->applyStyle(&cursor);
+                } else {
+                    kWarning(32500) << "character style " << styleName << " not found";
+                }
             }
+            QTextCharFormat newCharFormat = cursor.charFormat();
+            newCharFormat.setAnchor(true);
+            newCharFormat.setAnchorHref(target);
+            cursor.setCharFormat(newCharFormat);
+            
             loadSpan(ts, cursor, stripLeadingSpace);   // recurse
-            cursor.setCharFormat(cf);   // restore the cursor char format
+            cursor.setCharFormat(cf); // restore the cursor char format
+            
             if (!ts.attributeNS(KoXmlNS::delta, "insertion-type").isEmpty())
                 d->closeChangeRegion(ts);
         } else if (isTextNS && localName == "line-break") { // text:line-break

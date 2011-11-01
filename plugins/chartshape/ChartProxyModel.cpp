@@ -540,6 +540,12 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                 DataSet *dataSet;
                 if ( loadedDataSetCount < createdDataSets.size() )
                     dataSet = createdDataSets[loadedDataSetCount];
+                else {
+                    // if this happens then we need here a "dataSet = new DataSet( d->dataSets.size() );" like
+                    // above *and* need to make sure that dataSet-instance isn't mem-leaked (which it would).
+                    Q_ASSERT_X(false, __FUNCTION__, "bug introduced with commit 7009c4a8");
+                    continue; // be sure we don't crash in release-mode if that happens
+                }
                 dataSet->loadSeriesIntoDataset( n, context );
             }
             stockSeriesCounter = ( stockSeriesCounter + 1 ) %  seriesPerDataset;

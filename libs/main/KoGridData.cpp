@@ -207,7 +207,6 @@ KToggleAction *KoGridData::gridToggleAction(QWidget* canvas)
 {
     if (! d->toggleGridAction) {
         d->toggleGridAction = new KToggleAction(i18n("Show Grid"), 0);
-        d->toggleGridAction->setCheckedState(KGuiItem(i18n("Hide Grid")));
         d->toggleGridAction->setToolTip(i18n("Shows or hides grid"));
         d->toggleGridAction->setChecked(d->showGrid);
     }

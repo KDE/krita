@@ -1509,9 +1509,16 @@ void DataSet::saveOdf( KoShapeSavingContext &context ) const
     const QString styleName = mainStyles.insert( style, "ch" );
     bodyWriter.addAttribute( "chart:style-name", styleName );
 
-    // Save cell regions
-    bodyWriter.addAttribute( "chart:values-cell-range-address", yDataRegion().toString() );
-    bodyWriter.addAttribute( "chart:label-cell-address", labelDataRegion().toString() );
+    // Save cell regions for values if defined.
+    QString values = yDataRegion().toString();
+    if (!values.isEmpty())
+        bodyWriter.addAttribute( "chart:values-cell-range-address", values );
+
+    // Save cell regions for labels if defined. If not defined then the internal
+    // table:table "local-table" (the data is stored in the ChartProxyModel) is used.
+    QString label = labelDataRegion().toString();
+    if (!label.isEmpty())
+        bodyWriter.addAttribute( "chart:label-cell-address", label );
 
     bodyWriter.endElement(); // chart:series
 }

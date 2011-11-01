@@ -104,6 +104,23 @@ void TestCellRegion::testListOfRegions()
     }
 }
 
+void TestCellRegion::testListOfRegions2()
+{
+    CellRegion region( &m_source, QString( "Table1.A19:Table1.A30 Table1.E20:Table1.E30 Table1.G20:Table1.G30 Table1.I20:Table1.I30 Table1.E58:Table1.E71" ) );
+    QCOMPARE( region.table(), m_source.get( "Table1" ) );
+    const QVector< QRect > rects = region.rects();
+    QVector< QRect > compareRects;
+    compareRects.push_back( QRect( QPoint( 1, 19 ), QPoint( 1, 30 ) ) );
+    compareRects.push_back( QRect( QPoint( 5, 20 ), QPoint( 5, 30 ) ) );
+    compareRects.push_back( QRect( QPoint( 7,20 ), QPoint( 7, 30 ) ) );
+    compareRects.push_back( QRect( QPoint( 9,20 ), QPoint( 9, 30 ) ) );
+    compareRects.push_back( QRect( QPoint( 5,58 ), QPoint( 5, 71 ) ) );
+    for ( int i = 0; i < compareRects.count() && i < rects.count(); ++i )
+    {
+        QCOMPARE( rects[i], compareRects[i] );
+    }
+}
+
 void TestCellRegion::testToStringMultipleTables()
 {
     QEXPECT_FAIL( "", "Functionality is not yet supported, so its expected to fail", Continue );

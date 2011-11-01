@@ -703,7 +703,6 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     // actual data is not stored here.
     //
     // FIXME: Isn't the proxy model a strange place to store this data?
-    qDebug() << d->chartType;
     proxyModel()->loadOdf( plotAreaElement, context, d->chartType == StockChartType ? 3 : 1, d->chartType );
 
     // Now load the surfaces (wall and possibly floor)

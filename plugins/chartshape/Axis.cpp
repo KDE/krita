@@ -1572,7 +1572,7 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         return;
     }
 
-    qDebug() << "changed ChartType";
+    //qDebug() << "changed ChartType";
 
     ChartType oldChartType = d->plotAreaChartType;
 

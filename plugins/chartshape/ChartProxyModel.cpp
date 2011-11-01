@@ -284,7 +284,6 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
     // It is at least one, but if there's more than one data dimension, the x
     // data is shared among all data sets, thus - 1.
     int regionsPerDataSet = qMax( 1, dataDimensions - 1 );
-    qDebug() << regionsPerDataSet;
 
     // Fill dataRegions and set categoryRegion.
     // Note that here, we don't exactly know yet what region will be used for

@@ -209,7 +209,7 @@ bool allowAsChild(const QString & parentType, const QString & childType)
     return true;
 }
 
-void KisNodeManager::getNewNodeLocation(KisNodeSP& node, KisNodeSP& parent, KisNodeSP& above, KisNodeSP _activeNode)
+void KisNodeManager::getNewNodeLocation(KisNodeSP node, KisNodeSP& parent, KisNodeSP& above, KisNodeSP _activeNode)
 {
     KisNodeSP root = m_d->view->image()->root();
     if (!_activeNode)

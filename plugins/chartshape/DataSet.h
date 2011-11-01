@@ -186,6 +186,10 @@ public:
 
     QVariant categoryData( int index ) const;
     QVariant labelData() const;
+    QString defaultLabelData() const;
+
+    QString labelDataCustom() const;
+    void setLabelDataCustom( const QString &label );
 
     CellRegion xDataRegion() const;
     CellRegion yDataRegion() const;
@@ -204,13 +208,6 @@ public:
     int dimension() const;
 
     // Called by the proxy model
-    void yDataChanged( int start, int end ) const;
-    void xDataChanged( int start, int end ) const;
-    void customDataChanged( int start, int end ) const;
-    void labelDataChanged() const;
-    void categoryDataChanged( int start, int end ) const;
-
-    // FIXME: The parameter 'region' is unused in the methods below
     void yDataChanged( const QRect &region ) const;
     void xDataChanged( const QRect &region ) const;
     void customDataChanged( const QRect &region ) const;

@@ -57,11 +57,11 @@ using namespace KChart;
 
 class ChartProxyModel::Private {
 public:
-    Private( ChartProxyModel *parent, TableSource *source );
+    Private( ChartProxyModel *parent, ChartShape *shape, TableSource *source );
     ~Private();
 
     ChartProxyModel *const q;
-
+    ChartShape *const shape;
     TableSource *const tableSource;
 
     /// Set to true if we're in the process of loading data from ODF.
@@ -101,8 +101,9 @@ public:
                                               bool overrideCategories = true );
 };
 
-ChartProxyModel::Private::Private( ChartProxyModel *parent, TableSource *source )
+ChartProxyModel::Private::Private( ChartProxyModel *parent, ChartShape *shape, TableSource *source )
     : q( parent )
+    , shape( shape )
     , tableSource( source )
     , isLoading( false )
 {
@@ -129,9 +130,9 @@ ChartProxyModel::Private::~Private()
 //                          Class ChartProxyModel
 
 
-ChartProxyModel::ChartProxyModel( TableSource *source )
+ChartProxyModel::ChartProxyModel( ChartShape *shape, TableSource *source )
     : QAbstractTableModel(),
-      d( new Private( this, source ) )
+      d( new Private( this, shape, source ) )
 {
     connect( source, SIGNAL( tableAdded( Table* ) ),
              this,   SLOT( addTable( Table* ) ) );
@@ -354,11 +355,19 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
         // immediately before the next data set, thus (.. + 1) * .. - 1)
         int labelRowCol = (dataSetNumber + 1) * regionsPerDataSet - 1;
         if ( labelRegion.hasPointAtIndex( labelRowCol ) ) {
+            dataSet->setLabelDataCustom( QString() );
             QPoint point( labelRegion.pointAtIndex( labelRowCol ) );
             dataSet->setLabelDataRegion( CellRegion( selection.table(), point ) );
         }
-        else
+        else {
+            QString label;
+            if ( QAbstractItemModel *model = (shape ? shape->internalModel() ? shape->internalModel() : 0 : 0) ) {
+                // fetch the label (aka header-data) from the ChartTableModel if no labelRegion was defined
+                label = model->data( dataDirection == Qt::Horizontal ? model->index(labelRowCol+1, 0) : model->index(0, labelRowCol+1) ).toString();
+            }
+            dataSet->setLabelDataCustom( label );
             dataSet->setLabelDataRegion( CellRegion() );
+        }
 
         // regions per data set: y data, custom data (e.g. bubble width)
         dataSet->setYDataRegion( dataRegions.takeFirst() );

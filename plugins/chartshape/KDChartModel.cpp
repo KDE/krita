@@ -408,8 +408,16 @@ QVariant KDChartModel::headerData( int section,
         DataSet *dataSet  = d->dataSets[ dataSetNumber ];
 
         switch ( role ) {
-        case Qt::DisplayRole:
-            return dataSet->labelData();
+        case Qt::DisplayRole: {
+            QString label = dataSet->labelData().toString();
+            if ( label.isEmpty() ) {
+                label = dataSet->labelDataCustom();
+                if ( label.isEmpty() ) {
+                    label = dataSet->defaultLabelData();
+                }
+            }
+            return label.isEmpty() ? QVariant() : label;
+        }
         case KDChart::DatasetBrushRole:
             return dataSet->brush();
         case KDChart::DatasetPenRole:

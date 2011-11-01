@@ -162,6 +162,8 @@ public:
     /// that never changes.
     const int num;
 
+    QString labelDataCustom;
+
     // The different CellRegions for a dataset
     // Note: These are all 1-dimensional, i.e. vectors.
     CellRegion labelDataRegion; // one cell that holds the label
@@ -963,12 +965,23 @@ QVariant DataSet::labelData() const
         for ( int i = 0; i < cellCount; i++ )
             label += d->data( d->labelDataRegion, i ).toString();
     }
-    if ( label.isEmpty() )
-        label = d->defaultLabel;
-
     return QVariant( label );
 }
 
+QString DataSet::defaultLabelData() const
+{
+    return d->defaultLabel;
+}
+
+QString DataSet::labelDataCustom() const
+{
+    return d->labelDataCustom;
+}
+
+void DataSet::setLabelDataCustom( const QString &label )
+{
+    d->labelDataCustom = label;
+}
 
 CellRegion DataSet::xDataRegion() const
 {

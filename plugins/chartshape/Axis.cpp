@@ -554,7 +554,7 @@ void Axis::Private::createAreaDiagram()
     else if ( plotAreaChartSubType == PercentChartSubtype )
     {
         kdAreaDiagram->setType( KDChart::LineDiagram::Percent );
-        kdAreaDiagram->setUnitSuffix("%", kdBarDiagram->orientation());
+        kdAreaDiagram->setUnitSuffix("%", Qt::Vertical);
     }
 
     if ( isVisible )

@@ -1515,7 +1515,7 @@ void DataSet::saveOdf( KoShapeSavingContext &context ) const
         bodyWriter.addAttribute( "chart:values-cell-range-address", values );
 
     // Save cell regions for labels if defined. If not defined then the internal
-    // table:table "local-table" (the data is stored in the ChartProxyModel) is used.
+    // table:table "local-table" (the data is stored in the ChartTableModel) is used.
     QString label = labelDataRegion().toString();
     if (!label.isEmpty())
         bodyWriter.addAttribute( "chart:label-cell-address", label );

@@ -965,6 +965,11 @@ QVariant DataSet::labelData() const
         for ( int i = 0; i < cellCount; i++ )
             label += d->data( d->labelDataRegion, i ).toString();
     }
+    if ( label.isEmpty() ) {
+        label = d->labelDataCustom;
+        if ( label.isEmpty() )
+            label = d->defaultLabel;
+    }
     return QVariant( label );
 }
 

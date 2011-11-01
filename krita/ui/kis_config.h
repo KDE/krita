@@ -87,6 +87,7 @@ public:
 
     QString monitorProfile() const;
     void setMonitorProfile(const QString & monitorProfile);
+    static const KoColorProfile* getScreenProfile(int screen = -1);
     const KoColorProfile *displayProfile(int screen = -1);
 
     QString workingColorSpace() const;

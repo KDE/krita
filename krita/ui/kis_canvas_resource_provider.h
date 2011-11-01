@@ -98,8 +98,6 @@ public:
 
     KisFilterConfiguration* currentGeneratorConfiguration() const;
 
-    static const KoColorProfile* getScreenProfile(int screen = -1);
-
     void setCurrentCompositeOp(const QString& compositeOp);
     QString currentCompositeOp() const;
 

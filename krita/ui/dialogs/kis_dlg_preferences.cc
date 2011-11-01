@@ -231,7 +231,8 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     m_page->cmbMonitorIntent->setCurrentIndex(cfg.renderIntent());
 
-    if (const KoColorProfile * profile = KisCanvasResourceProvider::getScreenProfile()) {
+    // XXX: this needs to be available per screen!
+    if (const KoColorProfile * profile = KisConfig::getScreenProfile()) {
         // We've got an X11 profile, don't allow to override
         m_page->cmbMonitorProfile->hide();
         m_page->lblMonitorProfile->setText(i18n("Monitor profile: ") + profile->name());

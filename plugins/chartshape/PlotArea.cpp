@@ -656,7 +656,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     // chart types like line charts, stock charts, etc.
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         styleStack.clear();
-        //context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
+        context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
 
         styleStack.setTypeProperties( "graphic" );
         styleStack.setTypeProperties( "chart" );

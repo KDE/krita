@@ -59,11 +59,12 @@ const QPair<QPointF, QPointF> StackedBarDiagram::calculateDataBoundaries() const
         {
             const CartesianDiagramDataCompressor::CachePosition position( row, col );
             const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
+            const double value = ISNAN( point.value ) ? 0.0 : point.value;
 
-            if( point.value > 0.0 )
-                stackedValues += point.value;
+            if( value > 0.0 )
+                stackedValues += value;
             else
-                negativeStackedValues += point.value;
+                negativeStackedValues += value;
 
             // this is always true yMin can be 0 in case all values
             // are the same
@@ -180,20 +181,22 @@ void StackedBarDiagram::paint(  PaintContext* ctx )
             {
                 const CartesianDiagramDataCompressor::CachePosition position( row, k );
                 const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
-                if( ( p.value >= 0.0 && point.value >= 0.0 ) || ( p.value < 0.0 && point.value < 0.0 ) )
+                if( !ISNAN( point.value ) && (( p.value >= 0.0 && point.value >= 0.0 ) || ( p.value < 0.0 && point.value < 0.0 )) )
                     stackedValues += point.value;
                 key = point.key;
             }
-            QPointF point = ctx->coordinatePlane()->translate( QPointF( key, stackedValues ) );
-            point.rx() += offset / 2;
-            const QPointF previousPoint = ctx->coordinatePlane()->translate( QPointF( key, stackedValues - value ) );
-            const double barHeight = previousPoint.y() - point.y();
+            if (!ISNAN( value )) {
+                QPointF point = ctx->coordinatePlane()->translate( QPointF( key, stackedValues ) );
+                point.rx() += offset / 2;
+                const QPointF previousPoint = ctx->coordinatePlane()->translate( QPointF( key, stackedValues - value ) );
+                const double barHeight = previousPoint.y() - point.y();
 
-            const QRectF rect( point, QSizeF( barWidth , barHeight ) );
-            appendDataValueTextInfoToList( diagram(), list, index, PositionPoints( rect ),
-                                              Position::NorthWest, Position::SouthEast,
-                                              value );
-            paintBars( ctx, index, rect, maxDepth );
+                const QRectF rect( point, QSizeF( barWidth , barHeight ) );
+                appendDataValueTextInfoToList( diagram(), list, index, PositionPoints( rect ),
+                                                Position::NorthWest, Position::SouthEast,
+                                                value );
+                paintBars( ctx, index, rect, maxDepth );
+            }
         }
     }
     paintDataValueTextsAndMarkers( diagram(), ctx, list, false );

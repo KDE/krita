@@ -134,7 +134,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
 
         image->undoAdapter()->beginMacro(i18n("Convert Layer Type"));
 
-        KisColorSpaceConvertVisitor visitor(image, cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
+        KisColorSpaceConvertVisitor visitor(image, layer->colorSpace(), cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
         layer->accept(visitor);
 
         image->undoAdapter()->endMacro();

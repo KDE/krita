@@ -30,8 +30,8 @@ class RgbCompositeOpClear : public KoCompositeOp
 
 public:
 
-    RgbCompositeOpClear(KoColorSpace * cs, const bool userVisible = true)
-            : KoCompositeOp(cs, COMPOSITE_CLEAR, i18n("Clear"), "", userVisible) {
+    RgbCompositeOpClear(KoColorSpace * cs)
+            : KoCompositeOp(cs, COMPOSITE_CLEAR, i18n("Clear"), "") {
     }
 
     using KoCompositeOp::composite;

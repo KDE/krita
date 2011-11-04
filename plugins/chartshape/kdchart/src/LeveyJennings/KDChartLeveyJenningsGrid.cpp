@@ -29,6 +29,7 @@
 #include <QPainter>
 
 #include <KDABLibFakes>
+#include <limits>
 
 
 using namespace KDChart;
@@ -158,7 +159,7 @@ static void calculateSteps(
 {
     //qDebug("-----------------------------------\nstart: %f   end: %f   power-of-ten: %i", start_, end_, power);
 
-    qreal distance;
+    qreal distance=std::numeric_limits<qreal>::max();
     steps = 0.0;
 
     const int lastIdx = list.count()-1;

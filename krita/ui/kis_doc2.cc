@@ -94,7 +94,7 @@
 #include "kra/kis_kra_saver.h"
 #include "kis_statusbar.h"
 #include "widgets/kis_progress_widget.h"
-
+#include "kis_canvas_resource_provider.h"
 
 static const char *CURRENT_DTD_VERSION = "2.0";
 
@@ -462,8 +462,7 @@ void KisDoc2::showErrorAndDie()
 void KisDoc2::paintContent(QPainter& painter, const QRect& rc)
 {
     KisConfig cfg;
-    QString monitorProfileName = cfg.monitorProfile();
-    const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
+    const KoColorProfile *profile = cfg.displayProfile();
     QRect rect = rc & m_d->image->bounds();
     m_d->image->renderToPainter(rect.left(), rect.left(), rect.top(), rect.height(), rect.width(), rect.height(), painter, profile);
 }

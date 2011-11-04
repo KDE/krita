@@ -211,12 +211,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     setLayout(d->mainLayout);
 
-    // Use 40_Colors.gpl for testing
-    // TODO don't depend on Krita data in libs
-    QString defaultPalette("krita/palettes/40_Colors.gpl");
-    QString dir = KGlobal::dirs()->findResourceDir("data", defaultPalette);
-    KoColorSet *colorSet = new KoColorSet(dir.append(defaultPalette));
-    colorSet->load();
+    KoColorSet *colorSet = new KoColorSet();
     setColorSet(colorSet);
 
 /*    connect(d->slider, SIGNAL(sliderReleased()), SLOT(sliderReleased()));
@@ -227,7 +222,11 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
 KoColorSetWidget::~KoColorSetWidget()
 {
-    delete d->colorSet;
+    KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
+    QList<KoColorSet*> palettes = srv->resources();
+    if (!palettes.contains(d->colorSet)) {
+        delete d->colorSet;
+    }
     delete d;
 }
 
@@ -259,6 +258,7 @@ void KoColorSetWidget::setOppositeColor(const KoColor &color)
 
 void KoColorSetWidget::setColorSet(KoColorSet *colorSet)
 {
+    delete d->colorSet;
     d->colorSet = colorSet;
     d->filter(d->filterCheckBox->checkState());
 }

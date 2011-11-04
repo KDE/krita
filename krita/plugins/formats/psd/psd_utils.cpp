@@ -157,7 +157,7 @@ bool psdread_pascalstring(QIODevice* io, QString& s)
     s.append(chars);
 
     // read padding byte
-    if ((length & 0x01) != 0) {
+    if (((length +1) & 0x01) != 0) {
         if (!psdread(io, &length)) return false;
         return (length == 0);
     }

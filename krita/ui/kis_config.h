@@ -28,6 +28,8 @@
 #include "kis_global.h"
 #include "krita_export.h"
 
+class KoColorProfile;
+
 class KRITAUI_EXPORT KisConfig
 {
 public:
@@ -85,6 +87,8 @@ public:
 
     QString monitorProfile() const;
     void setMonitorProfile(const QString & monitorProfile);
+    static const KoColorProfile* getScreenProfile(int screen = -1);
+    const KoColorProfile *displayProfile(int screen = -1);
 
     QString workingColorSpace() const;
     void setWorkingColorSpace(const QString & workingColorSpace);

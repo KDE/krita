@@ -60,4 +60,4 @@ Comment[zh_TW]=延伸管理員
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaextensionsmanager
-X-Krita-Version=4
+X-Krita-Version=5

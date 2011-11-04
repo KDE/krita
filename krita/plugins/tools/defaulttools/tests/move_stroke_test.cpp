@@ -31,7 +31,7 @@ class MoveStrokeTester : public utils::StrokeTester
 {
 public:
     MoveStrokeTester()
-        : StrokeTester("move", QSize(512, 512), "")
+        : StrokeTester("move", QSize(512, 512), 0)
     {
     }
 
@@ -40,7 +40,7 @@ protected:
         Q_UNUSED(image);
 
         QImage src(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
-        activeNode->original()->convertFromQImage(src, "");
+        activeNode->original()->convertFromQImage(src, 0);
     }
 
     KisStrokeStrategy* createStroke(bool indirectPainting,

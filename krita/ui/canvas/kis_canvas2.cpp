@@ -319,8 +319,8 @@ void KisCanvas2::createOpenGLCanvas()
 
 void KisCanvas2::createCanvas(bool useOpenGL)
 {
-    KisConfig cfg;
-    slotSetDisplayProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));
+    const KoColorProfile *profile = m_d->view->resourceProvider()->currentDisplayProfile();
+    slotSetDisplayProfile(profile);
 
     if (useOpenGL) {
 #ifdef HAVE_OPENGL
@@ -346,7 +346,6 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 void KisCanvas2::connectCurrentImage()
 {
     m_d->coordinatesConverter->setImage(m_d->view->image());
-
 
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
@@ -400,6 +399,11 @@ void KisCanvas2::disconnectCurrentImage()
 
 void KisCanvas2::resetCanvas(bool useOpenGL)
 {
+    // we cannot reset the canvas before it's created, but this method might be called,
+    // for instance when setting the monitor profile.
+    if (!m_d->canvasWidget) {
+        return;
+    }
 #ifdef HAVE_OPENGL
     KisConfig cfg;
 
@@ -593,6 +597,7 @@ void KisCanvas2::slotConfigChanged()
 void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * profile)
 {
     m_d->monitorProfile = const_cast<KoColorProfile*>(profile);
+    slotConfigChanged();
 }
 
 void KisCanvas2::addDecoration(KisCanvasDecoration* deco)

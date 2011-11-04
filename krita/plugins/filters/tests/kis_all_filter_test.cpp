@@ -67,7 +67,7 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
     QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisPaintDeviceSP dstdev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
 
     // Get the predefined configuration from a file
     KisFilterConfiguration * kfc = f->defaultConfiguration(dev);
@@ -105,7 +105,7 @@ bool testFilterNoTransaction(KisFilterSP f)
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
     QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
 
     // Get the predefined configuration from a file
     KisFilterConfiguration * kfc = f->defaultConfiguration(dev);
@@ -148,7 +148,7 @@ bool testFilter(KisFilterSP f)
         return false;
     }
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
     KisTransaction * cmd = new KisTransaction(f->name(), dev);
 
     // Get the predefined configuration from a file
@@ -191,7 +191,7 @@ bool testFilterWithSelections(KisFilterSP f)
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
     QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
 
     // Get the predefined configuration from a file
     KisFilterConfiguration * kfc = f->defaultConfiguration(dev);

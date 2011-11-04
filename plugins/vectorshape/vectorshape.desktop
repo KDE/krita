@@ -26,5 +26,5 @@ Name[zh_TW]=靜態向量元件
 X-KDE-ServiceTypes=Calligra/Flake
 Type=Service
 X-KDE-Library=vectorshape
-X-Flake-MinVersion=0
-X-Flake-PluginVersion=1
+X-Flake-MinVersion=4
+X-Flake-PluginVersion=4

@@ -43,4 +43,4 @@ Name[zh_TW]=曲線工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolcurves
-X-Krita-Version=4
+X-Krita-Version=5

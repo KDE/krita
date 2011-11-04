@@ -87,7 +87,7 @@ public:
 
     KoAbstractGradient *currentGradient() const;
 
-    void resetDisplayProfile();
+    void resetDisplayProfile(int screen = -1);
     const KoColorProfile * currentDisplayProfile() const;
 
     KisImageWSP currentImage() const;
@@ -97,8 +97,6 @@ public:
     KisPaintOpPresetSP currentPreset() const;
 
     KisFilterConfiguration* currentGeneratorConfiguration() const;
-
-    static const KoColorProfile* getScreenProfile(int screen = -1);
 
     void setCurrentCompositeOp(const QString& compositeOp);
     QString currentCompositeOp() const;

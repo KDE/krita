@@ -50,8 +50,8 @@ KisImageSP KisUpdateSchedulerTest::buildTestingImage()
     KisPaintLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8 / 3);
     KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
 
-    paintLayer1->paintDevice()->convertFromQImage(sourceImage1, "", 0, 0);
-    paintLayer2->paintDevice()->convertFromQImage(sourceImage2, "", 0, 0);
+    paintLayer1->paintDevice()->convertFromQImage(sourceImage1, 0, 0, 0);
+    paintLayer2->paintDevice()->convertFromQImage(sourceImage2, 0, 0, 0);
 
     image->lock();
     image->addNode(paintLayer1);

@@ -409,9 +409,9 @@ public:
 
     /**
      * Fill this paint device with the data from image; starting at (offsetX, offsetY)
-     * @param srcProfileName name of the RGB profile to interpret the image as. "" is interpreted as sRGB
+     * @param srcProfileName name of the RGB profile to interpret the image as. 0 is interpreted as sRGB
      */
-    virtual void convertFromQImage(const QImage& image, const QString &srcProfileName, qint32 offsetX = 0, qint32 offsetY = 0);
+    virtual void convertFromQImage(const QImage& image, const KoColorProfile *profile, qint32 offsetX = 0, qint32 offsetY = 0);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device.
@@ -424,7 +424,7 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile, qint32 x, qint32 y, qint32 w, qint32 h) const;
+    virtual QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h) const;
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The

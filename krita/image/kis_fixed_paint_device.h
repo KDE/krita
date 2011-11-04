@@ -112,7 +112,7 @@ public:
     /**
      * Fill this paint device with the data from image
      *
-     * @param srcProfileName name of the RGB profile to interpret the image as. "" is interpreted as sRGB
+     * @param srcProfileName name of the RGB profile to interpret the image as. 0 is interpreted as sRGB
      */
     virtual void convertFromQImage(const QImage& image, const QString &srcProfileName);
 

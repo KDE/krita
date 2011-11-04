@@ -22,4 +22,4 @@ Name[zh_TW]=水樣混合筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritawaterymixpaintop
-X-Krita-Version=4
+X-Krita-Version=5

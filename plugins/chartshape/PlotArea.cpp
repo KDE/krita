@@ -656,7 +656,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     // chart types like line charts, stock charts, etc.
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         styleStack.clear();
-        //context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
+        context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
 
         styleStack.setTypeProperties( "graphic" );
         styleStack.setTypeProperties( "chart" );
@@ -703,7 +703,6 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     // actual data is not stored here.
     //
     // FIXME: Isn't the proxy model a strange place to store this data?
-    qDebug() << d->chartType;
     proxyModel()->loadOdf( plotAreaElement, context, d->chartType == StockChartType ? 3 : 1, d->chartType );
 
     // Now load the surfaces (wall and possibly floor)

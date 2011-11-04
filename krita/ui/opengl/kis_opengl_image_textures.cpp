@@ -220,7 +220,7 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 
     KisTextureTileUpdateInfo tileInfo;
     foreach(tileInfo, glInfo->tileList) {
-        const KoColorSpace *dstCS;
+        const KoColorSpace *dstCS = 0;
 
         switch(m_texturesInfo.type) {
         case GL_UNSIGNED_BYTE:

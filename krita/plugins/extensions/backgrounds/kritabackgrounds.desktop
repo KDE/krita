@@ -30,4 +30,4 @@ Name[zh_TW]=背景圖片樣式選擇器
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritabackgrounds
-X-Krita-Version=4
+X-Krita-Version=5

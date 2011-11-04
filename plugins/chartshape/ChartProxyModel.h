@@ -55,7 +55,7 @@ class CHARTSHAPELIB_EXPORT ChartProxyModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    ChartProxyModel( TableSource *source );
+    ChartProxyModel( ChartShape *shape, TableSource *source );
     ~ChartProxyModel();
 
     /**

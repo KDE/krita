@@ -126,6 +126,7 @@ public:
     KisSelectionSP globalSelection;
     KisSelectionSP deselectedGlobalSelection;
 
+    QAtomicInt disableUIUpdateSignals;
     KisImageSignalRouter *signalRouter;
     KisUpdateScheduler *scheduler;
 
@@ -423,7 +424,11 @@ void KisImage::resizeImageImpl(const QRect& newRect, bool cropLayers)
     KisImageSignalVector emitSignals;
     emitSignals << SizeChangedSignal << ModifiedSignal;
 
-    KisProcessingApplicator applicator(this, m_d->rootLayer, true, emitSignals, actionName);
+    KisProcessingApplicator applicator(this, m_d->rootLayer,
+                                       KisProcessingApplicator::RECURSIVE |
+                                       KisProcessingApplicator::NO_UI_UPDATES,
+                                       emitSignals, actionName);
+
     if(cropLayers || !newRect.topLeft().isNull()) {
         KisProcessingVisitorSP visitor =
             new KisCropProcessingVisitor(newRect, cropLayers, true);
@@ -451,7 +456,10 @@ void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
 
-    KisProcessingApplicator applicator(this, node, false, emitSignals, actionName);
+    KisProcessingApplicator applicator(this, node,
+                                       KisProcessingApplicator::NONE,
+                                       emitSignals, actionName);
+
     KisProcessingVisitorSP visitor =
         new KisCropProcessingVisitor(newRect, true, false);
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
@@ -481,7 +489,14 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
 
     QString actionName = sizeChanged ? "Scale Image" : "Change Image Resolution";
 
-    KisProcessingApplicator applicator(this, m_d->rootLayer, true, emitSignals, actionName);
+    KisProcessingApplicator::ProcessingFlags signalFlags =
+        (resolutionChanged || sizeChanged) ?
+        KisProcessingApplicator::NO_UI_UPDATES :
+        KisProcessingApplicator::NONE;
+
+    KisProcessingApplicator applicator(this, m_d->rootLayer,
+                                       KisProcessingApplicator::RECURSIVE | signalFlags,
+                                       emitSignals, actionName);
 
     qreal sx = qreal(size.width()) / this->size().width();
     qreal sy = qreal(size.height()) / this->size().height();
@@ -589,11 +604,13 @@ void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColor
 {
     if (*m_d->colorSpace == *dstColorSpace) return;
 
+    const KoColorSpace *srcColorSpace = m_d->colorSpace;
+
     undoAdapter()->beginMacro(i18n("Convert Image Color Space"));
     undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
     undoAdapter()->addCommand(new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstColorSpace));
 
-    KisColorSpaceConvertVisitor visitor(this, dstColorSpace, renderingIntent);
+    KisColorSpaceConvertVisitor visitor(this, srcColorSpace, dstColorSpace, renderingIntent);
     m_d->rootLayer->accept(visitor);
 
     undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
@@ -1272,9 +1289,21 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
     }
 }
 
+void KisImage::disableUIUpdates()
+{
+    m_d->disableUIUpdateSignals.ref();
+}
+
+void KisImage::enableUIUpdates()
+{
+    m_d->disableUIUpdateSignals.deref();
+}
+
 void KisImage::notifyProjectionUpdated(const QRect &rc)
 {
-    emit sigImageUpdated(rc);
+    if(!m_d->disableUIUpdateSignals) {
+        emit sigImageUpdated(rc);
+    }
 }
 
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)

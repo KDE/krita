@@ -268,6 +268,17 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                         fr.format = format;
                         selections.prepend(fr);
                     }
+                    if (format.isAnchor()) {
+                        if (!format.hasProperty(KoCharacterStyle::UnderlineStyle))
+                            format.setFontUnderline(true);
+                        if (!format.hasProperty(QTextFormat::ForegroundBrush))
+                            format.setForeground(Qt::blue);
+                        QTextLayout::FormatRange fr;
+                        fr.start = currentFragment.position() - block.position();
+                        fr.length = currentFragment.length();
+                        fr.format = format;
+                        selections.append(fr);
+                    }
                 }
             }
 
@@ -275,7 +286,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             //and adjust to make sure we don't clip edges of glyphs. The clipping is
             //imprtatnt for paragraph splt acrosse two pages.
             painter->setClipRect(br.adjusted(-2,-2,2,2), Qt::IntersectClip);
-
+            
             if (context.showSpellChecking) {
                 layout->draw(painter, QPointF(0, 0), selections, br);
             } else {

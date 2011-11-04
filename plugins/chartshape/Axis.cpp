@@ -554,7 +554,7 @@ void Axis::Private::createAreaDiagram()
     else if ( plotAreaChartSubType == PercentChartSubtype )
     {
         kdAreaDiagram->setType( KDChart::LineDiagram::Percent );
-        kdAreaDiagram->setUnitSuffix("%", kdBarDiagram->orientation());
+        kdAreaDiagram->setUnitSuffix("%", Qt::Vertical);
     }
 
     if ( isVisible )
@@ -1572,7 +1572,7 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         return;
     }
 
-    qDebug() << "changed ChartType";
+    //qDebug() << "changed ChartType";
 
     ChartType oldChartType = d->plotAreaChartType;
 

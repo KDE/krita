@@ -581,6 +581,9 @@ public slots:
     void blockUpdates();
     void unblockUpdates();
 
+    void disableUIUpdates();
+    void enableUIUpdates();
+
     void refreshGraphAsync(KisNodeSP root = 0);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect);

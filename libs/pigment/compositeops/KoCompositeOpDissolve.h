@@ -27,10 +27,10 @@ template<class Traits>
 class KoCompositeOpDissolve: public KoCompositeOp
 {
     typedef typename Traits::channels_type channels_type;
-    
+
     static const qint32 channels_nb = Traits::channels_nb;
     static const qint32 alpha_pos   = Traits::alpha_pos;
-    
+
     inline static quint8 getRandomValue(quint32 i)
     {
         static const quint8 randomValues[256] =
@@ -52,59 +52,59 @@ class KoCompositeOpDissolve: public KoCompositeOp
             0xA3, 0x73, 0x9C, 0x16, 0xDC, 0x42, 0xEA, 0x74, 0x92, 0xE6, 0xCB, 0x53, 0x08, 0xEE, 0x59, 0x02,
             0xF3, 0x29, 0xFE, 0xA4, 0x1B, 0xD6, 0x87, 0xB5, 0xCE, 0x1D, 0x68, 0x88, 0x31, 0x0B, 0x2D, 0xD0
         };
-        
+
         return randomValues[i];
     }
-    
+
 public:
-    KoCompositeOpDissolve(const KoColorSpace* cs, const QString& category, bool userVisible=true)
-        : KoCompositeOp(cs, COMPOSITE_DISSOLVE, i18n("Dissolve"), category, userVisible) { }
-    
+    KoCompositeOpDissolve(const KoColorSpace* cs, const QString& category)
+        : KoCompositeOp(cs, COMPOSITE_DISSOLVE, i18n("Dissolve"), category) { }
+
     using KoCompositeOp::composite;
-    
+
     virtual void composite(quint8*       dstRowStart , qint32 dstRowStride ,
                            const quint8* srcRowStart , qint32 srcRowStride ,
                            const quint8* maskRowStart, qint32 maskRowStride,
                            qint32 rows, qint32 cols, quint8 U8_opacity, const QBitArray& channelFlags) const {
-        
+
         const QBitArray& flags       = channelFlags.isEmpty() ? QBitArray(channels_nb,true) : channelFlags;
         bool             alphaLocked = (alpha_pos != -1) && !flags.testBit(alpha_pos);
-        
+
         using namespace Arithmetic;
-        
+
 //         quint32       ctr       = quint32(reinterpret_cast<quint64>(dstRowStart) % 256);
         qint32        srcInc    = (srcRowStride == 0) ? 0 : channels_nb;
         bool          useMask   = maskRowStart != 0;
         channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
         channels_type opacity   = KoColorSpaceMaths<quint8,channels_type>::scaleToA(U8_opacity);
-        
+
         for(; rows>0; --rows) {
             const channels_type* src  = reinterpret_cast<const channels_type*>(srcRowStart);
             channels_type*       dst  = reinterpret_cast<channels_type*>(dstRowStart);
             const quint8*        mask = maskRowStart;
-            
+
             for(qint32 c=cols; c>0; --c) {
                 channels_type srcAlpha = (alpha_pos == -1) ? unitValue : src[alpha_pos];
                 channels_type dstAlpha = (alpha_pos == -1) ? unitValue : dst[alpha_pos];
                 channels_type blend    = useMask ? mul(opacity, scale<channels_type>(*mask), srcAlpha) : mul(opacity, srcAlpha);
-                
+
 //                 if(getRandomValue(ctr) <= scale<quint8>(blend) && blend != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
                 if((qrand() % 256) <= scale<quint8>(blend) && blend != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
                     for(qint32 i=0; i <channels_nb; i++) {
                         if(i != alpha_pos && flags.testBit(i))
                             dst[i] = src[i];
                     }
-                    
+
                     if(alpha_pos != -1)
                         dst[alpha_pos] = alphaLocked ? dstAlpha : unitValue;
                 }
-                
+
                 src += srcInc;
                 dst += channels_nb;
 //                 ctr  = (ctr + 1) % 256;
                 ++mask;
             }
-            
+
             srcRowStart  += srcRowStride;
             dstRowStart  += dstRowStride;
             maskRowStart += maskRowStride;

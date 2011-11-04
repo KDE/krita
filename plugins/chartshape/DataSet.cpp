@@ -162,6 +162,8 @@ public:
     /// that never changes.
     const int num;
 
+    QString labelDataCustom;
+
     // The different CellRegions for a dataset
     // Note: These are all 1-dimensional, i.e. vectors.
     CellRegion labelDataRegion; // one cell that holds the label
@@ -963,12 +965,28 @@ QVariant DataSet::labelData() const
         for ( int i = 0; i < cellCount; i++ )
             label += d->data( d->labelDataRegion, i ).toString();
     }
-    if ( label.isEmpty() )
-        label = d->defaultLabel;
-
+    if ( label.isEmpty() ) {
+        label = d->labelDataCustom;
+        if ( label.isEmpty() )
+            label = d->defaultLabel;
+    }
     return QVariant( label );
 }
 
+QString DataSet::defaultLabelData() const
+{
+    return d->defaultLabel;
+}
+
+QString DataSet::labelDataCustom() const
+{
+    return d->labelDataCustom;
+}
+
+void DataSet::setLabelDataCustom( const QString &label )
+{
+    d->labelDataCustom = label;
+}
 
 CellRegion DataSet::xDataRegion() const
 {
@@ -1444,7 +1462,6 @@ bool DataSet::loadSeriesIntoDataset( const KoXmlElement &n,
                 {
                     setYDataRegion( CellRegion( region ) );
                     ++d->loadedDimensions;
-                    qDebug() << "YDATA SET";
                 }
                 else if ( d->loadedDimensions == 1 )
                 {
@@ -1452,16 +1469,13 @@ bool DataSet::loadSeriesIntoDataset( const KoXmlElement &n,
                     // to ensure the diagram is displayed, even if not as expected from o office or ms office
                     setXDataRegion( CellRegion( region ) );
                     ++d->loadedDimensions;
-                    qDebug() << "XDATA SET";
                 }
                 else if ( d->loadedDimensions == 2 )
                 {
                     // as long as there is not default table for missing data series the same region is used twice
                     // to ensure the diagram is displayed, even if not as expected from o office or ms office
                     setCustomDataRegion( CellRegion( region ) );
-                    qDebug() << region.toString();
                     ++d->loadedDimensions;
-                    qDebug() << "CUSTOMDATA SET";
                 }
     }
     if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) && !ignoreCellRanges ) {
@@ -1496,9 +1510,16 @@ void DataSet::saveOdf( KoShapeSavingContext &context ) const
     const QString styleName = mainStyles.insert( style, "ch" );
     bodyWriter.addAttribute( "chart:style-name", styleName );
 
-    // Save cell regions
-    bodyWriter.addAttribute( "chart:values-cell-range-address", yDataRegion().toString() );
-    bodyWriter.addAttribute( "chart:label-cell-address", labelDataRegion().toString() );
+    // Save cell regions for values if defined.
+    QString values = yDataRegion().toString();
+    if (!values.isEmpty())
+        bodyWriter.addAttribute( "chart:values-cell-range-address", values );
+
+    // Save cell regions for labels if defined. If not defined then the internal
+    // table:table "local-table" (the data is stored in the ChartTableModel) is used.
+    QString label = labelDataRegion().toString();
+    if (!label.isEmpty())
+        bodyWriter.addAttribute( "chart:label-cell-address", label );
 
     bodyWriter.endElement(); // chart:series
 }

@@ -315,7 +315,7 @@ bool SvmParser::parse(const QByteArray &data)
                 quint16  startIndex;
                 quint16  len;
                 quint32  dxArrayLen;
-                qint32  *dxArray;
+                qint32  *dxArray = 0;
 
                 stream >> startPoint;
                 parseString(stream, string);

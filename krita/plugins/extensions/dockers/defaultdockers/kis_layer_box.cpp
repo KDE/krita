@@ -332,7 +332,7 @@ void KisLayerBox::updateUI()
     m_newTransparencyMaskAction->setEnabled(active);
     m_newEffectMaskAction->setEnabled(active);
     m_newSelectionMaskAction->setEnabled(active);
-    m_newCloneLayerAction->setEnabled(active && !active->inherits("KisGroupLayer"));
+    m_newCloneLayerAction->setEnabled(active);
 
 }
 

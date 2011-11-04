@@ -141,14 +141,14 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
                 i18n("Page %1", *it + 1),
                 quint8_MAX);
 
-        KisTransaction("", layer->paintDevice());
+        KisTransaction(0, layer->paintDevice());
 
         Poppler::Page* page = pdoc->page(*it);
         for (int x = 0; x < width; x += 1000) {
             int currentWidth = (x + 1000 > width) ? (width - x) : 1000;
             for (int y = 0; y < height; y += 1000) {
                 int currentHeight = (y + 1000 > height) ? (height - x) : 1000;
-                layer->paintDevice()->convertFromQImage(page->renderToImage(wdg->intHorizontal->value(), wdg->intVertical->value(), x, y, currentWidth, currentHeight), "", x, y);
+                layer->paintDevice()->convertFromQImage(page->renderToImage(wdg->intHorizontal->value(), wdg->intVertical->value(), x, y, currentWidth, currentHeight), 0, x, y);
             }
         }
         delete page;

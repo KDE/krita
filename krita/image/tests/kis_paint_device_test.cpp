@@ -202,7 +202,7 @@ void KisPaintDeviceTest::testRoundtripReadWrite()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
     quint8* bytes = cs->allocPixelBuffer(image.width() * image.height());
     memset(bytes, 0, image.width() * image.height() * dev->pixelSize());
     dev->readBytes(bytes, image.rect());
@@ -244,7 +244,7 @@ void KisPaintDeviceTest::testColorSpaceConversion()
     const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->rgb8();
     const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->lab16();
     KisPaintDeviceSP dev = new KisPaintDevice(srcCs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
     dev->move(10, 10);   // Unalign with tile boundaries
     KUndo2Command* cmd = dev->convertTo(dstCs);
 
@@ -261,7 +261,7 @@ void KisPaintDeviceTest::testRoundtripConversion()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
     QImage result = dev->convertToQImage(0, 0, 0, 640, 441);
 
     QPoint errpoint;
@@ -279,7 +279,7 @@ void KisPaintDeviceTest::testFastBitBlt()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dstDev = new KisPaintDevice(cs);
     KisPaintDeviceSP srcDev = new KisPaintDevice(cs);
-    srcDev->convertFromQImage(image, "");
+    srcDev->convertFromQImage(image, 0);
 
     QRect cloneRect(100,100,200,200);
     QPoint errpoint;
@@ -320,7 +320,7 @@ void KisPaintDeviceTest::testMakeClone()
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP srcDev = new KisPaintDevice(cs);
-    srcDev->convertFromQImage(image, "");
+    srcDev->convertFromQImage(image, 0);
     srcDev->move(10,10);
 
     const KoColorSpace * weirdCS = KoColorSpaceRegistry::instance()->lab16();
@@ -354,7 +354,7 @@ void KisPaintDeviceTest::testThumbnail()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
     {
         KisPaintDeviceSP thumb = dev->createThumbnailDevice(50, 50);
         QRect rc = thumb->exactBounds();
@@ -508,7 +508,7 @@ void KisPaintDeviceTest::testBltPerformance()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP fdev = new KisPaintDevice(cs);
-    fdev->convertFromQImage(image, "");
+    fdev->convertFromQImage(image, 0);
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());
@@ -548,7 +548,7 @@ void KisPaintDeviceTest::testDeviceDuplication()
     referenceImage = device->convertToQImage(0);
 
 
-    KisTransaction transaction1("", device);
+    KisTransaction transaction1(0, device);
 //    qDebug()<<"CLEARING";
     device->clear(clearRect);
 
@@ -559,7 +559,7 @@ void KisPaintDeviceTest::testDeviceDuplication()
 
     KisPaintDeviceSP clone =  new KisPaintDevice(*device);
 
-    KisTransaction transaction("", clone);
+    KisTransaction transaction(0, clone);
 //    qDebug()<<"CLEARING";
     clone->clear(clearRect);
 
@@ -631,7 +631,7 @@ void KisPaintDeviceTest::testOpacity()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP fdev = new KisPaintDevice(cs);
-    fdev->convertFromQImage(image, "");
+    fdev->convertFromQImage(image, 0);
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());

@@ -374,7 +374,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     setShapeId( ChartShapeId );
 
     // Instantiated all children first
-    d->proxyModel = new ChartProxyModel( &d->tableSource );
+    d->proxyModel = new ChartProxyModel( this, &d->tableSource );
 
     d->plotArea = new PlotArea( this );
     d->document = new ChartDocument( this );

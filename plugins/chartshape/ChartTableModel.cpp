@@ -96,17 +96,12 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
     setRowCount( 0 );
     setColumnCount( 0 );
 
-    ///const QDomNode &node = tableElement.asQDomNode( QDomDocument() );
-
+    //const QDomNode &node = tableElement.asQDomNode( QDomDocument() );
     //QTextStream stream(stdout);
     //stream << node;
 
-    // FIXME: Rewrite this without the for loop.  I think there can
-    //        only be one table-rows and one table-header-rows element
-    //        in each table.
     int           row = 0;
     KoXmlElement  n;
-    int           found = false;
     forEachElement ( n, tableElement ) {
         if ( n.namespaceURI() != KoXmlNS::table )
             continue;
@@ -114,8 +109,6 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
         if ( n.localName() == "table-rows"
              || n.localName() == "table-header-rows" )
         {
-            found = true;
-
             KoXmlElement  _n;
             forEachElement ( _n, n ) {
 
@@ -137,7 +130,6 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
                     if ( __n.namespaceURI() == KoXmlNS::table
                          && __n.localName() == "table-cell" )
                     {
-//                         continue;
 
                     // If this row is wider than any previous one,
                     // then add another column.
@@ -180,7 +172,7 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
         }
     }
 
-    return found;
+    return true;
 }
 
 bool ChartTableModel::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const

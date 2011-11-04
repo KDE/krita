@@ -308,6 +308,10 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
             if (isOutline != bool(b.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
                 continue; // one of them is an outline while the other is not
 
+            if (b.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
+                continue; //unnumbered listItems are irrelevant
+            }
+
             if (b.textList() == m_textList) {
                 if (b.textList()->format().intProperty(KoListStyle::Level) == level)
                     if (KoTextBlockData *otherData = dynamic_cast<KoTextBlockData *>(b.userData())) {

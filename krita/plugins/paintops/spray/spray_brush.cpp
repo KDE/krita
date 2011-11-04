@@ -293,7 +293,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                         m.scale(particleScale,particleScale);
                     }
                     m_transformed = m_brushQImage.transformed(m, Qt::SmoothTransformation);
-                    m_imageDevice->convertFromQImage(m_transformed, "");
+                    m_imageDevice->convertFromQImage(m_transformed, 0);
                     KisRandomAccessor ac = m_imageDevice->createRandomAccessor(0,0);
                     QRect rc = m_transformed.rect();
 

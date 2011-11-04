@@ -146,13 +146,14 @@ void KisPrescaledProjection::initBackend()
 
 void KisPrescaledProjection::updateSettings()
 {
-    KisConfig cfg;
+
 
     if (m_d->projectionBackend == 0) {
         initBackend();
     }
 
-    setMonitorProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));
+    KisConfig cfg;
+    setMonitorProfile(cfg.displayProfile());
 
     KisImageConfig imageConfig;
     m_d->updatePatchSize.setWidth(imageConfig.updatePatchWidth());

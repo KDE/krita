@@ -432,8 +432,15 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         QTextTable *table = qobject_cast<QTextTable*>(cursor->it.currentFrame());
         QTextFrame *subFrame = cursor->it.currentFrame();
         if (table) {
-            if (acceptsPageBreak() && !virginPage()
-                   && (table->frameFormat().intProperty(KoTableStyle::BreakBefore) & KoText::PageBreak)) {
+            bool masterPageNameChanged = false;
+            QString masterPageName = table->frameFormat().property(KoTableStyle::MasterPageName).toString();
+            if (!masterPageName.isEmpty() && cursor->masterPageName != masterPageName) {
+                masterPageNameChanged = true;
+                cursor->masterPageName = masterPageName;
+            }
+
+            if (!virginPage() && acceptsPageBreak() && (masterPageNameChanged ||
+                   ((table->frameFormat().intProperty(KoTableStyle::BreakBefore) & KoText::PageBreak)))) {
                 m_endOfArea = new FrameIterator(cursor);
                 setBottom(m_y + m_footNotesHeight);
                 if (!m_blockRects.isEmpty()) {
@@ -553,10 +560,9 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                     cursor->masterPageName = masterPageName;
                 }
 
-                if (!virginPage() &&
+                if (!virginPage() && acceptsPageBreak() &&
                     (masterPageNameChanged ||
-                        (acceptsPageBreak() &&
-                        (block.blockFormat().intProperty(KoParagraphStyle::BreakBefore) & KoText::PageBreak)))) {
+                        (block.blockFormat().intProperty(KoParagraphStyle::BreakBefore) & KoText::PageBreak))) {
                     m_endOfArea = new FrameIterator(cursor);
                     setBottom(m_y + m_footNotesHeight);
                     if (!m_blockRects.isEmpty()) {
@@ -961,7 +967,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         qTabs.append(tab);
     }
 
-    qreal presentationListTabValue; // for use in presentationListTabWorkaround
+    qreal presentationListTabValue(0.0); // for use in presentationListTabWorkaround
 
     // For some lists we need to add a special list tab according to odf 1.2 19.830 
     if (textList && listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
@@ -1078,13 +1084,18 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         m_indent = 0;
     }
 
+    if (block.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
+        // Unnumbered list items act like "following lines" in a numbered block
+        m_indent = 0;
+    }
+
     // ==============
     // List label/counter positioning
     // ==============
-    if (textList && block.layout()->lineCount() == 1) {
+    if (textList && block.layout()->lineCount() == 1
+        && ! block.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
         // If first line in a list then set the counterposition. Following lines in the same
-        // list-item have nothing to do with the counter. Do this after borders so we can
-        // account for them.
+        // list-item have nothing to do with the counter.
         if (listFormat.boolProperty(KoListStyle::AlignmentMode) == false) {
             if (m_isRtl) {
                 m_width -= blockData->counterWidth() + blockData->counterSpacing() + listFormat.doubleProperty(KoListStyle::Indent) + labelBoxWidth;

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2009-2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 
 #include <flake/kis_node_shape.h>
 
+class KisDoubleSliderSpinBox;
 class QCheckBox;
 class QComboBox;
 class QGridLayout;
@@ -81,7 +82,6 @@ public:
     KisToolDyna(KoCanvasBase * canvas);
     virtual ~KisToolDyna();
 
-    // TODO vymyslet GUI
     QWidget * createOptionWidget();
 
     virtual void mousePressEvent(KoPointerEvent *e);
@@ -95,8 +95,7 @@ private slots:
     void slotSetDynaWidth(double width);
     void slotSetMass(double mass);
     void slotSetDrag(double drag);
-    void slotSetXangle(double angle);
-    void slotSetYangle(double angle);
+    void slotSetAngle(qreal angle);
     void slotSetWidthRange(double widthRange);
     void slotSetFixedAngle(bool fixedAngle);
 
@@ -108,11 +107,10 @@ private:
 
     // dyna gui
     QCheckBox * m_chkFixedAngle;
-    QDoubleSpinBox * m_initWidthSPBox;
     QDoubleSpinBox * m_massSPBox;
     QDoubleSpinBox * m_dragSPBox;
-    QDoubleSpinBox * m_xAngleSPBox;
-    QDoubleSpinBox * m_yAngleSPBox;
+    KisDoubleSliderSpinBox * m_angleDSSBox;
+    QDoubleSpinBox * m_initWidthSPBox;
     QDoubleSpinBox * m_widthRangeSPBox;
 
     // dyna algorithm
@@ -124,7 +122,7 @@ private:
 
     qreal m_surfaceWidth;
     qreal m_surfaceHeight;
-    
+
     // settings variables
     qreal m_width;
     qreal m_curmass;

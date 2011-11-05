@@ -236,7 +236,7 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
             name = "T."; //TODO is this correct?
 
         KoGenStyle style(KoGenStyle::TableCellStyle);
-        tableCellStyle->saveOdf(style);
+        tableCellStyle->saveOdf(style, context);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 

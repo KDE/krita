@@ -531,6 +531,18 @@ void saveOdf<KoParagraphStyle>(KoParagraphStyle *genStyle, KoGenStyle *styleWrit
     genStyle->saveOdf(*styleWriter, context);
 }
 
+template<>
+void saveOdf<KoTableCellStyle>(KoTableCellStyle *genStyle, KoGenStyle *styleWriter)
+{
+    QByteArray array;
+    QBuffer buffer(&array);
+    KoXmlWriter xmlWriter(&buffer);
+    KoGenStyles styles;
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoShapeSavingContext context(xmlWriter, styles, embeddedSaver);
+    genStyle->saveOdf(*styleWriter, context);
+}
+
 template<class T>
 bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QString &familyName, Attribute *attribute, const QString &value)
 {

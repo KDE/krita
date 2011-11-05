@@ -627,7 +627,7 @@ QString KoTextWriter::Private::saveTableCellStyle(const QTextTableCellFormat& ce
         style.setAutoStyleInStylesDotXml(true);
 
     KoTableCellStyle cellStyle(cellFormat);
-    cellStyle.saveOdf(style);
+    cellStyle.saveOdf(style, context);
     generatedName = context.mainStyles().insert(style, generatedName);
     return generatedName;
 }

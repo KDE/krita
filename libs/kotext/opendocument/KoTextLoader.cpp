@@ -2194,9 +2194,10 @@ void KoTextLoader::loadTableCell(KoXmlElement &rowTag, QTextTable *tbl, QList<QR
             cellStyle = tcarManager.defaultColumnCellStyle(currentCell);
         }
 
-        QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
         if (cellStyle)
-            cellStyle->applyStyle(cellFormat);
+            cellStyle->applyStyle(cell);
+
+        QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
 
         if (rowTag.attributeNS(KoXmlNS::table, "protected", "false") == "true") {
             cellFormat.setProperty(KoTableCellStyle::CellIsProtected, true);

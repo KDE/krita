@@ -1214,12 +1214,6 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
         converter.zoom(&zoomX, &zoomY);
         shapeMatrix.scale(zoomX, zoomY);
         rect = shapeMatrix.mapRect(rect);
-        QPointF scroll(canvas()->canvasController()->scrollBarValue());
-        if (canvas()->canvasController()->canvasMode() == KoCanvasController::Spreadsheet &&
-                canvas()->canvasWidget()->layoutDirection() == Qt::RightToLeft) {
-            scroll.setX(-scroll.x());
-        }
-        rect.translate(canvas()->documentOrigin() - scroll);
         return rect.toRect();
     }
     case Qt::ImFont:
@@ -1250,7 +1244,10 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
         for (int i = event->replacementLength(); i > 0; --i) {
             textEditor->deleteChar(KoTextEditor::NextChar, m_actionRecordChanges->isChecked(),
                                        canvas()->shapeController());
+            qDebug()<<"3"<<textEditor->position();
         }
+        qDebug()<<"bah!";
+        qDebug()<<"2"<<textEditor->position();
     }
     if (!event->commitString().isEmpty()) {
         QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
@@ -1266,6 +1263,7 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
         Q_ASSERT(layout);
         layout->setPreeditArea(textEditor->position() - block.position(), event->preeditString());
         const_cast<QTextDocument*>(textEditor->document())->markContentsDirty(textEditor->position(), 1);
+        qDebug()<<"1"<<textEditor->position();
     }
     event->accept();
 }

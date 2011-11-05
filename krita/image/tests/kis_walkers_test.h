@@ -197,6 +197,35 @@ public:
     }
 };
 
+class ComplexAccessLayer : public ComplexRectsLayer
+{
+
+    Q_OBJECT
+
+public:
+    ComplexAccessLayer(KisImageWSP image, const QString & name, quint8 opacity)
+            : ComplexRectsLayer(image, name, opacity) {
+    }
+
+
+    QRect accessRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const {
+        Q_UNUSED(pos);
+
+        const qint32 delta = 70;
+        return rect.translated(delta, 0);
+    }
+
+    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const {
+        Q_UNUSED(pos);
+        return rect;
+    }
+
+    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const {
+        Q_UNUSED(pos);
+        return rect;
+    }
+};
+
 class KisBaseRectsWalker;
 
 class KisWalkersTest : public QObject
@@ -206,6 +235,7 @@ class KisWalkersTest : public QObject
 private slots:
     void testUsualVisiting();
     void testMergeVisiting();
+    void testComplexAccessVisiting();
     void testRefreshSubtreeVisiting();
     void testFullRefreshVisiting();
     void testCachedVisiting();

@@ -159,6 +159,17 @@ QRect KisCloneLayer::exactBounds() const
     return projectionDevice->exactBounds();
 }
 
+QRect KisCloneLayer::accessRect(const QRect &rect, PositionToFilthy pos) const
+{
+    QRect resultRect = rect;
+
+    if(pos & (N_FILTHY_PROJECTION | N_FILTHY) && (m_d->x || m_d->y)) {
+        resultRect |= rect.translated(-m_d->x, -m_d->y);
+    }
+
+    return resultRect;
+}
+
 bool KisCloneLayer::accept(KisNodeVisitor & v)
 {
     return v.visit(this);

@@ -84,6 +84,8 @@ public:
     /// Returns the exact bounds of where the actual data resides in this layer
     QRect exactBounds() const;
 
+    QRect accessRect(const QRect &rect, PositionToFilthy pos) const;
+
     bool accept(KisNodeVisitor &);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 

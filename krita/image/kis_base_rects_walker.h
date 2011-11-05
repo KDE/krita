@@ -166,7 +166,7 @@ protected:
     }
 
     inline void clear() {
-        m_resultAccessRect = /*m_resultChangeRect =*/
+        m_resultAccessRect = m_resultNeedRect = /*m_resultChangeRect =*/
             m_childNeedRect = m_lastNeedRect = QRect();
 
         m_needRectVaries = m_changeRectVaries = false;
@@ -219,7 +219,7 @@ protected:
         if(!isLayer(node)) return;
 
         if(m_mergeTask.isEmpty())
-            m_resultAccessRect = m_childNeedRect =
+            m_resultAccessRect = m_resultNeedRect = m_childNeedRect =
                 m_lastNeedRect = m_resultChangeRect;
 
         QRect currentNeedRect;
@@ -232,6 +232,9 @@ protected:
                 pushJob(node, position, m_lastNeedRect);
             //else /* Why push empty rect? */;
 
+            m_resultAccessRect |= node->accessRect(m_lastNeedRect,
+                                                   getPositionToFilthy(position));
+
             m_lastNeedRect = node->needRect(m_lastNeedRect,
                                             getPositionToFilthy(position));
             m_lastNeedRect = cropThisRect(m_lastNeedRect);
@@ -240,6 +243,10 @@ protected:
         else if(position & (N_BELOW_FILTHY | N_FILTHY_PROJECTION)) {
             if(!m_lastNeedRect.isEmpty()) {
                 pushJob(node, position, m_lastNeedRect);
+
+                m_resultAccessRect |= node->accessRect(m_lastNeedRect,
+                                                       getPositionToFilthy(position));
+
                 m_lastNeedRect = node->needRect(m_lastNeedRect,
                                                 getPositionToFilthy(position));
                 m_lastNeedRect = cropThisRect(m_lastNeedRect);
@@ -251,8 +258,8 @@ protected:
         }
 
         if(!m_needRectVaries)
-            m_needRectVaries = m_resultAccessRect != m_lastNeedRect;
-        m_resultAccessRect |= m_lastNeedRect;
+            m_needRectVaries = m_resultNeedRect != m_lastNeedRect;
+        m_resultNeedRect |= m_lastNeedRect;
     }
 
     virtual void adjustMasksChangeRect(KisNodeSP firstMask) {
@@ -301,6 +308,7 @@ private:
      * data for a successful merge operation.
      */
     QRect m_resultAccessRect;
+    QRect m_resultNeedRect;
     QRect m_resultChangeRect;
     bool m_needRectVaries;
     bool m_changeRectVaries;

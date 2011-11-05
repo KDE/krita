@@ -34,6 +34,14 @@
 #define MAXIMUM_SMOOTHNESS 1000
 #define MAXIMUM_MAGNETISM 1000
 
+#define MIN_MASS 1.0
+#define MAX_MASS 160.0
+#define MIN_DRAG 0.0
+#define MAX_DRAG 0.5
+#define MIN_ACC 0.000001
+#define MIN_VEL 0.000001
+
+
 KisToolDyna::KisToolDyna(KoCanvasBase * canvas)
         : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18nc("(qtundo-format)", "Dyna"))
 {
@@ -47,7 +55,7 @@ void KisToolDyna::initDyna()
     /* dynadraw init */
     m_curmass = 0.5;
     m_curdrag = 0.15;
-    m_mouse.fixedangle = true;
+    m_mouse.fixedangle = false;
     m_width = 1.5;
     m_xangle = 0.60;
     m_yangle = 0.20;
@@ -101,8 +109,8 @@ void KisToolDyna::mouseMoveEvent(KoPointerEvent *e)
 int KisToolDyna::applyFilter(qreal mx, qreal my)
 {
     /* calculate mass and drag */
-    qreal mass = flerp(1.0, 160.0, m_curmass);
-    qreal drag = flerp(0.00, 0.5, m_curdrag * m_curdrag);
+    qreal mass = flerp(MIN_MASS, MAX_MASS, m_curmass);
+    qreal drag = flerp(MIN_DRAG, MAX_DRAG, m_curdrag * m_curdrag);
 
     /* calculate force and acceleration */
     qreal fx = mx - m_mouse.curx;
@@ -110,7 +118,7 @@ int KisToolDyna::applyFilter(qreal mx, qreal my)
 
     m_mouse.acc = sqrt(fx * fx + fy * fy);
 
-    if (m_mouse.acc < 0.000001) {
+    if (m_mouse.acc < MIN_ACC) {
         return 0;
     }
 
@@ -123,16 +131,17 @@ int KisToolDyna::applyFilter(qreal mx, qreal my)
     m_mouse.vel = sqrt(m_mouse.velx * m_mouse.velx + m_mouse.vely * m_mouse.vely);
     m_mouse.angx = -m_mouse.vely;
     m_mouse.angy = m_mouse.velx;
-    if (m_mouse.vel < 0.000001) {
+    if (m_mouse.vel < MIN_VEL) {
         return 0;
     }
 
     /* calculate angle of drawing tool */
-    m_mouse.angx /= m_mouse.vel;
-    m_mouse.angy /= m_mouse.vel;
     if (m_mouse.fixedangle) {
         m_mouse.angx = m_xangle;
         m_mouse.angy = m_yangle;
+    } else {
+        m_mouse.angx /= m_mouse.vel;
+        m_mouse.angy /= m_mouse.vel;
     }
 
     m_mouse.velx = m_mouse.velx * (1.0 - drag);
@@ -223,13 +232,13 @@ KoPointerEvent KisToolDyna::filterEvent(KoPointerEvent* event)
 }
 
 
-void KisToolDyna::slotSetDrag(double drag)
+void KisToolDyna::slotSetDrag(qreal drag)
 {
-    m_dragDist = drag;
+    m_curdrag = drag;
 }
 
 
-void KisToolDyna::slotSetMass(double mass)
+void KisToolDyna::slotSetMass(qreal mass)
 {
     m_curmass = mass;
 }
@@ -259,50 +268,56 @@ QWidget * KisToolDyna::createOptionWidget()
     QWidget * optionWidget = KisToolFreehand::createOptionWidget();
     optionWidget->setObjectName(toolId() + "option widget");
 
-    QLabel* initWidthLbl = new QLabel(i18n("Initial width:"), optionWidget);
+    m_optionLayout = new QGridLayout(optionWidget);
+    Q_CHECK_PTR(m_optionLayout);
+
+    m_optionLayout->setMargin(0);
+    m_optionLayout->setSpacing(2);
+    KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
+
     QLabel* massLbl = new QLabel(i18n("Mass:"), optionWidget);
+    m_massSPBox = new KisDoubleSliderSpinBox(optionWidget);
+    m_massSPBox->setRange(0.0,1.0,2);
+    m_massSPBox->setValue(m_curmass);
+    connect(m_massSPBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetMass(qreal)));
+    KisToolFreehand::addOptionWidgetOption(m_massSPBox,massLbl);
+
     QLabel* dragLbl = new QLabel(i18n("Drag:"), optionWidget);
-    QLabel* widthRangeLbl = new QLabel(i18n("Width range:"), optionWidget);
+    m_dragSPBox = new KisDoubleSliderSpinBox(optionWidget);
+    m_dragSPBox->setRange(0.0,1.0,2);
+    m_dragSPBox->setValue(m_curdrag);
+    connect(m_dragSPBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetDrag(qreal)));
+    KisToolFreehand::addOptionWidgetOption(m_dragSPBox,dragLbl);
 
-    m_initWidthSPBox = new QDoubleSpinBox(optionWidget);
-    m_initWidthSPBox->setValue(1.5);
-    connect(m_initWidthSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetDynaWidth(double)));
-
-    m_massSPBox = new QDoubleSpinBox(optionWidget);
-    m_massSPBox->setValue(0.5);
-    connect(m_massSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetMass(double)));
-
-    m_dragSPBox = new QDoubleSpinBox(optionWidget);
-    m_dragSPBox->setValue(0.15);
-    connect(m_dragSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetDrag(double)));
-
+    //NOTE: so far unused, waiting for the changes to propagate rotation/pressure to freehand tool
+    // fixed angle might be for 2.4, but the later one for 2.5
     m_chkFixedAngle = new QCheckBox(i18n("Fixed angle:"), optionWidget);
     m_chkFixedAngle->setChecked(false);
     connect(m_chkFixedAngle, SIGNAL(toggled(bool)), this, SLOT(slotSetFixedAngle(bool)));
-
     m_angleDSSBox = new KisDoubleSliderSpinBox(optionWidget);
     m_angleDSSBox->setRange(0,360,0);
     m_angleDSSBox->setValue(70);
     m_angleDSSBox->setSuffix(QChar(Qt::Key_degree));
     m_angleDSSBox->setEnabled(m_chkFixedAngle->isChecked());
     connect(m_angleDSSBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAngle(qreal)));
-
-    m_widthRangeSPBox = new QDoubleSpinBox(optionWidget);
-    m_widthRangeSPBox->setValue(0.05);
-    connect(m_widthRangeSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetWidthRange(double)));
-
-    m_optionLayout = new QGridLayout(optionWidget);
-    Q_CHECK_PTR(m_optionLayout);
-
-    m_optionLayout->setMargin(0);
-    m_optionLayout->setSpacing(2);
-
-    KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
-    KisToolFreehand::addOptionWidgetOption(m_massSPBox,massLbl);
-    KisToolFreehand::addOptionWidgetOption(m_dragSPBox,dragLbl);
+    m_chkFixedAngle->setEnabled(false);
+    m_angleDSSBox->setEnabled(false);
     KisToolFreehand::addOptionWidgetOption(m_angleDSSBox,m_chkFixedAngle);
+
+#if 0
+    QLabel* initWidthLbl = new QLabel(i18n("Initial width:"), optionWidget);
+    m_initWidthSPBox = new QDoubleSpinBox(optionWidget);
+    m_initWidthSPBox->setValue(m_width);
+    connect(m_initWidthSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetDynaWidth(double)));
     KisToolFreehand::addOptionWidgetOption(m_initWidthSPBox,initWidthLbl);
-    KisToolFreehand::addOptionWidgetOption(m_widthRangeSPBox,widthRangeLbl);
+
+    QLabel* widthRangeLbl = new QLabel(i18n("Width range:"), optionWidget);
+    m_widthRangeSPBox = new QDoubleSpinBox(optionWidget);
+    m_widthRangeSPBox->setValue(m_widthRange);
+    connect(m_widthRangeSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetWidthRange(double)));
+    //KisToolFreehand::addOptionWidgetOption(m_widthRangeSPBox,widthRangeLbl);
+#endif
+
     return optionWidget;
 }
 

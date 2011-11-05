@@ -93,22 +93,19 @@ protected:
 private slots:
 
     void slotSetDynaWidth(double width);
-    void slotSetMass(double mass);
-    void slotSetDrag(double drag);
+    void slotSetMass(qreal mass);
+    void slotSetDrag(qreal drag);
     void slotSetAngle(qreal angle);
     void slotSetWidthRange(double widthRange);
     void slotSetFixedAngle(bool fixedAngle);
 
 private:
-    // FIXME: investigate why this variable is needed
-    double m_dragDist;
-
     QGridLayout* m_optionLayout;
 
     // dyna gui
     QCheckBox * m_chkFixedAngle;
-    QDoubleSpinBox * m_massSPBox;
-    QDoubleSpinBox * m_dragSPBox;
+    KisDoubleSliderSpinBox * m_massSPBox;
+    KisDoubleSliderSpinBox * m_dragSPBox;
     KisDoubleSliderSpinBox * m_angleDSSBox;
     QDoubleSpinBox * m_initWidthSPBox;
     QDoubleSpinBox * m_widthRangeSPBox;

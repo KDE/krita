@@ -322,6 +322,7 @@ void KisPrescaledProjection::updateViewportSize()
         m_d->prescaledQImage.size() != m_d->viewportSize) {
 
         m_d->prescaledQImage = QImage(m_d->viewportSize, QImage::Format_ARGB32);
+        m_d->prescaledQImage.fill(0);
     }
 }
 

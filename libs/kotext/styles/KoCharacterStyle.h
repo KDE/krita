@@ -448,6 +448,9 @@ public:
      */
     void applyStyle(QTextCursor *selection) const;
 
+    /// This should be called after all charFormat properties are merged.
+    void ensureMinimalProperties(QTextCharFormat &format) const;
+
     /**
      * Load the style form the element
      *

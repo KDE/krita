@@ -703,50 +703,36 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     if (textList) {
         listFormat = textList->format();
 
-        KoCharacterStyle *cs = 0;
+        if (block.text().size() == 0 || m_documentLayout->wordprocessingMode()) {
+            labelFormat = block.charFormat();
+        } else {
+            labelFormat = block.begin().fragment().charFormat();
+        }
 
         if (m_documentLayout->styleManager()) {
             const int id = listFormat.intProperty(KoListStyle::CharacterStyleId);
-            cs = m_documentLayout->styleManager()->characterStyle(id);
-            if (!cs) {
-                KoParagraphStyle *ps = m_documentLayout->styleManager()->paragraphStyle(
-                                       block.blockFormat().intProperty(KoParagraphStyle::StyleId));
-                if (ps && !ps->hasDefaults()) {
-                    cs = (KoCharacterStyle*)ps;
-                }
-            }
-        }
-
-        // use format from the actual block of the list item
-        if ( cs && cs->hasProperty(QTextFormat::FontPointSize) ) {
+            KoCharacterStyle *cs = m_documentLayout->styleManager()->characterStyle(id);
+            if (cs) {
                 cs->applyStyle(labelFormat);
-        } else {
-            if (block.text().size() == 0) {
-                labelFormat = block.charFormat();
-            } else {
-                labelFormat = block.begin().fragment().charFormat();
+                cs->ensureMinimalProperties(labelFormat);
             }
         }
 
-        // fetch the text properties of the list-level-style-bullet
-        if (listFormat.hasProperty(KoListStyle::MarkCharacterStyleId)) {
-            QVariant v = listFormat.property(KoListStyle::MarkCharacterStyleId);
+        // fetch the text-properties of the label
+        if (listFormat.hasProperty(KoListStyle::CharacterProperties)) {
+            QVariant v = listFormat.property(KoListStyle::CharacterProperties);
             QSharedPointer<KoCharacterStyle> textPropertiesCharStyle = v.value< QSharedPointer<KoCharacterStyle> >();
             if (!textPropertiesCharStyle.isNull()) {
                 textPropertiesCharStyle->applyStyle(labelFormat);
-
-                //calculate the correct font point size taking into account the current
-                // block format and the relative font size percent if the size is not absolute
-                if (!textPropertiesCharStyle->hasProperty(QTextFormat::FontPointSize)) {
-                    qreal percent = 100.0;
-                    if (listFormat.hasProperty(KoListStyle::RelativeBulletSize)) {
-                        percent = listFormat.property(KoListStyle::RelativeBulletSize).toDouble();
-                    } else {
-                        listFormat.setProperty(KoListStyle::RelativeBulletSize, percent);
-                    }
-                    labelFormat.setFontPointSize((percent*labelFormat.fontPointSize())/100.00);
-                }
+                textPropertiesCharStyle->ensureMinimalProperties(labelFormat);
             }
+        }
+
+        // Calculate the correct font point size taking into account the current
+        // block format and the relative font size percent if the size is not absolute
+        if (listFormat.hasProperty(KoListStyle::RelativeBulletSize)) {
+            qreal percent = listFormat.property(KoListStyle::RelativeBulletSize).toDouble();
+            labelFormat.setFontPointSize((percent*labelFormat.fontPointSize())/100.00);
         }
 
         QFont font(labelFormat.font(), m_documentLayout->paintDevice());

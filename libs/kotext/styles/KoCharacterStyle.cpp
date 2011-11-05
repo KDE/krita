@@ -149,9 +149,6 @@ public:
         return value;
     }
 
-    //This should be called after all charFormat properties are merged to the cursor.
-    void ensureMinimalProperties(QTextCursor &cursor, bool blockCharFormatAlso);
-
     // problem with fonts in linux and windows is that true type fonts have more than one metric
     // they have normal metric placed in font header table
     //           microsoft metric placed in os2 table
@@ -184,11 +181,10 @@ KoCharacterStyle::Private::Private()
 }
 
 
-void KoCharacterStyle::Private::ensureMinimalProperties(QTextCursor &cursor, bool blockCharFormatAlso)
+void KoCharacterStyle::ensureMinimalProperties(QTextCharFormat &format) const
 {
-    QTextCharFormat format = cursor.charFormat();
-    if (defaultStyle) {
-        QMap<int, QVariant> props = defaultStyle->d->stylesPrivate.properties();
+    if (d->defaultStyle) {
+        QMap<int, QVariant> props = d->defaultStyle->d->stylesPrivate.properties();
         QMap<int, QVariant>::const_iterator it = props.constBegin();
         while (it != props.constEnd()) {
             if (!it.value().isNull() && !format.hasProperty(it.key())) {
@@ -197,7 +193,7 @@ void KoCharacterStyle::Private::ensureMinimalProperties(QTextCursor &cursor, boo
             ++it;
         }
     }
-    QMap<int, QVariant> props = hardCodedDefaultStyle.properties();
+    QMap<int, QVariant> props = d->hardCodedDefaultStyle.properties();
     QMap<int, QVariant>::const_iterator it = props.constBegin();
     while (it != props.constEnd()) {
         if (!it.value().isNull() && !format.hasProperty(it.key())) {
@@ -208,14 +204,11 @@ void KoCharacterStyle::Private::ensureMinimalProperties(QTextCursor &cursor, boo
 
     // Ensuring fontsize is a bit more special
     if (format.hasProperty(QTextCharFormat::FontPointSize)) {
-        format.setProperty(QTextCharFormat::FontPointSize, resolveFontSize(format.doubleProperty(QTextCharFormat::FontPointSize)));
+        format.setProperty(QTextCharFormat::FontPointSize, d->resolveFontSize(format.doubleProperty(QTextCharFormat::FontPointSize)));
     } else {
-        format.setProperty(QTextCharFormat::FontPointSize, resolveFontSize(12.0));
+        format.setProperty(QTextCharFormat::FontPointSize, d->resolveFontSize(12.0));
     }
 
-    cursor.mergeCharFormat(format);
-    if (blockCharFormatAlso)
-        cursor.mergeBlockCharFormat(format);
 }
 
 qreal KoCharacterStyle::Private::calculateFontYStretch(QString fontFamily)
@@ -456,7 +449,12 @@ void KoCharacterStyle::applyStyle(QTextBlock &block) const
     applyStyle(cf);
     cursor.mergeCharFormat(cf);
     cursor.mergeBlockCharFormat(cf);
-    d->ensureMinimalProperties(cursor, true);
+    QTextCharFormat format = cursor.charFormat();
+    ensureMinimalProperties(format);
+    cursor.mergeCharFormat(format);
+    format = cursor.blockCharFormat();
+    ensureMinimalProperties(format);
+    cursor.mergeBlockCharFormat(format);
 }
 
 void KoCharacterStyle::applyStyle(QTextCursor *selection) const
@@ -464,7 +462,9 @@ void KoCharacterStyle::applyStyle(QTextCursor *selection) const
     QTextCharFormat cf;
     applyStyle(cf);
     selection->mergeCharFormat(cf);
-    d->ensureMinimalProperties(*selection, false);
+    QTextCharFormat format = selection->charFormat();
+    ensureMinimalProperties(format);
+    selection->mergeCharFormat(format);
 }
 
 void KoCharacterStyle::unapplyStyle(QTextCharFormat &format) const

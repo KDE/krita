@@ -536,10 +536,6 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             key = "display-level";
             value = QString::number(properties[id].toInt());
             break;
-        case KoListStyle::CharacterStyleId:
-            key = "charstyleid";
-            value = QString::number(properties[id].toInt());
-            break;
         case KoListStyle::Alignment:
             key = "alignment";
             value = QString::number(properties[id].toInt());

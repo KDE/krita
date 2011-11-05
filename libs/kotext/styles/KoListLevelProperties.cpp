@@ -57,7 +57,7 @@ KoListLevelProperties::KoListLevelProperties()
         , d(new Private())
 {
     QSharedPointer<KoCharacterStyle> charStyle = QSharedPointer<KoCharacterStyle>(new KoCharacterStyle);
-    setMarkCharacterStyle(charStyle);
+    setCharacterProperties(charStyle);
 
     setRelativeBulletSize(100);
     setAlignmentMode(false);
@@ -238,14 +238,14 @@ int KoListLevelProperties::characterStyleId() const
     return propertyInt(KoListStyle::CharacterStyleId);
 }
 
-void KoListLevelProperties::setMarkCharacterStyle(QSharedPointer< KoCharacterStyle > style)
+void KoListLevelProperties::setCharacterProperties(QSharedPointer< KoCharacterStyle > style)
 {
-    setProperty(KoListStyle::MarkCharacterStyleId, QVariant::fromValue< QSharedPointer<KoCharacterStyle> >(style));
+    setProperty(KoListStyle::CharacterProperties, QVariant::fromValue< QSharedPointer<KoCharacterStyle> >(style));
 }
 
-QSharedPointer<KoCharacterStyle> KoListLevelProperties::markCharacterStyle() const
+QSharedPointer<KoCharacterStyle> KoListLevelProperties::characterProperties() const
 {
-    const QVariant v = d->stylesPrivate.value(KoListStyle::MarkCharacterStyleId);
+    const QVariant v = d->stylesPrivate.value(KoListStyle::CharacterProperties);
     if (v.isNull()) {
         return static_cast< QSharedPointer<KoCharacterStyle> >(0);
     }
@@ -492,10 +492,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         }
     }
 
-    bool hasBulletRelativeSize=false;
     if (style.localName() == "list-level-style-bullet") {   // list with bullets
-
-        setRelativeBulletSize(45); //arbitary value for bulleted list
         // special case bullets:
         //qDebug() << QChar(0x2202) << QChar(0x25CF) << QChar(0xF0B7) << QChar(0xE00C)
         //<< QChar(0xE00A) << QChar(0x27A2)<< QChar(0x2794) << QChar(0x2714) << QChar(0x2d) << QChar(0x2717);
@@ -566,7 +563,6 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         }
         QString size = style.attributeNS(KoXmlNS::text, "bullet-relative-size", QString());
         if (!size.isEmpty()) {
-            hasBulletRelativeSize=true;
             setRelativeBulletSize(size.replace('%', "").toInt());
         }
 
@@ -730,15 +726,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         } else if (localName == "text-properties") {
             QSharedPointer<KoCharacterStyle> charStyle = QSharedPointer<KoCharacterStyle>(new KoCharacterStyle);
             charStyle->loadOdf(&style, scontext);
-            //if not set in bullet-relative-size or any where before then set it now
-            if (!hasBulletRelativeSize && charStyle->hasProperty(KoCharacterStyle::PercentageFontSize)) {
-                setRelativeBulletSize((int)charStyle->percentageFontSize());
-                // in bullet lists in layout we recompute the font point size
-                // relatively to the paragraph size of the list item so drop it
-                // to indicate that it is not correct
-                charStyle->clearFontPointSize();
-            }
-            setMarkCharacterStyle(charStyle);
+            setCharacterProperties(charStyle);
         }
     }
 }
@@ -866,10 +854,10 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
 
     // text properties
 
-    if (d->stylesPrivate.contains(KoListStyle::MarkCharacterStyleId)) {
+    if (d->stylesPrivate.contains(KoListStyle::CharacterProperties)) {
         KoGenStyle liststyle(KoGenStyle::ListStyle);
 
-        QSharedPointer<KoCharacterStyle> cs = markCharacterStyle();
+        QSharedPointer<KoCharacterStyle> cs = characterProperties();
         cs->saveOdf(liststyle);
 
         liststyle.writeStyleProperties(writer, KoGenStyle::TextType);

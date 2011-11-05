@@ -171,7 +171,15 @@ void KisCloneLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAd
 
 void KisCloneLayer::setCopyFrom(KisLayerSP fromLayer)
 {
+    if (m_d->copyFrom) {
+        m_d->copyFrom->unregisterClone(this);
+    }
+
     m_d->copyFrom = fromLayer;
+
+    if (m_d->copyFrom) {
+        m_d->copyFrom->registerClone(this);
+    }
 }
 
 KisLayerSP KisCloneLayer::copyFrom() const

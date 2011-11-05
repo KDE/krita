@@ -603,6 +603,7 @@ public:
             case 3:
                 run_concurrent(lock,t) {
                     QRect newRect = dm.extent();
+		    Q_UNUSED(newRect);
                 }
                 break;
             case 4:

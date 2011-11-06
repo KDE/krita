@@ -149,14 +149,20 @@ void KisCloneLayer::setY(qint32 y)
 
 QRect KisCloneLayer::extent() const
 {
-    KisPaintDeviceSP projectionDevice = projection();
-    return projectionDevice->extent();
+    QRect rect = original()->extent();
+    if(m_d->x || m_d->y) {
+        rect.translate(m_d->x, m_d->y);
+    }
+    return rect;
 }
 
 QRect KisCloneLayer::exactBounds() const
 {
-    KisPaintDeviceSP projectionDevice = projection();
-    return projectionDevice->exactBounds();
+    QRect rect = original()->exactBounds();
+    if(m_d->x || m_d->y) {
+        rect.translate(m_d->x, m_d->y);
+    }
+    return rect;
 }
 
 QRect KisCloneLayer::accessRect(const QRect &rect, PositionToFilthy pos) const

@@ -1270,6 +1270,16 @@ void KisImage::refreshGraph(KisNodeSP root, const QRect &rc, const QRect &cropRe
     }
 }
 
+void KisImage::initialRefreshGraphAsync()
+{
+    /**
+     * NOTE: Tricky part. We set crop rect to null, so the clones
+     * will not rely on precalculated projections of their sources
+     */
+
+    refreshGraphAsync(0, bounds(), QRect());
+}
+
 void KisImage::refreshGraphAsync(KisNodeSP root)
 {
     refreshGraphAsync(root, bounds(), bounds());

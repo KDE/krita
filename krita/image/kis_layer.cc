@@ -99,6 +99,10 @@ public:
         return m_clonesList;
     }
 
+    bool hasClones() const {
+        return !m_clonesList.isEmpty();
+    }
+
 private:
     QList<KisCloneLayerWSP> m_clonesList;
 };
@@ -237,12 +241,6 @@ void KisLayer::setImage(KisImageWSP image)
     }
 }
 
-void KisLayer::setDirty(const QRect & rect)
-{
-    KisNode::setDirty(rect);
-    m_d->clonesList.setDirty(rect);
-}
-
 void KisLayer::registerClone(KisCloneLayerWSP clone)
 {
     m_d->clonesList.addClone(clone);
@@ -256,6 +254,16 @@ void KisLayer::unregisterClone(KisCloneLayerWSP clone)
 const QList<KisCloneLayerWSP> KisLayer::registeredClones() const
 {
     return m_d->clonesList.registeredClones();
+}
+
+bool KisLayer::hasClones() const
+{
+    return m_d->clonesList.hasClones();
+}
+
+void KisLayer::updateClones(const QRect &rect)
+{
+    m_d->clonesList.setDirty(rect);
 }
 
 KisSelectionMaskSP KisLayer::selectionMask() const

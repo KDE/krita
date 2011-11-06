@@ -45,6 +45,7 @@
 
 
 #include "kis_merge_walker.h"
+#include "kis_refresh_subtree_walker.h"
 
 
 //#define DEBUG_MERGER
@@ -60,8 +61,10 @@
 class KisUpdateOriginalVisitor : public KisNodeVisitor
 {
 public:
-    KisUpdateOriginalVisitor(QRect updateRect, KisPaintDeviceSP projection)
-        : m_updateRect(updateRect), m_projection(projection)
+    KisUpdateOriginalVisitor(QRect updateRect, KisPaintDeviceSP projection, QRect cropRect)
+        : m_updateRect(updateRect),
+          m_cropRect(cropRect),
+          m_projection(projection)
         {
         }
 
@@ -127,7 +130,22 @@ public:
         return true;
     }
 
-    bool visit(KisCloneLayer*) {
+    bool visit(KisCloneLayer *layer) {
+        QRect emptyRect;
+        KisRefreshSubtreeWalker walker(emptyRect);
+        KisAsyncMerger merger;
+
+        KisLayerSP srcLayer = layer->copyFrom();
+        QRect srcRect = m_updateRect.translated(-layer->x(), -layer->y());
+
+        QRegion prepareRegion(srcRect);
+        prepareRegion -= m_cropRect;
+
+        foreach(const QRect &rect, prepareRegion.rects()) {
+            walker.collectRects(srcLayer, rect);
+            merger.startMerge(walker, false);
+        }
+
         return true;
     }
 
@@ -146,6 +164,7 @@ public:
 
 private:
     QRect m_updateRect;
+    QRect m_cropRect;
     KisPaintDeviceSP m_projection;
 };
 
@@ -157,7 +176,7 @@ private:
 /**
  * FIXME: Check node<->layer transitions
  */
-void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker) {
+void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
     KisMergeWalker::NodeStack &nodeStack = walker.nodeStack();
 
     const bool useTempProjections = walker.needRectVaries();
@@ -177,7 +196,8 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker) {
 
             DEBUG_NODE_ACTION("Updating", "N_EXTRA", currentNode, applyRect);
             KisUpdateOriginalVisitor originalVisitor(applyRect,
-                                                     m_currentProjection);
+                                                     m_currentProjection,
+                                                     walker.cropRect());
             currentNode->accept(originalVisitor);
             currentNode->updateProjection(applyRect);
 
@@ -189,7 +209,8 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker) {
             setupProjection(currentNode, applyRect, useTempProjections);
 
         KisUpdateOriginalVisitor originalVisitor(applyRect,
-                                                 m_currentProjection);
+                                                 m_currentProjection,
+                                                 walker.cropRect());
 
         if(item.m_position & KisMergeWalker::N_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY", currentNode, applyRect);
@@ -198,9 +219,10 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker) {
         }
         else if(item.m_position & KisMergeWalker::N_ABOVE_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_ABOVE_FILTHY", currentNode, applyRect);
-            currentNode->accept(originalVisitor);
-            if(dependOnLowerNodes(currentNode))
+            if(dependOnLowerNodes(currentNode)) {
+                currentNode->accept(originalVisitor);
                 currentNode->updateProjection(applyRect);
+            }
         }
         else if(item.m_position & KisMergeWalker::N_FILTHY_PROJECTION) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY_PROJECTION", currentNode, applyRect);
@@ -217,6 +239,10 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker) {
             writeProjection(currentNode, useTempProjections, applyRect);
             resetProjection();
         }
+    }
+
+    if(notifyClones) {
+        doNotifyClones(walker);
     }
 }
 
@@ -325,4 +351,15 @@ bool KisAsyncMerger::compositeWithProjection(KisLayerSP layer, const QRect &rect
 
     DEBUG_NODE_ACTION("Compositing projection", "", layer, needRect);
     return true;
+}
+
+void KisAsyncMerger::doNotifyClones(KisBaseRectsWalker &walker) {
+    KisBaseRectsWalker::CloneNotificationsVector &vector =
+        walker.cloneNotifications();
+
+    KisBaseRectsWalker::CloneNotificationsVector::iterator it;
+
+    for(it = vector.begin(); it != vector.end(); ++it) {
+        (*it).notify();
+    }
 }

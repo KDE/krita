@@ -32,7 +32,8 @@ class KRITAIMAGE_EXPORT KisBaseRectsWalker : public KisShared
 public:
     enum UpdateType {
         UPDATE,
-        FULL_REFRESH
+        FULL_REFRESH,
+        UNSUPPORTED
     };
 
 
@@ -59,6 +60,26 @@ public:
     #define GRAPH_POSITION_MASK     0x07
     #define POSITION_TO_FILTHY_MASK 0xF8
 
+    struct CloneNotification {
+        CloneNotification() {}
+        CloneNotification(KisNodeSP node, const QRect &dirtyRect)
+            : m_layer(qobject_cast<KisLayer*>(node.data())),
+              m_dirtyRect(dirtyRect) {}
+
+        void notify() {
+            Q_ASSERT(m_layer); // clones are possible for layers only
+            m_layer->updateClones(m_dirtyRect);
+        }
+
+    private:
+        friend class KisWalkersTest;
+
+        KisLayerSP m_layer;
+        QRect m_dirtyRect;
+    };
+
+    typedef QVector<CloneNotification> CloneNotificationsVector;
+
     struct JobItem {
         KisNodeSP m_node;
         NodePosition m_position;
@@ -82,6 +103,7 @@ public:
         clear();
         m_nodeChecksum = calculateChecksum(node, requestedRect);
         m_resultChangeRect = requestedRect;
+        m_resultUncroppedChangeRect = requestedRect;
         m_requestedRect = requestedRect;
         m_startNode = node;
         startTrip(node);
@@ -110,12 +132,21 @@ public:
         return m_mergeTask;
     }
 
+    // return a reference for efficiency reasons
+    inline CloneNotificationsVector& cloneNotifications() {
+        return m_cloneNotifications;
+    }
+
     inline const QRect& accessRect() const {
         return m_resultAccessRect;
     }
 
     inline const QRect& changeRect() const {
         return m_resultChangeRect;
+    }
+
+    inline const QRect& uncroppedChangeRect() const {
+        return m_resultUncroppedChangeRect;
     }
 
     inline bool needRectVaries() const {
@@ -165,12 +196,18 @@ protected:
         return qobject_cast<KisMask*>(node.data());
     }
 
+    static inline bool hasClones(KisNodeSP node) {
+        KisLayer *layer = qobject_cast<KisLayer*>(node.data());
+        return layer && layer->hasClones();
+    }
+
     inline void clear() {
         m_resultAccessRect = m_resultNeedRect = /*m_resultChangeRect =*/
             m_childNeedRect = m_lastNeedRect = QRect();
 
         m_needRectVaries = m_changeRectVaries = false;
         m_mergeTask.clear();
+        m_cloneNotifications.clear();
 
         // Not needed really. Think over removing.
         //m_startNode = 0;
@@ -189,9 +226,11 @@ protected:
     /**
      * Used by KisFullRefreshWalker as it has a special changeRect strategy
      */
-    inline void setExplicitChangeRect(const QRect &changeRect, bool changeRectVaries) {
+    inline void setExplicitChangeRect(KisNodeSP node, const QRect &changeRect, bool changeRectVaries) {
         m_resultChangeRect = changeRect;
+        m_resultUncroppedChangeRect = changeRect;
         m_changeRectVaries = changeRectVaries;
+        registerCloneNotification(node, N_FILTHY);
     }
 
     /**
@@ -209,6 +248,25 @@ protected:
             m_changeRectVaries = currentChangeRect != m_resultChangeRect;
 
         m_resultChangeRect = currentChangeRect;
+
+        m_resultUncroppedChangeRect = node->changeRect(m_resultUncroppedChangeRect,
+                                                       getPositionToFilthy(position));
+        registerCloneNotification(node, position);
+    }
+
+    void registerCloneNotification(KisNodeSP node, NodePosition position) {
+        /**
+         * Note, we do not check for (N_ABOVE_FILTHY &&
+         * dependOnLowerNodes(node)) because it may lead to an
+         * infinite loop with filter layer. Activate it when it is
+         * guaranteed that it is not possible to create a filter layer
+         * avobe its own clone
+         */
+
+        if(hasClones(node) && position & (N_FILTHY | N_FILTHY_PROJECTION)) {
+            m_cloneNotifications.append(
+                CloneNotification(node, m_resultUncroppedChangeRect));
+        }
     }
 
     /**
@@ -310,9 +368,11 @@ private:
     QRect m_resultAccessRect;
     QRect m_resultNeedRect;
     QRect m_resultChangeRect;
+    QRect m_resultUncroppedChangeRect;
     bool m_needRectVaries;
     bool m_changeRectVaries;
     NodeStack m_mergeTask;
+    CloneNotificationsVector m_cloneNotifications;
 
     /**
      * Used by update optimization framework

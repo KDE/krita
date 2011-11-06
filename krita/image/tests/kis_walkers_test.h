@@ -25,6 +25,7 @@
 #include "kis_types.h"
 #include "kis_node_visitor.h"
 #include "kis_paint_device.h"
+#include "kis_merge_walker.h"
 
 class TestLayer : public KisLayer
 {
@@ -236,6 +237,7 @@ private slots:
     void testUsualVisiting();
     void testMergeVisiting();
     void testComplexAccessVisiting();
+    void testCloneNotificationsVisiting();
     void testRefreshSubtreeVisiting();
     void testFullRefreshVisiting();
     void testCachedVisiting();
@@ -248,6 +250,10 @@ private:
                       QRect accessRect, bool changeRectVaries,
                       bool needRectVaries);
     void verifyResult(KisBaseRectsWalker &walker, struct UpdateTestJob &job);
+
+    void checkNotification(const KisMergeWalker::CloneNotification &notification,
+                           const QString &name,
+                           const QRect &rect);
 };
 
 #endif

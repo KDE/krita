@@ -29,7 +29,7 @@ class KisBaseRectsWalker;
 class KRITAIMAGE_EXPORT KisAsyncMerger
 {
 public:
-    void startMerge(KisBaseRectsWalker &walker);
+    void startMerge(KisBaseRectsWalker &walker, bool notifyClones = true);
 
 private:
     static inline bool isRootNode(KisNodeSP node);
@@ -39,6 +39,7 @@ private:
     inline void setupProjection(KisNodeSP currentNode, const QRect& rect, bool useTempProjection);
     inline void writeProjection(KisNodeSP topmostNode, bool useTempProjection, QRect rect);
     inline bool compositeWithProjection(KisLayerSP layer, const QRect &rect);
+    inline void doNotifyClones(KisBaseRectsWalker &walker);
 
 private:
     /**

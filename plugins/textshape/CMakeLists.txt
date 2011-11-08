@@ -35,6 +35,9 @@ SET ( textshape_SRCS
 
     dialogs/StylesWidget.cpp
     dialogs/SpecialButton.cpp
+    dialogs/StylesCombo.cpp
+    dialogs/StylesComboView.cpp
+    dialogs/StylesComboPreview.cpp
     dialogs/SimpleCharacterWidget.cpp
     dialogs/SimpleParagraphWidget.cpp
     dialogs/SimpleTableWidget.cpp

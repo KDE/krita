@@ -52,7 +52,7 @@ StylesWidget::StylesWidget(QWidget *parent, bool paragraphMode, Qt::WindowFlags 
     m_stylesModel->setStyleThumbnailer(m_styleThumbnailer);
     widget.setupUi(this);
     widget.stylesView->setModel(m_stylesModel);
-    widget.stylesView->setItemDelegate(m_stylesDelegate);
+//    widget.stylesView->setItemDelegate(m_stylesDelegate);
 
     if (paragraphMode) {
         connect(widget.stylesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(applyParagraphStyle()));

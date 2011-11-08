@@ -56,7 +56,9 @@ public:
     KoCharacterStyle *characterStyleForIndex(const QModelIndex &index) const;
     QModelIndex indexForCharacterStyle(const KoCharacterStyle &style) const;
 
+    KoStyleManager* styleManager();
     void setStyleManager(KoStyleManager *manager);
+    KoStyleThumbnailer* thumbnailer();
     void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer);
 
 public slots:

@@ -19,21 +19,37 @@
 #ifndef STYLESDELEGATE_H
 #define STYLESDELEGATE_H
 
+#include <QRect>
 #include <QStyledItemDelegate>
-
-class KoStyleManager;
-class KoParagraphStyle;
-class KoCharacterStyle;
 
 class StylesDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
+
 public:
     StylesDelegate();
 
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
                             const QModelIndex &index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+    virtual bool editorEvent(QEvent *event, QAbstractItemModel *model,
+                            const QStyleOptionViewItem &option, const QModelIndex &index);
+
+signals:
+    void styleManagerButtonClicked(QModelIndex index);
+    void deleteStyleButtonClicked(QModelIndex index);
+    void needsUpdate(QModelIndex index);
+
+private:
+    bool m_editButtonPressed;
+    bool m_deleteButtonPressed;
+
+    int m_buttonSize;
+    int m_buttonDistance;
+
+    QRect m_delRect;
+    QRect m_editRect;
 };
 
 #endif

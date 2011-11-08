@@ -24,6 +24,10 @@
 #include "StylesWidget.h"
 #include "SpecialButton.h"
 
+#include "StylesCombo.h"
+#include "StylesModel.h"
+#include "StylesDelegate.h"
+
 #include <KAction>
 #include <KoTextBlockData.h>
 #include <KoParagraphStyle.h>
@@ -41,9 +45,11 @@
 
 SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
         : QWidget(parent),
-        m_blockSignals(false),
-        m_tool(tool),
-        m_directionButtonState(Auto)
+          m_blockSignals(false),
+          m_tool(tool),
+          m_directionButtonState(Auto),
+          m_stylesCombo(0),
+          m_stylesModel(0)
 {
     widget.setupUi(this);
     widget.alignCenter->setDefaultAction(tool->action("format_aligncenter"));
@@ -86,13 +92,24 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     m_stylePopup = new StylesWidget(this, true, Qt::Popup);
     m_stylePopup->setFrameShape(QFrame::StyledPanel);
     m_stylePopup->setFrameShadow(QFrame::Raised);
-    widget.blockFrame->setStylesWidget(m_stylePopup);
+//    widget.blockFrame->setStylesWidget(m_stylePopup);
 
     connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)));
     connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(doneWithFocus()));
     connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(hidePopup()));
 
     m_thumbnailer = new KoStyleThumbnailer();
+
+//    m_stylesCombo = new StylesCombo(this);
+    m_stylesModel = new StylesModel(0, true);
+    m_stylesModel->setStyleThumbnailer(m_thumbnailer);
+//    m_stylesCombo->setStylesModel(m_stylesModel);
+//    widget.gridLayout->addWidget(m_stylesCombo, 4, 0, 0, 10);
+
+    widget.blockFrame->setStylesModel(m_stylesModel);
+
+    connect(widget.blockFrame, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)), this, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)));
+    connect(widget.blockFrame, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)), this, SIGNAL(doneWithFocus()));
 }
 
 SimpleParagraphWidget::~SimpleParagraphWidget()
@@ -241,26 +258,63 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
         }
     }
 
-    QTextBlockFormat format;
-
-    int id = format.intProperty(KoParagraphStyle::StyleId);
-    KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
-    if (style) {
-        widget.blockFrame->setStylePreview(m_thumbnailer->thumbnail(style, widget.blockFrame->size()));
-    }
-    m_stylePopup->setCurrentFormat(format);
-}
-
-void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
-{
-    if (format == m_currentBlockFormat)
-        return;
-    m_currentBlockFormat = format;
+    m_currentBlockFormat = m_currentBlock.blockFormat();
 
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
     KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
     if (style) {
-        widget.blockFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->paragraphStyle(id), widget.blockFrame->contentsRect().size()));
+//        widget.blockFrame->setStylePreview(m_thumbnailer->thumbnail(style, widget.blockFrame->size()));
+
+        bool unchanged = true;
+        foreach(int property, m_currentBlockFormat.properties().keys()) {
+            kDebug() << "comparing property in set block: " << property;
+            kDebug() << " currentBlockFormat: " << m_currentBlockFormat.property(property);
+            kDebug() << " style property: " << style->value(property);
+            if (property == QTextFormat::ObjectIndex)
+                continue;
+            if (property == KoParagraphStyle::ListStyleId)
+                continue;
+            if (m_currentBlockFormat.property(property) != style->value(property)) {
+                kDebug() << "different property";
+                unchanged = false;
+                break;
+            }
+        }
+//        m_stylesCombo->setStyleIsOriginal(unchanged);
+        widget.blockFrame->setStyleIsOriginal(unchanged);
+    }
+    m_stylePopup->setCurrentFormat(m_currentBlockFormat);
+}
+
+void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
+{
+//    if (format == m_currentBlockFormat)
+//        return;
+    m_currentBlockFormat = format;
+    kDebug() << "setCurrentFormat";
+
+    int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
+    KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
+    if (style) {
+ //       widget.blockFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->paragraphStyle(id), widget.blockFrame->contentsRect().size()));
+
+        bool unchanged = true;
+        foreach(int property, m_currentBlockFormat.properties().keys()) {
+            kDebug() << "comparing property in set format: " << property;
+            kDebug() << " currentBlockFormat: " << m_currentBlockFormat.property(property);
+            kDebug() << " style property: " << style->value(property);
+            if (property == QTextFormat::ObjectIndex)
+                continue;
+            if (property == KoParagraphStyle::ListStyleId)
+                continue;
+            if (m_currentBlockFormat.property(property) != style->value(property)) {
+                unchanged = false;
+                kDebug() << "different property";
+                break;
+            }
+        }
+//        m_stylesCombo->setStyleIsOriginal(unchanged);
+        widget.blockFrame->setStyleIsOriginal(unchanged);
     }
     m_stylePopup->setCurrentFormat(format);
 }
@@ -269,11 +323,14 @@ void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
     m_stylePopup->setStyleManager(sm);
+
+    m_stylesModel->setStyleManager(sm);
+//    m_stylesCombo->setStyleManager(sm);
 }
 
 void SimpleParagraphWidget::hidePopup()
 {
-    widget.blockFrame->hidePopup();
+//    widget.blockFrame->hidePopup();
 }
 
 void SimpleParagraphWidget::listStyleChanged(int id)

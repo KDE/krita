@@ -95,7 +95,7 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
     int id = (int) index.internalId();
     switch (role) {
     case Qt::DisplayRole: {
-        return QVariant();
+//        return QVariant();
         KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
         if (paragStyle)
             return paragStyle->name();
@@ -176,6 +176,11 @@ QModelIndex StylesModel::indexForCharacterStyle(const KoCharacterStyle &style) c
     }
 }
 
+KoStyleManager* StylesModel::styleManager()
+{
+    return m_styleManager;
+}
+
 void StylesModel::setStyleManager(KoStyleManager *sm)
 {
     if (sm == m_styleManager)
@@ -202,6 +207,11 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
         connect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
         connect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
     }
+}
+
+KoStyleThumbnailer* StylesModel::thumbnailer()
+{
+    return m_styleThumbnailer;
 }
 
 void StylesModel::setStyleThumbnailer(KoStyleThumbnailer *thumbnailer)
@@ -235,15 +245,23 @@ void StylesModel::addCharacterStyle(KoCharacterStyle *style)
 // called when the stylemanager removes a style
 void StylesModel::removeParagraphStyle(KoParagraphStyle *style)
 {
+    int row = m_styleList.indexOf(style->styleId());
+    beginRemoveRows(QModelIndex(), row, row);
     m_styleMapper->removeMappings(style);
     disconnect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    m_styleList.removeAt(row);
+    endRemoveRows();
 }
 
 // called when the stylemanager removes a style
 void StylesModel::removeCharacterStyle(KoCharacterStyle *style)
 {
+    int row = m_styleList.indexOf(style->styleId());
+    beginRemoveRows(QModelIndex(), row, row);
     m_styleMapper->removeMappings(style);
     disconnect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    m_styleList.removeAt(row);
+    endRemoveRows();
 }
 
 void StylesModel::updateName(int styleId)

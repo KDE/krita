@@ -31,6 +31,10 @@ class KoParagraphStyle;
 class StylesWidget;
 class KoStyleThumbnailer;
 
+class StylesCombo;
+class StylesModel;
+class StylesDelegate;
+
 class SimpleParagraphWidget : public QWidget
 {
     Q_OBJECT
@@ -74,6 +78,10 @@ private:
     DirectionButtonState m_directionButtonState;
     KoStyleThumbnailer *m_thumbnailer;
     StylesWidget *m_stylePopup;
+
+    StylesCombo *m_stylesCombo;
+    StylesModel *m_stylesModel;
+    StylesDelegate *m_stylesDelegate;
 };
 
 #endif

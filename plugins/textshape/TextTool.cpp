@@ -1753,14 +1753,16 @@ void TextTool::insertIndexMarker()
 void TextTool::setStyle(KoCharacterStyle *style)
 {
     m_textEditor.data()->setStyle(style);
-    emit charFormatChanged(m_textEditor.data()->charFormat());
+    updateActions();
+//    emit charFormatChanged(m_textEditor.data()->charFormat());
 }
 
 void TextTool::setStyle(KoParagraphStyle *style)
 {
     m_textEditor.data()->setStyle(style);
-    emit blockFormatChanged(m_textEditor.data()->blockFormat());
-    emit charFormatChanged(m_textEditor.data()->charFormat());
+    updateActions();
+//    emit blockFormatChanged(m_textEditor.data()->blockFormat());
+//    emit charFormatChanged(m_textEditor.data()->charFormat());
 }
 
 void TextTool::insertTable()

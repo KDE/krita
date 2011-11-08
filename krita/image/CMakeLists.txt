@@ -125,6 +125,7 @@ set(kritaimage_LIB_SRCS
    kis_filter_strategy.cc
    kis_gradient_painter.cc
    kis_iterator_ng.cpp
+   kis_async_merger.cpp
    kis_merge_walker.cc
    kis_updater_context.cpp
    kis_update_job_item.cpp

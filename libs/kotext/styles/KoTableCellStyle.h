@@ -243,8 +243,7 @@ public:
 
     /**
      * Apply this style to a blockFormat by copying all properties from this, and parent
-     * styles to the target block format.  Note that the character format will not be applied
-     * using this method, use the other applyStyle() method for that.
+     * styles to the target block format.
      */
     void applyStyle(QTextTableCellFormat &format) const;
 

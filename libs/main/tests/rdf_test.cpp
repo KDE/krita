@@ -128,12 +128,14 @@ void RdfTest::testCreateMarkers()
 
     QPair<int,int> position2 = rdfDoc.findExtent(&editor);
     Q_ASSERT(position == position2);
+    Q_UNUSED(position2);
 
     // verify that we don't find markers where there aren't any
     editor.setPosition(10);
     QPair<int,int> position4 = rdfDoc.findExtent(&editor);
     Q_ASSERT(position4.first == 0);
     Q_ASSERT(position4.second == 0);
+    Q_UNUSED(position4);
 
 
     // go back to the semitem
@@ -183,6 +185,7 @@ void RdfTest::testFindMarkers()
             editor.setPosition(position.first + 1);
             const QTextTable *table = editor.currentTable();
             Q_ASSERT(table);
+	    Q_UNUSED(table);
         }
     }
 
@@ -206,6 +209,7 @@ void RdfTest::testFindMarkers()
     editor.setPosition(position.first + 1);
     const QTextTable *table = editor.currentTable();
     Q_ASSERT(table);
+    Q_UNUSED(table);
 
     QCOMPARE(semItems[1]->xmlIdList().length(), 1);
     position = rdfDoc.findExtent(semItems[1]->xmlIdList()[0]);

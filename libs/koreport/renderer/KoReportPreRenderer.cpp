@@ -441,11 +441,10 @@ void KoReportPreRendererPrivate::initEngine()
     connect(this, SIGNAL(renderingSection(KRSectionData*, OROPage*, QPointF)), m_scriptHandler, SLOT(slotEnteredSection(KRSectionData*, OROPage*, QPointF)));
 }
 
-void KoReportPreRendererPrivate::asyncItemsFinished(){
+void KoReportPreRendererPrivate::asyncItemsFinished()
+{
     kDebug() << "Finished rendering async items";
-    
     delete asyncManager;
-    
 }
 
 

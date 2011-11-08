@@ -152,6 +152,7 @@ void KisDatamanagerBenchmark::benchmarkExtent()
     dm.writeBytes(bytes, 0, 0, NO_TILE_EXACT_BOUNDARY_WIDTH, NO_TILE_EXACT_BOUNDARY_HEIGHT);
     QBENCHMARK {
         QRect extent = dm.extent();
+	Q_UNUSED(extent);
     }
 }
 

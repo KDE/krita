@@ -237,7 +237,7 @@ const KoColorProfile *KisConfig::displayProfile(int screen)
     // if we still don't have a profile, or the profile isn't suitable for display,
     // we need to get a last-resort profile. the built-in sRGB is a good choice then.
     if (!profile || !profile->isSuitableForDisplay()) {
-        profile = KoColorSpaceRegistry::instance()->profileByName("sRGB");
+        profile = KoColorSpaceRegistry::instance()->profileByName("sRGB Built-in");
     }
 
     return profile;

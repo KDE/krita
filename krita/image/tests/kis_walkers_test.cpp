@@ -181,7 +181,7 @@ void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, QStringList refere
                  << nodeTypeString(item.m_position);
 #endif
 
-        QVERIFY(item.m_node->name() == *iter);
+        QCOMPARE(item.m_node->name(), *iter);
 
         iter++;
     }
@@ -190,9 +190,9 @@ void KisWalkersTest::verifyResult(KisBaseRectsWalker &walker, QStringList refere
     qDebug() << "Result AR:\t" << walker.accessRect();
 #endif
 
-    QVERIFY(walker.accessRect() == accessRect);
-    QVERIFY(walker.changeRectVaries() == changeRectVaries);
-    QVERIFY(walker.needRectVaries() == needRectVaries);
+    QCOMPARE(walker.accessRect(), accessRect);
+    QCOMPARE(walker.changeRectVaries(), changeRectVaries);
+    QCOMPARE(walker.needRectVaries(), needRectVaries);
 }
 
 
@@ -363,7 +363,157 @@ void KisWalkersTest::testMergeVisiting()
         verifyResult(walker, orderList, accessRect, true, true);
     }
 
+    {
+        /**
+         * Test uncropped values
+         */
+        QString order("root,paint5,cplx2,group,paint1,"
+                      "paint4,paint3,cplx1,paint2");
+        QStringList orderList = order.split(",");
+        QRect cropRect(9,9,12,12);
+        QRect accessRect(cropRect);
+
+        reportStartWith("paint2 (testing uncropped)");
+        walker.setCropRect(cropRect);
+        walker.collectRects(paintLayer2, testRect);
+        walker.setCropRect(cropRect);
+        verifyResult(walker, orderList, accessRect, true, false);
+
+        QCOMPARE(walker.uncroppedChangeRect(), QRect(4,4,22,22));
+    }
+
 }
+
+    /*
+      +------------+
+      |root        |
+      | layer 5    |
+      | cplx  2    |
+      | group      |
+      |  paint 4   |
+      |  cplxacc 1 |
+      |  paint 3   |
+      |  cplx  1   |
+      |  paint 2   |
+      | paint 1    |
+      +------------+
+     */
+
+void KisWalkersTest::testComplexAccessVisiting()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE_U8);
+
+    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE_U8);
+    KisLayerSP complexRectsLayer1 = new ComplexRectsLayer(image, "cplx1", OPACITY_OPAQUE_U8);
+    KisLayerSP complexRectsLayer2 = new ComplexRectsLayer(image, "cplx2", OPACITY_OPAQUE_U8);
+    KisLayerSP complexAccess = new ComplexAccessLayer(image, "cplxacc1", OPACITY_OPAQUE_U8);
+
+    image->addNode(paintLayer1, image->rootLayer());
+    image->addNode(groupLayer, image->rootLayer());
+    image->addNode(complexRectsLayer2, image->rootLayer());
+    image->addNode(paintLayer5, image->rootLayer());
+
+    image->addNode(paintLayer2, groupLayer);
+    image->addNode(complexRectsLayer1, groupLayer);
+    image->addNode(paintLayer3, groupLayer);
+    image->addNode(complexAccess, groupLayer);
+    image->addNode(paintLayer4, groupLayer);
+
+    QRect testRect(10,10,10,10);
+    // Empty rect to show we don't need any cropping
+    QRect cropRect;
+
+    KisMergeWalker walker(cropRect);
+
+    {
+        QString order("root,paint5,cplx2,group,paint1,"
+                      "paint4,cplxacc1,paint3,cplx1,paint2");
+        QStringList orderList = order.split(",");
+        QRect accessRect = QRect(-7,-7,44,44) | QRect(0,0,30,30).translated(70,0);
+
+        reportStartWith("paint3");
+        walker.collectRects(paintLayer3, testRect);
+        verifyResult(walker, orderList, accessRect, true, true);
+    }
+}
+
+
+void KisWalkersTest::checkNotification(const KisMergeWalker::CloneNotification &notification,
+                                       const QString &name,
+                                       const QRect &rect)
+{
+    QCOMPARE(notification.m_layer->name(), name);
+    QCOMPARE(notification.m_dirtyRect, rect);
+}
+
+    /*
+      +--------------+
+      |root          |
+      | paint 3 <--+ |
+      | cplx  2    | |
+      | group <--+ | |
+      |  cplx  1 | | |
+      |  paint 2 | | |
+      | clone 2 -+ | |
+      | clone 1 ---+ |
+      | paint 1      |
+      +--------------+
+     */
+
+void KisWalkersTest::testCloneNotificationsVisiting()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE_U8);
+
+    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE_U8);
+    KisLayerSP complexRectsLayer1 = new ComplexRectsLayer(image, "cplx1", OPACITY_OPAQUE_U8);
+    KisLayerSP complexRectsLayer2 = new ComplexRectsLayer(image, "cplx2", OPACITY_OPAQUE_U8);
+
+    KisLayerSP cloneLayer1 = new KisCloneLayer(paintLayer3, image, "clone1", OPACITY_OPAQUE_U8);
+    KisLayerSP cloneLayer2 = new KisCloneLayer(groupLayer, image, "clone2", OPACITY_OPAQUE_U8);
+
+    image->addNode(paintLayer1, image->rootLayer());
+    image->addNode(cloneLayer1, image->rootLayer());
+    image->addNode(cloneLayer2, image->rootLayer());
+    image->addNode(groupLayer, image->rootLayer());
+    image->addNode(complexRectsLayer2, image->rootLayer());
+    image->addNode(paintLayer3, image->rootLayer());
+
+    image->addNode(paintLayer2, groupLayer);
+    image->addNode(complexRectsLayer1, groupLayer);
+
+    QRect testRect(10,10,10,10);
+    QRect cropRect(5,5,507,507);
+
+    KisMergeWalker walker(cropRect);
+
+    {
+        QString order("root,paint3,cplx2,group,clone2,clone1,paint1,"
+                      "cplx1,paint2");
+        QStringList orderList = order.split(",");
+        QRect accessRect = QRect(5,5,35,35);
+
+        reportStartWith("paint2");
+        walker.collectRects(paintLayer2, testRect);
+        verifyResult(walker, orderList, accessRect, true, true);
+
+        const KisMergeWalker::CloneNotificationsVector vector = walker.cloneNotifications();
+        QCOMPARE(vector.size(), 1);
+        checkNotification(vector[0], "group", QRect(7,7,16,16));
+    }
+}
+
 
 class TestingRefreshSubtreeWalker : public KisRefreshSubtreeWalker
 {

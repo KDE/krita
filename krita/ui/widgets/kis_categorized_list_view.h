@@ -30,6 +30,7 @@ class KRITAUI_EXPORT KisCategorizedListView: public QListView
     Q_OBJECT
 public:
     KisCategorizedListView(bool useCheckBoxHack=false, QWidget* parent=0);
+    virtual ~KisCategorizedListView();
     virtual void setModel(QAbstractItemModel* model);
     void updateRows(int begin, int end);
 

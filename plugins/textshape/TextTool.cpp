@@ -1242,8 +1242,8 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
     if (event->replacementLength() > 0) {
         textEditor->setPosition(textEditor->position() + event->replacementStart());
         for (int i = event->replacementLength(); i > 0; --i) {
-            //textEditor->deleteChar(KoTextEditor::NextChar, m_actionRecordChanges->isChecked(),
-                                       //canvas()->shapeController());
+            textEditor->deleteChar(KoTextEditor::NextChar, m_actionRecordChanges->isChecked(),
+                                       canvas()->shapeController());
         }
     }
     if (!event->commitString().isEmpty()) {

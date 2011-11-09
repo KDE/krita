@@ -72,9 +72,12 @@ qint64 KoInputDevice::uniqueTabletId() const
 
 bool KoInputDevice::isMouse() const
 {
-    return d->mouse;
+    // sometimes, the system gives us tablet events with NoDevice or UnknownPointer. This is
+    // likely an XInput2 bug. However, assuming that if cannot identify the tablet device we've
+    // actually got a mouse is reasonable. See https://bugs.kde.org/show_bug.cgi?id=283130.
+    return d->mouse || d->device == QTabletEvent::NoDevice || d->pointer == QTabletEvent::UnknownPointer;
 }
- 
+
 
 bool KoInputDevice::operator==(const KoInputDevice &other) const
 {

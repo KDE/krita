@@ -1207,27 +1207,25 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
         // The rectangle covering the area of the input cursor in widget coordinates.
         QRectF rect = caretRect(textEditor->cursor());
         qDebug()<<"caretRect"<<rect.topLeft()<<rect.size();
+        qDebug()<<"<<textShape position>>"<<m_textShape->position();
         qDebug()<<"m_textShapeData->documentOffset()"<<m_textShapeData->documentOffset();
         rect.moveTop(rect.top() - m_textShapeData->documentOffset());
         qDebug()<<"moveToped rect"<<rect.topLeft()<<rect.size();
-        //QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
-        //qreal zoomX, zoomY;
-        //converter.zoom(&zoomX, &zoomY);
-        //shapeMatrix.scale(zoomX, zoomY);
-        //rect = shapeMatrix.mapRect(rect);
-        //rect = rect.translated(m_textShape->absolutePosition());
-        //rect = converter.documentToView(rect);
-        qDebug()<<"Transformed rect"<<rect.topLeft()<<rect.size();/*
-        //qDebug()<<"rect with dtv"<<(converter.documentToView(rect)).topLeft()<<(converter.documentToView(rect)).size();
-        qDebug()<<"Here shows the cursor!!!"<<textEditor->cursor();
-        qDebug()<<"relayout?"<<m_textShapeData->rootArea()->isDirty();
-
-        QPointF scrollOffset = canvas()->canvasController()->scrollBarValue();
-        QPointF docOffset = canvas()->canvasController()->documentOffset();
-        qDebug()<<"scrolloffset"<<scrollOffset;
-        qDebug()<<"docOffset"<<docOffset;
-        //rect.translate(-docOffset.x(), -docOffset.y());
-        //return .toRect();*/
+        QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
+        qreal zoomX, zoomY;
+        converter.zoom(&zoomX, &zoomY);
+        qDebug()<<"Unscaled rect"<<rect.topLeft()<<rect.size();
+        shapeMatrix.scale(zoomX, zoomY);
+        rect = shapeMatrix.mapRect(rect);
+        qDebug()<<"Scaled rect"<<rect.topLeft()<<rect.size();
+        qDebug()<<"Document Origin"<<canvas()->documentOrigin();
+        qDebug()<<"scroll bar value"<<canvas()->canvasController()->scrollBarValue();
+        QPointF scroll(canvas()->canvasController()->scrollBarValue());
+        if (canvas()->canvasController()->canvasMode() == KoCanvasController::Spreadsheet &&
+                canvas()->canvasWidget()->layoutDirection() == Qt::RightToLeft) {
+            scroll.setX(-scroll.x());
+        }
+        rect.translate(canvas()->documentOrigin() - scroll);
         qDebug()<<"rect to return"<<rect.topLeft()<<rect.size();
         return rect.toRect();
     }
@@ -1257,12 +1255,9 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
     if (event->replacementLength() > 0) {
         textEditor->setPosition(textEditor->position() + event->replacementStart());
         for (int i = event->replacementLength(); i > 0; --i) {
-            textEditor->deleteChar(KoTextEditor::NextChar, m_actionRecordChanges->isChecked(),
-                                       canvas()->shapeController());
-            qDebug()<<"3"<<textEditor->position();
+            //textEditor->deleteChar(KoTextEditor::NextChar, m_actionRecordChanges->isChecked(),
+                                       //canvas()->shapeController());
         }
-        qDebug()<<"bah!";
-        qDebug()<<"2"<<textEditor->position();
     }
     QTextBlock block = textEditor->block();
     QTextLayout *layout = block.layout();
@@ -1273,8 +1268,9 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
         layout->setPreeditArea(-1, QString());
     } else {
         layout->setPreeditArea(textEditor->position() - block.position(), event->preeditString());
+        qDebug()<<"<<textEditor position before mark dirty>>"<<textEditor->position();
         const_cast<QTextDocument*>(textEditor->document())->markContentsDirty(textEditor->position(), 1);
-        qDebug()<<"1"<<textEditor->position();
+        qDebug()<<"<<textEditor position after mark dirty>>"<<textEditor->position();
     }
     event->accept();
 }

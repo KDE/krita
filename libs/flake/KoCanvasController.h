@@ -294,7 +294,7 @@ public:
    /**
      * Returns the action collection for the canvas
      * @returns action collection for this canvas, can be 0
-     */    
+     */
     virtual KActionCollection* actionCollection() const;
 
     QPoint documentOffset() const;

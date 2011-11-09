@@ -22,7 +22,8 @@
 
 #include <ui_ParagraphGeneral.h>
 
-#include <QWidget>
+#include "CharacterGeneral.h"
+
 #include <QList>
 
 class KoParagraphStyle;
@@ -32,7 +33,7 @@ class ParagraphIndentSpacing;
 class ParagraphLayout;
 class ParagraphDecorations;
 
-class ParagraphGeneral : public QWidget
+class ParagraphGeneral : public CharacterGeneral
 {
     Q_OBJECT
 public:
@@ -59,7 +60,6 @@ private slots:
     void bulletListItemChanged(const QString&);
 
 private:
-    Ui::ParagraphGeneral widget;
     bool m_blockSignals;
     bool m_nameHidden;
 

@@ -1242,12 +1242,9 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
     if (event->replacementLength() > 0) {
         textEditor->setPosition(textEditor->position() + event->replacementStart());
         for (int i = event->replacementLength(); i > 0; --i) {
-            textEditor->deleteChar(KoTextEditor::NextChar, m_actionRecordChanges->isChecked(),
-                                       canvas()->shapeController());
-            qDebug()<<"3"<<textEditor->position();
+            //textEditor->deleteChar(KoTextEditor::NextChar, m_actionRecordChanges->isChecked(),
+                                       //canvas()->shapeController());
         }
-        qDebug()<<"bah!";
-        qDebug()<<"2"<<textEditor->position();
     }
     if (!event->commitString().isEmpty()) {
         QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
@@ -1262,8 +1259,9 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
         QTextLayout *layout = block.layout();
         Q_ASSERT(layout);
         layout->setPreeditArea(textEditor->position() - block.position(), event->preeditString());
+        qDebug()<<"<<textEditor position before mark dirty>>"<<textEditor->position();
         const_cast<QTextDocument*>(textEditor->document())->markContentsDirty(textEditor->position(), 1);
-        qDebug()<<"1"<<textEditor->position();
+        qDebug()<<"<<textEditor position after mark dirty>>"<<textEditor->position();
     }
     event->accept();
 }

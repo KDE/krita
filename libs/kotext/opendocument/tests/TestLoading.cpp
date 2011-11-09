@@ -251,14 +251,14 @@ bool TestLoading::compareListFormats(const QTextListFormat &actualFormat, const 
     actualProperties.remove(KoListStyle::StyleId);
     actualProperties.remove(KoListStyle::MinimumDistance);
     actualProperties.remove(KoListStyle::ListId);
-    actualProperties.remove(KoListStyle::MarkCharacterStyle);
+    actualProperties.remove(KoListStyle::CharacterProperties);
     actualProperties.remove(QTextFormat::ObjectIndex);
 
     QMap<int, QVariant> expectedProperties = expectedFormat.properties();
     expectedProperties.remove(KoListStyle::StyleId);
     expectedProperties.remove(KoListStyle::MinimumDistance);
     expectedProperties.remove(KoListStyle::ListId);
-    expectedProperties.remove(KoListStyle::MarkCharacterStyle);
+    expectedProperties.remove(KoListStyle::CharacterProperties);
     expectedProperties.remove(QTextFormat::ObjectIndex);
 
 

@@ -509,7 +509,6 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                 setStyle(KoListStyle::Bullet);
                 break;
             case 0x25CF: // black circle, large disc -> disc
-            case 0xF0B7: // #113361
                 setStyle(KoListStyle::BlackCircle);
                 break;
             case 0x25CB:           //white circle, no fill

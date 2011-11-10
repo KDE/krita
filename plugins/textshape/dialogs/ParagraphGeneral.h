@@ -20,8 +20,6 @@
 #ifndef PARAGRAPHGENERAL_H
 #define PARAGRAPHGENERAL_H
 
-#include <ui_ParagraphGeneral.h>
-
 #include "CharacterGeneral.h"
 
 #include <QList>

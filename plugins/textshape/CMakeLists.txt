@@ -113,7 +113,6 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/ParagraphDecorations.ui
     dialogs/ParagraphBulletsNumbers.ui
     dialogs/StyleManager.ui
-    dialogs/ParagraphGeneral.ui
     dialogs/NewStyleWidget.ui
     dialogs/CharacterGeneral.ui
     dialogs/CharacterHighlighting.ui

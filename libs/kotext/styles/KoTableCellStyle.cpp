@@ -30,7 +30,7 @@
 #include "KoTableCellStyle_p.h"
 #include <KoShapeLoadingContext.h>
 #include <KoOdfGraphicStyles.h>
-#include "KoCharacterStyle.h"
+#include "KoParagraphStyle.h"
 
 #include <KDebug>
 
@@ -69,7 +69,7 @@ QString rotationAlignmentToString(KoTableCellStyle::RotationAlignment align)
 }
 
 KoTableCellStylePrivate::KoTableCellStylePrivate()
-    : charStyle(0)
+    : paragraphStyle(0)
     , parentStyle(0)
     , next(0)
 {
@@ -89,7 +89,7 @@ KoTableCellStyle::KoTableCellStyle(QObject *parent)
     , d_ptr(new KoTableCellStylePrivate)
 {
     Q_D(KoTableCellStyle);
-    d->charStyle = new KoCharacterStyle(this);
+    d->paragraphStyle = new KoParagraphStyle(this);
 }
 
 KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *parent)
@@ -98,7 +98,7 @@ KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *
 {
     Q_D(KoTableCellStyle);
     d->stylesPrivate = format.properties();
-    d->charStyle = new KoCharacterStyle(this);
+    d->paragraphStyle = new KoParagraphStyle(this);
 }
 
 KoTableCellStyle::~KoTableCellStyle()
@@ -195,22 +195,10 @@ void KoTableCellStyle::setPadding(qreal padding)
     setLeftPadding(padding);
 }
 
-KoCharacterStyle *KoTableCellStyle::characterStyle()
+KoParagraphStyle *KoTableCellStyle::paragraphStyle()
 {
     Q_D(KoTableCellStyle);
-    return d->charStyle;
-}
-
-void KoTableCellStyle::setCharacterStyle(KoCharacterStyle *style)
-{
-    Q_D(KoTableCellStyle);
-    if (d->charStyle == style) {
-        return;
-    }
-    if (d->charStyle && d->charStyle->parent() == this) {
-        delete d->charStyle;
-    }
-    d->charStyle = style;
+    return d->paragraphStyle;
 }
 
 bool KoTableCellStyle::shrinkToFit() const
@@ -304,14 +292,24 @@ void KoTableCellStyle::applyStyle(QTextTableCellFormat &format) const
     if (d->parentStyle) {
         d->parentStyle->applyStyle(format);
     }
-    if (d->charStyle) {
-        d->charStyle->applyStyle(format);
-    }
     QList<int> keys = d->stylesPrivate.keys();
     for (int i = 0; i < keys.count(); i++) {
         QVariant variant = d->stylesPrivate.value(keys[i]);
         format.setProperty(keys[i], variant);
     }
+}
+
+void KoTableCellStyle::applyStyle(QTextTableCell &cell) const
+{
+    Q_D(const KoTableCellStyle);
+    QTextTableCellFormat format = cell.format().toTableCellFormat();
+    applyStyle(format);
+
+    if (d->paragraphStyle) {
+        d->paragraphStyle->KoCharacterStyle::applyStyle(format);
+    }
+    cell.setFormat(format);
+    //FIXME TODO we should apply the paragrapStyle under all contained blocks
 }
 
 void KoTableCellStyle::setBackground(const QBrush &brush)
@@ -543,22 +541,19 @@ void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
     if (! masterPage.isEmpty()) {
         setMasterPageName(masterPage);
     }
+
+    paragraphStyle()->loadOdf(element, scontext, true); // load the par and char properties
+
     context.styleStack().save();
     QString family = element->attributeNS(KoXmlNS::style, "family", "table-cell");
     context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
 
     context.styleStack().setTypeProperties("table-cell");
     loadOdfProperties(scontext, context.styleStack());
-    
-    KoCharacterStyle *charstyle = characterStyle();
-    context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
-    charstyle->loadOdf(scontext);   // load the KoCharacterStyle from the stylestack
 
     context.styleStack().setTypeProperties("graphic");
     loadOdfProperties(scontext, context.styleStack());
 
-    context.styleStack().setTypeProperties("paragraph");
-    loadOdfProperties(scontext, context.styleStack());
     context.styleStack().restore();
 
     // Borders - ugly mode enabled
@@ -846,7 +841,7 @@ void KoTableCellStyle::removeDuplicates(const KoTableCellStyle &other)
     d->stylesPrivate.removeDuplicates(otherD->stylesPrivate);
 }
 
-void KoTableCellStyle::saveOdf(KoGenStyle &style)
+void KoTableCellStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
 {
     Q_D(KoTableCellStyle);
     QList<int> keys = d->stylesPrivate.keys();
@@ -935,8 +930,8 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
             style.addProperty("style:shadow", shadow().saveOdf());
         }
     }
-    if (d->charStyle) {
-        d->charStyle->saveOdf(style);
+    if (d->paragraphStyle) {
+        d->paragraphStyle->saveOdf(style, context);
     }
 
 }

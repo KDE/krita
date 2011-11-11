@@ -121,7 +121,7 @@ void TestLoadStyle::testLoadStyle()
     QCOMPARE(block.text(), QString("The following is a word which uses the named character style MyStyle."));
 
     QTextCursor cursor(block);
-    QCOMPARE(cursor.blockFormat().property(KoParagraphStyle::StyleId).toInt(), 100);
+    QCOMPARE(cursor.blockFormat().property(KoParagraphStyle::StyleId).toInt(), 101);
     QCOMPARE(cursor.blockCharFormat().property(KoCharacterStyle::StyleId).toInt(), 101);
     QCOMPARE(cursor.charFormat().property(KoCharacterStyle::StyleId).toInt(), 101);
 

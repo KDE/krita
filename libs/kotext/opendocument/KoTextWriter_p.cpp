@@ -517,7 +517,7 @@ QString KoTextWriter::Private::saveParagraphStyle(const QTextBlockFormat &blockF
 
 QString KoTextWriter::Private::saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat)
 {
-    KoCharacterStyle *defaultCharStyle = styleManager->defaultParagraphStyle()->characterStyle();
+    KoCharacterStyle *defaultCharStyle = styleManager->defaultCharacterStyle();
 
     KoCharacterStyle *originalCharStyle = styleManager->characterStyle(charFormat.intProperty(KoCharacterStyle::StyleId));
     if (!originalCharStyle)
@@ -627,7 +627,7 @@ QString KoTextWriter::Private::saveTableCellStyle(const QTextTableCellFormat& ce
         style.setAutoStyleInStylesDotXml(true);
 
     KoTableCellStyle cellStyle(cellFormat);
-    cellStyle.saveOdf(style);
+    cellStyle.saveOdf(style, context);
     generatedName = context.mainStyles().insert(style, generatedName);
     return generatedName;
 }

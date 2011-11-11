@@ -156,7 +156,6 @@ KoToolManager::Private::Private(KoToolManager *qq)
     canvasData(0),
     layerEnabled(true)
 {
-    tabletEventTimer.setSingleShot(true);
 }
 
 KoToolManager::Private::~Private()
@@ -645,21 +644,16 @@ void KoToolManager::Private::currentLayerChanged(const KoShapeLayer *layer)
     }
 }
 
-#define MSECS_TO_IGNORE_SWITCH_TO_MOUSE_AFTER_TABLET_EVENT_RECEIVED 100
-
 void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
 {
     Q_ASSERT(canvasData);
     if (!canvasData) return;
-    if (!device.isMouse()) {
-        tabletEventTimer.start(MSECS_TO_IGNORE_SWITCH_TO_MOUSE_AFTER_TABLET_EVENT_RECEIVED);
-    }
     if (inputDevice == device) return;
-    if (device.isMouse() && tabletEventTimer.isActive()) {
-        // Ignore switch to mouse for a short time after a tablet event
-        // is received, as this is likely to be either the mouse event sent
-        // to a widget that doesn't accept the tablet event, or, on X11,
-        // a core event sent after the tablet event.
+    if (device.isMouse() && !inputDevice.isMouse()) {
+        // we never switch back to mouse from a tablet input device, so the user can use the
+        // mouse to edit the settings for a tool activated by a tablet. See bugs
+        // https://bugs.kde.org/show_bug.cgi?id=283130 and https://bugs.kde.org/show_bug.cgi?id=285501.
+        // We do continue to switch between tablet devices, thought.
         return;
     }
     inputDevice = device;

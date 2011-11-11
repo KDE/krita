@@ -58,8 +58,10 @@ private slots:
     void slotStrikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor);
     void slotCapitalizationChanged(QFont::Capitalization capitalisation);
 
-private:
+protected:
     Ui::CharacterGeneral widget;
+
+private:
     bool m_blockSignals;
     bool m_nameHidden;
 

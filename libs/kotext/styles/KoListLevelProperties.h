@@ -82,9 +82,9 @@ public:
     /// return the styleId of the KoCharacterStyle to be used to layout the listitem
     int characterStyleId() const;
     /// set the style for the bullet or the number of the list
-    void setMarkCharacterStyle(QSharedPointer<KoCharacterStyle> style);
+    void setCharacterProperties(QSharedPointer<KoCharacterStyle> style);
     /// return the KoCharacterStyle for the bullet or the number of the list
-    QSharedPointer<KoCharacterStyle> markCharacterStyle() const;
+    QSharedPointer<KoCharacterStyle> characterProperties() const;
     /// set the character to be used as the counter of the listitem
     void setBulletCharacter(QChar character);
     /// return the character to be used as the counter of the listitem

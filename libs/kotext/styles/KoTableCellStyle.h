@@ -41,10 +41,10 @@ class QRectF;
 class KoStyleStack;
 class KoGenStyle;
 class KoGenStyles;
-class KoCharacterStyle;
+class KoParagraphStyle;
 #include "KoXmlReaderForward.h"
 class KoShapeLoadingContext;
-
+class KoShapeSavingContext;
 class KoTableCellStylePrivate;
 
 /**
@@ -145,18 +145,11 @@ public:
     void clearBackground();
 
     /**
-     * Get the character style for this cell style
+     * Get the paragraph style for this cell style
      *
-     * @return the character style
+     * @return the paragraph style
      */
-    KoCharacterStyle *characterStyle();
-
-    /**
-     * Sets the character style for this cell style
-     *
-     * @param style The character style
-     */
-    void setCharacterStyle(KoCharacterStyle *style);
+    KoParagraphStyle *paragraphStyle();
 
     bool shrinkToFit() const;
     void setShrinkToFit(bool state);
@@ -242,10 +235,14 @@ public:
     void copyProperties(const KoTableCellStyle *style);
 
     /**
-     * Apply this style to a blockFormat by copying all properties from this, and parent
-     * styles to the target block format.
+     * Apply this style to a textTableCellFormat by copying all properties from this, and parent
+     * styles to the target textTableCellFormat.  Note that the paragraph format will not be applied
+     * using this method, use the other method for that.
+     * No default values are applied.
      */
     void applyStyle(QTextTableCellFormat &format) const;
+
+    void applyStyle(QTextTableCell &cell) const;
 
     void remove(int key);
 
@@ -262,7 +259,7 @@ public:
      */
     void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context);
 
-    void saveOdf(KoGenStyle &style);
+    void saveOdf(KoGenStyle &style, KoShapeSavingContext &context);
 
     /**
      * Returns true if this paragraph style has the property set.

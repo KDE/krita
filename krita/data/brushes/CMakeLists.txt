@@ -1,4 +1,6 @@
 install( FILES
+M_Pipe_whiteflat.png
+texture-a.png
 A_--13B-Airbrush-big.vbr
 A_-13b-Airbrush.vbr
 A_-13c-Airbrush.vbr

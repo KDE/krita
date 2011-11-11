@@ -1281,10 +1281,9 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     if ( axisElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         styleStack.clear();
         context.odfLoadingContext().fillStyleStack( axisElement, KoXmlNS::chart, "style-name", "chart" );
-        styleStack.setTypeProperties( "text" );
 
         KoCharacterStyle charStyle;
-        charStyle.loadOdf( context );
+        charStyle.loadOdf(&axisElement, context );
         setFont( charStyle.font() );
 
         styleStack.setTypeProperties( "chart" );

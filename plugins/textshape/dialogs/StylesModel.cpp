@@ -231,11 +231,6 @@ void StylesModel::addParagraphStyle(KoParagraphStyle *style)
 // called when the stylemanager adds a style
 void StylesModel::addCharacterStyle(KoCharacterStyle *style)
 {
-    foreach(KoParagraphStyle *ps, m_styleManager->paragraphStyles()) {
-        if (style->styleId() == ps->characterStyle()->styleId()) {
-            return;
-        }
-    }
     Q_ASSERT(style);
     m_styleList.append(style->styleId());
     m_styleMapper->setMapping(style, style->styleId());

@@ -115,18 +115,6 @@
      </item>
      <item row="1" column="0" colspan="10">
       <widget class="StylesCombo" name="blockFrame">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>32</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
       </widget>
      </item>
     </layout>

@@ -48,7 +48,6 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     return;
     }
     // Open style manager dialog button.
-    kDebug() << "draw. optionRect: " << option.rect;
     int dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) - m_buttonSize - m_buttonDistance -2;
     int dy1 = 1 + (option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
     int dx2 = -m_buttonSize - m_buttonDistance -2;
@@ -62,7 +61,6 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     optEdit.rect = option.rect.adjusted(dx1, dy1, dx2, dy2);
  //   m_editRect = optEdit.rect;
     const_cast<StylesDelegate*>(this)->m_editRect = optEdit.rect;
-    kDebug() << "editRect: " << optEdit.rect;
     QApplication::style()->drawControl(QStyle::CE_PushButton, &optEdit, painter, 0);
 
     // Delete style button.
@@ -79,7 +77,6 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     optDel.rect = option.rect.adjusted(dx1, dy1, dx2, dy2);
     const_cast<StylesDelegate*>(this)->m_delRect = optDel.rect;
  //   m_delRect = optDel.rect;
-    kDebug() << "delRect: " << optDel.rect;
     QApplication::style()->drawControl(QStyle::CE_PushButton, &optDel, painter, 0);
 }
 
@@ -94,18 +91,14 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
     Q_UNUSED(model);
     if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        kDebug() << "buttonPressed event pos: " << mouseEvent->pos();
-        kDebug() << "optionRect: " << option.rect;
         int dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) - m_buttonSize - m_buttonDistance -2;
         int dy1 = 1 + (option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
         int dx2 = - m_buttonSize - m_buttonDistance -2;
         int dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
         QRect editRect = option.rect.adjusted(dx1, dy1, dx2, dy2);
-        kDebug() << "buttonPressed. editRect: " << editRect;
   //      if (editRect.contains(mouseEvent->pos())) {
         if (m_editRect.contains(mouseEvent->pos())) {
             m_editButtonPressed = true;
-            kDebug() << "edit button pressed";
         }
         else {
             m_editButtonPressed = false;
@@ -115,7 +108,6 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         dx2 = -2;
         dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
         QRect delRect = option.rect.adjusted(dx1, dy1, dx2, dy2);
-        kDebug() << "buttonPressed. delRect: " << delRect;
 //        if (delRect.contains(mouseEvent->pos())){
         if (m_delRect.contains(mouseEvent->pos())){
             m_deleteButtonPressed = true;
@@ -136,7 +128,6 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         int dx2 = - m_buttonSize - m_buttonDistance -2;
         int dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
         QRect editRect = option.rect.adjusted(dx1, dy1, dx2, dy2);
-        kDebug() << "buttonReleased. editRect: " << editRect;
 //        if (editRect.contains(mouseEvent->pos())) {
         if (m_editRect.contains(mouseEvent->pos())) {
             emit styleManagerButtonClicked(index);
@@ -147,7 +138,6 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         dx2 = -2;
         dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
         QRect delRect = option.rect.adjusted(dx1, dy1, dx2, dy2);
-        kDebug() << "buttonReleased. delRect: " << delRect;
 //        if (delRect.contains(mouseEvent->pos())){
         if (m_delRect.contains(mouseEvent->pos())){
             emit deleteStyleButtonClicked(index);

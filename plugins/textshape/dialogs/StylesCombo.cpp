@@ -22,6 +22,7 @@
 #include "StylesComboView.h"
 #include "StylesComboPreview.h"
 #include "StylesDelegate.h"
+#include <KoParagraphStyle.h>
 #include <KoStyleManager.h>
 #include <KoStyleThumbnailer.h>
 #include "StyleManagerDialog.h"
@@ -184,6 +185,47 @@ void StylesCombo::selectionChanged(int index)
     }
     }
     m_preview->setPreview(QPixmap());
+}
+
+void StylesCombo::setCurrentFormat(const QTextBlockFormat &format)
+{
+/*    if (format == m_currentBlockFormat)
+        return;
+    m_currentBlockFormat = format;
+    int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
+    bool unchanged = true;
+    KoParagraphStyle *usedStyle = 0;
+    if (m_styleManager)
+        usedStyle = m_styleManager->paragraphStyle(id);
+    if (usedStyle) {
+        foreach(int property, m_currentBlockFormat.properties().keys()) {
+            if (property == QTextFormat::ObjectIndex)
+                continue;
+            if (property == KoParagraphStyle::ListStyleId)
+                continue;
+            if (m_currentBlockFormat.property(property) != usedStyle->value(property)) {
+                unchanged = false;
+                break;
+            }
+        }
+    }
+*/
+    kDebug() << "in setCurrentFormat";
+    int id = format.intProperty(KoParagraphStyle::StyleId);
+    kDebug() << "paragraph id: " << id;
+    KoParagraphStyle *paragStyle = m_stylesModel->styleManager()->paragraphStyle(id);
+    if (paragStyle) {
+        kDebug() << "in setCurrentFormat. we have a paragStyle to set";
+        m_stylesModel->setCurrentParagraphStyle(id, m_preview->isAddButtonShown()); //temporary hack for the unchanged stuff. i need to decide if this resides in the combo or in the paragWidget.
+        view()->setCurrentIndex(m_stylesModel->indexForParagraphStyle(paragStyle));
+        //setCurrentIndex(m_stylesModel->indexForParagraphStyle(paragStyle).row());
+        m_preview->setPreview(m_stylesModel->thumbnailer()->thumbnail(paragStyle, m_preview->availableSize()));
+    }
+}
+
+void StylesCombo::setCurrentFormat(const QTextCharFormat &format)
+{
+
 }
 
 bool StylesCombo::eventFilter(QObject *object, QEvent *event)

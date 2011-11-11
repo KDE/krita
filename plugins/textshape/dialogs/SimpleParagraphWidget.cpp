@@ -284,6 +284,7 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
         widget.blockFrame->setStyleIsOriginal(unchanged);
     }
     m_stylePopup->setCurrentFormat(m_currentBlockFormat);
+    widget.blockFrame->setCurrentFormat(m_currentBlockFormat);
 }
 
 void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
@@ -317,6 +318,7 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
         widget.blockFrame->setStyleIsOriginal(unchanged);
     }
     m_stylePopup->setCurrentFormat(format);
+    widget.blockFrame->setCurrentFormat(format);
 }
 
 void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)

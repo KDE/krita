@@ -20,13 +20,16 @@
 #define STYLESCOMBO_H
 
 #include <QComboBox>
+#include <QTextBlockFormat>
+#include <QTextCharFormat>
+
+class QListView;
 
 class KoParagraphStyle;
 class KoStyleManager;
 class StylesModel;
 class StylesComboView;
 class StylesComboPreview;
-class QListView;
 
 class StylesCombo : public QComboBox
 {
@@ -43,6 +46,10 @@ public:
     void setStyleIsOriginal(bool original);
 
     bool eventFilter(QObject *, QEvent *);
+
+public slots:
+    void setCurrentFormat(const QTextBlockFormat &format);
+    void setCurrentFormat(const QTextCharFormat &format);
 
 signals:
     void selectionChanged(QModelIndex index);

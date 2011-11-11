@@ -1344,6 +1344,11 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         if (fontName == "Thorndale")
             fontName = "Times New Roman";
 
+        // 'StarSymbol' is written by OpenOffice but they actually mean
+        //  'OpenSymbol'.
+        if (fontName == "StarSymbol")
+            fontName = "OpenSymbol";
+
         fontName.remove(QRegExp("\\sCE$")); // Arial CE -> Arial
         setFontFamily(fontName);
     }

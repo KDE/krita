@@ -1,4 +1,3 @@
-
 /*  This file is part of the KDE project
 
     Copyright (c) 2000 Matthias Elter <elter@kde.org>
@@ -27,7 +26,6 @@
 #include <QImage>
 #include <QMap>
 #include <QFile>
-#include <QTextStream>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -83,7 +81,6 @@ bool KoPattern::save()
     QFile file(filename());
     file.open(QIODevice::WriteOnly | QIODevice::Truncate);
 
-    QTextStream stream(&file);
     // Header: header_size (24+name length),version,width,height,colordepth of brush,magic,name
     // depth: 1 = greyscale, 2 = greyscale + A, 3 = RGB, 4 = RGBA
     // magic = "GPAT", as a single uint32, the docs are wrong here!

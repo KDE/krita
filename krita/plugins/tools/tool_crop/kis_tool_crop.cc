@@ -452,7 +452,8 @@ void KisToolCrop::crop()
     } else {
         currentImage()->cropImage(cropRect);
     }
-
+    
+    currentImage()->requestProjectionUpdate(currentNode().data(), QRect(0, 0, cropRect.width(), cropRect.height()));
     m_rectCrop = QRect(0, 0, 0, 0);
 
     updateWidgetValues();

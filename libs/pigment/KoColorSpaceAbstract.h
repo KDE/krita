@@ -25,6 +25,7 @@
 #include <klocale.h>
 
 #include <KoColorSpace.h>
+#include <KoColorProfile.h>
 #include "KoColorSpaceConstants.h"
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceRegistry.h>
@@ -51,13 +52,9 @@
 template<class _CSTrait>
 class KoColorSpaceAbstract : public KoColorSpace
 {
-
 public:
-
     KoColorSpaceAbstract(const QString &id, const QString &name) :
-            KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), new KoConvolutionOpImpl< _CSTrait>()) {
-
-        
+        KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), new KoConvolutionOpImpl< _CSTrait>()) {
     }
 
     virtual quint32 colorChannelCount() const {
@@ -100,6 +97,7 @@ public:
         typename _CSTrait::channels_type c = _CSTrait::nativeArray(srcPixel)[channelIndex];
         return KoColorSpaceMaths<typename _CSTrait::channels_type, quint16>::scaleToA(c);
     }
+
     virtual void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const {
         _CSTrait::singleChannelPixel(dstPixel, srcPixel, channelIndex);
     }
@@ -149,7 +147,59 @@ public:
     virtual KoID mathToolboxId() const {
         return KoID("Basic");
     }
+
+    virtual bool convertPixelsTo(const quint8 *src,
+                                 quint8 *dst, const KoColorSpace *dstColorSpace,
+                                 quint32 numPixels,
+                                 KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const {
+        
+        // check whether we have the same profile and color model, but only a different bit
+        // depth; in that case we don't convert as such, but scale
+        bool scaleOnly = dstColorSpace->colorModelId().id() == colorModelId().id() &&
+                         dstColorSpace->colorDepthId().id() != colorDepthId().id() &&
+                         dstColorSpace->profile()->name()   == profile()->name();
+        
+        if(scaleOnly && dynamic_cast<const KoColorSpaceAbstract*>(dstColorSpace)) {
+            typedef typename _CSTrait::channels_type channels_type;
+            
+            switch(dstColorSpace->channels()[0]->channelValueType())
+            {
+            case KoChannelInfo::UINT8:
+                scalePixels<_CSTrait::pixelSize, 1, channels_type, quint8>(src, dst, numPixels);
+                return true;
+//             case KoChannelInfo::INT8:
+//                 scalePixels<_CSTrait::pixelSize, 1, channels_type, qint8>(src, dst, numPixels);
+//                 return true;
+            case KoChannelInfo::UINT16:
+                scalePixels<_CSTrait::pixelSize, 2, channels_type, quint16>(src, dst, numPixels);
+                return true;
+            case KoChannelInfo::INT16:
+                scalePixels<_CSTrait::pixelSize, 2, channels_type, qint16>(src, dst, numPixels);
+                return true;
+            case KoChannelInfo::UINT32:
+                scalePixels<_CSTrait::pixelSize, 4, channels_type, quint32>(src, dst, numPixels);
+                return true;
+            default:
+                break;
+            }
+        }
+        
+        return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent);
+    }
+    
+private:
+    template<int srcPixelSize, int dstChannelSize, class TSrcChannel, class TDstChannel>
+    void scalePixels(const quint8* src, quint8* dst, quint32 numPixels) const {
+        qint32 dstPixelSize = dstChannelSize * _CSTrait::channels_nb;
+        
+        for(quint32 i=0; i<numPixels; ++i) {
+            const TSrcChannel* srcPixel = reinterpret_cast<const TSrcChannel*>(src + i * srcPixelSize);
+            TDstChannel*       dstPixel = reinterpret_cast<TDstChannel*>(dst + i * dstPixelSize);
+            
+            for(quint32 c=0; c<_CSTrait::channels_nb; ++c)
+                dstPixel[c] = Arithmetic::scale<TDstChannel>(srcPixel[c]);
+        }
+    }
 };
 
-
-#endif
+#endif // KOCOLORSPACEABSTRACT_H

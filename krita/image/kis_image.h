@@ -125,20 +125,17 @@ public:
     QImage convertToQImage(const QRect& scaledRect, const QSize& scaledImageSize, const KoColorProfile *profile);
 
     /**
-     * Lock the image to make sure no recompositing-causing signals
-     * get emitted while you're messing with the layers. Don't forget
-     * to unlock again.
+     * Calls KisUpdateScheduler::lock
      */
     void lock();
 
     /**
-     * Unlock the image to make sure the rest of Krita learns about
-     * changes in the image again.
+     * Calls KisUpdateScheduler::unlock
      */
     void unlock();
 
     /**
-     * Returns true if the image is locked.
+     * Returns true if lock() has been called more often than unlock().
      */
     bool locked() const;
 
@@ -555,7 +552,7 @@ signals:
      * Inform the model we're done moving a layer.
      */
     void sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
-    
+
     /**
      * Inform the model that a node was changed
      */

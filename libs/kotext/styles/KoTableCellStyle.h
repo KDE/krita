@@ -22,7 +22,6 @@
 #ifndef KOTABLECELLSTYLE_H
 #define KOTABLECELLSTYLE_H
 
-#include "KoTableBorderStyle.h"
 #include "KoText.h"
 #include "kotext_export.h"
 
@@ -81,7 +80,7 @@ public:
     };
 
     enum Property {
-        StyleId = QTextTableFormat::UserProperty + 1,
+        StyleId = QTextTableCellFormat::UserProperty + 7001,
         ShrinkToFit,                ///< Shrink the cell content to fit the size
         Wrap,                       ///< Wrap the text within the cell
         CellProtection,             ///< The cell protection when the table is protected

@@ -37,12 +37,7 @@ public:
     KoBorderPrivate();
     ~KoBorderPrivate();
 
-    KoBorder::BorderData leftBorder;
-    KoBorder::BorderData topBorder;
-    KoBorder::BorderData rightBorder;
-    KoBorder::BorderData bottomBorder;
-    KoBorder::BorderData tlbrBorder;
-    KoBorder::BorderData trblBorder;
+    QMap<KoBorder::Side, KoBorder::BorderData> data;
 };
 
 KoBorderPrivate::KoBorderPrivate()
@@ -61,6 +56,36 @@ KoBorder::BorderData::BorderData()
 {
 }
 
+bool KoBorder::BorderData::operator==(const KoBorder::BorderData& other) const
+{
+    // Left Borders
+    if (style == BorderNone && other.style == BorderNone) {
+        // If both styles are None, then the rest of the values don't
+        // need to be compared.
+        ;
+    }
+    else if (style != other.style) {
+        // If any of them are non-None, and they are different, the
+        // borders are also different.
+        return false;
+    }
+    else {
+        // Here we know that the border styles are the same, now
+        // compare the rest of the values.
+        if (outerPen != other.outerPen)
+            return false;
+        
+        // If the border style == BorderDouble, then compare a couple
+            // of other values too.
+            if (style == BorderDouble) {
+                if (innerPen != other.innerPen)
+                    return false;
+                if (spacing != other.spacing)
+                    return false;
+            }
+    }
+    return true;
+}
 
 // ----------------------------------------------------------------
 
@@ -94,114 +119,19 @@ bool KoBorder::operator==(const KoBorder &other) const
     if (d.data() == other.d.data())
         return true;
 
-    // Left Borders
-    if (d->leftBorder.style == BorderNone && other.d->leftBorder.style == BorderNone) {
-        // If both styles are None, then the rest of the values don't
-        // need to be compared.
-        ;
-    }
-    else if (d->leftBorder.style != other.d->leftBorder.style) {
-        // If any of them are non-None, and they are different, the
-        // borders are also different.
+    
+    if (d->data.size() != other.d->data.size())
         return false;
-    }
-    else {
-        // Here we know that the border styles are the same, now
-        // compare the rest of the values.
-        if (d->leftBorder.outerPen != other.d->leftBorder.outerPen)
+
+    KoBorder::Side key;
+    
+    foreach (key, d->data.keys()) {
+        if (!other.d->data.contains(key))
             return false;
-
-        // If the border style == BorderDouble, then compare a couple
-        // of other values too.
-        if (d->leftBorder.style == BorderDouble) {
-            if (d->leftBorder.innerPen != other.d->leftBorder.innerPen)
-                return false;
-            if (d->leftBorder.spacing != other.d->leftBorder.spacing)
-                return false;
-        }
-    }
-
-    // Tope Borders
-    if (d->topBorder.style == BorderNone && other.d->topBorder.style == BorderNone) {
-        // If both styles are None, then the rest of the values don't
-        // need to be compared.
-        ;
-    }
-    else if (d->topBorder.style != other.d->topBorder.style) {
-        // If any of them are non-None, and they are different, the
-        // borders are also different.
-        return false;
-    }
-    else {
-        // Here we know that the border styles are the same, now
-        // compare the rest of the values.
-        if (d->topBorder.outerPen != other.d->topBorder.outerPen)
+        if (!(other.d->data[key] == d->data[key]))
             return false;
-
-        // If the border style == BorderDouble, then compare a couple
-        // of other values too.
-        if (d->topBorder.style == BorderDouble) {
-            if (d->topBorder.innerPen != other.d->topBorder.innerPen)
-                return false;
-            if (d->topBorder.spacing != other.d->topBorder.spacing)
-                return false;
-        }
     }
-
-    // Right Borders
-    if (d->rightBorder.style == BorderNone && other.d->rightBorder.style == BorderNone) {
-        // If both styles are None, then the rest of the values don't
-        // need to be compared.
-        ;
-    }
-    else if (d->rightBorder.style != other.d->rightBorder.style) {
-        // If any of them are non-None, and they are different, the
-        // borders are also different.
-        return false;
-    }
-    else {
-        // Here we know that the border styles are the same, now
-        // compare the rest of the values.
-        if (d->rightBorder.outerPen != other.d->rightBorder.outerPen)
-            return false;
-
-        // If the border style == BorderDouble, then compare a couple
-        // of other values too.
-        if (d->rightBorder.style == BorderDouble) {
-            if (d->rightBorder.innerPen != other.d->rightBorder.innerPen)
-                return false;
-            if (d->rightBorder.spacing != other.d->rightBorder.spacing)
-                return false;
-        }
-    }
-
-    // Bottom Borders
-    if (d->bottomBorder.style == BorderNone && other.d->bottomBorder.style == BorderNone) {
-        // If both styles are None, then the rest of the values don't
-        // need to be compared.
-        ;
-    }
-    else if (d->bottomBorder.style != other.d->bottomBorder.style) {
-        // If any of them are non-None, and they are different, the
-        // borders are also different.
-        return false;
-    }
-    else {
-        // Here we know that the border styles are the same, now
-        // compare the rest of the values.
-        if (d->bottomBorder.outerPen != other.d->bottomBorder.outerPen)
-            return false;
-
-        // If the border style == BorderDouble, then compare a couple
-        // of other values too.
-        if (d->bottomBorder.style == BorderDouble) {
-            if (d->bottomBorder.innerPen != other.d->bottomBorder.innerPen)
-                return false;
-            if (d->bottomBorder.spacing != other.d->bottomBorder.spacing)
-                return false;
-        }
-    }
-
+    
     return true;
 }
 
@@ -287,386 +217,144 @@ QString KoBorder::odfBorderStyleString(BorderStyle borderstyle)
 
 
 // ----------------------------------------------------------------
-
-
-void KoBorder::setLeftBorderStyle(BorderStyle style)
-{
-    d->leftBorder.style = style;
-}
-
-KoBorder::BorderStyle KoBorder::leftBorderStyle() const
-{
-    return d->leftBorder.style;
-}
-
-void KoBorder::setLeftBorderColor(const QColor &color)
-{
-    d->leftBorder.outerPen.setColor(color);
-}
-
-QColor KoBorder::leftBorderColor() const
-{
-    return d->leftBorder.outerPen.color();
-}
-
-void KoBorder::setLeftBorderWidth(qreal width)
-{
-    d->leftBorder.outerPen.setWidthF(width);
-}
-
-qreal KoBorder::leftBorderWidth() const
-{
-    return d->leftBorder.outerPen.widthF();
-}
-
-void KoBorder::setLeftInnerBorderWidth(qreal width)
-{
-    d->leftBorder.innerPen.setWidthF(width);
-}
-
-qreal KoBorder::leftInnerBorderWidth() const
-{
-    return d->leftBorder.innerPen.widthF();
-}
-
-void KoBorder::setLeftBorderSpacing(qreal width)
-{
-    d->leftBorder.spacing = width;
-}
-
-qreal KoBorder::leftBorderSpacing() const
-{
-    return d->leftBorder.spacing;
-}
-
-
-void KoBorder::setTopBorderStyle(BorderStyle style)
-{
-    d->topBorder.style = style;
-}
-
-KoBorder::BorderStyle KoBorder::topBorderStyle() const
-{
-    return d->topBorder.style;
-}
-
-void KoBorder::setTopBorderColor(const QColor &color)
-{
-    d->topBorder.outerPen.setColor(color);
-}
-
-QColor KoBorder::topBorderColor() const
-{
-    return d->topBorder.outerPen.color();
-}
-
-void KoBorder::setTopBorderWidth(qreal width)
-{
-    d->topBorder.outerPen.setWidthF(width);
-}
-
-qreal KoBorder::topBorderWidth() const
-{
-    return d->topBorder.outerPen.widthF();
-}
-
-void KoBorder::setTopInnerBorderWidth(qreal width)
-{
-    d->topBorder.innerPen.setWidthF(width);
-}
-
-qreal KoBorder::topInnerBorderWidth() const
-{
-    return d->topBorder.innerPen.widthF();
-}
-
-void KoBorder::setTopBorderSpacing(qreal width)
-{
-    d->topBorder.spacing = width;
-}
-
-qreal KoBorder::topBorderSpacing() const
-{
-    return d->topBorder.spacing;
-}
-
-
-void KoBorder::setRightBorderStyle(BorderStyle style)
-{
-    d->rightBorder.style = style;
-}
-
-KoBorder::BorderStyle KoBorder::rightBorderStyle() const
-{
-    return d->rightBorder.style;
-}
-
-void KoBorder::setRightBorderColor(const QColor &color)
-{
-    d->rightBorder.outerPen.setColor(color);
-}
-
-QColor KoBorder::rightBorderColor() const
-{
-    return d->rightBorder.outerPen.color();
-}
-
-void KoBorder::setRightBorderWidth(qreal width)
-{
-    d->rightBorder.outerPen.setWidthF(width);
-}
-
-qreal KoBorder::rightBorderWidth() const
-{
-    return d->rightBorder.outerPen.widthF();
-}
-
-void KoBorder::setRightInnerBorderWidth(qreal width)
-{
-    d->rightBorder.innerPen.setWidthF(width);
-}
-
-qreal KoBorder::rightInnerBorderWidth() const
-{
-    return d->rightBorder.innerPen.widthF();
-}
-
-void KoBorder::setRightBorderSpacing(qreal width)
-{
-    d->rightBorder.spacing = width;
-}
-
-qreal KoBorder::rightBorderSpacing() const
-{
-    return d->rightBorder.spacing;
-}
-
-
-void KoBorder::setBottomBorderStyle(BorderStyle style)
-{
-    d->bottomBorder.style = style;
-}
-
-KoBorder::BorderStyle KoBorder::bottomBorderStyle() const
-{
-    return d->bottomBorder.style;
-}
-
-void KoBorder::setBottomBorderColor(const QColor &color)
-{
-    d->bottomBorder.outerPen.setColor(color);
-}
-
-QColor KoBorder::bottomBorderColor() const
-{
-    return d->bottomBorder.outerPen.color();
-}
-
-void KoBorder::setBottomBorderWidth(qreal width)
-{
-    d->bottomBorder.outerPen.setWidthF(width);
-}
-
-qreal KoBorder::bottomBorderWidth() const
-{
-    return d->bottomBorder.outerPen.widthF();
-}
-
-void KoBorder::setBottomInnerBorderWidth(qreal width)
-{
-    d->bottomBorder.innerPen.setWidthF(width);
-}
-
-qreal KoBorder::bottomInnerBorderWidth() const
-{
-    return d->bottomBorder.innerPen.widthF();
-}
-
-void KoBorder::setBottomBorderSpacing(qreal width)
-{
-    d->bottomBorder.spacing = width;
-}
-
-qreal KoBorder::bottomBorderSpacing() const
-{
-    return d->bottomBorder.spacing;
-}
-
-void KoBorder::setTlbrBorderStyle(BorderStyle style)
-{
-    d->tlbrBorder.style = style;
-}
-
-KoBorder::BorderStyle KoBorder::tlbrBorderStyle() const
-{
-    return d->tlbrBorder.style;
-}
-
-void KoBorder::setTlbrBorderColor(const QColor &color)
-{
-    d->tlbrBorder.outerPen.setColor(color);
-}
-
-QColor KoBorder::tlbrBorderColor() const
-{
-    return d->tlbrBorder.outerPen.color();
-}
-
-void KoBorder::setTlbrBorderWidth(qreal width)
-{
-    d->tlbrBorder.outerPen.setWidthF(width);
-}
-
-qreal KoBorder::tlbrBorderWidth() const
-{
-    return d->tlbrBorder.outerPen.widthF();
-}
-
-void KoBorder::setTlbrInnerBorderWidth(qreal width)
-{
-    d->tlbrBorder.innerPen.setWidthF(width);
-}
-
-qreal KoBorder::tlbrInnerBorderWidth() const
-{
-    return d->tlbrBorder.innerPen.widthF();
-}
-
-void KoBorder::setTlbrBorderSpacing(qreal width)
-{
-    d->tlbrBorder.spacing = width;
-}
-
-qreal KoBorder::tlbrBorderSpacing() const
-{
-    return d->tlbrBorder.spacing;
-}
-
-void KoBorder::setTrblBorderStyle(BorderStyle style)
-{
-    d->trblBorder.style = style;
-}
-
-KoBorder::BorderStyle KoBorder::trblBorderStyle() const
-{
-    return d->trblBorder.style;
-}
-
-void KoBorder::setTrblBorderColor(const QColor &color)
-{
-    d->trblBorder.outerPen.setColor(color);
-}
-
-QColor KoBorder::trblBorderColor() const
-{
-    return d->trblBorder.outerPen.color();
-}
-
-void KoBorder::setTrblBorderWidth(qreal width)
-{
-    d->trblBorder.outerPen.setWidthF(width);
-}
-
-qreal KoBorder::trblBorderWidth() const
-{
-    return d->trblBorder.outerPen.widthF();
-}
-
-void KoBorder::setTrblInnerBorderWidth(qreal width)
-{
-    d->trblBorder.innerPen.setWidthF(width);
-}
-
-qreal KoBorder::trblInnerBorderWidth() const
-{
-    return d->trblBorder.innerPen.widthF();
-}
-
-void KoBorder::setTrblBorderSpacing(qreal width)
-{
-    d->trblBorder.spacing = width;
-}
-
-qreal KoBorder::trblBorderSpacing() const
-{
-    return d->trblBorder.spacing;
-}
-
-KoBorder::BorderData KoBorder::leftBorderData() const
-{
-    return d->leftBorder;
-}
-
-void KoBorder::setLeftBorderData(const KoBorder::BorderData& data)
-{
-    d->leftBorder = data;
-}
-
-KoBorder::BorderData KoBorder::topBorderData() const
-{
-    return d->topBorder;
-}
-
-void KoBorder::setTopBorderData(const KoBorder::BorderData& data)
-{
-    d->topBorder = data;
-}
-
-KoBorder::BorderData KoBorder::rightBorderData() const
-{
-    return d->rightBorder;
-}
-
-void KoBorder::setRightBorderData(const KoBorder::BorderData& data)
-{
-    d->rightBorder = data;
-}
-
-KoBorder::BorderData KoBorder::bottomBorderData() const
-{
-    return d->bottomBorder;
-}
-
-void KoBorder::setBottomBorderData(const KoBorder::BorderData& data)
-{
-    d->bottomBorder = data;
-}
-
-KoBorder::BorderData KoBorder::trblBorderData() const
-{
-    return d->trblBorder;
-}
-
-void KoBorder::setTrblBorderData(const KoBorder::BorderData& data)
-{
-    d->trblBorder = data;
-}
-
-KoBorder::BorderData KoBorder::tlbrBorderData() const
-{
-    return d->tlbrBorder;
-}
-
-void KoBorder::setTlbrBorderData(const KoBorder::BorderData& data)
-{
-    d->tlbrBorder = data;
-}
+#define setBorderSideProperty( side,property,value ) \
+    if (!d->data.contains( side )) {\
+        BorderData data; \
+        data.property = value; \
+        d->data[side] = data; \
+    } else { \
+        d->data[side].property = value; \
+    }
+
+#define setPenBorderSideProperty( side,pen,setter,value ) \
+    if (!d->data.contains( side )) {\
+        BorderData data; \
+        data.pen.setter(value); \
+        d->data[side] = data; \
+    } else { \
+        d->data[side].pen.setter(value); \
+    }
+
+#define getBorderSideProperty( side,property,default ) \
+    if (!d->data.contains( side )) { \
+        return default; \
+    } else { \
+        return d->data[side].property; \
+    }
+
+#define getPenBorderSideProperty( side,pen,property,default ) \
+    if (!d->data.contains( side )) { \
+        return default; \
+    } else { \
+        return d->data[side].pen.property(); \
+    }
+
+
+#define sideFunctions(side, styleSetter,styleGetter,colorSetter,colorGetter, \
+                    widthSetter,widthGetter,innerWidthSetter,innerWidthGetter, \
+                    spacingSetter,spacingGetter,dataSetter,dataGetter) \
+void KoBorder::styleSetter(BorderStyle style) \
+{ \
+setBorderSideProperty(side, style, style); \
+} \
+KoBorder::BorderStyle KoBorder::styleGetter() const \
+{ \
+getBorderSideProperty(side, style, BorderNone); \
+} \
+void KoBorder::colorSetter(const QColor &color) \
+{ \
+setPenBorderSideProperty(side, outerPen, setColor, color); \
+} \
+QColor KoBorder::colorGetter() const \
+{ \
+getPenBorderSideProperty(side, outerPen, color, QColor()); \
+} \
+void KoBorder::widthSetter(qreal width) \
+{ \
+setPenBorderSideProperty(side, outerPen, setWidthF, width); \
+} \
+qreal KoBorder::widthGetter() const \
+{ \
+getPenBorderSideProperty(side, outerPen, widthF, 0); \
+} \
+void KoBorder::innerWidthSetter(qreal width) \
+{ \
+setPenBorderSideProperty(side, innerPen, setWidthF, width); \
+} \
+qreal KoBorder::innerWidthGetter() const \
+{ \
+getPenBorderSideProperty(side, innerPen, widthF, 0); \
+} \
+void KoBorder::spacingSetter(qreal width) \
+{ \
+setBorderSideProperty(side, spacing, width); \
+} \
+qreal KoBorder::spacingGetter() const \
+{ \
+getBorderSideProperty(side, spacing, 0); \
+} \
+void KoBorder::dataSetter(const BorderData &data) \
+{ \
+d->data[side] = data; \
+} \
+KoBorder::BorderData KoBorder::dataGetter() const \
+{ \
+return d->data.value(side, BorderData()); \
+}
+
+sideFunctions(Left, setLeftBorderStyle, leftBorderStyle,
+              setLeftBorderColor, leftBorderColor, setLeftBorderWidth,
+              leftBorderWidth, setLeftInnerBorderWidth, leftInnerBorderWidth,
+              setLeftBorderSpacing, leftBorderSpacing, setLeftBorderData, leftBorderData)
+
+sideFunctions(Right, setRightBorderStyle, rightBorderStyle,
+              setRightBorderColor, rightBorderColor, setRightBorderWidth,
+              rightBorderWidth, setRightInnerBorderWidth, rightInnerBorderWidth,
+              setRightBorderSpacing, rightBorderSpacing, setRightBorderData, rightBorderData)
+
+sideFunctions(Top, setTopBorderStyle, topBorderStyle,
+              setTopBorderColor, topBorderColor, setTopBorderWidth,
+              topBorderWidth, setTopInnerBorderWidth, topInnerBorderWidth,
+              setTopBorderSpacing, topBorderSpacing, setTopBorderData, topBorderData)
+
+sideFunctions(Bottom, setBottomBorderStyle, bottomBorderStyle,
+              setBottomBorderColor, bottomBorderColor, setBottomBorderWidth,
+              bottomBorderWidth, setBottomInnerBorderWidth, bottomInnerBorderWidth,
+              setBottomBorderSpacing, bottomBorderSpacing, setBottomBorderData, bottomBorderData)
+
+sideFunctions(BottomLeftToTopRight, setTrblBorderStyle, trblBorderStyle,
+              setTrblBorderColor, trblBorderColor, setTrblBorderWidth,
+              trblBorderWidth, setTrblInnerBorderWidth, trblInnerBorderWidth,
+              setTrblBorderSpacing, trblBorderSpacing, setTrblBorderData, trblBorderData)
+
+sideFunctions(TopLeftToBottomRight, setTlbrBorderStyle, tlbrBorderStyle,
+              setTlbrBorderColor, tlbrBorderColor, setTlbrBorderWidth,
+              tlbrBorderWidth, setTlbrInnerBorderWidth, tlbrInnerBorderWidth,
+              setTlbrBorderSpacing, tlbrBorderSpacing, setTlbrBorderData, tlbrBorderData)
+
+
+// -------------------------------
 
 bool KoBorder::hasBorder() const
 {
-    if (d->leftBorder.outerPen.widthF() > 0.0)
+    if (d->data.contains(Left) && leftBorderWidth() > 0.0)
         return true;
-    if (d->topBorder.outerPen.widthF() > 0.0)
+    if (d->data.contains(Right) && rightBorderWidth() > 0.0)
         return true;
-    if (d->rightBorder.outerPen.widthF() > 0.0)
+    if (d->data.contains(Top) && topBorderWidth() > 0.0)
         return true;
-    if (d->bottomBorder.outerPen.widthF() > 0.0)
+    if (d->data.contains(Bottom) && bottomBorderWidth() > 0.0)
         return true;
-    if (d->tlbrBorder.outerPen.widthF() > 0.0)
+    if (d->data.contains(BottomLeftToTopRight) && trblBorderWidth() > 0.0)
         return true;
-    if (d->trblBorder.outerPen.widthF() > 0.0)
+    if (d->data.contains(TopLeftToBottomRight) && tlbrBorderWidth() > 0.0)
         return true;
     return false;
+}
+
+bool KoBorder::hasBorder(KoBorder::Side side) const
+{
+    return d->data.contains(side);
 }
 
 void parseOdfBorder (const QString &border, QColor *color, KoBorder::BorderStyle *borderStyle, bool *hasBorderStyle, qreal *borderWidth, bool *hasBorderWidth)

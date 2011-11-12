@@ -156,12 +156,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
 
         image = new KisImage(m_d->document->createUndoStore(), width, height, cs, name);
-        image->lock();
-        image->setResolution(xres, yres);
-
         loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
-
-        image->unlock();
 
     }
 
@@ -175,8 +170,6 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
 
     if (external)
         visitor.setExternalUri(uri);
-
-    image->lock();
 
     image->rootLayer()->accept(visitor);
 
@@ -210,7 +203,6 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
     if (m_d->document->documentInfo()->aboutInfo("comment").isNull())
         m_d->document->documentInfo()->setAboutInfo("comment", m_d->imageComment);
 
-    image->unlock();
 }
 
 KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent)

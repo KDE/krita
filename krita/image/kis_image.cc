@@ -356,7 +356,6 @@ bool KisImage::tryBarrierLock()
 
 void KisImage::lock()
 {
-//  blockSignals(true);
     if (!locked()) {
         if (m_d->scheduler) {
             m_d->scheduler->lock();
@@ -382,7 +381,6 @@ void KisImage::unlock()
                 m_d->scheduler->unlock();
             }
         }
-//      blockSignals(false);
     }
 }
 
@@ -1319,7 +1317,7 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
     if (m_d->scheduler) {
-        dbgImage << "KisImage: requested and update for" << node->name() << rect;
+        qDebug() << "KisImage: requested and update for" << node->name() << rect;
         m_d->scheduler->updateProjection(node, rect, bounds());
     }
 }

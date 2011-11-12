@@ -101,6 +101,7 @@ public:
         PercentageFontSize, //font-size can be in % and this stores that value
         AdditionalFontSize, //font-size-rel can specify an addition to the parent value
         UseWindowFontColor, //boolean, same as odf
+        Blink,
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550, // Internal: Reserved for ChangeTracker
         FontYStretch = 577297551 // Internal: Ratio between Linux font pt size and Windows font height
@@ -402,6 +403,9 @@ public:
     /// Get the language
     QString language() const;
 
+    bool blinking() const;
+    void setBlinking(bool blink);
+    
     void setHasHyphenation(bool on);
     bool hasHyphenation() const;
 

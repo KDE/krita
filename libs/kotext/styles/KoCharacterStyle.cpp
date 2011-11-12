@@ -1076,6 +1076,16 @@ QString KoCharacterStyle::language() const
     return d->propertyString(KoCharacterStyle::Language);
 }
 
+bool KoCharacterStyle::blinking() const
+{
+    return d->propertyBoolean(Blink);
+}
+
+void KoCharacterStyle::setBlinking(bool blink)
+{
+    d->setProperty(KoCharacterStyle::Blink, blink);
+}
+
 bool KoCharacterStyle::hasProperty(int key) const
 {
     return d->stylesPrivate.contains(key);
@@ -1738,6 +1748,10 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         else if (pitch == "variable")
             setFontPitch(VariableWidth);
     }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "text-blinking")) {
+        setBlinking(styleStack.property(KoXmlNS::style, "text-blinking") == "true");
+    }
 
 
 //TODO
@@ -2056,6 +2070,8 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
                 style.addProperty("style:font-pitch", "fixed");
             else
                 style.addProperty("style:font-pitch", "variable");
+        } else if (key == KoCharacterStyle::Blink) {
+            style.addProperty("style:text-blinking", blinking());
         }
     }
     //TODO: font name and family

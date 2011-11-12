@@ -422,7 +422,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     png_structp png_ptr =  png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
     if (!png_ptr) {
         iod->close();
-        return (KisImageBuilder_RESULT_FAILURE);
     }
 
     png_infop info_ptr = png_create_info_struct(png_ptr);
@@ -548,7 +547,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     if (m_image == 0) {
         m_image = new KisImage(m_doc->createUndoStore(), width, height, cs, "built image");
         Q_CHECK_PTR(m_image);
-        m_image->lock();
     }
 
     // Read resolution
@@ -731,7 +729,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
 
     delete reader;
-    m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 
 }

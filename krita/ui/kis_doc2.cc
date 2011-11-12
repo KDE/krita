@@ -379,7 +379,6 @@ bool KisDoc2::newImage(const QString& name,
 
     image = new KisImage(createUndoStore(), width, height, cs, name);
     Q_CHECK_PTR(image);
-    image->lock();
 
     connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
     image->setResolution(imageResolution, imageResolution);
@@ -392,7 +391,6 @@ bool KisDoc2::newImage(const QString& name,
 
     layer->paintDevice()->setDefaultPixel(bgColor.data());
     image->addNode(layer.data(), image->rootLayer().data());
-    image->unlock();
     setCurrentImage(image);
 
     cfg.defImageWidth(width);

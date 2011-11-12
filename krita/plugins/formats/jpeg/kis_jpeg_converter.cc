@@ -227,7 +227,6 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     if (! m_image) {
         m_image = new KisImage(m_doc->createUndoStore(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
         Q_CHECK_PTR(m_image);
-        m_image->lock();
     }
 
     // Set resolution
@@ -291,7 +290,6 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     }
 
     m_image->addNode(KisNodeSP(layer.data()), m_image->rootLayer().data());
-    layer->setDirty();
 
     // Read exif information
 

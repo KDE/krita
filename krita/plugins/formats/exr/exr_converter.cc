@@ -439,7 +439,6 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     if (!m_image) {
         return KisImageBuilder_RESULT_FAILURE;
     }
-    m_image->lock();
 
     // Create group layers
     for (int i = 0; i < groups.size(); ++i) {
@@ -511,12 +510,10 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
             // Add the layer
             KisGroupLayerSP groupLayerParent = (info.parent) ? info.parent->groupLayer : m_image->rootLayer();
             m_image->addNode(layer, groupLayerParent);
-            layer->setDirty();
         } else {
             dbgFile << "No decoding " << info.name << " with " << info.channelMap.size() << " channels, and lack of a color space";
         }
     }
-    m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 

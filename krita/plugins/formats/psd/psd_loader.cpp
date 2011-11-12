@@ -180,10 +180,8 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                 return KisImageBuilder_RESULT_FAILURE;
             }
 
-            layer->setDirty();
             m_image->addNode(layer, m_image->rootLayer());
-            if(layerRecord->visible)
-                layer->setVisible(false);
+            layer->setVisible(layerRecord->visible);
         }
     }
 

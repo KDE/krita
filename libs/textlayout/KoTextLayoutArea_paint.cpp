@@ -207,6 +207,8 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             QBrush bg = paintStrategy->background(block.blockFormat().background());
             if (bg != Qt::NoBrush) {
                 painter->fillRect(br, bg);
+            } else {
+                bg = context.background;
             }
 
             paintStrategy->applyStrategy(painter);
@@ -244,6 +246,8 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             for (QTextBlock::iterator it = block.begin(); !(it.atEnd()); ++it) {
                 QTextFragment currentFragment = it.fragment();
                 if (currentFragment.isValid()) {
+                    bool formatChanged = true;
+
                     QTextCharFormat format = currentFragment.charFormat();
                     int changeId = format.intProperty(KoCharacterStyle::ChangeTrackerId);
                     if (changeId && m_documentLayout->changeTracker() && m_documentLayout->changeTracker()->displayChanges()) {
@@ -261,23 +265,39 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                             case (KoGenChange::UNKNOWN):
                             break;
                         }
-
-                        QTextLayout::FormatRange fr;
-                        fr.start = currentFragment.position() - block.position();
-                        fr.length = currentFragment.length();
-                        fr.format = format;
-                        selections.prepend(fr);
+                        formatChanged = true;
                     }
+
                     if (format.isAnchor()) {
                         if (!format.hasProperty(KoCharacterStyle::UnderlineStyle))
                             format.setFontUnderline(true);
                         if (!format.hasProperty(QTextFormat::ForegroundBrush))
                             format.setForeground(Qt::blue);
+                        formatChanged = true;
+                    }
+
+                    if (format.boolProperty(KoCharacterStyle::UseWindowFontColor)) {
+                        if (bg != Qt::NoBrush) {
+                            QColor back = bg.color();
+                            QBrush frontBrush;
+                            frontBrush.setStyle(Qt::SolidPattern);
+                            if (qGray(back.rgb()) > 140) {
+                                frontBrush.setColor(QColor(Qt::black));
+                            } else {
+                                frontBrush.setColor(QColor(Qt::white));
+                            }
+                            format.setForeground(frontBrush);
+                        } else {
+                            format.setForeground(Qt::black);
+                        }
+                        formatChanged = true;
+                    }
+                    if (formatChanged) {
                         QTextLayout::FormatRange fr;
                         fr.start = currentFragment.position() - block.position();
                         fr.length = currentFragment.length();
                         fr.format = format;
-                        selections.append(fr);
+                        selections.prepend(fr);
                     }
                 }
             }

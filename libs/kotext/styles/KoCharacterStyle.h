@@ -100,6 +100,7 @@ public:
         FontPitch,                  ///< FontPitchMode
         PercentageFontSize, //font-size can be in % and this stores that value
         AdditionalFontSize, //font-size-rel can specify an addition to the parent value
+        UseWindowFontColor, //boolean, same as odf
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550, // Internal: Reserved for ChangeTracker
         FontYStretch = 577297551 // Internal: Ratio between Linux font pt size and Windows font height
@@ -279,6 +280,9 @@ public:
     QBrush foreground() const;
     /// See similar named method on QTextCharFormat
     void clearForeground();
+
+    /// Set the boolean of using window font color (see odf spec)
+    void setFontAutoColor(bool use);
 
     /// Apply a font strike out style to this KoCharacterStyle
     void setStrikeOutStyle(LineStyle style);

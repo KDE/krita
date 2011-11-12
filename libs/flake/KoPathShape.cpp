@@ -765,9 +765,9 @@ int KoPathShape::subpathPointCount(int subpathIndex) const
     return subpath->size();
 }
 
-bool KoPathShape::isClosedSubpath(int subpathIndex)
+bool KoPathShape::isClosedSubpath(int subpathIndex) const
 {
-    Q_D(KoPathShape);
+    Q_D(const KoPathShape);
     KoSubpath *subpath = d->subPath(subpathIndex);
 
     if (subpath == 0)

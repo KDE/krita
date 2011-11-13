@@ -1620,7 +1620,7 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
     // The style:use-window-font-color attribute specifies whether or not the window foreground color should be as used as the foreground color for a light background color and white for a dark background color.
     const QString useWindowFont(styleStack.property(KoXmlNS::style, "use-window-font-color"));
-    if (!useWindowFont.isEmpty) {
+    if (!useWindowFont.isEmpty()) {
         setFontAutoColor(useWindowFont == "true");
     }
 
@@ -1955,7 +1955,7 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
             else
                 style.addProperty("fo:color", brush.color().name(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::UseWindowFontColor) {
-            bool use = d->stylesPrivate.value(key).tobool(&ok);
+            bool use = d->stylesPrivate.value(key).toBool();
             style.addProperty("style:use-window-font-color", use ? "true" : "false", KoGenStyle::TextType);
         } else if (key == QTextFormat::TextVerticalAlignment) {
             if (verticalAlignment() == QTextCharFormat::AlignSuperScript)

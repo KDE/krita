@@ -320,7 +320,7 @@ void KisCanvas2::createOpenGLCanvas()
 void KisCanvas2::createCanvas(bool useOpenGL)
 {
     const KoColorProfile *profile = m_d->view->resourceProvider()->currentDisplayProfile();
-    slotSetDisplayProfile(profile);
+    m_d->monitorProfile = const_cast<KoColorProfile*>(profile);
 
     if (useOpenGL) {
 #ifdef HAVE_OPENGL

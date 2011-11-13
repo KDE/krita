@@ -29,6 +29,7 @@ private slots:
     void testMerger();
     void debugObligeChild();
     void testFullRefreshWithClones();
+    void testSubgraphingWithoutUpdatingParent();
 private:
 };
 

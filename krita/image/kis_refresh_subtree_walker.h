@@ -99,10 +99,10 @@ protected:
         calculateChangeRect(startWith, requestedRect());
 
         if(startWith == startNode()) {
-            NodePosition pos = N_FILTHY;
+            NodePosition pos = N_EXTRA;
             if(!startWith->nextSibling()) pos |= N_TOPMOST;
             if(!startWith->prevSibling()) pos |= N_BOTTOMMOST;
-            registerNeedRect(startWith, N_TOPMOST | N_FILTHY);
+            registerNeedRect(startWith, pos);
         }
 
 

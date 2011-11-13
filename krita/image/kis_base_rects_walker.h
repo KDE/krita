@@ -285,7 +285,7 @@ protected:
         if(position & N_TOPMOST)
             m_lastNeedRect = m_childNeedRect;
 
-        if(position & (N_FILTHY | N_ABOVE_FILTHY)) {
+        if(position & (N_FILTHY | N_ABOVE_FILTHY | N_EXTRA)) {
             if(!m_lastNeedRect.isEmpty())
                 pushJob(node, position, m_lastNeedRect);
             //else /* Why push empty rect? */;

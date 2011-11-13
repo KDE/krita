@@ -1317,7 +1317,6 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
     if (m_d->scheduler) {
-        qDebug() << "KisImage: requested and update for" << node->name() << rect;
         m_d->scheduler->updateProjection(node, rect, bounds());
     }
 }

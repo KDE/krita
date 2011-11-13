@@ -581,7 +581,6 @@ public slots:
     void disableUIUpdates();
     void enableUIUpdates();
 
-    void initialRefreshGraphAsync();
     void refreshGraphAsync(KisNodeSP root = 0);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect);
@@ -591,6 +590,7 @@ public slots:
      */
     void refreshGraph(KisNodeSP root = 0);
     void refreshGraph(KisNodeSP root, const QRect& rc, const QRect &cropRect);
+    void initialRefreshGraph();
 
 private:
     KisImage(const KisImage& rhs);

@@ -69,7 +69,7 @@ public:
             : viewConverter(0)
             , imageCollection(0)
             , showFormattingCharacters(false)
-            , background(Qt::transparent)
+            , background(Qt::white)
         {
         }
 

@@ -187,6 +187,13 @@ void KoCharacterStyle::ensureMinimalProperties(QTextCharFormat &format) const
         QMap<int, QVariant> props = d->defaultStyle->d->stylesPrivate.properties();
         QMap<int, QVariant>::const_iterator it = props.constBegin();
         while (it != props.constEnd()) {
+            if (it.key() == KoCharacterStyle::UseWindowFontColor) {
+                if (format.hasProperty(QTextFormat::ForegroundBrush)) {
+                    ++it;
+                    continue;
+                }
+            }
+
             if (!it.value().isNull() && !format.hasProperty(it.key())) {
                 format.setProperty(it.key(), it.value());
             }
@@ -435,6 +442,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
     while (it != props.end()) {
         if (!it.value().isNull()) {
             format.setProperty(it.key(), it.value());
+
             if (it.key() == QTextFormat::ForegroundBrush) {
                 format.clearProperty(KoCharacterStyle::UseWindowFontColor);
             }
@@ -446,17 +454,18 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
 void KoCharacterStyle::applyStyle(QTextBlock &block) const
 {
     QTextCursor cursor(block);
-    QTextCharFormat cf;
-    cursor.setPosition(block.position() + block.length() - 1, QTextCursor::KeepAnchor);
+    QTextCharFormat cf = cursor.blockCharFormat();
     applyStyle(cf);
-    cursor.mergeCharFormat(cf);
-    cursor.mergeBlockCharFormat(cf);
-    QTextCharFormat format = cursor.charFormat();
+    QTextCharFormat format = cf;
     ensureMinimalProperties(format);
-    cursor.mergeCharFormat(format);
-    format = cursor.blockCharFormat();
-    ensureMinimalProperties(format);
-    cursor.mergeBlockCharFormat(format);
+    cursor.setBlockCharFormat(format);
+
+//    cursor.setPosition(block.position() + block.length() - 1, QTextCursor::KeepAnchor);
+//    cursor.mergeCharFormat(cf);
+
+//    QTextCharFormat format = cursor.charFormat();
+//    ensureMinimalProperties(format);
+//    cursor.mergeCharFormat(format);
 }
 
 void KoCharacterStyle::applyStyle(QTextCursor *selection) const

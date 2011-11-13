@@ -205,7 +205,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             painter->save();
 
             QBrush bg = paintStrategy->background(block.blockFormat().background());
-            if (bg != Qt::NoBrush) {
+            if (bg != Qt::NoBrush ) {
                 painter->fillRect(br, bg);
             } else {
                 bg = context.background;
@@ -277,19 +277,20 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                     }
 
                     if (format.boolProperty(KoCharacterStyle::UseWindowFontColor)) {
-                        if (bg != Qt::NoBrush) {
-                            QColor back = bg.color();
-                            QBrush frontBrush;
-                            frontBrush.setStyle(Qt::SolidPattern);
-                            if (qGray(back.rgb()) > 140) {
-                                frontBrush.setColor(QColor(Qt::black));
-                            } else {
-                                frontBrush.setColor(QColor(Qt::white));
-                            }
-                            format.setForeground(frontBrush);
-                        } else {
-                            format.setForeground(Qt::black);
+                        QBrush backbrush = bg;
+                        if (format.background() != Qt::NoBrush) {
+                            backbrush = format.background();
                         }
+
+                        QBrush frontBrush;
+                        frontBrush.setStyle(Qt::SolidPattern);
+                        if (qGray(backbrush.color().rgb()) > 60) {
+                            frontBrush.setColor(QColor(Qt::black));
+                        } else {
+                            frontBrush.setColor(QColor(Qt::white));
+                        }
+                        format.setForeground(frontBrush);
+
                         formatChanged = true;
                     }
                     if (formatChanged) {

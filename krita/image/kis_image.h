@@ -222,7 +222,7 @@ public:
     /**
      * Execute a rotate transform on all layers in this image.
      */
-    void rotate(double radians, KoUpdater *m_progress);
+    void rotate(double radians);
 
     /**
      * Execute a shear transform on all layers in this image.

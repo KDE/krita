@@ -481,16 +481,17 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
     if(!resolutionChanged && !sizeChanged) return;
 
     KisImageSignalVector emitSignals;
-    if(resolutionChanged) emitSignals << ResolutionChangedSignal;
-    if(sizeChanged) emitSignals << SizeChangedSignal;
+    if (resolutionChanged) emitSignals << ResolutionChangedSignal;
+    if (sizeChanged) emitSignals << SizeChangedSignal;
     emitSignals << ModifiedSignal;
 
+    // XXX: Translate after 2.4 is released
     QString actionName = sizeChanged ? "Scale Image" : "Change Image Resolution";
 
     KisProcessingApplicator::ProcessingFlags signalFlags =
         (resolutionChanged || sizeChanged) ?
-        KisProcessingApplicator::NO_UI_UPDATES :
-        KisProcessingApplicator::NONE;
+                KisProcessingApplicator::NO_UI_UPDATES :
+                KisProcessingApplicator::NONE;
 
     KisProcessingApplicator applicator(this, m_d->rootLayer,
                                        KisProcessingApplicator::RECURSIVE | signalFlags,
@@ -516,21 +517,21 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
 
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
 
-    if(resolutionChanged) {
+    if (resolutionChanged) {
         KUndo2Command *parent =
             new KisResetShapesCommand(m_d->rootLayer);
         new KisImageSetResolutionCommand(this, xres, yres, parent);
         applicator.applyCommand(parent);
     }
 
-    if(sizeChanged) {
+    if (sizeChanged) {
         applicator.applyCommand(new KisImageResizeCommand(this, size));
     }
 
     applicator.end();
 }
 
-void KisImage::rotate(double radians, KoUpdater *progress)
+void KisImage::rotate(double radians)
 {
     qint32 w = width();
     qint32 h = height();
@@ -542,19 +543,37 @@ void KisImage::rotate(double radians, KoUpdater *progress)
     tx -= (w - width()) / 2;
     ty -= (h - height()) / 2;
 
-    undoAdapter()->beginMacro(i18n("Rotate Image"));
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-    undoAdapter()->addCommand(new KisImageResizeCommand(KisImageWSP(this), QSize(w,h)));
+    // These signals will be emitted after processing is done
+    KisImageSignalVector emitSignals;
+    if (w != width() || h != height()) emitSignals << SizeChangedSignal;
+    emitSignals << ModifiedSignal;
+
+    // These flags determine whether updates are transferred to the UI during processing
+    KisProcessingApplicator::ProcessingFlags signalFlags =
+        (emitSignals.contains(SizeChangedSignal)) ?
+                KisProcessingApplicator::NO_UI_UPDATES :
+                KisProcessingApplicator::NONE;
+
+
+    // XXX i18n("Rotate Image") after 2.4
+    KisProcessingApplicator applicator(this, m_d->rootLayer,
+                                       KisProcessingApplicator::RECURSIVE | signalFlags,
+                                       emitSignals, "Rotate Image");
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
 
-    KisTransformVisitor visitor(KisImageWSP(this), 1.0, 1.0, 0, 0, radians, -tx, -ty, progress, filter);
-    m_d->rootLayer->accept(visitor);
+    KisProcessingVisitorSP visitor =
+            new KisTransformProcessingVisitor(1.0, 1.0, 0.0, 0.0,
+                                              QPointF(),
+                                              radians,
+                                              -tx, -ty, filter);
 
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-    undoAdapter()->endMacro();
+    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
 
-    setModified();
+    if (w != width() || h != height()) {
+        applicator.applyCommand(new KisImageResizeCommand(this, QSize(w,h)));
+    }
+    applicator.end();
 }
 
 void KisImage::shear(double angleX, double angleY, KoUpdater *progress)

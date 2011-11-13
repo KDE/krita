@@ -66,12 +66,16 @@ QPointF KisDuplicateOpSettings::position() const
 
 bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt::KeyboardModifiers modifiers)
 {
+    qDebug() << "KisDuplicateOpSettings::mousePressEvent" << (modifiers == Qt::ControlModifier);
+
     bool ignoreEvent = true;
+
     if (modifiers == Qt::ControlModifier) {
         m_position = info.pos();
         m_isOffsetNotUptodate = true;
         ignoreEvent = false;
-    } else {
+    }
+    else {
         if (m_isOffsetNotUptodate) {
             m_offset = info.pos() - m_position;
             m_isOffsetNotUptodate = false;

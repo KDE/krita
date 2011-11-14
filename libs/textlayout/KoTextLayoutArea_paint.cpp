@@ -305,9 +305,9 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             //We set clip because layout-draw doesn't clip text to it correctly after all
             //and adjust to make sure we don't clip edges of glyphs. The clipping is
-            //imprtatnt for paragraph splt acrosse two pages.
+            //important for paragraph split across two pages.
             painter->setClipRect(br.adjusted(-2,-2,2,2), Qt::IntersectClip);
-            
+
             if (context.showSpellChecking) {
                 layout->draw(painter, QPointF(0, 0), selections, br);
             } else {

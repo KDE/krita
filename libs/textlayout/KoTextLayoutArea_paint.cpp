@@ -286,9 +286,9 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                         frontBrush.setStyle(Qt::SolidPattern);
                         // use the same luma calculation and threshold as msoffice
                         // see http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a02a9a24-efb6-4ba0-a187-0e3d2704882b
-                        int luma = (5036060 * backbrush.color().red()
-                                    + 9886846 * backbrush.color().green()
-                                    + 1920103 * backbrush.color().blue()) >> 24; 
+                        int luma = ((5036060/2) * backbrush.color().red()
+                                    + (9886846/2) * backbrush.color().green()
+                                    + (1920103/2) * backbrush.color().blue()) >> 23; 
                         if (luma > 60) {
                             frontBrush.setColor(QColor(Qt::black));
                         } else {
@@ -311,7 +311,9 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             //We set clip because layout-draw doesn't clip text to it correctly after all
             //and adjust to make sure we don't clip edges of glyphs. The clipping is
             //important for paragraph split across two pages.
-            painter->setClipRect(br.adjusted(-2,-2,2,2), Qt::IntersectClip);
+            //20pt enlargement seems safe as pages is split by 50pt and this helps unwanted
+            //glyph cutting
+            painter->setClipRect(br.adjusted(-20,-20,20,20), Qt::IntersectClip);
 
             if (context.showSpellChecking) {
                 layout->draw(painter, QPointF(0, 0), selections);

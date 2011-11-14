@@ -246,7 +246,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             for (QTextBlock::iterator it = block.begin(); !(it.atEnd()); ++it) {
                 QTextFragment currentFragment = it.fragment();
                 if (currentFragment.isValid()) {
-                    bool formatChanged = true;
+                    bool formatChanged = false;
 
                     QTextCharFormat format = currentFragment.charFormat();
                     int changeId = format.intProperty(KoCharacterStyle::ChangeTrackerId);

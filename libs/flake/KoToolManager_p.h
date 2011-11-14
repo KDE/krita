@@ -97,8 +97,6 @@ public:
     CanvasData *canvasData; // data about the active canvas.
 
     KoInputDevice inputDevice;
-    QTimer tabletEventTimer; // Runs for a short while after any tablet event is
-    // received to help correct input device detection.
 
     bool layerEnabled;
 };

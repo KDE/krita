@@ -98,7 +98,6 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 SimpleParagraphWidget::~SimpleParagraphWidget()
 {
     delete m_thumbnailer;
-    delete m_stylePopup;
 }
 
 void SimpleParagraphWidget::directionChangeRequested()

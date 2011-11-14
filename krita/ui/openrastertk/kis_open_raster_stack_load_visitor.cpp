@@ -70,7 +70,6 @@ void KisOpenRasterStackLoadVisitor::loadImage()
 
     QDomDocument doc = d->loadContext->loadStack();
 
-    d->image->lock();
     for (QDomNode node = doc.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "image") { // it's the image root
             for (QDomNode node2 = node.firstChild(); !node2.isNull(); node2 = node2.nextSibling()) {
@@ -96,8 +95,6 @@ void KisOpenRasterStackLoadVisitor::loadImage()
     if (d->image->width() == 0 && d->image->height() == 0) {
         // TODO: when width = height = 0 use the new function from boud to get the size of the image after the layers have been loaded
     }
-    d->image->unlock();
-    d->image->rootLayer()->setDirty();
 }
 
 void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLayer* layer)

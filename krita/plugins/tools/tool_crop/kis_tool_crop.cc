@@ -452,7 +452,6 @@ void KisToolCrop::crop()
     } else {
         currentImage()->cropImage(cropRect);
     }
-
     m_rectCrop = QRect(0, 0, 0, 0);
 
     updateWidgetValues();

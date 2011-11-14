@@ -52,4 +52,4 @@ Name[zh_TW]=星形工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolstar
-X-Krita-Version=4
+X-Krita-Version=5

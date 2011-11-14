@@ -34,8 +34,8 @@ class RgbCompositeOpSaturation: public KoCompositeOp
 
 public:
 
-    RgbCompositeOpSaturation(KoColorSpace * cs, const bool userVisible = true)
-            : KoCompositeOp(cs, COMPOSITE_SATURATION, i18n("Saturation"), "", userVisible) {
+    RgbCompositeOpSaturation(KoColorSpace * cs)
+            : KoCompositeOp(cs, COMPOSITE_SATURATION, i18n("Saturation"), "") {
     }
 
     using KoCompositeOp::composite;

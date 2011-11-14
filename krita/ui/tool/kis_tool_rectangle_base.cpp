@@ -107,9 +107,7 @@ void KisToolRectangleBase::mouseReleaseEvent(KoPointerEvent *event)
         setMode(KisTool::HOVER_MODE);
 
         updateArea();
-        setCurrentNodeLocked(true);
         finishRect(QRectF(m_dragStart, m_dragEnd));
-        setCurrentNodeLocked(false);
     }
     else {
         KisToolPaint::mouseReleaseEvent(event);

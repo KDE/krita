@@ -58,7 +58,7 @@ public:
      * @param format the textCharFormat
      */
     KoInlineObject *inlineTextObject(const QTextCharFormat &format) const;
-    
+
     /**
      * Retrieve a formerly added inline object based on the cursor position.
      * @param cursor the cursor which position is used. The anchor is ignored.
@@ -176,6 +176,7 @@ signals:
 private:
 
     QHash<int, KoInlineObject*> m_objects;
+    QHash<int, KoInlineObject*> m_deletedObjects;
     QList<KoInlineObject*> m_listeners; // holds objects also in m_objects, but which want propertyChanges
     int m_lastObjectId;
     QHash<int, QVariant> m_properties;

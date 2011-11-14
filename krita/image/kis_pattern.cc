@@ -50,7 +50,7 @@ KisPattern::KisPattern(const QString& file)
 }
 
 KisPattern::KisPattern(const QImage &image, const QString &name)
-        : KoPattern("")
+        : KoPattern(0)
 {
     setImage(image);
     setName(name);
@@ -63,7 +63,7 @@ KisPattern::~KisPattern()
 KisPaintDeviceSP KisPattern::paintDevice(const KoColorSpace * colorSpace) const
 {
     KisPaintDevice* dev = new KisPaintDevice(colorSpace, name());
-    dev->convertFromQImage(image(), "");
+    dev->convertFromQImage(image(), 0);
     return dev;
 }
 

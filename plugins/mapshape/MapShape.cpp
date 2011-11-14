@@ -33,6 +33,7 @@
 #include <KoImageCollection.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapePaintingContext.h>
 
 class MapShapePrivate {
 public:

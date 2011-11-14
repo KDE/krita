@@ -240,11 +240,13 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     m_d->canvasController = canvasController;
 
-
+    m_d->resourceProvider = new KisCanvasResourceProvider(this);
+    m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
     m_d->canvas = new KisCanvas2(m_d->viewConverter, this, doc->shapeController());
+    connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
+
     m_d->canvasController->setCanvas(m_d->canvas);
 
-    m_d->resourceProvider = new KisCanvasResourceProvider(this);
     m_d->resourceProvider->setResourceManager(m_d->canvas->resourceManager());
 
     createManagers();
@@ -256,21 +258,18 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     KoToolManager::instance()->addController(m_d->canvasController);
     KoToolManager::instance()->registerTools(actionCollection(), m_d->canvasController);
 
-
-    connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
-
     // krita/krita.rc must also be modified to add actions to the menu entries
 
     m_d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
     m_d->saveIncremental->setShortcut(Qt::Key_F2);
     actionCollection()->addAction("save_incremental_version", m_d->saveIncremental);
     connect(m_d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
-    
+
     m_d->saveIncrementalBackup = new KAction(i18n("Save Incremental Backup"), this);
     m_d->saveIncrementalBackup->setShortcut(Qt::Key_F4);
     actionCollection()->addAction("save_incremental_backup", m_d->saveIncrementalBackup);
     connect(m_d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
-    
+
     connect(shell(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
 
     if (koDocument()->localFilePath().isNull()) {
@@ -392,7 +391,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     //check for colliding shortcuts
     QSet<QKeySequence> existingShortcuts;
     foreach(QAction* action, actionCollection()->actions()) {
-        if(action->shortcut() == QKeySequence("")) {
+        if(action->shortcut() == QKeySequence(0)) {
             continue;
         }
         dbgUI << "shortcut " << action->text() << " " << action->shortcut();
@@ -447,7 +446,7 @@ void KisView2::dropEvent(QDropEvent *event)
 
             if (kisimage) {
                 KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-                device->convertFromQImage(qimage, "");
+                device->convertFromQImage(qimage, 0);
                 node = new KisPaintLayer(kisimage.data(), kisimage->nextLayerName(), OPACITY_OPAQUE_U8, device);
             }
         }
@@ -796,7 +795,7 @@ void KisView2::slotPreferences()
 {
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
-        m_d->resourceProvider->resetDisplayProfile();
+        m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
         KisConfig cfg;
         static_cast<KoCanvasControllerWidget*>(m_d->canvasController)->setZoomWithWheel(cfg.zoomWithWheel());
 
@@ -845,7 +844,7 @@ void KisView2::loadPlugins()
     // Load all plugins
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/ViewPlugin"),
                                                               QString::fromLatin1("(Type == 'Service') and "
-                                                                                  "([X-Krita-Version] == 4)"));
+                                                                                  "([X-Krita-Version] == 5)"));
     KService::List::ConstIterator iter;
     for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
         KService::Ptr service = *iter;
@@ -948,7 +947,7 @@ void KisView2::slotSaveIncremental()
     regex.indexIn(fileName);     //  Perform the search
     QStringList matches = regex.capturedTexts();
     foundVersion = matches.at(0).isEmpty() ? false : true;
-    
+
     // Ensure compatibility with Save Incremental Backup
     // If this regex is not kept separate, the entire algorithm needs modification;
     // It's simpler to just add this.
@@ -1048,8 +1047,8 @@ void KisView2::slotSaveIncrementalBackup()
         } else {
             version.chop(1);             //  Trim "."
         }
-        version.remove(0, 1);            //  Trim "~"     
-        
+        version.remove(0, 1);            //  Trim "~"
+
         // Prepare the base for new version filename
         int intVersion = version.toInt(0);
         ++intVersion;
@@ -1082,7 +1081,7 @@ void KisView2::slotSaveIncrementalBackup()
             return;
         }
         pDoc->saveAs(fileName);
-        
+
         shell()->updateCaption();
     }
     else { // if NOT working on a backup...
@@ -1097,7 +1096,7 @@ void KisView2::slotSaveIncrementalBackup()
         extensionPlusVersion.prepend(baseNewVersion);
         extensionPlusVersion.prepend("~");
         backupFileName.replace(regex2, extensionPlusVersion);
-        
+
         // Save version with 1 number higher than the highest version found ignoring letters
         do {
             newVersion = baseNewVersion;
@@ -1118,7 +1117,7 @@ void KisView2::slotSaveIncrementalBackup()
             }
             qDebug() << "idiot";
         } while (fileAlreadyExists);
-        
+
         // Save both as backup and on current file for interapplication workflow
         pDoc->saveAs(backupFileName);
         pDoc->saveAs(fileName);

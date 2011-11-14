@@ -331,10 +331,8 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     if (! m_image) {
         m_image = new KisImage(m_doc->createUndoStore(), width, height, cs, "built image");
         m_image->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres )); // It is the "invert" macro because we convert from pointer-per-inchs to points
-        m_image->lock();
         Q_CHECK_PTR(m_image);
     } else {
-        m_image->lock();
         if (m_image->width() < (qint32)width || m_image->height() < (qint32)height) {
             quint32 newwidth = (m_image->width() < (qint32)width) ? width : m_image->width();
             quint32 newheight = (m_image->height() < (qint32)height) ? height : m_image->height();
@@ -538,8 +536,6 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     }
 
     m_image->addNode(KisNodeSP(layer), m_image->rootLayer().data());
-    layer->setDirty();
-    m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 

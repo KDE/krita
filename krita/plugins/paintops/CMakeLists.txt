@@ -2,7 +2,6 @@ include_directories(libbrush libpaintop)
 
 add_subdirectory( libbrush )
 add_subdirectory( libpaintop )
-add_subdirectory( defaultpresets )
 add_subdirectory( defaultpaintops )
 add_subdirectory( hairy )
 add_subdirectory( chalk )

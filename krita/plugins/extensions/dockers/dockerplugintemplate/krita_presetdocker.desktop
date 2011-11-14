@@ -33,4 +33,4 @@ Comment[zh_TW]=選取預設定的嵌入器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritapresetdocker
-X-Krita-Version=3
+X-Krita-Version=5

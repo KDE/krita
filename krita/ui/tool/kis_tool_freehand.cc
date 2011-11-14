@@ -131,7 +131,7 @@ int KisToolFreehand::flags() const
 
 void KisToolFreehand::deactivate()
 {
-    if(mode() == PAINT_MODE)
+    if (mode() == PAINT_MODE)
     {
         endStroke();
         setMode(KisTool::HOVER_MODE);
@@ -168,13 +168,13 @@ void KisToolFreehand::updateOutlineDocPoint(const QPointF &point)
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
-    if(mode() == KisTool::PAINT_MODE)
+    if (mode() == KisTool::PAINT_MODE)
         return;
 
     updateOutlineDocPoint(e->point);
 
     KisConfig cfg;
-    if(cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
+    if (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
         updateOutlineRect();
     }
 
@@ -191,9 +191,9 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         }
     }
     bool ignoreEvent = currentPaintOpPreset()->settings()->mousePressEvent(KisPaintInformation(convertToPixelCoord(e->point),
-                                                         pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
-                                                         KisVector2D::Zero(),
-                                                         e->rotation(), e->tangentialPressure(), perspective, 0),e->modifiers());
+                                                                                               pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
+                                                                                               KisVector2D::Zero(),
+                                                                                               e->rotation(), e->tangentialPressure(), perspective, 0),e->modifiers());
     if (!ignoreEvent){
         e->accept();
         return;
@@ -202,10 +202,10 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     }
 
 
-    if(mode() == KisTool::HOVER_MODE &&
-       e->button() == Qt::LeftButton &&
-       e->modifiers() == Qt::NoModifier &&
-       !specialModifierActive()) {
+    if (mode() == KisTool::HOVER_MODE &&
+            e->button() == Qt::LeftButton &&
+            e->modifiers() == Qt::NoModifier &&
+            !specialModifierActive()) {
 
 
         if (nodePaintAbility() != PAINT)
@@ -214,7 +214,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         setMode(KisTool::PAINT_MODE);
 
         KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
-        if(canvas2)
+        if (canvas2)
             canvas2->view()->disableControls();
 
         initStroke(e);
@@ -231,12 +231,12 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     /**
      * Update outline
      */
-    if(mode() == KisTool::HOVER_MODE ||
-       mode() == KisTool::PAINT_MODE) {
+    if (mode() == KisTool::HOVER_MODE ||
+            mode() == KisTool::PAINT_MODE) {
         updateOutlineDocPoint(e->point);
 
         KisConfig cfg;
-        if(cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
+        if (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
             updateOutlineRect();
         }
 
@@ -252,7 +252,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 #endif
     }
 
-    if(mode() != KisTool::PAINT_MODE) {
+    if (mode() != KisTool::PAINT_MODE) {
         KisToolPaint::mouseMoveEvent(e);
         return;
     }
@@ -265,8 +265,8 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 
 void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 {
-    if(mode() == KisTool::PAINT_MODE &&
-       e->button() == Qt::LeftButton) {
+    if (mode() == KisTool::PAINT_MODE &&
+            e->button() == Qt::LeftButton) {
 
         endStroke();
 
@@ -276,7 +276,7 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 
         notifyModified();
         KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
-        if(canvas2) {
+        if (canvas2) {
             canvas2->view()->enableControls();
         }
 
@@ -290,7 +290,7 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 
 void KisToolFreehand::keyPressEvent(QKeyEvent *event)
 {
-    if(mode() != KisTool::PAINT_MODE) {
+    if (mode() != KisTool::PAINT_MODE) {
         KisToolPaint::keyPressEvent(event);
         return;
     }
@@ -300,7 +300,7 @@ void KisToolFreehand::keyPressEvent(QKeyEvent *event)
 
 void KisToolFreehand::keyReleaseEvent(QKeyEvent* event)
 {
-    if(mode() != KisTool::PAINT_MODE) {
+    if (mode() != KisTool::PAINT_MODE) {
         KisToolPaint::keyReleaseEvent(event);
         return;
     }
@@ -408,11 +408,11 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
         KisPaintOpSettings::OutlineMode outlineMode;
         outlineMode = KisPaintOpSettings::CursorIsNotOutline;
 
-        if(m_explicitShowOutline ||
-           mode() == KisTool::GESTURE_MODE ||
-           (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE &&
-            (mode() == HOVER_MODE ||
-             (mode() == PAINT_MODE && cfg.showOutlineWhilePainting())))) {
+        if (m_explicitShowOutline ||
+                mode() == KisTool::GESTURE_MODE ||
+                (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE &&
+                 (mode() == HOVER_MODE ||
+                  (mode() == PAINT_MODE && cfg.showOutlineWhilePainting())))) {
 
             outlineMode = KisPaintOpSettings::CursorIsOutline;
         }
@@ -457,7 +457,7 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
 
     QPointF imagePos = currentImage()->documentToPixel(documentPos);
     QPainterPath path = currentPaintOpPreset()->settings()->
-        brushOutline(imagePos, outlineMode, scale, rotation);
+            brushOutline(imagePos, outlineMode, scale, rotation);
 
     return path;
 }
@@ -466,7 +466,7 @@ void KisToolFreehand::increaseBrushSize()
 {
     int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
     int increment = 1;
-    if(paintopSize > 100) {
+    if (paintopSize > 100) {
         increment = 30;
     } else if (paintopSize > 10){
         increment = 10;
@@ -479,7 +479,7 @@ void KisToolFreehand::decreaseBrushSize()
 {
     int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
     int decrement = -1;
-    if(paintopSize > 100) {
+    if (paintopSize > 100) {
         decrement = -30;
     } else if (paintopSize > 20){
         decrement = -10;
@@ -493,7 +493,7 @@ void KisToolFreehand::updateOutlineRect()
     QRectF outlinePixelRect = getOutlinePath(m_outlineDocPoint, KisPaintOpSettings::CursorIsOutline).boundingRect();
     QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
 
-    if(!m_oldOutlineRect.isEmpty()) {
+    if (!m_oldOutlineRect.isEmpty()) {
         canvas()->updateCanvas(m_oldOutlineRect);
     }
 

@@ -32,7 +32,7 @@ void KoShapeBorderRegistry::init()
     config.whiteList = "FlakeBorderPlugins";
     config.blacklist = "FlakeBorderPluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Border"),
-                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
+                                     QString::fromLatin1("[X-Flake-MinVersion] <= 4"),
                                      config);
 
     // Also add our hard-coded basic border

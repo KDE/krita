@@ -160,7 +160,7 @@ public:
     KoCreateShapesTool *shapeCreatorTool(KoCanvasBase *canvas) const;
 
     /**
-     * Returns the tool that is able to add/edit guides for this param canvas.
+     * Returns the tool for the given tool id.
      * @param canvas the canvas that is a child of a previously registered controller
      *    who's tool you want.
      * @see addController()

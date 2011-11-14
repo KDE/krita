@@ -57,11 +57,11 @@ using namespace KChart;
 
 class ChartProxyModel::Private {
 public:
-    Private( ChartProxyModel *parent, TableSource *source );
+    Private( ChartProxyModel *parent, ChartShape *shape, TableSource *source );
     ~Private();
 
     ChartProxyModel *const q;
-
+    ChartShape *const shape;
     TableSource *const tableSource;
 
     /// Set to true if we're in the process of loading data from ODF.
@@ -101,8 +101,9 @@ public:
                                               bool overrideCategories = true );
 };
 
-ChartProxyModel::Private::Private( ChartProxyModel *parent, TableSource *source )
+ChartProxyModel::Private::Private( ChartProxyModel *parent, ChartShape *shape, TableSource *source )
     : q( parent )
+    , shape( shape )
     , tableSource( source )
     , isLoading( false )
 {
@@ -129,9 +130,9 @@ ChartProxyModel::Private::~Private()
 //                          Class ChartProxyModel
 
 
-ChartProxyModel::ChartProxyModel( TableSource *source )
+ChartProxyModel::ChartProxyModel( ChartShape *shape, TableSource *source )
     : QAbstractTableModel(),
-      d( new Private( this, source ) )
+      d( new Private( this, shape, source ) )
 {
     connect( source, SIGNAL( tableAdded( Table* ) ),
              this,   SLOT( addTable( Table* ) ) );
@@ -283,7 +284,6 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
     // It is at least one, but if there's more than one data dimension, the x
     // data is shared among all data sets, thus - 1.
     int regionsPerDataSet = qMax( 1, dataDimensions - 1 );
-    qDebug() << regionsPerDataSet;
 
     // Fill dataRegions and set categoryRegion.
     // Note that here, we don't exactly know yet what region will be used for
@@ -354,11 +354,19 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
         // immediately before the next data set, thus (.. + 1) * .. - 1)
         int labelRowCol = (dataSetNumber + 1) * regionsPerDataSet - 1;
         if ( labelRegion.hasPointAtIndex( labelRowCol ) ) {
+            dataSet->setLabelDataCustom( QString() );
             QPoint point( labelRegion.pointAtIndex( labelRowCol ) );
             dataSet->setLabelDataRegion( CellRegion( selection.table(), point ) );
         }
-        else
+        else {
+            QString label;
+            if ( QAbstractItemModel *model = (shape ? shape->internalModel() ? shape->internalModel() : 0 : 0) ) {
+                // fetch the label (aka header-data) from the ChartTableModel if no labelRegion was defined
+                label = model->data( dataDirection == Qt::Horizontal ? model->index(labelRowCol+1, 0) : model->index(0, labelRowCol+1) ).toString();
+            }
+            dataSet->setLabelDataCustom( label );
             dataSet->setLabelDataRegion( CellRegion() );
+        }
 
         // regions per data set: y data, custom data (e.g. bubble width)
         dataSet->setYDataRegion( dataRegions.takeFirst() );
@@ -513,6 +521,9 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                     // the datasetnumber needs to be known at construction time, to ensure
                     // default colors are set correctly
                     dataSet = new DataSet( d->dataSets.size() );
+                    // add the newly created dataSet to the createdDataSets list so our
+                    // stockSeriesCounter != 0 condition below is able to pick it up.
+                    createdDataSets.append(dataSet);
                 }
                 dataSet->setChartType( type );
                 d->dataSets.append( dataSet );
@@ -531,6 +542,10 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                 DataSet *dataSet;
                 if ( loadedDataSetCount < createdDataSets.size() )
                     dataSet = createdDataSets[loadedDataSetCount];
+                else {
+                    Q_ASSERT_X(false, __FUNCTION__, "Unexpected series. Is the document broken?");
+                    continue; // be sure we don't crash in release-mode if that happens
+                }
                 dataSet->loadSeriesIntoDataset( n, context );
             }
             stockSeriesCounter = ( stockSeriesCounter + 1 ) %  seriesPerDataset;

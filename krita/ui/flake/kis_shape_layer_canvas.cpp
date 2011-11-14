@@ -123,7 +123,7 @@ void KisShapeLayerCanvas::repaint()
     p.end();
 
     KisPaintDeviceSP dev = new KisPaintDevice(m_projection->colorSpace());
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
     KisPainter kp(m_projection.data());
     kp.setCompositeOp(m_projection->colorSpace()->compositeOp(COMPOSITE_COPY));
     kp.bitBlt(r.x(), r.y(), dev, 0, 0, r.width(), r.height());

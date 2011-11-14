@@ -146,13 +146,14 @@ void KisPrescaledProjection::initBackend()
 
 void KisPrescaledProjection::updateSettings()
 {
-    KisConfig cfg;
+
 
     if (m_d->projectionBackend == 0) {
         initBackend();
     }
 
-    setMonitorProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));
+    KisConfig cfg;
+    setMonitorProfile(cfg.displayProfile());
 
     KisImageConfig imageConfig;
     m_d->updatePatchSize.setWidth(imageConfig.updatePatchWidth());
@@ -220,14 +221,13 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
 
 void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
 {
+    Q_UNUSED(w);
+    Q_UNUSED(h);
+
     m_d->projectionBackend->setImageSize(w, h);
 
-    QRect viewportRect = m_d->coordinatesConverter->imageToViewport(QRect(0, 0, w, h)).toAlignedRect();
-    viewportRect = viewportRect.intersected(QRect(QPoint(0, 0), m_d->viewportSize));
-
-    if (!viewportRect.isEmpty()) {
-        preScale(viewportRect);
-    }
+    KisUpdateInfoSP info = updateCache(m_d->image->bounds());
+    recalculateCache(info);
 }
 
 KisUpdateInfoSP KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
@@ -321,6 +321,7 @@ void KisPrescaledProjection::updateViewportSize()
         m_d->prescaledQImage.size() != m_d->viewportSize) {
 
         m_d->prescaledQImage = QImage(m_d->viewportSize, QImage::Format_ARGB32);
+        m_d->prescaledQImage.fill(0);
     }
 }
 

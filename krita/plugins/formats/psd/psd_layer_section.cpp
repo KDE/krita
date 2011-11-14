@@ -120,7 +120,8 @@ bool PSDLayerSection::read(QIODevice* io)
                 return false;
             }
             dbgFile << "Read layer" << i << layerRecord->layerName << "blending mode"
-                    << layerRecord->blendModeKey << io->pos();
+                    << layerRecord->blendModeKey << io->pos()
+                    << "Number of channels:" <<  layerRecord->channelInfoRecords.size();
             layers << layerRecord;
         }
     }

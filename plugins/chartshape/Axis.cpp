@@ -554,7 +554,7 @@ void Axis::Private::createAreaDiagram()
     else if ( plotAreaChartSubType == PercentChartSubtype )
     {
         kdAreaDiagram->setType( KDChart::LineDiagram::Percent );
-        kdAreaDiagram->setUnitSuffix("%", kdBarDiagram->orientation());
+        kdAreaDiagram->setUnitSuffix("%", Qt::Vertical);
     }
 
     if ( isVisible )
@@ -1281,10 +1281,9 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     if ( axisElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         styleStack.clear();
         context.odfLoadingContext().fillStyleStack( axisElement, KoXmlNS::chart, "style-name", "chart" );
-        styleStack.setTypeProperties( "text" );
 
         KoCharacterStyle charStyle;
-        charStyle.loadOdf( context );
+        charStyle.loadOdf(&axisElement, context );
         setFont( charStyle.font() );
 
         styleStack.setTypeProperties( "chart" );
@@ -1572,7 +1571,7 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         return;
     }
 
-    qDebug() << "changed ChartType";
+    //qDebug() << "changed ChartType";
 
     ChartType oldChartType = d->plotAreaChartType;
 

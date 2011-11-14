@@ -24,6 +24,7 @@
 #include "kis_indirect_painting_support.h"
 
 #include <krita_export.h>
+#include "kis_clone_info.h"
 
 class KisNodeVisitor;
 class KoCompositeOp;
@@ -83,6 +84,8 @@ public:
     /// Returns the exact bounds of where the actual data resides in this layer
     QRect exactBounds() const;
 
+    QRect accessRect(const QRect &rect, PositionToFilthy pos) const;
+
     bool accept(KisNodeVisitor &);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
@@ -91,8 +94,8 @@ public:
      * from layer is set when all layers have been created, not during
      * loading.
      */
-    void setCopyFromName(const QString& layerName);
-    QString copyFromName() const;
+    void setCopyFromInfo(KisCloneInfo info);
+    KisCloneInfo copyFromInfo() const;
 
     void setCopyFrom(KisLayerSP layer);
     KisLayerSP copyFrom() const;

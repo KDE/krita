@@ -205,8 +205,10 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             painter->save();
 
             QBrush bg = paintStrategy->background(block.blockFormat().background());
-            if (bg != Qt::NoBrush) {
+            if (bg != Qt::NoBrush ) {
                 painter->fillRect(br, bg);
+            } else {
+                bg = context.background;
             }
 
             paintStrategy->applyStrategy(painter);
@@ -244,6 +246,8 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             for (QTextBlock::iterator it = block.begin(); !(it.atEnd()); ++it) {
                 QTextFragment currentFragment = it.fragment();
                 if (currentFragment.isValid()) {
+                    bool formatChanged = false;
+
                     QTextCharFormat format = currentFragment.charFormat();
                     int changeId = format.intProperty(KoCharacterStyle::ChangeTrackerId);
                     if (changeId && m_documentLayout->changeTracker() && m_documentLayout->changeTracker()->displayChanges()) {
@@ -261,7 +265,40 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                             case (KoGenChange::UNKNOWN):
                             break;
                         }
+                        formatChanged = true;
+                    }
 
+                    if (format.isAnchor()) {
+                        if (!format.hasProperty(KoCharacterStyle::UnderlineStyle))
+                            format.setFontUnderline(true);
+                        if (!format.hasProperty(QTextFormat::ForegroundBrush))
+                            format.setForeground(Qt::blue);
+                        formatChanged = true;
+                    }
+
+                    if (format.boolProperty(KoCharacterStyle::UseWindowFontColor)) {
+                        QBrush backbrush = bg;
+                        if (format.background() != Qt::NoBrush) {
+                            backbrush = format.background();
+                        }
+
+                        QBrush frontBrush;
+                        frontBrush.setStyle(Qt::SolidPattern);
+                        // use the same luma calculation and threshold as msoffice
+                        // see http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a02a9a24-efb6-4ba0-a187-0e3d2704882b
+                        int luma = (5036060 * backbrush.color().red()
+                                    + 9886846 * backbrush.color().green()
+                                    + 1920103 * backbrush.color().blue()) >> 24; 
+                        if (luma > 60) {
+                            frontBrush.setColor(QColor(Qt::black));
+                        } else {
+                            frontBrush.setColor(QColor(Qt::white));
+                        }
+                        format.setForeground(frontBrush);
+
+                        formatChanged = true;
+                    }
+                    if (formatChanged) {
                         QTextLayout::FormatRange fr;
                         fr.start = currentFragment.position() - block.position();
                         fr.length = currentFragment.length();
@@ -273,15 +310,15 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             //We set clip because layout-draw doesn't clip text to it correctly after all
             //and adjust to make sure we don't clip edges of glyphs. The clipping is
-            //imprtatnt for paragraph splt acrosse two pages.
+            //important for paragraph split across two pages.
             painter->setClipRect(br.adjusted(-2,-2,2,2), Qt::IntersectClip);
 
             if (context.showSpellChecking) {
-                layout->draw(painter, QPointF(0, 0), selections, br);
+                layout->draw(painter, QPointF(0, 0), selections);
             } else {
                 QList<QTextLayout::FormatRange> misspellings = layout->additionalFormats();
                 layout->clearAdditionalFormats();
-                layout->draw(painter, QPointF(0, 0), selections, br);
+                layout->draw(painter, QPointF(0, 0), selections);
                 layout->setAdditionalFormats(misspellings);
             }
             decorateParagraph(painter, block, context.showFormattingCharacters);

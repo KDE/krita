@@ -114,7 +114,7 @@ void KisConvolutionPainterTest::testIdentityConvolution()
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
 
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
 
     KisConvolutionKernelSP kernel = new KisConvolutionKernel(3, 3, 0, 0);
     kernel->data()[0] = 0;
@@ -127,7 +127,7 @@ void KisConvolutionPainterTest::testIdentityConvolution()
     kernel->data()[7] = 0;
     kernel->data()[8] = 0;
     KisConvolutionPainter gc(dev);
-    gc.beginTransaction("");
+    gc.beginTransaction(0);
     gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimage.width(), qimage.height()));
     gc.deleteTransaction();
 
@@ -155,7 +155,7 @@ void KisConvolutionPainterTest::testSymmConvolution()
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(filter, offset, factor);
     KisConvolutionPainter gc(dev);
-    gc.beginTransaction("");
+    gc.beginTransaction(0);
     gc.applyMatrix(kernel, dev, imageRect.topLeft(), imageRect.topLeft(),
                    imageRect.size());
     gc.deleteTransaction();
@@ -176,11 +176,11 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
     int pixelSize = -1;
     QByteArray initialData;
     KisPaintDeviceSP dev = initAsymTestDevice(imageRect, pixelSize, initialData);
-    
+
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(filter, offset, factor);
     KisConvolutionPainter gc(dev);
-    gc.beginTransaction("");
+    gc.beginTransaction(0);
     gc.setChannelFlags(channelFlags);
     gc.applyMatrix(kernel, dev, imageRect.topLeft(), imageRect.topLeft(),
                    imageRect.size());
@@ -206,7 +206,7 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
                 referencePixel.data()[j] = isFiltered && channelFlags[j] ?
                     filteredPixel.data()[j] : srcPtr[j];
             }
-            
+
             if(memcmp(resPtr, referencePixel.data(), pixelSize)) {
                 printPixel("Actual:  ", pixelSize, resPtr);
                 printPixel("Expected:", pixelSize, referencePixel.data());
@@ -270,7 +270,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
     QRect imageRect(QPoint(), referenceImage.size());
 
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    dev->convertFromQImage(referenceImage, "", 0, 0);
+    dev->convertFromQImage(referenceImage, 0, 0, 0);
 
     qreal offset = 0.0;
     qreal factor = 1.0;
@@ -289,7 +289,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
 
         // CALLGRIND_START_INSTRUMENTATION;
 
-        gc.beginTransaction("");
+        gc.beginTransaction(0);
         gc.applyMatrix(kernel, dev, imageRect.topLeft(), imageRect.topLeft(),
                        imageRect.size());
         gc.deleteTransaction();

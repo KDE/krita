@@ -34,8 +34,8 @@ class RgbCompositeOpValue: public KoCompositeOp
 
 public:
 
-    RgbCompositeOpValue(KoColorSpace * cs, const bool userVisible = true)
-            : KoCompositeOp(cs, COMPOSITE_VALUE, i18n("Value"), "", userVisible) {
+    RgbCompositeOpValue(KoColorSpace * cs)
+            : KoCompositeOp(cs, COMPOSITE_VALUE, i18n("Value"), "") {
     }
 
     using KoCompositeOp::composite;

@@ -146,7 +146,8 @@ bool KisSaveXmlVisitor::visit(KisCloneLayer *layer)
 {
     QDomElement layerElement = m_doc.createElement(LAYER);
     saveLayer(layerElement, CLONE_LAYER, layer);
-    layerElement.setAttribute(CLONE_FROM, layer->copyFromName());
+    layerElement.setAttribute(CLONE_FROM, layer->copyFromInfo().name());
+    layerElement.setAttribute(CLONE_FROM_UUID, layer->copyFromInfo().uuid().toString());
     layerElement.setAttribute(CLONE_TYPE, layer->copyType());
     m_elem.appendChild(layerElement);
 
@@ -205,6 +206,7 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(FILE_NAME, LAYER + QString::number(m_count));
     el.setAttribute(X, layer->x());
     el.setAttribute(Y, layer->y());
+    el.setAttribute(UUID, layer->uuid().toString());
 
     m_nodeFileNames[layer] = LAYER + QString::number(m_count);
 
@@ -223,6 +225,7 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
     el.setAttribute(FILE_NAME, MASK + QString::number(m_count));
     el.setAttribute(X, mask->x());
     el.setAttribute(Y, mask->y());
+    el.setAttribute(UUID, mask->uuid().toString());
 
     m_nodeFileNames[mask] = MASK + QString::number(m_count);
 

@@ -1166,7 +1166,13 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
+#ifdef _WIN32
+    // "kfiledialog:///OpenDialog" forces KDE style open dialog in Windows
+	// TODO provide support for "last visited" directory
+    KFileDialog *dialog = new KFileDialog(KUrl(""), QString(), this);
+#else
     KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString(), this);
+#endif    	
     dialog->setObjectName("file dialog");
     dialog->setMode(KFile::File);
     if (!isImporting())
@@ -1342,8 +1348,8 @@ KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
 
 void KoMainWindow::slotConfigureKeys()
 {
-    QAction* undoAction;
-    QAction* redoAction;
+    QAction* undoAction=0;
+    QAction* redoAction=0;
     QString oldUndoText;
     QString oldRedoText;
     if(currentView()) {

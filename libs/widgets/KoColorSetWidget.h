@@ -34,7 +34,6 @@ class KoColorSet;
  *
  * KoColorSetWidget is a widget for choosing a color (colormanaged via pigment). It shows a a color
  * set plus optionally a checkbox to filter away bad matching colors.
- * Some ways to add and remove plus choose another colorset will be added in the future.
  */
 class KOWIDGETS_EXPORT KoColorSetWidget : public QFrame
 {

@@ -61,36 +61,50 @@ static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
 class KoParagraphStyle::Private
 {
 public:
-    Private() : charStyle(0), listStyle(0), parentStyle(0), list(0), next(0) {}
+    Private() : listStyle(0), parentStyle(0), defaultStyle(0), list(0), next(0) {}
 
-    ~Private() {
+    ~Private()
+    {
     }
 
-    void setProperty(int key, const QVariant &value) {
+    void setProperty(int key, const QVariant &value)
+    {
         stylesPrivate.add(key, value);
     }
 
+    void ensureDefaults(QTextBlockFormat &format)
+    {
+        if (defaultStyle) {
+            QMap<int, QVariant> props = defaultStyle->d->stylesPrivate.properties();
+            QMap<int, QVariant>::const_iterator it = props.constBegin();
+            while (it != props.constEnd()) {
+                if (!it.value().isNull() && !format.hasProperty(it.key())) {
+                    format.setProperty(it.key(), it.value());
+                }
+                ++it;
+            }
+        }
+    }
+
     QString name;
-    KoCharacterStyle *charStyle;
     KoListStyle *listStyle;
     KoParagraphStyle *parentStyle;
+    KoParagraphStyle *defaultStyle;
     KoList *list;
     int next;
     StylePrivate stylesPrivate;
 };
 
 KoParagraphStyle::KoParagraphStyle(QObject *parent)
-        : QObject(parent), d(new Private())
+        : KoCharacterStyle(parent), d(new Private())
 {
-    d->charStyle = new KoCharacterStyle(this);
 }
 
 KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &blockCharFormat, QObject *parent)
-        : QObject(parent),
+        : KoCharacterStyle(blockCharFormat, parent),
         d(new Private())
 {
     d->stylesPrivate = blockFormat.properties();
-    d->charStyle = new KoCharacterStyle(blockCharFormat, this);
 }
 
 KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block, QObject *parent)
@@ -117,9 +131,16 @@ KoParagraphStyle::~KoParagraphStyle()
     delete d;
 }
 
+void KoParagraphStyle::setDefaultStyle(KoParagraphStyle *defaultStyle)
+{
+    d->defaultStyle = defaultStyle;
+    KoCharacterStyle::setDefaultStyle(defaultStyle);
+}
+
 void KoParagraphStyle::setParentStyle(KoParagraphStyle *parent)
 {
     d->parentStyle = parent;
+    KoCharacterStyle::setParentStyle(parent);
 }
 
 void KoParagraphStyle::setProperty(int key, const QVariant &value)
@@ -142,8 +163,12 @@ void KoParagraphStyle::remove(int key)
 QVariant KoParagraphStyle::value(int key) const
 {
     QVariant var = d->stylesPrivate.value(key);
-    if (var.isNull() && d->parentStyle)
-        return d->parentStyle->value(key);
+    if (var.isNull()) {
+        if (d->parentStyle)
+            return d->parentStyle->value(key);
+        else if (d->defaultStyle)
+            return d->defaultStyle->value(key);
+    }
     return var;
 }
 
@@ -212,6 +237,7 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
     if (d->parentStyle) {
         d->parentStyle->applyStyle(format);
     }
+
     if (!hadBreakBefore) {
          // page preak should not be inherited according to odf, yet if it was there
          // before we shouldn't remove
@@ -238,12 +264,10 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
     QTextCursor cursor(block);
     QTextBlockFormat format = cursor.blockFormat();
     applyStyle(format);
+    d->ensureDefaults(format);
     cursor.setBlockFormat(format);
-    if (d->parentStyle && d->parentStyle->characterStyle())
-        d->parentStyle->characterStyle()->applyStyle(block);
-    if (d->charStyle) {
-        d->charStyle->applyStyle(block);
-    }
+
+    KoCharacterStyle::applyStyle(block);
 
     if (applyListStyle) {
         if (d->listStyle) {
@@ -275,8 +299,7 @@ void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
             format.clearProperty(keys[i]);
     }
     cursor.setBlockFormat(format);
-    if (d->charStyle)
-        d->charStyle->unapplyStyle(block);
+    KoCharacterStyle::unapplyStyle(block);
     if (d->listStyle && block.textList()) // TODO check its the same one?
         block.textList()->remove(block);
 }
@@ -782,9 +805,7 @@ void KoParagraphStyle::setMargin(QTextLength margin)
 
 void KoParagraphStyle::setAlignment(Qt::Alignment alignment)
 {
-
     setProperty(QTextFormat::BlockAlignment, (int) alignment);
-
 }
 
 Qt::Alignment KoParagraphStyle::alignment() const
@@ -871,6 +892,7 @@ void KoParagraphStyle::setName(const QString &name)
     if (name == d->name)
         return;
     d->name = name;
+    KoCharacterStyle::setName(name);
     emit nameChanged(name);
 }
 
@@ -886,6 +908,7 @@ int KoParagraphStyle::styleId() const
 void KoParagraphStyle::setStyleId(int id)
 {
     setProperty(StyleId, id); if (d->next == 0) d->next = id;
+    KoCharacterStyle::setStyleId(id);
 }
 
 QString KoParagraphStyle::masterPageName() const
@@ -976,25 +999,6 @@ void KoParagraphStyle::setIsListHeader(bool on)
 bool KoParagraphStyle::isListHeader() const
 {
     return propertyBoolean(IsListHeader);
-}
-
-KoCharacterStyle *KoParagraphStyle::characterStyle()
-{
-    return d->charStyle;
-}
-
-const KoCharacterStyle *KoParagraphStyle::characterStyle() const
-{
-    return d->charStyle;
-}
-
-void KoParagraphStyle::setCharacterStyle(KoCharacterStyle *style)
-{
-    if (d->charStyle == style)
-        return;
-    if (d->charStyle && d->charStyle->parent() == this)
-        delete d->charStyle;
-    d->charStyle = style;
 }
 
 KoListStyle *KoParagraphStyle::listStyle() const
@@ -1148,21 +1152,28 @@ KoShadowStyle KoParagraphStyle::shadow() const
     return KoShadowStyle();
 }
 
-void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContext &scontext)
+void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContext &scontext,
+    bool loadParents)
 {
     KoOdfLoadingContext &context = scontext.odfLoadingContext();
     const QString name(element->attributeNS(KoXmlNS::style, "display-name", QString()));
     if (!name.isEmpty()) {
-        d->name = name;
+        setName(name);
     }
     else {
-        d->name = element->attributeNS(KoXmlNS::style, "name", QString());
+        setName(element->attributeNS(KoXmlNS::style, "name", QString()));
     }
 
-    context.styleStack().save();
-    // Load all parents - only because we don't support inheritance.
     QString family = element->attributeNS(KoXmlNS::style, "family", "paragraph");
-    context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
+ 
+    context.styleStack().save();
+    if (loadParents) {
+        context.addStyles(element, family.toLocal8Bit().constData());   // Load all parent
+    } else {
+        context.styleStack().push(*element);
+    }
+    context.styleStack().setTypeProperties("text");  // load the style:text-properties
+    KoCharacterStyle::loadOdfProperties(scontext);
 
     QString masterPage = element->attributeNS(KoXmlNS::style, "master-page-name", QString());
     if (! masterPage.isEmpty()) {
@@ -1175,11 +1186,6 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
         if (ok)
             setDefaultOutlineLevel(level);
     }
-
-    //1.6: KoTextFormat::load
-    KoCharacterStyle *charstyle = characterStyle();
-    context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
-    charstyle->loadOdf(scontext);   // load the KoCharacterStyle from the stylestack
 
     //1.6: KoTextParag::loadOasis => KoParagLayout::loadOasisParagLayout
     kDebug(32500) << "family" << family;
@@ -1808,9 +1814,7 @@ void KoParagraphStyle::copyProperties(const KoParagraphStyle *style)
 {
     d->stylesPrivate = style->d->stylesPrivate;
     setName(style->name()); // make sure we emit property change
-    if (d->charStyle && d->charStyle->parent() == this)
-        delete d->charStyle;
-    d->charStyle = style->d->charStyle->clone(this);
+    KoCharacterStyle::copyProperties(style);
     d->next = style->d->next;
     d->parentStyle = style->d->parentStyle;
     d->listStyle = style->d->listStyle;
@@ -1828,15 +1832,6 @@ bool KoParagraphStyle::compareParagraphProperties(const KoParagraphStyle &other)
     return other.d->stylesPrivate == d->stylesPrivate;
 }
 
-bool KoParagraphStyle::compareCharacterProperties(const KoParagraphStyle &other) const
-{
-    if (d->charStyle == 0 && other.d->charStyle == 0)
-        return true;
-    if (!d->charStyle || !other.d->charStyle)
-        return false;
-    return *d->charStyle == *other.d->charStyle;
-}
-
 bool KoParagraphStyle::operator==(const KoParagraphStyle &other) const
 {
     if (!compareParagraphProperties(other))
@@ -1849,16 +1844,14 @@ bool KoParagraphStyle::operator==(const KoParagraphStyle &other) const
 void KoParagraphStyle::removeDuplicates(const KoParagraphStyle &other)
 {
     d->stylesPrivate.removeDuplicates(other.d->stylesPrivate);
-    if (d->charStyle && other.d->charStyle)
-        d->charStyle->removeDuplicates(*other.d->charStyle);
+    KoCharacterStyle::removeDuplicates(other);
 }
 
 void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const
 {
     bool writtenLineSpacing = false;
-    if (d->charStyle) {
-        d->charStyle->saveOdf(style);
-    }
+    KoCharacterStyle::saveOdf(style);
+
     if (d->listStyle) {
         KoGenStyle liststyle(KoGenStyle::ListStyle);
         d->listStyle->saveOdf(liststyle, context);

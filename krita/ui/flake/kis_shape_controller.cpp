@@ -226,7 +226,7 @@ void KisShapeController::addShape(KoShape* shape)
                 dynamic_cast<KisLayerContainerShape*>(shapeForNode(m_d->image->rootLayer().data()));
 
             shapeLayer = new KisShapeLayer(container, this, m_d->image,
-                                           i18n("Flake shapes %1", m_d->nameServer->number()),
+                                           i18n("Vector Layer %1", m_d->nameServer->number()),
                                            OPACITY_OPAQUE_U8);
 
             m_d->image->undoAdapter()->addCommand(new KisImageLayerAddCommand(m_d->image, shapeLayer, m_d->image->rootLayer(), m_d->image->rootLayer()->childCount()));

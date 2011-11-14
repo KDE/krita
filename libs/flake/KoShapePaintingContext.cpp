@@ -35,7 +35,11 @@ KoShapePaintingContext::KoShapePaintingContext(KoCanvasBase *canvas, bool forPri
     KoCanvasResourceManager *rm = canvas->resourceManager();
 
     showFormattingCharacters = rm->boolResource(KoCanvasResourceManager::ShowFormattingCharacters);
-    showTextShapeOutlines = rm->boolResource(KoCanvasResourceManager::ShowTextShapeOutlines);
+    if (forPrint) {
+        showTextShapeOutlines = false;
+    } else {
+        showTextShapeOutlines = rm->boolResource(KoCanvasResourceManager::ShowTextShapeOutlines);
+    }
     if (rm->hasResource(KoCanvasResourceManager::ShowTableBorders)) {
         showTableBorders = rm->boolResource(KoCanvasResourceManager::ShowTableBorders);
     } else {

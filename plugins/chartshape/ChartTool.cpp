@@ -120,6 +120,7 @@ void ChartTool::shapeSelectionChanged()
     
     // Get the chart shape that the tool is working on. 
     // Let d->shape point to it.
+    d->shape = 0; // to be sure we don't deal with an old value if nothing is found
     KoSelection  *selection = canvas()->shapeManager()->selection();
     foreach ( KoShape *shape, selection->selectedShapes() ) {
         // Find out which type of shape that the user clicked on.
@@ -228,6 +229,11 @@ void ChartTool::mouseReleaseEvent( KoPointerEvent *event )
 void ChartTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
     useCursor(Qt::ArrowCursor);
+
+    // cause on ChartTool::deactivate we set d->shape to NULL it is needed
+    // to call shapeSelectionChanged() even if the selection did not change
+    // to be sure d->shape is proper set again.
+    shapeSelectionChanged();
 }
 
 void ChartTool::deactivate()

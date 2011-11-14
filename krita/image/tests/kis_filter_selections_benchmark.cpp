@@ -146,7 +146,7 @@ void KisFilterSelectionsBenchmark::testAll()
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     m_device = new KisPaintDevice(cs);
-    m_device->convertFromQImage(image, "", 0, 0);
+    m_device->convertFromQImage(image, 0, 0, 0);
 
     testFilter("brightnesscontrast");
     testFilter("invert");
@@ -166,7 +166,7 @@ void KisFilterSelectionsBenchmark::testUsualSelections(int num)
 
     timer.restart();
     for (int i = 0; i < num; i++) {
-        KisTransaction transac("", projection, 0);
+        KisTransaction transac(0, projection, 0);
         m_filter->process(m_device, projection, m_selection, filterRect, m_configuration, 0);
     }
     avTime = double(timer.elapsed()) / num;
@@ -189,7 +189,7 @@ void KisFilterSelectionsBenchmark::testNoSelections(int num)
 
     timer.restart();
     for (int i = 0; i < num; i++) {
-        KisTransaction transac("", projection, 0);
+        KisTransaction transac(0, projection, 0);
         m_filter->process(m_device, projection, 0, filterRect, m_configuration, 0);
     }
     avTime = double(timer.elapsed()) / num;
@@ -215,7 +215,7 @@ void KisFilterSelectionsBenchmark::testGoodSelections(int num)
 
     timer.restart();
     for (int i = 0; i < num; i++) {
-        KisTransaction transac("", projection, 0);
+        KisTransaction transac(0, projection, 0);
         m_filter->processSpecial(src, dst, filterRect.size(), m_configuration, 0);
     }
     avTime = double(timer.elapsed()) / num;
@@ -244,11 +244,11 @@ void KisFilterSelectionsBenchmark::testBitBltWOSelections(int num)
     for (int i = 0; i < num; i++) {
         KisPaintDeviceSP cacheDevice = new KisPaintDevice(projection->colorSpace());
 
-        KisTransaction transac("", cacheDevice, 0);
+        KisTransaction transac(0, cacheDevice, 0);
         m_filter->process(m_device, projection, 0, filterRect, m_configuration, 0);
 
         KisPainter painter(projection);
-        painter.beginTransaction("");
+        painter.beginTransaction(0);
         painter.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
         painter.bitBlt(filterRect.topLeft(), cacheDevice, filterRect);
         painter.deleteTransaction();
@@ -275,11 +275,11 @@ void KisFilterSelectionsBenchmark::testBitBltSelections(int num)
     for (int i = 0; i < num; i++) {
         KisPaintDeviceSP cacheDevice = new KisPaintDevice(projection->colorSpace());
 
-        KisTransaction transac("", cacheDevice, 0);
+        KisTransaction transac(0, cacheDevice, 0);
         m_filter->process(m_device, cacheDevice, 0, filterRect, m_configuration, 0);
 
         KisPainter gc(projection);
-        gc.beginTransaction("");
+        gc.beginTransaction(0);
         gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
         gc.setSelection(m_selection);
         gc.bitBlt(filterRect.topLeft(), cacheDevice, filterRect);

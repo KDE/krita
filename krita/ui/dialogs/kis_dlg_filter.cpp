@@ -109,12 +109,13 @@ void KisFilterDialog::setFilter(KisFilterSP f)
 void KisFilterDialog::updatePreview()
 {
     if (!d->currentFilter) return;
-
+    
     if(d->uiFilterDialog.checkBoxPreview->isChecked()) {
         d->mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
         d->mask->setDirty();
+        d->node->setDirty(d->node->extent());
     }
-
+    
     d->uiFilterDialog.pushButtonOk->setEnabled(true);
 }
 
@@ -156,7 +157,6 @@ void KisFilterDialog::createMask()
 void KisFilterDialog::previewCheckBoxChange(int state)
 {
     d->mask->setVisible(state == Qt::Checked);
-    d->node->setDirty(d->node->extent());
     updatePreview();
 
     KConfigGroup group(KGlobal::config(), "filterdialog");

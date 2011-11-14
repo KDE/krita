@@ -11,4 +11,4 @@ Name[zh_TW]=Taskset 嵌入器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritatasksetdocker
-X-Krita-Version=4
+X-Krita-Version=5

@@ -223,7 +223,6 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     // Create the image
     if (m_image == 0) {
         m_image = new KisImage(m_doc->createUndoStore(), image->x1, image->y1, colorSpace, "built image");
-        m_image->lock();
     }
 
     // Create the layer
@@ -258,7 +257,6 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
         }
     }
 
-    m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 

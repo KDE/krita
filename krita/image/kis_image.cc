@@ -126,6 +126,7 @@ public:
     KisSelectionSP globalSelection;
     KisSelectionSP deselectedGlobalSelection;
 
+    QAtomicInt disableUIUpdateSignals;
     KisImageSignalRouter *signalRouter;
     KisUpdateScheduler *scheduler;
 
@@ -355,7 +356,6 @@ bool KisImage::tryBarrierLock()
 
 void KisImage::lock()
 {
-//  blockSignals(true);
     if (!locked()) {
         if (m_d->scheduler) {
             m_d->scheduler->lock();
@@ -381,7 +381,6 @@ void KisImage::unlock()
                 m_d->scheduler->unlock();
             }
         }
-//      blockSignals(false);
     }
 }
 
@@ -423,7 +422,11 @@ void KisImage::resizeImageImpl(const QRect& newRect, bool cropLayers)
     KisImageSignalVector emitSignals;
     emitSignals << SizeChangedSignal << ModifiedSignal;
 
-    KisProcessingApplicator applicator(this, m_d->rootLayer, true, emitSignals, actionName);
+    KisProcessingApplicator applicator(this, m_d->rootLayer,
+                                       KisProcessingApplicator::RECURSIVE |
+                                       KisProcessingApplicator::NO_UI_UPDATES,
+                                       emitSignals, actionName);
+
     if(cropLayers || !newRect.topLeft().isNull()) {
         KisProcessingVisitorSP visitor =
             new KisCropProcessingVisitor(newRect, cropLayers, true);
@@ -451,7 +454,10 @@ void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
 
-    KisProcessingApplicator applicator(this, node, false, emitSignals, actionName);
+    KisProcessingApplicator applicator(this, node,
+                                       KisProcessingApplicator::NONE,
+                                       emitSignals, actionName);
+
     KisProcessingVisitorSP visitor =
         new KisCropProcessingVisitor(newRect, true, false);
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
@@ -475,13 +481,21 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
     if(!resolutionChanged && !sizeChanged) return;
 
     KisImageSignalVector emitSignals;
-    if(resolutionChanged) emitSignals << ResolutionChangedSignal;
-    if(sizeChanged) emitSignals << SizeChangedSignal;
+    if (resolutionChanged) emitSignals << ResolutionChangedSignal;
+    if (sizeChanged) emitSignals << SizeChangedSignal;
     emitSignals << ModifiedSignal;
 
+    // XXX: Translate after 2.4 is released
     QString actionName = sizeChanged ? "Scale Image" : "Change Image Resolution";
 
-    KisProcessingApplicator applicator(this, m_d->rootLayer, true, emitSignals, actionName);
+    KisProcessingApplicator::ProcessingFlags signalFlags =
+        (resolutionChanged || sizeChanged) ?
+                KisProcessingApplicator::NO_UI_UPDATES :
+                KisProcessingApplicator::NONE;
+
+    KisProcessingApplicator applicator(this, m_d->rootLayer,
+                                       KisProcessingApplicator::RECURSIVE | signalFlags,
+                                       emitSignals, actionName);
 
     qreal sx = qreal(size.width()) / this->size().width();
     qreal sy = qreal(size.height()) / this->size().height();
@@ -503,21 +517,21 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
 
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
 
-    if(resolutionChanged) {
+    if (resolutionChanged) {
         KUndo2Command *parent =
             new KisResetShapesCommand(m_d->rootLayer);
         new KisImageSetResolutionCommand(this, xres, yres, parent);
         applicator.applyCommand(parent);
     }
 
-    if(sizeChanged) {
+    if (sizeChanged) {
         applicator.applyCommand(new KisImageResizeCommand(this, size));
     }
 
     applicator.end();
 }
 
-void KisImage::rotate(double radians, KoUpdater *progress)
+void KisImage::rotate(double radians)
 {
     qint32 w = width();
     qint32 h = height();
@@ -529,19 +543,37 @@ void KisImage::rotate(double radians, KoUpdater *progress)
     tx -= (w - width()) / 2;
     ty -= (h - height()) / 2;
 
-    undoAdapter()->beginMacro(i18n("Rotate Image"));
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-    undoAdapter()->addCommand(new KisImageResizeCommand(KisImageWSP(this), QSize(w,h)));
+    // These signals will be emitted after processing is done
+    KisImageSignalVector emitSignals;
+    if (w != width() || h != height()) emitSignals << SizeChangedSignal;
+    emitSignals << ModifiedSignal;
+
+    // These flags determine whether updates are transferred to the UI during processing
+    KisProcessingApplicator::ProcessingFlags signalFlags =
+        (emitSignals.contains(SizeChangedSignal)) ?
+                KisProcessingApplicator::NO_UI_UPDATES :
+                KisProcessingApplicator::NONE;
+
+
+    // XXX i18n("Rotate Image") after 2.4
+    KisProcessingApplicator applicator(this, m_d->rootLayer,
+                                       KisProcessingApplicator::RECURSIVE | signalFlags,
+                                       emitSignals, "Rotate Image");
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
 
-    KisTransformVisitor visitor(KisImageWSP(this), 1.0, 1.0, 0, 0, radians, -tx, -ty, progress, filter);
-    m_d->rootLayer->accept(visitor);
+    KisProcessingVisitorSP visitor =
+            new KisTransformProcessingVisitor(1.0, 1.0, 0.0, 0.0,
+                                              QPointF(),
+                                              radians,
+                                              -tx, -ty, filter);
 
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-    undoAdapter()->endMacro();
+    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
 
-    setModified();
+    if (w != width() || h != height()) {
+        applicator.applyCommand(new KisImageResizeCommand(this, QSize(w,h)));
+    }
+    applicator.end();
 }
 
 void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
@@ -589,11 +621,13 @@ void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColor
 {
     if (*m_d->colorSpace == *dstColorSpace) return;
 
+    const KoColorSpace *srcColorSpace = m_d->colorSpace;
+
     undoAdapter()->beginMacro(i18n("Convert Image Color Space"));
     undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
     undoAdapter()->addCommand(new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstColorSpace));
 
-    KisColorSpaceConvertVisitor visitor(this, dstColorSpace, renderingIntent);
+    KisColorSpaceConvertVisitor visitor(this, srcColorSpace, dstColorSpace, renderingIntent);
     m_d->rootLayer->accept(visitor);
 
     undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
@@ -1253,6 +1287,17 @@ void KisImage::refreshGraph(KisNodeSP root, const QRect &rc, const QRect &cropRe
     }
 }
 
+void KisImage::initialRefreshGraph()
+{
+    /**
+     * NOTE: Tricky part. We set crop rect to null, so the clones
+     * will not rely on precalculated projections of their sources
+     */
+
+    refreshGraphAsync(0, bounds(), QRect());
+    waitForDone();
+}
+
 void KisImage::refreshGraphAsync(KisNodeSP root)
 {
     refreshGraphAsync(root, bounds(), bounds());
@@ -1272,15 +1317,26 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &c
     }
 }
 
+void KisImage::disableUIUpdates()
+{
+    m_d->disableUIUpdateSignals.ref();
+}
+
+void KisImage::enableUIUpdates()
+{
+    m_d->disableUIUpdateSignals.deref();
+}
+
 void KisImage::notifyProjectionUpdated(const QRect &rc)
 {
-    emit sigImageUpdated(rc);
+    if(!m_d->disableUIUpdateSignals) {
+        emit sigImageUpdated(rc);
+    }
 }
 
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
     if (m_d->scheduler) {
-        dbgImage << "KisImage: requested and update for" << node->name() << rect;
         m_d->scheduler->updateProjection(node, rect, bounds());
     }
 }

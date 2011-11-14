@@ -146,7 +146,9 @@ void KoRdfSemanticItemViewSite::setStylesheetWithoutReflow(KoSemanticStylesheet 
 void KoRdfSemanticItemViewSite::reflowUsingCurrentStylesheet(KoTextEditor *editor)
 {
     KoSemanticStylesheet *ss = stylesheet();
-    ss->format(d->m_semItem, editor, d->m_xmlid);
+    if (ss) {
+        ss->format(d->m_semItem, editor, d->m_xmlid);
+    }
 }
 
 void KoRdfSemanticItemViewSite::selectRange(KoCanvasResourceManager *provider, int startpos, int endpos)

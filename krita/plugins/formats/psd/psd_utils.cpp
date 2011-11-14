@@ -130,6 +130,16 @@ bool psdread(QIODevice* io, quint32* v)
     return true;
 }
 
+
+bool psdread(QIODevice* io, qint32* v)
+{
+    qint32 val;
+    quint64 read = io->read((char*)&val, 4);
+    if (read != 4) return false;
+    *v = ntohl(val);
+    return true;
+}
+
 bool psdread(QIODevice* io, quint64* v)
 {
     quint64 val;
@@ -157,7 +167,7 @@ bool psdread_pascalstring(QIODevice* io, QString& s)
     s.append(chars);
 
     // read padding byte
-    if ((length & 0x01) != 0) {
+    if (((length +1) & 0x01) != 0) {
         if (!psdread(io, &length)) return false;
         return (length == 0);
     }

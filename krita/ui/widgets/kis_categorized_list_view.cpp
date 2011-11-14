@@ -26,6 +26,10 @@ KisCategorizedListView::KisCategorizedListView(bool useCheckBoxHack, QWidget* pa
     connect(this, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotIndexChanged(const QModelIndex&)));
 }
 
+KisCategorizedListView::~KisCategorizedListView()
+{
+}
+
 void KisCategorizedListView::setModel(QAbstractItemModel* model)
 {
     QListView::setModel(model);

@@ -30,8 +30,8 @@ class RgbCompositeOpLighten : public KoCompositeOp
 
 public:
 
-    RgbCompositeOpLighten(KoColorSpace * cs, const bool userVisible = true)
-            : KoCompositeOp(cs, COMPOSITE_LIGHTEN, i18n("Lighten"), "", userVisible) {
+    RgbCompositeOpLighten(KoColorSpace * cs)
+            : KoCompositeOp(cs, COMPOSITE_LIGHTEN, i18n("Lighten"), "") {
     }
 
     using KoCompositeOp::composite;

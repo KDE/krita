@@ -89,7 +89,8 @@ class TextToolSelection : public KoToolSelection
 public:
 
     TextToolSelection(QWeakPointer<KoTextEditor> editor)
-        : m_editor(editor)
+        : KoToolSelection(0)
+        , m_editor(editor)
     {
     }
 
@@ -736,21 +737,22 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         }
     }
 
-    if (event->button() != Qt::RightButton)
-        updateSelectedShape(event->point);
-    KoSelection *selection = canvas()->shapeManager()->selection();
-    if (m_textShape && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
-        selection->deselectAll();
-        selection->select(m_textShape);
-    }
-
     const bool canMoveCaret = !m_textEditor.data()->hasSelection() || event->button() !=  Qt::RightButton;
     if (canMoveCaret) {
-        bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
         if (m_textEditor.data()->hasSelection())
             repaintSelection(); // will erase selection
         else
             repaintCaret();
+
+        updateSelectedShape(event->point);
+
+        KoSelection *selection = canvas()->shapeManager()->selection();
+        if (m_textShape && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
+            selection->deselectAll();
+            selection->select(m_textShape);
+        }
+
+        bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
         KoPointedAt pointedAt = hitTest(event->point);
         if (pointedAt.position != -1) {
             m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
@@ -2296,15 +2298,6 @@ void TextTool::debugTextStyles()
 
     foreach (KoParagraphStyle *style, styleManager->paragraphStyles()) {
         kDebug(32500) << style->styleId() << style->name() << (styleManager->defaultParagraphStyle() == style ? "[Default]" : "");
-        KoCharacterStyle *cs = style->characterStyle();
-        seenStyles << style->styleId();
-        if (cs) {
-            kDebug(32500) << "  +- CharStyle: " << cs->styleId() << cs->name();
-            kDebug(32500) << "  |  " << cs->font();
-            seenStyles << cs->styleId();
-        } else {
-            kDebug(32500) << "  +- ERROR; no char style found!" << endl;
-        }
         KoListStyle *ls = style->listStyle();
         if (ls) { // optional ;)
             kDebug(32500) << "  +- ListStyle: " << ls->styleId() << ls->name()

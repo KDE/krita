@@ -82,6 +82,7 @@ public:
        , continuousLayout(true)
        , layoutBlocked(false)
        , restartLayout(false)
+       , wordprocessingMode(false)
     {
     }
     KoStyleManager *styleManager;
@@ -118,6 +119,7 @@ public:
     bool continuousLayout;
     bool layoutBlocked;
     bool restartLayout;
+    bool wordprocessingMode;
 };
 
 
@@ -154,6 +156,17 @@ KoTextLayoutRootAreaProvider *KoTextDocumentLayout::provider() const
 {
     return d->provider;
 }
+
+void KoTextDocumentLayout::setWordprocessingMode()
+{
+    d->wordprocessingMode = true;
+}
+
+bool KoTextDocumentLayout::wordprocessingMode()
+{
+    return d->wordprocessingMode;
+}
+
 
 bool KoTextDocumentLayout::relativeTabs(QTextBlock block) const
 {

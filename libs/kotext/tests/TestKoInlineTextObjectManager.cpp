@@ -167,6 +167,7 @@ void TestKoInlineTextObjectManager::testRetrieveInlineObject()
     // by id
     KoInlineObject *obj2 = manager.inlineTextObject(1);
     Q_ASSERT(obj2 == obj);
+    Q_UNUSED(obj2) // not really unused, but gcc thinks so.
 
     // by cursor
     editor.setPosition(444);

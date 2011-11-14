@@ -293,13 +293,6 @@ DeleteCommand::~DeleteCommand()
         KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
         if (textEditor == 0)
             return;
-        foreach (KoInlineObject *object, m_invalidInlineObjects) {
-            KoTextDocument textDocument(m_document);
-            KoInlineTextObjectManager *manager = textDocument.inlineTextObjectManager();
-            manager->removeInlineObject(object);
-            delete object;
-        }
-
         foreach (KUndo2Command *command, m_shapeDeleteCommands)
             delete command;
     }

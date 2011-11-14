@@ -51,7 +51,7 @@ protected:
     bool processOneJob(KisUpdaterContext &updaterContext);
 
     bool trySplitJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, KisBaseRectsWalker::UpdateType type);
-    bool tryMergeJob(KisNodeSP node, const QRect& rc, KisBaseRectsWalker::UpdateType type);
+    bool tryMergeJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, KisBaseRectsWalker::UpdateType type);
 
     void collectJobs(KisBaseRectsWalkerSP &baseWalker, QRect baseRect,
                      const KisNodeSP &baseNode, const qreal maxAlpha);

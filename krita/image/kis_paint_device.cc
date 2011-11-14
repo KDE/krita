@@ -646,7 +646,7 @@ void KisPaintDevice::setDataManager(KisDataManagerSP data, const KoColorSpace * 
     }
 }
 
-void KisPaintDevice::convertFromQImage(const QImage& _image, const QString &srcProfileName,
+void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfile *profile,
                                        qint32 offsetX, qint32 offsetY)
 {
     QImage image = _image;
@@ -655,12 +655,13 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const QString &srcP
         image = image.convertToFormat(QImage::Format_ARGB32);
     }
     // Don't convert if not no profile is given and both paint dev and qimage are rgba.
-    if (srcProfileName.isEmpty() && colorSpace()->id() == "RGBA") {
+    if (!profile && colorSpace()->id() == "RGBA") {
         writeBytes(image.bits(), offsetX, offsetY, image.width(), image.height());
     } else {
+        Q_ASSERT(profile);
         quint8 * dstData = new quint8[image.width() * image.height() * pixelSize()];
         KoColorSpaceRegistry::instance()
-                ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), srcProfileName)
+                ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile)
                 ->convertPixelsTo(image.bits(), dstData, colorSpace(), image.width() * image.height());
 
         writeBytes(dstData, offsetX, offsetY, image.width(), image.height());
@@ -669,7 +670,7 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const QString &srcP
     m_d->cache.invalidate();
 }
 
-QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile) const
+QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile) const
 {
     qint32 x1;
     qint32 y1;

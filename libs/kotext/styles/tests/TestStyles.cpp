@@ -246,12 +246,12 @@ void TestStyles::testUnapplyStyle()
     
     // in this test we should avoid testing any of the hardcodedDefaultProperties; see KoCharacterStyle for details!
     KoParagraphStyle headers;
-    headers.characterStyle()->setOverlineColor(testOverlineColor);
-    headers.characterStyle()->setOverlineMode(KoCharacterStyle::ContinuousLineMode);
-    headers.characterStyle()->setOverlineStyle(KoCharacterStyle::DottedLine);
-    headers.characterStyle()->setOverlineType(KoCharacterStyle::DoubleLine);
-    headers.characterStyle()->setOverlineWidth(testOverlineWeight, testOverlineWidth);
-    headers.characterStyle()->setFontWeight(QFont::Bold);
+    headers.setOverlineColor(testOverlineColor);
+    headers.setOverlineMode(KoCharacterStyle::ContinuousLineMode);
+    headers.setOverlineStyle(KoCharacterStyle::DottedLine);
+    headers.setOverlineType(KoCharacterStyle::DoubleLine);
+    headers.setOverlineWidth(testOverlineWeight, testOverlineWidth);
+    headers.setFontWeight(QFont::Bold);
     headers.setAlignment(Qt::AlignCenter);
     KoParagraphStyle head1;
     head1.setParentStyle(&headers);

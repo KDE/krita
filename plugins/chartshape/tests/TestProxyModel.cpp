@@ -46,7 +46,7 @@ using namespace KChart;
 
 TestProxyModel::TestProxyModel()
     : m_source()
-    , m_proxyModel( &m_source )
+    , m_proxyModel( 0, &m_source )
     , m_sourceModel()
     , m_table( 0 )
 {

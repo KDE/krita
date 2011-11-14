@@ -24,13 +24,11 @@
 #include <kis_shared_ptr.h>
 #include <krita_export.h>
 
-class KisTiledRectIterator;
+#include <config-tiles.h> // For the next define
+#include KIS_TILED_ITERATOR_HEADER
+
 typedef KisSharedPtr<KisTiledRectIterator> KisTiledRectIteratorSP;
-
-class KisTiledVLineIterator;
 typedef KisSharedPtr<KisTiledVLineIterator> KisTiledVLineIteratorSP;
-
-class KisTiledHLineIterator;
 typedef KisSharedPtr<KisTiledHLineIterator> KisTiledHLineIteratorSP;
 
 class KisDataManager;

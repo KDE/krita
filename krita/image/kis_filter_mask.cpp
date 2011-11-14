@@ -51,6 +51,7 @@ KisFilterMask::KisFilterMask()
         , m_d(new Private())
 {
     m_d->filterConfig = 0;
+    setCompositeOp(COMPOSITE_COPY);
 }
 
 KisFilterMask::~KisFilterMask()

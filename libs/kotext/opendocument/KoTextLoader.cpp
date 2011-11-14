@@ -1318,11 +1318,8 @@ void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level)
             c.setBlockFormat(blockFormat);
             d->currentList->add(c.block(), level);
         }
-    } else {
-        QTextBlockFormat fmt = cursor.blockFormat();
-        fmt.clearProperty(KoParagraphStyle::ForceDisablingList);
-        cursor.setBlockFormat(fmt);
     }
+
     if (!e.attributeNS(KoXmlNS::delta, "insertion-type").isEmpty())
         d->closeChangeRegion(e);
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());
@@ -1658,24 +1655,25 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             if (!ts.attributeNS(KoXmlNS::delta, "insertion-type").isEmpty())
                 d->openChangeRegion(ts);
             QString target = ts.attributeNS(KoXmlNS::xlink, "href");
+            QString styleName = ts.attributeNS(KoXmlNS::text, "style-name", QString());
             QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
-            if (!target.isEmpty()) {
-                QTextCharFormat linkCf(cf);   // and copy it to alter it
-                linkCf.setAnchor(true);
-                linkCf.setAnchorHref(target);
-
-                // TODO make configurable ? Ho, and it will interfere with saving :/
-                QBrush foreground = linkCf.foreground();
-                foreground.setColor(Qt::blue);
-                //                 foreground.setStyle(Qt::Dense1Pattern);
-                linkCf.setForeground(foreground);
-                linkCf.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
-                linkCf.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
-
-                cursor.setCharFormat(linkCf);
+            
+            if (!styleName.isEmpty()) {
+                KoCharacterStyle *characterStyle = d->textSharedData->characterStyle(styleName, d->stylesDotXml);
+                if (characterStyle) {
+                    characterStyle->applyStyle(&cursor);
+                } else {
+                    kWarning(32500) << "character style " << styleName << " not found";
+                }
             }
+            QTextCharFormat newCharFormat = cursor.charFormat();
+            newCharFormat.setAnchor(true);
+            newCharFormat.setAnchorHref(target);
+            cursor.setCharFormat(newCharFormat);
+            
             loadSpan(ts, cursor, stripLeadingSpace);   // recurse
-            cursor.setCharFormat(cf);   // restore the cursor char format
+            cursor.setCharFormat(cf); // restore the cursor char format
+            
             if (!ts.attributeNS(KoXmlNS::delta, "insertion-type").isEmpty())
                 d->closeChangeRegion(ts);
         } else if (isTextNS && localName == "line-break") { // text:line-break
@@ -1978,15 +1976,6 @@ void KoTextLoader::Private::processDeleteChange(QTextCursor &cursor)
 
 void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 {
-    //add block before table,
-    // **************This Should Be fixed: Just Commenting out for now***************
-    // An Empty block before a table would result in a <p></p> before a table
-    // After n round-trips we would end-up with n <p></p> before table.
-    // ******************************************************************************
-    //if (cursor.block().blockNumber() != 0) {
-    //    cursor.insertBlock(QTextBlockFormat());
-    //}
-
     QTextTableFormat tableFormat;
     QString tableStyleName = tableElem.attributeNS(KoXmlNS::table, "style-name", "");
     if (!tableStyleName.isEmpty()) {
@@ -1995,17 +1984,16 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
             tblStyle->applyStyle(tableFormat);
     }
 
-    // if table has master page style property, copy it to block before table, because this block belongs to table
-    // **************This Should Be fixed: Just Commenting out for now***************
-    // An Empty block before a table would result in a <p></p> before a table
-    // After n round-trips we would end-up with n <p></p> before table.
-    // ******************************************************************************
-    //QVariant masterStyle = tableFormat.property(KoTableStyle::MasterPageName);
-    //if (!masterStyle.isNull()) {
-    //    QTextBlockFormat textBlockFormat;
-    //    textBlockFormat.setProperty(KoParagraphStyle::MasterPageName,masterStyle);
-    //    cursor.setBlockFormat(textBlockFormat);
-    //}
+    // if table is being inserted at start of document and it has master page style property,
+    // copy it to block before table, because this block shouldn't really be there but Qt
+    // doesn't allow us to get rid of it. But at least make it belongs to the same masterpage
+    // so we don't end up with a blank page
+    QVariant masterStyle = tableFormat.property(KoTableStyle::MasterPageName);
+    if (!masterStyle.isNull() && cursor.block().blockNumber() == 0) {
+        QTextBlockFormat textBlockFormat;
+        textBlockFormat.setProperty(KoParagraphStyle::MasterPageName,masterStyle);
+        cursor.setBlockFormat(textBlockFormat);
+    }
 
     if (d->changeTracker && d->changeStack.count()) {
         tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
@@ -2215,9 +2203,10 @@ void KoTextLoader::loadTableCell(KoXmlElement &rowTag, QTextTable *tbl, QList<QR
             cellStyle = tcarManager.defaultColumnCellStyle(currentCell);
         }
 
-        QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
         if (cellStyle)
-            cellStyle->applyStyle(cellFormat);
+            cellStyle->applyStyle(cell);
+
+        QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
 
         if (rowTag.attributeNS(KoXmlNS::table, "protected", "false") == "true") {
             cellFormat.setProperty(KoTableCellStyle::CellIsProtected, true);

@@ -16,8 +16,8 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 
 # define the generic version of the Calligra libraries here
 # this makes it easy to advance it when the next Calligra release comes
-set(GENERIC_CALLIGRA_LIB_VERSION "8.0.0")
-set(GENERIC_CALLIGRA_LIB_SOVERSION "8")
+set(GENERIC_CALLIGRA_LIB_VERSION "9.0.0")
+set(GENERIC_CALLIGRA_LIB_SOVERSION "9")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
@@ -500,7 +500,7 @@ if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     ##
     ## Test for sqlite
     ##
-    set(SQLITE_RECOMMENDED_VERSION "3.7.3")
+    set(SQLITE_RECOMMENDED_VERSION "3.7.9")
     find_package(CalligraSqlite 3.6.16)
     macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine" "http://www.sqlite.org"
                       FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")

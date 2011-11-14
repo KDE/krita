@@ -170,7 +170,7 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
 
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8, cs);
     image->addNode(layer.data(), image->rootLayer(), 0);
-    layer->paintDevice()->convertFromQImage(qimage, "");
+    layer->paintDevice()->convertFromQImage(qimage, 0);
 
     KisPrescaledProjection projection;
     KisCoordinatesConverter converter;
@@ -202,7 +202,7 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
 
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8, cs);
     image->addNode(layer.data(), image->rootLayer(), 0);
-    layer->paintDevice()->convertFromQImage(qimage, "");
+    layer->paintDevice()->convertFromQImage(qimage, 0);
 
     KisPrescaledProjection projection;
     KisCoordinatesConverter converter;
@@ -230,7 +230,7 @@ void KisPrescaledProjectionTest::benchmarkUpdate()
     image->setResolution(300 / 72 , 300 / 72);
 
     KisPaintLayerSP layer = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, cs);
-    layer->paintDevice()->convertFromQImage(referenceImage, "");
+    layer->paintDevice()->convertFromQImage(referenceImage, 0);
 
     image->addNode(layer, image->rootLayer(), 0);
 
@@ -280,7 +280,7 @@ void KisPrescaledProjectionTest::testScaling()
     image->setResolution(100, 100);
 
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8, cs);
-    layer->paintDevice()->convertFromQImage(sourceImage, "");
+    layer->paintDevice()->convertFromQImage(sourceImage, 0);
 
     image->addNode(layer, image->rootLayer(), 0);
 

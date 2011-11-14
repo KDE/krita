@@ -22,6 +22,14 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
+#include "kis_group_layer.h"
+#include "kis_paint_layer.h"
+#include "kis_adjustment_layer.h"
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_registry.h"
+#include "kis_selection.h"
+
 #include "scheduler_utils.h"
 #include "kis_update_scheduler.h"
 #include "kis_updater_context.h"
@@ -50,8 +58,8 @@ KisImageSP KisUpdateSchedulerTest::buildTestingImage()
     KisPaintLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8 / 3);
     KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
 
-    paintLayer1->paintDevice()->convertFromQImage(sourceImage1, "", 0, 0);
-    paintLayer2->paintDevice()->convertFromQImage(sourceImage2, "", 0, 0);
+    paintLayer1->paintDevice()->convertFromQImage(sourceImage1, 0, 0, 0);
+    paintLayer2->paintDevice()->convertFromQImage(sourceImage2, 0, 0, 0);
 
     image->lock();
     image->addNode(paintLayer1);

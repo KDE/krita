@@ -236,12 +236,12 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
 
 void KisGridProperties::fillProperties(const KisPropertiesConfiguration* setting)
 {
-    gridWidth = setting->getInt(GRID_WIDTH);
-    gridHeight = setting->getInt(GRID_HEIGHT);
-    divisionLevel = setting->getInt(GRID_DIVISION_LEVEL);
+    gridWidth = qMax(1, setting->getInt(GRID_WIDTH));
+    gridHeight = qMax(1, setting->getInt(GRID_HEIGHT));
+    divisionLevel = qMax(1, setting->getInt(GRID_DIVISION_LEVEL));
     pressureDivision =  setting->getBool(GRID_PRESSURE_DIVISION);
     randomBorder = setting->getBool(GRID_RANDOM_BORDER);
-    scale = setting->getDouble(GRID_SCALE);
+    scale = qMax(0.1, setting->getDouble(GRID_SCALE));
     vertBorder  = setting->getDouble(GRID_VERTICAL_BORDER);
     horizBorder = setting->getDouble(GRID_HORIZONTAL_BORDER);
 

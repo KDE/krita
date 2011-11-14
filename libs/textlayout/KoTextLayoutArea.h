@@ -69,8 +69,8 @@ public:
     /// Returns true if the area starts at the cursor position
     bool isStartingAt(FrameIterator *cursor) const;
 
-    QTextFrame::iterator startTextFrameIterator() const;
-    QTextFrame::iterator endTextFrameIterator() const;
+    KDE_DEPRECATED QTextFrame::iterator startTextFrameIterator() const;
+    KDE_DEPRECATED QTextFrame::iterator endTextFrameIterator() const;
 
     /// Layouts as much as we can
     bool layout(FrameIterator *cursor);
@@ -183,6 +183,8 @@ private:
     QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep);
 
     bool layoutBlock(FrameIterator *cursor);
+
+    bool presentationListTabWorkaround(qreal indent, qreal labelBoxWidth, qreal presentationListTabValue);
 
     /// Returns vertical height of line
     qreal addLine(QTextLine &line, FrameIterator *cursor, KoTextBlockData *blockData);

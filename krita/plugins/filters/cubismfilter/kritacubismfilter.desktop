@@ -92,4 +92,4 @@ Comment[zh_TW]=立體過濾器
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritacubismfilter
-X-Krita-Version=4
+X-Krita-Version=5

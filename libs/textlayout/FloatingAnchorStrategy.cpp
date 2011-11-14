@@ -385,13 +385,13 @@ void FloatingAnchorStrategy::checkLayoutEnvironment(QPointF &newPosition, KoText
     }
 
     //check top border and move the shape back to have the whole shape within
-    if (newPosition.y() < layoutEnvironmentRect().y()) {
-        newPosition.setY(layoutEnvironmentRect().y());
+    if (newPosition.y() < layoutEnvironmentRect().y() - data->documentOffset()) {
+        newPosition.setY(layoutEnvironmentRect().y() - data->documentOffset());
     }
 
     //check bottom border and move the shape back to have the whole shape within
-    if (newPosition.y() + size.height() > layoutEnvironmentRect().bottom()) {
-        newPosition.setY(layoutEnvironmentRect().bottom() - size.height());
+    if (newPosition.y() + size.height() > layoutEnvironmentRect().bottom() - data->documentOffset()) {
+        newPosition.setY(layoutEnvironmentRect().bottom() - size.height() - data->documentOffset());
     }
 }
 

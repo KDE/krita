@@ -29,5 +29,5 @@ Name[zh_TW]=繪圖色彩空間（LC 與 QP 轉換，32 與 16 位元浮動色頻
 X-KDE-ServiceTypes=Calligra/ColorSpace
 Type=Service
 X-KDE-Library=kritakscolorspacesplugin
-X-Pigment-MinVersion=0
-X-Flake-PluginVersion=1
+X-Pigment-MinVersion=4
+X-Flake-PluginVersion=4

@@ -70,7 +70,7 @@ void KisCsConversionTest::testColorSpaceConversion()
         foreach(const KoColorSpace * dstCs,  colorSpaces) {
 
             KisPaintDeviceSP dev  = new KisPaintDevice(srcCs);
-            dev->convertFromQImage(image, "");
+            dev->convertFromQImage(image, 0);
             dev->move(10, 10);   // Unalign with tile boundaries
             dev->convertTo(dstCs);
 

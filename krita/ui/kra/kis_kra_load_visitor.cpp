@@ -195,33 +195,13 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
     return result;
 }
 
-
-KisNodeSP KisKraLoadVisitor::findNodeByName(const QString &name,
-                                            KisNodeSP rootNode)
-{
-    if(rootNode->name() == name)
-        return rootNode;
-
-    KisNodeSP result;
-    KisNodeSP child = rootNode->firstChild();
-    while(child) {
-        result = findNodeByName(name, child);
-        if(result) break;
-
-        child = child->nextSibling();
-    }
-
-    return result;
-}
-
 bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
 {
     if (!loadMetaData(layer)) {
         return false;
     }
 
-    KisNodeSP srcNode = findNodeByName(layer->copyFromName(),
-                                        m_image->rootLayer());
+    KisNodeSP srcNode = layer->copyFromInfo().findNode(m_image->rootLayer());
     KisLayerSP srcLayer = dynamic_cast<KisLayer*>(srcNode.data());
     Q_ASSERT(srcLayer);
 

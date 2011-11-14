@@ -267,7 +267,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     }
 
     int index = startValue;
-    qreal width = format.doubleProperty(KoListStyle::MinimumWidth);
+    qreal width = 0.0;
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
     if (!data) {
         data = new KoTextBlockData();
@@ -307,6 +307,10 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
 
             if (isOutline != bool(b.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
                 continue; // one of them is an outline while the other is not
+
+            if (b.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
+                continue; //unnumbered listItems are irrelevant
+            }
 
             if (b.textList() == m_textList) {
                 if (b.textList()->format().intProperty(KoListStyle::Level) == level)
@@ -461,23 +465,22 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     data->setCounterPrefix(prefix);
     data->setCounterSuffix(suffix);
     if (calcWidth)
-        width = qMax(width, m_fm.width(item));
+        width = m_fm.width(item);
     index++;
 
-    int widthPercent = format.intProperty(KoListStyle::RelativeBulletSize);
-    if (widthPercent > 0)
-        width += (m_fm.width(prefix + suffix) * widthPercent) / 100.0;
-    else
-        width += m_fm.width(prefix + suffix);
+    width += m_fm.width(prefix + suffix);
 
     qreal counterSpacing = 0;
     if (listStyle != KoListStyle::None) {
-        if (format.boolProperty(KoListStyle::AlignmentMode) == false) {
-            counterSpacing = qMax(format.doubleProperty(KoListStyle::MinimumDistance), m_fm.width(' '));
-            width = qMax(format.doubleProperty(KoListStyle::MinimumWidth), width);
-        } else {
+        if (format.boolProperty(KoListStyle::AlignmentMode)) {
             // for aligmentmode spacing should be 0
             counterSpacing = 0;
+        } else {
+            // see ODF spec 1.2 item 20.422
+            counterSpacing = format.doubleProperty(KoListStyle::MinimumDistance);
+            counterSpacing -= format.doubleProperty(KoListStyle::MinimumWidth) - width;
+            counterSpacing = qMax(counterSpacing, qreal(0.0));
+            width = qMax(width, format.doubleProperty(KoListStyle::MinimumWidth));
         }
     }
     data->setCounterWidth(width);

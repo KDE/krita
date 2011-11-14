@@ -284,7 +284,12 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
                         QBrush frontBrush;
                         frontBrush.setStyle(Qt::SolidPattern);
-                        if (qGray(backbrush.color().rgb()) > 60) {
+                        // use the same luma calculation and threshold as msoffice
+                        // see http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a02a9a24-efb6-4ba0-a187-0e3d2704882b
+                        int luma = (5036060 * backbrush.color().red()
+                                    + 9886846 * backbrush.color().green()
+                                    + 1920103 * backbrush.color().blue()) >> 24; 
+                        if (luma > 60) {
                             frontBrush.setColor(QColor(Qt::black));
                         } else {
                             frontBrush.setColor(QColor(Qt::white));
@@ -309,11 +314,11 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             painter->setClipRect(br.adjusted(-2,-2,2,2), Qt::IntersectClip);
 
             if (context.showSpellChecking) {
-                layout->draw(painter, QPointF(0, 0), selections, br);
+                layout->draw(painter, QPointF(0, 0), selections);
             } else {
                 QList<QTextLayout::FormatRange> misspellings = layout->additionalFormats();
                 layout->clearAdditionalFormats();
-                layout->draw(painter, QPointF(0, 0), selections, br);
+                layout->draw(painter, QPointF(0, 0), selections);
                 layout->setAdditionalFormats(misspellings);
             }
             decorateParagraph(painter, block, context.showFormattingCharacters);

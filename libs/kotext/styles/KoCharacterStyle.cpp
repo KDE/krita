@@ -457,15 +457,12 @@ void KoCharacterStyle::applyStyle(QTextBlock &block) const
     QTextCharFormat cf = cursor.blockCharFormat();
     applyStyle(cf);
     QTextCharFormat format = cf;
-    ensureMinimalProperties(format);
-    cursor.setBlockCharFormat(format);
+    ensureMinimalProperties(cf);
+    cursor.setBlockCharFormat(cf);
 
-//    cursor.setPosition(block.position() + block.length() - 1, QTextCursor::KeepAnchor);
-//    cursor.mergeCharFormat(cf);
-
-//    QTextCharFormat format = cursor.charFormat();
-//    ensureMinimalProperties(format);
-//    cursor.mergeCharFormat(format);
+    cursor.setPosition(block.position() + block.length() - 1, QTextCursor::KeepAnchor);
+    cursor.setCharFormat(cf);
+// FIXME above effectively removes any char styles and direct formatting from the block
 }
 
 void KoCharacterStyle::applyStyle(QTextCursor *selection) const

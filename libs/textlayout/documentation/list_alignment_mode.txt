@@ -3,12 +3,12 @@ label-width-and-position mode
 
                       min-    min-
                      label-  label-
-                     width  distance indent
-                    |------|--------|------|
-                    LABELBOX        |      TEXT STARTS HERE AND GOES ON
-                    |               TO THE NEXT LINE
-|>------------------|
-     list-indent
+                     width  distance
+                    |------|--------|
+                    LABELBOX        TEXT STARTS HERE AND GOES ON
+                    |          TO THE NEXT LINE
+|>------------------|          |----|
+     list-indent               indent
 
 
 Inside LABELBOX the label can be aligned and prepended by spacing:

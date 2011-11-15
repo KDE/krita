@@ -1206,27 +1206,20 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
     case Qt::ImMicroFocus: {
         // The rectangle covering the area of the input cursor in widget coordinates.
         QRectF rect = caretRect(textEditor->cursor());
-        qDebug()<<"caretRect"<<rect.topLeft()<<rect.size();
-        qDebug()<<"<<textShape position>>"<<m_textShape->position();
-        qDebug()<<"m_textShapeData->documentOffset()"<<m_textShapeData->documentOffset();
+        //qDebug()<<"caretRect"<<rect.topLeft()<<rect.size();
+        //qDebug()<<"m_textShapeData->documentOffset()"<<m_textShapeData->documentOffset();
         rect.moveTop(rect.top() - m_textShapeData->documentOffset());
-        qDebug()<<"moveToped rect"<<rect.topLeft()<<rect.size();
         QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
         qreal zoomX, zoomY;
         converter.zoom(&zoomX, &zoomY);
-        qDebug()<<"Unscaled rect"<<rect.topLeft()<<rect.size();
         shapeMatrix.scale(zoomX, zoomY);
         rect = shapeMatrix.mapRect(rect);
-        qDebug()<<"Scaled rect"<<rect.topLeft()<<rect.size();
-        qDebug()<<"Document Origin"<<canvas()->documentOrigin();
-        qDebug()<<"scroll bar value"<<canvas()->canvasController()->scrollBarValue();
         QPointF scroll(canvas()->canvasController()->scrollBarValue());
         if (canvas()->canvasController()->canvasMode() == KoCanvasController::Spreadsheet &&
                 canvas()->canvasWidget()->layoutDirection() == Qt::RightToLeft) {
             scroll.setX(-scroll.x());
         }
         rect.translate(canvas()->documentOrigin() - scroll);
-        qDebug()<<"rect to return"<<rect.topLeft()<<rect.size();
         return rect.toRect();
     }
     case Qt::ImFont:
@@ -1259,18 +1252,20 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
                                        canvas()->shapeController());
         }
     }
-    QTextBlock block = textEditor->block();
-    QTextLayout *layout = block.layout();
-    Q_ASSERT(layout);
     if (!event->commitString().isEmpty()) {
         QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
         keyPressEvent(&ke);
+        // The cursor may reside in a different block before vs. after keyPressEvent.
+        QTextBlock block = textEditor->block();
+        QTextLayout *layout = block.layout();
+        Q_ASSERT(layout);
         layout->setPreeditArea(-1, QString());
     } else {
+        QTextBlock block = textEditor->block();
+        QTextLayout *layout = block.layout();
+        Q_ASSERT(layout);
         layout->setPreeditArea(textEditor->position() - block.position(), event->preeditString());
-        qDebug()<<"<<textEditor position before mark dirty>>"<<textEditor->position();
         const_cast<QTextDocument*>(textEditor->document())->markContentsDirty(textEditor->position(), 1);
-        qDebug()<<"<<textEditor position after mark dirty>>"<<textEditor->position();
     }
     event->accept();
 }

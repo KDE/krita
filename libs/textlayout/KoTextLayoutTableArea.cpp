@@ -818,6 +818,9 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
     // This is an actual cell we want to draw, and not a covered one.
     QRectF bRect(cellBoundingRect(tableCell));
 
+    painter->save();
+    painter->setClipRect(bRect, Qt::IntersectClip);
+
     // Possibly paint the background of the cell
     QVariant background(tableCell.format().property(KoTableCellStyle::CellBackgroundBrush));
     if (!background.isNull()) {
@@ -846,14 +849,14 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
         }
     }
 
-    // Paint the content of the cellArea
     if (row < d->headerRows) {
         painter->translate(d->headerOffsetX, 0);
-        d->cellAreas[row][column]->paint(painter, context);
-        painter->translate(-d->headerOffsetX, 0);
-    } else {
-        d->cellAreas[row][column]->paint(painter, context);
     }
+
+    // Paint the content of the cellArea
+    d->cellAreas[row][column]->paint(painter, context);
+
+    painter->restore();
 }
 
 void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell, bool topRow, QVector<QLineF> *accuBlankBorders)

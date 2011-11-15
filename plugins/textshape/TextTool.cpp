@@ -1214,6 +1214,12 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
         converter.zoom(&zoomX, &zoomY);
         shapeMatrix.scale(zoomX, zoomY);
         rect = shapeMatrix.mapRect(rect);
+        QPointF scroll(canvas()->canvasController()->scrollBarValue());
+        if (canvas()->canvasController()->canvasMode() == KoCanvasController::Spreadsheet &&
+                canvas()->canvasWidget()->layoutDirection() == Qt::RightToLeft) {
+            scroll.setX(-scroll.x());
+        }
+        rect.translate(canvas()->documentOrigin() - scroll);
         return rect.toRect();
     }
     case Qt::ImFont:
@@ -1259,9 +1265,7 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
         QTextLayout *layout = block.layout();
         Q_ASSERT(layout);
         layout->setPreeditArea(textEditor->position() - block.position(), event->preeditString());
-        qDebug()<<"<<textEditor position before mark dirty>>"<<textEditor->position();
         const_cast<QTextDocument*>(textEditor->document())->markContentsDirty(textEditor->position(), 1);
-        qDebug()<<"<<textEditor position after mark dirty>>"<<textEditor->position();
     }
     event->accept();
 }

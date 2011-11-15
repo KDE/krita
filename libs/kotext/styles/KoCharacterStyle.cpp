@@ -124,31 +124,6 @@ public:
         return variant.value<QColor>();
     }
 
-    qreal resolveFontSize(qreal defaultValue)
-    {
-        qreal value;
-        if (parentStyle) {
-            value = parentStyle->d->resolveFontSize(defaultValue);
-        } else {
-            value = defaultValue;
-        }
-
-        QVariant variant = stylesPrivate.value(QTextFormat::FontPointSize);
-        if (!variant.isNull()) {
-            return variant.toDouble();
-        }
-        variant = stylesPrivate.value(KoCharacterStyle::PercentageFontSize);
-        if (!variant.isNull()) {
-            return value * variant.toDouble() / 100.0;
-        }
-        variant = stylesPrivate.value(KoCharacterStyle::AdditionalFontSize);
-        if (!variant.isNull()) {
-            return value + variant.toDouble();
-        }
-
-        return value;
-    }
-
     // problem with fonts in linux and windows is that true type fonts have more than one metric
     // they have normal metric placed in font header table
     //           microsoft metric placed in os2 table
@@ -207,13 +182,6 @@ void KoCharacterStyle::ensureMinimalProperties(QTextCharFormat &format) const
             format.setProperty(it.key(), it.value());
         }
         ++it;
-    }
-
-    // Ensuring fontsize is a bit more special
-    if (format.hasProperty(QTextCharFormat::FontPointSize)) {
-        format.setProperty(QTextCharFormat::FontPointSize, d->resolveFontSize(format.doubleProperty(QTextCharFormat::FontPointSize)));
-    } else {
-        format.setProperty(QTextCharFormat::FontPointSize, d->resolveFontSize(12.0));
     }
 }
 
@@ -437,11 +405,36 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
         d->parentStyle->applyStyle(format);
     }
 
+    bool fontSizeSet = false; // if this style has already set size don't apply the relatives
     const QMap<int, QVariant> props = d->stylesPrivate.properties();
     QMap<int, QVariant>::const_iterator it = props.begin();
     while (it != props.end()) {
         if (!it.value().isNull()) {
-            format.setProperty(it.key(), it.value());
+            if (it.key() == KoCharacterStyle::PercentageFontSize && !fontSizeSet) {
+                qreal size = it.value().toDouble() / 100.0;
+                if (format.hasProperty(QTextFormat::FontPointSize)) {
+                    size *= format.doubleProperty(QTextFormat::FontPointSize);
+                } else {
+                    size *= 12.0;
+                }
+                format.setProperty(QTextFormat::FontPointSize, size);
+            }
+            else if (it.key() == KoCharacterStyle::AdditionalFontSize && !fontSizeSet) {
+                qreal size = it.value().toDouble() / 100.0;
+                if (format.hasProperty(QTextFormat::FontPointSize)) {
+                    size += format.doubleProperty(QTextFormat::FontPointSize);
+                } else {
+                    size += 12.0;
+                }
+                format.setProperty(QTextFormat::FontPointSize, size);
+            }
+            else {
+                format.setProperty(it.key(), it.value());
+            }
+
+            if (it.key() == QTextFormat::FontPointSize) {
+                fontSizeSet = true;
+            }
 
             if (it.key() == QTextFormat::ForegroundBrush) {
                 format.clearProperty(KoCharacterStyle::UseWindowFontColor);
@@ -467,12 +460,11 @@ void KoCharacterStyle::applyStyle(QTextBlock &block) const
 
 void KoCharacterStyle::applyStyle(QTextCursor *selection) const
 {
-    QTextCharFormat cf;
+// FIXME below should be done for each frament in the selection
+    QTextCharFormat cf = selection->charFormat();
     applyStyle(cf);
-    selection->mergeCharFormat(cf);
-    QTextCharFormat format = selection->charFormat();
-    ensureMinimalProperties(format);
-    selection->mergeCharFormat(format);
+    ensureMinimalProperties(cf);
+    selection->setCharFormat(cf);
 }
 
 void KoCharacterStyle::unapplyStyle(QTextCharFormat &format) const

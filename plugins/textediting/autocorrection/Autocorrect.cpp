@@ -606,7 +606,7 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
     }
 
     if (pos != -1) {
-        // A URL inside e.g. quotes (like "http://www.calligra-suite.org" with the quotes) shouldn't include the quote in the URL.
+        // A URL inside e.g. quotes (like "http://www.calligra.org" with the quotes) shouldn't include the quote in the URL.
 	    while (!word.at(word.length()-1).isLetter() &&  !word.at(word.length()-1).isDigit() && word.at(word.length()-1) != '/')
             word.truncate(word.length() - 1);
         word.remove(0, pos);

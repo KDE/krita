@@ -2189,12 +2189,12 @@ QDomDocument KoDocument::createDomDocument(const QString& tagName, const QString
 QDomDocument KoDocument::createDomDocument(const QString& appName, const QString& tagName, const QString& version)
 {
     QDomImplementation impl;
-    QString url = QString("http://www.calligra-suite.org/DTD/%1-%2.dtd").arg(appName).arg(version);
+    QString url = QString("http://www.calligra.org/DTD/%1-%2.dtd").arg(appName).arg(version);
     QDomDocumentType dtype = impl.createDocumentType(tagName,
                              QString("-//KDE//DTD %1 %2//EN").arg(appName).arg(version),
                              url);
     // The namespace URN doesn't need to include the version number.
-    QString namespaceURN = QString("http://www.calligra-suite.org/DTD/%1").arg(appName);
+    QString namespaceURN = QString("http://www.calligra.org/DTD/%1").arg(appName);
     QDomDocument doc = impl.createDocument(namespaceURN, tagName, dtype);
     doc.insertBefore(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""), doc.documentElement());
     return doc;

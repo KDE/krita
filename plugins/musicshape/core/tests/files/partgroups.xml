@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 1.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
-<music:score-partwise xmlns:music="http://www.calligra-suite.org/music" version="1.1">
+<music:score-partwise xmlns:music="http://www.calligra.org/music" version="1.1">
  <music:part-list>
   <music:part-group type="start" number="1">
    <music:group-name>group 1</music:group-name>

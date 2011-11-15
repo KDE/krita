@@ -132,7 +132,7 @@ void KoRdfPrefixMapping::remove(const QString &prefix)
 
 void KoRdfPrefixMapping::load(Soprano::Model *model)
 {
-    QString nodePrefix = "http://calligra-suite.org/rdf/prefixmapping/";
+    QString nodePrefix = "http://calligra.org/rdf/prefixmapping/";
     Node rdfNil = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"));
     Node rdfFirst = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#first"));
     Node rdfRest = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"));
@@ -152,7 +152,7 @@ void KoRdfPrefixMapping::load(Soprano::Model *model)
 
 void KoRdfPrefixMapping::save(Soprano::Model *model, Soprano::Node context) const
 {
-    QString nodePrefix = "http://calligra-suite.org/rdf/prefixmapping/";
+    QString nodePrefix = "http://calligra.org/rdf/prefixmapping/";
     Node rdfNil = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"));
     Node rdfFirst = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#first"));
     Node rdfRest = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"));

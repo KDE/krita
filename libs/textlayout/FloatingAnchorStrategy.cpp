@@ -281,12 +281,16 @@ void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anc
 bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
                                           KoTextShapeData *data, QTextBlock &block, QTextLayout *layout)
 {
+    //FIXME proper handle VFrame and VFrameContent but fallback to VPage/VPageContent for now to produce better results
+
     switch (m_anchor->verticalRel()) {
+    case KoTextAnchor::VFrame:
     case KoTextAnchor::VPage:
         anchorBoundingRect.setY(pageRect().y());
         anchorBoundingRect.setHeight(pageRect().height());
         break;
 
+    case KoTextAnchor::VFrameContent:
     case KoTextAnchor::VPageContent:
         anchorBoundingRect.setY(pageContentRect().y());
         anchorBoundingRect.setHeight(pageContentRect().height());

@@ -27,12 +27,15 @@
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QFontMetricsF>
+#include <QFontDatabase>
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoUnit.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 #include <KoGenStyle.h>
 #include <KoShadowStyle.h>
 #include <KoShapeLoadingContext.h>
@@ -1344,8 +1347,29 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         // This font name is a reference to a font face declaration.
         KoOdfStylesReader &stylesReader = scontext.odfLoadingContext().stylesReader();
         const KoXmlElement *fontFace = stylesReader.findStyle(styleStack.property(KoXmlNS::style, "font-name"));
-        if (fontFace != 0)
+        if (fontFace != 0) {
             fontName = fontFace->attributeNS(KoXmlNS::svg, "font-family", "");
+
+            KoXmlElement fontFaceElem;
+            forEachElement(fontFaceElem, (*fontFace)) {
+                if (fontFaceElem.tagName() == "font-face-src") {
+                    KoXmlElement fontUriElem;
+                    forEachElement(fontUriElem, fontFaceElem) {
+                        if (fontUriElem.tagName() == "font-face-uri") {
+                            QString filename = fontUriElem.attributeNS(KoXmlNS::xlink, "href");
+                            KoStore *store = scontext.odfLoadingContext().store();
+                            if (store->open(filename)) {
+                                KoStoreDevice device(store);
+                                QByteArray data = device.readAll();
+                                if (device.open(QIODevice::ReadOnly)) {
+                                    QFontDatabase::addApplicationFontFromData(data);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
      }
 
     if (!fontName.isEmpty()) {

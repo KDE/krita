@@ -30,6 +30,7 @@
 #include <KoTextPaste.h>
 #include <KoShapeController.h>
 #include <KoTextOdfSaveHelper.h>
+#include "KoTextAnchor.h"
 #include "KoTextDocument.h"
 #include "KoTextDrag.h"
 #include "KoTextLocator.h"
@@ -54,9 +55,11 @@
 #include "commands/ChangeTrackedDeleteCommand.h"
 #include "commands/ListItemNumberingCommand.h"
 #include "commands/ChangeListCommand.h"
+#include "commands/InsertInlineObjectCommand.h"
 #include "commands/DeleteCommand.h"
 #include "KoInlineCite.h"
 #include <KoTextLayoutScheduler.h>
+#include <KoShapeCreateCommand.h>
 
 #include <KLocale>
 #include <kundo2stack.h>
@@ -862,7 +865,7 @@ KoInlineObject *KoTextEditor::insertIndexMarker()
     return tl;
 }
 
-void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
+void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cmd)
 {
     if (isEditProtected()) {
         return;
@@ -886,6 +889,14 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     d->caret.clearSelection();
 
     d->updateState(KoTextEditor::Private::NoOp);
+
+//    InsertTextAnchorCommand *insertTextAnchorCommand = new InsertTextAnchorCommand(anchor, document(), cmd);
+
+//    if (!cmd) {
+//        addCommand(insertTextAnchorCommand);
+//    }
+
+
     emit cursorPositionChanged();
 }
 

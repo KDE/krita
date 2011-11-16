@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
 * Copyright (C) 2009 Thomas Zander <zander@kde.org>
+* Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Library General Public
@@ -42,6 +43,7 @@ class KoBibliographyInfo;
 class KoCanvasBase;
 class KoTableOfContentsGeneratorInfo;
 class KoShapeController;
+class KoTextAnchor;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -194,8 +196,10 @@ public slots:
     /**
      * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
      * @param inliner the object to insert.
+     * @param cmd a parent command for the commands created by this methods. If present, the commands
+     *    will not be added to the document's undo stack automatically.
      */
-    void insertInlineObject(KoInlineObject *inliner);
+    void insertInlineObject(KoInlineObject *inliner, KUndo2Command *parent = 0);
 
     /**
      * update the position of all inline objects from the given start point to the given end point.

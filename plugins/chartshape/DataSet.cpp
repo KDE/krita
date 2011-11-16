@@ -162,8 +162,6 @@ public:
     /// that never changes.
     const int num;
 
-    QString labelDataCustom;
-
     // The different CellRegions for a dataset
     // Note: These are all 1-dimensional, i.e. vectors.
     CellRegion labelDataRegion; // one cell that holds the label
@@ -369,10 +367,6 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
     if ( !model )
         return QVariant();
 
-    // FIXME: Why not use this immediately if true?
-    const bool verticalHeaderData   = dataPoint.x() == 0;
-    const bool horizontalHeaderData = dataPoint.y() == 0;
-
     // Check if the data point is valid
     const bool validDataPoint = isValidDataPoint( dataPoint );
 
@@ -383,6 +377,8 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
         return QVariant();
 
     // The top-left point is (1,1). (0,y) or (x,0) refers to header data.
+    const bool verticalHeaderData   = dataPoint.x() == 0;
+    const bool horizontalHeaderData = dataPoint.y() == 0;
     const int row = dataPoint.y() - 1;
     const int col = dataPoint.x() - 1;
 
@@ -392,7 +388,6 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
         data = model->headerData( col, Qt::Horizontal );
     else {
         const QModelIndex &index = model->index( row, col );
-        // FIXME: This causes a crash in KSpread when a document is loaded.
         //Q_ASSERT( index.isValid() );
         if ( index.isValid() )
             data = model->data( index );
@@ -943,15 +938,41 @@ QVariant DataSet::customData( int index ) const
 
 QVariant DataSet::categoryData( int index ) const
 {
-    // There's no cell that holds this category's data
-    // (i.e., the region is either too short or simply empty)
-    if ( !d->categoryDataRegion.hasPointAtIndex( index ) )
-        return QString::number( index + 1 );
+     // There's no cell that holds this category's data
+     // (i.e., the region is either too short or simply empty)
+//     if ( !d->categoryDataRegion.hasPointAtIndex( index ) )
+//         return QString::number( index + 1 );
 
-    const QVariant data = d->data( d->categoryDataRegion, index );
-    // The cell contains valid data
-    if ( data.isValid() )
-        return data;
+    if ( d->categoryDataRegion.rects().isEmpty() ) {
+        // There's no cell that holds this category's data
+        // (i.e., the region is either too short or simply empty)
+        return QString::number( index + 1 );
+    }
+
+    foreach ( const QRect &rect, d->categoryDataRegion.rects() ) {
+        if ( rect.width() == 1 || rect.height() == 1 ) {
+            // Handle the clear case of either horizontal or vertical
+            // ranges with only one row/column.
+            const QVariant data = d->data( d->categoryDataRegion, index );
+            if ( data.isValid() )
+                return data;
+        } else {
+            // Operate on the last row in the defined in the categoryDataRegion.
+            // If multiple rows are given then we would need to build up multiple
+            // lines of category labels. Each line of labels would represent
+            // one row. If the category labels are displayed at the x-axis below
+            // the chart then the last row will be displayed as first label line,
+            // the row before the last row would be displayed as second label
+            // line below the first line and so on. Since we don't support
+            // multiple label lines for categories yet we only display the last
+            // row aka the very first label line.
+            CellRegion c( d->categoryDataRegion.table(), QRect( rect.x(), rect.bottom(), rect.width(), 1 ) );
+            const QVariant data = d->data( c, index );
+            if ( data.isValid() /* && !data.toString().isEmpty() */ )
+                return data;
+        }
+    }
+
     // The cell is empty
     return QString( "" );
 }
@@ -959,16 +980,14 @@ QVariant DataSet::categoryData( int index ) const
 QVariant DataSet::labelData() const
 {
     QString label;
-    if ( d->labelDataRegion.isValid() )
-    {
+    if ( d->labelDataRegion.isValid() ) {
         const int cellCount = d->labelDataRegion.cellCount();
-        for ( int i = 0; i < cellCount; i++ )
+        for ( int i = 0; i < cellCount; i++ ) {
             label += d->data( d->labelDataRegion, i ).toString();
+        }
     }
     if ( label.isEmpty() ) {
-        label = d->labelDataCustom;
-        if ( label.isEmpty() )
-            label = d->defaultLabel;
+        label = d->defaultLabel;
     }
     return QVariant( label );
 }
@@ -976,16 +995,6 @@ QVariant DataSet::labelData() const
 QString DataSet::defaultLabelData() const
 {
     return d->defaultLabel;
-}
-
-QString DataSet::labelDataCustom() const
-{
-    return d->labelDataCustom;
-}
-
-void DataSet::setLabelDataCustom( const QString &label )
-{
-    d->labelDataCustom = label;
 }
 
 CellRegion DataSet::xDataRegion() const

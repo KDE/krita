@@ -188,9 +188,6 @@ public:
     QVariant labelData() const;
     QString defaultLabelData() const;
 
-    QString labelDataCustom() const;
-    void setLabelDataCustom( const QString &label );
-
     CellRegion xDataRegion() const;
     CellRegion yDataRegion() const;
     CellRegion customDataRegion() const;

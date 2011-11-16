@@ -713,7 +713,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     painter->fillRect(tableRect, d->table->format().background());
 
     KoTextDocumentLayout::PaintContext cellContext = context;
-    QColor tableBackground;
+    QColor tableBackground = context.background;
     if (d->table->format().hasProperty(QTextFormat::BackgroundBrush)) {
         tableBackground = d->table->format().background().color();
     }

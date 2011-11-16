@@ -20,12 +20,20 @@
 
 #include <openjpeg.h>
 
+#include <QFileInfo>
+
 #include <kapplication.h>
+#include <KMessageBox>
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
 
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceTraits.h>
 #include <KoColorSpaceConstants.h>
+#include <KoFilterManager.h>
+#include <KoColorSpace.h>
+#include <KoColorModelStandardIds.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -33,13 +41,7 @@
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
-#include <QFileInfo>
-#include <KoColorSpaceRegistry.h>
-#include <KoColorSpaceTraits.h>
 #include <kis_iterator.h>
-#include <KoColorSpace.h>
-#include <KoColorModelStandardIds.h>
-#include <KMessageBox>
 
 jp2Converter::jp2Converter(KisDoc2 *doc)
 {

@@ -23,6 +23,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 
 #include <KDialog>
 #include <KMessageBox>
@@ -154,9 +155,11 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     optionsPPM.setupUi(wdg);
 
     kdb->setMainWidget(wdg);
-
-    if (kdb->exec() == QDialog::Rejected) {
-        return KoFilter::OK; // FIXME Cancel doesn't exist :(
+    
+    if (!m_chain->manager()->getBatchMode()) {
+        if (kdb->exec() == QDialog::Rejected) {
+            return KoFilter::OK; // FIXME Cancel doesn't exist :(
+        }
     }
 
     bool rgb = (to == "image/x-portable-pixmap");

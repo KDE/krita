@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (c) 2003 David Faure <faure@kde.org>
+ * Copyright (C)  2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,6 +42,11 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
     widget.lineSpacing->addItem(i18nc("Line spacing type", "Additional"));    // normal distance + absolute value
     widget.lineSpacing->addItem(i18nc("Line spacing type", "Fixed"));
 
+    connect(widget.first, SIGNAL(valueChangedPt(qreal)), this, SLOT(firstIndenValueChanged()));
+    connect(widget.left, SIGNAL(valueChangedPt(qreal)), this, SLOT(leftMarginValueChanged()));
+    connect(widget.right, SIGNAL(valueChangedPt(qreal)), this, SLOT(rightMarginValueChanged()));
+    connect(widget.after, SIGNAL(valueChangedPt(qreal)), this, SLOT(bottomMarginValueChanged()));
+    connect(widget.before, SIGNAL(valueChangedPt(qreal)), this, SLOT(topMarginValueChanged()));
     connect(widget.lineSpacing, SIGNAL(currentIndexChanged(int)), this, SLOT(lineSpacingChanged(int)));
     connect(widget.useFont, SIGNAL(toggled(bool)), this, SLOT(useFontMetrices(bool)));
     connect(widget.autoTextIndent, SIGNAL(stateChanged(int)), this, SLOT(autoTextIndentChanged(int)));
@@ -52,6 +58,31 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
 void ParagraphIndentSpacing::autoTextIndentChanged(int state)
 {
     widget.first->setEnabled(state == Qt::Unchecked);
+    m_autoTextIndentInherited = false;
+}
+void ParagraphIndentSpacing::firstIndenValueChanged()
+{
+    m_textIndentInherited = false;
+}
+
+void ParagraphIndentSpacing::rightMarginValueChanged()
+{
+    m_rightMarginIngerited = false;
+}
+
+void ParagraphIndentSpacing::leftMarginValueChanged()
+{
+    m_leftMarginInherited = false;
+}
+
+void ParagraphIndentSpacing::topMarginValueChanged()
+{
+    m_topMarginInherited = false;
+}
+
+void ParagraphIndentSpacing::bottomMarginValueChanged()
+{
+    m_bottomMarginInherited = false;
 }
 
 void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style)
@@ -63,7 +94,14 @@ void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style)
     widget.right->changeValue(style->rightMargin());
     widget.before->changeValue(style->topMargin());
     widget.after->changeValue(style->bottomMargin());
-    
+
+    m_rightMarginIngerited = !style->hasProperty(QTextFormat::BlockRightMargin);
+    m_leftMarginInherited = !style->hasProperty(QTextFormat::BlockLeftMargin);
+    m_topMarginInherited = !style->hasProperty(QTextFormat::BlockTopMargin);
+    m_bottomMarginInherited = !style->hasProperty(QTextFormat::BlockBottomMargin);
+    m_autoTextIndentInherited = !style->hasProperty(KoParagraphStyle::AutoTextIndent);
+    m_textIndentInherited = !style->hasProperty(QTextFormat::TextIndent);
+
     widget.autoTextIndent->setChecked(style->autoTextIndent());
 
     int index;
@@ -172,12 +210,24 @@ void ParagraphIndentSpacing::save(KoParagraphStyle *style)
     // general note; we have to unset values by setting it to zero instead of removing the item
     // since this dialog may be used on a copy style, which will be applied later. And removing
     // items doesn't work for that.
-    style->setTextIndent(QTextLength(QTextLength::FixedLength, widget.first->value()));
-    style->setLeftMargin(QTextLength(QTextLength::FixedLength, widget.left->value()));
-    style->setRightMargin(QTextLength(QTextLength::FixedLength, widget.right->value()));
-    style->setTopMargin(QTextLength(QTextLength::FixedLength, widget.before->value()));
-    style->setBottomMargin(QTextLength(QTextLength::FixedLength, widget.after->value()));
-    style->setAutoTextIndent(widget.autoTextIndent->isChecked());
+    if (!m_textIndentInherited){
+        style->setTextIndent(QTextLength(QTextLength::FixedLength, widget.first->value()));
+    }
+    if (!m_leftMarginInherited){
+        style->setLeftMargin(QTextLength(QTextLength::FixedLength, widget.left->value()));
+    }
+    if (!m_rightMarginIngerited){
+        style->setRightMargin(QTextLength(QTextLength::FixedLength, widget.right->value()));
+    }
+    if (!m_topMarginInherited){
+        style->setTopMargin(QTextLength(QTextLength::FixedLength, widget.before->value()));
+    }
+    if (!m_bottomMarginInherited){
+        style->setBottomMargin(QTextLength(QTextLength::FixedLength, widget.after->value()));
+    }
+    if (!m_autoTextIndentInherited){
+        style->setAutoTextIndent(widget.autoTextIndent->isChecked());
+    }
     style->setLineHeightAbsolute(0); // since it trumps percentage based line heights, unset it.
     style->setMinimumLineHeight(QTextLength(QTextLength::FixedLength, 0));
     style->setLineSpacing(0);

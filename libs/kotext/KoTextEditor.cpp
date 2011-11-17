@@ -1386,7 +1386,7 @@ void KoTextEditor::insertBlock(const QTextBlockFormat &format, const QTextCharFo
 
 void KoTextEditor::insertTable(int rows, int columns)
 {
-    if (isEditProtected()) {
+    if (isEditProtected() || rows <= 0 || columns <= 0) {
         return;
     }
 

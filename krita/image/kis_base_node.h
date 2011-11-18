@@ -27,11 +27,12 @@
 #include "KoDocumentSectionModel.h"
 #include <QUuid>
 
+#include "kis_processing_visitor.h" // included, not forward declared for msvc
+
 class KoProperties;
 class KoColorSpace;
 class KoCompositeOp;
 class KisNodeVisitor;
-class KisProcessingVisitor;
 class KisUndoAdapter;
 
 /**

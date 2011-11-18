@@ -1170,7 +1170,13 @@ void DataSet::setValueLabelType( const ValueLabelType &type, int section /* = -1
                                          d->dataValueAttributes;
 
     KDChart::TextAttributes ta ( attr.textAttributes() );
+
     ta.setVisible( !type.noLabel() );
+
+    KDChart::Measure m = ta.fontSize();
+    m.setValue( 8 ); // same small font the legend is using
+    ta.setFontSize( m );
+
     attr.setTextAttributes( ta );
 
     setShowLabels( !type.noLabel() );

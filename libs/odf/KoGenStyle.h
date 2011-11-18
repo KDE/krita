@@ -312,6 +312,17 @@ public:
     }
 
     /**
+     *  Remove properties of defined type from the style.  Passing DefaultType
+     *  as property type uses a style-type specific property type.
+     */
+    void removeAllProperties(PropertyType type = DefaultType) {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
+        m_properties[type].clear();
+    }
+
+    /**
      *  Add an attribute to the style
      *  The difference between property and attributes is a bit oasis-format-specific:
      *  attributes are for the style element itself, and properties are in the style:properties child element

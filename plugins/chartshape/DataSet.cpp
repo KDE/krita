@@ -1270,7 +1270,7 @@ void DataSet::Private::readValueLabelType( KoStyleStack &styleStack, int section
         type.category = ( text == "true" );
     }
 
-    const QString symbol = styleStack.property( KoXmlNS::chart, "chart:data-label-symbol" );
+    const QString symbol = styleStack.property( KoXmlNS::chart, "data-label-symbol" );
     if ( !symbol.isNull() ) {
         type.symbol = ( symbol == "true" );
     }

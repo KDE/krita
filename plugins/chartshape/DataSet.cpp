@@ -89,7 +89,7 @@ public:
     bool         hasOwnChartType() const;
     ChartType    effectiveChartType() const;
     bool         isValidDataPoint( const QPoint &point ) const;
-    QVariant     data( const CellRegion &region, int index ) const;
+    QVariant     data( const CellRegion &region, int index, int role ) const;
 
     QBrush defaultBrush() const;
     QBrush defaultBrush( int section ) const;
@@ -146,9 +146,12 @@ public:
     bool brushIsSet;
     QPen pen;
     QBrush brush;
+    QMap<int, DataSet::ValueLabelType> valueLabelType;
 
     KDChart::PieAttributes pieAttributes;
     KDChart::DataValueAttributes dataValueAttributes;
+
+    void readValueLabelType( KoStyleStack &styleStack, int section = -1 );
 
     // Note: Set section-specific attributes only if really necessary.
     //       They will override the respective global attributes.
@@ -199,7 +202,7 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     penIsSet( false ),
     brushIsSet( false ),
     pen( QPen( Qt::black ) ),
-    brush( QColor( Qt::white ) ),    
+    brush( QColor( Qt::white ) ),
     dataValueAttributes( defaultDataValueAttributes() ),
     num( dataSetNr ),
     kdChartModel( 0 ),
@@ -345,15 +348,12 @@ bool DataSet::Private::isValidDataPoint( const QPoint &point ) const
     return true;
 }
 
-QVariant DataSet::Private::data( const CellRegion &region, int index ) const
+QVariant DataSet::Private::data( const CellRegion &region, int index, int role ) const
 {
     if ( !region.isValid() )
         return QVariant();
     if ( !region.hasPointAtIndex( index ) )
         return QVariant();
-
-    // The result
-    QVariant data;
 
     // Convert the given index in this dataset to a data point in the
     // source model.
@@ -382,17 +382,17 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
     const int row = dataPoint.y() - 1;
     const int col = dataPoint.x() - 1;
 
+    QVariant data;
     if ( verticalHeaderData )
-        data = model->headerData( row, Qt::Vertical );
+        data = model->headerData( row, Qt::Vertical, role );
     else if ( horizontalHeaderData )
-        data = model->headerData( col, Qt::Horizontal );
+        data = model->headerData( col, Qt::Horizontal, role );
     else {
         const QModelIndex &index = model->index( row, col );
         //Q_ASSERT( index.isValid() );
         if ( index.isValid() )
-            data = model->data( index );
+            data = model->data( index, role );
     }
-
     return data;
 }
 
@@ -770,6 +770,37 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
     ma.setPen( pen( section ) );
     attr.setMarkerAttributes( ma );
 
+    QString dataLabel = ""; // initialize with empty and NOT null!
+    ValueLabelType type = valueLabelType( section );
+    if ( type.symbol ) {
+        //TODO
+    }
+    if ( type.category ) {
+        QString s = categoryData( section, Qt::DisplayRole ).toString().trimmed();
+        if ( !s.isEmpty() ) dataLabel += s + " ";
+    }
+    if ( type.number ) {
+        QString s = yData( section, Qt::DisplayRole ).toString().trimmed();
+        if ( !s.isEmpty() ) dataLabel += s + " ";
+    }
+    if ( type.percentage ) {
+        bool ok;
+        qreal value = yData( section, Qt::EditRole ).toDouble(&ok);
+        if ( ok ) {
+            qreal sum = 0.0;
+            for(int i = 1; i < d->yDataRegion.cellCount(); ++i) {
+                sum += yData( i, Qt::EditRole ).toDouble();
+            }
+            if (sum == 0.0)
+                ok = false;
+            else
+                value = value / (sum / 100.0);
+        }
+        if ( ok )
+            dataLabel += QString::number(value, 'f', 0) + "% ";
+    }
+    attr.setDataLabel( dataLabel.trimmed() );
+
     return attr;
 }
 
@@ -906,37 +937,37 @@ void DataSet::setUpperErrorLimit( qreal limit )
     d->upperErrorLimit = limit;
 }
 
-QVariant DataSet::xData( int index ) const
+QVariant DataSet::xData( int index, int role ) const
 {
     // Sometimes a bubble chart is created with a table with 4 columns.
     // What we do here is assign the 2 columns per data set, so we have
     // 2 data sets in total afterwards. The first column is y data, the second
     // bubble width. Same for the second data set. So there is nothing left
     // for x data. Instead use a fall-back to the data points index.
-    QVariant data = d->data( d->xDataRegion, index );
-    if ( data.isValid() && data.canConvert< double >() && data.convert( QVariant::Double ) )
+    QVariant data = d->data( d->xDataRegion, index, role );
+    if ( data.isValid() /* && data.canConvert< double >() && data.convert( QVariant::Double ) */ )
         return data;
     return QVariant( index + 1 );
 }
 
-QVariant DataSet::yData( int index ) const
+QVariant DataSet::yData( int index, int role ) const
 {
     // No fall-back necessary. y data region must be specified if needed.
     // (may also be part of 'domain' in ODF terms, but only in case of
     // scatter and bubble charts)
-    return d->data( d->yDataRegion, index );
+    return d->data( d->yDataRegion, index, role );
 }
 
-QVariant DataSet::customData( int index ) const
+QVariant DataSet::customData( int index, int role ) const
 {
     // No fall-back necessary. ('custom' [1]) data region (part of 'domain' in
     // ODF terms) must be specified if needed. See ODF v1.1 §10.9.1
-    return d->data( d->customDataRegion, index );
+    return d->data( d->customDataRegion, index, role );
     // [1] In fact, 'custom' data only refers to the bubble width of bubble
     // charts at the moment.
 }
 
-QVariant DataSet::categoryData( int index ) const
+QVariant DataSet::categoryData( int index, int role ) const
 {
      // There's no cell that holds this category's data
      // (i.e., the region is either too short or simply empty)
@@ -953,7 +984,7 @@ QVariant DataSet::categoryData( int index ) const
         if ( rect.width() == 1 || rect.height() == 1 ) {
             // Handle the clear case of either horizontal or vertical
             // ranges with only one row/column.
-            const QVariant data = d->data( d->categoryDataRegion, index );
+            const QVariant data = d->data( d->categoryDataRegion, index, role );
             if ( data.isValid() )
                 return data;
         } else {
@@ -967,7 +998,7 @@ QVariant DataSet::categoryData( int index ) const
             // multiple label lines for categories yet we only display the last
             // row aka the very first label line.
             CellRegion c( d->categoryDataRegion.table(), QRect( rect.x(), rect.bottom(), rect.width(), 1 ) );
-            const QVariant data = d->data( c, index );
+            const QVariant data = d->data( c, index, role );
             if ( data.isValid() /* && !data.toString().isEmpty() */ )
                 return data;
         }
@@ -983,7 +1014,7 @@ QVariant DataSet::labelData() const
     if ( d->labelDataRegion.isValid() ) {
         const int cellCount = d->labelDataRegion.cellCount();
         for ( int i = 0; i < cellCount; i++ ) {
-            label += d->data( d->labelDataRegion, i ).toString();
+            label += d->data( d->labelDataRegion, i, Qt::EditRole ).toString();
         }
     }
     if ( label.isEmpty() ) {
@@ -1126,42 +1157,23 @@ KDChartModel *DataSet::kdChartModel() const
     return d->kdChartModel;
 }
 
-void DataSet::setValueLabelType( ValueLabelType type, int section /* = -1 */ )
+void DataSet::setValueLabelType( const ValueLabelType &type, int section /* = -1 */ )
 {
     if ( section >= 0 )
         d->insertDataValueAttributeSectionIfNecessary( section );
+
+    d->valueLabelType[section] = type;
 
     // This is a reference, not a copy!
     KDChart::DataValueAttributes &attr = section >= 0 ?
                                          d->sectionsDataValueAttributes[ section ] :
                                          d->dataValueAttributes;
 
-    switch ( type ) {
-        case NoValueLabel:{
-            KDChart::TextAttributes ta ( attr.textAttributes() );
-            ta.setVisible( false );
-            attr.setTextAttributes( ta );
-//             attr.setVisible( false );
-            break;
-        }
-        case RealValueLabel:{
-            KDChart::TextAttributes ta ( attr.textAttributes() );
-            ta.setVisible( true );
-            attr.setTextAttributes( ta );
-            attr.setVisible( true );
-            attr.setUsePercentage( false );
-            break;
-        }
-        case PercentageValueLabel:{
-            KDChart::TextAttributes ta ( attr.textAttributes() );
-            ta.setVisible( true );
-            attr.setTextAttributes( ta );
-            attr.setVisible( true );
-            attr.setUsePercentage( true );
-            attr.setSuffix( "%" );
-            break;
-        }
-    }
+    KDChart::TextAttributes ta ( attr.textAttributes() );
+    ta.setVisible( !type.noLabel() );
+    attr.setTextAttributes( ta );
+
+    setShowLabels( !type.noLabel() );
 
     if ( d->kdChartModel ) {
         if ( section >= 0 )
@@ -1173,15 +1185,11 @@ void DataSet::setValueLabelType( ValueLabelType type, int section /* = -1 */ )
 
 DataSet::ValueLabelType DataSet::valueLabelType( int section /* = -1 */ ) const
 {
-    KDChart::DataValueAttributes &attr = d->dataValueAttributes;
-    if ( d->sectionsDataValueAttributes.contains( section ) )
-        attr = d->sectionsDataValueAttributes[ section ];
-    KDChart::TextAttributes ta ( attr.textAttributes() );
-    if ( !ta.isVisible() )
-        return NoValueLabel;
-    if ( !attr.usePercentage() )
-        return RealValueLabel;
-    return PercentageValueLabel;
+    if ( d->valueLabelType.contains(section) )
+        return d->valueLabelType[section];
+    if ( d->valueLabelType.contains(-1) )
+        return d->valueLabelType[-1];
+    return ValueLabelType();
 }
 
 bool loadBrushAndPen( KoStyleStack &styleStack, KoShapeLoadingContext &context,
@@ -1230,14 +1238,44 @@ bool loadBrushAndPen( KoStyleStack &styleStack, KoShapeLoadingContext &context,
     return true;
 }
 
-static DataSet::ValueLabelType valueLabelTypeFromString( const QString &format )
+/**
+* The valueLabelType can be read from a few different places;
+*   - chart:data-label
+*   - chart:data-point
+*   - chart:series
+*   - chart:plot-area
+*
+* Since we somehow need to merge e.g. a global one defined at the plot-area
+* together with a local one defined in a series we need to make sure to
+* fetch + change only what is redefined + reapply.
+*
+* The question is if this is 100% the correct thing to do or if we
+* need more logic that e.g. differs between where the data-labels got
+* defined? It would make sense but there is no information about that
+* available and it seems OO.org/LO just save redundant informations
+* here at least with pie-charts...
+*/
+void DataSet::Private::readValueLabelType( KoStyleStack &styleStack, int section /* = -1 */ )
 {
-    DataSet::ValueLabelType type = DataSet::NoValueLabel;
-    if ( format == "value" )
-        type = DataSet::RealValueLabel;
-    else if ( format == "percentage" )
-        type = DataSet::PercentageValueLabel;
-    return type;
+    DataSet::ValueLabelType type = parent->valueLabelType( section );
+
+    const QString number = styleStack.property( KoXmlNS::chart, "data-label-number" );
+    if ( !number.isNull() ) {
+        type.number = ( number == "value" || number == "value-and-percentage" );
+        type.percentage = ( number == "percentage" || number == "value-and-percentage" );
+    }
+
+    const QString text = styleStack.property( KoXmlNS::chart, "data-label-text" );
+    if ( !text.isNull() ) {
+        type.category = ( text == "true" );
+    }
+
+    const QString symbol = styleStack.property( KoXmlNS::chart, "chart:data-label-symbol" );
+    if ( !symbol.isNull() ) {
+        type.symbol = ( symbol == "true" );
+    }
+
+    parent->setValueLabelType( type, section );
 }
 
 bool DataSet::loadOdf( const KoXmlElement &n,
@@ -1334,15 +1372,9 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
         setLabelDataRegion( CellRegion( helper->tableSource, region ) );
     }
-    if ( n.hasAttributeNS( KoXmlNS::chart, "data-label-text" ) ) {
-        const QString enable = n.attributeNS( KoXmlNS::chart, "data-label-text", QString() );
-        setShowLabels( enable == "true" );
-    }
-    if ( styleStack.hasProperty(KoXmlNS::chart, "data-label-number" ) ) {
-        const QString format = styleStack.property( KoXmlNS::chart, "data-label-number" );
-        setValueLabelType( valueLabelTypeFromString( format ) );
-    }
-    
+
+    d->readValueLabelType( styleStack );
+
     if ( styleStack.hasProperty( KoXmlNS::chart, "symbol-type" ) )
     {
         const QString name = styleStack.property( KoXmlNS::chart, "symbol-type" );
@@ -1400,10 +1432,8 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         styleStack.setTypeProperties("chart");
         if(styleStack.hasProperty( KoXmlNS::chart, "pie-offset"))
             setPieExplodeFactor( loadedDataPointCount, styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
-        if ( styleStack.hasProperty( KoXmlNS::chart, "data-label-number" ) ) {
-            const QString format = styleStack.property( KoXmlNS::chart, "data-label-number" );
-            setValueLabelType( valueLabelTypeFromString( format ), loadedDataPointCount );
-        }
+
+        d->readValueLabelType( styleStack, loadedDataPointCount );
 
         ++loadedDataPointCount;
     }
@@ -1491,14 +1521,9 @@ bool DataSet::loadSeriesIntoDataset( const KoXmlElement &n,
         const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
         setLabelDataRegion( CellRegion( helper->tableSource, region ) );
     }
-    if ( n.hasAttributeNS( KoXmlNS::chart, "data-label-text" ) ) {
-        const QString enable = n.attributeNS( KoXmlNS::chart, "data-label-text", QString() );
-        setShowLabels( enable == "true" );
-    }
-    if ( styleStack.hasProperty(KoXmlNS::chart, "data-label-number" ) ) {
-        const QString format = styleStack.property( KoXmlNS::chart, "data-label-number" );
-        setValueLabelType( valueLabelTypeFromString( format ) );
-    }
+
+    d->readValueLabelType( styleStack );
+
     return true;
 }
 

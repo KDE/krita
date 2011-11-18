@@ -72,14 +72,20 @@ public:
     /**
      * Describes ODF attribute chart:data-label-number from §15.32.3
      */
-    enum ValueLabelType {
-        /// No value will be displayed
-        NoValueLabel,
-        /// The actual value will be displayed
-        RealValueLabel,
-        /// A percentage in e.g. respect to the sum of all values in a series
-        /// will be shown.
-        PercentageValueLabel
+    class ValueLabelType {
+    public:
+        /// Show value as number.
+        bool number;
+        /// Show value as percentage.
+        bool percentage;
+        /// Show category.
+        bool category;
+        /// Show legend key.
+        bool symbol;
+        /// Constructor.
+        explicit ValueLabelType(bool number = false, bool percentage = false, bool category = false, bool symbol = false) : number(number), percentage(percentage), category(category), symbol(symbol) {}
+        /// Returns true if no label will be displayed.
+        bool noLabel() const { return !number && !percentage && !category && !symbol; }
     };
 
     /**
@@ -88,7 +94,7 @@ public:
      * \param section The data point to set this type for. -1 will set
      * a series-wide value
      */
-    void setValueLabelType( ValueLabelType type, int section = -1 );    
+    void setValueLabelType( const ValueLabelType &type, int section = -1 );
 
     /**
      * \return the value label type.
@@ -175,16 +181,38 @@ public:
     void setLowerErrorLimit( qreal limit );
     void setUpperErrorLimit( qreal limit );
 
-    QVariant xData( int index ) const;
-    QVariant yData( int index ) const;
+    /**
+     * Returns the x-data.
+     *
+     * \param index the unique index that identifies the cell.
+     * \param role either Qt::DisplayRole if the content displayed
+     * in the cell (aka the displayText()) should be returned or
+     * Qt::EditRole if the actual data of the cell (which can be
+     * different from what is displayed) should be returned.
+     * \return the x-data value.
+     */
+    QVariant xData( int index, int role = Qt::EditRole ) const;
+
+    /**
+     * Returns the y-data aka value-data.
+     *
+     * \param index the unique index that identifies the cell.
+     * \param role either Qt::DisplayRole if the content displayed
+     * in the cell (aka the displayText()) should be returned or
+     * Qt::EditRole if the actual data of the cell (which can be
+     * different from what is displayed) should be returned.
+     * \return the y-data value.
+     */
+    QVariant yData( int index, int role = Qt::EditRole ) const;
 
     /**
      * Used for bubble width in bubble charts. May also be referred to as
      * 'z data' in some cases.
      */
-    QVariant customData( int index ) const;
+    QVariant customData( int index, int role = Qt::EditRole ) const;
 
-    QVariant categoryData( int index ) const;
+    QVariant categoryData( int index, int role = Qt::EditRole ) const;
+
     QVariant labelData() const;
     QString defaultLabelData() const;
 

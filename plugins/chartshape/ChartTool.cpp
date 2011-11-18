@@ -474,10 +474,25 @@ void ChartTool::setDataSetShowValues( DataSet *dataSet, bool b )
     if ( !dataSet )
         return;
 
-    dataSet->setValueLabelType( b ? DataSet::RealValueLabel : DataSet::NoValueLabel );
+    DataSet::ValueLabelType type = dataSet->valueLabelType();
+    type.number = b;
+    //TODO handle also the other possible cases and allow to set/unset
+    //     them in the UI
+    type.percentage = false;
+    type.category = false;
+    type.symbol = false;
+    dataSet->setValueLabelType( type );
+
     // its necessary to set this for all data value
-    for ( int i = 0; i < dataSet->size(); ++i ){
-        dataSet->setValueLabelType( b ? DataSet::RealValueLabel : DataSet::NoValueLabel, i );
+    //TODO we need to allow to differ in the UI between the datasets vs
+    //     the global setting and then allow to edit them separatly.
+    for ( int i = 0; i < dataSet->size(); ++i ) {
+        DataSet::ValueLabelType type = dataSet->valueLabelType( i );
+        type.number = b;
+        type.percentage = false;
+        type.category = false;
+        type.symbol = false;
+        dataSet->setValueLabelType( type, i );
     }
     d->shape->update();
 }

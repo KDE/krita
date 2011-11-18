@@ -1324,7 +1324,7 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index )
     d->ui.datasetPen->blockSignals( false );
 
     d->ui.datasetShowValues->blockSignals( true );
-    d->ui.datasetShowValues->setChecked( dataSet->valueLabelType() == DataSet::RealValueLabel );
+    d->ui.datasetShowValues->setChecked( dataSet->valueLabelType().number );
     d->ui.datasetShowValues->blockSignals( false );
 
     d->ui.dataSetShowLabels->blockSignals( true );

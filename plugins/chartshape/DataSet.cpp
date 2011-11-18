@@ -131,7 +131,6 @@ public:
     Axis *attachedAxis;
     bool showMeanValue;
     QPen meanValuePen;
-    bool showLabels;
     bool showLowerErrorIndicator;
     bool showUpperErrorIndicator;
     QPen errorIndicatorPen;
@@ -159,7 +158,6 @@ public:
     QMap<int, QBrush> brushes;
     QMap<int, KDChart::PieAttributes> sectionsPieAttributes;
     QMap<int, KDChart::DataValueAttributes> sectionsDataValueAttributes;
-    QMap<int, bool> sectionsShowLabels;
 
     /// The number of this series is passed in the constructor and after
     /// that never changes.
@@ -192,7 +190,6 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     chartSubType( NoChartSubtype ),
     attachedAxis( 0 ),
     showMeanValue( false ),
-    showLabels( false ),
     showLowerErrorIndicator( false ),
     showUpperErrorIndicator( false ),
     errorPercentage( 0.0 ),
@@ -639,21 +636,6 @@ void DataSet::setAttachedAxis( Axis *axis )
     d->attachedAxis = axis;
 }
 
-bool DataSet::showLabels( int section /* = -1 */ ) const
-{
-    if ( section >= 0 )
-        return d->sectionsShowLabels[ section ];
-    return d->showLabels;
-}
-
-void DataSet::setShowLabels( bool showLabels, int section /* = -1 */ )
-{
-    if ( section >= 0 )
-        d->sectionsShowLabels[ section ] = showLabels;
-    else
-        d->showLabels = showLabels;
-}
-
 QPen DataSet::pen() const
 {
     return d->penIsSet ? d->pen : d->defaultPen();
@@ -768,12 +750,12 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
 
     ma.setMarkerColor( brush( section ).color() );
     ma.setPen( pen( section ) );
-    attr.setMarkerAttributes( ma );
 
     QString dataLabel = ""; // initialize with empty and NOT null!
     ValueLabelType type = valueLabelType( section );
     if ( type.symbol ) {
-        //TODO
+        //TODO is that correct?
+        ma.setVisible( true );
     }
     if ( type.category ) {
         QString s = categoryData( section, Qt::DisplayRole ).toString().trimmed();
@@ -800,6 +782,8 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
             dataLabel += QString::number(value, 'f', 0) + "% ";
     }
     attr.setDataLabel( dataLabel.trimmed() );
+
+    attr.setMarkerAttributes( ma );
 
     return attr;
 }
@@ -1179,8 +1163,6 @@ void DataSet::setValueLabelType( const ValueLabelType &type, int section /* = -1
 
     attr.setTextAttributes( ta );
 
-    setShowLabels( !type.noLabel() );
-
     if ( d->kdChartModel ) {
         if ( section >= 0 )
             d->kdChartModel->dataSetChanged( this, KDChartModel::DataValueAttributesRole, section );
@@ -1542,7 +1524,17 @@ void DataSet::saveOdf( KoShapeSavingContext &context ) const
 
     KoGenStyle style( KoGenStyle::ChartAutoStyle, "chart" );
 
-    style.addProperty( "chart:data-label-text", showLabels() ? "true" : "false" );
+    DataSet::ValueLabelType type = valueLabelType();
+    if ( type.number && type.percentage )
+        style.addProperty( "chart:data-label-number", "value-and-percentage" );
+    else if ( type.number )
+        style.addProperty( "chart:data-label-number", "value" );
+    else if ( type.percentage )
+        style.addProperty( "chart:data-label-number", "percentage" );
+    if ( type.category )
+        style.addProperty( "chart:data-label-text", "true" );
+    if ( type.symbol )
+        style.addProperty( "chart:data-label-symbol", "true" );
 
     KoOdfGraphicStyles::saveOdfFillStyle( style, mainStyles, brush() );
     KoOdfGraphicStyles::saveOdfStrokeStyle( style, mainStyles, pen() );

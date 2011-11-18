@@ -76,6 +76,8 @@ public:
     QModelIndex  datasetSelection;
     QPen         datasetSelectionPen;
     QBrush       datasetSelectionBrush;
+
+    void setDataSetShowLabel( DataSet *dataSet, bool *number, bool *percentage, bool *category, bool *symbol );
 };
 
 ChartTool::Private::Private()
@@ -275,10 +277,14 @@ QWidget *ChartTool::createOptionWidget()
              this, SLOT( setDataSetBrush( DataSet*, const QColor& ) ) );
     connect( widget, SIGNAL( datasetPenChanged( DataSet*, const QColor& ) ),
              this, SLOT( setDataSetPen( DataSet*, const QColor& ) ) );
-    connect( widget, SIGNAL( datasetShowValuesChanged( DataSet*, bool ) ),
-             this, SLOT( setDataSetShowValues( DataSet*, bool ) ) );
-    connect( widget, SIGNAL( datasetShowLabelsChanged( DataSet*, bool ) ),
-             this, SLOT( setDataSetShowLabels( DataSet*, bool ) ) );
+    connect( widget, SIGNAL( datasetShowCategoryChanged( DataSet*, bool ) ),
+             this, SLOT( setDataSetShowCategory( DataSet*, bool ) ) );
+    connect( widget, SIGNAL( dataSetShowNumberChanged( DataSet*, bool ) ),
+             this, SLOT( setDataSetShowNumber( DataSet*, bool ) ) );
+    connect( widget, SIGNAL( datasetShowPercentChanged( DataSet*, bool ) ),
+             this, SLOT( setDataSetShowPercent( DataSet*, bool ) ) );
+    connect( widget, SIGNAL( datasetShowSymbolChanged( DataSet*, bool ) ),
+             this, SLOT( setDataSetShowSymbol( DataSet*, bool ) ) );
     connect( widget, SIGNAL( dataSetAxisChanged( DataSet*, Axis* ) ),
              this, SLOT( setDataSetAxis( DataSet*, Axis* ) ) );
     connect( widget, SIGNAL( gapBetweenBarsChanged( int ) ),
@@ -468,19 +474,17 @@ void ChartTool::setDataSetAxis( DataSet *dataSet, Axis *axis )
     d->shape->update();
 }
 
-void ChartTool::setDataSetShowValues( DataSet *dataSet, bool b )
+void ChartTool::Private::setDataSetShowLabel( DataSet *dataSet, bool *number, bool *percentage, bool *category, bool *symbol )
 {
-    Q_ASSERT( d->shape );
+    Q_ASSERT( shape );
     if ( !dataSet )
         return;
 
     DataSet::ValueLabelType type = dataSet->valueLabelType();
-    type.number = b;
-    //TODO handle also the other possible cases and allow to set/unset
-    //     them in the UI
-    type.percentage = false;
-    type.category = false;
-    type.symbol = false;
+    if ( number ) type.number = *number;
+    if ( percentage ) type.percentage = *percentage;
+    if ( category ) type.category = *category;
+    if ( symbol ) type.symbol = *symbol;
     dataSet->setValueLabelType( type );
 
     // its necessary to set this for all data value
@@ -488,25 +492,35 @@ void ChartTool::setDataSetShowValues( DataSet *dataSet, bool b )
     //     the global setting and then allow to edit them separatly.
     for ( int i = 0; i < dataSet->size(); ++i ) {
         DataSet::ValueLabelType type = dataSet->valueLabelType( i );
-        type.number = b;
-        type.percentage = false;
-        type.category = false;
-        type.symbol = false;
+        if ( number ) type.number = *number;
+        if ( percentage ) type.percentage = *percentage;
+        if ( category ) type.category = *category;
+        if ( symbol ) type.symbol = *symbol;
         dataSet->setValueLabelType( type, i );
     }
-    d->shape->update();
+
+    shape->update();
 }
 
-void ChartTool::setDataSetShowLabels( DataSet *dataSet, bool b )
+void ChartTool::setDataSetShowCategory( DataSet *dataSet, bool b )
 {
-    Q_ASSERT( d->shape );
-    if ( !dataSet )
-        return;
-
-    dataSet->setShowLabels( b );
-    d->shape->update();
+    d->setDataSetShowLabel( dataSet, 0, 0, &b, 0 );
 }
 
+void ChartTool::setDataSetShowNumber( DataSet *dataSet, bool b )
+{
+    d->setDataSetShowLabel( dataSet, &b, 0, 0, 0 );
+}
+
+void ChartTool::setDataSetShowPercent( DataSet *dataSet, bool b )
+{
+    d->setDataSetShowLabel( dataSet, 0, &b, 0, 0 );
+}
+
+void ChartTool::setDataSetShowSymbol( DataSet *dataSet, bool b )
+{
+    d->setDataSetShowLabel( dataSet, 0, 0, 0, &b );
+}
 
 void ChartTool::setThreeDMode( bool threeD )
 {

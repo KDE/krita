@@ -149,17 +149,6 @@ public:
     void setChartSubType( ChartSubtype type );
     void setAttachedAxis( Axis *axis );
 
-    /**
-     * \return Whether to display categories as labels or not
-     * See ODF's chart:data-label-text attribute from §15.32.3
-     */
-    bool showLabels( int section = -1 ) const;
-
-    /**
-     * \see showLabels
-     */
-    void setShowLabels( bool showLabels, int section = -1 );
-
     void setPen( const QPen &pen );
     void setBrush( const QBrush &brush );
     void setPen( int section, const QPen &pen );

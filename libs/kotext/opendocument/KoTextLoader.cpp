@@ -1975,16 +1975,22 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
             tblStyle->applyStyle(tableFormat);
     }
 
-    // if table is being inserted at start of document and it has master page style property,
-    // copy it to block before table, because this block shouldn't really be there but Qt
-    // doesn't allow us to get rid of it. But at least make it belongs to the same masterpage
-    // so we don't end up with a blank page
-    QVariant masterStyle = tableFormat.property(KoTableStyle::MasterPageName);
-    if (!masterStyle.isNull() && cursor.block().blockNumber() == 0) {
-        QTextBlockFormat textBlockFormat;
-        textBlockFormat.setProperty(KoParagraphStyle::MasterPageName,masterStyle);
-        cursor.setBlockFormat(textBlockFormat);
+    // Let's try to figure out when to hide the current block
+    QTextBlock currentBlock = cursor.block();
+    QTextTable *outerTable = cursor.currentTable();
+    bool hide = cursor.position() == 0;
+    if (outerTable) {
+        QTextTableCell cell = outerTable->cellAt(cursor.position());
+        if (cursor.position() == cell.firstCursorPosition().position()) {
+            hide = true;
+        }
     }
+    if (!hide) {
+        // Let's insert an extra block so that will be the one we hide instead
+        cursor.insertBlock();
+        currentBlock = cursor.block();
+    }
+
 
     if (d->changeTracker && d->changeStack.count()) {
         tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
@@ -1993,6 +1999,20 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
         tableFormat.setProperty(KoTableStyle::TableIsProtected, true);
     }
     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
+
+    // 'Hide' the block before the table (possibly the extra block we just inserted)
+    QTextBlockFormat blockFormat;
+    //blockFormat.setFont(currentBlock.blockFormat().font());
+    QTextCursor tmpCursor(currentBlock);
+    blockFormat.setProperty(KoParagraphStyle::HiddenByTable, true);
+    QVariant masterStyle = tableFormat.property(KoTableStyle::MasterPageName);
+    if (!masterStyle.isNull()) {
+        // if table has a master page style property, copy it to block before table, because
+        // this block is a hidden block so let's make it belong to the same masterpage
+        // so we don't end up with a page break at the wrong place
+        blockFormat.setProperty(KoParagraphStyle::MasterPageName, masterStyle);
+    }
+    tmpCursor.setBlockFormat(blockFormat);
 
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(tbl);
     int rows = 0;

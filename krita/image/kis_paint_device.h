@@ -728,7 +728,7 @@ private:
 private:
     KisDataManagerSP m_datamanager;
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

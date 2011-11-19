@@ -21,6 +21,10 @@
 
 class QVariant;
 
+#ifdef _MSC_VER // this removes KDEWIN extensions to stdint.h: required by exiv2
+#define KDEWIN_STDINT_H
+#endif
+
 #include <metadata/kis_meta_data_value.h>
 #include <exiv2/value.hpp>
 #include "krita_export.h"

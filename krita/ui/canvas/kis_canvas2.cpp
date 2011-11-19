@@ -65,7 +65,7 @@
 #include <ko_favorite_resource_manager.h>
 #include <kis_paintop_box.h>
 
-class KisCanvas2::KisCanvas2Private
+struct KisCanvas2::KisCanvas2Private
 {
 
 public:

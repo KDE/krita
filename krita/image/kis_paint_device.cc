@@ -156,7 +156,7 @@ private:
 };
 
 
-class KisPaintDevice::Private
+struct KisPaintDevice::Private
 {
 
 public:

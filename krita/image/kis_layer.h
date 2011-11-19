@@ -291,7 +291,7 @@ protected:
                      const QRect &requestedRect) const;
 
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

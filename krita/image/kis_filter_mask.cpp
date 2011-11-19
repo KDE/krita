@@ -38,7 +38,7 @@
 #include <KoUpdater.h>
 #include <QMutex>
 
-class KRITAIMAGE_EXPORT KisFilterMask::Private
+struct KisFilterMask::Private
 {
 public:
 

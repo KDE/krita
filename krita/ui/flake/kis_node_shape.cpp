@@ -34,7 +34,7 @@
 
 #include <kis_paint_device.h>
 
-class KisNodeShape::Private
+struct KisNodeShape::Private
 {
 public:
     KisNodeSP node;

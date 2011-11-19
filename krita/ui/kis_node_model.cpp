@@ -41,7 +41,7 @@
 #include "kis_config_notifier.h"
 #include <QTimer>
 
-class KisNodeModel::Private
+struct KisNodeModel::Private
 {
 public:
     KisImageWSP image;

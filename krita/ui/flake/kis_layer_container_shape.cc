@@ -33,7 +33,7 @@
 #include <kis_group_layer.h>
 #include <kis_image.h>
 
-class KisLayerContainerShape::Private
+struct KisLayerContainerShape::Private
 {
 
 public:

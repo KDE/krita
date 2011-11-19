@@ -61,7 +61,7 @@
 
 typedef QMap<KisNodeSP, KoShape*> KisNodeMap;
 
-class KisShapeController::Private
+struct KisShapeController::Private
 {
 public:
     Private(KisShapeController *parent) : q(parent) {}

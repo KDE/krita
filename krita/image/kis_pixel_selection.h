@@ -43,7 +43,7 @@ public:
      * Create a new KisPixelSelection. This selection will not have a
      * parent paint device.
      */
-    KisPixelSelection(KisDefaultBoundsSP defaultBounds = new KisDefaultBounds());
+    KisPixelSelection(KisDefaultBounds * defaultBounds = 0);
 
     /**
      * Copy the selection

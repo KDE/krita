@@ -33,7 +33,7 @@
 #include "testutil.h"
 #include "kis_fill_painter.h"
 #include "kis_transaction.h"
-
+#include "kis_selection_default_bounds.h"
 
 void KisPixelSelectionTest::testCreation()
 {

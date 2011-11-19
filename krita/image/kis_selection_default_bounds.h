@@ -16,45 +16,29 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KIS_SELECTION_DEFAULT_BOUNDS_H
+#define KIS_SELECTION_DEFAULT_BOUNDS_H
 
-#include "kis_global.h"
 #include "kis_default_bounds.h"
 #include "kis_paint_device.h"
+#include "kis_image.h"
+#include "kis_types.h"
 
-const QRect KisDefaultBounds::infiniteRect =
-    QRect(qint32_MIN/2, qint32_MIN/2, qint32_MAX, qint32_MAX);
+#include "QRect"
 
-
-/******************************************************************/
-/*                  KisDefaultBounds                              */
-/******************************************************************/
-
-struct KisDefaultBounds::Private
+class KRITAIMAGE_EXPORT KisSelectionDefaultBounds : public KisDefaultBounds
 {
-    KisImageWSP image;
+public:
+    KisSelectionDefaultBounds(KisPaintDeviceSP parentPaintDevice, KisImageWSP image = 0);
+    ~KisSelectionDefaultBounds();
+
+    QRect bounds() const;
+
+private:
+    struct Private;
+    Private * const m_d;
 };
 
-KisDefaultBounds::KisDefaultBounds()
-    : m_d(new Private())
-{
-}
 
 
-KisDefaultBounds::KisDefaultBounds(KisImageWSP image)
-    : m_d(new Private())
-{
-    m_d->image = image;
-}
-
-KisDefaultBounds::~KisDefaultBounds()
-{
-    delete m_d;
-}
-
-QRect KisDefaultBounds::bounds() const
-{
-    /**
-     * By default return infinite rect to cover everything
-     */
-    return m_d->image ? m_d->image->bounds() : infiniteRect;
-}
+#endif // KIS_SELECTION_DEFAULT_BOUNDS_H

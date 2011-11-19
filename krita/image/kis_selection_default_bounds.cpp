@@ -16,45 +16,28 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-#include "kis_global.h"
-#include "kis_default_bounds.h"
-#include "kis_paint_device.h"
-
-const QRect KisDefaultBounds::infiniteRect =
-    QRect(qint32_MIN/2, qint32_MIN/2, qint32_MAX, qint32_MAX);
+#include "kis_selection_default_bounds.h"
 
 
-/******************************************************************/
-/*                  KisDefaultBounds                              */
-/******************************************************************/
-
-struct KisDefaultBounds::Private
+struct KisSelectionDefaultBounds::Private
 {
-    KisImageWSP image;
+    KisPaintDeviceSP parentDevice;
 };
 
-KisDefaultBounds::KisDefaultBounds()
-    : m_d(new Private())
+KisSelectionDefaultBounds::KisSelectionDefaultBounds(KisPaintDeviceSP parentDevice, KisImageWSP image)
+    : KisDefaultBounds(image),
+      m_d(new Private())
 {
+    m_d->parentDevice = parentDevice;
 }
 
-
-KisDefaultBounds::KisDefaultBounds(KisImageWSP image)
-    : m_d(new Private())
-{
-    m_d->image = image;
-}
-
-KisDefaultBounds::~KisDefaultBounds()
+KisSelectionDefaultBounds::~KisSelectionDefaultBounds()
 {
     delete m_d;
 }
 
-QRect KisDefaultBounds::bounds() const
+QRect KisSelectionDefaultBounds::bounds() const
 {
-    /**
-     * By default return infinite rect to cover everything
-     */
-    return m_d->image ? m_d->image->bounds() : infiniteRect;
+    QRect additionalRect = m_d->parentDevice ? m_d->parentDevice->exactBounds() : QRect();
+    return additionalRect | KisDefaultBounds::bounds();
 }

@@ -20,17 +20,17 @@
 #define KIS_DEFAULT_BOUNDS_H
 
 #include <QRect>
-#include "krita_export.h"
+
 #include "kis_types.h"
 #include "kis_image.h"
-#include "kis_shared.h"
-#include "kis_shared_ptr.h"
-#include "kis_paint_device.h"
 
-class KRITAIMAGE_EXPORT KisDefaultBounds : public KisShared
+#include "krita_export.h"
+
+class KRITAIMAGE_EXPORT KisDefaultBounds
 {
 public:
-    KisDefaultBounds(KisImageWSP image = 0);
+    KisDefaultBounds();
+    KisDefaultBounds(KisImageWSP image);
     virtual ~KisDefaultBounds();
 
     virtual QRect bounds() const;
@@ -42,22 +42,5 @@ private:
     struct Private;
     Private * const m_d;
 };
-
-class KRITAIMAGE_EXPORT KisSelectionDefaultBounds : public KisDefaultBounds
-{
-public:
-    KisSelectionDefaultBounds(KisPaintDeviceSP parentPaintDevice = 0, KisImageWSP image = 0);
-    ~KisSelectionDefaultBounds();
-
-    QRect bounds() const;
-
-private:
-    struct Private;
-    Private * const m_d;
-};
-
-typedef KisSharedPtr<KisDefaultBounds> KisDefaultBoundsSP;
-typedef KisSharedPtr<KisSelectionDefaultBounds> KisSelectionDefaultBoundsSP;
-
 
 #endif // KIS_DEFAULT_BOUNDS_H

@@ -41,6 +41,7 @@
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
+#include "KoColor.h"
 
 #include "generator/kis_generator.h"
 #include "filter/kis_filter_configuration.h"
@@ -55,13 +56,10 @@
 #include "KoColorSpace.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
-
+#include "kis_selection_default_bounds.h"
 #include "kis_pixel_selection.h"
-
 #include "kis_random_accessor.h"
-
 #include "kis_iterator.h"
-#include "KoColor.h"
 #include "kis_selection.h"
 #include "kis_random_accessor_ng.h"
 

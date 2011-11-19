@@ -65,7 +65,7 @@ public:
      * @param defaultBounds defines the bounds of the selection when
      * Select All is initiated.
      */
-    KisSelection(KisDefaultBoundsSP defaultBounds = new KisDefaultBounds());
+    KisSelection(KisDefaultBounds * defaultBounds = 0);
 
     /**
      * Copy the selection. The selection components are copied, too.
@@ -137,8 +137,8 @@ public:
     qint32 x() const;
     qint32 y() const;
 
-    KisDefaultBoundsSP defaultBounds() const;
-    void setDefaultBounds(KisDefaultBoundsSP bounds);
+    KisDefaultBounds * defaultBounds() const;
+    void setDefaultBounds(KisDefaultBounds * bounds);
 
     void clear();
     KisPixelSelectionSP mergedPixelSelection();

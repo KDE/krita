@@ -30,11 +30,10 @@
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 #include "kis_painter.h"
-
 #include "kis_image.h"
 #include "kis_layer.h"
-
 #include "tiles3/kis_lockless_stack.h"
+#include "kis_selection_default_bounds.h"
 
 struct KisMask::Private {
     class CachedPaintDevice {

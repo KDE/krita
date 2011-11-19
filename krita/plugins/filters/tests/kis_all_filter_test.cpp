@@ -28,6 +28,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_transaction.h"
 #include <KoColorSpaceRegistry.h>
+#include "kis_selection_default_bounds.h"
 
 bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2)
 {

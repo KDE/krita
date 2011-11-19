@@ -48,6 +48,7 @@
 #include "kis_count_visitor.h"
 #include "kis_filter_strategy.h"
 #include "kis_group_layer.h"
+#include "kis_default_bounds.h"
 #include "commands/kis_image_commands.h"
 #include "kis_iterators_pixel.h"
 #include "kis_layer.h"

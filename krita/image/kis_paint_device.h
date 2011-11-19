@@ -130,11 +130,6 @@ public:
      */
     virtual void setDefaultBounds(KisDefaultBounds * bounds);
 
-     /**
-     * the default bounds rect of the paint device
-     */
-    KisDefaultBounds * defaultBounds() const;
-
     /**
      * Moves the device to these new coordinates (so no incremental move or so)
      */
@@ -721,6 +716,14 @@ private:
      * in the colorspace of this paint device.
      */
     QVector<qint32> channelSizes();
+
+
+    friend class KisPaintDeviceTest;
+     /**
+     * the default bounds rect of the paint device
+     */
+    KisDefaultBounds * defaultBounds() const;
+
 
 private:
     KisDataManagerSP m_datamanager;

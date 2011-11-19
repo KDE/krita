@@ -125,7 +125,7 @@ public:
     bool isVisible();
 
     /**
-     * Convinience functions. Just call the corresponding methods
+     * Convenience functions. Just call the corresponding methods
      * of the underlying projection
      */
     bool isTotallyUnselected(const QRect & r) const;
@@ -137,7 +137,6 @@ public:
     qint32 x() const;
     qint32 y() const;
 
-    KisDefaultBounds * defaultBounds() const;
     void setDefaultBounds(KisDefaultBounds * bounds);
 
     void clear();
@@ -147,6 +146,8 @@ public:
     KDE_DEPRECATED void setDirty(const QRect &rc = QRect());
 
 private:
+
+    KisDefaultBounds * defaultBounds() const;
 
     struct Private;
     Private * const m_d;

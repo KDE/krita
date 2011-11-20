@@ -1295,7 +1295,7 @@ void KisImage::initialRefreshGraph()
      */
 
     refreshGraphAsync(0, bounds(), QRect());
-    //waitForDone();
+    waitForDone();
 }
 
 void KisImage::refreshGraphAsync(KisNodeSP root)

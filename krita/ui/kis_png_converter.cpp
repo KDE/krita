@@ -558,7 +558,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         m_image->setResolution((double) POINT_TO_CM(x_resolution) / 100.0, (double) POINT_TO_CM(y_resolution) / 100.0); // It is the "invert" macro because we convert from pointer-per-inchs to points
     }
 
-    double coeff = quint8_MAX / (double)(pow(2, color_nb_bits) - 1);
+    double coeff = quint8_MAX / (double)(pow((double)2, color_nb_bits) - 1);
     KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), UCHAR_MAX);
     KisTransaction("", layer -> paintDevice());
 

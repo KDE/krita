@@ -481,7 +481,7 @@ int KisPopupPalette::calculateIndex(QPointF point, int n)
 
     //rotate
     float smallerAngle = M_PI/2 + M_PI/n - atan2 ( point.y(), point.x() );
-    float radius = sqrt ( point.x()*point.x() + point.y()*point.y() );
+    float radius = sqrt ( (float)point.x() * point.x() + point.y() * point.y() );
     point.setX( radius * cos(smallerAngle) );
     point.setY( radius * sin(smallerAngle) );
 
@@ -530,7 +530,7 @@ int KisPopupPalette::calculatePresetIndex(QPointF point, int /*n*/)
     int x = point.x() - width()/2;
     int y = point.y() - height()/2;
 
-    qreal radius = sqrt ( x*x + y*y );
+    qreal radius = sqrt ( (qreal) x*x + y*y );
 
     qreal angle;
     // y coordinate is the reverse of the cartesian one

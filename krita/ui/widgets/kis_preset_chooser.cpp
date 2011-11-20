@@ -300,7 +300,7 @@ void KisPresetChooser::updateViewSettings()
             }
             cols++;
         }
-        m_chooser->setRowHeight(floor(width/cols));
+        m_chooser->setRowHeight(floor((double)width/cols));
         m_chooser->setColumnCount(cols);
         m_delegate->setShowText(false);
     } else if (m_mode == DETAIL) {

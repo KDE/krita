@@ -172,7 +172,7 @@ void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image,
 QPainterPath KisDuplicateOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
 {
     QPainterPath path;
-    path = KisBrushBasedPaintOpSettings::brushOutline(QPointF(0.0,0.0),KisPaintOpSettings::CursorIsOutline, scale, rotation);
+    path = KisBrushBasedPaintOpSettings::brushOutline(QPointF(), mode, scale, rotation);
 
     QPainterPath copy(path);
     QRectF rect2 = copy.boundingRect();
@@ -194,11 +194,5 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const QPointF& pos, KisPaintOp
     path.moveTo(rect2.topRight());
     path.lineTo(rect2.bottomLeft());
 
-    if (mode == CursorIsOutline){
-        return path.translated(pos);
-    } else {
-        // workaround?
-        //copy.addEllipse(QRectF(0,0,1,1));
-        return copy.translated(pos);
-    }
+    return path.translated(pos);
 }

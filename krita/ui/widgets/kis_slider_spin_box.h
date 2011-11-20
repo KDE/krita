@@ -28,9 +28,9 @@
 class QLineEdit;
 class QDoubleValidator;
 class QTimer;
-struct KisAbstractSliderSpinBoxPrivate;
-struct KisSliderSpinBoxPrivate;
-struct KisDoubleSliderSpinBoxPrivate;
+class KisAbstractSliderSpinBoxPrivate;
+class KisSliderSpinBoxPrivate;
+class KisDoubleSliderSpinBoxPrivate;
 
 /**
  * XXX: when inactive, also show the progress bar part as inactive!

@@ -718,8 +718,7 @@ private:
     QVector<qint32> channelSizes();
 
 
-    friend class KisPaintDeviceTest;
-     /**
+    /**
      * the default bounds rect of the paint device
      */
     KisDefaultBounds * defaultBounds() const;

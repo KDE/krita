@@ -190,11 +190,11 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
             break;
         }
     }
-    bool ignoreEvent = currentPaintOpPreset()->settings()->mousePressEvent(KisPaintInformation(convertToPixelCoord(e->point),
+    bool eventIgnored = currentPaintOpPreset()->settings()->mousePressEvent(KisPaintInformation(convertToPixelCoord(e->point),
                                                                                                pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
                                                                                                KisVector2D::Zero(),
                                                                                                e->rotation(), e->tangentialPressure(), perspective, 0),e->modifiers());
-    if (!ignoreEvent){
+    if (!eventIgnored){
         e->accept();
         return;
     }else{

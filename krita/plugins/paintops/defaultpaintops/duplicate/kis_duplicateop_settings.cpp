@@ -131,44 +131,6 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
 
 }
 
-QRectF KisDuplicateOpSettings::duplicateOutlineRect(const QPointF& pos, KisImageWSP image) const
-{
-    // Compute the rectangle for the offset
-    QRectF rect2 = QRectF(-5, -5, 10, 10);
-    if (m_isOffsetNotUptodate) {
-        rect2.translate(m_position);
-    } else {
-        rect2.translate(- m_offset + image->documentToPixel(pos));
-    }
-    return image->pixelToDocument(rect2);
-}
-
-QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
-{
-    /*QRectF dubRect = duplicateOutlineRect(pos, image);
-    if (_mode == CursorIsOutline) {
-        dubRect |= KisBrushBasedPaintOpSettings::paintOutlineRect(pos, image, _mode);
-    }
-    return dubRect;*/
-
-    if (_mode != CursorIsOutline) return QRectF();
-
-    QPointF hotSpot = KisBrushBasedPaintOpSettings::brushOutline(pos,_mode).boundingRect().center();
-    QRectF boundRect = brushOutline(pos,_mode).boundingRect();
-    return image->pixelToDocument(boundRect.translated(-hotSpot)).translated(pos);
-
-}
-
-void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
-{
-    painter.save();
-    KisBrushBasedPaintOpSettings::paintOutline(pos, image, painter, _mode);
-    painter.restore();
-    QRectF rect2 = duplicateOutlineRect(pos, image);
-    painter.drawLine(rect2.topLeft(), rect2.bottomRight());
-    painter.drawLine(rect2.topRight(), rect2.bottomLeft());
-
-}
 QPainterPath KisDuplicateOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
 {
     QPainterPath path;

@@ -779,13 +779,13 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
         qreal value = yData( section, Qt::EditRole ).toDouble(&ok);
         if ( ok ) {
             qreal sum = 0.0;
-            for(int i = 1; i < d->yDataRegion.cellCount(); ++i) {
+            for(int i = 0; i < d->yDataRegion.cellCount(); ++i) {
                 sum += yData( i, Qt::EditRole ).toDouble();
             }
             if (sum == 0.0)
                 ok = false;
             else
-                value = value / (sum / 100.0);
+                value = value / sum * 100.0;
         }
         if ( ok )
             dataLabel += QString::number(value, 'f', 0) + "% ";

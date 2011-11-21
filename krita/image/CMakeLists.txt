@@ -183,7 +183,6 @@ set(kritaimage_LIB_SRCS
    kis_selection_mask.cpp
    kis_selection_transaction_data.cpp
    kis_serializable_configuration.cc
-   kis_selection_default_bounds.cpp
    kis_shared.cc
    kis_threaded_applicator.cpp
    kis_transaction_data.cpp

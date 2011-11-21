@@ -16,34 +16,45 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-#include "kis_global.h"
 #include "kis_default_bounds.h"
 #include "kis_paint_device.h"
 
 const QRect KisDefaultBounds::infiniteRect =
     QRect(qint32_MIN/2, qint32_MIN/2, qint32_MAX, qint32_MAX);
 
-
-/******************************************************************/
-/*                  KisDefaultBounds                              */
-/******************************************************************/
-
 struct KisDefaultBounds::Private
 {
     KisImageWSP image;
+    KisPaintDeviceSP parentDevice;
 };
+
 
 KisDefaultBounds::KisDefaultBounds()
     : m_d(new Private())
 {
+    m_d->image = 0;
+    m_d->parentDevice = 0;
 }
-
 
 KisDefaultBounds::KisDefaultBounds(KisImageWSP image)
     : m_d(new Private())
 {
+    m_d->parentDevice = 0;
     m_d->image = image;
+}
+
+KisDefaultBounds::KisDefaultBounds(KisPaintDeviceSP parentDevice, KisImageWSP image)
+    : m_d(new Private())
+{
+    m_d->parentDevice = parentDevice;
+    m_d->image = image;
+}
+
+KisDefaultBounds::KisDefaultBounds(const KisDefaultBounds &rhs)
+    : m_d(new Private)
+{
+    m_d->parentDevice = rhs.m_d->parentDevice;
+    m_d->image = rhs.m_d->image;
 }
 
 KisDefaultBounds::~KisDefaultBounds()
@@ -51,10 +62,21 @@ KisDefaultBounds::~KisDefaultBounds()
     delete m_d;
 }
 
+KisDefaultBounds KisDefaultBounds::operator=(const KisDefaultBounds &rhs)
+{
+    m_d->parentDevice = rhs.m_d->parentDevice;
+    m_d->image = rhs.m_d->image;
+    return *this;
+}
+
 QRect KisDefaultBounds::bounds() const
 {
-    /**
-     * By default return infinite rect to cover everything
-     */
-    return m_d->image ? m_d->image->bounds() : infiniteRect;
+    QRect additionalRect = m_d->parentDevice ? m_d->parentDevice->exactBounds() : QRect();
+    return additionalRect | (m_d->image ? m_d->image->bounds() : infiniteRect);
+}
+
+bool KisDefaultBounds::operator==(const KisDefaultBounds &other)
+{
+    return (other.m_d->image == m_d->image && other.m_d->parentDevice == m_d->parentDevice);
+
 }

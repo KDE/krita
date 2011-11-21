@@ -33,7 +33,7 @@
 #include "kis_mask.h"
 #include "kis_transparency_mask.h"
 #include "testutil.h"
-#include "kis_selection_default_bounds.h"
+#include "kis_default_bounds.h"
 
 void KisSelectionTest::testSelectionComponents()
 {
@@ -192,7 +192,7 @@ void KisSelectionTest::testSelectionExactBounds()
 
     QCOMPARE(device->exactBounds(), referenceDeviceRect);
 
-    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(device, image));
+    KisSelectionSP selection = new KisSelection(KisDefaultBounds(device, image));
 
     quint8 defaultPixel = MAX_SELECTED;
     selection->projection()->setDefaultPixel(&defaultPixel);

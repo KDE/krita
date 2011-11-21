@@ -33,7 +33,7 @@
 #include "testutil.h"
 #include "kis_fill_painter.h"
 #include "kis_transaction.h"
-#include "kis_selection_default_bounds.h"
+#include "kis_default_bounds.h"
 
 void KisPixelSelectionTest::testCreation()
 {
@@ -46,7 +46,7 @@ void KisPixelSelectionTest::testCreation()
     QVERIFY(selection);
     QVERIFY(selection->isTotallyUnselected(QRect(0, 0, 512, 512)));
 
-    selection = new KisPixelSelection(new KisSelectionDefaultBounds(dev));
+    selection = new KisPixelSelection(KisDefaultBounds(dev));
     QVERIFY(selection);
     QVERIFY(selection->isTotallyUnselected(QRect(0, 0, 512, 512)));
     selection->setDirty(QRect(10, 10, 10, 10));
@@ -65,7 +65,7 @@ void KisPixelSelectionTest::testSetSelected()
 void KisPixelSelectionTest::testInvert()
 {
     KisDefaultBounds defaultBounds;
-    
+
     KisPixelSelectionSP selection = new KisPixelSelection();
     selection->select(QRect(5, 5, 10, 10));
     selection->invert();
@@ -80,7 +80,7 @@ void KisPixelSelectionTest::testInvertWithImage()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 200, 200, cs, "merge test");
-    
+
     image->setGlobalSelection();
     KisPixelSelectionSP selection =  image->globalSelection()->getOrCreatePixelSelection();
     selection->select(QRect(5, 5, 10, 10));

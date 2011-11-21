@@ -43,39 +43,6 @@ int KisBrushBasedPaintOpSettings::rate() const
     return getInt(AIRBRUSH_RATE);
 }
 
-
-QRectF KisBrushBasedPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
-{
-    KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
-    if(!options)
-        return QRectF();
-    
-    if (_mode != CursorIsOutline) return QRectF();
-    KisBrushSP brush = options->brush();
-    QPointF hotSpot = brush->hotSpot(1.0, 1.0);
-    QRectF rect = image->pixelToDocument(
-                  QRectF(0, 0, brush->width() + 1, brush->height() + 1).translated(-(hotSpot + QPointF(0.5, 0.5)))
-                  ).translated(pos);
-    rect.adjust(-2, -2, 2, 2);
-    return rect;
-}
-
-void KisBrushBasedPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
-{
-    KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
-    if(!options)
-        return;
-    
-    if (_mode != CursorIsOutline) return;
-    KisBrushSP brush = options->brush();
-    QPointF hotSpot = brush->hotSpot(1.0, 1.0);
-    painter.setPen(Qt::black);
-    painter.setBackground(Qt::black);
-    painter.translate(pos - image->pixelToDocument(hotSpot + QPointF(0.5, 0.5)));
-    painter.scale(1/image->xRes(), 1/image->yRes());
-    brush->boundary()->paint(painter);
-}
-
 QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
 {
     QPainterPath path;

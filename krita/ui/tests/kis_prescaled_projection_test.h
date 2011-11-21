@@ -53,6 +53,8 @@ private slots:
     void benchmarkUpdate();
 
     void testScaling();
+
+    void testQtScaling();
 };
 
 #endif

@@ -285,9 +285,9 @@ void PieDiagram::paintInternal(PaintContext* ctx, QRectF& textBoundingRect)
         // is now in relation to the whole d->size.
         qreal diff;
         if ( xDistanceMax + xDistanceMin > yDistanceMax + yDistanceMin ) {
-            diff = qMax(qreal(0.0), xDistanceMax - availableDistance) + qMax(0.0, xDistanceMin - availableDistance);
+            diff = qMax(qreal(0.0), xDistanceMax - availableDistance) + qMax(qreal(0.0), xDistanceMin - availableDistance);
         } else {
-            diff = qMax(qreal(0.0), yDistanceMax - availableDistance) + qMax(0.0, yDistanceMin - availableDistance);
+            diff = qMax(qreal(0.0), yDistanceMax - availableDistance) + qMax(qreal(0.0), yDistanceMin - availableDistance);
         }
         if(diff > 0.0) {
             // If that is the case then we need to shrink the size available for the

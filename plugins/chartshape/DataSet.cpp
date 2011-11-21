@@ -929,7 +929,7 @@ QVariant DataSet::xData( int index, int role ) const
     // bubble width. Same for the second data set. So there is nothing left
     // for x data. Instead use a fall-back to the data points index.
     QVariant data = d->data( d->xDataRegion, index, role );
-    if ( data.isValid() /* && data.canConvert< double >() && data.convert( QVariant::Double ) */ )
+    if ( data.isValid() && data.canConvert< double >() && data.convert( QVariant::Double )  )
         return data;
     return QVariant( index + 1 );
 }
@@ -1306,34 +1306,37 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         if(styleStack.hasProperty(KoXmlNS::chart, "pie-offset"))
             setPieExplodeFactor( styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
     }
+
     bool bubbleChart = false;
+    bool scatterChart = false;
     if ( n.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
-        bubbleChart = n.attributeNS( KoXmlNS::chart, "class", QString() ) == "chart:bubble";
-//         bubbleChart =  bubbleChart || n.attributeNS( KoXmlNS::chart, "class", QString() ) == "chart:stock";
+        QString charttype = n.attributeNS( KoXmlNS::chart, "class", QString() );
+        bubbleChart = charttype == "chart:bubble";
+        scatterChart = charttype == "chart:scatter";
     }
-    
-    // FIXME: Maybe it's easier to understand this if we simply have a counter
-    // 'loadedDomainElements' that is either 0, 1 or 2.
-    bool maybeCompleteDataDefinition = false;
-    // FIXME: This variable is unused.
-    
-    if ( /*bubbleChart &&*/ n.hasChildNodes() ){
+
+    // For scatter charts, one <chart:domain> element shall exist. Its table:cell-range-address
+    // attribute references the x coordinate values for the scatter chart.
+    // For bubble charts, two <chart:domain> elements shall exist. The values for the y-coordinates are
+    // given by the first <chart:domain> element. The values for the x-coordinates are given by the
+    // second <chart:domain> element.
+    if ( ( scatterChart || bubbleChart ) && n.hasChildNodes() ) {
+        int domainCount = 0;
         KoXmlNode cn = n.firstChild();
         while ( !cn.isNull() ){
             KoXmlElement elem = cn.toElement();
             const QString name = elem.tagName();
             if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") && !ignoreCellRanges ) {
-                if ( maybeCompleteDataDefinition ){
+                if ( (domainCount == 0 && scatterChart) || (domainCount == 1 && bubbleChart) ) {
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
                     setXDataRegion( CellRegion( helper->tableSource, region ) );
-                }else{
+                } else {
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );                    
-                    // as long as there is not default table for missing data series the same region is used twice
-                    // to ensure the diagram is displayed, even if not as expected from o office or ms office
                     setYDataRegion( CellRegion( helper->tableSource, region ) );
-                    maybeCompleteDataDefinition = true;
                 }
-                
+                ++domainCount;
+                if ( (bubbleChart && domainCount == 2) || scatterChart )
+                    break; // We are finished and don't expect more domain's.
             }
             cn = cn.nextSibling();
         }

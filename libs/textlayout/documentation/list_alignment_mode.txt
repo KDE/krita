@@ -8,25 +8,22 @@ label-width-and-position mode
                     LABELBOX        TEXT STARTS HERE AND GOES ON
                     |          TO THE NEXT LINE
 |>------------------|          |----|
-     list-indent               indent
-
+     space-before            text-indent
+    + margin-left
 
 Inside LABELBOX the label can be aligned and prepended by spacing:
 
 left:
-          space-
-          before
-           |-|
            LABELBOX
-             1.2
+           11.2
 
 center:
            LABELBOX
-              1.2
+             11.2
 
 right:
            LABELBOX
-                1.2
+               11.2
 
 
 label-alignment mode

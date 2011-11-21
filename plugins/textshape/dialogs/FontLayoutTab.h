@@ -37,11 +37,18 @@ public:
     void setDisplay(KoCharacterStyle *style);
     void save(KoCharacterStyle *style);
 
+private slots:
+    void textPositionChanged();
+    void hyphenateStateChanged();
+
 private:
     Ui::FontLayoutTab widget;
     QButtonGroup *m_buttonGroup;
     
     bool m_uniqueFormat;
+    bool m_positionInherited;
+    bool m_hyphenateInherited;
+
 };
 
 #endif

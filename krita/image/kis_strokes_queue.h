@@ -54,7 +54,7 @@ private:
     bool checkBarrierProperty(qint32 numMergeJobs, qint32 numStrokeJobs,
                               bool externalJobsPending);
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

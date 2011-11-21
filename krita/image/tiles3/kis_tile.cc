@@ -116,7 +116,7 @@ inline void KisTile::blockSwapping() const
      * We need to hold a specal barrier lock here to ensure
      * m_tileData->blockSwapping() has finished executing
      * before anyone started reading the tile data. That is
-     * why we not not use atomic operations here.
+     * why we can not use atomic operations here.
      */
 
     QMutexLocker locker(&m_swapBarrierLock);

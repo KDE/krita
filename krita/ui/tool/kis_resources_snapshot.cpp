@@ -30,7 +30,7 @@
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "recorder/kis_recorded_paint_action.h"
-
+#include "kis_default_bounds.h"
 
 struct KisResourcesSnapshot::Private {
     Private() : currentPattern(0), currentGradient(0),
@@ -39,7 +39,7 @@ struct KisResourcesSnapshot::Private {
     }
 
     KisImageWSP image;
-    KisDefaultBoundsSP bounds;
+    KisDefaultBounds bounds;
     KisPostExecutionUndoAdapter *undoAdapter;
     KoColor currentFgColor;
     KoColor currentBgColor;
@@ -63,7 +63,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUn
     : m_d(new Private())
 {
     m_d->image = image;
-    m_d->bounds = new KisDefaultBounds(image);
+    m_d->bounds = KisDefaultBounds(image);
     m_d->undoAdapter = undoAdapter;
     m_d->currentFgColor = resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
@@ -75,7 +75,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUn
 
     m_d->axisCenter = resourceManager->resource(KisCanvasResourceProvider::MirrorAxisCenter).toPointF();
     if (m_d->axisCenter.isNull()){
-        QRect bounds = m_d->bounds->bounds();
+        QRect bounds = m_d->bounds.bounds();
         m_d->axisCenter = QPointF(0.5 * bounds.width(), 0.5 * bounds.height());
     }
 
@@ -97,7 +97,7 @@ KisResourcesSnapshot::~KisResourcesSnapshot()
 
 void KisResourcesSnapshot::setupPainter(KisPainter* painter)
 {
-    painter->setBounds(m_d->bounds->bounds());
+    painter->setBounds(m_d->bounds.bounds());
     painter->setPaintColor(m_d->currentFgColor);
     painter->setBackgroundColor(m_d->currentBgColor);
     painter->setGenerator(m_d->currentGenerator);

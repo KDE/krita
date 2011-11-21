@@ -125,7 +125,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                             subValueChild = subValueChild.nextSiblingElement();
                         } while (!subValueChild.isNull());
                         QStringList mergedAllowedValues;
-                        while (mergedAllowedValues.length() != (pow(allowedValues.length(), allowedValues.length()))) {
+                        while (mergedAllowedValues.length() != (pow((double) allowedValues.length(), allowedValues.length()))) {
                             foreach (QString baseValue, allowedValues) {
                                 if (!mergedAllowedValues.contains(baseValue))
                                     mergedAllowedValues << baseValue;

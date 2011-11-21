@@ -392,8 +392,14 @@ ChartConfigWidget::ChartConfigWidget()
              this, SLOT( datasetBrushSelected( const QColor& ) ) );
     connect( d->ui.datasetPen, SIGNAL( changed( const QColor& ) ),
              this, SLOT( datasetPenSelected( const QColor& ) ) );
-    connect( d->ui.datasetShowValues, SIGNAL( toggled( bool ) ),
-             this, SLOT( ui_datasetShowValuesChanged( bool ) ) );
+    connect( d->ui.datasetShowCategory, SIGNAL( toggled( bool ) ),
+             this, SLOT( ui_datasetShowCategoryChanged( bool ) ) );
+    connect( d->ui.dataSetShowNumber, SIGNAL( toggled( bool ) ),
+             this, SLOT( ui_dataSetShowNumberChanged( bool ) ) );
+    connect( d->ui.datasetShowPercent, SIGNAL( toggled( bool ) ),
+             this, SLOT( ui_datasetShowPercentChanged( bool ) ) );
+    connect( d->ui.datasetShowSymbol, SIGNAL( toggled( bool ) ),
+             this, SLOT( ui_datasetShowSymbolChanged( bool ) ) );
     connect( d->ui.gapBetweenBars, SIGNAL( valueChanged( int ) ),
              this, SIGNAL( gapBetweenBarsChanged( int ) ) );
     connect( d->ui.gapBetweenSets, SIGNAL( valueChanged( int ) ),
@@ -1323,13 +1329,21 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index )
     d->ui.datasetPen->setColor( dataSet->pen().color() );
     d->ui.datasetPen->blockSignals( false );
 
-    d->ui.datasetShowValues->blockSignals( true );
-    d->ui.datasetShowValues->setChecked( dataSet->valueLabelType() == DataSet::RealValueLabel );
-    d->ui.datasetShowValues->blockSignals( false );
+    d->ui.datasetShowCategory->blockSignals( true );
+    d->ui.datasetShowCategory->setChecked( dataSet->valueLabelType().category );
+    d->ui.datasetShowCategory->blockSignals( false );
 
-    d->ui.dataSetShowLabels->blockSignals( true );
-    d->ui.dataSetShowLabels->setChecked( dataSet->showLabels() );
-    d->ui.dataSetShowLabels->blockSignals( false );
+    d->ui.dataSetShowNumber->blockSignals( true );
+    d->ui.dataSetShowNumber->setChecked( dataSet->valueLabelType().number );
+    d->ui.dataSetShowNumber->blockSignals( false );
+
+    d->ui.datasetShowPercent->blockSignals( true );
+    d->ui.datasetShowPercent->setChecked( dataSet->valueLabelType().percentage );
+    d->ui.datasetShowPercent->blockSignals( false );
+
+    d->ui.datasetShowSymbol->blockSignals( true );
+    d->ui.datasetShowSymbol->setChecked( dataSet->valueLabelType().symbol );
+    d->ui.datasetShowSymbol->blockSignals( false );
 
     if ( dataSet->chartType() != LastChartType ) {
         d->ui.dataSetHasChartType->blockSignals( true );
@@ -1566,22 +1580,37 @@ void ChartConfigWidget::ui_axisScalingButtonClicked()
     d->axisScalingDialog.show();
 }
 
-void ChartConfigWidget::ui_datasetShowValuesChanged( bool b )
+void ChartConfigWidget::ui_datasetShowCategoryChanged( bool b )
 {
     if ( d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count() )
         return;
 
-    emit datasetShowValuesChanged( d->dataSets[ d->selectedDataSet ], b );
+    emit datasetShowCategoryChanged( d->dataSets[ d->selectedDataSet ], b );
 }
 
-void ChartConfigWidget::ui_datasetShowLabelsChanged( bool b )
+void ChartConfigWidget::ui_dataSetShowNumberChanged( bool b )
 {
     if ( d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count() )
         return;
 
-    emit datasetShowValuesChanged( d->dataSets[ d->selectedDataSet ], b );
+    emit dataSetShowNumberChanged( d->dataSets[ d->selectedDataSet ], b );
 }
 
+void ChartConfigWidget::ui_datasetShowPercentChanged( bool b )
+{
+    if ( d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count() )
+        return;
+
+    emit datasetShowPercentChanged( d->dataSets[ d->selectedDataSet ], b );
+}
+
+void ChartConfigWidget::ui_datasetShowSymbolChanged( bool b )
+{
+    if ( d->selectedDataSet < 0 || d->selectedDataSet >= d->dataSets.count() )
+        return;
+
+    emit datasetShowSymbolChanged( d->dataSets[ d->selectedDataSet ], b );
+}
 
 #include "ChartConfigWidget.moc"
 

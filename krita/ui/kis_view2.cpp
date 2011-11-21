@@ -139,7 +139,7 @@ class BlockingUserInputEventFilter : public QObject
     }
 };
 
-class KisView2::KisView2Private
+struct KisView2::KisView2Private
 {
 
 public:

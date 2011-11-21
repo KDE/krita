@@ -730,13 +730,19 @@ void OutputPainterStrategy::selectStockObject( const quint32 ihObject )
 	break;
     case OEM_FIXED_FONT:
     case ANSI_FIXED_FONT:
+    case SYSTEM_FIXED_FONT:
         {
             QFont  font(QString("Fixed"));
             m_painter->setFont(font);
             break;
         }
     case ANSI_VAR_FONT:
-	Q_ASSERT( 0 );
+    case DEFAULT_GUI_FONT:      // Not sure if this is true, but it should work well
+        {
+            QFont  font(QString("Helvetica")); // Could also be "System"
+            m_painter->setFont(font);
+            break;
+        }
 	break;
     case SYSTEM_FONT:
 	// TODO: handle this
@@ -745,19 +751,12 @@ void OutputPainterStrategy::selectStockObject( const quint32 ihObject )
 	// TODO: handle this
 	break;
     case DEFAULT_PALETTE:
-	Q_ASSERT( 0 );
-	break;
-    case SYSTEM_FIXED_FONT:
-	Q_ASSERT( 0 );
-	break;
-    case DEFAULT_GUI_FONT:
-	Q_ASSERT( 0 );
 	break;
     case DC_BRUSH:
-	Q_ASSERT( 0 );
+        // FIXME
 	break;
     case DC_PEN:
-	Q_ASSERT( 0 );
+        // FIXME
 	break;
     default:
 	qWarning() << "Unexpected stock object:" << ( ihObject & 0x8000000 );

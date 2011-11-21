@@ -49,7 +49,7 @@ KisTIFFYCbCrReaderTarget8Bit::~KisTIFFYCbCrReaderTarget8Bit()
 uint KisTIFFYCbCrReaderTarget8Bit::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream)
 {
     int numcols = dataWidth / m_hsub;
-    double coeff = quint8_MAX / (double)(pow(2, sourceDepth()) - 1);
+    double coeff = quint8_MAX / (double)(pow(2.0, sourceDepth()) - 1);
 //     dbgFile <<" depth expension coefficient :" << coeff;
 //     dbgFile <<" y =" << y;
     uint buffPos = y / m_vsub * m_bufferWidth + x / m_hsub ;
@@ -115,7 +115,7 @@ KisTIFFYCbCrReaderTarget16Bit::~KisTIFFYCbCrReaderTarget16Bit()
 uint KisTIFFYCbCrReaderTarget16Bit::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream)
 {
     int numcols = dataWidth / m_hsub;
-    double coeff = quint16_MAX / (double)(pow(2, sourceDepth()) - 1);
+    double coeff = quint16_MAX / (double)(pow(2.0, sourceDepth()) - 1);
 //     dbgFile <<" depth expension coefficient :" << coeff;
 //     dbgFile <<" y =" << y;
     uint buffPos = y / m_vsub * m_bufferWidth + x / m_hsub ;

@@ -29,7 +29,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_undo_adapter.h"
 
-class KisSelectionMask::Private
+struct KisSelectionMask::Private
 {
 public:
     KisImageWSP image;

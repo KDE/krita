@@ -55,7 +55,7 @@ public:
     }
     
     bool isImageLoaded(KisImageItem* item) const {
-        return m_data[item].isLoaded != false;
+        return m_data[item].isLoaded != 0;
     }
     
     QImage getImage(KisImageItem* item) const {

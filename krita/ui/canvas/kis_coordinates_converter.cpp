@@ -213,15 +213,27 @@ void KisCoordinatesConverter::getQPainterCheckersInfo(QTransform *transform,
                                                       QPointF *brushOrigin,
                                                       QPolygonF *polygon) const
 {
+    /**
+     * Qt has different rounding for QPainter::drawRect/drawImage.
+     * The image is rounded mathematically, while rect in aligned
+     * to the next integer. That causes transparent line appear on
+     * the canvas.
+     *
+     * See: https://bugreports.qt.nokia.com/browse/QTBUG-22827
+     */
+
+    QRectF imageRect = imageRectInViewportPixels();
+    imageRect.adjust(0,0,-0.5,-0.5);
+
     KisConfig cfg;
     if (cfg.scrollCheckers()) {
         *transform = viewportToWidgetTransform();
-        *polygon = imageRectInViewportPixels();
+        *polygon = imageRect;
         *brushOrigin = imageToViewport(QPointF(0,0));
     }
     else {
         *transform = QTransform();
-        *polygon = viewportToWidgetTransform().map(imageRectInViewportPixels());
+        *polygon = viewportToWidgetTransform().map(imageRect);
         *brushOrigin = QPoint(0,0);
     }
 }

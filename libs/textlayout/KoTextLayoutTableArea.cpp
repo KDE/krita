@@ -713,11 +713,11 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     painter->fillRect(tableRect, d->table->format().background());
 
     KoTextDocumentLayout::PaintContext cellContext = context;
-    QColor tableBackground;
+    QColor tableBackground = context.background;
     if (d->table->format().hasProperty(QTextFormat::BackgroundBrush)) {
         tableBackground = d->table->format().background().color();
     }
- 
+
     // Draw header row backgrounds
     for (int row = 0; row < d->headerRows; ++row) {
         QRectF rowRect(d->columnPositions[0], d->headerRowPositions[row], d->tableWidth, d->headerRowPositions[row+1] - d->headerRowPositions[row]);
@@ -746,8 +746,9 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
             int testRow = (row == firstRow ? tableCell.row() : row);
             if (d->cellAreas[testRow][column]) {
                 cellContext.background = tableBackground;
-                if (tableCell.format().hasProperty(KoTableCellStyle::CellBackgroundBrush)) {
-                    cellContext.background = tableCell.format().brushProperty(KoTableCellStyle::CellBackgroundBrush).color();
+                QBrush bgBrush = tableCell.format().brushProperty(KoTableCellStyle::CellBackgroundBrush);
+                if (bgBrush != Qt::NoBrush) {
+                    cellContext.background = bgBrush.color();
                 }
                 paintCell(painter, cellContext, tableCell);
             }
@@ -768,8 +769,9 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
             int testRow = row == firstRow ? tableCell.row() : row;
             if (d->cellAreas[testRow][column]) {
                 cellContext.background = tableBackground;
-                if (tableCell.format().hasProperty(QTextFormat::BackgroundBrush)) {
-                    cellContext.background = tableCell.format().background().color();
+                QBrush bgBrush = tableCell.format().brushProperty(KoTableCellStyle::CellBackgroundBrush);
+                if (bgBrush != Qt::NoBrush) {
+                    cellContext.background = bgBrush.color();
                 }
                 paintCell(painter, cellContext, tableCell);
 

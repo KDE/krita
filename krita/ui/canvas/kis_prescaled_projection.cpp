@@ -357,8 +357,19 @@ KisPPUpdateInfoSP KisPrescaledProjection::getUpdateInformation(const QRect &view
     QRect croppedViewRect = viewportRect.intersected(QRect(QPoint(0, 0), m_d->viewportSize));
 
     // second, align this rect to the KisImage's pixels and pixels
-    // of projection backend
+    // of projection backend.
     info->imageRect = m_d->coordinatesConverter->viewportToImage(QRectF(croppedViewRect)).toAlignedRect();
+
+    /**
+     * To avoid artifacts while scaling we use machanism like
+     * changeRect/needRect for layers. Here we grow the rect to update
+     * pixels which depend on the dirty rect (like changeRect), and
+     * later we request a bit more pixels for the patch to make the
+     * scaling safe (like needRect).
+     */
+    const int borderSize = BORDER_SIZE(qMax(info->scaleX, info->scaleY));
+    info->imageRect.adjust(-borderSize, -borderSize, borderSize, borderSize);
+
     info->imageRect = info->imageRect & m_d->image->bounds();
 
     m_d->projectionBackend->alignSourceRect(info->imageRect, info->scaleX);
@@ -371,12 +382,12 @@ KisPPUpdateInfoSP KisPrescaledProjection::getUpdateInformation(const QRect &view
         if (SCALE_LESS_THAN(info->scaleX, info->scaleY, 2.0)) {
             dbgRender << "smoothBetween100And200Percent" << endl;
             info->renderHints = QPainter::SmoothPixmapTransform;
-            info->borderWidth = BORDER_SIZE(qMax(info->scaleX, info->scaleY));
+            info->borderWidth = borderSize;
         }
         info->transfer = KisPPUpdateInfo::DIRECT;
     } else { // <100%
         info->renderHints = QPainter::SmoothPixmapTransform;
-        info->borderWidth = BORDER_SIZE(qMax(info->scaleX, info->scaleY));
+        info->borderWidth = borderSize;
         info->transfer = KisPPUpdateInfo::PATCH;
     }
 

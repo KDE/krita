@@ -63,7 +63,7 @@ protected:
 
         QRect childrenRect;
         QRect tempRect = requestedRect;
-        bool changeRectVaries;
+        bool changeRectVaries = false;
 
         KisNodeSP currentNode = startWith->firstChild();
         KisNodeSP prevNode;
@@ -85,7 +85,7 @@ protected:
             currentNode = nextNode;
         }
 
-        tempRect = startWith->changeRect(requestedRect | childrenRect);
+        tempRect |= startWith->changeRect(requestedRect | childrenRect);
 
         if(!changeRectVaries)
             changeRectVaries = tempRect != requestedRect;

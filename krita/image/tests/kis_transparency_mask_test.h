@@ -28,7 +28,7 @@ private slots:
 
     void testCreation();
     void testApply();
-
+    void testMoveParentLayer();
 };
 
 #endif

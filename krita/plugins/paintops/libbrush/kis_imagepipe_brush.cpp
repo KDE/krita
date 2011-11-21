@@ -19,7 +19,7 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_imagepipe_brush_p.h"
 
-class KisImagePipeBrush::Private
+struct KisImagePipeBrush::Private
 {
 public:
 

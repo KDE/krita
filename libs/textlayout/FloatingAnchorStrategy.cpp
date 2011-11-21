@@ -144,9 +144,15 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
         anchorBoundingRect.setWidth(pageRect().width());
         break;
 
-    case KoTextAnchor::HPageContent:
+    case KoTextAnchor::HFrameContent:
+    case KoTextAnchor::HFrame:
         anchorBoundingRect.setX(containerBoundingRect.x());
         anchorBoundingRect.setWidth(containerBoundingRect.width());
+        break;
+
+    case KoTextAnchor::HPageContent:
+        anchorBoundingRect.setX(pageContentRect().x());
+        anchorBoundingRect.setWidth(pageContentRect().width());
         break;
 
     case KoTextAnchor::HParagraph:
@@ -284,13 +290,17 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
     //FIXME proper handle VFrame and VFrameContent but fallback to VPage/VPageContent for now to produce better results
 
     switch (m_anchor->verticalRel()) {
-    case KoTextAnchor::VFrame:
     case KoTextAnchor::VPage:
         anchorBoundingRect.setY(pageRect().y());
         anchorBoundingRect.setHeight(pageRect().height());
         break;
 
+    case KoTextAnchor::VFrame:
     case KoTextAnchor::VFrameContent:
+        anchorBoundingRect.setY(containerBoundingRect.y());
+        anchorBoundingRect.setHeight(containerBoundingRect.height());
+        break;
+
     case KoTextAnchor::VPageContent:
         anchorBoundingRect.setY(pageContentRect().y());
         anchorBoundingRect.setHeight(pageContentRect().height());

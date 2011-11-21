@@ -1,4 +1,6 @@
-add_subdirectory(tests)
+if (NOT WIN32)
+    add_subdirectory(tests)
+endif (NOT WIN32)	
 
 set(kritadefaulttools_PART_SRCS
     default_tools.cc

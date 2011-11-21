@@ -47,7 +47,7 @@ public Q_SLOTS:
 signals:
     void scriptProcess(QObject* src, const QRect& srcTopLeft, QObject* config) const;
 private:
-    class Private;
+    struct Private;
     Private* const d;
 };
 

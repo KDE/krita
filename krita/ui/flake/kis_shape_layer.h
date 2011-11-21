@@ -112,7 +112,7 @@ signals:
     void selectionChanged(QList<KoShape*> shape);
 
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

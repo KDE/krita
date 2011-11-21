@@ -785,16 +785,17 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
     // About the data:
     //   Save if the first row / column contain headers.
     QString  dataSourceHasLabels;
-    if ( proxyModel()->firstRowIsLabel() )
+    if ( proxyModel()->firstRowIsLabel() ) {
         if ( proxyModel()->firstColumnIsLabel() )
             dataSourceHasLabels = "both";
         else
             dataSourceHasLabels = "row";
-    else
+    } else {
         if ( proxyModel()->firstColumnIsLabel() )
             dataSourceHasLabels = "column";
         else
             dataSourceHasLabels = "none";
+    }
     // Note: this is saved in the plotarea attributes and not the style.
     bodyWriter.addAttribute( "chart:data-source-has-labels",
                              dataSourceHasLabels );

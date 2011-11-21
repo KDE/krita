@@ -28,6 +28,7 @@
 
 #include <KoColorSpace.h>
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 
 #include <kis_paint_device.h>
 #include <kis_doc2.h>
@@ -86,6 +87,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     kdb->setModal(false);
 
     KisImageWSP image = output->image();
+    qDebug() << ">>>>>>>>>>>" << image->locked();
     image->refreshGraph();
     image->lock();
     KisPaintDeviceSP pd;
@@ -115,8 +117,10 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
     if (hasVisibleWidgets()) {
-        if (kdb->exec() == QDialog::Rejected) {
-            return KoFilter::OK; // FIXME Cancel doesn't exist :(
+        if (!m_chain->manager()->getBatchMode()) {
+            if (kdb->exec() == QDialog::Rejected) {
+                return KoFilter::OK; // FIXME Cancel doesn't exist :(
+            }
         }
     }
 

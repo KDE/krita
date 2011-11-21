@@ -22,6 +22,7 @@
 #include "kis_node.h"
 #include "kis_paint_device.h"
 #include "kis_shared_ptr.h"
+#include "kis_image.h"
 #include "kis_doc2.h"
 
 #include <KoStore.h>

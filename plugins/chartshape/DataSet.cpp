@@ -765,7 +765,7 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
         QVariant v = yData( section, Qt::DisplayRole );
         QString s;
         if ( v.type() == QVariant::Double ) {
-            // Don't use v.toString() else out double/float would lose precision
+            // Don't use v.toString() else a double/float would lose precision
             // and something like "36.5207" would become "36.520660888888912".
             QTextStream ts(&s);
             ts << v.toDouble();

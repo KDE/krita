@@ -1007,7 +1007,12 @@ QVariant DataSet::labelData() const
     if ( d->labelDataRegion.isValid() ) {
         const int cellCount = d->labelDataRegion.cellCount();
         for ( int i = 0; i < cellCount; i++ ) {
-            label += d->data( d->labelDataRegion, i, Qt::EditRole ).toString();
+            QString s = d->data( d->labelDataRegion, i, Qt::EditRole ).toString();
+            if ( !s.isEmpty() ) {
+                if ( !label.isEmpty() )
+                    label += " ";
+                label += s;
+            }
         }
     }
     if ( label.isEmpty() ) {

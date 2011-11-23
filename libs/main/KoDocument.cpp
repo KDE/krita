@@ -804,6 +804,12 @@ KoDocumentRdf *KoDocument::documentRdf() const
     return 0;
 }
 
+void KoDocument::setDocumentRdf(KoDocumentRdf *rdfDocument)
+{
+    delete d->docRdf;
+    d->docRdf = rdfDocument;
+}
+
 KoDocumentRdfBase *KoDocument::documentRdfBase() const
 {
     return d->docRdf;

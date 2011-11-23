@@ -585,6 +585,13 @@ public:
      * @see KoDocumentRdf
      */
     KoDocumentRdf *documentRdf() const;
+
+    /**
+     * replace the current rdf document with the given rdf document.
+     * (mostly useful for unittests!)
+     */
+    void setDocumentRdf(KoDocumentRdf *rdfDocument);
+
     /**
      * @return the Rdf metadata for this document.
      * @see KoDocumentRdf

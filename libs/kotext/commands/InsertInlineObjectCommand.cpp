@@ -18,18 +18,24 @@
  */
 
 #include "InsertInlineObjectCommand.h"
+#include "KoTextEditor.h"
+#include "KoTextDocument.h"
+#include "KoInlineTextObjectManager.h"
+#include "KoInlineObject.h"
 
-InsertInlineObjectCommand::InsertInlineObjectCommand(KoTextAnchor *anchor, QTextDocument *document, KUndo2Command *parent)
+InsertInlineObjectCommand::InsertInlineObjectCommand(KoInlineObject *inlineObject, QTextDocument *document, KUndo2Command *parent)
     : KUndo2Command(parent)
-    , m_anchor(anchor)
+    , m_inlineObject(inlineObject)
     , m_document(document)
+    , m_first(true)
+    , m_position(-1)
 {
 }
 
 InsertInlineObjectCommand::~InsertInlineObjectCommand()
 {
-    if (m_deleteAnchor) {
-        delete m_anchor;
+    if (m_deleteInlineObject) {
+        delete m_inlineObject;
     }
 }
 
@@ -37,17 +43,24 @@ void InsertInlineObjectCommand::redo()
 {
     KUndo2Command::redo();
 
-    // put us back in the inline object manager
+    KoTextDocument doc(m_document);
+    KoTextEditor *editor = doc.textEditor();
+    doc.inlineTextObjectManager()->insertInlineObject(*editor->cursor(), m_inlineObject);
+    if (m_first) {
+        m_position = editor->cursor()->position();
+        m_first = false;
+    }
+    editor->setPosition(m_position);
+    QTextCharFormat format = editor->charFormat();
+    m_inlineObject->updatePosition(m_document, m_position, format);
 
-    // redo the deletion of the object remplacement character
-
-    m_deleteAnchor = false;
+    m_deleteInlineObject = false;
 }
 
 void InsertInlineObjectCommand::undo()
 {
     KUndo2Command::undo();
-    // remove the anchor's character from the document
-    // remove the anchor from the inline object manager
-    m_deleteAnchor = true;
+    // remove the inlineObject's character from the document
+    // remove the inlineObject from the inline object manager
+    m_deleteInlineObject = true;
 }

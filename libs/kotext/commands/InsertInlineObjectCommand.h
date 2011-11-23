@@ -22,13 +22,13 @@
 
 #include <kundo2command.h>
 
-class KoTextAnchor;
+class KoInlineObject;
 class QTextDocument;
 
 class InsertInlineObjectCommand : public KUndo2Command
 {
 public:
-    InsertInlineObjectCommand(KoTextAnchor *anchor, QTextDocument *document, KUndo2Command *parent);
+    InsertInlineObjectCommand(KoInlineObject *inlineObject, QTextDocument *document, KUndo2Command *parent);
     virtual ~InsertInlineObjectCommand();
 
     /// redo the command
@@ -37,9 +37,11 @@ public:
     void undo();
 private:
 
-    KoTextAnchor *m_anchor;
+    KoInlineObject *m_inlineObject;
     QTextDocument *m_document;
-    bool m_deleteAnchor;
+    bool m_deleteInlineObject;
+    bool m_first;
+    int m_position;
 };
 
 #endif // INSERTTEXTANCHORCOMMAND_H

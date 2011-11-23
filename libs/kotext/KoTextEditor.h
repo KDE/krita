@@ -137,6 +137,7 @@ private:
     friend class InsertTableColumnCommand;
     friend class ChangeTrackedDeleteCommand;
     friend class DeleteCommand;
+    friend class InsertInlineObjectCommand;
 
     // for unittests
     friend class TestKoInlineTextObjectManager;

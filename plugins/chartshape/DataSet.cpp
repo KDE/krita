@@ -1329,11 +1329,15 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         scatterChart = charttype == "chart:scatter";
     }
 
+    // The <chart:domain> element specifies coordinate values required by particular chart types.
     // For scatter charts, one <chart:domain> element shall exist. Its table:cell-range-address
     // attribute references the x coordinate values for the scatter chart.
     // For bubble charts, two <chart:domain> elements shall exist. The values for the y-coordinates are
     // given by the first <chart:domain> element. The values for the x-coordinates are given by the
     // second <chart:domain> element.
+    // At least one <chart:series> element of a given chart:class shall have the necessary
+    // number of <chart:domain> sub-elements. All other <chart:series> elements with the same
+    // chart:class may omit the <chart:domain> sub-elements and use the previously defined.
     if ( ( scatterChart || bubbleChart ) && n.hasChildNodes() ) {
         int domainCount = 0;
         KoXmlNode cn = n.firstChild();

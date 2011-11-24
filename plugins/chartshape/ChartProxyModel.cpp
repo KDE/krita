@@ -22,6 +22,7 @@
 
 // Own
 #include "ChartProxyModel.h"
+#include "PlotArea.h"
 
 // Qt
 #include <QRegion>
@@ -622,8 +623,11 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     QList<DataSet*> createdDataSets = d->createDataSetsFromRegion( &d->removedDataSets,
                                                                    !helper->categoryRegionSpecifiedInXAxis );
 
-    int loadedDataSetCount = 0;
+    bool isBubble = d->shape->plotArea()->chartType() == BubbleChartType;
+    bool isScatter = d->shape->plotArea()->chartType() == ScatterChartType;
+    CellRegion prevXData, prevYData;
 
+    int loadedDataSetCount = 0;
     KoXmlElement n;
     QPen p;
     QBrush brush;
@@ -655,6 +659,25 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                     dataSet->setCategoryDataRegion( d->categoryDataRegion );
                 }
                 dataSet->loadOdf( n, context );
+
+                if ( isBubble || isScatter ) {
+                    // bubble- and scatter-charts have chart:domain's that define the
+                    // x- and y-data. But if they are not defined in the series then
+                    // a previous defined one needs to be used.
+                    if ( dataSet->xDataRegion().isValid() ) {
+                        prevXData = dataSet->xDataRegion();
+                    } else {
+                        dataSet->setXDataRegion(prevXData);
+                    }
+                    if ( isBubble ) {
+                        if ( dataSet->yDataRegion().isValid() ) {
+                            prevYData = dataSet->yDataRegion();
+                        } else {
+                            dataSet->setYDataRegion(prevYData);
+                        }
+                    }
+                }
+
                 if ( penLoaded )
                     dataSet->setPen( p );
                 if ( brushLoaded )

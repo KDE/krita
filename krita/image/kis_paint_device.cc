@@ -665,7 +665,6 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfil
     if (!profile && colorSpace()->id() == "RGBA") {
         writeBytes(image.bits(), offsetX, offsetY, image.width(), image.height());
     } else {
-        Q_ASSERT(profile);
         quint8 * dstData = new quint8[image.width() * image.height() * pixelSize()];
         KoColorSpaceRegistry::instance()
                 ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile)

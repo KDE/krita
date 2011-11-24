@@ -809,8 +809,9 @@ void KoDocument::setDocumentRdf(KoDocumentRdf *rdfDocument)
     delete d->docRdf;
 #ifdef SHOULD_BUILD_RDF
     d->docRdf = rdfDocument;
-#endif
+#else
     d->docRdf = 0;
+#endif
 }
 
 KoDocumentRdfBase *KoDocument::documentRdfBase() const

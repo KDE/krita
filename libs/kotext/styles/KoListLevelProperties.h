@@ -128,11 +128,6 @@ public:
      */
     void setLetterSynchronization(bool on);
 
-    /// set to true to continue numbering from a previous list of the same style
-    void setContinueNumbering(bool enable);
-    /// returns whether this list continues numbering from a previous list of the same style
-    bool continueNumbering() const;
-
     /// sets the indentation of paragraph
     void setIndent(qreal value);
     /// returns the indentation of paragraphs

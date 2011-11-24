@@ -156,6 +156,14 @@ public:
     bool checkForDeleteMerge(QTextCursor &cursor, const QString &id, int startPosition);
     QMap<KoDeleteChangeMarker *, QPair<int, int> > deleteChangeMarkerMap;
 
+    QMap<QString, KoList *> xmlIdToListMap;
+    QVector<KoList *> m_previousList;
+
+    /// level is between 1 and 10
+    void setCurrentList(KoList *currentList, int level);
+    /// level is between 1 and 10
+    KoList *previousList(int level);
+
     // For Loading of list item splits
     bool checkForListItemSplit(const KoXmlElement &element);
     KoXmlNode loadListItemSplit(const KoXmlElement &element, QString *generatedXmlString);
@@ -181,6 +189,7 @@ public:
           loadSpanInitialPos(0),
           openedElements(0),
           deleteMergeStarted(false)
+        , m_previousList(10)
     {
         progressTime.start();
     }
@@ -189,7 +198,7 @@ public:
         kDebug(32500) << "Loading took" << (float)(progressTime.elapsed()) / 1000 << " seconds";
     }
 
-    KoList *list(const QTextDocument *document, KoListStyle *listStyle);
+    KoList *list(const QTextDocument *document, KoListStyle *listStyle, bool mergeSimilarStyledList);
 
     void openChangeRegion(const KoXmlElement &element);
     void closeChangeRegion(const KoXmlElement &element);
@@ -391,13 +400,34 @@ void KoTextLoader::Private::splitStack(int id)
     changeStack.push(newId);
 }
 
-KoList *KoTextLoader::Private::list(const QTextDocument *document, KoListStyle *listStyle)
+KoList *KoTextLoader::Private::list(const QTextDocument *document, KoListStyle *listStyle, bool mergeSimilarStyledList)
 {
-    if (lists.contains(listStyle))
-        return lists[listStyle];
+    if (mergeSimilarStyledList) {
+        if (lists.contains(listStyle)) {
+            return lists[listStyle];
+        }
+    }
     KoList *newList = new KoList(document, listStyle);
     lists[listStyle] = newList;
     return newList;
+}
+
+void KoTextLoader::Private::setCurrentList(KoList *currentList, int level)
+{
+    Q_ASSERT(level > 0 && level <= 10);
+
+    m_previousList[level - 1] = currentList;
+}
+
+KoList *KoTextLoader::Private::previousList(int level)
+{
+    Q_ASSERT(level > 0 && level <= 10);
+
+    if (m_previousList.size() < level) {
+        return 0;
+    }
+
+    return m_previousList.at(level - 1);
 }
 
 /////////////KoTextLoader
@@ -1086,7 +1116,7 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
     if (!d->currentList) { // apply <text:outline-style> (if present) only if heading is not within a <text:list>
         KoListStyle *outlineStyle = d->styleManager->outlineStyle();
         if (outlineStyle) {
-            KoList *list = d->list(block.document(), outlineStyle);
+            KoList *list = d->list(block.document(), outlineStyle, true);
             if (!KoTextDocument(block.document()).headingList()) {
                 KoTextDocument(block.document()).setHeadingList(list);
             }
@@ -1125,17 +1155,44 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 
     int level;
 
+    if (element.hasAttributeNS(KoXmlNS::text, "continue-list")) {
+        if (d->xmlIdToListMap.contains(element.attributeNS(KoXmlNS::text, "continue-list", QString()))) {
+           d->currentList = d->xmlIdToListMap.value(element.attributeNS(KoXmlNS::text, "continue-list", QString()));
+        }
+    } else {
+        //the ODF spec says that continue-numbering is considered only if continue-list is not specified
+        if (element.hasAttributeNS(KoXmlNS::text, "continue-numbering")) {
+            const QString continueNumbering = element.attributeNS(KoXmlNS::text, "continue-numbering", QString());
+            if (continueNumbering == "true") {
+                //since ODF spec says "and the numbering style of the preceding list is the same as the current list"
+                KoList *prevList = d->previousList(d->currentListLevel);
+                if (prevList && listStyle && prevList->style()->hasLevelProperties(d->currentListLevel)
+                        && listStyle->hasLevelProperties(d->currentListLevel)
+                        && (prevList->style()->levelProperties(d->currentListLevel).style() ==
+                       listStyle->levelProperties(d->currentListLevel).style())) {
+                   d->currentList = prevList;
+                }
+            }
+        }
+    }
+
     // TODO: get level from the style, if it has a style:list-level attribute (new in ODF-1.2)
     if (numberedParagraph) {
-        d->currentList = d->list(cursor.block().document(), listStyle);
-        d->currentListStyle = listStyle;
         level = element.attributeNS(KoXmlNS::text, "level", "1").toInt();
+        d->currentList = d->list(cursor.block().document(), listStyle, true);
+        d->currentListStyle = listStyle;
     } else {
         if (!listStyle)
             listStyle = d->currentListStyle;
-        d->currentList = d->list(cursor.block().document(), listStyle);
-        d->currentListStyle = listStyle;
         level = d->currentListLevel++;
+        if (! d->currentList) {
+            d->currentList = d->list(cursor.block().document(), listStyle, false);
+        }
+        d->currentListStyle = listStyle;
+    }
+
+    if (element.hasAttributeNS(KoXmlNS::xml, "id")) {
+        d->xmlIdToListMap.insert(element.attributeNS(KoXmlNS::xml, "id", QString()), d->currentList);
     }
 
     if (level < 0 || level > 10) { // should not happen but if it does then we should not crash/assert
@@ -1143,9 +1200,8 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
         level = qBound(0, level, 10);
     }
 
-    if (element.hasAttributeNS(KoXmlNS::text, "continue-numbering")) {
-        const QString continueNumbering = element.attributeNS(KoXmlNS::text, "continue-numbering", QString());
-        d->currentList->setContinueNumbering(level, continueNumbering == "true");
+    if (! numberedParagraph) {
+        d->setCurrentList(d->currentList, level);
     }
 
 #ifdef KOOPENDOCUMENTLOADER_DEBUG

@@ -244,29 +244,29 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     int startValue = 1;
     if (format.hasProperty(KoListStyle::StartValue))
         startValue = format.intProperty(KoListStyle::StartValue);
-    if (format.boolProperty(KoListStyle::ContinueNumbering)) {
-        // Look for the index of a previous list of the same numbering style and level
-        for (QTextBlock tb = m_textList->item(0).previous(); tb.isValid(); tb = tb.previous()) {
-            if (!tb.textList() || tb.textList() == m_textList)
-                continue; // no list here or it's the same list; keep looking
 
-            if (isOutline != bool(tb.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
-                continue; // one of them is an outline while the other is not
+    int index = startValue;
+    bool fixed = false;
+    if (blockFormat.boolProperty(KoParagraphStyle::RestartListNumbering)) {
+        index = format.intProperty(KoListStyle::StartValue);
+        fixed = true;
+    }
+    const int paragIndex = blockFormat.intProperty(KoParagraphStyle::ListStartValue);
+    if (paragIndex > 0) {
+        index = paragIndex;
+        fixed = true;
+    }
 
-            QTextListFormat otherFormat = tb.textList()->format();
-            if (otherFormat.intProperty(KoListStyle::Level) != level)
-                break; // found a different list but of a different level
-
-            if (otherFormat.style() == format.style()) {
-                if (KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(tb.userData()))
-                    startValue = data->counterIndex() + 1; // Start from previous list value + 1
+    if (!fixed) {
+        if (m_textList->itemNumber(block) > 0) {
+            const QTextBlock textBlock = m_textList->item(m_textList->itemNumber(block) - 1);
+            KoTextBlockData *blockData = 0;
+            if (textBlock.isValid() && (blockData = dynamic_cast<KoTextBlockData *>(textBlock.userData()))) {
+                index = blockData->counterIndex() + 1; //resume the previous list count
             }
-
-            break;
         }
     }
 
-    int index = startValue;
     qreal width = 0.0;
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
     if (!data) {
@@ -280,52 +280,10 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         data->setCounterPrefix(QString());
         data->setCounterSuffix(QString());
         data->setPartialCounterText(QString());
+        // set the counter for the current un-numbered list to the counter index of the previous list item.
+        // index-1 because the list counter would have already incremented by one
+        data->setCounterIndex(index - 1);
         return;
-    }
-
-    bool fixed = false;
-    if (blockFormat.boolProperty(KoParagraphStyle::RestartListNumbering)) {
-        index = format.intProperty(KoListStyle::StartValue);
-        fixed = true;
-    }
-    const int paragIndex = blockFormat.intProperty(KoParagraphStyle::ListStartValue);
-    if (paragIndex > 0) {
-        index = paragIndex;
-        fixed = true;
-    }
-
-    if (!fixed) {
-        //check if this is the first of this level meaning we should start from startvalue
-        for (QTextBlock b = block.previous(); b.isValid(); b = b.previous()) {
-            if (b.textList() == 0)
-                continue; // we only look for lists
-
-            QTextListFormat otherFormat = b.textList()->format();
-
-            if (otherFormat.property(KoListStyle::StyleId) != format.property(KoListStyle::StyleId))
-                continue; // different liststyle what means it's another unrelated list
-
-            if (isOutline != bool(b.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
-                continue; // one of them is an outline while the other is not
-
-            if (b.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
-                continue; //unnumbered listItems are irrelevant
-            }
-
-            if (b.textList() == m_textList) {
-                if (b.textList()->format().intProperty(KoListStyle::Level) == level)
-                    if (KoTextBlockData *otherData = dynamic_cast<KoTextBlockData *>(b.userData())) {
-                        index = otherData->counterIndex() + 1; // Start from previous list value + 1
-                        break;
-                    }
-            }
-            if (b.textList()->format().intProperty(KoListStyle::Level) < level) {
-                // Either a new list, that would mark the end (as in beginning) of our list, or the same
-                // list with a lower list-level (is that possible at all?). In both cases we can abort.
-                index = startValue;
-                break;
-            }
-        }
     }
 
     QString item;

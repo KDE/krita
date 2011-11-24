@@ -406,25 +406,28 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
     // This is the logic that extracts all the subregions from selection
     // that are later used for the data sets
     Table *internalTable = shape ? shape->tableSource()->get(shape->internalModel()) : 0;
-    for ( QMap<int, QVector<QRect> >::const_iterator it = sortedDataRegions.constBegin(); it != sortedDataRegions.constEnd(); ++it ) {
+    QList<int> sortedDataKeys = sortedDataRegions.keys();
+    qSort(sortedDataKeys);
+    foreach(int key, sortedDataKeys) {
+        QVector<QRect> rects = sortedDataRegions[key];
         QVector<QRect> dataRects;
         CellRegion labelRegion;
         if ( dataDirection == Qt::Horizontal ) {
             if ( firstColumnIsLabel ) {
-                QVector<QRect> labelRects = extractRow(it.value(), colOffset, true);
+                QVector<QRect> labelRects = extractRow(rects, colOffset, true);
                 labelRegion = labelRects.isEmpty() ? CellRegion() : CellRegion(selection.table(), labelRects);
             } else {
-                labelRegion = internalTable ? CellRegion(internalTable, QPoint(1, it.key())) : CellRegion();
+                labelRegion = internalTable ? CellRegion(internalTable, QPoint(1, key)) : CellRegion();
             }
-            dataRects = extractRow(it.value(), colOffset, false);
+            dataRects = extractRow(rects, colOffset, false);
         } else {
             if ( firstRowIsLabel ) {
-                QVector<QRect> labelRects = extractColumn(it.value(), rowOffset, true);
+                QVector<QRect> labelRects = extractColumn(rects, rowOffset, true);
                 labelRegion = labelRects.isEmpty() ? CellRegion() : CellRegion(selection.table(), labelRects);
             } else {
-                labelRegion = internalTable ? CellRegion(internalTable, QPoint(it.key(), 1)) : CellRegion();
+                labelRegion = internalTable ? CellRegion(internalTable, QPoint(key, 1)) : CellRegion();
             }
-            dataRects = extractColumn(it.value(), rowOffset, false);
+            dataRects = extractColumn(rects, rowOffset, false);
         }
 
         labelRegions.append( labelRegion );

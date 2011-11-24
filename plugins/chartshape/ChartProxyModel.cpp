@@ -435,6 +435,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
             (dataDirection == Qt::Horizontal && firstRowIsLabel) ||
             (dataDirection == Qt::Vertical && firstColumnIsLabel);
 
+    /*
     kDebug(35001) << "selection=" << selection.toString();
     kDebug(35001) << "dataDirection=" << (dataDirection == Qt::Horizontal ? "Horizontal" : "Vertical");
     kDebug(35001) << "firstRowIsLabel=" << firstRowIsLabel;
@@ -442,6 +443,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
     kDebug(35001) << "overrideCategories=" << overrideCategories;
     kDebug(35001) << "useCategories=" << useCategories;
     kDebug(35001) << "dataRegions.count()="<<dataRegions.count();
+    */
 
     // Regions shared by all data sets: categories and x-data
 
@@ -493,11 +495,13 @@ if(overrideCategories) categoryDataRegion = CellRegion();
         else
             dataSet->setCustomDataRegion( CellRegion() );
 
+        /*
         kDebug(35001) << "xDataRegion=" << dataSet->xDataRegion().toString();
         kDebug(35001) << "yDataRegion=" << dataSet->yDataRegion().toString();
         kDebug(35001) << "categoryDataRegion=" << dataSet->categoryDataRegion().toString();
         kDebug(35001) << "labelDataRegion=" << dataSet->labelDataRegion().toString();
         kDebug(35001) << "customDataRegion=" << dataSet->customDataRegion().toString();
+        */
 
         createdDataSets.append( dataSet );
 

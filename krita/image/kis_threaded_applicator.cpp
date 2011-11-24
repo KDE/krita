@@ -38,7 +38,7 @@
 
 using namespace ThreadWeaver;
 
-class KisThreadedApplicator::Private
+struct KisThreadedApplicator::Private
 {
 
 public:

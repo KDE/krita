@@ -95,6 +95,7 @@
 #include "kis_statusbar.h"
 #include "widgets/kis_progress_widget.h"
 #include "kis_canvas_resource_provider.h"
+#include "kis_resource_server_provider.h"
 
 static const char *CURRENT_DTD_VERSION = "2.0";
 
@@ -144,6 +145,10 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
         , m_d(new KisDocPrivate())
 {
     setComponentData(KisFactory2::componentData(), false);
+
+    // preload the krita resources
+    KisResourceServerProvider::instance();
+
     setTemplateType("krita_template");
     init();
     connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));

@@ -602,6 +602,18 @@ Qt::Orientation CellRegion::orientation() const
 int CellRegion::cellCount() const
 {
     int count = 0;
+
+    /*FIXME the following would be more correct cause it
+     * would also cover multi-dimensional ranges (means
+     * where rect.width()>1 *and* rect.height()>1). But
+     * for that kchart needs lot of fixing (e.g. in
+     * the CellRegion to proper handle multi-dimension
+     * ranges too).
+     *
+    foreach ( const QRect &rect, d->rects )
+        count += ( rect.width() * rect.height() );
+    */
+
     if ( orientation() == Qt::Horizontal ) {
         foreach ( const QRect &rect, d->rects )
             count += rect.width();
@@ -610,7 +622,6 @@ int CellRegion::cellCount() const
         foreach( const QRect &rect, d->rects )
             count += rect.height();
     }
-
     return count;
 }
 

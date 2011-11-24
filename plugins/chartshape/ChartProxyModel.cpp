@@ -22,6 +22,7 @@
 
 // Own
 #include "ChartProxyModel.h"
+#include "PlotArea.h"
 
 // Qt
 #include <QRegion>
@@ -197,19 +198,25 @@ void ChartProxyModel::removeTable( Table *table )
  * @param row The number of the row, starting with 0
  * @param colOffset How many of the first columns to cut from the resulting row
  */
-static CellRegion extractRow( const CellRegion &region, int row, int colOffset )
+static QVector<QRect> extractRow( const QVector<QRect> &rects, int colOffset, bool extractLabel )
 {
-    foreach( const QRect &rect, region.rects() ) {
-        if ( row >= rect.height() ) {
-            row -= rect.height();
-            continue;
+    if (colOffset == 0)
+        return extractLabel ? QVector<QRect>() : rects;
+    QVector<QRect> result;
+    foreach( const QRect &rect, rects ) {
+        if (extractLabel) {
+            QRect r( rect.topLeft(), QSize(colOffset, rect.height()) );
+            result.append( r );
+        } else {
+//Q_ASSERT( rect.width() > colOffset );
+            if ( rect.width() > colOffset ) {
+                QPoint topLeft = rect.topLeft() + QPoint(colOffset, 0);
+                QRect r( topLeft, QSize(rect.width() - colOffset, rect.height()) );
+                result.append( r );
+            }
         }
-        QPoint topLeft = rect.topLeft() + QPoint( colOffset, row );
-        QRect row( topLeft, QSize( rect.width() - colOffset, 1 ) );
-        return CellRegion( region.table(), row );
     }
-
-    return CellRegion();
+    return result;
 }
 
 /**
@@ -225,18 +232,113 @@ static CellRegion extractRow( const CellRegion &region, int row, int colOffset )
  * @param col The number of the column, starting with 0
  * @param rowOffset How many of the first rows to cut from the resulting column
  */
-static CellRegion extractColumn( const CellRegion &region, int col, int rowOffset )
+static QVector<QRect> extractColumn( const QVector<QRect> &rects, int rowOffset, bool extractLabel )
 {
-    CellRegion result( region.table() );
-    foreach( const QRect &rect, region.rects() ) {
-        if ( col >= rect.width() )
-            continue;
-        QPoint topLeft = rect.topLeft() + QPoint( col, rowOffset );
-        QRect col( topLeft, QSize( 1, rect.height() - rowOffset ) );
-        result.add( col );
+    if (rowOffset == 0)
+        return extractLabel ? QVector<QRect>() : rects;
+    QVector<QRect> result;
+    foreach( const QRect &rect, rects ) {
+        if (extractLabel) {
+            QRect r( rect.topLeft(), QSize(rect.width(), rowOffset) );
+            result.append( r );
+        } else {
+//Q_ASSERT( rect.height() > rowOffset );
+            if ( rect.height() > rowOffset ) {
+                QPoint topLeft = rect.topLeft() + QPoint(0, rowOffset);
+                QRect r( topLeft, QSize(rect.width(), rect.height() - rowOffset) );
+                result.append( r );
+            }
+        }
     }
-
     return result;
+}
+
+/**
+ * Returns a according to the dataDirection sorted data-region.
+ *
+ * First prepare the dataRegions to have them
+ * - proper sorted either from left-to-right if the dataDirection is
+ *   Qt::Horizontal or from top-to-bottom when Qt::Vertical.
+ * - have multiple dimensions proper split-up into single rows/columns
+ *   to produce one DataSet per row/column.
+ *
+ * The resulting map is build up depending on the dataDirection;
+ * - Qt::Horizontal: key is the row and values are the columns in the row.
+ * - Qt::Vertical: key is the column and values are the rows in the column.
+ *
+ * @param dataDirection The direction of the data. This could be either
+ * dataDirection == Qt::Horizontal or dataDirection == Qt::Vertical.
+ * @param dataRegions The unsorted list of data-regions.
+ * @return Compared to the QVector that goes in the resulting map makes
+ * following sure;
+ * - sorted according to the dataDirection either by row or column
+ * - duplicate definitions are removed/compressed.
+ * - definitions or multiple rows and columns in one QRect are split
+ *   in rows/columns what makes sure we earn one dataRegion per
+ *   row/column. This is needed so for example the labelRegion and
+ *   all other things operate on exactly one row/column.
+ */
+QMap<int, QVector<QRect> > sortDataRegions(Qt::Orientation dataDirection, QVector<QRect> dataRegions)
+{
+    QMap<int, QVector<QRect> >  sortedDataRegions;
+    if ( dataDirection == Qt::Horizontal ) {
+        // Split up region in horizontal rectangles that are sorted from top to bottom
+        QMap<int, QVector<QRect> >  rows;
+        foreach ( const QRect &rect, dataRegions ) {
+            int x = rect.topLeft().x();
+            for ( int y = rect.topLeft().y(); y <= rect.bottomLeft().y(); y++ ) {
+                QRect dataRect = QRect( QPoint( x, y ), QSize( rect.width(), 1 ) );
+                if ( !rows.contains( y ) )
+                    rows.insert( y, QVector<QRect>() );
+                rows[y].append( dataRect );
+            }
+        }
+        // Sort rectangles in each row from left to right.
+        QMapIterator<int, QVector<QRect> >  i( rows );
+        while ( i.hasNext() ) {
+            i.next();
+            int             row = i.key();
+            QVector<QRect>  unsortedRects = i.value();
+            QVector<QRect>  sortedRects;
+            foreach ( const QRect &rect, unsortedRects ) {
+                int index;
+                for ( index = 0; index < sortedRects.size(); index++ )
+                    if ( rect.topLeft().x() <= sortedRects[ index ].topLeft().x() )
+                        break;
+                sortedRects.insert( index, rect );
+            }
+            sortedDataRegions.insert( row, sortedRects );
+        }
+    } else {
+        // Split up region in horizontal rectangles that are sorted from top to bottom
+        QMap<int, QVector<QRect> >  columns;
+        foreach ( const QRect &rect, dataRegions ) {
+            int y = rect.topLeft().y();
+            for ( int x = rect.topLeft().x(); x <= rect.topRight().x(); ++x ) {
+                QRect dataRect = QRect( QPoint( x, y ), QSize( 1, rect.height() ) );
+                if ( !columns.contains( x ) )
+                    columns.insert( x, QVector<QRect>() );
+                columns[x].append( dataRect );
+            }
+        }
+        // Sort rectangles in each column from top to bottom
+        QMapIterator<int, QVector<QRect> >  i( columns );
+        while ( i.hasNext() ) {
+            i.next();
+            int             col = i.key();
+            QVector<QRect>  unsortedRects = i.value();
+            QVector<QRect>  sortedRects;
+            foreach ( const QRect &rect, unsortedRects ) {
+                int index;
+                for ( index = 0; index < sortedRects.size(); ++index )
+                    if ( rect.topLeft().y() <= sortedRects[ index ].topLeft().y() )
+                        break;
+                sortedRects.insert( index, rect );
+            }
+            sortedDataRegions.insert( col, sortedRects );
+        }
+    }
+    return sortedDataRegions;
 }
 
 QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSet*> *dataSetsToRecycle,
@@ -245,32 +347,16 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
     if ( !selection.isValid() )
         return QList<DataSet*>();
 
-    QList<DataSet*> createdDataSets;
-
-    // What this algorithm does:
+    // First prepare the dataRegions to have them
+    // 1) proper sorted either from left-to-right if the dataDirection is
+    //    Qt::Horizontal or from top-to-bottom when Qt::Vertical.
+    // 2) have multiple dimensions proper split-up into single rows/columns
+    //    to produce one DataSet per row/column.
     //
-    // First it calculates the number of rows and columns we'd have if we'd
-    // stack up all subregions on top of each other. So something like
-    //
-    // aaa   bb
-    //   cccc
-    //
-    // would become
-    //
-    // aaa
-    // bb
-    // cccc
-    //
-    // assuming that the order is aaa,bb,cccc
-    //
-    // The methods extractRow() and extractColumn() are then used to extract
-    // the rows and columns from this very construct.
-    int rows = 0;
-    int cols = 0;
-    foreach( const QRect &rect, selection.rects() ) {
-        rows += rect.height();
-        cols = qMax( cols, rect.width() );
-    }
+    // The resulting map is build up depending on the dataDirection;
+    // - Qt::Horizontal: key is the row and values are the columns in the row.
+    // - Qt::Vertical: key is the column and values are the rows in the column.
+    QMap<int, QVector<QRect> > sortedDataRegions = sortDataRegions( dataDirection, selection.rects() );
 
     // In the end, the contents of this list will look something like this:
     // ( Category-Data, X-Data, Y-Data, Y-Data, Y-Data )
@@ -278,18 +364,31 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
     QList<CellRegion> dataRegions;
     // This region exlusively contains (global) data set labels, i.e.
     // one label per data set (thus in opposite data direction)
-    CellRegion labelRegion;
-
-    // Determines how many individual rows/columns will be assigned per data set.
-    // It is at least one, but if there's more than one data dimension, the x
-    // data is shared among all data sets, thus - 1.
-    int regionsPerDataSet = qMax( 1, dataDimensions - 1 );
+    QList<CellRegion> labelRegions;
 
     // Fill dataRegions and set categoryRegion.
     // Note that here, we don't exactly know yet what region will be used for
     // what data set, we also don't know yet what data these regions contain.
     int rowOffset = firstRowIsLabel ? 1 : 0;
     int colOffset = firstColumnIsLabel ? 1 : 0;
+
+    // Determines how many individual rows/columns will be assigned per data set.
+    // It is at least one, but if there's more than one data dimension, the x
+    // data is shared among all data sets, thus - 1.
+    int regionsPerDataSet = qMax( 1, dataDimensions - 1 );
+
+    // Determinate the number of rows and maximum number of columns used.
+    // FIXME this logic is rather buggy. We better should use our sortedDataRegions
+    //       here but that would need some testing for regression in e.g.
+    //       bubble-charts which I don't had the time to do. So, leaving the logic as
+    //       it was before for now. If you run into problems with bubble charts and
+    //       there x-values then this foreach-logic here is very likely the reason.
+    int rows = 0;
+    int cols = 0;
+    foreach( const QRect &rect, selection.rects() ) {
+        rows += rect.height();
+        cols = qMax( cols, rect.width() );
+    }
 
     bool extractXData = dataDimensions > 1 &&
                         // Checks if the remaining data regions would fit exactly to the
@@ -301,44 +400,81 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
 
     // When x data is present, it occupies the first non-header row/column
     if ( extractXData && dataDirection == Qt::Horizontal )
-        rowOffset++;
+        ++rowOffset;
     if ( extractXData && dataDirection == Qt::Vertical )
-        colOffset++;
+        ++colOffset;
 
     // This is the logic that extracts all the subregions from selection
     // that are later used for the data sets
-    if ( dataDirection == Qt::Horizontal ) {
-        if ( firstColumnIsLabel )
-            labelRegion = extractColumn( selection, 0, rowOffset );
-        for ( int i = 0; i < rows; i++ )
-            dataRegions.append( extractRow( selection, i, colOffset ) );
-    } else {
-        if ( firstRowIsLabel )
-            labelRegion = extractRow( selection, 0, colOffset);
-        for ( int i = 0; i < cols; i++ )
-            dataRegions.append( extractColumn( selection, i, rowOffset ) );
+    Table *internalTable = shape ? shape->tableSource()->get(shape->internalModel()) : 0;
+    QList<int> sortedDataKeys = sortedDataRegions.keys();
+    qSort(sortedDataKeys);
+    foreach(int key, sortedDataKeys) {
+        QVector<QRect> rects = sortedDataRegions[key];
+        QVector<QRect> dataRects;
+        CellRegion labelRegion;
+        if ( dataDirection == Qt::Horizontal ) {
+            if ( firstColumnIsLabel ) {
+                QVector<QRect> labelRects = extractRow(rects, colOffset, true);
+                labelRegion = labelRects.isEmpty() ? CellRegion() : CellRegion(selection.table(), labelRects);
+            } else {
+                labelRegion = internalTable ? CellRegion(internalTable, QPoint(1, key)) : CellRegion();
+            }
+            dataRects = extractRow(rects, colOffset, false);
+        } else {
+            if ( firstRowIsLabel ) {
+                QVector<QRect> labelRects = extractColumn(rects, rowOffset, true);
+                labelRegion = labelRects.isEmpty() ? CellRegion() : CellRegion(selection.table(), labelRects);
+            } else {
+                labelRegion = internalTable ? CellRegion(internalTable, QPoint(key, 1)) : CellRegion();
+            }
+            dataRects = extractColumn(rects, rowOffset, false);
+        }
+
+        labelRegions.append( labelRegion );
+        dataRegions.append( dataRects.isEmpty() ? CellRegion() : CellRegion(selection.table(), dataRects) );
     }
 
     bool useCategories =
             (dataDirection == Qt::Horizontal && firstRowIsLabel) ||
             (dataDirection == Qt::Vertical && firstColumnIsLabel);
 
-    // Regions shared by all data sets: categories and x-data
-    if ( overrideCategories )
-        categoryDataRegion = CellRegion();
-    CellRegion xData;
-    if ( !dataRegions.isEmpty() && useCategories ) {
-        if ( overrideCategories )
-            categoryDataRegion = dataRegions.takeFirst();
-        else
-            dataRegions.removeFirst();
-    }
-    if ( !dataRegions.isEmpty() && extractXData )
-        xData = dataRegions.takeFirst();
+    /*
+    kDebug(35001) << "selection=" << selection.toString();
+    kDebug(35001) << "dataDirection=" << (dataDirection == Qt::Horizontal ? "Horizontal" : "Vertical");
+    kDebug(35001) << "firstRowIsLabel=" << firstRowIsLabel;
+    kDebug(35001) << "firstColumnIsLabel=" << firstColumnIsLabel;
+    kDebug(35001) << "overrideCategories=" << overrideCategories;
+    kDebug(35001) << "useCategories=" << useCategories;
+    kDebug(35001) << "dataRegions.count()="<<dataRegions.count();
+    */
 
+    // Regions shared by all data sets: categories and x-data
+
+    //FIXME don't use overrideCategories for the categoryDataRegion's but for
+    //the categoryLabelRegion (which we need to introduce and use).
+if(overrideCategories) categoryDataRegion = CellRegion();
+
+    if ( !dataRegions.isEmpty() ) {
+// Q_ASSERT(label.isValid());
+// Q_ASSERT(data.isValid());
+        if ( useCategories ) {
+            labelRegions.takeFirst();
+            categoryDataRegion = dataRegions.takeFirst();
+        }
+    }
+
+    CellRegion xData;
+    if ( !dataRegions.isEmpty() && extractXData ) {
+        labelRegions.removeFirst();
+        xData = dataRegions.takeFirst();
+    }
+
+    QList<DataSet*> createdDataSets;
     int dataSetNumber = 0;
     // Now assign all dataRegions to a number of data sets.
     // Here they're semantically seperated into x data, y data, etc.
+    Q_ASSERT( dataRegions.count() == labelRegions.count() );
     while ( !dataRegions.isEmpty() ) {
         // Get a data set instance we can use
         DataSet *dataSet;
@@ -350,31 +486,26 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
         // category and x data are "global" regions shared among all data sets
         dataSet->setCategoryDataRegion( categoryDataRegion );
         dataSet->setXDataRegion( xData );
-        // Last row/column of this data set contains label (row/column
-        // immediately before the next data set, thus (.. + 1) * .. - 1)
-        int labelRowCol = (dataSetNumber + 1) * regionsPerDataSet - 1;
-        if ( labelRegion.hasPointAtIndex( labelRowCol ) ) {
-            dataSet->setLabelDataCustom( QString() );
-            QPoint point( labelRegion.pointAtIndex( labelRowCol ) );
-            dataSet->setLabelDataRegion( CellRegion( selection.table(), point ) );
-        }
-        else {
-            QString label;
-            if ( QAbstractItemModel *model = (shape ? shape->internalModel() ? shape->internalModel() : 0 : 0) ) {
-                // fetch the label (aka header-data) from the ChartTableModel if no labelRegion was defined
-                label = model->data( dataDirection == Qt::Horizontal ? model->index(labelRowCol+1, 0) : model->index(0, labelRowCol+1) ).toString();
-            }
-            dataSet->setLabelDataCustom( label );
-            dataSet->setLabelDataRegion( CellRegion() );
-        }
 
-        // regions per data set: y data, custom data (e.g. bubble width)
+        // the name-value used for e.g. the legend label
+        dataSet->setLabelDataRegion( labelRegions.takeFirst() );
+
+        // the range for y-values
         dataSet->setYDataRegion( dataRegions.takeFirst() );
 
+        // the custom data (e.g. bubble width)
         if ( !dataRegions.isEmpty() && dataDimensions > 2 )
             dataSet->setCustomDataRegion( dataRegions.takeFirst() );
         else
             dataSet->setCustomDataRegion( CellRegion() );
+
+        /*
+        kDebug(35001) << "xDataRegion=" << dataSet->xDataRegion().toString();
+        kDebug(35001) << "yDataRegion=" << dataSet->yDataRegion().toString();
+        kDebug(35001) << "categoryDataRegion=" << dataSet->categoryDataRegion().toString();
+        kDebug(35001) << "labelDataRegion=" << dataSet->labelDataRegion().toString();
+        kDebug(35001) << "customDataRegion=" << dataSet->customDataRegion().toString();
+        */
 
         createdDataSets.append( dataSet );
 
@@ -442,26 +573,19 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     // contains the chart:categories element, the category data region
     // will automatically be set on every data set attached to that
     // axis. See Axis::attachDataSet().
-    if ( element.hasAttributeNS( KoXmlNS::chart, "data-source-has-labels" ) ) {
-        const QString dataSourceHasLabels
-            = element.attributeNS( KoXmlNS::chart, "data-source-has-labels" );
-        if ( dataSourceHasLabels == "both" ) {
-            d->firstRowIsLabel = true;
-            d->firstColumnIsLabel = true;
-        } else if ( dataSourceHasLabels == "row" ) {
-            d->firstRowIsLabel = true;
-            d->firstColumnIsLabel = false;
-        } else if ( dataSourceHasLabels == "column" ) {
-            d->firstRowIsLabel = false;
-            d->firstColumnIsLabel = true;
-        } else {
-            // dataSourceHasLabels == "none" or wrong value
-            d->firstRowIsLabel = false;
-            d->firstColumnIsLabel = false;
-        }
-    }
-    else {
-        // No info about if first row / column contains labels.
+    const QString dataSourceHasLabels
+        = element.attributeNS( KoXmlNS::chart, "data-source-has-labels" );
+    if ( dataSourceHasLabels == "both" ) {
+        d->firstRowIsLabel = true;
+        d->firstColumnIsLabel = true;
+    } else if ( dataSourceHasLabels == "row" ) {
+        d->firstRowIsLabel = true;
+        d->firstColumnIsLabel = false;
+    } else if ( dataSourceHasLabels == "column" ) {
+        d->firstRowIsLabel = false;
+        d->firstColumnIsLabel = true;
+    } else {
+        // dataSourceHasLabels == "none" or wrong value
         d->firstRowIsLabel = false;
         d->firstColumnIsLabel = false;
     }
@@ -499,8 +623,11 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     QList<DataSet*> createdDataSets = d->createDataSetsFromRegion( &d->removedDataSets,
                                                                    !helper->categoryRegionSpecifiedInXAxis );
 
-    int loadedDataSetCount = 0;
+    bool isBubble = d->shape->plotArea()->chartType() == BubbleChartType;
+    bool isScatter = d->shape->plotArea()->chartType() == ScatterChartType;
+    CellRegion prevXData, prevYData;
 
+    int loadedDataSetCount = 0;
     KoXmlElement n;
     QPen p;
     QBrush brush;
@@ -532,6 +659,25 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                     dataSet->setCategoryDataRegion( d->categoryDataRegion );
                 }
                 dataSet->loadOdf( n, context );
+
+                if ( isBubble || isScatter ) {
+                    // bubble- and scatter-charts have chart:domain's that define the
+                    // x- and y-data. But if they are not defined in the series then
+                    // a previous defined one needs to be used.
+                    if ( dataSet->xDataRegion().isValid() ) {
+                        prevXData = dataSet->xDataRegion();
+                    } else {
+                        dataSet->setXDataRegion(prevXData);
+                    }
+                    if ( isBubble ) {
+                        if ( dataSet->yDataRegion().isValid() ) {
+                            prevYData = dataSet->yDataRegion();
+                        } else {
+                            dataSet->setYDataRegion(prevYData);
+                        }
+                    }
+                }
+
                 if ( penLoaded )
                     dataSet->setPen( p );
                 if ( brushLoaded )

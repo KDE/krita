@@ -45,7 +45,7 @@
 #include "kis_group_layer.h"
 #include <QMessageBox>
 
-class KisImportCatcher::Private
+struct KisImportCatcher::Private
 {
 public:
     KisDoc2* doc;

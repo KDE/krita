@@ -107,7 +107,7 @@ private:
     QList<KisCloneLayerWSP> m_clonesList;
 };
 
-class KisLayer::Private
+struct KisLayer::Private
 {
 
 public:

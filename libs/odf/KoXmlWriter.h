@@ -242,6 +242,11 @@ public:
      */
     QList<const char*> tagHierarchy() const;
 
+    /**
+     * Return the so far written XML as string for debugging purposes.
+     */
+    QString toString() const;
+
 private:
     struct Tag {
         Tag(const char* t = 0, bool ind = true)

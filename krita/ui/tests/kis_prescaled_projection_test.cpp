@@ -318,6 +318,49 @@ void KisPrescaledProjectionTest::testScaling()
     QVERIFY(TestUtil::compareQImages(pt, result, reference));
 }
 
+void KisPrescaledProjectionTest::testQtScaling()
+{
+    // See: https://bugreports.qt.nokia.com/browse/QTBUG-22827
+
+    /**
+     * Curently we rely on this behavior, so let's test for it.
+     */
+
+    // Create a canvas image
+    QImage canvas(6, 6, QImage::Format_ARGB32);
+    canvas.fill(0);
+
+    // Image we are going to scale down
+    QImage image(7, 7, QImage::Format_ARGB32);
+    QPainter imagePainter(&image);
+    imagePainter.fillRect(QRect(0,0,7,7),Qt::green);
+    imagePainter.end();
+
+
+    QPainter gc(&canvas);
+
+    // Scale down transformation
+    qreal scale = 3.49/7.0;
+    gc.setTransform(QTransform::fromScale(scale,scale));
+
+    // Draw a rect scale*(7x7)
+    gc.fillRect(QRectF(0,0,7,7), Qt::red);
+
+    // Draw an image scale*(7x7)
+    gc.drawImage(QPointF(), image, QRectF(0,0,7,7));
+
+    gc.end();
+
+    // Create an expected result
+    QImage expectedResult(6, 6, QImage::Format_ARGB32);
+    expectedResult.fill(0);
+    QPainter expectedPainter(&expectedResult);
+    expectedPainter.fillRect(QRect(0,0,4,4), Qt::red);
+    expectedPainter.fillRect(QRect(0,0,3,3), Qt::green);
+    expectedPainter.end();
+
+    QCOMPARE(canvas, expectedResult);
+}
 
 QTEST_KDEMAIN(KisPrescaledProjectionTest, GUI)
 

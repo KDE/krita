@@ -285,8 +285,12 @@ void KisTiledDataManager::purge(const QRect& area)
         KisTileSP tile;
 
         while (tile = iter.tile()) {
-            if (tile->extent().intersects(area) && memcmp(defaultData, tile->data(), tileDataSize) == 0) {
-                tilesToDelete.push_back(tile);
+            if (tile->extent().intersects(area)) {
+                tile->lockForRead();
+                if(memcmp(defaultData, tile->data(), tileDataSize) == 0) {
+                    tilesToDelete.push_back(tile);
+                }
+                tile->unlock();
             }
             ++iter;
         }

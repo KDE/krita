@@ -432,13 +432,13 @@ void TestProxyModel::testRegionOrder()
     QCOMPARE( dataSets[0]->size(), 4 );
     QCOMPARE( dataSets[1]->size(), 4 );
 
-    QCOMPARE( dataSets[0]->yDataRegion(), CellRegion( m_table, QRect( 1, 2, 4, 1 ) ) );
+    QCOMPARE( dataSets[0]->yDataRegion(), CellRegion( m_table, QRect( 1, 1, 4, 1 ) ) );
     QCOMPARE( dataSets[0]->xDataRegion(), CellRegion() );
     QCOMPARE( dataSets[0]->customDataRegion(), CellRegion() );
     QCOMPARE( dataSets[0]->labelDataRegion(), CellRegion() );
     QCOMPARE( dataSets[0]->categoryDataRegion(), CellRegion());
 
-    QCOMPARE( dataSets[1]->yDataRegion(), CellRegion( m_table, QRect( 1, 1, 4, 1 ) ) );
+    QCOMPARE( dataSets[1]->yDataRegion(), CellRegion( m_table, QRect( 1, 2, 4, 1 ) ) );
     QCOMPARE( dataSets[1]->xDataRegion(), CellRegion() );
     QCOMPARE( dataSets[1]->customDataRegion(), CellRegion() );
     QCOMPARE( dataSets[1]->labelDataRegion(), CellRegion() );
@@ -460,11 +460,11 @@ void TestProxyModel::testComplexRegions()
     QCOMPARE( dataSets.size(), 7 );
     QCOMPARE( dataSets[0]->size(), 2 );
     QCOMPARE( dataSets[1]->size(), 2 );
-    QCOMPARE( dataSets[2]->size(), 3 );
-    QCOMPARE( dataSets[3]->size(), 3 );
-    QCOMPARE( dataSets[4]->size(), 2 );
-    QCOMPARE( dataSets[5]->size(), 1 );
-    QCOMPARE( dataSets[6]->size(), 1 );
+    QCOMPARE( dataSets[2]->size(), 2 );
+    QCOMPARE( dataSets[3]->size(), 1 );
+    QCOMPARE( dataSets[4]->size(), 1 );
+    QCOMPARE( dataSets[5]->size(), 3 );
+    QCOMPARE( dataSets[6]->size(), 3 );
 
     QCOMPARE( dataSets[0]->yDataRegion(), CellRegion( &m_source, "Table1.C2:D2" ) );
     QCOMPARE( dataSets[0]->xDataRegion(), CellRegion() );
@@ -478,31 +478,31 @@ void TestProxyModel::testComplexRegions()
     QCOMPARE( dataSets[1]->labelDataRegion(), CellRegion() );
     QCOMPARE( dataSets[1]->categoryDataRegion(), CellRegion());
 
-    QCOMPARE( dataSets[2]->yDataRegion(), CellRegion( &m_source, "Table1.D9:F9" ) );
+    QCOMPARE( dataSets[2]->yDataRegion(), CellRegion( &m_source, "Table1.E4:F4" ) );
     QCOMPARE( dataSets[2]->xDataRegion(), CellRegion() );
     QCOMPARE( dataSets[2]->customDataRegion(), CellRegion() );
     QCOMPARE( dataSets[2]->labelDataRegion(), CellRegion() );
     QCOMPARE( dataSets[2]->categoryDataRegion(), CellRegion());
 
-    QCOMPARE( dataSets[3]->yDataRegion(), CellRegion( &m_source, "Table1.D10:F10" ) );
+    QCOMPARE( dataSets[3]->yDataRegion(), CellRegion( &m_source, "Table1.E6" ) );
     QCOMPARE( dataSets[3]->xDataRegion(), CellRegion() );
     QCOMPARE( dataSets[3]->customDataRegion(), CellRegion() );
     QCOMPARE( dataSets[3]->labelDataRegion(), CellRegion() );
     QCOMPARE( dataSets[3]->categoryDataRegion(), CellRegion());
 
-    QCOMPARE( dataSets[4]->yDataRegion(), CellRegion( &m_source, "Table1.E4:F4" ) );
+    QCOMPARE( dataSets[4]->yDataRegion(), CellRegion( &m_source, "Table1.E7" ) );
     QCOMPARE( dataSets[4]->xDataRegion(), CellRegion() );
     QCOMPARE( dataSets[4]->customDataRegion(), CellRegion() );
     QCOMPARE( dataSets[4]->labelDataRegion(), CellRegion() );
     QCOMPARE( dataSets[4]->categoryDataRegion(), CellRegion());
 
-    QCOMPARE( dataSets[5]->yDataRegion(), CellRegion( &m_source, "Table1.E6" ) );
+    QCOMPARE( dataSets[5]->yDataRegion(), CellRegion( &m_source, "Table1.D9:F9" ) );
     QCOMPARE( dataSets[5]->xDataRegion(), CellRegion() );
     QCOMPARE( dataSets[5]->customDataRegion(), CellRegion() );
     QCOMPARE( dataSets[5]->labelDataRegion(), CellRegion() );
     QCOMPARE( dataSets[5]->categoryDataRegion(), CellRegion());
 
-    QCOMPARE( dataSets[6]->yDataRegion(), CellRegion( &m_source, "Table1.E7" ) );
+    QCOMPARE( dataSets[6]->yDataRegion(), CellRegion( &m_source, "Table1.D10:F10" ) );
     QCOMPARE( dataSets[6]->xDataRegion(), CellRegion() );
     QCOMPARE( dataSets[6]->customDataRegion(), CellRegion() );
     QCOMPARE( dataSets[6]->labelDataRegion(), CellRegion() );
@@ -512,24 +512,24 @@ void TestProxyModel::testComplexRegions()
 
     dataSets = m_proxyModel.dataSets();
 
-    QCOMPARE( dataSets.size(), 3 );
-    QCOMPARE( dataSets[0]->size(), 7 );
-    QCOMPARE( dataSets[1]->size(), 5 );
-    QCOMPARE( dataSets[2]->size(), 2 );
+    QCOMPARE( dataSets.size(), 4 );
+    QCOMPARE( dataSets[0]->size(), 2 );
+    QCOMPARE( dataSets[1]->size(), 4 );
+    QCOMPARE( dataSets[2]->size(), 5 );
 
-    QCOMPARE( dataSets[0]->yDataRegion(), CellRegion( &m_source, "Table1.C2:C3;Table1.D9:D10;Table1.E4;Table1.E6:E7" ) );
+    QCOMPARE( dataSets[0]->yDataRegion(), CellRegion( &m_source, "Table1.C2:C3" ) );
     QCOMPARE( dataSets[0]->xDataRegion(), CellRegion() );
     QCOMPARE( dataSets[0]->customDataRegion(), CellRegion() );
     QCOMPARE( dataSets[0]->labelDataRegion(), CellRegion() );
     QCOMPARE( dataSets[0]->categoryDataRegion(), CellRegion());
 
-    QCOMPARE( dataSets[1]->yDataRegion(), CellRegion( &m_source, "Table1.D2:D3;Table1.E9:E10;Table1.F4" ) );
+    QCOMPARE( dataSets[1]->yDataRegion(), CellRegion( &m_source, "Table1.D2:D3;$Table1.D9:D10" ) );
     QCOMPARE( dataSets[1]->xDataRegion(), CellRegion() );
     QCOMPARE( dataSets[1]->customDataRegion(), CellRegion() );
     QCOMPARE( dataSets[1]->labelDataRegion(), CellRegion() );
     QCOMPARE( dataSets[1]->categoryDataRegion(), CellRegion());
 
-    QCOMPARE( dataSets[2]->yDataRegion(), CellRegion( &m_source, "Table1.F9:F10" ) );
+    QCOMPARE( dataSets[2]->yDataRegion(), CellRegion( &m_source, "Table1.E4;Table1.E6:E7;Table1.E9:E10" ) );
     QCOMPARE( dataSets[2]->xDataRegion(), CellRegion() );
     QCOMPARE( dataSets[2]->customDataRegion(), CellRegion() );
     QCOMPARE( dataSets[2]->labelDataRegion(), CellRegion() );

@@ -27,11 +27,12 @@
 #include "KoDocumentSectionModel.h"
 #include <QUuid>
 
+#include "kis_processing_visitor.h" // included, not forward declared for msvc
+
 class KoProperties;
 class KoColorSpace;
 class KoCompositeOp;
 class KisNodeVisitor;
-class KisProcessingVisitor;
 class KisUndoAdapter;
 
 /**
@@ -393,7 +394,7 @@ signals:
     void systemLockingChanged(bool);
 private:
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

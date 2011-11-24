@@ -27,7 +27,7 @@
 #include <kis_config.h>
 #include <QCompleter>
 
-class KisPaintOpPresetsChooserPopup::Private
+struct KisPaintOpPresetsChooserPopup::Private
 {
 public:
     Ui_WdgPaintOpPresets uiWdgPaintOpPresets;

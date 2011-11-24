@@ -22,6 +22,7 @@
 #include "ui_wdgphongbumpmap.h"
 #include "kis_paint_device.h"
 #include "kis_config_widget.h"
+#include "kis_image.h"
 
 class KisNodeModel;
 

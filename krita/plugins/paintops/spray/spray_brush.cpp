@@ -347,10 +347,6 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             m_painter->bltFixed(QPoint(ix, iy), m_fixedDab, m_fixedDab->bounds());
         }
     }
-    // hidden code for outline detection
-    //m_inkColor.setOpacity(128);
-    //paintOutline(dev,m_inkColor,x, y, m_radius * 2);
-
     // recover from jittering of color,
     // m_inkColor.opacity is recovered with every paint
 }

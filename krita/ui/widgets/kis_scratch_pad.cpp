@@ -46,7 +46,7 @@
 #include "kis_tool_freehand_helper.h"
 #include "kis_image_patch.h"
 #include "kis_canvas_widget_base.h"
-
+#include "kis_image.h"
 
 class KisScratchPadNodeListener : public KisNodeGraphListener
 {
@@ -345,7 +345,7 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
 
     m_paintLayer = new KisPaintLayer(0, "ScratchPad", OPACITY_OPAQUE_U8, paintDevice);
     m_paintLayer->setGraphListener(m_nodeListener);
-    paintDevice->setDefaultBounds(new KisScratchPadDefaultBounds(this));
+    paintDevice->setDefaultBounds(KisScratchPadDefaultBounds(this));
 
     fillDefault();
 }

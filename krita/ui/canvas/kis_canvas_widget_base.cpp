@@ -37,7 +37,7 @@
 #include "../kis_view2.h"
 #include "../kis_selection_manager.h"
 
-class KisCanvasWidgetBase::Private
+struct KisCanvasWidgetBase::Private
 {
 public:
     Private(KisCanvas2 *newCanvas, KisCoordinatesConverter *newCoordinatesConverter)

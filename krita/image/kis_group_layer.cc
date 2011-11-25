@@ -50,7 +50,7 @@ KisGroupLayer::KisGroupLayer(KisImageWSP image, const QString &name, quint8 opac
         KisLayer(image, name, opacity),
         m_d(new Private())
 {
-    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), KisDefaultBounds(image));
+    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
 }
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
@@ -116,7 +116,7 @@ QIcon KisGroupLayer::icon() const
 
 void KisGroupLayer::setImage(KisImageWSP image)
 {
-    m_d->paintDevice->setDefaultBounds(KisDefaultBounds(image));
+    m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
     KisLayer::setImage(image);
 }
 
@@ -133,7 +133,7 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
     }
     else if(!(*m_d->paintDevice->colorSpace() == *colorSpace)) {
 
-        KisPaintDeviceSP dev = new KisPaintDevice(this, colorSpace, KisDefaultBounds(image()));
+        KisPaintDeviceSP dev = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
         dev->setX(m_d->x);
         dev->setY(m_d->y);
         quint8* defaultPixel = colorSpace->allocPixelBuffer(1);

@@ -46,7 +46,7 @@ void KisPixelSelectionTest::testCreation()
     QVERIFY(selection);
     QVERIFY(selection->isTotallyUnselected(QRect(0, 0, 512, 512)));
 
-    selection = new KisPixelSelection(KisDefaultBounds(dev));
+    selection = new KisPixelSelection(new KisDefaultBounds(dev));
     QVERIFY(selection);
     QVERIFY(selection->isTotallyUnselected(QRect(0, 0, 512, 512)));
     selection->setDirty(QRect(10, 10, 10, 10));
@@ -64,7 +64,7 @@ void KisPixelSelectionTest::testSetSelected()
 
 void KisPixelSelectionTest::testInvert()
 {
-    KisDefaultBounds defaultBounds;
+    KisDefaultBounds *defaultBounds;
 
     KisPixelSelectionSP selection = new KisPixelSelection();
     selection->select(QRect(5, 5, 10, 10));
@@ -72,8 +72,8 @@ void KisPixelSelectionTest::testInvert()
 
     QCOMPARE(TestUtil::alphaDevicePixel(selection, 20, 20), MAX_SELECTED);
     QCOMPARE(TestUtil::alphaDevicePixel(selection, 6, 6), MIN_SELECTED);
-    QCOMPARE(selection->selectedExactRect(), defaultBounds.bounds());
-    QCOMPARE(selection->selectedRect(), defaultBounds.bounds());
+    QCOMPARE(selection->selectedExactRect(), defaultBounds->bounds());
+    QCOMPARE(selection->selectedRect(), defaultBounds->bounds());
 }
 
 void KisPixelSelectionTest::testInvertWithImage()

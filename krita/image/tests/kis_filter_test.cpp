@@ -120,7 +120,7 @@ void KisFilterTest::testDifferentSrcAndDst()
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
     KisPaintDeviceSP src = new KisPaintDevice(cs);
     KisPaintDeviceSP dst = new KisPaintDevice(cs);
-    KisSelectionSP sel = new KisSelection(KisDefaultBounds(src));
+    KisSelectionSP sel = new KisSelection(new KisDefaultBounds(src));
     sel->getOrCreatePixelSelection()->invert(); // select everything
     sel->updateProjection();
 

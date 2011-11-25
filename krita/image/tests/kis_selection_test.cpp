@@ -192,7 +192,7 @@ void KisSelectionTest::testSelectionExactBounds()
 
     QCOMPARE(device->exactBounds(), referenceDeviceRect);
 
-    KisSelectionSP selection = new KisSelection(KisDefaultBounds(device, image));
+    KisSelectionSP selection = new KisSelection(new KisDefaultBounds(image, device));
 
     quint8 defaultPixel = MAX_SELECTED;
     selection->projection()->setDefaultPixel(&defaultPixel);

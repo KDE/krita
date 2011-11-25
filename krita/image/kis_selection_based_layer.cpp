@@ -57,7 +57,7 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
 
     setShowSelection(true);
 
-    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), KisDefaultBounds(image));
+    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
 }
 
 KisSelectionBasedLayer::KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs)
@@ -87,7 +87,7 @@ void KisSelectionBasedLayer::initSelection()
 
 void KisSelectionBasedLayer::setImage(KisImageWSP image)
 {
-    m_d->paintDevice->setDefaultBounds(KisDefaultBounds(image));
+    m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
     KisLayer::setImage(image);
 }
 

@@ -39,11 +39,11 @@
 #include "kis_outline_generator.h"
 
 KisPixelSelection::KisPixelSelection()
-    : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), KisDefaultBounds())
+    : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), new KisDefaultBounds())
 {
 }
 
-KisPixelSelection::KisPixelSelection(KisDefaultBounds defaultBounds)
+KisPixelSelection::KisPixelSelection(KisDefaultBounds *defaultBounds)
         : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
 {
 }

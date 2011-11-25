@@ -121,6 +121,7 @@ Legend::Legend( ChartShape *parent )
     d->shape = parent;
 
     d->kdLegend = new KDChart::Legend();
+    d->kdLegend->setTextAlignment( Qt::AlignLeft | Qt::AlignVCenter );
 
     setTitleFontSize( 10 );
     setTitle( QString() );

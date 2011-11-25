@@ -30,11 +30,10 @@
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 #include "kis_painter.h"
-
 #include "kis_image.h"
 #include "kis_layer.h"
-
 #include "tiles3/kis_lockless_stack.h"
+#include "kis_default_bounds.h"
 
 struct KisMask::Private {
     class CachedPaintDevice {
@@ -119,10 +118,10 @@ void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
          * We can't use setSelection as we may not have parent() yet
          */
         m_d->selection = new KisSelection(*copyFrom);
-        m_d->selection->setDefaultBounds(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        m_d->selection->setDefaultBounds(KisDefaultBounds(parentPaintDevice, parentLayer->image()));
     }
     else {
-        m_d->selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        m_d->selection = new KisSelection(KisDefaultBounds(parentPaintDevice, parentLayer->image()));
 
         quint8 newDefaultPixel = MAX_SELECTED;
         m_d->selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
@@ -143,7 +142,7 @@ KisSelectionSP KisMask::selection() const
         if(parentLayer) {
             KisPaintDeviceSP parentPaintDevice = parentLayer->paintDevice();
             m_d->selection = new KisSelection(
-                new KisSelectionDefaultBounds(parentPaintDevice,
+                KisDefaultBounds(parentPaintDevice,
                                               parentLayer->image()));
 
             quint8 newDefaultPixel = MAX_SELECTED;
@@ -168,7 +167,7 @@ void KisMask::setSelection(KisSelectionSP selection)
     m_d->selection = selection;
     if (parent()) {
         const KisLayer *parentLayer = qobject_cast<const KisLayer*>(parent());
-        m_d->selection->setDefaultBounds(new KisDefaultBounds(parentLayer->image()));
+        m_d->selection->setDefaultBounds(KisDefaultBounds(parentLayer->image()));
     }
 }
 

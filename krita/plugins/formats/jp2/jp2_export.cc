@@ -27,6 +27,7 @@
 
 #include <KoColorSpaceConstants.h>
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -78,10 +79,12 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
     
     kdb->setMainWidget(wdg);
 
-    if (kdb->exec() == QDialog::Rejected) {
-        return KoFilter::OK; // FIXME Cancel doesn't exist :(
+    if (!m_chain->manager()->getBatchMode()) {
+        if (kdb->exec() == QDialog::Rejected) {
+            return KoFilter::OK; // FIXME Cancel doesn't exist :(
+        }
     }
-
+    
     JP2ConvertOptions options;
     options.numberresolution = optionsJP2.numberResolutions->value();
     options.rate = optionsJP2.qualityLevel->value();

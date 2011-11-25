@@ -91,7 +91,7 @@ public:
 
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);
-        setIcon("krita_tool_freehand");
+        setIcon("krita_tool_multihand");
         setShortcut(KShortcut(Qt::Key_Q));
         setPriority(11);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

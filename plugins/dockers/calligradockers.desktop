@@ -13,6 +13,7 @@ Name[pt_BR]=Plugin de módulos acopláveis do Calligra
 Name[sv]=Calligra-dockningsinsticksprogram
 Name[uk]=Додаток панелей для Calligra
 Name[x-test]=xxCalligra Dockers pluginxx
+Name[zh_CN]=Calligra 停靠插件
 Name[zh_TW]=Calligra 嵌入外掛程式
 X-KDE-ServiceTypes=Calligra/Dock
 Type=Service

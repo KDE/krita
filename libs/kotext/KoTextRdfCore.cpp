@@ -114,7 +114,7 @@ bool KoTextRdfCore::loadManifest(KoStore *store, Soprano::Model *model)
         kDebug(30003) << "Entry " << fileName << " not found!";
         return false;
     }
-    Soprano::Node context(QUrl("http://www.calligra-suite.org/Rdf/path/" + fileName));
+    Soprano::Node context(QUrl("http://www.calligra.org/Rdf/path/" + fileName));
     QUrl BaseURI = QUrl("");
     kDebug(30015) << "Loading external Rdf/XML from:" << fileName;
 

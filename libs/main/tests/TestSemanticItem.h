@@ -43,7 +43,7 @@ public:
 
     TestSemanticItem(QObject *parent, const KoDocumentRdf *rdf = 0)
         : KoRdfSemanticItem(const_cast<KoDocumentRdf*>(rdf), parent)
-        , PREDBASE("http://calligra-suite.org/testrdf/")
+        , PREDBASE("http://calligra.org/testrdf/")
         , m_uri(QUuid::createUuid().toString())
     {
         Q_ASSERT(!m_uri.isEmpty());
@@ -128,7 +128,7 @@ public:
 
         QString query =
                 "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-                "prefix testrdf: <http://calligra-suite.org/testrdf/> \n"
+                "prefix testrdf: <http://calligra.org/testrdf/> \n"
                 "select distinct ?name ?object ?payload \n"
                 "where { \n"
                 "    ?object rdf:type testrdf:testitem . \n"
@@ -154,7 +154,7 @@ public:
 
         QString query(
                     "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-                    "prefix testrdf: <http://calligra-suite.org/testrdf/> \n"
+                    "prefix testrdf: <http://calligra.org/testrdf/> \n"
                     "select distinct ?name ?object ?payload \n"
                     "where { \n"
                     "    ?object rdf:type testrdf:testitem . \n"

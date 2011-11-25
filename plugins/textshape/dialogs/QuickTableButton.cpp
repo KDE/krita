@@ -22,6 +22,7 @@
 
 #include <klocale.h>
 #include <kicon.h>
+#include <kdebug.h>
 
 #include <QMenu>
 #include <QFrame>
@@ -36,6 +37,7 @@ class QuickTableGrid : public QFrame
         QuickTableGrid(QuickTableButton *button, QWidget * parent = 0);
         virtual QSize sizeHint() const;
         virtual void mouseMoveEvent (QMouseEvent *ev);
+        virtual void leaveEvent(QEvent *ev);
         virtual void mouseReleaseEvent (QMouseEvent *ev);
         virtual void paintEvent(QPaintEvent * event);
     private:
@@ -80,18 +82,25 @@ QSize QuickTableGrid::sizeHint() const
 
 void QuickTableGrid::mouseMoveEvent(QMouseEvent *ev)
 {
-    grabMouse();
     m_column = (ev->x()-m_leftMargin) / m_columnWidth;
     m_row = (ev->y()-m_topMargin) / m_rowHeight;
     updateGeometry();
     repaint();
 }
 
+void QuickTableGrid::leaveEvent(QEvent *ev)
+{
+    m_column = -1;
+    m_row = -1;
+    updateGeometry();
+    repaint();
+}
 
 void QuickTableGrid::mouseReleaseEvent(QMouseEvent *ev)
 {
-    releaseMouse();
-    m_button->emitCreate(m_row+1, m_column+1);
+    if (contentsRect().contains(ev->pos())) {
+        m_button->emitCreate(m_row+1, m_column+1);
+    }
     QFrame::mouseReleaseEvent(ev);
 }
 

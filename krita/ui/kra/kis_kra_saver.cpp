@@ -42,7 +42,7 @@
 
 using namespace KRA;
 
-class KisKraSaver::Private
+struct KisKraSaver::Private
 {
 public:
     KisDoc2* doc;

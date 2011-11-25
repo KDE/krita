@@ -12,6 +12,7 @@ Name[pt_BR]=Componente de gráfico do Calligra
 Name[sv]=Calligra Chart-komponent
 Name[uk]=Компонент діаграм Calligra
 Name[x-test]=xxCalligra Chart Componentxx
+Name[zh_CN]=Calligra 图表组件
 Name[zh_TW]=Calligra Chart 組件
 X-KDE-Library=kchartpart
 Type=Service

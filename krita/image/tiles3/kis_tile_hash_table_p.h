@@ -159,12 +159,14 @@ template<class T>
 inline void KisTileHashTableTraits<T>::setDefaultTileDataImp(KisTileData *defaultTileData)
 {
     if (m_defaultTileData) {
+        m_defaultTileData->unblockSwapping();
         m_defaultTileData->release();
         m_defaultTileData = 0;
     }
 
     if (defaultTileData) {
         defaultTileData->acquire();
+        defaultTileData->blockSwapping();
         m_defaultTileData = defaultTileData;
     }
 }

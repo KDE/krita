@@ -19,6 +19,7 @@ Name[pt_BR]=Filtro de importação de ODG para o Krita
 Name[sv]=Krita ODG-importfilter
 Name[uk]=Фільтр імпорту ODG для Krita
 Name[x-test]=xxKrita ODG Import Filterxx
+Name[zh_CN]=Krita ODG 导入过滤器
 Name[zh_TW]=Krita ODG 匯入過濾程式
 X-KDE-Export=application/x-krita
 X-KDE-Import=application/vnd.oasis.opendocument.graphics

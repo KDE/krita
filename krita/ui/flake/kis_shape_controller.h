@@ -72,7 +72,7 @@ private:
     int layerMapSize();
 
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

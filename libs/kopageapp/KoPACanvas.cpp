@@ -23,6 +23,7 @@
 #include <KoToolProxy.h>
 #include <KoUnit.h>
 #include <KoText.h>
+#include <KoCanvasController.h>
 
 #include "KoPADocument.h"
 #include "KoPAView.h"

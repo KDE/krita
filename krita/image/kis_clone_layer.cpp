@@ -32,7 +32,7 @@
 #include "kis_clone_info.h"
 
 
-class KisCloneLayer::Private
+struct KisCloneLayer::Private
 {
 public:
     KisLayerSP copyFrom;

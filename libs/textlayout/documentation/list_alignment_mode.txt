@@ -1,4 +1,35 @@
- How list tab is defined if fixed tabs:
+label-width-and-position mode
+=============================
+
+                      min-    min-
+                     label-  label-
+                     width  distance
+                    |------|--------|
+                    LABELBOX        TEXT STARTS HERE AND GOES ON
+                    |          TO THE NEXT LINE
+|>------------------|          |----|
+     space-before            text-indent
+    + margin-left
+
+Inside LABELBOX the label can be aligned and prepended by spacing:
+
+left:
+           LABELBOX
+           11.2
+
+center:
+           LABELBOX
+             11.2
+
+right:
+           LABELBOX
+               11.2
+
+
+label-alignment mode
+====================
+
+How list tab is defined if fixed tabs:
 
             text-indent
            |---------<|
@@ -49,3 +80,19 @@ right:
        LABEL
          1.2
 
+
+Font determination in calligra
+==============================
+
+In presentations the order of text properties is:
+-------------------------------------------------
+paragraph textproperties
+first fragment of the text's textproperties
+liststyle referenced named characterstyle (but LO/OO doesn't)
+liststyle text-properties
+
+In odt the order is:
+--------------------
+paragraph textproperties
+liststyle referenced named characterstyle
+liststyle text-properties (but LO/OO doesn't)

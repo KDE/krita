@@ -16,6 +16,7 @@ Name[ru]=Страница сведений о документе Calligra
 Name[sv]=Calligra-sida med dokumentinformation
 Name[uk]=Сторінка властивостей документу Calligra
 Name[x-test]=xxCalligra Document Info Properties Pagexx
+Name[zh_CN]=Calligra 文档信息属性页
 Name[zh_TW]=Calligra 文件資訊和屬性
 X-KDE-Library=kodocinfopropspage
 X-KDE-ServiceTypes=KPropertiesDialog/Plugin

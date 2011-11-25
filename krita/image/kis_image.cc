@@ -48,6 +48,7 @@
 #include "kis_count_visitor.h"
 #include "kis_filter_strategy.h"
 #include "kis_group_layer.h"
+#include "kis_default_bounds.h"
 #include "commands/kis_image_commands.h"
 #include "kis_iterators_pixel.h"
 #include "kis_layer.h"
@@ -221,7 +222,7 @@ KisSelectionSP KisImage::globalSelection() const
 void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
 {
     if (globalSelection == 0)
-        m_d->globalSelection = new KisSelection(new KisDefaultBounds(this));
+        m_d->globalSelection = new KisSelection(KisDefaultBounds(this));
     else
         m_d->globalSelection = globalSelection;
 }

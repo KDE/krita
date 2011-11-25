@@ -349,8 +349,8 @@ void KoDocumentRdfEditWidget::addTriple()
     // want to create a bnode, we change it to a URI first.
     //
     Soprano::Node obj(QUrl(const_cast<Soprano::Model*>(m_rdf->model())->createBlankNode().toString()));
-    Soprano::Statement st(Soprano::Node(QUrl("http://calligra-suite.org/new-node")),
-                          Soprano::Node(QUrl("http://calligra-suite.org/new-node")),
+    Soprano::Statement st(Soprano::Node(QUrl("http://calligra.org/new-node")),
+                          Soprano::Node(QUrl("http://calligra.org/new-node")),
                           obj,
                           m_rdf->manifestRdfNode());
     int newRowNumber = d->m_tripleModel->insertStatement(st);

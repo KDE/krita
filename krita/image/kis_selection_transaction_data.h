@@ -23,6 +23,7 @@
 #include "kis_transaction_data.h"
 
 #include "kis_selection.h"
+#include "kis_image.h"
 
 /**
  * KisSelectionTransactionData records changes to the selection for the undo stack. There

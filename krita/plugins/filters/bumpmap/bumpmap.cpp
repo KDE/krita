@@ -185,7 +185,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP device,
         switch ((enumBumpmapType)config->getInt("type", krita::LINEAR)) {
         case SPHERICAL:
             n = i / 255.0 - 1.0;
-            lut[i] = (int)(255.0 * sqrt(1.0 - n * n) + 0.5);
+            lut[i] = (int)(255.0 * sqrt((double)1.0 - n * n) + 0.5);
             break;
 
         case SINUSOIDAL:
@@ -317,7 +317,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP device,
                 if (ndotl < 0) {
                     shade = (qint32)(compensation * config->getInt("ambient", 0));
                 } else {
-                    shade = (qint32)(ndotl / sqrt(nx * nx + ny * ny + nz2));
+                    shade = (qint32)(ndotl / sqrt((double)nx * nx + ny * ny + nz2));
                     shade = (qint32)(shade + qMax(0, (int)((255 * compensation - shade)) * config->getInt("ambient", 0) / 255));
                 }
             }

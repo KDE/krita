@@ -51,7 +51,7 @@ struct KisNodeSPStaticRegistrar {
 static KisNodeSPStaticRegistrar __registrar;
 
 
-class KisNode::Private
+struct KisNode::Private
 {
 public:
     Private()

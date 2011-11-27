@@ -47,7 +47,7 @@ namespace KoOdfNumberStyles
 
 QString format(const QString &value, NumericStyleFormat format)
 {
-    QString result;
+    QString result = value;
     switch (format.type) {
         case Number: {
             bool ok;

@@ -47,39 +47,38 @@ namespace KoOdfNumberStyles
 
 QString format(const QString &value, NumericStyleFormat format)
 {
-    QString result = value;
     switch (format.type) {
         case Number: {
             bool ok;
             int v = value.toInt(&ok);
-            result = ok ? QString::number(v) : value;
+            return ok ? QString::number(v) : value;
         } break;
         case Boolean: {
-            result = formatBoolean(value, format.formatStr);
+            return formatBoolean(value, format.formatStr);
         } break;
         case Date: {
-            result = formatDate(value.toInt(), format.formatStr);
+            return formatDate(value.toInt(), format.formatStr);
         } break;
         case Time: {
-            result = formatTime(value.toDouble(), format.formatStr);
+            return formatTime(value.toDouble(), format.formatStr);
         } break;
         case Percentage: {
-            result = formatPercent(value, format.formatStr, format.precision);
+            return formatPercent(value, format.formatStr, format.precision);
         } break;
         case Currency: {
-            result = formatCurrency(value.toDouble(), format.formatStr, format.currencySymbol, format.precision);
+            return formatCurrency(value.toDouble(), format.formatStr, format.currencySymbol, format.precision);
         } break;
         case Scientific: {
-            result = formatScientific(value.toDouble(), format.formatStr, format.precision);
+            return formatScientific(value.toDouble(), format.formatStr, format.precision);
         } break;
         case Fraction: {
-            result = formatFraction(value.toDouble(), format.formatStr);
+            return formatFraction(value.toDouble(), format.formatStr);
         } break;
         case Text: {
-            result = value;
+            return value;
         } break;
     }
-    return result;
+    return value;
 }
 
 QString formatNumber(qreal value, const QString &format, int precision)

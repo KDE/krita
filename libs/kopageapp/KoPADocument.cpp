@@ -154,6 +154,11 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore)
         return false;
     }
 
+    // Load user defined variable declarations
+    if (KoVariableManager *variableManager = inlineTextObjectManager()->variableManager()) {
+        variableManager->loadOdf(body);
+    }
+
     // Load text styles before the corresponding text shapes try to use them!
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
     paContext.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );

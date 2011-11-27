@@ -125,10 +125,15 @@ QList<QString> KoVariableManager::userVariables() const
     return d->userVariableNames;
 }
 
-void KoVariableManager::loadOdf(const KoXmlElement &element)
+void KoVariableManager::loadOdf(const KoXmlElement &bodyElement)
 {
+    KoXmlElement element = KoXml::namedItemNS(bodyElement, KoXmlNS::text, "user-field-decls");
+    if (element.isNull())
+        return;
     KoXmlElement e;
     forEachElement(e, element) {
+        if (e.namespaceURI() != KoXmlNS::text || e.localName() != "user-field-decl")
+            continue;
         QString name = e.attributeNS(KoXmlNS::text, "name");
         QString type = e.attributeNS(KoXmlNS::office, "value-type");
         QString value;

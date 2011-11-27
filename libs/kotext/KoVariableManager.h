@@ -107,9 +107,9 @@ public:
     QList<QString> userVariables() const;
 
     /**
-     * Load user defined variable declarations from the ODF element.
+     * Load user defined variable declarations from the ODF body-element.
      */
-    void loadOdf(const KoXmlElement &element);
+    void loadOdf(const KoXmlElement &bodyElement);
 
     /**
      * Save user defined variable declarations into the ODF writer.

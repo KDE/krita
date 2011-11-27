@@ -704,15 +704,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                         loadSection(tag, cursor);
                     } else if (localName == "table-of-content") {
                         loadTableOfContents(tag, cursor);
-                    } else if (localName == "user-field-decls") {
-                        // Load user defined variable declarations
-                        KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
-                        if (textObjectManager) {
-                            KoVariableManager *variableManager = textObjectManager->variableManager();
-                            if (variableManager) {
-                                variableManager->loadOdf(tag);
-                            }
-                        }
                     } else if (localName == "bibliography") {
                         loadBibliography(tag, cursor);
                     } else {

@@ -52,6 +52,7 @@ signals:
     void doneWithFocus();
     void insertTableQuick(int, int);
     void paragraphStyleSelected(KoParagraphStyle *);
+    void newStyleRequested(QString name);
 
 private slots:
     void directionChangeRequested();

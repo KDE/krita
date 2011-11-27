@@ -222,10 +222,13 @@ void StylesModel::setStyleThumbnailer(KoStyleThumbnailer *thumbnailer)
 // called when the stylemanager adds a style
 void StylesModel::addParagraphStyle(KoParagraphStyle *style)
 {
+    kDebug() << "received addParagraph signal";
     Q_ASSERT(style);
+    beginInsertRows(QModelIndex(), rowCount(QModelIndex()), rowCount(QModelIndex()));
     m_styleList.append(style->styleId());
     m_styleMapper->setMapping(style, style->styleId());
     connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    endInsertRows();
 }
 
 // called when the stylemanager adds a style

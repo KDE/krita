@@ -1569,6 +1569,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     connect(spw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(spw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
     connect(spw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
+    connect(spw, SIGNAL(newStyleRequested(QString)), this, SLOT(createStyleFromCurrentBlockFormat(QString)));
 
     // Connect to/with simple table widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));
@@ -2048,6 +2049,21 @@ void TextTool::shapeDataRemoved()
         m_textShapeData = static_cast<KoTextShapeData*>(m_textShape->userData());
         connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
     }
+}
+
+void TextTool::createStyleFromCurrentBlockFormat(QString name)
+{
+    kDebug() << "create style: " << name;
+    KoTextDocument document(m_textShapeData->document());
+    kDebug() << "currentBlockFormat styleId: " << m_textEditor.data()->blockFormat().property(KoParagraphStyle::StyleId);
+    KoStyleManager *styleManager = document.styleManager();
+    KoParagraphStyle *paragraphStyle = new KoParagraphStyle(m_textEditor.data()->blockFormat(), m_textEditor.data()->charFormat());
+    paragraphStyle->setName(name);
+    styleManager->add(paragraphStyle);
+    m_textEditor.data()->setStyle(paragraphStyle);
+    kDebug() << "newBlockFormat styleId: " << m_textEditor.data()->blockFormat().property(KoParagraphStyle::StyleId);
+    emit charFormatChanged(m_textEditor.data()->charFormat());
+    emit blockFormatChanged(m_textEditor.data()->blockFormat());
 }
 
 // ---------- editing plugins methods.

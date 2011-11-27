@@ -54,6 +54,7 @@ public slots:
 signals:
     void selectionChanged(QModelIndex index);
     void paragraphStyleSelected(KoParagraphStyle *style);
+    void newStyleRequested(QString name);
 
 protected:
 //    virtual void paintEvent(QPaintEvent *e);
@@ -68,6 +69,9 @@ private:
 //    StylesComboView *m_view;
     StylesComboPreview *m_preview;
     QListView *m_view;
+
+    QTextBlockFormat m_currentBlockFormat;
+    QTextCharFormat m_currentCharFormat;
 
     bool skipNextHide;
 };

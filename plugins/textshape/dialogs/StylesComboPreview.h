@@ -27,6 +27,7 @@ public:
     void setPreview(QPixmap pixmap);
 
 signals:
+    void newStyleRequested(QString name);
 
 protected:
     virtual void resizeEvent(QResizeEvent *event);
@@ -38,12 +39,15 @@ protected:
 
 private slots:
     void updateAddButtonIcon();
+    void addNewStyle();
 
 private:
     void init();
     void updateAddButton();
 
     bool m_clickInAdd;
+    bool m_renamingNewStyle;
+    bool m_shouldAddNewStyle;
     bool m_wideEnoughForAdd;
 
     QPixmap m_stylePreview;

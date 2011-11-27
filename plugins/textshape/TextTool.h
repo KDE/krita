@@ -283,6 +283,8 @@ private slots:
 
     void ensureCursorVisible(bool moveView = true);
 
+    void createStyleFromCurrentBlockFormat(QString name);
+
     void testSlot(bool);
 
 private:

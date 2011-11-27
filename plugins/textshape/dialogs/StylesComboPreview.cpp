@@ -1,13 +1,47 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2011 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+
+ * This class is inspired/ripped of KLineEdit, so here goes credit where credit is due (from klineedit.h):
+ *  This class was originally inspired by Torben Weis'
+ *  fileentry.cpp for KFM II.
+
+ *  Copyright (C) 1997 Sven Radej <sven.radej@iname.com>
+ *  Copyright (c) 1999 Patrick Ward <PAT_WARD@HP-USA-om5.om.hp.com>
+ *  Copyright (c) 1999 Preston Brown <pbrown@kde.org>
+
+ *  Completely re-designed:
+ *  Copyright (c) 2000,2001 Dawit Alemayehu <adawit@kde.org>
+
+ */
 #include "StylesComboPreview.h"
 
 #include <QModelIndex>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QFocusEvent>
+#include <QMouseEvent>
+#include <QKeyEvent>
 #include <QPixmap>
 #include <QPushButton>
 #include <QString>
 
 #include <KIcon>
+#include <KLocale>
 
 #include <KDebug>
 
@@ -39,6 +73,8 @@
 StylesComboPreview::StylesComboPreview(QWidget *parent) :
     QLineEdit(parent),
     m_clickInAdd(false),
+    m_renamingNewStyle(false),
+    m_shouldAddNewStyle(false),
     m_wideEnoughForAdd(true),
     m_addButton(0)
 {
@@ -65,6 +101,7 @@ void StylesComboPreview::init()
     m_addButton->setMinimumSize(16,16);
     m_addButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_addButton->setMaximumSize(size().height(), size().height());
+    connect(m_addButton, SIGNAL(clicked()), this, SLOT(addNewStyle()));
 //        m_addButton->setToolTip( i18nc( "@action:button Clear current text in the line edit", "Clear text" ) );
 
     updateAddButtonIcon();
@@ -597,25 +634,38 @@ void StylesComboPreview::keyPressEvent( QKeyEvent *e )
     if ( selectedLength != selectedText().length() )
         slotRestoreSelectionColors(); // and set userSelection to true
 */
-    QLineEdit::keyPressEvent(e);
+    if (e->key() == Qt::Key_Escape) {
+        m_renamingNewStyle = false;
+        m_shouldAddNewStyle = false;
+        setReadOnly(true);
+        setText(QString());
+        e->accept();
+    }
+    else {
+        QLineEdit::keyPressEvent(e);
+    }
+}
+
+void StylesComboPreview::addNewStyle()
+{
+    m_renamingNewStyle = true;
+    m_shouldAddNewStyle = true;
+    setText(i18n("New style"));
+    selectAll();
+    setReadOnly(false);
+    this->setFocus();
 }
 
 void StylesComboPreview::mousePressEvent( QMouseEvent* e )
 {
-/*    if  ( (e->button() == Qt::LeftButton ||
-           e->button() == Qt::MidButton ) &&
-          d->clearButton ) {
-        d->clickInClear = d->clearButton == childAt( e->pos() );
-
-        if ( d->clickInClear ) {
-            d->possibleTripleClick = false;
-        }
-    }
-
-    if ( e->button() == Qt::LeftButton && d->possibleTripleClick ) {
-        selectAll();
-        e->accept();
-        return;
+    /*
+    kDebug() << "in buttonPressed";
+    kDebug() << "m_addButton: " << m_addButton;
+    if  ((e->button() == Qt::LeftButton ||
+           e->button() == Qt::MidButton) &&
+          m_addButton) {
+        m_clickInAdd = m_addButton == childAt(e->pos());
+        kDebug() << "mousePressed in addButton";
     }
 */
     QLineEdit::mousePressEvent( e );
@@ -623,8 +673,11 @@ void StylesComboPreview::mousePressEvent( QMouseEvent* e )
 
 void StylesComboPreview::mouseReleaseEvent( QMouseEvent* e )
 {
-/*    if ( d->clickInClear ) {
-        if ( d->clearButton == childAt( e->pos() ) ) {
+/*
+    kDebug() << "in mouseReleased. clickinAdd: " << m_clickInAdd;
+    if (m_clickInAdd) {
+        if (m_addButton == childAt(e->pos())) {
+            kDebug() << "mouseReleased in addButton";
             QString newText;
             if ( e->button() == Qt::MidButton ) {
                 newText = QApplication::clipboard()->text( QClipboard::Selection );
@@ -640,6 +693,8 @@ void StylesComboPreview::mouseReleaseEvent( QMouseEvent* e )
         d->clickInClear = false;
         e->accept();
         return;
+
+        }
     }
 */
     QLineEdit::mouseReleaseEvent( e );
@@ -725,17 +780,38 @@ bool StylesComboPreview::event( QEvent* ev )
         }
     }
 */
+    if (ev->type() == QEvent::FocusOut) {
+        QFocusEvent *focusEvent = static_cast<QFocusEvent *>(ev);
+        if (focusEvent->reason() != Qt::ActiveWindowFocusReason && focusEvent->reason() != Qt::PopupFocusReason) {
+            if (m_shouldAddNewStyle) {
+                emit newStyleRequested(text());
+                setReadOnly(true);
+                m_renamingNewStyle = false;
+                setText(QString());
+                return true;
+            }
+            setReadOnly(true);
+            m_renamingNewStyle = false;
+            setText(QString());
+        }
+    }
     return QLineEdit::event( ev );
 }
 
 void StylesComboPreview::paintEvent( QPaintEvent *ev )
 {
-    QLineEdit::paintEvent(ev);
-    QPainter p(this);
-    p.setClipRect(ev->rect());
+//    QLineEdit::paintEvent(ev);
 //    p.fillRect(this->contentsRect(),Qt::white);
 //    QRect pixmapRect(contentsRect().left(), contentsRect().top(), contentsRect().width()-m_addButton->width(), contentsRect().height());
-    p.drawPixmap(contentsRect().topLeft(), m_stylePreview);
+    if (!m_renamingNewStyle) {
+        QLineEdit::paintEvent(ev);
+        QPainter p(this);
+        p.setClipRect(ev->rect());
+        p.drawPixmap(contentsRect().topLeft(), m_stylePreview);
+    }
+    else {
+        QLineEdit::paintEvent(ev);
+    }
     /*
     if (echoMode() == Password && d->threeStars) {
         // ### hack alert!

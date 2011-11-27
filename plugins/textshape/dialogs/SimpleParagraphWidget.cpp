@@ -110,6 +110,8 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 
     connect(widget.blockFrame, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)), this, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)));
     connect(widget.blockFrame, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)), this, SIGNAL(doneWithFocus()));
+    connect(widget.blockFrame, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
+    connect(widget.blockFrame, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
 }
 
 SimpleParagraphWidget::~SimpleParagraphWidget()
@@ -257,7 +259,7 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
             break;
         }
     }
-
+/*
     m_currentBlockFormat = m_currentBlock.blockFormat();
 
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
@@ -283,6 +285,7 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
 //        m_stylesCombo->setStyleIsOriginal(unchanged);
         widget.blockFrame->setStyleIsOriginal(unchanged);
     }
+*/
     m_stylePopup->setCurrentFormat(m_currentBlockFormat);
     widget.blockFrame->setCurrentFormat(m_currentBlockFormat);
 }
@@ -293,7 +296,7 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
 //        return;
     m_currentBlockFormat = format;
     kDebug() << "setCurrentFormat";
-
+/*
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
     KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
     if (style) {
@@ -317,6 +320,7 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
 //        m_stylesCombo->setStyleIsOriginal(unchanged);
         widget.blockFrame->setStyleIsOriginal(unchanged);
     }
+*/
     m_stylePopup->setCurrentFormat(format);
     widget.blockFrame->setCurrentFormat(format);
 }

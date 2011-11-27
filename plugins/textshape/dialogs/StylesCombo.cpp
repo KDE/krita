@@ -84,6 +84,7 @@ StylesCombo::StylesCombo(QWidget *parent)
 
     StylesComboPreview *preview = new StylesComboPreview(this);
     preview->setAddButtonShown(true);
+    connect(preview, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
     QComboBox::setEditable(true);
     setLineEdit(preview);
 }
@@ -131,7 +132,6 @@ void StylesCombo::setLineEdit(QLineEdit *edit)
     if ( !isEditable() && edit &&
          !qstrcmp( edit->metaObject()->className(), "QLineEdit" ) )
     {
-        kDebug() << "will set the preview";
         // uic generates code that creates a read-only KComboBox and then
         // calls combo->setEditable( true ), which causes QComboBox to set up
         // a dumb QLineEdit instead of our nice KLineEdit.
@@ -171,7 +171,6 @@ void StylesCombo::setLineEdit(QLineEdit *edit)
 
 void StylesCombo::selectionChanged(int index)
 {
-    if (!skipNextHide) {
     KoParagraphStyle *paragStyle = m_stylesModel->styleManager()->paragraphStyle(m_stylesModel->index(index).internalId());
     if (paragStyle) {
         m_preview->setPreview(m_stylesModel->thumbnailer()->thumbnail(paragStyle, m_preview->availableSize()));
@@ -183,44 +182,50 @@ void StylesCombo::selectionChanged(int index)
         m_preview->setPreview(m_stylesModel->thumbnailer()->thumbnail(characterStyle, m_preview->availableSize()));
         return;
     }
-    }
     m_preview->setPreview(QPixmap());
 }
 
 void StylesCombo::setCurrentFormat(const QTextBlockFormat &format)
 {
-/*    if (format == m_currentBlockFormat)
+    if (format == m_currentBlockFormat)
         return;
+    kDebug() << "in setCurrentFormat";
     m_currentBlockFormat = format;
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
+    kDebug() << "paragraph id: " << id;
     bool unchanged = true;
     KoParagraphStyle *usedStyle = 0;
-    if (m_styleManager)
-        usedStyle = m_styleManager->paragraphStyle(id);
+    if (m_stylesModel->styleManager())
+        usedStyle = m_stylesModel->styleManager()->paragraphStyle(id);
     if (usedStyle) {
         foreach(int property, m_currentBlockFormat.properties().keys()) {
             if (property == QTextFormat::ObjectIndex)
                 continue;
             if (property == KoParagraphStyle::ListStyleId)
                 continue;
+            kDebug() << "comparing properties in style: " << usedStyle->name();
+            kDebug() << "property: " << property;
+            kDebug() << "blockFormat: " << m_currentBlockFormat.property(property);
+            kDebug() << "style: " << usedStyle->value(property);
             if (m_currentBlockFormat.property(property) != usedStyle->value(property)) {
                 unchanged = false;
+                kDebug() << "different style";
                 break;
             }
         }
     }
-*/
-    kDebug() << "in setCurrentFormat";
-    int id = format.intProperty(KoParagraphStyle::StyleId);
-    kDebug() << "paragraph id: " << id;
+
+    setStyleIsOriginal(unchanged);
+
+
     KoParagraphStyle *paragStyle = m_stylesModel->styleManager()->paragraphStyle(id);
     if (paragStyle) {
-        kDebug() << "in setCurrentFormat. we have a paragStyle to set";
         m_stylesModel->setCurrentParagraphStyle(id, m_preview->isAddButtonShown()); //temporary hack for the unchanged stuff. i need to decide if this resides in the combo or in the paragWidget.
         view()->setCurrentIndex(m_stylesModel->indexForParagraphStyle(paragStyle));
         //setCurrentIndex(m_stylesModel->indexForParagraphStyle(paragStyle).row());
         m_preview->setPreview(m_stylesModel->thumbnailer()->thumbnail(paragStyle, m_preview->availableSize()));
     }
+    update();
 }
 
 void StylesCombo::setCurrentFormat(const QTextCharFormat &format)
@@ -284,11 +289,12 @@ void StylesCombo::showDia()
 void StylesCombo::deleteStyle(QModelIndex index)
 {
     //TODO this should not be handled here. send a signal instead.
-    KoStyleManager *styleManager = m_stylesModel->styleManager();
+/*    KoStyleManager *styleManager = m_stylesModel->styleManager();
     Q_ASSERT(styleManager);
     if (!styleManager)
         return;
     styleManager->remove(styleManager->paragraphStyle(index.internalId()));
+*/
 }
 
 #include <StylesCombo.moc>

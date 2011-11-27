@@ -163,7 +163,9 @@ public:
 
         TableOfContentsData,      // set when block is instead a TableOfContents
         GeneratedDocument,  // set when block is instead a generated document
-        Shadow                    //< KoShadowStyle, the shadow of this paragraph
+        Shadow,                    //< KoShadowStyle, the shadow of this paragraph
+        NextStyle,                  ///< holds the styleId of the style to be used on a new line
+        ParagraphListStyleId        ///< this holds the listStyleId of the list got from style:list-style-name property from ODF 1.2
     };
 
     enum AutoSpace {
@@ -722,5 +724,5 @@ private:
     class Private;
     Private * const d;
 };
-
+Q_DECLARE_METATYPE(KoListStyle *);
 #endif

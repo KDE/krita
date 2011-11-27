@@ -402,6 +402,8 @@ void KoTextLoader::Private::splitStack(int id)
 
 KoList *KoTextLoader::Private::list(const QTextDocument *document, KoListStyle *listStyle, bool mergeSimilarStyledList)
 {
+    //TODO: Remove mergeSimilarStyledList parameter by finding a way to put the numbered-paragraphs of same level
+    //      to a single QTextList while loading rather than maintaining a hash list
     if (mergeSimilarStyledList) {
         if (lists.contains(listStyle)) {
             return lists[listStyle];
@@ -1091,8 +1093,13 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
 
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
 
-    QTextBlock block = cursor.block();
+    QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
 
+    bool stripLeadingSpace = true;
+    loadSpan(element, cursor, &stripLeadingSpace);
+    cursor.setCharFormat(cf);   // restore the cursor char format
+
+    QTextBlock block = cursor.block();
     // Set the paragraph-style on the block
     KoParagraphStyle *paragraphStyle = d->textSharedData->paragraphStyle(styleName, d->stylesDotXml);
     if (!paragraphStyle) {
@@ -1116,11 +1123,12 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
     if (!d->currentList) { // apply <text:outline-style> (if present) only if heading is not within a <text:list>
         KoListStyle *outlineStyle = d->styleManager->outlineStyle();
         if (outlineStyle) {
-            KoList *list = d->list(block.document(), outlineStyle, true);
-            if (!KoTextDocument(block.document()).headingList()) {
+            KoList *list = KoTextDocument(block.document()).headingList();
+            if (! list) {
+                list = d->list(block.document(), outlineStyle, false);
                 KoTextDocument(block.document()).setHeadingList(list);
             }
-            list->applyStyle(block, outlineStyle, level);
+            list->add(block, level);
         }
     }
 
@@ -1138,12 +1146,6 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());
 #endif
-
-    QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
-
-    bool stripLeadingSpace = true;
-    loadSpan(element, cursor, &stripLeadingSpace);
-    cursor.setCharFormat(cf);   // restore the cursor char format
 }
 
 void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)

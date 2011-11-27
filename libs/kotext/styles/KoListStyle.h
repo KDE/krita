@@ -252,6 +252,11 @@ public:
      */
     bool isNumberingStyle() const;
 
+    /**
+     * Returns true if this list style is a outline style
+     */
+    bool isOulineStyle() const;
+
     /// returns true if style is a numbering style
     static bool isNumberingStyle(int style);
 signals:

@@ -163,6 +163,9 @@ public:
     /// return the alignment mode of the list isLabelAlignmentMode=true if ist-level-position-and-space-mode=label-alignment
     bool alignmentMode() const;
 
+    void setOutlineList(bool isOutline);
+    bool isOutlineList() const;
+
     bool operator==(const KoListLevelProperties &other) const;
     bool operator!=(const KoListLevelProperties &other) const;
     KoListLevelProperties & operator=(const KoListLevelProperties &other);

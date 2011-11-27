@@ -125,6 +125,7 @@ public:
                                      ///<  @note unused
         MarkerStyle,                 ///< draw:marker as in odf 14.14.6 Marker
         PresentationPageLayoutStyle, ///< style:presentation-page-layout as in odf 14.15 Presentation Page Layouts
+        OutlineLevelStyle,           ///< text:outline-style as in odf 1.2 section 16.34
         //   TODO differently
         MasterPageStyle,             ///< style:master-page as in odf 14.4 14.4 Master Pages (office:master-styles)
         // style:default-style as in odf 14.2 Default Styles

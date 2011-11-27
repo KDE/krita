@@ -181,6 +181,9 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
                 continue;
             }
             KoListStyle *listStyle = list->style();
+            if (listStyle && listStyle->isOulineStyle()) {
+                continue;
+            }
             bool automatic = listStyle->styleId() == 0;
             KoGenStyle style(automatic ? KoGenStyle::ListAutoStyle : KoGenStyle::ListStyle);
             listStyle->saveOdf(style, context);
@@ -194,6 +197,9 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
             KoGenStyle style(KoGenStyle::ListAutoStyle);
             KoListStyle listStyle;
             listStyle.setLevelProperties(llp);
+            if (listStyle.isOulineStyle()) {
+                continue;
+            }
             listStyle.saveOdf(style, context);
             QString generatedName = context.mainStyles().insert(style, listStyle.name());
             listStyles[textList] = generatedName;

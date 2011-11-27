@@ -184,6 +184,15 @@ void KoList::setStyle(KoListStyle *style)
         textList->setFormat(format);
         d->invalidate(textList->item(0));
     }
+
+    //if this list is a heading list then update the style manager with the list proprerties
+    if (KoTextDocument(d->document).headingList() == this) {
+        if (KoStyleManager *styleManager = KoTextDocument(d->document).styleManager()) {
+            if (styleManager->outlineStyle()) {
+                styleManager->outlineStyle()->copyProperties(style);
+            }
+        }
+    }
 }
 
 KoListStyle *KoList::style() const

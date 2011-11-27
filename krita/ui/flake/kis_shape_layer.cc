@@ -104,7 +104,7 @@ private:
 };
 
 
-class KisShapeLayer::Private
+struct KisShapeLayer::Private
 {
 public:
     KoViewConverter * converter;

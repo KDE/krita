@@ -63,7 +63,7 @@ protected:
 
         QRect childrenRect;
         QRect tempRect = requestedRect;
-        bool changeRectVaries;
+        bool changeRectVaries = false;
 
         KisNodeSP currentNode = startWith->firstChild();
         KisNodeSP prevNode;
@@ -85,7 +85,7 @@ protected:
             currentNode = nextNode;
         }
 
-        tempRect = startWith->changeRect(requestedRect | childrenRect);
+        tempRect |= startWith->changeRect(requestedRect | childrenRect);
 
         if(!changeRectVaries)
             changeRectVaries = tempRect != requestedRect;
@@ -99,10 +99,10 @@ protected:
         calculateChangeRect(startWith, requestedRect());
 
         if(startWith == startNode()) {
-            NodePosition pos = N_FILTHY;
+            NodePosition pos = N_EXTRA;
             if(!startWith->nextSibling()) pos |= N_TOPMOST;
             if(!startWith->prevSibling()) pos |= N_BOTTOMMOST;
-            registerNeedRect(startWith, N_TOPMOST | N_FILTHY);
+            registerNeedRect(startWith, pos);
         }
 
 

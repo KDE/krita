@@ -299,8 +299,28 @@ public:
      *  and the unit name ("pt" or "%") is appended to it.
      */
     void addPropertyLength(const QString &propName, const QTextLength &propValue, PropertyType type = DefaultType);
-    
-    
+
+    /**
+     *  Remove a property from the style.  Passing DefaultType as property type
+     *  uses a style-type specific property type.
+     */
+    void removeProperty(const QString &propName, PropertyType type = DefaultType) {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
+        m_properties[type].remove(propName);
+    }
+
+    /**
+     *  Remove properties of defined type from the style.  Passing DefaultType
+     *  as property type uses a style-type specific property type.
+     */
+    void removeAllProperties(PropertyType type = DefaultType) {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
+        m_properties[type].clear();
+    }
 
     /**
      *  Add an attribute to the style
@@ -331,6 +351,13 @@ public:
      *  and the unit name ("pt") is appended to it.
      */
     void addAttributePt(const QString &attrName, qreal attrValue);
+
+    /**
+     *  Remove an attribute from the style.
+     */
+    void removeAttribute(const QString &attrName) {
+        m_attributes.remove(attrName);
+    }
 
     /**
      * @brief Add a child element to the style properties.

@@ -114,6 +114,7 @@ KoTextLayoutArea::~KoTextLayoutArea()
     delete m_endOfArea;
 }
 
+
 KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) const
 {
     QPointF point = p - QPointF(0, m_verticalAlignOffset);

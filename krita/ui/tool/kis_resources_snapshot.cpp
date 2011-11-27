@@ -30,16 +30,20 @@
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "recorder/kis_recorded_paint_action.h"
-
+#include "kis_default_bounds.h"
 
 struct KisResourcesSnapshot::Private {
-    Private() : currentPattern(0), currentGradient(0),
-                currentGenerator(0), compositeOp(0)
+    Private()
+        : bounds(0)
+        , currentPattern(0)
+        , currentGradient(0)
+        , currentGenerator(0)
+        , compositeOp(0)
     {
     }
 
     KisImageWSP image;
-    KisDefaultBoundsSP bounds;
+    KisDefaultBounds *bounds;
     KisPostExecutionUndoAdapter *undoAdapter;
     KoColor currentFgColor;
     KoColor currentBgColor;

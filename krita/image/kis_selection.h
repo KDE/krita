@@ -53,19 +53,25 @@ class KisSelectionComponent;
  * read from it, but not write to it. You need to keep track of
  * the need for updating the projection yourself: there is no
  * automatic updating after changing the contents of one or more
- * of the selection components. 
+ * of the selection components.
  */
-class KRITAIMAGE_EXPORT KisSelection : public KisShared
+class KRITAIMAGE_EXPORT KisSelection : public QObject, public KisShared
 {
-
+    Q_OBJECT
 public:
+
+    /**
+     * Create a new KisSelection.
+     */
+    KisSelection();
+
     /**
      * Create a new KisSelection.
      *
      * @param defaultBounds defines the bounds of the selection when
      * Select All is initiated.
      */
-    KisSelection(KisDefaultBoundsSP defaultBounds = new KisDefaultBounds());
+    KisSelection(KisDefaultBounds *defaultBounds);
 
     /**
      * Copy the selection. The selection components are copied, too.
@@ -125,7 +131,7 @@ public:
     bool isVisible();
 
     /**
-     * Convinience functions. Just call the corresponding methods
+     * Convenience functions. Just call the corresponding methods
      * of the underlying projection
      */
     bool isTotallyUnselected(const QRect & r) const;
@@ -137,8 +143,7 @@ public:
     qint32 x() const;
     qint32 y() const;
 
-    KisDefaultBoundsSP defaultBounds() const;
-    void setDefaultBounds(KisDefaultBoundsSP bounds);
+    void setDefaultBounds(KisDefaultBounds *bounds);
 
     void clear();
     KisPixelSelectionSP mergedPixelSelection();
@@ -148,8 +153,10 @@ public:
 
 private:
 
+    KisDefaultBounds *defaultBounds() const;
+
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif // KIS_SELECTION_H_

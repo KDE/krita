@@ -585,6 +585,14 @@ public:
      * @see KoDocumentRdf
      */
     KoDocumentRdf *documentRdf() const;
+
+    /**
+     * Replace the current rdf document with the given rdf document. The existing RDF document
+     * will be deleted, and if RDF support is compiled out, KoDocument does not take ownership.
+     * Otherwise, KoDocument will own the rdf document.
+     */
+    void setDocumentRdf(KoDocumentRdf *rdfDocument);
+
     /**
      * @return the Rdf metadata for this document.
      * @see KoDocumentRdf

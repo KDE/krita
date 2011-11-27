@@ -80,8 +80,9 @@ void KoPACanvasItem::updateCanvas( const QRectF& rc )
     emit canvasUpdated();
 }
 
-void KoPACanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget */*widget*/)
+void KoPACanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(widget)
     KoPACanvasBase::paint(*painter, option->exposedRect);
 }
 

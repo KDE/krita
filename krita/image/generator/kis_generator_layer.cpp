@@ -29,7 +29,7 @@
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
 
-class KisGeneratorLayer::Private
+struct KisGeneratorLayer::Private
 {
 public:
     KisFilterConfiguration * filterConfig;

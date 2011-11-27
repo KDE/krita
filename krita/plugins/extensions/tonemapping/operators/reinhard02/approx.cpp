@@ -95,7 +95,7 @@ void build_pyramid(double **/*luminance*/, int image_width, int image_height)
 
     /* Compute the size of the Pyramid array */
     max_dim = (ImageHeight > ImageWidth ? ImageHeight : ImageWidth);
-    PyramidHeight = (int) floor(log(max_dim - 0.5) / log(2)) + 1;
+    PyramidHeight = (int) floor((float)log((float)max_dim - 0.5) / log(2.0)) + 1;
 
     /* Compute the dimensions of the first level */
     width = 1 << (PyramidHeight - 1);

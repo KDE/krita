@@ -46,7 +46,7 @@ const QString KoXmlNS::VL("http://openoffice.org/2001/versions-list");
 const QString KoXmlNS::smil("urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0");
 const QString KoXmlNS::xhtml("http://www.w3.org/1999/xhtml");
 
-const QString KoXmlNS::calligra = "http://www.calligra-suite.org/2005/";
+const QString KoXmlNS::calligra = "http://www.calligra.org/2005/";
 const QString KoXmlNS::officeooo = "http://openoffice.org/2009/office";
 const QString KoXmlNS::ooo = "http://openoffice.org/2004/office";
 

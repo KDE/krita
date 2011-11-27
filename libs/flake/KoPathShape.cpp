@@ -240,7 +240,7 @@ void KoPathShape::clear()
     m_subpaths.clear();
 }
 
-void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
+void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &/*paintcontext*/)
 {
     Q_D(KoPathShape);
     applyConversion(painter, converter);
@@ -765,9 +765,9 @@ int KoPathShape::subpathPointCount(int subpathIndex) const
     return subpath->size();
 }
 
-bool KoPathShape::isClosedSubpath(int subpathIndex)
+bool KoPathShape::isClosedSubpath(int subpathIndex) const
 {
-    Q_D(KoPathShape);
+    Q_D(const KoPathShape);
     KoSubpath *subpath = d->subPath(subpathIndex);
 
     if (subpath == 0)
@@ -1145,44 +1145,59 @@ QString KoPathShape::toString(const QTransform &matrix) const
 {
     QString d;
 
+    // iterate over all subpaths
     KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
     for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
-        KoSubpath::const_iterator it((*pathIt)->constBegin());
-        KoPathPoint * lastPoint(*it);
-        bool activeCP = false;
-        for (; it != (*pathIt)->constEnd(); ++it) {
+        KoSubpath::const_iterator pointIt((*pathIt)->constBegin());
+        // keep a pointer to the first point of the subpath
+        KoPathPoint *firstPoint(*pointIt);
+        // keep a pointer to the previous point of the subpath
+        KoPathPoint *lastPoint = firstPoint;
+        // keep track if the previous point has an active control point 2
+        bool activeControlPoint2 = false;
+
+        // iterate over all points of the current subpath
+        for (; pointIt != (*pathIt)->constEnd(); ++pointIt) {
+            KoPathPoint *currPoint(*pointIt);
             // first point of subpath ?
-            if (it == (*pathIt)->constBegin()) {
-                if ((*it)->properties() & KoPathPoint::StartSubpath) {
-                    QPointF p = matrix.map((*it)->point());
+            if (currPoint == firstPoint) {
+                // are we starting a subpath ?
+                if (currPoint->properties() & KoPathPoint::StartSubpath) {
+                    const QPointF p = matrix.map(currPoint->point());
                     d += QString("M%1 %2").arg(p.x()).arg(p.y());
                 }
             }
-            // end point of curve ?
-            else if (activeCP || (*it)->activeControlPoint1()) {
-                QPointF cp1 = matrix.map(activeCP ? lastPoint->controlPoint2() : lastPoint->point());
-                QPointF cp2 = matrix.map((*it)->activeControlPoint1() ? (*it)->controlPoint1() : (*it)->point());
-                QPointF p = matrix.map((*it)->point());
+            // end point of curve segment ?
+            else if (activeControlPoint2 || currPoint->activeControlPoint1()) {
+                // check if we have a cubic or quadratic curve
+                const bool isCubic = activeControlPoint2 && currPoint->activeControlPoint1();
+                KoPathSegment cubicSeg = isCubic ? KoPathSegment(lastPoint, currPoint)
+                                                 : KoPathSegment(lastPoint, currPoint).toCubic();
+                const QPointF cp1 = matrix.map(cubicSeg.first()->controlPoint2());
+                const QPointF cp2 = matrix.map(cubicSeg.second()->controlPoint1());
+                const QPointF p = matrix.map(cubicSeg.second()->point());
                 d += QString("C%1 %2 %3 %4 %5 %6")
                      .arg(cp1.x()).arg(cp1.y())
                      .arg(cp2.x()).arg(cp2.y())
                      .arg(p.x()).arg(p.y());
             }
-            // end point of line
+            // end point of line segment!
             else {
-                QPointF p = matrix.map((*it)->point());
+                const QPointF p = matrix.map(currPoint->point());
                 d += QString("L%1 %2").arg(p.x()).arg(p.y());
             }
             // last point closes subpath ?
-            if ((*it)->properties() & KoPathPoint::StopSubpath
-                    && (*it)->properties() & KoPathPoint::CloseSubpath) {
+            if (currPoint->properties() & KoPathPoint::StopSubpath
+                    && currPoint->properties() & KoPathPoint::CloseSubpath) {
                 // add curve when there is a curve on the way to the first point
-                KoPathPoint * firstPoint = (*pathIt)->first();
-                if ((*it)->activeControlPoint2() || firstPoint->activeControlPoint1()) {
-                    QPointF cp1 = matrix.map((*it)->activeControlPoint2() ? (*it)->controlPoint2() : (*it)->point());
-                    QPointF cp2 = matrix.map(firstPoint->activeControlPoint1() ? firstPoint->controlPoint1() : (firstPoint)->point());
-                    QPointF p = matrix.map(firstPoint->point());
-
+                if (currPoint->activeControlPoint2() || firstPoint->activeControlPoint1()) {
+                    // check if we have a cubic or quadratic curve
+                    const bool isCubic = currPoint->activeControlPoint2() && firstPoint->activeControlPoint1();
+                    KoPathSegment cubicSeg = isCubic ? KoPathSegment(currPoint, firstPoint)
+                                                     : KoPathSegment(currPoint, firstPoint).toCubic();
+                    const QPointF cp1 = matrix.map(cubicSeg.first()->controlPoint2());
+                    const QPointF cp2 = matrix.map(cubicSeg.second()->controlPoint1());
+                    const QPointF p = matrix.map(cubicSeg.second()->point());
                     d += QString("C%1 %2 %3 %4 %5 %6")
                          .arg(cp1.x()).arg(cp1.y())
                          .arg(cp2.x()).arg(cp2.y())
@@ -1191,8 +1206,8 @@ QString KoPathShape::toString(const QTransform &matrix) const
                 d += QString("Z");
             }
 
-            activeCP = (*it)->activeControlPoint2();
-            lastPoint = *it;
+            activeControlPoint2 = currPoint->activeControlPoint2();
+            lastPoint = currPoint;
         }
     }
 

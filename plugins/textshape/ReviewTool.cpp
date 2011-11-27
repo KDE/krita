@@ -337,10 +337,6 @@ QList<QWidget*> ReviewTool::createOptionWidgets()
     dummy->setObjectName("dummy2");
     dummy->setWindowTitle(i18n("Comments"));
     widgets.append(dummy);
-    dummy = new QWidget();
-    dummy->setObjectName("dummy3");
-    dummy->setWindowTitle(i18n("Statistics"));
-    widgets.append(dummy);
     return widgets;
 }
 

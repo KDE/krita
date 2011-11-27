@@ -69,6 +69,8 @@ public:
             : viewConverter(0)
             , imageCollection(0)
             , showFormattingCharacters(false)
+            , showSpellChecking(false)
+            , background(Qt::white)
         {
         }
 
@@ -81,6 +83,7 @@ public:
         bool showFormattingCharacters;
         bool showTableBorders;
         bool showSpellChecking;
+        QColor background;
     };
 
     /// constructor

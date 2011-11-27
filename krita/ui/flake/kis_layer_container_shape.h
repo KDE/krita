@@ -69,7 +69,7 @@ private slots:
     void setLayerVisible(bool);
     void editabilityChanged();
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

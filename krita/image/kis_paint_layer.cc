@@ -35,7 +35,7 @@
 #include "kis_processing_visitor.h"
 #include "kis_default_bounds.h"
 
-class KisPaintLayer::Private
+struct KisPaintLayer::Private
 {
 public:
     KisPaintDeviceSP paintDevice;
@@ -51,8 +51,6 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
     m_d->paintDevice = dev;
     m_d->paintDevice->setParentNode(this);
 
-    // fixme: overwriting the default bounds is unexpected behaviour.
-    // maybe something like if(dynamic_cast<KisDefaultBounds*>(dev.defaultBounds())) {..} is better.
     m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
 }
 
@@ -65,7 +63,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
     m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
 }
 
-KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
+KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, const KoColorSpace *colorSpace)
         : KisLayer(image, name, opacity)
         , m_d(new Private())
 {
@@ -152,11 +150,11 @@ void KisPaintLayer::setImage(KisImageWSP image)
 KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    
+
     // XXX: get right icons
     l << KoDocumentSectionModel::Property(i18n("Alpha Channel Locked"), KIcon("transparency-locked"), KIcon("transparency-unlocked"), alphaLocked());
     l << KoDocumentSectionModel::Property(i18n("Alpha Channel Disabled"), KIcon("transparency-disabled"), KIcon("transparency-enabled"), alphaChannelDisabled());
-    
+
     return l;
 }
 
@@ -170,7 +168,7 @@ void KisPaintLayer::setSectionModelProperties(const KoDocumentSectionModel::Prop
             disableAlphaChannel(property.state.toBool());
         }
     }
-    
+
     KisLayer::setSectionModelProperties(properties);
 }
 
@@ -222,7 +220,7 @@ void KisPaintLayer::setAlphaLocked(bool lock)
 {
     if(m_d->paintChannelFlags.isEmpty())
         m_d->paintChannelFlags = colorSpace()->channelFlags(true, true, true, true);
-    
+
     if(lock)
         m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false, true, true);
     else

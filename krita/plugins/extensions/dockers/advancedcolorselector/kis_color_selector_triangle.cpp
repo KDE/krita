@@ -134,7 +134,7 @@ void KisColorSelectorTriangle::setColor(const QColor &color)
 
 int KisColorSelectorTriangle::triangleWidth() const
 {
-    return triangleHeight()*2/sqrt(3);
+    return triangleHeight()*2/sqrt(3.0);
 }
 
 int KisColorSelectorTriangle::triangleHeight() const

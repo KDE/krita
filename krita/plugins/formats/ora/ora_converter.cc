@@ -56,9 +56,6 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
-    // We're not set up to handle asynchronous loading at the moment.
-    QString tmpFile;
-
     KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Read, "image/openraster", KoStore::Zip);
     if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
@@ -68,9 +65,9 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
     KisOpenRasterStackLoadVisitor orslv(m_doc, &olc);
     orslv.loadImage();
     m_image = orslv.image();
-    
+
     delete store;
-    
+
     return KisImageBuilder_RESULT_OK;
 
 }

@@ -24,7 +24,7 @@
 #include <KoCompositeOp.h>
 #include "kis_paint_device.h"
 
-class KisBaseNode::Private
+struct KisBaseNode::Private
 {
 public:
 

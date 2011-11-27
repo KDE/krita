@@ -48,10 +48,11 @@
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
 #include "kis_shape_selection.h"
+#include "kis_default_bounds.h"
 
 KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 {
-    KisSelectionSP pixelSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
+    KisSelectionSP pixelSelection = new KisSelection(new KisDefaultBounds(paintDevice));
 
     KisFillPainter gc(pixelSelection->getOrCreatePixelSelection());
     gc.fillRect(10, 10, 200, 200, KoColor(gc.device()->colorSpace()));
@@ -63,7 +64,7 @@ KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 
 KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP image)
 {
-    KisSelectionSP vectorSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
+    KisSelectionSP vectorSelection = new KisSelection(new KisDefaultBounds(paintDevice));
     KoPathShape* path = new KoPathShape();
     path->setShapeId(KoPathShapeId);
     path->moveTo(QPointF(10, 10));

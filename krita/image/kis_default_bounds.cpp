@@ -16,31 +16,51 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-
-#include "kis_global.h"
 #include "kis_default_bounds.h"
 #include "kis_paint_device.h"
 
 const QRect KisDefaultBounds::infiniteRect =
     QRect(qint32_MIN/2, qint32_MIN/2, qint32_MAX, qint32_MAX);
 
-
-/******************************************************************/
-/*                  KisDefaultBounds                              */
-/******************************************************************/
-
 struct KisDefaultBounds::Private
 {
     KisImageWSP image;
+    KisPaintDeviceSP parentDevice;
 };
 
 
-KisDefaultBounds::KisDefaultBounds(KisImageWSP image)
-    : m_d(new Private())
+KisDefaultBounds::KisDefaultBounds()
+    : QObject(0)
+    , m_d(new Private())
 {
+    m_d->image = 0;
+    m_d->parentDevice = 0;
+}
+
+KisDefaultBounds::KisDefaultBounds(KisImageWSP image)
+    : QObject(0)
+    , m_d(new Private())
+{
+    m_d->parentDevice = 0;
     m_d->image = image;
 }
+
+KisDefaultBounds::KisDefaultBounds(KisPaintDeviceSP parentDevice)
+    : QObject(0)
+    , m_d(new Private())
+{
+    m_d->parentDevice = parentDevice;
+    m_d->image = 0;
+}
+
+KisDefaultBounds::KisDefaultBounds(KisImageWSP image, KisPaintDeviceSP parentDevice)
+    : QObject(0)
+    , m_d(new Private())
+{
+    m_d->image = image;
+    m_d->parentDevice = parentDevice;
+}
+
 
 KisDefaultBounds::~KisDefaultBounds()
 {
@@ -49,36 +69,13 @@ KisDefaultBounds::~KisDefaultBounds()
 
 QRect KisDefaultBounds::bounds() const
 {
-    /**
-     * By default return infinite rect to cover everything
-     */
-    return m_d->image ? m_d->image->bounds() : infiniteRect;
-}
 
 
-/******************************************************************/
-/*                  KisSelectionDefaultBounds                     */
-/******************************************************************/
-
-struct KisSelectionDefaultBounds::Private
-{
-    KisPaintDeviceSP parentDevice;
-};
-
-KisSelectionDefaultBounds::KisSelectionDefaultBounds(KisPaintDeviceSP parentDevice, KisImageWSP image)
-    : KisDefaultBounds(image),
-      m_d(new Private())
-{
-    m_d->parentDevice = parentDevice;
-}
-
-KisSelectionDefaultBounds::~KisSelectionDefaultBounds()
-{
-    delete m_d;
-}
-
-QRect KisSelectionDefaultBounds::bounds() const
-{
     QRect additionalRect = m_d->parentDevice ? m_d->parentDevice->exactBounds() : QRect();
-    return additionalRect | KisDefaultBounds::bounds();
+    additionalRect |= (m_d->image ? m_d->image->bounds() : infiniteRect);
+
+    if (!m_d->image && !m_d->parentDevice) {
+        additionalRect = QRect();
+    }
+    return additionalRect;
 }

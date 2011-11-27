@@ -65,7 +65,7 @@
 #include <ko_favorite_resource_manager.h>
 #include <kis_paintop_box.h>
 
-class KisCanvas2::KisCanvas2Private
+struct KisCanvas2::KisCanvas2Private
 {
 
 public:
@@ -320,7 +320,7 @@ void KisCanvas2::createOpenGLCanvas()
 void KisCanvas2::createCanvas(bool useOpenGL)
 {
     const KoColorProfile *profile = m_d->view->resourceProvider()->currentDisplayProfile();
-    slotSetDisplayProfile(profile);
+    m_d->monitorProfile = const_cast<KoColorProfile*>(profile);
 
     if (useOpenGL) {
 #ifdef HAVE_OPENGL

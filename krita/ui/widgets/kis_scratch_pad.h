@@ -44,7 +44,7 @@ class KisScratchPadEventFilter;
 class KisPaintingInformationBuilder;
 class KisToolFreehandHelper;
 class KisNodeGraphListener;
-
+class KisDefaultBounds;
 
 /**
  * A scratchpad is a painting canvas with only one zoomlevel and based on

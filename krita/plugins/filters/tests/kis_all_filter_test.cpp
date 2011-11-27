@@ -28,6 +28,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_transaction.h"
 #include <KoColorSpaceRegistry.h>
+#include "kis_default_bounds.h"
 
 bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2)
 {
@@ -211,7 +212,7 @@ bool testFilterWithSelections(KisFilterSP f)
     }
     qDebug() << f->id();// << "\n"; << kfc->toXML() << "\n";
 
-    KisSelectionSP sel1 = new KisSelection(new KisSelectionDefaultBounds(dev));
+    KisSelectionSP sel1 = new KisSelection(new KisDefaultBounds(dev));
     sel1->getOrCreatePixelSelection()->select(qimage.rect());
 
     f->process(dev, dev, sel1, QRect(QPoint(0,0), qimage.size()), kfc);

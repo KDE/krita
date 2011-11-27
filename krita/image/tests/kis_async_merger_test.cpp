@@ -235,6 +235,53 @@ void KisAsyncMergerTest::testFullRefreshWithClones()
     }
 }
 
+    /*
+      +--------------+
+      |root          |
+      | paint 2      |
+      | paint 1      |
+      +--------------+
+     */
+
+void KisAsyncMergerTest::testSubgraphingWithoutUpdatingParent()
+{
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 128, 128, colorSpace, "clones test");
+
+    KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
+    device1->fill(image->bounds(), KoColor(Qt::white, colorSpace));
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
+
+    KisPaintDeviceSP device2 = new KisPaintDevice(colorSpace);
+    device2->fill(image->bounds(), KoColor(Qt::black, colorSpace));
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", 128, device2);
+
+    image->addNode(paintLayer1, image->rootLayer());
+    image->addNode(paintLayer2, image->rootLayer());
+
+    image->refreshGraph();
+
+    QImage refImage(QString(FILES_DATA_DIR) + QDir::separator() + "subgraphing_without_updating.png");
+
+    {
+        QImage resultImage = image->projection()->convertToQImage(0);
+        QCOMPARE(resultImage, refImage);
+    }
+
+    QRect cropRect(image->bounds());
+
+    KisRefreshSubtreeWalker walker(cropRect);
+    KisAsyncMerger merger;
+
+    walker.collectRects(paintLayer2, image->bounds());
+    merger.startMerge(walker);
+
+    {
+        QImage resultImage = image->projection()->convertToQImage(0);
+        QCOMPARE(resultImage, refImage);
+    }
+}
+
 QTEST_KDEMAIN(KisAsyncMergerTest, NoGUI)
 #include "kis_async_merger_test.moc"
 

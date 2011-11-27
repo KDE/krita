@@ -122,7 +122,7 @@ private:
     void selectNextBrush(const KisPaintInformation& info) const;
     void sanitize(); // Force some default values in case the ones read in don't make sense
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 
 

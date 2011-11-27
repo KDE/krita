@@ -245,38 +245,58 @@ void PieDiagram::paintInternal(PaintContext* ctx, QRectF& textBoundingRect)
     }
     d->size /= ( 1.0 + 1.0 * maxExplode );
 
-    if(!textBoundingRect.isEmpty())
+    if(d->size < 0.0)
+        d->size = 0;
+
+    if(!textBoundingRect.isEmpty() && d->size > 0.0)
     {
-        // Find out the maximum distance from every corner of the rectangle with
+        // Find out the distances from every corner of the rectangle with
         // the center.
-        double maxDistance = 0, dist = 0;
-
         QPointF center = ctx->rectangle().center();
-		
-		dist = qAbs(textBoundingRect.right() - center.x());
-        if(dist > maxDistance)
-            maxDistance = dist;
-
-        dist = qAbs(textBoundingRect.left() - center.x());
-        if(dist > maxDistance)
-            maxDistance = dist;
-
-        dist = qAbs(textBoundingRect.top() - center.y());
-        if(dist > maxDistance)
-            maxDistance = dist;
-
-        dist = qAbs(textBoundingRect.bottom() - center.y());
-        if(dist > maxDistance)
-            maxDistance = dist;
-
-        double size = d->size;
-        double diff = (2*maxDistance - d->size);
-        if(diff > 0)
-            d->size *= 1.0-(diff/size);
+        qreal left = qMax(qreal(0.0), center.x() - textBoundingRect.left());
+        qreal right = qMax(qreal(0.0), textBoundingRect.right() - center.x());
+        qreal top = qMax(qreal(0.0), center.y() - textBoundingRect.top());
+        qreal bottom = qMax(qreal(0.0), textBoundingRect.bottom() - center.y());
+        // Compute the minimal and maximal distances for horizontal vs vertical
+        // the text has.
+        qreal xDistanceMax, xDistanceMin, yDistanceMax, yDistanceMin;
+        if ( left > right ) {
+            xDistanceMax = left;
+            xDistanceMin = right;
+        } else {
+            xDistanceMax = right;
+            xDistanceMin = left;
+        }
+        if ( top > bottom ) {
+            yDistanceMax = top;
+            yDistanceMin = bottom;
+        } else {
+            yDistanceMax = bottom;
+            yDistanceMin = top;
+        }
+        // Above we are dealing with the distance from the center what means
+        // below we need to make sure to use the half d->size while working
+        // with those values.
+        qreal availableDistance = d->size/2.0;
+        // Now first check what size (if any) the text needs more in any
+        // of the corners then what is available for the pie-chart.
+        // The resulting diff value is not any longer only related to the
+        // distance (d->size/2 cause of calculation from the center) but
+        // is now in relation to the whole d->size.
+        qreal diff;
+        if ( xDistanceMax + xDistanceMin > yDistanceMax + yDistanceMin ) {
+            diff = qMax(qreal(0.0), xDistanceMax - availableDistance) + qMax(qreal(0.0), xDistanceMin - availableDistance);
+        } else {
+            diff = qMax(qreal(0.0), yDistanceMax - availableDistance) + qMax(qreal(0.0), yDistanceMin - availableDistance);
+        }
+        if(diff > 0.0) {
+            // If that is the case then we need to shrink the size available for the
+            // pie-chart by the additional space needed for the text. Those space
+            // removed from the pie-chart will then be used by the text and makes
+            // sure that the text fits into the contentsRect and is not drawn outside.
+            d->size -= qMin(d->size, diff);
+        }
     }
-
-    if(d->size < 0)
-        d->size = 0; 
 
     qreal sizeFor3DEffect = 0.0;
     if ( ! threeDAttrs.isEnabled() ) {

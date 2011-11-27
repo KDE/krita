@@ -124,14 +124,7 @@ void KisImageManager::rotateCurrentImage(double radians)
 {
     if (!m_view->image()) return;
 
-    KoProgressUpdater* updater = m_view->statusBar()->progress()->createUpdater();
-    updater->start(100, "Rotate Image");
-    KoUpdaterPtr up = updater->startSubtask();
-
-    m_view->image()->rotate(radians, up);
-
-    m_view->statusBar()->progress()->detachUpdater(updater);
-    updater->deleteLater();
+    m_view->image()->rotate(radians);
 }
 
 void KisImageManager::shearCurrentImage(double angleX, double angleY)

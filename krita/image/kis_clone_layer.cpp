@@ -32,7 +32,7 @@
 #include "kis_clone_info.h"
 
 
-class KisCloneLayer::Private
+struct KisCloneLayer::Private
 {
 public:
     KisLayerSP copyFrom;
@@ -153,7 +153,7 @@ QRect KisCloneLayer::extent() const
     if(m_d->x || m_d->y) {
         rect.translate(m_d->x, m_d->y);
     }
-    return rect;
+    return rect | projection()->extent();
 }
 
 QRect KisCloneLayer::exactBounds() const
@@ -162,7 +162,7 @@ QRect KisCloneLayer::exactBounds() const
     if(m_d->x || m_d->y) {
         rect.translate(m_d->x, m_d->y);
     }
-    return rect;
+    return rect | projection()->exactBounds();
 }
 
 QRect KisCloneLayer::accessRect(const QRect &rect, PositionToFilthy pos) const

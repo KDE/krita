@@ -367,7 +367,13 @@ KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     d->docInfo = new KoDocumentInfo(this);
     d->docRdf = 0;
 #ifdef SHOULD_BUILD_RDF
-    d->docRdf  = new KoDocumentRdf(this);
+    {
+        KConfigGroup cfgGrp(componentData().config(), "RDF");
+        bool rdfEnabled = cfgGrp.readEntry("rdf_enabled", false);
+        if (rdfEnabled) {
+            d->docRdf  = new KoDocumentRdf(this);
+        }
+    }
 #endif
 
     d->pageLayout.width = 0;
@@ -796,6 +802,16 @@ KoDocumentRdf *KoDocument::documentRdf() const
     return d->docRdf;
 #endif
     return 0;
+}
+
+void KoDocument::setDocumentRdf(KoDocumentRdf *rdfDocument)
+{
+    delete d->docRdf;
+#ifdef SHOULD_BUILD_RDF
+    d->docRdf = rdfDocument;
+#else
+    d->docRdf = 0;
+#endif
 }
 
 KoDocumentRdfBase *KoDocument::documentRdfBase() const
@@ -2189,12 +2205,12 @@ QDomDocument KoDocument::createDomDocument(const QString& tagName, const QString
 QDomDocument KoDocument::createDomDocument(const QString& appName, const QString& tagName, const QString& version)
 {
     QDomImplementation impl;
-    QString url = QString("http://www.calligra-suite.org/DTD/%1-%2.dtd").arg(appName).arg(version);
+    QString url = QString("http://www.calligra.org/DTD/%1-%2.dtd").arg(appName).arg(version);
     QDomDocumentType dtype = impl.createDocumentType(tagName,
                              QString("-//KDE//DTD %1 %2//EN").arg(appName).arg(version),
                              url);
     // The namespace URN doesn't need to include the version number.
-    QString namespaceURN = QString("http://www.calligra-suite.org/DTD/%1").arg(appName);
+    QString namespaceURN = QString("http://www.calligra.org/DTD/%1").arg(appName);
     QDomDocument doc = impl.createDocument(namespaceURN, tagName, dtype);
     doc.insertBefore(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""), doc.documentElement());
     return doc;

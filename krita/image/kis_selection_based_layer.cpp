@@ -28,7 +28,6 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_default_bounds.h"
-
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 #include "filter/kis_filter_configuration.h"
@@ -36,7 +35,7 @@
 #include "filter/kis_filter.h"
 
 
-class KisSelectionBasedLayer::Private
+struct KisSelectionBasedLayer::Private
 {
 public:
     bool showSelection;

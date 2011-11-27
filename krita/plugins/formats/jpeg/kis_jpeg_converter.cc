@@ -16,11 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
-#ifdef _MSC_VER // this removes KDEWIN extensions to stdint.h: required by exiv2
-#define KDEWIN_STDINT_H
-#endif
-
 #include "kis_jpeg_converter.h"
 
 #include <stdio.h>
@@ -227,7 +222,6 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     if (! m_image) {
         m_image = new KisImage(m_doc->createUndoStore(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
         Q_CHECK_PTR(m_image);
-        m_image->lock();
     }
 
     // Set resolution
@@ -291,7 +285,6 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     }
 
     m_image->addNode(KisNodeSP(layer.data()), m_image->rootLayer().data());
-    layer->setDirty();
 
     // Read exif information
 
@@ -326,24 +319,24 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
                     KisTransformWorker::mirrorY(layer->paintDevice());
                     break;
                 case 3:
-                    image()->rotate(M_PI, 0);
+                    image()->rotate(M_PI);
                     break;
                 case 4:
                     KisTransformWorker::mirrorX(layer->paintDevice());
                     break;
                 case 5:
-                    image()->rotate(M_PI / 2, 0);
+                    image()->rotate(M_PI / 2);
                     KisTransformWorker::mirrorY(layer->paintDevice());
                     break;
                 case 6:
-                    image()->rotate(M_PI / 2, 0);
+                    image()->rotate(M_PI / 2);
                     break;
                 case 7:
-                    image()->rotate(M_PI / 2, 0);
+                    image()->rotate(M_PI / 2);
                     KisTransformWorker::mirrorX(layer->paintDevice());
                     break;
                 case 8:
-                    image()->rotate(-M_PI / 2 + M_PI*2, 0);
+                    image()->rotate(-M_PI / 2 + M_PI*2);
                     break;
                 default:
                     break;

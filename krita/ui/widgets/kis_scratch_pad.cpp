@@ -46,7 +46,7 @@
 #include "kis_tool_freehand_helper.h"
 #include "kis_image_patch.h"
 #include "kis_canvas_widget_base.h"
-
+#include "kis_image.h"
 
 class KisScratchPadNodeListener : public KisNodeGraphListener
 {
@@ -138,7 +138,6 @@ KisScratchPad::KisScratchPad(QWidget *parent)
 KisScratchPad::~KisScratchPad() {
     delete m_helper;
     delete m_infoBuilder;
-
     delete m_undoAdapter;
     delete m_undoStore;
     delete m_updateScheduler;

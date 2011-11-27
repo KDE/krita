@@ -175,7 +175,7 @@ public:
 
     KisNodeWSP parent;
     PaintDeviceCache cache;
-    KisDefaultBounds defaultBounds;
+    KisDefaultBounds *defaultBounds;
     qint32 x;
     qint32 y;
     KoColorSpace* colorSpace;
@@ -186,10 +186,10 @@ KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& n
     : QObject(0)
     , m_d(new Private(this))
 {
-    init(0, colorSpace, KisDefaultBounds(), 0, name);
+    init(0, colorSpace, new KisDefaultBounds(), 0, name);
 }
 
-KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace *colorSpace, KisDefaultBounds defaultBounds, const QString& name)
+KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace *colorSpace, KisDefaultBounds *defaultBounds, const QString& name)
     : QObject(0)
     , m_d(new Private(this))
 {
@@ -209,7 +209,7 @@ KisPaintDevice::KisPaintDevice(KisDataManagerSP explicitDataManager,
 
 void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
                           const KoColorSpace *colorSpace,
-                          KisDefaultBounds defaultBounds,
+                          KisDefaultBounds *defaultBounds,
                           KisNodeWSP parent, const QString& name)
 {
     Q_ASSERT(colorSpace);
@@ -336,13 +336,17 @@ void KisPaintDevice::setParentNode(KisNodeWSP parent)
     m_d->parent = parent;
 }
 
-void KisPaintDevice::setDefaultBounds(KisDefaultBounds defaultBounds)
+void KisPaintDevice::setDefaultBounds(KisDefaultBounds *defaultBounds)
 {
+    if (!defaultBounds->parent()) {
+        defaultBounds->moveToThread(QThread::currentThread());
+        defaultBounds->setParent(this);
+    }
     m_d->defaultBounds = defaultBounds;
     m_d->cache.invalidate();
 }
 
-KisDefaultBounds KisPaintDevice::defaultBounds() const
+KisDefaultBounds *KisPaintDevice::defaultBounds() const
 {
     return m_d->defaultBounds;
 }
@@ -387,7 +391,7 @@ QRect KisPaintDevice::extent() const
     quint8 defaultOpacity = colorSpace()->opacityU8(defaultPixel());
 
     if (defaultOpacity != OPACITY_TRANSPARENT_U8) {
-        extent |= m_d->defaultBounds.bounds();
+        extent |= m_d->defaultBounds->bounds();
     }
 
     return extent;

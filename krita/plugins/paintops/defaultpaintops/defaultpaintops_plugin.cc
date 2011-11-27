@@ -37,6 +37,7 @@
 #include "kis_global.h"
 #include "kis_paintop_registry.h"
 #include "kis_brush_based_paintop_settings.h"
+#include "kis_brush_server.h"
 
 K_PLUGIN_FACTORY(DefaultPaintOpsPluginFactory, registerPlugin<DefaultPaintOpsPlugin>();)
 K_EXPORT_PLUGIN(DefaultPaintOpsPluginFactory("krita"))
@@ -51,6 +52,7 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QVariantList
     QStringList whiteList;
     whiteList << COMPOSITE_COPY;
     r->add(new KisSimplePaintOpFactory<KisSmudgeOp, KisBrushBasedPaintOpSettings, KisSmudgeOpSettingsWidget>("smudge", i18n("Smudge Brush"), KisPaintOpFactory::categoryStable(),"krita-smudgebrush.png","smudge-finger", whiteList,2));
+    KisBrushServer::instance();
 }
 
 DefaultPaintOpsPlugin::~DefaultPaintOpsPlugin()

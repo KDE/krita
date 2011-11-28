@@ -77,23 +77,6 @@ private:
 };
 
 
-class KisScratchPadDefaultBounds : public KisDefaultBounds
-{
-public:
-
-    KisScratchPadDefaultBounds(KisScratchPad *scratchPad)
-        : m_scratchPad(scratchPad)
-    {
-    }
-
-    QRect bounds() const {
-        return m_scratchPad->imageBounds();
-    }
-
-private:
-    KisScratchPad *m_scratchPad;
-};
-
 
 KisScratchPad::KisScratchPad(QWidget *parent)
     : QWidget(parent)

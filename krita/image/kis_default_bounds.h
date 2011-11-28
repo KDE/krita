@@ -19,17 +19,14 @@
 #ifndef KIS_DEFAULT_BOUNDS_H
 #define KIS_DEFAULT_BOUNDS_H
 
+#include <QObject>
 #include <QRect>
 #include "kis_types.h"
 #include "kis_image.h"
 
-class KisDefaultBounds;
-class KisSelectionDefaultBounds;
-typedef KisSharedPtr<KisDefaultBounds> KisDefaultBoundsSP;
-typedef KisSharedPtr<KisSelectionDefaultBounds> KisSelectionDefaultBoundsSP;
-
-class KRITAIMAGE_EXPORT KisDefaultBounds : public KisShared
+class KRITAIMAGE_EXPORT KisDefaultBounds : public QObject, public KisShared
 {
+    Q_OBJECT
 public:
     KisDefaultBounds(KisImageWSP image = 0);
     virtual ~KisDefaultBounds();
@@ -46,6 +43,7 @@ private:
 
 class KRITAIMAGE_EXPORT KisSelectionDefaultBounds : public KisDefaultBounds
 {
+    Q_OBJECT
 public:
     KisSelectionDefaultBounds(KisPaintDeviceSP parentPaintDevice = 0, KisImageWSP image = 0);
     ~KisSelectionDefaultBounds();

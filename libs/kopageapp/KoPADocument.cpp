@@ -154,11 +154,6 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore)
         return false;
     }
 
-    // Load user defined variable declarations
-    if (KoVariableManager *variableManager = inlineTextObjectManager()->variableManager()) {
-        variableManager->loadOdf(body);
-    }
-
     // Load text styles before the corresponding text shapes try to use them!
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
     paContext.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
@@ -218,11 +213,6 @@ bool KoPADocument::saveOdf( SavingContext & documentContext )
 
     bodyWriter->startElement( "office:body" );
     bodyWriter->startElement( odfTagName( true ) );
-
-    // Save user defined variable declarations
-    if (KoVariableManager *variableManager = inlineTextObjectManager()->variableManager()) {
-        variableManager->saveOdf(bodyWriter);
-    }
 
     if ( !saveOdfProlog( paContext ) ) {
         return false;
@@ -349,6 +339,12 @@ bool KoPADocument::loadOdfProlog( const KoXmlElement & body, KoPALoadingContext 
 {
     Q_UNUSED( body );
     Q_UNUSED( context );
+
+    // Load user defined variable declarations
+    if (KoVariableManager *variableManager = inlineTextObjectManager()->variableManager()) {
+        variableManager->loadOdf(body);
+    }
+
     return true;
 }
 
@@ -379,6 +375,12 @@ bool KoPADocument::saveOdfPages( KoPASavingContext &paContext, QList<KoPAPageBas
 bool KoPADocument::saveOdfProlog( KoPASavingContext & paContext )
 {
     Q_UNUSED( paContext );
+
+    // Save user defined variable declarations
+    if (KoVariableManager *variableManager = inlineTextObjectManager()->variableManager()) {
+        variableManager->saveOdf(&paContext.xmlWriter());
+    }
+
     return true;
 }
 

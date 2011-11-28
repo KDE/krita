@@ -87,10 +87,14 @@ QString KoVariableManager::value(const QString &name) const
 QString KoVariableManager::userType(const QString &name)
 {
     int key = d->variableMapping.value(name);
-    if (key == 0 || !d->userTypes.contains(key)) {
+    if (key == 0) {
         return QString();
     }
-    return d->userTypes[key];
+    QHash<int, QString>::const_iterator it = d->userTypes.constFind(key);
+    if (it == d->userTypes.constEnd()) {
+        return QString();
+    }
+    return it.value();
 }
 
 void KoVariableManager::remove(const QString &name)

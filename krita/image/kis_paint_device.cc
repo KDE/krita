@@ -45,7 +45,6 @@
 #include "kis_node.h"
 #include "commands/kis_paintdevice_convert_type_command.h"
 #include "kis_datamanager.h"
-#include "kis_paint_device.h"
 
 #include "kis_selection_component.h"
 #include "kis_pixel_selection.h"
@@ -57,7 +56,6 @@
 #include "tiles3/kis_rect_iterator.h"
 #include "tiles3/kis_random_accessor.h"
 
-#include "kis_default_bounds.h"
 
 class CacheData : public KisDataManager::AbstractCache
 {
@@ -168,13 +166,8 @@ public:
     {
     }
 
-    ~Private()
-    {
-        delete defaultBounds;
-    }
-
     KisNodeWSP parent;
-    KisDefaultBounds *defaultBounds;
+    KisDefaultBoundsSP defaultBounds;
     PaintDeviceCache cache;
     qint32 x;
     qint32 y;
@@ -189,7 +182,7 @@ KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& n
     init(0, colorSpace, new KisDefaultBounds(), 0, name);
 }
 
-KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBounds * defaultBounds, const QString& name)
+KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsSP defaultBounds, const QString& name)
     : QObject(0)
     , m_d(new Private(this))
 {
@@ -212,7 +205,7 @@ KisPaintDevice::KisPaintDevice(KisDataManagerSP explicitDataManager,
 
 void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
                           const KoColorSpace *colorSpace,
-                          KisDefaultBounds * defaultBounds,
+                          KisDefaultBoundsSP defaultBounds,
                           KisNodeWSP parent, const QString& name)
 {
     Q_ASSERT(colorSpace);
@@ -339,14 +332,13 @@ void KisPaintDevice::setParentNode(KisNodeWSP parent)
     m_d->parent = parent;
 }
 
-void KisPaintDevice::setDefaultBounds(KisDefaultBounds * defaultBounds)
+void KisPaintDevice::setDefaultBounds(KisDefaultBoundsSP defaultBounds)
 {
-    delete m_d->defaultBounds;
     m_d->defaultBounds = defaultBounds;
     m_d->cache.invalidate();
 }
 
-KisDefaultBounds * KisPaintDevice::defaultBounds() const
+KisDefaultBoundsSP KisPaintDevice::defaultBounds() const
 {
     return m_d->defaultBounds;
 }

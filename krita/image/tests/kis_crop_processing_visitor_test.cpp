@@ -28,7 +28,7 @@
 #include "kis_transparency_mask.h"
 #include "testutil.h"
 #include "kis_surrogate_undo_adapter.h"
-#include "kis_image.h"
+
 
 void KisCropProcessingVisitorTest::testUndo()
 {

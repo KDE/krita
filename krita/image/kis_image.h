@@ -33,7 +33,9 @@
 #include "kis_shared.h"
 #include "kis_node_graph_listener.h"
 #include "kis_node_facade.h"
+#include "kis_default_bounds.h"
 #include "kis_image_interfaces.h"
+
 
 class KoDocument;
 class KoColorSpace;
@@ -61,13 +63,7 @@ class MergeStrategy;
  * meta information about the image. And it also provides some
  * functions to manipulate the whole image.
  */
-class KRITAIMAGE_EXPORT KisImage : public QObject,
-        public KisStrokesFacade,
-        public KisUpdatesFacade,
-        public KisProjectionUpdateListener,
-        public KisNodeFacade,
-        public KisNodeGraphListener,
-        public KisShared
+class KRITAIMAGE_EXPORT KisImage : public QObject, public KisStrokesFacade, public KisUpdatesFacade, public KisProjectionUpdateListener, public KisNodeFacade, public KisNodeGraphListener, public KisShared
 {
 
     Q_OBJECT
@@ -447,6 +443,8 @@ public:
      */
     KisLayerSP flattenLayer(KisLayerSP layer);
 
+
+    /// This overrides interface for KisDefaultBounds
     /// @return the exact bounds of the image in pixel coordinates.
     QRect bounds() const;
 

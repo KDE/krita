@@ -41,7 +41,7 @@
 struct KisPixelSelection::Private {
 };
 
-KisPixelSelection::KisPixelSelection(KisDefaultBounds * defaultBounds)
+KisPixelSelection::KisPixelSelection(KisDefaultBoundsSP defaultBounds)
         : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
         , m_d(new Private)
 {

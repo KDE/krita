@@ -33,7 +33,6 @@
 #include "kis_mask.h"
 #include "kis_transparency_mask.h"
 #include "testutil.h"
-#include "kis_selection_default_bounds.h"
 
 void KisSelectionTest::testSelectionComponents()
 {

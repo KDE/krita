@@ -140,7 +140,7 @@ void KoVariableManager::loadOdf(const KoXmlElement &bodyElement)
     forEachElement(e, element) {
         if (e.namespaceURI() != KoXmlNS::text || e.localName() != "user-field-decl")
             continue;
-        QString name = e.attributeNS(KoXmlNS::text, "name");
+        const QString name = e.attributeNS(KoXmlNS::text, "name");
         QString type = e.attributeNS(KoXmlNS::office, "value-type");
         QString value;
         if (type == "string") {

@@ -208,12 +208,16 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
                 pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
                 return pointedAt;
             }
+            if (basicallyFound && point.y() < lineRect.y()) {
+                // This was not same baseline so basicallyFound was correct
+                return pointedAt;
+            }
             if (point.x() > lineRect.x() + lineRect.width()) {
                 // right of line
                 basicallyFound = true;
                 pointedAt.position = block.position() + line.textStart() + line.textLength();
                 pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
-                continue;
+                continue; // don't break as next line may be on same baseline
             }
             pointedAt.position = block.position() + line.xToCursor(point.x());
             pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());

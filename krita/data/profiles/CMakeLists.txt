@@ -4,10 +4,8 @@ install(FILES
     Apple.icm
     CIE.icm
     ColorMatch.icm
-    ISO.icc
     lcmslabi.icm
     lcmsxyzi.icm
-    monoscnr.icm
     NTSC.icm
     PAL.icm
     README
@@ -15,7 +13,6 @@ install(FILES
     SMPTE-C.icm
     sRGB.icm
     srgbspac.icm
-    tifflab8spac.icm
     WideGamut.icm
     ycc601.icm
     ycc709.icm

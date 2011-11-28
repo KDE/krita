@@ -20,7 +20,6 @@
 #define __KIS_CROP_PROCESSING_VISITOR_H
 
 #include "kis_processing_visitor.h"
-
 #include <QRect>
 
 

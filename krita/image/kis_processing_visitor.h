@@ -19,11 +19,9 @@
 #ifndef __KIS_PROCESSING_VISITOR_H
 #define __KIS_PROCESSING_VISITOR_H
 
+#include "kis_node.h"
 #include "krita_export.h"
 
-#include "kis_shared.h"
-
-class KisNode;
 class KoUpdater;
 class KoProgressUpdater;
 class KisUndoAdapter;
@@ -35,7 +33,6 @@ class KisCloneLayer;
 class KisFilterMask;
 class KisTransparencyMask;
 class KisSelectionMask;
-class KisGeneratorLayer;
 
 /**
  * A visitor that processes a single layer; it does not recurse into the

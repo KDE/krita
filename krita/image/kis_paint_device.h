@@ -27,12 +27,11 @@
 
 #include <KoColorConversionTransformation.h>
 
-#include "kis_default_bounds.h"
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_shared.h"
 #include "kis_iterators_pixel.h"
-
+#include "kis_default_bounds.h"
 
 #include <krita_export.h>
 
@@ -89,7 +88,7 @@ public:
      * @param defaultBounds boundaries of the device in case it is empty
      * @param name for debugging purposes
      */
-    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBounds &defaultBounds = KisDefaultBounds(), const QString& name = QString());
+    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsSP defaultBounds = new KisDefaultBounds(), const QString& name = QString());
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();

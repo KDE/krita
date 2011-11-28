@@ -19,7 +19,6 @@
 #include "kis_processing_visitor.h"
 
 #include <KoUpdater.h>
-#include <kis_node.h>
 #include <KoProgressUpdater.h>
 #include "kis_node_progress_proxy.h"
 

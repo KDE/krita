@@ -186,9 +186,6 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
     : QObject(0)
     , m_d(new Private(this))
 {
-    if (!defaultBounds) {
-        defaultBounds = new KisDefaultBounds();
-    }
     init(0, colorSpace, defaultBounds, parent, name);
 }
 

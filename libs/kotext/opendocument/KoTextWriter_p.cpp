@@ -86,6 +86,10 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 }
             }
         }
+        if (format.hasProperty(KoParagraphStyle::HiddenByTable)) {
+            block = block.next();
+            continue;
+        }
         if (format.hasProperty(KoParagraphStyle::TableOfContentsData)) {
             saveTableOfContents(document, listStyles, block);
             block = block.next();

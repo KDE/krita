@@ -84,17 +84,14 @@ KisKraLoader::~KisKraLoader()
 
 KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
 {
-
-    KisConfig cfg;
     QString attr;
-    KoXmlNode node;
-    KoXmlNode child;
     KisImageWSP image = 0;
     QString name;
     qint32 width;
     qint32 height;
-    QString description;
     QString profileProductName;
+    double xres;
+    double yres;
     QString colorspacename;
     const KoColorSpace * cs;
 
@@ -114,6 +111,18 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         height = attr.toInt();
 
         m_d->imageComment = element.attribute(DESCRIPTION);
+
+        xres = 100.0 / 72.0;
+        if (!(attr = element.attribute(X_RESOLUTION)).isNull()) {
+            if (attr.toDouble() > 1.0)
+                xres = attr.toDouble() / 72.0;
+        }
+
+        yres = 100.0;
+        if (!(attr = element.attribute(Y_RESOLUTION)).isNull()) {
+            if (attr.toDouble() > 1.0)
+                yres = attr.toDouble() / 72.0;
+        }
 
         if ((colorspacename = element.attribute(COLORSPACE_NAME)).isNull()) {
             // An old file: take a reasonable default.
@@ -142,6 +151,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
 
         image = new KisImage(m_d->document->createUndoStore(), width, height, cs, name);
+        image->setResolution(xres, yres);
         loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
 
     }
@@ -321,7 +331,7 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
         layer->setChannelFlags(channelFlags);
         layer->setCompositeOp(compositeOpName);
     }
-    
+
     if(node->inherits("KisPaintLayer")) {
         KisPaintLayer* layer            = qobject_cast<KisPaintLayer*>(node);
         QBitArray      channelLockFlags = stringToFlags(element.attribute(CHANNEL_LOCK_FLAGS, ""), colorSpace->channelCount());

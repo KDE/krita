@@ -1214,12 +1214,6 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
         converter.zoom(&zoomX, &zoomY);
         shapeMatrix.scale(zoomX, zoomY);
         rect = shapeMatrix.mapRect(rect);
-        QPointF scroll(canvas()->canvasController()->scrollBarValue());
-        if (canvas()->canvasController()->canvasMode() == KoCanvasController::Spreadsheet &&
-                canvas()->canvasWidget()->layoutDirection() == Qt::RightToLeft) {
-            scroll.setX(-scroll.x());
-        }
-        rect.translate(canvas()->documentOrigin() - scroll);
         return rect.toRect();
     }
     case Qt::ImFont:

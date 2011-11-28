@@ -53,25 +53,19 @@ class KisSelectionComponent;
  * read from it, but not write to it. You need to keep track of
  * the need for updating the projection yourself: there is no
  * automatic updating after changing the contents of one or more
- * of the selection components.
+ * of the selection components. 
  */
 class KRITAIMAGE_EXPORT KisSelection : public KisShared
 {
 
 public:
-
-    /**
-     * Create a new KisSelection.
-     */
-    KisSelection();
-
     /**
      * Create a new KisSelection.
      *
      * @param defaultBounds defines the bounds of the selection when
      * Select All is initiated.
      */
-    KisSelection(KisDefaultBounds defaultBounds);
+    KisSelection(KisDefaultBounds * defaultBounds = 0);
 
     /**
      * Copy the selection. The selection components are copied, too.
@@ -143,7 +137,7 @@ public:
     qint32 x() const;
     qint32 y() const;
 
-    void setDefaultBounds(KisDefaultBounds bounds);
+    void setDefaultBounds(KisDefaultBounds * bounds);
 
     void clear();
     KisPixelSelectionSP mergedPixelSelection();
@@ -153,10 +147,10 @@ public:
 
 private:
 
-    KisDefaultBounds defaultBounds() const;
+    KisDefaultBounds * defaultBounds() const;
 
     struct Private;
-    Private *const m_d;
+    Private * const m_d;
 };
 
 #endif // KIS_SELECTION_H_

@@ -224,7 +224,7 @@ public:
 
     }
 
-    virtual void requestProjectionUpdate(KisNode *, const QRect& ) {
+    virtual void requestProjectionUpdate(KisNode *node, const QRect& rect) {
 
     }
 

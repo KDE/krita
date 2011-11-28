@@ -331,7 +331,7 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) co
         qreal y = pos.y();
 
         //0.125 needed since Qt Scribe works with fixed point
-        if (x + 0.125 >= rect.x() && x<= rect.right() && y + 0.125 >= rect.y() && y <= rect.bottom()) {
+        if (x + 0.125 >= rect.x() && x<= rect.right() && y + line.height() + 0.125 >= rect.y() && y <= rect.bottom()) {
             return rootArea;
         }
     }

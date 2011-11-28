@@ -28,6 +28,7 @@ struct KisSelection::Private {
     Private()
         : isDeselected(false)
         , isVisible(true)
+        , defaultBounds(0)
         , shapeSelection(0)
     {
     }
@@ -47,6 +48,7 @@ struct KisSelection::Private {
 KisSelection::KisSelection()
     : m_d(new Private)
 {
+    m_d->defaultBounds = new KisDefaultBounds();
 }
 
 KisSelection::KisSelection(KisDefaultBounds *defaultBounds)

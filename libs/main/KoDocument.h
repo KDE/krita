@@ -587,8 +587,9 @@ public:
     KoDocumentRdf *documentRdf() const;
 
     /**
-     * replace the current rdf document with the given rdf document.
-     * (mostly useful for unittests!)
+     * Replace the current rdf document with the given rdf document. The existing RDF document
+     * will be deleted, and if RDF support is compiled out, KoDocument does not take ownership.
+     * Otherwise, KoDocument will own the rdf document.
      */
     void setDocumentRdf(KoDocumentRdf *rdfDocument);
 

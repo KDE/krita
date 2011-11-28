@@ -29,6 +29,7 @@
 #include <kis_transaction.h>
 #include <kis_math_toolbox.h>
 #include <kis_paint_device.h>
+#include <kis_image.h>
 
 #include "krs_image.h"
 #include "krs_const_iterator.h"

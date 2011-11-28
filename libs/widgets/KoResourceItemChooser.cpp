@@ -332,7 +332,7 @@ void KoResourceItemChooser::updateButtonState()
     if( resource ) {
         removeButton->setEnabled( true );
         uploadButton->setEnabled(resource->removable());
-        d->tagOpLineEdit->setEnabled( resource->removable());
+        d->tagOpLineEdit->setEnabled(true);
         return;
     }
 

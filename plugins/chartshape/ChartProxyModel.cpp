@@ -22,6 +22,7 @@
 
 // Own
 #include "ChartProxyModel.h"
+#include "PlotArea.h"
 
 // Qt
 #include <QRegion>
@@ -406,25 +407,28 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
     // This is the logic that extracts all the subregions from selection
     // that are later used for the data sets
     Table *internalTable = shape ? shape->tableSource()->get(shape->internalModel()) : 0;
-    for ( QMap<int, QVector<QRect> >::const_iterator it = sortedDataRegions.constBegin(); it != sortedDataRegions.constEnd(); ++it ) {
+    QList<int> sortedDataKeys = sortedDataRegions.keys();
+    qSort(sortedDataKeys);
+    foreach(int key, sortedDataKeys) {
+        QVector<QRect> rects = sortedDataRegions[key];
         QVector<QRect> dataRects;
         CellRegion labelRegion;
         if ( dataDirection == Qt::Horizontal ) {
             if ( firstColumnIsLabel ) {
-                QVector<QRect> labelRects = extractRow(it.value(), colOffset, true);
+                QVector<QRect> labelRects = extractRow(rects, colOffset, true);
                 labelRegion = labelRects.isEmpty() ? CellRegion() : CellRegion(selection.table(), labelRects);
             } else {
-                labelRegion = internalTable ? CellRegion(internalTable, QPoint(1, it.key())) : CellRegion();
+                labelRegion = internalTable ? CellRegion(internalTable, QPoint(1, key)) : CellRegion();
             }
-            dataRects = extractRow(it.value(), colOffset, false);
+            dataRects = extractRow(rects, colOffset, false);
         } else {
             if ( firstRowIsLabel ) {
-                QVector<QRect> labelRects = extractColumn(it.value(), rowOffset, true);
+                QVector<QRect> labelRects = extractColumn(rects, rowOffset, true);
                 labelRegion = labelRects.isEmpty() ? CellRegion() : CellRegion(selection.table(), labelRects);
             } else {
-                labelRegion = internalTable ? CellRegion(internalTable, QPoint(it.key(), 1)) : CellRegion();
+                labelRegion = internalTable ? CellRegion(internalTable, QPoint(key, 1)) : CellRegion();
             }
-            dataRects = extractColumn(it.value(), rowOffset, false);
+            dataRects = extractColumn(rects, rowOffset, false);
         }
 
         labelRegions.append( labelRegion );
@@ -435,6 +439,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
             (dataDirection == Qt::Horizontal && firstRowIsLabel) ||
             (dataDirection == Qt::Vertical && firstColumnIsLabel);
 
+    /*
     kDebug(35001) << "selection=" << selection.toString();
     kDebug(35001) << "dataDirection=" << (dataDirection == Qt::Horizontal ? "Horizontal" : "Vertical");
     kDebug(35001) << "firstRowIsLabel=" << firstRowIsLabel;
@@ -442,6 +447,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
     kDebug(35001) << "overrideCategories=" << overrideCategories;
     kDebug(35001) << "useCategories=" << useCategories;
     kDebug(35001) << "dataRegions.count()="<<dataRegions.count();
+    */
 
     // Regions shared by all data sets: categories and x-data
 
@@ -493,11 +499,13 @@ if(overrideCategories) categoryDataRegion = CellRegion();
         else
             dataSet->setCustomDataRegion( CellRegion() );
 
+        /*
         kDebug(35001) << "xDataRegion=" << dataSet->xDataRegion().toString();
         kDebug(35001) << "yDataRegion=" << dataSet->yDataRegion().toString();
         kDebug(35001) << "categoryDataRegion=" << dataSet->categoryDataRegion().toString();
         kDebug(35001) << "labelDataRegion=" << dataSet->labelDataRegion().toString();
         kDebug(35001) << "customDataRegion=" << dataSet->customDataRegion().toString();
+        */
 
         createdDataSets.append( dataSet );
 
@@ -615,8 +623,11 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     QList<DataSet*> createdDataSets = d->createDataSetsFromRegion( &d->removedDataSets,
                                                                    !helper->categoryRegionSpecifiedInXAxis );
 
-    int loadedDataSetCount = 0;
+    bool isBubble = d->shape->plotArea()->chartType() == BubbleChartType;
+    bool isScatter = d->shape->plotArea()->chartType() == ScatterChartType;
+    CellRegion prevXData, prevYData;
 
+    int loadedDataSetCount = 0;
     KoXmlElement n;
     QPen p;
     QBrush brush;
@@ -648,6 +659,25 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                     dataSet->setCategoryDataRegion( d->categoryDataRegion );
                 }
                 dataSet->loadOdf( n, context );
+
+                if ( isBubble || isScatter ) {
+                    // bubble- and scatter-charts have chart:domain's that define the
+                    // x- and y-data. But if they are not defined in the series then
+                    // a previous defined one needs to be used.
+                    if ( dataSet->xDataRegion().isValid() ) {
+                        prevXData = dataSet->xDataRegion();
+                    } else {
+                        dataSet->setXDataRegion(prevXData);
+                    }
+                    if ( isBubble ) {
+                        if ( dataSet->yDataRegion().isValid() ) {
+                            prevYData = dataSet->yDataRegion();
+                        } else {
+                            dataSet->setYDataRegion(prevYData);
+                        }
+                    }
+                }
+
                 if ( penLoaded )
                     dataSet->setPen( p );
                 if ( brushLoaded )

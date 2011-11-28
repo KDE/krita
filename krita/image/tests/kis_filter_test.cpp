@@ -28,7 +28,7 @@
 #include "kis_threaded_applicator.h"
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
-#include "kis_default_bounds.h"
+
 #include <KoUpdater.h>
 
 class TestFilter : public KisFilter
@@ -120,7 +120,7 @@ void KisFilterTest::testDifferentSrcAndDst()
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
     KisPaintDeviceSP src = new KisPaintDevice(cs);
     KisPaintDeviceSP dst = new KisPaintDevice(cs);
-    KisSelectionSP sel = new KisSelection(KisDefaultBounds(src));
+    KisSelectionSP sel = new KisSelection(new KisSelectionDefaultBounds(src));
     sel->getOrCreatePixelSelection()->invert(); // select everything
     sel->updateProjection();
 

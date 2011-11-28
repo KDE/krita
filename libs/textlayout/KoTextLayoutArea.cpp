@@ -208,12 +208,16 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
                 pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
                 return pointedAt;
             }
+            if (basicallyFound && point.y() < lineRect.y()) {
+                // This was not same baseline so basicallyFound was correct
+                return pointedAt;
+            }
             if (point.x() > lineRect.x() + lineRect.width()) {
                 // right of line
                 basicallyFound = true;
                 pointedAt.position = block.position() + line.textStart() + line.textLength();
                 pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
-                continue;
+                continue; // don't break as next line may be on same baseline
             }
             pointedAt.position = block.position() + line.xToCursor(point.x());
             pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
@@ -1128,7 +1132,16 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // ==============
     // Now once we know the physical context we can work on the borders of the paragraph
     // ==============
-    handleBordersAndSpacing(blockData, &block);
+    if (block.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
+        if (!m_blockRects.isEmpty()) {
+            m_blockRects.last().setBottom(m_y);
+        }
+        m_y += m_bottomSpacing;
+        m_bottomSpacing = 0;
+        m_blockRects.append(QRectF(m_x, m_y, m_width, 10.0));
+    } else {
+        handleBordersAndSpacing(blockData, &block);
+    }
 
     // Expand bounding rect so if we have content outside we show it
     expandBoundingLeft(m_blockRects.last().x());
@@ -1229,7 +1242,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         anyLineAdded = true;
         maxLineHeight = qMax(maxLineHeight, addLine(line, cursor, blockData));
 
-        if (!runAroundHelper.stayOnBaseline()) {
+        if (!runAroundHelper.stayOnBaseline() && !(block.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)
+         && block.length() <= 1)) {
             m_y += maxLineHeight;
             maxLineHeight = 0;
             m_indent = 0;

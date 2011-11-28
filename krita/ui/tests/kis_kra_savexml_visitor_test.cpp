@@ -30,6 +30,7 @@
 #include <KoColorSpace.h>
 #include <KoPathShape.h>
 
+#include "kis_image.h"
 #include "kis_count_visitor.h"
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter_configuration.h"
@@ -49,6 +50,7 @@
 #include "kis_fill_painter.h"
 #include "kis_shape_selection.h"
 #include "util.h"
+#include "kis_default_bounds.h"
 
 #include "kra/kis_kra_savexml_visitor.h"
 
@@ -67,7 +69,7 @@ void KisKraSaveXmlVisitorTest::testCreateDomDocument()
     QStringList list;
 
     doc->image()->lock();
-    
+
     KisCountVisitor cv(list, KoProperties());
     doc->image()->rootLayer()->accept(cv);
 

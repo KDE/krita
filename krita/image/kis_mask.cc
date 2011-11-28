@@ -118,10 +118,10 @@ void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
          * We can't use setSelection as we may not have parent() yet
          */
         m_d->selection = new KisSelection(*copyFrom);
-        m_d->selection->setDefaultBounds(new KisDefaultBounds(parentLayer->image(), parentPaintDevice));
+        m_d->selection->setDefaultBounds(KisDefaultBounds(parentPaintDevice, parentLayer->image()));
     }
     else {
-        m_d->selection = new KisSelection(new KisDefaultBounds(parentLayer->image(), parentPaintDevice));
+        m_d->selection = new KisSelection(KisDefaultBounds(parentPaintDevice, parentLayer->image()));
 
         quint8 newDefaultPixel = MAX_SELECTED;
         m_d->selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
@@ -142,7 +142,8 @@ KisSelectionSP KisMask::selection() const
         if(parentLayer) {
             KisPaintDeviceSP parentPaintDevice = parentLayer->paintDevice();
             m_d->selection = new KisSelection(
-                new KisDefaultBounds(parentLayer->image(), parentPaintDevice));
+                KisDefaultBounds(parentPaintDevice,
+                                              parentLayer->image()));
 
             quint8 newDefaultPixel = MAX_SELECTED;
             m_d->selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
@@ -166,7 +167,7 @@ void KisMask::setSelection(KisSelectionSP selection)
     m_d->selection = selection;
     if (parent()) {
         const KisLayer *parentLayer = qobject_cast<const KisLayer*>(parent());
-        m_d->selection->setDefaultBounds(new KisDefaultBounds(parentLayer->image()));
+        m_d->selection->setDefaultBounds(KisDefaultBounds(parentLayer->image()));
     }
 }
 

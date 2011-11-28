@@ -51,7 +51,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
     m_d->paintDevice = dev;
     m_d->paintDevice->setParentNode(this);
 
-    m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
+    m_d->paintDevice->setDefaultBounds(KisDefaultBounds(image));
 }
 
 
@@ -60,7 +60,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
         , m_d(new Private())
 {
     Q_ASSERT(image);
-    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
+    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), KisDefaultBounds(image));
 }
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, const KoColorSpace *colorSpace)
@@ -72,7 +72,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
         colorSpace = image->colorSpace();
     }
     Q_ASSERT(colorSpace);
-    m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image));
+    m_d->paintDevice = new KisPaintDevice(this, colorSpace, KisDefaultBounds(image));
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
@@ -143,7 +143,7 @@ QIcon KisPaintLayer::icon() const
 
 void KisPaintLayer::setImage(KisImageWSP image)
 {
-    m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
+    m_d->paintDevice->setDefaultBounds(KisDefaultBounds(image));
     KisLayer::setImage(image);
 }
 

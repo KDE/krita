@@ -38,7 +38,7 @@ struct KisSelection::Private {
 
     bool isDeselected; // true if the selection is empty, no pixels are selected
     bool isVisible; //false is the selection decoration should not be displayed
-    KisDefaultBounds *defaultBounds;
+    KisDefaultBounds defaultBounds;
     KisPixelSelectionSP projection;
     KisPixelSelectionSP pixelSelection;
     KisSelectionComponent* shapeSelection;
@@ -49,18 +49,15 @@ KisSelection::KisSelection()
 {
 }
 
-KisSelection::KisSelection(KisDefaultBounds *defaultBounds)
+KisSelection::KisSelection(KisDefaultBounds defaultBounds)
     : m_d(new Private)
 {
-    defaultBounds->moveToThread(QThread::currentThread());
-    defaultBounds->setParent(this);
     m_d->defaultBounds = defaultBounds;
 }
 
 KisSelection::KisSelection(const KisSelection& rhs)
-    : QObject()
-    , KisShared()
-    , m_d(new Private)
+    : KisShared(),
+      m_d(new Private)
 {
     m_d->isDeselected = rhs.m_d->isDeselected;
     m_d->isVisible = rhs.m_d->isVisible;
@@ -271,17 +268,17 @@ void KisSelection::setY(qint32 y)
     }
 }
 
-KisDefaultBounds *KisSelection::defaultBounds() const
+KisDefaultBounds KisSelection::defaultBounds() const
 {
     return m_d->defaultBounds;
 }
 
-void KisSelection::setDefaultBounds(KisDefaultBounds *defaultBounds)
+void KisSelection::setDefaultBounds(KisDefaultBounds bounds)
 {
-    m_d->defaultBounds = defaultBounds;
-    projection()->setDefaultBounds(defaultBounds);
+    m_d->defaultBounds = bounds;
+    projection()->setDefaultBounds(bounds);
     if(m_d->pixelSelection) {
-        m_d->pixelSelection->setDefaultBounds(defaultBounds);
+        m_d->pixelSelection->setDefaultBounds(bounds);
     }
 }
 

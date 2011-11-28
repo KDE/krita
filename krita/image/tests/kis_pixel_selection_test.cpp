@@ -46,7 +46,7 @@ void KisPixelSelectionTest::testCreation()
     QVERIFY(selection);
     QVERIFY(selection->isTotallyUnselected(QRect(0, 0, 512, 512)));
 
-    selection = new KisPixelSelection(new KisDefaultBounds(dev));
+    selection = new KisPixelSelection(KisDefaultBounds(dev));
     QVERIFY(selection);
     QVERIFY(selection->isTotallyUnselected(QRect(0, 0, 512, 512)));
     selection->setDirty(QRect(10, 10, 10, 10));

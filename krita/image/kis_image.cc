@@ -222,7 +222,7 @@ KisSelectionSP KisImage::globalSelection() const
 void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
 {
     if (globalSelection == 0)
-        m_d->globalSelection = new KisSelection(new KisDefaultBounds(this));
+        m_d->globalSelection = new KisSelection(KisDefaultBounds(this));
     else
         m_d->globalSelection = globalSelection;
 }

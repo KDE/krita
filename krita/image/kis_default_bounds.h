@@ -22,35 +22,27 @@
 #include "kis_image.h"
 #include "kis_types.h"
 
-#include <QObject>
-#include <QRect>
+#include "QRect"
 
-class KRITAIMAGE_EXPORT KisDefaultBounds : public QObject
+class KRITAIMAGE_EXPORT KisDefaultBounds
 {
-
-    Q_OBJECT
-
 public:
     KisDefaultBounds();
-
-
-    KisDefaultBounds(KisPaintDeviceSP parentPaintDevice);
     KisDefaultBounds(KisImageWSP image);
-    KisDefaultBounds(KisImageWSP image, KisPaintDeviceSP parentPaintDevice);
-
+    KisDefaultBounds(KisPaintDeviceSP parentPaintDevice, KisImageWSP image = 0);
+    KisDefaultBounds(const KisDefaultBounds &rhs);
     ~KisDefaultBounds();
-
+    bool operator==(const KisDefaultBounds &rhs);
+    KisDefaultBounds operator=(const KisDefaultBounds &rhs);
     static const QRect infiniteRect;
 
-    virtual QRect bounds() const;
+    QRect bounds() const;
 
 private:
-
-    Q_DISABLE_COPY(KisDefaultBounds);
-
     struct Private;
     Private * const m_d;
 };
+
 
 
 #endif // KIS_DEFAULT_BOUNDS_H

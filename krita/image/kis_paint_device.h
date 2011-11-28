@@ -87,7 +87,7 @@ public:
      * @param name for debugging purposes
      */
     KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace,
-                   KisDefaultBounds *defaultBounds,
+                   KisDefaultBounds defaultBounds,
                    const QString& name = QString());
 
     KisPaintDevice(const KisPaintDevice& rhs);
@@ -128,7 +128,7 @@ public:
      * set the default bounds for the paint device when
      * the default pixel in not completely transarent
      */
-    virtual void setDefaultBounds(KisDefaultBounds *bounds);
+    virtual void setDefaultBounds(KisDefaultBounds bounds);
 
     /**
      * Moves the device to these new coordinates (so no incremental move or so)
@@ -687,7 +687,7 @@ private:
     KisPaintDevice& operator=(const KisPaintDevice&);
     void init(KisDataManagerSP explicitDataManager,
               const KoColorSpace *colorSpace,
-              KisDefaultBounds *defaultBounds,
+              KisDefaultBounds defaultBounds,
               KisNodeWSP parent, const QString& name);
 
     // Only KisPainter is allowed to have access to these low-level methods
@@ -721,7 +721,7 @@ private:
     /**
      * the default bounds rect of the paint device
      */
-    KisDefaultBounds *defaultBounds() const;
+    KisDefaultBounds defaultBounds() const;
 
 
 private:

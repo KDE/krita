@@ -30,52 +30,53 @@ struct KisDefaultBounds::Private
 
 
 KisDefaultBounds::KisDefaultBounds()
-    : QObject(0)
-    , m_d(new Private())
+    : m_d(new Private())
 {
     m_d->image = 0;
     m_d->parentDevice = 0;
 }
 
 KisDefaultBounds::KisDefaultBounds(KisImageWSP image)
-    : QObject(0)
-    , m_d(new Private())
+    : m_d(new Private())
 {
     m_d->parentDevice = 0;
     m_d->image = image;
 }
 
-KisDefaultBounds::KisDefaultBounds(KisPaintDeviceSP parentDevice)
-    : QObject(0)
-    , m_d(new Private())
+KisDefaultBounds::KisDefaultBounds(KisPaintDeviceSP parentDevice, KisImageWSP image)
+    : m_d(new Private())
 {
     m_d->parentDevice = parentDevice;
-    m_d->image = 0;
-}
-
-KisDefaultBounds::KisDefaultBounds(KisImageWSP image, KisPaintDeviceSP parentDevice)
-    : QObject(0)
-    , m_d(new Private())
-{
     m_d->image = image;
-    m_d->parentDevice = parentDevice;
 }
 
+KisDefaultBounds::KisDefaultBounds(const KisDefaultBounds &rhs)
+    : m_d(new Private)
+{
+    m_d->parentDevice = rhs.m_d->parentDevice;
+    m_d->image = rhs.m_d->image;
+}
 
 KisDefaultBounds::~KisDefaultBounds()
 {
     delete m_d;
 }
 
+KisDefaultBounds KisDefaultBounds::operator=(const KisDefaultBounds &rhs)
+{
+    m_d->parentDevice = rhs.m_d->parentDevice;
+    m_d->image = rhs.m_d->image;
+    return *this;
+}
+
 QRect KisDefaultBounds::bounds() const
 {
-
-
     QRect additionalRect = m_d->parentDevice ? m_d->parentDevice->exactBounds() : QRect();
-    additionalRect |= (m_d->image ? m_d->image->bounds() : infiniteRect);
+    return additionalRect | (m_d->image ? m_d->image->bounds() : infiniteRect);
+}
 
-    if (!m_d->image && !m_d->parentDevice) {
-        additionalRect = QRect();
-    }
-    return additionalRect;
+bool KisDefaultBounds::operator==(const KisDefaultBounds &other)
+{
+    return (other.m_d->image == m_d->image && other.m_d->parentDevice == m_d->parentDevice);
+
 }

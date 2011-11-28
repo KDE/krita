@@ -138,6 +138,7 @@ KisScratchPad::KisScratchPad(QWidget *parent)
 KisScratchPad::~KisScratchPad() {
     delete m_helper;
     delete m_infoBuilder;
+
     delete m_undoAdapter;
     delete m_undoStore;
     delete m_updateScheduler;
@@ -344,7 +345,7 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
 
     m_paintLayer = new KisPaintLayer(0, "ScratchPad", OPACITY_OPAQUE_U8, paintDevice);
     m_paintLayer->setGraphListener(m_nodeListener);
-    paintDevice->setDefaultBounds(new KisScratchPadDefaultBounds(this));
+    paintDevice->setDefaultBounds(KisScratchPadDefaultBounds(this));
 
     fillDefault();
 }

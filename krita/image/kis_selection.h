@@ -55,9 +55,9 @@ class KisSelectionComponent;
  * automatic updating after changing the contents of one or more
  * of the selection components.
  */
-class KRITAIMAGE_EXPORT KisSelection : public QObject, public KisShared
+class KRITAIMAGE_EXPORT KisSelection : public KisShared
 {
-    Q_OBJECT
+
 public:
 
     /**
@@ -71,7 +71,7 @@ public:
      * @param defaultBounds defines the bounds of the selection when
      * Select All is initiated.
      */
-    KisSelection(KisDefaultBounds *defaultBounds);
+    KisSelection(KisDefaultBounds defaultBounds);
 
     /**
      * Copy the selection. The selection components are copied, too.
@@ -143,7 +143,7 @@ public:
     qint32 x() const;
     qint32 y() const;
 
-    void setDefaultBounds(KisDefaultBounds *bounds);
+    void setDefaultBounds(KisDefaultBounds bounds);
 
     void clear();
     KisPixelSelectionSP mergedPixelSelection();
@@ -153,7 +153,7 @@ public:
 
 private:
 
-    KisDefaultBounds *defaultBounds() const;
+    KisDefaultBounds defaultBounds() const;
 
     struct Private;
     Private *const m_d;

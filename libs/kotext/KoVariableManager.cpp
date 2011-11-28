@@ -62,8 +62,10 @@ void KoVariableManager::setValue(const QString &name, const QString &value, cons
         key = d->lastId++;
         d->variableMapping.insert(name, key);
         if (type.isEmpty()) {
+            Q_ASSERT(!d->variableNames.contains(name));
             d->variableNames.append(name);
         } else {
+            Q_ASSERT(!d->userVariableNames.contains(name));
             d->userVariableNames.append(name);
         }
     }

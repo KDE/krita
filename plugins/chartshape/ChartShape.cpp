@@ -636,8 +636,8 @@ void ChartShape::setInternalModel( QAbstractItemModel *model )
     Q_ASSERT( table );
     delete d->internalModelHelper;
     delete d->internalModel;
-    d->internalModelHelper = new SingleModelHelper( table, d->proxyModel );
     d->internalModel = model;
+    d->internalModelHelper = new SingleModelHelper( table, d->proxyModel );
 }
 
 TableSource *ChartShape::tableSource() const

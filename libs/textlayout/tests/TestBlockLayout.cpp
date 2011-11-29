@@ -71,6 +71,7 @@ void TestBlockLayout::setupTest(const QString &initText)
         QTextCursor cursor(m_doc);
         cursor.insertText(initText);
         KoParagraphStyle style;
+        style.setFontPointSize(12.0);
         style.setStyleId(101); // needed to do manually since we don't use the stylemanager
         QTextBlock b2 = m_doc->begin();
         while (b2.isValid()) {
@@ -182,6 +183,7 @@ void TestBlockLayout::testAdvancedLineSpacing()
     QTextCursor cursor(m_doc);
 
     KoParagraphStyle style;
+    style.setFontPointSize(12.0);
     style.setLineHeightPercent(80);
     QTextBlock block = m_doc->begin();
     style.applyStyle(block);
@@ -595,16 +597,20 @@ void TestBlockLayout::testTextAlignments()
     // TODO justified & justified, last line
     setupTest("Left\nRight\nﺵﻻﺆﻴﺜﺒ\nﺵﻻﺆﻴﺜﺒ\nLast Line.");
     KoParagraphStyle start;
+    start.setFontPointSize(12.0);
     start.setAlignment(Qt::AlignLeading);
     KoParagraphStyle end;
+    end.setFontPointSize(12.0);
     end.setAlignment(Qt::AlignTrailing);
 
     KoParagraphStyle startRTL;
+    startRTL.setFontPointSize(12.0);
     startRTL.setAlignment(Qt::AlignLeading);
     startRTL.setTextProgressionDirection(KoText::RightLeftTopBottom);
     KoParagraphStyle endRTL;
     endRTL.setAlignment(Qt::AlignTrailing);
     endRTL.setTextProgressionDirection(KoText::RightLeftTopBottom);
+    endRTL.setFontPointSize(12.0);
 
     QTextBlock block = m_doc->begin();
     start.applyStyle(block);
@@ -752,6 +758,7 @@ void TestBlockLayout::testBorderData()
     setupTest("Emtpy\nParagraph with Borders\nAnother parag\n");
 
     KoParagraphStyle style;
+    style.setFontPointSize(12.0);
     m_styleManager->add(&style);
     style.setTopMargin(QTextLength(QTextLength::FixedLength, 10));
     KoListStyle listStyle;
@@ -823,6 +830,7 @@ void TestBlockLayout::testDropCaps()
     setupTest(QString("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam\nsome more text")); // some not too long text so the dropcap will be bigger than the block
 
     KoParagraphStyle style;
+    style.setFontPointSize(12.0);
     style.setDropCaps(false);
     style.setDropCapsLength(1);
     style.setDropCapsLines(4);
@@ -856,7 +864,9 @@ void TestBlockLayout::testDropCaps()
     qreal heightNormalLine = line.height();
     qreal linexpos = line.position().x();
     QCOMPARE(line.position().y(), 0.0); // aligned top
-    QVERIFY(line.position().x() > 20.0); // can't get a tight-boundingrect here.
+    qDebug()<<line.position().x();
+    QVERIFY(line.position().x() > 40.0); // can't get a tight-boundingrect here.
+    QVERIFY(line.position().x() < 42.0); // can't get a tight-boundingrect here.
 
     // Now test that a following block is moved inward by the same about since
     // it should still be influenced by the dropcap
@@ -865,7 +875,8 @@ void TestBlockLayout::testDropCaps()
     line = blockLayout->lineAt(0);
     QVERIFY(line.textLength() > 3);
     QCOMPARE(line.position().x(), linexpos);
-    QVERIFY(line.position().x() > 20.0); // can't get a tight-boundingrect here.
+    QVERIFY(line.position().x() > 40.0); // can't get a tight-boundingrect here.
+    QVERIFY(line.position().x() < 42.0); // can't get a tight-boundingrect here.
 
     style.setDropCaps(false); // remove it
     style.applyStyle(block);

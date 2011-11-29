@@ -803,11 +803,26 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 && dropCapsAffectsNMoreLines == 0 // first line of this para is not affected by a previous drop-cap
                 && block.length() > 1) {
             QString blockText = block.text();
-            // ok, now we can drop caps for this block
-            int firstNonSpace = blockText.indexOf(QRegExp("[^ ]")); // since QTextLine::setNumColumns()
-            // skips blankspaces, we will too
+
+            // since QTextLine::setNumColumns() skips blankspaces, we will too
+            int firstNonSpace = blockText.indexOf(QRegExp("[^ ]"));
+
             if (dropCapsLength < 0) // means whole word is to be dropped
                 dropCapsLength = blockText.indexOf(QRegExp("\\W"), firstNonSpace);
+            else {
+                dropCapsLength += firstNonSpace; 
+
+                // LibreOffice skips softbreaks but not spaces. We will do the same
+                QTextCursor c1(block);
+                c1.setPosition(block.position());
+                c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
+
+                KoTextSoftPageBreak *softPageBreak = dynamic_cast<KoTextSoftPageBreak*>(m_documentLayout->inlineTextObjectManager()->inlineTextObject(c1));
+                if (softPageBreak) {
+                    dropCapsLength++;
+                }
+            }
+
             // increase the size of the dropped chars
             QTextCursor blockStart(block);
             QTextLayout::FormatRange dropCapsFormatRange;
@@ -865,15 +880,17 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             dropCapsFormatRange.format.setProperty(DropCapsAdditionalFormattingId,
                     (QVariant) true);
             dropCapsFormatRange.start = 0;
-            dropCapsFormatRange.length = dropCapsLength + firstNonSpace;
+            dropCapsFormatRange.length = dropCapsLength;
             formatRanges.append(dropCapsFormatRange);
             layout->setAdditionalFormats(formatRanges);
 
-            m_dropCapsNChars = dropCapsLength + firstNonSpace;
+            m_dropCapsNChars = dropCapsLength;
             dropCapsAffectsNMoreLines = (m_dropCapsNChars > 0) ? dropCapsLines : 0;
         } else {
             m_dropCapsNChars = 0;
         }
+    } else {
+        m_dropCapsNChars = 0;
     }
 
     //========
@@ -1254,12 +1271,13 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             m_indent = 0;
             ++numBaselineShifts;
         }
+
         // drop caps
         if (m_dropCapsNChars > 0) { // we just laid out the dropped chars
             y_justBelowDropCaps = m_y; // save the y position just below the dropped characters
             m_y = line.y();              // keep the same y for the next line
             line.setPosition(line.position() - QPointF(0, dropCapsPositionAdjust));
-            m_dropCapsNChars = 0;
+            m_dropCapsNChars -= line.textLength();
         } else if (dropCapsAffectsNMoreLines > 0) { // we just laid out a drop-cap-affected line
             dropCapsAffectsNMoreLines--;
             if (dropCapsAffectsNMoreLines == 0) {   // no more drop-cap-affected lines
@@ -1343,7 +1361,7 @@ void KoTextLayoutArea::setExtraTextIndent(qreal extraTextIndent)
 
 qreal KoTextLayoutArea::x() const
 {
-    return m_x + m_indent + (m_dropCapsNChars == 0 ? m_dropCapsWidth : 0.0);
+    return m_x + m_indent + (m_dropCapsNChars > 0 ? 0.0 : m_dropCapsWidth);
 }
 
 qreal KoTextLayoutArea::width() const

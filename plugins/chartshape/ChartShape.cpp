@@ -127,6 +127,7 @@ static const char *ODF_CHARTTYPES[ NUM_CHARTTYPES ] = {
     "chart:ring",
     "chart:scatter",
     "chart:radar",
+    "chart:filled-radar",
     "chart:stock",
     "chart:bubble",
     "chart:surface",
@@ -141,6 +142,7 @@ static const ChartSubtype defaultSubtypes[ NUM_CHARTTYPES ] = {
     NoChartSubtype,         // Ring
     NoChartSubtype,         // Scatter
     NormalChartSubtype,     // Radar
+    NormalChartSubtype,     // Filled Radar
     NoChartSubtype,         // Stock
     NoChartSubtype,         // Bubble
     NoChartSubtype,         // Surface

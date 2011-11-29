@@ -35,7 +35,8 @@ using namespace KDChart;
 
 RadarDiagram::Private::Private() :
     closeDatasets( false ),
-    reverseData( false )
+    reverseData( false ),
+    fillAlpha( 0.0 )
 {
 }
 
@@ -153,6 +154,14 @@ bool RadarDiagram::reverseData()
     return d->reverseData;
 }
 
+// local structure to remember the settings of a polygon inclusive the used color and pen.
+struct Polygon {
+    QPolygonF polygon;
+    QBrush brush;
+    QPen pen;
+    Polygon(const QPolygonF &polygon, const QBrush &brush, const QPen &pen) : polygon(polygon), brush(brush), pen(pen) {}
+};
+
 void RadarDiagram::paint( PaintContext* ctx,
                           bool calculateListAndReturnScale,
                           qreal& newZoomX, qreal& newZoomY )
@@ -229,13 +238,13 @@ void RadarDiagram::paint( PaintContext* ctx,
         ctx->painter()->restore();
 
     }else{
-        // Iterate through data sets
+        // Iterate through data sets and create a list of polygons out of them.
+        QList<Polygon> polygons;
         for ( iCol=0; iCol < colCount; ++iCol ) {
             //TODO(khz): As of yet RadarDiagram can not show per-segment line attributes
             //           but it draws every polyline in one go - using one color.
             //           This needs to be enhanced to allow for cell-specific settings
             //           in the same way as LineDiagram does it.
-            QBrush brush = qVariantValue<QBrush>( d->datasetAttrs( iCol, KDChart::DatasetBrushRole ) );
             QPolygonF polygon;
             QPointF point0;
             for ( iRow=0; iRow < rowCount; ++iRow ) {
@@ -249,16 +258,38 @@ void RadarDiagram::paint( PaintContext* ctx,
             if( closeDatasets() && rowCount )
                 polygon.append( point0 );
 
-            PainterSaver painterSaver( ctx->painter() );
-            ctx->painter()->setRenderHint ( QPainter::Antialiasing );
-            ctx->painter()->setBrush( brush );
+            QBrush brush = qVariantValue<QBrush>( d->datasetAttrs( iCol, KDChart::DatasetBrushRole ) );
             QPen p( model()->headerData( iCol, Qt::Horizontal, KDChart::DatasetPenRole ).value< QPen >() );
             if ( p.style() != Qt::NoPen )
             {
-                ctx->painter()->setPen( PrintingParameters::scalePen( p ) );
-                ctx->painter()->drawPolyline( polygon );
+                polygons.append( Polygon(polygon, brush, PrintingParameters::scalePen( p )) );
             }
         }
+
+        // first fill the areas with the brush-color and the defined alpha-value.
+        if (d->fillAlpha > 0.0) {
+            foreach(const Polygon& p, polygons) {
+                PainterSaver painterSaver( ctx->painter() );
+                ctx->painter()->setRenderHint ( QPainter::Antialiasing );
+                QBrush br = p.brush;
+                QColor c = br.color();
+                c.setAlphaF(d->fillAlpha);
+                br.setColor(c);
+                ctx->painter()->setBrush( br );
+                ctx->painter()->setPen( p.pen );
+                ctx->painter()->drawPolygon( p.polygon );
+            }
+        }
+
+        // then draw the poly-lines.
+        foreach(const Polygon& p, polygons) {
+            PainterSaver painterSaver( ctx->painter() );
+            ctx->painter()->setRenderHint ( QPainter::Antialiasing );
+            ctx->painter()->setBrush( p.brush );
+            ctx->painter()->setPen( p.pen );
+            ctx->painter()->drawPolyline( p.polygon );
+        }
+
         d->paintDataValueTextsAndMarkers( this, ctx, d->dataValueInfoList, true );
     }
 }
@@ -294,6 +325,16 @@ void RadarDiagram::setCloseDatasets( bool closeDatasets )
 bool RadarDiagram::closeDatasets() const
 {
     return d->closeDatasets;
+}
+
+qreal RadarDiagram::fillAlpha() const
+{
+    return d->fillAlpha;
+}
+
+void RadarDiagram::setFillAlpha(qreal alphaF)
+{
+    d->fillAlpha = alphaF;
 }
 
 void RadarDiagram::resizeEvent ( QResizeEvent*)

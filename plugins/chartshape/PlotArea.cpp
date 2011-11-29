@@ -503,6 +503,7 @@ CoordinatePlaneList PlotArea::Private::coordinatePlanesForChartType( ChartType t
         result.append( kdPolarPlane );
         break;
     case RadarChartType:
+    case FilledRadarChartType:
         result.append( kdRadarPlane );
         break;
     case LastChartType:
@@ -898,6 +899,7 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter,
         // FIXME
         break;
     case RadarChartType:
+    case FilledRadarChartType:
         // Save subtype of the Radar chart.
         switch( d->chartSubtype ) {
         case NoChartSubtype:

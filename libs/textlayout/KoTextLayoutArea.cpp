@@ -1193,6 +1193,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 // we don't add a line here. That fixes the problem that e.g. the counter is before
                 // the page break and the text is after the page break
                 if (!virginPage() && softBreakPos == 0) {
+                    layout->endLayout();
                     return false;
                 }
             }
@@ -1206,6 +1207,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             // we don't add a line here. That fixes the problem that e.g. the counter is before
             // the page break and the text is after the page break
             if (!virginPage() && documentLayout()->anchoringSoftBreak() == block.position()) {
+                layout->endLayout();
                 return false;
             }
         }
@@ -1234,6 +1236,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             }
             if (!virginPage() || anyLineAdded) {
                 line.setPosition(QPointF(x(), m_maximalAllowedBottom));
+                layout->endLayout();
                 clearPreregisteredFootNotes();
                 return false; //to indicate block was not done!
             }
@@ -1274,6 +1277,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         cursor->lineTextStart = line.textStart();
 
         if (softBreak) {
+            layout->endLayout();
             return false; // page-break means we need to start again on the next page
         }
     }

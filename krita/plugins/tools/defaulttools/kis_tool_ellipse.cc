@@ -31,6 +31,7 @@
 #include <kis_shape_tool_helper.h>
 #include <kis_paint_device.h>
 #include <kis_paintop_preset.h>
+#include <kis_system_locker.h>
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_shape_paint_action.h>

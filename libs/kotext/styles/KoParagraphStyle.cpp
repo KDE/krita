@@ -1037,7 +1037,9 @@ void KoParagraphStyle::setListStyle(KoListStyle *style)
         return;
     if (listStyle() && listStyle()->parent() == this)
         delete listStyle();
-    setProperty(ParagraphListStyleId, QVariant::fromValue<KoListStyle *>(style));
+    QVariant variant;
+    variant.setValue(style->clone());
+    setProperty(ParagraphListStyleId, variant);
 }
 
 KoText::Direction KoParagraphStyle::textProgressionDirection() const

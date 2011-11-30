@@ -1348,8 +1348,8 @@ void TextTool::updateActions()
     //update paragraphStyle GUI element
     QTextBlockFormat bf = textEditor->blockFormat();
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
-        bool revert = (textEditor->block().layout()->textOption().textDirection() == Qt::LeftToRight) != QApplication::isLeftToRight();
-        if (bf.alignment() == (Qt::AlignLeading ^ revert))
+        bool revert = (textEditor->block().layout()->textOption().textDirection() == Qt::RightToLeft);
+        if ((bf.alignment() == Qt::AlignLeading) ^ revert)
             m_actionAlignLeft->setChecked(true);
         else
             m_actionAlignRight->setChecked(true);

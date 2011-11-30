@@ -211,7 +211,9 @@ QPair<int, int>  KoTextInlineRdf::findExtent()
 {
     if (d->bookmark && d->document) {
         KoBookmark *e = d->bookmark.data()->endBookmark();
-        return QPair<int, int>(d->bookmark.data()->position(), e->position());
+        if (e) {
+          return QPair<int, int>(d->bookmark.data()->position(), e->position());
+        }
     }
     if (d->kotextmeta && d->document) {
         KoTextMeta *e = d->kotextmeta.data()->endBookmark();

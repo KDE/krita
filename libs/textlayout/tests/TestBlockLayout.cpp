@@ -866,7 +866,7 @@ void TestBlockLayout::testDropCaps()
     QCOMPARE(line.position().y(), 0.0); // aligned top
     qDebug()<<line.position().x();
     QVERIFY(line.position().x() > 40.0); // can't get a tight-boundingrect here.
-    QVERIFY(line.position().x() < 42.0); // can't get a tight-boundingrect here.
+    QVERIFY(line.position().x() < 45.0); // can't get a tight-boundingrect here.
 
     // Now test that a following block is moved inward by the same about since
     // it should still be influenced by the dropcap
@@ -876,7 +876,7 @@ void TestBlockLayout::testDropCaps()
     QVERIFY(line.textLength() > 3);
     QCOMPARE(line.position().x(), linexpos);
     QVERIFY(line.position().x() > 40.0); // can't get a tight-boundingrect here.
-    QVERIFY(line.position().x() < 42.0); // can't get a tight-boundingrect here.
+    QVERIFY(line.position().x() < 45.0); // can't get a tight-boundingrect here.
 
     style.setDropCaps(false); // remove it
     style.applyStyle(block);

@@ -30,6 +30,7 @@
 #include <QTextList>
 #include <QTextBlock>
 #include <QTextCursor>
+#include <QWeakPointer>
 
 #include <KDebug>
 
@@ -41,7 +42,7 @@ public:
             posInDocument(0) { }
     const QTextDocument *document;
     int posInDocument;
-    KoTextMeta *endBookmark;
+    QWeakPointer<KoTextMeta> endBookmark;
     BookmarkType type;
 };
 
@@ -49,7 +50,7 @@ KoTextMeta::KoTextMeta(const QTextDocument *document)
         : KoInlineObject(false),
         d(new Private(document))
 {
-    d->endBookmark = 0;
+    d->endBookmark.clear();
 }
 
 KoTextMeta::~KoTextMeta()
@@ -130,7 +131,7 @@ void KoTextMeta::setEndBookmark(KoTextMeta *bookmark)
 
 KoTextMeta *KoTextMeta::endBookmark() const
 {
-    return d->endBookmark;
+    return d->endBookmark.data();
 }
 
 int KoTextMeta::position() const

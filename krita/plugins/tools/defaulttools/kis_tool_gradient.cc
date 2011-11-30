@@ -53,6 +53,7 @@
 #include <kis_selection.h>
 #include <kis_threaded_applicator.h>
 #include <kis_paint_layer.h>
+#include <kis_system_locker.h>
 
 #include <canvas/kis_canvas2.h>
 #include <kis_view2.h>
@@ -256,7 +257,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *event)
             return;
         }
 
-        setCurrentNodeLocked(true);
+        KisSystemLocker locker(currentNode());
 
         KisPaintDeviceSP device;
 
@@ -282,7 +283,6 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *event)
             delete updater;
         }
         canvas()->updateCanvas(convertToPt(currentImage()->bounds()));
-        setCurrentNodeLocked(false);
     }
     else {
         KisToolPaint::mouseReleaseEvent(event);

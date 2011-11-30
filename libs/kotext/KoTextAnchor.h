@@ -80,6 +80,7 @@ public:
  */
 class KOTEXT_EXPORT KoTextAnchor : public KoInlineObject
 {
+    Q_OBJECT
 public:
     enum HorizontalPos {
         HCenter,

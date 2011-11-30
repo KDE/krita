@@ -781,97 +781,116 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // Drop caps
     //==========
 
-    // first remove any drop-caps related formatting that's already there in the layout.
-    // we'll do it all afresh now.
-    QList<QTextLayout::FormatRange> formatRanges = layout->additionalFormats();
-    for (QList< QTextLayout::FormatRange >::Iterator iter = formatRanges.begin();
-            iter != formatRanges.end(); ) {
-        if (iter->format.boolProperty(DropCapsAdditionalFormattingId)) {
-            iter = formatRanges.erase(iter);
-        } else {
-            ++iter;
-        }
-    }
-    if (formatRanges.count() != layout->additionalFormats().count())
-        layout->setAdditionalFormats(formatRanges);
-    bool dropCaps = pStyle.dropCaps();
-    int dropCapsLength = pStyle.dropCapsLength();
-    int dropCapsLines = pStyle.dropCapsLines();
-
-    if (dropCaps && dropCapsLength != 0 && dropCapsLines > 1
-            && dropCapsAffectsNMoreLines == 0 // first line of this para is not affected by a previous drop-cap
-            && block.length() > 1) {
-        QString blockText = block.text();
-        // ok, now we can drop caps for this block
-        int firstNonSpace = blockText.indexOf(QRegExp("[^ ]")); // since QTextLine::setNumColumns()
-        // skips blankspaces, we will too
-        if (dropCapsLength < 0) // means whole word is to be dropped
-            dropCapsLength = blockText.indexOf(QRegExp("\\W"), firstNonSpace);
-        // increase the size of the dropped chars
-        QTextCursor blockStart(block);
-        QTextLayout::FormatRange dropCapsFormatRange;
-        dropCapsFormatRange.format = blockStart.charFormat();
-
-        // find out lineHeight for this block.
-        QTextBlock::iterator it = block.begin();
-        QTextFragment lineRepresentative = it.fragment();
-        qreal lineHeight = pStyle.lineHeightAbsolute();
-        qreal dropCapsHeight = 0;
-        if (lineHeight == 0) {
-            lineHeight = lineRepresentative.charFormat().fontPointSize();
-            qreal linespacing = pStyle.lineSpacing();
-            if (linespacing == 0) { // unset
-                int percent = pStyle.lineHeightPercent();
-                if (percent != 0)
-                    linespacing = lineHeight * ((percent - 100) / 100.0);
-                else if (linespacing == 0)
-                    linespacing = lineHeight * 0.2; // default
+    m_dropCapsNChars = 0;
+    if (cursor->lineTextStart == -1) {
+        // first remove any drop-caps related formatting that's already there in the layout.
+        // we'll do it all afresh now.
+        QList<QTextLayout::FormatRange> formatRanges = layout->additionalFormats();
+        for (QList< QTextLayout::FormatRange >::Iterator iter = formatRanges.begin();
+                iter != formatRanges.end(); ) {
+            if (iter->format.boolProperty(DropCapsAdditionalFormattingId)) {
+                iter = formatRanges.erase(iter);
+            } else {
+                ++iter;
             }
-            dropCapsHeight = linespacing * (dropCapsLines-1);
         }
-        const qreal minimum = pStyle.minimumLineHeight();
-        if (minimum > 0.0) {
-            lineHeight = qMax(lineHeight, minimum);
+        if (formatRanges.count() != layout->additionalFormats().count())
+            layout->setAdditionalFormats(formatRanges);
+        bool dropCaps = pStyle.dropCaps();
+        int dropCapsLength = pStyle.dropCapsLength();
+        int dropCapsLines = pStyle.dropCapsLines();
+
+        if (dropCaps && dropCapsLength != 0 && dropCapsLines > 1 && block.length() > 1) {
+            QString blockText = block.text();
+
+            if (dropCapsLength < 0) { // means whole word is to be dropped
+                int firstNonSpace = blockText.indexOf(QRegExp("[^ ]"));
+                dropCapsLength = blockText.indexOf(QRegExp("\\W"), firstNonSpace);
+            } else {
+                // LibreOffice skips softbreaks but not spaces. We will do the same
+                QTextCursor c1(block);
+                c1.setPosition(block.position());
+                c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
+
+                KoTextSoftPageBreak *softPageBreak = dynamic_cast<KoTextSoftPageBreak*>(m_documentLayout->inlineTextObjectManager()->inlineTextObject(c1));
+                if (softPageBreak) {
+                    dropCapsLength++;
+                }
+            }
+            dropCapsLength = qMin(dropCapsLength, blockText.length() - 1);
+
+            if (dropCapsLength > 0) {
+                // increase the size of the dropped chars
+                QTextCursor blockStart(block);
+                QTextLayout::FormatRange dropCapsFormatRange;
+                dropCapsFormatRange.format = blockStart.charFormat();
+
+                // find out lineHeight for this block.
+                QTextBlock::iterator it = block.begin();
+                QTextFragment lineRepresentative = it.fragment();
+                qreal lineHeight = pStyle.lineHeightAbsolute();
+                qreal dropCapsHeight = 0;
+                if (lineHeight == 0) {
+                    lineHeight = lineRepresentative.charFormat().fontPointSize();
+                    qreal linespacing = pStyle.lineSpacing();
+                    if (linespacing == 0) { // unset
+                        int percent = pStyle.lineHeightPercent();
+                        if (percent != 0)
+                            linespacing = lineHeight * ((percent - 100) / 100.0);
+                        else if (linespacing == 0)
+                            linespacing = lineHeight * 0.2; // default
+                    }
+                    dropCapsHeight = linespacing * (dropCapsLines-1);
+                }
+                const qreal minimum = pStyle.minimumLineHeight();
+                if (minimum > 0.0) {
+                    lineHeight = qMax(lineHeight, minimum);
+                }
+
+                dropCapsHeight += lineHeight * dropCapsLines;
+
+                int dropCapsStyleId = pStyle.dropCapsTextStyleId();
+                KoCharacterStyle *dropCapsCharStyle = 0;
+                if (dropCapsStyleId > 0 && m_documentLayout->styleManager()) {
+                    dropCapsCharStyle = m_documentLayout->styleManager()->characterStyle(dropCapsStyleId);
+                    dropCapsCharStyle->applyStyle(dropCapsFormatRange.format);
+                }
+
+                QFont f(dropCapsFormatRange.format.font(), m_documentLayout->paintDevice());
+                QString dropCapsText(block.text().left(dropCapsLength));
+                f.setPointSizeF(dropCapsHeight);
+                for (int i=0; i < 5; ++i) {
+                    QTextLayout tmplayout(dropCapsText, f);
+                    tmplayout.setTextOption(option);
+                    tmplayout.beginLayout();
+                    QTextLine tmpline = tmplayout.createLine();
+                    tmplayout.endLayout();
+                    m_dropCapsWidth = tmpline.naturalTextWidth();
+
+                    QFontMetricsF fm(f, documentLayout()->paintDevice());
+                    QRectF rect = fm.tightBoundingRect(dropCapsText);
+                    const qreal diff = dropCapsHeight - rect.height();
+                    dropCapsPositionAdjust = rect.top() + fm.ascent();
+                    if (qAbs(diff < 0.5)) // good enough
+                        break;
+
+                    const qreal adjustment = diff * (f.pointSizeF() / rect.height());
+                    // kDebug() << "adjusting with" << adjustment;
+                    f.setPointSizeF(f.pointSizeF() + adjustment);
+                }
+
+                dropCapsFormatRange.format.setFontPointSize(f.pointSizeF());
+                dropCapsFormatRange.format.setProperty(DropCapsAdditionalFormattingId,
+                        (QVariant) true);
+                dropCapsFormatRange.start = 0;
+                dropCapsFormatRange.length = dropCapsLength;
+                formatRanges.append(dropCapsFormatRange);
+                layout->setAdditionalFormats(formatRanges);
+
+                m_dropCapsNChars = dropCapsLength;
+                dropCapsAffectsNMoreLines = (m_dropCapsNChars > 0) ? dropCapsLines : 0;
+            }
         }
-
-        dropCapsHeight += lineHeight * dropCapsLines;
-
-        int dropCapsStyleId = pStyle.dropCapsTextStyleId();
-        KoCharacterStyle *dropCapsCharStyle = 0;
-        if (dropCapsStyleId > 0 && m_documentLayout->styleManager()) {
-            dropCapsCharStyle = m_documentLayout->styleManager()->characterStyle(dropCapsStyleId);
-            dropCapsCharStyle->applyStyle(dropCapsFormatRange.format);
-        }
-        QFont f(dropCapsFormatRange.format.font(), m_documentLayout->paintDevice());
-        QString dropCapsText(block.text().left(dropCapsLength));
-        f.setPointSizeF(dropCapsHeight);
-        QChar lastChar = dropCapsText.at(dropCapsText.length()-1);
-        for (int i=0; i < 5; ++i) {
-            QFontMetricsF fm(f);
-            QRectF rect = fm.tightBoundingRect(dropCapsText);
-            m_dropCapsWidth = rect.width();
-            m_dropCapsWidth += fm.rightBearing(lastChar);
-            const qreal diff = dropCapsHeight - rect.height();
-            dropCapsPositionAdjust = rect.top() + fm.ascent();
-            if (qAbs(diff < 0.5)) // good enough
-                break;
-
-            const qreal adjustment = diff * ((f.pointSizeF() / diff) / (rect.height() / diff));
-            // kDebug() << "adjusting with" << adjustment;
-            f.setPointSizeF(f.pointSizeF() + adjustment);
-        }
-        dropCapsFormatRange.format.setFontPointSize(f.pointSizeF());
-        dropCapsFormatRange.format.setProperty(DropCapsAdditionalFormattingId,
-                (QVariant) true);
-        dropCapsFormatRange.start = 0;
-        dropCapsFormatRange.length = dropCapsLength + firstNonSpace;
-        formatRanges.append(dropCapsFormatRange);
-        layout->setAdditionalFormats(formatRanges);
-
-        m_dropCapsNChars = dropCapsLength + firstNonSpace;
-        dropCapsAffectsNMoreLines = (m_dropCapsNChars > 0) ? dropCapsLines : 0;
-    } else {
-        m_dropCapsNChars = 0;
     }
 
     //========
@@ -1193,6 +1212,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 // we don't add a line here. That fixes the problem that e.g. the counter is before
                 // the page break and the text is after the page break
                 if (!virginPage() && softBreakPos == 0) {
+                    layout->endLayout();
                     return false;
                 }
             }
@@ -1206,6 +1226,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             // we don't add a line here. That fixes the problem that e.g. the counter is before
             // the page break and the text is after the page break
             if (!virginPage() && documentLayout()->anchoringSoftBreak() == block.position()) {
+                layout->endLayout();
                 return false;
             }
         }
@@ -1234,6 +1255,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             }
             if (!virginPage() || anyLineAdded) {
                 line.setPosition(QPointF(x(), m_maximalAllowedBottom));
+                layout->endLayout();
                 clearPreregisteredFootNotes();
                 return false; //to indicate block was not done!
             }
@@ -1249,12 +1271,13 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             m_indent = 0;
             ++numBaselineShifts;
         }
+
         // drop caps
         if (m_dropCapsNChars > 0) { // we just laid out the dropped chars
             y_justBelowDropCaps = m_y; // save the y position just below the dropped characters
             m_y = line.y();              // keep the same y for the next line
             line.setPosition(line.position() - QPointF(0, dropCapsPositionAdjust));
-            m_dropCapsNChars = 0;
+            m_dropCapsNChars -= line.textLength();
         } else if (dropCapsAffectsNMoreLines > 0) { // we just laid out a drop-cap-affected line
             dropCapsAffectsNMoreLines--;
             if (dropCapsAffectsNMoreLines == 0) {   // no more drop-cap-affected lines
@@ -1274,6 +1297,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         cursor->lineTextStart = line.textStart();
 
         if (softBreak) {
+            layout->endLayout();
             return false; // page-break means we need to start again on the next page
         }
     }
@@ -1337,7 +1361,7 @@ void KoTextLayoutArea::setExtraTextIndent(qreal extraTextIndent)
 
 qreal KoTextLayoutArea::x() const
 {
-    return m_x + m_indent + (m_dropCapsNChars == 0 ? m_dropCapsWidth : 0.0);
+    return m_x + m_indent + (m_dropCapsNChars > 0 ? 0.0 : m_dropCapsWidth);
 }
 
 qreal KoTextLayoutArea::width() const

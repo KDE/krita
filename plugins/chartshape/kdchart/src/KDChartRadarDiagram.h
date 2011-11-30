@@ -70,11 +70,23 @@ public:
     
     virtual RadarDiagram * clone() const;
     
-    /** Close each of the data series by connecting the last point to its
+    /**
+     * Close each of the data series by connecting the last point to its
      * respective start point
      */
     void setCloseDatasets( bool closeDatasets );
     bool closeDatasets() const;
+
+    /**
+     * Fill the areas of the radar chart with there respective color defined
+     * via KDChart::DatasetBrushRole. The value defines the alpha of the
+     * color to use. If set to 0.0 (the default) then the radar areas will
+     * not be filled with any color. If set to 1.0 then the areas will be
+     * solid filled and are not transparent.
+     */
+    qreal fillAlpha() const;
+    void setFillAlpha(qreal alphaF);
+
 protected:
     /** \reimpl */
     virtual const QPair<QPointF, QPointF> calculateDataBoundaries() const;

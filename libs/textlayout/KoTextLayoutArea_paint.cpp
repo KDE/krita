@@ -243,6 +243,12 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                 selections.append(fr);
             }
 
+            // this is a workaround to fix text getting cut of when format ranges are used. There 
+            // is a bug in Qt that can hit when text lines overlap each other. In case a format range
+            // is used for formating it can clip the lines above/below as Qt creates a clip rect for
+            // the places it already painted for the format range which results in clippling. So use
+            // the format range allways to paint the text.
+            QVector<QTextLayout::FormatRange> workaroundFormatRanges;
             for (QTextBlock::iterator it = block.begin(); !(it.atEnd()); ++it) {
                 QTextFragment currentFragment = it.fragment();
                 if (currentFragment.isValid()) {
@@ -302,10 +308,45 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                         QTextLayout::FormatRange fr;
                         fr.start = currentFragment.position() - block.position();
                         fr.length = currentFragment.length();
+                        if (!format.hasProperty(KoCharacterStyle::InlineInstanceId)) {
+                            if (format.background().style() == Qt::NoBrush) {
+                                format.setBackground(QBrush(QColor(0, 0, 0, 0)));
+                            }
+                            if (format.foreground().style() == Qt::NoBrush) {
+                                format.setForeground(QBrush(QColor(0, 0, 0, 0)));
+                            }
+                        }
                         fr.format = format;
+                        // the prepend is done so the selections are at the end.
                         selections.prepend(fr);
                     }
+                    else {
+                        if (!format.hasProperty(KoCharacterStyle::InlineInstanceId)) {
+                            QTextLayout::FormatRange fr;
+                            fr.start = currentFragment.position() - block.position();
+                            fr.length = currentFragment.length();
+                            QTextCharFormat f;
+                            if (format.background().style() == Qt::NoBrush) {
+                                f.setBackground(QBrush(QColor(0, 0, 0, 0)));
+                            }
+                            else {
+                                f.setBackground(format.background());
+                            }
+                            if (format.foreground().style() == Qt::NoBrush) {
+                                f.setForeground(QBrush(QColor(0, 0, 0, 0)));
+                            }
+                            else {
+                                f.setForeground(format.foreground());
+                            }
+                            fr.format = f;
+                            workaroundFormatRanges.append(fr);
+                        }
+                    }
                 }
+            }
+
+            if (!selections.isEmpty()) {
+                selections = workaroundFormatRanges + selections;
             }
 
             //We set clip because layout-draw doesn't clip text to it correctly after all

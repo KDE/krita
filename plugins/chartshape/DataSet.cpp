@@ -1100,7 +1100,7 @@ void DataSet::setLabelDataRegion( const CellRegion &region )
 
 int DataSet::size() const
 {
-    return d->size > 0 ? d->size : 1;
+    return qMax(1, d->size);
 }
 
 void DataSet::Private::dataChanged( KDChartModel::DataRole role, const QRect &rect ) const

@@ -45,6 +45,7 @@
 #include <kis_pattern.h>
 #include <kis_fill_painter.h>
 #include <kis_selection.h>
+#include <kis_system_locker.h>
 
 #include <kis_view2.h>
 #include <canvas/kis_canvas2.h>
@@ -189,9 +190,8 @@ void KisToolFill::mouseReleaseEvent(KoPointerEvent *event)
             return;
         }
 
-        setCurrentNodeLocked(true);
+        KisSystemLocker locker(currentNode());
         flood(m_startPos.x(), m_startPos.y());
-        setCurrentNodeLocked(false);
         notifyModified();
     }
     else {

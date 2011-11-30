@@ -45,6 +45,7 @@ class KoBookmarkManager;
  */
 class KOTEXT_EXPORT KoBookmark : public KoInlineObject
 {
+    Q_OBJECT
 public:
     /// This enum determines the type of bookmark
     enum BookmarkType {

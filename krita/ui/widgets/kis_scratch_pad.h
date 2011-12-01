@@ -26,10 +26,9 @@
 
 #include <KoColor.h>
 
-
 #include <kis_paintop_preset.h>
 #include <kis_types.h>
-#include <krita_export.h>
+#include "kis_default_bounds.h"
 
 class QColor;
 
@@ -44,7 +43,8 @@ class KisScratchPadEventFilter;
 class KisPaintingInformationBuilder;
 class KisToolFreehandHelper;
 class KisNodeGraphListener;
-class KisDefaultBounds;
+
+#include <krita_export.h>
 
 /**
  * A scratchpad is a painting canvas with only one zoomlevel and based on
@@ -161,5 +161,26 @@ private:
 
     QImage m_presetImage;
 };
+
+
+class KisScratchPadDefaultBounds : public KisDefaultBounds
+{
+    Q_OBJECT
+public:
+
+    KisScratchPadDefaultBounds(KisScratchPad *scratchPad)
+        : m_scratchPad(scratchPad)
+    {
+    }
+
+    QRect bounds() const {
+        return m_scratchPad->imageBounds();
+    }
+
+private:
+    KisScratchPad *m_scratchPad;
+};
+
+
 
 #endif // KIS_SCRATCH_PAD_H

@@ -29,6 +29,7 @@ bool isPolar( ChartType type )
     case CircleChartType:
     case RingChartType:
     case RadarChartType:
+    case FilledRadarChartType:
         return true;
     default:
         return false;
@@ -52,6 +53,7 @@ int numDimensions( ChartType type )
     case CircleChartType:
     case RingChartType:
     case RadarChartType:
+    case FilledRadarChartType:
         dimensions = 1;
         break;
     case ScatterChartType:

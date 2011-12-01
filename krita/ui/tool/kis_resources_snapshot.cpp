@@ -33,17 +33,13 @@
 #include "kis_default_bounds.h"
 
 struct KisResourcesSnapshot::Private {
-    Private()
-        : bounds(0)
-        , currentPattern(0)
-        , currentGradient(0)
-        , currentGenerator(0)
-        , compositeOp(0)
+    Private() : currentPattern(0), currentGradient(0),
+                currentGenerator(0), compositeOp(0)
     {
     }
 
     KisImageWSP image;
-    KisDefaultBounds *bounds;
+    KisDefaultBounds * bounds;
     KisPostExecutionUndoAdapter *undoAdapter;
     KoColor currentFgColor;
     KoColor currentBgColor;

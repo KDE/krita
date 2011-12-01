@@ -78,10 +78,11 @@ enum DocumentResource {
     PasteAtCursor,          ///< Application wide paste at cursor setting
     HandleRadius,           ///< The handle radius used for drawing handles of any kind
     GrabSensitivity,        ///< The grab sensitivity used for grabbing handles of any kind
+    MarkerCollection,       ///< The collection holding all markers
 
     KarbonStart = 1000,      ///< Base number for karbon specific values.
     KexiStart = 2000,        ///< Base number for kexi specific values.
-    FlowStart = 3000,       ///< Base number for flow specific values.
+    FlowStart = 3000,        ///< Base number for flow specific values.
     KPlatoStart = 4000,      ///< Base number for kplato specific values.
     KPresenterStart = 5000,  ///< Base number for kpresenter specific values.
     KritaStart = 6000,       ///< Base number for krita specific values.

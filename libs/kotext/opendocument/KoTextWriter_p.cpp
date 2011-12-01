@@ -185,6 +185,9 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
                 continue;
             }
             KoListStyle *listStyle = list->style();
+            if (listStyle && listStyle->isOulineStyle()) {
+                continue;
+            }
             bool automatic = listStyle->styleId() == 0;
             KoGenStyle style(automatic ? KoGenStyle::ListAutoStyle : KoGenStyle::ListStyle);
             listStyle->saveOdf(style, context);
@@ -198,6 +201,9 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
             KoGenStyle style(KoGenStyle::ListAutoStyle);
             KoListStyle listStyle;
             listStyle.setLevelProperties(llp);
+            if (listStyle.isOulineStyle()) {
+                continue;
+            }
             listStyle.saveOdf(style, context);
             QString generatedName = context.mainStyles().insert(style, listStyle.name());
             listStyles[textList] = generatedName;
@@ -1371,8 +1377,19 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
         TagInformation listTagInformation;
         listTagInformation.setTagName("text:list");
         listTagInformation.addAttribute("text:style-name", listStyles[textList]);
-        if (textList->format().hasProperty(KoListStyle::ContinueNumbering))
-            listTagInformation.addAttribute("text:continue-numbering",textList->format().boolProperty(KoListStyle::ContinueNumbering) ? "true" : "false");
+
+        bool newList = true;
+        if (listXmlIds.contains(textList)) {
+            newList = false;
+            listTagInformation.addAttribute("text:continue-list", listXmlIds.value(textList));
+        }
+
+        QString listXmlId = QString("list-%1").arg(createXmlId());
+        listTagInformation.addAttribute("xml:id", listXmlId);
+        if (newList) {
+            listXmlIds.insert(textList, listXmlId);
+        }
+
 
         listChangeId = openTagRegion(block.position(), KoTextWriter::Private::List, listTagInformation);
     }
@@ -1422,7 +1439,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     }
                 }
 
-                if (textList == topLevelTextList) {
+                if (topListLevel == level && textList == topLevelTextList) {
                     writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, currentTable, textList);
                     // we are generating a text:list-item. Look forward and generate unnumbered list items.
                     while (true) {
@@ -2312,3 +2329,10 @@ void KoTextWriter::Private::writeNode(QTextStream &outputXmlStream, KoXmlNode &n
     }
 }
 
+QString KoTextWriter::Private::createXmlId()
+{
+    QString uuid = QUuid::createUuid().toString();
+    uuid.remove('{');
+    uuid.remove('}');
+    return uuid;
+}

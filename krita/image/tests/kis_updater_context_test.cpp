@@ -24,10 +24,10 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_paint_layer.h"
-#include "kis_image.h"
+
 #include "kis_merge_walker.h"
 #include "kis_updater_context.h"
-
+#include "kis_image.h"
 
 void KisUpdaterContextTest::testJobInterference()
 {

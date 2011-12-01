@@ -34,6 +34,7 @@ class KoShapeLoadingContext;
  */
 class KOTEXT_EXPORT KoTextMeta : public KoInlineObject
 {
+    Q_OBJECT
 public:
     enum BookmarkType {
         StartBookmark,      ///< start position

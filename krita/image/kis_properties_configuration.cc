@@ -28,10 +28,12 @@
 #include "kis_undo_adapter.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
-#include "KoID.h"
 #include "kis_types.h"
-#include <KoColor.h>
+#include "kis_image.h"
+
+#include "KoID.h"
 #include <KoColorModelStandardIds.h>
+#include <KoColor.h>
 
 struct KisPropertiesConfiguration::Private {
     QMap<QString, QVariant> properties;

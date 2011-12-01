@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +21,7 @@
 #include "KoPathShape.h"
 #include "KoLineBorder.h"
 #include "KoImageCollection.h"
+#include "KoMarkerCollection.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapeLoadingContext.h"
 
@@ -76,5 +78,10 @@ void KoPathShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *m
     if (manager->imageCollection() == 0) {
         KoImageCollection *imgCol = new KoImageCollection(manager);
         manager->setImageCollection(imgCol);
+    }
+    // we also need a MarkerCollection so add if it is not there yet
+    if (!manager->hasResource(KoDocumentResourceManager::MarkerCollection)) {
+        KoMarkerCollection *markerCollection = new KoMarkerCollection(manager);
+        manager->setResource(KoDocumentResourceManager::MarkerCollection, qVariantFromValue(markerCollection));
     }
 }

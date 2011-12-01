@@ -48,10 +48,6 @@ public:
     /// Destructor
     ~KoList();
 
-    enum {
-        ContinueNumbering = 1
-    };
-
     /// Adds \a block to \a level of this list
     void add(const QTextBlock &block, int level);
 
@@ -80,9 +76,6 @@ public:
     QVector<QWeakPointer<QTextList> > textLists() const;
 
     QVector<KoListStyle::ListIdType> textListIds() const;
-
-    void setContinueNumbering(int level, bool enable);
-    bool continueNumbering(int level) const;
 
     static int level(const QTextBlock &block);
 

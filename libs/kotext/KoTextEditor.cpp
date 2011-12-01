@@ -283,6 +283,7 @@ void KoTextEditor::Private::newLine()
     bf.clearProperty(KoParagraphStyle::UnnumberedListItem);
     bf.clearProperty(KoParagraphStyle::IsListHeader);
     bf.clearProperty(KoParagraphStyle::MasterPageName);
+    bf.clearProperty(KoParagraphStyle::OutlineLevel);
     caret.setBlockFormat(bf);
     if (nextStyle) {
         QTextBlock block = caret.block();
@@ -919,6 +920,23 @@ KoInlineObject *KoTextEditor::insertIndexMarker()
         return 0;
     }
 
+    int startPosition = d->caret.position();
+
+    if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
+        d->caret.movePosition(QTextCursor::PreviousCharacter);
+        if (startPosition == d->caret.position()) {
+            d->newLine();
+            d->caret.movePosition(QTextCursor::PreviousCharacter);
+        } else {
+            d->newLine();
+        }
+        QTextBlockFormat bf = d->caret.blockFormat();
+        bf.clearProperty(KoParagraphStyle::HiddenByTable);
+        d->caret.setBlockFormat(bf);
+
+        startPosition = d->caret.position();
+    }
+
     QTextBlock block = d->caret.block();
     if (d->caret.position() >= block.position() + block.length() - 1)
         return 0; // can't insert one at end of text
@@ -941,6 +959,22 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Variable"));
 
     int startPosition = d->caret.position();
+
+    if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
+        d->caret.movePosition(QTextCursor::PreviousCharacter);
+        if (startPosition == d->caret.position()) {
+            d->newLine();
+            d->caret.movePosition(QTextCursor::PreviousCharacter);
+        } else {
+            d->newLine();
+        }
+        QTextBlockFormat bf = d->caret.blockFormat();
+        bf.clearProperty(KoParagraphStyle::HiddenByTable);
+        d->caret.setBlockFormat(bf);
+
+        startPosition = d->caret.position();
+    }
+
     QTextCharFormat format = d->caret.charFormat();
     if (format.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
         format.clearProperty(KoCharacterStyle::ChangeTrackerId);

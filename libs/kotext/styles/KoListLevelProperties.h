@@ -128,11 +128,6 @@ public:
      */
     void setLetterSynchronization(bool on);
 
-    /// set to true to continue numbering from a previous list of the same style
-    void setContinueNumbering(bool enable);
-    /// returns whether this list continues numbering from a previous list of the same style
-    bool continueNumbering() const;
-
     /// sets the indentation of paragraph
     void setIndent(qreal value);
     /// returns the indentation of paragraphs
@@ -167,6 +162,9 @@ public:
     void setAlignmentMode(bool isLabelAlignmentMode);
     /// return the alignment mode of the list isLabelAlignmentMode=true if ist-level-position-and-space-mode=label-alignment
     bool alignmentMode() const;
+
+    void setOutlineList(bool isOutline);
+    bool isOutlineList() const;
 
     bool operator==(const KoListLevelProperties &other) const;
     bool operator!=(const KoListLevelProperties &other) const;

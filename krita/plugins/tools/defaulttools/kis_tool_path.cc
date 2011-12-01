@@ -36,6 +36,7 @@
 #include <kis_paintop_registry.h>
 #include <kis_selection.h>
 #include <kis_cursor.h>
+#include <kis_system_locker.h>
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_path_paint_action.h>
@@ -180,7 +181,7 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
             return;
         }
 
-        setCurrentNodeLocked(true);
+        KisSystemLocker locker(currentNode);
 
         KisSelectionSP selection = kiscanvas->view()->selection();
 
@@ -193,7 +194,6 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
 
         dev->setDirty(painter.takeDirtyRegion());
         image->setModified();
-        setCurrentNodeLocked(false);
 
     } else {
         pathShape->normalize();

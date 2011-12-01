@@ -271,6 +271,16 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         d->bibliographyConfiguration->saveOdf(xmlWriter);
         context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferBib.data());
     }
+
+    if (d->outlineStyle) {
+        QString name(QString(QUrl::toPercentEncoding(d->outlineStyle->name(), "", " ")).replace('%', '_'));
+        if (name.isEmpty())
+            name = 'O';
+
+        KoGenStyle style(KoGenStyle::OutlineLevelStyle);
+        d->outlineStyle->saveOdf(style, context);
+        context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+    }
 }
 
 void KoStyleManager::add(KoCharacterStyle *style)

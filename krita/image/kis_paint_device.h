@@ -16,8 +16,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_PAINT_DEVICE_H_
-#define KIS_PAINT_DEVICE_H_
+#ifndef KIS_PAINT_DEVICE_IMPL_H_
+#define KIS_PAINT_DEVICE_IMPL_H_
 
 #include <QObject>
 #include <QRect>
@@ -31,8 +31,8 @@
 #include "kis_global.h"
 #include "kis_shared.h"
 #include "kis_iterators_pixel.h"
+
 #include <krita_export.h>
-#include "kis_default_bounds.h"
 
 class KUndo2Command;
 class QRect;
@@ -50,6 +50,7 @@ class KisHLineIteratorNG;
 class KisRandomSubAccessorPixel;
 class KisDataManager;
 class KisSelectionComponent;
+class KisDefaultBounds;
 
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
@@ -86,9 +87,7 @@ public:
      * @param defaultBounds boundaries of the device in case it is empty
      * @param name for debugging purposes
      */
-    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace,
-                   KisDefaultBounds *defaultBounds,
-                   const QString& name = QString());
+    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBounds * defaultBounds = 0, const QString& name = QString());
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
@@ -128,7 +127,12 @@ public:
      * set the default bounds for the paint device when
      * the default pixel in not completely transarent
      */
-    virtual void setDefaultBounds(KisDefaultBounds *bounds);
+    virtual void setDefaultBounds(KisDefaultBounds * bounds);
+
+     /**
+     * the default bounds rect of the paint device
+     */
+    KisDefaultBounds * defaultBounds() const;
 
     /**
      * Moves the device to these new coordinates (so no incremental move or so)
@@ -687,7 +691,7 @@ private:
     KisPaintDevice& operator=(const KisPaintDevice&);
     void init(KisDataManagerSP explicitDataManager,
               const KoColorSpace *colorSpace,
-              KisDefaultBounds *defaultBounds,
+              KisDefaultBounds * defaultBounds,
               KisNodeWSP parent, const QString& name);
 
     // Only KisPainter is allowed to have access to these low-level methods
@@ -717,13 +721,6 @@ private:
      */
     QVector<qint32> channelSizes();
 
-
-    /**
-     * the default bounds rect of the paint device
-     */
-    KisDefaultBounds *defaultBounds() const;
-
-
 private:
     KisDataManagerSP m_datamanager;
 
@@ -732,4 +729,4 @@ private:
 
 };
 
-#endif // KIS_PAINT_DEVICE_H_
+#endif // KIS_PAINT_DEVICE_IMPL_H_

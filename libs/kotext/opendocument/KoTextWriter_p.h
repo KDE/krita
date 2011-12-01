@@ -239,6 +239,7 @@ private:
     void removeLeavingContentEnd(QTextStream &outputXmlStream, int endIdCounter);
     void insertAroundContent(QTextStream &outputXmlStream, KoXmlElement &element, QString &changeId);
 
+    QString createXmlId();
 
 public:
 
@@ -265,6 +266,8 @@ private:
     // e.g. the QTextDocument of a table, we need have a clean slate. Hence, a stack of stacks.
     QStack< QStack<KoInlineObject*> *> pairedInlineObjectsStackStack;
     QStack<KoInlineObject*> *currentPairedInlineObjectsStack;
+
+    QMap<QTextList *, QString> listXmlIds;
 
     int splitEndBlockNumber;
     bool splitRegionOpened;

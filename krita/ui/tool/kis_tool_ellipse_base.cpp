@@ -24,6 +24,7 @@
 #include <KoCanvasController.h>
 #include <KoViewConverter.h>
 
+#include <kis_system_locker.h>
 #include "kis_canvas2.h"
 
 KisToolEllipseBase::KisToolEllipseBase(KoCanvasBase * canvas, const QCursor & cursor) :
@@ -117,9 +118,8 @@ void KisToolEllipseBase::mouseReleaseEvent(KoPointerEvent *event)
 
         updateArea();
 
-        setCurrentNodeLocked(true);
+        KisSystemLocker locker(currentNode());
         finishEllipse(QRectF(m_dragStart, m_dragEnd).normalized());
-        setCurrentNodeLocked(false);
         event->accept();
     }
     else {

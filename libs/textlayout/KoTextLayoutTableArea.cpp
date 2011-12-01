@@ -880,7 +880,6 @@ void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocu
         if (row == 0) {
             cellStyleHelper.drawTopHorizontalBorder(*painter, bRect.x(), bRect.y(), bRect.width(), accuBlankBorders);
         }
-        qDebug() << __PRETTY_FUNCTION__ << row << topRow;
         if (topRow && row != 0) {
             // in collapsing mode we need to also paint the top border of the area
             int c = column;

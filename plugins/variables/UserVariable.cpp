@@ -44,8 +44,7 @@
 #include <KDebug>
 
 UserVariable::UserVariable()
-    : QObject()
-    , KoVariable(true)
+    : KoVariable(true)
     , m_variableManager(0)
     , m_property(0)
 {

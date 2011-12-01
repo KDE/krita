@@ -37,7 +37,7 @@ class KoVariableManager;
  * text:user-field-input which are fetching variables defined
  * via text:user-field-decls and text:user-field-decl.
  */
-class UserVariable : public QObject, public KoVariable
+class UserVariable : public KoVariable
 {
     Q_OBJECT
 public:

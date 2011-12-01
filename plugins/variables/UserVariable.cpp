@@ -43,16 +43,176 @@
 #include <KInputDialog>
 #include <KDebug>
 
+UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable, QWidget *parent)
+    : QWidget(parent)
+    , userVariable(userVariable)
+{
+    QGridLayout *layout = new QGridLayout(this);
+    layout->setColumnStretch(1, 1);
+    setLayout(layout);
+
+    QLabel *nameLabel = new QLabel(i18n("Name:"), this);
+    nameLabel->setAlignment(Qt::AlignRight);
+    layout->addWidget(nameLabel, 0, 0);
+    QHBoxLayout *nameLayout = new QHBoxLayout(this);
+    nameEdit = new QComboBox(this);
+    nameEdit->setObjectName(QLatin1String("nameEdit"));
+    nameEdit->setMinimumContentsLength(10);
+    nameLabel->setBuddy(nameEdit);
+    connect(nameEdit, SIGNAL(currentIndexChanged(QString)), this, SLOT(nameChanged()));
+    nameLayout->addWidget(nameEdit);
+
+    newButton = new QPushButton(i18n("New"), this);
+    connect(newButton, SIGNAL(clicked()), this, SLOT(newClicked()));
+    nameLayout->addWidget(newButton);
+
+    deleteButton = new QPushButton(i18n("Delete"), this);
+    deleteButton->setObjectName("DeleteButton");
+    connect(deleteButton, SIGNAL(clicked()), this, SLOT(deleteClicked()));
+    nameLayout->addWidget(deleteButton);
+
+    layout->addLayout(nameLayout, 0, 1);
+
+    QLabel *typeLabel = new QLabel(i18n("Format:"), this);
+    typeLabel->setAlignment(Qt::AlignRight);
+    layout->addWidget(typeLabel, 1, 0);
+    typeEdit = new QComboBox(this);
+    typeEdit->setObjectName(QLatin1String("typeEdit"));
+    typeLabel->setBuddy(typeEdit);
+    typeEdit->addItem(i18n("String"), QLatin1String("string"));
+    typeEdit->addItem(i18n("Boolean"), QLatin1String("boolean"));
+    typeEdit->addItem(i18n("Float"), QLatin1String("float"));
+    typeEdit->addItem(i18n("Percentage"), QLatin1String("percentage"));
+    typeEdit->addItem(i18n("Currency"), QLatin1String("currency"));
+    typeEdit->addItem(i18n("Date"), QLatin1String("date"));
+    typeEdit->addItem(i18n("Time"), QLatin1String("time"));
+    typeEdit->addItem(i18n("Formula"), QLatin1String("formula"));
+    typeEdit->addItem(i18n("Void"), QLatin1String("void"));
+    typeEdit->setCurrentIndex(qMax(0, typeEdit->findData(variableManager()->userType(userVariable->name()))));
+    connect(typeEdit, SIGNAL(currentIndexChanged(QString)), this, SLOT(typeChanged()));
+    layout->addWidget(typeEdit, 1, 1);
+
+    QLabel *valueLabel = new QLabel(i18n("Value:"), this);
+    valueLabel->setAlignment(Qt::AlignRight);
+    layout->addWidget(valueLabel, 2, 0);
+    valueEdit = new QLineEdit(this);
+    valueEdit->setObjectName(QLatin1String("valueEdit"));
+    valueLabel->setBuddy(valueEdit);
+    valueEdit->setText(variableManager()->value(userVariable->name()));
+    connect(valueEdit, SIGNAL(textChanged(QString)), this, SLOT(valueChanged()));
+    layout->addWidget(valueEdit, 2, 1);
+
+    updateNameEdit();
+}
+
+UserVariableOptionsWidget::~UserVariableOptionsWidget()
+{
+}
+
+KoVariableManager *UserVariableOptionsWidget::variableManager()
+{
+    return userVariable->variableManager();
+}
+
+void UserVariableOptionsWidget::nameChanged()
+{
+    bool enabled = !variableManager()->userVariables().isEmpty();
+
+    nameEdit->setEnabled(enabled);
+    userVariable->setName(nameEdit->currentText());
+
+    bool wasBlocked = typeEdit->blockSignals(true);
+    typeEdit->setCurrentIndex(qMax(0, typeEdit->findData(variableManager()->userType(userVariable->name()))));
+    typeEdit->blockSignals(wasBlocked);
+    typeEdit->setEnabled(enabled);
+
+    wasBlocked = valueEdit->blockSignals(true);
+    valueEdit->setText(variableManager()->value(userVariable->name()));
+    valueEdit->blockSignals(wasBlocked);
+    valueEdit->setEnabled(enabled);
+
+    deleteButton->setEnabled(enabled);
+}
+
+void UserVariableOptionsWidget::typeChanged()
+{
+    QString value = variableManager()->value(userVariable->name());
+    QString type = typeEdit->itemData(typeEdit->currentIndex()).toString();
+    variableManager()->setValue(userVariable->name(), value, type);
+    //userVariable->valueChanged();
+}
+
+void UserVariableOptionsWidget::valueChanged()
+{
+    QString value = valueEdit->text();
+    QString type = variableManager()->userType(userVariable->name());
+    variableManager()->setValue(userVariable->name(), value, type);
+    //userVariable->valueChanged();
+}
+
+void UserVariableOptionsWidget::newClicked()
+{
+    class Validator : public QValidator
+    {
+    public:
+        Validator(KoVariableManager *variableManager) : m_variableManager(variableManager) {}
+        virtual State validate(QString &input, int &) const
+        {
+            QString s = input.trimmed();
+            return s.isEmpty() || m_variableManager->userVariables().contains(s) ? Intermediate : Acceptable;
+        }
+    private:
+        KoVariableManager *m_variableManager;
+    };
+    Validator validator(variableManager());
+    QString name = KInputDialog::getText(i18n("New Variable"), i18n("Name for new variable:"), QString(), 0, this, &validator).trimmed();
+    if (name.isEmpty()) {
+        return;
+    }
+    userVariable->setName(name);
+    variableManager()->setValue(userVariable->name(), QString(), QLatin1String("string"));
+    updateNameEdit();
+    valueEdit->setFocus();
+}
+
+void UserVariableOptionsWidget::deleteClicked()
+{
+    if (!variableManager()->userVariables().contains(userVariable->name())) {
+        return;
+    }
+    if (KMessageBox::questionYesNo(this,
+            i18n("Delete variable <b>%1</b>?", userVariable->name()),
+            i18n("Delete Variable"),
+            KStandardGuiItem::yes(),
+            KStandardGuiItem::cancel(),
+            QString(),
+            KMessageBox::Dangerous | KMessageBox::Notify) != KMessageBox::Yes) {
+        return;
+    }
+    variableManager()->remove(userVariable->name());
+    userVariable->setName(QString());
+    updateNameEdit();
+}
+
+void UserVariableOptionsWidget::updateNameEdit()
+{
+    QStringList names = variableManager()->userVariables();
+    bool wasBlocked = nameEdit->blockSignals(true);
+    nameEdit->clear();
+    nameEdit->addItems(names);
+    nameEdit->blockSignals(wasBlocked);
+    if (userVariable->name().isNull() && !names.isEmpty()) {
+        userVariable->setName(names.first());
+    }
+    nameEdit->setCurrentIndex(qMax(0, names.indexOf(userVariable->name())));
+    nameChanged();
+}
+
 UserVariable::UserVariable()
     : KoVariable(true)
     , m_variableManager(0)
     , m_property(0)
 {
-    connect(&m_nameMapper, SIGNAL(mapped(QWidget*)), this, SLOT(nameChanged(QWidget*)));
-    connect(&m_typeMapper, SIGNAL(mapped(QWidget*)), this, SLOT(typeChanged(QWidget*)));
-    connect(&m_valueMapper, SIGNAL(mapped(QWidget*)), this, SLOT(valueChanged(QWidget*)));
-    connect(&m_newMapper, SIGNAL(mapped(QWidget*)), this, SLOT(newClicked(QWidget*)));
-    connect(&m_deleteMapper, SIGNAL(mapped(QWidget*)), this, SLOT(deleteClicked(QWidget*)));
 }
 
 KoVariableManager *UserVariable::variableManager()
@@ -72,183 +232,37 @@ KoVariableManager *UserVariable::variableManager()
     return m_variableManager;
 }
 
-QWidget* UserVariable::createOptionsWidget()
+int UserVariable::property() const
 {
-    QWidget *configWidget = new QWidget();
-    QGridLayout *layout = new QGridLayout(configWidget);
-    layout->setColumnStretch(1, 1);
-    configWidget->setLayout(layout);
-
-    QLabel *nameLabel = new QLabel(i18n("Name:"), configWidget);
-    nameLabel->setAlignment(Qt::AlignRight);
-    layout->addWidget(nameLabel, 0, 0);
-    QHBoxLayout *nameLayout = new QHBoxLayout(configWidget);
-    QComboBox *nameEdit = new QComboBox(configWidget);
-    nameEdit->setObjectName(QLatin1String("nameEdit"));
-    nameEdit->setMinimumContentsLength(10);
-    nameLabel->setBuddy(nameEdit);
-    connect(nameEdit, SIGNAL(currentIndexChanged(QString)), &m_nameMapper, SLOT(map()));
-    m_nameMapper.setMapping(nameEdit, configWidget);
-    nameLayout->addWidget(nameEdit);
-
-    QPushButton *newButton = new QPushButton(i18n("New"), configWidget);
-    connect(newButton, SIGNAL(clicked()), &m_newMapper, SLOT(map()));
-    m_newMapper.setMapping(newButton, configWidget);
-    nameLayout->addWidget(newButton);
-
-    QPushButton *deleteButton = new QPushButton(i18n("Delete"), configWidget);
-    deleteButton->setObjectName("DeleteButton");
-    connect(deleteButton, SIGNAL(clicked()), &m_deleteMapper, SLOT(map()));
-    m_deleteMapper.setMapping(deleteButton, configWidget);
-    nameLayout->addWidget(deleteButton);
-
-    layout->addLayout(nameLayout, 0, 1);
-
-    QLabel *typeLabel = new QLabel(i18n("Format:"), configWidget);
-    typeLabel->setAlignment(Qt::AlignRight);
-    layout->addWidget(typeLabel, 1, 0);
-    QComboBox *typeEdit = new QComboBox(configWidget);
-    typeEdit->setObjectName(QLatin1String("typeEdit"));
-    typeLabel->setBuddy(typeEdit);
-    typeEdit->addItem(i18n("String"), QLatin1String("string"));
-    typeEdit->addItem(i18n("Boolean"), QLatin1String("boolean"));
-    typeEdit->addItem(i18n("Float"), QLatin1String("float"));
-    typeEdit->addItem(i18n("Percentage"), QLatin1String("percentage"));
-    typeEdit->addItem(i18n("Currency"), QLatin1String("currency"));
-    typeEdit->addItem(i18n("Date"), QLatin1String("date"));
-    typeEdit->addItem(i18n("Time"), QLatin1String("time"));
-    typeEdit->addItem(i18n("Formula"), QLatin1String("formula"));
-    typeEdit->addItem(i18n("Void"), QLatin1String("void"));
-    typeEdit->setCurrentIndex(qMax(0, typeEdit->findData(variableManager()->userType(m_name))));
-    connect(typeEdit, SIGNAL(currentIndexChanged(QString)), &m_typeMapper, SLOT(map()));
-    m_typeMapper.setMapping(typeEdit, configWidget);
-    layout->addWidget(typeEdit, 1, 1);
-
-    QLabel *valueLabel = new QLabel(i18n("Value:"), configWidget);
-    valueLabel->setAlignment(Qt::AlignRight);
-    layout->addWidget(valueLabel, 2, 0);
-    QLineEdit *valueEdit = new QLineEdit(configWidget);
-    valueEdit->setObjectName(QLatin1String("valueEdit"));
-    valueLabel->setBuddy(valueEdit);
-    valueEdit->setText(variableManager()->value(m_name));
-    connect(valueEdit, SIGNAL(textChanged(QString)), &m_valueMapper, SLOT(map()));
-    m_valueMapper.setMapping(valueEdit, configWidget);
-    layout->addWidget(valueEdit, 2, 1);
-
-    updateNameEdit(configWidget);
-
-    return configWidget;
+    return m_property;
 }
 
-QComboBox* UserVariable::nameEdit(QWidget *configWidget) const
+const QString& UserVariable::name() const
 {
-    QComboBox *c = configWidget->findChild<QComboBox*>("nameEdit");
-    Q_ASSERT(c);
-    return c;
+    return m_name;
 }
 
-QComboBox* UserVariable::typeEdit(QWidget *configWidget) const
+void UserVariable::setName(const QString &name)
 {
-    QComboBox *c = configWidget->findChild<QComboBox*>("typeEdit");
-    Q_ASSERT(c);
-    return c;
-}
-
-QLineEdit* UserVariable::valueEdit(QWidget *configWidget) const
-{
-    QLineEdit *e = configWidget->findChild<QLineEdit*>("valueEdit");
-    Q_ASSERT(e);
-    return e;
-}
-
-void UserVariable::nameChanged(QWidget *configWidget)
-{
-    bool enabled = !variableManager()->userVariables().isEmpty();
-
-    QComboBox *ne = nameEdit(configWidget);
-    ne->setEnabled(enabled);
-    m_name = ne->currentText();
-
-    QComboBox *te = typeEdit(configWidget);
-    bool wasBlocked = te->blockSignals(true);
-    te->setCurrentIndex(qMax(0, te->findData(variableManager()->userType(m_name))));
-    te->blockSignals(wasBlocked);
-    te->setEnabled(enabled);
-
-    QLineEdit *ve = valueEdit(configWidget);
-    wasBlocked = ve->blockSignals(true);
-    ve->setText(variableManager()->value(m_name));
-    ve->blockSignals(wasBlocked);
-    ve->setEnabled(enabled);
-
-    QPushButton *db = configWidget->findChild<QPushButton*>("DeleteButton");
-    db->setEnabled(enabled);
-
+    m_name = name;
     valueChanged();
 }
 
-void UserVariable::typeChanged(QWidget *configWidget)
+KoOdfNumberStyles::NumericStyleFormat UserVariable::numberstyle() const
 {
-    QString value = variableManager()->value(m_name);
-
-    QComboBox *typeedit = typeEdit(configWidget);
-    QString type = typeedit->itemData(typeedit->currentIndex()).toString();
-
-    variableManager()->setValue(m_name, value, type);
-
-    //valueChanged();
+    return m_numberstyle;
 }
 
-void UserVariable::valueChanged(QWidget *configWidget)
+void UserVariable::setNumberStyle(KoOdfNumberStyles::NumericStyleFormat numberstyle)
 {
-    QString value = valueEdit(configWidget)->text();
-    QString type = variableManager()->userType(m_name);
-    variableManager()->setValue(m_name, value, type);
-    //valueChanged();
+    m_numberstyle = numberstyle;
+    valueChanged();
 }
 
-void UserVariable::newClicked(QWidget *configWidget)
+QWidget* UserVariable::createOptionsWidget()
 {
-    class Validator : public QValidator
-    {
-    public:
-        Validator(KoVariableManager *variableManager) : m_variableManager(variableManager) {}
-        virtual State validate(QString &input, int &) const
-        {
-            QString s = input.trimmed();
-            return s.isEmpty() || m_variableManager->userVariables().contains(s) ? Intermediate : Acceptable;
-        }
-    private:
-        KoVariableManager *m_variableManager;
-    };
-    Validator validator(variableManager());
-    QString name = KInputDialog::getText(i18n("New Variable"), i18n("Name for new variable:"), QString(), 0, configWidget, &validator).trimmed();
-    if (name.isEmpty()) {
-        return;
-    }
-    m_name = name;
-    variableManager()->setValue(m_name, QString(), QLatin1String("string"));
-    updateNameEdit(configWidget);
-    valueEdit(configWidget)->setFocus();
-}
-
-void UserVariable::deleteClicked(QWidget *configWidget)
-{
-    if (!variableManager()->userVariables().contains(m_name)) {
-        return;
-    }
-    if (KMessageBox::questionYesNo(configWidget,
-            i18n("Delete variable <b>%1</b>?", m_name),
-            i18n("Delete Variable"),
-            KStandardGuiItem::yes(),
-            KStandardGuiItem::cancel(),
-            QString(),
-            KMessageBox::Dangerous | KMessageBox::Notify) != KMessageBox::Yes) {
-        return;
-    }
-    variableManager()->remove(m_name);
-    m_name.clear();
-    updateNameEdit(configWidget);
+    UserVariableOptionsWidget *configWidget = new UserVariableOptionsWidget(this);
+    return configWidget;
 }
 
 void UserVariable::valueChanged()
@@ -258,21 +272,6 @@ void UserVariable::valueChanged()
     QString value = variableManager()->value(m_name);
     value = KoOdfNumberStyles::format(value, m_numberstyle);
     setValue(value);
-}
-
-void UserVariable::updateNameEdit(QWidget *configWidget)
-{
-    QComboBox *nameedit = nameEdit(configWidget);
-    QStringList names = variableManager()->userVariables();
-    bool wasBlocked = nameedit->blockSignals(true);
-    nameedit->clear();
-    nameedit->addItems(names);
-    nameedit->blockSignals(wasBlocked);
-    if (m_name.isNull() && !names.isEmpty()) {
-        m_name = names.first();
-    }
-    nameedit->setCurrentIndex(qMax(0, names.indexOf(m_name)));
-    nameChanged(configWidget);
 }
 
 void UserVariable::readProperties(const KoProperties *props)

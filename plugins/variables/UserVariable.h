@@ -21,14 +21,39 @@
 #define PAGEVARIABLE_H
 
 #include <QObject>
-#include <QSignalMapper>
+#include <QWidget>
 #include <KoVariable.h>
 #include <KoOdfNumberStyles.h>
 
 class QLineEdit;
 class QComboBox;
+class QPushButton;
 class KoShapeSavingContext;
 class KoVariableManager;
+class UserVariable;
+
+class UserVariableOptionsWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    UserVariableOptionsWidget(UserVariable* userVariable, QWidget *parent = 0);
+    virtual ~UserVariableOptionsWidget();
+private Q_SLOTS:
+    void nameChanged();
+    void typeChanged();
+    void valueChanged();
+    void newClicked();
+    void deleteClicked();
+private:
+    KoVariableManager *variableManager();
+    void updateNameEdit();
+
+    UserVariable *userVariable;
+    QComboBox *nameEdit;
+    QComboBox *typeEdit;
+    QLineEdit *valueEdit;
+    QPushButton *newButton, *deleteButton;
+};
 
 /**
  * This is a KoVariable for user defined variables.
@@ -44,36 +69,33 @@ public:
     UserVariable();
 
     QWidget* createOptionsWidget();
+
     void readProperties(const KoProperties *props);
     void propertyChanged(Property property, const QVariant &value);
+
     void saveOdf(KoShapeSavingContext &context);
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext & context);
 
+    KoVariableManager *variableManager();
+
+    int property() const;
+
+    const QString& name() const;
+    void setName(const QString &name);
+
+    KoOdfNumberStyles::NumericStyleFormat numberstyle() const;
+    void setNumberStyle(KoOdfNumberStyles::NumericStyleFormat numberstyle);
+
 private Q_SLOTS:
-    void nameChanged(QWidget *configWidget);
-    void typeChanged(QWidget *configWidget);
-    void valueChanged(QWidget *configWidget);
-    void newClicked(QWidget *configWidget);
-    void deleteClicked(QWidget *configWidget);
     void valueChanged();
 
 private:
-    KoVariableManager *variableManager();
-
     void resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
-
-    QComboBox* nameEdit(QWidget *configWidget) const;
-    QComboBox* typeEdit(QWidget *configWidget) const;
-    QLineEdit* valueEdit(QWidget *configWidget) const;
-
-    void updateNameEdit(QWidget *configWidget);
 
     KoVariableManager *m_variableManager;
     int m_property;
     QString m_name;
-
     KoOdfNumberStyles::NumericStyleFormat m_numberstyle;
-    QSignalMapper m_nameMapper, m_typeMapper, m_valueMapper, m_newMapper, m_deleteMapper;
 };
 
 #endif

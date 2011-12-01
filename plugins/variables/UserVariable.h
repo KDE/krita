@@ -17,43 +17,15 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef PAGEVARIABLE_H
-#define PAGEVARIABLE_H
+#ifndef USERVARIABLE_H
+#define USERVARIABLE_H
 
 #include <QObject>
-#include <QWidget>
 #include <KoVariable.h>
 #include <KoOdfNumberStyles.h>
 
-class QLineEdit;
-class QComboBox;
-class QPushButton;
 class KoShapeSavingContext;
 class KoVariableManager;
-class UserVariable;
-
-class UserVariableOptionsWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    UserVariableOptionsWidget(UserVariable* userVariable, QWidget *parent = 0);
-    virtual ~UserVariableOptionsWidget();
-private Q_SLOTS:
-    void nameChanged();
-    void typeChanged();
-    void valueChanged();
-    void newClicked();
-    void deleteClicked();
-private:
-    KoVariableManager *variableManager();
-    void updateNameEdit();
-
-    UserVariable *userVariable;
-    QComboBox *nameEdit;
-    QComboBox *typeEdit;
-    QLineEdit *valueEdit;
-    QPushButton *newButton, *deleteButton;
-};
 
 /**
  * This is a KoVariable for user defined variables.

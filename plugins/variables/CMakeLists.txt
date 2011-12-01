@@ -11,6 +11,7 @@ set(textvariables_SRCS
     VariablesPlugin.cpp
     UserVariable.cpp
     UserVariableFactory.cpp
+    UserVariableOptionsWidget.cpp
     DateVariable.cpp
     DateVariableFactory.cpp
     FixedDateFormat.cpp

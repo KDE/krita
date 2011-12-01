@@ -133,7 +133,7 @@ QList<QString> KoVariableManager::userVariables() const
 
 void KoVariableManager::loadOdf(const KoXmlElement &bodyElement)
 {
-    KoXmlElement element = KoXml::namedItemNS(bodyElement, KoXmlNS::text, "user-field-decls");
+    KoXmlElement element = KoXml::namedItemNS(bodyElement, KoXmlNS::text, "user-field-decls", KoXmlTextContentPrelude);
     if (element.isNull())
         return;
     KoXmlElement e;

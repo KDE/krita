@@ -8,6 +8,8 @@
  * Copyright (C) 2005, 2011 Thomas Zander <zander@kde.org>
  * Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * Copyright (C) 2011 Thorsten Zachmann <zachmann@kde.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,13 +36,14 @@
 
 class KoUnit;
 class KoLineBorder;
+class KoMarker;
 
 /// A widget for configuring the stroke of a shape
 class KOWIDGETS_EXPORT KoStrokeConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoStrokeConfigWidget( QWidget * parent );
+    KoStrokeConfigWidget(QWidget * parent);
     ~KoStrokeConfigWidget();
 
     // Getters
@@ -48,13 +51,17 @@ public:
     QVector<qreal> lineDashes() const;
     qreal lineWidth() const;
     qreal miterLimit() const;
+    KoMarker *startMarker() const;
+    KoMarker *endMarker() const;
 
-    void updateControls(KoLineBorder &border);
+    void updateControls(KoLineBorder &border, KoMarker *startMarker, KoMarker *endMarker);
 
     void locationChanged(Qt::DockWidgetArea area);
 
 public slots:
-    void setUnit( const KoUnit &unit );
+    void setUnit(const KoUnit &unit);
+
+    void updateMarkers(const QList<KoMarker*> &markers);
 
 signals:
     /// Emitted when the line style changes.
@@ -71,6 +78,12 @@ signals:
 
     /// Emitted when the line miter limit changes.
     void miterLimitChanged();
+
+    /// Emitted when the start marker changes.
+    void currentStartMarkerChanged();
+
+    /// Emitted when the end marker changes.
+    void currentEndMarkerChanged();
 
 private:
     void blockChildSignals(bool block);

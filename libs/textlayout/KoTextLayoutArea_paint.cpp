@@ -415,22 +415,27 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
             layouts.append(format);
             layout.setAdditionalFormats(layouts);
 
-            Qt::Alignment align = static_cast<Qt::Alignment>(listFormat.intProperty(KoListStyle::Alignment));
+            Qt::Alignment alignment = static_cast<Qt::Alignment>(listFormat.intProperty(KoListStyle::Alignment));
 
-            if (align == 0) {
-                align = Qt::AlignLeft;
+            if (alignment == 0) {
+                alignment = Qt::AlignLeft | Qt::AlignAbsolute;
             }
-            else if (align != Qt::AlignLeft) {
-                align |= Qt::AlignAbsolute;
+            if (m_isRtl && (alignment & Qt::AlignAbsolute) == 0) {
+                if (alignment & Qt::AlignLeft) {
+                    alignment = Qt::AlignRight;
+                } else if (alignment & Qt::AlignRight) {
+                    alignment = Qt::AlignLeft;
+                }
             }
+            alignment |= Qt::AlignAbsolute;
 
-            QTextOption option(align);
+            QTextOption option(alignment);
             option.setTextDirection(block.layout()->textOption().textDirection());
-
+/*
             if (option.textDirection() == Qt::RightToLeft || data->counterText().isRightToLeft()) {
                 option.setAlignment(Qt::AlignRight);
             }
-
+*/
             layout.setTextOption(option);
 
             layout.beginLayout();
@@ -452,7 +457,6 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
                     counterPosition += QPointF(0, (firstParagLine.height() - layout.lineAt(0).height())/2.0);
                 }
             }
-
             layout.draw(painter, counterPosition);
         }
 

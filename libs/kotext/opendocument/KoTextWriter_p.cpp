@@ -708,6 +708,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         writer->addAttribute("text:style-name", styleName);
 
     if ( const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
+        // text:id is deprecated. if present, it must have the same value as
+        // xml:id
+        writer->addAttribute("xml:id", context.subId(blockData));
         writer->addAttribute("text:id", context.subId(blockData));
     }
 

@@ -769,7 +769,11 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         // and naturalTextRect calculation so they are proper handled in the RunAroundHelper. For left-to-right we do
         // not like to include trailing spaces in the calculations cause else justified text would not look proper
         // justified. Seems for right-to-left we have to accept that justified text will not look proper justified then.
-        option.setFlags(QTextOption::IncludeTrailingSpaces);
+        // only set it for justified text as otherwise we will cut of text at the beginning of the line
+        if (pStyle.alignment() == Qt::AlignJustify) {
+            option.setFlags(QTextOption::IncludeTrailingSpaces);
+        }
+
     } else {
         option.setFlags(0);
         option.setTextDirection(Qt::LeftToRight);

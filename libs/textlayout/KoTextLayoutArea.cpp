@@ -936,9 +936,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             }
             labelBoxIndent = m_indent - labelBoxWidth;
         } else {
-            if (!m_isRtl) {
-                labelBoxWidth = blockData->counterSpacing() + blockData->counterWidth();
-            }
+            labelBoxWidth = blockData->counterSpacing() + blockData->counterWidth();
         }
     }
 
@@ -1117,16 +1115,13 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         // If first line in a list then set the counterposition. Following lines in the same
         // list-item have nothing to do with the counter.
         if (listFormat.boolProperty(KoListStyle::AlignmentMode) == false) {
-            if (m_isRtl) {
-                m_width -= blockData->counterWidth() + blockData->counterSpacing() + listFormat.doubleProperty(KoListStyle::Indent) + labelBoxWidth;
-                blockData->setCounterPosition(QPointF(right() -
-                                                      blockData->counterWidth() - startMargin, m_y));
-            } else {
-                blockData->setCounterPosition(QPointF(m_x, m_y));
-                m_x += listFormat.doubleProperty(KoListStyle::Indent) + labelBoxWidth;
-                m_width -= listFormat.doubleProperty(KoListStyle::Indent) + labelBoxWidth;
-                blockData->setCounterPosition(QPointF(x() - labelBoxWidth, m_y));
+            qreal minLabelWidth = listFormat.doubleProperty(KoListStyle::MinimumWidth);
+            if (!m_isRtl) {
+                m_x += listFormat.doubleProperty(KoListStyle::Indent) + minLabelWidth;
             }
+            m_width -= listFormat.doubleProperty(KoListStyle::Indent) + minLabelWidth;
+            m_indent +=  labelBoxWidth - minLabelWidth;
+            blockData->setCounterPosition(QPointF(m_x + m_indent - labelBoxWidth, m_y));
         } else if (labelBoxWidth > 0.0 || blockData->counterText().length() > 0) {
             // Alignmentmode and there is a label (double check needed to acount for both
             // picture bullets and non width chars)
@@ -1440,40 +1435,22 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         }
         alignment &= Qt::AlignRight | Qt::AlignLeft | Qt::AlignHCenter;
 
-        // first line, lets check where the line ended up and adjust the positioning of the counter.
-        if (block.textList()->format().boolProperty(KoListStyle::AlignmentMode)) {
-            qreal newX;
-            if (alignment & Qt::AlignHCenter) {
-                const qreal padding = (line.width() - line.naturalTextWidth()) / 2;
-                newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
-            } else if (alignment & Qt::AlignRight) {
-                const qreal padding = line.width() - line.naturalTextWidth();
-                newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
-            } else {
-                newX = blockData->counterPosition().x();
-            }
-            if (m_isRtl) {
-                newX = line.x() + line.naturalTextWidth() + line.x() + m_indent - newX;
-            }
-
-            blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
+        // First line, lets check where the line ended up and adjust the positioning of the counter.
+        qreal newX;
+        if (alignment & Qt::AlignHCenter) {
+            const qreal padding = (line.width() - line.naturalTextWidth()) / 2;
+            newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
+        } else if (alignment & Qt::AlignRight) {
+            const qreal padding = line.width() - line.naturalTextWidth();
+            newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
         } else {
-            if (alignment & Qt::AlignHCenter) {
-                const qreal padding = (line.width() - line.naturalTextWidth() ) / 2;
-                qreal newX;
-                if (m_isRtl) {
-                    newX = line.x() + line.width() - padding + blockData->counterSpacing();
-                } else {
-                    newX = line.x() + padding - blockData->counterWidth() - blockData->counterSpacing();
-                }
-                blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
-            } else if (!m_isRtl && x() < line.x()) {// move the counter more left.
-                blockData->setCounterPosition(blockData->counterPosition() + QPointF(line.x() - x(), 0));
-            } else if (m_isRtl && x() + width() > line.x() + line.width() + 0.1) { // 0.1 to account for qfixed rounding
-                const qreal newX = line.x() + line.width() + blockData->counterSpacing();
-                blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
-            }
+            newX = blockData->counterPosition().x();
         }
+        if (m_isRtl) {
+            newX = line.x() + line.naturalTextWidth() + line.x() + m_indent - newX;
+        }
+
+        blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
     }
 
     qreal height = 0;

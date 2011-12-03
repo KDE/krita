@@ -436,7 +436,9 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         } else {
             // see ODF spec 1.2 item 20.422
             counterSpacing = format.doubleProperty(KoListStyle::MinimumDistance);
-            counterSpacing -= format.doubleProperty(KoListStyle::MinimumWidth) - width;
+            if (width < format.doubleProperty(KoListStyle::MinimumWidth)) {
+                counterSpacing -= format.doubleProperty(KoListStyle::MinimumWidth) - width;
+            }
             counterSpacing = qMax(counterSpacing, qreal(0.0));
             width = qMax(width, format.doubleProperty(KoListStyle::MinimumWidth));
         }

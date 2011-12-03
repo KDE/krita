@@ -316,7 +316,7 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
             newName = newName + "_";
 
         // If there was a previous object name, replace it with the new one.
-        if (!objectName.isEmpty()) {
+        if (!objectName.isEmpty() && manifestEntry) {
             // FIXME: We must make a copy of the byte array here because
             //        otherwise we won't be able to save > 1 time.
             xmlArray.replace(objectName.toLatin1(), newName.toLatin1());
@@ -326,8 +326,9 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 
         // If the objectName is empty, this may be inline XML.
         // If so, we are done now.
-        if (objectName.isEmpty())
+        if (objectName.isEmpty() || !manifestEntry) {
             continue;
+        }
 
         // Save embedded files for this object.
         foreach (FileEntry *entry, d->embeddedFiles) {
@@ -551,7 +552,9 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
                                                 ObjectEntry *object)
 {
     // Start the element;
-    writer.startElement(el.nodeName().toAscii());
+    // keep the name in a QByteArray so that it stays valid until end element is called.
+    const QByteArray name(el.nodeName().toAscii());
+    writer.startElement(name.constData());
 
     // Copy all the attributes, including namespaces.
     QList< QPair<QString, QString> >  attributeNames = el.attributeFullNames();

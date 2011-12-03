@@ -1454,7 +1454,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     }
                 } else {
                     //This is a sub-list
-                    block = saveList(block, listStyles, ++level, currentTable);
+                    block = saveList(block, listStyles, level + 1, currentTable);
                     //saveList will return a block one-past the last block of the list.
                     //Since we are doing a block.next() below, we need to go one back.
                     block = block.previous();

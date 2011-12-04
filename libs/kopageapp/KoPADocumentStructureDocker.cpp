@@ -482,20 +482,16 @@ void KoPADocumentStructureDocker::extractSelectedLayersAndShapes(QList<KoPAPageB
 
 void KoPADocumentStructureDocker::setCanvas(KoCanvasBase* canvas)
 {
-    qDebug() << __PRETTY_FUNCTION__ << canvas;
     KoPACanvas * c = dynamic_cast<KoPACanvas*> (canvas);
     if (c) {
         m_doc = c->document();
         m_model->setDocument(m_doc);
         m_sectionView->setModel(m_model);
-        //m_sectionView->reset();
-        qDebug() << __PRETTY_FUNCTION__ << canvas << m_doc;
     }
 }
 
 void KoPADocumentStructureDocker::unsetCanvas()
 {
-    qDebug() << __PRETTY_FUNCTION__;
     m_doc = 0;
     m_model->setDocument(0);
     m_sectionView->setModel(0);

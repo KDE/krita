@@ -1403,16 +1403,11 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
 
     if ( reverseAxis )
     {
-        if ( dimension() == XAxisDimension )
-        {
-            KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( kdPlane() );
-            if ( plane )
+        KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( kdPlane() );
+        if ( plane ) {
+            if ( orientation() == Qt::Horizontal )
                 plane->setHorizontalRangeReversed( reverseAxis );
-        }
-        else if ( dimension() == YAxisDimension )
-        {
-            KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( kdPlane() );
-            if ( plane )
+            else // Qt::Vertical
                 plane->setVerticalRangeReversed( reverseAxis );
         }
     }   

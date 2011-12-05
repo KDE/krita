@@ -929,6 +929,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
             labelBoxWidth = blockData->counterWidth();
             Qt::Alignment align = static_cast<Qt::Alignment>(listFormat.intProperty(KoListStyle::Alignment));
+            if (align == 0) {
+                align = Qt::AlignLeft;
+            }
             if (align & Qt::AlignLeft) {
                 m_indent += labelBoxWidth;
             } else if (align & Qt::AlignHCenter) {

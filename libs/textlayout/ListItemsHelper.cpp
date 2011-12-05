@@ -283,6 +283,10 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         // set the counter for the current un-numbered list to the counter index of the previous list item.
         // index-1 because the list counter would have already incremented by one
         data->setCounterIndex(index - 1);
+        if (blockFormat.boolProperty(KoParagraphStyle::IsListHeader)) {
+            data->setCounterWidth(format.doubleProperty(KoListStyle::MinimumWidth));
+            data->setCounterSpacing(0);
+        }
         return;
     }
 

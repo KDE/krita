@@ -240,7 +240,6 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
             for (int i = 0; i < subLayout->count(); ++i) {
                 QWidget *spacerWidget = subLayout->itemAt(i)->widget();
                 if (spacerWidget && spacerWidget->objectName().contains("SpecialSpacer")) {
-                    qDebug() << "found special spacer";
                     specialCount++;
                 }
             }

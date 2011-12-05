@@ -215,12 +215,15 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
 
     int cnt = 0;
     QGridLayout *layout = (QGridLayout *)d->addedWidgets[d->activeId]->layout();
+    // need to unstretch row that have previously been stretched
+    layout->setRowStretch(layout->rowCount()-1, 0);
     layout->setColumnMinimumWidth(0, 16);
     layout->setColumnStretch(1, 1);
     layout->setColumnStretch(2, 2);
     layout->setColumnStretch(3, 1);
     layout->setHorizontalSpacing(0);
     layout->setVerticalSpacing(2);
+    int specialCount = 0;
     foreach(QWidget *widget, optionWidgetList) {
         if (widget->objectName().isEmpty()) {
             Q_ASSERT(!(widget->objectName().isEmpty()));
@@ -232,6 +235,16 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
             d->currentAuxWidgets.insert(l);
         }
         layout->addWidget(widget, cnt++, 1, 1, 3);
+        QLayout *subLayout = widget->layout();
+        if (subLayout) {
+            for (int i = 0; i < subLayout->count(); ++i) {
+                QWidget *spacerWidget = subLayout->itemAt(i)->widget();
+                if (spacerWidget && spacerWidget->objectName().contains("SpecialSpacer")) {
+                    qDebug() << "found special spacer";
+                    specialCount++;
+                }
+            }
+        }
         widget->show();
         if (widget != optionWidgetList.last()) {
             QFrame *s;
@@ -239,6 +252,9 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
             s->setFrameShape(QFrame::HLine);
             d->currentAuxWidgets.insert(s);
         }
+    }
+    if (specialCount == optionWidgetList.count()) {
+        layout->setRowStretch(cnt, 100);
     }
 }
 

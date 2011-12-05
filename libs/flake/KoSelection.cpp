@@ -123,6 +123,7 @@ void KoSelection::paint(QPainter &painter, const KoViewConverter &converter, KoS
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
+    Q_UNUSED(paintcontext);
 }
 
 void KoSelection::select(KoShape *shape, bool recursive)

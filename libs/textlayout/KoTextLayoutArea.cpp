@@ -769,7 +769,11 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         // and naturalTextRect calculation so they are proper handled in the RunAroundHelper. For left-to-right we do
         // not like to include trailing spaces in the calculations cause else justified text would not look proper
         // justified. Seems for right-to-left we have to accept that justified text will not look proper justified then.
-        option.setFlags(QTextOption::IncludeTrailingSpaces);
+        // only set it for justified text as otherwise we will cut of text at the beginning of the line
+        if (pStyle.alignment() == Qt::AlignJustify) {
+            option.setFlags(QTextOption::IncludeTrailingSpaces);
+        }
+
     } else {
         option.setFlags(0);
         option.setTextDirection(Qt::LeftToRight);
@@ -896,11 +900,15 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     //========
     // Margins
     //========
-    qreal leftMargin = pStyle.leftMargin();
-    qreal rightMargin = pStyle.rightMargin();
+    qreal startMargin = pStyle.leftMargin();
+    qreal endMargin = pStyle.rightMargin();
+    if (m_isRtl) {
+        qSwap(startMargin, endMargin);
+    }
     m_indent = textIndent(block, textList, pStyle);
 
     qreal labelBoxWidth = 0;
+    qreal labelBoxIndent = 0;
     if (textList) {
         if (listFormat.boolProperty(KoListStyle::AlignmentMode)) {
             // according to odf 1.2 17.20 list margin should be used when paragraph margin is
@@ -909,14 +917,14 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             bool set = false;
             if (id && m_documentLayout->styleManager()) {
                 KoParagraphStyle *originalParagraphStyle = m_documentLayout->styleManager()->paragraphStyle(id);
-                if (originalParagraphStyle->leftMargin() != leftMargin) {
-                    set = (leftMargin != 0);
+                if (originalParagraphStyle->leftMargin() != startMargin) {
+                    set = (startMargin != 0);
                 }
             } else {
-                set = (leftMargin != 0);
+                set = (startMargin != 0);
             }
             if (! set) {
-                leftMargin = listFormat.doubleProperty(KoListStyle::Margin);
+                startMargin = listFormat.doubleProperty(KoListStyle::Margin);
             }
 
             labelBoxWidth = blockData->counterWidth();
@@ -926,16 +934,15 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             } else if (align & Qt::AlignHCenter) {
                 m_indent += labelBoxWidth/2;
             }
+            labelBoxIndent = m_indent - labelBoxWidth;
         } else {
-            if (!m_isRtl) {
-                labelBoxWidth = blockData->counterSpacing() + blockData->counterWidth();
-            }
+            labelBoxWidth = blockData->counterSpacing() + blockData->counterWidth();
         }
     }
 
     m_width = right() - left();
-    m_width -= leftMargin + rightMargin;
-    m_x = left() + (m_isRtl ? rightMargin : leftMargin);
+    m_width -= startMargin + endMargin;
+    m_x = left() + (m_isRtl ? 0.0 : startMargin);
 
     m_documentLayout->clearInlineObjectRegistry(block);
 
@@ -944,10 +951,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     //========
     QList<KoText::Tab> tabs = pStyle.tabPositions();
 
-    // Handle tabs relative to leftMargin
+    // Handle tabs relative to startMargin
     qreal tabOffset = -m_indent;
     if (!m_documentLayout->relativeTabs(block)) {
-        tabOffset += m_isRtl ? -rightMargin : -leftMargin;
+        tabOffset -= startMargin;
     }
 
     // Make a list of tabs that Qt can use
@@ -963,7 +970,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             // if rtl the above left/right reasons swap but formula stays the same
             // -tabOfset is just to cancel that we add it next
             // -2 is to avoid wrap at right edge to the next line
-            value = right() - left() - leftMargin - rightMargin - m_indent - tabOffset - 2;
+            value = right() - left() - startMargin - endMargin - m_indent - tabOffset - 2;
         }
 
         // conversion here is required because Qt thinks in device units and we don't
@@ -994,11 +1001,11 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 //     LABEL                 TEXT STARTS HERE AND GOES ON
                 //                    TO THE NEXT LINE
                 //|>------------------|
-                //     leftMargin
-                listTab -= leftMargin;
+                //     startMargin
+                listTab -= startMargin;
             } else {
                 // How list tab is defined if relative tabs:
-                // It's relative to leftMargin - list.leftMargin
+                // It's relative to startMargin - list.startMargin
                 //              listTab
                 //       |>-------------------|
                 //             m_indent
@@ -1006,7 +1013,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 //       LABEL                 TEXT STARTS HERE AND GOES ON
                 //                      TO THE NEXT LINE
                 //|>--------------------|
-                //     leftMargin       |
+                //     startMargin       |
                 //       |>-------------|
                 //          list.margin
                 listTab -= listFormat.doubleProperty(KoListStyle::Margin);
@@ -1020,7 +1027,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         //     LABEL                 TEXT STARTS HERE AND GOES ON
         //                    TO THE NEXT LINE
         //|>------------------|
-        //     leftMargin
+        //     startMargin
         presentationListTabValue = listTab;
         listTab -= m_indent;
 
@@ -1033,7 +1040,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         //     LABEL                 TEXT STARTS HERE AND GOES ON
         //                    TO THE NEXT LINE
         //|>------------------|
-        //     leftMargin
+        //     startMargin
 
         // conversion here is required because Qt thinks in device units and we don't
         listTab *= qt_defaultDpiY() / 72.0;
@@ -1108,20 +1115,17 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         // If first line in a list then set the counterposition. Following lines in the same
         // list-item have nothing to do with the counter.
         if (listFormat.boolProperty(KoListStyle::AlignmentMode) == false) {
-            if (m_isRtl) {
-                m_width -= blockData->counterWidth() + blockData->counterSpacing() + listFormat.doubleProperty(KoListStyle::Indent) + labelBoxWidth;
-                blockData->setCounterPosition(QPointF(right() -
-                                                      blockData->counterWidth() - leftMargin, m_y));
-            } else {
-                m_x += listFormat.doubleProperty(KoListStyle::Indent) + labelBoxWidth;
-                m_width -= listFormat.doubleProperty(KoListStyle::Indent) + labelBoxWidth;
-                blockData->setCounterPosition(QPointF(x() - labelBoxWidth, m_y));
+            qreal minLabelWidth = listFormat.doubleProperty(KoListStyle::MinimumWidth);
+            if (!m_isRtl) {
+                m_x += listFormat.doubleProperty(KoListStyle::Indent) + minLabelWidth;
             }
+            m_width -= listFormat.doubleProperty(KoListStyle::Indent) + minLabelWidth;
+            m_indent +=  labelBoxWidth - minLabelWidth;
+            blockData->setCounterPosition(QPointF(m_x + m_indent - labelBoxWidth, m_y));
         } else if (labelBoxWidth > 0.0 || blockData->counterText().length() > 0) {
             // Alignmentmode and there is a label (double check needed to acount for both
             // picture bullets and non width chars)
-            blockData->setCounterPosition(QPointF(x() - labelBoxWidth, m_y));
-
+            blockData->setCounterPosition(QPointF(m_x + labelBoxIndent, m_y));
             if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab
                 && !presentationListTabWorkaround(textIndent(block, textList, pStyle), labelBoxWidth, presentationListTabValue)) {
                 foreach(QTextOption::Tab tab, qTabs) {
@@ -1139,7 +1143,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 //     LABEL                 TEXT STARTS HERE AND GOES ON
                 //                    TO THE NEXT LINE
                 //|>------------------|
-                //     leftMargin
+                //     startMargin
             } else if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::Space) {
                  QFontMetrics fm(labelFormat.font(), m_documentLayout->paintDevice());
                  m_indent += fm.width(' ');
@@ -1361,7 +1365,11 @@ void KoTextLayoutArea::setExtraTextIndent(qreal extraTextIndent)
 
 qreal KoTextLayoutArea::x() const
 {
-    return m_x + m_indent + (m_dropCapsNChars > 0 ? 0.0 : m_dropCapsWidth);
+    if (m_isRtl) {
+        return m_x;
+    } else {
+        return m_x + m_indent + (m_dropCapsNChars > 0 ? 0.0 : m_dropCapsWidth);
+    }
 }
 
 qreal KoTextLayoutArea::width() const
@@ -1417,34 +1425,32 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
     KoParagraphStyle style(format, block.charFormat());
 
     if (blockData && block.textList() && block.layout()->lineCount() == 1) {
-        // first line, lets check where the line ended up and adjust the positioning of the counter.
-        if (block.textList()->format().boolProperty(KoListStyle::AlignmentMode)) {
-            if ((format.alignment() & Qt::AlignHCenter) == Qt::AlignHCenter) {
-                const qreal padding = (line.width() - line.naturalTextWidth()) / 2;
-                qreal newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
-                blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
-            } else if ((format.alignment() & Qt::AlignRight) == Qt::AlignRight) {
-                const qreal padding = line.width() - line.naturalTextWidth();
-                qreal newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
-                blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
-            }
-        } else {
-            if ((format.alignment() & Qt::AlignHCenter) == Qt::AlignHCenter) {
-                const qreal padding = (line.width() - line.naturalTextWidth() ) / 2;
-                qreal newX;
-                if (m_isRtl) {
-                    newX = line.x() + line.width() - padding + blockData->counterSpacing();
-                } else {
-                    newX = line.x() + padding - blockData->counterWidth() - blockData->counterSpacing();
-                }
-                blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
-            } else if (!m_isRtl && x() < line.x()) {// move the counter more left.
-                blockData->setCounterPosition(blockData->counterPosition() + QPointF(line.x() - x(), 0));
-            } else if (m_isRtl && x() + width() > line.x() + line.width() + 0.1) { // 0.1 to account for qfixed rounding
-                const qreal newX = line.x() + line.width() + blockData->counterSpacing();
-                blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
+        Qt::Alignment alignment = format.alignment();
+        if (m_isRtl && (alignment & Qt::AlignAbsolute) == 0) {
+            if (alignment & Qt::AlignLeft) {
+                alignment = Qt::AlignRight;
+            } else if (alignment & Qt::AlignRight) {
+                alignment = Qt::AlignLeft;
             }
         }
+        alignment &= Qt::AlignRight | Qt::AlignLeft | Qt::AlignHCenter;
+
+        // First line, lets check where the line ended up and adjust the positioning of the counter.
+        qreal newX;
+        if (alignment & Qt::AlignHCenter) {
+            const qreal padding = (line.width() - line.naturalTextWidth()) / 2;
+            newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
+        } else if (alignment & Qt::AlignRight) {
+            const qreal padding = line.width() - line.naturalTextWidth();
+            newX = blockData->counterPosition().x() + (m_isRtl ? -padding : padding);
+        } else {
+            newX = blockData->counterPosition().x();
+        }
+        if (m_isRtl) {
+            newX = line.x() + line.naturalTextWidth() + line.x() + m_indent - newX;
+        }
+
+        blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
     }
 
     qreal height = 0;

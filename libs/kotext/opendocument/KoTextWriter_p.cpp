@@ -708,6 +708,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         writer->addAttribute("text:style-name", styleName);
 
     if ( const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
+        // text:id is deprecated. if present, it must have the same value as
+        // xml:id
+        writer->addAttribute("xml:id", context.subId(blockData));
         writer->addAttribute("text:id", context.subId(blockData));
     }
 
@@ -1451,7 +1454,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     }
                 } else {
                     //This is a sub-list
-                    block = saveList(block, listStyles, ++level, currentTable);
+                    block = saveList(block, listStyles, level + 1, currentTable);
                     //saveList will return a block one-past the last block of the list.
                     //Since we are doing a block.next() below, we need to go one back.
                     block = block.previous();

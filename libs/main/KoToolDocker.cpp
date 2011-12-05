@@ -88,6 +88,9 @@ public:
 
         currentWidgetList = optionWidgetList;
 
+        // need to unstretch row that have previously been stretched
+        housekeeperLayout->setRowStretch(housekeeperLayout->rowCount()-1, 0);
+
         if (tabbed && currentWidgetList.size() > 1) {
             QTabWidget *t;
             housekeeperLayout->addWidget(t = new QTabWidget(), 0, 0);
@@ -127,9 +130,10 @@ public:
                 }
                 break;
             case Qt::LeftDockWidgetArea:
-            case Qt::RightDockWidgetArea:
+            case Qt::RightDockWidgetArea: {
                 housekeeperLayout->setHorizontalSpacing(0);
                 housekeeperLayout->setVerticalSpacing(2);
+                int specialCount = 0;
                 foreach(QWidget *widget, currentWidgetList) {
                     if (widget->objectName().isEmpty()) {
                         Q_ASSERT(!(widget->objectName().isEmpty()));
@@ -140,6 +144,16 @@ public:
                         currentAuxWidgets.insert(l);
                     }
                     housekeeperLayout->addWidget(widget, cnt++, 0);
+                    QLayout *subLayout = widget->layout();
+                    if (subLayout) {
+                        for (int i = 0; i < subLayout->count(); ++i) {
+                            QWidget *spacerWidget = subLayout->itemAt(i)->widget();
+                            if (spacerWidget && spacerWidget->objectName().contains("SpecialSpacer")) {
+                                qDebug() << "found special spacer";
+                                specialCount++;
+                            }
+                        }
+                    }
                     widget->show();
                     if (widget != currentWidgetList.last()) {
                         housekeeperLayout->addWidget(s = new QFrame(), cnt++, 0);
@@ -147,7 +161,11 @@ public:
                         currentAuxWidgets.insert(s);
                     }
                 }
+                if (specialCount == currentWidgetList.count()) {
+                    housekeeperLayout->setRowStretch(cnt, 100);
+                }
                 break;
+            }
             default:
                 break;
             }
@@ -223,6 +241,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     d->housekeeperWidget = new QWidget();
     d->housekeeperLayout = new QGridLayout();
     d->housekeeperWidget->setLayout(d->housekeeperLayout);
+
     d->housekeeperLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
 
     d->hiderWidget = new QWidget(d->housekeeperWidget);

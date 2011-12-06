@@ -1540,7 +1540,7 @@ QRectF TextTool::caretRect(QTextCursor *cursor) const
     if (rect.size() == QSizeF(0,0)) {
         rect = m_lastImMicroFocus; // prevent block changed but layout not done
     } else {
-        const_cast<QRectF &>(m_lastImMicroFocus) = rect;
+        m_lastImMicroFocus = rect;
     }
     return rect;
 }

@@ -362,7 +362,7 @@ private:
 
     TextToolSelection *m_toolSelection;
 
-    QRectF m_lastImMicroFocus;
+    mutable QRectF m_lastImMicroFocus;
 };
 
 #endif

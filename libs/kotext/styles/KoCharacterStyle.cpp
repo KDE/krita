@@ -448,6 +448,16 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
     }
 }
 
+KoCharacterStyle *KoCharacterStyle::autoStyle(const QTextCharFormat &format, QTextCharFormat blockCharFormat) const
+{
+    applyStyle(blockCharFormat);
+    ensureMinimalProperties(blockCharFormat);
+    KoCharacterStyle *autoStyle = new KoCharacterStyle(blockCharFormat);
+    autoStyle->d->stylesPrivate.removeDuplicates(format.properties());
+
+    return autoStyle;
+}
+
 void KoCharacterStyle::applyStyle(QTextBlock &block) const
 {
     QTextCursor cursor(block);

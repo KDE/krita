@@ -787,6 +787,7 @@ bool StylesComboPreview::event( QEvent* ev )
                 emit newStyleRequested(text());
                 setReadOnly(true);
                 m_renamingNewStyle = false;
+                m_shouldAddNewStyle = false;
                 setText(QString());
                 return true;
             }

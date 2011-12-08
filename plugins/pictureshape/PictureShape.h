@@ -27,6 +27,7 @@
 
 #define PICTURESHAPEID "PictureShape"
 
+class KoImageData;
 class KoImageCollection;
 class RenderQueue;
 class KJob;
@@ -60,17 +61,17 @@ public:
      * Get the collection used in the shape.
      */
     KoImageCollection *imageCollection() const;
+    KoImageData       *imageData() const;
+    PictureMode        mode() const;
+    QRectF             cropRect() const;
 
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
-
-    void setMode( PictureMode mode );
-    PictureMode mode() const;
+    void setCropRect(const QRectF& rect);
+    void setMode(PictureMode mode);
 
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
-
     virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
-
     virtual void loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context);
 
 private:
@@ -78,6 +79,7 @@ private:
     RenderQueue *m_renderQueue;
     mutable QImage m_printQualityImage;
     PictureMode m_mode;
+    QRectF      m_cropRect;
 };
 
 class RenderQueue : public QObject

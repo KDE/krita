@@ -20,9 +20,13 @@
 #include "PictureTool.h"
 #include "PictureShape.h"
 #include "ChangeImageCommand.h"
+#include "CropWidget.h"
 
 #include <QToolButton>
-#include <QGridLayout>
+#include <QComboBox>
+#include <QScrollArea>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <KLocale>
 #include <KIconLoader>
 #include <KUrl>
@@ -31,13 +35,20 @@
 
 #include <KoCanvasBase.h>
 #include <KoImageCollection.h>
+#include <KoImageData.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
+#include <KoFilterEffect.h>
+#include <KoFilterEffectRegistry.h>
+#include <KoFilterEffectConfigWidgetBase.h>
+#include <KoFilterEffectStack.h>
 
 PictureTool::PictureTool( KoCanvasBase* canvas )
     : KoToolBase( canvas ),
-      m_pictureshape(0)
+      m_pictureshape(0),
+      m_filterEffect(0),
+      m_cropWidget(0)
 {
 }
 
@@ -46,37 +57,63 @@ void PictureTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     Q_UNUSED(toolActivation);
 
     foreach (KoShape *shape, shapes) {
-        m_pictureshape = dynamic_cast<PictureShape*>( shape );
-        if ( m_pictureshape )
+        if ((m_pictureshape = dynamic_cast<PictureShape*>(shape)))
             break;
     }
-    if ( !m_pictureshape )
-    {
+    
+    if (!m_pictureshape) {
         emit done();
         return;
     }
+
+    if(m_cropWidget) {
+        m_cropWidget->setPictureShape(m_pictureshape);
+        m_cropWidget->update();
+    }
+    
     useCursor(Qt::ArrowCursor);
 }
 
 void PictureTool::deactivate()
 {
-  m_pictureshape = 0;
+    m_pictureshape = 0;
 }
 
 QWidget * PictureTool::createOptionWidget()
 {
-
     QWidget *optionWidget = new QWidget();
-    QGridLayout *layout = new QGridLayout(optionWidget);
+    QVBoxLayout *layout = new QVBoxLayout(optionWidget);
+    QHBoxLayout *hBox   = new QHBoxLayout();
+    
+//     QGridLayout *layout = new QGridLayout(optionWidget);
 
-    QToolButton *button = 0;
-
-    button = new QToolButton(optionWidget);
+    QToolButton *button = new QToolButton;
     button->setIcon(SmallIcon("open"));
-    button->setToolTip(i18n( "Open"));
-    layout->addWidget(button, 0, 0);
+    button->setToolTip(i18n("Open"));
+    
+    m_scrollArea = new QScrollArea();
+    
+//     layout->addWidget(button, 0, 0);
     connect(button, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
+    
+    m_filterEffectsCmb = new QComboBox;
+    m_filterEffectsCmb->addItem(i18n("Normal"), "default");
+    
+    foreach (KoFilterEffectFactoryBase *factory, KoFilterEffectRegistry::instance()->values()) {
+        m_filterEffectsCmb->addItem(factory->name(), factory->id());
+    }
+    
+    connect(m_filterEffectsCmb, SIGNAL(currentIndexChanged(int)), this, SLOT(filterSelected(int)));
 
+    m_cropWidget = new CropWidget;
+    m_cropWidget->setPictureShape(m_pictureshape);
+    
+    hBox->addWidget(button);
+    hBox->addWidget(m_filterEffectsCmb);
+    layout->addLayout(hBox        , 0);
+    layout->addWidget(m_scrollArea, 1);
+    layout->addWidget(m_cropWidget, 1);
+    
     return optionWidget;
 }
 
@@ -90,6 +127,53 @@ void PictureTool::changeUrlPressed()
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
         connect(job, SIGNAL(result(KJob*)), this, SLOT(setImageData(KJob*)));
     }
+}
+
+void PictureTool::filterChanged()
+{
+//     m_pictureshape->filterEffectStack()->takeFilterEffect(0);
+//     m_pictureshape->filterEffectStack()->setClipRect(QRect(0, 0, 100, 100));
+    m_pictureshape->update();
+}
+
+void PictureTool::filterSelected(int cmbIndex)
+{
+    QString id = m_filterEffectsCmb->itemData(cmbIndex).toString();
+    
+    if (id != "default") {
+        KoFilterEffectFactoryBase      *filterFactory   = KoFilterEffectRegistry::instance()->get(id);
+        KoFilterEffectConfigWidgetBase *filterConfigWdg = filterFactory->createConfigWidget();
+        
+        m_filterEffect = m_pictureshape->filterEffectStack()->takeFilterEffect(0);
+        delete m_filterEffect;
+        m_filterEffect = filterFactory->createFilterEffect();
+        m_pictureshape->filterEffectStack()->appendFilterEffect(m_filterEffect);
+        
+        filterConfigWdg->editFilterEffect(m_filterEffect);
+        m_scrollArea->setWidget(filterConfigWdg);
+        m_pictureshape->update();
+        
+        connect(filterConfigWdg, SIGNAL(filterChanged()), this, SLOT(filterChanged()));
+//         KoFilterEffect *effect = KoFilterEffectRegistry::instance()->get(id)->createFilterEffect();
+    }
+    
+//     m_pictureshape->filterEffectStack()->appendFilterEffect(effect);
+//     m_pictureshape->update();
+    
+//     switch(cmbBoxIndex)
+//     {
+//     case 0:
+//         m_pictureshape->setMode(PictureShape::Standard);
+//         break;
+//     
+//     case 1:
+//         m_pictureshape->setMode(PictureShape::Greyscale);
+//         break;
+//     
+//     case 2:
+//         m_pictureshape->setMode(PictureShape::Mono);
+//         break;
+//     }
 }
 
 void PictureTool::setImageData(KJob *job)

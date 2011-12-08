@@ -10,9 +10,10 @@ SET (pictureshape_LIB_SRCS
     Plugin.cpp
     PictureShapeConfigWidget.cpp
     ChangeImageCommand.cpp
-    GreyscaleFilterEffect.cpp
-    MonoFilterEffect.cpp
-    WatermarkFilterEffect.cpp
+    CropWidget.cpp
+    filters/GreyscaleFilterEffect.cpp
+    filters/MonoFilterEffect.cpp
+    filters/WatermarkFilterEffect.cpp
 )
 
 kde4_add_plugin(pictureshape ${pictureshape_LIB_SRCS})

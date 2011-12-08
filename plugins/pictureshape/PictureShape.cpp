@@ -20,9 +20,9 @@
  */
 
 #include "PictureShape.h"
-#include "GreyscaleFilterEffect.h"
-#include "MonoFilterEffect.h"
-#include "WatermarkFilterEffect.h"
+#include "filters/GreyscaleFilterEffect.h"
+#include "filters/MonoFilterEffect.h"
+#include "filters/WatermarkFilterEffect.h"
 
 #include <KoViewConverter.h>
 #include <KoImageCollection.h>
@@ -99,7 +99,8 @@ PictureShape::PictureShape()
     : KoFrameShape(KoXmlNS::draw, "image"),
     m_imageCollection(0),
     m_renderQueue(new RenderQueue(this)),
-    m_mode(Standard)
+    m_mode(Standard),
+    m_cropRect(0, 0, 1, 1)
 {
     setKeepAspectRatio(true);
     KoFilterEffectStack * effectStack = new KoFilterEffectStack();
@@ -112,19 +113,37 @@ PictureShape::~PictureShape()
     delete m_renderQueue;
 }
 
+KoImageData* PictureShape::imageData() const
+{
+    return qobject_cast<KoImageData*>(userData());
+}
+
+QRectF PictureShape::cropRect() const
+{
+    return m_cropRect;
+}
+
+void PictureShape::setCropRect(const QRectF& rect)
+{
+    m_cropRect = rect;
+    update();
+}
+
 void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
-    QRectF pixelsF = converter.documentToView(QRectF(QPointF(0,0), size()));
+    QRectF       pixelsF   = converter.documentToView(QRectF(QPointF(0,0), size()));
     KoImageData *imageData = qobject_cast<KoImageData*>(userData());
+    
     if (imageData == 0) {
         painter.fillRect(pixelsF, QColor(Qt::gray));
         return;
     }
-    const QRect pixels = pixelsF.toRect();
+    QRect pixels     = pixelsF.toRect();
     QSize pixmapSize = pixelsF.size().toSize();
 
     QString key(generate_key(imageData->key(), pixmapSize));
     QPixmap pixmap;
+    
 #if QT_VERSION  >= 0x040600
     if (!QPixmapCache::find(key, &pixmap)) { // first check cache.
 #else
@@ -154,6 +173,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
                     pixmapSize.setHeight(MaxSize);
                 }
             }
+            
             key = generate_key(imageData->key(), pixmapSize);
         }
     }
@@ -171,14 +191,25 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
 #endif
         m_renderQueue->addSize(pixmapSize);
         QTimer::singleShot(0, m_renderQueue, SLOT(renderImage()));
-        if (!imageData->hasCachedPixmap()
-            || imageData->pixmap().size().width() > pixmapSize.width()) { // don't scale down
+        if (!imageData->hasCachedPixmap() || imageData->pixmap().size().width() > pixmapSize.width()) { // don't scale down
             QTimer::singleShot(0, m_renderQueue, SLOT(updateShape()));
             return;
         }
         pixmap = imageData->pixmap();
     }
-    painter.drawPixmap(pixels, pixmap, QRect(0, 0, pixmap.width(), pixmap.height()));
+    
+//     painter.drawPixmap(pixels, pixmap, QRect(100, 0, pixmap.width(), pixmap.height()));
+
+    QSizeF size = imageData->imageSize();
+
+    QRectF cropRect(
+        size.width()  * m_cropRect.x(),
+        size.height() * m_cropRect.y(),
+        size.width()  * m_cropRect.width(),
+        size.height() * m_cropRect.height()
+    );
+    
+    painter.drawImage(pixels, imageData->image(), cropRect);
 }
 
 void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
@@ -279,6 +310,7 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
     if(transparency() > 0.0) {
         style.addProperty("draw:image-opacity", QString("%1%").arg((1.0 - transparency()) * 100.0));
     }
+    
     return KoShape::saveStyle(style, context);
 }
 
@@ -301,7 +333,9 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
             setMode(Watermark);
         }
     }
+    
     const QString opacity(styleStack.property(KoXmlNS::draw, "image-opacity"));
+    
     if (! opacity.isEmpty() && opacity.right(1) == "%") {
         setTransparency(1.0 - (opacity.left(opacity.length() - 1).toFloat() / 100.0));
     }
@@ -399,6 +433,5 @@ bool PictureShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &conte
     setUserData(data);
     setSize(QSizeF(w, h));
     setPosition(QPointF(x, y));
-
     return true;
 }

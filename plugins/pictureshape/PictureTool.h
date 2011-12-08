@@ -24,6 +24,10 @@
 #include <KJob>
 
 class PictureShape;
+class KoFilterEffect;
+class QComboBox;
+class QScrollArea;
+class CropWidget;
 
 class PictureTool : public KoToolBase
 {
@@ -52,11 +56,17 @@ protected:
     virtual QWidget *createOptionWidget();
 
 private slots:
+    void filterSelected(int cmbBoxIndex);
     void changeUrlPressed();
     void setImageData(KJob *job);
+    void filterChanged();
 
 private:
-    PictureShape *m_pictureshape;
+    PictureShape   *m_pictureshape;
+    QComboBox      *m_filterEffectsCmb;
+    QScrollArea    *m_scrollArea;
+    KoFilterEffect *m_filterEffect;
+    CropWidget     *m_cropWidget;
 };
 
 #endif

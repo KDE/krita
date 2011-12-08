@@ -94,13 +94,15 @@ void RenderQueue::updateShape()
     m_pictureShape->update();
 }
 
-//////////////
+// ----------------------------------------------------------------- //
+
 PictureShape::PictureShape()
     : KoFrameShape(KoXmlNS::draw, "image"),
     m_imageCollection(0),
     m_renderQueue(new RenderQueue(this)),
     m_mode(Standard),
-    m_cropRect(0, 0, 1, 1)
+    m_clippingRect (0, 0, 1, 1),
+    m_clippingRectIsNormalized(true)
 {
     setKeepAspectRatio(true);
     KoFilterEffectStack * effectStack = new KoFilterEffectStack();
@@ -120,17 +122,67 @@ KoImageData* PictureShape::imageData() const
 
 QRectF PictureShape::cropRect() const
 {
-    return m_cropRect;
+    return m_clippingRect;
 }
 
 void PictureShape::setCropRect(const QRectF& rect)
 {
-    m_cropRect = rect;
+    m_clippingRect             = rect;
+    m_clippingRectIsNormalized = true;
     update();
 }
 
-void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+QSize PictureShape::calcOptimalPixmapSize(const QSizeF& shapeSize, const QSizeF& imageSize) const
 {
+    qreal imageAspect = imageSize.width() / imageSize.height();
+    qreal shapeAspect = shapeSize.width() / shapeSize.height();
+    qreal scale       = 1.0;
+    
+    if(shapeAspect > imageAspect) { scale = shapeSize.width()  / imageSize.width() / m_clippingRect.width();   }
+    else                          { scale = shapeSize.height() / imageSize.height() / m_clippingRect.height(); }
+    
+    scale = qMin(1.0, scale); // prevent upscaling
+    return (imageSize * scale).toSize();
+}
+
+QRectF PictureShape::parseClippingRectString(QString string) const
+{
+    QRectF rect(0, 0, 0, 0);
+    string = string.trimmed();
+    
+    if ((!string.isEmpty()) && string.startsWith("rect")) {
+        QStringList points = string.replace("rect("," ").replace(QChar(')'), QChar(' ')).trimmed().split(",");
+        
+        if (points.at(0).trimmed().isEmpty() || points.at(0).trimmed().compare("auto", Qt::CaseInsensitive) == 0) {
+            rect.setTop(0);
+        } else {
+            rect.setTop(KoUnit::parseValue(points.at(0).trimmed()));
+        }
+        
+        if (points.at(1).trimmed().isEmpty() || points.at(1).trimmed().compare("auto", Qt::CaseInsensitive) == 0) {
+            rect.setRight(0);
+        } else {
+            rect.setRight(KoUnit::parseValue(points.at(1).trimmed()));
+        }
+        
+        if (points.at(2).trimmed().isEmpty() || points.at(2).trimmed().compare("auto", Qt::CaseInsensitive) == 0) {
+            rect.setBottom(0);
+        } else {
+            rect.setBottom(KoUnit::parseValue(points.at(2).trimmed()));
+        }
+        
+        if (points.at(3).trimmed().isEmpty() || points.at(3).trimmed().compare("auto", Qt::CaseInsensitive) == 0) {
+            rect.setLeft(0);
+        } else {
+            rect.setLeft(KoUnit::parseValue(points.at(3).trimmed()));
+        }
+    }
+
+    return rect;
+}
+
+void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+{/*
     QRectF       pixelsF   = converter.documentToView(QRectF(QPointF(0,0), size()));
     KoImageData *imageData = qobject_cast<KoImageData*>(userData());
     
@@ -139,7 +191,8 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
         return;
     }
     QRect pixels     = pixelsF.toRect();
-    QSize pixmapSize = pixelsF.size().toSize();
+//     QSize pixmapSize = pixelsF.size().toSize();
+    QSize pixmapSize = calcOptimalPixmapSize();
 
     QString key(generate_key(imageData->key(), pixmapSize));
     QPixmap pixmap;
@@ -198,18 +251,64 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
         pixmap = imageData->pixmap();
     }
     
-//     painter.drawPixmap(pixels, pixmap, QRect(100, 0, pixmap.width(), pixmap.height()));
+    painter.drawPixmap(pixels, pixmap, QRect(100, 0, pixmap.width(), pixmap.height()));
+//*/
 
-    QSizeF size = imageData->imageSize();
+    QPixmap pixmap;
+    QRectF  viewRect   = converter.documentToView(QRectF(QPointF(0,0), size()));
+    QSize   pixmapSize = calcOptimalPixmapSize(viewRect.size(), imageData()->image().size());
+    QString key(generate_key(imageData()->key(), pixmapSize));
 
-    QRectF cropRect(
-        size.width()  * m_cropRect.x(),
-        size.height() * m_cropRect.y(),
-        size.width()  * m_cropRect.width(),
-        size.height() * m_cropRect.height()
-    );
+    if (imageData() == 0) {
+        painter.fillRect(viewRect, QColor(Qt::gray));
+        return;
+    }
+
+    // normalize the clipping rect if it isn't already done
+    if (!m_clippingRectIsNormalized) {
+        QSizeF imageSize = imageData()->imageSize();
+        
+        m_clippingRect = QRectF(
+            m_clippingRect.x()      / imageSize.width(),
+            m_clippingRect.y()      / imageSize.height(),
+            m_clippingRect.width()  / imageSize.width(),
+            m_clippingRect.height() / imageSize.height()
+        );
+        
+        m_clippingRectIsNormalized = true;
+    }
     
-    painter.drawImage(pixels, imageData->image(), cropRect);
+    // painting the image as prepared in waitUntilReady()
+    if (!m_printQualityImage.isNull() && pixmapSize != m_printQualityImage.size()) {
+        QSizeF imageSize = m_printQualityImage.size();
+        QRectF cropRect(
+            imageSize.width()  * m_clippingRect.x(),
+            imageSize.height() * m_clippingRect.y(),
+            imageSize.width()  * m_clippingRect.width(),
+            imageSize.height() * m_clippingRect.height()
+        );
+        
+        painter.drawImage(viewRect, m_printQualityImage, cropRect);
+        m_printQualityImage = QImage(); // free memory
+    }
+    else {
+        if (imageData()->hasCachedPixmap() && imageData()->pixmap().size() == pixmapSize) {
+            pixmap = imageData()->pixmap();
+        }
+        else if (!QPixmapCache::find(key, &pixmap)) {
+            pixmap = imageData()->pixmap(pixmapSize);
+            QPixmapCache::insert(key, pixmap);
+        }
+
+        QRectF cropRect(
+            pixmapSize.width()  * m_clippingRect.x(),
+            pixmapSize.height() * m_clippingRect.y(),
+            pixmapSize.width()  * m_clippingRect.width(),
+            pixmapSize.height() * m_clippingRect.height()
+        );
+
+        painter.drawPixmap(viewRect, pixmap, cropRect);
+    }
 }
 
 void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
@@ -310,6 +409,15 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
     if(transparency() > 0.0) {
         style.addProperty("draw:image-opacity", QString("%1%").arg((1.0 - transparency()) * 100.0));
     }
+
+    QSizeF imageSize = imageData()->imageSize();
+    
+    style.addProperty("fo:clip", QString("rect(%1pt, %2pt, %3pt, %4pt)")
+        .arg(m_clippingRect.top()    * imageSize.height())
+        .arg(m_clippingRect.right()  * imageSize.width())
+        .arg(m_clippingRect.bottom() * imageSize.height())
+        .arg(m_clippingRect.left()   * imageSize.width())
+    );
     
     return KoShape::saveStyle(style, context);
 }
@@ -334,11 +442,14 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
         }
     }
     
-    const QString opacity(styleStack.property(KoXmlNS::draw, "image-opacity"));
+    QString opacity(styleStack.property(KoXmlNS::draw, "image-opacity"));
     
     if (! opacity.isEmpty() && opacity.right(1) == "%") {
         setTransparency(1.0 - (opacity.left(opacity.length() - 1).toFloat() / 100.0));
     }
+    
+    m_clippingRect             = parseClippingRectString (styleStack.property(KoXmlNS::fo, "clip"));
+    m_clippingRectIsNormalized = false;
 }
 
 PictureShape::PictureMode PictureShape::mode() const

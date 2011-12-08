@@ -75,11 +75,16 @@ protected:
     virtual void loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context);
 
 private:
+    QSize calcOptimalPixmapSize(const QSizeF& shapeSize, const QSizeF& imageSize) const;
+    QRectF parseClippingRectString (QString string) const;
+
+private:
     KoImageCollection *m_imageCollection;
-    RenderQueue *m_renderQueue;
-    mutable QImage m_printQualityImage;
-    PictureMode m_mode;
-    QRectF      m_cropRect;
+    RenderQueue       *m_renderQueue;
+    mutable QImage     m_printQualityImage;
+    PictureMode        m_mode;
+    QRectF             m_clippingRect;
+    bool               m_clippingRectIsNormalized;
 };
 
 class RenderQueue : public QObject

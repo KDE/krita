@@ -82,30 +82,32 @@ public:
             m_rect.moveTo(m_rect.topLeft() + (pos - m_tempPos));
             m_tempPos = pos;
             
-            if (m_rect.left() < m_lConstr)
+            if (m_rect.left() < m_lConstr) {
                 m_rect.moveLeft(m_lConstr);
-            
-            if (m_rect.right() > m_rConstr)
+            }
+            if (m_rect.right() > m_rConstr) {
                 m_rect.moveRight(m_rConstr);
-            
-            if (m_rect.top() < m_tConstr)
+            }
+            if (m_rect.top() < m_tConstr) {
                 m_rect.moveTop(m_tConstr);
-            
-            if (m_rect.bottom() > m_bConstr)
+            }
+            if (m_rect.bottom() > m_bConstr) {
                 m_rect.moveBottom(m_bConstr);
+            }
         }
         else {
-            if (m_currentHandle & TOP_HANDLE)
-                m_rect.setTop(qMax(pos.y(), m_tConstr));
-            
-            if (m_currentHandle & BOTTOM_HANDLE)
-                m_rect.setBottom(qMin(pos.y(), m_bConstr));
-
-            if (m_currentHandle & LEFT_HANDLE)
-                m_rect.setLeft(qMax(pos.x(), m_lConstr));
-
-            if (m_currentHandle & RIGHT_HANDLE)
-                m_rect.setRight(qMin(pos.x(), m_rConstr));
+            if (m_currentHandle & TOP_HANDLE) {
+                m_rect.setTop(qBound(m_tConstr, pos.y(), m_bConstr));
+            }
+            if (m_currentHandle & BOTTOM_HANDLE) {
+                m_rect.setBottom(qBound(m_tConstr, pos.y(), m_bConstr));
+            }
+            if (m_currentHandle & LEFT_HANDLE) {
+                m_rect.setLeft(qBound(m_lConstr, pos.x(), m_rConstr));
+            }
+            if (m_currentHandle & RIGHT_HANDLE) {
+                m_rect.setRight(qBound(m_lConstr, pos.x(), m_rConstr));
+            }
         }
     }
 
@@ -141,14 +143,14 @@ public:
             case 6: return BOTTOM_HANDLE|LEFT_HANDLE;
             case 7: return LEFT_HANDLE;
         }
-
+        
         return 0;
     }
     
     QRectF getHandleRect(HandleFlags handle) const
     {
-        qreal x = ( m_rect.left() + m_rect.right()) / 2.0;
-        qreal y = ( m_rect.top()  + m_rect.bottom()) / 2.0;
+        qreal x = (m_rect.left() + m_rect.right()) / 2.0;
+        qreal y = (m_rect.top()  + m_rect.bottom()) / 2.0;
         qreal h = m_handleSize / 2.0;
         
         x = (handle & LEFT_HANDLE  ) ? m_rect.left()   : x;

@@ -48,7 +48,7 @@ private:
     
 private:
     PictureShape *m_pictureShape;
-    QRectF        m_imageRect;
+    QRectF m_imageRect;
     SelectionRect m_selectionRect;
 };
 

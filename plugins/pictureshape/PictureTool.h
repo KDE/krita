@@ -62,11 +62,11 @@ private slots:
     void filterChanged();
 
 private:
-    PictureShape   *m_pictureshape;
-    QComboBox      *m_filterEffectsCmb;
-    QScrollArea    *m_scrollArea;
+    PictureShape *m_pictureshape;
+    QComboBox *m_filterEffectsCmb;
+    QScrollArea *m_scrollArea;
     KoFilterEffect *m_filterEffect;
-    CropWidget     *m_cropWidget;
+    CropWidget *m_cropWidget;
 };
 
 #endif

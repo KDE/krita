@@ -162,14 +162,14 @@ public:
     }
     
 private:
-    QPointF     m_tempPos;
-    QRectF      m_rect;
-    qreal       m_lConstr;
-    qreal       m_rConstr;
-    qreal       m_tConstr;
-    qreal       m_bConstr;
-    QSizeF      m_minSize;
-    qreal       m_handleSize;
+    QPointF m_tempPos;
+    QRectF m_rect;
+    qreal m_lConstr;
+    qreal m_rConstr;
+    qreal m_tConstr;
+    qreal m_bConstr;
+    QSizeF m_minSize;
+    qreal m_handleSize;
     HandleFlags m_currentHandle;
 };
 

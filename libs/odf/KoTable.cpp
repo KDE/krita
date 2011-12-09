@@ -114,7 +114,8 @@ void KoTable::saveOdf(KoXmlWriter& writer, KoGenStyles& styles)
     }
 
     if(m_style) {
-        writer.addAttribute("table:style-name", m_style->saveOdf(styles));
+        m_style->setName(m_style->saveOdf(styles));
+        writer.addAttribute("table:style-name", m_style->name());
     }
 
     {

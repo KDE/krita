@@ -92,7 +92,6 @@
 #include <QTextStream>
 #include <QXmlStreamReader>
 
-#include "KoTextLoader_p.h"
 // if defined then debugging is enabled
 // #define KOOPENDOCUMENTLOADER_DEBUG
 
@@ -225,32 +224,6 @@ public:
     QString attributeName;
     QString attributeValue;
 };
-
-bool KoTextLoader::containsRichText(const KoXmlElement &element)
-{
-    KoXmlElement textParagraphElement;
-    forEachElement(textParagraphElement, element) {
-
-        if (textParagraphElement.localName() != "p" ||
-                textParagraphElement.namespaceURI() != KoXmlNS::text)
-            return true;
-
-        // if any of this nodes children are elements, we're dealing with richtext (exceptions: text:s (space character) and text:tab (tab character)
-        for (KoXmlNode n = textParagraphElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
-            const KoXmlElement e = n.toElement();
-            if (!e.isNull() && (e.namespaceURI() != KoXmlNS::text
-                                || (e.localName() != "s" // space
-                                    && e.localName() != "annotation"
-                                    && e.localName() != "bookmark"
-                                    && e.localName() != "line-break"
-                                    && e.localName() != "meta"
-                                    && e.localName() != "tab" //\\t
-                                    && e.localName() != "tag")))
-                return true;
-        }
-    }
-    return false;
-}
 
 void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
 {
@@ -430,6 +403,41 @@ KoList *KoTextLoader::Private::previousList(int level)
     }
 
     return m_previousList.at(level - 1);
+}
+
+inline static bool isspace(ushort ch)
+{
+    // options are ordered by likelyhood
+    return ch == ' ' || ch== '\n' || ch == '\r' ||  ch == '\t';
+}
+
+QString KoTextLoader::normalizeWhitespace(const QString &in, bool leadingSpace)
+{
+    QString textstring = in;
+    ushort *text = (ushort*)textstring.data(); // this detaches from the string 'in'
+    int r, w = 0;
+    int len = textstring.length();
+    for (r = 0; r < len; ++r) {
+        const ushort ch = text[r];
+        // check for space, tab, line feed, carriage return
+        if (isspace(ch)) {
+            // if we were lead by whitespace in some parent or previous sibling element,
+            // we completely collapse this space
+            if (r != 0 || !leadingSpace)
+                text[w++] = ' ';
+            // find the end of the whitespace run
+            while (r < len && isspace(text[r]))
+                ++r;
+            // and then record the next non-whitespace character
+            if (r < len)
+                text[w++] = text[r];
+        } else {
+            text[w++] = ch;
+        }
+    }
+    // and now trim off the unused part of the string
+    textstring.truncate(w);
+    return textstring;
 }
 
 /////////////KoTextLoader
@@ -1556,7 +1564,7 @@ void KoTextLoader::loadCite(const KoXmlElement &noteElem, QTextCursor &cursor)
 void KoTextLoader::loadText(const QString &fulltext, QTextCursor &cursor,
                             bool *stripLeadingSpace, bool isLastNode)
 {
-    QString text = KoTextLoaderP::normalizeWhitespace(fulltext, *stripLeadingSpace);
+    QString text = normalizeWhitespace(fulltext, *stripLeadingSpace);
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
     kDebug(32500) << "  <text> text=" << text << text.length();
 #endif

@@ -50,6 +50,7 @@ QRectF centerRect(const QRectF& rect, const QSizeF viewSize)
 CropWidget::CropWidget(QWidget *parent):
     QWidget(parent)
 {
+    setMinimumSize(100, 100);
 }
 
 void CropWidget::paintEvent(QPaintEvent *event)

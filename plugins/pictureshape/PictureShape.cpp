@@ -47,12 +47,7 @@
 #include <QPainter>
 #include <QTimer>
 #include <QPixmapCache>
-#include <QtCore/QBuffer>
-
-QString generate_key(qint64 key, const QSize & size)
-{
-    return QString("%1-%2-%3").arg(key).arg(size.width()).arg(size.height());
-}
+#include <QThreadPool>
 
 void LoadWaiter::setImageData(KJob *job)
 {
@@ -71,26 +66,39 @@ void LoadWaiter::setImageData(KJob *job)
     deleteLater();
 }
 
-void RenderQueue::renderImage()
+QString generate_key(qint64 key, const QSize & size)
 {
-    KoImageData *imageData = qobject_cast<KoImageData*>(m_pictureShape->userData());
-    if (m_wantedImageSize.isEmpty() || imageData == 0) {
-        return;
-    }
-    QSize size = m_wantedImageSize.takeFirst();
-    QString key(generate_key(imageData->key(), size));
-    if (QPixmapCache::find(key) == 0) {
-        QPixmap pixmap = imageData->pixmap(size);
-        QPixmapCache::insert(key, pixmap);
-        m_pictureShape->update();
-    }
-    if (! m_wantedImageSize.isEmpty()) {
-        QTimer::singleShot(0, this, SLOT(renderImage()));
-    }
+    return QString("%1-%2-%3").arg(key).arg(size.width()).arg(size.height());
 }
 
-void RenderQueue::updateShape()
+// ----------------------------------------------------------------- //
+
+_Private::PixmapScaler::PixmapScaler(PictureShape* pictureShape, const QSize& pixmapSize):
+    m_pictureShape(pictureShape), m_pixmapSize(pixmapSize)
 {
+    connect(this, SIGNAL(finished(QString,QImage)), &pictureShape->m_proxy, SLOT(setImage(QString,QImage)));
+}
+
+void _Private::PixmapScaler::run()
+{
+    QImage  image = m_pictureShape->imageData()->image();
+    QString key   = generate_key(m_pictureShape->imageData()->key(), m_pixmapSize);
+    
+    image = image.scaled(
+        m_pixmapSize.width(),
+        m_pixmapSize.height(),
+        Qt::IgnoreAspectRatio,
+        Qt::SmoothTransformation
+    );
+    
+    emit finished(key, image);
+}
+
+// ----------------------------------------------------------------- //
+
+void _Private::PictureShapeProxy::setImage(const QString& key, const QImage& image)
+{
+    QPixmapCache::insert(key, QPixmap::fromImage(image));
     m_pictureShape->update();
 }
 
@@ -99,18 +107,13 @@ void RenderQueue::updateShape()
 PictureShape::PictureShape()
     : KoFrameShape(KoXmlNS::draw, "image"),
     m_imageCollection(0),
-    m_renderQueue(new RenderQueue(this)),
-    m_mode(Standard)
+    m_mode(Standard),
+    m_proxy(this)
 {
     setKeepAspectRatio(true);
     KoFilterEffectStack * effectStack = new KoFilterEffectStack();
     effectStack->setClipRect(QRectF(0, 0, 1, 1));
     setFilterEffectStack(effectStack);
-}
-
-PictureShape::~PictureShape()
-{
-    delete m_renderQueue;
 }
 
 KoImageData* PictureShape::imageData() const
@@ -167,78 +170,7 @@ PictureShape::ClippingRect PictureShape::parseClippingRectString(QString string)
 }
 
 void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
-{/*
-    QRectF       pixelsF   = converter.documentToView(QRectF(QPointF(0,0), size()));
-    KoImageData *imageData = qobject_cast<KoImageData*>(userData());
-    
-    if (imageData == 0) {
-        painter.fillRect(pixelsF, QColor(Qt::gray));
-        return;
-    }
-    QRect pixels     = pixelsF.toRect();
-//     QSize pixmapSize = pixelsF.size().toSize();
-    QSize pixmapSize = calcOptimalPixmapSize();
-
-    QString key(generate_key(imageData->key(), pixmapSize));
-    QPixmap pixmap;
-    
-#if QT_VERSION  >= 0x040600
-    if (!QPixmapCache::find(key, &pixmap)) { // first check cache.
-#else
-    if (!QPixmapCache::find(key, pixmap)) { // first check cache.
-#endif
-        // no? Does the imageData have it then?
-        if (!(imageData->hasCachedPixmap() && imageData->pixmap().size() == pixmapSize)) {
-            // ok, not what we want.
-            // before asking to render it, make sure the image doesn't get too big
-            QSize imageSize = imageData->image().size();
-            if (imageSize.width() < pixmapSize.width() || imageSize.height() < pixmapSize.height()) {
-                // kDebug() << "clipping size to orig image size" << imageSize;
-                pixmapSize.setWidth(imageSize.width());
-                pixmapSize.setHeight(imageSize.height());
-            }
-
-            if (m_printQualityImage.isNull()) {
-                const int MaxSize = 1000; // TODO set the number as a KoImageCollection size
-                // make sure our pixmap doesn't get too slow.
-                // In future we may want to make this action cause a multi-threaded rescale of the pixmap.
-                if (pixmapSize.width() > MaxSize) { // resize to max size.
-                    pixmapSize.setHeight(qRound(pixelsF.height() / pixelsF.width() * MaxSize));
-                    pixmapSize.setWidth(MaxSize);
-                }
-                if (pixmapSize.height() > MaxSize) {
-                    pixmapSize.setWidth(qRound(pixelsF.width() / pixelsF.height() * MaxSize));
-                    pixmapSize.setHeight(MaxSize);
-                }
-            }
-            
-            key = generate_key(imageData->key(), pixmapSize);
-        }
-    }
-
-    if (!m_printQualityImage.isNull() && pixmapSize == m_printQualityImage.size()) { // painting the image as prepared in waitUntilReady()
-        painter.drawImage(pixels, m_printQualityImage, QRect(0, 0, pixmapSize.width(), pixmapSize.height()));
-        m_printQualityImage = QImage(); // free memory
-        return;
-    }
-
-#if QT_VERSION  >= 0x040600
-    if (!QPixmapCache::find(key, &pixmap)) {
-#else
-    if (!QPixmapCache::find(key, pixmap)) {
-#endif
-        m_renderQueue->addSize(pixmapSize);
-        QTimer::singleShot(0, m_renderQueue, SLOT(renderImage()));
-        if (!imageData->hasCachedPixmap() || imageData->pixmap().size().width() > pixmapSize.width()) { // don't scale down
-            QTimer::singleShot(0, m_renderQueue, SLOT(updateShape()));
-            return;
-        }
-        pixmap = imageData->pixmap();
-    }
-    
-    painter.drawPixmap(pixels, pixmap, QRect(100, 0, pixmap.width(), pixmap.height()));
-//*/
-    
+{
     QRectF viewRect   = converter.documentToView(QRectF(QPointF(0,0), size()));
     QSize  pixmapSize = calcOptimalPixmapSize(viewRect.size(), imageData()->image().size());
 
@@ -271,18 +203,19 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
             pixmap = imageData()->pixmap();
         }
         else if (!QPixmapCache::find(key, &pixmap)) {
-            pixmap = imageData()->pixmap(pixmapSize);
-            QPixmapCache::insert(key, pixmap);
+            QThreadPool::globalInstance()->start(new _Private::PixmapScaler(this, pixmapSize));
+            painter.fillRect(viewRect, QColor(Qt::gray));
         }
+        else {
+            QRectF cropRect(
+                pixmapSize.width()  * m_clippingRect.left,
+                pixmapSize.height() * m_clippingRect.top,
+                pixmapSize.width()  * m_clippingRect.width(),
+                pixmapSize.height() * m_clippingRect.height()
+            );
 
-        QRectF cropRect(
-            pixmapSize.width()  * m_clippingRect.left,
-            pixmapSize.height() * m_clippingRect.top,
-            pixmapSize.width()  * m_clippingRect.width(),
-            pixmapSize.height() * m_clippingRect.height()
-        );
-
-        painter.drawPixmap(viewRect, pixmap, cropRect);
+            painter.drawPixmap(viewRect, pixmap, cropRect);
+        }
     }
 }
 

@@ -21,6 +21,10 @@
 #define PICTURESHAPE_H
 
 #include <QPixmap>
+#include <QImage>
+#include <QRunnable>
+#include <QMutex>
+
 #include <KoTosContainer.h>
 #include <KoFrameShape.h>
 #include <SvgShape.h>
@@ -31,6 +35,39 @@ class KoImageData;
 class KoImageCollection;
 class RenderQueue;
 class KJob;
+class PictureShape;
+
+namespace _Private
+{
+    class PictureShapeProxy: public QObject
+    {
+        Q_OBJECT
+    public:
+        PictureShapeProxy(PictureShape *p):
+            m_pictureShape(p) { }
+
+    public slots:
+        void setImage(const QString& key, const QImage& image);
+
+    private:
+        PictureShape *m_pictureShape;
+    };
+
+    class PixmapScaler: public QObject, public QRunnable
+    {
+        Q_OBJECT
+    public:
+        PixmapScaler(PictureShape *pictureShape, const QSize& pixmapSize);
+        virtual void run();
+        
+    signals:
+        void finished(const QString&, const QImage&);
+        
+    private:
+        PictureShape *m_pictureShape;
+        QSize m_pixmapSize;
+    };
+}
 
 class PictureShape : public KoTosContainer, public KoFrameShape, public SvgShape
 {
@@ -87,6 +124,9 @@ class PictureShape : public KoTosContainer, public KoFrameShape, public SvgShape
         bool uniform;
         bool inverted;
     };
+
+    friend class _Private::PixmapScaler;
+    friend class _Private::PictureShapeProxy;
     
 public:
     enum PictureMode {
@@ -97,8 +137,7 @@ public:
     };
 
     PictureShape();
-    virtual ~PictureShape();
-
+    
     // reimplemented
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     // reimplemented
@@ -134,27 +173,10 @@ private:
 
 private:
     KoImageCollection *m_imageCollection;
-    RenderQueue *m_renderQueue;
     mutable QImage m_printQualityImage;
     PictureMode m_mode;
     ClippingRect m_clippingRect;
-};
-
-class RenderQueue : public QObject
-{
-    Q_OBJECT
-public:
-    RenderQueue(PictureShape *shape) : m_pictureShape(shape) { }
-
-    void addSize(const QSize &size) { m_wantedImageSize << size; }
-
-public slots:
-    void renderImage();
-    void updateShape();
-
-private:
-    KoShape *m_pictureShape;
-    QList<QSize> m_wantedImageSize;
+    _Private::PictureShapeProxy m_proxy;
 };
 
 class LoadWaiter : public QObject

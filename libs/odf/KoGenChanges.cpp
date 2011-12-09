@@ -32,7 +32,10 @@
 class KoGenChanges::Private
 {
 public:
-    Private(KoGenChanges *q) : q(q) { }
+    Private(KoGenChanges *q)
+       : q(q)
+       , trackChanges(false)
+    { }
 
     QString makeUniqueName(const QString &base) const;
 
@@ -53,6 +56,7 @@ public:
     QMap<KoGenChange, QString> ::iterator insertChange(const KoGenChange &change, const QString &name);
 
     KoGenChanges *q;
+    bool trackChanges;
 };
 
 KoGenChanges::KoGenChanges()
@@ -126,6 +130,11 @@ const KoGenChange* KoGenChanges::change(const QString& name) const
     return 0;
 }
 
+void KoGenChanges::setTrackChanges(bool track)
+{
+    d->trackChanges = track;
+}
+
 void KoGenChanges::saveOdfChanges(KoXmlWriter* xmlWriter) const
 {
     QMap<KoGenChange, QString> changesList = changes();
@@ -135,7 +144,8 @@ void KoGenChanges::saveOdfChanges(KoXmlWriter* xmlWriter) const
         xmlWriter->startElement("delta:tracked-changes");
     } else {
         xmlWriter->startElement("text:tracked-changes");
-    }
+        xmlWriter->addAttribute("track-changes", d->trackChanges);
+   }
 
     for (; it != changesList.constEnd() ; ++it) {
         it.key().writeChange(xmlWriter, it.value());

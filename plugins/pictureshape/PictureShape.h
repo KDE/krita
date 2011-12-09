@@ -66,8 +66,9 @@ namespace _Private
         void finished(const QString&, const QImage&);
         
     private:
-        PictureShape *m_pictureShape;
-        QSize m_pixmapSize;
+        QSize   m_size;
+        QImage  m_image;
+        quint64 m_imageKey;
     };
 }
 

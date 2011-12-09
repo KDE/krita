@@ -74,24 +74,25 @@ QString generate_key(qint64 key, const QSize & size)
 // ----------------------------------------------------------------- //
 
 _Private::PixmapScaler::PixmapScaler(PictureShape* pictureShape, const QSize& pixmapSize):
-    m_pictureShape(pictureShape), m_pixmapSize(pixmapSize)
+    m_size(pixmapSize)
 {
+    m_image    = pictureShape->imageData()->image();
+    m_imageKey = pictureShape->imageData()->key();
     connect(this, SIGNAL(finished(QString,QImage)), &pictureShape->m_proxy, SLOT(setImage(QString,QImage)));
 }
 
 void _Private::PixmapScaler::run()
 {
-    QImage  image = m_pictureShape->imageData()->image();
-    QString key   = generate_key(m_pictureShape->imageData()->key(), m_pixmapSize);
+    QString key = generate_key(m_imageKey, m_size);
     
-    image = image.scaled(
-        m_pixmapSize.width(),
-        m_pixmapSize.height(),
+    m_image = m_image.scaled(
+        m_size.width(),
+        m_size.height(),
         Qt::IgnoreAspectRatio,
         Qt::SmoothTransformation
     );
     
-    emit finished(key, image);
+    emit finished(key, m_image);
 }
 
 // ----------------------------------------------------------------- //

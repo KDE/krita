@@ -315,6 +315,22 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
         style.addProperty("draw:image-opacity", QString("%1%").arg((1.0 - transparency()) * 100.0));
     }
 
+    switch(m_mode)
+    {
+    case Standard:
+        style.addProperty("draw:color-mode", "standard");
+        break;
+    case Greyscale:
+        style.addProperty("draw:color-mode", "greyscale");
+        break;
+    case Watermark:
+        style.addProperty("draw:color-mode", "watermark");
+        break;
+    case Mono:
+        style.addProperty("draw:color-mode", "mono");
+        break;
+    }
+
     QSizeF       imageSize = imageData()->imageSize();
     ClippingRect rect      = m_clippingRect;
     

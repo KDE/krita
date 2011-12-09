@@ -29,6 +29,8 @@
 #include <KoFrameShape.h>
 #include <SvgShape.h>
 
+#include "ClippingRect.h"
+
 #define PICTURESHAPEID "PictureShape"
 
 class KoImageData;
@@ -71,71 +73,17 @@ namespace _Private
 
 class PictureShape : public KoTosContainer, public KoFrameShape, public SvgShape
 {
-    struct ClippingRect
-    {
-        ClippingRect():
-            top(0), right(1), bottom(1), left(0),
-            uniform(true), inverted(false) { }
-
-        ClippingRect(const ClippingRect& rect):
-            top(rect.top), right(rect.right), bottom(rect.bottom), left(rect.left),
-            uniform(rect.uniform), inverted(rect.inverted) { }
-        
-        void scale(const QSizeF& size, bool isUniform)
-        {
-            top    *= size.height();
-            right  *= size.width();
-            bottom *= size.height();
-            left   *= size.width();
-            uniform = isUniform;
-        }
-
-        void normalize(const QSizeF& size)
-        {
-            if (!uniform) {
-                scale(QSizeF(1.0/size.width(), 1.0/size.height()), true);
-            }
-
-            if(inverted) {
-                right    = 1.0 - right;
-                bottom   = 1.0 - bottom;
-                inverted = false;
-            }
-        }
-
-        void setRect(const QRectF& rect, bool isUniform)
-        {
-            top      = rect.top();
-            right    = rect.right();
-            bottom   = rect.bottom();
-            left     = rect.left();
-            uniform  = isUniform;
-            inverted = false;
-        }
-
-        qreal  width()  const { return right - left; }
-        qreal  height() const { return bottom - top; }
-        QRectF toRect() const { return QRectF(left, top, width(), height()); }
-
-        qreal top;
-        qreal right;
-        qreal bottom;
-        qreal left;
-        bool uniform;
-        bool inverted;
-    };
-
     friend class _Private::PixmapScaler;
     friend class _Private::PictureShapeProxy;
     
 public:
-    enum PictureMode {
+    enum ColorMode {
         Standard,
         Greyscale,
         Mono,
         Watermark
     };
-
+    
     PictureShape();
     
     // reimplemented
@@ -155,12 +103,12 @@ public:
      */
     KoImageCollection *imageCollection() const;
     KoImageData *imageData() const;
-    PictureMode mode() const;
+    ColorMode colorMode() const;
     QRectF cropRect() const;
 
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
     void setCropRect(const QRectF& rect);
-    void setMode(PictureMode mode);
+    void setColorMode ( ColorMode mode);
 
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
@@ -174,7 +122,7 @@ private:
 private:
     KoImageCollection *m_imageCollection;
     mutable QImage m_printQualityImage;
-    PictureMode m_mode;
+    ColorMode m_mode;
     ClippingRect m_clippingRect;
     _Private::PictureShapeProxy m_proxy;
 };

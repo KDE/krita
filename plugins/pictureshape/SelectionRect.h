@@ -160,6 +160,13 @@ public:
 
         return QRectF(x-h, y-h, m_handleSize, m_handleSize);
     }
+
+private:
+//     void fixAspect(HandleFlags handle)
+//     {
+//         if(handle & TOP_HANDLE) {
+//         }
+//     }
     
 private:
     QPointF m_tempPos;

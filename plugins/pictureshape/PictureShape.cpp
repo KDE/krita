@@ -145,7 +145,7 @@ QSize PictureShape::calcOptimalPixmapSize(const QSizeF& shapeSize, const QSizeF&
     return (imageSize * scale).toSize();
 }
 
-PictureShape::ClippingRect PictureShape::parseClippingRectString(QString string) const
+ClippingRect PictureShape::parseClippingRectString(QString string) const
 {
     ClippingRect rect;
     string = string.trimmed();
@@ -199,10 +199,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
         QPixmap pixmap;
         QString key(generate_key(imageData()->key(), pixmapSize));
         
-        if (imageData()->hasCachedPixmap() && imageData()->pixmap().size() == pixmapSize) {
-            pixmap = imageData()->pixmap();
-        }
-        else if (!QPixmapCache::find(key, &pixmap)) {
+        if (!QPixmapCache::find(key, &pixmap)) {
             QThreadPool::globalInstance()->start(new _Private::PixmapScaler(this, pixmapSize));
             painter.fillRect(viewRect, QColor(Qt::gray));
         }
@@ -345,13 +342,13 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
     if (styleStack.hasProperty(KoXmlNS::draw, "color-mode")) {
         QString colorMode = styleStack.property(KoXmlNS::draw, "color-mode");
         if (colorMode == "greyscale") {
-            setMode(Greyscale);
+            setColorMode(Greyscale);
         }
         else if (colorMode == "mono") {
-            setMode(Mono);
+            setColorMode(Mono);
         }
         else if (colorMode == "watermark") {
-            setMode(Watermark);
+            setColorMode(Watermark);
         }
     }
     
@@ -364,30 +361,32 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
     m_clippingRect = parseClippingRectString(styleStack.property(KoXmlNS::fo, "clip"));
 }
 
-PictureShape::PictureMode PictureShape::mode() const
+PictureShape::ColorMode PictureShape::colorMode() const
 {
     return m_mode;
 }
 
-void PictureShape::setMode(PictureShape::PictureMode mode)
+void PictureShape::setColorMode(PictureShape::ColorMode mode)
 {
-    if( mode != m_mode ) {
-        m_mode = mode;
-        KoFilterEffect* filterMode = filterEffectStack()->takeFilterEffect(0);
-        delete filterMode;
-        switch( mode ) {
-            case Greyscale:
-                filterMode = new GreyscaleFilterEffect();
-                break;
-            case Mono:
-                filterMode = new MonoFilterEffect();
-                break;
-            default:
-                filterMode = new WatermarkFilterEffect();
-                break;
+    if (mode != m_mode) {
+        filterEffectStack()->removeFilterEffect(0);
+        
+        switch(mode)
+        {
+        case Greyscale:
+            filterEffectStack()->appendFilterEffect(new GreyscaleFilterEffect());
+            break;
+        case Mono:
+            filterEffectStack()->appendFilterEffect(new MonoFilterEffect());
+            break;
+        case Watermark:
+            filterEffectStack()->appendFilterEffect(new WatermarkFilterEffect());
+            break;
+        default:
+            break;
         }
-        if( filterMode )
-            filterEffectStack()->appendFilterEffect(filterMode);
+
+        m_mode = mode;
         update();
     }
 }

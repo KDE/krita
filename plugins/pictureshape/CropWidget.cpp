@@ -47,7 +47,8 @@ QRectF centerRect(const QRectF& rect, const QSizeF viewSize)
 
 // ---------------------------------------------------------------- //
 
-CropWidget::CropWidget()
+CropWidget::CropWidget(QWidget *parent):
+    QWidget(parent)
 {
 }
 
@@ -71,24 +72,20 @@ void CropWidget::paintEvent(QPaintEvent *event)
 
 void CropWidget::mousePressEvent(QMouseEvent *event)
 {
-    m_selectionRect.beginDragging(toImageCoord(event->posF()));
+    m_selectionRect.beginDragging( toUniformCoord (event->posF()));
 }
 
 void CropWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    m_selectionRect.doDragging(toImageCoord(event->posF()));
+    m_selectionRect.doDragging( toUniformCoord (event->posF()));
     update();
 }
 
 void CropWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     m_selectionRect.finishDragging();
-    
-    if (m_pictureShape) {
-        m_pictureShape->setCropRect(m_selectionRect.getRect());
-    }
-    
     update();
+    emit sigCropRegionChnaged(m_selectionRect.getRect());
 }
 
 void CropWidget::setPictureShape(PictureShape *shape)
@@ -99,15 +96,16 @@ void CropWidget::setPictureShape(PictureShape *shape)
     m_selectionRect.setRect(shape->cropRect());
     m_selectionRect.setConstrainingRect(QRectF(0, 0, 1, 1));
     m_selectionRect.setHandleSize(0.04);
+    update();
 }
 
-QPointF CropWidget::toImageCoord(const QPointF& coord) const
+QPointF CropWidget::toUniformCoord(const QPointF& coord) const
 {
     QPointF result = coord - m_imageRect.topLeft();
     return QPointF(result.x() / m_imageRect.width(), result.y() / m_imageRect.height());
 }
 
-QPointF CropWidget::fromImageCoord(const QPointF& coord) const
+QPointF CropWidget::fromUniformCoord(const QPointF& coord) const
 {
     return m_imageRect.topLeft() + QPointF(coord.x()*m_imageRect.width(), coord.y()*m_imageRect.height());
 }
@@ -115,7 +113,7 @@ QPointF CropWidget::fromImageCoord(const QPointF& coord) const
 void CropWidget::calcImageRect()
 {
     if (m_pictureShape) {
-        QSizeF imageSize = m_pictureShape->imageData()->imageSize();
+        QSizeF imageSize = m_pictureShape->imageData()->image().size();// imageSize();
         imageSize = imageSize * calcScale(imageSize, size(), true);
         m_imageRect = centerRect(QRect(0, 0, imageSize.width(), imageSize.height()), size());
     }
@@ -126,4 +124,3 @@ void CropWidget::resizeEvent(QResizeEvent* event)
 {
     calcImageRect();
 }
-

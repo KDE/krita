@@ -28,6 +28,7 @@ class KoFilterEffect;
 class QComboBox;
 class QScrollArea;
 class CropWidget;
+struct PictureToolUI;
 
 class PictureTool : public KoToolBase
 {
@@ -56,17 +57,15 @@ protected:
     virtual QWidget *createOptionWidget();
 
 private slots:
-    void filterSelected(int cmbBoxIndex);
+    void colorModeChanged(int cmbBoxIndex);
     void changeUrlPressed();
+    void cropRegionChanged(const QRectF& rect);
+    void cropEditFieldsChanged();
     void setImageData(KJob *job);
-    void filterChanged();
 
 private:
     PictureShape *m_pictureshape;
-    QComboBox *m_filterEffectsCmb;
-    QScrollArea *m_scrollArea;
-    KoFilterEffect *m_filterEffect;
-    CropWidget *m_cropWidget;
+    PictureToolUI *m_pictureToolUI;
 };
 
 #endif

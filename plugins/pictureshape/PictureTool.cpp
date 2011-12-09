@@ -44,11 +44,22 @@
 #include <KoFilterEffectConfigWidgetBase.h>
 #include <KoFilterEffectStack.h>
 
-PictureTool::PictureTool( KoCanvasBase* canvas )
-    : KoToolBase( canvas ),
+#include "ui_wdgPictureTool.h"
+
+struct PictureToolUI: public QWidget, public Ui::PictureTool
+{
+    PictureToolUI()
+    {
+        setupUi(this);
+    }
+};
+
+// ---------------------------------------------------- //
+
+PictureTool::PictureTool(KoCanvasBase* canvas)
+    : KoToolBase(canvas),
       m_pictureshape(0),
-      m_filterEffect(0),
-      m_cropWidget(0)
+      m_pictureToolUI(0)
 {
 }
 
@@ -66,9 +77,9 @@ void PictureTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &
         return;
     }
 
-    if(m_cropWidget) {
-        m_cropWidget->setPictureShape(m_pictureshape);
-        m_cropWidget->update();
+    if(m_pictureToolUI) {
+        m_pictureToolUI->cropWidget->setPictureShape(m_pictureshape);
+        m_pictureToolUI->cropWidget->update();
     }
     
     useCursor(Qt::ArrowCursor);
@@ -81,40 +92,35 @@ void PictureTool::deactivate()
 
 QWidget * PictureTool::createOptionWidget()
 {
-    QWidget *optionWidget = new QWidget();
-    QVBoxLayout *layout = new QVBoxLayout(optionWidget);
-    QHBoxLayout *hBox   = new QHBoxLayout();
+    QSizeF                  imageSize = m_pictureshape->imageData()->imageSize();
+    PictureShape::ColorMode mode      = m_pictureshape->colorMode();
     
-//     QGridLayout *layout = new QGridLayout(optionWidget);
+    m_pictureToolUI = new PictureToolUI();
+    m_pictureToolUI->cmbColorMode->addItem(i18n("Standard")  , PictureShape::Standard);
+    m_pictureToolUI->cmbColorMode->addItem(i18n("Greyscale") , PictureShape::Greyscale);
+    m_pictureToolUI->cmbColorMode->addItem(i18n("Monochrome"), PictureShape::Mono);
+    m_pictureToolUI->cmbColorMode->addItem(i18n("Watermark") , PictureShape::Watermark);
+    m_pictureToolUI->cmbColorMode->setCurrentIndex(m_pictureToolUI->cmbColorMode->findData(mode));
+    
+    m_pictureToolUI->bnImageFile->setIcon(SmallIcon("open"));
+    
+    m_pictureToolUI->leftDoubleSpinBox->setRange  (0.0, imageSize.width());
+    m_pictureToolUI->rightDoubleSpinBox->setRange (0.0, imageSize.width());
+    m_pictureToolUI->topDoubleSpinBox->setRange   (0.0, imageSize.height());
+    m_pictureToolUI->bottomDoubleSpinBox->setRange(0.0, imageSize.height());
+    m_pictureToolUI->cropWidget->setPictureShape(m_pictureshape);
 
-    QToolButton *button = new QToolButton;
-    button->setIcon(SmallIcon("open"));
-    button->setToolTip(i18n("Open"));
-    
-    m_scrollArea = new QScrollArea();
-    
-//     layout->addWidget(button, 0, 0);
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
-    
-    m_filterEffectsCmb = new QComboBox;
-    m_filterEffectsCmb->addItem(i18n("Normal"), "default");
-    
-    foreach (KoFilterEffectFactoryBase *factory, KoFilterEffectRegistry::instance()->values()) {
-        m_filterEffectsCmb->addItem(factory->name(), factory->id());
-    }
-    
-    connect(m_filterEffectsCmb, SIGNAL(currentIndexChanged(int)), this, SLOT(filterSelected(int)));
+    cropRegionChanged(m_pictureshape->cropRect());
 
-    m_cropWidget = new CropWidget;
-    m_cropWidget->setPictureShape(m_pictureshape);
+    connect(m_pictureToolUI->cmbColorMode, SIGNAL(currentIndexChanged(int)), this, SLOT(colorModeChanged(int)));
+    connect(m_pictureToolUI->bnImageFile, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
+    connect(m_pictureToolUI->leftDoubleSpinBox  , SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
+    connect(m_pictureToolUI->rightDoubleSpinBox , SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
+    connect(m_pictureToolUI->topDoubleSpinBox   , SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
+    connect(m_pictureToolUI->bottomDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
+    connect(m_pictureToolUI->cropWidget, SIGNAL(sigCropRegionChnaged(QRectF)), this, SLOT(cropRegionChanged(QRectF)));
     
-    hBox->addWidget(button);
-    hBox->addWidget(m_filterEffectsCmb);
-    layout->addLayout(hBox        , 0);
-    layout->addWidget(m_scrollArea, 1);
-    layout->addWidget(m_cropWidget, 1);
-    
-    return optionWidget;
+    return m_pictureToolUI;
 }
 
 void PictureTool::changeUrlPressed()
@@ -129,51 +135,45 @@ void PictureTool::changeUrlPressed()
     }
 }
 
-void PictureTool::filterChanged()
+void PictureTool::cropEditFieldsChanged()
 {
-//     m_pictureshape->filterEffectStack()->takeFilterEffect(0);
-//     m_pictureshape->filterEffectStack()->setClipRect(QRect(0, 0, 100, 100));
+    ClippingRect clippingRect;
+    clippingRect.left     = m_pictureToolUI->leftDoubleSpinBox->value();
+    clippingRect.right    = m_pictureToolUI->rightDoubleSpinBox->value();
+    clippingRect.top      = m_pictureToolUI->topDoubleSpinBox->value();
+    clippingRect.bottom   = m_pictureToolUI->bottomDoubleSpinBox->value();
+    clippingRect.uniform  = false;
+    clippingRect.inverted = true;
+
+    clippingRect.normalize(m_pictureshape->imageData()->imageSize());
+    m_pictureshape->setCropRect(clippingRect.toRect());
+    m_pictureToolUI->cropWidget->setPictureShape(m_pictureshape);
+}
+
+void PictureTool::cropRegionChanged(const QRectF& rect)
+{
+    QSizeF       imageSize(m_pictureshape->imageData()->imageSize());
+    ClippingRect clippingRect(rect);
+    
+    clippingRect.right  = 1.0 - clippingRect.right;
+    clippingRect.bottom = 1.0 - clippingRect.bottom;
+    clippingRect.scale(imageSize);
+
+//     m_pictureToolUI->blockSignals(true);
+    
+    m_pictureToolUI->leftDoubleSpinBox->setValue(clippingRect.left);
+    m_pictureToolUI->rightDoubleSpinBox->setValue(clippingRect.right);
+    m_pictureToolUI->topDoubleSpinBox->setValue(clippingRect.top);
+    m_pictureToolUI->bottomDoubleSpinBox->setValue(clippingRect.bottom);
+
+    m_pictureshape->setCropRect(rect);
     m_pictureshape->update();
 }
 
-void PictureTool::filterSelected(int cmbIndex)
+void PictureTool::colorModeChanged(int cmbIndex)
 {
-    QString id = m_filterEffectsCmb->itemData(cmbIndex).toString();
-    
-    if (id != "default") {
-        KoFilterEffectFactoryBase      *filterFactory   = KoFilterEffectRegistry::instance()->get(id);
-        KoFilterEffectConfigWidgetBase *filterConfigWdg = filterFactory->createConfigWidget();
-        
-        m_filterEffect = m_pictureshape->filterEffectStack()->takeFilterEffect(0);
-        delete m_filterEffect;
-        m_filterEffect = filterFactory->createFilterEffect();
-        m_pictureshape->filterEffectStack()->appendFilterEffect(m_filterEffect);
-        
-        filterConfigWdg->editFilterEffect(m_filterEffect);
-        m_scrollArea->setWidget(filterConfigWdg);
-        m_pictureshape->update();
-        
-        connect(filterConfigWdg, SIGNAL(filterChanged()), this, SLOT(filterChanged()));
-//         KoFilterEffect *effect = KoFilterEffectRegistry::instance()->get(id)->createFilterEffect();
-    }
-    
-//     m_pictureshape->filterEffectStack()->appendFilterEffect(effect);
-//     m_pictureshape->update();
-    
-//     switch(cmbBoxIndex)
-//     {
-//     case 0:
-//         m_pictureshape->setMode(PictureShape::Standard);
-//         break;
-//     
-//     case 1:
-//         m_pictureshape->setMode(PictureShape::Greyscale);
-//         break;
-//     
-//     case 2:
-//         m_pictureshape->setMode(PictureShape::Mono);
-//         break;
-//     }
+    PictureShape::ColorMode mode = (PictureShape::ColorMode)m_pictureToolUI->cmbColorMode->itemData(cmbIndex).toInt();
+    m_pictureshape->setColorMode(mode);
 }
 
 void PictureTool::setImageData(KJob *job)
@@ -188,7 +188,6 @@ void PictureTool::setImageData(KJob *job)
         ChangeImageCommand *cmd = new ChangeImageCommand(m_pictureshape, data);
         canvas()->addCommand(cmd);
     }
-
 }
 
 void PictureTool::mouseDoubleClickEvent( KoPointerEvent *event )

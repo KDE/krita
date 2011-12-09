@@ -31,7 +31,7 @@ class CropWidget : public QWidget
     Q_OBJECT
 
 public:
-    CropWidget();
+    CropWidget(QWidget *parent=0);
     
     virtual void paintEvent(QPaintEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);
@@ -41,10 +41,13 @@ public:
 
     void setPictureShape(PictureShape* shape);
 
+signals:
+    void sigCropRegionChnaged(const QRectF&);
+
 private:
     void calcImageRect();
-    QPointF toImageCoord(const QPointF& coord) const;
-    QPointF fromImageCoord(const QPointF& coord) const;
+    QPointF toUniformCoord(const QPointF& coord) const;
+    QPointF fromUniformCoord(const QPointF& coord) const;
     
 private:
     PictureShape *m_pictureShape;

@@ -77,11 +77,7 @@ void PictureTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &
         return;
     }
 
-    if(m_pictureToolUI) {
-        m_pictureToolUI->cropWidget->setPictureShape(m_pictureshape);
-        m_pictureToolUI->cropWidget->update();
-    }
-    
+    updateControlElements();
     useCursor(Qt::ArrowCursor);
 }
 
@@ -90,7 +86,7 @@ void PictureTool::deactivate()
     m_pictureshape = 0;
 }
 
-QWidget * PictureTool::createOptionWidget()
+QWidget *PictureTool::createOptionWidget()
 {
     QSizeF                  imageSize = m_pictureshape->imageData()->imageSize();
     PictureShape::ColorMode mode      = m_pictureshape->colorMode();
@@ -100,27 +96,45 @@ QWidget * PictureTool::createOptionWidget()
     m_pictureToolUI->cmbColorMode->addItem(i18n("Greyscale") , PictureShape::Greyscale);
     m_pictureToolUI->cmbColorMode->addItem(i18n("Monochrome"), PictureShape::Mono);
     m_pictureToolUI->cmbColorMode->addItem(i18n("Watermark") , PictureShape::Watermark);
-    m_pictureToolUI->cmbColorMode->setCurrentIndex(m_pictureToolUI->cmbColorMode->findData(mode));
-    
     m_pictureToolUI->bnImageFile->setIcon(SmallIcon("open"));
-    
-    m_pictureToolUI->leftDoubleSpinBox->setRange  (0.0, imageSize.width());
-    m_pictureToolUI->rightDoubleSpinBox->setRange (0.0, imageSize.width());
-    m_pictureToolUI->topDoubleSpinBox->setRange   (0.0, imageSize.height());
-    m_pictureToolUI->bottomDoubleSpinBox->setRange(0.0, imageSize.height());
-    m_pictureToolUI->cropWidget->setPictureShape(m_pictureshape);
 
+    updateControlElements();
     cropRegionChanged(m_pictureshape->cropRect());
 
     connect(m_pictureToolUI->cmbColorMode, SIGNAL(currentIndexChanged(int)), this, SLOT(colorModeChanged(int)));
     connect(m_pictureToolUI->bnImageFile, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
+    connect(m_pictureToolUI->cropWidget, SIGNAL(sigCropRegionChnaged(QRectF)), this, SLOT(cropRegionChanged(QRectF)));
+    connect(m_pictureToolUI->cbAspect, SIGNAL(toggled(bool)), this, SLOT(aspectCheckBoxChanged(bool)));
     connect(m_pictureToolUI->leftDoubleSpinBox  , SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
     connect(m_pictureToolUI->rightDoubleSpinBox , SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
     connect(m_pictureToolUI->topDoubleSpinBox   , SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
     connect(m_pictureToolUI->bottomDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
-    connect(m_pictureToolUI->cropWidget, SIGNAL(sigCropRegionChnaged(QRectF)), this, SLOT(cropRegionChanged(QRectF)));
+    connect(m_pictureToolUI->bnFill, SIGNAL(pressed()), this, SLOT(fillButtonPressed()));
     
     return m_pictureToolUI;
+}
+
+void PictureTool::updateControlElements()
+{
+    if(m_pictureToolUI) {
+        QSizeF                  imageSize = m_pictureshape->imageData()->imageSize();
+        PictureShape::ColorMode mode      = m_pictureshape->colorMode();
+        
+        m_pictureToolUI->cropWidget->setPictureShape(m_pictureshape);
+        m_pictureToolUI->cropWidget->setKeepPictureProportion(m_pictureshape->isPictureInProportion());
+        m_pictureToolUI->cropWidget->update();
+        m_pictureToolUI->cbAspect->blockSignals(true);
+        m_pictureToolUI->cbAspect->setChecked(m_pictureshape->isPictureInProportion());
+        m_pictureToolUI->cbAspect->blockSignals(false);
+        m_pictureToolUI->cmbColorMode->blockSignals(true);
+        m_pictureToolUI->cmbColorMode->setCurrentIndex(m_pictureToolUI->cmbColorMode->findData(mode));
+        m_pictureToolUI->cmbColorMode->blockSignals(false);
+
+        m_pictureToolUI->leftDoubleSpinBox->setRange  (0.0, imageSize.width());
+        m_pictureToolUI->rightDoubleSpinBox->setRange (0.0, imageSize.width());
+        m_pictureToolUI->topDoubleSpinBox->setRange   (0.0, imageSize.height());
+        m_pictureToolUI->bottomDoubleSpinBox->setRange(0.0, imageSize.height());
+    }
 }
 
 void PictureTool::changeUrlPressed()
@@ -158,8 +172,6 @@ void PictureTool::cropRegionChanged(const QRectF& rect)
     clippingRect.right  = 1.0 - clippingRect.right;
     clippingRect.bottom = 1.0 - clippingRect.bottom;
     clippingRect.scale(imageSize);
-
-//     m_pictureToolUI->blockSignals(true);
     
     m_pictureToolUI->leftDoubleSpinBox->setValue(clippingRect.left);
     m_pictureToolUI->rightDoubleSpinBox->setValue(clippingRect.right);
@@ -176,6 +188,20 @@ void PictureTool::colorModeChanged(int cmbIndex)
     m_pictureshape->setColorMode(mode);
 }
 
+void PictureTool::aspectCheckBoxChanged(bool checked)
+{
+    m_pictureToolUI->cropWidget->setKeepPictureProportion(checked);
+}
+
+void PictureTool::fillButtonPressed()
+{
+    m_pictureToolUI->cropWidget->maximizeCroppedArea();
+    m_pictureToolUI->cbAspect->blockSignals(true);
+    m_pictureToolUI->cbAspect->setChecked(m_pictureshape->isPictureInProportion());
+    m_pictureToolUI->cropWidget->setKeepPictureProportion(m_pictureshape->isPictureInProportion());
+    m_pictureToolUI->cbAspect->blockSignals(false);
+}
+
 void PictureTool::setImageData(KJob *job)
 {
     if (m_pictureshape == 0)
@@ -187,6 +213,7 @@ void PictureTool::setImageData(KJob *job)
         KoImageData *data = m_pictureshape->imageCollection()->createImageData(transferJob->data());
         ChangeImageCommand *cmd = new ChangeImageCommand(m_pictureshape, data);
         canvas()->addCommand(cmd);
+        updateControlElements();
     }
 }
 

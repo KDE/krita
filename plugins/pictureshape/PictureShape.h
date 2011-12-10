@@ -106,10 +106,11 @@ public:
     KoImageData *imageData() const;
     ColorMode colorMode() const;
     QRectF cropRect() const;
+    bool isPictureInProportion() const;
 
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
     void setCropRect(const QRectF& rect);
-    void setColorMode ( ColorMode mode);
+    void setColorMode(ColorMode mode);
 
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);

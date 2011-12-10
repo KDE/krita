@@ -40,6 +40,8 @@ public:
     virtual void resizeEvent(QResizeEvent *event);
 
     void setPictureShape(PictureShape* shape);
+    void setKeepPictureProportion(bool keepProportion);
+    void maximizeCroppedArea();
 
 signals:
     void sigCropRegionChnaged(const QRectF&);
@@ -53,6 +55,7 @@ private:
     PictureShape *m_pictureShape;
     QRectF m_imageRect;
     SelectionRect m_selectionRect;
+    bool m_isMousePressed;
 };
 
 #endif // H_CROP_WIDGET_H

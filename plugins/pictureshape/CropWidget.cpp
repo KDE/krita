@@ -42,15 +42,18 @@ qreal calcScale(const QSizeF& imgSize, const QSizeF viewSize, bool fitView)
 QRectF centerRect(const QRectF& rect, const QSizeF viewSize)
 {
     QSizeF diff = viewSize - rect.size();
-    return QRectF(diff.width() / 2.0, diff.height() / 2.0, rect.width(), rect.height());
+//     return QRectF(diff.width() / 2.0, diff.height() / 2.0, rect.width(), rect.height());
+    return QRectF(diff.width() / 2.0, 0.0, rect.width(), rect.height());
 }
 
 // ---------------------------------------------------------------- //
 
 CropWidget::CropWidget(QWidget *parent):
-    QWidget(parent)
+    QWidget(parent),
+    m_isMousePressed(false)
 {
     setMinimumSize(100, 100);
+    setMouseTracking(true);
 }
 
 void CropWidget::paintEvent(QPaintEvent *event)
@@ -66,25 +69,64 @@ void CropWidget::paintEvent(QPaintEvent *event)
     
     painter.drawImage(QRectF(0, 0, 1, 1), image);
     painter.drawRect(m_selectionRect.getRect());
+    painter.setBrush(QBrush(Qt::yellow));
     
     for (int i=0; i<m_selectionRect.getNumHandles(); ++i)
-        painter.fillRect(m_selectionRect.getHandleRect(m_selectionRect.getHandleFlags(i)), Qt::blue);
+        painter.drawRect(m_selectionRect.getHandleRect(m_selectionRect.getHandleFlags(i)));
 }
 
 void CropWidget::mousePressEvent(QMouseEvent *event)
 {
-    m_selectionRect.beginDragging( toUniformCoord (event->posF()));
+    m_selectionRect.beginDragging(toUniformCoord(event->posF()));
+    m_isMousePressed = true;
 }
 
 void CropWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    m_selectionRect.doDragging( toUniformCoord (event->posF()));
-    update();
+    QPointF                    pos   = toUniformCoord(event->posF());
+    SelectionRect::HandleFlags flags = m_selectionRect.getHandleFlags(pos);
+    
+    switch (flags)
+    {
+    case SelectionRect::TOP_HANDLE:
+    case SelectionRect::BOTTOM_HANDLE:
+        QWidget::setCursor(Qt::SizeVerCursor);
+        break;
+
+    case SelectionRect::LEFT_HANDLE:
+    case SelectionRect::RIGHT_HANDLE:
+        QWidget::setCursor(Qt::SizeHorCursor);
+        break;
+    
+    case SelectionRect::LEFT_HANDLE|SelectionRect::TOP_HANDLE:
+    case SelectionRect::RIGHT_HANDLE|SelectionRect::BOTTOM_HANDLE:
+        QWidget::setCursor(Qt::SizeFDiagCursor);
+        break;
+    
+    case SelectionRect::LEFT_HANDLE|SelectionRect::BOTTOM_HANDLE:
+    case SelectionRect::RIGHT_HANDLE|SelectionRect::TOP_HANDLE:
+        QWidget::setCursor(Qt::SizeBDiagCursor);
+        break;
+
+    case SelectionRect::INSIDE_RECT:
+        QWidget::setCursor(Qt::SizeAllCursor);
+        break;
+        
+    default:
+        QWidget::setCursor(Qt::ArrowCursor);
+        break;
+    }
+
+    if (m_isMousePressed) {
+        m_selectionRect.doDragging(pos);
+        update();
+    }
 }
 
 void CropWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     m_selectionRect.finishDragging();
+    m_isMousePressed = false;
     update();
     emit sigCropRegionChnaged(m_selectionRect.getRect());
 }
@@ -98,6 +140,19 @@ void CropWidget::setPictureShape(PictureShape *shape)
     m_selectionRect.setConstrainingRect(QRectF(0, 0, 1, 1));
     m_selectionRect.setHandleSize(0.04);
     update();
+}
+
+void CropWidget::setKeepPictureProportion(bool keepProportion)
+{
+    qreal aspect = keepProportion ? (m_pictureShape->size().width() / m_pictureShape->size().height()) : 0.0;
+    m_selectionRect.setConstrainingAspectRatio(aspect);
+    emit sigCropRegionChnaged(m_selectionRect.getRect());
+}
+
+void CropWidget::maximizeCroppedArea()
+{
+    m_selectionRect.setRect(QRectF(0, 0, 1, 1));
+    emit sigCropRegionChnaged(m_selectionRect.getRect());
 }
 
 QPointF CropWidget::toUniformCoord(const QPointF& coord) const
@@ -114,9 +169,10 @@ QPointF CropWidget::fromUniformCoord(const QPointF& coord) const
 void CropWidget::calcImageRect()
 {
     if (m_pictureShape) {
-        QSizeF imageSize = m_pictureShape->imageData()->image().size();// imageSize();
-        imageSize = imageSize * calcScale(imageSize, size(), true);
+        QSizeF imageSize = m_pictureShape->imageData()->image().size();
+        imageSize   = imageSize * calcScale(imageSize, size(), true);
         m_imageRect = centerRect(QRect(0, 0, imageSize.width(), imageSize.height()), size());
+        m_selectionRect.setAspectRatio(m_imageRect.width() / m_imageRect.height());
     }
     else m_imageRect = QRectF();
 }

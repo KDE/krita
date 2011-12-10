@@ -41,6 +41,8 @@ public:
     
     SelectionRect(const QRectF& rect=QRectF(), qreal handleSize=10.0):
         m_rect(rect),
+        m_aspectRatio(1),
+        m_aConstr (0),
         m_minSize(0,0),
         m_handleSize(handleSize),
         m_currentHandle(0)
@@ -61,12 +63,26 @@ public:
         m_handleSize = size;
     }
 
+    void setAspectRatio(qreal aspect)
+    {
+        m_aspectRatio = aspect;
+    }
+
     void setConstrainingRect(const QRectF& rect)
     {
         m_lConstr = rect.left();
         m_rConstr = rect.right();
         m_tConstr = rect.top();
         m_bConstr = rect.bottom();
+    }
+
+    void setConstrainingAspectRatio(qreal aspect)
+    {
+        m_aConstr = aspect;
+
+        if (m_aConstr != 0.0) {
+            fixAspect(TOP_HANDLE);
+        }
     }
 
     bool beginDragging(const QPointF& pos)
@@ -107,6 +123,10 @@ public:
             }
             if (m_currentHandle & RIGHT_HANDLE) {
                 m_rect.setRight(qBound(m_lConstr, pos.x(), m_rConstr));
+            }
+
+            if(m_aConstr != 0.0) {
+                fixAspect(m_currentHandle);
             }
         }
     }
@@ -151,30 +171,85 @@ public:
     {
         qreal x = (m_rect.left() + m_rect.right()) / 2.0;
         qreal y = (m_rect.top()  + m_rect.bottom()) / 2.0;
-        qreal h = m_handleSize / 2.0;
+        qreal w = m_handleSize;
+        qreal h = m_handleSize * m_aspectRatio;
         
         x = (handle & LEFT_HANDLE  ) ? m_rect.left()   : x;
         y = (handle & TOP_HANDLE   ) ? m_rect.top()    : y;
         x = (handle & RIGHT_HANDLE ) ? m_rect.right()  : x;
         y = (handle & BOTTOM_HANDLE) ? m_rect.bottom() : y;
 
-        return QRectF(x-h, y-h, m_handleSize, m_handleSize);
+        return QRectF(x-(w/2.0), y-(h/2.0), w, h);
     }
 
 private:
-//     void fixAspect(HandleFlags handle)
-//     {
-//         if(handle & TOP_HANDLE) {
-//         }
-//     }
+    void fixAspect(HandleFlags handle)
+    {
+        QRectF oldRect = m_rect;
+        
+        switch(handle)
+        {
+        case TOP_HANDLE:
+        case BOTTOM_HANDLE:
+            m_rect.setWidth((m_rect.height() * m_aConstr) / m_aspectRatio);
+            break;
+
+        case LEFT_HANDLE:
+        case RIGHT_HANDLE:
+        case RIGHT_HANDLE|BOTTOM_HANDLE:
+            m_rect.setHeight((m_rect.width() / m_aConstr) * m_aspectRatio);
+            break;
+
+        case RIGHT_HANDLE|TOP_HANDLE:
+            m_rect.setHeight((m_rect.width() / m_aConstr) * m_aspectRatio);
+            m_rect.moveBottomLeft(oldRect.bottomLeft());
+            break;
+
+        case LEFT_HANDLE|BOTTOM_HANDLE:
+            m_rect.setHeight((m_rect.width() / m_aConstr) * m_aspectRatio);
+            m_rect.moveTopRight(oldRect.topRight());
+            break;
+
+        case LEFT_HANDLE|TOP_HANDLE:
+            m_rect.setHeight((m_rect.width() / m_aConstr) * m_aspectRatio);
+            m_rect.moveBottomRight(oldRect.bottomRight());
+            break;
+        }
+
+        if (m_rect.top() < m_tConstr || m_rect.top() > m_bConstr) {
+            m_rect.setTop(qBound(m_tConstr, m_rect.top(), m_bConstr));
+            fixAspect(TOP_HANDLE);
+        }
+
+        if (m_rect.bottom() < m_tConstr || m_rect.bottom() > m_bConstr) {
+            m_rect.setBottom(qBound(m_tConstr, m_rect.bottom(), m_bConstr));
+            fixAspect(BOTTOM_HANDLE);
+            
+            if(handle & LEFT_HANDLE)  { m_rect.moveTopRight(oldRect.topRight()); }
+            if(handle & RIGHT_HANDLE) { m_rect.moveTopLeft(oldRect.topLeft());   }
+        }
+
+        if (m_rect.left() < m_lConstr || m_rect.left() > m_rConstr) {
+            m_rect.setLeft(qBound(m_lConstr, m_rect.left(), m_rConstr));
+            fixAspect(LEFT_HANDLE);
+        }
+
+        if (m_rect.right() < m_lConstr || m_rect.right() > m_rConstr) {
+            m_rect.setRight(qBound(m_lConstr, m_rect.right(), m_rConstr));
+            fixAspect(RIGHT_HANDLE);
+            m_rect.moveBottomRight(oldRect.bottomRight());
+        }
+    }
     
 private:
     QPointF m_tempPos;
     QRectF m_rect;
+    qreal m_aspectRatio;
     qreal m_lConstr;
     qreal m_rConstr;
     qreal m_tConstr;
     qreal m_bConstr;
+    qreal m_aConstr;
     QSizeF m_minSize;
     qreal m_handleSize;
     HandleFlags m_currentHandle;

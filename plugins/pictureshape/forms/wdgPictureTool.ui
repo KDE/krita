@@ -11,43 +11,22 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,1">
    <item>
-    <layout class="QHBoxLayout" name="hLayout" stretch="0,0,0">
-     <item>
-      <widget class="QToolButton" name="bnImageFile">
-       <property name="text">
-        <string>Image File</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Color Mode:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="cmbColorMode"/>
-     </item>
-    </layout>
+    <widget class="QPushButton" name="bnImageFile">
+     <property name="text">
+      <string>Open file</string>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="topLabel">
-       <property name="text">
-        <string>Crop top:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
+     <property name="fieldGrowthPolicy">
+      <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+     </property>
+     <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="topDoubleSpinBox">
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -66,14 +45,14 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item row="2" column="0">
       <widget class="QLabel" name="bottomLabel">
        <property name="text">
         <string>Crop bottom:</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item row="2" column="1">
       <widget class="QDoubleSpinBox" name="bottomDoubleSpinBox">
        <property name="suffix">
         <string notr="true"> pt</string>
@@ -83,14 +62,14 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QLabel" name="leftLabel">
        <property name="text">
         <string>Crop left:</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="3" column="1">
       <widget class="QDoubleSpinBox" name="leftDoubleSpinBox">
        <property name="suffix">
         <string notr="true"> pt</string>
@@ -100,14 +79,14 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="rightLabel">
        <property name="text">
         <string>Crop right:</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="4" column="1">
       <widget class="QDoubleSpinBox" name="rightDoubleSpinBox">
        <property name="suffix">
         <string notr="true"> pt</string>
@@ -117,14 +96,62 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="topLabel">
+       <property name="text">
+        <string>Crop top:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Color mode:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="cmbColorMode"/>
+     </item>
     </layout>
    </item>
    <item>
-    <widget class="CropWidget" name="cropWidget" native="true"/>
+    <widget class="KSeparator" name="kseparator"/>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0">
+     <item>
+      <widget class="QCheckBox" name="cbAspect">
+       <property name="text">
+        <string>Keep proportions</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="bnFill">
+       <property name="text">
+        <string>Fill</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="CropWidget" name="cropWidget" native="true">
+     <zorder></zorder>
+    </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KSeparator</class>
+   <extends>QFrame</extends>
+   <header>kseparator.h</header>
+  </customwidget>
   <customwidget>
    <class>CropWidget</class>
    <extends>QWidget</extends>

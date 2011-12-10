@@ -127,6 +127,19 @@ QRectF PictureShape::cropRect() const
     return m_clippingRect.toRect();
 }
 
+bool PictureShape::isPictureInProportion() const
+{
+    QSizeF clippingRectSize(
+        imageData()->imageSize().width()  * m_clippingRect.width(),
+        imageData()->imageSize().height() * m_clippingRect.height()
+    );
+
+    qreal shapeAspect = size().width() / size().height();
+    qreal rectAspect  = clippingRectSize.width() / clippingRectSize.height();
+
+    return qAbs(shapeAspect - rectAspect) <= 0.01;
+}
+
 void PictureShape::setCropRect(const QRectF& rect)
 {
     m_clippingRect.setRect(rect, true);

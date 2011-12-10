@@ -312,6 +312,15 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
                continue; // uninteresting for us
             if (isOutline != bool(b.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
                 continue; // also uninteresting cause the one is an outline-listitem while the other is not
+
+            if (! KoListStyle::isNumberingStyle(static_cast<KoListStyle::Style>(lf.style()))) {
+                continue;
+            }
+
+            if (b.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
+                continue; //unnumbered listItems are irrelevant
+            }
+
             const int otherLevel  = lf.intProperty(KoListStyle::Level);
             if (checkLevel <= otherLevel)
                 continue;

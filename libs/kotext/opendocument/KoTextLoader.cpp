@@ -1162,12 +1162,12 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
     KoListStyle *listStyle = d->textSharedData->listStyle(styleName, d->stylesDotXml);
-
+    KoList *continuedList = 0;
     int level;
 
     if (element.hasAttributeNS(KoXmlNS::text, "continue-list")) {
         if (d->xmlIdToListMap.contains(element.attributeNS(KoXmlNS::text, "continue-list", QString()))) {
-           d->currentList = d->xmlIdToListMap.value(element.attributeNS(KoXmlNS::text, "continue-list", QString()));
+           continuedList = d->xmlIdToListMap.value(element.attributeNS(KoXmlNS::text, "continue-list", QString()));
         }
     } else {
         //the ODF spec says that continue-numbering is considered only if continue-list is not specified
@@ -1197,6 +1197,7 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
         level = d->currentListLevel++;
         if (! d->currentList) {
             d->currentList = d->list(cursor.block().document(), listStyle, false);
+            d->currentList->setListContinuedFrom(continuedList);
         }
         d->currentListStyle = listStyle;
     }

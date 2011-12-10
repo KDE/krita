@@ -228,4 +228,14 @@ int KoList::level(const QTextBlock &block)
     return l;
 }
 
+KoList *KoList::listContinuedFrom()
+{
+    return d->listToBeContinuedFrom;
+}
+
+void KoList::setListContinuedFrom(KoList *list)
+{
+    d->listToBeContinuedFrom = list;
+}
+
 #include <KoList.moc>

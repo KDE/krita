@@ -211,6 +211,7 @@ void PictureTool::setImageData(KJob *job)
 
     if (m_pictureshape->imageCollection()) {
         KoImageData *data = m_pictureshape->imageCollection()->createImageData(transferJob->data());
+        m_pictureshape->setCropRect(QRectF(0, 0, 1, 1));
         ChangeImageCommand *cmd = new ChangeImageCommand(m_pictureshape, data);
         canvas()->addCommand(cmd);
         updateControlElements();

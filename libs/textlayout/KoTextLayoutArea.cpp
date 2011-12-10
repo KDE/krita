@@ -528,6 +528,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                     m_blockRects.last().setBottom(m_y);
                 }
                 area->setVirginPage(virginPage());
+                area->setAcceptsPageBreak(acceptsPageBreak());
                 area->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
                 QTextLayout *blayout = block.layout();
                 blayout->beginLayout();

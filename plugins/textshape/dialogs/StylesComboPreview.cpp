@@ -144,7 +144,7 @@ void StylesComboPreview::setAddButtonShown(bool show)
 
 QSize StylesComboPreview::availableSize() const
 {
-    return QSize(contentsRect().width()-m_addButton->width(), contentsRect().height());
+    return QSize(contentsRect().width()/*-m_addButton->width()*/, contentsRect().height()); ///TODO decide if button should be superimposed, if not, should preview be resized
 }
 
 void StylesComboPreview::setPreview(QPixmap pixmap)
@@ -634,10 +634,18 @@ void StylesComboPreview::keyPressEvent( QKeyEvent *e )
     if ( selectedLength != selectedText().length() )
         slotRestoreSelectionColors(); // and set userSelection to true
 */
-    if (e->key() == Qt::Key_Escape) {
+    if (m_shouldAddNewStyle && e->key() == Qt::Key_Escape) {
         m_renamingNewStyle = false;
         m_shouldAddNewStyle = false;
         setReadOnly(true);
+        setText(QString());
+        e->accept();
+    }
+    else if (m_shouldAddNewStyle && e->key() == Qt::Key_Enter) {
+        emit newStyleRequested(text());
+        setReadOnly(true);
+        m_renamingNewStyle = false;
+        m_shouldAddNewStyle = false;
         setText(QString());
         e->accept();
     }

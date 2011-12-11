@@ -189,10 +189,8 @@ void StylesCombo::setCurrentFormat(const QTextBlockFormat &format)
 {
     if (format == m_currentBlockFormat)
         return;
-    kDebug() << "in setCurrentFormat";
     m_currentBlockFormat = format;
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
-    kDebug() << "paragraph id: " << id;
     bool unchanged = true;
     KoParagraphStyle *usedStyle = 0;
     if (m_stylesModel->styleManager())
@@ -203,13 +201,8 @@ void StylesCombo::setCurrentFormat(const QTextBlockFormat &format)
                 continue;
             if (property == KoParagraphStyle::ListStyleId)
                 continue;
-            kDebug() << "comparing properties in style: " << usedStyle->name();
-            kDebug() << "property: " << property;
-            kDebug() << "blockFormat: " << m_currentBlockFormat.property(property);
-            kDebug() << "style: " << usedStyle->value(property);
             if (m_currentBlockFormat.property(property) != usedStyle->value(property)) {
                 unchanged = false;
-                kDebug() << "different style";
                 break;
             }
         }
@@ -220,8 +213,17 @@ void StylesCombo::setCurrentFormat(const QTextBlockFormat &format)
 
     KoParagraphStyle *paragStyle = m_stylesModel->styleManager()->paragraphStyle(id);
     if (paragStyle) {
+        kDebug() << "in setting selection. style id: " << id;
+        kDebug() << "paragStyle id: " << paragStyle->styleId();
         m_stylesModel->setCurrentParagraphStyle(id, m_preview->isAddButtonShown()); //temporary hack for the unchanged stuff. i need to decide if this resides in the combo or in the paragWidget.
-        view()->setCurrentIndex(m_stylesModel->indexForParagraphStyle(paragStyle));
+        kDebug() << "index for paragtyle: " << m_stylesModel->indexForParagraphStyle(*paragStyle);
+        kDebug() << "index for parag, internalId: " << m_stylesModel->indexForParagraphStyle(*paragStyle).internalId();
+        QModelIndex index = m_stylesModel->indexForParagraphStyle(*paragStyle);
+        kDebug() << "view selection mode: " << view()->selectionMode();
+        kDebug() << "view model: " << view()->model();
+        kDebug() << "view selection model: " << view()->selectionModel();
+        view()->setCurrentIndex(index);
+        view()->selectionModel()->select(index, QItemSelectionModel::Clear | QItemSelectionModel::Select);
         //setCurrentIndex(m_stylesModel->indexForParagraphStyle(paragStyle).row());
         m_preview->setPreview(m_stylesModel->thumbnailer()->thumbnail(paragStyle, m_preview->availableSize()));
     }

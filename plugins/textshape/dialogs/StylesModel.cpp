@@ -154,9 +154,14 @@ KoParagraphStyle *StylesModel::paragraphStyleForIndex(const QModelIndex &index) 
 QModelIndex StylesModel::indexForParagraphStyle(const KoParagraphStyle &style) const
 {
     if (&style) {
-        return createIndex(m_styleList.indexOf(style.styleId()), 0, style.styleId());;
+        kDebug() << "will return a valid index";
+        kDebug() << "style id: " << style.styleId();
+        kDebug() << "index of style: " << m_styleList.indexOf(style.styleId());
+        QModelIndex index = createIndex(m_styleList.indexOf(style.styleId()), 0, style.styleId());
+        return index;
     }
     else {
+        kDebug() << "will return an unvalid index";
         return QModelIndex();
     }
 }

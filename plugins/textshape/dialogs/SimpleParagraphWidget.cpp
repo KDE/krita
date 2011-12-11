@@ -321,7 +321,7 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
         widget.blockFrame->setStyleIsOriginal(unchanged);
     }
 */
-    m_stylePopup->setCurrentFormat(format);
+//    m_stylePopup->setCurrentFormat(format);
     widget.blockFrame->setCurrentFormat(format);
 }
 

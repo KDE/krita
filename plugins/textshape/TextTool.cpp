@@ -2073,6 +2073,7 @@ void TextTool::createStyleFromCurrentBlockFormat(QString name)
     styleManager->add(paragraphStyle);
     m_textEditor.data()->setStyle(paragraphStyle);
     kDebug() << "newBlockFormat styleId: " << m_textEditor.data()->blockFormat().property(KoParagraphStyle::StyleId);
+    kDebug() << "newParagStyle id: " << paragraphStyle->styleId();
     emit charFormatChanged(m_textEditor.data()->charFormat());
     emit blockFormatChanged(m_textEditor.data()->blockFormat());
 }

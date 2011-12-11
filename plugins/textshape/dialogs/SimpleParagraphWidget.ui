@@ -127,12 +127,6 @@
          <height>0</height>
         </size>
        </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
       </widget>
      </item>
      <item row="2" column="10">

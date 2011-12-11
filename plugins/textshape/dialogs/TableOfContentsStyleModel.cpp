@@ -88,9 +88,6 @@ QVariant TableOfContentsStyleModel::data(const QModelIndex &index, int role) con
         switch (role) {
         case Qt::DisplayRole: {
             return QVariant();
-            KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
-            if (paragStyle)
-                return paragStyle->name();
         }
         case Qt::DecorationRole: {
             if (!m_styleThumbnailer) {

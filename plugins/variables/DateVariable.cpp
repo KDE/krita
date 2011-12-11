@@ -55,6 +55,12 @@ void DateVariable::saveOdf(KoShapeSavingContext & context)
     } else {
         writer->startElement("text:date", false);
     }
+
+    if (!m_definition.isEmpty()) {
+        QString styleName = KoOdfNumberStyles::saveOdfDateStyle(context.mainStyles(), m_definition, false);
+        writer->addAttribute("style:data-style-name", styleName);
+    }
+
     if (m_type == Fixed) {
         writer->addAttribute("text:fixed", "true");
     } else {

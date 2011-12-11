@@ -226,6 +226,12 @@ void StylesCombo::setCurrentFormat(const QTextBlockFormat &format)
         view()->selectionModel()->select(index, QItemSelectionModel::Clear | QItemSelectionModel::Select);
         //setCurrentIndex(m_stylesModel->indexForParagraphStyle(paragStyle).row());
         m_preview->setPreview(m_stylesModel->thumbnailer()->thumbnail(paragStyle, m_preview->availableSize()));
+        view()->update(index);
+        QModelIndexList indexes = view()->selectionModel()->selectedIndexes();
+        QModelIndex iterator;
+        foreach(iterator, indexes) {
+            kDebug() << "selected: " << iterator.data(Qt::DisplayRole) << " id: " << iterator.internalId();
+        }
     }
     update();
 }

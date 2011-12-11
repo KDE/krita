@@ -42,11 +42,17 @@ StylesDelegate::StylesDelegate()
 void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                             const QModelIndex &index) const
 {
+    bool selectdItem = (option.state & QStyle::State_Selected);
+    bool mouseOverItem = (option.state & QStyle::State_MouseOver);
+    kDebug() << "index: " << index.data(Qt::DisplayRole)
+             << " state selected: " << selectdItem
+             << " state mouseOver: " << mouseOverItem;
     QStyledItemDelegate::paint(painter, option, index);
 
     if (!index.isValid() || !(option.state & QStyle::State_MouseOver)) {
     return;
     }
+    kDebug() << "in paint";
     // Open style manager dialog button.
     int dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) - m_buttonSize - m_buttonDistance -2;
     int dy1 = 1 + (option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;

@@ -1374,18 +1374,15 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
         listTagInformation.setTagName("text:list");
         listTagInformation.addAttribute("text:style-name", listStyles[textList]);
 
-        bool newList = true;
-        if (listXmlIds.contains(textList)) {
-            newList = false;
-            listTagInformation.addAttribute("text:continue-list", listXmlIds.value(textList));
+        if (listXmlIds.contains(list->listContinuedFrom())) {
+            listTagInformation.addAttribute("text:continue-list", listXmlIds.value(list->listContinuedFrom()));
         }
 
         QString listXmlId = QString("list-%1").arg(createXmlId());
         listTagInformation.addAttribute("xml:id", listXmlId);
-        if (newList) {
-            listXmlIds.insert(textList, listXmlId);
+        if (! listXmlIds.contains(list)) {
+            listXmlIds.insert(list, listXmlId);
         }
-
 
         listChangeId = openTagRegion(block.position(), KoTextWriter::Private::List, listTagInformation);
     }

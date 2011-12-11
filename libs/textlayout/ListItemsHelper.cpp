@@ -258,7 +258,17 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     }
 
     if (!fixed) {
-        if (m_textList->itemNumber(block) > 0) {
+        //if this is the first item then find if the list has to be continued from any other list
+        KoList *listContinued = 0;
+        if (m_textList->itemNumber(block) == 0 && (listContinued = KoTextDocument(m_textList->document()).list(m_textList)->listContinuedFrom())) {
+            //find the previous list of the same level
+            QTextList *previousTextList = listContinued->textLists().at(level - 1).data();
+            const QTextBlock textBlock = previousTextList->item(previousTextList->count() - 1);
+            KoTextBlockData *blockData = 0;
+            if (textBlock.isValid() && (blockData = dynamic_cast<KoTextBlockData *>(textBlock.userData()))) {
+                index = blockData->counterIndex() + 1; //resume the previous list count
+            }
+        } else if (m_textList->itemNumber(block) > 0) {
             const QTextBlock textBlock = m_textList->item(m_textList->itemNumber(block) - 1);
             KoTextBlockData *blockData = 0;
             if (textBlock.isValid() && (blockData = dynamic_cast<KoTextBlockData *>(textBlock.userData()))) {
@@ -302,6 +312,15 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
                continue; // uninteresting for us
             if (isOutline != bool(b.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
                 continue; // also uninteresting cause the one is an outline-listitem while the other is not
+
+            if (! KoListStyle::isNumberingStyle(static_cast<KoListStyle::Style>(lf.style()))) {
+                continue;
+            }
+
+            if (b.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
+                continue; //unnumbered listItems are irrelevant
+            }
+
             const int otherLevel  = lf.intProperty(KoListStyle::Level);
             if (checkLevel <= otherLevel)
                 continue;

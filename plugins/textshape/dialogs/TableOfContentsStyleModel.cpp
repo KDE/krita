@@ -88,9 +88,6 @@ QVariant TableOfContentsStyleModel::data(const QModelIndex &index, int role) con
         switch (role) {
         case Qt::DisplayRole: {
             return QVariant();
-            KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
-            if (paragStyle)
-                return paragStyle->name();
         }
         case Qt::DecorationRole: {
             if (!m_styleThumbnailer) {
@@ -177,8 +174,6 @@ int TableOfContentsStyleModel::getOutlineLevel(int styleId)
 
 void TableOfContentsStyleModel::setOutlineLevel(int styleId, int outLineLevel)
 {
-    qDebug()<<Q_FUNC_INFO<<"style Id"<<styleId<<" outlineLevel "<<outLineLevel;
-
     //ignore changes to paragraph styles with KoParagraphStyle::OutlineLevel property set.
     //i.e. those considered by KoTableOfContentsGeneratorInfo::m_useOutlineLevel==true
     if (m_styleManager->paragraphStyle(styleId)->hasProperty(KoParagraphStyle::OutlineLevel)) {
@@ -216,8 +211,6 @@ void TableOfContentsStyleModel::setOutlineLevel(int styleId, int outLineLevel)
         indexStyleMoved.styleId = styleId;
         indexStyleMoved.styleName = m_styleManager->paragraphStyle(styleId)->name();
     }
-
-    qDebug()<<"style moved details "<<indexStyleMoved.styleId <<" "<<indexStyleMoved.styleName;
 
     //check if IndexSourceStyles are there for this outlineLevel, if not create it
     bool sourceStylePresent = false;

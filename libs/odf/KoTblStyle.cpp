@@ -119,6 +119,21 @@ bool KoTblStyle::allowBreakBetweenRows() const
     return m_allowBreakBetweenRows;
 }
 
+void KoTblStyle::setMasterPageName(const QString& name)
+{
+    m_masterPageName = name;
+}
+
+void KoTblStyle::setMasterPageName(const char* name)
+{
+    m_masterPageName = QString::fromUtf8(name);
+}
+
+QString KoTblStyle::masterPageName() const
+{
+    return m_masterPageName;
+}
+
 void KoTblStyle::setBackgroundColor(const QColor& color)
 {
     m_backgroundColor = color;
@@ -306,5 +321,9 @@ void KoTblStyle::prepareStyle(KoGenStyle& style) const
 
     if(!m_display) {
         style.addProperty("table:display", "false");
+    }
+
+    if(!m_masterPageName.isEmpty()) {
+        style.addAttribute("style:master-page-name", m_masterPageName);
     }
 }

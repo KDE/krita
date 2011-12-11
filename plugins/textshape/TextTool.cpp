@@ -136,7 +136,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_changeTipTimer(this),
         m_changeTipCursorPos(0),
         m_delayedEnsureVisible(false),
-        m_toolSelection(0)
+        m_toolSelection(0),
+        m_lastImMicroFocus(QRectF(0,0,0,0))
 {
     setTextMode(true);
 
@@ -1206,20 +1207,12 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
     case Qt::ImMicroFocus: {
         // The rectangle covering the area of the input cursor in widget coordinates.
         QRectF rect = caretRect(textEditor->cursor());
-        //qDebug()<<"caretRect"<<rect.topLeft()<<rect.size();
-        //qDebug()<<"m_textShapeData->documentOffset()"<<m_textShapeData->documentOffset();
         rect.moveTop(rect.top() - m_textShapeData->documentOffset());
         QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
         qreal zoomX, zoomY;
         converter.zoom(&zoomX, &zoomY);
         shapeMatrix.scale(zoomX, zoomY);
         rect = shapeMatrix.mapRect(rect);
-        QPointF scroll(canvas()->canvasController()->scrollBarValue());
-        if (canvas()->canvasController()->canvasMode() == KoCanvasController::Spreadsheet &&
-                canvas()->canvasWidget()->layoutDirection() == Qt::RightToLeft) {
-            scroll.setX(-scroll.x());
-        }
-        rect.translate(canvas()->documentOrigin() - scroll);
         return rect.toRect();
     }
     case Qt::ImFont:
@@ -1354,8 +1347,8 @@ void TextTool::updateActions()
     //update paragraphStyle GUI element
     QTextBlockFormat bf = textEditor->blockFormat();
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
-        bool revert = (textEditor->block().layout()->textOption().textDirection() == Qt::LeftToRight) != QApplication::isLeftToRight();
-        if (bf.alignment() == (Qt::AlignLeading ^ revert))
+        bool revert = (textEditor->block().layout()->textOption().textDirection() == Qt::RightToLeft);
+        if ((bf.alignment() == Qt::AlignLeading) ^ revert)
             m_actionAlignLeft->setChecked(true);
         else
             m_actionAlignRight->setChecked(true);
@@ -1543,7 +1536,13 @@ QRectF TextTool::caretRect(QTextCursor *cursor) const
     QTextCursor tmpCursor(*cursor);
     tmpCursor.setPosition(cursor->position()); // looses the anchor
 
-    return textRect(tmpCursor);
+    QRectF rect = textRect(tmpCursor);
+    if (rect.size() == QSizeF(0,0)) {
+        rect = m_lastImMicroFocus; // prevent block changed but layout not done
+    } else {
+        m_lastImMicroFocus = rect;
+    }
+    return rect;
 }
 
 QRectF TextTool::textRect(QTextCursor &cursor) const

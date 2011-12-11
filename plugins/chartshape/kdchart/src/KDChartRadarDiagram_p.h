@@ -55,13 +55,15 @@ public:
     Private( const Private& rhs ) :
         AbstractPolarDiagram::Private( rhs ),
         closeDatasets( rhs.closeDatasets ),
-        reverseData( rhs.reverseData )
+        reverseData( rhs.reverseData ),
+        fillAlpha( rhs.fillAlpha )
         {
         }
 
 private:
     bool closeDatasets;
     bool reverseData;
+    qreal fillAlpha;
     DataValueTextInfoList dataValueInfoList;
 };
 

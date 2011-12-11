@@ -30,7 +30,7 @@ KisPaintOpListWidget::KisPaintOpListWidget(QWidget* parent, const char* name):
     KisCategorizedListView(false, parent)
 {
     setObjectName(name);
-    connect(this, SIGNAL(activated(QModelIndex)), this, SLOT(slotOpActivated(QModelIndex)));
+    connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(slotOpActivated(QModelIndex)));
 
     m_model    = new KisPaintOpListModel();
     m_delegate = new KisCategorizedItemDelegate(false);

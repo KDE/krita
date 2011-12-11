@@ -223,6 +223,9 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
 //set up the Font properties
     QFont displayFont = QFont(m_font, paintDevice);
     displayFont.setCapitalization(m_fontCapitalisation);
+#if QT_VERSION >= 0x040800
+    displayFont.setHintingPreference(QFont::PreferNoHinting);
+#endif
     painter.setPen(m_textColor);
     painter.setFont(displayFont);
 

@@ -91,7 +91,7 @@ bool KisGroupLayer::allowAsChild(KisNodeSP node) const
             }
         }
     }
-
+    
     if (node->inherits("KisGroupLayer")) {
         KisNodeSP child = node->firstChild();
         while (child) {

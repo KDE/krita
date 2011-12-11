@@ -28,7 +28,7 @@
 #include <KoShapeManager.h>
 #include <KoViewConverter.h>
 #include <KoToolProxy.h>
-
+#include <KoCanvasController.h>
 
 #include "kis_coordinates_converter.h"
 #include "kis_canvas_decoration.h"
@@ -283,6 +283,12 @@ void KisCanvasWidgetBase::processKeyReleaseEvent(QKeyEvent *e)
 
 QVariant KisCanvasWidgetBase::processInputMethodQuery(Qt::InputMethodQuery query) const
 {
+    if (query == Qt::ImMicroFocus) {
+        QRectF rect = (m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter).toRectF()).toRect();
+        QPointF scroll(m_d->canvas->view()->canvasController()->scrollBarValue());
+        rect.translate(m_d->canvas->documentOrigin() - scroll);
+        return rect.toRect();
+    }
     return m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter);
 }
 

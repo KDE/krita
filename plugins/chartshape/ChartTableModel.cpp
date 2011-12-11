@@ -162,7 +162,7 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
                     // Read the actual value in the cell.
                     QVariant value;
                     if ( valueString.isEmpty() )
-                        valueString = valueElement.text();
+                        valueString = valueElement.text().trimmed();
                     if ( valueType == "float" )
                         value = valueString.toDouble();
                     else if ( valueType == "boolean" )

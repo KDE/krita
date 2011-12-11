@@ -66,6 +66,12 @@ public:
     const KoGenChange *change(const QString &name) const;
 
     /**
+     * set if changes should be tracked
+     * @param track true means changes should be tracked
+     */
+    void setTrackChanges(bool track);
+
+    /**
      * Save changes.
      *
      * This creates the text:changed-region tag containing all

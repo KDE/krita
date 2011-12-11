@@ -22,6 +22,7 @@
 #include "kis_types.h"
 #include "kis_tool_paint.h"
 #include "kis_paint_information.h"
+#include "kis_resources_snapshot.h"
 #include "kis_paintop_settings.h"
 #include "kis_distance_information.h"
 

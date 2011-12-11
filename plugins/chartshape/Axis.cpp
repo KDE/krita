@@ -105,7 +105,7 @@ public:
     void createAreaDiagram();
     void createCircleDiagram();
     void createRingDiagram();
-    void createRadarDiagram();
+    void createRadarDiagram(bool filled);
     void createScatterDiagram();
     void createStockDiagram();
     void createBubbleDiagram();
@@ -326,8 +326,9 @@ KDChart::AbstractDiagram *Axis::Private::getDiagramAndCreateIfNeeded( ChartType 
         diagram = kdRingDiagram;
         break;
     case RadarChartType:
+    case FilledRadarChartType:
         if ( !kdRadarDiagram )
-            createRadarDiagram();
+            createRadarDiagram(chartType == FilledRadarChartType);
         diagram = kdRadarDiagram;
         break;
     case ScatterChartType:
@@ -381,6 +382,7 @@ KDChart::AbstractDiagram *Axis::Private::getDiagram( ChartType chartType )
         case RingChartType:
             return kdRingDiagram;
         case RadarChartType:
+        case FilledRadarChartType:
             return kdRadarDiagram;
         case ScatterChartType:
             return kdScatterDiagram;
@@ -422,6 +424,7 @@ void Axis::Private::deleteDiagram( ChartType chartType )
         diagram = (KDChart::AbstractDiagram**)&kdRingDiagram;
         break;
     case RadarChartType:
+    case FilledRadarChartType:
         diagram = (KDChart::AbstractDiagram**)&kdRadarDiagram;
         break;
     case ScatterChartType:
@@ -625,7 +628,7 @@ void Axis::Private::createRingDiagram()
     kdPolarPlane->setStartPosition( (int)plotArea->pieAngleOffset() );
 }
 
-void Axis::Private::createRadarDiagram()
+void Axis::Private::createRadarDiagram(bool filled)
 {
     Q_ASSERT( kdRadarDiagram == 0 );
 
@@ -635,6 +638,14 @@ void Axis::Private::createRadarDiagram()
     kdRadarDiagram = new KDChart::RadarDiagram( plotArea->kdChart(), kdRadarPlane );
     registerDiagram( kdRadarDiagram );
     kdRadarDiagram->setCloseDatasets(true);
+
+    if (filled) {
+        // Don't use a solid fill of 1.0 but a more transparent one so the
+        // grid and the data-value-labels are still visible plus it provides
+        // a better look (other areas can still be seen) even if it's slightly
+        // different from what OO.org does.
+        kdRadarDiagram->setFillAlpha(0.4);
+    }
 
 #if 0  // Stacked and Percent not supported by KDChart.
     if ( plotAreaChartSubType == StackedChartSubtype )
@@ -1371,7 +1382,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
         gridAttr.setGridPen( gridPen );
     if ( subGridPen.style() != Qt::NoPen )
         gridAttr.setSubGridPen( subGridPen );
-//     if ( plotArea()->chartType() == RadarChartType )
+//     if ( plotArea()->chartType() == RadarChartType || plotArea()->chartType() == FilledRadarChartType )
 //         d->kdPolarPlane->setGridAttributes( false, gridAttr );
 //     else
     d->kdPolarPlane->setGridAttributes( true, gridAttr );
@@ -1392,16 +1403,11 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
 
     if ( reverseAxis )
     {
-        if ( dimension() == XAxisDimension )
-        {
-            KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( kdPlane() );
-            if ( plane )
+        KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( kdPlane() );
+        if ( plane ) {
+            if ( orientation() == Qt::Horizontal )
                 plane->setHorizontalRangeReversed( reverseAxis );
-        }
-        else if ( dimension() == YAxisDimension )
-        {
-            KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( kdPlane() );
-            if ( plane )
+            else // Qt::Vertical
                 plane->setVerticalRangeReversed( reverseAxis );
         }
     }   
@@ -1683,6 +1689,7 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
         }
         break;
     case RadarChartType:
+    case FilledRadarChartType:
 #if 0 // FIXME: Stacked and Percent not supported by KDChart
         if ( d->kdRadarDiagram ) {
             KDChart::PolarDiagram::PolarType type;

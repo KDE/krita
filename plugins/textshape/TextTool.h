@@ -34,6 +34,7 @@
 #include <QTextCursor>
 #include <QTimer>
 #include <QWeakPointer>
+#include <QRectF>
 
 class TextEditingPluginContainer;
 class InsertCharacter;
@@ -362,6 +363,8 @@ private:
     bool m_delayedEnsureVisible;
 
     TextToolSelection *m_toolSelection;
+
+    mutable QRectF m_lastImMicroFocus;
 };
 
 #endif

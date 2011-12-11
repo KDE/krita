@@ -70,6 +70,7 @@
 #include <kis_pixel_selection.h>
 #include <kis_shape_selection.h>
 #include <kis_selection_manager.h>
+#include <kis_system_locker.h>
 
 #include <KoShapeTransformCommand.h>
 
@@ -2088,7 +2089,7 @@ void KisToolTransform::applyTransform()
     if (!canvas)
         return;
 
-    setCurrentNodeLocked(true);
+    KisSystemLocker locker(currentNode());
 
     QVector3D tmpCenter(m_originalCenter.x(), m_originalCenter.y(), 0);
     tmpCenter = scale(tmpCenter.x(), tmpCenter.y(), tmpCenter.z());
@@ -2269,7 +2270,6 @@ void KisToolTransform::applyTransform()
 
     transaction.commit(image()->undoAdapter());
     updater->deleteLater();
-    setCurrentNodeLocked(false);
 }
 
 void KisToolTransform::notifyCommandAdded(const KUndo2Command * command)

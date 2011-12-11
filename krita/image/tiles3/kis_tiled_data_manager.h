@@ -48,32 +48,71 @@ public:
         READ,
         WRITE
     };
+
+
     KisTileDataWrapper(KisTileSP tile, qint32 offset, accessType type)
-            : m_tile(tile), m_offset(offset) {
-        if (type == READ)
+            : m_tile(tile)
+            , m_offset(offset)
+    {
+        if (type == READ) {
+            m_tile->lockForRead();
+            m_type = READ;
+        }
+        else {
+            m_tile->lockForWrite();
+            m_type = WRITE;
+        }
+    }
+
+    virtual ~KisTileDataWrapper()
+    {
+        m_tile->unlock();
+    }
+
+    KisTileDataWrapper(const KisTileDataWrapper &rhs)
+    {
+        m_tile = rhs.m_tile;
+        m_offset = rhs.m_offset;
+        m_type = rhs.m_type;
+        if (m_type == READ)
             m_tile->lockForRead();
         else
             m_tile->lockForWrite();
     }
 
-    virtual ~KisTileDataWrapper() {
-        m_tile->unlock();
+    KisTileDataWrapper &operator=(const KisTileDataWrapper &rhs)
+    {
+        if (this != &rhs) {
+            m_tile = rhs.m_tile;
+            m_offset = rhs.m_offset;
+            m_type = rhs.m_type;
+            if (m_type == READ)
+                m_tile->lockForRead();
+            else
+                m_tile->lockForWrite();
+        }
+        return *this;
     }
 
-    inline qint32 offset() const {
+    inline qint32 offset() const
+    {
         return m_offset;
     }
 
-    inline KisTileSP& tile() {
+    inline KisTileSP& tile()
+    {
         return m_tile;
     }
 
-    inline quint8* data() const {
+    inline quint8* data() const
+    {
         return m_tile->data() + m_offset;
     }
+
 private:
     KisTileSP m_tile;
     qint32 m_offset;
+    accessType m_type;
 };
 
 

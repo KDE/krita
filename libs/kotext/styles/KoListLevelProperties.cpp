@@ -346,16 +346,6 @@ void KoListLevelProperties::setLetterSynchronization(bool on)
     setProperty(KoListStyle::LetterSynchronization, on);
 }
 
-void KoListLevelProperties::setContinueNumbering(bool enable)
-{
-    setProperty(KoListStyle::ContinueNumbering, enable);
-}
-
-bool KoListLevelProperties::continueNumbering() const
-{
-    return propertyBoolean(KoListStyle::ContinueNumbering);
-}
-
 void KoListLevelProperties::setIndent(qreal value)
 {
     setProperty(KoListStyle::Indent, value);
@@ -424,6 +414,16 @@ void KoListLevelProperties::setLabelFollowedBy(KoListStyle::ListLabelFollowedBy 
 KoListStyle::ListLabelFollowedBy KoListLevelProperties::labelFollowedBy() const
 {
     return (KoListStyle::ListLabelFollowedBy)propertyInt(KoListStyle::LabelFollowedBy);
+}
+
+void KoListLevelProperties::setOutlineList(bool isOutline)
+{
+    setProperty(KoListStyle::IsOutline, isOutline);
+}
+
+bool KoListLevelProperties::isOutlineList() const
+{
+    return propertyBoolean(KoListStyle::IsOutline);
 }
 
 // static
@@ -567,6 +567,9 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
 
     } else if (style.localName() == "list-level-style-number" || style.localName() == "outline-level-style") { // it's a numbered list
 
+        if (style.localName() == "outline-level-style") {
+            setOutlineList(true);
+        }
         setRelativeBulletSize(100); //arbitary value for numbered list
 
         KoOdfNumberDefinition numberDefinition;
@@ -742,8 +745,12 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
 {
     bool isNumber = KoListStyle::isNumberingStyle(d->stylesPrivate.value(QTextListFormat::ListStyle).toInt());
 
-    if (isNumber) {
-        writer->startElement("text:list-level-style-number");
+    if (isNumber || isOutlineList()) {
+        if (isOutlineList()) {
+            writer->startElement("text:outline-level-style");
+        } else {
+            writer->startElement("text:list-level-style-number");
+        }
 
         if (d->stylesPrivate.contains(KoListStyle::StartValue))
             writer->addAttribute("text:start-value", d->stylesPrivate.value(KoListStyle::StartValue).toInt());
@@ -757,7 +764,7 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
         case KoListStyle::UpperAlphaItem:   format = 'A'; break;
         case KoListStyle::RomanLowerItem:   format = 'i'; break;
         case KoListStyle::UpperRomanItem:   format = 'I'; break;
-        default: break;
+        default:                            format = QChar::Null; break;
         }
         writer->addAttribute("style:num-format", format);
     }
@@ -787,7 +794,7 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
             case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
             case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
             case KoListStyle::BallotXItem:          bullet = 0x2717; break;
-            default:                                bullet = 0x25CF; break; //KoListStyle::BlackCircle
+            default:                                bullet = 0; break; //empty character
             }
         }
         writer->addAttribute("text:bullet-char", QChar(bullet));

@@ -93,6 +93,7 @@ public:
     QMenu *dataSetBarChartMenu;
     QMenu *dataSetLineChartMenu;
     QMenu *dataSetAreaChartMenu;
+    QMenu *dataSetRadarChartMenu;
 
     // chart type selection actions
     QAction  *normalBarChartAction;
@@ -110,6 +111,7 @@ public:
     QAction  *circleChartAction;
     QAction  *ringChartAction;
     QAction  *radarChartAction;
+    QAction  *filledRadarChartAction;
 
     QAction  *scatterChartAction;
     QAction  *bubbleChartAction;
@@ -134,6 +136,7 @@ public:
     QAction  *dataSetCircleChartAction;
     QAction  *dataSetRingChartAction;
     QAction  *dataSetRadarChartAction;
+    QAction  *dataSetFilledRadarChartAction;
     QAction  *dataSetScatterChartAction;
     QAction  *dataSetBubbleChartAction;
     QAction  *dataSetStockChartAction;
@@ -194,6 +197,7 @@ ChartConfigWidget::Private::Private( QWidget *parent )
     dataSetBarChartMenu = 0;
     dataSetLineChartMenu = 0;
     dataSetAreaChartMenu = 0;
+    dataSetRadarChartMenu = 0;
     dataSetNormalBarChartAction = 0;
     dataSetStackedBarChartAction = 0;
     dataSetPercentBarChartAction = 0;
@@ -207,6 +211,7 @@ ChartConfigWidget::Private::Private( QWidget *parent )
     dataSetRingChartAction = 0;
     dataSetScatterChartAction = 0;
     dataSetRadarChartAction = 0;
+    dataSetFilledRadarChartAction = 0;
     dataSetStockChartAction = 0;
     dataSetBubbleChartAction = 0;
     dataSetSurfaceChartAction = 0;
@@ -270,6 +275,8 @@ static QString chartTypeIcon( ChartType type, ChartSubtype subtype )
         return "office-chart-ring";
     case RadarChartType:
         return "office-chart-polar";
+    case FilledRadarChartType:
+        return "office-chart-polar-filled";
     default:
         return "";
     }
@@ -314,7 +321,9 @@ ChartConfigWidget::ChartConfigWidget()
     chartTypeMenu->addSeparator();
 
     // Polar charts: radar
-    d->radarChartAction = chartTypeMenu->addAction( KIcon( "office-chart-polar" ), i18n("Polar Chart") );
+    QMenu *radarChartMenu = chartTypeMenu->addMenu( KIcon( "office-chart-polar" ), i18n( "Polar Chart" ) );
+    d->radarChartAction = radarChartMenu->addAction( KIcon( "office-chart-polar" ), i18n("Normal") );
+    d->filledRadarChartAction = radarChartMenu->addAction( KIcon( "office-chart-polar-filled" ), i18n("Filled") );
 
     chartTypeMenu->addSeparator();
 
@@ -360,7 +369,11 @@ ChartConfigWidget::ChartConfigWidget()
 
     d->dataSetCircleChartAction = dataSetChartTypeMenu->addAction( KIcon( "office-chart-pie" ), i18n("Pie Chart") );
     d->dataSetRingChartAction = dataSetChartTypeMenu->addAction( KIcon( "office-chart-ring" ), i18n("Ring Chart") );
-    d->dataSetRadarChartAction = dataSetChartTypeMenu->addAction( KIcon( "office-chart-polar" ), i18n("Polar Chart") );
+
+    d->dataSetRadarChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "office-chart-polar" ), "Polar Chart" );
+    d->dataSetRadarChartAction = d->dataSetRadarChartMenu->addAction( KIcon( "office-chart-polar" ), i18n("Normal") );
+    d->dataSetFilledRadarChartAction = d->dataSetRadarChartMenu->addAction( KIcon( "office-chart-polar-filled" ), i18n("Filled") );
+
     d->dataSetStockChartAction = dataSetChartTypeMenu->addAction( i18n("Stock Chart") );
     d->dataSetBubbleChartAction = dataSetChartTypeMenu->addAction( i18n("Bubble Chart") );
 
@@ -604,6 +617,10 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
         type    = RadarChartType;
         subtype = NoChartSubtype;
     }
+    else if ( action == d->filledRadarChartAction ) {
+        type    = FilledRadarChartType;
+        subtype = NoChartSubtype;
+    }
 
     // Also known as pie chart
     else if ( action == d->circleChartAction ) {
@@ -680,6 +697,7 @@ void ChartConfigWidget::setPolarChartTypesEnabled( bool enabled )
     d->dataSetCircleChartAction->setEnabled( enabled );
     d->dataSetRingChartAction->setEnabled( enabled );
     d->dataSetRadarChartAction->setEnabled( enabled );
+    d->dataSetFilledRadarChartAction->setEnabled( enabled );
 }
 
 /**
@@ -690,6 +708,7 @@ void ChartConfigWidget::setCartesianChartTypesEnabled( bool enabled )
     d->dataSetBarChartMenu->setEnabled( enabled );
     d->dataSetLineChartMenu->setEnabled( enabled );
     d->dataSetAreaChartMenu->setEnabled( enabled );
+    d->dataSetRadarChartMenu->setEnabled( enabled );
     d->dataSetScatterChartAction->setEnabled( enabled );
     d->dataSetStockChartAction->setEnabled( enabled );
     d->dataSetBubbleChartAction->setEnabled( enabled );
@@ -773,6 +792,9 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
 
     else if ( action == d->dataSetRadarChartAction )
         type = RadarChartType;
+    else if ( action == d->dataSetFilledRadarChartAction )
+        type = FilledRadarChartType;
+
     else if ( action == d->dataSetCircleChartAction )
         type = CircleChartType;
     else if ( action == d->dataSetRingChartAction )

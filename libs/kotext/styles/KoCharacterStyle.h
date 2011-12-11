@@ -486,6 +486,15 @@ public:
      */
     void removeDuplicates(const QTextCharFormat &other_format);
 
+    /**
+     * Create an autostyle out of the format and baseFormat
+     * @param format the format that is converted to an autostyle.
+     * @param baseFormat the format (typically a blockCharFormat) that is the basis of the format,
+     * but not itself part of the character style inheritance.
+     * @return pointer to autostyle that has this as parent style
+     */
+    KoCharacterStyle *autoStyle(const QTextCharFormat &format, QTextCharFormat blockCharFormat) const;
+ 
     void saveOdf(KoGenStyle &style) const;
 
     /**

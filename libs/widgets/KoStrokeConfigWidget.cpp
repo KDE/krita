@@ -9,7 +9,8 @@
  * Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
  * Copyright (C) 2006 Peter Simonsson <psn@linux.se>
  * Copyright (C) 2006 Laurent Montel <montel@kde.org>
- * Copyright (C) 2007 Thorsten Zachmann <t.zachmann@zagge.de>
+ * Copyright (C) 2007,2011 Thorsten Zachmann <t.zachmann@zagge.de>
+ * Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -50,6 +51,16 @@
 #include <KoLineBorder.h>
 #include <KoLineStyleSelector.h>
 #include <KoUnitDoubleSpinBox.h>
+#include "KoMarkerSelector.h"
+
+#include <QBuffer>
+#include <KoXmlReader.h>
+#include <KoXmlNS.h>
+#include <KoOdfStylesReader.h>
+#include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
+#include <KoMarker.h>
+#include <KoPathShape.h>
 
 
 class KoStrokeConfigWidget::Private
@@ -64,6 +75,8 @@ public:
     KoUnitDoubleSpinBox *miterLimit;
     QButtonGroup        *capGroup;
     QButtonGroup        *joinGroup;
+    KoMarkerSelector    *startMarkerSelector;
+    KoMarkerSelector    *endMarkerSelector;
 
     QSpacerItem *spacer;
     QGridLayout *layout;
@@ -161,6 +174,16 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->miterLimit->setToolTip(i18n("Set miter limit"));
     mainLayout->addWidget(d->miterLimit, 4, 1, 1, 3);
 
+    QList<KoMarker*> markers;
+
+    d->startMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerStart, this);
+    d->startMarkerSelector->updateMarkers(markers);
+    mainLayout->addWidget(d->startMarkerSelector, 5, 0, 1, 2);
+
+    d->endMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerEnd, this);
+    d->endMarkerSelector->updateMarkers(markers);
+    mainLayout->addWidget(d->endMarkerSelector, 5, 2, 1, 2);
+
     // Spacer
     d->spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
     mainLayout->addItem(d->spacer, 5, 4);
@@ -174,6 +197,8 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     connect(d->capGroup,   SIGNAL(buttonClicked(int)),       this, SIGNAL(capChanged(int)));
     connect(d->joinGroup,  SIGNAL(buttonClicked(int)),       this, SIGNAL(joinChanged(int)));
     connect(d->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SIGNAL(miterLimitChanged()));
+    connect(d->startMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SIGNAL(currentStartMarkerChanged()));
+    connect(d->endMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SIGNAL(currentEndMarkerChanged()));
 }
 
 KoStrokeConfigWidget::~KoStrokeConfigWidget()
@@ -205,11 +230,20 @@ qreal KoStrokeConfigWidget::miterLimit() const
     return d->miterLimit->value();
 }
 
+KoMarker *KoStrokeConfigWidget::startMarker() const
+{
+    return d->startMarkerSelector->marker();
+}
+
+KoMarker *KoStrokeConfigWidget::endMarker() const
+{
+    return d->endMarkerSelector->marker();
+}
 
 // ----------------------------------------------------------------
 //                         Other public functions
 
-void KoStrokeConfigWidget::updateControls(KoLineBorder &border)
+void KoStrokeConfigWidget::updateControls(KoLineBorder &border, KoMarker *startMarker, KoMarker *endMarker)
 {
     blockChildSignals(true);
 
@@ -219,6 +253,8 @@ void KoStrokeConfigWidget::updateControls(KoLineBorder &border)
     d->miterLimit->changeValue(border.miterLimit());
     d->lineStyle->setLineStyle(border.lineStyle(), border.lineDashes());
     d->miterLimit->setEnabled(border.joinStyle() == Qt::MiterJoin);
+    d->startMarkerSelector->setMarker(startMarker);
+    d->endMarkerSelector->setMarker(endMarker);
 
     blockChildSignals(false);
 }
@@ -233,6 +269,12 @@ void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
     blockChildSignals(false);
 }
 
+void KoStrokeConfigWidget::updateMarkers(const QList<KoMarker*> &markers)
+{
+    d->startMarkerSelector->updateMarkers(markers);
+    d->endMarkerSelector->updateMarkers(markers);
+}
+
 void KoStrokeConfigWidget::blockChildSignals(bool block)
 {
     d->lineWidth->blockSignals(block);
@@ -240,6 +282,8 @@ void KoStrokeConfigWidget::blockChildSignals(bool block)
     d->joinGroup->blockSignals(block);
     d->miterLimit->blockSignals(block);
     d->lineStyle->blockSignals(block);
+    d->startMarkerSelector->blockSignals(block);
+    d->endMarkerSelector->blockSignals(block);
 }
 
 void KoStrokeConfigWidget::locationChanged(Qt::DockWidgetArea area)

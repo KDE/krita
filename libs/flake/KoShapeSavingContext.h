@@ -35,6 +35,7 @@ class KoGenStyles;
 class KoDataCenterBase;
 class KoEmbeddedDocumentSaver;
 class KoImageData;
+class KoMarker;
 class KoShapeLayer;
 class KoStore;
 class KoSharedSavingData;
@@ -207,6 +208,11 @@ public:
      * Get the images that needs to be saved to the store
      */
     QMap<qint64, QString> imagesToSave();
+
+    /**
+     * Get the reference to use for the marker lookup
+     */
+    QString markerRef(const KoMarker *marker);
 
     /**
      * Add data center

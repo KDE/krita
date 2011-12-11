@@ -213,25 +213,11 @@ void StylesCombo::setCurrentFormat(const QTextBlockFormat &format)
 
     KoParagraphStyle *paragStyle = m_stylesModel->styleManager()->paragraphStyle(id);
     if (paragStyle) {
-        kDebug() << "in setting selection. style id: " << id;
-        kDebug() << "paragStyle id: " << paragStyle->styleId();
         m_stylesModel->setCurrentParagraphStyle(id, m_preview->isAddButtonShown()); //temporary hack for the unchanged stuff. i need to decide if this resides in the combo or in the paragWidget.
-        kDebug() << "index for paragtyle: " << m_stylesModel->indexForParagraphStyle(*paragStyle);
-        kDebug() << "index for parag, internalId: " << m_stylesModel->indexForParagraphStyle(*paragStyle).internalId();
-        QModelIndex index = m_stylesModel->indexForParagraphStyle(*paragStyle);
-        kDebug() << "view selection mode: " << view()->selectionMode();
-        kDebug() << "view model: " << view()->model();
-        kDebug() << "view selection model: " << view()->selectionModel();
-        view()->setCurrentIndex(index);
-        view()->selectionModel()->select(index, QItemSelectionModel::Clear | QItemSelectionModel::Select);
-        //setCurrentIndex(m_stylesModel->indexForParagraphStyle(paragStyle).row());
+        disconnect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(selectionChanged(int)));
+        setCurrentIndex(m_stylesModel->indexForParagraphStyle(*paragStyle).row());
+        connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(selectionChanged(int)));
         m_preview->setPreview(m_stylesModel->thumbnailer()->thumbnail(paragStyle, m_preview->availableSize()));
-        view()->update(index);
-        QModelIndexList indexes = view()->selectionModel()->selectedIndexes();
-        QModelIndex iterator;
-        foreach(iterator, indexes) {
-            kDebug() << "selected: " << iterator.data(Qt::DisplayRole) << " id: " << iterator.internalId();
-        }
     }
     update();
 }

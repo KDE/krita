@@ -286,7 +286,7 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
         widget.blockFrame->setStyleIsOriginal(unchanged);
     }
 */
-    m_stylePopup->setCurrentFormat(m_currentBlockFormat);
+//    m_stylePopup->setCurrentFormat(m_currentBlockFormat);
     widget.blockFrame->setCurrentFormat(m_currentBlockFormat);
 }
 
@@ -295,7 +295,6 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
 //    if (format == m_currentBlockFormat)
 //        return;
     m_currentBlockFormat = format;
-    kDebug() << "setCurrentFormat";
 /*
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
     KoParagraphStyle *style(m_styleManager->paragraphStyle(id));

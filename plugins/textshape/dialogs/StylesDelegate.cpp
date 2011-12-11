@@ -42,17 +42,11 @@ StylesDelegate::StylesDelegate()
 void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                             const QModelIndex &index) const
 {
-    bool selectdItem = (option.state & QStyle::State_Selected);
-    bool mouseOverItem = (option.state & QStyle::State_MouseOver);
-    kDebug() << "index: " << index.data(Qt::DisplayRole)
-             << " state selected: " << selectdItem
-             << " state mouseOver: " << mouseOverItem;
     QStyledItemDelegate::paint(painter, option, index);
 
     if (!index.isValid() || !(option.state & QStyle::State_MouseOver)) {
     return;
     }
-    kDebug() << "in paint";
     // Open style manager dialog button.
     int dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) - m_buttonSize - m_buttonDistance -2;
     int dy1 = 1 + (option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
@@ -65,7 +59,7 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     optEdit.icon = KIcon("document-properties");
     optEdit.features |= QStyleOptionButton::Flat;
     optEdit.rect = option.rect.adjusted(dx1, dy1, dx2, dy2);
- //   m_editRect = optEdit.rect;
+    //the hack below is because for some reason the option.rect given to the paint method isn't the same as the option.rect given to the editorEvent method for the same item
     const_cast<StylesDelegate*>(this)->m_editRect = optEdit.rect;
     QApplication::style()->drawControl(QStyle::CE_PushButton, &optEdit, painter, 0);
 
@@ -81,8 +75,8 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     optDel.icon = KIcon("edit-delete");
     optDel.features |= QStyleOptionButton::Flat;
     optDel.rect = option.rect.adjusted(dx1, dy1, dx2, dy2);
+    //the hack below is because for some reason the option.rect given to the paint method isn't the same as the option.rect given to the editorEvent method for the same item
     const_cast<StylesDelegate*>(this)->m_delRect = optDel.rect;
- //   m_delRect = optDel.rect;
     QApplication::style()->drawControl(QStyle::CE_PushButton, &optDel, painter, 0);
 }
 

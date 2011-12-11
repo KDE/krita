@@ -11,6 +11,7 @@ SET (pictureshape_LIB_SRCS
     PictureShapeConfigWidget.cpp
     ChangeImageCommand.cpp
     CropWidget.cpp
+    SelectionRect.cpp
     filters/GreyscaleFilterEffect.cpp
     filters/MonoFilterEffect.cpp
     filters/WatermarkFilterEffect.cpp

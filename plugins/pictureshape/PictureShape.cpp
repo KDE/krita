@@ -186,13 +186,14 @@ ClippingRect PictureShape::parseClippingRectString(QString string) const
 
 void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
-    QRectF viewRect   = converter.documentToView(QRectF(QPointF(0,0), size()));
-    QSize  pixmapSize = calcOptimalPixmapSize(viewRect.size(), imageData()->image().size());
-
+    QRectF viewRect = converter.documentToView(QRectF(QPointF(0,0), size()));
+    
     if (imageData() == 0) {
         painter.fillRect(viewRect, QColor(Qt::gray));
         return;
     }
+
+    QSize pixmapSize = calcOptimalPixmapSize(viewRect.size(), imageData()->image().size());
 
     // normalize the clipping rect if it isn't already done
     m_clippingRect.normalize(imageData()->imageSize());

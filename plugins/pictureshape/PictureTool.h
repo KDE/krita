@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2007 Montel Laurent <montel@kde.org>
+   Copyright 2011 Silvio Heinrich <plassy@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -55,9 +56,6 @@ public:
 protected:
     /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget();
-
-private:
-    void updateControlElements();
     
 private slots:
     void colorModeChanged(int cmbBoxIndex);
@@ -66,6 +64,7 @@ private slots:
     void cropEditFieldsChanged();
     void aspectCheckBoxChanged(bool checked);
     void fillButtonPressed();
+    void updateControlElements();
     void setImageData(KJob *job);
 
 private:

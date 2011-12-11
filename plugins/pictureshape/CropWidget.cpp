@@ -42,8 +42,17 @@ qreal calcScale(const QSizeF& imgSize, const QSizeF viewSize, bool fitView)
 QRectF centerRect(const QRectF& rect, const QSizeF viewSize)
 {
     QSizeF diff = viewSize - rect.size();
-//     return QRectF(diff.width() / 2.0, diff.height() / 2.0, rect.width(), rect.height());
     return QRectF(diff.width() / 2.0, 0.0, rect.width(), rect.height());
+}
+
+bool compareRects(const QRectF &a, const QRectF &b, qreal epsilon)
+{
+    qreal x = qAbs(a.x() - b.x());
+    qreal y = qAbs(a.y() - b.y());
+    qreal w = qAbs(a.width()  - b.width());
+    qreal h = qAbs(a.height() - b.height());
+    
+    return x <= epsilon && y <= epsilon && w <= epsilon && h <= epsilon;
 }
 
 // ---------------------------------------------------------------- //
@@ -125,10 +134,15 @@ void CropWidget::mouseMoveEvent(QMouseEvent *event)
 
 void CropWidget::mouseReleaseEvent(QMouseEvent *event)
 {
+    Q_UNUSED(event);
     m_selectionRect.finishDragging();
     m_isMousePressed = false;
-    update();
-    emit sigCropRegionChnaged(m_selectionRect.getRect());
+    emitCropRegionChanged();
+}
+
+void CropWidget::resizeEvent(QResizeEvent* event)
+{
+    calcImageRect();
 }
 
 void CropWidget::setPictureShape(PictureShape *shape)
@@ -136,23 +150,31 @@ void CropWidget::setPictureShape(PictureShape *shape)
     m_pictureShape = shape;
     
     calcImageRect();
+    m_oldSelectionRect = shape->cropRect();
     m_selectionRect.setRect(shape->cropRect());
     m_selectionRect.setConstrainingRect(QRectF(0, 0, 1, 1));
     m_selectionRect.setHandleSize(0.04);
+    emit sigCropRegionChnaged(shape->cropRect());
     update();
+}
+
+void CropWidget::setCropRect(const QRectF &rect)
+{
+    m_selectionRect.setRect(rect);
+    emitCropRegionChanged();
 }
 
 void CropWidget::setKeepPictureProportion(bool keepProportion)
 {
     qreal aspect = keepProportion ? (m_pictureShape->size().width() / m_pictureShape->size().height()) : 0.0;
     m_selectionRect.setConstrainingAspectRatio(aspect);
-    emit sigCropRegionChnaged(m_selectionRect.getRect());
+    emitCropRegionChanged();
 }
 
 void CropWidget::maximizeCroppedArea()
 {
     m_selectionRect.setRect(QRectF(0, 0, 1, 1));
-    emit sigCropRegionChnaged(m_selectionRect.getRect());
+    emitCropRegionChanged();
 }
 
 QPointF CropWidget::toUniformCoord(const QPointF& coord) const
@@ -166,6 +188,15 @@ QPointF CropWidget::fromUniformCoord(const QPointF& coord) const
     return m_imageRect.topLeft() + QPointF(coord.x()*m_imageRect.width(), coord.y()*m_imageRect.height());
 }
 
+void CropWidget::emitCropRegionChanged()
+{
+    if (!compareRects(m_oldSelectionRect, m_selectionRect.getRect(), 0.01)) {
+        m_oldSelectionRect = m_selectionRect.getRect();
+        emit sigCropRegionChnaged(m_selectionRect.getRect());
+        update();
+    }
+}
+
 void CropWidget::calcImageRect()
 {
     if (m_pictureShape) {
@@ -175,9 +206,4 @@ void CropWidget::calcImageRect()
         m_selectionRect.setAspectRatio(m_imageRect.width() / m_imageRect.height());
     }
     else m_imageRect = QRectF();
-}
-
-void CropWidget::resizeEvent(QResizeEvent* event)
-{
-    calcImageRect();
 }

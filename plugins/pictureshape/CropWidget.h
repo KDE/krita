@@ -40,6 +40,7 @@ public:
     virtual void resizeEvent(QResizeEvent *event);
 
     void setPictureShape(PictureShape* shape);
+    void setCropRect(const QRectF &rect);
     void setKeepPictureProportion(bool keepProportion);
     void maximizeCroppedArea();
 
@@ -48,12 +49,14 @@ signals:
 
 private:
     void calcImageRect();
+    void emitCropRegionChanged();
     QPointF toUniformCoord(const QPointF& coord) const;
     QPointF fromUniformCoord(const QPointF& coord) const;
     
 private:
     PictureShape *m_pictureShape;
     QRectF m_imageRect;
+    QRectF m_oldSelectionRect;
     SelectionRect m_selectionRect;
     bool m_isMousePressed;
 };

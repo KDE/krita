@@ -116,8 +116,9 @@ void KoPACanvas::mousePressEvent( QMouseEvent *event )
     if(!event->isAccepted() && event->button() == Qt::RightButton)
     {
         showContextMenu( event->globalPos(), toolProxy()->popupActionList() );
-        event->setAccepted( true );
     }
+
+    event->setAccepted( true );
 }
 
 void KoPACanvas::mouseDoubleClickEvent( QMouseEvent *event )

@@ -24,7 +24,6 @@
 #include <QPixmap>
 #include <QImage>
 #include <QRunnable>
-#include <QMutex>
 
 #include <KoTosContainer.h>
 #include <KoFrameShape.h>
@@ -36,7 +35,6 @@
 
 class KoImageData;
 class KoImageCollection;
-class RenderQueue;
 class KJob;
 class PictureShape;
 
@@ -128,19 +126,6 @@ private:
     ColorMode m_mode;
     ClippingRect m_clippingRect;
     _Private::PictureShapeProxy m_proxy;
-};
-
-class LoadWaiter : public QObject
-{
-    Q_OBJECT
-public:
-    LoadWaiter(PictureShape *shape) : m_pictureShape(shape) { }
-
-public slots:
-    void setImageData(KJob *job);
-
-private:
-    PictureShape *m_pictureShape;
 };
 
 #endif

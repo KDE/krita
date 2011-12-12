@@ -1362,6 +1362,19 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                 kdAxis()->setTextAttributes( tatt );
             }
         }
+        if ( styleStack.hasProperty( KoXmlNS::fo, "font-color" ) )
+        {
+            QString fontColorString =  styleStack.property( KoXmlNS::fo, "font-color" );
+            QColor color(fontColorString);
+            if ( color.isValid() )
+            {
+                KDChart::TextAttributes tatt =  kdAxis()->textAttributes();
+                QPen pen = tatt.pen();
+                pen.setColor(color);
+                tatt.setPen(pen);
+                kdAxis()->setTextAttributes( tatt );
+            }
+        }
     } else {
         setShowLabels( KoOdfWorkaround::fixMissingStyle_DisplayLabel( axisElement, context ) );
     }

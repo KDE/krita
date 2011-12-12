@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2008, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2009-2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,7 +35,6 @@
 #include <KoStyleManager.h>
 #include <KoListLevelProperties.h>
 #include <KoShapePaintingContext.h>
-
 #include <KDebug>
 
 #include <QTextLayout>
@@ -60,6 +60,8 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 
     widget.decreaseIndent->setDefaultAction(tool->action("format_decreaseindent"));
     widget.increaseIndent->setDefaultAction(tool->action("format_increaseindent"));
+    widget.changeTextDirection->setDefaultAction(tool->action("change_text_direction"));
+    connect(widget.changeTextDirection, SIGNAL(clicked()), this, SIGNAL(doneWithFocus()));
     connect(widget.alignCenter, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.alignBlock, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.alignLeft, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
@@ -77,11 +79,9 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
  
     fillListButtons();
     widget.bulletListButton->addSeparator();
-    //widget.bulletListButton->addAction(new QAction("fgfd",0));
 
     connect(widget.bulletListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
     connect(widget.numberedListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
-    connect(widget.reversedText, SIGNAL(clicked()), this, SLOT(directionChangeRequested()));
 
     m_stylePopup = new StylesWidget(this, true, Qt::Popup);
     m_stylePopup->setFrameShape(QFrame::StyledPanel);
@@ -98,68 +98,6 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 SimpleParagraphWidget::~SimpleParagraphWidget()
 {
     delete m_thumbnailer;
-}
-
-void SimpleParagraphWidget::directionChangeRequested()
-{
-    KoTextEditor *editor = m_tool->textEditor();
-    QTextBlockFormat format;
-    KoText::Direction dir = static_cast<KoText::Direction>(m_currentBlock.blockFormat()
-            .intProperty(KoParagraphStyle::TextProgressionDirection));
-    switch (dir) {
-    case KoText::PerhapsLeftRightTopBottom:
-    case KoText::LeftRightTopBottom:
-        format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::RightLeftTopBottom);
-        updateDirection(RTL);
-        break;
-    case KoText::InheritDirection:
-    case KoText::AutoDirection:
-        updateDirection(LTR);
-        format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::LeftRightTopBottom);
-        break;
-    case KoText::PerhapsRightLeftTopBottom:
-    case KoText::RightLeftTopBottom: {
-        updateDirection(Auto);
-        // clearProperty won't have any effect on merge below.
-        int start = qMin(editor->position(), editor->anchor());
-        int end = qMax(editor->position(), editor->anchor());
-        Q_ASSERT(start >= 0);
-        editor->setPosition(start);
-        while (editor->position() <= end) {
-            QTextBlockFormat bf = editor->blockFormat();
-            bf.clearProperty(KoParagraphStyle::TextProgressionDirection);
-            editor->setBlockFormat(bf);
-            if (!editor->movePosition(QTextCursor::NextBlock))
-                break;
-        }
-        emit doneWithFocus();
-        return;
-    }
-    case KoText::TopBottomRightLeft: ;// Unhandled.
-        break;
-    };
-    editor->mergeBlockFormat(format);
-    emit doneWithFocus();
-}
-
-void SimpleParagraphWidget::updateDirection(DirectionButtonState state)
-{
-    if (m_directionButtonState == state) return;
-    m_directionButtonState = state;
-    QString buttonText;
-    switch (state) {
-    case LTR:
-        buttonText = i18nc("Short for LeftToRight", "LTR");
-        break;
-    case RTL:
-        buttonText = i18nc("Short for RightToLeft", "RTL");
-        break;
-    default:
-    case Auto:
-        buttonText = i18nc("Automatic direction detection", "Auto");
-        break;
-    }
-    widget.reversedText->setText(buttonText);
 }
 
 void SimpleParagraphWidget::fillListButtons()
@@ -230,16 +168,21 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
     };
     Finally finally(this);
 
-    widget.reversedText->setVisible(m_tool->isBidiDocument());
     QTextLayout *layout = block.layout();
     if (layout) {
-        switch (layout->textOption().textDirection()) {
-        case Qt::LeftToRight: updateDirection(LTR); break;
-        case Qt::RightToLeft: updateDirection(RTL); break;
-        default:
+        switch(layout->textOption().textDirection())
+        {
+        case Qt::LeftToRight:
+             widget.changeTextDirection->setChecked(false);
+             break;
+        case Qt::RightToLeft:
+            widget.changeTextDirection->setChecked(true);
             break;
-        }
+        default:
+              break;
+            }
     }
+
 
     QTextBlockFormat format;
 

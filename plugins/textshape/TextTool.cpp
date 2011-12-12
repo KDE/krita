@@ -4,6 +4,7 @@
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -249,6 +250,14 @@ void TextTool::createActions()
     m_actionAlignBlock->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignBlock);
     connect(m_actionAlignBlock, SIGNAL(triggered(bool)), this, SLOT(alignBlock()));
+
+    m_actionChangeDirection = new KAction(KIcon("format-text-direction-ltr"), i18n("Change text direction"), this);
+    addAction("change_text_direction", m_actionChangeDirection);
+    m_actionChangeDirection->setToolTip(i18n("Change writing direction"));
+    m_actionChangeDirection->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
+    m_actionChangeDirection->setCheckable(true);
+    connect(m_actionChangeDirection, SIGNAL(triggered()), this, SLOT(textDirectionChanged()));
+
 
     m_actionFormatSuper = new KAction(KIcon("format-text-superscript"), i18n("Superscript"), this);
     addAction("format_super", m_actionFormatSuper);
@@ -2348,6 +2357,18 @@ void TextTool::debugTextStyles()
                 << (style == styleManager->defaultListStyle() ? "[Default]":"");
     }
 #endif
+}
+
+void TextTool::textDirectionChanged()
+{
+    QTextBlockFormat blockFormat;
+    if (m_actionChangeDirection->isChecked()) {
+        blockFormat.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::RightLeftTopBottom);
+    }
+    else {
+        blockFormat.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::LeftRightTopBottom);
+     }
+    m_textEditor.data()->mergeBlockFormat(blockFormat);
 }
 
 #include <TextTool.moc>

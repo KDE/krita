@@ -223,6 +223,10 @@ public:
     void setBlockLayout(bool block);
     bool layoutBlocked() const;
 
+    /// Set \a documentChanged() to be blocked (changes will not result in root-areas being marked dirty)
+    void setBlockChanges(bool block);
+    bool changesBlocked() const;
+
     KoTextDocumentLayout* referencedLayout() const;
     void setReferencedLayout(KoTextDocumentLayout *layout);
 

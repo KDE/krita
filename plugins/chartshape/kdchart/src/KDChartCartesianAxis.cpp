@@ -944,11 +944,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
                     if ( labelItem->intersects( *labelItem2, firstPos, secondPos ) )
                     {
                         i = minValueX;
-
-                        // fix for issue #4179:
-                        labelDiff *= 10.0;
-                        // old code: labelDiff += labelDiff;
-
+                        labelDiff += labelDiff;
                         iLabel = 0;
                         //qDebug() << firstPos << secondPos.x()-firstPos .x() << labelItem->text() << labelItem2->text() << labelDiff;
                     }
@@ -1001,9 +997,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
                 else
                     bIsVisibleLabel = ( (translatedValue >= geoRect.top() && translatedValue <= geoRect.bottom() && !isLogarithmicX) || i != 0.0 );
 
-                // fix for issue #4179:
-                bool painttick = bIsVisibleLabel && labelStep <= 0;
-                // old code: bool painttick = true;
+                bool painttick = true;
 
                 //Dont paint more ticks than we need
                 //when diagram type is Bar

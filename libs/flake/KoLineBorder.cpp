@@ -24,6 +24,9 @@
 #include "KoShape.h"
 #include "KoShapeSavingContext.h"
 
+#include "KoPathShape.h"
+#include "KoMarkerData.h"
+
 #include <QPainterPath>
 
 #include <KoGenStyle.h>
@@ -35,10 +38,25 @@
 class KoLineBorder::Private
 {
 public:
+    void paintBorder(KoShape *shape, QPainter &painter, const QPen &pen) const;
     QColor color;
     QPen pen;
     QBrush brush;
 };
+
+void KoLineBorder::Private::paintBorder(KoShape *shape, QPainter &painter, const QPen &pen) const
+{
+    if (!pen.isCosmetic()) {
+        KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
+        if (pathShape) {
+            QPainterPath path = pathShape->pathStroke(pen);
+            painter.fillPath(path, pen.brush());
+            return;
+        }
+        painter.strokePath(shape->outline(), pen);
+    }
+}
+
 
 KoLineBorder::KoLineBorder()
         : d(new Private())
@@ -127,8 +145,7 @@ void KoLineBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverte
     else
         pen.setColor(d->color);
 
-    if (!pen.isCosmetic())
-        painter.strokePath(shape->outline(), pen);
+    d->paintBorder(shape, painter, pen);
 }
 
 void KoLineBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color)
@@ -138,9 +155,7 @@ void KoLineBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverte
     QPen pen = d->pen;
     pen.setColor(color);
 
-    if (!pen.isCosmetic()) {
-        painter.strokePath(shape->outline(), pen);
-    }
+    d->paintBorder(shape, painter, pen);
 }
 
 void KoLineBorder::setCapStyle(Qt::PenCapStyle style)

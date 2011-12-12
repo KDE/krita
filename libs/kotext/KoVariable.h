@@ -47,6 +47,7 @@ class KoVariablePrivate;
  */
 class KOTEXT_EXPORT KoVariable : public KoInlineObject
 {
+    Q_OBJECT
 public:
     /**
      * Constructor.

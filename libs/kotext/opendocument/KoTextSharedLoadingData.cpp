@@ -81,6 +81,7 @@ public:
     QHash<QString, KoParagraphStyle *> paragraphStylesDotXmlStyles;
     QHash<QString, KoCharacterStyle *> characterStylesDotXmlStyles;
     QHash<QString, KoListStyle *>      listStylesDotXmlStyles;
+    QHash<QString, KoListStyle *>       outlineStylesDotXmlStyles;
     QHash<QString, KoTableStyle *>      tableStylesDotXmlStyles;
     QHash<QString, KoTableColumnStyle *>      tableColumnStylesDotXmlStyles;
     QHash<QString, KoTableRowStyle *>      tableRowStylesDotXmlStyles;
@@ -659,3 +660,4 @@ void KoTextSharedLoadingData::addBibliographyConfiguration(KoShapeLoadingContext
     d->bibliographyConfiguration =
             context.odfLoadingContext().stylesReader().globalBibliographyConfiguration();
 }
+

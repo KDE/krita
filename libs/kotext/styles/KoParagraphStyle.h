@@ -157,13 +157,16 @@ public:
         HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
         PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
         VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
+        HiddenByTable,        ///< dont let this paragraph have any height
 
         NormalLineHeight,         ///< bool, internal property for reserved usage
         BibliographyData,
 
         TableOfContentsData,      // set when block is instead a TableOfContents
         GeneratedDocument,  // set when block is instead a generated document
-        Shadow                    //< KoShadowStyle, the shadow of this paragraph
+        Shadow,                    //< KoShadowStyle, the shadow of this paragraph
+        NextStyle,                  ///< holds the styleId of the style to be used on a new line
+        ParagraphListStyleId        ///< this holds the listStyleId of the list got from style:list-style-name property from ODF 1.2
     };
 
     enum AutoSpace {
@@ -722,5 +725,5 @@ private:
     class Private;
     Private * const d;
 };
-
+Q_DECLARE_METATYPE(KoListStyle *);
 #endif

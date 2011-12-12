@@ -26,6 +26,7 @@
 #include <KoCanvasController.h>
 #include <KoViewConverter.h>
 
+#include <kis_system_locker.h>
 #include "kis_tool_polyline_base.h"
 
 #define PREVIEW_LINE_WIDTH 1
@@ -177,14 +178,13 @@ void KisToolPolylineBase::finish()
     if (!currentNode())
         return;
 
-    setCurrentNodeLocked(true);
+    KisSystemLocker locker(currentNode());
     m_dragging = false;
     updateArea();
     if(m_points.count() > 1) {
         finishPolyline(m_points);
     }
     m_points.clear();
-    setCurrentNodeLocked(false);
 }
 
 QRectF KisToolPolylineBase::dragBoundingRect()

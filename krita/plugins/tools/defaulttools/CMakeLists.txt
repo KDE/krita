@@ -27,6 +27,9 @@ target_link_libraries(kritadefaulttools kritaui)
 if (HAVE_OPENGL)
   target_link_libraries(kritadefaulttools ${QT_QTOPENGL_LIBRARY} ${OPENGL_LIBRARIES} )
 endif (HAVE_OPENGL)
+if (HAVE_GLEW)
+  target_link_libraries(kritadefaulttools ${GLEW_LIBRARIES} )
+endif (HAVE_GLEW)
 
 install(TARGETS kritadefaulttools  DESTINATION ${PLUGIN_INSTALL_DIR})
 

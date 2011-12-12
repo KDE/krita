@@ -222,13 +222,14 @@ QImage KisImagePipeBrush::image() const
 }
 
 
-void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation, 
-                                                            double scaleX, double scaleY, double angle, const KisPaintInformation& info, 
-                                                            double subPixelX , double subPixelY, 
+void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
+                                                            double scaleX, double scaleY, double angle, const KisPaintInformation& info,
+                                                            double subPixelX , double subPixelY,
                                                             qreal softnessFactor) const
 {
     if (m_d->brushes.isEmpty()) return;
     selectNextBrush(info);
+    if (m_d->currentBrush )
     m_d->brushes.at(m_d->currentBrush)->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
 }
 
@@ -250,7 +251,7 @@ void KisImagePipeBrush::setParasiteString(const QString& parasite)
 quint32 KisImagePipeBrush::brushIndex(const KisPaintInformation& info) const
 {
     quint32 brushIndex = 0;
-    
+
     double angle;
     for (int i = 0; i < m_d->parasite.dim; i++) {
         int index = m_d->parasite.index[i];
@@ -281,7 +282,9 @@ quint32 KisImagePipeBrush::brushIndex(const KisPaintInformation& info) const
         m_d->parasite.index[i] = index;
         brushIndex += m_d->parasite.brushesCount[i] * index;
     }
-    
+    if (brushIndex > m_d->brushes.size()) {
+        brushIndex = 0;
+    }
     return brushIndex;
 }
 
@@ -387,5 +390,5 @@ void KisImagePipeBrush::setScale(qreal _scale)
     for (int i = 0; i < m_d->brushes.count(); i++){
         m_d->brushes.at(i)->setScale(_scale);
     }
-   
+
 }

@@ -24,6 +24,7 @@
 #include "kis_shared.h"
 
 class KisNode;
+class KisGeneratorLayer;
 class KoUpdater;
 class KoProgressUpdater;
 class KisUndoAdapter;
@@ -35,7 +36,8 @@ class KisCloneLayer;
 class KisFilterMask;
 class KisTransparencyMask;
 class KisSelectionMask;
-class KisGeneratorLayer;
+
+
 
 /**
  * A visitor that processes a single layer; it does not recurse into the

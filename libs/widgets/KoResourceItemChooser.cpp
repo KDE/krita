@@ -307,7 +307,7 @@ void KoResourceItemChooser::setProxyModel( QAbstractProxyModel* proxyModel )
     d->view->setModel(proxyModel);
 }
 
-void KoResourceItemChooser::activated( const QModelIndex & index )
+void KoResourceItemChooser::activated(const QModelIndex &/*index*/)
 {
     KoResource* resource = currentResource();
     if( resource ) {
@@ -332,7 +332,7 @@ void KoResourceItemChooser::updateButtonState()
     if( resource ) {
         removeButton->setEnabled( true );
         uploadButton->setEnabled(resource->removable());
-        d->tagOpLineEdit->setEnabled( resource->removable());
+        d->tagOpLineEdit->setEnabled(true);
         return;
     }
 

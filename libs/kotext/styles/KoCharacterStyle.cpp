@@ -154,8 +154,12 @@ KoCharacterStyle::Private::Private()
 {
     //set the minimal default properties
     hardCodedDefaultStyle.add(QTextFormat::FontFamily, QString("Sans Serif"));
+    hardCodedDefaultStyle.add(QTextFormat::FontPointSize, 12.0);
     hardCodedDefaultStyle.add(QTextFormat::ForegroundBrush, QBrush(Qt::black));
     hardCodedDefaultStyle.add(KoCharacterStyle::FontYStretch, 1);
+#if QT_VERSION >= 0x040800
+    hardCodedDefaultStyle.add(QTextFormat::FontHintingPreference, QFont::PreferNoHinting);
+#endif
 }
 
 
@@ -445,6 +449,16 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
         }
         ++it;
     }
+}
+
+KoCharacterStyle *KoCharacterStyle::autoStyle(const QTextCharFormat &format, QTextCharFormat blockCharFormat) const
+{
+    applyStyle(blockCharFormat);
+    ensureMinimalProperties(blockCharFormat);
+    KoCharacterStyle *autoStyle = new KoCharacterStyle(blockCharFormat);
+    autoStyle->d->stylesPrivate.removeDuplicates(format.properties());
+
+    return autoStyle;
 }
 
 void KoCharacterStyle::applyStyle(QTextBlock &block) const

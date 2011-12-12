@@ -37,20 +37,21 @@
 #include "kis_image.h"
 #include "kis_fill_painter.h"
 #include "kis_outline_generator.h"
+#include "kis_default_bounds.h"
 
-KisPixelSelection::KisPixelSelection()
-    : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), KisDefaultBounds())
-{
-}
+struct KisPixelSelection::Private {
+};
 
-KisPixelSelection::KisPixelSelection(KisDefaultBounds defaultBounds)
+KisPixelSelection::KisPixelSelection(KisDefaultBounds * defaultBounds)
         : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
+        , m_d(new Private)
 {
 }
 
 KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
         : KisPaintDevice(rhs)
         , KisSelectionComponent(rhs)
+        , m_d(new Private)
 {
 }
 
@@ -61,6 +62,7 @@ KisSelectionComponent* KisPixelSelection::clone(KisSelection*)
 
 KisPixelSelection::~KisPixelSelection()
 {
+    delete m_d;
 }
 
 KisPaintDeviceSP KisPixelSelection::createThumbnailDevice(qint32 w, qint32 h, const KisSelection * selection, QRect rect) const

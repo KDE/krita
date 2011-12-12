@@ -1,7 +1,8 @@
 /*
  * OpenRPT report writer and rendering engine
- * Copyright (C) 2001-2007 by OpenMFG, LLC (info@openmfg.com)
- * Copyright (C) 2007-2010 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2001-2007 by OpenMFG, LLC <info@openmfg.com>
+ * Copyright (C) 2007-2010 by Adam Pigg <adam@piggz.co.uk>
+ * Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -48,6 +49,7 @@
 #include <kaction.h>
 #include <KLocale>
 #include <KDebug>
+#include <KToggleAction>
 #include <kross/core/manager.h>
 
 //! Also add public method for runtime?
@@ -877,8 +879,10 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
             }
             if (item) {
                 item->setVisible(true);
-                if (v && v->designer())
+                if (v && v->designer()) {
                     v->designer()->setModified(true);
+                }
+                emit itemInserted(m_sectionData->insertItem);
             }
                 
             m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
@@ -1169,15 +1173,20 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
     return unique;
 }
 
-QList<QAction*> KoReportDesigner::actions(QObject* parent)
+static bool actionPriortyLessThan(QAction* act1, QAction* act2)
+{
+    if (act1->data().toInt() > 0 && act1->data().toInt() > 0) {
+        return act1->data().toInt() < act2->data().toInt();
+    }
+    return false;
+}
+
+QList<QAction*> KoReportDesigner::actions(QActionGroup* group)
 {
     KoReportPluginManager* manager = KoReportPluginManager::self();
-    QAction *act;
-    QList<QAction*> actList;
-
-    actList = manager->actions();
+    QList<QAction*> actList = manager->actions();
     
-    act = new QAction(KIcon("line"), i18n("Line"), parent);
+    KToggleAction *act = new KToggleAction(KIcon("line"), i18n("Line"), group);
     act->setObjectName("report:line");
     act->setData(9);
     actList << act;
@@ -1189,26 +1198,21 @@ QList<QAction*> KoReportDesigner::actions(QObject* parent)
     //It finds the first plugin based on the priority in userdata
     //The lowest oriority a plugin can have is 10
     //And inserts a separator before it.
+    bool sepInserted = false;
     foreach(QAction *a, actList) {
         ++i;
-        if(a->data().toInt() >= 10) {
-            QAction *sep = new QAction("separator", parent);
+        if (!sepInserted && a->data().toInt() >= 10) {
+            QAction *sep = new QAction("separator", group);
             sep->setSeparator(true);
             actList.insert(i-1, sep);
-            break;
+            sepInserted = true;
+        }
+        else {
+            group->addAction(a);
         }
     }
     
     return actList;
-}
-
-bool KoReportDesigner::actionPriortyLessThan(QAction* act1, QAction* act2)
-{
-    if (act1->data().toInt() > 0 && act1->data().toInt() > 0) {
-        return act1->data().toInt() < act2->data().toInt();
-    }
-
-    return false;
 }
 
 void KoReportDesigner::setSectionCursor(const QCursor& c)

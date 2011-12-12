@@ -26,7 +26,6 @@
 
 #include "kis_types.h"
 #include "kis_mask.h"
-#include "kis_image.h"
 
 /**
  * An selection mask is a single channel mask that applies a

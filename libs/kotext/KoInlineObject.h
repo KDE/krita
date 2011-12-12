@@ -22,6 +22,7 @@
 #include "kotext_export.h"
 
 #include <QVariant>
+#include <QObject>
 
 class QTextDocument;
 class QTextCharFormat;
@@ -46,8 +47,9 @@ class KoShapeLoadingContext;
  *
  * @see KoInlineTextObjectManager
  */
-class KOTEXT_EXPORT KoInlineObject
+class KOTEXT_EXPORT KoInlineObject : public QObject
 {
+    Q_OBJECT
 public:
     enum Property {
         DocumentURL,

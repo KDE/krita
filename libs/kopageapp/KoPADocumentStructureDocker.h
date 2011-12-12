@@ -44,7 +44,7 @@ namespace KParts
 class KoPADocumentStructureDockerFactory : public KoDockFactoryBase
 {
 public:
-    explicit KoPADocumentStructureDockerFactory( KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType = KoPageApp::Page);
+    explicit KoPADocumentStructureDockerFactory(KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType = KoPageApp::Page);
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
@@ -64,10 +64,10 @@ class KoPADocumentStructureDocker : public QDockWidget, public KoCanvasObserverB
 Q_OBJECT
 
 public:
-    explicit KoPADocumentStructureDocker( KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType, QWidget* parent = 0 );
+    explicit KoPADocumentStructureDocker(KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType, QWidget* parent = 0);
     virtual ~KoPADocumentStructureDocker();
 
-    virtual void setCanvas( KoCanvasBase* canvas);
+    virtual void setCanvas(KoCanvasBase* canvas);
     virtual void unsetCanvas();
     void setActivePage(KoPAPageBase *page);
     void setMasterMode(bool master);
@@ -86,34 +86,34 @@ public slots:
     void updateView();
     /// Set the KPart::Part or the document for this docker, this will reset the document model for this docker
     /// and eventually dockerReset() signal will be emitted
-    void setPart( KParts::Part * part );
+    void setPart(KParts::Part * part);
 
     void selectPages(int start, int count);
 
 private slots:
-    void slotButtonClicked( int buttonId );
+    void slotButtonClicked(int buttonId);
     void addLayer();
     void addPage();
     void deleteItem();
     void raiseItem();
     void lowerItem();
-    void itemClicked( const QModelIndex &index );
+    void itemClicked(const QModelIndex &index);
     void minimalView();
     void detailedView();
     void thumbnailView();
 
-    void itemSelected( const QItemSelection& selected, const QItemSelection& deselected );
+    void itemSelected(const QItemSelection& selected, const QItemSelection& deselected);
     void editCut();
     void editCopy();
     void editPaste();
 
 private:
-    void extractSelectedLayersAndShapes( QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes );
+    void extractSelectedLayersAndShapes(QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes);
     void setViewMode(KoDocumentSectionView::DisplayMode mode);
-    QModelIndex getRootIndex( const QModelIndex &index ) const;
+    QModelIndex getRootIndex(const QModelIndex &index) const;
 
-    KoDocumentSectionView::DisplayMode viewModeFromString( const QString& mode );
-    QString viewModeToString( KoDocumentSectionView::DisplayMode mode );
+    KoDocumentSectionView::DisplayMode viewModeFromString(const QString& mode);
+    QString viewModeToString(KoDocumentSectionView::DisplayMode mode);
 
     KoPADocument * m_doc;
     KoDocumentSectionView *m_sectionView;

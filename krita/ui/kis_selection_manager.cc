@@ -423,6 +423,13 @@ void KisSelectionManager::paste()
             viewConverter->viewToDocumentX(canvasBase->canvasController()->canvasOffsetX()) + center.x(),
             viewConverter->viewToDocumentY(canvasBase->canvasController()->canvasOffsetY()) + center.y()));
 
+    // Pasted layer content could be outside image bounds and invisible, if that is the case move content into the bounds
+    QRect exactBounds = clip->exactBounds();
+    if(!exactBounds.isEmpty() && !exactBounds.intersects(image->bounds())) {
+        clip->setX(clip->x() - exactBounds.x());
+        clip->setY(clip->y() - exactBounds.y());
+    }
+
     if (clip) {
         KisPaintLayer *layer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8, clip);
         Q_CHECK_PTR(layer);

@@ -243,6 +243,12 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                 selections.append(fr);
             }
 
+            // this is a workaround to fix text getting cut of when format ranges are used. There 
+            // is a bug in Qt that can hit when text lines overlap each other. In case a format range
+            // is used for formating it can clip the lines above/below as Qt creates a clip rect for
+            // the places it already painted for the format range which results in clippling. So use
+            // the format range allways to paint the text.
+            QVector<QTextLayout::FormatRange> workaroundFormatRanges;
             for (QTextBlock::iterator it = block.begin(); !(it.atEnd()); ++it) {
                 QTextFragment currentFragment = it.fragment();
                 if (currentFragment.isValid()) {
@@ -302,10 +308,45 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                         QTextLayout::FormatRange fr;
                         fr.start = currentFragment.position() - block.position();
                         fr.length = currentFragment.length();
+                        if (!format.hasProperty(KoCharacterStyle::InlineInstanceId)) {
+                            if (format.background().style() == Qt::NoBrush) {
+                                format.setBackground(QBrush(QColor(0, 0, 0, 0)));
+                            }
+                            if (format.foreground().style() == Qt::NoBrush) {
+                                format.setForeground(QBrush(QColor(0, 0, 0)));
+                            }
+                        }
                         fr.format = format;
+                        // the prepend is done so the selections are at the end.
                         selections.prepend(fr);
                     }
+                    else {
+                        if (!format.hasProperty(KoCharacterStyle::InlineInstanceId)) {
+                            QTextLayout::FormatRange fr;
+                            fr.start = currentFragment.position() - block.position();
+                            fr.length = currentFragment.length();
+                            QTextCharFormat f;
+                            if (format.background().style() == Qt::NoBrush) {
+                                f.setBackground(QBrush(QColor(0, 0, 0, 0)));
+                            }
+                            else {
+                                f.setBackground(format.background());
+                            }
+                            if (format.foreground().style() == Qt::NoBrush) {
+                                f.setForeground(QBrush(QColor(0, 0, 0)));
+                            }
+                            else {
+                                f.setForeground(format.foreground());
+                            }
+                            fr.format = f;
+                            workaroundFormatRanges.append(fr);
+                        }
+                    }
                 }
+            }
+
+            if (!selections.isEmpty()) {
+                selections = workaroundFormatRanges + selections;
             }
 
             //We set clip because layout-draw doesn't clip text to it correctly after all
@@ -374,22 +415,27 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
             layouts.append(format);
             layout.setAdditionalFormats(layouts);
 
-            Qt::Alignment align = static_cast<Qt::Alignment>(listFormat.intProperty(KoListStyle::Alignment));
+            Qt::Alignment alignment = static_cast<Qt::Alignment>(listFormat.intProperty(KoListStyle::Alignment));
 
-            if (align == 0) {
-                align = Qt::AlignLeft;
+            if (alignment == 0) {
+                alignment = Qt::AlignLeft | Qt::AlignAbsolute;
             }
-            else if (align != Qt::AlignLeft) {
-                align |= Qt::AlignAbsolute;
+            if (m_isRtl && (alignment & Qt::AlignAbsolute) == 0) {
+                if (alignment & Qt::AlignLeft) {
+                    alignment = Qt::AlignRight;
+                } else if (alignment & Qt::AlignRight) {
+                    alignment = Qt::AlignLeft;
+                }
             }
+            alignment |= Qt::AlignAbsolute;
 
-            QTextOption option(align);
+            QTextOption option(alignment);
             option.setTextDirection(block.layout()->textOption().textDirection());
-
+/*
             if (option.textDirection() == Qt::RightToLeft || data->counterText().isRightToLeft()) {
                 option.setAlignment(Qt::AlignRight);
             }
-
+*/
             layout.setTextOption(option);
 
             layout.beginLayout();
@@ -411,8 +457,14 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
                     counterPosition += QPointF(0, (firstParagLine.height() - layout.lineAt(0).height())/2.0);
                 }
             }
-
             layout.draw(painter, counterPosition);
+
+            //decorate the list label iff it is a numbered list
+            if (KoListStyle::isNumberingStyle(listStyle)) {
+                painter->save();
+                decorateListLabel(painter, data, layout.lineAt(0), block);
+                painter->restore();
+            }
         }
 
         KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
@@ -428,6 +480,27 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
             }
         }
     }
+}
+
+void KoTextLayoutArea::decorateListLabel(QPainter *painter, const KoTextBlockData *blockData, const QTextLine &listLabelLine, const QTextBlock &listItem)
+{
+    const QTextCharFormat listLabelCharFormat = blockData->labelFormat();
+    painter->setFont(listLabelCharFormat.font());
+
+    int startOfFragmentInBlock = 0;
+    Q_ASSERT_X(listLabelLine.isValid(), __FUNCTION__, QString("Invalid list label").toLocal8Bit());
+    if (!listLabelLine.isValid()) {
+        return;
+    }
+
+    int fragmentToLineOffset = 0;
+
+    qreal x1 = blockData->counterPosition().x();
+    qreal x2 = listItem.layout()->lineAt(0).x();
+
+    drawStrikeOuts(painter, listLabelCharFormat, blockData->counterText(), listItem.layout()->lineAt(0), x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+    drawOverlines(painter, listLabelCharFormat, blockData->counterText(), listItem.layout()->lineAt(0), x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+    drawUnderlines(painter, listLabelCharFormat, blockData->counterText(), listItem.layout()->lineAt(0), x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
 }
 
 /**
@@ -649,9 +722,9 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
                         // Following line was supposed to fix bug 171686 (I cannot reproduce the original problem) but it opens bug 260159. So, deactivated for now.
                         // x2 = qMin(x2, line.naturalTextWidth() + line.cursorToX(line.textStart()));
 
-                        drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
-                        drawOverlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
-                        drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+                        drawStrikeOuts(painter, fmt, currentFragment.text(), line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+                        drawOverlines(painter, fmt, currentFragment.text(), line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+                        drawUnderlines(painter, fmt, currentFragment.text(), line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         decorateTabsAndFormatting(painter, currentFragment, line, startOfFragmentInBlock, tabList, currentTabStop, showFormattingCharacters);
                     }
                 }
@@ -669,18 +742,17 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
     painter->setFont(oldFont);
 }
 
-void KoTextLayoutArea::drawStrikeOuts(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const
+void KoTextLayoutArea::drawStrikeOuts(QPainter *painter, const QTextCharFormat &currentCharFormat, const QString &text, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const
 {
-    QTextCharFormat fmt = currentFragment.charFormat();
     KoCharacterStyle::LineStyle strikeOutStyle = (KoCharacterStyle::LineStyle)
-            fmt.intProperty(KoCharacterStyle::StrikeOutStyle);
+            currentCharFormat.intProperty(KoCharacterStyle::StrikeOutStyle);
     KoCharacterStyle::LineType strikeOutType = (KoCharacterStyle::LineType)
-            fmt.intProperty(KoCharacterStyle::StrikeOutType);
+            currentCharFormat.intProperty(KoCharacterStyle::StrikeOutType);
     if ((strikeOutStyle != KoCharacterStyle::NoLineStyle) &&
             (strikeOutType != KoCharacterStyle::NoLineType)) {
-        QTextCharFormat::VerticalAlignment valign = fmt.verticalAlignment();
+        QTextCharFormat::VerticalAlignment valign = currentCharFormat.verticalAlignment();
 
-        QFont font(fmt.font());
+        QFont font(currentCharFormat.font());
         if (valign == QTextCharFormat::AlignSubScript
                 || valign == QTextCharFormat::AlignSuperScript)
             font.setPointSize(qRound(font.pointSize() * 2 / 3.));
@@ -694,18 +766,18 @@ void KoTextLayoutArea::drawStrikeOuts(QPainter *painter, const QTextFragment &cu
         else
             y += line.ascent() - metrics.strikeOutPos();
 
-        QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
+        QColor color = currentCharFormat.colorProperty(KoCharacterStyle::StrikeOutColor);
         if (!color.isValid())
-            color = fmt.foreground().color();
+            color = currentCharFormat.foreground().color();
         KoCharacterStyle::LineMode strikeOutMode =
-            (KoCharacterStyle::LineMode) fmt.intProperty(KoCharacterStyle::StrikeOutMode);
+            (KoCharacterStyle::LineMode) currentCharFormat.intProperty(KoCharacterStyle::StrikeOutMode);
 
-        QString strikeOutText = fmt.stringProperty(KoCharacterStyle::StrikeOutText);
+        QString strikeOutText = currentCharFormat.stringProperty(KoCharacterStyle::StrikeOutText);
         qreal width = 0; // line thickness
         if (strikeOutText.isEmpty()) {
             width = computeWidth(
-                        (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::StrikeOutWeight),
-                        fmt.doubleProperty(KoCharacterStyle::StrikeOutWidth),
+                        (KoCharacterStyle::LineWeight) currentCharFormat.intProperty(KoCharacterStyle::StrikeOutWeight),
+                        currentCharFormat.doubleProperty(KoCharacterStyle::StrikeOutWidth),
                         font);
         }
         if (valign == QTextCharFormat::AlignSubScript
@@ -713,7 +785,7 @@ void KoTextLayoutArea::drawStrikeOuts(QPainter *painter, const QTextFragment &cu
             width = width * 2 / 3;
 
         if (strikeOutMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
-            drawDecorationWords(painter, line, currentFragment.text(), color, strikeOutType,
+            drawDecorationWords(painter, line, text, color, strikeOutType,
                     strikeOutStyle, strikeOutText, width, y, fragmentToLineOffset,
                     startOfFragmentInBlock);
         } else {
@@ -725,16 +797,15 @@ void KoTextLayoutArea::drawStrikeOuts(QPainter *painter, const QTextFragment &cu
     }
 }
 
-void KoTextLayoutArea::drawOverlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const
+void KoTextLayoutArea::drawOverlines(QPainter *painter, const QTextCharFormat &currentCharFormat, const QString &text, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const
 {
-    QTextCharFormat fmt = currentFragment.charFormat();
-    KoCharacterStyle::LineStyle fontOverLineStyle = (KoCharacterStyle::LineStyle) fmt.intProperty(KoCharacterStyle::OverlineStyle);
-    KoCharacterStyle::LineType fontOverLineType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::OverlineType);
+    KoCharacterStyle::LineStyle fontOverLineStyle = (KoCharacterStyle::LineStyle) currentCharFormat.intProperty(KoCharacterStyle::OverlineStyle);
+    KoCharacterStyle::LineType fontOverLineType = (KoCharacterStyle::LineType) currentCharFormat.intProperty(KoCharacterStyle::OverlineType);
     if ((fontOverLineStyle != KoCharacterStyle::NoLineStyle) &&
             (fontOverLineType != KoCharacterStyle::NoLineType)) {
-        QTextCharFormat::VerticalAlignment valign = fmt.verticalAlignment();
+        QTextCharFormat::VerticalAlignment valign = currentCharFormat.verticalAlignment();
 
-        QFont font(fmt.font());
+        QFont font(currentCharFormat.font());
         if (valign == QTextCharFormat::AlignSubScript
                 || valign == QTextCharFormat::AlignSuperScript)
             font.setPointSize(font.pointSize() * 2 / 3);
@@ -748,21 +819,21 @@ void KoTextLayoutArea::drawOverlines(QPainter *painter, const QTextFragment &cur
         else
             y += line.ascent() - metrics.overlinePos();
 
-        QColor color = fmt.colorProperty(KoCharacterStyle::OverlineColor);
+        QColor color = currentCharFormat.colorProperty(KoCharacterStyle::OverlineColor);
         if (!color.isValid())
-            color = fmt.foreground().color();
+            color = currentCharFormat.foreground().color();
         KoCharacterStyle::LineMode overlineMode =
-            (KoCharacterStyle::LineMode) fmt.intProperty(KoCharacterStyle::OverlineMode);
+            (KoCharacterStyle::LineMode) currentCharFormat.intProperty(KoCharacterStyle::OverlineMode);
         qreal width = computeWidth( // line thickness
-                          (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::OverlineWeight),
-                          fmt.doubleProperty(KoCharacterStyle::OverlineWidth),
+                          (KoCharacterStyle::LineWeight) currentCharFormat.intProperty(KoCharacterStyle::OverlineWeight),
+                          currentCharFormat.doubleProperty(KoCharacterStyle::OverlineWidth),
                           font);
         if (valign == QTextCharFormat::AlignSubScript
                 || valign == QTextCharFormat::AlignSuperScript) // adjust size.
             width = width * 2 / 3;
 
         if (overlineMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
-            drawDecorationWords(painter, line, currentFragment.text(), color, fontOverLineType,
+            drawDecorationWords(painter, line, text, color, fontOverLineType,
                     fontOverLineStyle, QString(), width, y, fragmentToLineOffset, startOfFragmentInBlock);
         } else {
             drawDecorationLine(painter, color, fontOverLineType, fontOverLineStyle, width, x1, x2, y);
@@ -770,17 +841,15 @@ void KoTextLayoutArea::drawOverlines(QPainter *painter, const QTextFragment &cur
     }
 }
 
-void KoTextLayoutArea::drawUnderlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const
+void KoTextLayoutArea::drawUnderlines(QPainter *painter, const QTextCharFormat &currentCharFormat,const QString &text, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const
 {
-
-    QTextCharFormat fmt = currentFragment.charFormat();
-    KoCharacterStyle::LineStyle fontUnderLineStyle = (KoCharacterStyle::LineStyle) fmt.intProperty(KoCharacterStyle::UnderlineStyle);
-    KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::UnderlineType);
+    KoCharacterStyle::LineStyle fontUnderLineStyle = (KoCharacterStyle::LineStyle) currentCharFormat.intProperty(KoCharacterStyle::UnderlineStyle);
+    KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType) currentCharFormat.intProperty(KoCharacterStyle::UnderlineType);
     if ((fontUnderLineStyle != KoCharacterStyle::NoLineStyle) &&
             (fontUnderLineType != KoCharacterStyle::NoLineType)) {
-        QTextCharFormat::VerticalAlignment valign = fmt.verticalAlignment();
+        QTextCharFormat::VerticalAlignment valign = currentCharFormat.verticalAlignment();
 
-        QFont font(fmt.font());
+        QFont font(currentCharFormat.font());
         if (valign == QTextCharFormat::AlignSubScript
                 || valign == QTextCharFormat::AlignSuperScript)
             font.setPointSize(font.pointSize() * 2 / 3);
@@ -794,21 +863,21 @@ void KoTextLayoutArea::drawUnderlines(QPainter *painter, const QTextFragment &cu
         else
             y += line.ascent() + metrics.underlinePos();
 
-        QColor color = fmt.underlineColor();
+        QColor color = currentCharFormat.underlineColor();
         if (!color.isValid())
-            color = fmt.foreground().color();
+            color = currentCharFormat.foreground().color();
         KoCharacterStyle::LineMode underlineMode =
-            (KoCharacterStyle::LineMode) fmt.intProperty(KoCharacterStyle::UnderlineMode);
+            (KoCharacterStyle::LineMode) currentCharFormat.intProperty(KoCharacterStyle::UnderlineMode);
         qreal width = computeWidth( // line thickness
-                          (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::UnderlineWeight),
-                          fmt.doubleProperty(KoCharacterStyle::UnderlineWidth),
+                          (KoCharacterStyle::LineWeight) currentCharFormat.intProperty(KoCharacterStyle::UnderlineWeight),
+                          currentCharFormat.doubleProperty(KoCharacterStyle::UnderlineWidth),
                           font);
         if (valign == QTextCharFormat::AlignSubScript
                 || valign == QTextCharFormat::AlignSuperScript) // adjust size.
             width = width * 2 / 3;
 
         if (underlineMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
-            drawDecorationWords(painter, line, currentFragment.text(), color, fontUnderLineType,
+            drawDecorationWords(painter, line, text, color, fontUnderLineType,
                     fontUnderLineStyle, QString(), width, y, fragmentToLineOffset, startOfFragmentInBlock);
         } else {
             drawDecorationLine(painter, color, fontUnderLineType, fontUnderLineStyle, width, x1, x2, y);
@@ -823,6 +892,7 @@ int KoTextLayoutArea::decorateTabsAndFormatting(QPainter *painter, const QTextFr
     // be called multiple times on the same line, with different fragments.
     // Likewise, if a fragment spans two lines, then this function will be called twice
     // on the same fragment, once for each line.
+
     QString fragText = currentFragment.text();
 
     QFontMetricsF fm(currentFragment.charFormat().font(), m_documentLayout->paintDevice());

@@ -58,6 +58,10 @@ public:
     void setAllowBreakBetweenRows(bool allow);
     bool allowBreakBetweenRows() const;
 
+    void setMasterPageName(const QString& name);
+    void setMasterPageName(const char* name);
+    QString masterPageName() const;
+
     void setLeftMargin(qreal left);
     qreal leftMargin() const;
 
@@ -129,6 +133,8 @@ private:
     BreakType m_breakAfter;
     BreakType m_breakBefore;
     bool m_allowBreakBetweenRows;
+
+    QString m_masterPageName;
 
     qreal m_leftMargin;
     qreal m_topMargin;

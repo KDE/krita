@@ -323,7 +323,13 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> len;
                 stream >> dxArrayLen;
                 if (dxArrayLen > 0) {
-                    dxArray = new qint32[dxArrayLen];  // FIXME: Should cap to a reasonable value.
+                    quint32 maxDxArrayLen = totalSize - stream.device()->pos();
+                    if (dxArrayLen > maxDxArrayLen) {
+                        qDebug() << "Defined dxArrayLen= " << dxArrayLen << "exceeds availalable size" << maxDxArrayLen;
+                        dxArrayLen = maxDxArrayLen;
+                    }
+
+                    dxArray = new qint32[dxArrayLen];
 
                     for (uint i = 0; i < dxArrayLen; ++i)
                         stream >> dxArray[i];

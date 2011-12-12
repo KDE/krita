@@ -29,7 +29,7 @@ public:
 };
 
 
-KoModeBoxFactory::KoModeBoxFactory(KoCanvasControllerWidget *canvasController, const QString& title)
+KoModeBoxFactory::KoModeBoxFactory(KoCanvasControllerWidget *canvasController, const QString& /*title*/)
     : d( new Private())
 {
     d->canvasController = canvasController;

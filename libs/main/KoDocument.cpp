@@ -367,7 +367,13 @@ KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     d->docInfo = new KoDocumentInfo(this);
     d->docRdf = 0;
 #ifdef SHOULD_BUILD_RDF
-    d->docRdf  = new KoDocumentRdf(this);
+    {
+        KConfigGroup cfgGrp(componentData().config(), "RDF");
+        bool rdfEnabled = cfgGrp.readEntry("rdf_enabled", false);
+        if (rdfEnabled) {
+            d->docRdf  = new KoDocumentRdf(this);
+        }
+    }
 #endif
 
     d->pageLayout.width = 0;
@@ -796,6 +802,16 @@ KoDocumentRdf *KoDocument::documentRdf() const
     return d->docRdf;
 #endif
     return 0;
+}
+
+void KoDocument::setDocumentRdf(KoDocumentRdf *rdfDocument)
+{
+    delete d->docRdf;
+#ifdef SHOULD_BUILD_RDF
+    d->docRdf = rdfDocument;
+#else
+    d->docRdf = 0;
+#endif
 }
 
 KoDocumentRdfBase *KoDocument::documentRdfBase() const

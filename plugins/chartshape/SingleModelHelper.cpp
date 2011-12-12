@@ -57,7 +57,13 @@ SingleModelHelper::SingleModelHelper( Table *table, ChartProxyModel *proxyModel 
 void SingleModelHelper::slotModelStructureChanged()
 {
     QAbstractItemModel *model = m_table->model();
-    QPoint topLeft( 1, 1 );
-    QPoint bottomRight( model->columnCount(), model->rowCount() );
-    m_proxyModel->reset( CellRegion( m_table, QRect( topLeft, bottomRight ) ) );
+    const int columnCount = model->columnCount();
+    const int rowCount = model->rowCount();
+    CellRegion region( m_table );
+    if ( columnCount >= 1 && rowCount >= 1 ) {
+        QPoint topLeft( 1, 1 );
+        QPoint bottomRight( columnCount, rowCount );
+        region.add( QRect( topLeft, bottomRight ) );
+    }
+    m_proxyModel->reset( region );
 }

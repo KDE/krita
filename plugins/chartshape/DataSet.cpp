@@ -220,7 +220,8 @@ KDChart::MarkerAttributes DataSet::Private::defaultMarkerAttributes() const
     KDChart::MarkerAttributes ma;
     // Don't show markers unless we turn them on
     ma.setVisible( false );
-    //ma.setMarkerSizeMode( KDChart::MarkerAttributes::RelativeToDiagramWidthHeightMin );
+    // The marker size is specified in pixels, but scaled by the painter's zoom level
+    ma.setMarkerSizeMode( KDChart::MarkerAttributes::AbsoluteSizeScaled );
     return ma;
 }
 
@@ -765,7 +766,7 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
         QVariant v = yData( section, Qt::DisplayRole );
         QString s;
         if ( v.type() == QVariant::Double ) {
-            // Don't use v.toString() else out double/float would lose precision
+            // Don't use v.toString() else a double/float would lose precision
             // and something like "36.5207" would become "36.520660888888912".
             QTextStream ts(&s);
             ts << v.toDouble();
@@ -1007,7 +1008,12 @@ QVariant DataSet::labelData() const
     if ( d->labelDataRegion.isValid() ) {
         const int cellCount = d->labelDataRegion.cellCount();
         for ( int i = 0; i < cellCount; i++ ) {
-            label += d->data( d->labelDataRegion, i, Qt::EditRole ).toString();
+            QString s = d->data( d->labelDataRegion, i, Qt::EditRole ).toString();
+            if ( !s.isEmpty() ) {
+                if ( !label.isEmpty() )
+                    label += " ";
+                label += s;
+            }
         }
     }
     if ( label.isEmpty() ) {
@@ -1095,7 +1101,7 @@ void DataSet::setLabelDataRegion( const CellRegion &region )
 
 int DataSet::size() const
 {
-    return d->size > 0 ? d->size : 1;
+    return qMax(1, d->size);
 }
 
 void DataSet::Private::dataChanged( KDChartModel::DataRole role, const QRect &rect ) const
@@ -1324,11 +1330,15 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         scatterChart = charttype == "chart:scatter";
     }
 
+    // The <chart:domain> element specifies coordinate values required by particular chart types.
     // For scatter charts, one <chart:domain> element shall exist. Its table:cell-range-address
     // attribute references the x coordinate values for the scatter chart.
     // For bubble charts, two <chart:domain> elements shall exist. The values for the y-coordinates are
     // given by the first <chart:domain> element. The values for the x-coordinates are given by the
     // second <chart:domain> element.
+    // At least one <chart:series> element of a given chart:class shall have the necessary
+    // number of <chart:domain> sub-elements. All other <chart:series> elements with the same
+    // chart:class may omit the <chart:domain> sub-elements and use the previously defined.
     if ( ( scatterChart || bubbleChart ) && n.hasChildNodes() ) {
         int domainCount = 0;
         KoXmlNode cn = n.firstChild();

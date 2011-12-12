@@ -51,6 +51,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
 #include "kis_shape_tool_helper.h"
+#include "kis_system_locker.h"
 
 KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase * canvas)
         : KisToolSelectBase(canvas, KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6)),
@@ -72,7 +73,7 @@ QWidget* KisToolSelectRectangular::createOptionWidget()
 
 void KisToolSelectRectangular::LocalTool::finishRect(const QRectF& rect)
 {
-    setCurrentNodeLocked(true);
+    KisSystemLocker locker(currentNode());
     QRect rc(rect.toRect());
     rc = rc.intersected(currentImage()->bounds());
     rc = rc.normalized();
@@ -95,7 +96,6 @@ void KisToolSelectRectangular::LocalTool::finishRect(const QRectF& rect)
         QRectF documentRect = convertToPt(rect);
         helper.addSelectionShape(KisShapeToolHelper::createRectangleShape(documentRect));
     }
-    setCurrentNodeLocked(false);
 }
 
 #include "kis_tool_select_rectangular.moc"

@@ -46,7 +46,7 @@
 #include "kis_tool_freehand_helper.h"
 #include "kis_image_patch.h"
 #include "kis_canvas_widget_base.h"
-#include "kis_image.h"
+
 
 class KisScratchPadNodeListener : public KisNodeGraphListener
 {
@@ -76,23 +76,6 @@ private:
     QMutex m_lock;
 };
 
-
-class KisScratchPadDefaultBounds : public KisDefaultBounds
-{
-public:
-
-    KisScratchPadDefaultBounds(KisScratchPad *scratchPad)
-        : m_scratchPad(scratchPad)
-    {
-    }
-
-    QRect bounds() const {
-        return m_scratchPad->imageBounds();
-    }
-
-private:
-    KisScratchPad *m_scratchPad;
-};
 
 
 KisScratchPad::KisScratchPad(QWidget *parent)
@@ -345,7 +328,7 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
 
     m_paintLayer = new KisPaintLayer(0, "ScratchPad", OPACITY_OPAQUE_U8, paintDevice);
     m_paintLayer->setGraphListener(m_nodeListener);
-    paintDevice->setDefaultBounds(KisScratchPadDefaultBounds(this));
+    paintDevice->setDefaultBounds(new KisScratchPadDefaultBounds(this));
 
     fillDefault();
 }

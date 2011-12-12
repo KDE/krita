@@ -81,6 +81,7 @@ public:
        , layoutScheduled(false)
        , continuousLayout(true)
        , layoutBlocked(false)
+       , changesBlocked(false)
        , restartLayout(false)
        , wordprocessingMode(false)
     {
@@ -118,6 +119,7 @@ public:
     bool layoutScheduled;
     bool continuousLayout;
     bool layoutBlocked;
+    bool changesBlocked;
     bool restartLayout;
     bool wordprocessingMode;
 };
@@ -257,6 +259,10 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     Q_UNUSED(charsAdded);
     Q_UNUSED(charsRemoved);
 
+    if (d->changesBlocked) {
+        return;
+    }
+
     int from = position;
     const int to = from + charsAdded;
     while (from < to) { // find blocks that have been added
@@ -331,7 +337,7 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) co
         qreal y = pos.y();
 
         //0.125 needed since Qt Scribe works with fixed point
-        if (x + 0.125 >= rect.x() && x<= rect.right() && y + 0.125 >= rect.y() && y <= rect.bottom()) {
+        if (x + 0.125 >= rect.x() && x<= rect.right() && y + line.height() + 0.125 >= rect.y() && y <= rect.bottom()) {
             return rootArea;
         }
     }
@@ -773,6 +779,16 @@ void KoTextDocumentLayout::setBlockLayout(bool block)
 bool KoTextDocumentLayout::layoutBlocked() const
 {
     return d->layoutBlocked;
+}
+
+void KoTextDocumentLayout::setBlockChanges(bool block)
+{
+    d->changesBlocked = block;
+}
+
+bool KoTextDocumentLayout::changesBlocked() const
+{
+    return d->changesBlocked;
 }
 
 KoTextDocumentLayout* KoTextDocumentLayout::referencedLayout() const

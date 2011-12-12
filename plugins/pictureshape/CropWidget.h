@@ -26,6 +26,11 @@
 
 class PictureShape;
 
+/**
+ * This widget is a graphical user interface to the functionality
+ * the SelectionRect class provides. It shows an image and the user can
+ * move a rectangle freely to select a certain region of that image.
+ */
 class CropWidget : public QWidget
 {
     Q_OBJECT

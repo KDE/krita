@@ -197,10 +197,13 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
     else {
         QPixmap pixmap;
         QString key(generate_key(imageData()->key(), pixmapSize));
-        
+
+        // if the required pixmap is not in the cache
+        // lunch a task in a background thread that scales
+        // the source image to the required size
         if (!QPixmapCache::find(key, &pixmap)) {
             QThreadPool::globalInstance()->start(new _Private::PixmapScaler(this, pixmapSize));
-            painter.fillRect(viewRect, QColor(Qt::gray));
+            painter.fillRect(viewRect, QColor(Qt::gray)); // just paint a gray rect as long as we don't have the required pixmap
         }
         else {
             QRectF cropRect(
@@ -353,7 +356,6 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.setTypeProperties("graphic");
 
-    //FIXME: are there other applicable properties?
     if (styleStack.hasProperty(KoXmlNS::draw, "color-mode")) {
         QString colorMode = styleStack.property(KoXmlNS::draw, "color-mode");
         if (colorMode == "greyscale") {

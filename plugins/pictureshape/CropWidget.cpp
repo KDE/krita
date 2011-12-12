@@ -59,6 +59,7 @@ bool compareRects(const QRectF &a, const QRectF &b, qreal epsilon)
 
 CropWidget::CropWidget(QWidget *parent):
     QWidget(parent),
+    m_pictureShape(0),
     m_isMousePressed(false)
 {
     setMinimumSize(100, 100);
@@ -67,6 +68,8 @@ CropWidget::CropWidget(QWidget *parent):
 
 void CropWidget::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+    
     if(!m_pictureShape)
         return;
     
@@ -142,6 +145,7 @@ void CropWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void CropWidget::resizeEvent(QResizeEvent* event)
 {
+    Q_UNUSED(event);
     calcImageRect();
 }
 

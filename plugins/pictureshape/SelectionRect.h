@@ -25,6 +25,10 @@
 #include <QSizeF>
 #include <limits>
 
+/**
+ * This class represents a rectangle that can be moved and resized
+ * inbetween a constraining rectangle.
+ */
 class SelectionRect
 {
 public:
@@ -69,7 +73,6 @@ private:
     qreal m_tConstr;
     qreal m_bConstr;
     qreal m_aConstr;
-    QSizeF m_minSize;
     qreal m_handleSize;
     HandleFlags m_currentHandle;
 };

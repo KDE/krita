@@ -23,6 +23,11 @@
 #include <QRectF>
 #include <QSizeF>
 
+/**
+ * This is a helper class. It helps converting clipping information
+ * from standard cartesian coordinates to the format required to
+ * save the information to an ODF file (using the fo::clip attribute)
+ */
 struct ClippingRect
 {
     ClippingRect():

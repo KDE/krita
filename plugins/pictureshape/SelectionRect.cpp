@@ -27,8 +27,7 @@
 SelectionRect::SelectionRect(const QRectF &rect, qreal handleSize):
     m_rect(rect),
     m_aspectRatio(1),
-    m_aConstr (0),
-    m_minSize(0,0),
+    m_aConstr(0),
     m_handleSize(handleSize),
     m_currentHandle(0)
 {

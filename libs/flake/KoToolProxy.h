@@ -33,7 +33,6 @@ class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
 class QTabletEvent;
-class KoToolSelection;
 class KoToolBase;
 class KoCanvasBase;
 class KoCanvasController;

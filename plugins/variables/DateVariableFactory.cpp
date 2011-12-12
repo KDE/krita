@@ -31,6 +31,7 @@ DateVariableFactory::DateVariableFactory()
 {
     KoInlineObjectTemplate var;
     var.id = "fixed";
+    // POST 2.4 change explanation to "data that does not automatically update"
     var.name = i18nc("date that can not be changed later", "Date (Fixed)");
     KoProperties *props = new KoProperties();
     props->setProperty("id", DateVariable::Fixed);

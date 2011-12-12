@@ -220,7 +220,8 @@ KDChart::MarkerAttributes DataSet::Private::defaultMarkerAttributes() const
     KDChart::MarkerAttributes ma;
     // Don't show markers unless we turn them on
     ma.setVisible( false );
-    //ma.setMarkerSizeMode( KDChart::MarkerAttributes::RelativeToDiagramWidthHeightMin );
+    // The marker size is specified in pixels, but scaled by the painter's zoom level
+    ma.setMarkerSizeMode( KDChart::MarkerAttributes::AbsoluteSizeScaled );
     return ma;
 }
 

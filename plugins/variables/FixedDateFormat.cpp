@@ -150,7 +150,7 @@ void FixedDateFormat::insertCustomButtonPressed()
         createTimeAction(minute, i18n("Flexible Digits (1-59)"), "m");
         createTimeAction(minute, i18n("2 Digits (01-59)"), "mm");
         createTimeAction(second, i18n("Flexible Digits (1-59)"), "s");
-        createTimeAction(second, i18n("2 Digits (01-59)"), "sss");
+        createTimeAction(second, i18n("2 Digits (01-59)"), "ss");
         createTimeAction(m_popup, i18n("am/pm"), "ap");
         createTimeAction(m_popup, i18n("AM/PM"), "AP");
     }

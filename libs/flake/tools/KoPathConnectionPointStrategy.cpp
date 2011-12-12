@@ -137,10 +137,8 @@ KUndo2Command* KoPathConnectionPointStrategy::createCommand()
     if (!cmd)
         return 0;
 
-    // detach old connection
-    new KoShapeConnectionChangeCommand(d->connectionShape, static_cast<KoConnectionShape::HandleId>(d->handleId), d->oldConnectionShape, 0, d->oldConnectionId, cmd);
-    // attach new connection
-    new KoShapeConnectionChangeCommand(d->connectionShape, static_cast<KoConnectionShape::HandleId>(d->handleId), 0, d->newConnectionShape, d->newConnectionId, cmd);
-
+    // change connection
+    new KoShapeConnectionChangeCommand(d->connectionShape, static_cast<KoConnectionShape::HandleId>(d->handleId),
+                                       d->oldConnectionShape, d->oldConnectionId, d->newConnectionShape, d->newConnectionId, cmd);
     return cmd;
 }

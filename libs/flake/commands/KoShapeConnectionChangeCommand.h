@@ -37,7 +37,9 @@ public:
      * @param connectionPointId the id of the connection point to connect to
      * @param parent the parent undo command
      */
-    KoShapeConnectionChangeCommand(KoConnectionShape *connection, KoConnectionShape::HandleId connectionHandle, KoShape *oldConnectedShape, KoShape *newConnectedShape, int connectionPointId, KUndo2Command *parent = 0);
+    KoShapeConnectionChangeCommand(KoConnectionShape *connection, KoConnectionShape::HandleId connectionHandle,
+                                   KoShape *oldConnectedShape, int oldConnectionPointId,
+                                   KoShape *newConnectedShape, int newConnectionPointId, KUndo2Command *parent = 0);
 
     /// Destroys the command
     virtual ~KoShapeConnectionChangeCommand();

@@ -169,6 +169,10 @@ bool KoBookmark::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
                 if (inlineRdf->loadOdf(element)) {
                     setInlineRdf(inlineRdf);
                 }
+                else {
+                    delete inlineRdf;
+                    inlineRdf = 0;
+                }
             }
         }
         else if (localName == "bookmark-end") {

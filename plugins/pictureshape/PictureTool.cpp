@@ -123,29 +123,31 @@ QWidget *PictureTool::createOptionWidget()
 
 void PictureTool::updateControlElements()
 {
-    QSizeF                  imageSize = m_pictureshape->imageData()->imageSize();
-    PictureShape::ColorMode mode      = m_pictureshape->colorMode();
-    ClippingRect            clippingRect(m_pictureshape->cropRect());
+    if (m_pictureshape) {
+        QSizeF                  imageSize = m_pictureshape->imageData()->imageSize();
+        PictureShape::ColorMode mode      = m_pictureshape->colorMode();
+        ClippingRect            clippingRect(m_pictureshape->cropRect());
 
-    clippingRect.right  = 1.0 - clippingRect.right;
-    clippingRect.bottom = 1.0 - clippingRect.bottom;
-    clippingRect.scale(imageSize);
+        clippingRect.right  = 1.0 - clippingRect.right;
+        clippingRect.bottom = 1.0 - clippingRect.bottom;
+        clippingRect.scale(imageSize);
 
-    m_pictureToolUI->blockAllSignals(true);
-    m_pictureToolUI->cropWidget->setPictureShape(m_pictureshape);
-    m_pictureToolUI->cropWidget->setKeepPictureProportion(m_pictureshape->isPictureInProportion());
-    m_pictureToolUI->cbAspect->setChecked(m_pictureshape->isPictureInProportion());
-    m_pictureToolUI->cmbColorMode->setCurrentIndex(m_pictureToolUI->cmbColorMode->findData(mode));
-    
-    m_pictureToolUI->leftDoubleSpinBox->setRange  (0.0, imageSize.width());
-    m_pictureToolUI->rightDoubleSpinBox->setRange (0.0, imageSize.width());
-    m_pictureToolUI->topDoubleSpinBox->setRange   (0.0, imageSize.height());
-    m_pictureToolUI->bottomDoubleSpinBox->setRange(0.0, imageSize.height());
-    m_pictureToolUI->leftDoubleSpinBox->setValue  (clippingRect.left);
-    m_pictureToolUI->rightDoubleSpinBox->setValue (clippingRect.right);
-    m_pictureToolUI->topDoubleSpinBox->setValue   (clippingRect.top);
-    m_pictureToolUI->bottomDoubleSpinBox->setValue(clippingRect.bottom);
-    m_pictureToolUI->blockAllSignals(false);
+        m_pictureToolUI->blockAllSignals(true);
+        m_pictureToolUI->cropWidget->setPictureShape(m_pictureshape);
+        m_pictureToolUI->cropWidget->setKeepPictureProportion(m_pictureshape->isPictureInProportion());
+        m_pictureToolUI->cbAspect->setChecked(m_pictureshape->isPictureInProportion());
+        m_pictureToolUI->cmbColorMode->setCurrentIndex(m_pictureToolUI->cmbColorMode->findData(mode));
+
+        m_pictureToolUI->leftDoubleSpinBox->setRange  (0.0, imageSize.width());
+        m_pictureToolUI->rightDoubleSpinBox->setRange (0.0, imageSize.width());
+        m_pictureToolUI->topDoubleSpinBox->setRange   (0.0, imageSize.height());
+        m_pictureToolUI->bottomDoubleSpinBox->setRange(0.0, imageSize.height());
+        m_pictureToolUI->leftDoubleSpinBox->setValue  (clippingRect.left);
+        m_pictureToolUI->rightDoubleSpinBox->setValue (clippingRect.right);
+        m_pictureToolUI->topDoubleSpinBox->setValue   (clippingRect.top);
+        m_pictureToolUI->bottomDoubleSpinBox->setValue(clippingRect.bottom);
+        m_pictureToolUI->blockAllSignals(false);
+    }
 }
 
 void PictureTool::changeUrlPressed()

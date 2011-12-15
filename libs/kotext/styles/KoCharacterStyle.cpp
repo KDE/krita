@@ -453,11 +453,11 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
 
 KoCharacterStyle *KoCharacterStyle::autoStyle(const QTextCharFormat &format, QTextCharFormat blockCharFormat) const
 {
-    applyStyle(blockCharFormat);
-    ensureMinimalProperties(blockCharFormat);
-    KoCharacterStyle *autoStyle = new KoCharacterStyle(blockCharFormat);
-    autoStyle->d->stylesPrivate.removeDuplicates(format.properties());
-
+    KoCharacterStyle *autoStyle = new KoCharacterStyle(format);
+    autoStyle->setParentStyle(const_cast<KoCharacterStyle*>(this));
+    autoStyle->applyStyle(blockCharFormat);
+    autoStyle->ensureMinimalProperties(blockCharFormat);
+    autoStyle->removeDuplicates(*this);
     return autoStyle;
 }
 

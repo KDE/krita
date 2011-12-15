@@ -89,11 +89,13 @@ public:
         // 2. disable conflicting actions
         // 3. replace conflicting actions in the action collection
         KActionCollection *ac = canvas->actionCollection();
+
         QHash<QString, KAction*> toolActions = activeTool->actions();
         QHash<QString, KAction*>::const_iterator it(toolActions.constBegin());
+
         for (; it != toolActions.constEnd(); ++it) {
             if (ac) {
-                QAction* action = ac->action(it.key());
+                KAction* action = qobject_cast<KAction*>(ac->action(it.key()));
                 if (action) {
                     ac->takeAction(action);
                     if (action != it.value()) {
@@ -104,7 +106,6 @@ public:
                             disabledDisabledActions.append(action);
                         }
                     }
-                    it.value()->setShortcut(action->shortcut());
                 }
                 ac->addAction(it.key(), it.value());
             }
@@ -114,16 +115,18 @@ public:
 
     void deactivateToolActions()
     {
+
         if (!activeTool)
             return;
         // disable actions of active tool
         foreach(KAction *action, activeTool->actions()) {
             action->setEnabled(false);
         }
-        // enable actions which where disables on activating the active tool
+
+        // enable actions which where disabled on activating the active tool
         // and re-add them to the action collection
         KActionCollection *ac = canvas->actionCollection();
-        foreach(QAction *action, disabledDisabledActions) {
+        foreach(KAction *action, disabledDisabledActions) {
             if(ac) {
                 ac->addAction(action->objectName(), action);
             }
@@ -147,8 +150,8 @@ public:
     const KoInputDevice inputDevice;
     QWidget *dummyToolWidget;  // the widget shown in the toolDocker.
     QLabel *dummyToolLabel;
-    QList<QAction*> disabledActions; ///< disabled conflicting actions
-    QList<QAction*> disabledDisabledActions; ///< disabled conflicting actions that were already disabled
+    QList<KAction*> disabledActions; ///< disabled conflicting actions
+    QList<KAction*> disabledDisabledActions; ///< disabled conflicting actions that were already disabled
 };
 
 KoToolManager::Private::Private(KoToolManager *qq)

@@ -126,7 +126,7 @@ public:
         setShortcut(KShortcut(Qt::Key_G));
         setPriority(15);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setInputDeviceAgnostic(false);
+        setInputDeviceAgnostic(true);
     }
 
     virtual ~KisToolGradientFactory() {}

@@ -55,7 +55,7 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("draw-text");
         setPriority(2);
-        setInputDeviceAgnostic(false);
+        setInputDeviceAgnostic(true);
     }
 
     virtual ~KisToolTextFactory() {}

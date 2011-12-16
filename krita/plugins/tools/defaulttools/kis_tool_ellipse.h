@@ -57,7 +57,7 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("krita_tool_ellipse");
         setPriority(3);
-        setInputDeviceAgnostic(false);
+        setInputDeviceAgnostic(true);
     }
 
     virtual ~KisToolEllipseFactory() {}

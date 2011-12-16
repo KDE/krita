@@ -76,7 +76,7 @@ public:
         setPriority(6);
         setIcon("tool_star");
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setInputDeviceAgnostic(false);
+        setInputDeviceAgnostic(true);
     }
 
     virtual ~KisToolStarFactory() {}

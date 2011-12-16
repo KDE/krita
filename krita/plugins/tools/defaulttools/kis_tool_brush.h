@@ -70,7 +70,7 @@ public:
         setShortcut(KShortcut(Qt::Key_B));
         setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setInputDeviceAgnostic(false);
+        setInputDeviceAgnostic(true);
     }
 
     virtual ~KisToolBrushFactory() {}

@@ -53,7 +53,7 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("polyline");
         setPriority(5);
-        setInputDeviceAgnostic(false);
+        setInputDeviceAgnostic(true);
     }
 
     virtual ~KisToolPolylineFactory() {}

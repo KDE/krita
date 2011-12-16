@@ -88,7 +88,7 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(1);
         setIcon("krita_tool_line");
-        setInputDeviceAgnostic(false);
+        setInputDeviceAgnostic(true);
     }
 
     virtual ~KisToolLineFactory() {}

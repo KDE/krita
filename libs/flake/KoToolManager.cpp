@@ -229,7 +229,6 @@ void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
 
     if (newActiveTool) {
         canvasData->activeTool->repaintDecorations();
-        // check if this tool is inputDeviceAgnostic and used by other devices, in which case we should not deactivate.
         QList<CanvasData*> items = canvasses[canvasData->canvas];
         foreach(CanvasData *cd, items) {
             if (cd == canvasData) continue;
@@ -998,8 +997,7 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
         origHash = d->canvasses.value(controller).first()->allTools;
     }
 
-    if (tool->inputDeviceAgnostic() && origHash.contains(tool->id())) {
-        // reuse ones that are marked as inputDeviceAgnostic();
+    if (origHash.contains(tool->id())) {
         return QPair<QString, KoToolBase*>(tool->id(), origHash.value(tool->id()));
     }
 

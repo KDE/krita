@@ -33,7 +33,7 @@ class KisToolText : public KisToolRectangleBase
 public:
     KisToolText(KoCanvasBase * canvas);
     virtual ~KisToolText();
-    
+
     virtual QList< QWidget* > createOptionWidgets();
 
     virtual KisPainter::FillStyle fillStyle();
@@ -55,7 +55,6 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("draw-text");
         setPriority(2);
-        setInputDeviceAgnostic(true);
     }
 
     virtual ~KisToolTextFactory() {}

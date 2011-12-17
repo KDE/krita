@@ -94,7 +94,6 @@ public:
         setIcon("krita_tool_color_fill");
         //setShortcut( QKeySequence( Qt::Key_F ) );
         setPriority(14);
-        setInputDeviceAgnostic(true);
     }
 
     virtual ~KisToolFillFactory() {}

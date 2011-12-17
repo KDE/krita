@@ -213,7 +213,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 {
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
-    
+
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
@@ -314,7 +314,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     createShellGUI();
     d->mainWindowGuiIsBuilt = true;
-
+#ifndef Q_WS_WIN
     // Get screen geometry
     const int scnum = QApplication::desktop()->screenNumber(parentWidget());
     QRect desk = QApplication::desktop()->availableGeometry(scnum);
@@ -335,7 +335,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
             resize( desk.size() );
         }
     }
-
+#endif
     KConfigGroup config(KGlobal::config(), "MainWindow");
     restoreWindowSize( config );
 
@@ -1172,7 +1172,7 @@ void KoMainWindow::slotFileOpen()
     KFileDialog *dialog = new KFileDialog(KUrl(""), QString(), this);
 #else
     KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString(), this);
-#endif    	
+#endif
     dialog->setObjectName("file dialog");
     dialog->setMode(KFile::File);
     if (!isImporting())

@@ -380,9 +380,10 @@ void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
                 const qint32 lineSize = clearTileRect.width() * pixelSize;
                 qint32 rowsRemaining = clearTileRect.height();
 
-                KisTileDataWrapper tw = pixelPtr(clearTileRect.left(),
-                                                 clearTileRect.top(),
-                                                 KisTileDataWrapper::WRITE);
+                KisTileDataWrapper tw(this,
+                                      clearTileRect.left(),
+                                      clearTileRect.top(),
+                                      KisTileDataWrapper::WRITE);
                 quint8* tileIt = tw.data();
 
                 if (pixelBytesAreTheSame) {
@@ -474,9 +475,10 @@ void KisTiledDataManager::bitBlt(KisTiledDataManager *srcDM, const QRect &rect)
                 const qint32 lineSize = cloneTileRect.width() * pixelSize;
                 qint32 rowsRemaining = cloneTileRect.height();
 
-                KisTileDataWrapper tw = pixelPtr(cloneTileRect.left(),
-                                                 cloneTileRect.top(),
-                                                 KisTileDataWrapper::WRITE);
+                KisTileDataWrapper tw(this,
+                                      cloneTileRect.left(),
+                                      cloneTileRect.top(),
+                                      KisTileDataWrapper::WRITE);
                 srcTile->lockForRead();
                 // We suppose that the shift in both tiles is the same
                 const quint8* srcTileIt = srcTile->data() + tw.offset();
@@ -649,34 +651,10 @@ QRegion KisTiledDataManager::region() const
     return region;
 }
 
-KisTileDataWrapper KisTiledDataManager::pixelPtr(qint32 x, qint32 y,
-        enum KisTileDataWrapper::accessType type)
-{
-    const qint32 col = xToCol(x);
-    const qint32 row = yToRow(y);
-
-    /* FIXME: Always positive? */
-    const qint32 xInTile = x - col * KisTileData::WIDTH;
-    const qint32 yInTile = y - row * KisTileData::HEIGHT;
-
-    const qint32 pixelIndex = xInTile + yInTile * KisTileData::WIDTH;
-
-    /*    bool newTile;
-          KisTileSP tile = m_hashTable->getTileLazy(col, row, newTile);
-          if(newTile)
-          updateExtent(tile->col(), tile->row());
-    */
-    KisTileSP tile = getTile(col, row, type == KisTileDataWrapper::WRITE);
-
-    return KisTileDataWrapper(tile,
-                              pixelIndex*pixelSize(),
-                              type);
-}
-
 void KisTiledDataManager::setPixel(qint32 x, qint32 y, const quint8 * data)
 {
     QWriteLocker locker(&m_lock);
-    KisTileDataWrapper tw = pixelPtr(x, y, KisTileDataWrapper::WRITE);
+    KisTileDataWrapper tw(this, x, y, KisTileDataWrapper::WRITE);
     memcpy(tw.data(), data, pixelSize());
 }
 

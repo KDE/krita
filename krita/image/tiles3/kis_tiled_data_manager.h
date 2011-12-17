@@ -49,49 +49,13 @@ public:
         WRITE
     };
 
-
-    KisTileDataWrapper(KisTileSP tile, qint32 offset, accessType type)
-            : m_tile(tile)
-            , m_offset(offset)
-    {
-        if (type == READ) {
-            m_tile->lockForRead();
-            m_type = READ;
-        }
-        else {
-            m_tile->lockForWrite();
-            m_type = WRITE;
-        }
-    }
+    inline KisTileDataWrapper(KisTiledDataManager *dm,
+                              qint32 x, qint32 y,
+                              enum KisTileDataWrapper::accessType type);
 
     virtual ~KisTileDataWrapper()
     {
         m_tile->unlock();
-    }
-
-    KisTileDataWrapper(const KisTileDataWrapper &rhs)
-    {
-        m_tile = rhs.m_tile;
-        m_offset = rhs.m_offset;
-        m_type = rhs.m_type;
-        if (m_type == READ)
-            m_tile->lockForRead();
-        else
-            m_tile->lockForWrite();
-    }
-
-    KisTileDataWrapper &operator=(const KisTileDataWrapper &rhs)
-    {
-        if (this != &rhs) {
-            m_tile = rhs.m_tile;
-            m_offset = rhs.m_offset;
-            m_type = rhs.m_type;
-            if (m_type == READ)
-                m_tile->lockForRead();
-            else
-                m_tile->lockForWrite();
-        }
-        return *this;
     }
 
     inline qint32 offset() const
@@ -110,9 +74,10 @@ public:
     }
 
 private:
+    Q_DISABLE_COPY(KisTileDataWrapper);
+
     KisTileSP m_tile;
     qint32 m_offset;
-    accessType m_type;
 };
 
 
@@ -355,6 +320,7 @@ private:
     // Allow compression routines to calculate (col,row) coordinates
     // and pixel size
     friend class KisAbstractTileCompressor;
+    friend class KisTileDataWrapper;
     qint32 xToCol(qint32 x) const;
     qint32 yToRow(qint32 y) const;
 
@@ -363,8 +329,6 @@ private:
     bool processTilesHeader(QIODevice *stream, quint32 &numTiles);
 
     qint32 divideRoundDown(qint32 x, const qint32 y) const;
-    KisTileDataWrapper pixelPtr(qint32 x, qint32 y,
-                                enum KisTileDataWrapper::accessType type);
 
     void updateExtent(qint32 col, qint32 row);
     void recalculateExtent();
@@ -411,6 +375,31 @@ inline qint32 KisTiledDataManager::yToRow(qint32 y) const
     return divideRoundDown(y, KisTileData::HEIGHT);
 }
 
+inline KisTileDataWrapper::KisTileDataWrapper(KisTiledDataManager *dm,
+                                              qint32 x, qint32 y,
+                                              enum KisTileDataWrapper::accessType type)
+{
+    const qint32 col = dm->xToCol(x);
+    const qint32 row = dm->yToRow(y);
+
+    /* FIXME: Always positive? */
+    const qint32 xInTile = x - col * KisTileData::WIDTH;
+    const qint32 yInTile = y - row * KisTileData::HEIGHT;
+
+    const qint32 pixelIndex = xInTile + yInTile * KisTileData::WIDTH;
+
+    KisTileSP tile = dm->getTile(col, row, type == WRITE);
+
+    m_tile = tile;
+    m_offset = pixelIndex * dm->pixelSize();
+
+    if (type == READ) {
+        m_tile->lockForRead();
+    }
+    else {
+        m_tile->lockForWrite();
+    }
+}
 
 // during development the following line helps to check the interface is correct
 // it should be safe to keep it here even during normal compilation

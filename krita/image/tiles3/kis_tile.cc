@@ -131,8 +131,8 @@ inline void KisTile::blockSwapping() const
 inline void KisTile::unblockSwapping() const
 {
     QMutexLocker locker(&m_swapBarrierLock);
-
     Q_ASSERT(m_lockCounter > 0);
+
     if(--m_lockCounter == 0) {
         m_tileData->unblockSwapping();
 
@@ -149,8 +149,8 @@ inline void KisTile::unblockSwapping() const
 inline void KisTile::safeReleaseOldTileData(KisTileData *td)
 {
     QMutexLocker locker(&m_swapBarrierLock);
-
     Q_ASSERT(m_lockCounter >= 0);
+
     if(m_lockCounter > 0) {
         m_oldTileData.push(td);
     }

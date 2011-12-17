@@ -88,6 +88,9 @@ protected:
     /// values for the subclasses are provided in component coordinates, eg (0,0) is top left of component
     virtual bool containsPointInComponentCoords(int x, int y) const;
 
+    // Workaround for Bug 287001
+    void setLastMousePosition(int x, int y);
+
     qreal m_hue;
     qreal m_hsvSaturation;
     qreal m_value;

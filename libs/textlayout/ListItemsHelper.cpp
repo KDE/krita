@@ -467,6 +467,8 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
             counterSpacing = qMax(counterSpacing, qreal(0.0));
             width = qMax(width, format.doubleProperty(KoListStyle::MinimumWidth));
         }
+    } else {
+        width = qMax(width, format.doubleProperty(KoListStyle::MinimumWidth));
     }
     data->setCounterWidth(width);
     data->setCounterSpacing(counterSpacing);

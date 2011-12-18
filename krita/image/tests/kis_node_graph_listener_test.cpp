@@ -20,11 +20,58 @@
 
 #include <qtest_kde.h>
 #include "kis_node_graph_listener.h"
+#include "kis_node_facade.h"
+#include "testutil.h"
 
-void KisNodeGraphListenerTest::testCreation()
+void KisNodeGraphListenerTest::testUpdateOfListener()
 {
+    KisNodeFacade nodeFacade;
+    TestUtil::TestGraphListener listener;
+
+    KisNodeSP rootNode = new TestNode();
+    KisNodeSP child1 = new TestNode();
+    KisNodeSP child2 = new TestNode();
+
+    rootNode->setGraphListener(&listener);
+
+    QCOMPARE(rootNode->graphListener(), &listener);
+    QCOMPARE(child1->graphListener(), (KisNodeGraphListener*)0);
+    QCOMPARE(child2->graphListener(), (KisNodeGraphListener*)0);
+
+    nodeFacade.addNode(child1, rootNode);
+    nodeFacade.addNode(child2, rootNode);
+
+    QCOMPARE(rootNode->graphListener(), &listener);
+    QCOMPARE(child1->graphListener(), &listener);
+    QCOMPARE(child2->graphListener(), &listener);
 }
 
+void KisNodeGraphListenerTest::testRecursiveUpdateOfListener()
+{
+    KisNodeFacade nodeFacade;
+    TestUtil::TestGraphListener listener;
 
-QTEST_KDEMAIN(KisNodeGraphListenerTest, GUI)
+    KisNodeSP rootNode = new TestNode();
+    KisNodeSP child1 = new TestNode();
+    KisNodeSP child2 = new TestNode();
+
+    QCOMPARE(rootNode->graphListener(), (KisNodeGraphListener*)0);
+    QCOMPARE(child1->graphListener(), (KisNodeGraphListener*)0);
+    QCOMPARE(child2->graphListener(), (KisNodeGraphListener*)0);
+
+    nodeFacade.addNode(child1, rootNode);
+    nodeFacade.addNode(child2, rootNode);
+
+    QCOMPARE(rootNode->graphListener(), (KisNodeGraphListener*)0);
+    QCOMPARE(child1->graphListener(), (KisNodeGraphListener*)0);
+    QCOMPARE(child2->graphListener(), (KisNodeGraphListener*)0);
+
+    rootNode->setGraphListener(&listener);
+
+    QCOMPARE(rootNode->graphListener(), &listener);
+    QCOMPARE(child1->graphListener(), &listener);
+    QCOMPARE(child2->graphListener(), &listener);
+}
+
+QTEST_KDEMAIN(KisNodeGraphListenerTest, NoGUI)
 #include "kis_node_graph_listener_test.moc"

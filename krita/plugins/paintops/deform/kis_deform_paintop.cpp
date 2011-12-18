@@ -105,6 +105,9 @@ qreal KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         }
 
         qreal rotation = m_rotationOption.apply(info);
+
+        // Deform Brush is capable of working with zero scale,
+        // so no additional checks for 'zero'ness are needed
         qreal scale = m_sizeOption.apply(info);
 
         setCurrentRotation(rotation);

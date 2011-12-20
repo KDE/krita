@@ -264,6 +264,9 @@ bool StylesCombo::eventFilter(QObject *object, QEvent *event)
         QModelIndex buddy = m_stylesModel->buddy(index);
         QStyleOptionViewItemV4 options;
         options.rect = view()->visualRect(buddy);
+        options.widget = m_view;
+        kDebug() << "option.rect sent to the popup: " << options.rect;
+        kDebug() << "event sent: " << mouseEvent->type();
         options.state |= (buddy == view()->currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
         return view()->itemDelegate()->editorEvent(mouseEvent, m_stylesModel, options, index);
     }

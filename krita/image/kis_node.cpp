@@ -141,6 +141,12 @@ KisNodeGraphListener *KisNode::graphListener() const
 void KisNode::setGraphListener(KisNodeGraphListener *graphListener)
 {
     m_d->graphListener = graphListener;
+
+    KisSafeReadNodeList::const_iterator iter;
+    FOREACH_SAFE(iter, m_d->nodes) {
+        KisNodeSP child = (*iter);
+        child->setGraphListener(graphListener);
+    }
 }
 
 KisNodeSP KisNode::parent() const

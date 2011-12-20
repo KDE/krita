@@ -27,18 +27,18 @@
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                KisResourcesSnapshotSP resources,
-                                               KisPainter *painter)
+                                               PainterInfo *painterInfo)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", "Freehand stroke",
-                                    resources, painter)
+                                    resources, painterInfo)
 {
     init(needsIndirectPainting);
 }
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                KisResourcesSnapshotSP resources,
-                                               QVector<KisPainter*> painters)
+                                               QVector<PainterInfo*> painterInfos)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", "Freehand stroke",
-                                    resources, painters)
+                                    resources, painterInfos)
 {
     init(needsIndirectPainting);
 }
@@ -52,26 +52,27 @@ void FreehandStrokeStrategy::init(bool needsIndirectPainting)
 void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
+    PainterInfo *info = d->painterInfo;
 
     switch(d->type) {
     case Data::POINT:
-        d->dragDistance = KisDistanceInformation(0,0);
-        d->painter->paintAt(d->pi1);
-        d->node->setDirty(d->painter->takeDirtyRegion());
+        *info->dragDistance = KisDistanceInformation(0,0);
+        info->painter->paintAt(d->pi1);
+        d->node->setDirty(info->painter->takeDirtyRegion());
         break;
     case Data::LINE:
-        d->dragDistance =
-            d->painter->paintLine(d->pi1, d->pi2, d->dragDistance);
-        d->node->setDirty(d->painter->takeDirtyRegion());
+        *info->dragDistance =
+            info->painter->paintLine(d->pi1, d->pi2, *info->dragDistance);
+        d->node->setDirty(info->painter->takeDirtyRegion());
         break;
     case Data::CURVE:
-        d->dragDistance =
-            d->painter->paintBezierCurve(d->pi1,
-                                         d->control1,
-                                         d->control2,
-                                         d->pi2,
-                                         d->dragDistance);
-        d->node->setDirty(d->painter->takeDirtyRegion());
+        *info->dragDistance =
+            info->painter->paintBezierCurve(d->pi1,
+                                            d->control1,
+                                            d->control2,
+                                            d->pi2,
+                                            *info->dragDistance);
+        d->node->setDirty(info->painter->takeDirtyRegion());
         break;
     };
 }

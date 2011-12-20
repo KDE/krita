@@ -278,6 +278,24 @@ void Legend::setFontSize( qreal size )
     d->pixmapRepaintRequested = true;
 }
 
+void Legend::setFontColor( const QColor &color )
+{
+    KDChart::TextAttributes attributes = d->kdLegend->textAttributes();
+    QPen pen = attributes.pen();
+    pen.setColor(color);
+    attributes.setPen(pen);
+    d->kdLegend->setTextAttributes( attributes );
+
+    d->pixmapRepaintRequested = true;
+}
+
+QColor Legend::fontColor() const
+{
+    KDChart::TextAttributes attributes = d->kdLegend->textAttributes();
+    QPen pen = attributes.pen();
+    return pen.color();
+}
+
 QFont Legend::titleFont() const
 {
     return d->titleFont;
@@ -510,6 +528,12 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
 
         if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) {
             setFontSize( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "font-size" ) ) );
+        }
+        if ( styleStack.hasProperty( KoXmlNS::fo, "font-color" ) ) {
+            QColor color = styleStack.property( KoXmlNS::fo, "font-color" );
+            if (color.isValid()) {
+                setFontColor(color);
+            }
         }
     }
     else {

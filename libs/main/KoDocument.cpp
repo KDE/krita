@@ -625,6 +625,22 @@ void KoDocument::setConfirmNonNativeSave(const bool exporting, const bool on)
     d->confirmNonNativeSave [ exporting ? 1 : 0] = on;
 }
 
+bool KoDocument::saveInBatchMode() const
+{
+    if (d->filterManager) {
+        return d->filterManager->getBatchMode();
+    }
+    return true;
+}
+
+void KoDocument::setSaveInBatchMode(const bool batchMode)
+{
+    if (!d->filterManager) {
+        d->filterManager = new KoFilterManager(this, d->progressUpdater);
+    }
+    d->filterManager->setBatchMode(batchMode);
+}
+
 bool KoDocument::wantExportConfirmation() const
 {
     return true;

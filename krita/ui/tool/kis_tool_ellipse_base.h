@@ -38,7 +38,6 @@ public:
 
 protected:
     virtual void finishEllipse(const QRectF& rect)=0;
-    void updateArea(const QRectF& rect);
     void updateArea();
 
 private:

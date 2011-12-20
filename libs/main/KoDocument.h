@@ -308,6 +308,17 @@ public:
     bool confirmNonNativeSave(const bool exporting) const;
     void setConfirmNonNativeSave(const bool exporting, const bool on);
 
+
+    /**
+     * @return true if saving/exporting should inhibit the option dialog
+     */
+    bool saveInBatchMode() const;
+
+    /**
+     * @param batchMode if true, do not show the option dialog when saving or exporting.
+     */
+    void setSaveInBatchMode(const bool batchMode);
+
     virtual bool wantExportConfirmation() const;
 
     /**

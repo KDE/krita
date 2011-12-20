@@ -553,6 +553,7 @@ QString KoTextWriter::Private::saveCharacterStyle(const QTextCharFormat &charFor
         generatedName = context.mainStyles().insert(style, "T");
     }
 
+    delete autoStyle;
     return generatedName;
 }
 

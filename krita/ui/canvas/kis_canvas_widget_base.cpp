@@ -222,12 +222,15 @@ void KisCanvasWidgetBase::processMousePressEvent(QMouseEvent *e)
         {
             m_d->toolProxy->mousePressEvent(e, mouseEventWidgetToDocument(e->pos()));
         }
+        e->setAccepted(true);
         return;
     }
     if (m_d->blockMouseEvent.isActive()) {
+        e->setAccepted(true);
         return;
     }
     m_d->toolProxy->mousePressEvent(e, mouseEventWidgetToDocument(e->pos()));
+    e->setAccepted(true);
 }
 
 void KisCanvasWidgetBase::processMouseReleaseEvent(QMouseEvent *e)

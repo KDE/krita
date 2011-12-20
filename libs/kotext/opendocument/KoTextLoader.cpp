@@ -1080,8 +1080,13 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
         QTextBlock block = cursor.block();
         KoTextInlineRdf* inlineRdf =
                 new KoTextInlineRdf((QTextDocument*)block.document(), block);
-        inlineRdf->loadOdf(element);
-        KoTextInlineRdf::attach(inlineRdf, cursor);
+        if (inlineRdf->loadOdf(element)) {
+                KoTextInlineRdf::attach(inlineRdf, cursor);
+        }
+        else {
+            delete inlineRdf;
+            inlineRdf = 0;
+        }
     }
 
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
@@ -1147,8 +1152,13 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
         QTextBlock block = cursor.block();
         KoTextInlineRdf* inlineRdf =
                 new KoTextInlineRdf((QTextDocument*)block.document(), block);
-        inlineRdf->loadOdf(element);
-        KoTextInlineRdf::attach(inlineRdf, cursor);
+        if (inlineRdf->loadOdf(element)) {
+            KoTextInlineRdf::attach(inlineRdf, cursor);
+        }
+        else {
+            delete inlineRdf;
+            inlineRdf = 0;
+        }
     }
 
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
@@ -1715,7 +1725,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             QString target = ts.attributeNS(KoXmlNS::xlink, "href");
             QString styleName = ts.attributeNS(KoXmlNS::text, "style-name", QString());
             QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
-            
+
             if (!styleName.isEmpty()) {
                 KoCharacterStyle *characterStyle = d->textSharedData->characterStyle(styleName, d->stylesDotXml);
                 if (characterStyle) {
@@ -1728,10 +1738,10 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             newCharFormat.setAnchor(true);
             newCharFormat.setAnchorHref(target);
             cursor.setCharFormat(newCharFormat);
-            
+
             loadSpan(ts, cursor, stripLeadingSpace);   // recurse
             cursor.setCharFormat(cf); // restore the cursor char format
-            
+
             if (!ts.attributeNS(KoXmlNS::delta, "insertion-type").isEmpty())
                 d->closeChangeRegion(ts);
         } else if (isTextNS && localName == "line-break") { // text:line-break
@@ -1759,8 +1769,14 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                         || ts.hasAttribute("id")) {
                     KoTextInlineRdf* inlineRdf =
                             new KoTextInlineRdf((QTextDocument*)document, startmark);
-                    inlineRdf->loadOdf(ts);
-                    startmark->setInlineRdf(inlineRdf);
+                    if (inlineRdf->loadOdf(ts)) {
+                        startmark->setInlineRdf(inlineRdf);
+                    }
+                    else {
+                        delete inlineRdf;
+                        inlineRdf = 0;
+                    }
+
                 }
 
                 loadSpan(ts, cursor, stripLeadingSpace);   // recurse
@@ -2299,10 +2315,15 @@ void KoTextLoader::loadTableCell(KoXmlElement &rowTag, QTextTable *tbl, QList<QR
         // rowTag is the current table cell.
         if (rowTag.hasAttributeNS(KoXmlNS::xhtml, "property") || rowTag.hasAttribute("id")) {
             KoTextInlineRdf* inlineRdf = new KoTextInlineRdf((QTextDocument*)cursor.block().document(),cell);
-            inlineRdf->loadOdf(rowTag);
-            QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-            cellFormat.setProperty(KoTableCellStyle::InlineRdf,QVariant::fromValue(inlineRdf));
-            cell.setFormat(cellFormat);
+            if (inlineRdf->loadOdf(rowTag)) {
+                QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
+                cellFormat.setProperty(KoTableCellStyle::InlineRdf,QVariant::fromValue(inlineRdf));
+                cell.setFormat(cellFormat);
+            }
+            else {
+                delete inlineRdf;
+                inlineRdf = 0;
+            }
         }
 
         cursor = cell.firstCursorPosition();

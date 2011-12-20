@@ -79,6 +79,9 @@ KisSelection::KisSelection(const KisSelection& rhs)
 
 KisSelection::~KisSelection()
 {
+    if (!m_d->defaultBounds->parent()) {
+        delete m_d->defaultBounds;
+    }
     delete m_d->shapeSelection;
     delete m_d;
 }

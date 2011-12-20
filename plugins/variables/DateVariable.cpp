@@ -33,7 +33,7 @@
 DateVariable::DateVariable(DateType type)
         : KoVariable()
         , m_type(type)
-        , m_displayType(Custom)
+        , m_displayType(Date)
         , m_daysOffset(0)
         , m_monthsOffset(0)
         , m_yearsOffset(0)
@@ -63,13 +63,14 @@ void DateVariable::saveOdf(KoShapeSavingContext & context)
 
     if (m_type == Fixed) {
         writer->addAttribute("text:fixed", "true");
+        if (m_displayType == Time) {
+            // if only the time is set QDateTime::toString returns an empty so add the data by hand
+            writer->addAttribute("text:time-value", "0-00-00T" + m_time.time().toString(Qt::ISODate));
+        } else {
+            writer->addAttribute("text:date-value", m_time.toString(Qt::ISODate));
+        }
     } else {
         writer->addAttribute("text:fixed", "false");
-    }
-    if (m_displayType == Time) {
-        writer->addAttribute("text:time-value", m_time.toString(Qt::ISODate));
-    } else {
-        writer->addAttribute("text:date-value", m_time.toString(Qt::ISODate));
     }
     writer->addTextNode(value());
     writer->endElement();
@@ -95,24 +96,24 @@ bool DateVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     }
 
     //dateProperties.setProperty("time", element.attributeNS(KoXmlNS::text, localName + "-value"));
-    const QString value(element.attributeNS(KoXmlNS::text, localName + "-value", ""));
+    QString value(element.attributeNS(KoXmlNS::text, localName + "-value", ""));
     if (!value.isEmpty()) {
+        if (value.startsWith("0-00-00T")) {
+            value.prepend("000");
+        }
         m_time = QDateTime::fromString(value, Qt::ISODate);
     } else {
-        //TODO see 6.2.1 Date Fields
+        // if value is not set current time is assumed  ODF 19.881 text:time-value
+        m_type = AutoUpdate;
     }
 
     //dateProperties.setProperty("definition", dateFormat);
     m_definition = dateFormat;
 
-    if (dateFormat.isEmpty())
-        if (localName == "time") {
-            m_displayType = Time;
-        } else {
-            m_displayType = Date;
-        }
-    else {
-        m_displayType = Custom;
+    if (localName == "time") {
+        m_displayType = Time;
+    } else {
+        m_displayType = Date;
     }
 
     //dateProperties.setProperty("adjust", element.attributeNS(KoXmlNS::text, localName + "-adjust"));
@@ -131,13 +132,13 @@ void DateVariable::readProperties(const KoProperties *props)
         m_type = Fixed;
     else
         m_type = AutoUpdate;
-    QString displayTypeProp = props->stringProperty("displayType", "custom");
-    if (displayTypeProp == "custom")
-        m_displayType = Custom;
-    else if (displayTypeProp == "date")
-        m_displayType = Date;
-    else if (displayTypeProp == "time")
+    QString displayTypeProp = props->stringProperty("displayType", "date");
+    if (displayTypeProp == "time") {
         m_displayType = Time;
+    }
+    else {
+        m_displayType = Date;
+    }
     adjustTime(props->stringProperty("adjust"));
     update();
 }
@@ -198,14 +199,21 @@ void DateVariable::update()
     target = target.addMonths(m_monthsOffset);
     target = target.addYears(m_yearsOffset);
     switch (m_displayType) {
-    case Custom:
-        setValue(target.toString(m_definition));
-        break;
     case Time:
-        setValue(target.time().toString(Qt::LocalDate));
+        if (m_definition.isEmpty()) {
+            setValue(target.time().toString(Qt::LocalDate));
+        }
+        else {
+            setValue(target.time().toString(m_definition));
+        }
         break;
     case Date:
-        setValue(target.date().toString(Qt::LocalDate));
+        if (m_definition.isEmpty()) {
+            setValue(target.date().toString(Qt::LocalDate));
+        }
+        else {
+            setValue(target.toString(m_definition));
+        }
         break;
     }
 }

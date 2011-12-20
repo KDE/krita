@@ -30,54 +30,17 @@
  */
 struct ClippingRect
 {
-    ClippingRect():
-        top(0), right(1), bottom(1), left(0),
-        uniform(true), inverted(false) { }
+    ClippingRect();
+    ClippingRect(const ClippingRect& rect);
+    explicit ClippingRect(const QRectF& rect, bool isUniform=false);
     
-    ClippingRect(const ClippingRect& rect):
-        top(rect.top), right(rect.right), bottom(rect.bottom), left(rect.left),
-        uniform(rect.uniform), inverted(rect.inverted) { }
-
-    explicit ClippingRect(const QRectF& rect, bool isUniform=false)
-    {
-        setRect(rect, isUniform);
-    }
+    void scale(const QSizeF& size, bool isUniform=false);
+    void normalize(const QSizeF& size);
+    void setRect(const QRectF& rect, bool isUniform=false);
     
-    void scale(const QSizeF& size, bool isUniform=false)
-    {
-        top    *= size.height();
-        right  *= size.width();
-        bottom *= size.height();
-        left   *= size.width();
-        uniform = isUniform;
-    }
-    
-    void normalize(const QSizeF& size)
-    {
-        if (!uniform) {
-            scale(QSizeF(1.0/size.width(), 1.0/size.height()), true);
-        }
-        
-        if(inverted) {
-            right    = 1.0 - right;
-            bottom   = 1.0 - bottom;
-            inverted = false;
-        }
-    }
-    
-    void setRect(const QRectF& rect, bool isUniform=false)
-    {
-        top      = rect.top();
-        right    = rect.right();
-        bottom   = rect.bottom();
-        left     = rect.left();
-        uniform  = isUniform;
-        inverted = false;
-    }
-    
-    qreal  width()  const { return right - left; }
-    qreal  height() const { return bottom - top; }
-    QRectF toRect() const { return QRectF(left, top, width(), height()); }
+    qreal width() const;
+    qreal height() const;
+    QRectF toRect() const;
     
     qreal top;
     qreal right;

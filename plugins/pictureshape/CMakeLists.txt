@@ -12,6 +12,7 @@ SET (pictureshape_LIB_SRCS
     ChangeImageCommand.cpp
     CropWidget.cpp
     SelectionRect.cpp
+    ClippingRect.cpp
     filters/GreyscaleFilterEffect.cpp
     filters/MonoFilterEffect.cpp
     filters/WatermarkFilterEffect.cpp

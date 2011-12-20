@@ -65,8 +65,8 @@ namespace _Private
         void finished(const QString&, const QImage&);
         
     private:
-        QSize   m_size;
-        QImage  m_image;
+        QSize m_size;
+        QImage m_image;
         quint64 m_imageKey;
     };
 }

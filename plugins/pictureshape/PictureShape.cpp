@@ -121,7 +121,7 @@ bool PictureShape::isPictureInProportion() const
     qreal shapeAspect = size().width() / size().height();
     qreal rectAspect  = clippingRectSize.width() / clippingRectSize.height();
 
-    return qAbs(shapeAspect - rectAspect) <= 0.01;
+    return qAbs(shapeAspect - rectAspect) <= 0.025;
 }
 
 void PictureShape::setCropRect(const QRectF& rect)

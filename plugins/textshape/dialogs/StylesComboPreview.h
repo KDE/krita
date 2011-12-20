@@ -27,6 +27,7 @@ public:
     void setPreview(QPixmap pixmap);
 
 signals:
+    void resized();
     void newStyleRequested(QString name);
 
 protected:

@@ -252,7 +252,7 @@ void StylesComboPreview::updateAddButton()
 
 void StylesComboPreview::resizeEvent( QResizeEvent * ev )
 {
-
+    emit resized();
     updateAddButton();
     QLineEdit::resizeEvent(ev);
 }

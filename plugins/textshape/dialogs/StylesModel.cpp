@@ -95,7 +95,7 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
     int id = (int) index.internalId();
     switch (role) {
     case Qt::DisplayRole: {
-//        return QVariant();
+        return QVariant();
         KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
         if (paragStyle)
             return paragStyle->name();

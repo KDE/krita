@@ -63,6 +63,7 @@ private slots:
     void showDia();
     void deleteStyle(QModelIndex);
     void selectionChanged(int index);
+    void previewResized();
 
 private:
     StylesModel *m_stylesModel;

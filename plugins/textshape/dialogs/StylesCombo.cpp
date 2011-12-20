@@ -70,6 +70,9 @@ StylesCombo::StylesCombo(QWidget *parent)
     m_view->setMouseTracking(true);
 //    m_view->setSizePolicy(QSizePolicy::Minimum);
     setView(m_view);
+//    view()->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Ignored);
+//    view()->setMinimumWidth(250);
+//    view()->setMaximumWidth(250);
     view()->viewport()->installEventFilter(this);
     StylesDelegate *delegate = new StylesDelegate();
     connect(delegate, SIGNAL(needsUpdate(QModelIndex)), m_view, SLOT(update(QModelIndex)));
@@ -163,6 +166,7 @@ void StylesCombo::setLineEdit(QLineEdit *edit)
         connect(edit, SIGNAL(destroyed()), SLOT(lineEditDeleted()));
 
         connect(m_preview, SIGNAL(returnPressed(const QString&)), SIGNAL(returnPressed(const QString&)));
+        connect(m_preview, SIGNAL(resized()), this, SLOT(previewResized()));
 
 //        m_preview->setTrapReturnKey( d->trapReturnKey );
     }
@@ -224,7 +228,19 @@ void StylesCombo::setCurrentFormat(const QTextBlockFormat &format)
 
 void StylesCombo::setCurrentFormat(const QTextCharFormat &format)
 {
+    Q_UNUSED(format)
+}
 
+void StylesCombo::previewResized()
+{///TODO take care of charStyles too
+    int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
+    KoParagraphStyle *usedStyle = 0;
+    if (m_stylesModel->styleManager())
+        usedStyle = m_stylesModel->styleManager()->paragraphStyle(id);
+    if (usedStyle) {
+        kDebug() << "resizing preview. new available size: " << m_preview->availableSize();
+        m_preview->setPreview(m_stylesModel->thumbnailer()->thumbnail(usedStyle, m_preview->availableSize()));
+    }
 }
 
 bool StylesCombo::eventFilter(QObject *object, QEvent *event)

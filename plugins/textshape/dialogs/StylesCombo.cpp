@@ -86,7 +86,7 @@ StylesCombo::StylesCombo(QWidget *parent)
     setIconSize(QSize(0,0));
 
     StylesComboPreview *preview = new StylesComboPreview(this);
-    preview->setAddButtonShown(true);
+//    preview->setAddButtonShown(true);
     connect(preview, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
     QComboBox::setEditable(true);
     setLineEdit(preview);
@@ -114,7 +114,7 @@ void StylesCombo::setStylesModel(StylesModel *model)
 
 void StylesCombo::setStyleManager(KoStyleManager *styleManager)
 {
-
+    Q_UNUSED(styleManager)
 }
 void StylesCombo::setEditable(bool editable)
 {
@@ -287,6 +287,9 @@ void StylesCombo::paintEvent(QPaintEvent *e)
 */
 void StylesCombo::showDia()
 {
+    kDebug() << "showDia slot";
+//TODO this shouldn't be done here, send signal instead
+/*
         KoStyleManager *styleManager = m_stylesModel->styleManager();
         Q_ASSERT(styleManager);
         if (!styleManager)
@@ -294,10 +297,13 @@ void StylesCombo::showDia()
         StyleManagerDialog *dia = new StyleManagerDialog(this);
         dia->setStyleManager(styleManager);
         dia->show();
+*/
 }
 
 void StylesCombo::deleteStyle(QModelIndex index)
 {
+    Q_UNUSED(index)
+    kDebug() << "delete style slot";
     //TODO this should not be handled here. send a signal instead.
 /*    KoStyleManager *styleManager = m_stylesModel->styleManager();
     Q_ASSERT(styleManager);

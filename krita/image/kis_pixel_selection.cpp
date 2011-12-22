@@ -37,12 +37,11 @@
 #include "kis_image.h"
 #include "kis_fill_painter.h"
 #include "kis_outline_generator.h"
-#include "kis_default_bounds.h"
 
 struct KisPixelSelection::Private {
 };
 
-KisPixelSelection::KisPixelSelection(KisDefaultBounds * defaultBounds)
+KisPixelSelection::KisPixelSelection(KisDefaultBoundsSP defaultBounds)
         : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
         , m_d(new Private)
 {
@@ -253,7 +252,7 @@ QVector<QPolygon> KisPixelSelection::outline()
 
     KisOutlineGenerator generator(colorSpace(), *defaultPixel());
     QVector<QPolygon> paths = generator.outline(buffer, xOffset, yOffset, width, height);
-
+    
     delete[] buffer;
 
     return paths;

@@ -28,7 +28,6 @@
 #include "kis_iterators_pixel.h"
 #include "KoColorSpace.h"
 #include "kis_debug.h"
-#include "kis_image.h"
 
 KisHistogram::KisHistogram(const KisPaintLayerSP layer,
                            KoHistogramProducerSP producer,

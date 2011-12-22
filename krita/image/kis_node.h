@@ -18,9 +18,8 @@
 #ifndef _KIS_NODE_H
 #define _KIS_NODE_H
 
-#include "kis_undo_adapter.h"
-#include "kis_base_node.h"
 #include "kis_types.h"
+#include "kis_base_node.h"
 #include "krita_export.h"
 
 #include <QVector>

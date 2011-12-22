@@ -32,7 +32,7 @@
 #include <kis_node.h>
 #include <kis_undo_adapter.h>
 #include "kis_node_graph_listener.h"
-#include <kis_image.h>
+
 /**
  * Routines that are useful for writing efficient tests
  */
@@ -224,7 +224,7 @@ public:
 
     }
 
-    virtual void requestProjectionUpdate(KisNode */*node*/, const QRect& /*rect*/) {
+    virtual void requestProjectionUpdate(KisNode *node, const QRect& rect) {
 
     }
 

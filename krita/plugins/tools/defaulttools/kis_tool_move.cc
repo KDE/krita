@@ -39,7 +39,6 @@
 #include "kis_canvas2.h"
 #include "kis_view2.h"
 #include "kis_node_manager.h"
-#include "kis_image.h"
 
 #include <kis_transaction.h>
 #include <commands/kis_image_layer_add_command.h>
@@ -268,7 +267,7 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *event)
 {
     if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
         setMode(KisTool::HOVER_MODE);
-
+        
         if (!m_strokeId)
         {
             return;

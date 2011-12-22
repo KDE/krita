@@ -202,7 +202,15 @@ void TextShape::saveOdf(KoShapeSavingContext &context) const
     QString textHeight = additionalAttribute("fo:min-height");
     const_cast<TextShape*>(this)->removeAdditionalAttribute("fo:min-height");
     writer.startElement("draw:frame");
-    saveOdfAttributes(context, OdfAllAttributes);
+    // if the TextShape is wrapped in a shrink to fit container we need to save the geometry of the container as
+    // the geomerty of the shape might have been changed.
+    if (ShrinkToFitShapeContainer *stf = dynamic_cast<ShrinkToFitShapeContainer *>(this->parent())) {
+        stf->saveOdfAttributes(context, OdfSize | OdfPosition | OdfTransformation );
+        saveOdfAttributes(context, OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements);
+    }
+    else {
+        saveOdfAttributes(context, OdfAllAttributes);
+    }
     writer.startElement("draw:text-box");
     if (! textHeight.isEmpty())
         writer.addAttribute("fo:min-height", textHeight);

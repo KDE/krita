@@ -57,7 +57,7 @@ namespace KoOdfNumberStyles
         QString currencySymbol;
         bool thousandsSep;
         QList<QPair<QString,QString> > styleMaps; // conditional formatting, first=condition, second=applyStyleName
-        NumericStyleFormat() : precision(-1), thousandsSep(false) {}
+        NumericStyleFormat() : type(Text), precision(-1), thousandsSep(false) {}
     };
 
     KOODF_EXPORT QString format(const QString &value, NumericStyleFormat format);

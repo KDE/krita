@@ -29,7 +29,7 @@
 #include "kis_undo_stores.h"
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
-
+#include "kis_image.h"
 
 /*
   +----------+

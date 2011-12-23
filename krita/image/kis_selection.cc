@@ -23,6 +23,7 @@
 #include "kis_selection_component.h"
 #include "kis_pixel_selection.h"
 
+#include "kis_default_bounds.h"
 
 struct KisSelection::Private {
     Private()
@@ -34,15 +35,18 @@ struct KisSelection::Private {
 
     bool isDeselected; // true if the selection is empty, no pixels are selected
     bool isVisible; //false is the selection decoration should not be displayed
-    KisDefaultBoundsSP defaultBounds;
+    KisDefaultBoundsBaseSP defaultBounds;
     KisPixelSelectionSP projection;
     KisPixelSelectionSP pixelSelection;
     KisSelectionComponent* shapeSelection;
 };
 
-KisSelection::KisSelection(KisDefaultBoundsSP defaultBounds)
+KisSelection::KisSelection(KisDefaultBoundsBaseSP defaultBounds)
     : m_d(new Private)
 {
+    if (!defaultBounds) {
+        defaultBounds = new KisSelectionDefaultBounds();
+    }
     m_d->defaultBounds = defaultBounds;
 }
 
@@ -76,9 +80,6 @@ KisSelection::KisSelection(const KisSelection& rhs)
 
 KisSelection::~KisSelection()
 {
-    if (!m_d->defaultBounds->parent()) {
-        delete m_d->defaultBounds;
-    }
     delete m_d->shapeSelection;
     delete m_d;
 }
@@ -264,12 +265,12 @@ void KisSelection::setY(qint32 y)
     }
 }
 
-KisDefaultBoundsSP KisSelection::defaultBounds() const
+KisDefaultBoundsBaseSP KisSelection::defaultBounds() const
 {
     return m_d->defaultBounds;
 }
 
-void KisSelection::setDefaultBounds(KisDefaultBoundsSP bounds)
+void KisSelection::setDefaultBounds(KisDefaultBoundsBaseSP bounds)
 {
     m_d->defaultBounds = bounds;
 

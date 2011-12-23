@@ -89,8 +89,8 @@ QString formatNumber(qreal value, const QString &format, int precision)
     if (showNegative)
         start = 1;
     for (int i = start; i < format.length(); ++i) {
-        const char c = format[ i ].toLatin1();
-        switch (c) {
+        QChar c = format[ i ];
+        switch (c.unicode()) {
             case '.':
             case ',':
             case '#':

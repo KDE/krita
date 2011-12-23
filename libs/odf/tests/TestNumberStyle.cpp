@@ -20,6 +20,19 @@
 
 #include <KoUnit.h>
 
+void TestNumberStyle::testEmpty()
+{
+    KoOdfNumberStyles::NumericStyleFormat f;
+    QCOMPARE(f.formatStr, QString());
+    QCOMPARE(f.prefix, QString());
+    QCOMPARE(f.suffix, QString());
+    QCOMPARE(f.type, KoOdfNumberStyles::Text);
+    QCOMPARE(f.precision, -1);
+    QCOMPARE(f.currencySymbol, QString());
+    QCOMPARE(f.thousandsSep, false);
+    QCOMPARE(f.styleMaps.count(), 0);
+}
+
 void TestNumberStyle::testText()
 {
     KoOdfNumberStyles::NumericStyleFormat f;

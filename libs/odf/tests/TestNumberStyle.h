@@ -26,6 +26,7 @@ class TestNumberStyle : public QObject
 {
     Q_OBJECT
 private slots:
+    void testEmpty();
     void testText();
     void testNumber();
     void testDate();

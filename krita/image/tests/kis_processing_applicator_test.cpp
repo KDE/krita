@@ -58,7 +58,7 @@ KisImageSP createImage(KisUndoStore *undoStore,
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(paintLayer2, image->rootLayer());
 
-    image->refreshGraph();
+    image->initialRefreshGraph();
 
     return image;
 }

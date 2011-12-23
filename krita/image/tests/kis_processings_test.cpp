@@ -54,7 +54,7 @@ public:
     void test(const QString &testname, KisProcessingVisitorSP visitor) {
         KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
         KisImageSP image = createImage(undoStore);
-        image->refreshGraph();
+        image->initialRefreshGraph();
 
         QVERIFY(checkLayers(image, "initial"));
 

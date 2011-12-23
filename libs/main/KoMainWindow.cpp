@@ -213,7 +213,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 {
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
-    
+
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
@@ -314,7 +314,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     createShellGUI();
     d->mainWindowGuiIsBuilt = true;
-
     // Get screen geometry
     const int scnum = QApplication::desktop()->screenNumber(parentWidget());
     QRect desk = QApplication::desktop()->availableGeometry(scnum);
@@ -335,7 +334,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
             resize( desk.size() );
         }
     }
-
     KConfigGroup config(KGlobal::config(), "MainWindow");
     restoreWindowSize( config );
 
@@ -1166,7 +1164,13 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
+#ifdef Q_WS_WIN
+    // "kfiledialog:///OpenDialog" forces KDE style open dialog in Windows
+	// TODO provide support for "last visited" directory
+    KFileDialog *dialog = new KFileDialog(KUrl(""), QString(), this);
+#else
     KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString(), this);
+#endif
     dialog->setObjectName("file dialog");
     dialog->setMode(KFile::File);
     if (!isImporting())

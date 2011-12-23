@@ -151,7 +151,7 @@ protected: // KisCanvasWidgetBase
     virtual bool callFocusNextPrevChild(bool next);
 
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 
     void loadQTransform(QTransform transform);

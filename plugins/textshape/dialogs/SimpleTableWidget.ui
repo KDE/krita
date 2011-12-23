@@ -118,7 +118,7 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0">
+   <item row="2" column="0">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -133,6 +133,16 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="1" column="0">
+    <widget class="QWidget" name="SpecialSpacer" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

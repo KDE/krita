@@ -31,7 +31,6 @@
 #include "kis_global.h"
 #include "kis_shared.h"
 #include "kis_iterators_pixel.h"
-#include "kis_default_bounds.h"
 
 #include <krita_export.h>
 
@@ -51,7 +50,7 @@ class KisHLineIteratorNG;
 class KisRandomSubAccessorPixel;
 class KisDataManager;
 class KisSelectionComponent;
-
+class KisDefaultBounds;
 
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
@@ -88,7 +87,7 @@ public:
      * @param defaultBounds boundaries of the device in case it is empty
      * @param name for debugging purposes
      */
-    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsSP defaultBounds = new KisDefaultBounds(), const QString& name = QString());
+    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBounds * defaultBounds = 0, const QString& name = QString());
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
@@ -128,12 +127,12 @@ public:
      * set the default bounds for the paint device when
      * the default pixel in not completely transarent
      */
-    virtual void setDefaultBounds(KisDefaultBoundsSP bounds);
+    virtual void setDefaultBounds(KisDefaultBounds * bounds);
 
      /**
      * the default bounds rect of the paint device
      */
-    KisDefaultBoundsSP defaultBounds() const;
+    KisDefaultBounds * defaultBounds() const;
 
     /**
      * Moves the device to these new coordinates (so no incremental move or so)
@@ -692,7 +691,7 @@ private:
     KisPaintDevice& operator=(const KisPaintDevice&);
     void init(KisDataManagerSP explicitDataManager,
               const KoColorSpace *colorSpace,
-              KisDefaultBoundsSP defaultBounds,
+              KisDefaultBounds * defaultBounds,
               KisNodeWSP parent, const QString& name);
 
     // Only KisPainter is allowed to have access to these low-level methods
@@ -725,7 +724,7 @@ private:
 private:
     KisDataManagerSP m_datamanager;
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

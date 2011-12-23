@@ -177,11 +177,6 @@ void StyleManager::addParagraphStyle(KoParagraphStyle *style)
 
     if (m_blockSignals) return;
 
-    KoCharacterStyle *cs = style->characterStyle();
-    if (cs->name().isEmpty())
-        cs->setName(style->name());
-    addCharacterStyle(cs);
-
     m_styleManager->add(style);
     widget.paragraphStylePage->setParagraphStyles(m_styleManager->paragraphStyles());
     widget.stackedWidget->setCurrentWidget(widget.welcomePage);

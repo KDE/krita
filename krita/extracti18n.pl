@@ -23,7 +23,10 @@ use strict;
 use warnings;
 
 sub printi18n {
-  print "i18n(\"".$_[0]."\");\n";
+  if ($_[0] ne "") 
+    {
+          print "i18n(\"".$_[0]."\");\n";
+    }
 }
 
 my @filenames = glob("./data/gradients/*.ggr");

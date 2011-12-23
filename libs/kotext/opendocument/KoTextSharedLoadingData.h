@@ -181,19 +181,6 @@ public:
      */
     KoOdfBibliographyConfiguration bibliographyConfiguration() const;
 
-    /**
-     * Set the appication default style
-     *
-     * This is done so the application default style needs to be loaded only once.
-     * The ownership of the style is transfered to this class.
-     */
-    void setApplicationDefaultStyle(KoCharacterStyle *applicationDefaultStyle);
-
-    /**
-     * Get the application default style
-     */
-    KoCharacterStyle *applicationDefaultStyle() const;
-
 protected:
     /**
      * This method got called by kotext once a \a KoShape got inserted and an
@@ -226,6 +213,8 @@ private:
         KoCharacterStyle *style;
     };
     QList<OdfCharStyle> loadCharacterStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements);
+
+    void addDefaultCharacterStyle(KoShapeLoadingContext &context, const KoXmlElement *styleElem, const KoXmlElement *appDefault, KoStyleManager *styleManager);
 
     // helper functions for loading of list styles
     void addListStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,

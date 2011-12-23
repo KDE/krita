@@ -202,7 +202,15 @@ void TextShape::saveOdf(KoShapeSavingContext &context) const
     QString textHeight = additionalAttribute("fo:min-height");
     const_cast<TextShape*>(this)->removeAdditionalAttribute("fo:min-height");
     writer.startElement("draw:frame");
-    saveOdfAttributes(context, OdfAllAttributes);
+    // if the TextShape is wrapped in a shrink to fit container we need to save the geometry of the container as
+    // the geomerty of the shape might have been changed.
+    if (ShrinkToFitShapeContainer *stf = dynamic_cast<ShrinkToFitShapeContainer *>(this->parent())) {
+        stf->saveOdfAttributes(context, OdfSize | OdfPosition | OdfTransformation );
+        saveOdfAttributes(context, OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements);
+    }
+    else {
+        saveOdfAttributes(context, OdfAllAttributes);
+    }
     writer.startElement("draw:text-box");
     if (! textHeight.isEmpty())
         writer.addAttribute("fo:min-height", textHeight);
@@ -331,12 +339,17 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
 
     if (style) {
         KoParagraphStyle paragraphStyle;
-        paragraphStyle.loadOdf(style, context);
-
+        paragraphStyle.loadOdf(style, context, true);
         QTextDocument *document = m_textShapeData->document();
         QTextCursor cursor(document);
-        QTextBlock block = cursor.block();
-        paragraphStyle.applyStyle(block, false);
+    QTextBlockFormat format;
+    paragraphStyle.applyStyle(format);
+    cursor.setBlockFormat(format);
+    QTextCharFormat cformat;
+    paragraphStyle.KoCharacterStyle::applyStyle(cformat);
+    cursor.setCharFormat(cformat);
+    cursor.setBlockCharFormat(cformat);
+
 #ifndef NWORKAROUND_ODF_BUGS
         KoTextShapeData::ResizeMethod method = m_textShapeData->resizeMethod();
         if (KoOdfWorkaround::fixAutoGrow(method, context)) {

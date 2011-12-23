@@ -86,7 +86,7 @@ private:
 
     KisImageWSP image() const;
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

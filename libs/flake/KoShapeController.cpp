@@ -2,6 +2,7 @@
  *
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,12 +28,14 @@
 #include "KoSelection.h"
 #include "commands/KoShapeCreateCommand.h"
 #include "commands/KoShapeDeleteCommand.h"
+#include "commands/KoShapeConnectionChangeCommand.h"
 #include "KoCanvasBase.h"
 #include "KoShapeConfigWidgetBase.h"
 #include "KoShapeConfigFactoryBase.h"
 #include "KoShapeFactoryBase.h"
 #include "KoShape.h"
 #include "KoToolManager.h"
+#include "KoConnectionShape.h"
 
 #include <QObject>
 
@@ -120,6 +123,21 @@ public:
         }
         return new KoShapeCreateCommand(shapeBasedDocument, shape, parent);
     }
+
+    void handleAttachedConnections(KoShape *shape, KUndo2Command *parentCmd) {
+        foreach (KoShape *dependee, shape->dependees()) {
+            KoConnectionShape *connection = dynamic_cast<KoConnectionShape*>(dependee);
+            if (connection) {
+                if (shape == connection->firstShape()) {
+                    new KoShapeConnectionChangeCommand(connection, KoConnectionShape::StartHandle,
+                                                       shape, connection->firstConnectionId(), 0, -1, parentCmd);
+                } else if (shape == connection->secondShape()) {
+                    new KoShapeConnectionChangeCommand(connection, KoConnectionShape::EndHandle,
+                                                       shape, connection->secondConnectionId(), 0, -1, parentCmd);
+                }
+            }
+        }
+    }
 };
 
 KoShapeController::KoShapeController(KoCanvasBase *canvas, KoShapeBasedDocumentBase *shapeBasedDocument)
@@ -146,12 +164,19 @@ KUndo2Command* KoShapeController::addShapeDirect(KoShape *shape, KUndo2Command *
 
 KUndo2Command* KoShapeController::removeShape(KoShape *shape, KUndo2Command *parent)
 {
-    return new KoShapeDeleteCommand(d->shapeBasedDocument, shape, parent);
+    KUndo2Command *cmd = new KoShapeDeleteCommand(d->shapeBasedDocument, shape, parent);
+    // detach shape from any attached connection shapes
+    d->handleAttachedConnections(shape, cmd);
+    return cmd;
 }
 
 KUndo2Command* KoShapeController::removeShapes(const QList<KoShape*> &shapes, KUndo2Command *parent)
 {
-    return new KoShapeDeleteCommand(d->shapeBasedDocument, shapes, parent);
+    KUndo2Command *cmd = new KoShapeDeleteCommand(d->shapeBasedDocument, shapes, parent);
+    foreach (KoShape *shape, shapes) {
+        d->handleAttachedConnections(shape, cmd);
+    }
+    return cmd;
 }
 
 void KoShapeController::setShapeControllerBase(KoShapeBasedDocumentBase *shapeBasedDocument)

@@ -670,7 +670,7 @@ void TestSnapStrategy::testProject()
     QCOMPARE(resultingRealTwo, toCompWithTwo);
     //testing for negative and positive point values
     ExtensionSnapStrategy toTestThree;
-    qreal toCompWithThree = (10*(6/sqrt(72)) + 10*(6/sqrt(72))) / sqrt(72); //diffLength = sqrt(72), scalar = (10*(6/sqrt(72)) + 10*(6/sqrt(72)))
+    qreal toCompWithThree = (10*(6/sqrt(72.0)) + 10*(6/sqrt(72.0))) / sqrt(72.0); //diffLength = sqrt(72), scalar = (10*(6/sqrt(72)) + 10*(6/sqrt(72)))
     QPointF lineStart_3(-2,-2);
     QPointF lineEnd_3(4, 4);
     QPointF comparisonPoint_3(8,8);
@@ -805,7 +805,7 @@ void TestSnapStrategy::testSquareDistanceToLine()
     //scalar = (1*(6/sqrt(52)) + 2*(4/sqrt(52)));
 
     //pointOnLine = lineA + scalar / diffLength * diff;  lineA + ((1*(6/sqrt(52)) + 2*(4/sqrt(52))) / sqrt(52)) * 6,4;
-    QPointF distToPointOnLine = (lineA4 + ((1*(6/sqrt(52)) + 2*(4/sqrt(52))) / sqrt(52)) * diff)-point4;
+    QPointF distToPointOnLine = (lineA4 + ((1*(6/sqrt(52.0)) + 2*(4/sqrt(52.0))) / sqrt(52.0)) * diff)-point4;
     qreal toCompWithFour = distToPointOnLine.x()*distToPointOnLine.x()+distToPointOnLine.y()*distToPointOnLine.y();
 
     qreal result4 = toTestFour.squareDistanceToLine(lineA4, lineB4, point4, pointOnLine4);

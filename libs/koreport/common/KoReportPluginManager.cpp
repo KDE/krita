@@ -26,8 +26,7 @@
 #include <KService>
 #include <KServiceTypeTrader>
 #include <KIconLoader>
-
-#include <QAction>
+#include <KToggleAction>
 
 //Include the static items
 #include "../items/label/KoReportLabelPlugin.h"
@@ -70,7 +69,7 @@ QList<QAction*> KoReportPluginManager::actions()
     foreach(KoReportPluginInterface* plugin, plugins) {
         KoReportPluginInfo *info = plugin->info();
         if (info) {
-            QAction *act = new QAction(KIcon(info->icon()), info->name(), this);
+            KToggleAction *act = new KToggleAction(KIcon(info->icon()), info->name(), this);
             act->setObjectName(info->className());
 
             //Store the order priority in the user data field

@@ -117,6 +117,8 @@ QString nodeTypeString(KisMergeWalker::NodePosition position)
         string+="_ORIGI*_WARNINIG!!!: NOT USED";
     else if(position & KisMergeWalker::N_BELOW_FILTHY)
         string+="_BELOW ";
+    else if(position & KisMergeWalker::N_EXTRA)
+        string+="_EXTRA*";
     else
         qFatal("Impossible happened");
 
@@ -144,6 +146,8 @@ QString nodeTypePostfix(KisMergeWalker::NodePosition position)
         string += 'O';
     else if(position & KisMergeWalker::N_BELOW_FILTHY)
         string += 'B';
+    else if(position & KisMergeWalker::N_EXTRA)
+        string += 'E';
     else
         qFatal("Impossible happened");
 

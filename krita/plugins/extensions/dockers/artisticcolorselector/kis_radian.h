@@ -21,36 +21,38 @@
 
 #include <cmath>
 
+#define PI       3.14159265358979323846
+#define PI2      6.28318530717958647693 // PI * 2.0
+#define TO_DEG   57.2957795130823208768 // 180.0 / PI
+#define TO_RAD   0.01745329251994329577 // PI / 180.0
+#define RAD_360  6.28318530717958647693 // 360  = 2.0*PI
+#define RAD_270  4.71238898038468985769 // 270° = 3.0*PI / 2.0
+#define RAD_180  3.14159265358979323846 // 180° = PI
+#define RAD_90   1.57079632679489661923 // 90°  = PI/2.0
+
+
 template<class TReal> class KisRadian;
 
 namespace _Private
 {
-    struct Value
-    {
-        template<class T>
-        inline static const T& get(const T& value) { return value; }
-        
-        template<class T>
-        inline static const T& get(const KisRadian<T>& rad) { return rad.value(); }
-    };
+struct Value
+{
+    template<class T>
+    inline static const T& get(const T& value) { return value; }
+
+    template<class T>
+    inline static const T& get(const KisRadian<T>& rad) { return rad.value(); }
+};
 }
 
 template<class TReal>
 class KisRadian
 {
 public:
-    const static TReal PI      = 3.14159265358979323846;
-    const static TReal PI2     = 6.28318530717958647693; // PI * 2.0
-    const static TReal TO_DEG  = 57.2957795130823208768; // 180.0 / PI
-    const static TReal TO_RAD  = 0.01745329251994329577; // PI / 180.0
-    const static TReal RAD_360 = 6.28318530717958647693; // 360  = 2.0*PI
-    const static TReal RAD_270 = 4.71238898038468985769; // 270° = 3.0*PI / 2.0
-    const static TReal RAD_180 = 3.14159265358979323846; // 180° = PI
-    const static TReal RAD_90  = 1.57079632679489661923; // 90°  = PI/2.0
-    
+
     KisRadian():
         m_value(TReal(0)) { }
-        
+
     template<class U>
     KisRadian(const KisRadian<U>& rad):
         m_value(rad.m_value) { }
@@ -61,7 +63,7 @@ public:
     }
     
     static TReal normalizeRadians(TReal rad) {
-        rad = std::fmod(rad, PI2);
+        rad = std::fmod((TReal)rad, (TReal)PI2);
         return rad < TReal(0) ? (rad + PI2) : rad;
     }
     
@@ -121,15 +123,6 @@ public:
         return *this;
     }
     
-//     template<class U>
-//     friend KisRadian operator + (const KisRadian& l, const U& r) {
-//         return KisRadian(l.m_value + r);
-//     }
-    
-//     template<class U>
-//     friend KisRadian<U> operator + (const U& l, const KisRadian& r) {
-//         return KisRadian<U>(l + r.m_value);
-//     }
     
     friend KisRadian operator + (const KisRadian& l, const KisRadian& r) {
         KisRadian rad(l);
@@ -145,16 +138,6 @@ public:
         return *this;
     }
     
-//     template<class U>
-//     friend KisRadian operator - (const KisRadian& l, const U& r) {
-//         return KisRadian(l.m_value - r);
-//     }
-    
-//     template<class U>
-//     friend KisRadian<U> operator - (const U& l, const KisRadian& r) {
-//         return KisRadian<U>(l - r.m_value);
-//     }
-    
     friend KisRadian operator - (const KisRadian& l, const KisRadian& r) {
         KisRadian rad(l);
         rad -= r;
@@ -168,17 +151,7 @@ public:
         m_value = normalizeRadians(m_value * _Private::Value::get(rad));
         return *this;
     }
-    
-//     template<class U>
-//     friend KisRadian operator * (const KisRadian& l, const U& r) {
-//         return KisRadian(l.m_value * r);
-//     }
-    
-//     template<class U>
-//     friend KisRadian<U> operator * (const U& l, const KisRadian& r) {
-//         return KisRadian<U>(l * r.m_value);
-//     }
-    
+
     friend KisRadian operator * (const KisRadian& l, const KisRadian& r) {
         KisRadian rad(l);
         rad *= r;
@@ -192,17 +165,7 @@ public:
         m_value = normalizeRadians(m_value / _Private::Value::get(rad));
         return *this;
     }
-    
-//     template<class U>
-//     friend KisRadian operator / (const KisRadian& l, const U& r) {
-//         return KisRadian(l.m_value / r);
-//     }
-    
-//     template<class U>
-//     friend KisRadian<U> operator / (const U& l, const KisRadian& r) {
-//         return KisRadian<U>(l / r.m_value);
-//     }
-    
+
     friend KisRadian operator / (const KisRadian& l, const KisRadian& r) {
         KisRadian rad(l);
         rad /= r;
@@ -217,15 +180,6 @@ public:
         return *this;
     }
     
-//     template<class U>
-//     friend KisRadian operator % (const KisRadian& l, const U& r) {
-//         return KisRadian(std::fmod(l.m_value, TReal(r)));
-//     }
-    
-//     template<class U>
-//     friend KisRadian<U> operator % (const U& l, const KisRadian& r) {
-//         return KisRadian<U>(std::fmod(l, U(r.m_value)));
-//     }
     
     friend KisRadian operator % (const KisRadian& l, const KisRadian& r) {
         KisRadian rad(l);

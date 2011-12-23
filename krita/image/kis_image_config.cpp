@@ -165,6 +165,8 @@ QString KisImageConfig::swapDir()
 #include <sys/sysinfo.h>
 #elif defined Q_OS_FREEBSD
 #include <sys/sysctl.h>
+#elif defined Q_OS_WIN
+#include <windows.h>
 #endif
 
 #include <kdebug.h>
@@ -190,6 +192,15 @@ int KisImageConfig::totalRAM()
     error = sysctl(mib, 2, &physmem, &len, NULL, 0);
     if(!error) {
         totalMemory = physmem >> 20;
+    }
+#elif defined Q_OS_WIN
+    MEMORYSTATUSEX status;
+    status.dwLength = sizeof(status);
+    error  = !GlobalMemoryStatusEx(&status);
+
+    if (!error)
+    {
+        totalMemory = status.ullTotalPhys >> 20;
     }
 #endif
 

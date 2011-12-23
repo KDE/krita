@@ -339,5 +339,33 @@ void TestPathSegment::nearestPoint()
     }
 }
 
+void TestPathSegment::paramAtLength()
+{
+    // line segment
+    {
+        KoPathSegment s1(QPointF(0,0), QPointF(100,0));
+        QCOMPARE(s1.paramAtLength(0), 0.0);
+        QCOMPARE(s1.paramAtLength(100.0), 1.0);
+        QCOMPARE(s1.paramAtLength(50.0), 0.5);
+        QCOMPARE(s1.paramAtLength(120.0), 1.0);
+    }
+    // quadratic segments
+    {
+        // a flat quadratic bezier
+        KoPathSegment s1(QPointF(0, 0), QPointF(50, 0), QPointF(100, 0));
+        QCOMPARE(s1.paramAtLength(0), 0.0);
+        QCOMPARE(s1.paramAtLength(100.0), 1.0);
+        QCOMPARE(s1.paramAtLength(120.0), 1.0);
+    }
+    // cubic segments
+    {
+        // a flat cubic bezier
+        KoPathSegment s1(QPointF(0, 0), QPointF(25, 0), QPointF(75, 0), QPointF(100, 0));
+        QCOMPARE(s1.paramAtLength(0), 0.0);
+        QCOMPARE(s1.paramAtLength(100.0), 1.0);
+        QCOMPARE(s1.paramAtLength(120.0), 1.0);
+    }
+}
+
 QTEST_KDEMAIN(TestPathSegment, GUI)
 #include <TestPathSegment.moc>

@@ -96,7 +96,7 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
 
             int dx = x-width()/2;
             int dy = y-height()/2;
-            int diag = sqrt(2)*size/2;
+            int diag = sqrt(2.0)*size/2;
 
             int dxs, dys;
             if (dx > 0)

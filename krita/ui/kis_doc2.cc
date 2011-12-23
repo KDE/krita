@@ -95,6 +95,7 @@
 #include "kis_statusbar.h"
 #include "widgets/kis_progress_widget.h"
 #include "kis_canvas_resource_provider.h"
+#include "kis_resource_server_provider.h"
 
 static const char *CURRENT_DTD_VERSION = "2.0";
 
@@ -144,6 +145,10 @@ KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
         , m_d(new KisDocPrivate())
 {
     setComponentData(KisFactory2::componentData(), false);
+
+    // preload the krita resources
+    KisResourceServerProvider::instance();
+
     setTemplateType("krita_template");
     init();
     connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
@@ -172,7 +177,7 @@ QByteArray KisDoc2::mimeType() const
 }
 
 void KisDoc2::slotLoadingFinished() {
-    image()->initialRefreshGraphAsync();
+    image()->initialRefreshGraph();
     setAutoSave(KisConfig().autoSaveInterval());
 }
 
@@ -379,7 +384,6 @@ bool KisDoc2::newImage(const QString& name,
 
     image = new KisImage(createUndoStore(), width, height, cs, name);
     Q_CHECK_PTR(image);
-    image->lock();
 
     connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
     image->setResolution(imageResolution, imageResolution);
@@ -392,7 +396,6 @@ bool KisDoc2::newImage(const QString& name,
 
     layer->paintDevice()->setDefaultPixel(bgColor.data());
     image->addNode(layer.data(), image->rootLayer().data());
-    image->unlock();
     setCurrentImage(image);
 
     cfg.defImageWidth(width);

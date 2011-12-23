@@ -82,7 +82,7 @@ protected:
     KisPaintDeviceSP tryObligeChild() const;
 
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

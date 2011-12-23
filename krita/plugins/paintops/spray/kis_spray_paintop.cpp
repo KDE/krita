@@ -92,6 +92,8 @@ qreal KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 
     qreal rotation = m_rotationOption.apply(info);
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
+    // Spray Brush is capable of working with zero scale,
+    // so no additional checks for 'zero'ness are needed
     qreal scale = m_sizeOption.apply(info);
 
     setCurrentRotation(rotation);

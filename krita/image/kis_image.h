@@ -28,6 +28,7 @@
 
 #include <KoColorConversionTransformation.h>
 
+#include "kis_paint_device.h" // msvc cannot handle forward declarations, so include kis_paint_device here
 #include "kis_types.h"
 #include "kis_shared.h"
 #include "kis_node_graph_listener.h"
@@ -125,20 +126,17 @@ public:
     QImage convertToQImage(const QRect& scaledRect, const QSize& scaledImageSize, const KoColorProfile *profile);
 
     /**
-     * Lock the image to make sure no recompositing-causing signals
-     * get emitted while you're messing with the layers. Don't forget
-     * to unlock again.
+     * Calls KisUpdateScheduler::lock
      */
     void lock();
 
     /**
-     * Unlock the image to make sure the rest of Krita learns about
-     * changes in the image again.
+     * Calls KisUpdateScheduler::unlock
      */
     void unlock();
 
     /**
-     * Returns true if the image is locked.
+     * Returns true if lock() has been called more often than unlock().
      */
     bool locked() const;
 
@@ -225,7 +223,7 @@ public:
     /**
      * Execute a rotate transform on all layers in this image.
      */
-    void rotate(double radians, KoUpdater *m_progress);
+    void rotate(double radians);
 
     /**
      * Execute a shear transform on all layers in this image.
@@ -555,7 +553,7 @@ signals:
      * Inform the model we're done moving a layer.
      */
     void sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
-    
+
     /**
      * Inform the model that a node was changed
      */
@@ -584,7 +582,6 @@ public slots:
     void disableUIUpdates();
     void enableUIUpdates();
 
-    void initialRefreshGraphAsync();
     void refreshGraphAsync(KisNodeSP root = 0);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect);
@@ -594,6 +591,7 @@ public slots:
      */
     void refreshGraph(KisNodeSP root = 0);
     void refreshGraph(KisNodeSP root, const QRect& rc, const QRect &cropRect);
+    void initialRefreshGraph();
 
 private:
     KisImage(const KisImage& rhs);

@@ -105,6 +105,9 @@ void ChartTypeCommand::setChartType(ChartType type, ChartSubtype subtype)
     case RadarChartType:
         setText(i18nc("(qtundo-format)", "Radar Chart"));
         break;
+    case FilledRadarChartType:
+        setText(i18nc("(qtundo-format)", "Filled Radar Chart"));
+        break;
     case StockChartType:
         setText(i18nc("(qtundo-format)", "Stock Chart"));
         break;

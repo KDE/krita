@@ -291,8 +291,6 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
     }
 
     KisImageSP image = new KisImage(doc->createUndoStore(), width, height, colorSpace, "built image");
-    image->lock();
-
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
     KisTransaction("", layer->paintDevice());
 
@@ -354,7 +352,6 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
 
     image->addNode(layer.data(), image->rootLayer().data());
 
-    image->unlock();
     doc->setCurrentImage(image);
     return KoFilter::OK;
 }

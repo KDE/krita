@@ -87,7 +87,7 @@ void Image::scale(double widthfactor, double heightfactor)
 
 void Image::rotate(double angle)
 {
-    m_image->rotate(angle, 0);
+    m_image->rotate(angle);
 }
 
 void Image::shear(double xangle, double yangle)

@@ -136,7 +136,7 @@ public:
 
 private:
 
-    class Private;
+    struct Private;
     Private * const d;
 
 };

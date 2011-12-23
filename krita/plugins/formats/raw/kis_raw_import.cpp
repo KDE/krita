@@ -121,7 +121,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb16();
         KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, filename);
         if (image.isNull()) return KoFilter::CreationError;
-        image->lock();
+
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), quint8_MAX);
         KisTransaction("", layer -> paintDevice());
 
@@ -152,9 +152,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
             it.nextRow();
         }
 
-        layer->setDirty();
         QApplication::restoreOverrideCursor();
-        image->unlock();
         doc->setCurrentImage(image);
         return KoFilter::OK;
     }

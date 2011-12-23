@@ -136,7 +136,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_changeTipTimer(this),
         m_changeTipCursorPos(0),
         m_delayedEnsureVisible(false),
-        m_toolSelection(0)
+        m_toolSelection(0),
+        m_lastImMicroFocus(QRectF(0,0,0,0))
 {
     setTextMode(true);
 
@@ -1212,7 +1213,6 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
         converter.zoom(&zoomX, &zoomY);
         shapeMatrix.scale(zoomX, zoomY);
         rect = shapeMatrix.mapRect(rect);
-
         return rect.toRect();
     }
     case Qt::ImFont:
@@ -1245,14 +1245,18 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
                                        canvas()->shapeController());
         }
     }
-    QTextBlock block = textEditor->block();
-    QTextLayout *layout = block.layout();
-    Q_ASSERT(layout);
     if (!event->commitString().isEmpty()) {
         QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
         keyPressEvent(&ke);
+        // The cursor may reside in a different block before vs. after keyPressEvent.
+        QTextBlock block = textEditor->block();
+        QTextLayout *layout = block.layout();
+        Q_ASSERT(layout);
         layout->setPreeditArea(-1, QString());
     } else {
+        QTextBlock block = textEditor->block();
+        QTextLayout *layout = block.layout();
+        Q_ASSERT(layout);
         layout->setPreeditArea(textEditor->position() - block.position(), event->preeditString());
         const_cast<QTextDocument*>(textEditor->document())->markContentsDirty(textEditor->position(), 1);
     }
@@ -1343,8 +1347,8 @@ void TextTool::updateActions()
     //update paragraphStyle GUI element
     QTextBlockFormat bf = textEditor->blockFormat();
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
-        bool revert = (textEditor->block().layout()->textOption().textDirection() == Qt::LeftToRight) != QApplication::isLeftToRight();
-        if (bf.alignment() == (Qt::AlignLeading ^ revert))
+        bool revert = (textEditor->block().layout()->textOption().textDirection() == Qt::RightToLeft);
+        if ((bf.alignment() == Qt::AlignLeading) ^ revert)
             m_actionAlignLeft->setChecked(true);
         else
             m_actionAlignRight->setChecked(true);
@@ -1532,7 +1536,13 @@ QRectF TextTool::caretRect(QTextCursor *cursor) const
     QTextCursor tmpCursor(*cursor);
     tmpCursor.setPosition(cursor->position()); // looses the anchor
 
-    return textRect(tmpCursor);
+    QRectF rect = textRect(tmpCursor);
+    if (rect.size() == QSizeF(0,0)) {
+        rect = m_lastImMicroFocus; // prevent block changed but layout not done
+    } else {
+        m_lastImMicroFocus = rect;
+    }
+    return rect;
 }
 
 QRectF TextTool::textRect(QTextCursor &cursor) const
@@ -2298,15 +2308,6 @@ void TextTool::debugTextStyles()
 
     foreach (KoParagraphStyle *style, styleManager->paragraphStyles()) {
         kDebug(32500) << style->styleId() << style->name() << (styleManager->defaultParagraphStyle() == style ? "[Default]" : "");
-        KoCharacterStyle *cs = style->characterStyle();
-        seenStyles << style->styleId();
-        if (cs) {
-            kDebug(32500) << "  +- CharStyle: " << cs->styleId() << cs->name();
-            kDebug(32500) << "  |  " << cs->font();
-            seenStyles << cs->styleId();
-        } else {
-            kDebug(32500) << "  +- ERROR; no char style found!" << endl;
-        }
         KoListStyle *ls = style->listStyle();
         if (ls) { // optional ;)
             kDebug(32500) << "  +- ListStyle: " << ls->styleId() << ls->name()

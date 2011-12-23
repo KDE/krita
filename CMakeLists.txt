@@ -35,6 +35,7 @@ option(GHNS "support Get Hot New Stuff" ON)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
 option(TINY "compile a tiny Calligra" OFF)
 option(CREATIVEONLY "compile only Karbon and Krita" OFF)
+option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
 
 IF (TINY)
     set(SHOULD_BUILD_WORDS TRUE)
@@ -108,14 +109,17 @@ endif(KDE4_BUILD_TESTS)
 set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
 
-find_package(Qt4 4.6.0 REQUIRED)
+if (QT3SUPPORT)
+    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL Qt3Support)
+else (QT3SUPPORT)
+    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL)
+endif (QT3SUPPORT)
 
 include(KDE4Defaults)
 include(MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
-option(GHNS "support Get Hot New Stuff" ON)
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
     set(GHNS FALSE)
 endif(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
@@ -490,6 +494,10 @@ endif (NOT QT_QTDECLARATIVE_FOUND)
 #    set (SHOULD_BUILD_KEXI FALSE)
 #endif(NOT QIMAGEBLITZ_FOUND)
 
+if (NOT QT3SUPPORT)
+    set (SHOULD_BUILD_KEXI FALSE)
+endif (NOT QT3SUPPORT)
+
 ### HACK ###
 # Those BUILD_ are illegally used below before they are defined, which cause problem on a first build
 option(BUILD_kexi   "Build directory kexi" ON)
@@ -500,15 +508,29 @@ if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     ##
     ## Test for sqlite
     ##
-    set(SQLITE_RECOMMENDED_VERSION "3.7.9")
+    set(SQLITE_MIN_VERSION 3.6.16)
+    set(SQLITE_RECOMMENDED_VERSION 3.7.9)
+    set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
     find_package(CalligraSqlite 3.6.16)
-    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine" "http://www.sqlite.org"
-                      FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")
-
+    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
+                      "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
+                      "Required by Kexi for its default database driver.")
     if(NOT SQLITE_FOUND)
         set(SHOULD_BUILD_KEXI FALSE)
-        message(STATUS "WARNING: Kexi will not be built.")
+        message(STATUS "WARNING: Because of that, Kexi will not be built.")
     endif(NOT SQLITE_FOUND)
+
+    ##
+    ## Test for ICU
+    ##
+    find_package(ICU)
+    macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Library"
+                      "http://icu-project.org" FALSE "" "Required by Kexi")
+
+    if(NOT ICU_FOUND)
+        set(SHOULD_BUILD_KEXI FALSE)
+        message(STATUS "WARNING: Because of that, Kexi will not be built.")
+    endif(NOT ICU_FOUND)
 endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
 
  ###################

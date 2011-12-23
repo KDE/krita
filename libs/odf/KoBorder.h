@@ -93,6 +93,9 @@ public:
 
         QPen innerPen;
         QPen outerPen;
+
+        /// Compare the border data with another one
+        bool operator==(const BorderData &other) const;
     };
 
 
@@ -190,6 +193,8 @@ public:
 
 
     bool hasBorder() const;
+
+    bool hasBorder(Side side) const;
 
     /**
      * Load the style from the element

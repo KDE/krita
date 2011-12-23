@@ -86,11 +86,10 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent *event)
             fillpainter.createFloodSelection(pos.x(), pos.y(), currentImage()->mergedImage());
 
         KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        if (!kisCanvas) {
+        if (!kisCanvas || !selection->pixelSelection()) {
             QApplication::restoreOverrideCursor();
             return;
         }
-
         KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Contiguous Area Selection"));
         helper.selectPixelSelection(selection->pixelSelection(), m_selectAction);
 

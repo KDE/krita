@@ -63,7 +63,24 @@ public:
             KisRefreshSubtreeWalker::registerChangeRect(node, position);
         }
         else {
-            KisMergeWalker::registerChangeRect(node, position);
+            /**
+             * Merge walker thinks that we changed the original of the
+             * dirty node (dirtyNode == startNode()), but that is not
+             * true in case of full refresh walker, because all the
+             * children of the dirty node are dirty as well, that is
+             * why we shouldn't rely on usual registerChangeRect()
+             * mechanism for this node. Actually, node->changeRect()
+             * may not be valid in case its masks have been changes.
+             * That is why we just unite the changeRects of all its
+             * children here.
+             */
+
+            if(node == startNode()) {
+                KisRefreshSubtreeWalker::calculateChangeRect(node, changeRect());
+            }
+            else {
+                KisMergeWalker::registerChangeRect(node, position);
+            }
         }
     }
     void registerNeedRect(KisNodeSP node, NodePosition position) {

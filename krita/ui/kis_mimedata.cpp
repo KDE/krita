@@ -22,6 +22,7 @@
 #include "kis_node.h"
 #include "kis_paint_device.h"
 #include "kis_shared_ptr.h"
+#include "kis_image.h"
 #include "kis_doc2.h"
 
 #include <KoStore.h>
@@ -74,8 +75,8 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         QByteArray ba;
         QBuffer buf(&ba);
         KoStore *store = KoStore::createStore(&buf, KoStore::Write);
-
         Q_ASSERT(!store->bad());
+        store->disallowNameExpansion();
 
         KisDoc2 doc;
 

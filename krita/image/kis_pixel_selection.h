@@ -29,6 +29,7 @@
 #include "kis_selection.h"
 #include <krita_export.h>
 
+class KisDefaultBounds;
 
 /**
  * KisPixelSelection contains a byte-map representation of a layer, where
@@ -43,7 +44,7 @@ public:
      * Create a new KisPixelSelection. This selection will not have a
      * parent paint device.
      */
-    KisPixelSelection(KisDefaultBoundsSP defaultBounds = new KisDefaultBounds());
+    KisPixelSelection(KisDefaultBounds * defaultBounds = 0);
 
     /**
      * Copy the selection

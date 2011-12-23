@@ -68,7 +68,7 @@ QColor KisColorSelectorWheel::selectColor(int x, int y)
     int xWheel = x-width()/2;
     int yWheel = y-height()/2;
 
-    qreal radius = sqrt(xWheel*xWheel+yWheel*yWheel);
+    qreal radius = sqrt((double)xWheel*xWheel+yWheel*yWheel);
     radius/=qMin(width(), height());
     if(radius>0.5)
         radius=0.5;

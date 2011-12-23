@@ -202,7 +202,6 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
 
     // Create the image
     KisImageSP image = new KisImage(doc->createUndoStore(), XCF.width, XCF.height, KoColorSpaceRegistry::instance()->rgb8(), "built image");
-    image->lock();
 
     // Read layers
     for (int i = 0; i < XCF.numLayers; ++i) {
@@ -317,7 +316,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         dbgFile << xcflayer.pixels.tileptrs;
 
     }
-    image->unlock();
+
     doc->setCurrentImage(image);
     return KoFilter::OK;
 }

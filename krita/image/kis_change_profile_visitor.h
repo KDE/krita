@@ -66,7 +66,6 @@ public:
             child->accept(*this);
             child = dynamic_cast<KisLayer*>(child->nextSibling().data());
         }
-        layer->setDirty();
         return true;
     }
 
@@ -81,7 +80,6 @@ public:
 
     bool visit(KisAdjustmentLayer * layer) {
         layer->resetCache();
-        layer->setDirty();
         return true;
     }
 
@@ -111,10 +109,7 @@ private:
         const KoColorSpace * cs = layer->paintDevice()->colorSpace();
 
         if (*cs == *m_oldColorSpace) {
-
             layer->paintDevice()->setProfile(m_dstColorSpace->profile());
-
-            layer->setDirty();
         }
 
         return true;

@@ -28,6 +28,7 @@
 
 #include <KoFilterChain.h>
 #include <KoColorSpaceConstants.h>
+#include <KoFilterManager.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -65,10 +66,11 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
     Ui::ExrExportWidget widget;
     widget.setupUi(&dialog);
 
-    if (dialog.exec() == QDialog::Rejected) {
-        return KoFilter::UserCancelled;
+    if (!m_chain->manager()->getBatchMode() ) {
+        if (dialog.exec() == QDialog::Rejected) {
+            return KoFilter::UserCancelled;
+        }
     }
-
     KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 

@@ -119,12 +119,14 @@ void TestStyles::testApplyParagraphStyle()
     QTextBlockFormat format;
     QCOMPARE(format.properties().count(), 0);
     style.applyStyle(format);
-    QCOMPARE(format.properties().count(), 1); // the styleId
+    QCOMPARE(format.properties().count(), 2); // the styleId and nextStyleId
+    QCOMPARE(format.property(KoParagraphStyle::StyleId).toInt(), 1001);
+    QCOMPARE(format.property(KoParagraphStyle::NextStyle).toInt(), 1001);
 
     style.setName("name");
     style.setAlignment(Qt::AlignRight);
     style.applyStyle(format);
-    QCOMPARE(format.properties().count(), 2);
+    QCOMPARE(format.properties().count(), 3);
     QCOMPARE(format.alignment(), Qt::AlignRight);
 }
 
@@ -193,26 +195,32 @@ void TestStyles::testApplyParagraphStyleWithParent()
     QTextBlockFormat rawFormat;
     style1.applyStyle(rawFormat);
     KoParagraphStyle format(rawFormat, rawFormat.toCharFormat());
-    QCOMPARE(rawFormat.properties().count(), 3);
+    QCOMPARE(rawFormat.properties().count(), 4);
     QCOMPARE(format.alignment(), Qt::AlignRight);
     QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), 1002);
+    //since we have not specified any NextStyle it should be the same as the current style
+    QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), rawFormat.property(KoParagraphStyle::NextStyle).toInt());
     QCOMPARE(format.leftMargin(), 10.0);
     QCOMPARE(format.rightMargin(), 0.0);
 
     style2.applyStyle(rawFormat);
     KoParagraphStyle format2(rawFormat, rawFormat.toCharFormat());
-    QCOMPARE(rawFormat.properties().count(), 4);
+    QCOMPARE(rawFormat.properties().count(), 5);
     QCOMPARE(format2.alignment(), Qt::AlignCenter);
     QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), 1003);
+    //since we have not specified any NextStyle it should be the same as the current style
+    QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), rawFormat.property(KoParagraphStyle::NextStyle).toInt());
     QCOMPARE(format2.leftMargin(), 10.0);
     QCOMPARE(format2.rightMargin(), 20.0);
 
     style3.applyStyle(rawFormat);
     KoParagraphStyle format3(rawFormat, rawFormat.toCharFormat());
-    QCOMPARE(rawFormat.properties().count(), 8);
+    QCOMPARE(rawFormat.properties().count(), 9);
     QCOMPARE(rawFormat.property(KoParagraphStyle::LineSpacing).toReal(), 56.78);
     QCOMPARE(format3.alignment(), Qt::AlignLeft | Qt::AlignAbsolute);
     QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), 1004);
+    //since we have not specified any NextStyle it should be the same as the current style
+    QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), rawFormat.property(KoParagraphStyle::NextStyle).toInt());
     QCOMPARE(format3.leftMargin(), 10.0);
     QCOMPARE(format3.rightMargin(), 20.0);
 }
@@ -246,12 +254,12 @@ void TestStyles::testUnapplyStyle()
     
     // in this test we should avoid testing any of the hardcodedDefaultProperties; see KoCharacterStyle for details!
     KoParagraphStyle headers;
-    headers.characterStyle()->setOverlineColor(testOverlineColor);
-    headers.characterStyle()->setOverlineMode(KoCharacterStyle::ContinuousLineMode);
-    headers.characterStyle()->setOverlineStyle(KoCharacterStyle::DottedLine);
-    headers.characterStyle()->setOverlineType(KoCharacterStyle::DoubleLine);
-    headers.characterStyle()->setOverlineWidth(testOverlineWeight, testOverlineWidth);
-    headers.characterStyle()->setFontWeight(QFont::Bold);
+    headers.setOverlineColor(testOverlineColor);
+    headers.setOverlineMode(KoCharacterStyle::ContinuousLineMode);
+    headers.setOverlineStyle(KoCharacterStyle::DottedLine);
+    headers.setOverlineType(KoCharacterStyle::DoubleLine);
+    headers.setOverlineWidth(testOverlineWeight, testOverlineWidth);
+    headers.setFontWeight(QFont::Bold);
     headers.setAlignment(Qt::AlignCenter);
     KoParagraphStyle head1;
     head1.setParentStyle(&headers);

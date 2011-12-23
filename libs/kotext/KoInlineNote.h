@@ -36,6 +36,7 @@ class QTextFrame;
  */
 class KOTEXT_EXPORT KoInlineNote : public KoInlineObject
 {
+    Q_OBJECT
 public:
     /// The type of note specifies how the application will use the text from the note.
     enum Type {

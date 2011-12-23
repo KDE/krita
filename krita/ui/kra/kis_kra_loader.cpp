@@ -56,7 +56,7 @@
 
 using namespace KRA;
 
-class KisKraLoader::Private
+struct KisKraLoader::Private
 {
 public:
 
@@ -84,16 +84,11 @@ KisKraLoader::~KisKraLoader()
 
 KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
 {
-
-    KisConfig cfg;
     QString attr;
-    KoXmlNode node;
-    KoXmlNode child;
     KisImageWSP image = 0;
     QString name;
     qint32 width;
     qint32 height;
-    QString description;
     QString profileProductName;
     double xres;
     double yres;
@@ -156,12 +151,8 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
 
         image = new KisImage(m_d->document->createUndoStore(), width, height, cs, name);
-        image->lock();
         image->setResolution(xres, yres);
-
         loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
-
-        image->unlock();
 
     }
 
@@ -175,8 +166,6 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
 
     if (external)
         visitor.setExternalUri(uri);
-
-    image->lock();
 
     image->rootLayer()->accept(visitor);
 
@@ -210,7 +199,6 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
     if (m_d->document->documentInfo()->aboutInfo("comment").isNull())
         m_d->document->documentInfo()->setAboutInfo("comment", m_d->imageComment);
 
-    image->unlock();
 }
 
 KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent)
@@ -343,7 +331,7 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
         layer->setChannelFlags(channelFlags);
         layer->setCompositeOp(compositeOpName);
     }
-    
+
     if(node->inherits("KisPaintLayer")) {
         KisPaintLayer* layer            = qobject_cast<KisPaintLayer*>(node);
         QBitArray      channelLockFlags = stringToFlags(element.attribute(CHANNEL_LOCK_FLAGS, ""), colorSpace->channelCount());

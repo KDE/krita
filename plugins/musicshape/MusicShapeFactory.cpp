@@ -51,7 +51,7 @@ MusicShapeFactory::MusicShapeFactory()
     setToolTip( i18n( "A shape which provides a music editor" ) );
     ///@todo setIcon( "musicflake" );
     setIcon( "music-note-16th" );
-    setXmlElementNames( "http://www.calligra-suite.org/music", QStringList("shape") );
+    setXmlElementNames( "http://www.calligra.org/music", QStringList("shape") );
     setLoadingPriority( 1 );
 }
 
@@ -74,5 +74,5 @@ KoShape *MusicShapeFactory::createDefaultShape(KoDocumentResourceManager *) cons
 bool MusicShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
-    return ( e.localName() == "shape" ) && ( e.namespaceURI() == "http://www.calligra-suite.org/music" );
+    return ( e.localName() == "shape" ) && ( e.namespaceURI() == "http://www.calligra.org/music" );
 }

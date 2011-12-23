@@ -89,7 +89,7 @@ public:
     bool         hasOwnChartType() const;
     ChartType    effectiveChartType() const;
     bool         isValidDataPoint( const QPoint &point ) const;
-    QVariant     data( const CellRegion &region, int index ) const;
+    QVariant     data( const CellRegion &region, int index, int role ) const;
 
     QBrush defaultBrush() const;
     QBrush defaultBrush( int section ) const;
@@ -131,7 +131,6 @@ public:
     Axis *attachedAxis;
     bool showMeanValue;
     QPen meanValuePen;
-    bool showLabels;
     bool showLowerErrorIndicator;
     bool showUpperErrorIndicator;
     QPen errorIndicatorPen;
@@ -146,9 +145,12 @@ public:
     bool brushIsSet;
     QPen pen;
     QBrush brush;
+    QMap<int, DataSet::ValueLabelType> valueLabelType;
 
     KDChart::PieAttributes pieAttributes;
     KDChart::DataValueAttributes dataValueAttributes;
+
+    void readValueLabelType( KoStyleStack &styleStack, int section = -1 );
 
     // Note: Set section-specific attributes only if really necessary.
     //       They will override the respective global attributes.
@@ -156,13 +158,10 @@ public:
     QMap<int, QBrush> brushes;
     QMap<int, KDChart::PieAttributes> sectionsPieAttributes;
     QMap<int, KDChart::DataValueAttributes> sectionsDataValueAttributes;
-    QMap<int, bool> sectionsShowLabels;
 
     /// The number of this series is passed in the constructor and after
     /// that never changes.
     const int num;
-
-    QString labelDataCustom;
 
     // The different CellRegions for a dataset
     // Note: These are all 1-dimensional, i.e. vectors.
@@ -191,7 +190,6 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     chartSubType( NoChartSubtype ),
     attachedAxis( 0 ),
     showMeanValue( false ),
-    showLabels( false ),
     showLowerErrorIndicator( false ),
     showUpperErrorIndicator( false ),
     errorPercentage( 0.0 ),
@@ -201,7 +199,7 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     penIsSet( false ),
     brushIsSet( false ),
     pen( QPen( Qt::black ) ),
-    brush( QColor( Qt::white ) ),    
+    brush( QColor( Qt::white ) ),
     dataValueAttributes( defaultDataValueAttributes() ),
     num( dataSetNr ),
     kdChartModel( 0 ),
@@ -222,7 +220,8 @@ KDChart::MarkerAttributes DataSet::Private::defaultMarkerAttributes() const
     KDChart::MarkerAttributes ma;
     // Don't show markers unless we turn them on
     ma.setVisible( false );
-    //ma.setMarkerSizeMode( KDChart::MarkerAttributes::RelativeToDiagramWidthHeightMin );
+    // The marker size is specified in pixels, but scaled by the painter's zoom level
+    ma.setMarkerSizeMode( KDChart::MarkerAttributes::AbsoluteSizeScaled );
     return ma;
 }
 
@@ -347,15 +346,12 @@ bool DataSet::Private::isValidDataPoint( const QPoint &point ) const
     return true;
 }
 
-QVariant DataSet::Private::data( const CellRegion &region, int index ) const
+QVariant DataSet::Private::data( const CellRegion &region, int index, int role ) const
 {
     if ( !region.isValid() )
         return QVariant();
     if ( !region.hasPointAtIndex( index ) )
         return QVariant();
-
-    // The result
-    QVariant data;
 
     // Convert the given index in this dataset to a data point in the
     // source model.
@@ -369,10 +365,6 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
     if ( !model )
         return QVariant();
 
-    // FIXME: Why not use this immediately if true?
-    const bool verticalHeaderData   = dataPoint.x() == 0;
-    const bool horizontalHeaderData = dataPoint.y() == 0;
-
     // Check if the data point is valid
     const bool validDataPoint = isValidDataPoint( dataPoint );
 
@@ -383,21 +375,22 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
         return QVariant();
 
     // The top-left point is (1,1). (0,y) or (x,0) refers to header data.
+    const bool verticalHeaderData   = dataPoint.x() == 0;
+    const bool horizontalHeaderData = dataPoint.y() == 0;
     const int row = dataPoint.y() - 1;
     const int col = dataPoint.x() - 1;
 
+    QVariant data;
     if ( verticalHeaderData )
-        data = model->headerData( row, Qt::Vertical );
+        data = model->headerData( row, Qt::Vertical, role );
     else if ( horizontalHeaderData )
-        data = model->headerData( col, Qt::Horizontal );
+        data = model->headerData( col, Qt::Horizontal, role );
     else {
         const QModelIndex &index = model->index( row, col );
-        // FIXME: This causes a crash in KSpread when a document is loaded.
         //Q_ASSERT( index.isValid() );
         if ( index.isValid() )
-            data = model->data( index );
+            data = model->data( index, role );
     }
-
     return data;
 }
 
@@ -644,21 +637,6 @@ void DataSet::setAttachedAxis( Axis *axis )
     d->attachedAxis = axis;
 }
 
-bool DataSet::showLabels( int section /* = -1 */ ) const
-{
-    if ( section >= 0 )
-        return d->sectionsShowLabels[ section ];
-    return d->showLabels;
-}
-
-void DataSet::setShowLabels( bool showLabels, int section /* = -1 */ )
-{
-    if ( section >= 0 )
-        d->sectionsShowLabels[ section ] = showLabels;
-    else
-        d->showLabels = showLabels;
-}
-
 QPen DataSet::pen() const
 {
     return d->penIsSet ? d->pen : d->defaultPen();
@@ -773,6 +751,48 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
 
     ma.setMarkerColor( brush( section ).color() );
     ma.setPen( pen( section ) );
+
+    QString dataLabel = ""; // initialize with empty and NOT null!
+    ValueLabelType type = valueLabelType( section );
+    if ( type.symbol ) {
+        //TODO is that correct?
+        ma.setVisible( true );
+    }
+    if ( type.category ) {
+        QString s = categoryData( section, Qt::DisplayRole ).toString().trimmed();
+        if ( !s.isEmpty() ) dataLabel += s + " ";
+    }
+    if ( type.number ) {
+        QVariant v = yData( section, Qt::DisplayRole );
+        QString s;
+        if ( v.type() == QVariant::Double ) {
+            // Don't use v.toString() else a double/float would lose precision
+            // and something like "36.5207" would become "36.520660888888912".
+            QTextStream ts(&s);
+            ts << v.toDouble();
+        } else {
+            s = v.toString().trimmed();
+        }
+        if ( !s.isEmpty() ) dataLabel += s + " ";
+    }
+    if ( type.percentage ) {
+        bool ok;
+        qreal value = yData( section, Qt::EditRole ).toDouble(&ok);
+        if ( ok ) {
+            qreal sum = 0.0;
+            for(int i = 0; i < d->yDataRegion.cellCount(); ++i) {
+                sum += yData( i, Qt::EditRole ).toDouble();
+            }
+            if (sum == 0.0)
+                ok = false;
+            else
+                value = value / sum * 100.0;
+        }
+        if ( ok )
+            dataLabel += QString::number(value, 'f', 0) + "% ";
+    }
+    attr.setDataLabel( dataLabel.trimmed() );
+
     attr.setMarkerAttributes( ma );
 
     return attr;
@@ -911,47 +931,73 @@ void DataSet::setUpperErrorLimit( qreal limit )
     d->upperErrorLimit = limit;
 }
 
-QVariant DataSet::xData( int index ) const
+QVariant DataSet::xData( int index, int role ) const
 {
     // Sometimes a bubble chart is created with a table with 4 columns.
     // What we do here is assign the 2 columns per data set, so we have
     // 2 data sets in total afterwards. The first column is y data, the second
     // bubble width. Same for the second data set. So there is nothing left
     // for x data. Instead use a fall-back to the data points index.
-    QVariant data = d->data( d->xDataRegion, index );
-    if ( data.isValid() && data.canConvert< double >() && data.convert( QVariant::Double ) )
+    QVariant data = d->data( d->xDataRegion, index, role );
+    if ( data.isValid() && data.canConvert< double >() && data.convert( QVariant::Double )  )
         return data;
     return QVariant( index + 1 );
 }
 
-QVariant DataSet::yData( int index ) const
+QVariant DataSet::yData( int index, int role ) const
 {
     // No fall-back necessary. y data region must be specified if needed.
     // (may also be part of 'domain' in ODF terms, but only in case of
     // scatter and bubble charts)
-    return d->data( d->yDataRegion, index );
+    return d->data( d->yDataRegion, index, role );
 }
 
-QVariant DataSet::customData( int index ) const
+QVariant DataSet::customData( int index, int role ) const
 {
     // No fall-back necessary. ('custom' [1]) data region (part of 'domain' in
     // ODF terms) must be specified if needed. See ODF v1.1 §10.9.1
-    return d->data( d->customDataRegion, index );
+    return d->data( d->customDataRegion, index, role );
     // [1] In fact, 'custom' data only refers to the bubble width of bubble
     // charts at the moment.
 }
 
-QVariant DataSet::categoryData( int index ) const
+QVariant DataSet::categoryData( int index, int role ) const
 {
-    // There's no cell that holds this category's data
-    // (i.e., the region is either too short or simply empty)
-    if ( !d->categoryDataRegion.hasPointAtIndex( index ) )
-        return QString::number( index + 1 );
+     // There's no cell that holds this category's data
+     // (i.e., the region is either too short or simply empty)
+//     if ( !d->categoryDataRegion.hasPointAtIndex( index ) )
+//         return QString::number( index + 1 );
 
-    const QVariant data = d->data( d->categoryDataRegion, index );
-    // The cell contains valid data
-    if ( data.isValid() )
-        return data;
+    if ( d->categoryDataRegion.rects().isEmpty() ) {
+        // There's no cell that holds this category's data
+        // (i.e., the region is either too short or simply empty)
+        return QString::number( index + 1 );
+    }
+
+    foreach ( const QRect &rect, d->categoryDataRegion.rects() ) {
+        if ( rect.width() == 1 || rect.height() == 1 ) {
+            // Handle the clear case of either horizontal or vertical
+            // ranges with only one row/column.
+            const QVariant data = d->data( d->categoryDataRegion, index, role );
+            if ( data.isValid() )
+                return data;
+        } else {
+            // Operate on the last row in the defined in the categoryDataRegion.
+            // If multiple rows are given then we would need to build up multiple
+            // lines of category labels. Each line of labels would represent
+            // one row. If the category labels are displayed at the x-axis below
+            // the chart then the last row will be displayed as first label line,
+            // the row before the last row would be displayed as second label
+            // line below the first line and so on. Since we don't support
+            // multiple label lines for categories yet we only display the last
+            // row aka the very first label line.
+            CellRegion c( d->categoryDataRegion.table(), QRect( rect.x(), rect.bottom(), rect.width(), 1 ) );
+            const QVariant data = d->data( c, index, role );
+            if ( data.isValid() /* && !data.toString().isEmpty() */ )
+                return data;
+        }
+    }
+
     // The cell is empty
     return QString( "" );
 }
@@ -959,16 +1005,19 @@ QVariant DataSet::categoryData( int index ) const
 QVariant DataSet::labelData() const
 {
     QString label;
-    if ( d->labelDataRegion.isValid() )
-    {
+    if ( d->labelDataRegion.isValid() ) {
         const int cellCount = d->labelDataRegion.cellCount();
-        for ( int i = 0; i < cellCount; i++ )
-            label += d->data( d->labelDataRegion, i ).toString();
+        for ( int i = 0; i < cellCount; i++ ) {
+            QString s = d->data( d->labelDataRegion, i, Qt::EditRole ).toString();
+            if ( !s.isEmpty() ) {
+                if ( !label.isEmpty() )
+                    label += " ";
+                label += s;
+            }
+        }
     }
     if ( label.isEmpty() ) {
-        label = d->labelDataCustom;
-        if ( label.isEmpty() )
-            label = d->defaultLabel;
+        label = d->defaultLabel;
     }
     return QVariant( label );
 }
@@ -976,16 +1025,6 @@ QVariant DataSet::labelData() const
 QString DataSet::defaultLabelData() const
 {
     return d->defaultLabel;
-}
-
-QString DataSet::labelDataCustom() const
-{
-    return d->labelDataCustom;
-}
-
-void DataSet::setLabelDataCustom( const QString &label )
-{
-    d->labelDataCustom = label;
 }
 
 CellRegion DataSet::xDataRegion() const
@@ -1062,7 +1101,7 @@ void DataSet::setLabelDataRegion( const CellRegion &region )
 
 int DataSet::size() const
 {
-    return d->size > 0 ? d->size : 1;
+    return qMax(1, d->size);
 }
 
 void DataSet::Private::dataChanged( KDChartModel::DataRole role, const QRect &rect ) const
@@ -1117,42 +1156,27 @@ KDChartModel *DataSet::kdChartModel() const
     return d->kdChartModel;
 }
 
-void DataSet::setValueLabelType( ValueLabelType type, int section /* = -1 */ )
+void DataSet::setValueLabelType( const ValueLabelType &type, int section /* = -1 */ )
 {
     if ( section >= 0 )
         d->insertDataValueAttributeSectionIfNecessary( section );
+
+    d->valueLabelType[section] = type;
 
     // This is a reference, not a copy!
     KDChart::DataValueAttributes &attr = section >= 0 ?
                                          d->sectionsDataValueAttributes[ section ] :
                                          d->dataValueAttributes;
 
-    switch ( type ) {
-        case NoValueLabel:{
-            KDChart::TextAttributes ta ( attr.textAttributes() );
-            ta.setVisible( false );
-            attr.setTextAttributes( ta );
-//             attr.setVisible( false );
-            break;
-        }
-        case RealValueLabel:{
-            KDChart::TextAttributes ta ( attr.textAttributes() );
-            ta.setVisible( true );
-            attr.setTextAttributes( ta );
-            attr.setVisible( true );
-            attr.setUsePercentage( false );
-            break;
-        }
-        case PercentageValueLabel:{
-            KDChart::TextAttributes ta ( attr.textAttributes() );
-            ta.setVisible( true );
-            attr.setTextAttributes( ta );
-            attr.setVisible( true );
-            attr.setUsePercentage( true );
-            attr.setSuffix( "%" );
-            break;
-        }
-    }
+    KDChart::TextAttributes ta ( attr.textAttributes() );
+
+    ta.setVisible( !type.noLabel() );
+
+    KDChart::Measure m = ta.fontSize();
+    m.setValue( 8 ); // same small font the legend is using
+    ta.setFontSize( m );
+
+    attr.setTextAttributes( ta );
 
     if ( d->kdChartModel ) {
         if ( section >= 0 )
@@ -1164,15 +1188,11 @@ void DataSet::setValueLabelType( ValueLabelType type, int section /* = -1 */ )
 
 DataSet::ValueLabelType DataSet::valueLabelType( int section /* = -1 */ ) const
 {
-    KDChart::DataValueAttributes &attr = d->dataValueAttributes;
-    if ( d->sectionsDataValueAttributes.contains( section ) )
-        attr = d->sectionsDataValueAttributes[ section ];
-    KDChart::TextAttributes ta ( attr.textAttributes() );
-    if ( !ta.isVisible() )
-        return NoValueLabel;
-    if ( !attr.usePercentage() )
-        return RealValueLabel;
-    return PercentageValueLabel;
+    if ( d->valueLabelType.contains(section) )
+        return d->valueLabelType[section];
+    if ( d->valueLabelType.contains(-1) )
+        return d->valueLabelType[-1];
+    return ValueLabelType();
 }
 
 bool loadBrushAndPen( KoStyleStack &styleStack, KoShapeLoadingContext &context,
@@ -1221,14 +1241,44 @@ bool loadBrushAndPen( KoStyleStack &styleStack, KoShapeLoadingContext &context,
     return true;
 }
 
-static DataSet::ValueLabelType valueLabelTypeFromString( const QString &format )
+/**
+* The valueLabelType can be read from a few different places;
+*   - chart:data-label
+*   - chart:data-point
+*   - chart:series
+*   - chart:plot-area
+*
+* Since we somehow need to merge e.g. a global one defined at the plot-area
+* together with a local one defined in a series we need to make sure to
+* fetch + change only what is redefined + reapply.
+*
+* The question is if this is 100% the correct thing to do or if we
+* need more logic that e.g. differs between where the data-labels got
+* defined? It would make sense but there is no information about that
+* available and it seems OO.org/LO just save redundant informations
+* here at least with pie-charts...
+*/
+void DataSet::Private::readValueLabelType( KoStyleStack &styleStack, int section /* = -1 */ )
 {
-    DataSet::ValueLabelType type = DataSet::NoValueLabel;
-    if ( format == "value" )
-        type = DataSet::RealValueLabel;
-    else if ( format == "percentage" )
-        type = DataSet::PercentageValueLabel;
-    return type;
+    DataSet::ValueLabelType type = parent->valueLabelType( section );
+
+    const QString number = styleStack.property( KoXmlNS::chart, "data-label-number" );
+    if ( !number.isNull() ) {
+        type.number = ( number == "value" || number == "value-and-percentage" );
+        type.percentage = ( number == "percentage" || number == "value-and-percentage" );
+    }
+
+    const QString text = styleStack.property( KoXmlNS::chart, "data-label-text" );
+    if ( !text.isNull() ) {
+        type.category = ( text == "true" );
+    }
+
+    const QString symbol = styleStack.property( KoXmlNS::chart, "data-label-symbol" );
+    if ( !symbol.isNull() ) {
+        type.symbol = ( symbol == "true" );
+    }
+
+    parent->setValueLabelType( type, section );
 }
 
 bool DataSet::loadOdf( const KoXmlElement &n,
@@ -1271,34 +1321,41 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         if(styleStack.hasProperty(KoXmlNS::chart, "pie-offset"))
             setPieExplodeFactor( styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
     }
+
     bool bubbleChart = false;
+    bool scatterChart = false;
     if ( n.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
-        bubbleChart = n.attributeNS( KoXmlNS::chart, "class", QString() ) == "chart:bubble";
-//         bubbleChart =  bubbleChart || n.attributeNS( KoXmlNS::chart, "class", QString() ) == "chart:stock";
+        QString charttype = n.attributeNS( KoXmlNS::chart, "class", QString() );
+        bubbleChart = charttype == "chart:bubble";
+        scatterChart = charttype == "chart:scatter";
     }
-    
-    // FIXME: Maybe it's easier to understand this if we simply have a counter
-    // 'loadedDomainElements' that is either 0, 1 or 2.
-    bool maybeCompleteDataDefinition = false;
-    // FIXME: This variable is unused.
-    
-    if ( /*bubbleChart &&*/ n.hasChildNodes() ){
+
+    // The <chart:domain> element specifies coordinate values required by particular chart types.
+    // For scatter charts, one <chart:domain> element shall exist. Its table:cell-range-address
+    // attribute references the x coordinate values for the scatter chart.
+    // For bubble charts, two <chart:domain> elements shall exist. The values for the y-coordinates are
+    // given by the first <chart:domain> element. The values for the x-coordinates are given by the
+    // second <chart:domain> element.
+    // At least one <chart:series> element of a given chart:class shall have the necessary
+    // number of <chart:domain> sub-elements. All other <chart:series> elements with the same
+    // chart:class may omit the <chart:domain> sub-elements and use the previously defined.
+    if ( ( scatterChart || bubbleChart ) && n.hasChildNodes() ) {
+        int domainCount = 0;
         KoXmlNode cn = n.firstChild();
         while ( !cn.isNull() ){
             KoXmlElement elem = cn.toElement();
             const QString name = elem.tagName();
             if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") && !ignoreCellRanges ) {
-                if ( maybeCompleteDataDefinition ){
+                if ( (domainCount == 0 && scatterChart) || (domainCount == 1 && bubbleChart) ) {
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
                     setXDataRegion( CellRegion( helper->tableSource, region ) );
-                }else{
+                } else {
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );                    
-                    // as long as there is not default table for missing data series the same region is used twice
-                    // to ensure the diagram is displayed, even if not as expected from o office or ms office
                     setYDataRegion( CellRegion( helper->tableSource, region ) );
-                    maybeCompleteDataDefinition = true;
                 }
-                
+                ++domainCount;
+                if ( (bubbleChart && domainCount == 2) || scatterChart )
+                    break; // We are finished and don't expect more domain's.
             }
             cn = cn.nextSibling();
         }
@@ -1325,15 +1382,9 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
         setLabelDataRegion( CellRegion( helper->tableSource, region ) );
     }
-    if ( n.hasAttributeNS( KoXmlNS::chart, "data-label-text" ) ) {
-        const QString enable = n.attributeNS( KoXmlNS::chart, "data-label-text", QString() );
-        setShowLabels( enable == "true" );
-    }
-    if ( styleStack.hasProperty(KoXmlNS::chart, "data-label-number" ) ) {
-        const QString format = styleStack.property( KoXmlNS::chart, "data-label-number" );
-        setValueLabelType( valueLabelTypeFromString( format ) );
-    }
-    
+
+    d->readValueLabelType( styleStack );
+
     if ( styleStack.hasProperty( KoXmlNS::chart, "symbol-type" ) )
     {
         const QString name = styleStack.property( KoXmlNS::chart, "symbol-type" );
@@ -1391,10 +1442,8 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         styleStack.setTypeProperties("chart");
         if(styleStack.hasProperty( KoXmlNS::chart, "pie-offset"))
             setPieExplodeFactor( loadedDataPointCount, styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
-        if ( styleStack.hasProperty( KoXmlNS::chart, "data-label-number" ) ) {
-            const QString format = styleStack.property( KoXmlNS::chart, "data-label-number" );
-            setValueLabelType( valueLabelTypeFromString( format ), loadedDataPointCount );
-        }
+
+        d->readValueLabelType( styleStack, loadedDataPointCount );
 
         ++loadedDataPointCount;
     }
@@ -1482,14 +1531,9 @@ bool DataSet::loadSeriesIntoDataset( const KoXmlElement &n,
         const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
         setLabelDataRegion( CellRegion( helper->tableSource, region ) );
     }
-    if ( n.hasAttributeNS( KoXmlNS::chart, "data-label-text" ) ) {
-        const QString enable = n.attributeNS( KoXmlNS::chart, "data-label-text", QString() );
-        setShowLabels( enable == "true" );
-    }
-    if ( styleStack.hasProperty(KoXmlNS::chart, "data-label-number" ) ) {
-        const QString format = styleStack.property( KoXmlNS::chart, "data-label-number" );
-        setValueLabelType( valueLabelTypeFromString( format ) );
-    }
+
+    d->readValueLabelType( styleStack );
+
     return true;
 }
 
@@ -1502,7 +1546,17 @@ void DataSet::saveOdf( KoShapeSavingContext &context ) const
 
     KoGenStyle style( KoGenStyle::ChartAutoStyle, "chart" );
 
-    style.addProperty( "chart:data-label-text", showLabels() ? "true" : "false" );
+    DataSet::ValueLabelType type = valueLabelType();
+    if ( type.number && type.percentage )
+        style.addProperty( "chart:data-label-number", "value-and-percentage" );
+    else if ( type.number )
+        style.addProperty( "chart:data-label-number", "value" );
+    else if ( type.percentage )
+        style.addProperty( "chart:data-label-number", "percentage" );
+    if ( type.category )
+        style.addProperty( "chart:data-label-text", "true" );
+    if ( type.symbol )
+        style.addProperty( "chart:data-label-symbol", "true" );
 
     KoOdfGraphicStyles::saveOdfFillStyle( style, mainStyles, brush() );
     KoOdfGraphicStyles::saveOdfStrokeStyle( style, mainStyles, pen() );

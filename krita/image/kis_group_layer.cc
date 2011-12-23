@@ -32,7 +32,7 @@
 #include "kis_default_bounds.h"
 #include "kis_clone_layer.h"
 
-class KisGroupLayer::Private
+struct KisGroupLayer::Private
 {
 public:
     Private()

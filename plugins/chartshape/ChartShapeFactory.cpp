@@ -34,6 +34,7 @@
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoDocumentResourceManager.h>
 
 // Chart shape
@@ -83,6 +84,25 @@ bool ChartShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingCont
     Q_UNUSED(context);
     return element.namespaceURI() == "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
         && element.tagName() == "object";
+}
+
+KoShape *ChartShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    ChartShape* shape = new ChartShape(context.documentResourceManager());
+
+    if (shape->shapeId().isEmpty())
+        shape->setShapeId(id());
+
+    context.odfLoadingContext().styleStack().save();
+    bool loaded = shape->loadOdf(element, context);
+    context.odfLoadingContext().styleStack().restore();
+
+    if (!loaded) {
+        delete shape;
+        return 0;
+    }
+
+    return shape;
 }
 
 KoShape *ChartShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const

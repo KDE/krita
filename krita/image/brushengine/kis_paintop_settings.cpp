@@ -94,23 +94,6 @@ KisNodeSP KisPaintOpSettings::node() const
     return d->node;
 }
 
-
-QRectF KisPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
-{
-    Q_UNUSED(_mode);
-    QRectF rect = QRectF(-5, -5, 10, 10);
-    return image->pixelToDocument(rect).translated(pos);
-}
-
-void KisPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
-{
-    if (_mode != CursorIsOutline) return;
-    QRectF rect2 = paintOutlineRect(pos, image, _mode);
-    painter.drawLine(rect2.topLeft(), rect2.bottomRight());
-    painter.drawLine(rect2.topRight(), rect2.bottomLeft());
-}
-
-
 void KisPaintOpSettings::changePaintOpSize(qreal x, qreal y)
 {
     if(!d->settingsWidget.isNull()) {

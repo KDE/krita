@@ -67,7 +67,7 @@ namespace
     const GLuint NO_PROGRAM = 0;
 }
 
-class KisOpenGLCanvas2::Private
+struct KisOpenGLCanvas2::Private
 {
 public:
     Private()

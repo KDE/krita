@@ -63,7 +63,9 @@ void TestNumberStyle::testPercent()
 
 void TestNumberStyle::testScientific()
 {
-    QCOMPARE(KoOdfNumberStyles::formatScientific(345678, "0.00E+000"), QString("3,456780E+05"));
+    QString localDependentScientific = KoOdfNumberStyles::formatScientific(345678, "0.00E+000");
+    localDependentScientific.replace(',','.');
+    QCOMPARE(localDependentScientific, QString("3.456780E+05"));
 }
 
 void TestNumberStyle::testFraction()
@@ -76,7 +78,10 @@ void TestNumberStyle::testCurrency()
     QCOMPARE(KoOdfNumberStyles::formatCurrency(34.56, "-$#,###0.00", QString(), 2), QString("$34.56"));
     QCOMPARE(KoOdfNumberStyles::formatCurrency(34.56, "-#,###0.00 EUR", QString(), 2), QString("34.56 EUR"));
     QCOMPARE(KoOdfNumberStyles::formatCurrency(34.56, "-$#,###0.", QString(), 0), QString("$35"));
-    QCOMPARE(KoOdfNumberStyles::formatCurrency(34.5, "#,###0 CCC", "CCC"), QString("34,50 USD"));
+    QString localDependentDollar = KoOdfNumberStyles::formatCurrency(34.5, "#,###0 CCC", "CCC");
+    localDependentDollar.replace(',','.');
+    QVERIFY(localDependentDollar.startsWith("34.50") || localDependentDollar.endsWith("34.50"));
+    QVERIFY(localDependentDollar.startsWith("USD") || localDependentDollar.endsWith("USD"));
     QCOMPARE(KoOdfNumberStyles::formatCurrency(34.56789, "-#,###0.00 EUR", QString(), 2), QString("34.57 EUR"));
     QCOMPARE(KoOdfNumberStyles::formatCurrency(34.5, "-#,###0.00 EUR", QString(), 2), QString("34.50 EUR"));
 }

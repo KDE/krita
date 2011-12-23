@@ -508,15 +508,29 @@ if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     ##
     ## Test for sqlite
     ##
-    set(SQLITE_RECOMMENDED_VERSION "3.7.9")
+    set(SQLITE_MIN_VERSION 3.6.16)
+    set(SQLITE_RECOMMENDED_VERSION 3.7.9)
+    set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
     find_package(CalligraSqlite 3.6.16)
-    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine" "http://www.sqlite.org"
-                      FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")
-
+    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
+                      "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
+                      "Required by Kexi for its default database driver.")
     if(NOT SQLITE_FOUND)
         set(SHOULD_BUILD_KEXI FALSE)
-        message(STATUS "WARNING: Kexi will not be built.")
+        message(STATUS "WARNING: Because of that, Kexi will not be built.")
     endif(NOT SQLITE_FOUND)
+
+    ##
+    ## Test for ICU
+    ##
+    find_package(ICU)
+    macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Library"
+                      "http://icu-project.org" FALSE "" "Required by Kexi")
+
+    if(NOT ICU_FOUND)
+        set(SHOULD_BUILD_KEXI FALSE)
+        message(STATUS "WARNING: Because of that, Kexi will not be built.")
+    endif(NOT ICU_FOUND)
 endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
 
  ###################

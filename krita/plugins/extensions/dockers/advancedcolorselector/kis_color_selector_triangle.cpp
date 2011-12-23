@@ -128,6 +128,9 @@ void KisColorSelectorTriangle::setColor(const QColor &color)
     m_lastClickPos.setX(tmp.x()/qreal(width()));
     m_lastClickPos.setY(tmp.y()/qreal(height()));
 
+    // Workaround for Bug 287001
+    setLastMousePosition(tmp.x(), tmp.y());
+
     emit paramChanged(-1, color.saturationF(), color.valueF(), -1, -1);
     emit update();
 }

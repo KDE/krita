@@ -82,6 +82,9 @@ public:
     /// Update the stored QTextList pointer for the given block
     void updateStoredList(const QTextBlock &block);
 
+    KoList *listContinuedFrom();
+    void setListContinuedFrom(KoList *list);
+
 private:
     KoListPrivate *d;
 

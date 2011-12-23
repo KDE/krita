@@ -26,6 +26,7 @@
 #include "KoShapeContainer.h"
 #include "KoShapeGroup.h"
 #include "KoPointerEvent.h"
+#include "KoShapePaintingContext.h"
 
 #include <QPainter>
 #include <QTimer>

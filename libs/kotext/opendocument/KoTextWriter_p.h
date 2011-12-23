@@ -267,7 +267,7 @@ private:
     QStack< QStack<KoInlineObject*> *> pairedInlineObjectsStackStack;
     QStack<KoInlineObject*> *currentPairedInlineObjectsStack;
 
-    QMap<QTextList *, QString> listXmlIds;
+    QMap<KoList *, QString> listXmlIds;
 
     int splitEndBlockNumber;
     bool splitRegionOpened;

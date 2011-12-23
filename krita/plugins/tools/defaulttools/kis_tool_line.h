@@ -45,7 +45,7 @@ class KisToolLine : public KisToolPaint
 public:
     KisToolLine(KoCanvasBase * canvas);
     virtual ~KisToolLine();
-    
+
     virtual int flags() const;
 
     virtual void mousePressEvent(KoPointerEvent *event);
@@ -88,7 +88,6 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(1);
         setIcon("krita_tool_line");
-        setInputDeviceAgnostic(false);
     }
 
     virtual ~KisToolLineFactory() {}

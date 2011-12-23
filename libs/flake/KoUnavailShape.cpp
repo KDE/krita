@@ -128,7 +128,7 @@ public:
 
     void storeObjects(const KoXmlElement &element);
     void storeXmlRecursive(const KoXmlElement &el, KoXmlWriter &writer,
-                           ObjectEntry *object);
+                           ObjectEntry *object, QHash<QString, QString> &unknownNamespaces);
     void storeFile(const QString &filename, KoShapeLoadingContext &context);
     QByteArray loadFile(const QString &filename, KoShapeLoadingContext &context);
 
@@ -536,7 +536,8 @@ void KoUnavailShape::Private::storeObjects(const KoXmlElement &element)
         object->objectName = name;
 
         // 2. Copy the XML code.
-        storeXmlRecursive(el, writer, object);
+        QHash<QString, QString> unknownNamespaces;
+        storeXmlRecursive(el, writer, object, unknownNamespaces);
         object->objectXmlContents = contentsTmp;
 
         // 3, 4: the isDir and manifestEntry members are not set here,
@@ -549,7 +550,7 @@ void KoUnavailShape::Private::storeObjects(const KoXmlElement &element)
 }
 
 void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWriter &writer,
-                                                ObjectEntry *object)
+                                                ObjectEntry *object, QHash<QString, QString> &unknownNamespaces)
 {
     // Start the element;
     // keep the name in a QByteArray so that it stays valid until end element is called.
@@ -566,8 +567,18 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
         else {
             // This somewhat convoluted code is because we need the
             // namespace, not the namespace URI.
-            QString attr(QString(KoXmlNS::nsURI2NS(attrPair.first.toAscii()))
-                         + ':' + attrPair.second);
+            QString nsShort = KoXmlNS::nsURI2NS(attrPair.first.toAscii());
+            // in case we don't find the namespace in our list create a own one and use that
+            // so the document created on saving is valid.
+            if (nsShort.isEmpty()) {
+                nsShort = unknownNamespaces.value(attrPair.first);
+                if (nsShort.isEmpty()) {
+                    nsShort = QString("ns%1").arg(unknownNamespaces.size() + 1);
+                    unknownNamespaces.insert(attrPair.first, nsShort);
+                }
+                writer.addAttribute("xmlns:" + nsShort.toAscii(), attrPair.first);
+            }
+            QString attr(nsShort + ':' + attrPair.second);
             writer.addAttribute(attr.toAscii(), el.attributeNS(attrPair.first,
                                                                attrPair.second));
         }
@@ -578,7 +589,7 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
     KoXmlNode n = el.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
         if (n.isElement()) {
-            storeXmlRecursive(n.toElement(), writer, object);
+            storeXmlRecursive(n.toElement(), writer, object, unknownNamespaces);
         }
         else if (n.isText()) {
             writer.addTextNode(n.toText().data()/*.toUtf8()*/);

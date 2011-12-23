@@ -86,6 +86,11 @@ KoProgressUpdater::~KoProgressUpdater()
         Private::logEvents(*d->output, d, referenceTime(), "");
     }
     d->progressBar->setValue(d->progressBar->maximum());
+
+    // make sure to stop the timer to avoid accessing
+    // the data we are going to delete right now
+    d->updateGuiTimer.stop();
+
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
 

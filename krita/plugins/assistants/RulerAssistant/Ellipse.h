@@ -29,6 +29,7 @@ public:
     ~Ellipse();
     
     QPointF project(const QPointF&) const; // find a close point on the ellipse
+    QRectF boundingRect() const; // find an axis-aligned box bounding this ellipse (inexact)
     
     bool set(const QPointF& m1, const QPointF& m2, const QPointF& p); // set all points
     

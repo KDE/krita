@@ -23,21 +23,36 @@
 #include "kis_resources_snapshot.h"
 
 class KisPainter;
+class KisDistanceInformation;
 class KisTransaction;
 
 
 class KRITAUI_EXPORT KisPainterBasedStrokeStrategy : public KisSimpleStrokeStrategy
 {
 public:
+    /**
+     * The distance information should be associated with each
+     * painter individually, so we strore and manipulate with
+     * them together using the structure PainterInfo
+     */
+    struct PainterInfo {
+        PainterInfo(KisPainter *painter, KisDistanceInformation *dragDistance);
+        ~PainterInfo();
+
+        KisPainter *painter;
+        KisDistanceInformation *dragDistance;
+    };
+
+public:
     KisPainterBasedStrokeStrategy(const QString &id,
                                   const QString &name,
                                   KisResourcesSnapshotSP resources,
-                                  QVector<KisPainter*> painters);
+                                  QVector<PainterInfo*> painterInfos);
 
     KisPainterBasedStrokeStrategy(const QString &id,
                                   const QString &name,
                                   KisResourcesSnapshotSP resources,
-                                  KisPainter *painter);
+                                  PainterInfo *painterInfo);
 
     void initStrokeCallback();
     void finishStrokeCallback();
@@ -52,7 +67,7 @@ private:
 
 private:
     KisResourcesSnapshotSP m_resources;
-    QVector<KisPainter*> m_painters;
+    QVector<PainterInfo*> m_painterInfos;
     KisTransaction *m_transaction;
 };
 

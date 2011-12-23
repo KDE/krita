@@ -31,6 +31,7 @@ void KisTile::init(qint32 col, qint32 row,
 {
     m_col = col;
     m_row = row;
+    m_lockCounter = 0;
 
     m_extent = QRect(m_col * KisTileData::WIDTH, m_row * KisTileData::HEIGHT,
                      KisTileData::WIDTH, KisTileData::HEIGHT);
@@ -39,7 +40,6 @@ void KisTile::init(qint32 col, qint32 row,
     m_tileData->acquire();
 
     m_mementoManager = mm;
-    m_lockCounter = 0;
 
     if (m_mementoManager)
         m_mementoManager->registerTileChange(this);
@@ -120,6 +120,7 @@ inline void KisTile::blockSwapping() const
      */
 
     QMutexLocker locker(&m_swapBarrierLock);
+    Q_ASSERT(m_lockCounter >= 0);
 
     if(!m_lockCounter++)
         m_tileData->blockSwapping();
@@ -130,6 +131,7 @@ inline void KisTile::blockSwapping() const
 inline void KisTile::unblockSwapping() const
 {
     QMutexLocker locker(&m_swapBarrierLock);
+    Q_ASSERT(m_lockCounter > 0);
 
     if(--m_lockCounter == 0) {
         m_tileData->unblockSwapping();
@@ -147,6 +149,7 @@ inline void KisTile::unblockSwapping() const
 inline void KisTile::safeReleaseOldTileData(KisTileData *td)
 {
     QMutexLocker locker(&m_swapBarrierLock);
+    Q_ASSERT(m_lockCounter >= 0);
 
     if(m_lockCounter > 0) {
         m_oldTileData.push(td);

@@ -20,11 +20,11 @@ FX_soft_decrease-saturation.kpp
 FX_splat_starfield.kpp
 Grid_square_25.kpp
 Hatch_crispy.kpp
-Hatch_cross_dark.kpp
 Hatch_cross_regular.kpp
+Hatch_cross_small.kpp
 Hatch_diag_fat.kpp
-Hatch_diag_medium.kpp
-Hatch_diag_small.kpp
+Hatch_diag_M.kpp
+Hatch_diag_S.kpp
 Hatch_moire.kpp
 Hatch_noisy.kpp
 Ink_ballpen.kpp
@@ -83,6 +83,9 @@ Pencil_2B.kpp
 Pencil_chalk.kpp
 Pencil_HB.kpp
 Pencil_shade_texture.kpp
+Pencil-tilt-shade2.kpp
+Pencil-tilt-shade.kpp
+Pencil-tilt-sketch.kpp
 SB_chrome.kpp
 SB_fur.kpp
 SB_ink_dirty_02.kpp
@@ -106,5 +109,9 @@ Smudge_detail.kpp
 Smudge_hard_grain.kpp
 Smudge_hard.kpp
 Smudge_oil.kpp
+Splat-granular.kpp
 Spray_splat.kpp
+Texture-dirty.kpp
+Texture-hair1.kpp
+Texturizer_001.kpp
 DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)

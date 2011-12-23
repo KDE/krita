@@ -222,8 +222,6 @@ void KisFilterBumpmap::process(KisPaintDeviceSP device,
         bumpmap = device;
     }
 
-    return;
-
     qint32 sel_h = applyRect.height();
     qint32 sel_w = applyRect.width();
 
@@ -252,7 +250,6 @@ void KisFilterBumpmap::process(KisPaintDeviceSP device,
     // ---------------------- Load initial three bumpmap scanlines
 
     const KoColorSpace * srcCs = device->colorSpace();
-    QList<KoChannelInfo *> channels = srcCs->channels();
 
     // One byte per pixel, converted from the bumpmap layer.
     quint8 * bm_row1 = new quint8[bm_w];
@@ -277,8 +274,6 @@ void KisFilterBumpmap::process(KisPaintDeviceSP device,
         row_in_bumpmap = (y >= - config->getInt("yofs", 0) && y < - config->getInt("yofs", 0) + bm_h);
 
         // Bumpmap
-
-
         qint32 tmp = config->getInt("xofs", 0) + srcTopLeft.x();
         xofs2 = MOD(tmp, bm_w);
 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -111,6 +111,14 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
         startHeight = std::numeric_limits<qreal>::epsilon();
 
     QPointF distance = m_unwindMatrix.map(newPos) - m_unwindMatrix.map( m_start );
+    // guard against resizing zero width shapes, which would result in huge zoom factors
+    if (m_initialSize.width() < std::numeric_limits<qreal>::epsilon()) {
+        distance.rx() = 0.0;
+    }
+    // guard against resizing zero height shapes, which would result in huge zoom factors
+    if (m_initialSize.height() < std::numeric_limits<qreal>::epsilon()) {
+        distance.ry() = 0.0;
+    }
 
     const bool scaleFromCenter = modifiers & Qt::ControlModifier;
     if (scaleFromCenter) {

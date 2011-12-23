@@ -485,22 +485,14 @@ void KisPaintopBox::slotSaveActivePreset()
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
     QString name = m_presetsPopup->getPresetName();
-    QFileInfo fileInfo(saveLocation + name + newPreset->defaultFileExtension());
 
-    QStringList blacklistFileNames = rServer->blackListedFiles();
-
-    if (fileInfo.exists() && blacklistFileNames.contains(fileInfo.filePath())) {
-        QTemporaryFile file(saveLocation + name + newPreset->defaultFileExtension());
-        if (file.open()) {
-            fileInfo.setFile(file.fileName());
-        }
-     }
-     else if (fileInfo.exists()) {
-        rServer->removeResource(rServer->getResourceByName(name));
+    KisPaintOpPreset* resource = rServer->getResourceByName(name);
+    if (resource) {
+        rServer->removeResource(resource);
     }
 
     newPreset->setImage(m_presetsPopup->cutOutOverlay());
-    newPreset->setFilename(fileInfo.filePath());
+    newPreset->setFilename(saveLocation + name + newPreset->defaultFileExtension());
     newPreset->setName(name);
 
     m_presetsPopup->changeSavePresetButtonText(true);

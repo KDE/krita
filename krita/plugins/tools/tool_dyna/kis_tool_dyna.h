@@ -161,7 +161,6 @@ public:
         //setShortcut(KShortcut(Qt::Key_F));
         setPriority(10);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setInputDeviceAgnostic(false);
     }
 
     virtual ~KisToolDynaFactory() {}

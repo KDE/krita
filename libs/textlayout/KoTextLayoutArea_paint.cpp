@@ -313,7 +313,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                                 format.setBackground(QBrush(QColor(0, 0, 0, 0)));
                             }
                             if (format.foreground().style() == Qt::NoBrush) {
-                                format.setForeground(QBrush(QColor(0, 0, 0, 0)));
+                                format.setForeground(QBrush(QColor(0, 0, 0)));
                             }
                         }
                         fr.format = format;
@@ -333,7 +333,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                                 f.setBackground(format.background());
                             }
                             if (format.foreground().style() == Qt::NoBrush) {
-                                f.setForeground(QBrush(QColor(0, 0, 0, 0)));
+                                f.setForeground(QBrush(QColor(0, 0, 0)));
                             }
                             else {
                                 f.setForeground(format.foreground());

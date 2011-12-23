@@ -537,29 +537,23 @@ QString KoTextWriter::Private::saveCharacterStyle(const QTextCharFormat &charFor
     QString displayName = originalCharStyle->name();
     QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace('%', '_');
 
-    KoCharacterStyle charStyle(charFormat);
-    // we'll convert it to a KoCharacterStyle to check for local changes.
-    // we remove that properties given by the paragraphstyle char format, these are not present in the saved style (should it really be the case?)
-    charStyle.removeDuplicates(blockCharFormat);
-    if (charStyle == (*originalCharStyle)) { // This is the real, unmodified character style.
+    KoCharacterStyle *autoStyle = originalCharStyle->autoStyle(charFormat, blockCharFormat);
+
+    if (autoStyle->isEmpty()) { // This is the real, unmodified character style.
         if (originalCharStyle != defaultCharStyle) {
-            if (!charStyle.isEmpty()) {
-                KoGenStyle style(KoGenStyle::ParagraphStyle, "text");
-                originalCharStyle->saveOdf(style);
-                generatedName = context.mainStyles().insert(style, internalName, KoGenStyles::DontAddNumberToName);
-            }
+            KoGenStyle style(KoGenStyle::ParagraphStyle, "text");
+            originalCharStyle->saveOdf(style);
+            generatedName = context.mainStyles().insert(style, internalName, KoGenStyles::DontAddNumberToName);
         }
     } else { // There are manual changes... We'll have to store them then
         KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "text", originalCharStyle != defaultCharStyle ? internalName : "" /*parent*/);
         if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
             style.setAutoStyleInStylesDotXml(true);
-        charStyle.removeDuplicates(*originalCharStyle);
-        if (!charStyle.isEmpty()) {
-            charStyle.saveOdf(style);
-            generatedName = context.mainStyles().insert(style, "T");
-        }
+        autoStyle->saveOdf(style);
+        generatedName = context.mainStyles().insert(style, "T");
     }
 
+    delete autoStyle;
     return generatedName;
 }
 
@@ -1381,18 +1375,15 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
         listTagInformation.setTagName("text:list");
         listTagInformation.addAttribute("text:style-name", listStyles[textList]);
 
-        bool newList = true;
-        if (listXmlIds.contains(textList)) {
-            newList = false;
-            listTagInformation.addAttribute("text:continue-list", listXmlIds.value(textList));
+        if (listXmlIds.contains(list->listContinuedFrom())) {
+            listTagInformation.addAttribute("text:continue-list", listXmlIds.value(list->listContinuedFrom()));
         }
 
         QString listXmlId = QString("list-%1").arg(createXmlId());
         listTagInformation.addAttribute("xml:id", listXmlId);
-        if (newList) {
-            listXmlIds.insert(textList, listXmlId);
+        if (! listXmlIds.contains(list)) {
+            listXmlIds.insert(list, listXmlId);
         }
-
 
         listChangeId = openTagRegion(block.position(), KoTextWriter::Private::List, listTagInformation);
     }

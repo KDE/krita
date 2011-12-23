@@ -25,6 +25,7 @@
 class KoColorSpace;
 class QVBoxLayout;
 class KisColorInput;
+class KisColorSpaceSelector;
 class QTimer;
 
 class KisSpecificColorSelectorWidget : public QWidget
@@ -39,6 +40,7 @@ public slots:
 private slots:
     void update();
     void updateTimeout();
+    void setCustomColorSpace(const KoColorSpace *);
 signals:
     void colorChanged(const KoColor&);
     void updated();
@@ -49,6 +51,8 @@ private:
     KoColor m_color;
     bool m_updateAllowed;
     QTimer* m_delayTimer;
+    KisColorSpaceSelector *m_colorspaceSelector;
+    bool m_customColorSpaceSelected;
 };
 
 #endif

@@ -35,7 +35,8 @@ public:
      * painter individually, so we strore and manipulate with
      * them together using the structure PainterInfo
      */
-    struct KRITAUI_EXPORT PainterInfo {
+    class KRITAUI_EXPORT PainterInfo {
+    public:
         PainterInfo(KisPainter *painter, KisDistanceInformation *dragDistance);
         ~PainterInfo();
 

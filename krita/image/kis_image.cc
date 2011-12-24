@@ -58,7 +58,6 @@
 #include "kis_painter.h"
 #include "kis_perspective_grid.h"
 #include "kis_selection.h"
-#include "kis_shear_visitor.h"
 #include "kis_transaction.h"
 #include "kis_transform_visitor.h"
 #include "kis_types.h"
@@ -578,9 +577,13 @@ void KisImage::rotate(double radians)
     applicator.end();
 }
 
-void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
+void KisImage::shearImpl(const QString &actionName,
+                         KisNodeSP rootNode,
+                         bool resizeImage,
+                         double angleX, double angleY,
+                         const QPointF &origin)
 {
-    //angleX, angleY are in degrees
+        //angleX, angleY are in degrees
     const qreal pi = 3.1415926535897932385;
     const qreal deg2rad = pi / 180.0;
 
@@ -593,41 +596,59 @@ void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
     {
         KisTransformWorker worker(0,
                                   1.0, 1.0,
-                                  tanX, tanY, 0, 0,
+                                  tanX, tanY, origin.x(), origin.y(),
                                   0,
                                   0, 0, 0, 0);
 
         QRect newRect = worker.transform().mapRect(bounds());
-        offset = -newRect.topLeft();
         newSize = newRect.size();
+        if(resizeImage) offset = -newRect.topLeft();
     }
 
     if(newSize == size()) return;
 
     KisImageSignalVector emitSignals;
-    emitSignals << SizeChangedSignal << ModifiedSignal;
+    if(resizeImage) emitSignals << SizeChangedSignal;
+    emitSignals << ModifiedSignal;
 
     KisProcessingApplicator::ProcessingFlags signalFlags =
-        KisProcessingApplicator::NO_UI_UPDATES |
         KisProcessingApplicator::RECURSIVE;
+    if(resizeImage) signalFlags |= KisProcessingApplicator::NO_UI_UPDATES;
 
-    KisProcessingApplicator applicator(this, m_d->rootLayer,
+    KisProcessingApplicator applicator(this, rootNode,
                                        signalFlags,
-                                       emitSignals, i18n("Shear Image"));
+                                       emitSignals, actionName);
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
 
     KisProcessingVisitorSP visitor =
             new KisTransformProcessingVisitor(1.0, 1.0,
-                                              tanX, tanY, QPointF(),
+                                              tanX, tanY, origin,
                                               0,
                                               offset.x(), offset.y(),
                                               filter);
 
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
 
-    applicator.applyCommand(new KisImageResizeCommand(this, newSize));
+    if(resizeImage) {
+        applicator.applyCommand(new KisImageResizeCommand(this, newSize));
+    }
+
     applicator.end();
+}
+
+void KisImage::shearNode(KisNodeSP node, double angleX, double angleY)
+{
+    QPointF shearOrigin = 0.5 * (QPointF(1.0,1.0) + bounds().bottomRight());
+
+    shearImpl(i18n("Shear layer"), node, false,
+              angleX, angleY, shearOrigin);
+}
+
+void KisImage::shear(double angleX, double angleY)
+{
+    shearImpl(i18n("Shear Image"), m_d->rootLayer, true,
+              angleX, angleY, QPointF());
 }
 
 void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)

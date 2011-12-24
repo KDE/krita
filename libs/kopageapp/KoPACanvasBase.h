@@ -84,6 +84,11 @@ public:
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
     virtual void updateSize() = 0;
 
+    /// return if grid is marked to be painted in the background
+    bool paintGridInBackground() const;
+
+    /// set if grid is marked to be painted in the background
+    void setPaintGridInBackground(bool strategy);
 
 protected:
 

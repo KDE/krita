@@ -88,7 +88,7 @@ void TestKDChartModel::initTestCase()
 
 void TestKDChartModel::init()
 {
-    m_model = new KDChartModel;
+    m_model = new KDChartModel( 0 );
     m_testModel = new ModelObserver( m_model );
 }
 

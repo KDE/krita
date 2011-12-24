@@ -67,8 +67,14 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
             m_dev->colorSpace()->colorChannelCount());
 
+    QList<KoChannelInfo *> colorChannels;
+    foreach(KoChannelInfo *channel, dev->colorSpace()->channels()) {
+        if (channel->channelType() == KoChannelInfo::COLOR) {
+            colorChannels.append(channel);
+        }
+    }
     // fill in the channel chooser, in the display order, but store the pixel index as well.
-    QList<KoChannelInfo *> sortedChannels = KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels());
+    QList<KoChannelInfo *> sortedChannels = KoChannelInfo::displayOrderSorted(colorChannels);
     foreach(KoChannelInfo *channel, sortedChannels) {
         QVariant pixelIndex(KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), 
                                                                          KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())));

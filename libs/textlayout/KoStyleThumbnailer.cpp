@@ -4,6 +4,7 @@
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009,2011 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -86,6 +87,9 @@ QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style)
 
 QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size)
 {
+    if (size.isNull()) {
+        size = d->defaultSize;
+    }
     QString pixmapKey = "p_" + QString::number(style->styleId()) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
     QPixmap pm(size.width(), size.height());
 
@@ -124,6 +128,9 @@ QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style)
 
 QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size)
 {
+    if (size.isNull()) {
+        size = d->defaultSize;
+    }
     QString pixmapKey = "c_" + QString::number(style->styleId()) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
     QPixmap pm(size.width(), size.height());
 

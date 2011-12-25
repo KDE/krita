@@ -99,8 +99,9 @@ void StylesComboPreview::init()
     m_addButton->setIcon(KIcon("list-add"));
     m_addButton->setFlat(true);
     m_addButton->setMinimumSize(16,16);
-    m_addButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    m_addButton->setMaximumSize(size().height(), size().height());
+    m_addButton->setMaximumSize(16, 16);
+//    m_addButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+//    m_addButton->setMaximumSize(size().height(), size().height());
     connect(m_addButton, SIGNAL(clicked()), this, SLOT(addNewStyle()));
 //        m_addButton->setToolTip( i18nc( "@action:button Clear current text in the line edit", "Clear text" ) );
 
@@ -144,7 +145,7 @@ void StylesComboPreview::setAddButtonShown(bool show)
 
 QSize StylesComboPreview::availableSize() const
 {
-    return QSize(contentsRect().width()/*-m_addButton->width()*/, contentsRect().height()); ///TODO decide if button should be superimposed, if not, should preview be resized
+    return QSize(contentsRect().width()- m_addButton->width(), contentsRect().height()); ///TODO dynamic resizing when button shown/hidden.
 }
 
 void StylesComboPreview::setPreview(QPixmap pixmap)
@@ -235,7 +236,9 @@ void StylesComboPreview::updateAddButton()
 
     if (layoutDirection() == Qt::LeftToRight ) {
 */
-        m_addButton->move(geom.width() /*- frameWidth*/ - buttonWidth , (geom.height()-m_addButton->height())/2);
+    kDebug() << "geom: " << geom;
+    kDebug() << "buttone size: " << m_addButton->size();
+    m_addButton->move(geom.width() /*- frameWidth*/ - buttonWidth , (geom.height()-m_addButton->size().height())/2);
 /*    } else {
         d->clearButton->move(frameWidth + 1, 0);
     }
@@ -252,9 +255,9 @@ void StylesComboPreview::updateAddButton()
 
 void StylesComboPreview::resizeEvent( QResizeEvent * ev )
 {
+    QLineEdit::resizeEvent(ev);
     emit resized();
     updateAddButton();
-    QLineEdit::resizeEvent(ev);
 }
 
 void StylesComboPreview::keyPressEvent( QKeyEvent *e )

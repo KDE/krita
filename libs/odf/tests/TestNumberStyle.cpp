@@ -44,6 +44,16 @@ void TestNumberStyle::testNumber()
 {
     QCOMPARE(KoOdfNumberStyles::formatNumber(23, "0."), QString("23"));
     QCOMPARE(KoOdfNumberStyles::formatNumber(0, "0."), QString("0"));
+
+    KoOdfNumberStyles::NumericStyleFormat f;
+    f.type = KoOdfNumberStyles::Number;
+    f.precision = 3;
+    f.thousandsSep = true;
+    f.formatStr = "00.00 test";
+    QCOMPARE(KoOdfNumberStyles::format("12345.6789", f), QString("12345.679 test"));
+    f.precision = 1;
+    f.formatStr = "test1 00.00 test2";
+    QCOMPARE(KoOdfNumberStyles::format("12345.6789", f), QString("test1 12345.70 test2"));
 }
 
 void TestNumberStyle::testDate()

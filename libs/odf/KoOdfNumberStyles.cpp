@@ -50,8 +50,8 @@ QString format(const QString &value, NumericStyleFormat format)
     switch (format.type) {
         case Number: {
             bool ok;
-            int v = value.toInt(&ok);
-            return ok ? QString::number(v) : value;
+            qreal v = value.toDouble(&ok);
+            return ok ? formatNumber(v, format.formatStr, format.precision) : value;
         } break;
         case Boolean: {
             return formatBoolean(value, format.formatStr);

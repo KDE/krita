@@ -32,7 +32,7 @@ signals:
 
 protected:
     virtual void resizeEvent(QResizeEvent *event);
-    virtual void keyPressEvent(QKeyEvent *event);
+//    virtual void keyPressEvent(QKeyEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent *event);
     virtual bool event(QEvent *event);

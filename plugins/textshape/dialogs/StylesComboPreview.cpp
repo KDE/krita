@@ -259,10 +259,10 @@ void StylesComboPreview::resizeEvent( QResizeEvent * ev )
     emit resized();
     updateAddButton();
 }
-
+/*
 void StylesComboPreview::keyPressEvent( QKeyEvent *e )
 {
-    /*
+
     const int key = e->key() | e->modifiers();
 
     if ( KStandardShortcut::copy().contains( key ) )
@@ -636,7 +636,6 @@ void StylesComboPreview::keyPressEvent( QKeyEvent *e )
 
     if ( selectedLength != selectedText().length() )
         slotRestoreSelectionColors(); // and set userSelection to true
-*/
     if (m_shouldAddNewStyle && e->key() == Qt::Key_Escape) {
         m_renamingNewStyle = false;
         m_shouldAddNewStyle = false;
@@ -656,7 +655,7 @@ void StylesComboPreview::keyPressEvent( QKeyEvent *e )
         QLineEdit::keyPressEvent(e);
     }
 }
-
+*/
 void StylesComboPreview::addNewStyle()
 {
     m_renamingNewStyle = true;
@@ -791,14 +790,32 @@ bool StylesComboPreview::event( QEvent* ev )
         }
     }
 */
-    if (ev->type() == QEvent::FocusOut) {
+    if( ev->type() == QEvent::KeyPress ) {
+        QKeyEvent *e = static_cast<QKeyEvent *>( ev );
+        if (m_shouldAddNewStyle && e->key() == Qt::Key_Escape) {
+            m_renamingNewStyle = false;
+            m_shouldAddNewStyle = false;
+            setReadOnly(true);
+            setText(QString());
+            e->accept();
+        }
+        else if (m_shouldAddNewStyle && (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)) {
+            m_renamingNewStyle = false;
+            m_shouldAddNewStyle = false;
+            emit newStyleRequested(text());
+            setReadOnly(true);
+            setText(QString());
+            e->accept();
+        }
+    }
+    else if (ev->type() == QEvent::FocusOut) {
         QFocusEvent *focusEvent = static_cast<QFocusEvent *>(ev);
         if (focusEvent->reason() != Qt::ActiveWindowFocusReason && focusEvent->reason() != Qt::PopupFocusReason) {
             if (m_shouldAddNewStyle) {
-                emit newStyleRequested(text());
-                setReadOnly(true);
                 m_renamingNewStyle = false;
                 m_shouldAddNewStyle = false;
+                emit newStyleRequested(text());
+                setReadOnly(true);
                 setText(QString());
                 return true;
             }

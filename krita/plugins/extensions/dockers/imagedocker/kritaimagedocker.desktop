@@ -2,6 +2,7 @@
 Name=Image Docker
 Name[cs]=Dok obrázků
 Name[da]=Billed-dokker
+Name[it]=Area di aggancio immagini
 Name[nb]=Bildedokker
 Name[nds]=Bild-Andocker
 Name[nl]=Vastzetter van afbeelding
@@ -15,6 +16,7 @@ Name[zh_TW]=影像嵌入器
 Comment=Docker for reference images
 Comment[cs]=Dok pro referenční obrázky
 Comment[da]=Dokker til referencebilleder
+Comment[it]=Area di aggancio per le immagini di riferimento
 Comment[nb]=Dokker for referansebilder
 Comment[pt]=Área das imagens de referência
 Comment[pt_BR]=Acoplador para imagens de referência

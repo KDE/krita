@@ -73,4 +73,10 @@ set(TestKoUnit_SRCS TestKoUnit.cpp)
 kde4_add_unit_test(TestKoUnit TESTNAME libs-kobase-TestKoUnit ${TestKoUnit_SRCS})
 target_link_libraries(TestKoUnit koodf ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestNumberStyle_SRCS TestNumberStyle.cpp )
+kde4_add_unit_test(TestNumberStyle TESTNAME libs-odf-TestNumberStyle ${TestNumberStyle_SRCS})
+target_link_libraries(TestNumberStyle koodf ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
+
 ########### end ###############

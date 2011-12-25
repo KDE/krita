@@ -314,7 +314,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     createShellGUI();
     d->mainWindowGuiIsBuilt = true;
-#ifndef Q_WS_WIN
     // Get screen geometry
     const int scnum = QApplication::desktop()->screenNumber(parentWidget());
     QRect desk = QApplication::desktop()->availableGeometry(scnum);
@@ -335,7 +334,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
             resize( desk.size() );
         }
     }
-#endif
     KConfigGroup config(KGlobal::config(), "MainWindow");
     restoreWindowSize( config );
 
@@ -1166,7 +1164,7 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
-#ifdef _WIN32
+#ifdef Q_WS_WIN
     // "kfiledialog:///OpenDialog" forces KDE style open dialog in Windows
 	// TODO provide support for "last visited" directory
     KFileDialog *dialog = new KFileDialog(KUrl(""), QString(), this);

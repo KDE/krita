@@ -1,5 +1,6 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,19 +16,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_default_bounds_base.h"
 
-#ifndef KIS_SHEAR_VISITOR_TEST_H
-#define KIS_SHEAR_VISITOR_TEST_H
-
-#include <QtTest/QtTest>
-
-class KisShearVisitorTest : public QObject
+KisDefaultBoundsBase::~KisDefaultBoundsBase()
 {
-    Q_OBJECT
-private slots:
+}
 
-    void testCreation();
-
-};
-
-#endif

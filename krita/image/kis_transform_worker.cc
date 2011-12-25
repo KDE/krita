@@ -527,6 +527,7 @@ bool KisTransformWorker::run()
 
     KisPaintDeviceSP tmpdev1 = KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace()));
     KisPaintDeviceSP srcdev = m_dev;
+    tmpdev1->setDefaultPixel(srcdev->defaultPixel());
 
     double xscale = m_xscale;
     double yscale = m_yscale;

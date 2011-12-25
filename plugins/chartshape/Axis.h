@@ -29,6 +29,9 @@
 // KChart
 #include "ChartShape.h"
 
+namespace KoOdfNumberStyles {
+    class NumericStyleFormat;
+}
 
 namespace KChart {
 
@@ -112,7 +115,10 @@ public:
     void setThreeD( bool threeD );
     void setFont( const QFont &font );
     void setVisible( bool visible );
-    
+
+    KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat() const;
+    void SetNumericStyleFormat(KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat) const;
+
     bool loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context);
     bool loadOdfChartSubtypeProperties( const KoXmlElement &axisElement,
                                         KoShapeLoadingContext &context );

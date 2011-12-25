@@ -40,7 +40,6 @@ KisPainterBasedStrokeStrategy::PainterInfo::~PainterInfo()
     delete(dragDistance);
 }
 
-
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
                                                              const QString &name,
                                                              KisResourcesSnapshotSP resources,

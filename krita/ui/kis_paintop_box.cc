@@ -366,20 +366,25 @@ KoID KisPaintopBox::defaultPaintOp()
 KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)
 {
     QString defaultName = paintOp.id() + ".kpp";
-    QString path        = KGlobal::mainComponent().dirs()->findResource("kis_defaultpresets", defaultName);
+    QString path = KGlobal::mainComponent().dirs()->findResource("kis_defaultpresets", defaultName);
 
     KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
 
-    if(!preset->load())
-        return KisPaintOpRegistry::instance()->defaultPreset(paintOp, m_view->image());
+    if (!preset->load()) {
+        preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp, m_view->image());
+    }
+
+    Q_ASSERT(preset);
+    Q_ASSERT(preset->valid());
 
     return preset;
 }
 
 KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID& paintOp)
 {
-    if(m_paintOpPresetMap[paintOp] == 0)
+    if (m_paintOpPresetMap[paintOp] == 0) {
         m_paintOpPresetMap[paintOp] = defaultPreset(paintOp);
+    }
 
     return m_paintOpPresetMap[paintOp];
 }

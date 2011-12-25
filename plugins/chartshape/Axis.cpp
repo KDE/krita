@@ -44,6 +44,7 @@
 #include <KoOdfGraphicStyles.h>
 #include <KoOdfWorkaround.h>
 #include <KoTextDocumentLayout.h>
+#include <KoOdfNumberStyles.h>
 
 // KDChart
 #include <KDChartChart>
@@ -146,6 +147,7 @@ public:
     KDChart::CartesianCoordinatePlane *kdPlane;
     KDChart::PolarCoordinatePlane     *kdPolarPlane;
     KDChart::RadarCoordinatePlane     *kdRadarPlane;
+    KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat;
 
     KDChart::BarDiagram   *kdBarDiagram;
     KDChart::LineDiagram  *kdLineDiagram;
@@ -191,14 +193,28 @@ public:
     bool isVisible;
 };
 
+class CartesianAxis : public KDChart::CartesianAxis
+{
+public:
+    CartesianAxis( KChart::Axis *_axis ) : KDChart::CartesianAxis(), axis(_axis) {}
+    virtual ~CartesianAxis() {}
+    virtual const QString customizedLabel( const QString& label ) const {
+        if (KoOdfNumberStyles::NumericStyleFormat *n = axis->numericStyleFormat())
+            return KoOdfNumberStyles::format(label, *n);
+        return label;
+    }
+private:
+    KChart::Axis *axis;
+};
 
 Axis::Private::Private( Axis *axis, AxisDimension dim )
     : q( axis )
     , dimension( dim )
-    , kdAxis( new KDChart::CartesianAxis )
+    , kdAxis( new CartesianAxis( axis ) )
     , kdPlane( 0 )
     , kdPolarPlane( 0 )
     , kdRadarPlane( 0 )
+    , numericStyleFormat( 0 )
 {
     centerDataPoints = false;
 
@@ -240,6 +256,8 @@ Axis::Private::~Private()
 {
     Q_ASSERT( plotArea );
 
+    delete numericStyleFormat;
+
     delete kdBarDiagram;
     delete kdAreaDiagram;
     delete kdCircleDiagram;
@@ -259,7 +277,7 @@ Axis::Private::~Private()
 
 void Axis::Private::registerDiagram( KDChart::AbstractDiagram *diagram )
 {
-    KDChartModel *model = new KDChartModel;
+    KDChartModel *model = new KDChartModel( plotArea );
     diagram->setModel( model );
 
     QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
@@ -1176,6 +1194,7 @@ Qt::Orientation Axis::orientation()
 bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context )
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
     bool reverseAxis = false;
 
@@ -1197,6 +1216,17 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     setMinorInterval( 0.0 );
 
     if ( !axisElement.isNull() ) {
+
+        QString styleName = axisElement.attributeNS(KoXmlNS::chart, "style-name", QString());
+        const KoXmlElement *stylElement = stylesReader.findStyle(styleName, "chart");
+        if (stylElement) {
+            const QString dataStyleName = stylElement->attributeNS(KoXmlNS::style, "data-style-name", QString());
+            if (!dataStyleName.isEmpty() && stylesReader.dataFormats().contains(dataStyleName)) {
+                delete d->numericStyleFormat;
+                d->numericStyleFormat = new KoOdfNumberStyles::NumericStyleFormat(stylesReader.dataFormats()[dataStyleName].first);
+            }
+        }
+
         KoXmlElement n;
         forEachElement ( n, axisElement ) {
             if ( n.namespaceURI() != KoXmlNS::chart )
@@ -1942,6 +1972,17 @@ void Axis::setVisible( bool visible )
         registerKdAxis( d->kdAxis );
     else
         deregisterKdAxis( d->kdAxis );
+}
+
+KoOdfNumberStyles::NumericStyleFormat *Axis::numericStyleFormat() const
+{
+    return d->numericStyleFormat;
+}
+
+void Axis::SetNumericStyleFormat(KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat) const
+{
+    delete d->numericStyleFormat;
+    d->numericStyleFormat = numericStyleFormat;
 }
 
 #include "Axis.moc"

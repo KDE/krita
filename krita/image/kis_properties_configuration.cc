@@ -24,16 +24,15 @@
 #include <qdom.h>
 #include <QString>
 
+#include "kis_image.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
-#include "kis_types.h"
-#include "kis_image.h"
-
 #include "KoID.h"
-#include <KoColorModelStandardIds.h>
+#include "kis_types.h"
 #include <KoColor.h>
+#include <KoColorModelStandardIds.h>
 
 struct KisPropertiesConfiguration::Private {
     QMap<QString, QVariant> properties;

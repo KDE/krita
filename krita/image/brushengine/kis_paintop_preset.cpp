@@ -39,6 +39,10 @@
 #include "kis_image.h"
 
 struct KisPaintOpPreset::Private {
+    Private()
+        : settings(0)
+    {}
+
     KisPaintOpSettingsSP settings;
     QImage image;
 };
@@ -48,7 +52,6 @@ KisPaintOpPreset::KisPaintOpPreset()
         : KoResource(QString())
         , m_d(new Private)
 {
-    m_d->settings = 0;
 }
 
 KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)

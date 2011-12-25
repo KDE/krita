@@ -54,6 +54,15 @@ class KoXmlDocument;
 class KoXmlNodeData;
 
 /**
+ * The office-text-content-prelude type.
+ */
+enum KoXmlNamedItemType {
+    KoXmlTextContentPrelude ///< office-text-content-prelude
+    //KoXmlTextContentMain, ///< office-text-content-main
+    //KoXmlTextContentEpilogue ///< office-text-content-epilogue
+};
+
+/**
 * KoXmlNode represents a node in a DOM tree.
 *
 * KoXmlNode is a base class for KoXmlElement, KoXmlText.
@@ -126,6 +135,7 @@ public:
 
     KoXmlNode namedItem(const QString& name) const;
     KoXmlNode namedItemNS(const QString& nsURI, const QString& name) const;
+    KoXmlNode namedItemNS(const QString& nsURI, const QString& name, KoXmlNamedItemType type) const;
 
     /**
     * Loads all child nodes (if any) of this node. Normally you do not need
@@ -339,6 +349,7 @@ namespace KoXml
 /**
  * A namespace-aware version of QDomNode::namedItem(),
  * which also takes care of casting to a QDomElement.
+ *
  * Use this when a domelement is known to have only *one* child element
  * with a given tagname.
  *
@@ -346,6 +357,21 @@ namespace KoXml
  */
 KOODF_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
                                         const QString& nsURI, const QString& localName);
+
+/**
+ * A namespace-aware version of QDomNode::namedItem().
+ * which also takes care of casting to a QDomElement.
+ *
+ * Use this when you like to return the first or an invalid
+ * KoXmlElement with a known type.
+ *
+ * This is an optimized version of the namedItemNS above to
+ * give fast access to certain sections of the document using
+ * the office-text-content-prelude condition as @a KoXmlNamedItemType .
+ */
+KOODF_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
+                                      const QString& nsURI, const QString& localName,
+                                      KoXmlNamedItemType type);
 
 /**
  * Explicitly load child nodes of specified node, up to given depth.

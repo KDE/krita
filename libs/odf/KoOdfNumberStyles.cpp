@@ -57,22 +57,32 @@ QString format(const QString &value, NumericStyleFormat format)
             return formatBoolean(value, format.formatStr);
         } break;
         case Date: {
-            return formatDate(value.toInt(), format.formatStr);
+            bool ok;
+            int v = value.toInt(&ok);
+            return ok ? formatDate(v, format.formatStr) : value;
         } break;
         case Time: {
-            return formatTime(value.toDouble(), format.formatStr);
+            bool ok;
+            qreal v = value.toDouble(&ok);
+            return ok ? formatTime(v, format.formatStr) : value;
         } break;
         case Percentage: {
             return formatPercent(value, format.formatStr, format.precision);
         } break;
         case Currency: {
-            return formatCurrency(value.toDouble(), format.formatStr, format.currencySymbol, format.precision);
+            bool ok;
+            qreal v = value.toDouble(&ok);
+            return ok ? formatCurrency(v, format.formatStr, format.currencySymbol, format.precision) : value;
         } break;
         case Scientific: {
-            return formatScientific(value.toDouble(), format.formatStr, format.precision);
+            bool ok;
+            qreal v = value.toDouble(&ok);
+            return ok ? formatScientific(v, format.formatStr, format.precision) : value;
         } break;
         case Fraction: {
-            return formatFraction(value.toDouble(), format.formatStr);
+            bool ok;
+            qreal v = value.toDouble(&ok);
+            return ok ? formatFraction(v, format.formatStr) : value;
         } break;
         case Text: {
             return value;
@@ -319,7 +329,13 @@ QString formatFraction(qreal value, const QString &format)
 
 QString formatPercent(const QString &value, const QString &format, int precision)
 {
-    return value.contains('.') ? QString::number(value.toDouble() * 100., 'f', precision) + QLatin1String("%") : QString::number(value.toInt());
+    if (value.contains('.')) {
+        bool ok;
+        qreal v = value.toDouble(&ok);
+        if (ok)
+            return QString::number(v * 100., 'f', precision) + QLatin1String("%");
+    }
+    return value;
 }
 
 // OO spec 2.5.4. p68. Conversion to Qt format: see qdate.html

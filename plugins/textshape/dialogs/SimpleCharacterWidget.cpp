@@ -17,11 +17,13 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "SimpleCharacterWidget.h"
 #include "TextTool.h"
 #include "../commands/ChangeListCommand.h"
 #include "StylesWidget.h"
 #include "SpecialButton.h"
+#include "StylesModel.h"
 
 #include <KAction>
 #include <KSelectAction>
@@ -78,16 +80,27 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
 
     widget.fontsFrame->setColumnStretch(0,1);
 
-    m_stylePopup = new StylesWidget(this, false, Qt::Popup);
-    m_stylePopup->setFrameShape(QFrame::StyledPanel);
-    m_stylePopup->setFrameShadow(QFrame::Raised);
-    widget.charFrame->setStylesWidget(m_stylePopup);
+//    m_stylePopup = new StylesWidget(this, false, Qt::Popup);
+//    m_stylePopup->setFrameShape(QFrame::StyledPanel);
+//    m_stylePopup->setFrameShadow(QFrame::Raised);
+//    widget.charFrame->setStylesWidget(m_stylePopup);
 
-    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(characterStyleSelected(KoCharacterStyle *)));
-    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(doneWithFocus()));
-    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(hidePopup()));
+//    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(characterStyleSelected(KoCharacterStyle *)));
+//    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(doneWithFocus()));
+//    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(hidePopup()));
 
     m_thumbnailer = new KoStyleThumbnailer();
+
+    m_stylesModel = new StylesModel(0, StylesModel::CharacterStyle);
+    m_stylesModel->setStyleThumbnailer(m_thumbnailer);
+
+    widget.charFrame->setStylesModel(m_stylesModel);
+
+    connect(widget.charFrame, SIGNAL(characterStyleSelected(KoCharacterStyle*)), this, SIGNAL(characterStyleSelected(KoCharacterStyle*)));
+    connect(widget.charFrame, SIGNAL(characterStyleSelected(KoCharacterStyle*)), this, SIGNAL(doneWithFocus()));
+    connect(widget.charFrame, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
+    connect(widget.charFrame, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
+
 }
 
 SimpleCharacterWidget::~SimpleCharacterWidget()
@@ -98,7 +111,8 @@ SimpleCharacterWidget::~SimpleCharacterWidget()
 void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
-    m_stylePopup->setStyleManager(sm);
+//    m_stylePopup->setStyleManager(sm);
+    m_stylesModel->setStyleManager(sm);
 }
 
 void SimpleCharacterWidget::hidePopup()
@@ -115,9 +129,9 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
     int id = m_currentCharFormat.intProperty(KoCharacterStyle::StyleId);
     KoCharacterStyle *style(m_styleManager->characterStyle(id));
     if (style) {
-        widget.charFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->characterStyle(id), widget.charFrame->contentsRect().size()));
+//        widget.charFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->characterStyle(id), widget.charFrame->contentsRect().size()));
     }
-    m_stylePopup->setCurrentFormat(format);
+//    m_stylePopup->setCurrentFormat(format);
 }
 
 void SimpleCharacterWidget::fontFamilyActivated(int index) {

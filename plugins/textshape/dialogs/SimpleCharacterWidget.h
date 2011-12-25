@@ -31,6 +31,7 @@ class KoStyleManager;
 class KoCharacterStyle;
 class StylesWidget;
 class KoStyleThumbnailer;
+class StylesModel;
 
 class SimpleCharacterWidget : public QWidget
 {
@@ -51,6 +52,7 @@ private slots:
 signals:
     void doneWithFocus();
     void characterStyleSelected(KoCharacterStyle *);
+    void newStyleRequested(QString name);
 
 private:
     Ui::SimpleCharacterWidget widget;
@@ -63,6 +65,7 @@ private:
     QTextCharFormat m_currentCharFormat;
     KoStyleThumbnailer *m_thumbnailer;
     StylesWidget *m_stylePopup;
+    StylesModel *m_stylesModel;
 };
 
 #endif

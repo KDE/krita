@@ -114,7 +114,7 @@
       </spacer>
      </item>
      <item row="1" column="0" colspan="11">
-      <widget class="StylesCombo" name="blockFrame">
+      <widget class="StylesCombo" name="paragraphStyleCombo">
       </widget>
      </item>
      <item row="2" column="10">

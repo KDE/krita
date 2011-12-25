@@ -42,7 +42,7 @@ StylesWidget::StylesWidget(QWidget *parent, bool paragraphMode, Qt::WindowFlags 
         : QFrame(parent, f),
         m_styleManager(0),
           m_styleThumbnailer(0),
-        m_stylesModel(new StylesModel(0, paragraphMode)),
+        m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle)),
         m_stylesDelegate(new StylesDelegate()),
         m_blockSignals(false),
         m_isHovered(false)
@@ -103,7 +103,7 @@ void StylesWidget::setCurrentFormat(const QTextBlockFormat &format)
     }
 
     m_blockSignals = true;
-    m_stylesModel->setCurrentParagraphStyle(id, unchanged);
+//    m_stylesModel->setCurrentParagraphStyle(id, unchanged);
     m_blockSignals = false;
     widget.stylesView->setCurrentIndex(m_stylesModel->indexForParagraphStyle(*usedStyle));
 }
@@ -134,7 +134,7 @@ void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
     }
 
     m_blockSignals = true;
-    m_stylesModel->setCurrentCharacterStyle(id, unchanged);
+//    m_stylesModel->setCurrentCharacterStyle(id, unchanged);
     m_blockSignals = false;
     widget.stylesView->setCurrentIndex(m_stylesModel->indexForCharacterStyle(*usedStyle));
 }

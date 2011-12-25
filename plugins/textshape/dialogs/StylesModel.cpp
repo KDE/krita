@@ -43,7 +43,7 @@
 #include <QTextLayout>
 
 
-StylesModel::StylesModel(KoStyleManager *manager, bool paragraphMode, QObject *parent)
+StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *parent)
     : QAbstractListModel(parent),
       m_styleManager(0),
       m_styleThumbnailer(0),
@@ -51,7 +51,7 @@ StylesModel::StylesModel(KoStyleManager *manager, bool paragraphMode, QObject *p
       m_currentCharacterStyle(0),
       m_pureParagraphStyle(true),
       m_pureCharacterStyle(true),
-      m_paragraphMode(paragraphMode),
+      m_modelType(modelType),
       m_styleMapper(new QSignalMapper(this)),
       m_tmpTextShape(0)
 {
@@ -95,6 +95,10 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
     int id = (int) index.internalId();
     switch (role) {
     case Qt::DisplayRole: {
+        if (id == -1) {
+            kDebug() << "data will return as paragraph";
+            return QVariant(QString("As paragraph"));
+        }
         return QVariant();
         KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
         if (paragStyle)
@@ -129,7 +133,7 @@ Qt::ItemFlags StylesModel::flags(const QModelIndex &index) const
         return 0;
     return (Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
-
+/*
 void StylesModel::setCurrentParagraphStyle(int styleId, bool unchanged)
 {
     if (m_currentParagraphStyle == styleId && unchanged == m_pureParagraphStyle)
@@ -145,7 +149,7 @@ void StylesModel::setCurrentCharacterStyle(int styleId, bool unchanged)
     m_currentCharacterStyle = styleId;
     m_pureCharacterStyle = unchanged;
 }
-
+*/
 KoParagraphStyle *StylesModel::paragraphStyleForIndex(const QModelIndex &index) const
 {
     return m_styleManager->paragraphStyle(index.internalId());
@@ -177,11 +181,35 @@ QModelIndex StylesModel::indexForCharacterStyle(const KoCharacterStyle &style) c
     }
 }
 
+QPixmap StylesModel::stylePreview(int row, QSize size)
+{
+    Q_ASSERT(!m_styleManager);
+    Q_ASSERT(!m_styleThumbnailer);
+    if (m_modelType == StylesModel::ParagraphStyle) {
+        KoParagraphStyle *usedStyle = 0;
+        usedStyle = m_styleManager->paragraphStyle(index(row).internalId());
+        if (usedStyle) {
+            return m_styleThumbnailer->thumbnail(usedStyle, size);
+        }
+    }
+    else {
+        if (index(row).internalId() == -1) { ///TODO handle the "as paragraph case
+            return QPixmap();
+        }
+        KoCharacterStyle *usedStyle = 0;
+        usedStyle = m_styleManager->characterStyle(index(row).internalId());
+        if (usedStyle) {
+            return m_styleThumbnailer->thumbnail(usedStyle, size);
+        }
+    }
+    return QPixmap();
+}
+/*
 KoStyleManager* StylesModel::styleManager()
 {
     return m_styleManager;
 }
-
+*/
 void StylesModel::setStyleManager(KoStyleManager *sm)
 {
     if (sm == m_styleManager)
@@ -197,24 +225,29 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
         return;
     }
 
-    if (m_paragraphMode) {
+    if (m_modelType == StylesModel::ParagraphStyle) {
         foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles())
             addParagraphStyle(style);
         connect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
         connect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
     } else {
+        kDebug() << "in adding char styles";
+        if (m_styleManager->paragraphStyles().count()) {
+            kDebug() << "there are several parStyles";
+            m_styleList.append(-1);
+        }
         foreach(KoCharacterStyle *style, m_styleManager->characterStyles())
             addCharacterStyle(style);
         connect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
         connect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
     }
 }
-
+/*
 KoStyleThumbnailer* StylesModel::thumbnailer()
 {
     return m_styleThumbnailer;
 }
-
+*/
 void StylesModel::setStyleThumbnailer(KoStyleThumbnailer *thumbnailer)
 {
     m_styleThumbnailer = thumbnailer;

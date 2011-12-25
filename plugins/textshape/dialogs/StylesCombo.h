@@ -39,7 +39,7 @@ public:
     ~StylesCombo();
 
     void setStylesModel(StylesModel *model);
-    void setStyleManager(KoStyleManager *styleManager);
+//    void setStyleManager(KoStyleManager *styleManager);
     void setLineEdit(QLineEdit *lineEdit);
     void setEditable(bool editable);
 
@@ -48,12 +48,13 @@ public:
     bool eventFilter(QObject *, QEvent *);
 
 public slots:
-    void setCurrentFormat(const QTextBlockFormat &format);
-    void setCurrentFormat(const QTextCharFormat &format);
+//    void setCurrentFormat(const QTextBlockFormat &format);
+//    void setCurrentFormat(const QTextCharFormat &format);
 
 signals:
-    void selectionChanged(QModelIndex index);
-    void paragraphStyleSelected(KoParagraphStyle *style);
+//    void selectionChanged(QModelIndex index);
+    void selectionChanged(int index);
+//    void paragraphStyleSelected(KoParagraphStyle *style);
     void newStyleRequested(QString name);
 
 protected:
@@ -62,7 +63,7 @@ protected:
 private slots:
     void showDia();
     void deleteStyle(QModelIndex);
-    void selectionChanged(int index);
+    void slotSelectionChanged(int index);
     void previewResized();
 
 private:
@@ -71,10 +72,10 @@ private:
     StylesComboPreview *m_preview;
     QListView *m_view;
 
-    QTextBlockFormat m_currentBlockFormat;
-    QTextCharFormat m_currentCharFormat;
+//    QTextBlockFormat m_currentBlockFormat;
+//    QTextCharFormat m_currentCharFormat;
 
-    bool skipNextHide;
+//    bool skipNextHide;
 };
 
 #endif //STYLESCOMBO_H

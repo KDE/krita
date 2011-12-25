@@ -39,7 +39,12 @@ class StylesModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    explicit StylesModel(KoStyleManager *styleManager, bool paragraphMode, QObject *parent = 0);
+    enum Type {
+        CharacterStyle,
+        ParagraphStyle
+    };
+
+    explicit StylesModel(KoStyleManager *styleManager, Type modelType, QObject *parent = 0);
     ~StylesModel();
 
     virtual QModelIndex index(int row, int column=0, const QModelIndex &parent = QModelIndex()) const;
@@ -50,30 +55,34 @@ public:
 
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
+    /** Specific methods of the StylesModel */
+
     KoParagraphStyle *paragraphStyleForIndex(const QModelIndex &index) const;
     QModelIndex indexForParagraphStyle(const KoParagraphStyle &style) const;
 
     KoCharacterStyle *characterStyleForIndex(const QModelIndex &index) const;
     QModelIndex indexForCharacterStyle(const KoCharacterStyle &style) const;
 
-    KoStyleManager* styleManager();
+    QPixmap stylePreview(int row, QSize size = QSize());
+
+//    KoStyleManager* styleManager();
     void setStyleManager(KoStyleManager *manager);
-    KoStyleThumbnailer* thumbnailer();
+//    KoStyleThumbnailer* thumbnailer();
     void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer);
 
 public slots:
-    /**
-        Sets the paragraph style that is to be marked as the 'active' one.
-        @param styleId the id from KoParagraphStyle::styleId()
-        @param unchanged if true the icon will display the paragraph style in the text has no local modifications.
-    */
-    void setCurrentParagraphStyle(int styleId, bool unchanged);
-    /**
-        Sets the character style that is to be marked as the 'active' one.
-        @param styleId the id from KoCharacterStyle::styleId()
-        @param unchanged if true the icon will display the character style in the text has no local modifications.
-    */
-    void setCurrentCharacterStyle(int styleId, bool unchanged);
+//    /**
+//        Sets the paragraph style that is to be marked as the 'active' one.
+//        @param styleId the id from KoParagraphStyle::styleId()
+//        @param unchanged if true the icon will display the paragraph style in the text has no local modifications.
+//    */
+//    void setCurrentParagraphStyle(int styleId, bool unchanged);
+//    /**
+//        Sets the character style that is to be marked as the 'active' one.
+//        @param styleId the id from KoCharacterStyle::styleId()
+//        @param unchanged if true the icon will display the character style in the text has no local modifications.
+//    */
+//    void setCurrentCharacterStyle(int styleId, bool unchanged);
 
 private slots:
     void addParagraphStyle(KoParagraphStyle*);
@@ -93,7 +102,7 @@ private:
     int m_currentCharacterStyle;
     bool m_pureParagraphStyle;
     bool m_pureCharacterStyle;
-    bool m_paragraphMode;
+    Type m_modelType;
 
     QIcon m_paragIcon, m_charIcon;
 

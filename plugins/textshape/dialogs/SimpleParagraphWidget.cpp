@@ -48,7 +48,6 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
           m_blockSignals(false),
           m_tool(tool),
           m_directionButtonState(Auto),
-          m_stylesCombo(0),
           m_stylesModel(0)
 {
     widget.setupUi(this);
@@ -89,29 +88,30 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     connect(widget.numberedListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
     connect(widget.reversedText, SIGNAL(clicked()), this, SLOT(directionChangeRequested()));
 
-    m_stylePopup = new StylesWidget(this, true, Qt::Popup);
-    m_stylePopup->setFrameShape(QFrame::StyledPanel);
-    m_stylePopup->setFrameShadow(QFrame::Raised);
-//    widget.blockFrame->setStylesWidget(m_stylePopup);
+//    m_stylePopup = new StylesWidget(this, true, Qt::Popup);
+//    m_stylePopup->setFrameShape(QFrame::StyledPanel);
+//    m_stylePopup->setFrameShadow(QFrame::Raised);
+//    widget.paragraphStyleCombo->setStylesWidget(m_stylePopup);
 
-    connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)));
-    connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(doneWithFocus()));
-    connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(hidePopup()));
+//    connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)));
+//    connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(doneWithFocus()));
+//    connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(hidePopup()));
 
     m_thumbnailer = new KoStyleThumbnailer();
 
 //    m_stylesCombo = new StylesCombo(this);
-    m_stylesModel = new StylesModel(0, true);
+    m_stylesModel = new StylesModel(0, StylesModel::ParagraphStyle);
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
 //    m_stylesCombo->setStylesModel(m_stylesModel);
 //    widget.gridLayout->addWidget(m_stylesCombo, 4, 0, 0, 10);
 
-    widget.blockFrame->setStylesModel(m_stylesModel);
+    widget.paragraphStyleCombo->setStylesModel(m_stylesModel);
 
-    connect(widget.blockFrame, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)), this, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)));
-    connect(widget.blockFrame, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)), this, SIGNAL(doneWithFocus()));
-    connect(widget.blockFrame, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
-    connect(widget.blockFrame, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
+//    connect(widget.paragraphStyleCombo, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)), this, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)));
+//    connect(widget.paragraphStyleCombo, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)), this, SIGNAL(doneWithFocus()));
+    connect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+    connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
+    connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
 }
 
 SimpleParagraphWidget::~SimpleParagraphWidget()
@@ -236,6 +236,10 @@ void SimpleParagraphWidget::fillListButtons()
 
 void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
 {
+    if (block == m_currentBlock) {
+        return;
+    }
+
     m_currentBlock = block;
     m_blockSignals = true;
     struct Finally {
@@ -259,13 +263,16 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
             break;
         }
     }
-/*
+
+    if (m_currentBlockFormat == m_currentBlock.blockFormat()) {
+        return;
+    }
     m_currentBlockFormat = m_currentBlock.blockFormat();
 
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
     KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
     if (style) {
-//        widget.blockFrame->setStylePreview(m_thumbnailer->thumbnail(style, widget.blockFrame->size()));
+//        widget.paragraphStyleCombo->setStylePreview(m_thumbnailer->thumbnail(style, widget.paragraphStyleCombo->size()));
 
         bool unchanged = true;
         foreach(int property, m_currentBlockFormat.properties().keys()) {
@@ -282,24 +289,27 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
                 break;
             }
         }
+        widget.paragraphStyleCombo->setCurrentIndex(m_stylesModel->indexForParagraphStyle(*style).row());
+        widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
+
 //        m_stylesCombo->setStyleIsOriginal(unchanged);
-        widget.blockFrame->setStyleIsOriginal(unchanged);
     }
-*/
+
 //    m_stylePopup->setCurrentFormat(m_currentBlockFormat);
-    widget.blockFrame->setCurrentFormat(m_currentBlockFormat);
+
+//    widget.paragraphStyleCombo->setCurrentFormat(m_currentBlockFormat);
 }
 
 void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
 {
-//    if (format == m_currentBlockFormat)
-//        return;
+    if (format == m_currentBlockFormat)
+        return;
     m_currentBlockFormat = format;
-/*
+
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
     KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
     if (style) {
- //       widget.blockFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->paragraphStyle(id), widget.blockFrame->contentsRect().size()));
+ //       widget.paragraphStyleCombo->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->paragraphStyle(id), widget.paragraphStyleCombo->contentsRect().size()));
 
         bool unchanged = true;
         foreach(int property, m_currentBlockFormat.properties().keys()) {
@@ -316,18 +326,22 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
                 break;
             }
         }
+        widget.paragraphStyleCombo->setCurrentIndex(m_stylesModel->indexForParagraphStyle(*style).row());
+        widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
+
 //        m_stylesCombo->setStyleIsOriginal(unchanged);
-        widget.blockFrame->setStyleIsOriginal(unchanged);
+//        widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
     }
-*/
+
 //    m_stylePopup->setCurrentFormat(format);
-    widget.blockFrame->setCurrentFormat(format);
+
+//    widget.paragraphStyleCombo->setCurrentFormat(format);
 }
 
 void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
-    m_stylePopup->setStyleManager(sm);
+//    m_stylePopup->setStyleManager(sm);
 
     m_stylesModel->setStyleManager(sm);
 //    m_stylesCombo->setStyleManager(sm);
@@ -335,7 +349,7 @@ void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
 
 void SimpleParagraphWidget::hidePopup()
 {
-//    widget.blockFrame->hidePopup();
+//    widget.paragraphStyleCombo->hidePopup();
 }
 
 void SimpleParagraphWidget::listStyleChanged(int id)
@@ -343,6 +357,16 @@ void SimpleParagraphWidget::listStyleChanged(int id)
     emit doneWithFocus();
     if (m_blockSignals) return;
     m_tool->textEditor()->setListProperties(static_cast<KoListStyle::Style> (id));
+}
+
+void SimpleParagraphWidget::styleSelected(int index)
+{
+    KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(m_stylesModel->index(index).internalId());
+    if (paragStyle) {
+        kDebug() << "will emit paragStyleSelected: " << paragStyle->name();
+        emit paragraphStyleSelected(paragStyle);
+    }
+    emit doneWithFocus();
 }
 
 #include <SimpleParagraphWidget.moc>

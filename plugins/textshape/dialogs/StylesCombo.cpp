@@ -42,8 +42,8 @@
 StylesCombo::StylesCombo(QWidget *parent)
     : QComboBox(parent),
       m_stylesModel(0),
-      m_view(0),
-      skipNextHide(false)
+      m_view(0)//,
+//      skipNextHide(false)
 {
 /*    setFrameShape(QFrame::StyledPanel);
     setFrameShadow(QFrame::Sunken);
@@ -80,7 +80,7 @@ StylesCombo::StylesCombo(QWidget *parent)
     connect(delegate, SIGNAL(deleteStyleButtonClicked(QModelIndex)), this, SLOT(deleteStyle(QModelIndex)));
     setItemDelegate(delegate);
 
-    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(selectionChanged(int)));
+    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSelectionChanged(int)));
 
     QComboBox::setEditable(true);
     setIconSize(QSize(0,0));
@@ -111,11 +111,12 @@ void StylesCombo::setStylesModel(StylesModel *model)
     m_stylesModel = model;
     setModel(model);
 }
-
+/*
 void StylesCombo::setStyleManager(KoStyleManager *styleManager)
 {
     Q_UNUSED(styleManager)
 }
+*/
 void StylesCombo::setEditable(bool editable)
 {
     if (editable) {
@@ -123,7 +124,7 @@ void StylesCombo::setEditable(bool editable)
         // Compared to QComboBox::setEditable, we might be missing the SH_ComboBox_Popup code though...
         // If a style needs this, then we'll need to call QComboBox::setEditable and then setLineEdit again
         StylesComboPreview *edit = new StylesComboPreview( this );
-        edit->setAddButtonShown( true );
+//        edit->setAddButtonShown( true );
         setLineEdit( edit );
     } else {
         QComboBox::setEditable(editable);
@@ -144,7 +145,7 @@ void StylesCombo::setLineEdit(QLineEdit *edit)
         StylesComboPreview* preview = new StylesComboPreview( this );
 
 //        if ( isEditable() ) {
-            preview->setAddButtonShown( true );
+//            preview->setAddButtonShown( true );
 //        }
 
         edit = preview;
@@ -173,9 +174,13 @@ void StylesCombo::setLineEdit(QLineEdit *edit)
 
 }
 
-void StylesCombo::selectionChanged(int index)
+void StylesCombo::slotSelectionChanged(int index)
 {
-    KoParagraphStyle *paragStyle = m_stylesModel->styleManager()->paragraphStyle(m_stylesModel->index(index).internalId());
+    m_preview->setPreview(m_stylesModel->stylePreview(index, m_preview->availableSize()));
+    update();
+    emit selectionChanged(index);
+
+/*    KoParagraphStyle *paragStyle = m_stylesModel->styleManager()->paragraphStyle(m_stylesModel->index(index).internalId());
     if (paragStyle) {
         m_preview->setPreview(m_stylesModel->thumbnailer()->thumbnail(paragStyle, m_preview->availableSize()));
         emit paragraphStyleSelected(paragStyle);
@@ -187,8 +192,9 @@ void StylesCombo::selectionChanged(int index)
         return;
     }
     m_preview->setPreview(QPixmap());
+*/
 }
-
+/*
 void StylesCombo::setCurrentFormat(const QTextBlockFormat &format)
 {
     if (format == m_currentBlockFormat)
@@ -230,17 +236,18 @@ void StylesCombo::setCurrentFormat(const QTextCharFormat &format)
 {
     Q_UNUSED(format)
 }
-
+*/
 void StylesCombo::previewResized()
 {///TODO take care of charStyles too
-    int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
-    KoParagraphStyle *usedStyle = 0;
+    kDebug() << "resized: " << size();
+/*    KoParagraphStyle *usedStyle = 0;
     if (m_stylesModel->styleManager())
-        usedStyle = m_stylesModel->styleManager()->paragraphStyle(id);
+        usedStyle = m_stylesModel->styleManager()->paragraphStyle(m_stylesModel->index(currentIndex()).internalId());
     if (usedStyle) {
-        kDebug() << "resizing preview. new available size: " << m_preview->availableSize();
         m_preview->setPreview(m_stylesModel->thumbnailer()->thumbnail(usedStyle, m_preview->availableSize()));
     }
+*/
+    m_preview->setPreview(m_stylesModel->stylePreview(currentIndex(), m_preview->availableSize()));
 }
 
 bool StylesCombo::eventFilter(QObject *object, QEvent *event)

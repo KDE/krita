@@ -28,10 +28,10 @@
 class TextTool;
 class KoStyleManager;
 class KoParagraphStyle;
-class StylesWidget;
+//class StylesWidget;
 class KoStyleThumbnailer;
 
-class StylesCombo;
+//class StylesCombo;
 class StylesModel;
 class StylesDelegate;
 
@@ -57,6 +57,7 @@ signals:
 private slots:
     void directionChangeRequested();
     void listStyleChanged(int id);
+    void styleSelected(int index);
 
 private:
     enum DirectionButtonState {
@@ -78,9 +79,9 @@ private:
     TextTool *m_tool;
     DirectionButtonState m_directionButtonState;
     KoStyleThumbnailer *m_thumbnailer;
-    StylesWidget *m_stylePopup;
+//    StylesWidget *m_stylePopup;
 
-    StylesCombo *m_stylesCombo;
+//    StylesCombo *m_stylesCombo;
     StylesModel *m_stylesModel;
     StylesDelegate *m_stylesDelegate;
 };

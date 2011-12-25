@@ -295,9 +295,10 @@ void StylesCombo::paintEvent(QPaintEvent *e)
 
 }
 */
-void StylesCombo::showDia()
+void StylesCombo::slotShowDia(QModelIndex index)
 {
     kDebug() << "showDia slot";
+    emit showStyleManager(index.row());
 //TODO this shouldn't be done here, send signal instead
 /*
         KoStyleManager *styleManager = m_stylesModel->styleManager();
@@ -310,10 +311,10 @@ void StylesCombo::showDia()
 */
 }
 
-void StylesCombo::deleteStyle(QModelIndex index)
+void StylesCombo::slotDeleteStyle(QModelIndex index)
 {
-    Q_UNUSED(index)
     kDebug() << "delete style slot";
+    emit deleteStyle(index.row());
     //TODO this should not be handled here. send a signal instead.
 /*    KoStyleManager *styleManager = m_stylesModel->styleManager();
     Q_ASSERT(styleManager);

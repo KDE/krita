@@ -56,13 +56,15 @@ signals:
     void selectionChanged(int index);
 //    void paragraphStyleSelected(KoParagraphStyle *style);
     void newStyleRequested(QString name);
+    void showStyleManager(int index);
+    void deleteStyle(int index);
 
 protected:
 //    virtual void paintEvent(QPaintEvent *e);
 
 private slots:
-    void showDia();
-    void deleteStyle(QModelIndex);
+    void slotDeleteStyle(QModelIndex);
+    void slotShowDia(QModelIndex);
     void slotSelectionChanged(int index);
     void previewResized();
 

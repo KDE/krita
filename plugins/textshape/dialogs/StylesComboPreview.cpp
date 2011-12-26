@@ -236,8 +236,6 @@ void StylesComboPreview::updateAddButton()
 
     if (layoutDirection() == Qt::LeftToRight ) {
 */
-    kDebug() << "geom: " << geom;
-    kDebug() << "buttone size: " << m_addButton->size();
     m_addButton->move(geom.width() /*- frameWidth*/ - buttonWidth , (geom.height()-m_addButton->size().height())/2);
 /*    } else {
         d->clearButton->move(frameWidth + 1, 0);

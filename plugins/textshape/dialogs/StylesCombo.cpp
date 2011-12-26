@@ -239,7 +239,6 @@ void StylesCombo::setCurrentFormat(const QTextCharFormat &format)
 */
 void StylesCombo::previewResized()
 {///TODO take care of charStyles too
-    kDebug() << "resized: " << size();
 /*    KoParagraphStyle *usedStyle = 0;
     if (m_stylesModel->styleManager())
         usedStyle = m_stylesModel->styleManager()->paragraphStyle(m_stylesModel->index(currentIndex()).internalId());
@@ -272,8 +271,6 @@ bool StylesCombo::eventFilter(QObject *object, QEvent *event)
         QStyleOptionViewItemV4 options;
         options.rect = view()->visualRect(buddy);
         options.widget = m_view;
-        kDebug() << "option.rect sent to the popup: " << options.rect;
-        kDebug() << "event sent: " << mouseEvent->type();
         options.state |= (buddy == view()->currentIndex() ? QStyle::State_HasFocus : QStyle::State_None);
         return view()->itemDelegate()->editorEvent(mouseEvent, m_stylesModel, options, index);
     }

@@ -29,7 +29,7 @@
 class TextTool;
 class KoStyleManager;
 class KoCharacterStyle;
-class StylesWidget;
+//class StylesWidget;
 class KoStyleThumbnailer;
 class StylesModel;
 
@@ -64,7 +64,7 @@ private:
     TextTool *m_tool;
     QTextCharFormat m_currentCharFormat;
     KoStyleThumbnailer *m_thumbnailer;
-    StylesWidget *m_stylePopup;
+//    StylesWidget *m_stylePopup;
     StylesModel *m_stylesModel;
 };
 

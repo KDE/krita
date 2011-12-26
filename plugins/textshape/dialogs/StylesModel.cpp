@@ -92,11 +92,10 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    int id = (int) index.internalId();
-    switch (role) {
+    int id = (int)index.internalId();
+    switch (role){
     case Qt::DisplayRole: {
         if (id == -1) {
-            kDebug() << "data will return as paragraph";
             return QVariant(QString("As paragraph"));
         }
         return QVariant();

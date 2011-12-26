@@ -24,8 +24,6 @@
 #ifndef KOSTYLETHUMBNAILER_H
 #define KOSTYLETHUMBNAILER_H
 
-#include "textlayout_export.h"
-
 #include <QPixmap>
 
 class QSize;
@@ -36,7 +34,7 @@ class KoParagraphStyle;
 /**
  * Helper class to create (and cache) thumbnails of styles
  */
-class TEXTLAYOUT_EXPORT KoStyleThumbnailer
+class KoStyleThumbnailer
 {
 public:
     /**

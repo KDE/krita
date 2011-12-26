@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "StylesCombo.h"
+#include "KoStyleThumbnailer.h"
 
 #include "StylesModel.h"
 #include "StylesComboView.h"
@@ -24,7 +25,6 @@
 #include "StylesDelegate.h"
 #include <KoParagraphStyle.h>
 #include <KoStyleManager.h>
-#include <KoStyleThumbnailer.h>
 #include "StyleManagerDialog.h"
 
 #include <QApplication>

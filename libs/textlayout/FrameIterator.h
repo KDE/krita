@@ -19,6 +19,7 @@
 #ifndef FRAMEITERATOR_H
 #define FRAMEITERATOR_H
 
+#include "textlayout_export.h"
 
 #include <QTextFrame>
 #include <QTextLine>
@@ -29,7 +30,7 @@ class QTextTable;
 class KoTextLayoutRootArea;
 class KoTextLayoutTableArea;
 
-class FrameIterator
+class TEXTLAYOUT_EXPORT FrameIterator
 {
 public:
     FrameIterator(QTextFrame *frame);

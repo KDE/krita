@@ -24,6 +24,7 @@
 #include "StylesWidget.h"
 #include "SpecialButton.h"
 #include "StylesModel.h"
+#include "KoStyleThumbnailer.h"
 
 #include <KAction>
 #include <KSelectAction>
@@ -32,7 +33,6 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextDocumentLayout.h>
 #include <KoZoomHandler.h>
-#include <KoStyleThumbnailer.h>
 #include <KoStyleManager.h>
 
 #include <KDebug>

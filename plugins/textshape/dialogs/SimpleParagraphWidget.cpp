@@ -23,6 +23,7 @@
 #include "FormattingButton.h"
 #include "StylesWidget.h"
 #include "SpecialButton.h"
+#include "KoStyleThumbnailer.h"
 
 #include "StylesCombo.h"
 #include "StylesModel.h"
@@ -34,7 +35,6 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextDocumentLayout.h>
 #include <KoZoomHandler.h>
-#include <KoStyleThumbnailer.h>
 #include <KoStyleManager.h>
 #include <KoListLevelProperties.h>
 #include <KoShapePaintingContext.h>

@@ -19,6 +19,7 @@
  */
 #include "StylesModel.h"
 #include "TextTool.h"
+#include "KoStyleThumbnailer.h"
 
 #include <QSet>
 #include <QDebug>
@@ -27,7 +28,6 @@
 #include <QTextBlock>
 
 #include <KoStyleManager.h>
-#include <KoStyleThumbnailer.h>
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
 

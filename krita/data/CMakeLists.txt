@@ -24,7 +24,6 @@ install( FILES
 
 install( FILES
     kritarc
-    krita.knsrc
     kritapresets.knsrc
     kritabrushes.knsrc
     kritapatterns.knsrc

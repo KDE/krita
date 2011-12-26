@@ -250,7 +250,7 @@ QVector<QPolygon> KisPixelSelection::outline()
 #endif
     readBytes(buffer, xOffset, yOffset, width, height);
 
-    KisOutlineGenerator generator(colorSpace(), *defaultPixel());
+    KisOutlineGenerator generator(colorSpace(), MIN_SELECTED);
     QVector<QPolygon> paths = generator.outline(buffer, xOffset, yOffset, width, height);
 
     delete[] buffer;

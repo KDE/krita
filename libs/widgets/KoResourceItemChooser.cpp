@@ -58,7 +58,7 @@ public:
 };
 
 KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent )
- : QWidget( parent ), d( new Private() )
+    : QWidget( parent ), d( new Private() )
 {
     Q_ASSERT(resourceAdapter);
     d->model = new KoResourceModel(resourceAdapter, this);
@@ -186,17 +186,17 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 
         foreach (const KNS3::Entry& e, dialog.changedEntries()) {
 
-             foreach(const QString &file, e.installedFiles()) {
-                 QFileInfo fi(file);
-                  d->model->resourceServerAdapter()->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
-              }
+            foreach(const QString &file, e.installedFiles()) {
+                QFileInfo fi(file);
+                d->model->resourceServerAdapter()->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
+            }
 
-       foreach(const QString &file, e.uninstalledFiles()) {
-                 QFileInfo fi(file);
-                 d->model->resourceServerAdapter()->removeResourceFile(fi.absolutePath()+'/'+fi.fileName());
-              }
-      }
-     }
+            foreach(const QString &file, e.uninstalledFiles()) {
+                QFileInfo fi(file);
+                d->model->resourceServerAdapter()->removeResourceFile(fi.absolutePath()+'/'+fi.fileName());
+            }
+        }
+    }
     else if (button == Button_GhnsUpload) {
 
         QModelIndex index = d->view->currentIndex();
@@ -374,7 +374,7 @@ void KoResourceItemChooser::setTagOpLineEdit(QStringList tagsList)
         tags = tagsList.join(", ");
         tags.append(", ");
         d->tagOpLineEdit->setText(tags);
-     }
+    }
     else
     {
         d->tagOpLineEdit->clear();
@@ -402,13 +402,13 @@ void KoResourceItemChooser::tagOpLineEditActivated(QString lineEditText)
         if(!tagsList.contains(tag)) {
             d->model->resourceServerAdapter()->addTag(resource, tag);
         }
-     }
+    }
 
-     foreach(const QString& tag, tagsList) {
+    foreach(const QString& tag, tagsList) {
         if(!tagsListNew.contains(tag)) {
             d->model->resourceServerAdapter()->delTag(resource, tag);
         }
-     }
+    }
 
     setTagOpLineEdit( d->model->resourceServerAdapter()->getAssignedTagsList(resource));
 }
@@ -436,8 +436,8 @@ QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
     if(lineEditText.contains(", ")) {
         QStringList tagsList = lineEditText.split(", ");
         if(tagsList.contains("")) {
-           tagsList.removeAll("");
-         }
+            tagsList.removeAll("");
+        }
 
         QStringList autoCompletionTagsList;
         QString joinText;
@@ -459,7 +459,7 @@ QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
         return autoCompletionTagsList;
     }
     return tagNamesList;
- }
+}
 
 QStringList KoResourceItemChooser::getTaggedResourceFileNames(QString lineEditText)
 {

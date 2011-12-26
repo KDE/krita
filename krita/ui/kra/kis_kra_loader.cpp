@@ -161,7 +161,21 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
 
 void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QString & uri, bool external)
 {
-    // Load the layers data
+
+    // icc profile: if present, this overrides the profile product name loaded in loadXML.
+    qDebug() << "image layer count" << image->nlayers();
+    QString location = external ? QString::null : uri;
+    location += m_d->imageName + ICC_PATH;
+    if (store->hasFile(location)) {
+        store->open(location);
+        QByteArray data; data.resize(store->size());
+        store->read(data.data(), store->size());
+        store->close();
+        image->assignImageProfile(KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data));
+    }
+
+
+    // Load the layers data: if there is a profile associated with a layer it will be set now.
     KisKraLoadVisitor visitor(image, store, m_d->layerFilenames, m_d->imageName, m_d->syntaxVersion);
 
     if (external)
@@ -170,9 +184,10 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
     image->rootLayer()->accept(visitor);
 
 
+
     // annotations
     // exif
-    QString location = external ? QString::null : uri;
+    location = external ? QString::null : uri;
     location += m_d->imageName + EXIF_PATH;
     if (store->hasFile(location)) {
         QByteArray data;
@@ -180,17 +195,6 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
         data = store->read(store->size());
         store->close();
         image->addAnnotation(KisAnnotationSP(new KisAnnotation("exif", "", data)));
-    }
-
-    // icc profile
-    location = external ? QString::null : uri;
-    location += m_d->imageName + ICC_PATH;
-    if (store->hasFile(location)) {
-        store->open(location);
-        QByteArray data; data.resize(store->size());
-        store->read(data.data(), store->size());
-        store->close();
-        image->assignImageProfile(KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data));
     }
 
 

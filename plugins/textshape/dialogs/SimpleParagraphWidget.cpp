@@ -317,16 +317,14 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
 
         bool unchanged = true;
         foreach(int property, m_currentBlockFormat.properties().keys()) {
-            kDebug() << "comparing property in set format: " << property;
-            kDebug() << " currentBlockFormat: " << m_currentBlockFormat.property(property);
-            kDebug() << " style property: " << style->value(property);
             if (property == QTextFormat::ObjectIndex)
                 continue;
             if (property == KoParagraphStyle::ListStyleId)
                 continue;
+            if (property == KoParagraphStyle::MasterPageName) //is this really a valid exception?
+                continue;
             if (m_currentBlockFormat.property(property) != style->value(property)) {
                 unchanged = false;
-                kDebug() << "different property";
                 break;
             }
         }

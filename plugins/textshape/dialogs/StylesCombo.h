@@ -66,13 +66,16 @@ private slots:
     void slotDeleteStyle(QModelIndex);
     void slotShowDia(QModelIndex);
     void slotSelectionChanged(int index);
-    void previewResized();
+    void slotItemClicked(QModelIndex);
+    void slotPreviewResized();
 
 private:
     StylesModel *m_stylesModel;
 //    StylesComboView *m_view;
     StylesComboPreview *m_preview;
     QListView *m_view;
+    int m_selectedItem;
+    bool m_originalStyle;
 
 //    QTextBlockFormat m_currentBlockFormat;
 //    QTextCharFormat m_currentCharFormat;

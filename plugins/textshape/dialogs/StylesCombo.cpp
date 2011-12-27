@@ -42,7 +42,9 @@
 StylesCombo::StylesCombo(QWidget *parent)
     : QComboBox(parent),
       m_stylesModel(0),
-      m_view(0)//,
+      m_view(0),
+      m_selectedItem(-1),
+      m_originalStyle(true)//,
 //      skipNextHide(false)
 {
 /*    setFrameShape(QFrame::StyledPanel);
@@ -78,6 +80,7 @@ StylesCombo::StylesCombo(QWidget *parent)
     connect(delegate, SIGNAL(needsUpdate(QModelIndex)), m_view, SLOT(update(QModelIndex)));
     connect(delegate, SIGNAL(styleManagerButtonClicked(QModelIndex)), this, SLOT(showDia()));
     connect(delegate, SIGNAL(deleteStyleButtonClicked(QModelIndex)), this, SLOT(deleteStyle(QModelIndex)));
+    connect(delegate, SIGNAL(clickedInItem(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
     setItemDelegate(delegate);
 
     connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSelectionChanged(int)));
@@ -98,6 +101,7 @@ StylesCombo::~StylesCombo()
 
 void StylesCombo::setStyleIsOriginal(bool original)
 {
+    m_originalStyle = original;
     if (!original) {
         m_preview->setAddButtonShown(true);
     }
@@ -167,7 +171,7 @@ void StylesCombo::setLineEdit(QLineEdit *edit)
         connect(edit, SIGNAL(destroyed()), SLOT(lineEditDeleted()));
 
         connect(m_preview, SIGNAL(returnPressed(const QString&)), SIGNAL(returnPressed(const QString&)));
-        connect(m_preview, SIGNAL(resized()), this, SLOT(previewResized()));
+        connect(m_preview, SIGNAL(resized()), this, SLOT(slotPreviewResized()));
 
 //        m_preview->setTrapReturnKey( d->trapReturnKey );
     }
@@ -176,24 +180,25 @@ void StylesCombo::setLineEdit(QLineEdit *edit)
 
 void StylesCombo::slotSelectionChanged(int index)
 {
-    m_preview->setPreview(m_stylesModel->stylePreview(index, m_preview->availableSize()));
-    update();
-    emit selectionChanged(index);
-
-/*    KoParagraphStyle *paragStyle = m_stylesModel->styleManager()->paragraphStyle(m_stylesModel->index(index).internalId());
-    if (paragStyle) {
-        m_preview->setPreview(m_stylesModel->thumbnailer()->thumbnail(paragStyle, m_preview->availableSize()));
-        emit paragraphStyleSelected(paragStyle);
-        return;
+    if (index != m_selectedItem || !m_originalStyle) {
+        m_selectedItem = index;
+        m_preview->setPreview(m_stylesModel->stylePreview(index, m_preview->availableSize()));
+        update();
+        emit selectionChanged(index);
     }
-    KoCharacterStyle *characterStyle =  m_stylesModel->styleManager()->characterStyle(m_stylesModel->index(index).internalId());
-    if (characterStyle) {
-        m_preview->setPreview(m_stylesModel->thumbnailer()->thumbnail(characterStyle, m_preview->availableSize()));
-        return;
-    }
-    m_preview->setPreview(QPixmap());
-*/
 }
+
+void StylesCombo::slotItemClicked(QModelIndex index)
+{
+    //this slot allows us to emit a selectionChanged signal in case the already selected style isn't in its original form anymore. In such case, the view does not emit currentIndexChanged, so we use the editorEvent of the delegate to send us a signal. There is a bit of redundancy if the item clicked was indeed a new selection, hence the check in both slots.
+    if (index.row() != m_selectedItem || !m_originalStyle) {
+        m_selectedItem = index.row();
+        m_preview->setPreview(m_stylesModel->stylePreview(m_selectedItem, m_preview->availableSize()));
+        update();
+        emit selectionChanged(m_selectedItem);
+    }
+}
+
 /*
 void StylesCombo::setCurrentFormat(const QTextBlockFormat &format)
 {
@@ -237,7 +242,7 @@ void StylesCombo::setCurrentFormat(const QTextCharFormat &format)
     Q_UNUSED(format)
 }
 */
-void StylesCombo::previewResized()
+void StylesCombo::slotPreviewResized()
 {///TODO take care of charStyles too
 /*    KoParagraphStyle *usedStyle = 0;
     if (m_stylesModel->styleManager())

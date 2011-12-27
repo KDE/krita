@@ -176,6 +176,7 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
             emit deleteStyleButtonClicked(index);
             return true;
         }
+        emit clickedInItem(index);
         return false;
     }
     if (event->type() == QEvent::MouseMove) {

@@ -40,6 +40,7 @@ signals:
     void styleManagerButtonClicked(QModelIndex index);
     void deleteStyleButtonClicked(QModelIndex index);
     void needsUpdate(QModelIndex index);
+    void clickedInItem(QModelIndex index);
 
 private:
     bool m_editButtonPressed;

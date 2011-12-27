@@ -23,8 +23,12 @@
 
 #include "kis_outline_generator.h"
 #include "kdebug.h"
-
 #include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+
+#include "kis_paint_device.h"
+#include <kis_iterator_ng.h>
+#include <kis_random_accessor_ng.h>
 
 KisOutlineGenerator::KisOutlineGenerator(const KoColorSpace* cs, quint8 defaultOpacity)
     : m_cs(cs), m_defaultOpacity(defaultOpacity), m_simple(false)
@@ -35,9 +39,7 @@ QVector<QPolygon> KisOutlineGenerator::outline(quint8* buffer, qint32 xOffset, q
 {
   
     quint8* marks = new quint8[width*height];
-    for (int i = 0; i < width*height; i++) {
-        marks[i] = 0;
-    }
+    memset(marks, 0, width *height);
     QVector<QPolygon> paths;
 
     int nodes = 0;
@@ -66,7 +68,7 @@ QVector<QPolygon> KisOutlineGenerator::outline(quint8* buffer, qint32 xOffset, q
                 EdgeType currentEdge = edge;
                 EdgeType lastEdge = currentEdge;
                 do {
-                    //While following a strait line no points nead to be added
+                    //While following a straight line no points need to be added
                     if (lastEdge != currentEdge) {
                         appendCoordinate(&path, col + xOffset, row + yOffset, currentEdge);
                         nodes++;
@@ -87,6 +89,73 @@ QVector<QPolygon> KisOutlineGenerator::outline(quint8* buffer, qint32 xOffset, q
     return paths;
 }
 
+QVector<QPolygon> KisOutlineGenerator::outline(KisPaintDeviceSP buffer, qint32 xOffset, qint32 yOffset, qint32 width, qint32 height)
+{
+    m_xOffset = xOffset;
+    m_yOffset = yOffset;
+
+    m_accessor = buffer->createRandomConstAccessorNG(xOffset, yOffset);
+
+    const KoColorSpace *alphaCs = KoColorSpaceRegistry::instance()->alpha8();
+    KisPaintDeviceSP marks = new KisPaintDevice(alphaCs);
+    quint8 defaultPixel = 0;
+    marks->setDefaultPixel(&defaultPixel);
+    KisRandomAccessorSP marksAccessor = marks->createRandomAccessorNG(0, 0);
+
+    QVector<QPolygon> paths;
+
+    int nodes = 0;
+    for (qint32 y = 0; y < height; y++) {
+        for (qint32 x = 0; x < width; x++) {
+
+            m_accessor->moveTo(x + xOffset, y + yOffset);
+
+            if (m_cs->opacityU8(m_accessor->oldRawData()) == m_defaultOpacity)
+                continue;
+
+            EdgeType startEdge = TopEdge;
+
+            EdgeType edge = startEdge;
+            marksAccessor->moveTo(x, y);
+            while (edge != NoEdge && (alphaCs->opacityU8(marksAccessor->rawData()) & (1 << edge) || !isOutlineEdge(edge, x, y, buffer, width, height))) {
+                edge = nextEdge(edge);
+                if (edge == startEdge)
+                    edge = NoEdge;
+            }
+
+            if (edge != NoEdge) {
+                QPolygon path;
+                path << QPoint(x + xOffset, y + yOffset);
+
+                bool clockwise = edge == BottomEdge;
+
+                qint32 row = y, col = x;
+                EdgeType currentEdge = edge;
+                EdgeType lastEdge = currentEdge;
+                do {
+                    //While following a straight line no points need to be added
+                    if (lastEdge != currentEdge) {
+                        appendCoordinate(&path, col + xOffset, row + yOffset, currentEdge);
+                        nodes++;
+                        lastEdge = currentEdge;
+                    }
+                    marksAccessor->moveTo(col, row);
+                    quint8 mark = alphaCs->opacityU8(marksAccessor->rawData());
+                    mark |= 1 << currentEdge;
+                    alphaCs->setOpacity(marksAccessor->rawData(), mark, 1);
+                    nextOutlineEdge(&currentEdge, &row, &col, buffer, width, height);
+                } while (row != y || col != x || currentEdge != edge);
+
+                if(!m_simple || !clockwise)
+                    paths.push_back(path);
+            }
+        }
+    }
+
+    return paths;
+}
+
+
 bool KisOutlineGenerator::isOutlineEdge(EdgeType edge, qint32 x, qint32 y, quint8* buffer, qint32 bufWidth, qint32 bufHeight)
 {
     if (m_cs->opacityU8(buffer + (y*bufWidth+x)*m_cs->pixelSize()) == m_defaultOpacity)
@@ -106,6 +175,43 @@ bool KisOutlineGenerator::isOutlineEdge(EdgeType edge, qint32 x, qint32 y, quint
     }
     return false;
 }
+
+
+bool KisOutlineGenerator::isOutlineEdge(EdgeType edge, qint32 x, qint32 y, KisPaintDeviceSP /*buffer*/, qint32 bufWidth, qint32 bufHeight)
+{
+
+    m_accessor->moveTo(x + m_xOffset, y + m_yOffset);
+
+    if (m_cs->opacityU8(m_accessor->oldRawData()) == m_defaultOpacity)
+        return false;
+
+    switch (edge) {
+    case LeftEdge:
+    {
+        m_accessor->moveTo(x + m_xOffset - 1, y + m_yOffset);
+        return x == 0 || m_cs->opacityU8(m_accessor->oldRawData()) == m_defaultOpacity;
+    }
+    case TopEdge:
+    {
+        m_accessor->moveTo(x + m_xOffset, y + m_yOffset - 1);
+        return y == 0 || m_cs->opacityU8(m_accessor->oldRawData()) == m_defaultOpacity;
+    }
+    case RightEdge:
+    {
+        m_accessor->moveTo(x + m_xOffset + 1, y + m_yOffset);
+        return x == bufWidth - 1 || m_cs->opacityU8(m_accessor->oldRawData()) == m_defaultOpacity;
+    }
+    case BottomEdge:
+    {
+        m_accessor->moveTo(x + m_xOffset, y + m_yOffset + 1);
+        return y == bufHeight - 1 || m_cs->opacityU8(m_accessor->oldRawData()) == m_defaultOpacity;
+    }
+    case NoEdge:
+        return false;
+    }
+    return false;
+}
+
 
 #define TRY_PIXEL(deltaRow, deltaCol, test_edge)                                                \
     {                                                                                               \
@@ -155,6 +261,42 @@ void KisOutlineGenerator::nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *c
     if (*row == original_row && *col == original_col)
         *edge = nextEdge(*edge);
 }
+
+void KisOutlineGenerator::nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *col, KisPaintDeviceSP buffer, qint32 width, qint32 height)
+{
+    int original_row = *row;
+    int original_col = *col;
+
+    switch (*edge) {
+    case RightEdge:
+        TRY_PIXEL(-1, 0, RightEdge);
+        TRY_PIXEL(-1, 1, BottomEdge);
+        break;
+
+    case TopEdge:
+        TRY_PIXEL(0, -1, TopEdge);
+        TRY_PIXEL(-1, -1, RightEdge);
+        break;
+
+    case LeftEdge:
+        TRY_PIXEL(1, 0, LeftEdge);
+        TRY_PIXEL(1, -1, TopEdge);
+        break;
+
+    case BottomEdge:
+        TRY_PIXEL(0, 1, BottomEdge);
+        TRY_PIXEL(1, 1, LeftEdge);
+        break;
+
+    default:
+        break;
+
+    }
+
+    if (*row == original_row && *col == original_col)
+        *edge = nextEdge(*edge);
+}
+
 
 void KisOutlineGenerator::appendCoordinate(QPolygon * path, int x, int y, EdgeType edge)
 {

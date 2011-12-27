@@ -289,8 +289,12 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
                 break;
             }
         }
+
+        //we are updating the combo's selected item to what is the current format. we do not want this to apply the style as it would mess up the undo stack, the change tracking,...
+        disconnect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
         widget.paragraphStyleCombo->setCurrentIndex(m_stylesModel->indexForParagraphStyle(*style).row());
         widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
+        connect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
 
 //        m_stylesCombo->setStyleIsOriginal(unchanged);
     }
@@ -326,8 +330,11 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
                 break;
             }
         }
+        //we are updating the combo's selected item to what is the current format. we do not want this to apply the style as it would mess up the undo stack, the change tracking,...
+        disconnect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
         widget.paragraphStyleCombo->setCurrentIndex(m_stylesModel->indexForParagraphStyle(*style).row());
         widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
+        connect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
 
 //        m_stylesCombo->setStyleIsOriginal(unchanged);
 //        widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);

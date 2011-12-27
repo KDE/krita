@@ -92,9 +92,12 @@ public slots:
     void viewportMoved(const QPointF &offset);
 
     /**
-     * Called whenever the size of the KisImage changes
+     * Called whenever the size of the KisImage changes.
+     * It is a part of a complex update ritual, when the size
+     * fo the image changes. This method just resizes the storage
+     * for the image cache, it doesn't update any cached data.
      */
-    void setImageSize(qint32 w, qint32 h);
+    void slotImageSizeChanged(qint32 w, qint32 h);
 
     /**
      * Checks whether it is needed to resize the prescaled image and

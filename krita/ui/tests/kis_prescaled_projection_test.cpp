@@ -377,7 +377,8 @@ void KisPrescaledProjectionTest::testUpdates()
                                   "zoom50"));
 
     t.layer->setVisible(false);
-    t.projection.setImage(t.image);
+    KisUpdateInfoSP info = t.projection.updateCache(t.image->bounds());
+    t.projection.recalculateCache(info);
 
     QVERIFY(TestUtil::checkQImage(t.projection.prescaledQImage(),
                                   "prescaled_projection_test",

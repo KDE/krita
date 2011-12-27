@@ -115,6 +115,10 @@ public:
     bool usingHDRExposureProgram() const;
 
 public:
+    inline QRect storedImageBounds() {
+        return m_storedImageBounds;
+    }
+
     inline int xToCol(int x) {
         return x / m_texturesInfo.effectiveWidth;
     }
@@ -154,6 +158,7 @@ private:
 
 private:
     KisImageWSP m_image;
+    QRect m_storedImageBounds;
     KoColorProfile *m_monitorProfile;
     float m_exposure;
 

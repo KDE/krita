@@ -119,9 +119,6 @@ void KisPrescaledProjection::setImage(KisImageWSP image)
     Q_ASSERT(image);
     m_d->image = image;
     m_d->projectionBackend->setImage(image);
-
-
-    setImageSize(image->width(), image->height());
 }
 
 QImage KisPrescaledProjection::prescaledQImage() const
@@ -220,15 +217,12 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
     m_d->prescaledQImage = newImage;
 }
 
-void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
+void KisPrescaledProjection::slotImageSizeChanged(qint32 w, qint32 h)
 {
-    Q_UNUSED(w);
-    Q_UNUSED(h);
-
     m_d->projectionBackend->setImageSize(w, h);
-
-    KisUpdateInfoSP info = updateCache(m_d->image->bounds());
-    recalculateCache(info);
+    // viewport size is cropped by the size of the image
+    // so we need to update it as well
+    updateViewportSize();
 }
 
 KisUpdateInfoSP KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)

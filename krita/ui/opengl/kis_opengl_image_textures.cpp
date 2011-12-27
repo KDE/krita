@@ -137,6 +137,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     destroyImageTextureTiles();
     updateTextureFormat();
 
+    m_storedImageBounds = m_image->bounds();
     const int lastCol = xToCol(m_image->width());
     const int lastRow = yToRow(m_image->height());
     m_numCols = lastCol + 1;
@@ -166,6 +167,7 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
         delete tile;
     }
     m_textureTiles.clear();
+    m_storedImageBounds = QRect();
 }
 
 KisOpenGLUpdateInfoSP
@@ -283,12 +285,7 @@ GLuint KisOpenGLImageTextures::backgroundTexture() const
 
 void KisOpenGLImageTextures::slotImageSizeChanged(qint32 w, qint32 h)
 {
-    Q_UNUSED(w);
-    Q_UNUSED(h);
-
     createImageTextureTiles();
-    KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
-    recalculateCache(info);
 }
 
 void KisOpenGLImageTextures::setMonitorProfile(KoColorProfile *monitorProfile)

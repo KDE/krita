@@ -95,9 +95,6 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
     int id = (int)index.internalId();
     switch (role){
     case Qt::DisplayRole: {
-        if (id == -1) {
-            return QVariant(QString("As paragraph"));
-        }
         return QVariant();
         KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
         if (paragStyle)
@@ -118,6 +115,17 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
         KoCharacterStyle *characterStyle =  m_styleManager->characterStyle(id);
         if (characterStyle) {
             return m_styleThumbnailer->thumbnail(characterStyle);
+        }
+        if (id == -1) {
+            //we use the default character style here. We do not have an easy way (that I can think of) to access the currently selected paragraph style.
+           KoCharacterStyle *usedStyle = m_styleManager->defaultCharacterStyle();
+           if (!usedStyle) {
+               return QPixmap();
+           }
+           usedStyle = usedStyle->clone();
+           usedStyle->setName(QString("As paragraph"));
+           usedStyle->setStyleId(-1); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
+           return m_styleThumbnailer->thumbnail(usedStyle);
         }
         break;
     }
@@ -192,13 +200,20 @@ QPixmap StylesModel::stylePreview(int row, QSize size)
         }
     }
     else {
-        if (index(row).internalId() == -1) { ///TODO handle the "as paragraph case
-            QPixmap pixmap(size);
-            pixmap.fill(QColor(Qt::red));
-            return pixmap;
-        }
         KoCharacterStyle *usedStyle = 0;
-        usedStyle = m_styleManager->characterStyle(index(row).internalId());
+        if (index(row).internalId() == -1) {
+            //we use the default character style here. We do not have an easy way (that I can think of) to access the currently selected paragraph style.
+           usedStyle = m_styleManager->defaultCharacterStyle();
+           if (!usedStyle) {
+               return QPixmap();
+           }
+           usedStyle = usedStyle->clone();
+           usedStyle->setName(QString("As paragraph"));
+           usedStyle->setStyleId(-1); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
+        }
+        else {
+            usedStyle = m_styleManager->characterStyle(index(row).internalId());
+        }
         if (usedStyle) {
             return m_styleThumbnailer->thumbnail(usedStyle, size);
         }
@@ -232,9 +247,7 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
         connect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
         connect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
     } else {
-        kDebug() << "in adding char styles";
         if (m_styleManager->paragraphStyles().count()) {
-            kDebug() << "there are several parStyles";
             m_styleList.append(-1);
         }
         foreach(KoCharacterStyle *style, m_styleManager->characterStyles())

@@ -87,6 +87,9 @@ QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style)
 
 QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size)
 {
+    if (!style) {
+        return QPixmap();
+    }
     if (size.isNull()) {
         size = d->defaultSize;
     }
@@ -128,6 +131,9 @@ QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style)
 
 QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size)
 {
+    if (!style) {
+        return QPixmap();
+    }
     if (size.isNull()) {
         size = d->defaultSize;
     }

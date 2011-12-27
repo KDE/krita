@@ -1371,6 +1371,7 @@ void TextTool::updateActions()
 
     m_allowActions = true;
 
+    ///TODO if selection contains several different format
     emit charFormatChanged(cf);
     emit blockFormatChanged(bf);
     emit blockChanged(textEditor->block());

@@ -163,7 +163,6 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
 {
 
     // icc profile: if present, this overrides the profile product name loaded in loadXML.
-    qDebug() << "image layer count" << image->nlayers();
     QString location = external ? QString::null : uri;
     location += m_d->imageName + ICC_PATH;
     if (store->hasFile(location)) {

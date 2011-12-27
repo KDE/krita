@@ -106,8 +106,6 @@ private:
         if (!layer->paintDevice()) return false;
         if (!layer->paintDevice()->colorSpace()) return false;
 
-        qDebug() << "setting layer" << layer->name() << "from profile" << layer->paintDevice()->colorSpace()->profile() << "to" << m_dstColorSpace->profile();
-
         const KoColorSpace *cs = layer->paintDevice()->colorSpace();
 
         if (cs->colorModelId() == m_oldColorSpace->colorModelId()) {

@@ -171,6 +171,34 @@ bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPain
     return true;
 }
 
+#ifdef FILES_OUTPUT_DIR
+
+bool checkQImage(const QImage &image, const QString &testName,
+                 const QString &prefix, const QString &name,
+                 int fuzzy = 0)
+{
+    QString filename(prefix + "_" + name + ".png");
+    QString dumpName(prefix + "_" + name + "_expected.png");
+
+    QImage ref(QString(FILES_DATA_DIR) + QDir::separator() +
+               testName + QDir::separator() +
+               prefix + QDir::separator() + filename);
+
+    bool valid = true;
+    QPoint t;
+    if(!compareQImages(t, image, ref)) {
+        qDebug() << "--- Wrong image:" << name;
+        valid = false;
+
+        image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + filename);
+        ref.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + dumpName);
+    }
+
+    return valid;
+}
+
+#endif
+
 quint8 alphaDevicePixel(KisPaintDeviceSP dev, qint32 x, qint32 y)
 {
     KisHLineConstIteratorPixel iter = dev->createHLineConstIterator(x, y, 1);

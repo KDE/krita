@@ -273,9 +273,9 @@ void StylesModel::addParagraphStyle(KoParagraphStyle *style)
     Q_ASSERT(style);
     beginInsertRows(QModelIndex(), rowCount(QModelIndex()), rowCount(QModelIndex()));
     m_styleList.append(style->styleId());
+    endInsertRows();
     m_styleMapper->setMapping(style, style->styleId());
     connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
-    endInsertRows();
 }
 
 // called when the stylemanager adds a style

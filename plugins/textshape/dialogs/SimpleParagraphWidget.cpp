@@ -104,7 +104,6 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
 //    m_stylesCombo->setStylesModel(m_stylesModel);
 //    widget.gridLayout->addWidget(m_stylesCombo, 4, 0, 0, 10);
-
     widget.paragraphStyleCombo->setStylesModel(m_stylesModel);
 
 //    connect(widget.paragraphStyleCombo, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)), this, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)));
@@ -346,10 +345,10 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
 void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
-//    m_stylePopup->setStyleManager(sm);
-
+    //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
+    disconnect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
     m_stylesModel->setStyleManager(sm);
-//    m_stylesCombo->setStyleManager(sm);
+    connect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
 }
 
 void SimpleParagraphWidget::hidePopup()

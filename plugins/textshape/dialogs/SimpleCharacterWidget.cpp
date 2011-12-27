@@ -113,8 +113,10 @@ SimpleCharacterWidget::~SimpleCharacterWidget()
 void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
-//    m_stylePopup->setStyleManager(sm);
+    //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
+    disconnect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
     m_stylesModel->setStyleManager(sm);
+    connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
 }
 
 void SimpleCharacterWidget::hidePopup()
@@ -123,7 +125,7 @@ void SimpleCharacterWidget::hidePopup()
 }
 
 void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
-{//TODO comparison stuff for unchanged
+{
     if (format == m_currentCharFormat)
         return;
     m_currentCharFormat = format;
@@ -147,7 +149,6 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
     }
     else {
         int parId = m_currentCharFormat.intProperty(KoParagraphStyle::StyleId);
-//        KoCharacterStyle *parStyle(m_styleManager->paragraphStyle(parId));
         style = static_cast<KoCharacterStyle*>(m_styleManager->paragraphStyle(parId));
         if (style) {
             bool unchanged = true;
@@ -156,12 +157,8 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
                     continue;
                 }
                 if (m_currentCharFormat.property(property) != style->value(property)) {
-
-                    kDebug() << "different property: " << property;
-                    kDebug() << "charFormat value: " << m_currentCharFormat.property(property);
-                    kDebug() << "charStyle value: " << style->value(property);
                     unchanged = false;
-//                    break;
+                    break;
                 }
             }
             disconnect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
@@ -203,8 +200,7 @@ void SimpleCharacterWidget::fontSizeActivated(int index) {
 }
 
 void SimpleCharacterWidget::styleSelected(int index)
-{//TODO handle "as paragraph style" somehow
-    kDebug() << "slotStyeSelected: " << index;
+{
     KoCharacterStyle *charStyle = m_styleManager->characterStyle(m_stylesModel->index(index).internalId());
 
     //if the selected item correspond to a null characterStyle, send the null pointer. the tool should set the characterStyle as per paragraph

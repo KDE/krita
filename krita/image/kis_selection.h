@@ -42,7 +42,7 @@ enum selectionAction {
 class KisSelectionComponent;
 
 /**
- * KisSelection is a compisite object. It may contain an instance
+ * KisSelection is a composite object. It may contain an instance
  * of KisPixelSelection and a KisShapeSelection object. Both these
  * selections are merged into a projection of the KisSelection.
  *

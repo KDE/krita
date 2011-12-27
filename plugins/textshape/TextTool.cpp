@@ -1763,8 +1763,19 @@ void TextTool::insertIndexMarker()
 
 void TextTool::setStyle(KoCharacterStyle *style)
 {
-    m_textEditor.data()->setStyle(style);
-    updateActions();
+    KoCharacterStyle *charStyle;
+    //if the given KoCharacterStyle is null, set the KoParagraphStyle character properties
+    if (!style){
+        charStyle = static_cast<KoCharacterStyle*>(KoTextDocument(m_textShapeData->document()).styleManager()->paragraphStyle(m_textEditor.data()->blockFormat().intProperty(KoParagraphStyle::StyleId)));
+        kDebug() << "charStyle from parag: " << charStyle;
+    }
+    else {
+        charStyle = style;
+    }
+    if (charStyle) {
+        m_textEditor.data()->setStyle(charStyle);
+        updateActions();
+    }
 //    emit charFormatChanged(m_textEditor.data()->charFormat());
 }
 

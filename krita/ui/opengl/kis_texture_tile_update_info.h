@@ -36,11 +36,12 @@ public:
         m_patchPixels = 0;
     }
 
-    KisTextureTileUpdateInfo(qint32 col, qint32 row, QRect tileRect, QRect updateRect) {
+    KisTextureTileUpdateInfo(qint32 col, qint32 row, QRect tileRect, QRect updateRect, QRect currentImageRect) {
         m_tileCol = col;
         m_tileRow = row;
         m_tileRect = tileRect;
         m_patchRect = m_tileRect & updateRect;
+        m_currentImageRect = currentImageRect;
         m_patchPixels = 0;
     }
 
@@ -94,21 +95,26 @@ public:
         return m_tileRect;
     }
 
-    qint32 tileCol() const {
+    inline QRect imageRect() const {
+        return m_currentImageRect;
+    }
+
+    inline qint32 tileCol() const {
         return m_tileCol;
     }
 
-    qint32 tileRow() const {
+    inline qint32 tileRow() const {
         return m_tileRow;
     }
 
-    quint32 pixelSize() const {
+    inline quint32 pixelSize() const {
         return m_patchColorSpace->pixelSize();
     }
 
 private:
     qint32 m_tileCol;
     qint32 m_tileRow;
+    QRect m_currentImageRect;
     QRect m_tileRect;
     QRect m_patchRect;
     const KoColorSpace* m_patchColorSpace;

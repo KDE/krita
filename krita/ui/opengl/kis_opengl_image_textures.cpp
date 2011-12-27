@@ -136,8 +136,6 @@ void KisOpenGLImageTextures::createImageTextureTiles()
 
     destroyImageTextureTiles();
     updateTextureFormat();
-    m_texturesInfo.imageRect = m_image->bounds();
-
 
     const int lastCol = xToCol(m_image->width());
     const int lastRow = yToRow(m_image->height());
@@ -207,7 +205,8 @@ KisOpenGLImageTextures::updateCache(const QRect& rect)
 
             KisTextureTileUpdateInfo tileInfo(col, row,
                                               tileTextureRect,
-                                              updateRect);
+                                              updateRect,
+                                              m_image->bounds());
 
             tileInfo.retrieveData(m_image);
             info->tileList.append(tileInfo);

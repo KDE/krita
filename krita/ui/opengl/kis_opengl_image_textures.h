@@ -148,6 +148,7 @@ protected:
     static bool imageCanShareTextures(KisImageWSP image);
 
 private:
+    QRect calculateTileRect(int col, int row) const;
     static void getTextureSize(KisGLTexturesInfo *texturesInfo);
     void updateTextureFormat();
 

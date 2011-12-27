@@ -121,6 +121,15 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
     }
 }
 
+QRect KisOpenGLImageTextures::calculateTileRect(int col, int row) const
+{
+    return m_image->bounds() &
+        QRect(col * m_texturesInfo.effectiveWidth,
+              row * m_texturesInfo.effectiveHeight,
+              m_texturesInfo.effectiveWidth,
+              m_texturesInfo.effectiveHeight);
+}
+
 void KisOpenGLImageTextures::createImageTextureTiles()
 {
     KisOpenGL::makeContextCurrent();
@@ -140,12 +149,9 @@ void KisOpenGLImageTextures::createImageTextureTiles()
 
     for (int row = 0; row <= lastRow; row++) {
         for (int col = 0; col <= lastCol; col++) {
-            QRect tileRect(col * m_texturesInfo.effectiveWidth,
-                           row * m_texturesInfo.effectiveHeight,
-                           m_texturesInfo.effectiveWidth,
-                           m_texturesInfo.effectiveHeight);
+            QRect tileRect = calculateTileRect(col, row);
 
-            KisTextureTile *tile = new KisTextureTile(tileRect & m_texturesInfo.imageRect,
+            KisTextureTile *tile = new KisTextureTile(tileRect,
                                                       &m_texturesInfo,
                                                       emptyTileData.constData());
             m_textureTiles.append(tile);
@@ -196,10 +202,11 @@ KisOpenGLImageTextures::updateCache(const QRect& rect)
     for (int col = firstColumn; col <= lastColumn; col++) {
         for (int row = firstRow; row <= lastRow; row++) {
 
-            KisTextureTile *tile = getTextureTileCR(col, row);
+            QRect tileRect = calculateTileRect(col, row);
+            QRect tileTextureRect = stretchRect(tileRect, m_texturesInfo.border);
 
-            KisTextureTileUpdateInfo tileInfo(tile,
-                                              tile->textureRectInImagePixels(),
+            KisTextureTileUpdateInfo tileInfo(col, row,
+                                              tileTextureRect,
                                               updateRect);
 
             tileInfo.retrieveData(m_image);
@@ -242,7 +249,8 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
         }
 
         tileInfo.convertTo(dstCS);
-        tileInfo.relatedTile()->update(tileInfo);
+        KisTextureTile *tile = getTextureTileCR(tileInfo.tileCol(), tileInfo.tileRow());
+        tile->update(tileInfo);
         tileInfo.destroy();
 
         KIS_OPENGL_PRINT_ERROR();

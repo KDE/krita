@@ -25,7 +25,6 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 
-class KisTextureTile;
 
 class KisTextureTileUpdateInfo;
 typedef QVector<KisTextureTileUpdateInfo> KisTextureTileUpdateInfoList;
@@ -37,8 +36,9 @@ public:
         m_patchPixels = 0;
     }
 
-    KisTextureTileUpdateInfo(KisTextureTile *tile, QRect tileRect, QRect updateRect) {
-        m_textureTile = tile;
+    KisTextureTileUpdateInfo(qint32 col, qint32 row, QRect tileRect, QRect updateRect) {
+        m_tileCol = col;
+        m_tileRow = row;
         m_tileRect = tileRect;
         m_patchRect = m_tileRect & updateRect;
         m_patchPixels = 0;
@@ -94,8 +94,12 @@ public:
         return m_tileRect;
     }
 
-    KisTextureTile *relatedTile() const {
-        return m_textureTile;
+    qint32 tileCol() const {
+        return m_tileCol;
+    }
+
+    qint32 tileRow() const {
+        return m_tileRow;
     }
 
     quint32 pixelSize() const {
@@ -103,7 +107,8 @@ public:
     }
 
 private:
-    KisTextureTile *m_textureTile;
+    qint32 m_tileCol;
+    qint32 m_tileRow;
     QRect m_tileRect;
     QRect m_patchRect;
     const KoColorSpace* m_patchColorSpace;

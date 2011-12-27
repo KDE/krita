@@ -2118,10 +2118,13 @@ QVariant KoCharacterStyle::value(int key) const
     QVariant variant = d->stylesPrivate.value(key);
     if (variant.isNull()) {
         if (d->parentStyle)
-            return d->parentStyle->value(key);
+            variant = d->parentStyle->value(key);
         else if (d->defaultStyle)
-            return d->defaultStyle->value(key);
+            variant = d->defaultStyle->value(key);
     }
+    if (variant.isNull() && d->hardCodedDefaultStyle.contains(key))
+        variant = d->hardCodedDefaultStyle.value(key);
+
     return variant;
 }
 

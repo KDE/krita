@@ -21,7 +21,7 @@
 #include "SimpleCharacterWidget.h"
 #include "TextTool.h"
 #include "../commands/ChangeListCommand.h"
-#include "StylesWidget.h"
+//#include "StylesWidget.h"
 #include "SpecialButton.h"
 #include "StylesModel.h"
 #include "KoStyleThumbnailer.h"
@@ -83,7 +83,7 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
 //    m_stylePopup = new StylesWidget(this, false, Qt::Popup);
 //    m_stylePopup->setFrameShape(QFrame::StyledPanel);
 //    m_stylePopup->setFrameShadow(QFrame::Raised);
-//    widget.charFrame->setStylesWidget(m_stylePopup);
+//    widget.characterStyleCombo->setStylesWidget(m_stylePopup);
 
 //    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(characterStyleSelected(KoCharacterStyle *)));
 //    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(doneWithFocus()));
@@ -94,12 +94,13 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     m_stylesModel = new StylesModel(0, StylesModel::CharacterStyle);
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
 
-    widget.charFrame->setStylesModel(m_stylesModel);
+    widget.characterStyleCombo->setStylesModel(m_stylesModel);
 
-    connect(widget.charFrame, SIGNAL(characterStyleSelected(KoCharacterStyle*)), this, SIGNAL(characterStyleSelected(KoCharacterStyle*)));
-    connect(widget.charFrame, SIGNAL(characterStyleSelected(KoCharacterStyle*)), this, SIGNAL(doneWithFocus()));
-    connect(widget.charFrame, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
-    connect(widget.charFrame, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
+    connect(widget.characterStyleCombo, SIGNAL(characterStyleSelected(KoCharacterStyle*)), this, SIGNAL(characterStyleSelected(KoCharacterStyle*)));
+    connect(widget.characterStyleCombo, SIGNAL(characterStyleSelected(KoCharacterStyle*)), this, SIGNAL(doneWithFocus()));
+    connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+    connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
+    connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
 
 }
 
@@ -117,7 +118,7 @@ void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
 
 void SimpleCharacterWidget::hidePopup()
 {
-    widget.charFrame->hidePopup();
+    widget.characterStyleCombo->hidePopup();
 }
 
 void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)

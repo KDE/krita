@@ -193,7 +193,9 @@ QPixmap StylesModel::stylePreview(int row, QSize size)
     }
     else {
         if (index(row).internalId() == -1) { ///TODO handle the "as paragraph case
-            return QPixmap();
+            QPixmap pixmap(size);
+            pixmap.fill(QColor(Qt::red));
+            return pixmap;
         }
         KoCharacterStyle *usedStyle = 0;
         usedStyle = m_styleManager->characterStyle(index(row).internalId());

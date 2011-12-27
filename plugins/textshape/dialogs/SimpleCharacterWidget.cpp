@@ -30,6 +30,7 @@
 #include <KSelectAction>
 #include <KoTextBlockData.h>
 #include <KoCharacterStyle.h>
+#include <KoParagraphStyle.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextDocumentLayout.h>
 #include <KoZoomHandler.h>
@@ -122,7 +123,7 @@ void SimpleCharacterWidget::hidePopup()
 }
 
 void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
-{
+{//TODO comparison stuff for unchanged
     if (format == m_currentCharFormat)
         return;
     m_currentCharFormat = format;
@@ -130,9 +131,45 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
     int id = m_currentCharFormat.intProperty(KoCharacterStyle::StyleId);
     KoCharacterStyle *style(m_styleManager->characterStyle(id));
     if (style) {
-//        widget.charFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->characterStyle(id), widget.charFrame->contentsRect().size()));
+        bool unchanged = true;
+        foreach(int property, m_currentCharFormat.properties().keys()) {
+            if (property == QTextFormat::ObjectIndex)
+                continue;
+            if (m_currentCharFormat.property(property) != style->value(property)) {
+                unchanged = false;
+                break;
+            }
+        }
+        disconnect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+        widget.characterStyleCombo->setCurrentIndex(m_stylesModel->indexForCharacterStyle(*style).row());
+        widget.characterStyleCombo->setStyleIsOriginal(unchanged);
+        connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
     }
-//    m_stylePopup->setCurrentFormat(format);
+    else {
+        int parId = m_currentCharFormat.intProperty(KoParagraphStyle::StyleId);
+//        KoCharacterStyle *parStyle(m_styleManager->paragraphStyle(parId));
+        style = static_cast<KoCharacterStyle*>(m_styleManager->paragraphStyle(parId));
+        if (style) {
+            bool unchanged = true;
+            foreach(int property, m_currentCharFormat.properties().keys()) {
+                if (property == QTextFormat::ObjectIndex) {
+                    continue;
+                }
+                if (m_currentCharFormat.property(property) != style->value(property)) {
+
+                    kDebug() << "different property: " << property;
+                    kDebug() << "charFormat value: " << m_currentCharFormat.property(property);
+                    kDebug() << "charStyle value: " << style->value(property);
+                    unchanged = false;
+//                    break;
+                }
+            }
+            disconnect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+            widget.characterStyleCombo->setCurrentIndex(0); //TODO make it a bit more resilient
+            widget.characterStyleCombo->setStyleIsOriginal(unchanged);
+            connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+        }
+    }
 }
 
 void SimpleCharacterWidget::fontFamilyActivated(int index) {
@@ -163,6 +200,16 @@ void SimpleCharacterWidget::fontSizeActivated(int index) {
         action->currentAction()->trigger();
     }
     m_lastFontSizeIndex = index;
+}
+
+void SimpleCharacterWidget::styleSelected(int index)
+{//TODO handle "as paragraph style" somehow
+    kDebug() << "slotStyeSelected: " << index;
+    KoCharacterStyle *charStyle = m_styleManager->characterStyle(m_stylesModel->index(index).internalId());
+
+    //if the selected item correspond to a null characterStyle, send the null pointer. the tool should set the characterStyle as per paragraph
+    emit characterStyleSelected(charStyle);
+    emit doneWithFocus();
 }
 
 #include <SimpleCharacterWidget.moc>

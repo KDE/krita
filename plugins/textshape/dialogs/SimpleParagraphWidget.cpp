@@ -370,7 +370,6 @@ void SimpleParagraphWidget::styleSelected(int index)
 {
     KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(m_stylesModel->index(index).internalId());
     if (paragStyle) {
-        kDebug() << "will emit paragStyleSelected: " << paragStyle->name();
         emit paragraphStyleSelected(paragStyle);
     }
     emit doneWithFocus();

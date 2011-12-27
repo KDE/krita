@@ -47,6 +47,7 @@ public slots:
 private slots:
     void fontFamilyActivated(int index);
     void fontSizeActivated(int index);
+    void styleSelected(int index);
     void hidePopup();
 
 signals:

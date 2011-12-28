@@ -158,6 +158,7 @@ signals:
     void favoritePaletteCalled(const QPoint&);
 
     void sigCanvasCacheUpdated(KisUpdateInfoSP);
+    void sigContinueResizeImage(qint32 w, qint32 h);
 
 public slots:
 
@@ -167,10 +168,10 @@ public slots:
     /// The image projection has changed, now start an update
     /// of the canvas representation.
     void startUpdateCanvasProjection(const QRect & rc);
-
     void updateCanvasProjection(KisUpdateInfoSP info);
 
-    void setImageSize(qint32 w, qint32 h);
+    void startResizingImage(qint32 w, qint32 h);
+    void finishResisingImage(qint32 w, qint32 h);
 
     /// adjust the origin of the document
     void adjustOrigin();

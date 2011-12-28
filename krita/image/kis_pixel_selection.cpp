@@ -37,12 +37,11 @@
 #include "kis_image.h"
 #include "kis_fill_painter.h"
 #include "kis_outline_generator.h"
-#include "kis_default_bounds.h"
 
 struct KisPixelSelection::Private {
 };
 
-KisPixelSelection::KisPixelSelection(KisDefaultBounds * defaultBounds)
+KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds)
         : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
         , m_d(new Private)
 {
@@ -242,31 +241,17 @@ QVector<QPolygon> KisPixelSelection::outline()
     qint32 width = selectionExtent.width();
     qint32 height = selectionExtent.height();
 
-    quint8* buffer = new quint8[width*height];
-
-#ifdef __GNUC__
-#warning "Do not deep copy the entire image here!"
-#else
-#pragma WARNING( "Do not deep copy the entire image here!" )
-#endif
-    readBytes(buffer, xOffset, yOffset, width, height);
-
-    KisOutlineGenerator generator(colorSpace(), *defaultPixel());
-    QVector<QPolygon> paths = generator.outline(buffer, xOffset, yOffset, width, height);
-
-    delete[] buffer;
-
-    return paths;
+    KisOutlineGenerator generator(colorSpace(), MIN_SELECTED);
+    return generator.outline(this, xOffset, yOffset, width, height);
 }
 
-void KisPixelSelection::renderToProjection(KisPixelSelection* projection)
+void KisPixelSelection::renderToProjection(KisPaintDeviceSP projection)
 {
     renderToProjection(projection, selectedExactRect());
 }
 
-void KisPixelSelection::renderToProjection(KisPixelSelection* projection, const QRect& rc)
+void KisPixelSelection::renderToProjection(KisPaintDeviceSP projection, const QRect& rc)
 {
-    // FIXME: use selectedRect() instead
     QRect updateRect = rc & selectedExactRect();
 
     if (updateRect.isValid()) {

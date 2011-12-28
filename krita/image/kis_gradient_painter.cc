@@ -616,7 +616,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     }
 
     if (!progressUpdater() || (progressUpdater() && !progressUpdater()->interrupted())) {
-        // XXX: FIX ANTIALISED DRAWING OF GRADIENTS
         if (false && antiAliasThreshold < 1 - DBL_EPSILON) {
 
             QList<KoChannelInfo *> channels = colorSpace->channels();
@@ -632,7 +631,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                     memcpy(thisPixel, iter->rawData(), pixelSize);
                     quint8 thisPixelOpacity = colorSpace->opacityU8(thisPixel);
 
-                    // XXX: Move the distance computation into the colorspace when it works.
                     for (int yOffset = -1; yOffset < 2; yOffset++) {
                         for (int xOffset = -1; xOffset < 2; xOffset++) {
 
@@ -686,8 +684,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                             }
                         }
                     }
-
-                    // XXX: Move this averaging code into the colorspace
                     if (maxDistance > 3. * antiAliasThreshold * antiAliasThreshold) {
                         const int numSamples = 4;
 

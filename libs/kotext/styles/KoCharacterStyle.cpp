@@ -454,9 +454,9 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
 KoCharacterStyle *KoCharacterStyle::autoStyle(const QTextCharFormat &format, QTextCharFormat blockCharFormat) const
 {
     KoCharacterStyle *autoStyle = new KoCharacterStyle(format);
-    autoStyle->applyStyle(blockCharFormat);
-    autoStyle->ensureMinimalProperties(blockCharFormat);
-    autoStyle->removeDuplicates(*this);
+    applyStyle(blockCharFormat);
+    ensureMinimalProperties(blockCharFormat);
+    autoStyle->removeDuplicates(blockCharFormat);
     autoStyle->setParentStyle(const_cast<KoCharacterStyle*>(this));
     return autoStyle;
 }
@@ -1826,6 +1826,14 @@ bool KoCharacterStyle::compareCharacterProperties(const KoCharacterStyle &other)
 void KoCharacterStyle::removeDuplicates(const KoCharacterStyle &other)
 {
     this->d->stylesPrivate.removeDuplicates(other.d->stylesPrivate);
+    // in case the char style has any of the following properties it also needs to have the fontFamily as otherwise 
+    // these values will be ignored when loading according to the odf spec
+    if (!hasProperty(QTextFormat::FontFamily) && (hasProperty(QTextFormat::FontStyleHint) || hasProperty(QTextFormat::FontFixedPitch) || hasProperty(KoCharacterStyle::FontCharset))) {
+        QString fontFamily = other.fontFamily();
+        if (!fontFamily.isEmpty()) {
+            setFontFamily(fontFamily);
+        }
+    }
 }
 
 void KoCharacterStyle::removeDuplicates(const QTextCharFormat &otherFormat)
@@ -1871,11 +1879,16 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
         } else if (key == QTextFormat::FontFixedPitch) {
             bool fixedPitch = d->stylesPrivate.value(key).toBool();
             style.addProperty("style:font-pitch", fixedPitch ? "fixed" : "variable", KoGenStyle::TextType);
+            // if this property is saved we also need to save the fo:font-family attribute as otherwise it will be ignored on loading as defined in the spec
+            style.addProperty("fo:font-family", fontFamily(), KoGenStyle::TextType);
         } else if (key == QTextFormat::FontStyleHint) {
             bool ok = false;
             int styleHint = d->stylesPrivate.value(key).toInt(&ok);
-            if (ok)
+            if (ok) {
                 style.addProperty("style:font-family-generic", exportOdfFontStyleHint((QFont::StyleHint) styleHint), KoGenStyle::TextType);
+                // if this property is saved we also need to save the fo:font-family attribute as otherwise it will be ignored on loading as defined in the spec
+                style.addProperty("fo:font-family", fontFamily(), KoGenStyle::TextType);
+            }
         } else if (key == QTextFormat::FontKerning) {
             style.addProperty("style:letter-kerning", fontKerning() ? "true" : "false", KoGenStyle::TextType);
         } else if (key == QTextFormat::FontCapitalization) {
@@ -2020,6 +2033,8 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
             style.addProperty("style:text-outline", outline.style() == Qt::NoPen ? "false" : "true", KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::FontCharset) {
             style.addProperty("style:font-charset", d->stylesPrivate.value(KoCharacterStyle::FontCharset).toString(), KoGenStyle::TextType);
+            // if this property is saved we also need to save the fo:font-family attribute as otherwise it will be ignored on loading as defined in the spec
+            style.addProperty("fo:font-family", fontFamily(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::TextRotationAngle) {
             style.addProperty("style:text-rotation-angle", QString::number(textRotationAngle()), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::TextRotationScale) {

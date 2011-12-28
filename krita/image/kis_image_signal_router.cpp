@@ -35,6 +35,11 @@
         else { emit __##signal; }               \
     }
 
+#define EMIT_NONBLOCKING(signal)                \
+    {                                           \
+        emit signal;                            \
+    }
+
 
 struct ImageSignalsStaticRegistrar {
     ImageSignalsStaticRegistrar() {
@@ -94,7 +99,7 @@ void KisImageSignalRouter::emitNotifications(KisImageSignalVector notifications)
 
 void KisImageSignalRouter::emitNotification(KisImageSignalType type)
 {
-    EMIT_BLOCKING(sigNotification(type));
+    EMIT_NONBLOCKING(sigNotification(type));
 }
 
 void KisImageSignalRouter::emitNodeChanged(KisNode *node)

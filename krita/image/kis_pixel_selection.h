@@ -29,7 +29,6 @@
 #include "kis_selection.h"
 #include <krita_export.h>
 
-class KisDefaultBounds;
 
 /**
  * KisPixelSelection contains a byte-map representation of a layer, where
@@ -44,7 +43,7 @@ public:
      * Create a new KisPixelSelection. This selection will not have a
      * parent paint device.
      */
-    KisPixelSelection(KisDefaultBounds * defaultBounds = 0);
+    KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds = 0);
 
     /**
      * Copy the selection
@@ -109,8 +108,8 @@ public:
 
     QVector<QPolygon> outline();
 
-    virtual void renderToProjection(KisPixelSelection* projection);
-    virtual void renderToProjection(KisPixelSelection* projection, const QRect& r);
+    virtual void renderToProjection(KisPaintDeviceSP projection);
+    virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);
 
 private:
     /**

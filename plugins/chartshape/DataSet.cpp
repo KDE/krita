@@ -90,6 +90,7 @@ public:
     ChartType    effectiveChartType() const;
     bool         isValidDataPoint( const QPoint &point ) const;
     QVariant     data( const CellRegion &region, int index, int role ) const;
+    QString      formatData( const CellRegion &region, int index, int role ) const;
 
     QBrush defaultBrush() const;
     QBrush defaultBrush( int section ) const;
@@ -182,6 +183,8 @@ public:
     bool symbolsActivated;
     int symbolID;
     int loadedDimensions;
+
+    KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat;
 };
 
 DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
@@ -207,12 +210,14 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     defaultLabel( i18n( "Series %1", dataSetNr + 1 ) ),
     symbolsActivated( true ),
     symbolID( 0 ),
-    loadedDimensions( 0 )
+    loadedDimensions( 0 ),
+    numericStyleFormat( 0 )
 {
 }
 
 DataSet::Private::~Private()
 {
+    delete numericStyleFormat;
 }
 
 KDChart::MarkerAttributes DataSet::Private::defaultMarkerAttributes() const
@@ -392,6 +397,23 @@ QVariant DataSet::Private::data( const CellRegion &region, int index, int role )
             data = model->data( index, role );
     }
     return data;
+}
+
+QString DataSet::Private::formatData( const CellRegion &region, int index, int role ) const
+{
+    QVariant v = data(region, index, role);
+    QString s;
+    if ( v.type() == QVariant::Double ) {
+        // Don't use v.toString() else a double/float would lose precision
+        // and something like "36.5207" would become "36.520660888888912".
+        QTextStream ts(&s);
+        //ts.setRealNumberNotation(QTextStream::FixedNotation);
+        //ts.setRealNumberPrecision();
+        ts << v.toDouble();
+    } else {
+        s = v.toString();
+    }
+    return numericStyleFormat ? KoOdfNumberStyles::format(s, *numericStyleFormat) : s;
 }
 
 QBrush DataSet::Private::defaultBrush() const
@@ -763,16 +785,7 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
         if ( !s.isEmpty() ) dataLabel += s + " ";
     }
     if ( type.number ) {
-        QVariant v = yData( section, Qt::DisplayRole );
-        QString s;
-        if ( v.type() == QVariant::Double ) {
-            // Don't use v.toString() else a double/float would lose precision
-            // and something like "36.5207" would become "36.520660888888912".
-            QTextStream ts(&s);
-            ts << v.toDouble();
-        } else {
-            s = v.toString().trimmed();
-        }
+        QString s = d->formatData( d->yDataRegion, section, Qt::DisplayRole );
         if ( !s.isEmpty() ) dataLabel += s + " ";
     }
     if ( type.percentage ) {
@@ -1286,9 +1299,23 @@ bool DataSet::loadOdf( const KoXmlElement &n,
 {
     d->symbolsActivated = false;
     KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
+    KoOdfStylesReader &stylesReader = odfLoadingContext.stylesReader();
     KoStyleStack &styleStack = odfLoadingContext.styleStack();
     styleStack.clear();
     odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
+
+    QString styleName = n.attributeNS(KoXmlNS::chart, "style-name", QString());
+    const KoXmlElement *stylElement = stylesReader.findStyle(styleName, "chart");
+    if (stylElement) {
+        const QString dataStyleName = stylElement->attributeNS(KoXmlNS::style, "data-style-name", QString());
+        if (!dataStyleName.isEmpty()) {
+            if (stylesReader.dataFormats().contains(dataStyleName)) {
+                QPair<KoOdfNumberStyles::NumericStyleFormat, KoXmlElement*> dataStylePair = stylesReader.dataFormats()[dataStyleName];
+                delete d->numericStyleFormat;
+                d->numericStyleFormat = new KoOdfNumberStyles::NumericStyleFormat(dataStylePair.first);
+            }
+        }
+    }
 
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
     // OOo assumes that if we use an internal model only, the columns are

@@ -42,7 +42,7 @@ enum selectionAction {
 class KisSelectionComponent;
 
 /**
- * KisSelection is a compisite object. It may contain an instance
+ * KisSelection is a composite object. It may contain an instance
  * of KisPixelSelection and a KisShapeSelection object. Both these
  * selections are merged into a projection of the KisSelection.
  *
@@ -65,7 +65,7 @@ public:
      * @param defaultBounds defines the bounds of the selection when
      * Select All is initiated.
      */
-    KisSelection(KisDefaultBounds * defaultBounds = 0);
+    KisSelection(KisDefaultBoundsBaseSP defaultBounds = 0);
 
     /**
      * Copy the selection. The selection components are copied, too.
@@ -109,7 +109,7 @@ public:
      * as pixel selection. You must read selection data from this
      * paint device only
      */
-    KisPixelSelectionSP projection() const;
+    KisPaintDeviceSP projection() const;
 
     /**
      * Updates the projection of the selection. You should call this
@@ -137,8 +137,8 @@ public:
     qint32 x() const;
     qint32 y() const;
 
-    KisDefaultBounds * defaultBounds() const;
-    void setDefaultBounds(KisDefaultBounds * bounds);
+    KisDefaultBoundsBaseSP defaultBounds() const;
+    void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
 
     void clear();
     KisPixelSelectionSP mergedPixelSelection();

@@ -142,9 +142,9 @@ void KisImagePyramid::setImageSize(qint32 w, qint32 h)
     /* nothing interesting */
 }
 
-void KisImagePyramid::updateCache(KisPPUpdateInfoSP info)
+void KisImagePyramid::updateCache(const QRect &dirtyImageRect)
 {
-    retrieveImageData(info->dirtyImageRect);
+    retrieveImageData(dirtyImageRect);
 }
 
 void KisImagePyramid::retrieveImageData(const QRect &rect)

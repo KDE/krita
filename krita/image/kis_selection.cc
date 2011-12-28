@@ -22,6 +22,7 @@
 
 #include "kis_selection_component.h"
 #include "kis_pixel_selection.h"
+
 #include "kis_default_bounds.h"
 
 struct KisSelection::Private {
@@ -34,17 +35,32 @@ struct KisSelection::Private {
 
     bool isDeselected; // true if the selection is empty, no pixels are selected
     bool isVisible; //false is the selection decoration should not be displayed
-    KisDefaultBounds * defaultBounds;
+    KisDefaultBoundsBaseSP defaultBounds;
     KisPixelSelectionSP projection;
     KisPixelSelectionSP pixelSelection;
     KisSelectionComponent* shapeSelection;
+
+    KisPixelSelectionSP getProjection()
+    {
+        if (pixelSelection && !shapeSelection) {
+            return pixelSelection;
+        }
+        else {
+            if(!projection) {
+                projection = new KisPixelSelection(defaultBounds);
+            }
+            return projection;
+        }
+
+    }
+
 };
 
-KisSelection::KisSelection(KisDefaultBounds * defaultBounds)
+KisSelection::KisSelection(KisDefaultBoundsBaseSP defaultBounds)
     : m_d(new Private)
 {
     if (!defaultBounds) {
-        defaultBounds = new KisDefaultBounds();
+        defaultBounds = new KisSelectionDefaultBounds();
     }
     m_d->defaultBounds = defaultBounds;
 }
@@ -79,9 +95,6 @@ KisSelection::KisSelection(const KisSelection& rhs)
 
 KisSelection::~KisSelection()
 {
-    if (!m_d->defaultBounds->parent()) {
-        delete m_d->defaultBounds;
-    }
     delete m_d->shapeSelection;
     delete m_d;
 }
@@ -125,24 +138,14 @@ KisPixelSelectionSP KisSelection::getOrCreatePixelSelection()
     return m_d->pixelSelection;
 }
 
-KisPixelSelectionSP KisSelection::projection() const
+KisPaintDeviceSP KisSelection::projection() const
 {
-    KisPixelSelectionSP nearestProjection;
-
-    if (m_d->pixelSelection && !m_d->shapeSelection) {
-        return m_d->pixelSelection;
-    }
-    else {
-        if(!m_d->projection) {
-            m_d->projection = new KisPixelSelection(m_d->defaultBounds);
-        }
-        return m_d->projection;
-    }
+    return m_d->getProjection();
 }
 
 void KisSelection::updateProjection(const QRect &rc)
 {
-    KisPixelSelectionSP currentProjection = projection();
+    KisPixelSelectionSP currentProjection = m_d->getProjection();
     if(currentProjection == m_d->pixelSelection) return;
 
     QRect updateRect = rc;
@@ -171,7 +174,7 @@ void KisSelection::updateProjection()
      * we cannot get an extent of KisSelectionComponent.
      */
 
-    KisPixelSelectionSP currentProjection = projection();
+    KisPixelSelectionSP currentProjection = m_d->getProjection();
     if(currentProjection == m_d->pixelSelection) return;
 
     currentProjection->clear();
@@ -213,37 +216,37 @@ bool KisSelection::isVisible()
 
 bool KisSelection::isTotallyUnselected(const QRect & r) const
 {
-    return projection()->isTotallyUnselected(r);
+    return m_d->getProjection()->isTotallyUnselected(r);
 }
 
 bool KisSelection::isProbablyTotallyUnselected(const QRect & r) const
 {
-    return projection()->isProbablyTotallyUnselected(r);
+    return m_d->getProjection()->isProbablyTotallyUnselected(r);
 }
 
 QRect KisSelection::selectedRect() const
 {
-    return projection()->selectedRect();
+    return m_d->getProjection()->selectedRect();
 }
 
 QRect KisSelection::selectedExactRect() const
 {
-    return projection()->selectedExactRect();
+    return m_d->getProjection()->selectedExactRect();
 }
 
 qint32 KisSelection::x() const
 {
-    return projection()->x();
+    return m_d->getProjection()->x();
 }
 
 qint32 KisSelection::y() const
 {
-    return projection()->y();
+    return m_d->getProjection()->y();
 }
 
 void KisSelection::setX(qint32 x)
 {
-    KisPixelSelectionSP currentProjection = projection();
+    KisPixelSelectionSP currentProjection = m_d->getProjection();
     qint32 delta = x - currentProjection->x();
     currentProjection->setX(x);
     if (m_d->pixelSelection) {
@@ -256,7 +259,7 @@ void KisSelection::setX(qint32 x)
 
 void KisSelection::setY(qint32 y)
 {
-    KisPixelSelectionSP currentProjection = projection();
+    KisPixelSelectionSP currentProjection = m_d->getProjection();
     qint32 delta = y - currentProjection->y();
     currentProjection->setY(y);
     if (m_d->pixelSelection) {
@@ -267,16 +270,16 @@ void KisSelection::setY(qint32 y)
     }
 }
 
-KisDefaultBounds * KisSelection::defaultBounds() const
+KisDefaultBoundsBaseSP KisSelection::defaultBounds() const
 {
     return m_d->defaultBounds;
 }
 
-void KisSelection::setDefaultBounds(KisDefaultBounds * bounds)
+void KisSelection::setDefaultBounds(KisDefaultBoundsBaseSP bounds)
 {
     m_d->defaultBounds = bounds;
 
-    projection()->setDefaultBounds(bounds);
+    m_d->getProjection()->setDefaultBounds(bounds);
     if(m_d->pixelSelection) {
         m_d->pixelSelection->setDefaultBounds(bounds);
     }
@@ -291,7 +294,7 @@ void KisSelection::clear()
     // FIXME: check whether this is safe
     delete m_d->shapeSelection;
 
-    KisPixelSelectionSP currentProjection = projection();
+    KisPixelSelectionSP currentProjection = m_d->getProjection();
     if(currentProjection != m_d->pixelSelection) {
         currentProjection->clear();
     }
@@ -304,7 +307,7 @@ KisPixelSelectionSP KisSelection::mergedPixelSelection()
 
 quint8 KisSelection::selected(qint32 x, qint32 y) const
 {
-    KisHLineConstIteratorPixel iter = projection()->createHLineConstIterator(x, y, 1);
+    KisHLineConstIteratorPixel iter = m_d->getProjection()->createHLineConstIterator(x, y, 1);
 
     const quint8 *pix = iter.rawData();
 

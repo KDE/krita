@@ -228,7 +228,13 @@ public:
     /**
      * Execute a shear transform on all layers in this image.
      */
-    void shear(double angleX, double angleY, KoUpdater *m_progress);
+    void shear(double angleX, double angleY);
+
+    /**
+     * Shear a node and all its children.
+     * @param angleX, @param angleY are given in degrees.
+     */
+    void shearNode(KisNodeSP node, double angleX, double angleY);
 
     /**
      * Convert the image and all its layers to the dstColorSpace
@@ -600,6 +606,9 @@ private:
     void emitSizeChanged();
 
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
+    void shearImpl(const QString &actionName, KisNodeSP rootNode,
+                   bool resizeImage, double angleX, double angleY,
+                   const QPointF &origin);
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
     static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());

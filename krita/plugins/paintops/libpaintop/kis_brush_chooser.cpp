@@ -281,6 +281,11 @@ void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
         }
 
         qreal newScale = newWidth / m_brush->width();
+
+        // If the size is increased, use at least the minimum that the slider doesn't interpret as zero
+        if (xPixels > 0 && newScale < 0.05) {
+            newScale  = 0.05;
+        }
         // signal valueChanged will care about call to slotSetItemScale
         m_slScale->setValue(newScale);
 }

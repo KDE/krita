@@ -1828,7 +1828,7 @@ void KoCharacterStyle::removeDuplicates(const KoCharacterStyle &other)
     this->d->stylesPrivate.removeDuplicates(other.d->stylesPrivate);
     // in case the char style has any of the following properties it also needs to have the fontFamily as otherwise 
     // these values will be ignored when loading according to the odf spec
-    if (hasProperty(QTextFormat::FontStyleHint) || hasProperty(QTextFormat::FontFixedPitch) || hasProperty(KoCharacterStyle::FontCharset)) {
+    if (!hasProperty(QTextFormat::FontFamily) && (hasProperty(QTextFormat::FontStyleHint) || hasProperty(QTextFormat::FontFixedPitch) || hasProperty(KoCharacterStyle::FontCharset))) {
         QString fontFamily = other.fontFamily();
         if (!fontFamily.isEmpty()) {
             setFontFamily(fontFamily);

@@ -50,6 +50,8 @@
 #include "colorspaces/rgb_u8/RgbU8ColorSpace.h"
 #include "colorspaces/gray_u16/GrayU16ColorSpace.h"
 #include "colorspaces/rgb_u16/RgbU16ColorSpace.h"
+#include "colorspaces/gray_u16_no_alpha/GrayU16NoAlphaColorSpace.h"
+#include "colorspaces/gray_u8_no_alpha/GrayU8NoAlphaColorSpace.h"
 
 void lcms2LogErrorHandlerFunction(cmsContext /*ContextID*/, cmsUInt32Number ErrorCode, const char *Text)
 {
@@ -128,15 +130,12 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     registry->addProfile(defProfile);
 
     // Gray without alpha 8
-//    KoColorSpaceFactory* csFactory = new KoGrayColorSpaceFactory();
-//    registry->add(csFactory);
-//
-//    KoHistogramProducerFactoryRegistry::instance()->add(
-//            new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-//            (KoID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), csFactory->id()));
+    KoColorSpaceFactory* csFactory = new KoGrayColorSpaceFactory();
+    registry->add(csFactory);
+
 
     // Gray without alpha 16
-    KoColorSpaceFactory* csFactory = new GrayU16ColorSpaceFactory();
+    csFactory = new GrayU16ColorSpaceFactory();
     registry->add(csFactory);
 
     KoHistogramProducerFactoryRegistry::instance()->add(

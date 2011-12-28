@@ -470,7 +470,7 @@ void KisPainter::bitBlt(qint32 dstX, qint32 dstY,
     the other bit blit operations. This one is longer than the rest in an effort to
     optimize speed and memory use */
     if (d->selection) {
-        KisPixelSelectionSP selectionProjection = d->selection->projection();
+        KisPaintDeviceSP selectionProjection = d->selection->projection();
         KisRandomConstAccessorPixel maskIt = selectionProjection->createRandomConstAccessor(dstX, dstY);
 
         while (rowsRemaining > 0) {
@@ -629,7 +629,7 @@ void KisPainter::bitBltOldData(qint32 dstX, qint32 dstY,
     the other bit blit operations. This one is longer than the rest in an effort to
     optimize speed and memory use */
     if (d->selection) {
-        KisPixelSelectionSP selectionProjection = d->selection->projection();
+        KisPaintDeviceSP selectionProjection = d->selection->projection();
         KisRandomConstAccessorPixel maskIt = selectionProjection->createRandomConstAccessor(dstX, dstY);
 
         while (rowsRemaining > 0) {
@@ -756,7 +756,7 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
     KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG(x, y);
 
     if(d->selection) {
-        KisPixelSelectionSP selectionProjection = d->selection->projection();
+        KisPaintDeviceSP selectionProjection = d->selection->projection();
         KisRandomConstAccessorSP maskIt = selectionProjection->createRandomConstAccessorNG(x, y);
 
         while(rowsRemaining > 0) {
@@ -881,7 +881,7 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     if (d->selection) {
         /* d->selection is a KisPaintDevice, so first a readBytes is performed to
         get the area of interest... */
-        KisPixelSelectionSP selectionProjection = d->selection->projection();
+        KisPaintDeviceSP selectionProjection = d->selection->projection();
         quint8* selBytes = new quint8[srcWidth * srcHeight * selectionProjection->pixelSize()];
         selectionProjection->readBytes(selBytes, dstX, dstY, srcWidth, srcHeight);
         d->paramInfo.maskRowStart  = selBytes;

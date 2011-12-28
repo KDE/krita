@@ -725,10 +725,9 @@ void KisSelectionManager::copyFromDevice(KisPaintDeviceSP device)
 
     if (selection) {
         // Apply selection mask.
-        KisPixelSelectionSP selectionProjection = selection->projection();
+        KisPaintDeviceSP selectionProjection = selection->projection();
         KisHLineIteratorSP layerIt = clip->createHLineIteratorNG(0, 0, r.width());
         KisHLineConstIteratorPixel selectionIt = selectionProjection->createHLineIterator(r.x(), r.y(), r.width());
-        //KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
 
         for (qint32 y = 0; y < r.height(); y++) {
 

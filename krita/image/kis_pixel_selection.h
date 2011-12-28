@@ -108,8 +108,8 @@ public:
 
     QVector<QPolygon> outline();
 
-    virtual void renderToProjection(KisPixelSelection* projection);
-    virtual void renderToProjection(KisPixelSelection* projection, const QRect& r);
+    virtual void renderToProjection(KisPaintDeviceSP projection);
+    virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);
 
 private:
     /**

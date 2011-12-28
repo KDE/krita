@@ -300,11 +300,6 @@ void KisSelection::clear()
     }
 }
 
-KisPixelSelectionSP KisSelection::mergedPixelSelection()
-{
-    return getOrCreatePixelSelection();
-}
-
 quint8 KisSelection::selected(qint32 x, qint32 y) const
 {
     KisHLineConstIteratorPixel iter = m_d->getProjection()->createHLineConstIterator(x, y, 1);

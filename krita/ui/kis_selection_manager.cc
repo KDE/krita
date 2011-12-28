@@ -622,7 +622,7 @@ void KisSelectionManager::applySelectionFilter(KisSelectionFilter *filter)
 
     KisSelectionTransaction transaction(filter->name(), image, selection);
 
-    KisPixelSelectionSP mergedSelection = selection->mergedPixelSelection();
+    KisPixelSelectionSP mergedSelection = selection->getOrCreatePixelSelection();
     QRect processingRect = filter->changeRect(mergedSelection->selectedExactRect());
 
     filter->process(mergedSelection, processingRect);

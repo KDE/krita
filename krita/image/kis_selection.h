@@ -72,6 +72,8 @@ public:
      */
     KisSelection(const KisSelection& rhs);
 
+    KisSelection &operator=(const KisSelection &rhs);
+
     /**
      * Delete the selection. The shape selection component is deleted, the
      * pixel selection component is contained in a shared pointer, so that
@@ -137,7 +139,6 @@ public:
     qint32 x() const;
     qint32 y() const;
 
-    KisDefaultBoundsBaseSP defaultBounds() const;
     void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
 
     void clear();

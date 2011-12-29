@@ -949,6 +949,8 @@ void KoToolManager::injectDeviceEvent(KoInputDeviceHandlerEvent * event)
 void KoToolManager::addDeferredToolFactory(KoToolFactoryBase *toolFactory)
 {
     ToolHelper *tool = new ToolHelper(toolFactory);
+    // make sure all plugins are loaded as otherwise we will not load them
+    d->setup();
     d->tools.append(tool);
 
     // connect to all tools so we can hear their button-clicks

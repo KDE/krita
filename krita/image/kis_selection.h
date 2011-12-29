@@ -123,6 +123,7 @@ public:
 
     void setDeselected(bool deselected);
     bool isDeselected();
+
     void setVisible(bool visible);
     bool isVisible();
 
@@ -132,10 +133,13 @@ public:
      */
     bool isTotallyUnselected(const QRect & r) const;
     bool isProbablyTotallyUnselected(const QRect & r) const;
+
     QRect selectedRect() const;
     QRect selectedExactRect() const;
+
     void setX(qint32 x);
     void setY(qint32 y);
+
     qint32 x() const;
     qint32 y() const;
 

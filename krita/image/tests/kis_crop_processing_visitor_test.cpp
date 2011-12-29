@@ -76,7 +76,6 @@ void KisCropProcessingVisitorTest::testCropTransparencyMask()
 
     QRect selectionRect(40,40,100,100);
     KisTransparencyMaskSP mask = new KisTransparencyMask();
-    mask->setSelection(new KisSelection());
     KisPixelSelectionSP pixelSelection = mask->selection()->getOrCreatePixelSelection();
     pixelSelection->select(selectionRect, MAX_SELECTED);
 

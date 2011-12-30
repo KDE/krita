@@ -157,28 +157,6 @@ public:
     KisSelectionSP globalSelection() const;
 
     /**
-     * Replaces the current global selection with globalSelection. If
-     * globalSelection is empty, a new selection object will be
-     * created that is by default completely deselected.
-     */
-    void setGlobalSelection(KisSelectionSP globalSelection = 0);
-
-    /**
-     * Removes the global selection.
-     */
-    void removeGlobalSelection();
-
-    /**
-     * @return the deselected global selection or 0 if no global selection was deselected
-     */
-    KisSelectionSP deselectedGlobalSelection();
-
-    /**
-     * Set deselected global selection
-     */
-    void setDeleselectedGlobalSelection(KisSelectionSP selection);
-
-    /**
      * Retrieve the next automatic layername (XXX: fix to add option to return Mask X)
      */
     QString nextLayerName() const;
@@ -618,6 +596,35 @@ private:
 
     friend class KisImageSetProjectionColorSpaceCommand;
     void setProjectionColorSpace(const KoColorSpace * colorSpace);
+
+
+    friend class KisDeselectGlobalSelectionCommand;
+    friend class KisReselectGlobalSelectionCommand;
+    friend class KisSetGlobalSelectionCommand;
+    friend class KisPixelSelectionTest;
+
+    /**
+     * Replaces the current global selection with globalSelection. If
+     * globalSelection is empty, a new selection object will be
+     * created that is by default completely deselected.
+     */
+    void setGlobalSelection(KisSelectionSP globalSelection = 0);
+
+    /**
+     * Removes the global selection.
+     */
+    void removeGlobalSelection();
+
+    /**
+     * @return the deselected global selection or 0 if no global selection was deselected
+     */
+    KisSelectionSP deselectedGlobalSelection();
+
+    /**
+     * Set deselected global selection
+     */
+    void setDeleselectedGlobalSelection(KisSelectionSP selection);
+
 private:
     class KisImagePrivate;
     KisImagePrivate * const m_d;

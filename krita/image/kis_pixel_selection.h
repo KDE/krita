@@ -88,13 +88,6 @@ public:
     bool isTotallyUnselected(const QRect & r) const;
 
     /**
-     * Tests if the the rect is totally outside the selection,
-     * but uses selectedRect instead of selectedExactRect, and
-     * this is faster (but might deliver false negatives!)
-     */
-    bool isProbablyTotallyUnselected(const QRect & r) const;
-
-    /**
      * Rough, but fastish way of determining the area
      * of the tiles used by the selection.
      */

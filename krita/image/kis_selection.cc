@@ -248,11 +248,6 @@ bool KisSelection::isTotallyUnselected(const QRect & r) const
     return m_d->getProjection()->isTotallyUnselected(r);
 }
 
-bool KisSelection::isProbablyTotallyUnselected(const QRect & r) const
-{
-    return m_d->getProjection()->isProbablyTotallyUnselected(r);
-}
-
 QRect KisSelection::selectedRect() const
 {
     return m_d->getProjection()->selectedRect();

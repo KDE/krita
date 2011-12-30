@@ -132,7 +132,6 @@ public:
      * of the underlying projection
      */
     bool isTotallyUnselected(const QRect & r) const;
-    bool isProbablyTotallyUnselected(const QRect & r) const;
 
     QRect selectedRect() const;
     QRect selectedExactRect() const;

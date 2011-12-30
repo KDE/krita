@@ -35,6 +35,7 @@
 #include <kdebug.h>
 
 #ifdef GHNS
+#include <attica/version.h>
 #include <knewstuff3/downloaddialog.h>
 #include <knewstuff3/uploaddialog.h>
 #endif
@@ -225,8 +226,14 @@ void KoResourceItemChooser::showButtons( bool show )
 void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUpload )
 {
 #ifdef GHNS
+
     QAbstractButton *button = d->buttonGroup->button(Button_GhnsDownload);
     showDownload ? button->show() : button->hide();
+
+    // attica < 2.9 is broken for upload, so don't show the upload button. 2.9 is released as 3.0
+    // because of binary incompatibility with 2.x.
+    if (LIBATTICA_VERSION_MAJOR < 3) return;
+
     button = d->buttonGroup->button(Button_GhnsUpload);
     showUpload ? button->show() : button->hide();
 #endif

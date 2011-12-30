@@ -99,7 +99,11 @@ public:
      */
     QRect selectedExactRect() const;
 
-    QVector<QPolygon> outline();
+    /**
+     * @brief outline returns the outline of the current selection
+     * @return a vector of polygons that can be used to draw the outline
+     */
+    QVector<QPolygon> outline() const;
 
     virtual void renderToProjection(KisPaintDeviceSP projection);
     virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);

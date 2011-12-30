@@ -224,7 +224,7 @@ QRect KisPixelSelection::selectedExactRect() const
     return exactBounds();
 }
 
-QVector<QPolygon> KisPixelSelection::outline()
+QVector<QPolygon> KisPixelSelection::outline() const
 {
     QRect selectionExtent = selectedExactRect();
     qint32 xOffset = selectionExtent.x();

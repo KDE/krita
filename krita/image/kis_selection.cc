@@ -138,6 +138,11 @@ bool KisSelection::hasShapeSelection() const
     return m_d->shapeSelection;
 }
 
+QVector<QPolygon> KisSelection::outline() const
+{
+    return m_d->getProjection()->outline();
+}
+
 KisPixelSelectionSP KisSelection::pixelSelection() const
 {
     return m_d->pixelSelection;

@@ -84,6 +84,8 @@ public:
     bool hasPixelSelection() const;
     bool hasShapeSelection() const;
 
+    QVector<QPolygon> outline() const;
+
     /**
      * return the pixel selection component of this selection or zero
      * if hasPixelSelection() returns false.

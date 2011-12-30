@@ -57,7 +57,7 @@ public:
      **/
     QVector<QPolygon> outline(quint8* buffer, qint32 xOffset, qint32 yOffset, qint32 width, qint32 height);
 
-    QVector<QPolygon> outline(KisPaintDeviceSP buffer, qint32 xOffset, qint32 yOffset, qint32 width, qint32 height);
+    QVector<QPolygon> outline(const KisPaintDevice *buffer, qint32 xOffset, qint32 yOffset, qint32 width, qint32 height);
 
 
     /**
@@ -73,14 +73,14 @@ private:
     };
 
     bool isOutlineEdge(EdgeType edge, qint32 x, qint32 y, quint8* buffer, qint32 bufWidth, qint32 bufHeight);
-    bool isOutlineEdge(EdgeType edge, qint32 x, qint32 y, KisPaintDeviceSP buffer, qint32 bufWidth, qint32 bufHeight);
+    bool isOutlineEdge(EdgeType edge, qint32 x, qint32 y, const KisPaintDevice *buffer, qint32 bufWidth, qint32 bufHeight);
 
     EdgeType nextEdge(EdgeType edge) {
         return edge == NoEdge ? edge : static_cast<EdgeType>((edge + 1) % 4);
     }
 
     void nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *col, quint8* buffer, qint32 bufWidth, qint32 bufHeight);
-    void nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *col, KisPaintDeviceSP buffer, qint32 bufWidth, qint32 bufHeight);
+    void nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *col, const KisPaintDevice *buffer, qint32 bufWidth, qint32 bufHeight);
 
     void appendCoordinate(QPolygon * path, int x, int y, EdgeType edge);
 

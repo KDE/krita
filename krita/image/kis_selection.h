@@ -24,12 +24,12 @@
 #include "krita_export.h"
 #include "kis_paint_device.h"
 
-enum selectionMode {
+enum SelectionMode {
     PIXEL_SELECTION,
     SHAPE_PROTECTION
 };
 
-enum selectionAction {
+enum SelectionAction {
     SELECTION_REPLACE,
     SELECTION_ADD,
     SELECTION_SUBTRACT,

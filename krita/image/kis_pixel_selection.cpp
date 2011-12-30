@@ -93,7 +93,7 @@ void KisPixelSelection::select(const QRect & rc, quint8 selectedness)
     }
 }
 
-void KisPixelSelection::applySelection(KisPixelSelectionSP selection, selectionAction action)
+void KisPixelSelection::applySelection(KisPixelSelectionSP selection, SelectionAction action)
 {
     switch (action) {
     case SELECTION_REPLACE:

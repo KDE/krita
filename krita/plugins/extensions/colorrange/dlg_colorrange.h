@@ -90,7 +90,7 @@ private:
 
     WdgColorRange * m_page;
     KisView2 * m_view;
-    selectionAction m_mode;
+    SelectionAction m_mode;
     QCursor m_oldCursor;
     KisSelectedTransaction *m_transaction;
     enumAction m_currentAction;

@@ -1249,18 +1249,6 @@ void KoCharacterStyle::setTextEmphasizeStyle(KoCharacterStyle::EmphasisStyle emp
     d->setProperty(TextEmphasizeStyle, emphasis);
 }
 
-KoCharacterStyle::FontPitchMode KoCharacterStyle::fontPitch() const
-{
-    if (hasProperty(FontPitch))
-        return (FontPitchMode) d->propertyInt(FontPitch);
-    return KoCharacterStyle::FixedWidth;
-}
-
-void KoCharacterStyle::setFontPitch(KoCharacterStyle::FontPitchMode mode)
-{
-    d->setProperty(KoCharacterStyle::FontPitch, mode);
-}
-
 void KoCharacterStyle::setPercentageFontSize(qreal percent)
 {
     d->setProperty(KoCharacterStyle::PercentageFontSize, percent);
@@ -1776,15 +1764,7 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         if (ok)
             setHyphenationPushCharCount(count);
     }
-    
-    if (styleStack.hasProperty(KoXmlNS::style, "font-pitch")) {
-        QString pitch = styleStack.property(KoXmlNS::style, "font-pitch");
-        if (pitch == "fixed")
-            setFontPitch(FixedWidth);
-        else if (pitch == "variable")
-            setFontPitch(VariableWidth);
-    }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "text-blinking")) {
         setBlinking(styleStack.property(KoXmlNS::style, "text-blinking") == "true");
     }
@@ -2116,11 +2096,6 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
             style.addProperty("fo:hyphenation-push-char-count", hyphenationPushCharCount(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::HyphenationRemainCharCount) {
             style.addProperty("fo:hyphenation-remain-char-count", hyphenationRemainCharCount(), KoGenStyle::TextType);
-        } else if (key == KoCharacterStyle::FontPitch) {
-            if (fontPitch() == FixedWidth)
-                style.addProperty("style:font-pitch", "fixed");
-            else
-                style.addProperty("style:font-pitch", "variable");
         } else if (key == KoCharacterStyle::Blink) {
             style.addProperty("style:text-blinking", blinking());
         }

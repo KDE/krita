@@ -63,7 +63,13 @@ class MergeStrategy;
  * meta information about the image. And it also provides some
  * functions to manipulate the whole image.
  */
-class KRITAIMAGE_EXPORT KisImage : public QObject, public KisStrokesFacade, public KisUpdatesFacade, public KisProjectionUpdateListener, public KisNodeFacade, public KisNodeGraphListener, public KisShared
+class KRITAIMAGE_EXPORT KisImage : public QObject,
+        public KisStrokesFacade,
+        public KisUpdatesFacade,
+        public KisProjectionUpdateListener,
+        public KisNodeFacade,
+        public KisNodeGraphListener,
+        public KisShared
 {
 
     Q_OBJECT
@@ -623,7 +629,7 @@ private:
     /**
      * Set deselected global selection
      */
-    void setDeleselectedGlobalSelection(KisSelectionSP selection);
+    void setDeselectedGlobalSelection(KisSelectionSP selection);
 
 private:
     class KisImagePrivate;

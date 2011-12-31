@@ -39,7 +39,7 @@ KisDeselectGlobalSelectionCommand::~KisDeselectGlobalSelectionCommand()
 void KisDeselectGlobalSelectionCommand::redo()
 {
     m_oldDeselectedSelection = m_image->deselectedGlobalSelection();
-    m_image->setDeleselectedGlobalSelection(m_image->globalSelection());
+    m_image->setDeselectedGlobalSelection(m_image->globalSelection());
 
     if (!m_newSelection) {
         m_image->setGlobalSelection();
@@ -55,7 +55,7 @@ void KisDeselectGlobalSelectionCommand::redo()
 void KisDeselectGlobalSelectionCommand::undo()
 {
     m_image->setGlobalSelection(m_image->deselectedGlobalSelection());
-    m_image->setDeleselectedGlobalSelection(m_oldDeselectedSelection);
+    m_image->setDeselectedGlobalSelection(m_oldDeselectedSelection);
 
     m_image->undoAdapter()->emitSelectionChanged();
 }

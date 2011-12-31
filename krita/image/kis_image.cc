@@ -83,9 +83,9 @@
 
 #ifdef SANITY_CHECKS
 #define SANITY_CHECK_LOCKED(name)                                       \
-    if(!locked()) qDebug() << "Locking policy failed:" << name          \
-                           << "has been called without the image"       \
-                              "being locked";
+    if (!locked()) warnKrita() << "Locking policy failed:" << name          \
+                               << "has been called without the image"       \
+                                  "being locked";
 #else
 #define SANITY_CHECK_LOCKED(name)
 #endif
@@ -121,9 +121,6 @@ public:
     KisActionRecorder *recorder;
 
     vKisAnnotationSP annotations;
-
-    KisSelectionSP globalSelection;
-    KisSelectionSP deselectedGlobalSelection;
 
     QAtomicInt disableUIUpdateSignals;
     KisImageSignalRouter *signalRouter;
@@ -214,30 +211,62 @@ void KisImage::nodeChanged(KisNode* node)
 
 KisSelectionSP KisImage::globalSelection() const
 {
-    return m_d->globalSelection;
+    KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
+    if (selectionMask) {
+        return selectionMask->selection();
+    }
+    else {
+        return 0;
+    }
 }
 
 void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
 {
-    if (globalSelection == 0)
-        m_d->globalSelection = new KisSelection(new KisDefaultBounds(this));
-    else
-        m_d->globalSelection = globalSelection;
+    KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
+    if (!selectionMask) {
+        selectionMask = new KisSelectionMask(this);
+        selectionMask->setActive(true);
+        Q_ASSERT(addNode(selectionMask, m_d->rootLayer, 0));
+    }
+    if (globalSelection) {
+        selectionMask->setSelection(globalSelection);
+    }
+    else {
+        selectionMask->setSelection(new KisSelection(new KisDefaultBounds(this)));
+    }
+    Q_ASSERT(m_d->rootLayer->childCount() > 0);
+    Q_ASSERT(m_d->rootLayer->selectionMask());
 }
 
 void KisImage::removeGlobalSelection()
 {
-    m_d->globalSelection = 0;
+    KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
+    if (selectionMask) {
+        removeNode(selectionMask);
+    }
 }
 
 KisSelectionSP KisImage::deselectedGlobalSelection()
 {
-    return m_d->deselectedGlobalSelection;
+    KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
+    if (selectionMask) {
+        return selectionMask->deselectedSelection();
+    }
+    else {
+        return 0;
+    }
 }
 
-void KisImage::setDeleselectedGlobalSelection(KisSelectionSP selection)
+void KisImage::setDeselectedGlobalSelection(KisSelectionSP selection)
 {
-    m_d->deselectedGlobalSelection = selection;
+    KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
+    if (!selectionMask) {
+        setGlobalSelection();
+        selectionMask = m_d->rootLayer->selectionMask();
+    }
+    Q_ASSERT(selectionMask);
+    selectionMask->setDeselectedSelection(selection);
+
 }
 
 KisBackgroundSP KisImage::backgroundPattern() const

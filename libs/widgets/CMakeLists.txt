@@ -1,7 +1,10 @@
 add_subdirectory( tests )
 add_subdirectory( pics )
 
-include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES} ${LIBATTICA_INCLUDE_DIR})
+include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES})
+if (LibAttica_FOUND)
+    include_directories(${LIBATTICA_INCLUDE_DIR})
+endif (LibAttica_FOUND)
 
 if(NEPOMUK)
     include(SopranoAddOntology)

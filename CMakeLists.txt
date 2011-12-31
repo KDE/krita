@@ -124,10 +124,12 @@ if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
     set(GHNS FALSE)
 endif(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
 
-find_package(LibAttica)
-if (NOT LibAttica_FOUND)
+macro_optional_find_package(LibAttica)
+macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")
+
+if (NOT LIBATTICA_FOUND)
     set(GHNS FALSE)
-endif (NOT LibAttica_FOUND)
+endif (NOT LIBATTICA_FOUND)
 
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
   set(NEPOMUK FALSE)

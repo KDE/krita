@@ -253,7 +253,20 @@ else(NOT MARBLE_FOUND)
     set(CAN_USE_MARBLE TRUE)
 endif(NOT MARBLE_FOUND)
 if( MARBLE_FOUND )
-   add_definitions( -DCAN_USE_MARBLE )
+    add_definitions( -DCAN_USE_MARBLE )
+    ##
+    ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
+    ## with commit ea177ca. This is for compatibility with older versions.
+    ##
+    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR})
+    if( MARBLECONTROLBOX_H )
+        execute_process(COMMAND grep -m 1 -e "setMarbleWidget" ${MARBLECONTROLBOX_H}
+                        OUTPUT_VARIABLE SETMARBLEWIDGET
+        )
+        if( SETMARBLEWIDGET )
+            add_definitions(-DHAVE_SETMARBLEWIDGET)
+        endif( SETMARBLEWIDGET)
+    endif( MARBLECONTROLBOX_H )
 endif( MARBLE_FOUND )
 
 

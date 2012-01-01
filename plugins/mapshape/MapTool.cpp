@@ -92,7 +92,7 @@ void MapTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shap
     }
 
     if (d->m_controlBox) {
-        d->m_controlBox->addMarbleWidget(d->m_shape->marbleWidget());
+        d->m_controlBox->setMarbleWidget(d->m_shape->marbleWidget());
     }
     useCursor(Qt::ArrowCursor);
 }
@@ -109,7 +109,7 @@ QWidget * MapTool::createOptionWidget()
     QGridLayout *layout = new QGridLayout(optionWidget);
 
     d->m_controlBox = new Marble::MarbleControlBox(optionWidget);
-    d->m_controlBox->addMarbleWidget(d->m_shape->marbleWidget());
+    d->m_controlBox->setMarbleWidget(d->m_shape->marbleWidget());
 
     layout->addWidget(d->m_controlBox, 0, 0);
 

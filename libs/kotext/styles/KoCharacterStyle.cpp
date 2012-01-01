@@ -1805,7 +1805,18 @@ bool KoCharacterStyle::compareCharacterProperties(const KoCharacterStyle &other)
 
 void KoCharacterStyle::removeDuplicates(const KoCharacterStyle &other)
 {
+    // In case the current style doesn't have the flag UseWindowFontColor set but the other has it set and they use the same color
+    // remove duplicates will remove the color. However to make it work correctly we need to store the color with the style so it
+    // will be loaded again. We don't store a use-window-font-color="false" as that is not compatible to the way OO/LO does work.
+    // So save the color and restore it after the remove duplicates
+    QBrush brush;
+    if (other.d->propertyBoolean(KoCharacterStyle::UseWindowFontColor) && !d->propertyBoolean(KoCharacterStyle::UseWindowFontColor)) {
+        brush = foreground();
+    }
     this->d->stylesPrivate.removeDuplicates(other.d->stylesPrivate);
+    if (brush.style() != Qt::NoBrush) {
+        setForeground(brush);
+    }
     // in case the char style has any of the following properties it also needs to have the fontFamily as otherwise 
     // these values will be ignored when loading according to the odf spec
     if (!hasProperty(QTextFormat::FontFamily) && (hasProperty(QTextFormat::FontStyleHint) || hasProperty(QTextFormat::FontFixedPitch) || hasProperty(KoCharacterStyle::FontCharset))) {

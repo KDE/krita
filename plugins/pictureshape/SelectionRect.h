@@ -40,7 +40,11 @@ public:
         TOP_HANDLE = 0x02,
         BOTTOM_HANDLE = 0x04,
         LEFT_HANDLE = 0x08,
-        RIGHT_HANDLE = 0x10
+        RIGHT_HANDLE = 0x10,
+        TOP_LEFT_HANDLE = TOP_HANDLE|LEFT_HANDLE,
+        TOP_RIGHT_HANDLE = TOP_HANDLE|RIGHT_HANDLE,
+        BOTTOM_LEFT_HANDLE = BOTTOM_HANDLE|LEFT_HANDLE,
+        BOTTOM_RIGHT_HANDLE = BOTTOM_HANDLE|RIGHT_HANDLE
     };
     
     SelectionRect(const QRectF& rect=QRectF(), qreal handleSize=10.0);

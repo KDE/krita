@@ -30,7 +30,7 @@ qreal calcScale(const QSizeF& imgSize, const QSizeF viewSize, bool fitView)
     qreal imgAspect = imgSize.width() / imgSize.height();
     
     if (fitView) {
-        if(viewAspect > imgAspect) {
+        if (viewAspect > imgAspect) {
             return viewSize.height() / imgSize.height();
         }
         else {
@@ -38,7 +38,7 @@ qreal calcScale(const QSizeF& imgSize, const QSizeF viewSize, bool fitView)
         }
     }
     else {
-        if(viewAspect > imgAspect) {
+        if (viewAspect > imgAspect) {
             return viewSize.width()  / imgSize.width();
         }
         else {

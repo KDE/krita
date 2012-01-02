@@ -135,13 +135,13 @@ SelectionRect::HandleFlags SelectionRect::getHandleFlags(int handleIndex) const
 {
     switch(handleIndex)
     {
-        case 0: return TOP_HANDLE|LEFT_HANDLE;
+        case 0: return TOP_LEFT_HANDLE;
         case 1: return TOP_HANDLE;
-        case 2: return TOP_HANDLE|RIGHT_HANDLE;
+        case 2: return TOP_RIGHT_HANDLE;
         case 3: return RIGHT_HANDLE;
-        case 4: return BOTTOM_HANDLE|RIGHT_HANDLE;
+        case 4: return BOTTOM_RIGHT_HANDLE;
         case 5: return BOTTOM_HANDLE;
-        case 6: return BOTTOM_HANDLE|LEFT_HANDLE;
+        case 6: return BOTTOM_LEFT_HANDLE;
         case 7: return LEFT_HANDLE;
     }
 
@@ -176,21 +176,21 @@ void SelectionRect::fixAspect(HandleFlags handle)
 
     case LEFT_HANDLE:
     case RIGHT_HANDLE:
-    case RIGHT_HANDLE|BOTTOM_HANDLE:
+    case BOTTOM_RIGHT_HANDLE:
         m_rect.setHeight((m_rect.width() / m_aConstr) * m_aspectRatio);
         break;
 
-    case RIGHT_HANDLE|TOP_HANDLE:
+    case TOP_RIGHT_HANDLE:
         m_rect.setHeight((m_rect.width() / m_aConstr) * m_aspectRatio);
         m_rect.moveBottomLeft(oldRect.bottomLeft());
         break;
 
-    case LEFT_HANDLE|BOTTOM_HANDLE:
+    case BOTTOM_LEFT_HANDLE:
         m_rect.setHeight((m_rect.width() / m_aConstr) * m_aspectRatio);
         m_rect.moveTopRight(oldRect.topRight());
         break;
 
-    case LEFT_HANDLE|TOP_HANDLE:
+    case TOP_LEFT_HANDLE:
         m_rect.setHeight((m_rect.width() / m_aConstr) * m_aspectRatio);
         m_rect.moveBottomRight(oldRect.bottomRight());
         break;

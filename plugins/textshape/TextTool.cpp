@@ -1428,10 +1428,10 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
     setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
     useCursor(Qt::IBeamCursor);
 
+    updateStyleManager();
     repaintSelection();
     updateSelectionHandler();
     updateActions();
-    updateStyleManager();
     if (m_specialCharacterDocker)
         m_specialCharacterDocker->setEnabled(true);
     readConfig();

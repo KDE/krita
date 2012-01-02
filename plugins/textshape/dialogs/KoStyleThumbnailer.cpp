@@ -87,7 +87,7 @@ QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, bool dirtyCache)
 
 QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool dirtyCache)
 {
-    if (!style) {
+    if (!style || style->name().isNull()) {
         return QPixmap();
     }
     if (size.isNull()) {
@@ -96,7 +96,7 @@ QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool 
     QString pixmapKey = "p_" + QString::number(style->styleId()) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
     QPixmap pm(size.width(), size.height());
 
-    if (d->pixmapCache.find(pixmapKey, &pm)) {
+    if (d->pixmapCache.find(pixmapKey, &pm) && !dirtyCache) {
         return pm;
     }
 
@@ -131,7 +131,7 @@ QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, bool dirtyCache)
 
 QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size, bool dirtyCache)
 {
-    if (!style) {
+    if (!style || style->name().isNull()) {
         return QPixmap();
     }
     if (size.isNull()) {

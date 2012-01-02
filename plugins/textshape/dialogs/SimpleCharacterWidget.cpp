@@ -97,8 +97,6 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
 
     widget.characterStyleCombo->setStylesModel(m_stylesModel);
 
-    connect(widget.characterStyleCombo, SIGNAL(characterStyleSelected(KoCharacterStyle*)), this, SIGNAL(characterStyleSelected(KoCharacterStyle*)));
-    connect(widget.characterStyleCombo, SIGNAL(characterStyleSelected(KoCharacterStyle*)), this, SIGNAL(doneWithFocus()));
     connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
     connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
     connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));

@@ -78,8 +78,8 @@ StylesCombo::StylesCombo(QWidget *parent)
     view()->viewport()->installEventFilter(this);
     StylesDelegate *delegate = new StylesDelegate();
     connect(delegate, SIGNAL(needsUpdate(QModelIndex)), m_view, SLOT(update(QModelIndex)));
-    connect(delegate, SIGNAL(styleManagerButtonClicked(QModelIndex)), this, SLOT(showDia()));
-    connect(delegate, SIGNAL(deleteStyleButtonClicked(QModelIndex)), this, SLOT(deleteStyle(QModelIndex)));
+    connect(delegate, SIGNAL(styleManagerButtonClicked(QModelIndex)), this, SLOT(slotShowDia(QModelIndex)));
+    connect(delegate, SIGNAL(deleteStyleButtonClicked(QModelIndex)), this, SLOT(slotDeleteStyle(QModelIndex)));
     connect(delegate, SIGNAL(clickedInItem(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
     setItemDelegate(delegate);
 
@@ -164,13 +164,6 @@ void StylesCombo::setLineEdit(QLineEdit *edit)
 
     if ( m_preview )
     {
-        // someone calling KComboBox::setEditable( false ) destroys our
-        // lineedit without us noticing. And KCompletionBase::delegate would
-        // be a dangling pointer then, so prevent that. Note: only do this
-        // when it is a KLineEdit!
-        connect(edit, SIGNAL(destroyed()), SLOT(lineEditDeleted()));
-
-        connect(m_preview, SIGNAL(returnPressed(const QString&)), SIGNAL(returnPressed(const QString&)));
         connect(m_preview, SIGNAL(resized()), this, SLOT(slotUpdatePreview()));
 
 //        m_preview->setTrapReturnKey( d->trapReturnKey );

@@ -47,10 +47,10 @@ qreal calcScale(const QSizeF& imgSize, const QSizeF viewSize, bool fitView)
     }
 }
 
-QRectF centerRect(const QRectF& rect, const QSizeF viewSize)
+QRectF centerRectHorizontally(const QRectF& rect, const QSizeF viewSize)
 {
     QSizeF diff = viewSize - rect.size();
-    return QRectF(diff.width() / 2.0, 0.0, rect.width(), rect.height());
+    return QRectF(diff.width() / 2.0, rect.y(), rect.width(), rect.height());
 }
 
 bool compareRects(const QRectF &a, const QRectF &b, qreal epsilon)
@@ -214,7 +214,7 @@ void CropWidget::calcImageRect()
     if (m_pictureShape) {
         QSizeF imageSize = m_pictureShape->imageData()->image().size();
         imageSize = imageSize * calcScale(imageSize, size(), true);
-        m_imageRect = centerRect(QRect(0, 0, imageSize.width(), imageSize.height()), size());
+        m_imageRect = centerRectHorizontally (QRect(0, 0, imageSize.width(), imageSize.height()), size());
         m_selectionRect.setAspectRatio(m_imageRect.width() / m_imageRect.height());
     }
     else {

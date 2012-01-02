@@ -549,6 +549,7 @@ QString KoTextWriter::Private::saveCharacterStyle(const QTextCharFormat &charFor
         KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "text", originalCharStyle != defaultCharStyle ? internalName : "" /*parent*/);
         if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
             style.setAutoStyleInStylesDotXml(true);
+
         autoStyle->saveOdf(style);
         generatedName = context.mainStyles().insert(style, "T");
     }

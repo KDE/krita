@@ -312,28 +312,49 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     KSharedConfigPtr configPtr = componentData.isValid() ? componentData.config() : KGlobal::config();
     d->recent->loadEntries(configPtr->group("RecentFiles"));
 
+
     createShellGUI();
     d->mainWindowGuiIsBuilt = true;
-    // Get screen geometry
-    const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-    QRect desk = QApplication::desktop()->availableGeometry(scnum);
 
-    // if the desktop is virtual then use virtual screen size
-    if (QApplication::desktop()->isVirtualDesktop())
-        desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen());
-
+    // if the user didn's specifiy the geometry on the command line (does anyone do that still?),
+    // we first figure out some good default size and restore the x,y position. See bug 285804Z.
     if (!initialGeometrySet()) {
-        // Default size
+
+        const int scnum = QApplication::desktop()->screenNumber(parentWidget());
+        QRect desk = QApplication::desktop()->availableGeometry(scnum);
+        // if the desktop is virtual then use virtual screen size
+        if (QApplication::desktop()->isVirtualDesktop()) {
+            desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen());
+            desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen(scnum));
+        }
+
+        quint32 x = desk.x();
+        quint32 y = desk.y();
+        quint32 w = 0;
+        quint32 h = 0;
+
+        // Default size -- maximize on small screens, something useful on big screens
         const int deskWidth = desk.width();
         if (deskWidth > 1024) {
             // a nice width, and slightly less than total available
             // height to componensate for the window decs
-            resize( ( deskWidth / 3 ) * 2, desk.height() - 50);
+            w = ( deskWidth / 3 ) * 2;
+            h = desk.height();
         }
         else {
-            resize( desk.size() );
+            w = desk.width();
+            h = desk.height();
         }
+        // KDE doesn't restore the x,y position, so let's do that ourselves
+        KConfigGroup cfg(KGlobal::config(), "MainWindow");
+        x = cfg.readEntry("ko_x", x);
+        y = cfg.readEntry("ko_y", y);
+        setGeometry(x, y, w, h);
     }
+
+    // Now ask kde to restore the size of the window; this could probably be replaced by
+    // QWidget::saveGeometry asnd QWidget::restoreGeometry, but let's stay with the KDE
+    // way of doing things.
     KConfigGroup config(KGlobal::config(), "MainWindow");
     restoreWindowSize( config );
 
@@ -342,6 +363,10 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
 KoMainWindow::~KoMainWindow()
 {
+    KConfigGroup cfg(KGlobal::config(), "MainWindow");
+    cfg.writeEntry("ko_x", frameGeometry().x());
+    cfg.writeEntry("ko_y", frameGeometry().y());
+
     // Explicitly delete the docker manager to ensure that it is deleted before the dockers
     delete d->dockerManager;
     d->dockerManager = 0;
@@ -1379,9 +1404,12 @@ void KoMainWindow::slotConfigureToolbars()
 
 void KoMainWindow::slotNewToolbarConfig()
 {
-    if (rootDocument())
+    if (rootDocument()) {
         applyMainWindowSettings(KGlobal::config()->group(rootDocument()->componentData().componentName()));
+    }
+
     KXMLGUIFactory *factory = guiFactory();
+    Q_UNUSED(factory);
 
     // Check if there's an active view
     if (!d->activeView)

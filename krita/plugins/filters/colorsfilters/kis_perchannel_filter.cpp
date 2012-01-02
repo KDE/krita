@@ -105,6 +105,11 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     m_page->curveWidget->blockSignals(false);
 }
 
+KisPerChannelConfigWidget::~KisPerChannelConfigWidget()
+{
+    delete m_histogram;
+}
+
 inline QPixmap KisPerChannelConfigWidget::createGradient(Qt::Orientation orient /*, int invert (not used yet) */)
 {
     int width;

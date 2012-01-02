@@ -70,11 +70,6 @@ KisGroupLayer::~KisGroupLayer()
 
 bool KisGroupLayer::allowAsChild(KisNodeSP node) const
 {
-    if (node->inherits("KisMask") && !parent())
-    {
-        return false;
-    }
-
     if (node->inherits("KisCloneLayer")) {
         KisNodeSP source = qobject_cast<KisCloneLayer*>(node.data())->copyFrom();
         if (source) {

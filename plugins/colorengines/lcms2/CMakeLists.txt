@@ -8,9 +8,7 @@ include_directories( ${PIGMENT_INCLUDES} ${LCMS2_INCLUDE_DIR} )
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/cmyk_u16
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/cmyk_u8
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/gray_u16
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/gray_u16_no_alpha
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/gray_u8
-    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/gray_u8_no_alpha
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/lab_u16
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/rgb_u16
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/rgb_u8
@@ -33,8 +31,6 @@ SET ( lcmsengine_SRCS
     colorspaces/gray_u8/GrayU8ColorSpace.cpp
     colorspaces/lab_u16/LabColorSpace.cpp
     colorspaces/xyz_u16/XyzU16ColorSpace.cpp
-    colorspaces/gray_u8_no_alpha/GrayU8NoAlphaColorSpace.cpp
-    colorspaces/gray_u16_no_alpha/GrayU16NoAlphaColorSpace.cpp
     colorspaces/rgb_u8/RgbU8ColorSpace.cpp
     colorspaces/gray_u16/GrayU16ColorSpace.cpp
     colorspaces/rgb_u16/RgbU16ColorSpace.cpp

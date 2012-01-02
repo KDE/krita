@@ -82,17 +82,10 @@ public:
     /**
      * Apply a selection to the selection using the specified selection mode
      */
-    void applySelection(KisPixelSelectionSP selection, selectionAction action);
+    void applySelection(KisPixelSelectionSP selection, SelectionAction action);
 
     /// Tests if the the rect is totally outside the selection
     bool isTotallyUnselected(const QRect & r) const;
-
-    /**
-     * Tests if the the rect is totally outside the selection,
-     * but uses selectedRect instead of selectedExactRect, and
-     * this is faster (but might deliver false negatives!)
-     */
-    bool isProbablyTotallyUnselected(const QRect & r) const;
 
     /**
      * Rough, but fastish way of determining the area
@@ -106,10 +99,14 @@ public:
      */
     QRect selectedExactRect() const;
 
-    QVector<QPolygon> outline();
+    /**
+     * @brief outline returns the outline of the current selection
+     * @return a vector of polygons that can be used to draw the outline
+     */
+    QVector<QPolygon> outline() const;
 
-    virtual void renderToProjection(KisPixelSelection* projection);
-    virtual void renderToProjection(KisPixelSelection* projection, const QRect& r);
+    virtual void renderToProjection(KisPaintDeviceSP projection);
+    virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);
 
 private:
     /**

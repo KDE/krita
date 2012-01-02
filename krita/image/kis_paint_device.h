@@ -447,7 +447,6 @@ public:
      * @param rect: only this rect will be used for the thumbnail
      *
      */
-
     virtual KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection *selection = 0, QRect rect = QRect()) const;
 
     /**

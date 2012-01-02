@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=Maps Report Plugin
+Name[ca]=Connector d'informes de mapes
+Name[et]=Aruande kaardiplugin
 Name[it]=Estensione rapporti mappe
 Name[nb]=Programtillegg for kartrapport
 Name[pt]='Plugin' de Relatório de Mapas
@@ -10,8 +12,10 @@ Name[uk]=Додаток карт звіту
 Name[x-test]=xxMaps Report Pluginxx
 Name[zh_TW]=地圖報告外掛程式
 Comment=Calligra Reports Maps Plugin
+Comment[ca]=Connector d'informes de maps del Calligra
 Comment[da]=Kort-plugin til Calligra Reports
 Comment[es]=Complemento de mapas de informes de Calligra
+Comment[et]=Calligra aruannete kaardiplugin
 Comment[it]=Estensione rapporti mappe di Calligra
 Comment[nb]=Kart-programtillegg for Calligra-rapporter
 Comment[pt]='Plugin' de Mapas dos Relatórios do Calligra

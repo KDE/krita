@@ -158,6 +158,10 @@ void KisFilterDialog::previewCheckBoxChange(int state)
 {
     d->mask->setVisible(state == Qt::Checked);
     updatePreview();
+    if (state != Qt::Checked) {
+        // update node to hide what remains from the filter mask
+        d->node->setDirty(d->node->extent());
+    }
 
     KConfigGroup group(KGlobal::config(), "filterdialog");
     group.writeEntry("showPreview", d->uiFilterDialog.checkBoxPreview->isChecked());

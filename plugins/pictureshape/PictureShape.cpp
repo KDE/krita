@@ -119,7 +119,7 @@ bool PictureShape::isPictureInProportion() const
     );
 
     qreal shapeAspect = size().width() / size().height();
-    qreal rectAspect  = clippingRectSize.width() / clippingRectSize.height();
+    qreal rectAspect = clippingRectSize.width() / clippingRectSize.height();
 
     return qAbs(shapeAspect - rectAspect) <= 0.025;
 }
@@ -136,7 +136,7 @@ QSize PictureShape::calcOptimalPixmapSize(const QSizeF& shapeSize, const QSizeF&
     qreal shapeAspect = shapeSize.width() / shapeSize.height();
     qreal scale = 1.0;
     
-    if(shapeAspect > imageAspect) {
+    if (shapeAspect > imageAspect) {
         scale = shapeSize.width()  / imageSize.width()  / m_clippingRect.width();
     }
     else {
@@ -154,17 +154,17 @@ ClippingRect PictureShape::parseClippingRectString(QString string) const
     
     if ((!string.isEmpty()) && string.startsWith("rect")) {
         QStringList points = string.replace("rect("," ").replace(QChar(')'), QChar(' ')).trimmed().split(",");
-        qreal       values[4] = { 0, 0, 0, 0 };
+        qreal values[4] = { 0, 0, 0, 0 };
         
         for (int i=0; i<points.size(); ++i) {
             values[i] = KoUnit::parseValue(points[i].trimmed(), 0.0);
         }
         
-        rect.top      = values[0];
-        rect.right    = values[1];
-        rect.bottom   = values[2];
-        rect.left     = values[3];
-        rect.uniform  = false;
+        rect.top = values[0];
+        rect.right = values[1];
+        rect.bottom = values[2];
+        rect.left = values[3];
+        rect.uniform = false;
         rect.inverted = true;
     }
 

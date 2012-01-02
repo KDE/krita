@@ -40,6 +40,11 @@ class PictureShape;
 
 namespace _Private
 {
+    /**
+     * This class acts as a proxy for the PictureShape class
+     * since it is not possible to add slots to it
+     * (MOC always complains)
+     */
     class PictureShapeProxy: public QObject
     {
         Q_OBJECT
@@ -54,6 +59,11 @@ namespace _Private
         PictureShape *m_pictureShape;
     };
 
+    /**
+     * This class will scale an image to a given size.
+     * Instances of this class can be executed in a thread pool
+     * therefore the scaling process can be done in the background
+     */
     class PixmapScaler: public QObject, public QRunnable
     {
         Q_OBJECT

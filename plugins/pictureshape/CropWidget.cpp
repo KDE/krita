@@ -26,6 +26,11 @@
 
 qreal calcScale(const QSizeF& imgSize, const QSizeF viewSize, bool fitView)
 {
+    if (qFuzzyCompare(imgSize.width(), qreal(0)) || qFuzzyCompare(imgSize.height(), qreal(0)) ||
+        qFuzzyCompare(viewSize.width(), qreal(0)) || qFuzzyCompare(viewSize.height(), qreal(0))) {
+        return 1;
+    }
+    
     qreal viewAspect = viewSize.width() / viewSize.height();
     qreal imgAspect = imgSize.width() / imgSize.height();
     

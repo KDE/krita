@@ -108,15 +108,15 @@ QWidget *PictureTool::createOptionWidget()
     
     updateControlElements();
     
-    connect(m_pictureToolUI->bnImageFile        , SIGNAL(clicked(bool))       , this, SLOT(changeUrlPressed()));
-    connect(m_pictureToolUI->cbAspect           , SIGNAL(toggled(bool))       , this, SLOT(aspectCheckBoxChanged(bool)));
-    connect(m_pictureToolUI->leftDoubleSpinBox  , SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
-    connect(m_pictureToolUI->rightDoubleSpinBox , SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
-    connect(m_pictureToolUI->topDoubleSpinBox   , SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
+    connect(m_pictureToolUI->bnImageFile, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
+    connect(m_pictureToolUI->cbAspect, SIGNAL(toggled(bool)), this, SLOT(aspectCheckBoxChanged(bool)));
+    connect(m_pictureToolUI->leftDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
+    connect(m_pictureToolUI->rightDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
+    connect(m_pictureToolUI->topDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
     connect(m_pictureToolUI->bottomDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
-    connect(m_pictureToolUI->bnFill             , SIGNAL(pressed())           , this, SLOT(fillButtonPressed()));
-    connect(m_pictureToolUI->cmbColorMode, SIGNAL(currentIndexChanged(int))    , this, SLOT(colorModeChanged(int)));
-    connect(m_pictureToolUI->cropWidget  , SIGNAL(sigCropRegionChnaged(QRectF)), this, SLOT(cropRegionChanged(QRectF)));
+    connect(m_pictureToolUI->bnFill, SIGNAL(pressed()), this, SLOT(fillButtonPressed()));
+    connect(m_pictureToolUI->cmbColorMode, SIGNAL(currentIndexChanged(int)), this, SLOT(colorModeChanged(int)));
+    connect(m_pictureToolUI->cropWidget, SIGNAL(sigCropRegionChnaged(QRectF)), this, SLOT(cropRegionChanged(QRectF)));
     
     return m_pictureToolUI;
 }
@@ -124,11 +124,11 @@ QWidget *PictureTool::createOptionWidget()
 void PictureTool::updateControlElements()
 {
     if (m_pictureshape) {
-        QSizeF                  imageSize = m_pictureshape->imageData()->imageSize();
+        QSizeF imageSize = m_pictureshape->imageData()->imageSize();
         PictureShape::ColorMode mode      = m_pictureshape->colorMode();
-        ClippingRect            clippingRect(m_pictureshape->cropRect());
+        ClippingRect clippingRect(m_pictureshape->cropRect());
 
-        clippingRect.right  = 1.0 - clippingRect.right;
+        clippingRect.right = 1.0 - clippingRect.right;
         clippingRect.bottom = 1.0 - clippingRect.bottom;
         clippingRect.scale(imageSize);
 
@@ -138,13 +138,13 @@ void PictureTool::updateControlElements()
         m_pictureToolUI->cbAspect->setChecked(m_pictureshape->isPictureInProportion());
         m_pictureToolUI->cmbColorMode->setCurrentIndex(m_pictureToolUI->cmbColorMode->findData(mode));
 
-        m_pictureToolUI->leftDoubleSpinBox->setRange  (0.0, imageSize.width());
-        m_pictureToolUI->rightDoubleSpinBox->setRange (0.0, imageSize.width());
-        m_pictureToolUI->topDoubleSpinBox->setRange   (0.0, imageSize.height());
+        m_pictureToolUI->leftDoubleSpinBox->setRange(0.0, imageSize.width());
+        m_pictureToolUI->rightDoubleSpinBox->setRange(0.0, imageSize.width());
+        m_pictureToolUI->topDoubleSpinBox->setRange(0.0, imageSize.height());
         m_pictureToolUI->bottomDoubleSpinBox->setRange(0.0, imageSize.height());
-        m_pictureToolUI->leftDoubleSpinBox->setValue  (clippingRect.left);
-        m_pictureToolUI->rightDoubleSpinBox->setValue (clippingRect.right);
-        m_pictureToolUI->topDoubleSpinBox->setValue   (clippingRect.top);
+        m_pictureToolUI->leftDoubleSpinBox->setValue(clippingRect.left);
+        m_pictureToolUI->rightDoubleSpinBox->setValue(clippingRect.right);
+        m_pictureToolUI->topDoubleSpinBox->setValue(clippingRect.top);
         m_pictureToolUI->bottomDoubleSpinBox->setValue(clippingRect.bottom);
         m_pictureToolUI->blockAllSignals(false);
     }
@@ -165,11 +165,11 @@ void PictureTool::changeUrlPressed()
 void PictureTool::cropEditFieldsChanged()
 {
     ClippingRect clippingRect;
-    clippingRect.left     = m_pictureToolUI->leftDoubleSpinBox->value();
-    clippingRect.right    = m_pictureToolUI->rightDoubleSpinBox->value();
-    clippingRect.top      = m_pictureToolUI->topDoubleSpinBox->value();
-    clippingRect.bottom   = m_pictureToolUI->bottomDoubleSpinBox->value();
-    clippingRect.uniform  = false;
+    clippingRect.left = m_pictureToolUI->leftDoubleSpinBox->value();
+    clippingRect.right = m_pictureToolUI->rightDoubleSpinBox->value();
+    clippingRect.top = m_pictureToolUI->topDoubleSpinBox->value();
+    clippingRect.bottom = m_pictureToolUI->bottomDoubleSpinBox->value();
+    clippingRect.uniform = false;
     clippingRect.inverted = true;
     clippingRect.normalize(m_pictureshape->imageData()->imageSize());
         

@@ -32,9 +32,9 @@ SelectionRect::SelectionRect(const QRectF &rect, qreal handleSize):
     m_currentHandle(0)
 {
     m_lConstr = -std::numeric_limits<qreal>::infinity();
-    m_rConstr =  std::numeric_limits<qreal>::infinity();
+    m_rConstr = std::numeric_limits<qreal>::infinity();
     m_tConstr = -std::numeric_limits<qreal>::infinity();
-    m_bConstr =  std::numeric_limits<qreal>::infinity();
+    m_bConstr = std::numeric_limits<qreal>::infinity();
 }
 
 void SelectionRect::setRect(const QRectF &rect)
@@ -71,7 +71,7 @@ void SelectionRect::setConstrainingAspectRatio(qreal aspect)
 
 bool SelectionRect::beginDragging(const QPointF &pos)
 {
-    m_tempPos       = pos;
+    m_tempPos = pos;
     m_currentHandle = getHandleFlags(pos);
     return bool(m_currentHandle);
 }
@@ -118,7 +118,7 @@ void SelectionRect::doDragging(const QPointF &pos)
 void SelectionRect::finishDragging()
 {
     m_currentHandle = 0;
-    m_rect          = m_rect.normalized();
+    m_rect = m_rect.normalized();
 }
 
 SelectionRect::HandleFlags SelectionRect::getHandleFlags(const QPointF &pos) const
@@ -151,13 +151,13 @@ SelectionRect::HandleFlags SelectionRect::getHandleFlags(int handleIndex) const
 QRectF SelectionRect::getHandleRect(HandleFlags handle) const
 {
     qreal x = (m_rect.left() + m_rect.right()) / 2.0;
-    qreal y = (m_rect.top()  + m_rect.bottom()) / 2.0;
+    qreal y = (m_rect.top() + m_rect.bottom()) / 2.0;
     qreal w = m_handleSize;
     qreal h = m_handleSize * m_aspectRatio;
 
-    x = (handle & LEFT_HANDLE  ) ? m_rect.left()   : x;
-    y = (handle & TOP_HANDLE   ) ? m_rect.top()    : y;
-    x = (handle & RIGHT_HANDLE ) ? m_rect.right()  : x;
+    x = (handle & LEFT_HANDLE) ? m_rect.left() : x;
+    y = (handle & TOP_HANDLE) ? m_rect.top() : y;
+    x = (handle & RIGHT_HANDLE) ? m_rect.right() : x;
     y = (handle & BOTTOM_HANDLE) ? m_rect.bottom() : y;
 
     return QRectF(x-(w/2.0), y-(h/2.0), w, h);
@@ -205,8 +205,13 @@ void SelectionRect::fixAspect(HandleFlags handle)
         m_rect.setBottom(qBound(m_tConstr, m_rect.bottom(), m_bConstr));
         fixAspect(BOTTOM_HANDLE);
 
-        if(handle & LEFT_HANDLE)  { m_rect.moveTopRight(oldRect.topRight()); }
-        if(handle & RIGHT_HANDLE) { m_rect.moveTopLeft(oldRect.topLeft());   }
+        if(handle & LEFT_HANDLE) {
+            m_rect.moveTopRight(oldRect.topRight());
+        }
+        
+        if(handle & RIGHT_HANDLE) {
+            m_rect.moveTopLeft(oldRect.topLeft());
+        }
     }
 
     if (m_rect.left() < m_lConstr || m_rect.left() > m_rConstr) {

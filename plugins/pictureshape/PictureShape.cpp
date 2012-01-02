@@ -60,7 +60,7 @@ QString generate_key(qint64 key, const QSize & size)
 _Private::PixmapScaler::PixmapScaler(PictureShape* pictureShape, const QSize& pixmapSize):
     m_size(pixmapSize)
 {
-    m_image    = pictureShape->imageData()->image();
+    m_image = pictureShape->imageData()->image();
     m_imageKey = pictureShape->imageData()->key();
     connect(this, SIGNAL(finished(QString,QImage)), &pictureShape->m_proxy, SLOT(setImage(QString,QImage)));
 }
@@ -114,7 +114,7 @@ QRectF PictureShape::cropRect() const
 bool PictureShape::isPictureInProportion() const
 {
     QSizeF clippingRectSize(
-        imageData()->imageSize().width()  * m_clippingRect.width(),
+        imageData()->imageSize().width() * m_clippingRect.width(),
         imageData()->imageSize().height() * m_clippingRect.height()
     );
 
@@ -134,10 +134,14 @@ QSize PictureShape::calcOptimalPixmapSize(const QSizeF& shapeSize, const QSizeF&
 {
     qreal imageAspect = imageSize.width() / imageSize.height();
     qreal shapeAspect = shapeSize.width() / shapeSize.height();
-    qreal scale       = 1.0;
+    qreal scale = 1.0;
     
-    if(shapeAspect > imageAspect) { scale = shapeSize.width()  / imageSize.width()  / m_clippingRect.width();  }
-    else                          { scale = shapeSize.height() / imageSize.height() / m_clippingRect.height(); }
+    if(shapeAspect > imageAspect) {
+        scale = shapeSize.width()  / imageSize.width()  / m_clippingRect.width();
+    }
+    else {
+        scale = shapeSize.height() / imageSize.height() / m_clippingRect.height();
+    }
     
     scale = qMin(1.0, scale); // prevent upscaling
     return (imageSize * scale).toSize();
@@ -338,13 +342,13 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
     
     rect.normalize(imageSize);
     rect.bottom = 1.0 - rect.bottom;
-    rect.right  = 1.0 - rect.right;
+    rect.right = 1.0 - rect.right;
     
     style.addProperty("fo:clip", QString("rect(%1pt, %2pt, %3pt, %4pt)")
-        .arg(rect.top    * imageSize.height())
-        .arg(rect.right  * imageSize.width())
+        .arg(rect.top * imageSize.height())
+        .arg(rect.right * imageSize.width())
         .arg(rect.bottom * imageSize.height())
-        .arg(rect.left   * imageSize.width())
+        .arg(rect.left * imageSize.width())
     );
     
     return KoShape::saveStyle(style, context);

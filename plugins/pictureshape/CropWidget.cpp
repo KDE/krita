@@ -27,15 +27,23 @@
 qreal calcScale(const QSizeF& imgSize, const QSizeF viewSize, bool fitView)
 {
     qreal viewAspect = viewSize.width() / viewSize.height();
-    qreal imgAspect  = imgSize.width() / imgSize.height();
+    qreal imgAspect = imgSize.width() / imgSize.height();
     
     if (fitView) {
-        if(viewAspect > imgAspect) { return viewSize.height() / imgSize.height(); }
-        else                       { return viewSize.width()  / imgSize.width();  }
+        if(viewAspect > imgAspect) {
+            return viewSize.height() / imgSize.height();
+        }
+        else {
+            return viewSize.width()  / imgSize.width();
+        }
     }
     else {
-        if(viewAspect > imgAspect) { return viewSize.width()  / imgSize.width();  }
-        else                       { return viewSize.height() / imgSize.height(); }
+        if(viewAspect > imgAspect) {
+            return viewSize.width()  / imgSize.width();
+        }
+        else {
+            return viewSize.height() / imgSize.height();
+        }
     }
 }
 
@@ -49,7 +57,7 @@ bool compareRects(const QRectF &a, const QRectF &b, qreal epsilon)
 {
     qreal x = qAbs(a.x() - b.x());
     qreal y = qAbs(a.y() - b.y());
-    qreal w = qAbs(a.width()  - b.width());
+    qreal w = qAbs(a.width() - b.width());
     qreal h = qAbs(a.height() - b.height());
     
     return x <= epsilon && y <= epsilon && w <= epsilon && h <= epsilon;
@@ -74,7 +82,7 @@ void CropWidget::paintEvent(QPaintEvent *event)
         return;
     
     QPainter painter(this);
-    QImage   image = m_pictureShape->imageData()->image();
+    QImage image = m_pictureShape->imageData()->image();
 
     painter.translate(m_imageRect.topLeft());
     painter.scale(m_imageRect.width(), m_imageRect.height());
@@ -95,7 +103,7 @@ void CropWidget::mousePressEvent(QMouseEvent *event)
 
 void CropWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    QPointF                    pos   = toUniformCoord(event->posF());
+    QPointF pos = toUniformCoord(event->posF());
     SelectionRect::HandleFlags flags = m_selectionRect.getHandleFlags(pos);
     
     switch (flags)
@@ -205,9 +213,11 @@ void CropWidget::calcImageRect()
 {
     if (m_pictureShape) {
         QSizeF imageSize = m_pictureShape->imageData()->image().size();
-        imageSize   = imageSize * calcScale(imageSize, size(), true);
+        imageSize = imageSize * calcScale(imageSize, size(), true);
         m_imageRect = centerRect(QRect(0, 0, imageSize.width(), imageSize.height()), size());
         m_selectionRect.setAspectRatio(m_imageRect.width() / m_imageRect.height());
     }
-    else m_imageRect = QRectF();
+    else {
+        m_imageRect = QRectF();
+    }
 }

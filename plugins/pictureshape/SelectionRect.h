@@ -36,15 +36,15 @@ public:
     
     enum PositionInfo
     {
-        INSIDE_RECT   = 0x01,
-        TOP_HANDLE    = 0x02,
+        INSIDE_RECT = 0x01,
+        TOP_HANDLE = 0x02,
         BOTTOM_HANDLE = 0x04,
-        LEFT_HANDLE   = 0x08,
-        RIGHT_HANDLE  = 0x10
+        LEFT_HANDLE = 0x08,
+        RIGHT_HANDLE = 0x10
     };
     
     SelectionRect(const QRectF& rect=QRectF(), qreal handleSize=10.0);
-
+    
     void setRect(const QRectF &rect);
     void setHandleSize(qreal size);
     void setAspectRatio(qreal aspect);
@@ -54,8 +54,8 @@ public:
     void doDragging(const QPointF &pos);
     void finishDragging();
 
-    int    getNumHandles() const { return 8;      }
-    QRectF getRect      () const { return m_rect; }
+    int getNumHandles() const { return 8; }
+    QRectF getRect() const { return m_rect; }
 
     HandleFlags getHandleFlags(const QPointF &pos) const;
     HandleFlags getHandleFlags(int handleIndex) const;

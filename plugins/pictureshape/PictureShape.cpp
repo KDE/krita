@@ -343,13 +343,15 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
     rect.normalize(imageSize);
     rect.bottom = 1.0 - rect.bottom;
     rect.right = 1.0 - rect.right;
-    
-    style.addProperty("fo:clip", QString("rect(%1pt, %2pt, %3pt, %4pt)")
-        .arg(rect.top * imageSize.height())
-        .arg(rect.right * imageSize.width())
-        .arg(rect.bottom * imageSize.height())
-        .arg(rect.left * imageSize.width())
-    );
+
+    if (!qFuzzyCompare(rect.left + rect.right + rect.top + rect.bottom, qreal(0))) {
+        style.addProperty("fo:clip", QString("rect(%1pt, %2pt, %3pt, %4pt)")
+            .arg(rect.top * imageSize.height())
+            .arg(rect.right * imageSize.width())
+            .arg(rect.bottom * imageSize.height())
+            .arg(rect.left * imageSize.width())
+        );
+    }
     
     return KoShape::saveStyle(style, context);
 }

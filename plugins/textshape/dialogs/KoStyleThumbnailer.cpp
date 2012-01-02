@@ -113,9 +113,15 @@ QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool 
     cursor.setBlockFormat(QTextBlockFormat());
     cursor.setBlockCharFormat(QTextCharFormat());
     cursor.setCharFormat(QTextCharFormat());
-    cursor.insertText(clone->name());
     QTextBlock block = cursor.block();
     clone->applyStyle(block, true);
+
+    KoCharacterStyle *charStyle = static_cast<KoCharacterStyle*>(clone);
+    QTextCharFormat format;
+    if (charStyle) {
+        charStyle->applyStyle(format);
+    }
+    cursor.insertText(clone->name(), format);
 
     layoutThumbnail(size, pm);
 

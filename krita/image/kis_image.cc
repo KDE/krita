@@ -703,21 +703,12 @@ void KisImage::assignImageProfile(const KoColorProfile *profile)
 {
     if(!profile) return;
 
-    undoAdapter()->beginMacro(i18n("Assign Profile"));
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-
     const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     const KoColorSpace *srcCs = colorSpace();
 
     KisChangeProfileVisitor visitor(srcCs, dstCs);
     m_d->rootLayer->accept(visitor);
 
-    undoAdapter()->addCommand(new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstCs));
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-    undoAdapter()->endMacro();
-
-    setModified();
-    m_d->signalRouter->emitNotification(ProfileChangedSignal);
 }
 
 void KisImage::convertProjectionColorSpace(const KoColorSpace *dstColorSpace)

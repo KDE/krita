@@ -244,6 +244,9 @@ public:
      *
      * This is essential if you have loaded an image that didn't
      * have an embedded profile to which you want to attach the right profile.
+     *
+     * This does not create an undo action; only call it when creating or
+     * loading an image.
      */
     void assignImageProfile(const KoColorProfile *profile);
 

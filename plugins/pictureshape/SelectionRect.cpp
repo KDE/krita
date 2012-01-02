@@ -109,7 +109,7 @@ void SelectionRect::doDragging(const QPointF &pos)
             m_rect.setRight(qBound(m_lConstr, pos.x(), m_rConstr));
         }
 
-        if(m_aConstr != 0.0) {
+        if (m_aConstr != 0.0) {
             fixAspect(m_currentHandle);
         }
     }
@@ -167,7 +167,7 @@ void SelectionRect::fixAspect(HandleFlags handle)
 {
     QRectF oldRect = m_rect;
 
-    switch(handle)
+    switch (handle)
     {
     case TOP_HANDLE:
     case BOTTOM_HANDLE:
@@ -205,11 +205,11 @@ void SelectionRect::fixAspect(HandleFlags handle)
         m_rect.setBottom(qBound(m_tConstr, m_rect.bottom(), m_bConstr));
         fixAspect(BOTTOM_HANDLE);
 
-        if(handle & LEFT_HANDLE) {
+        if (handle & LEFT_HANDLE) {
             m_rect.moveTopRight(oldRect.topRight());
         }
         
-        if(handle & RIGHT_HANDLE) {
+        if (handle & RIGHT_HANDLE) {
             m_rect.moveTopLeft(oldRect.topLeft());
         }
     }

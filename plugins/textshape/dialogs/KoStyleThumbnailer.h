@@ -4,6 +4,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009-2011 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -50,31 +51,36 @@ public:
     /**
      * Return a thumbnail representing the style
      * The thunbnail is the size specified with @fn setThumbnailSize or 250*48 pt if no size was provided.
+     * If @param dirtyCache is true, do not return the cached thumbnail if it exist, but recreate a new one.
      * The created thumbnail is cached.
      */
-    QPixmap thumbnail(KoParagraphStyle *style);
+    QPixmap thumbnail(KoParagraphStyle *style, bool dirtyCache = false);
 
     /**
      * @returns a thumbnail representing the @param style, constrained into the @param size.
      * If the given @param size is too small, the font size will be decreased, so the thumbnail fits.
      * The real font size is indicated in this case.
+     * If @param dirtyCache is true, do not return the cached thumbnail if it exist, but recreate a new one.
      * The created thumbnail is cached.
      */
-    QPixmap thumbnail(KoParagraphStyle *style, QSize size);
+    QPixmap thumbnail(KoParagraphStyle *style, QSize size, bool dirtyCache = false);
 
     /**
      * Return a thumbnail representing the style
      * The thunbnail is the size specified with @fn setThumbnailSize or 250*48 pt if no size was provided.
+     * If @param dirtyCache is true, do not return the cached thumbnail if it exist, but recreate a new one.
      * The created thumbnail is cached.
      */
-    QPixmap thumbnail(KoCharacterStyle *style);
+    QPixmap thumbnail(KoCharacterStyle *style, bool dirtyCache = false);
 
     /**
      * @returns a thumbnail representing the @param style, constrained into the @param size.
      * If the given @param size is too small, the font size will be decreased, so the thumbnail fits.
      * The real font size is indicated in this case.
+     * If @param dirtyCache is true, do not return the cached thumbnail if it exist, but recreate a new one.
+     * The created thumbnail is cached.
      */
-    QPixmap thumbnail(KoCharacterStyle *style, QSize size);
+    QPixmap thumbnail(KoCharacterStyle *style, QSize size, bool dirtyCache = false);
 
     /**
      * Sets the size of the thumbnails returned by the @fn thumbnail with no size arguments.

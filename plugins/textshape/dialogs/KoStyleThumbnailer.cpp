@@ -4,7 +4,7 @@
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009,2011 KO GmbH <cbo@kogmbh.com>
- * Copyright (C) 2011 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -80,12 +80,12 @@ KoStyleThumbnailer::~KoStyleThumbnailer()
     delete d;
 }
 
-QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style)
+QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, bool dirtyCache)
 {
-    return thumbnail(style, d->defaultSize);
+    return thumbnail(style, d->defaultSize, dirtyCache);
 }
 
-QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size)
+QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool dirtyCache)
 {
     if (!style) {
         return QPixmap();
@@ -124,12 +124,12 @@ QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size)
     return pm;
 }
 
-QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style)
+QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, bool dirtyCache)
 {
-    return thumbnail(style, d->defaultSize);
+    return thumbnail(style, d->defaultSize, dirtyCache);
 }
 
-QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size)
+QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size, bool dirtyCache)
 {
     if (!style) {
         return QPixmap();
@@ -140,7 +140,7 @@ QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size)
     QString pixmapKey = "c_" + QString::number(style->styleId()) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
     QPixmap pm(size.width(), size.height());
 
-    if (d->pixmapCache.find(pixmapKey, &pm)) {
+    if (d->pixmapCache.find(pixmapKey, &pm) && !dirtyCache) {
         return pm;
     }
 
@@ -148,13 +148,13 @@ QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size)
 
     KoCharacterStyle *clone = style->clone();
     QTextCursor cursor(d->pixmapHelperDocument);
+    QTextCharFormat format;
+    clone->applyStyle(format);
     cursor.select(QTextCursor::Document);
     cursor.setBlockFormat(QTextBlockFormat());
     cursor.setBlockCharFormat(QTextCharFormat());
     cursor.setCharFormat(QTextCharFormat());
-    cursor.insertText(clone->name());
-    QTextBlock block = cursor.block();
-    clone->applyStyle(block);
+    cursor.insertText(clone->name(), format);
 
     layoutThumbnail(size, pm);
 

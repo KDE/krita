@@ -43,6 +43,7 @@ public:
 public slots:
     void setStyleManager(KoStyleManager *sm);
     void setCurrentFormat(const QTextCharFormat& format);
+    void setCurrentBlockFormat(const QTextBlockFormat &format);
 
 private slots:
     void fontFamilyActivated(int index);
@@ -64,6 +65,7 @@ private:
     int m_lastFontSizeIndex;
     TextTool *m_tool;
     QTextCharFormat m_currentCharFormat;
+    QTextBlockFormat m_currentBlockFormat;
     KoStyleThumbnailer *m_thumbnailer;
 //    StylesWidget *m_stylePopup;
     StylesModel *m_stylesModel;

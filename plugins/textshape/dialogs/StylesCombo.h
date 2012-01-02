@@ -50,6 +50,7 @@ public:
 public slots:
 //    void setCurrentFormat(const QTextBlockFormat &format);
 //    void setCurrentFormat(const QTextCharFormat &format);
+    void slotUpdatePreview();
 
 signals:
 //    void selectionChanged(QModelIndex index);
@@ -67,7 +68,6 @@ private slots:
     void slotShowDia(QModelIndex);
     void slotSelectionChanged(int index);
     void slotItemClicked(QModelIndex);
-    void slotPreviewResized();
 
 private:
     StylesModel *m_stylesModel;

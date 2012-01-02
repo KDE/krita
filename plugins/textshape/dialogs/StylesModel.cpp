@@ -48,7 +48,7 @@ StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *paren
       m_styleManager(0),
       m_styleThumbnailer(0),
       m_currentParagraphStyle(0),
-      m_currentCharacterStyle(0),
+      m_defaultCharacterStyle(0),
       m_pureParagraphStyle(true),
       m_pureCharacterStyle(true),
       m_modelType(modelType),
@@ -56,6 +56,14 @@ StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *paren
       m_tmpTextShape(0)
 {
     setStyleManager(manager);
+    //Create a default characterStyle for the preview of "As paragraph" character style
+    if (m_modelType == StylesModel::CharacterStyle) {
+        m_defaultCharacterStyle = new KoCharacterStyle();
+        m_defaultCharacterStyle->setStyleId(-1);
+        m_defaultCharacterStyle->setName(QString("As paragraph"));
+        m_defaultCharacterStyle->setFontPointSize(12);
+    }
+
     m_paragIcon = KIcon("kotext-paragraph");
     m_charIcon = KIcon("kotext-character");
     connect(m_styleMapper, SIGNAL(mapped(int)), this, SLOT(updateName(int)));
@@ -64,6 +72,8 @@ StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *paren
 StylesModel::~StylesModel()
 {
     delete m_tmpTextShape;
+    delete m_currentParagraphStyle;
+    delete m_defaultCharacterStyle;
 }
 
 QModelIndex StylesModel::index(int row, int column, const QModelIndex &parent) const
@@ -108,24 +118,31 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
         if (!m_styleThumbnailer) {
             return QPixmap();
         }
-        KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
-        if (paragStyle) {
-            return m_styleThumbnailer->thumbnail(paragStyle);
+        if (m_modelType == StylesModel::ParagraphStyle) {
+            KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
+            if (paragStyle) {
+                return m_styleThumbnailer->thumbnail(paragStyle);
+            }
         }
-        KoCharacterStyle *characterStyle =  m_styleManager->characterStyle(id);
-        if (characterStyle) {
-            return m_styleThumbnailer->thumbnail(characterStyle);
-        }
-        if (id == -1) {
-            //we use the default character style here. We do not have an easy way (that I can think of) to access the currently selected paragraph style.
-           KoCharacterStyle *usedStyle = m_styleManager->defaultCharacterStyle();
-           if (!usedStyle) {
-               return QPixmap();
-           }
-           usedStyle = usedStyle->clone();
-           usedStyle->setName(QString("As paragraph"));
-           usedStyle->setStyleId(-1); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
-           return m_styleThumbnailer->thumbnail(usedStyle);
+        else {
+            KoCharacterStyle *usedStyle = 0;
+            if (id == -1) {
+                usedStyle = static_cast<KoCharacterStyle*>(m_currentParagraphStyle);
+                if (!usedStyle) {
+                    usedStyle = m_defaultCharacterStyle;
+                }
+                usedStyle->setName(QString("As paragraph"));
+                if (usedStyle->styleId() >= 0) { //if the styleId is -1, we are using the default character style
+                    usedStyle->setStyleId(-usedStyle->styleId()); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
+                }
+                return m_styleThumbnailer->thumbnail(usedStyle);
+            }
+            else {
+                usedStyle = m_styleManager->characterStyle(id);
+                if (usedStyle) {
+                    return m_styleThumbnailer->thumbnail(usedStyle);
+                }
+            }
         }
         break;
     }
@@ -140,21 +157,45 @@ Qt::ItemFlags StylesModel::flags(const QModelIndex &index) const
         return 0;
     return (Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
-/*
-void StylesModel::setCurrentParagraphStyle(int styleId, bool unchanged)
-{
-    if (m_currentParagraphStyle == styleId && unchanged == m_pureParagraphStyle)
-        return;
-    m_currentParagraphStyle = styleId;
-    m_pureParagraphStyle = unchanged;
-}
 
-void StylesModel::setCurrentCharacterStyle(int styleId, bool unchanged)
+void StylesModel::setCurrentParagraphStyle(int styleId)
 {
-    if (m_currentCharacterStyle == styleId && unchanged == m_pureCharacterStyle)
+    if (m_currentParagraphStyle == m_styleManager->paragraphStyle(styleId) || !m_styleManager->paragraphStyle(styleId)) {
+        return; //TODO do we create a default paragraphStyle? use the styleManager default?
+    }
+    if (m_currentParagraphStyle) {
+        delete m_currentParagraphStyle;
+        m_currentParagraphStyle = 0;
+    }
+    m_currentParagraphStyle = m_styleManager->paragraphStyle(styleId)->clone();
+}
+/*
+void StylesModel::setCurrentCharacterStyle(int styleId)
+{
+    if (m_currentCharacterStyle == m_styleManager->characterStyle(styleId))
         return;
-    m_currentCharacterStyle = styleId;
-    m_pureCharacterStyle = unchanged;
+    if (m_currentCharacterStyle) {
+        delete m_currentCharacterStyle;
+        m_currentCharacterStyle = 0;
+    }
+    if (styleId == -1) {
+        m_currentCharacterStyle = static_cast<KoCharacterStyle*>(m_currentParagraphStyle)->clone();
+        if (!m_currentCharacterStyle) {
+            m_currentCharacterStyle = new KoCharacterStyle();
+            m_currentCharacterStyle->setStyleId(-1);
+            m_currentCharacterStyle->setName(QString("As paragraph"));
+            m_currentCharacterStyle->setFontPointSize(12);
+            return;
+        }
+    }
+    if (!m_styleManager->characterStyle(styleId)) {
+        m_currentCharacterStyle = new KoCharacterStyle();
+        m_currentCharacterStyle->setStyleId(-1);
+        m_currentCharacterStyle->setName(QString("As paragraph"));
+        m_currentCharacterStyle->setFontPointSize(12);
+        return;
+    }
+    m_currentCharacterStyle = m_styleManager->characterStyle(styleId)->clone();
 }
 */
 KoParagraphStyle *StylesModel::paragraphStyleForIndex(const QModelIndex &index) const
@@ -202,20 +243,21 @@ QPixmap StylesModel::stylePreview(int row, QSize size)
     else {
         KoCharacterStyle *usedStyle = 0;
         if (index(row).internalId() == -1) {
-            //we use the default character style here. We do not have an easy way (that I can think of) to access the currently selected paragraph style.
-           usedStyle = m_styleManager->defaultCharacterStyle();
-           if (!usedStyle) {
-               return QPixmap();
-           }
-           usedStyle = usedStyle->clone();
-           usedStyle->setName(QString("As paragraph"));
-           usedStyle->setStyleId(-1); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
+            usedStyle = static_cast<KoCharacterStyle*>(m_currentParagraphStyle);
+            if (!usedStyle) {
+                usedStyle = m_defaultCharacterStyle;
+            }
+            usedStyle->setName(QString("As paragraph"));
+            if (usedStyle->styleId() >= 0) {
+                usedStyle->setStyleId(-usedStyle->styleId()); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
+            }
+            return m_styleThumbnailer->thumbnail(usedStyle, size);
         }
         else {
             usedStyle = m_styleManager->characterStyle(index(row).internalId());
-        }
-        if (usedStyle) {
-            return m_styleThumbnailer->thumbnail(usedStyle, size);
+            if (usedStyle) {
+                return m_styleThumbnailer->thumbnail(usedStyle, size);
+            }
         }
     }
     return QPixmap();

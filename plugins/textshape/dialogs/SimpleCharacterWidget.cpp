@@ -164,6 +164,7 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
             disconnect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
             widget.characterStyleCombo->setCurrentIndex(0); //TODO make it a bit more resilient
             widget.characterStyleCombo->setStyleIsOriginal(unchanged);
+            widget.characterStyleCombo->slotUpdatePreview();
             connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
         }
     }
@@ -197,6 +198,20 @@ void SimpleCharacterWidget::fontSizeActivated(int index) {
         action->currentAction()->trigger();
     }
     m_lastFontSizeIndex = index;
+}
+
+void SimpleCharacterWidget::setCurrentBlockFormat(const QTextBlockFormat &format)
+{
+    if (format == m_currentBlockFormat)
+        return;
+    m_currentBlockFormat = format;
+
+    m_stylesModel->setCurrentParagraphStyle(format.intProperty(KoParagraphStyle::StyleId));
+    disconnect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+//    widget.characterStyleCombo->setCurrentIndex(0); //TODO make it a bit more resilient
+//    widget.characterStyleCombo->setStyleIsOriginal(true); //TODO should we compare the properties here too?
+    widget.characterStyleCombo->slotUpdatePreview();
+    connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
 }
 
 void SimpleCharacterWidget::styleSelected(int index)

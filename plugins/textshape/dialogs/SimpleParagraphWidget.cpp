@@ -275,9 +275,6 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
 
         bool unchanged = true;
         foreach(int property, m_currentBlockFormat.properties().keys()) {
-            kDebug() << "comparing property in set block: " << property;
-            kDebug() << " currentBlockFormat: " << m_currentBlockFormat.property(property);
-            kDebug() << " style property: " << style->value(property);
             if (property == QTextFormat::ObjectIndex)
                 continue;
             if (property == KoParagraphStyle::ListStyleId)
@@ -293,6 +290,7 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
         disconnect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
         widget.paragraphStyleCombo->setCurrentIndex(m_stylesModel->indexForParagraphStyle(*style).row());
         widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
+        m_stylesModel->setCurrentParagraphStyle(id);
         connect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
 
 //        m_stylesCombo->setStyleIsOriginal(unchanged);
@@ -331,6 +329,7 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
         disconnect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
         widget.paragraphStyleCombo->setCurrentIndex(m_stylesModel->indexForParagraphStyle(*style).row());
         widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
+        m_stylesModel->setCurrentParagraphStyle(id);
         connect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
 
 //        m_stylesCombo->setStyleIsOriginal(unchanged);

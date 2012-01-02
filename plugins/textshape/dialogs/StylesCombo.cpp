@@ -171,7 +171,7 @@ void StylesCombo::setLineEdit(QLineEdit *edit)
         connect(edit, SIGNAL(destroyed()), SLOT(lineEditDeleted()));
 
         connect(m_preview, SIGNAL(returnPressed(const QString&)), SIGNAL(returnPressed(const QString&)));
-        connect(m_preview, SIGNAL(resized()), this, SLOT(slotPreviewResized()));
+        connect(m_preview, SIGNAL(resized()), this, SLOT(slotUpdatePreview()));
 
 //        m_preview->setTrapReturnKey( d->trapReturnKey );
     }
@@ -242,16 +242,10 @@ void StylesCombo::setCurrentFormat(const QTextCharFormat &format)
     Q_UNUSED(format)
 }
 */
-void StylesCombo::slotPreviewResized()
-{///TODO take care of charStyles too
-/*    KoParagraphStyle *usedStyle = 0;
-    if (m_stylesModel->styleManager())
-        usedStyle = m_stylesModel->styleManager()->paragraphStyle(m_stylesModel->index(currentIndex()).internalId());
-    if (usedStyle) {
-        m_preview->setPreview(m_stylesModel->thumbnailer()->thumbnail(usedStyle, m_preview->availableSize()));
-    }
-*/
+void StylesCombo::slotUpdatePreview()
+{
     m_preview->setPreview(m_stylesModel->stylePreview(currentIndex(), m_preview->availableSize()));
+    update();
 }
 
 bool StylesCombo::eventFilter(QObject *object, QEvent *event)

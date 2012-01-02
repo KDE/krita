@@ -72,17 +72,15 @@ public:
 
 public slots:
 //    /**
-//        Sets the paragraph style that is to be marked as the 'active' one.
+//        Sets the paragraph style that is currently used.
 //        @param styleId the id from KoParagraphStyle::styleId()
-//        @param unchanged if true the icon will display the paragraph style in the text has no local modifications.
 //    */
-//    void setCurrentParagraphStyle(int styleId, bool unchanged);
+    void setCurrentParagraphStyle(int styleId);
 //    /**
-//        Sets the character style that is to be marked as the 'active' one.
+//        Sets the character style that is currently used.
 //        @param styleId the id from KoCharacterStyle::styleId()
-//        @param unchanged if true the icon will display the character style in the text has no local modifications.
 //    */
-//    void setCurrentCharacterStyle(int styleId, bool unchanged);
+//    void setCurrentCharacterStyle(int styleId);
 
 private slots:
     void addParagraphStyle(KoParagraphStyle*);
@@ -98,8 +96,8 @@ private:
     KoStyleManager *m_styleManager;
     KoStyleThumbnailer *m_styleThumbnailer;
 
-    int m_currentParagraphStyle;
-    int m_currentCharacterStyle;
+    KoParagraphStyle *m_currentParagraphStyle;
+    KoCharacterStyle *m_defaultCharacterStyle;
     bool m_pureParagraphStyle;
     bool m_pureCharacterStyle;
     Type m_modelType;

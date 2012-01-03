@@ -226,7 +226,11 @@ void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
     if (!selectionMask) {
         selectionMask = new KisSelectionMask(this);
         selectionMask->setActive(true);
-        Q_ASSERT(addNode(selectionMask, m_d->rootLayer, 0));
+        bool success = addNode(selectionMask, m_d->rootLayer, 0);
+        Q_ASSERT(success);
+        if (!success) {
+            warnKrita << "Could not creaste global selection mask!";
+        }
     }
     if (globalSelection) {
         selectionMask->setSelection(globalSelection);

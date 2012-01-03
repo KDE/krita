@@ -61,9 +61,6 @@ void KisConvolutionFilter::process(KisPaintDeviceSP device,
         channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }
  
-    // disable alpha channel
-    channelFlags.clearBit(1);
-
     painter.setChannelFlags(channelFlags);
     painter.setProgress(progressUpdater);
     painter.applyMatrix(m_matrix, device, srcTopLeft, srcTopLeft, applyRect.size(), BORDER_REPEAT);

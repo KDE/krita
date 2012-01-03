@@ -125,6 +125,8 @@ KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1
         m_dab->clear();
     }
 
+    // Hairy Brush is capable of working with zero scale,
+    // so no additional checks for 'zero'ness are needed
     qreal scale = m_sizeOption.apply(pi2);
     qreal rotation = m_rotationOption.apply(pi2);
     quint8 origOpacity = m_opacityOption.apply(painter(), pi2);

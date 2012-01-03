@@ -2,6 +2,7 @@
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -286,6 +287,9 @@ private slots:
 
     void testSlot(bool);
 
+    /// change block text direction
+    void textDirectionChanged();
+
 private:
     void repaintCaret();
     void repaintSelection();
@@ -339,6 +343,8 @@ private:
     KAction *m_growWidthAction;
     KAction *m_growHeightAction;
     KAction *m_shrinkToFitAction;
+    KAction *m_actionChangeDirection;
+
     FontSizeAction *m_actionFormatFontSize;
     KFontAction *m_actionFormatFontFamily;
     KoColorPopupAction *m_actionFormatTextColor;
@@ -359,7 +365,6 @@ private:
     int m_changeTipCursorPos;
     QPoint m_changeTipPos;
     bool m_delayedEnsureVisible;
-
     TextToolSelection *m_toolSelection;
 
     mutable QRectF m_lastImMicroFocus;

@@ -42,26 +42,31 @@ protected:
                                     KisImageWSP image) {
         Q_UNUSED(image);
 
-        return new FreehandStrokeStrategy(indirectPainting, resources, painter);
+        m_painterInfo =
+            new FreehandStrokeStrategy::PainterInfo(painter,
+                                                    new KisDistanceInformation());
+
+        return new FreehandStrokeStrategy(indirectPainting, resources, m_painterInfo);
     }
 
     void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources,
                          KisPainter *painter) {
+
+        Q_ASSERT(painter == m_painterInfo->painter);
+
         KisPaintInformation pi1;
         KisPaintInformation pi2;
 
-        m_dragDistance.clear();
         pi1 = KisPaintInformation(QPointF(200, 200));
         pi2 = KisPaintInformation(QPointF(300, 300));
 
         image->addJob(strokeId(),
             new FreehandStrokeStrategy::Data(resources->currentNode(),
-                                             painter, pi1, pi2,
-                                             m_dragDistance));
+                                             m_painterInfo, pi1, pi2));
     }
 
 private:
-    KisDistanceInformation m_dragDistance;
+    FreehandStrokeStrategy::PainterInfo *m_painterInfo;
 };
 
 void FreehandStrokeTest::testAutobrushStroke()

@@ -135,12 +135,16 @@ void KoStyleManager::saveOdfDefaultStyles(KoShapeSavingContext &context)
     KoGenStyle pstyle(KoGenStyle::ParagraphStyle, "paragraph");
     pstyle.setDefaultStyle(true);
     d->defaultParagraphStyle->saveOdf(pstyle, context);
-    context.mainStyles().insert(pstyle);
+    if (!pstyle.isEmpty()) {
+        context.mainStyles().insert(pstyle);
+    }
 
     KoGenStyle tstyle(KoGenStyle::TextStyle, "text");
     tstyle.setDefaultStyle(true);
     d->defaultCharacterStyle->saveOdf(tstyle);
-    context.mainStyles().insert(tstyle);
+    if (!tstyle.isEmpty()) {
+        context.mainStyles().insert(tstyle);
+    }
 
 }
 

@@ -88,8 +88,7 @@ QRect KisFixedPainter::fillPainterPath(const QPainterPath& path)
     // save to QImage
     QPainter pathPainter(&d->polygonMaskImage);
     pathPainter.setRenderHint(QPainter::Antialiasing, true);
-    pathPainter.translate(-boundingRect.topLeft());
-    pathPainter.translate(1,1);
+    pathPainter.translate(-fillRect.topLeft());
     pathPainter.fillPath(path, KIS_WHITE_BRUSH);
 
     //convert to device

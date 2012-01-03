@@ -86,10 +86,15 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     d->textLayout->beginLayout();
     QTextLine line = d->textLayout->createLine();
     d->textLayout->endLayout();
-    KoTextLayoutArea::setExtraTextIndent(line.naturalTextWidth());
 
     KoParagraphStyle pStyle(d->note->textFrame()->begin().currentBlock().blockFormat(), QTextCharFormat());
-    d->labelIndent = pStyle.leftMargin();
+    d->labelIndent = textIndent(d->note->textFrame()->begin().currentBlock(), 0, pStyle);
+    if (line.naturalTextWidth() > -d->labelIndent) {
+        KoTextLayoutArea::setExtraTextIndent(line.naturalTextWidth());
+    } else {
+        KoTextLayoutArea::setExtraTextIndent(-d->labelIndent);
+    }
+    d->labelIndent += pStyle.leftMargin();
 
     return KoTextLayoutArea::layout(cursor);
 }

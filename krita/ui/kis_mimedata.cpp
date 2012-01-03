@@ -75,8 +75,8 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         QByteArray ba;
         QBuffer buf(&ba);
         KoStore *store = KoStore::createStore(&buf, KoStore::Write);
-
         Q_ASSERT(!store->bad());
+        store->disallowNameExpansion();
 
         KisDoc2 doc;
 

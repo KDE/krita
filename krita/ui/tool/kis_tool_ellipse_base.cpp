@@ -139,7 +139,7 @@ void KisToolEllipseBase::paintEllipse(QPainter& gc, const QRect&)
 
 void KisToolEllipseBase::updateArea()
 {
-    canvas()->updateCanvas(convertToPt(QRectF(m_dragStart, m_dragEnd).normalized()));
+    canvas()->updateCanvas(convertToPt(QRectF(m_dragStart, m_dragEnd).normalized().adjusted(-10, -10, 10, 10)));
 }
 
 #include "kis_tool_ellipse_base.moc"

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Calligra Docker Plugin
+Name[ca]=Connector amarrador del Calligra
 Name[cs]=Modul doků Calligra
 Name[da]=Dokker-plugin til Calligra
 Name[de]=Calligra Docker-Modul
@@ -43,6 +44,7 @@ Comment[pl]=Wtyczka zawierająca tak zwany 'dokowy element interfejsu'
 Comment[pt]=Um 'plugin' que contém um 'módulo acoplável'
 Comment[pt_BR]=Um plugin que contém um 'módulo acoplável'
 Comment[ru]=Модуль, содержащий элемент панели
+Comment[sk]=Plugin, ktorý obsahuje takzvaný 'dockwidget'
 Comment[sv]=Ett insticksprogram som innehåller en så kallad 'grafisk dockningskomponent'
 Comment[ta]=எசாருகள் என்பது'டாக்விட்கெட்' ஐ உள்ளடக்கியது 
 Comment[tr]=Sözde dok parçacığı içeren bir eklenti

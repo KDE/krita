@@ -354,12 +354,44 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
 {
     if (isParametricShape()) {
         context.xmlWriter().startElement("draw:custom-shape");
-        saveOdfAttributes(context, OdfAllAttributes&~OdfSize);
+
+        const QSizeF currentSize = outline().boundingRect().size();
+
+        // save the right position so that when loading we fit the viewbox
+        // to the right position without getting any wrong scaling
+        // -> calculate the right position from the current 0 position / viewbound ratio
+        // this is e.g. the case when there is a callout that goes into negative viewbound coordinates
+        QPointF topLeft = m_viewBound.topLeft();
+        QPointF diff;
+        if (qAbs(topLeft.x()) > 1E-5) {
+            diff.setX(topLeft.x()*currentSize.width()/m_viewBound.width());
+        }
+        if (qAbs(topLeft.y()) > 1E-5) {
+            diff.setY(topLeft.y()*currentSize.height()/m_viewBound.height());
+        }
+        qDebug() << "XXX" << m_viewBox << m_viewBound << outline().boundingRect() << position() << diff << position() - diff;
+
+        if (diff.isNull()) {
+            saveOdfAttributes(context, OdfAllAttributes&~OdfSize);
+        }
+        else {
+            //FIXME: this needs to be fixed for shapes that are transformed by rotation or skewing
+            QTransform offset(context.shapeOffset(this));
+            QTransform newOffset(offset);
+            newOffset.translate(-diff.x(), -diff.y());
+            context.addShapeOffset(this, newOffset);
+            saveOdfAttributes(context, OdfAllAttributes&~OdfSize);
+            if (offset.isIdentity()) {
+                context.removeShapeOffset(this);
+            }
+            else {
+                context.addShapeOffset(this, offset);
+            }
+        }
 
         // save the right size so that when loading we fit the viewbox
         // to the right size without getting any wrong scaling
         // -> calculate the right size from the current size/viewbound ratio
-        const QSizeF currentSize = outline().boundingRect().size();
         context.xmlWriter().addAttributePt("svg:width", m_viewBox.width()*currentSize.width()/m_viewBound.width());
         context.xmlWriter().addAttributePt("svg:height", m_viewBox.height()*currentSize.height()/m_viewBound.height());
 

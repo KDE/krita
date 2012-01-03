@@ -58,7 +58,6 @@
 #include "kis_painter.h"
 #include "kis_perspective_grid.h"
 #include "kis_selection.h"
-#include "kis_shear_visitor.h"
 #include "kis_transaction.h"
 #include "kis_transform_visitor.h"
 #include "kis_types.h"
@@ -84,9 +83,9 @@
 
 #ifdef SANITY_CHECKS
 #define SANITY_CHECK_LOCKED(name)                                       \
-    if(!locked()) qDebug() << "Locking policy failed:" << name          \
-                           << "has been called without the image"       \
-                              "being locked";
+    if (!locked()) warnKrita() << "Locking policy failed:" << name          \
+                               << "has been called without the image"       \
+                                  "being locked";
 #else
 #define SANITY_CHECK_LOCKED(name)
 #endif
@@ -122,9 +121,6 @@ public:
     KisActionRecorder *recorder;
 
     vKisAnnotationSP annotations;
-
-    KisSelectionSP globalSelection;
-    KisSelectionSP deselectedGlobalSelection;
 
     QAtomicInt disableUIUpdateSignals;
     KisImageSignalRouter *signalRouter;
@@ -215,30 +211,62 @@ void KisImage::nodeChanged(KisNode* node)
 
 KisSelectionSP KisImage::globalSelection() const
 {
-    return m_d->globalSelection;
+    KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
+    if (selectionMask) {
+        return selectionMask->selection();
+    }
+    else {
+        return 0;
+    }
 }
 
 void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
 {
-    if (globalSelection == 0)
-        m_d->globalSelection = new KisSelection(new KisDefaultBounds(this));
-    else
-        m_d->globalSelection = globalSelection;
+    KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
+    if (!selectionMask) {
+        selectionMask = new KisSelectionMask(this);
+        selectionMask->setActive(true);
+        Q_ASSERT(addNode(selectionMask, m_d->rootLayer, 0));
+    }
+    if (globalSelection) {
+        selectionMask->setSelection(globalSelection);
+    }
+    else {
+        selectionMask->setSelection(new KisSelection(new KisDefaultBounds(this)));
+    }
+    Q_ASSERT(m_d->rootLayer->childCount() > 0);
+    Q_ASSERT(m_d->rootLayer->selectionMask());
 }
 
 void KisImage::removeGlobalSelection()
 {
-    m_d->globalSelection = 0;
+    KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
+    if (selectionMask) {
+        removeNode(selectionMask);
+    }
 }
 
 KisSelectionSP KisImage::deselectedGlobalSelection()
 {
-    return m_d->deselectedGlobalSelection;
+    KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
+    if (selectionMask) {
+        return selectionMask->deselectedSelection();
+    }
+    else {
+        return 0;
+    }
 }
 
-void KisImage::setDeleselectedGlobalSelection(KisSelectionSP selection)
+void KisImage::setDeselectedGlobalSelection(KisSelectionSP selection)
 {
-    m_d->deselectedGlobalSelection = selection;
+    KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
+    if (!selectionMask) {
+        setGlobalSelection();
+        selectionMask = m_d->rootLayer->selectionMask();
+    }
+    Q_ASSERT(selectionMask);
+    selectionMask->setDeselectedSelection(selection);
+
 }
 
 KisBackgroundSP KisImage::backgroundPattern() const
@@ -455,7 +483,7 @@ void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
     emitSignals << ModifiedSignal;
 
     KisProcessingApplicator applicator(this, node,
-                                       KisProcessingApplicator::NONE,
+                                       KisProcessingApplicator::RECURSIVE,
                                        emitSignals, actionName);
 
     KisProcessingVisitorSP visitor =
@@ -543,9 +571,11 @@ void KisImage::rotate(double radians)
     tx -= (w - width()) / 2;
     ty -= (h - height()) / 2;
 
+    bool sizeChanged = w != width() || h != height();
+
     // These signals will be emitted after processing is done
     KisImageSignalVector emitSignals;
-    if (w != width() || h != height()) emitSignals << SizeChangedSignal;
+    if (sizeChanged) emitSignals << SizeChangedSignal;
     emitSignals << ModifiedSignal;
 
     // These flags determine whether updates are transferred to the UI during processing
@@ -570,51 +600,84 @@ void KisImage::rotate(double radians)
 
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
 
-    if (w != width() || h != height()) {
+    if (sizeChanged) {
         applicator.applyCommand(new KisImageResizeCommand(this, QSize(w,h)));
     }
     applicator.end();
 }
 
-void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
+void KisImage::shearImpl(const QString &actionName,
+                         KisNodeSP rootNode,
+                         bool resizeImage,
+                         double angleX, double angleY,
+                         const QPointF &origin)
 {
-    const double pi = 3.1415926535897932385;
+        //angleX, angleY are in degrees
+    const qreal pi = 3.1415926535897932385;
+    const qreal deg2rad = pi / 180.0;
 
-    //new image size
-    qint32 w = width();
-    qint32 h = height();
+    qreal tanX = tan(angleX * deg2rad);
+    qreal tanY = tan(angleY * deg2rad);
 
+    QPointF offset;
+    QSize newSize;
 
-    if (angleX != 0 || angleY != 0) {
-        double deltaY = height() * qAbs(tan(angleX * pi / 180) * tan(angleY * pi / 180));
-        w = (qint32)(width() + qAbs(height() * tan(angleX * pi / 180)));
-        //ugly fix for the problem of having two extra pixels if only a shear along one
-        //axis is done.
-        if (angleX == 0 || angleY == 0)
-            h = (qint32)(height() + qAbs(w * tan(angleY * pi / 180)));
-        else if (angleX > 0 && angleY > 0)
-            h = (qint32)(height() + qAbs(w * tan(angleY * pi / 180)) - 2 * deltaY + 2);
-        else if (angleX < 0 && angleY < 0)
-            h = (qint32)(height() + qAbs(w * tan(angleY * pi / 180)) - 2 * deltaY + 2);
-        else
-            h = (qint32)(height() + qAbs(w * tan(angleY * pi / 180)));
+    {
+        KisTransformWorker worker(0,
+                                  1.0, 1.0,
+                                  tanX, tanY, origin.x(), origin.y(),
+                                  0,
+                                  0, 0, 0, 0);
+
+        QRect newRect = worker.transform().mapRect(bounds());
+        newSize = newRect.size();
+        if(resizeImage) offset = -newRect.topLeft();
     }
 
-    QSize newSize(w, h);
     if(newSize == size()) return;
 
-    undoAdapter()->beginMacro(i18n("Shear Image"));
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-    undoAdapter()->addCommand(new KisImageResizeCommand(KisImageWSP(this), newSize));
+    KisImageSignalVector emitSignals;
+    if(resizeImage) emitSignals << SizeChangedSignal;
+    emitSignals << ModifiedSignal;
 
-    KisShearVisitor visitor(angleX, angleY, progress);
-    visitor.setUndoAdapter(undoAdapter());
-    rootLayer()->accept(visitor);
+    KisProcessingApplicator::ProcessingFlags signalFlags =
+        KisProcessingApplicator::RECURSIVE;
+    if(resizeImage) signalFlags |= KisProcessingApplicator::NO_UI_UPDATES;
 
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-    undoAdapter()->endMacro();
+    KisProcessingApplicator applicator(this, rootNode,
+                                       signalFlags,
+                                       emitSignals, actionName);
 
-    setModified();
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
+
+    KisProcessingVisitorSP visitor =
+            new KisTransformProcessingVisitor(1.0, 1.0,
+                                              tanX, tanY, origin,
+                                              0,
+                                              offset.x(), offset.y(),
+                                              filter);
+
+    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+
+    if(resizeImage) {
+        applicator.applyCommand(new KisImageResizeCommand(this, newSize));
+    }
+
+    applicator.end();
+}
+
+void KisImage::shearNode(KisNodeSP node, double angleX, double angleY)
+{
+    QPointF shearOrigin = 0.5 * (QPointF(1.0,1.0) + bounds().bottomRight());
+
+    shearImpl(i18n("Shear layer"), node, false,
+              angleX, angleY, shearOrigin);
+}
+
+void KisImage::shear(double angleX, double angleY)
+{
+    shearImpl(i18n("Shear Image"), m_d->rootLayer, true,
+              angleX, angleY, QPointF());
 }
 
 void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
@@ -640,21 +703,14 @@ void KisImage::assignImageProfile(const KoColorProfile *profile)
 {
     if(!profile) return;
 
-    undoAdapter()->beginMacro(i18n("Assign Profile"));
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-
     const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     const KoColorSpace *srcCs = colorSpace();
+
+    m_d->colorSpace = dstCs;
 
     KisChangeProfileVisitor visitor(srcCs, dstCs);
     m_d->rootLayer->accept(visitor);
 
-    undoAdapter()->addCommand(new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstCs));
-    undoAdapter()->addCommand(new KisImageLockCommand(KisImageWSP(this), false));
-    undoAdapter()->endMacro();
-
-    setModified();
-    m_d->signalRouter->emitNotification(ProfileChangedSignal);
 }
 
 void KisImage::convertProjectionColorSpace(const KoColorSpace *dstColorSpace)

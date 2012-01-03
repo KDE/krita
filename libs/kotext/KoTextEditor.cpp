@@ -1943,9 +1943,7 @@ void KoTextEditor::mergeBlockFormat(const QTextBlockFormat &modifier)
     if (isEditProtected()) {
         return;
     }
-
-    Q_UNUSED(modifier)
-    //TODO
+    d->caret.mergeBlockFormat(modifier);
 }
 
 void KoTextEditor::mergeCharFormat(const QTextCharFormat &modifier)

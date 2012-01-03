@@ -72,6 +72,7 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
         delete store;
         return KoFilter::BadConversionGraph;
     }
+    store->disallowNameExpansion();
 
     doc -> prepareForImport();
 
@@ -133,7 +134,6 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
     doc->setCurrentImage(image);
-    image->lock();
 
     KisLayerContainerShape *container =
         dynamic_cast<KisLayerContainerShape*>(doc->shapeForNode(image->rootLayer().data()));
@@ -157,7 +157,6 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
         KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
     }
 
-    image->unlock();
     return KoFilter::OK;
 }
 

@@ -32,12 +32,10 @@ class QDomDocument;
 class KisGridPaintOpSettings : public KisPaintOpSettings
 {
 public:
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode ) const;
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const;
     virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;    
-    
+
     bool paintIncremental();
-    
+
 private:
     KisGridPaintOpSettingsWidget* m_options;
 

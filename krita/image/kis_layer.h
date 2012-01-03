@@ -184,6 +184,20 @@ public:
      */
     const QList<KisCloneLayerWSP> registeredClones() const;
 
+
+    /**
+     * Returns whether we have a clone.
+     *
+     * Be careful with it. It is not thread safe to add/remove
+     * clone while checking hasClones(). So there should be no updates.
+     */
+    bool hasClones() const;
+
+    /**
+     * It is calles by the async merger after projection update is done
+     */
+    void updateClones(const QRect &rect);
+
 public:
     qint32 x() const;
     qint32 y() const;
@@ -204,12 +218,8 @@ public:
     QRect exactBounds() const;
 
     QImage createThumbnail(qint32 w, qint32 h);
+
 public:
-
-    void setDirty(const QRect & rect);
-
-    using KisNode::setDirty;
-
     /**
      * Returns true if there are any effect masks present
      */
@@ -281,7 +291,7 @@ protected:
                      const QRect &requestedRect) const;
 
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

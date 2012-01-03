@@ -40,56 +40,48 @@ public:
             CURVE
         };
 
-        Data(KisNodeSP _node, KisPainter *_painter,
-             const KisPaintInformation &_pi,
-             KisDistanceInformation &_dragDistance)
-            : node(_node), painter(_painter),
-              type(POINT), pi1(_pi),
-              dragDistance(_dragDistance)
+        Data(KisNodeSP _node, PainterInfo *_painterInfo,
+             const KisPaintInformation &_pi)
+            : node(_node), painterInfo(_painterInfo),
+              type(POINT), pi1(_pi)
         {}
 
-        Data(KisNodeSP _node, KisPainter *_painter,
+        Data(KisNodeSP _node, PainterInfo *_painterInfo,
              const KisPaintInformation &_pi1,
-             const KisPaintInformation &_pi2,
-             KisDistanceInformation &_dragDistance)
-            : node(_node), painter(_painter),
-              type(LINE), pi1(_pi1), pi2(_pi2),
-              dragDistance(_dragDistance)
+             const KisPaintInformation &_pi2)
+            : node(_node), painterInfo(_painterInfo),
+              type(LINE), pi1(_pi1), pi2(_pi2)
         {}
 
-        Data(KisNodeSP _node, KisPainter *_painter,
+        Data(KisNodeSP _node, PainterInfo *_painterInfo,
              const KisPaintInformation &_pi1,
              const QPointF &_control1,
              const QPointF &_control2,
-             const KisPaintInformation &_pi2,
-             KisDistanceInformation &_dragDistance)
-            : node(_node), painter(_painter),
+             const KisPaintInformation &_pi2)
+            : node(_node), painterInfo(_painterInfo),
               type(CURVE), pi1(_pi1), pi2(_pi2),
-              control1(_control1), control2(_control2),
-              dragDistance(_dragDistance)
+              control1(_control1), control2(_control2)
         {}
 
 
         KisNodeSP node;
-        KisPainter *painter;
+        PainterInfo *painterInfo;
 
         DabType type;
         KisPaintInformation pi1;
         KisPaintInformation pi2;
         QPointF control1;
         QPointF control2;
-
-        KisDistanceInformation &dragDistance;
     };
 
 public:
     FreehandStrokeStrategy(bool needsIndirectPainting,
                            KisResourcesSnapshotSP resources,
-                           KisPainter *painter);
+                           PainterInfo *painterInfo);
 
     FreehandStrokeStrategy(bool needsIndirectPainting,
                            KisResourcesSnapshotSP resources,
-                           QVector<KisPainter*> painters);
+                           QVector<PainterInfo*> painterInfos);
 
     void doStrokeCallback(KisStrokeJobData *data);
 

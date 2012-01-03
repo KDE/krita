@@ -2,6 +2,7 @@
 Type=Service
 Name=Calligra Document Info Properties Page
 Name[bg]=Страница с данни за документ на Calligra
+Name[ca]=Pàgina d'informació de propietats de documents Calligra
 Name[cs]=Stránka s informacemi o dokumentu Calligra
 Name[da]=Egenskabsside for Calligra-dokumentinformation
 Name[de]=Calligra Dokumentinfo-Eigenschaftenseite
@@ -16,6 +17,7 @@ Name[ru]=Страница сведений о документе Calligra
 Name[sv]=Calligra-sida med dokumentinformation
 Name[uk]=Сторінка властивостей документу Calligra
 Name[x-test]=xxCalligra Document Info Properties Pagexx
+Name[zh_CN]=Calligra 文档信息属性页
 Name[zh_TW]=Calligra 文件資訊和屬性
 X-KDE-Library=kodocinfopropspage
 X-KDE-ServiceTypes=KPropertiesDialog/Plugin

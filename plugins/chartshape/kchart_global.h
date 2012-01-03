@@ -33,7 +33,8 @@ enum ChartType {
     CircleChartType,		// Pie in KDChart
     RingChartType,
     ScatterChartType,
-    RadarChartType,		// Polar in KDChart
+    RadarChartType,		    // Polar in KDChart
+    FilledRadarChartType,   // Polar in KDChart
     StockChartType,
     BubbleChartType,
     SurfaceChartType,

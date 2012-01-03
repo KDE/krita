@@ -27,6 +27,9 @@
 
 /**
  * Generic implementation of the COPY composite op which respects selection.
+ *
+ * Note: this composite op is necessary with the deform brush and should not
+ * be hidden.
  */
 template<class Traits>
 class KoCompositeOpCopy2: public KoCompositeOpBase< Traits, KoCompositeOpCopy2<Traits> >

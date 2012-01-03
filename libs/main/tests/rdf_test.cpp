@@ -122,18 +122,20 @@ void RdfTest::testCreateMarkers()
     // verify that the markers are there
     QPair<int,int> position = rdfDoc.findExtent(newId);
     Q_ASSERT(position.first == 444);
-    Q_ASSERT(position.second == 496);
+    Q_ASSERT(position.second == 497);
 
     editor.setPosition(position.first + 1);
 
     QPair<int,int> position2 = rdfDoc.findExtent(&editor);
     Q_ASSERT(position == position2);
+    Q_UNUSED(position2);
 
     // verify that we don't find markers where there aren't any
     editor.setPosition(10);
     QPair<int,int> position4 = rdfDoc.findExtent(&editor);
     Q_ASSERT(position4.first == 0);
     Q_ASSERT(position4.second == 0);
+    Q_UNUSED(position4);
 
 
     // go back to the semitem
@@ -179,10 +181,11 @@ void RdfTest::testFindMarkers()
             Q_ASSERT(idList.contains(xmlid));
             QPair<int, int> position = rdfDoc.findExtent(xmlid);
             Q_ASSERT(position.first == 444);
-            Q_ASSERT(position.second == 496);
-            editor.setPosition(position.first + 1);
+            Q_ASSERT(position.second == 497);
+            editor.setPosition(position.first + 2);
             const QTextTable *table = editor.currentTable();
             Q_ASSERT(table);
+	    Q_UNUSED(table);
         }
     }
 
@@ -201,17 +204,18 @@ void RdfTest::testFindMarkers()
     // find the extents from the xml-id's in the semantic items
     QCOMPARE(semItems[0]->xmlIdList().length(), 1);
     QPair<int, int> position = rdfDoc.findExtent(semItems[0]->xmlIdList()[0]);
-    QCOMPARE(position.first, 940);
-    QCOMPARE(position.second, 992);
-    editor.setPosition(position.first + 1);
+    QCOMPARE(position.first, 942);
+    QCOMPARE(position.second, 995);
+    editor.setPosition(position.first + 2);
     const QTextTable *table = editor.currentTable();
     Q_ASSERT(table);
+    Q_UNUSED(table);
 
     QCOMPARE(semItems[1]->xmlIdList().length(), 1);
     position = rdfDoc.findExtent(semItems[1]->xmlIdList()[0]);
     QCOMPARE(position.first, 444);
-    QCOMPARE(position.second, 496);
-    editor.setPosition(position.first + 1);
+    QCOMPARE(position.second, 497);
+    editor.setPosition(position.first + 2);
     table = editor.currentTable();
     Q_ASSERT(table);
 

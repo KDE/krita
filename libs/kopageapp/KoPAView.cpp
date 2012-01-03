@@ -147,6 +147,7 @@ public:
     QWidget *insideWidget;
 
     // status bar
+    QLabel *pageNumbers;  ///< page numbers
     QLabel *status;       ///< ordinary status
     QWidget *zoomActionWidget;
 
@@ -250,8 +251,16 @@ void KoPAView::initGUI()
 
     d->zoomAction = d->zoomController->zoomAction();
 
+    d->pageNumbers = new QLabel(QString(), this);
+    d->pageNumbers->setFixedWidth(QFontMetrics(d->pageNumbers->font()).width("999/999"));
+    d->pageNumbers->setAlignment(Qt::AlignCenter);
+    updatePageCount();
+    connect(d->doc, SIGNAL(pageAdded(KoPAPageBase*)), this, SLOT(updatePageCount()));
+    connect(d->doc, SIGNAL(pageRemoved(KoPAPageBase*)), this, SLOT(updatePageCount()));
+    addStatusBarItem(d->pageNumbers, 0);
+
     // set up status bar message
-    d->status = new QLabel( QString() );
+    d->status = new QLabel(QString(), this);
     d->status->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
     d->status->setMinimumWidth( 300 );
     addStatusBarItem( d->status, 1 );
@@ -764,6 +773,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     if ( shell() && pageChanged ) {
         d->documentStructureDocker->setActivePage(d->activePage);
         proxyObject->emitActivePageChanged();
+        updatePageCount();
     }
 
     // Set the current page number in the canvas resource provider
@@ -1226,6 +1236,16 @@ void KoPAView::updateUnit(const KoUnit &unit)
     d->horizontalRuler->setUnit(unit);
     d->verticalRuler->setUnit(unit);
     d->canvas->resourceManager()->setResource(KoCanvasResourceManager::Unit, unit);
+}
+
+void KoPAView::updatePageCount()
+{
+    int pageNumber = d->doc->pageIndex(d->activePage) + 1;
+    if (pageNumber > 0) {
+        int pageCount = d->doc->pages(dynamic_cast<KoPAPage*>(d->activePage) == 0).size(); 
+        // TODO POST2.4 add 
+        d->pageNumbers->setText(QString("%1/%2").arg(pageNumber).arg(pageCount));
+    }
 }
 
 #include <KoPAView.moc>

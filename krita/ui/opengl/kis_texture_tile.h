@@ -40,8 +40,6 @@ struct KisGLTexturesInfo {
 
     GLint format;
     GLint type;
-
-    QRect imageRect;
 };
 
 inline QRect stretchRect(const QRect &rc, int delta)

@@ -23,6 +23,8 @@
 #include <QVector>
 #include "krita_export.h"
 #include "kis_types.h"
+#include "kis_group_layer.h"
+
 
 class KoColorSpace;
 class KoColorProfile;
@@ -62,17 +64,6 @@ private:
 
 private slots:
     void slotNotification(KisImageSignalType type);
-
-signals:
-
-    void __sigNotification(KisImageSignalType type);
-    void __sigNodeChanged(KisNode *node);
-    void __sigAboutToAddANode(KisNode *parent, int index);
-    void __sigNodeHasBeenAdded(KisNode *parent, int index);
-    void __sigAboutToRemoveANode(KisNode *parent, int index);
-    void __sigNodeHasBeenRemoved(KisNode *parent, int index);
-    void __sigAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
-    void __sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
 
 signals:
 

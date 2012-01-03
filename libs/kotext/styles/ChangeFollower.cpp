@@ -66,16 +66,9 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles)
             KoParagraphStyle *style = sm->paragraphStyle(id);
             Q_ASSERT(style);
 
-            style->applyStyle(bf);
-            cursor.setBlockFormat(bf);
-        }
-        QTextCharFormat cf = block.charFormat();
-        id = cf.intProperty(KoCharacterStyle::StyleId);
-        if (id > 0 && changedStyles.contains(id)) {
-            KoCharacterStyle *style = sm->characterStyle(id);
-            Q_ASSERT(style);
             style->applyStyle(block);
         }
+        QTextCharFormat cf;
 
         QTextBlock::iterator iter = block.begin();
         while (! iter.atEnd()) {
@@ -87,10 +80,10 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles)
                 cursor.setPosition(fragment.position());
                 cursor.setPosition(fragment.position() + fragment.length(), QTextCursor::KeepAnchor);
                 KoCharacterStyle *style = sm->characterStyle(id);
-                Q_ASSERT(style);
-
-                style->applyStyle(cf);
-                cursor.mergeCharFormat(cf);
+                if (style) {
+                    style->applyStyle(cf);
+                    cursor.mergeCharFormat(cf);
+                }
             }
             ++iter;
         }

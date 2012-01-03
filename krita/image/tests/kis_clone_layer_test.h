@@ -27,7 +27,9 @@ class KisCloneLayerTest : public QObject
 private slots:
 
     void testCreation();
-
+    void testOriginalUpdates();
+    void testOriginalUpdatesOutOfBounds();
+    void testOriginalRefresh();
 };
 
 #endif

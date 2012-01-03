@@ -31,8 +31,8 @@ class KoShapeBasedDocumentBasePrivate;
 class KoDocumentResourceManager;
 
 /**
- * The shape controller is an abstract interface that the applications class
- * that controls the shapes should implement.  This tends to be the document.
+ * The  KoShapeBasedDocumentBase is an abstract interface that the application's class
+ * that owns the shapes should implement. This tends to be the document.
  * @see KoShapeDeleteCommand, KoShapeCreateCommand
  */
 class FLAKE_EXPORT KoShapeBasedDocumentBase

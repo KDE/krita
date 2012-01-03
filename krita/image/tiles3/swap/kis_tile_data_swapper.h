@@ -53,7 +53,7 @@ private:
     static const qint32 DELAY;
 
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

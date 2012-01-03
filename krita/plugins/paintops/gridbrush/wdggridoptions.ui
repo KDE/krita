@@ -41,6 +41,9 @@
     </item>
     <item row="0" column="1" colspan="2">
      <widget class="QSpinBox" name="gridWidthSPBox">
+      <property name="minimum">
+       <number>1</number>
+      </property>
       <property name="maximum">
        <number>999</number>
       </property>
@@ -58,6 +61,9 @@
     </item>
     <item row="1" column="1" colspan="2">
      <widget class="QSpinBox" name="gridHeightSPBox">
+      <property name="minimum">
+       <number>1</number>
+      </property>
       <property name="maximum">
        <number>999</number>
       </property>
@@ -75,6 +81,9 @@
     </item>
     <item row="2" column="1" colspan="2">
      <widget class="QSpinBox" name="divisionLevelSPBox">
+      <property name="minimum">
+       <number>1</number>
+      </property>
       <property name="maximum">
        <number>999</number>
       </property>
@@ -101,6 +110,9 @@
      <widget class="QDoubleSpinBox" name="scaleDSPBox">
       <property name="decimals">
        <number>1</number>
+      </property>
+      <property name="minimum">
+       <double>0.100000000000000</double>
       </property>
       <property name="maximum">
        <double>1000.000000000000000</double>

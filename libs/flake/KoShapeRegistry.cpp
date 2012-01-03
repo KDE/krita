@@ -168,28 +168,36 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
         // The reason is that all subsequent children will be fallbacks, in order of preference.
 
         if (e.hasChildNodes()) {
-            KoXmlElement element = e.firstChild().toElement();
-
-            // Check for draw:object
-            if (element.tagName() == "object" && element.namespaceURI() == KoXmlNS::draw && element.hasChildNodes()) {
-                // Loop through the elements and find the first one
-                // that is handled by any shape.
-                KoXmlNode n = element.firstChild();
-                for (; !n.isNull(); n = n.nextSibling()) {
-                    if (n.isElement()) {
-                        kDebug(30006) << "trying for element " << n.toElement().tagName();
-                        shape = d->createShapeInternal(e, context, n.toElement());
-                        break;
-                    }
-                }
-                if (shape)
-                    kDebug(30006) << "Found a shape for draw:object";
-                else
-                    kDebug(30006) << "Found NO shape shape for draw:object";
+            // if we don't ignore white spaces it can be that the first child is not a element so look for the first element
+            KoXmlNode node = e.firstChild();
+            KoXmlElement element;
+            while (!node.isNull() && element.isNull()) {
+                element = node.toElement();
+                node = node.nextSibling();
             }
-            else {
-                // If not draw:object, e.g draw:image or draw:plugin
-                shape = d->createShapeInternal(e, context, element);
+
+            if (!element.isNull()) {
+                // Check for draw:object
+                if (element.tagName() == "object" && element.namespaceURI() == KoXmlNS::draw && element.hasChildNodes()) {
+                    // Loop through the elements and find the first one
+                    // that is handled by any shape.
+                    KoXmlNode n = element.firstChild();
+                    for (; !n.isNull(); n = n.nextSibling()) {
+                        if (n.isElement()) {
+                            kDebug(30006) << "trying for element " << n.toElement().tagName();
+                            shape = d->createShapeInternal(e, context, n.toElement());
+                            break;
+                        }
+                    }
+                    if (shape)
+                        kDebug(30006) << "Found a shape for draw:object";
+                    else
+                        kDebug(30006) << "Found NO shape shape for draw:object";
+                }
+                else {
+                    // If not draw:object, e.g draw:image or draw:plugin
+                    shape = d->createShapeInternal(e, context, element);
+                }
             }
 
             if (shape) {

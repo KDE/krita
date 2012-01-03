@@ -97,8 +97,6 @@ public:
     CanvasData *canvasData; // data about the active canvas.
 
     KoInputDevice inputDevice;
-    QTimer tabletEventTimer; // Runs for a short while after any tablet event is
-    // received to help correct input device detection.
 
     bool layerEnabled;
 };
@@ -126,8 +124,6 @@ public:
     }
     /// wrapper around KoToolFactoryBase::shortcut()
     KShortcut shortcut() const;
-    /// wrapper around KoToolFactoryBase::inputDeviceAgnostic()
-    bool inputDeviceAgnostic() const;
     /// returns true if the factory will create a tool, false if it decided to not create one in createTool().
     bool canCreateTool(KoCanvasBase *canvas) const;
 

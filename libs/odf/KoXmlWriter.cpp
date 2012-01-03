@@ -485,6 +485,7 @@ void KoXmlWriter::addTextSpan(const QString& text, const QMap<int, int>& tabCach
             // \f can be added e.g. in ascii import filter.
             case '\f':
             case '\n':
+            case QChar::LineSeparator:
                 if (!str.isEmpty())
                     addTextNode(str);
                 str.clear();
@@ -531,3 +532,27 @@ QList<const char*> KoXmlWriter::tagHierarchy() const
     return answer;
 }
 
+QString KoXmlWriter::toString() const
+{
+    Q_ASSERT(!d->dev->isSequential());
+    if (d->dev->isSequential())
+        return QString();
+    bool wasOpen = d->dev->isOpen();
+    qint64 oldPos = -1;
+    if (wasOpen) {
+        oldPos = d->dev->pos();
+        if (oldPos > 0)
+            d->dev->seek(0);
+    } else {
+        const bool openOk = d->dev->open(QIODevice::ReadOnly);
+        Q_ASSERT(openOk);
+        if (!openOk)
+            return QString();
+    }
+    QString s = QString::fromUtf8(d->dev->readAll());
+    if (wasOpen)
+        d->dev->seek(oldPos);
+    else
+        d->dev->close();
+    return s;
+}

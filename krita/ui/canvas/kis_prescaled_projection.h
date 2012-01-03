@@ -92,9 +92,12 @@ public slots:
     void viewportMoved(const QPointF &offset);
 
     /**
-     * Called whenever the size of the KisImage changes
+     * Called whenever the size of the KisImage changes.
+     * It is a part of a complex update ritual, when the size
+     * fo the image changes. This method just resizes the storage
+     * for the image cache, it doesn't update any cached data.
      */
-    void setImageSize(qint32 w, qint32 h);
+    void slotImageSizeChanged(qint32 w, qint32 h);
 
     /**
      * Checks whether it is needed to resize the prescaled image and
@@ -137,14 +140,33 @@ private:
      */
     QRect preScale(const QRect & rc);
 
+
+    /**
+     * This creates an empty update information and fills it with the only
+     * parameter: @p dirtyImageRect
+     * This function is supposed to be run in the context of the image
+     * threads, so it does no accesses to zoom or any UI specific values.
+     * All the needed information for zooming will be fetched in the context
+     * of the UI thread in fillInUpdateInformation().
+     *
+     * @see fillInUpdateInformation()
+     */
+    KisPPUpdateInfoSP getInitialUpdateInformation(const QRect &dirtyImageRect);
+
     /**
      * Prepare all the information about rects needed during
-     * projection updating
+     * projection updating.
      *
-     * @param dirtyImageRect the part of the KisImage that is dirty
+     * @param viewportRect the part of the viewport that has to be updated
+     * @param info the structure to be filled in. It's member dirtyImageRect
+     * is supposed to have already been set up in the previous step of the
+     * update in getInitialUpdateInformation(). Though it is allowed to
+     * be null rect.
+     *
+     * @see getInitialUpdateInformation()
      */
-    KisPPUpdateInfoSP getUpdateInformation(const QRect &viewportRect,
-                                           const QRect &dirtyImageRect);
+    void fillInUpdateInformation(const QRect &viewportRect,
+                                 KisPPUpdateInfoSP info);
 
     /**
      * Initiates the process of prescaled image update

@@ -27,21 +27,15 @@
 #include <KoParagraphStyle.h>
 
 ParagraphGeneral::ParagraphGeneral(QWidget *parent)
-        : QWidget(parent),
+        : CharacterGeneral(parent),
         m_blockSignals(false),
         m_nameHidden(false),
         m_style(0)
 {
-    widget.setupUi(this);
-
 //Disable for now
     //inherit style
     widget.label_3->setVisible(false);
     widget.inheritStyle->setVisible(false);
-    //use named charStyle
-    widget.useCharacterStyle->setVisible(false);
-    widget.label_4->setVisible(false);
-    widget.characterStyle->setVisible(false);
     //include in TOC
     widget.inToc->setVisible(false);
 //
@@ -112,6 +106,8 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
     if (m_style == 0)
         return;
 
+    CharacterGeneral::setStyle(style);
+
     m_blockSignals = true;
 
 /*    widget.inheritStyle->clear();
@@ -164,6 +160,8 @@ void ParagraphGeneral::setUnit(const KoUnit &unit)
 
 void ParagraphGeneral::save(KoParagraphStyle *style)
 {
+    CharacterGeneral::save(style);
+
     KoParagraphStyle *savingStyle;
     if (style == 0) {
         if (m_style == 0)

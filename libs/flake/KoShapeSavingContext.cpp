@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
-   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007-2009, 2011 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
 
@@ -25,6 +25,7 @@
 
 #include "KoShapeLayer.h"
 #include "KoImageData.h"
+#include "KoMarker.h"
 
 #include <KoXmlWriter.h>
 #include <KoStore.h>
@@ -53,6 +54,7 @@ public:
     int imageId;
     QMap<QString, QImage> images;
     QHash<const KoShape *, QTransform> shapeOffsets;
+    QMap<const KoMarker *, QString> markerRefs;
 
     KoGenStyles& mainStyles;
     KoEmbeddedDocumentSaver& embeddedSaver;
@@ -222,6 +224,16 @@ QString KoShapeSavingContext::imageHref(QImage &image)
 QMap<qint64, QString> KoShapeSavingContext::imagesToSave()
 {
     return d->imageNames;
+}
+
+QString KoShapeSavingContext::markerRef(const KoMarker *marker)
+{
+    QMap<const KoMarker *, QString>::iterator it = d->markerRefs.find(marker);
+    if (it == d->markerRefs.end()) {
+        it = d->markerRefs.insert(marker, marker->saveOdf(*this));
+    }
+
+    return it.value();
 }
 
 void KoShapeSavingContext::addDataCenter(KoDataCenterBase * dataCenter)

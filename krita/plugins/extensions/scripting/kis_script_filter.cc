@@ -26,7 +26,7 @@
 // kdelibs/kross
 #include <kross/core/action.h>
 
-class KisScriptFilter::Private
+struct KisScriptFilter::Private
 {
 public:
     Kross::Action* action;

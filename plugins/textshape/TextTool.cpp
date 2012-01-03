@@ -4,6 +4,7 @@
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -136,7 +137,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_changeTipTimer(this),
         m_changeTipCursorPos(0),
         m_delayedEnsureVisible(false),
-        m_toolSelection(0)
+        m_toolSelection(0),
+        m_lastImMicroFocus(QRectF(0,0,0,0))
 {
     setTextMode(true);
 
@@ -249,6 +251,14 @@ void TextTool::createActions()
     m_actionAlignBlock->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignBlock);
     connect(m_actionAlignBlock, SIGNAL(triggered(bool)), this, SLOT(alignBlock()));
+
+    m_actionChangeDirection = new KAction(KIcon("format-text-direction-ltr"), i18n("Change text direction"), this);
+    addAction("change_text_direction", m_actionChangeDirection);
+    m_actionChangeDirection->setToolTip(i18n("Change writing direction"));
+    m_actionChangeDirection->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
+    m_actionChangeDirection->setCheckable(true);
+    connect(m_actionChangeDirection, SIGNAL(triggered()), this, SLOT(textDirectionChanged()));
+
 
     m_actionFormatSuper = new KAction(KIcon("format-text-superscript"), i18n("Superscript"), this);
     addAction("format_super", m_actionFormatSuper);
@@ -1212,7 +1222,6 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
         converter.zoom(&zoomX, &zoomY);
         shapeMatrix.scale(zoomX, zoomY);
         rect = shapeMatrix.mapRect(rect);
-
         return rect.toRect();
     }
     case Qt::ImFont:
@@ -1245,14 +1254,18 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
                                        canvas()->shapeController());
         }
     }
-    QTextBlock block = textEditor->block();
-    QTextLayout *layout = block.layout();
-    Q_ASSERT(layout);
     if (!event->commitString().isEmpty()) {
         QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
         keyPressEvent(&ke);
+        // The cursor may reside in a different block before vs. after keyPressEvent.
+        QTextBlock block = textEditor->block();
+        QTextLayout *layout = block.layout();
+        Q_ASSERT(layout);
         layout->setPreeditArea(-1, QString());
     } else {
+        QTextBlock block = textEditor->block();
+        QTextLayout *layout = block.layout();
+        Q_ASSERT(layout);
         layout->setPreeditArea(textEditor->position() - block.position(), event->preeditString());
         const_cast<QTextDocument*>(textEditor->document())->markContentsDirty(textEditor->position(), 1);
     }
@@ -1343,8 +1356,8 @@ void TextTool::updateActions()
     //update paragraphStyle GUI element
     QTextBlockFormat bf = textEditor->blockFormat();
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
-        bool revert = (textEditor->block().layout()->textOption().textDirection() == Qt::LeftToRight) != QApplication::isLeftToRight();
-        if (bf.alignment() == (Qt::AlignLeading ^ revert))
+        bool revert = (textEditor->block().layout()->textOption().textDirection() == Qt::RightToLeft);
+        if ((bf.alignment() == Qt::AlignLeading) ^ revert)
             m_actionAlignLeft->setChecked(true);
         else
             m_actionAlignRight->setChecked(true);
@@ -1532,7 +1545,13 @@ QRectF TextTool::caretRect(QTextCursor *cursor) const
     QTextCursor tmpCursor(*cursor);
     tmpCursor.setPosition(cursor->position()); // looses the anchor
 
-    return textRect(tmpCursor);
+    QRectF rect = textRect(tmpCursor);
+    if (rect.size() == QSizeF(0,0)) {
+        rect = m_lastImMicroFocus; // prevent block changed but layout not done
+    } else {
+        m_lastImMicroFocus = rect;
+    }
+    return rect;
 }
 
 QRectF TextTool::textRect(QTextCursor &cursor) const
@@ -2298,15 +2317,6 @@ void TextTool::debugTextStyles()
 
     foreach (KoParagraphStyle *style, styleManager->paragraphStyles()) {
         kDebug(32500) << style->styleId() << style->name() << (styleManager->defaultParagraphStyle() == style ? "[Default]" : "");
-        KoCharacterStyle *cs = style->characterStyle();
-        seenStyles << style->styleId();
-        if (cs) {
-            kDebug(32500) << "  +- CharStyle: " << cs->styleId() << cs->name();
-            kDebug(32500) << "  |  " << cs->font();
-            seenStyles << cs->styleId();
-        } else {
-            kDebug(32500) << "  +- ERROR; no char style found!" << endl;
-        }
         KoListStyle *ls = style->listStyle();
         if (ls) { // optional ;)
             kDebug(32500) << "  +- ListStyle: " << ls->styleId() << ls->name()
@@ -2346,6 +2356,18 @@ void TextTool::debugTextStyles()
                 << (style == styleManager->defaultListStyle() ? "[Default]":"");
     }
 #endif
+}
+
+void TextTool::textDirectionChanged()
+{
+    QTextBlockFormat blockFormat;
+    if (m_actionChangeDirection->isChecked()) {
+        blockFormat.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::RightLeftTopBottom);
+    }
+    else {
+        blockFormat.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::LeftRightTopBottom);
+     }
+    m_textEditor.data()->mergeBlockFormat(blockFormat);
 }
 
 #include <TextTool.moc>

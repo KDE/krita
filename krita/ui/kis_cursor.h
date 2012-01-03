@@ -68,6 +68,9 @@ public:
     static QCursor closedHandCursor();    // Pan tool cursor
     static QCursor rotateCursor();    // Transform tool cursor
 
+    // Makes a 32x32 bitmap that is compatible with different plattfroms
+    static QBitmap bitmapFromData(const QSize& size, unsigned char* data);
+
     // Load a cursor from an image file. The image should have an alpha channel
     // and will be converted to black and white on loading. Any format loadable by
     // QImage can be used.

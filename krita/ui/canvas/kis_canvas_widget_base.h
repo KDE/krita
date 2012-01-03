@@ -109,7 +109,7 @@ protected:
     virtual bool callFocusNextPrevChild(bool next) = 0;
 
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

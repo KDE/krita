@@ -308,6 +308,17 @@ public:
     bool confirmNonNativeSave(const bool exporting) const;
     void setConfirmNonNativeSave(const bool exporting, const bool on);
 
+
+    /**
+     * @return true if saving/exporting should inhibit the option dialog
+     */
+    bool saveInBatchMode() const;
+
+    /**
+     * @param batchMode if true, do not show the option dialog when saving or exporting.
+     */
+    void setSaveInBatchMode(const bool batchMode);
+
     virtual bool wantExportConfirmation() const;
 
     /**
@@ -585,6 +596,14 @@ public:
      * @see KoDocumentRdf
      */
     KoDocumentRdf *documentRdf() const;
+
+    /**
+     * Replace the current rdf document with the given rdf document. The existing RDF document
+     * will be deleted, and if RDF support is compiled out, KoDocument does not take ownership.
+     * Otherwise, KoDocument will own the rdf document.
+     */
+    void setDocumentRdf(KoDocumentRdf *rdfDocument);
+
     /**
      * @return the Rdf metadata for this document.
      * @see KoDocumentRdf

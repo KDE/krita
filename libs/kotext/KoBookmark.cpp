@@ -33,7 +33,7 @@
 #include <QTextList>
 #include <QTextBlock>
 #include <QTextCursor>
-
+#include <QWeakPointer>
 #include <KDebug>
 
 class KoBookmark::Private
@@ -44,7 +44,7 @@ public:
           posInDocument(0) { }
     const QTextDocument *document;
     int posInDocument;
-    KoBookmark *endBookmark;
+    QWeakPointer<KoBookmark> endBookmark;
     QString name;
     BookmarkType type;
 };
@@ -54,7 +54,7 @@ KoBookmark::KoBookmark(const QTextDocument *document)
       d(new Private(document))
 {
     d->type = SinglePosition;
-    d->endBookmark = 0;
+    d->endBookmark.clear();
 }
 
 KoBookmark::~KoBookmark()
@@ -92,7 +92,7 @@ void KoBookmark::setName(const QString &name)
     // insert it, then create your endbookmark and set the end on this. I
     // don't think this is particularly useful, but it cannot hurt.
     if (d->endBookmark) {
-        d->endBookmark->setName(name);
+        d->endBookmark.data()->setName(name);
     }
 }
 
@@ -104,7 +104,7 @@ QString KoBookmark::name() const
 void KoBookmark::setType(BookmarkType type)
 {
     if (type == SinglePosition) {
-        d->endBookmark = 0;
+        d->endBookmark.clear();
     }
     d->type = type;
 }
@@ -123,12 +123,12 @@ void KoBookmark::setEndBookmark(KoBookmark *bookmark)
     // 19.837.6 <text:bookmark-start>
     // The text:name attribute specifies matching names for bookmarks.
     // so let's set the endname to the startname.
-    d->endBookmark->setName(name());
+    d->endBookmark.data()->setName(name());
 }
 
 KoBookmark *KoBookmark::endBookmark()
 {
-    return d->endBookmark;
+    return d->endBookmark.data();
 }
 
 int KoBookmark::position()
@@ -168,6 +168,10 @@ bool KoBookmark::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
                 KoTextInlineRdf* inlineRdf = new KoTextInlineRdf(const_cast<QTextDocument*>(d->document), this);
                 if (inlineRdf->loadOdf(element)) {
                     setInlineRdf(inlineRdf);
+                }
+                else {
+                    delete inlineRdf;
+                    inlineRdf = 0;
                 }
             }
         }

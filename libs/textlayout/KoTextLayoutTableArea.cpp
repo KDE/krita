@@ -598,7 +598,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
         d->totalMisFit = true;
     }
 
-    if (anyCellTried && noCellsFitted && !rowHasExactHeight) {
+    if (anyCellTried && noCellsFitted && !rowHasExactHeight && !allCellsFullyDone) {
         d->rowPositions[row+1] = d->rowPositions[row];
         nukeRow(cursor);
         if (cursor->row > d->startOfArea->row) {
@@ -712,6 +712,12 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
 
     painter->fillRect(tableRect, d->table->format().background());
 
+    KoTextDocumentLayout::PaintContext cellContext = context;
+    QColor tableBackground = context.background;
+    if (d->table->format().hasProperty(QTextFormat::BackgroundBrush)) {
+        tableBackground = d->table->format().background().color();
+    }
+
     // Draw header row backgrounds
     for (int row = 0; row < d->headerRows; ++row) {
         QRectF rowRect(d->columnPositions[0], d->headerRowPositions[row], d->tableWidth, d->headerRowPositions[row+1] - d->headerRowPositions[row]);
@@ -739,7 +745,12 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
 
             int testRow = (row == firstRow ? tableCell.row() : row);
             if (d->cellAreas[testRow][column]) {
-                paintCell(painter, context, tableCell);
+                cellContext.background = tableBackground;
+                QBrush bgBrush = tableCell.format().brushProperty(KoTableCellStyle::CellBackgroundBrush);
+                if (bgBrush != Qt::NoBrush) {
+                    cellContext.background = bgBrush.color();
+                }
+                paintCell(painter, cellContext, tableCell);
             }
         }
     }
@@ -757,7 +768,12 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
 
             int testRow = row == firstRow ? tableCell.row() : row;
             if (d->cellAreas[testRow][column]) {
-                paintCell(painter, context, tableCell);
+                cellContext.background = tableBackground;
+                QBrush bgBrush = tableCell.format().brushProperty(KoTableCellStyle::CellBackgroundBrush);
+                if (bgBrush != Qt::NoBrush) {
+                    cellContext.background = bgBrush.color();
+                }
+                paintCell(painter, cellContext, tableCell);
 
                 painter->setRenderHint(QPainter::Antialiasing, true);
                 paintCellBorders(painter, context, tableCell, false, &accuBlankBorders);
@@ -804,6 +820,9 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
     // This is an actual cell we want to draw, and not a covered one.
     QRectF bRect(cellBoundingRect(tableCell));
 
+    painter->save();
+    painter->setClipRect(bRect, Qt::IntersectClip);
+
     // Possibly paint the background of the cell
     QVariant background(tableCell.format().property(KoTableCellStyle::CellBackgroundBrush));
     if (!background.isNull()) {
@@ -832,14 +851,14 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
         }
     }
 
-    // Paint the content of the cellArea
     if (row < d->headerRows) {
         painter->translate(d->headerOffsetX, 0);
-        d->cellAreas[row][column]->paint(painter, context);
-        painter->translate(-d->headerOffsetX, 0);
-    } else {
-        d->cellAreas[row][column]->paint(painter, context);
     }
+
+    // Paint the content of the cellArea
+    d->cellAreas[row][column]->paint(painter, context);
+
+    painter->restore();
 }
 
 void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell, bool topRow, QVector<QLineF> *accuBlankBorders)
@@ -861,7 +880,7 @@ void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocu
         if (row == 0) {
             cellStyleHelper.drawTopHorizontalBorder(*painter, bRect.x(), bRect.y(), bRect.width(), accuBlankBorders);
         }
-        if (topRow) {
+        if (topRow && row != 0) {
             // in collapsing mode we need to also paint the top border of the area
             int c = column;
             while (c < column + tableCell.columnSpan()) {

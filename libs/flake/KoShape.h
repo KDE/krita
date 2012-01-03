@@ -301,7 +301,7 @@ public:
 
     /**
      * @brief Add a connector point to the shape
-     * 
+     *
      * A connector is a place on the shape that allows a graphical connection to be made
      * using a line, for example.
      *
@@ -318,7 +318,7 @@ public:
      * are fixed at their default position.
      * The function will insert a new connection point if the specified id was not used
      * before.
-     * 
+     *
      * @param connectionPointId the id of the connection point to set
      * @param point the connection point data
      * @return false if specified connection point id is invalid, else true
@@ -882,6 +882,9 @@ public:
 
     /// Returns if the given shape is dependent on this shape
     bool hasDependee(KoShape *shape) const;
+
+    /// Returns list of shapes depending on this shape
+    QList<KoShape*> dependees() const;
 
     /// Returns additional snap data the shape wants to have snapping to
     virtual KoSnapData snapData() const;

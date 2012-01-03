@@ -1,15 +1,26 @@
 [Desktop Entry]
 Name=Spreadsheet
+Name[ca]=Full de càlcul
 Name[cs]=Sešit
+Name[et]=Arvutustabel
+Name[it]=Foglio di calcolo
+Name[nb]=Regneark
 Name[pt]=Folha de cálculo
 Name[pt_BR]=Planilha
+Name[ru]=Таблица
 Name[sv]=Kalkylark
 Name[uk]=Електронні таблиці
 Name[x-test]=xxSpreadsheetxx
+Name[zh_CN]=电子表格
 Name[zh_TW]=試算表
 Comment=Spreadsheet Import Plugin for Kexi
+Comment[ca]=Connector d'importació de fulls de dades per al Kexi
+Comment[et]=Kexi arvutustabeli impordiplugin
+Comment[it]=Estensione di importazione foglio elettronico di Kexi
+Comment[nb]=Regneark import-programtillegg for Kexi
 Comment[pt]='Plugin' de Importação de Folhas de Cálculo para o Kexi
 Comment[pt_BR]=Plugin de Importação de Planilha para o Kexi
+Comment[ru]=Модуль импорта таблиц для Kexi
 Comment[sv]=Importinsticksprogram av kalkylark för Kexi
 Comment[uk]=Додаток імпортування даних з електронної таблиці для Kexi
 Comment[x-test]=xxSpreadsheet Import Plugin for Kexixx

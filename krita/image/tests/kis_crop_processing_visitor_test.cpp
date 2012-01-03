@@ -28,7 +28,7 @@
 #include "kis_transparency_mask.h"
 #include "testutil.h"
 #include "kis_surrogate_undo_adapter.h"
-
+#include "kis_image.h"
 
 void KisCropProcessingVisitorTest::testUndo()
 {
@@ -76,7 +76,6 @@ void KisCropProcessingVisitorTest::testCropTransparencyMask()
 
     QRect selectionRect(40,40,100,100);
     KisTransparencyMaskSP mask = new KisTransparencyMask();
-    mask->setSelection(new KisSelection());
     KisPixelSelectionSP pixelSelection = mask->selection()->getOrCreatePixelSelection();
     pixelSelection->select(selectionRect, MAX_SELECTED);
 

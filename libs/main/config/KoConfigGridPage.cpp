@@ -72,7 +72,9 @@ KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
     d->snapChBox->setChecked(gd.snapToGrid());
     QLabel* gridColorLbl = new QLabel(i18n("Grid color:"), generalGrp);
     d->gridColorBtn = new KColorButton(gd.gridColor(), generalGrp);
+#if KDE_IS_VERSION(4,5,0)
     d->gridColorBtn->setAlphaChannelEnabled(true);
+#endif
     gridColorLbl->setBuddy(d->gridColorBtn);
     layoutGeneral->addWidget(showGridLabel, 0, 0);
     layoutGeneral->addWidget(d->gridChBox, 0, 1);

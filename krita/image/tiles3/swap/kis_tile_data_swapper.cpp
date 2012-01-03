@@ -44,7 +44,7 @@ class SoftSwapStrategy;
 class AggressiveSwapStrategy;
 
 
-class KisTileDataSwapper::Private
+struct KisTileDataSwapper::Private
 {
 public:
     QSemaphore semaphore;

@@ -470,7 +470,7 @@ void KisPainter::bitBlt(qint32 dstX, qint32 dstY,
     the other bit blit operations. This one is longer than the rest in an effort to
     optimize speed and memory use */
     if (d->selection) {
-        KisPixelSelectionSP selectionProjection = d->selection->projection();
+        KisPaintDeviceSP selectionProjection = d->selection->projection();
         KisRandomConstAccessorPixel maskIt = selectionProjection->createRandomConstAccessor(dstX, dstY);
 
         while (rowsRemaining > 0) {
@@ -629,7 +629,7 @@ void KisPainter::bitBltOldData(qint32 dstX, qint32 dstY,
     the other bit blit operations. This one is longer than the rest in an effort to
     optimize speed and memory use */
     if (d->selection) {
-        KisPixelSelectionSP selectionProjection = d->selection->projection();
+        KisPaintDeviceSP selectionProjection = d->selection->projection();
         KisRandomConstAccessorPixel maskIt = selectionProjection->createRandomConstAccessor(dstX, dstY);
 
         while (rowsRemaining > 0) {
@@ -756,7 +756,7 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
     KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG(x, y);
 
     if(d->selection) {
-        KisPixelSelectionSP selectionProjection = d->selection->projection();
+        KisPaintDeviceSP selectionProjection = d->selection->projection();
         KisRandomConstAccessorSP maskIt = selectionProjection->createRandomConstAccessorNG(x, y);
 
         while(rowsRemaining > 0) {
@@ -881,7 +881,7 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     if (d->selection) {
         /* d->selection is a KisPaintDevice, so first a readBytes is performed to
         get the area of interest... */
-        KisPixelSelectionSP selectionProjection = d->selection->projection();
+        KisPaintDeviceSP selectionProjection = d->selection->projection();
         quint8* selBytes = new quint8[srcWidth * srcHeight * selectionProjection->pixelSize()];
         selectionProjection->readBytes(selBytes, dstX, dstY, srcWidth, srcHeight);
         d->paramInfo.maskRowStart  = selBytes;
@@ -1437,7 +1437,7 @@ void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width,
     int dstY = y2-y1;
 
     qreal _C = dstX*y1 - dstY*x1;
-    qreal projectionDenominator = 1.0 / (pow(dstX,2) + pow(dstY,2));
+    qreal projectionDenominator = 1.0 / (pow((double)dstX, 2) + pow((double)dstY, 2));
 
     qreal subPixel;
     if (qAbs(dstX) > qAbs(dstY)){
@@ -1458,7 +1458,7 @@ void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width,
     if (x2<x1) qSwap(x1,x2);
     if (y2<y1) qSwap(y1,y2);
 
-    qreal denominator = sqrt(pow(dstY,2) + pow(dstX,2));
+    qreal denominator = sqrt(pow((double)dstY,2) + pow((double)dstX,2));
     if (denominator == 0.0) {
         denominator = 1.0;
     }
@@ -1477,8 +1477,8 @@ void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width,
             scanY = Y1_ + projection * dstY;
 
             if (((scanX < x1) || (scanX > x2)) || ((scanY < y1) || (scanY > y2))) {
-                AA_ = qMin( sqrt( pow(x-X1_,2) + pow(y-Y1_,2) ),
-                            sqrt( pow(x-X2_,2) + pow(y-Y2_,2) ));
+                AA_ = qMin( sqrt( pow((double)x - X1_, 2) + pow((double)y - Y1_, 2) ),
+                            sqrt( pow((double)x - X2_, 2) + pow((double)y - Y2_, 2) ));
             }else{
                 AA_ = qAbs(dstY*x - dstX*y + _C) * denominator;
             }

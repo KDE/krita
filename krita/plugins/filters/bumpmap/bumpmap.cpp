@@ -185,7 +185,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP device,
         switch ((enumBumpmapType)config->getInt("type", krita::LINEAR)) {
         case SPHERICAL:
             n = i / 255.0 - 1.0;
-            lut[i] = (int)(255.0 * sqrt(1.0 - n * n) + 0.5);
+            lut[i] = (int)(255.0 * sqrt((double)1.0 - n * n) + 0.5);
             break;
 
         case SINUSOIDAL:
@@ -222,8 +222,6 @@ void KisFilterBumpmap::process(KisPaintDeviceSP device,
         bumpmap = device;
     }
 
-    return;
-
     qint32 sel_h = applyRect.height();
     qint32 sel_w = applyRect.width();
 
@@ -252,7 +250,6 @@ void KisFilterBumpmap::process(KisPaintDeviceSP device,
     // ---------------------- Load initial three bumpmap scanlines
 
     const KoColorSpace * srcCs = device->colorSpace();
-    QList<KoChannelInfo *> channels = srcCs->channels();
 
     // One byte per pixel, converted from the bumpmap layer.
     quint8 * bm_row1 = new quint8[bm_w];
@@ -277,8 +274,6 @@ void KisFilterBumpmap::process(KisPaintDeviceSP device,
         row_in_bumpmap = (y >= - config->getInt("yofs", 0) && y < - config->getInt("yofs", 0) + bm_h);
 
         // Bumpmap
-
-
         qint32 tmp = config->getInt("xofs", 0) + srcTopLeft.x();
         xofs2 = MOD(tmp, bm_w);
 
@@ -317,7 +312,7 @@ void KisFilterBumpmap::process(KisPaintDeviceSP device,
                 if (ndotl < 0) {
                     shade = (qint32)(compensation * config->getInt("ambient", 0));
                 } else {
-                    shade = (qint32)(ndotl / sqrt(nx * nx + ny * ny + nz2));
+                    shade = (qint32)(ndotl / sqrt((double)nx * nx + ny * ny + nz2));
                     shade = (qint32)(shade + qMax(0, (int)((255 * compensation - shade)) * config->getInt("ambient", 0) / 255));
                 }
             }

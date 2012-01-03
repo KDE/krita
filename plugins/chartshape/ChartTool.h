@@ -81,8 +81,12 @@ private slots:
     
     void setDataSetChartType( DataSet *dataSet, ChartType type );
     void setDataSetChartSubType( DataSet *dataSet, ChartSubtype subType );
-    void setDataSetShowValues( DataSet *dataSet, bool b );
-    void setDataSetShowLabels( DataSet *dataSet, bool b );
+
+    void setDataSetShowCategory( DataSet *dataSet, bool b );
+    void setDataSetShowNumber( DataSet *dataSet, bool b );
+    void setDataSetShowPercent( DataSet *dataSet, bool b );
+    void setDataSetShowSymbol( DataSet *dataSet, bool b );
+
     void setDataSetPen( DataSet *dataSet, const QColor& color );
     void setDataSetBrush( DataSet *dataSet, const QColor& color );
     void setDataSetAxis( DataSet *dataSet, Axis *axis );

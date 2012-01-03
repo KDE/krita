@@ -85,6 +85,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
     KoStore* store = KoStore::createStore(&buffer, KoStore::Write, mimeType);
     Q_ASSERT(store);
     Q_ASSERT(!store->bad());
+    store->disallowNameExpansion();
 
     // Layer data
     if (store->open("layerdata")) {
@@ -193,6 +194,7 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
         KoStore* store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
+        store->disallowNameExpansion();
         const KoColorProfile *profile = 0;
 
         QString csDepth, csModel;

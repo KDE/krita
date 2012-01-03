@@ -31,7 +31,7 @@
 #include "kis_processing_visitor.h"
 
 
-class KisAdjustmentLayer::Private
+struct KisAdjustmentLayer::Private
 {
 public:
     KisFilterConfiguration *filterConfig;

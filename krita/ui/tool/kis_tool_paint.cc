@@ -73,7 +73,7 @@
 const int STEP = 20;
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
-        : KisTool(canvas, cursor)
+    : KisTool(canvas, cursor)
 {
     m_optionWidgetLayout = 0;
 
@@ -116,11 +116,11 @@ void KisToolPaint::resourceChanged(int key, const QVariant& v)
     KisTool::resourceChanged(key, v);
 
     switch(key){
-        case(KisCanvasResourceProvider::Opacity):
-            slotSetOpacity(v.toDouble());
-            break;
-        default: //nothing
-            break;
+    case(KisCanvasResourceProvider::Opacity):
+        slotSetOpacity(v.toDouble());
+        break;
+    default: //nothing
+        break;
     }
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
@@ -151,7 +151,7 @@ void KisToolPaint::paint(QPainter&, const KoViewConverter &)
 void KisToolPaint::setMode(ToolMode mode)
 {
     if(this->mode() == KisTool::PAINT_MODE &&
-       mode != KisTool::PAINT_MODE) {
+            mode != KisTool::PAINT_MODE) {
 
         // Let's add history information about recently used colors
         emit sigPaintingFinished();
@@ -163,17 +163,17 @@ void KisToolPaint::setMode(ToolMode mode)
 void KisToolPaint::mousePressEvent(KoPointerEvent *event)
 {
     if(mode() == KisTool::HOVER_MODE &&
-       (event->button() == Qt::LeftButton) &&
-       event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) &&
-       !specialModifierActive()) {
+            (event->button() == Qt::LeftButton) &&
+            event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) &&
+            !specialModifierActive()) {
         setMode(MIRROR_AXIS_SETUP_MODE);
         useCursor(KisCursor::crossCursor());
         canvas()->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, convertToPixelCoord(event->point));
     }
     else if(mode() == KisTool::HOVER_MODE &&
-       (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) &&
-       event->modifiers() & Qt::ControlModifier &&
-       !specialModifierActive()) {
+            (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) &&
+            event->modifiers() & Qt::ControlModifier &&
+            !specialModifierActive()) {
 
         setMode(SECONDARY_PAINT_MODE);
         useCursor(KisCursor::pickerCursor());
@@ -228,7 +228,7 @@ void KisToolPaint::keyPressEvent(QKeyEvent *event)
     if ((event->key() == Qt::Key_Control) && (event->modifiers() == Qt::ControlModifier)) {
         useCursor(KisCursor::pickerCursor());
     } else if ((event->key() == Qt::Key_Control || event->key() == Qt::Key_Shift)) {
-            if (event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) {
+        if (event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) {
             useCursor(KisCursor::crossCursor());
         }
     }
@@ -256,15 +256,15 @@ void KisToolPaint::pickColor(const QPointF &documentPixel,
     }
 
     int resource = toForegroundColor ?
-        KoCanvasResourceManager::ForegroundColor : KoCanvasResourceManager::BackgroundColor;
+                KoCanvasResourceManager::ForegroundColor : KoCanvasResourceManager::BackgroundColor;
 
     KisPaintDeviceSP device = fromCurrentNode ?
-        currentNode()->paintDevice() : image()->projection();
+                currentNode()->paintDevice() : image()->projection();
 
     QPoint imagePoint = image()->documentToIntPixel(documentPixel);
 
     canvas()->resourceManager()->
-        setResource(resource, KisToolUtils::pick(device, imagePoint));
+            setResource(resource, KisToolUtils::pick(device, imagePoint));
 }
 
 QWidget * KisToolPaint::createOptionWidget()

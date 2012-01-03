@@ -78,8 +78,10 @@ public slots:
     void dataSetChartTypeSelected( QAction *action );
     void datasetBrushSelected( const QColor& color );
     void datasetPenSelected( const QColor& color );
-    void ui_datasetShowValuesChanged( bool b );
-    void ui_datasetShowLabelsChanged( bool b );
+    void ui_datasetShowCategoryChanged( bool b );
+    void ui_dataSetShowNumberChanged( bool b );
+    void ui_datasetShowPercentChanged( bool b );
+    void ui_datasetShowSymbolChanged( bool b );
     void ui_dataSetSelectionChanged( int index );
     void ui_dataSetAxisSelectionChanged( int index );
     void ui_dataSetXDataRegionChanged();
@@ -133,8 +135,10 @@ signals:
     
     void datasetPenChanged( DataSet *dataSet, const QColor& color );
     void datasetBrushChanged( DataSet *dataSet, const QColor& color );
-    void datasetShowValuesChanged( DataSet *dataSet, bool b );
-    void datasetShowLabelsChanged( DataSet *dataSet, bool b );
+    void datasetShowCategoryChanged( DataSet *dataSet, bool b );
+    void dataSetShowNumberChanged( DataSet *dataSet, bool b );
+    void datasetShowPercentChanged( DataSet *dataSet, bool b );
+    void datasetShowSymbolChanged( DataSet *dataSet, bool b );
     void dataSetAxisChanged( DataSet *dataSet, Axis *axis );
     void gapBetweenBarsChanged( int percent );
     void gapBetweenSetsChanged( int percent );

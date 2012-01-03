@@ -49,7 +49,7 @@ protected:
     virtual void undoNoUpdate();
 
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

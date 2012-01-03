@@ -49,7 +49,7 @@ class KoCanvasControllerProxyObject;
  * imlements KoCanvasController, tools, scrolling and zooming will work.
  *
  * A KoCanvasController implementation acts as a decorator around the canvas widget or
- * graphics item and provides a way to scroll the cavasn, allows the canvas to be centered
+ * graphics item and provides a way to scroll the canvas, allows the canvas to be centered
  * in the viewArea and manages tool activation.
  *
  * <p>The using application can instantiate this class and add its
@@ -294,8 +294,10 @@ public:
    /**
      * Returns the action collection for the canvas
      * @returns action collection for this canvas, can be 0
-     */    
+     */
     virtual KActionCollection* actionCollection() const;
+
+    QPoint documentOffset() const;
 
 protected:
     void setDocumentSize(const QSize &sz);
@@ -308,7 +310,7 @@ protected:
     qreal preferredCenterFractionY() const;
 
     void setDocumentOffset( QPoint &offset);
-    QPoint documentOffset() const;
+
 
 private:
     class Private;

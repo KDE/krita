@@ -34,9 +34,6 @@ typedef QPointer<KoUpdater> KoUpdaterPtr;
 
 #include <kis_types.h>
 #include <kis_image.h>
-#include <kis_filter_strategy.h>
-#include <kis_shear_visitor.h>
-#include <kis_transform_worker.h>
 #include <kis_paint_device.h>
 
 #include "kis_layer_manager.h"
@@ -123,29 +120,13 @@ void KisImageManager::scaleCurrentImage(const QSize &size, qreal xres, qreal yre
 void KisImageManager::rotateCurrentImage(double radians)
 {
     if (!m_view->image()) return;
-
-    KoProgressUpdater* updater = m_view->statusBar()->progress()->createUpdater();
-    updater->start(100, "Rotate Image");
-    KoUpdaterPtr up = updater->startSubtask();
-
-    m_view->image()->rotate(radians, up);
-
-    m_view->statusBar()->progress()->detachUpdater(updater);
-    updater->deleteLater();
+    m_view->image()->rotate(radians);
 }
 
 void KisImageManager::shearCurrentImage(double angleX, double angleY)
 {
     if (!m_view->image()) return;
-
-    KoProgressUpdater* updater = m_view->statusBar()->progress()->createUpdater();
-    updater->start(100, "Shear Image");
-    KoUpdaterPtr up = updater->startSubtask();
-
-    m_view->image()->shear(angleX, angleY, up);
-
-    m_view->statusBar()->progress()->detachUpdater(updater);
-    updater->deleteLater();
+    m_view->image()->shear(angleX, angleY);
 }
 
 

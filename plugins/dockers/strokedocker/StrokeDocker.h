@@ -8,6 +8,7 @@
    Copyright (C) 2005 Thomas Zander <zander@kde.org>
    Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +32,7 @@
 #include <KoUnit.h>
 #include <KoCanvasObserverBase.h>
 #include <QtGui/QDockWidget>
+#include <KoMarkerData.h>
 
 class KoShapeBorderModel;
 
@@ -61,6 +63,10 @@ private slots:
     void slotJoinChanged( int ID );
     /// miter limit has changed
     void miterLimitChanged();
+    /// start marker has changed
+    void startMarkerChanged();
+    /// end marker has changed
+    void endMarkerChanged();
 
     void resourceChanged(int key, const QVariant & value);
     void locationChanged(Qt::DockWidgetArea area);
@@ -72,10 +78,13 @@ private:
     /// apply line changes to the selected shape
     void applyChanges();
 
+    /// apply marker changes to the selected shape
+    void applyMarkerChanges(KoMarkerData::MarkerPosition position);
+
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );
     virtual void unsetCanvas();
-    
+
 private:
     class Private;
     Private * const d;

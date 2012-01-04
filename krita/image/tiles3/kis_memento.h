@@ -40,7 +40,7 @@ typedef KisSharedPtr<KisMemento> KisMementoSP;
 class KisMemento : public KisShared
 {
 public:
-    inline KisMemento(KisMementoManager* mementoManager) {
+    inline KisMemento(KisMementoManager* /*mementoManager*/) {
         m_extentMinX = qint32_MAX;
         m_extentMinY = qint32_MAX;
         m_extentMaxX = qint32_MIN;

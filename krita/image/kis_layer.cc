@@ -275,8 +275,8 @@ KisSelectionMaskSP KisLayer::selectionMask() const
 
     //finds the active selection mask
     if (masks.size() == 1) {
-        KisSelectionMaskSP selection = dynamic_cast<KisSelectionMask*>(masks[0].data());
-        return selection;
+        KisSelectionMaskSP selectionMask = dynamic_cast<KisSelectionMask*>(masks[0].data());
+        return selectionMask;
     }
     return 0;
 }

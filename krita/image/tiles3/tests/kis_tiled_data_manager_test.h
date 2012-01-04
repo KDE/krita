@@ -50,6 +50,8 @@ private slots:
     void testBitBltRough();
     void testTransactions();
     void testPurgeHistory();
+    void testUndoSetDefaultPixel();
+
     void benchmarkReadOnlyTileLazy();
     void benchmarkSharedPointers();
 

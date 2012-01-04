@@ -224,6 +224,13 @@ public:
     virtual void clear();
 
     /**
+     * Clear the given rectangle to transparent black. The paint device will expand to
+     * contain the given rect.
+     */
+    void clear(const QRect & rc);
+
+
+    /**
      * Sets the default pixel. New data will be initialised with this pixel. The pixel is copied: the
      * caller still owns the pointer and needs to delete it to avoid memory leaks.
      */
@@ -233,12 +240,6 @@ public:
      * Get a pointer to the default pixel.
      */
     const quint8 *defaultPixel() const;
-
-    /**
-     * Clear the given rectangle to transparent black. The paint device will expand to
-     * contain the given rect.
-     */
-    void clear(const QRect & rc);
 
     /**
      * Fill the given rectangle with the given pixel. The paint device will expand to

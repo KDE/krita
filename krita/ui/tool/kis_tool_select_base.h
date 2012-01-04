@@ -25,7 +25,6 @@
 #include "kis_cursor.h"
 
 class KisSelectionOptions;
-//class KAction;
 
 class KRITAUI_EXPORT KisToolSelectBase : public KisTool
 {
@@ -47,8 +46,8 @@ protected:
     virtual void keyPressEvent(QKeyEvent *event);
 
     KisSelectionOptions* m_optWidget;
-    selectionAction m_selectAction;
-    selectionMode m_selectionMode;
+    SelectionAction m_selectAction;
+    SelectionMode m_selectionMode;
 };
 
 #endif // KISTOOLSELECTBASE_H

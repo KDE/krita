@@ -87,11 +87,6 @@ KShortcut ToolHelper::shortcut() const
     return m_toolFactory->shortcut();
 }
 
-bool ToolHelper::inputDeviceAgnostic() const
-{
-    return m_toolFactory->inputDeviceAgnostic();
-}
-
 bool ToolHelper::canCreateTool(KoCanvasBase *canvas) const
 {
     return m_toolFactory->canCreateTool(canvas);

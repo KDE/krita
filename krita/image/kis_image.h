@@ -63,7 +63,13 @@ class MergeStrategy;
  * meta information about the image. And it also provides some
  * functions to manipulate the whole image.
  */
-class KRITAIMAGE_EXPORT KisImage : public QObject, public KisStrokesFacade, public KisUpdatesFacade, public KisProjectionUpdateListener, public KisNodeFacade, public KisNodeGraphListener, public KisShared
+class KRITAIMAGE_EXPORT KisImage : public QObject,
+        public KisStrokesFacade,
+        public KisUpdatesFacade,
+        public KisProjectionUpdateListener,
+        public KisNodeFacade,
+        public KisNodeGraphListener,
+        public KisShared
 {
 
     Q_OBJECT
@@ -157,28 +163,6 @@ public:
     KisSelectionSP globalSelection() const;
 
     /**
-     * Replaces the current global selection with globalSelection. If
-     * globalSelection is empty, a new selection object will be
-     * created that is by default completely deselected.
-     */
-    void setGlobalSelection(KisSelectionSP globalSelection = 0);
-
-    /**
-     * Removes the global selection.
-     */
-    void removeGlobalSelection();
-
-    /**
-     * @return the deselected global selection or 0 if no global selection was deselected
-     */
-    KisSelectionSP deselectedGlobalSelection();
-
-    /**
-     * Set deselected global selection
-     */
-    void setDeleselectedGlobalSelection(KisSelectionSP selection);
-
-    /**
      * Retrieve the next automatic layername (XXX: fix to add option to return Mask X)
      */
     QString nextLayerName() const;
@@ -228,7 +212,13 @@ public:
     /**
      * Execute a shear transform on all layers in this image.
      */
-    void shear(double angleX, double angleY, KoUpdater *m_progress);
+    void shear(double angleX, double angleY);
+
+    /**
+     * Shear a node and all its children.
+     * @param angleX, @param angleY are given in degrees.
+     */
+    void shearNode(KisNodeSP node, double angleX, double angleY);
 
     /**
      * Convert the image and all its layers to the dstColorSpace
@@ -254,6 +244,9 @@ public:
      *
      * This is essential if you have loaded an image that didn't
      * have an embedded profile to which you want to attach the right profile.
+     *
+     * This does not create an undo action; only call it when creating or
+     * loading an image.
      */
     void assignImageProfile(const KoColorProfile *profile);
 
@@ -600,6 +593,9 @@ private:
     void emitSizeChanged();
 
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
+    void shearImpl(const QString &actionName, KisNodeSP rootNode,
+                   bool resizeImage, double angleX, double angleY,
+                   const QPointF &origin);
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
     static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());
@@ -609,6 +605,35 @@ private:
 
     friend class KisImageSetProjectionColorSpaceCommand;
     void setProjectionColorSpace(const KoColorSpace * colorSpace);
+
+
+    friend class KisDeselectGlobalSelectionCommand;
+    friend class KisReselectGlobalSelectionCommand;
+    friend class KisSetGlobalSelectionCommand;
+    friend class KisPixelSelectionTest;
+
+    /**
+     * Replaces the current global selection with globalSelection. If
+     * globalSelection is empty, a new selection object will be
+     * created that is by default completely deselected.
+     */
+    void setGlobalSelection(KisSelectionSP globalSelection = 0);
+
+    /**
+     * Removes the global selection.
+     */
+    void removeGlobalSelection();
+
+    /**
+     * @return the deselected global selection or 0 if no global selection was deselected
+     */
+    KisSelectionSP deselectedGlobalSelection();
+
+    /**
+     * Set deselected global selection
+     */
+    void setDeselectedGlobalSelection(KisSelectionSP selection);
+
 private:
     class KisImagePrivate;
     KisImagePrivate * const m_d;

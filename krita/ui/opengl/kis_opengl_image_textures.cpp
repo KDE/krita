@@ -121,15 +121,23 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
     }
 }
 
+QRect KisOpenGLImageTextures::calculateTileRect(int col, int row) const
+{
+    return m_image->bounds() &
+        QRect(col * m_texturesInfo.effectiveWidth,
+              row * m_texturesInfo.effectiveHeight,
+              m_texturesInfo.effectiveWidth,
+              m_texturesInfo.effectiveHeight);
+}
+
 void KisOpenGLImageTextures::createImageTextureTiles()
 {
     KisOpenGL::makeContextCurrent();
 
     destroyImageTextureTiles();
     updateTextureFormat();
-    m_texturesInfo.imageRect = m_image->bounds();
 
-
+    m_storedImageBounds = m_image->bounds();
     const int lastCol = xToCol(m_image->width());
     const int lastRow = yToRow(m_image->height());
     m_numCols = lastCol + 1;
@@ -140,12 +148,9 @@ void KisOpenGLImageTextures::createImageTextureTiles()
 
     for (int row = 0; row <= lastRow; row++) {
         for (int col = 0; col <= lastCol; col++) {
-            QRect tileRect(col * m_texturesInfo.effectiveWidth,
-                           row * m_texturesInfo.effectiveHeight,
-                           m_texturesInfo.effectiveWidth,
-                           m_texturesInfo.effectiveHeight);
+            QRect tileRect = calculateTileRect(col, row);
 
-            KisTextureTile *tile = new KisTextureTile(tileRect & m_texturesInfo.imageRect,
+            KisTextureTile *tile = new KisTextureTile(tileRect,
                                                       &m_texturesInfo,
                                                       emptyTileData.constData());
             m_textureTiles.append(tile);
@@ -162,6 +167,7 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
         delete tile;
     }
     m_textureTiles.clear();
+    m_storedImageBounds = QRect();
 }
 
 KisOpenGLUpdateInfoSP
@@ -196,11 +202,13 @@ KisOpenGLImageTextures::updateCache(const QRect& rect)
     for (int col = firstColumn; col <= lastColumn; col++) {
         for (int row = firstRow; row <= lastRow; row++) {
 
-            KisTextureTile *tile = getTextureTileCR(col, row);
+            QRect tileRect = calculateTileRect(col, row);
+            QRect tileTextureRect = stretchRect(tileRect, m_texturesInfo.border);
 
-            KisTextureTileUpdateInfo tileInfo(tile,
-                                              tile->textureRectInImagePixels(),
-                                              updateRect);
+            KisTextureTileUpdateInfo tileInfo(col, row,
+                                              tileTextureRect,
+                                              updateRect,
+                                              m_image->bounds());
 
             tileInfo.retrieveData(m_image);
             info->tileList.append(tileInfo);
@@ -242,7 +250,8 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
         }
 
         tileInfo.convertTo(dstCS);
-        tileInfo.relatedTile()->update(tileInfo);
+        KisTextureTile *tile = getTextureTileCR(tileInfo.tileCol(), tileInfo.tileRow());
+        tile->update(tileInfo);
         tileInfo.destroy();
 
         KIS_OPENGL_PRINT_ERROR();
@@ -276,12 +285,7 @@ GLuint KisOpenGLImageTextures::backgroundTexture() const
 
 void KisOpenGLImageTextures::slotImageSizeChanged(qint32 w, qint32 h)
 {
-    Q_UNUSED(w);
-    Q_UNUSED(h);
-
     createImageTextureTiles();
-    KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
-    recalculateCache(info);
 }
 
 void KisOpenGLImageTextures::setMonitorProfile(KoColorProfile *monitorProfile)

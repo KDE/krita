@@ -263,10 +263,12 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         if (m_textList->itemNumber(block) == 0 && (listContinued = KoTextDocument(m_textList->document()).list(m_textList)->listContinuedFrom())) {
             //find the previous list of the same level
             QTextList *previousTextList = listContinued->textLists().at(level - 1).data();
-            const QTextBlock textBlock = previousTextList->item(previousTextList->count() - 1);
-            KoTextBlockData *blockData = 0;
-            if (textBlock.isValid() && (blockData = dynamic_cast<KoTextBlockData *>(textBlock.userData()))) {
-                index = blockData->counterIndex() + 1; //resume the previous list count
+            if (previousTextList) {
+                const QTextBlock textBlock = previousTextList->item(previousTextList->count() - 1);
+                KoTextBlockData *blockData = 0;
+                if (textBlock.isValid() && (blockData = dynamic_cast<KoTextBlockData *>(textBlock.userData()))) {
+                    index = blockData->counterIndex() + 1; //resume the previous list count
+                }
             }
         } else if (m_textList->itemNumber(block) > 0) {
             const QTextBlock textBlock = m_textList->item(m_textList->itemNumber(block) - 1);
@@ -452,19 +454,19 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     width += m_fm.width(prefix + suffix);
 
     qreal counterSpacing = 0;
-    if (listStyle != KoListStyle::None) {
-        if (format.boolProperty(KoListStyle::AlignmentMode)) {
-            // for aligmentmode spacing should be 0
-            counterSpacing = 0;
-        } else {
+    if (format.boolProperty(KoListStyle::AlignmentMode)) {
+        // for aligmentmode spacing should be 0
+        counterSpacing = 0;
+    } else {
+        if (listStyle != KoListStyle::None) {
             // see ODF spec 1.2 item 20.422
             counterSpacing = format.doubleProperty(KoListStyle::MinimumDistance);
             if (width < format.doubleProperty(KoListStyle::MinimumWidth)) {
                 counterSpacing -= format.doubleProperty(KoListStyle::MinimumWidth) - width;
             }
             counterSpacing = qMax(counterSpacing, qreal(0.0));
-            width = qMax(width, format.doubleProperty(KoListStyle::MinimumWidth));
         }
+        width = qMax(width, format.doubleProperty(KoListStyle::MinimumWidth));
     }
     data->setCounterWidth(width);
     data->setCounterSpacing(counterSpacing);

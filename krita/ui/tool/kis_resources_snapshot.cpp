@@ -39,7 +39,7 @@ struct KisResourcesSnapshot::Private {
     }
 
     KisImageWSP image;
-    KisDefaultBounds * bounds;
+    KisDefaultBoundsSP bounds;
     KisPostExecutionUndoAdapter *undoAdapter;
     KoColor currentFgColor;
     KoColor currentBgColor;

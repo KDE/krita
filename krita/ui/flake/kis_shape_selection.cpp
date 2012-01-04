@@ -307,7 +307,7 @@ void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter&
     Q_UNUSED(converter);
 }
 
-void KisShapeSelection::renderToProjection(KisPixelSelection* projection)
+void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection)
 {
     Q_ASSERT(projection);
     Q_ASSERT(m_image);
@@ -318,13 +318,13 @@ void KisShapeSelection::renderToProjection(KisPixelSelection* projection)
     renderSelection(projection, boundingRect.toAlignedRect());
 }
 
-void KisShapeSelection::renderToProjection(KisPixelSelection* projection, const QRect& r)
+void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection, const QRect& r)
 {
     Q_ASSERT(projection);
     renderSelection(projection, r);
 }
 
-void KisShapeSelection::renderSelection(KisPixelSelection* projection, const QRect& r)
+void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect& r)
 {
     Q_ASSERT(projection);
     Q_ASSERT(m_image);

@@ -1955,6 +1955,12 @@ bool KoShape::hasDependee(KoShape *shape) const
     return d->dependees.contains(shape);
 }
 
+QList<KoShape*> KoShape::dependees() const
+{
+    Q_D(const KoShape);
+    return d->dependees;
+}
+
 void KoShape::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(type);

@@ -36,6 +36,7 @@
 #include "krs_histogram.h"
 #include "krs_painter.h"
 #include "krs_wavelet.h"
+
 using namespace Scripting;
 
 ConstPaintDevice::ConstPaintDevice(KisPaintDeviceSP device, KisDoc2* doc)

@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Web Report Plugin
+Name[ca]=Connector d'informes web
+Name[et]=Aruande veebiplugin
+Name[it]=Estensione rapporti web
 Name[nb]=Programtillegg for vevrapport
 Name[pt]='Plugin' de Relatório Web
 Name[pt_BR]=Plugin de Web para relatório
@@ -9,6 +12,9 @@ Name[uk]=Додаток перегляду інтернету у звіті
 Name[x-test]=xxWeb Report Pluginxx
 Name[zh_TW]=網頁報告外掛程式
 Comment=Calligra Reports web Plugin
+Comment[ca]=Connector d'informes web del Calligra
+Comment[et]=Calligra aruannete veebiplugin
+Comment[it]=Estensione rapporti web di Calligra
 Comment[nb]=Vev-programtillegg for Calligra-rapporter
 Comment[pt]='Plugin' Web de Relatórios do Calligra
 Comment[pt_BR]=Plugin da Web para relatórios do Calligra

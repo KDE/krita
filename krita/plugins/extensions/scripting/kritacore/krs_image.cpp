@@ -92,7 +92,7 @@ void Image::rotate(double angle)
 
 void Image::shear(double xangle, double yangle)
 {
-    m_image->shear(xangle, yangle, 0);
+    m_image->shear(xangle, yangle);
 }
 
 QObject* Image::createPaintLayer(const QString& name, int opacity)

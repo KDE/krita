@@ -134,6 +134,11 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     const double currentLineWidth = m_lineWidthOption.apply(pi2, m_sketchProperties.lineWidth);
     const double currentOffsetScale = m_offsetScaleOption.apply(pi2, m_sketchProperties.offset);
 
+    KisVector2D endVec = toKisVector2D(pi2.pos());
+    KisVector2D startVec = toKisVector2D(pi1.pos());
+    KisVector2D dragVec = endVec - startVec;
+    if ((scale * m_brush->width()) <= 0.01 || (scale * m_brush->height()) <= 0.01) return KisDistanceInformation(0, dragVec.norm());;
+
     // shaded: does not draw this line, chrome does, fur does
     if (m_sketchProperties.makeConnection){
         drawConnection(prevMouse, mousePosition, currentLineWidth);
@@ -261,10 +266,6 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
-
-    KisVector2D end = toKisVector2D(pi2.pos());
-    KisVector2D start = toKisVector2D(pi1.pos());
-    KisVector2D dragVec = end - start;
 
     return KisDistanceInformation(0, dragVec.norm());
 }

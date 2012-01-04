@@ -118,6 +118,7 @@ set(kritaimage_LIB_SRCS
    kis_convolution_painter.cc
    kis_cubic_curve.cpp
    kis_default_bounds.cpp
+   kis_default_bounds_base.cpp
    kis_effect_mask.cc
    kis_fast_math.cpp
    kis_fill_painter.cc
@@ -177,7 +178,6 @@ set(kritaimage_LIB_SRCS
    kis_random_accessor_ng.cpp
    kis_random_generator.cc
    kis_random_sub_accessor.cpp
-   kis_shear_visitor.cpp
    kis_selected_transaction_data.cpp
    kis_selection.cc
    kis_selection_mask.cpp

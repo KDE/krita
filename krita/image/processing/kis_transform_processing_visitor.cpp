@@ -22,12 +22,15 @@
 
 #include <KoUpdater.h>
 
+#include "kis_layer.h"
+#include "kis_paint_device.h"
+#include "kis_selection.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_clone_layer.h"
 #include "kis_adjustment_layer.h"
 #include "generator/kis_generator_layer.h"
-#include "kis_image.h"
+
 #include "kis_transparency_mask.h"
 #include "kis_filter_mask.h"
 #include "kis_selection_mask.h"

@@ -1080,8 +1080,13 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
         QTextBlock block = cursor.block();
         KoTextInlineRdf* inlineRdf =
                 new KoTextInlineRdf((QTextDocument*)block.document(), block);
-        inlineRdf->loadOdf(element);
-        KoTextInlineRdf::attach(inlineRdf, cursor);
+        if (inlineRdf->loadOdf(element)) {
+                KoTextInlineRdf::attach(inlineRdf, cursor);
+        }
+        else {
+            delete inlineRdf;
+            inlineRdf = 0;
+        }
     }
 
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
@@ -1090,6 +1095,8 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
 
     bool stripLeadingSpace = true;
     loadSpan(element, cursor, &stripLeadingSpace);
+    cursor.mergeBlockCharFormat(cursor.blockCharFormat());
+
     cursor.setCharFormat(cf);   // restore the cursor char format
 }
 
@@ -1147,8 +1154,13 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
         QTextBlock block = cursor.block();
         KoTextInlineRdf* inlineRdf =
                 new KoTextInlineRdf((QTextDocument*)block.document(), block);
-        inlineRdf->loadOdf(element);
-        KoTextInlineRdf::attach(inlineRdf, cursor);
+        if (inlineRdf->loadOdf(element)) {
+            KoTextInlineRdf::attach(inlineRdf, cursor);
+        }
+        else {
+            delete inlineRdf;
+            inlineRdf = 0;
+        }
     }
 
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
@@ -1567,7 +1579,7 @@ void KoTextLoader::loadText(const QString &fulltext, QTextCursor &cursor,
 {
     QString text = normalizeWhitespace(fulltext, *stripLeadingSpace);
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
-    kDebug(32500) << "  <text> text=" << text << text.length();
+    kDebug(32500) << "  <text> text=" << text << text.length() << *stripLeadingSpace;
 #endif
 
     if (!text.isEmpty()) {
@@ -1608,12 +1620,6 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
     if (d->loadSpanLevel++ == 0)
         d->loadSpanInitialPos = cursor.position();
 
-    if (element.firstChild().isNull()) {
-        // there's nothing in this span. Insert an invisible character to make sure the
-        // style is used. See bug: 264471.
-        cursor.insertText(QString(0x200B)); // invisible space
-    }
-
     for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
         KoXmlElement ts = node.toElement();
         const QString localName(ts.localName());
@@ -1621,6 +1627,10 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
         const bool isDeltaNS = ts.namespaceURI() == KoXmlNS::delta;
         //        const bool isOfficeNS = ts.namespaceURI() == KoXmlNS::office;
+
+#ifdef KOOPENDOCUMENTLOADER_DEBUG
+        kDebug(32500) << "load" << localName << *stripLeadingSpace << node.toText().data();
+#endif
         if (node.isText()) {
             bool isLastNode = node.nextSibling().isNull();
             loadText(node.toText().data(), cursor, stripLeadingSpace,
@@ -1703,19 +1713,21 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             cursor.insertText(QString().fill(32, howmany));
             if (!ts.attributeNS(KoXmlNS::delta, "insertion-type").isEmpty())
                 d->closeChangeRegion(ts);
+            *stripLeadingSpace = false;
         } else if ( (isTextNS && localName == "note")) { // text:note
             loadNote(ts, cursor);
         } else if (isTextNS && localName == "bibliography-mark") { // text:bibliography-mark
             loadCite(ts,cursor);
         } else if (isTextNS && localName == "tab") { // text:tab
             cursor.insertText("\t");
+            *stripLeadingSpace = false;
         } else if (isTextNS && localName == "a") { // text:a
             if (!ts.attributeNS(KoXmlNS::delta, "insertion-type").isEmpty())
                 d->openChangeRegion(ts);
             QString target = ts.attributeNS(KoXmlNS::xlink, "href");
             QString styleName = ts.attributeNS(KoXmlNS::text, "style-name", QString());
             QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
-            
+
             if (!styleName.isEmpty()) {
                 KoCharacterStyle *characterStyle = d->textSharedData->characterStyle(styleName, d->stylesDotXml);
                 if (characterStyle) {
@@ -1728,10 +1740,10 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             newCharFormat.setAnchor(true);
             newCharFormat.setAnchorHref(target);
             cursor.setCharFormat(newCharFormat);
-            
+
             loadSpan(ts, cursor, stripLeadingSpace);   // recurse
             cursor.setCharFormat(cf); // restore the cursor char format
-            
+
             if (!ts.attributeNS(KoXmlNS::delta, "insertion-type").isEmpty())
                 d->closeChangeRegion(ts);
         } else if (isTextNS && localName == "line-break") { // text:line-break
@@ -1739,6 +1751,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             kDebug(32500) << "  <line-break> Node localName=" << localName;
 #endif
             cursor.insertText(QChar(0x2028));
+            *stripLeadingSpace = false;
         } else if (isTextNS && localName == "soft-page-break") { // text:soft-page-break
             KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
             if (textObjectManager) {
@@ -1759,8 +1772,14 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                         || ts.hasAttribute("id")) {
                     KoTextInlineRdf* inlineRdf =
                             new KoTextInlineRdf((QTextDocument*)document, startmark);
-                    inlineRdf->loadOdf(ts);
-                    startmark->setInlineRdf(inlineRdf);
+                    if (inlineRdf->loadOdf(ts)) {
+                        startmark->setInlineRdf(inlineRdf);
+                    }
+                    else {
+                        delete inlineRdf;
+                        inlineRdf = 0;
+                    }
+
                 }
 
                 loadSpan(ts, cursor, stripLeadingSpace);   // recurse
@@ -1796,8 +1815,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 linkCf.setAnchorNames(anchorName);
                 cursor.setCharFormat(linkCf);
             }
-            bool stripLeadingSpace = true;
-            loadSpan(ts, cursor, &stripLeadingSpace);   // recurse
+            loadSpan(ts, cursor, stripLeadingSpace);   // recurse
             cursor.setCharFormat(cf);   // restore the cursor char format
         } else if (isTextNS && localName == "number") { // text:number
             /*                ODF Spec, §4.1.1, Formatted Heading Numbering
@@ -1824,6 +1842,18 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 KoVariableManager *varManager = textObjectManager->variableManager();
                 if (varManager) {
                     textObjectManager->insertInlineObject(cursor, obj);
+                    // we need to update whitespace stripping here so we don't remove to many whitespaces.
+                    // this is simplified as it assumes the first child it the text item but that should be the case
+                    // most of the time with variables so it should be fine.
+                    KoXmlNode child = ts.firstChild();
+                    if (child.isText()) {
+                        QString text = normalizeWhitespace(child.toText().data(), *stripLeadingSpace);
+                        if (!text.isEmpty()) {
+                            // if present text ends with a space,
+                            // we can remove the leading space in the next text
+                            *stripLeadingSpace = text[text.length() - 1].isSpace();
+                        }
+                    }
                 }
             } else {
 #if 0 //1.6:
@@ -2299,10 +2329,15 @@ void KoTextLoader::loadTableCell(KoXmlElement &rowTag, QTextTable *tbl, QList<QR
         // rowTag is the current table cell.
         if (rowTag.hasAttributeNS(KoXmlNS::xhtml, "property") || rowTag.hasAttribute("id")) {
             KoTextInlineRdf* inlineRdf = new KoTextInlineRdf((QTextDocument*)cursor.block().document(),cell);
-            inlineRdf->loadOdf(rowTag);
-            QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-            cellFormat.setProperty(KoTableCellStyle::InlineRdf,QVariant::fromValue(inlineRdf));
-            cell.setFormat(cellFormat);
+            if (inlineRdf->loadOdf(rowTag)) {
+                QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
+                cellFormat.setProperty(KoTableCellStyle::InlineRdf,QVariant::fromValue(inlineRdf));
+                cell.setFormat(cellFormat);
+            }
+            else {
+                delete inlineRdf;
+                inlineRdf = 0;
+            }
         }
 
         cursor = cell.firstCursorPosition();

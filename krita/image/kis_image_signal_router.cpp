@@ -23,16 +23,18 @@
 #include "kis_image.h"
 
 
-#define CONNECT_BLOCKING_SIGNAL(signal)                                 \
-    connect(this, SIGNAL(__##signal), this, SIGNAL(signal), Qt::BlockingQueuedConnection)
-
 #define CONNECT_TO_IMAGE(signal)                                        \
     connect(this, SIGNAL(signal), m_image, SIGNAL(signal), Qt::DirectConnection)
 
-#define EMIT_BLOCKING(signal)                   \
+#define EMIT_NONBLOCKING(signal)                \
     {                                           \
-        if(checkSameThread()) { emit signal; }  \
-        else { emit __##signal; }               \
+        emit signal;                            \
+    }
+
+#define EMIT_DIRECT_ASSERT_SAME_THREAD(signal)  \
+    {                                           \
+        Q_ASSERT(checkSameThread());            \
+        emit signal;                            \
     }
 
 
@@ -47,15 +49,6 @@ static ImageSignalsStaticRegistrar __registrar;
 KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
     : m_image(image)
 {
-    CONNECT_BLOCKING_SIGNAL(sigNotification(KisImageSignalType));
-    CONNECT_BLOCKING_SIGNAL(sigNodeChanged(KisNode*));
-    CONNECT_BLOCKING_SIGNAL(sigAboutToAddANode(KisNode*, int));
-    CONNECT_BLOCKING_SIGNAL(sigNodeHasBeenAdded(KisNode*, int));
-    CONNECT_BLOCKING_SIGNAL(sigAboutToRemoveANode(KisNode*, int));
-    CONNECT_BLOCKING_SIGNAL(sigNodeHasBeenRemoved(KisNode*, int));
-    CONNECT_BLOCKING_SIGNAL(sigAboutToMoveNode(KisNode*, int, int));
-    CONNECT_BLOCKING_SIGNAL(sigNodeHasBeenMoved(KisNode*, int, int));
-
     connect(this, SIGNAL(sigNotification(KisImageSignalType)),
             SLOT(slotNotification(KisImageSignalType)));
 
@@ -94,42 +87,63 @@ void KisImageSignalRouter::emitNotifications(KisImageSignalVector notifications)
 
 void KisImageSignalRouter::emitNotification(KisImageSignalType type)
 {
-    EMIT_BLOCKING(sigNotification(type));
+    EMIT_NONBLOCKING(sigNotification(type));
 }
 
 void KisImageSignalRouter::emitNodeChanged(KisNode *node)
 {
-    EMIT_BLOCKING(sigNodeChanged(node));
+    EMIT_NONBLOCKING(sigNodeChanged(node));
 }
 
 void KisImageSignalRouter::emitAboutToAddANode(KisNode *parent, int index)
 {
-    EMIT_BLOCKING(sigAboutToAddANode(parent, index));
+    /**
+     * Some of the users of our signals rely on the fact that the
+     * signals are emitted synchronously from the same thread. Such
+     * users are KisNodeModel, KisShapeController. They request the
+     * data of the signal right from the node data, so they cannot
+     * be emitted asynchronously. We cannot use BlockingQueued
+     * connections here, because the we'll get a deadlock when UI
+     * will decide to wait for scheduler to finish it's job.
+     *
+     * That is why we explicitly check that no nodes are added,
+     * removed or moved from the context of the scheduler thread.
+     * Currently we have no other way than to assert in such a case.
+     * So all the node modifications should be done using legacy
+     * undo adapter, in the context of the UI thread.
+     */
+
+    EMIT_DIRECT_ASSERT_SAME_THREAD(sigAboutToAddANode(parent, index));
 }
 
 void KisImageSignalRouter::emitNodeHasBeenAdded(KisNode *parent, int index)
 {
-    EMIT_BLOCKING(sigNodeHasBeenAdded(parent, index));
+    // see comment in emitAboutToAddANode()
+    EMIT_DIRECT_ASSERT_SAME_THREAD(sigNodeHasBeenAdded(parent, index));
 }
 
 void KisImageSignalRouter::emitAboutToRemoveANode(KisNode *parent, int index)
 {
-    EMIT_BLOCKING(sigAboutToRemoveANode(parent, index));
+    // see comment in emitAboutToAddANode()
+    EMIT_DIRECT_ASSERT_SAME_THREAD(sigAboutToRemoveANode(parent, index));
 }
 
 void KisImageSignalRouter::emitNodeHasBeenRemoved(KisNode *parent, int index)
 {
-    EMIT_BLOCKING(sigNodeHasBeenRemoved(parent, index));
+    // see comment in emitAboutToAddANode()
+    EMIT_DIRECT_ASSERT_SAME_THREAD(sigNodeHasBeenRemoved(parent, index));
 }
 
 void KisImageSignalRouter::emitAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex)
 {
-    EMIT_BLOCKING(sigAboutToMoveNode(parent, oldIndex, newIndex));
+    // see comment in emitAboutToAddANode()
+    EMIT_DIRECT_ASSERT_SAME_THREAD(sigAboutToMoveNode(parent, oldIndex, newIndex));
 }
 
 void KisImageSignalRouter::emitNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex)
 {
-    EMIT_BLOCKING(sigNodeHasBeenMoved(parent, oldIndex, newIndex));
+    // see comment in emitAboutToAddANode()
+    EMIT_DIRECT_ASSERT_SAME_THREAD(sigNodeHasBeenMoved(parent, oldIndex, newIndex));
 }
 
 

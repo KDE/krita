@@ -366,20 +366,25 @@ KoID KisPaintopBox::defaultPaintOp()
 KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)
 {
     QString defaultName = paintOp.id() + ".kpp";
-    QString path        = KGlobal::mainComponent().dirs()->findResource("kis_defaultpresets", defaultName);
+    QString path = KGlobal::mainComponent().dirs()->findResource("kis_defaultpresets", defaultName);
 
     KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
 
-    if(!preset->load())
-        return KisPaintOpRegistry::instance()->defaultPreset(paintOp, m_view->image());
+    if (!preset->load()) {
+        preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp, m_view->image());
+    }
+
+    Q_ASSERT(preset);
+    Q_ASSERT(preset->valid());
 
     return preset;
 }
 
 KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID& paintOp)
 {
-    if(m_paintOpPresetMap[paintOp] == 0)
+    if (m_paintOpPresetMap[paintOp] == 0) {
         m_paintOpPresetMap[paintOp] = defaultPreset(paintOp);
+    }
 
     return m_paintOpPresetMap[paintOp];
 }
@@ -485,22 +490,14 @@ void KisPaintopBox::slotSaveActivePreset()
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
     QString name = m_presetsPopup->getPresetName();
-    QFileInfo fileInfo(saveLocation + name + newPreset->defaultFileExtension());
 
-    QStringList blacklistFileNames = rServer->blackListedFiles();
-
-    if (fileInfo.exists() && blacklistFileNames.contains(fileInfo.filePath())) {
-        QTemporaryFile file(saveLocation + name + newPreset->defaultFileExtension());
-        if (file.open()) {
-            fileInfo.setFile(file.fileName());
-        }
-     }
-     else if (fileInfo.exists()) {
-        rServer->removeResource(rServer->getResourceByName(name));
+    KisPaintOpPreset* resource = rServer->getResourceByName(name);
+    if (resource) {
+        rServer->removeResource(resource);
     }
 
     newPreset->setImage(m_presetsPopup->cutOutOverlay());
-    newPreset->setFilename(fileInfo.filePath());
+    newPreset->setFilename(saveLocation + name + newPreset->defaultFileExtension());
     newPreset->setName(name);
 
     m_presetsPopup->changeSavePresetButtonText(true);

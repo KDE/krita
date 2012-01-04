@@ -2,7 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=KoReport/ItemPlugin
 Comment=KoReport Item Plugin
-Comment[ca]=Connector del'ítem KoReport
+Comment[ca]=Connector de l'ítem KoReport
 Comment[ca@valencia]=Connector del'ítem KoReport
 Comment[da]=Plugin til KoReport-element
 Comment[el]=Πρόσθετο αντικειμένου KoReport
@@ -20,6 +20,7 @@ Comment[pl]=Wtyczka elementu KoReport
 Comment[pt]='Plugin' de Itens do KoReport
 Comment[pt_BR]=Plugin de itens do KoReport
 Comment[ru]=Модуль KoReport
+Comment[sk]=Plugin položky KoReport
 Comment[sv]=Insticksprogram för Koffice objektrapport
 Comment[uk]=Додаток елементів KoReport
 Comment[wa]=Tchôke-divins di cayet di KoReport

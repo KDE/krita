@@ -81,8 +81,9 @@ void StylePrivate::copyMissing(const QMap<int, QVariant> &other)
 void StylePrivate::removeDuplicates(const StylePrivate &other)
 {
     foreach(int key, other.m_properties.keys()) {
-        if (m_properties.value(key) == other.value(key))
+        if (m_properties.value(key) == other.value(key)) {
             m_properties.remove(key);
+        }
     }
 }
 

@@ -279,6 +279,23 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
     if(transparency() > 0.0) {
         style.addProperty("draw:image-opacity", QString("%1%").arg((1.0 - transparency()) * 100.0));
     }
+
+    switch(m_mode)
+    {
+    case Standard:
+        style.addProperty("draw:color-mode", "standard");
+        break;
+    case Greyscale:
+        style.addProperty("draw:color-mode", "greyscale");
+        break;
+    case Watermark:
+        style.addProperty("draw:color-mode", "watermark");
+        break;
+    case Mono:
+        style.addProperty("draw:color-mode", "mono");
+        break;
+    }
+    
     return KoShape::saveStyle(style, context);
 }
 
@@ -314,23 +331,25 @@ PictureShape::PictureMode PictureShape::mode() const
 
 void PictureShape::setMode(PictureShape::PictureMode mode)
 {
-    if( mode != m_mode ) {
-        m_mode = mode;
-        KoFilterEffect* filterMode = filterEffectStack()->takeFilterEffect(0);
-        delete filterMode;
-        switch( mode ) {
-            case Greyscale:
-                filterMode = new GreyscaleFilterEffect();
-                break;
-            case Mono:
-                filterMode = new MonoFilterEffect();
-                break;
-            default:
-                filterMode = new WatermarkFilterEffect();
-                break;
+    if (mode != m_mode) {
+        filterEffectStack()->removeFilterEffect(0);
+        
+        switch(mode)
+        {
+        case Greyscale:
+            filterEffectStack()->appendFilterEffect(new GreyscaleFilterEffect());
+            break;
+        case Mono:
+            filterEffectStack()->appendFilterEffect(new MonoFilterEffect());
+            break;
+        case Watermark:
+            filterEffectStack()->appendFilterEffect(new WatermarkFilterEffect());
+            break;
+        default:
+            break;
         }
-        if( filterMode )
-            filterEffectStack()->appendFilterEffect(filterMode);
+        
+        m_mode = mode;
         update();
     }
 }

@@ -289,7 +289,7 @@ void DeleteCommand::updateListChanges()
 
 DeleteCommand::~DeleteCommand()
 {
-    if (!m_undone) {
+    if (!m_undone && m_document) {
         KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
         if (textEditor == 0)
             return;

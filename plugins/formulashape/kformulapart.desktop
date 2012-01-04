@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Calligra Formula Component
+Name[ca]=Component de fórmules del Calligra
 Name[cs]=Komponenta Calligra pro vzorce
 Name[da]=Calligra-komponent til formler
 Name[es]=Componente Formula de Calligra
@@ -66,6 +67,7 @@ GenericName[pt_BR]=Editor de Fórmulas
 GenericName[ro]=Redactor de formule
 GenericName[ru]=Формулы
 GenericName[se]=Hápmodoaimmaheaddji
+GenericName[sk]=Editor rovníc
 GenericName[sl]=Urejevalnik formul
 GenericName[sv]=Formeleditor
 GenericName[ta]=சூத்திரம் தொகுப்பாளர்

@@ -145,6 +145,9 @@ KoTextInlineRdf::~KoTextInlineRdf()
 bool KoTextInlineRdf::loadOdf(const KoXmlElement &e)
 {
     d->id = e.attribute("id", QString());
+    if (!d->id.startsWith("rdfid-")) {
+        return false;
+    }
     d->subject = e.attributeNS(KoXmlNS::xhtml, "about");
     d->predicate = e.attributeNS(KoXmlNS::xhtml, "property");
     d->dt = e.attributeNS(KoXmlNS::xhtml, "datatype");

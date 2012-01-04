@@ -124,6 +124,13 @@ if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
     set(GHNS FALSE)
 endif(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
 
+macro_optional_find_package(LibAttica)
+macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")
+
+if (NOT LIBATTICA_FOUND)
+    set(GHNS FALSE)
+endif (NOT LIBATTICA_FOUND)
+
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
   set(NEPOMUK FALSE)
 endif(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
@@ -246,7 +253,20 @@ else(NOT MARBLE_FOUND)
     set(CAN_USE_MARBLE TRUE)
 endif(NOT MARBLE_FOUND)
 if( MARBLE_FOUND )
-   add_definitions( -DCAN_USE_MARBLE )
+    add_definitions( -DCAN_USE_MARBLE )
+    ##
+    ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
+    ## with commit ea177ca. This is for compatibility with older versions.
+    ##
+    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR})
+    if( MARBLECONTROLBOX_H )
+        execute_process(COMMAND grep -m 1 -e "setMarbleWidget" ${MARBLECONTROLBOX_H}
+                        OUTPUT_VARIABLE SETMARBLEWIDGET
+        )
+        if( SETMARBLEWIDGET )
+            add_definitions(-DHAVE_SETMARBLEWIDGET)
+        endif( SETMARBLEWIDGET)
+    endif( MARBLECONTROLBOX_H )
 endif( MARBLE_FOUND )
 
 
@@ -508,15 +528,29 @@ if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     ##
     ## Test for sqlite
     ##
-    set(SQLITE_RECOMMENDED_VERSION "3.7.9")
+    set(SQLITE_MIN_VERSION 3.6.16)
+    set(SQLITE_RECOMMENDED_VERSION 3.7.9)
+    set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
     find_package(CalligraSqlite 3.6.16)
-    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine" "http://www.sqlite.org"
-                      FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")
-
+    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
+                      "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
+                      "Required by Kexi for its default database driver.")
     if(NOT SQLITE_FOUND)
         set(SHOULD_BUILD_KEXI FALSE)
-        message(STATUS "WARNING: Kexi will not be built.")
+        message(STATUS "WARNING: Because of that, Kexi will not be built.")
     endif(NOT SQLITE_FOUND)
+
+    ##
+    ## Test for ICU
+    ##
+    find_package(ICU)
+    macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Library"
+                      "http://icu-project.org" FALSE "" "Required by Kexi")
+
+    if(NOT ICU_FOUND)
+        set(SHOULD_BUILD_KEXI FALSE)
+        message(STATUS "WARNING: Because of that, Kexi will not be built.")
+    endif(NOT ICU_FOUND)
 endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
 
  ###################

@@ -21,13 +21,34 @@
 
 #include <QtTest/QtTest>
 
+#include "kis_node.h"
+
+class TestNode : public KisNode
+{
+    Q_OBJECT
+public:
+    KisNodeSP clone() const {
+        return new TestNode(*this);
+    }
+    bool allowAsChild(KisNodeSP) const {
+        return true;
+    }
+    const KoColorSpace * colorSpace() const {
+        return 0;
+    }
+    virtual const KoCompositeOp * compositeOp() const {
+        return 0;
+    }
+};
+
+
 class KisNodeGraphListenerTest : public QObject
 {
     Q_OBJECT
 private slots:
 
-    void testCreation();
-
+    void testUpdateOfListener();
+    void testRecursiveUpdateOfListener();
 };
 
 #endif

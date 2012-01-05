@@ -27,8 +27,9 @@
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                KisResourcesSnapshotSP resources,
-                                               PainterInfo *painterInfo)
-    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", "Freehand stroke",
+                                               PainterInfo *painterInfo,
+                                               const QString &name)
+    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
                                     resources, painterInfo)
 {
     init(needsIndirectPainting);
@@ -36,8 +37,9 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                KisResourcesSnapshotSP resources,
-                                               QVector<PainterInfo*> painterInfos)
-    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", "Freehand stroke",
+                                               QVector<PainterInfo*> painterInfos,
+                                               const QString &name)
+    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
                                     resources, painterInfos)
 {
     init(needsIndirectPainting);

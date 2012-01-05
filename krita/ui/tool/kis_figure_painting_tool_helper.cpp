@@ -30,9 +30,6 @@ KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const QString &name,
                                                          KisImageWSP image,
                                                          KoCanvasResourceManager *resourceManager)
 {
-    // FIXME: restore name of the action
-    Q_UNUSED(name);
-
     m_strokesFacade = image.data();
 
     m_resources =
@@ -45,9 +42,7 @@ KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const QString &name,
                         new KisDistanceInformation());
 
     KisStrokeStrategy *stroke =
-        new FreehandStrokeStrategy(false,
-                                   m_resources,
-                                   m_painterInfo);
+        new FreehandStrokeStrategy(false, m_resources, m_painterInfo, name);
 
     m_strokeId = m_strokesFacade->startStroke(stroke);
 }

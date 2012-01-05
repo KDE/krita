@@ -91,6 +91,7 @@ set(kotext_LIB_SRCS
     changetracker/KoDeletedColumnData.cpp
     changetracker/KoDeletedCellData.cpp
 
+    commands/ChangeAnchorPropertiesCommand.cpp
     commands/ChangeListCommand.cpp
     commands/ChangeTrackedDeleteCommand.cpp
     commands/DeleteCommand.cpp

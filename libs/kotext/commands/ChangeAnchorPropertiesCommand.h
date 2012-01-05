@@ -21,9 +21,10 @@
 #define CHANGEANCHORPROPERTIESCOMMAND_H
 
 #include <kundo2command.h>
+#include "kotext_export.h"
 #include "KoTextAnchor.h"
 
-class ChangeAnchorPropertiesCommand : public KUndo2Command
+class KOTEXT_EXPORT ChangeAnchorPropertiesCommand : public KUndo2Command
 {
 public:
     ChangeAnchorPropertiesCommand(KoTextAnchor *anchor, KoTextAnchor *newAnchor, KUndo2Command *parent);

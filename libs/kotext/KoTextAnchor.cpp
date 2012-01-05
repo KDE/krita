@@ -65,7 +65,6 @@ public:
             inlineObjectDescent(0),
             pageNumber(-1)
     {
-        Q_ASSERT(shape);
     }
 
 

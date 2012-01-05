@@ -132,7 +132,7 @@ public:
             cacheThumbnail(w, h, thumbnail);
         }
 
-        Q_ASSERT(!thumbnail.isNull());
+        Q_ASSERT(!thumbnail.isNull() || m_paintDevice->extent().isEmpty());
         return thumbnail;
     }
 

@@ -101,7 +101,7 @@ private slots:
 
 private:
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

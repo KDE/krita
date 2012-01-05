@@ -95,9 +95,9 @@ KisFilterConfiguration * KisBaseProcessor::factoryConfiguration(const KisPaintDe
 KisFilterConfiguration * KisBaseProcessor::defaultConfiguration(const KisPaintDeviceSP pd) const
 {
     KisFilterConfiguration* fc = 0;
-    if (bookmarkManager()) {
-        fc = dynamic_cast<KisFilterConfiguration*>(bookmarkManager()->defaultConfiguration());
-    }
+//     if (bookmarkManager()) {
+//         fc = dynamic_cast<KisFilterConfiguration*>(bookmarkManager()->defaultConfiguration());
+//     }
     if (!fc || !fc->isCompatible(pd)) {
         fc = factoryConfiguration(pd);
     }

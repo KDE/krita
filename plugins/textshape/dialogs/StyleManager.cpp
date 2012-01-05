@@ -74,18 +74,19 @@ void StyleManager::setStyleManager(KoStyleManager *sm)
 
 void StyleManager::setParagraphStyle(KoParagraphStyle *style)
 {
-
     m_selectedCharStyle = 0;
     m_selectedParagStyle = style;
     widget.characterStylePage->save();
     widget.characterStylePage->setStyle(0);
     widget.paragraphStylePage->save();
-    KoParagraphStyle * localStyle = style->clone();
+    KoParagraphStyle *localStyle;
 
-    if (!m_alteredParagraphStyles.contains(style->styleId()))
+    if (!m_alteredParagraphStyles.contains(style->styleId())) {
+        localStyle = style->clone();
         m_alteredParagraphStyles.insert(style->styleId(), localStyle);
-    else
+    } else {
         localStyle = m_alteredParagraphStyles.value(style->styleId());
+    }
 
     widget.paragraphStylePage->setStyle(localStyle);
     widget.stackedWidget->setCurrentWidget(widget.paragraphStylePage);
@@ -101,12 +102,14 @@ void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
     widget.paragraphStylePage->setStyle(0);
     widget.characterStylePage->save();
 
-    KoCharacterStyle *localStyle = style->clone();
+    KoCharacterStyle *localStyle;
 
-    if (!m_alteredCharacterStyles.contains(style->styleId()))
+    if (!m_alteredCharacterStyles.contains(style->styleId())) {
+        localStyle = style->clone();
         m_alteredCharacterStyles.insert(style->styleId(), localStyle);
-    else
+    } else {
         localStyle = m_alteredCharacterStyles.value(style->styleId());
+    }
 
     widget.characterStylePage->setStyle(localStyle);
     widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
@@ -141,14 +144,12 @@ void StyleManager::save()
         delete altered;
     }
     m_alteredParagraphStyles.clear();
-//Reset the active style
+
+    //Reset the active style
     if (m_selectedCharStyle) {
         KoCharacterStyle *localStyle = m_selectedCharStyle->clone();
 
-        if (!m_alteredCharacterStyles.contains(m_selectedCharStyle->styleId()))
-            m_alteredCharacterStyles.insert(m_selectedCharStyle->styleId(), localStyle);
-        else
-            localStyle = m_alteredCharacterStyles.value(m_selectedCharStyle->styleId());
+        m_alteredCharacterStyles.insert(m_selectedCharStyle->styleId(), localStyle);
 
         widget.characterStylePage->setStyle(localStyle);
     }
@@ -156,12 +157,9 @@ void StyleManager::save()
         widget.characterStylePage->setStyle(0);
 
     if (m_selectedParagStyle) {
-        KoParagraphStyle * localStyle = m_selectedParagStyle->clone();
+        KoParagraphStyle *localStyle = m_selectedParagStyle->clone();
 
-        if (!m_alteredParagraphStyles.contains(m_selectedParagStyle->styleId()))
-            m_alteredParagraphStyles.insert(m_selectedParagStyle->styleId(), localStyle);
-        else
-            localStyle = m_alteredParagraphStyles.value(m_selectedParagStyle->styleId());
+        m_alteredParagraphStyles.insert(m_selectedParagStyle->styleId(), localStyle);
 
         widget.paragraphStylePage->setStyle(localStyle);
     }
@@ -178,11 +176,6 @@ void StyleManager::addParagraphStyle(KoParagraphStyle *style)
     widget.paragraphStylePage->setStyle(0);
 
     if (m_blockSignals) return;
-
-    KoCharacterStyle *cs = style->characterStyle();
-    if (cs->name().isEmpty())
-        cs->setName(style->name());
-    addCharacterStyle(cs);
 
     m_styleManager->add(style);
     widget.paragraphStylePage->setParagraphStyles(m_styleManager->paragraphStyles());

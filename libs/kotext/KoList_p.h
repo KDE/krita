@@ -37,7 +37,7 @@ class KoListPrivate
 {
 public:
     KoListPrivate(KoList *q, const QTextDocument *document)
-    : q(q), type(KoList::TextList), style(0), textLists(10), textListIds(10), document(document)
+        : q(q), type(KoList::TextList), style(0), textLists(10), textListIds(10), document(document), listToBeContinuedFrom(0)
     {
     }
 
@@ -74,6 +74,7 @@ public:
     QVector<KoListStyle::ListIdType> textListIds;
     const QTextDocument *document;
     QMap<int, QVariant> properties;
+    KoList *listToBeContinuedFrom;
 };
 
 #endif // KOLIST_P_H

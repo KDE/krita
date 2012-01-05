@@ -30,7 +30,7 @@
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "recorder/kis_recorded_paint_action.h"
-
+#include "kis_default_bounds.h"
 
 struct KisResourcesSnapshot::Private {
     Private() : currentPattern(0), currentGradient(0),

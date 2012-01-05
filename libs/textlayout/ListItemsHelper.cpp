@@ -244,45 +244,8 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     int startValue = 1;
     if (format.hasProperty(KoListStyle::StartValue))
         startValue = format.intProperty(KoListStyle::StartValue);
-    if (format.boolProperty(KoListStyle::ContinueNumbering)) {
-        // Look for the index of a previous list of the same numbering style and level
-        for (QTextBlock tb = m_textList->item(0).previous(); tb.isValid(); tb = tb.previous()) {
-            if (!tb.textList() || tb.textList() == m_textList)
-                continue; // no list here or it's the same list; keep looking
-
-            if (isOutline != bool(tb.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
-                continue; // one of them is an outline while the other is not
-
-            QTextListFormat otherFormat = tb.textList()->format();
-            if (otherFormat.intProperty(KoListStyle::Level) != level)
-                break; // found a different list but of a different level
-
-            if (otherFormat.style() == format.style()) {
-                if (KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(tb.userData()))
-                    startValue = data->counterIndex() + 1; // Start from previous list value + 1
-            }
-
-            break;
-        }
-    }
 
     int index = startValue;
-    qreal width = format.doubleProperty(KoListStyle::MinimumWidth);
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-    if (!data) {
-        data = new KoTextBlockData();
-        block.setUserData(data);
-    }
-
-    if (blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem)
-        || blockFormat.boolProperty(KoParagraphStyle::IsListHeader)) {
-        data->setCounterPlainText(QString());
-        data->setCounterPrefix(QString());
-        data->setCounterSuffix(QString());
-        data->setPartialCounterText(QString());
-        return;
-    }
-
     bool fixed = false;
     if (blockFormat.boolProperty(KoParagraphStyle::RestartListNumbering)) {
         index = format.intProperty(KoListStyle::StartValue);
@@ -295,33 +258,48 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     }
 
     if (!fixed) {
-        //check if this is the first of this level meaning we should start from startvalue
-        for (QTextBlock b = block.previous(); b.isValid(); b = b.previous()) {
-            if (b.textList() == 0)
-                continue; // we only look for lists
-
-            QTextListFormat otherFormat = b.textList()->format();
-
-            if (otherFormat.property(KoListStyle::StyleId) != format.property(KoListStyle::StyleId))
-                continue; // different liststyle what means it's another unrelated list
-
-            if (isOutline != bool(b.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
-                continue; // one of them is an outline while the other is not
-
-            if (b.textList() == m_textList) {
-                if (b.textList()->format().intProperty(KoListStyle::Level) == level)
-                    if (KoTextBlockData *otherData = dynamic_cast<KoTextBlockData *>(b.userData())) {
-                        index = otherData->counterIndex() + 1; // Start from previous list value + 1
-                        break;
-                    }
+        //if this is the first item then find if the list has to be continued from any other list
+        KoList *listContinued = 0;
+        if (m_textList->itemNumber(block) == 0 && (listContinued = KoTextDocument(m_textList->document()).list(m_textList)->listContinuedFrom())) {
+            //find the previous list of the same level
+            QTextList *previousTextList = listContinued->textLists().at(level - 1).data();
+            if (previousTextList) {
+                const QTextBlock textBlock = previousTextList->item(previousTextList->count() - 1);
+                KoTextBlockData *blockData = 0;
+                if (textBlock.isValid() && (blockData = dynamic_cast<KoTextBlockData *>(textBlock.userData()))) {
+                    index = blockData->counterIndex() + 1; //resume the previous list count
+                }
             }
-            if (b.textList()->format().intProperty(KoListStyle::Level) < level) {
-                // Either a new list, that would mark the end (as in beginning) of our list, or the same
-                // list with a lower list-level (is that possible at all?). In both cases we can abort.
-                index = startValue;
-                break;
+        } else if (m_textList->itemNumber(block) > 0) {
+            const QTextBlock textBlock = m_textList->item(m_textList->itemNumber(block) - 1);
+            KoTextBlockData *blockData = 0;
+            if (textBlock.isValid() && (blockData = dynamic_cast<KoTextBlockData *>(textBlock.userData()))) {
+                index = blockData->counterIndex() + 1; //resume the previous list count
             }
         }
+    }
+
+    qreal width = 0.0;
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+    if (!data) {
+        data = new KoTextBlockData();
+        block.setUserData(data);
+    }
+
+    if (blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem)
+        || blockFormat.boolProperty(KoParagraphStyle::IsListHeader)) {
+        data->setCounterPlainText(QString());
+        data->setCounterPrefix(QString());
+        data->setCounterSuffix(QString());
+        data->setPartialCounterText(QString());
+        // set the counter for the current un-numbered list to the counter index of the previous list item.
+        // index-1 because the list counter would have already incremented by one
+        data->setCounterIndex(index - 1);
+        if (blockFormat.boolProperty(KoParagraphStyle::IsListHeader)) {
+            data->setCounterWidth(format.doubleProperty(KoListStyle::MinimumWidth));
+            data->setCounterSpacing(0);
+        }
+        return;
     }
 
     QString item;
@@ -336,6 +314,15 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
                continue; // uninteresting for us
             if (isOutline != bool(b.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
                 continue; // also uninteresting cause the one is an outline-listitem while the other is not
+
+            if (! KoListStyle::isNumberingStyle(static_cast<KoListStyle::Style>(lf.style()))) {
+                continue;
+            }
+
+            if (b.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
+                continue; //unnumbered listItems are irrelevant
+            }
+
             const int otherLevel  = lf.intProperty(KoListStyle::Level);
             if (checkLevel <= otherLevel)
                 continue;
@@ -461,24 +448,25 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     data->setCounterPrefix(prefix);
     data->setCounterSuffix(suffix);
     if (calcWidth)
-        width = qMax(width, m_fm.width(item));
+        width = m_fm.width(item);
     index++;
 
-    int widthPercent = format.intProperty(KoListStyle::RelativeBulletSize);
-    if (widthPercent > 0)
-        width += (m_fm.width(prefix + suffix) * widthPercent) / 100.0;
-    else
-        width += m_fm.width(prefix + suffix);
+    width += m_fm.width(prefix + suffix);
 
     qreal counterSpacing = 0;
-    if (listStyle != KoListStyle::None) {
-        if (format.boolProperty(KoListStyle::AlignmentMode) == false) {
-            counterSpacing = qMax(format.doubleProperty(KoListStyle::MinimumDistance), m_fm.width(' '));
-            width = qMax(format.doubleProperty(KoListStyle::MinimumWidth), width);
-        } else {
-            // for aligmentmode spacing should be 0
-            counterSpacing = 0;
+    if (format.boolProperty(KoListStyle::AlignmentMode)) {
+        // for aligmentmode spacing should be 0
+        counterSpacing = 0;
+    } else {
+        if (listStyle != KoListStyle::None) {
+            // see ODF spec 1.2 item 20.422
+            counterSpacing = format.doubleProperty(KoListStyle::MinimumDistance);
+            if (width < format.doubleProperty(KoListStyle::MinimumWidth)) {
+                counterSpacing -= format.doubleProperty(KoListStyle::MinimumWidth) - width;
+            }
+            counterSpacing = qMax(counterSpacing, qreal(0.0));
         }
+        width = qMax(width, format.doubleProperty(KoListStyle::MinimumWidth));
     }
     data->setCounterWidth(width);
     data->setCounterSpacing(counterSpacing);

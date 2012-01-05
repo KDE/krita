@@ -1,3 +1,5 @@
+favoriteCompositeOps=normal,erase,multiply
+
 [TemplateChooserDialog]
 ShowCustomDocumentWidgetByDefault=true
 

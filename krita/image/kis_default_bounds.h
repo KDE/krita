@@ -22,13 +22,14 @@
 #include <QRect>
 #include "kis_types.h"
 #include "kis_image.h"
+#include "kis_default_bounds_base.h"
 
 class KisDefaultBounds;
 class KisSelectionDefaultBounds;
 typedef KisSharedPtr<KisDefaultBounds> KisDefaultBoundsSP;
 typedef KisSharedPtr<KisSelectionDefaultBounds> KisSelectionDefaultBoundsSP;
 
-class KRITAIMAGE_EXPORT KisDefaultBounds : public KisShared
+class KRITAIMAGE_EXPORT KisDefaultBounds :  public KisDefaultBoundsBase
 {
 public:
     KisDefaultBounds(KisImageWSP image = 0);

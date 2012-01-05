@@ -63,8 +63,8 @@ struct AddGeneralOps<Traits, true>
      static const qint32 alpha_pos = Traits::alpha_pos;
 
      template<CompositeFunc func>
-     static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible=true) {
-         cs->addCompositeOp(new KoCompositeOpGenericSC<Traits, func>(cs, id, description, category, userVisible));
+     static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category) {
+         cs->addCompositeOp(new KoCompositeOpGenericSC<Traits, func>(cs, id, description, category));
      }
 
      static void add(KoColorSpace* cs) {
@@ -129,8 +129,8 @@ struct AddRGBOps<Traits, true>
     static const qint32 blue_pos  = Traits::blue_pos;
     
     template<void compositeFunc(Arg, Arg, Arg, Arg&, Arg&, Arg&)>
-    static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible=true) {
-        cs->addCompositeOp(new KoCompositeOpGenericHSL<Traits, compositeFunc>(cs, id, description, category, userVisible));
+    static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category) {
+        cs->addCompositeOp(new KoCompositeOpGenericHSL<Traits, compositeFunc>(cs, id, description, category));
     }
     
     static void add(KoColorSpace* cs) {

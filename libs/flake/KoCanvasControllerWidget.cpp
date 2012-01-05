@@ -551,11 +551,12 @@ void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalcul
     KoCanvasController::setDocumentSize(sz);
     d->viewportWidget->setDocumentSize(sz);
     d->resetScrollBars();
-    d->ignoreScrollSignals = oldIgnoreScrollSignals;
 
     // Always emit the new offset.
     updateCanvasOffsetX();
     updateCanvasOffsetY();
+
+    d->ignoreScrollSignals = oldIgnoreScrollSignals;
 }
 
 void KoCanvasControllerWidget::setZoomWithWheel(bool zoom)

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C)  2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,6 +31,8 @@ ParagraphLayout::ParagraphLayout(QWidget *parent)
     connect(widget.center, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
     connect(widget.justify, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
     connect(widget.left, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
+    connect(widget.breakAfter, SIGNAL(stateChanged(int)), this, SLOT(breakAfterChanged()));
+    connect(widget.breakBefore, SIGNAL(stateChanged(int)), this, SLOT(breakBeforeChanged()));
 }
 
 void ParagraphLayout::slotAlignChanged()
@@ -44,9 +47,20 @@ void ParagraphLayout::slotAlignChanged()
     else
         align = Qt::AlignLeft;
 
+    m_alignmentInherited = false;
+
     emit horizontalAlignmentChanged(align);
 }
 
+void ParagraphLayout::breakAfterChanged()
+{
+   m_breakAfterInherited = false;
+}
+
+void ParagraphLayout::breakBeforeChanged()
+{
+    m_breakBeforeInherited = false;
+}
 
 void ParagraphLayout::setDisplay(KoParagraphStyle *style)
 {
@@ -59,6 +73,11 @@ void ParagraphLayout::setDisplay(KoParagraphStyle *style)
         widget.left->setChecked(true); break;
     }
 
+    m_alignmentInherited = !style->hasProperty(QTextFormat::BlockAlignment);
+    m_breakAfterInherited = !style->hasProperty(KoParagraphStyle::BreakAfter);
+    m_breakBeforeInherited = !style->hasProperty(KoParagraphStyle::BreakBefore);
+
+
     widget.keepTogether->setChecked(style->nonBreakableLines());
     widget.breakBefore->setChecked(style->breakBefore());
     widget.breakAfter->setChecked(style->breakAfter());
@@ -66,25 +85,32 @@ void ParagraphLayout::setDisplay(KoParagraphStyle *style)
 
 void ParagraphLayout::save(KoParagraphStyle *style)
 {
-    Qt::Alignment align;
-    if (widget.right->isChecked())
-        align = Qt::AlignRight;
-    else if (widget.center->isChecked())
-        align = Qt::AlignHCenter;
-    else if (widget.justify->isChecked())
-        align = Qt::AlignJustify;
-    else
-        align = Qt::AlignLeft;
-    style->setAlignment(align);
-    style->setNonBreakableLines(widget.keepTogether->isChecked());
-    if (widget.breakBefore->isChecked())
-        style->setBreakBefore(KoText::PageBreak);
-    else
-        style->setBreakBefore(KoText::NoBreak);
-    if (widget.breakAfter->isChecked())
-        style->setBreakAfter(KoText::PageBreak);
-    else
-        style->setBreakAfter(KoText::NoBreak);
+    if (!m_alignmentInherited) {
+        Qt::Alignment align;
+        if (widget.right->isChecked())
+            align = Qt::AlignRight;
+        else if (widget.center->isChecked())
+            align = Qt::AlignHCenter;
+        else if (widget.justify->isChecked())
+            align = Qt::AlignJustify;
+        else
+            align = Qt::AlignLeft;
+        style->setAlignment(align);
+    }
+
+        style->setNonBreakableLines(widget.keepTogether->isChecked());
+        if (!m_breakBeforeInherited){
+            if (widget.breakBefore->isChecked())
+                style->setBreakBefore(KoText::PageBreak);
+            else
+                style->setBreakBefore(KoText::NoBreak);
+        }
+        if (!m_breakAfterInherited){
+            if (widget.breakAfter->isChecked())
+                style->setBreakAfter(KoText::PageBreak);
+            else
+                style->setBreakAfter(KoText::NoBreak);
+        }
 }
 
 #include <ParagraphLayout.moc>

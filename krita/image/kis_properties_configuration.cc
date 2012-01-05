@@ -24,6 +24,7 @@
 #include <qdom.h>
 #include <QString>
 
+#include "kis_image.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 #include "kis_painter.h"

@@ -20,19 +20,31 @@
 
 #include <limits.h>
 
-#include <kglobalsettings.h>
-#include <libs/main/KoDocument.h>
-#include <kglobal.h>
-#include <kis_debug.h>
-#include <kconfig.h>
+#ifdef Q_WS_X11
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#include <fixx11h.h>
+#include <QX11Info>
+#endif
+
 #include <QFont>
 #include <QThread>
 #include <QStringList>
 
-#include "kis_global.h"
+#include <kglobalsettings.h>
+#include <kglobal.h>
+#include <kconfig.h>
+
+#include <KoDocument.h>
+
 #include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 
+#include <kis_debug.h>
+
+#include "kis_canvas_resource_provider.h"
+#include "kis_global.h"
 
 namespace
 {
@@ -170,6 +182,66 @@ void KisConfig::setMonitorProfile(const QString & monitorProfile)
     m_cfg.writeEntry("monitorProfile", monitorProfile);
 }
 
+const KoColorProfile *KisConfig::getScreenProfile(int screen)
+{
+#ifdef Q_WS_X11
+
+    Atom type;
+    int format;
+    unsigned long nitems;
+    unsigned long bytes_after;
+    quint8 * str;
+
+    static Atom icc_atom = XInternAtom(QX11Info::display(), "_ICC_PROFILE", True);
+
+    if (XGetWindowProperty(QX11Info::display(),
+                           QX11Info::appRootWindow(screen),
+                           icc_atom,
+                           0,
+                           INT_MAX,
+                           False,
+                           XA_CARDINAL,
+                           &type,
+                           &format,
+                           &nitems,
+                           &bytes_after,
+                           (unsigned char **) &str) == Success
+       ) {
+        QByteArray bytes(nitems, '\0');
+        bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
+        // XXX: this assumes the screen is 8 bits -- which might not be true
+        return KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), bytes);
+    }
+    else {
+        return 0;
+    }
+#else
+    return 0;
+
+#endif
+}
+
+const KoColorProfile *KisConfig::displayProfile(int screen)
+{
+    // first try to get the screen profile set by the X11 _ICC_PROFILE atom (compatible with colord,
+    // but colord can set the atom to none, in which case we cannot create a suitable profile)
+    const KoColorProfile *profile = KisConfig::getScreenProfile(screen);
+
+    // if it fails. check the configuration
+    if (!profile || !profile->isSuitableForDisplay()) {
+        QString monitorProfileName = monitorProfile();
+        if (!monitorProfileName.isEmpty()) {
+            profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
+        }
+    }
+    // if we still don't have a profile, or the profile isn't suitable for display,
+    // we need to get a last-resort profile. the built-in sRGB is a good choice then.
+    if (!profile || !profile->isSuitableForDisplay()) {
+        profile = KoColorSpaceRegistry::instance()->profileByName("sRGB Built-in");
+    }
+
+    return profile;
+}
 
 QString KisConfig::workingColorSpace() const
 {

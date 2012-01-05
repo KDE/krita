@@ -17,13 +17,6 @@
  */
 #include "kis_canvas_resource_provider.h"
 
-#ifdef Q_WS_X11
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <fixx11h.h>
-#include <QX11Info>
-#endif
-
 #include <QImage>
 #include <QPainter>
 
@@ -81,7 +74,6 @@ void KisCanvasResourceProvider::setResourceManager(KoCanvasResourceManager *reso
     m_resourceManager->setResource(KoCanvasResourceManager::BackgroundColor, v);
 
     setCurrentCompositeOp(COMPOSITE_OVER);
-    resetDisplayProfile();
 
     setMirrorHorizontal(false);
     setMirrorVertical(false);
@@ -141,17 +133,10 @@ KoAbstractGradient* KisCanvasResourceProvider::currentGradient() const
 }
 
 
-void KisCanvasResourceProvider::resetDisplayProfile()
+void KisCanvasResourceProvider::resetDisplayProfile(int screen)
 {
-    // XXX: The X11 monitor profile overrides the settings
-    m_displayProfile = KisCanvasResourceProvider::getScreenProfile();
-
-    if (m_displayProfile == 0) {
-        KisConfig cfg;
-        QString monitorProfileName = cfg.monitorProfile();
-        m_displayProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
-    }
-
+    KisConfig cfg;
+    m_displayProfile = cfg.displayProfile(screen);
     emit sigDisplayProfileChanged(m_displayProfile);
 }
 
@@ -336,45 +321,6 @@ void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & re
         ;
         // Do nothing
     };
-}
-
-const KoColorProfile *KisCanvasResourceProvider::getScreenProfile(int screen)
-{
-#ifdef Q_WS_X11
-
-    Atom type;
-    int format;
-    unsigned long nitems;
-    unsigned long bytes_after;
-    quint8 * str;
-
-    static Atom icc_atom = XInternAtom(QX11Info::display(), "_ICC_PROFILE", True);
-
-    if (XGetWindowProperty(QX11Info::display(),
-                           QX11Info::appRootWindow(screen),
-                           icc_atom,
-                           0,
-                           INT_MAX,
-                           False,
-                           XA_CARDINAL,
-                           &type,
-                           &format,
-                           &nitems,
-                           &bytes_after,
-                           (unsigned char **) &str) == Success
-       ) {
-        QByteArray bytes(nitems, '\0');
-        bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
-
-        return KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), bytes);
-        return 0;
-    } else {
-        return 0;
-    }
-#else
-    return 0;
-
-#endif
 }
 
 void KisCanvasResourceProvider::setCurrentCompositeOp(const QString& compositeOp)

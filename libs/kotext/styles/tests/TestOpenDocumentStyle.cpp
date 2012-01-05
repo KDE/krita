@@ -125,7 +125,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                             subValueChild = subValueChild.nextSiblingElement();
                         } while (!subValueChild.isNull());
                         QStringList mergedAllowedValues;
-                        while (mergedAllowedValues.length() != (pow(allowedValues.length(), allowedValues.length()))) {
+                        while (mergedAllowedValues.length() != (pow((double) allowedValues.length(), allowedValues.length()))) {
                             foreach (QString baseValue, allowedValues) {
                                 if (!mergedAllowedValues.contains(baseValue))
                                     mergedAllowedValues << baseValue;
@@ -509,10 +509,8 @@ void loadOdf<KoParagraphStyle>(KoParagraphStyle* genStyle, const KoXmlElement *m
 template<>
 void loadOdf<KoCharacterStyle>(KoCharacterStyle* genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
 {
-    loadCtxt.addStyles(mainElement, "text");
-    loadCtxt.styleStack().setTypeProperties("text");
     KoShapeLoadingContext shapeCtxt(loadCtxt, 0);
-    genStyle->loadOdf(shapeCtxt);
+    genStyle->loadOdf(mainElement, shapeCtxt);
 }
 
 template<class T>
@@ -523,6 +521,18 @@ void saveOdf(T* genStyle, KoGenStyle *styleWriter)
 
 template<>
 void saveOdf<KoParagraphStyle>(KoParagraphStyle *genStyle, KoGenStyle *styleWriter)
+{
+    QByteArray array;
+    QBuffer buffer(&array);
+    KoXmlWriter xmlWriter(&buffer);
+    KoGenStyles styles;
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoShapeSavingContext context(xmlWriter, styles, embeddedSaver);
+    genStyle->saveOdf(*styleWriter, context);
+}
+
+template<>
+void saveOdf<KoTableCellStyle>(KoTableCellStyle *genStyle, KoGenStyle *styleWriter)
 {
     QByteArray array;
     QBuffer buffer(&array);

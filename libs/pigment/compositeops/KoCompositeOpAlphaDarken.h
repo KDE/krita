@@ -31,16 +31,16 @@ template<class Traits>
 class KoCompositeOpAlphaDarken: public KoCompositeOp
 {
     typedef typename Traits::channels_type channels_type;
-    
+
     static const qint32 channels_nb = Traits::channels_nb;
     static const qint32 alpha_pos   = Traits::alpha_pos;
-    
+
 public:
     KoCompositeOpAlphaDarken(const KoColorSpace* cs):
-        KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, i18n("Alpha darken"), KoCompositeOp::categoryMix(), true) { }
-    
+        KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, i18n("Alpha darken"), KoCompositeOp::categoryMix()) { }
+
     using KoCompositeOp::composite;
-    
+
     virtual void composite(const KoCompositeOp::ParameterInfo& params) const
     {
         if(params.maskRowStart != 0)
@@ -48,31 +48,31 @@ public:
         else
             genericComposite<false>(params);
     }
-    
+
     template<bool useMask>
     void genericComposite(const KoCompositeOp::ParameterInfo& params) const
     {
         using namespace Arithmetic;
-        
+
         qint32        srcInc       = (params.srcRowStride == 0) ? 0 : channels_nb;
         channels_type flow         = scale<channels_type>(params.flow);
         channels_type opacity      = mul(flow, scale<channels_type>(params.opacity));
         quint8*       dstRowStart  = params.dstRowStart;
         const quint8* srcRowStart  = params.srcRowStart;
         const quint8* maskRowStart = params.maskRowStart;
-        
+
         for(quint32 r=params.rows; r>0; --r) {
             const channels_type* src  = reinterpret_cast<const channels_type*>(srcRowStart);
             channels_type*       dst  = reinterpret_cast<channels_type*>(dstRowStart);
             const quint8*        mask = maskRowStart;
-            
+
             for(qint32 c=params.cols; c>0; --c) {
                 channels_type srcAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : src[alpha_pos];
                 channels_type dstAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : dst[alpha_pos];
                 channels_type mskAlpha = useMask ? mul(scale<channels_type>(*mask), srcAlpha) : srcAlpha;
-                
+
                 srcAlpha = mul(mskAlpha, opacity);
-                
+
                 if(dstAlpha != zeroValue<channels_type>()) {
                     for(qint32 i=0; i <channels_nb; i++) {
                         if(i != alpha_pos)
@@ -85,20 +85,20 @@ public:
                             dst[i] = src[i];
                     }
                 }
-                
+
                 if(alpha_pos != -1) {
                     channels_type alpha1 = unionShapeOpacity(srcAlpha, dstAlpha);                               // alpha with 0% flow
                     channels_type alpha2 = (opacity > dstAlpha) ? lerp(dstAlpha, opacity, mskAlpha) : dstAlpha; // alpha with 100% flow
                     dst[alpha_pos] = lerp(alpha1, alpha2, flow);
                 }
-                
+
                 src += srcInc;
                 dst += channels_nb;
-                
+
                 if(useMask)
                     ++mask;
             }
-            
+
             srcRowStart  += params.srcRowStride;
             dstRowStart  += params.dstRowStride;
             maskRowStart += params.maskRowStride;

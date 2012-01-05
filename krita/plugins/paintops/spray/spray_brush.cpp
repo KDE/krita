@@ -293,7 +293,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                         m.scale(particleScale,particleScale);
                     }
                     m_transformed = m_brushQImage.transformed(m, Qt::SmoothTransformation);
-                    m_imageDevice->convertFromQImage(m_transformed, "");
+                    m_imageDevice->convertFromQImage(m_transformed, 0);
                     KisRandomAccessor ac = m_imageDevice->createRandomAccessor(0,0);
                     QRect rc = m_transformed.rect();
 
@@ -347,10 +347,6 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             m_painter->bltFixed(QPoint(ix, iy), m_fixedDab, m_fixedDab->bounds());
         }
     }
-    // hidden code for outline detection
-    //m_inkColor.setOpacity(128);
-    //paintOutline(dev,m_inkColor,x, y, m_radius * 2);
-
     // recover from jittering of color,
     // m_inkColor.opacity is recovered with every paint
 }

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Text Editing plugin for the Calligra text tool
+Name[ca]=Connector d'edició de text per a l'eina de text del Calligra
 Name[cs]=Modul pro editaci textu nástroje Calligra pro úpravu textu
 Name[da]=Plugin til tekstredigering til Calligras tekstværktøj
 Name[de]=Modul zur Textbearbeitung für das Calligra-Textwerkzeug
@@ -10,9 +11,11 @@ Name[nds]=Textbewerk-Moduul för dat Calligra-Textwarktüüch
 Name[pl]=Wtyczka edycji tekstu dla narzędzia tekstu Calligra
 Name[pt]='Plugin' de edição de texto para a ferramenta de texto do Calligra
 Name[pt_BR]=Plugin de edição de texto para a ferramenta de texto do Calligra
+Name[ru]=Модуль редактирования текста для Calligra
 Name[sv]=Insticksprogram med textredigering för Calligra textverktyg
 Name[uk]=Додаток редагування тексту для текстового редактора Calligra
 Name[x-test]=xxText Editing plugin for the Calligra text toolxx
+Name[zh_CN]=Calligra 文本工具的文本编辑插件
 Name[zh_TW]=Calligra 文字工具的文字編輯外掛程式
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Text-EditingPlugin
@@ -41,6 +44,8 @@ Comment[nl]=Definitie van een tekstinvoerplug-in
 Comment[pl]=Definicja wtyczki edytowania tekstu
 Comment[pt]=Definição de um 'plugin' de edição de texto
 Comment[pt_BR]=Definição de um plugin de edição de texto
+Comment[ru]=Определение объекта для редактирования текста
+Comment[sk]=Definícia pluginu na editáciu textu
 Comment[sv]=Definition av ett Insticksprogram för textredigering
 Comment[ta]=உரை-தொகுப்பானின் சொருகல் வரையறை
 Comment[tr]=Metin düzenleme eklentisi tanımı

@@ -86,6 +86,10 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 }
             }
         }
+        if (format.hasProperty(KoParagraphStyle::HiddenByTable)) {
+            block = block.next();
+            continue;
+        }
         if (format.hasProperty(KoParagraphStyle::TableOfContentsData)) {
             saveTableOfContents(document, listStyles, block);
             block = block.next();
@@ -181,6 +185,9 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
                 continue;
             }
             KoListStyle *listStyle = list->style();
+            if (listStyle && listStyle->isOulineStyle()) {
+                continue;
+            }
             bool automatic = listStyle->styleId() == 0;
             KoGenStyle style(automatic ? KoGenStyle::ListAutoStyle : KoGenStyle::ListStyle);
             listStyle->saveOdf(style, context);
@@ -194,6 +201,9 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
             KoGenStyle style(KoGenStyle::ListAutoStyle);
             KoListStyle listStyle;
             listStyle.setLevelProperties(llp);
+            if (listStyle.isOulineStyle()) {
+                continue;
+            }
             listStyle.saveOdf(style, context);
             QString generatedName = context.mainStyles().insert(style, listStyle.name());
             listStyles[textList] = generatedName;
@@ -425,12 +435,11 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
                 KoTextStyleChangeInformation *textStyleChangeInformation = static_cast<KoTextStyleChangeInformation *>(formatChangeInformation);
                 QString styleName = saveCharacterStyle(textStyleChangeInformation->previousCharFormat(), cursor.blockCharFormat());
                 if (!styleName.isEmpty()) {
-                   writer->startElement("text:span", false);
-                   writer->addAttribute("text:style-name", styleName);
+                    writer->startElement("text:span", false);
+                    writer->addAttribute("text:style-name", styleName);
+                    writer->endElement();
                 }
                 writer->endElement();
-                writer->endElement();
-
             }
 
             tagInformation.addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
@@ -518,7 +527,7 @@ QString KoTextWriter::Private::saveParagraphStyle(const QTextBlockFormat &blockF
 
 QString KoTextWriter::Private::saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat)
 {
-    KoCharacterStyle *defaultCharStyle = styleManager->defaultParagraphStyle()->characterStyle();
+    KoCharacterStyle *defaultCharStyle = styleManager->defaultCharacterStyle();
 
     KoCharacterStyle *originalCharStyle = styleManager->characterStyle(charFormat.intProperty(KoCharacterStyle::StyleId));
     if (!originalCharStyle)
@@ -528,29 +537,24 @@ QString KoTextWriter::Private::saveCharacterStyle(const QTextCharFormat &charFor
     QString displayName = originalCharStyle->name();
     QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace('%', '_');
 
-    KoCharacterStyle charStyle(charFormat);
-    // we'll convert it to a KoCharacterStyle to check for local changes.
-    // we remove that properties given by the paragraphstyle char format, these are not present in the saved style (should it really be the case?)
-    charStyle.removeDuplicates(blockCharFormat);
-    if (charStyle == (*originalCharStyle)) { // This is the real, unmodified character style.
+    KoCharacterStyle *autoStyle = originalCharStyle->autoStyle(charFormat, blockCharFormat);
+
+    if (autoStyle->isEmpty()) { // This is the real, unmodified character style.
         if (originalCharStyle != defaultCharStyle) {
-            if (!charStyle.isEmpty()) {
-                KoGenStyle style(KoGenStyle::ParagraphStyle, "text");
-                originalCharStyle->saveOdf(style);
-                generatedName = context.mainStyles().insert(style, internalName, KoGenStyles::DontAddNumberToName);
-            }
+            KoGenStyle style(KoGenStyle::ParagraphStyle, "text");
+            originalCharStyle->saveOdf(style);
+            generatedName = context.mainStyles().insert(style, internalName, KoGenStyles::DontAddNumberToName);
         }
     } else { // There are manual changes... We'll have to store them then
         KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "text", originalCharStyle != defaultCharStyle ? internalName : "" /*parent*/);
         if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
             style.setAutoStyleInStylesDotXml(true);
-        charStyle.removeDuplicates(*originalCharStyle);
-        if (!charStyle.isEmpty()) {
-            charStyle.saveOdf(style);
-            generatedName = context.mainStyles().insert(style, "T");
-        }
+
+        autoStyle->saveOdf(style);
+        generatedName = context.mainStyles().insert(style, "T");
     }
 
+    delete autoStyle;
     return generatedName;
 }
 
@@ -628,7 +632,7 @@ QString KoTextWriter::Private::saveTableCellStyle(const QTextTableCellFormat& ce
         style.setAutoStyleInStylesDotXml(true);
 
     KoTableCellStyle cellStyle(cellFormat);
-    cellStyle.saveOdf(style);
+    cellStyle.saveOdf(style, context);
     generatedName = context.mainStyles().insert(style, generatedName);
     return generatedName;
 }
@@ -699,6 +703,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         writer->addAttribute("text:style-name", styleName);
 
     if ( const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
+        // text:id is deprecated. if present, it must have the same value as
+        // xml:id
+        writer->addAttribute("xml:id", context.subId(blockData));
         writer->addAttribute("text:id", context.subId(blockData));
     }
 
@@ -732,6 +739,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         inlineRdf->saveOdf(context, writer);
     }
 
+    QString previousFragmentLink;
+    int linkTagChangeId = -1;
     for (it = block.begin(); !(it.atEnd()); ++it) {
         QTextFragment currentFragment = it.fragment();
         const int fragmentStart = currentFragment.position();
@@ -747,9 +756,31 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
                 saveODF12Change(charFormat);
             }
-
+            
+            if ((!previousFragmentLink.isEmpty()) && (charFormat.anchorHref() != previousFragmentLink || !charFormat.isAnchor())) {
+                // Close the current text:a
+                closeTagRegion(linkTagChangeId);
+                previousFragmentLink = "";
+            }
+            
+            if (charFormat.isAnchor() && charFormat.anchorHref() != previousFragmentLink) {
+                // Open a text:a
+                previousFragmentLink = charFormat.anchorHref();
+                TagInformation linkTagInformation;
+                linkTagInformation.setTagName("text:a");
+                linkTagInformation.addAttribute("xlink:type", "simple");
+                linkTagInformation.addAttribute("xlink:href", charFormat.anchorHref());
+                if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
+                    // Write xml:id here for Rdf
+                    kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
+                    saveInlineRdf(inlineRdf, &linkTagInformation);
+                }
+                linkTagChangeId = openTagRegion(currentFragment.position(), KoTextWriter::Private::Span, linkTagInformation);
+            }
+            
             KoInlineTextObjectManager *textObjectManager = KoTextDocument(document).inlineTextObjectManager();
             KoInlineObject *inlineObject = textObjectManager ? textObjectManager->inlineTextObject(charFormat) : 0;
+            // If we are in an inline object
             if (currentFragment.length() == 1 && inlineObject
                     && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
                 if (!dynamic_cast<KoDeleteChangeMarker*>(inlineObject)) {
@@ -835,20 +866,11 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     }
                 }
             } else {
+                // Normal block, easier to handle
                 QString styleName = saveCharacterStyle(charFormat, blockCharFormat);
 
                 TagInformation fragmentTagInformation;
-                if (charFormat.isAnchor()) {
-                    fragmentTagInformation.setTagName("text:a");
-                    fragmentTagInformation.addAttribute("xlink:type", "simple");
-                    fragmentTagInformation.addAttribute("xlink:href", charFormat.anchorHref());
-                    if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
-                        // Write xml:id here for Rdf
-                        kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
-                        saveInlineRdf(inlineRdf, &fragmentTagInformation);
-                        //inlineRdf->saveOdf(context, writer);
-                    }
-                } else if (!styleName.isEmpty() /*&& !identical*/) {
+                if (!styleName.isEmpty() /*&& !identical*/) {
                     fragmentTagInformation.setTagName("text:span");
                     fragmentTagInformation.addAttribute("text:style-name", styleName);
                 }
@@ -869,6 +891,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
             previousCharFormat = charFormat;
         }
+    }
+    if (!previousFragmentLink.isEmpty()) {
+        writer->endElement();
     }
 
     if (to !=-1 && to < block.position() + block.length()) {
@@ -1350,8 +1375,16 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
         TagInformation listTagInformation;
         listTagInformation.setTagName("text:list");
         listTagInformation.addAttribute("text:style-name", listStyles[textList]);
-        if (textList->format().hasProperty(KoListStyle::ContinueNumbering))
-            listTagInformation.addAttribute("text:continue-numbering",textList->format().boolProperty(KoListStyle::ContinueNumbering) ? "true" : "false");
+
+        if (listXmlIds.contains(list->listContinuedFrom())) {
+            listTagInformation.addAttribute("text:continue-list", listXmlIds.value(list->listContinuedFrom()));
+        }
+
+        QString listXmlId = QString("list-%1").arg(createXmlId());
+        listTagInformation.addAttribute("xml:id", listXmlId);
+        if (! listXmlIds.contains(list)) {
+            listXmlIds.insert(list, listXmlId);
+        }
 
         listChangeId = openTagRegion(block.position(), KoTextWriter::Private::List, listTagInformation);
     }
@@ -1401,7 +1434,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     }
                 }
 
-                if (textList == topLevelTextList) {
+                if (topListLevel == level && textList == topLevelTextList) {
                     writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, currentTable, textList);
                     // we are generating a text:list-item. Look forward and generate unnumbered list items.
                     while (true) {
@@ -1413,7 +1446,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     }
                 } else {
                     //This is a sub-list
-                    block = saveList(block, listStyles, ++level, currentTable);
+                    block = saveList(block, listStyles, level + 1, currentTable);
                     //saveList will return a block one-past the last block of the list.
                     //Since we are doing a block.next() below, we need to go one back.
                     block = block.previous();
@@ -2291,3 +2324,10 @@ void KoTextWriter::Private::writeNode(QTextStream &outputXmlStream, KoXmlNode &n
     }
 }
 
+QString KoTextWriter::Private::createXmlId()
+{
+    QString uuid = QUuid::createUuid().toString();
+    uuid.remove('{');
+    uuid.remove('}');
+    return uuid;
+}

@@ -49,7 +49,7 @@
 #include "kis_config.h"
 
 
-class KisPaintOpPresetsPopup::Private
+struct KisPaintOpPresetsPopup::Private
 {
 
 public:

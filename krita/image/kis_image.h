@@ -28,6 +28,7 @@
 
 #include <KoColorConversionTransformation.h>
 
+#include "kis_paint_device.h" // msvc cannot handle forward declarations, so include kis_paint_device here
 #include "kis_types.h"
 #include "kis_shared.h"
 #include "kis_node_graph_listener.h"
@@ -62,7 +63,13 @@ class MergeStrategy;
  * meta information about the image. And it also provides some
  * functions to manipulate the whole image.
  */
-class KRITAIMAGE_EXPORT KisImage : public QObject, public KisStrokesFacade, public KisUpdatesFacade, public KisProjectionUpdateListener, public KisNodeFacade, public KisNodeGraphListener, public KisShared
+class KRITAIMAGE_EXPORT KisImage : public QObject,
+        public KisStrokesFacade,
+        public KisUpdatesFacade,
+        public KisProjectionUpdateListener,
+        public KisNodeFacade,
+        public KisNodeGraphListener,
+        public KisShared
 {
 
     Q_OBJECT
@@ -125,20 +132,17 @@ public:
     QImage convertToQImage(const QRect& scaledRect, const QSize& scaledImageSize, const KoColorProfile *profile);
 
     /**
-     * Lock the image to make sure no recompositing-causing signals
-     * get emitted while you're messing with the layers. Don't forget
-     * to unlock again.
+     * Calls KisUpdateScheduler::lock
      */
     void lock();
 
     /**
-     * Unlock the image to make sure the rest of Krita learns about
-     * changes in the image again.
+     * Calls KisUpdateScheduler::unlock
      */
     void unlock();
 
     /**
-     * Returns true if the image is locked.
+     * Returns true if lock() has been called more often than unlock().
      */
     bool locked() const;
 
@@ -157,28 +161,6 @@ public:
      * global selection is always read-write.
      */
     KisSelectionSP globalSelection() const;
-
-    /**
-     * Replaces the current global selection with globalSelection. If
-     * globalSelection is empty, a new selection object will be
-     * created that is by default completely deselected.
-     */
-    void setGlobalSelection(KisSelectionSP globalSelection = 0);
-
-    /**
-     * Removes the global selection.
-     */
-    void removeGlobalSelection();
-
-    /**
-     * @return the deselected global selection or 0 if no global selection was deselected
-     */
-    KisSelectionSP deselectedGlobalSelection();
-
-    /**
-     * Set deselected global selection
-     */
-    void setDeleselectedGlobalSelection(KisSelectionSP selection);
 
     /**
      * Retrieve the next automatic layername (XXX: fix to add option to return Mask X)
@@ -225,12 +207,18 @@ public:
     /**
      * Execute a rotate transform on all layers in this image.
      */
-    void rotate(double radians, KoUpdater *m_progress);
+    void rotate(double radians);
 
     /**
      * Execute a shear transform on all layers in this image.
      */
-    void shear(double angleX, double angleY, KoUpdater *m_progress);
+    void shear(double angleX, double angleY);
+
+    /**
+     * Shear a node and all its children.
+     * @param angleX, @param angleY are given in degrees.
+     */
+    void shearNode(KisNodeSP node, double angleX, double angleY);
 
     /**
      * Convert the image and all its layers to the dstColorSpace
@@ -256,6 +244,9 @@ public:
      *
      * This is essential if you have loaded an image that didn't
      * have an embedded profile to which you want to attach the right profile.
+     *
+     * This does not create an undo action; only call it when creating or
+     * loading an image.
      */
     void assignImageProfile(const KoColorProfile *profile);
 
@@ -555,7 +546,7 @@ signals:
      * Inform the model we're done moving a layer.
      */
     void sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
-    
+
     /**
      * Inform the model that a node was changed
      */
@@ -581,6 +572,9 @@ public slots:
     void blockUpdates();
     void unblockUpdates();
 
+    void disableUIUpdates();
+    void enableUIUpdates();
+
     void refreshGraphAsync(KisNodeSP root = 0);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc);
     void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect);
@@ -590,6 +584,7 @@ public slots:
      */
     void refreshGraph(KisNodeSP root = 0);
     void refreshGraph(KisNodeSP root, const QRect& rc, const QRect &cropRect);
+    void initialRefreshGraph();
 
 private:
     KisImage(const KisImage& rhs);
@@ -598,6 +593,9 @@ private:
     void emitSizeChanged();
 
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
+    void shearImpl(const QString &actionName, KisNodeSP rootNode,
+                   bool resizeImage, double angleX, double angleY,
+                   const QPointF &origin);
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
     static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());
@@ -607,6 +605,35 @@ private:
 
     friend class KisImageSetProjectionColorSpaceCommand;
     void setProjectionColorSpace(const KoColorSpace * colorSpace);
+
+
+    friend class KisDeselectGlobalSelectionCommand;
+    friend class KisReselectGlobalSelectionCommand;
+    friend class KisSetGlobalSelectionCommand;
+    friend class KisPixelSelectionTest;
+
+    /**
+     * Replaces the current global selection with globalSelection. If
+     * globalSelection is empty, a new selection object will be
+     * created that is by default completely deselected.
+     */
+    void setGlobalSelection(KisSelectionSP globalSelection = 0);
+
+    /**
+     * Removes the global selection.
+     */
+    void removeGlobalSelection();
+
+    /**
+     * @return the deselected global selection or 0 if no global selection was deselected
+     */
+    KisSelectionSP deselectedGlobalSelection();
+
+    /**
+     * Set deselected global selection
+     */
+    void setDeselectedGlobalSelection(KisSelectionSP selection);
+
 private:
     class KisImagePrivate;
     KisImagePrivate * const m_d;

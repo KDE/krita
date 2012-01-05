@@ -44,6 +44,7 @@
 #include <KoOdfGraphicStyles.h>
 #include <KoOdfWorkaround.h>
 #include <KoTextDocumentLayout.h>
+#include <KoOdfNumberStyles.h>
 
 // KDChart
 #include <KDChartChart>
@@ -105,7 +106,7 @@ public:
     void createAreaDiagram();
     void createCircleDiagram();
     void createRingDiagram();
-    void createRadarDiagram();
+    void createRadarDiagram(bool filled);
     void createScatterDiagram();
     void createStockDiagram();
     void createBubbleDiagram();
@@ -146,6 +147,7 @@ public:
     KDChart::CartesianCoordinatePlane *kdPlane;
     KDChart::PolarCoordinatePlane     *kdPolarPlane;
     KDChart::RadarCoordinatePlane     *kdRadarPlane;
+    KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat;
 
     KDChart::BarDiagram   *kdBarDiagram;
     KDChart::LineDiagram  *kdLineDiagram;
@@ -191,14 +193,28 @@ public:
     bool isVisible;
 };
 
+class CartesianAxis : public KDChart::CartesianAxis
+{
+public:
+    CartesianAxis( KChart::Axis *_axis ) : KDChart::CartesianAxis(), axis(_axis) {}
+    virtual ~CartesianAxis() {}
+    virtual const QString customizedLabel( const QString& label ) const {
+        if (KoOdfNumberStyles::NumericStyleFormat *n = axis->numericStyleFormat())
+            return KoOdfNumberStyles::format(label, *n);
+        return label;
+    }
+private:
+    KChart::Axis *axis;
+};
 
 Axis::Private::Private( Axis *axis, AxisDimension dim )
     : q( axis )
     , dimension( dim )
-    , kdAxis( new KDChart::CartesianAxis )
+    , kdAxis( new CartesianAxis( axis ) )
     , kdPlane( 0 )
     , kdPolarPlane( 0 )
     , kdRadarPlane( 0 )
+    , numericStyleFormat( 0 )
 {
     centerDataPoints = false;
 
@@ -240,6 +256,8 @@ Axis::Private::~Private()
 {
     Q_ASSERT( plotArea );
 
+    delete numericStyleFormat;
+
     delete kdBarDiagram;
     delete kdAreaDiagram;
     delete kdCircleDiagram;
@@ -259,7 +277,7 @@ Axis::Private::~Private()
 
 void Axis::Private::registerDiagram( KDChart::AbstractDiagram *diagram )
 {
-    KDChartModel *model = new KDChartModel;
+    KDChartModel *model = new KDChartModel( plotArea );
     diagram->setModel( model );
 
     QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
@@ -326,8 +344,9 @@ KDChart::AbstractDiagram *Axis::Private::getDiagramAndCreateIfNeeded( ChartType 
         diagram = kdRingDiagram;
         break;
     case RadarChartType:
+    case FilledRadarChartType:
         if ( !kdRadarDiagram )
-            createRadarDiagram();
+            createRadarDiagram(chartType == FilledRadarChartType);
         diagram = kdRadarDiagram;
         break;
     case ScatterChartType:
@@ -381,6 +400,7 @@ KDChart::AbstractDiagram *Axis::Private::getDiagram( ChartType chartType )
         case RingChartType:
             return kdRingDiagram;
         case RadarChartType:
+        case FilledRadarChartType:
             return kdRadarDiagram;
         case ScatterChartType:
             return kdScatterDiagram;
@@ -422,6 +442,7 @@ void Axis::Private::deleteDiagram( ChartType chartType )
         diagram = (KDChart::AbstractDiagram**)&kdRingDiagram;
         break;
     case RadarChartType:
+    case FilledRadarChartType:
         diagram = (KDChart::AbstractDiagram**)&kdRadarDiagram;
         break;
     case ScatterChartType:
@@ -554,7 +575,7 @@ void Axis::Private::createAreaDiagram()
     else if ( plotAreaChartSubType == PercentChartSubtype )
     {
         kdAreaDiagram->setType( KDChart::LineDiagram::Percent );
-        kdAreaDiagram->setUnitSuffix("%", kdBarDiagram->orientation());
+        kdAreaDiagram->setUnitSuffix("%", Qt::Vertical);
     }
 
     if ( isVisible )
@@ -625,7 +646,7 @@ void Axis::Private::createRingDiagram()
     kdPolarPlane->setStartPosition( (int)plotArea->pieAngleOffset() );
 }
 
-void Axis::Private::createRadarDiagram()
+void Axis::Private::createRadarDiagram(bool filled)
 {
     Q_ASSERT( kdRadarDiagram == 0 );
 
@@ -635,6 +656,14 @@ void Axis::Private::createRadarDiagram()
     kdRadarDiagram = new KDChart::RadarDiagram( plotArea->kdChart(), kdRadarPlane );
     registerDiagram( kdRadarDiagram );
     kdRadarDiagram->setCloseDatasets(true);
+
+    if (filled) {
+        // Don't use a solid fill of 1.0 but a more transparent one so the
+        // grid and the data-value-labels are still visible plus it provides
+        // a better look (other areas can still be seen) even if it's slightly
+        // different from what OO.org does.
+        kdRadarDiagram->setFillAlpha(0.4);
+    }
 
 #if 0  // Stacked and Percent not supported by KDChart.
     if ( plotAreaChartSubType == StackedChartSubtype )
@@ -1165,6 +1194,7 @@ Qt::Orientation Axis::orientation()
 bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context )
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
     bool reverseAxis = false;
 
@@ -1186,6 +1216,17 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     setMinorInterval( 0.0 );
 
     if ( !axisElement.isNull() ) {
+
+        QString styleName = axisElement.attributeNS(KoXmlNS::chart, "style-name", QString());
+        const KoXmlElement *stylElement = stylesReader.findStyle(styleName, "chart");
+        if (stylElement) {
+            const QString dataStyleName = stylElement->attributeNS(KoXmlNS::style, "data-style-name", QString());
+            if (!dataStyleName.isEmpty() && stylesReader.dataFormats().contains(dataStyleName)) {
+                delete d->numericStyleFormat;
+                d->numericStyleFormat = new KoOdfNumberStyles::NumericStyleFormat(stylesReader.dataFormats()[dataStyleName].first);
+            }
+        }
+
         KoXmlElement n;
         forEachElement ( n, axisElement ) {
             if ( n.namespaceURI() != KoXmlNS::chart )
@@ -1281,10 +1322,9 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     if ( axisElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         styleStack.clear();
         context.odfLoadingContext().fillStyleStack( axisElement, KoXmlNS::chart, "style-name", "chart" );
-        styleStack.setTypeProperties( "text" );
 
         KoCharacterStyle charStyle;
-        charStyle.loadOdf( context );
+        charStyle.loadOdf(&axisElement, context );
         setFont( charStyle.font() );
 
         styleStack.setTypeProperties( "chart" );
@@ -1352,6 +1392,19 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                 kdAxis()->setTextAttributes( tatt );
             }
         }
+        if ( styleStack.hasProperty( KoXmlNS::fo, "font-color" ) )
+        {
+            QString fontColorString =  styleStack.property( KoXmlNS::fo, "font-color" );
+            QColor color(fontColorString);
+            if ( color.isValid() )
+            {
+                KDChart::TextAttributes tatt =  kdAxis()->textAttributes();
+                QPen pen = tatt.pen();
+                pen.setColor(color);
+                tatt.setPen(pen);
+                kdAxis()->setTextAttributes( tatt );
+            }
+        }
     } else {
         setShowLabels( KoOdfWorkaround::fixMissingStyle_DisplayLabel( axisElement, context ) );
     }
@@ -1372,7 +1425,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
         gridAttr.setGridPen( gridPen );
     if ( subGridPen.style() != Qt::NoPen )
         gridAttr.setSubGridPen( subGridPen );
-//     if ( plotArea()->chartType() == RadarChartType )
+//     if ( plotArea()->chartType() == RadarChartType || plotArea()->chartType() == FilledRadarChartType )
 //         d->kdPolarPlane->setGridAttributes( false, gridAttr );
 //     else
     d->kdPolarPlane->setGridAttributes( true, gridAttr );
@@ -1393,16 +1446,11 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
 
     if ( reverseAxis )
     {
-        if ( dimension() == XAxisDimension )
-        {
-            KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( kdPlane() );
-            if ( plane )
+        KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( kdPlane() );
+        if ( plane ) {
+            if ( orientation() == Qt::Horizontal )
                 plane->setHorizontalRangeReversed( reverseAxis );
-        }
-        else if ( dimension() == YAxisDimension )
-        {
-            KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( kdPlane() );
-            if ( plane )
+            else // Qt::Vertical
                 plane->setVerticalRangeReversed( reverseAxis );
         }
     }   
@@ -1572,7 +1620,7 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         return;
     }
 
-    qDebug() << "changed ChartType";
+    //qDebug() << "changed ChartType";
 
     ChartType oldChartType = d->plotAreaChartType;
 
@@ -1684,6 +1732,7 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
         }
         break;
     case RadarChartType:
+    case FilledRadarChartType:
 #if 0 // FIXME: Stacked and Percent not supported by KDChart
         if ( d->kdRadarDiagram ) {
             KDChart::PolarDiagram::PolarType type;
@@ -1923,6 +1972,17 @@ void Axis::setVisible( bool visible )
         registerKdAxis( d->kdAxis );
     else
         deregisterKdAxis( d->kdAxis );
+}
+
+KoOdfNumberStyles::NumericStyleFormat *Axis::numericStyleFormat() const
+{
+    return d->numericStyleFormat;
+}
+
+void Axis::SetNumericStyleFormat(KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat) const
+{
+    delete d->numericStyleFormat;
+    d->numericStyleFormat = numericStyleFormat;
 }
 
 #include "Axis.moc"

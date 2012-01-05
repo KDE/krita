@@ -41,6 +41,12 @@ class KisTiledIterator;
 class KisTiledRandomAccessor;
 class KoStore;
 
+
+/**
+ * KisTileDataWrapper is a special object, that fetches the tile from
+ * the data manager according to the position, locks it and returns
+ * a pointer to the needed piece of data
+ */
 class KisTileDataWrapper
 {
 public:
@@ -48,30 +54,53 @@ public:
         READ,
         WRITE
     };
-    KisTileDataWrapper(KisTileSP tile, qint32 offset, accessType type)
-            : m_tile(tile), m_offset(offset) {
-        if (type == READ)
-            m_tile->lockForRead();
-        else
-            m_tile->lockForWrite();
-    }
 
-    virtual ~KisTileDataWrapper() {
+    /**
+     * Fetches the tile which contains point (\p x, \p y) from
+     * the data manager \p dm with access \p type
+     */
+    inline KisTileDataWrapper(KisTiledDataManager *dm,
+                              qint32 x, qint32 y,
+                              enum KisTileDataWrapper::accessType type);
+
+    virtual ~KisTileDataWrapper()
+    {
         m_tile->unlock();
     }
 
-    inline qint32 offset() const {
+    /**
+     * Returns the offset of the data in the tile's chunk of memory
+     *
+     * \see data()
+     */
+    inline qint32 offset() const
+    {
         return m_offset;
     }
 
-    inline KisTileSP& tile() {
+    /**
+     * Returns the fetched tile
+     */
+    inline KisTileSP& tile()
+    {
         return m_tile;
     }
 
-    inline quint8* data() const {
+    /**
+     * Returns the pointer to the pixel, that was passed to
+     * the constructor. This points to the raw data of the tile,
+     * so you should think about the borders of the tile yourself.
+     * When (x,y) is the top-left corner of the tile, the pointer
+     * will lead to the beginning of the tile's chunk of memory.
+     */
+    inline quint8* data() const
+    {
         return m_tile->data() + m_offset;
     }
+
 private:
+    Q_DISABLE_COPY(KisTileDataWrapper);
+
     KisTileSP m_tile;
     qint32 m_offset;
 };
@@ -316,6 +345,7 @@ private:
     // Allow compression routines to calculate (col,row) coordinates
     // and pixel size
     friend class KisAbstractTileCompressor;
+    friend class KisTileDataWrapper;
     qint32 xToCol(qint32 x) const;
     qint32 yToRow(qint32 y) const;
 
@@ -324,8 +354,6 @@ private:
     bool processTilesHeader(QIODevice *stream, quint32 &numTiles);
 
     qint32 divideRoundDown(qint32 x, const qint32 y) const;
-    KisTileDataWrapper pixelPtr(qint32 x, qint32 y,
-                                enum KisTileDataWrapper::accessType type);
 
     void updateExtent(qint32 col, qint32 row);
     void recalculateExtent();
@@ -372,6 +400,31 @@ inline qint32 KisTiledDataManager::yToRow(qint32 y) const
     return divideRoundDown(y, KisTileData::HEIGHT);
 }
 
+inline KisTileDataWrapper::KisTileDataWrapper(KisTiledDataManager *dm,
+                                              qint32 x, qint32 y,
+                                              enum KisTileDataWrapper::accessType type)
+{
+    const qint32 col = dm->xToCol(x);
+    const qint32 row = dm->yToRow(y);
+
+    /* FIXME: Always positive? */
+    const qint32 xInTile = x - col * KisTileData::WIDTH;
+    const qint32 yInTile = y - row * KisTileData::HEIGHT;
+
+    const qint32 pixelIndex = xInTile + yInTile * KisTileData::WIDTH;
+
+    KisTileSP tile = dm->getTile(col, row, type == WRITE);
+
+    m_tile = tile;
+    m_offset = pixelIndex * dm->pixelSize();
+
+    if (type == READ) {
+        m_tile->lockForRead();
+    }
+    else {
+        m_tile->lockForWrite();
+    }
+}
 
 // during development the following line helps to check the interface is correct
 // it should be safe to keep it here even during normal compilation

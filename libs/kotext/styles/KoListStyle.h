@@ -133,7 +133,7 @@ public:
         Level,          ///< list nesting level, is 1 or higher, or zero when implied
         DisplayLevel,   ///< show this many levels. Is always lower than the (implied) level.
         CharacterStyleId,///< CharacterStyle used for markup of the counter
-        MarkCharacterStyleId, ///< This stores the character style used for the mark of the list item
+        CharacterProperties, ///< This stores the character properties of the list style
         BulletCharacter,///< an int with the unicode value of the character (for CustomCharItem)
         RelativeBulletSize,     ///< size in percent relative to the height of the text
         Alignment,      ///< Alignment of the counter
@@ -142,7 +142,6 @@ public:
         IsOutline,      ///< If true then this list is an outline list (for header paragraphs)
         LetterSynchronization, ///< If letters are used for numbering, when true increment all at the same time. (aa, bb)
         StyleId,        ///< The id stored in the listFormat to link the list to this style.
-        ContinueNumbering, ///< Continue numbering this list from the counter of a previous list
         Indent,         ///< The space (margin) to include for all paragraphs
         MinimumDistance, ///< The minimum distance, in pt, between the counter and the text
         Width,          ///< The width, in pt, of  a picture bullet.
@@ -252,6 +251,11 @@ public:
      * Check if list has numbering in one of it's list levels
      */
     bool isNumberingStyle() const;
+
+    /**
+     * Returns true if this list style is a outline style
+     */
+    bool isOulineStyle() const;
 
     /// returns true if style is a numbering style
     static bool isNumberingStyle(int style);

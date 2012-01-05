@@ -32,7 +32,6 @@
 #include <QPainter>
 #include <QBuffer>
 #include <QDataStream>
-#include <QPixmap>
 #include <QMutexLocker>
 #include <QThreadPool>
 

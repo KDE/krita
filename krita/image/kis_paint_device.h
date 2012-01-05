@@ -31,7 +31,7 @@
 #include "kis_global.h"
 #include "kis_shared.h"
 #include "kis_iterators_pixel.h"
-#include "kis_default_bounds.h"
+#include "kis_default_bounds_base.h"
 
 #include <krita_export.h>
 
@@ -88,7 +88,7 @@ public:
      * @param defaultBounds boundaries of the device in case it is empty
      * @param name for debugging purposes
      */
-    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsSP defaultBounds = new KisDefaultBounds(), const QString& name = QString());
+    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsBaseSP defaultBounds = 0, const QString& name = QString());
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
@@ -128,12 +128,12 @@ public:
      * set the default bounds for the paint device when
      * the default pixel in not completely transarent
      */
-    virtual void setDefaultBounds(KisDefaultBoundsSP bounds);
+    virtual void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
 
      /**
      * the default bounds rect of the paint device
      */
-    KisDefaultBoundsSP defaultBounds() const;
+    KisDefaultBoundsBaseSP defaultBounds() const;
 
     /**
      * Moves the device to these new coordinates (so no incremental move or so)
@@ -409,9 +409,9 @@ public:
 
     /**
      * Fill this paint device with the data from image; starting at (offsetX, offsetY)
-     * @param srcProfileName name of the RGB profile to interpret the image as. "" is interpreted as sRGB
+     * @param srcProfileName name of the RGB profile to interpret the image as. 0 is interpreted as sRGB
      */
-    virtual void convertFromQImage(const QImage& image, const QString &srcProfileName, qint32 offsetX = 0, qint32 offsetY = 0);
+    virtual void convertFromQImage(const QImage& image, const KoColorProfile *profile, qint32 offsetX = 0, qint32 offsetY = 0);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device.
@@ -424,7 +424,7 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile, qint32 x, qint32 y, qint32 w, qint32 h) const;
+    virtual QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h) const;
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The
@@ -447,7 +447,6 @@ public:
      * @param rect: only this rect will be used for the thumbnail
      *
      */
-
     virtual KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection *selection = 0, QRect rect = QRect()) const;
 
     /**
@@ -692,7 +691,7 @@ private:
     KisPaintDevice& operator=(const KisPaintDevice&);
     void init(KisDataManagerSP explicitDataManager,
               const KoColorSpace *colorSpace,
-              KisDefaultBoundsSP defaultBounds,
+              KisDefaultBoundsBaseSP defaultBounds,
               KisNodeWSP parent, const QString& name);
 
     // Only KisPainter is allowed to have access to these low-level methods
@@ -725,7 +724,7 @@ private:
 private:
     KisDataManagerSP m_datamanager;
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

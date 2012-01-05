@@ -132,10 +132,7 @@ void KoResourceTagging::delTag( KoResource* resource,const QString& tag)
 
 QStringList KoResourceTagging::searchTag(const QString& lineEditText)
 {
-    QStringList tagsList = lineEditText.split(", ");
-    if(tagsList.contains("")) {
-       tagsList.removeAll("");
-    }
+    QStringList tagsList = lineEditText.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);
 
     QStringList keysList = m_tagRepo.keys(tagsList.takeFirst());
 

@@ -6,13 +6,13 @@
  *   the Free Software Foundation; either version 2 of the License, or
  *   (at your option) any later version.
  *
- *   This program is distributed in the hope that it will be useful,  
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of   
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/> 
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 #include <netinet/in.h> // htonl
@@ -43,13 +43,11 @@ PSDImageData::~PSDImageData() {
 
 bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
 
-    //qDebug() << "Position before read " << io->pos();
     psdread(io, &m_compression);
-    //qDebug() << "COMPRESSION TYPE " << m_compression;
     quint64 start = io->pos();
     m_channelSize = m_header->channelDepth/8;
     m_channelDataLength = m_header->height * m_header->width * m_channelSize;
-    //qDebug()<<"Height" << m_header->height << "Width:"<< m_header->width;
+
     switch (m_compression) {
 
     case 0: // Uncompressed
@@ -66,17 +64,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
 
         }
 
-        for (int channel = 0; channel < m_header->nChannels; channel++) {
-
-            //qDebug() << "Channel ID: " << m_channelInfoRecords[channel].channelId;
-            //qDebug() << "Channel Compression Type: " << m_channelInfoRecords[channel].compressionType;
-            //qDebug() << "Channel Data Start: " << m_channelInfoRecords[channel].channelDataStart;
-            //qDebug() << "Channel Data Length: " << m_channelInfoRecords[channel].channelDataLength;
-            //qDebug() << "---------------------------------------------------";
-
-        }
-
-        switch (m_header->colormode) {
+    switch (m_header->colormode) {
         case Bitmap:
             break;
         case Grayscale:
@@ -84,7 +72,6 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         case Indexed:
             break;
         case RGB:
-            //qDebug()<<"RGB";
             doRGB(dev, io);
             break;
         case CMYK:
@@ -107,9 +94,9 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
 
     case 1: // RLE
     {
-        //qDebug()<<"RLE ENCODED";
-        quint32 rlelength = 0;        
-        
+
+        quint32 rlelength = 0;
+
         // The start of the actual channel data is _after_ the RLE rowlengths block
         if (m_header->version == 1) {
             start += m_header->nChannels * m_header->height * 2;
@@ -117,7 +104,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         else if (m_header->version == 2) {
             start += m_header->nChannels * m_header->height * 4;
         }
-        
+
         for (int channel = 0; channel < m_header->nChannels; channel++) {
             m_channelOffsets << 0;
             quint32 sumrlelength = 0;
@@ -140,16 +127,6 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
             m_channelInfoRecords.append(channelInfo);
         }
 
-        for (int channel = 0; channel < m_header->nChannels; channel++) {
-            //qDebug() << "Channel offset" << m_channelOffsets[channel];
-            //qDebug() << "Channel ID: " << m_channelInfoRecords[channel].channelId;
-            //qDebug() << "Channel Compression Type: " << m_channelInfoRecords[channel].compressionType;
-            //qDebug() << "Channel Data Start: " << m_channelInfoRecords[channel].channelDataStart;
-            //qDebug() << "Channel Data Length: " << m_channelInfoRecords[channel].channelDataLength;
-            //qDebug() << "Found " << m_channelInfoRecords[channel].rleRowLengths.size() << "rows";
-            //qDebug() << "---------------------------------------------------";
-        }
-
         switch (m_header->colormode) {
         case Bitmap:
             break;
@@ -161,12 +138,14 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
             doRGB(dev,io);
             break;
         case CMYK:
+            doCMYK(dev,io);
             break;
         case MultiChannel:
             break;
         case DuoTone:
             break;
         case Lab:
+            doLAB(dev, io);
             break;
         case UNKNOWN:
             break;
@@ -177,7 +156,6 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         break;
     }
     case 2: // ZIP without prediction
-        //qDebug()<<"ZIP without prediction";
 
         switch (m_header->colormode) {
         case Bitmap:
@@ -204,8 +182,6 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         break;
 
     case 3: // ZIP with prediction
-        //qDebug()<<"ZIP with prediction";
-
         switch (m_header->colormode) {
         case Bitmap:
             break;
@@ -242,7 +218,7 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
     int channelid = 0;
 
     for (int row = 0; row < m_header->height; row++) {
-        
+
         KisHLineIterator it = dev->createHLineIterator(0, row, m_header->width);
         QVector<QByteArray> channelBytes;
 
@@ -256,8 +232,7 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
             {
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[0]);
                 channelBytes.append(io->read(m_header->width*m_channelSize));
-                // Debug
-                //qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
+
             }
                 break;
 
@@ -265,16 +240,10 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
             {
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[channel]);
                 int uncompressedLength = m_header->width * m_header->channelDepth / 8;
-
-                //qDebug() << "channel" << channel << "row" << row << "rle length" << m_channelInfoRecords[channel].rleRowLengths[row] << "uncompressed length" << uncompressedLength;
-
                 QByteArray compressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
                 QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, m_channelInfoRecords[channel].compressionType);
-                //qDebug() << "uncompressedBytes" << uncompressedBytes.length();
                 channelBytes.append(uncompressedBytes);
-
                 m_channelOffsets[channel] +=  m_channelInfoRecords[channel].rleRowLengths[row];
-                //qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
 
             }
                 break;
@@ -294,9 +263,6 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
         if (m_channelInfoRecords[channelid].compressionType == 0){
             m_channelOffsets[channelid] += (m_header->width * m_channelSize);
         }
-
-        //qDebug() << "------------------------------------------";
-        //qDebug() << "channel offset:"<< m_channelOffsets[channelid] <<": "<<  channelid;
 
         for (int col = 0; col < m_header->width; col++) {
 
@@ -346,49 +312,76 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 
     }
 
-    //qDebug()<<"IO Position: "<<io->pos();
     return true;
 }
 
 
 bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
-    int m_channelOffsets = 0;
+    int channelid = 0;
 
-    for (int row = 0; row <m_header->height; row++) {
+    for (int row = 0; row < m_header->height; row++) {
 
         KisHLineIterator it = dev->createHLineIterator(0, row, m_header->width);
         QVector<QByteArray> channelBytes;
 
         for (int channel = 0; channel < m_header->nChannels; channel++) {
 
-            io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets);
-            channelBytes.append(io->read(m_header->width*m_channelSize));
-            //qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
+
+            switch (m_compression) {
+
+            case Compression::Uncompressed:
+
+            {
+                io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[0]);
+                channelBytes.append(io->read(m_header->width*m_channelSize));
+
+            }
+                break;
+
+            case Compression::RLE:
+            {
+                io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[channel]);
+                int uncompressedLength = m_header->width * m_header->channelDepth / 8;
+                QByteArray compressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
+                QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, m_channelInfoRecords[channel].compressionType);
+                channelBytes.append(uncompressedBytes);
+                m_channelOffsets[channel] +=  m_channelInfoRecords[channel].rleRowLengths[row];
+            }
+                break;
+
+            case Compression::ZIP:
+                break;
+
+            case Compression::ZIPWithPrediction:
+                break;
+
+            default:
+                break;
+            }
 
         }
-        m_channelOffsets += (m_header->width * m_channelSize);
 
-        //qDebug() << "------------------------------------------";
-        //qDebug() << "channel offset:"<< m_channelOffsets ;
+        if (m_channelInfoRecords[channelid].compressionType == 0){
+            m_channelOffsets[channelid] += (m_header->width * m_channelSize);
+        }
 
         for (int col = 0; col < m_header->width; col++) {
 
             if (m_channelSize == 1) {
 
-                quint8 C = ntohs(reinterpret_cast<const quint8 *>(channelBytes[0].constData())[col]);
-                KoCmykTraits<quint8>::setC(it.rawData(),C);
+                quint8 *pixel = new quint8[5];
+                memset(pixel, 0, 5);
+                dev->colorSpace()->setOpacity(pixel, OPACITY_OPAQUE_U8, 1);
 
-                quint8 M = ntohs(reinterpret_cast<const quint8 *>(channelBytes[1].constData())[col]);
-                KoCmykTraits<quint8>::setM(it.rawData(),M);
+                memset(pixel, 255 - channelBytes[0].constData()[col], 1);
+                memset(pixel + 1, 255 - channelBytes[1].constData()[col], 1);
+                memset(pixel + 2, 255 - channelBytes[2].constData()[col], 1);
+                memset(pixel + 3, 255 - channelBytes[3].constData()[col], 1);
+                qDebug() << "C" << pixel[0] << "M" << pixel[1] << "Y" << pixel[2] << "K" << pixel[3] << "A" << pixel[4];
+                memcpy(it.rawData(), pixel, 5);
 
-                quint8 Y = ntohs(reinterpret_cast<const quint8 *>(channelBytes[2].constData())[col]);
-                KoCmykTraits<quint8>::setY(it.rawData(),Y);
-
-                quint8 K = ntohs(reinterpret_cast<const quint8 *>(channelBytes[3].constData())[col]);
-                KoCmykTraits<quint8>::setK(it.rawData(),K);
 
             }
-
             else if (m_channelSize == 2) {
 
                 quint16 C = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
@@ -401,10 +394,9 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
                 KoCmykTraits<quint16>::setY(it.rawData(),Y);
 
                 quint16 K = ntohs(reinterpret_cast<const quint16 *>(channelBytes[3].constData())[col]);
-                KoCmykTraits<quint16>::setK(it.rawData(),K);
+               KoCmykTraits<quint16>::setK(it.rawData(),K);
 
             }
-
             else if (m_channelSize == 4) {
 
                 quint32 C = ntohs(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);
@@ -426,55 +418,86 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
         }
 
     }
+
     return true;
+
 }
 
 bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io) {
-    int m_channelOffsets = 0;
 
-    for (int row = 0; row <m_header->height; row++) {
+    int channelid = 0;
+
+    for (int row = 0; row < m_header->height; row++) {
 
         KisHLineIterator it = dev->createHLineIterator(0, row, m_header->width);
         QVector<QByteArray> channelBytes;
 
         for (int channel = 0; channel < m_header->nChannels; channel++) {
 
-            io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets);
-            channelBytes.append(io->read(m_header->width*m_channelSize));
-            //qDebug() << "channel: " << m_channelInfoRecords[channel].channelId << "is at position " << io->pos();
+
+            switch (m_compression) {
+
+            case Compression::Uncompressed:
+
+            {
+                io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[0]);
+                channelBytes.append(io->read(m_header->width*m_channelSize));
+            }
+                break;
+
+            case Compression::RLE:
+            {
+                io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[channel]);
+                int uncompressedLength = m_header->width * m_header->channelDepth / 8;
+                QByteArray compressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
+                QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, m_channelInfoRecords[channel].compressionType);
+                channelBytes.append(uncompressedBytes);
+                m_channelOffsets[channel] +=  m_channelInfoRecords[channel].rleRowLengths[row];
+
+            }
+                break;
+
+            case Compression::ZIP:
+                break;
+
+            case Compression::ZIPWithPrediction:
+                break;
+
+            default:
+                break;
+            }
 
         }
-        m_channelOffsets += (m_header->width * m_channelSize);
 
-        //qDebug() << "------------------------------------------";
-        //qDebug() << "channel offset:"<< m_channelOffsets ;
-        //qDebug() << "------------------------------------------";
+        if (m_channelInfoRecords[channelid].compressionType == 0){
+            m_channelOffsets[channelid] += (m_header->width * m_channelSize);
+        }
 
         for (int col = 0; col < m_header->width; col++) {
 
             if (m_channelSize == 1) {
 
                 quint8 L = ntohs(reinterpret_cast<const quint8 *>(channelBytes[0].constData())[col]);
-                KoLabTraits<quint8>::setL(it.rawData(),L);
+                KoLabTraits<quint16>::setL(it.rawData(),KoColorSpaceMaths<quint8, quint16 >::scaleToA(L));
 
                 quint8 A = ntohs(reinterpret_cast<const quint8 *>(channelBytes[1].constData())[col]);
-                KoLabTraits<quint8>::setA(it.rawData(),A);
+                KoLabTraits<quint16>::setA(it.rawData(),KoColorSpaceMaths<quint8, quint16 >::scaleToA(A));
 
                 quint8 B = ntohs(reinterpret_cast<const quint8 *>(channelBytes[2].constData())[col]);
-                KoLabTraits<quint8>::setB(it.rawData(),B);
+                KoLabTraits<quint16>::setB(it.rawData(),KoColorSpaceMaths<quint8, quint16 >::scaleToA(B));
 
             }
 
             else if (m_channelSize == 2) {
 
                 quint16 L = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
-                KoLabTraits<quint16>::setL(it.rawData(),L);
+                KoLabU16Traits::setL(it.rawData(),L);
 
                 quint16 A = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
-                KoLabTraits<quint16>::setA(it.rawData(),A);
+                KoLabU16Traits::setA(it.rawData(),A);
 
                 quint16 B = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
-                KoLabTraits<quint16>::setB(it.rawData(),B);
+                KoLabU16Traits::setB(it.rawData(),B);
 
             }
 
@@ -498,5 +521,4 @@ bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io) {
     }
 
     return true;
-
 }

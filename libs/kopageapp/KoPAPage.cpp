@@ -58,6 +58,7 @@ void KoPAPage::saveOdf( KoShapeSavingContext & context ) const
         paContext.xmlWriter().addAttribute( "calligra:name", name() );
     }
     paContext.xmlWriter().addAttribute( "draw:id", "page" + QString::number( paContext.page() ) );
+    paContext.xmlWriter().addAttribute( "xml:id", "page" + QString::number( paContext.page() ) );
     paContext.xmlWriter().addAttribute( "draw:master-page-name", paContext.masterPageName( m_masterPage ) );
     paContext.xmlWriter().addAttribute( "draw:style-name", saveOdfPageStyle( paContext ) );
 

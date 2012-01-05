@@ -134,14 +134,19 @@ bool KoInlineTextObjectManager::removeInlineObject(QTextCursor &cursor)
 
 void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
 {
-    if (object) {
-        m_objects.remove(object->id());
-        m_listeners.removeAll(object);
-        KoBookmark *bookmark = dynamic_cast<KoBookmark *>(object);
-        if (bookmark) {
-            m_bookmarkManager.remove(bookmark->name());
-        }
+    if (!object) {
+        return;
     }
+
+    m_objects.remove(object->id());
+    m_listeners.removeAll(object);
+
+    KoBookmark *bookmark = dynamic_cast<KoBookmark *>(object);
+    if (bookmark) {
+        m_bookmarkManager.remove(bookmark->name());
+    }
+
+    m_deletedObjects[object->id()] = object;
     // TODO dirty the document somehow
 }
 

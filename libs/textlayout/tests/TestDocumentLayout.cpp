@@ -58,7 +58,6 @@ void TestDocumentLayout::setupTest(const QString &initText)
     Q_ASSERT(m_layout);
     m_doc->setDocumentLayout(m_layout);
 
-    QTextBlock block = m_doc->begin();
     if (!initText.isEmpty()) {
         QTextCursor cursor(m_doc);
         cursor.insertText(initText);
@@ -128,6 +127,8 @@ void TestDocumentLayout::testHitTest()
     QCOMPARE(p->m_area->hitTest(QPointF(20, paragOffets[1]), Qt::FuzzyHit).position, 139);
     QVERIFY(p->m_area->hitTest(QPointF(20, paragOffets[1] + 20), Qt::FuzzyHit).position >= 139);
     */
+    Q_UNUSED(lineHeight); // used in the above commented piece of code
+    Q_UNUSED(paragOffets); // used in the above commentted piece of code
 }
 
 void TestDocumentLayout::testRootAreaZeroWidth()

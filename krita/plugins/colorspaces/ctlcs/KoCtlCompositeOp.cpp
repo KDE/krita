@@ -36,7 +36,13 @@
 #include <OpenCTL/Program.h>
 #include <OpenCTL/Module.h>
 
-KoCTLCompositeOp::KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColorSpace * cs, const GTLCore::PixelDescription& _pd) : KoCompositeOp(cs, idForFile(_template->fileName()), descriptionForFile(_template->fileName()), categoryForFile(_template->fileName())), m_withMaskProgram(0), m_withoutMaskProgram(0)
+KoCTLCompositeOp::KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColorSpace * cs, const GTLCore::PixelDescription& _pd)
+    : KoCompositeOp(cs,
+                    idForFile(_template->fileName()),
+                    descriptionForFile(_template->fileName()),
+                    categoryForFile(_template->fileName()))
+    , m_withMaskProgram(0)
+    , m_withoutMaskProgram(0)
 {
     QMutexLocker lock(ctlMutex);
     OpenCTL::Module* module = _template->generateModule(_pd);

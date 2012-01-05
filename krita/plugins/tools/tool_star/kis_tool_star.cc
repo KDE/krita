@@ -46,6 +46,7 @@
 #include <kis_cursor.h>
 #include <kis_paint_device.h>
 #include <kis_paint_information.h>
+#include <kis_system_locker.h>
 
 #include "kis_selection.h"
 #include "widgets/kis_slider_spin_box.h"
@@ -131,7 +132,8 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 
             if (!currentNode()->paintDevice())
                 return;
-            setCurrentNodeLocked(true);
+
+            KisSystemLocker locker(currentNode());
             
             KisPaintDeviceSP device = currentNode()->paintDevice();
             KisPainter painter(device, currentSelection());
@@ -145,7 +147,6 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
             updatePreview();
 
             painter.endTransaction(image()->undoAdapter());
-            setCurrentNodeLocked(false);
         } else {
             KoPathShape* path = new KoPathShape();
             path->setShapeId(KoPathShapeId);

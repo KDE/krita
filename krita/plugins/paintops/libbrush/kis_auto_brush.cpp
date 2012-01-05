@@ -218,9 +218,6 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
             color = const_cast<quint8*>(coloringInformation->color());
         }
-    } else {
-        // Mask everything out
-        cs->setOpacity(dst->data(), OPACITY_TRANSPARENT_U8, dst->bounds().width() * dst->bounds().height());
     }
 
     int rowWidth = dst->bounds().width();
@@ -446,9 +443,9 @@ QPainterPath KisAutoBrush::outline() const
     if (simpleOutline){
         QPainterPath path;
         QRectF brushBoundingbox(0,0,width(), height());
-        if (maskGenerator()->type() == KisMaskGenerator::CIRCLE){
+        if (maskGenerator()->type() == KisMaskGenerator::CIRCLE) {
             path.addEllipse(brushBoundingbox);
-        }else // if (maskGenerator()->type() == KisMaskGenerator::RECTANGLE)
+        } else // if (maskGenerator()->type() == KisMaskGenerator::RECTANGLE)
         {
             path.addRect(brushBoundingbox);
         }

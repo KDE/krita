@@ -23,7 +23,7 @@
 
 void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption* option, int widgetIndex)
 {
-    BaseCalss::addEntry(option->category(), KisOptionInfo(option, widgetIndex));
+    BaseClass::addEntry(option->category(), KisOptionInfo(option, widgetIndex));
 }
 
 QString KisPaintOpOptionListModel::categoryToString(const QString& val) const
@@ -38,43 +38,43 @@ QString KisPaintOpOptionListModel::entryToString(const KisOptionInfo& val) const
 
 QVariant KisPaintOpOptionListModel::data(const QModelIndex& idx, int role) const
 {
-    if(idx.isValid() && role == Qt::CheckStateRole) {
+    if (idx.isValid() && role == Qt::CheckStateRole) {
         KisOptionInfo info;
-        
-        if(BaseCalss::entryAt(info, idx.row()) && info.option->isCheckable())
+
+        if (BaseClass::entryAt(info, idx.row()) && info.option->isCheckable())
             return info.option->isChecked() ? Qt::Checked : Qt::Unchecked;
-        
+
         return QVariant();
     }
-    
-    return BaseCalss::data(idx, role);
+
+    return BaseClass::data(idx, role);
 }
 
 bool KisPaintOpOptionListModel::setData(const QModelIndex& idx, const QVariant& value, int role)
 {
-    if(idx.isValid() && role == Qt::CheckStateRole) {
+    if (idx.isValid() && role == Qt::CheckStateRole) {
         KisOptionInfo info;
-        
-        if(BaseCalss::entryAt(info, idx.row()) && info.option->isCheckable()) {
+
+        if (BaseClass::entryAt(info, idx.row()) && info.option->isCheckable()) {
             info.option->setChecked(value.toInt() == Qt::Checked);
             return true;
         }
-        
+
         return false;
     }
-    
-    return BaseCalss::setData(idx, value, role);
+
+    return BaseClass::setData(idx, value, role);
 }
 
 Qt::ItemFlags KisPaintOpOptionListModel::flags(const QModelIndex& idx) const
 {
     Qt::ItemFlags flags = 0;
     KisOptionInfo info;
-    
-    if(idx.isValid() && BaseCalss::entryAt(info, idx.row())) {
-        if(info.option->isCheckable())
+
+    if (idx.isValid() && BaseClass::entryAt(info, idx.row())) {
+        if (info.option->isCheckable())
             flags |= Qt::ItemIsUserCheckable;
     }
-    
-    return BaseCalss::flags(idx) | flags;
+
+    return BaseClass::flags(idx) | flags;
 }

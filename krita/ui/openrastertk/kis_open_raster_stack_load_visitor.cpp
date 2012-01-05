@@ -66,13 +66,28 @@ KisImageWSP KisOpenRasterStackLoadVisitor::image()
 
 void KisOpenRasterStackLoadVisitor::loadImage()
 {
-    d->image = new KisImage(d->doc->createUndoStore(), 0, 0, KoColorSpaceRegistry::instance()->rgb8(), "OpenRaster Image (name)");
 
     QDomDocument doc = d->loadContext->loadStack();
 
-    d->image->lock();
+
     for (QDomNode node = doc.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "image") { // it's the image root
+            QDomElement subelem = node.toElement();
+
+            int width = 0;
+            if (!subelem.attribute("w").isNull()) {
+                width = subelem.attribute("w").toInt();
+            }
+
+            int height = 0;
+            if (!subelem.attribute("h").isNull()) {
+                height = subelem.attribute("h").toInt();
+            }
+
+            dbgFile << ppVar(width) << ppVar(height);
+
+            d->image = new KisImage(d->doc->createUndoStore(), width, height, KoColorSpaceRegistry::instance()->rgb8(), "OpenRaster Image (name)");
+
             for (QDomNode node2 = node.firstChild(); !node2.isNull(); node2 = node2.nextSibling()) {
                 if (node2.isElement() && node2.nodeName() == "stack") { // it's the root layer !
                     QDomElement subelem2 = node2.toElement();
@@ -80,24 +95,8 @@ void KisOpenRasterStackLoadVisitor::loadImage()
                     break;
                 }
             }
-            QDomElement subelem = node.toElement();
-            int width = 0;
-            if (!subelem.attribute("w").isNull()) {
-                width = subelem.attribute("w").toInt();
-            }
-            int height = 0;
-            if (!subelem.attribute("h").isNull()) {
-                height = subelem.attribute("h").toInt();
-            }
-            dbgFile << ppVar(width) << ppVar(height);
-            d->image->resizeImage(QRect(0,0,width,height));
         }
     }
-    if (d->image->width() == 0 && d->image->height() == 0) {
-        // TODO: when width = height = 0 use the new function from boud to get the size of the image after the layers have been loaded
-    }
-    d->image->unlock();
-    d->image->rootLayer()->setDirty();
 }
 
 void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLayer* layer)

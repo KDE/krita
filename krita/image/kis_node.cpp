@@ -51,7 +51,7 @@ struct KisNodeSPStaticRegistrar {
 static KisNodeSPStaticRegistrar __registrar;
 
 
-class KisNode::Private
+struct KisNode::Private
 {
 public:
     Private()
@@ -109,6 +109,12 @@ QRect KisNode::changeRect(const QRect &rect, PositionToFilthy pos) const
     return rect;
 }
 
+QRect KisNode::accessRect(const QRect &rect, PositionToFilthy pos) const
+{
+    Q_UNUSED(pos);
+    return rect;
+}
+
 void KisNode::setSystemLocked(bool l, bool update)
 {
     KisBaseNode::setSystemLocked(l, update);
@@ -135,6 +141,12 @@ KisNodeGraphListener *KisNode::graphListener() const
 void KisNode::setGraphListener(KisNodeGraphListener *graphListener)
 {
     m_d->graphListener = graphListener;
+
+    KisSafeReadNodeList::const_iterator iter;
+    FOREACH_SAFE(iter, m_d->nodes) {
+        KisNodeSP child = (*iter);
+        child->setGraphListener(graphListener);
+    }
 }
 
 KisNodeSP KisNode::parent() const

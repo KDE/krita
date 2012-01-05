@@ -30,6 +30,7 @@
 #include <KoGenericRegistry.h>
 #include <KoPluginLoader.h>
 #include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
 #include <KoID.h>
 
@@ -59,9 +60,24 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 {
     K_GLOBAL_STATIC(KisPaintOpRegistry, s_instance);
     if (!s_instance.exists()) {
-        KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 4)");
+        KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 5)");
+
+
+        KisImageSP img = new KisImage(0, 0, 0, 0, 0, KoColorSpaceRegistry::instance()->alpha8());
+        QStringList toBeRemoved;
+
         foreach(const QString id, s_instance->keys()) {
-            s_instance->get(id)->processAfterLoading();
+            KisPaintOpFactory *factory = s_instance->get(id);
+            if (!factory->settings(img)) {
+                toBeRemoved << id;
+            }
+            else {
+                factory->processAfterLoading();
+            }
+        }
+        kWarning() << "The following brush engines do not provide a default brush and are removed" << toBeRemoved;
+        foreach(const QString id, toBeRemoved) {
+            s_instance->remove(id);
         }
     }
     return s_instance;
@@ -103,7 +119,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPai
 
 KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, KisImageWSP image) const
 {
-    KisPaintOpFactory* f = value(id.id());
+    KisPaintOpFactory *f = value(id.id());
     Q_ASSERT(f);
     if (f) {
         KisPaintOpSettingsSP settings = f->settings(image);
@@ -119,6 +135,10 @@ KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, KisImageWSP
     preset->setName(i18n("default"));
 
     KisPaintOpSettingsSP s = settings(id, image);
+
+    if (s.isNull()) {
+        return 0;
+    }
 
     preset->setSettings(s);
     preset->setPaintOp(id);

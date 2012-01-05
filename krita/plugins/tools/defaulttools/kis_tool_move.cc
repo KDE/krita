@@ -39,12 +39,35 @@
 #include "kis_canvas2.h"
 #include "kis_view2.h"
 #include "kis_node_manager.h"
+#include "kis_image.h"
 
 #include <kis_transaction.h>
 #include <commands/kis_image_layer_add_command.h>
 #include <commands/kis_deselect_global_selection_command.h>
 #include "strokes/move_stroke_strategy.h"
 
+/**
+ * Deferred activation of a node. After it is actually added to the
+ * layer stack. In the future it might be shared with the methods of
+ * KisNodeManager which are not ported to strokes yet.
+ */
+class ActivateNodeCommand : public KUndo2Command
+{
+public:
+    ActivateNodeCommand(KisView2 *view, KisNodeSP node)
+        : m_view(view), m_node(node)
+    {}
+
+    void redo() {
+        m_view->nodeManager()->activateNode(m_node);
+    }
+
+    void undo() {}
+
+private:
+    KisView2 *m_view;
+    KisNodeSP m_node;
+};
 
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
@@ -114,7 +137,7 @@ KisLayerSP createSelectionCopy(KisLayerSP srcLayer, KisSelectionSP selection, Ki
     KisTransaction transaction("cut", srcLayer->paintDevice());
     srcLayer->paintDevice()->clearSelection(selection);
     image->addJob(strokeId,
-        new KisStrokeStrategyUndoCommandBased::Data(transaction.endAndTake()));
+                  new KisStrokeStrategyUndoCommandBased::Data(transaction.endAndTake()));
 
     image->addJob(strokeId,
         new KisStrokeStrategyUndoCommandBased::Data(
@@ -126,10 +149,13 @@ KisLayerSP createSelectionCopy(KisLayerSP srcLayer, KisSelectionSP selection, Ki
 
     newLayer->setCompositeOp(srcLayer->compositeOpId());
 
+    // No updates while we adding a layer, so let's be "exclusive"
     image->addJob(strokeId,
         new KisStrokeStrategyUndoCommandBased::Data(
             new KisImageLayerAddCommand(image, newLayer,
-                                        srcLayer->parent(), srcLayer)));
+                                        srcLayer->parent(), srcLayer),
+            false,
+            KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE));
 
     return newLayer;
 }
@@ -163,6 +189,9 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
 
         if(!node) {
             node = currentNode();
+            if (!node) {
+                return;
+            }
         }
 
         /**
@@ -190,7 +219,9 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
             KisLayerSP newLayer = createSelectionCopy(oldLayer, selection, image, m_strokeId);
 
             KisView2 *view = dynamic_cast<KisCanvas2*>(canvas())->view();
-            view->nodeManager()->activateNode(newLayer);
+            image->addJob(m_strokeId,
+                          new KisStrokeStrategyUndoCommandBased::Data(
+                              new ActivateNodeCommand(view, newLayer)));
 
             node = newLayer;
         }
@@ -210,6 +241,11 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
 void KisToolMove::mouseMoveEvent(KoPointerEvent *event)
 {
     if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
+        if (!m_strokeId)
+        {
+            return;
+        }
+
         QPoint pos = convertToPixelCoord(event).toPoint();
         if ((event->modifiers() & Qt::AltModifier) ||
             (event->modifiers() & Qt::ControlModifier)) {
@@ -233,11 +269,17 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *event)
     if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
         setMode(KisTool::HOVER_MODE);
 
+        if (!m_strokeId)
+        {
+            return;
+        }
+
         QPoint pos = convertToPixelCoord(event).toPoint();
         drag(pos);
 
         KisImageWSP image = currentImage();
         image->endStroke(m_strokeId);
+        m_strokeId.clear();
 
         currentImage()->setModified();
     }

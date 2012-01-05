@@ -252,9 +252,9 @@ void tonemap_image2()
     filter_size   = (int) sigma_c;
 
     if (width > height)
-        levels = 1 + (int)(log10(width)  / log10(2.));
+        levels = 1 + (int)(log10((double)width)  / log10(2.0));
     else
-        levels = 1 + (int)(log10(height) / log10(2.));
+        levels = 1 + (int)(log10((double)height) / log10(2.0));
     levels = (levels > 5) ? 5 : levels;
 
     compute_luminance(rgb_image, luminance, width, height);

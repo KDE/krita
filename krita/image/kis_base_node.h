@@ -18,20 +18,26 @@
 #ifndef _KIS_BASE_NODE_H
 #define _KIS_BASE_NODE_H
 
+#include <QObject>
 #include <QIcon>
+#include <QUuid>
+#include <QString>
+
 #include <kicon.h>
 
-#include "kis_types.h"
-#include "kis_shared.h"
-#include "krita_export.h"
 #include "KoDocumentSectionModel.h"
+
+#include "kis_shared.h"
+#include "kis_paint_device.h"
+#include "kis_processing_visitor.h" // included, not forward declared for msvc
 
 class KoProperties;
 class KoColorSpace;
 class KoCompositeOp;
 class KisNodeVisitor;
-class KisProcessingVisitor;
 class KisUndoAdapter;
+
+#include "krita_export.h"
 
 /**
  * A KisBaseNode is the base class for all components of an image:
@@ -89,7 +95,7 @@ public:
      */
     virtual KisPaintDeviceSP projection() const;
 
-    virtual const KoColorSpace * colorSpace() const = 0;
+    virtual const KoColorSpace *colorSpace() const = 0;
 
     /**
      * Return the opacity of this layer, scaled to a range between 0
@@ -124,7 +130,7 @@ public:
     /**
      * Return the composite op associated with this layer.
      */
-    virtual const KoCompositeOp * compositeOp() const = 0;
+    virtual const KoCompositeOp *compositeOp() const = 0;
     const QString& compositeOpId() const;
 
     /**
@@ -132,6 +138,17 @@ public:
      * dirty.
      */
     void setCompositeOp(const QString& compositeOpId);
+
+    /**
+     * @return unique id, which is now used by clone layers.
+     */
+    QUuid uuid() const;
+
+    /**
+     * Set the uuid of node. This should only be used when loading
+     * existing node and in constructor.
+     */
+    void setUuid(const QUuid& id);
 
     /**
      * return the name of this node. This is the same as the
@@ -381,7 +398,7 @@ signals:
     void systemLockingChanged(bool);
 private:
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

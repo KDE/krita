@@ -424,6 +424,13 @@ void KisSelectionManager::paste()
             viewConverter->viewToDocumentY(canvasBase->canvasController()->canvasOffsetY()) + center.y()));
 
     if (clip) {
+        // Pasted layer content could be outside image bounds and invisible, if that is the case move content into the bounds
+        QRect exactBounds = clip->exactBounds();
+        if(!exactBounds.isEmpty() && !exactBounds.intersects(image->bounds())) {
+            clip->setX(clip->x() - exactBounds.x());
+            clip->setY(clip->y() - exactBounds.y());
+        }
+
         KisPaintLayer *layer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8, clip);
         Q_CHECK_PTR(layer);
 
@@ -615,7 +622,7 @@ void KisSelectionManager::applySelectionFilter(KisSelectionFilter *filter)
 
     KisSelectionTransaction transaction(filter->name(), image, selection);
 
-    KisPixelSelectionSP mergedSelection = selection->mergedPixelSelection();
+    KisPixelSelectionSP mergedSelection = selection->getOrCreatePixelSelection();
     QRect processingRect = filter->changeRect(mergedSelection->selectedExactRect());
 
     filter->process(mergedSelection, processingRect);
@@ -718,10 +725,9 @@ void KisSelectionManager::copyFromDevice(KisPaintDeviceSP device)
 
     if (selection) {
         // Apply selection mask.
-        KisPixelSelectionSP selectionProjection = selection->projection();
+        KisPaintDeviceSP selectionProjection = selection->projection();
         KisHLineIteratorSP layerIt = clip->createHLineIteratorNG(0, 0, r.width());
         KisHLineConstIteratorPixel selectionIt = selectionProjection->createHLineIterator(r.x(), r.y(), r.width());
-        //KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
 
         for (qint32 y = 0; y < r.height(); y++) {
 

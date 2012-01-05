@@ -306,7 +306,7 @@ void KisMaskManager::mirrorMaskX()
 
 void KisMaskManager::mirrorMaskY()
 {
-    // XXX_NODE: This is a load of copy-past from Kisupanager -- how can I fix that?
+    // XXX_NODE: This is a load of copy-past from KisLayerManager -- how can I fix that?
     // XXX_NODE: we should also mirror the shape-based part of the selection!
     if (!m_activeMask) return;
 

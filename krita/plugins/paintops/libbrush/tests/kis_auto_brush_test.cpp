@@ -149,7 +149,7 @@ void KisAutoBrushTest::testCopyMasking()
 #endif
 
     QRect rc = tempDev->exactBounds();
-    QRect maskRc = maskDab->bounds();
+    //QRect maskRc = maskDab->bounds();
 
     //TODO: if rc != maskRc, bitBltWithFixedSelection works wrong
     //qDebug() << rc;

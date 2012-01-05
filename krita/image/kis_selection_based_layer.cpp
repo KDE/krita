@@ -36,7 +36,7 @@
 #include "filter/kis_filter.h"
 
 
-class KisSelectionBasedLayer::Private
+struct KisSelectionBasedLayer::Private
 {
 public:
     bool showSelection;

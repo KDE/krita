@@ -77,7 +77,7 @@ class CHARTSHAPELIB_EXPORT KDChartModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    KDChartModel( QObject *parent = 0 );
+    KDChartModel( PlotArea *plotArea, QObject *parent = 0 );
     ~KDChartModel();
 
     enum DataRole {

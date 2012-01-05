@@ -208,10 +208,10 @@ void KisUpdateScheduler::unlock()
 
 void KisUpdateScheduler::waitForDone()
 {
-    while(!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty()) {
+    do {
         processQueues();
         m_d->updaterContext->waitForDone();
-    }
+    } while(!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty());
 }
 
 bool KisUpdateScheduler::tryBarrierLock()

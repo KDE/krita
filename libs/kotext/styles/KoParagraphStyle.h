@@ -23,6 +23,7 @@
 #ifndef KOPARAGRAPHSTYLE_H
 #define KOPARAGRAPHSTYLE_H
 
+#include "KoCharacterStyle.h"
 #include "KoText.h"
 #include "kotext_export.h"
 
@@ -55,7 +56,7 @@ class KoShapeSavingContext;
  * a specific KoParagraphStyle.
  * @see KoStyleManager
  */
-class KOTEXT_EXPORT KoParagraphStyle : public QObject
+class KOTEXT_EXPORT KoParagraphStyle : public KoCharacterStyle
 {
     Q_OBJECT
 public:
@@ -156,13 +157,16 @@ public:
         HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
         PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
         VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
+        HiddenByTable,        ///< dont let this paragraph have any height
 
         NormalLineHeight,         ///< bool, internal property for reserved usage
         BibliographyData,
 
         TableOfContentsData,      // set when block is instead a TableOfContents
         GeneratedDocument,  // set when block is instead a generated document
-        Shadow                    //< KoShadowStyle, the shadow of this paragraph
+        Shadow,                    //< KoShadowStyle, the shadow of this paragraph
+        NextStyle,                  ///< holds the styleId of the style to be used on a new line
+        ParagraphListStyleId        ///< this holds the listStyleId of the list got from style:list-style-name property from ODF 1.2
     };
 
     enum AutoSpace {
@@ -508,6 +512,9 @@ public:
     /// duplicated property from QTextBlockFormat
     bool nonBreakableLines() const;
 
+    /// set the default style this one inherits its unset properties from if no parent style.
+    void setDefaultStyle(KoParagraphStyle *parent);
+
     /// set the parent style this one inherits its unset properties from.
     void setParentStyle(KoParagraphStyle *parent);
 
@@ -629,14 +636,14 @@ public:
      * the character style (where relevant) to the target block formats.
      */
     void applyStyle(QTextBlock &block, bool applyListStyle = true) const;
-
-    /// return the character style for this paragraph style
+/*
+    /// return the character "properties" for this paragraph style, Note it does not inherit
     KoCharacterStyle *characterStyle();
-    /// return the character style for this paragraph style
+    /// return the character "properties" for this paragraph style, Note it does not inherit
     const KoCharacterStyle *characterStyle() const;
-    /// set the character style for this paragraph style
+    /// set the character "properties" for this paragraph style
     void setCharacterStyle(KoCharacterStyle *style);
-
+*/
     /**
      * Returns the list style for this paragraph style.
      * @see KoListStyle::isValid()
@@ -658,8 +665,6 @@ public:
     bool operator==(const KoParagraphStyle &other) const;
     /// Compare the paragraph properties of this style with other
     bool compareParagraphProperties(const KoParagraphStyle &other) const;
-    /// Compare the character properties of this style with other
-    bool compareCharacterProperties(const KoParagraphStyle &other) const;
 
     void removeDuplicates(const KoParagraphStyle &other);
 
@@ -667,9 +672,11 @@ public:
      * Load the style form the element
      *
      * @param context the odf loading context
-     * @param element the element containing the
+     * @param element the element containing the style
+     * @param loadParents true = use the stylestack, false = use just the element
      */
-    void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context);
+    void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context,
+                bool loadParents = false);
 
     void saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const;
 
@@ -718,5 +725,5 @@ private:
     class Private;
     Private * const d;
 };
-
+Q_DECLARE_METATYPE(KoListStyle *);
 #endif

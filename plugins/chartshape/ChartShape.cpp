@@ -127,6 +127,7 @@ static const char *ODF_CHARTTYPES[ NUM_CHARTTYPES ] = {
     "chart:ring",
     "chart:scatter",
     "chart:radar",
+    "chart:filled-radar",
     "chart:stock",
     "chart:bubble",
     "chart:surface",
@@ -141,6 +142,7 @@ static const ChartSubtype defaultSubtypes[ NUM_CHARTTYPES ] = {
     NoChartSubtype,         // Ring
     NoChartSubtype,         // Scatter
     NormalChartSubtype,     // Radar
+    NormalChartSubtype,     // Filled Radar
     NoChartSubtype,         // Stock
     NoChartSubtype,         // Bubble
     NoChartSubtype,         // Surface
@@ -374,7 +376,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     setShapeId( ChartShapeId );
 
     // Instantiated all children first
-    d->proxyModel = new ChartProxyModel( &d->tableSource );
+    d->proxyModel = new ChartProxyModel( this, &d->tableSource );
 
     d->plotArea = new PlotArea( this );
     d->document = new ChartDocument( this );
@@ -634,8 +636,8 @@ void ChartShape::setInternalModel( QAbstractItemModel *model )
     Q_ASSERT( table );
     delete d->internalModelHelper;
     delete d->internalModel;
-    d->internalModelHelper = new SingleModelHelper( table, d->proxyModel );
     d->internalModel = model;
+    d->internalModelHelper = new SingleModelHelper( table, d->proxyModel );
 }
 
 TableSource *ChartShape::tableSource() const

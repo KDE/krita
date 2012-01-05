@@ -61,12 +61,16 @@ class KOTEXT_EXPORT KoTextLoader : public QObject
 public:
 
     /**
-     * Tries to determine if passing \p element to \a loadBody() would result in rich text
-     *
-     * \param element the element to test for richtext
-     * \return \p true if rich text was detected
-     */
-    static bool containsRichText(const KoXmlElement &element);
+    * Normalizes the whitespaces in the string \p in according to the ODF ruleset
+    * for stripping whitespaces and returns the result. If \p leadingSpace is
+    * true a leading space is stripped too.
+    *
+    * This is different from QString::simplifyWhiteSpace() because that one removes
+    * leading and trailing whitespace, but such whitespace is significant in ODF.
+    * So we use this function to compress sequences of space characters into single
+    * spaces.
+    */
+    static QString normalizeWhitespace(const QString &in, bool leadingSpace);
 
     /**
     * Constructor.

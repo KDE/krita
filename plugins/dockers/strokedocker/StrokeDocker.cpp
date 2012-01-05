@@ -10,6 +10,7 @@
    Copyright (C) 2006 Peter Simonsson <psn@linux.se>
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <t.zachmann@zagge.de>
+   Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -44,6 +45,7 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoCanvasResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoDockFactoryBase.h>
 //#include <KoUnitDoubleSpinBox.h>
 //#include <KoLineStyleSelector.h>
@@ -52,7 +54,11 @@
 #include <KoShapeBorderModel.h>
 #include <KoSelection.h>
 #include <KoLineBorder.h>
-
+#include <KoPathShape.h>
+#include <KoMarker.h>
+#include <KoPathShapeMarkerCommand.h>
+#include <KoShapeController.h>
+#include <KoMarkerCollection.h>
 
 class StrokeDocker::Private
 {
@@ -62,6 +68,8 @@ public:
         , mainWidget(0)
     {}
 
+    KoMarker *startMarker;
+    KoMarker *endMarker;
     KoLineBorder border;
     KoCanvasBase *canvas;
     KoStrokeConfigWidget *mainWidget;
@@ -81,8 +89,10 @@ StrokeDocker::StrokeDocker()
     connect( d->mainWidget, SIGNAL(capChanged(int)),       this, SLOT(slotCapChanged(int)));
     connect( d->mainWidget, SIGNAL(joinChanged(int)),      this, SLOT(slotJoinChanged(int)));
     connect( d->mainWidget, SIGNAL(miterLimitChanged()),   this, SLOT(miterLimitChanged()));
+    connect( d->mainWidget, SIGNAL(currentStartMarkerChanged()), this, SLOT(startMarkerChanged()));
+    connect( d->mainWidget, SIGNAL(currentEndMarkerChanged()), this, SLOT(endMarkerChanged()));
 
-    d->mainWidget->updateControls(d->border);
+    d->mainWidget->updateControls(d->border, d->startMarker, d->endMarker);
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(locationChanged(Qt::DockWidgetArea)));
@@ -105,7 +115,7 @@ void StrokeDocker::applyChanges()
 
     canvasController->canvas()->resourceManager()->setActiveBorder( d->border );
 
-    d->mainWidget->updateControls(d->border);
+    d->mainWidget->updateControls(d->border, d->startMarker, d->endMarker);
 
     if (!selection || !selection->count())
         return;
@@ -119,6 +129,40 @@ void StrokeDocker::applyChanges()
 
     KoShapeBorderCommand *cmd = new KoShapeBorderCommand(selection->selectedShapes(), newBorder);
     canvasController->canvas()->addCommand(cmd);
+}
+
+void StrokeDocker::applyMarkerChanges(KoMarkerData::MarkerPosition position)
+{
+    KoMarker *marker = 0;
+    if (position == KoMarkerData::MarkerStart) {
+        marker = d->startMarker;
+    }
+    else if (position == KoMarkerData::MarkerEnd) {
+        marker = d->endMarker;
+    }
+
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+
+    canvasController->canvas()->resourceManager()->setActiveBorder( d->border );
+
+    if (! selection || !selection->count()) {
+        return;
+    }
+
+    QList<KoShape*> shapeList = selection->selectedShapes();
+    QList<KoPathShape*> pathShapeList;
+    for (QList<KoShape*>::iterator itShape = shapeList.begin(); itShape != shapeList.end(); ++itShape) {
+        KoPathShape* pathShape = dynamic_cast<KoPathShape*>(*itShape);
+        if (pathShape) {
+            pathShapeList << pathShape;
+        }
+    }
+
+    if(pathShapeList.size()){
+        KoPathShapeMarkerCommand* cmdMarker = new KoPathShapeMarkerCommand(pathShapeList, marker, position);
+        canvasController->canvas()->addCommand( cmdMarker );
+    }
 }
 
 
@@ -152,6 +196,17 @@ void StrokeDocker::miterLimitChanged()
     applyChanges();
 }
 
+void StrokeDocker::startMarkerChanged()
+{
+    d->startMarker = d->mainWidget->startMarker();
+    applyMarkerChanges(KoMarkerData::MarkerStart);
+}
+
+void StrokeDocker::endMarkerChanged()
+{
+    d->endMarker = d->mainWidget->endMarker();
+    applyMarkerChanges(KoMarkerData::MarkerEnd);
+}
 // ----------------------------------------------------------------
 
 
@@ -172,8 +227,6 @@ void StrokeDocker::setStroke( const KoShapeBorderModel *border )
         d->border.setMiterLimit( 0.0 );
         d->border.setLineStyle( Qt::NoPen, QVector<qreal>() );
     }
-
-    d->mainWidget->updateControls(d->border);
 }
 
 void StrokeDocker::setUnit(KoUnit unit)
@@ -186,8 +239,19 @@ void StrokeDocker::selectionChanged()
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     KoShape * shape = selection->firstSelectedShape();
-    if (shape)
+    if (shape) {
         setStroke(shape->border());
+        KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
+        if (pathShape) {
+            d->startMarker = pathShape->marker(KoMarkerData::MarkerStart);
+            d->endMarker = pathShape->marker(KoMarkerData::MarkerEnd);
+        }
+        else {
+            d->startMarker = 0;
+            d->endMarker = 0;
+        }
+        d->mainWidget->updateControls(d->border, d->startMarker, d->endMarker);
+    }
 }
 
 void StrokeDocker::setCanvas( KoCanvasBase *canvas )
@@ -205,6 +269,14 @@ void StrokeDocker::setCanvas( KoCanvasBase *canvas )
     }
 
     d->canvas = canvas;
+    KoDocumentResourceManager *resourceManager = canvas->shapeController()->resourceManager();
+    if (resourceManager) {
+        KoMarkerCollection *collection = resourceManager->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
+        if (collection) {
+            d->mainWidget->updateMarkers(collection->markers());
+
+        }
+    }
 }
 
 void StrokeDocker::unsetCanvas()
@@ -226,6 +298,4 @@ void StrokeDocker::locationChanged(Qt::DockWidgetArea area)
     d->mainWidget->locationChanged(area);
 }
 
-
 #include <StrokeDocker.moc>
-

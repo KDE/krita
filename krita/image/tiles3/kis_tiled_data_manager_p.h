@@ -53,8 +53,7 @@ void KisTiledDataManager::writeBytesBody(const quint8 *data,
             qint32 columnsToWork = qMin(numContiguousImageColumns,
                                         columnsRemaining);
 
-            KisTileDataWrapper tw = pixelPtr(imageX, imageY,
-                                             KisTileDataWrapper::WRITE);
+            KisTileDataWrapper tw(this, imageX, imageY, KisTileDataWrapper::WRITE);
             quint8 *tileIt = tw.data();
 
 
@@ -117,8 +116,8 @@ void KisTiledDataManager::readBytesBody(quint8 *data,
             qint32 columnsToWork = qMin(numContiguousImageColumns,
                                         columnsRemaining);
 
-            // XXX: Ugly const cast because of theold pixelPtr design copied from tiles1.
-            KisTileDataWrapper tw = const_cast<KisTiledDataManager*>(this)->pixelPtr(imageX, imageY, KisTileDataWrapper::READ);
+            // XXX: Ugly const cast because of the old pixelPtr design copied from tiles1.
+            KisTileDataWrapper tw(const_cast<KisTiledDataManager*>(this), imageX, imageY, KisTileDataWrapper::READ);
             quint8 *tileIt = tw.data();
 
 
@@ -194,8 +193,8 @@ void KisTiledDataManager::writePlanarBytesBody(QVector </*const*/ quint8* > plan
             const qint32 tileRowStride = rowStride(imageX, imageY) -
                                          columnsToWork * pixelSize;
 
-            KisTileDataWrapper tw = pixelPtr(imageX, imageY,
-                                             KisTileDataWrapper::WRITE);
+            KisTileDataWrapper tw(this, imageX, imageY,
+                                  KisTileDataWrapper::WRITE);
             quint8 *tileItStart = tw.data();
 
 
@@ -273,8 +272,8 @@ readPlanarBytesBody(QVector<qint32> channelSizes,
             const qint32 tileRowStride = rowStride(imageX, imageY) -
                                          columnsToWork * pixelSize;
 
-            KisTileDataWrapper tw = pixelPtr(imageX, imageY,
-                                             KisTileDataWrapper::READ);
+            KisTileDataWrapper tw(this, imageX, imageY,
+                                  KisTileDataWrapper::READ);
             quint8 *tileItStart = tw.data();
 
 

@@ -67,7 +67,7 @@ namespace
     const GLuint NO_PROGRAM = 0;
 }
 
-class KisOpenGLCanvas2::Private
+struct KisOpenGLCanvas2::Private
 {
 public:
     Private()
@@ -249,7 +249,8 @@ void KisOpenGLCanvas2::drawImage()
     qreal scaleX, scaleY;
     converter->imageScale(&scaleX, &scaleY);
 
-    QRect wr = widgetRectInImagePixels.toAlignedRect() & image->bounds();
+    QRect wr = widgetRectInImagePixels.toAlignedRect() &
+        m_d->openGLImageTextures->storedImageBounds();
 
 
     if (image->colorSpace()->hasHighDynamicRange()) {

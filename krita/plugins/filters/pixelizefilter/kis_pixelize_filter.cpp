@@ -87,29 +87,18 @@ void KisPixelizeFilter::process(KisPaintDeviceSP device,
 
     qint32 count;
 
-    //calculate the total number of pixels
-    qint32 numX = 0;
-    qint32 numY = 0;
-
-    for (qint32 x = srcTopLeft.x(); x < srcTopLeft.x() + width; x += pixelWidth - (x % pixelWidth)) {
-        numX++;
-    }
-    for (qint32 y = srcTopLeft.y(); y < srcTopLeft.y() + height; y += pixelHeight - (y % pixelHeight)) {
-        numY++;
-    }
-
     if (progressUpdater) {
         progressUpdater->setRange(0, applyRect.width() * applyRect.height());
     }
 
     qint32 numberOfPixelsProcessed = 0;
 
-    for (qint32 y = 0; y < height; y += pixelHeight - ((srcTopLeft.y() + y) % pixelHeight)) {
-        qint32 h = pixelHeight - ((srcTopLeft.y() + y) % pixelHeight);
+    for (qint32 y = 0; y < height; y += pixelHeight - (y % pixelHeight)) {
+        qint32 h = pixelHeight;
         h = qMin(h, height - y);
 
-        for (qint32 x = 0; x < width; x += pixelWidth - ((srcTopLeft.x() + x) % pixelWidth)) {
-            qint32 w = pixelWidth - ((srcTopLeft.x() + x) % pixelWidth);
+        for (qint32 x = 0; x < width; x += pixelWidth - (x % pixelWidth)) {
+            qint32 w = pixelWidth;
             w = qMin(w, width - x);
 
             for (qint32 i = 0; i < pixelSize; i++) {
@@ -118,7 +107,7 @@ void KisPixelizeFilter::process(KisPaintDeviceSP device,
             count = 0;
 
             //read
-            KisRectConstIteratorSP srcIt = device->createRectConstIteratorNG(srcTopLeft.x(), srcTopLeft.y(), w, h);
+            KisRectConstIteratorSP srcIt = device->createRectConstIteratorNG(srcTopLeft.x() + x, srcTopLeft.y() + y, w, h);
             do {
                 for (qint32 i = 0; i < pixelSize; i++) {
                     average[i] += srcIt->oldRawData()[i];
@@ -132,7 +121,7 @@ void KisPixelizeFilter::process(KisPaintDeviceSP device,
                     average[i] /= count;
             }
             //write
-            KisRectIteratorSP dstIt = device->createRectIteratorNG(srcTopLeft.x(), srcTopLeft.y(), w, h);
+            KisRectIteratorSP dstIt = device->createRectIteratorNG(srcTopLeft.x() + x, srcTopLeft.y() + y, w, h);
             do {
                 for (int i = 0; i < pixelSize; i++) {
                     dstIt->rawData()[i] = average[i];
@@ -141,7 +130,6 @@ void KisPixelizeFilter::process(KisPaintDeviceSP device,
             if (progressUpdater) progressUpdater->setValue(++numberOfPixelsProcessed);
         }
     }
-
 }
 
 KisConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP) const

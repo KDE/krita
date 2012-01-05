@@ -27,6 +27,7 @@ class KisProcessingApplicatorTest : public QObject
 private slots:
     void testNonRecursiveProcessing();
     void testRecursiveProcessing();
+    void testNoUIUpdates();
 };
 
 #endif /* __KIS_PROCESSING_APPLICATOR_TEST_H */

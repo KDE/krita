@@ -1,11 +1,14 @@
 [Desktop Entry]
 Name=Artistic color selector
+Name[ca]=Selector artístic de color
 Name[da]=Kunstnerisk farvevælger
 Name[es]=Selector de color artístico
+Name[it]=Selettore colore artistico
 Name[nb]=Artistisk Fargevelger
 Name[nds]=Smuck Klöörköör
 Name[pt]=Selector de cores artísticas
 Name[pt_BR]=Seletor de cores artísticas
+Name[ru]=Художественный выбор цвета
 Name[sv]=Artistisk färgväljare
 Name[uk]=Художній вибір кольору
 Name[x-test]=xxArtistic color selectorxx
@@ -13,4 +16,4 @@ Name[zh_TW]=精美顏色選擇器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritaartisticcolorselector
-X-Krita-Version=4
+X-Krita-Version=5

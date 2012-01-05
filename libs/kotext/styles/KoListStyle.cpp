@@ -151,6 +151,9 @@ void KoListStyle::refreshLevelProperties(const KoListLevelProperties &properties
 {
     int level = qMax(1, properties.level());
     KoListLevelProperties llp = properties;
+    if (isOulineStyle()) {
+        llp.setOutlineList(true);
+    }
     llp.setLevel(level);
     d->levels.insert(level, llp);
 }
@@ -249,6 +252,17 @@ bool KoListStyle::isNumberingStyle(int style)
         retval = true;
     }
     return retval;
+}
+
+bool KoListStyle::isOulineStyle() const
+{
+    QMap<int, KoListLevelProperties>::const_iterator it(d->levels.constBegin());
+    for (; it != d->levels.constEnd(); ++it) {
+        if (it.value().isOutlineList()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 QList<int> KoListStyle::listLevels() const

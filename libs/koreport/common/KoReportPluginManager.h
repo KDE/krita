@@ -21,8 +21,8 @@
 #ifndef KOREPORTPLUGINMANAGER_H
 #define KOREPORTPLUGINMANAGER_H
 
-#include <QObject>
 #include <KoReportPluginInterface.h>
+#include <QAction>
 
 class KoReportPluginManagerPrivate;
  
@@ -36,7 +36,6 @@ class KoReportPluginManager : public QObject
         QList<QAction*> actions();
         
     private:
-       
         KoReportPluginManagerPrivate *const d;
 
         KoReportPluginManager();

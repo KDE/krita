@@ -132,7 +132,7 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     // get the scaling factor calculated by the size option
     qreal scale    = m_sizeOption.apply(info);
     qreal rotation = m_rotationOption.apply(info);
-    qreal diagonal = std::sqrt(brush->width()*brush->width() + brush->height()*brush->height());
+    qreal diagonal = std::sqrt((qreal)brush->width()*brush->width() + brush->height()*brush->height());
     
     // don't paint anything if the brush is too samll
     if((scale*brush->width()) <= 0.01 || (scale*brush->height()) <= 0.01)

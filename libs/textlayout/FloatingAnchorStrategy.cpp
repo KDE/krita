@@ -144,9 +144,15 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
         anchorBoundingRect.setWidth(pageRect().width());
         break;
 
-    case KoTextAnchor::HPageContent:
+    case KoTextAnchor::HFrameContent:
+    case KoTextAnchor::HFrame:
         anchorBoundingRect.setX(containerBoundingRect.x());
         anchorBoundingRect.setWidth(containerBoundingRect.width());
+        break;
+
+    case KoTextAnchor::HPageContent:
+        anchorBoundingRect.setX(pageContentRect().x());
+        anchorBoundingRect.setWidth(pageContentRect().width());
         break;
 
     case KoTextAnchor::HParagraph:
@@ -281,10 +287,18 @@ void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anc
 bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
                                           KoTextShapeData *data, QTextBlock &block, QTextLayout *layout)
 {
+    //FIXME proper handle VFrame and VFrameContent but fallback to VPage/VPageContent for now to produce better results
+
     switch (m_anchor->verticalRel()) {
     case KoTextAnchor::VPage:
         anchorBoundingRect.setY(pageRect().y());
         anchorBoundingRect.setHeight(pageRect().height());
+        break;
+
+    case KoTextAnchor::VFrame:
+    case KoTextAnchor::VFrameContent:
+        anchorBoundingRect.setY(containerBoundingRect.y());
+        anchorBoundingRect.setHeight(containerBoundingRect.height());
         break;
 
     case KoTextAnchor::VPageContent:
@@ -385,13 +399,13 @@ void FloatingAnchorStrategy::checkLayoutEnvironment(QPointF &newPosition, KoText
     }
 
     //check top border and move the shape back to have the whole shape within
-    if (newPosition.y() < layoutEnvironmentRect().y()) {
-        newPosition.setY(layoutEnvironmentRect().y());
+    if (newPosition.y() < layoutEnvironmentRect().y() - data->documentOffset()) {
+        newPosition.setY(layoutEnvironmentRect().y() - data->documentOffset());
     }
 
     //check bottom border and move the shape back to have the whole shape within
-    if (newPosition.y() + size.height() > layoutEnvironmentRect().bottom()) {
-        newPosition.setY(layoutEnvironmentRect().bottom() - size.height());
+    if (newPosition.y() + size.height() > layoutEnvironmentRect().bottom() - data->documentOffset()) {
+        newPosition.setY(layoutEnvironmentRect().bottom() - size.height() - data->documentOffset());
     }
 }
 

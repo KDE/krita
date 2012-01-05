@@ -33,7 +33,8 @@
 #include <QtDebug>
 #include <QDoubleSpinBox>
 
-struct KisAbstractSliderSpinBoxPrivate {
+class KisAbstractSliderSpinBoxPrivate {
+public:
     QLineEdit* edit;
     QDoubleValidator* validator;
     bool upButtonDown;
@@ -412,7 +413,7 @@ void KisAbstractSliderSpinBox::editLostFocus()
     hideEdit();
 }
 
-struct KisSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {
+class KisSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {
 };
 
 KisSliderSpinBox::KisSliderSpinBox(QWidget* parent) : KisAbstractSliderSpinBox(parent, new KisSliderSpinBoxPrivate)
@@ -493,7 +494,7 @@ void KisSliderSpinBox::setInternalValue(int _value)
     emit(valueChanged(value()));
 }
 
-struct KisDoubleSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {
+class KisDoubleSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {
 };
 
 KisDoubleSliderSpinBox::KisDoubleSliderSpinBox(QWidget* parent) : KisAbstractSliderSpinBox(parent, new KisDoubleSliderSpinBoxPrivate)
@@ -507,7 +508,7 @@ KisDoubleSliderSpinBox::~KisDoubleSliderSpinBox()
 void KisDoubleSliderSpinBox::setRange(qreal minimum, qreal maximum, int decimals)
 {
     Q_D(KisDoubleSliderSpinBox);
-    d->factor = pow(10, decimals);
+    d->factor = pow((double)10, decimals);
 
     d->minimum = minimum * d->factor;
     d->maximum = maximum * d->factor;

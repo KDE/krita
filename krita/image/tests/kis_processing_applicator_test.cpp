@@ -29,7 +29,7 @@
 #include "kis_undo_stores.h"
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
-
+#include "kis_image.h"
 
 /*
   +----------+
@@ -58,7 +58,7 @@ KisImageSP createImage(KisUndoStore *undoStore,
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(paintLayer2, image->rootLayer());
 
-    image->refreshGraph();
+    image->initialRefreshGraph();
 
     return image;
 }
@@ -108,7 +108,9 @@ void KisProcessingApplicatorTest::testNonRecursiveProcessing()
     QVERIFY(checkLayers(image, "initial"));
 
     {
-        KisProcessingApplicator applicator(image, paintLayer1, false);
+        KisProcessingApplicator applicator(image, paintLayer1,
+                                           KisProcessingApplicator::NONE);
+
         KisProcessingVisitorSP visitor =
             new KisCropProcessingVisitor(cropRect1, true, false);
         applicator.applyVisitor(visitor);
@@ -119,7 +121,9 @@ void KisProcessingApplicatorTest::testNonRecursiveProcessing()
     QVERIFY(checkLayers(image, "crop_l1"));
 
     {
-        KisProcessingApplicator applicator(image, paintLayer2, false);
+        KisProcessingApplicator applicator(image, paintLayer2,
+                                           KisProcessingApplicator::NONE);
+
         KisProcessingVisitorSP visitor =
             new KisCropProcessingVisitor(cropRect2, true, false);
         applicator.applyVisitor(visitor);
@@ -150,7 +154,9 @@ void KisProcessingApplicatorTest::testRecursiveProcessing()
     QVERIFY(checkLayers(image, "recursive_initial"));
 
     {
-        KisProcessingApplicator applicator(image, image->rootLayer(), true);
+        KisProcessingApplicator applicator(image, image->rootLayer(),
+                                           KisProcessingApplicator::RECURSIVE);
+
         KisProcessingVisitorSP visitor =
             new KisCropProcessingVisitor(cropRect1, true, true);
         applicator.applyVisitor(visitor);
@@ -163,6 +169,38 @@ void KisProcessingApplicatorTest::testRecursiveProcessing()
     undoStore->undo();
     image->waitForDone();
     QVERIFY(checkLayers(image, "recursive_initial"));
+}
+
+void KisProcessingApplicatorTest::testNoUIUpdates()
+{
+    KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
+    KisPaintLayerSP paintLayer1;
+    KisPaintLayerSP paintLayer2;
+    KisImageSP image = createImage(undoStore, paintLayer1, paintLayer2);
+    QSignalSpy uiSignalsCounter(image.data(), SIGNAL(sigImageUpdated(const QRect&)));
+
+    QRect cropRect1(40,40,86,86);
+
+    {
+        KisProcessingApplicator applicator(image, image->rootLayer(),
+                                           KisProcessingApplicator::RECURSIVE |
+                                           KisProcessingApplicator::NO_UI_UPDATES);
+
+        KisProcessingVisitorSP visitor =
+            new KisCropProcessingVisitor(cropRect1, true, true);
+        applicator.applyVisitor(visitor);
+        applicator.end();
+        image->waitForDone();
+    }
+
+    QCOMPARE(uiSignalsCounter.size(), 0);
+
+    uiSignalsCounter.clear();
+
+    undoStore->undo();
+    image->waitForDone();
+
+    QCOMPARE(uiSignalsCounter.size(), 0);
 }
 
 QTEST_KDEMAIN(KisProcessingApplicatorTest, GUI)

@@ -72,7 +72,8 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
         delete store;
         return KoFilter::BadConversionGraph;
     }
-    
+    store->disallowNameExpansion();
+
     doc -> prepareForImport();
 
     KoOdfReadStore odfStore(store);
@@ -133,17 +134,16 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
     doc->setCurrentImage(image);
-    image->lock();
-    
+
     KisLayerContainerShape *container =
         dynamic_cast<KisLayerContainerShape*>(doc->shapeForNode(image->rootLayer().data()));
-    
-    
+
+
     KoXmlElement layerElement;
     forEachElement(layerElement, KoXml::namedItemNS(page, KoXmlNS::draw, "layer-set")) {
 
     KisShapeLayerSP shapeLayer = new KisShapeLayer(container, doc->shapeController(), image,
-                                        i18n("Flake shapes"),
+                                        i18n("Vector Layer"),
                                         OPACITY_OPAQUE_U8);
     if (!shapeLayer->loadOdf(layerElement, shapeContext)) {
             kWarning() << "Could not load shape layer!";
@@ -157,7 +157,6 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
         KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
     }
 
-    image->unlock();
     return KoFilter::OK;
 }
 

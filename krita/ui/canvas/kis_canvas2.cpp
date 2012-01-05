@@ -65,7 +65,7 @@
 #include <ko_favorite_resource_manager.h>
 #include <kis_paintop_box.h>
 
-class KisCanvas2::KisCanvas2Private
+struct KisCanvas2::KisCanvas2Private
 {
 
 public:
@@ -319,8 +319,8 @@ void KisCanvas2::createOpenGLCanvas()
 
 void KisCanvas2::createCanvas(bool useOpenGL)
 {
-    KisConfig cfg;
-    slotSetDisplayProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));
+    const KoColorProfile *profile = m_d->view->resourceProvider()->currentDisplayProfile();
+    m_d->monitorProfile = const_cast<KoColorProfile*>(profile);
 
     if (useOpenGL) {
 #ifdef HAVE_OPENGL
@@ -345,37 +345,30 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 
 void KisCanvas2::connectCurrentImage()
 {
-    m_d->coordinatesConverter->setImage(m_d->view->image());
+    KisImageWSP image = m_d->view->image();
 
+    m_d->coordinatesConverter->setImage(image);
 
-    if (m_d->currentCanvasIsOpenGL) {
-#ifdef HAVE_OPENGL
-        Q_ASSERT(m_d->openGLImageTextures);
-
-        connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)),
-                m_d->openGLImageTextures, SLOT(slotImageSizeChanged(qint32, qint32)));
-
-        QRect imageRect = m_d->view->image()->bounds();
-        m_d->openGLImageTextures->slotImageSizeChanged(imageRect.width(), imageRect.height());
-#else
-        qFatal("Bad use of connectCurrentImage(). It shouldn't have happened =(");
-#endif
-    } else {
-        connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)),
-                SLOT(setImageSize(qint32, qint32)));
-
+    if (!m_d->currentCanvasIsOpenGL) {
         Q_ASSERT(m_d->prescaledProjection);
-        m_d->prescaledProjection->setImage(m_d->view->image());
-
+        m_d->prescaledProjection->setImage(image);
     }
 
-    connect(m_d->view->image(), SIGNAL(sigImageUpdated(const QRect &)),
+    connect(image, SIGNAL(sigImageUpdated(const QRect &)),
             SLOT(startUpdateCanvasProjection(const QRect &)),
             Qt::DirectConnection);
     connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)),
             this, SLOT(updateCanvasProjection(KisUpdateInfoSP)));
 
-    emit imageChanged(m_d->view->image());
+    connect(image, SIGNAL(sigSizeChanged(qint32, qint32)),
+            SLOT(startResizingImage(qint32, qint32)),
+            Qt::DirectConnection);
+    connect(this, SIGNAL(sigContinueResizeImage(qint32, qint32)),
+            this, SLOT(finishResisingImage(qint32, qint32)));
+
+    startResizingImage(image->width(), image->height());
+
+    emit imageChanged(image);
 }
 
 void KisCanvas2::disconnectCurrentImage()
@@ -400,6 +393,11 @@ void KisCanvas2::disconnectCurrentImage()
 
 void KisCanvas2::resetCanvas(bool useOpenGL)
 {
+    // we cannot reset the canvas before it's created, but this method might be called,
+    // for instance when setting the monitor profile.
+    if (!m_d->canvasWidget) {
+        return;
+    }
 #ifdef HAVE_OPENGL
     KisConfig cfg;
 
@@ -427,6 +425,42 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     m_d->canvasWidget->widget()->update();
 }
 
+void KisCanvas2::startResizingImage(qint32 w, qint32 h)
+{
+    emit sigContinueResizeImage(w, h);
+
+    QRect imageBounds(0, 0, w, h);
+    if (m_d->currentCanvasIsOpenGL) {
+        startUpdateCanvasProjection(imageBounds);
+    } else {
+        // TODO: make configurable from KisImageConfig
+        const int patchSize = 512;
+        for (int y = 0; y < h; y += patchSize) {
+            for (int x = 0; x < w; x += patchSize) {
+                QRect patchRect(x, y, patchSize, patchSize);
+
+                startUpdateCanvasProjection(patchRect);
+            }
+        }
+    }
+}
+
+void KisCanvas2::finishResisingImage(qint32 w, qint32 h)
+{
+    if (m_d->currentCanvasIsOpenGL) {
+#ifdef HAVE_OPENGL
+        Q_ASSERT(m_d->openGLImageTextures);
+        m_d->openGLImageTextures->slotImageSizeChanged(w, h);
+
+#else
+        Q_ASSERT_X(0, "finishResisingImage()", "Bad use of finishResisingImage(). It shouldn't have happened =(");
+#endif
+    } else {
+        Q_ASSERT(m_d->prescaledProjection);
+        m_d->prescaledProjection->slotImageSizeChanged(w, h);
+    }
+}
+
 void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 {
     if (m_d->currentCanvasIsOpenGL) {
@@ -444,8 +478,6 @@ void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 
         emit sigCanvasCacheUpdated(info);
     }
-
-
 }
 
 void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
@@ -542,12 +574,6 @@ KisImageWSP KisCanvas2::currentImage()
     return m_d->view->image();
 }
 
-void KisCanvas2::setImageSize(qint32 w, qint32 h)
-{
-    if (m_d->prescaledProjection)
-        m_d->prescaledProjection->setImageSize(w, h);
-}
-
 void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
 {
     QPointF offsetBefore = m_d->coordinatesConverter->imageRectInViewportPixels().topLeft();
@@ -593,6 +619,7 @@ void KisCanvas2::slotConfigChanged()
 void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * profile)
 {
     m_d->monitorProfile = const_cast<KoColorProfile*>(profile);
+    slotConfigChanged();
 }
 
 void KisCanvas2::addDecoration(KisCanvasDecoration* deco)

@@ -31,7 +31,7 @@ public:
     void setProperty(int key, const QVariant &value);
 
     QString name;
-    KoCharacterStyle *charStyle;
+    KoParagraphStyle *paragraphStyle;
     KoTableCellStyle *parentStyle;
     int next;
     StylePrivate stylesPrivate;

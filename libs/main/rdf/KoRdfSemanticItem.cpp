@@ -366,16 +366,16 @@ KoSemanticStylesheet *KoRdfSemanticItem::defaultStylesheet() const
     QString semanticClass = metaObject()->className();
     Soprano::Model *m = const_cast<Soprano::Model*>(documentRdf()->model());
     QString name = KoTextRdfCore::getProperty(m,
-                                              Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/document/" + semanticClass)),
-                                              Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/stylesheet")),
+                                              Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
+                                              Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet")),
                                               "name");
     QString type = KoTextRdfCore::getProperty(m,
-                                              Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/document/" + semanticClass)),
-                                              Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/stylesheet-type")),
+                                              Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
+                                              Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet-type")),
                                               KoSemanticStylesheet::stylesheetTypeSystem());
     QString uuid = KoTextRdfCore::getProperty(m,
-                                              Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/document/" + semanticClass)),
-                                              Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/stylesheet-uuid")),
+                                              Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
+                                              Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet-uuid")),
                                               QString());
     kDebug(30015) << "name:" << name << " type:" << type << "\n uuid:" << uuid;
     KoSemanticStylesheet *ret = findStylesheetByUuid(uuid);
@@ -398,27 +398,27 @@ void KoRdfSemanticItem::defaultStylesheet(KoSemanticStylesheet *ss)
     QString name = ss->name();
     QString semanticClass = metaObject()->className();
     m->removeAllStatements(
-        Statement(Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/document/" + semanticClass)),
-                  Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/stylesheet")),
+        Statement(Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
+                  Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet")),
                   Node()));
-    m->addStatement(Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/document/" + semanticClass)),
-                    Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/stylesheet")),
+    m->addStatement(Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
+                    Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet")),
                     Node::createLiteralNode(name),
                     rdf->manifestRdfNode());
     m->removeAllStatements(
-        Statement(Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/document/" + semanticClass)),
-                  Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/stylesheet-type")),
+        Statement(Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
+                  Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet-type")),
                   Node()));
-    m->addStatement(Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/document/" + semanticClass)),
-                    Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/stylesheet-type")),
+    m->addStatement(Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
+                    Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet-type")),
                     Node::createLiteralNode(name),
                     rdf->manifestRdfNode());
     m->removeAllStatements(
-        Statement(Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/document/" + semanticClass)),
-                  Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/stylesheet-uuid")),
+        Statement(Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
+                  Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet-uuid")),
                   Node()));
-    m->addStatement(Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/document/" + semanticClass)),
-                    Node::createResourceNode(QUrl("http://calligra-suite.org/rdf/stylesheet-uuid")),
+    m->addStatement(Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
+                    Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet-uuid")),
                     Node::createLiteralNode(uuid),
                     rdf->manifestRdfNode());
 }
@@ -456,7 +456,7 @@ void KoRdfSemanticItem::destroyUserStylesheet(KoSemanticStylesheet *ss)
 void KoRdfSemanticItem::loadUserStylesheets(Soprano::Model *model)
 {
     QString semanticClass = metaObject()->className();
-    QString nodePrefix = "http://calligra-suite.org/rdf/user-stylesheets/" + semanticClass + "/";
+    QString nodePrefix = "http://calligra.org/rdf/user-stylesheets/" + semanticClass + "/";
     Node rdfNil = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"));
     Node rdfFirst = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#first"));
     Node rdfRest = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"));
@@ -496,7 +496,7 @@ void KoRdfSemanticItem::loadUserStylesheets(Soprano::Model *model)
 void KoRdfSemanticItem::saveUserStylesheets(Soprano::Model *model, const Soprano::Node &context) const
 {
     QString semanticClass = metaObject()->className();
-    QString nodePrefix = "http://calligra-suite.org/rdf/user-stylesheets/" + semanticClass + "/";
+    QString nodePrefix = "http://calligra.org/rdf/user-stylesheets/" + semanticClass + "/";
     Node rdfNil = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"));
     Node rdfFirst = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#first"));
     Node rdfRest = Node::createResourceNode(QUrl("http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"));
@@ -528,7 +528,7 @@ Soprano::Node KoRdfSemanticItem::createNewUUIDNode() const
     QString uuid = QUuid::createUuid().toString();
     uuid.remove('{');
     uuid.remove('}');
-    QString nodestr = "http://calligra-suite.org/uuidnode/" + uuid;
+    QString nodestr = "http://calligra.org/uuidnode/" + uuid;
     return Node::createResourceNode(nodestr);
 }
 

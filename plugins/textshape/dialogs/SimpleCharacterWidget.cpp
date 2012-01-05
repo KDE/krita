@@ -93,7 +93,6 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
 SimpleCharacterWidget::~SimpleCharacterWidget()
 {
     delete m_thumbnailer;
-    delete m_stylePopup;
 }
 
 void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)

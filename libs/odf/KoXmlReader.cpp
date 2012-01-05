@@ -2174,6 +2174,41 @@ KoXmlNode KoXmlNode::namedItemNS(const QString& nsURI, const QString& name) cons
     return KoXmlNode();
 }
 
+KoXmlNode KoXmlNode::namedItemNS(const QString& nsURI, const QString& name, KoXmlNamedItemType type) const
+{
+    if (!d->loaded)
+        d->loadChildren();
+
+    for (KoXmlNodeData* node = d->first; node; node = node->next) {
+        if (node->nodeType != KoXmlNode::ElementNode)
+            continue;
+        if (node->localName == name && node->namespaceURI == nsURI) {
+            return KoXmlNode(node);
+        }
+        bool isPrelude = false;
+        switch (type) {
+            case KoXmlTextContentPrelude:
+                isPrelude =
+                    (node->localName == "tracked-changes" && node->namespaceURI == KoXmlNS::text) ||
+                    (node->localName == "variable-decls" && node->namespaceURI == KoXmlNS::text) ||
+                    (node->localName == "user-field-decls" && node->namespaceURI == KoXmlNS::text) ||
+                    (node->localName == "user-field-decl" && node->namespaceURI == KoXmlNS::text) ||
+                    (node->localName == "sequence-decls" && node->namespaceURI == KoXmlNS::text) ||
+                    (node->localName == "sequence-decl" && node->namespaceURI == KoXmlNS::text) ||
+                    (node->localName == "dde-connection-decls" && node->namespaceURI == KoXmlNS::text) ||
+                    (node->localName == "alphabetical-index-auto-mark-file" && node->namespaceURI == KoXmlNS::text) ||
+                    (node->localName == "forms" && node->namespaceURI == KoXmlNS::office);
+                break;
+        }
+        if (!isPrelude) {
+            return KoXmlNode(); // no TextContentPrelude means it follows TextContentMain, so stop here.
+        }
+    }
+
+    // not found
+    return KoXmlNode();
+}
+
 KoXmlElement KoXmlNode::toElement() const
 {
     return isElement() ? KoXmlElement(d) : KoXmlElement();
@@ -2672,6 +2707,17 @@ KoXmlElement KoXml::namedItemNS(const KoXmlNode& node, const QString& nsURI,
     return KoXmlElement();
 #else
     return node.namedItemNS(nsURI, localName).toElement();
+#endif
+}
+
+KoXmlElement KoXml::namedItemNS(const KoXmlNode& node, const QString& nsURI,
+                                const QString& localName, KoXmlNamedItemType type)
+{
+#ifdef KOXML_USE_QDOM
+Q_ASSERT(false);
+    return namedItemNS(node, nsURI, localName);
+#else
+    return node.namedItemNS(nsURI, localName, type).toElement();
 #endif
 }
 

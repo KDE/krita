@@ -102,6 +102,9 @@ bool KisToolFill::flood(int startX, int startY)
 
     QVector<QRect> dirty;
 
+    KisUndoAdapter *undoAdapter = image()->undoAdapter();
+    undoAdapter->beginMacro(i18n("Flood Fill"));
+
     if (m_fillOnlySelection && selection) {
         KisPaintDeviceSP filled = new KisPaintDevice(device->colorSpace());
         KisFillPainter fillPainter(filled);
@@ -124,7 +127,7 @@ bool KisToolFill::flood(int startX, int startY)
         m_painter = new KisPainter(device, currentSelection());
         Q_CHECK_PTR(m_painter);
 
-        m_painter->beginTransaction(i18n("Fill"));
+        m_painter->beginTransaction("");
 
         m_painter->setCompositeOp(compositeOp());
         m_painter->setOpacity(m_opacity);
@@ -139,7 +142,7 @@ bool KisToolFill::flood(int startX, int startY)
 
         KisFillPainter fillPainter(device, currentSelection());
         setupPainter(&fillPainter);
-        fillPainter.beginTransaction(i18n("Flood Fill"));
+        fillPainter.beginTransaction("");
 
         fillPainter.setProgress(updater->startSubtask());
         fillPainter.setOpacity(m_opacity);
@@ -158,9 +161,11 @@ bool KisToolFill::flood(int startX, int startY)
         fillPainter.endTransaction(image()->undoAdapter());
         dirty = fillPainter.takeDirtyRegion();
     }
+
+    undoAdapter->endMacro();
+
     device->setDirty(dirty);
     delete updater;
-
 
     return true;
 }

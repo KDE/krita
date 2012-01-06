@@ -51,7 +51,6 @@ public:
     void setImage(KisImageWSP image);
     KoShape * shapeForNode(KisNodeSP layer) const;
     void setInitialShapeForView(KisView2 * view);
-    virtual QMap<QString, KoDataCenterBase *> dataCenterMap() const;
 
 signals:
     void selectionChanged();
@@ -62,7 +61,6 @@ protected:
 
 private slots:
     friend class KisShapeControllerTest;
-    friend class KisDoc2;
 
     void slotNodeAdded(KisNode *parentNode, int index);
     void slotNodeRemoved(KisNode *parentNode, int index);
@@ -70,6 +68,7 @@ private slots:
 
 private:
     int layerMapSize();
+    QMap<QString, KoDataCenterBase *> dataCenterMap() const;
 
 private:
     struct Private;

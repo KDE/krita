@@ -50,6 +50,7 @@ class KoTextEditor;
 class UndoTextCommand;
 
 class KAction;
+class KActionMenu;
 class KFontAction;
 class FontSizeAction;
 
@@ -344,6 +345,7 @@ private:
     KAction *m_growHeightAction;
     KAction *m_shrinkToFitAction;
     KAction *m_actionChangeDirection;
+    KActionMenu *m_variableMenu;
 
     FontSizeAction *m_actionFormatFontSize;
     KFontAction *m_actionFormatFontFamily;

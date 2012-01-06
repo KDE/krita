@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010-2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,27 +16,36 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef SIMPLEINSERTWIDGET_H
+#define SIMPLEINSERTWIDGET_H
 
-#ifndef TABLECREATEBUTTON_H
-#define TABLECREATEBUTTON_H
+#include <ui_SimpleInsertWidget.h>
+#include <KoListStyle.h>
 
-#include <QToolButton>
+#include <QWidget>
+#include <QTextBlock>
 
-class QMenu;
+class TextTool;
+class KoStyleManager;
 
-class QuickTableButton : public QToolButton
+class SimpleInsertWidget : public QWidget
 {
     Q_OBJECT
 public:
-    QuickTableButton( QWidget *parent = 0 );
-    void emitCreate(int rows, int columns);
-    void addAction(QAction *action);
+    explicit SimpleInsertWidget(TextTool *tool, QWidget *parent = 0);
+
+public slots:
+    void setStyleManager(KoStyleManager *sm);
 
 signals:
-    void create(int rows, int columns);
+    void doneWithFocus();
+    void insertTableQuick(int, int);
 
 private:
-    QMenu *m_menu;
+    Ui::SimpleInsertWidget widget;
+    KoStyleManager *m_styleManager;
+    bool m_blockSignals;
+    TextTool *m_tool;
 };
 
 #endif

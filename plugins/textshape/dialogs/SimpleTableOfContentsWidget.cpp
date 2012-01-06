@@ -113,7 +113,7 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
             QPixmap pmm(QSize(200,120));
             pmm.fill(Qt::white);
             widget.addToC->addItem(pmm, index);
-        }        
+        }
     }
     if (widget.addToC->isFirstTimeMenuShown()) {
         widget.addToC->addSeparator();

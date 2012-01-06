@@ -248,6 +248,10 @@ KisMementoSP KisMementoManager::getMemento()
     return m_currentMemento;
 }
 
+KisMementoSP KisMementoManager::currentMemento() {
+    return m_currentMemento;
+}
+
 #define forEachReversed(iter, list) \
         for(iter=list.end(); iter-- != list.begin();)
 

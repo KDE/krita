@@ -145,12 +145,10 @@ void DeleteCommand::deleteInlineObjects()
         const QChar *data = selected.constData();
         for (int i = 0; i < selected.length(); i++) {
             if (data->unicode() == QChar::ObjectReplacementCharacter) {
-                cursor.setPosition(position);
+                cursor.setPosition(position + i);
                 object = manager->inlineTextObject(cursor);
                 deleteTextAnchor(object);
                 m_invalidInlineObjects.insert(object);
-            } else {
-                position++;
             }
             data++;
         }

@@ -69,9 +69,6 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     connect(widget.decreaseIndent, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.increaseIndent, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 
-    connect(widget.quickTable, SIGNAL(create(int, int)), this, SIGNAL(insertTableQuick(int, int)));
-    connect(widget.quickTable, SIGNAL(create(int, int)), this, SIGNAL(doneWithFocus()));
-
     widget.bulletListButton->setDefaultAction(tool->action("format_bulletlist"));
     widget.numberedListButton->setDefaultAction(tool->action("format_numberlist"));
     widget.bulletListButton->setNumColumns(3);

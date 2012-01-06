@@ -24,12 +24,12 @@
 #include "krita_export.h"
 #include "kis_paint_device.h"
 
-enum selectionMode {
+enum SelectionMode {
     PIXEL_SELECTION,
     SHAPE_PROTECTION
 };
 
-enum selectionAction {
+enum SelectionAction {
     SELECTION_REPLACE,
     SELECTION_ADD,
     SELECTION_SUBTRACT,
@@ -72,6 +72,8 @@ public:
      */
     KisSelection(const KisSelection& rhs);
 
+    KisSelection &operator=(const KisSelection &rhs);
+
     /**
      * Delete the selection. The shape selection component is deleted, the
      * pixel selection component is contained in a shared pointer, so that
@@ -81,6 +83,8 @@ public:
 
     bool hasPixelSelection() const;
     bool hasShapeSelection() const;
+
+    QVector<QPolygon> outline() const;
 
     /**
      * return the pixel selection component of this selection or zero
@@ -121,6 +125,7 @@ public:
 
     void setDeselected(bool deselected);
     bool isDeselected();
+
     void setVisible(bool visible);
     bool isVisible();
 
@@ -129,19 +134,19 @@ public:
      * of the underlying projection
      */
     bool isTotallyUnselected(const QRect & r) const;
-    bool isProbablyTotallyUnselected(const QRect & r) const;
+
     QRect selectedRect() const;
     QRect selectedExactRect() const;
+
     void setX(qint32 x);
     void setY(qint32 y);
+
     qint32 x() const;
     qint32 y() const;
 
-    KisDefaultBoundsBaseSP defaultBounds() const;
     void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
 
     void clear();
-    KisPixelSelectionSP mergedPixelSelection();
 
     KDE_DEPRECATED quint8 selected(qint32 x, qint32 y) const;
     KDE_DEPRECATED void setDirty(const QRect &rc = QRect());

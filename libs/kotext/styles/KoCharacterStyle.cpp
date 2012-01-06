@@ -1249,18 +1249,6 @@ void KoCharacterStyle::setTextEmphasizeStyle(KoCharacterStyle::EmphasisStyle emp
     d->setProperty(TextEmphasizeStyle, emphasis);
 }
 
-KoCharacterStyle::FontPitchMode KoCharacterStyle::fontPitch() const
-{
-    if (hasProperty(FontPitch))
-        return (FontPitchMode) d->propertyInt(FontPitch);
-    return KoCharacterStyle::FixedWidth;
-}
-
-void KoCharacterStyle::setFontPitch(KoCharacterStyle::FontPitchMode mode)
-{
-    d->setProperty(KoCharacterStyle::FontPitch, mode);
-}
-
 void KoCharacterStyle::setPercentageFontSize(qreal percent)
 {
     d->setProperty(KoCharacterStyle::PercentageFontSize, percent);
@@ -1776,15 +1764,7 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         if (ok)
             setHyphenationPushCharCount(count);
     }
-    
-    if (styleStack.hasProperty(KoXmlNS::style, "font-pitch")) {
-        QString pitch = styleStack.property(KoXmlNS::style, "font-pitch");
-        if (pitch == "fixed")
-            setFontPitch(FixedWidth);
-        else if (pitch == "variable")
-            setFontPitch(VariableWidth);
-    }
-    
+
     if (styleStack.hasProperty(KoXmlNS::style, "text-blinking")) {
         setBlinking(styleStack.property(KoXmlNS::style, "text-blinking") == "true");
     }
@@ -1825,7 +1805,18 @@ bool KoCharacterStyle::compareCharacterProperties(const KoCharacterStyle &other)
 
 void KoCharacterStyle::removeDuplicates(const KoCharacterStyle &other)
 {
+    // In case the current style doesn't have the flag UseWindowFontColor set but the other has it set and they use the same color
+    // remove duplicates will remove the color. However to make it work correctly we need to store the color with the style so it
+    // will be loaded again. We don't store a use-window-font-color="false" as that is not compatible to the way OO/LO does work.
+    // So save the color and restore it after the remove duplicates
+    QBrush brush;
+    if (other.d->propertyBoolean(KoCharacterStyle::UseWindowFontColor) && !d->propertyBoolean(KoCharacterStyle::UseWindowFontColor)) {
+        brush = foreground();
+    }
     this->d->stylesPrivate.removeDuplicates(other.d->stylesPrivate);
+    if (brush.style() != Qt::NoBrush) {
+        setForeground(brush);
+    }
     // in case the char style has any of the following properties it also needs to have the fontFamily as otherwise 
     // these values will be ignored when loading according to the odf spec
     if (!hasProperty(QTextFormat::FontFamily) && (hasProperty(QTextFormat::FontStyleHint) || hasProperty(QTextFormat::FontFixedPitch) || hasProperty(KoCharacterStyle::FontCharset))) {
@@ -2116,11 +2107,6 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
             style.addProperty("fo:hyphenation-push-char-count", hyphenationPushCharCount(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::HyphenationRemainCharCount) {
             style.addProperty("fo:hyphenation-remain-char-count", hyphenationRemainCharCount(), KoGenStyle::TextType);
-        } else if (key == KoCharacterStyle::FontPitch) {
-            if (fontPitch() == FixedWidth)
-                style.addProperty("style:font-pitch", "fixed");
-            else
-                style.addProperty("style:font-pitch", "variable");
         } else if (key == KoCharacterStyle::Blink) {
             style.addProperty("style:text-blinking", blinking());
         }

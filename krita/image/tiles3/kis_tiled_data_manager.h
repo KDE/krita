@@ -145,15 +145,12 @@ protected:
     friend class KisTiledRandomAccessor;
     friend class KisRandomAccessor2;
     friend class KisStressJob;
-protected:
 
+public:
     void setDefaultPixel(const quint8 *defPixel);
     const quint8 *defaultPixel() const {
         return m_defaultPixel;
     }
-
-    /* FIXME:*/
-public:
 
     inline KisTileSP getTile(qint32 col, qint32 row, bool writable) {
         if (writable) {
@@ -176,7 +173,9 @@ public:
 
     KisMementoSP getMemento() {
         QWriteLocker locker(&m_lock);
-        return m_mementoManager->getMemento();
+        KisMementoSP memento = m_mementoManager->getMemento();
+        memento->saveOldDefaultPixel(m_defaultPixel, m_pixelSize);
+        return memento;
     }
 
     /**
@@ -184,19 +183,35 @@ public:
      */
     void commit() {
         QWriteLocker locker(&m_lock);
+
+        KisMementoSP memento = m_mementoManager->currentMemento();
+        if(memento) {
+            memento->saveNewDefaultPixel(m_defaultPixel, m_pixelSize);
+        }
+
         m_mementoManager->commit();
     }
 
     void rollback(KisMementoSP memento) {
-        Q_UNUSED(memento);
+        commit();
+
         QWriteLocker locker(&m_lock);
         m_mementoManager->rollback(m_hashTable);
+        const quint8 *defaultPixel = memento->oldDefaultPixel();
+        if(memcmp(m_defaultPixel, defaultPixel, m_pixelSize)) {
+            setDefaultPixelImpl(defaultPixel);
+        }
         recalculateExtent();
     }
     void rollforward(KisMementoSP memento) {
-        Q_UNUSED(memento);
+        commit();
+
         QWriteLocker locker(&m_lock);
         m_mementoManager->rollforward(m_hashTable);
+        const quint8 *defaultPixel = memento->newDefaultPixel();
+        if(memcmp(m_defaultPixel, defaultPixel, m_pixelSize)) {
+            setDefaultPixelImpl(defaultPixel);
+        }
         recalculateExtent();
     }
     bool hasCurrentMemento() const {
@@ -350,6 +365,8 @@ private:
     qint32 yToRow(qint32 y) const;
 
 private:
+    void setDefaultPixelImpl(const quint8 *defPixel);
+
     bool writeTilesHeader(KoStore *store, quint32 numTiles);
     bool processTilesHeader(QIODevice *stream, quint32 &numTiles);
 

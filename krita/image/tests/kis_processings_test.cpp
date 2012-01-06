@@ -20,19 +20,6 @@
 
 #include <qtest_kde.h>
 
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
-
-#include "kis_image.h"
-#include "kis_selection.h"
-#include "kis_paint_layer.h"
-#include "kis_adjustment_layer.h"
-#include "kis_transparency_mask.h"
-#include "kis_clone_layer.h"
-
-#include "filter/kis_filter.h"
-#include "filter/kis_filter_registry.h"
-
 #include "kis_undo_stores.h"
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"

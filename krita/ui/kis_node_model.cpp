@@ -145,6 +145,10 @@ QModelIndex KisNodeModel::indexFromNode(const KisNodeSP node) const
     //dbgUI << "KisNodeModel::indexFromNode " << node;
     Q_ASSERT(node);
     if (node->parent()) {
+        // Don't show the global selection mask if we don't show the root layer
+        if (!m_d->showRootLayer && !node->parent()->parent() && node->inherits("KisSelectionMask")) {
+            return QModelIndex();
+        }
         int rowCount = node->parent()->childCount() - 1;
         int index = node->parent()->index(node);
         int row = rowCount - index;
@@ -407,7 +411,7 @@ void KisNodeModel::beginRemoveNodes(KisNode * parent, int index)
     beginRemoveRows(indexFromNode(parent), parent->childCount() - 1 - index, parent->childCount() - 1 - index);
 }
 
-void KisNodeModel::endRemoveNodes(KisNode *parent, int index)
+void KisNodeModel::endRemoveNodes(KisNode */*parent*/, int /*index*/)
 {
     //dbgUI <<"KisNodeModel::endRemoveNodes";
     endRemoveRows();

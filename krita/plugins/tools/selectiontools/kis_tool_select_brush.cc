@@ -108,6 +108,10 @@ void KisToolSelectBrush::mousePressEvent(KoPointerEvent *event)
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
 
+        if (!currentNode()) {
+            return;
+        }
+
         setMode(KisTool::PAINT_MODE);
 
         m_lastPoint = convertToPixelCoord(event->point);

@@ -63,7 +63,13 @@ class MergeStrategy;
  * meta information about the image. And it also provides some
  * functions to manipulate the whole image.
  */
-class KRITAIMAGE_EXPORT KisImage : public QObject, public KisStrokesFacade, public KisUpdatesFacade, public KisProjectionUpdateListener, public KisNodeFacade, public KisNodeGraphListener, public KisShared
+class KRITAIMAGE_EXPORT KisImage : public QObject,
+        public KisStrokesFacade,
+        public KisUpdatesFacade,
+        public KisProjectionUpdateListener,
+        public KisNodeFacade,
+        public KisNodeGraphListener,
+        public KisShared
 {
 
     Q_OBJECT
@@ -157,28 +163,6 @@ public:
     KisSelectionSP globalSelection() const;
 
     /**
-     * Replaces the current global selection with globalSelection. If
-     * globalSelection is empty, a new selection object will be
-     * created that is by default completely deselected.
-     */
-    void setGlobalSelection(KisSelectionSP globalSelection = 0);
-
-    /**
-     * Removes the global selection.
-     */
-    void removeGlobalSelection();
-
-    /**
-     * @return the deselected global selection or 0 if no global selection was deselected
-     */
-    KisSelectionSP deselectedGlobalSelection();
-
-    /**
-     * Set deselected global selection
-     */
-    void setDeleselectedGlobalSelection(KisSelectionSP selection);
-
-    /**
      * Retrieve the next automatic layername (XXX: fix to add option to return Mask X)
      */
     QString nextLayerName() const;
@@ -260,6 +244,9 @@ public:
      *
      * This is essential if you have loaded an image that didn't
      * have an embedded profile to which you want to attach the right profile.
+     *
+     * This does not create an undo action; only call it when creating or
+     * loading an image.
      */
     void assignImageProfile(const KoColorProfile *profile);
 
@@ -618,6 +605,35 @@ private:
 
     friend class KisImageSetProjectionColorSpaceCommand;
     void setProjectionColorSpace(const KoColorSpace * colorSpace);
+
+
+    friend class KisDeselectGlobalSelectionCommand;
+    friend class KisReselectGlobalSelectionCommand;
+    friend class KisSetGlobalSelectionCommand;
+    friend class KisPixelSelectionTest;
+
+    /**
+     * Replaces the current global selection with globalSelection. If
+     * globalSelection is empty, a new selection object will be
+     * created that is by default completely deselected.
+     */
+    void setGlobalSelection(KisSelectionSP globalSelection = 0);
+
+    /**
+     * Removes the global selection.
+     */
+    void removeGlobalSelection();
+
+    /**
+     * @return the deselected global selection or 0 if no global selection was deselected
+     */
+    KisSelectionSP deselectedGlobalSelection();
+
+    /**
+     * Set deselected global selection
+     */
+    void setDeselectedGlobalSelection(KisSelectionSP selection);
+
 private:
     class KisImagePrivate;
     KisImagePrivate * const m_d;

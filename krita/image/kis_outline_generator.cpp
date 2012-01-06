@@ -89,7 +89,7 @@ QVector<QPolygon> KisOutlineGenerator::outline(quint8* buffer, qint32 xOffset, q
     return paths;
 }
 
-QVector<QPolygon> KisOutlineGenerator::outline(KisPaintDeviceSP buffer, qint32 xOffset, qint32 yOffset, qint32 width, qint32 height)
+QVector<QPolygon> KisOutlineGenerator::outline(const KisPaintDevice *buffer, qint32 xOffset, qint32 yOffset, qint32 width, qint32 height)
 {
     m_xOffset = xOffset;
     m_yOffset = yOffset;
@@ -177,7 +177,7 @@ bool KisOutlineGenerator::isOutlineEdge(EdgeType edge, qint32 x, qint32 y, quint
 }
 
 
-bool KisOutlineGenerator::isOutlineEdge(EdgeType edge, qint32 x, qint32 y, KisPaintDeviceSP /*buffer*/, qint32 bufWidth, qint32 bufHeight)
+bool KisOutlineGenerator::isOutlineEdge(EdgeType edge, qint32 x, qint32 y, const KisPaintDevice * /*buffer*/, qint32 bufWidth, qint32 bufHeight)
 {
 
     m_accessor->moveTo(x + m_xOffset, y + m_yOffset);
@@ -262,7 +262,7 @@ void KisOutlineGenerator::nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *c
         *edge = nextEdge(*edge);
 }
 
-void KisOutlineGenerator::nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *col, KisPaintDeviceSP buffer, qint32 width, qint32 height)
+void KisOutlineGenerator::nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *col, const KisPaintDevice *buffer, qint32 width, qint32 height)
 {
     int original_row = *row;
     int original_col = *col;

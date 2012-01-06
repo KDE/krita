@@ -50,11 +50,10 @@
 #include <kis_transaction.h>
 #include <kis_cursor.h>
 
+#include "kis_selection_tool_helper.h"
+
 namespace
 {
-
-// XXX: Poynton says: hsv/hls is not what one ought to use for color calculations.
-//      Unfortunately, I don't know enough to be able to use anything else.
 
 bool isReddish(int h)
 {
@@ -165,15 +164,15 @@ quint32 matchColors(const QColor & c, enumAction action)
     return MIN_SELECTED;
 }
 
-DlgColorRange::DlgColorRange(KisView2 * view, KisPaintDeviceSP dev, QWidget *  parent, const char * name)
+DlgColorRange::DlgColorRange(KisView2 *view, QWidget *parent)
         : KDialog(parent)
         , m_transaction(0)
+        , m_selectionCommandsAdded(0)
 {
     setCaption(i18n("Color Range"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
-    setObjectName(name);
-    m_dev = dev;
+
     m_view = view;
 
     m_page = new WdgColorRange(this);
@@ -183,23 +182,6 @@ DlgColorRange::DlgColorRange(KisView2 * view, KisPaintDeviceSP dev, QWidget *  p
     setCaption(i18n("Color Range"));
     setMainWidget(m_page);
     resize(m_page->sizeHint());
-
-
-#ifdef __GNUC__
-#warning "Activate transactions for colorrange selections!"
-#endif
-//    XXX_SELECTION
-//    m_transaction = new KisSelectedTransaction(i18n("Select by Color Range"), m_dev);
-
-    KisSelectionSP selection = m_view->selection();
-
-    if (!selection) {
-        m_view->image()->setGlobalSelection();
-        selection = m_view->selection();
-    }
-    m_selection = selection->getOrCreatePixelSelection();
-
-    updatePreview();
 
     m_invert = false;
     m_mode = SELECTION_ADD;
@@ -229,6 +211,8 @@ DlgColorRange::DlgColorRange(KisView2 * view, KisPaintDeviceSP dev, QWidget *  p
     connect(m_page->bnDeselect, SIGNAL(clicked()),
             this, SLOT(slotDeselectClicked()));
 
+    m_page->bnDeselect->setEnabled(false);
+
 }
 
 DlgColorRange::~DlgColorRange()
@@ -236,23 +220,8 @@ DlgColorRange::~DlgColorRange()
     delete m_page;
 }
 
-
-void DlgColorRange::updatePreview()
-{
-    if (!m_selection) return;
-
-    qint32 x, y, w, h;
-    m_dev->exactBounds(x, y, w, h);
-    QPixmap pix = QPixmap::fromImage(m_selection->createThumbnail(350,350));
-    m_view->canvas()->update();
-    m_page->pixSelection->setPixmap(pix);
-}
-
 void DlgColorRange::okClicked()
 {
-//    m_transaction->commit(m_view->image()->undoAdapter());
-//    delete m_transaction;
-
     accept();
 }
 
@@ -260,11 +229,10 @@ void DlgColorRange::cancelClicked()
 {
     if (!m_view) return;
     if (!m_view->image()) return;
-//    if (!m_transaction) return;
 
-//    m_transaction->revert();
-//    delete m_transaction;
-
+    for (int i = 0; i < m_selectionCommandsAdded; i++) {
+        m_view->undoAdapter()->undoLastCommand();
+    }
     m_view->canvas()->update();
     reject();
 }
@@ -284,6 +252,7 @@ void DlgColorRange::slotSubtract(bool on)
     if (on)
         m_mode = SELECTION_SUBTRACT;
 }
+
 void DlgColorRange::slotAdd(bool on)
 {
     if (on)
@@ -293,13 +262,14 @@ void DlgColorRange::slotAdd(bool on)
 void DlgColorRange::slotSelectClicked()
 {
     QApplication::setOverrideCursor(KisCursor::waitCursor());
-    // XXX: Multithread this!
     qint32 x, y, w, h;
-    m_dev->exactBounds(x, y, w, h);
-    const KoColorSpace * cs = m_dev->colorSpace();
+    m_view->activeDevice()->exactBounds(x, y, w, h);
+    const KoColorSpace *cs = m_view->activeDevice()->colorSpace();
 
-    KisHLineConstIterator hiter = m_dev->createHLineConstIterator(x, y, w);
-    KisHLineIterator selIter = m_selection ->createHLineIterator(x, y, w);
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(m_view->activeDevice(), m_view->image()));
+
+    KisHLineConstIterator hiter = m_view->activeDevice()->createHLineConstIterator(x, y, w);
+    KisHLineIterator selIter = selection->getOrCreatePixelSelection()->createHLineIterator(x, y, w);
 
     for (int row = y; row < h - y; ++row) {
         while (!hiter.isDone()) {
@@ -311,7 +281,6 @@ void DlgColorRange::slotSelectClicked()
                 quint8 match = matchColors(c, m_currentAction);
 
                 if (match) {
-                    // Personally, I think the invert option a bit silly. But it's possible I don't quite understand it. BSAR.
                     if (!m_invert) {
                         if (m_mode == SELECTION_ADD) {
                             *(selIter.rawData()) =  match;
@@ -343,17 +312,26 @@ void DlgColorRange::slotSelectClicked()
         hiter.nextRow();
         selIter.nextRow();
     }
-    updatePreview();
+
+    // Enable translation after 2.4 release
+    KisSelectionToolHelper helper(m_view->canvasBase(), m_view->activeNode(),"Color Range Selection");
+    helper.selectPixelSelection(selection->pixelSelection(), m_mode);
+
+    m_page->bnDeselect->setEnabled(true);
+    m_selectionCommandsAdded++;
     QApplication::restoreOverrideCursor();
 }
 
 void DlgColorRange::slotDeselectClicked()
 {
-    if (m_view->selection()) {
-        m_view->selection()->getOrCreatePixelSelection()->clear();
-        updatePreview();
-    }
+    if (!m_view) return;
 
+
+    m_view->undoAdapter()->undoLastCommand();
+    m_selectionCommandsAdded--;
+    if (!m_selectionCommandsAdded) {
+        m_page->bnDeselect->setEnabled(false);
+    }
 }
 
 

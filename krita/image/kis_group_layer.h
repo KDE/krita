@@ -79,6 +79,7 @@ public:
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
 protected:
+    KisLayer* onlyMeaningfulChild() const;
     KisPaintDeviceSP tryObligeChild() const;
 
 private:

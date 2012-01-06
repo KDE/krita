@@ -349,7 +349,9 @@ KisCubicCurve::~KisCubicCurve()
 
 KisCubicCurve& KisCubicCurve::operator=(const KisCubicCurve & curve)
 {
-    *d = *curve.d;
+    if (&curve != this) {
+        *d = *curve.d;
+    }
     return *this;
 }
 

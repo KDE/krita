@@ -126,7 +126,8 @@ bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, i
                     pt.setY(y);
                     qDebug() << " Different at" << pt
                              << "source" << qRed(a) << qGreen(a) << qBlue(a) << qAlpha(a)
-                             << "dest" << qRed(b) << qGreen(b) << qBlue(b) << qAlpha(b);
+                             << "dest" << qRed(b) << qGreen(b) << qBlue(b) << qAlpha(b)
+                             << "fuzzy" << fuzzy;
                     return false;
                 }
             }

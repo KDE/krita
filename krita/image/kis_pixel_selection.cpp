@@ -93,7 +93,7 @@ void KisPixelSelection::select(const QRect & rc, quint8 selectedness)
     }
 }
 
-void KisPixelSelection::applySelection(KisPixelSelectionSP selection, selectionAction action)
+void KisPixelSelection::applySelection(KisPixelSelectionSP selection, SelectionAction action)
 {
     switch (action) {
     case SELECTION_REPLACE:
@@ -214,15 +214,6 @@ bool KisPixelSelection::isTotallyUnselected(const QRect & r) const
     return ! r.intersects(sr);
 }
 
-bool KisPixelSelection::isProbablyTotallyUnselected(const QRect & r) const
-{
-    if (*defaultPixel() != MIN_SELECTED)
-        return false;
-    QRect sr = selectedRect();
-    return ! r.intersects(sr);
-}
-
-
 QRect KisPixelSelection::selectedRect() const
 {
     return extent();
@@ -233,7 +224,7 @@ QRect KisPixelSelection::selectedExactRect() const
     return exactBounds();
 }
 
-QVector<QPolygon> KisPixelSelection::outline()
+QVector<QPolygon> KisPixelSelection::outline() const
 {
     QRect selectionExtent = selectedExactRect();
     qint32 xOffset = selectionExtent.x();

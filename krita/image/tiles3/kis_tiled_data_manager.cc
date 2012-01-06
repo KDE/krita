@@ -105,14 +105,17 @@ KisTiledDataManager::~KisTiledDataManager()
 void KisTiledDataManager::setDefaultPixel(const quint8 *defaultPixel)
 {
     QWriteLocker locker(&m_lock);
+    setDefaultPixelImpl(defaultPixel);
+}
 
+void KisTiledDataManager::setDefaultPixelImpl(const quint8 *defaultPixel)
+{
     KisTileData *td = KisTileDataStore::instance()->createDefaultTileData(pixelSize(), defaultPixel);
     m_hashTable->setDefaultTileData(td);
     m_mementoManager->setDefaultTileData(td);
 
     memcpy(m_defaultPixel, defaultPixel, pixelSize());
 }
-
 
 bool KisTiledDataManager::write(KoStore *store)
 {

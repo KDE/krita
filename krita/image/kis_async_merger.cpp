@@ -93,7 +93,6 @@ public:
         KisPaintDeviceSP originalDevice = layer->original();
         originalDevice->clear(m_updateRect);
 
-        if(!m_projection) return true;
         QRect applyRect = m_updateRect & m_projection->extent();
 
         // If the intersection of the updaterect and the projection extent is

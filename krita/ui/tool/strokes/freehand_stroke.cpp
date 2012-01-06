@@ -27,8 +27,9 @@
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                KisResourcesSnapshotSP resources,
-                                               PainterInfo *painterInfo)
-    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", "Freehand stroke",
+                                               PainterInfo *painterInfo,
+                                               const QString &name)
+    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
                                     resources, painterInfo)
 {
     init(needsIndirectPainting);
@@ -36,8 +37,9 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                KisResourcesSnapshotSP resources,
-                                               QVector<PainterInfo*> painterInfos)
-    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", "Freehand stroke",
+                                               QVector<PainterInfo*> painterInfos,
+                                               const QString &name)
+    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
                                     resources, painterInfos)
 {
     init(needsIndirectPainting);
@@ -58,12 +60,10 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     case Data::POINT:
         *info->dragDistance = KisDistanceInformation(0,0);
         info->painter->paintAt(d->pi1);
-        d->node->setDirty(info->painter->takeDirtyRegion());
         break;
     case Data::LINE:
         *info->dragDistance =
             info->painter->paintLine(d->pi1, d->pi2, *info->dragDistance);
-        d->node->setDirty(info->painter->takeDirtyRegion());
         break;
     case Data::CURVE:
         *info->dragDistance =
@@ -72,7 +72,22 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                             d->control2,
                                             d->pi2,
                                             *info->dragDistance);
-        d->node->setDirty(info->painter->takeDirtyRegion());
         break;
+    case Data::POLYLINE:
+        info->painter->paintPolyline(d->points, 0, d->points.size());
+        break;
+    case Data::POLYGON:
+        info->painter->paintPolygon(d->points);
+        break;
+    case Data::RECT:
+        info->painter->paintRect(d->rect);
+        break;
+    case Data::ELLIPSE:
+        info->painter->paintEllipse(d->rect);
+        break;
+    case Data::PAINTER_PATH:
+        info->painter->paintPainterPath(d->path);
     };
+
+    d->node->setDirty(info->painter->takeDirtyRegion());
 }

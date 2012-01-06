@@ -19,6 +19,25 @@
 #ifndef __QIMAGE_BASED_TEST_H
 #define __QIMAGE_BASED_TEST_H
 
+#include "testutil.h"
+
+
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+
+#include "kis_undo_stores.h"
+#include "kis_image.h"
+#include "kis_selection.h"
+#include "kis_paint_layer.h"
+#include "kis_adjustment_layer.h"
+#include "kis_transparency_mask.h"
+#include "kis_clone_layer.h"
+
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_registry.h"
+
+#include "commands/kis_selection_commands.h"
+
 
 namespace TestUtil
 {
@@ -83,8 +102,19 @@ protected:
         return image;
     }
 
+    void addGlobalSelection(KisImageSP image) {
+        QRect selectionRect(40,40,300,300);
+
+        KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(0, image));
+        KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+        pixelSelection->select(selectionRect);
+
+        KUndo2Command *cmd = new KisSetGlobalSelectionCommand(image, 0, selection);
+        image->undoAdapter()->addCommand(cmd);
+    }
+
     /**
-     * Checks the content of image's layer against the set of
+     * Checks the content of image's layers against the set of
      * QImages stored in @p prefix subfolder
      */
     bool checkLayers(KisImageWSP image, const QString &prefix) {
@@ -97,25 +127,85 @@ protected:
 
         const int stackSize = images.size();
         for(int i = 0; i < stackSize; i++) {
-            QString name = prefix + "_" + names[i] + ".png";
-            QString expectedName = prefix + "_" + names[i] + "_expected.png";
-
-            QImage ref(QString(FILES_DATA_DIR) + QDir::separator() +
-                       m_directoryName + QDir::separator() +
-                       prefix + QDir::separator() + name);
-
-            if(ref != images[i]) {
-                qDebug() << "--- Wrong image:" << name;
+            if(!checkOneQImage(images[i], prefix, names[i])) {
                 valid = false;
-                images[i].save(QString(FILES_OUTPUT_DIR) + QDir::separator() + name);
-                ref.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + expectedName);
             }
         }
 
         return valid;
     }
 
+    /**
+     * Checks the content of one image's layer against the QImage
+     * stored in @p prefix subfolder
+     */
+    bool checkOneLayer(KisImageWSP image, KisNodeSP node,  const QString &prefix) {
+        QVector<QImage> images;
+        QVector<QString> names;
+
+        fillNamesImages(node, image->bounds(), images, names);
+
+        return checkOneQImage(images.first(), prefix, names.first());
+    }
+
+    // add default bounds param
+    bool checkOneDevice(KisPaintDeviceSP device,
+                        const QString &prefix,
+                        const QString &name)
+    {
+        QImage image = device->convertToQImage(0);
+        return checkOneQImage(image, prefix, name);
+    }
+
+    KisNodeSP findNode(KisNodeSP root, const QString &name) {
+        if(root->name() == name) return root;
+
+        KisNodeSP child = root->firstChild();
+        while (child) {
+            if(root = findNode(child, name)) return root;
+            child = child->nextSibling();
+        }
+
+        return 0;
+    }
+
 private:
+    bool checkOneQImage(const QImage &image,
+                        const QString &prefix,
+                        const QString &name)
+    {
+        QString realName = prefix + "_" + name + ".png";
+        QString expectedName = prefix + "_" + name + "_expected.png";
+
+        bool valid = true;
+
+        QImage ref(QString(FILES_DATA_DIR) + QDir::separator() +
+                   m_directoryName + QDir::separator() +
+                   prefix + QDir::separator() + realName);
+
+        QPoint temp;
+        int fuzzy = 0;
+
+        {
+            QStringList terms = name.split('_');
+            if(terms[0] == "root" || terms[0] == "blur1") {
+                fuzzy = 1;
+            }
+        }
+
+        if(ref != image &&
+           !TestUtil::compareQImages(temp, ref, image, fuzzy)) {
+
+            qDebug() << "--- Wrong image:" << realName;
+            valid = false;
+
+            image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + realName);
+            ref.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + expectedName);
+        }
+
+        return valid;
+    }
+
     void fillNamesImages(KisNodeSP node, const QRect &rc,
                          QVector<QImage> &images,
                          QVector<QString> &names) {

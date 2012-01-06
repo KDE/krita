@@ -231,8 +231,8 @@ QModelIndex StylesModel::indexForCharacterStyle(const KoCharacterStyle &style) c
 
 QPixmap StylesModel::stylePreview(int row, QSize size)
 {
-    Q_ASSERT(!m_styleManager);
-    Q_ASSERT(!m_styleThumbnailer);
+    Q_ASSERT(m_styleManager);
+    Q_ASSERT(m_styleThumbnailer);
     if (m_modelType == StylesModel::ParagraphStyle) {
         KoParagraphStyle *usedStyle = 0;
         usedStyle = m_styleManager->paragraphStyle(index(row).internalId());

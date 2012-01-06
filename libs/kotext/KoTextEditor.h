@@ -210,6 +210,13 @@ public slots:
     void updateInlineObjectPosition(int start = 0, int end = -1);
 
     /**
+     * Remove the KoTextAnchor objects from the document.
+     *
+     * NOTE: Call this method only when the the shapes belonging to the anchors have been deleted.
+     */
+    void removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent);
+
+    /**
     * At the current cursor position, insert a marker that marks the next word as being part of the index.
     * @returns returns the index marker when successful, or 0 if failed.  Failure can be because there is no word
     *  at the cursor position or there already is an index marker available.

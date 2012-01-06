@@ -57,6 +57,7 @@
 #include "commands/ChangeListCommand.h"
 #include "commands/InsertInlineObjectCommand.h"
 #include "commands/DeleteCommand.h"
+#include "commands/DeleteAnchorsCommand.h"
 #include "KoInlineCite.h"
 #include <KoTextLayoutScheduler.h>
 #include <KoShapeCreateCommand.h>
@@ -425,7 +426,6 @@ void KoTextEditor::addCommand(KUndo2Command *command, bool addCommandToStack)
     else
         command->redo();
     //kDebug() << "custom command pushed";
-    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
@@ -1015,6 +1015,12 @@ void KoTextEditor::updateInlineObjectPosition(int start, int end)
 
 }
 
+void KoTextEditor::removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent)
+{
+    Q_ASSERT(parent);
+    addCommand(parent, false);
+    new DeleteAnchorsCommand(anchors, d->document, parent);
+}
 
 void KoTextEditor::insertFrameBreak()
 {

@@ -30,6 +30,7 @@
 #include <KoTextPaste.h>
 #include <KoShapeController.h>
 #include <KoTextOdfSaveHelper.h>
+#include "KoTextAnchor.h"
 #include "KoTextDocument.h"
 #include "KoTextDrag.h"
 #include "KoTextLocator.h"
@@ -54,9 +55,12 @@
 #include "commands/ChangeTrackedDeleteCommand.h"
 #include "commands/ListItemNumberingCommand.h"
 #include "commands/ChangeListCommand.h"
+#include "commands/InsertInlineObjectCommand.h"
 #include "commands/DeleteCommand.h"
+#include "commands/DeleteAnchorsCommand.h"
 #include "KoInlineCite.h"
 #include <KoTextLayoutScheduler.h>
+#include <KoShapeCreateCommand.h>
 
 #include <KLocale>
 #include <kundo2stack.h>
@@ -422,7 +426,6 @@ void KoTextEditor::addCommand(KUndo2Command *command, bool addCommandToStack)
     else
         command->redo();
     //kDebug() << "custom command pushed";
-    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
@@ -950,7 +953,7 @@ KoInlineObject *KoTextEditor::insertIndexMarker()
     return tl;
 }
 
-void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
+void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cmd)
 {
     if (isEditProtected()) {
         return;
@@ -980,8 +983,6 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
         format.clearProperty(KoCharacterStyle::ChangeTrackerId);
     }
 
-    KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, inliner);
-    inliner->updatePosition(d->document, d->caret.position(), format);
 
     int endPosition = d->caret.position();
     d->caret.setPosition(startPosition);
@@ -989,7 +990,14 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     registerTrackedChange(d->caret, KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
     d->caret.clearSelection();
 
+    InsertInlineObjectCommand *insertInlineObjectCommand = new InsertInlineObjectCommand(inliner, d->document, cmd);
+
+    if (!cmd) {
+        addCommand(insertInlineObjectCommand);
+    }
+
     d->updateState(KoTextEditor::Private::NoOp);
+
     emit cursorPositionChanged();
 }
 
@@ -1007,6 +1015,12 @@ void KoTextEditor::updateInlineObjectPosition(int start, int end)
 
 }
 
+void KoTextEditor::removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent)
+{
+    Q_ASSERT(parent);
+    addCommand(parent, false);
+    new DeleteAnchorsCommand(anchors, d->document, parent);
+}
 
 void KoTextEditor::insertFrameBreak()
 {

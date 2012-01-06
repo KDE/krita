@@ -42,6 +42,7 @@
 #include <KDebug>
 
 #include <QTextLayout>
+#include <QFlags>
 
 SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
         : QWidget(parent),
@@ -221,8 +222,21 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
                 continue;
             if (property == KoParagraphStyle::ListStyleId)
                 continue;
-            if (m_currentBlockFormat.property(property) != style->value(property)) {
-                kDebug() << "different property";
+            if (property == KoParagraphStyle::MasterPageName) //is this really a valid exception?
+                continue;
+            if (property == QTextBlockFormat::BlockAlignment) { //the default alignment can be retrieved in the defaultTextOption. However, calligra sets the Qt::AlignAbsolute flag, so we need to or this flag with the default alignment before comparing.
+                if ((m_currentBlockFormat.property(property) != style->value(property))
+                        && !(style->value(property).isNull()
+                             && ((m_currentBlockFormat.intProperty(property)) == int(m_currentBlock.document()->defaultTextOption().alignment()| Qt::AlignAbsolute)))) {
+                    unchanged = false;
+                    break;
+                }
+                else {
+                    continue;
+                }
+            }
+            if ((m_currentBlockFormat.property(property) != style->value(property)) && !(style->value(property).isNull() && !m_currentBlockFormat.property(property).toBool())) {
+                //the last check seems to work. might be cause of a bug. The problem is when comparing an unset property in the style with a set to {0, false, ...) property in the format (eg. set then unset bold)
                 unchanged = false;
                 break;
             }
@@ -262,7 +276,19 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
                 continue;
             if (property == KoParagraphStyle::MasterPageName) //is this really a valid exception?
                 continue;
-            if (m_currentBlockFormat.property(property) != style->value(property)) {
+            if (property == QTextBlockFormat::BlockAlignment) { //the default alignment can be retrieved in the defaultTextOption. However, calligra sets the Qt::AlignAbsolute flag, so we need to or this flag with the default alignment before comparing.
+                if ((m_currentBlockFormat.property(property) != style->value(property))
+                        && !(style->value(property).isNull()
+                             && ((m_currentBlockFormat.intProperty(property)) == int(m_currentBlock.document()->defaultTextOption().alignment()| Qt::AlignAbsolute)))) {
+                    unchanged = false;
+                    break;
+                }
+                else {
+                    continue;
+                }
+            }
+            if ((m_currentBlockFormat.property(property) != style->value(property)) && !(style->value(property).isNull() && !m_currentBlockFormat.property(property).toBool())) {
+                //the last check seems to work. might be cause of a bug. The problem is when comparing an unset property in the style with a set to {0, false, ...) property in the format (eg. set then unset bold)
                 unchanged = false;
                 break;
             }
@@ -301,7 +327,7 @@ void SimpleParagraphWidget::listStyleChanged(int id)
 {
     emit doneWithFocus();
     if (m_blockSignals) return;
-    m_tool->textEditor()->setListProperties(static_cast<KoListStyle::Style> (id));
+    m_tool->textEditor()->setListProperties(static_cast<KoListStyle::Style>(id));
 }
 
 void SimpleParagraphWidget::styleSelected(int index)

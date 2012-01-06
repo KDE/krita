@@ -40,7 +40,7 @@ public:
     KisNodeSP node;
 };
 
-KisNodeShape::KisNodeShape(KoShapeContainer * parent, KisNodeSP node)
+KisNodeShape::KisNodeShape(KoShapeLayer *parent, KisNodeSP node)
         : KoShapeLayer()
         , m_d(new Private())
 {
@@ -49,6 +49,8 @@ KisNodeShape::KisNodeShape(KoShapeContainer * parent, KisNodeSP node)
 
     setShapeId(KIS_NODE_SHAPE_ID);
     KoShape::setParent(parent);
+
+    setSelectable(false);
 
     connect(node, SIGNAL(visibilityChanged(bool)), SLOT(setNodeVisible(bool)));
     connect(node, SIGNAL(userLockingChanged(bool)), SLOT(editabilityChanged()));
@@ -66,103 +68,71 @@ KisNodeSP KisNodeShape::node()
     return m_d->node;
 }
 
-void KisNodeShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
-{
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
-}
-
-
-void KisNodeShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
-{
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
-}
-
-QSizeF KisNodeShape::size() const
-{
-    Q_ASSERT(m_d);
-    Q_ASSERT(m_d->node);
-
-    QRect br = m_d->node->extent();
-
-    KisImageWSP image = getImage();
-
-    if (!image) return QSizeF(0.0, 0.0);
-
-    dbgUI << "KisNodeShape::size extent:" << br << ", x res:" << image->xRes() << ", y res:" << image->yRes();
-
-    return QSizeF(br.width() / image->xRes(), br.height() / image->yRes());
-}
-
-QRectF KisNodeShape::boundingRect() const
-{
-    QRect br = m_d->node->extent();
-
-    KisImageWSP image = getImage();
-
-    return QRectF(int(br.left()) / image->xRes(), int(br.top()) / image->yRes(),
-                  int(1 + br.right()) / image->xRes(), int(1 + br.bottom()) / image->yRes());
-
-}
-
-void KisNodeShape::setPosition(const QPointF & position)
-{
-    Q_ASSERT(m_d);
-    Q_ASSERT(m_d->node);
-
-    KisImageWSP image = getImage();
-
-    if (image) {
-        // XXX: Does flake handle undo for us?
-        QPointF pf(position.x() / image->xRes(), position.y() / image->yRes());
-        QPoint p = pf.toPoint();
-        m_d->node->setX(p.x());
-        m_d->node->setY(p.y());
-    }
-}
-
-
-void KisNodeShape::saveOdf(KoShapeSavingContext & /*context*/) const
-{
-
-    // TODO
-}
-
-bool KisNodeShape::loadOdf(const KoXmlElement & /*element*/, KoShapeLoadingContext &/*context*/)
-{
-    return false; // TODO
-}
-
 void KisNodeShape::setNodeVisible(bool v)
 {
     // Necessary because shapes are not QObjects
     setVisible(v);
 }
 
-// Defined in KisNodeContainerShape... FIXME (2.1) find a better way to share code between those two classes, or even better merge them
-bool recursiveFindActiveLayerInChildren(KoSelection* _selection, KoShapeLayer* _currentLayer);
+bool KisNodeShape::checkIfDescendant(KoShapeLayer *activeLayer)
+{
+    bool found;
+    KoShapeLayer *layer = activeLayer;
+
+    while(layer && !(found = layer == this)) {
+        layer = dynamic_cast<KoShapeLayer*>(layer->parent());
+    }
+
+    return found;
+}
 
 void KisNodeShape::editabilityChanged()
 {
-    dbgKrita << m_d->node->isEditable();
     setGeometryProtected(!m_d->node->isEditable());
-    KoCanvasController* canvas = KoToolManager::instance()->activeCanvasController();
-    if (canvas) {
-        recursiveFindActiveLayerInChildren(canvas->canvas()->shapeManager()->selection(), this);
+
+    /**
+     * Editability of a child depends on the editablity
+     * of its parent. So when we change one's editability,
+     * we need to search for active children and reactivate them
+     */
+
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+
+    if(canvasController) {
+        KoSelection *activeSelection = canvasController->canvas()->shapeManager()->selection();
+        KoShapeLayer *activeLayer = activeSelection->activeLayer();
+
+        if(checkIfDescendant(activeLayer)) {
+            activeSelection->setActiveLayer(activeLayer);
+        }
     }
 }
 
-KisImageWSP KisNodeShape::getImage() const
+QSizeF KisNodeShape::size() const
 {
+    return boundingRect().size();
+}
 
-    if (m_d->node->inherits("KisLayer")) {
-        return dynamic_cast<KisLayer*>(m_d->node.data())->image();
-    } else if (m_d->node->inherits("KisMask")) {
-        return dynamic_cast<KisLayer*>(m_d->node->parent().data())->image();
-    }
+QRectF KisNodeShape::boundingRect() const
+{
+    return QRectF();
+}
 
-    return 0;
+void KisNodeShape::setPosition(const QPointF &)
+{
+}
+
+void KisNodeShape::paint(QPainter &, const KoViewConverter &, KoShapePaintingContext &)
+{
+}
+
+void KisNodeShape::saveOdf(KoShapeSavingContext &) const
+{
+}
+
+bool KisNodeShape::loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
+{
+    return false;
 }
 
 #include "kis_node_shape.moc"

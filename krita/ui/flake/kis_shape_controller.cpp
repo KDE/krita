@@ -44,7 +44,6 @@
 #include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_group_layer.h"
-#include "kis_layer_container_shape.h"
 #include "kis_node_shape.h"
 #include "kis_name_server.h"
 #include "kis_mask.h"
@@ -59,7 +58,7 @@
 #include <commands/kis_image_layer_add_command.h>
 #include <kis_undo_adapter.h>
 
-typedef QMap<KisNodeSP, KoShape*> KisNodeMap;
+typedef QMap<KisNodeSP, KoShapeLayer*> KisNodeMap;
 
 struct KisShapeController::Private
 {
@@ -85,25 +84,22 @@ void KisShapeController::Private::addNodeShape(KisNodeSP node)
 {
     Q_ASSERT(!nodeShapes.contains(node));
 
-    KoShapeContainer *parent = 0;
+    KoShapeLayer *parent = 0;
 
     if(nodeShapes.contains(node->parent())) {
-        parent = dynamic_cast<KoShapeContainer*>(nodeShapes[node->parent()]);
+        parent = dynamic_cast<KoShapeLayer*>(nodeShapes[node->parent()]);
     }
 
+    KoShapeLayer *shape;
 
-    KoShape *shape;
-
-    if (node->inherits("KisGroupLayer")) {
-        shape = new KisLayerContainerShape(parent, static_cast<KisGroupLayer*>(node.data()));
-    } else if (node->inherits("KisShapeLayer")) {
+    if (node->inherits("KisShapeLayer")) {
         KisShapeLayer *shapeLayer = static_cast<KisShapeLayer*>(node.data());
         q->connect(shapeLayer, SIGNAL(selectionChanged(QList<KoShape*>)),
                    q, SIGNAL(selectionChanged()));
 
         shape = shapeLayer;
     } else {
-        shape = new KisNodeShape(parent, static_cast<KisLayer*>(node.data()));
+        shape = new KisNodeShape(parent, node);
     }
 
     shape->setParent(parent);
@@ -126,7 +122,7 @@ void KisShapeController::Private::removeNodeShape(KisNodeSP node)
 
     Q_ASSERT(nodeShapes.contains(node));
 
-    KoShape *nodeShape = nodeShapes[node];
+    KoShapeLayer *nodeShape = nodeShapes[node];
     nodeShapes.remove(node);
 
     KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(nodeShape);
@@ -200,8 +196,7 @@ void KisShapeController::addShape(KoShape* shape)
      * It goes through slotNodeAdded()
      */
     Q_ASSERT(shape->shapeId() != KIS_NODE_SHAPE_ID  &&
-             shape->shapeId() != KIS_SHAPE_LAYER_ID  &&
-             shape->shapeId() != KIS_LAYER_CONTAINER_ID);
+             shape->shapeId() != KIS_SHAPE_LAYER_ID);
 
 
     KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas());
@@ -222,10 +217,9 @@ void KisShapeController::addShape(KoShape* shape)
         KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(shape->parent());
 
         if (!shapeLayer) {
-            KisLayerContainerShape *container =
-                dynamic_cast<KisLayerContainerShape*>(shapeForNode(m_d->image->rootLayer().data()));
+            KoShapeLayer *rootLayer = shapeForNode(m_d->image->rootLayer().data());
 
-            shapeLayer = new KisShapeLayer(container, this, m_d->image,
+            shapeLayer = new KisShapeLayer(rootLayer, this, m_d->image,
                                            i18n("Vector Layer %1", m_d->nameServer->number()),
                                            OPACITY_OPAQUE_U8);
 
@@ -241,9 +235,13 @@ void KisShapeController::addShape(KoShape* shape)
 
 void KisShapeController::removeShape(KoShape* shape)
 {
-    // Nodes have their own way of death through slotNodeRemoved()
-    Q_ASSERT(!dynamic_cast<KisNodeShape*>(shape) &&
-             !dynamic_cast<KisLayerContainerShape*>(shape));
+    /**
+     * Krita layers have their own destruction path.
+     * It goes through slotNodeRemoved()
+     */
+    Q_ASSERT(shape->shapeId() != KIS_NODE_SHAPE_ID  &&
+             shape->shapeId() != KIS_SHAPE_LAYER_ID);
+
 
     // Remove children shapes if any
     KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
@@ -302,7 +300,7 @@ void KisShapeController::slotLayersChanged(KisGroupLayerSP rootLayer)
     setImage(m_d->image);
 }
 
-KoShape * KisShapeController::shapeForNode(KisNodeSP node) const
+KoShapeLayer* KisShapeController::shapeForNode(KisNodeSP node) const
 {
     Q_ASSERT(m_d->nodeShapes.contains(node));
     return m_d->nodeShapes[node];

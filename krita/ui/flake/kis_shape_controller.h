@@ -26,7 +26,7 @@
 #include "kis_types.h"
 #include <krita_export.h>
 
-class KoShape;
+class KoShapeLayer;
 
 class KisView2;
 class KisDoc2;
@@ -49,7 +49,7 @@ public:
     ~KisShapeController();
 
     void setImage(KisImageWSP image);
-    KoShape * shapeForNode(KisNodeSP layer) const;
+    KoShapeLayer* shapeForNode(KisNodeSP layer) const;
     void setInitialShapeForView(KisView2 * view);
 
 signals:

@@ -47,7 +47,6 @@ public slots:
 
 signals:
     void doneWithFocus();
-    void insertTableQuick(int, int);
     void paragraphStyleSelected(KoParagraphStyle *);
 
 private slots:

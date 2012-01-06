@@ -139,11 +139,6 @@ public:
 
     KoShape * shapeForNode(KisNodeSP layer) const;
 
-    /**
-     * Add a node to the shape controller
-     */
-    KoShape * addShape(const KisNodeSP node);
-
 signals:
 
     void sigLoadingFinished();

@@ -33,7 +33,7 @@
 
 #define EMIT_DIRECT_ASSERT_SAME_THREAD(signal)  \
     {                                           \
-        Q_ASSERT(checkSameThread());            \
+        /*Q_ASSERT(checkSameThread());*/        \
         emit signal;                            \
     }
 

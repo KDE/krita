@@ -54,6 +54,7 @@ public:
 
 signals:
     void selectionChanged();
+    void currentLayerChanged(const KoShapeLayer*);
 
 protected:
     void addShape(KoShape* shape);

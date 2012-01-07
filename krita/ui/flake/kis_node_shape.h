@@ -22,8 +22,6 @@
 #include <QObject>
 
 #include <KoShapeLayer.h>
-//#include <KoShape.h>
-//#include <KoViewConverter.h>
 
 #include <krita_export.h>
 #include <kis_types.h>

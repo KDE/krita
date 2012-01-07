@@ -75,6 +75,8 @@ public:
 
     void addNodeShape(KisNodeSP node);
     void removeNodeShape(KisNodeSP node);
+    void addNodeShapeImpl(KisNodeSP node);
+    void removeNodeShapeImpl(KisNodeSP node);
 
 private:
     KisShapeController *q;
@@ -82,28 +84,7 @@ private:
 
 void KisShapeController::Private::addNodeShape(KisNodeSP node)
 {
-    Q_ASSERT(!nodeShapes.contains(node));
-
-    KoShapeLayer *parent = 0;
-
-    if(nodeShapes.contains(node->parent())) {
-        parent = dynamic_cast<KoShapeLayer*>(nodeShapes[node->parent()]);
-    }
-
-    KoShapeLayer *shape;
-
-    if (node->inherits("KisShapeLayer")) {
-        KisShapeLayer *shapeLayer = static_cast<KisShapeLayer*>(node.data());
-        q->connect(shapeLayer, SIGNAL(selectionChanged(QList<KoShape*>)),
-                   q, SIGNAL(selectionChanged()));
-
-        shape = shapeLayer;
-    } else {
-        shape = new KisNodeShape(parent, node);
-    }
-
-    shape->setParent(parent);
-    nodeShapes[node] = shape;
+    addNodeShapeImpl(node);
 
     KisNodeSP childNode = node->firstChild();
     while (childNode) {
@@ -120,18 +101,49 @@ void KisShapeController::Private::removeNodeShape(KisNodeSP node)
         childNode = childNode->nextSibling();
     }
 
+    removeNodeShapeImpl(node);
+}
+
+void KisShapeController::Private::addNodeShapeImpl(KisNodeSP node)
+{
+    Q_ASSERT(!nodeShapes.contains(node));
+
+    KoShapeLayer *parent = 0;
+    if(nodeShapes.contains(node->parent())) {
+        parent = nodeShapes[node->parent()];
+    }
+    KoShapeLayer *newLayer = new KisNodeShape(parent, node);
+
+    newLayer->setParent(parent);
+    nodeShapes[node] = newLayer;
+
+    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
+    if (shapeLayer) {
+        /**
+         * Forward signals for global shape manager
+         * \see comment in the constructor of KisCanvas2
+         */
+        q->connect(shapeLayer, SIGNAL(selectionChanged()),
+                   q, SIGNAL(selectionChanged()));
+        q->connect(shapeLayer, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
+                   q, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
+        ((KoShapeLayer*)shapeLayer)->setParent(newLayer);
+    }
+}
+
+void KisShapeController::Private::removeNodeShapeImpl(KisNodeSP node)
+{
     Q_ASSERT(nodeShapes.contains(node));
+
+    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
+    if (shapeLayer) {
+        shapeLayer->disconnect(q);
+        ((KoShapeLayer*)shapeLayer)->setParent(0);
+    }
 
     KoShapeLayer *nodeShape = nodeShapes[node];
     nodeShapes.remove(node);
-
-    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(nodeShape);
-    if (shapeLayer) {
-        shapeLayer->disconnect(q);
-        nodeShape->setParent(0);
-    } else {
-        delete nodeShape;
-    }
+    delete nodeShape;
 }
 
 KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
@@ -218,7 +230,6 @@ void KisShapeController::addShape(KoShape* shape)
 
         if (!shapeLayer) {
             KoShapeLayer *rootLayer = shapeForNode(m_d->image->rootLayer().data());
-
             shapeLayer = new KisShapeLayer(rootLayer, this, m_d->image,
                                            i18n("Vector Layer %1", m_d->nameServer->number()),
                                            OPACITY_OPAQUE_U8);
@@ -243,6 +254,7 @@ void KisShapeController::removeShape(KoShape* shape)
              shape->shapeId() != KIS_SHAPE_LAYER_ID);
 
 
+#if 0
     // Remove children shapes if any
     KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
@@ -250,6 +262,7 @@ void KisShapeController::removeShape(KoShape* shape)
             removeShape(child);
         }
     }
+#endif
 
     shape->setParent(0);
 

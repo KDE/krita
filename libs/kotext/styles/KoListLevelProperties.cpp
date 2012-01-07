@@ -451,6 +451,7 @@ void KoListLevelProperties::onStyleChanged(int key)
         case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
         case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
         case KoListStyle::BallotXItem:          bullet = 0x2717; break;
+        case KoListStyle::DiscItem:             bullet = 0x25CF; break;
     }
 
     if (bullet != 0)
@@ -794,6 +795,8 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
             case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
             case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
             case KoListStyle::BallotXItem:          bullet = 0x2717; break;
+            case KoListStyle::BlackCircle:
+            case KoListStyle::DiscItem:             bullet = 0x25CF; break;
             default:                                bullet = 0; break; //empty character
             }
         }

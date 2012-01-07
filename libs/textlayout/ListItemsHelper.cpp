@@ -389,6 +389,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     case KoListStyle::SquareItem:
     case KoListStyle::Bullet:
     case KoListStyle::BlackCircle:
+    case KoListStyle::DiscItem:
     case KoListStyle::CircleItem:
     case KoListStyle::HeavyCheckMarkItem:
     case KoListStyle::BallotXItem:

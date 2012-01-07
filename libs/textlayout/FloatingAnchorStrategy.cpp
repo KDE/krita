@@ -89,6 +89,15 @@ bool FloatingAnchorStrategy::moveSubject()
     // This is in coords relative to texshape
     QPointF newPosition;
 
+    QPointF offset;
+    if (m_anchor->horizontalPos() == KoTextAnchor::HFromLeft
+        || m_anchor->horizontalPos() == KoTextAnchor::HFromInside) {
+        offset.setX(m_anchor->offset().x());
+    }
+    if (m_anchor->verticalPos() == KoTextAnchor::VFromTop) {
+        offset.setY(m_anchor->offset().y());
+    }
+
     // set anchor bounding rectangle horizontal position and size
     if (!countHorizontalRel(anchorBoundingRect, containerBoundingRect, block, layout)) {
         return false; // let's fake we moved to force another relayout
@@ -105,7 +114,7 @@ bool FloatingAnchorStrategy::moveSubject()
     // Set shape vertical alignment inside anchor bounding rectangle
     countVerticalPos(newPosition, anchorBoundingRect, containerBoundingRect);
 
-    newPosition = newPosition + m_anchor->offset();
+    newPosition = newPosition + offset;
 
     //check the border of layout environment and move the shape back to have it within
     if (m_anchor->flowWithText()) {

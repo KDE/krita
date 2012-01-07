@@ -96,6 +96,10 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *event)
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
 
+        if (!currentNode()) {
+            return;
+        }
+
         KisPaintDeviceSP dev = currentNode()->projection();
 
         if (!dev || !currentNode()->visible())

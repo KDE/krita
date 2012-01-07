@@ -1794,7 +1794,7 @@ bool KoDocument::loadNativeFormat(const QString & file_)
         QString errorMsg;
         int errorLine;
         int errorColumn;
-        KoXmlDocument doc;
+        KoXmlDocument doc = KoXmlDocument(true);
         bool res;
         if (doc.setContent(&in, &errorMsg, &errorLine, &errorColumn)) {
             res = loadXML(doc, 0);
@@ -1895,7 +1895,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
     } else if (store->hasFile("root")) {   // Fallback to "old" file format (maindoc.xml)
         oasis = false;
 
-        KoXmlDocument doc;
+        KoXmlDocument doc = KoXmlDocument(true);
         bool ok = oldLoadAndParse(store, "root", doc);
         if (ok)
             ok = loadXML(doc, store);
@@ -1918,7 +1918,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
             d->docInfo->loadOasis(metaDoc);
         }
     } else if (!oasis && store->hasFile("documentinfo.xml")) {
-        KoXmlDocument doc;
+        KoXmlDocument doc = KoXmlDocument(true);
         if (oldLoadAndParse(store, "documentinfo.xml", doc)) {
             d->docInfo->load(doc);
         }
@@ -1963,7 +1963,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
 bool KoDocument::loadFromStore(KoStore *_store, const QString& url)
 {
     if (_store->open(url)) {
-        KoXmlDocument doc;
+        KoXmlDocument doc = KoXmlDocument(true);
         doc.setContent(_store->device());
         if (!loadXML(doc, _store)) {
             _store->close();

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Calligra Formula Component
+Name[ca]=Component de fórmules del Calligra
 Name[cs]=Komponenta Calligra pro vzorce
 Name[da]=Calligra-komponent til formler
 Name[es]=Componente Formula de Calligra
@@ -77,8 +78,8 @@ GenericName[uk]=Редактор формул
 GenericName[uz]=Formula tahrirchi
 GenericName[uz@cyrillic]=Формула таҳрирчи
 GenericName[wa]=Aspougneu d' formules
-GenericName[x-test]=xxFormula Editorxx
 GenericName[xh]=Umhleli wendlela yokubala
+GenericName[x-test]=xxFormula Editorxx
 GenericName[zh_CN]=公式编辑器
 GenericName[zh_TW]=方程式編輯器
 Icon=kformula

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Calligra Chart Component
 Name[bg]=Компонент за диаграми в Calligra
+Name[ca]=Component de diagrames del Calligra
 Name[cs]=Komponenta Calligra pro grafy
 Name[da]=Calligra-komponent til diagrammer
 Name[et]=Calligra diagrammikomponent
@@ -80,8 +81,8 @@ GenericName[uk]=Діаграми
 GenericName[uz]=Diagramma
 GenericName[uz@cyrillic]=Диаграмма
 GenericName[wa]=Grafike
-GenericName[x-test]=xxChartxx
 GenericName[xh]=Itshati
+GenericName[x-test]=xxChartxx
 GenericName[zh_CN]=图表
 GenericName[zh_TW]=圖表
 Icon=kchart

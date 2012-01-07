@@ -21,8 +21,12 @@
 #include "InsertVariableAction_p.h"
 #include "KoVariable.h"
 #include "KoInlineObjectFactoryBase.h"
+#include "KoText.h"
 
 #include <KoCanvasBase.h>
+#include <KoShapeController.h>
+#include <KoInlineTextObjectManager.h>
+
 #include <kpagedialog.h>
 
 #include <KLocale>
@@ -42,6 +46,9 @@ KoInlineObject *InsertVariableAction::createInlineObject()
     KoInlineObject *io = m_factory->createInlineObject(m_properties);
     KoVariable *variable = dynamic_cast<KoVariable*>(io);
     Q_ASSERT(variable);
+    KoInlineTextObjectManager *objManager = m_canvas->shapeController()->resourceManager()->resource(KoText::InlineTextObjectManager).value<KoInlineTextObjectManager*>();
+    Q_ASSERT(objManager);
+    variable->setManager(objManager);
     QWidget *widget = variable->createOptionsWidget();
     if (widget) {
         if (widget->layout()) {

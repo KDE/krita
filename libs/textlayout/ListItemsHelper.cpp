@@ -454,20 +454,18 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     width += m_fm.width(prefix + suffix);
 
     qreal counterSpacing = 0;
-    if (listStyle != KoListStyle::None) {
-        if (format.boolProperty(KoListStyle::AlignmentMode)) {
-            // for aligmentmode spacing should be 0
-            counterSpacing = 0;
-        } else {
+    if (format.boolProperty(KoListStyle::AlignmentMode)) {
+        // for aligmentmode spacing should be 0
+        counterSpacing = 0;
+    } else {
+        if (listStyle != KoListStyle::None) {
             // see ODF spec 1.2 item 20.422
             counterSpacing = format.doubleProperty(KoListStyle::MinimumDistance);
             if (width < format.doubleProperty(KoListStyle::MinimumWidth)) {
                 counterSpacing -= format.doubleProperty(KoListStyle::MinimumWidth) - width;
             }
             counterSpacing = qMax(counterSpacing, qreal(0.0));
-            width = qMax(width, format.doubleProperty(KoListStyle::MinimumWidth));
         }
-    } else {
         width = qMax(width, format.doubleProperty(KoListStyle::MinimumWidth));
     }
     data->setCounterWidth(width);

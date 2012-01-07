@@ -97,7 +97,6 @@ public:
         HyphenationPushCharCount,   ///< int
         HyphenationRemainCharCount, ///< int
         FontLetterSpacing,          ///< qreal, not the same format as the FontLetterSpacing in QTextFormat
-        FontPitch,                  ///< FontPitchMode
         PercentageFontSize, //font-size can be in % and this stores that value
         AdditionalFontSize, //font-size-rel can specify an addition to the parent value
         UseWindowFontColor, //boolean, same as odf
@@ -176,11 +175,6 @@ public:
     enum RotationScale {
         Fixed,
         LineHeight
-    };
-
-    enum FontPitchMode {
-        FixedWidth,
-        VariableWidth
     };
 
     /**
@@ -390,9 +384,6 @@ public:
     
     EmphasisPosition textEmphasizePosition() const;
     void setTextEmphasizePosition(EmphasisPosition position);
-
-    FontPitchMode fontPitch() const;
-    void setFontPitch(FontPitchMode mode);
 
     /// Set the country
     void setCountry(const QString &country);

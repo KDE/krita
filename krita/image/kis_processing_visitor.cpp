@@ -41,7 +41,7 @@ KisProcessingVisitor::ProgressHelper::ProgressHelper(const KisNode *node)
 
 KisProcessingVisitor::ProgressHelper::~ProgressHelper()
 {
-    delete m_progressUpdater;
+    m_progressUpdater->deleteLater();
 }
 
 KoUpdater* KisProcessingVisitor::ProgressHelper::updater() const

@@ -193,6 +193,7 @@ void KisColorSpaceSelector::installProfile()
 
 void KisColorSpaceSelector::downloadProfile()
 {
+#ifdef GHNS
     KNS3::DownloadDialog dialog( "kritaiccprofiles.knsrc", this);
     dialog.exec();
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
@@ -208,16 +209,19 @@ void KisColorSpaceSelector::downloadProfile()
         }
     }
     fillCmbProfiles();
+#endif
 }
 
 void KisColorSpaceSelector::uploadProfile()
 {
+#ifdef GHNS
     KNS3::UploadDialog dialog("kritaiccprofiles.knsrc", this);
     const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(d->colorSpaceSelector->cmbProfile->currentText());
     if(!profile)  return;
     dialog.setUploadFile(KUrl::fromLocalFile(profile->fileName()));
     dialog.setUploadName(profile->name());
     dialog.exec();
+#endif
 }
 
 void KisColorSpaceSelector::buttonUpdate()

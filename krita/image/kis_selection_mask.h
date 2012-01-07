@@ -65,12 +65,12 @@ public:
     /**
      * @return the deselected selection or 0 if no selection was deselected
      */
-    KisSelectionSP deleselectedSelection();
+    KisSelectionSP deselectedSelection();
 
     /**
      * Set deselected selection
      */
-    void setDeleselectedSelection(KisSelectionSP selection);
+    void setDeselectedSelection(KisSelectionSP selection);
 
     virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
     virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);

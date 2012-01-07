@@ -485,6 +485,7 @@ void KoXmlWriter::addTextSpan(const QString& text, const QMap<int, int>& tabCach
             // \f can be added e.g. in ascii import filter.
             case '\f':
             case '\n':
+            case QChar::LineSeparator:
                 if (!str.isEmpty())
                     addTextNode(str);
                 str.clear();

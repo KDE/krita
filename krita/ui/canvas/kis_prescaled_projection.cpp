@@ -119,9 +119,6 @@ void KisPrescaledProjection::setImage(KisImageWSP image)
     Q_ASSERT(image);
     m_d->image = image;
     m_d->projectionBackend->setImage(image);
-
-
-    setImageSize(image->width(), image->height());
 }
 
 QImage KisPrescaledProjection::prescaledQImage() const
@@ -211,7 +208,8 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
             QRect viewportPatch =
                 m_d->coordinatesConverter->imageToViewport(rc).toAlignedRect();
 
-            KisPPUpdateInfoSP info = getUpdateInformation(viewportPatch, QRect());
+            KisPPUpdateInfoSP info = getInitialUpdateInformation(QRect());
+            fillInUpdateInformation(viewportPatch, info);
             drawUsingBackend(gc, info);
         }
     }
@@ -219,15 +217,12 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
     m_d->prescaledQImage = newImage;
 }
 
-void KisPrescaledProjection::setImageSize(qint32 w, qint32 h)
+void KisPrescaledProjection::slotImageSizeChanged(qint32 w, qint32 h)
 {
-    Q_UNUSED(w);
-    Q_UNUSED(h);
-
     m_d->projectionBackend->setImageSize(w, h);
-
-    KisUpdateInfoSP info = updateCache(m_d->image->bounds());
-    recalculateCache(info);
+    // viewport size is cropped by the size of the image
+    // so we need to update it as well
+    updateViewportSize();
 }
 
 KisUpdateInfoSP KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
@@ -242,16 +237,11 @@ KisUpdateInfoSP KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
      * We needn't this stuff ouside KisImage's area. Lets user
      * paint there, anyway we won't show him anything =)
      */
-    if (!dirtyImageRect.intersects(m_d->image->bounds()))
-        return new KisPPUpdateInfo();
+    QRect croppedImageRect = dirtyImageRect & m_d->image->bounds();
+    if (croppedImageRect.isEmpty()) return new KisPPUpdateInfo();
 
-
-    QRect rawViewRect =
-        m_d->coordinatesConverter->imageToViewport(dirtyImageRect).toAlignedRect();
-
-    KisPPUpdateInfoSP info = getUpdateInformation(rawViewRect, dirtyImageRect);
-
-    m_d->projectionBackend->updateCache(info);
+    KisPPUpdateInfoSP info = getInitialUpdateInformation(croppedImageRect);
+    m_d->projectionBackend->updateCache(croppedImageRect);
 
     return info;
 }
@@ -260,6 +250,12 @@ void KisPrescaledProjection::recalculateCache(KisUpdateInfoSP info)
 {
     KisPPUpdateInfoSP ppInfo = dynamic_cast<KisPPUpdateInfo*>(info.data());
     if(!ppInfo) return;
+
+    QRect rawViewRect =
+        m_d->coordinatesConverter->
+        imageToViewport(ppInfo->dirtyImageRect).toAlignedRect();
+
+    fillInUpdateInformation(rawViewRect, ppInfo);
 
     m_d->projectionBackend->recalculateCache(ppInfo);
 
@@ -286,10 +282,8 @@ void KisPrescaledProjection::preScale()
 QRect KisPrescaledProjection::preScale(const QRect & rc)
 {
     if (!rc.isEmpty() && m_d->image) {
-        /**
-         * FIXME: It can happen that we will need access to KisImage here
-         */
-        KisPPUpdateInfoSP info = getUpdateInformation(rc, QRect());
+        KisPPUpdateInfoSP info = getInitialUpdateInformation(QRect());
+        fillInUpdateInformation(rc, info);
 
         QPainter gc(&m_d->prescaledQImage);
         gc.setCompositionMode(QPainter::CompositionMode_Source);
@@ -342,16 +336,25 @@ void KisPrescaledProjection::notifyCanvasSizeChanged(const QSize &widgetSize)
     preScale();
 }
 
-
-KisPPUpdateInfoSP KisPrescaledProjection::getUpdateInformation(const QRect &viewportRect,
-                                             const QRect &dirtyImageRect)
+KisPPUpdateInfoSP KisPrescaledProjection::getInitialUpdateInformation(const QRect &dirtyImageRect)
 {
+    /**
+     * This update information has nothing more than an information
+     * about dirty image rect. All the other information used for
+     * scaling will be fetched in fillUpdateInformation() later,
+     * when we are working in the context of the UI thread
+     */
+
     KisPPUpdateInfoSP info = new KisPPUpdateInfo();
-
-    m_d->coordinatesConverter->imageScale(&info->scaleX, &info->scaleY);
-
-    // save it for future
     info->dirtyImageRect = dirtyImageRect;
+
+    return info;
+}
+
+void KisPrescaledProjection::fillInUpdateInformation(const QRect &viewportRect,
+                                                     KisPPUpdateInfoSP info)
+{
+    m_d->coordinatesConverter->imageScale(&info->scaleX, &info->scaleY);
 
     // first, crop the part of the view rect that is outside of the canvas
     QRect croppedViewRect = viewportRect.intersected(QRect(QPoint(0, 0), m_d->viewportSize));
@@ -395,13 +398,11 @@ KisPPUpdateInfoSP KisPrescaledProjection::getUpdateInformation(const QRect &view
     dbgRender << ppVar(info->scaleX) << ppVar(info->scaleY);
     dbgRender << ppVar(info->borderWidth) << ppVar(info->renderHints);
     dbgRender << ppVar(info->transfer);
-    dbgRender << ppVar(dirtyImageRect);
+    dbgRender << ppVar(info->dirtyImageRect);
     dbgRender << "Not aligned rect of the canvas (raw):\t" << croppedViewRect;
     dbgRender << "Update rect in KisImage's pixels:\t" << info->imageRect;
     dbgRender << "Update rect in canvas' pixels:\t" << info->viewportRect;
     dbgRender << "#####################################";
-
-    return info;
 }
 
 void KisPrescaledProjection::updateScaledImage(KisPPUpdateInfoSP info)

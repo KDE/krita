@@ -21,7 +21,8 @@
 
 #include "kis_processing_visitor.h"
 
-#include "kis_paint_device.h"
+
+#include <kis_types.h>
 
 #include <QPointF>
 #include <QTransform>

@@ -200,7 +200,7 @@ bool KoPACanvasBase::paintGridInBackground() const
     return d->paintGridInBackground;
 }
 
-void KoPACanvasBase::setPaintGridInBackground(bool strategy)
+void KoPACanvasBase::setPaintGridInBackground(bool inBackground)
 {
-    d->paintGridInBackground = strategy;
+    d->paintGridInBackground = inBackground;
 }

@@ -88,7 +88,7 @@ public:
     bool paintGridInBackground() const;
 
     /// set if grid is marked to be painted in the background
-    void setPaintGridInBackground(bool strategy);
+    void setPaintGridInBackground(bool inBackground);
 
 protected:
 

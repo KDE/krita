@@ -62,8 +62,6 @@ set(kotext_LIB_SRCS
     KoBibliographyInfo.cpp
     BibliographyGenerator.cpp
 
-    KoTextLayoutScheduler.cpp
-
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
     styles/KoParagraphStyle.cpp

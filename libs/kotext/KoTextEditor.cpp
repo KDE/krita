@@ -59,7 +59,6 @@
 #include "commands/DeleteCommand.h"
 #include "commands/DeleteAnchorsCommand.h"
 #include "KoInlineCite.h"
-#include <KoTextLayoutScheduler.h>
 #include <KoShapeCreateCommand.h>
 
 #include <KLocale>
@@ -1811,7 +1810,7 @@ void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info
 
     d->updateState(KoTextEditor::Private::NoOp);
     emit cursorPositionChanged();
-    KoTextLayoutScheduler::markDocumentChanged(document(), document()->firstBlock().position(), 0 , 0);
+    const_cast<QTextDocument *>(document())->markContentsDirty(document()->firstBlock().position(), 0);
 }
 
 void KoTextEditor::insertBibliography()

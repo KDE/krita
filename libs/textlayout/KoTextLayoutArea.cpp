@@ -715,12 +715,12 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             labelFormat = block.begin().fragment().charFormat();
         }
 
-        if (m_documentLayout->styleManager()) {
-            const int id = listFormat.intProperty(KoListStyle::CharacterStyleId);
-            KoCharacterStyle *cs = m_documentLayout->styleManager()->characterStyle(id);
-            if (cs) {
-                cs->applyStyle(labelFormat);
-                cs->ensureMinimalProperties(labelFormat);
+        if (listFormat.hasProperty(KoListStyle::LabelCharacterStyle)) {
+            QVariant v = listFormat.property(KoListStyle::LabelCharacterStyle);
+            KoCharacterStyle *labelCharStyle = v.value<KoCharacterStyle *>();
+            if (labelCharStyle) {
+                labelCharStyle->applyStyle(labelFormat);
+                labelCharStyle->ensureMinimalProperties(labelFormat);
             }
         }
 

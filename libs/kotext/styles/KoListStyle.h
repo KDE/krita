@@ -132,7 +132,7 @@ public:
         StartValue,     ///< First value to use
         Level,          ///< list nesting level, is 1 or higher, or zero when implied
         DisplayLevel,   ///< show this many levels. Is always lower than the (implied) level.
-        CharacterStyleId,///< CharacterStyle used for markup of the counter
+        LabelCharacterStyle,///< CharacterStyle used for markup of the counter
         CharacterProperties, ///< This stores the character properties of the list style
         BulletCharacter,///< an int with the unicode value of the character (for CustomCharItem)
         RelativeBulletSize,     ///< size in percent relative to the height of the text

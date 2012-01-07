@@ -279,13 +279,15 @@ void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anc
             newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x());
         } else {
             QSizeF size = m_anchor->shape()->boundingRect().size();
-            newPosition.setX(anchorBoundingRect.x() - containerBoundingRect.x() +
-                             size.width() - 2*(m_anchor->offset().x() + size.width()) );
+            newPosition.setX(anchorBoundingRect.x() - containerBoundingRect.x() -
+                             size.width() - m_anchor->offset().x());
         }
         break;
     }
     case KoTextAnchor::HRight: {
-        newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x());
+        QSizeF size = m_anchor->shape()->boundingRect().size();
+        newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x()
+                           - size.width());
         break;
     }
     default :

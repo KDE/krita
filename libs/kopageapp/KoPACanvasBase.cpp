@@ -45,7 +45,6 @@ public:
     , shapeManager(0)
     , masterShapeManager(0)
     , toolProxy(0)
-    , paintGridInBackground(false)
     {}
 
     ~Private()
@@ -67,7 +66,6 @@ public:
     KoShapeManager * masterShapeManager;
     KoToolProxy * toolProxy;
     QPoint documentOffset;
-    bool paintGridInBackground; // grid painting strategy
 };
 
 KoPACanvasBase::KoPACanvasBase( KoPADocument * doc )
@@ -193,14 +191,4 @@ void KoPACanvasBase::paint(QPainter &painter, const QRectF &paintRect) {
         static_cast<KoPAPageProvider*>(var.value<void*>())->setPageData(pageNumber, activePage);
         d->view->viewMode()->paint(this, painter, paintRect);
     }
-}
-
-bool KoPACanvasBase::paintGridInBackground() const
-{
-    return d->paintGridInBackground;
-}
-
-void KoPACanvasBase::setPaintGridInBackground(bool inBackground)
-{
-    d->paintGridInBackground = inBackground;
 }

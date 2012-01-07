@@ -763,6 +763,8 @@ void KoPADocument::loadConfig()
         KConfigGroup configGroup = config->group( "Grid" );
         bool showGrid = configGroup.readEntry<bool>( "ShowGrid", defGrid.showGrid() );
         gridData().setShowGrid(showGrid);
+        bool paintGridInBackground = configGroup.readEntry("PaintGridInBackground", defGrid.paintGridInBackground());
+        gridData().setPaintGridInBackground(paintGridInBackground);
         bool snapToGrid = configGroup.readEntry<bool>( "SnapToGrid", defGrid.snapToGrid() );
         gridData().setSnapToGrid(snapToGrid);
         qreal spacingX = configGroup.readEntry<qreal>( "SpacingX", defGrid.gridX() );

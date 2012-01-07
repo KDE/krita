@@ -62,7 +62,7 @@ void KoPAViewModeNormal::paint(KoPACanvasBase* canvas, QPainter& painter, const 
     QRectF updateRect = converter->viewToDocument( m_canvas->widgetToView( clipRect ) );
     m_view->activePage()->paintBackground( painter, *converter );
 
-    if (m_canvas->paintGridInBackground()) {
+    if (m_canvas->document()->gridData().paintGridInBackground()) {
         painter.setRenderHint( QPainter::Antialiasing, false );
         m_canvas->document()->gridData().paintGrid( painter, *converter, updateRect );
     }
@@ -79,7 +79,7 @@ void KoPAViewModeNormal::paint(KoPACanvasBase* canvas, QPainter& painter, const 
 
     painter.setRenderHint( QPainter::Antialiasing, false );
 
-    if (!m_canvas->paintGridInBackground()) {
+    if (!m_canvas->document()->gridData().paintGridInBackground()) {
         m_canvas->document()->gridData().paintGrid( painter, *converter, updateRect );
     }
     m_canvas->document()->guidesData().paintGuides( painter, *converter, updateRect );

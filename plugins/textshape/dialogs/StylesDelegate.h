@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,7 +20,6 @@
 #ifndef STYLESDELEGATE_H
 #define STYLESDELEGATE_H
 
-#include <QRect>
 #include <QStyledItemDelegate>
 
 class StylesDelegate : public QStyledItemDelegate
@@ -48,9 +48,6 @@ private:
 
     int m_buttonSize;
     int m_buttonDistance;
-
-    QRect m_delRect;
-    QRect m_editRect;
 };
 
 #endif

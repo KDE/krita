@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,22 +20,22 @@
 
 #include "StylesDelegate.h"
 
-#include <KIcon>
 
 #include <QAbstractItemView>
+#include <QColor>
 #include <QEvent>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPen>
 #include <QRect>
 #include <QScrollBar>
+#include <QStyle>
 #include <QStyleOptionButton>
 #include <QStyleOptionViewItemV4>
 
+#include <KIcon>
 #include <KDebug>
 
-#include <QColor>
-#include <QPen>
-#include <QStyle>
 
 StylesDelegate::StylesDelegate()
     : QStyledItemDelegate(),
@@ -130,7 +131,6 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         int dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
         QRect editRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
         if (editRect.contains(mouseEvent->pos())) {
-//        if (m_editRect.contains(mouseEvent->pos())) {
             m_editButtonPressed = true;
         }
         else {
@@ -142,7 +142,6 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
         QRect delRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
         if (delRect.contains(mouseEvent->pos())){
-//        if (m_delRect.contains(mouseEvent->pos())){
             m_deleteButtonPressed = true;
         }
         else {
@@ -161,7 +160,6 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         int dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
         QRect editRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
         if (editRect.contains(mouseEvent->pos())) {
-//        if (m_editRect.contains(mouseEvent->pos())) {
             emit styleManagerButtonClicked(index);
             return true;
         }
@@ -171,7 +169,6 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
         QRect delRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
         if (delRect.contains(mouseEvent->pos())){
-//        if (m_delRect.contains(mouseEvent->pos())){
             emit deleteStyleButtonClicked(index);
             return true;
         }
@@ -186,7 +183,6 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         int dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
         QRect editRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
         if (!editRect.contains(mouseEvent->pos())) {
-//        if (m_editRect.contains(mouseEvent->pos())) {
             m_editButtonPressed = false;
         }
         dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) -2;
@@ -195,7 +191,6 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         dy2 = -1 -(option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
         QRect delRect = option.rect.adjusted(dx1 - scrollBarWidth, dy1, dx2 - scrollBarWidth, dy2);
         if (!delRect.contains(mouseEvent->pos())){
-//        if (m_delRect.contains(mouseEvent->pos())){
             m_deleteButtonPressed = false;
         }
         emit needsUpdate(index);

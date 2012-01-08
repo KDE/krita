@@ -193,15 +193,15 @@ void KisImage::nodeHasBeenRemoved(KisNode *parent, int index)
     m_d->signalRouter->emitNodeHasBeenRemoved(parent, index);
 }
 
-void KisImage::aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex)
+void KisImage::aboutToMoveNode(KisNode *node, int oldIndex, int newIndex)
 {
     SANITY_CHECK_LOCKED("aboutToMoveNode");
-    m_d->signalRouter->emitAboutToMoveNode(parent, oldIndex, newIndex);
+    m_d->signalRouter->emitAboutToMoveNode(node, oldIndex, newIndex);
 }
 
-void KisImage::nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex)
+void KisImage::nodeHasBeenMoved(KisNode *node, int oldIndex, int newIndex)
 {
-    m_d->signalRouter->emitNodeHasBeenMoved(parent, oldIndex, newIndex);
+    m_d->signalRouter->emitNodeHasBeenMoved(node, oldIndex, newIndex);
 }
 
 void KisImage::nodeChanged(KisNode* node)

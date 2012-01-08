@@ -62,13 +62,13 @@ public:
      * Inform the model we're about to start moving a node (which
      * includes removing and adding the same node)
      */
-    virtual void aboutToMoveNode(KisNode * parent, int oldIndex, int newIndex) = 0;
+    virtual void aboutToMoveNode(KisNode * node, int oldIndex, int newIndex) = 0;
 
     /**
      * Inform the model we're done moving the node: it has been
      * removed and added successfully
      */
-    virtual void nodeHasBeenMoved(KisNode * parent, int oldIndex, int newIndex) = 0;
+    virtual void nodeHasBeenMoved(KisNode * node, int oldIndex, int newIndex) = 0;
 
     virtual void nodeChanged(KisNode * node) = 0;
 

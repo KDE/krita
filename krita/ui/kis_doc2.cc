@@ -488,7 +488,7 @@ KoShapeBasedDocumentBase * KisDoc2::shapeController() const
     return m_d->shapeController;
 }
 
-KoShape * KisDoc2::shapeForNode(KisNodeSP layer) const
+KoShapeLayer* KisDoc2::shapeForNode(KisNodeSP layer) const
 {
     return m_d->shapeController->shapeForNode(layer);
 }

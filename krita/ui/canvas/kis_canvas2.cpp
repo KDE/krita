@@ -118,9 +118,26 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(this, SIGNAL(canvasDestroyed(QWidget *)), this, SLOT(slotCanvasDestroyed(QWidget *)));
 
+    /**
+     * We switch the shape manager every time shape layer or
+     * shape selection is activated. Flake does not expect this
+     * and connects all the signals of the global shape manager
+     * to the clients in the constructor. To workaround this we
+     * forward the signals of local shape managers stored in the
+     * shape layers to the signals of global shape manager. So the
+     * sequence of signal deliveries is the following:
+     *
+     * shapeLayer.m_d.canvas.m_shapeManager.selection() ->
+     * shapeLayer ->
+     * shapeController ->
+     * globalShapeManager.selection()
+     */
+
     KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(sc);
     connect(kritaShapeController, SIGNAL(selectionChanged()),
             globalShapeManager()->selection(), SIGNAL(selectionChanged()));
+    connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
+            globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 }
 
 KisCanvas2::~KisCanvas2()

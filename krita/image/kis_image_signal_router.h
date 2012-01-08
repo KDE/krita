@@ -56,8 +56,8 @@ public:
     void emitNodeHasBeenAdded(KisNode *parent, int index);
     void emitAboutToRemoveANode(KisNode *parent, int index);
     void emitNodeHasBeenRemoved(KisNode *parent, int index);
-    void emitAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
-    void emitNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
+    void emitAboutToMoveNode(KisNode *node, int oldIndex, int newIndex);
+    void emitNodeHasBeenMoved(KisNode *node, int oldIndex, int newIndex);
 
 private:
     bool checkSameThread();
@@ -88,6 +88,12 @@ signals:
     void sigNodeHasBeenRemoved(KisNode *parent, int index);
     void sigAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
     void sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
+
+    // Asynchronous
+    void sigNodeAddedAsync(KisNodeSP node);
+    void sigNodeMovedAsync(KisNodeSP node);
+    void sigRemoveNodeAsync(KisNodeSP node);
+    void sigLayersChangedAsync();
 
 private:
     KisImageWSP m_image;

@@ -26,7 +26,8 @@
 #include "kis_types.h"
 #include <krita_export.h>
 
-class KoShape;
+class KisNodeDummy;
+class KoShapeLayer;
 
 class KisView2;
 class KisDoc2;
@@ -49,11 +50,17 @@ public:
     ~KisShapeController();
 
     void setImage(KisImageWSP image);
-    KoShape * shapeForNode(KisNodeSP layer) const;
+    KoShapeLayer* shapeForNode(KisNodeSP layer) const;
+    KisNodeDummy* dummyForNode(KisNodeSP layer) const;
     void setInitialShapeForView(KisView2 * view);
 
 signals:
     void selectionChanged();
+    void currentLayerChanged(const KoShapeLayer*);
+
+    void sigContinueAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+    void sigContinueMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+    void sigContinueRemoveNode(KisNodeSP node);
 
 protected:
     void addShape(KoShape* shape);
@@ -62,9 +69,14 @@ protected:
 private slots:
     friend class KisShapeControllerTest;
 
-    void slotNodeAdded(KisNode *parentNode, int index);
-    void slotNodeRemoved(KisNode *parentNode, int index);
-    void slotLayersChanged(KisGroupLayerSP rootLayer);
+    void slotNodeAdded(KisNodeSP node);
+    void slotNodeMoved(KisNodeSP node);
+    void slotRemoveNode(KisNodeSP node);
+    void slotLayersChanged();
+
+    void slotContinueAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+    void slotContinueMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+    void slotContinueRemoveNode(KisNodeSP node);
 
 private:
     int layerMapSize();

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,15 +20,10 @@
 #define STYLESCOMBO_H
 
 #include <QComboBox>
-#include <QTextBlockFormat>
-#include <QTextCharFormat>
 
 class QListView;
 
-class KoParagraphStyle;
-class KoStyleManager;
 class StylesModel;
-class StylesComboView;
 class StylesComboPreview;
 
 class StylesCombo : public QComboBox
@@ -39,7 +34,6 @@ public:
     ~StylesCombo();
 
     void setStylesModel(StylesModel *model);
-//    void setStyleManager(KoStyleManager *styleManager);
     void setLineEdit(QLineEdit *lineEdit);
     void setEditable(bool editable);
 
@@ -48,20 +42,13 @@ public:
     bool eventFilter(QObject *, QEvent *);
 
 public slots:
-//    void setCurrentFormat(const QTextBlockFormat &format);
-//    void setCurrentFormat(const QTextCharFormat &format);
     void slotUpdatePreview();
 
 signals:
-//    void selectionChanged(QModelIndex index);
     void selectionChanged(int index);
-//    void paragraphStyleSelected(KoParagraphStyle *style);
     void newStyleRequested(QString name);
     void showStyleManager(int index);
     void deleteStyle(int index);
-
-protected:
-//    virtual void paintEvent(QPaintEvent *e);
 
 private slots:
     void slotDeleteStyle(QModelIndex);
@@ -71,16 +58,10 @@ private slots:
 
 private:
     StylesModel *m_stylesModel;
-//    StylesComboView *m_view;
     StylesComboPreview *m_preview;
     QListView *m_view;
     int m_selectedItem;
     bool m_originalStyle;
-
-//    QTextBlockFormat m_currentBlockFormat;
-//    QTextCharFormat m_currentCharFormat;
-
-//    bool skipNextHide;
 };
 
 #endif //STYLESCOMBO_H

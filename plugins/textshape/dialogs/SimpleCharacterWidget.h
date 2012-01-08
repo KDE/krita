@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,7 +30,6 @@
 class TextTool;
 class KoStyleManager;
 class KoCharacterStyle;
-//class StylesWidget;
 class KoStyleThumbnailer;
 class StylesModel;
 
@@ -49,7 +49,6 @@ private slots:
     void fontFamilyActivated(int index);
     void fontSizeActivated(int index);
     void styleSelected(int index);
-    void hidePopup();
 
 signals:
     void doneWithFocus();
@@ -67,7 +66,6 @@ private:
     QTextCharFormat m_currentCharFormat;
     QTextBlockFormat m_currentBlockFormat;
     KoStyleThumbnailer *m_thumbnailer;
-//    StylesWidget *m_stylePopup;
     StylesModel *m_stylesModel;
 };
 

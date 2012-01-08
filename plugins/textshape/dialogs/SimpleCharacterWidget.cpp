@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2008, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2009-2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,8 +22,6 @@
 #include "SimpleCharacterWidget.h"
 #include "TextTool.h"
 #include "../commands/ChangeListCommand.h"
-//#include "StylesWidget.h"
-#include "SpecialButton.h"
 #include "StylesModel.h"
 #include "KoStyleThumbnailer.h"
 
@@ -81,22 +80,11 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
 
     widget.fontsFrame->setColumnStretch(0,1);
 
-//    m_stylePopup = new StylesWidget(this, false, Qt::Popup);
-//    m_stylePopup->setFrameShape(QFrame::StyledPanel);
-//    m_stylePopup->setFrameShadow(QFrame::Raised);
-//    widget.characterStyleCombo->setStylesWidget(m_stylePopup);
-
-//    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(characterStyleSelected(KoCharacterStyle *)));
-//    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(doneWithFocus()));
-//    connect(m_stylePopup, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(hidePopup()));
-
     m_thumbnailer = new KoStyleThumbnailer();
 
     m_stylesModel = new StylesModel(0, StylesModel::CharacterStyle);
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
-
     widget.characterStyleCombo->setStylesModel(m_stylesModel);
-
     connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
     connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
     connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
@@ -105,6 +93,7 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
 
 SimpleCharacterWidget::~SimpleCharacterWidget()
 {
+    //the model is set on the comboBox which takes ownership
     delete m_thumbnailer;
 }
 
@@ -115,11 +104,6 @@ void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
     disconnect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
     m_stylesModel->setStyleManager(sm);
     connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
-}
-
-void SimpleCharacterWidget::hidePopup()
-{
-    widget.characterStyleCombo->hidePopup();
 }
 
 void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
@@ -225,8 +209,6 @@ void SimpleCharacterWidget::setCurrentBlockFormat(const QTextBlockFormat &format
 
     m_stylesModel->setCurrentParagraphStyle(format.intProperty(KoParagraphStyle::StyleId));
     disconnect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
-//    widget.characterStyleCombo->setCurrentIndex(0); //TODO make it a bit more resilient
-//    widget.characterStyleCombo->setStyleIsOriginal(true); //TODO should we compare the properties here too?
     widget.characterStyleCombo->slotUpdatePreview();
     connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
 }

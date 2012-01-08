@@ -43,8 +43,31 @@ class KisNodeDummy;
 class KRITAUI_EXPORT KisNodeShapesGraph
 {
 public:
+    /**
+     * Adds a node to the graph
+     *
+     * WARNING: this method does *not* add all the children recursively
+     * because the shapes graph has no right to access the hierarchy
+     * information from the UI thread, so you should do it manually.
+     */
     KisNodeShape* addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+
+    /**
+     * Moves a node inside the graph. It is supposed that the node has
+     * previously been added to the graph using addNode().
+     *
+     * The node is moved together with all its children.
+     */
     void moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+
+    /**
+     * Removes the node from the graph
+     *
+     * Removing the node from the graph removes both the node itself
+     * and all its children, because all this information is accesible
+     * to the shapes graph without referring to the node's hierarchy
+     * information owned by the image.
+     */
     void removeNode(KisNodeSP node);
 
     KisNodeShape* nodeToShape(KisNodeSP node);

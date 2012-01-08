@@ -94,9 +94,7 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
     } else {
 
         KoShape * shape = view->document()->shapeForNode(node);
-        if (!shape) {
-            shape = view->document()->addShape(node);
-        }
+        Q_ASSERT(shape);
 
         selection->select(shape);
         KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape);

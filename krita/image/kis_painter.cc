@@ -1027,7 +1027,7 @@ void KisPainter::paintPolyline(const vQPointF &points,
 
     KisDistanceInformation saveDist;
     for (int i = index; i < index + numPoints - 1; i++) {
-        saveDist = paintLine(points [index], points [index + 1], saveDist);
+        saveDist = paintLine(points [i], points [i + 1], saveDist);
     }
 }
 

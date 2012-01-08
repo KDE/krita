@@ -25,19 +25,15 @@
 
 #include <KoCanvasBase.h>
 #include <KoPathShape.h>
-#include <KoShapeController.h>
 #include <KoLineBorder.h>
 
-#include <kis_paint_layer.h>
-#include <kis_selection.h>
-#include <kis_painter.h>
-#include <kis_paint_device.h>
-#include <kis_paint_information.h>
 #include <kis_paintop_preset.h>
+#include "kis_figure_painting_tool_helper.h"
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_path_paint_action.h>
 #include <recorder/kis_node_query_path.h>
+
 
 KisToolPolyline::KisToolPolyline(KoCanvasBase * canvas)
         : KisToolPolylineBase(canvas, KisCursor::load("tool_polyline_cursor.png", 6, 6))
@@ -58,29 +54,10 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
         image()->actionRecorder()->addAction(linePaintAction);
     }
     if (!currentNode()->inherits("KisShapeLayer")) {
-        KisPaintDeviceSP device = currentNode()->paintDevice();
-        if (!device) return;
-
-        KisPainter painter(device, currentSelection());
-        painter.beginTransaction(i18n("Polyline"));
-        setupPainter(&painter);
-
-        QPointF start, end;
-        QVector<QPointF>::const_iterator it;
-        for (it =
-                    points.begin();
-                it !=
-                points.end(); ++it) {
-            if (it == points.begin()) {
-                start = (*it);
-            } else {
-                end = (*it);
-                painter.paintLine(start, end);
-                start = end;
-            }
-        }
-        device->setDirty(painter.takeDirtyRegion());
-        painter.endTransaction(image()->undoAdapter());
+        KisFigurePaintingToolHelper helper(i18n("Polyline"),
+                                           image(),
+                                           canvas()->resourceManager());
+        helper.paintPolyline(points);
     } else {
         KoPathShape* path = new KoPathShape();
         path->setShapeId(KoPathShapeId);
@@ -97,7 +74,6 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
 
         addShape(path);
     }
-
     notifyModified();
 }
 

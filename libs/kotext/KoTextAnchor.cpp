@@ -65,14 +65,13 @@ public:
             inlineObjectDescent(0),
             pageNumber(-1)
     {
-        Q_ASSERT(shape);
     }
 
 
     virtual QDebug printDebug(QDebug dbg) const
     {
 #ifndef NDEBUG
-        dbg.nospace() << "KoTextAnchor";
+        dbg.space() << "KoTextAnchor" << this;
         dbg.space() << "offset:" << distance;
         dbg.space() << "shape:" << shape->name();
 #endif

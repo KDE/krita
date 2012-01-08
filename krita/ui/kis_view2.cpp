@@ -664,8 +664,14 @@ void KisView2::slotLoadingFinished()
         image()->unlock();
     }
 
-    if (KisNodeSP node = image()->rootLayer()->firstChild()) {
-        m_d->nodeManager->activateNode(node);
+    KisNodeSP activeNode = image()->rootLayer()->firstChild();
+
+    while(activeNode && !activeNode->inherits("KisLayer")) {
+        activeNode = activeNode->nextSibling();
+    }
+
+    if (activeNode) {
+        m_d->nodeManager->activateNode(activeNode);
     }
 
     /**

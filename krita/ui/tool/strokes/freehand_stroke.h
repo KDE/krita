@@ -37,7 +37,12 @@ public:
         enum DabType {
             POINT,
             LINE,
-            CURVE
+            CURVE,
+            POLYLINE,
+            POLYGON,
+            RECT,
+            ELLIPSE,
+            PAINTER_PATH
         };
 
         Data(KisNodeSP _node, PainterInfo *_painterInfo,
@@ -63,6 +68,27 @@ public:
               control1(_control1), control2(_control2)
         {}
 
+        Data(KisNodeSP _node, PainterInfo *_painterInfo,
+             DabType _type,
+             const vQPointF &_points)
+            : node(_node), painterInfo(_painterInfo),
+            type(_type), points(_points)
+        {}
+
+        Data(KisNodeSP _node, PainterInfo *_painterInfo,
+             DabType _type,
+             const QRectF &_rect)
+            : node(_node), painterInfo(_painterInfo),
+            type(_type), rect(_rect)
+        {}
+
+        Data(KisNodeSP _node, PainterInfo *_painterInfo,
+             DabType _type,
+             const QPainterPath &_path)
+            : node(_node), painterInfo(_painterInfo),
+            type(_type), path(_path)
+        {}
+
 
         KisNodeSP node;
         PainterInfo *painterInfo;
@@ -72,16 +98,24 @@ public:
         KisPaintInformation pi2;
         QPointF control1;
         QPointF control2;
+
+        vQPointF points;
+        QRectF rect;
+        QPainterPath path;
     };
 
 public:
+    // TODO: add i18n after 2.4
     FreehandStrokeStrategy(bool needsIndirectPainting,
                            KisResourcesSnapshotSP resources,
-                           PainterInfo *painterInfo);
+                           PainterInfo *painterInfo,
+                           const QString &name = "Freehand Stroke");
 
+    // TODO: add i18n after 2.4
     FreehandStrokeStrategy(bool needsIndirectPainting,
                            KisResourcesSnapshotSP resources,
-                           QVector<PainterInfo*> painterInfos);
+                           QVector<PainterInfo*> painterInfos,
+                           const QString &name = "Freehand Stroke");
 
     void doStrokeCallback(KisStrokeJobData *data);
 

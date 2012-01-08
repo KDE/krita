@@ -38,7 +38,8 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_image_properties.cc
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
-    flake/kis_layer_container_shape.cc 
+    flake/kis_node_dummies_graph.cpp
+    flake/kis_node_shapes_graph.cpp
     flake/kis_node_shape.cpp
     flake/kis_shape_controller.cpp
     flake/kis_shape_layer.cc 
@@ -127,6 +128,7 @@ set(kritaui_LIB_SRCS
     tool/kis_painting_information_builder.cpp
     tool/kis_tool_freehand_helper.cpp
     tool/kis_tool_multihand_helper.cpp
+    tool/kis_figure_painting_tool_helper.cpp
     tool/kis_recording_adapter.cpp
     tool/kis_tool_paint.cc 
     tool/kis_tool_shape.cc

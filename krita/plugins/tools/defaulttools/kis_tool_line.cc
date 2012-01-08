@@ -24,39 +24,23 @@
 
 #include "kis_tool_line.h"
 
-#include <cmath>
 
-#include <QLayout>
-#include <QWidget>
-#include <QCheckBox>
 #include <QPushButton>
-#include <QPainter>
-#include <QPainterPath>
-
-#include <klocale.h>
 
 #include <KoCanvasBase.h>
-#include <KoCanvasController.h>
 #include <KoPointerEvent.h>
 #include <KoPathShape.h>
 #include <KoShapeController.h>
 #include <KoLineBorder.h>
 
 #include <kis_debug.h>
-#include <kis_selection.h>
-#include <kis_paint_device.h>
-#include <kis_paint_information.h>
 #include <kis_cursor.h>
-#include <kis_painter.h>
 #include <kis_paintop_registry.h>
-#include <kis_layer.h>
-#include <kis_paint_layer.h>
+#include "kis_figure_painting_tool_helper.h"
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_path_paint_action.h>
 #include <recorder/kis_node_query_path.h>
-
-
 
 #define ENABLE_RECORDING
 
@@ -220,22 +204,10 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
 #endif
 
         if (nodeAbility == PAINT) {
-                KisPaintDeviceSP device = currentNode()->paintDevice();
-                delete m_painter;
-                m_painter = new KisPainter(device, currentSelection());
-                Q_CHECK_PTR(m_painter);
-
-                m_painter->beginTransaction(i18nc("a straight drawn line", "Line"));
-                setupPainter(m_painter);
-                m_painter->paintLine(m_startPos, m_endPos);
-
-                m_painter->endTransaction(image()->undoAdapter());
-
-                device->setDirty(m_painter->takeDirtyRegion());
-                notifyModified();
-
-                delete m_painter;
-                m_painter = 0;
+            KisFigurePaintingToolHelper helper(i18nc("a straight drawn line", "Line"),
+                                               image(),
+                                               canvas()->resourceManager());
+            helper.paintLine(m_startPos, m_endPos);
         }
         else {
             KoPathShape* path = new KoPathShape();
@@ -256,7 +228,9 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
     }
     else {
         KisToolPaint::mouseReleaseEvent(event);
+        return;
     }
+    notifyModified();
 }
 
 

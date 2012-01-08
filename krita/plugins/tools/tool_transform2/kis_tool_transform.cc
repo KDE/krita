@@ -74,9 +74,6 @@
 
 #include <KoShapeTransformCommand.h>
 
-#include "flake/kis_node_shape.h"
-#include "flake/kis_layer_container_shape.h"
-#include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"
 #include "widgets/kis_progress_widget.h"
 
@@ -2098,6 +2095,9 @@ void KisToolTransform::applyTransform()
     KoProgressUpdater* updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
     updater->start(100, i18n("Apply Transformation"));
 
+    KisUndoAdapter *undoAdapter = image()->undoAdapter();
+    undoAdapter->beginMacro(i18n("Apply transformation"));
+
     // This mementoes the current state of the active device.
     ApplyTransformCmd transaction(this, m_currentArgs.mode(), currentNode());
 
@@ -2261,15 +2261,16 @@ void KisToolTransform::applyTransform()
         }
     }
 
+    transaction.commit(undoAdapter);
+    undoAdapter->endMacro();
+
+    updater->deleteLater();
     currentNode()->setDirty();
 
     canvas->view()->selectionManager()->selectionChanged();
 
     if (currentSelection() && currentSelection()->hasShapeSelection())
         canvas->view()->selectionManager()->shapeSelectionChanged();
-
-    transaction.commit(image()->undoAdapter());
-    updater->deleteLater();
 }
 
 void KisToolTransform::notifyCommandAdded(const KUndo2Command * command)

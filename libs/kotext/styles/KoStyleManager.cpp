@@ -103,12 +103,22 @@ KoStyleManager::KoStyleManager(QObject *parent)
 
     //TODO: also use the defaultstyles.xml mechanism. see KoOdfLoadingContext and KoTextSharedLoadingData
     d->defaultListStyle = new KoListStyle(this);
-    KoListLevelProperties llp;
-    llp.setLevel(1);
-    llp.setStartValue(1);
-    llp.setStyle(KoListStyle::DecimalItem);
-    llp.setListItemSuffix(".");
-    d->defaultListStyle->setLevelProperties(llp);
+    const int margin = 10; // we specify the margin for the default list style(Note: Even ChangeListCommand has this value)
+    const int maxListLevel = 10;
+    for (int level = 1; level <= maxListLevel; level++) {
+        KoListLevelProperties llp;
+        llp.setLevel(level);
+        llp.setStartValue(1);
+        llp.setStyle(KoListStyle::DecimalItem);
+        llp.setListItemSuffix(".");
+        llp.setAlignmentMode(true);
+        llp.setLabelFollowedBy(KoListStyle::ListTab);
+        llp.setTabStopPosition(margin*(level+2));
+        llp.setMargin(margin*(level+1));
+        llp.setTextIndent(margin);
+
+        d->defaultListStyle->setLevelProperties(llp);
+    }
 
     //default styles for ToCs
     int maxOutLineLevel = 10;

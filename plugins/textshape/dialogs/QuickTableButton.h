@@ -30,6 +30,7 @@ class QuickTableButton : public QToolButton
 public:
     QuickTableButton( QWidget *parent = 0 );
     void emitCreate(int rows, int columns);
+    void addAction(QAction *action);
 
 signals:
     void create(int rows, int columns);

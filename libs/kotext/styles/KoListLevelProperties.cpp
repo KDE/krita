@@ -228,14 +228,15 @@ int KoListLevelProperties::displayLevel() const
     return propertyInt(KoListStyle::DisplayLevel);
 }
 
-void KoListLevelProperties::setCharacterStyleId(int id)
+void KoListLevelProperties::setLabelCharacterStyle(KoCharacterStyle *style)
 {
-    setProperty(KoListStyle::CharacterStyleId, id);
+    setProperty(KoListStyle::LabelCharacterStyle, QVariant::fromValue<KoCharacterStyle *>(style));
 }
 
-int KoListLevelProperties::characterStyleId() const
+KoCharacterStyle *KoListLevelProperties::labelCharacterStyle() const
 {
-    return propertyInt(KoListStyle::CharacterStyleId);
+    const QVariant v = d->stylesPrivate.value(KoListStyle::LabelCharacterStyle);
+    return v.value<KoCharacterStyle *>();
 }
 
 void KoListLevelProperties::setCharacterProperties(QSharedPointer< KoCharacterStyle > style)
@@ -451,6 +452,7 @@ void KoListLevelProperties::onStyleChanged(int key)
         case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
         case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
         case KoListStyle::BallotXItem:          bullet = 0x2717; break;
+        case KoListStyle::DiscItem:             bullet = 0x25CF; break;
     }
 
     if (bullet != 0)
@@ -487,7 +489,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             else {
 //                kDebug(32500) << "==> cs.name:" << cs->name();
 //                kDebug(32500) << "==> cs.styleId:" << cs->styleId();
-               setCharacterStyleId(cs->styleId());
+                setLabelCharacterStyle(cs);
             }
         }
     }
@@ -794,10 +796,19 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
             case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
             case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
             case KoListStyle::BallotXItem:          bullet = 0x2717; break;
+            case KoListStyle::BlackCircle:
+            case KoListStyle::DiscItem:             bullet = 0x25CF; break;
             default:                                bullet = 0; break; //empty character
             }
         }
         writer->addAttribute("text:bullet-char", QChar(bullet));
+    }
+
+    if (d->stylesPrivate.contains(KoListStyle::LabelCharacterStyle)) {
+        KoCharacterStyle *labelCharStyle = labelCharacterStyle();
+        if (labelCharStyle) {
+            writer->addAttribute("text:style-name", labelCharStyle->name());
+        }
     }
 
     // These apply to bulleted and numbered lists

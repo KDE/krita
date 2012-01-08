@@ -177,6 +177,76 @@ void TestBlockLayout::testBasicLineSpacing2()
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - 28.8) < ROUNDING);
 }
 
+void TestBlockLayout::testFixedLineSpacing()
+{
+    setupTest(QString("Line1")+QChar(0x2028)+"Line2"+QChar(0x2028)+"Line3");
+    QTextCursor cursor(m_doc);
+
+    KoParagraphStyle style;
+    style.setFontPointSize(12.0);
+    style.setLineHeightAbsolute(28.0);
+    QTextBlock block = m_doc->begin();
+    style.applyStyle(block);
+
+    QCOMPARE(block.blockFormat().doubleProperty(KoParagraphStyle::FixedLineHeight), 28.0);
+
+    m_layout->layout();
+    QTextLayout *blockLayout = block.layout();
+
+    // lines with fontsize less than the fixed height are bottom aligned, resulting in 
+    // positive y for first line
+    QCOMPARE(blockLayout->lineAt(0).y(), 28.0-12.0);
+    QCOMPARE(blockLayout->lineAt(1).y(), 28.0 + 28.0-12.0);
+    QCOMPARE(blockLayout->lineAt(2).y(), 56.0 + 28.0-12.0);
+
+    style.setLineHeightAbsolute(8.0);
+    style.applyStyle(block);
+
+    QCOMPARE(block.blockFormat().doubleProperty(KoParagraphStyle::FixedLineHeight), 8.0);
+
+    m_layout->layout();
+    blockLayout = block.layout();
+
+    // lines with fontsize more than the fixed height are bottom aligned, resulting in 
+    //negative y for first line
+    QCOMPARE(blockLayout->lineAt(0).y(), 8.0-12.0);
+    QCOMPARE(blockLayout->lineAt(1).y(), 8.0-12.0 + 8.0);
+    QCOMPARE(blockLayout->lineAt(2).y(), 8.0-12.0 + 8.0 + 8.0);
+}
+
+void TestBlockLayout::testPercentageLineSpacing()
+{
+    setupTest(QString("Line1")+QChar(0x2028)+"Line2"+QChar(0x2028)+"Line3");
+    QTextCursor cursor(m_doc);
+
+    KoParagraphStyle style;
+    style.setFontPointSize(12.0);
+    style.setLineHeightPercent(150);
+    QTextBlock block = m_doc->begin();
+    style.applyStyle(block);
+
+    QCOMPARE(block.blockFormat().intProperty(KoParagraphStyle::PercentLineHeight), 150);
+
+    m_layout->layout();
+    QTextLayout *blockLayout = block.layout();
+
+    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
+    QCOMPARE(blockLayout->lineAt(1).y(), 0.0 + 18.0);
+    QCOMPARE(blockLayout->lineAt(2).y(), 0.0 + 18.0 + 18.0);
+
+    style.setLineHeightPercent(50);
+    style.applyStyle(block);
+
+    QCOMPARE(block.blockFormat().intProperty(KoParagraphStyle::PercentLineHeight), 50);
+
+    m_layout->layout();
+    blockLayout = block.layout();
+
+    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
+    QCOMPARE(blockLayout->lineAt(1).y(), 0.0 + 6.0);
+    QCOMPARE(blockLayout->lineAt(2).y(), 0.0 + 6.0 + 6.0);
+}
+
 void TestBlockLayout::testAdvancedLineSpacing()
 {
     setupTest("Line1\nLine2\nLine3\nLine4\nLine5\nLine6\nLine7");
@@ -223,45 +293,49 @@ void TestBlockLayout::testAdvancedLineSpacing()
     style.remove(KoParagraphStyle::LineSpacing);
     style.applyStyle(block);
 
+    block = m_block; // line1
     m_layout->layout();
-    QTextLayout *blockLayout = m_block.layout();
-    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
+    QTextLayout *blockLayout = block.layout();
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.0)) < ROUNDING);
 
-    block = m_block.next(); // line2
+    block = block.next(); // line2 with fixed we are bottom aligned so offset by 28.0-12.0
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 25.6) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0-12.0)) < ROUNDING);
 
     block = block.next(); // line3
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 37.6) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0)) < ROUNDING);
 
     block = block.next(); // line4
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 52) < ROUNDING);
+    // percentage overrides minimum so percentage value is the right to test against
+    //QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 40.0)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12)) < ROUNDING);
 
     block = block.next(); // line5
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 66.39) < ROUNDING);
+    // minimum of 5 is irelevant and percentage of 1.2 was still there
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12 + 1.2*12)) < ROUNDING);
 
     block = block.next(); // line6
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 86.39) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12 + 1.2*12 + 12+8)) < ROUNDING);
 
     block = block.next(); // line 7
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 100.79) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12 + 1.2*12 + 12+8 + 1.2*12)) < ROUNDING);
 }
 
 // Test that spacing between blocks are the max of bottomMargin and topMargin
@@ -864,7 +938,7 @@ void TestBlockLayout::testDropCaps()
     qreal heightNormalLine = line.height();
     qreal linexpos = line.position().x();
     QCOMPARE(line.position().y(), 0.0); // aligned top
-    qDebug()<<line.position().x();
+    //qDebug()<<line.position().x();
     QVERIFY(line.position().x() > 40.0); // can't get a tight-boundingrect here.
     QVERIFY(line.position().x() < 45.0); // can't get a tight-boundingrect here.
 

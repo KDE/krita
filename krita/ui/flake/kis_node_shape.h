@@ -39,7 +39,7 @@ class KRITAUI_EXPORT KisNodeShape : public QObject, public KoShapeLayer
 {
     Q_OBJECT
 public:
-    KisNodeShape(KoShapeLayer *parent, KisNodeSP node);
+    KisNodeShape(KisNodeSP node);
     virtual ~KisNodeShape();
 
     KisNodeSP node();

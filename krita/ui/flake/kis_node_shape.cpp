@@ -40,7 +40,7 @@ public:
     KisNodeSP node;
 };
 
-KisNodeShape::KisNodeShape(KoShapeLayer *parent, KisNodeSP node)
+KisNodeShape::KisNodeShape(KisNodeSP node)
         : KoShapeLayer()
         , m_d(new Private())
 {
@@ -48,7 +48,6 @@ KisNodeShape::KisNodeShape(KoShapeLayer *parent, KisNodeSP node)
     m_d->node = node;
 
     setShapeId(KIS_NODE_SHAPE_ID);
-    KoShape::setParent(parent);
 
     setSelectable(false);
 

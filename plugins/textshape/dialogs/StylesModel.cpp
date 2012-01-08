@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,30 +19,19 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "StylesModel.h"
-#include "TextTool.h"
+
 #include "KoStyleThumbnailer.h"
-
-#include <QSet>
-#include <QDebug>
-#include <QSignalMapper>
-#include <QTextLayout>
-#include <QTextBlock>
-
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
 
+#include <QSignalMapper>
+#include <QList>
+#include <QPixmap>
+
 #include <KIcon>
-#include <KoTextBlockData.h>
-#include <KoParagraphStyle.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoTextDocumentLayout.h>
-#include <KoZoomHandler.h>
 
 #include <KDebug>
-
-#include <QTextLayout>
-
 
 StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *parent)
     : QAbstractListModel(parent),
@@ -49,12 +39,8 @@ StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *paren
       m_styleThumbnailer(0),
       m_currentParagraphStyle(0),
       m_defaultCharacterStyle(0),
-      m_pureParagraphStyle(true),
-      m_pureCharacterStyle(true),
       m_modelType(modelType),
-      m_styleMapper(new QSignalMapper(this)),
-      m_tmpTextShape(0)
-{
+      m_styleMapper(new QSignalMapper(this)){
     setStyleManager(manager);
     //Create a default characterStyle for the preview of "As paragraph" character style
     if (m_modelType == StylesModel::CharacterStyle) {
@@ -71,7 +57,6 @@ StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *paren
 
 StylesModel::~StylesModel()
 {
-    delete m_tmpTextShape;
     delete m_currentParagraphStyle;
     delete m_defaultCharacterStyle;
 }
@@ -106,13 +91,6 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
     switch (role){
     case Qt::DisplayRole: {
         return QVariant();
-        KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
-        if (paragStyle)
-            return paragStyle->name();
-        KoCharacterStyle *characterStyle =  m_styleManager->characterStyle(id);
-        if (characterStyle)
-            return characterStyle->name();
-        break;
     }
     case Qt::DecorationRole: {
         if (!m_styleThumbnailer) {
@@ -169,35 +147,7 @@ void StylesModel::setCurrentParagraphStyle(int styleId)
     }
     m_currentParagraphStyle = m_styleManager->paragraphStyle(styleId)->clone();
 }
-/*
-void StylesModel::setCurrentCharacterStyle(int styleId)
-{
-    if (m_currentCharacterStyle == m_styleManager->characterStyle(styleId))
-        return;
-    if (m_currentCharacterStyle) {
-        delete m_currentCharacterStyle;
-        m_currentCharacterStyle = 0;
-    }
-    if (styleId == -1) {
-        m_currentCharacterStyle = static_cast<KoCharacterStyle*>(m_currentParagraphStyle)->clone();
-        if (!m_currentCharacterStyle) {
-            m_currentCharacterStyle = new KoCharacterStyle();
-            m_currentCharacterStyle->setStyleId(-1);
-            m_currentCharacterStyle->setName(QString("As paragraph"));
-            m_currentCharacterStyle->setFontPointSize(12);
-            return;
-        }
-    }
-    if (!m_styleManager->characterStyle(styleId)) {
-        m_currentCharacterStyle = new KoCharacterStyle();
-        m_currentCharacterStyle->setStyleId(-1);
-        m_currentCharacterStyle->setName(QString("As paragraph"));
-        m_currentCharacterStyle->setFontPointSize(12);
-        return;
-    }
-    m_currentCharacterStyle = m_styleManager->characterStyle(styleId)->clone();
-}
-*/
+
 KoParagraphStyle *StylesModel::paragraphStyleForIndex(const QModelIndex &index) const
 {
     return m_styleManager->paragraphStyle(index.internalId());
@@ -262,12 +212,7 @@ QPixmap StylesModel::stylePreview(int row, QSize size)
     }
     return QPixmap();
 }
-/*
-KoStyleManager* StylesModel::styleManager()
-{
-    return m_styleManager;
-}
-*/
+
 void StylesModel::setStyleManager(KoStyleManager *sm)
 {
     if (sm == m_styleManager)
@@ -298,12 +243,7 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
         connect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
     }
 }
-/*
-KoStyleThumbnailer* StylesModel::thumbnailer()
-{
-    return m_styleThumbnailer;
-}
-*/
+
 void StylesModel::setStyleThumbnailer(KoStyleThumbnailer *thumbnailer)
 {
     m_styleThumbnailer = thumbnailer;

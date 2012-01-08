@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,10 +22,7 @@
 #define MODEL_H
 
 #include <QAbstractListModel>
-#include <QMultiHash>
-#include <QIcon>
-#include <QPixmap>
-#include <QMap>
+#include <KIcon>
 
 class KoStyleThumbnailer;
 
@@ -32,7 +30,7 @@ class KoStyleManager;
 class KoParagraphStyle;
 class KoCharacterStyle;
 class QSignalMapper;
-class TextShape;
+class QSize;
 
 class StylesModel : public QAbstractListModel
 {
@@ -65,22 +63,10 @@ public:
 
     QPixmap stylePreview(int row, QSize size = QSize());
 
-//    KoStyleManager* styleManager();
     void setStyleManager(KoStyleManager *manager);
-//    KoStyleThumbnailer* thumbnailer();
     void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer);
 
-public slots:
-//    /**
-//        Sets the paragraph style that is currently used.
-//        @param styleId the id from KoParagraphStyle::styleId()
-//    */
     void setCurrentParagraphStyle(int styleId);
-//    /**
-//        Sets the character style that is currently used.
-//        @param styleId the id from KoCharacterStyle::styleId()
-//    */
-//    void setCurrentCharacterStyle(int styleId);
 
 private slots:
     void addParagraphStyle(KoParagraphStyle*);
@@ -98,14 +84,11 @@ private:
 
     KoParagraphStyle *m_currentParagraphStyle;
     KoCharacterStyle *m_defaultCharacterStyle;
-    bool m_pureParagraphStyle;
-    bool m_pureCharacterStyle;
     Type m_modelType;
 
-    QIcon m_paragIcon, m_charIcon;
+    KIcon m_paragIcon, m_charIcon;
 
     QSignalMapper *m_styleMapper;
-    TextShape *m_tmpTextShape;
 };
 
 #endif

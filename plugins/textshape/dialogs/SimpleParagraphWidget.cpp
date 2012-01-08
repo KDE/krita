@@ -212,6 +212,12 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
                     continue;
                 }
             }
+            if (property == KoParagraphStyle::TextProgressionDirection) {
+                if (style->value(property).isNull() && m_currentBlockFormat.intProperty(property) == KoText::LeftRightTopBottom) {
+                    //LTR seems to be Qt default when unset
+                    continue;
+                }
+            }
             if ((m_currentBlockFormat.property(property) != style->value(property)) && !(style->value(property).isNull() && !m_currentBlockFormat.property(property).toBool())) {
                 //the last check seems to work. might be cause of a bug. The problem is when comparing an unset property in the style with a set to {0, false, ...) property in the format (eg. set then unset bold)
                 unchanged = false;
@@ -251,6 +257,12 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
                     break;
                 }
                 else {
+                    continue;
+                }
+            }
+            if (property == KoParagraphStyle::TextProgressionDirection) {
+                if (style->value(property).isNull() && m_currentBlockFormat.intProperty(property) == KoText::LeftRightTopBottom) {
+                    //LTR seems to be Qt default when unset
                     continue;
                 }
             }

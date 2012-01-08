@@ -135,7 +135,15 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
         foreach(int property, m_currentCharFormat.properties().keys()) {
             if (property == QTextFormat::ObjectIndex)
                 continue;
-            if ((m_currentCharFormat.property(property) != style->value(property)) && !(style->value(property).isNull() && !m_currentCharFormat.property(property).toBool())) {
+            if (property == KoCharacterStyle::ChangeTrackerId) { //internal property
+                continue;
+            }
+            if (property == KoCharacterStyle::InlineInstanceId) { //internal property
+                continue;
+            }
+            if (property == KoCharacterStyle::FontYStretch) { //internal property
+                continue;
+            }            if ((m_currentCharFormat.property(property) != style->value(property)) && !(style->value(property).isNull() && !m_currentCharFormat.property(property).toBool())) {
             //the last check seems to work. might be cause of a bug. The problem is when comparing an unset property in the style with a set to {0, false, ...) property in the format (eg. set then unset bold)
                 unchanged = false;
                 break;
@@ -153,6 +161,15 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
             bool unchanged = true;
             foreach(int property, m_currentCharFormat.properties().keys()) {
                 if (property == QTextFormat::ObjectIndex) {
+                    continue;
+                }
+                if (property == KoCharacterStyle::ChangeTrackerId) { //internal property
+                    continue;
+                }
+                if (property == KoCharacterStyle::InlineInstanceId) { //internal property
+                    continue;
+                }
+                if (property == KoCharacterStyle::FontYStretch) { //internal property
                     continue;
                 }
                 if ((m_currentCharFormat.property(property) != style->value(property)) && !(style->value(property).isNull() && !m_currentCharFormat.property(property).toBool())) {

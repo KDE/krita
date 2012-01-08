@@ -458,6 +458,7 @@ public slots:
 signals:
     void isBidiUpdated();
     void cursorPositionChanged();
+    void textFormatChanged();
 
 protected:
     bool recursiveProtectionCheck(QTextFrame::iterator it) const;

@@ -294,11 +294,12 @@ private slots:
     /// change block text direction
     void textDirectionChanged();
 
+    void updateActions();
+
 private:
     void repaintCaret();
     void repaintSelection();
     KoPointedAt hitTest(const QPointF & point) const;
-    void updateActions();
     void updateStyleManager();
     void updateSelectedShape(const QPointF &point);
     void updateSelectionHandler();

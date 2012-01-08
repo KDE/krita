@@ -818,6 +818,7 @@ void TextTool::setShapeData(KoTextShapeData *data)
     if (docChanged) {
         if (!m_textEditor.isNull()) {
             disconnect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
+            disconnect(m_textEditor.data(), SIGNAL(textFormatChanged()), this, SLOT(updateActions()));
         }
         m_textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
         Q_ASSERT(m_textEditor.data());
@@ -835,6 +836,7 @@ void TextTool::setShapeData(KoTextShapeData *data)
         }
 
         connect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
+        connect(m_textEditor.data(), SIGNAL(textFormatChanged()), this, SLOT(updateActions()));
     }
     m_textEditor.data()->updateDefaultTextDirection(m_textShapeData->pageDirection());
 }

@@ -2,7 +2,7 @@
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
- * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
+ * Copyright (C) 2008, 2012 Pierre Stirnweiss <pstirnweiss@googlemail.org>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
@@ -1801,7 +1801,6 @@ void TextTool::setStyle(KoCharacterStyle *style)
     //if the given KoCharacterStyle is null, set the KoParagraphStyle character properties
     if (!style){
         charStyle = static_cast<KoCharacterStyle*>(KoTextDocument(m_textShapeData->document()).styleManager()->paragraphStyle(m_textEditor.data()->blockFormat().intProperty(KoParagraphStyle::StyleId)));
-        kDebug() << "charStyle from parag: " << charStyle;
     }
     else {
         charStyle = style;
@@ -1810,15 +1809,12 @@ void TextTool::setStyle(KoCharacterStyle *style)
         m_textEditor.data()->setStyle(charStyle);
         updateActions();
     }
-//    emit charFormatChanged(m_textEditor.data()->charFormat());
 }
 
 void TextTool::setStyle(KoParagraphStyle *style)
 {
     m_textEditor.data()->setStyle(style);
     updateActions();
-//    emit blockFormatChanged(m_textEditor.data()->blockFormat());
-//    emit charFormatChanged(m_textEditor.data()->charFormat());
 }
 
 void TextTool::insertTable()
@@ -2108,32 +2104,24 @@ void TextTool::shapeDataRemoved()
 
 void TextTool::createStyleFromCurrentBlockFormat(QString name)
 {
-    kDebug() << "create parag style: " << name;
     KoTextDocument document(m_textShapeData->document());
-    kDebug() << "currentBlockFormat styleId: " << m_textEditor.data()->blockFormat().property(KoParagraphStyle::StyleId);
     KoStyleManager *styleManager = document.styleManager();
     KoParagraphStyle *paragraphStyle = new KoParagraphStyle(m_textEditor.data()->blockFormat(), m_textEditor.data()->charFormat());
     paragraphStyle->setName(name);
     styleManager->add(paragraphStyle);
     m_textEditor.data()->setStyle(paragraphStyle);
-    kDebug() << "newBlockFormat styleId: " << m_textEditor.data()->blockFormat().property(KoParagraphStyle::StyleId);
-    kDebug() << "newParagStyle id: " << paragraphStyle->styleId();
     emit charFormatChanged(m_textEditor.data()->charFormat());
     emit blockFormatChanged(m_textEditor.data()->blockFormat());
 }
 
 void TextTool::createStyleFromCurrentCharFormat(QString name)
 {
-    kDebug() << "create char style: " << name;
     KoTextDocument document(m_textShapeData->document());
-    kDebug() << "currentCharFormat styleId: " << m_textEditor.data()->charFormat().property(KoCharacterStyle::StyleId);
     KoStyleManager *styleManager = document.styleManager();
     KoCharacterStyle *characterStyle = new KoCharacterStyle(m_textEditor.data()->charFormat());
     characterStyle->setName(name);
     styleManager->add(characterStyle);
     m_textEditor.data()->setStyle(characterStyle);
-    kDebug() << "newCharFormat styleId: " << m_textEditor.data()->charFormat().property(KoCharacterStyle::StyleId);
-    kDebug() << "newCharacterStyle id: " << characterStyle->styleId();
     emit charFormatChanged(m_textEditor.data()->charFormat());
 }
 

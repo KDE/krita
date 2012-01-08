@@ -1596,6 +1596,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), scw, SLOT(setCurrentBlockFormat(QTextBlockFormat)));
     connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(scw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
+    connect(scw, SIGNAL(newStyleRequested(QString)), this, SLOT(createStyleFromCurrentCharFormat(QString)));
 
 
     // Connect to/with simple paragraph widget (docker)
@@ -2105,7 +2106,7 @@ void TextTool::shapeDataRemoved()
 
 void TextTool::createStyleFromCurrentBlockFormat(QString name)
 {
-    kDebug() << "create style: " << name;
+    kDebug() << "create parag style: " << name;
     KoTextDocument document(m_textShapeData->document());
     kDebug() << "currentBlockFormat styleId: " << m_textEditor.data()->blockFormat().property(KoParagraphStyle::StyleId);
     KoStyleManager *styleManager = document.styleManager();
@@ -2117,6 +2118,21 @@ void TextTool::createStyleFromCurrentBlockFormat(QString name)
     kDebug() << "newParagStyle id: " << paragraphStyle->styleId();
     emit charFormatChanged(m_textEditor.data()->charFormat());
     emit blockFormatChanged(m_textEditor.data()->blockFormat());
+}
+
+void TextTool::createStyleFromCurrentCharFormat(QString name)
+{
+    kDebug() << "create char style: " << name;
+    KoTextDocument document(m_textShapeData->document());
+    kDebug() << "currentCharFormat styleId: " << m_textEditor.data()->charFormat().property(KoCharacterStyle::StyleId);
+    KoStyleManager *styleManager = document.styleManager();
+    KoCharacterStyle *characterStyle = new KoCharacterStyle(m_textEditor.data()->charFormat());
+    characterStyle->setName(name);
+    styleManager->add(characterStyle);
+    m_textEditor.data()->setStyle(characterStyle);
+    kDebug() << "newCharFormat styleId: " << m_textEditor.data()->charFormat().property(KoCharacterStyle::StyleId);
+    kDebug() << "newCharacterStyle id: " << characterStyle->styleId();
+    emit charFormatChanged(m_textEditor.data()->charFormat());
 }
 
 // ---------- editing plugins methods.

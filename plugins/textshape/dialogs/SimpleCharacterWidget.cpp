@@ -23,7 +23,7 @@
 #include "TextTool.h"
 #include "../commands/ChangeListCommand.h"
 #include "StylesModel.h"
-#include "KoStyleThumbnailer.h"
+#include <KoStyleThumbnailer.h>
 
 #include <KAction>
 #include <KSelectAction>

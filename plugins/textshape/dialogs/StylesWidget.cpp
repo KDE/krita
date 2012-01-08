@@ -21,7 +21,7 @@
 #include "StylesDelegate.h"
 #include "ParagraphGeneral.h"
 #include "CharacterGeneral.h"
-#include "KoStyleThumbnailer.h"
+#include <KoStyleThumbnailer.h>
 
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>

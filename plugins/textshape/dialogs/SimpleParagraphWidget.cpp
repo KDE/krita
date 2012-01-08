@@ -23,7 +23,7 @@
 #include "TextTool.h"
 #include <ListItemsHelper.h>
 #include "FormattingButton.h"
-#include "KoStyleThumbnailer.h"
+#include <KoStyleThumbnailer.h>
 
 #include "StylesCombo.h"
 #include "StylesModel.h"

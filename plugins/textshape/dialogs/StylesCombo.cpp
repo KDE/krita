@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "StylesCombo.h"
-#include "KoStyleThumbnailer.h"
+#include <KoStyleThumbnailer.h>
 
 #include "StylesModel.h"
 #include "StylesComboPreview.h"

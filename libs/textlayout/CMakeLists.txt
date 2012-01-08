@@ -27,6 +27,7 @@ set(textlayout_LIB_SRCS
     ToCGenerator.cpp
     DummyDocumentLayout.cpp
     IndexGeneratorManager.cpp
+    KoStyleThumbnailer.cpp
 )
 
 
@@ -51,7 +52,7 @@ install(
     KoTextLayoutRootArea.h
     KoTextShapeData.h
     KoPointedAt.h
-    FrameIterator.h
+    KoStyleThumbnailer.h
     textlayout_export.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel

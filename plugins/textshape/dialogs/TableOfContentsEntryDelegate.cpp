@@ -22,7 +22,7 @@
 #include <KLocale>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
-#include "KoStyleThumbnailer.h"
+#include <KoStyleThumbnailer.h>
 
 #include <QComboBox>
 #include <QPainter>

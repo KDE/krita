@@ -20,7 +20,7 @@
  */
 #include "StylesModel.h"
 
-#include "KoStyleThumbnailer.h"
+#include <KoStyleThumbnailer.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>

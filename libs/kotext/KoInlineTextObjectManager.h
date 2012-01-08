@@ -85,6 +85,17 @@ public:
     void insertInlineObject(QTextCursor &cursor, KoInlineObject *object);
 
     /**
+     * Add inline object into the manager.
+     *
+     * This methods add the inline object into the manager. This is useful if you have a command
+     * that removes and adds a inline object to the manager. If the object already was inserted before
+     * (the object id is already set) it keeps the old id, otherwise a new id will be generated.
+     *
+     * @param object the inline object to insert.
+     */
+    void addInlineObject(KoInlineObject* object);
+
+    /**
      * Remove an inline object from this manager (as well as the document).
      * This method will also remove the placeholder for the inline object.
      * This method will try to smartly remove the bookmark from the bookmark manager if the object
@@ -174,6 +185,7 @@ signals:
     void propertyChanged(int, const QVariant &variant);
 
 private:
+    void insertObject(KoInlineObject *object);
 
     QHash<int, KoInlineObject*> m_objects;
     QHash<int, KoInlineObject*> m_deletedObjects;

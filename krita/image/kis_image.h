@@ -540,12 +540,12 @@ signals:
     /**
      * Inform the model we're about to move a layer.
      */
-    void sigAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
+    void sigAboutToMoveNode(KisNode *node, int oldIndex, int newIndex);
 
     /**
      * Inform the model we're done moving a layer.
      */
-    void sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
+    void sigNodeHasBeenMoved(KisNode *node, int oldIndex, int newIndex);
 
     /**
      * Inform the model that a node was changed
@@ -556,6 +556,12 @@ signals:
      * Inform that the image is going to be deleted
      */
     void sigAboutToBeDeleted();
+
+    void sigNodeAddedAsync(KisNodeSP node);
+    void sigNodeMovedAsync(KisNodeSP node);
+    void sigRemoveNodeAsync(KisNodeSP node);
+    void sigLayersChangedAsync();
+
 
 public slots:
     KisCompositeProgressProxy* compositeProgressProxy();

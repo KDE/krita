@@ -2,6 +2,7 @@
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
  * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,10 +30,8 @@
 class TextTool;
 class KoStyleManager;
 class KoParagraphStyle;
-//class StylesWidget;
 class KoStyleThumbnailer;
 
-//class StylesCombo;
 class StylesModel;
 class StylesDelegate;
 
@@ -47,7 +46,6 @@ public slots:
     void setCurrentBlock(const QTextBlock &block);
     void setCurrentFormat(const QTextBlockFormat& format);
     void setStyleManager(KoStyleManager *sm);
-    void hidePopup();
 
 signals:
     void doneWithFocus();
@@ -78,9 +76,7 @@ private:
     TextTool *m_tool;
     DirectionButtonState m_directionButtonState;
     KoStyleThumbnailer *m_thumbnailer;
-//    StylesWidget *m_stylePopup;
 
-//    StylesCombo *m_stylesCombo;
     StylesModel *m_stylesModel;
     StylesDelegate *m_stylesDelegate;
 };

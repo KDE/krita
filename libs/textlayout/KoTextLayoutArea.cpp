@@ -1568,7 +1568,9 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         // Adjust the position of the block-rect for this line which is used later
         // to proper clip the line while drawing. If we would not adjust it here
         // then we could end with text-lines being partly cutoff.
-        m_blockRects.last().moveTop(m_blockRects.last().top() + lineAdjust);
+        if (lineAdjust < 0.0) {
+            m_blockRects.last().moveTop(m_blockRects.last().top() + lineAdjust);
+        }
 
         if (blockData && block.textList() && block.layout()->lineCount() == 1) {
             // If this is the first line in a list (aka the first line after the list-

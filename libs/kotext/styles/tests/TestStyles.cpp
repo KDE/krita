@@ -322,6 +322,7 @@ void TestStyles::testUnapplyStyle()
     //QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
 
     doc.setHtml("bla bla<i>italic</i>enzo");
+
     block = doc.begin();
     head1.applyStyle(block);
     bf = cursor.blockFormat();
@@ -337,6 +338,15 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWeight), true);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWidth), true);
 
+    cursor.setPosition(7);
+    cursor.setPosition(12, QTextCursor::KeepAnchor);
+    QTextCharFormat italic;
+    italic.setFontItalic(true);
+    cursor.mergeCharFormat(italic);
+    cursor.setPosition(8);
+    cf = cursor.charFormat();
+    QCOMPARE(cf.fontItalic(), true);
+    cursor.setPosition(0);
 
     head1.unapplyStyle(block);
     cursor.setPosition(0);
@@ -363,7 +373,7 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWeight), false);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWidth), false);
     QCOMPARE(cf.fontItalic(), true);
-    cursor.setPosition(13);
+    cursor.setPosition(12);
     cf = cursor.charFormat();
     //QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineColor), false);
@@ -374,7 +384,7 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWidth), false);
     QCOMPARE(cf.fontItalic(), true);
 
-    cursor.setPosition(14);
+    cursor.setPosition(13);
     cf = cursor.charFormat();
     //QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineColor), false);

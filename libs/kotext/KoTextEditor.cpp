@@ -30,6 +30,7 @@
 #include <KoTextPaste.h>
 #include <KoShapeController.h>
 #include <KoTextOdfSaveHelper.h>
+#include "KoTextAnchor.h"
 #include "KoTextDocument.h"
 #include "KoTextDrag.h"
 #include "KoTextLocator.h"
@@ -54,9 +55,11 @@
 #include "commands/ChangeTrackedDeleteCommand.h"
 #include "commands/ListItemNumberingCommand.h"
 #include "commands/ChangeListCommand.h"
+#include "commands/InsertInlineObjectCommand.h"
 #include "commands/DeleteCommand.h"
+#include "commands/DeleteAnchorsCommand.h"
 #include "KoInlineCite.h"
-#include <KoTextLayoutScheduler.h>
+#include <KoShapeCreateCommand.h>
 
 #include <KLocale>
 #include <kundo2stack.h>
@@ -422,7 +425,6 @@ void KoTextEditor::addCommand(KUndo2Command *command, bool addCommandToStack)
     else
         command->redo();
     //kDebug() << "custom command pushed";
-    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
@@ -950,7 +952,7 @@ KoInlineObject *KoTextEditor::insertIndexMarker()
     return tl;
 }
 
-void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
+void KoTextEditor::insertInlineObject(KoInlineObject *inliner, KUndo2Command *cmd)
 {
     if (isEditProtected()) {
         return;
@@ -980,8 +982,6 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
         format.clearProperty(KoCharacterStyle::ChangeTrackerId);
     }
 
-    KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, inliner);
-    inliner->updatePosition(d->document, d->caret.position(), format);
 
     int endPosition = d->caret.position();
     d->caret.setPosition(startPosition);
@@ -989,7 +989,14 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     registerTrackedChange(d->caret, KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
     d->caret.clearSelection();
 
+    InsertInlineObjectCommand *insertInlineObjectCommand = new InsertInlineObjectCommand(inliner, d->document, cmd);
+
+    if (!cmd) {
+        addCommand(insertInlineObjectCommand);
+    }
+
     d->updateState(KoTextEditor::Private::NoOp);
+
     emit cursorPositionChanged();
 }
 
@@ -1007,6 +1014,12 @@ void KoTextEditor::updateInlineObjectPosition(int start, int end)
 
 }
 
+void KoTextEditor::removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent)
+{
+    Q_ASSERT(parent);
+    addCommand(parent, false);
+    new DeleteAnchorsCommand(anchors, d->document, parent);
+}
 
 void KoTextEditor::insertFrameBreak()
 {
@@ -1797,7 +1810,7 @@ void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info
 
     d->updateState(KoTextEditor::Private::NoOp);
     emit cursorPositionChanged();
-    KoTextLayoutScheduler::markDocumentChanged(document(), document()->firstBlock().position(), 0 , 0);
+    const_cast<QTextDocument *>(document())->markContentsDirty(document()->firstBlock().position(), 0);
 }
 
 void KoTextEditor::insertBibliography()
@@ -1925,7 +1938,38 @@ void KoTextEditor::insertHtml(const QString &html)
     }
 
     // XXX: do the changetracking and everything!
+    QTextBlock currentBlock = d->caret.block();
     d->caret.insertHtml(html);
+
+    QList<QTextList *> pastedLists;
+    KoList *currentPastedList = 0;
+    while (currentBlock != d->caret.block()) {
+        currentBlock = currentBlock.next();
+        QTextList *currentTextList = currentBlock.textList();
+        if(currentTextList && !pastedLists.contains(currentBlock.textList())) {
+            KoListStyle *listStyle = KoTextDocument(d->document).styleManager()->defaultListStyle()->clone();
+            listStyle->setName("");
+            listStyle->setStyleId(0);
+            currentPastedList = new KoList(d->document, listStyle);
+            QTextListFormat currentTextListFormat = currentTextList->format();
+
+            KoListLevelProperties levelProperty = listStyle->levelProperties(currentTextListFormat.indent());
+            levelProperty.setStyle(static_cast<KoListStyle::Style>(currentTextListFormat.style()));
+            levelProperty.setLevel(currentTextListFormat.indent());
+            levelProperty.setListItemPrefix("");
+            levelProperty.setListItemSuffix("");
+            levelProperty.setListId((KoListStyle::ListIdType)currentTextList);
+            listStyle->setLevelProperties(levelProperty);
+
+            currentTextListFormat.setProperty(KoListStyle::Level, currentTextListFormat.indent());
+            currentBlock.textList()->setFormat(currentTextListFormat);
+
+            currentPastedList->updateStoredList(currentBlock);
+            currentPastedList->setStyle(listStyle);
+
+            pastedLists.append(currentBlock.textList());
+        }
+    }
 }
 
 void KoTextEditor::mergeBlockCharFormat(const QTextCharFormat &modifier)

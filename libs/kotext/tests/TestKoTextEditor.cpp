@@ -60,6 +60,7 @@ void TestKoTextEditor::testInsertInlineObject()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText(lorem);
@@ -92,6 +93,7 @@ void TestKoTextEditor::testRemoveSelectedText()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText(lorem);

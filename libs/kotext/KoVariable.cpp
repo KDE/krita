@@ -20,7 +20,6 @@
 #include "KoInlineObject_p.h"
 
 #include <KoShape.h>
-#include <KoTextLayoutScheduler.h>
 
 #include <QTextCursor>
 #include <QPainter>
@@ -68,7 +67,7 @@ void KoVariable::setValue(const QString &value)
     d->value = value;
     d->modified = true;
     if (d->document) {
-            KoTextLayoutScheduler::markDocumentChanged(d->document, d->lastPositionInDocument, 0, 0);
+        const_cast<QTextDocument *>(d->document)->markContentsDirty(d->lastPositionInDocument, 0);
     }
 }
 

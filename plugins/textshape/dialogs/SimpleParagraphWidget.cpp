@@ -219,8 +219,6 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
                 continue;
             if (property == KoParagraphStyle::ListStyleId)
                 continue;
-            if (property == KoParagraphStyle::MasterPageName) //is this really a valid exception?
-                continue;
             if (property == QTextBlockFormat::BlockAlignment) { //the default alignment can be retrieved in the defaultTextOption. However, calligra sets the Qt::AlignAbsolute flag, so we need to or this flag with the default alignment before comparing.
                 if ((m_currentBlockFormat.property(property) != style->value(property))
                         && !(style->value(property).isNull()
@@ -270,8 +268,6 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
             if (property == QTextFormat::ObjectIndex)
                 continue;
             if (property == KoParagraphStyle::ListStyleId)
-                continue;
-            if (property == KoParagraphStyle::MasterPageName) //is this really a valid exception?
                 continue;
             if (property == QTextBlockFormat::BlockAlignment) { //the default alignment can be retrieved in the defaultTextOption. However, calligra sets the Qt::AlignAbsolute flag, so we need to or this flag with the default alignment before comparing.
                 if ((m_currentBlockFormat.property(property) != style->value(property))

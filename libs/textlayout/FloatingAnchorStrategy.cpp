@@ -63,9 +63,6 @@ bool FloatingAnchorStrategy::moveSubject()
         return false; // let's fake we moved to force another relayout
     }
 
-    QRectF pageContentRect = m_anchor->shape()->parent()->boundingRect();
-    setPageContentRect(pageContentRect);
-
     // get the page data
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
     if (!data) {

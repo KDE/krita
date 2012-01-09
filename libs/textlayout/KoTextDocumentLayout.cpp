@@ -425,6 +425,7 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
         AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->anchorStrategy());
 
         strategy->setPageRect(page->rect());
+        strategy->setPageContentRect(page->contentRect());
         strategy->setPageNumber(page->pageNumber());
 
         if (strategy->moveSubject()) {

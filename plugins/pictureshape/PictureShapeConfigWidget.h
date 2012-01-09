@@ -54,10 +54,10 @@ class LoadWaiter : public QObject
     Q_OBJECT
 public:
     LoadWaiter(PictureShape *shape) : m_pictureShape(shape) { }
-    
+
 public slots:
     void setImageData(KJob *job);
-    
+
 private:
     PictureShape *m_pictureShape;
 };

@@ -78,7 +78,7 @@ void PictureTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &
         if ((m_pictureshape = dynamic_cast<PictureShape*>(shape)))
             break;
     }
-    
+
     if (!m_pictureshape) {
         emit done();
         return;
@@ -88,7 +88,7 @@ void PictureTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &
         m_pictureToolUI->cropWidget->setPictureShape(m_pictureshape);
         updateControlElements();
     }
-    
+
     useCursor(Qt::ArrowCursor);
 }
 
@@ -105,9 +105,9 @@ QWidget *PictureTool::createOptionWidget()
     m_pictureToolUI->cmbColorMode->addItem(i18n("Monochrome"), PictureShape::Mono);
     m_pictureToolUI->cmbColorMode->addItem(i18n("Watermark") , PictureShape::Watermark);
     m_pictureToolUI->bnImageFile->setIcon(SmallIcon("open"));
-    
+
     updateControlElements();
-    
+
     connect(m_pictureToolUI->bnImageFile, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
     connect(m_pictureToolUI->cbAspect, SIGNAL(toggled(bool)), this, SLOT(aspectCheckBoxChanged(bool)));
     connect(m_pictureToolUI->leftDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
@@ -117,7 +117,7 @@ QWidget *PictureTool::createOptionWidget()
     connect(m_pictureToolUI->bnFill, SIGNAL(pressed()), this, SLOT(fillButtonPressed()));
     connect(m_pictureToolUI->cmbColorMode, SIGNAL(currentIndexChanged(int)), this, SLOT(colorModeChanged(int)));
     connect(m_pictureToolUI->cropWidget, SIGNAL(sigCropRegionChnaged(QRectF)), this, SLOT(cropRegionChanged(QRectF)));
-    
+
     return m_pictureToolUI;
 }
 
@@ -172,7 +172,7 @@ void PictureTool::cropEditFieldsChanged()
     clippingRect.uniform = false;
     clippingRect.inverted = true;
     clippingRect.normalize(m_pictureshape->imageData()->imageSize());
-        
+
     m_pictureToolUI->cropWidget->setCropRect(clippingRect.toRect());
 }
 
@@ -209,7 +209,7 @@ void PictureTool::setImageData(KJob *job)
 {
     if (m_pictureshape == 0)
         return; // ugh, the user deselected the image in between. We should move this code to main anyway redesign it
-        
+
     KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
     Q_ASSERT(transferJob);
 

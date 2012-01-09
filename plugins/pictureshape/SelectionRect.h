@@ -33,7 +33,7 @@ class SelectionRect
 {
 public:
     typedef int HandleFlags;
-    
+
     enum PositionInfo
     {
         INSIDE_RECT = 0x01,
@@ -46,9 +46,9 @@ public:
         BOTTOM_LEFT_HANDLE = BOTTOM_HANDLE|LEFT_HANDLE,
         BOTTOM_RIGHT_HANDLE = BOTTOM_HANDLE|RIGHT_HANDLE
     };
-    
+
     SelectionRect(const QRectF& rect=QRectF(), qreal handleSize=10.0);
-    
+
     void setRect(const QRectF &rect);
     void setHandleSize(qreal size);
     void setAspectRatio(qreal aspect);
@@ -67,7 +67,7 @@ public:
 
 private:
     void fixAspect(HandleFlags handle);
-    
+
 private:
     QPointF m_tempPos;
     QRectF m_rect;

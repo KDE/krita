@@ -208,7 +208,7 @@ void SelectionRect::fixAspect(HandleFlags handle)
         if (handle & LEFT_HANDLE) {
             m_rect.moveTopRight(oldRect.topRight());
         }
-        
+
         if (handle & RIGHT_HANDLE) {
             m_rect.moveTopLeft(oldRect.topLeft());
         }

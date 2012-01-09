@@ -68,14 +68,14 @@ _Private::PixmapScaler::PixmapScaler(PictureShape* pictureShape, const QSize& pi
 void _Private::PixmapScaler::run()
 {
     QString key = generate_key(m_imageKey, m_size);
-    
+
     m_image = m_image.scaled(
         m_size.width(),
         m_size.height(),
         Qt::IgnoreAspectRatio,
         Qt::SmoothTransformation
     );
-    
+
     emit finished(key, m_image);
 }
 
@@ -135,14 +135,14 @@ QSize PictureShape::calcOptimalPixmapSize(const QSizeF& shapeSize, const QSizeF&
     qreal imageAspect = imageSize.width() / imageSize.height();
     qreal shapeAspect = shapeSize.width() / shapeSize.height();
     qreal scale = 1.0;
-    
+
     if (shapeAspect > imageAspect) {
         scale = shapeSize.width()  / imageSize.width()  / m_clippingRect.width();
     }
     else {
         scale = shapeSize.height() / imageSize.height() / m_clippingRect.height();
     }
-    
+
     scale = qMin(1.0, scale); // prevent upscaling
     return (imageSize * scale).toSize();
 }
@@ -151,15 +151,15 @@ ClippingRect PictureShape::parseClippingRectString(QString string) const
 {
     ClippingRect rect;
     string = string.trimmed();
-    
+
     if ((!string.isEmpty()) && string.startsWith("rect")) {
         QStringList points = string.replace("rect("," ").replace(QChar(')'), QChar(' ')).trimmed().split(",");
         qreal values[4] = { 0, 0, 0, 0 };
-        
+
         for (int i=0; i<points.size(); ++i) {
             values[i] = KoUnit::parseValue(points[i].trimmed(), 0.0);
         }
-        
+
         rect.top = values[0];
         rect.right = values[1];
         rect.bottom = values[2];
@@ -174,7 +174,7 @@ ClippingRect PictureShape::parseClippingRectString(QString string) const
 void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     QRectF viewRect = converter.documentToView(QRectF(QPointF(0,0), size()));
-    
+
     if (imageData() == 0) {
         painter.fillRect(viewRect, QColor(Qt::gray));
         return;
@@ -184,7 +184,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
 
     // normalize the clipping rect if it isn't already done
     m_clippingRect.normalize(imageData()->imageSize());
-    
+
     // painting the image as prepared in waitUntilReady()
     if (!m_printQualityImage.isNull() && pixmapSize != m_printQualityImage.size()) {
         QSizeF imageSize = m_printQualityImage.size();
@@ -194,7 +194,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
             imageSize.width()  * m_clippingRect.width(),
             imageSize.height() * m_clippingRect.height()
         );
-        
+
         painter.drawImage(viewRect, m_printQualityImage, cropRect);
         m_printQualityImage = QImage(); // free memory
     }
@@ -339,7 +339,7 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
 
     QSizeF       imageSize = imageData()->imageSize();
     ClippingRect rect      = m_clippingRect;
-    
+
     rect.normalize(imageSize);
     rect.bottom = 1.0 - rect.bottom;
     rect.right = 1.0 - rect.right;
@@ -352,7 +352,7 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
             .arg(rect.left * imageSize.width())
         );
     }
-    
+
     return KoShape::saveStyle(style, context);
 }
 
@@ -374,13 +374,13 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
             setColorMode(Watermark);
         }
     }
-    
+
     QString opacity(styleStack.property(KoXmlNS::draw, "image-opacity"));
-    
+
     if (! opacity.isEmpty() && opacity.right(1) == "%") {
         setTransparency(1.0 - (opacity.left(opacity.length() - 1).toFloat() / 100.0));
     }
-    
+
     m_clippingRect = parseClippingRectString(styleStack.property(KoXmlNS::fo, "clip"));
 }
 
@@ -393,7 +393,7 @@ void PictureShape::setColorMode(PictureShape::ColorMode mode)
 {
     if (mode != m_mode) {
         filterEffectStack()->removeFilterEffect(0);
-        
+
         switch(mode)
         {
         case Greyscale:

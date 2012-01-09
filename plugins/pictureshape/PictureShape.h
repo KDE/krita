@@ -70,10 +70,10 @@ namespace _Private
     public:
         PixmapScaler(PictureShape *pictureShape, const QSize& pixmapSize);
         virtual void run();
-        
+
     signals:
         void finished(const QString&, const QImage&);
-        
+
     private:
         QSize m_size;
         QImage m_image;
@@ -85,7 +85,7 @@ class PictureShape : public KoTosContainer, public KoFrameShape, public SvgShape
 {
     friend class _Private::PixmapScaler;
     friend class _Private::PictureShapeProxy;
-    
+
 public:
     enum ColorMode {
         Standard,
@@ -93,9 +93,9 @@ public:
         Mono,
         Watermark
     };
-    
+
     PictureShape();
-    
+
     // reimplemented
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     // reimplemented

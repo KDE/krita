@@ -36,10 +36,10 @@ ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImag
     m_newColorMode(shape->colorMode())
 {
     setText(i18nc("(qtundo-format)", "Change image"));
-    
+
     // we need new here as setUserData deletes the old data
     m_oldImageData = m_shape->imageData() ? new KoImageData(*m_shape->imageData()): 0;
-    
+
     qreal oldArea = m_oldSize.width() * m_oldSize.height();
     qreal newArea = m_newSize.width() * m_newSize.height();
     m_newSize *= std::sqrt(oldArea / newArea);
@@ -87,7 +87,7 @@ void ChangeImageCommand::redo()
         // we need new here as setUserData deletes the old data
         m_shape->setUserData(m_newImageData ? new KoImageData(*m_newImageData): 0);
     }
-    
+
     m_shape->setSize(m_newSize);
     m_shape->setColorMode(m_newColorMode);
     m_shape->setCropRect(m_newCroppingRect);
@@ -100,7 +100,7 @@ void ChangeImageCommand::undo()
         // we need new here as setUserData deletes the old data
         m_shape->setUserData(m_oldImageData ? new KoImageData(*m_oldImageData): 0);
     }
-    
+
     m_shape->setSize(m_oldSize);
     m_shape->setColorMode(m_oldColorMode);
     m_shape->setCropRect(m_oldCroppingRect);

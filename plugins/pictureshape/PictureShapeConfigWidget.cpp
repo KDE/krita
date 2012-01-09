@@ -36,7 +36,7 @@ void LoadWaiter::setImageData(KJob *job)
         return; // ugh, the shape got deleted meanwhile
         KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
     Q_ASSERT(transferJob);
-    
+
     if (m_pictureShape->imageCollection()) {
         KoImageData *data = m_pictureShape->imageCollection()->createImageData(transferJob->data());
         if (data) {
@@ -96,5 +96,3 @@ bool PictureShapeConfigWidget::showOnShapeSelect()
 {
     return false;
 }
-
-#include <PictureShapeConfigWidget.moc>

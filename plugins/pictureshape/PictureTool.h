@@ -56,7 +56,7 @@ public:
 protected:
     /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget();
-    
+
 private slots:
     void colorModeChanged(int cmbBoxIndex);
     void changeUrlPressed();

@@ -165,6 +165,9 @@ KUndo2Command* KoShapeController::addShapeDirect(KoShape *shape, KUndo2Command *
 KUndo2Command* KoShapeController::removeShape(KoShape *shape, KUndo2Command *parent)
 {
     KUndo2Command *cmd = new KoShapeDeleteCommand(d->shapeBasedDocument, shape, parent);
+    QList<KoShape*> shapes;
+    shapes.append(shape);
+    d->shapeBasedDocument->shapesRemoved(shapes, cmd);
     // detach shape from any attached connection shapes
     d->handleAttachedConnections(shape, cmd);
     return cmd;
@@ -173,6 +176,7 @@ KUndo2Command* KoShapeController::removeShape(KoShape *shape, KUndo2Command *par
 KUndo2Command* KoShapeController::removeShapes(const QList<KoShape*> &shapes, KUndo2Command *parent)
 {
     KUndo2Command *cmd = new KoShapeDeleteCommand(d->shapeBasedDocument, shapes, parent);
+    d->shapeBasedDocument->shapesRemoved(shapes, cmd);
     foreach (KoShape *shape, shapes) {
         d->handleAttachedConnections(shape, cmd);
     }

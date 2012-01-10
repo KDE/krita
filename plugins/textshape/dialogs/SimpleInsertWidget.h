@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
+ * Copyright (C) 2010-2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,27 +16,36 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef SIMPLEINSERTWIDGET_H
+#define SIMPLEINSERTWIDGET_H
 
-#ifndef KOTEXTLAYOUTSCHEDULER_H
-#define KOTEXTLAYOUTSCHEDULER_H
+#include <ui_SimpleInsertWidget.h>
+#include <KoListStyle.h>
 
-#include <QAbstractTextDocumentLayout>
+#include <QWidget>
+#include <QTextBlock>
 
-/**
- * This class is used to indicate to the layout that a document has changed and it needs a relayout
- * Use the markDocumentChanged method to mark a document dirty
- */
-class KoTextLayoutScheduler
+class TextTool;
+class KoStyleManager;
+
+class SimpleInsertWidget : public QWidget
 {
+    Q_OBJECT
 public:
-    /// Marks that a document dirty(changed) indicating to the layout library that this needs a re-layout
-    static void markDocumentChanged(const QTextDocument *document, int position, int charsRemoved, int charsAdded);
+    explicit SimpleInsertWidget(TextTool *tool, QWidget *parent = 0);
 
-    class KoTextLayoutSchedulerInternal: public QAbstractTextDocumentLayout
-    {
-    public:
-        void markDocumentDirty(int from, int charsRemoved, int charsAdded);
-    };
+public slots:
+    void setStyleManager(KoStyleManager *sm);
+
+signals:
+    void doneWithFocus();
+    void insertTableQuick(int, int);
+
+private:
+    Ui::SimpleInsertWidget widget;
+    KoStyleManager *m_styleManager;
+    bool m_blockSignals;
+    TextTool *m_tool;
 };
 
-#endif // KOTEXTLAYOUTSCHEDULER_H
+#endif

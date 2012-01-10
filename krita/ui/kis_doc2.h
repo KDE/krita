@@ -34,7 +34,7 @@ class QString;
 
 class KoColorSpace;
 class KoColor;
-class KoShape;
+class KoShapeLayer;
 
 class KoShapeBasedDocumentBase;
 class KisView2;
@@ -137,12 +137,7 @@ public:
      */
     KoShapeBasedDocumentBase * shapeController() const;
 
-    KoShape * shapeForNode(KisNodeSP layer) const;
-
-    /**
-     * Add a node to the shape controller
-     */
-    KoShape * addShape(const KisNodeSP node);
+    KoShapeLayer* shapeForNode(KisNodeSP layer) const;
 
 signals:
 

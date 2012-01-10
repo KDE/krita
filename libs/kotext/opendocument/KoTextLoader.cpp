@@ -1192,7 +1192,7 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
                         && listStyle->hasLevelProperties(d->currentListLevel)
                         && (prevList->style()->levelProperties(d->currentListLevel).style() ==
                        listStyle->levelProperties(d->currentListLevel).style())) {
-                   d->currentList = prevList;
+                   continuedList = prevList;
                 }
             }
         }

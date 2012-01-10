@@ -106,7 +106,7 @@ QString formatNumber(qreal value, const QString &format, int precision)
             case '#':
             case '0':
             case '?': {
-                bool grouping = false;
+//                bool grouping = false;
                 bool gotDot = false;
                 bool gotE = false;
                 bool gotFraction = false;
@@ -122,7 +122,7 @@ QString formatNumber(qreal value, const QString &format, int precision)
                     if (ch == '.') {
                         gotDot = true;
                     } else if (ch == ',') {
-                        grouping = true;
+                //        grouping = true; 
                     } else if (ch == 'E' || ch == 'e') {
                         //SET_TYPE_OR_RETURN(KoGenStyle::NumericScientificStyle);
 

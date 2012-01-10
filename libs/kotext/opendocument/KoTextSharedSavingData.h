@@ -56,6 +56,22 @@ public:
     void setRdfModel(const Soprano::Model *m);
     const Soprano::Model* rdfModel() const;
 
+    /**
+     * Stores the name that written to the file for the style
+     *
+     * @param styleId the id of the style in KoStyleManger
+     * @param savedName the name that is written to the file
+     */
+    void setStyleName(int styleId, const QString &name);
+
+    /**
+     * Style name of the style
+     *
+     * @param styleId the id of the style in KoStyleManager
+     * @return the saved name of the style
+     */
+    QString styleName(int styleId);
+
 private:
 
     class Private;

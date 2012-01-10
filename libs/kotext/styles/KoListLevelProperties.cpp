@@ -41,6 +41,7 @@
 #include <KoImageData.h>
 #include <KoOdfNumberDefinition.h>
 #include <KoGenStyle.h>
+#include <KoTextSharedSavingData.h>
 
 class KoListLevelProperties::Private
 {
@@ -451,6 +452,7 @@ void KoListLevelProperties::onStyleChanged(int key)
         case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
         case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
         case KoListStyle::BallotXItem:          bullet = 0x2717; break;
+        case KoListStyle::DiscItem:             bullet = 0x25CF; break;
     }
 
     if (bullet != 0)
@@ -487,7 +489,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             else {
 //                kDebug(32500) << "==> cs.name:" << cs->name();
 //                kDebug(32500) << "==> cs.styleId:" << cs->styleId();
-               setCharacterStyleId(cs->styleId());
+                setCharacterStyleId(cs->styleId());
             }
         }
     }
@@ -794,10 +796,22 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
             case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
             case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
             case KoListStyle::BallotXItem:          bullet = 0x2717; break;
+            case KoListStyle::BlackCircle:
+            case KoListStyle::DiscItem:             bullet = 0x25CF; break;
             default:                                bullet = 0; break; //empty character
             }
         }
         writer->addAttribute("text:bullet-char", QChar(bullet));
+    }
+
+    KoTextSharedSavingData *sharedSavingData = 0;
+    if (d->stylesPrivate.contains(KoListStyle::CharacterStyleId) && (characterStyleId() != 0) &&
+           (sharedSavingData = dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID)))) {
+        QString styleName = sharedSavingData->styleName(characterStyleId());
+               // dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID))->styleName(characterStyleId());
+        if (!styleName.isEmpty()) {
+            writer->addAttribute("text:style-name", styleName);
+         }
     }
 
     // These apply to bulleted and numbered lists

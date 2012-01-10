@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
+ * Copyright (C) 2011 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,21 +17,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoTextLayoutScheduler.h"
+#ifndef DELETEANCHORSCOMMAND_H
+#define DELETEANCHORSCOMMAND_H
 
-#include <QTextDocument>
+#include <kundo2command.h>
 
-void KoTextLayoutScheduler::markDocumentChanged(const QTextDocument *document, int position, int charsRemoved, int charsAdded)
+#include <QList>
+
+class QTextDocument;
+class KoTextAnchor;
+
+class DeleteAnchorsCommand : public KUndo2Command
 {
-    if (document) {
-        KoTextLayoutSchedulerInternal *layout = (KoTextLayoutSchedulerInternal *)document->documentLayout();
-        if (layout) {
-            layout->markDocumentDirty(position, charsRemoved, charsAdded);
-        }
-    }
-}
+public:
+    DeleteAnchorsCommand(const QList<KoTextAnchor*> &anchors, QTextDocument *document, KUndo2Command *parent);
+    virtual ~DeleteAnchorsCommand();
 
-void KoTextLayoutScheduler::KoTextLayoutSchedulerInternal::markDocumentDirty(int from, int charsRemoved, int charsAdded)
-{
-    documentChanged(from, charsRemoved, charsAdded);
-}
+    virtual void redo();
+    virtual void undo();
+
+private:
+    QList<KoTextAnchor*> m_anchors;
+    QTextDocument *m_document;
+    bool m_first;
+    bool m_deleteAnchors;
+};
+
+#endif /* DELETEANCHORSCOMMAND_H */

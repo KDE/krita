@@ -41,116 +41,183 @@
 #include "kis_types.h"
 #include "kis_transparency_mask.h"
 
+#include "node_shapes_utils.h"
+
+
+void KisShapeControllerTest::init()
+{
+    m_doc = new KisDoc2;
+    m_nameServer = new KisNameServer();
+    m_shapeController = new KisShapeController(m_doc, m_nameServer);
+
+    m_image = new KisImage(0, 512, 512, 0, "test");
+    m_layer1 = new KisPaintLayer(m_image, "layer1", OPACITY_OPAQUE_U8);
+    m_layer2 = new KisGroupLayer(m_image, "layer2", OPACITY_OPAQUE_U8);
+    m_layer3 = new KisCloneLayer(m_layer1, m_image, "layer3", OPACITY_OPAQUE_U8);
+    m_layer4 = new KisGroupLayer(m_image, "layer4", OPACITY_OPAQUE_U8);
+    m_mask1 = new KisTransparencyMask();
+}
+
+void KisShapeControllerTest::cleanup()
+{
+    m_layer1 = 0;
+    m_layer2 = 0;
+    m_layer3 = 0;
+    m_layer4 = 0;
+    m_mask1 = 0;
+    m_image = 0;
+
+    delete m_shapeController;
+    delete m_nameServer;
+    delete m_doc;
+}
+
+void KisShapeControllerTest::constructImage()
+{
+    m_image->addNode(m_layer1);
+    m_image->addNode(m_layer2);
+    m_image->addNode(m_layer3);
+    m_image->addNode(m_layer4);
+    m_image->addNode(m_mask1, m_layer3);
+}
+
 void KisShapeControllerTest::testSetImage()
 {
-    KisDoc2 doc;
-    KisNameServer nameServer;
-    KisShapeController shapeController(&doc, &nameServer);
+    constructImage();
 
-    KisImageSP image = new KisImage(0, 512, 512, 0, "shape controller test");
-    QCOMPARE((int)image->rootLayer()->childCount(), 0);
+    m_shapeController->setImage(m_image);
 
-    KisLayerSP layer = new KisPaintLayer(image, "test1", OPACITY_OPAQUE_U8);
-    image->addNode(layer);
-    QCOMPARE((int)image->rootLayer()->childCount(), 1);
+    QString actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
+    QString expectedGraph = "root layer1 layer2 layer3 effect layer4";
 
-    shapeController.setImage(image);
-    QCOMPARE(shapeController.layerMapSize(), 2);
+    QCOMPARE(actualGraph, expectedGraph);
+    QCOMPARE(m_shapeController->layerMapSize(), 6);
 
-    shapeController.setImage(0);
-    QCOMPARE(shapeController.layerMapSize(), 0);
-
+    m_shapeController->setImage(0);
+    QCOMPARE(m_shapeController->layerMapSize(), 0);
 }
 
-void KisShapeControllerTest::testAddShape()
+void KisShapeControllerTest::testAddNode()
 {
+    QString actualGraph;
+    QString expectedGraph;
 
-    KisDoc2 doc;
-    KisNameServer nameServer;
-    KisShapeController shapeController(&doc, &nameServer);
+    m_shapeController->setImage(m_image);
 
-    KisImageSP image = new KisImage(0, 512, 512, 0, "shape controller test");
+    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
+    expectedGraph = "root";
 
-    QCOMPARE((int)image->rootLayer()->childCount(), 0);
+    QCOMPARE(actualGraph, expectedGraph);
+    QCOMPARE(m_shapeController->layerMapSize(), 1);
 
-    KisLayerSP layer = new KisPaintLayer(image, "test1", OPACITY_OPAQUE_U8);
-    image->addNode(layer);
-    QCOMPARE((int)image->rootLayer()->childCount(), 1);
+    constructImage();
 
-    shapeController.setImage(image);
-    QCOMPARE(shapeController.layerMapSize(), 2);
+    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
+    expectedGraph = "root layer1 layer2 layer3 effect layer4";
 
-    KisGroupLayerSP layer2 = new KisGroupLayer(image, "test2", OPACITY_OPAQUE_U8);
-    image->addNode(layer2.data());
+    QCOMPARE(actualGraph, expectedGraph);
+    QCOMPARE(m_shapeController->layerMapSize(), 6);
 
-    QVERIFY(shapeController.shapeForNode(layer2.data()) != 0);
-    QCOMPARE((int)image->rootLayer()->childCount(), 2);
-    QCOMPARE(shapeController.layerMapSize(), 3);
+    m_shapeController->setImage(0);
+    QCOMPARE(m_shapeController->layerMapSize(), 0);
 
-    KisLayerSP layer3 = new KisCloneLayer(layer, image, "clonetest", OPACITY_OPAQUE_U8);
-    image->addNode(layer3, layer2);
-    QCOMPARE((int)image->rootLayer()->childCount(), 2);
-    QCOMPARE(shapeController.layerMapSize(), 4);
-
-    KisLayerSP layer4 = new KisGroupLayer(image, "grouptest", OPACITY_OPAQUE_U8);
-    image->addNode(layer4, layer2);
-    QCOMPARE(shapeController.layerMapSize(), 5);
-
-    KisMaskSP mask1 = new KisTransparencyMask();
-    image->addNode(mask1.data(), layer3.data());
-    QCOMPARE(shapeController.layerMapSize(), 6);
-
-    shapeController.setImage(0);
+    m_shapeController->setImage(0);
 }
 
-void KisShapeControllerTest::testRemoveShape()
+void KisShapeControllerTest::testRemoveNode()
 {
-    KisDoc2 doc;
-    KisNameServer nameServer;
-    KisShapeController shapeController(&doc, &nameServer);
+    QString actualGraph;
+    QString expectedGraph;
 
-    KisImageSP image = new KisImage(0, 512, 512, 0, "shape controller test");
-    QCOMPARE((int)image->rootLayer()->childCount(), 0);
+    constructImage();
 
-    KisLayerSP layer = new KisPaintLayer(image, "test1", OPACITY_OPAQUE_U8);
-    image->addNode(layer);
-    QCOMPARE((int)image->rootLayer()->childCount(), 1);
+    m_shapeController->setImage(m_image);
 
-    shapeController.setImage(image);
-    QCOMPARE(shapeController.layerMapSize(), 2);
+    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
+    expectedGraph = "root layer1 layer2 layer3 effect layer4";
 
-    KisGroupLayerSP layer2 = new KisGroupLayer(image, "test2", OPACITY_OPAQUE_U8);
-    image->addNode(layer2.data());
+    QCOMPARE(actualGraph, expectedGraph);
+    QCOMPARE(m_shapeController->layerMapSize(), 6);
 
-    QVERIFY(shapeController.shapeForNode(layer2.data()) != 0);
-    QCOMPARE((int)image->rootLayer()->childCount(), 2);
-    QCOMPARE(shapeController.layerMapSize(), 3);
+    m_image->removeNode(m_layer2);
 
-    KisLayerSP layer3 = new KisCloneLayer(layer, image, "clonetest", OPACITY_OPAQUE_U8);
-    image->addNode(layer3, layer2);
-    QCOMPARE((int)image->rootLayer()->childCount(), 2);
-    QCOMPARE(shapeController.layerMapSize(), 4);
+    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
+    expectedGraph = "root layer1 layer3 effect layer4";
 
-    KisLayerSP layer4 = new KisGroupLayer(image, "grouptest", OPACITY_OPAQUE_U8);
-    image->addNode(layer4, layer2);
-    QCOMPARE(shapeController.layerMapSize(), 5);
+    QCOMPARE(actualGraph, expectedGraph);
+    QCOMPARE(m_shapeController->layerMapSize(), 5);
 
-    KisMaskSP mask1 = new KisTransparencyMask();
-    image->addNode(mask1.data(), layer3.data());
-    QCOMPARE(shapeController.layerMapSize(), 6);
-#if 0
-XXX: Is this really broken ?
+    m_image->removeNode(m_layer3);
 
-    image->removeNode(layer2);
-    qDebug() << ">>>>>>>>>> " << shapeController.layerMapSize();
-    QCOMPARE(shapeController.layerMapSize(), 2);
+    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
+    expectedGraph = "root layer1 layer4";
 
-    image->removeNode(layer);
-    qDebug() << ">>>>>>>>>> " << shapeController.layerMapSize();
-    QCOMPARE(shapeController.layerMapSize(), 1);
-#endif
-    shapeController.setImage(0);
+    QCOMPARE(actualGraph, expectedGraph);
+    QCOMPARE(m_shapeController->layerMapSize(), 3);
+
+    m_shapeController->setImage(0);
 }
+
+void KisShapeControllerTest::testMoveNodeSameParent()
+{
+    QString actualGraph;
+    QString expectedGraph;
+
+    constructImage();
+
+    m_shapeController->setImage(m_image);
+
+    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
+    expectedGraph = "root layer1 layer2 layer3 effect layer4";
+
+    QCOMPARE(actualGraph, expectedGraph);
+    QCOMPARE(m_shapeController->layerMapSize(), 6);
+
+    m_image->moveNode(m_layer2, m_image->root(), m_layer3);
+
+    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
+    expectedGraph = "root layer1 layer3 effect layer2 layer4";
+
+    QCOMPARE(actualGraph, expectedGraph);
+    QCOMPARE(m_shapeController->layerMapSize(), 6);
+
+    m_shapeController->setImage(0);
+}
+
+void KisShapeControllerTest::testMoveNodeDifferentParent()
+{
+    QString actualGraph;
+    QString expectedGraph;
+
+    constructImage();
+
+    m_shapeController->setImage(m_image);
+
+    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
+    expectedGraph = "root layer1 layer2 layer3 effect layer4";
+
+    QCOMPARE(actualGraph, expectedGraph);
+    QCOMPARE(m_shapeController->layerMapSize(), 6);
+
+    m_image->moveNode(m_layer2, m_image->root(), m_layer4);
+
+    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
+    expectedGraph = "root layer1 layer3 effect layer4 layer2";
+
+    QCOMPARE(actualGraph, expectedGraph);
+    QCOMPARE(m_shapeController->layerMapSize(), 6);
+
+    m_image->moveNode(m_layer3, m_layer4, m_layer4->lastChild());
+
+    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
+    expectedGraph = "root layer1 layer4 layer3 effect layer2";
+
+    QCOMPARE(actualGraph, expectedGraph);
+    QCOMPARE(m_shapeController->layerMapSize(), 6);
+
+    m_shapeController->setImage(0);
+}
+
 
 QTEST_KDEMAIN(KisShapeControllerTest, GUI)
 #include "kis_shape_controller_test.moc"

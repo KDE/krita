@@ -1536,19 +1536,13 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
     if (fixedLineHeight != 0.0) {
         qreal prevHeight = height;
         height = fixedLineHeight;
-        if (prevHeight > height) {
-            lineAdjust = fixedLineHeight - height;
-        }
+        lineAdjust = height - prevHeight;
     } else {
         qreal lineSpacing = format.doubleProperty(KoParagraphStyle::LineSpacing);
         if (lineSpacing == 0.0) { // unset
             int percent = format.intProperty(KoParagraphStyle::PercentLineHeight);
             if (percent != 0) {
-                qreal prevHeight = height;
                 height *= percent / 100.0;
-                if (prevHeight > height) {
-                    lineAdjust = height - prevHeight;
-                }
             } else {
                 height *= 1.2; // default
             }
@@ -1574,10 +1568,12 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         // Adjust the position of the block-rect for this line which is used later
         // to proper clip the line while drawing. If we would not adjust it here
         // then we could end with text-lines being partly cutoff.
-        m_blockRects.last().moveTop(m_blockRects.last().top() + lineAdjust);
+        if (lineAdjust < 0.0) {
+            m_blockRects.last().moveTop(m_blockRects.last().top() + lineAdjust);
+        }
 
         if (blockData && block.textList() && block.layout()->lineCount() == 1) {
-            // If this is the first line in a list (aka the first line of the first list-
+            // If this is the first line in a list (aka the first line after the list-
             // item) then we also need to adjust the counter to match to the line again.
             blockData->setCounterPosition(QPointF(blockData->counterPosition().x(), blockData->counterPosition().y() + lineAdjust));
         }

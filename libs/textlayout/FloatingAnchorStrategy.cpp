@@ -89,6 +89,15 @@ bool FloatingAnchorStrategy::moveSubject()
     // This is in coords relative to texshape
     QPointF newPosition;
 
+    QPointF offset;
+    if (m_anchor->horizontalPos() == KoTextAnchor::HFromLeft
+        || m_anchor->horizontalPos() == KoTextAnchor::HFromInside) {
+        offset.setX(m_anchor->offset().x());
+    }
+    if (m_anchor->verticalPos() == KoTextAnchor::VFromTop) {
+        offset.setY(m_anchor->offset().y());
+    }
+
     // set anchor bounding rectangle horizontal position and size
     if (!countHorizontalRel(anchorBoundingRect, containerBoundingRect, block, layout)) {
         return false; // let's fake we moved to force another relayout
@@ -105,7 +114,7 @@ bool FloatingAnchorStrategy::moveSubject()
     // Set shape vertical alignment inside anchor bounding rectangle
     countVerticalPos(newPosition, anchorBoundingRect, containerBoundingRect);
 
-    newPosition = newPosition + m_anchor->offset();
+    newPosition = newPosition + offset;
 
     //check the border of layout environment and move the shape back to have it within
     if (m_anchor->flowWithText()) {
@@ -245,7 +254,8 @@ void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anc
 {
     switch (m_anchor->horizontalPos()) {
     case KoTextAnchor::HCenter:
-        newPosition.setX(anchorBoundingRect.x() + anchorBoundingRect.width()/2 - containerBoundingRect.x());
+        newPosition.setX(anchorBoundingRect.x() + anchorBoundingRect.width()/2 
+         - m_anchor->shape()->size().width()/2 - containerBoundingRect.x());
         break;
 
     case KoTextAnchor::HFromInside:
@@ -270,13 +280,15 @@ void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anc
             newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x());
         } else {
             QSizeF size = m_anchor->shape()->boundingRect().size();
-            newPosition.setX(anchorBoundingRect.x() - containerBoundingRect.x() +
-                             size.width() - 2*(m_anchor->offset().x() + size.width()) );
+            newPosition.setX(anchorBoundingRect.x() - containerBoundingRect.x() -
+                             size.width() - m_anchor->offset().x());
         }
         break;
     }
     case KoTextAnchor::HRight: {
-        newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x());
+        QSizeF size = m_anchor->shape()->boundingRect().size();
+        newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x()
+                           - size.width());
         break;
     }
     default :
@@ -363,14 +375,14 @@ void FloatingAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF ancho
     switch (m_anchor->verticalPos()) {
     case KoTextAnchor::VBottom:
         newPosition.setY(anchorBoundingRect.bottom() - containerBoundingRect.y()
-        );//- m_anchor->shape()->size().height());
+        - m_anchor->shape()->size().height());
         break;
     case KoTextAnchor::VBelow:
         newPosition.setY(anchorBoundingRect.bottom() - containerBoundingRect.y());
         break;
 
     case KoTextAnchor::VMiddle:
-        newPosition.setY(anchorBoundingRect.y() + anchorBoundingRect.height()/2 - containerBoundingRect.y());
+        newPosition.setY(anchorBoundingRect.y() + anchorBoundingRect.height()/2 - m_anchor->shape()->size().height()/2 - containerBoundingRect.y());
         break;
 
     case KoTextAnchor::VFromTop:

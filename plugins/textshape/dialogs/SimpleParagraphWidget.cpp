@@ -92,6 +92,7 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     connect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
     connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
     connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
+    connect(widget.paragraphStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
 }
 
 SimpleParagraphWidget::~SimpleParagraphWidget()
@@ -303,6 +304,13 @@ void SimpleParagraphWidget::styleSelected(int index)
     if (paragStyle) {
         emit paragraphStyleSelected(paragStyle);
     }
+    emit doneWithFocus();
+}
+
+void SimpleParagraphWidget::slotShowStyleManager(int index)
+{
+    int styleId = m_stylesModel->index(index).internalId();
+    emit showStyleManager(styleId);
     emit doneWithFocus();
 }
 

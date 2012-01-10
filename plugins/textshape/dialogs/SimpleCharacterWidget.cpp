@@ -88,6 +88,7 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
     connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
     connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
+    connect(widget.characterStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
 
 }
 
@@ -219,6 +220,13 @@ void SimpleCharacterWidget::styleSelected(int index)
 
     //if the selected item correspond to a null characterStyle, send the null pointer. the tool should set the characterStyle as per paragraph
     emit characterStyleSelected(charStyle);
+    emit doneWithFocus();
+}
+
+void SimpleCharacterWidget::slotShowStyleManager(int index)
+{
+    int styleId = m_stylesModel->index(index).internalId();
+    emit showStyleManager(styleId);
     emit doneWithFocus();
 }
 

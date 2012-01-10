@@ -46,11 +46,13 @@ public slots:
     void setCurrentBlock(const QTextBlock &block);
     void setCurrentFormat(const QTextBlockFormat& format);
     void setStyleManager(KoStyleManager *sm);
+    void slotShowStyleManager(int index);
 
 signals:
     void doneWithFocus();
     void paragraphStyleSelected(KoParagraphStyle *);
     void newStyleRequested(QString name);
+    void showStyleManager(int styleId);
 
 private slots:
     void listStyleChanged(int id);

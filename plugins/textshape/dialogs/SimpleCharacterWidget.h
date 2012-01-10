@@ -49,11 +49,13 @@ private slots:
     void fontFamilyActivated(int index);
     void fontSizeActivated(int index);
     void styleSelected(int index);
+    void slotShowStyleManager(int index);
 
 signals:
     void doneWithFocus();
     void characterStyleSelected(KoCharacterStyle *);
     void newStyleRequested(QString name);
+    void showStyleManager(int styleId);
 
 private:
     Ui::SimpleCharacterWidget widget;

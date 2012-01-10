@@ -1599,6 +1599,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(scw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
     connect(scw, SIGNAL(newStyleRequested(QString)), this, SLOT(createStyleFromCurrentCharFormat(QString)));
+    connect(scw, SIGNAL(showStyleManager(int)), this, SLOT(showStyleManager()));
 
 
     // Connect to/with simple paragraph widget (docker)
@@ -1608,6 +1609,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     connect(spw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(spw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
     connect(spw, SIGNAL(newStyleRequested(QString)), this, SLOT(createStyleFromCurrentBlockFormat(QString)));
+    connect(spw, SIGNAL(showStyleManager(int)), this, SLOT(showStyleManager()));
 
     // Connect to/with simple table widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));

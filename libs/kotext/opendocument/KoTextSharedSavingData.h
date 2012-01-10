@@ -62,7 +62,7 @@ public:
      * @param styleId the id of the style in KoStyleManger
      * @param savedName the name that is written to the file
      */
-    void setStyleName(int styleId, QString savedName);
+    void setStyleName(int styleId, const QString &name);
 
     /**
      * Style name of the style

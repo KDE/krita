@@ -74,9 +74,9 @@ const Soprano::Model* KoTextSharedSavingData::rdfModel() const
     return d->m_rdfModel;
 }
 
-void KoTextSharedSavingData::setStyleName(int styleId, QString savedName)
+void KoTextSharedSavingData::setStyleName(int styleId, const QString &name)
 {
-    d->styleIdToName.insert(styleId, savedName);
+    d->styleIdToName.insert(styleId, name);
 }
 
 QString KoTextSharedSavingData::styleName(int styleId)

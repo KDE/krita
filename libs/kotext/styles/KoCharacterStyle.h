@@ -524,5 +524,5 @@ private:
 };
 
 Q_DECLARE_METATYPE(QSharedPointer<KoCharacterStyle>)
-Q_DECLARE_METATYPE(KoCharacterStyle *)
+
 #endif

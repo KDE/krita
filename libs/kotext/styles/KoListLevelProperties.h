@@ -77,10 +77,10 @@ public:
     void setDisplayLevel(int level);
     /// return the amount of levels that will be shown in list items of this list.
     int displayLevel() const;
-    /// set the style for the bullet or the number of the list
-    void setLabelCharacterStyle(KoCharacterStyle *style);
-    /// return the KoCharacterStyle for the bullet or the number of the list
-    KoCharacterStyle *labelCharacterStyle() const;
+    /// set the styleId of the KoCharacterStyle to be used to layout the listitem
+    void setCharacterStyleId(int id);
+    /// return the styleId of the KoCharacterStyle to be used to layout the listitem
+    int characterStyleId() const;
     /// set the style for the bullet or the number of the list
     void setCharacterProperties(QSharedPointer<KoCharacterStyle> style);
     /// return the KoCharacterStyle for the bullet or the number of the list

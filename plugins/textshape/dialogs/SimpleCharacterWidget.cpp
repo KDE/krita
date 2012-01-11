@@ -130,7 +130,8 @@ void SimpleCharacterWidget::fontFamilyActivated(int index) {
      */
     if (index == m_lastFontFamilyIndex) {
         KSelectAction *action = qobject_cast<KSelectAction*>(m_tool->action("format_fontfamily"));
-        action->currentAction()->trigger();
+        if(action->currentAction())
+            action->currentAction()->trigger();
     }
     m_lastFontFamilyIndex = index;
 }

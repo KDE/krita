@@ -165,15 +165,16 @@ public:
         TableOfContentsData,      // set when block is instead a TableOfContents
         GeneratedDocument,  // set when block is instead a generated document
         Shadow,                    //< KoShadowStyle, the shadow of this paragraph
-        NextStyle,                  ///< holds the styleId of the style to be used on a new line
-        ParagraphListStyleId        ///< this holds the listStyleId of the list got from style:list-style-name property from ODF 1.2
+        NextStyle,                  ///< holds the styleId of the style to be used on a new paragraph
+        ParagraphListStyleId,        ///< this holds the listStyleId of the list got from style:list-style-name property from ODF 1.2
+        EndCharStyle           // QSharedPointer<KoCharacterStyle>  used when final line is empty
     };
 
     enum AutoSpace {
         NoAutoSpace,              ///< space should not be added between portions of Asian, Western and complex texts
         IdeographAlpha            ///< space should be added between portions of Asian, Western and complex texts
     };
-    
+
     enum VerticalAlign {
         VAlignAuto,
         VAlignBaseline,
@@ -181,8 +182,7 @@ public:
         VAlignMiddle,
         VAlignTop
     };
-        
-    
+
     /// Constructor
     KoParagraphStyle(QObject *parent = 0);
     /// Creates a KoParagrahStyle with the given block format, the block character format and \a parent
@@ -277,6 +277,7 @@ public:
      * frame, setting a widowThreshold of 4 will break at 6 lines instead to leave the
      * requested 4 lines.
      */
+
     void setWidowThreshold(int lines);
     /**
      * @see setWidowThreshold
@@ -290,6 +291,7 @@ public:
      * setting the orphanThreshold to something greater than 2 will move the whole paragraph
      * to the second frame.
      */
+
     void setOrphanThreshold(int lines);
     /**
      * @see setOrphanThreshold
@@ -301,6 +303,7 @@ public:
      * @see setDropCapsLines
      * @see dropCapsDistance
      */
+
     void setDropCaps(bool on);
     /**
      * @see setDropCaps
@@ -312,6 +315,7 @@ public:
      * @see setDropCapsLines
      * @see dropCapsDistance
      */
+
     void setDropCapsLength(int characters);
     /**
      * set dropCaps Length in characters
@@ -324,6 +328,7 @@ public:
      * @see setDropCaps
      * @see dropCapsDistance
      */
+
     void setDropCapsLines(int lines);
     /**
      * The dropCapsLines
@@ -336,6 +341,7 @@ public:
      * @see setDropCaps
      * @see setDropCapsLines
      */
+
     void setDropCapsDistance(qreal distance);
     /**
      * The dropCaps distance
@@ -371,46 +377,46 @@ public:
     QBrush background() const;
     /// See similar named method on QTextBlockFormat
     void clearBackground();
-    
+
     qreal backgroundTransparency() const;
     void setBackgroundTransparency(qreal transparency);
 
     bool snapToLayoutGrid() const;
     void setSnapToLayoutGrid(bool value);
-    
+
     bool registerTrue() const;
     void setRegisterTrue(bool value);
-    
+
     bool strictLineBreak() const;
     void setStrictLineBreak(bool value);
-    
+
     bool justifySingleWord() const;
     void setJustifySingleWord(bool value);
-    
+
     bool automaticWritingMode() const;
     void setAutomaticWritingMode(bool value);
-    
+
     void setPageNumber(int pageNumber);
     int pageNumber() const;
-    
+
     void setKeepWithNext(bool value);
     bool keepWithNext() const;
-    
+
     void setPunctuationWrap(bool value);
     bool punctuationWrap() const;
-    
+
     void setTextAutoSpace(AutoSpace value);
     AutoSpace textAutoSpace() const;
-    
+
     void setKeepHyphenation(bool value);
     bool keepHyphenation() const;
-    
+
     void setHyphenationLadderCount(int value);
     int hyphenationLadderCount() const;
-    
+
     VerticalAlign verticalAlignment() const;
     void setVerticalAlignment(VerticalAlign value);
-    
+
     void setBreakBefore(KoText::KoTextBreakProperty value);
     KoText::KoTextBreakProperty breakBefore() const;
     void setBreakAfter(KoText::KoTextBreakProperty value);
@@ -465,7 +471,7 @@ public:
     KoBorder::BorderStyle bottomBorderStyle() const;
     void setBottomBorderColor(const QColor &color);
     QColor bottomBorderColor() const;
-    
+ 
     bool joinBorder() const;
     void setJoinBorder(bool value);
 
@@ -521,10 +527,10 @@ public:
     /// return the parent style
     KoParagraphStyle *parentStyle() const;
 
-    /// the 'next' style is the one used when the user creates a new paragrap after this one.
+    /// the 'next' style is the one used when the user creates a new paragraph after this one.
     void setNextStyle(int next);
 
-    /// the 'next' style is the one used when the user creates a new paragrap after this one.
+    /// the 'next' style is the one used when the user creates a new paragraph after this one.
     int nextStyle() const;
 
     /// return the name of the style.

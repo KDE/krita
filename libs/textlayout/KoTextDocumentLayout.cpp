@@ -256,9 +256,6 @@ qreal KoTextDocumentLayout::defaultTabSpacing()
 // this method is called on every char inserted or deleted, on format changes, setting/moving of variables or objects.
 void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int charsAdded)
 {
-    Q_UNUSED(charsAdded);
-    Q_UNUSED(charsRemoved);
-
     if (d->changesBlocked) {
         return;
     }
@@ -281,7 +278,12 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     // Mark the to the position corresponding root-areas as dirty. If there is no root-area for the position then we
     // don't need to mark anything dirty but still need to go on to force a scheduled relayout.
     if (!d->rootAreaList.isEmpty()) {
-        KoTextLayoutRootArea *fromArea = rootAreaForPosition(position);
+        KoTextLayoutRootArea *fromArea;
+        if (position) {
+            fromArea = rootAreaForPosition(position-1);
+        } else {
+            fromArea = d->rootAreaList.at(0);
+        }
         int startIndex = fromArea ? qMax(0, d->rootAreaList.indexOf(fromArea)) : 0;
         int endIndex = startIndex;
         if (charsRemoved != 0 || charsAdded != 0) {
@@ -290,7 +292,7 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
             // and charsAdded>0 cause they are changing a range of characters. One case where both is zero is if
             // the content of a variable changed (see KoVariable::setValue which calls publicDocumentChanged). In
             // those cases we only need to relayout the root-area dirty where the variable is on.
-            KoTextLayoutRootArea *toArea = fromArea ? rootAreaForPosition(position + qMax(charsRemoved, charsAdded)) : 0;
+            KoTextLayoutRootArea *toArea = fromArea ? rootAreaForPosition(position + qMax(charsRemoved, charsAdded) + 1) : 0;
             if (toArea) {
                 if (toArea != fromArea) {
                     endIndex = qMax(startIndex, d->rootAreaList.indexOf(toArea));
@@ -423,6 +425,7 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
         AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->anchorStrategy());
 
         strategy->setPageRect(page->rect());
+        strategy->setPageContentRect(page->contentRect());
         strategy->setPageNumber(page->pageNumber());
 
         if (strategy->moveSubject()) {

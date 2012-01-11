@@ -45,10 +45,6 @@
 #include <opengl/kis_opengl_canvas2.h>
 #endif
 
-#include "kis_node_shape.h"
-#include "kis_layer_container_shape.h"
-#include "kis_shape_layer.h"
-
 #include <kis_view2.h>
 #include <kis_selection.h>
 #include <kis_image.h>

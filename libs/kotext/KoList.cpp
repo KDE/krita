@@ -205,7 +205,9 @@ void KoList::updateStoredList(const QTextBlock &block)
     if (block.textList()) {
         int level = block.textList()->format().property(KoListStyle::Level).toInt();
         QTextList *textList = block.textList();
-        textList->format().setProperty(KoListStyle::ListId, (KoListStyle::ListIdType)(textList));
+        QTextListFormat format = textList->format();
+        format.setProperty(KoListStyle::ListId, (KoListStyle::ListIdType)(textList));
+        textList->setFormat(format);
         d->textLists[level-1] = textList;
         d->textListIds[level-1] = (KoListStyle::ListIdType)textList;
     }

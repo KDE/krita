@@ -27,6 +27,7 @@
 #include <QAbstractItemDelegate>
 #include <QStyleOptionViewItem>
 #include <QSortFilterProxyModel>
+#include <QApplication>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -91,7 +92,8 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         painter->drawImage(paintRect.x(), paintRect.y(),
                            preview.scaled(pixSize, Qt::KeepAspectRatio));
 
-        painter->setPen(Qt::black);
+        QPalette palette = QApplication::palette();
+        painter->setBrush(palette.text());
         painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());
     }
 

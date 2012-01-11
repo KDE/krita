@@ -1458,64 +1458,117 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
     }
 
     qreal height = 0;
+    qreal breakHeight = 0.0;
     qreal ascent = 0.0;
     qreal descent = 0.0;
     const bool useFontProperties = format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
 
     if (cursor->fragmentIterator.atEnd()) {// no text in parag.
         qreal fontStretch = 1;
+        QTextCharFormat charFormat = block.charFormat();
+        if (block.blockFormat().hasProperty(KoParagraphStyle::EndCharStyle)) {
+            QVariant v = block.blockFormat().property(KoParagraphStyle::EndCharStyle);
+            QSharedPointer<KoCharacterStyle> endCharStyle = v.value< QSharedPointer<KoCharacterStyle> >();
+            if (!endCharStyle.isNull()) {
+                endCharStyle->applyStyle(charFormat);
+                endCharStyle->ensureMinimalProperties(charFormat);
+            }
+        }
+
         if (useFontProperties) {
             //stretch line height to powerpoint size
             fontStretch = PresenterFontStretch;
-        } else if ( block.charFormat().hasProperty(KoCharacterStyle::FontYStretch)) {
+        } else if (block.charFormat().hasProperty(KoCharacterStyle::FontYStretch)) {
             // stretch line height to ms-word size
-            fontStretch = block.charFormat().property(KoCharacterStyle::FontYStretch).toDouble();
+            fontStretch = charFormat.property(KoCharacterStyle::FontYStretch).toDouble();
         }
-        height = block.charFormat().fontPointSize() * fontStretch;
+        height = charFormat.fontPointSize() * fontStretch;
     } else {
         qreal fontStretch = 1;
+        QTextFragment fragment = cursor->fragmentIterator.fragment();
         if (useFontProperties) {
             //stretch line height to powerpoint size
             fontStretch = PresenterFontStretch;
-        } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontYStretch)) {
+        } else if (fragment.charFormat().hasProperty(KoCharacterStyle::FontYStretch)) {
             // stretch line height to ms-word size
-            fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontYStretch).toDouble();
+            fontStretch = fragment.charFormat().property(KoCharacterStyle::FontYStretch).toDouble();
         }
         // read max font height
-        height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);
+        height = qMax(height, fragment.charFormat().fontPointSize() * fontStretch);
 
-        KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
+        KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(fragment);
         ascent = qMax(ascent, pos.m_ascent);
         descent = qMax(descent, pos.m_descent);
 
-        while (!(cursor->fragmentIterator.atEnd() || cursor->fragmentIterator.fragment().contains(
-                        block.position() + line.textStart() + line.textLength() - 1))) {
+        bool lineBreak = false;
+        int lastCharPos = block.position() + line.textStart() + line.textLength() - 1;
+        if (block.text().at(line.textStart() + line.textLength() - 1) == QChar(0x2028)) {
+            // Was a line with line-break
+            if (line.textLength() != 1) { //unless empty line we should ignore the format of it
+                --lastCharPos;
+            }
+                lineBreak = true;
+        }
+        while (!(fragment.contains(lastCharPos))) {
             cursor->fragmentIterator++;
             if (cursor->fragmentIterator.atEnd()) {
                 break;
             }
+            fragment = cursor->fragmentIterator.fragment();
             if (!m_documentLayout->changeTracker()
                 || !m_documentLayout->changeTracker()->displayChanges()
-                || !m_documentLayout->changeTracker()->containsInlineChanges(cursor->fragmentIterator.fragment().charFormat())
-                || !m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())
-                || !m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
-                || (m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
+                || !m_documentLayout->changeTracker()->containsInlineChanges(fragment.charFormat())
+                || !m_documentLayout->changeTracker()->elementById(fragment.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())
+                || !m_documentLayout->changeTracker()->elementById(fragment.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
+                || (m_documentLayout->changeTracker()->elementById(fragment.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
                 || m_documentLayout->changeTracker()->displayChanges()) {
                 qreal fontStretch = 1;
                 if (useFontProperties) {
                     //stretch line height to powerpoint size
                     fontStretch = PresenterFontStretch;
-                } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontYStretch)) {
+                } else if (fragment.charFormat().hasProperty(KoCharacterStyle::FontYStretch)) {
                     // stretch line height to ms-word size
-                    fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontYStretch).toDouble();
+                    fontStretch = fragment.charFormat().property(KoCharacterStyle::FontYStretch).toDouble();
                 }
                 // read max font height
-                height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);
+                height = qMax(height, fragment.charFormat().fontPointSize() * fontStretch);
 
-                KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
+                KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(fragment);
                 ascent = qMax(ascent, pos.m_ascent);
                 descent = qMax(descent, pos.m_descent);
             }
+        }
+
+        if (lineBreak) {
+            // Was a line with line-break - the format of the line-break should not be
+            // considered for the next line either. So we may have to advance the fragmentIterator.
+            while (!cursor->fragmentIterator.atEnd() && lastCharPos > fragment.position() + fragment.length()-1) {
+                cursor->fragmentIterator++;
+                fragment = cursor->fragmentIterator.fragment();
+            }
+
+            qreal breakAscent = ascent;
+            qreal breakDescent = descent;
+            breakHeight = height;
+
+            int firstPos = block.position() + line.textStart() + line.textLength();
+
+            // Was a line with line-break - the format of the line-break should not be
+            // considered for the next line either. So we may have to advance the fragmentIterator.
+            while (!cursor->fragmentIterator.atEnd() && firstPos > fragment.position() + fragment.length()-1) {
+                cursor->fragmentIterator++;
+                if (!cursor->fragmentIterator.atEnd()) {
+                    fragment = cursor->fragmentIterator.fragment();
+
+                    // read max font height
+                    breakHeight = qMax(breakHeight, fragment.charFormat().fontPointSize() * fontStretch);
+
+                    KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(fragment);
+                    breakAscent = qMax(breakAscent, pos.m_ascent);
+                    breakDescent = qMax(breakDescent, pos.m_descent);
+                }
+            }
+            breakHeight = qMax(breakHeight, breakAscent + breakDescent);
         }
     }
 
@@ -1525,30 +1578,30 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         height = 12; // default size for uninitialized styles.
     }
 
+    // Calculate adjustment to the height due to line height calculated by qt which shouldn't be
+    // there in reality. We will just move the line
+    qreal lineAdjust = 0.0;
+    if (breakHeight > height) {
+        lineAdjust = height - breakHeight;
+    }
+
     // Adjust the line-height according to a probably defined fixed line height,
     // a proportional (percent) line-height and/or the line-spacing. Together
     // with the line-height we maybe also need to adjust the position of the
     // line. This is for example needed if the line needs to shrink in height
     // so the line-text stays on the baseline. If the line grows in height then
     // we don't need to do anything.
-    qreal lineAdjust = 0.0;
     qreal fixedLineHeight = format.doubleProperty(KoParagraphStyle::FixedLineHeight);
     if (fixedLineHeight != 0.0) {
         qreal prevHeight = height;
         height = fixedLineHeight;
-        if (prevHeight > height) {
-            lineAdjust = fixedLineHeight - height;
-        }
+        lineAdjust += height - prevHeight;
     } else {
         qreal lineSpacing = format.doubleProperty(KoParagraphStyle::LineSpacing);
         if (lineSpacing == 0.0) { // unset
             int percent = format.intProperty(KoParagraphStyle::PercentLineHeight);
             if (percent != 0) {
-                qreal prevHeight = height;
                 height *= percent / 100.0;
-                if (prevHeight > height) {
-                    lineAdjust = height - prevHeight;
-                }
             } else {
                 height *= 1.2; // default
             }
@@ -1574,10 +1627,12 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         // Adjust the position of the block-rect for this line which is used later
         // to proper clip the line while drawing. If we would not adjust it here
         // then we could end with text-lines being partly cutoff.
-        m_blockRects.last().moveTop(m_blockRects.last().top() + lineAdjust);
+        if (lineAdjust < 0.0) {
+            m_blockRects.last().moveTop(m_blockRects.last().top() + lineAdjust);
+        }
 
         if (blockData && block.textList() && block.layout()->lineCount() == 1) {
-            // If this is the first line in a list (aka the first line of the first list-
+            // If this is the first line in a list (aka the first line after the list-
             // item) then we also need to adjust the counter to match to the line again.
             blockData->setCounterPosition(QPointF(blockData->counterPosition().x(), blockData->counterPosition().y() + lineAdjust));
         }

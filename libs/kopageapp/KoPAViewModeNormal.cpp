@@ -59,7 +59,16 @@ void KoPAViewModeNormal::paint(KoPACanvasBase* canvas, QPainter& painter, const 
     painter.translate( m_canvas->documentOrigin().x(), m_canvas->documentOrigin().y() );
 
     KoViewConverter * converter = m_view->viewConverter( m_canvas );
+    QRectF updateRect = converter->viewToDocument( m_canvas->widgetToView( clipRect ) );
     m_view->activePage()->paintBackground( painter, *converter );
+
+    if (m_canvas->document()->gridData().paintGridInBackground()) {
+        painter.setRenderHint( QPainter::Antialiasing, false );
+        m_canvas->document()->gridData().paintGrid( painter, *converter, updateRect );
+    }
+
+    // paint the shapes
+    painter.setRenderHint( QPainter::Antialiasing );
     if ( m_view->activePage()->displayMasterShapes() ) {
         m_canvas->masterShapeManager()->paint( painter, *converter, false );
     }
@@ -70,8 +79,9 @@ void KoPAViewModeNormal::paint(KoPACanvasBase* canvas, QPainter& painter, const 
 
     painter.setRenderHint( QPainter::Antialiasing, false );
 
-    QRectF updateRect = converter->viewToDocument( m_canvas->widgetToView( clipRect ) );
-    m_canvas->document()->gridData().paintGrid( painter, *converter, updateRect );
+    if (!m_canvas->document()->gridData().paintGridInBackground()) {
+        m_canvas->document()->gridData().paintGrid( painter, *converter, updateRect );
+    }
     m_canvas->document()->guidesData().paintGuides( painter, *converter, updateRect );
 
     painter.setRenderHint( QPainter::Antialiasing );

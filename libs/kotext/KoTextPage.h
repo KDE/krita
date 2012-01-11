@@ -92,6 +92,11 @@ public:
      */
     virtual QRectF rect() const = 0;
 
+    /**
+     * Returns the (text) content rect of the page in document coords
+     */
+    virtual QRectF contentRect() const {return rect();}
+
 };
 
 Q_DECLARE_METATYPE(KoTextPage*)

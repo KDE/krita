@@ -59,7 +59,6 @@
 #include "commands/DeleteCommand.h"
 #include "commands/DeleteAnchorsCommand.h"
 #include "KoInlineCite.h"
-#include <KoTextLayoutScheduler.h>
 #include <KoShapeCreateCommand.h>
 
 #include <KLocale>
@@ -1811,7 +1810,7 @@ void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info
 
     d->updateState(KoTextEditor::Private::NoOp);
     emit cursorPositionChanged();
-    KoTextLayoutScheduler::markDocumentChanged(document(), document()->firstBlock().position(), 0 , 0);
+    const_cast<QTextDocument *>(document())->markContentsDirty(document()->firstBlock().position(), 0);
 }
 
 void KoTextEditor::insertBibliography()
@@ -1939,7 +1938,38 @@ void KoTextEditor::insertHtml(const QString &html)
     }
 
     // XXX: do the changetracking and everything!
+    QTextBlock currentBlock = d->caret.block();
     d->caret.insertHtml(html);
+
+    QList<QTextList *> pastedLists;
+    KoList *currentPastedList = 0;
+    while (currentBlock != d->caret.block()) {
+        currentBlock = currentBlock.next();
+        QTextList *currentTextList = currentBlock.textList();
+        if(currentTextList && !pastedLists.contains(currentBlock.textList())) {
+            KoListStyle *listStyle = KoTextDocument(d->document).styleManager()->defaultListStyle()->clone();
+            listStyle->setName("");
+            listStyle->setStyleId(0);
+            currentPastedList = new KoList(d->document, listStyle);
+            QTextListFormat currentTextListFormat = currentTextList->format();
+
+            KoListLevelProperties levelProperty = listStyle->levelProperties(currentTextListFormat.indent());
+            levelProperty.setStyle(static_cast<KoListStyle::Style>(currentTextListFormat.style()));
+            levelProperty.setLevel(currentTextListFormat.indent());
+            levelProperty.setListItemPrefix("");
+            levelProperty.setListItemSuffix("");
+            levelProperty.setListId((KoListStyle::ListIdType)currentTextList);
+            listStyle->setLevelProperties(levelProperty);
+
+            currentTextListFormat.setProperty(KoListStyle::Level, currentTextListFormat.indent());
+            currentBlock.textList()->setFormat(currentTextListFormat);
+
+            currentPastedList->updateStoredList(currentBlock);
+            currentPastedList->setStyle(listStyle);
+
+            pastedLists.append(currentBlock.textList());
+        }
+    }
 }
 
 void KoTextEditor::mergeBlockCharFormat(const QTextCharFormat &modifier)

@@ -39,6 +39,7 @@ public:
     Private()
         : snapToGrid(false),
         showGrid(false),
+        paintGridInBackground(false),
         gridX(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
         gridY(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
         gridColor(Qt::lightGray),
@@ -53,6 +54,7 @@ public:
 
     bool snapToGrid;
     bool showGrid;
+    bool paintGridInBackground;
     qreal gridX, gridY;
     QColor gridColor;
     KToggleAction *toggleGridAction;
@@ -116,6 +118,16 @@ void KoGridData::setShowGrid(bool showGrid)
     if (d->toggleGridAction)
         d->toggleGridAction->setChecked(showGrid);
     d->showGrid = showGrid;
+}
+
+bool KoGridData::paintGridInBackground() const
+{
+    return d->paintGridInBackground;
+}
+
+void KoGridData::setPaintGridInBackground(bool inBackground)
+{
+    d->paintGridInBackground = inBackground;
 }
 
 void KoGridData::paintGrid(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const

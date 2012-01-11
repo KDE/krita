@@ -20,6 +20,10 @@
 #include "ChangeAnchorPropertiesCommand.h"
 #include "KoTextAnchor.h"
 
+#include <KoShape.h>
+
+#include <QTextDocument>
+
 ChangeAnchorPropertiesCommand::ChangeAnchorPropertiesCommand(KoTextAnchor *anchor, KoTextAnchor *newAnchor, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_anchor(anchor)
@@ -49,7 +53,9 @@ void ChangeAnchorPropertiesCommand::redo()
     KUndo2Command::redo();
 
     copyLayoutProperties(&m_newAnchor, m_anchor);
-   // m_anchor->shape()->notifyChanged();
+
+    m_anchor->shape()->notifyChanged();
+    const_cast<QTextDocument *>(m_anchor->document())->markContentsDirty(m_anchor->positionInDocument(), 0);
 }
 
 void ChangeAnchorPropertiesCommand::undo()
@@ -57,5 +63,6 @@ void ChangeAnchorPropertiesCommand::undo()
     KUndo2Command::undo();
 
     copyLayoutProperties(&m_oldAnchor, m_anchor);
-   // m_anchor->shape()->notifyChanged();
+    m_anchor->shape()->notifyChanged();
+    const_cast<QTextDocument *>(m_anchor->document())->markContentsDirty(m_anchor->positionInDocument(), 0);
 }

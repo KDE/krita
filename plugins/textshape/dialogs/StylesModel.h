@@ -34,6 +34,12 @@ class QImage;
 class QSignalMapper;
 class QSize;
 
+/** This class is used to provide widgets (like the @class StylesCombo) the styles available to the document being worked on. The @class StylesModel can be of two types: character styles or paragraph styles type. This allows the widget to ignore the type of style it is handling.
+  * Character styles in ODF can be specified in two ways. First, a named character style, specifying character formatting properties. It is meant to be used on a couple of individual characters. Secondely, a paragraph style also specifies character formatting properties, which are to be considered the default for that particular paragraph.
+  * For this reason, the @class Stylesmodel, when of the type @value characterStyle, do not list the paragraph style names. Only the specific named chracter styles are listed. Additionnaly, as the first item, a virtual style "As paragraph" is provided. Selecting this "style" will set the character properties as specified by the paragraph style currently applied to the selection.
+  * This class requires that a @class KoStyleManager and a @class KoStyleThumbnailer be set. See below methods.
+*/
+
 class StylesModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -47,6 +53,8 @@ public:
     explicit StylesModel(KoStyleManager *styleManager, Type modelType, QObject *parent = 0);
     ~StylesModel();
 
+    /** Re-implemented from QAbstractItemModel. */
+
     virtual QModelIndex index(int row, int column=0, const QModelIndex &parent = QModelIndex()) const;
 
     virtual int rowCount(const QModelIndex &parent) const;
@@ -57,17 +65,29 @@ public:
 
     /** Specific methods of the StylesModel */
 
+    /** Returns the @class KoParagraphStyle corresponding to the specified @param index. */
     KoParagraphStyle *paragraphStyleForIndex(const QModelIndex &index) const;
+    /** Return a @class QModelIndex for the specified @param style. */
     QModelIndex indexForParagraphStyle(const KoParagraphStyle &style) const;
 
+    /** Returns the @class KoCharacterhStyle corresponding to the specified @param index. */
     KoCharacterStyle *characterStyleForIndex(const QModelIndex &index) const;
+    /** Return a @class QModelIndex for the specified @param style. */
     QModelIndex indexForCharacterStyle(const KoCharacterStyle &style) const;
 
+    /** Returns a QImage which is a preview of the style specified by @param row of the given @param size.
+      * If size isn't specified, the default size of the given @class KoStyleThumbnailer is used.
+    */
     QImage stylePreview(int row, QSize size = QSize());
 
+    /** Sets the @class KoStyleManager of the model. Setting this will populate the styles. It is required that a @param manager is set before using the model.
+      * CAUTION: Populating the style will select the first inserted item. If this model is already set on a view, this might cause the view to emit an item selection changed signal.
+    */
     void setStyleManager(KoStyleManager *manager);
+    /** Sets the @class KoStyleThumbnailer of the model. It is required that a @param thumbnailer is set before using the model. */
     void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer);
 
+    /** Specifies which paragraph style is currently the active one (on the current paragraph). This is used in order to properly preview the "As paragraph" virtual character style. */
     void setCurrentParagraphStyle(int styleId);
 
 private slots:

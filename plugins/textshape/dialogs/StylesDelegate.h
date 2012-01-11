@@ -22,6 +22,10 @@
 
 #include <QStyledItemDelegate>
 
+/** This is an internal class, used for the preview of styles in the dropdown of the @class StylesCombo.
+  * This class is also responsible for drawing and handling the buttons to call the style manager or to delete a style.
+  * NB. Deleting a style is currently not supported, therefore the button has been disabled. */
+
 class StylesDelegate : public QStyledItemDelegate
 {
     Q_OBJECT

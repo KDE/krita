@@ -28,6 +28,8 @@ class QPushButton;
 class QSize;
 class QString;
 
+/** This is an internal class, used for the preview of styles in the main area of the @class StylesCombo. */
+
 class StylesComboPreview : public QLineEdit
 {
     Q_OBJECT

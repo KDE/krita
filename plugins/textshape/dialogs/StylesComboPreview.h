@@ -23,7 +23,7 @@
 #include <QLineEdit>
 
 class QModelIndex;
-class QPixmap;
+class QImage;
 class QPushButton;
 class QSize;
 class QString;
@@ -42,7 +42,7 @@ public:
     void setAddButtonShown(bool show);
     bool isAddButtonShown() const;
 
-    void setPreview(QPixmap pixmap);
+    void setPreview(QImage image);
 
 signals:
     void resized();
@@ -64,7 +64,7 @@ private:
     bool m_renamingNewStyle;
     bool m_shouldAddNewStyle;
 
-    QPixmap m_stylePreview;
+    QImage m_stylePreview;
 
     QPushButton *m_addButton;
 };

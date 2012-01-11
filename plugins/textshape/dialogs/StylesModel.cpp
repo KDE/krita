@@ -27,7 +27,7 @@
 
 #include <QSignalMapper>
 #include <QList>
-#include <QPixmap>
+#include <QImage>
 
 #include <KIcon>
 
@@ -179,7 +179,7 @@ QModelIndex StylesModel::indexForCharacterStyle(const KoCharacterStyle &style) c
     }
 }
 
-QPixmap StylesModel::stylePreview(int row, QSize size)
+QImage StylesModel::stylePreview(int row, QSize size)
 {
     Q_ASSERT(m_styleManager);
     Q_ASSERT(m_styleThumbnailer);
@@ -210,7 +210,7 @@ QPixmap StylesModel::stylePreview(int row, QSize size)
             }
         }
     }
-    return QPixmap();
+    return QImage();
 }
 
 void StylesModel::setStyleManager(KoStyleManager *sm)

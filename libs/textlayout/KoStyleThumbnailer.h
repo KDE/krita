@@ -27,12 +27,12 @@
 
 #include "textlayout_export.h"
 
-#include <QPixmap>
-
-class QSize;
-class QTextDocument;
 class KoCharacterStyle;
 class KoParagraphStyle;
+
+class QImage;
+class QSize;
+class QTextDocument;
 
 /**
  * Helper class to create (and cache) thumbnails of styles
@@ -56,7 +56,7 @@ public:
      * If @param dirtyCache is true, do not return the cached thumbnail if it exist, but recreate a new one.
      * The created thumbnail is cached.
      */
-    QPixmap thumbnail(KoParagraphStyle *style, bool dirtyCache = false);
+    QImage thumbnail(KoParagraphStyle *style, bool dirtyCache = false);
 
     /**
      * @returns a thumbnail representing the @param style, constrained into the @param size.
@@ -65,7 +65,7 @@ public:
      * If @param dirtyCache is true, do not return the cached thumbnail if it exist, but recreate a new one.
      * The created thumbnail is cached.
      */
-    QPixmap thumbnail(KoParagraphStyle *style, QSize size, bool dirtyCache = false);
+    QImage thumbnail(KoParagraphStyle *style, QSize size, bool dirtyCache = false);
 
     /**
      * Return a thumbnail representing the style
@@ -73,7 +73,7 @@ public:
      * If @param dirtyCache is true, do not return the cached thumbnail if it exist, but recreate a new one.
      * The created thumbnail is cached.
      */
-    QPixmap thumbnail(KoCharacterStyle *style, bool dirtyCache = false);
+    QImage thumbnail(KoCharacterStyle *style, bool dirtyCache = false);
 
     /**
      * @returns a thumbnail representing the @param style, constrained into the @param size.
@@ -82,7 +82,7 @@ public:
      * If @param dirtyCache is true, do not return the cached thumbnail if it exist, but recreate a new one.
      * The created thumbnail is cached.
      */
-    QPixmap thumbnail(KoCharacterStyle *style, QSize size, bool dirtyCache = false);
+    QImage thumbnail(KoCharacterStyle *style, QSize size, bool dirtyCache = false);
 
     /**
      * Sets the size of the thumbnails returned by the @fn thumbnail with no size arguments.
@@ -90,7 +90,7 @@ public:
     void setThumbnailSize(QSize size);
 
 private:
-    void layoutThumbnail(QSize size, QPixmap &pm);
+    void layoutThumbnail(QSize size, QImage *im);
 
     class Private;
     Private* const d;

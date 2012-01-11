@@ -33,13 +33,14 @@
 
 #include "StylesComboPreview.h"
 
+#include <QImage>
+#include <QLineEdit>
 #include <QModelIndex>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QFocusEvent>
 #include <QMouseEvent>
 #include <QKeyEvent>
-#include <QPixmap>
 #include <QPushButton>
 #include <QString>
 
@@ -104,9 +105,9 @@ QSize StylesComboPreview::availableSize() const
     return QSize(contentsRect().width()- m_addButton->width(), contentsRect().height()); ///TODO dynamic resizing when button shown/hidden.
 }
 
-void StylesComboPreview::setPreview(QPixmap pixmap)
+void StylesComboPreview::setPreview(QImage image)
 {
-    m_stylePreview = pixmap;
+    m_stylePreview = image;
 }
 
 bool StylesComboPreview::isAddButtonShown() const
@@ -169,7 +170,7 @@ void StylesComboPreview::paintEvent( QPaintEvent *ev )
         QLineEdit::paintEvent(ev);
         QPainter p(this);
         p.setClipRect(ev->rect());
-        p.drawPixmap(contentsRect().topLeft(), m_stylePreview);
+        p.drawImage(contentsRect().topLeft(), m_stylePreview);
     }
     else {
         QLineEdit::paintEvent(ev);

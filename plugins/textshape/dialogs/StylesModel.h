@@ -29,6 +29,8 @@ class KoStyleThumbnailer;
 class KoStyleManager;
 class KoParagraphStyle;
 class KoCharacterStyle;
+
+class QImage;
 class QSignalMapper;
 class QSize;
 
@@ -61,7 +63,7 @@ public:
     KoCharacterStyle *characterStyleForIndex(const QModelIndex &index) const;
     QModelIndex indexForCharacterStyle(const KoCharacterStyle &style) const;
 
-    QPixmap stylePreview(int row, QSize size = QSize());
+    QImage stylePreview(int row, QSize size = QSize());
 
     void setStyleManager(KoStyleManager *manager);
     void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer);

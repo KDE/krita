@@ -59,7 +59,8 @@ private slots:
     void testPercentageLineSpacing();
     /// Tests advanced linespacing options provided in our style.
     void testAdvancedLineSpacing();
-    /// test data integrety for multiple shapes.
+    /// Tests that empty lines are given the correct height like in LibreOffice
+    void testEmptyLineHeights();
 
     /// Test distance above and below paragraphs.
     void testBlockSpacing();

@@ -119,6 +119,8 @@ public:
     // This hash keeps all the lists that have the same style in one KoList.
     QHash<KoListStyle *, KoList *> lists;
 
+    KoCharacterStyle *endCharStyle; // charstyle from empty span used at end of paragraph
+
     KoStyleManager *styleManager;
 
     KoChangeTracker *changeTracker;
@@ -181,6 +183,7 @@ public:
           currentList(0),
           currentListStyle(0),
           currentListLevel(1),
+          endCharStyle(0),
           styleManager(0),
           changeTracker(0),
           shape(s),
@@ -1095,7 +1098,16 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
 
     bool stripLeadingSpace = true;
     loadSpan(element, cursor, &stripLeadingSpace);
-    cursor.mergeBlockCharFormat(cursor.blockCharFormat());
+    QTextBlock block = cursor.block();
+    QString text = block.text();
+    if (text.length() == 0 || text.at(text.length()-1) == QChar(0x2028)) {
+        if (d->endCharStyle) {
+            QTextBlockFormat blockFormat = block.blockFormat();
+            blockFormat.setProperty(KoParagraphStyle::EndCharStyle, QVariant::fromValue< QSharedPointer<KoCharacterStyle> >(QSharedPointer<KoCharacterStyle>(d->endCharStyle->clone())));
+            cursor.setBlockFormat(blockFormat);
+        }
+    }
+    d->endCharStyle = 0;
 
     cursor.setCharFormat(cf);   // restore the cursor char format
 }
@@ -1631,6 +1643,11 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug(32500) << "load" << localName << *stripLeadingSpace << node.toText().data();
 #endif
+
+        if (!(isTextNS && localName == "span")) {
+            d->endCharStyle = 0;
+        }
+
         if (node.isText()) {
             bool isLastNode = node.nextSibling().isNull();
             loadText(node.toText().data(), cursor, stripLeadingSpace,
@@ -1695,6 +1712,10 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             KoCharacterStyle *characterStyle = d->textSharedData->characterStyle(styleName, d->stylesDotXml);
             if (characterStyle) {
                 characterStyle->applyStyle(&cursor);
+                if (ts.firstChild().isNull()) {
+                    // empty span so let's save the characterStyle for possible use at end of par
+                    d->endCharStyle = characterStyle;
+                }
             } else if (!styleName.isEmpty()) {
                 kWarning(32500) << "character style " << styleName << " not found";
             }

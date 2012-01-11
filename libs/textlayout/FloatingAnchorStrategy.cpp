@@ -63,9 +63,6 @@ bool FloatingAnchorStrategy::moveSubject()
         return false; // let's fake we moved to force another relayout
     }
 
-    QRectF pageContentRect = m_anchor->shape()->parent()->boundingRect();
-    setPageContentRect(pageContentRect);
-
     // get the page data
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
     if (!data) {
@@ -254,7 +251,8 @@ void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anc
 {
     switch (m_anchor->horizontalPos()) {
     case KoTextAnchor::HCenter:
-        newPosition.setX(anchorBoundingRect.x() + anchorBoundingRect.width()/2 - containerBoundingRect.x());
+        newPosition.setX(anchorBoundingRect.x() + anchorBoundingRect.width()/2 
+         - m_anchor->shape()->size().width()/2 - containerBoundingRect.x());
         break;
 
     case KoTextAnchor::HFromInside:
@@ -374,14 +372,14 @@ void FloatingAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF ancho
     switch (m_anchor->verticalPos()) {
     case KoTextAnchor::VBottom:
         newPosition.setY(anchorBoundingRect.bottom() - containerBoundingRect.y()
-        );//- m_anchor->shape()->size().height());
+        - m_anchor->shape()->size().height());
         break;
     case KoTextAnchor::VBelow:
         newPosition.setY(anchorBoundingRect.bottom() - containerBoundingRect.y());
         break;
 
     case KoTextAnchor::VMiddle:
-        newPosition.setY(anchorBoundingRect.y() + anchorBoundingRect.height()/2 - containerBoundingRect.y());
+        newPosition.setY(anchorBoundingRect.y() + anchorBoundingRect.height()/2 - m_anchor->shape()->size().height()/2 - containerBoundingRect.y());
         break;
 
     case KoTextAnchor::VFromTop:

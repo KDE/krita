@@ -158,7 +158,9 @@ void TestNumberStyle::testCurrency()
     f.formatStr = "-#,###0.00";
     QCOMPARE(escapeLocals(KoOdfNumberStyles::format("0.2", f)), QString("0.20"));
     f.formatStr = "";
-    QCOMPARE(escapeLocals(KoOdfNumberStyles::format("0.2", f)), QString("0.20 $"));
+    localDependentDollar = escapeLocals(KoOdfNumberStyles::format("0.2", f));
+    QVERIFY(localDependentDollar.startsWith("0.20") || localDependentDollar.endsWith("0.20"));
+    QVERIFY(localDependentDollar.startsWith("$") || localDependentDollar.endsWith("$"));
 }
 
 QTEST_MAIN(TestNumberStyle)

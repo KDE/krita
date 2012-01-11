@@ -2,6 +2,7 @@
 Name=Text Tool
 Name[bg]=Инструмент текст
 Name[ca]=Eina de text
+Name[ca@valencia]=Eina de text
 Name[da]=Tekstværktøj
 Name[de]=Textwerkzeug
 Name[et]=Tekstitööriist
@@ -9,6 +10,7 @@ Name[it]=Strumento testo
 Name[nb]=Tekstverktøy
 Name[nds]=Textwarktüüch
 Name[nl]=Tekstgereedschap
+Name[pl]=Narzędzie tekstu
 Name[pt]=Ferramenta de Texto
 Name[pt_BR]=Ferramenta de texto
 Name[ru]=Текст

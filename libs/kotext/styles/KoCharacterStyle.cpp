@@ -458,6 +458,10 @@ KoCharacterStyle *KoCharacterStyle::autoStyle(const QTextCharFormat &format, QTe
     ensureMinimalProperties(blockCharFormat);
     autoStyle->removeDuplicates(blockCharFormat);
     autoStyle->setParentStyle(const_cast<KoCharacterStyle*>(this));
+    // remove StyleId if it is there as it is not a property of the style itself and will not be written out
+    // so it should not be part of the autostyle. As otherwise it can happen that the StyleId is the only 
+    // property left and then we write out an empty style which is unneeded.
+    autoStyle->d->stylesPrivate.remove(StyleId);
     return autoStyle;
 }
 

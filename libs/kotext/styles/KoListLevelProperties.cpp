@@ -41,6 +41,7 @@
 #include <KoImageData.h>
 #include <KoOdfNumberDefinition.h>
 #include <KoGenStyle.h>
+#include <KoTextSharedSavingData.h>
 
 class KoListLevelProperties::Private
 {
@@ -228,15 +229,14 @@ int KoListLevelProperties::displayLevel() const
     return propertyInt(KoListStyle::DisplayLevel);
 }
 
-void KoListLevelProperties::setLabelCharacterStyle(KoCharacterStyle *style)
+void KoListLevelProperties::setCharacterStyleId(int id)
 {
-    setProperty(KoListStyle::LabelCharacterStyle, QVariant::fromValue<KoCharacterStyle *>(style));
+    setProperty(KoListStyle::CharacterStyleId, id);
 }
 
-KoCharacterStyle *KoListLevelProperties::labelCharacterStyle() const
+int KoListLevelProperties::characterStyleId() const
 {
-    const QVariant v = d->stylesPrivate.value(KoListStyle::LabelCharacterStyle);
-    return v.value<KoCharacterStyle *>();
+    return propertyInt(KoListStyle::CharacterStyleId);
 }
 
 void KoListLevelProperties::setCharacterProperties(QSharedPointer< KoCharacterStyle > style)
@@ -489,7 +489,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             else {
 //                kDebug(32500) << "==> cs.name:" << cs->name();
 //                kDebug(32500) << "==> cs.styleId:" << cs->styleId();
-                setLabelCharacterStyle(cs);
+                setCharacterStyleId(cs->styleId());
             }
         }
     }
@@ -804,11 +804,14 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
         writer->addAttribute("text:bullet-char", QChar(bullet));
     }
 
-    if (d->stylesPrivate.contains(KoListStyle::LabelCharacterStyle)) {
-        KoCharacterStyle *labelCharStyle = labelCharacterStyle();
-        if (labelCharStyle) {
-            writer->addAttribute("text:style-name", labelCharStyle->name());
-        }
+    KoTextSharedSavingData *sharedSavingData = 0;
+    if (d->stylesPrivate.contains(KoListStyle::CharacterStyleId) && (characterStyleId() != 0) &&
+           (sharedSavingData = dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID)))) {
+        QString styleName = sharedSavingData->styleName(characterStyleId());
+               // dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID))->styleName(characterStyleId());
+        if (!styleName.isEmpty()) {
+            writer->addAttribute("text:style-name", styleName);
+         }
     }
 
     // These apply to bulleted and numbered lists

@@ -29,7 +29,6 @@ KisNodeShape* KisNodeShapesGraph::addNode(KisNodeSP node, KisNodeSP parent, KisN
     KisNodeDummy *aboveThisDummy = 0;
 
     KisNodeShape *parentShape = 0;
-    KisNodeShape *aboveThisShape = 0;
 
     if(parent) {
         parentDummy = nodeToDummy(parent);
@@ -38,7 +37,6 @@ KisNodeShape* KisNodeShapesGraph::addNode(KisNodeSP node, KisNodeSP parent, KisN
 
     if(aboveThis) {
         aboveThisDummy = nodeToDummy(aboveThis);
-        aboveThisShape = aboveThisDummy->nodeShape();
     }
 
     KisNodeShape *newShape = new KisNodeShape(node);

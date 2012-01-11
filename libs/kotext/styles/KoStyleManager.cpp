@@ -37,6 +37,7 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoShapeSavingContext.h>
+#include <KoTextSharedSavingData.h>
 
 #include <QTimer>
 #include <QUrl>
@@ -160,6 +161,12 @@ void KoStyleManager::saveOdfDefaultStyles(KoShapeSavingContext &context)
 
 void KoStyleManager::saveOdf(KoShapeSavingContext &context)
 {
+    KoTextSharedSavingData *textSharedSavingData = 0;
+    if (!(textSharedSavingData = dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID)))) {
+        textSharedSavingData = new KoTextSharedSavingData;
+        context.addSharedData(KOTEXT_SHARED_SAVING_ID, textSharedSavingData);
+    }
+
     saveOdfDefaultStyles(context);
 
     // don't save character styles that are already saved as part of a paragraph style
@@ -176,6 +183,7 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
         paragraphStyle->saveOdf(style, context);
         QString newName = context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        textSharedSavingData->setStyleName(paragraphStyle->styleId(), newName);
         savedNames.insert(paragraphStyle, newName);
     }
 
@@ -199,7 +207,8 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
 
         KoGenStyle style(KoGenStyle::ParagraphStyle, "text");
         characterStyle->saveOdf(style);
-        context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        QString newName = context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        textSharedSavingData->setStyleName(characterStyle->styleId(), newName);
     }
 
     foreach(KoListStyle *listStyle, d->listStyles) {
@@ -212,6 +221,8 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         KoGenStyle style(KoGenStyle::ListStyle);
         listStyle->saveOdf(style, context);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        QString newName = context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        textSharedSavingData->setStyleName(listStyle->styleId(), newName);
     }
 
     foreach(KoTableStyle *tableStyle, d->tableStyles) {

@@ -75,7 +75,7 @@ void KisNodeShape::setNodeVisible(bool v)
 
 bool KisNodeShape::checkIfDescendant(KoShapeLayer *activeLayer)
 {
-    bool found;
+    bool found(false);
     KoShapeLayer *layer = activeLayer;
 
     while(layer && !(found = layer == this)) {

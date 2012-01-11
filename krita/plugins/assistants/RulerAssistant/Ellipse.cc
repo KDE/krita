@@ -72,7 +72,6 @@ inline QPointF rotate90(const QPointF& p) {
 
 QRectF Ellipse::boundingRect() const
 {
-    const QPointF centre = (p1 + p2) * 0.5;
     const QPointF d = rotate90((p2 - p1) * 0.5 * b / a);
     const QPointF pts[4] = {
         p1 + d,

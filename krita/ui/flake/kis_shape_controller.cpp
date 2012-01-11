@@ -63,8 +63,6 @@
 struct KisShapeController::Private
 {
 public:
-    Private(KisShapeController *parent) : q(parent) {}
-
     KisImageWSP image;
 
     KisDoc2 *doc;
@@ -72,76 +70,23 @@ public:
     QMap<QString, KoDataCenterBase*> dataCenterMap;
 
     KisNodeShapesGraph shapesGraph;
-
-    void addNodeShape(KisNodeSP node);
-    void removeNodeShape(KisNodeSP node);
-    void addNodeShapeImpl(KisNodeSP node);
-    void removeNodeShapeImpl(KisNodeSP node);
-
-private:
-    KisShapeController *q;
 };
-
-void KisShapeController::Private::addNodeShape(KisNodeSP node)
-{
-    addNodeShapeImpl(node);
-
-    KisNodeSP childNode = node->firstChild();
-    while (childNode) {
-        addNodeShape(childNode);
-        childNode = childNode->nextSibling();
-    }
-}
-
-void KisShapeController::Private::removeNodeShape(KisNodeSP node)
-{
-    KisNodeSP childNode = node->firstChild();
-    while (childNode) {
-        removeNodeShape(childNode);
-        childNode = childNode->nextSibling();
-    }
-
-    removeNodeShapeImpl(node);
-}
-
-void KisShapeController::Private::addNodeShapeImpl(KisNodeSP node)
-{
-    KisNodeShape *newShape =
-        shapesGraph.addNode(node, node->parent(), node->prevSibling());
-
-    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
-    if (shapeLayer) {
-        /**
-         * Forward signals for global shape manager
-         * \see comment in the constructor of KisCanvas2
-         */
-        q->connect(shapeLayer, SIGNAL(selectionChanged()),
-                   q, SIGNAL(selectionChanged()));
-        q->connect(shapeLayer, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
-                   q, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
-        ((KoShapeLayer*)shapeLayer)->setParent(newShape);
-    }
-}
-
-void KisShapeController::Private::removeNodeShapeImpl(KisNodeSP node)
-{
-    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
-    if (shapeLayer) {
-        shapeLayer->disconnect(q);
-        ((KoShapeLayer*)shapeLayer)->setParent(0);
-    }
-
-    shapesGraph.removeNode(node);
-}
 
 KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
         : QObject(doc)
-        , m_d(new Private(this))
+        , m_d(new Private())
 {
     m_d->doc = doc;
     m_d->nameServer = nameServer;
     m_d->image = 0;
     resourceManager()->setUndoStack(doc->undoStack());
+
+    connect(this, SIGNAL(sigContinueAddNode(KisNodeSP, KisNodeSP, KisNodeSP)),
+            SLOT(slotContinueAddNode(KisNodeSP, KisNodeSP, KisNodeSP)));
+    connect(this, SIGNAL(sigContinueMoveNode(KisNodeSP, KisNodeSP, KisNodeSP)),
+            SLOT(slotContinueMoveNode(KisNodeSP, KisNodeSP, KisNodeSP)));
+    connect(this, SIGNAL(sigContinueRemoveNode(KisNodeSP)),
+            SLOT(slotContinueRemoveNode(KisNodeSP)));
 }
 
 
@@ -160,7 +105,7 @@ void KisShapeController::setImage(KisImageWSP image)
 {
     if (m_d->image.isValid()) {
         m_d->image->disconnect(this);
-        m_d->removeNodeShape(m_d->image->root());
+        slotRemoveNode(m_d->image->root());
 
         Q_ASSERT(!m_d->shapesGraph.shapesCount());
     }
@@ -168,11 +113,16 @@ void KisShapeController::setImage(KisImageWSP image)
 
     if (image) {
         m_d->image = image;
-        m_d->addNodeShape(m_d->image->root());
+        slotNodeAdded(m_d->image->root());
 
-        connect(image, SIGNAL(sigNodeHasBeenAdded(KisNode *, int)), SLOT(slotNodeAdded(KisNode*, int)));
-        connect(image, SIGNAL(sigAboutToRemoveANode(KisNode *, int)), SLOT(slotNodeRemoved(KisNode*, int)));
-        connect(image, SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged(KisGroupLayerSP)));
+        connect(image, SIGNAL(sigNodeAddedAsync(KisNodeSP)),
+                SLOT(slotNodeAdded(KisNodeSP)), Qt::DirectConnection);
+        connect(image, SIGNAL(sigNodeMovedAsync(KisNodeSP)),
+                SLOT(slotNodeMoved(KisNodeSP)), Qt::DirectConnection);
+        connect(image, SIGNAL(sigRemoveNodeAsync(KisNodeSP)),
+                SLOT(slotRemoveNode(KisNodeSP)), Qt::DirectConnection);
+        connect(image, SIGNAL(sigLayersChangedAsync()),
+                SLOT(slotLayersChanged()), Qt::DirectConnection);
     }
 }
 
@@ -231,7 +181,7 @@ void KisShapeController::removeShape(KoShape* shape)
 {
     /**
      * Krita layers have their own destruction path.
-     * It goes through slotNodeRemoved()
+     * It goes through slotRemoveNode()
      */
     Q_ASSERT(shape->shapeId() != KIS_NODE_SHAPE_ID  &&
              shape->shapeId() != KIS_SHAPE_LAYER_ID);
@@ -275,27 +225,65 @@ void KisShapeController::setInitialShapeForView(KisView2 * view)
     }
 }
 
-void KisShapeController::slotNodeAdded(KisNode *parentNode, int index)
+void KisShapeController::slotLayersChanged()
 {
-    if (!parentNode) return;
-
-    KisNodeSP node = parentNode->at(index);
-    m_d->addNodeShape(node);
-}
-
-void KisShapeController::slotNodeRemoved(KisNode *parentNode, int index)
-{
-    if (!parentNode) return;
-
-    KisNodeSP node = parentNode->at(index);
-    m_d->removeNodeShape(node);
-}
-
-void KisShapeController::slotLayersChanged(KisGroupLayerSP rootLayer)
-{
-    Q_UNUSED(rootLayer);
-
     setImage(m_d->image);
+}
+
+void KisShapeController::slotNodeAdded(KisNodeSP node)
+{
+    emit sigContinueAddNode(node, node->parent(), node->prevSibling());
+
+    KisNodeSP childNode = node->firstChild();
+    while (childNode) {
+        slotNodeAdded(childNode);
+        childNode = childNode->nextSibling();
+    }
+}
+
+void KisShapeController::slotNodeMoved(KisNodeSP node)
+{
+    emit sigContinueMoveNode(node, node->parent(), node->prevSibling());
+}
+
+void KisShapeController::slotRemoveNode(KisNodeSP node)
+{
+    emit sigContinueRemoveNode(node);
+}
+
+void KisShapeController::slotContinueAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
+{
+    KisNodeShape *newShape =
+        m_d->shapesGraph.addNode(node, parent, aboveThis);
+
+    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
+    if (shapeLayer) {
+        /**
+         * Forward signals for global shape manager
+         * \see comment in the constructor of KisCanvas2
+         */
+        connect(shapeLayer, SIGNAL(selectionChanged()),
+                SIGNAL(selectionChanged()));
+        connect(shapeLayer, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
+                SIGNAL(currentLayerChanged(const KoShapeLayer*)));
+        ((KoShapeLayer*)shapeLayer)->setParent(newShape);
+    }
+}
+
+void KisShapeController::slotContinueMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
+{
+    m_d->shapesGraph.moveNode(node, parent, aboveThis);
+}
+
+void KisShapeController::slotContinueRemoveNode(KisNodeSP node)
+{
+    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
+    if (shapeLayer) {
+        shapeLayer->disconnect(this);
+        ((KoShapeLayer*)shapeLayer)->setParent(0);
+    }
+
+    m_d->shapesGraph.removeNode(node);
 }
 
 KoShapeLayer* KisShapeController::shapeForNode(KisNodeSP node) const
@@ -303,6 +291,10 @@ KoShapeLayer* KisShapeController::shapeForNode(KisNodeSP node) const
     return m_d->shapesGraph.nodeToShape(node);
 }
 
+KisNodeDummy* KisShapeController::dummyForNode(KisNodeSP node) const
+{
+    return m_d->shapesGraph.nodeToDummy(node);
+}
 
 int KisShapeController::layerMapSize()
 {

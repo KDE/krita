@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Barcode Report Plugin
 Name[ca]=Connector d'informes de codi de barres
+Name[ca@valencia]=Connector d'informes de codi de barres
 Name[et]=Aruande ribakoodiplugin
 Name[it]=Estensione rapporti codici a barre
 Name[nb]=Programtillegg for Strekkode-rapport
+Name[pl]=Wtyczka sprawozdania kodu paskowego
 Name[pt]='Plugin' de Relatório de Códigos de Barras
 Name[pt_BR]=Plugin de código de barras para relatório
 Name[ru]=Модуль считывания штрих-кодов
@@ -13,10 +15,12 @@ Name[x-test]=xxBarcode Report Pluginxx
 Name[zh_TW]=條碼報告外掛程式
 Comment=KoReport Barcode Plugin
 Comment[ca]=Connector de codi de barres KoReport
+Comment[ca@valencia]=Connector de codi de barres KoReport
 Comment[da]=Stregkode-plugin til KoReport
 Comment[et]=KoReporti ribakoodiplugin
 Comment[it]=Estensione per codici a barre di KoReport
 Comment[nb]=KoReport strekkode-programtillegg
+Comment[pl]=Wtyczka kodu paskowego dla KoReport
 Comment[pt]='Plugin' de Códigos de Barras do KoReport
 Comment[pt_BR]=Plugin de códigos de barra do KoReport
 Comment[ru]=Модуль считывания штрих-кодов KoReport

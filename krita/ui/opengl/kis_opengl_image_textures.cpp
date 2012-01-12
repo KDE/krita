@@ -283,7 +283,7 @@ GLuint KisOpenGLImageTextures::backgroundTexture() const
     return m_backgroundTexture;
 }
 
-void KisOpenGLImageTextures::slotImageSizeChanged(qint32 w, qint32 h)
+void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
 {
     createImageTextureTiles();
 }

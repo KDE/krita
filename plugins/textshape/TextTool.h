@@ -76,9 +76,11 @@ public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     /// reimplemented from superclass
-    virtual void mousePressEvent(KoPointerEvent *event) ;
+    virtual void mousePressEvent(KoPointerEvent *event);
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    /// reimplemented from superclass
+    virtual void mouseTripleClickEvent(KoPointerEvent *event);
     /// reimplemented from superclass
     virtual void mouseMoveEvent(KoPointerEvent *event);
     /// reimplemented from superclass

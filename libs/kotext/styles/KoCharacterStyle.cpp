@@ -40,6 +40,7 @@
 #include <KoShadowStyle.h>
 #include <KoShapeLoadingContext.h>
 #include "KoTextSharedLoadingData.h"
+#include "KoInlineTextObjectManager.h"
 
 #ifdef SHOULD_BUILD_FONT_CONVERSION
 #include <string.h>
@@ -474,9 +475,17 @@ void KoCharacterStyle::applyStyle(QTextBlock &block) const
     ensureMinimalProperties(cf);
     cursor.setBlockCharFormat(cf);
 
-    cursor.setPosition(block.position() + block.length() - 1, QTextCursor::KeepAnchor);
-    cursor.setCharFormat(cf);
-// FIXME above effectively removes any char styles and direct formatting from the block
+    // be sure that we keep the InlineInstanceId when applying a style
+    for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
+        cursor.setPosition(it.fragment().position());
+        cursor.setPosition(it.fragment().position() + it.fragment().length(), QTextCursor::KeepAnchor);
+        QTextCharFormat f(cf);
+        QVariant v = it.fragment().charFormat().property(KoInlineTextObjectManager::InlineInstanceId);
+        if (!v.isNull()) {
+            f.setProperty(KoInlineTextObjectManager::InlineInstanceId, v);
+        }
+        cursor.setCharFormat(f);
+    }
 }
 
 void KoCharacterStyle::applyStyle(QTextCursor *selection) const

@@ -480,9 +480,13 @@ void KoCharacterStyle::applyStyle(QTextBlock &block) const
         cursor.setPosition(it.fragment().position());
         cursor.setPosition(it.fragment().position() + it.fragment().length(), QTextCursor::KeepAnchor);
         QTextCharFormat f(cf);
-        QVariant v = it.fragment().charFormat().property(KoInlineTextObjectManager::InlineInstanceId);
+        QVariant v = it.fragment().charFormat().property(InlineInstanceId);
         if (!v.isNull()) {
-            f.setProperty(KoInlineTextObjectManager::InlineInstanceId, v);
+            f.setProperty(InlineInstanceId, v);
+        }
+        v = it.fragment().charFormat().property(ChangeTrackerId);
+        if (!v.isNull()) {
+            f.setProperty(ChangeTrackerId, v);
         }
         cursor.setCharFormat(f);
     }

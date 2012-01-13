@@ -284,7 +284,6 @@ void KoModeBox::setCanvas(KoCanvasBase *canvas)
 
 void KoModeBox::unsetCanvas()
 {
-    d->canvas = 0;
 }
 
 void KoModeBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas)

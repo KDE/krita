@@ -128,8 +128,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_trackChanges(false),
         m_allowResourceManagerUpdates(true),
         m_prevCursorPosition(-1),
-        m_prevMouseSelectionStart(-1),
-        m_prevMouseSelectionEnd(-1),
         m_caretTimer(this),
         m_caretTimerState(true),
         m_currentCommand(0),
@@ -942,22 +940,35 @@ void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
         return;
     }
 
-    int pos = m_textEditor.data()->position();
-    m_textEditor.data()->movePosition(QTextCursor::WordLeft);
-    m_textEditor.data()->movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
-
-    // clicked between two words
-    if (qAbs(pos - m_textEditor.data()->position()) <= 1)
-        m_textEditor.data()->movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
-
-    // switch between select single words or whole line
-    if (m_prevMouseSelectionStart == m_textEditor.data()->selectionStart() && m_prevMouseSelectionEnd == m_textEditor.data()->selectionEnd()) {
-        m_textEditor.data()->clearSelection();
-        m_textEditor.data()->movePosition(QTextCursor::StartOfLine);
-        m_textEditor.data()->movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    if (event->modifiers() & Qt::ShiftModifier) {
+        // When whift is pressed we behave as a single press
+        return mousePressEvent(event);
     }
-    m_prevMouseSelectionStart = m_textEditor.data()->selectionStart();
-    m_prevMouseSelectionEnd = m_textEditor.data()->selectionEnd();
+ 
+    int pos = m_textEditor.data()->position();
+    m_textEditor.data()->select(QTextCursor::WordUnderCursor);
+
+    repaintSelection();
+    updateSelectionHandler();
+}
+
+void TextTool::mouseTripleClickEvent(KoPointerEvent *event)
+{
+    if (canvas()->shapeManager()->shapeAt(event->point) != m_textShape) {
+        event->ignore(); // allow the event to be used by another
+        return;
+    }
+
+    if (event->modifiers() & Qt::ShiftModifier) {
+        // When whift is pressed we behave as a single press
+        return mousePressEvent(event);
+    }
+ 
+    int pos = m_textEditor.data()->position();
+
+    m_textEditor.data()->clearSelection();
+    m_textEditor.data()->movePosition(QTextCursor::StartOfBlock);
+    m_textEditor.data()->movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
     repaintSelection();
     updateSelectionHandler();

@@ -130,6 +130,28 @@ void KoPAMasterPage::pageUpdated()
     KoPAPixmapCache::instance()->clear( false );
 }
 
+QImage KoPAMasterPage::thumbImage(const QSize &size)
+{
+    if (size.isEmpty()) {
+        return QImage();
+    }
+    KoZoomHandler zoomHandler;
+    const KoPageLayout & layout = pageLayout();
+    KoPAUtil::setZoom(layout, size, zoomHandler);
+    QRect pageRect(KoPAUtil::pageRect(layout, size, zoomHandler));
+
+    QImage image(size, QImage::Format_RGB32);
+    // should it be transparent at the places where it is to big?
+    image.fill(QColor(Qt::white).rgb());
+    QPainter painter(&image);
+    painter.setClipRect(pageRect);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.translate(pageRect.topLeft());
+
+    paintPage(painter, zoomHandler);
+    return image;
+}
+
 QPixmap KoPAMasterPage::generateThumbnail( const QSize& size )
 {
     // don't paint null pixmap

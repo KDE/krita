@@ -352,6 +352,19 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
                 }
             }
         }
+        // if the full paragraph is selected to add it to the rect. This makes sure we get a rect for the case 
+        // where the end of the selection lies is a different area.
+        if (cursor.selectionEnd() >= block.position() + block.length() && cursor.selectionStart() <= block.position()) {
+            QTextLine line = block.layout()->lineForTextPosition(block.length()-1);
+            if (line.isValid()) {
+                retval.setBottom(line.y() + line.height());
+                if (line.ascent()==0) {
+                    // Block is empty from any visible content and has as such no height
+                    // but in that case the block font defines line height
+                    retval.setBottom(line.y() + 24);
+                }
+            }
+        }
     }
     return retval.translated(0, m_verticalAlignOffset);
 }

@@ -705,6 +705,7 @@ void KisSelectionManager::shapeSelectionChanged()
                 shape->setBorder(0);
         }
     }
+    updateGUI();
 }
 
 void KisSelectionManager::imageResizeToSelection()

@@ -23,6 +23,7 @@
 #include "kis_bookmarked_configuration_manager.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_processing_information.h"
+#include "kis_transaction.h"
 #include "kis_paint_device.h"
 #include "kis_selection.h"
 #include "kis_types.h"
@@ -103,6 +104,8 @@ void KisFilter::process(const KisPaintDeviceSP src,
     QRect nR = neededRect(applyRect, config);
     // Create a temporary device that will be filtered, sharing the source data
     KisPaintDeviceSP temporary;
+    KisTransaction *transaction = 0;
+
     if(src == dst && sel == 0)
     {
         temporary = src;
@@ -110,12 +113,15 @@ void KisFilter::process(const KisPaintDeviceSP src,
     else {
         temporary = new KisPaintDevice(src->colorSpace());
         temporary->makeCloneFromRough(src, nR);
+        transaction = new KisTransaction("", temporary);
     }
     // Filter
     process(temporary, applyRect, config, progressUpdater);
+
     // Copy on destination, respecting the selection
     if(temporary != src)
     {
+        delete transaction;
         KisPainter p(dst);
         p.setSelection(sel);
         p.bitBlt(applyRect.topLeft(), temporary, applyRect);

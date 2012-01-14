@@ -48,6 +48,8 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
           m_blockSignals(false),
           m_tool(tool),
           m_directionButtonState(Auto),
+          m_styleManager(0),
+          m_thumbnailer(0),
           m_stylesModel(0)
 {
     widget.setupUi(this);
@@ -188,56 +190,12 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
             }
     }
 
-    if (m_currentBlockFormat == m_currentBlock.blockFormat()) {
-        return;
-    }
-    m_currentBlockFormat = m_currentBlock.blockFormat();
-
-    int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
-    KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
-    if (style) {
-        bool unchanged = true;
-        foreach(int property, m_currentBlockFormat.properties().keys()) {
-            if (property == QTextFormat::ObjectIndex)
-                continue;
-            if (property == KoParagraphStyle::ListStyleId)
-                continue;
-            if (property == QTextBlockFormat::BlockAlignment) { //the default alignment can be retrieved in the defaultTextOption. However, calligra sets the Qt::AlignAbsolute flag, so we need to or this flag with the default alignment before comparing.
-                if ((m_currentBlockFormat.property(property) != style->value(property))
-                        && !(style->value(property).isNull()
-                             && ((m_currentBlockFormat.intProperty(property)) == int(m_currentBlock.document()->defaultTextOption().alignment()| Qt::AlignAbsolute)))) {
-                    unchanged = false;
-                    break;
-                }
-                else {
-                    continue;
-                }
-            }
-            if (property == KoParagraphStyle::TextProgressionDirection) {
-                if (style->value(property).isNull() && m_currentBlockFormat.intProperty(property) == KoText::LeftRightTopBottom) {
-                    //LTR seems to be Qt default when unset
-                    continue;
-                }
-            }
-            if ((m_currentBlockFormat.property(property) != style->value(property)) && !(style->value(property).isNull() && !m_currentBlockFormat.property(property).toBool())) {
-                //the last check seems to work. might be cause of a bug. The problem is when comparing an unset property in the style with a set to {0, false, ...) property in the format (eg. set then unset bold)
-                unchanged = false;
-                break;
-            }
-        }
-
-        //we are updating the combo's selected item to what is the current format. we do not want this to apply the style as it would mess up the undo stack, the change tracking,...
-        disconnect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
-        widget.paragraphStyleCombo->setCurrentIndex(m_stylesModel->indexForParagraphStyle(*style).row());
-        widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
-        m_stylesModel->setCurrentParagraphStyle(id);
-        connect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
-    }
+    setCurrentFormat(m_currentBlock.blockFormat());
 }
 
 void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
 {
-    if (format == m_currentBlockFormat)
+    if (!m_styleManager || format == m_currentBlockFormat)
         return;
     m_currentBlockFormat = format;
 

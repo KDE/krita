@@ -41,10 +41,12 @@
 #include <QComboBox>
 
 SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
-        : QWidget(parent),
-        m_blockSignals(false),
-        m_comboboxHasBidiItems(false),
-        m_tool(tool)
+    : QWidget(parent),
+    m_blockSignals(false),
+    m_comboboxHasBidiItems(false),
+    m_styleManager(0),
+    m_thumbnailer(0),
+    m_tool(tool)
 {
     widget.setupUi(this);
     widget.bold->setDefaultAction(tool->action("format_bold"));
@@ -109,12 +111,11 @@ void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
 
 void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
 {
-    if (format == m_currentCharFormat)
+    if (!m_styleManager || format == m_currentCharFormat)
         return;
     m_currentCharFormat = format;
 
-    int id = m_currentCharFormat.intProperty(KoCharacterStyle::StyleId);
-    KoCharacterStyle *style(m_styleManager->characterStyle(id));
+    KoCharacterStyle *style(m_styleManager->characterStyle(m_currentCharFormat.intProperty(KoCharacterStyle::StyleId)));
     if (style) {
         bool unchanged = true;
         foreach(int property, m_currentCharFormat.properties().keys()) {

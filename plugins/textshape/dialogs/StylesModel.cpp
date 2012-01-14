@@ -138,7 +138,7 @@ Qt::ItemFlags StylesModel::flags(const QModelIndex &index) const
 
 void StylesModel::setCurrentParagraphStyle(int styleId)
 {
-    if (m_currentParagraphStyle == m_styleManager->paragraphStyle(styleId) || !m_styleManager->paragraphStyle(styleId)) {
+    if (!m_styleManager || m_currentParagraphStyle == m_styleManager->paragraphStyle(styleId) || !m_styleManager->paragraphStyle(styleId)) {
         return; //TODO do we create a default paragraphStyle? use the styleManager default?
     }
     if (m_currentParagraphStyle) {
@@ -181,8 +181,9 @@ QModelIndex StylesModel::indexForCharacterStyle(const KoCharacterStyle &style) c
 
 QImage StylesModel::stylePreview(int row, QSize size)
 {
-    Q_ASSERT(m_styleManager);
-    Q_ASSERT(m_styleThumbnailer);
+    if (!m_styleManager || !m_styleThumbnailer) {
+        return QImage();
+    }
     if (m_modelType == StylesModel::ParagraphStyle) {
         KoParagraphStyle *usedStyle = 0;
         usedStyle = m_styleManager->paragraphStyle(index(row).internalId());

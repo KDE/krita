@@ -1331,8 +1331,9 @@ void TextTool::keyReleaseEvent(QKeyEvent *event)
 void TextTool::updateActions()
 {
     KoTextEditor *textEditor = m_textEditor.data();
-    if (textEditor == 0)
+    if (textEditor == 0) {
         return;
+    }
     m_allowActions = false;
 
     //Update the characterStyle related GUI elements
@@ -1397,9 +1398,9 @@ void TextTool::updateActions()
     m_allowActions = true;
 
     ///TODO if selection contains several different format
+    emit blockChanged(textEditor->block());
     emit charFormatChanged(cf);
     emit blockFormatChanged(bf);
-    emit blockChanged(textEditor->block());
 }
 
 void TextTool::updateStyleManager()
@@ -1415,8 +1416,6 @@ void TextTool::updateStyleManager()
 
 void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    kDebug();
-
     Q_UNUSED(toolActivation);
     m_caretTimer.start();
     m_caretTimerState = true;
@@ -1440,7 +1439,6 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
     rect = m_textShape->absoluteTransformation(0).mapRect(rect);
     v.setValue(rect);
     canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, v);
-
     setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
     useCursor(Qt::IBeamCursor);
 
@@ -1455,8 +1453,6 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
 
 void TextTool::deactivate()
 {
-    kDebug();
-
     m_caretTimer.stop();
     m_caretTimerState = false;
     repaintCaret();
@@ -1589,6 +1585,13 @@ QList<QWidget *> TextTool::createOptionWidgets()
     QList<QWidget *> widgets;
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
+    if (m_textEditor.data()) {
+        //initialise the char- and par- widgets with the current block and formats.
+        scw->setCurrentBlockFormat(m_textEditor.data()->blockFormat());
+        scw->setCurrentFormat(m_textEditor.data()->charFormat());
+        spw->setCurrentBlock(m_textEditor.data()->block());
+        spw->setCurrentFormat(m_textEditor.data()->blockFormat());
+    }
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
     SimpleInsertWidget *siw = new SimpleInsertWidget(this, 0);
 
@@ -1620,8 +1623,9 @@ QList<QWidget *> TextTool::createOptionWidgets()
     connect(siw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
 
     updateStyleManager();
-    if (m_textShape)
+    if (m_textShape) {
         updateActions();
+    }
     scw->setWindowTitle(i18n("Character"));
     widgets.append(scw);
     spw->setWindowTitle(i18n("Paragraph"));

@@ -8,14 +8,6 @@ add_subdirectory(ctlcolorspaces)
 add_subdirectory(ctlcompositeops)
 add_subdirectory(ctlcolortransformations)
 
-if(HAVE_OPENCTL_913)
-    set( BUFFER_SRCS
-         KoCtlBuffer13.cpp )
-else(HAVE_OPENCTL_913)
-    set( BUFFER_SRCS
-         KoCtlBuffer12.cpp )
-endif(HAVE_OPENCTL_913)
-
 set( CTLCS_SRCS
     KoCtlBuffer.cpp
     KoCtlAccumulator.cpp

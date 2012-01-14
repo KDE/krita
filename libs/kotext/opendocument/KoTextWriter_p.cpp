@@ -767,9 +767,17 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 // Open a text:a
                 previousFragmentLink = charFormat.anchorHref();
                 TagInformation linkTagInformation;
-                linkTagInformation.setTagName("text:a");
-                linkTagInformation.addAttribute("xlink:type", "simple");
-                linkTagInformation.addAttribute("xlink:href", charFormat.anchorHref());
+                if (previousFragmentLink.startsWith(QChar('#', 0))) {
+                    linkTagInformation.setTagName("text:bookmark-ref");
+                    QString href = previousFragmentLink.right(previousFragmentLink.size()-1);
+                    linkTagInformation.addAttribute("text:ref-name", href);
+                    //linkTagInformation.addAttribute("text:ref-format", add the style of the ref here);
+                }
+                else {
+                    linkTagInformation.setTagName("text:a");
+                    linkTagInformation.addAttribute("xlink:type", "simple");
+                    linkTagInformation.addAttribute("xlink:href", charFormat.anchorHref());
+                }
                 if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
                     // Write xml:id here for Rdf
                     kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();

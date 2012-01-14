@@ -1833,7 +1833,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 linkCf.setAnchor(true);
                 QStringList anchorName;
                 anchorName << bookmarkName;
-                linkCf.setAnchorNames(anchorName);
+                linkCf.setAnchorHref('#'+ bookmarkName);
                 cursor.setCharFormat(linkCf);
             }
             loadSpan(ts, cursor, stripLeadingSpace);   // recurse

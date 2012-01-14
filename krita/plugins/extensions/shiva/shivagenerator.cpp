@@ -40,6 +40,7 @@
 
 #if OPENSHIVA_13_OR_MORE
 #include "GTLCore/CompilationMessages.h"
+#include <kis_gtl_lock.h>
 #endif
 
 extern QMutex* shivaMutex;
@@ -96,6 +97,7 @@ void ShivaGenerator::generate(KisProcessingInformation dstInfo,
             }
         }
     }
+    KisGtlLocker gtlLocker;
     {
         QMutexLocker l(shivaMutex);
         kernel.compile();

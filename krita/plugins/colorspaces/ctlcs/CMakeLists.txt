@@ -38,7 +38,7 @@ set( CTLCS_SRCS
 
 kde4_add_plugin(krita_ctlcs_plugin ${CTLCS_SRCS})
 
-target_link_libraries(krita_ctlcs_plugin pigmentcms ${KDE4_KPARTS_LIBS} ${OPENEXR_LIBRARIES} ${OPENCTL_LDFLAGS})
+target_link_libraries(krita_ctlcs_plugin pigmentcms ${KDE4_KPARTS_LIBS} ${OPENEXR_LIBRARIES} ${OPENCTL_LDFLAGS} kritaimage)
 
 install(TARGETS krita_ctlcs_plugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 

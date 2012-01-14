@@ -34,6 +34,7 @@
 
 #include "Version.h"
 #include "UpdaterProgressReport.h"
+#include <kis_gtl_lock.h>
 
 extern QMutex* shivaMutex;
 
@@ -75,7 +76,6 @@ void ShivaFilter::process(KisPaintDeviceSP dev,
     // TODO support for selection
     OpenShiva::Kernel kernel;
     kernel.setSource(*m_source);
-
     if (config) {
         QMap<QString, QVariant> map = config->getProperties();
         for (QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it) {
@@ -94,6 +94,7 @@ void ShivaFilter::process(KisPaintDeviceSP dev,
             }
         }
     }
+    KisGtlLocker gtlLocker;
     {
         dbgPlugins << "Compile: " << m_source->name().c_str();
         QMutexLocker l(shivaMutex);

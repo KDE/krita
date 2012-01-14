@@ -218,6 +218,32 @@ void KisShapeControllerTest::testMoveNodeDifferentParent()
     m_shapeController->setImage(0);
 }
 
+void KisShapeControllerTest::testSubstituteRootNode()
+{
+    QString actualGraph;
+    QString expectedGraph;
+
+    constructImage();
+
+    m_shapeController->setImage(m_image);
+
+    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
+    expectedGraph = "root layer1 layer2 layer3 effect layer4";
+
+    QCOMPARE(actualGraph, expectedGraph);
+    QCOMPARE(m_shapeController->layerMapSize(), 6);
+
+    m_image->flatten();
+
+    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
+    expectedGraph = "root Layer 1";
+
+    QCOMPARE(actualGraph, expectedGraph);
+    QCOMPARE(m_shapeController->layerMapSize(), 2);
+
+    m_shapeController->setImage(0);
+}
+
 
 QTEST_KDEMAIN(KisShapeControllerTest, GUI)
 #include "kis_shape_controller_test.moc"

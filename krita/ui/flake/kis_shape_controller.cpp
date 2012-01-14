@@ -64,6 +64,7 @@ struct KisShapeController::Private
 {
 public:
     KisImageWSP image;
+    KisNodeSP savedRootNode;
 
     KisDoc2 *doc;
     KisNameServer *nameServer;
@@ -105,15 +106,17 @@ void KisShapeController::setImage(KisImageWSP image)
 {
     if (m_d->image.isValid()) {
         m_d->image->disconnect(this);
-        slotRemoveNode(m_d->image->root());
+        slotRemoveNode(m_d->savedRootNode);
 
         Q_ASSERT(!m_d->shapesGraph.shapesCount());
     }
     m_d->image = 0;
+    m_d->savedRootNode = 0;
 
     if (image) {
         m_d->image = image;
-        slotNodeAdded(m_d->image->root());
+        m_d->savedRootNode = m_d->image->root();
+        slotNodeAdded(m_d->savedRootNode);
 
         connect(image, SIGNAL(sigNodeAddedAsync(KisNodeSP)),
                 SLOT(slotNodeAdded(KisNodeSP)), Qt::DirectConnection);

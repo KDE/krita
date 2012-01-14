@@ -86,17 +86,12 @@ KoStyleThumbnailer::~KoStyleThumbnailer()
     delete d;
 }
 
-QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, bool recreateThumbnail)
-{
-    return thumbnail(style, d->defaultSize, recreateThumbnail);
-}
-
 QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool recreateThumbnail)
 {
     if (!style || style->name().isNull()) {
         return QImage();
     }
-    if (size.isNull()) {
+    if (!size.isValid() || size.isNull()) {
         size = d->defaultSize;
     }
     QString imageKey = "p_" + QString::number(style->styleId()) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
@@ -136,17 +131,12 @@ QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool r
     return QImage(*im);
 }
 
-QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, bool recreateThumbnail)
-{
-    return thumbnail(style, d->defaultSize, recreateThumbnail);
-}
-
 QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size, bool recreateThumbnail)
 {
     if (!style || style->name().isNull()) {
         return QImage();
     }
-    if (size.isNull()) {
+    if (!size.isValid() || size.isNull()) {
         size = d->defaultSize;
     }
     QString imageKey = "c_" + QString::number(style->styleId()) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());

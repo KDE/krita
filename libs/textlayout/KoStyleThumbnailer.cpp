@@ -56,7 +56,19 @@
 class KoStyleThumbnailer::Private
 {
 public:
-    Private() : thumbnailHelperDocument(0){ }
+    Private() :
+        thumbnailHelperDocument(new QTextDocument),
+        documentLayout(new KoTextDocumentLayout(thumbnailHelperDocument)),
+        defaultSize(QSize(250, 48))
+    {
+        thumbnailHelperDocument->setDocumentLayout(documentLayout);
+    }
+
+    ~Private()
+    {
+        delete documentLayout;
+        delete thumbnailHelperDocument;
+    }
 
     QTextDocument *thumbnailHelperDocument;
     KoTextDocumentLayout *documentLayout;
@@ -67,16 +79,10 @@ public:
 KoStyleThumbnailer::KoStyleThumbnailer()
         : d(new Private())
 {
-    d->thumbnailHelperDocument = new QTextDocument;
-    d->documentLayout = new KoTextDocumentLayout(d->thumbnailHelperDocument);
-    d->thumbnailHelperDocument->setDocumentLayout(d->documentLayout);
-    d->defaultSize = QSize(250, 48);
 }
 
 KoStyleThumbnailer::~KoStyleThumbnailer()
 {
-    delete d->documentLayout;
-    delete d->thumbnailHelperDocument;
     delete d;
 }
 

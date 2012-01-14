@@ -17,7 +17,7 @@ else(HAVE_OPENCTL_913)
 endif(HAVE_OPENCTL_913)
 
 set( CTLCS_SRCS
-    ${BUFFER_SRCS}
+    KoCtlBuffer.cpp
     KoCtlAccumulator.cpp
     KoCtlChannel.cpp
     KoCtlMixColorsOp.cpp

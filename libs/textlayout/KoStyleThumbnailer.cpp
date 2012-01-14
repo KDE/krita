@@ -80,12 +80,12 @@ KoStyleThumbnailer::~KoStyleThumbnailer()
     delete d;
 }
 
-QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, bool dirtyCache)
+QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, bool recreateThumbnail)
 {
-    return thumbnail(style, d->defaultSize, dirtyCache);
+    return thumbnail(style, d->defaultSize, recreateThumbnail);
 }
 
-QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool dirtyCache)
+QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool recreateThumbnail)
 {
     if (!style || style->name().isNull()) {
         return QImage();
@@ -95,7 +95,7 @@ QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool d
     }
     QString imageKey = "p_" + QString::number(style->styleId()) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
 
-    if (d->thumbnailCache.object(imageKey) && !dirtyCache) {
+    if (!recreateThumbnail && d->thumbnailCache.object(imageKey)) {
         return QImage(*(d->thumbnailCache.object(imageKey)));
     }
 
@@ -130,12 +130,12 @@ QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool d
     return QImage(*im);
 }
 
-QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, bool dirtyCache)
+QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, bool recreateThumbnail)
 {
-    return thumbnail(style, d->defaultSize, dirtyCache);
+    return thumbnail(style, d->defaultSize, recreateThumbnail);
 }
 
-QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size, bool dirtyCache)
+QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size, bool recreateThumbnail)
 {
     if (!style || style->name().isNull()) {
         return QImage();
@@ -145,7 +145,7 @@ QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size, bool d
     }
     QString imageKey = "c_" + QString::number(style->styleId()) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
 
-    if (d->thumbnailCache.object(imageKey) && !dirtyCache) {
+    if (!recreateThumbnail && d->thumbnailCache.object(imageKey)) {
         return QImage(*(d->thumbnailCache.object(imageKey)));
     }
 

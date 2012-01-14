@@ -1232,6 +1232,7 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
         if (!currentList) {
             currentList = d->list(cursor.block().document(), listStyle, false);
             currentList->setListContinuedFrom(continuedList);
+            d->currentLists[d->currentListLevel - 2] = currentList;
         }
         d->currentListStyle = listStyle;
     }

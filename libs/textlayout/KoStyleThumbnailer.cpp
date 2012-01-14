@@ -100,7 +100,7 @@ QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool d
     }
 
     QImage *im = new QImage(size.width(), size.height(), QImage::Format_ARGB32_Premultiplied);
-    im->fill(Qt::transparent);
+    im->fill(QColor(Qt::transparent).rgba());
 
     KoParagraphStyle *clone = style->clone();
     //TODO: make the following real options
@@ -150,7 +150,7 @@ QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size, bool d
     }
 
     QImage *im = new QImage(size.width(), size.height(), QImage::Format_ARGB32_Premultiplied);
-    im->fill(Qt::transparent);
+    im->fill(QColor(Qt::transparent).rgba());
 
     KoCharacterStyle *clone = style->clone();
     QTextCursor cursor(d->thumbnailHelperDocument);

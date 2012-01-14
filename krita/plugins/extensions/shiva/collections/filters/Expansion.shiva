@@ -1,0 +1,30 @@
+kernel Expansion
+{
+  void evaluatePixel(image img, out pixel result)
+  {
+    pixel inp = img.sampleNearest( result.coord);
+    if( inp.opacity() < 1.0)
+    {
+      floatn res = 0;
+      float weight = 0.0;
+      for(int y = -1; y <= 1; ++y)
+      {
+        for(int x= -1; x <= 1; ++x)
+        {
+          pixel s = img.sampleNearest(result.coord+float2(x,y));
+          weight += s.opacity();
+          res += s.opacity() * s;
+        }
+      }
+      if (weight > 0.0) {
+        result = res * (1.0 - inp.opacity()) / weight + inp;
+//         result = res / weight;
+      } else {
+        result = res;
+      }
+    } else {
+      result = inp;
+    }
+  }
+
+}

@@ -18,7 +18,7 @@
 >;  
 kernel Ripples
 {
-  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  dependent float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
   const float waveslengthInv = 1.0 / 50.0;
   
   void evaluatePixel(image img, out pixel result)

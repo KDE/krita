@@ -1802,6 +1802,11 @@ bool KoCharacterStyle::operator==(const KoCharacterStyle &other) const
      return compareCharacterProperties(other);
 }
 
+bool KoCharacterStyle::operator!=(const KoCharacterStyle &other) const
+{
+     return !compareCharacterProperties(other);
+}
+
 bool KoCharacterStyle::compareCharacterProperties(const KoCharacterStyle &other) const
 {
     return other.d->stylesPrivate == d->stylesPrivate;

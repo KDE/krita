@@ -329,6 +329,12 @@ public:
     KoListStyle *defaultListStyle() const;
 
     /**
+     * Returns the default outline style to be used if outline-style is not specified in the document
+     * that do not specify a list-style
+     */
+    KoListStyle *defaultOutlineStyle() const;
+
+    /**
      * Sets the outline style to be used for headers that are not specified as lists
      */
     void setOutlineStyle(KoListStyle *listStyle);

@@ -700,7 +700,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                     d->splitPositionMap.remove(splitId);
                                 }
                             }
-
                             loadHeading(tag, cursor);
 
                             if (!tag.attributeNS(KoXmlNS::delta, "insertion-type").isEmpty())
@@ -1149,17 +1148,25 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
         cursor.mergeBlockFormat(blockFormat);
     }
 
-    if (!d->currentLists[d->currentListLevel - 1]) { // apply <text:outline-style> (if present) only if heading is not within a <text:list>
-        KoListStyle *outlineStyle = d->styleManager->outlineStyle();
-        if (outlineStyle) {
-            KoList *list = KoTextDocument(block.document()).headingList();
-            if (! list) {
-                list = d->list(block.document(), outlineStyle, false);
-                KoTextDocument(block.document()).setHeadingList(list);
-            }
-            list->add(block, level);
-        }
+    if (element.hasAttributeNS(KoXmlNS::text, "is-list-header")) {
+        QTextBlockFormat blockFormat;
+        blockFormat.setProperty(KoParagraphStyle::IsListHeader, element.attributeNS(KoXmlNS::text, "is-list-header") == "true");
+        cursor.mergeBlockFormat(blockFormat);
     }
+
+    KoListStyle *outlineStyle = d->styleManager->outlineStyle();
+    if (!outlineStyle) {
+        outlineStyle = d->styleManager->defaultOutlineStyle()->clone();
+        d->styleManager->setOutlineStyle(outlineStyle);
+    }
+
+    KoList *list = KoTextDocument(block.document()).headingList();
+    if (!list) {
+        list = d->list(block.document(), outlineStyle, false);
+        KoTextDocument(block.document()).setHeadingList(list);
+    }
+
+    list->add(block, level);
 
     // attach Rdf to cursor.block()
     // remember inline Rdf metadata
@@ -1358,7 +1365,6 @@ void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level)
     QTextBlock current = cursor.block();
 
     QTextBlockFormat blockFormat;
-
     if (numberedParagraph) {
         if (e.localName() == "p") {
             loadParagraph(e, cursor);

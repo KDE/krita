@@ -58,6 +58,8 @@ signals:
     void showStyleManager(int styleId);
 
 private:
+    void clearUnsetProperties(QTextFormat &format);
+
     Ui::SimpleCharacterWidget widget;
     KoStyleManager *m_styleManager;
     bool m_blockSignals;

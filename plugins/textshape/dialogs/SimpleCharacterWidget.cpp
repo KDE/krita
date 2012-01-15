@@ -42,11 +42,11 @@
 
 SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     : QWidget(parent),
-    m_blockSignals(false),
-    m_comboboxHasBidiItems(false),
-    m_styleManager(0),
-    m_thumbnailer(0),
-    m_tool(tool)
+      m_styleManager(0),
+      m_blockSignals(false),
+      m_comboboxHasBidiItems(false),
+      m_tool(tool),
+      m_thumbnailer(0)
 {
     widget.setupUi(this);
     widget.bold->setDefaultAction(tool->action("format_bold"));
@@ -111,64 +111,51 @@ void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
 
 void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
 {
-    if (!m_styleManager || format == m_currentCharFormat)
+    if (!m_styleManager || format == m_currentCharFormat) {
         return;
+    }
     m_currentCharFormat = format;
 
     KoCharacterStyle *style(m_styleManager->characterStyle(m_currentCharFormat.intProperty(KoCharacterStyle::StyleId)));
+    bool useParagraphStyle = false;
+    if (!style) {
+        style = static_cast<KoCharacterStyle*>(m_styleManager->paragraphStyle(m_currentCharFormat.intProperty(KoParagraphStyle::StyleId)));
+        useParagraphStyle = true;
+    }
     if (style) {
         bool unchanged = true;
-        foreach(int property, m_currentCharFormat.properties().keys()) {
-            if (property == QTextFormat::ObjectIndex)
-                continue;
-            if (property == KoCharacterStyle::ChangeTrackerId) { //internal property
-                continue;
-            }
-            if (property == KoCharacterStyle::InlineInstanceId) { //internal property
-                continue;
-            }
-            if (property == KoCharacterStyle::FontYStretch) { //internal property
-                continue;
-            }            if ((m_currentCharFormat.property(property) != style->value(property)) && !(style->value(property).isNull() && !m_currentCharFormat.property(property).toBool())) {
-            //the last check seems to work. might be cause of a bug. The problem is when comparing an unset property in the style with a set to {0, false, ...) property in the format (eg. set then unset bold)
-                unchanged = false;
-                break;
+        QTextCharFormat comparisonFormat;
+        style->applyStyle(comparisonFormat);
+        //Here we are making quite a few assumptions:
+        //i. we can set the "ensured" properties on a blank charFormat. These corresponds to Qt default. We are not creating false positive (ie. different styles showing as identical).
+        //ii. a property which will return as false with toBool() is identical to an unset property (this test is done in the clearUnsetProperties method
+        style->ensureMinimalProperties(comparisonFormat);
+        style->ensureMinimalProperties(m_currentCharFormat);
+        clearUnsetProperties(comparisonFormat);
+        clearUnsetProperties(m_currentCharFormat);
+        if (m_currentCharFormat.properties().count() != comparisonFormat.properties().count()) {
+            unchanged = false;
+        }
+        else {
+            foreach(int property, m_currentCharFormat.properties().keys()) {
+                if (m_currentCharFormat.property(property) != comparisonFormat.property(property)) {
+                    unchanged = false;
+                }
             }
         }
         disconnect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
-        widget.characterStyleCombo->setCurrentIndex(m_stylesModel->indexForCharacterStyle(*style).row());
+        widget.characterStyleCombo->setCurrentIndex((useParagraphStyle)?0:m_stylesModel->indexForCharacterStyle(*style).row());
         widget.characterStyleCombo->setStyleIsOriginal(unchanged);
+        widget.characterStyleCombo->slotUpdatePreview();
         connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
     }
-    else {
-        int parId = m_currentCharFormat.intProperty(KoParagraphStyle::StyleId);
-        style = static_cast<KoCharacterStyle*>(m_styleManager->paragraphStyle(parId));
-        if (style) {
-            bool unchanged = true;
-            foreach(int property, m_currentCharFormat.properties().keys()) {
-                if (property == QTextFormat::ObjectIndex) {
-                    continue;
-                }
-                if (property == KoCharacterStyle::ChangeTrackerId) { //internal property
-                    continue;
-                }
-                if (property == KoCharacterStyle::InlineInstanceId) { //internal property
-                    continue;
-                }
-                if (property == KoCharacterStyle::FontYStretch) { //internal property
-                    continue;
-                }
-                if ((m_currentCharFormat.property(property) != style->value(property)) && !(style->value(property).isNull() && !m_currentCharFormat.property(property).toBool())) {
-                    //the last check seems to work. might be cause of a bug. The problem is when comparing an unset property in the style with a set to {0, false, ...) property in the format (eg. set then unset bold)
-                    unchanged = false;
-                    break;
-                }
-            }
-            disconnect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
-            widget.characterStyleCombo->setCurrentIndex(0); //TODO make it a bit more resilient
-            widget.characterStyleCombo->setStyleIsOriginal(unchanged);
-            widget.characterStyleCombo->slotUpdatePreview();
-            connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+}
+
+void SimpleCharacterWidget::clearUnsetProperties(QTextFormat &format)
+{
+    foreach(int property, format.properties().keys()) {
+        if (!format.property(property).toBool()) {
+            format.clearProperty(property);
         }
     }
 }

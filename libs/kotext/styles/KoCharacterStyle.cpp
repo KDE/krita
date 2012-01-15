@@ -2132,9 +2132,6 @@ QVariant KoCharacterStyle::value(int key) const
         else if (d->defaultStyle)
             variant = d->defaultStyle->value(key);
     }
-    if (variant.isNull() && d->hardCodedDefaultStyle.contains(key))
-        variant = d->hardCodedDefaultStyle.value(key);
-
     return variant;
 }
 

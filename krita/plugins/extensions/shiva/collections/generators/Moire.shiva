@@ -16,9 +16,14 @@
 >;
 kernel Moire
 {
-  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
-  const float PI2 = 2 * 3.14159265;
-  const float q = t * PI2;
+  const float PI2 = 2 * 3.14159265358979323846;
+  dependent float2 center;
+  dependent float q;
+  void evaluateDependents()
+  {
+    center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+    q = t * PI2;
+  }
   void evaluatePixel(out pixel4 result)
   {
     float2 vec = result.coord - center;

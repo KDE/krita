@@ -493,7 +493,7 @@ kernel FractalExplorer
     {
         float h; float s; float v; float r; float g; float b; float j; float p; float q; float t;
         int i;
-        float4 color;
+        float4 col;
         
         h = hsv.x;
         s = hsv.y;
@@ -502,11 +502,11 @@ kernel FractalExplorer
         
         if (v == 0.0) {
             // No brightness so return black
-            color = float4(0.0, 0.0, 0.0, 1.0);
+            col = float4(0.0, 0.0, 0.0, 1.0);
             
         } else if (s == 0.0) {
             // No saturation so return grey
-            color = float4(v, v, v, 1.0);
+            col = float4(v, v, v, 1.0);
             
         } else {
 			// RGB color
@@ -542,10 +542,10 @@ kernel FractalExplorer
 				g = p;
 				b = q;
 			}
-			color = float4(r, g, b, 1.0);
+			col = float4(r, g, b, 1.0);
 		}
         
-        return color;
+        return col;
     }
     
     float2 multiply( float2 matrix[2], float2 v)
@@ -633,40 +633,40 @@ kernel FractalExplorer
     
     float4 colorMapping(float n, float2 z)
     {
-        float4 color;
+        float4 col;
         float4 c1;
         float4 c2;
         float v = abs(1.0 - (n - float(iterationsOffset)) / float(iterations - iterationsOffset));
         float v0 = v;
         
         if (hsbColor && colorMode > 0) {
-            c1 = hsv2rgb(float3(color1.x, color1.y, color1.z));
-            c2 = hsv2rgb(float3(color2.x, color2.y, color2.z));
+            c1 = hsv2rgb(float3(color1.red, color1.green, color1.blue));
+            c2 = hsv2rgb(float3(color2.red, color2.green, color2.blue));
         } else {
-            c1 = color1;
-            c2 = color2;
+            c1 = float4(color1.red, color1.green, color1.blue, color1.opacity);
+            c2 = float4(color2.red, color2.green, color2.blue, color2.opacity);
         }
         
         if (colorMode == 3) {
           if( atan2(z.y, z.x) > 0.0 )
           {
-            color = c1;
+            col = c1;
           } else {
-            color = c2;
+            col = c2;
           }
         } else if (colorMode == 4) {
           if( mod(n, 2.0) == 0.0 )
           {
-            color = c1;
+            col = c1;
           } else {
-            color = c2;
+            col = c2;
           }
         } else if (colorMode == 5) {
           if(abs(z.x) < bailout / 2.0 || abs(z.y) < bailout / 2.0)
           {
-            color = c1;
+            col = c1;
           } else {
-            color = c2;
+            col = c2;
           }
         } else {
             if (colorMode != 2) {
@@ -716,12 +716,12 @@ kernel FractalExplorer
             }
             
             if (hsbColor) {
-                color = hsv2rgb(mix(float3(c1.x, c1.y, c1.z), float3(c2.x, c2.y, c2.z), v));
+                col = hsv2rgb(mix(float3(c1.x, c1.y, c1.z), float3(c2.x, c2.y, c2.z), v));
             } else {
-               color = mix(c1, c2, v);
+               col = mix(c1, c2, v);
             }
         }
-        return color;
+        return col;
     }
     
     
@@ -735,7 +735,8 @@ kernel FractalExplorer
      */
     float4 renderPoint(float2 p)
     {
-        float4 color = colorBackground;
+        float4 col_o = float4(colorBackground.red, colorBackground.green, colorBackground.blue, colorBackground.opacity);
+        float4 col = col_o;
         float2 z0;
         float2 z;
         
@@ -767,7 +768,7 @@ kernel FractalExplorer
             
             if (n >= minIterations && bailoutCondition(z)) {
                 // Set the pixel colour based on the number of iterations it takes to reach the bailout threshold
-                color = colorMapping(float(n), z);
+                col = colorMapping(float(n), z);
                 run = false;
             }
             
@@ -780,12 +781,12 @@ kernel FractalExplorer
         //}
         
         // Prevent edge case of invalid color value
-        color = mix(colorBackground, color, color.a);
+        col = mix(col_o, col, col.a);
         
         if (iterationColorBlend > 0.0) blend = clamp(1.0 - (float(n - minIterations) / float(iterations - minIterations)) * iterationColorBlend, 0.0, 1.0);
-        color = mix(colorBackground, color, color.a * blend);
+        col = mix(col_o, col, col.a * blend);
         
-        return color;
+        return col;
     }
     
     

@@ -45,10 +45,13 @@ void InsertInlineObjectCommand::redo()
 
     KoTextDocument doc(m_document);
     KoTextEditor *editor = doc.textEditor();
-    doc.inlineTextObjectManager()->insertInlineObject(*editor->cursor(), m_inlineObject);
     if (m_first) {
+        doc.inlineTextObjectManager()->insertInlineObject(*editor->cursor(), m_inlineObject);
         m_position = editor->cursor()->position();
         m_first = false;
+    }
+    else {
+        doc.inlineTextObjectManager()->addInlineObject(m_inlineObject);
     }
     editor->setPosition(m_position);
     QTextCharFormat format = editor->charFormat();
@@ -60,7 +63,6 @@ void InsertInlineObjectCommand::redo()
 void InsertInlineObjectCommand::undo()
 {
     KUndo2Command::undo();
-    // remove the inlineObject's character from the document
-    // remove the inlineObject from the inline object manager
+    KoTextDocument(m_document).inlineTextObjectManager()->removeInlineObject(m_inlineObject);
     m_deleteInlineObject = true;
 }

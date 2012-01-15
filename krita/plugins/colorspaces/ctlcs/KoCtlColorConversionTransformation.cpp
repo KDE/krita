@@ -29,6 +29,7 @@
 #include "KoCtlBuffer.h"
 
 #include <QString>
+#include <kis_gtl_lock.h>
 
 struct KoCtlColorConversionTransformation::Private {
     OpenCTL::Program* program;
@@ -58,6 +59,8 @@ KoCtlColorConversionTransformation::~KoCtlColorConversionTransformation()
 
 void KoCtlColorConversionTransformation::transform(const quint8 *src8, quint8 *dst8, qint32 nPixels) const
 {
+    KisGtlLock::lock();
+  
     dbgPigment << "Transformation from " << srcColorSpace()->id() << " " << srcColorSpace()->profile()->name() << " to " << dstColorSpace()->id() << " " << dstColorSpace()->profile()->name();
     KoCtlBuffer src(reinterpret_cast<char*>(const_cast<quint8*>(src8)), nPixels * srcColorSpace()->pixelSize());
     KoCtlBuffer dst(reinterpret_cast<char*>(dst8), nPixels * dstColorSpace()->pixelSize());
@@ -77,6 +80,8 @@ void KoCtlColorConversionTransformation::transform(const quint8 *src8, quint8 *d
         }
     }
     d->program->apply(src, dst);
+    
+    KisGtlLock::unlock();
 }
 
 struct KoCtlColorConversionTransformationFactory::Private {

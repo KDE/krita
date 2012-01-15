@@ -18,7 +18,7 @@
 >;  
 kernel ZigZag
 {  
-  const float2 center = { IMAGE_WIDTH * 0.5, IMAGE_HEIGHT * 0.5 };
+  dependent float2 center = { IMAGE_WIDTH * 0.5, IMAGE_HEIGHT * 0.5 };
   void evaluatePixel(image img, out pixel result)
   {
     float2 vec = result.coord - center;

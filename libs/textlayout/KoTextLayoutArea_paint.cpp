@@ -710,8 +710,11 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
                         if (!line.isValid())
                             continue;
 
-                        // end position: not that this can be smaller than p1 when we are handling RTL
+                        // end position: not that x2 can be smaller than x1 when we are handling RTL
                         int p2 = startOfFragmentInBlock + currentFragment.length();
+                        if (i < lastLine) {
+                            p2 = qMin(p2, line.textStart() + line.textLength() - 1);
+                        }
                         int fragmentToLineOffset = qMax(startOfFragmentInBlock - line.textStart(), 0);
 
                         qreal x1 = line.cursorToX(p1);

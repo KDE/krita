@@ -21,6 +21,8 @@
 
 #include <QTextCursor>
 #include "KoTextAnchor.h"
+#include "KoTextDocument.h"
+#include "KoInlineTextObjectManager.h"
 
 bool sortAnchor(KoTextAnchor *a1, KoTextAnchor *a2)
 {
@@ -60,10 +62,24 @@ void DeleteAnchorsCommand::redo()
             cursor.deleteChar();
         }
     }
+    KoInlineTextObjectManager *manager = KoTextDocument(m_document).inlineTextObjectManager();
+    Q_ASSERT(manager);
+    if (manager) {
+        foreach (KoTextAnchor *anchor, m_anchors) {
+            manager->removeInlineObject(anchor);
+        }
+    }
 }
 
 void DeleteAnchorsCommand::undo()
 {
+    KoInlineTextObjectManager *manager = KoTextDocument(m_document).inlineTextObjectManager();
+    Q_ASSERT(manager);
+    if (manager) {
+        foreach (KoTextAnchor *anchor, m_anchors) {
+            manager->addInlineObject(anchor);
+        }
+    }
     KUndo2Command::undo();
     m_deleteAnchors = false;
 }

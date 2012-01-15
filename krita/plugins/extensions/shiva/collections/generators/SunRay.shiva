@@ -29,9 +29,14 @@
 
 kernel SunRay
 {
-  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
-  const float PI = 3.14159265;
-  const float4 color = { colorrgb[0], colorrgb[1], colorrgb[2], 1.0 };
+  dependent float2 center;
+  dependent float4 colorv;
+  
+  void evaluateDependents()
+  {
+    center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+    colorv = { colorrgb.red, colorrgb.green, colorrgb.blue, 1.0 };
+  }
   
   void evaluatePixel(out pixel4 result)
   {
@@ -39,7 +44,7 @@ kernel SunRay
     float angle = atan2( vec.x, vec.y);
     float coef = cos(angle * phase);
     if( coef < 0.0 ) coef = - coef;
-    result = color + fluctuation * coef;
+    result = colorv + fluctuation * coef;
     
     for( int i = 0; i < 3; ++i)
     {

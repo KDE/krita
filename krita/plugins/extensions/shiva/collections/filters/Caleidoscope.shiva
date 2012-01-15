@@ -26,9 +26,9 @@
 >;  
 kernel Caleidoscope
 {  
-  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  dependent float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
   const float pi = 3.14159265358979323846;
-  const float angle = pi / count;
+  dependent float angle = pi / count;
   void evaluatePixel(image img, out pixel result)
   {
     float2 vec = result.coord - center;

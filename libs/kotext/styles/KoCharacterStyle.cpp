@@ -462,7 +462,11 @@ KoCharacterStyle *KoCharacterStyle::autoStyle(const QTextCharFormat &format, QTe
     // remove StyleId if it is there as it is not a property of the style itself and will not be written out
     // so it should not be part of the autostyle. As otherwise it can happen that the StyleId is the only 
     // property left and then we write out an empty style which is unneeded.
+    // we also need to remove the properties of links as they are saved differently
     autoStyle->d->stylesPrivate.remove(StyleId);
+    autoStyle->d->stylesPrivate.remove(QTextFormat::IsAnchor);
+    autoStyle->d->stylesPrivate.remove(QTextFormat::AnchorHref);
+    autoStyle->d->stylesPrivate.remove(QTextFormat::AnchorName);
     return autoStyle;
 }
 
@@ -475,18 +479,26 @@ void KoCharacterStyle::applyStyle(QTextBlock &block) const
     ensureMinimalProperties(cf);
     cursor.setBlockCharFormat(cf);
 
-    // be sure that we keep the InlineInstanceId when applying a style
+    // be sure that we keep the InlineInstanceId, anchor information and ChangeTrackerId when applying a style
     for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
         cursor.setPosition(it.fragment().position());
         cursor.setPosition(it.fragment().position() + it.fragment().length(), QTextCursor::KeepAnchor);
+
         QTextCharFormat f(cf);
+
         QVariant v = it.fragment().charFormat().property(InlineInstanceId);
         if (!v.isNull()) {
             f.setProperty(InlineInstanceId, v);
         }
+
         v = it.fragment().charFormat().property(ChangeTrackerId);
         if (!v.isNull()) {
             f.setProperty(ChangeTrackerId, v);
+        }
+
+        if (it.fragment().charFormat().isAnchor()) {
+            f.setAnchor(true);
+            f.setAnchorHref(it.fragment().charFormat().anchorHref());
         }
         cursor.setCharFormat(f);
     }

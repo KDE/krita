@@ -107,7 +107,15 @@ void PictureTool::setImageData(KJob *job)
 
 }
 
-void PictureTool::mouseDoubleClickEvent( KoPointerEvent *event )
+void PictureTool::mousePressEvent(KoPointerEvent *event)
+{
+    if (event->button() == Qt::RightButton) {
+        event->ignore();
+    }
+
+}
+
+void PictureTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     if(canvas()->shapeManager()->shapeAt(event->point) != m_pictureshape) {
         event->ignore(); // allow the event to be used by another

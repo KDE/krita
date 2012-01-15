@@ -1,0 +1,22 @@
+kernel Contraction
+{
+  void evaluatePixel(image img, out pixel result)
+  {
+    pixel inp = img.sampleNearest( result.coord);
+    result = inp;
+    if( inp.opacity() > 0.0)
+    {
+      float minAlpha = 1.0;
+      for(int y = -1; y <= 1; ++y)
+      {
+        for(int x= -1; x <= 1; ++x)
+        {
+          pixel s = img.sampleNearest(result.coord+float2(x,y));
+          minAlpha = min(minAlpha, s.opacity());
+        }
+      }
+      result.setOpacity(minAlpha);
+    }
+  }
+
+}

@@ -1,12 +1,12 @@
 <
   parameters: <
     colors: <
-      colorrgb: <
+      color1: <
         label: "Object";
         type: color;
         defaultValue: { 0.2, 0.01, 0.08 };
       >;
-      colorcenterrgb: <
+      colorcenter: <
         label: "Background";
         type: color;
         defaultValue: { 1.0, 1.0, 1.0 };
@@ -35,11 +35,14 @@
 >;
 kernel Something
 {
-  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  dependent float2 center;
   const float PI = 3.14159265;
-  const float4 color1 = { colorrgb[0], colorrgb[1], colorrgb[2], 1.0 };
-  const float4 colorCenter = { colorcenterrgb[0], colorcenterrgb[1], colorcenterrgb[2], 1.0 };
-  const float radius = 0.2 * (IMAGE_WIDTH + IMAGE_HEIGHT) * radiusp;
+  dependent float radius;
+  void evaluateDependents()
+  {
+    center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+    radius = 0.2 * (IMAGE_WIDTH + IMAGE_HEIGHT) * radiusp;
+  }
   
   void evaluatePixel(out pixel4 result)
   {
@@ -57,7 +60,7 @@ kernel Something
       {
 	coef = pow((radius - vec_length) / adjRadius , 1.0 ) * ( 1.0 - coef) + coef;
       }
-      result = ( 1 - coef ) * color1 + coef * colorCenter;
+      result = mix(color1, colorcenter, coef);
       
       for( int i = 0; i < 3; ++i)
       {
@@ -66,7 +69,7 @@ kernel Something
       }
       result[3] = 1.0;
     } else {
-      result = colorCenter;
+      result = colorcenter;
     }
   }
   region generated()

@@ -43,6 +43,6 @@ kernel MandelbrotSet
       result[1] = 0.0;
       result[2] = 0.0;
     }
-    result.setAlpha(1.0);
+    result.setOpacity(1.0);
   }
 }

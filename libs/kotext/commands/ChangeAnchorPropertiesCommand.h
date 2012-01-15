@@ -24,10 +24,13 @@
 #include "kotext_export.h"
 #include "KoTextAnchor.h"
 
+class KoShapeContainer;
+
+
 class KOTEXT_EXPORT ChangeAnchorPropertiesCommand : public KUndo2Command
 {
 public:
-    ChangeAnchorPropertiesCommand(KoTextAnchor *anchor, KoTextAnchor *newAnchor, KUndo2Command *parent);
+    ChangeAnchorPropertiesCommand(KoTextAnchor *anchor, KoTextAnchor *newAnchor, KoShapeContainer *newParent, KUndo2Command *parent);
     virtual ~ChangeAnchorPropertiesCommand();
 
     /// redo the command
@@ -40,6 +43,8 @@ private:
     KoTextAnchor *m_anchor;
     KoTextAnchor m_oldAnchor;
     KoTextAnchor m_newAnchor;
+    KoShapeContainer *m_oldParent;
+    KoShapeContainer *m_newParent;
 };
 
 #endif // CHANGEANCHORPROPERTIESCOMMAND_H

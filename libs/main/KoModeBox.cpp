@@ -276,8 +276,7 @@ void KoModeBox::setCanvas(KoCanvasBase *canvas)
                     this, SLOT(setOptionWidgets(const QList<QWidget *> &)));
     }
 
-if (d->canvas)
-    d->canvasReset = true;
+    d->canvasReset = d->canvas != 0;
 
     d->canvas = canvas;
 

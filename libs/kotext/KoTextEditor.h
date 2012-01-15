@@ -460,6 +460,7 @@ signals:
     void cursorPositionChanged();
 
 protected:
+    void recursiveSetStyle(QTextFrame::iterator it, KoCharacterStyle *style);
     bool recursiveProtectionCheck(QTextFrame::iterator it) const;
 
 private:

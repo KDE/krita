@@ -110,6 +110,7 @@ set(kritaimage_LIB_SRCS
    kis_base_processor.cpp
    kis_basic_math_toolbox.cpp
    kis_bookmarked_configuration_manager.cc
+   kis_clone_info.cpp
    kis_clone_layer.cpp
    kis_colorspace_convert_visitor.cpp
    kis_config_widget.cpp
@@ -117,6 +118,7 @@ set(kritaimage_LIB_SRCS
    kis_convolution_painter.cc
    kis_cubic_curve.cpp
    kis_default_bounds.cpp
+   kis_default_bounds_base.cpp
    kis_effect_mask.cc
    kis_fast_math.cpp
    kis_fill_painter.cc
@@ -124,6 +126,7 @@ set(kritaimage_LIB_SRCS
    kis_filter_strategy.cc
    kis_gradient_painter.cc
    kis_iterator_ng.cpp
+   kis_async_merger.cpp
    kis_merge_walker.cc
    kis_updater_context.cpp
    kis_update_job_item.cpp
@@ -151,6 +154,9 @@ set(kritaimage_LIB_SRCS
    kis_base_mask_generator.cpp
    kis_rect_mask_generator.cpp
    kis_circle_mask_generator.cpp
+   kis_gauss_circle_mask_generator.cpp
+   kis_gauss_rect_mask_generator.cpp
+   kis_gtl_lock.cpp
    kis_curve_circle_mask_generator.cpp
    kis_curve_rect_mask_generator.cpp
    kis_math_toolbox.cpp
@@ -173,7 +179,6 @@ set(kritaimage_LIB_SRCS
    kis_random_accessor_ng.cpp
    kis_random_generator.cc
    kis_random_sub_accessor.cpp
-   kis_shear_visitor.cpp
    kis_selected_transaction_data.cpp
    kis_selection.cc
    kis_selection_mask.cpp

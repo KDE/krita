@@ -145,12 +145,10 @@ void DeleteCommand::deleteInlineObjects()
         const QChar *data = selected.constData();
         for (int i = 0; i < selected.length(); i++) {
             if (data->unicode() == QChar::ObjectReplacementCharacter) {
-                cursor.setPosition(position);
+                cursor.setPosition(position + i);
                 object = manager->inlineTextObject(cursor);
                 deleteTextAnchor(object);
                 m_invalidInlineObjects.insert(object);
-            } else {
-                position++;
             }
             data++;
         }
@@ -289,17 +287,10 @@ void DeleteCommand::updateListChanges()
 
 DeleteCommand::~DeleteCommand()
 {
-    if (!m_undone) {
+    if (!m_undone && m_document) {
         KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
         if (textEditor == 0)
             return;
-        foreach (KoInlineObject *object, m_invalidInlineObjects) {
-            KoTextDocument textDocument(m_document);
-            KoInlineTextObjectManager *manager = textDocument.inlineTextObjectManager();
-            manager->removeInlineObject(object);
-            delete object;
-        }
-
         foreach (KUndo2Command *command, m_shapeDeleteCommands)
             delete command;
     }

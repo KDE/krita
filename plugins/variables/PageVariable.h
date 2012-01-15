@@ -24,6 +24,7 @@
 #include <KoVariable.h>
 #include <KoTextShapeData.h>
 #include <KoTextPage.h>
+#include <KoOdfNumberDefinition.h>
 
 class KoShapeSavingContext;
 
@@ -62,6 +63,7 @@ private:
     KoTextPage::PageSelection m_pageselect;
     int m_pageadjust;
     bool m_fixed;
+    KoOdfNumberDefinition m_numberFormat;
 
     QString m_continuation;
 };

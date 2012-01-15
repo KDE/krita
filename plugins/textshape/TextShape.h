@@ -51,9 +51,7 @@ public:
     virtual ~TextShape();
 
     /// reimplemented
-    void paintComponent(QPainter &painter, const KoViewConverter &converter);
-    /// reimplemented
-    void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     /// reimplemented
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
 
@@ -115,6 +113,7 @@ private:
     KoPageProvider *m_pageProvider;
     KoImageCollection *m_imageCollection;
     QRegion m_paintRegion;
+    KoParagraphStyle * m_paragraphStyle;
 };
 
 #endif

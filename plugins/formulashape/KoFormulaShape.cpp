@@ -59,7 +59,7 @@ KoFormulaShape::~KoFormulaShape()
     delete m_formulaRenderer;
 }
 
-void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter )
+void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     painter.save();
     applyConversion( painter, converter );   // apply zooming and coordinate translation

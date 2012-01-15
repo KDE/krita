@@ -115,16 +115,26 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     // Get the icc profile!
     const KoColorProfile* profile = 0;
     if (resourceSection.resources.contains(PSDResourceSection::ICC_PROFILE)) {
+
         QByteArray profileData = resourceSection.resources[PSDResourceSection::ICC_PROFILE]->data;
         profile = KoColorSpaceRegistry::instance()->createColorProfile(colorSpaceId.first,
                                                                        colorSpaceId.second,
                                                                        profileData);
+
     }
 
     // Create the colorspace
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile);
-    if (!cs) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
-
+    if (!cs) {
+        if (colorSpaceId.first.contains("LABA") && colorSpaceId.second.contains("U8"))
+        {
+            qDebug()<<"Krita Has Got LAB with 8 Bit Depth, which doesnt seem to be in kolospacemath so i upscale to 16 bit";
+            cs = KoColorSpaceRegistry::instance()->colorSpace("LABA",  "U16", profile);
+        }
+        else{
+            return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+        }
+    }
     // Creating the KisImageWSP
     m_image = new KisImage(m_doc->createUndoStore(),  header.width, header.height, cs, "built image");
     Q_CHECK_PTR(m_image);
@@ -170,10 +180,11 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                 return KisImageBuilder_RESULT_FAILURE;
             }
 
-            layer->setDirty();
             m_image->addNode(layer, m_image->rootLayer());
+            layer->setVisible(layerRecord->visible);
         }
     }
+
     m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 }

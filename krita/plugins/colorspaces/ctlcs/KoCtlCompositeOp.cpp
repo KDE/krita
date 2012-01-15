@@ -35,9 +35,17 @@
 #include <GTLCore/Value.h>
 #include <OpenCTL/Program.h>
 #include <OpenCTL/Module.h>
+#include <kis_gtl_lock.h>
 
-KoCTLCompositeOp::KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColorSpace * cs, const GTLCore::PixelDescription& _pd) : KoCompositeOp(cs, idForFile(_template->fileName()), descriptionForFile(_template->fileName()), categoryForFile(_template->fileName())), m_withMaskProgram(0), m_withoutMaskProgram(0)
+KoCTLCompositeOp::KoCTLCompositeOp(OpenCTL::Template* _template, const KoCtlColorSpace * cs, const GTLCore::PixelDescription& _pd)
+    : KoCompositeOp(cs,
+                    idForFile(_template->fileName()),
+                    descriptionForFile(_template->fileName()),
+                    categoryForFile(_template->fileName()))
+    , m_withMaskProgram(0)
+    , m_withoutMaskProgram(0)
 {
+    KisGtlLocker gtlLocker;
     QMutexLocker lock(ctlMutex);
     OpenCTL::Module* module = _template->generateModule(_pd);
     module->compile();
@@ -79,6 +87,7 @@ void KoCTLCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
                                  quint8 opacity,
                                  const QBitArray & channelFlags) const
 {
+    KisGtlLocker gtlLocker;
     Q_UNUSED(channelFlags);
 #ifdef __GNUC__
 #warning "Use channel flags, especially for alpha locking!"

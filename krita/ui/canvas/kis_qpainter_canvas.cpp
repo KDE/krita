@@ -100,8 +100,6 @@ void KisQPainterCanvas::setPrescaledProjection(KisPrescaledProjectionSP prescale
 
 void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 {
-    KisConfig cfg;
-
     KisImageWSP image = canvas()->image();
     if (image == 0) return;
 
@@ -113,6 +111,11 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 
 
     QPainter gc(&m_buffer);
+
+    // we double buffer, so we paint on an image first, then from the image onto the canvas,
+    // so copy the clip region since otherwise we're filling the whole buffer every time with
+    // the background color _and_ the transparent squares.
+    gc.setClipRegion(ev->region());
 
     KisCoordinatesConverter *converter = coordinatesConverter();
     QTransform imageTransform = converter->viewportToWidgetTransform();

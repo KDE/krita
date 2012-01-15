@@ -7,6 +7,7 @@ if(KDE4_BUILD_TESTS)
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 
+add_subdirectory(styles)
 add_subdirectory(tests)
 add_subdirectory(pics)
 
@@ -39,9 +40,14 @@ set(flake_SRCS
     KoShapeGroup.cpp
     KoShapeManagerPaintingStrategy.cpp
     KoShapeManager.cpp
+    KoShapePaintingContext.cpp
     KoShapePainter.cpp
     KoFrameShape.cpp
     KoUnavailShape.cpp
+    KoMarkerData.cpp
+    KoMarker.cpp
+    KoMarkerCollection.cpp
+    KoMarkerSharedLoadingData.cpp
     #KoUnavailData.cpp
     #KoUnavailCollection.cpp
     KoToolBase.cpp
@@ -78,6 +84,7 @@ set(flake_SRCS
     KoShapeBackground.cpp
     KoColorBackground.cpp
     KoGradientBackground.cpp
+    KoOdfGradientBackground.cpp
     KoPatternBackground.cpp
     KoShapeConfigWidgetBase.cpp
     KoShapeConfigFactoryBase.cpp
@@ -156,10 +163,13 @@ set(flake_SRCS
     commands/KoEventActionAddCommand.cpp
     commands/KoEventActionRemoveCommand.cpp
     commands/KoShapeRenameCommand.cpp
+    commands/KoShapeRunAroundCommand.cpp
     commands/KoPathPointMergeCommand.cpp
     commands/KoShapeTransparencyCommand.cpp
     commands/KoShapeClipCommand.cpp
     commands/KoShapeUnclipCommand.cpp
+    commands/KoPathShapeMarkerCommand.cpp
+    commands/KoShapeConnectionChangeCommand.cpp
     tools/KoCreatePathTool.cpp
     tools/KoCreatePathToolFactory.cpp
     tools/KoCreateShapeStrategy.cpp
@@ -334,6 +344,7 @@ install(
     commands/KoShapeTransformCommand.h
     commands/KoShapeUngroupCommand.h
     commands/KoSubpathRemoveCommand.h
+    commands/KoPathShapeMarkerCommand.h
     tools/KoInteractionTool.h
     tools/KoPanTool.h
     KoViewConverter.h

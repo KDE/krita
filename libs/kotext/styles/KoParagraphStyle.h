@@ -23,6 +23,7 @@
 #ifndef KOPARAGRAPHSTYLE_H
 #define KOPARAGRAPHSTYLE_H
 
+#include "KoCharacterStyle.h"
 #include "KoText.h"
 #include "kotext_export.h"
 
@@ -55,7 +56,7 @@ class KoShapeSavingContext;
  * a specific KoParagraphStyle.
  * @see KoStyleManager
  */
-class KOTEXT_EXPORT KoParagraphStyle : public QObject
+class KOTEXT_EXPORT KoParagraphStyle : public KoCharacterStyle
 {
     Q_OBJECT
 public:
@@ -156,20 +157,24 @@ public:
         HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
         PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
         VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
+        HiddenByTable,        ///< dont let this paragraph have any height
 
         NormalLineHeight,         ///< bool, internal property for reserved usage
         BibliographyData,
 
         TableOfContentsData,      // set when block is instead a TableOfContents
         GeneratedDocument,  // set when block is instead a generated document
-        Shadow                    //< KoShadowStyle, the shadow of this paragraph
+        Shadow,                    //< KoShadowStyle, the shadow of this paragraph
+        NextStyle,                  ///< holds the styleId of the style to be used on a new paragraph
+        ParagraphListStyleId,        ///< this holds the listStyleId of the list got from style:list-style-name property from ODF 1.2
+        EndCharStyle           // QSharedPointer<KoCharacterStyle>  used when final line is empty
     };
 
     enum AutoSpace {
         NoAutoSpace,              ///< space should not be added between portions of Asian, Western and complex texts
         IdeographAlpha            ///< space should be added between portions of Asian, Western and complex texts
     };
-    
+
     enum VerticalAlign {
         VAlignAuto,
         VAlignBaseline,
@@ -177,8 +182,7 @@ public:
         VAlignMiddle,
         VAlignTop
     };
-        
-    
+
     /// Constructor
     KoParagraphStyle(QObject *parent = 0);
     /// Creates a KoParagrahStyle with the given block format, the block character format and \a parent
@@ -273,6 +277,7 @@ public:
      * frame, setting a widowThreshold of 4 will break at 6 lines instead to leave the
      * requested 4 lines.
      */
+
     void setWidowThreshold(int lines);
     /**
      * @see setWidowThreshold
@@ -286,6 +291,7 @@ public:
      * setting the orphanThreshold to something greater than 2 will move the whole paragraph
      * to the second frame.
      */
+
     void setOrphanThreshold(int lines);
     /**
      * @see setOrphanThreshold
@@ -297,6 +303,7 @@ public:
      * @see setDropCapsLines
      * @see dropCapsDistance
      */
+
     void setDropCaps(bool on);
     /**
      * @see setDropCaps
@@ -308,6 +315,7 @@ public:
      * @see setDropCapsLines
      * @see dropCapsDistance
      */
+
     void setDropCapsLength(int characters);
     /**
      * set dropCaps Length in characters
@@ -320,6 +328,7 @@ public:
      * @see setDropCaps
      * @see dropCapsDistance
      */
+
     void setDropCapsLines(int lines);
     /**
      * The dropCapsLines
@@ -332,6 +341,7 @@ public:
      * @see setDropCaps
      * @see setDropCapsLines
      */
+
     void setDropCapsDistance(qreal distance);
     /**
      * The dropCaps distance
@@ -367,46 +377,46 @@ public:
     QBrush background() const;
     /// See similar named method on QTextBlockFormat
     void clearBackground();
-    
+
     qreal backgroundTransparency() const;
     void setBackgroundTransparency(qreal transparency);
 
     bool snapToLayoutGrid() const;
     void setSnapToLayoutGrid(bool value);
-    
+
     bool registerTrue() const;
     void setRegisterTrue(bool value);
-    
+
     bool strictLineBreak() const;
     void setStrictLineBreak(bool value);
-    
+
     bool justifySingleWord() const;
     void setJustifySingleWord(bool value);
-    
+
     bool automaticWritingMode() const;
     void setAutomaticWritingMode(bool value);
-    
+
     void setPageNumber(int pageNumber);
     int pageNumber() const;
-    
+
     void setKeepWithNext(bool value);
     bool keepWithNext() const;
-    
+
     void setPunctuationWrap(bool value);
     bool punctuationWrap() const;
-    
+
     void setTextAutoSpace(AutoSpace value);
     AutoSpace textAutoSpace() const;
-    
+
     void setKeepHyphenation(bool value);
     bool keepHyphenation() const;
-    
+
     void setHyphenationLadderCount(int value);
     int hyphenationLadderCount() const;
-    
+
     VerticalAlign verticalAlignment() const;
     void setVerticalAlignment(VerticalAlign value);
-    
+
     void setBreakBefore(KoText::KoTextBreakProperty value);
     KoText::KoTextBreakProperty breakBefore() const;
     void setBreakAfter(KoText::KoTextBreakProperty value);
@@ -461,7 +471,7 @@ public:
     KoBorder::BorderStyle bottomBorderStyle() const;
     void setBottomBorderColor(const QColor &color);
     QColor bottomBorderColor() const;
-    
+ 
     bool joinBorder() const;
     void setJoinBorder(bool value);
 
@@ -508,16 +518,19 @@ public:
     /// duplicated property from QTextBlockFormat
     bool nonBreakableLines() const;
 
+    /// set the default style this one inherits its unset properties from if no parent style.
+    void setDefaultStyle(KoParagraphStyle *parent);
+
     /// set the parent style this one inherits its unset properties from.
     void setParentStyle(KoParagraphStyle *parent);
 
     /// return the parent style
     KoParagraphStyle *parentStyle() const;
 
-    /// the 'next' style is the one used when the user creates a new paragrap after this one.
+    /// the 'next' style is the one used when the user creates a new paragraph after this one.
     void setNextStyle(int next);
 
-    /// the 'next' style is the one used when the user creates a new paragrap after this one.
+    /// the 'next' style is the one used when the user creates a new paragraph after this one.
     int nextStyle() const;
 
     /// return the name of the style.
@@ -629,14 +642,14 @@ public:
      * the character style (where relevant) to the target block formats.
      */
     void applyStyle(QTextBlock &block, bool applyListStyle = true) const;
-
-    /// return the character style for this paragraph style
+/*
+    /// return the character "properties" for this paragraph style, Note it does not inherit
     KoCharacterStyle *characterStyle();
-    /// return the character style for this paragraph style
+    /// return the character "properties" for this paragraph style, Note it does not inherit
     const KoCharacterStyle *characterStyle() const;
-    /// set the character style for this paragraph style
+    /// set the character "properties" for this paragraph style
     void setCharacterStyle(KoCharacterStyle *style);
-
+*/
     /**
      * Returns the list style for this paragraph style.
      * @see KoListStyle::isValid()
@@ -658,8 +671,6 @@ public:
     bool operator==(const KoParagraphStyle &other) const;
     /// Compare the paragraph properties of this style with other
     bool compareParagraphProperties(const KoParagraphStyle &other) const;
-    /// Compare the character properties of this style with other
-    bool compareCharacterProperties(const KoParagraphStyle &other) const;
 
     void removeDuplicates(const KoParagraphStyle &other);
 
@@ -667,9 +678,11 @@ public:
      * Load the style form the element
      *
      * @param context the odf loading context
-     * @param element the element containing the
+     * @param element the element containing the style
+     * @param loadParents true = use the stylestack, false = use just the element
      */
-    void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context);
+    void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context,
+                bool loadParents = false);
 
     void saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const;
 
@@ -718,5 +731,5 @@ private:
     class Private;
     Private * const d;
 };
-
+Q_DECLARE_METATYPE(KoListStyle *);
 #endif

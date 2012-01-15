@@ -35,6 +35,7 @@
 #include <kdebug.h>
 
 #ifdef GHNS
+#include <attica/version.h>
 #include <knewstuff3/downloaddialog.h>
 #include <knewstuff3/uploaddialog.h>
 #endif
@@ -58,7 +59,7 @@ public:
 };
 
 KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent )
- : QWidget( parent ), d( new Private() )
+    : QWidget( parent ), d( new Private() )
 {
     Q_ASSERT(resourceAdapter);
     d->model = new KoResourceModel(resourceAdapter, this);
@@ -186,17 +187,17 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 
         foreach (const KNS3::Entry& e, dialog.changedEntries()) {
 
-             foreach(const QString &file, e.installedFiles()) {
-                 QFileInfo fi(file);
-                  d->model->resourceServerAdapter()->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
-              }
+            foreach(const QString &file, e.installedFiles()) {
+                QFileInfo fi(file);
+                d->model->resourceServerAdapter()->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
+            }
 
-       foreach(const QString &file, e.uninstalledFiles()) {
-                 QFileInfo fi(file);
-                 d->model->resourceServerAdapter()->removeResourceFile(fi.absolutePath()+'/'+fi.fileName());
-              }
-      }
-     }
+            foreach(const QString &file, e.uninstalledFiles()) {
+                QFileInfo fi(file);
+                d->model->resourceServerAdapter()->removeResourceFile(fi.absolutePath()+'/'+fi.fileName());
+            }
+        }
+    }
     else if (button == Button_GhnsUpload) {
 
         QModelIndex index = d->view->currentIndex();
@@ -225,8 +226,14 @@ void KoResourceItemChooser::showButtons( bool show )
 void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUpload )
 {
 #ifdef GHNS
+
     QAbstractButton *button = d->buttonGroup->button(Button_GhnsDownload);
     showDownload ? button->show() : button->hide();
+
+    // attica < 2.9 is broken for upload, so don't show the upload button. 2.9 is released as 3.0
+    // because of binary incompatibility with 2.x.
+    if (LIBATTICA_VERSION_MAJOR < 3) return;
+
     button = d->buttonGroup->button(Button_GhnsUpload);
     showUpload ? button->show() : button->hide();
 #endif
@@ -307,7 +314,7 @@ void KoResourceItemChooser::setProxyModel( QAbstractProxyModel* proxyModel )
     d->view->setModel(proxyModel);
 }
 
-void KoResourceItemChooser::activated( const QModelIndex & index )
+void KoResourceItemChooser::activated(const QModelIndex &/*index*/)
 {
     KoResource* resource = currentResource();
     if( resource ) {
@@ -332,7 +339,7 @@ void KoResourceItemChooser::updateButtonState()
     if( resource ) {
         removeButton->setEnabled( true );
         uploadButton->setEnabled(resource->removable());
-        d->tagOpLineEdit->setEnabled( resource->removable());
+        d->tagOpLineEdit->setEnabled(true);
         return;
     }
 
@@ -374,7 +381,7 @@ void KoResourceItemChooser::setTagOpLineEdit(QStringList tagsList)
         tags = tagsList.join(", ");
         tags.append(", ");
         d->tagOpLineEdit->setText(tags);
-     }
+    }
     else
     {
         d->tagOpLineEdit->clear();
@@ -402,13 +409,13 @@ void KoResourceItemChooser::tagOpLineEditActivated(QString lineEditText)
         if(!tagsList.contains(tag)) {
             d->model->resourceServerAdapter()->addTag(resource, tag);
         }
-     }
+    }
 
-     foreach(const QString& tag, tagsList) {
+    foreach(const QString& tag, tagsList) {
         if(!tagsListNew.contains(tag)) {
             d->model->resourceServerAdapter()->delTag(resource, tag);
         }
-     }
+    }
 
     setTagOpLineEdit( d->model->resourceServerAdapter()->getAssignedTagsList(resource));
 }
@@ -436,8 +443,8 @@ QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
     if(lineEditText.contains(", ")) {
         QStringList tagsList = lineEditText.split(", ");
         if(tagsList.contains("")) {
-           tagsList.removeAll("");
-         }
+            tagsList.removeAll("");
+        }
 
         QStringList autoCompletionTagsList;
         QString joinText;
@@ -459,7 +466,7 @@ QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
         return autoCompletionTagsList;
     }
     return tagNamesList;
- }
+}
 
 QStringList KoResourceItemChooser::getTaggedResourceFileNames(QString lineEditText)
 {

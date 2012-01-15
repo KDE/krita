@@ -21,6 +21,7 @@
 
 #include <QList>
 #include <QTime>
+#include <QDir>
 #include <kundo2qstack.h>
 
 #include <KoColorSpace.h>
@@ -40,7 +41,7 @@
 namespace TestUtil
 {
 
-void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
+inline void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
 {
     qDebug() << node->name();
     KisNodeSP child = node->firstChild();
@@ -89,7 +90,7 @@ private:
 };
 
 
-bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0)
+inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0)
 {
     //     QTime t;
     //     t.start();
@@ -126,7 +127,8 @@ bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, i
                     pt.setY(y);
                     qDebug() << " Different at" << pt
                              << "source" << qRed(a) << qGreen(a) << qBlue(a) << qAlpha(a)
-                             << "dest" << qRed(b) << qGreen(b) << qBlue(b) << qAlpha(b);
+                             << "dest" << qRed(b) << qGreen(b) << qBlue(b) << qAlpha(b)
+                             << "fuzzy" << fuzzy;
                     return false;
                 }
             }
@@ -137,7 +139,7 @@ bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, i
     return true;
 }
 
-bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPaintDeviceSP dev2)
+inline bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPaintDeviceSP dev2)
 {
     //     QTime t;
     //     t.start();
@@ -171,14 +173,42 @@ bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPain
     return true;
 }
 
-quint8 alphaDevicePixel(KisPaintDeviceSP dev, qint32 x, qint32 y)
+#ifdef FILES_OUTPUT_DIR
+
+inline bool checkQImage(const QImage &image, const QString &testName,
+                        const QString &prefix, const QString &name,
+                        int fuzzy = 0)
+{
+    QString filename(prefix + "_" + name + ".png");
+    QString dumpName(prefix + "_" + name + "_expected.png");
+
+    QImage ref(QString(FILES_DATA_DIR) + QDir::separator() +
+               testName + QDir::separator() +
+               prefix + QDir::separator() + filename);
+
+    bool valid = true;
+    QPoint t;
+    if(!compareQImages(t, image, ref)) {
+        qDebug() << "--- Wrong image:" << name;
+        valid = false;
+
+        image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + filename);
+        ref.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + dumpName);
+    }
+
+    return valid;
+}
+
+#endif
+
+inline quint8 alphaDevicePixel(KisPaintDeviceSP dev, qint32 x, qint32 y)
 {
     KisHLineConstIteratorPixel iter = dev->createHLineConstIterator(x, y, 1);
     const quint8 *pix = iter.rawData();
     return *pix;
 }
 
-void alphaDeviceSetPixel(KisPaintDeviceSP dev, qint32 x, qint32 y, quint8 s)
+inline void alphaDeviceSetPixel(KisPaintDeviceSP dev, qint32 x, qint32 y, quint8 s)
 {
     KisHLineIteratorPixel iter = dev->createHLineIterator(x, y, 1);
     quint8 *pix = iter.rawData();
@@ -186,10 +216,20 @@ void alphaDeviceSetPixel(KisPaintDeviceSP dev, qint32 x, qint32 y, quint8 s)
 }
 
 
-QList<const KoColorSpace*> allColorSpaces()
+inline QList<const KoColorSpace*> allColorSpaces()
 {
     return KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
 }
+
+class TestNode : public KisNode
+{
+    Q_OBJECT
+public:
+    KisNodeSP clone() const;
+    bool allowAsChild(KisNodeSP) const;
+    const KoColorSpace * colorSpace() const;
+    const KoCompositeOp * compositeOp() const;
+};
 
 class TestGraphListener : public KisNodeGraphListener
 {

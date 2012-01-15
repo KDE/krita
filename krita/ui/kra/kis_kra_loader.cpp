@@ -56,7 +56,7 @@
 
 using namespace KRA;
 
-class KisKraLoader::Private
+struct KisKraLoader::Private
 {
 public:
 
@@ -84,16 +84,11 @@ KisKraLoader::~KisKraLoader()
 
 KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
 {
-
-    KisConfig cfg;
     QString attr;
-    KoXmlNode node;
-    KoXmlNode child;
     KisImageWSP image = 0;
     QString name;
     qint32 width;
     qint32 height;
-    QString description;
     QString profileProductName;
     double xres;
     double yres;
@@ -156,12 +151,8 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
 
         image = new KisImage(m_d->document->createUndoStore(), width, height, cs, name);
-        image->lock();
         image->setResolution(xres, yres);
-
         loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
-
-        image->unlock();
 
     }
 
@@ -170,31 +161,9 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
 
 void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QString & uri, bool external)
 {
-    // Load the layers data
-    KisKraLoadVisitor visitor(image, store, m_d->layerFilenames, m_d->imageName, m_d->syntaxVersion);
 
-    if (external)
-        visitor.setExternalUri(uri);
-
-    image->lock();
-
-    image->rootLayer()->accept(visitor);
-
-
-    // annotations
-    // exif
+    // icc profile: if present, this overrides the profile product name loaded in loadXML.
     QString location = external ? QString::null : uri;
-    location += m_d->imageName + EXIF_PATH;
-    if (store->hasFile(location)) {
-        QByteArray data;
-        store->open(location);
-        data = store->read(store->size());
-        store->close();
-        image->addAnnotation(KisAnnotationSP(new KisAnnotation("exif", "", data)));
-    }
-
-    // icc profile
-    location = external ? QString::null : uri;
     location += m_d->imageName + ICC_PATH;
     if (store->hasFile(location)) {
         store->open(location);
@@ -205,12 +174,34 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
     }
 
 
+    // Load the layers data: if there is a profile associated with a layer it will be set now.
+    KisKraLoadVisitor visitor(image, store, m_d->layerFilenames, m_d->imageName, m_d->syntaxVersion);
+
+    if (external)
+        visitor.setExternalUri(uri);
+
+    image->rootLayer()->accept(visitor);
+
+
+
+    // annotations
+    // exif
+    location = external ? QString::null : uri;
+    location += m_d->imageName + EXIF_PATH;
+    if (store->hasFile(location)) {
+        QByteArray data;
+        store->open(location);
+        data = store->read(store->size());
+        store->close();
+        image->addAnnotation(KisAnnotationSP(new KisAnnotation("exif", "", data)));
+    }
+
+
     if (m_d->document->documentInfo()->aboutInfo("title").isNull())
         m_d->document->documentInfo()->setAboutInfo("title", m_d->imageName);
     if (m_d->document->documentInfo()->aboutInfo("comment").isNull())
         m_d->document->documentInfo()->setAboutInfo("comment", m_d->imageComment);
 
-    image->unlock();
 }
 
 KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent)
@@ -256,6 +247,8 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
     // compatibility.
 
     QString name = element.attribute(NAME, "No Name");
+
+    QUuid id = QUuid(element.attribute(UUID, QUuid().toString()));
 
     qint32 x = element.attribute(X, "0").toInt();
     qint32 y = element.attribute(Y, "0").toInt();
@@ -330,6 +323,9 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
     node->setY(y);
     node->setName(name);
 
+    if (! id.isNull())          // if no uuid in file, new one has been generated already
+        node->setUuid(id);
+
     if (node->inherits("KisLayer")) {
         KisLayer* layer           = qobject_cast<KisLayer*>(node);
         QBitArray channelFlags    = stringToFlags(element.attribute(CHANNEL_FLAGS, ""), colorSpace->channelCount());
@@ -338,7 +334,7 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
         layer->setChannelFlags(channelFlags);
         layer->setCompositeOp(compositeOpName);
     }
-    
+
     if(node->inherits("KisPaintLayer")) {
         KisPaintLayer* layer            = qobject_cast<KisPaintLayer*>(node);
         QBitArray      channelLockFlags = stringToFlags(element.attribute(CHANNEL_LOCK_FLAGS, ""), colorSpace->channelCount());
@@ -489,11 +485,17 @@ KisNode* KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageWSP i
 
     KisCloneLayer* layer = new KisCloneLayer(0, image, name, opacity);
 
-    if ((element.attribute(CLONE_FROM)).isNull()) {
-        return 0;
+    KisCloneInfo info;
+    if (! (element.attribute(CLONE_FROM_UUID)).isNull()) {
+        info = KisCloneInfo(QUuid(element.attribute(CLONE_FROM_UUID)));
     } else {
-        layer->setCopyFromName(element.attribute(CLONE_FROM));
+        if ((element.attribute(CLONE_FROM)).isNull()) {
+            return 0;
+        } else {
+            info = KisCloneInfo(element.attribute(CLONE_FROM));
+        }
     }
+    layer->setCopyFromInfo(info);
 
     if ((element.attribute(CLONE_TYPE)).isNull()) {
         return 0;

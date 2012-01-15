@@ -370,14 +370,6 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
 KoShape * KoPADocumentModel::childFromIndex( KoShapeContainer *parent, int row ) const
 {
     return parent->shapes().at(row);
-
-    if( parent != m_lastContainer )
-    {
-        m_lastContainer = parent;
-        m_childs = parent->shapes();
-        qSort( m_childs.begin(), m_childs.end(), KoShape::compareShapeZIndex );
-    }
-    return m_childs.at( row );
 }
 
 int KoPADocumentModel::indexFromChild( KoShapeContainer *parent, KoShape *child ) const
@@ -386,14 +378,6 @@ int KoPADocumentModel::indexFromChild( KoShapeContainer *parent, KoShape *child 
         return 0;
 
     return parent->shapes().indexOf( child );
-
-    if( parent != m_lastContainer )
-    {
-        m_lastContainer = parent;
-        m_childs = parent->shapes();
-        qSort( m_childs.begin(), m_childs.end(), KoShape::compareShapeZIndex );
-    }
-    return m_childs.indexOf( child );
 }
 
 Qt::DropActions KoPADocumentModel::supportedDropActions () const

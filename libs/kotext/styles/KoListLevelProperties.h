@@ -82,9 +82,9 @@ public:
     /// return the styleId of the KoCharacterStyle to be used to layout the listitem
     int characterStyleId() const;
     /// set the style for the bullet or the number of the list
-    void setMarkCharacterStyle(QSharedPointer<KoCharacterStyle> style);
+    void setCharacterProperties(QSharedPointer<KoCharacterStyle> style);
     /// return the KoCharacterStyle for the bullet or the number of the list
-    QSharedPointer<KoCharacterStyle> markCharacterStyle() const;
+    QSharedPointer<KoCharacterStyle> characterProperties() const;
     /// set the character to be used as the counter of the listitem
     void setBulletCharacter(QChar character);
     /// return the character to be used as the counter of the listitem
@@ -128,11 +128,6 @@ public:
      */
     void setLetterSynchronization(bool on);
 
-    /// set to true to continue numbering from a previous list of the same style
-    void setContinueNumbering(bool enable);
-    /// returns whether this list continues numbering from a previous list of the same style
-    bool continueNumbering() const;
-
     /// sets the indentation of paragraph
     void setIndent(qreal value);
     /// returns the indentation of paragraphs
@@ -167,6 +162,9 @@ public:
     void setAlignmentMode(bool isLabelAlignmentMode);
     /// return the alignment mode of the list isLabelAlignmentMode=true if ist-level-position-and-space-mode=label-alignment
     bool alignmentMode() const;
+
+    void setOutlineList(bool isOutline);
+    bool isOutlineList() const;
 
     bool operator==(const KoListLevelProperties &other) const;
     bool operator!=(const KoListLevelProperties &other) const;

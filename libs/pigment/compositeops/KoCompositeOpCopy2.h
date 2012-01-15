@@ -26,21 +26,24 @@
 #include "KoCompositeOpBase.h"
 
 /**
- * Generic implementation of the COPY composite op. That respect selection.
+ * Generic implementation of the COPY composite op which respects selection.
+ *
+ * Note: this composite op is necessary with the deform brush and should not
+ * be hidden.
  */
 template<class Traits>
 class KoCompositeOpCopy2: public KoCompositeOpBase< Traits, KoCompositeOpCopy2<Traits> >
 {
     typedef KoCompositeOpBase< Traits, KoCompositeOpCopy2<Traits> > base_class;
     typedef typename Traits::channels_type                          channels_type;
-    
+
     static const qint32 channels_nb = Traits::channels_nb;
     static const qint32 alpha_pos   = Traits::alpha_pos;
-    
+
 public:
     KoCompositeOpCopy2(const KoColorSpace* cs)
-        : base_class(cs, COMPOSITE_COPY, i18n("Copy"), KoCompositeOp::categoryMisc(), false) { }
-    
+        : base_class(cs, COMPOSITE_COPY, i18n("Copy"), KoCompositeOp::categoryMisc()) { }
+
 public:
     template<bool alphaLocked, bool allChannelFlags>
     inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
@@ -48,11 +51,11 @@ public:
                                                      channels_type opacity, const QBitArray& channelFlags) {
         using namespace Arithmetic;
         opacity = mul(maskAlpha, opacity);
-        
+
         if(dstAlpha != zeroValue<channels_type>()) {
             // blend the color channels
             for(qint32 i=0; i<channels_nb; ++i)
-                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) 
+                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
                     dst[i] = lerp(dst[i], src[i], opacity);
         }
         else {
@@ -62,7 +65,7 @@ public:
                 if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
                     dst[i] = src[i];
         }
-        
+
         // blend the alpha channel
         return lerp(dstAlpha, srcAlpha, opacity);
     }

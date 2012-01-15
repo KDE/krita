@@ -82,24 +82,30 @@ public:
 
     void activateToolActions()
     {
+        disabledDisabledActions.clear();
         disabledActions.clear();
         // we do several things here
         // 1. enable the actions of the active tool
         // 2. disable conflicting actions
         // 3. replace conflicting actions in the action collection
         KActionCollection *ac = canvas->actionCollection();
+
         QHash<QString, KAction*> toolActions = activeTool->actions();
         QHash<QString, KAction*>::const_iterator it(toolActions.constBegin());
+
         for (; it != toolActions.constEnd(); ++it) {
             if (ac) {
-                QAction* action = ac->action(it.key());
+                KAction* action = qobject_cast<KAction*>(ac->action(it.key()));
                 if (action) {
                     ac->takeAction(action);
                     if (action != it.value()) {
-                        action->setEnabled(false);
-                        disabledActions.append(action);
+                        if (action->isEnabled()) {
+                            action->setEnabled(false);
+                            disabledActions.append(action);
+                        } else  {
+                            disabledDisabledActions.append(action);
+                        }
                     }
-                    it.value()->setShortcut(action->shortcut());
                 }
                 ac->addAction(it.key(), it.value());
             }
@@ -109,15 +115,23 @@ public:
 
     void deactivateToolActions()
     {
+
         if (!activeTool)
             return;
         // disable actions of active tool
         foreach(KAction *action, activeTool->actions()) {
             action->setEnabled(false);
         }
-        // enable actions which where disables on activating the active tool
+
+        // enable actions which where disabled on activating the active tool
         // and re-add them to the action collection
         KActionCollection *ac = canvas->actionCollection();
+        foreach(KAction *action, disabledDisabledActions) {
+            if(ac) {
+                ac->addAction(action->objectName(), action);
+            }
+        }
+        disabledDisabledActions.clear();
         foreach(QAction *action, disabledActions) {
             action->setEnabled(true);
             if(ac) {
@@ -136,7 +150,8 @@ public:
     const KoInputDevice inputDevice;
     QWidget *dummyToolWidget;  // the widget shown in the toolDocker.
     QLabel *dummyToolLabel;
-    QList<QAction*> disabledActions; ///< disabled conflicting actions
+    QList<KAction*> disabledActions; ///< disabled conflicting actions
+    QList<KAction*> disabledDisabledActions; ///< disabled conflicting actions that were already disabled
 };
 
 KoToolManager::Private::Private(KoToolManager *qq)
@@ -144,7 +159,6 @@ KoToolManager::Private::Private(KoToolManager *qq)
     canvasData(0),
     layerEnabled(true)
 {
-    tabletEventTimer.setSingleShot(true);
 }
 
 KoToolManager::Private::~Private()
@@ -215,7 +229,6 @@ void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
 
     if (newActiveTool) {
         canvasData->activeTool->repaintDecorations();
-        // check if this tool is inputDeviceAgnostic and used by other devices, in which case we should not deactivate.
         QList<CanvasData*> items = canvasses[canvasData->canvas];
         foreach(CanvasData *cd, items) {
             if (cd == canvasData) continue;
@@ -369,22 +382,13 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
 
     // Activate the actions for the currently active tool
     canvasData->activateToolActions();
-    QList<CanvasData*> items = canvasses[canvasData->canvas];
-    foreach(CanvasData *cd, items) {
-        foreach(KoToolBase* tool, cd->allTools) {
-            if(tool == canvasData->activeTool)
-                continue;
-            foreach(KAction* action, tool->actions()) {
-                action->setEnabled(false);
-            }
-        }
-    }
+
+    emit q->changedTool(canvasData->canvas, uniqueToolIds.value(canvasData->activeTool));
 
     KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
     if (canvasControllerWidget) {
         canvasControllerWidget->setToolOptionWidgets(optionWidgetList);
     }
-    emit q->changedTool(canvasData->canvas, uniqueToolIds.value(canvasData->activeTool));
 }
 
 void KoToolManager::Private::toolActivated(ToolHelper *tool)
@@ -642,21 +646,16 @@ void KoToolManager::Private::currentLayerChanged(const KoShapeLayer *layer)
     }
 }
 
-#define MSECS_TO_IGNORE_SWITCH_TO_MOUSE_AFTER_TABLET_EVENT_RECEIVED 100
-
 void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
 {
     Q_ASSERT(canvasData);
     if (!canvasData) return;
-    if (!device.isMouse()) {
-        tabletEventTimer.start(MSECS_TO_IGNORE_SWITCH_TO_MOUSE_AFTER_TABLET_EVENT_RECEIVED);
-    }
     if (inputDevice == device) return;
-    if (device.isMouse() && tabletEventTimer.isActive()) {
-        // Ignore switch to mouse for a short time after a tablet event
-        // is received, as this is likely to be either the mouse event sent
-        // to a widget that doesn't accept the tablet event, or, on X11,
-        // a core event sent after the tablet event.
+    if (device.isMouse() && !inputDevice.isMouse()) {
+        // we never switch back to mouse from a tablet input device, so the user can use the
+        // mouse to edit the settings for a tool activated by a tablet. See bugs
+        // https://bugs.kde.org/show_bug.cgi?id=283130 and https://bugs.kde.org/show_bug.cgi?id=285501.
+        // We do continue to switch between tablet devices, thought.
         return;
     }
     inputDevice = device;
@@ -950,6 +949,8 @@ void KoToolManager::injectDeviceEvent(KoInputDeviceHandlerEvent * event)
 void KoToolManager::addDeferredToolFactory(KoToolFactoryBase *toolFactory)
 {
     ToolHelper *tool = new ToolHelper(toolFactory);
+    // make sure all plugins are loaded as otherwise we will not load them
+    d->setup();
     d->tools.append(tool);
 
     // connect to all tools so we can hear their button-clicks
@@ -998,8 +999,7 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
         origHash = d->canvasses.value(controller).first()->allTools;
     }
 
-    if (tool->inputDeviceAgnostic() && origHash.contains(tool->id())) {
-        // reuse ones that are marked as inputDeviceAgnostic();
+    if (origHash.contains(tool->id())) {
         return QPair<QString, KoToolBase*>(tool->id(), origHash.value(tool->id()));
     }
 

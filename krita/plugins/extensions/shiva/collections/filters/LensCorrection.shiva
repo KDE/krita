@@ -1,0 +1,58 @@
+<
+  parameters: <
+    xcenter: <
+      label: "Center x";
+      type: float;
+    >;
+    ycenter: <
+      label: "Center y";
+      type: float;
+    >;
+    correctionnearcenter: <
+      label: "Correction near center";
+      type: float;
+      defaultValue: 0.0;
+      maxValue: 100.0;
+    >;
+    correctionnearedges: <
+      label: "Correction near edges";
+      type: float;
+      defaultValue: 0.0;
+      maxValue: 100.0;
+    >;
+    brightness: <
+      label: "Brightness";
+      type: float;
+      defaultValue: 0.0;
+      maxValue: 100.0;
+    >;
+  >;
+>;  
+kernel LensCorrection
+{
+  dependent float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  dependent float max = (IMAGE_WIDTH + IMAGE_HEIGHT) * 0.5;
+  dependent float mult_sq;
+  dependent float mult_qd;
+  dependent float normallise_radius_sq;
+  void evaluateDependents()
+  {
+    mult_sq = correctionnearcenter / 200.0;
+    mult_qd = correctionnearedges / 200.0;
+    normallise_radius_sq = 4.0 / ( IMAGE_WIDTH * IMAGE_WIDTH + IMAGE_HEIGHT * IMAGE_HEIGHT );
+  }
+  void evaluatePixel(input image img, output pixel result)
+  {
+    float2 vec = result.coord - center;
+    float radius = (vec.x * vec.x + vec.y * vec.y) * normallise_radius_sq;
+    radius = radius * mult_sq + radius * radius * mult_qd;
+    float mag = radius;
+    radius += 1.0;
+    
+    float2 src = center + radius * vec;
+
+    float brighten = 1.0 + mag * brightness;
+    
+    result = brighten * img.sampleNearest( src );
+  }
+}

@@ -149,7 +149,7 @@ void KisPainterBenchmark::benchmarkFixedBitBlt()
     img.fill(255);
 
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(m_colorSpace);
-    fdev->convertFromQImage(img, "");
+    fdev->convertFromQImage(img, 0);
 
     KisPaintDeviceSP dst = new KisPaintDevice(m_colorSpace);
     KisPainter gc(dst);
@@ -170,7 +170,7 @@ void KisPainterBenchmark::benchmarkFixedBitBltSelection()
     img.fill(128);
 
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(m_colorSpace);
-    fdev->convertFromQImage(img, "");
+    fdev->convertFromQImage(img, 0);
 
     KisPaintDeviceSP dst = new KisPaintDevice(m_colorSpace);
 

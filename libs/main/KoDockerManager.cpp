@@ -80,6 +80,7 @@ public:
         dockedToolBarsLayout(0)
         ,mainWindow(mw)
         ,ignore(true)
+        ,showOptionsDocker(true)
     {
     }
 
@@ -89,13 +90,14 @@ public:
     QList<KToolBar *> toolBarList;
     KoMainWindow *mainWindow;
     bool ignore;
+    bool showOptionsDocker;
 
     void restoringDone()
     {
         if (ignore) {
             ignore = false;
             moveToolBars();
-            toolOptionsDocker->setVisible(true); // should always be visible
+            toolOptionsDocker->setVisible(showOptionsDocker);
         }
     }
 
@@ -166,6 +168,12 @@ KoDockerManager::~KoDockerManager()
 void KoDockerManager::newOptionWidgets(const QList<QWidget *> &optionWidgetList)
 {
     d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
+}
+
+void KoDockerManager::removeToolOptionsDocker()
+{
+    d->toolOptionsDocker->setVisible(false);
+    d->showOptionsDocker = false;
 }
 
 void KoDockerManager::resetToolDockerWidgets()

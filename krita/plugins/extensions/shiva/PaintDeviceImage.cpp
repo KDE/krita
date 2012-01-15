@@ -26,7 +26,6 @@
 #include <GTLCore/PixelDescription.h>
 #include <GTLCore/Type.h>
 #include <GTLCore/Region.h>
-#include "Version.h"
 #include <KoColorSpaceTraits.h>
 #include <kis_random_accessor_ng.h>
 
@@ -57,11 +56,7 @@ GTLCore::PixelDescription csToPD(const KoColorSpace* cs)
             types.push_back(GTLCore::Type::Float32);
             break;
         case KoChannelInfo::FLOAT64:
-#if OPENSHIVA_12
-            types.push_back(GTLCore::Type::Double);
-#else
             types.push_back(GTLCore::Type::Float64);
-#endif
             break;
         default:
             errKrita << "Channeltype OTHER encountered";
@@ -118,12 +113,10 @@ const char* ConstPaintDeviceImage::rawData(int _x, int _y) const
     return (const char*)(m_accessor->oldRawData());
 }
 
-#if OPENSHIVA_13_OR_MORE
 GTLCore::RegionI ConstPaintDeviceImage::boundingBox() const
 {
   return GTLCore::RegionI(0,0,-1,-1);
 }
-#endif
 
 GTLCore::AbstractImage::ConstIterator* ConstPaintDeviceImage::createIterator() const
 {
@@ -168,12 +161,10 @@ const char* PaintDeviceImage::rawData(int _x, int _y) const
     return (const char*)(m_accessor->oldRawData());
 }
 
-#if OPENSHIVA_13_OR_MORE
 GTLCore::RegionI PaintDeviceImage::boundingBox() const
 {
   return GTLCore::RegionI(0,0,-1,-1);
 }
-#endif
 
 GTLCore::AbstractImage::ConstIterator* PaintDeviceImage::createIterator() const
 {

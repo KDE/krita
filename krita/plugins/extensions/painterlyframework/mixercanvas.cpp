@@ -60,13 +60,13 @@ MixerCanvas::MixerCanvas(QWidget *parent)
     p.end();
 
     KisConfig config;
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(config.defaultPainterlyColorModelId(), config.defaultPainterlyColorDepthId(), "");
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(config.defaultPainterlyColorModelId(), config.defaultPainterlyColorDepthId(), 0);
     if (!cs) {
         dbgPlugins << "Could not load painterly colorspace, falling back to rgb";
         cs = KoColorSpaceRegistry::instance()->rgb16();
     }
     m_paintDevice = new KisPaintDevice(cs, "Mixer");
-    m_paintDevice->convertFromQImage(m_image, QString::null);
+    m_paintDevice->convertFromQImage(m_image, 0);
     m_mixerTool = new MixerTool(this);
 
 }

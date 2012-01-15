@@ -130,6 +130,8 @@ QTextDocument *TestChangeTracking::documentFromOdt(const QString &odt, const QSt
 
 QString TestChangeTracking::documentToOdt(const QString &testCase, QTextDocument *document)
 {
+    Q_UNUSED(testCase);
+
     QString odt("test.odt");
     if (QFile::exists(odt))
         QFile::remove(odt);

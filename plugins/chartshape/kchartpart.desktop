@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Calligra Chart Component
 Name[bg]=Компонент за диаграми в Calligra
+Name[ca]=Component de diagrames del Calligra
+Name[ca@valencia]=Component de diagrames del Calligra
 Name[cs]=Komponenta Calligra pro grafy
 Name[da]=Calligra-komponent til diagrammer
 Name[et]=Calligra diagrammikomponent
@@ -9,9 +11,11 @@ Name[nb]=Calligra diagram-komponent
 Name[pl]=Składnik wykresów dla Calligry
 Name[pt]=Componente de Gráficos do Calligra
 Name[pt_BR]=Componente de gráfico do Calligra
+Name[ru]=Компонент диаграмм Calligra
 Name[sv]=Calligra Chart-komponent
 Name[uk]=Компонент діаграм Calligra
 Name[x-test]=xxCalligra Chart Componentxx
+Name[zh_CN]=Calligra 图表组件
 Name[zh_TW]=Calligra Chart 組件
 X-KDE-Library=kchartpart
 Type=Service

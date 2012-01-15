@@ -21,6 +21,7 @@
 
 #include <QString>
 #include <QPointF>
+#include <QRect>
 
 #include <krita_export.h>
 #include <kis_shared.h>
@@ -52,6 +53,7 @@ public:
     ~KisPaintingAssistantHandle();
     void mergeWith(KisPaintingAssistantHandleSP);
     QList<KisPaintingAssistantHandleSP> split();
+    void uncache();
     KisPaintingAssistantHandle& operator=(const QPointF&);
 private:
     void registerAssistant(KisPaintingAssistant*);
@@ -80,11 +82,12 @@ public:
      */
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) = 0;
     virtual void endStroke() { }
-    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter) = 0;
     virtual QPointF buttonPosition() const = 0;
     virtual int numHandles() const = 0;
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     void addHandle(KisPaintingAssistantHandleSP handle);
+    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true);
+    void uncache();
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();
 public:
@@ -93,6 +96,8 @@ public:
      */
     static void drawPath(QPainter& painter, const QPainterPath& path);
 protected:
+    virtual QRect boundingRect() const;
+    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter) = 0;
     void initHandles(QList<KisPaintingAssistantHandleSP> _handles);
 private:
     struct Private;

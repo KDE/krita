@@ -22,6 +22,7 @@
 #include "kotext_export.h"
 
 #include <QVariant>
+#include <QObject>
 
 class QTextDocument;
 class QTextCharFormat;
@@ -46,8 +47,9 @@ class KoShapeLoadingContext;
  *
  * @see KoInlineTextObjectManager
  */
-class KOTEXT_EXPORT KoInlineObject
+class KOTEXT_EXPORT KoInlineObject : public QObject
 {
+    Q_OBJECT
 public:
     enum Property {
         DocumentURL,
@@ -75,13 +77,14 @@ public:
 
         KarbonStart = 1000,      ///< Base number for karbon specific values.
         KexiStart = 2000,        ///< Base number for kexi specific values.
-        FlowStart = 3000,       ///< Base number for flow specific values.
+        FlowStart = 3000,        ///< Base number for flow specific values.
         KPlatoStart = 4000,      ///< Base number for kplato specific values.
         KPresenterStart = 5000,  ///< Base number for kpresenter specific values.
         KritaStart = 6000,       ///< Base number for krita specific values.
         WordsStart = 7000,       ///< Base number for words specific values.
         VariableManagerStart = 8000, ///< Start of numbers reserved for the KoVariableManager
-        User = 12000
+        UserGet = 12000,         ///< User defined variable user-field-get
+        UserInput = 12001        ///< User defined variable user-field-input
     };
 
     /**

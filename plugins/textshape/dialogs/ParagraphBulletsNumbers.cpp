@@ -165,6 +165,7 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     }
     if (savingStyle->listStyle() == 0) {
         KoListStyle *listStyle = new KoListStyle(savingStyle);
+        listStyle->setStyleId(style);
         savingStyle->setListStyle(listStyle);
     }
     KoListStyle *listStyle = savingStyle->listStyle();

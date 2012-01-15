@@ -105,14 +105,20 @@ protected:
     friend class ShapeLayerContainerModel;
     KoViewConverter* converter() const;
 
-public slots:
-    void selectionChanged();
-
 signals:
-    void selectionChanged(QList<KoShape*> shape);
+    /**
+     * These signals are forwarded from the local shape manager
+     * This is done because we switch KoShapeManager and therefore
+     * KoSelection in KisCanvas2, so we need to connect local managers
+     * to the UI as well.
+     *
+     * \see comment in the constructor of KisCanvas2
+     */
+    void selectionChanged();
+    void currentLayerChanged(const KoShapeLayer *layer);
 
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

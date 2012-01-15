@@ -37,6 +37,7 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoShapeSavingContext.h>
+#include <KoTextSharedSavingData.h>
 
 #include <QTimer>
 #include <QUrl>
@@ -52,7 +53,7 @@
 class KoStyleManager::Private
 {
 public:
-    Private() : updateTriggered(false), defaultParagraphStyle(0), defaultListStyle(0), outlineStyle(0)
+    Private() : updateTriggered(false), defaultCharacterStyle(0), defaultParagraphStyle(0), defaultListStyle(0), outlineStyle(0)
     {
     }
     ~Private() {
@@ -75,6 +76,7 @@ public:
     bool updateTriggered;
     QList<int> updateQueue;
 
+    KoCharacterStyle *defaultCharacterStyle;
     KoParagraphStyle *defaultParagraphStyle;
     KoListStyle *defaultListStyle;
     KoListStyle *outlineStyle;
@@ -90,6 +92,11 @@ int KoStyleManager::Private::s_stylesNumber = 100;
 KoStyleManager::KoStyleManager(QObject *parent)
         : QObject(parent), d(new Private())
 {
+    d->defaultCharacterStyle = new KoCharacterStyle(this);
+    d->defaultCharacterStyle->setName(i18n("Default"));
+
+    add(d->defaultCharacterStyle);
+
     d->defaultParagraphStyle = new KoParagraphStyle(this);
     d->defaultParagraphStyle->setName(i18n("Default"));
 
@@ -97,12 +104,22 @@ KoStyleManager::KoStyleManager(QObject *parent)
 
     //TODO: also use the defaultstyles.xml mechanism. see KoOdfLoadingContext and KoTextSharedLoadingData
     d->defaultListStyle = new KoListStyle(this);
-    KoListLevelProperties llp;
-    llp.setLevel(1);
-    llp.setStartValue(1);
-    llp.setStyle(KoListStyle::DecimalItem);
-    llp.setListItemSuffix(".");
-    d->defaultListStyle->setLevelProperties(llp);
+    const int margin = 10; // we specify the margin for the default list style(Note: Even ChangeListCommand has this value)
+    const int maxListLevel = 10;
+    for (int level = 1; level <= maxListLevel; level++) {
+        KoListLevelProperties llp;
+        llp.setLevel(level);
+        llp.setStartValue(1);
+        llp.setStyle(KoListStyle::DecimalItem);
+        llp.setListItemSuffix(".");
+        llp.setAlignmentMode(true);
+        llp.setLabelFollowedBy(KoListStyle::ListTab);
+        llp.setTabStopPosition(margin*(level+2));
+        llp.setMargin(margin*(level+1));
+        llp.setTextIndent(margin);
+
+        d->defaultListStyle->setLevelProperties(llp);
+    }
 
     //default styles for ToCs
     int maxOutLineLevel = 10;
@@ -126,18 +143,33 @@ KoStyleManager::~KoStyleManager()
 
 void KoStyleManager::saveOdfDefaultStyles(KoShapeSavingContext &context)
 {
-    KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
-    style.setDefaultStyle(true);
-    d->defaultParagraphStyle->saveOdf(style, context);
-    context.mainStyles().insert(style);
+    KoGenStyle pstyle(KoGenStyle::ParagraphStyle, "paragraph");
+    pstyle.setDefaultStyle(true);
+    d->defaultParagraphStyle->saveOdf(pstyle, context);
+    if (!pstyle.isEmpty()) {
+        context.mainStyles().insert(pstyle);
+    }
+
+    KoGenStyle tstyle(KoGenStyle::TextStyle, "text");
+    tstyle.setDefaultStyle(true);
+    d->defaultCharacterStyle->saveOdf(tstyle);
+    if (!tstyle.isEmpty()) {
+        context.mainStyles().insert(tstyle);
+    }
+
 }
 
 void KoStyleManager::saveOdf(KoShapeSavingContext &context)
 {
+    KoTextSharedSavingData *textSharedSavingData = 0;
+    if (!(textSharedSavingData = dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID)))) {
+        textSharedSavingData = new KoTextSharedSavingData;
+        context.addSharedData(KOTEXT_SHARED_SAVING_ID, textSharedSavingData);
+    }
+
     saveOdfDefaultStyles(context);
 
     // don't save character styles that are already saved as part of a paragraph style
-    QSet<KoCharacterStyle*> characterParagraphStyles;
     QHash<KoParagraphStyle*, QString> savedNames;
     foreach(KoParagraphStyle *paragraphStyle, d->paragStyles) {
         if (paragraphStyle == d->defaultParagraphStyle)
@@ -151,8 +183,8 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
         paragraphStyle->saveOdf(style, context);
         QString newName = context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        textSharedSavingData->setStyleName(paragraphStyle->styleId(), newName);
         savedNames.insert(paragraphStyle, newName);
-        characterParagraphStyles.insert(paragraphStyle->characterStyle());
     }
 
     foreach(KoParagraphStyle *p, d->paragStyles) {
@@ -165,7 +197,7 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
     }
 
     foreach(KoCharacterStyle *characterStyle, d->charStyles) {
-        if (characterStyle == d->defaultParagraphStyle->characterStyle() || characterParagraphStyles.contains(characterStyle))
+        if (characterStyle == d->defaultCharacterStyle)
             continue;
 
         QString name(QString(QUrl::toPercentEncoding(characterStyle->name(), "", " ")).replace('%', '_'));
@@ -175,7 +207,8 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
 
         KoGenStyle style(KoGenStyle::ParagraphStyle, "text");
         characterStyle->saveOdf(style);
-        context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        QString newName = context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        textSharedSavingData->setStyleName(characterStyle->styleId(), newName);
     }
 
     foreach(KoListStyle *listStyle, d->listStyles) {
@@ -188,6 +221,8 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         KoGenStyle style(KoGenStyle::ListStyle);
         listStyle->saveOdf(style, context);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        QString newName = context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+        textSharedSavingData->setStyleName(listStyle->styleId(), newName);
     }
 
     foreach(KoTableStyle *tableStyle, d->tableStyles) {
@@ -226,7 +261,7 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
             name = "T."; //TODO is this correct?
 
         KoGenStyle style(KoGenStyle::TableCellStyle);
-        tableCellStyle->saveOdf(style);
+        tableCellStyle->saveOdf(style, context);
         context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
     }
 
@@ -261,6 +296,16 @@ void KoStyleManager::saveOdf(KoShapeSavingContext &context)
         d->bibliographyConfiguration->saveOdf(xmlWriter);
         context.mainStyles().insertRawOdfStyles(KoGenStyles::DocumentStyles, xmlBufferBib.data());
     }
+
+    if (d->outlineStyle) {
+        QString name(QString(QUrl::toPercentEncoding(d->outlineStyle->name(), "", " ")).replace('%', '_'));
+        if (name.isEmpty())
+            name = 'O';
+
+        KoGenStyle style(KoGenStyle::OutlineLevelStyle);
+        d->outlineStyle->saveOdf(style, context);
+        context.mainStyles().insert(style, name, KoGenStyles::DontAddNumberToName);
+    }
 }
 
 void KoStyleManager::add(KoCharacterStyle *style)
@@ -281,11 +326,7 @@ void KoStyleManager::add(KoParagraphStyle *style)
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
     d->paragStyles.insert(d->s_stylesNumber++, style);
-    if (style->characterStyle()) {
-        add(style->characterStyle());
-        if (style->characterStyle()->name().isEmpty())
-            style->characterStyle()->setName(style->name());
-    }
+
     if (style->listStyle() && style->listStyle()->styleId() == 0)
         add(style->listStyle());
     KoParagraphStyle *root = style;
@@ -294,8 +335,6 @@ void KoStyleManager::add(KoParagraphStyle *style)
         if (root->styleId() == 0)
             add(root);
     }
-    if (root != d->defaultParagraphStyle && root->parentStyle() == 0)
-        root->setParentStyle(d->defaultParagraphStyle);
 
     emit styleAdded(style);
 }
@@ -741,6 +780,11 @@ KoOdfBibliographyConfiguration *KoStyleManager::bibliographyConfiguration() cons
     return d->bibliographyConfiguration;
 }
 
+KoCharacterStyle *KoStyleManager::defaultCharacterStyle() const
+{
+    return d->defaultCharacterStyle;
+}
+
 KoParagraphStyle *KoStyleManager::defaultParagraphStyle() const
 {
     return d->defaultParagraphStyle;
@@ -842,11 +886,7 @@ void KoStyleManager::moveToUsedStyles(int id)
     d->unusedParagraphStyles.remove(id);
 
     d->paragStyles.insert(style->styleId(), style);
-    if (style->characterStyle()) {
-        add(style->characterStyle());
-        if (style->characterStyle()->name().isEmpty())
-            style->characterStyle()->setName(style->name());
-    }
+
     if (style->listStyle() && style->listStyle()->styleId() == 0)
         add(style->listStyle());
     KoParagraphStyle *root = style;

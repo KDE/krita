@@ -53,34 +53,39 @@ KoImageDataPrivate::~KoImageDataPrivate()
 // called from the collection
 bool KoImageDataPrivate::saveData(QIODevice &device)
 {
+    // if we have a temp file save that to the store. This is needed as to not loose data when
+    // saving lossy formats. Also wrinting out gif is not supported by qt so saving temp file
+    // also fixes the problem that gif images are empty after saving-
+    if (temporaryFile) {
+        if (!temporaryFile->open()) {
+            kWarning(30006) << "Read file from temporary store failed";
+            return false;
+        }
+        char buf[4096];
+        while (true) {
+            temporaryFile->waitForReadyRead(-1);
+            qint64 bytes = temporaryFile->read(buf, sizeof(buf));
+            if (bytes <= 0)
+                break; // done!
+            do {
+                qint64 nWritten = device.write(buf, bytes);
+                if (nWritten == -1) {
+                    temporaryFile->close();
+                    return false;
+                }
+                bytes -= nWritten;
+            } while (bytes > 0);
+        }
+        temporaryFile->close();
+        return true;
+    }
+
     switch (dataStoreState) {
     case KoImageDataPrivate::StateEmpty:
         return false;
     case KoImageDataPrivate::StateNotLoaded:
-        // spool directly.
-        Q_ASSERT(temporaryFile); // otherwise the collection should not have called this
-        if (temporaryFile) {
-            if (!temporaryFile->open()) {
-                kWarning(30006) << "Read file from temporary store failed";
-                return false;
-            }
-            char buf[4096];
-            while (true) {
-                temporaryFile->waitForReadyRead(-1);
-                qint64 bytes = temporaryFile->read(buf, sizeof(buf));
-                if (bytes <= 0)
-                    break; // done!
-                do {
-                    qint64 nWritten = device.write(buf, bytes);
-                    if (nWritten == -1) {
-                        temporaryFile->close();
-                        return false;
-                    }
-                    bytes -= nWritten;
-                } while (bytes > 0);
-            }
-            temporaryFile->close();
-        }
+        // we should not reach this state as above this will already be saved.
+        Q_ASSERT(temporaryFile);
         return true;
     case KoImageDataPrivate::StateImageLoaded:
     case KoImageDataPrivate::StateImageOnly: {

@@ -114,3 +114,21 @@ target_link_libraries(KisClipboardTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage $
 set(freehand_stroke_test_SRCS freehand_stroke_test.cpp ../../sdk/tests/stroke_testing_utils.cpp)
 kde4_add_unit_test(FreehandStrokeTest TESTNAME krita-ui-FreehandStrokeTest  ${freehand_stroke_test_SRCS})
 target_link_libraries(FreehandStrokeTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_selection_manager_test_SRCS kis_selection_manager_test.cpp)
+kde4_add_unit_test(KisSelectionManagerTest TESTNAME krita-ui-KisSelectionManagerTest  ${kis_selection_manager_test_SRCS})
+target_link_libraries(KisSelectionManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_node_dummies_graph_test_SRCS kis_node_dummies_graph_test.cpp ../../sdk/tests/testutil.cpp)
+kde4_add_unit_test(KisNodeDummiesGraphTest TESTNAME krita-ui-KisNodeDummiesGraphTest  ${kis_node_dummies_graph_test_SRCS})
+target_link_libraries(KisNodeDummiesGraphTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_node_shapes_graph_test_SRCS kis_node_shapes_graph_test.cpp ../../sdk/tests/testutil.cpp)
+kde4_add_unit_test(KisNodeShapesGraphTest TESTNAME krita-ui-KisNodeShapesGraphTest  ${kis_node_shapes_graph_test_SRCS})
+target_link_libraries(KisNodeShapesGraphTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})

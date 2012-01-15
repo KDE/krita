@@ -45,6 +45,7 @@
 #include <kis_pattern.h>
 #include <kis_fill_painter.h>
 #include <kis_selection.h>
+#include <kis_system_locker.h>
 
 #include <kis_view2.h>
 #include <canvas/kis_canvas2.h>
@@ -101,6 +102,9 @@ bool KisToolFill::flood(int startX, int startY)
 
     QVector<QRect> dirty;
 
+    KisUndoAdapter *undoAdapter = image()->undoAdapter();
+    undoAdapter->beginMacro(i18n("Flood Fill"));
+
     if (m_fillOnlySelection && selection) {
         KisPaintDeviceSP filled = new KisPaintDevice(device->colorSpace());
         KisFillPainter fillPainter(filled);
@@ -123,7 +127,7 @@ bool KisToolFill::flood(int startX, int startY)
         m_painter = new KisPainter(device, currentSelection());
         Q_CHECK_PTR(m_painter);
 
-        m_painter->beginTransaction(i18n("Fill"));
+        m_painter->beginTransaction("");
 
         m_painter->setCompositeOp(compositeOp());
         m_painter->setOpacity(m_opacity);
@@ -138,7 +142,7 @@ bool KisToolFill::flood(int startX, int startY)
 
         KisFillPainter fillPainter(device, currentSelection());
         setupPainter(&fillPainter);
-        fillPainter.beginTransaction(i18n("Flood Fill"));
+        fillPainter.beginTransaction("");
 
         fillPainter.setProgress(updater->startSubtask());
         fillPainter.setOpacity(m_opacity);
@@ -157,9 +161,11 @@ bool KisToolFill::flood(int startX, int startY)
         fillPainter.endTransaction(image()->undoAdapter());
         dirty = fillPainter.takeDirtyRegion();
     }
+
+    undoAdapter->endMacro();
+
     device->setDirty(dirty);
     delete updater;
-
 
     return true;
 }
@@ -189,9 +195,8 @@ void KisToolFill::mouseReleaseEvent(KoPointerEvent *event)
             return;
         }
 
-        setCurrentNodeLocked(true);
+        KisSystemLocker locker(currentNode());
         flood(m_startPos.x(), m_startPos.y());
-        setCurrentNodeLocked(false);
         notifyModified();
     }
     else {

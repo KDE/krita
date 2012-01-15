@@ -59,7 +59,7 @@ public:
     virtual ~ShrinkToFitShapeContainer();
 
     // reimplemented
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     // reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     // reimplemented

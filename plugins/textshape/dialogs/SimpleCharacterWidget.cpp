@@ -93,7 +93,6 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
 SimpleCharacterWidget::~SimpleCharacterWidget()
 {
     delete m_thumbnailer;
-    delete m_stylePopup;
 }
 
 void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
@@ -131,7 +130,8 @@ void SimpleCharacterWidget::fontFamilyActivated(int index) {
      */
     if (index == m_lastFontFamilyIndex) {
         KSelectAction *action = qobject_cast<KSelectAction*>(m_tool->action("format_fontfamily"));
-        action->currentAction()->trigger();
+        if(action->currentAction())
+            action->currentAction()->trigger();
     }
     m_lastFontFamilyIndex = index;
 }

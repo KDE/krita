@@ -111,7 +111,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     }
 
     connect(comboBoxMaskType, SIGNAL(activated(int)), SLOT(paramChanged()));
-    connect(comboBoxMaskType, SIGNAL(currentIndexChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+    connect(comboBoxMaskType, SIGNAL(currentIndexChanged(int)), SLOT(setStackedWidget(int)));
 
     brushPreview->setIconSize(QSize(100, 100));
 
@@ -134,13 +134,19 @@ void KisAutoBrushWidget::paramChanged()
 {
     KisMaskGenerator* kas;
 
-    if (comboBoxMaskType->currentIndex() == 1) { // soft brush
-        if (comboBoxShape->currentIndex() == 0){
+    if (comboBoxMaskType->currentIndex() == 2) { // gaussian brush
+        if (comboBoxShape->currentIndex() == 0) {
+            kas = new KisGaussCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
+        } else {
+            kas = new KisGaussRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
+        }
+    } else if (comboBoxMaskType->currentIndex() == 1) { // soft brush
+        if (comboBoxShape->currentIndex() == 0) {
             kas = new KisCurveCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), softnessCurve->curve());
-        }else{
+        } else {
             kas = new KisCurveRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(),softnessCurve->curve());
         }
-    }else {// default == 0 or any other
+    } else {// default == 0 or any other
         if (comboBoxShape->currentIndex() == 0) { // use index compare instead of comparing a translatable string
             kas = new KisCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
         } else {
@@ -171,6 +177,14 @@ void KisAutoBrushWidget::paramChanged()
     brushPreview->setIcon(QIcon(p));
 
     emit sigBrushChanged();
+}
+
+void KisAutoBrushWidget::setStackedWidget(int index)
+{
+    if (index == 1)
+        stackedWidget->setCurrentIndex(1);
+    else
+        stackedWidget->setCurrentIndex(0);
 }
 
 void KisAutoBrushWidget::spinBoxHorizontalChanged(qreal a)
@@ -214,8 +228,10 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     KisAutoBrush* aBrush = dynamic_cast<KisAutoBrush*>(brush.data());
     if (aBrush->maskGenerator()->type() == KisMaskGenerator::CIRCLE){
         comboBoxShape->setCurrentIndex(0);
-    }else /*if (aBrush->maskGenerator()->type() == KisMaskGenerator::RECTANGLE) */ {
+    } else if (aBrush->maskGenerator()->type() == KisMaskGenerator::RECTANGLE) {
         comboBoxShape->setCurrentIndex(1);
+    } else {
+        comboBoxShape->setCurrentIndex(2);
     }
 
     comboBoxMaskType->setCurrentIndex( comboBoxMaskType->findText( aBrush->maskGenerator()->name() ) );

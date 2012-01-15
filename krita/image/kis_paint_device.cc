@@ -26,7 +26,6 @@
 #include <QHash>
 
 #include <klocale.h>
-#include <kconfiggroup.h>
 
 #include <KoColorProfile.h>
 #include <KoColor.h>
@@ -57,6 +56,7 @@
 #include "tiles3/kis_rect_iterator.h"
 #include "tiles3/kis_random_accessor.h"
 
+#include "kis_default_bounds.h"
 
 class CacheData : public KisDataManager::AbstractCache
 {
@@ -132,7 +132,7 @@ public:
             cacheThumbnail(w, h, thumbnail);
         }
 
-        Q_ASSERT(!thumbnail.isNull());
+        Q_ASSERT(!thumbnail.isNull() || m_paintDevice->extent().isEmpty());
         return thumbnail;
     }
 
@@ -155,7 +155,7 @@ private:
 };
 
 
-class KisPaintDevice::Private
+struct KisPaintDevice::Private
 {
 
 public:
@@ -168,7 +168,7 @@ public:
     }
 
     KisNodeWSP parent;
-    KisDefaultBoundsSP defaultBounds;
+    KisDefaultBoundsBaseSP defaultBounds;
     PaintDeviceCache cache;
     qint32 x;
     qint32 y;
@@ -183,7 +183,7 @@ KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& n
     init(0, colorSpace, new KisDefaultBounds(), 0, name);
 }
 
-KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsSP defaultBounds, const QString& name)
+KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsBaseSP defaultBounds, const QString& name)
     : QObject(0)
     , m_d(new Private(this))
 {
@@ -203,11 +203,15 @@ KisPaintDevice::KisPaintDevice(KisDataManagerSP explicitDataManager,
 
 void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
                           const KoColorSpace *colorSpace,
-                          KisDefaultBoundsSP defaultBounds,
+                          KisDefaultBoundsBaseSP defaultBounds,
                           KisNodeWSP parent, const QString& name)
 {
     Q_ASSERT(colorSpace);
     setObjectName(name);
+
+    if (!defaultBounds) {
+        defaultBounds = new KisDefaultBounds();
+    }
 
     m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(colorSpace);
     Q_ASSERT(m_d->colorSpace);
@@ -330,13 +334,13 @@ void KisPaintDevice::setParentNode(KisNodeWSP parent)
     m_d->parent = parent;
 }
 
-void KisPaintDevice::setDefaultBounds(KisDefaultBoundsSP defaultBounds)
+void KisPaintDevice::setDefaultBounds(KisDefaultBoundsBaseSP defaultBounds)
 {
     m_d->defaultBounds = defaultBounds;
     m_d->cache.invalidate();
 }
 
-KisDefaultBoundsSP KisPaintDevice::defaultBounds() const
+KisDefaultBoundsBaseSP KisPaintDevice::defaultBounds() const
 {
     return m_d->defaultBounds;
 }
@@ -647,7 +651,7 @@ void KisPaintDevice::setDataManager(KisDataManagerSP data, const KoColorSpace * 
     }
 }
 
-void KisPaintDevice::convertFromQImage(const QImage& _image, const QString &srcProfileName,
+void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfile *profile,
                                        qint32 offsetX, qint32 offsetY)
 {
     QImage image = _image;
@@ -656,12 +660,12 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const QString &srcP
         image = image.convertToFormat(QImage::Format_ARGB32);
     }
     // Don't convert if not no profile is given and both paint dev and qimage are rgba.
-    if (srcProfileName.isEmpty() && colorSpace()->id() == "RGBA") {
+    if (!profile && colorSpace()->id() == "RGBA") {
         writeBytes(image.bits(), offsetX, offsetY, image.width(), image.height());
     } else {
         quint8 * dstData = new quint8[image.width() * image.height() * pixelSize()];
         KoColorSpaceRegistry::instance()
-                ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), srcProfileName)
+                ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile)
                 ->convertPixelsTo(image.bits(), dstData, colorSpace(), image.width() * image.height());
 
         writeBytes(dstData, offsetX, offsetY, image.width(), image.height());
@@ -670,7 +674,7 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const QString &srcP
     m_d->cache.invalidate();
 }
 
-QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile) const
+QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile) const
 {
     qint32 x1;
     qint32 y1;

@@ -94,9 +94,7 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
     } else {
 
         KoShape * shape = view->document()->shapeForNode(node);
-        if (!shape) {
-            shape = view->document()->addShape(node);
-        }
+        Q_ASSERT(shape);
 
         selection->select(shape);
         KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape);
@@ -209,6 +207,31 @@ bool allowAsChild(const QString & parentType, const QString & childType)
     return true;
 }
 
+void KisNodeManager::getNewNodeLocation(KisNodeSP node, KisNodeSP& parent, KisNodeSP& above, KisNodeSP _activeNode)
+{
+    KisNodeSP root = m_d->view->image()->root();
+    if (!_activeNode)
+        _activeNode = root->firstChild();
+    KisNodeSP active = _activeNode;
+    // Find the first node above the current node that can have the desired
+    // layer type as child. XXX_NODE: disable the menu entries for node types
+    // that are not compatible with the active node type.
+    while (active) {
+        if (active->allowAsChild(node)) {
+            parent = active;
+            if (_activeNode->parent() == parent) {
+                above = _activeNode;
+            } else {
+                above = parent->firstChild();
+            }
+            return;
+        }
+        active = active->parent();
+    }
+    parent = root;
+    above = parent->firstChild();
+}
+
 void KisNodeManager::getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP _activeNode)
 {
     KisNodeSP root = m_d->view->image()->root();
@@ -239,7 +262,7 @@ void KisNodeManager::addNode(KisNodeSP node, KisNodeSP activeNode)
     KisNodeSP parent;
     KisNodeSP above;
 
-    getNewNodeLocation(node->metaObject()->className(), parent, above, activeNode);
+    getNewNodeLocation(node, parent, above, activeNode);
     m_d->commandsAdapter->addNode(node, parent, above);
     node->setDirty(node->extent());
 }
@@ -256,7 +279,7 @@ void KisNodeManager::moveNode(KisNodeSP node, KisNodeSP activeNode)
     KisNodeSP parent;
     KisNodeSP above;
 
-    getNewNodeLocation(node->metaObject()->className(), parent, above, activeNode);
+    getNewNodeLocation(node, parent, above, activeNode);
     if (node->inherits("KisSelectionMask") && parent->inherits("KisLayer")) {
         KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data());
         KisLayer *l = dynamic_cast<KisLayer*>(parent.data());
@@ -270,7 +293,7 @@ void KisNodeManager::moveNode(KisNodeSP node, KisNodeSP activeNode)
 
 void KisNodeManager::moveNodeAt(KisNodeSP node, KisNodeSP parent, int index)
 {
-    if (allowAsChild(parent->metaObject()->className(), node->metaObject()->className())) {
+    if (parent->allowAsChild(node)) {
         if (node->inherits("KisSelectionMask") && parent->inherits("KisLayer")) {
             KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data());
             KisLayer *l = dynamic_cast<KisLayer*>(parent.data());

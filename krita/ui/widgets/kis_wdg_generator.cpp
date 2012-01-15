@@ -47,7 +47,7 @@ public:
 
 };
 
-class KisWdgGenerator::Private
+struct KisWdgGenerator::Private
 {
 
 public:

@@ -133,7 +133,6 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     int width = wdg->intWidth->value();
     int height = wdg->intHeight->value();
     KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
-    image->lock();
     // create a layer
     QList<int> pages = wdg->pages();
     for (QList<int>::const_iterator it = pages.constBegin(); it != pages.constEnd(); ++it) {
@@ -141,23 +140,21 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
                 i18n("Page %1", *it + 1),
                 quint8_MAX);
 
-        KisTransaction("", layer->paintDevice());
+        KisTransaction(0, layer->paintDevice());
 
         Poppler::Page* page = pdoc->page(*it);
         for (int x = 0; x < width; x += 1000) {
             int currentWidth = (x + 1000 > width) ? (width - x) : 1000;
             for (int y = 0; y < height; y += 1000) {
                 int currentHeight = (y + 1000 > height) ? (height - x) : 1000;
-                layer->paintDevice()->convertFromQImage(page->renderToImage(wdg->intHorizontal->value(), wdg->intVertical->value(), x, y, currentWidth, currentHeight), "", x, y);
+                layer->paintDevice()->convertFromQImage(page->renderToImage(wdg->intHorizontal->value(), wdg->intVertical->value(), x, y, currentWidth, currentHeight), 0, x, y);
             }
         }
         delete page;
         image->addNode(layer, image->rootLayer(), 0);
-        layer->setDirty();
     }
 
     doc->setCurrentImage(image);
-    image->unlock();
     KIO::NetAccess::removeTempFile(tmpFile);
 
     delete pdoc;

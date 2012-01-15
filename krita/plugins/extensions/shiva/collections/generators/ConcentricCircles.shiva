@@ -19,13 +19,17 @@
 >;  
 kernel ConcentricCircles
 {
-  const float2 center = { IMAGE_WIDTH * 0.5 , IMAGE_HEIGHT * 0.5 };
+  dependent float2 center;
+  void evaluateDependents()
+  {
+    center = IMAGE_SIZE * 0.5;
+  }
   void evaluatePixel(out pixel4 result)
   {
     float lf = length(result.coord - center);
     int l = lf;
     
-    float4 r;
+    color r;
     if( (l / radius & 1) == 1 )
     {
       r = color1;
@@ -34,13 +38,13 @@ kernel ConcentricCircles
       if( ( ((l-1)/radius) & 1) == 1 )
       {
         float c = l - lf;
-        if(c < 0) c = -c;
-        r = (1.0- c) * color1 + c * color2;
+        if(c < 0) c = 1+c;
+        r = mix(color2, color1, c);
       } else if((((l+1)/radius) & 1 ) == 1)
       {
         float c = l - lf;
         if(c < 0) c = -c;
-        r = c * color1 + (1.0 - c) * color2;
+        r = mix(color2, color1, c);
       } else {
         r = color2;
       }

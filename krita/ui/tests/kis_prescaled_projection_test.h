@@ -52,7 +52,11 @@ private slots:
 
     void benchmarkUpdate();
 
-    void testScaling();
+    void testScrollingZoom100();
+    void testScrollingZoom50();
+    void testUpdates();
+
+    void testQtScaling();
 };
 
 #endif

@@ -295,10 +295,19 @@ public:
     KoSectionStyle *sectionStyle(const QString &name) const;
 
      /**
+     * Return the default character style that will always be present in each
+     * document. You can alter the style, but you can never delete it.
+     * The default is suppost to stay invisible to the user and its called
+     * i18n("Default") for that reason. Applications should not
+     * show this style in their document-level configure dialogs.
+     */
+    KoCharacterStyle *defaultCharacterStyle() const;
+
+     /**
      * Return the default paragraph style that will always be present in each
      * document. You can alter the style, but you can never delete it.
      * The default is suppost to stay invisible to the user and its called
-     * i18n("[No Paragraph Style]") for that reason. Applications should not
+     * i18n("Default") for that reason. Applications should not
      * show this style in their document-level configure dialogs.
      */
     KoParagraphStyle *defaultParagraphStyle() const;

@@ -18,11 +18,13 @@
  */
 
 #include "kis_painting_assistant.h"
+#include "kis_coordinates_converter.h"
 #include "kis_debug.h"
 
 #include <kglobal.h>
 #include <QPen>
 #include <QPainter>
+#include <QPixmapCache>
 
 struct KisPaintingAssistantHandle::Private {
     QList<KisPaintingAssistant*> assistants;
@@ -92,11 +94,28 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistantHandle::split()
     return newHandles;
 }
 
+void KisPaintingAssistantHandle::uncache()
+{
+    foreach(KisPaintingAssistant* assistant, d->assistants) {
+        assistant->uncache();
+    }
+}
+
 
 struct KisPaintingAssistant::Private {
     QString id;
     QString name;
     QList<KisPaintingAssistantHandleSP> handles;
+    QPixmapCache::Key cached;
+    QRect cachedRect; // relative to boundingRect().topLeft()
+    struct TranslationInvariantTransform {
+        qreal m11, m12, m21, m22;
+        TranslationInvariantTransform() { }
+        TranslationInvariantTransform(const QTransform& t) : m11(t.m11()), m12(t.m12()), m21(t.m21()), m22(t.m22()) { }
+        bool operator==(const TranslationInvariantTransform& b) {
+            return m11 == b.m11 && m12 == b.m12 && m21 == b.m21 && m22 == b.m22;
+        }
+    } cachedTransform;
 };
 
 KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& name) : d(new Private)
@@ -160,6 +179,60 @@ void KisPaintingAssistant::addHandle(KisPaintingAssistantHandleSP handle)
     Q_ASSERT(!d->handles.contains(handle));
     d->handles.append(handle);
     handle->registerAssistant(this);
+}
+
+void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool useCache)
+{
+    Q_UNUSED(updateRect);
+
+    if (!useCache) {
+        gc.save();
+        drawCache(gc, converter);
+        gc.restore();
+        return;
+    }
+    const QRect bound = boundingRect();
+    if (bound.isEmpty()) return;
+    const QTransform transform = converter->documentToWidgetTransform();
+    const QRect widgetBound = transform.mapRect(bound);
+
+    const QRect paintRect = transform.mapRect(bound).intersected(gc.viewport());
+    if (paintRect.isEmpty()) return;
+
+    QPixmap cached;
+    if (!(QPixmapCache::find(d->cached, &cached) &&
+          d->cachedTransform == transform &&
+          d->cachedRect.translated(widgetBound.topLeft()).contains(paintRect))) {
+        const QRect cacheRect = gc.viewport().adjusted(-100, -100, 100, 100).intersected(widgetBound);
+        Q_ASSERT(!cacheRect.isEmpty());
+        if (cached.isNull() || cached.size() != cacheRect.size()) {
+            cached = QPixmap(cacheRect.size());
+        }
+        cached.fill(Qt::transparent);
+        QPainter painter(&cached);
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setWindow(cacheRect);
+        drawCache(painter, converter);
+        painter.end();
+        d->cachedTransform = transform;
+        d->cachedRect = cacheRect.translated(-widgetBound.topLeft());
+        d->cached = QPixmapCache::insert(cached);
+    }
+    gc.drawPixmap(paintRect, cached, paintRect.translated(-widgetBound.topLeft() - d->cachedRect.topLeft()));
+}
+
+void KisPaintingAssistant::uncache()
+{
+    d->cached = QPixmapCache::Key();
+}
+
+QRect KisPaintingAssistant::boundingRect() const
+{
+    QRectF r;
+    foreach (KisPaintingAssistantHandleSP h, handles()) {
+        r = r.united(QRectF(*h, QSizeF(1,1)));
+    }
+    return r.adjusted(-2, -2, 2, 2).toAlignedRect();
 }
 
 const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const

@@ -76,6 +76,9 @@ public:
         CurrentPage,        ///< The current page number
         ActiveStyleType,    ///< the actual active style type see KoFlake::StyleType for valid values
         ActiveRange,        ///< The area where the rulers should show white
+        ShowTextShapeOutlines,     ///< Paint of text shape outlines ?
+        ShowFormattingCharacters,  ///< Paint of formatting characters ?
+        ShowTableBorders,  ///< Paint of table borders (when not really there) ?
         KarbonStart = 1000,      ///< Base number for karbon specific values.
         KexiStart = 2000,        ///< Base number for kexi specific values.
         FlowStart = 3000,       ///< Base number for flow specific values.

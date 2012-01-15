@@ -71,7 +71,7 @@ public:
     virtual KoPageLayout & pageLayout() = 0;
     virtual const KoPageLayout & pageLayout() const = 0;
 
-    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
+    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
 
     /**
      * @brief Paint background
@@ -119,6 +119,8 @@ public:
     virtual bool displayShape(KoShape *shape) const = 0;
 
     QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) );
+
+    virtual QImage thumbImage(const QSize &size = QSize(512, 512)) = 0;
 
     /**
      * This function is called when the content of the page changes

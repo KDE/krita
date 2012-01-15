@@ -133,6 +133,7 @@ protected:
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void deactivate();
 
 private slots:
 

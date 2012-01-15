@@ -135,6 +135,10 @@ public:
         <td>''</td>
         <td>Tool will always be visible. We recommend you don't use this one.</td></tr>
      <tr>
+        <td>"comma separated list of application names"</td>
+        <td>see main type</td>
+        <td>Similar to the 'main' item if the application name matches with the current application. Otherwise it's similar to 'dynamic', but segmented in its own section. If the list includes 'dynamic' it's even added to the dynamic section, when not matching the application name</td></tr>
+     <tr>
         <td>'other'</td>
         <td>any</td>
         <td>similar to the 'dynamic' items, but segmented in its own section.</td></tr>
@@ -156,12 +160,6 @@ public:
      * @return the shortcut
      */
     KShortcut shortcut() const;
-
-    /**
-     * Returns if the tools instance this factory creates can be reused between input devices.
-     * @return true when the tool instance can be reused, false if a new instance needs to be created.
-     */
-    bool inputDeviceAgnostic() const;
 
     /**
      * Returns the main toolType
@@ -238,18 +236,6 @@ protected:
      */
     void setActivationShapeId(const QString &activationShapeId);
 
-    /**
-     * set if the tools instance this factory creates can be reused between input devices.
-     * There is always at least one instance of a tool per view. Calligra will use this boolean to
-     * decide if additionally it should create one instance per input device, like mouse and tablet.
-     *
-     * When a user has a mouse and 2 tablet pens it is useful to have one tool per device since each
-     * tool can then remember its own selection and its own cursor-position etc.
-     * Default value is true.
-     *
-     * @param agnostic when true the tool instance can be reused, false if a new instance needs to be created.
-     */
-    void setInputDeviceAgnostic(bool agnostic);
 
 private:
     class Private;

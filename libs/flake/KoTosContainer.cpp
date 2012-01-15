@@ -31,8 +31,8 @@
 #include <QTextCursor>
 
 KoTosContainerPrivate::KoTosContainerPrivate(KoShapeContainer *q)
-: KoShapeContainerPrivate(q)
-, resizeBehavior(KoTosContainer::IndependentSizes)
+    : KoShapeContainerPrivate(q)
+    , resizeBehavior(KoTosContainer::IndependentSizes)
 {
 }
 
@@ -42,7 +42,7 @@ KoTosContainerPrivate::~KoTosContainerPrivate()
 
 
 KoTosContainer::KoTosContainer()
-: KoShapeContainer(*(new KoTosContainerPrivate(this)))
+    : KoShapeContainer(*(new KoTosContainerPrivate(this)))
 {
 }
 
@@ -56,7 +56,7 @@ KoTosContainer::KoTosContainer(KoTosContainerPrivate &dd)
 {
 }
 
-void KoTosContainer::paintComponent(QPainter &, const KoViewConverter &)
+void KoTosContainer::paintComponent(QPainter &, const KoViewConverter &, KoShapePaintingContext &)
 {
 }
 
@@ -68,26 +68,17 @@ bool KoTosContainer::loadText(const KoXmlElement &element, KoShapeLoadingContext
         if (child.localName() == "p" || child.localName() == "list") {
 
             KoShape *textShape = createTextShape(context.documentResourceManager());
+            if (!textShape) {
+                return false;
+            }
 
             // In the case of text on shape, we cannot ask the text shape to load
             // the odf, since it expects a complete document with style info and
             // everything, so we have to use the KoTextShapeData object instead.
             KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(textShape->userData());
-            if (shapeData) {
-                bool loadOdf = shapeData->loadOdf(element, context);
-
-                // TODO are the next 3 commands needed that all but setPosition is done in create text shape
-                textShape->setSize(size());
-                textShape->setTransformation(transformation());
-                textShape->setPosition(QPointF(0, 0));
-                textShape->setRunThrough(runThrough());
-
-                // Don't overwrite the alignment that may already have been defined for the
-                // Tos-shape in a paragraph-style.
-                //setTextAlignment(Qt::AlignCenter);
-
-                return loadOdf;
-            }
+            Q_ASSERT(shapeData);
+            bool loadOdf = shapeData->loadOdf(element, context);
+            return loadOdf;
         }
     }
     return true;
@@ -187,9 +178,9 @@ void KoTosContainer::setPreferredTextRect(const QRectF &rect)
     Q_D(KoTosContainer);
     d->preferredTextRect = rect;
     KoShape *textShape = this->textShape();
-    kDebug(30006) << rect << textShape << d->resizeBehavior;
+    //kDebug(30006) << rect << textShape << d->resizeBehavior;
     if (d->resizeBehavior == TextFollowsPreferredTextRect && textShape) {
-        kDebug(30006) << rect;
+        //kDebug(30006) << rect;
         textShape->setPosition(rect.topLeft());
         textShape->setSize(rect.size());
     }
@@ -204,6 +195,7 @@ QRectF KoTosContainer::preferredTextRect() const
 KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentResources)
 {
     if (!documentResources) {
+        kWarning(30006) << "KoDocumentResourceManager not found";
         return 0;
     }
 
@@ -221,9 +213,19 @@ KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentReso
     if (factory) { // not installed, thats too bad, but allowed
         textShape = factory->createDefaultShape(documentResources);
         Q_ASSERT(textShape); // would be a bug in the text shape;
-        textShape->setSize(size());
+        if (d->resizeBehavior == TextFollowsPreferredTextRect) {
+            textShape->setSize(d->preferredTextRect.size());
+        } else {
+            textShape->setSize(size());
+        }
         textShape->setTransformation(transformation());
+        if (d->resizeBehavior == TextFollowsPreferredTextRect) {
+            textShape->setPosition(d->preferredTextRect.topLeft());
+        } else {
+            textShape->setPosition(QPointF(0, 0));
+        }
         textShape->setSelectable(false);
+        textShape->setRunThrough(runThrough());
         KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(textShape->userData());
         Q_ASSERT(shapeData); // would be a bug in kotext
         // TODO check if that is correct depending on the resize mode

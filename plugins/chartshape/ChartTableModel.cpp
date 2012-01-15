@@ -96,71 +96,74 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
     setRowCount( 0 );
     setColumnCount( 0 );
 
-    ///const QDomNode &node = tableElement.asQDomNode( QDomDocument() );
-
+    //QDomDocument doc;
+    //KoXml::asQDomElement( doc, tableElement );
     //QTextStream stream(stdout);
-    //stream << node;
+    //stream << doc.documentElement();
 
-    // FIXME: Rewrite this without the for loop.  I think there can
-    //        only be one table-rows and one table-header-rows element
-    //        in each table.
-    int           row = 0;
+    int row = 0;
     KoXmlElement  n;
-    int           found = false;
     forEachElement ( n, tableElement ) {
         if ( n.namespaceURI() != KoXmlNS::table )
             continue;
 
-        if ( n.localName() == "table-rows"
-             || n.localName() == "table-header-rows" )
+        if ( n.localName() == "table-columns" || n.localName() == "table-header-columns" )
         {
-            found = true;
+            int column = 0;
+            KoXmlElement  _n;
+            forEachElement ( _n, n ) {
+                if ( _n.namespaceURI() != KoXmlNS::table || _n.localName() != "table-column" )
+                    continue;
+                column += qMax( 1, _n.attributeNS( KoXmlNS::table, "number-columns-repeated" ).toInt() );
+                if ( column > columnCount() )
+                    setColumnCount( column );
+            }
+        }
+        else if ( n.localName() == "table-rows" || n.localName() == "table-header-rows" )
+        {
+            if (n.localName() == "table-header-rows") {
+                if (row >= 1) {
+                    // There can only be one header-row and only at the very beginning.
+                    // So, ignore all following header-rows to be sure our internal
+                    // table doesn't start at the wrong offset or something like that.
+                    continue;
+                }
+            }
 
             KoXmlElement  _n;
             forEachElement ( _n, n ) {
-
-                // Must be a table:table-row, else go to next element.
-                if ( _n.namespaceURI() != KoXmlNS::table
-                     || _n.localName() != "table-row" )
+                if ( _n.namespaceURI() != KoXmlNS::table || _n.localName() != "table-row" )
                     continue;
 
                 // Add a row to the internal representation.
-                setRowCount( rowCount() + 1 );
+                setRowCount( row + 1 );
 
                 // Loop through all cells in a table row.
-                int           column = 0;
+                int  column = 0;
                 KoXmlElement  __n;
                 forEachElement ( __n, _n ) {
+                    if ( __n.namespaceURI() != KoXmlNS::table || __n.localName() != "table-cell" )
+                        continue;
 
-                    // Must be a table:table-cell, otherwise go to
-                    // next element.
-                    if ( __n.namespaceURI() == KoXmlNS::table
-                         && __n.localName() == "table-cell" )
-                    {
-//                         continue;
+                    // We have a cell so be sure our column-counter is increased right now so
+                    // any 'continue' coming now will leave with the correct value for the next
+                    // cell we deal with.
+                    ++column;
 
-                    // If this row is wider than any previous one,
-                    // then add another column.
-                    // Is this efficient enough?
-                    if ( column >= columnCount() )
-                        setColumnCount( columnCount() + 1 );
+                    // If this row is wider than any previous one, then add another column.
+                    if ( column > columnCount() )
+                        setColumnCount( column );
 
                     const QString valueType = __n.attributeNS( KoXmlNS::office, "value-type" );
-
                     QString valueString = __n.attributeNS( KoXmlNS::office, "value" );
                     const KoXmlElement valueElement = __n.namedItemNS( KoXmlNS::text, "p" ).toElement();
                     if ( ( valueElement.isNull() || !valueElement.isElement() ) && valueString.isEmpty() )
-                    {
-                        qWarning() << "ChartTableModel::loadOdf(): Cell contains no valid <text:p> element, cannnot load cell data.";
-                        // Even if it doesn't contain any value, it's still a cell.
-                        column++;
                         continue;
-                    }
 
                     // Read the actual value in the cell.
                     QVariant value;
                     if ( valueString.isEmpty() )
-                        valueString = valueElement.text();
+                        valueString = valueElement.text().trimmed();
                     if ( valueType == "float" )
                         value = valueString.toDouble();
                     else if ( valueType == "boolean" )
@@ -168,11 +171,7 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
                     else // if ( valueType == "string" )
                         value = valueString;
 
-                    setData( index( row, column ), value );
-
-                    ++column;
-                    }
-
+                    setData( index( row, column - 1 ), value );
                 } // foreach table:table-cell
                 ++row;
 
@@ -180,7 +179,7 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
         }
     }
 
-    return found;
+    return true;
 }
 
 bool ChartTableModel::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const

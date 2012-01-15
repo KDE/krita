@@ -62,8 +62,6 @@ set(kotext_LIB_SRCS
     KoBibliographyInfo.cpp
     BibliographyGenerator.cpp
 
-    KoTextLayoutScheduler.cpp
-
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
     styles/KoParagraphStyle.cpp
@@ -91,14 +89,17 @@ set(kotext_LIB_SRCS
     changetracker/KoDeletedColumnData.cpp
     changetracker/KoDeletedCellData.cpp
 
+    commands/ChangeAnchorPropertiesCommand.cpp
     commands/ChangeListCommand.cpp
     commands/ChangeTrackedDeleteCommand.cpp
+    commands/DeleteAnchorsCommand.cpp
     commands/DeleteCommand.cpp
     commands/DeleteTableColumnCommand.cpp
     commands/DeleteTableRowCommand.cpp
     commands/InsertDeleteChangesCommand.cpp
     commands/InsertTableColumnCommand.cpp
     commands/InsertTableRowCommand.cpp
+    commands/InsertInlineObjectCommand.cpp
     commands/ListItemNumberingCommand.cpp
     commands/RemoveDeleteChangesCommand.cpp
     commands/TextPasteCommand.cpp
@@ -186,7 +187,6 @@ install(
     styles/KoTableCellStyle.h
     styles/KoSectionStyle.h
     styles/KoStyleManager.h
-    styles/KoTableBorderStyle.h
     styles/KoTableStyle.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/styles COMPONENT Devel

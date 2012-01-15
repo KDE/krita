@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C)  2001, 2002 Montel Laurent <lmontel@mandrakesoft.com>
    Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,12 +44,28 @@ FontLayoutTab::FontLayoutTab(bool withSubSuperScript, bool uniqueFormat, QWidget
     widget.offsetLabel->setVisible(false);
 
     widget.hyphenate->setVisible(false); // TODO enable when we add this feature to the layout engine
+    connect(widget.normal, SIGNAL(toggled(bool)), this, SLOT(textPositionChanged()));
+    connect(widget.superscript, SIGNAL(toggled(bool)), this, SLOT(textPositionChanged()));
+    connect(widget.subscript, SIGNAL(toggled(bool)), this, SLOT(textPositionChanged()));
+    connect(widget.hyphenate, SIGNAL(stateChanged(int)), this, SLOT(hyphenateStateChanged()));
+}
+
+void FontLayoutTab::textPositionChanged()
+{
+   m_positionInherited = false;
+}
+
+void FontLayoutTab::hyphenateStateChanged()
+{
+    m_hyphenateInherited = false;
 }
 
 void FontLayoutTab::setDisplay(KoCharacterStyle *style)
 {
     if (!style)
         return;
+    m_positionInherited  = !style->hasProperty(QTextFormat::TextVerticalAlignment);
+    m_hyphenateInherited = !style->hasProperty(KoCharacterStyle::HasHyphenation);
 
     switch (style->verticalAlignment()) {
     case QTextCharFormat::AlignSuperScript:
@@ -78,7 +95,7 @@ void FontLayoutTab::save(KoCharacterStyle *style)
     Q_ASSERT(style);
     QTextCharFormat::VerticalAlignment va;
 
-    if (m_uniqueFormat || widget.positionGroup->isChecked()) {
+    if (m_uniqueFormat || widget.positionGroup->isChecked() || !m_positionInherited) {
         if (widget.normal->isChecked())
             va = QTextCharFormat::AlignNormal;
         else if (widget.subscript->isChecked())
@@ -89,11 +106,12 @@ void FontLayoutTab::save(KoCharacterStyle *style)
             va = QTextCharFormat::AlignNormal;
         style->setVerticalAlignment(va);
     }
-
-    if (widget.hyphenate->checkState() == Qt::Checked)
-        style->setHasHyphenation(true);
-    else if (widget.hyphenate->checkState() == Qt::Unchecked)
-        style->setHasHyphenation(false);
+    if (!m_hyphenateInherited) {
+        if (widget.hyphenate->checkState() == Qt::Checked)
+            style->setHasHyphenation(true);
+        else if (widget.hyphenate->checkState() == Qt::Unchecked)
+            style->setHasHyphenation(false);
+    }
 }
 
 #include <FontLayoutTab.moc>

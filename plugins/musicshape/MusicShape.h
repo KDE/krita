@@ -38,7 +38,7 @@ public:
     MusicShape();
     virtual ~MusicShape();
     /// reimplemented
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    virtual void paint( QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
     void constPaint( QPainter& painter, const KoViewConverter& converter ) const;
 
     /// reimplemented

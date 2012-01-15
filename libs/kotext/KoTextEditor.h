@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
 * Copyright (C) 2009 Thomas Zander <zander@kde.org>
+* Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Library General Public
@@ -42,6 +43,7 @@ class KoBibliographyInfo;
 class KoCanvasBase;
 class KoTableOfContentsGeneratorInfo;
 class KoShapeController;
+class KoTextAnchor;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -71,7 +73,8 @@ public:
         MergeWithAdjacentList = 2,
         MergeExactly = 4,
         CreateNumberedParagraph = 8,
-        AutoListStyle = 16
+        AutoListStyle = 16,
+        DontUnsetIfSame = 32 /// do not unset the current list style if it is already been set the same
     };
     Q_DECLARE_FLAGS(ChangeListFlags, ChangeListFlag)
 
@@ -134,6 +137,7 @@ private:
     friend class InsertTableColumnCommand;
     friend class ChangeTrackedDeleteCommand;
     friend class DeleteCommand;
+    friend class InsertInlineObjectCommand;
 
     // for unittests
     friend class TestKoInlineTextObjectManager;
@@ -193,8 +197,10 @@ public slots:
     /**
      * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
      * @param inliner the object to insert.
+     * @param cmd a parent command for the commands created by this methods. If present, the commands
+     *    will not be added to the document's undo stack automatically.
      */
-    void insertInlineObject(KoInlineObject *inliner);
+    void insertInlineObject(KoInlineObject *inliner, KUndo2Command *parent = 0);
 
     /**
      * update the position of all inline objects from the given start point to the given end point.
@@ -202,6 +208,13 @@ public slots:
      * @param end end position for updating. If -1, we update to the end of the document
      */
     void updateInlineObjectPosition(int start = 0, int end = -1);
+
+    /**
+     * Remove the KoTextAnchor objects from the document.
+     *
+     * NOTE: Call this method only when the the shapes belonging to the anchors have been deleted.
+     */
+    void removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent);
 
     /**
     * At the current cursor position, insert a marker that marks the next word as being part of the index.
@@ -447,6 +460,7 @@ signals:
     void cursorPositionChanged();
 
 protected:
+    void recursiveSetStyle(QTextFrame::iterator it, KoCharacterStyle *style);
     bool recursiveProtectionCheck(QTextFrame::iterator it) const;
 
 private:

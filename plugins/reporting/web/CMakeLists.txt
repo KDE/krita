@@ -31,7 +31,6 @@ target_link_libraries(koreport_webplugin
     ${QT_QTGUI_LIBRARY}
     ${QT_QTWEBKIT_LIBRARY}
     ${QT_QTXML_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
 )
 
 ########### install files ###############

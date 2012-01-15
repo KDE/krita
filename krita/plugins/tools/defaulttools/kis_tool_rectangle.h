@@ -65,7 +65,6 @@ public:
         setIcon("krita_tool_rectangle");
         //setShortcut( Qt::Key_F6 );
         setPriority(2);
-        setInputDeviceAgnostic(false);
     }
 
     virtual ~KisToolRectangleFactory() {}

@@ -50,6 +50,7 @@ public:
     QColor backgroundColor() const;
     QFont font() const;
     qreal fontSize() const;
+    QColor fontColor() const;
     QFont titleFont() const;
     qreal titleFontSize() const;
     LegendExpansion expansion() const;
@@ -64,6 +65,7 @@ public:
     void setBackgroundColor( const QColor &color );
     void setFont( const QFont &font );
     void setFontSize( qreal size );
+    void setFontColor( const QColor &color );
     void setTitleFont( const QFont &font );
     void setTitleFontSize( qreal size );
     void setExpansion( LegendExpansion expansion );
@@ -71,7 +73,7 @@ public:
     void setLegendPosition( Position position );
     void setSize( const QSizeF &size );
 
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     void paintPixmap( QPainter &painter, const KoViewConverter &converter );
 
     bool loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &context );

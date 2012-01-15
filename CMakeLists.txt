@@ -16,8 +16,8 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 
 # define the generic version of the Calligra libraries here
 # this makes it easy to advance it when the next Calligra release comes
-set(GENERIC_CALLIGRA_LIB_VERSION "8.0.0")
-set(GENERIC_CALLIGRA_LIB_SOVERSION "8")
+set(GENERIC_CALLIGRA_LIB_VERSION "9.0.0")
+set(GENERIC_CALLIGRA_LIB_SOVERSION "9")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
@@ -35,6 +35,7 @@ option(GHNS "support Get Hot New Stuff" ON)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
 option(TINY "compile a tiny Calligra" OFF)
 option(CREATIVEONLY "compile only Karbon and Krita" OFF)
+option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
 
 IF (TINY)
     set(SHOULD_BUILD_WORDS TRUE)
@@ -108,17 +109,27 @@ endif(KDE4_BUILD_TESTS)
 set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
 
-find_package(Qt4 4.6.0 REQUIRED)
+if (QT3SUPPORT)
+    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL Qt3Support)
+else (QT3SUPPORT)
+    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL)
+endif (QT3SUPPORT)
 
 include(KDE4Defaults)
 include(MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
-option(GHNS "support Get Hot New Stuff" ON)
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
     set(GHNS FALSE)
 endif(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
+
+macro_optional_find_package(LibAttica)
+macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")
+
+if (NOT LIBATTICA_FOUND)
+    set(GHNS FALSE)
+endif (NOT LIBATTICA_FOUND)
 
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
   set(NEPOMUK FALSE)
@@ -242,7 +253,20 @@ else(NOT MARBLE_FOUND)
     set(CAN_USE_MARBLE TRUE)
 endif(NOT MARBLE_FOUND)
 if( MARBLE_FOUND )
-   add_definitions( -DCAN_USE_MARBLE )
+    add_definitions( -DCAN_USE_MARBLE )
+    ##
+    ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
+    ## with commit ea177ca. This is for compatibility with older versions.
+    ##
+    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR})
+    if( MARBLECONTROLBOX_H )
+        execute_process(COMMAND grep -m 1 -e "setMarbleWidget" ${MARBLECONTROLBOX_H}
+                        OUTPUT_VARIABLE SETMARBLEWIDGET
+        )
+        if( SETMARBLEWIDGET )
+            add_definitions(-DHAVE_SETMARBLEWIDGET)
+        endif( SETMARBLEWIDGET)
+    endif( MARBLECONTROLBOX_H )
 endif( MARBLE_FOUND )
 
 
@@ -490,6 +514,10 @@ endif (NOT QT_QTDECLARATIVE_FOUND)
 #    set (SHOULD_BUILD_KEXI FALSE)
 #endif(NOT QIMAGEBLITZ_FOUND)
 
+if (NOT QT3SUPPORT)
+    set (SHOULD_BUILD_KEXI FALSE)
+endif (NOT QT3SUPPORT)
+
 ### HACK ###
 # Those BUILD_ are illegally used below before they are defined, which cause problem on a first build
 option(BUILD_kexi   "Build directory kexi" ON)
@@ -500,15 +528,29 @@ if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     ##
     ## Test for sqlite
     ##
-    set(SQLITE_RECOMMENDED_VERSION "3.7.3")
+    set(SQLITE_MIN_VERSION 3.6.16)
+    set(SQLITE_RECOMMENDED_VERSION 3.7.9)
+    set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
     find_package(CalligraSqlite 3.6.16)
-    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine" "http://www.sqlite.org"
-                      FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")
-
+    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
+                      "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
+                      "Required by Kexi for its default database driver.")
     if(NOT SQLITE_FOUND)
         set(SHOULD_BUILD_KEXI FALSE)
-        message(STATUS "WARNING: Kexi will not be built.")
+        message(STATUS "WARNING: Because of that, Kexi will not be built.")
     endif(NOT SQLITE_FOUND)
+
+    ##
+    ## Test for ICU
+    ##
+    find_package(ICU)
+    macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Library"
+                      "http://icu-project.org" FALSE "" "Required by Kexi")
+
+    if(NOT ICU_FOUND)
+        set(SHOULD_BUILD_KEXI FALSE)
+        message(STATUS "WARNING: Because of that, Kexi will not be built.")
+    endif(NOT ICU_FOUND)
 endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
 
  ###################

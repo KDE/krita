@@ -44,12 +44,12 @@ KoShapeManagerPaintingStrategy::~KoShapeManagerPaintingStrategy()
     delete d;
 }
 
-void KoShapeManagerPaintingStrategy::paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint)
+void KoShapeManagerPaintingStrategy::paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     if (d->shapeManager) {
         painter.save();
         painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
-        d->shapeManager->paintShape(shape, painter, converter, forPrint);
+        d->shapeManager->paintShape(shape, painter, converter, paintContext);
         painter.restore();  // for the matrix
     }
 }

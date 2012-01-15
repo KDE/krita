@@ -35,7 +35,8 @@
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
-#include  <QtCore/QXmlStreamReader>
+#include <QtCore/QXmlStreamReader>
+#include <QtCore/QTemporaryFile>
 #include <qdom.h>
 #include "KoResource.h"
 #include "KoResourceServerObserver.h"
@@ -167,6 +168,18 @@ public:
             kWarning(30009) << "Tried to add an invalid resource!";
             return false;
         }
+        QFileInfo fileInfo(resource->filename());
+
+        if (fileInfo.exists()) {
+           QString filename = fileInfo.path() + "/" + fileInfo.baseName() + "XXXXXX" + "." + fileInfo.suffix();
+           kDebug() << "fileName is " << filename;
+           QTemporaryFile file(filename);
+           if (file.open()) {
+               kDebug() << "now " << file.fileName();
+               resource->setFilename(file.fileName());
+           }
+        }
+
         if( save && ! resource->save()) {
             kWarning(30009) << "Could not save resource!";
             return false;

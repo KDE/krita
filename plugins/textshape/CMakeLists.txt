@@ -38,6 +38,7 @@ SET ( textshape_SRCS
     dialogs/SimpleCharacterWidget.cpp
     dialogs/SimpleParagraphWidget.cpp
     dialogs/SimpleTableWidget.cpp
+    dialogs/SimpleInsertWidget.cpp
     dialogs/SimpleTableOfContentsWidget.cpp
     dialogs/SimpleCitationBibliographyWidget.cpp
     dialogs/CitationInsertionDialog.cpp
@@ -97,6 +98,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/SimpleCharacterWidget.ui
     dialogs/SimpleParagraphWidget.ui
     dialogs/SimpleTableWidget.ui
+    dialogs/SimpleInsertWidget.ui
     dialogs/SimpleTableOfContentsWidget.ui
     dialogs/SimpleCitationBibliographyWidget.ui
     dialogs/CitationInsertionDialog.ui
@@ -110,7 +112,6 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/ParagraphDecorations.ui
     dialogs/ParagraphBulletsNumbers.ui
     dialogs/StyleManager.ui
-    dialogs/ParagraphGeneral.ui
     dialogs/NewStyleWidget.ui
     dialogs/CharacterGeneral.ui
     dialogs/CharacterHighlighting.ui

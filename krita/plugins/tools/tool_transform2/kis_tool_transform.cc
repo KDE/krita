@@ -70,12 +70,10 @@
 #include <kis_pixel_selection.h>
 #include <kis_shape_selection.h>
 #include <kis_selection_manager.h>
+#include <kis_system_locker.h>
 
 #include <KoShapeTransformCommand.h>
 
-#include "flake/kis_node_shape.h"
-#include "flake/kis_layer_container_shape.h"
-#include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"
 #include "widgets/kis_progress_widget.h"
 
@@ -2088,7 +2086,7 @@ void KisToolTransform::applyTransform()
     if (!canvas)
         return;
 
-    setCurrentNodeLocked(true);
+    KisSystemLocker locker(currentNode());
 
     QVector3D tmpCenter(m_originalCenter.x(), m_originalCenter.y(), 0);
     tmpCenter = scale(tmpCenter.x(), tmpCenter.y(), tmpCenter.z());
@@ -2096,6 +2094,9 @@ void KisToolTransform::applyTransform()
     QPointF t = m_currentArgs.translate() - tmpCenter.toPointF();
     KoProgressUpdater* updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
     updater->start(100, i18n("Apply Transformation"));
+
+    KisUndoAdapter *undoAdapter = image()->undoAdapter();
+    undoAdapter->beginMacro(i18n("Apply transformation"));
 
     // This mementoes the current state of the active device.
     ApplyTransformCmd transaction(this, m_currentArgs.mode(), currentNode());
@@ -2260,16 +2261,16 @@ void KisToolTransform::applyTransform()
         }
     }
 
+    transaction.commit(undoAdapter);
+    undoAdapter->endMacro();
+
+    updater->deleteLater();
     currentNode()->setDirty();
 
     canvas->view()->selectionManager()->selectionChanged();
 
     if (currentSelection() && currentSelection()->hasShapeSelection())
         canvas->view()->selectionManager()->shapeSelectionChanged();
-
-    transaction.commit(image()->undoAdapter());
-    updater->deleteLater();
-    setCurrentNodeLocked(false);
 }
 
 void KisToolTransform::notifyCommandAdded(const KUndo2Command * command)

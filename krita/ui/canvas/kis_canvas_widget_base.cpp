@@ -28,7 +28,7 @@
 #include <KoShapeManager.h>
 #include <KoViewConverter.h>
 #include <KoToolProxy.h>
-
+#include <KoCanvasController.h>
 
 #include "kis_coordinates_converter.h"
 #include "kis_canvas_decoration.h"
@@ -37,7 +37,7 @@
 #include "../kis_view2.h"
 #include "../kis_selection_manager.h"
 
-class KisCanvasWidgetBase::Private
+struct KisCanvasWidgetBase::Private
 {
 public:
     Private(KisCanvas2 *newCanvas, KisCoordinatesConverter *newCoordinatesConverter)
@@ -222,12 +222,15 @@ void KisCanvasWidgetBase::processMousePressEvent(QMouseEvent *e)
         {
             m_d->toolProxy->mousePressEvent(e, mouseEventWidgetToDocument(e->pos()));
         }
+        e->setAccepted(true);
         return;
     }
     if (m_d->blockMouseEvent.isActive()) {
+        e->setAccepted(true);
         return;
     }
     m_d->toolProxy->mousePressEvent(e, mouseEventWidgetToDocument(e->pos()));
+    e->setAccepted(true);
 }
 
 void KisCanvasWidgetBase::processMouseReleaseEvent(QMouseEvent *e)
@@ -283,6 +286,12 @@ void KisCanvasWidgetBase::processKeyReleaseEvent(QKeyEvent *e)
 
 QVariant KisCanvasWidgetBase::processInputMethodQuery(Qt::InputMethodQuery query) const
 {
+    if (query == Qt::ImMicroFocus) {
+        QRectF rect = (m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter).toRectF()).toRect();
+        QPointF scroll(m_d->canvas->view()->canvasController()->scrollBarValue());
+        rect.translate(m_d->canvas->documentOrigin() - scroll);
+        return rect.toRect();
+    }
     return m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter);
 }
 

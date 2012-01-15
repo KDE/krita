@@ -23,6 +23,7 @@
 #include <KoToolProxy.h>
 #include <KoUnit.h>
 #include <KoText.h>
+#include <KoCanvasController.h>
 
 #include "KoPADocument.h"
 #include "KoPAView.h"
@@ -115,8 +116,9 @@ void KoPACanvas::mousePressEvent( QMouseEvent *event )
     if(!event->isAccepted() && event->button() == Qt::RightButton)
     {
         showContextMenu( event->globalPos(), toolProxy()->popupActionList() );
-        event->setAccepted( true );
     }
+
+    event->setAccepted( true );
 }
 
 void KoPACanvas::mouseDoubleClickEvent( QMouseEvent *event )
@@ -168,6 +170,16 @@ void KoPACanvas::updateInputMethodInfo()
 
 QVariant KoPACanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
+    if (query == Qt::ImMicroFocus) {
+        QRectF rect = (toolProxy()->inputMethodQuery(query, *(viewConverter())).toRectF()).toRect();
+        QPointF scroll(canvasController()->scrollBarValue());
+        if (canvasController()->canvasMode() == KoCanvasController::Spreadsheet &&
+                canvasWidget()->layoutDirection() == Qt::RightToLeft) {
+            scroll.setX(-scroll.x());
+        }
+        rect.translate(documentOrigin() - scroll);
+        return rect.toRect();
+    }
     return toolProxy()->inputMethodQuery(query, *(viewConverter()) );
 }
 

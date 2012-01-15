@@ -1,0 +1,24 @@
+[Desktop Entry]
+Name=Map Shape
+Name[ca]=Forma de mapes
+Name[ca@valencia]=Forma de mapes
+Name[cs]=Tvar mapy
+Name[de]=Karten-Objekt
+Name[et]=Kaardikujund
+Name[fi]=Karttamuoto
+Name[it]=Forma di mappa
+Name[nb]=Kartform
+Name[pl]=Kształt mapy
+Name[pt]=Forma de Mapa
+Name[pt_BR]=Forma de mapa
+Name[ru]=Фигура карты
+Name[sv]=Kartform
+Name[uk]=Форма карти
+Name[x-test]=xxMap Shapexx
+Name[zh_CN]=地图形状
+Name[zh_TW]=地圖元件
+X-KDE-ServiceTypes=Calligra/Shape
+Type=Service
+X-KDE-Library=mapshape
+X-Flake-MinVersion=4
+X-Flake-PluginVersion=4

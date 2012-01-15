@@ -183,7 +183,7 @@ public:
 
 
     /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
     /**
      * @brief Paint the component
@@ -194,7 +194,7 @@ public:
      * @param converter to convert between internal and view coordinates.
      * @see applyConversion()
      */
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter) = 0;
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) = 0;
 
     using KoShape::update;
     /// reimplemented

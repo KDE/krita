@@ -180,6 +180,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
             d->refCount.ref();
         }
         delete d->temporaryFile;
+        d->temporaryFile = 0;
         d->clear();
         d->suffix = "png"; // good default for non-lossy storage.
         if (image.byteCount() > MAX_MEMORY_IMAGESIZE) {
@@ -190,6 +191,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
                 kWarning(30006) << "Write temporary file failed";
                 d->errorCode = StorageFailed;
                 delete d->temporaryFile;
+                d->temporaryFile = 0;
                 return;
             }
             buffer.close();
@@ -299,6 +301,7 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
             d->refCount.ref();
         }
         delete d->temporaryFile;
+        d->temporaryFile = 0;
         d->clear();
         d->suffix = "png"; // good default for non-lossy storage.
         if (imageData.size() <= MAX_MEMORY_IMAGESIZE) {

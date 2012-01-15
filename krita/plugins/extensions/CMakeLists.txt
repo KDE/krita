@@ -21,9 +21,9 @@ add_subdirectory( tonemapping )
 add_subdirectory( dockers )
 add_subdirectory( extensionsmanager )
 
-if(OPENEXR_FOUND)
+if(OPENCTL_FOUND AND OPENEXR_FOUND)
   add_subdirectory( painterlyframework )
-endif(OPENEXR_FOUND)
+endif(OPENCTL_FOUND AND OPENEXR_FOUND)
 
 find_package(OpenShiva)
 find_package(QtShiva )

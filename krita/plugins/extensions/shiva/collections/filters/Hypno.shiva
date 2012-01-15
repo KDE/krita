@@ -1,0 +1,73 @@
+/*
+ * Copyright (c) 2009 Ricardo Cabello
+ * Copyright (c) 2010 Cyrille Berger
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+<
+  parameters: <
+    center: <
+      type: float2;
+      minValue: {0,0};
+      maxValue: {1,1};
+      defaultValue: {0.5, 0.5};
+    >;
+    offset: <
+      type: float2;
+    >;
+  >;
+>;
+kernel Hypno
+{
+  dependent float2 center_p = { IMAGE_WIDTH * center.x, IMAGE_HEIGHT * center.y };
+  void evaluatePixel(image src, output pixel dst)
+  {        
+    float2 pos = (dst.coord - center_p) / IMAGE_SIZE;
+
+    float pi = 3.141592653589793;
+    float a = atan2(pos.y,pos.x);
+    float r = sqrt(pow(pos.x,2.0)+pow(pos.y,2.0));
+    
+    float u = 0.0;
+    float v = 0.0;
+    float w = 0.0;
+    
+    u += offset.x;
+    v += offset.y;
+    
+    // This is where the magic happens
+    
+    u += cos(a)/r;
+    v += sin(a)/r;
+    w += 1.0/pow(r,0.1);
+
+    // End of the magic
+
+    u *= IMAGE_WIDTH;
+    v *= IMAGE_HEIGHT;
+    
+    if (u < 0.0) u += IMAGE_WIDTH * ceil(-u / IMAGE_WIDTH);
+    if (v < 0.0) v += IMAGE_HEIGHT * ceil(-v / IMAGE_HEIGHT);
+    if (u > IMAGE_WIDTH) u -= IMAGE_WIDTH * floor(u / IMAGE_WIDTH);
+    if (v > IMAGE_HEIGHT) v -= IMAGE_HEIGHT * floor(v / IMAGE_HEIGHT);
+    
+    dst = w * src.sampleNearest(float2(u, v));
+  }
+}

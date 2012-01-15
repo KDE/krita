@@ -512,6 +512,7 @@ void KisStrokeBenchmark::benchmarkRand()
             j = rand() / (float)RAND_MAX;
         }
     }
+    Q_UNUSED(j);
 }
 
 

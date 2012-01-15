@@ -25,15 +25,28 @@
 #include "kis_paint_layer.h"
 #include "kis_selection.h"
 #include "kis_transaction.h"
+#include "kis_image.h"
+#include "kis_distance_information.h"
 
+
+KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo(KisPainter *_painter, KisDistanceInformation *_dragDistance)
+    : painter(_painter), dragDistance(_dragDistance)
+{
+}
+
+KisPainterBasedStrokeStrategy::PainterInfo::~PainterInfo()
+{
+    delete(painter);
+    delete(dragDistance);
+}
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
                                                              const QString &name,
                                                              KisResourcesSnapshotSP resources,
-                                                             QVector<KisPainter*> painters)
+                                                             QVector<PainterInfo*> painterInfos)
     : KisSimpleStrokeStrategy(id, name),
       m_resources(resources),
-      m_painters(painters),
+      m_painterInfos(painterInfos),
       m_transaction(0)
 {
     init();
@@ -42,10 +55,10 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
                                                              const QString &name,
                                                              KisResourcesSnapshotSP resources,
-                                                             KisPainter *painter)
+                                                             PainterInfo *painterInfo)
     : KisSimpleStrokeStrategy(id, name),
       m_resources(resources),
-      m_painters(QVector<KisPainter*>() <<  painter),
+      m_painterInfos(QVector<PainterInfo*>() <<  painterInfo),
       m_transaction(0)
 {
     init();
@@ -62,7 +75,9 @@ void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
                                                  KisSelectionSP selection,
                                                  bool hasIndirectPainting)
 {
-    foreach(KisPainter *painter, m_painters) {
+    foreach(PainterInfo *info, m_painterInfos) {
+        KisPainter *painter = info->painter;
+
         painter->begin(targetDevice, selection);
         m_resources->setupPainter(painter);
 
@@ -76,10 +91,11 @@ void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
 
 void KisPainterBasedStrokeStrategy::deletePainters()
 {
-    foreach(KisPainter *painter, m_painters) {
-        delete painter;
+    foreach(PainterInfo *info, m_painterInfos) {
+        delete info;
     }
-    m_painters.clear();
+
+    m_painterInfos.clear();
 }
 
 void KisPainterBasedStrokeStrategy::initStrokeCallback()

@@ -71,14 +71,14 @@ void KisToolSelectBase::deactivate()
 void KisToolSelectBase::slotSetAction(int action)
 {
     if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT) {
-        m_selectAction = (selectionAction)action;
+        m_selectAction = (SelectionAction)action;
         m_optWidget->setAction(action);
     }
 }
 
 void KisToolSelectBase::slotSetSelectionMode(int mode)
 {
-    m_selectionMode = (selectionMode)mode;
+    m_selectionMode = (SelectionMode)mode;
 }
 
 void KisToolSelectBase::keyPressEvent(QKeyEvent *event)

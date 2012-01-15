@@ -29,7 +29,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_undo_adapter.h"
 
-class KisSelectionMask::Private
+struct KisSelectionMask::Private
 {
 public:
     KisImageWSP image;
@@ -94,12 +94,12 @@ void KisSelectionMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *und
     return visitor.visit(this, undoAdapter);
 }
 
-KisSelectionSP KisSelectionMask::deleselectedSelection()
+KisSelectionSP KisSelectionMask::deselectedSelection()
 {
     return m_d->deselectedSelection;
 }
 
-void KisSelectionMask::setDeleselectedSelection(KisSelectionSP selection)
+void KisSelectionMask::setDeselectedSelection(KisSelectionSP selection)
 {
     m_d->deselectedSelection = selection;
 }

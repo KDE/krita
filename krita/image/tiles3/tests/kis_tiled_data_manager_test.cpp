@@ -428,6 +428,71 @@ void KisTiledDataManagerTest::testPurgeHistory()
     dm.purgeHistory(memento4);
 }
 
+void KisTiledDataManagerTest::testUndoSetDefaultPixel()
+{
+    quint8 defaultPixel = 0;
+    KisTiledDataManager dm(1, &defaultPixel);
+
+    quint8 oddPixel1 = 128;
+    quint8 oddPixel2 = 129;
+
+    QRect fillRect(0,0,64,64);
+
+    KisTileSP tile00;
+    KisTileSP tile10;
+
+    tile00 = dm.getTile(0, 0, false);
+    tile10 = dm.getTile(1, 0, false);
+    QVERIFY(memoryIsFilled(defaultPixel, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(defaultPixel, tile10->data(), TILESIZE));
+
+    KisMementoSP memento1 = dm.getMemento();
+    dm.clear(fillRect, &oddPixel1);
+    dm.commit();
+
+    tile00 = dm.getTile(0, 0, false);
+    tile10 = dm.getTile(1, 0, false);
+    QVERIFY(memoryIsFilled(oddPixel1, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(defaultPixel, tile10->data(), TILESIZE));
+
+    KisMementoSP memento2 = dm.getMemento();
+    dm.setDefaultPixel(&oddPixel2);
+    dm.commit();
+
+    tile00 = dm.getTile(0, 0, false);
+    tile10 = dm.getTile(1, 0, false);
+    QVERIFY(memoryIsFilled(oddPixel1, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(oddPixel2, tile10->data(), TILESIZE));
+
+    dm.rollback(memento2);
+
+    tile00 = dm.getTile(0, 0, false);
+    tile10 = dm.getTile(1, 0, false);
+    QVERIFY(memoryIsFilled(oddPixel1, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(defaultPixel, tile10->data(), TILESIZE));
+
+    dm.rollback(memento1);
+
+    tile00 = dm.getTile(0, 0, false);
+    tile10 = dm.getTile(1, 0, false);
+    QVERIFY(memoryIsFilled(defaultPixel, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(defaultPixel, tile10->data(), TILESIZE));
+
+    dm.rollforward(memento1);
+
+    tile00 = dm.getTile(0, 0, false);
+    tile10 = dm.getTile(1, 0, false);
+    QVERIFY(memoryIsFilled(oddPixel1, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(defaultPixel, tile10->data(), TILESIZE));
+
+    dm.rollforward(memento2);
+
+    tile00 = dm.getTile(0, 0, false);
+    tile10 = dm.getTile(1, 0, false);
+    QVERIFY(memoryIsFilled(oddPixel1, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(oddPixel2, tile10->data(), TILESIZE));
+}
+
 //#include <valgrind/callgrind.h>
 
 void KisTiledDataManagerTest::benchmarkReadOnlyTileLazy()
@@ -603,6 +668,7 @@ public:
             case 3:
                 run_concurrent(lock,t) {
                     QRect newRect = dm.extent();
+		    Q_UNUSED(newRect);
                 }
                 break;
             case 4:

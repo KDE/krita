@@ -45,7 +45,7 @@
 #include <QtDBus/QtDBus>
 #include <QFile>
 #include <QSplashScreen>
-
+#include <QSysInfo>
 
 bool KoApplication::m_starting = true;
 
@@ -77,6 +77,25 @@ KoApplication::KoApplication()
     QDBusConnection::sessionBus().registerObject("/application", this);
 
     m_starting = true;
+#ifdef Q_WS_WIN
+    QSysInfo::WinVersion version = QSysInfo::windowsVersion();
+    printf("setting windows style %i", version);
+    switch (version) {
+	case QSysInfo::WV_NT:
+	case QSysInfo::WV_2000:
+            setStyle("windows");
+	    break;
+	case QSysInfo::WV_XP:
+	case QSysInfo::WV_2003:
+	    setStyle("windowsxp");
+	    break;
+	case QSysInfo::WV_VISTA:
+	case QSysInfo::WV_WINDOWS7:
+	default:
+	    setStyle("windowsvista");
+    }
+#endif
+    
 }
 
 // This gets called before entering KApplication::KApplication

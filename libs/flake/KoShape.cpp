@@ -69,6 +69,7 @@
 #include <kdebug.h>
 
 #include <limits>
+#include "KoOdfGradientBackground.h"
 
 // KoShapePrivate
 
@@ -274,28 +275,6 @@ KoShape::~KoShape()
     Q_D(KoShape);
     d->shapeChanged(Deleted);
     delete d_ptr;
-}
-
-void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
-{
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
-    Q_UNUSED(canvas);
-    /* Since this code is not actually used (flow is going to be the main user) lets disable instead of fix.
-        if (selected)
-        {
-            // draw connectors
-            QPen pen(Qt::blue);
-            pen.setWidth(0);
-            painter.setPen(pen);
-            painter.setBrush(Qt::NoBrush);
-            for (int i = 0; i < d->connectors.size(); ++i)
-          {
-                QPointF p = converter.documentToView(d->connectors[ i ]);
-                painter.drawLine(QPointF(p.x() - 2, p.y() + 2), QPointF(p.x() + 2, p.y() - 2));
-                painter.drawLine(QPointF(p.x() + 2, p.y() + 2), QPointF(p.x() - 2, p.y() - 2));
-            }
-        }*/
 }
 
 void KoShape::scale(qreal sx, qreal sy)
@@ -865,7 +844,7 @@ KoShape::TextRunAroundSide KoShape::textRunAroundSide() const
     return d->textRunAroundSide;
 }
 
-void KoShape::setTextRunAroundSide(TextRunAroundSide side, Through runThrought)
+void KoShape::setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrought)
 {
     Q_D(KoShape);
 
@@ -1439,9 +1418,19 @@ KoShapeBackground *KoShape::loadOdfFill(KoShapeLoadingContext &context) const
     if (fill == "solid" || fill == "hatch") {
         bg = new KoColorBackground();
     } else if (fill == "gradient") {
-        QGradient *gradient = new QLinearGradient();
-        gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
-        bg = new KoGradientBackground(gradient);
+        QString styleName = KoShapePrivate::getStyleProperty("fill-gradient-name", context);
+        KoXmlElement *e = context.odfLoadingContext().stylesReader().drawStyles("gradient")[styleName];
+        QString style;
+        if (e) {
+            style = e->attributeNS(KoXmlNS::draw, "style", QString());
+        }
+        if ((style == "rectangular") || (style == "square")) {
+            bg = new KoOdfGradientBackground();
+        } else {
+            QGradient *gradient = new QLinearGradient();
+            gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
+            bg = new KoGradientBackground(gradient);
+        }
     } else if (fill == "bitmap") {
         bg = new KoPatternBackground(context.imageCollection());
 #ifndef NWORKAROUND_ODF_BUGS
@@ -1725,6 +1714,7 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
     if (attributes & OdfId)  {
         if (context.isSet(KoShapeSavingContext::DrawId)) {
             context.xmlWriter().addAttribute("draw:id", context.drawId(this));
+            context.xmlWriter().addAttribute("xml:id", context.drawId(this));
         }
     }
 
@@ -1826,6 +1816,7 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
                 continue;
             context.xmlWriter().startElement("draw:glue-point");
             context.xmlWriter().addAttribute("draw:id", QString("%1").arg(cp.key()));
+            context.xmlWriter().addAttribute("xml:id", QString("%1").arg(cp.key()));
             if (cp.value().alignment == KoConnectionPoint::AlignNone) {
                 // convert to percent from center
                 const qreal x = cp.value().position.x() * 100.0 - 50.0;
@@ -1962,6 +1953,12 @@ bool KoShape::hasDependee(KoShape *shape) const
 {
     Q_D(const KoShape);
     return d->dependees.contains(shape);
+}
+
+QList<KoShape*> KoShape::dependees() const
+{
+    Q_D(const KoShape);
+    return d->dependees;
 }
 
 void KoShape::shapeChanged(ChangeType type, KoShape *shape)

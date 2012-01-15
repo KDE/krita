@@ -2,6 +2,7 @@
 Name=Mind Tree
 Name[ca]=Arbre de ment
 Name[ca@valencia]=Arbre de ment
+Name[cs]=Myšlenkový strom
 Name[da]=Tanketræ
 Name[en_GB]=Mind Tree
 Name[es]=Árbol mental
@@ -21,5 +22,5 @@ Name[zh_TW]=心智圖
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service
 X-KDE-Library=treeshape
-X-Flake-MinVersion=0
-X-Flake-PluginVersion=1
+X-Flake-MinVersion=4
+X-Flake-PluginVersion=4

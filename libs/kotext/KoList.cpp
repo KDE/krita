@@ -120,8 +120,6 @@ void KoList::add(const QTextBlock &block, int level)
     if (!textList) {
         QTextCursor cursor(block);
         QTextListFormat format = d->style->listFormat(level);
-        if (continueNumbering(level))
-            format.setProperty(KoListStyle::ContinueNumbering, true);
         textList = cursor.createList(format);
         format.setProperty(KoListStyle::ListId, (KoListStyle::ListIdType)(textList));
         textList->setFormat(format);
@@ -186,6 +184,15 @@ void KoList::setStyle(KoListStyle *style)
         textList->setFormat(format);
         d->invalidate(textList->item(0));
     }
+
+    //if this list is a heading list then update the style manager with the list proprerties
+    if (KoTextDocument(d->document).headingList() == this) {
+        if (KoStyleManager *styleManager = KoTextDocument(d->document).styleManager()) {
+            if (styleManager->outlineStyle()) {
+                styleManager->outlineStyle()->copyProperties(style);
+            }
+        }
+    }
 }
 
 KoListStyle *KoList::style() const
@@ -198,7 +205,9 @@ void KoList::updateStoredList(const QTextBlock &block)
     if (block.textList()) {
         int level = block.textList()->format().property(KoListStyle::Level).toInt();
         QTextList *textList = block.textList();
-        textList->format().setProperty(KoListStyle::ListId, (KoListStyle::ListIdType)(textList));
+        QTextListFormat format = textList->format();
+        format.setProperty(KoListStyle::ListId, (KoListStyle::ListIdType)(textList));
+        textList->setFormat(format);
         d->textLists[level-1] = textList;
         d->textListIds[level-1] = (KoListStyle::ListIdType)textList;
     }
@@ -207,38 +216,6 @@ void KoList::updateStoredList(const QTextBlock &block)
 bool KoList::contains(QTextList *list) const
 {
     return list && d->textLists.contains(list);
-}
-
-void KoList::setContinueNumbering(int level, bool enable)
-{
-    Q_ASSERT(level > 0 && level <= 10);
-
-    QBitArray bitArray = d->properties[ContinueNumbering].toBitArray();
-    if (bitArray.isEmpty())
-        bitArray.resize(10);
-    bitArray.setBit(level-1, enable);
-    d->properties[ContinueNumbering] = bitArray;
-
-    QTextList *textList = d->textLists.value(level-1).data();
-    if (!textList)
-        return;
-    QTextListFormat format = textList->format();
-    if (enable) {
-        format.setProperty(KoListStyle::ContinueNumbering, true);
-    } else {
-        format.clearProperty(KoListStyle::ContinueNumbering);
-    }
-    textList->setFormat(format);
-}
-
-bool KoList::continueNumbering(int level) const
-{
-    Q_ASSERT(level > 0 && level <= 10);
-
-    QBitArray bitArray = d->properties.value(ContinueNumbering).toBitArray();
-    if (bitArray.isEmpty())
-        return false;
-    return bitArray.testBit(level-1);
 }
 
 int KoList::level(const QTextBlock &block)
@@ -251,6 +228,16 @@ int KoList::level(const QTextBlock &block)
         l = format.intProperty(KoListStyle::Level);
     }
     return l;
+}
+
+KoList *KoList::listContinuedFrom()
+{
+    return d->listToBeContinuedFrom;
+}
+
+void KoList::setListContinuedFrom(KoList *list)
+{
+    d->listToBeContinuedFrom = list;
 }
 
 #include <KoList.moc>

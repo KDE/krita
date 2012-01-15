@@ -41,7 +41,7 @@ class KisColorSelector: public QWidget
     {
         ColorRing(): angle(0) { }
         
-        Radian getPieceAngle() const { return Radian::RAD_360 / float(pieced.size()); }
+        Radian getPieceAngle() const { return RAD_360 / float(pieced.size()); }
         Radian getShift     () const { return angle % getPieceAngle();                }
         Radian getMovedAngel() const { return angle - tmpAngle;                       }
         

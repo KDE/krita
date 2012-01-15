@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2003 Patrick Julien  <freak@codepimps.org>
  *  Copyright (c) 2004,2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -44,8 +45,6 @@
 #include "colorspaces/gray_u8/GrayU8ColorSpace.h"
 #include "colorspaces/lab_u16/LabColorSpace.h"
 #include "colorspaces/xyz_u16/XyzU16ColorSpace.h"
-#include "colorspaces/gray_u8_no_alpha/GrayU8NoAlphaColorSpace.h"
-#include "colorspaces/gray_u16_no_alpha/GrayU16NoAlphaColorSpace.h"
 #include "colorspaces/rgb_u8/RgbU8ColorSpace.h"
 #include "colorspaces/gray_u16/GrayU16ColorSpace.h"
 #include "colorspaces/rgb_u16/RgbU16ColorSpace.h"
@@ -74,6 +73,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
     // prepare a list of the ICC profiles
     KGlobal::mainComponent().dirs()->addResourceType("icc_profiles", 0, "share/color/icc/");
+    KGlobal::mainComponent().dirs()->addResourceDir("icc_profiles", QDir::homePath() + QString("/.kde/share/apps/krita/profiles/"));
 
     QStringList profileFilenames;
     profileFilenames += KGlobal::mainComponent().dirs()->findAllResources("icc_profiles", "*.icm",  KStandardDirs::Recursive);
@@ -125,24 +125,8 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     KoColorProfile *defProfile = LcmsColorProfileContainer::createFromLcmsProfile(hProfile);
     registry->addProfile(defProfile);
 
-    // Gray without alpha 8
-//    KoColorSpaceFactory* csFactory = new KoGrayColorSpaceFactory();
-//    registry->add(csFactory);
-//
-//    KoHistogramProducerFactoryRegistry::instance()->add(
-//            new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-//            (KoID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), csFactory->id()));
-
-    // Gray without alpha 16
-    KoColorSpaceFactory* csFactory = new GrayU16ColorSpaceFactory();
-    registry->add(csFactory);
-
-    KoHistogramProducerFactoryRegistry::instance()->add(
-        new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-        (KoID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), GrayColorModelID.id(), Integer16BitsColorDepthID.id()));
-
     // Gray Alpha 8
-    csFactory = new KoGrayAU8ColorSpaceFactory();
+    KoColorSpaceFactory *csFactory = new KoGrayAU8ColorSpaceFactory();
     registry->add(csFactory);
 
     KoHistogramProducerFactoryRegistry::instance()->add(

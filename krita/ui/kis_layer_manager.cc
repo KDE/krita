@@ -56,7 +56,6 @@
 #include <kis_transaction.h>
 #include <kis_selection.h>
 #include <flake/kis_shape_layer.h>
-#include <kis_shear_visitor.h>
 #include <kis_transform_visitor.h>
 #include <kis_undo_adapter.h>
 #include <kis_painter.h>
@@ -194,8 +193,6 @@ void KisLayerManager::updateGUI()
 void KisLayerManager::imageResizeToActiveLayer()
 {
     KisLayerSP layer;
-    KisUndoAdapter * undoAdapter = m_view->undoAdapter();
-
     KisImageWSP image = m_view->image();
 
     if (image && (layer = activeLayer())) {
@@ -335,19 +332,19 @@ void KisLayerManager::addCloneLayer()
 
 void KisLayerManager::addCloneLayer(KisNodeSP parent, KisNodeSP above)
 {
-    Q_ASSERT(!m_activeLayer->inherits("KisGroupLayer"));
     KisImageWSP image = m_view->image();
     if (image) {
         // Check whether we are not cloning a parent layer
         if (KisGroupLayer * from = dynamic_cast<KisGroupLayer*>(m_activeLayer.data())) {
-            KisNodeSP parent = parent;
-            while (parent && parent != image->root()) {
-                if (parent.data() == from) {
+            KisNodeSP parent1 = parent;
+            while (parent1 && parent1 != image->root()) {
+                if (parent1.data() == from) {
                     // The chosen layer is one of our own parents -- this will
-                    // lead to cyclic behaviour when updating. Don't do that!
-                    return;
+                    // lead to cyclic behaviour when updating. So we need to change parent
+                    parent = parent1->parent();
+                    above = parent1;
                 }
-                parent = parent->parent();
+                parent1 = parent1->parent();
             }
         }
 
@@ -706,25 +703,7 @@ void KisLayerManager::shearLayer(double angleX, double angleY)
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    KisUndoAdapter * undoAdapter = m_view->image()->undoAdapter();
-    undoAdapter->beginMacro(i18n("Shear layer"));
-
-    KoProgressUpdater* updater = m_view->statusBar()->progress()->createUpdater();
-    updater->start(100, i18n("Shear layer"));
-    KoUpdaterPtr up = updater->startSubtask();
-
-    KisShearVisitor v(angleX, angleY, up);
-    v.setUndoAdapter(undoAdapter);
-    layer->accept(v);
-
-    undoAdapter->endMacro();
-
-    m_doc->setModified(true);
-    layersUpdated();
-    m_view->canvas()->update();
-
-    m_view->statusBar()->progress()->detachUpdater(updater);
-    updater->deleteLater();
+    m_view->image()->shearNode(layer, angleX, angleY);
 }
 
 void KisLayerManager::flattenImage()

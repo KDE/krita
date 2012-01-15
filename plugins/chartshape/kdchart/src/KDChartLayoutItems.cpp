@@ -498,7 +498,10 @@ bool KDChart::TextLayoutItem::intersects( const TextLayoutItem& other, const QPo
         // now rotate both points the negative angle around myPos
         myP1 = QPointF( myP1.x() * cos( -angle ), myP1.x() * sin( -angle ) );
         qreal r = sqrt( otherP1.x() * otherP1.x() + otherP1.y() * otherP1.y() );
-        otherP1 = QPointF( r * cos( -angle ), r * sin( -angle ) );
+        if (myP1.x() == otherP1.x()) // vertical
+            otherP1 = QPointF( r * sin( -angle ), r * cos( -angle ) );
+        else if (myP1.y() == otherP1.y()) // horizontal
+            otherP1 = QPointF( r * cos( -angle ), r * sin( -angle ) );
 
         // finally we look, whether both rectangles intersect or even not
         const bool res = QRectF( myP1, mySize ).intersects( QRectF( otherP1, otherSize ) );

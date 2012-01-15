@@ -27,7 +27,6 @@
 #include "kis_painting_information_builder.h"
 #include "kis_recording_adapter.h"
 #include "kis_image.h"
-#include "strokes/freehand_stroke.h"
 #include "kis_painter.h"
 
 
@@ -42,12 +41,11 @@ struct KisToolFreehandHelper::Private
 
 
     bool hasPaintAtLeastOnce;
-    KisDistanceInformation dragDistance;
 
     QTime strokeTime;
     QTimer strokeTimeoutTimer;
 
-    QVector<KisPainter*> painters;
+    QVector<PainterInfo*> painterInfos;
     KisResourcesSnapshotSP resources;
     KisStrokeId strokeId;
 
@@ -104,11 +102,10 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     m_d->previousTangent = QPointF();
 
     m_d->hasPaintAtLeastOnce = false;
-    m_d->dragDistance.clear();
 
     m_d->strokeTime.start();
 
-    createPainters(m_d->painters);
+    createPainters(m_d->painterInfos);
     m_d->resources = new KisResourcesSnapshot(image,
                                               undoAdapter,
                                               resourceManager);
@@ -125,7 +122,7 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
 
     KisStrokeStrategy *stroke =
         new FreehandStrokeStrategy(indirectPainting,
-                                   m_d->resources, m_d->painters);
+                                   m_d->resources, m_d->painterInfos);
 
     m_d->strokeId = m_d->strokesFacade->startStroke(stroke);
 
@@ -157,7 +154,7 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
             qreal scaleFactor = (m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
             QPointF control1 = m_d->olderPaintInformation.pos() + m_d->previousTangent * scaleFactor;
             QPointF control2 = m_d->previousPaintInformation.pos() - newTangent * scaleFactor;
-            paintBezierCurve(m_d->painters,
+            paintBezierCurve(m_d->painterInfos,
                              m_d->olderPaintInformation,
                              control1,
                              control2,
@@ -167,7 +164,7 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
         m_d->olderPaintInformation = m_d->previousPaintInformation;
         m_d->strokeTimeoutTimer.start(100);
     } else {
-        paintLine(m_d->painters, m_d->previousPaintInformation, info);
+        paintLine(m_d->painterInfos, m_d->previousPaintInformation, info);
     }
 
     m_d->previousPaintInformation = info;
@@ -180,7 +177,7 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
 void KisToolFreehandHelper::endPaint()
 {
     if (!m_d->hasPaintAtLeastOnce) {
-        paintAt(m_d->painters, m_d->previousPaintInformation);
+        paintAt(m_d->painterInfos, m_d->previousPaintInformation);
     } else if (m_d->smooth) {
         finishStroke();
     }
@@ -196,7 +193,7 @@ void KisToolFreehandHelper::endPaint()
      * Please note that we are not in MT here, so no mutex
      * is needed
      */
-    m_d->painters.clear();
+    m_d->painterInfos.clear();
 
     m_d->strokesFacade->endStroke(m_d->strokeId);
 
@@ -207,7 +204,7 @@ void KisToolFreehandHelper::endPaint()
 
 const KisPaintOp* KisToolFreehandHelper::currentPaintOp() const
 {
-    return !m_d->painters.isEmpty() ? m_d->painters.first()->paintOp() : 0;
+    return !m_d->painterInfos.isEmpty() ? m_d->painterInfos.first()->painter->paintOp() : 0;
 }
 
 
@@ -220,7 +217,7 @@ void KisToolFreehandHelper::finishStroke()
         qreal scaleFactor = (m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
         QPointF control1 = m_d->olderPaintInformation.pos() + m_d->previousTangent * scaleFactor;
         QPointF control2 = m_d->previousPaintInformation.pos() - newTangent;
-        paintBezierCurve(m_d->painters,
+        paintBezierCurve(m_d->painterInfos,
                          m_d->olderPaintInformation,
                          control1,
                          control2,
@@ -230,41 +227,39 @@ void KisToolFreehandHelper::finishStroke()
 
 void KisToolFreehandHelper::doAirbrushing()
 {
-    if(!m_d->painters.isEmpty()) {
-        paintAt(m_d->painters, m_d->previousPaintInformation);
+    if(!m_d->painterInfos.isEmpty()) {
+        paintAt(m_d->painterInfos, m_d->previousPaintInformation);
     }
 }
 
-void KisToolFreehandHelper::paintAt(KisPainter *painter,
+void KisToolFreehandHelper::paintAt(PainterInfo *painterInfo,
                                     const KisPaintInformation &pi)
 {
     m_d->hasPaintAtLeastOnce = true;
     m_d->strokesFacade->addJob(m_d->strokeId,
         new FreehandStrokeStrategy::Data(m_d->resources->currentNode(),
-                                         painter, pi,
-                                         m_d->dragDistance));
+                                         painterInfo, pi));
 
     if(m_d->recordingAdapter) {
         m_d->recordingAdapter->addPoint(pi);
     }
 }
 
-void KisToolFreehandHelper::paintLine(KisPainter *painter,
+void KisToolFreehandHelper::paintLine(PainterInfo *painterInfo,
                                       const KisPaintInformation &pi1,
                                       const KisPaintInformation &pi2)
 {
     m_d->hasPaintAtLeastOnce = true;
     m_d->strokesFacade->addJob(m_d->strokeId,
         new FreehandStrokeStrategy::Data(m_d->resources->currentNode(),
-                                         painter, pi1, pi2,
-                                         m_d->dragDistance));
+                                         painterInfo, pi1, pi2));
 
     if(m_d->recordingAdapter) {
         m_d->recordingAdapter->addLine(pi1, pi2);
     }
 }
 
-void KisToolFreehandHelper::paintBezierCurve(KisPainter *painter,
+void KisToolFreehandHelper::paintBezierCurve(PainterInfo *painterInfo,
                                              const KisPaintInformation &pi1,
                                              const QPointF &control1,
                                              const QPointF &control2,
@@ -273,39 +268,38 @@ void KisToolFreehandHelper::paintBezierCurve(KisPainter *painter,
     m_d->hasPaintAtLeastOnce = true;
     m_d->strokesFacade->addJob(m_d->strokeId,
         new FreehandStrokeStrategy::Data(m_d->resources->currentNode(),
-                                         painter,
-                                         pi1, control1, control2, pi2,
-                                         m_d->dragDistance));
+                                         painterInfo,
+                                         pi1, control1, control2, pi2));
 
     if(m_d->recordingAdapter) {
         m_d->recordingAdapter->addCurve(pi1, control1, control2, pi2);
     }
 }
 
-void KisToolFreehandHelper::createPainters(QVector<KisPainter*> &painters)
+void KisToolFreehandHelper::createPainters(QVector<PainterInfo*> &painterInfos)
 {
-    painters << new KisPainter();
+    painterInfos << new PainterInfo(new KisPainter(), new KisDistanceInformation());
 }
 
-void KisToolFreehandHelper::paintAt(const QVector<KisPainter*> &painters,
+void KisToolFreehandHelper::paintAt(const QVector<PainterInfo*> &painterInfos,
                                     const KisPaintInformation &pi)
 {
-    paintAt(painters.first(), pi);
+    paintAt(painterInfos.first(), pi);
 }
 
-void KisToolFreehandHelper::paintLine(const QVector<KisPainter*> &painters,
+void KisToolFreehandHelper::paintLine(const QVector<PainterInfo*> &painterInfos,
                                       const KisPaintInformation &pi1,
                                       const KisPaintInformation &pi2)
 {
-    paintLine(painters.first(), pi1, pi2);
+    paintLine(painterInfos.first(), pi1, pi2);
 }
 
-void KisToolFreehandHelper::paintBezierCurve(const QVector<KisPainter*> &painters,
+void KisToolFreehandHelper::paintBezierCurve(const QVector<PainterInfo*> &painterInfos,
                                              const KisPaintInformation &pi1,
                                              const QPointF &control1,
                                              const QPointF &control2,
                                              const KisPaintInformation &pi2)
 {
-    paintBezierCurve(painters.first(), pi1, control1, control2, pi2);
+    paintBezierCurve(painterInfos.first(), pi1, control1, control2, pi2);
 }
 

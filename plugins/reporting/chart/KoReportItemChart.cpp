@@ -282,7 +282,7 @@ void KoReportItemChart::populateData()
 
                 //Add the bottom labels
                 if (m_chartWidget->barDiagram() || m_chartWidget->lineDiagram()) {
-                    KDChart::AbstractCartesianDiagram *dia = dynamic_cast<KDChart::AbstractCartesianDiagram*>(m_chartWidget->diagram());
+                    KDChart::AbstractCartesianDiagram *dia = static_cast<KDChart::AbstractCartesianDiagram*>(m_chartWidget->diagram());
 
                     foreach(KDChart::CartesianAxis* axis, dia->axes()) {
                         if (axis->position() == KDChart::CartesianAxis::Bottom) {
@@ -322,7 +322,7 @@ void KoReportItemChart::setAxis(const QString& xa, const QString &ya)
     Q_ASSERT(m_chartWidget);
 
     if (m_chartWidget->barDiagram() || m_chartWidget->lineDiagram()) {
-        KDChart::AbstractCartesianDiagram *dia = dynamic_cast<KDChart::AbstractCartesianDiagram*>(m_chartWidget->diagram());
+        KDChart::AbstractCartesianDiagram *dia = static_cast<KDChart::AbstractCartesianDiagram*>(m_chartWidget->diagram());
         KDChart::CartesianAxis *xAxis = 0;
         KDChart::CartesianAxis *yAxis = 0;
 
@@ -337,13 +337,13 @@ void KoReportItemChart::setAxis(const QString& xa, const QString &ya)
         }
 
         if (!xAxis) {
-            xAxis =  new KDChart::CartesianAxis(dynamic_cast<KDChart::AbstractCartesianDiagram*>(m_chartWidget->diagram()));
+            xAxis =  new KDChart::CartesianAxis(static_cast<KDChart::AbstractCartesianDiagram*>(m_chartWidget->diagram()));
             xAxis->setPosition(KDChart::CartesianAxis::Bottom);
             dia->addAxis(xAxis);
         }
 
         if (!yAxis) {
-            yAxis = new KDChart::CartesianAxis(dynamic_cast<KDChart::AbstractCartesianDiagram*>(m_chartWidget->diagram()));
+            yAxis = new KDChart::CartesianAxis(static_cast<KDChart::AbstractCartesianDiagram*>(m_chartWidget->diagram()));
             yAxis->setPosition(KDChart::CartesianAxis::Left);
             dia->addAxis(yAxis);
         }
@@ -420,7 +420,7 @@ int KoReportItemChart::render(OROPage* page, OROSection* section,  QPointF offse
         pic->setSize(size);
         if (page) page->addPrimitive(pic);
 
-        OROPicture *p2 = dynamic_cast<OROPicture*>(pic->clone());
+        OROPicture *p2 = static_cast<OROPicture*>(pic->clone());
         p2->setPosition(m_pos.toPoint());
         if (section) section->addPrimitive(p2);
     }

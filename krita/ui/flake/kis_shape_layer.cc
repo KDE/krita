@@ -104,7 +104,7 @@ private:
 };
 
 
-class KisShapeLayer::Private
+struct KisShapeLayer::Private
 {
 public:
     KoViewConverter * converter;
@@ -175,7 +175,8 @@ void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
     m_d->canvas->setProjection(m_d->paintDevice);
     m_d->controller = controller;
 
-    connect(m_d->canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(m_d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
+    connect(m_d->canvas->shapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)), this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 }
 
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const
@@ -432,11 +433,6 @@ bool KisShapeLayer::loadLayer(KoStore* store)
 
     return true;
 
-}
-
-void KisShapeLayer::selectionChanged()
-{
-    emit selectionChanged(m_d->canvas->shapeManager()->selection()->selectedShapes());
 }
 
 void KisShapeLayer::resetCache()

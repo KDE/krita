@@ -22,37 +22,24 @@
 
 #include "kis_tool_star.h"
 
-#include <math.h>
-
-#include <QPainter>
-#include <QSpinBox>
-#include <QLayout>
-#include <QGridLayout>
-
-#include <klocale.h>
-#include <knuminput.h>
-
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
-#include <KoCanvasController.h>
-#include <KoShapeController.h>
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
 
 #include <kis_debug.h>
 #include <canvas/kis_canvas2.h>
-#include <kis_painter.h>
 #include <kis_paintop_registry.h>
 #include <kis_cursor.h>
-#include <kis_paint_device.h>
 #include <kis_paint_information.h>
-
-#include "kis_selection.h"
+#include "kis_figure_painting_tool_helper.h"
+#include <kis_system_locker.h>
 #include "widgets/kis_slider_spin_box.h"
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_path_paint_action.h>
 #include <recorder/kis_node_query_path.h>
+
 
 KisToolStar::KisToolStar(KoCanvasBase * canvas)
         : KisToolShape(canvas, KisCursor::load("tool_star_cursor.png", 6, 6))
@@ -128,24 +115,12 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
         }
 
         if (!currentNode()->inherits("KisShapeLayer")) {
+            KisSystemLocker locker(currentNode());
 
-            if (!currentNode()->paintDevice())
-                return;
-            setCurrentNodeLocked(true);
-            
-            KisPaintDeviceSP device = currentNode()->paintDevice();
-            KisPainter painter(device, currentSelection());
-            painter.beginTransaction(i18n("Star"));
-            setupPainter(&painter);
-
-            painter.paintPolygon(coord);
-
-            device->setDirty(painter.takeDirtyRegion());
-            notifyModified();
-            updatePreview();
-
-            painter.endTransaction(image()->undoAdapter());
-            setCurrentNodeLocked(false);
+            KisFigurePaintingToolHelper helper(i18n("Star"),
+                                               image(),
+                                               canvas()->resourceManager());
+            helper.paintPolygon(coord);
         } else {
             KoPathShape* path = new KoPathShape();
             path->setShapeId(KoPathShapeId);
@@ -163,6 +138,7 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 
             addShape(path);
         }
+        notifyModified();
     }
     else {
         KisToolShape::mouseReleaseEvent(event);

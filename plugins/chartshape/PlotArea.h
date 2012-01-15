@@ -145,7 +145,7 @@ public:
     
     ChartShape *parent() const;
 
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     
     bool registerKdDiagram( KDChart::AbstractDiagram *diagram );
     bool deregisterKdDiagram( KDChart::AbstractDiagram *diagram );

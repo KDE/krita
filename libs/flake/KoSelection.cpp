@@ -26,6 +26,7 @@
 #include "KoShapeContainer.h"
 #include "KoShapeGroup.h"
 #include "KoPointerEvent.h"
+#include "KoShapePaintingContext.h"
 
 #include <QPainter>
 #include <QTimer>
@@ -119,10 +120,11 @@ KoSelection::~KoSelection()
 {
 }
 
-void KoSelection::paint(QPainter &painter, const KoViewConverter &converter)
+void KoSelection::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
+    Q_UNUSED(paintcontext);
 }
 
 void KoSelection::select(KoShape *shape, bool recursive)

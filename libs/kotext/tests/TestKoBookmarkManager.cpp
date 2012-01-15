@@ -74,6 +74,7 @@ void TestKoBookmarkManager::testRetrieveByEndmark()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText("bla bla bla");

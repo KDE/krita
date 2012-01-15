@@ -70,8 +70,11 @@ public:
         Q_ASSERT_X(m_transactionData, "KisTransaction::endAndTake()",
                    "the transaction has been tried to be committed twice");
 
-        m_transactionData->endTransaction();
-        return m_transactionData;
+        KisTransactionData *transactionData = m_transactionData;
+        m_transactionData = 0;
+
+        transactionData->endTransaction();
+        return transactionData;
     }
 
     void end() {
@@ -108,7 +111,7 @@ public:
     }
 
 protected:
-    KisTransaction() {}
+    KisTransaction() : m_transactionData(0) {}
     KisTransactionData* m_transactionData;
 };
 

@@ -313,7 +313,6 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
     KoColorSpace * cs = src->colorSpace();
     KoMixColorsOp * mixOp = cs->mixColorsOp();
     qint32 scale;
-    qint32 scaleDenom;
     qint32 shearFracOffset;
 
 
@@ -325,9 +324,7 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
         return;
     }
 
-    scaleDenom = srcLen;
-
-    if (scaleDenom == 0) {
+    if (srcLen == 0) {
         updateBounds <T>(m_boundRect, floatscale, shear, dx);
         return;
     }
@@ -337,12 +334,12 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
     qint32 invfscale = 256;
 
     // handle magnification/minification
-    if (abs(scale) < scaleDenom) {
-        support *= scaleDenom;
+    if (abs(scale) < srcLen) {
+        support *= srcLen;
         support /= scale;
 
         invfscale *= scale;
-        invfscale /= scaleDenom;
+        invfscale /= srcLen;
         if (scale < 0) { // handle mirroring
             support = -support;
             invfscale = -invfscale;
@@ -377,10 +374,8 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
         qint32 sum = 0;
         for (int num = 0; num < span; ++num) {
             qint32 tmpw = filterStrategy->intValueAt(t) * invfscale;
-
             tmpw >>= 8;
             filterWeights[center].weight[num] = tmpw;
-
             t += dt;
             sum += tmpw;
         }
@@ -409,10 +404,11 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
 
     // Now time to do the actual scaling and shearing
     for (lineNum = firstLine; lineNum < firstLine + numLines; lineNum++) {
-        if (scale < 0)
-            dstStart = srcStart * scale / scaleDenom - dstLen + dx;
-        else
-            dstStart = (srcStart) * scale / scaleDenom + dx;
+        if (scale < 0) {
+            dstStart = srcStart * scale / srcLen - dstLen + dx;
+        } else {
+            dstStart = (srcStart) * scale / srcLen + dx;
+        }
 
         shearFracOffset = -int(256 * (lineNum * shear - floor(lineNum * shear)));
         dstStart += int(floor(lineNum * shear));
@@ -427,44 +423,60 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
             i++;
         }
 
+
         while (i < srcLen + extraLen) {
             data = srcIt.rawData();
             memcpy(&tmpLine[i*pixelSize], data, pixelSize);
             memcpy(data, src->defaultPixel(), pixelSize);
-            if (i < srcLen + extraLen - 1) // duplicate pixels along edge
+            if (i < srcLen + extraLen - 1) { // duplicate pixels along edge
                 ++srcIt;
+            }
             i++;
         }
+
+
 
         data = &tmpLine[(i-1)*pixelSize]; // take the last pixel as source - in effect duplicating the pixel
         while (i < srcLen + 2*extraLen) {
             memcpy(&tmpLine[i*pixelSize], data, pixelSize);
             i++;
         }
+        // line is done
 
         T dstIt = createIterator <T>(dst, dstStart, lineNum, dstLen);
 
         i = 0;
+
         while (!dstIt.isDone()) {
-            if (scaleDenom < 2500)
-                center = ((i << 8) * scaleDenom) / scale;
-            else {
-                if (scaleDenom < 46000) // real limit is actually 46340 pixels
-                    center = ((i * scaleDenom) / scale) << 8;
-                else
-                    center = ((i << 8) / scale * scaleDenom) / scale; // XXX fails for sizes over 2^23 pixels src width
+            // NOTE: 2500 was selected by Boemann as limit to avoid overflow
+            // but the overflow happens when dstLen is bigger then 3356, thus
+            // new condition to avoid the overflow.
+            // How did I caluculated the magic number? (qint32_max / 256) / (2500-1) = ~3356
+            if ((srcLen < 2500) && (dstLen < 3300)) {
+                center = ((i << 8) * srcLen) / scale;
+            } else {
+                if (srcLen < 46000) { // real limit is actually 46340 pixels
+                    center = ((i * srcLen) / scale) << 8;
+                } else {
+                    center = ((i << 8) / scale * srcLen) / scale; // XXX fails for sizes over 2^23 pixels src width
+                }
             }
 
-            if (scale < 0)
+            if (scale < 0) {
                 center += srcLen << 8;
+            }
 
             // Since the above gives us the position at the left of the pixels we need to advance by one half dst pixel
-            center += 128 * scaleDenom / scale;//xxx doesn't work for scale<0;
+            center += 128 * srcLen / scale;//xxx doesn't work for scale<0;
             center += (extraLen << 8) + shearFracOffset;
 
             // find contributing pixels
             begin = (center - support) >> 8; // find first pixel to sample
             end = (center + support) >> 8; // find last pixel to sample
+
+            // catch fixed-arithmethics overflows indirectly (variable center can overflow)
+            Q_ASSERT(begin >= 0);
+            Q_ASSERT(end >= 0);
 
             int num = 0;
             for (int srcpos = begin; srcpos <= end; ++srcpos) {
@@ -508,14 +520,14 @@ bool KisTransformWorker::run()
     Q_ASSERT_X(m_yscale != 0, "KisTransformer::run() validation step", "yscale == 0");
     // Fallback safety line in case Krita is compiled without ASSERTS
     if (m_xscale == 0 || m_yscale == 0) return false;
-    
+
     // Progress info
     m_progressTotalSteps = 0;
     m_progressStep = 0;
 
     KoColor defaultPixel(m_dev->defaultPixel(), m_dev->colorSpace());
     if (defaultPixel.opacityU8() != OPACITY_TRANSPARENT_U8)
-        m_boundRect = m_dev->dataManager()->extent();
+        m_boundRect = m_dev->extent();
     else
         m_boundRect = m_dev->exactBounds();
 
@@ -525,8 +537,10 @@ bool KisTransformWorker::run()
         return true;
     }
 
+
     KisPaintDeviceSP tmpdev1 = KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace()));
     KisPaintDeviceSP srcdev = m_dev;
+    tmpdev1->setDefaultPixel(srcdev->defaultPixel());
 
     double xscale = m_xscale;
     double yscale = m_yscale;
@@ -536,12 +550,14 @@ bool KisTransformWorker::run()
     qint32 xtranslate = m_xtranslate;
     qint32 ytranslate = m_ytranslate;
 
+
     m_progressTotalSteps = 0;
 
     // Apply shear X and Y
     if (xshear != 0 || yshear != 0) {
         m_progressTotalSteps += (yscale * m_boundRect.height() * (m_boundRect.width() + m_xshear * m_boundRect.height()));
         m_progressTotalSteps += (xscale * m_boundRect.width() * (m_boundRect.height() + m_yshear * m_boundRect.width()));
+
 
         int dx = - qRound(m_yshearOrigin * yscale * m_xshear);
         int dy = - qRound(m_xshearOrigin * xscale * m_yshear);

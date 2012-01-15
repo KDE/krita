@@ -28,11 +28,11 @@ void KisChunkAllocatorTest::testOperations()
 {
     KisChunkAllocator allocator;
 
-    KisChunk chunk1 = allocator.getChunk(10);
-    KisChunk chunk2 = allocator.getChunk(15);
+    allocator.getChunk(10);
+    allocator.getChunk(15);
     KisChunk chunk3 = allocator.getChunk(20);
-    KisChunk chunk4 = allocator.getChunk(25);
-    KisChunk chunk5 = allocator.getChunk(30);
+    allocator.getChunk(25);
+    allocator.getChunk(30);
 
     allocator.freeChunk(chunk3);
     chunk3 = allocator.getChunk(20);

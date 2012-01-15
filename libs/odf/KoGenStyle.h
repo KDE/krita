@@ -125,6 +125,7 @@ public:
                                      ///<  @note unused
         MarkerStyle,                 ///< draw:marker as in odf 14.14.6 Marker
         PresentationPageLayoutStyle, ///< style:presentation-page-layout as in odf 14.15 Presentation Page Layouts
+        OutlineLevelStyle,           ///< text:outline-style as in odf 1.2 section 16.34
         //   TODO differently
         MasterPageStyle,             ///< style:master-page as in odf 14.4 14.4 Master Pages (office:master-styles)
         // style:default-style as in odf 14.2 Default Styles
@@ -299,8 +300,28 @@ public:
      *  and the unit name ("pt" or "%") is appended to it.
      */
     void addPropertyLength(const QString &propName, const QTextLength &propValue, PropertyType type = DefaultType);
-    
-    
+
+    /**
+     *  Remove a property from the style.  Passing DefaultType as property type
+     *  uses a style-type specific property type.
+     */
+    void removeProperty(const QString &propName, PropertyType type = DefaultType) {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
+        m_properties[type].remove(propName);
+    }
+
+    /**
+     *  Remove properties of defined type from the style.  Passing DefaultType
+     *  as property type uses a style-type specific property type.
+     */
+    void removeAllProperties(PropertyType type = DefaultType) {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
+        m_properties[type].clear();
+    }
 
     /**
      *  Add an attribute to the style
@@ -331,6 +352,13 @@ public:
      *  and the unit name ("pt") is appended to it.
      */
     void addAttributePt(const QString &attrName, qreal attrValue);
+
+    /**
+     *  Remove an attribute from the style.
+     */
+    void removeAttribute(const QString &attrName) {
+        m_attributes.remove(attrName);
+    }
 
     /**
      * @brief Add a child element to the style properties.

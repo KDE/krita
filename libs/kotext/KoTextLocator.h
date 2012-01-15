@@ -34,6 +34,7 @@ class KoTextReference;
  */
 class KOTEXT_EXPORT KoTextLocator : public KoInlineObject
 {
+    Q_OBJECT
 public:
     /// constructor
     KoTextLocator();

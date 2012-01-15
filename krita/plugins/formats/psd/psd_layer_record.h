@@ -60,10 +60,10 @@ public:
 
     QString error;
 
-    quint32 top;
-    quint32 left;
-    quint32 bottom;
-    quint32 right;
+    qint32 top;
+    qint32 left;
+    qint32 bottom;
+    qint32 right;
 
     quint16 nChannels;
 
@@ -78,10 +78,10 @@ public:
     bool   irrelevant;
 
     struct LayerMaskData {
-        quint32 top;
-        quint32 left;
-        quint32 bottom;
-        quint32 right;
+        qint32 top;
+        qint32 left;
+        qint32 bottom;
+        qint32 right;
         quint8 defaultColor;
         bool positionedRelativeToLayer;
         bool disabled;
@@ -117,7 +117,7 @@ private:
     bool doRGB(KisPaintDeviceSP dev ,QIODevice *io);
     bool doCMYK(KisPaintDeviceSP dev ,QIODevice *io);
     bool doLAB(KisPaintDeviceSP dev ,QIODevice *io);
-    bool doGray(KisPaintDeviceSP dev ,QIODevice *io);
+    bool doGrayscale(KisPaintDeviceSP dev ,QIODevice *io);
 
     const PSDHeader m_header;
 

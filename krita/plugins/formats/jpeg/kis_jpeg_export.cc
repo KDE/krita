@@ -26,6 +26,7 @@
 #include <kdialog.h>
 #include <kpluginfactory.h>
 
+#include <KoFilterManager.h>
 #include <KoFilterChain.h>
 #include <KoColorSpaceConstants.h>
 
@@ -78,9 +79,13 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
 
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
-    if (kdb->exec() == QDialog::Rejected) {
-        return KoFilter::OK; // FIXME Cancel doesn't exist :(
+
+    if (!m_chain->manager()->getBatchMode()) {
+        if (kdb->exec() == QDialog::Rejected) {
+            return KoFilter::OK; // FIXME Cancel doesn't exist :(
+        }
     }
+    
     KisJPEGOptions options;
     options.progressive = wdgUi.progressive->isChecked();
     options.quality = wdgUi.qualityLevel->value();

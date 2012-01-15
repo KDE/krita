@@ -19,70 +19,7 @@
  */
 #include "TestKoInlineTextObjectManager.h"
 
-#include <QtTest/QTest>
-#include <QDebug>
-#include <QString>
-#include <QTextDocument>
-#include <QList>
-#include <QTextCursor>
-#include <QTextCharFormat>
 
-#include <KoInlineObject.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoTextEditor.h>
-#include <KoTextDocument.h>
-#include <KoBookmark.h>
-
-class DummyInlineObject : public KoInlineObject
-{
-public:
-
-    DummyInlineObject(bool propertyListener)
-        : KoInlineObject(propertyListener)
-        , m_position(-1)
-    {
-    }
-
-    virtual ~DummyInlineObject() {}
-
-    virtual void saveOdf(KoShapeSavingContext &/*context*/)
-    {
-        // dummy impl
-    }
-
-    virtual bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&)
-    {
-        // dummy impl
-        return false;
-    }
-
-    virtual void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &/*format*/)
-    {
-        Q_ASSERT(posInDocument <= document->toPlainText().size());
-        m_position = posInDocument;
-    }
-
-    virtual void resize(const QTextDocument */*document*/, QTextInlineObject /*object*/,
-                        int /*posInDocument*/, const QTextCharFormat &/*format*/, QPaintDevice */*pd*/)
-    {
-        // dummy impl
-    }
-
-    virtual void paint(QPainter &/*painter*/, QPaintDevice */*pd*/, const QTextDocument */*document*/,
-                       const QRectF &/*rect*/, QTextInlineObject /*object*/, int /*posInDocument*/, const QTextCharFormat &/*format*/)
-    {
-        // dummy impl
-    }
-
-    virtual void propertyChanged(Property /*property*/, const QVariant &value)
-    {
-        m_property = value;
-    }
-
-    QVariant m_property;
-    int m_position;
-
-};
 
 const QString lorem(
     "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
@@ -167,6 +104,7 @@ void TestKoInlineTextObjectManager::testRetrieveInlineObject()
     // by id
     KoInlineObject *obj2 = manager.inlineTextObject(1);
     Q_ASSERT(obj2 == obj);
+    Q_UNUSED(obj2) // not really unused, but gcc thinks so.
 
     // by cursor
     editor.setPosition(444);
@@ -207,7 +145,7 @@ void TestKoInlineTextObjectManager::testRemoveInlineObject()
     Q_ASSERT(cursor.position() == -1);
 
     // this should not crash, even though we were a listener
-    manager.setProperty(KoInlineObject::User, "bla");
+    manager.setProperty(KoInlineObject::UserGet, "bla");
 
     // now insert a bookmark and remove it. It should also be gone from the bookmark manager
     KoBookmark *bm = new KoBookmark(&doc);
@@ -228,11 +166,16 @@ void TestKoInlineTextObjectManager::testListenToProperties()
     KoTextDocument textDoc(&doc);
     textDoc.setInlineTextObjectManager(&manager);
     KoTextEditor editor(&doc);
-    DummyInlineObject *obj = new DummyInlineObject(true);
-    manager.insertInlineObject(*editor.cursor(), obj);
-    manager.setProperty(KoInlineObject::User, "bla");
-    Q_ASSERT(obj->m_property.toString() == "bla");
 
+    DummyInlineObject *obj1 = new DummyInlineObject(true);
+    manager.insertInlineObject(*editor.cursor(), obj1);
+    manager.setProperty(KoInlineObject::UserGet, "bla1");
+    Q_ASSERT(obj1->m_property.toString() == "bla1");
+
+    DummyInlineObject *obj2 = new DummyInlineObject(true);
+    manager.insertInlineObject(*editor.cursor(), obj2);
+    manager.setProperty(KoInlineObject::UserInput, "bla2");
+    Q_ASSERT(obj2->m_property.toString() == "bla2");
 }
 
 

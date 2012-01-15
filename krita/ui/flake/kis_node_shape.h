@@ -22,63 +22,46 @@
 #include <QObject>
 
 #include <KoShapeLayer.h>
-#include <KoShape.h>
-#include <KoViewConverter.h>
 
 #include <krita_export.h>
 #include <kis_types.h>
 
+class KoViewConverter;
+
+
 #define KIS_NODE_SHAPE_ID "KisNodeShape"
 
 /**
-   A KisNodeShape is a flake wrapper around adjustment nodes or paint
-   nodes. A nodeshape can only have a KisMaskShape as its descendant.
+ * A KisNodeShape is a flake wrapper around Krita nodes. It is used
+ * for dealing with currently active node for tools.
  */
 class KRITAUI_EXPORT KisNodeShape : public QObject, public KoShapeLayer
 {
     Q_OBJECT
 public:
-
-    KisNodeShape(KoShapeContainer * parent, KisNodeSP node);
+    KisNodeShape(KisNodeSP node);
     virtual ~KisNodeShape();
 
     KisNodeSP node();
 
-    // Shape overrides
-    void paint(QPainter &painter, const KoViewConverter &converter);
-
-    bool isSelectable() const {
-        return false;
-    }
-
+    // Empty implementations as the node is not painted anywhere
     QSizeF size() const;
-
     QRectF boundingRect() const;
-
-    void setPosition(const QPointF & position);
-
-    // KoShapeContainer implementation
-    void paintComponent(QPainter &painter, const KoViewConverter &converter);
-
-    /// reimplemented
-    virtual void saveOdf(KoShapeSavingContext & context) const;
-
-    // reimplemented
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    void setPosition(const QPointF &);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void saveOdf(KoShapeSavingContext & context) const;
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
 
 private slots:
-
     void setNodeVisible(bool);
-
     void editabilityChanged();
 
-    KisImageWSP getImage() const;
+private:
+    bool checkIfDescendant(KoShapeLayer *activeLayer);
 
 private:
-
-    class Private;
+    struct Private;
     Private * const m_d;
-
 };
 
 #endif

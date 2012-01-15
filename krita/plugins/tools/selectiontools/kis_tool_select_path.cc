@@ -77,6 +77,10 @@ void KisToolSelectPath::mousePressEvent(KoPointerEvent *event)
                           Qt::LeftButton, Qt::ShiftModifier |
                           Qt::ControlModifier | Qt::AltModifier)) {
 
+        if (!currentNode()) {
+            return;
+        }
+
         setMode(KisTool::PAINT_MODE);
 
         Q_ASSERT(m_localTool);

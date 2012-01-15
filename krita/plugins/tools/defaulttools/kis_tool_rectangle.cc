@@ -25,30 +25,19 @@
 
 #include "kis_tool_rectangle.h"
 
-#include <QPainter>
-
 #include <kis_debug.h>
-#include <klocale.h>
-
-#include <KoPathShape.h>
-#include <KoShapeManager.h>
-#include <KoShapeRegistry.h>
-#include <KoShapeController.h>
-
-#include "kis_painter.h"
 #include "kis_paintop_registry.h"
-#include "kis_cursor.h"
-#include "kis_layer.h"
 #include "KoCanvasBase.h"
-#include <kis_selection.h>
-#include <kis_paint_device.h>
 #include "kis_shape_tool_helper.h"
+#include "kis_figure_painting_tool_helper.h"
+#include "kis_system_locker.h"
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_shape_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
 #include <KoCanvasController.h>
+
 
 KisToolRectangle::KisToolRectangle(KoCanvasBase * canvas)
         : KisToolRectangleBase(canvas, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
@@ -62,6 +51,7 @@ KisToolRectangle::~KisToolRectangle()
 
 void KisToolRectangle::finishRect(const QRectF &rect)
 {
+    KisSystemLocker locker(currentNode());
     if (rect.isNull())
         return;
 
@@ -72,23 +62,17 @@ void KisToolRectangle::finishRect(const QRectF &rect)
     }
 
     if (!currentNode()->inherits("KisShapeLayer")) {
-        KisPaintDeviceSP device = currentNode()->paintDevice();
-        if (!device) return;
-
-        KisPainter painter(device, currentSelection());
-
-        painter.beginTransaction(i18n("Rectangle"));
-        setupPainter(&painter);
-        painter.paintRect(rect);
-        painter.endTransaction(image()->undoAdapter());
-
-        device->setDirty(painter.takeDirtyRegion());
-        notifyModified();
+        KisFigurePaintingToolHelper helper(i18n("Rectangle"),
+                                           image(),
+                                           canvas()->resourceManager());
+        helper.paintRect(rect);
     } else {
         QRectF r = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createRectangleShape(r);
         addShape(shape);
     }
+
+    notifyModified();
 }
 
 #include "kis_tool_rectangle.moc"

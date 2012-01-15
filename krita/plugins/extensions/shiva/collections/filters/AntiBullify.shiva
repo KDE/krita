@@ -17,9 +17,8 @@
 >;  
 kernel AntiBullify
 {
-  const float2 center = { xcenter * IMAGE_WIDTH, ycenter * IMAGE_HEIGHT };
-  const float lightLength = lightLengthP * 0.5 * (IMAGE_WIDTH + IMAGE_HEIGHT );
-  
+  dependent float2 center = { xcenter * IMAGE_WIDTH, ycenter * IMAGE_HEIGHT };
+  dependent float lightLength = lightLengthP * 0.5 * (IMAGE_WIDTH + IMAGE_HEIGHT );
   void evaluatePixel(image img, out pixel result)
   {
     float2 vec = result.coord - center;

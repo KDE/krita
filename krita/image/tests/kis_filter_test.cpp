@@ -69,7 +69,7 @@ void KisFilterTest::testWithProgressUpdater()
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
@@ -95,7 +95,7 @@ void KisFilterTest::testSingleThreaded()
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
@@ -124,7 +124,7 @@ void KisFilterTest::testDifferentSrcAndDst()
     sel->getOrCreatePixelSelection()->invert(); // select everything
     sel->updateProjection();
 
-    src->convertFromQImage(qimage, "", 0, 0);
+    src->convertFromQImage(qimage, 0, 0, 0);
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);

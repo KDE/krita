@@ -18,28 +18,32 @@
  */
 
 #include "kis_tool_path.h"
-#include <klocale.h>
+//#include <klocale.h>
 #include <KoPathShape.h>
 #include <KoCanvasBase.h>
-#include <KoColorSpace.h>
-#include <KoCompositeOp.h>
-#include <KoShapeController.h>
+#include <KoPointerEvent.h>
+//#include <KoColorSpace.h>
+//#include <KoCompositeOp.h>
+//#include <KoShapeController.h>
 
-#include <kis_paint_layer.h>
-#include <kis_image.h>
-#include <kis_painter.h>
-#include <kis_paint_information.h>
-#include <kis_layer.h>
-#include <canvas/kis_canvas2.h>
-#include <kis_view2.h>
+//#include <kis_paint_layer.h>
+//#include <kis_image.h>
+//#include <kis_painter.h>
+//#include <kis_paint_information.h>
+//#include <kis_layer.h>
+//#include <canvas/kis_canvas2.h>
+//#include <kis_view2.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_paintop_registry.h>
-#include <kis_selection.h>
+//#include <kis_selection.h>
 #include <kis_cursor.h>
+#include <kis_system_locker.h>
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_path_paint_action.h>
 #include <recorder/kis_node_query_path.h>
+
+#include "kis_figure_painting_tool_helper.h"
 
 
 KisToolPath::KisToolPath(KoCanvasBase * canvas)
@@ -119,17 +123,16 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
 {
     KisNodeSP currentNode =
         canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-    KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2 *>(this->canvas());
-    if (!currentNode || !kiscanvas || currentNode->systemLocked()) {
+    if (!currentNode || currentNode->systemLocked()) {
         return;
     }
     // Get painting options
-    KisPaintOpPresetSP preset = kiscanvas->resourceManager()->
+    KisPaintOpPresetSP preset = canvas()->resourceManager()->
                                 resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
     KoColor paintColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
 
     // Compute the outline
-    KisImageWSP image = kiscanvas->view()->image();
+    KisImageWSP image = this->image();
     QTransform matrix;
     matrix.scale(image->xRes(), image->yRes());
     matrix.translate(pathShape->position().x(), pathShape->position().y());
@@ -173,32 +176,18 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
     image->actionRecorder()->addAction(bezierCurvePaintAction);
 
     if (!currentNode->inherits("KisShapeLayer")) {
+        KisSystemLocker locker(currentNode);
 
-        KisPaintDeviceSP dev = currentNode->paintDevice();
-
-        if (!dev) {
-            return;
-        }
-
-        setCurrentNodeLocked(true);
-
-        KisSelectionSP selection = kiscanvas->view()->selection();
-
-        KisPainter painter(dev, selection);
-        painter.beginTransaction(i18n("Path"));
-
-        setupPainter(&painter);
-        painter.paintPainterPath(mapedOutline);
-        painter.endTransaction(image->undoAdapter());
-
-        dev->setDirty(painter.takeDirtyRegion());
-        image->setModified();
-        setCurrentNodeLocked(false);
-
+        KisFigurePaintingToolHelper helper(i18n("Path"),
+                                           image,
+                                           canvas()->resourceManager());
+        helper.paintPainterPath(mapedOutline);
     } else {
         pathShape->normalize();
         addShape(pathShape);
     }
+
+    notifyModified();
 }
 
 void KisToolPath::paint(QPainter &painter, const KoViewConverter &converter)
@@ -220,12 +209,9 @@ KisToolPath::LocalTool::LocalTool(KoCanvasBase * canvas, KisToolPath* selectingT
 void KisToolPath::LocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    if (!kisCanvas)
-        return;
 
     QTransform matrix;
-    matrix.scale(kisCanvas->image()->xRes(), kisCanvas->image()->yRes());
+    matrix.scale(m_parentTool->image()->xRes(), m_parentTool->image()->yRes());
     matrix.translate(pathShape.position().x(), pathShape.position().y());
     m_parentTool->paintToolOutline(&painter, m_parentTool->pixelToView(matrix.map(pathShape.outline())));
 }

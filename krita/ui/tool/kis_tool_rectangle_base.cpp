@@ -56,7 +56,7 @@ void KisToolRectangleBase::mousePressEvent(KoPointerEvent *event)
         m_dragStart = m_dragCenter = m_dragEnd = convertToPixelCoord(event);
     }
     else {
-        KisToolPaint::mousePressEvent(event);
+        KisToolShape::mousePressEvent(event);
     }
 }
 
@@ -97,7 +97,7 @@ void KisToolRectangleBase::mouseMoveEvent(KoPointerEvent *event)
                                (m_dragStart.y() + m_dragEnd.y()) / 2);
     }
     else {
-        KisToolPaint::mouseMoveEvent(event);
+        KisToolShape::mouseMoveEvent(event);
     }
 }
 
@@ -107,12 +107,10 @@ void KisToolRectangleBase::mouseReleaseEvent(KoPointerEvent *event)
         setMode(KisTool::HOVER_MODE);
 
         updateArea();
-        setCurrentNodeLocked(true);
         finishRect(QRectF(m_dragStart, m_dragEnd));
-        setCurrentNodeLocked(false);
     }
     else {
-        KisToolPaint::mouseReleaseEvent(event);
+        KisToolShape::mouseReleaseEvent(event);
     }
 }
 

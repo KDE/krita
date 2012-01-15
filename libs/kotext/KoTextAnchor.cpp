@@ -65,14 +65,13 @@ public:
             inlineObjectDescent(0),
             pageNumber(-1)
     {
-        Q_ASSERT(shape);
     }
 
 
     virtual QDebug printDebug(QDebug dbg) const
     {
 #ifndef NDEBUG
-        dbg.nospace() << "KoTextAnchor";
+        dbg.space() << "KoTextAnchor" << this;
         dbg.space() << "offset:" << distance;
         dbg.space() << "shape:" << shape->name();
 #endif
@@ -353,16 +352,16 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext &context)
     // anchor-type
     switch (d->anchorType) {
     case AnchorToCharacter:
-        shape()->setAdditionalStyleAttribute("text:anchor-type", "char");
+        shape()->setAdditionalAttribute("text:anchor-type", "char");
         break;
     case AnchorAsCharacter:
-        shape()->setAdditionalStyleAttribute("text:anchor-type", "as-char");
+        shape()->setAdditionalAttribute("text:anchor-type", "as-char");
         break;
     case AnchorParagraph:
-        shape()->setAdditionalStyleAttribute("text:anchor-type", "paragraph");
+        shape()->setAdditionalAttribute("text:anchor-type", "paragraph");
         break;
     case AnchorPage:
-        shape()->setAdditionalStyleAttribute("text:anchor-type", "page");
+        shape()->setAdditionalAttribute("text:anchor-type", "page");
         break;
     default:
         break;

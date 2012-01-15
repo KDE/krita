@@ -147,11 +147,11 @@ bool KoShapeContainer::inheritsTransform(const KoShape *shape) const
     return d->model->inheritsTransform(shape);
 }
 
-void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter)
+void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
     Q_D(KoShapeContainer);
     painter.save();
-    paintComponent(painter, converter);
+    paintComponent(painter, converter, paintcontext);
     painter.restore();
     if (d->model == 0 || d->model->count() == 0)
         return;
@@ -194,7 +194,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
 
         painter.save();
         painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
-        shape->paint(painter, converter);
+        shape->paint(painter, converter, paintcontext);
         painter.restore();
         if (shape->border()) {
             painter.save();
@@ -205,7 +205,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     }
 }
 
-void KoShapeContainer::shapeChanged(ChangeType type, KoShape *shape)
+void KoShapeContainer::shapeChanged(ChangeType type, KoShape */*shape*/)
 {
     Q_D(KoShapeContainer);
     if (d->model == 0)

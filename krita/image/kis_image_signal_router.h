@@ -23,6 +23,8 @@
 #include <QVector>
 #include "krita_export.h"
 #include "kis_types.h"
+#include "kis_group_layer.h"
+
 
 class KoColorSpace;
 class KoColorProfile;
@@ -54,25 +56,14 @@ public:
     void emitNodeHasBeenAdded(KisNode *parent, int index);
     void emitAboutToRemoveANode(KisNode *parent, int index);
     void emitNodeHasBeenRemoved(KisNode *parent, int index);
-    void emitAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
-    void emitNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
+    void emitAboutToMoveNode(KisNode *node, int oldIndex, int newIndex);
+    void emitNodeHasBeenMoved(KisNode *node, int oldIndex, int newIndex);
 
 private:
     bool checkSameThread();
 
 private slots:
     void slotNotification(KisImageSignalType type);
-
-signals:
-
-    void __sigNotification(KisImageSignalType type);
-    void __sigNodeChanged(KisNode *node);
-    void __sigAboutToAddANode(KisNode *parent, int index);
-    void __sigNodeHasBeenAdded(KisNode *parent, int index);
-    void __sigAboutToRemoveANode(KisNode *parent, int index);
-    void __sigNodeHasBeenRemoved(KisNode *parent, int index);
-    void __sigAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
-    void __sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
 
 signals:
 
@@ -97,6 +88,12 @@ signals:
     void sigNodeHasBeenRemoved(KisNode *parent, int index);
     void sigAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
     void sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
+
+    // Asynchronous
+    void sigNodeAddedAsync(KisNodeSP node);
+    void sigNodeMovedAsync(KisNodeSP node);
+    void sigRemoveNodeAsync(KisNodeSP node);
+    void sigLayersChangedAsync();
 
 private:
     KisImageWSP m_image;

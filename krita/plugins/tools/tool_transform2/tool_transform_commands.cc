@@ -19,6 +19,7 @@
  */
 
 #include "tool_transform_commands.h"
+#include <kis_image.h>
 
 ApplyTransformCmdData::ApplyTransformCmdData(KisToolTransform *tool, ToolTransformArgs::TransfMode mode, KisNodeSP node)
         : KisSelectedTransactionData(i18n("Apply transformation"), node)

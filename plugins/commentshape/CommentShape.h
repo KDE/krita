@@ -38,7 +38,7 @@ public:
     virtual void saveOdf(KoShapeSavingContext& context) const;
     virtual void setSize(const QSizeF& size);
 
-    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
+    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
 
     void toogleActive();
     void setActive(bool active);

@@ -34,8 +34,8 @@ class RgbCompositeOpHue : public KoCompositeOp
 
 public:
 
-    RgbCompositeOpHue(KoColorSpace * cs, const bool userVisible = true)
-            : KoCompositeOp(cs, COMPOSITE_HUE, i18n("Hue"), "", userVisible) {
+    RgbCompositeOpHue(KoColorSpace * cs)
+            : KoCompositeOp(cs, COMPOSITE_HUE, i18n("Hue"), "") {
     }
 
     using KoCompositeOp::composite;

@@ -26,17 +26,37 @@ class KisNameServer;
 class KisImage;
 class KisShapeController;
 
+#include "kis_types.h"
+
+
 class KisShapeControllerTest : public QObject
 {
     Q_OBJECT
 
 private slots:
+    void init();
+    void cleanup();
 
-    // tests
     void testSetImage();
-    void testAddShape();
-    void testRemoveShape();
+    void testAddNode();
+    void testRemoveNode();
+    void testMoveNodeSameParent();
+    void testMoveNodeDifferentParent();
+    void testSubstituteRootNode();
 
+private:
+    void constructImage();
+
+private:
+    KisDoc2 *m_doc;
+    KisNameServer *m_nameServer;
+    KisShapeController *m_shapeController;
+    KisImageSP m_image;
+    KisLayerSP m_layer1;
+    KisLayerSP m_layer2;
+    KisLayerSP m_layer3;
+    KisLayerSP m_layer4;
+    KisMaskSP m_mask1;
 };
 
 #endif

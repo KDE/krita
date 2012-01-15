@@ -82,7 +82,7 @@ void KisDropButton::dropEvent(QDropEvent *event)
         
         QImage qimage = qvariant_cast<QImage>(event->mimeData()->imageData());
         KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-        device->convertFromQImage(qimage, "");
+        device->convertFromQImage(qimage, 0);
         node = new KisPaintLayer(0, "node creaed from dropped image", OPACITY_OPAQUE_U8, device);
     }
     

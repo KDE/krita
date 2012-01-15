@@ -27,16 +27,20 @@
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QFontMetricsF>
+#include <QFontDatabase>
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoUnit.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 #include <KoGenStyle.h>
 #include <KoShadowStyle.h>
 #include <KoShapeLoadingContext.h>
 #include "KoTextSharedLoadingData.h"
+#include "KoInlineTextObjectManager.h"
 
 #ifdef SHOULD_BUILD_FONT_CONVERSION
 #include <string.h>
@@ -70,40 +74,59 @@ public:
     }
     qreal propertyDouble(int key) const {
         QVariant variant = stylesPrivate.value(key);
-        if (variant.isNull())
+        if (variant.isNull()) {
+            if (parentStyle)
+                return parentStyle->d->propertyDouble(key);
+            else if (defaultStyle)
+                return defaultStyle->d->propertyDouble(key);
             return 0.0;
+        }
         return variant.toDouble();
     }
     int propertyInt(int key) const {
         QVariant variant = stylesPrivate.value(key);
-        if (variant.isNull())
+        if (variant.isNull()) {
+            if (parentStyle)
+                return parentStyle->d->propertyInt(key);
+            else if (defaultStyle)
+                return defaultStyle->d->propertyInt(key);
             return 0;
+        }
         return variant.toInt();
     }
     QString propertyString(int key) const {
         QVariant variant = stylesPrivate.value(key);
-        if (variant.isNull())
+        if (variant.isNull()) {
+            if (parentStyle)
+                return parentStyle->d->propertyString(key);
+            else if (defaultStyle)
+                return defaultStyle->d->propertyString(key);
             return QString();
+        }
         return qvariant_cast<QString>(variant);
     }
     bool propertyBoolean(int key) const {
         QVariant variant = stylesPrivate.value(key);
-        if (variant.isNull())
+        if (variant.isNull()) {
+            if (parentStyle)
+                return parentStyle->d->propertyBoolean(key);
+            else if (defaultStyle)
+                return defaultStyle->d->propertyBoolean(key);
             return false;
+        }
         return variant.toBool();
     }
     QColor propertyColor(int key) const {
         QVariant variant = stylesPrivate.value(key);
-        if (variant.isNull())
+        if (variant.isNull()) {
+            if (parentStyle)
+                return parentStyle->d->propertyColor(key);
+            else if (defaultStyle)
+                return defaultStyle->d->propertyColor(key);
             return QColor();
+        }
         return variant.value<QColor>();
     }
-
-    //Overload the hard-coded default with defaultstyles.xml properties if defined
-    void setApplicationDefaults(KoShapeLoadingContext &context);
-
-    //This should be called after all charFormat properties are merged to the cursor.
-    void ensureMinimalProperties(QTextCursor &cursor, bool blockCharFormatAlso);
 
     // problem with fonts in linux and windows is that true type fonts have more than one metric
     // they have normal metric placed in font header table
@@ -116,56 +139,51 @@ public:
     // this font stretch is needed if we want to have exact line height as in ms-word and oo
     //
     // font_size * font_stretch = windows_font_height
-    qreal calculateFontStretch(QString fontFamily);
+    qreal calculateFontYStretch(QString fontFamily);
 
 
     StylePrivate hardCodedDefaultStyle;
 
     QString name;
     StylePrivate stylesPrivate;
+    KoCharacterStyle *parentStyle;
+    KoCharacterStyle *defaultStyle;
 };
 
 KoCharacterStyle::Private::Private()
+ : parentStyle(0), defaultStyle(0)
 {
     //set the minimal default properties
     hardCodedDefaultStyle.add(QTextFormat::FontFamily, QString("Sans Serif"));
     hardCodedDefaultStyle.add(QTextFormat::FontPointSize, 12.0);
     hardCodedDefaultStyle.add(QTextFormat::ForegroundBrush, QBrush(Qt::black));
-    hardCodedDefaultStyle.add(KoCharacterStyle::FontStretch, 1);
+    hardCodedDefaultStyle.add(KoCharacterStyle::FontYStretch, 1);
+#if QT_VERSION >= 0x040800
+    hardCodedDefaultStyle.add(QTextFormat::FontHintingPreference, QFont::PreferNoHinting);
+#endif
 }
 
 
-void KoCharacterStyle::Private::setApplicationDefaults(KoShapeLoadingContext &context)
+void KoCharacterStyle::ensureMinimalProperties(QTextCharFormat &format) const
 {
-    KoSharedLoadingData *sharedData = context.sharedData(KOTEXT_SHARED_LOADING_ID);
-    KoTextSharedLoadingData *textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
-    if (textSharedData) {
-        KoCharacterStyle *applicationDefaultStyle(textSharedData->applicationDefaultStyle());
-        if (applicationDefaultStyle == 0) {
-            const KoXmlElement *appDef = context.odfLoadingContext().defaultStylesReader().defaultStyle("paragraph");
-            if (appDef) {
-                applicationDefaultStyle = new KoCharacterStyle();
-                KoStyleStack defaultStyleStack;
-                defaultStyleStack.push(*appDef);
-                defaultStyleStack.setTypeProperties("text");
-                applicationDefaultStyle->loadOdfProperties(defaultStyleStack);
-                textSharedData->setApplicationDefaultStyle(applicationDefaultStyle);
+    if (d->defaultStyle) {
+        QMap<int, QVariant> props = d->defaultStyle->d->stylesPrivate.properties();
+        QMap<int, QVariant>::const_iterator it = props.constBegin();
+        while (it != props.constEnd()) {
+            if (it.key() == KoCharacterStyle::UseWindowFontColor) {
+                if (format.hasProperty(QTextFormat::ForegroundBrush)) {
+                    ++it;
+                    continue;
+                }
             }
-        }
 
-        if (applicationDefaultStyle) {
-            const QMap<int, QVariant> props = applicationDefaultStyle->d->stylesPrivate.properties();
-            for (QMap<int, QVariant>::const_iterator it = props.begin(); it != props.end(); ++it) {
-                hardCodedDefaultStyle.add(it.key(), it.value());
+            if (!it.value().isNull() && !format.hasProperty(it.key())) {
+                format.setProperty(it.key(), it.value());
             }
+            ++it;
         }
     }
-}
-
-void KoCharacterStyle::Private::ensureMinimalProperties(QTextCursor &cursor, bool blockCharFormatAlso)
-{
-    QTextCharFormat format = cursor.charFormat();
-    QMap<int, QVariant> props = hardCodedDefaultStyle.properties();
+    QMap<int, QVariant> props = d->hardCodedDefaultStyle.properties();
     QMap<int, QVariant>::const_iterator it = props.constBegin();
     while (it != props.constEnd()) {
         if (!it.value().isNull() && !format.hasProperty(it.key())) {
@@ -173,12 +191,9 @@ void KoCharacterStyle::Private::ensureMinimalProperties(QTextCursor &cursor, boo
         }
         ++it;
     }
-    cursor.mergeCharFormat(format);
-    if (blockCharFormatAlso)
-        cursor.mergeBlockCharFormat(format);
 }
 
-qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
+qreal KoCharacterStyle::Private::calculateFontYStretch(QString fontFamily)
 {
     qreal stretch = 1;
 #ifdef SHOULD_BUILD_FONT_CONVERSION
@@ -194,6 +209,8 @@ qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
     int error = 0;
     QByteArray fontName = fontFamily.toAscii();
 
+    //TODO http://freedesktop.org/software/fontconfig/fontconfig-devel/x19.html
+    // we should specify slant and weight too
     FcPattern *font = FcPatternBuild (0, FC_FAMILY, FcTypeString,fontName.data(), FC_SIZE, FcTypeDouble, (qreal)11, NULL);
     if (font == 0) {
         return 1;
@@ -321,6 +338,8 @@ void KoCharacterStyle::copyProperties(const KoCharacterStyle *style)
 {
     d->stylesPrivate = style->d->stylesPrivate;
     setName(style->name()); // make sure we emit property change
+    d->parentStyle = style->d->parentStyle;
+    d->defaultStyle = style->d->defaultStyle;
 }
 
 void KoCharacterStyle::copyProperties(const QTextCharFormat &format)
@@ -340,9 +359,19 @@ KoCharacterStyle::~KoCharacterStyle()
     delete d;
 }
 
+void KoCharacterStyle::setDefaultStyle(KoCharacterStyle *defaultStyle)
+{
+    d->defaultStyle = defaultStyle;
+}
+
+void KoCharacterStyle::setParentStyle(KoCharacterStyle *parent)
+{
+    d->parentStyle = parent;
+}
+
 QPen KoCharacterStyle::textOutline() const
 {
-    QVariant variant = d->stylesPrivate.value(QTextFormat::TextOutline);
+    QVariant variant = value(QTextFormat::TextOutline);
     if (variant.isNull()) {
         return QPen(Qt::NoPen);
     }
@@ -351,7 +380,7 @@ QPen KoCharacterStyle::textOutline() const
 
 QBrush KoCharacterStyle::background() const
 {
-    QVariant variant = d->stylesPrivate.value(QTextFormat::BackgroundBrush);
+    QVariant variant = value(QTextFormat::BackgroundBrush);
 
     if (variant.isNull()) {
         return QBrush();
@@ -366,7 +395,7 @@ void KoCharacterStyle::clearBackground()
 
 QBrush KoCharacterStyle::foreground() const
 {
-    QVariant variant = d->stylesPrivate.value(QTextFormat::ForegroundBrush);
+    QVariant variant = value(QTextFormat::ForegroundBrush);
     if (variant.isNull()) {
         return QBrush();
     }
@@ -380,37 +409,115 @@ void KoCharacterStyle::clearForeground()
 
 void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
 {
+    if (d->parentStyle) {
+        d->parentStyle->applyStyle(format);
+    }
+
+    bool fontSizeSet = false; // if this style has already set size don't apply the relatives
     const QMap<int, QVariant> props = d->stylesPrivate.properties();
     QMap<int, QVariant>::const_iterator it = props.begin();
     while (it != props.end()) {
         if (!it.value().isNull()) {
-            format.setProperty(it.key(), it.value());
+            if (it.key() == KoCharacterStyle::PercentageFontSize && !fontSizeSet) {
+                qreal size = it.value().toDouble() / 100.0;
+                if (format.hasProperty(QTextFormat::FontPointSize)) {
+                    size *= format.doubleProperty(QTextFormat::FontPointSize);
+                } else {
+                    size *= 12.0;
+                }
+                format.setProperty(QTextFormat::FontPointSize, size);
+            }
+            else if (it.key() == KoCharacterStyle::AdditionalFontSize && !fontSizeSet) {
+                qreal size = it.value().toDouble() / 100.0;
+                if (format.hasProperty(QTextFormat::FontPointSize)) {
+                    size += format.doubleProperty(QTextFormat::FontPointSize);
+                } else {
+                    size += 12.0;
+                }
+                format.setProperty(QTextFormat::FontPointSize, size);
+            }
+            else {
+                format.setProperty(it.key(), it.value());
+            }
+
+            if (it.key() == QTextFormat::FontPointSize) {
+                fontSizeSet = true;
+            }
+
+            if (it.key() == QTextFormat::ForegroundBrush) {
+                format.clearProperty(KoCharacterStyle::UseWindowFontColor);
+            }
         }
         ++it;
     }
 }
 
+KoCharacterStyle *KoCharacterStyle::autoStyle(const QTextCharFormat &format, QTextCharFormat blockCharFormat) const
+{
+    KoCharacterStyle *autoStyle = new KoCharacterStyle(format);
+    applyStyle(blockCharFormat);
+    ensureMinimalProperties(blockCharFormat);
+    autoStyle->removeDuplicates(blockCharFormat);
+    autoStyle->setParentStyle(const_cast<KoCharacterStyle*>(this));
+    // remove StyleId if it is there as it is not a property of the style itself and will not be written out
+    // so it should not be part of the autostyle. As otherwise it can happen that the StyleId is the only 
+    // property left and then we write out an empty style which is unneeded.
+    // we also need to remove the properties of links as they are saved differently
+    autoStyle->d->stylesPrivate.remove(StyleId);
+    autoStyle->d->stylesPrivate.remove(QTextFormat::IsAnchor);
+    autoStyle->d->stylesPrivate.remove(QTextFormat::AnchorHref);
+    autoStyle->d->stylesPrivate.remove(QTextFormat::AnchorName);
+    return autoStyle;
+}
+
 void KoCharacterStyle::applyStyle(QTextBlock &block) const
 {
     QTextCursor cursor(block);
-    QTextCharFormat cf;
-    cursor.setPosition(block.position() + block.length() - 1, QTextCursor::KeepAnchor);
+    QTextCharFormat cf = cursor.blockCharFormat();
     applyStyle(cf);
-    cursor.mergeCharFormat(cf);
-    cursor.mergeBlockCharFormat(cf);
-    d->ensureMinimalProperties(cursor, true);
+    QTextCharFormat format = cf;
+    ensureMinimalProperties(cf);
+    cursor.setBlockCharFormat(cf);
+
+    // be sure that we keep the InlineInstanceId, anchor information and ChangeTrackerId when applying a style
+    for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
+        cursor.setPosition(it.fragment().position());
+        cursor.setPosition(it.fragment().position() + it.fragment().length(), QTextCursor::KeepAnchor);
+
+        QTextCharFormat f(cf);
+
+        QVariant v = it.fragment().charFormat().property(InlineInstanceId);
+        if (!v.isNull()) {
+            f.setProperty(InlineInstanceId, v);
+        }
+
+        v = it.fragment().charFormat().property(ChangeTrackerId);
+        if (!v.isNull()) {
+            f.setProperty(ChangeTrackerId, v);
+        }
+
+        if (it.fragment().charFormat().isAnchor()) {
+            f.setAnchor(true);
+            f.setAnchorHref(it.fragment().charFormat().anchorHref());
+        }
+        cursor.setCharFormat(f);
+    }
 }
 
 void KoCharacterStyle::applyStyle(QTextCursor *selection) const
 {
-    QTextCharFormat cf;
+// FIXME below should be done for each frament in the selection
+    QTextCharFormat cf = selection->charFormat();
     applyStyle(cf);
-    selection->mergeCharFormat(cf);
-    d->ensureMinimalProperties(*selection, false);
+    ensureMinimalProperties(cf);
+    selection->setCharFormat(cf);
 }
 
 void KoCharacterStyle::unapplyStyle(QTextCharFormat &format) const
 {
+    if (d->parentStyle)
+        d->parentStyle->unapplyStyle(format);
+
     QMap<int, QVariant> props = d->stylesPrivate.properties();
     QMap<int, QVariant>::const_iterator it = props.constBegin();
     while (it != props.constEnd()) {
@@ -618,7 +725,7 @@ static QString exportOdfFontStyleHint(QFont::StyleHint hint)
 void KoCharacterStyle::setFontFamily(const QString &family)
 {
     d->setProperty(QTextFormat::FontFamily, family);
-    setFontStretch(d->calculateFontStretch(family));
+    setFontYStretch(d->calculateFontYStretch(family));
 }
 QString KoCharacterStyle::fontFamily() const
 {
@@ -706,6 +813,11 @@ void KoCharacterStyle::setForeground(const QBrush &brush)
 {
     d->setProperty(QTextFormat::ForegroundBrush, brush);
 }
+void KoCharacterStyle::setFontAutoColor(bool use)
+{
+    d->setProperty(KoCharacterStyle::UseWindowFontColor, use);
+}
+
 QString KoCharacterStyle::name() const
 {
     return d->name;
@@ -972,14 +1084,14 @@ QFont::Capitalization KoCharacterStyle::fontCapitalization() const
 }
 
 
-void KoCharacterStyle::setFontStretch(qreal stretch)
+void KoCharacterStyle::setFontYStretch(qreal stretch)
 {
-    d->setProperty(KoCharacterStyle::FontStretch, stretch);
+    d->setProperty(KoCharacterStyle::FontYStretch, stretch);
 }
 
-qreal KoCharacterStyle::fontStretch() const
+qreal KoCharacterStyle::fontYStretch() const
 {
-    return d->propertyDouble(KoCharacterStyle::FontStretch);
+    return d->propertyDouble(KoCharacterStyle::FontYStretch);
 }
 
 void KoCharacterStyle::setCountry(const QString &country)
@@ -1000,12 +1112,22 @@ void KoCharacterStyle::setLanguage(const QString &language)
 
 QString KoCharacterStyle::country() const
 {
-    return d->stylesPrivate.value(KoCharacterStyle::Country).toString();
+    return value(KoCharacterStyle::Country).toString();
 }
 
 QString KoCharacterStyle::language() const
 {
     return d->propertyString(KoCharacterStyle::Language);
+}
+
+bool KoCharacterStyle::blinking() const
+{
+    return d->propertyBoolean(Blink);
+}
+
+void KoCharacterStyle::setBlinking(bool blink)
+{
+    d->setProperty(KoCharacterStyle::Blink, blink);
 }
 
 bool KoCharacterStyle::hasProperty(int key) const
@@ -1069,7 +1191,7 @@ void KoCharacterStyle::setTextShadow(const KoShadowStyle& shadow)
 KoShadowStyle KoCharacterStyle::textShadow() const
 {
     if (hasProperty(TextShadow)) {
-        QVariant shadow = d->stylesPrivate.value(TextShadow);
+        QVariant shadow = value(TextShadow);
         if (shadow.canConvert<KoShadowStyle>())
             return shadow.value<KoShadowStyle>();
     }
@@ -1156,60 +1278,55 @@ void KoCharacterStyle::setTextEmphasizeStyle(KoCharacterStyle::EmphasisStyle emp
     d->setProperty(TextEmphasizeStyle, emphasis);
 }
 
-KoCharacterStyle::FontPitchMode KoCharacterStyle::fontPitch() const
-{
-    if (hasProperty(FontPitch))
-        return (FontPitchMode) d->propertyInt(FontPitch);
-    return KoCharacterStyle::FixedWidth;
-}
-
-void KoCharacterStyle::setFontPitch(KoCharacterStyle::FontPitchMode mode)
-{
-    d->setProperty(KoCharacterStyle::FontPitch, mode);
-}
-
 void KoCharacterStyle::setPercentageFontSize(qreal percent)
 {
-    d->setProperty(KoCharacterStyle::PercentageFontSize,percent);
+    d->setProperty(KoCharacterStyle::PercentageFontSize, percent);
 }
 
-qreal KoCharacterStyle::percentageFontSize()
+qreal KoCharacterStyle::percentageFontSize() const
 {
     return d->propertyDouble(KoCharacterStyle::PercentageFontSize);
 }
 
-//in 1.6 this was defined in KoTextFormat::load(KoOasisContext &context)
-void KoCharacterStyle::loadOdf(KoShapeLoadingContext &scontext)
+void KoCharacterStyle::setAdditionalFontSize(qreal percent)
 {
-    d->setApplicationDefaults(scontext);
-    KoOdfLoadingContext &context = scontext.odfLoadingContext();
-    KoStyleStack &styleStack = context.styleStack();
-    loadOdfProperties(styleStack);
-
-    QString fontName;
-    if (styleStack.hasProperty(KoXmlNS::style, "font-name")) {
-        // This font name is a reference to a font face declaration.
-        KoOdfStylesReader &stylesReader = context.stylesReader();
-        const KoXmlElement *fontFace = stylesReader.findStyle(styleStack.property(KoXmlNS::style, "font-name"));
-        if (fontFace != 0)
-            fontName = fontFace->attributeNS(KoXmlNS::svg, "font-family", "");
-    }
-    if (! fontName.isEmpty()) {
-    // Hmm, the remove "'" could break it's in the middle of the fontname...
-        fontName = fontName.remove('\'');
-
-    // 'Thorndale' is not known outside OpenOffice so we substitute it
-    // with 'Times New Roman' that looks nearly the same.
-        if (fontName == "Thorndale")
-            fontName = "Times New Roman";
-
-        fontName.remove(QRegExp("\\sCE$")); // Arial CE -> Arial
-        setFontFamily(fontName);
-    }
+    d->setProperty(KoCharacterStyle::AdditionalFontSize, percent);
 }
 
-void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
+qreal KoCharacterStyle::additionalFontSize() const
 {
+    return d->propertyDouble(KoCharacterStyle::AdditionalFontSize);
+}
+
+void KoCharacterStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContext &scontext,
+    bool loadParents)
+{
+    KoOdfLoadingContext &context = scontext.odfLoadingContext();
+    const QString name(element->attributeNS(KoXmlNS::style, "display-name", QString()));
+    if (!name.isEmpty()) {
+        d->name = name;
+    }
+    else {
+        d->name = element->attributeNS(KoXmlNS::style, "name", QString());
+    }
+ 
+    QString family = element->attributeNS(KoXmlNS::style, "family", "text");
+
+    context.styleStack().save();
+    if (loadParents) {
+        context.addStyles(element, family.toLocal8Bit().constData());   // Load all parent
+    } else {
+        context.styleStack().push(*element);
+    }
+    context.styleStack().setTypeProperties("text");  // load the style:text-properties
+    loadOdfProperties(scontext);
+    context.styleStack().restore();
+}
+
+void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
+{
+    KoStyleStack &styleStack = scontext.odfLoadingContext().styleStack();
+
     // The fo:color attribute specifies the foreground color of text.
     const QString color(styleStack.property(KoXmlNS::fo, "color"));
     if (!color.isEmpty()) {
@@ -1217,8 +1334,6 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
         if (c.isValid()) {     // 3.10.3
             setForeground(QBrush(c));
         }
-        // if (styleStack.property(KoXmlNS::style, "use-window-font-color") == "true")
-            // we should store this property to allow the layout to ignore the above set color in some situations.
     }
 
     QString fontName(styleStack.property(KoXmlNS::fo, "font-family"));
@@ -1259,6 +1374,35 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (!fontFamily.isEmpty())
         fontName = fontFamily;
 
+    if (styleStack.hasProperty(KoXmlNS::style, "font-name")) {
+        // This font name is a reference to a font face declaration.
+        KoOdfStylesReader &stylesReader = scontext.odfLoadingContext().stylesReader();
+        const KoXmlElement *fontFace = stylesReader.findStyle(styleStack.property(KoXmlNS::style, "font-name"));
+        if (fontFace != 0) {
+            fontName = fontFace->attributeNS(KoXmlNS::svg, "font-family", "");
+
+            KoXmlElement fontFaceElem;
+            forEachElement(fontFaceElem, (*fontFace)) {
+                if (fontFaceElem.tagName() == "font-face-src") {
+                    KoXmlElement fontUriElem;
+                    forEachElement(fontUriElem, fontFaceElem) {
+                        if (fontUriElem.tagName() == "font-face-uri") {
+                            QString filename = fontUriElem.attributeNS(KoXmlNS::xlink, "href");
+                            KoStore *store = scontext.odfLoadingContext().store();
+                            if (store->open(filename)) {
+                                KoStoreDevice device(store);
+                                QByteArray data = device.readAll();
+                                if (device.open(QIODevice::ReadOnly)) {
+                                    QFontDatabase::addApplicationFontFromData(data);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+     }
+
     if (!fontName.isEmpty()) {
         // Hmm, the remove "'" could break it's in the middle of the fontname...
         fontName = fontName.remove('\'');
@@ -1268,30 +1412,30 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
         if (fontName == "Thorndale")
             fontName = "Times New Roman";
 
+        // 'StarSymbol' is written by OpenOffice but they actually mean
+        //  'OpenSymbol'.
+        if (fontName == "StarSymbol")
+            fontName = "OpenSymbol";
+
         fontName.remove(QRegExp("\\sCE$")); // Arial CE -> Arial
         setFontFamily(fontName);
     }
 
     // Specify the size of a font. The value of these attribute is either an absolute length or a percentage
     if (styleStack.hasProperty(KoXmlNS::fo, "font-size")) {
-        QPair<qreal,qreal> fontSize = styleStack.fontSize();
-        qreal pointSize = fontSize.first;
-        qreal percentage = fontSize.second;
-        if (pointSize > 0) {
-            setFontPointSize(pointSize);
-        }
-        if (percentage > 0) {
-            setPercentageFontSize(percentage);
+        const QString fontSize(styleStack.property(KoXmlNS::fo, "font-size"));
+        if (!fontSize.isEmpty()) {
+            if (fontSize.endsWith('%')) {
+                setPercentageFontSize(fontSize.left(fontSize.length() - 1).toDouble());
+            } else {
+                setFontPointSize(KoUnit::parseValue(fontSize));
+            }
         }
     }
     else {
         const QString fontSizeRel(styleStack.property(KoXmlNS::style, "font-size-rel"));
         if (!fontSizeRel.isEmpty()) {
-        // These attributes specify a relative font size change as a length such as +1pt, -3pt. It changes the font size based on the font size of the parent style.
-            qreal pointSize = styleStack.fontSize().first + KoUnit::parseValue(fontSizeRel);
-            if (pointSize > 0) {
-                setFontPointSize(pointSize);
-            }
+            setAdditionalFontSize(KoUnit::parseValue(fontSizeRel));
         }
     }
 
@@ -1315,6 +1459,8 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (!fontStyle.isEmpty()) {     // 3.10.19
         if (fontStyle == "italic" || fontStyle == "oblique") {    // no difference in kotext
             setFontItalic(true);
+        } else {
+            setFontItalic(false);
         }
     }
 
@@ -1526,22 +1672,9 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     }
 
     // The style:use-window-font-color attribute specifies whether or not the window foreground color should be as used as the foreground color for a light background color and white for a dark background color.
-    if (styleStack.property(KoXmlNS::style, "use-window-font-color") == "true") {
-        // Do like OpenOffice.org : change the foreground font if its color is too close to the background color...
-
-        QColor back = background().color();
-        QColor front = foreground().color();
-        if ((abs(qGray(back.rgb()) - qGray(front.rgb())) < 10) && (background().style() != Qt::NoBrush)) {
-            front.setRed(255 - front.red());
-            front.setGreen(255 - front.green());
-            front.setBlue(255 - front.blue());
-            QBrush frontBrush = foreground();
-            frontBrush.setColor(front);
-            if (frontBrush.style() == Qt::NoBrush) {
-                frontBrush.setStyle(Qt::SolidPattern);
-            }
-            setForeground(frontBrush);
-        }
+    const QString useWindowFont(styleStack.property(KoXmlNS::style, "use-window-font-color"));
+    if (!useWindowFont.isEmpty()) {
+        setFontAutoColor(useWindowFont == "true");
     }
 
     const QString letterKerning(styleStack.property( KoXmlNS::style, "letter-kerning"));
@@ -1660,15 +1793,12 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
         if (ok)
             setHyphenationPushCharCount(count);
     }
-    
-    if (styleStack.hasProperty(KoXmlNS::style, "font-pitch")) {
-        QString pitch = styleStack.property(KoXmlNS::style, "font-pitch");
-        if (pitch == "fixed")
-            setFontPitch(FixedWidth);
-        else if (pitch == "variable")
-            setFontPitch(VariableWidth);
+
+    if (styleStack.hasProperty(KoXmlNS::style, "text-blinking")) {
+        setBlinking(styleStack.property(KoXmlNS::style, "text-blinking") == "true");
     }
-    
+
+
 //TODO
 #if 0
     /*
@@ -1690,17 +1820,40 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     generateKey();
     addRef();
 #endif
-
 }
 
 bool KoCharacterStyle::operator==(const KoCharacterStyle &other) const
+{
+     return compareCharacterProperties(other);
+}
+
+bool KoCharacterStyle::compareCharacterProperties(const KoCharacterStyle &other) const
 {
     return other.d->stylesPrivate == d->stylesPrivate;
 }
 
 void KoCharacterStyle::removeDuplicates(const KoCharacterStyle &other)
 {
+    // In case the current style doesn't have the flag UseWindowFontColor set but the other has it set and they use the same color
+    // remove duplicates will remove the color. However to make it work correctly we need to store the color with the style so it
+    // will be loaded again. We don't store a use-window-font-color="false" as that is not compatible to the way OO/LO does work.
+    // So save the color and restore it after the remove duplicates
+    QBrush brush;
+    if (other.d->propertyBoolean(KoCharacterStyle::UseWindowFontColor) && !d->propertyBoolean(KoCharacterStyle::UseWindowFontColor)) {
+        brush = foreground();
+    }
     this->d->stylesPrivate.removeDuplicates(other.d->stylesPrivate);
+    if (brush.style() != Qt::NoBrush) {
+        setForeground(brush);
+    }
+    // in case the char style has any of the following properties it also needs to have the fontFamily as otherwise 
+    // these values will be ignored when loading according to the odf spec
+    if (!hasProperty(QTextFormat::FontFamily) && (hasProperty(QTextFormat::FontStyleHint) || hasProperty(QTextFormat::FontFixedPitch) || hasProperty(KoCharacterStyle::FontCharset))) {
+        QString fontFamily = other.fontFamily();
+        if (!fontFamily.isEmpty()) {
+            setFontFamily(fontFamily);
+        }
+    }
 }
 
 void KoCharacterStyle::removeDuplicates(const QTextCharFormat &otherFormat)
@@ -1714,7 +1867,7 @@ bool KoCharacterStyle::isEmpty() const
     return d->stylesPrivate.isEmpty();
 }
 
-void KoCharacterStyle::saveOdf(KoGenStyle &style)
+void KoCharacterStyle::saveOdf(KoGenStyle &style) const
 {
     if (!d->name.isEmpty() && !style.isDefaultStyle()) {
         style.addAttribute("style:display-name", d->name);
@@ -1746,11 +1899,16 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
         } else if (key == QTextFormat::FontFixedPitch) {
             bool fixedPitch = d->stylesPrivate.value(key).toBool();
             style.addProperty("style:font-pitch", fixedPitch ? "fixed" : "variable", KoGenStyle::TextType);
+            // if this property is saved we also need to save the fo:font-family attribute as otherwise it will be ignored on loading as defined in the spec
+            style.addProperty("fo:font-family", fontFamily(), KoGenStyle::TextType);
         } else if (key == QTextFormat::FontStyleHint) {
             bool ok = false;
             int styleHint = d->stylesPrivate.value(key).toInt(&ok);
-            if (ok)
+            if (ok) {
                 style.addProperty("style:font-family-generic", exportOdfFontStyleHint((QFont::StyleHint) styleHint), KoGenStyle::TextType);
+                // if this property is saved we also need to save the fo:font-family attribute as otherwise it will be ignored on loading as defined in the spec
+                style.addProperty("fo:font-family", fontFamily(), KoGenStyle::TextType);
+            }
         } else if (key == QTextFormat::FontKerning) {
             style.addProperty("style:letter-kerning", fontKerning() ? "true" : "false", KoGenStyle::TextType);
         } else if (key == QTextFormat::FontCapitalization) {
@@ -1865,6 +2023,9 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:color", "transparent", KoGenStyle::TextType);
             else
                 style.addProperty("fo:color", brush.color().name(), KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::UseWindowFontColor) {
+            bool use = d->stylesPrivate.value(key).toBool();
+            style.addProperty("style:use-window-font-color", use ? "true" : "false", KoGenStyle::TextType);
         } else if (key == QTextFormat::TextVerticalAlignment) {
             if (verticalAlignment() == QTextCharFormat::AlignSuperScript)
                 style.addProperty("style:text-position", "super", KoGenStyle::TextType);
@@ -1892,6 +2053,8 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
             style.addProperty("style:text-outline", outline.style() == Qt::NoPen ? "false" : "true", KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::FontCharset) {
             style.addProperty("style:font-charset", d->stylesPrivate.value(KoCharacterStyle::FontCharset).toString(), KoGenStyle::TextType);
+            // if this property is saved we also need to save the fo:font-family attribute as otherwise it will be ignored on loading as defined in the spec
+            style.addProperty("fo:font-family", fontFamily(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::TextRotationAngle) {
             style.addProperty("style:text-rotation-angle", QString::number(textRotationAngle()), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::TextRotationScale) {
@@ -1973,11 +2136,8 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
             style.addProperty("fo:hyphenation-push-char-count", hyphenationPushCharCount(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::HyphenationRemainCharCount) {
             style.addProperty("fo:hyphenation-remain-char-count", hyphenationRemainCharCount(), KoGenStyle::TextType);
-        } else if (key == KoCharacterStyle::FontPitch) {
-            if (fontPitch() == FixedWidth)
-                style.addProperty("style:font-pitch", "fixed");
-            else
-                style.addProperty("style:font-pitch", "variable");
+        } else if (key == KoCharacterStyle::Blink) {
+            style.addProperty("style:text-blinking", blinking());
         }
     }
     //TODO: font name and family
@@ -1985,7 +2145,14 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
 
 QVariant KoCharacterStyle::value(int key) const
 {
-    return d->stylesPrivate.value(key);
+    QVariant variant = d->stylesPrivate.value(key);
+    if (variant.isNull()) {
+        if (d->parentStyle)
+            return d->parentStyle->value(key);
+        else if (d->defaultStyle)
+            return d->defaultStyle->value(key);
+    }
+    return variant;
 }
 
 void KoCharacterStyle::removeHardCodedDefaults()

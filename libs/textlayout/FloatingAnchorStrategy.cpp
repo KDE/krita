@@ -63,9 +63,6 @@ bool FloatingAnchorStrategy::moveSubject()
         return false; // let's fake we moved to force another relayout
     }
 
-    QRectF pageContentRect = m_anchor->shape()->parent()->boundingRect();
-    setPageContentRect(pageContentRect);
-
     // get the page data
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
     if (!data) {
@@ -89,6 +86,15 @@ bool FloatingAnchorStrategy::moveSubject()
     // This is in coords relative to texshape
     QPointF newPosition;
 
+    QPointF offset;
+    if (m_anchor->horizontalPos() == KoTextAnchor::HFromLeft
+        || m_anchor->horizontalPos() == KoTextAnchor::HFromInside) {
+        offset.setX(m_anchor->offset().x());
+    }
+    if (m_anchor->verticalPos() == KoTextAnchor::VFromTop) {
+        offset.setY(m_anchor->offset().y());
+    }
+
     // set anchor bounding rectangle horizontal position and size
     if (!countHorizontalRel(anchorBoundingRect, containerBoundingRect, block, layout)) {
         return false; // let's fake we moved to force another relayout
@@ -105,7 +111,7 @@ bool FloatingAnchorStrategy::moveSubject()
     // Set shape vertical alignment inside anchor bounding rectangle
     countVerticalPos(newPosition, anchorBoundingRect, containerBoundingRect);
 
-    newPosition = newPosition + m_anchor->offset();
+    newPosition = newPosition + offset;
 
     //check the border of layout environment and move the shape back to have it within
     if (m_anchor->flowWithText()) {
@@ -144,9 +150,15 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
         anchorBoundingRect.setWidth(pageRect().width());
         break;
 
-    case KoTextAnchor::HPageContent:
+    case KoTextAnchor::HFrameContent:
+    case KoTextAnchor::HFrame:
         anchorBoundingRect.setX(containerBoundingRect.x());
         anchorBoundingRect.setWidth(containerBoundingRect.width());
+        break;
+
+    case KoTextAnchor::HPageContent:
+        anchorBoundingRect.setX(pageContentRect().x());
+        anchorBoundingRect.setWidth(pageContentRect().width());
         break;
 
     case KoTextAnchor::HParagraph:
@@ -239,7 +251,8 @@ void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anc
 {
     switch (m_anchor->horizontalPos()) {
     case KoTextAnchor::HCenter:
-        newPosition.setX(anchorBoundingRect.x() + anchorBoundingRect.width()/2 - containerBoundingRect.x());
+        newPosition.setX(anchorBoundingRect.x() + anchorBoundingRect.width()/2 
+         - m_anchor->shape()->size().width()/2 - containerBoundingRect.x());
         break;
 
     case KoTextAnchor::HFromInside:
@@ -264,13 +277,15 @@ void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anc
             newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x());
         } else {
             QSizeF size = m_anchor->shape()->boundingRect().size();
-            newPosition.setX(anchorBoundingRect.x() - containerBoundingRect.x() +
-                             size.width() - 2*(m_anchor->offset().x() + size.width()) );
+            newPosition.setX(anchorBoundingRect.x() - containerBoundingRect.x() -
+                             size.width() - m_anchor->offset().x());
         }
         break;
     }
     case KoTextAnchor::HRight: {
-        newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x());
+        QSizeF size = m_anchor->shape()->boundingRect().size();
+        newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x()
+                           - size.width());
         break;
     }
     default :
@@ -281,10 +296,18 @@ void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anc
 bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
                                           KoTextShapeData *data, QTextBlock &block, QTextLayout *layout)
 {
+    //FIXME proper handle VFrame and VFrameContent but fallback to VPage/VPageContent for now to produce better results
+
     switch (m_anchor->verticalRel()) {
     case KoTextAnchor::VPage:
         anchorBoundingRect.setY(pageRect().y());
         anchorBoundingRect.setHeight(pageRect().height());
+        break;
+
+    case KoTextAnchor::VFrame:
+    case KoTextAnchor::VFrameContent:
+        anchorBoundingRect.setY(containerBoundingRect.y());
+        anchorBoundingRect.setHeight(containerBoundingRect.height());
         break;
 
     case KoTextAnchor::VPageContent:
@@ -349,14 +372,14 @@ void FloatingAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF ancho
     switch (m_anchor->verticalPos()) {
     case KoTextAnchor::VBottom:
         newPosition.setY(anchorBoundingRect.bottom() - containerBoundingRect.y()
-        );//- m_anchor->shape()->size().height());
+        - m_anchor->shape()->size().height());
         break;
     case KoTextAnchor::VBelow:
         newPosition.setY(anchorBoundingRect.bottom() - containerBoundingRect.y());
         break;
 
     case KoTextAnchor::VMiddle:
-        newPosition.setY(anchorBoundingRect.y() + anchorBoundingRect.height()/2 - containerBoundingRect.y());
+        newPosition.setY(anchorBoundingRect.y() + anchorBoundingRect.height()/2 - m_anchor->shape()->size().height()/2 - containerBoundingRect.y());
         break;
 
     case KoTextAnchor::VFromTop:
@@ -385,13 +408,13 @@ void FloatingAnchorStrategy::checkLayoutEnvironment(QPointF &newPosition, KoText
     }
 
     //check top border and move the shape back to have the whole shape within
-    if (newPosition.y() < layoutEnvironmentRect().y()) {
-        newPosition.setY(layoutEnvironmentRect().y());
+    if (newPosition.y() < layoutEnvironmentRect().y() - data->documentOffset()) {
+        newPosition.setY(layoutEnvironmentRect().y() - data->documentOffset());
     }
 
     //check bottom border and move the shape back to have the whole shape within
-    if (newPosition.y() + size.height() > layoutEnvironmentRect().bottom()) {
-        newPosition.setY(layoutEnvironmentRect().bottom() - size.height());
+    if (newPosition.y() + size.height() > layoutEnvironmentRect().bottom() - data->documentOffset()) {
+        newPosition.setY(layoutEnvironmentRect().bottom() - size.height() - data->documentOffset());
     }
 }
 

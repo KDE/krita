@@ -102,7 +102,7 @@ inline void KisTextureTile::repeatStripes(const KisTextureTileUpdateInfo &update
      */
 
     const int pixelSize = updateInfo.pixelSize();
-    const QRect imageRect = m_texturesInfo->imageRect;
+    const QRect imageRect = updateInfo.imageRect();
     const QPoint patchOffset = updateInfo.patchOffset();
     const QSize patchSize = updateInfo.patchSize();
     const QRect patchRect = QRect(m_textureRectInImagePixels.topLeft() +

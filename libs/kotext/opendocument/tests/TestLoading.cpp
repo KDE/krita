@@ -251,14 +251,14 @@ bool TestLoading::compareListFormats(const QTextListFormat &actualFormat, const 
     actualProperties.remove(KoListStyle::StyleId);
     actualProperties.remove(KoListStyle::MinimumDistance);
     actualProperties.remove(KoListStyle::ListId);
-    actualProperties.remove(KoListStyle::MarkCharacterStyleId);
+    actualProperties.remove(KoListStyle::CharacterProperties);
     actualProperties.remove(QTextFormat::ObjectIndex);
 
     QMap<int, QVariant> expectedProperties = expectedFormat.properties();
     expectedProperties.remove(KoListStyle::StyleId);
     expectedProperties.remove(KoListStyle::MinimumDistance);
     expectedProperties.remove(KoListStyle::ListId);
-    expectedProperties.remove(KoListStyle::MarkCharacterStyleId);
+    expectedProperties.remove(KoListStyle::CharacterProperties);
     expectedProperties.remove(QTextFormat::ObjectIndex);
 
 
@@ -396,42 +396,15 @@ bool TestLoading::compareTableCellFormats(QTextTableCellFormat &actualFormat, QT
     foreach(int id, allPropertyIds) {
         QString key, value;
         switch (id) {
-        // double properties
-        case KoTableBorderStyle::LeftBorderSpacing:
-        case KoTableBorderStyle::RightBorderSpacing:
-        case KoTableBorderStyle::TopBorderSpacing:
-        case KoTableBorderStyle::BottomBorderSpacing:
-            if (abs(actualProperty[id].toDouble() - expectedProperty[id].toDouble()) > 1e-10) {
-                qDebug() << "Cell Border Spacing Mismatch";
-                qDebug() << "Expected Spacing: " << expectedProperty[id].toDouble();
-                qDebug() << "Actual Spacing: " << actualProperty[id].toDouble();
+        case KoTableCellStyle::Borders:
+            if (actualProperty.value(KoTableCellStyle::Borders).value<KoBorder>() != expectedProperty.value(KoTableCellStyle::Borders).value<KoBorder>())
                 match = false;
-            }
             break;
         // string properties
         case KoTableCellStyle::MasterPageName:
             if (actualProperty[id].toString() != expectedProperty[id].toString())
                 match = false;
             break;
-        // pen properties
-        case KoTableBorderStyle::LeftBorderOuterPen:
-        case KoTableBorderStyle::LeftBorderInnerPen:
-        case KoTableBorderStyle::RightBorderOuterPen:
-        case KoTableBorderStyle::RightBorderInnerPen:
-        case KoTableBorderStyle::TopBorderOuterPen:
-        case KoTableBorderStyle::TopBorderInnerPen:
-        case KoTableBorderStyle::BottomBorderOuterPen:
-        case KoTableBorderStyle::BottomBorderInnerPen: {
-            QPen actualPen = qvariant_cast<QPen>(actualProperty[id]);
-            QPen expectedPen = qvariant_cast<QPen>(expectedProperty[id]);
-            if (actualPen != expectedPen) {
-                qDebug() << "Cell Border Pen MisMatch";
-                qDebug() << "Actual Pen:" << actualPen;
-                qDebug() << "Expected Pen:" << expectedPen;
-                match = false;
-            }
-            break;
-        }
         // brush properties
         case KoTableCellStyle::CellBackgroundBrush: {
             QBrush actualBrush = qvariant_cast<QBrush>(actualProperty[id]);

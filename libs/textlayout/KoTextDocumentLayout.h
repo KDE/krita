@@ -65,13 +65,25 @@ class TEXTLAYOUT_EXPORT KoTextDocumentLayout : public QAbstractTextDocumentLayou
 public:
     /// This struct is a helper for painting of kotext texts.
     struct PaintContext {
-        PaintContext() : viewConverter(0), imageCollection(0) { }
+        PaintContext()
+            : viewConverter(0)
+            , imageCollection(0)
+            , showFormattingCharacters(false)
+            , showSpellChecking(false)
+            , background(Qt::white)
+        {
+        }
+
         /// the QText context
         QAbstractTextDocumentLayout::PaintContext textContext;
         /// A view converter, when set, is used to find out when the zoom is so low that painting of text is unneeded
         const KoViewConverter *viewConverter;
 
         KoImageCollection *imageCollection;
+        bool showFormattingCharacters;
+        bool showTableBorders;
+        bool showSpellChecking;
+        QColor background;
     };
 
     /// constructor
@@ -106,6 +118,12 @@ public:
 
     /// set default tab size for this document
     void setTabSpacing(qreal spacing);
+
+    /// set if this is for a word processor (slight changes in layout may occur)
+    void setWordprocessingMode();
+
+    /// is it for a word processor (slight changes in layout may occur)
+    bool wordprocessingMode();
 
     /// are the tabs relative to indent or not
     bool relativeTabs(QTextBlock block) const;
@@ -204,6 +222,10 @@ public:
     /// Set \a layout() to be blocked (no layouting will happen)
     void setBlockLayout(bool block);
     bool layoutBlocked() const;
+
+    /// Set \a documentChanged() to be blocked (changes will not result in root-areas being marked dirty)
+    void setBlockChanges(bool block);
+    bool changesBlocked() const;
 
     KoTextDocumentLayout* referencedLayout() const;
     void setReferencedLayout(KoTextDocumentLayout *layout);

@@ -38,6 +38,7 @@ class QTextCursor;
  */
 class KOTEXT_EXPORT KoInlineCite : public KoInlineObject
 {
+    Q_OBJECT
 public:
     enum Type {
         Citation,

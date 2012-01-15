@@ -53,9 +53,14 @@ private slots:
     void testBasicLineSpacing();
     /// Tests incrementing Y pos based on the font size
     void testBasicLineSpacing2();
+    /// Tests fixed linespacing.
+    void testFixedLineSpacing();
+    /// Tests percentage linespacing.
+    void testPercentageLineSpacing();
     /// Tests advanced linespacing options provided in our style.
     void testAdvancedLineSpacing();
-    /// test data integrety for multiple shapes.
+    /// Tests that empty lines are given the correct height like in LibreOffice
+    void testEmptyLineHeights();
 
     /// Test distance above and below paragraphs.
     void testBlockSpacing();

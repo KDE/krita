@@ -41,8 +41,7 @@ public:
 
     enum DisplayType {
         Date,
-        Time,
-        Custom
+        Time
     };
 
     /**

@@ -63,6 +63,7 @@ class KoShapePrivate;
 class KoFilterEffectStack;
 class KoSnapData;
 class KoClipPath;
+class KoShapePaintingContext;
 
 /**
  *
@@ -146,7 +147,7 @@ public:
     /**
      * TODO
      */
-    enum Through {
+    enum RunThroughLevel {
         Background,
         Foreground
     };
@@ -175,19 +176,9 @@ public:
      * @param painter used for painting the shape
      * @param converter to convert between internal and view coordinates.
      * @see applyConversion()
+     * @param paintcontext the painting context.
      */
-    virtual void paint(QPainter &painter, const KoViewConverter &converter) = 0;
-
-    /**
-     * Paint non-print decorations specific for this type of shape.
-     * The default implementation is empty.
-     *
-     * @param painter used for painting the shape
-     * @param converter to convert between internal and view coordinates.
-     * @param canvas the canvas that requested this paint.  This can be used to retrieve canvas specific properties
-     *      like selection and get a reference to the KoDocumentResourceManager.
-     */
-    virtual void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) = 0;
 
     /**
      * Load a shape from odf
@@ -310,7 +301,7 @@ public:
 
     /**
      * @brief Add a connector point to the shape
-     * 
+     *
      * A connector is a place on the shape that allows a graphical connection to be made
      * using a line, for example.
      *
@@ -327,7 +318,7 @@ public:
      * are fixed at their default position.
      * The function will insert a new connection point if the specified id was not used
      * before.
-     * 
+     *
      * @param connectionPointId the id of the connection point to set
      * @param point the connection point data
      * @return false if specified connection point id is invalid, else true
@@ -379,7 +370,7 @@ public:
      * @param side the requested side
      * @param runThrought run through the foreground or background or...
      */
-    void setTextRunAroundSide(TextRunAroundSide side, Through runThrought = Background);
+    void setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrough = Background);
 
     /**
      * The space between this shape's edge and text that runs around this shape.
@@ -891,6 +882,9 @@ public:
 
     /// Returns if the given shape is dependent on this shape
     bool hasDependee(KoShape *shape) const;
+
+    /// Returns list of shapes depending on this shape
+    QList<KoShape*> dependees() const;
 
     /// Returns additional snap data the shape wants to have snapping to
     virtual KoSnapData snapData() const;

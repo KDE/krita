@@ -30,8 +30,9 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_default_bounds.h"
+#include "kis_clone_layer.h"
 
-class KisGroupLayer::Private
+struct KisGroupLayer::Private
 {
 public:
     Private()
@@ -49,7 +50,7 @@ KisGroupLayer::KisGroupLayer(KisImageWSP image, const QString &name, quint8 opac
         KisLayer(image, name, opacity),
         m_d(new Private())
 {
-    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
+    resetCache();
 }
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
@@ -69,7 +70,32 @@ KisGroupLayer::~KisGroupLayer()
 
 bool KisGroupLayer::allowAsChild(KisNodeSP node) const
 {
-    Q_UNUSED(node);
+    if (node->inherits("KisCloneLayer")) {
+        KisNodeSP source = qobject_cast<KisCloneLayer*>(node.data())->copyFrom();
+        if (source) {
+            if (source->inherits("KisGroupLayer")) {
+                KisNodeSP parent = const_cast<KisGroupLayer*>(this);
+                while (parent && parent->parent()) {
+                    if (parent == source || !parent->allowAsChild(source)) {
+                        return false;
+                    }
+                    parent = parent->parent();
+                }
+            } else if (source->inherits("KisCloneLayer")) {
+                return allowAsChild(source);
+            }
+        }
+    }
+    
+    if (node->inherits("KisGroupLayer")) {
+        KisNodeSP child = node->firstChild();
+        while (child) {
+            if (!allowAsChild(child)) {
+                return false;
+            }
+            child = child->nextSibling();
+        }
+    }
     return true;
 }
 
@@ -96,7 +122,7 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 
     if (!m_d->paintDevice) {
 
-        m_d->paintDevice = new KisPaintDevice(colorSpace);
+        m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
         m_d->paintDevice->setX(m_d->x);
         m_d->paintDevice->setY(m_d->y);
     }
@@ -116,23 +142,40 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
     }
 }
 
+KisLayer* KisGroupLayer::onlyMeaningfulChild() const
+{
+    KisNode *child = firstChild().data();
+
+    KisLayer *onlyLayer = 0;
+
+    while(child) {
+        KisLayer *layer = dynamic_cast<KisLayer*>(child);
+        if(layer) {
+            if(onlyLayer) return 0;
+            onlyLayer = layer;
+        }
+
+        child = child->nextSibling().data();
+    }
+
+    return onlyLayer;
+}
+
 KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
 {
-    if (childCount() == 1) {
-        const KisLayer *child = dynamic_cast<KisLayer*>(firstChild().data());
+    const KisLayer *child = onlyMeaningfulChild();
 
-        if (child &&
-                child->channelFlags().isEmpty() &&
-                child->projection() &&
-                child->visible() &&
-                (child->compositeOpId() == COMPOSITE_OVER ||
-                 child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
-                 child->compositeOpId() == COMPOSITE_COPY) &&
-                child->opacity() == OPACITY_OPAQUE_U8 &&
-                *child->projection()->colorSpace() == *colorSpace()) {
+    if (child &&
+        child->channelFlags().isEmpty() &&
+        child->projection() &&
+        child->visible() &&
+        (child->compositeOpId() == COMPOSITE_OVER ||
+         child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
+         child->compositeOpId() == COMPOSITE_COPY) &&
+        child->opacity() == OPACITY_OPAQUE_U8 &&
+        *child->projection()->colorSpace() == *colorSpace()) {
 
-            return child->projection();
-        }
+        return child->projection();
     }
 
     return 0;

@@ -85,7 +85,7 @@ void KisFixedPaintDeviceTest::testColorSpaceConversion()
     const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->rgb8();
     const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->lab16();
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(srcCs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
 
     dev->convertTo(dstCs);
 
@@ -101,7 +101,7 @@ void KisFixedPaintDeviceTest::testRoundtripQImageConversion()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
     QImage result = dev->convertToQImage(0, 0, 0, 640, 441);
 
     QPoint errpoint;
@@ -118,7 +118,7 @@ void KisFixedPaintDeviceTest::testBltFixed()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
-    fdev->convertFromQImage(image, "");
+    fdev->convertFromQImage(image, 0);
 
     // Without opacity
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -144,7 +144,7 @@ void KisFixedPaintDeviceTest::testBltFixedOpacity()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
-    fdev->convertFromQImage(image, "");
+    fdev->convertFromQImage(image, 0);
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());
@@ -220,7 +220,7 @@ void KisFixedPaintDeviceTest::testBltFixedSmall()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "fixed_blit_small.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
-    fdev->convertFromQImage(image, "");
+    fdev->convertFromQImage(image, 0);
 
     // Without opacity
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -243,7 +243,7 @@ void KisFixedPaintDeviceTest::testBltPerformance()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
-    fdev->convertFromQImage(image, "");
+    fdev->convertFromQImage(image, 0);
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());

@@ -29,11 +29,8 @@
 #include <OpenShiva/SourcesCollection.h>
 
 #include "shivagenerator.h"
-#include "Version.h"
 
-#if OPENSHIVA_13_OR_MORE
 #include <GTLCore/CompilationMessages.h>
-#endif
 
 QMutex* shivaMutex;
 
@@ -54,7 +51,6 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
     {
         KisGeneratorRegistry * manager = KisGeneratorRegistry::instance();
         Q_ASSERT(manager);
-#if OPENSHIVA_13_OR_MORE
         std::list< OpenShiva::Source > kernels = m_sourceCollection->sources(OpenShiva::Source::GeneratorKernel);
 
         dbgPlugins << "Collection has " << kernels.size() << " generators";
@@ -64,15 +60,6 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
                 manager->add(new ShivaGenerator(new OpenShiva::Source(kernel)));
             }
         }
-#else
-        std::list< OpenShiva::Source* > kernels = m_sourceCollection->sources(OpenShiva::Source::GeneratorKernel);
-
-        foreach(OpenShiva::Source* kernel, kernels) {
-            if (kernel->outputImageType() == OpenShiva::Source::Image || kernel->outputImageType() == OpenShiva::Source::Image4) {
-                manager->add(new ShivaGenerator(kernel));
-            }
-        }
-#endif
     }
     shivaMutex = new QMutex;
 }

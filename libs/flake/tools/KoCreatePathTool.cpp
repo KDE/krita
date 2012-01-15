@@ -30,6 +30,7 @@
 #include "SnapGuideConfigWidget.h"
 #include "KoCanvasResourceManager.h"
 #include "KoDocumentResourceManager.h"
+#include "KoShapePaintingContext.h"
 
 #include <KNumInput>
 
@@ -107,7 +108,9 @@ void KoCreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, cons
     Q_D(KoCreatePathTool);
     painter.setTransform(pathShape.absoluteTransformation(&converter) * painter.transform());
     painter.save();
-    pathShape.paint(painter, converter);
+
+    KoShapePaintingContext paintContext; //FIXME
+    pathShape.paint(painter, converter, paintContext);
     painter.restore();
     if (pathShape.border()) {
         painter.save();
@@ -379,7 +382,10 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
     angleEdit->setRange(1, 360, 1);
     angleEdit->setSuffix(QChar(Qt::Key_degree));
     layout->addWidget(angleEdit, 0, 1);
-    widget->setWindowTitle(i18n("Angle Constraints"));
+    QWidget *specialSpacer =new QWidget();
+    specialSpacer->setObjectName("SpecialSpacer");
+    layout->addWidget(specialSpacer, 1, 1);
+    angleWidget->setWindowTitle(i18n("Angle Constraints"));
     list.append(angleWidget);
 
     connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));

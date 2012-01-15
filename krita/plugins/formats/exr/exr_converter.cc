@@ -439,7 +439,6 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     if (!m_image) {
         return KisImageBuilder_RESULT_FAILURE;
     }
-    m_image->lock();
 
     // Create group layers
     for (int i = 0; i < groups.size(); ++i) {
@@ -511,12 +510,10 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
             // Add the layer
             KisGroupLayerSP groupLayerParent = (info.parent) ? info.parent->groupLayer : m_image->rootLayer();
             m_image->addNode(layer, groupLayerParent);
-            layer->setDirty();
         } else {
             dbgFile << "No decoding " << info.name << " with " << info.channelMap.size() << " channels, and lack of a color space";
         }
     }
-    m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 
@@ -709,7 +706,20 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
     qint32 width = image->width();
     Imf::Header header(width, height);
 
-    Imf::PixelType pixelType = (layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) ? Imf::HALF : Imf::FLOAT;
+    Imf::PixelType pixelType = Imf::NUM_PIXELTYPES;
+    
+    if(layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+        pixelType = Imf::HALF;
+    } else if(layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID)
+    {
+        pixelType = Imf::FLOAT;
+    }
+    
+    if(pixelType >= Imf::NUM_PIXELTYPES)
+    {
+      return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    }
+      
 
     header.channels().insert("R", Imf::Channel(pixelType));
     header.channels().insert("G", Imf::Channel(pixelType));
@@ -785,7 +795,14 @@ void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& informationObjects
             } else {
                 info.pixelType = Imf::NUM_PIXELTYPES;
             }
-            informationObjects.push_back(info);
+            
+            if(info.pixelType < Imf::NUM_PIXELTYPES)
+            {
+                informationObjects.push_back(info);
+            } else {
+                // TODO should probably inform that one of the layer cannot be saved.
+            }
+
         } else if (KisGroupLayerSP groupLayer = dynamic_cast<KisGroupLayer*>(node.data())) {
             recBuildPaintLayerSaveInfo(informationObjects, name + groupLayer->name() + '.', groupLayer);
         }
@@ -813,6 +830,11 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisGroupLayerSP 
 
     QList<ExrPaintLayerSaveInfo> informationObjects;
     recBuildPaintLayerSaveInfo(informationObjects, "", layer);
+    
+    if(informationObjects.isEmpty())
+    {
+        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    }
 
     dbgFile << informationObjects.size() << " layers to save";
 

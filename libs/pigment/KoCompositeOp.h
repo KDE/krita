@@ -30,138 +30,10 @@
 
 class KoColorSpace;
 
-const QString COMPOSITE_OVER         = "normal";
-const QString COMPOSITE_ERASE        = "erase";
-const QString COMPOSITE_IN           = "in";
-const QString COMPOSITE_OUT          = "out";
-const QString COMPOSITE_ALPHA_DARKEN = "alphadarken";
-
-const QString COMPOSITE_XOR                   = "xor";
-const QString COMPOSITE_PLUS                  = "plus";
-const QString COMPOSITE_MINUS                 = "minus";
-const QString COMPOSITE_ADD                   = "add";
-const QString COMPOSITE_SUBTRACT              = "subtract";
-const QString COMPOSITE_INVERSE_SUBTRACT      = "inverse_subtract";
-const QString COMPOSITE_DIFF                  = "diff";
-const QString COMPOSITE_MULT                  = "multiply";
-const QString COMPOSITE_DIVIDE                = "divide";
-const QString COMPOSITE_ARC_TANGENT           = "arc_tangent";
-const QString COMPOSITE_GEOMETRIC_MEAN        = "geometric_mean";
-const QString COMPOSITE_ADDITIVE_SUBSTRACTIVE = "additive_substractive";
-const QString COMPOSITE_INVERTED_DIVIDE       = "inverted_divide"; // XXX: not implemented anywhere yet
-
-const QString COMPOSITE_EQUIVALENCE   = "equivalence";
-const QString COMPOSITE_ALLANON       = "allanon";
-const QString COMPOSITE_PARALLEL      = "parallel";
-const QString COMPOSITE_GRAIN_MERGE   = "grain_merge";
-const QString COMPOSITE_GRAIN_EXTRACT = "grain_extract";
-const QString COMPOSITE_EXCLUSION     = "exclusion";
-const QString COMPOSITE_HARD_MIX      = "hard mix";
-const QString COMPOSITE_OVERLAY       = "overlay";
-
-const QString COMPOSITE_DARKEN      = "darken";
-const QString COMPOSITE_BURN        = "burn";
-const QString COMPOSITE_LINEAR_BURN = "linear_burn";
-const QString COMPOSITE_GAMMA_DARK  = "gamma_dark";
-
-const QString COMPOSITE_LIGHTEN      = "lighten";
-const QString COMPOSITE_DODGE        = "dodge";
-const QString COMPOSITE_LINEAR_DODGE = "linear_dodge";
-const QString COMPOSITE_SCREEN       = "screen";
-const QString COMPOSITE_HARD_LIGHT   = "hard_light";
-const QString COMPOSITE_SOFT_LIGHT   = "soft_light";
-const QString COMPOSITE_GAMMA_LIGHT  = "gamma_light";
-const QString COMPOSITE_VIVID_LIGHT  = "vivid_light";
-const QString COMPOSITE_LINEAR_LIGHT = "linear light";
-const QString COMPOSITE_PIN_LIGHT    = "pin_light";
-
-const QString COMPOSITE_HUE            = "hue";
-const QString COMPOSITE_COLOR          = "color";
-const QString COMPOSITE_SATURATION     = "saturation";
-const QString COMPOSITE_INC_SATURATION = "inc_saturation";
-const QString COMPOSITE_DEC_SATURATION = "dec_saturation";
-const QString COMPOSITE_LUMINIZE       = "luminize";
-const QString COMPOSITE_INC_LUMINOSITY = "inc_luminosity";
-const QString COMPOSITE_DEC_LUMINOSITY = "dec_luminosity";
-
-const QString COMPOSITE_HUE_HSV            = "hue_hsv";
-const QString COMPOSITE_COLOR_HSV          = "color_hsv";
-const QString COMPOSITE_SATURATION_HSV     = "saturation_hsv";
-const QString COMPOSITE_INC_SATURATION_HSV = "inc_saturation_hsv";
-const QString COMPOSITE_DEC_SATURATION_HSV = "dec_saturation_hsv";
-const QString COMPOSITE_VALUE              = "value";
-const QString COMPOSITE_INC_VALUE          = "inc_value";
-const QString COMPOSITE_DEC_VALUE          = "dec_value";
-
-const QString COMPOSITE_HUE_HSL            = "hue_hsl";
-const QString COMPOSITE_COLOR_HSL          = "color_hsl";
-const QString COMPOSITE_SATURATION_HSL     = "saturation_hsl";
-const QString COMPOSITE_INC_SATURATION_HSL = "inc_saturation_hsl";
-const QString COMPOSITE_DEC_SATURATION_HSL = "dec_saturation_hsl";
-const QString COMPOSITE_LIGHTNESS          = "lightness";
-const QString COMPOSITE_INC_LIGHTNESS      = "inc_lightness";
-const QString COMPOSITE_DEC_LIGHTNESS      = "dec_lightness";
-
-const QString COMPOSITE_HUE_HSI            = "hue_hsi";
-const QString COMPOSITE_COLOR_HSI          = "color_hsi";
-const QString COMPOSITE_SATURATION_HSI     = "saturation_hsi";
-const QString COMPOSITE_INC_SATURATION_HSI = "inc_saturation_hsi";
-const QString COMPOSITE_DEC_SATURATION_HSI = "dec_saturation_hsi";
-const QString COMPOSITE_INTENSITY          = "intensity";
-const QString COMPOSITE_INC_INTENSITY      = "inc_intensity";
-const QString COMPOSITE_DEC_INTENSITY      = "dec_intensity";
-
-const QString COMPOSITE_COPY         = "copy";
-const QString COMPOSITE_COPY_RED     = "copy_red";
-const QString COMPOSITE_COPY_GREEN   = "copy_green";
-const QString COMPOSITE_COPY_BLUE    = "copy_blue";
-
-const QString COMPOSITE_COLORIZE     = "colorize";
-const QString COMPOSITE_BUMPMAP      = "bumpmap";
-const QString COMPOSITE_CLEAR        = "clear";
-const QString COMPOSITE_DISSOLVE     = "dissolve";
-const QString COMPOSITE_DISPLACE     = "displace";
-const QString COMPOSITE_NO           = "nocomposition";
-const QString COMPOSITE_PASS_THROUGH = "pass through"; // XXX: not implemented anywhere yet
-const QString COMPOSITE_UNDEF        = "undefined";
-
-
 class KoID;
 class KoColorSpace;
 
-class PIGMENTCMS_EXPORT KoCompositeOpRegistry
-{
-    typedef QMultiMap<KoID,KoID> KoIDMap;
-    typedef QList<KoID>          KoIDList;
-    KoCompositeOpRegistry();
-    
-public:
-    static const KoCompositeOpRegistry& instance();
-    
-    KoID     getDefaultCompositeOp() const;
-    KoID     getKoID(const QString& compositeOpID) const;
-    KoIDMap  getCompositeOps() const;
-    KoIDList getCategories() const;
-    KoIDList getCompositeOps(const KoColorSpace* colorSpace) const;
-    KoIDList getCompositeOps(const KoID& category, const KoColorSpace* colorSpace=0) const;
-    bool     colorSpaceHasCompositeOp(const KoColorSpace* colorSpace, const KoID& compositeOp) const;
-    
-    template<class TKoIdIterator>
-    KoIDList filterCompositeOps(TKoIdIterator begin, TKoIdIterator end, const KoColorSpace* colorSpace, bool removeInvaliOps=true) const {
-        KoIDList list;
-        
-        for(; begin!=end; ++begin){ 
-            if( colorSpaceHasCompositeOp(colorSpace, *begin) == removeInvaliOps)
-                list.push_back(*begin);
-        }
-        
-        return list;
-    }
-    
-private:
-    KoIDList m_categories;
-    KoIDMap  m_map;
-};
+#include "KoCompositeOpRegistry.h"
 
 /**
  * Base for colorspace-specific blending modes.
@@ -170,7 +42,7 @@ class PIGMENTCMS_EXPORT KoCompositeOp
 {
 public:
     static QString categoryColor();
-    
+
     static QString categoryArithmetic();
     static QString categoryNegative();
     static QString categoryLight();
@@ -181,7 +53,7 @@ public:
     static QString categoryHSV();
     static QString categoryMix();
     static QString categoryMisc();
-    
+
     struct ParameterInfo
     {
         quint8*       dstRowStart;
@@ -196,7 +68,7 @@ public:
         float         flow;
         QBitArray     channelFlags;
     };
-    
+
 public:
 
     /**
@@ -207,7 +79,7 @@ public:
      * @param userVisible define whether or not that composite op should be visible in an user
      *                    interface
      */
-    KoCompositeOp(const KoColorSpace * cs, const QString& id, const QString& description, const QString & categoryMisc, const bool userVisible = true);
+    KoCompositeOp(const KoColorSpace * cs, const QString& id, const QString& description, const QString & categoryMisc = categoryMisc());
     virtual ~KoCompositeOp();
 
     /**
@@ -223,18 +95,14 @@ public:
      */
     const KoColorSpace * colorSpace() const;
     /**
-     * @return whether this composite op should be visible in the user interface
-     */
-    bool userVisible() const;
-    /**
      * @return the category associated with the composite op
      */
     QString category() const;
-    
+
     // WARNING: A derived class needs to overwrite at least one
     //          of the following virtual methods or a call to
     //          composite(...) will lead to an endless recursion/stack overflow
-    
+
     /**
      * @param dstRowStart pointer to the start of the byte array we will composite the source on
      * @param dstRowStride length of the rows of the block of destination pixels in bytes
@@ -255,12 +123,12 @@ public:
                             const quint8 *maskRowStart, qint32 maskRowStride,
                             qint32 rows, qint32 numColumns,
                             quint8 opacity, const QBitArray& channelFlags=QBitArray()) const;
-    
+
     /**
     * Same as previous, but uses a parameter structure
     */
     virtual void composite(const ParameterInfo& params) const;
-    
+
 private:
     KoCompositeOp();
     struct Private;

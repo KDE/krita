@@ -129,7 +129,7 @@ void KoOdfNumberDefinition::saveOdf(KoXmlWriter *writer) const
     }
 }
 
-QString KoOdfNumberDefinition::formattedNumber(int number) const
+QString KoOdfNumberDefinition::formattedNumber(int number, KoOdfNumberDefinition *defaultDefinition) const
 {
    switch(d->formatSpecification) {
     case Numeric:
@@ -282,6 +282,10 @@ QString KoOdfNumberDefinition::formattedNumber(int number) const
         return roman;
     }
     case Empty:
+        if (defaultDefinition) {
+            return defaultDefinition->formattedNumber(number);
+        }
+
         break;
     default:
         ;

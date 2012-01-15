@@ -71,7 +71,7 @@ void KisFilterJobTest::testInWeaver()
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
 
     KisFilterJobFactory factory(f, kfc);
 

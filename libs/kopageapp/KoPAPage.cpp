@@ -58,6 +58,7 @@ void KoPAPage::saveOdf( KoShapeSavingContext & context ) const
         paContext.xmlWriter().addAttribute( "calligra:name", name() );
     }
     paContext.xmlWriter().addAttribute( "draw:id", "page" + QString::number( paContext.page() ) );
+    paContext.xmlWriter().addAttribute( "xml:id", "page" + QString::number( paContext.page() ) );
     paContext.xmlWriter().addAttribute( "draw:master-page-name", paContext.masterPageName( m_masterPage ) );
     paContext.xmlWriter().addAttribute( "draw:style-name", saveOdfPageStyle( paContext ) );
 
@@ -161,6 +162,27 @@ bool KoPAPage::displayShape(KoShape *shape) const
 {
     Q_UNUSED(shape);
     return true;
+}
+
+QImage KoPAPage::thumbImage(const QSize &size)
+{
+    if (size.isEmpty()) {
+        return QImage();
+    }
+    KoZoomHandler zoomHandler;
+    const KoPageLayout & layout = pageLayout();
+    KoPAUtil::setZoom(layout, size, zoomHandler);
+    QRect pageRect(KoPAUtil::pageRect(layout, size, zoomHandler));
+
+    QImage image(size, QImage::Format_RGB32);
+    image.fill(QColor(Qt::white).rgb());
+    QPainter painter(&image);
+    painter.setClipRect(pageRect);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.translate(pageRect.topLeft());
+
+    paintPage(painter, zoomHandler);
+    return image;
 }
 
 QPixmap KoPAPage::generateThumbnail( const QSize& size )

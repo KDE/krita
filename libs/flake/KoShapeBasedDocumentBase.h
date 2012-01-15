@@ -25,14 +25,17 @@
 
 #include "flake_export.h"
 
+#include <QList>
+
 class KoShape;
 class QString;
 class KoShapeBasedDocumentBasePrivate;
 class KoDocumentResourceManager;
+class KUndo2Command;
 
 /**
- * The shape controller is an abstract interface that the applications class
- * that controls the shapes should implement.  This tends to be the document.
+ * The  KoShapeBasedDocumentBase is an abstract interface that the application's class
+ * that owns the shapes should implement. This tends to be the document.
  * @see KoShapeDeleteCommand, KoShapeCreateCommand
  */
 class FLAKE_EXPORT KoShapeBasedDocumentBase
@@ -55,6 +58,18 @@ public:
      * @param shape the shape to remove
      */
     virtual void removeShape(KoShape *shape) = 0;
+
+    /**
+     * This method gets called after the KoShapeDeleteCommand is executed
+     *
+     * This passes the KoShapeDeleteCommand as the command parameter. This makes it possible
+     * for applications that need to do something after the KoShapeDeleteCommand is done, e.g.
+     * adding one commands that need to be executed when a shape was deleted.
+     * The default implementation is empty.
+     * @param shapes The list of shapes that got removed.
+     * @param command The command that was used to remove the shapes from the document.
+     */
+    virtual void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command);
 
     /**
      * Return a pointer to the resource manager associated with the

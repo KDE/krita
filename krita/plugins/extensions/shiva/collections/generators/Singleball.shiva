@@ -33,10 +33,11 @@
 >;
 kernel Singleball
 {
-  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  dependent float2 center;
   dependent float pxradius, pxringradius;
   void evaluateDependents()
   {
+    center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
     int image_size = min(IMAGE_WIDTH, IMAGE_HEIGHT);
     pxradius = radius * image_size;
     pxringradius = ringradius * image_size;
@@ -51,7 +52,7 @@ kernel Singleball
       result = outsidecolor;
     } else {
       float v = (r - pxradius) / pxringradius;
-      result = (1.0 - v) * ballcolor + v * outsidecolor;
+      result = mix(ballcolor, outsidecolor, v);
     }
   }
   region generated()

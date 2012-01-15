@@ -211,20 +211,20 @@ qreal KisPaintInformation::ascension(const KisPaintInformation& info, bool norma
 
 qreal KisPaintInformation::declination(const KisPaintInformation& info, qreal maxTiltX, qreal maxTiltY, bool normalize)
 {
-    qreal xTilt = qBound(-1.0, info.xTilt() / maxTiltX , 1.0);
-    qreal yTilt = qBound(-1.0, info.yTilt() / maxTiltY , 1.0);
+    qreal xTilt = qBound(qreal(-1.0), info.xTilt() / maxTiltX , qreal(1.0));
+    qreal yTilt = qBound(qreal(-1.0), info.yTilt() / maxTiltY , qreal(1.0));
     
     qreal e;
     if (fabs(xTilt) > fabs(yTilt)) {
-        e = sqrt(1.0 + yTilt*yTilt);
+        e = sqrt(qreal(1.0) + yTilt*yTilt);
     } else {
-        e = sqrt(1.0 + xTilt*xTilt);
+        e = sqrt(qreal(1.0) + xTilt*xTilt);
     }
     
     qreal cosAlpha    = sqrt(xTilt*xTilt + yTilt*yTilt)/e;
     qreal declination = acos(cosAlpha); // in radians in [0, 0.5 * PI]
     
     // mapping to 0.0..1.0 if normalize is true
-    return normalize ? (declination / (M_PI * 0.5)) : declination;
+    return normalize ? (declination / (M_PI * qreal(0.5))) : declination;
 }
 

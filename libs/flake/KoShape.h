@@ -147,7 +147,7 @@ public:
     /**
      * TODO
      */
-    enum Through {
+    enum RunThroughLevel {
         Background,
         Foreground
     };
@@ -370,7 +370,7 @@ public:
      * @param side the requested side
      * @param runThrought run through the foreground or background or...
      */
-    void setTextRunAroundSide(TextRunAroundSide side, Through runThrought = Background);
+    void setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrough = Background);
 
     /**
      * The space between this shape's edge and text that runs around this shape.

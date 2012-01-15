@@ -24,11 +24,13 @@
 
 #include <QTextDocument>
 
-ChangeAnchorPropertiesCommand::ChangeAnchorPropertiesCommand(KoTextAnchor *anchor, KoTextAnchor *newAnchor, KUndo2Command *parent)
+ChangeAnchorPropertiesCommand::ChangeAnchorPropertiesCommand(KoTextAnchor *anchor, KoTextAnchor *newAnchor, KoShapeContainer *newParent, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_anchor(anchor)
     , m_oldAnchor(0)
     , m_newAnchor(0)
+    , m_oldParent(anchor->shape()->parent())
+    , m_newParent(newParent)
 {
     copyLayoutProperties(anchor, &m_oldAnchor);
     copyLayoutProperties(newAnchor, &m_newAnchor);
@@ -54,6 +56,10 @@ void ChangeAnchorPropertiesCommand::redo()
 
     copyLayoutProperties(&m_newAnchor, m_anchor);
 
+    QPointF absPos =  m_anchor->shape()->absolutePosition();
+    m_anchor->shape()->setParent(m_newParent);
+    m_anchor->shape()->setAbsolutePosition(absPos);
+
     m_anchor->shape()->notifyChanged();
     const_cast<QTextDocument *>(m_anchor->document())->markContentsDirty(m_anchor->positionInDocument(), 0);
 }
@@ -61,8 +67,12 @@ void ChangeAnchorPropertiesCommand::redo()
 void ChangeAnchorPropertiesCommand::undo()
 {
     KUndo2Command::undo();
-
     copyLayoutProperties(&m_oldAnchor, m_anchor);
+
+    QPointF absPos =  m_anchor->shape()->absolutePosition();
+    m_anchor->shape()->setParent(m_oldParent);
+    m_anchor->shape()->setAbsolutePosition(absPos);
+
     m_anchor->shape()->notifyChanged();
     const_cast<QTextDocument *>(m_anchor->document())->markContentsDirty(m_anchor->positionInDocument(), 0);
 }

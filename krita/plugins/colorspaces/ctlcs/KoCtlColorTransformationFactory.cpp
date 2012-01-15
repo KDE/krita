@@ -37,6 +37,7 @@
 #include <OpenCTL/Program.h>
 #include <OpenCTL/Template.h>
 #include <GTLCore/Value.h>
+#include <kis_gtl_lock.h>
 
 class KoCtlColorTransformation : public KoColorTransformation
 {
@@ -54,6 +55,7 @@ public:
 
 public:
     void transform(const quint8 *srcU8, quint8 *dstU8, qint32 numColumns) const {
+        KisGtlLocker gtlLocker;
         KoCtlBuffer src(reinterpret_cast<char*>(const_cast<quint8*>(srcU8)), numColumns * m_colorSpace->pixelSize());
         KoCtlBuffer dst(reinterpret_cast<char*>(dstU8), numColumns * m_colorSpace->pixelSize());
         std::list< GTLCore::Buffer* > ops;

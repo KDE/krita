@@ -46,11 +46,13 @@ class KoModeBox::Private
 public:
     Private(KoCanvasController *c)
         : canvas(c->canvas())
+        , canvasReset(false)
         , activeId(-1)
     {
     }
 
     KoCanvasBase *canvas;
+    bool canvasReset;
     QList<KoToolButton> buttons; // buttons maintained by toolmanager
     QList<KoToolButton> addedButtons; //buttons in the order added to QToolBox
     QMap<int, QWidget *> addedWidgets;
@@ -274,6 +276,8 @@ void KoModeBox::setCanvas(KoCanvasBase *canvas)
                     this, SLOT(setOptionWidgets(const QList<QWidget *> &)));
     }
 
+    d->canvasReset = d->canvas != 0;
+
     d->canvas = canvas;
 
     ccwidget = dynamic_cast<KoCanvasControllerWidget *>(d->canvas->canvasController());
@@ -284,7 +288,9 @@ void KoModeBox::setCanvas(KoCanvasBase *canvas)
 
 void KoModeBox::unsetCanvas()
 {
-    d->canvas = 0;
+    if (!d->canvasReset) {
+        d->canvas = 0;
+    }
 }
 
 void KoModeBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas)

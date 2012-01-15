@@ -33,7 +33,7 @@ ReviewToolFactory::ReviewToolFactory()
     setToolTip(i18n("Review"));
     setToolType(dynamicToolType()+",calligrawords");
     setIcon("tool-changetracking");
-    setPriority(3);
+    setPriority(30);
     setActivationShapeId(TextShape_SHAPEID);
 }
 

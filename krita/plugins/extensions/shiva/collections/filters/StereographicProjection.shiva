@@ -59,10 +59,9 @@
 >;  
 kernel StereographicProjection
 {  
-  const float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
-  const float2 xy0 = { center.x - IMAGE_WIDTH, -center.y + IMAGE_HEIGHT };
-  const float2 xy_replication = {IMAGE_WIDTH * 0.5, IMAGE_HEIGHT * 0.5};
-  const float PI = 3.14159265;
+  dependent float2 center = { IMAGE_WIDTH * xcenter, IMAGE_HEIGHT * ycenter };
+  dependent float2 xy0 = { center.x - IMAGE_WIDTH, -center.y + IMAGE_HEIGHT };
+  dependent float2 xy_replication = {IMAGE_WIDTH * 0.5, IMAGE_HEIGHT * 0.5};
   const float PI2 = 2 * PI;
   void evaluatePixel(image img, out pixel result)
   {

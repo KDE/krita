@@ -42,6 +42,7 @@ private slots:
     void testRemoveNode();
     void testMoveNodeSameParent();
     void testMoveNodeDifferentParent();
+    void testSubstituteRootNode();
 
 private:
     void constructImage();

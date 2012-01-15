@@ -106,6 +106,7 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 void KisShapeLayerCanvas::repaint()
 {
     QRect r = m_dirty.boundingRect();
+    r.intersect(m_parentLayer->image()->bounds());
     QImage image(r.width(), r.height(), QImage::Format_ARGB32);
     image.fill(0);
     QPainter p(&image);

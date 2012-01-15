@@ -836,19 +836,123 @@ void KoTextEditor::setTextColor(const QColor &color)
 
 void KoTextEditor::setStyle(KoCharacterStyle *style)
 {
-    if (isEditProtected()) {
-        return;
-    }
-
     Q_ASSERT(style);
     d->updateState(KoTextEditor::Private::Format, i18n("Set Character Style"));
-    QTextCharFormat format;
-    style->applyStyle(format);
-    QTextCharFormat prevFormat(d->caret.charFormat());
-    d->caret.setCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set Character Style"), format, prevFormat, false);
+    recursiveSetStyle(d->document->rootFrame()->begin(), style);
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
+}
+
+// To figure out if a the blocks of the selection are write protected we need to traverse
+//the entire document
+// as sections build up the protectiveness recursively.
+void KoTextEditor::recursiveSetStyle(QTextFrame::iterator it, KoCharacterStyle *style)
+{
+    do {
+        QTextBlock block = it.currentBlock();
+        QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
+        QTextFrame *subFrame = it.currentFrame();
+        if (table) {
+            // There are 4 ways this table can be selected:
+            //  - "before to mid"
+            //  - "mid to after"
+            //  - "complex mid to mid"
+            //  - "simple mid to mid"
+            // The 3 first are entire cells, the fourth is within a cell
+
+            if (d->caret.selectionStart() <= table->lastPosition()
+                    && d->caret.selectionEnd() >= table->firstPosition()) {
+                // We have a selection somewhere
+                QTextTableCell cell1 = table->cellAt(d->caret.selectionStart());
+                QTextTableCell cell2 = table->cellAt(d->caret.selectionEnd());
+                if (cell1 != cell2 || !cell1.isValid() || !cell2.isValid()) {
+                    // And the selection is complex or entire table
+                    int selectionRow;
+                    int selectionColumn;
+                    int selectionRowSpan;
+                    int selectionColumnSpan;
+                    if (!cell1.isValid() || !cell2.isValid()) {
+                        // entire table
+                        selectionRow = selectionColumn = 0;
+                        selectionRowSpan = table->rows();
+                        selectionColumnSpan = table->columns();
+                    } else {
+                        d->caret.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
+                    }
+
+                    for (int r = selectionRow; r < selectionRow + selectionRowSpan; r++) {
+                        for (int c = selectionColumn; c < selectionColumn +
+                             selectionColumnSpan; c++) {
+                            QTextTableCell cell = table->cellAt(r,c);
+                            if (!cell.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
+                                recursiveSetStyle(cell.begin(), style);
+                            }
+                        }
+                    }
+                } else {
+                    // And the selection is simple
+                    if (!cell1.format().boolProperty(KoTableCellStyle::CellIsProtected)) {
+                        recursiveSetStyle(cell1.begin(), style);
+                    }
+                    return;
+                }
+            }
+            if (d->caret.selectionEnd() <= table->lastPosition()) {
+                return;
+            }
+        } if (subFrame) {
+        } else {
+            // TODO build up the section stack
+
+            if (d->caret.selectionStart() < block.position() + block.length()
+                    && d->caret.selectionEnd() >= block.position()) {
+                // We have a selection somewhere
+                if (true) { // TODO don't change if block is protected by section
+                    QTextCursor cursor(block);
+                    QTextCharFormat format = cursor.blockCharFormat();
+                    style->applyStyle(format);
+                    style->ensureMinimalProperties(format);
+                    for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
+                        cursor.setPosition(qMax(d->caret.selectionStart(), it.fragment().position()));
+                        cursor.setPosition(qMin(d->caret.selectionEnd(), it.fragment().position() + it.fragment().length()), QTextCursor::KeepAnchor);
+
+                        if (cursor.anchor() >= cursor.position()) {
+                            continue;
+                        }
+                        QTextCharFormat f(format);
+
+                        QVariant v = it.fragment().charFormat().property(KoCharacterStyle::InlineInstanceId);
+                        if (!v.isNull()) {
+                            f.setProperty(KoCharacterStyle::InlineInstanceId, v);
+                        }
+
+                        v = it.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId);
+                        if (!v.isNull()) {
+                            f.setProperty(KoCharacterStyle::ChangeTrackerId, v);
+                        }
+
+                        if (it.fragment().charFormat().isAnchor()) {
+                            f.setAnchor(true);
+                            f.setAnchorHref(it.fragment().charFormat().anchorHref());
+                        }
+                        QTextCharFormat prevFormat(cursor.charFormat());
+                        cursor.setCharFormat(f);
+                        registerTrackedChange(cursor, KoGenChange::FormatChange, i18n("Set Character Style"), f, prevFormat, false);
+                    }
+
+                }
+            }
+
+            // TODO tear down the section stack
+
+            if (d->caret.selectionEnd() < block.position() + block.length()) {
+                return;
+            }
+        }
+        if (!it.atEnd()) {
+            ++it;
+        }
+    } while (!it.atEnd());
 }
 
 void KoTextEditor::setStyle(KoParagraphStyle *style)

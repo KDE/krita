@@ -20,7 +20,6 @@
 
 #include <GTLCore/AbstractImage.h>
 #include <kis_types.h>
-#include "Version.h"
 
 class ConstPaintDeviceImage : public GTLCore::AbstractImage
 {
@@ -31,9 +30,7 @@ public:
     virtual char* rawData( int _x, int _y );
     virtual const char* data(int _x, int _y) const ;
     virtual const char* rawData( int _x, int _y ) const;
-#if OPENSHIVA_13_OR_MORE
     virtual GTLCore::RegionI boundingBox() const;
-#endif
     virtual ConstIterator* createIterator() const;
     virtual Iterator* createIterator();
 private:
@@ -50,9 +47,7 @@ public:
     virtual char* rawData( int _x, int _y );
     virtual const char* data(int _x, int _y) const ;
     virtual const char* rawData( int _x, int _y ) const;
-#if OPENSHIVA_13_OR_MORE
     virtual GTLCore::RegionI boundingBox() const;
-#endif
     virtual ConstIterator* createIterator() const;
     virtual Iterator* createIterator();
 private:

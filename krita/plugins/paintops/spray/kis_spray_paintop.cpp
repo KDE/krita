@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008,2009,2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2012 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@
 KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter)
         , m_settings(settings)
+        , m_isPresetValid(true)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -62,8 +63,14 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     // TODO: what to do with proportional sizes?
     m_shapeDynamicsProperties.loadSettings(settings);
 
+    if (!m_shapeProperties.enabled && !m_brushOption.brush()) {
+        // in case the preset does not contain the definition for KisBrush
+        m_isPresetValid = false;
+        kWarning() << "Preset is not valid. Painting is not possible. Use the preset editor to fix current brush engine preset.";
+    }
+
     m_sprayBrush.setProperties( &m_properties,&m_colorProperties,
-                                &m_shapeProperties, &m_shapeDynamicsProperties,m_brushOption.brush());
+                                &m_shapeProperties, &m_shapeDynamicsProperties, m_brushOption.brush());
 
     m_sprayBrush.setFixedDab( cachedDab() );
 
@@ -82,7 +89,9 @@ KisSprayPaintOp::~KisSprayPaintOp()
 
 qreal KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()) return m_spacing;
+    if (!painter() || !m_isPresetValid) {
+        return m_spacing;
+    }
 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());

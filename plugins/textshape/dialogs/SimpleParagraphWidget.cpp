@@ -49,8 +49,8 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
           m_tool(tool),
           m_directionButtonState(Auto),
           m_styleManager(0),
-          m_thumbnailer(0),
-          m_stylesModel(0)
+          m_thumbnailer(new KoStyleThumbnailer()),
+          m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle))
 {
     widget.setupUi(this);
     widget.alignCenter->setDefaultAction(tool->action("format_aligncenter"));
@@ -87,8 +87,6 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     connect(widget.bulletListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
     connect(widget.numberedListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
 
-    m_thumbnailer = new KoStyleThumbnailer();
-    m_stylesModel = new StylesModel(0, StylesModel::ParagraphStyle);
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
     widget.paragraphStyleCombo->setStylesModel(m_stylesModel);
     connect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));

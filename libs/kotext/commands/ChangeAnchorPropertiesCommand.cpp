@@ -54,6 +54,9 @@ void ChangeAnchorPropertiesCommand::redo()
 
     copyLayoutProperties(&m_newAnchor, m_anchor);
 
+    if (m_anchor->anchorType() == KoTextAnchor::AnchorPage) {
+        m_anchor->shape()->setParent(0);
+    }
     m_anchor->shape()->notifyChanged();
     const_cast<QTextDocument *>(m_anchor->document())->markContentsDirty(m_anchor->positionInDocument(), 0);
 }
@@ -61,8 +64,11 @@ void ChangeAnchorPropertiesCommand::redo()
 void ChangeAnchorPropertiesCommand::undo()
 {
     KUndo2Command::undo();
-
     copyLayoutProperties(&m_oldAnchor, m_anchor);
+
+    if (m_anchor->anchorType() == KoTextAnchor::AnchorPage) {
+        m_anchor->shape()->setParent(0);
+    }
     m_anchor->shape()->notifyChanged();
     const_cast<QTextDocument *>(m_anchor->document())->markContentsDirty(m_anchor->positionInDocument(), 0);
 }

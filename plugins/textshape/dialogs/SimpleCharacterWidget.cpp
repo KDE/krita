@@ -46,7 +46,8 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
       m_blockSignals(false),
       m_comboboxHasBidiItems(false),
       m_tool(tool),
-      m_thumbnailer(0)
+      m_thumbnailer(new KoStyleThumbnailer()),
+      m_stylesModel(new StylesModel(0, StylesModel::CharacterStyle))
 {
     widget.setupUi(this);
     widget.bold->setDefaultAction(tool->action("format_bold"));
@@ -82,9 +83,6 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
 
     widget.fontsFrame->setColumnStretch(0,1);
 
-    m_thumbnailer = new KoStyleThumbnailer();
-
-    m_stylesModel = new StylesModel(0, StylesModel::CharacterStyle);
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
     widget.characterStyleCombo->setStylesModel(m_stylesModel);
     connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
@@ -128,7 +126,7 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
         style->applyStyle(comparisonFormat);
         //Here we are making quite a few assumptions:
         //i. we can set the "ensured" properties on a blank charFormat. These corresponds to Qt default. We are not creating false positive (ie. different styles showing as identical).
-        //ii. a property which will return as false with toBool() is identical to an unset property (this test is done in the clearUnsetProperties method
+        //ii. a property whose toBool returns as false is identical to an unset property (this is done through the clearUnsetProperties method)
         style->ensureMinimalProperties(comparisonFormat);
         style->ensureMinimalProperties(m_currentCharFormat);
         clearUnsetProperties(comparisonFormat);

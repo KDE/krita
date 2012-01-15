@@ -30,6 +30,7 @@
 #include <QImage>
 
 #include <KIcon>
+#include <KLocale>
 
 #include <KDebug>
 
@@ -42,11 +43,11 @@ StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *paren
       m_modelType(modelType),
       m_styleMapper(new QSignalMapper(this)){
     setStyleManager(manager);
-    //Create a default characterStyle for the preview of "As paragraph" character style
+    //Create a default characterStyle for the preview of "None" character style
     if (m_modelType == StylesModel::CharacterStyle) {
         m_defaultCharacterStyle = new KoCharacterStyle();
         m_defaultCharacterStyle->setStyleId(-1);
-        m_defaultCharacterStyle->setName(QString("As paragraph"));
+        m_defaultCharacterStyle->setName(i18n("None"));
         m_defaultCharacterStyle->setFontPointSize(12);
     }
 
@@ -109,7 +110,7 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
                 if (!usedStyle) {
                     usedStyle = m_defaultCharacterStyle;
                 }
-                usedStyle->setName(QString("As paragraph"));
+                usedStyle->setName(i18n("None"));
                 if (usedStyle->styleId() >= 0) { //if the styleId is -1, we are using the default character style
                     usedStyle->setStyleId(-usedStyle->styleId()); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
                 }
@@ -198,7 +199,7 @@ QImage StylesModel::stylePreview(int row, QSize size)
             if (!usedStyle) {
                 usedStyle = m_defaultCharacterStyle;
             }
-            usedStyle->setName(QString("As paragraph"));
+            usedStyle->setName(i18n("None"));
             if (usedStyle->styleId() >= 0) {
                 usedStyle->setStyleId(-usedStyle->styleId()); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
             }

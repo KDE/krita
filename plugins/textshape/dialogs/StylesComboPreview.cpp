@@ -77,8 +77,8 @@ void StylesComboPreview::init()
     m_addButton->setFlat(true);
     m_addButton->setMinimumSize(16,16);
     m_addButton->setMaximumSize(16, 16);
-//TODO uncomment the following line after string freeze
-//    m_addButton->setToolTip( i18nc( "@action:button Create a new style with the current properties", "Create style" ) );
+//TODO uncomment the following line after string freeze, also remove the _ in the middle of i18_nc call
+//    m_addButton->setToolTip( i18_nc( "@action:button Create a new style with the current properties", "Create style" ) );
     connect(m_addButton, SIGNAL(clicked()), this, SLOT(addNewStyle()));
 
     updateAddButton();

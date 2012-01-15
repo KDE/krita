@@ -38,7 +38,7 @@ class StylesCombo : public QComboBox
 {
     Q_OBJECT
 public:
-    StylesCombo(QWidget *parent);
+    explicit StylesCombo(QWidget *parent);
     ~StylesCombo();
 
     /** Use this method to set the @param model of the combo. */

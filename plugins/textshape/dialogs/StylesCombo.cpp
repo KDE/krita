@@ -23,15 +23,9 @@
 #include "StylesComboPreview.h"
 #include "StylesDelegate.h"
 
-#include <QApplication>
 #include <QListView>
-#include <QSizePolicy>
-#include <QWidget>
 #include <QMouseEvent>
-#include <QPoint>
-#include <QStyleOptionComboBox>
 #include <QStyleOptionViewItemV4>
-#include <QStylePainter>
 
 #include <KDebug>
 
@@ -103,24 +97,21 @@ void StylesCombo::setEditable(bool editable)
 
 void StylesCombo::setLineEdit(QLineEdit *edit)
 {
-    if ( !isEditable() && edit &&
-         !qstrcmp( edit->metaObject()->className(), "QLineEdit" ) )
-    {
+    if (!isEditable() && edit && !qstrcmp(edit->metaObject()->className(), "QLineEdit")) {
         // uic generates code that creates a read-only StylesCombo and then
         // calls combo->setEditable( true ), which causes QComboBox to set up
         // a dumb QLineEdit instead of our nice StylesComboPreview.
         // As some StylesCombo features rely on the StylesComboPreview, we reject
         // this order here.
         delete edit;
-        StylesComboPreview* preview = new StylesComboPreview( this );
+        StylesComboPreview* preview = new StylesComboPreview(this);
         edit = preview;
     }
 
-    QComboBox::setLineEdit( edit );
-    m_preview = qobject_cast<StylesComboPreview*>( edit );
+    QComboBox::setLineEdit(edit);
+    m_preview = qobject_cast<StylesComboPreview*>(edit);
 
-    if ( m_preview )
-    {
+    if (m_preview) {
         connect(m_preview, SIGNAL(resized()), this, SLOT(slotUpdatePreview()));
     }
 

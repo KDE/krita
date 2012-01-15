@@ -117,11 +117,8 @@ QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool r
     QTextBlock block = cursor.block();
     clone->applyStyle(block, true);
 
-    KoCharacterStyle *charStyle = static_cast<KoCharacterStyle*>(clone);
     QTextCharFormat format;
-    if (charStyle) {
-        charStyle->applyStyle(format);
-    }
+    clone->KoCharacterStyle::applyStyle(format);
     cursor.insertText(clone->name(), format);
 
     layoutThumbnail(size, im);

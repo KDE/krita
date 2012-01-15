@@ -1803,13 +1803,10 @@ void TextTool::insertIndexMarker()
 
 void TextTool::setStyle(KoCharacterStyle *style)
 {
-    KoCharacterStyle *charStyle;
+    KoCharacterStyle *charStyle = style;
     //if the given KoCharacterStyle is null, set the KoParagraphStyle character properties
-    if (!style){
+    if (!charStyle){
         charStyle = static_cast<KoCharacterStyle*>(KoTextDocument(m_textShapeData->document()).styleManager()->paragraphStyle(m_textEditor.data()->blockFormat().intProperty(KoParagraphStyle::StyleId)));
-    }
-    else {
-        charStyle = style;
     }
     if (charStyle) {
         m_textEditor.data()->setStyle(charStyle);
@@ -2124,10 +2121,15 @@ void TextTool::createStyleFromCurrentCharFormat(QString name)
 {
     KoTextDocument document(m_textShapeData->document());
     KoStyleManager *styleManager = document.styleManager();
-    KoCharacterStyle *characterStyle = new KoCharacterStyle(m_textEditor.data()->charFormat());
-    characterStyle->setName(name);
-    styleManager->add(characterStyle);
-    m_textEditor.data()->setStyle(characterStyle);
+    KoCharacterStyle *originalCharStyle = styleManager->characterStyle(m_textEditor.data()->charFormat().intProperty(KoCharacterStyle::StyleId));
+    if (!originalCharStyle) {
+        originalCharStyle = static_cast<KoCharacterStyle*>(styleManager->paragraphStyle(m_textEditor.data()->charFormat().intProperty(KoParagraphStyle::StyleId)));
+    }
+    KoCharacterStyle *autoStyle = originalCharStyle->autoStyle(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
+    autoStyle->setName(name);
+    autoStyle->setParent(0);
+    styleManager->add(autoStyle);
+    m_textEditor.data()->setStyle(autoStyle);
     emit charFormatChanged(m_textEditor.data()->charFormat());
 }
 

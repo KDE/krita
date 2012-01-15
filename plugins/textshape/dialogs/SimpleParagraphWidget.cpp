@@ -29,7 +29,6 @@
 #include "StylesModel.h"
 #include "StylesDelegate.h"
 
-#include <KAction>
 #include <KoTextBlockData.h>
 #include <KoParagraphStyle.h>
 #include <KoInlineTextObjectManager.h>
@@ -38,17 +37,20 @@
 #include <KoStyleManager.h>
 #include <KoListLevelProperties.h>
 #include <KoShapePaintingContext.h>
-#include <KDebug>
+
+#include <KAction>
 
 #include <QTextLayout>
 #include <QFlags>
 
+#include <KDebug>
+
 SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
         : QWidget(parent),
+          m_styleManager(0),
           m_blockSignals(false),
           m_tool(tool),
           m_directionButtonState(Auto),
-          m_styleManager(0),
           m_thumbnailer(new KoStyleThumbnailer()),
           m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle))
 {

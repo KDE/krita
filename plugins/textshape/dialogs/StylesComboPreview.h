@@ -22,7 +22,6 @@
 
 #include <QLineEdit>
 
-class QModelIndex;
 class QImage;
 class QPushButton;
 class QSize;

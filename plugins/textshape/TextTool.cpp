@@ -2,7 +2,7 @@
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
- * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
+ * Copyright (C) 2008, 2012 Pierre Stirnweiss <pstirnweiss@googlemail.org>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
@@ -816,6 +816,7 @@ void TextTool::setShapeData(KoTextShapeData *data)
     if (docChanged) {
         if (!m_textEditor.isNull()) {
             disconnect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
+            disconnect(m_textEditor.data(), SIGNAL(textFormatChanged()), this, SLOT(updateActions()));
         }
         m_textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
         Q_ASSERT(m_textEditor.data());
@@ -833,6 +834,7 @@ void TextTool::setShapeData(KoTextShapeData *data)
         }
 
         connect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
+        connect(m_textEditor.data(), SIGNAL(textFormatChanged()), this, SLOT(updateActions()));
     }
     m_textEditor.data()->updateDefaultTextDirection(m_textShapeData->pageDirection());
 }
@@ -1340,8 +1342,9 @@ void TextTool::keyReleaseEvent(QKeyEvent *event)
 void TextTool::updateActions()
 {
     KoTextEditor *textEditor = m_textEditor.data();
-    if (textEditor == 0)
+    if (textEditor == 0) {
         return;
+    }
     m_allowActions = false;
 
     //Update the characterStyle related GUI elements
@@ -1405,9 +1408,10 @@ void TextTool::updateActions()
 
     m_allowActions = true;
 
-    emit charFormatChanged(cf);
-    emit blockFormatChanged(bf);
+    ///TODO if selection contains several different format
     emit blockChanged(textEditor->block());
+    emit charFormatChanged(cf, textEditor->blockCharFormat());
+    emit blockFormatChanged(bf);
 }
 
 void TextTool::updateStyleManager()
@@ -1423,8 +1427,6 @@ void TextTool::updateStyleManager()
 
 void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    kDebug();
-
     Q_UNUSED(toolActivation);
     m_caretTimer.start();
     m_caretTimerState = true;
@@ -1448,14 +1450,13 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
     rect = m_textShape->absoluteTransformation(0).mapRect(rect);
     v.setValue(rect);
     canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, v);
-
     setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
     useCursor(Qt::IBeamCursor);
 
+    updateStyleManager();
     repaintSelection();
     updateSelectionHandler();
     updateActions();
-    updateStyleManager();
     if (m_specialCharacterDocker)
         m_specialCharacterDocker->setEnabled(true);
     readConfig();
@@ -1463,8 +1464,6 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
 
 void TextTool::deactivate()
 {
-    kDebug();
-
     m_caretTimer.stop();
     m_caretTimerState = false;
     repaintCaret();
@@ -1597,14 +1596,24 @@ QList<QWidget *> TextTool::createOptionWidgets()
     QList<QWidget *> widgets;
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
+    if (m_textEditor.data()) {
+        //initialise the char- and par- widgets with the current block and formats.
+        scw->setCurrentBlockFormat(m_textEditor.data()->blockFormat());
+        scw->setCurrentFormat(m_textEditor.data()->charFormat(), m_textEditor.data()-> blockCharFormat());
+        spw->setCurrentBlock(m_textEditor.data()->block());
+        spw->setCurrentFormat(m_textEditor.data()->blockFormat());
+    }
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
     SimpleInsertWidget *siw = new SimpleInsertWidget(this, 0);
 
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
-    connect(this, SIGNAL(charFormatChanged(QTextCharFormat)), scw, SLOT(setCurrentFormat(QTextCharFormat)));
+    connect(this, SIGNAL(charFormatChanged(QTextCharFormat, QTextCharFormat)), scw, SLOT(setCurrentFormat(QTextCharFormat, QTextCharFormat)));
+    connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), scw, SLOT(setCurrentBlockFormat(QTextBlockFormat)));
     connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(scw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
+    connect(scw, SIGNAL(newStyleRequested(QString)), this, SLOT(createStyleFromCurrentCharFormat(QString)));
+    connect(scw, SIGNAL(showStyleManager(int)), this, SLOT(showStyleManager()));
 
 
     // Connect to/with simple paragraph widget (docker)
@@ -1613,6 +1622,8 @@ QList<QWidget *> TextTool::createOptionWidgets()
     connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), spw, SLOT(setCurrentFormat(QTextBlockFormat)));
     connect(spw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(spw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
+    connect(spw, SIGNAL(newStyleRequested(QString)), this, SLOT(createStyleFromCurrentBlockFormat(QString)));
+    connect(spw, SIGNAL(showStyleManager(int)), this, SLOT(showStyleManager()));
 
     // Connect to/with simple table widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));
@@ -1623,8 +1634,9 @@ QList<QWidget *> TextTool::createOptionWidgets()
     connect(siw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
 
     updateStyleManager();
-    if (m_textShape)
+    if (m_textShape) {
         updateActions();
+    }
     scw->setWindowTitle(i18n("Character"));
     widgets.append(scw);
     spw->setWindowTitle(i18n("Paragraph"));
@@ -1802,15 +1814,21 @@ void TextTool::insertIndexMarker()
 
 void TextTool::setStyle(KoCharacterStyle *style)
 {
-    m_textEditor.data()->setStyle(style);
-    emit charFormatChanged(m_textEditor.data()->charFormat());
+    KoCharacterStyle *charStyle = style;
+    //if the given KoCharacterStyle is null, set the KoParagraphStyle character properties
+    if (!charStyle){
+        charStyle = static_cast<KoCharacterStyle*>(KoTextDocument(m_textShapeData->document()).styleManager()->paragraphStyle(m_textEditor.data()->blockFormat().intProperty(KoParagraphStyle::StyleId)));
+    }
+    if (charStyle) {
+        m_textEditor.data()->setStyle(charStyle);
+        updateActions();
+    }
 }
 
 void TextTool::setStyle(KoParagraphStyle *style)
 {
     m_textEditor.data()->setStyle(style);
-    emit blockFormatChanged(m_textEditor.data()->blockFormat());
-    emit charFormatChanged(m_textEditor.data()->charFormat());
+    updateActions();
 }
 
 void TextTool::insertTable()
@@ -2096,6 +2114,38 @@ void TextTool::shapeDataRemoved()
         m_textShapeData = static_cast<KoTextShapeData*>(m_textShape->userData());
         connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
     }
+}
+
+void TextTool::createStyleFromCurrentBlockFormat(QString name)
+{
+    KoTextDocument document(m_textShapeData->document());
+    KoStyleManager *styleManager = document.styleManager();
+    KoParagraphStyle *paragraphStyle = new KoParagraphStyle(m_textEditor.data()->blockFormat(), m_textEditor.data()->charFormat());
+    paragraphStyle->setName(name);
+    styleManager->add(paragraphStyle);
+    m_textEditor.data()->setStyle(paragraphStyle);
+    emit charFormatChanged(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
+    emit blockFormatChanged(m_textEditor.data()->blockFormat());
+}
+
+void TextTool::createStyleFromCurrentCharFormat(QString name)
+{
+    KoTextDocument document(m_textShapeData->document());
+    KoStyleManager *styleManager = document.styleManager();
+    KoCharacterStyle *originalCharStyle = styleManager->characterStyle(m_textEditor.data()->charFormat().intProperty(KoCharacterStyle::StyleId));
+    KoCharacterStyle *autoStyle;
+    if (!originalCharStyle) {
+        KoCharacterStyle blankStyle;
+        originalCharStyle = &blankStyle
+        autoStyle = originalCharStyle->autoStyle(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
+        autoStyle->setParentStyle(0);
+    } else {
+        autoStyle = originalCharStyle->autoStyle(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
+    }
+    autoStyle->setName(name);
+    styleManager->add(autoStyle);
+    m_textEditor.data()->setStyle(autoStyle);
+    emit charFormatChanged(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
 }
 
 // ---------- editing plugins methods.

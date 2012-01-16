@@ -467,6 +467,8 @@ public:
 
     bool operator==(const KoCharacterStyle &other) const;
 
+    bool operator!=(const KoCharacterStyle &other) const;
+
     /**
      * Removes properties from this style that have the same value in other style.
      */

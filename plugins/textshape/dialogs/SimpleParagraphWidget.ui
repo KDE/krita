@@ -118,25 +118,7 @@
       </spacer>
      </item>
      <item row="1" column="0" colspan="11">
-      <widget class="SpecialButton" name="blockFrame">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>32</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
+      <widget class="StylesCombo" name="paragraphStyleCombo">
       </widget>
      </item>
      <item row="2" column="10">
@@ -163,9 +145,9 @@
    <header>dialogs/FormattingButton.h</header>
   </customwidget>
   <customwidget>
-   <class>SpecialButton</class>
-   <extends>QFrame</extends>
-   <header>dialogs/SpecialButton.h</header>
+   <class>StylesCombo</class>
+   <extends>QComboBox</extends>
+   <header>dialogs/StylesCombo.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

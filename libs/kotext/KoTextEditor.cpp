@@ -129,14 +129,20 @@ KoTextEditor::Private::Private(KoTextEditor *qq, QTextDocument *document)
     QObject::connect(&updateRtlTimer, SIGNAL(timeout()), q, SLOT(runDirectionUpdater()));
 }
 
+void KoTextEditor::Private::emitTextFormatChanged()
+{
+    emit q->textFormatChanged();
+}
+
 void KoTextEditor::Private::documentCommandAdded()
 {
     class UndoTextCommand : public KUndo2Command
     {
     public:
-        UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
+        UndoTextCommand(QTextDocument *document, KoTextEditor::Private *p, KUndo2Command *parent = 0)
             : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
               m_document(document)
+            , m_p(p)
         {}
 
         void undo() {
@@ -144,6 +150,7 @@ void KoTextEditor::Private::documentCommandAdded()
             if (doc == 0)
                 return;
             doc->undo(KoTextDocument(doc).textEditor()->cursor());
+            m_p->emitTextFormatChanged();
         }
 
         void redo() {
@@ -151,9 +158,11 @@ void KoTextEditor::Private::documentCommandAdded()
             if (doc == 0)
                 return;
             doc->redo(KoTextDocument(doc).textEditor()->cursor());
+            m_p->emitTextFormatChanged();
         }
 
         QWeakPointer<QTextDocument> m_document;
+        KoTextEditor::Private *m_p;
     };
 
     //kDebug() << "editor state: " << editorState << " headcommand: " << headCommand;
@@ -172,7 +181,7 @@ void KoTextEditor::Private::documentCommandAdded()
         }
     }
 
-    new UndoTextCommand(document, headCommand);
+    new UndoTextCommand(document, this, headCommand);
 }
 
 void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, QString title)
@@ -564,6 +573,7 @@ void KoTextEditor::bold(bool bold)
     d->caret.mergeCharFormat(format);
     registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Bold"), format, prevFormat, false);
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::italic(bool italic)
@@ -580,6 +590,7 @@ void KoTextEditor::italic(bool italic)
     d->caret.mergeCharFormat(format);
     registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Italic"), format, prevFormat, false);
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::underline(bool underline)
@@ -602,6 +613,7 @@ void KoTextEditor::underline(bool underline)
     d->caret.mergeCharFormat(format);
     registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Underline"), format, prevFormat, false);
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::strikeOut(bool strikeout)
@@ -623,6 +635,7 @@ void KoTextEditor::strikeOut(bool strikeout)
     d->caret.mergeCharFormat(format);
     registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Strike Out"), format, prevFormat, false);
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::setHorizontalTextAlignment(Qt::Alignment align)
@@ -645,6 +658,7 @@ void KoTextEditor::setHorizontalTextAlignment(Qt::Alignment align)
     d->updateState(KoTextEditor::Private::Format, i18n("Set Horizontal Alignment"));
     BlockFormatVisitor::visitSelection(this, aligner, i18n("Set Horizontal Alignment"));
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::setVerticalTextAlignment(Qt::Alignment align)
@@ -666,6 +680,7 @@ void KoTextEditor::setVerticalTextAlignment(Qt::Alignment align)
     d->caret.mergeCharFormat(format);
     registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set Vertical Alignment"), format, prevFormat, false);
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::decreaseIndent()
@@ -688,6 +703,7 @@ void KoTextEditor::decreaseIndent()
     d->updateState(KoTextEditor::Private::Format, i18n("Decrease Indent"));
     BlockFormatVisitor::visitSelection(this, indenter, i18n("Decrease Indent"));
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::increaseIndent()
@@ -710,6 +726,7 @@ void KoTextEditor::increaseIndent()
     d->updateState(KoTextEditor::Private::Format, i18n("Increase Indent"));
     BlockFormatVisitor::visitSelection(this, indenter, i18n("Increase Indent"));
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 class FontResizer : public CharFormatVisitor
@@ -746,6 +763,7 @@ void KoTextEditor::decreaseFontSize()
     FontResizer sizer(FontResizer::Shrink);
     CharFormatVisitor::visitSelection(this, sizer, i18n("Decrease font size"));
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::increaseFontSize()
@@ -758,6 +776,7 @@ void KoTextEditor::increaseFontSize()
     FontResizer sizer(FontResizer::Grow);
     CharFormatVisitor::visitSelection(this, sizer, i18n("Increase font size"));
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::setFontFamily(const QString &font)
@@ -773,6 +792,7 @@ void KoTextEditor::setFontFamily(const QString &font)
     d->caret.mergeCharFormat(format);
     registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set Font"), format, prevFormat, false);
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::setFontSize(qreal size)
@@ -788,6 +808,7 @@ void KoTextEditor::setFontSize(qreal size)
     d->caret.mergeCharFormat(format);
     registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set Font Size"), format, prevFormat, false);
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::setTextBackgroundColor(const QColor &color)
@@ -803,6 +824,7 @@ void KoTextEditor::setTextBackgroundColor(const QColor &color)
     d->caret.mergeCharFormat(format);
     registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set Background Color"), format, prevFormat, false);
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::setTextColor(const QColor &color)
@@ -818,6 +840,7 @@ void KoTextEditor::setTextColor(const QColor &color)
     d->caret.mergeCharFormat(format);
     registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set Text Color"), format, prevFormat, false);
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::setStyle(KoCharacterStyle *style)
@@ -826,6 +849,7 @@ void KoTextEditor::setStyle(KoCharacterStyle *style)
     d->updateState(KoTextEditor::Private::Format, i18n("Set Character Style"));
     recursiveSetStyle(d->document->rootFrame()->begin(), style);
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 // To figure out if a the blocks of the selection are write protected we need to traverse
@@ -962,6 +986,7 @@ void KoTextEditor::setStyle(KoParagraphStyle *style)
         block = block.next();
     }
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::setDefaultFormat()
@@ -975,6 +1000,7 @@ void KoTextEditor::setDefaultFormat()
         registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set default format"), format, prevFormat, false);
     }
     d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::addBookmark(const QString &name)
@@ -1305,6 +1331,7 @@ void KoTextEditor::toggleListNumbering(bool numberingEnabled)
     }
 
     addCommand(new ListItemNumberingCommand(block(), numberingEnabled));
+    emit textFormatChanged();
 }
 
 void KoTextEditor::setListProperties(KoListStyle::Style style,
@@ -1319,6 +1346,7 @@ void KoTextEditor::setListProperties(KoListStyle::Style style,
         flags = MergeWithAdjacentList;
     }
     addCommand(new ChangeListCommand(d->caret, style, level, flags));
+    emit textFormatChanged();
 }
 
 
@@ -2092,6 +2120,7 @@ void KoTextEditor::mergeBlockFormat(const QTextBlockFormat &modifier)
         return;
     }
     d->caret.mergeBlockFormat(modifier);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::mergeCharFormat(const QTextCharFormat &modifier)
@@ -2291,6 +2320,7 @@ void KoTextEditor::setBlockFormat(const QTextBlockFormat &format)
 
     Q_UNUSED(format)
     d->caret.setBlockFormat(format);
+    emit textFormatChanged();
 }
 
 void KoTextEditor::setCharFormat(const QTextCharFormat &format)
@@ -2300,6 +2330,7 @@ void KoTextEditor::setCharFormat(const QTextCharFormat &format)
     }
 
     d->caret.setCharFormat(format);
+    emit textFormatChanged();
 }
 
 //void KoTextEditor::setTableFormat(const QTextTableFormat &format)

@@ -2,6 +2,7 @@
  * Copyright (C) 2007, 2008, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2009-2010 Casper Boemann <cbo@boemann.dk>
  * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,28 +23,36 @@
 #include "TextTool.h"
 #include <ListItemsHelper.h>
 #include "FormattingButton.h"
-#include "StylesWidget.h"
-#include "SpecialButton.h"
+#include <KoStyleThumbnailer.h>
 
-#include <KAction>
+#include "StylesCombo.h"
+#include "StylesModel.h"
+#include "StylesDelegate.h"
+
 #include <KoTextBlockData.h>
 #include <KoParagraphStyle.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextDocumentLayout.h>
 #include <KoZoomHandler.h>
-#include <KoStyleThumbnailer.h>
 #include <KoStyleManager.h>
 #include <KoListLevelProperties.h>
 #include <KoShapePaintingContext.h>
-#include <KDebug>
+
+#include <KAction>
 
 #include <QTextLayout>
+#include <QFlags>
+
+#include <KDebug>
 
 SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
         : QWidget(parent),
-        m_blockSignals(false),
-        m_tool(tool),
-        m_directionButtonState(Auto)
+          m_styleManager(0),
+          m_blockSignals(false),
+          m_tool(tool),
+          m_directionButtonState(Auto),
+          m_thumbnailer(new KoStyleThumbnailer()),
+          m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle))
 {
     widget.setupUi(this);
     widget.alignCenter->setDefaultAction(tool->action("format_aligncenter"));
@@ -80,20 +89,17 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     connect(widget.bulletListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
     connect(widget.numberedListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
 
-    m_stylePopup = new StylesWidget(this, true, Qt::Popup);
-    m_stylePopup->setFrameShape(QFrame::StyledPanel);
-    m_stylePopup->setFrameShadow(QFrame::Raised);
-    widget.blockFrame->setStylesWidget(m_stylePopup);
-
-    connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)));
-    connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(doneWithFocus()));
-    connect(m_stylePopup, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(hidePopup()));
-
-    m_thumbnailer = new KoStyleThumbnailer();
+    m_stylesModel->setStyleThumbnailer(m_thumbnailer);
+    widget.paragraphStyleCombo->setStylesModel(m_stylesModel);
+    connect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+    connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
+    connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
+    connect(widget.paragraphStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
 }
 
 SimpleParagraphWidget::~SimpleParagraphWidget()
 {
+    //the style model is set on the comboBox who takes over ownership
     delete m_thumbnailer;
 }
 
@@ -152,6 +158,10 @@ void SimpleParagraphWidget::fillListButtons()
 
 void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
 {
+    if (block == m_currentBlock) {
+        return;
+    }
+
     m_currentBlock = block;
     m_blockSignals = true;
     struct Finally {
@@ -180,47 +190,86 @@ void SimpleParagraphWidget::setCurrentBlock(const QTextBlock &block)
             }
     }
 
-
-    QTextBlockFormat format;
-
-    int id = format.intProperty(KoParagraphStyle::StyleId);
-    KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
-    if (style) {
-        widget.blockFrame->setStylePreview(m_thumbnailer->thumbnail(style, widget.blockFrame->size()));
-    }
-    m_stylePopup->setCurrentFormat(format);
+    setCurrentFormat(m_currentBlock.blockFormat());
 }
 
 void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
 {
-    if (format == m_currentBlockFormat)
+    if (!m_styleManager || format == m_currentBlockFormat)
         return;
     m_currentBlockFormat = format;
 
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
     KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
     if (style) {
-        widget.blockFrame->setStylePreview(m_thumbnailer->thumbnail(m_styleManager->paragraphStyle(id), widget.blockFrame->contentsRect().size()));
+        bool unchanged = true;
+        foreach(int property, m_currentBlockFormat.properties().keys()) {
+            if (property == QTextFormat::ObjectIndex)
+                continue;
+            if (property == KoParagraphStyle::ListStyleId)
+                continue;
+            if (property == QTextBlockFormat::BlockAlignment) { //the default alignment can be retrieved in the defaultTextOption. However, calligra sets the Qt::AlignAbsolute flag, so we need to or this flag with the default alignment before comparing.
+                if ((m_currentBlockFormat.property(property) != style->value(property))
+                        && !(style->value(property).isNull()
+                             && ((m_currentBlockFormat.intProperty(property)) == int(m_currentBlock.document()->defaultTextOption().alignment()| Qt::AlignAbsolute)))) {
+                    unchanged = false;
+                    break;
+                }
+                else {
+                    continue;
+                }
+            }
+            if (property == KoParagraphStyle::TextProgressionDirection) {
+                if (style->value(property).isNull() && m_currentBlockFormat.intProperty(property) == KoText::LeftRightTopBottom) {
+                    //LTR seems to be Qt default when unset
+                    continue;
+                }
+            }
+            if ((m_currentBlockFormat.property(property) != style->value(property)) && !(style->value(property).isNull() && !m_currentBlockFormat.property(property).toBool())) {
+                //the last check seems to work. might be cause of a bug. The problem is when comparing an unset property in the style with a set to {0, false, ...) property in the format (eg. set then unset bold)
+                unchanged = false;
+                break;
+            }
+        }
+        //we are updating the combo's selected item to what is the current format. we do not want this to apply the style as it would mess up the undo stack, the change tracking,...
+        disconnect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+        widget.paragraphStyleCombo->setCurrentIndex(m_stylesModel->indexForParagraphStyle(*style).row());
+        widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
+        m_stylesModel->setCurrentParagraphStyle(id);
+        connect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
     }
-    m_stylePopup->setCurrentFormat(format);
 }
 
 void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
-    m_stylePopup->setStyleManager(sm);
-}
-
-void SimpleParagraphWidget::hidePopup()
-{
-    widget.blockFrame->hidePopup();
+    //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
+    disconnect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+    m_stylesModel->setStyleManager(sm);
+    connect(widget.paragraphStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
 }
 
 void SimpleParagraphWidget::listStyleChanged(int id)
 {
     emit doneWithFocus();
     if (m_blockSignals) return;
-    m_tool->textEditor()->setListProperties(static_cast<KoListStyle::Style> (id));
+    m_tool->textEditor()->setListProperties(static_cast<KoListStyle::Style>(id));
+}
+
+void SimpleParagraphWidget::styleSelected(int index)
+{
+    KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(m_stylesModel->index(index).internalId());
+    if (paragStyle) {
+        emit paragraphStyleSelected(paragStyle);
+    }
+    emit doneWithFocus();
+}
+
+void SimpleParagraphWidget::slotShowStyleManager(int index)
+{
+    int styleId = m_stylesModel->index(index).internalId();
+    emit showStyleManager(styleId);
+    emit doneWithFocus();
 }
 
 #include <SimpleParagraphWidget.moc>

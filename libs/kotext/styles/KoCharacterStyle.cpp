@@ -1827,6 +1827,11 @@ bool KoCharacterStyle::operator==(const KoCharacterStyle &other) const
      return compareCharacterProperties(other);
 }
 
+bool KoCharacterStyle::operator!=(const KoCharacterStyle &other) const
+{
+     return !compareCharacterProperties(other);
+}
+
 bool KoCharacterStyle::compareCharacterProperties(const KoCharacterStyle &other) const
 {
     return other.d->stylesPrivate == d->stylesPrivate;
@@ -2148,9 +2153,9 @@ QVariant KoCharacterStyle::value(int key) const
     QVariant variant = d->stylesPrivate.value(key);
     if (variant.isNull()) {
         if (d->parentStyle)
-            return d->parentStyle->value(key);
+            variant = d->parentStyle->value(key);
         else if (d->defaultStyle)
-            return d->defaultStyle->value(key);
+            variant = d->defaultStyle->value(key);
     }
     return variant;
 }

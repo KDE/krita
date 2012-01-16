@@ -61,6 +61,7 @@ class KOTEXT_EXPORT KoParagraphStyle : public KoCharacterStyle
     Q_OBJECT
 public:
     enum Property {
+        // Every 10 properties, the decimal number shown indicates the decimal offstet over the QTextFormat::UserProperty enum value
         StyleId = QTextFormat::UserProperty + 1,
         // Linespacing properties
         PercentLineHeight,  ///< this propery is used for a percentage of the highest character on that line
@@ -71,7 +72,7 @@ public:
         AlignLastLine,      ///< When the paragraph is justified, what to do with the last word line
         WidowThreshold,     ///< If 'keep together'=false, amount of lines to keep it anyway.
         OrphanThreshold,   ///< If 'keep together'=false, amount of lines to keep it anyway.
-        DropCaps,       ///< defines if a paragraph renders its first char(s) with drop-caps
+        DropCaps, /*10*/   ///< defines if a paragraph renders its first char(s) with drop-caps
         DropCapsLength, ///< Number of glyphs to show as drop-caps
         DropCapsLines,  ///< Number of lines that the drop-caps span
         DropCapsDistance,   ///< Distance between drop caps and text
@@ -83,7 +84,7 @@ public:
         HasTopBorder,   ///< If true, paint a border on the top
         HasRightBorder, ///< If true, paint a border on the right
         HasBottomBorder,///< If true, paint a border on the bottom
-        BorderLineWidth,///< Thickness of inner-border
+        BorderLineWidth, /*20*/ ///< Thickness of inner-border
         SecondBorderLineWidth,  ///< Thickness of outer-border
         DistanceToSecondBorder, ///< Distance between inner and outer border
         LeftPadding,    ///< distance between text and border
@@ -93,7 +94,7 @@ public:
         LeftBorderWidth,        ///< The thickness of the border, or 0 if there is no border
         LeftInnerBorderWidth,   ///< In case of style being 'double' the thickness of the inner border line
         LeftBorderSpacing,      ///< In case of style being 'double' the space between the inner and outer border lines
-        LeftBorderStyle,        ///< The border style. (see BorderStyle)
+        LeftBorderStyle, /*30*/ ///< The border style. (see BorderStyle)
         LeftBorderColor,        ///< The border Color
         TopBorderWidth,         ///< The thickness of the border, or 0 if there is no border
         TopInnerBorderWidth,    ///< In case of style being 'double' the thickness of the inner border line
@@ -103,7 +104,7 @@ public:
         RightBorderWidth,       ///< The thickness of the border, or 0 if there is no border
         RightInnerBorderWidth,  ///< In case of style being 'double' the thickness of the inner border line
         RightBorderSpacing,     ///< In case of style being 'double' the space between the inner and outer border lines
-        RightBorderStyle,       ///< The border style. (see BorderStyle)
+        RightBorderStyle, /*40*/ ///< The border style. (see BorderStyle)
         RightBorderColor,       ///< The border Color
         BottomBorderWidth,      ///< The thickness of the border, or 0 if there is no border
         BottomInnerBorderWidth, ///< In case of style being 'double' the thickness of the inner border line
@@ -115,7 +116,7 @@ public:
         ListStyleId,            ///< Style Id of associated list style
         ListStartValue,         ///< Int with the list-value that that parag will have. Ignored if this is not a list.
         RestartListNumbering,   ///< boolean to indicate that this paragraph will have numbering restart at the list-start. Ignored if this is not a list.
-        ListLevel,               ///< int with the list-level that the paragraph will get when this is a list (numbered paragraphs)
+        ListLevel, /*50*/       ///< int with the list-level that the paragraph will get when this is a list (numbered paragraphs)
         IsListHeader,           ///< bool, if true the paragraph shows up as a list item, but w/o a list label.
         UnnumberedListItem,     ///< bool. if true this paragraph is part of a list but is not numbered
 
@@ -133,7 +134,7 @@ public:
 
         // numbering
         LineNumbering,           ///< bool, specifies whether lines should be numbered in this paragraph
-        LineNumberStartValue,    ///< integer value that specifies the number for the first line in the paragraph
+        LineNumberStartValue, /*60*/ ///< integer value that specifies the number for the first line in the paragraph
         SectionStartings,            ///< list of section definitions
         SectionEndings,               ///< list <end of a named section>
 // do 15.5.24

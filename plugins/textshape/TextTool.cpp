@@ -2133,12 +2133,16 @@ void TextTool::createStyleFromCurrentCharFormat(QString name)
     KoTextDocument document(m_textShapeData->document());
     KoStyleManager *styleManager = document.styleManager();
     KoCharacterStyle *originalCharStyle = styleManager->characterStyle(m_textEditor.data()->charFormat().intProperty(KoCharacterStyle::StyleId));
+    KoCharacterStyle *autoStyle;
     if (!originalCharStyle) {
-        originalCharStyle = static_cast<KoCharacterStyle*>(styleManager->paragraphStyle(m_textEditor.data()->charFormat().intProperty(KoParagraphStyle::StyleId)));
+        KoCharacterStyle blankStyle;
+        originalCharStyle = &blankStyle
+        autoStyle = originalCharStyle->autoStyle(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
+        autoStyle->setParentStyle(0);
+    } else {
+        autoStyle = originalCharStyle->autoStyle(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
     }
-    KoCharacterStyle *autoStyle = originalCharStyle->autoStyle(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
     autoStyle->setName(name);
-    autoStyle->setParent(0);
     styleManager->add(autoStyle);
     m_textEditor.data()->setStyle(autoStyle);
     emit charFormatChanged(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());

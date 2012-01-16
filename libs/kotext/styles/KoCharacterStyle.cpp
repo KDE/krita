@@ -470,37 +470,56 @@ KoCharacterStyle *KoCharacterStyle::autoStyle(const QTextCharFormat &format, QTe
     return autoStyle;
 }
 
+struct FragmentData
+{
+    FragmentData(const QTextCharFormat &format, int position, int length)
+    : format(format)
+    , position(position)
+    , length(length)
+    {}
+
+    QTextCharFormat format;
+    int position;
+    int length;
+};
+
 void KoCharacterStyle::applyStyle(QTextBlock &block) const
 {
     QTextCursor cursor(block);
     QTextCharFormat cf = cursor.blockCharFormat();
     applyStyle(cf);
-    QTextCharFormat format = cf;
     ensureMinimalProperties(cf);
     cursor.setBlockCharFormat(cf);
 
     // be sure that we keep the InlineInstanceId, anchor information and ChangeTrackerId when applying a style
+
+    QList<FragmentData> fragments;
     for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
-        cursor.setPosition(it.fragment().position());
-        cursor.setPosition(it.fragment().position() + it.fragment().length(), QTextCursor::KeepAnchor);
+        QTextFragment currentFragment = it.fragment();
+        if (currentFragment.isValid()) {
+            QTextCharFormat format(cf);
+            QVariant v = currentFragment.charFormat().property(InlineInstanceId);
+            if (!v.isNull()) {
+                format.setProperty(InlineInstanceId, v);
+            }
 
-        QTextCharFormat f(cf);
+            v = currentFragment.charFormat().property(ChangeTrackerId);
+            if (!v.isNull()) {
+                format.setProperty(ChangeTrackerId, v);
+            }
 
-        QVariant v = it.fragment().charFormat().property(InlineInstanceId);
-        if (!v.isNull()) {
-            f.setProperty(InlineInstanceId, v);
+            if (currentFragment.charFormat().isAnchor()) {
+                format.setAnchor(true);
+                format.setAnchorHref(currentFragment.charFormat().anchorHref());
+            }
+            fragments.append(FragmentData(format, currentFragment.position(), currentFragment.length()));
         }
+    }
 
-        v = it.fragment().charFormat().property(ChangeTrackerId);
-        if (!v.isNull()) {
-            f.setProperty(ChangeTrackerId, v);
-        }
-
-        if (it.fragment().charFormat().isAnchor()) {
-            f.setAnchor(true);
-            f.setAnchorHref(it.fragment().charFormat().anchorHref());
-        }
-        cursor.setCharFormat(f);
+    foreach (const FragmentData &fragment, fragments) {
+        cursor.setPosition(fragment.position);
+        cursor.setPosition(fragment.position + fragment.length, QTextCursor::KeepAnchor);
+        cursor.setCharFormat(fragment.format);
     }
 }
 

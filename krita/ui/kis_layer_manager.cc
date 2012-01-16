@@ -529,6 +529,7 @@ void KisLayerManager::layerDuplicate()
         activateLayer(dup);
         dup->setDirty();
         m_view->canvas()->update();
+        m_view->nodeManager()->activateNode(dup);
     } else {
         KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
     }

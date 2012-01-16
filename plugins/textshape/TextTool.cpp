@@ -1410,7 +1410,7 @@ void TextTool::updateActions()
 
     ///TODO if selection contains several different format
     emit blockChanged(textEditor->block());
-    emit charFormatChanged(cf);
+    emit charFormatChanged(cf, textEditor->blockCharFormat());
     emit blockFormatChanged(bf);
 }
 
@@ -1599,7 +1599,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     if (m_textEditor.data()) {
         //initialise the char- and par- widgets with the current block and formats.
         scw->setCurrentBlockFormat(m_textEditor.data()->blockFormat());
-        scw->setCurrentFormat(m_textEditor.data()->charFormat());
+        scw->setCurrentFormat(m_textEditor.data()->charFormat(), m_textEditor.data()-> blockCharFormat());
         spw->setCurrentBlock(m_textEditor.data()->block());
         spw->setCurrentFormat(m_textEditor.data()->blockFormat());
     }
@@ -1608,7 +1608,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
 
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
-    connect(this, SIGNAL(charFormatChanged(QTextCharFormat)), scw, SLOT(setCurrentFormat(QTextCharFormat)));
+    connect(this, SIGNAL(charFormatChanged(QTextCharFormat, QTextCharFormat)), scw, SLOT(setCurrentFormat(QTextCharFormat, QTextCharFormat)));
     connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), scw, SLOT(setCurrentBlockFormat(QTextBlockFormat)));
     connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(scw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
@@ -2124,7 +2124,7 @@ void TextTool::createStyleFromCurrentBlockFormat(QString name)
     paragraphStyle->setName(name);
     styleManager->add(paragraphStyle);
     m_textEditor.data()->setStyle(paragraphStyle);
-    emit charFormatChanged(m_textEditor.data()->charFormat());
+    emit charFormatChanged(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
     emit blockFormatChanged(m_textEditor.data()->blockFormat());
 }
 
@@ -2141,7 +2141,7 @@ void TextTool::createStyleFromCurrentCharFormat(QString name)
     autoStyle->setParent(0);
     styleManager->add(autoStyle);
     m_textEditor.data()->setStyle(autoStyle);
-    emit charFormatChanged(m_textEditor.data()->charFormat());
+    emit charFormatChanged(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
 }
 
 // ---------- editing plugins methods.

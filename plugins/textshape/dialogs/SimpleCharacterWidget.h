@@ -42,7 +42,7 @@ public:
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
-    void setCurrentFormat(const QTextCharFormat& format);
+    void setCurrentFormat(const QTextCharFormat& format, const QTextCharFormat& refBlockCharFormat);
     void setCurrentBlockFormat(const QTextBlockFormat &format);
 
 private slots:

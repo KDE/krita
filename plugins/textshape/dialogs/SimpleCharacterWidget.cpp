@@ -107,7 +107,7 @@ void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
     connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
 }
 
-void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
+void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, const QTextCharFormat& refBlockCharFormat)
 {
     if (!m_styleManager || format == m_currentCharFormat) {
         return;
@@ -122,7 +122,7 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format)
     }
     if (style) {
         bool unchanged = true;
-        QTextCharFormat comparisonFormat;
+        QTextCharFormat comparisonFormat = refBlockCharFormat;
         style->applyStyle(comparisonFormat);
         //Here we are making quite a few assumptions:
         //i. we can set the "ensured" properties on a blank charFormat. These corresponds to Qt default. We are not creating false positive (ie. different styles showing as identical).

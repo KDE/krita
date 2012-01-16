@@ -163,7 +163,7 @@ signals:
     /// emitted every time a different styleManager is set.
     void styleManagerChanged(KoStyleManager *manager);
     /// emitted every time a caret move leads to a different character format being under the caret
-    void charFormatChanged(const QTextCharFormat &format);
+    void charFormatChanged(const QTextCharFormat &format, const QTextCharFormat& refBlockCharFormat);
     /// emitted every time a caret move leads to a different paragraph format being under the caret
     void blockFormatChanged(const QTextBlockFormat &format);
     /// emitted every time a caret move leads to a different paragraph format being under the caret

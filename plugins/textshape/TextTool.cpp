@@ -2136,7 +2136,7 @@ void TextTool::createStyleFromCurrentCharFormat(QString name)
     KoCharacterStyle *autoStyle;
     if (!originalCharStyle) {
         KoCharacterStyle blankStyle;
-        originalCharStyle = &blankStyle
+        originalCharStyle = &blankStyle;
         autoStyle = originalCharStyle->autoStyle(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
         autoStyle->setParentStyle(0);
     } else {

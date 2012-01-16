@@ -58,6 +58,8 @@ public:
     void runDirectionUpdater();
     void clearCharFormatProperty(int propertyId);
 
+    void emitTextFormatChanged();
+
     KoTextEditor *q;
     QTextCursor caret;
     QTextDocument *document;

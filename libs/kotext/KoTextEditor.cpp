@@ -129,14 +129,20 @@ KoTextEditor::Private::Private(KoTextEditor *qq, QTextDocument *document)
     QObject::connect(&updateRtlTimer, SIGNAL(timeout()), q, SLOT(runDirectionUpdater()));
 }
 
+void KoTextEditor::Private::emitTextFormatChanged()
+{
+    emit q->textFormatChanged();
+}
+
 void KoTextEditor::Private::documentCommandAdded()
 {
     class UndoTextCommand : public KUndo2Command
     {
     public:
-        UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
+        UndoTextCommand(QTextDocument *document, KoTextEditor::Private *p, KUndo2Command *parent = 0)
             : KUndo2Command(i18nc("(qtundo-format)", "Text"), parent),
               m_document(document)
+            , m_p(p)
         {}
 
         void undo() {
@@ -144,6 +150,7 @@ void KoTextEditor::Private::documentCommandAdded()
             if (doc == 0)
                 return;
             doc->undo(KoTextDocument(doc).textEditor()->cursor());
+            m_p->emitTextFormatChanged();
         }
 
         void redo() {
@@ -151,9 +158,11 @@ void KoTextEditor::Private::documentCommandAdded()
             if (doc == 0)
                 return;
             doc->redo(KoTextDocument(doc).textEditor()->cursor());
+            m_p->emitTextFormatChanged();
         }
 
         QWeakPointer<QTextDocument> m_document;
+        KoTextEditor::Private *m_p;
     };
 
     //kDebug() << "editor state: " << editorState << " headcommand: " << headCommand;
@@ -172,7 +181,7 @@ void KoTextEditor::Private::documentCommandAdded()
         }
     }
 
-    new UndoTextCommand(document, headCommand);
+    new UndoTextCommand(document, this, headCommand);
 }
 
 void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, QString title)

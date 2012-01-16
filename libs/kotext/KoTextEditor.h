@@ -469,6 +469,7 @@ private:
     Q_PRIVATE_SLOT(d, void runDirectionUpdater())
 
     class Private;
+    friend class Private;
     Private* const d;
 };
 

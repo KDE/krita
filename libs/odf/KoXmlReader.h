@@ -126,6 +126,8 @@ public:
     KoXmlNode nextSibling() const;
     KoXmlNode previousSibling() const;
 
+    KoXmlElement firstChildElement() const;
+
     // equivalent to node.childNodes().count() if node is a QDomNode instance
     int childNodesCount() const;
 

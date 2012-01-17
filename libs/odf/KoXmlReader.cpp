@@ -2134,6 +2134,15 @@ KoXmlNode KoXmlNode::firstChild() const
     return d->first ? KoXmlNode(d->first) : KoXmlNode();
 }
 
+KoXmlElement KoXmlNode::firstChildElement() const
+{
+    KoXmlElement element;
+    forEachElement (element, (*this)) {
+        return element;
+    }
+    return KoXmlElement();
+}
+
 KoXmlNode KoXmlNode::lastChild() const
 {
     if (!d->loaded)

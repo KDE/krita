@@ -128,15 +128,16 @@ QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool r
     return QImage(*im);
 }
 
-QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size, bool recreateThumbnail)
+QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagraphStyle *paragraphStyle, QSize size, bool recreateThumbnail)
 {
-    if (!style || style->name().isNull()) {
+    if (!characterStyle || characterStyle->name().isNull()) {
         return QImage();
     }
     if (!size.isValid() || size.isNull()) {
         size = d->defaultSize;
     }
-    QString imageKey = "c_" + QString::number(style->styleId()) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
+    int paragraphStyleId = (paragraphStyle)?paragraphStyle->styleId():0;
+    QString imageKey = "c_" + QString::number(characterStyle->styleId()) + "_" + "p_" + QString::number(paragraphStyleId) + "_" + QString::number(size.width()) + "_" + QString::number(size.height());
 
     if (!recreateThumbnail && d->thumbnailCache.object(imageKey)) {
         return QImage(*(d->thumbnailCache.object(imageKey)));
@@ -145,20 +146,26 @@ QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size, bool r
     QImage *im = new QImage(size.width(), size.height(), QImage::Format_ARGB32_Premultiplied);
     im->fill(QColor(Qt::transparent).rgba());
 
-    KoCharacterStyle *clone = style->clone();
     QTextCursor cursor(d->thumbnailHelperDocument);
     QTextCharFormat format;
-    clone->applyStyle(format);
+    if (paragraphStyle) {
+        KoParagraphStyle *paragraphStyleClone = paragraphStyle->clone();
+        paragraphStyleClone->KoCharacterStyle::applyStyle(format);
+        delete paragraphStyleClone;
+        paragraphStyleClone = 0;
+    }
+    KoCharacterStyle *characterStyleClone = characterStyle->clone();
+    characterStyleClone->applyStyle(format);
     cursor.select(QTextCursor::Document);
     cursor.setBlockFormat(QTextBlockFormat());
     cursor.setBlockCharFormat(QTextCharFormat());
     cursor.setCharFormat(QTextCharFormat());
-    cursor.insertText(clone->name(), format);
+    cursor.insertText(characterStyleClone->name(), format);
 
     layoutThumbnail(size, im);
 
     d->thumbnailCache.insert(imageKey, im);
-    delete clone;
+    delete characterStyleClone;
     return QImage(*im);
 }
 

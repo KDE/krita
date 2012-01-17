@@ -62,14 +62,14 @@ public:
     QImage thumbnail(KoParagraphStyle *style, QSize size = QSize(), bool recreateThumbnail = false);
 
     /**
-     * @returns a thumbnail representing the @param style, constrained into the @param size.
+     * @returns a thumbnail representing the @param characterStyle applied on the given @param paragraphStyle, constrained into the @param size.
      * If there is no specified @param size, the thunbnail is the size specified with @fn setThumbnailSize or 250*48 pt if no size was provided.
      * If the given @param size is too small, the font size will be decreased, so the thumbnail fits.
      * The real font size is indicated in this case.
      * If @param recreateThumbnail is true, do not return the cached thumbnail if it exist, but recreate a new one.
      * The created thumbnail is cached.
      */
-    QImage thumbnail(KoCharacterStyle *style, QSize size = QSize(), bool recreateThumbnail = false);
+    QImage thumbnail(KoCharacterStyle *characterStyle, KoParagraphStyle *paragraphStyle = 0, QSize size = QSize(), bool recreateThumbnail = false);
 
     /**
      * Sets the size of the thumbnails returned by the @fn thumbnail with no size arguments.

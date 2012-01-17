@@ -119,7 +119,7 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
             else {
                 usedStyle = m_styleManager->characterStyle(id);
                 if (usedStyle) {
-                    return m_styleThumbnailer->thumbnail(usedStyle);
+                    return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle);
                 }
             }
         }
@@ -203,12 +203,12 @@ QImage StylesModel::stylePreview(int row, QSize size)
             if (usedStyle->styleId() >= 0) {
                 usedStyle->setStyleId(-usedStyle->styleId()); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
             }
-            return m_styleThumbnailer->thumbnail(usedStyle, size);
+            return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle, size);
         }
         else {
             usedStyle = m_styleManager->characterStyle(index(row).internalId());
             if (usedStyle) {
-                return m_styleThumbnailer->thumbnail(usedStyle, size);
+                return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle, size);
             }
         }
     }

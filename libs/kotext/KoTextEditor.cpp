@@ -852,6 +852,13 @@ void KoTextEditor::setStyle(KoCharacterStyle *style)
     emit textFormatChanged();
 }
 
+struct FragmentData
+{
+    QTextCharFormat format;
+    int anchor;
+    int position;
+};
+
 // To figure out if a the blocks of the selection are write protected we need to traverse
 //the entire document
 // as sections build up the protectiveness recursively.
@@ -921,34 +928,45 @@ void KoTextEditor::recursiveSetStyle(QTextFrame::iterator it, KoCharacterStyle *
                     QTextCharFormat format = cursor.blockCharFormat();
                     style->applyStyle(format);
                     style->ensureMinimalProperties(format);
-                    for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
-                        cursor.setPosition(qMax(d->caret.selectionStart(), it.fragment().position()));
-                        cursor.setPosition(qMin(d->caret.selectionEnd(), it.fragment().position() + it.fragment().length()), QTextCursor::KeepAnchor);
 
-                        if (cursor.anchor() >= cursor.position()) {
+                    QList<FragmentData> fragments;
+
+                    for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
+                        FragmentData fragData;
+                        fragData.anchor = qMax(d->caret.selectionStart(), it.fragment().position());
+                        fragData.position = qMin(d->caret.selectionEnd(), it.fragment().position() + it.fragment().length());
+
+                        if (fragData.anchor >= fragData.position) {
                             continue;
                         }
-                        QTextCharFormat f(format);
+                        fragData.format = format;
 
-                        QVariant v = it.fragment().charFormat().property(KoCharacterStyle::InlineInstanceId);
+                        QVariant v;
+                        v = it.fragment().charFormat().property(KoCharacterStyle::InlineInstanceId);
                         if (!v.isNull()) {
-                            f.setProperty(KoCharacterStyle::InlineInstanceId, v);
+                            fragData.format.setProperty(KoCharacterStyle::InlineInstanceId, v);
                         }
 
                         v = it.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId);
                         if (!v.isNull()) {
-                            f.setProperty(KoCharacterStyle::ChangeTrackerId, v);
+                            fragData.format.setProperty(KoCharacterStyle::ChangeTrackerId, v);
                         }
 
                         if (it.fragment().charFormat().isAnchor()) {
-                            f.setAnchor(true);
-                            f.setAnchorHref(it.fragment().charFormat().anchorHref());
+                            fragData.format.setAnchor(true);
+                            fragData.format.setAnchorHref(it.fragment().charFormat().anchorHref());
                         }
-                        QTextCharFormat prevFormat(cursor.charFormat());
-                        cursor.setCharFormat(f);
-                        registerTrackedChange(cursor, KoGenChange::FormatChange, i18n("Set Character Style"), f, prevFormat, false);
+                        fragments.append(fragData);
                     }
 
+                    foreach (const FragmentData &fragData, fragments) {
+                        cursor.setPosition(fragData.anchor);
+                        cursor.setPosition(fragData.position, QTextCursor::KeepAnchor);
+                        cursor.setCharFormat(fragData.format);
+                        QTextFormat newFormat(fragData.format);
+                        QTextFormat prevFormat(cursor.charFormat());
+                        registerTrackedChange(cursor, KoGenChange::FormatChange, i18n("Set Character Style"), newFormat, prevFormat, false);
+                    }
                 }
             }
 

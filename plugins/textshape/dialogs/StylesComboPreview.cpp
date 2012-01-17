@@ -164,6 +164,14 @@ void StylesComboPreview::focusOutEvent(QFocusEvent *e)
     }
 }
 
+void StylesComboPreview::mouseReleaseEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+    if (!m_renamingNewStyle) {
+        emit clicked();
+    }
+}
+
 void StylesComboPreview::paintEvent( QPaintEvent *ev )
 {
     if (!m_renamingNewStyle) {

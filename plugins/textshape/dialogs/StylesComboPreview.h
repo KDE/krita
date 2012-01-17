@@ -48,11 +48,13 @@ public:
 signals:
     void resized();
     void newStyleRequested(QString name);
+    void clicked();
 
 protected:
     virtual void resizeEvent(QResizeEvent *event);
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void focusOutEvent(QFocusEvent *);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
     virtual void paintEvent(QPaintEvent *event);
 
 private slots:

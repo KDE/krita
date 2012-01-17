@@ -81,6 +81,7 @@ private slots:
     void slotShowDia(QModelIndex);
     void slotSelectionChanged(int index);
     void slotItemClicked(QModelIndex);
+    void slotPreviewClicked();
 
 private:
     StylesModel *m_stylesModel;

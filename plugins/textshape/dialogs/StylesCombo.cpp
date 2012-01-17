@@ -56,7 +56,6 @@ StylesCombo::StylesCombo(QWidget *parent)
     setIconSize(QSize(0,0));
 
     StylesComboPreview *preview = new StylesComboPreview(this);
-    connect(preview, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
     QComboBox::setEditable(true);
     setLineEdit(preview);
 }
@@ -113,6 +112,8 @@ void StylesCombo::setLineEdit(QLineEdit *edit)
 
     if (m_preview) {
         connect(m_preview, SIGNAL(resized()), this, SLOT(slotUpdatePreview()));
+        connect(m_preview, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
+        connect(m_preview, SIGNAL(clicked()), this, SLOT(slotPreviewClicked()));
     }
 
 }
@@ -142,6 +143,13 @@ void StylesCombo::slotUpdatePreview()
 {
     m_preview->setPreview(m_stylesModel->stylePreview(currentIndex(), m_preview->availableSize()));
     update();
+}
+
+void StylesCombo::slotPreviewClicked()
+{
+    if (!view()->isVisible()) {
+        showPopup();
+    }
 }
 
 bool StylesCombo::eventFilter(QObject *object, QEvent *event)

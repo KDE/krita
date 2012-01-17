@@ -712,8 +712,13 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
 
                         // end position: not that x2 can be smaller than x1 when we are handling RTL
                         int p2 = startOfFragmentInBlock + currentFragment.length();
-                        if (i < lastLine) {
-                            p2 = qMin(p2, line.textStart() + line.textLength() - 1);
+                        qDebug()<<"lastline of block"<< block.text();
+                        int lineEnd = line.textStart() + line.textLength();
+                        while (lineEnd > 0 && block.text().at(lineEnd - 1) == ' ') {
+                            --lineEnd;
+                        }
+                        if (lineEnd < p2) { //line caps
+                            p2 = lineEnd;
                         }
                         int fragmentToLineOffset = qMax(startOfFragmentInBlock - line.textStart(), 0);
 

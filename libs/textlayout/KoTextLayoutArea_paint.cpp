@@ -714,7 +714,7 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
                         int p2 = startOfFragmentInBlock + currentFragment.length();
                         qDebug()<<"lastline of block"<< block.text();
                         int lineEnd = line.textStart() + line.textLength();
-                        while (lineEnd > 0 && block.text().at(lineEnd - 1) == ' ') {
+                        while (lineEnd > line.textStart() && block.text().at(lineEnd - 1) == ' ') {
                             --lineEnd;
                         }
                         if (lineEnd < p2) { //line caps
@@ -728,16 +728,12 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
 //                        qDebug() << "\n\t\t\tp1:" << p1 << "x1:" << x1
 //                                 << "\n\t\t\tp2:" << p2 << "x2:" << x2;
 
-                        // Comment by sebsauer:
-                        // Following line was supposed to fix bug 171686 (I cannot reproduce the original problem) but it opens bug 260159. So, deactivated for now.
-                        // x2 = qMin(x2, line.naturalTextWidth() + line.cursorToX(line.textStart()));
-
                         if (x1 != x2) {
                             drawStrikeOuts(painter, fmt, currentFragment.text(), line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                             drawOverlines(painter, fmt, currentFragment.text(), line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                             drawUnderlines(painter, fmt, currentFragment.text(), line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
-                            decorateTabsAndFormatting(painter, currentFragment, line, startOfFragmentInBlock, tabList, currentTabStop, showFormattingCharacters);
                         }
+                        decorateTabsAndFormatting(painter, currentFragment, line, startOfFragmentInBlock, tabList, currentTabStop, showFormattingCharacters);
                     }
                 }
             }

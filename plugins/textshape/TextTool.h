@@ -122,8 +122,6 @@ public:
     /// reimplemented from superclass
     virtual void inputMethodEvent(QInputMethodEvent * event);
 
-    bool isBidiDocument() const;
-
 
     /// The following two methods allow an undo/redo command to tell the tool, it will modify the QTextDocument and wants to be parent of the undo/redo commands resulting from these changes.
 
@@ -156,8 +154,6 @@ public slots:
     void toggleRecordChanges(bool);
     /// Configure Change Tracking
     void configureChangeTracking();
-    /// call this when the 'is-bidi' boolean has been changed.
-    void isBidiUpdated();
 
 signals:
     /// emitted every time a different styleManager is set.

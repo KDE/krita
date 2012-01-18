@@ -88,45 +88,16 @@
 
 Q_DECLARE_METATYPE(QTextFrame*)
 
-static bool isRightToLeft(const QString &text)
-{
-    int ltr = 0, rtl = 0;
-
-    QString::const_iterator iter = text.begin();
-    while (iter != text.end()) {
-        switch (QChar::direction((*iter).unicode())) {
-        case QChar::DirL:
-        case QChar::DirLRO:
-        case QChar::DirLRE:
-            ltr++;
-            break;
-        case QChar::DirR:
-        case QChar::DirAL:
-        case QChar::DirRLO:
-        case QChar::DirRLE:
-            rtl++;
-        default:
-            break;
-        }
-        ++iter;
-    }
-    return ltr < rtl;
-}
-
 /*Private*/
 
 KoTextEditor::Private::Private(KoTextEditor *qq, QTextDocument *document)
     : q(qq)
     , document (document)
     , headCommand(0)
-    , isBidiDocument(false)
     , editProtectionCached(false)
 {
     caret = QTextCursor(document);
     editorState = NoOp;
-    updateRtlTimer.setSingleShot(true);
-    updateRtlTimer.setInterval(250);
-    QObject::connect(&updateRtlTimer, SIGNAL(timeout()), q, SLOT(runDirectionUpdater()));
 }
 
 void KoTextEditor::Private::emitTextFormatChanged()
@@ -286,22 +257,6 @@ void KoTextEditor::Private::newLine()
     bf.clearProperty(KoParagraphStyle::MasterPageName);
     bf.clearProperty(KoParagraphStyle::OutlineLevel);
 
-    QVariant directionProp = bf.property(KoParagraphStyle::TextProgressionDirection);
-    if (direction != KoText::AutoDirection) { // inherit from shape
-        KoText::Direction dir;
-        switch (direction) {
-        case KoText::RightLeftTopBottom:
-            dir = KoText::PerhapsRightLeftTopBottom;
-            break;
-        case KoText::LeftRightTopBottom:
-        default:
-            dir = KoText::PerhapsLeftRightTopBottom;
-        }
-        bf.setProperty(KoParagraphStyle::TextProgressionDirection, dir);
-    } else if (! directionProp.isNull()) { // then we inherit from the previous paragraph.
-        bf.setProperty(KoParagraphStyle::TextProgressionDirection, direction);
-    }
-
     // Build the block char format which is just a copy
     QTextCharFormat bcf = caret.blockCharFormat();
 
@@ -330,46 +285,6 @@ void KoTextEditor::Private::newLine()
     }
 
     caret.setCharFormat(format);
-}
-
-void KoTextEditor::Private::runDirectionUpdater()
-{
-    while (! dirtyBlocks.isEmpty()) {
-        const int blockNumber = dirtyBlocks.first();
-        dirtyBlocks.removeAll(blockNumber);
-        QTextBlock block = document->findBlockByNumber(blockNumber);
-        if (block.isValid()) {
-            KoText::Direction newDirection = KoText::AutoDirection;
-            QTextBlockFormat format = block.blockFormat();
-            KoText::Direction dir =
-                    static_cast<KoText::Direction>(format.intProperty(KoParagraphStyle::TextProgressionDirection));
-
-            if (dir == KoText::AutoDirection || dir == KoText::PerhapsLeftRightTopBottom
-                    || dir == KoText::PerhapsRightLeftTopBottom
-                    || dir == KoText::InheritDirection) {
-                bool rtl = isRightToLeft(block.text());
-                if (rtl && (dir != KoText::AutoDirection || QApplication::isLeftToRight()))
-                    newDirection = KoText::PerhapsRightLeftTopBottom;
-                else if (!rtl && (dir != KoText::AutoDirection || QApplication::isRightToLeft())) // remove previously set one if needed.
-                    newDirection = KoText::PerhapsLeftRightTopBottom;
-
-                QTextCursor cursor(block);
-                if (format.property(KoParagraphStyle::TextProgressionDirection).toInt() != newDirection) {
-                    format.setProperty(KoParagraphStyle::TextProgressionDirection, newDirection);
-                    cursor.setBlockFormat(format); // note that setting this causes a re-layout.
-                }
-                if (!isBidiDocument) {
-                    if ((QApplication::isLeftToRight() && (newDirection == KoText::RightLeftTopBottom
-                                                           || newDirection == KoText::PerhapsRightLeftTopBottom))
-                            || (QApplication::isRightToLeft() && (newDirection == KoText::LeftRightTopBottom
-                                                                  || newDirection == KoText::PerhapsLeftRightTopBottom))) {
-                        isBidiDocument = true;
-                        emit q->isBidiUpdated();
-                    }
-                }
-            }
-        }
-    }
 }
 
 void KoTextEditor::Private::clearCharFormatProperty(int property)
@@ -421,11 +336,6 @@ KoTextEditor *KoTextEditor::getTextEditorFromCanvas(KoCanvasBase *canvas)
         }
     }
     return 0;
-}
-
-void KoTextEditor::updateDefaultTextDirection(KoText::Direction direction)
-{
-    d->direction = direction;
 }
 
 QTextCursor* KoTextEditor::cursor()
@@ -2069,14 +1979,6 @@ void KoTextEditor::insertText(const QString &text)
 
     d->caret.clearSelection();
 
-    int blockNumber = d->caret.blockNumber();
-    while (blockNumber <= d->caret.blockNumber()) {
-        d->dirtyBlocks << blockNumber;
-        ++blockNumber;
-    }
-    d->updateRtlTimer.stop();
-    d->updateRtlTimer.start();
-
     emit cursorPositionChanged();
 }
 
@@ -2418,11 +2320,6 @@ bool KoTextEditor::visualNavigation() const
     return d->caret.visualNavigation();
 }
 
-bool KoTextEditor::isBidiDocument() const
-{
-    return d->isBidiDocument;
-}
-
 const QTextFrame *KoTextEditor::currentFrame () const
 {
     return d->caret.currentFrame();
@@ -2449,19 +2346,6 @@ void KoTextEditor::endEditBlock()
 {
     d->caret.endEditBlock();
     d->updateState(KoTextEditor::Private::NoOp);
-}
-
-void KoTextEditor::finishedLoading()
-{
-    QTextBlock block = d->document->begin();
-    while (!d->isBidiDocument && block.isValid()) {
-        bool rtl = isRightToLeft(block.text());
-        if ((QApplication::isLeftToRight() && rtl) || (QApplication::isRightToLeft() && !rtl)) {
-            d->isBidiDocument = true;
-            emit isBidiUpdated();
-        }
-        block = block.next();
-    }
 }
 
 #include <KoTextEditor.moc>

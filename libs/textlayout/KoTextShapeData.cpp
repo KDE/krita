@@ -195,7 +195,6 @@ bool KoTextShapeData::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
     KoTextEditor *editor = KoTextDocument(document()).textEditor();
     if (editor) { // at one point we have to get the position from the odf doc instead.
         editor->setPosition(0);
-        editor->finishedLoading();
     }
 
     return true;

@@ -55,7 +55,6 @@ public:
 
     bool deleteInlineObjects(bool backwards = false);
     void newLine();
-    void runDirectionUpdater();
     void clearCharFormatProperty(int propertyId);
 
     void emitTextFormatChanged();
@@ -65,13 +64,8 @@ public:
     QTextDocument *document;
     KUndo2Command *headCommand;
     QString commandTitle;
-    KoText::Direction direction;
-    bool isBidiDocument;
 
     State editorState;
-
-    QTimer updateRtlTimer;
-    QList<int> dirtyBlocks;
 
     bool editProtected;
     bool editProtectionCached;

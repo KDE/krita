@@ -105,11 +105,6 @@ public: // KoToolSelection overloads
 
 public:
 
-    /// Called when loading is done to check whether there's bidi text in the document.
-    void finishedLoading();
-
-    void updateDefaultTextDirection(KoText::Direction direction);
-
     bool operator!=(const QTextCursor &other) const;
 
     bool operator<(const QTextCursor &other) const;
@@ -449,14 +444,11 @@ public slots:
 
     bool visualNavigation() const;
 
-    bool isBidiDocument() const;
-
     const QTextFrame *currentFrame () const;
     const QTextList *currentList () const;
     const QTextTable *currentTable () const;
 
 signals:
-    void isBidiUpdated();
     void cursorPositionChanged();
     void textFormatChanged();
 
@@ -466,7 +458,6 @@ protected:
 
 private:
     Q_PRIVATE_SLOT(d, void documentCommandAdded())
-    Q_PRIVATE_SLOT(d, void runDirectionUpdater())
 
     class Private;
     friend class Private;

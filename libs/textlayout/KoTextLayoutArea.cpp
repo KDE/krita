@@ -713,7 +713,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     if (dir == KoText::AutoDirection)
         m_isRtl = block.text().isRightToLeft();
     else
-        m_isRtl =  dir == KoText::RightLeftTopBottom || dir == KoText::PerhapsRightLeftTopBottom;
+        m_isRtl =  dir == KoText::RightLeftTopBottom;
 
     // initialize list item stuff for this parag.
     QTextList *textList = block.textList();

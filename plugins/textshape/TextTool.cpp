@@ -815,7 +815,6 @@ void TextTool::setShapeData(KoTextShapeData *data)
     connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
     if (docChanged) {
         if (!m_textEditor.isNull()) {
-            disconnect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
             disconnect(m_textEditor.data(), SIGNAL(textFormatChanged()), this, SLOT(updateActions()));
         }
         m_textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
@@ -833,10 +832,8 @@ void TextTool::setShapeData(KoTextShapeData *data)
             m_variableMenu->addAction(action);
         }
 
-        connect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
         connect(m_textEditor.data(), SIGNAL(textFormatChanged()), this, SLOT(updateActions()));
     }
-    m_textEditor.data()->updateDefaultTextDirection(m_textShapeData->pageDirection());
 }
 
 void TextTool::updateSelectionHandler()
@@ -2023,13 +2020,6 @@ void TextTool::startTextEditingPlugin(const QString &pluginId)
     }
 }
 
-bool TextTool::isBidiDocument() const
-{
-    if (m_textEditor)
-        return m_textEditor.data()->isBidiDocument();
-    return false;
-}
-
 void TextTool::resourceChanged(int key, const QVariant &var)
 {
     if (m_textEditor.isNull())
@@ -2050,11 +2040,6 @@ void TextTool::resourceChanged(int key, const QVariant &var)
     } else return;
 
     repaintSelection();
-}
-
-void TextTool::isBidiUpdated()
-{
-    emit blockChanged(m_textEditor.data()->block()); // make sure that the dialogs follow this change
 }
 
 void TextTool::insertSpecialCharacter()

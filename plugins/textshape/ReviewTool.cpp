@@ -282,7 +282,6 @@ void ReviewTool::setShapeData(KoTextShapeData *data)
 //            connect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
         }
     }
-    m_textEditor->updateDefaultTextDirection(m_textShapeData->pageDirection());
 
     if (m_model) {
         disconnect(m_changesTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(selectedChangeChanged(QModelIndex,QModelIndex)));

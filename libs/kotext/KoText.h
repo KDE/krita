@@ -103,8 +103,6 @@ enum Direction {
     RightLeftTopBottom, ///< Text layout for languages like Hebrew
     TopBottomRightLeft,  ///< Vertical text layout.
     TopBottomLeftRight,  ///< Vertical text layout. ?
-    PerhapsLeftRightTopBottom, ///< \internal
-    PerhapsRightLeftTopBottom, ///< \internal
     InheritDirection    ///< Direction is unspecified and should come from the container
 };
 

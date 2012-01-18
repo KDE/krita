@@ -1135,7 +1135,8 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
     }
     if (paragraphStyle) {
         // Apply list style when loading a list but we don't have a list style
-        paragraphStyle->applyStyle(block, d->currentLists[d->currentListLevel - 1] && !d->currentListStyle);
+        paragraphStyle->applyStyle(block, (d->currentListLevel > 1) &&
+                                   d->currentLists[d->currentListLevel - 2] && !d->currentListStyle);
     }
 
     if ((block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) && (level == -1)) {
@@ -1154,10 +1155,23 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
         cursor.mergeBlockFormat(blockFormat);
     }
 
+    //we are defining our default behaviour here
+    //Case 1: If text:outline-style is specified then we use the outline style to determine the numbering style
+    //Case 2: If text:outline-style is not specified then if the <text:h> element is inside a <text:list> then it is numbered
+    //        otherwise it is not
     KoListStyle *outlineStyle = d->styleManager->outlineStyle();
     if (!outlineStyle) {
         outlineStyle = d->styleManager->defaultOutlineStyle()->clone();
         d->styleManager->setOutlineStyle(outlineStyle);
+    }
+
+    //if outline style is not specified and this is not inside a list then we do not number it
+    if (d->currentListLevel <= 1) {
+        if (outlineStyle->styleId() == d->styleManager->defaultOutlineStyle()->styleId()) {
+            QTextBlockFormat blockFormat;
+            blockFormat.setProperty(KoParagraphStyle::UnnumberedListItem, true);
+            cursor.mergeBlockFormat(blockFormat);
+        }
     }
 
     KoList *list = KoTextDocument(block.document()).headingList();

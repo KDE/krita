@@ -670,7 +670,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     if (outlineLevel > 0) {
         blockTagInformation.setTagName("text:h");
         blockTagInformation.addAttribute("text:outline-level", outlineLevel);
-        if (blockFormat.boolProperty(KoParagraphStyle::IsListHeader)) {
+        if (blockFormat.boolProperty(KoParagraphStyle::IsListHeader) || blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem)) {
             blockTagInformation.addAttribute("text:is-list-header", "true");
         }
     } else {

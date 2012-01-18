@@ -203,11 +203,24 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
     KoParagraphStyle *style(m_styleManager->paragraphStyle(id));
     if (style) {
         bool unchanged = true;
+
         foreach(int property, m_currentBlockFormat.properties().keys()) {
-            if (property == QTextFormat::ObjectIndex)
+            switch (property) {
+            case QTextFormat::ObjectIndex:
+            case KoParagraphStyle::ListStyleId:
+            case KoParagraphStyle::OutlineLevel:
+            case KoParagraphStyle::ListStartValue:
+            case KoParagraphStyle::IsListHeader:
+            case KoParagraphStyle::UnnumberedListItem:
                 continue;
-            if (property == KoParagraphStyle::ListStyleId)
+            // These can be both content and style properties so let's ignore
+            case KoParagraphStyle::BreakBefore:
+            case KoParagraphStyle::MasterPageName:
                 continue;
+
+            default:
+                break;
+            }
             if (property == QTextBlockFormat::BlockAlignment) { //the default alignment can be retrieved in the defaultTextOption. However, calligra sets the Qt::AlignAbsolute flag, so we need to or this flag with the default alignment before comparing.
                 if ((m_currentBlockFormat.property(property) != style->value(property))
                         && !(style->value(property).isNull()

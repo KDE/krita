@@ -712,7 +712,6 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
 
                         // end position: not that x2 can be smaller than x1 when we are handling RTL
                         int p2 = startOfFragmentInBlock + currentFragment.length();
-                        qDebug()<<"lastline of block"<< block.text();
                         int lineEnd = line.textStart() + line.textLength();
                         while (lineEnd > line.textStart() && block.text().at(lineEnd - 1) == ' ') {
                             --lineEnd;

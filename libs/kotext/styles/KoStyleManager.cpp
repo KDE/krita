@@ -53,7 +53,7 @@
 class KoStyleManager::Private
 {
 public:
-    Private() : updateTriggered(false), defaultCharacterStyle(0), defaultParagraphStyle(0), defaultListStyle(0), outlineStyle(0)
+    Private() : updateTriggered(false), defaultCharacterStyle(0), defaultParagraphStyle(0), defaultListStyle(0), defaultOutlineStyle(0), outlineStyle(0)
     {
     }
     ~Private() {
@@ -79,6 +79,7 @@ public:
     KoCharacterStyle *defaultCharacterStyle;
     KoParagraphStyle *defaultParagraphStyle;
     KoListStyle *defaultListStyle;
+    KoListStyle *defaultOutlineStyle;
     KoListStyle *outlineStyle;
     QList<int> defaultToCEntriesStyleId;
     KoOdfNotesConfiguration *footNotesConfiguration;
@@ -797,15 +798,20 @@ KoListStyle *KoStyleManager::defaultListStyle() const
 
 KoListStyle *KoStyleManager::defaultOutlineStyle() const
 {
-    KoListStyle *outlineStyle = d->defaultListStyle->clone();
-    QList<int> levels = outlineStyle->listLevels();
-    foreach (int level, levels) {
-        KoListLevelProperties llp = outlineStyle->levelProperties(level);
-        llp.setOutlineList(true);
-        llp.setDisplayLevel(level);
-        outlineStyle->setLevelProperties(llp);
+    if (!d->defaultOutlineStyle) {
+        d->defaultOutlineStyle = d->defaultListStyle->clone();
+
+        QList<int> levels = d->defaultOutlineStyle->listLevels();
+        foreach (int level, levels) {
+            KoListLevelProperties llp = d->defaultOutlineStyle->levelProperties(level);
+            llp.setOutlineList(true);
+            llp.setDisplayLevel(level);
+            d->defaultOutlineStyle->setLevelProperties(llp);
+        }
+        d->defaultOutlineStyle->setStyleId(d->s_stylesNumber++);
     }
-    return outlineStyle;
+
+    return d->defaultOutlineStyle;
 }
 
 void KoStyleManager::setOutlineStyle(KoListStyle* listStyle)

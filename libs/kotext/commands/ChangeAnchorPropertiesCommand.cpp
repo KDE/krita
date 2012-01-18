@@ -35,6 +35,7 @@ ChangeAnchorPropertiesCommand::ChangeAnchorPropertiesCommand(KoTextAnchor *ancho
     , m_oldParent(anchor->shape()->parent())
     , m_newParent(newParent)
     , m_first(true)
+    , m_macroFirst(parent != 0)
 {
     copyLayoutProperties(anchor, &m_oldAnchor);
     copyLayoutProperties(&newAnchorData, &m_newAnchor);
@@ -56,98 +57,100 @@ void ChangeAnchorPropertiesCommand::copyLayoutProperties(const KoTextAnchor *fro
 
 void ChangeAnchorPropertiesCommand::redo()
 {
+    KoTextShapeDataBase *textData = 0;
+    if (m_oldParent) {
+        textData = qobject_cast<KoTextShapeDataBase*>(m_oldParent->userData());
+    } else  if (m_newParent) {
+        textData = qobject_cast<KoTextShapeDataBase*>(m_newParent->userData());
+    }
+
+    // We need this weird construct if we are played within a macro then our first job
+    // is to call addCommand which will "redo" us imidiately in what is the normal
+    // "first" time
+    if (m_macroFirst) {
+        m_macroFirst = false;
+        if (textData) {
+            KoTextEditor *editor = KoTextDocument(textData->document()).textEditor();
+            editor->addCommand(this, false);
+            return;
+        }
+        //fall through as it's just a AnchorPage to AnchorPage change
+    }
+
     KUndo2Command::redo();
 
     copyLayoutProperties(&m_newAnchor, m_anchor);
 
-    QPointF absPos =  m_anchor->shape()->absolutePosition();
+    if (m_first) {
+        m_oldAbsPos =  m_anchor->shape()->absolutePosition();
+    }
     m_anchor->shape()->setParent(m_newParent);
-    m_anchor->shape()->setAbsolutePosition(absPos);
+    m_anchor->shape()->setAbsolutePosition(m_oldAbsPos);
 
-    KoTextShapeDataBase *oldTextData = 0;
-    KoTextShapeDataBase *newTextData = 0;
     if (m_newAnchor.anchorType() != m_oldAnchor.anchorType()) {
         if (m_newAnchor.anchorType() == KoTextAnchor::AnchorPage) {
-            oldTextData = qobject_cast<KoTextShapeDataBase*>(m_oldParent->userData());
-            Q_ASSERT(oldTextData);
-            KoInlineTextObjectManager *manager = KoTextDocument(oldTextData->document()).inlineTextObjectManager();
+            Q_ASSERT(textData);
+            KoTextDocument doc(textData->document());
+            KoInlineTextObjectManager *manager = doc.inlineTextObjectManager();
             Q_ASSERT(manager);
-            if (manager) {
-                manager->removeInlineObject(m_anchor);
+            if (m_first) {
+                //first time we need to remove the character manually
+                QTextCursor cursor(textData->document());
+                cursor.setPosition(m_anchor->positionInDocument());
+                cursor.deleteChar();
             }
+            manager->removeInlineObject(m_anchor);
         }
         else if (m_oldAnchor.anchorType() == KoTextAnchor::AnchorPage) {
-            newTextData = qobject_cast<KoTextShapeDataBase*>(m_newParent->userData());
-            Q_ASSERT(newTextData);
-            KoInlineTextObjectManager *manager = KoTextDocument(newTextData->document()).inlineTextObjectManager();
+            Q_ASSERT(textData);
+            KoTextDocument doc(textData->document());
+            KoInlineTextObjectManager *manager = doc.inlineTextObjectManager();
             Q_ASSERT(manager);
-            if (manager) {
+            if (m_first) {
+                KoTextEditor *editor = doc.textEditor();
+                QTextCursor cursor(textData->document());
+                cursor.setPosition(editor->position());
+                manager->insertInlineObject(cursor, m_anchor);
+            } else {
+                // only insert in manager as qt re-inserts the character
                 manager->addInlineObject(m_anchor);
             }
         }
     }
-    if (m_first) {
-        m_first = false;
 
-        if (oldTextData) {
-            // remove the old anchor from the document
-            KoTextEditor *editor = KoTextDocument(oldTextData->document()).textEditor();
-            editor->addCommand(this, false);
-            QTextCursor cursor(oldTextData->document());
-            cursor.setPosition(m_anchor->positionInDocument());
-            cursor.deleteChar();
-        }
-        else if (newTextData) {
-            KoTextEditor *editor = KoTextDocument(newTextData->document()).textEditor();
-            editor->addCommand(this, false);
-
-            QTextCursor cursor(newTextData->document());
-            cursor.setPosition(editor->position());
-            QTextCharFormat oldCf = cursor.charFormat();
-            // create a new format out of the old so that the current formatting is
-            // also used for the inserted object.  KoVariables render text too ;)
-            QTextCharFormat cf(oldCf);
-            cf.setObjectType(QTextFormat::UserObject + 1);
-            cf.setProperty(KoInlineTextObjectManager::InlineInstanceId, m_anchor->id());
-            cursor.insertText(QString(QChar::ObjectReplacementCharacter), cf);
-            // reset to use old format so that the InlineInstanceId is no longer set.
-            cursor.setCharFormat(oldCf);
-        }
-    }
+    m_first = false;
 
     m_anchor->shape()->notifyChanged();
-    if (oldTextData) {
-        oldTextData->document()->markContentsDirty(m_anchor->positionInDocument(), 0);
-    }
-    else if (newTextData) {
-        newTextData->document()->markContentsDirty(m_anchor->positionInDocument(), 0);
+    if (textData) {
+        textData->document()->markContentsDirty(m_anchor->positionInDocument(), 0);
     }
 }
 
 void ChangeAnchorPropertiesCommand::undo()
 {
+    KoTextShapeDataBase *textData = 0;
+    if (m_oldParent) {
+        textData = qobject_cast<KoTextShapeDataBase*>(m_oldParent->userData());
+    } else  if (m_newParent) {
+        textData = qobject_cast<KoTextShapeDataBase*>(m_newParent->userData());
+    }
     copyLayoutProperties(&m_oldAnchor, m_anchor);
 
-    QPointF absPos =  m_anchor->shape()->absolutePosition();
     m_anchor->shape()->setParent(m_oldParent);
-    m_anchor->shape()->setAbsolutePosition(absPos);
+    m_anchor->shape()->setAbsolutePosition(m_oldAbsPos);
 
-    KoTextShapeDataBase *oldTextData = 0;
-    KoTextShapeDataBase *newTextData = 0;
     if (m_newAnchor.anchorType() != m_oldAnchor.anchorType()) {
         if (m_newAnchor.anchorType() == KoTextAnchor::AnchorPage) {
-            oldTextData = qobject_cast<KoTextShapeDataBase*>(m_oldParent->userData());
-            Q_ASSERT(oldTextData);
-            KoInlineTextObjectManager *manager = KoTextDocument(oldTextData->document()).inlineTextObjectManager();
+            Q_ASSERT(textData);
+            KoInlineTextObjectManager *manager = KoTextDocument(textData->document()).inlineTextObjectManager();
             Q_ASSERT(manager);
             if (manager) {
                 manager->addInlineObject(m_anchor);
             }
         }
         else if (m_oldAnchor.anchorType() == KoTextAnchor::AnchorPage) {
-            newTextData = qobject_cast<KoTextShapeDataBase*>(m_newParent->userData());
-            Q_ASSERT(newTextData);
-            KoInlineTextObjectManager *manager = KoTextDocument(newTextData->document()).inlineTextObjectManager();
+            Q_ASSERT(textData);
+            KoInlineTextObjectManager *manager = KoTextDocument(textData->document()).inlineTextObjectManager();
             Q_ASSERT(manager);
             if (manager) {
                 manager->removeInlineObject(m_anchor);
@@ -157,10 +160,7 @@ void ChangeAnchorPropertiesCommand::undo()
 
     KUndo2Command::undo();
     m_anchor->shape()->notifyChanged();
-    if (oldTextData) {
-        oldTextData->document()->markContentsDirty(m_anchor->positionInDocument(), 0);
-    }
-    else if (newTextData) {
-        newTextData->document()->markContentsDirty(m_anchor->positionInDocument(), 0);
+    if (textData) {
+        textData->document()->markContentsDirty(m_anchor->positionInDocument(), 0);
     }
 }

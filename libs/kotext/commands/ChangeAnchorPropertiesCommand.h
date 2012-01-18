@@ -24,6 +24,8 @@
 #include "kotext_export.h"
 #include "KoTextAnchor.h"
 
+#include <QPointF>
+
 class KoShapeContainer;
 
 
@@ -45,7 +47,9 @@ private:
     KoTextAnchor m_newAnchor;
     KoShapeContainer *m_oldParent;
     KoShapeContainer *m_newParent;
+    QPointF m_oldAbsPos;
     bool m_first;
+    bool m_macroFirst;
 };
 
 #endif // CHANGEANCHORPROPERTIESCOMMAND_H

@@ -217,32 +217,33 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             painter->restore();
 
             QVector<QTextLayout::FormatRange> selections;
-            foreach(const QAbstractTextDocumentLayout::Selection & selection, context.textContext.selections) {
-                QTextCursor cursor = selection.cursor;
-                int begin = cursor.position();
-                int end = cursor.anchor();
-                if (begin > end)
-                    qSwap(begin, end);
+            if (context.showSelections) {
+                foreach(const QAbstractTextDocumentLayout::Selection & selection, context.textContext.selections) {
+                    QTextCursor cursor = selection.cursor;
+                    int begin = cursor.position();
+                    int end = cursor.anchor();
+                    if (begin > end)
+                        qSwap(begin, end);
 
-                if (end < block.position() || begin > block.position() + block.length())
-                    continue; // selection does not intersect this block.
-                if (selection.cursor.hasComplexSelection()) {
-                    continue; // selections of several table cells are covered by the within drawBorders above.
+                    if (end < block.position() || begin > block.position() + block.length())
+                        continue; // selection does not intersect this block.
+                    if (selection.cursor.hasComplexSelection()) {
+                        continue; // selections of several table cells are covered by the within drawBorders above.
+                    }
+                    if (m_documentLayout->changeTracker()
+                        && !m_documentLayout->changeTracker()->displayChanges()
+                        && m_documentLayout->changeTracker()->containsInlineChanges(selection.format)
+                        && m_documentLayout->changeTracker()->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
+                        && m_documentLayout->changeTracker()->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() == KoGenChange::DeleteChange) {
+                        continue; // Deletions should not be shown.
+                    }
+                    QTextLayout::FormatRange fr;
+                    fr.start = begin - block.position();
+                    fr.length = end - begin;
+                    fr.format = selection.format;
+                    selections.append(fr);
                 }
-                if (m_documentLayout->changeTracker()
-                    && !m_documentLayout->changeTracker()->displayChanges()
-                    && m_documentLayout->changeTracker()->containsInlineChanges(selection.format)
-                    && m_documentLayout->changeTracker()->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
-                    && m_documentLayout->changeTracker()->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() == KoGenChange::DeleteChange) {
-                    continue; // Deletions should not be shown.
-                }
-                QTextLayout::FormatRange fr;
-                fr.start = begin - block.position();
-                fr.length = end - begin;
-                fr.format = selection.format;
-                selections.append(fr);
             }
-
             // this is a workaround to fix text getting cut of when format ranges are used. There 
             // is a bug in Qt that can hit when text lines overlap each other. In case a format range
             // is used for formating it can clip the lines above/below as Qt creates a clip rect for

@@ -43,6 +43,7 @@ public:
     bool showTextShapeOutlines;
     bool showTableBorders;
     bool showSpellChecking;
+    bool showSelections;
 };
 
 #endif /* KOSHAPEPAINTINGCONTEXT_H */

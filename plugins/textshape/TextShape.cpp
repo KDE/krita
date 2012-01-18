@@ -152,6 +152,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     pc.showFormattingCharacters = paintContext.showFormattingCharacters;
     pc.showTableBorders = paintContext.showTableBorders;
     pc.showSpellChecking = paintContext.showSpellChecking;
+    pc.showSelections = paintContext.showSelections;
 
     // When clipping the painter we need to make sure not to cutoff cosmetic pens which
     // may used to draw e.g. table-borders for user convenience when on screen (but not

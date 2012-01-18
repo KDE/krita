@@ -21,6 +21,7 @@
 #include "randompickfilter.h"
 #include <stdlib.h>
 #include <vector>
+#include <math.h>
 
 #include <qpoint.h>
 
@@ -150,4 +151,11 @@ KisFilterConfiguration* KisFilterRandomPick::factoryConfiguration(const KisPaint
     config->setProperty("seedV", rand());
 
     return config;
+}
+
+QRect KisFilterRandomPick::neededRect(const QRect& rect, const KisFilterConfiguration* config) const
+{
+    QVariant value;
+    int windowsize = ceil((config && config->getProperty("windowsize", value)) ? value.toDouble() : 2.5);
+    return rect.adjusted(-windowsize, -windowsize, windowsize, windowsize);
 }

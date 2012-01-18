@@ -240,6 +240,8 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
+target_link_libraries(kritaui ${X11_X11_LIB})
+
 if(GHNS)
     target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)

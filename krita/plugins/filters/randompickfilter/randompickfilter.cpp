@@ -94,6 +94,7 @@ void KisFilterRandomPick::process(KisPaintDeviceSP device,
     QVariant value;
     int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;
     int opacity = (config && config->getProperty("opacity", value)) ? value.toInt() : 100;
+    double windowsize = (config && config->getProperty("windowsize", value)) ? value.toDouble() : 2.5;
 
     int seedThreshold = rand();
     int seedH = rand();
@@ -119,8 +120,8 @@ void KisFilterRandomPick::process(KisPaintDeviceSP device,
     KoMixColorsOp * mixOp = cs->mixColorsOp();
     do{
         if (randT.doubleRandomAt(dstIt->x(), dstIt->y()) > threshold) {
-            int x = static_cast<int>(dstIt->x() + 2.5 * randH.doubleRandomAt(dstIt->x(), dstIt->y()));
-            int y = static_cast<int>(dstIt->y() +  2.5 * randH.doubleRandomAt(dstIt->x(), dstIt->y()));
+            int x = static_cast<int>(dstIt->x() + windowsize * (randH.doubleRandomAt(dstIt->x(), dstIt->y()) - 0.5));
+            int y = static_cast<int>(dstIt->y() +  windowsize * (randV.doubleRandomAt(dstIt->x(), dstIt->y()) -0.5));
             srcRA->moveTo(x, y);
             pixels[0] = srcRA->oldRawData();
             pixels[1] = dstIt->oldRawData();

@@ -133,8 +133,8 @@ public:
         DefaultOutlineLevel,
 
         // numbering
-        LineNumbering,           ///< bool, specifies whether lines should be numbered in this paragraph
-        LineNumberStartValue, /*60*/ ///< integer value that specifies the number for the first line in the paragraph
+        LineNumbering,         /*60*/   ///< bool, specifies whether lines should be numbered in this paragraph
+        LineNumberStartValue, ///< integer value that specifies the number for the first line in the paragraph
         SectionStartings,            ///< list of section definitions
         SectionEndings,               ///< list <end of a named section>
 // do 15.5.24

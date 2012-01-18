@@ -351,8 +351,11 @@ void KoTextEditor::addCommand(KUndo2Command *command, bool addCommandToStack)
     KUndo2QStack *stack = KoTextDocument(d->document).undoStack();
     if (stack && addCommandToStack)
         stack->push(command);
-    else
+    else {
         command->redo();
+        // instant replay done let's not keep it dangling
+        d->updateState(KoTextEditor::Private::NoOp);
+    }
     //kDebug() << "custom command pushed";
 }
 
@@ -1085,8 +1088,7 @@ void KoTextEditor::updateInlineObjectPosition(int start, int end)
 void KoTextEditor::removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent)
 {
     Q_ASSERT(parent);
-    addCommand(parent, false);
-    new DeleteAnchorsCommand(anchors, d->document, parent);
+    addCommand(new DeleteAnchorsCommand(anchors, d->document, parent), false);
 }
 
 void KoTextEditor::insertFrameBreak()

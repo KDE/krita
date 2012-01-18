@@ -271,40 +271,22 @@ void KoTextEditor::Private::newLine()
             nextStyle = 0;
     }
 
-    int startPosition = caret.position();
     QTextCharFormat format = caret.charFormat();
     if (format.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
         format.clearProperty(KoCharacterStyle::ChangeTrackerId);
     }
-    caret.insertBlock();
-    int endPosition = caret.position();
 
-
+    // Build the block format and subtract the properties that are not inherited
     QTextBlockFormat bf = caret.blockFormat();
- 
-    //Mark the inserted text
-    caret.setPosition(startPosition);
-    caret.setPosition(endPosition, QTextCursor::KeepAnchor);
 
-    q->registerTrackedChange(caret, KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
-
-    caret.clearSelection();
-    QVariant directionProp = bf.property(KoParagraphStyle::TextProgressionDirection);
     bf.clearProperty(KoParagraphStyle::BreakBefore);
     bf.clearProperty(KoParagraphStyle::ListStartValue);
     bf.clearProperty(KoParagraphStyle::UnnumberedListItem);
     bf.clearProperty(KoParagraphStyle::IsListHeader);
     bf.clearProperty(KoParagraphStyle::MasterPageName);
     bf.clearProperty(KoParagraphStyle::OutlineLevel);
-    caret.setBlockFormat(bf);
-    if (nextStyle) {
-        QTextBlock block = caret.block();
-        if (currentStyle)
-            currentStyle->unapplyStyle(block);
-        nextStyle->applyStyle(block);
-    }
 
-    bf = caret.blockFormat();
+    QVariant directionProp = bf.property(KoParagraphStyle::TextProgressionDirection);
     if (direction != KoText::AutoDirection) { // inherit from shape
         KoText::Direction dir;
         switch (direction) {
@@ -319,7 +301,35 @@ void KoTextEditor::Private::newLine()
     } else if (! directionProp.isNull()) { // then we inherit from the previous paragraph.
         bf.setProperty(KoParagraphStyle::TextProgressionDirection, direction);
     }
-    caret.setBlockFormat(bf);
+
+    // Build the block char format which is just a copy
+    QTextCharFormat bcf = caret.blockCharFormat();
+
+    // Actually insert the new paragraph char
+    int startPosition = caret.position();
+
+    caret.insertBlock(bf, bcf);
+
+    int endPosition = caret.position();
+
+    // Mark the CR as a tracked change
+    caret.setPosition(startPosition);
+    caret.setPosition(endPosition, QTextCursor::KeepAnchor);
+
+    q->registerTrackedChange(caret, KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
+
+    caret.clearSelection();
+
+    // possibly change the style if requested
+    if (nextStyle) {
+        QTextBlock block = caret.block();
+        if (currentStyle)
+            currentStyle->unapplyStyle(block);
+        nextStyle->applyStyle(block);
+        format = block.charFormat();
+    }
+
+    caret.setCharFormat(format);
 }
 
 void KoTextEditor::Private::runDirectionUpdater()
@@ -2196,7 +2206,7 @@ void KoTextEditor::newLine()
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Custom, i18n("Line Break")); //TODO "New Paragraph"
+    d->updateState(KoTextEditor::Private::Custom, i18n("New Paragraph"));
 
     // Handle if this is the special block before a table
     if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {

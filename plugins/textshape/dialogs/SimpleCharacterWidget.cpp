@@ -79,6 +79,8 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
         widget.fontsFrame->addWidget(size,0,1);
         connect(size, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
         connect(size, SIGNAL(activated(int)), this, SLOT(fontSizeActivated(int)));
+        QDoubleValidator* validator = new QDoubleValidator(2, 999, 1, size);
+        size->setValidator(validator);
     }
 
     widget.fontsFrame->setColumnStretch(0,1);

@@ -25,9 +25,10 @@
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
 
-#include <QSignalMapper>
-#include <QList>
 #include <QImage>
+#include <QList>
+#include <QSignalMapper>
+#include <QSize>
 
 #include <KIcon>
 #include <KLocale>
@@ -124,6 +125,9 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
             }
         }
         break;
+    }
+    case Qt::SizeHintRole: {
+        return QVariant(QSize(250, 48));
     }
     default: break;
     };

@@ -19,15 +19,23 @@
 
 #include "StyleManager.h"
 
-#include "StylesWidget.h"
+#include "StylesModel.h"
 
 #include <KoStyleManager.h>
+#include <KoStyleThumbnailer.h>
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
+
+#include <QListView>
+#include <QModelIndex>
+
+#include <KDebug>
 
 StyleManager::StyleManager(QWidget *parent)
         : QWidget(parent),
         m_styleManager(0),
+        m_paragraphStylesModel(new StylesModel(0, StylesModel::ParagraphStyle)),
+        m_thumbnailer(new KoStyleThumbnailer()),
         m_selectedParagStyle(0),
         m_selectedCharStyle(0),
         m_blockSignals(false)
@@ -35,8 +43,9 @@ StyleManager::StyleManager(QWidget *parent)
     widget.setupUi(this);
     layout()->setMargin(0);
 
-    connect(widget.styles, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)), this, SLOT(setParagraphStyle(KoParagraphStyle*)));
-    connect(widget.styles, SIGNAL(characterStyleSelected(KoCharacterStyle *, bool)), this, SLOT(setCharacterStyle(KoCharacterStyle*,bool)));
+    m_paragraphStylesModel->setStyleThumbnailer(m_thumbnailer);
+    widget.styles->setModel(m_paragraphStylesModel);
+    connect(widget.styles, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
 
     connect(widget.bNew, SIGNAL(pressed()), this, SLOT(buttonNewPressed()));
     connect(widget.bDelete, SIGNAL(pressed()), this, SLOT(buttonDeletePressed()));
@@ -63,7 +72,11 @@ void StyleManager::setStyleManager(KoStyleManager *sm)
 {
     Q_ASSERT(sm);
     m_styleManager = sm;
-    widget.styles->setStyleManager(sm);
+    //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
+    disconnect(widget.styles, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
+    m_paragraphStylesModel->setStyleManager(m_styleManager);
+    connect(widget.styles, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
+
     widget.stackedWidget->setCurrentWidget(widget.welcomePage);
     widget.paragraphStylePage->setParagraphStyles(sm->paragraphStyles());
     connect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
@@ -177,7 +190,7 @@ void StyleManager::addParagraphStyle(KoParagraphStyle *style)
 
     if (m_blockSignals) return;
 
-    m_styleManager->add(style);
+//    m_styleManager->add(style);
     widget.paragraphStylePage->setParagraphStyles(m_styleManager->paragraphStyles());
     widget.stackedWidget->setCurrentWidget(widget.welcomePage);
 }
@@ -186,7 +199,7 @@ void StyleManager::addCharacterStyle(KoCharacterStyle *style)
 {
     if (m_blockSignals) return;
 
-    m_styleManager->add(style);
+//    m_styleManager->add(style);
     widget.stackedWidget->setCurrentWidget(widget.welcomePage);
 }
 
@@ -201,6 +214,20 @@ void StyleManager::removeCharacterStyle(KoCharacterStyle* style)
 {
     if (m_alteredCharacterStyles.contains(style->styleId()))
         m_alteredCharacterStyles.remove(style->styleId());
+}
+
+void StyleManager::slotStyleSelected(QModelIndex index)
+{
+    KoParagraphStyle *paragraphStyle = m_styleManager->paragraphStyle(index.internalId());
+    if (paragraphStyle) {
+        setParagraphStyle(paragraphStyle);
+        return;
+    }
+    KoCharacterStyle *characterStyle = m_styleManager->characterStyle(index.internalId());
+    if (characterStyle) {
+        setCharacterStyle(characterStyle, false);
+        return;
+    }
 }
 
 /* TODO

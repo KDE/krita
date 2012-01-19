@@ -18,12 +18,15 @@
   </property>
   <layout class="QGridLayout">
    <item row="0" column="0" colspan="2">
-    <widget class="StylesWidget" name="styles">
+    <widget class="QListView" name="styles">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-       <horstretch>0</horstretch>
+       <horstretch>270</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
      </property>
     </widget>
    </item>
@@ -78,11 +81,6 @@
    <extends>QWidget</extends>
    <header>dialogs/CharacterGeneral.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>StylesWidget</class>
-   <extends>QListWidget</extends>
-   <header>dialogs/StylesWidget.h</header>
   </customwidget>
   <customwidget>
    <class>StyleManagerWelcome</class>

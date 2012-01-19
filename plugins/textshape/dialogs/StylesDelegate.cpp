@@ -100,9 +100,8 @@ void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
 
 QSize StylesDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    Q_UNUSED(index);
     Q_UNUSED(option);
-    return QSize(250, 48);
+    return index.data(Qt::SizeHintRole).toSize();
 }
 
 bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &optionV1, const QModelIndex &index)

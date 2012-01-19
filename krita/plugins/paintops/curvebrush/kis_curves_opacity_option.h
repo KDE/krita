@@ -26,7 +26,7 @@ class KisCurvesOpacityOption : public KisCurveOption
 {
 public:
     KisCurvesOpacityOption();
-    qreal apply(const KisPaintInformation & info, double opacity) const;
+    qreal apply(const KisPaintInformation & info, qreal opacity) const;
 };
 
 #endif

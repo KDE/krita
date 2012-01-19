@@ -32,7 +32,7 @@ KAboutData * newKritaAboutData()
                                             CALLIGRA_VERSION_STRING,
                                             ki18n("Digital Painting for Artists"),
                                             KAboutData::License_GPL,
-                                            ki18n("(c) 1999-2011 The Krita team.\n"),
+                                            ki18n("(c) 1999-2012 The Krita team.\n"),
                                             KLocalizedString(),
                                             "http://www.krita.org",
                                             "submit@bugs.kde.org");

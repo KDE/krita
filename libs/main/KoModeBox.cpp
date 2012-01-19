@@ -60,14 +60,16 @@ public:
     int activeId;
 };
 
+QString KoModeBox::applicationName;
+
 static bool compareButton(const KoToolButton &b1, const KoToolButton &b2)
 {
     if (b1.section == b2.section) {
         return b1.priority < b2.priority;
     } else {
-        if (b1.section.contains(qApp->applicationName())) {
+        if (b1.section.contains(KoModeBox::applicationName)) {
             return true;
-        } else if (b2.section.contains(qApp->applicationName())) {
+        } else if (b2.section.contains(KoModeBox::applicationName)) {
             return false;
         }
 
@@ -81,10 +83,12 @@ static bool compareButton(const KoToolButton &b1, const KoToolButton &b2)
 }
 
 
-KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas)
+KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     : QToolBox()
     , d(new Private(canvas))
 {
+    applicationName = appName;
+
     foreach(const KoToolButton & button,
             KoToolManager::instance()->createToolList(canvas->canvas())) {
         addButton(button);
@@ -178,11 +182,10 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
     int newIndex = -1;
     foreach (const KoToolButton button, d->buttons) {
         QString code = button.visibilityCode;
-
         if (button.buttonGroupId == d->activeId) {
             newIndex = d->addedButtons.length();
         }
-        if (button.section.contains(qApp->applicationName())) {
+        if (button.section.contains(applicationName)) {
             addItem(button);
             continue;
         } else if (!button.section.contains("dynamic")
@@ -197,10 +200,13 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
 
         if (code.endsWith( QLatin1String( "/always"))) {
             addItem(button);
+            continue;
         } else if (code.isEmpty() && codes.count() != 0) {
             addItem(button);
+            continue;
         } else if (codes.contains(code)) {
             addItem(button);
+            continue;
         }
     }
     if (newIndex != -1) {

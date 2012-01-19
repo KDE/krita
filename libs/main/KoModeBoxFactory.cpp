@@ -26,13 +26,15 @@
 class KoModeBoxFactory::Private {
 public:
     KoCanvasControllerWidget *canvasController;
+    QString applicationName;
 };
 
 
-KoModeBoxFactory::KoModeBoxFactory(KoCanvasControllerWidget *canvasController, const QString& /*title*/)
+KoModeBoxFactory::KoModeBoxFactory(KoCanvasControllerWidget *canvasController, const QString &applicationName, const QString& /*title*/)
     : d( new Private())
 {
     d->canvasController = canvasController;
+    d->applicationName = applicationName;
 }
 
 KoModeBoxFactory::~KoModeBoxFactory() {
@@ -51,7 +53,7 @@ KoDockFactoryBase::DockPosition KoModeBoxFactory::defaultDockPosition() const
 
 QDockWidget* KoModeBoxFactory::createDockWidget()
 {
-    KoModeBox *box = new KoModeBox(d->canvasController);
+    KoModeBox *box = new KoModeBox(d->canvasController, d->applicationName);
     QDockWidget *docker = new KoModeBoxDocker(box);
 
     return docker;

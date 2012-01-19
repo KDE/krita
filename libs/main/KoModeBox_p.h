@@ -55,7 +55,7 @@ class KoModeBox : public QToolBox {
     Q_OBJECT
 public:
     /// constructor
-    explicit KoModeBox(KoCanvasControllerWidget *canvas);
+    explicit KoModeBox(KoCanvasControllerWidget *canvas, const QString &applicationName);
     ~KoModeBox();
 
     /**
@@ -106,6 +106,9 @@ private slots:
 
     /// slot for when a new item have been selected in the QToolBox
     void toolSelected(int index);
+
+public:
+    static QString applicationName;
 
 private:
     void addItem(const KoToolButton button);

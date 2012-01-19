@@ -31,6 +31,8 @@
 #include <KoTextEditor.h>
 #include <KoTextShapeData.h>
 #include <KoViewConverter.h>
+#include <KoGlobal.h>
+
 #include "TextShape.h"
 
 #include "commands/AcceptChangeCommand.h"
@@ -39,9 +41,11 @@
 #include "dialogs/TrackedChangeModel.h"
 #include "dialogs/TrackedChangeManager.h"
 #include "dialogs/AcceptRejectChangeDialog.h"
+#include "dialogs/ChangeConfigureDialog.h"
 
 #include <KLocale>
 #include <KAction>
+#include <KUser>
 
 #include <QHBoxLayout>
 #include <QKeyEvent>
@@ -68,6 +72,20 @@ ReviewTool::ReviewTool(KoCanvasBase* canvas): KoToolBase(canvas),
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_T);
     addAction("show_changeManager", action);
     connect(action, SIGNAL(triggered()), this, SLOT(showTrackedChangeManager()));
+
+    m_actionShowChanges = new KAction(i18n("Show Changes"), this);
+    m_actionShowChanges->setCheckable(true);
+    addAction("edit_show_changes", m_actionShowChanges);
+    connect(m_actionShowChanges, SIGNAL(triggered(bool)), this, SLOT(toggleShowChanges(bool)));
+
+    m_actionRecordChanges = new KAction(i18n("Record Changes"), this);
+    m_actionRecordChanges->setCheckable(true);
+    addAction("edit_record_changes", m_actionRecordChanges);
+    connect(m_actionRecordChanges, SIGNAL(triggered(bool)), this, SLOT(toggleRecordChanges(bool)));
+
+    m_configureChangeTracking = new KAction(i18n("Configure Change Tracking..."), this);
+    addAction("configure_change_tracking", m_configureChangeTracking);
+    connect(m_configureChangeTracking, SIGNAL(triggered()), this, SLOT(configureChangeTracking()));
 }
 
 ReviewTool::~ReviewTool()
@@ -253,6 +271,8 @@ void ReviewTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &s
 
 
     m_textShape->update();
+
+    readConfig();
 }
 
 void ReviewTool::setShapeData(KoTextShapeData *data)
@@ -295,6 +315,8 @@ void ReviewTool::setShapeData(KoTextShapeData *data)
         connect(m_changesTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(selectedChangeChanged(QModelIndex,QModelIndex)));
         m_changesTreeView->reset();
     }
+
+    m_changeTracker = KoTextDocument(m_textShapeData->document()).changeTracker();
 }
 
 void ReviewTool::deactivate()
@@ -312,6 +334,7 @@ QList<QWidget*> ReviewTool::createOptionWidgets()
 
     m_changesTreeView = new QTreeView(widget);
     m_changesTreeView->setModel(m_model);
+    m_changesTreeView->setColumnHidden(0, true);
     connect(m_changesTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(selectedChangeChanged(QModelIndex,QModelIndex)));
 
     QVBoxLayout *vLayout = new QVBoxLayout(widget);
@@ -322,7 +345,18 @@ QList<QWidget*> ReviewTool::createOptionWidgets()
     hLayout->addWidget(accept);
     hLayout->addWidget(reject);
     vLayout->addLayout(hLayout);
+    QCheckBox *showChanges = new QCheckBox(i18n("Show Changes"));
+    vLayout->addWidget(showChanges);
+    QCheckBox *recordChanges = new QCheckBox(i18n("Record Changes"));
+    vLayout->addWidget(recordChanges);
+    QToolButton *configureTracing = new QToolButton();
+    configureTracing->setDefaultAction(action("configure_change_tracking"));
+    vLayout->addWidget(configureTracing);
 
+    connect(m_actionShowChanges, SIGNAL(triggered(bool)), showChanges, SLOT(setChecked(bool)));
+    connect(m_actionRecordChanges, SIGNAL(triggered(bool)), recordChanges, SLOT(setChecked(bool)));
+    connect(showChanges, SIGNAL(clicked(bool)), this, SLOT(toggleShowChanges(bool)));
+    connect(recordChanges, SIGNAL(clicked(bool)), this, SLOT(toggleRecordChanges(bool)));
     connect(accept, SIGNAL(clicked(bool)), this, SLOT(acceptChange()));
     connect(reject, SIGNAL(clicked(bool)), this, SLOT(rejectChange()));
 
@@ -367,6 +401,89 @@ void ReviewTool::selectedChangeChanged(QModelIndex newItem, QModelIndex previous
     Q_UNUSED(previousItem);
     canvas()->updateCanvas(m_textShape->boundingRect());
 }
+
+void ReviewTool::toggleShowChanges(bool on)//TODO transfer this in KoTextEditor
+{
+    m_actionShowChanges->setChecked(on);
+    ShowChangesCommand *command = new ShowChangesCommand(on, m_textShapeData->document(), this->canvas());
+    connect(command, SIGNAL(toggledShowChange(bool)), m_actionShowChanges, SLOT(setChecked(bool)));
+    m_textEditor->addCommand(command);
+}
+
+void ReviewTool::toggleRecordChanges(bool on)
+{
+    m_actionRecordChanges->setChecked(on);
+    if (m_changeTracker)
+        m_changeTracker->setRecordChanges(on);
+}
+
+void ReviewTool::configureChangeTracking()
+{
+    if (m_changeTracker) {
+        QColor insertionBgColor, deletionBgColor, formatChangeBgColor;
+        insertionBgColor = m_changeTracker->getInsertionBgColor();
+        deletionBgColor = m_changeTracker->getDeletionBgColor();
+        formatChangeBgColor = m_changeTracker->getFormatChangeBgColor();
+        QString authorName = m_changeTracker->authorName();
+        KoChangeTracker::ChangeSaveFormat changeSaveFormat = m_changeTracker->saveFormat();
+
+        ChangeConfigureDialog changeDialog(insertionBgColor, deletionBgColor, formatChangeBgColor, authorName, changeSaveFormat, canvas()->canvasWidget());
+
+        if (changeDialog.exec()) {
+            m_changeTracker->setInsertionBgColor(changeDialog.getInsertionBgColor());
+            m_changeTracker->setDeletionBgColor(changeDialog.getDeletionBgColor());
+            m_changeTracker->setFormatChangeBgColor(changeDialog.getFormatChangeBgColor());
+            m_changeTracker->setAuthorName(changeDialog.authorName());
+            m_changeTracker->setSaveFormat(changeDialog.saveFormat());
+            writeConfig();
+        }
+    }
+}
+
+
+void ReviewTool::readConfig()
+{
+    if (m_changeTracker) {
+        QColor bgColor, defaultColor;
+        QString changeAuthor;
+        int changeSaveFormat = KoChangeTracker::DELTAXML;
+        KConfigGroup interface = KoGlobal::calligraConfig()->group("Change-Tracking");
+        if (interface.exists()) {
+            bgColor = interface.readEntry("insertionBgColor", defaultColor);
+            m_changeTracker->setInsertionBgColor(bgColor);
+            bgColor = interface.readEntry("deletionBgColor", defaultColor);
+            m_changeTracker->setDeletionBgColor(bgColor);
+            bgColor = interface.readEntry("formatChangeBgColor", defaultColor);
+            m_changeTracker->setFormatChangeBgColor(bgColor);
+            changeAuthor = interface.readEntry("changeAuthor", changeAuthor);
+            if (changeAuthor == "") {
+                KUser user(KUser::UseRealUserID);
+                m_changeTracker->setAuthorName(user.property(KUser::FullName).toString());
+            } else {
+                m_changeTracker->setAuthorName(changeAuthor);
+            }
+            changeSaveFormat = interface.readEntry("changeSaveFormat", changeSaveFormat);
+            m_changeTracker->setSaveFormat((KoChangeTracker::ChangeSaveFormat)(changeSaveFormat));
+        }
+    }
+}
+
+void ReviewTool::writeConfig()
+{
+    if (m_changeTracker) {
+        KConfigGroup interface = KoGlobal::calligraConfig()->group("Change-Tracking");
+        interface.writeEntry("insertionBgColor", m_changeTracker->getInsertionBgColor());
+        interface.writeEntry("deletionBgColor", m_changeTracker->getDeletionBgColor());
+        interface.writeEntry("formatChangeBgColor", m_changeTracker->getFormatChangeBgColor());
+        KUser user(KUser::UseRealUserID);
+        QString changeAuthor = m_changeTracker->authorName();
+        if (changeAuthor != user.property(KUser::FullName).toString()) {
+            interface.writeEntry("changeAuthor", changeAuthor);
+        }
+        interface.writeEntry("changeSaveFormat", (int)(m_changeTracker->saveFormat()));
+    }
+}
+
 
 void ReviewTool::showTrackedChangeManager()
 {

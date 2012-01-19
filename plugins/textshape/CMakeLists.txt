@@ -77,7 +77,6 @@ SET ( textshape_SRCS
     dialogs/AcceptRejectChangeDialog.cpp
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp
-    dialogs/ChangeTrackingOptionsWidget.cpp
     dialogs/BibliographyConfigureDialog.cpp
     dialogs/TableOfContentsConfigure.cpp
     dialogs/TableOfContentsStyleConfigure.cpp
@@ -129,7 +128,6 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/ChangeConfigureDialog.ui
     dialogs/AcceptRejectChangeDialog.ui
     dialogs/TrackedChangeManager.ui
-    dialogs/ChangeTrackingOptionsWidget.ui
 )
 
 kde4_add_plugin(textshape ${textshape_SRCS})

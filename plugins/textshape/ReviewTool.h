@@ -30,6 +30,9 @@ class KoViewConverter;
 class TextShape;
 class TrackedChangeManager;
 class TrackedChangeModel;
+class KoChangeTracker;
+
+class KAction;
 
 class QModelIndex;
 class QPainter;
@@ -59,6 +62,9 @@ public:
 protected:
     virtual QList<QWidget*> createOptionWidgets();
 
+    void readConfig();
+    void writeConfig();
+
 private slots:
     void acceptChange();
     void rejectChange();
@@ -66,10 +72,21 @@ private slots:
     void setShapeData(KoTextShapeData *data);
     void showTrackedChangeManager();
 
+    /// When enabled, display changes
+    void toggleShowChanges(bool);
+    /// When enabled, make the change tracker record changes made while typing
+    void toggleRecordChanges(bool);
+    /// Configure Change Tracking
+    void configureChangeTracking();
+
 private:
     int pointToPosition(const QPointF & point) const;
     QRectF textRect(QTextCursor &cursor) const;
     void updateSelectedShape(const QPointF &point);
+
+    KAction *m_actionShowChanges;
+    KAction *m_actionRecordChanges;
+    KAction *m_configureChangeTracking;
 
     KoTextEditor *m_textEditor;
     KoTextShapeData *m_textShapeData;
@@ -78,6 +95,7 @@ private:
     TrackedChangeModel *m_model;
     TrackedChangeManager *m_trackedChangeManager;
     QTreeView *m_changesTreeView;
+    KoChangeTracker *m_changeTracker;
 };
 
 #endif // CHANGETRACKINGTOOL_H

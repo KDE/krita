@@ -148,12 +148,6 @@ public slots:
     void startTextEditingPlugin(const QString &pluginId);
     /// reimplemented from KoToolBase
     virtual void resourceChanged(int key, const QVariant &res);
-    //When enabled, display changes
-    void toggleShowChanges(bool);
-    /// When enabled, make the change tracker record changes made while typing
-    void toggleRecordChanges(bool);
-    /// Configure Change Tracking
-    void configureChangeTracking();
 
 signals:
     /// emitted every time a different styleManager is set.
@@ -305,8 +299,6 @@ private:
     void editingPluginEvents();
     void finishedWord();
     void finishedParagraph();
-    void readConfig();
-    void writeConfig();
     void runUrl(KoPointerEvent *event, QString &url);
 
 private:
@@ -321,7 +313,6 @@ private:
     KoChangeTracker *m_changeTracker;
     bool m_allowActions;
     bool m_allowAddUndoCommand;
-    bool m_trackChanges;
     bool m_allowResourceManagerUpdates;
     int m_prevCursorPosition; /// used by editingPluginEvents
     int m_prevMouseSelectionStart, m_prevMouseSelectionEnd;
@@ -341,9 +332,6 @@ private:
     KAction *m_actionFormatSub;
     KAction *m_actionFormatIncreaseIndent;
     KAction *m_actionFormatDecreaseIndent;
-    KAction *m_actionShowChanges;
-    KAction *m_actionRecordChanges;
-    KAction *m_configureChangeTracking;
     KAction *m_growWidthAction;
     KAction *m_growHeightAction;
     KAction *m_shrinkToFitAction;

@@ -49,7 +49,7 @@ void TextCutCommand::redo()
             return;
 
         te->deleteChar(KoTextEditor::NextChar,
-                       m_tool->m_actionShowChanges->isChecked(),
+                      /*FIXME m_tool->m_actionShowChanges->isChecked()*/false,
                        m_tool->canvas()->shapeController());
     }
 }

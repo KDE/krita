@@ -59,7 +59,14 @@ public slots:
     void slotUpdatePreview();
 
 signals:
-    /** As a normal QComboBox, this is emitted when the selection is changed (programatically or by user interaction). It is to be noted that this signal is also emitted in case a style which is considered modified is selected again.
+    /** This is emitted when a selection is made (programatically or by user interaction). It is
+      * to be noted that this signal is also emitted when an item is selected again.
+      * @param index: the index of the selected item. */
+    void selected(int index);
+
+    /** This is emitted when a selection is changed (programatically or by user interaction). It is
+      * to be noted that this signal is _not_ emitted when an item is selected again. Not even if it
+      * had been modified.
       * @param index: the index of the selected item. */
     void selectionChanged(int index);
 

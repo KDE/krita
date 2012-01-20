@@ -87,7 +87,7 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
 
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
     widget.characterStyleCombo->setStylesModel(m_stylesModel);
-    connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+    connect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
     connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
     connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
     connect(widget.characterStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
@@ -104,9 +104,9 @@ void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
     //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
-    disconnect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+    disconnect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
     m_stylesModel->setStyleManager(sm);
-    connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+    connect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
 }
 
 void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, const QTextCharFormat& refBlockCharFormat)
@@ -143,11 +143,11 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, cons
                 }
             }
         }
-        disconnect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+        disconnect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
         widget.characterStyleCombo->setCurrentIndex((useParagraphStyle)?0:m_stylesModel->indexForCharacterStyle(*style).row());
         widget.characterStyleCombo->setStyleIsOriginal(unchanged);
         widget.characterStyleCombo->slotUpdatePreview();
-        connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+        connect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
     }
 }
 
@@ -198,9 +198,9 @@ void SimpleCharacterWidget::setCurrentBlockFormat(const QTextBlockFormat &format
     m_currentBlockFormat = format;
 
     m_stylesModel->setCurrentParagraphStyle(format.intProperty(KoParagraphStyle::StyleId));
-    disconnect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+    disconnect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
     widget.characterStyleCombo->slotUpdatePreview();
-    connect(widget.characterStyleCombo, SIGNAL(selectionChanged(int)), this, SLOT(styleSelected(int)));
+    connect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
 }
 
 void SimpleCharacterWidget::styleSelected(int index)

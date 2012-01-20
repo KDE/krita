@@ -926,6 +926,7 @@ void KoTextEditor::setStyle(KoParagraphStyle *style)
         style->applyStyle(block);
         block = block.next();
     }
+    d->caret.setCharFormat(d->caret.blockCharFormat());
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
 }

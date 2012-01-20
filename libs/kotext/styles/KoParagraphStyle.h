@@ -509,7 +509,7 @@ public:
     /// duplicated property from QTextBlockFormat
     void setTextIndent(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    QTextLength textIndent() const;
+    qreal textIndent() const;
     /// Custom KoParagraphStyle property for auto-text-indent
     void setAutoTextIndent(bool on);
     bool autoTextIndent() const;

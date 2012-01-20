@@ -249,7 +249,15 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
     const QMap<int, QVariant> props = d->stylesPrivate.properties();
     QMap<int, QVariant>::const_iterator it = props.begin();
     while (it != props.end()) {
-        format.setProperty(it.key(), it.value());
+        if (it.key() == QTextBlockFormat::BlockLeftMargin) {
+            format.setLeftMargin(leftMargin());
+        } else if (it.key() == QTextBlockFormat::BlockRightMargin) {
+            format.setRightMargin(rightMargin());
+        } else if (it.key() == QTextBlockFormat::TextIndent) {
+            format.setTextIndent(textIndent());
+        } else {
+            format.setProperty(it.key(), it.value());
+        }
         ++it;
     }
     if ((hasProperty(DefaultOutlineLevel)) && (!format.hasProperty(OutlineLevel))) {
@@ -840,9 +848,12 @@ void KoParagraphStyle::setTextIndent(QTextLength margin)
     setProperty(QTextFormat::TextIndent, margin);
 }
 
-QTextLength KoParagraphStyle::textIndent() const
+qreal KoParagraphStyle::textIndent() const
 {
-    return propertyLength(QTextFormat::TextIndent);
+    if (parentStyle())
+        return propertyLength(QTextFormat::TextIndent).value(parentStyle()->textIndent());
+    else
+        return propertyLength(QTextFormat::TextIndent).value(0);
 }
 
 void KoParagraphStyle::setAutoTextIndent(bool on)
@@ -2023,7 +2034,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
             }
     //
         } else if (key == QTextFormat::TextIndent) {
-            style.addPropertyLength("fo:text-indent", textIndent(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:text-indent", propertyLength(QTextFormat::TextIndent), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::AutoTextIndent) {
             style.addProperty("style:auto-text-indent", autoTextIndent(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::TabStopDistance) {

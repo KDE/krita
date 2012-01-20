@@ -914,8 +914,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     //========
     // Margins
     //========
-    qreal startMargin = pStyle.leftMargin();
-    qreal endMargin = pStyle.rightMargin();
+    qreal startMargin = block.blockFormat().leftMargin();
+    qreal endMargin = block.blockFormat().rightMargin();
     if (m_isRtl) {
         qSwap(startMargin, endMargin);
     }
@@ -1353,7 +1353,7 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const 
         return guessGlyphWidth * 3 + m_extraTextIndent;
     }
 
-    qreal pStyleTextIndent = pStyle.textIndent().value(width());
+    qreal blockTextIndent = block.blockFormat().textIndent();
 
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
         // according to odf 1.2 17.20 list text indent should be used when paragraph text indent is
@@ -1362,17 +1362,17 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const 
         bool set = false;
         if (id && m_documentLayout->styleManager()) {
             KoParagraphStyle *originalParagraphStyle = m_documentLayout->styleManager()->paragraphStyle(id);
-            if (originalParagraphStyle->textIndent().value(width()) != pStyleTextIndent) {
-                set = (pStyleTextIndent != 0);
+            if (originalParagraphStyle->textIndent() != blockTextIndent) {
+                set = (blockTextIndent != 0);
             }
         } else {
-            set = (pStyleTextIndent != 0);
+            set = (blockTextIndent != 0);
         }
         if (! set) {
             return textList->format().doubleProperty(KoListStyle::TextIndent) + m_extraTextIndent;
         }
     }
-    return pStyleTextIndent + m_extraTextIndent;
+    return blockTextIndent + m_extraTextIndent;
 }
 
 void KoTextLayoutArea::setExtraTextIndent(qreal extraTextIndent)

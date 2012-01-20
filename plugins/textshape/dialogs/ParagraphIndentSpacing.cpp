@@ -89,7 +89,7 @@ void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style)
 {
     m_style = style;
     // TODO : handle relatives
-    widget.first->changeValue(style->textIndent().rawValue());
+    widget.first->changeValue(style->textIndent());
     widget.left->changeValue(style->leftMargin());
     widget.right->changeValue(style->rightMargin());
     widget.before->changeValue(style->topMargin());

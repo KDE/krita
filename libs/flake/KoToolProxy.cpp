@@ -256,7 +256,7 @@ void KoToolProxy::mouseDoubleClickEvent(KoPointerEvent *event)
 {
      // let us handle it as any other mousepress (where we then detect multi clicks
     mousePressEvent(event);
-    if (!event->isAccepted())
+    if (!event->isAccepted() && d->activeTool)
         d->activeTool->canvas()->shapeManager()->suggestChangeTool(event);
 }
 

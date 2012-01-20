@@ -2137,7 +2137,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     }
     if (!hide) {
         // Let's insert an extra block so that will be the one we hide instead
-        cursor.insertBlock();
+        cursor.insertBlock(cursor.blockFormat(), cursor.blockCharFormat());
         currentBlock = cursor.block();
     }
 

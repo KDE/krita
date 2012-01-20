@@ -486,7 +486,7 @@ struct FragmentData
 void KoCharacterStyle::applyStyle(QTextBlock &block) const
 {
     QTextCursor cursor(block);
-    QTextCharFormat cf = cursor.blockCharFormat();
+    QTextCharFormat cf;
     applyStyle(cf);
     ensureMinimalProperties(cf);
     cursor.setBlockCharFormat(cf);

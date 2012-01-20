@@ -325,8 +325,19 @@ void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
     QList<int> keys = d->stylesPrivate.keys();
     for (int i = 0; i < keys.count(); i++) {
         QVariant variant = d->stylesPrivate.value(keys[i]);
-        if (variant == format.property(keys[i]))
-            format.clearProperty(keys[i]);
+        if (keys[i] == QTextBlockFormat::BlockLeftMargin) {
+            if (leftMargin() == format.property(keys[i]))
+                format.clearProperty(keys[i]);
+        } else if (keys[i] == QTextBlockFormat::BlockRightMargin) {
+            if (rightMargin() == format.property(keys[i]))
+                format.clearProperty(keys[i]);
+        } else if (keys[i] == QTextBlockFormat::TextIndent) {
+            if (textIndent() == format.property(keys[i]))
+                format.clearProperty(keys[i]);
+        } else {
+            if (variant == format.property(keys[i]))
+                format.clearProperty(keys[i]);
+        }
     }
     cursor.setBlockFormat(format);
     KoCharacterStyle::unapplyStyle(block);

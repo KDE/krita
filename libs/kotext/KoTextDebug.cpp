@@ -302,6 +302,8 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
             value = QString::number(properties[id].toInt());
             break;
         default:
+            key = "unknown"+QString::number(id);
+            value = QString::number(properties[id].toInt());
             break;
         }
         if (!key.isEmpty())

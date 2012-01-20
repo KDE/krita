@@ -33,6 +33,7 @@
 #include "KoParagraphStyle.h"
 
 #include <KDebug>
+#include <KoTextDebug.h>
 
 #include <QTextTable>
 #include <QTextTableFormat>
@@ -109,6 +110,28 @@ KoTableCellStyle *KoTableCellStyle::fromTableCell(const QTextTableCell &tableCel
 {
     QTextTableCellFormat tableCellFormat = tableCell.format().toTableCellFormat();
     return new KoTableCellStyle(tableCellFormat, parent);
+}
+
+QTextCharFormat KoTableCellStyle::cleanCharFormat(const QTextCharFormat &charFormat)
+{
+    if (charFormat.isTableCellFormat()) {
+        QTextTableCellFormat format;
+        const QMap<int, QVariant> props = charFormat.properties();
+        QMap<int, QVariant>::const_iterator it = props.begin();
+        while (it != props.end()) {
+            // lets save all Qt's table cell properties
+            if (it.key()>=QTextFormat::TableCellRowSpan && it.key()<QTextFormat::ImageName)
+                format.setProperty(it.key(), it.value());
+
+            // lets save all our table cell properties
+            if (it.key()>=StyleId && it.key()<LastCellStyleProperty)
+                format.setProperty(it.key(), it.value());
+
+            ++it;
+        }
+        return format;
+    }
+    return QTextCharFormat();
 }
 
 QRectF KoTableCellStyle::contentRect(const QRectF &boundingRect) const

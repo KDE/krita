@@ -33,6 +33,7 @@
 #include <KoTableColumnStyle.h>
 #include <KoTableRowStyle.h>
 #include <KoTableStyle.h>
+#include <KoTextDebug.h>
 
 #include <QtGui>
 #include <QTextCursor>
@@ -88,7 +89,6 @@ void TestTableLayout::setupTest(const QString &mergedText, const QString &topRig
     KoParagraphStyle style;
     style.setStyleId(101); // needed to do manually since we don't use the stylemanager
     style.applyStyle(m_block);
-
     QTextTableFormat tableFormat;
     if (tableStyle)
         tableStyle->applyStyle(tableFormat);

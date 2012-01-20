@@ -22,6 +22,8 @@
  */
 #include "KoCharacterStyle.h"
 
+#include "KoTableCellStyle.h"
+
 #include "Styles_p.h"
 
 #include <QTextBlock>
@@ -486,7 +488,7 @@ struct FragmentData
 void KoCharacterStyle::applyStyle(QTextBlock &block) const
 {
     QTextCursor cursor(block);
-    QTextCharFormat cf;
+    QTextCharFormat cf = KoTableCellStyle::cleanCharFormat(block.charFormat());
     applyStyle(cf);
     ensureMinimalProperties(cf);
     cursor.setBlockCharFormat(cf);

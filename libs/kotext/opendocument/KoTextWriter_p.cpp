@@ -1407,7 +1407,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
         listTagInformation.setTagName("text:list");
         listTagInformation.addAttribute("text:style-name", listStyles[textList]);
 
-        if (listXmlIds.contains(list->listContinuedFrom())) {
+        if (list && listXmlIds.contains(list->listContinuedFrom())) {
             listTagInformation.addAttribute("text:continue-list", listXmlIds.value(list->listContinuedFrom()));
         }
 

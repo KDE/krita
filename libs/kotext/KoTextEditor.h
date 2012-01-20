@@ -183,8 +183,6 @@ public slots:
 
     void setTextBackgroundColor(const QColor &color);
 
-    void setDefaultFormat();
-
     void setStyle(KoParagraphStyle *style);
 
     void setStyle(KoCharacterStyle *style);

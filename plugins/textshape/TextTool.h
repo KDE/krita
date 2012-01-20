@@ -202,8 +202,6 @@ private slots:
     void setFontFamily(const QString &);
     /// Set Font size
     void setFontSize(qreal size);
-    /// Default Format
-    void setDefaultFormat();
     /// see KoTextEditor::insertIndexMarker
     void insertIndexMarker();
     /// shows a dialog to insert a table

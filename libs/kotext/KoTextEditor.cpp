@@ -931,20 +931,6 @@ void KoTextEditor::setStyle(KoParagraphStyle *style)
     emit textFormatChanged();
 }
 
-void KoTextEditor::setDefaultFormat()
-{
-    d->updateState(KoTextEditor::Private::Format, i18n("Set default format"));
-    if (KoStyleManager *styleManager = KoTextDocument(d->document).styleManager()) {
-        QTextCharFormat format;
-        ((KoCharacterStyle *)styleManager->defaultParagraphStyle())->applyStyle(format);
-        QTextCharFormat prevFormat(d->caret.charFormat());
-        d->caret.setCharFormat(format);
-        registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Set default format"), format, prevFormat, false);
-    }
-    d->updateState(KoTextEditor::Private::NoOp);
-    emit textFormatChanged();
-}
-
 void KoTextEditor::addBookmark(const QString &name)
 {//TODO changeTracking
     if (isEditProtected()) {

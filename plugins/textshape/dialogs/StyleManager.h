@@ -63,6 +63,7 @@ private:
     QMap<int, KoCharacterStyle*> m_alteredCharacterStyles;
 
     StylesModel *m_paragraphStylesModel;
+    StylesModel *m_characterStylesModel;
     KoStyleThumbnailer *m_thumbnailer;
     KoParagraphStyle *m_selectedParagStyle;
     KoCharacterStyle *m_selectedCharStyle;

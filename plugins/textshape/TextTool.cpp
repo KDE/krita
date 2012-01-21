@@ -1933,12 +1933,10 @@ void TextTool::showStyleManager(int styleId)
     if (paragraphStyle) {
         dia->setParagraphStyle(paragraphStyle);
     }
-/*TODO enable when we have the charStyles in the styleManager
     KoCharacterStyle *characterStyle = styleManager->characterStyle(styleId);
     if (characterStyle) {
         dia->setCharacterStyle(characterStyle);
     }
-*/
     dia->show();
 }
 

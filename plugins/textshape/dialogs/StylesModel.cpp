@@ -42,7 +42,8 @@ StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *paren
       m_currentParagraphStyle(0),
       m_defaultCharacterStyle(0),
       m_modelType(modelType),
-      m_styleMapper(new QSignalMapper(this))
+      m_styleMapper(new QSignalMapper(this)),
+      m_provideStyleNone(false)
 {
     setStyleManager(manager);
     //Create a default characterStyle for the preview of "None" character style
@@ -51,6 +52,8 @@ StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *paren
         m_defaultCharacterStyle->setStyleId(-1);
         m_defaultCharacterStyle->setName(i18n("None"));
         m_defaultCharacterStyle->setFontPointSize(12);
+
+        m_provideStyleNone = true;
     }
 
     m_paragIcon = KIcon("kotext-paragraph");
@@ -152,6 +155,13 @@ void StylesModel::setCurrentParagraphStyle(int styleId)
         m_currentParagraphStyle = 0;
     }
     m_currentParagraphStyle = m_styleManager->paragraphStyle(styleId)->clone();
+}
+
+void StylesModel::setProvideStyleNone(bool provide)
+{
+    if (m_modelType == StylesModel::CharacterStyle) {
+        m_provideStyleNone = provide;
+    }
 }
 
 KoParagraphStyle *StylesModel::paragraphStyleForIndex(const QModelIndex &index) const
@@ -341,7 +351,7 @@ void StylesModel::updateCharacterStyles()
     beginResetModel();
     m_styleList.clear();
 
-    if (m_styleManager->paragraphStyles().count()) {
+    if (m_provideStyleNone && m_styleManager->paragraphStyles().count()) {
         m_styleList.append(-1);
     }
 

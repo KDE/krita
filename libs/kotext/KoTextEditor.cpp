@@ -775,7 +775,12 @@ void KoTextEditor::setTextColor(const QColor &color)
 class KoTextVisitor
 {
 public:
-    KoTextVisitor() : m_abortVisiting(false) {}
+    KoTextVisitor(KoTextEditor *editor)
+        : m_abortVisiting(false)
+        , m_editor(editor)
+    {
+    }
+
     virtual ~KoTextVisitor() {}
     // called whenever a visit was prevented by editprotection
     virtual void nonVisit() {}
@@ -801,15 +806,17 @@ public:
 
     bool abortVisiting() { return m_abortVisiting;}
     void setAbortVisiting(bool abort) {m_abortVisiting = abort;}
+    KoTextEditor * editor() {return m_editor;}
 private:
     bool m_abortVisiting;
+    KoTextEditor *m_editor;
 };
 
 class SetCharacterStyleVisitor : public KoTextVisitor
 {
 public:
-    SetCharacterStyleVisitor(KoCharacterStyle *style)
-        : KoTextVisitor()
+    SetCharacterStyleVisitor(KoTextEditor *editor, KoCharacterStyle *style)
+        : KoTextVisitor(editor)
         , m_style(style)
     {
     }
@@ -826,8 +833,8 @@ public:
         QList<QTextCharFormat>::Iterator it = m_formats.begin();
         foreach(QTextCursor cursor, m_cursors) {
             cursor.setCharFormat(*it);
-            //QTextFormat prevFormat(cursor.charFormat());
-            //registerTrackedChange(cursor, KoGenChange::FormatChange, i18n("Set Character Style"), *it, prevFormat, false);
+            QTextFormat prevFormat(cursor.charFormat());
+            editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, i18n("Set Character Style"), *it, prevFormat, false);
             ++it;
         }
     }
@@ -867,7 +874,7 @@ void KoTextEditor::setStyle(KoCharacterStyle *style)
     Q_ASSERT(style);
     d->updateState(KoTextEditor::Private::Format, i18n("Set Character Style"));
 
-    SetCharacterStyleVisitor visitor(style);
+    SetCharacterStyleVisitor visitor(this, style);
 
     recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
     d->updateState(KoTextEditor::Private::NoOp);
@@ -969,8 +976,8 @@ void KoTextEditor::recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisi
 class SetParagraphStyleVisitor : public KoTextVisitor
 {
 public:
-    SetParagraphStyleVisitor(KoStyleManager *styleManager, KoParagraphStyle *style)
-        : KoTextVisitor()
+    SetParagraphStyleVisitor(KoTextEditor *editor, KoStyleManager *styleManager, KoParagraphStyle *style)
+        : KoTextVisitor(editor)
         , m_styleManager(styleManager)
         , m_style(style)
     {
@@ -996,7 +1003,7 @@ void KoTextEditor::setStyle(KoParagraphStyle *style)
     d->updateState(KoTextEditor::Private::Format, i18n("Set Paragraph Style"));
 
     KoStyleManager *styleManager = KoTextDocument(d->document).styleManager();
-    SetParagraphStyleVisitor visitor(styleManager, style);
+    SetParagraphStyleVisitor visitor(this, styleManager, style);
 
     recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
 
@@ -1526,8 +1533,8 @@ bool KoTextEditor::hasSelection() const
 class ProtectionCheckVisitor : public KoTextVisitor
 {
 public:
-    ProtectionCheckVisitor()
-        : KoTextVisitor()
+    ProtectionCheckVisitor(const KoTextEditor *editor)
+        : KoTextVisitor(const_cast<KoTextEditor *>(editor))
     {
     }
 
@@ -1544,7 +1551,7 @@ public:
 
 bool KoTextEditor::isEditProtected(bool useCached) const
 {
-    ProtectionCheckVisitor visitor;
+    ProtectionCheckVisitor visitor(this);
 
     if (useCached) {
         if (! d->editProtectionCached) {

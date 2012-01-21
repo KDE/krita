@@ -76,8 +76,19 @@ public:
      */
     void setThumbnailSize(QSize size);
 
+    /**
+     * remove all occurences of the style from the cache
+     */
+    void removeFromCache(KoParagraphStyle *style);
+
+    /**
+     * remove all occurences of the style from the cache
+     */
+    void removeFromCache(KoCharacterStyle *style);
+
 private:
     void layoutThumbnail(QSize size, QImage *im);
+    void removeFromCache(const QString &expr);
 
     class Private;
     Private* const d;

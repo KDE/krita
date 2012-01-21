@@ -235,3 +235,25 @@ void KoStyleThumbnailer::layoutThumbnail(QSize size, QImage *im)
         rootArea.paint(&p, pc);
     }
 }
+
+void KoStyleThumbnailer::removeFromCache(KoParagraphStyle *style)
+{
+    QString imageKey = "p_" + QString::number(style->styleId()) + "_";
+    removeFromCache(imageKey);
+}
+
+void KoStyleThumbnailer::removeFromCache(KoCharacterStyle *style)
+{
+    QString imageKey = "c_" + QString::number(style->styleId()) + "_";
+    removeFromCache(imageKey);
+}
+
+void KoStyleThumbnailer::removeFromCache(const QString &expr)
+{
+    QList<QString> keys = d->thumbnailCache.keys();
+    foreach (const QString &key, keys) {
+        if (key.contains(expr)) {
+            d->thumbnailCache.remove(key);
+        }
+    }
+}

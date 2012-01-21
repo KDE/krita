@@ -79,6 +79,7 @@
 #include <kundo2command.h>
 
 #include <kdebug.h>
+#include "KoTextDebug.h"
 
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>
@@ -793,13 +794,14 @@ public:
     virtual void visitBlock(QTextBlock block, const QTextCursor &caret)
     {
         for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
-            QTextCursor fragmentSelection;
+            QTextCursor fragmentSelection(caret);
             fragmentSelection.setPosition(qMax(caret.selectionStart(), it.fragment().position()));
             fragmentSelection.setPosition(qMin(caret.selectionEnd(), it.fragment().position() + it.fragment().length()), QTextCursor::KeepAnchor);
 
             if (fragmentSelection.anchor() >= fragmentSelection.position()) {
                 continue;
             }
+
             visitFragmentSelection(fragmentSelection);
         }
     }
@@ -828,7 +830,6 @@ public:
         m_style->ensureMinimalProperties(m_newFormat);
 
         KoTextVisitor::visitBlock(block, caret);
-
 
         QList<QTextCharFormat>::Iterator it = m_formats.begin();
         foreach(QTextCursor cursor, m_cursors) {
@@ -859,6 +860,7 @@ public:
             format.setAnchor(true);
             format.setAnchorHref(fragmentSelection.charFormat().anchorHref());
         }
+
         m_formats.append(format);
         m_cursors.append(fragmentSelection);
     }
@@ -985,12 +987,15 @@ public:
 
     virtual void visitBlock(QTextBlock block, const QTextCursor &)
     {
-        QTextBlockFormat bf = block.blockFormat();
         if (m_styleManager) {
+            QTextBlockFormat bf = block.blockFormat();
             KoParagraphStyle *old = m_styleManager->paragraphStyle(bf.intProperty(KoParagraphStyle::StyleId));
             if (old)
                 old->unapplyStyle(block);
         }
+        // above should unaaply the style and it's lists part, but we want to clear everything
+        QTextCursor cursor(block);
+        cursor.setBlockFormat(QTextBlockFormat());
         m_style->applyStyle(block);
     }
 

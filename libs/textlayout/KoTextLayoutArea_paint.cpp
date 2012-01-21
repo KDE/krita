@@ -450,7 +450,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
             if (block.layout()->lineCount() > 0) {
                 // if there is text, then baseline align the counter.
                 QTextLine firstParagLine = block.layout()->lineAt(0);
-                if (KoListStyle::isNumberingStyle(listStyle) || listStyle == KoListStyle::CustomCharItem) {
+                if (KoListStyle::isNumberingStyle(listStyle)) {
                     //if numbered list baseline align
                     counterPosition += QPointF(0, firstParagLine.ascent() - layout.lineAt(0).ascent());
                 } else {

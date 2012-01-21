@@ -868,7 +868,7 @@ void TextTool::copy() const
 
 void TextTool::deleteSelection()
 {
-    m_textEditor.data()->deleteChar(KoTextEditor::NextChar, m_changeTracker->recordChanges(),
+    m_textEditor.data()->deleteChar(KoTextEditor::NextChar, m_changeTracker && m_changeTracker->recordChanges(),
                                     canvas()->shapeController());
     editingPluginEvents();
 }
@@ -1055,7 +1055,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
     if (event->key() == Qt::Key_Backspace) {
         if (!textEditor->hasSelection() && textEditor->block().textList()
             && (textEditor->position() == textEditor->block().position())
-            && !(m_changeTracker->recordChanges())) {
+            && !(m_changeTracker && m_changeTracker->recordChanges())) {
             if (!textEditor->blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
                 // backspace at beginning of numbered list item, makes it unnumbered
                 textEditor->toggleListNumbering(false);
@@ -1067,7 +1067,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) { // delete prev word.
                 textEditor->movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
             }
-            textEditor->deleteChar(KoTextEditor::PreviousChar, m_changeTracker->recordChanges(),
+            textEditor->deleteChar(KoTextEditor::PreviousChar, m_changeTracker && m_changeTracker->recordChanges(),
                                        canvas()->shapeController());
 
             editingPluginEvents();
@@ -1079,7 +1079,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         textEditor->addCommand(cll);
         editingPluginEvents();
     } else if ((event->key() == Qt::Key_Backtab)
-        && ((!textEditor->hasSelection() && (textEditor->position() == textEditor->block().position())) || (textEditor->block().document()->findBlock(textEditor->anchor()) != textEditor->block().document()->findBlock(textEditor->position()))) && textEditor->block().textList() && !(m_changeTracker->recordChanges())) {
+        && ((!textEditor->hasSelection() && (textEditor->position() == textEditor->block().position())) || (textEditor->block().document()->findBlock(textEditor->anchor()) != textEditor->block().document()->findBlock(textEditor->position()))) && textEditor->block().textList() && !(m_changeTracker && m_changeTracker->recordChanges())) {
         ChangeListLevelCommand::CommandType type = ChangeListLevelCommand::DecreaseLevel;
         ChangeListLevelCommand *cll = new ChangeListLevelCommand(*textEditor->cursor(), type, 1);
         textEditor->addCommand(cll);
@@ -1090,7 +1090,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         }
         // the event only gets through when the Del is not used in the app
         // if the app forwards Del then deleteSelection is used
-        textEditor->deleteChar(KoTextEditor::NextChar, m_changeTracker->recordChanges(),
+        textEditor->deleteChar(KoTextEditor::NextChar, m_changeTracker && m_changeTracker->recordChanges(),
                                    canvas()->shapeController());
         editingPluginEvents();
     } else if ((event->key() == Qt::Key_Left) && (event->modifiers() & Qt::ControlModifier) == 0) {
@@ -1250,7 +1250,7 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
     if (event->replacementLength() > 0) {
         textEditor->setPosition(textEditor->position() + event->replacementStart());
         for (int i = event->replacementLength(); i > 0; --i) {
-            textEditor->deleteChar(KoTextEditor::NextChar, m_changeTracker->recordChanges(),
+            textEditor->deleteChar(KoTextEditor::NextChar, m_changeTracker && m_changeTracker->recordChanges(),
                                        canvas()->shapeController());
         }
     }

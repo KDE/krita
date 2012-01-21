@@ -45,14 +45,14 @@ public:
 
 public slots:
     void save();
+    void setParagraphStyle(KoParagraphStyle *style);
+    void setCharacterStyle(KoCharacterStyle *style, bool canDelete = false);
 
 private slots:
     void addParagraphStyle(KoParagraphStyle*);
     void addCharacterStyle(KoCharacterStyle*);
     void removeParagraphStyle(KoParagraphStyle*);
     void removeCharacterStyle(KoCharacterStyle*);
-    void setParagraphStyle(KoParagraphStyle *style);
-    void setCharacterStyle(KoCharacterStyle *style, bool canDelete);
     void slotStyleSelected(QModelIndex index);
 
 private:

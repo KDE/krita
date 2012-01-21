@@ -229,7 +229,7 @@ private slots:
     /// select all text in the current document.
     void selectAll();
     /// show the style manager
-    void showStyleManager();
+    void showStyleManager(int styleId = -1);
     /// change color of a selected text
     void setTextColor(const KoColor &color);
     /// change background color of a selected text

@@ -28,6 +28,7 @@
 
 #include <QListView>
 #include <QModelIndex>
+#include <QItemSelectionModel>
 
 #include <KDebug>
 
@@ -101,6 +102,9 @@ void StyleManager::setParagraphStyle(KoParagraphStyle *style)
         localStyle = m_alteredParagraphStyles.value(style->styleId());
     }
 
+    disconnect(widget.styles, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
+    widget.styles->setCurrentIndex(m_paragraphStylesModel->indexForParagraphStyle(*style));
+    connect(widget.styles, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotStyleSelected(QModelIndex)));
     widget.paragraphStylePage->setStyle(localStyle);
     widget.stackedWidget->setCurrentWidget(widget.paragraphStylePage);
  //   widget.bDelete->setEnabled(canDelete);

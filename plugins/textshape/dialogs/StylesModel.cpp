@@ -42,7 +42,8 @@ StylesModel::StylesModel(KoStyleManager *manager, Type modelType, QObject *paren
       m_currentParagraphStyle(0),
       m_defaultCharacterStyle(0),
       m_modelType(modelType),
-      m_styleMapper(new QSignalMapper(this)){
+      m_styleMapper(new QSignalMapper(this))
+{
     setStyleManager(manager);
     //Create a default characterStyle for the preview of "None" character style
     if (m_modelType == StylesModel::CharacterStyle) {
@@ -235,16 +236,11 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
     }
 
     if (m_modelType == StylesModel::ParagraphStyle) {
-        foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles())
-            addParagraphStyle(style);
+        updateParagraphStyles();
         connect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
         connect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
     } else {
-        if (m_styleManager->paragraphStyles().count()) {
-            m_styleList.append(-1);
-        }
-        foreach(KoCharacterStyle *style, m_styleManager->characterStyles())
-            addCharacterStyle(style);
+        updateCharacterStyles();
         connect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
         connect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
     }
@@ -259,22 +255,106 @@ void StylesModel::setStyleThumbnailer(KoStyleThumbnailer *thumbnailer)
 void StylesModel::addParagraphStyle(KoParagraphStyle *style)
 {
     Q_ASSERT(style);
-    beginInsertRows(QModelIndex(), rowCount(QModelIndex()), rowCount(QModelIndex()));
-    m_styleList.append(style->styleId());
+    QList<int>::iterator begin = m_styleList.begin();
+    int index = 0;
+    for ( ; begin != m_styleList.end(); ++begin) {
+        KoParagraphStyle *s = m_styleManager->paragraphStyle(*begin);
+        // s should be found as the manager and the m_styleList should be in sync
+        Q_ASSERT(s);
+        if (QString::localeAwareCompare(style->name(), s->name()) < 0) {
+            break;
+        }
+        ++index;
+    }
+    beginInsertRows(QModelIndex(), index, index);
+    m_styleList.insert(begin, style->styleId());
     m_styleMapper->setMapping(style, style->styleId());
     connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
     endInsertRows();
+}
+
+bool sortParagraphStyleByName(KoParagraphStyle *style1, KoParagraphStyle *style2)
+{
+    Q_ASSERT(style1);
+    Q_ASSERT(style2);
+    return QString::localeAwareCompare(style1->name(), style2->name()) < 0;
+}
+
+void StylesModel::updateParagraphStyles()
+{
+    Q_ASSERT(m_styleManager);
+
+    beginResetModel();
+    m_styleList.clear();
+
+    QList<KoParagraphStyle *> styles = m_styleManager->paragraphStyles();
+    qSort(styles.begin(), styles.end(), sortParagraphStyleByName);
+
+    foreach(KoParagraphStyle *style, styles) {
+        m_styleList.append(style->styleId());
+        m_styleMapper->setMapping(style, style->styleId());
+        connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    }
+
+    endResetModel();
 }
 
 // called when the stylemanager adds a style
 void StylesModel::addCharacterStyle(KoCharacterStyle *style)
 {
     Q_ASSERT(style);
-    beginInsertRows(QModelIndex(), rowCount(QModelIndex()), rowCount(QModelIndex()));
-    m_styleList.append(style->styleId());
+    // find the place where we need to insert the style
+    QList<int>::iterator begin = m_styleList.begin();
+    int index = 0;
+    // the None style should also be the first one so only start after it
+    if (begin != m_styleList.end() && *begin == -1) {
+        ++begin;
+        ++index;
+    }
+    for ( ; begin != m_styleList.end(); ++begin) {
+        KoCharacterStyle *s = m_styleManager->characterStyle(*begin);
+        // s should be found as the manager and the m_styleList should be in sync
+        Q_ASSERT(s);
+        if (QString::localeAwareCompare(style->name(), s->name()) < 0) {
+            break;
+        }
+        ++index;
+    }
+    beginInsertRows(QModelIndex(), index, index);
+    m_styleList.insert(index, style->styleId());
     endInsertRows();
     m_styleMapper->setMapping(style, style->styleId());
     connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+}
+
+bool sortCharacterStyleByName(KoCharacterStyle *style1, KoCharacterStyle *style2)
+{
+    Q_ASSERT(style1);
+    Q_ASSERT(style2);
+    return QString::localeAwareCompare(style1->name(), style2->name()) < 0;
+}
+
+void StylesModel::updateCharacterStyles()
+{
+    Q_ASSERT(m_styleManager);
+
+    beginResetModel();
+    m_styleList.clear();
+
+    if (m_styleManager->paragraphStyles().count()) {
+        m_styleList.append(-1);
+    }
+
+    QList<KoCharacterStyle *> styles = m_styleManager->characterStyles();
+    qSort(styles.begin(), styles.end(), sortCharacterStyleByName);
+
+    foreach(KoCharacterStyle *style, styles) {
+        m_styleList.append(style->styleId());
+        m_styleMapper->setMapping(style, style->styleId());
+        connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    }
+
+    endResetModel();
 }
 
 // called when the stylemanager removes a style
@@ -301,10 +381,71 @@ void StylesModel::removeCharacterStyle(KoCharacterStyle *style)
 
 void StylesModel::updateName(int styleId)
 {
-    // TODO, no idea how to do this more correct for children...
-    int row = m_styleList.indexOf(styleId);
-    if (row >= 0) {
-        QModelIndex index = createIndex(row, 0, styleId);
-        emit dataChanged(index, index);
+    // updating the name of a style can mean that the style needs to be moved inside the list to keep the sort order.
+    int oldIndex = m_styleList.indexOf(styleId);
+    if (oldIndex >= 0) {
+        int newIndex = 0;
+        if (m_modelType == StylesModel::ParagraphStyle) {
+            KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(styleId);
+            if (paragStyle) {
+                m_styleThumbnailer->removeFromCache(paragStyle);
+
+                QList<int>::iterator begin = m_styleList.begin();
+                for ( ; begin != m_styleList.end(); ++begin) {
+                    // don't test again the same style
+                    if (*begin == styleId) {
+                        continue;
+                    }
+                    KoParagraphStyle *s = m_styleManager->paragraphStyle(*begin);
+                    // s should be found as the manager and the m_styleList should be in sync
+                    Q_ASSERT(s);
+                    if (QString::localeAwareCompare(paragStyle->name(), s->name()) < 0) {
+                        break;
+                    }
+                    ++newIndex;
+                }
+                if (oldIndex != newIndex) {
+                    // beginMoveRows needs the index where it would be placed when it is still in the old position
+                    // so add one when newIndex > oldIndex 
+                    beginMoveRows(QModelIndex(), oldIndex, oldIndex, QModelIndex(), newIndex > oldIndex ? newIndex + 1 : newIndex);
+                    m_styleList.removeAt(oldIndex);
+                    m_styleList.insert(newIndex, styleId);
+                    endMoveRows();
+                }
+            }
+        }
+        else {
+            KoCharacterStyle *characterStyle = m_styleManager->characterStyle(styleId);
+            if (characterStyle) {
+                m_styleThumbnailer->removeFromCache(characterStyle);
+
+                QList<int>::iterator begin = m_styleList.begin();
+                if (begin != m_styleList.end() && *begin == -1) {
+                    ++begin;
+                    ++newIndex;
+                }
+                for ( ; begin != m_styleList.end(); ++begin) {
+                    // don't test again the same style
+                    if (*begin == styleId) {
+                        continue;
+                    }
+                    KoCharacterStyle *s = m_styleManager->characterStyle(*begin);
+                    // s should be found as the manager and the m_styleList should be in sync
+                    Q_ASSERT(s);
+                    if (QString::localeAwareCompare(characterStyle->name(), s->name()) < 0) {
+                        break;
+                    }
+                    ++newIndex;
+                }
+                if (oldIndex != newIndex) {
+                    // beginMoveRows needs the index where it would be placed when it is still in the old position
+                    // so add one when newIndex > oldIndex 
+                    beginMoveRows(QModelIndex(), oldIndex, oldIndex, QModelIndex(), newIndex > oldIndex ? newIndex + 1 : newIndex);
+                    m_styleList.removeAt(oldIndex);
+                    m_styleList.insert(newIndex, styleId);
+                    endMoveRows();
+                }
+            }
+        }
     }
 }

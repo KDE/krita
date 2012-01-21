@@ -97,6 +97,10 @@ private slots:
     void removeCharacterStyle(KoCharacterStyle*);
     void updateName(int styleId);
 
+private:
+    void updateParagraphStyles();
+    void updateCharacterStyles();
+
 protected:
     QList<int> m_styleList; // list of style IDs
 

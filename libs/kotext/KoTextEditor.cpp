@@ -352,6 +352,8 @@ void KoTextEditor::addCommand(KUndo2Command *command)
     KUndo2QStack *stack = KoTextDocument(d->document).undoStack();
     if (stack) {
         stack->push(command);
+    } else {
+        command->redo();
     }
     //kDebug() << "custom command pushed";
 }

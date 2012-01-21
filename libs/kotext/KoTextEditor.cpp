@@ -985,12 +985,15 @@ public:
 
     virtual void visitBlock(QTextBlock block, const QTextCursor &)
     {
-        QTextBlockFormat bf = block.blockFormat();
         if (m_styleManager) {
+            QTextBlockFormat bf = block.blockFormat();
             KoParagraphStyle *old = m_styleManager->paragraphStyle(bf.intProperty(KoParagraphStyle::StyleId));
             if (old)
                 old->unapplyStyle(block);
         }
+        // above should unaaply the style and it's lists part, but we want to clear everything
+        QTextCursor cursor(block);
+        cursor.setBlockFormat(QTextBlockFormat());
         m_style->applyStyle(block);
     }
 

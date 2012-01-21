@@ -343,20 +343,26 @@ QTextCursor* KoTextEditor::cursor()
     return &(d->caret);
 }
 
-void KoTextEditor::addCommand(KUndo2Command *command, bool addCommandToStack)
+void KoTextEditor::addCommand(KUndo2Command *command)
 {
     d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty())?command->text():i18n("Text"));
     //kDebug() << "will push the custom command: " << command->text();
     d->headCommand = command;
     KUndo2QStack *stack = KoTextDocument(d->document).undoStack();
-    if (stack && addCommandToStack)
+    if (stack) {
         stack->push(command);
-    else {
-        command->redo();
-        // instant replay done let's not keep it dangling
-        d->updateState(KoTextEditor::Private::NoOp);
     }
     //kDebug() << "custom command pushed";
+}
+
+void KoTextEditor::instantlyExecuteCommand(KUndo2Command *command)
+{
+    d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty())?command->text():i18n("Text"));
+    //kDebug() << "will push the custom command: " << command->text();
+    d->headCommand = command; // So any text it does is store as sub commands
+    command->redo();
+    // instant replay done let's not keep it dangling
+    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
@@ -1075,7 +1081,7 @@ void KoTextEditor::updateInlineObjectPosition(int start, int end)
 void KoTextEditor::removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent)
 {
     Q_ASSERT(parent);
-    addCommand(new DeleteAnchorsCommand(anchors, d->document, parent), false);
+    instantlyExecuteCommand(new DeleteAnchorsCommand(anchors, d->document, parent));
 }
 
 void KoTextEditor::insertFrameBreak()

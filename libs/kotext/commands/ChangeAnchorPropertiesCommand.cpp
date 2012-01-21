@@ -65,13 +65,13 @@ void ChangeAnchorPropertiesCommand::redo()
     }
 
     // We need this weird construct if we are played within a macro then our first job
-    // is to call addCommand which will "redo" us imidiately in what is the normal
+    // is to call instantlyExecuteCommand which will "redo" us immidiately in what is the normal
     // "first" time
     if (m_macroFirst) {
         m_macroFirst = false;
         if (textData) {
             KoTextEditor *editor = KoTextDocument(textData->document()).textEditor();
-            editor->addCommand(this, false);
+            editor->instantlyExecuteCommand(this);
             return;
         }
         //fall through as it's just a AnchorPage to AnchorPage change

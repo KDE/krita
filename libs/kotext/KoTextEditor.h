@@ -150,8 +150,30 @@ private:
 
 public slots:
 
-    // XXX: make this private as  well
-    void addCommand(KUndo2Command *command, bool addCommandToStack = true);
+    /// This adds the \ref command to the calligra undo stack.
+    ///
+    /// From this point forward all text manipulation is placed in the qt text systems internal
+    /// undostack while also adding representative subcommands to \ref command.
+    ///
+    /// The \ref command is not redone as part of this process.
+    ///
+    /// Note: Be aware that many KoTextEditor methods start their own commands thus terminating
+    /// the recording of this \ref command. Only use QTextCursor manipulation (with all the issues
+    /// that brings) or only use KoTextEditor methods that don't start their own commmand.
+    ///
+    /// The recording is automatically terminated when another command is added, which as mentioned
+    /// can happen by executing some of the KoTextEditor methods.
+    void addCommand(KUndo2Command *command);
+    
+    /// This instantly "redo" the command thus placing all the text manipulation the "redo" does
+    /// (should be implemented with a "first redo" pattern) in the qt text systems internal
+    /// undostack while also adding representative subcommands to \ref command.
+    ///
+    /// When \ref command is done "redoing" no further text manipulation is added as subcommands.
+    ///
+    /// \ref command is not put on the calligra undo stack. That is the responsibility of the
+    /// caller, or the caller can choose to quickly undo and then delete the \ref command.
+    void instantlyExecuteCommand(KUndo2Command *command);
 
     void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
 

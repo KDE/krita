@@ -53,6 +53,8 @@ class QTextDocumentFragment;
 class QString;
 class KUndo2Command;
 
+class KoTextVisitor;
+
 /**
  * KoTextEditor is a wrapper around QTextCursor. It handles undo/redo and change
  * tracking for all editing commands.
@@ -473,8 +475,7 @@ signals:
     void textFormatChanged();
 
 protected:
-    void recursiveSetStyle(QTextFrame::iterator it, KoCharacterStyle *style);
-    bool recursiveProtectionCheck(QTextFrame::iterator it) const;
+    void recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisitor &visitor) const;
 
 private:
     Q_PRIVATE_SLOT(d, void documentCommandAdded())

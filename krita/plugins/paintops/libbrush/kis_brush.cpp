@@ -138,7 +138,6 @@ KisBrush::KisBrush(const KisBrush& rhs)
     d->hotSpot = rhs.d->hotSpot;
     d->scaledBrushes.clear();
     d->hasColor = rhs.d->hasColor;
-    d->boundary = rhs.d->boundary;
     d->angle = rhs.d->angle;
     d->scale = rhs.d->scale;
     setFilename(rhs.filename());

@@ -141,6 +141,7 @@ KisBrush::KisBrush(const KisBrush& rhs)
     d->angle = rhs.d->angle;
     d->scale = rhs.d->scale;
     setFilename(rhs.filename());
+    // don't copy the boundery, it will be regenerated -- see bug 291910
 }
 
 KisBrush::~KisBrush()

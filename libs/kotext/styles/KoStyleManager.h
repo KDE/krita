@@ -399,6 +399,8 @@ signals:
     void styleRemoved(KoTableRowStyle*);
     void styleRemoved(KoTableCellStyle*);
     void styleRemoved(KoSectionStyle*);
+    void styleAltered(KoParagraphStyle*);
+    void styleAltered(KoCharacterStyle*);
 
 public slots:
     /**

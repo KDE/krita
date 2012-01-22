@@ -1,5 +1,5 @@
 /* XPM */
-static char *dummy[]={
+static char *splash_screen_xpm[]={
 "391 295 35651 3",
 "Qt. c #464645",
 "Qt# c #474745",

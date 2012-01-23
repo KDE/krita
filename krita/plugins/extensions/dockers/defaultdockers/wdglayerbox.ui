@@ -85,13 +85,13 @@
       <widget class="KisDropButton" name="bnAdd">
        <property name="minimumSize">
         <size>
-         <width>28</width>
+         <width>37</width>
          <height>28</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>28</width>
+         <width>37</width>
          <height>28</height>
         </size>
        </property>

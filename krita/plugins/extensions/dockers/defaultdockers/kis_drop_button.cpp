@@ -37,7 +37,7 @@
 #include <kis_mimedata.h>
 
 KisDropButton::KisDropButton(QWidget *parent)
-  : QToolButton(parent)
+  : KisToolButton(parent)
 {
     setAcceptDrops(true);
 }

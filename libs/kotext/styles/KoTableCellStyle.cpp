@@ -350,7 +350,6 @@ void KoTableCellStyle::applyStyle(QTextTableCell &cell) const
         d->paragraphStyle->KoCharacterStyle::applyStyle(format);
     }
     cell.setFormat(format);
-    //FIXME TODO we should apply the paragrapStyle under all contained blocks
 }
 
 void KoTableCellStyle::setBackground(const QBrush &brush)

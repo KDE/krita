@@ -30,6 +30,8 @@
 #include <QTextCursor>
 #include <QFontMetricsF>
 #include <QFontDatabase>
+#include <QTextTableCell>
+#include <QTextTable>
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
@@ -490,9 +492,17 @@ struct FragmentData
 void KoCharacterStyle::applyStyle(QTextBlock &block) const
 {
     QTextCursor cursor(block);
-    QTextCharFormat tcf = KoTableCellStyle::cleanCharFormat(block.charFormat());
-    QTextCharFormat cf = KoTextDocument(block.document()).frameCharFormat();
-    cf.merge(tcf);
+
+    if (block.length() > 0) // This weird setPosition is needed so currentFrame reports the table
+        cursor.setPosition(cursor.position()+1);
+    QTextTable *table = qobject_cast<QTextTable*>(cursor.currentFrame());
+    QTextCharFormat cf;
+    if (table) {
+        QTextTableCell cell = table->cellAt(cursor.position());
+        cf = cell.format();
+    } else {
+        cf = KoTextDocument(block.document()).frameCharFormat();
+    }
     applyStyle(cf);
     ensureMinimalProperties(cf);
     cursor.setBlockCharFormat(cf);

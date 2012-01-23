@@ -41,7 +41,7 @@ ChangeFollower::~ChangeFollower()
         sm->remove(this);
 }
 
-void ChangeFollower::processUpdates(const QList<int> &changedStyles)
+void ChangeFollower::processUpdates(const QSet<int> &changedStyles)
 {
     KoStyleManager *sm = m_styleManager.data();
     if (!sm) {

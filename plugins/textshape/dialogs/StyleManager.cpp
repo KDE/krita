@@ -160,23 +160,23 @@ void StyleManager::save()
     widget.paragraphStylePage->save();
     widget.characterStylePage->save();
 
+    m_styleManager->beginEdit();
+
     foreach(int styleId, m_alteredCharacterStyles.keys()) {
-        KoCharacterStyle *orig = m_styleManager->characterStyle(styleId);
         KoCharacterStyle *altered = m_alteredCharacterStyles[styleId];
-        orig->copyProperties(altered);
-        m_styleManager->alteredStyle(orig);
+        m_styleManager->alteredStyle(altered);
         delete altered;
     }
     m_alteredCharacterStyles.clear();
 
     foreach(int styleId, m_alteredParagraphStyles.keys()) {
-        KoParagraphStyle *orig = m_styleManager->paragraphStyle(styleId);
         KoParagraphStyle *altered = m_alteredParagraphStyles[styleId];
-        orig->copyProperties(altered);
-        m_styleManager->alteredStyle(orig);
+        m_styleManager->alteredStyle(altered);
         delete altered;
     }
     m_alteredParagraphStyles.clear();
+
+    m_styleManager->endEdit();
 
     //Reset the active style
     if (m_selectedCharStyle) {

@@ -60,7 +60,7 @@ void TestBlockLayout::setupTest(const QString &initText)
 
     m_doc->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false)); //do it manually since we do not load the appDefaultStyle
 
-    m_styleManager = new KoStyleManager();
+    m_styleManager = new KoStyleManager(0);
     KoTextDocument(m_doc).setStyleManager(m_styleManager);
 
     m_layout = new KoTextDocumentLayout(m_doc, provider);

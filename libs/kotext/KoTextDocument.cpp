@@ -173,6 +173,9 @@ void KoTextDocument::setUndoStack(KUndo2Stack *undoStack)
     QVariant v;
     v.setValue<void*>(undoStack);
     m_document->addResource(KoTextDocument::UndoStack, UndoStackURL, v);
+    if (styleManager()) {
+        styleManager()->setUndoStack(undoStack);
+    }
 }
 
 KUndo2Stack *KoTextDocument::undoStack() const

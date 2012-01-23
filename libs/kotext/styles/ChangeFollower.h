@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QTextDocument>
 #include <QWeakPointer>
+#include <QSet>
 
 /**
  * This object dies when the parent QTextDocument dies and in the destructor
@@ -45,8 +46,8 @@ public:
      * inside KoStyleManager is for memory management. A stylemanager can
      * maintain a lot of documents and these documents can be deleted without
      * telling the styleManager.  We use the QObject principle of children
-     * getting deleted when the parant gets deleted to track the document, which
-     * we use as the parant document.
+     * getting deleted when the parent gets deleted to track the document, which
+     * we use as the parent document.
      */
     ChangeFollower(QTextDocument *parent, KoStyleManager *manager);
 
@@ -61,7 +62,7 @@ public:
      * @param changedStyles a list of styleIds. from KoParagraphStyle::styleId
      *      and KoCharacterStyle::styleId
      */
-    void processUpdates(const QList<int> &changedStyles);
+    void processUpdates(const QSet<int> &changedStyles);
     /// return the document this follower is following.
     const QTextDocument *document() const {
         return m_document;

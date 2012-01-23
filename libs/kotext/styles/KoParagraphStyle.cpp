@@ -1875,6 +1875,7 @@ void KoParagraphStyle::copyProperties(const KoParagraphStyle *style)
     setName(style->name()); // make sure we emit property change
     KoCharacterStyle::copyProperties(style);
     d->parentStyle = style->d->parentStyle;
+    d->defaultStyle = style->d->defaultStyle;
 }
 
 KoParagraphStyle *KoParagraphStyle::clone(QObject *parent)

@@ -375,6 +375,11 @@ void KoCharacterStyle::setParentStyle(KoCharacterStyle *parent)
     d->parentStyle = parent;
 }
 
+KoCharacterStyle *KoCharacterStyle::parentStyle() const
+{
+    return d->parentStyle;
+}
+
 QPen KoCharacterStyle::textOutline() const
 {
     QVariant variant = value(QTextFormat::TextOutline);

@@ -479,6 +479,8 @@ KoTextLoader::~KoTextLoader()
 
 void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 {
+    const QTextDocument *document = cursor.block().document();
+
     static int rootCallChecker = 0;
     if (rootCallChecker == 0) {
         //This is the first call of loadBody.
@@ -486,11 +488,11 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
         //Will be used whenever a new block is inserted
         d->defaultBlockFormat = cursor.blockFormat();
         d->defaultCharFormat = cursor.charFormat();
+        KoTextDocument(document).setFrameCharFormat(cursor.blockCharFormat());
     }
     rootCallChecker++;
 
     cursor.beginEditBlock();
-    const QTextDocument *document = cursor.block().document();
 
     if (! d->openingSections.isEmpty()) {
         QTextBlock block = cursor.block();

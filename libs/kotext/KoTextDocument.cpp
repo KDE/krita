@@ -26,6 +26,8 @@
 #include <QVariantList>
 
 #include <kdebug.h>
+#include <KoTextDebug.h>
+
 #include <kundo2stack.h>
 
 #include "KoTextDocument.h"
@@ -38,6 +40,8 @@
 #include "changetracker/KoChangeTracker.h"
 
 Q_DECLARE_METATYPE(QAbstractTextDocumentLayout::Selection)
+Q_DECLARE_METATYPE(QTextFrame*)
+Q_DECLARE_METATYPE(QTextCharFormat)
 
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");
@@ -53,8 +57,7 @@ const QUrl KoTextDocument::SelectionsURL = QUrl("kotext://selections");
 const QUrl KoTextDocument::LayoutTextPageUrl = QUrl("kotext://layoutTextPage");
 const QUrl KoTextDocument::ParaTableSpacingAtStartUrl = QUrl("kotext://spacingAtStart");
 const QUrl KoTextDocument::IndexGeneratorManagerUrl = QUrl("kotext://indexGeneratorManager");
-
-Q_DECLARE_METATYPE(QTextFrame*)
+const QUrl KoTextDocument::FrameCharFormatUrl = QUrl("kotext://frameCharFormat");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
@@ -324,3 +327,18 @@ bool KoTextDocument::paraTableSpacingAtStart() const
     else
         return false;
 }
+
+QTextCharFormat KoTextDocument::frameCharFormat() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::FrameCharFormat, FrameCharFormatUrl);
+    if (resource.isValid())
+        return resource.value<QTextCharFormat>();
+    else
+        return QTextCharFormat();
+}
+
+void KoTextDocument::setFrameCharFormat(QTextCharFormat format)
+{
+    m_document->addResource(KoTextDocument::FrameCharFormat, FrameCharFormatUrl, QVariant::fromValue(format));
+}
+

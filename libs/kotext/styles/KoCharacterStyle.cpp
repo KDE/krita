@@ -43,6 +43,7 @@
 #include <KoShapeLoadingContext.h>
 #include "KoTextSharedLoadingData.h"
 #include "KoInlineTextObjectManager.h"
+#include "KoTextDocument.h"
 
 #ifdef SHOULD_BUILD_FONT_CONVERSION
 #include <string.h>
@@ -60,6 +61,7 @@
 #endif
 
 #include <KDebug>
+#include "KoTextDebug.h"
 
 #ifdef SHOULD_BUILD_FONT_CONVERSION
     QMap<QString,qreal> textScaleMap;
@@ -488,7 +490,9 @@ struct FragmentData
 void KoCharacterStyle::applyStyle(QTextBlock &block) const
 {
     QTextCursor cursor(block);
-    QTextCharFormat cf = KoTableCellStyle::cleanCharFormat(block.charFormat());
+    QTextCharFormat tcf = KoTableCellStyle::cleanCharFormat(block.charFormat());
+    QTextCharFormat cf = KoTextDocument(block.document()).frameCharFormat();
+    cf.merge(tcf);
     applyStyle(cf);
     ensureMinimalProperties(cf);
     cursor.setBlockCharFormat(cf);

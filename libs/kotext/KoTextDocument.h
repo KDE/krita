@@ -23,6 +23,7 @@
 #define KOTEXTDOCUMENT_H
 
 #include <QTextDocument>
+#include <QTextCharFormat>
 #include <QWeakPointer>
 #include <QAbstractTextDocumentLayout>
 #include <QUrl>
@@ -162,6 +163,10 @@ public:
     void setParaTableSpacingAtStart(bool spacingAtStart);
     bool paraTableSpacingAtStart() const;
 
+    QTextCharFormat frameCharFormat() const;
+
+    void setFrameCharFormat(QTextCharFormat format);
+
     /**
      * Clears the text in the document. Unlike QTextDocument::clear(), this
      * function does not clear the resources of the QTextDocument.
@@ -184,6 +189,7 @@ public:
         LayoutTextPage, /// this is used for setting the correct page variable on the first resize and should not be used for other purposes
         ParaTableSpacingAtStart, /// this is used during layouting to specify if at the first paragraph margin-top should be applied.
         IndexGeneratorManager
+        , FrameCharFormat
     };
 
     static const QUrl StyleManagerURL;
@@ -201,6 +207,7 @@ public:
     static const QUrl LayoutTextPageUrl;
     static const QUrl ParaTableSpacingAtStartUrl;
     static const QUrl IndexGeneratorManagerUrl;
+    static const QUrl FrameCharFormatUrl;
 
 private:
     QTextDocument *m_document;

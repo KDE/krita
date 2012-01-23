@@ -806,6 +806,9 @@ KoListStyle *KoStyleManager::defaultOutlineStyle() const
             KoListLevelProperties llp = d->defaultOutlineStyle->levelProperties(level);
             llp.setOutlineList(true);
             llp.setDisplayLevel(level);
+            llp.setTabStopPosition(0);
+            llp.setMargin(0);
+            llp.setTextIndent(0);
             d->defaultOutlineStyle->setLevelProperties(llp);
         }
         d->defaultOutlineStyle->setStyleId(d->s_stylesNumber++);

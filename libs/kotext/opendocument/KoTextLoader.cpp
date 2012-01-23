@@ -1168,11 +1168,27 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
     }
 
     //if outline style is not specified and this is not inside a list then we do not number it
-    if (d->currentListLevel <= 1) {
-        if (outlineStyle->styleId() == d->styleManager->defaultOutlineStyle()->styleId()) {
+    if (outlineStyle->styleId() == d->styleManager->defaultOutlineStyle()->styleId()) {
+        if (d->currentListLevel <= 1) {
             QTextBlockFormat blockFormat;
             blockFormat.setProperty(KoParagraphStyle::UnnumberedListItem, true);
             cursor.mergeBlockFormat(blockFormat);
+        } else { //inside a list then take the numbering from the list style
+            int level = d->currentListLevel - 1;
+            KoListLevelProperties llp;
+            if (!d->currentListStyle->hasLevelProperties(level)) {
+                // Look if one of the lower levels are defined to we can copy over that level.
+                for(int i = level - 1; i >= 0; --i) {
+                    if(d->currentLists[level - 1]->style()->hasLevelProperties(i)) {
+                        llp = d->currentLists[level - 1]->style()->levelProperties(i);
+                        break;
+                    }
+                }
+            } else {
+                llp = d->currentListStyle->levelProperties(level);
+            }
+            llp.setLevel(level);
+            outlineStyle->setLevelProperties(llp);
         }
     }
 
@@ -1181,7 +1197,7 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
         list = d->list(block.document(), outlineStyle, false);
         KoTextDocument(block.document()).setHeadingList(list);
     }
-
+    list->setStyle(outlineStyle);
     list->add(block, level);
 
     // attach Rdf to cursor.block()

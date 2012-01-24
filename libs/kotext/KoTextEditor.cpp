@@ -272,7 +272,7 @@ void KoTextEditor::Private::newLine()
     caret.setPosition(startPosition);
     caret.setPosition(endPosition, QTextCursor::KeepAnchor);
 
-    q->registerTrackedChange(caret, KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
+    q->registerTrackedChange(caret, KoGenChange::InsertChange, i18nc("(qtundo-format)", "New Paragraph"), format, format, false);
 
     caret.clearSelection();
 
@@ -497,13 +497,13 @@ void KoTextEditor::bold(bool bold)
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Format, i18n("Bold"));
+    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Bold"));
     QTextCharFormat format;
     format.setFontWeight(bold ? QFont::Bold : QFont::Normal);
 
     QTextCharFormat prevFormat(d->caret.charFormat());
     d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Bold"), format, prevFormat, false);
+    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18nc("(qtundo-format)", "Bold"), format, prevFormat, false);
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
 }
@@ -514,13 +514,13 @@ void KoTextEditor::italic(bool italic)
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Format, i18n("Italic"));
+    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Italic"));
     QTextCharFormat format;
     format.setFontItalic(italic);
 
     QTextCharFormat prevFormat(d->caret.charFormat());
     d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Italic"), format, prevFormat, false);
+    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18nc("(qtundo-format)", "Italic"), format, prevFormat, false);
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
 }
@@ -531,7 +531,7 @@ void KoTextEditor::underline(bool underline)
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Format, i18n("Underline"));
+    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Underline"));
     QTextCharFormat format;
     if (underline) {
         format.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
@@ -543,7 +543,7 @@ void KoTextEditor::underline(bool underline)
 
     QTextCharFormat prevFormat(d->caret.charFormat());
     d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Underline"), format, prevFormat, false);
+    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18nc("(qtundo-format)", "Underline"), format, prevFormat, false);
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
 }
@@ -554,7 +554,7 @@ void KoTextEditor::strikeOut(bool strikeout)
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Format, i18n("Strike Out"));
+    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Strike Out"));
     QTextCharFormat format;
     if (strikeout) {
         format.setProperty(KoCharacterStyle::StrikeOutType, KoCharacterStyle::SingleLine);
@@ -565,7 +565,7 @@ void KoTextEditor::strikeOut(bool strikeout)
     }
     QTextCharFormat prevFormat(d->caret.charFormat());
     d->caret.mergeCharFormat(format);
-    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18n("Strike Out"), format, prevFormat, false);
+    registerTrackedChange(d->caret, KoGenChange::FormatChange, i18nc("(qtundo-format)", "Strike Out"), format, prevFormat, false);
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
 }
@@ -587,8 +587,8 @@ void KoTextEditor::setHorizontalTextAlignment(Qt::Alignment align)
     };
 
     Aligner aligner(align);
-    d->updateState(KoTextEditor::Private::Format, i18n("Set Horizontal Alignment"));
-    BlockFormatVisitor::visitSelection(this, aligner, i18n("Set Horizontal Alignment"));
+    d->updateState(KoTextEditor::Private::Format, i18nc("(qtundo-format)", "Change Alignment"));
+    BlockFormatVisitor::visitSelection(this, aligner, i18nc("(qtundo-format)", "Change Alignment"));
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
 }
@@ -1942,7 +1942,7 @@ void KoTextEditor::insertBibliography()
 
 KoInlineCite *KoTextEditor::insertCitation()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Add Citation"));
+    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Add Citation"));
 
     KoInlineCite *cite = new KoInlineCite(KoInlineCite::Citation);
     KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
@@ -1958,7 +1958,7 @@ void KoTextEditor::insertText(const QString &text)
         return;
     }
 
-    d->updateState(KoTextEditor::Private::KeyPress, i18n("Key Press"));
+    d->updateState(KoTextEditor::Private::KeyPress, i18nc("(qtundo-format)", "Typing"));
 
     //first we make sure that we clear the inlineObject charProperty, if we have no selection
     if (!d->caret.hasSelection() && d->caret.charFormat().hasProperty(KoCharacterStyle::InlineInstanceId))
@@ -1992,7 +1992,7 @@ void KoTextEditor::insertText(const QString &text)
     d->caret.setPosition(startPosition);
     d->caret.setPosition(endPosition, QTextCursor::KeepAnchor);
 
-    registerTrackedChange(d->caret, KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
+    registerTrackedChange(d->caret, KoGenChange::InsertChange, i18n("Typing"), format, format, false);
 
     d->caret.clearSelection();
 
@@ -2125,7 +2125,7 @@ void KoTextEditor::newLine()
         return;
     }
 
-    d->updateState(KoTextEditor::Private::Custom, i18n("New Paragraph"));
+    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "New Paragraph"));
 
     // Handle if this is the special block before a table
     if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {

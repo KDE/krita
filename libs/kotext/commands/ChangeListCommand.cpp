@@ -37,6 +37,8 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Sty
       m_first(true),
       m_alignmentMode(false)
 {
+    setText(i18nc("(qtundo-format)", "Change List"));
+
     const bool styleCompletelySetAlready = extractTextBlocks(cursor, level, style);
     QSet<int> levels = m_levels.values().toSet();
     KoListStyle listStyle;

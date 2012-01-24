@@ -70,8 +70,9 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
     }
 
     QRect inputArea = applyRect;
+    QRect outputArea = applyRect;
+    
     inputArea.adjust(-1, -1, 1, 1);
-    QRect outputArea = inputArea.adjusted(1, 1, -1, -1);
 
     quint32 posup;
     quint32 posdown;
@@ -107,16 +108,16 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
         return;
     }
 
-    KisHLineIteratorSP iterator;
+    KisHLineConstIteratorSP iterator;
     quint32 curPixel = 0;
-    iterator = device->createHLineIteratorNG(inputArea.x(),
+    iterator = device->createHLineConstIteratorNG(inputArea.x(),
                                              inputArea.y(),
                                              inputArea.width()
                                              );
 
     for (qint32 srcRow = 0; srcRow < inputArea.height(); ++srcRow) {
         do {
-            const quint8 *data = iterator->rawData();
+            const quint8 *data = iterator->oldRawData();
             tileRenderer.realheightmap[curPixel] = toDoubleFuncPtr[ki](data, device->colorSpace()->channels()[ki]->pos());
             curPixel++;
         }
@@ -195,7 +196,7 @@ QRect KisFilterPhongBumpmap::neededRect(const QRect &rect, const KisFilterConfig
 
 QRect KisFilterPhongBumpmap::changedRect(const QRect &rect, const KisFilterConfiguration* /*config*/) const
 {
-    return rect.adjusted(-1, -1, 1, 1);
+    return rect;
 }
 
 KisConfigWidget *KisFilterPhongBumpmap::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageWSP image) const

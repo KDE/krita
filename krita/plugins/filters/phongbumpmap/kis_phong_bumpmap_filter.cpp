@@ -186,7 +186,6 @@ KisFilterConfiguration *KisFilterPhongBumpmap::factoryConfiguration(const KisPai
     config->setProperty(PHONG_ILLUMINANT_INCLINATION[2], 30);
     config->setProperty(PHONG_ILLUMINANT_INCLINATION[3], 40);
     return config;
-    return config;
 }
 
 QRect KisFilterPhongBumpmap::neededRect(const QRect &rect, const KisFilterConfiguration* /*config*/) const

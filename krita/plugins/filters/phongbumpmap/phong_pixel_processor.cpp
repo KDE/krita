@@ -1,5 +1,5 @@
 /*
-*  Copyright (c) 2010-2011 José Luis Vergara <pentalis@gmail.com>
+*  Copyright (c) 2010-2012 José Luis Vergara <pentalis@gmail.com>
 *
 *  This program is free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
@@ -60,10 +60,14 @@ void PhongPixelProcessor::initialize(const KisPropertiesConfiguration* config)
 
             azimuth = config->getInt(PHONG_ILLUMINANT_AZIMUTH[i]);
             inclination = config->getInt(PHONG_ILLUMINANT_INCLINATION[i]);
-            light[i].lightVector.setX( cos( azimuth * M_PI / 180 ) );
-            light[i].lightVector.setY( sin( azimuth * M_PI / 180 ) );
-            light[i].lightVector.setZ( cos( inclination * M_PI / 180 ) );
-
+            
+            qreal m; //2D vector magnitude
+            light[i].lightVector.setZ( sin( inclination * M_PI / 180 ) );
+            m = cos( inclination * M_PI / 180);
+            
+            light[i].lightVector.setX( cos( azimuth * M_PI / 180 ) * m  );
+            light[i].lightVector.setY( sin( azimuth * M_PI / 180 ) * m  );
+            
             //Pay close attention to this, indexes will move in this line
             lightSources.append(light[i]);
         }

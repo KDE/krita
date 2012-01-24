@@ -161,7 +161,31 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
 
 KisFilterConfiguration *KisFilterPhongBumpmap::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration *config = new KisFilterConfiguration(id(), 0);
+    KisFilterConfiguration *config = new KisFilterConfiguration(id(), 2);
+    config->setProperty(PHONG_AMBIENT_REFLECTIVITY, 0.2);
+    config->setProperty(PHONG_DIFFUSE_REFLECTIVITY, 0.5);
+    config->setProperty(PHONG_SPECULAR_REFLECTIVITY, 0.3);
+    config->setProperty(PHONG_SHINYNESS_EXPONENT, 2);
+    config->setProperty(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED, true);
+    config->setProperty(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED, true);
+    // Indexes are off by 1 simply because arrays start at 0 and the GUI naming scheme started at 1
+    config->setProperty(PHONG_ILLUMINANT_IS_ENABLED[0], true);
+    config->setProperty(PHONG_ILLUMINANT_IS_ENABLED[1], true);
+    config->setProperty(PHONG_ILLUMINANT_IS_ENABLED[2], false);
+    config->setProperty(PHONG_ILLUMINANT_IS_ENABLED[3], false);
+    config->setProperty(PHONG_ILLUMINANT_COLOR[0], QColor(255, 255, 0));
+    config->setProperty(PHONG_ILLUMINANT_COLOR[1], QColor(255, 0, 0));
+    config->setProperty(PHONG_ILLUMINANT_COLOR[2], QColor(0, 0, 255));
+    config->setProperty(PHONG_ILLUMINANT_COLOR[3], QColor(0, 255, 0));
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[0], 50);
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[1], 100);
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[2], 150);
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[3], 200);
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[0], 25);
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[1], 20);
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[2], 30);
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[3], 40);
+    return config;
     return config;
 }
 

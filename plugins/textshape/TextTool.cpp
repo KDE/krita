@@ -868,8 +868,7 @@ void TextTool::copy() const
 
 void TextTool::deleteSelection()
 {
-    m_textEditor.data()->deleteChar(KoTextEditor::NextChar, m_changeTracker && m_changeTracker->recordChanges(),
-                                    canvas()->shapeController());
+    m_textEditor.data()->deleteChar(KoTextEditor::NextChar, canvas()->shapeController());
     editingPluginEvents();
 }
 
@@ -1067,8 +1066,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) { // delete prev word.
                 textEditor->movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
             }
-            textEditor->deleteChar(KoTextEditor::PreviousChar, m_changeTracker && m_changeTracker->recordChanges(),
-                                       canvas()->shapeController());
+            textEditor->deleteChar(KoTextEditor::PreviousChar, canvas()->shapeController());
 
             editingPluginEvents();
         }
@@ -1090,8 +1088,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         }
         // the event only gets through when the Del is not used in the app
         // if the app forwards Del then deleteSelection is used
-        textEditor->deleteChar(KoTextEditor::NextChar, m_changeTracker && m_changeTracker->recordChanges(),
-                                   canvas()->shapeController());
+        textEditor->deleteChar(KoTextEditor::NextChar, canvas()->shapeController());
         editingPluginEvents();
     } else if ((event->key() == Qt::Key_Left) && (event->modifiers() & Qt::ControlModifier) == 0) {
         moveOperation = QTextCursor::Left;
@@ -1250,8 +1247,7 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
     if (event->replacementLength() > 0) {
         textEditor->setPosition(textEditor->position() + event->replacementStart());
         for (int i = event->replacementLength(); i > 0; --i) {
-            textEditor->deleteChar(KoTextEditor::NextChar, m_changeTracker && m_changeTracker->recordChanges(),
-                                       canvas()->shapeController());
+            textEditor->deleteChar(KoTextEditor::NextChar, canvas()->shapeController());
         }
     }
     if (!event->commitString().isEmpty()) {

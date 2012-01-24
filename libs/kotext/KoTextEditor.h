@@ -278,11 +278,9 @@ public slots:
     /**
      * Delete one character in the specified direction.
      * @param direction the direction into which we delete. Valid values are
-     * @param trackChanges if true, track this deletion in the changetracker
      * @param shapeController the canvas' shapeController
      */
-    void deleteChar(MoveOperation direction, bool trackChanges,
-                    KoShapeController *shapeController);
+    void deleteChar(MoveOperation direction, KoShapeController *shapeController);
 
     /**
      * @param numberingEnabled when true, we will enable numbering for the current paragraph (block).

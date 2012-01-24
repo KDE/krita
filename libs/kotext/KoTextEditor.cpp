@@ -1291,10 +1291,17 @@ bool KoTextEditor::paste(KoTextEditor *editor,
     return true;
 }
 
-void KoTextEditor::deleteChar(MoveOperation direction, bool trackChanges, KoShapeController *shapeController)
+void KoTextEditor::deleteChar(MoveOperation direction, KoShapeController *shapeController)
 {
     if (isEditProtected()) {
         return;
+    }
+
+    // Find out if we should track changes or not
+    KoChangeTracker *ct = KoTextDocument(d->document).changeTracker();
+    bool trackChanges = false;
+    if (ct && ct->recordChanges()) {
+        trackChanges = true;
     }
 
     if (direction == PreviousChar) {

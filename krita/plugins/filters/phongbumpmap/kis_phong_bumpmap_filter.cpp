@@ -78,7 +78,6 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
     quint32 posdown;
     quint32 posleft;
     quint32 posright;
-    QRect tileLimits;
     QColor I; //Reflected light
 
     if (progressUpdater) progressUpdater->setProgress(1);

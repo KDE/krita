@@ -197,14 +197,15 @@ void KoStyleThumbnailer::layoutThumbnail(QSize size, QImage *im)
         p.setFont(sizeHintFont);
         QRectF sizeHintRect(p.boundingRect(0, 0, 1, 1, Qt::AlignCenter, sizeHint));
         p.restore();
+        qreal width = qMax<qreal>(0., size.width()-sizeHintRect.width());
         //calculate the font reduction factor so that the text + the sizeHint fits
-        qreal reductionFactor = qMin((size.width()-sizeHintRect.width())/documentSize.width(), size.height()/documentSize.height());
+        qreal reductionFactor = qMin(width/documentSize.width(), size.height()/documentSize.height());
         QTextCharFormat fmt = cursor.charFormat();
         fmt.setFontPointSize((int)(fmt.fontPointSize()*reductionFactor));
         cursor.mergeCharFormat(fmt);
 
         frameCursor = FrameIterator(d->thumbnailHelperDocument->rootFrame());
-        rootArea.setReferenceRect(0, size.width()-sizeHintRect.width(), 0, 1E6);
+        rootArea.setReferenceRect(0, width, 0, 1E6);
         rootArea.setNoWrap(1E6);
         rootArea.layoutRoot(&frameCursor);
         documentSize = rootArea.boundingRect().size();

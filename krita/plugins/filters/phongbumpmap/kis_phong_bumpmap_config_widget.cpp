@@ -74,6 +74,11 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
     connect(m_page->shinynessExponentKisSliderSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     
     connect(m_page->heightChannelComboBox, SIGNAL(currentIndexChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    
+    connect(m_page->lightSourceGroupBox1, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->lightSourceGroupBox2, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->lightSourceGroupBox3, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->lightSourceGroupBox4, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
 
 
     QVBoxLayout *l = new QVBoxLayout(this);

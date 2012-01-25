@@ -48,7 +48,7 @@
 // We use our own ISNAN / ISINF in the code to detect
 // that we defined them.
 // reason: Windows / MacOS do not have isnan() / isinf()
-#if defined (Q_OS_WIN) && defined(_MSC_VER)
+#if defined (Q_OS_WIN)
 #include <float.h>
 #define ISNAN(x ) _isnan(x )
 #define ISINF(x ) (!(_finite(x ) + _isnan(x ) ) )

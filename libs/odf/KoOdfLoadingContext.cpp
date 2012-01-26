@@ -106,6 +106,9 @@ void KoOdfLoadingContext::setManifestFile(const QString& fileName) {
     KoOdfReadStore oasisStore(d->store);
     QString dummy;
     (void)oasisStore.loadAndParse(fileName, d->manifestDoc, dummy);
+    if (!parseManifest(d->manifestDoc)) {
+        kWarning(30010) << "could not parse manifest document";
+    }
 }
 
 void KoOdfLoadingContext::fillStyleStack(const KoXmlElement& object, const QString &nsURI, const QString &attrName, const QString &family)

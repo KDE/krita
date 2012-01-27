@@ -182,6 +182,7 @@ private:
     TabletToolMap    m_tabletToolMap;
     PaintOpPresetMap m_paintOpPresetMap;
     TabletToolID     m_currTabletToolID;
+    bool             m_presetsEnabled;
 };
 
 #endif //KIS_PAINTOP_BOX_H_

@@ -353,7 +353,7 @@ void KoCharacterStyle::copyProperties(const QTextCharFormat &format)
     d->stylesPrivate = format.properties();
 }
 
-KoCharacterStyle *KoCharacterStyle::clone(QObject *parent)
+KoCharacterStyle *KoCharacterStyle::clone(QObject *parent) const
 {
     KoCharacterStyle *newStyle = new KoCharacterStyle(parent);
     newStyle->copyProperties(this);

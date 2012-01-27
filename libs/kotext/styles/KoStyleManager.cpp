@@ -530,11 +530,8 @@ void KoStyleManager::alteredStyle(const KoParagraphStyle *newStyle)
     KoParagraphStyle *style = paragraphStyle(id);
     if (style != newStyle) {
         d->changeCommand->origStyle(style->clone());
-        style->copyProperties(newStyle);
-        d->changeCommand->changedStyle(style->clone());
+        d->changeCommand->changedStyle(newStyle->clone());
     }
-
-   emit styleAltered(style);
 
     // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
     foreach(const KoParagraphStyle *ps, d->paragStyles) {
@@ -560,11 +557,8 @@ void KoStyleManager::alteredStyle(const KoCharacterStyle *newStyle)
     KoCharacterStyle *style = characterStyle(id);
     if (style != newStyle) {
         d->changeCommand->origStyle(style->clone());
-        style->copyProperties(newStyle);
-        d->changeCommand->changedStyle(style->clone());
+        d->changeCommand->changedStyle(newStyle->clone());
     }
-
-   emit styleAltered(style);
 
     // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
     foreach(const KoCharacterStyle *cs, d->charStyles) {

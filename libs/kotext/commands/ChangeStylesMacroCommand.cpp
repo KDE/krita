@@ -43,27 +43,30 @@ ChangeStylesMacroCommand::~ChangeStylesMacroCommand()
 {
 }
 
+// on first pass the subcommands are created (where they collect needed info)
+//     then styles are changed in the styleManager
+//     finally the new styles are applied to the documents through super::redo()
 void ChangeStylesMacroCommand::redo()
 {
     if (m_first) {
-        m_first = false;
         foreach(ChangeFollower *cf, m_changeFollowers) {
             new ChangeStylesCommand(cf, m_origCharacterStyles, m_origParagraphStyles, m_changedStyles, this);
         }
-    } else {
-        foreach(KoCharacterStyle *newStyle, m_changedCharacterStyles) {
-            int id = newStyle->styleId();
-            m_styleManager->characterStyle(id)->copyProperties(newStyle);
+        m_first = false;
+    }
 
-            emit m_styleManager->styleAltered(m_styleManager->characterStyle(id));
-        }
+    foreach(KoCharacterStyle *newStyle, m_changedCharacterStyles) {
+        int id = newStyle->styleId();
+        m_styleManager->characterStyle(id)->copyProperties(newStyle);
 
-        foreach(KoParagraphStyle *newStyle, m_changedParagraphStyles) {
-            int id = newStyle->styleId();
-            m_styleManager->paragraphStyle(id)->copyProperties(newStyle);
+        emit m_styleManager->styleAltered(m_styleManager->characterStyle(id));
+    }
 
-            emit m_styleManager->styleAltered(m_styleManager->paragraphStyle(id));
-        }
+    foreach(KoParagraphStyle *newStyle, m_changedParagraphStyles) {
+        int id = newStyle->styleId();
+        m_styleManager->paragraphStyle(id)->copyProperties(newStyle);
+
+        emit m_styleManager->styleAltered(m_styleManager->paragraphStyle(id));
     }
 
     KUndo2Command::redo(); // calls redo on all children

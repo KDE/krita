@@ -162,6 +162,7 @@ void ChangeFollower::processUpdates(const QSet<int> &changedStyles)
         }
     }
     qDeleteAll(m_mementos);
+    m_mementos.clear();
 }
 
 #include <ChangeFollower.moc>

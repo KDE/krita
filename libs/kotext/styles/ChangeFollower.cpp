@@ -161,6 +161,7 @@ void ChangeFollower::processUpdates(const QSet<int> &changedStyles)
             ++fmtIt;
         }
     }
+    qDeleteAll(m_mementos);
 }
 
 #include <ChangeFollower.moc>

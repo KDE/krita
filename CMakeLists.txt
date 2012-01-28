@@ -96,10 +96,6 @@ ELSE()
     set(SHOULD_BUILD_ACTIVE TRUE)
 ENDIF()
 
-# HACK Active requires kdeclartive.h but the cmake test fails for olde kdelibs versions
-# diabling until it's fixed
-    set(SHOULD_BUILD_ACTIVE FALSE)
-
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FOO_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
@@ -516,6 +512,10 @@ endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
 if (NOT QT_QTDECLARATIVE_FOUND)
     set(SHOULD_BUILD_ACTIVE FALSE)
 endif (NOT QT_QTDECLARATIVE_FOUND)
+
+if(${KDE_VERSION} VERSION_LESS 4.8.0)
+    set(SHOULD_BUILD_ACTIVE FALSE)
+endif(${KDE_VERSION} VERSION_LESS 4.8.0)
 
 #if(NOT QIMAGEBLITZ_FOUND)
 #    set (SHOULD_BUILD_KEXI FALSE)

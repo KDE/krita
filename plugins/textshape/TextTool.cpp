@@ -1059,8 +1059,11 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 // backspace at beginning of numbered list item, makes it unnumbered
                 textEditor->toggleListNumbering(false);
             } else {
+                KoListLevelProperties llp;
+                llp.setStyle(KoListStyle::None);
+                llp.setLevel(0);
                 // backspace on numbered, empty parag, removes numbering.
-                textEditor->setListProperties(KoListStyle::None, 0 /* level */);
+                textEditor->setListProperties(llp);
             }
         } else if (textEditor->position() > 0 || textEditor->hasSelection()) {
             if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) { // delete prev word.

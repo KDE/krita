@@ -266,7 +266,10 @@ void SimpleParagraphWidget::listStyleChanged(int id)
 {
     emit doneWithFocus();
     if (m_blockSignals) return;
-    m_tool->textEditor()->setListProperties(static_cast<KoListStyle::Style>(id));
+    KoListLevelProperties llp;
+    llp.setStyle(static_cast<KoListStyle::Style>(id));
+    llp.setLevel(0);
+    m_tool->textEditor()->setListProperties(llp);
 }
 
 void SimpleParagraphWidget::styleSelected(int index)

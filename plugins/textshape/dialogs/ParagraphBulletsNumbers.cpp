@@ -165,7 +165,6 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     }
     if (savingStyle->listStyle() == 0) {
         KoListStyle *listStyle = new KoListStyle(savingStyle);
-        listStyle->setStyleId(style);
         savingStyle->setListStyle(listStyle);
     }
     KoListStyle *listStyle = savingStyle->listStyle();
@@ -197,7 +196,7 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     }
 
     if (style == KoListStyle::CustomCharItem) {
-        llp.setBulletCharacter(currentRow == m_blankCharIndex ? QChar() : widget.customCharacter->text().remove('&').at(0));
+        llp.setBulletCharacter((currentRow == m_blankCharIndex) ? QChar() : widget.customCharacter->text().remove('&').at(0));
     }
     // it is important to not use 45 for CustomCharItem as it is also char based
     else if (!KoListStyle::isNumberingStyle(style)) {

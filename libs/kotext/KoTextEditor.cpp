@@ -1355,8 +1355,7 @@ void KoTextEditor::toggleListNumbering(bool numberingEnabled)
     emit textFormatChanged();
 }
 
-void KoTextEditor::setListProperties(KoListStyle::Style style,
-                                     int level,
+void KoTextEditor::setListProperties(const KoListLevelProperties &llp,
                                      ChangeListFlags flags)
 {
     if (isEditProtected()) {
@@ -1366,7 +1365,8 @@ void KoTextEditor::setListProperties(KoListStyle::Style style,
     if (flags & AutoListStyle && d->caret.block().textList() == 0) {
         flags = MergeWithAdjacentList;
     }
-    addCommand(new ChangeListCommand(d->caret, style, level, flags));
+
+    addCommand(new ChangeListCommand(d->caret, llp, flags));
     emit textFormatChanged();
 }
 

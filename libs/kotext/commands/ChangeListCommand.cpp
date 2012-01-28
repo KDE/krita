@@ -30,7 +30,7 @@
 
 #define MARGIN_DEFAULT 10 // we consider it the default value
 
-ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Style style, int level,
+ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLevelProperties &levelProperties,
                                      KoTextEditor::ChangeListFlags flags, KUndo2Command *parent)
     : KoTextCommandBase(parent),
       m_flags(flags),
@@ -39,8 +39,9 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Sty
 {
     setText(i18nc("(qtundo-format)", "Change List"));
 
-    const bool styleCompletelySetAlready = extractTextBlocks(cursor, level, style);
+    const bool styleCompletelySetAlready = extractTextBlocks(cursor, levelProperties.level(), levelProperties.style());
     QSet<int> levels = m_levels.values().toSet();
+    KoListStyle::Style style = levelProperties.style();
     KoListStyle listStyle;
 
     // If the style is already completely set, we unset it instead
@@ -60,6 +61,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Sty
         }
         else if (style == KoListStyle::CustomCharItem) {
             llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
+            llp.setBulletCharacter(levelProperties.bulletCharacter());
         }
         else {
             llp.setRelativeBulletSize(45);   //for non-numbering bullets the default relative bullet size is 45%(The spec does not say it; we take it)

@@ -25,6 +25,7 @@
 #include <KoParagraphStyle.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
+#include <KoListLevelProperties.h>
 
 #include <QTextBlock>
 #include <QTimer>
@@ -74,10 +75,8 @@ void ParagraphSettingsDialog::slotApply()
     m_cursor->mergeBlockFormat(format);
     if (chosenStyle.listStyle()) {
         KoTextEditor::ChangeListFlags flags(KoTextEditor::AutoListStyle | KoTextEditor::DontUnsetIfSame);
-        m_tool->textEditor()->setListProperties(static_cast<KoListStyle::Style>(chosenStyle.listStyle()->styleId()),
-                                                chosenStyle.listStyle()->listLevels().first(),
+        m_tool->textEditor()->setListProperties(chosenStyle.listStyle()->levelProperties(chosenStyle.listStyle()->listLevels().first()),
                                                 flags);
-
     } else {
         QTextList *list = m_cursor->block().textList();
         if (list) { // then remove it.

@@ -167,6 +167,8 @@ public:
         if (canvasController) {
             KoToolManager::instance()->removeCanvasController(canvasController);
         }
+
+        delete canvasController;
         delete canvas;
         delete filterManager;
         delete selectionManager;

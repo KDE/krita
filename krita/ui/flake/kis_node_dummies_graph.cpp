@@ -79,6 +79,20 @@ KisNodeShape* KisNodeDummy::nodeShape() const
     return m_nodeShape;
 }
 
+KisNodeDummy* KisNodeDummy::at(int index) const
+{
+    return m_children.at(index);
+}
+
+int KisNodeDummy::childCount() const
+{
+    return m_children.size();
+}
+
+int KisNodeDummy::indexOf(KisNodeDummy *child) const
+{
+    return m_children.indexOf(child);
+}
 
 /********************************************************************/
 /*                 KisNodeDummiesGraph                              */

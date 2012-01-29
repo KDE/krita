@@ -1,6 +1,6 @@
 add_subdirectory( tests )
 add_subdirectory( blur )
-add_subdirectory( bumpmap )
+# add_subdirectory( bumpmap )
 add_subdirectory( colors )
 add_subdirectory( colorsfilters )
 add_subdirectory( convolutionfilters )

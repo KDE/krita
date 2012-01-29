@@ -165,11 +165,16 @@ bool KisNodeFacade::lowerNode(KisNodeSP node)
     if (!node) return false;
     if (!node->parent()) return false;
 
-    if (node->prevSibling())
-        return raiseNode(node->prevSibling());
-    else
+    KisNodeSP parent = node->parent();
+    KisNodeSP prevSibling = node->prevSibling();
+
+    if (node->prevSibling()) {
+        int prevIndex = parent->index(prevSibling);
+        return moveNode(node, parent, prevIndex);
+    } else {
         return true; // We're already at bottom, but there's no sense
-    // in complaining
+        // in complaining
+    }
 }
 
 bool KisNodeFacade::toTop(KisNodeSP node)

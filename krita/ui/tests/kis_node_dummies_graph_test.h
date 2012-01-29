@@ -32,6 +32,8 @@ private slots:
     void init();
     void cleanup();
 
+    void testIndexing();
+
     void testPrepend();
     void testAppend();
     void testInsert();

@@ -79,6 +79,15 @@ void KisNodeDummiesGraphTest::cleanup()
     delete m_dummiesGraph;
 }
 
+void KisNodeDummiesGraphTest::testIndexing()
+{
+    KisNodeDummy *parent = findDummyById(m_rootDummy, 4);
+    KisNodeDummy *dummy10 = findDummyById(m_rootDummy, 10);
+
+    QCOMPARE(parent->childCount(), 3);
+    QCOMPARE(parent->indexOf(dummy10), 1);
+    QCOMPARE(parent->at(1), dummy10);
+}
 
 void KisNodeDummiesGraphTest::testPrepend()
 {

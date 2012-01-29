@@ -21,17 +21,22 @@
 
 #include <QtTest/QtTest>
 
+#include "empty_nodes_test.h"
+
 class KisDoc2;
 class KisNameServer;
-class KisImage;
 class KisShapeController;
+class KisNodeDummy;
 
-#include "kis_types.h"
 
-
-class KisShapeControllerTest : public QObject
+class KisShapeControllerTest : public QObject, public TestUtil::EmptyNodesTest
 {
     Q_OBJECT
+
+protected slots:
+    void slotNodeActivated(KisNodeSP node);
+    void slotEndInsertDummy(KisNodeDummy *dummy);
+    void slotBeginRemoveDummy(KisNodeDummy *dummy);
 
 private slots:
     void init();
@@ -45,18 +50,15 @@ private slots:
     void testSubstituteRootNode();
 
 private:
-    void constructImage();
-
+    void verifyActivatedNodes(const QString &nodes);
+    void verifyMovedDummies(const QString &nodes);
 private:
     KisDoc2 *m_doc;
     KisNameServer *m_nameServer;
     KisShapeController *m_shapeController;
-    KisImageSP m_image;
-    KisLayerSP m_layer1;
-    KisLayerSP m_layer2;
-    KisLayerSP m_layer3;
-    KisLayerSP m_layer4;
-    KisMaskSP m_mask1;
+
+    QString m_activatedNodes;
+    QString m_movedDummies;
 };
 
 #endif

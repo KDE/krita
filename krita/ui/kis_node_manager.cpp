@@ -35,6 +35,7 @@
 #include <kis_image.h>
 
 #include "canvas/kis_canvas2.h"
+#include "kis_shape_controller.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_view2.h"
 #include "kis_doc2.h"
@@ -58,7 +59,6 @@ struct KisNodeManager::Private {
     KisNodeSP activeNode;
     KisNodeManager* self;
     KisNodeCommandsAdapter* commandsAdapter;
-    KisNodeSP activeNodeBeforeMove;
     
     void slotLayersChanged(KisGroupLayerSP);
     bool activateNodeImpl(KisNodeSP node);
@@ -129,9 +129,12 @@ KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
     m_d->maskManager = new KisMaskManager(view);
     m_d->self = this;
     m_d->commandsAdapter = new KisNodeCommandsAdapter(view);
-    connect(m_d->view->image(), SIGNAL(sigPostLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged(KisGroupLayerSP)));
-    connect(m_d->view->image(), SIGNAL(sigAboutToMoveNode(KisNode*,int,int)), SLOT(aboutToMoveNode()));
-    connect(m_d->view->image(), SIGNAL(sigNodeHasBeenMoved(KisNode*,int,int)), SLOT(nodeHasBeenMoved()));
+
+    KisShapeController *shapeController =
+        dynamic_cast<KisShapeController*>(doc->shapeController());
+    Q_ASSERT(shapeController);
+
+    connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
     connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), SIGNAL(sigLayerActivated(KisLayerSP)));
 }
 
@@ -338,7 +341,17 @@ void KisNodeManager::createNode(const QString & nodeType)
 
 }
 
+// FIXME: going to be deprecated
 void KisNodeManager::activateNode(KisNodeSP node)
+{
+    if(m_d->activateNodeImpl(node)) {
+        emit sigUiNeedChangeActiveNode(node);
+        emit sigNodeActivated(node);
+        nodesUpdated();
+    }
+}
+
+void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)
 {
     if(m_d->activateNodeImpl(node)) {
         emit sigUiNeedChangeActiveNode(node);
@@ -520,19 +533,6 @@ void KisNodeManager::mirrorNodeY()
         m_d->layerManager->mirrorLayerY();
     } else if (node->inherits("KisMask")) {
         m_d->maskManager->mirrorMaskY();
-    }
-}
-
-void KisNodeManager::aboutToMoveNode()
-{
-    m_d->activeNodeBeforeMove = activeNode();
-}
-
-void KisNodeManager::nodeHasBeenMoved()
-{
-    if (m_d->activeNodeBeforeMove) {
-        activateNode(m_d->activeNodeBeforeMove);
-        m_d->activeNodeBeforeMove = 0;
     }
 }
 

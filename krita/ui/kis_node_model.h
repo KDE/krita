@@ -22,6 +22,9 @@
 #include "krita_export.h"
 #include <kis_types.h>
 
+class KisShapeController;
+class KisNodeDummy;
+
 /**
  * KisNodeModel offers a Qt model-view compatible view on the node
  * hierarchy.
@@ -42,24 +45,24 @@ public: // from QAbstractItemModel
     KisNodeModel(QObject * parent);
     ~KisNodeModel();
 
-    void setImage(KisImageWSP image);
+    void setShapeController(KisShapeController *controller, KisImageWSP image);
+    KisNodeSP nodeFromIndex(const QModelIndex &index) const;
+    QModelIndex indexFromNode(KisNodeSP node) const;
 
-    KisNodeSP nodeFromIndex(const QModelIndex &index);
-    vKisNodeSP nodesFromIndexes(const QModelIndexList &list);
-    virtual QModelIndex indexFromNode(const KisNodeSP node) const;
+public:
 
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex &index) const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-    virtual QStringList mimeTypes() const;
-    QMimeData * mimeData(const QModelIndexList & indexes) const;
-    virtual bool dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent);
-    virtual Qt::DropActions supportedDragActions() const;
-    virtual Qt::DropActions supportedDropActions() const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex parent(const QModelIndex &index) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    QStringList mimeTypes() const;
+    QMimeData* mimeData(const QModelIndexList & indexes) const;
+    bool dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent);
+    Qt::DropActions supportedDragActions() const;
+    Qt::DropActions supportedDropActions() const;
 
 signals:
 
@@ -70,27 +73,27 @@ signals:
     void requestMoveNode(KisNodeSP node, KisNodeSP parent, int index);
 
 private slots:
+    void slotBeginInsertDummy(KisNodeDummy *parent, int index);
+    void slotEndInsertDummy(KisNodeDummy *dummy);
+    void slotBeginRemoveDummy(KisNodeDummy *dummy);
+    void slotEndRemoveDummy();
+    void slotDummyChanged(KisNodeDummy *dummy);
 
-    void beginInsertNodes(KisNode * parent, int index);
-    void endInsertNodes(KisNode * parent, int index);
-    void beginRemoveNodes(KisNode * parent, int index);
-    void endRemoveNodes(KisNode * parent, int index);
     void updateSettings();
+    void processUpdateQueue();
     void progressPercentageChanged(int, const KisNodeSP);
-    void layersChanged();
-    void nodeChanged(KisNode * node);
-    
-    void updateNodes();
 
 private:
-    void connectNode(KisNodeSP node, bool needConnect);
-    void connectNodes(KisNodeSP node, bool needConnect);
+    static inline KisNodeSP nodeFromDummy(KisNodeDummy *dummy);
+    static inline KisNodeDummy* dummyFromIndex(const QModelIndex &index);
 
+    QModelIndex indexFromDummy(KisNodeDummy *dummy) const;
+    void connectDummy(KisNodeDummy *dummy, bool needConnect);
+    void connectDummies(KisNodeDummy *dummy, bool needConnect);
 private:
 
     struct Private;
     Private * const m_d;
-
 };
 
 #endif

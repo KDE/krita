@@ -73,6 +73,8 @@
 #include "kis_node_model.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_doc2.h"
+#include "kis_shape_controller.h"
+
 
 #include "ui_wdglayerbox.h"
 
@@ -213,9 +215,12 @@ KisLayerBox::KisLayerBox()
     
     m_nodeModel = new KisNodeModel(this);
 
-    // connect model updateUI() to enable/disable controls
-    // connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), SLOT(updateUI()));      NOTE: commented for temporary bug fix
-    connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), SLOT(setCurrentNode(KisNodeSP)));  // NOTE: temporary bug fix - Pentalis
+    /**
+     * Connect model updateUI() to enable/disable controls.
+     * Note: nodeActivated() is connected seperately in setImage(), because
+     *       it needs particular order of calls: first the connection to the
+     *       node manager should be called, then updateUI()
+     */
     connect(m_nodeModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)), SLOT(updateUI()));
@@ -232,73 +237,65 @@ KisLayerBox::~KisLayerBox()
 void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 {
     if (m_canvas) {
-       m_canvas->disconnectCanvasObserver(this);
+        m_canvas->disconnectCanvasObserver(this);
+        m_nodeModel->setShapeController(0, 0);
+
+        disconnect(m_image, 0, this, 0);
+        disconnect(m_nodeManager, 0, this, 0);
+        disconnect(m_nodeModel, 0, m_nodeManager, 0);
+        disconnect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), this, SLOT(updateUI()));
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+
     if (m_canvas) {
-        connect(m_canvas, SIGNAL(imageChanged(KisImageWSP)), SLOT(setImage(KisImageWSP)));
-        setImage(m_canvas->view()->image());
-    }
-}    
+        m_image = m_canvas->view()->image();
 
-
-void KisLayerBox::unsetCanvas()
-{
-    m_canvas = 0;
-}
-
-void KisLayerBox::setImage(KisImageWSP image)
-{
-    if(m_image && m_canvas && m_canvas->view())
-    {
-        disconnect(m_image, SIGNAL(sigAboutToBeDeleted()), this, SLOT(notifyImageDeleted()));
-        disconnect(m_nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)), this, SLOT(setCurrentNode(KisNodeSP)));
-        disconnect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), m_nodeManager, SLOT(slotUiActivatedNode(KisNodeSP)));
-
-        disconnect(m_nodeModel, SIGNAL(requestAddNode(KisNodeSP, KisNodeSP)), m_nodeManager, SLOT(addNode(KisNodeSP, KisNodeSP)));
-        disconnect(m_nodeModel, SIGNAL(requestAddNode(KisNodeSP, KisNodeSP, int)), m_nodeManager, SLOT(insertNode(KisNodeSP, KisNodeSP, int)));
-        disconnect(m_nodeModel, SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP)), m_nodeManager, SLOT(moveNode(KisNodeSP, KisNodeSP)));
-        disconnect(m_nodeModel, SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP, int)), m_nodeManager, SLOT(moveNodeAt(KisNodeSP, KisNodeSP, int)));
-    }
-    
-    m_image = image;
-
-    if (m_image && m_canvas && m_canvas->view()) {
-
-        if (m_nodeManager) {
-            m_nodeManager->disconnect(this);
-        }
         m_nodeManager = m_canvas->view()->nodeManager();
-        m_nodeModel->setImage(m_image);
+
+        KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(m_canvas->view()->document()->shapeController());
+        m_nodeModel->setShapeController(kritaShapeController, m_image);
+
         connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
 
         // cold start
         setCurrentNode(m_nodeManager->activeNode());
-        connect(m_nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)), this, SLOT(setCurrentNode(KisNodeSP)));
-        connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), m_nodeManager, SLOT(slotUiActivatedNode(KisNodeSP)));
 
+        // Connection KisNodeManager -> KisLayerBox
+        connect(m_nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)), this, SLOT(setCurrentNode(KisNodeSP)));
+
+        // Connection KisLayerBox -> KisNodeManager
+        // The order of these connections is important! See comment in the ctor
+        connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), m_nodeManager, SLOT(slotUiActivatedNode(KisNodeSP)));
+        connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), SLOT(updateUI()));
+
+        // Node manipulation methods are forwarded to the node manager
         connect(m_nodeModel, SIGNAL(requestAddNode(KisNodeSP, KisNodeSP)), m_nodeManager, SLOT(addNode(KisNodeSP, KisNodeSP)));
         connect(m_nodeModel, SIGNAL(requestAddNode(KisNodeSP, KisNodeSP, int)), m_nodeManager, SLOT(insertNode(KisNodeSP, KisNodeSP, int)));
         connect(m_nodeModel, SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP)), m_nodeManager, SLOT(moveNode(KisNodeSP, KisNodeSP)));
         connect(m_nodeModel, SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP, int)), m_nodeManager, SLOT(moveNodeAt(KisNodeSP, KisNodeSP, int)));
-    }
-    else {
-        m_nodeModel->setImage(m_image);
     }
 
     m_wdgLayerBox->listLayers->expandAll();
     m_wdgLayerBox->listLayers->scrollToBottom();
 }
 
+
+void KisLayerBox::unsetCanvas()
+{
+    setCanvas(0);
+}
+
 void KisLayerBox::notifyImageDeleted()
 {
-    setImage(0);
+    setCanvas(0);
 }
 
 void KisLayerBox::updateUI()
 {
-    KisNodeSP active = m_image ? m_nodeManager->activeNode() : 0;
+    if(!m_canvas) return;
+
+    KisNodeSP active = m_nodeManager->activeNode();
 
     m_wdgLayerBox->bnDelete->setEnabled(active);
     m_wdgLayerBox->bnRaise->setEnabled(active && (active->nextSibling()
@@ -333,16 +330,19 @@ void KisLayerBox::updateUI()
     m_newEffectMaskAction->setEnabled(active);
     m_newSelectionMaskAction->setEnabled(active);
     m_newCloneLayerAction->setEnabled(active);
-
 }
 
+
+/**
+ * This method is callen *only* when non-GUI code requested the
+ * change of the current node
+ */
 void KisLayerBox::setCurrentNode(KisNodeSP node)
 {
-    if (node) {
-        m_wdgLayerBox->listLayers->setCurrentIndex(m_nodeModel->indexFromNode(node));
-        m_nodeManager->activateNode(node);   // NOTE: temporary bug fix - Pentalis
-        updateUI();
-    }
+    QModelIndex index = node ? m_nodeModel->indexFromNode(node) : QModelIndex();
+
+    m_wdgLayerBox->listLayers->setCurrentIndex(index);
+    updateUI();
 }
 
 void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
@@ -390,8 +390,9 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
     menu.exec(pos);
 }
 
-void KisLayerBox::slotMergeLayer()      
+void KisLayerBox::slotMergeLayer()
 {
+    if(!m_canvas) return;
     m_nodeManager->mergeLayerDown();
 }
 
@@ -412,55 +413,66 @@ void KisLayerBox::slotThumbnailView()
 
 void KisLayerBox::slotNewPaintLayer()
 {
+    if(!m_canvas) return;
     m_nodeManager->createNode("KisPaintLayer");
 }
 
 void KisLayerBox::slotNewGroupLayer()
 {
+    if(!m_canvas) return;
     m_nodeManager->createNode("KisGroupLayer");
 }
 
 void KisLayerBox::slotNewCloneLayer()
 {
+    if(!m_canvas) return;
     m_nodeManager->createNode("KisCloneLayer");
 }
 
 
 void KisLayerBox::slotNewShapeLayer()
 {
+    if(!m_canvas) return;
     m_nodeManager->createNode("KisShapeLayer");
 }
 
 
 void KisLayerBox::slotNewAdjustmentLayer()
 {
+    if(!m_canvas) return;
     m_nodeManager->createNode("KisAdjustmentLayer");
 }
 
 void KisLayerBox::slotNewGeneratorLayer()
 {
+    if(!m_canvas) return;
     m_nodeManager->createNode("KisGeneratorLayer");
 }
 
 void KisLayerBox::slotNewTransparencyMask()
 {
+    if(!m_canvas) return;
     m_nodeManager->createNode("KisTransparencyMask");
 }
 
 void KisLayerBox::slotNewEffectMask()
 {
+    if(!m_canvas) return;
     m_nodeManager->createNode("KisFilterMask");
 }
 
 
 void KisLayerBox::slotNewSelectionMask()
 {
+    if(!m_canvas) return;
     m_nodeManager->createNode("KisSelectionMask");
 }
 
 
 void KisLayerBox::slotRmClicked()
 {
+    if(!m_canvas) return;
+
     QModelIndexList l = m_wdgLayerBox->listLayers->selectionModel()->selectedIndexes();
     if (l.count() < 2 && m_nodeManager->activeNode() && !l.contains(m_wdgLayerBox->listLayers->currentIndex())) {
         l.clear();
@@ -473,14 +485,11 @@ void KisLayerBox::slotRmClicked()
             m_nodeManager->removeNode(node);
         }
     }
-    if (m_canvas && m_canvas->view()) {
-        KisView2* view = m_canvas->view();
-        view->updateGUI();
-    }
 }
 
 void KisLayerBox::slotRaiseClicked()
 {
+    if(!m_canvas) return;
     KisNodeSP node = m_nodeManager->activeNode();
     KisNodeSP parent = node->parent();
     KisNodeSP grandParent = parent->parent();
@@ -496,6 +505,7 @@ void KisLayerBox::slotRaiseClicked()
 
 void KisLayerBox::slotLowerClicked()
 {
+    if(!m_canvas) return;
     KisNodeSP node = m_nodeManager->activeNode();
     KisNodeSP parent = node->parent();
     KisNodeSP grandParent = parent->parent();
@@ -511,6 +521,7 @@ void KisLayerBox::slotLowerClicked()
 
 void KisLayerBox::slotLeftClicked()
 {
+    if(!m_canvas) return;
     KisNodeSP node = m_nodeManager->activeNode();
     KisNodeSP parent = node->parent();
     KisNodeSP grandParent = parent->parent();
@@ -528,6 +539,7 @@ void KisLayerBox::slotLeftClicked()
 
 void KisLayerBox::slotRightClicked()
 {
+    if(!m_canvas) return;
     KisNodeSP node = m_nodeManager->activeNode();
     KisNodeSP parent = m_nodeManager->activeNode()->parent();
     KisNodeSP newParent;
@@ -548,6 +560,7 @@ void KisLayerBox::slotRightClicked()
 
 void KisLayerBox::slotPropertiesClicked()
 {
+    if(!m_canvas) return;
     if (KisNodeSP active = m_nodeManager->activeNode()) {
         m_nodeManager->nodeProperties(active);
     }
@@ -555,19 +568,22 @@ void KisLayerBox::slotPropertiesClicked()
 
 void KisLayerBox::slotDuplicateClicked()
 {
+    if(!m_canvas) return;
     m_nodeManager->duplicateActiveNode();
 }
 
 void KisLayerBox::slotCompositeOpChanged(int index)
 {
+    if(!m_canvas) return;
+
     KoID compositeOp;
-    
     if(m_wdgLayerBox->cmbComposite->entryAt(compositeOp, index))
         m_nodeManager->nodeCompositeOpChanged(m_nodeManager->activeColorSpace()->compositeOp(compositeOp.id()));
 }
 
 void KisLayerBox::slotOpacityChanged()
 {
+    if(!m_canvas) return;
     m_nodeManager->nodeOpacityChanged(m_newOpacity, true);
 }
 

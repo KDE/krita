@@ -17,29 +17,14 @@
  */
 
 #include "kis_shape_controller_test.h"
-#include <QTest>
-#include <QCoreApplication>
-#include <QSignalSpy>
 
 #include <qtest_kde.h>
-#include <kactioncollection.h>
 #include <kis_debug.h>
 
-#include "KoColorSpace.h"
-#include "KoCompositeOp.h"
-#include "KoColorSpaceRegistry.h"
-
 #include "kis_doc2.h"
-#include "kis_group_layer.h"
-#include "kis_image.h"
-#include "kis_node_model.h"
+
 #include "kis_name_server.h"
-#include "kis_paint_layer.h"
-#include "kis_clone_layer.h"
-#include "kis_group_layer.h"
 #include "flake/kis_shape_controller.h"
-#include "kis_types.h"
-#include "kis_transparency_mask.h"
 
 #include "node_shapes_utils.h"
 
@@ -50,35 +35,59 @@ void KisShapeControllerTest::init()
     m_nameServer = new KisNameServer();
     m_shapeController = new KisShapeController(m_doc, m_nameServer);
 
-    m_image = new KisImage(0, 512, 512, 0, "test");
-    m_layer1 = new KisPaintLayer(m_image, "layer1", OPACITY_OPAQUE_U8);
-    m_layer2 = new KisGroupLayer(m_image, "layer2", OPACITY_OPAQUE_U8);
-    m_layer3 = new KisCloneLayer(m_layer1, m_image, "layer3", OPACITY_OPAQUE_U8);
-    m_layer4 = new KisGroupLayer(m_image, "layer4", OPACITY_OPAQUE_U8);
-    m_mask1 = new KisTransparencyMask();
+    initBase();
+
+    m_activatedNodes.clear();
+    m_movedDummies.clear();
+    connect(m_shapeController, SIGNAL(sigActivateNode(KisNodeSP)),
+            SLOT(slotNodeActivated(KisNodeSP)));
+    connect(m_shapeController, SIGNAL(sigEndInsertDummy(KisNodeDummy*)),
+            SLOT(slotEndInsertDummy(KisNodeDummy*)));
+    connect(m_shapeController, SIGNAL(sigBeginRemoveDummy(KisNodeDummy*)),
+            SLOT(slotBeginRemoveDummy(KisNodeDummy*)));
 }
 
 void KisShapeControllerTest::cleanup()
 {
-    m_layer1 = 0;
-    m_layer2 = 0;
-    m_layer3 = 0;
-    m_layer4 = 0;
-    m_mask1 = 0;
-    m_image = 0;
+    cleanupBase();
 
     delete m_shapeController;
     delete m_nameServer;
     delete m_doc;
 }
 
-void KisShapeControllerTest::constructImage()
+void KisShapeControllerTest::slotNodeActivated(KisNodeSP node)
 {
-    m_image->addNode(m_layer1);
-    m_image->addNode(m_layer2);
-    m_image->addNode(m_layer3);
-    m_image->addNode(m_layer4);
-    m_image->addNode(m_mask1, m_layer3);
+    QString prefix = m_activatedNodes.isEmpty() ? "" : " ";
+    QString name = node ? node->name() : "__null";
+
+    m_activatedNodes += prefix + name;
+}
+
+void KisShapeControllerTest::slotEndInsertDummy(KisNodeDummy *dummy)
+{
+    QString prefix = m_movedDummies.isEmpty() ? "" : " ";
+    QString name = dummy->nodeShape()->node()->name();
+
+    m_movedDummies += prefix + "A_" + name;
+}
+
+void KisShapeControllerTest::slotBeginRemoveDummy(KisNodeDummy *dummy)
+{
+    QString prefix = m_movedDummies.isEmpty() ? "" : " ";
+    QString name = dummy->nodeShape()->node()->name();
+
+    m_movedDummies += prefix + "R_" + name;
+}
+
+void KisShapeControllerTest::verifyActivatedNodes(const QString &nodes)
+{
+    QCOMPARE(m_activatedNodes, nodes);
+}
+
+void KisShapeControllerTest::verifyMovedDummies(const QString &nodes)
+{
+    QCOMPARE(m_movedDummies, nodes);
 }
 
 void KisShapeControllerTest::testSetImage()
@@ -95,6 +104,10 @@ void KisShapeControllerTest::testSetImage()
 
     m_shapeController->setImage(0);
     QCOMPARE(m_shapeController->layerMapSize(), 0);
+
+    verifyActivatedNodes("layer1 __null");
+    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_effect A_layer4 "
+                       "R_layer4 R_effect R_layer3 R_layer2 R_layer1 R_root");
 }
 
 void KisShapeControllerTest::testAddNode()
@@ -121,7 +134,9 @@ void KisShapeControllerTest::testAddNode()
     m_shapeController->setImage(0);
     QCOMPARE(m_shapeController->layerMapSize(), 0);
 
-    m_shapeController->setImage(0);
+    verifyActivatedNodes("__null layer1 layer2 layer3 layer4 effect __null");
+    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_layer4 A_effect "
+                       "R_layer4 R_effect R_layer3 R_layer2 R_layer1 R_root");
 }
 
 void KisShapeControllerTest::testRemoveNode()
@@ -156,6 +171,12 @@ void KisShapeControllerTest::testRemoveNode()
     QCOMPARE(m_shapeController->layerMapSize(), 3);
 
     m_shapeController->setImage(0);
+
+    // we are not expected to handle nodes removal, it is done by Qt
+    verifyActivatedNodes("layer1 __null");
+
+    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_effect A_layer4 "
+                       "R_layer2 R_effect R_layer3 R_layer4 R_layer1 R_root");
 }
 
 void KisShapeControllerTest::testMoveNodeSameParent()
@@ -182,6 +203,13 @@ void KisShapeControllerTest::testMoveNodeSameParent()
     QCOMPARE(m_shapeController->layerMapSize(), 6);
 
     m_shapeController->setImage(0);
+
+    // layer is first removed then added again
+    verifyActivatedNodes("layer1 layer2 __null");
+
+    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_effect A_layer4 "
+                       "R_layer2 A_layer2 "
+                       "R_layer4 R_layer2 R_effect R_layer3 R_layer1 R_root");
 }
 
 void KisShapeControllerTest::testMoveNodeDifferentParent()
@@ -216,6 +244,13 @@ void KisShapeControllerTest::testMoveNodeDifferentParent()
     QCOMPARE(m_shapeController->layerMapSize(), 6);
 
     m_shapeController->setImage(0);
+
+    // layer is first removed then added again
+    verifyActivatedNodes("layer1 layer2 layer3 __null");
+
+    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_effect A_layer4 "
+                       "R_layer2 A_layer2 R_effect R_layer3 A_layer3 A_effect "
+                       "R_layer2 R_effect R_layer3 R_layer4 R_layer1 R_root");
 }
 
 void KisShapeControllerTest::testSubstituteRootNode()
@@ -242,8 +277,13 @@ void KisShapeControllerTest::testSubstituteRootNode()
     QCOMPARE(m_shapeController->layerMapSize(), 2);
 
     m_shapeController->setImage(0);
-}
 
+    verifyActivatedNodes("layer1 __null Layer 1 __null");
+    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_effect A_layer4 "
+                       "R_layer4 R_effect R_layer3 R_layer2 R_layer1 R_root "
+                       "A_root A_Layer 1 "
+                       "R_Layer 1 R_root");
+}
 
 QTEST_KDEMAIN(KisShapeControllerTest, GUI)
 #include "kis_shape_controller_test.moc"

@@ -21,18 +21,34 @@
 
 #include <QtTest/QtTest>
 
-class kisnodemodel_test : public QObject
+#include "empty_nodes_test.h"
+
+class KisDoc2;
+class KisNameServer;
+class KisShapeController;
+class KisNodeDummy;
+class KisNodeModel;
+
+
+class KisNodeModelTest : public QObject, public TestUtil::EmptyNodesTest
 {
     Q_OBJECT
 
 private slots:
+    void init();
+    void cleanup();
 
-    // tests
-    void testRowcount();
+    void testSetImage();
+    void testAddNode();
+    void testRemoveAllNodes();
+    void testRemoveIncludingRoot();
+    void testSubstituteRootNode();
 
-    void testModelIndex();
-
-    void testGroupLayers();
+private:
+    KisDoc2 *m_doc;
+    KisNameServer *m_nameServer;
+    KisShapeController *m_shapeController;
+    KisNodeModel *m_nodeModel;
 };
 
 #endif

@@ -53,6 +53,10 @@ public:
     KisNodeDummy* prevSibling() const;
     KisNodeDummy* parent() const;
 
+    KisNodeDummy* at(int index) const;
+    int childCount() const;
+    int indexOf(KisNodeDummy *child) const;
+
     KisNodeShape* nodeShape() const;
 
 private:

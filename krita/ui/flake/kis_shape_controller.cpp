@@ -105,27 +105,34 @@ KisShapeController::~KisShapeController()
 void KisShapeController::setImage(KisImageWSP image)
 {
     if (m_d->image.isValid()) {
+        emit sigActivateNode(0);
         m_d->image->disconnect(this);
         slotRemoveNode(m_d->savedRootNode);
 
         Q_ASSERT(!m_d->shapesGraph.shapesCount());
     }
     m_d->image = 0;
-    m_d->savedRootNode = 0;
 
     if (image) {
         m_d->image = image;
-        m_d->savedRootNode = m_d->image->root();
-        slotNodeAdded(m_d->savedRootNode);
+        slotNodeAdded(m_d->image->root());
 
         connect(image, SIGNAL(sigNodeAddedAsync(KisNodeSP)),
                 SLOT(slotNodeAdded(KisNodeSP)), Qt::DirectConnection);
+        connect(image, SIGNAL(sigNodeAddedAsync(KisNodeSP)),
+                SIGNAL(sigActivateNode(KisNodeSP)), Qt::AutoConnection);
+
         connect(image, SIGNAL(sigNodeMovedAsync(KisNodeSP)),
                 SLOT(slotNodeMoved(KisNodeSP)), Qt::DirectConnection);
         connect(image, SIGNAL(sigRemoveNodeAsync(KisNodeSP)),
                 SLOT(slotRemoveNode(KisNodeSP)), Qt::DirectConnection);
         connect(image, SIGNAL(sigLayersChangedAsync()),
                 SLOT(slotLayersChanged()), Qt::DirectConnection);
+
+        connect(image, SIGNAL(sigNodeChanged(KisNode*)),
+                SLOT(slotNodeChanged(KisNode*)));
+
+        emit sigActivateNode(findFirstLayer(m_d->image->root()));
     }
 }
 
@@ -228,6 +235,21 @@ void KisShapeController::setInitialShapeForView(KisView2 * view)
     }
 }
 
+KisNodeSP KisShapeController::findFirstLayer(KisNodeSP root)
+{
+    KisNodeSP child = root->firstChild();
+    while(child && !child->inherits("KisLayer")) {
+        child = child->nextSibling();
+    }
+    return child;
+}
+
+// FIXME: pointer
+void KisShapeController::slotNodeChanged(KisNode* node)
+{
+    emit sigDummyChanged(dummyForNode(node));
+}
+
 void KisShapeController::slotLayersChanged()
 {
     setImage(m_d->image);
@@ -251,11 +273,24 @@ void KisShapeController::slotNodeMoved(KisNodeSP node)
 
 void KisShapeController::slotRemoveNode(KisNodeSP node)
 {
+    KisNodeSP childNode = node->lastChild();
+    while (childNode) {
+        slotRemoveNode(childNode);
+        childNode = childNode->prevSibling();
+    }
+
     emit sigContinueRemoveNode(node);
 }
 
 void KisShapeController::slotContinueAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
 {
+    KisNodeDummy *parentDummy = parent ? dummyForNode(parent) : 0;
+    KisNodeDummy *aboveThisDummy = aboveThis ? dummyForNode(aboveThis) : 0;
+    // Add one because this node does not exist yet
+    int index = parentDummy && aboveThisDummy ?
+        parentDummy->indexOf(aboveThisDummy) + 1 : 0;
+    emit sigBeginInsertDummy(parentDummy, index);
+
     KisNodeShape *newShape =
         m_d->shapesGraph.addNode(node, parent, aboveThis);
 
@@ -271,22 +306,39 @@ void KisShapeController::slotContinueAddNode(KisNodeSP node, KisNodeSP parent, K
                 SIGNAL(currentLayerChanged(const KoShapeLayer*)));
         ((KoShapeLayer*)shapeLayer)->setParent(newShape);
     }
+
+    if(!m_d->savedRootNode) {
+        Q_ASSERT(!parent);
+        m_d->savedRootNode = node;
+    }
+
+    emit sigEndInsertDummy(dummyForNode(node));
 }
 
 void KisShapeController::slotContinueMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
 {
-    m_d->shapesGraph.moveNode(node, parent, aboveThis);
+// FIXME: remove move signals: anyway nodes emit add/remove on every move
+//    m_d->shapesGraph.moveNode(node, parent, aboveThis);
 }
 
 void KisShapeController::slotContinueRemoveNode(KisNodeSP node)
 {
+    KisNodeDummy *dummy = dummyForNode(node);
+    emit sigBeginRemoveDummy(dummy);
+
     KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
     if (shapeLayer) {
         shapeLayer->disconnect(this);
         ((KoShapeLayer*)shapeLayer)->setParent(0);
     }
 
+    if(!dummy->parent()) {
+        Q_ASSERT(m_d->savedRootNode);
+        m_d->savedRootNode = 0;
+    }
+
     m_d->shapesGraph.removeNode(node);
+    emit sigEndRemoveDummy();
 }
 
 KoShapeLayer* KisShapeController::shapeForNode(KisNodeSP node) const
@@ -297,6 +349,11 @@ KoShapeLayer* KisShapeController::shapeForNode(KisNodeSP node) const
 KisNodeDummy* KisShapeController::dummyForNode(KisNodeSP node) const
 {
     return m_d->shapesGraph.nodeToDummy(node);
+}
+
+KisNodeDummy* KisShapeController::rootDummy() const
+{
+    return m_d->savedRootNode ? dummyForNode(m_d->savedRootNode) : 0;
 }
 
 int KisShapeController::layerMapSize()

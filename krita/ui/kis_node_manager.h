@@ -108,6 +108,8 @@ public:
 
 public slots:
 
+    void slotNonUiActivatedNode(KisNodeSP node);
+
     /**
      * Activates \p node.
      * All non-ui listeners are notified with sigNodeActivated,
@@ -170,12 +172,6 @@ public:
 
     void scale(double sx, double sy, KisFilterStrategy *filterStrategy);
     
-private slots:
-    
-    // Those slots are used to ensure that the node that was selected remains selected after a move
-    void aboutToMoveNode();
-    void nodeHasBeenMoved();
-
 private:
     
     void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP active);

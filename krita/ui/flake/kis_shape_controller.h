@@ -52,15 +52,42 @@ public:
     void setImage(KisImageWSP image);
     KoShapeLayer* shapeForNode(KisNodeSP layer) const;
     KisNodeDummy* dummyForNode(KisNodeSP layer) const;
+    KisNodeDummy* rootDummy() const;
     void setInitialShapeForView(KisView2 * view);
 
+
+
 signals:
+    /**
+     * These two signals are forwarded from the local shape manager of
+     * KisShapeLayer. This is done because we switch KoShapeManager and
+     * therefore KoSelection in KisCanvas2, so we need to connect local
+     * managers to the UI as well.
+     *
+     * \see comment in the constructor of KisCanvas2
+     */
     void selectionChanged();
     void currentLayerChanged(const KoShapeLayer*);
 
     void sigContinueAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void sigContinueMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void sigContinueRemoveNode(KisNodeSP node);
+
+    /**
+     * This signal is emitted when the shape controller wants to request
+     * the change of an active layer. E.g. when a new layer is added or
+     * when the root layer of the image is changed. It should be forwarded
+     * through a signal to allow queueing and synchronization of threads.
+     */
+    void sigActivateNode(KisNodeSP node);
+
+    void sigBeginInsertDummy(KisNodeDummy *parent, int index);
+    void sigEndInsertDummy(KisNodeDummy *dummy);
+
+    void sigBeginRemoveDummy(KisNodeDummy *dummy);
+    void sigEndRemoveDummy();
+
+    void sigDummyChanged(KisNodeDummy *dummy);
 
 protected:
     void addShape(KoShape* shape);
@@ -73,12 +100,15 @@ private slots:
     void slotNodeMoved(KisNodeSP node);
     void slotRemoveNode(KisNodeSP node);
     void slotLayersChanged();
+    void slotNodeChanged(KisNode* node);
 
     void slotContinueAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void slotContinueMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void slotContinueRemoveNode(KisNodeSP node);
 
 private:
+    static KisNodeSP findFirstLayer(KisNodeSP root);
+
     int layerMapSize();
     QMap<QString, KoDataCenterBase *> dataCenterMap() const;
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>226</width>
-    <height>63</height>
+    <width>303</width>
+    <height>67</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -28,7 +28,7 @@
      <property name="spacing">
       <number>2</number>
      </property>
-     <item row="1" column="0" colspan="9">
+     <item row="1" column="0" colspan="11">
       <layout class="QGridLayout" name="fontsFrame">
        <property name="horizontalSpacing">
         <number>2</number>
@@ -94,7 +94,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="8">
+     <item row="2" column="8" colspan="2">
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -110,8 +110,14 @@
        </property>
       </spacer>
      </item>
-     <item row="0" column="0" colspan="9">
-      <widget class="StylesCombo" name="characterStyleCombo">
+     <item row="0" column="0" colspan="11">
+      <widget class="StylesCombo" name="characterStyleCombo"/>
+     </item>
+     <item row="2" column="10">
+      <widget class="QToolButton" name="moreOptions">
+       <property name="text">
+        <string>...</string>
+       </property>
       </widget>
      </item>
     </layout>

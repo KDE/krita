@@ -111,7 +111,7 @@ void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnershi
     if (! d->document->useDesignMetrics())
         d->document->setUseDesignMetrics(true);
 
-    if (d->document->isEmpty()) { // apply app default style for first parag
+    if (d->document->isEmpty() && !d->document->firstBlock().blockFormat().hasProperty(KoParagraphStyle::StyleId)) { // apply app default style for first parag
         KoTextDocument doc(d->document);
         KoStyleManager *sm = doc.styleManager();
         if (sm) {

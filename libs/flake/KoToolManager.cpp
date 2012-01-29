@@ -430,6 +430,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
             if (canvasControllerWidget) {
                 canvasControllerWidget->activate();
             }
+            postSwitchTool(false);
         } else {
             KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
             if (canvasControllerWidget) {

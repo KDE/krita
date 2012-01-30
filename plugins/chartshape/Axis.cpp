@@ -1377,6 +1377,8 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
             setMajorInterval( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-major" ) ) );
         if ( styleStack.hasProperty( KoXmlNS::chart, "interval-minor-divisor" ) )
             setMinorIntervalDivisor( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-minor-divisor" ) ) );
+        else if ( styleStack.hasProperty( KoXmlNS::chart, "interval-minor" ) )
+            setMinorInterval( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-minor" ) ) );
 
         if ( styleStack.hasProperty( KoXmlNS::chart, "tick-marks-minor-inner" ) )
             setShowInnerMinorTicks(styleStack.property( KoXmlNS::chart, "tick-marks-minor-inner" ) == "true");

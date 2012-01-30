@@ -194,10 +194,17 @@ void KoXmlWriter::endElement()
 
 void KoXmlWriter::addTextNode(const QByteArray& cstr)
 {
+    for (int i=0;i<cstr.size(); i++)
+        qDebug()<<"addTextNode ba"<<cstr.constData()[i]<<int(cstr.constData()[i]);
     // Same as the const char* version below, but here we know the size
     prepareForTextNode();
     char* escaped = escapeForXML(cstr.constData(), cstr.size());
-    writeCString(escaped);
+    for (int i=0;i<cstr.size(); i++)
+        qDebug()<<"addTextNode esc"<<escaped[i]<<int(escaped[i]);
+//    writeCString(escaped);
+        QByteArray ba(escaped);
+    d->dev->write(ba,ba.size());
+qDebug()<<"textmode" <<d->dev->isTextModeEnabled ();
     if (escaped != d->escapeBuffer)
         delete[] escaped;
 }

@@ -153,6 +153,7 @@ void KoImageDataPrivate::clear()
     imageSize = QSizeF();
     key = 0;
     image = QImage();
+    pixmap = QPixmap();
 }
 
 qint64 KoImageDataPrivate::generateKey(const QByteArray &bytes)

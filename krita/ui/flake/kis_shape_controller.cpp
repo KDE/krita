@@ -65,7 +65,6 @@ struct KisShapeController::Private
 public:
     KisDoc2 *doc;
     KisNameServer *nameServer;
-    QMap<QString, KoDataCenterBase*> dataCenterMap;
 
     KisNodeShapesGraph shapesGraph;
 };
@@ -83,11 +82,6 @@ KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
 KisShapeController::~KisShapeController()
 {
     setImage(0);
-
-    // XXX: deleting the undoStack of the document while the document is being deleted is dangerous
-    m_d->dataCenterMap.remove("UndoStack");
-    qDeleteAll(m_d->dataCenterMap);
-
     delete m_d;
 }
 
@@ -197,12 +191,6 @@ void KisShapeController::removeShape(KoShape* shape)
     shape->setParent(0);
     m_d->doc->setModified(true);
 }
-
-QMap<QString, KoDataCenterBase *> KisShapeController::dataCenterMap() const
-{
-    return m_d->dataCenterMap;
-}
-
 
 void KisShapeController::setInitialShapeForView(KisView2 * view)
 {

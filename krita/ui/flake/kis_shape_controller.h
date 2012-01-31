@@ -75,9 +75,6 @@ protected:
     void removeShape(KoShape* shape);
 
 private:
-    QMap<QString, KoDataCenterBase *> dataCenterMap() const;
-
-private:
     struct Private;
     Private * const m_d;
 };

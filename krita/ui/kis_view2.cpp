@@ -471,9 +471,6 @@ void KisView2::dropEvent(QDropEvent *event)
                                 m_d->nodeManager->activeLayer()->parent(),
                                 m_d->nodeManager->activeLayer());
             }
-            node->setDirty();
-            canvas()->update();
-            nodeManager()->activateNode(node);
         }
 
         return;
@@ -673,7 +670,7 @@ void KisView2::slotLoadingFinished()
     }
 
     if (activeNode) {
-        m_d->nodeManager->activateNode(activeNode);
+        m_d->nodeManager->slotNonUiActivatedNode(activeNode);
     }
 
     /**

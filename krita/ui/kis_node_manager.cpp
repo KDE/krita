@@ -59,15 +59,9 @@ struct KisNodeManager::Private {
     KisNodeSP activeNode;
     KisNodeManager* self;
     KisNodeCommandsAdapter* commandsAdapter;
-    
-    void slotLayersChanged(KisGroupLayerSP);
+
     bool activateNodeImpl(KisNodeSP node);
 };
-
-void KisNodeManager::Private::slotLayersChanged(KisGroupLayerSP layer)
-{
-    self->activateNode(layer->at(0));
-}
 
 bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
 {
@@ -339,16 +333,6 @@ void KisNodeManager::createNode(const QString & nodeType)
         m_d->maskManager->createSelectionMask(parent, above);
     }
 
-}
-
-// FIXME: going to be deprecated
-void KisNodeManager::activateNode(KisNodeSP node)
-{
-    if(m_d->activateNodeImpl(node)) {
-        emit sigUiNeedChangeActiveNode(node);
-        emit sigNodeActivated(node);
-        nodesUpdated();
-    }
 }
 
 void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)

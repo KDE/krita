@@ -52,7 +52,7 @@ public:
         KisNodeSP paint1 = findNode(image->root(), "paint1");
         Q_ASSERT(paint1);
 
-        view->nodeManager()->activateNode(paint1);
+        view->nodeManager()->slotNonUiActivatedNode(paint1);
         selectionManager = view->selectionManager();
     }
 

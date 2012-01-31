@@ -170,7 +170,6 @@ void KisShapeController::addShape(KoShape* shape)
                                            OPACITY_OPAQUE_U8);
 
             image()->undoAdapter()->addCommand(new KisImageLayerAddCommand(image(), shapeLayer, image()->rootLayer(), image()->rootLayer()->childCount()));
-            canvas->view()->nodeManager()->activateNode(shapeLayer);
         }
 
         shapeLayer->addShape(shape);

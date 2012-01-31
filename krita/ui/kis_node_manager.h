@@ -96,18 +96,21 @@ public:
      */
     void setNodeCompositeOp(KisNodeSP node, const KoCompositeOp* compositeOp);
 
+public slots:
+
     /**
      * Explicitly activates \p node
      * The UI will be noticed that active node has been changed.
-     *
      * Both sigNodeActivated and sigUiNeedChangeActiveNode are emitted.
+     *
+     * WARNING: normally you needn't call this method manually. It is
+     * automatically called when a node is added to the graph. If you
+     * have some special cases when you need to activate a node, consider
+     * adding them to KisDummiesFacadeBase instead. Calling this method
+     * directly  should be the last resort.
      *
      * \see slotUiActivatedNode for comparison
      */
-    void activateNode(KisNodeSP node);
-
-public slots:
-
     void slotNonUiActivatedNode(KisNodeSP node);
 
     /**
@@ -185,7 +188,6 @@ private:
 
     struct Private;
     Private * const m_d;
-    Q_PRIVATE_SLOT(m_d, void slotLayersChanged(KisGroupLayerSP))
 };
 
 #endif

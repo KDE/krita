@@ -103,8 +103,6 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
 
             KisNodeCommandsAdapter adapter(m_d->view);
             adapter.addNode(importedImageLayer.data(), parent, currentActiveLayer.data());
-            m_d->view->nodeManager()->activateNode(importedImageLayer.data());
-            importedImageLayer->setDirty();
         }
     }
 

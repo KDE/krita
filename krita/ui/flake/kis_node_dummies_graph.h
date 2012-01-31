@@ -20,8 +20,11 @@
 #define __KIS_NODE_DUMMIES_GRAPH_H
 
 #include <QList>
+#include <QMap>
 
 #include "krita_export.h"
+#include "kis_types.h"
+#include "kis_node.h"
 
 class KisNodeShape;
 
@@ -44,7 +47,7 @@ class KisNodeShape;
 class KRITAUI_EXPORT KisNodeDummy
 {
 public:
-    KisNodeDummy(KisNodeShape *nodeShape);
+    KisNodeDummy(KisNodeShape *nodeShape, KisNodeSP node);
     ~KisNodeDummy();
 
     KisNodeDummy* firstChild() const;
@@ -57,15 +60,18 @@ public:
     int childCount() const;
     int indexOf(KisNodeDummy *child) const;
 
-    KisNodeShape* nodeShape() const;
+    KisNodeSP node() const;
 
 private:
-    friend class KisNodeDummiesGraph;
+    friend class KisNodeShapesGraph; // for ::nodeShape() method
+    KisNodeShape* nodeShape() const;
 
+    friend class KisNodeDummiesGraph;
     KisNodeDummy *m_parent;
     QList<KisNodeDummy*> m_children;
 
     KisNodeShape *m_nodeShape;
+    KisNodeSP m_node;
 };
 
 /**
@@ -76,6 +82,14 @@ private:
 class KRITAUI_EXPORT KisNodeDummiesGraph
 {
 public:
+    KisNodeDummiesGraph();
+
+    KisNodeDummy* rootDummy() const;
+
+    KisNodeDummy* nodeToDummy(KisNodeSP node);
+    bool containsNode(KisNodeSP node) const;
+    int dummiesCount() const;
+
     /**
      * Adds a dummy \p node to the position specified
      * by \p parent and \p aboveThis.
@@ -106,6 +120,16 @@ public:
      * \endcode
      */
     void removeNode(KisNodeDummy *node);
+
+private:
+    void unmapDummyRecursively(KisNodeDummy *dummy);
+
+private:
+    typedef QMap<KisNodeSP, KisNodeDummy*> NodeMap;
+
+private:
+    KisNodeDummy *m_rootDummy;
+    NodeMap m_dummiesMap;
 };
 
 #endif /* __KIS_NODE_DUMMIES_GRAPH_H */

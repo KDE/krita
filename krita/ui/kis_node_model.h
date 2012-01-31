@@ -22,7 +22,7 @@
 #include "krita_export.h"
 #include <kis_types.h>
 
-class KisShapeController;
+class KisDummiesFacadeBase;
 class KisNodeDummy;
 
 /**
@@ -45,7 +45,7 @@ public: // from QAbstractItemModel
     KisNodeModel(QObject * parent);
     ~KisNodeModel();
 
-    void setShapeController(KisShapeController *controller, KisImageWSP image);
+    void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image);
     KisNodeSP nodeFromIndex(const QModelIndex &index) const;
     QModelIndex indexFromNode(KisNodeSP node) const;
 

@@ -67,6 +67,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
+#include <kis_dummies_facade.h>
 #include <kis_node_model.h>
 #include <kis_iterator_ng.h>
 
@@ -374,13 +375,22 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const
 
     l->addWidget(m_page);
 
+    KisDummiesFacadeBase *dummiesFacade = new KisDummiesFacade(this);
+    dummiesFacade->setImage(image);
+
     m_model = new KisNodeModel(this);
-    m_model->setImage(image);
+    m_model->setDummiesFacade(dummiesFacade, image);
 
     m_page->listLayers->setModel(m_model);
     m_page->listLayers->expandAll();
-    m_page->listLayers->scrollToBottom();
 
+    connect(dummiesFacade, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(setCurrentNode(KisNodeSP)));
+}
+
+void KisBumpmapConfigWidget::setCurrentNode(KisNodeSP node)
+{
+    QModelIndex index = node ? m_model->indexFromNode(node) : QModelIndex();
+    m_page->listLayers->setCurrentIndex(index);
 }
 
 void KisBumpmapConfigWidget::setConfiguration(const KisPropertiesConfiguration * cfg)
@@ -388,8 +398,7 @@ void KisBumpmapConfigWidget::setConfiguration(const KisPropertiesConfiguration *
     if (!cfg) return;
 
     KisNodeSP node = cfg->getProperty("source_layer").value<KisNodeSP>();
-    if (node)
-        m_page->listLayers->setCurrentIndex(m_model->indexFromNode(node));
+    setCurrentNode(node);
 
     m_page->dblAzimuth->setValue(cfg->getDouble("azimuth", 135.0));
     m_page->dblElevation->setValue(cfg->getDouble("elevation", 45.0));
@@ -421,7 +430,21 @@ KisPropertiesConfiguration* KisBumpmapConfigWidget::configuration() const
     KisFilterConfiguration * cfg = new KisFilterConfiguration("bumpmap", 2);
     //cfg->setProperty("bumpmap", m_page->txtSourceLayer->text());
     QVariant v;
-    v.fromValue(m_model->nodeFromIndex(m_page->listLayers->currentIndex()));
+
+    QModelIndex index = m_page->listLayers->currentIndex();
+    KisNodeSP node;
+
+    if(index.isValid()) {
+        node = m_model->nodeFromIndex(index);
+    }
+    else {
+        node = m_image->root()->firstChild();
+        while (node && !node->inherits("KisLayer")) {
+            node = node->nextSibling();
+        }
+    }
+
+    v.fromValue(node);
     cfg->setProperty("source_layer", v);
     cfg->setProperty("azimuth", m_page->dblAzimuth->value());
     cfg->setProperty("elevation", m_page->dblElevation->value());

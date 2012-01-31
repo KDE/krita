@@ -19,270 +19,28 @@
 #include "kis_shape_controller_test.h"
 
 #include <qtest_kde.h>
-#include <kis_debug.h>
 
 #include "kis_doc2.h"
-
 #include "kis_name_server.h"
 #include "flake/kis_shape_controller.h"
 
-#include "node_shapes_utils.h"
 
+KisShapeControllerTest::~KisShapeControllerTest()
+{
+}
 
-void KisShapeControllerTest::init()
+KisDummiesFacadeBase* KisShapeControllerTest::dummiesFacadeFactory()
 {
     m_doc = new KisDoc2;
     m_nameServer = new KisNameServer();
-    m_shapeController = new KisShapeController(m_doc, m_nameServer);
-
-    initBase();
-
-    m_activatedNodes.clear();
-    m_movedDummies.clear();
-    connect(m_shapeController, SIGNAL(sigActivateNode(KisNodeSP)),
-            SLOT(slotNodeActivated(KisNodeSP)));
-    connect(m_shapeController, SIGNAL(sigEndInsertDummy(KisNodeDummy*)),
-            SLOT(slotEndInsertDummy(KisNodeDummy*)));
-    connect(m_shapeController, SIGNAL(sigBeginRemoveDummy(KisNodeDummy*)),
-            SLOT(slotBeginRemoveDummy(KisNodeDummy*)));
+    return new KisShapeController(m_doc, m_nameServer);
 }
 
-void KisShapeControllerTest::cleanup()
+void KisShapeControllerTest::destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade)
 {
-    cleanupBase();
-
-    delete m_shapeController;
+    delete dummiesFacade;
     delete m_nameServer;
     delete m_doc;
-}
-
-void KisShapeControllerTest::slotNodeActivated(KisNodeSP node)
-{
-    QString prefix = m_activatedNodes.isEmpty() ? "" : " ";
-    QString name = node ? node->name() : "__null";
-
-    m_activatedNodes += prefix + name;
-}
-
-void KisShapeControllerTest::slotEndInsertDummy(KisNodeDummy *dummy)
-{
-    QString prefix = m_movedDummies.isEmpty() ? "" : " ";
-    QString name = dummy->nodeShape()->node()->name();
-
-    m_movedDummies += prefix + "A_" + name;
-}
-
-void KisShapeControllerTest::slotBeginRemoveDummy(KisNodeDummy *dummy)
-{
-    QString prefix = m_movedDummies.isEmpty() ? "" : " ";
-    QString name = dummy->nodeShape()->node()->name();
-
-    m_movedDummies += prefix + "R_" + name;
-}
-
-void KisShapeControllerTest::verifyActivatedNodes(const QString &nodes)
-{
-    QCOMPARE(m_activatedNodes, nodes);
-}
-
-void KisShapeControllerTest::verifyMovedDummies(const QString &nodes)
-{
-    QCOMPARE(m_movedDummies, nodes);
-}
-
-void KisShapeControllerTest::testSetImage()
-{
-    constructImage();
-
-    m_shapeController->setImage(m_image);
-
-    QString actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
-    QString expectedGraph = "root layer1 layer2 layer3 effect layer4";
-
-    QCOMPARE(actualGraph, expectedGraph);
-    QCOMPARE(m_shapeController->layerMapSize(), 6);
-
-    m_shapeController->setImage(0);
-    QCOMPARE(m_shapeController->layerMapSize(), 0);
-
-    verifyActivatedNodes("layer1 __null");
-    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_effect A_layer4 "
-                       "R_layer4 R_effect R_layer3 R_layer2 R_layer1 R_root");
-}
-
-void KisShapeControllerTest::testAddNode()
-{
-    QString actualGraph;
-    QString expectedGraph;
-
-    m_shapeController->setImage(m_image);
-
-    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
-    expectedGraph = "root";
-
-    QCOMPARE(actualGraph, expectedGraph);
-    QCOMPARE(m_shapeController->layerMapSize(), 1);
-
-    constructImage();
-
-    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
-    expectedGraph = "root layer1 layer2 layer3 effect layer4";
-
-    QCOMPARE(actualGraph, expectedGraph);
-    QCOMPARE(m_shapeController->layerMapSize(), 6);
-
-    m_shapeController->setImage(0);
-    QCOMPARE(m_shapeController->layerMapSize(), 0);
-
-    verifyActivatedNodes("__null layer1 layer2 layer3 layer4 effect __null");
-    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_layer4 A_effect "
-                       "R_layer4 R_effect R_layer3 R_layer2 R_layer1 R_root");
-}
-
-void KisShapeControllerTest::testRemoveNode()
-{
-    QString actualGraph;
-    QString expectedGraph;
-
-    constructImage();
-
-    m_shapeController->setImage(m_image);
-
-    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
-    expectedGraph = "root layer1 layer2 layer3 effect layer4";
-
-    QCOMPARE(actualGraph, expectedGraph);
-    QCOMPARE(m_shapeController->layerMapSize(), 6);
-
-    m_image->removeNode(m_layer2);
-
-    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
-    expectedGraph = "root layer1 layer3 effect layer4";
-
-    QCOMPARE(actualGraph, expectedGraph);
-    QCOMPARE(m_shapeController->layerMapSize(), 5);
-
-    m_image->removeNode(m_layer3);
-
-    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
-    expectedGraph = "root layer1 layer4";
-
-    QCOMPARE(actualGraph, expectedGraph);
-    QCOMPARE(m_shapeController->layerMapSize(), 3);
-
-    m_shapeController->setImage(0);
-
-    // we are not expected to handle nodes removal, it is done by Qt
-    verifyActivatedNodes("layer1 __null");
-
-    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_effect A_layer4 "
-                       "R_layer2 R_effect R_layer3 R_layer4 R_layer1 R_root");
-}
-
-void KisShapeControllerTest::testMoveNodeSameParent()
-{
-    QString actualGraph;
-    QString expectedGraph;
-
-    constructImage();
-
-    m_shapeController->setImage(m_image);
-
-    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
-    expectedGraph = "root layer1 layer2 layer3 effect layer4";
-
-    QCOMPARE(actualGraph, expectedGraph);
-    QCOMPARE(m_shapeController->layerMapSize(), 6);
-
-    m_image->moveNode(m_layer2, m_image->root(), m_layer3);
-
-    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
-    expectedGraph = "root layer1 layer3 effect layer2 layer4";
-
-    QCOMPARE(actualGraph, expectedGraph);
-    QCOMPARE(m_shapeController->layerMapSize(), 6);
-
-    m_shapeController->setImage(0);
-
-    // layer is first removed then added again
-    verifyActivatedNodes("layer1 layer2 __null");
-
-    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_effect A_layer4 "
-                       "R_layer2 A_layer2 "
-                       "R_layer4 R_layer2 R_effect R_layer3 R_layer1 R_root");
-}
-
-void KisShapeControllerTest::testMoveNodeDifferentParent()
-{
-    QString actualGraph;
-    QString expectedGraph;
-
-    constructImage();
-
-    m_shapeController->setImage(m_image);
-
-    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
-    expectedGraph = "root layer1 layer2 layer3 effect layer4";
-
-    QCOMPARE(actualGraph, expectedGraph);
-    QCOMPARE(m_shapeController->layerMapSize(), 6);
-
-    m_image->moveNode(m_layer2, m_image->root(), m_layer4);
-
-    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
-    expectedGraph = "root layer1 layer3 effect layer4 layer2";
-
-    QCOMPARE(actualGraph, expectedGraph);
-    QCOMPARE(m_shapeController->layerMapSize(), 6);
-
-    m_image->moveNode(m_layer3, m_layer4, m_layer4->lastChild());
-
-    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
-    expectedGraph = "root layer1 layer4 layer3 effect layer2";
-
-    QCOMPARE(actualGraph, expectedGraph);
-    QCOMPARE(m_shapeController->layerMapSize(), 6);
-
-    m_shapeController->setImage(0);
-
-    // layer is first removed then added again
-    verifyActivatedNodes("layer1 layer2 layer3 __null");
-
-    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_effect A_layer4 "
-                       "R_layer2 A_layer2 R_effect R_layer3 A_layer3 A_effect "
-                       "R_layer2 R_effect R_layer3 R_layer4 R_layer1 R_root");
-}
-
-void KisShapeControllerTest::testSubstituteRootNode()
-{
-    QString actualGraph;
-    QString expectedGraph;
-
-    constructImage();
-
-    m_shapeController->setImage(m_image);
-
-    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
-    expectedGraph = "root layer1 layer2 layer3 effect layer4";
-
-    QCOMPARE(actualGraph, expectedGraph);
-    QCOMPARE(m_shapeController->layerMapSize(), 6);
-
-    m_image->flatten();
-
-    actualGraph = collectGraphPatternFull(m_shapeController->dummyForNode(m_image->root()));
-    expectedGraph = "root Layer 1";
-
-    QCOMPARE(actualGraph, expectedGraph);
-    QCOMPARE(m_shapeController->layerMapSize(), 2);
-
-    m_shapeController->setImage(0);
-
-    verifyActivatedNodes("layer1 __null Layer 1 __null");
-    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_effect A_layer4 "
-                       "R_layer4 R_effect R_layer3 R_layer2 R_layer1 R_root "
-                       "A_root A_Layer 1 "
-                       "R_Layer 1 R_root");
 }
 
 QTEST_KDEMAIN(KisShapeControllerTest, GUI)

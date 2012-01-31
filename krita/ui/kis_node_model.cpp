@@ -37,9 +37,8 @@
 #include <commands/kis_node_property_list_command.h>
 #include <kis_paint_layer.h>
 
-#include "kis_shape_controller.h"
+#include "kis_dummies_facade_base.h"
 #include "kis_node_dummies_graph.h"
-#include "kis_node_shape.h"
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
@@ -48,14 +47,14 @@
 struct KisNodeModel::Private
 {
 public:
-    Private() : shapeController(0), needFinishRemoveRows(false) {}
+    Private() : dummiesFacade(0), needFinishRemoveRows(false) {}
 
     KisImageWSP image;
     bool showRootLayer;
     QList<KisNodeDummy*> updateQueue;
     QTimer* updateTimer;
 
-    KisShapeController *shapeController;
+    KisDummiesFacadeBase *dummiesFacade;
     bool needFinishRemoveRows;
 };
 
@@ -76,7 +75,7 @@ KisNodeModel::~KisNodeModel()
 }
 
 inline KisNodeSP KisNodeModel::nodeFromDummy(KisNodeDummy *dummy) {
-    return dummy->nodeShape()->node();
+    return dummy->node();
 }
 
 inline KisNodeDummy* KisNodeModel::dummyFromIndex(const QModelIndex &index) {
@@ -91,7 +90,7 @@ KisNodeSP KisNodeModel::nodeFromIndex(const QModelIndex &index) const
 
 QModelIndex KisNodeModel::indexFromNode(KisNodeSP node) const
 {
-    return indexFromDummy(m_d->shapeController->dummyForNode(node));
+    return indexFromDummy(m_d->dummiesFacade->dummyForNode(node));
 }
 
 void KisNodeModel::updateSettings()
@@ -133,30 +132,33 @@ void KisNodeModel::connectDummies(KisNodeDummy *dummy, bool needConnect)
     }
 }
 
-void KisNodeModel::setShapeController(KisShapeController *controller, KisImageWSP image)
+void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image)
 {
     m_d->image = image;
 
-    if(m_d->shapeController) {
-        m_d->shapeController->disconnect(this);
-        connectDummies(m_d->shapeController->rootDummy(), false);
+    if(m_d->dummiesFacade) {
+        m_d->dummiesFacade->disconnect(this);
+        connectDummies(m_d->dummiesFacade->rootDummy(), false);
     }
 
-    m_d->shapeController = controller;
+    m_d->dummiesFacade = dummiesFacade;
 
-    if(m_d->shapeController) {
-        connectDummies(m_d->shapeController->rootDummy(), true);
+    if(m_d->dummiesFacade) {
+        KisNodeDummy *rootDummy = m_d->dummiesFacade->rootDummy();
+        if(rootDummy) {
+            connectDummies(rootDummy, true);
+        }
 
-        connect(m_d->shapeController, SIGNAL(sigBeginInsertDummy(KisNodeDummy*, int)),
+        connect(m_d->dummiesFacade, SIGNAL(sigBeginInsertDummy(KisNodeDummy*, int)),
                 SLOT(slotBeginInsertDummy(KisNodeDummy*, int)));
-        connect(m_d->shapeController, SIGNAL(sigEndInsertDummy(KisNodeDummy*)),
+        connect(m_d->dummiesFacade, SIGNAL(sigEndInsertDummy(KisNodeDummy*)),
                 SLOT(slotEndInsertDummy(KisNodeDummy*)));
-        connect(m_d->shapeController, SIGNAL(sigBeginRemoveDummy(KisNodeDummy*)),
+        connect(m_d->dummiesFacade, SIGNAL(sigBeginRemoveDummy(KisNodeDummy*)),
                 SLOT(slotBeginRemoveDummy(KisNodeDummy*)));
-        connect(m_d->shapeController, SIGNAL(sigEndRemoveDummy()),
+        connect(m_d->dummiesFacade, SIGNAL(sigEndRemoveDummy()),
                 SLOT(slotEndRemoveDummy()));
 
-        connect(m_d->shapeController, SIGNAL(sigDummyChanged(KisNodeDummy*)),
+        connect(m_d->dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)),
                 SLOT(slotDummyChanged(KisNodeDummy*)));
     }
 
@@ -263,7 +265,7 @@ QModelIndex KisNodeModel::indexFromDummy(KisNodeDummy *dummy) const
 
 QModelIndex KisNodeModel::index(int row, int col, const QModelIndex &parent) const
 {
-    if(!m_d->shapeController || !hasIndex(row, col, parent)) return QModelIndex();
+    if(!m_d->dummiesFacade || !hasIndex(row, col, parent)) return QModelIndex();
 
     KisNodeDummy *parentDummy;
 
@@ -271,11 +273,11 @@ QModelIndex KisNodeModel::index(int row, int col, const QModelIndex &parent) con
         parentDummy = dummyFromIndex(parent);
     }
     else if(!m_d->showRootLayer) {
-        parentDummy = m_d->shapeController->rootDummy();
+        parentDummy = m_d->dummiesFacade->rootDummy();
     }
     else {
         Q_ASSERT(row == 0);
-        KisNodeDummy *rootDummy = m_d->shapeController->rootDummy();
+        KisNodeDummy *rootDummy = m_d->dummiesFacade->rootDummy();
         return rootDummy ? indexFromDummy(rootDummy) : QModelIndex();
     }
 
@@ -290,7 +292,7 @@ QModelIndex KisNodeModel::index(int row, int col, const QModelIndex &parent) con
 
 int KisNodeModel::rowCount(const QModelIndex &parent) const
 {
-    if(!m_d->shapeController) return 0;
+    if(!m_d->dummiesFacade) return 0;
 
     KisNodeDummy *parentDummy;
 
@@ -298,7 +300,7 @@ int KisNodeModel::rowCount(const QModelIndex &parent) const
         parentDummy = dummyFromIndex(parent);
     }
     else if(!m_d->showRootLayer) {
-        parentDummy = m_d->shapeController->rootDummy();
+        parentDummy = m_d->dummiesFacade->rootDummy();
     }
     else {
         return 1;
@@ -314,7 +316,7 @@ int KisNodeModel::columnCount(const QModelIndex&) const
 
 QModelIndex KisNodeModel::parent(const QModelIndex &index) const
 {
-    if(!m_d->shapeController || !index.isValid()) return QModelIndex();
+    if(!m_d->dummiesFacade || !index.isValid()) return QModelIndex();
 
     KisNodeDummy *dummy = dummyFromIndex(index);
 
@@ -324,7 +326,7 @@ QModelIndex KisNodeModel::parent(const QModelIndex &index) const
 
 QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 {
-    if(!m_d->shapeController || !index.isValid()) return QVariant();
+    if(!m_d->dummiesFacade || !index.isValid()) return QVariant();
 
     KisNodeSP node = nodeFromIndex(index);
 
@@ -351,7 +353,7 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 {
-    if(!m_d->shapeController || !index.isValid()) return Qt::ItemIsDropEnabled;
+    if(!m_d->dummiesFacade || !index.isValid()) return Qt::ItemIsDropEnabled;
 
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable | Qt::ItemIsDropEnabled;
     return flags;
@@ -367,7 +369,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         return true;
     }
 
-    if(!m_d->shapeController || !index.isValid()) return false;
+    if(!m_d->dummiesFacade || !index.isValid()) return false;
 
     bool result = true;
     KisNodeSP node = nodeFromIndex(index);

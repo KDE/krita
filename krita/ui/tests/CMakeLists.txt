@@ -24,7 +24,7 @@ target_link_libraries(KisImageViewConverterTest  ${KDE4_KDEUI_LIBS}  komain krit
 
 ########### next target ###############
 
-set(kis_shape_controller_test_SRCS kis_shape_controller_test.cpp )
+set(kis_shape_controller_test_SRCS kis_shape_controller_test.cpp kis_dummies_facade_base_test.cpp)
 
 kde4_add_unit_test(kis_shape_controller_test TESTNAME krita-ui-kis_shape_controller_test  ${kis_shape_controller_test_SRCS})
 
@@ -132,3 +132,9 @@ target_link_libraries(KisNodeDummiesGraphTest  ${KDE4_KDEUI_LIBS}  kritaui krita
 set(kis_node_shapes_graph_test_SRCS kis_node_shapes_graph_test.cpp ../../sdk/tests/testutil.cpp)
 kde4_add_unit_test(KisNodeShapesGraphTest TESTNAME krita-ui-KisNodeShapesGraphTest  ${kis_node_shapes_graph_test_SRCS})
 target_link_libraries(KisNodeShapesGraphTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_dummies_facade_test_SRCS kis_dummies_facade_test.cpp kis_dummies_facade_base_test.cpp ../../sdk/tests/testutil.cpp)
+kde4_add_unit_test(KisDummiesFacadeTest TESTNAME krita-ui-KisDummiesFacadeTest  ${kis_dummies_facade_test_SRCS})
+target_link_libraries(KisDummiesFacadeTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})

@@ -23,8 +23,6 @@
 
 KisNodeShape* KisNodeShapesGraph::addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
 {
-    Q_ASSERT(!m_dummiesMap.contains(node));
-
     KisNodeDummy *parentDummy = 0;
     KisNodeDummy *aboveThisDummy = 0;
 
@@ -42,8 +40,7 @@ KisNodeShape* KisNodeShapesGraph::addNode(KisNodeSP node, KisNodeSP parent, KisN
     KisNodeShape *newShape = new KisNodeShape(node);
     ((KoShapeLayer*)newShape)->setParent(parentShape);
 
-    KisNodeDummy *newDummy = new KisNodeDummy(newShape);
-    m_dummiesMap[node] = newDummy;
+    KisNodeDummy *newDummy = new KisNodeDummy(newShape, newShape->node());
 
     m_dummiesGraph.addNode(newDummy, parentDummy, aboveThisDummy);
     return newShape;
@@ -61,27 +58,19 @@ void KisNodeShapesGraph::moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP ab
 void KisNodeShapesGraph::removeNode(KisNodeSP node)
 {
     KisNodeDummy *nodeDummy = nodeToDummy(node);
-    unmapDummyRecursively(nodeDummy);
 
     m_dummiesGraph.removeNode(nodeDummy);
     delete nodeDummy;
 }
 
-void KisNodeShapesGraph::unmapDummyRecursively(KisNodeDummy *dummy)
+KisNodeDummy* KisNodeShapesGraph::rootDummy() const
 {
-    m_dummiesMap.remove(dummy->nodeShape()->node());
-
-    KisNodeDummy *child = dummy->firstChild();
-    while(child) {
-        unmapDummyRecursively(child);
-        child = child->nextSibling();
-    }
+    return m_dummiesGraph.rootDummy();
 }
 
 KisNodeDummy* KisNodeShapesGraph::nodeToDummy(KisNodeSP node)
 {
-    Q_ASSERT(m_dummiesMap.contains(node));
-    return m_dummiesMap[node];
+    return m_dummiesGraph.nodeToDummy(node);
 }
 
 KisNodeShape* KisNodeShapesGraph::nodeToShape(KisNodeSP node)
@@ -91,10 +80,10 @@ KisNodeShape* KisNodeShapesGraph::nodeToShape(KisNodeSP node)
 
 bool KisNodeShapesGraph::containsNode(KisNodeSP node) const
 {
-    return m_dummiesMap.contains(node);
+    return m_dummiesGraph.containsNode(node);
 }
 
 int KisNodeShapesGraph::shapesCount() const
 {
-    return m_dummiesMap.size();
+    return m_dummiesGraph.dummiesCount();
 }

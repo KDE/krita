@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Boudewijn Rempt <boud@kde.org>
+ *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,31 +16,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISSHAPECONTROLLER_TEST_H
-#define KISSHAPECONTROLLER_TEST_H
+#ifndef __KIS_DUMMIES_FACADE_TEST_H
+#define __KIS_DUMMIES_FACADE_TEST_H
 
 #include "kis_dummies_facade_base_test.h"
 
-class KisDoc2;
-class KisNameServer;
-class KisShapeController;
 
-
-class KisShapeControllerTest : public KisDummiesFacadeBaseTest
+class KisDummiesFacadeTest : public KisDummiesFacadeBaseTest
 {
     Q_OBJECT
 
 public:
-    ~KisShapeControllerTest();
+    ~KisDummiesFacadeTest();
 
 protected:
     KisDummiesFacadeBase* dummiesFacadeFactory();
     void destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade);
-
-private:
-    KisDoc2 *m_doc;
-    KisNameServer *m_nameServer;
 };
 
-#endif
-
+#endif /* __KIS_DUMMIES_FACADE_TEST_H */

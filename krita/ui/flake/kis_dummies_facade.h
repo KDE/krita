@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Boudewijn Rempt <boud@kde.org>
+ *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,31 +16,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISSHAPECONTROLLER_TEST_H
-#define KISSHAPECONTROLLER_TEST_H
-
-#include "kis_dummies_facade_base_test.h"
-
-class KisDoc2;
-class KisNameServer;
-class KisShapeController;
+#ifndef __KIS_DUMMIES_FACADE_H
+#define __KIS_DUMMIES_FACADE_H
 
 
-class KisShapeControllerTest : public KisDummiesFacadeBaseTest
+#include "kis_dummies_facade_base.h"
+
+class KRITAUI_EXPORT KisDummiesFacade : public KisDummiesFacadeBase
 {
     Q_OBJECT
 
 public:
-    ~KisShapeControllerTest();
+    KisDummiesFacade(QObject *parent = 0);
+    ~KisDummiesFacade();
 
-protected:
-    KisDummiesFacadeBase* dummiesFacadeFactory();
-    void destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade);
+    KisNodeDummy* dummyForNode(KisNodeSP node) const;
+    KisNodeDummy* rootDummy() const;
+    int dummiesCount() const;
 
 private:
-    KisDoc2 *m_doc;
-    KisNameServer *m_nameServer;
+    void addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+    void removeNodeImpl(KisNodeSP node);
+
+private:
+    struct Private;
+    Private * const m_d;
 };
 
-#endif
-
+#endif /* __KIS_DUMMIES_FACADE_H */

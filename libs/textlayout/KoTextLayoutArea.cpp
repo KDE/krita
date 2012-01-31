@@ -1200,7 +1200,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     while (line.isValid()) {
         runAroundHelper.setLine(this, line);
         runAroundHelper.setObstructions(documentLayout()->currentObstructions());
-        documentLayout()->setAnchoringParagraphRect(m_blockRects.last());
+        QRectF anchoringRect = m_blockRects.last();
+        qDebug() << anchoringRect.top() << m_anchoringParagraphTop;
+        anchoringRect.setTop(m_anchoringParagraphTop);
+        documentLayout()->setAnchoringParagraphRect(anchoringRect);
         documentLayout()->setAnchoringLayoutEnvironmentRect(layoutEnvironmentRect());
         runAroundHelper.fit( /* resetHorizontalPosition */ false, /* rightToLeft */ m_isRtl, QPointF(x(), m_y));
         qreal bottomOfText = line.y() + line.height();
@@ -1851,6 +1854,10 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
         topMargin = formatStyle.topMargin();
     }
     qreal spacing = qMax(m_bottomSpacing, topMargin);
+    qreal divider = m_y;
+    if (spacing) {
+        divider += spacing * m_bottomSpacing / (m_bottomSpacing + topMargin);
+    }
     qreal dx = 0.0;
     qreal x = m_x;
     qreal width = m_width;
@@ -1887,10 +1894,6 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
         if (m_prevBorder && m_prevBorder->equals(border)) {
             blockData->setBorder(m_prevBorder);
             // Merged mean we don't have inserts inbetween the blocks
-            qreal divider = m_y;
-            if (spacing) {
-                divider += spacing * m_bottomSpacing / (m_bottomSpacing + topMargin);
-            }
             if (!m_blockRects.isEmpty()) {
                 m_blockRects.last().setBottom(divider);
             }
@@ -1948,4 +1951,5 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
     }
     m_prevBorder = blockData->border();
     m_prevBorderPadding = format.doubleProperty(KoParagraphStyle::BottomPadding);
+    m_anchoringParagraphTop = divider;
 }

@@ -172,12 +172,13 @@ KisImage::~KisImage()
 
 void KisImage::aboutToAddANode(KisNode *parent, int index)
 {
-    SANITY_CHECK_LOCKED("aboutToAddANode");
-    m_d->signalRouter->emitAboutToAddANode(parent, index);
+    Q_UNUSED(parent);
+    Q_UNUSED(index);
 }
 
 void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
 {
+    SANITY_CHECK_LOCKED("nodeHasBeenAdded");
     m_d->signalRouter->emitNodeHasBeenAdded(parent, index);
 }
 
@@ -189,8 +190,8 @@ void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 
 void KisImage::nodeHasBeenRemoved(KisNode *parent, int index)
 {
-    // XXX: Temporarily for compatibility
-    m_d->signalRouter->emitNodeHasBeenRemoved(parent, index);
+    Q_UNUSED(parent);
+    Q_UNUSED(index);
 }
 
 void KisImage::aboutToMoveNode(KisNode *node, int oldIndex, int newIndex)

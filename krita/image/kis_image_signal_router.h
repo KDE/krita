@@ -52,13 +52,8 @@ public:
     void emitNotifications(KisImageSignalVector notifications);
 
     void emitNodeChanged(KisNodeSP node);
-    void emitAboutToAddANode(KisNode *parent, int index);
     void emitNodeHasBeenAdded(KisNode *parent, int index);
     void emitAboutToRemoveANode(KisNode *parent, int index);
-    void emitNodeHasBeenRemoved(KisNode *parent, int index);
-
-private:
-    bool checkSameThread();
 
 private slots:
     void slotNotification(KisImageSignalType type);
@@ -68,9 +63,6 @@ signals:
     void sigNotification(KisImageSignalType type);
 
     // Notifications
-    void sigLayersChanged(KisGroupLayerSP rootLayer);
-    void sigPostLayersChanged(KisGroupLayerSP rootLayer);
-
     void sigImageModified();
 
     void sigSizeChanged(qint32 w, qint32 h);
@@ -78,14 +70,8 @@ signals:
     void sigColorSpaceChanged(const KoColorSpace*  cs);
     void sigResolutionChanged(double xRes, double yRes);
 
-    // Synchronous
+    // Graph change signals
     void sigNodeChanged(KisNodeSP node);
-    void sigAboutToAddANode(KisNode *parent, int index);
-    void sigNodeHasBeenAdded(KisNode *parent, int index);
-    void sigAboutToRemoveANode(KisNode *parent, int index);
-    void sigNodeHasBeenRemoved(KisNode *parent, int index);
-
-    // Asynchronous
     void sigNodeAddedAsync(KisNodeSP node);
     void sigRemoveNodeAsync(KisNodeSP node);
     void sigLayersChangedAsync();

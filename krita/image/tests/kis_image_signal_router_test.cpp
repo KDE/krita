@@ -20,123 +20,49 @@
 
 #include <qtest_kde.h>
 #include "kis_image_signal_router.h"
-#include "kis_image.h"
-
-#define NUMCYCLES 100
-#define CYCLE_DELAY 1
 
 
-class AsyncSignalProducer : public QThread
+inline void KisImageSignalRouterTest::checkNotification(KisImageSignalType notification, const char *signal)
 {
-public:
-    AsyncSignalProducer(KisImageSignalRouter &router, SignalConsumer &consumer)
-        : m_router(router),
-          m_consumer(consumer)
-    {
+    QSignalSpy *spy = new QSignalSpy(m_image.data(), signal);
+    QCOMPARE(spy->count(), 0);
+    m_image->signalRouter()->emitNotification(notification);
+    QCOMPARE(spy->count(), 1);
+    delete spy;
+}
+
+#define checkComplexSignal(method, signal)                      \
+    {                                                           \
+    QSignalSpy *spy = new QSignalSpy(m_image.data(), signal);   \
+    QCOMPARE(spy->count(), 0);                                  \
+    m_image->signalRouter()->method;                            \
+    QCOMPARE(spy->count(), 1);                                  \
+    delete spy;                                                 \
     }
 
-    void run() {
-        for(int i = 0; i < NUMCYCLES; i++) {
-            m_router.emitNotification(LayersChangedSignal);
-            QTest::qSleep(CYCLE_DELAY);
-            m_router.emitNodeChanged(0);
-            QTest::qSleep(CYCLE_DELAY);
-            m_router.emitNodeChanged(0);
-            QTest::qSleep(CYCLE_DELAY);
-
-            m_router.emitAboutToAddANode(0,i+1);
-            Q_ASSERT(m_consumer.getChecker() == i+1);
-            QTest::qSleep(CYCLE_DELAY);
-
-            m_router.emitNodeHasBeenAdded(0,i+1);
-            QTest::qSleep(CYCLE_DELAY);
-            m_router.emitAboutToRemoveANode(0,0);
-            QTest::qSleep(CYCLE_DELAY);
-            m_router.emitNodeHasBeenRemoved(0,0);
-            QTest::qSleep(CYCLE_DELAY);
-        }
-    }
-
-private:
-    KisImageSignalRouter &m_router;
-    SignalConsumer &m_consumer;
-};
-
-#define CONNECT_FROM_IMAGE(signal)                              \
-    connect(image, SIGNAL(signal), SLOT(slotAcceptSignal()))
-
-
-SignalConsumer::SignalConsumer(KisImageWSP image)
+void KisImageSignalRouterTest::init()
 {
-
-
-    CONNECT_FROM_IMAGE(sigLayersChanged(KisGroupLayerSP));
-    CONNECT_FROM_IMAGE(sigNodeChanged(KisNode*));
-
-    connect(image, SIGNAL(sigAboutToAddANode(KisNode*, int)),
-            SLOT(slotAcceptSetCheckerSignal(KisNode*, int)));
-
-    CONNECT_FROM_IMAGE(sigNodeHasBeenAdded(KisNode*, int));
-    CONNECT_FROM_IMAGE(sigAboutToRemoveANode(KisNode*, int));
-    CONNECT_FROM_IMAGE(sigNodeHasBeenRemoved(KisNode*, int));
+    initBase();
+    constructImage();
 }
 
-int SignalConsumer::signalsCounter() const {
-    return m_signalsCounter;
-}
-
-int SignalConsumer::getChecker() const {
-    return m_checker;
-}
-
-void SignalConsumer::slotAcceptSignal() {
-    m_signalsCounter.ref();
-    m_intrusionCounter.ref();
-    Q_ASSERT(m_intrusionCounter == 1);
-    QTest::qSleep(CYCLE_DELAY);
-    Q_ASSERT(m_intrusionCounter == 1);
-    m_intrusionCounter.deref();
-}
-
-void SignalConsumer::slotAcceptSetCheckerSignal(KisNode*, int value) {
-    slotAcceptSignal();
-    if(value > 0) {
-        m_checker = value;
-    }
-}
-
-
-void KisImageSignalRouterTest::testSequentiality()
+void KisImageSignalRouterTest::cleanup()
 {
-    KisImageSP image = new KisImage(0, 100, 100, 0, "testimage");
-    KisImageSignalRouter router(image);
+    cleanupBase();
+}
 
-    SignalConsumer consumer(image);
-    AsyncSignalProducer producer(router, consumer);
+void KisImageSignalRouterTest::testSignalForwarding()
+{
+    checkNotification(LayersChangedSignal, SIGNAL(sigLayersChangedAsync()));
+    checkNotification(ModifiedSignal, SIGNAL(sigImageModified()));
+    checkNotification(SizeChangedSignal, SIGNAL(sigSizeChanged(qint32, qint32)));
+    checkNotification(ProfileChangedSignal, SIGNAL(sigProfileChanged(const KoColorProfile*)));
+    checkNotification(ColorSpaceChangedSignal, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)));
+    checkNotification(ResolutionChangedSignal, SIGNAL(sigResolutionChanged(double, double)));
 
-    producer.start();
-
-
-    for(int i = 0; i < NUMCYCLES; i++) {
-        router.emitNotification(LayersChangedSignal);
-        QTest::qWait(CYCLE_DELAY);
-        router.emitNodeChanged(0);
-        QTest::qWait(CYCLE_DELAY);
-        router.emitNodeChanged(0);
-        QTest::qWait(CYCLE_DELAY);
-        router.emitAboutToAddANode(0,0);
-        QTest::qWait(CYCLE_DELAY);
-        router.emitNodeHasBeenAdded(0,0);
-        QTest::qWait(CYCLE_DELAY);
-        router.emitAboutToRemoveANode(0,0);
-        QTest::qWait(CYCLE_DELAY);
-        router.emitNodeHasBeenRemoved(0,0);
-        QTest::qWait(CYCLE_DELAY);
-    }
-
-    while(!producer.wait(CYCLE_DELAY)) qApp->processEvents();
-
-    QCOMPARE(consumer.signalsCounter(), 2 * 9 * NUMCYCLES);
+    checkComplexSignal(emitNodeChanged(m_layer1.data()), SIGNAL(sigNodeChanged(KisNodeSP)));
+    checkComplexSignal(emitNodeHasBeenAdded(m_layer3.data(),0), SIGNAL(sigNodeAddedAsync(KisNodeSP)));
+    checkComplexSignal(emitAboutToRemoveANode(m_layer3.data(),0), SIGNAL(sigRemoveNodeAsync(KisNodeSP)));
 }
 
 QTEST_KDEMAIN(KisImageSignalRouterTest, GUI)

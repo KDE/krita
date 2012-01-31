@@ -26,18 +26,6 @@
 #define CONNECT_TO_IMAGE(signal)                                        \
     connect(this, SIGNAL(signal), m_image, SIGNAL(signal), Qt::DirectConnection)
 
-#define EMIT_NONBLOCKING(signal)                \
-    {                                           \
-        emit signal;                            \
-    }
-
-#define EMIT_DIRECT_ASSERT_SAME_THREAD(signal)  \
-    {                                           \
-        /*Q_ASSERT(checkSameThread());*/        \
-        emit signal;                            \
-    }
-
-
 struct ImageSignalsStaticRegistrar {
     ImageSignalsStaticRegistrar() {
         qRegisterMetaType<KisImageSignalType>("KisImageSignalType");
@@ -52,8 +40,6 @@ KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
     connect(this, SIGNAL(sigNotification(KisImageSignalType)),
             SLOT(slotNotification(KisImageSignalType)));
 
-    CONNECT_TO_IMAGE(sigLayersChanged(KisGroupLayerSP));
-    CONNECT_TO_IMAGE(sigPostLayersChanged(KisGroupLayerSP));
     CONNECT_TO_IMAGE(sigImageModified());
     CONNECT_TO_IMAGE(sigSizeChanged(qint32, qint32));
     CONNECT_TO_IMAGE(sigProfileChanged(const KoColorProfile*));
@@ -61,11 +47,6 @@ KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
     CONNECT_TO_IMAGE(sigResolutionChanged(double, double));
 
     CONNECT_TO_IMAGE(sigNodeChanged(KisNodeSP));
-    CONNECT_TO_IMAGE(sigAboutToAddANode(KisNode*, int));
-    CONNECT_TO_IMAGE(sigNodeHasBeenAdded(KisNode*, int));
-    CONNECT_TO_IMAGE(sigAboutToRemoveANode(KisNode*, int));
-    CONNECT_TO_IMAGE(sigNodeHasBeenRemoved(KisNode*, int));
-
     CONNECT_TO_IMAGE(sigNodeAddedAsync(KisNodeSP));
     CONNECT_TO_IMAGE(sigRemoveNodeAsync(KisNodeSP));
     CONNECT_TO_IMAGE(sigLayersChangedAsync());
@@ -73,11 +54,6 @@ KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
 
 KisImageSignalRouter::~KisImageSignalRouter()
 {
-}
-
-bool KisImageSignalRouter::checkSameThread()
-{
-    return QThread::currentThread() == m_image->thread();
 }
 
 void KisImageSignalRouter::emitNotifications(KisImageSignalVector notifications)
@@ -89,62 +65,30 @@ void KisImageSignalRouter::emitNotifications(KisImageSignalVector notifications)
 
 void KisImageSignalRouter::emitNotification(KisImageSignalType type)
 {
-    EMIT_NONBLOCKING(sigNotification(type));
+    emit sigNotification(type);
 }
 
 void KisImageSignalRouter::emitNodeChanged(KisNodeSP node)
 {
-    EMIT_NONBLOCKING(sigNodeChanged(node));
-}
-
-void KisImageSignalRouter::emitAboutToAddANode(KisNode *parent, int index)
-{
-    /**
-     * Some of the users of our signals rely on the fact that the
-     * signals are emitted synchronously from the same thread. Such
-     * users are KisNodeModel, KisShapeController. They request the
-     * data of the signal right from the node data, so they cannot
-     * be emitted asynchronously. We cannot use BlockingQueued
-     * connections here, because the we'll get a deadlock when UI
-     * will decide to wait for scheduler to finish it's job.
-     *
-     * That is why we explicitly check that no nodes are added,
-     * removed or moved from the context of the scheduler thread.
-     * Currently we have no other way than to assert in such a case.
-     * So all the node modifications should be done using legacy
-     * undo adapter, in the context of the UI thread.
-     */
-
-    EMIT_DIRECT_ASSERT_SAME_THREAD(sigAboutToAddANode(parent, index));
+    emit sigNodeChanged(node);
 }
 
 void KisImageSignalRouter::emitNodeHasBeenAdded(KisNode *parent, int index)
 {
-    // see comment in emitAboutToAddANode()
-    EMIT_DIRECT_ASSERT_SAME_THREAD(sigNodeHasBeenAdded(parent, index));
     emit sigNodeAddedAsync(parent->at(index));
 }
 
 void KisImageSignalRouter::emitAboutToRemoveANode(KisNode *parent, int index)
 {
-    // see comment in emitAboutToAddANode()
-    EMIT_DIRECT_ASSERT_SAME_THREAD(sigAboutToRemoveANode(parent, index));
     emit sigRemoveNodeAsync(parent->at(index));
 }
 
-void KisImageSignalRouter::emitNodeHasBeenRemoved(KisNode *parent, int index)
-{
-    // see comment in emitAboutToAddANode()
-    EMIT_DIRECT_ASSERT_SAME_THREAD(sigNodeHasBeenRemoved(parent, index));
-}
 
 void KisImageSignalRouter::slotNotification(KisImageSignalType type)
 {
     switch(type) {
     case LayersChangedSignal:
         emit sigLayersChangedAsync();
-        emit sigLayersChanged(m_image->rootLayer());
-        emit sigPostLayersChanged(m_image->rootLayer());
         break;
     case ModifiedSignal:
         emit sigImageModified();

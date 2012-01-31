@@ -60,7 +60,7 @@ KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
     CONNECT_TO_IMAGE(sigColorSpaceChanged(const KoColorSpace*));
     CONNECT_TO_IMAGE(sigResolutionChanged(double, double));
 
-    CONNECT_TO_IMAGE(sigNodeChanged(KisNode*));
+    CONNECT_TO_IMAGE(sigNodeChanged(KisNodeSP));
     CONNECT_TO_IMAGE(sigAboutToAddANode(KisNode*, int));
     CONNECT_TO_IMAGE(sigNodeHasBeenAdded(KisNode*, int));
     CONNECT_TO_IMAGE(sigAboutToRemoveANode(KisNode*, int));
@@ -92,7 +92,7 @@ void KisImageSignalRouter::emitNotification(KisImageSignalType type)
     EMIT_NONBLOCKING(sigNotification(type));
 }
 
-void KisImageSignalRouter::emitNodeChanged(KisNode *node)
+void KisImageSignalRouter::emitNodeChanged(KisNodeSP node)
 {
     EMIT_NONBLOCKING(sigNodeChanged(node));
 }

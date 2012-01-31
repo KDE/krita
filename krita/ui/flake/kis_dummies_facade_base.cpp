@@ -93,8 +93,7 @@ KisNodeSP KisDummiesFacadeBase::findFirstLayer(KisNodeSP root)
     return child;
 }
 
-// FIXME: pointer
-void KisDummiesFacadeBase::slotNodeChanged(KisNode* node)
+void KisDummiesFacadeBase::slotNodeChanged(KisNodeSP node)
 {
     emit sigDummyChanged(dummyForNode(node));
 }

@@ -71,7 +71,7 @@ signals:
 
 private slots:
     void slotLayersChanged();
-    void slotNodeChanged(KisNode* node);
+    void slotNodeChanged(KisNodeSP node);
 
     void slotNodeAdded(KisNodeSP node);
     void slotRemoveNode(KisNodeSP node);

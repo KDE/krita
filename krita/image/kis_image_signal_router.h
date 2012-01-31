@@ -51,7 +51,7 @@ public:
     void emitNotification(KisImageSignalType type);
     void emitNotifications(KisImageSignalVector notifications);
 
-    void emitNodeChanged(KisNode *node);
+    void emitNodeChanged(KisNodeSP node);
     void emitAboutToAddANode(KisNode *parent, int index);
     void emitNodeHasBeenAdded(KisNode *parent, int index);
     void emitAboutToRemoveANode(KisNode *parent, int index);
@@ -79,7 +79,7 @@ signals:
     void sigResolutionChanged(double xRes, double yRes);
 
     // Synchronous
-    void sigNodeChanged(KisNode *node);
+    void sigNodeChanged(KisNodeSP node);
     void sigAboutToAddANode(KisNode *parent, int index);
     void sigNodeHasBeenAdded(KisNode *parent, int index);
     void sigAboutToRemoveANode(KisNode *parent, int index);

@@ -540,7 +540,7 @@ signals:
     /**
      * Inform the model that a node was changed
      */
-    void sigNodeChanged(KisNode * node);
+    void sigNodeChanged(KisNodeSP node);
 
     /**
      * Inform that the image is going to be deleted

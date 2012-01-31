@@ -195,13 +195,26 @@ void KisImage::nodeHasBeenRemoved(KisNode *parent, int index)
 
 void KisImage::aboutToMoveNode(KisNode *node, int oldIndex, int newIndex)
 {
-    SANITY_CHECK_LOCKED("aboutToMoveNode");
-    m_d->signalRouter->emitAboutToMoveNode(node, oldIndex, newIndex);
+    Q_UNUSED(node);
+    Q_UNUSED(oldIndex);
+    Q_UNUSED(newIndex);
+
+    /**
+     * We do not use move signals. A node is first deleted from the
+     * stack and then added back. So please catch remove/insert signals
+     */
 }
 
 void KisImage::nodeHasBeenMoved(KisNode *node, int oldIndex, int newIndex)
 {
-    m_d->signalRouter->emitNodeHasBeenMoved(node, oldIndex, newIndex);
+    Q_UNUSED(node);
+    Q_UNUSED(oldIndex);
+    Q_UNUSED(newIndex);
+
+    /**
+     * We do not use move signals. A node is first deleted from the
+     * stack and then added back. So please catch remove/insert signals
+     */
 }
 
 void KisImage::nodeChanged(KisNode* node)

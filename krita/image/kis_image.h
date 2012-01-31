@@ -538,16 +538,6 @@ signals:
     void sigNodeHasBeenRemoved(KisNode *parent, int index);
 
     /**
-     * Inform the model we're about to move a layer.
-     */
-    void sigAboutToMoveNode(KisNode *node, int oldIndex, int newIndex);
-
-    /**
-     * Inform the model we're done moving a layer.
-     */
-    void sigNodeHasBeenMoved(KisNode *node, int oldIndex, int newIndex);
-
-    /**
      * Inform the model that a node was changed
      */
     void sigNodeChanged(KisNode * node);
@@ -558,7 +548,6 @@ signals:
     void sigAboutToBeDeleted();
 
     void sigNodeAddedAsync(KisNodeSP node);
-    void sigNodeMovedAsync(KisNodeSP node);
     void sigRemoveNodeAsync(KisNodeSP node);
     void sigLayersChangedAsync();
 

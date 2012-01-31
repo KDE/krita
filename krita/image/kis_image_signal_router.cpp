@@ -65,11 +65,8 @@ KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
     CONNECT_TO_IMAGE(sigNodeHasBeenAdded(KisNode*, int));
     CONNECT_TO_IMAGE(sigAboutToRemoveANode(KisNode*, int));
     CONNECT_TO_IMAGE(sigNodeHasBeenRemoved(KisNode*, int));
-    CONNECT_TO_IMAGE(sigAboutToMoveNode(KisNode*, int, int));
-    CONNECT_TO_IMAGE(sigNodeHasBeenMoved(KisNode*, int, int));
 
     CONNECT_TO_IMAGE(sigNodeAddedAsync(KisNodeSP));
-    CONNECT_TO_IMAGE(sigNodeMovedAsync(KisNodeSP));
     CONNECT_TO_IMAGE(sigRemoveNodeAsync(KisNodeSP));
     CONNECT_TO_IMAGE(sigLayersChangedAsync());
 }
@@ -140,20 +137,6 @@ void KisImageSignalRouter::emitNodeHasBeenRemoved(KisNode *parent, int index)
     // see comment in emitAboutToAddANode()
     EMIT_DIRECT_ASSERT_SAME_THREAD(sigNodeHasBeenRemoved(parent, index));
 }
-
-void KisImageSignalRouter::emitAboutToMoveNode(KisNode *node, int oldIndex, int newIndex)
-{
-    // see comment in emitAboutToAddANode()
-    EMIT_DIRECT_ASSERT_SAME_THREAD(sigAboutToMoveNode(node, oldIndex, newIndex));
-}
-
-void KisImageSignalRouter::emitNodeHasBeenMoved(KisNode *node, int oldIndex, int newIndex)
-{
-    // see comment in emitAboutToAddANode()
-    EMIT_DIRECT_ASSERT_SAME_THREAD(sigNodeHasBeenMoved(node, oldIndex, newIndex));
-    emit sigNodeMovedAsync(node);
-}
-
 
 void KisImageSignalRouter::slotNotification(KisImageSignalType type)
 {

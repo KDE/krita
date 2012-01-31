@@ -54,10 +54,6 @@ public:
             QTest::qSleep(CYCLE_DELAY);
             m_router.emitNodeHasBeenRemoved(0,0);
             QTest::qSleep(CYCLE_DELAY);
-            m_router.emitAboutToMoveNode(0,0,0);
-            QTest::qSleep(CYCLE_DELAY);
-            m_router.emitNodeHasBeenMoved(0,0,0);
-            QTest::qSleep(CYCLE_DELAY);
         }
     }
 
@@ -83,8 +79,6 @@ SignalConsumer::SignalConsumer(KisImageWSP image)
     CONNECT_FROM_IMAGE(sigNodeHasBeenAdded(KisNode*, int));
     CONNECT_FROM_IMAGE(sigAboutToRemoveANode(KisNode*, int));
     CONNECT_FROM_IMAGE(sigNodeHasBeenRemoved(KisNode*, int));
-    CONNECT_FROM_IMAGE(sigAboutToMoveNode(KisNode*, int, int));
-    CONNECT_FROM_IMAGE(sigNodeHasBeenMoved(KisNode*, int, int));
 }
 
 int SignalConsumer::signalsCounter() const {
@@ -137,10 +131,6 @@ void KisImageSignalRouterTest::testSequentiality()
         router.emitAboutToRemoveANode(0,0);
         QTest::qWait(CYCLE_DELAY);
         router.emitNodeHasBeenRemoved(0,0);
-        QTest::qWait(CYCLE_DELAY);
-        router.emitAboutToMoveNode(0,0,0);
-        QTest::qWait(CYCLE_DELAY);
-        router.emitNodeHasBeenMoved(0,0,0);
         QTest::qWait(CYCLE_DELAY);
     }
 

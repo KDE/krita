@@ -593,6 +593,14 @@ public:
      */
     virtual void update(const QRectF &rect) const;
 
+   /**
+    * Returns if during compareShapeZIndex() this shape should overrule
+    * it childrens z alues with it's own. The default behaviour is to do so
+    * but for special cases (like Calligra's TextShape) it can be overloaded
+    * @returns if we overrule z order (default impl. returns true)
+    */
+    virtual bool overruleChildZValues();
+
     /**
      * This is a method used to sort a list using the STL sorting methods.
      * @param s1 the first shape

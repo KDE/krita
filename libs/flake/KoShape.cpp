@@ -461,6 +461,11 @@ QTransform KoShape::transformation() const
     return d->localMatrix;
 }
 
+bool KoShape::overruleChildZValues()
+{
+    return true;
+}
+
 bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
 {
     bool foundCommonParent = false;
@@ -479,13 +484,17 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
                 foundCommonParent = true;
                 break;
             }
-            index2 = parentShapeS2->zIndex();
+            if (parentShapeS2->overruleChildZValues()) {
+                index2 = parentShapeS2->zIndex();
+            }
             runThrough2 = parentShapeS2->runThrough();
             parentShapeS2 = parentShapeS2->parent();
         }
 
         if (!foundCommonParent) {
-            index1 = parentShapeS1->zIndex();
+            if (parentShapeS1->overruleChildZValues()) {
+                index1 = parentShapeS1->zIndex();
+            }
             runThrough1 = parentShapeS1->runThrough();
             parentShapeS1 = parentShapeS1->parent();
         }

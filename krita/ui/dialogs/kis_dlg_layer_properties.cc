@@ -105,8 +105,11 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisView2 *view, K
     m_page->intOpacity->setRange(0, 100);
     m_page->intOpacity->setValue(sliderOpacity);
 
-    m_page->cmbComposite->getModel()->validateCompositeOps(d->colorSpace);
-    m_page->cmbComposite->setCurrentIndex(m_page->cmbComposite->indexOf(KoID(d->compositeOp->id())));
+    m_page->cmbComposite->setEnabled(d->compositeOp);
+    if(d->compositeOp) {
+        m_page->cmbComposite->getModel()->validateCompositeOps(d->colorSpace);
+        m_page->cmbComposite->setCurrentIndex(m_page->cmbComposite->indexOf(KoID(d->compositeOp->id())));
+    }
 
     slotNameChanged(m_page->editName->text());
 
@@ -136,16 +139,23 @@ KisDlgLayerProperties::~KisDlgLayerProperties()
     }
 }
 
+bool KisDlgLayerProperties::haveChanges() const
+{
+    return m_layer->name() !=  getName()
+        || m_layer->opacity() !=  getOpacity()
+        || m_layer->channelFlags() !=  getChannelFlags()
+        || (d->compositeOp &&
+            m_layer->compositeOp()->id() !=  getCompositeOp());
+
+}
+
+
 void KisDlgLayerProperties::updatePreview()
 {
     if (!m_layer) return;
 
     if(m_page->checkBoxPreview->isChecked()) {
-        if (   m_layer->name()              !=  getName()
-            || m_layer->opacity()           !=  getOpacity()
-            || m_layer->compositeOp()->id() !=  getCompositeOp() 
-            || m_layer->channelFlags()      !=  getChannelFlags() )
-        {
+        if (haveChanges()) {
             m_layer->setOpacity(getOpacity());
             m_layer->setCompositeOp(getCompositeOp());
             m_layer->setName(getName());
@@ -153,7 +163,6 @@ void KisDlgLayerProperties::updatePreview()
             m_doc->setModified(true);
         }
         m_layer->setDirty();
-        
     }
 }
 
@@ -163,11 +172,7 @@ void KisDlgLayerProperties::applyNewProperties()
     
     cleanPreviewChanges();
     
-    if (   m_layer->name()              !=  getName()
-        || m_layer->opacity()           !=  getOpacity()
-        || m_layer->compositeOp()->id() !=  getCompositeOp() 
-        || m_layer->channelFlags()      !=  getChannelFlags() )
-    {
+    if (haveChanges()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         KUndo2Command *change = new KisLayerPropsCommand(m_layer,
                                             m_layer->opacity(),       getOpacity(),
@@ -185,9 +190,12 @@ void KisDlgLayerProperties::applyNewProperties()
 void KisDlgLayerProperties::cleanPreviewChanges()
 {
     m_layer->setOpacity(d->opacity);
-    m_layer->setCompositeOp(d->compositeOp->id());
     m_layer->setName(d->deviceName);
     m_layer->setChannelFlags(d->channelFlags);
+
+    if(d->compositeOp) {
+        m_layer->setCompositeOp(d->compositeOp->id());
+    }
 }
 
 void KisDlgLayerProperties::slotNameChanged(const QString &_text)

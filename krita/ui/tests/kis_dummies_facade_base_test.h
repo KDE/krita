@@ -52,6 +52,7 @@ private slots:
     void testMoveNodeSameParent();
     void testMoveNodeDifferentParent();
     void testSubstituteRootNode();
+    void testAddSelectionMasksNoActivation();
 
 private:
     void verifyActivatedNodes(const QString &nodes);

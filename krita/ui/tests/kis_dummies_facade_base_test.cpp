@@ -279,3 +279,35 @@ void KisDummiesFacadeBaseTest::testSubstituteRootNode()
                        "A_root A_Layer 1 "
                        "R_Layer 1 R_root");
 }
+
+void KisDummiesFacadeBaseTest::testAddSelectionMasksNoActivation()
+{
+    QString actualGraph;
+    QString expectedGraph;
+
+    m_dummiesFacade->setImage(m_image);
+
+    actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
+    expectedGraph = "root";
+
+    QCOMPARE(actualGraph, expectedGraph);
+    QCOMPARE(m_dummiesFacade->dummiesCount(), 1);
+
+    constructImage();
+    addSelectionMasks();
+
+    actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
+    expectedGraph = "root selection layer1 layer2 selection layer3 effect selection layer4";
+
+    QCOMPARE(actualGraph, expectedGraph);
+    QCOMPARE(m_dummiesFacade->dummiesCount(), 9);
+
+    m_dummiesFacade->setImage(0);
+    QCOMPARE(m_dummiesFacade->dummiesCount(), 0);
+
+    verifyActivatedNodes("__null layer1 layer2 layer3 layer4 effect __null");
+    verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_layer4 A_effect "
+                       "A_selection A_selection A_selection "
+                       "R_layer4 R_selection R_effect R_layer3 R_selection "
+                       "R_layer2 R_layer1 R_selection R_root");
+}

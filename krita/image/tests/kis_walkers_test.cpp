@@ -32,6 +32,12 @@
 #include "kis_adjustment_layer.h"
 #include "kis_selection.h"
 
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_registry.h"
+#include "kis_filter_mask.h"
+#include "kis_transparency_mask.h"
+
 #define DEBUG_VISITORS
 
 QString nodeTypeString(KisMergeWalker::NodePosition position);
@@ -57,17 +63,34 @@ public:
 protected:
 
     void registerChangeRect(KisNodeSP node, NodePosition position) {
+        QString postfix;
+
+        if(!node->inherits("KisLayer")) {
+            postfix = "[skipped as not-a-layer]";
+        }
+
 #ifdef DEBUG_VISITORS
-        qDebug()<< "FW:"<< node->name() <<'\t'<< nodeTypeString(position);
+        qDebug()<< "FW:"<< node->name() <<'\t'<< nodeTypeString(position) << postfix;
 #endif
-        m_order.append(node->name());
+
+        if(postfix.isEmpty()) {
+            m_order.append(node->name());
+        }
     }
 
     void registerNeedRect(KisNodeSP node, NodePosition position) {
+        QString postfix;
+
+        if(!node->inherits("KisLayer")) {
+            postfix = "[skipped as not-a-layer]";
+        }
+
 #ifdef DEBUG_VISITORS
-        qDebug()<< "BW:"<< node->name() <<'\t'<< nodeTypeString(position);
+        qDebug()<< "BW:"<< node->name() <<'\t'<< nodeTypeString(position) << postfix;
 #endif
-        m_order.append(node->name() + nodeTypePostfix(position));
+        if(postfix.isEmpty()) {
+            m_order.append(node->name() + nodeTypePostfix(position));
+        }
     }
 
 protected:
@@ -238,6 +261,92 @@ void KisWalkersTest::testUsualVisiting()
     image->addNode(adjustmentLayer, groupLayer);
     image->addNode(paintLayer3, groupLayer);
     image->addNode(paintLayer4, groupLayer);
+
+    KisTestWalker walker;
+
+    {
+        QString order("paint3,paint4,group,paint5,root,"
+                      "root_TF,paint5_TA,group_NF,paint1_BB,"
+                      "paint4_TA,paint3_NF,adj_NB,paint2_BB");
+        QStringList orderList = order.split(",");
+
+        reportStartWith("paint3");
+        walker.startTrip(paintLayer3);
+        QVERIFY(walker.popResult() == orderList);
+    }
+
+    {
+        QString order("adj,paint3,paint4,group,paint5,root,"
+                      "root_TF,paint5_TA,group_NF,paint1_BB,"
+                      "paint4_TA,paint3_NA,adj_NF,paint2_BB");
+        QStringList orderList = order.split(",");
+
+        reportStartWith("adj");
+        walker.startTrip(adjustmentLayer);
+        QVERIFY(walker.popResult() == orderList);
+    }
+
+    {
+        QString order("group,paint5,root,"
+                      "root_TF,paint5_TA,group_NF,paint1_BB");
+        QStringList orderList = order.split(",");
+
+        reportStartWith("group");
+        walker.startTrip(groupLayer);
+        QVERIFY(walker.popResult() == orderList);
+    }
+}
+
+    /*
+      +----------+
+      |root      |
+      | layer 5  |
+      | group    |
+      |  mask  1 |
+      |  paint 4 |
+      |  paint 3 |
+      |  adj     |
+      |  paint 2 |
+      | paint 1  |
+      +----------+
+     */
+
+void KisWalkersTest::testVisitingWithTopmostMask()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer5 = new KisPaintLayer(image, "paint5", OPACITY_OPAQUE_U8);
+
+    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE_U8);
+    KisLayerSP adjustmentLayer = new KisAdjustmentLayer(image, "adj", 0, 0);
+
+
+    KisFilterMaskSP filterMask1 = new KisFilterMask();
+    KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
+    Q_ASSERT(filter);
+    KisFilterConfiguration *configuration1 = filter->defaultConfiguration(0);
+    filterMask1->setFilter(configuration1);
+
+    image->addNode(paintLayer1, image->rootLayer());
+    image->addNode(groupLayer, image->rootLayer());
+    image->addNode(paintLayer5, image->rootLayer());
+
+    image->addNode(paintLayer2, groupLayer);
+    image->addNode(adjustmentLayer, groupLayer);
+    image->addNode(paintLayer3, groupLayer);
+    image->addNode(paintLayer4, groupLayer);
+
+    // nasty mask!
+    image->addNode(filterMask1, groupLayer);
+
+    /**
+     * The results must be the same as for testUsualVisiting
+     */
 
     KisTestWalker walker;
 
@@ -633,7 +742,7 @@ void KisWalkersTest::testFullRefreshVisiting()
         QString order("root,paint5,cplx2,group,paint1,"
                       "group,paint4,paint3,cplx1,paint2");
         QStringList orderList = order.split(",");
-        QRect accessRect(-7,-7,44,44);
+        QRect accessRect(-10,-10,50,50);
 
         reportStartWith("root");
         walker.collectRects(groupLayer, testRect);
@@ -705,12 +814,6 @@ void KisWalkersTest::testCachedVisiting()
     }
 
 }
-
-#include "filter/kis_filter.h"
-#include "filter/kis_filter_configuration.h"
-#include "filter/kis_filter_registry.h"
-#include "kis_filter_mask.h"
-#include "kis_transparency_mask.h"
 
     /*
       +----------+

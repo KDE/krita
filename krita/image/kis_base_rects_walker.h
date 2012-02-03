@@ -201,6 +201,18 @@ protected:
         return layer && layer->hasClones();
     }
 
+    static inline NodePosition calculateNodePosition(KisNodeSP node) {
+        KisNodeSP nextNode = node->nextSibling();
+        while(nextNode && !isLayer(nextNode)) nextNode = nextNode->nextSibling();
+        if (!nextNode) return N_TOPMOST;
+
+        KisNodeSP prevNode = node->prevSibling();
+        while(prevNode && !isLayer(prevNode)) prevNode = prevNode->prevSibling();
+        if (!prevNode) return N_BOTTOMMOST;
+
+        return N_NORMAL;
+    }
+
     inline void clear() {
         m_resultAccessRect = m_resultNeedRect = /*m_resultChangeRect =*/
             m_childNeedRect = m_lastNeedRect = QRect();

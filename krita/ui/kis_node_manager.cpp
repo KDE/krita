@@ -302,6 +302,18 @@ void KisNodeManager::moveNodeAt(KisNodeSP node, KisNodeSP parent, int index)
     }
 }
 
+void KisNodeManager::addNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
+{
+    Q_ASSERT(parent->allowAsChild(node));
+    m_d->commandsAdapter->addNode(node, parent, aboveThis);
+}
+
+void KisNodeManager::moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
+{
+    Q_ASSERT(parent->allowAsChild(node));
+    m_d->commandsAdapter->moveNode(node, parent, aboveThis);
+}
+
 void KisNodeManager::createNode(const QString & nodeType)
 {
 

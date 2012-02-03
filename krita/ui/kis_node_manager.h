@@ -122,6 +122,20 @@ public slots:
      */
     void slotUiActivatedNode(KisNodeSP node);
 
+    /**
+     * Adds a node without searching appropriate position for it.
+     * You *must* ensure that the node is allowed to be added to
+     * the parent, otherwise you'll get an assert.
+     */
+    void addNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+
+    /**
+     * Moves a node without searching appropriate position for it.
+     * You *must* ensure that the node is allowed to be added to
+     * the parent, otherwise you'll get an assert.
+     */
+    void moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+
     void addNode(KisNodeSP node, KisNodeSP activeNode);
     void insertNode(KisNodeSP node, KisNodeSP parent, int index);
     void moveNode(KisNodeSP node, KisNodeSP activeNode);

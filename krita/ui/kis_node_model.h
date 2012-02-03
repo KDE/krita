@@ -67,10 +67,9 @@ public:
 signals:
 
     void nodeActivated(KisNodeSP);
-    void requestAddNode(KisNodeSP node, KisNodeSP activeNode);
-    void requestAddNode(KisNodeSP node, KisNodeSP parent, int index);
-    void requestMoveNode(KisNodeSP node, KisNodeSP activeNode);
-    void requestMoveNode(KisNodeSP node, KisNodeSP parent, int index);
+
+    void requestAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+    void requestMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
 
 private slots:
     void slotBeginInsertDummy(KisNodeDummy *parent, int index);
@@ -91,6 +90,10 @@ private:
     void connectDummies(KisNodeDummy *dummy, bool needConnect);
 
     void resetIndexConverter();
+
+    void correctNewNodeLocation(KisNodeSP node,
+                                KisNodeDummy* &parentDummy,
+                                KisNodeDummy* &aboveThisDummy);
 private:
 
     struct Private;

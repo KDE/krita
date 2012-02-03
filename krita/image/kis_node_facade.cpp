@@ -79,9 +79,7 @@ bool KisNodeFacade::moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveTh
         dbgImage << "above this parent is not the parent"; return false;
     }
 
-    int newIndex = parent->childCount();
-    if (aboveThis) newIndex = parent->index(aboveThis) + 1;
-
+    int newIndex = aboveThis ? parent->index(aboveThis) + 1 : 0;
     return moveNode(node, parent, newIndex);
 }
 

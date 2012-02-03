@@ -44,6 +44,7 @@ KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP 
     m_prevParent = layer->parent();
     m_prevAbove = layer->prevSibling();
     m_index = -1;
+    m_useIndex = false;
 }
 
 KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP node, KisNodeSP newParent, quint32 index)
@@ -55,18 +56,19 @@ KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP 
     m_prevParent = node->parent();
     m_prevAbove = node->prevSibling();
     m_index = index;
+    m_useIndex = true;
 }
 
 void KisImageLayerMoveCommand::redo()
 {
-    if (m_newAbove || m_index == quint32(-1)) {
-        m_image->moveNode(m_layer, m_newParent, m_newAbove);
-    } else {
+
+    if (m_useIndex) {
         m_image->moveNode(m_layer, m_newParent, m_index);
+    } else {
+        m_image->moveNode(m_layer, m_newParent, m_newAbove);
     }
 
     m_image->refreshGraph(m_prevParent);
-    m_prevParent->setDirty(m_image->bounds());
     if (m_newParent != m_prevParent)
         m_layer->setDirty(m_image->bounds());
 }
@@ -76,7 +78,6 @@ void KisImageLayerMoveCommand::undo()
     m_image->moveNode(m_layer, m_prevParent, m_prevAbove);
 
     m_image->refreshGraph(m_newParent);
-    m_newParent->setDirty(m_image->bounds());
     if (m_newParent != m_prevParent)
         m_layer->setDirty(m_image->bounds());
 }

@@ -59,6 +59,8 @@ private:
     KisNodeSP m_newParent;
     KisNodeSP m_newAbove;
     quint32 m_index;
+
+    bool m_useIndex;
 };
 
 #endif

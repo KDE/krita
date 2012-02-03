@@ -79,6 +79,7 @@ KisNodeModel::KisNodeModel(QObject * parent)
 
 KisNodeModel::~KisNodeModel()
 {
+    delete m_d->indexConverter;
     delete m_d;
 }
 
@@ -99,6 +100,7 @@ QModelIndex KisNodeModel::indexFromNode(KisNodeSP node) const
 void KisNodeModel::resetIndexConverter()
 {
     delete m_d->indexConverter;
+    m_d->indexConverter = 0;
 
     if(m_d->dummiesFacade) {
         if(m_d->showRootLayer) {
@@ -429,6 +431,23 @@ QMimeData * KisNodeModel::mimeData(const QModelIndexList &indexes) const
     return data;
 }
 
+void KisNodeModel::correctNewNodeLocation(KisNodeSP node,
+                                          KisNodeDummy* &parentDummy,
+                                          KisNodeDummy* &aboveThisDummy)
+{
+    KisNodeSP parentNode = parentDummy->node();
+
+    if(!parentDummy->node()->allowAsChild(node)) {
+        // root layer must accept all the layers
+        Q_ASSERT(parentDummy->parent());
+
+        aboveThisDummy = parentDummy;
+        parentDummy = parentDummy->parent();
+
+        correctNewNodeLocation(node, parentDummy, aboveThisDummy);
+    }
+}
+
 bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent)
 {
     Q_UNUSED(column);
@@ -438,39 +457,39 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
 
     if(!node) return false;
 
-    KisNodeSP activeNode = parent.isValid() ? nodeFromIndex(parent) : 0;
+    KisNodeDummy *parentDummy = 0;
+    KisNodeDummy *aboveThisDummy = 0;
 
-    KisNodeSP parentNode = 0;
-    if (activeNode && activeNode->parent()) {
-        parentNode = activeNode->parent();
-    } else {
-        parentNode = m_d->image->root();
+    parentDummy = parent.isValid() ?
+        m_d->indexConverter->dummyFromIndex(parent) :
+        m_d->dummiesFacade->rootDummy();
+
+    if(row == -1) {
+        aboveThisDummy = parent.isValid() ? parentDummy->lastChild() : 0;
     }
-    dbgUI << activeNode << " " << parentNode;
-    if (action == Qt::CopyAction) {
-        dbgUI << "KisNodeModel::dropMimeData copy action on " << activeNode;
-        if (row >= 0) {
-            emit requestAddNode(node->clone(), parentNode, parentNode->childCount() - row);
-        } else if (activeNode) {
-            emit requestAddNode(node->clone(), activeNode);
-        } else {
-            emit requestAddNode(node->clone(), parentNode, 0);
-        }
-        return true;
+    else {
+        aboveThisDummy = row < m_d->indexConverter->rowCount(parent) ? m_d->indexConverter->dummyFromRow(row, parent) : 0;
     }
-    else if (action == Qt::MoveAction) {
-        dbgUI << "KisNodeModel::dropMimeData move action on " << activeNode;
-        if (row >= 0) {
-            emit requestMoveNode(node, parentNode, parentNode->childCount() - row);
-        } else if (activeNode) {
-            emit requestMoveNode(node, activeNode);
-        } else {
-            emit requestMoveNode(node, parentNode, 0);
-        }
-        return true;
+
+    correctNewNodeLocation(node, parentDummy, aboveThisDummy);
+
+    Q_ASSERT(parentDummy);
+    KisNodeSP aboveThisNode = aboveThisDummy ? aboveThisDummy->node() : 0;
+
+
+    bool result = true;
+
+    if(action == Qt::CopyAction) {
+        emit requestAddNode(node->clone(), parentDummy->node(), aboveThisNode);
     }
-    dbgUI << "Action was not Copy or Move " << action;
-    return false;
+    else if(action == Qt::MoveAction) {
+        emit requestMoveNode(node, parentDummy->node(), aboveThisNode);
+    }
+    else {
+        result = false;
+    }
+
+    return result;
 }
 
 #include "kis_node_model.moc"

@@ -314,17 +314,25 @@ void KisLayerBox::updateUI()
     m_wdgLayerBox->cmbComposite->setEnabled(active);
 
     if (active) {
-        if (m_nodeManager->activePaintDevice())
+        if (m_nodeManager->activePaintDevice()) {
             slotFillCompositeOps(m_nodeManager->activeColorSpace());
-        else
+        } else {
             slotFillCompositeOps(m_image->colorSpace());
+        }
+
         if (active->inherits("KisMask")) {
             active = active->parent(); // We need a layer to set opacity and composite op, which masks don't have
         }
         if (active->inherits("KisLayer")) {
             KisLayerSP l = qobject_cast<KisLayer*>(active.data());
             slotSetOpacity(l->opacity() * 100.0 / 255);
-            slotSetCompositeOp(l->compositeOp());
+
+            const KoCompositeOp* compositeOp = l->compositeOp();
+            if(compositeOp) {
+                slotSetCompositeOp(compositeOp);
+            } else {
+                m_wdgLayerBox->cmbComposite->setEnabled(false);
+            }
         }
     }
     m_newTransparencyMaskAction->setEnabled(active);

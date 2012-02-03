@@ -70,11 +70,11 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image)
         connect(image, SIGNAL(sigLayersChangedAsync()),
                 SLOT(slotLayersChanged()), Qt::DirectConnection);
 
-        connect(image, SIGNAL(sigNodeChanged(KisNode*)),
-                SLOT(slotNodeChanged(KisNode*)));
+        connect(image, SIGNAL(sigNodeChanged(KisNodeSP)),
+                SLOT(slotNodeChanged(KisNodeSP)));
 
         connect(image, SIGNAL(sigNodeAddedAsync(KisNodeSP)),
-                SIGNAL(sigActivateNode(KisNodeSP)), Qt::AutoConnection);
+                SLOT(slotNodeActivationRequested(KisNodeSP)), Qt::AutoConnection);
         emit sigActivateNode(findFirstLayer(image->root()));
     }
 }
@@ -101,6 +101,13 @@ void KisDummiesFacadeBase::slotNodeChanged(KisNodeSP node)
 void KisDummiesFacadeBase::slotLayersChanged()
 {
     setImage(m_d->image);
+}
+
+void KisDummiesFacadeBase::slotNodeActivationRequested(KisNodeSP node)
+{
+    if(!node->inherits("KisSelectionMask")) {
+        emit sigActivateNode(node);
+    }
 }
 
 void KisDummiesFacadeBase::slotNodeAdded(KisNodeSP node)

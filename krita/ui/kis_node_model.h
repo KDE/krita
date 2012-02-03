@@ -84,12 +84,13 @@ private slots:
     void progressPercentageChanged(int, const KisNodeSP);
 
 private:
-    static inline KisNodeSP nodeFromDummy(KisNodeDummy *dummy);
-    static inline KisNodeDummy* dummyFromIndex(const QModelIndex &index);
+    friend class KisModelIndexConverter;
+    friend class KisModelIndexConverterShowAll;
 
-    QModelIndex indexFromDummy(KisNodeDummy *dummy) const;
     void connectDummy(KisNodeDummy *dummy, bool needConnect);
     void connectDummies(KisNodeDummy *dummy, bool needConnect);
+
+    void resetIndexConverter();
 private:
 
     struct Private;

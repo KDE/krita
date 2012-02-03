@@ -28,6 +28,7 @@
 #include "kis_clone_layer.h"
 #include "kis_group_layer.h"
 #include "kis_transparency_mask.h"
+#include "kis_selection_mask.h"
 
 
 namespace TestUtil
@@ -43,6 +44,9 @@ protected:
         m_layer3 = new KisCloneLayer(m_layer1, m_image, "layer3", OPACITY_OPAQUE_U8);
         m_layer4 = new KisGroupLayer(m_image, "layer4", OPACITY_OPAQUE_U8);
         m_mask1 = new KisTransparencyMask();
+        m_sel1 = new KisSelectionMask(m_image);
+        m_sel2 = new KisSelectionMask(m_image);
+        m_sel3 = new KisSelectionMask(m_image);
     }
 
     void cleanupBase() {
@@ -51,8 +55,23 @@ protected:
         m_layer3 = 0;
         m_layer4 = 0;
         m_mask1 = 0;
+        m_sel1 = 0;
+        m_sel2 = 0;
+        m_sel3 = 0;
         m_image = 0;
     }
+
+    /**
+     * root
+     *   sel1
+     *   layer1
+     *   layer2
+     *   sel2
+     *   layer3
+     *     mask1
+     *     sel3
+     *   layer4
+     */
 
     void constructImage() {
         m_image->addNode(m_layer1);
@@ -62,6 +81,12 @@ protected:
         m_image->addNode(m_mask1, m_layer3);
     }
 
+    void addSelectionMasks() {
+        m_image->addNode(m_sel1, m_image->root(), (int)0);
+        m_image->addNode(m_sel2, m_image->root(), (int)2);
+        m_image->addNode(m_sel3, m_layer3);
+    }
+
 protected:
     KisImageSP m_image;
     KisLayerSP m_layer1;
@@ -69,6 +94,9 @@ protected:
     KisLayerSP m_layer3;
     KisLayerSP m_layer4;
     KisMaskSP m_mask1;
+    KisMaskSP m_sel1;
+    KisMaskSP m_sel2;
+    KisMaskSP m_sel3;
 };
 
 }

@@ -73,6 +73,8 @@ private slots:
     void slotLayersChanged();
     void slotNodeChanged(KisNodeSP node);
 
+    void slotNodeActivationRequested(KisNodeSP node);
+
     void slotNodeAdded(KisNodeSP node);
     void slotRemoveNode(KisNodeSP node);
 

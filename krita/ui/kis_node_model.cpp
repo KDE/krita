@@ -39,23 +39,31 @@
 
 #include "kis_dummies_facade_base.h"
 #include "kis_node_dummies_graph.h"
+#include "kis_model_index_converter.h"
+#include "kis_model_index_converter_show_all.h"
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include <QTimer>
 
+
 struct KisNodeModel::Private
 {
 public:
-    Private() : dummiesFacade(0), needFinishRemoveRows(false) {}
+    Private() : indexConverter(0),
+                dummiesFacade(0),
+                needFinishRemoveRows(false),
+                needFinishInsertRows(false) {}
 
     KisImageWSP image;
     bool showRootLayer;
     QList<KisNodeDummy*> updateQueue;
     QTimer* updateTimer;
 
+    KisModelIndexConverterBase *indexConverter;
     KisDummiesFacadeBase *dummiesFacade;
     bool needFinishRemoveRows;
+    bool needFinishInsertRows;
 };
 
 KisNodeModel::KisNodeModel(QObject * parent)
@@ -74,42 +82,55 @@ KisNodeModel::~KisNodeModel()
     delete m_d;
 }
 
-inline KisNodeSP KisNodeModel::nodeFromDummy(KisNodeDummy *dummy) {
-    return dummy->node();
-}
-
-inline KisNodeDummy* KisNodeModel::dummyFromIndex(const QModelIndex &index) {
-    Q_ASSERT(index.internalPointer());
-    return static_cast<KisNodeDummy*>(index.internalPointer());
-}
-
 KisNodeSP KisNodeModel::nodeFromIndex(const QModelIndex &index) const
 {
-    return nodeFromDummy(dummyFromIndex(index));
+    Q_ASSERT(index.isValid());
+
+    KisNodeDummy *dummy = m_d->indexConverter->dummyFromIndex(index);
+    return dummy->node();
 }
 
 QModelIndex KisNodeModel::indexFromNode(KisNodeSP node) const
 {
-    return indexFromDummy(m_d->dummiesFacade->dummyForNode(node));
+    KisNodeDummy *dummy = m_d->dummiesFacade->dummyForNode(node);
+    return m_d->indexConverter->indexFromDummy(dummy);
+}
+
+void KisNodeModel::resetIndexConverter()
+{
+    delete m_d->indexConverter;
+
+    if(m_d->dummiesFacade) {
+        if(m_d->showRootLayer) {
+            m_d->indexConverter =
+                new KisModelIndexConverterShowAll(m_d->dummiesFacade, this);
+        }
+        else {
+            m_d->indexConverter =
+                new KisModelIndexConverter(m_d->dummiesFacade, this);
+        }
+    }
 }
 
 void KisNodeModel::updateSettings()
 {
     KisConfig cfg;
     m_d->showRootLayer = cfg.showRootLayer();
+    resetIndexConverter();
     reset();
 }
 
 void KisNodeModel::progressPercentageChanged(int, const KisNodeSP node)
 {
-    QModelIndex index = indexFromNode(node);
+    if(!m_d->dummiesFacade) return;
 
+    QModelIndex index = indexFromNode(node);
     emit dataChanged(index, index);
 }
 
 void KisNodeModel::connectDummy(KisNodeDummy *dummy, bool needConnect)
 {
-    KisNodeSP node = nodeFromDummy(dummy);
+    KisNodeSP node = dummy->node();
     KisNodeProgressProxy *progressProxy = node->nodeProgressProxy();
     if(progressProxy) {
         if(needConnect) {
@@ -142,6 +163,7 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
     }
 
     m_d->dummiesFacade = dummiesFacade;
+    resetIndexConverter();
 
     if(m_d->dummiesFacade) {
         KisNodeDummy *rootDummy = m_d->dummiesFacade->rootDummy();
@@ -170,14 +192,12 @@ void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index)
     int row = 0;
     QModelIndex parentIndex;
 
-    if(parent) {
-        int rowCount = parent->childCount();
-        row = rowCount - index;
-        parentIndex = indexFromDummy(parent);
-    }
+    bool willAdd =
+        m_d->indexConverter->indexFromAddedDummy(parent, index, parentIndex, row);
 
-    if(parent || m_d->showRootLayer) {
+    if(willAdd) {
         beginInsertRows(parentIndex, row, row);
+        m_d->needFinishInsertRows = true;
     }
 }
 
@@ -185,8 +205,9 @@ void KisNodeModel::slotEndInsertDummy(KisNodeDummy *dummy)
 {
     connectDummy(dummy, true);
 
-    if(dummy->parent() || m_d->showRootLayer) {
+    if(m_d->needFinishInsertRows) {
         endInsertRows();
+        m_d->needFinishInsertRows = false;
     }
 }
 
@@ -200,19 +221,15 @@ void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
 
     KisNodeDummy *parentDummy = dummy->parent();
 
-    int row = 0;
     QModelIndex parentIndex;
-
     if(parentDummy) {
-        int rowCount = parentDummy->childCount();
-        int index = parentDummy->indexOf(dummy);
-
-        row = rowCount - index - 1;
-        parentIndex = indexFromDummy(parentDummy);
+        parentIndex = m_d->indexConverter->indexFromDummy(parentDummy);
     }
 
-    if(parentDummy || m_d->showRootLayer) {
-        beginRemoveRows(parentIndex, row, row);
+    QModelIndex itemIndex = m_d->indexConverter->indexFromDummy(dummy);
+
+    if(itemIndex.isValid()) {
+        beginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
         m_d->needFinishRemoveRows = true;
     }
 }
@@ -236,77 +253,30 @@ void KisNodeModel::slotDummyChanged(KisNodeDummy *dummy)
 void KisNodeModel::processUpdateQueue()
 {
     foreach(KisNodeDummy *dummy, m_d->updateQueue) {
-        QModelIndex index = indexFromDummy(dummy);
+        QModelIndex index = m_d->indexConverter->indexFromDummy(dummy);
         emit dataChanged(index, index);
     }
     m_d->updateQueue.clear();
-}
-
-QModelIndex KisNodeModel::indexFromDummy(KisNodeDummy *dummy) const
-{
-    if(!dummy->parent()) {
-        return m_d->showRootLayer ?
-            createIndex(0, 0, dummy) : QModelIndex();
-    }
-    else if (!m_d->showRootLayer &&
-             !dummy->parent()->parent() &&
-             nodeFromDummy(dummy)->inherits("KisSelectionMask")) {
-
-        // Don't show the global selection mask if we don't show the root layer
-        return QModelIndex();
-    }
-    else {
-        int rowCount = dummy->parent()->childCount();
-        int index = dummy->parent()->indexOf(dummy);
-        int row = rowCount - index - 1;
-        return createIndex(row, 0, (void*)dummy);
-    }
 }
 
 QModelIndex KisNodeModel::index(int row, int col, const QModelIndex &parent) const
 {
     if(!m_d->dummiesFacade || !hasIndex(row, col, parent)) return QModelIndex();
 
-    KisNodeDummy *parentDummy;
+    QModelIndex itemIndex;
 
-    if(parent.isValid()) {
-        parentDummy = dummyFromIndex(parent);
-    }
-    else if(!m_d->showRootLayer) {
-        parentDummy = m_d->dummiesFacade->rootDummy();
-    }
-    else {
-        Q_ASSERT(row == 0);
-        KisNodeDummy *rootDummy = m_d->dummiesFacade->rootDummy();
-        return rootDummy ? indexFromDummy(rootDummy) : QModelIndex();
+    KisNodeDummy *dummy = m_d->indexConverter->dummyFromRow(row, parent);
+    if(dummy) {
+        itemIndex = m_d->indexConverter->indexFromDummy(dummy);
     }
 
-    QModelIndex modelIndex;
-    if(parentDummy) {
-        int rowCount = parentDummy->childCount();
-        int index = rowCount - row - 1;
-        modelIndex = createIndex(row, col, parentDummy->at(index));
-    }
-    return modelIndex;
+    return itemIndex;
 }
 
 int KisNodeModel::rowCount(const QModelIndex &parent) const
 {
     if(!m_d->dummiesFacade) return 0;
-
-    KisNodeDummy *parentDummy;
-
-    if(parent.isValid()) {
-        parentDummy = dummyFromIndex(parent);
-    }
-    else if(!m_d->showRootLayer) {
-        parentDummy = m_d->dummiesFacade->rootDummy();
-    }
-    else {
-        return 1;
-    }
-
-    return parentDummy ? parentDummy->childCount() : 0;
+    return m_d->indexConverter->rowCount(parent);
 }
 
 int KisNodeModel::columnCount(const QModelIndex&) const
@@ -318,10 +288,16 @@ QModelIndex KisNodeModel::parent(const QModelIndex &index) const
 {
     if(!m_d->dummiesFacade || !index.isValid()) return QModelIndex();
 
-    KisNodeDummy *dummy = dummyFromIndex(index);
+    KisNodeDummy *dummy = m_d->indexConverter->dummyFromIndex(index);
+    KisNodeDummy *parentDummy = dummy->parent();
 
-    Q_ASSERT(m_d->showRootLayer || dummy->parent());
-    return dummy->parent() ? indexFromDummy(dummy->parent()) : QModelIndex();
+    QModelIndex parentIndex;
+
+    if(parentDummy) {
+        parentIndex = m_d->indexConverter->indexFromDummy(parentDummy);
+    }
+
+    return parentIndex;
 }
 
 QVariant KisNodeModel::data(const QModelIndex &index, int role) const

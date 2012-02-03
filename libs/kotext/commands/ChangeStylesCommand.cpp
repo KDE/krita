@@ -39,6 +39,7 @@ ChangeStylesCommand::ChangeStylesCommand(ChangeFollower *changeFollower
     , m_first(true)
     , m_macroFirst(parent != 0)
 {
+    m_changeFollower->collectNeededInfo(m_changedStyles);
 }
 
 ChangeStylesCommand::~ChangeStylesCommand()

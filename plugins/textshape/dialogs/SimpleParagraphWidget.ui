@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>230</width>
-    <height>66</height>
+    <height>90</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -34,7 +34,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <zorder></zorder>
     </widget>
    </item>
    <item row="0" column="0">
@@ -117,9 +116,8 @@
        </property>
       </spacer>
      </item>
-     <item row="1" column="0" colspan="11">
-      <widget class="StylesCombo" name="paragraphStyleCombo">
-      </widget>
+     <item row="1" column="0" colspan="12">
+      <widget class="StylesCombo" name="paragraphStyleCombo"/>
      </item>
      <item row="2" column="10">
       <spacer name="horizontalSpacer_2">
@@ -133,6 +131,13 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item row="3" column="11">
+      <widget class="QToolButton" name="moreOptions">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

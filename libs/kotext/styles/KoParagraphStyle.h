@@ -195,7 +195,7 @@ public:
     static KoParagraphStyle *fromBlock(const QTextBlock &block, QObject *parent = 0);
 
     /// creates a clone of this style with the specified parent
-    KoParagraphStyle *clone(QObject *parent = 0);
+    KoParagraphStyle *clone(QObject *parent = 0) const;
 
     //  ***** Linespacing
     /**

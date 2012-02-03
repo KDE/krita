@@ -260,9 +260,12 @@ if( MARBLE_FOUND )
     ##
     find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR})
     if( MARBLECONTROLBOX_H )
-        execute_process(COMMAND grep -m 1 -e "setMarbleWidget" ${MARBLECONTROLBOX_H}
-                        OUTPUT_VARIABLE SETMARBLEWIDGET
-        )
+        INCLUDE(CheckCXXSourceCompiles)
+        set(CMAKE_REQUIRED_LIBRARIES_SWAP ${CMAKE_REQUIRED_LIBRARIES})
+        set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${MARBLE_LIBRARIES})
+        CHECK_CXX_SOURCE_COMPILES ( "#include <${MARBLECONTROLBOX_H}>\nint main(){Marble::MarbleControlBox*p; p->setMarbleWidget(0); return 0;}" SETMARBLEWIDGET)
+        # subsequent tests will fail if this is not set back.
+        set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES_SWAP})
         if( SETMARBLEWIDGET )
             add_definitions(-DHAVE_SETMARBLEWIDGET)
         endif( SETMARBLEWIDGET)
@@ -504,6 +507,10 @@ endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
 if (NOT QT_QTDECLARATIVE_FOUND)
     set(SHOULD_BUILD_ACTIVE FALSE)
 endif (NOT QT_QTDECLARATIVE_FOUND)
+
+if(${KDE_VERSION} VERSION_LESS 4.8.0)
+    set(SHOULD_BUILD_ACTIVE FALSE)
+endif(${KDE_VERSION} VERSION_LESS 4.8.0)
 
 #if(NOT QIMAGEBLITZ_FOUND)
 #    set (SHOULD_BUILD_KEXI FALSE)

@@ -290,8 +290,7 @@ public slots:
     /**
      * change the current block's list properties
      */
-    void setListProperties(KoListStyle::Style style,
-                           int level = 0,
+    void setListProperties(const KoListLevelProperties &llp,
                            ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList));
 
     // -------------------------------------------------------------

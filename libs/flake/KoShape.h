@@ -593,6 +593,25 @@ public:
      */
     virtual void update(const QRectF &rect) const;
 
+    /// Used by compareShapeZIndex() to order shapes
+    enum ChildZOrderPolicy {
+        ChildZDefault,
+        ChildZParentChild = ChildZDefault, ///< normal parent/child ordering
+        ChildZPassThrough ///< children are considered equal to this shape
+    };
+
+   /**
+    * Returns if during compareShapeZIndex() how this shape portrays the values
+    * of its children. The default behaviour is to let this shape's z values take
+    * the place of its childrens values, so you get a parent/child relationship.
+    * The children are naturally still ordered relatively to their z values
+    *
+    * But for special cases (like Calligra's TextShape) it can be overloaded to return
+    * ChildZPassThrough which means the children keep their own z values
+    * @returns the z order policy of this shape
+    */
+    virtual ChildZOrderPolicy childZOrderPolicy();
+
     /**
      * This is a method used to sort a list using the STL sorting methods.
      * @param s1 the first shape

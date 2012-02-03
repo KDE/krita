@@ -80,6 +80,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     , m_activePreset(0)
     , m_previousNode(0)
     , m_currTabletToolID(KoToolManager::instance()->currentInputDevice())
+    , m_presetsEnabled(true)
 {
     Q_ASSERT(view != 0);
 
@@ -629,19 +630,22 @@ void KisPaintopBox::sliderChanged(int n)
     setSliderValue("opacity", opacity);
     setSliderValue("flow"   , flow   );
     setSliderValue("size"   , size   );
-    
-    // IMPORTANT: set the PaintOp size before setting the other properties
-    //            it wont work the other way
-    qreal sizeDiff = size - m_activePreset->settings()->paintOpSize().width();
-    m_activePreset->settings()->changePaintOpSize(sizeDiff, 0);
-    
-    if(m_activePreset->settings()->hasProperty("OpacityValue"))
-        m_activePreset->settings()->setProperty("OpacityValue", opacity);
-    
-    if(m_activePreset->settings()->hasProperty("FlowValue"))
-        m_activePreset->settings()->setProperty("FlowValue", flow);
-    
-    m_optionWidget->setConfiguration(m_activePreset->settings().data());
+
+    if(m_presetsEnabled) {
+        // IMPORTANT: set the PaintOp size before setting the other properties
+        //            it wont work the other way
+        qreal sizeDiff = size - m_activePreset->settings()->paintOpSize().width();
+        m_activePreset->settings()->changePaintOpSize(sizeDiff, 0);
+
+        if(m_activePreset->settings()->hasProperty("OpacityValue"))
+            m_activePreset->settings()->setProperty("OpacityValue", opacity);
+
+        if(m_activePreset->settings()->hasProperty("FlowValue"))
+            m_activePreset->settings()->setProperty("FlowValue", flow);
+
+        m_optionWidget->setConfiguration(m_activePreset->settings().data());
+    }
+    else m_resourceProvider->setOpacity(opacity);
 }
 
 void KisPaintopBox::slotSlider1Changed()
@@ -668,8 +672,15 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
         if(flags & KisTool::FLAG_USES_CUSTOM_COMPOSITEOP) { setWidgetState(ENABLE_COMPOSITEOP|ENABLE_OPACITY);   }
         else                                              { setWidgetState(DISABLE_COMPOSITEOP|DISABLE_OPACITY); }
         
-        if(flags & KisTool::FLAG_USES_CUSTOM_PRESET) { setWidgetState(ENABLE_PRESETS|ENABLE_SIZE|ENABLE_FLOW);    }
-        else                                         { setWidgetState(DISABLE_PRESETS|DISABLE_SIZE|DISABLE_FLOW); }
+        if(flags & KisTool::FLAG_USES_CUSTOM_PRESET) {
+            setWidgetState(ENABLE_PRESETS|ENABLE_SIZE|ENABLE_FLOW);
+            slotUpdatePreset();
+            m_presetsEnabled = true;
+        }
+        else {
+            setWidgetState(DISABLE_PRESETS|DISABLE_SIZE|DISABLE_FLOW);
+            m_presetsEnabled = false;
+        }
     }
     else setWidgetState(DISABLE_ALL);
 }

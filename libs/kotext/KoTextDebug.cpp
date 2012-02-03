@@ -588,7 +588,7 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             break;
         case KoListStyle::BulletImage:
             key = "bullet-image";
-            value = QString::number(long(properties[id].value<KoImageData*>()));
+            value = QString::number((quintptr)(properties[id].value<KoImageData*>()));
             break;
         case KoListStyle::Margin:
             key="margin-left";

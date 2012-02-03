@@ -70,6 +70,10 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     widget.decreaseIndent->setDefaultAction(tool->action("format_decreaseindent"));
     widget.increaseIndent->setDefaultAction(tool->action("format_increaseindent"));
     widget.changeTextDirection->setDefaultAction(tool->action("change_text_direction"));
+
+    widget.moreOptions->setText("...");
+    connect(widget.moreOptions, SIGNAL(clicked(bool)), tool->action("format_paragraph"), SLOT(trigger()));
+
     connect(widget.changeTextDirection, SIGNAL(clicked()), this, SIGNAL(doneWithFocus()));
     connect(widget.alignCenter, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.alignBlock, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
@@ -266,7 +270,10 @@ void SimpleParagraphWidget::listStyleChanged(int id)
 {
     emit doneWithFocus();
     if (m_blockSignals) return;
-    m_tool->textEditor()->setListProperties(static_cast<KoListStyle::Style>(id));
+    KoListLevelProperties llp;
+    llp.setStyle(static_cast<KoListStyle::Style>(id));
+    llp.setLevel(0);
+    m_tool->textEditor()->setListProperties(llp);
 }
 
 void SimpleParagraphWidget::styleSelected(int index)

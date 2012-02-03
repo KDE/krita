@@ -787,11 +787,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
             }
         }
         endBody();
-
-        if ((document->isEmpty()) && (d->styleManager)) {
-            QTextBlock block = document->begin();
-            d->styleManager->defaultParagraphStyle()->applyStyle(block);
-        }
     }
 
     rootCallChecker--;

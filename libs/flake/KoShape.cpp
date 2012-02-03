@@ -461,6 +461,11 @@ QTransform KoShape::transformation() const
     return d->localMatrix;
 }
 
+KoShape::ChildZOrderPolicy KoShape::childZOrderPolicy()
+{
+    return ChildZDefault;
+}
+
 bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
 {
     bool foundCommonParent = false;
@@ -479,14 +484,22 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
                 foundCommonParent = true;
                 break;
             }
-            index2 = parentShapeS2->zIndex();
-            runThrough2 = parentShapeS2->runThrough();
+            if (parentShapeS2->childZOrderPolicy() == KoShape::ChildZParentChild) {
+                index2 = parentShapeS2->zIndex();
+                runThrough2 = parentShapeS2->runThrough();
+            } else {
+                runThrough2 = runThrough2 + parentShapeS2->runThrough();
+            }
             parentShapeS2 = parentShapeS2->parent();
         }
 
         if (!foundCommonParent) {
-            index1 = parentShapeS1->zIndex();
-            runThrough1 = parentShapeS1->runThrough();
+            if (parentShapeS1->childZOrderPolicy() == KoShape::ChildZParentChild) {
+                index1 = parentShapeS1->zIndex();
+                runThrough1 = parentShapeS1->runThrough();
+            } else {
+                runThrough1 = runThrough1 + parentShapeS1->runThrough();
+            }
             parentShapeS1 = parentShapeS1->parent();
         }
     }

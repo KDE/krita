@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +21,7 @@
 #include "ChangeFollower.h"
 #include "KoCharacterStyle.h"
 #include "KoParagraphStyle.h"
+#include "KoTextDocument.h"
 
 #include <QVector>
 #include <QTextDocument>
@@ -41,54 +43,126 @@ ChangeFollower::~ChangeFollower()
         sm->remove(this);
 }
 
-void ChangeFollower::processUpdates(const QSet<int> &changedStyles)
+void ChangeFollower::collectNeededInfo(const QSet<int> &changedStyles)
 {
     KoStyleManager *sm = m_styleManager.data();
-    if (!sm) {
-        // since the stylemanager would be the one calling this method, I doubt this
-        // will ever happen.  But better safe than sorry..
-        deleteLater();
-        return;
-    }
 
-    // optimization strategy;  store the formatid of the formats we checked into
+    // TODO optimization strategy;  store the formatid of the formats we checked into
     // a qset for 'hits' and 'ignores' and avoid the copying of the format
     // (fragment.charFormat() / block.blockFormat()) when the formatId is
     // already checked previosly
 
     QTextCursor cursor(m_document);
     QTextBlock block = cursor.block();
+    Memento *memento = new Memento;
+
     while (block.isValid()) {
-        QTextBlockFormat bf = block.blockFormat();
-        int id = bf.intProperty(KoParagraphStyle::StyleId);
+        memento->blockPosition = block.position();
+        memento->blockParentCharFormat = block.charFormat();
+        // FIXME memento->blockParentFormat = KoTextDocument(m_document).frameBlockFormat();
+        memento->paragraphStyleId = 0;
+
+        if (!memento->blockParentCharFormat.isTableCellFormat()) {
+            memento->blockParentCharFormat = KoTextDocument(m_document).frameCharFormat();
+        }
+
+        bool blockChanged = false;
+        int id =  block.blockFormat().intProperty(KoParagraphStyle::StyleId);
         if (id > 0 && changedStyles.contains(id)) {
-            cursor.setPosition(block.position());
+            /* FIXME we should extract any direct formatting. Like this but needs testing:
             KoParagraphStyle *style = sm->paragraphStyle(id);
             Q_ASSERT(style);
-
-            style->applyStyle(block);
+            QTextCharFormat basis = memento->blockParentCharFormat;
+            style->KoCharacterStyle::applyStyle(basis);
+            style->KoCharacterStyle::ensureMinimalProperties(basis);
+            memento->blockDirectCharFormat = block.charFormat();
+            memento->blockDirectCharFormat->removeDuplicates(basis);
+            */
+            memento->paragraphStyleId = id;
+            blockChanged = true;
         }
-        QTextCharFormat cf;
 
         QTextBlock::iterator iter = block.begin();
-        while (! iter.atEnd()) {
+        while (!iter.atEnd()) {
             QTextFragment fragment = iter.fragment();
-            cf = fragment.charFormat();
+            QTextCharFormat cf(fragment.charFormat());
             id = cf.intProperty(KoCharacterStyle::StyleId);
-            if (id > 0 && changedStyles.contains(id)) {
+            if (blockChanged || (id > 0 && changedStyles.contains(id))) {
                 // create selection
                 cursor.setPosition(fragment.position());
                 cursor.setPosition(fragment.position() + fragment.length(), QTextCursor::KeepAnchor);
+                QTextCharFormat blockCharFormat = block.charFormat(); // with old parstyle applied
+
                 KoCharacterStyle *style = sm->characterStyle(id);
                 if (style) {
-                    style->applyStyle(cf);
-                    cursor.mergeCharFormat(cf);
+                    style->applyStyle(blockCharFormat);
+                    style->ensureMinimalProperties(blockCharFormat);
                 }
+
+                QMap<int, QVariant> props = blockCharFormat.properties();
+                foreach(int key, props.keys()) {
+                    if (cf.property(key) == blockCharFormat.property(key)) {
+                        cf.clearProperty(key);
+                    }
+                }
+                memento->fragmentStyleId.append(id);
+                memento->fragmentDirectFormats.append(cf);
+                memento->fragmentCursors.append(cursor);
             }
             ++iter;
         }
+        if (blockChanged || memento->fragmentCursors.length()) {
+            m_mementos.append(memento);
+            memento = new Memento;
+        }
         block = block.next();
     }
+
+    delete memento; // we always have one that is unused
+}
+
+void ChangeFollower::processUpdates(const QSet<int> &changedStyles)
+{
+    KoStyleManager *sm = m_styleManager.data();
+
+    QTextCursor cursor(m_document);
+    foreach (Memento *memento, m_mementos) {
+        cursor.setPosition(memento->blockPosition);
+        QTextBlock block = cursor.block();
+
+        if (memento->paragraphStyleId > 0) {
+            KoParagraphStyle *style = sm->paragraphStyle(memento->paragraphStyleId);
+            Q_ASSERT(style);
+
+            style->KoCharacterStyle::applyStyle(memento->blockParentCharFormat);
+            style->KoCharacterStyle::ensureMinimalProperties(memento->blockParentCharFormat);
+            cursor.setBlockCharFormat(memento->blockParentCharFormat);
+
+            //QTextBlockFormat bf = block.blockFormat();
+        }
+
+        QList<QTextCharFormat>::Iterator fmtIt = memento->fragmentDirectFormats.begin();
+        QList<int>::Iterator idIt = memento->fragmentStyleId.begin();
+        foreach(QTextCursor fragCursor, memento->fragmentCursors) {
+            QTextCharFormat cf(block.charFormat()); // start with block formatting
+
+            if (*idIt > 0) {
+                KoCharacterStyle *style = sm->characterStyle(*idIt);
+                if (style) {
+                    style->applyStyle(cf); // possibly apply charstyle formatting
+                }
+            }
+
+            cf.merge(*fmtIt); //apply direct formatting
+
+            fragCursor.setCharFormat(cf);
+
+            ++idIt;
+            ++fmtIt;
+        }
+    }
+    qDeleteAll(m_mementos);
+    m_mementos.clear();
 }
 
 #include <ChangeFollower.moc>

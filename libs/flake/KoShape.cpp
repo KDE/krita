@@ -1747,6 +1747,10 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
         }
     }
 
+    if (attributes & OdfZIndex) {
+        context.xmlWriter().addAttribute("draw:z-index", zIndex());
+    }
+
     if (attributes & OdfSize) {
         QSizeF s(size());
         if (parent() && parent()->isClipped(this)) { // being clipped shrinks our visible size

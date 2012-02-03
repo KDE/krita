@@ -24,6 +24,14 @@
 #include "krita_export.h"
 class KisNodeDummy;
 
+/**
+ * The base class for converting objects to/from QModelIndex used
+ * in KisNodeModel and  KisNodeDummy used in KisDummiesFacadeBase
+ * (KisShapeController).
+ *
+ * This is not a trivial task, because the indexing of nodes is
+ * reversed in KisNodeModel.
+ */
 
 class KRITAUI_EXPORT KisModelIndexConverterBase
 {

@@ -27,6 +27,13 @@
 class KisNodeDummy;
 class KisNodeDummiesGraph;
 
+/**
+ * Keeps track of the node stack and manages local (UI-wide) representation
+ * of the node stack. It uses KisNodeDummy objects to represent the stack.
+ * This is done to break synchronization tie between UI and Image threads,
+ * caused by the fact that KisNodeModel must be synchronously notified
+ * when a node is removed/deleted.
+ */
 
 class KRITAUI_EXPORT KisDummiesFacadeBase : public QObject
 {
@@ -52,6 +59,10 @@ signals:
 
     void sigContinueAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void sigContinueRemoveNode(KisNodeSP node);
+
+    /**
+     * The signals for controlling the node model
+     */
 
     void sigBeginInsertDummy(KisNodeDummy *parent, int index);
     void sigEndInsertDummy(KisNodeDummy *dummy);

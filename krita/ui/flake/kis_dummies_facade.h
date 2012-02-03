@@ -22,6 +22,12 @@
 
 #include "kis_dummies_facade_base.h"
 
+/**
+ * The simple implementation of KisDummiesFacadeBase. It can be used
+ * in cases when KisShapeController is not accessible, e.g. when you
+ * need to show layers in a filter and you need to create KisNodeModel
+ */
+
 class KRITAUI_EXPORT KisDummiesFacade : public KisDummiesFacadeBase
 {
     Q_OBJECT

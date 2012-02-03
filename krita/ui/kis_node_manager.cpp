@@ -254,40 +254,6 @@ void KisNodeManager::getNewNodeLocation(const QString & nodeType, KisNodeSP &par
     above = parent->firstChild();
 }
 
-void KisNodeManager::addNode(KisNodeSP node, KisNodeSP activeNode)
-{
-    KisNodeSP parent;
-    KisNodeSP above;
-
-    getNewNodeLocation(node, parent, above, activeNode);
-    m_d->commandsAdapter->addNode(node, parent, above);
-    node->setDirty(node->extent());
-}
-
-void KisNodeManager::insertNode(KisNodeSP node, KisNodeSP parent, int index)
-{
-    if (allowAsChild(parent->metaObject()->className(), node->metaObject()->className())) {
-        m_d->commandsAdapter->addNode(node, parent, index);
-    }
-}
-
-void KisNodeManager::moveNode(KisNodeSP node, KisNodeSP activeNode)
-{
-    KisNodeSP parent;
-    KisNodeSP above;
-
-    getNewNodeLocation(node, parent, above, activeNode);
-    if (node->inherits("KisSelectionMask") && parent->inherits("KisLayer")) {
-        KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data());
-        KisLayer *l = dynamic_cast<KisLayer*>(parent.data());
-        KisSelectionMaskSP selMask = l->selectionMask();
-        if (m && m->active() && l && l->selectionMask())
-            selMask->setActive(false);
-    }
-    m_d->commandsAdapter->moveNode(node, parent, above);
-    node->setDirty(node->extent());
-}
-
 void KisNodeManager::moveNodeAt(KisNodeSP node, KisNodeSP parent, int index)
 {
     if (parent->allowAsChild(node)) {
@@ -502,14 +468,11 @@ void KisNodeManager::nodeToBottom()
 
 void KisNodeManager::removeNode(KisNodeSP node)
 {
-//     QRect bounds = node->exactBounds();
-
     //do not delete root layer
     if(node->parent()==0)
         return;
 
     m_d->commandsAdapter->removeNode(node);
-//     m_image->rootLayer()->setDirty(bounds);
 }
 
 void KisNodeManager::mirrorNodeX()

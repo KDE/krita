@@ -276,42 +276,47 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
     KoCharacterStyle::applyStyle(block);
 
     if (applyListStyle) {
-        //gopalakbhat: We need to differentiate between normal styles and styles with outline(part of heading)
-        //Styles part of outline: We ignore the listStyle()( even if this is a valid in ODF; even LibreOffice does the same)
-        //                        since we can specify all info required in text:outline-style
-        //Normal styles: we use the listStyle()
-        if (format.hasProperty(OutlineLevel)) {
-            if (! d->list) {
-                if (! KoTextDocument(block.document()).headingList()) {
-                    if (KoTextDocument(block.document()).styleManager() && KoTextDocument(block.document()).styleManager()->outlineStyle()) {
-                        d->list = new KoList(block.document(), KoTextDocument(block.document()).styleManager()->outlineStyle());
-                        KoTextDocument(block.document()).setHeadingList(d->list);
-                    }
-                } else {
-                    d->list = KoTextDocument(block.document()).headingList();
-                }
-            }
-            if (d->list) {
-                d->list->applyStyle(block, KoTextDocument(block.document()).styleManager()->outlineStyle(), format.intProperty(OutlineLevel));
-            }
-        } else {
-            if (listStyle()) {
-                if (!d->list) {
-                    d->list = new KoList(block.document(), listStyle());
-                }
-                if (format.hasProperty(OutlineLevel)) {
+        applyParagraphListStyle(block, format);
+    }
+}
 
+void KoParagraphStyle::applyParagraphListStyle(QTextBlock &block, const QTextBlockFormat &blockFormat) const
+{
+    //gopalakbhat: We need to differentiate between normal styles and styles with outline(part of heading)
+    //Styles part of outline: We ignore the listStyle()( even if this is a valid in ODF; even LibreOffice does the same)
+    //                        since we can specify all info required in text:outline-style
+    //Normal styles: we use the listStyle()
+    if (blockFormat.hasProperty(OutlineLevel)) {
+        if (! d->list) {
+            if (! KoTextDocument(block.document()).headingList()) {
+                if (KoTextDocument(block.document()).styleManager() && KoTextDocument(block.document()).styleManager()->outlineStyle()) {
+                    d->list = new KoList(block.document(), KoTextDocument(block.document()).styleManager()->outlineStyle());
+                    KoTextDocument(block.document()).setHeadingList(d->list);
                 }
-                d->list->add(block, listLevel());
             } else {
-                // Gopalakrishna Bhat A: We do not remove the block from the list if the paragraphstyle does not have a listStyle
-                // even if applyListStyle is true
-                //if (block.textList())
-                //    block.textList()->remove(block);
-                KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-                if (data)
-                    data->setCounterWidth(-1);
+                d->list = KoTextDocument(block.document()).headingList();
             }
+        }
+        if (d->list) {
+            d->list->applyStyle(block, KoTextDocument(block.document()).styleManager()->outlineStyle(), blockFormat.intProperty(OutlineLevel));
+        }
+    } else {
+        if (listStyle()) {
+            if (!d->list) {
+                d->list = new KoList(block.document(), listStyle());
+            }
+            //FIXME: Gopalakrishna Bhat A: This condition should never happen.
+            // i.e. d->list->style() should always be in sync with the listStyle()
+            if (d->list->style() != listStyle()) {
+                d->list->setStyle(listStyle());
+            }
+            d->list->add(block, listLevel());
+        } else {
+            if (block.textList())
+                block.textList()->remove(block);
+            KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+            if (data)
+                data->setCounterWidth(-1);
         }
     }
 }
@@ -1070,8 +1075,15 @@ void KoParagraphStyle::setListStyle(KoListStyle *style)
     if (listStyle() && listStyle()->parent() == this)
         delete listStyle();
     QVariant variant;
-    variant.setValue(style->clone());
-    setProperty(ParagraphListStyleId, variant);
+    KoListStyle *cloneStyle = 0;
+    if (style) {
+        cloneStyle = style->clone();
+        variant.setValue(cloneStyle);
+
+        setProperty(ParagraphListStyleId, variant);
+    } else {
+        d->stylesPrivate.remove(ParagraphListStyleId);
+    }
 }
 
 KoText::Direction KoParagraphStyle::textProgressionDirection() const
@@ -2251,6 +2263,11 @@ bool KoParagraphStyle::hasDefaults() const
         return true;
     }
     return false;
+}
+
+KoList *KoParagraphStyle::list()
+{
+    return d->list;
 }
 
 #include <KoParagraphStyle.moc>

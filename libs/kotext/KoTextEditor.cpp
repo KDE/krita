@@ -1366,6 +1366,20 @@ void KoTextEditor::setListProperties(const KoListLevelProperties &llp,
         flags = MergeWithAdjacentList;
     }
 
+    if (KoList *list = KoTextDocument(d->document).list(d->caret.block().textList())) {
+        KoListStyle *listStyle = list->style();
+        if (KoStyleManager *styleManager = KoTextDocument(d->document).styleManager()) {
+            QList<KoParagraphStyle *> paragraphStyles = styleManager->paragraphStyles();
+            foreach (KoParagraphStyle *paragraphStyle, paragraphStyles) {
+                if (paragraphStyle->listStyle() == listStyle ||
+                        (paragraphStyle->list() && paragraphStyle->list()->style() == listStyle)) {
+                    flags = NoFlags;
+                    break;
+                }
+            }
+        }
+    }
+
     addCommand(new ChangeListCommand(d->caret, llp, flags));
     emit textFormatChanged();
 }

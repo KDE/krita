@@ -22,6 +22,7 @@
 #include "KoCharacterStyle.h"
 #include "KoParagraphStyle.h"
 #include "KoTextDocument.h"
+#include "KoList.h"
 
 #include <QVector>
 #include <QTextDocument>
@@ -72,6 +73,17 @@ void ChangeFollower::collectNeededInfo(const QSet<int> &changedStyles)
             /* FIXME we should extract any direct formatting. Like this but needs testing:
             KoParagraphStyle *style = sm->paragraphStyle(id);
             Q_ASSERT(style);
+
+            style->applyStyle(bf);
+            memento->blockDirectFormat = block.blockFormat();
+
+            QMap<int, QVariant> blockProperties = bf.properties();
+            foreach(int key, blockProperties.keys()) {
+                if (memento->blockDirectFormat.property(key) == bf.property(key)) {
+                    memento->blockDirectFormat.clearProperty(key);
+                }
+            }
+
             QTextCharFormat basis = memento->blockParentCharFormat;
             style->KoCharacterStyle::applyStyle(basis);
             style->KoCharacterStyle::ensureMinimalProperties(basis);
@@ -133,6 +145,14 @@ void ChangeFollower::processUpdates(const QSet<int> &changedStyles)
         if (memento->paragraphStyleId > 0) {
             KoParagraphStyle *style = sm->paragraphStyle(memento->paragraphStyleId);
             Q_ASSERT(style);
+
+            if (KoTextDocument(m_document).list(block.textList())) {
+                if (style->list() == KoTextDocument(m_document).list(block.textList())) {
+                    style->applyParagraphListStyle(block, block.blockFormat());
+                }
+            } else {
+                style->applyParagraphListStyle(block, block.blockFormat());
+            }
 
             style->KoCharacterStyle::applyStyle(memento->blockParentCharFormat);
             style->KoCharacterStyle::ensureMinimalProperties(memento->blockParentCharFormat);

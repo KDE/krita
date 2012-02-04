@@ -163,8 +163,6 @@ public:
      */
     virtual QRect accessRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
-    virtual void setSystemLocked(bool l, bool update = true);
-
 public: // Graph methods
 
     /**
@@ -266,8 +264,8 @@ private:
     void createNodeProgressProxy();
 
 protected:
-
     KisBaseNodeSP parentCallback() const;
+    void baseNodeChangedCallback();
 
     /**
      * Re-implement this method if your node type has to do something

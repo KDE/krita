@@ -165,6 +165,7 @@ public:
      */
     void setName(const QString& name) {
         setObjectName(name);
+        baseNodeChangedCallback();
     }
 
     /**
@@ -382,7 +383,19 @@ protected:
         return 0;
     }
 
+    /**
+     * This callback is called when some meta state of the base node
+     * that can be interesting to the UI has changed. E.g. visibility,
+     * lockness, opacity, compositeOp and etc. This signal is
+     * forwarded by the KisNode and KisNodeGraphListener to the model
+     * in KisLayerBox, so it can update its controls when information
+     * changes.
+     */
+    virtual void baseNodeChangedCallback() {
+    }
+
 signals:
+
     /**
      * This signal is emitted when the visibility of the layer is changed with \ref setVisible.
      */

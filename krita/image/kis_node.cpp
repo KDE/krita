@@ -115,14 +115,6 @@ QRect KisNode::accessRect(const QRect &rect, PositionToFilthy pos) const
     return rect;
 }
 
-void KisNode::setSystemLocked(bool l, bool update)
-{
-    KisBaseNode::setSystemLocked(l, update);
-    if (!l && m_d->graphListener) {
-        m_d->graphListener->nodeChanged(this);
-    }
-}
-
 bool KisNode::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
@@ -162,6 +154,13 @@ KisNodeSP KisNode::parent() const
 KisBaseNodeSP KisNode::parentCallback() const
 {
     return parent();
+}
+
+void KisNode::baseNodeChangedCallback()
+{
+    if(m_d->graphListener) {
+        m_d->graphListener->nodeChanged(this);
+    }
 }
 
 void KisNode::setParent(KisNodeWSP parent)

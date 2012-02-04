@@ -225,6 +225,7 @@ KisLayerBox::KisLayerBox()
     connect(m_nodeModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)), SLOT(updateUI()));
+    connect(m_nodeModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(modelReset()), SLOT(updateUI()));
 
     m_wdgLayerBox->listLayers->setModel(m_nodeModel);

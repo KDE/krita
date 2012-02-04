@@ -36,6 +36,8 @@ private slots:
     void testUpdateSelectionProjection();
     void testCopy();
     void testSelectionExactBounds();
+    void testSetParentNodeAfterCreation();
+    void testSetParentNodeBeforeCreation();
 };
 
 #endif

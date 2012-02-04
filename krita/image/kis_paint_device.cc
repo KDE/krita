@@ -334,6 +334,12 @@ void KisPaintDevice::setParentNode(KisNodeWSP parent)
     m_d->parent = parent;
 }
 
+// for testing purposes only
+KisNodeWSP KisPaintDevice::parentNode() const
+{
+    return m_d->parent;
+}
+
 void KisPaintDevice::setDefaultBounds(KisDefaultBoundsBaseSP defaultBounds)
 {
     m_d->defaultBounds = defaultBounds;

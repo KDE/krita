@@ -29,6 +29,7 @@ private slots:
     void testCreation();
     void testSelection();
     void testCropUpdateBySelection();
+    void testSelectionParent();
 };
 
 #endif

@@ -722,6 +722,10 @@ private:
     QVector<qint32> channelSizes();
 
 private:
+    friend class KisSelectionTest;
+    KisNodeWSP parentNode() const;
+
+private:
     KisDataManagerSP m_datamanager;
 
     struct Private;

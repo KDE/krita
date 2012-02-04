@@ -437,10 +437,19 @@ void KisView2::dropEvent(QDropEvent *event)
 
             QByteArray ba = event->mimeData()->data("application/x-krita-node");
 
-            KisDoc2 tmpDoc;
-            tmpDoc.loadNativeFormatFromStore(ba);
+            KisDoc2 tempDoc;
+            tempDoc.loadNativeFormatFromStore(ba);
 
-            node = tmpDoc.image()->rootLayer()->firstChild();
+            KisImageWSP tempImage = tempDoc.image();
+            node = tempImage->rootLayer()->firstChild();
+            tempImage->removeNode(node);
+
+            // layers store a lisk to the image, so update it
+            KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+            if(layer) {
+                layer->setImage(kisimage);
+            }
+
             node->setName(i18n("Pasted Layer"));
         }
         else if (event->mimeData()->hasImage()) {
@@ -454,11 +463,6 @@ void KisView2::dropEvent(QDropEvent *event)
         }
 
         if (node) {
-
-            // Set the image on layers before adding them, otherwise we get a crash
-            if (qobject_cast<KisLayer*>(node.data())) {
-                qobject_cast<KisLayer*>(node.data())->setImage(kisimage);
-            }
 
             node->setX(pos.x() - node->projection()->exactBounds().width());
             node->setY(pos.y() - node->projection()->exactBounds().height());

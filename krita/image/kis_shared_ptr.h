@@ -341,12 +341,12 @@ public:
      * @see data()
      */
     inline operator const T*() const {
-        if (!isConsistent()) {
-            warnKrita << kBacktrace();
-            Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
-        }
+        /**
+         * This operator is used in boolean expressions where we check
+         * for pointer consistency, so return 0 instead of asserting.
+         */
 
-        return d;
+        return isConsistent() ? d : 0;
     }
 
     inline const T& operator*() const {

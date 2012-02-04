@@ -48,7 +48,7 @@ KisDummiesFacadeBase::~KisDummiesFacadeBase()
 
 void KisDummiesFacadeBase::setImage(KisImageWSP image)
 {
-    if (m_d->image.isValid()) {
+    if (m_d->image) {
         emit sigActivateNode(0);
         m_d->image->disconnect(this);
 
@@ -60,7 +60,7 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image)
 
     m_d->image = image;
 
-    if (image.isValid()) {
+    if (image) {
         slotNodeAdded(image->root());
 
         connect(image, SIGNAL(sigNodeAddedAsync(KisNodeSP)),

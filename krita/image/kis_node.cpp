@@ -78,7 +78,7 @@ KisNode::KisNode(const KisNode & rhs)
         , m_d(new Private())
 {
     m_d->parent = 0;
-    m_d->graphListener = rhs.m_d->graphListener;
+    m_d->graphListener = 0;
 
     KisSafeReadNodeList::const_iterator iter;
     FOREACH_SAFE(iter, rhs.m_d->nodes) {
@@ -86,7 +86,6 @@ KisNode::KisNode(const KisNode & rhs)
         child->createNodeProgressProxy();
         m_d->nodes.append(child);
         child->setParent(this);
-        child->setGraphListener(m_d->graphListener);
     }
 }
 

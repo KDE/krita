@@ -648,8 +648,8 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                 }
                 QRectF drawRect(shapeMatrix.map(rect.topLeft()), shapeMatrix.map(rect.bottomLeft()));
                 drawRect.setWidth(2);
-                painter.fillRect(drawRect, QColor(Qt::white));
-                painter.fillRect(drawRect, QBrush(Qt::black, Qt::Dense3Pattern));
+                painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
+                painter.fillRect(drawRect, QColor(128, 255, 128));
                 if (m_textEditor.data()->isEditProtected(true)) {
                     QRectF circleRect(shapeMatrix.map(baselinePoint),QSizeF(14, 14));
                     circleRect.translate(-7.5, -7.5);

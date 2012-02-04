@@ -177,9 +177,6 @@ protected:
     KisPaintOpPresetSP currentPaintOpPreset();
     KisFilterConfiguration * currentGenerator();
 
-    /// convenience method to fill the painter's settings with all the current resources
-    virtual void setupPainter(KisPainter * painter);
-
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 
     /// paint the path which is in view coordinates, default paint mode is XOR_MODE, BW_MODE is also possible

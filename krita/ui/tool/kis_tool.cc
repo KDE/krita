@@ -581,23 +581,6 @@ void KisTool::deleteSelection()
     }
 }
 
-void KisTool::setupPainter(KisPainter* painter)
-{
-    Q_ASSERT(currentImage());
-    if (!currentImage()) return;
-
-    painter->setBounds(currentImage()->bounds());
-    painter->setPaintColor(currentFgColor());
-    painter->setBackgroundColor(currentBgColor());
-    painter->setGenerator(currentGenerator());
-    painter->setPattern(currentPattern());
-    painter->setGradient(currentGradient());
-    painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
-
-    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data()))
-        painter->setChannelFlags(l->channelLockFlags());
-}
-
 void KisTool::setupPaintAction(KisRecordedPaintAction* action)
 {
     action->setPaintColor(currentFgColor());

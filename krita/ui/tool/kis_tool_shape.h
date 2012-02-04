@@ -59,7 +59,6 @@ protected:
     virtual KisPainter::FillStyle fillStyle();
     KisPainter::StrokeStyle strokeStyle();
 
-    virtual void setupPainter(KisPainter * painter);
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 
     void addShape(KoShape* shape);

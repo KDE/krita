@@ -119,7 +119,9 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 
             KisFigurePaintingToolHelper helper(i18n("Star"),
                                                image(),
-                                               canvas()->resourceManager());
+                                               canvas()->resourceManager(),
+                                               strokeStyle(),
+                                               fillStyle());
             helper.paintPolygon(coord);
         } else {
             KoPathShape* path = new KoPathShape();

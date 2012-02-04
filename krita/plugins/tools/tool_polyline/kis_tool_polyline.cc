@@ -56,7 +56,9 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
     if (!currentNode()->inherits("KisShapeLayer")) {
         KisFigurePaintingToolHelper helper(i18n("Polyline"),
                                            image(),
-                                           canvas()->resourceManager());
+                                           canvas()->resourceManager(),
+                                           strokeStyle(),
+                                           fillStyle());
         helper.paintPolyline(points);
     } else {
         KoPathShape* path = new KoPathShape();

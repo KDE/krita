@@ -166,7 +166,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
     QSignalMapper *signalMapper = new QSignalMapper(this);
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
     QList<QAction*> list;
-    list.append(this->action("text_default"));
     list.append(this->action("format_font"));
     foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);

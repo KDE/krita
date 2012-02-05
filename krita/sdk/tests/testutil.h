@@ -235,39 +235,36 @@ class TestGraphListener : public KisNodeGraphListener
 {
 public:
 
-    virtual void aboutToAddANode(KisNode *, int) {
+    virtual void aboutToAddANode(KisNode *parent, int index) {
+        KisNodeGraphListener::aboutToAddANode(parent, index);
         beforeInsertRow = true;
     }
 
-    virtual void nodeHasBeenAdded(KisNode *, int) {
+    virtual void nodeHasBeenAdded(KisNode *parent, int index) {
+        KisNodeGraphListener::nodeHasBeenAdded(parent, index);
         afterInsertRow = true;
     }
 
-    virtual void aboutToRemoveANode(KisNode *, int) {
+    virtual void aboutToRemoveANode(KisNode *parent, int index) {
+        KisNodeGraphListener::aboutToRemoveANode(parent, index);
         beforeRemoveRow  = true;
     }
 
-    virtual void nodeHasBeenRemoved(KisNode *, int) {
+    virtual void nodeHasBeenRemoved(KisNode *parent, int index) {
+        KisNodeGraphListener::nodeHasBeenRemoved(parent, index);
         afterRemoveRow = true;
     }
 
 
-    virtual void aboutToMoveNode(KisNode *, int, int) {
+    virtual void aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex) {
+        KisNodeGraphListener::aboutToMoveNode(parent, oldIndex, newIndex);
         beforeMove = true;
     }
 
-    virtual void nodeHasBeenMoved(KisNode *, int, int) {
+    virtual void nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex) {
+        KisNodeGraphListener::nodeHasBeenMoved(parent, oldIndex, newIndex);
         afterMove = true;
     }
-
-    virtual void nodeChanged(KisNode*) {
-
-    }
-
-    virtual void requestProjectionUpdate(KisNode *node, const QRect& rect) {
-
-    }
-
 
     bool beforeInsertRow;
     bool afterInsertRow;

@@ -73,5 +73,40 @@ void KisNodeGraphListenerTest::testRecursiveUpdateOfListener()
     QCOMPARE(child2->graphListener(), &listener);
 }
 
+void KisNodeGraphListenerTest::testSequenceNumber()
+{
+    KisNodeFacade nodeFacade;
+    TestUtil::TestGraphListener listener;
+
+    KisNodeSP rootNode = new TestNode();
+    KisNodeSP child1 = new TestNode();
+    KisNodeSP child2 = new TestNode();
+
+    nodeFacade.setRoot(rootNode);
+    rootNode->setGraphListener(&listener);
+
+    int seqno = 0;
+
+    seqno = listener.graphSequenceNumber();
+    nodeFacade.addNode(child1, rootNode);
+    QVERIFY(seqno != listener.graphSequenceNumber());
+
+    seqno = listener.graphSequenceNumber();
+    nodeFacade.addNode(child2, rootNode);
+    QVERIFY(seqno != listener.graphSequenceNumber());
+
+    seqno = listener.graphSequenceNumber();
+    nodeFacade.moveNode(child1, rootNode, child2);
+    QVERIFY(seqno != listener.graphSequenceNumber());
+
+    seqno = listener.graphSequenceNumber();
+    nodeFacade.removeNode(child1);
+    QVERIFY(seqno != listener.graphSequenceNumber());
+
+    seqno = listener.graphSequenceNumber();
+    nodeFacade.removeNode(child2);
+    QVERIFY(seqno != listener.graphSequenceNumber());
+}
+
 QTEST_KDEMAIN(KisNodeGraphListenerTest, NoGUI)
 #include "kis_node_graph_listener_test.moc"

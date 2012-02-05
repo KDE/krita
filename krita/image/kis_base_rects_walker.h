@@ -102,6 +102,7 @@ public:
     void collectRects(KisNodeSP node, const QRect& requestedRect) {
         clear();
         m_nodeChecksum = calculateChecksum(node, requestedRect);
+        m_graphChecksum = node->graphSequenceNumber();
         m_resultChangeRect = requestedRect;
         m_resultUncroppedChangeRect = requestedRect;
         m_requestedRect = requestedRect;
@@ -116,7 +117,9 @@ public:
 
     bool checksumValid() {
         Q_ASSERT(m_startNode);
-        return m_nodeChecksum == calculateChecksum(m_startNode, m_requestedRect);
+        return
+            m_nodeChecksum == calculateChecksum(m_startNode, m_requestedRect) &&
+            m_graphChecksum == m_startNode->graphSequenceNumber();
     }
 
     inline void setCropRect(QRect cropRect) {
@@ -398,6 +401,13 @@ private:
      * calculated
      */
     qint32 m_nodeChecksum;
+
+    /**
+     * Used for getting know whether the structure of
+     * the graph has changed since the walker was
+     * calculated
+     */
+    qint32 m_graphChecksum;
 
     /**
      * Temporary variables

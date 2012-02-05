@@ -1050,7 +1050,7 @@ void KisWalkersTest::testMasksOverlapping()
       +----------+
      */
 
-void KisWalkersTest::testChecksum()
+void KisWalkersTest::testRectsChecksum()
 {
     QRect imageRect(0,0,512,512);
     QRect dirtyRect(100,100,100,100);
@@ -1096,6 +1096,50 @@ void KisWalkersTest::testChecksum()
     walker.recalculate(dirtyRect);
     QCOMPARE(walker.checksumValid(), true);
 
+}
+
+void KisWalkersTest::testGraphStructureChecksum()
+{
+    QRect imageRect(0,0,512,512);
+    QRect dirtyRect(100,100,100,100);
+
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, imageRect.width(), imageRect.height(), colorSpace, "walker test");
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
+
+    image->lock();
+    image->addNode(paintLayer1, image->rootLayer());
+    image->unlock();
+
+    KisMergeWalker walker(imageRect);
+    walker.collectRects(paintLayer1, dirtyRect);
+    QCOMPARE(walker.checksumValid(), true);
+
+    image->lock();
+    image->addNode(paintLayer2, image->rootLayer());
+    image->unlock();
+    QCOMPARE(walker.checksumValid(), false);
+
+    walker.recalculate(dirtyRect);
+    QCOMPARE(walker.checksumValid(), true);
+
+    image->lock();
+    image->moveNode(paintLayer1, image->rootLayer(), paintLayer2);
+    image->unlock();
+    QCOMPARE(walker.checksumValid(), false);
+
+    walker.recalculate(dirtyRect);
+    QCOMPARE(walker.checksumValid(), true);
+
+    image->lock();
+    image->removeNode(paintLayer1);
+    image->unlock();
+    QCOMPARE(walker.checksumValid(), false);
+
+    walker.recalculate(dirtyRect);
+    QCOMPARE(walker.checksumValid(), true);
 }
 
 QTEST_KDEMAIN(KisWalkersTest, NoGUI)

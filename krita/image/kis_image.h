@@ -82,12 +82,8 @@ public:
 
 public: // KisNodeGraphListener implementation
 
-    void aboutToAddANode(KisNode *parent, int index);
     void nodeHasBeenAdded(KisNode *parent, int index);
     void aboutToRemoveANode(KisNode *parent, int index);
-    void nodeHasBeenRemoved(KisNode *parent, int index);
-    void aboutToMoveNode(KisNode * node, int oldIndex, int newIndex);
-    void nodeHasBeenMoved(KisNode * node, int oldIndex, int newIndex);
     void nodeChanged(KisNode * node);
     void requestProjectionUpdate(KisNode *node, const QRect& rect);
 

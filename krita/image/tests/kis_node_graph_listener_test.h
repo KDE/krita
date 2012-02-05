@@ -49,6 +49,7 @@ private slots:
 
     void testUpdateOfListener();
     void testRecursiveUpdateOfListener();
+    void testSequenceNumber();
 };
 
 #endif

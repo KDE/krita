@@ -244,7 +244,8 @@ private slots:
     void testCachedVisiting();
     void testMasksVisiting();
     void testMasksOverlapping();
-    void testChecksum();
+    void testRectsChecksum();
+    void testGraphStructureChecksum();
 
 private:
     void verifyResult(KisBaseRectsWalker &walker, QStringList reference,

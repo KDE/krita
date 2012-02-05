@@ -124,6 +124,11 @@ void KisNode::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
     return visitor.visit(this, undoAdapter);
 }
 
+int KisNode::graphSequenceNumber() const
+{
+    return m_d->graphListener ? m_d->graphListener->graphSequenceNumber() : -1;
+}
+
 KisNodeGraphListener *KisNode::graphListener() const
 {
     return m_d->graphListener;

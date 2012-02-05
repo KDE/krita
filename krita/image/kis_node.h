@@ -166,6 +166,13 @@ public:
 public: // Graph methods
 
     /**
+     * @return the graph sequence number calculated by the associated
+     * graph listener. You can use it for checking for changes in the
+     * graph.
+     */
+    int graphSequenceNumber() const;
+
+    /**
      * @return the graph listener this node belongs to. 0 if the node
      * does not belong to a grap listener.
      */

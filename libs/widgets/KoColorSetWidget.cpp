@@ -213,11 +213,6 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     KoColorSet *colorSet = new KoColorSet();
     setColorSet(colorSet);
-
-/*    connect(d->slider, SIGNAL(sliderReleased()), SLOT(sliderReleased()));
-    connect(lineEdit(), SIGNAL(editingFinished()), SLOT(lineEditFinished()));
-*/
-
 }
 
 KoColorSetWidget::~KoColorSetWidget()

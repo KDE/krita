@@ -251,11 +251,6 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *pat
         addRecent(patch->color());
 }
 
-void KoColorSetWidget::setOppositeColor(const KoColor &color)
-{
-    Q_UNUSED(color);
-}
-
 void KoColorSetWidget::setColorSet(KoColorSet *colorSet)
 {
     delete d->colorSet;

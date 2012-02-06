@@ -31,12 +31,12 @@ class QScrollArea;
 class KoColorPatch;
 class KoColorSet;
 
-class KoEditColorSet : public QWidget
+class KoEditColorSetWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoEditColorSet(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent = 0);
-    virtual ~KoEditColorSet();
+    KoEditColorSetWidget(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent = 0);
+    virtual ~KoEditColorSetWidget();
 
     /**
      * Return the active color set. The caller takes ownership of that color set.
@@ -98,7 +98,7 @@ public:
     virtual ~KoEditColorSetDialog();
 
 private:
-    KoEditColorSet *ui;
+    KoEditColorSetWidget *ui;
 };
 
 #endif

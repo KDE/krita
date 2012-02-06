@@ -129,10 +129,9 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
                 cs = 0;
             }
         }
-        if( cs )
+        if ( cs ) {
             thePublic->setColorSet(cs);
-        // colorSetContainer->setFixedSize(colorSetLayout->sizeHint());
-        // thePublic->setFixedSize(mainLayout->sizeHint());
+        }
     }
     delete dlg;
 }

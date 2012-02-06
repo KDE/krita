@@ -54,8 +54,6 @@ public:
      */
     virtual ~KoColorSetWidget();
 
-public slots:
-
     /**
      * Sets the color set that this widget shows.
      * @param colorSet pointer to the color set

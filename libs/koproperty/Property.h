@@ -22,9 +22,9 @@
 #ifndef KPROPERTY_PROPERTY_H
 #define KPROPERTY_PROPERTY_H
 
-#include <QtCore/QVariant>
-#include <QtCore/QStringList>
-#include <QtCore/QByteArray>
+#include <QVariant>
+#include <QStringList>
+#include <QByteArray>
 #include "koproperty_global.h"
 
 /*! \brief Namespace for a set of classes implementing generic properties framework.

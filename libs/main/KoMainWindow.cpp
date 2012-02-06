@@ -70,10 +70,10 @@
 #include <QLabel>
 #include <QProgressBar>
 #include <QTabBar>
-#include <QtGui/QPrinter>
-#include <QtGui/QPrintDialog>
+#include <QPrinter>
+#include <QPrintDialog>
 #include <QDesktopWidget>
-#include <QtGui/QPrintPreviewDialog>
+#include <QPrintPreviewDialog>
 
 #include "calligraversion.h"
 

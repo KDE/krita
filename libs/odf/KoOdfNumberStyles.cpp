@@ -23,9 +23,9 @@
 #include "KoGenStyles.h"
 #include "KoXmlNS.h"
 
-#include <QtCore/QBuffer>
-#include <QtCore/QDateTime>
-#include <QtCore/QTime>
+#include <QBuffer>
+#include <QDateTime>
+#include <QTime>
 
 #include <KGlobal>
 #include <KLocale>

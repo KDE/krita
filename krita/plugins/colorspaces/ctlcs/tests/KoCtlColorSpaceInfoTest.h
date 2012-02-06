@@ -20,7 +20,7 @@
 #ifndef _KOCTLCOLORSPACEINFOTEST_H_
 #define _KOCTLCOLORSPACEINFOTEST_H_
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KoCtlColorSpaceInfoTest : public QObject
 {

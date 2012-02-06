@@ -19,7 +19,7 @@
 
 #include "KoInputDeviceHandlerEvent.h"
 #include "KoPointerEvent.h"
-#include <QtGui/QApplication>
+#include <QApplication>
 
 class KoInputDeviceHandlerEvent::Private
 {

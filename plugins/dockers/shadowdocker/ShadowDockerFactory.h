@@ -21,7 +21,7 @@
 #define SHADOWDOCKERFACTORY_H
 
 #include <KoDockFactoryBase.h>
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
 
 /// the factory which creates the shadow docker
 class ShadowDockerFactory : public KoDockFactoryBase

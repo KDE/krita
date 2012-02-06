@@ -1,7 +1,7 @@
 #ifndef TestColorConversion_H
 #define TestColorConversion_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestColorConversion : public QObject
 {

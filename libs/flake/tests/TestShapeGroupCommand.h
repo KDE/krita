@@ -20,7 +20,7 @@
 #ifndef TESTSHAPEGROUPCOMMAND_H
 #define TESTSHAPEGROUPCOMMAND_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KoShapeGroup;
 class KUndo2Command;

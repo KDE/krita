@@ -19,7 +19,7 @@
 
 #include "psd.h"
 #include "psd_utils.h"
-#include <QtCore/QByteArray>
+#include <QByteArray>
 #include <qrgb.h>
 #include <QColor>
 

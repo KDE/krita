@@ -32,11 +32,11 @@
 
 #include <QGraphicsRectItem>
 #include <QtWebKit>
-#include <QtCore/QUrl>
+#include <QUrl>
 #include <QWebPage>
-#include <QtGui/QAction>
-#include <QtGui/QWidget>
-#include <QtGui/QApplication>
+#include <QAction>
+#include <QWidget>
+#include <QApplication>
 
 KoReportItemWeb::KoReportItemWeb(): m_rendering(false)
 {

@@ -19,7 +19,7 @@
 #ifndef __KIS_CROP_PROCESSING_VISITOR_TEST_H
 #define __KIS_CROP_PROCESSING_VISITOR_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisCropProcessingVisitorTest : public QObject
 {

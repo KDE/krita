@@ -23,8 +23,8 @@
 #ifndef KODOCUMENT_H
 #define KODOCUMENT_H
 
-#include <QtCore/QDateTime>
-#include <QtGui/QTransform>
+#include <QDateTime>
+#include <QTransform>
 #include <QList>
 
 #include <kparts/part.h>

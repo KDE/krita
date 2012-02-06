@@ -20,9 +20,9 @@
 #ifndef _KO_COLOR_TRANSFORMATION_H_
 #define _KO_COLOR_TRANSFORMATION_H_
 
-#include <QtCore/QHash>
-#include <QtCore/QString>
-#include <QtCore/QVariant>
+#include <QHash>
+#include <QString>
+#include <QVariant>
 #include <qglobal.h>
 
 #include "pigment_export.h"

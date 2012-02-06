@@ -19,8 +19,8 @@
 #ifndef MUSIC_CORE_BAR_H
 #define MUSIC_CORE_BAR_H
 
-#include <QtCore/QObject>
-#include <QtCore/QPointF>
+#include <QObject>
+#include <QPointF>
 
 namespace MusicCore {
 

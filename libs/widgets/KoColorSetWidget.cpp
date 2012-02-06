@@ -31,7 +31,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QDir>
-#include <QtGui/QScrollArea>
+#include <QScrollArea>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>

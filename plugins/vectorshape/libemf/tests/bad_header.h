@@ -18,7 +18,7 @@
 #ifndef BAD_HEADER_H
 #define BAD_HEADER_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class BadHeader: public QObject
 {

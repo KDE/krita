@@ -19,10 +19,10 @@
 #ifndef KOCOLORSET
 #define KOCOLORSET
 
-#include <QtGui/QImage>
-#include <QtGui/QColor>
-#include <QtCore/QVector>
-#include <QtGui/QPixmap>
+#include <QImage>
+#include <QColor>
+#include <QVector>
+#include <QPixmap>
 
 #include "KoResource.h"
 #include "KoColor.h"

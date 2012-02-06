@@ -22,12 +22,12 @@
 
 #include "koproperty_global.h"
 #include "Property.h"
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
-#include <QtCore/QHash>
-#include <QtGui/QLabel>
-#include <QtGui/QPainter>
-#include <QtGui/QStyleOptionViewItem>
+#include <QObject>
+#include <QVariant>
+#include <QHash>
+#include <QLabel>
+#include <QPainter>
+#include <QStyleOptionViewItem>
 
 class QStyleOptionViewItem;
 class QModelIndex;

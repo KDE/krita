@@ -22,7 +22,7 @@
 
 #include "KoShapeBackground.h"
 #include "flake_export.h"
-#include <QtGui/QTransform>
+#include <QTransform>
 
 class KoImageCollection;
 class KoOdfLoadingContext;

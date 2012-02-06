@@ -22,9 +22,9 @@
 #define KOFINDOPTION_H
 
 #include "komain_export.h"
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
-#include <QtCore/QSharedDataPointer>
+#include <QObject>
+#include <QVariant>
+#include <QSharedDataPointer>
 
 /**
  * \brief A single searching option.

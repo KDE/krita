@@ -35,7 +35,7 @@
 #include <math.h>
 
 // Qt
-//#include <QtGui/QCheckBox>
+//#include <QCheckBox>
 #include <QLabel>
 #include <QRadioButton>
 #include <QWidget>

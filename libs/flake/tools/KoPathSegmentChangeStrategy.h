@@ -23,7 +23,7 @@
 #include "KoInteractionStrategy.h"
 #include "KoPathSegment.h"
 #include "KoPathPointData.h"
-#include <QtCore/QPointF>
+#include <QPointF>
 
 class KoPathTool;
 class KoCanvasBase;

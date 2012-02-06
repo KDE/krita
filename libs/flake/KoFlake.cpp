@@ -23,7 +23,7 @@
 #include "KoShape.h"
 #include "KoLineBorder.h"
 
-#include <QtGui/QGradient>
+#include <QGradient>
 #include <math.h>
 
 QGradient *KoFlake::cloneGradient(const QGradient *gradient)

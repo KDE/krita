@@ -20,7 +20,7 @@
 #include "rectedit.h"
 
 #include <KLocale>
-#include <QtCore/QRect>
+#include <QRect>
 
 using namespace KoProperty;
 

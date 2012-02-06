@@ -19,8 +19,8 @@
 #ifndef MUSIC_CORE_STAFFSYSTEM_H
 #define MUSIC_CORE_STAFFSYSTEM_H
 
-#include <QtCore/QObject>
-#include <QtCore/QList>
+#include <QObject>
+#include <QList>
 
 namespace MusicCore {
 

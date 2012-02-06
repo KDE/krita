@@ -24,19 +24,19 @@
 #ifndef KORESOURCESERVER_H
 #define KORESOURCESERVER_H
 
-#include <QtCore/QMutex>
-#include <QtCore/QMutexLocker>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QList>
-#include <QtCore/QFileInfo>
+#include <QMutex>
+#include <QMutexLocker>
+#include <QString>
+#include <QStringList>
+#include <QList>
+#include <QFileInfo>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
-#include <QtCore/QXmlStreamReader>
-#include <QtCore/QTemporaryFile>
+#include <QXmlStreamReader>
+#include <QTemporaryFile>
 #include <qdom.h>
 #include "KoResource.h"
 #include "KoResourceServerObserver.h"

@@ -19,7 +19,7 @@
 #ifndef KIS_DATAMANAGER_TEST_H
 #define KIS_DATAMANAGER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisDataManagerTest : public QObject
 {

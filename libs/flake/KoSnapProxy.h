@@ -24,9 +24,9 @@ class KoShape;
 class KoPathSegment;
 class KoCanvasBase;
 
-#include <QtCore/QList>
-#include <QtCore/QPointF>
-#include <QtCore/QRectF>
+#include <QList>
+#include <QPointF>
+#include <QRectF>
 #include "flake_export.h"
 /**
  * This class provides access to different shape related snap targets to snap strategies.

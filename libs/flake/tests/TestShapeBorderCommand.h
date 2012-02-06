@@ -19,7 +19,7 @@
 #ifndef TESTSHAPEBORDERCOMMAND_H
 #define TESTSHAPEBORDERCOMMAND_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestShapeBorderCommand : public QObject
 {

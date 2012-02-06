@@ -21,9 +21,9 @@
 #define KO_CHART_MODEL
 
 
-#include <QtCore/QHash>
-#include <QtCore/QVector>
-#include <QtCore/QtPlugin>
+#include <QHash>
+#include <QVector>
+#include <QtPlugin>
 
 
 class QAbstractItemModel;

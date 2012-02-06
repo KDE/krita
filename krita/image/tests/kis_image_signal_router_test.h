@@ -19,7 +19,7 @@
 #ifndef __KIS_IMAGE_SIGNAL_ROUTER_TEST_H
 #define __KIS_IMAGE_SIGNAL_ROUTER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include <QObject>
 #include <QAtomicInt>

@@ -23,15 +23,15 @@
 #include "Set.h"
 #include "Factory.h"
 
-#include <QtCore/QPointer>
-#include <QtGui/QItemDelegate>
-#include <QtGui/QStandardItemEditorCreator>
-#include <QtGui/QPainter>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QToolTip>
-#include <QtGui/QApplication>
-#include <QtGui/QHeaderView>
+#include <QPointer>
+#include <QItemDelegate>
+#include <QStandardItemEditorCreator>
+#include <QPainter>
+#include <QVBoxLayout>
+#include <QMouseEvent>
+#include <QToolTip>
+#include <QApplication>
+#include <QHeaderView>
 
 #include <KLocale>
 #include <KIconLoader>

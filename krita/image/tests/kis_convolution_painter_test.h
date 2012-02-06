@@ -19,7 +19,7 @@
 #ifndef KIS_CONVOLUTION_PAINTER_TEST_H
 #define KIS_CONVOLUTION_PAINTER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class QBitArray;
 

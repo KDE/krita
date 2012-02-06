@@ -18,7 +18,7 @@
 #ifndef VISIO_TESTS_H
 #define VISIO_TESTS_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class VisioTests: public QObject
 {

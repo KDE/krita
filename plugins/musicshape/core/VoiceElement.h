@@ -19,7 +19,7 @@
 #ifndef MUSIC_CORE_VOICEELEMENT_H
 #define MUSIC_CORE_VOICEELEMENT_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace MusicCore {
 

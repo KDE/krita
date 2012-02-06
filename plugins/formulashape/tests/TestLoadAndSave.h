@@ -20,7 +20,7 @@
 #ifndef _TESTLOADANDSAVE_H_
 #define _TESTLOADANDSAVE_H_
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class TestLoadAndSave : public QObject
 {

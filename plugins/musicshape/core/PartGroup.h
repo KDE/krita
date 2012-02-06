@@ -19,8 +19,8 @@
 #ifndef MUSIC_CORE_PARTGROUP_H
 #define MUSIC_CORE_PARTGROUP_H
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
+#include <QObject>
+#include <QString>
 
 namespace MusicCore {
 

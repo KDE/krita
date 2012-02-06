@@ -19,7 +19,7 @@
 #ifndef KISSHAPECONTROLLER_TEST_H
 #define KISSHAPECONTROLLER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisDoc2;
 class KisNameServer;

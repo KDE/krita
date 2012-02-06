@@ -45,12 +45,12 @@
 #include <KoXmlWriter.h>
 #include <KoShapePainter.h>
 
-#include <QtCore/QFile>
-#include <QtCore/QString>
-#include <QtCore/QTextStream>
-#include <QtCore/QBuffer>
-#include <QtGui/QPainter>
-#include <QtSvg/QSvgGenerator>
+#include <QFile>
+#include <QString>
+#include <QTextStream>
+#include <QBuffer>
+#include <QPainter>
+#include <QSvgGenerator>
 
 SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize)
     : m_pageSize(pageSize)

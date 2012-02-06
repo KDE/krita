@@ -20,7 +20,7 @@
 #ifndef KIS_IMAGE_TESTER_H
 #define KIS_IMAGE_TESTER_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisImageTest : public QObject
 {

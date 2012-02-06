@@ -19,7 +19,7 @@
  */
 #include "TestKoTextEditor.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QUuid>
 #include <QString>
 #include <QTextDocument>

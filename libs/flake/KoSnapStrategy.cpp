@@ -26,7 +26,7 @@
 #include <KoViewConverter.h>
 #include <KoGuidesData.h>
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 #include <math.h>
 

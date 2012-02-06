@@ -20,7 +20,7 @@
 #ifndef MIXING_TEST_H_
 #define MIXING_TEST_H_
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include <KoColorSpace.h>
 

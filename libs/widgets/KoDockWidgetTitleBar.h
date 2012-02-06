@@ -20,7 +20,7 @@
 #define KODOCKWIDGETTITLEBAR_H_
 
 #include "kowidgets_export.h"
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
 
 /**
  * @short A custom title bar for dock widgets.

@@ -21,7 +21,7 @@
 
 #include "KoCanvasResourceManager.h"
 #include "KoPathShape.h"
-#include <QtTest/QSignalSpy>
+#include <QSignalSpy>
 
 void TestResourceManager::koShapeResource()
 {

@@ -19,7 +19,7 @@
 #ifndef __MOVE_STROKE_TEST_H
 #define __MOVE_STROKE_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class MoveStrokeTest : public QObject
 {

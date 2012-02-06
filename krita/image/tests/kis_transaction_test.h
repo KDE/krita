@@ -19,7 +19,7 @@
 #ifndef KIS_TRANSACTION_TEST_H
 #define KIS_TRANSACTION_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisTransactionTest : public QObject
 {

@@ -25,7 +25,7 @@
 #include <KoShape.h>
 #include <KoPostscriptPaintDevice.h>
 #include <SvgShape.h>
-#include <QtGui/QFont>
+#include <QFont>
 
 class QPainter;
 class KoPathShape;

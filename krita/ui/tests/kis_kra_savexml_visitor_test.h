@@ -19,7 +19,7 @@
 #ifndef KIS_KRA_SAVEXML_VISITOR_TEST_H
 #define KIS_KRA_SAVEXML_VISITOR_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisKraSaveXmlVisitorTest : public QObject
 {

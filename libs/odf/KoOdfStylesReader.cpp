@@ -23,7 +23,7 @@
 #include "KoGenStyles.h"
 #include "KoXmlNS.h"
 
-#include <QtCore/QBuffer>
+#include <QBuffer>
 
 #include <kdebug.h>
 #include <kglobal.h>

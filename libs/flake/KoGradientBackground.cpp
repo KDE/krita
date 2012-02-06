@@ -28,8 +28,8 @@
 
 #include <KDebug>
 
-#include <QtGui/QBrush>
-#include <QtGui/QPainter>
+#include <QBrush>
+#include <QPainter>
 
 class KoGradientBackgroundPrivate : public KoShapeBackgroundPrivate
 {

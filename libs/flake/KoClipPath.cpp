@@ -21,9 +21,9 @@
 #include "KoPathShape.h"
 #include "KoViewConverter.h"
 
-#include <QtGui/QTransform>
-#include <QtGui/QPainterPath>
-#include <QtGui/QPainter>
+#include <QTransform>
+#include <QPainterPath>
+#include <QPainter>
 #include <qgraphicsitem.h>
 #include <qvarlengtharray.h>
 

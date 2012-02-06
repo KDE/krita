@@ -21,7 +21,7 @@
 #ifndef TEST_KO_BOOKMARK_MANAGER_H
 #define TEST_KO_BOOKMARK_MANAGER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class TestKoBookmarkManager : public QObject
 {

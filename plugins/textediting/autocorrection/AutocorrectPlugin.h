@@ -19,8 +19,8 @@
 #ifndef AUTOCORRECTPLUGIN_H
 #define AUTOCORRECTPLUGIN_H
 
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+#include <QObject>
+#include <QVariant>
 
 class AutocorrectPlugin : public QObject {
     Q_OBJECT

@@ -23,7 +23,7 @@
 #ifndef RDF_TEST_H
 #define RDF_TEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class QTextDocument;
 class KoTextEditor;

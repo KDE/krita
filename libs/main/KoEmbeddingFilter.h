@@ -20,8 +20,8 @@
 #ifndef __KO_EMBEDDING_FILTER_H__
 #define __KO_EMBEDDING_FILTER_H__
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
+#include <QObject>
+#include <QMap>
 #include "komain_export.h"
 
 #include "KoFilter.h"

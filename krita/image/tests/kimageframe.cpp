@@ -16,9 +16,9 @@
  */
 
 #include "kimageframe.h"
-#include <QtGui/QStyle>
-#include <QtGui/QStyleOption>
-#include <QtGui/QPainter>
+#include <QStyle>
+#include <QStyleOption>
+#include <QPainter>
 
 KImageFrame::KImageFrame(QWidget *parent) : QFrame(parent), _w(0), _h(0)
 {

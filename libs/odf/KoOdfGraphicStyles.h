@@ -24,7 +24,7 @@
 
 #include "koodf_export.h"
 
-#include <QtGui/QTransform>
+#include <QTransform>
 
 class QBrush;
 class QPen;

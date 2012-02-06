@@ -21,14 +21,14 @@
 
 #include "KoFindText.h"
 
-#include <QtGui/QTextDocument>
-#include <QtGui/QTextCursor>
-#include <QtGui/QTextBlock>
-#include <QtGui/QTextLayout>
-#include <QtGui/QPalette>
-#include <QtGui/QStyle>
-#include <QtGui/QApplication>
-#include <QtGui/QAbstractTextDocumentLayout>
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QTextBlock>
+#include <QTextLayout>
+#include <QPalette>
+#include <QStyle>
+#include <QApplication>
+#include <QAbstractTextDocumentLayout>
 
 #include <KDE/KDebug>
 #include <KDE/KLocalizedString>

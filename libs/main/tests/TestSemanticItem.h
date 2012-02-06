@@ -20,7 +20,7 @@
 #ifndef TEST_SEMANTIC_ITEM
 #define TEST_SEMANTIC_ITEM
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QUuid>
 #include <QString>
 #include <QTextDocument>

@@ -22,7 +22,7 @@
 
 #include "ui_SnapGuideConfigWidget.h"
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KoSnapGuide;
 class QShowEvent;

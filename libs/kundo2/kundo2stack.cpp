@@ -39,7 +39,7 @@
 **
 ****************************************************************************/
 
-#include <QtCore/qdebug.h>
+#include <qdebug.h>
 #include <KDE/KLocale>
 #include <kstandardaction.h>
 #include <kicon.h>

@@ -30,6 +30,8 @@ private slots:
     void testOriginalUpdates();
     void testOriginalUpdatesOutOfBounds();
     void testOriginalRefresh();
+
+    void testRemoveSourceLayer();
 };
 
 #endif

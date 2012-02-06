@@ -126,7 +126,7 @@ void KisCloneLayerTest::testOriginalUpdatesOutOfBounds()
     paintLayer1(image)->setDirty(fillRect);
     image->waitForDone();
 
-    const QRect expectedRect(-10,-10,20,20);
+    const QRect expectedRect(0,0,10,10);
     QCOMPARE(root->projection()->exactBounds(), expectedRect);
 
     QCOMPARE(groupLayer1(image)->projection()->exactBounds(), fillRect);

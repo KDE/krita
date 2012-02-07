@@ -110,7 +110,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
     if (dlg->exec() == KDialog::Accepted ) { // always reload the color set
         KoColorSet * cs = dlg->activeColorSet();
         // check if the selected colorset is predefined
-        if( ! palettes.contains( cs ) ) {
+        if( !palettes.contains( cs ) ) {
             int i = 1;
             QFileInfo fileInfo;
             QString savePath = srv->saveLocation();
@@ -118,18 +118,19 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
             do {
                 fileInfo.setFile( savePath + QString("%1.gpl").arg( i++, 4, 10, QChar('0') ) );
             }
-            while( fileInfo.exists() );
+            while (fileInfo.exists());
 
             cs->setFilename( fileInfo.filePath() );
             cs->setValid( true );
 
             // add new colorset to predefined colorsets
-            if( ! srv->addResource( cs ) ) {
+            if (!srv->addResource(cs)) {
+
                 delete cs;
                 cs = 0;
             }
         }
-        if ( cs ) {
+        if (cs) {
             thePublic->setColorSet(cs);
         }
     }
@@ -242,7 +243,14 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *pat
 
 void KoColorSetWidget::setColorSet(KoColorSet *colorSet)
 {
-    delete d->colorSet;
+    if (colorSet == d->colorSet) return;
+
+    KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
+    QList<KoColorSet*> palettes = srv->resources();
+    if (!palettes.contains(d->colorSet)) {
+        delete d->colorSet;
+    }
+
     d->colorSet = colorSet;
     d->filter(d->filterCheckBox->checkState());
 }

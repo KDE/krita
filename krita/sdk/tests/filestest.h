@@ -39,7 +39,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include <ktemporaryfile.h>
-#include <qfileinfo.h>
+#include <QFileInfo>
 
 namespace TestUtil
 {

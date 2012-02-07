@@ -59,8 +59,8 @@
 #ifndef KisUndoView_H
 #define KisUndoView_H
 
-#include <qlistview.h>
-#include <qstring.h>
+#include <QListView>
+#include <QString>
 #include "kis_canvas2.h"
 
 #ifndef QT_NO_UNDOVIEW

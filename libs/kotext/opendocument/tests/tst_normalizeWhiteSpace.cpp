@@ -1,4 +1,4 @@
-#include <qtest.h>
+#include <QtTest>
 
 #include "../KoTextLoader.h"
 

@@ -24,8 +24,8 @@
 #include <QTransform>
 #include <QPainterPath>
 #include <QPainter>
-#include <qgraphicsitem.h>
-#include <qvarlengtharray.h>
+#include <QGraphicsItem>
+#include <QVarLengthArray>
 
 QTransform scaleToPercent(const QSizeF &size)
 {

@@ -25,11 +25,11 @@
 #include <cfloat>
 #include <stack>
 
-#include "qfontinfo.h"
-#include "qfontmetrics.h"
-#include "qpen.h"
-#include "qregion.h"
-#include "qmatrix.h"
+#include <QFontInfo>
+#include <QFontMetrics>
+#include <QPen>
+#include <QRegion>
+#include <QMatrix>
 #include <QImage>
 #include <QMap>
 #include <QPainter>

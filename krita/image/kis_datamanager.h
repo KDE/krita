@@ -18,7 +18,7 @@
 #ifndef KIS_DATAMANAGER_H_
 #define KIS_DATAMANAGER_H_
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 class QRect;
 class KoStore;

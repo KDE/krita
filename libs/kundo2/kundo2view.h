@@ -59,8 +59,8 @@
 #ifndef KUNDO2VIEW_H
 #define KUNDO2VIEW_H
 
-#include <qlistview.h>
-#include <qstring.h>
+#include <QListView>
+#include <QString>
 
 #include "kundo2_export.h"
 

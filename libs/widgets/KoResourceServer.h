@@ -37,7 +37,7 @@
 
 #include <QXmlStreamReader>
 #include <QTemporaryFile>
-#include <qdom.h>
+#include <QDomDocument>
 #include "KoResource.h"
 #include "KoResourceServerObserver.h"
 #include "KoResourceTagging.h"

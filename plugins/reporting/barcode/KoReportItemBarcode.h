@@ -21,7 +21,7 @@
 #include <KoReportItemBase.h>
 #include <QRect>
 #include <QPainter>
-#include <qdom.h>
+#include <QDomDocument>
 #include <krpos.h>
 #include <krsize.h>
 

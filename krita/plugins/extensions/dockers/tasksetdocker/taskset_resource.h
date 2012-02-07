@@ -20,7 +20,7 @@
 #define TASKSET_RESOURCE_H
 
 #include <KoResource.h>
-#include <qstringlist.h>
+#include <QStringList>
 
 
 class TasksetResource : public KoResource

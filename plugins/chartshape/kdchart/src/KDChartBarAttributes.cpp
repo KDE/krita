@@ -21,7 +21,7 @@
 **********************************************************************/
 
 #include "KDChartBarAttributes.h"
-#include <qglobal.h>
+#include <QtGlobal>
 
 #include <KDABLibFakes>
 

@@ -33,7 +33,7 @@
 #include <kis_meta_data_schema_registry.h>
 
 #include "kis_entry_editor.h"
-#include <qtableview.h>
+#include <QTableView>
 #include "kis_meta_data_model.h"
 #include <QHeaderView>
 

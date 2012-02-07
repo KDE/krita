@@ -20,7 +20,7 @@
 #ifndef REPORTSECTIONDETAIL_H
 #define REPORTSECTIONDETAIL_H
 
-#include <qwidget.h>
+#include <QWidget>
 #include "KoReportDesigner.h"
 
 class QDomNode;

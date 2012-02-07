@@ -23,7 +23,7 @@
 #include <QHash>
 #include <QString>
 #include <QVariant>
-#include <qglobal.h>
+#include <QtGlobal>
 
 #include "pigment_export.h"
 

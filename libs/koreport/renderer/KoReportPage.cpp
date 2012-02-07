@@ -17,10 +17,10 @@
  */
 
 #include "KoReportPage.h"
-#include <qwidget.h>
+#include <QWidget>
 #include <kdebug.h>
-#include <qcolor.h>
-#include <qpixmap.h>
+#include <QColor>
+#include <QPixmap>
 #include <KoPageFormat.h>
 #include <KoUnit.h>
 #include <KoGlobal.h>

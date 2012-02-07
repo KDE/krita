@@ -20,7 +20,7 @@
 #include "filter/kis_filter.h"
 
 #include <kis_debug.h>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QString>
 
 #include "filter/kis_filter_registry.h"

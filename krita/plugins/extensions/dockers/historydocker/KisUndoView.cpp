@@ -63,9 +63,9 @@
 #ifndef QT_NO_UNDOVIEW
 
 #include <kundo2group.h>
-#include <qabstractitemmodel.h>
-#include <qpointer.h>
-#include <qicon.h>
+#include <QAbstractItemModel>
+#include <QPointer>
+#include <QIcon>
 
 
 /*!

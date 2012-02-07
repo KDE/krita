@@ -18,7 +18,7 @@
 
 #include <cmath>
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 #include "KoColorConversions.h"
 

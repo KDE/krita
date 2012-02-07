@@ -20,7 +20,7 @@
 #include "psd.h"
 #include "psd_utils.h"
 #include <QByteArray>
-#include <qrgb.h>
+#include <QColor>
 #include <QColor>
 
 PSDColorModeBlock::PSDColorModeBlock(PSDColorMode colormode)

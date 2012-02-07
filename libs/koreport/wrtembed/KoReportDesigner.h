@@ -20,10 +20,10 @@
 #ifndef REPORTDESIGNER_H
 #define REPORTDESIGNER_H
 
-#include <qwidget.h>
-#include <qstring.h>
-#include <qcolor.h>
-#include <qmap.h>
+#include <QWidget>
+#include <QString>
+#include <QColor>
+#include <QMap>
 #include <QVBoxLayout>
 #include <QCloseEvent>
 

@@ -20,7 +20,7 @@
 #ifndef KIS_SHAREDPTR_H
 #define KIS_SHAREDPTR_H
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 #include <kis_debug.h>
 

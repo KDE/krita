@@ -493,8 +493,10 @@ void KisPaintopBox::slotSaveActivePreset()
     QString saveLocation = rServer->saveLocation();
     QString name = m_presetsPopup->getPresetName();
 
+    QStringList tags;
     KisPaintOpPreset* resource = rServer->getResourceByName(name);
     if (resource) {
+        tags = rServer->getAssignedTagsList(resource);
         rServer->removeResource(resource);
     }
 
@@ -505,6 +507,9 @@ void KisPaintopBox::slotSaveActivePreset()
     m_presetsPopup->changeSavePresetButtonText(true);
 
     rServer->addResource(newPreset);
+    foreach(const QString& tag, tags) {
+        rServer->addTag(newPreset, tag);
+    }
 }
 
 void KisPaintopBox::slotUpdatePreset()

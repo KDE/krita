@@ -19,7 +19,7 @@
 #ifndef KIS_NODE_COMMANDS_TEST_H
 #define KIS_NODE_COMMANDS_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisNodeCommandsTest : public QObject
 {

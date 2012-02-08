@@ -19,7 +19,7 @@
 #ifndef KIS_THREADED_APPLICATOR_TEST_H
 #define KIS_THREADED_APPLICATOR_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 #include <threadweaver/Job.h>
 
 class KisThreadedApplicatorTest : public QObject

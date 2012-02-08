@@ -66,16 +66,16 @@
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
 
-#include <QtCore/QBuffer>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtGui/QPainter>
-#include <QtCore/QTimer>
+#include <QBuffer>
+#include <QDir>
+#include <QFileInfo>
+#include <QPainter>
+#include <QTimer>
 #include <QtDBus/QDBusConnection>
-#include <QtGui/QLayout>
-#include <QtGui/QApplication>
-#include <QtGui/QPrinter>
-#include <QtGui/QPrintDialog>
+#include <QLayout>
+#include <QApplication>
+#include <QPrinter>
+#include <QPrintDialog>
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
 

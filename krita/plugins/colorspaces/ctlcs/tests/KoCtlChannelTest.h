@@ -20,7 +20,7 @@
 #ifndef _KOCTLCHANNELTEST_H_
 #define _KOCTLCHANNELTEST_H_
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KoCtlChannelTest : public QObject
 {

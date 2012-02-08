@@ -22,11 +22,11 @@
 
 #include <limits.h>
 
-#include <QtGui/QImage>
-#include <QtCore/QHash>
-#include <QtCore/QVector>
-#include <QtCore/QList>
-#include <QtCore/QBitArray>
+#include <QImage>
+#include <QHash>
+#include <QVector>
+#include <QList>
+#include <QBitArray>
 
 #include "KoColorSpaceConstants.h"
 #include "KoColorConversionTransformation.h"

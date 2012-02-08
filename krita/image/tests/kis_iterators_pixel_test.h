@@ -19,7 +19,7 @@
 #ifndef KIS_ITERATORS_PIXEL_TEST_H
 #define KIS_ITERATORS_PIXEL_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisIteratorsPixelTest : public QObject
 {

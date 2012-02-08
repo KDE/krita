@@ -21,11 +21,11 @@
 #include "KoGenChanges.h"
 #include <KoXmlWriter.h>
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QMultiMap>
-#include <QtCore/QSet>
-#include <QtCore/QString>
+#include <QList>
+#include <QMap>
+#include <QMultiMap>
+#include <QSet>
+#include <QString>
 
 #include <kdebug.h>
 

@@ -23,10 +23,10 @@
 
 // Qt includes.
 
-#include <qwidget.h>
-#include <qcolor.h>
-#include <qlist.h>
-#include <qpair.h>
+#include <QWidget>
+#include <QColor>
+#include <QList>
+#include <QPair>
 
 class KGradientSlider : public QWidget
 {

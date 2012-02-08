@@ -18,7 +18,7 @@
 #ifndef KEXIREPORTPAGE_H
 #define KEXIREPORTPAGE_H
 
-#include <qwidget.h>
+#include <QWidget>
 #include <KoReportRendererBase.h>
 
 class QTimer;

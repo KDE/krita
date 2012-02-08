@@ -19,7 +19,7 @@
 #ifndef KOSECTION_H
 #define KOSECTION_H
 
-#include <qmetatype.h>
+#include <QMetaType>
 
 class KoXmlElement;
 class KoShapeSavingContext;

@@ -21,7 +21,7 @@
 #define KORESOURCESELECTOR_H
 
 #include "kowidgets_export.h"
-#include <QtGui/QComboBox>
+#include <QComboBox>
 
 class QMouseEvent;
 class KoAbstractResourceServerAdapter;

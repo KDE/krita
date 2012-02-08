@@ -26,11 +26,11 @@
 #include <KoCanvasResourceManager.h>
 #include <KoDocumentResourceManager.h>
 
-#include <QtCore/QStringList>
-#include <QtCore/QChar>
-#include <QtGui/QTextCharFormat>
-#include <QtCore/QMetaType>
-#include <QtGui/QTextOption>
+#include <QStringList>
+#include <QChar>
+#include <QTextCharFormat>
+#include <QMetaType>
+#include <QTextOption>
 #include <styles/KoCharacterStyle.h>
 
 

@@ -25,11 +25,11 @@
 
 #include <KoCanvasObserverBase.h>
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QHash>
-#include <QtGui/QDockWidget>
-#include <QtGui/QToolBox>
+#include <QList>
+#include <QMap>
+#include <QHash>
+#include <QDockWidget>
+#include <QToolBox>
 
 #include <KoToolManager.h>
 

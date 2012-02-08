@@ -22,9 +22,9 @@ Boston, MA 02110-1301, USA.
 #ifndef __calligra_filter_manager_h__
 #define __calligra_filter_manager_h__
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QByteArray>
+#include <QObject>
+#include <QMap>
+#include <QByteArray>
 
 #include "KoFilterChain.h"
 #include "KoFilterGraph.h"

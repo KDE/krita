@@ -19,7 +19,7 @@
 #ifndef KIS_FAST_MATH_TEST_H
 #define KIS_FAST_MATH_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisFastMathTest : public QObject
 {

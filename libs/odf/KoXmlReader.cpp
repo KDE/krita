@@ -74,8 +74,8 @@
 
 #ifndef KOXML_USE_QDOM
 
-#include <qxml.h>
-#include <qdom.h>
+#include <QtXml>
+#include <QDomDocument>
 #include <QXmlStreamReader>
 #include <QXmlStreamEntityResolver>
 

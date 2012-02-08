@@ -23,7 +23,7 @@
 #include "KDChartAbstractArea.h"
 #include "KDChartAbstractArea_p.h"
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 #include <QPainter>
 #include <QRect>

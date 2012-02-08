@@ -21,7 +21,7 @@
 #ifndef KOOASISSTYLES_H
 #define KOOASISSTYLES_H
 
-#include <QtCore/QHash>
+#include <QHash>
 
 #include <KoXmlReader.h>
 

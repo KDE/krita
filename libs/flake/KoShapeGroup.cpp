@@ -161,7 +161,7 @@ QRectF KoShapeGroup::boundingRect() const
 void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
 {
     context.xmlWriter().startElement("draw:g");
-    saveOdfAttributes(context, (OdfMandatories ^ OdfLayer) | OdfAdditionalAttributes);
+    saveOdfAttributes(context, (OdfMandatories ^ (OdfLayer | OdfZIndex)) | OdfAdditionalAttributes);
     context.xmlWriter().addAttributePt("svg:y", position().y());
 
     QList<KoShape*> shapes = this->shapes();

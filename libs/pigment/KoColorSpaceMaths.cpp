@@ -19,7 +19,7 @@
 
 #include <cfloat>
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 #include <KoColorSpaceMaths.h>
 

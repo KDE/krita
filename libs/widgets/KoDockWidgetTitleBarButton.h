@@ -20,7 +20,7 @@
 #define KODOCKWIDGETTITLEBARBUTTON_H_
 
 #include "kowidgets_export.h"
-#include <QtGui/QAbstractButton>
+#include <QAbstractButton>
 
 class QEvent;
 class QPaintEvent;

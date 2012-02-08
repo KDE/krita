@@ -18,7 +18,7 @@
 #ifndef KIMAGEFRAME_H
 #define KIMAGEFRAME_H
 
-#include <QtGui/QFrame>
+#include <QFrame>
 
 class KImageFrame : public QFrame
 {

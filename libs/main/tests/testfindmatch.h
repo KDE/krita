@@ -23,7 +23,7 @@
 #ifndef TESTFINDMATCH_H
 #define TESTFINDMATCH_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class TestFindMatch : public QObject
 {

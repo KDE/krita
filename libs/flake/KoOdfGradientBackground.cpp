@@ -20,7 +20,7 @@
 
 #include <QColor>
 #include <QImage>
-#include <QtCore/qmath.h>
+#include <qmath.h>
 
 #include <KoOdfGradientBackground.h>
 

@@ -19,11 +19,11 @@
 
 #include "kis_tool_perspectivegrid.h"
 
-#include <qapplication.h>
-#include <qpainter.h>
-#include <qregion.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include <QApplication>
+#include <QPainter>
+#include <QRegion>
+#include <QWidget>
+#include <QLayout>
 
 #include <kaction.h>
 #include <kactioncollection.h>

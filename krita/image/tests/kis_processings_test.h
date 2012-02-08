@@ -19,7 +19,7 @@
 #ifndef __KIS_PROCESSINGS_TEST_H
 #define __KIS_PROCESSINGS_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisProcessingsTest : public QObject
 {

@@ -27,7 +27,7 @@
 #include <stdio.h>
 
 #include "kis_view2.h"
-#include <qprinter.h>
+#include <QPrinter>
 
 #include <QDesktopWidget>
 #include <QGridLayout>

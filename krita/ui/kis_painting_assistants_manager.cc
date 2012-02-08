@@ -27,7 +27,7 @@
 #include <KToggleAction>
 
 #include "kis_painting_assistant.h"
-#include <qpainter.h>
+#include <QPainter>
 
 struct KisPaintingAssistantsManager::Private {
     QList<KisPaintingAssistant*> assistants;

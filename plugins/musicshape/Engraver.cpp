@@ -34,9 +34,9 @@
 #include <limits.h>
 #include <math.h>
 
-#include <QtCore/QList>
-#include <QtCore/QVarLengthArray>
-#include <QtCore/QMultiMap>
+#include <QList>
+#include <QVarLengthArray>
+#include <QMultiMap>
 
 #ifndef log2
 # define log2(x) (log(x) / M_LN2)

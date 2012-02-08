@@ -25,10 +25,10 @@
 #include "combobox.h"
 #include "koproperty/Factory.h"
 
-#include <QtCore/QEvent>
-#include <QtGui/QPixmap>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QToolButton>
+#include <QEvent>
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QToolButton>
 
 namespace KoProperty
 {

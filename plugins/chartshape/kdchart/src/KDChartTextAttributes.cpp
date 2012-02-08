@@ -23,7 +23,7 @@
 #include "KDChartTextAttributes.h"
 #include <QFont>
 #include <QPen>
-#include <qglobal.h>
+#include <QtGlobal>
 #include <QApplication>
 
 #include <KDABLibFakes>

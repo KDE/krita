@@ -21,7 +21,7 @@
 #define ARTISTICTEXTTOOLSELECTION_H
 
 #include <KoToolSelection.h>
-#include <QtGui/QPainterPath>
+#include <QPainterPath>
 
 class ArtisticTextShape;
 class KoCanvasBase;

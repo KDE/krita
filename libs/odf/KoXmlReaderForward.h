@@ -26,7 +26,7 @@
 
 #ifdef KOXML_USE_QDOM
 
-#include <QtXml/qdom.h>
+#include <QDomDocument>
 
 typedef QDomNode KoXmlNode;
 typedef QDomElement KoXmlElement;

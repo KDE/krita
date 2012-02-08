@@ -40,7 +40,7 @@
 #include <KoCompositeOp.h>
 
 #include "kis_undo_adapter.h"
-#include "qtimer.h"
+#include "QTimer"
 #include "commands/kis_layer_commands.h"
 #include "kis_layer.h"
 #include "kis_view2.h"

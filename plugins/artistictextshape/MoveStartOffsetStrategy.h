@@ -21,7 +21,7 @@
 #define MOVESTARTOFFSETSTRATEGY_H
 
 #include <KoInteractionStrategy.h>
-#include <QtCore/QList>
+#include <QList>
 
 class KoPathShape;
 class ArtisticTextShape;

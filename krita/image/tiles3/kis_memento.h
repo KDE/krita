@@ -20,7 +20,7 @@
 #ifndef KIS_MEMENTO_H_
 #define KIS_MEMENTO_H_
 
-#include <qglobal.h>
+#include <QtGlobal>
 #include <QRect>
 
 #include "kis_global.h"

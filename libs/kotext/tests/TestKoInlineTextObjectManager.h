@@ -23,8 +23,8 @@
 #ifndef TEST_KO_INLINE_TEXT_OBJECT_MANAGER_H
 #define TEST_KO_INLINE_TEXT_OBJECT_MANAGER_H
 
-#include <QtCore/QObject>
-#include <QtTest/QTest>
+#include <QObject>
+#include <QTest>
 #include <QDebug>
 #include <QString>
 #include <QTextDocument>

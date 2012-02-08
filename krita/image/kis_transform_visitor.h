@@ -23,7 +23,7 @@
 #ifndef KIS_TRANSFORM_VISITOR_H_
 #define KIS_TRANSFORM_VISITOR_H_
 
-#include "qrect.h"
+#include "QRect"
 
 #include "klocale.h"
 

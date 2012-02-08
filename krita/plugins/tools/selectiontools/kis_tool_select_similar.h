@@ -18,7 +18,7 @@
 #ifndef KIS_TOOL_SELECT_SIMILAR_H_
 #define KIS_TOOL_SELECT_SIMILAR_H_
 
-#include <QtGui/QPainter>
+#include <QPainter>
 #include <KoToolFactoryBase.h>
 #include "flake/kis_node_shape.h"
 #include "kis_tool_select_base.h"

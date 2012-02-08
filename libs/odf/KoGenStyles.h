@@ -23,12 +23,12 @@
 #ifndef KOGENSTYLES_H
 #define KOGENSTYLES_H
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QMultiMap>
-#include <QtCore/QSet>
-#include <QtCore/QString>
-#include <QtCore/QFlags>
+#include <QList>
+#include <QMap>
+#include <QMultiMap>
+#include <QSet>
+#include <QString>
+#include <QFlags>
 #include <KoGenStyle.h>
 
 class KoStore;

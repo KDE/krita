@@ -21,7 +21,7 @@
 #define ATTACHTEXTTOPATHCOMMAND_H
 
 #include <kundo2command.h>
-#include <QtGui/QTransform>
+#include <QTransform>
 
 class ArtisticTextShape;
 class KoPathShape;

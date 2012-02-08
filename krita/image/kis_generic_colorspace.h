@@ -21,7 +21,7 @@
 #include <KoColorSpaceAbstract.h>
 #include <KoColorSpaceTraits.h>
 
-#include <qimage.h>
+#include <QImage>
 
 /**
  * KisGenericColorSpace is a colorspace you use if you want to store some structured

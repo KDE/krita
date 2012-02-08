@@ -33,7 +33,7 @@
 
 #include <KDebug>
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 GuidesTool::GuidesTool(KoCanvasBase *canvas)
     : KoToolBase(canvas),

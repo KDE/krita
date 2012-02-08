@@ -19,7 +19,7 @@
 #ifndef TESTCONTROLPOINTMOVECOMMAND_H
 #define TESTCONTROLPOINTMOVECOMMAND_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestControlPointMoveCommand : public QObject
 {

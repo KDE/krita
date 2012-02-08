@@ -22,7 +22,7 @@
 #ifndef KOOASISSETTINGS_H
 #define KOOASISSETTINGS_H
 
-#include <qdom.h>
+#include <QDomDocument>
 #include "koodf_export.h"
 #include <KoXmlReader.h>
 

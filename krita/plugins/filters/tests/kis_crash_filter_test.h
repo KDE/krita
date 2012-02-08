@@ -19,7 +19,7 @@
 #ifndef KIS_CRASH_FILTER_TEST_H
 #define KIS_CRASH_FILTER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 /**
  * The crash filter test just loops through all filters

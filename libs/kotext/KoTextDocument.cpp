@@ -227,6 +227,9 @@ KoList *KoTextDocument::list(const QTextBlock &block) const
 
 KoList *KoTextDocument::list(QTextList *textList) const
 {
+    if (!textList) {
+        return 0;
+    }
     // FIXME: this is horrible.
     foreach(KoList *l, lists()) {
         if (l->textLists().contains(textList))

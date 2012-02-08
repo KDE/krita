@@ -22,10 +22,10 @@
 
 #ifndef KOUNIT_H
 #define KOUNIT_H
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QVariant>
-#include <QtCore/QDebug>
+#include <QString>
+#include <QStringList>
+#include <QVariant>
+#include <QDebug>
 #include <math.h> // for floor
 #include "koodf_export.h"
 

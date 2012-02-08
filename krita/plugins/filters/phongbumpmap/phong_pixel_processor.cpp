@@ -58,7 +58,7 @@ void PhongPixelProcessor::initialize(const KisPropertiesConfiguration* config)
             light[i].RGBvalue << guiLight[i].value<QColor>().greenF();
             light[i].RGBvalue << guiLight[i].value<QColor>().blueF();
 
-            azimuth = config->getInt(PHONG_ILLUMINANT_AZIMUTH[i]);
+            azimuth = config->getInt(PHONG_ILLUMINANT_AZIMUTH[i]) - 90;
             inclination = config->getInt(PHONG_ILLUMINANT_INCLINATION[i]);
             
             qreal m; //2D vector magnitude

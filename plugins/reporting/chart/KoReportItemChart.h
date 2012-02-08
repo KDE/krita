@@ -20,7 +20,7 @@
 
 #include "KoReportItemBase.h"
 #include <QRect>
-#include <qdom.h>
+#include <QDomDocument>
 #include "krsize.h"
 #include "krpos.h"
 #include <KDChartWidget>

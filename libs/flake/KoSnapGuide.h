@@ -23,10 +23,10 @@
 #include "flake_export.h"
 
 #include <KoPathSegment.h>
-#include <QtCore/QPointF>
-#include <QtCore/QList>
-#include <QtCore/QRectF>
-#include <QtGui/QPainterPath>
+#include <QPointF>
+#include <QList>
+#include <QRectF>
+#include <QPainterPath>
 
 class KoSnapStrategy;
 class KoShape;

@@ -55,22 +55,6 @@ public:
     virtual ~KoColorSetWidget();
 
     /**
-     * Add a color  to the list of recent colors. This method is useful when the user selects a color
-     * from other interface or dialog.
-     * @param color the color to be added to the list of recent colors.
-     */
-    void addRecentColor(const KoColor &color);
-
-public slots:
-
-    /**
-     * Sets the color of the opposite color. Typically this is the background if this widget controls the
-     * text color. Or vice versa. The color is used to calculate the suggestions.
-     * @param color the opposite color
-     */
-    void setOppositeColor(const KoColor &color);
-
-    /**
      * Sets the color set that this widget shows.
      * @param colorSet pointer to the color set
      */

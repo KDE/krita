@@ -22,9 +22,9 @@
 #define KOSTYLESTACK_H
 
 
-#include <QtCore/QList>
-#include <QtCore/QStack>
-#include <QtCore/QPair>
+#include <QList>
+#include <QStack>
+#include <QPair>
 
 #include <kdemacros.h>
 

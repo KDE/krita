@@ -22,7 +22,7 @@
 #include "pointedit.h"
 
 #include <KLocale>
-#include <QtCore/QPoint>
+#include <QPoint>
 
 using namespace KoProperty;
 

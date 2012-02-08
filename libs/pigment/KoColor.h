@@ -20,8 +20,8 @@
 #ifndef KOCOLOR_H
 #define KOCOLOR_H
 
-#include <QtGui/QColor>
-#include <QtCore/QMetaType>
+#include <QColor>
+#include <QMetaType>
 #include "pigment_export.h"
 
 class QDomDocument;

@@ -19,7 +19,7 @@
 #ifndef __KIS_NODE_DUMMIES_GRAPH_TEST_H
 #define __KIS_NODE_DUMMIES_GRAPH_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisNodeDummy;
 class KisNodeDummiesGraph;

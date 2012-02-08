@@ -20,8 +20,8 @@
 #ifndef KOVIEWCONVERTER_H
 #define KOVIEWCONVERTER_H
 
-#include <QtCore/QPointF>
-#include <QtCore/QRectF>
+#include <QPointF>
+#include <QRectF>
 
 #include "flake_export.h"
 

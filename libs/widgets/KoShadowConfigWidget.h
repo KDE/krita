@@ -21,7 +21,7 @@
 #define SHADOWCONFIGWIDGET_H
 
 #include "kowidgets_export.h"
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KoUnit;
 class KoColor;

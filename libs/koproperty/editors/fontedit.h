@@ -24,7 +24,7 @@
 
 #include "koproperty/Factory.h"
 
-#include <QtCore/QVariant>
+#include <QVariant>
 #include <KLineEdit>
 
 namespace KoProperty

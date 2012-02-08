@@ -19,7 +19,7 @@
 #ifndef KIS_KRA_SAVER_TEST_H
 #define KIS_KRA_SAVER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisKraSaverTest : public QObject
 {

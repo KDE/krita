@@ -19,7 +19,7 @@
 #ifndef KIS_MASK_GENERATOR_BENCHMARK_H
 #define KIS_MASK_GENERATOR_BENCHMARK_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisMaskGeneratorBenchmark : public QObject
 {

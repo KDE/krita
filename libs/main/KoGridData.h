@@ -23,7 +23,7 @@
 
 #include "komain_export.h"
 #include <KoXmlReaderForward.h>
-#include <QtGui/QColor>
+#include <QColor>
 
 class QPainter;
 class QRectF;

@@ -34,6 +34,9 @@
 #include <kis_undo_adapter.h>
 #include "kis_node_graph_listener.h"
 
+#include "kis_iterator_ng.h"
+
+
 /**
  * Routines that are useful for writing efficient tests
  */
@@ -213,6 +216,28 @@ inline void alphaDeviceSetPixel(KisPaintDeviceSP dev, qint32 x, qint32 y, quint8
     KisHLineIteratorPixel iter = dev->createHLineIterator(x, y, 1);
     quint8 *pix = iter.rawData();
     *pix = s;
+}
+
+inline bool checkAlphaDeviceFilledWithPixel(KisPaintDeviceSP dev, const QRect &rc, quint8 expected)
+{
+    KisHLineIteratorSP it = dev->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
+
+    for (int y = rc.y(); y < rc.y() + rc.height(); y++) {
+        for (int x = rc.x(); x < rc.x() + rc.width(); x++) {
+
+            if(*((quint8*)it->rawData()) != expected) {
+                qCritical() << "At point:" << x << y;
+                qCritical() << "Expected pixel:" << expected;
+                qCritical() << "Actual pixel:  " << *((quint8*)it->rawData());
+                return false;
+            }
+
+            it->nextPixel();
+        }
+        it->nextRow();
+    }
+
+    return true;
 }
 
 

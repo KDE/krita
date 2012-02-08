@@ -47,6 +47,7 @@ private slots:
     void testPurgedAndEmptyTransactions();
     void testUnversionedBitBlt();
     void testVersionedBitBlt();
+    void testBitBltOldData();
     void testBitBltRough();
     void testTransactions();
     void testPurgeHistory();

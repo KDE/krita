@@ -50,6 +50,9 @@ private slots:
     void testSelectionBitBltFixedSelection();
     void testSelectionBitBltEraseCompositeOp();
 
+    void testBitBltOldData();
+    void benchmarkBitBlt();
+    void benchmarkBitBltOldData();
 
 };
 

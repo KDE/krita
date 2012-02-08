@@ -729,6 +729,13 @@ protected:
     KoUpdater * progressUpdater();
 
 private:
+    template <bool useOldSrcData>
+        void bitBltImpl(qint32 dstX, qint32 dstY,
+                        const KisPaintDeviceSP srcDev,
+                        qint32 srcX, qint32 srcY,
+                        qint32 srcWidth, qint32 srcHeight);
+
+private:
 
     struct Private;
     Private* const d;

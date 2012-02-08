@@ -311,6 +311,11 @@ protected:
     void fastBitBlt(KisPaintDeviceSP src, const QRect &rect);
 
     /**
+     * The same as \ref fastBitBlt() but reads old data
+     */
+    void fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect);
+
+    /**
      * Clones rect from another paint device in a rough and fast way.
      * All the tiles touched by rect will be shared, between both
      * devices, that means it will copy a bigger area than was
@@ -321,6 +326,11 @@ protected:
      * \see fastBitBlt
      */
     void fastBitBltRough(KisPaintDeviceSP src, const QRect &rect);
+
+    /**
+     * The same as \ref fastBitBltRough() but reads old data
+     */
+    void fastBitBltRoughOldData(KisPaintDeviceSP src, const QRect &rect);
 
 public:
     /**

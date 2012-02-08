@@ -112,7 +112,17 @@ public:
 
     inline void recalculate(const QRect& requestedRect) {
         Q_ASSERT(m_startNode);
-        collectRects(m_startNode, requestedRect);
+
+        if(isStillInGraph(m_startNode)) {
+            collectRects(m_startNode, requestedRect);
+        }
+        else {
+            clear();
+            m_nodeChecksum = calculateChecksum(m_startNode, requestedRect);
+            m_graphChecksum = m_startNode->graphSequenceNumber();
+            m_resultChangeRect = QRect();
+            m_resultUncroppedChangeRect = QRect();
+        }
     }
 
     bool checksumValid() {
@@ -189,6 +199,10 @@ protected:
 
     static inline qint32 getGraphPosition(qint32 position) {
         return position & GRAPH_POSITION_MASK;
+    }
+
+    static inline bool isStillInGraph(KisNodeSP node) {
+        return node->graphListener();
     }
 
     static inline bool isLayer(KisNodeSP node) {

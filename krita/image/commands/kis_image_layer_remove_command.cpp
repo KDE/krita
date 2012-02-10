@@ -66,7 +66,7 @@ void KisImageLayerRemoveCommand::restoreClones()
 void KisImageLayerRemoveCommand::processClones(KisNodeSP node)
 {
     KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
-    if(!layer->hasClones()) return;
+    if(!layer || !layer->hasClones()) return;
 
     foreach(KisCloneLayerWSP _clone, layer->registeredClones()) {
         KisCloneLayerSP clone = _clone;

@@ -155,9 +155,9 @@ KisSelectionSP KisMask::selection() const
         else {
             m_d->selection = new KisSelection();
         }
+        m_d->selection->setParentNode(const_cast<KisMask*>(this));
         m_d->selection->updateProjection();
     }
-    m_d->selection->setParentNode(const_cast<KisMask*>(this));
     return m_d->selection;
 }
 

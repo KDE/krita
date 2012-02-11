@@ -38,7 +38,7 @@ struct KisSelection::Private {
     KisDefaultBoundsBaseSP defaultBounds;
     KisPixelSelectionSP projection;
     KisPixelSelectionSP pixelSelection;
-    KisSelectionComponent* shapeSelection;
+    KisSelectionComponent *shapeSelection;
 
     KisPixelSelectionSP getProjection()
     {
@@ -322,6 +322,16 @@ void KisSelection::clear()
     KisPixelSelectionSP currentProjection = m_d->getProjection();
     if(currentProjection != m_d->pixelSelection) {
         currentProjection->clear();
+    }
+}
+
+void KisSelection::flatten()
+{
+    if (hasShapeSelection()) {
+        updateProjection();
+        m_d->pixelSelection = m_d->projection;
+        delete m_d->shapeSelection;
+        m_d->shapeSelection = 0;
     }
 }
 

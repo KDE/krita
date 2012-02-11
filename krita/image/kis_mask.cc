@@ -114,12 +114,15 @@ void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
 
     KisPaintDeviceSP parentPaintDevice = parentLayer->original();
 
-    if(copyFrom) {
+    if (copyFrom) {
         /**
          * We can't use setSelection as we may not have parent() yet
          */
         m_d->selection = new KisSelection(*copyFrom);
         m_d->selection->setDefaultBounds(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        if (copyFrom->hasShapeSelection()) {
+            m_d->selection->flatten();
+        }
     }
     else {
         m_d->selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));

@@ -23,6 +23,9 @@
 #include "testutil.h"
 #include "qimage_based_test.h"
 
+#include "kis_pattern.h"
+#include "kis_resource_server_provider.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_filter_strategy.h"
 #include "kis_selection_manager.h"
 #include "kis_node_manager.h"
@@ -48,6 +51,17 @@ public:
 
         shell = new KoMainWindow(doc->componentData());
         KisView2 *view = new KisView2(doc, shell);
+
+        QString name = "HR SketchPaper 01";
+        name[17] = '\0';
+        KisPattern *newPattern = KisResourceServerProvider::instance()->patternServer()->getResourceByName(name);
+        Q_ASSERT(newPattern);
+        view->resourceProvider()->slotPatternActivated(newPattern);
+
+        KoColor fgColor(Qt::black, image->colorSpace());
+        KoColor bgColor(Qt::white, image->colorSpace());
+        view->resourceProvider()->setBGColor(bgColor);
+        view->resourceProvider()->setFGColor(fgColor);
 
         KisNodeSP paint1 = findNode(image->root(), "paint1");
         Q_ASSERT(paint1);

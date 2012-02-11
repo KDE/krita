@@ -24,10 +24,15 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_configuration.h"
+#include "filter/kis_filter_registry.h"
 
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
+#include "kis_adjustment_layer.h"
+#include "kis_selection.h"
 #include <kis_debug.h>
 
 #define IMAGE_WIDTH 128
@@ -43,6 +48,43 @@ void KisImageTest::layerTests()
     image->addNode(layer);
 
     QVERIFY(image->rootLayer()->firstChild()->objectName() == layer->objectName());
+}
+
+void KisImageTest::testConvertImageColorSpace()
+{
+    const KoColorSpace *cs8 = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 1000, 1000, cs8, "stest");
+
+    KisPaintDeviceSP device1 = new KisPaintDevice(cs8);
+    KisLayerSP paint1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
+    Q_ASSERT(filter);
+    KisFilterConfiguration *configuration = filter->defaultConfiguration(0);
+    Q_ASSERT(configuration);
+
+    KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
+
+    image->addNode(paint1, image->root());
+    image->addNode(blur1, image->root());
+
+    image->refreshGraph();
+
+    const KoColorSpace *cs16 = KoColorSpaceRegistry::instance()->rgb16();
+    image->lock();
+    image->convertImageColorSpace(cs16);
+    image->unlock();
+
+    QVERIFY(*cs16 == *image->colorSpace());
+    QVERIFY(*cs16 == *image->root()->colorSpace());
+    QVERIFY(*cs16 == *paint1->colorSpace());
+    QVERIFY(*cs16 == *blur1->colorSpace());
+
+    QVERIFY(!image->root()->compositeOp());
+    QVERIFY(*cs16 == *paint1->compositeOp()->colorSpace());
+    QVERIFY(*cs16 == *blur1->compositeOp()->colorSpace());
+
+    image->refreshGraph();
 }
 
 QTEST_KDEMAIN(KisImageTest, NoGUI)

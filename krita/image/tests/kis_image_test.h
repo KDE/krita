@@ -29,6 +29,7 @@ class KisImageTest : public QObject
 private slots:
 
     void layerTests();
+    void testConvertImageColorSpace();
 };
 
 #endif

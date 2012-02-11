@@ -279,7 +279,7 @@ qint32 KisBrush::maskWidth(double scale, double angle) const
     scale *= d->scale;
 
     double width_ = width() * scale;
-    if(angle == 0.0) return ceil(width_ + 1);
+    if(angle == 0.0) return (qint32)ceil(width_ + 1);
 
     double height_ = height() * scale;
 
@@ -574,8 +574,8 @@ void KisBrush::createScaledBrushes() const
     // will not get scaled up anymore or the memory consumption gets to height
     // also don't scale the brush up more then MAXIMUM_MIPMAP_SCALE times
     int scale  = qBound(1, MAXIMUM_MIPMAP_SIZE*2 / qMax(image().width(),image().height()), MAXIMUM_MIPMAP_SCALE);
-    int width  = ceil(image().width()  * scale);
-    int height = ceil(image().height() * scale);
+    int width  = ceil((double)(image().width()  * scale));
+    int height = ceil((double)(image().height() * scale));
 
     QImage scaledImage;
     while (true) {
@@ -624,7 +624,7 @@ KisQImagemaskSP KisBrush::createMask(double scale, double subPixelX, double subP
 
     if (belowBrush != 0) {
         double t = (scale - belowBrush->scale()) / (aboveBrush->scale() - belowBrush->scale());
-        
+
         outputMask = scaleMask( (t >= 0.5) ? aboveBrush : belowBrush, scale, subPixelX, subPixelY);
     } else {
         if (Eigen::ei_isApprox(scale, aboveBrush->scale())) {

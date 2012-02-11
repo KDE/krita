@@ -46,7 +46,8 @@ public:
         m_extentMaxX = qint32_MIN;
         m_extentMaxY = qint32_MIN;
 
-        m_oldDefaultPixel = m_newDefaultPixel = 0;
+        m_oldDefaultPixel = 0;
+        m_newDefaultPixel = 0;
     }
 
     inline ~KisMemento() {

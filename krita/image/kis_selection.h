@@ -156,6 +156,13 @@ public:
 
     void clear();
 
+    /**
+     * @brief flatten creates a new pixel selection component from the shape selection
+     * and throws away the shape selection. This has no effect if there is no
+     * shape selection.
+     */
+    void flatten();
+
     KDE_DEPRECATED quint8 selected(qint32 x, qint32 y) const;
     KDE_DEPRECATED void setDirty(const QRect &rc = QRect());
 

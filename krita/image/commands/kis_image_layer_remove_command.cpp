@@ -25,42 +25,57 @@
 #include "kis_clone_layer.h"
 #include "kis_paint_layer.h"
 
+struct KisImageLayerRemoveCommand::Private {
+    KisNodeSP node;
+    KisNodeSP prevParent;
+    KisNodeSP prevAbove;
+
+    QList<KisCloneLayerSP> clonesList;
+    QList<KisNodeSP> reincarnatedNodes;
+};
+
 KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageWSP image, KisNodeSP node)
-        : KisImageCommand(i18nc("(qtundo-format)", "Remove Layer"), image)
+    : KisImageCommand(i18nc("(qtundo-format)", "Remove Layer"), image),
+      m_d(new Private())
 {
-    m_node = node;
-    m_prevParent = node->parent();
-    m_prevAbove = node->prevSibling();
+    m_d->node = node;
+    m_d->prevParent = node->parent();
+    m_d->prevAbove = node->prevSibling();
+}
+
+KisImageLayerRemoveCommand::~KisImageLayerRemoveCommand()
+{
+    delete m_d;
 }
 
 void KisImageLayerRemoveCommand::redo()
 {
-    processClones(m_node);
-    UpdateTarget target(m_image, m_node, m_image->bounds());
-    m_image->removeNode(m_node);
+    processClones(m_d->node);
+    UpdateTarget target(m_image, m_d->node, m_image->bounds());
+    m_image->removeNode(m_d->node);
     target.update();
 }
 
 void KisImageLayerRemoveCommand::undo()
 {
-    m_image->addNode(m_node, m_prevParent, m_prevAbove);
+    m_image->addNode(m_d->node, m_d->prevParent, m_d->prevAbove);
     restoreClones();
-    m_node->setDirty(m_image->bounds());
+    m_d->node->setDirty(m_image->bounds());
 }
 
 void KisImageLayerRemoveCommand::restoreClones()
 {
-    while(!m_reincarnatedNodes.isEmpty()) {
-        KisCloneLayerSP clone = m_clonesList.takeLast();
-        KisNodeSP newNode = m_reincarnatedNodes.takeLast();
+    while(!m_d->reincarnatedNodes.isEmpty()) {
+        KisCloneLayerSP clone = m_d->clonesList.takeLast();
+        KisNodeSP newNode = m_d->reincarnatedNodes.takeLast();
 
         m_image->addNode(clone, newNode->parent(), newNode);
         moveChildren(newNode, clone);
         m_image->removeNode(newNode);
     }
 
-    Q_ASSERT(m_clonesList.isEmpty());
-    Q_ASSERT(m_reincarnatedNodes.isEmpty());
+    Q_ASSERT(m_d->clonesList.isEmpty());
+    Q_ASSERT(m_d->reincarnatedNodes.isEmpty());
 }
 
 void KisImageLayerRemoveCommand::processClones(KisNodeSP node)
@@ -78,8 +93,8 @@ void KisImageLayerRemoveCommand::processClones(KisNodeSP node)
         moveChildren(clone, newNode);
         m_image->removeNode(clone);
 
-        m_clonesList.append(clone);
-        m_reincarnatedNodes.append(newNode);
+        m_d->clonesList.append(clone);
+        m_d->reincarnatedNodes.append(newNode);
     }
 }
 

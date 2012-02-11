@@ -31,8 +31,6 @@
 /// The command for removing a node
 class KRITAIMAGE_EXPORT KisImageLayerRemoveCommand : public KisImageCommand
 {
-
-
 public:
     /**
      * Constructor
@@ -40,6 +38,7 @@ public:
      * @param node the node to remove
      */
     KisImageLayerRemoveCommand(KisImageWSP image, KisNodeSP node);
+    ~KisImageLayerRemoveCommand();
 
     virtual void redo();
     virtual void undo();
@@ -47,15 +46,10 @@ public:
 private:
     void restoreClones();
     void processClones(KisNodeSP node);
-    KisNodeSP reincarnateClone(KisCloneLayerSP clone);
     void moveChildren(KisNodeSP src, KisNodeSP dst);
 
 private:
-    KisNodeSP m_node;
-    KisNodeSP m_prevParent;
-    KisNodeSP m_prevAbove;
-
-    QList<KisCloneLayerSP> m_clonesList;
-    QList<KisNodeSP> m_reincarnatedNodes;
+    struct Private;
+    Private * const m_d;
 };
 #endif

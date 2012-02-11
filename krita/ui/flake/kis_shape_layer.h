@@ -117,6 +117,17 @@ signals:
     void selectionChanged();
     void currentLayerChanged(const KoShapeLayer *layer);
 
+signals:
+    /**
+     * A signal + slot to synchronize UI and image
+     * threads. Image thread emits the signal, UI
+     * thread performes the action
+     */
+    void sigMoveShapes(const QPointF &diff);
+
+private slots:
+    void slotMoveShapes(const QPointF &diff);
+
 private:
     struct Private;
     Private * const m_d;

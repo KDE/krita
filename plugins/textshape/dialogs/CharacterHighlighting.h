@@ -25,6 +25,7 @@
 #include <ui_CharacterHighlighting.h>
 
 #include "KoCharacterStyle.h"
+#include <kfontchooser.h>
 
 class QColor;
 
@@ -39,10 +40,17 @@ public:
     void setDisplay(KoCharacterStyle *style);
     void save(KoCharacterStyle *style);
 
+    QStringList capitalizationList();
+    QStringList fontLayoutPositionList();
+
 signals:
     void underlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor);
     void strikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor);
     void capitalizationChanged(QFont::Capitalization);
+    void fontChanged(const QFont &font);
+    void textColorChanged(QColor);
+    void backgroundColorChanged(QColor);
+
 
 private slots:
     void underlineTypeChanged(int item);
@@ -51,7 +59,14 @@ private slots:
     void strikethroughTypeChanged(int item);
     void strikethroughStyleChanged(int item);
     void strikethroughColorChanged(QColor color);
-    void capitalisationChanged();
+    void capitalisationChanged(int item);
+    void positionChanged(int item);
+    void textToggled(bool state);
+    void backgroundToggled(bool state);
+    void clearTextColor();
+    void clearBackgroundColor();
+    void textColorChanged();
+    void backgroundColorChanged();
 
 private:
     KoCharacterStyle::LineType indexToLineType(int index);
@@ -60,6 +75,8 @@ private:
     int lineStyleToIndex(KoCharacterStyle::LineStyle type);
 
     Ui::CharacterHighlighting widget;
+
+     KFontChooser *m_fontChooser;
 
     bool m_uniqueFormat;
     bool m_underlineStyleInherited;
@@ -72,6 +89,12 @@ private:
     bool m_allUpperCaseInherited;
     bool m_allLowerCaseInherited;
     bool m_capitalizInherited;
+    bool m_positionInherited;
+    bool m_hyphenateInherited;
+    bool m_textColorChanged;
+    bool m_textColorReset;
+    bool m_backgroundColorChanged;
+    bool m_backgroundColorReset;
 };
 
 #endif

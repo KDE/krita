@@ -269,12 +269,11 @@ void KoTextEditor::Private::newLine()
     int endPosition = caret.position();
 
     // Mark the CR as a tracked change
-    caret.setPosition(startPosition);
-    caret.setPosition(endPosition, QTextCursor::KeepAnchor);
+    QTextCursor changeCursor(document);
+    changeCursor.setPosition(startPosition);
+    changeCursor.setPosition(endPosition, QTextCursor::KeepAnchor);
 
-    q->registerTrackedChange(caret, KoGenChange::InsertChange, i18nc("(qtundo-format)", "New Paragraph"), format, format, false);
-
-    caret.clearSelection();
+    q->registerTrackedChange(changeCursor, KoGenChange::InsertChange, i18nc("(qtundo-format)", "New Paragraph"), format, format, false);
 
     // possibly change the style if requested
     if (nextStyle) {

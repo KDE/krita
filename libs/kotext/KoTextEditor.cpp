@@ -270,8 +270,10 @@ void KoTextEditor::Private::newLine()
 
     // Mark the CR as a tracked change
     QTextCursor changeCursor(document);
+    changeCursor.beginEditBlock();
     changeCursor.setPosition(startPosition);
     changeCursor.setPosition(endPosition, QTextCursor::KeepAnchor);
+    changeCursor.endEditBlock();
 
     q->registerTrackedChange(changeCursor, KoGenChange::InsertChange, i18nc("(qtundo-format)", "New Paragraph"), format, format, false);
 

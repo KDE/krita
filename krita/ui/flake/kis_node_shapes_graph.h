@@ -19,8 +19,6 @@
 #ifndef __KIS_NODE_SHAPES_GRAPH_H
 #define __KIS_NODE_SHAPES_GRAPH_H
 
-#include <QMap>
-#include "KoShapeLayer.h"
 
 #include "kis_node.h"
 #include "kis_types.h"
@@ -72,19 +70,16 @@ public:
 
     KisNodeShape* nodeToShape(KisNodeSP node);
     KisNodeDummy* nodeToDummy(KisNodeSP node);
+    KisNodeDummy* rootDummy() const;
 
     bool containsNode(KisNodeSP node) const;
     int shapesCount() const;
-
-private:
-    typedef QMap<KisNodeSP, KisNodeDummy*> NodeMap;
 
 private:
     void unmapDummyRecursively(KisNodeDummy *dummy);
 
 private:
     KisNodeDummiesGraph m_dummiesGraph;
-    NodeMap m_dummiesMap;
 };
 
 #endif /* __KIS_NODE_SHAPES_GRAPH_H */

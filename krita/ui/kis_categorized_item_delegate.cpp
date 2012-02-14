@@ -48,11 +48,13 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
         QStyledItemDelegate::paint(painter, sovi, index);
     }
     else {
+        QPalette palette = QApplication::palette();
         if(option.state & QStyle::State_MouseOver)
-            painter->fillRect(option.rect, Qt::gray);
+            painter->fillRect(option.rect, palette.midlight());
         else
-            painter->fillRect(option.rect, Qt::lightGray);
+            painter->fillRect(option.rect, palette.button());
 
+        painter->setBrush(palette.buttonText());
         painter->drawText(option.rect, index.data().toString(), QTextOption(Qt::AlignVCenter|Qt::AlignHCenter));
 
         paintTriangle(
@@ -93,6 +95,7 @@ void KisCategorizedItemDelegate::paintTriangle(QPainter* painter, qint32 x, qint
     if(rotate)
         painter->rotate(-90);
 
-    painter->setBrush(QBrush(Qt::black));
+    QPalette palette = QApplication::palette();
+    painter->setBrush(palette.buttonText());
     painter->drawPolygon(triangle);
 }

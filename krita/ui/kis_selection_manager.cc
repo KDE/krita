@@ -446,9 +446,6 @@ void KisSelectionManager::paste()
         } else {
             m_adapter->addNode(layer , image->rootLayer(), 0);
         }
-
-        m_view->nodeManager()->activateNode(layer);
-
     } else
         m_view->canvasBase()->toolProxy()->paste();
 }
@@ -705,6 +702,7 @@ void KisSelectionManager::shapeSelectionChanged()
                 shape->setBorder(0);
         }
     }
+    updateGUI();
 }
 
 void KisSelectionManager::imageResizeToSelection()

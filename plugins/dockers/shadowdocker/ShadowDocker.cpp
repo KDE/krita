@@ -27,8 +27,8 @@
 #include <KoShadowConfigWidget.h>
 #include <KoShapeShadowCommand.h>
 #include <KLocale>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QGridLayout>
+#include <QSpacerItem>
+#include <QGridLayout>
 
 class ShadowDocker::Private
 {

@@ -21,7 +21,7 @@
 #ifndef __koView_h__
 #define __koView_h__
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <kparts/part.h>
 #include "komain_export.h"
 

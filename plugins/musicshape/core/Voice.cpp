@@ -21,7 +21,7 @@
 #include "Bar.h"
 #include "Part.h"
 #include "Sheet.h"
-#include <QtCore/QList>
+#include <QList>
 
 namespace MusicCore {
 

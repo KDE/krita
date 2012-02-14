@@ -70,6 +70,7 @@ public:
             , imageCollection(0)
             , showFormattingCharacters(false)
             , showSpellChecking(false)
+            , showSelections(true)
             , background(Qt::white)
         {
         }
@@ -83,6 +84,7 @@ public:
         bool showFormattingCharacters;
         bool showTableBorders;
         bool showSpellChecking;
+        bool showSelections;
         QColor background;
     };
 

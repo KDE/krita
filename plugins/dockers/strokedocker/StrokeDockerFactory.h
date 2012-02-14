@@ -21,7 +21,7 @@
 #define STROKEDOCKERFACTORY_H
 
 #include <KoDockFactoryBase.h>
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
 
 /// the factory which creates the stroke docker
 class StrokeDockerFactory : public KoDockFactoryBase

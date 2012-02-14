@@ -23,7 +23,7 @@
 
 #include <kservice.h>
 #include <ksharedptr.h>
-#include <QtCore/QList>
+#include <QList>
 #include "komain_export.h"
 
 class QStringList;

@@ -302,11 +302,9 @@ void KoPageLayoutWidget::setTextDirection(KoText::Direction direction )
     int index = 0;
     switch(direction) {
     case KoText::LeftRightTopBottom:
-    case KoText::PerhapsLeftRightTopBottom:
         index = 1;
         break;
     case KoText::RightLeftTopBottom:
-    case KoText::PerhapsRightLeftTopBottom:
         index = 2;
         break;
     case KoText::TopBottomRightLeft: // unused for now.

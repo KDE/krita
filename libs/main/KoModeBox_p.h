@@ -25,11 +25,11 @@
 
 #include <KoCanvasObserverBase.h>
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QHash>
-#include <QtGui/QDockWidget>
-#include <QtGui/QToolBox>
+#include <QList>
+#include <QMap>
+#include <QHash>
+#include <QDockWidget>
+#include <QToolBox>
 
 #include <KoToolManager.h>
 
@@ -55,7 +55,7 @@ class KoModeBox : public QToolBox {
     Q_OBJECT
 public:
     /// constructor
-    explicit KoModeBox(KoCanvasControllerWidget *canvas);
+    explicit KoModeBox(KoCanvasControllerWidget *canvas, const QString &applicationName);
     ~KoModeBox();
 
     /**
@@ -106,6 +106,9 @@ private slots:
 
     /// slot for when a new item have been selected in the QToolBox
     void toolSelected(int index);
+
+public:
+    static QString applicationName;
 
 private:
     void addItem(const KoToolButton button);

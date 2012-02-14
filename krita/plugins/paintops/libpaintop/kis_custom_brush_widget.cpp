@@ -44,6 +44,7 @@
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 #include <kis_selection.h>
+#include <KoProperties.h>
 
 KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageWSP image)
         : KisWdgCustomBrush(parent)
@@ -225,15 +226,18 @@ void KisCustomBrushWidget::createBrush()
         int w = m_image->width();
         int h = m_image->height();
 
+        m_image->lock();
+
         // We only loop over the rootLayer. Since we actually should have a layer selection
         // list, no need to elaborate on that here and now
-        KisLayer* layer = dynamic_cast<KisLayer*>(m_image->rootLayer()->firstChild().data());
-        while (layer) {
-            KisPaintLayer* paint = 0;
-            if (layer->visible() && (paint = dynamic_cast<KisPaintLayer*>(layer)))
-                devices[0].push_back(paint->paintDevice().data());
-            layer = dynamic_cast<KisLayer*>(layer->nextSibling().data());
+        KoProperties properties;
+        properties.setProperty("visible", true);
+        QList<KisNodeSP> layers = m_image->root()->childNodes(QStringList("KisLayer"), properties);
+        KisNodeSP node;
+        foreach(KisNodeSP node, layers) {
+            devices[0].push_back(node->projection().data());
         }
+
         QVector<KisParasite::SelectionMode> modes;
 
         switch (comboBox2->currentIndex()) {
@@ -246,6 +250,7 @@ void KisCustomBrushWidget::createBrush()
         }
 
         m_brush = new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes);
+        m_image->unlock();
     }
 
     static_cast<KisGbrBrush*>( m_brush.data() )->setUseColorAsMask( colorAsMask->isChecked() );

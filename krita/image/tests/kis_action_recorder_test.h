@@ -19,7 +19,7 @@
 #ifndef KIS_ACTION_RECORDER_TEST_H
 #define KIS_ACTION_RECORDER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisActionRecorderTest : public QObject
 {

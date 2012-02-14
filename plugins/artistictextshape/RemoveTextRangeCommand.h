@@ -22,7 +22,7 @@
 #define REMOVETEXTRANGECOMMAND_H
 
 #include <kundo2command.h>
-#include <QtCore/QPointer>
+#include <QPointer>
 #include "ArtisticTextTool.h"
 
 class ArtisticTextShape;

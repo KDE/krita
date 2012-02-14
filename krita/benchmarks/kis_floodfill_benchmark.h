@@ -22,7 +22,7 @@
 #include <KoColor.h>
 
 #include <kis_types.h>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisPaintDevice;
 class KoColorSpace;

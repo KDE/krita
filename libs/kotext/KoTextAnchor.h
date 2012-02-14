@@ -182,25 +182,25 @@ public:
     void setHorizontalPos(HorizontalPos);
 
     /// return the current vertical-pos
-    HorizontalPos horizontalPos();
+    HorizontalPos horizontalPos() const;
 
     /// set the current vertical-rel
     void setHorizontalRel(HorizontalRel);
 
     /// return the current vertical-rel
-    HorizontalRel horizontalRel();
+    HorizontalRel horizontalRel() const;
 
     /// set the current horizontal-pos
     void setVerticalPos(VerticalPos);
 
     /// return the current horizontal-pos
-    VerticalPos verticalPos();
+    VerticalPos verticalPos() const;
 
     /// set the current horizontal-rel
     void setVerticalRel(VerticalRel);
 
     /// return the current horizontal-rel
-    VerticalRel verticalRel();
+    VerticalRel verticalRel() const;
 
     /// return the wrap influence on position
     QString wrapInfluenceOnPosition() const;

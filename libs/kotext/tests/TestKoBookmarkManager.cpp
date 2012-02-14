@@ -19,7 +19,7 @@
  */
 #include "TestKoBookmarkManager.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QDebug>
 #include <QString>
 #include <QTextDocument>

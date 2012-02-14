@@ -21,10 +21,8 @@
 */
 
 #include "FontDia.h"
-#include "FontTab.h"
 #include "CharacterHighlighting.h"
 #include "FontDecorations.h"
-#include "FontLayoutTab.h"
 
 #include "CharacterGeneral.h"
 

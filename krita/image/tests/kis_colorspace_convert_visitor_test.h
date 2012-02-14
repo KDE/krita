@@ -19,7 +19,7 @@
 #ifndef KIS_COLORSPACE_CONVERT_VISITOR_TEST_H
 #define KIS_COLORSPACE_CONVERT_VISITOR_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisColorSpaceConvertVisitorTest : public QObject
 {

@@ -22,11 +22,11 @@
 
 #include "KoFindToolbar.h"
 
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QToolButton>
-#include <QtGui/QMenu>
-#include <QtGui/QApplication>
-#include <QtCore/QDebug>
+#include <QHBoxLayout>
+#include <QToolButton>
+#include <QMenu>
+#include <QApplication>
+#include <QDebug>
 
 #include <KDE/KLocalizedString>
 #include <KDE/KLineEdit>

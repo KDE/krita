@@ -22,8 +22,8 @@
 #define STYLEDOCKER_H
 
 #include <KoCanvasObserverBase.h>
-#include <QtGui/QDockWidget>
-#include <QtCore/QTime>
+#include <QDockWidget>
+#include <QTime>
 
 class StylePreview;
 class StyleButtonBox;

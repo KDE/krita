@@ -32,15 +32,17 @@
 >;
 kernel Metaball
 {
-  dependent float2 centers[ metaballs ];
+  dependent float2 centers[ 0 ];
   dependent float pxradius, pxringradius;
   void evaluateDependents()
   {
+    float2 cs[metaballs];
+    centers = cs;
     int image_size = min(IMAGE_WIDTH, IMAGE_HEIGHT);
     pxradius = radius * image_size;
     pxringradius = ringradius * image_size;
     const float RAND_MAX  = 2147483647;
-    int seed_ = seed;
+    unsigned int seed_ = seed;
     for(int i = 0; i < metaballs; ++i)
     {
       centers[i].x = rand(seed_) / RAND_MAX * IMAGE_WIDTH;
@@ -64,7 +66,7 @@ kernel Metaball
         float v = (r - pxradius) / pxringradius;
         if(v < maxv)
         {
-          result = ( (1.0 - v) * metaballcolor + v * outsidecolor );
+          result = mix(metaballcolor, outsidecolor, v );
           maxv = v;
         }
       }

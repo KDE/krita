@@ -352,6 +352,19 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
                 }
             }
         }
+        // if the full paragraph is selected to add it to the rect. This makes sure we get a rect for the case 
+        // where the end of the selection lies is a different area.
+        if (cursor.selectionEnd() >= block.position() + block.length() && cursor.selectionStart() <= block.position()) {
+            QTextLine line = block.layout()->lineForTextPosition(block.length()-1);
+            if (line.isValid()) {
+                retval.setBottom(line.y() + line.height());
+                if (line.ascent()==0) {
+                    // Block is empty from any visible content and has as such no height
+                    // but in that case the block font defines line height
+                    retval.setBottom(line.y() + 24);
+                }
+            }
+        }
     }
     return retval.translated(0, m_verticalAlignOffset);
 }
@@ -700,7 +713,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     if (dir == KoText::AutoDirection)
         m_isRtl = block.text().isRightToLeft();
     else
-        m_isRtl =  dir == KoText::RightLeftTopBottom || dir == KoText::PerhapsRightLeftTopBottom;
+        m_isRtl =  dir == KoText::RightLeftTopBottom;
 
     // initialize list item stuff for this parag.
     QTextList *textList = block.textList();
@@ -901,8 +914,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     //========
     // Margins
     //========
-    qreal startMargin = pStyle.leftMargin();
-    qreal endMargin = pStyle.rightMargin();
+    qreal startMargin = block.blockFormat().leftMargin();
+    qreal endMargin = block.blockFormat().rightMargin();
     if (m_isRtl) {
         qSwap(startMargin, endMargin);
     }
@@ -1187,7 +1200,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     while (line.isValid()) {
         runAroundHelper.setLine(this, line);
         runAroundHelper.setObstructions(documentLayout()->currentObstructions());
-        documentLayout()->setAnchoringParagraphRect(m_blockRects.last());
+        QRectF anchoringRect = m_blockRects.last();
+        qDebug() << anchoringRect.top() << m_anchoringParagraphTop;
+        anchoringRect.setTop(m_anchoringParagraphTop);
+        documentLayout()->setAnchoringParagraphRect(anchoringRect);
         documentLayout()->setAnchoringLayoutEnvironmentRect(layoutEnvironmentRect());
         runAroundHelper.fit( /* resetHorizontalPosition */ false, /* rightToLeft */ m_isRtl, QPointF(x(), m_y));
         qreal bottomOfText = line.y() + line.height();
@@ -1340,7 +1356,7 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const 
         return guessGlyphWidth * 3 + m_extraTextIndent;
     }
 
-    qreal pStyleTextIndent = pStyle.textIndent().value(width());
+    qreal blockTextIndent = block.blockFormat().textIndent();
 
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
         // according to odf 1.2 17.20 list text indent should be used when paragraph text indent is
@@ -1349,17 +1365,17 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList, const 
         bool set = false;
         if (id && m_documentLayout->styleManager()) {
             KoParagraphStyle *originalParagraphStyle = m_documentLayout->styleManager()->paragraphStyle(id);
-            if (originalParagraphStyle->textIndent().value(width()) != pStyleTextIndent) {
-                set = (pStyleTextIndent != 0);
+            if (originalParagraphStyle->textIndent() != blockTextIndent) {
+                set = (blockTextIndent != 0);
             }
         } else {
-            set = (pStyleTextIndent != 0);
+            set = (blockTextIndent != 0);
         }
         if (! set) {
             return textList->format().doubleProperty(KoListStyle::TextIndent) + m_extraTextIndent;
         }
     }
-    return pStyleTextIndent + m_extraTextIndent;
+    return blockTextIndent + m_extraTextIndent;
 }
 
 void KoTextLayoutArea::setExtraTextIndent(qreal extraTextIndent)
@@ -1838,6 +1854,10 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
         topMargin = formatStyle.topMargin();
     }
     qreal spacing = qMax(m_bottomSpacing, topMargin);
+    qreal divider = m_y;
+    if (spacing) {
+        divider += spacing * m_bottomSpacing / (m_bottomSpacing + topMargin);
+    }
     qreal dx = 0.0;
     qreal x = m_x;
     qreal width = m_width;
@@ -1874,10 +1894,6 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
         if (m_prevBorder && m_prevBorder->equals(border)) {
             blockData->setBorder(m_prevBorder);
             // Merged mean we don't have inserts inbetween the blocks
-            qreal divider = m_y;
-            if (spacing) {
-                divider += spacing * m_bottomSpacing / (m_bottomSpacing + topMargin);
-            }
             if (!m_blockRects.isEmpty()) {
                 m_blockRects.last().setBottom(divider);
             }
@@ -1935,4 +1951,5 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
     }
     m_prevBorder = blockData->border();
     m_prevBorderPadding = format.doubleProperty(KoParagraphStyle::BottomPadding);
+    m_anchoringParagraphTop = divider;
 }

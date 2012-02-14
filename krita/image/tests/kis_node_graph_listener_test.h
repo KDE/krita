@@ -19,7 +19,7 @@
 #ifndef KIS_NODE_GRAPH_LISTENER_TEST_H
 #define KIS_NODE_GRAPH_LISTENER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include "kis_node.h"
 
@@ -49,6 +49,7 @@ private slots:
 
     void testUpdateOfListener();
     void testRecursiveUpdateOfListener();
+    void testSequenceNumber();
 };
 
 #endif

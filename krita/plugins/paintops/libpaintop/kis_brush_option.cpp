@@ -29,7 +29,7 @@ void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
 {
     if(!m_brush)
         return;
-    
+
     QDomDocument d;
     QDomElement e = d.createElement( "Brush" );
     m_brush->toXML( d, e );
@@ -43,10 +43,12 @@ void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
 void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     QString brushDefinition = setting->getString("brush_definition");
-    QDomDocument d;
-    d.setContent( brushDefinition, false );
-    QDomElement e = d.firstChildElement("Brush" );
-    m_brush = KisBrush::fromXML( e );
+    if (!brushDefinition.isEmpty()) {
+        QDomDocument d;
+        d.setContent( brushDefinition, false );
+        QDomElement e = d.firstChildElement("Brush" );
+        m_brush = KisBrush::fromXML( e );
+    }
 }
 
 KisBrushSP KisBrushOption::brush() const

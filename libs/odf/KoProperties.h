@@ -20,9 +20,9 @@
 #ifndef _KO_PROPERTIES_H
 #define _KO_PROPERTIES_H
 
-#include <QtCore/QString>
-#include <QtCore/QMap>
-#include <QtCore/QVariant>
+#include <QString>
+#include <QMap>
+#include <QVariant>
 #include "koodf_export.h"
 
 class QDomElement;

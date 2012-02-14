@@ -20,7 +20,7 @@
 #define SVMSTRUCT_H
 
 
-#include <qglobal.h>
+#include <QtGlobal>
 #include <QPoint>
 
 class QDataStream;

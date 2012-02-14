@@ -180,7 +180,9 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
 
         KisFigurePaintingToolHelper helper(i18n("Path"),
                                            image,
-                                           canvas()->resourceManager());
+                                           canvas()->resourceManager(),
+                                           strokeStyle(),
+                                           fillStyle());
         helper.paintPainterPath(mapedOutline);
     } else {
         pathShape->normalize();

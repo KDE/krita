@@ -30,17 +30,15 @@
 
 #include <ShivaGeneratorConfigWidget.h>
 #include <OpenShiva/Source.h>
-#include "Version.h"
 
-#include METADATA_HEADER
+#include <GTLFragment/Metadata.h>
 
 #include "PaintDeviceImage.h"
 #include "QVariantValue.h"
 #include "UpdaterProgressReport.h"
 
-#if OPENSHIVA_13_OR_MORE
 #include "GTLCore/CompilationMessages.h"
-#endif
+#include <kis_gtl_lock.h>
 
 extern QMutex* shivaMutex;
 
@@ -84,11 +82,7 @@ void ShivaGenerator::generate(KisProcessingInformation dstInfo,
         for (QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it) {
             const GTLCore::Metadata::Entry* entry = kernel.metadata()->parameter(it.key().toAscii().data());
             if (entry && entry->asParameterEntry()) {
-#if OPENSHIVA_12
-                GTLCore::Value val = qvariantToValue(it.value(), entry->asParameterEntry()->valueType());
-#else
                 GTLCore::Value val = qvariantToValue(it.value(), entry->asParameterEntry()->type());
-#endif
                 if(val.isValid())
                 {
                     kernel.setParameter(it.key().toAscii().data(), val);
@@ -96,25 +90,20 @@ void ShivaGenerator::generate(KisProcessingInformation dstInfo,
             }
         }
     }
+    kernel.setParameter(OpenShiva::Kernel::IMAGE_WIDTH, float(dstInfo.paintDevice()->defaultBounds()->bounds().width()));
+    kernel.setParameter(OpenShiva::Kernel::IMAGE_HEIGHT, float(dstInfo.paintDevice()->defaultBounds()->bounds().height()));
+    KisGtlLocker gtlLocker;
     {
         QMutexLocker l(shivaMutex);
         kernel.compile();
     }
     if (kernel.isCompiled()) {
         PaintDeviceImage pdi(dst);
-#if OPENSHIVA_12
-        std::list< GTLCore::AbstractImage* > inputs;
-        GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
-        kernel.evaluatePixeles(region, inputs, &pdi, report );
-#else
         std::list< const GTLCore::AbstractImage* > inputs;
         GTLCore::RegionI region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
         kernel.evaluatePixels(region, inputs, &pdi, report );
-#endif
     }
-#if OPENSHIVA_13_OR_MORE
     else {
         dbgPlugins << "Error: " << kernel.compilationMessages().toString().c_str();
     }
-#endif
 }

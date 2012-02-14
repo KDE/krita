@@ -21,7 +21,7 @@
 #include "psd.h"
 #include "psd_header.h"
 
-#include <QtCore/QByteArray>
+#include <QByteArray>
 #include <QColor>
 
 class PSDColorModeBlock

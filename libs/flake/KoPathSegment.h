@@ -21,10 +21,10 @@
 #define KOPATHSEGMENT_H
 
 #include "flake_export.h"
-#include <QtCore/QPointF>
-#include <QtCore/QList>
-#include <QtCore/QPair>
-#include <QtCore/QRectF>
+#include <QPointF>
+#include <QList>
+#include <QPair>
+#include <QRectF>
 
 class KoPathPoint;
 class QTransform;

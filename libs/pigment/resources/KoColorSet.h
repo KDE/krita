@@ -19,10 +19,10 @@
 #ifndef KOCOLORSET
 #define KOCOLORSET
 
-#include <QtGui/QImage>
-#include <QtGui/QColor>
-#include <QtCore/QVector>
-#include <QtGui/QPixmap>
+#include <QImage>
+#include <QColor>
+#include <QVector>
+#include <QPixmap>
 
 #include "KoResource.h"
 #include "KoColor.h"
@@ -44,8 +44,6 @@ struct KoColorSetEntry {
  */
 class PIGMENTCMS_EXPORT KoColorSet : public KoResource
 {
-    typedef KoResource super;
-
 public:
     /**
      * Load a color set from a file. This can be a Gimp

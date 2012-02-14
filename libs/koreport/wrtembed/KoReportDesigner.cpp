@@ -34,7 +34,7 @@
 #include "KoReportPluginManager.h"
 
 #include <QLayout>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QGraphicsSceneMouseEvent>

@@ -22,7 +22,7 @@
 
 class KoReportDesigner;
 class ReportSectionDetail;
-#include <QtGui/QDialog>
+#include <QDialog>
 
 #include <ui_sectioneditor.h>
 

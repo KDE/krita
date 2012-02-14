@@ -224,6 +224,13 @@ public:
     virtual void clear();
 
     /**
+     * Clear the given rectangle to transparent black. The paint device will expand to
+     * contain the given rect.
+     */
+    void clear(const QRect & rc);
+
+
+    /**
      * Sets the default pixel. New data will be initialised with this pixel. The pixel is copied: the
      * caller still owns the pointer and needs to delete it to avoid memory leaks.
      */
@@ -233,12 +240,6 @@ public:
      * Get a pointer to the default pixel.
      */
     const quint8 *defaultPixel() const;
-
-    /**
-     * Clear the given rectangle to transparent black. The paint device will expand to
-     * contain the given rect.
-     */
-    void clear(const QRect & rc);
 
     /**
      * Fill the given rectangle with the given pixel. The paint device will expand to
@@ -311,6 +312,11 @@ protected:
     void fastBitBlt(KisPaintDeviceSP src, const QRect &rect);
 
     /**
+     * The same as \ref fastBitBlt() but reads old data
+     */
+    void fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect);
+
+    /**
      * Clones rect from another paint device in a rough and fast way.
      * All the tiles touched by rect will be shared, between both
      * devices, that means it will copy a bigger area than was
@@ -321,6 +327,11 @@ protected:
      * \see fastBitBlt
      */
     void fastBitBltRough(KisPaintDeviceSP src, const QRect &rect);
+
+    /**
+     * The same as \ref fastBitBltRough() but reads old data
+     */
+    void fastBitBltRoughOldData(KisPaintDeviceSP src, const QRect &rect);
 
 public:
     /**
@@ -720,6 +731,10 @@ private:
      * in the colorspace of this paint device.
      */
     QVector<qint32> channelSizes();
+
+private:
+    friend class KisSelectionTest;
+    KisNodeWSP parentNode() const;
 
 private:
     KisDataManagerSP m_datamanager;

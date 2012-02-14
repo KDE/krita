@@ -23,9 +23,9 @@
 
 #include <kdemacros.h>
 #include <kdebug.h>
-#include <QtCore/QList>
-#include <QtCore/QString>
-#include <QtCore/QHash>
+#include <QList>
+#include <QString>
+#include <QHash>
 
 /**
  * Base class for registry objects.

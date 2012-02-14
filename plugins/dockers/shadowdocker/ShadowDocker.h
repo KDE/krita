@@ -21,7 +21,7 @@
 #define SHADOWDOCKER_H
 
 #include <KoCanvasObserverBase.h>
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
 
 
 /// A docker for setting properties of a shape shadow

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2008-2012 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,16 +46,16 @@ private:
     KisShapeDynamicsProperties m_shapeDynamicsProperties;
     KisColorProperties m_colorProperties;
     KisBrushOption m_brushOption;
-    
+
     const KisSprayPaintOpSettings *m_settings;
 
     KisPaintDeviceSP m_dab;
     SprayBrush m_sprayBrush;
     qreal m_xSpacing, m_ySpacing, m_spacing;
+    bool m_isPresetValid;
     KisPressureRotationOption m_rotationOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
-    
 };
 
 #endif // KIS_SPRAY_PAINTOP_H_

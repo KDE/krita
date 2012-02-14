@@ -18,8 +18,9 @@
 
 #include <kis_ruler_assistant_tool.h>
 
-#include <qpainter.h>
-#include <qxmlstream.h>
+#include <QPainter>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
 #include <kis_debug.h>
 #include <klocale.h>

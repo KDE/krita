@@ -22,9 +22,9 @@
 #ifndef koGlobal_h
 #define koGlobal_h
 
-#include <QtCore/QStringList>
-#include <QtGui/QFont>
-#include <QtCore/QMap>
+#include <QStringList>
+#include <QFont>
+#include <QMap>
 
 #include "komain_export.h"
 

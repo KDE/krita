@@ -24,7 +24,7 @@
 
 #include <KoCanvasObserverBase.h>
 
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
 
 class KoCanvasBase;
 class KoModeBox;

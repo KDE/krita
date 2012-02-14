@@ -64,7 +64,7 @@ void BgSpellCheck::startRun(QTextDocument *document, int startPosition, int endP
     if (m_currentLanguage != m_defaultLanguage || m_currentCountry != m_defaultCountry) {
         m_currentCountry = m_defaultCountry;
         m_currentLanguage = m_defaultLanguage;
-        changeLanguage(m_currentLanguage);
+        changeLanguage(m_currentLanguage+'_'+m_currentCountry);
     }
     if (m_currentPosition < m_endPosition) {
         kDebug(31000) << "Starting:" << m_currentPosition << m_endPosition;
@@ -148,13 +148,12 @@ QString BgSpellCheck::fetchMoreText()
 
     if (m_currentLanguage != language || m_currentCountry != country) {
         kDebug(31000) << "switching to language" << language << country;
-        // hmm, seems we can't set country. *shrug*
-#if 0
-     Disabling this as sonnet crashes on this. See https://bugs.kde.org/228271
-        changeLanguage(language);
-#endif
         m_currentLanguage = language;
         m_currentCountry = country;
+#if 0
+     Disabling this as sonnet crashes on this. See https://bugs.kde.org/228271
+        changeLanguage(m_currentLanguage+'_'+m_currentCountry);
+#endif
     }
 
     QTextCursor cursor(m_document);

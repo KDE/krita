@@ -23,7 +23,7 @@
 #ifndef TEST_KO_TEXT_EDITOR_H
 #define TEST_KO_TEXT_EDITOR_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class QTextDocument;
 class KoTextEditor;

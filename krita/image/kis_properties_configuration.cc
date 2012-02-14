@@ -21,7 +21,7 @@
 
 
 #include <kis_debug.h>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QString>
 
 #include "kis_image.h"

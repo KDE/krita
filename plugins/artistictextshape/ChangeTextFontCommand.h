@@ -23,7 +23,7 @@
 
 #include "ArtisticTextRange.h"
 #include <kundo2command.h>
-#include <QtGui/QFont>
+#include <QFont>
 
 class ArtisticTextShape;
 

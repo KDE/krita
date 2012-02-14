@@ -54,9 +54,9 @@
 #include <KIcon>
 #include <KDebug>
 #include <KLocale>
-#include <QtGui/QPainter>
-#include <QtGui/QBitmap>
-#include <QtGui/QTabWidget>
+#include <QPainter>
+#include <QBitmap>
+#include <QTabWidget>
 
 static unsigned char needle_bits[] = {
     0x00, 0x00, 0x10, 0x00, 0x20, 0x00, 0x60, 0x00, 0xc0, 0x00, 0xc0, 0x01,

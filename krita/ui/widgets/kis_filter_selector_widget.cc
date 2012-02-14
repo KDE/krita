@@ -38,6 +38,15 @@
 #include "kis_filters_model.h"
 #include "kis_config.h"
 
+class ThumbnailBounds : public KisDefaultBounds {
+
+    QRect bounds() const
+    {
+        return QRect(0, 0, 100, 100);
+    }
+};
+
+
 struct KisFilterSelectorWidget::Private {
     QWidget* currentCentralWidget;
     KisConfigWidget* currentFilterConfigurationWidget;
@@ -92,6 +101,7 @@ void KisFilterSelectorWidget::setPaintDevice(KisPaintDeviceSP _paintDevice)
 
     d->paintDevice = _paintDevice;
     d->thumb = d->paintDevice->createThumbnailDevice(100, 100);
+    d->thumb->setDefaultBounds(new ThumbnailBounds());
     d->filtersModel = new KisFiltersModel(d->thumb);
     d->uiFilterSelector.filtersSelector->setFilterModel(d->filtersModel);
     d->uiFilterSelector.filtersSelector->header()->setVisible(false);

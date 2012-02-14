@@ -20,8 +20,8 @@
 #include "KoPathSegment.h"
 #include "KoPathPoint.h"
 #include <kdebug.h>
-#include <QtGui/QPainterPath>
-#include <QtGui/QTransform>
+#include <QPainterPath>
+#include <QTransform>
 #include <math.h>
 
 /// Maximal recursion depth for finding root params

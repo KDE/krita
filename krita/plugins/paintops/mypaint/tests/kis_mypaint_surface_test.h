@@ -19,7 +19,7 @@
 #ifndef KIS_MYPAINT_SURFACE_TEST_H
 #define KIS_MYPAINT_SURFACE_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisMyPaintSurfaceTest : public QObject
 {

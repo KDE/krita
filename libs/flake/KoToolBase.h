@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QCursor>
 #include <QStringList>
-#include <QtCore/QRectF>
+#include <QRectF>
 
 #include "flake_export.h"
 
@@ -132,6 +132,14 @@ public:
      * @param event state and reason of this mouse or stylus press
      */
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+
+    /**
+     * Called when (one of) the mouse or stylus buttons is triple clicked.
+     * Implementors should call event->ignore() if they do not actually use the event.
+     * Default implementation ignores this event.
+     * @param event state and reason of this mouse or stylus press
+     */
+    virtual void mouseTripleClickEvent(KoPointerEvent *event);
 
     /**
      * Called when the mouse or stylus moved over the canvas.

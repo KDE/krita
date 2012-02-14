@@ -177,7 +177,9 @@ QByteArray KisDoc2::mimeType() const
 }
 
 void KisDoc2::slotLoadingFinished() {
-    image()->initialRefreshGraph();
+    if (m_d->image) {
+        m_d->image->initialRefreshGraph();
+    }
     setAutoSave(KisConfig().autoSaveInterval());
 }
 
@@ -464,6 +466,7 @@ void KisDoc2::showErrorAndDie()
 
 void KisDoc2::paintContent(QPainter& painter, const QRect& rc)
 {
+    if (!m_d->image) return;
     KisConfig cfg;
     const KoColorProfile *profile = cfg.displayProfile();
     QRect rect = rc & m_d->image->bounds();

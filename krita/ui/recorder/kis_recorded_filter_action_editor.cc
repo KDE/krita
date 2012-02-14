@@ -20,7 +20,7 @@
 #include "kis_recorded_filter_action_editor.h"
 #include <recorder/kis_recorded_filter_action.h>
 #include <filter/kis_filter.h>
-#include <qgridlayout.h>
+#include <QGridLayout>
 #include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
 #include <QLabel>

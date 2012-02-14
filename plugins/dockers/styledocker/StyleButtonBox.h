@@ -21,7 +21,7 @@
 #ifndef STYLEBUTTONBOX_H
 #define STYLEBUTTONBOX_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class QButtonGroup;
 

@@ -110,6 +110,9 @@ public:
 
     BumpmapWidget * m_page;
 
+private slots:
+    void setCurrentNode(KisNodeSP node);
+
 private:
 
     KisPaintDeviceSP m_device;

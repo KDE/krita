@@ -19,7 +19,7 @@
 #ifndef KIS_GENERIC_COLORSPACE_TEST_H
 #define KIS_GENERIC_COLORSPACE_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisGenericColorSpaceTest : public QObject
 {

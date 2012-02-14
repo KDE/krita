@@ -53,6 +53,8 @@ class QTextDocumentFragment;
 class QString;
 class KUndo2Command;
 
+class KoTextVisitor;
+
 /**
  * KoTextEditor is a wrapper around QTextCursor. It handles undo/redo and change
  * tracking for all editing commands.
@@ -105,11 +107,6 @@ public: // KoToolSelection overloads
 
 public:
 
-    /// Called when loading is done to check whether there's bidi text in the document.
-    void finishedLoading();
-
-    void updateDefaultTextDirection(KoText::Direction direction);
-
     bool operator!=(const QTextCursor &other) const;
 
     bool operator<(const QTextCursor &other) const;
@@ -155,8 +152,30 @@ private:
 
 public slots:
 
-    // XXX: make this private as  well
-    void addCommand(KUndo2Command *command, bool addCommandToStack = true);
+    /// This adds the \ref command to the calligra undo stack.
+    ///
+    /// From this point forward all text manipulation is placed in the qt text systems internal
+    /// undostack while also adding representative subcommands to \ref command.
+    ///
+    /// The \ref command is not redone as part of this process.
+    ///
+    /// Note: Be aware that many KoTextEditor methods start their own commands thus terminating
+    /// the recording of this \ref command. Only use QTextCursor manipulation (with all the issues
+    /// that brings) or only use KoTextEditor methods that don't start their own commmand.
+    ///
+    /// The recording is automatically terminated when another command is added, which as mentioned
+    /// can happen by executing some of the KoTextEditor methods.
+    void addCommand(KUndo2Command *command);
+    
+    /// This instantly "redo" the command thus placing all the text manipulation the "redo" does
+    /// (should be implemented with a "first redo" pattern) in the qt text systems internal
+    /// undostack while also adding representative subcommands to \ref command.
+    ///
+    /// When \ref command is done "redoing" no further text manipulation is added as subcommands.
+    ///
+    /// \ref command is not put on the calligra undo stack. That is the responsibility of the
+    /// caller, or the caller can choose to quickly undo and then delete the \ref command.
+    void instantlyExecuteCommand(KUndo2Command *command);
 
     void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
 
@@ -187,8 +206,6 @@ public slots:
     void setTextColor(const QColor &color);
 
     void setTextBackgroundColor(const QColor &color);
-
-    void setDefaultFormat();
 
     void setStyle(KoParagraphStyle *style);
 
@@ -261,11 +278,9 @@ public slots:
     /**
      * Delete one character in the specified direction.
      * @param direction the direction into which we delete. Valid values are
-     * @param trackChanges if true, track this deletion in the changetracker
      * @param shapeController the canvas' shapeController
      */
-    void deleteChar(MoveOperation direction, bool trackChanges,
-                    KoShapeController *shapeController);
+    void deleteChar(MoveOperation direction, KoShapeController *shapeController);
 
     /**
      * @param numberingEnabled when true, we will enable numbering for the current paragraph (block).
@@ -275,8 +290,7 @@ public slots:
     /**
      * change the current block's list properties
      */
-    void setListProperties(KoListStyle::Style style,
-                           int level = 0,
+    void setListProperties(const KoListLevelProperties &llp,
                            ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList));
 
     // -------------------------------------------------------------
@@ -449,24 +463,22 @@ public slots:
 
     bool visualNavigation() const;
 
-    bool isBidiDocument() const;
-
     const QTextFrame *currentFrame () const;
     const QTextList *currentList () const;
     const QTextTable *currentTable () const;
 
 signals:
-    void isBidiUpdated();
     void cursorPositionChanged();
+    void textFormatChanged();
 
 protected:
-    bool recursiveProtectionCheck(QTextFrame::iterator it) const;
+    void recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisitor &visitor) const;
 
 private:
     Q_PRIVATE_SLOT(d, void documentCommandAdded())
-    Q_PRIVATE_SLOT(d, void runDirectionUpdater())
 
     class Private;
+    friend class Private;
     Private* const d;
 };
 

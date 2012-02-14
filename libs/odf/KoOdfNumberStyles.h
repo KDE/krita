@@ -24,7 +24,7 @@
 #include "koodf_export.h"
 #include <KoXmlReader.h>
 
-#include <QtCore/QPair>
+#include <QPair>
 
 class KoGenStyles;
 class KoXmlWriter;

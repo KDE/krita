@@ -144,6 +144,7 @@ set(kritaimage_LIB_SRCS
    kis_count_visitor.cpp
    kis_histogram.cc
    kis_image_interfaces.cpp
+   kis_node_graph_listener.cpp
    kis_image.cc
    kis_image_signal_router.cpp
    kis_image_config.cpp
@@ -156,6 +157,7 @@ set(kritaimage_LIB_SRCS
    kis_circle_mask_generator.cpp
    kis_gauss_circle_mask_generator.cpp
    kis_gauss_rect_mask_generator.cpp
+   kis_gtl_lock.cpp
    kis_curve_circle_mask_generator.cpp
    kis_curve_rect_mask_generator.cpp
    kis_math_toolbox.cpp

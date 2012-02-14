@@ -387,21 +387,6 @@ void KisToolPaint::updateTabletPressureSamples()
     m_pressureSamples = curve.floatTransfer(LEVEL_OF_PRESSURE_RESOLUTION + 1);
 }
 
-void KisToolPaint::setupPainter(KisPainter* painter)
-{
-    KisTool::setupPainter(painter);
-    painter->setOpacity(m_opacity);
-    painter->setCompositeOp(compositeOp());
-
-    QPointF axisCenter = canvas()->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxisCenter).toPointF();
-    if (axisCenter.isNull()){
-        axisCenter = QPointF(0.5 * image()->width(), 0.5 * image()->height());
-    }
-    bool mirrorMaskHorizontal = canvas()->resourceManager()->resource(KisCanvasResourceProvider::MirrorHorizontal).toBool();
-    bool mirrorMaskVertical = canvas()->resourceManager()->resource(KisCanvasResourceProvider::MirrorVertical).toBool();
-    painter->setMirrorInformation(axisCenter, mirrorMaskHorizontal, mirrorMaskVertical);
-}
-
 void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)
 {
     KisTool::setupPaintAction(action);

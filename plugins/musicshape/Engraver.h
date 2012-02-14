@@ -19,7 +19,7 @@
 #ifndef MUSIC_ENGRAVER_H
 #define MUSIC_ENGRAVER_H
 
-#include <QtCore/QSizeF>
+#include <QSizeF>
 
 namespace MusicCore {
     class Bar;

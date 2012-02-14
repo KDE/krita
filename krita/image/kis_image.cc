@@ -170,42 +170,26 @@ KisImage::~KisImage()
     disconnect(); // in case Qt gets confused
 }
 
-void KisImage::aboutToAddANode(KisNode *parent, int index)
-{
-    SANITY_CHECK_LOCKED("aboutToAddANode");
-    m_d->signalRouter->emitAboutToAddANode(parent, index);
-}
-
 void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
 {
+    KisNodeGraphListener::nodeHasBeenAdded(parent, index);
+
+    SANITY_CHECK_LOCKED("nodeHasBeenAdded");
     m_d->signalRouter->emitNodeHasBeenAdded(parent, index);
 }
 
 void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 {
+    KisNodeGraphListener::aboutToRemoveANode(parent, index);
+
     SANITY_CHECK_LOCKED("aboutToRemoveANode");
     m_d->signalRouter->emitAboutToRemoveANode(parent, index);
 }
 
-void KisImage::nodeHasBeenRemoved(KisNode *parent, int index)
-{
-    // XXX: Temporarily for compatibility
-    m_d->signalRouter->emitNodeHasBeenRemoved(parent, index);
-}
-
-void KisImage::aboutToMoveNode(KisNode *node, int oldIndex, int newIndex)
-{
-    SANITY_CHECK_LOCKED("aboutToMoveNode");
-    m_d->signalRouter->emitAboutToMoveNode(node, oldIndex, newIndex);
-}
-
-void KisImage::nodeHasBeenMoved(KisNode *node, int oldIndex, int newIndex)
-{
-    m_d->signalRouter->emitNodeHasBeenMoved(node, oldIndex, newIndex);
-}
-
 void KisImage::nodeChanged(KisNode* node)
 {
+    KisNodeGraphListener::nodeChanged(node);
+
     m_d->signalRouter->emitNodeChanged(node);
 }
 
@@ -980,14 +964,7 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
 
     undoAdapter()->beginMacro(i18n("Flatten Layer"));
     undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, layer->parent(), layer));
-
-    KisNodeSP node = layer->firstChild();
-    while (node) {
-        undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, node));
-        node = node->nextSibling();
-    }
     undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer));
-
 
     QList<const KisMetaData::Store*> srcs;
     srcs.append(layer->metaData());
@@ -1196,8 +1173,10 @@ KisActionRecorder* KisImage::actionRecorder() const
 
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 {
-    if(m_d->rootLayer)
+    if(m_d->rootLayer) {
+        m_d->rootLayer->setGraphListener(0);
         m_d->rootLayer->disconnect();
+    }
 
     m_d->rootLayer = rootLayer;
     m_d->rootLayer->disconnect();
@@ -1396,6 +1375,8 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
 
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
+    KisNodeGraphListener::requestProjectionUpdate(node, rect);
+
     if (m_d->scheduler) {
         m_d->scheduler->updateProjection(node, rect, bounds());
     }

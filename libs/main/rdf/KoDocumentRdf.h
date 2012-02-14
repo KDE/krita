@@ -27,10 +27,10 @@
 #include <KoDataCenterBase.h>
 #include <kconfig.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QObject>
+#include <QMap>
+#include <QString>
+#include <QStringList>
 #include <Soprano/Soprano>
 #include <QTextBlockUserData>
 #include <QTreeWidgetItem>

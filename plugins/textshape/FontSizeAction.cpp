@@ -25,9 +25,9 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include <QtGui/QFontDatabase>
-#include <QtGui/QToolBar>
-#include <QtGui/QToolButton>
+#include <QFontDatabase>
+#include <QToolBar>
+#include <QToolButton>
 
 #include <kdebug.h>
 #include <kicon.h>

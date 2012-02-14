@@ -20,8 +20,8 @@
 #ifndef __REPORTPAGEOPTIONS_H__
 #define __REPORTPAGEOPTIONS_H__
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 #include "koreport_export.h"
 
 class KOREPORT_EXPORT ReportPageOptions : public QObject

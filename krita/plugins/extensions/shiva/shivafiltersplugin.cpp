@@ -30,11 +30,7 @@
 
 #include "shivafilter.h"
 
-#include "Version.h"
-
-#if OPENSHIVA_13_OR_MORE
 #include <GTLCore/CompilationMessages.h>
-#endif
 
 QMutex* shivaMutex;
 
@@ -55,7 +51,6 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
     {
         KisFilterRegistry * manager = KisFilterRegistry::instance();
         Q_ASSERT(manager);
-#if OPENSHIVA_13_OR_MORE
         std::list< OpenShiva::Source > kernels = m_sourceCollection->sources(OpenShiva::Source::FilterKernel);
         dbgPlugins << "Collection has " << kernels.size() << " filters";
         foreach(OpenShiva::Source kernel, kernels) {
@@ -64,15 +59,6 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QVariantList &)
                 manager->add(new ShivaFilter(new OpenShiva::Source(kernel)));
             }
         }
-#else
-        std::list< OpenShiva::Source* > kernels = m_sourceCollection->sources(OpenShiva::Source::FilterKernel);
-        dbgPlugins << "Collection has " << kernels.size() << " filters";
-        foreach(OpenShiva::Source* kernel, kernels) {
-            if (kernel->outputImageType() == OpenShiva::Source::Image && kernel->inputImageType(0) == OpenShiva::Source::Image) {
-                manager->add(new ShivaFilter(kernel));
-            }
-        }
-#endif
     }
     shivaMutex = new QMutex;
 }

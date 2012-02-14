@@ -33,10 +33,10 @@
 #include <kdialog.h>
 #include <kconfig.h>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QGroupBox>
-#include <QtGui/QLabel>
-#include <QtGui/QCheckBox>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QCheckBox>
 
 class KoConfigMiscPage::Private
 {

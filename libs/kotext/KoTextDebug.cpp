@@ -302,6 +302,8 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
             value = QString::number(properties[id].toInt());
             break;
         default:
+            key = "unknown"+QString::number(id);
+            value = QString::number(properties[id].toInt());
             break;
         }
         if (!key.isEmpty())
@@ -586,7 +588,7 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             break;
         case KoListStyle::BulletImage:
             key = "bullet-image";
-            value = QString::number(long(properties[id].value<KoImageData*>()));
+            value = QString::number((quintptr)(properties[id].value<KoImageData*>()));
             break;
         case KoListStyle::Margin:
             key="margin-left";

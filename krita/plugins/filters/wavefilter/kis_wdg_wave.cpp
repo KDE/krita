@@ -19,7 +19,7 @@
  */
 
 #include "kis_wdg_wave.h"
-#include <qspinbox.h>
+#include <QSpinBox>
 
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>

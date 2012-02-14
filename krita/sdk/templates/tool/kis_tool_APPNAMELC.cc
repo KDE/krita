@@ -1,6 +1,6 @@
 #include <kis_tool_%{APPNAMELC}.h>
 
-#include <qpainter.h>
+#include <QPainter>
 
 #include <kis_debug.h>
 #include <klocale.h>

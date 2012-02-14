@@ -22,7 +22,7 @@
 
 #include <ui_GuidesToolOptionWidget.h>
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class GuidesToolOptionWidget : public QWidget
 {

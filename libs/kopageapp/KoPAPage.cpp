@@ -164,6 +164,27 @@ bool KoPAPage::displayShape(KoShape *shape) const
     return true;
 }
 
+QImage KoPAPage::thumbImage(const QSize &size)
+{
+    if (size.isEmpty()) {
+        return QImage();
+    }
+    KoZoomHandler zoomHandler;
+    const KoPageLayout & layout = pageLayout();
+    KoPAUtil::setZoom(layout, size, zoomHandler);
+    QRect pageRect(KoPAUtil::pageRect(layout, size, zoomHandler));
+
+    QImage image(size, QImage::Format_RGB32);
+    image.fill(QColor(Qt::white).rgb());
+    QPainter painter(&image);
+    painter.setClipRect(pageRect);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.translate(pageRect.topLeft());
+
+    paintPage(painter, zoomHandler);
+    return image;
+}
+
 QPixmap KoPAPage::generateThumbnail( const QSize& size )
 {
     // don't paint null pixmap

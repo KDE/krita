@@ -55,7 +55,7 @@ kernel PerlinNoise
     {
        permutation[i] = i;
     }
-    int seed = 1252;
+    unsigned int seed = 1252;
     for (int i = 0; i < 1000; ++i) {
       int j = rand(seed) % 64;
       int k = rand(seed) % 64;

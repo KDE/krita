@@ -33,8 +33,8 @@
 
 #include <KoXmlReader.h>
 
-#include <QtGui/QGradient>
-#include <QtCore/QMap>
+#include <QGradient>
+#include <QMap>
 
 class KoShape;
 class KoShapeContainer;

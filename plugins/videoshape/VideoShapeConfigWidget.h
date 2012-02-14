@@ -22,7 +22,7 @@
 
 #include <KoShapeConfigWidgetBase.h>
 #include <kurl.h>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class VideoShape;
 class KFileWidget;

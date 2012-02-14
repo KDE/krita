@@ -80,7 +80,7 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
             KoImageDataPrivate *imageData = dataIt.value();
             if (imageData->imageLocation.isValid()) {
                 // TODO store url
-                Q_ASSERT(0); // not impleented yet
+                Q_ASSERT(0); // not implemented yet
             }
             else if (store->open(it.value())) {
                 KoStoreDevice device(store);

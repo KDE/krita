@@ -23,7 +23,7 @@
 
 #include "flake_export.h"
 
-#include <QtGui/QBrush>
+#include <QBrush>
 
 class KoShape;
 class QGradient;

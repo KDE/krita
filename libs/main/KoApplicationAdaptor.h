@@ -21,7 +21,7 @@
 #ifndef __KoApplicationAdaptor_h__
 #define __KoApplicationAdaptor_h__
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QtDBus/QtDBus>
 #include "komain_export.h"
 template<class T> class QList;

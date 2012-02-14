@@ -24,13 +24,18 @@
 >;  
 kernel CheckerBoard
 {
-  const int hsize = IMAGE_WIDTH / hcount;
-  const int vsize = IMAGE_HEIGHT / vcount;
+  dependent int hsize;
+  dependent int vsize;
+  void evaluateDependents()
+  {
+    hsize = IMAGE_WIDTH / hcount;
+    vsize = IMAGE_HEIGHT / vcount;
+  }
   void evaluatePixel(out pixel4 result)
   {
     int ix = int(result.coord.x) / hsize & 1;
     int iy = int(result.coord.y) / vsize & 1;
-    float4 r;
+    color r;
     if( ( ix == 1 and iy  == 1 ) or ( ix == 0 and iy == 0 ) )
     {
       r = color1;

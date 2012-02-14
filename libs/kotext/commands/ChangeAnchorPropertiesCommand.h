@@ -24,10 +24,15 @@
 #include "kotext_export.h"
 #include "KoTextAnchor.h"
 
+#include <QPointF>
+
+class KoShapeContainer;
+
+
 class KOTEXT_EXPORT ChangeAnchorPropertiesCommand : public KUndo2Command
 {
 public:
-    ChangeAnchorPropertiesCommand(KoTextAnchor *anchor, KoTextAnchor *newAnchor, KUndo2Command *parent);
+    ChangeAnchorPropertiesCommand(KoTextAnchor *anchor, const KoTextAnchor &newAnchorData, KoShapeContainer *newParent, KUndo2Command *parent);
     virtual ~ChangeAnchorPropertiesCommand();
 
     /// redo the command
@@ -35,11 +40,16 @@ public:
     /// revert the actions done in redo
     void undo();
 private:
-    void copyLayoutProperties(KoTextAnchor *from, KoTextAnchor *to);
+    void copyLayoutProperties(const KoTextAnchor *from, KoTextAnchor *to);
 
     KoTextAnchor *m_anchor;
     KoTextAnchor m_oldAnchor;
     KoTextAnchor m_newAnchor;
+    KoShapeContainer *m_oldParent;
+    KoShapeContainer *m_newParent;
+    QPointF m_oldAbsPos;
+    bool m_first;
+    bool m_macroFirst;
 };
 
 #endif // CHANGEANCHORPROPERTIESCOMMAND_H

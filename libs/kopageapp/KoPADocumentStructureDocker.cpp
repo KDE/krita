@@ -57,9 +57,9 @@
 #include <KConfigGroup>
 #include <KDebug>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QToolButton>
-#include <QtGui/QButtonGroup>
+#include <QGridLayout>
+#include <QToolButton>
+#include <QButtonGroup>
 #include <QItemSelection>
 #include <QApplication>
 #include <QClipboard>

@@ -5,6 +5,7 @@
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2010 Nandita Suri <suri.nandita@gmail.com>
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
+ * Copyright (C) 2011-2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -441,20 +442,7 @@ KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list)
 
 void KoListLevelProperties::onStyleChanged(int key)
 {
-    int bullet=0;
-    switch (key) {
-        case KoListStyle::Bullet:               bullet = 0x2022; break;
-        case KoListStyle::BlackCircle:          bullet = 0x25CF; break;
-        case KoListStyle::CircleItem:           bullet = 0x25CB; break;
-        case KoListStyle::RhombusItem:          bullet = 0xE00C; break;
-        case KoListStyle::SquareItem:           bullet = 0xE00A; break;
-        case KoListStyle::RightArrowHeadItem:   bullet = 0x27A2; break;
-        case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
-        case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
-        case KoListStyle::BallotXItem:          bullet = 0x2717; break;
-        case KoListStyle::DiscItem:             bullet = 0x25CF; break;
-    }
-
+    int bullet=KoListStyle::bulletCharacter(key);
     if (bullet != 0)
         setBulletCharacter(QChar(bullet));
 }
@@ -516,10 +504,10 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             case 0x25CB:           //white circle, no fill
                 setStyle(KoListStyle::CircleItem);
                 break;
-            case 0xE00C: // losange => rhombus
+            case 0x25C6: // losange => rhombus
                 setStyle(KoListStyle::RhombusItem);
                 break;
-            case 0xE00A: // square. Not in OASIS (reserved Unicode area!), but used in both OOo and kotext.
+            case 0x25A0: // square. Not in OASIS (reserved Unicode area!), but used in both OOo and kotext.
                 setStyle(KoListStyle::SquareItem);
                 break;
             case 0x27A2: // two-colors right-pointing triangle
@@ -787,19 +775,7 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
         if (d->stylesPrivate.contains(KoListStyle::BulletCharacter)) {
             bullet = d->stylesPrivate.value(KoListStyle::BulletCharacter).toInt();
         } else { // try to determine the bullet character from the style
-            switch (style()) {
-            case KoListStyle::Bullet:               bullet = 0x2022; break;
-            case KoListStyle::CircleItem:           bullet = 0x25CB; break;
-            case KoListStyle::RhombusItem:          bullet = 0xE00C; break;
-            case KoListStyle::SquareItem:           bullet = 0xE00A; break;
-            case KoListStyle::RightArrowHeadItem:   bullet = 0x27A2; break;
-            case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
-            case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
-            case KoListStyle::BallotXItem:          bullet = 0x2717; break;
-            case KoListStyle::BlackCircle:
-            case KoListStyle::DiscItem:             bullet = 0x25CF; break;
-            default:                                bullet = 0; break; //empty character
-            }
+            bullet = KoListStyle::bulletCharacter(style());
         }
         writer->addAttribute("text:bullet-char", QChar(bullet));
     }

@@ -19,9 +19,9 @@
  */
 
 #include "kis_wdg_color_to_alpha.h"
-#include <qcheckbox.h>
-#include <qlayout.h>
-#include <qspinbox.h>
+#include <QCheckBox>
+#include <QLayout>
+#include <QSpinBox>
 
 #include <kcolorbutton.h>
 

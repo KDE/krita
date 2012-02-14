@@ -159,8 +159,10 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
         m_canvas->disconnectCanvasObserver(this);
     }
     m_canvas = canvas;
-    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-            this,                        SLOT(resourceChanged(int, const QVariant&)), Qt::UniqueConnection);
+    if (m_canvas) {
+        connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
+            this, SLOT(resourceChanged(int, const QVariant&)), Qt::UniqueConnection);
+    }
 
     update();
 }

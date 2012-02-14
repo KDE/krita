@@ -228,6 +228,8 @@ public:
      */
     QPixmap pageThumbnail(KoPAPageBase* page, const QSize& size);
 
+    QImage pageThumbImage(KoPAPageBase* page, const QSize& size);
+
 public slots:
     /// reimplemented
     virtual void initEmpty();

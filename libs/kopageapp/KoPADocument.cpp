@@ -630,6 +630,13 @@ QPixmap KoPADocument::pageThumbnail(KoPAPageBase* page, const QSize& size)
     return page->thumbnail(size);
 }
 
+QImage KoPADocument::pageThumbImage(KoPAPageBase* page, const QSize& size)
+{
+    int pageNumber = pageIndex(page) + 1;
+    d->pageProvider->setPageData(pageNumber, page);
+    return page->thumbImage(size);
+}
+
 void KoPADocument::initEmpty()
 {
     d->masterPages.clear();

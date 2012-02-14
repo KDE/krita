@@ -19,8 +19,8 @@
 #ifndef MUSIC_CORE_VOICE_H
 #define MUSIC_CORE_VOICE_H
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
+#include <QObject>
+#include <QString>
 
 namespace MusicCore {
 

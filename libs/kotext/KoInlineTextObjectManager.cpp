@@ -73,9 +73,18 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
     cf.setProperty(InlineInstanceId, ++m_lastObjectId);
     cursor.insertText(QString(QChar::ObjectReplacementCharacter), cf);
     object->setId(m_lastObjectId);
-    m_objects.insert(m_lastObjectId, object);
     object->setManager(this);
     object->setup();
+
+    insertObject(object);
+
+    // reset to use old format so that the InlineInstanceId is no longer set.
+    cursor.setCharFormat(oldCf);
+}
+
+void KoInlineTextObjectManager::insertObject(KoInlineObject *object)
+{
+    m_objects.insert(object->id(), object);
     if (object->propertyChangeListener()) {
         m_listeners.append(object);
         QHash<int, QVariant>::iterator i;
@@ -90,7 +99,24 @@ void KoInlineTextObjectManager::insertInlineObject(QTextCursor &cursor, KoInline
         m_bookmarkManager.insert(bookmark->name(), bookmark);
     }
     // reset to use old format so that the InlineInstanceId is no longer set.
-    cursor.setCharFormat(oldCf);
+}
+
+void KoInlineTextObjectManager::addInlineObject(KoInlineObject* object)
+{
+    if (!object) {
+        return;
+    }
+
+    int id = object->id();
+    if (id == -1) {
+        object->setId(++m_lastObjectId);
+        object->setManager(this);
+        object->setup();
+    }
+    else {
+        m_deletedObjects.remove(id);
+    }
+    insertObject(object);
 }
 
 bool KoInlineTextObjectManager::removeInlineObject(QTextCursor &cursor)
@@ -132,13 +158,16 @@ bool KoInlineTextObjectManager::removeInlineObject(QTextCursor &cursor)
     return false;
 }
 
+
 void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
 {
     if (!object) {
         return;
     }
 
-    m_objects.remove(object->id());
+    int id = object->id();
+    m_objects.remove(id);
+    m_deletedObjects[id] = object;
     m_listeners.removeAll(object);
 
     KoBookmark *bookmark = dynamic_cast<KoBookmark *>(object);
@@ -146,7 +175,6 @@ void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
         m_bookmarkManager.remove(bookmark->name());
     }
 
-    m_deletedObjects[object->id()] = object;
     // TODO dirty the document somehow
 }
 
@@ -263,6 +291,8 @@ void KoInlineTextObjectManager::documentInformationUpdated(const QString &info, 
         setProperty(KoInlineObject::Title, data);
     else if (info == "description")
         setProperty(KoInlineObject::Description, data);
+    else if (info == "comments")
+        setProperty(KoInlineObject::Comments, data);
     else if (info == "subject")
         setProperty(KoInlineObject::Subject, data);
     else if (info == "keyword")

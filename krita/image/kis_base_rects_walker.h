@@ -102,6 +102,7 @@ public:
     void collectRects(KisNodeSP node, const QRect& requestedRect) {
         clear();
         m_nodeChecksum = calculateChecksum(node, requestedRect);
+        m_graphChecksum = node->graphSequenceNumber();
         m_resultChangeRect = requestedRect;
         m_resultUncroppedChangeRect = requestedRect;
         m_requestedRect = requestedRect;
@@ -111,12 +112,24 @@ public:
 
     inline void recalculate(const QRect& requestedRect) {
         Q_ASSERT(m_startNode);
-        collectRects(m_startNode, requestedRect);
+
+        if(isStillInGraph(m_startNode)) {
+            collectRects(m_startNode, requestedRect);
+        }
+        else {
+            clear();
+            m_nodeChecksum = calculateChecksum(m_startNode, requestedRect);
+            m_graphChecksum = m_startNode->graphSequenceNumber();
+            m_resultChangeRect = QRect();
+            m_resultUncroppedChangeRect = QRect();
+        }
     }
 
     bool checksumValid() {
         Q_ASSERT(m_startNode);
-        return m_nodeChecksum == calculateChecksum(m_startNode, m_requestedRect);
+        return
+            m_nodeChecksum == calculateChecksum(m_startNode, m_requestedRect) &&
+            m_graphChecksum == m_startNode->graphSequenceNumber();
     }
 
     inline void setCropRect(QRect cropRect) {
@@ -188,6 +201,10 @@ protected:
         return position & GRAPH_POSITION_MASK;
     }
 
+    static inline bool isStillInGraph(KisNodeSP node) {
+        return node->graphListener();
+    }
+
     static inline bool isLayer(KisNodeSP node) {
         return qobject_cast<KisLayer*>(node.data());
     }
@@ -199,6 +216,18 @@ protected:
     static inline bool hasClones(KisNodeSP node) {
         KisLayer *layer = qobject_cast<KisLayer*>(node.data());
         return layer && layer->hasClones();
+    }
+
+    static inline NodePosition calculateNodePosition(KisNodeSP node) {
+        KisNodeSP nextNode = node->nextSibling();
+        while(nextNode && !isLayer(nextNode)) nextNode = nextNode->nextSibling();
+        if (!nextNode) return N_TOPMOST;
+
+        KisNodeSP prevNode = node->prevSibling();
+        while(prevNode && !isLayer(prevNode)) prevNode = prevNode->prevSibling();
+        if (!prevNode) return N_BOTTOMMOST;
+
+        return N_NORMAL;
     }
 
     inline void clear() {
@@ -386,6 +415,13 @@ private:
      * calculated
      */
     qint32 m_nodeChecksum;
+
+    /**
+     * Used for getting know whether the structure of
+     * the graph has changed since the walker was
+     * calculated
+     */
+    qint32 m_graphChecksum;
 
     /**
      * Temporary variables

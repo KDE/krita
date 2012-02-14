@@ -18,7 +18,7 @@
 #ifndef KIS_TILED_DATA_MANAGER_TEST_H
 #define KIS_TILED_DATA_MANAGER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisTiledDataManager;
 
@@ -47,6 +47,7 @@ private slots:
     void testPurgedAndEmptyTransactions();
     void testUnversionedBitBlt();
     void testVersionedBitBlt();
+    void testBitBltOldData();
     void testBitBltRough();
     void testTransactions();
     void testPurgeHistory();

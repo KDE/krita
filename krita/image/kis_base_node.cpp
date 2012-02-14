@@ -105,6 +105,7 @@ void KisBaseNode::setOpacity(quint8 val)
     if (opacity() != val) {
         nodeProperties().setProperty("opacity", val);
     }
+    baseNodeChangedCallback();
 }
 
 quint8 KisBaseNode::percentOpacity() const
@@ -128,6 +129,7 @@ const QString& KisBaseNode::compositeOpId() const
 void KisBaseNode::setCompositeOp(const QString& compositeOp)
 {
     m_d->compositeOp = compositeOp;
+    baseNodeChangedCallback();
 }
 
 KoDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
@@ -157,6 +159,7 @@ void KisBaseNode::mergeNodeProperties(const KoProperties & properties)
         iter.next();
         m_d->properties.setProperty(iter.key(), iter.value());
     }
+    baseNodeChangedCallback();
 }
 
 bool KisBaseNode::check(const KoProperties & properties) const
@@ -197,7 +200,8 @@ bool KisBaseNode::visible(bool recursive) const
 void KisBaseNode::setVisible(bool visible)
 {
     m_d->properties.setProperty("visible", visible);
-    emit(visibilityChanged(visible));
+    emit visibilityChanged(visible);
+    baseNodeChangedCallback();
 }
 
 bool KisBaseNode::userLocked() const
@@ -208,7 +212,8 @@ bool KisBaseNode::userLocked() const
 void KisBaseNode::setUserLocked(bool locked)
 {
     m_d->properties.setProperty("locked", locked);
-    emit(userLockingChanged(locked));
+    emit userLockingChanged(locked);
+    baseNodeChangedCallback();
 }
 
 bool KisBaseNode::systemLocked() const
@@ -220,7 +225,8 @@ void KisBaseNode::setSystemLocked(bool locked, bool update)
 {
     m_d->systemLocked = locked;
     if (update) {
-        emit(systemLockingChanged(locked));
+        emit systemLockingChanged(locked);
+        baseNodeChangedCallback();
     }
 }
 
@@ -237,6 +243,7 @@ QUuid KisBaseNode::uuid() const
 void KisBaseNode::setUuid(const QUuid& id)
 {
     m_d->id = id;
+    baseNodeChangedCallback();
 }
 
 #include "kis_base_node.moc"

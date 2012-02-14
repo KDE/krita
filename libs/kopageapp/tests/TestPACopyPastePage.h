@@ -20,7 +20,7 @@
 #ifndef TESTPACOPYPASTEPAGE_H
 #define TESTPACOPYPASTEPAGE_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class QMimeData;
 class MockDocument;

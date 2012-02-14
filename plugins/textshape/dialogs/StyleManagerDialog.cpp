@@ -20,6 +20,9 @@
 #include "StyleManagerDialog.h"
 #include "StyleManager.h"
 
+#include <KoCharacterStyle.h>
+#include <KoParagraphStyle.h>
+
 StyleManagerDialog::StyleManagerDialog(QWidget *parent)
         : KDialog(parent)
 {
@@ -56,6 +59,16 @@ void StyleManagerDialog::setStyleManager(KoStyleManager *sm)
 void StyleManagerDialog::setUnit(const KoUnit &unit)
 {
     m_styleManagerWidget->setUnit(unit);
+}
+
+void StyleManagerDialog::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
+{
+    m_styleManagerWidget->setCharacterStyle(style, canDelete);
+}
+
+void StyleManagerDialog::setParagraphStyle(KoParagraphStyle *style)
+{
+    m_styleManagerWidget->setParagraphStyle(style);
 }
 
 #include <StyleManagerDialog.moc>

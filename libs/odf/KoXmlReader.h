@@ -26,8 +26,8 @@
 #include "koodf_export.h"
 
 #include <QPair>
-#include <QtXml/qxml.h>
-#include <QtXml/qdom.h>
+#include <QtXml>
+#include <QDomDocument>
 
 class QIODevice;
 class QTextDecoder;
@@ -126,6 +126,8 @@ public:
     KoXmlNode nextSibling() const;
     KoXmlNode previousSibling() const;
 
+    KoXmlElement firstChildElement() const;
+
     // equivalent to node.childNodes().count() if node is a QDomNode instance
     int childNodesCount() const;
 
@@ -150,7 +152,11 @@ public:
     void unload();
 
     // compatibility
-    QDomNode asQDomNode(QDomDocument ownerDoc) const;
+    /**
+     * @internal do not call directly
+     * Use KoXml::asQDomDocument(), KoXml::asQDomElement() or KoXml::asQDomNode() instead
+     */
+    void asQDomNode(QDomDocument& ownerDoc) const;
 
 protected:
     KoXmlNodeData* d;
@@ -396,12 +402,33 @@ KOODF_EXPORT int childNodesCount(const KoXmlNode& node);
 KOODF_EXPORT QStringList attributeNames(const KoXmlNode& node);
 
 /**
- * Convert KoXml classes to the corresponding QDom classes, which has
- * 'ownerDoc' as the owner document (QDomDocument instance).
+ * Convert KoXmlNode classes to the corresponding QDom classes, which has
+ * @p ownerDoc as the owner document (QDomDocument instance).
+ * The converted @p node (and its children) are added to ownerDoc.
+ *
+ * NOTE:
+ * - If ownerDoc is not empty, this may fail, @see QDomDocument
+ * - @p node must not be a KoXmlDocument, use asQDomDocument()
+ * 
+ * @see asQDomDocument, asQDomElement
  */
-KOODF_EXPORT QDomNode asQDomNode(QDomDocument ownerDoc, const KoXmlNode& node);
-KOODF_EXPORT QDomElement asQDomElement(QDomDocument ownerDoc, const KoXmlElement& element);
-KOODF_EXPORT QDomDocument asQDomDocument(QDomDocument ownerDoc, const KoXmlDocument& document);
+KOODF_EXPORT void asQDomNode(QDomDocument& ownerDoc, const KoXmlNode& node);
+
+/**
+ * Convert KoXmlNode classes to the corresponding QDom classes, which has
+ * @p ownerDoc as the owner document (QDomDocument instance).
+ * The converted @p element (and its children) is added to ownerDoc.
+ * 
+ * NOTE: If ownerDoc is not empty, this may fail, @see QDomDocument
+ *
+ */
+KOODF_EXPORT void asQDomElement(QDomDocument& ownerDoc, const KoXmlElement& element);
+
+/**
+ * Converts the whole @p document into a QDomDocument
+ * If KOXML_USE_QDOM is defined, just returns @p document
+ */
+KOODF_EXPORT QDomDocument asQDomDocument(const KoXmlDocument& document);
 
 /*
  * Load an XML document from specified device to a document. You can of

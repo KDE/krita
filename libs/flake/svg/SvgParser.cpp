@@ -52,7 +52,7 @@
 
 #include <KDebug>
 
-#include <QtGui/QColor>
+#include <QColor>
 
 
 SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)

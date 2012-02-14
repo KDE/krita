@@ -75,9 +75,9 @@ public:
         QTextBlockFormat format = block.blockFormat();
         ruler->setShowIndents(true);
         ruler->setRightToLeft(block.layout()->textOption().textDirection() == Qt::RightToLeft);
-        ruler->setParagraphIndent(format.property(QTextFormat::BlockLeftMargin).value<QTextLength>().value(0));
-        ruler->setFirstLineIndent(format.property(QTextFormat::TextIndent).value<QTextLength>().value(0));
-        ruler->setEndIndent(format.property(QTextFormat::BlockRightMargin).value<QTextLength>().value(0));
+        ruler->setParagraphIndent(format.leftMargin());
+        ruler->setFirstLineIndent(format.textIndent());
+        ruler->setEndIndent(format.rightMargin());
         ruler->setShowTabs(true);
         ruler->setRelativeTabs(relativeTabs());
 

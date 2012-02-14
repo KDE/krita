@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
-#include <qpoint.h>
+#include <QPoint>
 
 #include <kcombobox.h>
 #include <kis_debug.h>
@@ -175,10 +175,10 @@ void KisFilterWave::process(KisPaintDeviceSP device,
     delete verticalcurve;
 }
 
-int KisFilterWave::overlapMarginNeeded(const KisFilterConfiguration* config) const
+QRect KisFilterWave::neededRect(const QRect& rect, const KisFilterConfiguration* config) const
 {
     QVariant value;
     int horizontalamplitude = (config && config->getProperty("horizontalamplitude", value)) ? value.toInt() : 4;
     int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
-    return qMax(horizontalamplitude, verticalamplitude) ;
+    return rect.adjusted(-horizontalamplitude, -verticalamplitude, horizontalamplitude, verticalamplitude);
 }

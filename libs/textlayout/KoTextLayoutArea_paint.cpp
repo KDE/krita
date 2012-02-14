@@ -217,32 +217,33 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             painter->restore();
 
             QVector<QTextLayout::FormatRange> selections;
-            foreach(const QAbstractTextDocumentLayout::Selection & selection, context.textContext.selections) {
-                QTextCursor cursor = selection.cursor;
-                int begin = cursor.position();
-                int end = cursor.anchor();
-                if (begin > end)
-                    qSwap(begin, end);
+            if (context.showSelections) {
+                foreach(const QAbstractTextDocumentLayout::Selection & selection, context.textContext.selections) {
+                    QTextCursor cursor = selection.cursor;
+                    int begin = cursor.position();
+                    int end = cursor.anchor();
+                    if (begin > end)
+                        qSwap(begin, end);
 
-                if (end < block.position() || begin > block.position() + block.length())
-                    continue; // selection does not intersect this block.
-                if (selection.cursor.hasComplexSelection()) {
-                    continue; // selections of several table cells are covered by the within drawBorders above.
+                    if (end < block.position() || begin > block.position() + block.length())
+                        continue; // selection does not intersect this block.
+                    if (selection.cursor.hasComplexSelection()) {
+                        continue; // selections of several table cells are covered by the within drawBorders above.
+                    }
+                    if (m_documentLayout->changeTracker()
+                        && !m_documentLayout->changeTracker()->displayChanges()
+                        && m_documentLayout->changeTracker()->containsInlineChanges(selection.format)
+                        && m_documentLayout->changeTracker()->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
+                        && m_documentLayout->changeTracker()->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() == KoGenChange::DeleteChange) {
+                        continue; // Deletions should not be shown.
+                    }
+                    QTextLayout::FormatRange fr;
+                    fr.start = begin - block.position();
+                    fr.length = end - begin;
+                    fr.format = selection.format;
+                    selections.append(fr);
                 }
-                if (m_documentLayout->changeTracker()
-                    && !m_documentLayout->changeTracker()->displayChanges()
-                    && m_documentLayout->changeTracker()->containsInlineChanges(selection.format)
-                    && m_documentLayout->changeTracker()->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
-                    && m_documentLayout->changeTracker()->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() == KoGenChange::DeleteChange) {
-                    continue; // Deletions should not be shown.
-                }
-                QTextLayout::FormatRange fr;
-                fr.start = begin - block.position();
-                fr.length = end - begin;
-                fr.format = selection.format;
-                selections.append(fr);
             }
-
             // this is a workaround to fix text getting cut of when format ranges are used. There 
             // is a bug in Qt that can hit when text lines overlap each other. In case a format range
             // is used for formating it can clip the lines above/below as Qt creates a clip rect for
@@ -397,7 +398,6 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
 
     if (list && data->hasCounterData()) {
         QTextListFormat listFormat = list->format();
-
         if (! data->counterText().isEmpty()) {
             QFont font(data->labelFormat().font(), m_documentLayout->paintDevice());
 
@@ -449,7 +449,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block)
             if (block.layout()->lineCount() > 0) {
                 // if there is text, then baseline align the counter.
                 QTextLine firstParagLine = block.layout()->lineAt(0);
-                if (KoListStyle::isNumberingStyle(listStyle) || listStyle == KoListStyle::CustomCharItem) {
+                if (KoListStyle::isNumberingStyle(listStyle)) {
                     //if numbered list baseline align
                     counterPosition += QPointF(0, firstParagLine.ascent() - layout.lineAt(0).ascent());
                 } else {
@@ -710,8 +710,15 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
                         if (!line.isValid())
                             continue;
 
-                        // end position: not that this can be smaller than p1 when we are handling RTL
+                        // end position: not that x2 can be smaller than x1 when we are handling RTL
                         int p2 = startOfFragmentInBlock + currentFragment.length();
+                        int lineEnd = line.textStart() + line.textLength();
+                        while (lineEnd > line.textStart() && block.text().at(lineEnd - 1) == ' ') {
+                            --lineEnd;
+                        }
+                        if (lineEnd < p2) { //line caps
+                            p2 = lineEnd;
+                        }
                         int fragmentToLineOffset = qMax(startOfFragmentInBlock - line.textStart(), 0);
 
                         qreal x1 = line.cursorToX(p1);
@@ -720,16 +727,12 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
 //                        qDebug() << "\n\t\t\tp1:" << p1 << "x1:" << x1
 //                                 << "\n\t\t\tp2:" << p2 << "x2:" << x2;
 
-                        // Comment by sebsauer:
-                        // Following line was supposed to fix bug 171686 (I cannot reproduce the original problem) but it opens bug 260159. So, deactivated for now.
-                        // x2 = qMin(x2, line.naturalTextWidth() + line.cursorToX(line.textStart()));
-
                         if (x1 != x2) {
                             drawStrikeOuts(painter, fmt, currentFragment.text(), line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                             drawOverlines(painter, fmt, currentFragment.text(), line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                             drawUnderlines(painter, fmt, currentFragment.text(), line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
-                            decorateTabsAndFormatting(painter, currentFragment, line, startOfFragmentInBlock, tabList, currentTabStop, showFormattingCharacters);
                         }
+                        decorateTabsAndFormatting(painter, currentFragment, line, startOfFragmentInBlock, tabList, currentTabStop, showFormattingCharacters);
                     }
                 }
             }

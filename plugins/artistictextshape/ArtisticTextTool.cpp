@@ -48,12 +48,12 @@
 #include <KStandardAction>
 #include <KDebug>
 
-#include <QtGui/QAction>
-#include <QtGui/QGridLayout>
-#include <QtGui/QToolButton>
-#include <QtGui/QCheckBox>
-#include <QtGui/QPainter>
-#include <QtGui/QPainterPath>
+#include <QAction>
+#include <QGridLayout>
+#include <QToolButton>
+#include <QCheckBox>
+#include <QPainter>
+#include <QPainterPath>
 #include <kundo2command.h>
 
 #include <float.h>

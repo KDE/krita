@@ -22,10 +22,10 @@
 #ifndef KO_DOCUMENT_INFO_H
 #define KO_DOCUMENT_INFO_H
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QObject>
+#include <QMap>
+#include <QString>
+#include <QStringList>
 
 #include <kconfig.h>
 #include "komain_export.h"

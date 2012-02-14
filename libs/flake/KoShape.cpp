@@ -468,17 +468,53 @@ KoShape::ChildZOrderPolicy KoShape::childZOrderPolicy()
 
 bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
 {
+    // First sort according to runThrough which is sort of a master level
+    KoShape *parentShapeS1 = s1->parent();
+    KoShape *parentShapeS2 = s2->parent();
+    int runThrough1 = s1->runThrough();
+    int runThrough2 = s2->runThrough();
+    while (parentShapeS1) {
+        if (parentShapeS1->childZOrderPolicy() == KoShape::ChildZParentChild) {
+            runThrough1 = parentShapeS1->runThrough();
+        } else {
+            runThrough1 = runThrough1 + parentShapeS1->runThrough();
+        }
+        parentShapeS1 = parentShapeS1->parent();
+    }
+
+    while (parentShapeS2) {
+        if (parentShapeS2->childZOrderPolicy() == KoShape::ChildZParentChild) {
+            runThrough2 = parentShapeS2->runThrough();
+        } else {
+            runThrough2 = runThrough2 + parentShapeS2->runThrough();
+        }
+        parentShapeS2 = parentShapeS2->parent();
+    }
+
+    if (runThrough1 > runThrough2) {
+        return false;
+    }
+    if (runThrough1 < runThrough2) {
+        return true;
+    }
+
+    // If on the same runThrough level then the zIndex is all that matters.
+    //
+    // We basically walk up through the parents until we find a common base parent
+    // To do that we need two loops where the inner loop walks up through the parents
+    // of s2 every time we step up one parent level on s1
+    //
+    // We don't update the index value until after we have seen that it's not a common base
+    // That way we ensure that two children of a common base are sorted according to their respective
+    // z value
     bool foundCommonParent = false;
-    KoShape *parentShapeS1 = s1;
-    KoShape *parentShapeS2 = s2;
-    int index1 = parentShapeS1->zIndex();
-    int index2 = parentShapeS2->zIndex();
-    int runThrough1 = parentShapeS1->runThrough();
-    int runThrough2 = parentShapeS2->runThrough();
+    int index1 = s1->zIndex();
+    int index2 = s2->zIndex();
+    parentShapeS1 = s1;
+    parentShapeS2 = s2;
     while (parentShapeS1 && !foundCommonParent) {
         parentShapeS2 = s2;
         index2 = parentShapeS2->zIndex();
-        runThrough2 = parentShapeS2->runThrough();
         while (parentShapeS2) {
             if (parentShapeS2 == parentShapeS1) {
                 foundCommonParent = true;
@@ -486,9 +522,6 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
             }
             if (parentShapeS2->childZOrderPolicy() == KoShape::ChildZParentChild) {
                 index2 = parentShapeS2->zIndex();
-                runThrough2 = parentShapeS2->runThrough();
-            } else {
-                runThrough2 = runThrough2 + parentShapeS2->runThrough();
             }
             parentShapeS2 = parentShapeS2->parent();
         }
@@ -496,20 +529,9 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
         if (!foundCommonParent) {
             if (parentShapeS1->childZOrderPolicy() == KoShape::ChildZParentChild) {
                 index1 = parentShapeS1->zIndex();
-                runThrough1 = parentShapeS1->runThrough();
-            } else {
-                runThrough1 = runThrough1 + parentShapeS1->runThrough();
             }
             parentShapeS1 = parentShapeS1->parent();
         }
-    }
-
-    // If the shape runs through the foreground or background.
-    if (runThrough1 > runThrough2) {
-        return false;
-    }
-    if (runThrough1 < runThrough2) {
-        return true;
     }
 
     // If the one shape is a parent/child of the other then sort so.

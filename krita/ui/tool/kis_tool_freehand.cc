@@ -417,8 +417,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
             outlineMode = KisPaintOpSettings::CursorIsOutline;
         }
 
-        QPainterPath path = getOutlinePath(m_outlineDocPoint, outlineMode);
-        paintToolOutline(&gc,pixelToView(path));
+        paintToolOutline(&gc,pixelToView(m_currentOutline));
     }
 }
 
@@ -490,7 +489,8 @@ void KisToolFreehand::decreaseBrushSize()
 
 void KisToolFreehand::updateOutlineRect()
 {
-    QRectF outlinePixelRect = getOutlinePath(m_outlineDocPoint, KisPaintOpSettings::CursorIsOutline).boundingRect();
+    m_currentOutline = getOutlinePath(m_outlineDocPoint, KisPaintOpSettings::CursorIsOutline);
+    QRectF outlinePixelRect = m_currentOutline.boundingRect();
     QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
 
     if (!m_oldOutlineRect.isEmpty()) {

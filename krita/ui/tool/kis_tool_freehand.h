@@ -134,6 +134,7 @@ private:
     QPointF m_outlineDocPoint;
     QTimer m_outlineTimer;
     QRectF m_oldOutlineRect;
+    QPainterPath m_currentOutline;
     bool m_explicitShowOutline;
 
     KAction* m_increaseBrushSize;

@@ -852,7 +852,7 @@ void TextTool::copy() const
         rm = canvas()->shapeController()->resourceManager();
     }
     if (rm && rm->hasResource(KoText::DocumentRdf)) {
-        KoDocumentRdfBase *rdf = static_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<void*>());
+        KoDocumentRdfBase *rdf = qobject_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<QObject*>());
         if (rdf) {
             saveHelper.setRdfModel(rdf->model());
         }
@@ -917,7 +917,7 @@ void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
         // When whift is pressed we behave as a single press
         return mousePressEvent(event);
     }
- 
+
     int pos = m_textEditor.data()->position();
     m_textEditor.data()->select(QTextCursor::WordUnderCursor);
 
@@ -936,7 +936,7 @@ void TextTool::mouseTripleClickEvent(KoPointerEvent *event)
         // When whift is pressed we behave as a single press
         return mousePressEvent(event);
     }
- 
+
     int pos = m_textEditor.data()->position();
 
     m_textEditor.data()->clearSelection();

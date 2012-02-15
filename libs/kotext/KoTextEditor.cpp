@@ -1235,7 +1235,7 @@ bool KoTextEditor::paste(KoTextEditor *editor,
 
     KoDocumentRdfBase *rdf = 0;
     if (shapeController->resourceManager()->hasResource(KoText::DocumentRdf)) {
-        rdf = static_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<void*>());
+        rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
         saveHelper.setRdfModel(rdf->model());
     }
 

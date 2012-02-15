@@ -81,7 +81,7 @@ ChangeTrackedDeleteCommand::ChangeTrackedDeleteCommand(DeleteMode mode,
     m_removedElements()
 {
       setText(i18nc("(qtundo-format)", "Delete"));
-      m_rdf = static_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<void*>());
+      m_rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
 }
 
 void ChangeTrackedDeleteCommand::undo()

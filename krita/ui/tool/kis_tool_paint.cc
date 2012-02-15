@@ -170,7 +170,7 @@ void KisToolPaint::mousePressEvent(KoPointerEvent *event)
         useCursor(KisCursor::crossCursor());
         canvas()->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, convertToPixelCoord(event->point));
     }
-    else if(mode() == KisTool::HOVER_MODE &&
+    else if(mode() == KisTool::SECONDARY_HOVER_MODE &&
             (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) &&
             event->modifiers() & Qt::ControlModifier &&
             !specialModifierActive()) {
@@ -227,6 +227,7 @@ void KisToolPaint::keyPressEvent(QKeyEvent *event)
 {
     if ((event->key() == Qt::Key_Control) && (event->modifiers() == Qt::ControlModifier)) {
         useCursor(KisCursor::pickerCursor());
+        setMode(KisTool::SECONDARY_HOVER_MODE);
     } else if ((event->key() == Qt::Key_Control || event->key() == Qt::Key_Shift)) {
         if (event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) {
             useCursor(KisCursor::crossCursor());
@@ -239,6 +240,7 @@ void KisToolPaint::keyReleaseEvent(QKeyEvent* event)
 {
     if (mode() != KisTool::PAINT_MODE){
         resetCursorStyle();
+        setMode(KisTool::HOVER_MODE);
     }
     KisTool::keyReleaseEvent(event);
 }

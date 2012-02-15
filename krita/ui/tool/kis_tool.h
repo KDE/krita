@@ -200,6 +200,7 @@ protected:
 protected:
     enum ToolMode {
         HOVER_MODE,
+        SECONDARY_HOVER_MODE,
         PAINT_MODE,
         SECONDARY_PAINT_MODE,
         MIRROR_AXIS_SETUP_MODE,

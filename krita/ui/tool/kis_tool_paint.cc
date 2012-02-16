@@ -213,12 +213,19 @@ void KisToolPaint::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if(mode() == KisTool::SECONDARY_PAINT_MODE || mode() == KisTool::MIRROR_AXIS_SETUP_MODE) {
+    if(mode() == KisTool::MIRROR_AXIS_SETUP_MODE) {
         setMode(KisTool::HOVER_MODE);
         resetCursorStyle();
         event->accept();
-    }
-    else {
+    } else if(mode() == KisTool::SECONDARY_PAINT_MODE) {
+        if(event->modifiers() & Qt::ControlModifier) {
+            setMode(KisTool::SECONDARY_HOVER_MODE);
+        } else {
+            setMode(KisTool::HOVER_MODE);
+            resetCursorStyle();
+        }
+        event->accept();
+    } else {
         KisTool::mouseReleaseEvent(event);
     }
 }

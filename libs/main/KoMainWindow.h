@@ -37,6 +37,8 @@ class KRecentFilesAction;
 class QDockWidget;
 class QLabel;
 
+class KoPageLayout;
+
 // Calligra class but not in main module
 class KoDockerManager;
 
@@ -243,7 +245,8 @@ public slots:
     virtual void slotFilePrint();
     virtual void slotFilePrintPreview();
 
-    KoPrintJob* exportToPdf(QString fileName = QString());
+    KoPrintJob* exportToPdf(QString pdfFileName = QString());
+    KoPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
 
     /**
      * Show a dialog with author and document information.

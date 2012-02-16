@@ -35,6 +35,8 @@
 #include "KoDocumentEntry.h"
 #include "KoDockerManager.h"
 
+#include <KoPageLayoutWidget.h>
+
 #include <kdeversion.h>
 #if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
@@ -62,6 +64,9 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kdeprintdialog.h>
+#include <kfilewidget.h>
+#include <kurlcombobox.h>
+#include <kdiroperator.h>
 
 //   // qt includes
 #include <QDockWidget>
@@ -1320,12 +1325,73 @@ void KoMainWindow::slotFilePrintPreview()
     delete preview;
 }
 
+class ExportPdfDialog : public KPageDialog
+{
+public:
+    ExportPdfDialog(const KUrl &startUrl, const KoPageLayout &pageLayout) : KPageDialog() {
+        setFaceType(KPageDialog::List);
+        setCaption(i18n("Export to PDF"));
+
+        m_fileWidget = new KFileWidget(startUrl, this);
+        m_fileWidget->setOperationMode(KFileWidget::Saving);
+        m_fileWidget->setMode(KFile::File);
+        m_fileWidget->setMimeFilter(QStringList() << "application/pdf");
+        connect(m_fileWidget, SIGNAL(accepted()), this, SLOT(accept()));
+
+        KPageWidgetItem *fileItem = new KPageWidgetItem(m_fileWidget, i18n( "File" ));
+        fileItem->setIcon(KIcon("document-open"));
+        addPage(fileItem);
+
+        m_pageLayoutWidget = new KoPageLayoutWidget(this, pageLayout);
+        m_pageLayoutWidget->showUnitchooser(false);
+        m_pageLayoutWidget->layout()->setMargin(0);
+        KPageWidgetItem *optionsItem = new KPageWidgetItem(m_pageLayoutWidget, i18n("Configure"));
+        optionsItem->setIcon(KIcon("configure"));
+        addPage(optionsItem);
+
+        resize(QSize(800, 600).expandedTo(minimumSizeHint()));
+    }
+    KUrl selectedUrl() const {
+        // selectedUrl()( does not return the expected result. So, build up the KUrl the more complicated way
+        //return m_fileWidget->selectedUrl();
+
+        KUrl url = m_fileWidget->dirOperator()->url();
+        url.adjustPath(KUrl::AddTrailingSlash);
+        url.setFileName(m_fileWidget->locationEdit()->currentText());
+        return url;
+    }
+    KoPageLayout pageLayout() const {
+        return m_pageLayoutWidget->pageLayout();
+    }
+protected:
+    virtual void slotButtonClicked(int button) {
+        if (button == KDialog::Ok) {
+            m_fileWidget->slotOk();
+        } else {
+            KPageDialog::slotButtonClicked(button);
+        }
+    }
+private:
+    KFileWidget *m_fileWidget;
+    KoPageLayoutWidget *m_pageLayoutWidget;
+};
+
 KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
 {
     if (!rootView())
         return 0;
+    KoPageLayout pageLayout;
+    if (d->rootDoc)
+        pageLayout = d->rootDoc->pageLayout();
+    return exportToPdf(pageLayout, pdfFileName);
+}
+
+KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileName)
+{
+    if (!rootView())
+        return 0;
     if (pdfFileName.isEmpty()) {
-        KUrl startUrl = KUrl("kfiledialog:///SaveDialog/");
+        KUrl startUrl = KUrl("kfiledialog:///SavePdfDialog");
         KoDocument* pDoc = rootDocument();
         /** if document has a file name, take file name and replace extension with .pdf */
         if (pDoc && pDoc->url().isValid()) {
@@ -1335,16 +1401,16 @@ KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
             startUrl.setFileName( fileName );
         }
 
-        QStringList mimeTypes;
-        mimeTypes << "application/pdf" << "application/postscript";
-        KFileDialog dialog(startUrl, QString(), this);
-        dialog.setMimeFilter(mimeTypes);
-        dialog.setObjectName("print file");
-        dialog.setMode(KFile::File);
-        dialog.setCaption(i18n("Export to PDF"));
-        if (dialog.exec() != QDialog::Accepted)
+        QPointer<ExportPdfDialog> dialog(new ExportPdfDialog(startUrl, pageLayout));
+        if (dialog->exec() != QDialog::Accepted || !dialog) {
+            delete dialog;
             return 0;
-        KUrl url(dialog.selectedUrl());
+        }
+
+        KUrl url = dialog->selectedUrl();
+        pageLayout = dialog->pageLayout();
+        delete dialog;
+
         if (KIO::NetAccess::exists(url,  KIO::NetAccess::DestinationSide, this)) {
             bool overwrite = KMessageBox::questionYesNo(this,
                                             i18n("A document with this name already exists.\n"\
@@ -1355,19 +1421,35 @@ KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
             }
         }
         pdfFileName = url.toLocalFile();
+        if (pdfFileName.isEmpty())
+            return 0;
     }
+
     KoPrintJob *printJob = rootView()->createPdfPrintJob();
     if (printJob == 0)
         return 0;
-    d->applyDefaultSettings(printJob->printer());
 
+    d->applyDefaultSettings(printJob->printer());
     // TODO for remote files we have to first save locally and then upload.
     printJob->printer().setOutputFileName(pdfFileName);
     printJob->printer().setColorMode(QPrinter::Color);
+
+    if (pageLayout.format == KoPageFormat::CustomSize) {
+        printJob->printer().setPaperSize(QSizeF(pageLayout.width, pageLayout.height), QPrinter::Millimeter);
+    } else {
+        printJob->printer().setPaperSize(KoPageFormat::printerPageSize(pageLayout.format));
+    }
+
+    switch (pageLayout.orientation) {
+        case KoPageFormat::Portrait: printJob->printer().setOrientation(QPrinter::Portrait); break;
+        case KoPageFormat::Landscape: printJob->printer().setOrientation(QPrinter::Landscape); break;
+    }
+
+    printJob->printer().setPageMargins(pageLayout.leftMargin, pageLayout.topMargin, pageLayout.rightMargin, pageLayout.bottomMargin, QPrinter::Millimeter);
+
     printJob->startPrinting(KoPrintJob::DeleteWhenDone);
     return printJob;
 }
-
 
 void KoMainWindow::slotConfigureKeys()
 {

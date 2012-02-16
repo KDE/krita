@@ -185,6 +185,12 @@ public:
      */
     void endLoading();
 
+    /**
+     * Returns true if beginLoading() got called and endLoading() not
+     * yet what means we are in a longer loading process.
+     */
+    bool isLoading() const;
+
 public slots:
     /**
      * Connected to dataChanged() signal of source models in TableSource.

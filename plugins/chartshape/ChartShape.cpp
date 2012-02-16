@@ -902,6 +902,8 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store,
 bool ChartShape::loadOdf( const KoXmlElement &element,
                           KoShapeLoadingContext &context )
 {
+    //struct Timer{QTime t;Timer(){t.start();} ~Timer(){qDebug()<<">>>>>"<<t.elapsed();}} timer;
+
     // Load common attributes of (frame) shapes.  If you change here,
     // don't forget to also change in saveOdf().
     loadOdfAttributes( element, context, OdfAllAttributes );
@@ -925,7 +927,14 @@ bool ChartShape::loadOdfFrameElement( const KoXmlElement &element,
 bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
                                       KoShapeLoadingContext &context )
 {
-    proxyModel()->beginLoading();
+    // Use a helper-class created on the stack to be sure a we always leave
+    // this method with a call to endLoading proxyModel()->endLoading()
+    struct ProxyModelLoadState {
+        ChartProxyModel *m;
+        ProxyModelLoadState(ChartProxyModel *m) : m(m) { m->beginLoading(); }
+        ~ProxyModelLoadState() { m->endLoading(); }
+    };
+    ProxyModelLoadState proxyModelLoadState(proxyModel());
 
     // The shared data will automatically be deleted in the destructor
     // of KoShapeLoadingContext
@@ -1003,7 +1012,6 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
         return false;
     }
 
-
     // 2. Load the data
 //     int dimensions = numDimensions( chartType );
 //     qDebug() << "DIMENSIONS" << dimensions;
@@ -1071,8 +1079,6 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
     d->legend->update();
 
     requestRepaint();
-
-    proxyModel()->endLoading();
 
     return true;
 }

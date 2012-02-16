@@ -216,6 +216,7 @@ install( FILES
     KoGlobal.h
     KoGridData.h
     KoMainWindow.h
+    KoModeBoxFactory.h
     KoPrintJob.h
     KoProgressUpdater.h
     KoProgressProxy.h

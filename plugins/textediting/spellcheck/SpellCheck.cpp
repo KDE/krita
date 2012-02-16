@@ -141,6 +141,9 @@ void SpellCheck::setDefaultLanguage(const QString &language)
 {
     m_speller.setDefaultLanguage(language);
     m_bgSpellCheck->setDefaultLanguage(language);
+    if (m_enableSpellCheck) {
+        checkSection(m_document, 0, m_document->characterCount() - 1);
+    }
 }
 
 void SpellCheck::setBackgroundSpellChecking(bool on)
@@ -167,6 +170,7 @@ void SpellCheck::setBackgroundSpellChecking(bool on)
         }
     }
 }
+
 
 void SpellCheck::setSkipAllUppercaseWords(bool on)
 {

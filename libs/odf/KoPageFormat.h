@@ -25,7 +25,7 @@
 
 #include "koodf_export.h"
 
-#include <QtGui/QPrinter>
+#include <QPrinter>
 
 /// The page formats calligra supports
 namespace KoPageFormat

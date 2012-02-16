@@ -99,30 +99,25 @@ protected:
         calculateChangeRect(startWith, requestedRect());
 
         if(startWith == startNode()) {
-            NodePosition pos = N_EXTRA;
-            if(!startWith->nextSibling()) pos |= N_TOPMOST;
-            if(!startWith->prevSibling()) pos |= N_BOTTOMMOST;
+            NodePosition pos = N_EXTRA | calculateNodePosition(startWith);
             registerNeedRect(startWith, pos);
         }
 
 
         KisNodeSP currentNode = startWith->lastChild();
-        if(!currentNode) return;
-
-        registerNeedRect(currentNode, N_TOPMOST | N_FILTHY);
-
-        KisNodeSP prevNode = currentNode->prevSibling();
-        while ((currentNode = prevNode)) {
-            prevNode = currentNode->prevSibling();
-            registerNeedRect(currentNode,
-                             (!prevNode ? N_BOTTOMMOST : N_NORMAL) | N_FILTHY);
+        while(currentNode) {
+            NodePosition pos = N_FILTHY | calculateNodePosition(currentNode);
+            registerNeedRect(currentNode, pos);
+            currentNode = currentNode->prevSibling();
         }
 
         currentNode = startWith->lastChild();
-        do {
-            if(canHaveChildLayers(currentNode))
+        while(currentNode) {
+            if(canHaveChildLayers(currentNode)) {
                 startTrip(currentNode);
-        } while ((currentNode = currentNode->prevSibling()));
+            }
+            currentNode = currentNode->prevSibling();
+        }
     }
 };
 

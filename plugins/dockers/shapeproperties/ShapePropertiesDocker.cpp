@@ -32,7 +32,7 @@
 
 #include <klocale.h>
 
-#include <QtGui/QStackedWidget>
+#include <QStackedWidget>
 
 class ShapePropertiesDocker::Private {
 public:

@@ -24,7 +24,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QPushButton>
-#include <qscrollbar.h>
+#include <QScrollBar>
 
 #include <kis_debug.h>
 

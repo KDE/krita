@@ -22,12 +22,16 @@
  */
 #include "KoCharacterStyle.h"
 
+#include "KoTableCellStyle.h"
+
 #include "Styles_p.h"
 
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QFontMetricsF>
 #include <QFontDatabase>
+#include <QTextTableCell>
+#include <QTextTable>
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
@@ -41,6 +45,7 @@
 #include <KoShapeLoadingContext.h>
 #include "KoTextSharedLoadingData.h"
 #include "KoInlineTextObjectManager.h"
+#include "KoTextDocument.h"
 
 #ifdef SHOULD_BUILD_FONT_CONVERSION
 #include <string.h>
@@ -58,6 +63,7 @@
 #endif
 
 #include <KDebug>
+#include "KoTextDebug.h"
 
 #ifdef SHOULD_BUILD_FONT_CONVERSION
     QMap<QString,qreal> textScaleMap;
@@ -347,7 +353,7 @@ void KoCharacterStyle::copyProperties(const QTextCharFormat &format)
     d->stylesPrivate = format.properties();
 }
 
-KoCharacterStyle *KoCharacterStyle::clone(QObject *parent)
+KoCharacterStyle *KoCharacterStyle::clone(QObject *parent) const
 {
     KoCharacterStyle *newStyle = new KoCharacterStyle(parent);
     newStyle->copyProperties(this);
@@ -367,6 +373,11 @@ void KoCharacterStyle::setDefaultStyle(KoCharacterStyle *defaultStyle)
 void KoCharacterStyle::setParentStyle(KoCharacterStyle *parent)
 {
     d->parentStyle = parent;
+}
+
+KoCharacterStyle *KoCharacterStyle::parentStyle() const
+{
+    return d->parentStyle;
 }
 
 QPen KoCharacterStyle::textOutline() const
@@ -470,37 +481,61 @@ KoCharacterStyle *KoCharacterStyle::autoStyle(const QTextCharFormat &format, QTe
     return autoStyle;
 }
 
+struct FragmentData
+{
+    FragmentData(const QTextCharFormat &format, int position, int length)
+    : format(format)
+    , position(position)
+    , length(length)
+    {}
+
+    QTextCharFormat format;
+    int position;
+    int length;
+};
+
 void KoCharacterStyle::applyStyle(QTextBlock &block) const
 {
     QTextCursor cursor(block);
-    QTextCharFormat cf = cursor.blockCharFormat();
+    QTextCharFormat cf = block.charFormat();
+
+    if (!cf.isTableCellFormat()) {
+        cf = KoTextDocument(block.document()).frameCharFormat();
+    }
+
     applyStyle(cf);
-    QTextCharFormat format = cf;
     ensureMinimalProperties(cf);
     cursor.setBlockCharFormat(cf);
 
     // be sure that we keep the InlineInstanceId, anchor information and ChangeTrackerId when applying a style
+
+    QList<FragmentData> fragments;
     for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
-        cursor.setPosition(it.fragment().position());
-        cursor.setPosition(it.fragment().position() + it.fragment().length(), QTextCursor::KeepAnchor);
+        QTextFragment currentFragment = it.fragment();
+        if (currentFragment.isValid()) {
+            QTextCharFormat format(cf);
+            QVariant v = currentFragment.charFormat().property(InlineInstanceId);
+            if (!v.isNull()) {
+                format.setProperty(InlineInstanceId, v);
+            }
 
-        QTextCharFormat f(cf);
+            v = currentFragment.charFormat().property(ChangeTrackerId);
+            if (!v.isNull()) {
+                format.setProperty(ChangeTrackerId, v);
+            }
 
-        QVariant v = it.fragment().charFormat().property(InlineInstanceId);
-        if (!v.isNull()) {
-            f.setProperty(InlineInstanceId, v);
+            if (currentFragment.charFormat().isAnchor()) {
+                format.setAnchor(true);
+                format.setAnchorHref(currentFragment.charFormat().anchorHref());
+            }
+            fragments.append(FragmentData(format, currentFragment.position(), currentFragment.length()));
         }
+    }
 
-        v = it.fragment().charFormat().property(ChangeTrackerId);
-        if (!v.isNull()) {
-            f.setProperty(ChangeTrackerId, v);
-        }
-
-        if (it.fragment().charFormat().isAnchor()) {
-            f.setAnchor(true);
-            f.setAnchorHref(it.fragment().charFormat().anchorHref());
-        }
-        cursor.setCharFormat(f);
+    foreach (const FragmentData &fragment, fragments) {
+        cursor.setPosition(fragment.position);
+        cursor.setPosition(fragment.position + fragment.length, QTextCursor::KeepAnchor);
+        cursor.setCharFormat(fragment.format);
     }
 }
 
@@ -1827,6 +1862,11 @@ bool KoCharacterStyle::operator==(const KoCharacterStyle &other) const
      return compareCharacterProperties(other);
 }
 
+bool KoCharacterStyle::operator!=(const KoCharacterStyle &other) const
+{
+     return !compareCharacterProperties(other);
+}
+
 bool KoCharacterStyle::compareCharacterProperties(const KoCharacterStyle &other) const
 {
     return other.d->stylesPrivate == d->stylesPrivate;
@@ -2148,9 +2188,9 @@ QVariant KoCharacterStyle::value(int key) const
     QVariant variant = d->stylesPrivate.value(key);
     if (variant.isNull()) {
         if (d->parentStyle)
-            return d->parentStyle->value(key);
+            variant = d->parentStyle->value(key);
         else if (d->defaultStyle)
-            return d->defaultStyle->value(key);
+            variant = d->defaultStyle->value(key);
     }
     return variant;
 }

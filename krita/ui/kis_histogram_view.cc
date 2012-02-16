@@ -25,7 +25,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QPushButton>
-#include <qscrollbar.h>
+#include <QScrollBar>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QFrame>

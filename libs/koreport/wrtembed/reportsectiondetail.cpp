@@ -19,7 +19,7 @@
 #include "reportsectiondetail.h"
 #include "reportsectiondetailgroup.h"
 #include "reportsection.h"
-#include <qdom.h>
+#include <QDomDocument>
 #include <kdebug.h>
 
 //

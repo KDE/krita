@@ -45,8 +45,7 @@ public:
      * @param parent the parent undo command for macro functionality
      */
     ChangeListCommand(const QTextCursor &cursor,
-                      KoListStyle::Style style,
-                      int level,
+                      const KoListLevelProperties &levelProperties,
                       KoTextEditor::ChangeListFlags flags,
                       KUndo2Command *parent = 0);
 

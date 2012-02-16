@@ -19,8 +19,8 @@
  */
 
 #include "kis_wdg_unsharp.h"
-#include <qlayout.h>
-#include <qtoolbutton.h>
+#include <QLayout>
+#include <QToolButton>
 
 #include <kcombobox.h>
 #include <knuminput.h>

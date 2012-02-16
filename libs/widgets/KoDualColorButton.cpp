@@ -25,10 +25,10 @@
 #include "dcolorreset.xpm"
 
 #include <kglobalsettings.h>
-#include <QtGui/QBitmap>
-#include <QtGui/QBrush>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QPainter>
+#include <QBitmap>
+#include <QBrush>
+#include <QDragEnterEvent>
+#include <QPainter>
 
 class KoDualColorButton::Private
 {

@@ -55,6 +55,8 @@
 #include <recorder/kis_recorded_fill_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 #include <recorder/kis_action_recorder.h>
+#include "kis_resources_snapshot.h"
+
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
@@ -141,7 +143,12 @@ bool KisToolFill::flood(int startX, int startY)
     } else {
 
         KisFillPainter fillPainter(device, currentSelection());
-        setupPainter(&fillPainter);
+
+        KisResourcesSnapshotSP resources =
+            new KisResourcesSnapshot(image(), 0,
+                                     this->canvas()->resourceManager());
+        resources->setupPainter(&fillPainter);
+
         fillPainter.beginTransaction("");
 
         fillPainter.setProgress(updater->startSubtask());

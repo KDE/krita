@@ -128,7 +128,7 @@ void KoTextAnchor::setHorizontalPos(HorizontalPos hp)
     d->horizontalPos = hp;
 }
 
-KoTextAnchor::HorizontalPos KoTextAnchor::horizontalPos()
+KoTextAnchor::HorizontalPos KoTextAnchor::horizontalPos() const
 {
     Q_D(const KoTextAnchor);
     return d->horizontalPos;
@@ -140,7 +140,7 @@ void KoTextAnchor::setHorizontalRel(HorizontalRel hr)
     d->horizontalRel = hr;
 }
 
-KoTextAnchor::HorizontalRel KoTextAnchor::horizontalRel()
+KoTextAnchor::HorizontalRel KoTextAnchor::horizontalRel() const
 {
     Q_D(const KoTextAnchor);
     return d->horizontalRel;
@@ -152,7 +152,7 @@ void KoTextAnchor::setVerticalPos(VerticalPos vp)
     d->verticalPos = vp;
 }
 
-KoTextAnchor::VerticalPos KoTextAnchor::verticalPos()
+KoTextAnchor::VerticalPos KoTextAnchor::verticalPos() const
 {
     Q_D(const KoTextAnchor);
     return d->verticalPos;
@@ -164,7 +164,7 @@ void KoTextAnchor::setVerticalRel(VerticalRel vr)
     d->verticalRel = vr;
 }
 
-KoTextAnchor::VerticalRel KoTextAnchor::verticalRel()
+KoTextAnchor::VerticalRel KoTextAnchor::verticalRel() const
 {
     Q_D(const KoTextAnchor);
     return d->verticalRel;

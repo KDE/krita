@@ -20,7 +20,7 @@
 
 #include <KoGenericRegistry.h>
 
-#include <qalgorithms.h>
+#include <QtAlgorithms>
 #include <QList>
 #include <QWidget>
 

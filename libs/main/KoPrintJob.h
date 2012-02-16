@@ -20,10 +20,10 @@
 #ifndef KOPRINTJOB_H
 #define KOPRINTJOB_H
 
-#include <QtCore/QObject>
-#include <QtCore/QList>
-#include <QtGui/QAbstractPrintDialog>
-#include <QtGui/QPrinter>
+#include <QObject>
+#include <QList>
+#include <QAbstractPrintDialog>
+#include <QPrinter>
 
 #include "komain_export.h"
 

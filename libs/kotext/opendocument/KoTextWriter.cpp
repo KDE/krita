@@ -68,11 +68,11 @@ void KoTextWriter::saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *rdf
     if (changeTracker) {
         changeSaveFormat = changeTracker->saveFormat();
         if (!changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::DELTAXML)) {
-            KoTextDocument(document).textEditor()->addCommand(insertCommand, false);
+            KoTextDocument(document).textEditor()->instantlyExecuteCommand(insertCommand);
         }
 
         if (changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::ODF_1_2)) {
-            KoTextDocument(document).textEditor()->addCommand(removeCommand, false);
+            KoTextDocument(document).textEditor()->instantlyExecuteCommand(removeCommand);
         }
     }
 

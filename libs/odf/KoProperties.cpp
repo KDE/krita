@@ -20,7 +20,7 @@
 
 #include "KoProperties.h"
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QString>
 
 class KoProperties::Private

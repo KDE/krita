@@ -35,8 +35,8 @@
 
 #include <KDebug>
 
-#include <QtGui/QBrush>
-#include <QtGui/QPainter>
+#include <QBrush>
+#include <QPainter>
 
 class KoPatternBackgroundPrivate : public KoShapeBackgroundPrivate
 {

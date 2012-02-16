@@ -24,7 +24,7 @@
 
 #include <kdebug.h>
 #include <KoResource.h>
-#include <qdom.h>
+#include <QDomDocument>
 #include "kowidgets_export.h"
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>

@@ -22,9 +22,9 @@
 
 #include <KoUnit.h>
 
-#include <QtCore/QString>
-#include <QtCore/QRectF>
-#include <QtCore/QStringList>
+#include <QString>
+#include <QRectF>
+#include <QStringList>
 
 #include <math.h>
 

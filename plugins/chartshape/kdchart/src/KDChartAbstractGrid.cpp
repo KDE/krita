@@ -23,7 +23,7 @@
 #include "KDChartAbstractGrid.h"
 #include "KDChartPaintContext.h"
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 #include <KDABLibFakes>
 

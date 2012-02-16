@@ -282,8 +282,6 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineType), (int) KoCharacterStyle::DoubleLine);
     QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineWeight), (int) testOverlineWeight);
     QCOMPARE(cf.doubleProperty(KoCharacterStyle::OverlineWidth), testOverlineWidth);
-    
-    
 
     head1.unapplyStyle(block);
     bf = cursor.blockFormat();

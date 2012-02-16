@@ -260,7 +260,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     if (!fixed) {
         //if this is the first item then find if the list has to be continued from any other list
         KoList *listContinued = 0;
-        if (m_textList->itemNumber(block) == 0 && (listContinued = KoTextDocument(m_textList->document()).list(m_textList)->listContinuedFrom())) {
+        if (m_textList->itemNumber(block) == 0 && KoTextDocument(m_textList->document()).list(m_textList) && (listContinued = KoTextDocument(m_textList->document()).list(m_textList)->listContinuedFrom())) {
             //find the previous list of the same level
             QTextList *previousTextList = listContinued->textLists().at(level - 1).data();
             if (previousTextList) {

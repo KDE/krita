@@ -81,7 +81,7 @@ ChangeTrackedDeleteCommand::ChangeTrackedDeleteCommand(DeleteMode mode,
     m_removedElements()
 {
       setText(i18nc("(qtundo-format)", "Delete"));
-      m_rdf = static_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<void*>());
+      m_rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
 }
 
 void ChangeTrackedDeleteCommand::undo()
@@ -212,7 +212,10 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(KoTextEditor *editor)
         ListItemNumberingCommand *changeNumberingCommand = new ListItemNumberingCommand(editor->block(), false, this);
         changeNumberingCommand->redo();
     } else {
-        ChangeListCommand *changeListCommand = new ChangeListCommand(*editor->cursor(), KoListStyle::None, 0,
+        KoListLevelProperties llp;
+        llp.setStyle(KoListStyle::None);
+        llp.setLevel(0);
+        ChangeListCommand *changeListCommand = new ChangeListCommand(*editor->cursor(), llp,
                                                                      KoTextEditor::ModifyExistingList | KoTextEditor::MergeWithAdjacentList,
                                                                      this);
         changeListCommand->redo();

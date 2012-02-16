@@ -42,10 +42,10 @@
 #ifndef KUNDO2STACK_H
 #define KUNDO2STACK_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qlist.h>
-#include <QtGui/qaction.h>
+#include <QObject>
+#include <QString>
+#include <QList>
+#include <QAction>
 
 #include "kundo2_export.h"
 

@@ -20,17 +20,17 @@
 #include "KoReportDesignerItemBase.h"
 
 // qt
-#include <qpainter.h>
-#include <qstring.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qdom.h>
-#include <qinputdialog.h>
-#include <qslider.h>
-#include <qdatastream.h>
-#include <qcheckbox.h>
-#include <qradiobutton.h>
-#include <qsettings.h>
+#include <QPainter>
+#include <QString>
+#include <QLabel>
+#include <QLineEdit>
+#include <QDomDocument>
+#include <QInputDialog>
+#include <QSlider>
+#include <QDataStream>
+#include <QCheckBox>
+#include <QRadioButton>
+#include <QSettings>
 #include <kdebug.h>
 
 #include <koproperty/Property.h>

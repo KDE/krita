@@ -19,8 +19,8 @@
 #ifndef KORESOURCE_H
 #define KORESOURCE_H
 
-#include <QtGui/QImage>
-#include <QtCore/QString>
+#include <QImage>
+#include <QString>
 #include <pigment_export.h>
 
 class QDomDocument;

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2009-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -165,7 +166,6 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     }
     if (savingStyle->listStyle() == 0) {
         KoListStyle *listStyle = new KoListStyle(savingStyle);
-        listStyle->setStyleId(style);
         savingStyle->setListStyle(listStyle);
     }
     KoListStyle *listStyle = savingStyle->listStyle();
@@ -197,7 +197,7 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     }
 
     if (style == KoListStyle::CustomCharItem) {
-        llp.setBulletCharacter(currentRow == m_blankCharIndex ? QChar() : widget.customCharacter->text().remove('&').at(0));
+        llp.setBulletCharacter((currentRow == m_blankCharIndex) ? QChar() : widget.customCharacter->text().remove('&').at(0));
     }
     // it is important to not use 45 for CustomCharItem as it is also char based
     else if (!KoListStyle::isNumberingStyle(style)) {
@@ -225,28 +225,27 @@ void ParagraphBulletsNumbers::styleChanged(int index)
 {
     KoListStyle::Style style = m_mapping[index];
     bool showLetterSynchronization = false;
-    switch (style) {
-    case KoListStyle::SquareItem:
-    case KoListStyle::Bullet:
-    case KoListStyle::BlackCircle:
-    case KoListStyle::CircleItem:
-    case KoListStyle::BoxItem:
-    case KoListStyle::CustomCharItem:
-    case KoListStyle::None:
+
+    if (!KoListStyle::isNumberingStyle(style)) {
         widget.startValue->setCounterType(KoListStyle::DecimalItem);
         widget.startValue->setValue(1);
         widget.startValue->setEnabled(false);
-        break;
-    case KoListStyle::AlphaLowerItem:
-    case KoListStyle::UpperAlphaItem:
-        showLetterSynchronization = true;
-        // fall through
-    default:
-        widget.startValue->setEnabled(true);
-        widget.startValue->setCounterType(style);
-        int value = widget.startValue->value();
-        widget.startValue->setValue(value + 1);
-        widget.startValue->setValue(value); // surely to trigger a change event.
+        widget.levels->setValue(1);
+        widget.levels->setEnabled(false);
+    } else {
+        switch (style) {
+        case KoListStyle::AlphaLowerItem:
+        case KoListStyle::UpperAlphaItem:
+            showLetterSynchronization = true;
+            // fall through
+        default:
+            widget.levels->setEnabled(true);
+            widget.startValue->setEnabled(true);
+            widget.startValue->setCounterType(style);
+            int value = widget.startValue->value();
+            widget.startValue->setValue(value + 1);
+            widget.startValue->setValue(value); // surely to trigger a change event.
+        }
     }
 
     widget.customCharacter->setEnabled(style == KoListStyle::CustomCharItem && index != m_blankCharIndex);
@@ -285,12 +284,9 @@ void ParagraphBulletsNumbers::customCharButtonPressed()
 
 void ParagraphBulletsNumbers::recalcPreview()
 {
-    // TODO use startValue
-    // use custom char
-    // use type
     const int currentRow = widget.listTypes->currentRow();
     KoListStyle::Style style = m_mapping[currentRow];
-    QString answer;
+    QString answer = "";
     if (style != KoListStyle::None) {
         QString suffix = widget.suffix->text();
         if (suffix.isEmpty())
@@ -300,13 +296,24 @@ void ParagraphBulletsNumbers::recalcPreview()
         for (int i = 1; i <= depth; ++i) {
             if (depth - displayLevels >= i)
                 continue;
-            if (i == depth)
+
+            if (i == depth) {
                 answer += widget.prefix->text();
-            answer += QString::number(i);
-            if (i == depth)
+
+                if (KoListStyle::isNumberingStyle(style)) {
+                    answer += widget.startValue->textFromValue(widget.startValue->value());
+                } else if(style == KoListStyle::CustomCharItem) {
+                   answer += widget.customCharacter->text().remove('&').at(0);
+                }else {
+                    answer += QString(QChar(KoListStyle::bulletCharacter(style)));
+                }
+
                 answer += suffix;
-            else
-                answer += '.';
+            } else {
+                if (KoListStyle::isNumberingStyle(style)) {
+                    answer += widget.startValue->textFromValue(i).append('.');
+                }
+            }
         }
         if (!answer.isEmpty())
             answer += ' ';

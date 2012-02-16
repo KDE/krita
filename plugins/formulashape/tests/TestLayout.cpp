@@ -21,8 +21,8 @@
 #include <qtest_kde.h>
 
 #include <QtTest/QtTest>
-#include <QtGui/QFont>
-#include <QtGui/QFontMetrics>
+#include <QFont>
+#include <QFontMetrics>
 
 #include "AttributeManager.h"
 #include "IdentifierElement.h"

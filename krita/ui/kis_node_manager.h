@@ -96,17 +96,22 @@ public:
      */
     void setNodeCompositeOp(KisNodeSP node, const KoCompositeOp* compositeOp);
 
+public slots:
+
     /**
      * Explicitly activates \p node
      * The UI will be noticed that active node has been changed.
-     *
      * Both sigNodeActivated and sigUiNeedChangeActiveNode are emitted.
+     *
+     * WARNING: normally you needn't call this method manually. It is
+     * automatically called when a node is added to the graph. If you
+     * have some special cases when you need to activate a node, consider
+     * adding them to KisDummiesFacadeBase instead. Calling this method
+     * directly  should be the last resort.
      *
      * \see slotUiActivatedNode for comparison
      */
-    void activateNode(KisNodeSP node);
-
-public slots:
+    void slotNonUiActivatedNode(KisNodeSP node);
 
     /**
      * Activates \p node.
@@ -117,9 +122,20 @@ public slots:
      */
     void slotUiActivatedNode(KisNodeSP node);
 
-    void addNode(KisNodeSP node, KisNodeSP activeNode);
-    void insertNode(KisNodeSP node, KisNodeSP parent, int index);
-    void moveNode(KisNodeSP node, KisNodeSP activeNode);
+    /**
+     * Adds a node without searching appropriate position for it.
+     * You *must* ensure that the node is allowed to be added to
+     * the parent, otherwise you'll get an assert.
+     */
+    void addNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+
+    /**
+     * Moves a node without searching appropriate position for it.
+     * You *must* ensure that the node is allowed to be added to
+     * the parent, otherwise you'll get an assert.
+     */
+    void moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+
     void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
     void createNode(const QString & node);
     void nodesUpdated();
@@ -170,12 +186,6 @@ public:
 
     void scale(double sx, double sy, KisFilterStrategy *filterStrategy);
     
-private slots:
-    
-    // Those slots are used to ensure that the node that was selected remains selected after a move
-    void aboutToMoveNode();
-    void nodeHasBeenMoved();
-
 private:
     
     void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP active);
@@ -189,7 +199,6 @@ private:
 
     struct Private;
     Private * const m_d;
-    Q_PRIVATE_SLOT(m_d, void slotLayersChanged(KisGroupLayerSP))
 };
 
 #endif

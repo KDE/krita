@@ -479,6 +479,8 @@ KoTextLoader::~KoTextLoader()
 
 void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 {
+    const QTextDocument *document = cursor.block().document();
+
     static int rootCallChecker = 0;
     if (rootCallChecker == 0) {
         //This is the first call of loadBody.
@@ -486,11 +488,11 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
         //Will be used whenever a new block is inserted
         d->defaultBlockFormat = cursor.blockFormat();
         d->defaultCharFormat = cursor.charFormat();
+        KoTextDocument(document).setFrameCharFormat(cursor.blockCharFormat());
     }
     rootCallChecker++;
 
     cursor.beginEditBlock();
-    const QTextDocument *document = cursor.block().document();
 
     if (! d->openingSections.isEmpty()) {
         QTextBlock block = cursor.block();
@@ -700,7 +702,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                     d->splitPositionMap.remove(splitId);
                                 }
                             }
-
                             loadHeading(tag, cursor);
 
                             if (!tag.attributeNS(KoXmlNS::delta, "insertion-type").isEmpty())
@@ -786,11 +787,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
             }
         }
         endBody();
-
-        if ((document->isEmpty()) && (d->styleManager)) {
-            QTextBlock block = document->begin();
-            d->styleManager->defaultParagraphStyle()->applyStyle(block);
-        }
     }
 
     rootCallChecker--;
@@ -1136,7 +1132,8 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
     }
     if (paragraphStyle) {
         // Apply list style when loading a list but we don't have a list style
-        paragraphStyle->applyStyle(block, d->currentLists[d->currentListLevel - 1] && !d->currentListStyle);
+        paragraphStyle->applyStyle(block, (d->currentListLevel > 1) &&
+                                   d->currentLists[d->currentListLevel - 2] && !d->currentListStyle);
     }
 
     if ((block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) && (level == -1)) {
@@ -1149,17 +1146,54 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
         cursor.mergeBlockFormat(blockFormat);
     }
 
-    if (!d->currentLists[d->currentListLevel - 1]) { // apply <text:outline-style> (if present) only if heading is not within a <text:list>
-        KoListStyle *outlineStyle = d->styleManager->outlineStyle();
-        if (outlineStyle) {
-            KoList *list = KoTextDocument(block.document()).headingList();
-            if (! list) {
-                list = d->list(block.document(), outlineStyle, false);
-                KoTextDocument(block.document()).setHeadingList(list);
+    if (element.hasAttributeNS(KoXmlNS::text, "is-list-header")) {
+        QTextBlockFormat blockFormat;
+        blockFormat.setProperty(KoParagraphStyle::IsListHeader, element.attributeNS(KoXmlNS::text, "is-list-header") == "true");
+        cursor.mergeBlockFormat(blockFormat);
+    }
+
+    //we are defining our default behaviour here
+    //Case 1: If text:outline-style is specified then we use the outline style to determine the numbering style
+    //Case 2: If text:outline-style is not specified then if the <text:h> element is inside a <text:list> then it is numbered
+    //        otherwise it is not
+    KoListStyle *outlineStyle = d->styleManager->outlineStyle();
+    if (!outlineStyle) {
+        outlineStyle = d->styleManager->defaultOutlineStyle()->clone();
+        d->styleManager->setOutlineStyle(outlineStyle);
+    }
+
+    //if outline style is not specified and this is not inside a list then we do not number it
+    if (outlineStyle->styleId() == d->styleManager->defaultOutlineStyle()->styleId()) {
+        if (d->currentListLevel <= 1) {
+            QTextBlockFormat blockFormat;
+            blockFormat.setProperty(KoParagraphStyle::UnnumberedListItem, true);
+            cursor.mergeBlockFormat(blockFormat);
+        } else { //inside a list then take the numbering from the list style
+            int level = d->currentListLevel - 1;
+            KoListLevelProperties llp;
+            if (!d->currentListStyle->hasLevelProperties(level)) {
+                // Look if one of the lower levels are defined to we can copy over that level.
+                for(int i = level - 1; i >= 0; --i) {
+                    if(d->currentLists[level - 1]->style()->hasLevelProperties(i)) {
+                        llp = d->currentLists[level - 1]->style()->levelProperties(i);
+                        break;
+                    }
+                }
+            } else {
+                llp = d->currentListStyle->levelProperties(level);
             }
-            list->add(block, level);
+            llp.setLevel(level);
+            outlineStyle->setLevelProperties(llp);
         }
     }
+
+    KoList *list = KoTextDocument(block.document()).headingList();
+    if (!list) {
+        list = d->list(block.document(), outlineStyle, false);
+        KoTextDocument(block.document()).setHeadingList(list);
+    }
+    list->setStyle(outlineStyle);
+    list->add(block, level);
 
     // attach Rdf to cursor.block()
     // remember inline Rdf metadata
@@ -1358,7 +1392,6 @@ void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level)
     QTextBlock current = cursor.block();
 
     QTextBlockFormat blockFormat;
-
     if (numberedParagraph) {
         if (e.localName() == "p") {
             loadParagraph(e, cursor);
@@ -2117,7 +2150,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     }
     if (!hide) {
         // Let's insert an extra block so that will be the one we hide instead
-        cursor.insertBlock();
+        cursor.insertBlock(cursor.blockFormat(), cursor.blockCharFormat());
         currentBlock = cursor.block();
     }
 

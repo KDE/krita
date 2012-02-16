@@ -19,7 +19,7 @@
 #include "documentlistwindow.h"
 
 #include <QList>
-#include <QtGui/QListWidgetItem>
+#include <QListWidgetItem>
 #include <QDebug>
 
 #include "googledocumentservice.h"

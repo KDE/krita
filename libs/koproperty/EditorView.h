@@ -22,9 +22,9 @@
 
 #include "koproperty_export.h"
 
-#include <QtGui/QItemEditorFactory>
-#include <QtGui/QTreeView>
-#include <QtGui/QLabel>
+#include <QItemEditorFactory>
+#include <QTreeView>
+#include <QLabel>
 
 #include <KLineEdit>
 

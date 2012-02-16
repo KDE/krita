@@ -42,8 +42,8 @@
 #ifndef KUNDO2GROUP_H
 #define KUNDO2GROUP_H
 
-#include <QtCore/qobject.h>
-#include <QtCore/qstring.h>
+#include <QObject>
+#include <QString>
 
 #include "kundo2_export.h"
 

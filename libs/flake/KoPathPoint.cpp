@@ -23,7 +23,7 @@
 #include "KoPathShape.h"
 
 #include <KDebug>
-#include <QtGui/QPainter>
+#include <QPainter>
 #include <QPointF>
 
 #include <math.h>

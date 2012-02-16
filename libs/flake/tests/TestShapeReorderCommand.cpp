@@ -124,7 +124,7 @@ void TestShapeReorderCommand::testParentChildSorting()
     container1.setTextRunAroundSide(KoShape::RunThrough, KoShape::Foreground);
 
     container1.addShape(&shape1);
-    container1.addShape(&shape2);
+    //container1.addShape(&shape2); //we shouldn't parent combine fg and bg
     container2.addShape(&shape4);
     container2.addShape(&shape5);
     container1.addShape(&container2);
@@ -144,17 +144,31 @@ void TestShapeReorderCommand::testParentChildSorting()
 
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
-    QCOMPARE(shapes.indexOf(&shape1), 3);
-    QCOMPARE(shapes.indexOf(&shape2), 2);
-    QCOMPARE(shapes.indexOf(&shape3), 9);
-    QCOMPARE(shapes.indexOf(&shape4), 7);
-    QCOMPARE(shapes.indexOf(&shape5), 6);
-    QCOMPARE(shapes.indexOf(&shape6), 0);
-    QCOMPARE(shapes.indexOf(&shape7), 1);
+/* This is the expected result
+s3  0 fg
+  s4  9999
+  s5 -9999
+ c2  57
+ c3  0
+ s1 -2
+c1 -55 fg
 
-    QCOMPARE(shapes.indexOf(&container1), 8);
-    QCOMPARE(shapes.indexOf(&container2), 5);
-    QCOMPARE(shapes.indexOf(&container3), 4);
+s7  7
+s6  3
+
+s2  5 bg
+*/
+
+    QCOMPARE(shapes.indexOf(&shape1), 4);
+    QCOMPARE(shapes.indexOf(&shape2), 0);
+    QCOMPARE(shapes.indexOf(&shape3), 9);
+    QCOMPARE(shapes.indexOf(&shape4), 8);
+    QCOMPARE(shapes.indexOf(&shape5), 7);
+    QCOMPARE(shapes.indexOf(&shape6), 1);
+    QCOMPARE(shapes.indexOf(&shape7), 2);
+    QCOMPARE(shapes.indexOf(&container1), 3);
+    QCOMPARE(shapes.indexOf(&container2), 6);
+    QCOMPARE(shapes.indexOf(&container3), 5);
 }
 
 void TestShapeReorderCommand::testBringToFront()

@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <qpoint.h>
+#include <QPoint>
 
 #include <klocale.h>
 #include <kiconloader.h>

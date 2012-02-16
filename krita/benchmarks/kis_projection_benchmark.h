@@ -19,7 +19,7 @@
 #ifndef KIS_PROJECTION_BENCHMARK_H
 #define KIS_PROJECTION_BENCHMARK_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 /// loads the image, computes the projection and saves it to another file
 class KisProjectionBenchmark : public QObject

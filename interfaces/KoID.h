@@ -22,9 +22,9 @@
 #ifndef _KO_ID_H_
 #define _KO_ID_H_
 
-#include <QtCore/QString>
-#include <QtCore/QMetaType>
-#include <QtCore/QDebug>
+#include <QString>
+#include <QMetaType>
+#include <QDebug>
 
 #include <klocalizedstring.h>
 

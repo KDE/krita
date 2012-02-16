@@ -21,7 +21,7 @@
 #define SCAN_H
 
 #include <kparts/plugin.h>
-#include <qimage.h>
+#include <QImage>
 
 class KScanDialog;
 

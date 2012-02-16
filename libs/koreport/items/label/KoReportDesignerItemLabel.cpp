@@ -21,8 +21,8 @@
 #include <KoReportDesignerItemBase.h>
 #include <KoReportDesigner.h>
 
-#include <qdom.h>
-#include <qpainter.h>
+#include <QDomDocument>
+#include <QPainter>
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <koproperty/EditorView.h>

@@ -31,10 +31,10 @@
 #include <KIO/NetAccess>
 #include <KIO/CopyJob>
 
-#include <QtCore/QBuffer>
-#include <QtCore/QHash>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
+#include <QBuffer>
+#include <QHash>
+#include <QFile>
+#include <QFileInfo>
 
 class SvgSavingContext::Private
 {

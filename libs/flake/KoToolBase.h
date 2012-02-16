@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QCursor>
 #include <QStringList>
-#include <QtCore/QRectF>
+#include <QRectF>
 
 #include "flake_export.h"
 

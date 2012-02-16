@@ -35,7 +35,7 @@ inline KisNodeShape* nodeShapeFromId(int id) {
 }
 
 inline bool checkDummyId(KisNodeDummy *dummy, int id) {
-    return dummy->nodeShape()->node()->name() == QString("node%1").arg(id);
+    return dummy->node()->name() == QString("node%1").arg(id);
 }
 
 inline KisNodeDummy* findDummyById(KisNodeDummy *root, int id)
@@ -57,11 +57,11 @@ inline KisNodeSP findNodeById(KisNodeDummy *root, int id)
     KisNodeDummy *dummy = findDummyById(root, id);
     Q_ASSERT(dummy);
 
-    return dummy->nodeShape()->node();
+    return dummy->node();
 }
 
 inline QString dummyId(KisNodeDummy *dummy, const QString removePrefix) {
-    QString nodeName = dummy->nodeShape()->node()->name();
+    QString nodeName = dummy->node()->name();
 
     if(!removePrefix.isEmpty()) {
         nodeName = QString::number(nodeName.remove(removePrefix).toInt());

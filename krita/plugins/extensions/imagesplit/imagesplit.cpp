@@ -37,12 +37,12 @@
 #include <kis_doc2.h>
 #include <KoDocument.h>
 #include <kmimetype.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include <KoFilterManager.h>
 #include <kfiledialog.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
-#include <qdir.h>
+#include <QDir>
 
 #include <kis_paint_device.h>
 #include <kis_background.h>

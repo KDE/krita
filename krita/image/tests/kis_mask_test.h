@@ -19,7 +19,7 @@
 #ifndef KIS_MASK_TEST_H
 #define KIS_MASK_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisMaskTest : public QObject
 {
@@ -29,6 +29,7 @@ private slots:
     void testCreation();
     void testSelection();
     void testCropUpdateBySelection();
+    void testSelectionParent();
 };
 
 #endif

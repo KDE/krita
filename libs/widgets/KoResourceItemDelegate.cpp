@@ -20,7 +20,7 @@
 #include "KoResourceItemDelegate.h"
 
 #include <KoAbstractGradient.h>
-#include <QtGui/QPainter>
+#include <QPainter>
 
 KoResourceItemDelegate::KoResourceItemDelegate( QObject * parent )
     : QAbstractItemDelegate( parent ), m_checkerPainter( 4 )

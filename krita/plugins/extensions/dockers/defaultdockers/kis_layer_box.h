@@ -68,7 +68,6 @@ public:
     virtual void unsetCanvas();
 private slots:
 
-    void setImage(KisImageWSP image);
     void notifyImageDeleted();
 
     void slotContextMenuRequested(const QPoint &pos, const QModelIndex &index);

@@ -21,11 +21,11 @@
 #ifndef __koStore_h_
 #define __koStore_h_
 
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QIODevice>
-#include <QtCore/QStack>
-#include <QtCore/QByteArray>
+#include <QString>
+#include <QStringList>
+#include <QIODevice>
+#include <QStack>
+#include <QByteArray>
 #include "koodf_export.h"
 
 #include <kurl.h>

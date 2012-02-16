@@ -35,6 +35,8 @@ SET ( textshape_SRCS
 
     dialogs/StylesWidget.cpp
     dialogs/SpecialButton.cpp
+    dialogs/StylesCombo.cpp
+    dialogs/StylesComboPreview.cpp
     dialogs/SimpleCharacterWidget.cpp
     dialogs/SimpleParagraphWidget.cpp
     dialogs/SimpleTableWidget.cpp
@@ -62,9 +64,7 @@ SET ( textshape_SRCS
     dialogs/CharacterHighlighting.cpp
     dialogs/InsertCharacter.cpp
     dialogs/FontDia.cpp
-    dialogs/FontLayoutTab.cpp
     dialogs/FontDecorations.cpp
-    dialogs/FontTab.cpp
     dialogs/LanguageTab.cpp
     dialogs/FormattingPreview.cpp
     dialogs/StyleManagerWelcome.cpp
@@ -75,7 +75,6 @@ SET ( textshape_SRCS
     dialogs/AcceptRejectChangeDialog.cpp
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp
-    dialogs/ChangeTrackingOptionsWidget.cpp
     dialogs/BibliographyConfigureDialog.cpp
     dialogs/TableOfContentsConfigure.cpp
     dialogs/TableOfContentsStyleConfigure.cpp
@@ -122,12 +121,10 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/TableOfContentsStyleConfigure.ui
 
     dialogs/FontDecorations.ui
-    dialogs/FontLayoutTab.ui
     dialogs/LanguageTab.ui
     dialogs/ChangeConfigureDialog.ui
     dialogs/AcceptRejectChangeDialog.ui
     dialogs/TrackedChangeManager.ui
-    dialogs/ChangeTrackingOptionsWidget.ui
 )
 
 kde4_add_plugin(textshape ${textshape_SRCS})

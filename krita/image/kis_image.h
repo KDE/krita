@@ -82,12 +82,8 @@ public:
 
 public: // KisNodeGraphListener implementation
 
-    void aboutToAddANode(KisNode *parent, int index);
     void nodeHasBeenAdded(KisNode *parent, int index);
     void aboutToRemoveANode(KisNode *parent, int index);
-    void nodeHasBeenRemoved(KisNode *parent, int index);
-    void aboutToMoveNode(KisNode * node, int oldIndex, int newIndex);
-    void nodeHasBeenMoved(KisNode * node, int oldIndex, int newIndex);
     void nodeChanged(KisNode * node);
     void requestProjectionUpdate(KisNode *node, const QRect& rect);
 
@@ -487,18 +483,6 @@ public:
 signals:
 
     /**
-     * Emitted when the list of layers has changed completely.
-     * This means e.g. when the image is flattened, but not when it is rotated,
-     * as the layers only change internally then.
-     */
-    void sigLayersChanged(KisGroupLayerSP rootLayer);
-    /**
-     * Emitted when the list of layers has changed completely, and emitted after \ref sigLayersChanged has been
-     * emitted.
-     */
-    void sigPostLayersChanged(KisGroupLayerSP rootLayer);
-
-    /**
      *  Emitted whenever an action has caused the image to be
      *  recomposited.
      *
@@ -518,48 +502,46 @@ signals:
     void sigResolutionChanged(double xRes, double yRes);
 
     /**
-     * Inform the model that we're going to add a layer.
-     */
-    void sigAboutToAddANode(KisNode *parent, int index);
-
-    /**
-     * Inform the model we're done adding a layer.
-     */
-    void sigNodeHasBeenAdded(KisNode *parent, int index);
-
-    /**
-     * Inform the model we're going to remove a layer.
-     */
-    void sigAboutToRemoveANode(KisNode *parent, int index);
-
-    /**
-     * Inform the model we're done removing a layer.
-     */
-    void sigNodeHasBeenRemoved(KisNode *parent, int index);
-
-    /**
-     * Inform the model we're about to move a layer.
-     */
-    void sigAboutToMoveNode(KisNode *node, int oldIndex, int newIndex);
-
-    /**
-     * Inform the model we're done moving a layer.
-     */
-    void sigNodeHasBeenMoved(KisNode *node, int oldIndex, int newIndex);
-
-    /**
      * Inform the model that a node was changed
      */
-    void sigNodeChanged(KisNode * node);
+    void sigNodeChanged(KisNodeSP node);
 
     /**
      * Inform that the image is going to be deleted
      */
     void sigAboutToBeDeleted();
 
+    /**
+     * The signal is emitted right after a node has been connected
+     * to the graph of the nodes.
+     *
+     * WARNING: you must not request any graph-related information
+     * about the node being run in a not-scheduler thread. If you need
+     * information about the parent/siblings of the node connect
+     * with Qt::DirectConnection, get needed information and then
+     * emit another Qt::AutoConnection signal to pass this information
+     * to your thread. See details of the implementation
+     * in KisDummiesfacadeBase.
+     */
     void sigNodeAddedAsync(KisNodeSP node);
-    void sigNodeMovedAsync(KisNodeSP node);
+
+    /**
+     * This signal is emitted right before a node is going to removed
+     * from the graph of the nodes.
+     *
+     * WARNING: you must not request any graph-related information
+     * about the node being run in a not-scheduler thread.
+     *
+     * \see comment in sigNodeAddedAsync()
+     */
     void sigRemoveNodeAsync(KisNodeSP node);
+
+    /**
+     * Emitted when the root node of the image has changed.
+     * It happens, e.g. when we flatten the image. When
+     * this happens the reciever should reload information
+     * about the image
+     */
     void sigLayersChangedAsync();
 
 

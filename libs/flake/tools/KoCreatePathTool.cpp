@@ -34,8 +34,8 @@
 
 #include <KNumInput>
 
-#include <QtGui/QPainter>
-#include <QtGui/QLabel>
+#include <QPainter>
+#include <QLabel>
 
 #include "KoCreatePathTool_p.h"
 

@@ -53,9 +53,6 @@ typedef KisSharedPtr<KisFixedPaintDevice> KisFixedPaintDeviceSP;
 class KisMask;
 typedef KisSharedPtr<KisMask> KisMaskSP;
 typedef KisWeakSharedPtr<KisMask> KisMaskWSP;
-typedef KisSharedPtrVector<KisMask> vKisMaskSP;
-typedef vKisMaskSP::iterator vKisMaskSP_it;
-typedef vKisMaskSP::const_iterator vKisMaskSP_cit;
 
 class KisNode;
 typedef KisSharedPtr<KisNode> KisNodeSP;
@@ -67,17 +64,10 @@ typedef vKisNodeSP::const_iterator vKisNodeSP_cit;
 class KisBaseNode;
 typedef KisSharedPtr<KisBaseNode> KisBaseNodeSP;
 typedef KisWeakSharedPtr<KisBaseNode> KisBaseNodeWSP;
-typedef KisSharedPtrVector<KisBaseNode> vKisBaseNodeSP;
-typedef vKisBaseNodeSP::iterator vKisBaseNodeSP_it;
-typedef vKisBaseNodeSP::const_iterator vKisBaseNodeSP_cit;
-
 
 class KisEffectMask;
 typedef KisSharedPtr<KisEffectMask> KisEffectMaskSP;
 typedef KisWeakSharedPtr<KisEffectMask> KisEffectMaskWSP;
-typedef KisSharedPtrVector<KisEffectMask> vKisEffectMaskSP;
-typedef vKisEffectMaskSP::iterator vKisEffectMaskSP_it;
-typedef vKisEffectMaskSP::const_iterator vKisEffectMaskSP_cit;
 
 class KisFilterMask;
 typedef KisSharedPtr<KisFilterMask> KisFilterMaskSP;
@@ -86,16 +76,10 @@ typedef KisWeakSharedPtr<KisFilterMask> KisFilterMaskWSP;
 class KisTransparencyMask;
 typedef KisSharedPtr<KisTransparencyMask> KisTransparencyMaskSP;
 typedef KisWeakSharedPtr<KisTransparencyMask> KisTransparencyMaskWSP;
-typedef KisSharedPtrVector<KisTransparencyMask> vKisTransparencyMaskSP;
-typedef vKisTransparencyMaskSP::iterator vKisTransparencyMaskSP_it;
-typedef vKisTransparencyMaskSP::const_iterator vKisTransparencyMaskSP_cit;
 
 class KisLayer;
 typedef KisSharedPtr<KisLayer> KisLayerSP;
 typedef KisWeakSharedPtr<KisLayer> KisLayerWSP;
-typedef KisSharedPtrVector<KisLayer> vKisLayerSP;
-typedef vKisLayerSP::iterator vKisLayerSP_it;
-typedef vKisLayerSP::const_iterator vKisLayerSP_cit;
 
 class KisShapeLayer;
 typedef KisSharedPtr<KisShapeLayer> KisShapeLayerSP;
@@ -120,6 +104,9 @@ typedef KisWeakSharedPtr<KisGroupLayer> KisGroupLayerWSP;
 class KisSelection;
 typedef KisSharedPtr<KisSelection> KisSelectionSP;
 typedef KisWeakSharedPtr<KisSelection> KisSelectionWSP;
+
+class KisSelectionComponent;
+typedef KisSharedPtr<KisSelectionComponent> KisSelectionComponentSP;
 
 class KisBackground;
 typedef KisSharedPtr<KisBackground> KisBackgroundSP;

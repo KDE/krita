@@ -21,7 +21,7 @@
 #include <kdebug.h>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
-#include <QtCore/QFile>
+#include <QFile>
 using namespace Soprano;
 
 bool KoTextRdfCore::saveRdf(Soprano::Model *model, Soprano::StatementIterator triples, KoStore *store, KoXmlWriter *manifestWriter, const QString &fileName)

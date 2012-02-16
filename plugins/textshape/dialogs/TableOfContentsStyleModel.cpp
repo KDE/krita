@@ -20,7 +20,7 @@
 #include "TableOfContentsStyleModel.h"
 
 #include "KoStyleManager.h"
-#include "KoStyleThumbnailer.h"
+#include <KoStyleThumbnailer.h>
 #include "KoParagraphStyle.h"
 #include "ToCBibGeneratorInfo.h"
 #include "KoTableOfContentsGeneratorInfo.h"

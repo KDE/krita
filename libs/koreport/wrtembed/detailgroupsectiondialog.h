@@ -20,7 +20,7 @@
 #ifndef DETAILGROUPSECTIONDIALOG_H
 #define DETAILGROUPSECTIONDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 #include <ui_detailgroupsectiondialog.h>
 

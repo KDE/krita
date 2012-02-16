@@ -24,10 +24,10 @@
 
 #include <KoCanvasObserverBase.h>
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QHash>
-#include <QtGui/QDockWidget>
+#include <QList>
+#include <QMap>
+#include <QHash>
+#include <QDockWidget>
 
 class QToolButton;
 class KoCanvasController;

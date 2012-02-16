@@ -22,7 +22,7 @@
 
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
 
 class KoShape;
 

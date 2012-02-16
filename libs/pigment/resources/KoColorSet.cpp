@@ -31,7 +31,7 @@
 
 /*
 KoColorSet::KoColorSet(const KisGradient * gradient, qint32 nColors, const QString & name)
-    : super(QString("")),
+    : KoResource(QString("")),
       m_name(name)
 {
     Q_ASSERT(nColors > 0);
@@ -54,21 +54,21 @@ KoColorSet::KoColorSet(const KisGradient * gradient, qint32 nColors, const QStri
 }
 */
 KoColorSet::KoColorSet(const QString& filename)
-        : super(filename)
+        : KoResource(filename)
 {
-    // Implemented in super class
+    // Implemented in KoResource class
     m_columns = 0; // Set the default value that the GIMP uses...
 }
 
 KoColorSet::KoColorSet()
-        : super("")
+        : KoResource("")
 {
     m_columns = 0; // Set the default value that the GIMP uses...
 }
 
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet& rhs)
-        : super("")
+        : KoResource("")
 {
     setFilename(rhs.filename());
     m_ownData = false;

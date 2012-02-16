@@ -47,7 +47,7 @@
 #include <QPainter>
 #include <QTimer>
 #include <QPixmapCache>
-#include <QtCore/QBuffer>
+#include <QBuffer>
 
 QString generate_key(qint64 key, const QSize & size)
 {

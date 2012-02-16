@@ -32,7 +32,7 @@
 #include <QCheckBox>
 #include <QDomElement>
 #include <QHBoxLayout>
-#include <qtoolbutton.h>
+#include <QToolButton>
 
 #include <kis_image.h>
 #include <kis_debug.h>

@@ -19,7 +19,7 @@
 #ifndef __KIS_NODE_DUMMIES_GRAPH_TEST_H
 #define __KIS_NODE_DUMMIES_GRAPH_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisNodeDummy;
 class KisNodeDummiesGraph;
@@ -31,6 +31,8 @@ class KisNodeDummiesGraphTest : public QObject
 private slots:
     void init();
     void cleanup();
+
+    void testIndexing();
 
     void testPrepend();
     void testAppend();

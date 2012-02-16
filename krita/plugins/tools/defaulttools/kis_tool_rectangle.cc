@@ -64,7 +64,9 @@ void KisToolRectangle::finishRect(const QRectF &rect)
     if (!currentNode()->inherits("KisShapeLayer")) {
         KisFigurePaintingToolHelper helper(i18n("Rectangle"),
                                            image(),
-                                           canvas()->resourceManager());
+                                           canvas()->resourceManager(),
+                                           strokeStyle(),
+                                           fillStyle());
         helper.paintRect(rect);
     } else {
         QRectF r = convertToPt(rect);

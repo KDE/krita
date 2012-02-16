@@ -19,7 +19,7 @@
 #ifndef MUSIC_PARTSLISTMODEL_H
 #define MUSIC_PARTSLISTMODEL_H
 
-#include <QtCore/QAbstractListModel>
+#include <QAbstractListModel>
 
 namespace MusicCore {
     class Sheet;

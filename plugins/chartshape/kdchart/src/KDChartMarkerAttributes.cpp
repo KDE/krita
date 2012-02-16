@@ -26,7 +26,7 @@
 #include <QPen>
 #include <QSizeF>
 #include <QDebug>
-#include <qglobal.h>
+#include <QtGlobal>
 
 #include <KDABLibFakes>
 

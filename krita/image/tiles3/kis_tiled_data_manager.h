@@ -270,6 +270,11 @@ public:
     void bitBlt(KisTiledDataManager *srcDM, const QRect &rect);
 
     /**
+     * The same as \ref bitBlt(), but reads old data
+     */
+    void bitBltOldData(KisTiledDataManager *srcDM, const QRect &rect);
+
+    /**
      * Clones rect from another datamanager in a rough and fast way.
      * All the tiles touched by rect will be shared, between both
      * managers, that means it will copy a bigger area than was
@@ -277,6 +282,11 @@ public:
      * into temporary paint devices.
      */
     void bitBltRough(KisTiledDataManager *srcDM, const QRect &rect);
+
+    /**
+     * The same as \ref bitBltRough(), but reads old data
+     */
+    void bitBltRoughOldData(KisTiledDataManager *srcDM, const QRect &rect);
 
     /**
      * write the specified data to x, y. There is no checking on pixelSize!
@@ -376,6 +386,11 @@ private:
     void recalculateExtent();
 
     quint8* duplicatePixel(qint32 num, const quint8 *pixel);
+
+    template<bool useOldSrcData>
+        void bitBltImpl(KisTiledDataManager *srcDM, const QRect &rect);
+    template<bool useOldSrcData>
+        void bitBltRoughImpl(KisTiledDataManager *srcDM, const QRect &rect);
 
     void writeBytesBody(const quint8 *data,
                         qint32 x, qint32 y, qint32 width, qint32 height);

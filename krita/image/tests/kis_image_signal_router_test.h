@@ -19,36 +19,24 @@
 #ifndef __KIS_IMAGE_SIGNAL_ROUTER_TEST_H
 #define __KIS_IMAGE_SIGNAL_ROUTER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include <QObject>
-#include <QAtomicInt>
-#include "kis_types.h"
-
-class SignalConsumer : public QObject
-{
-    Q_OBJECT
-public:
-    SignalConsumer(KisImageWSP image);
-    int signalsCounter() const;
-    int getChecker() const;
+#include "kis_image_signal_router.h"
+#include "empty_nodes_test.h"
 
 
-public slots:
-    void slotAcceptSignal();
-    void slotAcceptSetCheckerSignal(KisNode*, int);
-
-private:
-    QAtomicInt m_intrusionCounter;
-    QAtomicInt m_signalsCounter;
-    QAtomicInt m_checker;
-};
-
-class KisImageSignalRouterTest : public QObject
+class KisImageSignalRouterTest : public QObject, public TestUtil::EmptyNodesTest
 {
     Q_OBJECT
 private slots:
-    void testSequentiality();
+    void init();
+    void cleanup();
+
+    void testSignalForwarding();
+
+private:
+    void checkNotification(KisImageSignalType notification, const char *signal);
 };
 
 #endif /* __KIS_IMAGE_SIGNAL_ROUTER_TEST_H */

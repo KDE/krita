@@ -21,7 +21,7 @@
 #include "ui_KoShadowConfigWidget.h"
 #include <KoUnit.h>
 #include <KoColorPopupAction.h>
-#include <QtGui/QCheckBox>
+#include <QCheckBox>
 #include <math.h>
 
 class KoShadowConfigWidget::Private

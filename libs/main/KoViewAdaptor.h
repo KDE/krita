@@ -22,8 +22,8 @@
 #ifndef __KoViewAdaptor_h__
 #define __KoViewAdaptor_h__
 
-#include <QtCore/QMap>
-#include <QtCore/QObject>
+#include <QMap>
+#include <QObject>
 #include <QtDBus/QtDBus>
 
 class QString;

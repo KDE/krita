@@ -22,6 +22,9 @@
 #include <KDialog>
 
 class StyleManager;
+
+class KoCharacterStyle;
+class KoParagraphStyle;
 class KoStyleManager;
 class KoUnit;
 
@@ -35,6 +38,11 @@ public:
     void setStyleManager(KoStyleManager *sm);
 
     void setUnit(const KoUnit &unit);
+
+public slots:
+    void setParagraphStyle(KoParagraphStyle *style);
+    void setCharacterStyle(KoCharacterStyle *style, bool canDelete = false);
+
 
 private:
     void accept();

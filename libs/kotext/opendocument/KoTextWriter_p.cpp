@@ -670,6 +670,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     if (outlineLevel > 0) {
         blockTagInformation.setTagName("text:h");
         blockTagInformation.addAttribute("text:outline-level", outlineLevel);
+        if (blockFormat.boolProperty(KoParagraphStyle::IsListHeader) || blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem)) {
+            blockTagInformation.addAttribute("text:is-list-header", "true");
+        }
     } else {
         blockTagInformation.setTagName("text:p");
     }
@@ -1404,7 +1407,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
         listTagInformation.setTagName("text:list");
         listTagInformation.addAttribute("text:style-name", listStyles[textList]);
 
-        if (listXmlIds.contains(list->listContinuedFrom())) {
+        if (list && listXmlIds.contains(list->listContinuedFrom())) {
             listTagInformation.addAttribute("text:continue-list", listXmlIds.value(list->listContinuedFrom()));
         }
 
@@ -1474,7 +1477,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     }
                 } else {
                     //This is a sub-list
-                    while (KoList::level(block) == (level + 1)) {
+                    while (KoList::level(block) >= (level + 1)) {
                         block = saveList(block, listStyles, level + 1, currentTable);
                     }
                     //saveList will return a block one-past the last block of the list.

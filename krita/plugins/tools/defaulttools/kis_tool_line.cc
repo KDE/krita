@@ -206,7 +206,9 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
         if (nodeAbility == PAINT) {
             KisFigurePaintingToolHelper helper(i18nc("a straight drawn line", "Line"),
                                                image(),
-                                               canvas()->resourceManager());
+                                               canvas()->resourceManager(),
+                                               KisPainter::StrokeStyleBrush,
+                                               KisPainter::FillStyleNone);
             helper.paintLine(m_startPos, m_endPos);
         }
         else {

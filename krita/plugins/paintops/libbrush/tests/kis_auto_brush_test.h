@@ -19,7 +19,7 @@
 #ifndef KIS_AUTOBRUSH_RESOURCE_TEST_H
 #define KIS_AUTOBRUSH_RESOURCE_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisAutoBrushTest : public QObject
 {

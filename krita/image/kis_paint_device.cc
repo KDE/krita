@@ -334,6 +334,12 @@ void KisPaintDevice::setParentNode(KisNodeWSP parent)
     m_d->parent = parent;
 }
 
+// for testing purposes only
+KisNodeWSP KisPaintDevice::parentNode() const
+{
+    return m_d->parent;
+}
+
 void KisPaintDevice::setDefaultBounds(KisDefaultBoundsBaseSP defaultBounds)
 {
     m_d->defaultBounds = defaultBounds;
@@ -1086,11 +1092,27 @@ void KisPaintDevice::fastBitBlt(KisPaintDeviceSP src, const QRect &rect)
     m_d->cache.invalidate();
 }
 
+void KisPaintDevice::fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect)
+{
+    Q_ASSERT(fastBitBltPossible(src));
+
+    m_datamanager->bitBltOldData(src->dataManager(), rect.translated(-m_d->x, -m_d->y));
+    m_d->cache.invalidate();
+}
+
 void KisPaintDevice::fastBitBltRough(KisPaintDeviceSP src, const QRect &rect)
 {
     Q_ASSERT(fastBitBltPossible(src));
 
     m_datamanager->bitBltRough(src->dataManager(), rect.translated(-m_d->x, -m_d->y));
+    m_d->cache.invalidate();
+}
+
+void KisPaintDevice::fastBitBltRoughOldData(KisPaintDeviceSP src, const QRect &rect)
+{
+    Q_ASSERT(fastBitBltPossible(src));
+
+    m_datamanager->bitBltRoughOldData(src->dataManager(), rect.translated(-m_d->x, -m_d->y));
     m_d->cache.invalidate();
 }
 

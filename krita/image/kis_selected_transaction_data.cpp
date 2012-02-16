@@ -29,14 +29,21 @@ KisSelectedTransactionData::KisSelectedTransactionData(const QString& name, KisN
         , m_selTransaction(0)
         , m_hadSelection(false)
 {
-    m_layer = dynamic_cast<KisLayer*>(node.data());
-    while (!m_layer && node->parent()) {
-        m_layer = dynamic_cast<KisLayer*>(node->parent().data());
-        node = node->parent();
-    }
+    KisNodeSP currentNode = node;
 
-    if (m_layer->selection())
-        m_selTransaction = new KisTransactionData(name, KisPaintDeviceSP(m_layer->selection()->getOrCreatePixelSelection().data()));
+    do {
+        m_layer = dynamic_cast<KisLayer*>(currentNode.data());
+    } while(!m_layer && (currentNode = currentNode->parent()));
+
+    KisSelectionSP selection = m_layer->selection();
+    if(selection) {
+        KisPaintDeviceSP selectionPaintDevice =
+            selection->getOrCreatePixelSelection();
+
+        if(selectionPaintDevice != node->paintDevice()) {
+            m_selTransaction = new KisTransactionData(name, selectionPaintDevice);
+        }
+    }
 }
 
 KisSelectedTransactionData::~KisSelectedTransactionData()

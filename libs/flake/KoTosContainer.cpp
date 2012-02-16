@@ -218,7 +218,6 @@ KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentReso
         } else {
             textShape->setSize(size());
         }
-        textShape->setTransformation(transformation());
         if (d->resizeBehavior == TextFollowsPreferredTextRect) {
             textShape->setPosition(d->preferredTextRect.topLeft());
         } else {

@@ -26,8 +26,8 @@
 #include "koodf_export.h"
 
 #include <QPair>
-#include <QtXml/qxml.h>
-#include <QtXml/qdom.h>
+#include <QtXml>
+#include <QDomDocument>
 
 class QIODevice;
 class QTextDecoder;
@@ -125,6 +125,8 @@ public:
     KoXmlNode lastChild() const;
     KoXmlNode nextSibling() const;
     KoXmlNode previousSibling() const;
+
+    KoXmlElement firstChildElement() const;
 
     // equivalent to node.childNodes().count() if node is a QDomNode instance
     int childNodesCount() const;

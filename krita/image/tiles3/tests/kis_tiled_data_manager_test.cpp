@@ -271,6 +271,42 @@ void KisTiledDataManagerTest::testVersionedBitBlt()
     QVERIFY(checkTilesNotShared(&srcDM1, &srcDM1, true, false, tilesRect));
 }
 
+void KisTiledDataManagerTest::testBitBltOldData()
+{
+    quint8 defaultPixel = 0;
+    KisTiledDataManager srcDM(1, &defaultPixel);
+    KisTiledDataManager dstDM(1, &defaultPixel);
+
+    quint8 oddPixel1 = 128;
+    quint8 oddPixel2 = 129;
+
+    QRect rect(0,0,512,512);
+    QRect cloneRect(81,80,250,250);
+    QRect tilesRect(2,2,3,3);
+
+    quint8 *buffer = new quint8[rect.width()*rect.height()];
+
+    KisMementoSP memento1 = srcDM.getMemento();
+    srcDM.clear(rect, &oddPixel1);
+    srcDM.commit();
+
+    dstDM.bitBltOldData(&srcDM, cloneRect);
+    dstDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, cloneRect,
+                      defaultPixel, rect));
+
+    KisMementoSP memento2 = srcDM.getMemento();
+    srcDM.clear(rect, &oddPixel2);
+    dstDM.bitBltOldData(&srcDM, cloneRect);
+    srcDM.commit();
+
+    dstDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, cloneRect,
+                      defaultPixel, rect));
+
+    delete[] buffer;
+}
+
 void KisTiledDataManagerTest::testBitBltRough()
 {
     quint8 defaultPixel = 0;
@@ -279,6 +315,7 @@ void KisTiledDataManagerTest::testBitBltRough()
 
     quint8 oddPixel1 = 128;
     quint8 oddPixel2 = 129;
+    quint8 oddPixel3 = 130;
 
     QRect rect(0,0,512,512);
     QRect cloneRect(81,80,250,250);
@@ -297,10 +334,19 @@ void KisTiledDataManagerTest::testBitBltRough()
     QVERIFY(checkHole(buffer, oddPixel1, actualCloneRect,
                       oddPixel2, rect));
 
-    delete[] buffer;
-
     // Test whether tiles became shared
     QVERIFY(checkTilesShared(&srcDM, &dstDM, false, false, tilesRect));
+
+    // check bitBltRoughOldData
+    KisMementoSP memento1 = srcDM.getMemento();
+    srcDM.clear(rect, &oddPixel3);
+    dstDM.bitBltRoughOldData(&srcDM, cloneRect);
+    srcDM.commit();
+    dstDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, actualCloneRect,
+                      oddPixel2, rect));
+
+    delete[] buffer;
 }
 
 void KisTiledDataManagerTest::testTransactions()

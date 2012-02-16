@@ -19,10 +19,10 @@
 
 #include "KoFilterEffectLoadingContext.h"
 
-#include <QtCore/QString>
-#include <QtCore/QRectF>
-#include <QtCore/QFileInfo>
-#include <QtCore/QDir>
+#include <QString>
+#include <QRectF>
+#include <QFileInfo>
+#include <QDir>
 
 class KoFilterEffectLoadingContext::Private
 {

@@ -26,7 +26,7 @@
 #define brushRadius (brushInnerRadius+brushOuterRadius)/2
 
 #include <kis_types.h>
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QQueue>
 #include <KoColor.h>
 #include <KoTriangleColorSelector.h>

@@ -23,8 +23,8 @@
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 
-#include <QtGui/QColor>
-#include <QtGui/QPainter>
+#include <QColor>
+#include <QPainter>
 
 class KoColorBackground::Private
 {

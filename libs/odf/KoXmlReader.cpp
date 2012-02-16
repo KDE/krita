@@ -74,8 +74,8 @@
 
 #ifndef KOXML_USE_QDOM
 
-#include <qxml.h>
-#include <qdom.h>
+#include <QtXml>
+#include <QDomDocument>
 #include <QXmlStreamReader>
 #include <QXmlStreamEntityResolver>
 
@@ -2132,6 +2132,15 @@ KoXmlNode KoXmlNode::firstChild() const
     if (!d->loaded)
         d->loadChildren();
     return d->first ? KoXmlNode(d->first) : KoXmlNode();
+}
+
+KoXmlElement KoXmlNode::firstChildElement() const
+{
+    KoXmlElement element;
+    forEachElement (element, (*this)) {
+        return element;
+    }
+    return KoXmlElement();
 }
 
 KoXmlNode KoXmlNode::lastChild() const

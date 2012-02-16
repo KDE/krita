@@ -23,7 +23,7 @@
 #ifndef RDF_TEST_H
 #define RDF_TEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class QTextDocument;
 class KoTextEditor;
@@ -35,8 +35,8 @@ class RdfTest : public QObject
     Q_OBJECT
 
 private slots:
-    void testFindMarkers();
     void testCreateMarkers();
+    void testFindMarkers();
     void testFindByName();
     void testEditAndFindMarkers(); // XXX: implement
     void testRemoveMarkers();

@@ -170,6 +170,8 @@ void KisFilterOption::updateFilterConfigWidget()
 
 void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
+    if (!m_currentFilter) return;
+
     setting->setProperty(FILTER_ID, m_currentFilter->id());
     setting->setProperty(FILTER_IGNORE_ALPHA, ignoreAlpha());
     if(filterConfig()) {

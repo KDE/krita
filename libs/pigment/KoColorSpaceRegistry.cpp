@@ -144,9 +144,9 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
 
     // Delete the colorspace factories
     qDeleteAll(d->localFactories);
-
+#ifndef Q_WS_WIN
     delete d->alphaCSF;
-
+#endif
     delete d;
 }
 

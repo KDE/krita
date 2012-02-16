@@ -19,7 +19,7 @@
 #ifndef _KO_HISTOGRAM_PRODUCER_
 #define _KO_HISTOGRAM_PRODUCER_
 
-#include <qglobal.h>
+#include <QtGlobal>
 #include <ksharedptr.h>
 
 #include "pigment_export.h"

@@ -26,7 +26,7 @@
 #include <QPainter>
 #include <QLabel>
 #include <QComboBox>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QHBoxLayout>
 
 #include "KoChannelInfo.h"

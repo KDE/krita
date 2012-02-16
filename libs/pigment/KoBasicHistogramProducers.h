@@ -21,7 +21,7 @@
 
 #include "KoHistogramProducer.h"
 
-#include <QtCore/QVector>
+#include <QVector>
 #include <klocale.h>
 
 #include <KoConfig.h>

@@ -91,8 +91,6 @@ public:
      */
     KoImageData *createImageData(const QByteArray &imageData);
 
-    void add(const KoImageData &data);
-    void remove(const KoImageData &data);
     void removeOnKey(qint64 imageDataKey);
 
     bool fillFromKey(KoImageData &idata, qint64 imageDataKey);
@@ -101,10 +99,20 @@ public:
      * Get the number of images inside the collection
      */
     int size() const;
+
     /**
      * Get the number of images inside the collection
      */
     int count() const;
+
+    /**
+     * Update the imagecollection: the imagedata object with the old
+     * key will now be associated with the new key.
+     *
+     * @param the key by which the object is known in the collection
+     * @param they new key by which the object should be known
+     */
+    void update(qint64 oldKey, qint64 newKey);
 
 private:
     KoImageData *cacheImage(KoImageData *data);

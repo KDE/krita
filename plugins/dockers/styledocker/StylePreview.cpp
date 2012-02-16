@@ -28,15 +28,15 @@
 #include <KoZoomHandler.h>
 #include <KoGradientBackground.h>
 
-#include <QtCore/QEvent>
-#include <QtCore/QPoint>
-#include <QtCore/QRect>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPainter>
-#include <QtGui/QColor>
-#include <QtGui/QBrush>
-#include <QtGui/QGradient>
+#include <QEvent>
+#include <QPoint>
+#include <QRect>
+#include <QPaintEvent>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QColor>
+#include <QBrush>
+#include <QGradient>
 
 #define PANEL_SIZEX 50.0
 #define PANEL_SIZEY 50.0

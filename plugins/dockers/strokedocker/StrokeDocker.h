@@ -31,7 +31,7 @@
 
 #include <KoUnit.h>
 #include <KoCanvasObserverBase.h>
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
 #include <KoMarkerData.h>
 
 class KoShapeBorderModel;

@@ -101,7 +101,7 @@ void KisNodeShape::editabilityChanged()
         KoSelection *activeSelection = canvasController->canvas()->shapeManager()->selection();
         KoShapeLayer *activeLayer = activeSelection->activeLayer();
 
-        if(checkIfDescendant(activeLayer)) {
+        if(activeLayer && checkIfDescendant(activeLayer)) {
             activeSelection->setActiveLayer(activeLayer);
         }
     }

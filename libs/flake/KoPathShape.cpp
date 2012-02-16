@@ -46,7 +46,7 @@
 #include <KoOdfLoadingContext.h>
 
 #include <KDebug>
-#include <QtGui/QPainter>
+#include <QPainter>
 
 #ifndef QT_NO_DEBUG
 #include <qnumeric.h> // for qIsNaN

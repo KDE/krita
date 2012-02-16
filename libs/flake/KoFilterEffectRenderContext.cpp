@@ -20,8 +20,8 @@
 #include "KoFilterEffectRenderContext.h"
 #include "KoViewConverter.h"
 
-#include <QtCore/QRectF>
-#include <QtGui/QTransform>
+#include <QRectF>
+#include <QTransform>
 
 class KoFilterEffectRenderContext::Private
 {

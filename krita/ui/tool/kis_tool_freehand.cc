@@ -303,6 +303,7 @@ void KisToolFreehand::keyReleaseEvent(QKeyEvent* event)
 {
     if (mode() != KisTool::PAINT_MODE) {
         KisToolPaint::keyReleaseEvent(event);
+        updateOutlineRect();
         return;
     }
 

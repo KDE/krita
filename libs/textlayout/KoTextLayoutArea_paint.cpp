@@ -72,7 +72,7 @@ extern int qt_defaultDpiY();
 
 void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
-    if (m_startOfArea == 0) // We have not been layouted yet
+    if (m_startOfArea == 0 || m_endOfArea == 0) // We have not been layouted yet
         return;
 
     /*

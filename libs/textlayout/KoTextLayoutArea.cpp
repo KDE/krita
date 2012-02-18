@@ -352,7 +352,7 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
                 }
             }
         }
-        // if the full paragraph is selected to add it to the rect. This makes sure we get a rect for the case 
+        // if the full paragraph is selected to add it to the rect. This makes sure we get a rect for the case
         // where the end of the selection lies is a different area.
         if (cursor.selectionEnd() >= block.position() + block.length() && cursor.selectionStart() <= block.position()) {
             QTextLine line = block.layout()->lineForTextPosition(block.length()-1);
@@ -1004,7 +1004,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     qreal presentationListTabValue(0.0); // for use in presentationListTabWorkaround
 
-    // For some lists we need to add a special list tab according to odf 1.2 19.830 
+    // For some lists we need to add a special list tab according to odf 1.2 19.830
     if (textList && listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
         qreal listTab = 0;
         if (listFormat.hasProperty(KoListStyle::TabStopPosition)) {
@@ -1201,7 +1201,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         runAroundHelper.setLine(this, line);
         runAroundHelper.setObstructions(documentLayout()->currentObstructions());
         QRectF anchoringRect = m_blockRects.last();
-        qDebug() << anchoringRect.top() << m_anchoringParagraphTop;
+//        qDebug() << anchoringRect.top() << m_anchoringParagraphTop;
         anchoringRect.setTop(m_anchoringParagraphTop);
         documentLayout()->setAnchoringParagraphRect(anchoringRect);
         documentLayout()->setAnchoringLayoutEnvironmentRect(layoutEnvironmentRect());
@@ -1243,7 +1243,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
 
         if (documentLayout()->anchoringSoftBreak() <= block.position() + line.textStart() + line.textLength()) {
-            //don't add an anchor that has been moved away 
+            //don't add an anchor that has been moved away
             line.setNumColumns(documentLayout()->anchoringSoftBreak() - block.position() - line.textStart(), line.width());
             softBreak = true;
             // if the softBreakPos is at the start of the block stop here so

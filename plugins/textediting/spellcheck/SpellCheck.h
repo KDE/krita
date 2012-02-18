@@ -2,6 +2,7 @@
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  * Copyright (C) 2007,2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2010 Christoph Goerlich <chgoerlich@gmx.de>
+ * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,8 +31,10 @@
 #include <QPointer>
 #include <QQueue>
 #include <QTextLayout>
+#include <QTextStream>
 
 class QTextDocument;
+class QTextStream;
 class BgSpellCheck;
 class SpellCheckMenu;
 
@@ -67,7 +70,7 @@ public:
     //reimplemented from Calligra2.0, we disconnect and re- connect the 'documentChanged' signal only when the document has replaced
     void setDocument(const QTextDocument *document);
 
-    void replaceWordBySuggestion(const QString &word, int startPosition);  
+    void replaceWordBySuggestion(const QString &word, int startPosition,int lengthOfWord);
 
 public slots:
     void setDefaultLanguage(const QString &lang);
@@ -102,6 +105,8 @@ private:
     bool m_allowSignals;
     bool m_documentIsLoading;
     bool m_isChecking;
+    QTextStream stream;
+    int position;
     QTextCharFormat m_defaultMisspelledFormat;
     SpellCheckMenu *m_spellCheckMenu;
 

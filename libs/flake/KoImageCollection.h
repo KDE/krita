@@ -105,6 +105,15 @@ public:
      */
     int count() const;
 
+    /**
+     * Update the imagecollection: the imagedata object with the old
+     * key will now be associated with the new key.
+     *
+     * @param the key by which the object is known in the collection
+     * @param they new key by which the object should be known
+     */
+    void update(qint64 oldKey, qint64 newKey);
+
 private:
     KoImageData *cacheImage(KoImageData *data);
 

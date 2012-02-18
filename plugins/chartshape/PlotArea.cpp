@@ -294,6 +294,9 @@ void PlotArea::plotAreaInit()
 
 void PlotArea::proxyModelStructureChanged()
 {
+    if (proxyModel()->isLoading())
+        return;
+
     Q_ASSERT( xAxis() );
     Q_ASSERT( yAxis() );
     QMap<DataSet*, Axis*> attachedAxes;

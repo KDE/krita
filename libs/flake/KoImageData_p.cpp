@@ -131,9 +131,10 @@ void KoImageDataPrivate::copyToTemporary(QIODevice &device)
         } while (bytes > 0);
     }
     key = KoImageDataPrivate::generateKey(md5.result());
+
     temporaryFile->close();
 
-    QFileInfo fi(*temporaryFile);
+    //QFileInfo fi(*temporaryFile);
     dataStoreState = StateNotLoaded;
 }
 

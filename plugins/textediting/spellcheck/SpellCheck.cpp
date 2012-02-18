@@ -2,6 +2,7 @@
  * Copyright (C) 2007, 2008 Fredy Yanardi <fyanardi@gmail.com>
  * Copyright (C) 2007,2009,2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2010 Christoph Goerlich <chgoerlich@gmx.de>
+ * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -377,7 +378,7 @@ void SpellCheck::setCurrentCursorPosition(const QTextDocument *document, int cur
                         && cursorPosition <= block.position() + range.start + range.length
                         && range.format == m_defaultMisspelledFormat) {
                     QString word = block.text().mid(range.start, range.length);
-                    m_spellCheckMenu->setMisspelled(word, block.position() + range.start);
+                    m_spellCheckMenu->setMisspelled(word, block.position() + range.start,range.length);
                     m_spellCheckMenu->setCurrentLanguage(m_bgSpellCheck->currentLanguage());
                     m_spellCheckMenu->setVisible(true);
                     m_spellCheckMenu->setEnabled(true);
@@ -417,7 +418,7 @@ void SpellCheck::clearHighlightMisspelled(int startPosition)
     }
 }
 
-void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition)
+void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition, int lengthOfWord)
 {
     if (!m_document)
         return;
@@ -426,9 +427,11 @@ void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition)
     if (!block.isValid())
         return;
 
+    int i=0;
     QTextCursor cursor(m_document);
     cursor.setPosition(startPosition);
-    cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::NextCharacter,QTextCursor::KeepAnchor, lengthOfWord);
+    cursor.removeSelectedText();
     //if the replaced word and the suggestion had the same number of chars,
     //we must clear highlighting manually, see 'documentChanged'
     if ((cursor.selectionEnd() - cursor.selectionStart()) == word.length())

@@ -52,10 +52,15 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
         KoListLevelProperties llp;
         llp.setLevel(lev);
         llp.setStyle(style);
+        llp.setListItemPrefix(levelProperties.listItemPrefix());
+        llp.setListItemSuffix(levelProperties.listItemSuffix());
+
         if (KoListStyle::isNumberingStyle(style)) {
             llp.setStartValue(1);
             llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
-            llp.setListItemSuffix(".");
+            if (llp.listItemSuffix().isEmpty()) {
+                llp.setListItemSuffix(".");
+            }
         }
         else if (style == KoListStyle::CustomCharItem) {
             llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100

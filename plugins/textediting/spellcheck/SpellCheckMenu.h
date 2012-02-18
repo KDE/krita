@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Christoph Goerlich <chgoerlich@gmx.de>
+ * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,7 +40,7 @@ public:
     ~SpellCheckMenu();
 
     QPair<QString, KAction*> menuAction();
-    void setMisspelled(const QString word, int position);
+    void setMisspelled(const QString word, int position,int length);
     void setEnabled(bool b);
     void setVisible(bool b);
     void setCurrentLanguage(const QString &language);
@@ -60,6 +61,7 @@ private:
     KAction *m_ignoreWordAction;
     KAction *m_addToDictionaryAction;
     KMenu *m_suggestionsMenu;
+    int m_lengthMisspelled;
     QSignalMapper *m_suggestionsSignalMapper;
     int m_currentMisspelledPosition;
     QString m_currentMisspelled;

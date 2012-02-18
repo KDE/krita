@@ -32,8 +32,8 @@
 #include <KoGenStyle.h>
 #include <KoViewConverter.h>
 #include <kdebug.h>
-#include <QtGui/QPainter>
-#include <QtCore/QAtomicInt>
+#include <QPainter>
+#include <QAtomicInt>
 #include <QImage>
 #include <QRectF>
 

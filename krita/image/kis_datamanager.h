@@ -18,7 +18,7 @@
 #ifndef KIS_DATAMANAGER_H_
 #define KIS_DATAMANAGER_H_
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 class QRect;
 class KoStore;
@@ -214,6 +214,13 @@ public:
     }
 
     /**
+     * The same as \ref bitBlt() but reads old data
+     */
+    inline void bitBltOldData(KisTiledDataManagerSP srcDM, const QRect &rect) {
+        ACTUAL_DATAMGR::bitBltOldData(const_cast<KisTiledDataManager*>(srcDM.data()), rect);
+    }
+
+    /**
      * Clones rect from another datamanager in a rough and fast way.
      * All the tiles touched by rect will be shared, between both
      * devices, that means it will copy a bigger area than was
@@ -222,6 +229,13 @@ public:
      */
     inline void bitBltRough(KisTiledDataManagerSP srcDM, const QRect &rect) {
         ACTUAL_DATAMGR::bitBltRough(const_cast<KisTiledDataManager*>(srcDM.data()), rect);
+    }
+
+    /**
+     * The same as \ref bitBltRough() but reads old data
+     */
+    inline void bitBltRoughOldData(KisTiledDataManagerSP srcDM, const QRect &rect) {
+        ACTUAL_DATAMGR::bitBltRoughOldData(const_cast<KisTiledDataManager*>(srcDM.data()), rect);
     }
 
 public:

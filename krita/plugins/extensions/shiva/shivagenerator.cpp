@@ -90,6 +90,8 @@ void ShivaGenerator::generate(KisProcessingInformation dstInfo,
             }
         }
     }
+    kernel.setParameter(OpenShiva::Kernel::IMAGE_WIDTH, float(dstInfo.paintDevice()->defaultBounds()->bounds().width()));
+    kernel.setParameter(OpenShiva::Kernel::IMAGE_HEIGHT, float(dstInfo.paintDevice()->defaultBounds()->bounds().height()));
     KisGtlLocker gtlLocker;
     {
         QMutexLocker l(shivaMutex);

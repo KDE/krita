@@ -38,7 +38,8 @@ static const struct {
     { KoInlineObject::Title, "title", "text:title" },
     { KoInlineObject::Subject, "subject", "text:subject" },
     { KoInlineObject::Keywords, "keywords", "text:keywords" },
-    { KoInlineObject::Description, "description", "text:description" }
+    //{ KoInlineObject::Description, "description", "text:description" }
+    { KoInlineObject::Comments, "comments", "text:comments" }
 };
 
 static const unsigned int numPropertyData = sizeof(propertyData) / sizeof(*propertyData);
@@ -103,6 +104,13 @@ bool InfoVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
 
     const QString localName(element.localName());
     m_type = s_loadInfo->value(localName);
+
+    for(KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() ) {
+        if (node.isText()) {
+            setValue(node.toText().data());
+            break;
+        }
+    }
 
     return true;
 }

@@ -27,9 +27,9 @@
 
 #include <KDebug>
 
-#include <QtCore/QStack>
-#include <QtCore/QFileInfo>
-#include <QtCore/QDir>
+#include <QStack>
+#include <QFileInfo>
+#include <QDir>
 
 class SvgLoadingContext::Private
 {

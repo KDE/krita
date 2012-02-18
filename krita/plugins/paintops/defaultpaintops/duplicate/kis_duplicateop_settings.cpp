@@ -89,7 +89,7 @@ void KisDuplicateOpSettings::activate()
     if(!options)
         return;
 
-    if (m_image && m_image.isValid() && m_image->perspectiveGrid()->countSubGrids() != 1) {
+    if (m_image && m_image->perspectiveGrid()->countSubGrids() != 1) {
         options->m_duplicateOption->setHealing(false);
         options->m_duplicateOption->setPerspective(false);
     } else {

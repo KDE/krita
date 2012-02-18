@@ -438,7 +438,9 @@ void KisTiledDataManager::clear()
     m_extentMaxY = qint32_MIN;
 }
 
-void KisTiledDataManager::bitBlt(KisTiledDataManager *srcDM, const QRect &rect)
+
+template<bool useOldSrcData>
+void KisTiledDataManager::bitBltImpl(KisTiledDataManager *srcDM, const QRect &rect)
 {
     QWriteLocker locker(&m_lock);
 
@@ -456,9 +458,11 @@ void KisTiledDataManager::bitBlt(KisTiledDataManager *srcDM, const QRect &rect)
     for (qint32 row = firstRow; row <= lastRow; ++row) {
         for (qint32 column = firstColumn; column <= lastColumn; ++column) {
 
-            // In most bitBlt code of Krita we do not use oldRawData
-            // so let's just conform this behavior
-            KisTileSP srcTile = srcDM->getTile(column, row, false);
+            // this is the only variation in the template
+            KisTileSP srcTile = useOldSrcData ?
+                srcDM->getOldTile(column, row) :
+                srcDM->getTile(column, row, false);
+
             QRect tileRect(column*KisTileData::WIDTH, row*KisTileData::HEIGHT,
                            KisTileData::WIDTH, KisTileData::HEIGHT);
             QRect cloneTileRect = rect & tileRect;
@@ -500,7 +504,8 @@ void KisTiledDataManager::bitBlt(KisTiledDataManager *srcDM, const QRect &rect)
     }
 }
 
-void KisTiledDataManager::bitBltRough(KisTiledDataManager *srcDM, const QRect &rect)
+template<bool useOldSrcData>
+void KisTiledDataManager::bitBltRoughImpl(KisTiledDataManager *srcDM, const QRect &rect)
 {
     QWriteLocker locker(&m_lock);
 
@@ -520,7 +525,10 @@ void KisTiledDataManager::bitBltRough(KisTiledDataManager *srcDM, const QRect &r
              * to check any borders :)
              */
 
-            KisTileSP srcTile = srcDM->getOldTile(column, row);
+            // this is the only variation in the template
+            KisTileSP srcTile = useOldSrcData ?
+                srcDM->getOldTile(column, row) :
+                srcDM->getTile(column, row, false);
 
             m_hashTable->deleteTile(column, row);
 
@@ -533,6 +541,26 @@ void KisTiledDataManager::bitBltRough(KisTiledDataManager *srcDM, const QRect &r
             updateExtent(column, row);
         }
     }
+}
+
+void KisTiledDataManager::bitBlt(KisTiledDataManager *srcDM, const QRect &rect)
+{
+    bitBltImpl<false>(srcDM, rect);
+}
+
+void KisTiledDataManager::bitBltOldData(KisTiledDataManager *srcDM, const QRect &rect)
+{
+    bitBltImpl<true>(srcDM, rect);
+}
+
+void KisTiledDataManager::bitBltRough(KisTiledDataManager *srcDM, const QRect &rect)
+{
+    bitBltRoughImpl<false>(srcDM, rect);
+}
+
+void KisTiledDataManager::bitBltRoughOldData(KisTiledDataManager *srcDM, const QRect &rect)
+{
+    bitBltRoughImpl<true>(srcDM, rect);
 }
 
 void KisTiledDataManager::setExtent(qint32 x, qint32 y, qint32 w, qint32 h)

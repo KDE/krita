@@ -20,7 +20,7 @@
 #ifndef KIS_PAINT_INFORMATION_TEST_H
 #define KIS_PAINT_INFORMATION_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisPaintInformationTest : public QObject
 {

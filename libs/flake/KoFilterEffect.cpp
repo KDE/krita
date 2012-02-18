@@ -22,7 +22,7 @@
 #include "KoXmlWriter.h"
 
 #include <QString>
-#include <QtCore/QRectF>
+#include <QRectF>
 
 class KoFilterEffect::Private
 {

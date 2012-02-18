@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
-#include <qpoint.h>
+#include <QPoint>
 
 #include <kcombobox.h>
 #include <kis_debug.h>

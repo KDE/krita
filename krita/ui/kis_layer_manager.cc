@@ -296,8 +296,6 @@ void KisLayerManager::addLayer(KisNodeSP parent, KisNodeSP above)
         if (layer) {
             layer->setCompositeOp(COMPOSITE_OVER);
             m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
-            m_view->canvas()->update();
-            m_view->nodeManager()->activateNode(layer);
         } else {
             KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
         }
@@ -312,8 +310,6 @@ void KisLayerManager::addGroupLayer(KisNodeSP parent, KisNodeSP above)
         if (layer) {
             layer->setCompositeOp(COMPOSITE_OVER);
             m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
-            m_view->canvas()->update();
-            m_view->nodeManager()->activateNode(layer);
         } else {
             KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
         }
@@ -354,9 +350,6 @@ void KisLayerManager::addCloneLayer(KisNodeSP parent, KisNodeSP above)
 
             layer->setCompositeOp(COMPOSITE_OVER);
             m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
-            m_view->nodeManager()->activateNode(layer);
-
-            m_view->canvas()->update();
 
         } else {
             KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
@@ -389,8 +382,6 @@ void KisLayerManager::addShapeLayer(KisNodeSP parent, KisNodeSP above)
         if (layer) {
             layer->setCompositeOp(COMPOSITE_OVER);
             m_commandsAdapter->addNode(layer.data(), parent, above.data());
-            m_view->nodeManager()->activateNode(layer);
-            m_view->canvas()->update();
         } else {
             KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
         }
@@ -429,7 +420,6 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
         m_commandsAdapter->undoLastCommand();
     } else {
         adjl->setName(dlg.layerName());
-        m_view->nodeManager()->activateNode(adjl);
     }
 }
 
@@ -481,12 +471,6 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const
 
     KisGeneratorLayerSP l = new KisGeneratorLayer(image, name, generator, selection);
     m_commandsAdapter->addNode(l.data(), parent, above.data());
-    m_view->nodeManager()->activateNode(l);
-    if (l->selection())
-        l->setDirty(l->selection()->selectedExactRect());
-    else
-        l->setDirty(image->bounds());
-
 }
 
 
@@ -527,9 +511,6 @@ void KisLayerManager::layerDuplicate()
     m_commandsAdapter->addNode(dup.data(), active->parent(), active.data());
     if (dup) {
         activateLayer(dup);
-        dup->setDirty();
-        m_view->canvas()->update();
-        m_view->nodeManager()->activateNode(dup);
     } else {
         KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
     }
@@ -744,13 +725,7 @@ void KisLayerManager::mergeLayer()
     if (!strategy) return;
 
     KisLayerSP  newLayer = image->mergeDown(layer, strategy);
-    if (newLayer) {
-        newLayer->setDirty();
-        m_view->nodeManager()->activateNode(newLayer);
-    }
-
     m_view->updateGUI();
-
 }
 
 void KisLayerManager::flattenLayer()

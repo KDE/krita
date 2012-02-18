@@ -20,8 +20,8 @@
 #ifndef __LABELSIZEINFO_H__
 #define __LABELSIZEINFO_H__
 
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 
 class LabelSizeInfo
 {

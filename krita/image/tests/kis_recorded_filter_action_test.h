@@ -19,7 +19,7 @@
 #ifndef KIS_RECORDED_FILTER_ACTION_TEST_H
 #define KIS_RECORDED_FILTER_ACTION_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisRecordedFilterActionTest : public QObject
 {

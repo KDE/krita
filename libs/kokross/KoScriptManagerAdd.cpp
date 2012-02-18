@@ -26,9 +26,9 @@
 #include <kross/core/actioncollection.h>
 #include <kross/ui/view.h>
 
-#include <QtGui/QBoxLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QRadioButton>
+#include <QBoxLayout>
+#include <QLabel>
+#include <QRadioButton>
 
 #include <QLineEdit>
 #include <QComboBox>

@@ -28,9 +28,9 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <kcomponentdata.h>
 #include <kconfig.h>
 
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QCheckBox>
-#include <QtGui/QGroupBox>
+#include <QVBoxLayout>
+#include <QCheckBox>
+#include <QGroupBox>
 
 class KoConfigDocumentPage::Private
 {

@@ -377,7 +377,6 @@ bool KoDocumentRdf::saveOasis(KoStore *store, KoXmlWriter *manifestWriter)
 
 void KoDocumentRdf::updateXmlIdReferences(const QMap<QString, QString> &m)
 {
-    qDebug() << "KoDocumentRdf::updateXmlIdReferences() m.size:" << m.size();
     Q_ASSERT(d->model);
 
     QList<Soprano::Statement> removeList;

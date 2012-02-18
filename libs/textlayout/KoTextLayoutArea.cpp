@@ -352,7 +352,7 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
                 }
             }
         }
-        // if the full paragraph is selected to add it to the rect. This makes sure we get a rect for the case 
+        // if the full paragraph is selected to add it to the rect. This makes sure we get a rect for the case
         // where the end of the selection lies is a different area.
         if (cursor.selectionEnd() >= block.position() + block.length() && cursor.selectionStart() <= block.position()) {
             QTextLine line = block.layout()->lineForTextPosition(block.length()-1);
@@ -1004,7 +1004,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     qreal presentationListTabValue(0.0); // for use in presentationListTabWorkaround
 
-    // For some lists we need to add a special list tab according to odf 1.2 19.830 
+    // For some lists we need to add a special list tab according to odf 1.2 19.830
     if (textList && listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
         qreal listTab = 0;
         if (listFormat.hasProperty(KoListStyle::TabStopPosition)) {
@@ -1200,7 +1200,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     while (line.isValid()) {
         runAroundHelper.setLine(this, line);
         runAroundHelper.setObstructions(documentLayout()->currentObstructions());
-        documentLayout()->setAnchoringParagraphRect(m_blockRects.last());
+        QRectF anchoringRect = m_blockRects.last();
+//        qDebug() << anchoringRect.top() << m_anchoringParagraphTop;
+        anchoringRect.setTop(m_anchoringParagraphTop);
+        documentLayout()->setAnchoringParagraphRect(anchoringRect);
         documentLayout()->setAnchoringLayoutEnvironmentRect(layoutEnvironmentRect());
         runAroundHelper.fit( /* resetHorizontalPosition */ false, /* rightToLeft */ m_isRtl, QPointF(x(), m_y));
         qreal bottomOfText = line.y() + line.height();
@@ -1240,7 +1243,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
 
         if (documentLayout()->anchoringSoftBreak() <= block.position() + line.textStart() + line.textLength()) {
-            //don't add an anchor that has been moved away 
+            //don't add an anchor that has been moved away
             line.setNumColumns(documentLayout()->anchoringSoftBreak() - block.position() - line.textStart(), line.width());
             softBreak = true;
             // if the softBreakPos is at the start of the block stop here so
@@ -1851,6 +1854,10 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
         topMargin = formatStyle.topMargin();
     }
     qreal spacing = qMax(m_bottomSpacing, topMargin);
+    qreal divider = m_y;
+    if (spacing) {
+        divider += spacing * m_bottomSpacing / (m_bottomSpacing + topMargin);
+    }
     qreal dx = 0.0;
     qreal x = m_x;
     qreal width = m_width;
@@ -1887,10 +1894,6 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
         if (m_prevBorder && m_prevBorder->equals(border)) {
             blockData->setBorder(m_prevBorder);
             // Merged mean we don't have inserts inbetween the blocks
-            qreal divider = m_y;
-            if (spacing) {
-                divider += spacing * m_bottomSpacing / (m_bottomSpacing + topMargin);
-            }
             if (!m_blockRects.isEmpty()) {
                 m_blockRects.last().setBottom(divider);
             }
@@ -1948,4 +1951,5 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
     }
     m_prevBorder = blockData->border();
     m_prevBorderPadding = format.doubleProperty(KoParagraphStyle::BottomPadding);
+    m_anchoringParagraphTop = divider;
 }

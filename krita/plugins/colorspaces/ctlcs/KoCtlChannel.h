@@ -21,7 +21,7 @@
 #define _KO_CTL_CHANNEL_H_
 
 #include <QtGlobal>
-#include <qstring.h>
+#include <QString>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceConstants.h>
 

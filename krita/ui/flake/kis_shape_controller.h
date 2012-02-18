@@ -18,13 +18,11 @@
 #ifndef KIS_SHAPE_CONTROLLER
 #define KIS_SHAPE_CONTROLLER
 
-#include <QObject>
 #include <QMap>
 
+#include "kis_dummies_facade_base.h"
 #include <KoShapeBasedDocumentBase.h>
 
-#include "kis_types.h"
-#include <krita_export.h>
 
 class KisNodeDummy;
 class KoShapeLayer;
@@ -39,7 +37,7 @@ class KoDataCenterBase;
  * selections -- everything that needs to be wrapped as a shape for
  * the tools to work on.
  */
-class KRITAUI_EXPORT KisShapeController : public QObject, public KoShapeBasedDocumentBase
+class KRITAUI_EXPORT KisShapeController : public KisDummiesFacadeBase, public KoShapeBasedDocumentBase
 {
 
     Q_OBJECT
@@ -49,38 +47,32 @@ public:
     KisShapeController(KisDoc2 * doc, KisNameServer *nameServer);
     ~KisShapeController();
 
-    void setImage(KisImageWSP image);
-    KoShapeLayer* shapeForNode(KisNodeSP layer) const;
     KisNodeDummy* dummyForNode(KisNodeSP layer) const;
+    KisNodeDummy* rootDummy() const;
+    int dummiesCount() const;
+
+    KoShapeLayer* shapeForNode(KisNodeSP layer) const;
     void setInitialShapeForView(KisView2 * view);
 
+private:
+    void addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+    void removeNodeImpl(KisNodeSP node);
+
 signals:
+    /**
+     * These two signals are forwarded from the local shape manager of
+     * KisShapeLayer. This is done because we switch KoShapeManager and
+     * therefore KoSelection in KisCanvas2, so we need to connect local
+     * managers to the UI as well.
+     *
+     * \see comment in the constructor of KisCanvas2
+     */
     void selectionChanged();
     void currentLayerChanged(const KoShapeLayer*);
-
-    void sigContinueAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
-    void sigContinueMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
-    void sigContinueRemoveNode(KisNodeSP node);
 
 protected:
     void addShape(KoShape* shape);
     void removeShape(KoShape* shape);
-
-private slots:
-    friend class KisShapeControllerTest;
-
-    void slotNodeAdded(KisNodeSP node);
-    void slotNodeMoved(KisNodeSP node);
-    void slotRemoveNode(KisNodeSP node);
-    void slotLayersChanged();
-
-    void slotContinueAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
-    void slotContinueMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
-    void slotContinueRemoveNode(KisNodeSP node);
-
-private:
-    int layerMapSize();
-    QMap<QString, KoDataCenterBase *> dataCenterMap() const;
 
 private:
     struct Private;

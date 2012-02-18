@@ -27,7 +27,7 @@
 #include <stdio.h>
 
 #include "kis_view2.h"
-#include <qprinter.h>
+#include <QPrinter>
 
 #include <QDesktopWidget>
 #include <QGridLayout>
@@ -167,6 +167,8 @@ public:
         if (canvasController) {
             KoToolManager::instance()->removeCanvasController(canvasController);
         }
+
+        delete canvasController;
         delete canvas;
         delete filterManager;
         delete selectionManager;
@@ -322,7 +324,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     tAction->setCheckedState(KGuiItem(i18n("Return to Window")));
     tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
     QList<QKeySequence> shortcuts;
-    shortcuts << QKeySequence("Ctrl+h");
+    shortcuts << QKeySequence(Qt::Key_Tab);
     tAction->setShortcuts(shortcuts);
     tAction->setChecked(false);
     actionCollection()->addAction("view_show_just_the_canvas", tAction);
@@ -435,10 +437,19 @@ void KisView2::dropEvent(QDropEvent *event)
 
             QByteArray ba = event->mimeData()->data("application/x-krita-node");
 
-            KisDoc2 tmpDoc;
-            tmpDoc.loadNativeFormatFromStore(ba);
+            KisDoc2 tempDoc;
+            tempDoc.loadNativeFormatFromStore(ba);
 
-            node = tmpDoc.image()->rootLayer()->firstChild();
+            KisImageWSP tempImage = tempDoc.image();
+            node = tempImage->rootLayer()->firstChild();
+            tempImage->removeNode(node);
+
+            // layers store a lisk to the image, so update it
+            KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+            if(layer) {
+                layer->setImage(kisimage);
+            }
+
             node->setName(i18n("Pasted Layer"));
         }
         else if (event->mimeData()->hasImage()) {
@@ -453,11 +464,6 @@ void KisView2::dropEvent(QDropEvent *event)
 
         if (node) {
 
-            // Set the image on layers before adding them, otherwise we get a crash
-            if (qobject_cast<KisLayer*>(node.data())) {
-                qobject_cast<KisLayer*>(node.data())->setImage(kisimage);
-            }
-
             node->setX(pos.x() - node->projection()->exactBounds().width());
             node->setY(pos.y() - node->projection()->exactBounds().height());
 
@@ -469,9 +475,6 @@ void KisView2::dropEvent(QDropEvent *event)
                                 m_d->nodeManager->activeLayer()->parent(),
                                 m_d->nodeManager->activeLayer());
             }
-            node->setDirty();
-            canvas()->update();
-            nodeManager()->activateNode(node);
         }
 
         return;
@@ -671,7 +674,7 @@ void KisView2::slotLoadingFinished()
     }
 
     if (activeNode) {
-        m_d->nodeManager->activateNode(activeNode);
+        m_d->nodeManager->slotNonUiActivatedNode(activeNode);
     }
 
     /**

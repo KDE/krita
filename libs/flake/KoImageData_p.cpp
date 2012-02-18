@@ -131,9 +131,10 @@ void KoImageDataPrivate::copyToTemporary(QIODevice &device)
         } while (bytes > 0);
     }
     key = KoImageDataPrivate::generateKey(md5.result());
+
     temporaryFile->close();
 
-    QFileInfo fi(*temporaryFile);
+    //QFileInfo fi(*temporaryFile);
     dataStoreState = StateNotLoaded;
 }
 
@@ -153,6 +154,7 @@ void KoImageDataPrivate::clear()
     imageSize = QSizeF();
     key = 0;
     image = QImage();
+    pixmap = QPixmap();
 }
 
 qint64 KoImageDataPrivate::generateKey(const QByteArray &bytes)

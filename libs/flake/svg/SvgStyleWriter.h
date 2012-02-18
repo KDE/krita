@@ -30,7 +30,7 @@
 #define SVGSTYLEWRITER_H
 
 #include "flake_export.h"
-#include <QtGui/QGradient>
+#include <QGradient>
 
 class SvgSavingContext;
 class KoShape;

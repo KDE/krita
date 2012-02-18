@@ -20,7 +20,6 @@
 
 #include <KoColor.h>
 #include <KoAbstractGradient.h>
-#include "kis_painter.h"
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
 #include "kis_pattern.h"
@@ -57,6 +56,9 @@ struct KisResourcesSnapshot::Private {
     quint8 opacity;
     QString compositeOpId;
     const KoCompositeOp *compositeOp;
+
+    KisPainter::StrokeStyle strokeStyle;
+    KisPainter::FillStyle fillStyle;
 };
 
 KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager)
@@ -88,6 +90,15 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUn
 
     m_d->compositeOpId = resourceManager->resource(KisCanvasResourceProvider::CurrentCompositeOp).toString();
     setCurrentNode(resourceManager->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>());
+
+    /**
+     * Fill and Stroke styles are not a part of the resource manager
+     * so the tools should set them manually
+     * TODO: port stroke and fill styles to be a part
+     *       of the resource manager
+     */
+    m_d->strokeStyle = KisPainter::StrokeStyleBrush;
+    m_d->fillStyle = KisPainter::FillStyleNone;
 }
 
 KisResourcesSnapshot::~KisResourcesSnapshot()
@@ -113,6 +124,9 @@ void KisResourcesSnapshot::setupPainter(KisPainter* painter)
     painter->setOpacity(m_d->opacity);
     painter->setCompositeOp(m_d->compositeOp);
     painter->setMirrorInformation(m_d->axisCenter, m_d->mirrorMaskHorizontal, m_d->mirrorMaskVertical);
+
+    painter->setStrokeStyle(m_d->strokeStyle);
+    painter->setFillStyle(m_d->fillStyle);
 }
 
 void KisResourcesSnapshot::setupPaintAction(KisRecordedPaintAction *action)
@@ -128,6 +142,9 @@ void KisResourcesSnapshot::setupPaintAction(KisRecordedPaintAction *action)
 
     action->setOpacity(m_d->opacity / qreal(OPACITY_OPAQUE_U8));
     action->setCompositeOp(m_d->compositeOp->id());
+
+    action->setStrokeStyle(m_d->strokeStyle);
+    action->setFillStyle(m_d->fillStyle);
 }
 
 KisPostExecutionUndoAdapter* KisResourcesSnapshot::postExecutionUndoAdapter() const
@@ -146,6 +163,16 @@ void KisResourcesSnapshot::setCurrentNode(KisNodeSP node)
             m_d->compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
         }
     }
+}
+
+void KisResourcesSnapshot::setStrokeStyle(KisPainter::StrokeStyle strokeStyle)
+{
+    m_d->strokeStyle = strokeStyle;
+}
+
+void KisResourcesSnapshot::setFillStyle(KisPainter::FillStyle fillStyle)
+{
+    m_d->fillStyle = fillStyle;
 }
 
 KisNodeSP KisResourcesSnapshot::currentNode() const

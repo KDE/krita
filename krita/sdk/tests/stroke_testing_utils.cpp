@@ -18,7 +18,7 @@
 
 #include "stroke_testing_utils.h"
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include <QDir>
 #include <KoColor.h>

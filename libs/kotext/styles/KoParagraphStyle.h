@@ -47,6 +47,7 @@ class KoGenStyle;
 class KoGenStyles;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
+class KoList;
 
 /**
  * A container for all properties for the paragraph wide style.
@@ -195,7 +196,7 @@ public:
     static KoParagraphStyle *fromBlock(const QTextBlock &block, QObject *parent = 0);
 
     /// creates a clone of this style with the specified parent
-    KoParagraphStyle *clone(QObject *parent = 0);
+    KoParagraphStyle *clone(QObject *parent = 0) const;
 
     //  ***** Linespacing
     /**
@@ -714,6 +715,11 @@ public:
      * Note that the value of StyleId property is not considered
      */
     bool hasDefaults() const;
+
+    KoList *list();
+
+    void applyParagraphListStyle(QTextBlock &block, const QTextBlockFormat &blockFormat) const;
+
 signals:
     void nameChanged(const QString &newName);
 

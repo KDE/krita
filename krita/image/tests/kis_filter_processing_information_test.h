@@ -19,7 +19,7 @@
 #ifndef KIS_FILTER_PROCESSING_INFORMATION_TEST_H
 #define KIS_FILTER_PROCESSING_INFORMATION_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisProcessingInformationTest : public QObject
 {

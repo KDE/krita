@@ -20,7 +20,7 @@
 #ifndef REPORTSECTIONDETAILGROUP_H
 #define REPORTSECTIONDETAILGROUP_H
 
-#include <qobject.h>
+#include <QObject>
 
 class ReportSection;
 class ReportSectionDetail;

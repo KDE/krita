@@ -36,7 +36,9 @@ protected:
 public:
     KisFigurePaintingToolHelper(const QString &name,
                                 KisImageWSP image,
-                                KoCanvasResourceManager *resourceManager);
+                                KoCanvasResourceManager *resourceManager,
+                                KisPainter::StrokeStyle strokeStyle,
+                                KisPainter::FillStyle fillStyle);
     ~KisFigurePaintingToolHelper();
 
     void paintLine(const KisPaintInformation &pi0,

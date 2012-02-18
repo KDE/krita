@@ -20,7 +20,7 @@
 
 #include "colorgenerator.h"
 
-#include <qpoint.h>
+#include <QPoint>
 
 #include <kis_debug.h>
 #include <kiconloader.h>

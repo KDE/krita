@@ -34,6 +34,9 @@
 #include <kis_undo_adapter.h>
 #include "kis_node_graph_listener.h"
 
+#include "kis_iterator_ng.h"
+
+
 /**
  * Routines that are useful for writing efficient tests
  */
@@ -179,6 +182,7 @@ inline bool checkQImage(const QImage &image, const QString &testName,
                         const QString &prefix, const QString &name,
                         int fuzzy = 0)
 {
+    Q_UNUSED(fuzzy);
     QString filename(prefix + "_" + name + ".png");
     QString dumpName(prefix + "_" + name + "_expected.png");
 
@@ -215,6 +219,28 @@ inline void alphaDeviceSetPixel(KisPaintDeviceSP dev, qint32 x, qint32 y, quint8
     *pix = s;
 }
 
+inline bool checkAlphaDeviceFilledWithPixel(KisPaintDeviceSP dev, const QRect &rc, quint8 expected)
+{
+    KisHLineIteratorSP it = dev->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
+
+    for (int y = rc.y(); y < rc.y() + rc.height(); y++) {
+        for (int x = rc.x(); x < rc.x() + rc.width(); x++) {
+
+            if(*((quint8*)it->rawData()) != expected) {
+                qCritical() << "At point:" << x << y;
+                qCritical() << "Expected pixel:" << expected;
+                qCritical() << "Actual pixel:  " << *((quint8*)it->rawData());
+                return false;
+            }
+
+            it->nextPixel();
+        }
+        it->nextRow();
+    }
+
+    return true;
+}
+
 
 inline QList<const KoColorSpace*> allColorSpaces()
 {
@@ -235,39 +261,36 @@ class TestGraphListener : public KisNodeGraphListener
 {
 public:
 
-    virtual void aboutToAddANode(KisNode *, int) {
+    virtual void aboutToAddANode(KisNode *parent, int index) {
+        KisNodeGraphListener::aboutToAddANode(parent, index);
         beforeInsertRow = true;
     }
 
-    virtual void nodeHasBeenAdded(KisNode *, int) {
+    virtual void nodeHasBeenAdded(KisNode *parent, int index) {
+        KisNodeGraphListener::nodeHasBeenAdded(parent, index);
         afterInsertRow = true;
     }
 
-    virtual void aboutToRemoveANode(KisNode *, int) {
+    virtual void aboutToRemoveANode(KisNode *parent, int index) {
+        KisNodeGraphListener::aboutToRemoveANode(parent, index);
         beforeRemoveRow  = true;
     }
 
-    virtual void nodeHasBeenRemoved(KisNode *, int) {
+    virtual void nodeHasBeenRemoved(KisNode *parent, int index) {
+        KisNodeGraphListener::nodeHasBeenRemoved(parent, index);
         afterRemoveRow = true;
     }
 
 
-    virtual void aboutToMoveNode(KisNode *, int, int) {
+    virtual void aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex) {
+        KisNodeGraphListener::aboutToMoveNode(parent, oldIndex, newIndex);
         beforeMove = true;
     }
 
-    virtual void nodeHasBeenMoved(KisNode *, int, int) {
+    virtual void nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex) {
+        KisNodeGraphListener::nodeHasBeenMoved(parent, oldIndex, newIndex);
         afterMove = true;
     }
-
-    virtual void nodeChanged(KisNode*) {
-
-    }
-
-    virtual void requestProjectionUpdate(KisNode *node, const QRect& rect) {
-
-    }
-
 
     bool beforeInsertRow;
     bool afterInsertRow;

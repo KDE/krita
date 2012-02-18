@@ -3,6 +3,7 @@
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2010 Nandita Suri <suri.nandita@gmail.com>
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
+ * Copyright (C) 2011-2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -259,6 +260,8 @@ public:
 
     /// returns true if style is a numbering style
     static bool isNumberingStyle(int style);
+
+    static int bulletCharacter(int style);
 signals:
     void nameChanged(const QString &newName);
     void styleChanged(int level);

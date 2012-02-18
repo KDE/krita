@@ -22,7 +22,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QHash>
 #include <QList>
-#include <QtCore/QStringList>
+#include <QStringList>
 
 #include "KoFilter.h"
 #include "KoEmbeddingFilter.h"

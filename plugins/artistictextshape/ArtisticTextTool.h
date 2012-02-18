@@ -25,7 +25,7 @@
 #include "ArtisticTextToolSelection.h"
 
 #include <KoToolBase.h>
-#include <QtCore/QTimer>
+#include <QTimer>
 
 class QAction;
 class QActionGroup;

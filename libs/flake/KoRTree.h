@@ -24,17 +24,17 @@
 
 #include <KDebug>
 
-#include <QtCore/QPair>
-#include <QtCore/QMap>
-#include <QtCore/QList>
-#include <QtCore/QVector>
-#include <QtCore/QPointF>
-#include <QtCore/QRectF>
-#include <QtCore/QVarLengthArray>
+#include <QPair>
+#include <QMap>
+#include <QList>
+#include <QVector>
+#include <QPointF>
+#include <QRectF>
+#include <QVarLengthArray>
 
 // #define CALLIGRA_RTREE_DEBUG
 #ifdef CALLIGRA_RTREE_DEBUG
-#include <QtGui/QPainter>
+#include <QPainter>
 #endif
 
 /**

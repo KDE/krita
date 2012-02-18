@@ -31,8 +31,8 @@
 #include <kdebug.h>
 #include <QRect>
 #include <QGraphicsScene>
-#include <QtGui/QWidget>
-#include <QtCore/QUrl>
+#include <QWidget>
+#include <QUrl>
 
 class QAction;
 class QWebHistory;

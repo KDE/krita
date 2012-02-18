@@ -76,8 +76,10 @@ KisMask::KisMask(const KisMask& rhs)
 {
     setName(rhs.name());
 
-    if (rhs.m_d->selection)
+    if (rhs.m_d->selection) {
         m_d->selection = new KisSelection(*rhs.m_d->selection.data());
+        m_d->selection->setParentNode(this);
+    }
 }
 
 KisMask::~KisMask()
@@ -114,12 +116,15 @@ void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
 
     KisPaintDeviceSP parentPaintDevice = parentLayer->original();
 
-    if(copyFrom) {
+    if (copyFrom) {
         /**
          * We can't use setSelection as we may not have parent() yet
          */
         m_d->selection = new KisSelection(*copyFrom);
         m_d->selection->setDefaultBounds(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        if (copyFrom->hasShapeSelection()) {
+            m_d->selection->flatten();
+        }
     }
     else {
         m_d->selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
@@ -127,6 +132,7 @@ void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
         quint8 newDefaultPixel = MAX_SELECTED;
         m_d->selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
     }
+    m_d->selection->setParentNode(this);
     m_d->selection->updateProjection();
 }
 
@@ -152,9 +158,9 @@ KisSelectionSP KisMask::selection() const
         else {
             m_d->selection = new KisSelection();
         }
+        m_d->selection->setParentNode(const_cast<KisMask*>(this));
         m_d->selection->updateProjection();
     }
-
     return m_d->selection;
 }
 
@@ -170,6 +176,7 @@ void KisMask::setSelection(KisSelectionSP selection)
         const KisLayer *parentLayer = qobject_cast<const KisLayer*>(parent());
         m_d->selection->setDefaultBounds(new KisDefaultBounds(parentLayer->image()));
     }
+    m_d->selection->setParentNode(this);
 }
 
 void KisMask::select(const QRect & rc, quint8 selectedness)

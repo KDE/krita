@@ -58,6 +58,8 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     widget.backgroundColor->setDefaultAction(tool->action("format_backgroundcolor"));
     widget.superscript->setDefaultAction(tool->action("format_super"));
     widget.subscript->setDefaultAction(tool->action("format_sub"));
+    widget.moreOptions->setText("...");
+    connect(widget.moreOptions, SIGNAL(clicked(bool)), tool->action("format_font"), SLOT(trigger()));
 
     connect(widget.bold, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.italic, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));

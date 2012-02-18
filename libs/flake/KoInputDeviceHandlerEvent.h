@@ -22,7 +22,7 @@
 
 #include "flake_export.h"
 
-#include <QtGui/QInputEvent>
+#include <QInputEvent>
 
 class KoPointerEvent;
 

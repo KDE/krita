@@ -28,7 +28,9 @@
 
 KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const QString &name,
                                                          KisImageWSP image,
-                                                         KoCanvasResourceManager *resourceManager)
+                                                         KoCanvasResourceManager *resourceManager,
+                                                         KisPainter::StrokeStyle strokeStyle,
+                                                         KisPainter::FillStyle fillStyle)
 {
     m_strokesFacade = image.data();
 
@@ -36,6 +38,9 @@ KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const QString &name,
         new KisResourcesSnapshot(image,
                                  image->postExecutionUndoAdapter(),
                                  resourceManager);
+
+    m_resources->setStrokeStyle(strokeStyle);
+    m_resources->setFillStyle(fillStyle);
 
     m_painterInfo =
         new PainterInfo(new KisPainter(),

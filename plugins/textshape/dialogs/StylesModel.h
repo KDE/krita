@@ -65,6 +65,13 @@ public:
 
     /** Specific methods of the StylesModel */
 
+    /** Specify if the combo should provide the virtual style None. This style is a virtual style which equates to no style. It is only relevant for character styles.
+        In case the "None" character style is selected, the character formatting properties of the paragraph style are used.
+        A @class StylesModel of the @enum Type ParagraphStyle always has this property set to false.
+        On the other hand, the default for a @class StylesModel of the @enum Type CharacterStyle is true.
+    */
+    void setProvideStyleNone(bool provide);
+
     /** Returns the @class KoParagraphStyle corresponding to the specified @param index. */
     KoParagraphStyle *paragraphStyleForIndex(const QModelIndex &index) const;
     /** Return a @class QModelIndex for the specified @param style. */
@@ -115,6 +122,8 @@ private:
     KIcon m_paragIcon, m_charIcon;
 
     QSignalMapper *m_styleMapper;
+
+    bool m_provideStyleNone;
 };
 
 #endif

@@ -147,7 +147,16 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
     KisBaseRectsWalkerSP walker = new KisFullRefreshWalker(cropRect);
     walker->collectRects(root, rc);
 
-    lock();
+    bool needLock = true;
+
+    if(m_d->processingBlocked) {
+        warnImage << "WARNING: Calling synchronous fullRefresh under a scheduler lock held";
+        warnImage << "We will not assert for now, but please port caller's to strokes";
+        warnImage << "to avoid this warning";
+        needLock = false;
+    }
+
+    if(needLock) lock();
     m_d->updaterContext->lock();
 
     Q_ASSERT(m_d->updaterContext->isJobAllowed(walker));
@@ -155,7 +164,7 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
     m_d->updaterContext->waitForDone();
 
     m_d->updaterContext->unlock();
-    unlock();
+    if(needLock) unlock();
 }
 
 KisStrokeId KisUpdateScheduler::startStroke(KisStrokeStrategy *strokeStrategy)

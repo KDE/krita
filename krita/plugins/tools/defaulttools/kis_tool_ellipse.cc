@@ -60,7 +60,9 @@ void KisToolEllipse::finishEllipse(const QRectF& rect)
     if (!currentNode()->inherits("KisShapeLayer")) {
         KisFigurePaintingToolHelper helper(i18n("Ellipse"),
                                            image(),
-                                           canvas()->resourceManager());
+                                           canvas()->resourceManager(),
+                                           strokeStyle(),
+                                           fillStyle());
         helper.paintEllipse(rect);
     } else {
         QRectF r = convertToPt(rect);

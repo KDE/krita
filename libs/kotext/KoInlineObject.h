@@ -65,6 +65,7 @@ public:
         Keywords,
         Subject,
         Description,
+        Comments,
         SenderPostalCode,
         SenderCity,
         SenderStreet,

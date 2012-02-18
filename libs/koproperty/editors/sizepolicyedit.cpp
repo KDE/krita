@@ -19,7 +19,7 @@
 
 #include "sizepolicyedit.h"
 
-#include <QtGui/QSizePolicy>
+#include <QSizePolicy>
 #include <KLocale>
 #include <KGlobal>
 

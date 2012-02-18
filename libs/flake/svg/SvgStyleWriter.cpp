@@ -50,10 +50,10 @@
 
 #include <KMimeType>
 
-#include <QtCore/QBuffer>
-#include <QtGui/QGradient>
-#include <QtGui/QLinearGradient>
-#include <QtGui/QRadialGradient>
+#include <QBuffer>
+#include <QGradient>
+#include <QLinearGradient>
+#include <QRadialGradient>
 
 void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 {

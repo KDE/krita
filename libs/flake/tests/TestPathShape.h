@@ -19,7 +19,7 @@
 #ifndef TESTPATHSHAPE_H
 #define TESTPATHSHAPE_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestPathShape : public QObject
 

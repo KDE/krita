@@ -32,12 +32,15 @@
 #include "KoTableCellStyle.h"
 #include "KoSectionStyle.h"
 #include "ChangeFollower.h"
+#include "commands/ChangeStylesMacroCommand.h"
 #include "KoTextDocument.h"
 
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoShapeSavingContext.h>
 #include <KoTextSharedSavingData.h>
+
+#include <kundo2stack.h>
 
 #include <QTimer>
 #include <QUrl>
@@ -53,7 +56,7 @@
 class KoStyleManager::Private
 {
 public:
-    Private() : updateTriggered(false), defaultCharacterStyle(0), defaultParagraphStyle(0), defaultListStyle(0), defaultOutlineStyle(0), outlineStyle(0)
+    Private() : defaultCharacterStyle(0), defaultParagraphStyle(0), defaultListStyle(0), defaultOutlineStyle(0), outlineStyle(0), undoStack(0), changeCommand(0)
     {
     }
     ~Private() {
@@ -73,8 +76,6 @@ public:
     QHash<int, KoParagraphStyle *> unusedParagraphStyles;
     QList<ChangeFollower*> documentUpdaterProxies;
 
-    bool updateTriggered;
-    QList<int> updateQueue;
 
     KoCharacterStyle *defaultCharacterStyle;
     KoParagraphStyle *defaultParagraphStyle;
@@ -85,6 +86,8 @@ public:
     KoOdfNotesConfiguration *footNotesConfiguration;
     KoOdfNotesConfiguration *endNotesConfiguration;
     KoOdfBibliographyConfiguration *bibliographyConfiguration;
+    KUndo2Stack *undoStack;
+    ChangeStylesMacroCommand *changeCommand;
 };
 
 // static
@@ -140,6 +143,11 @@ KoStyleManager::KoStyleManager(QObject *parent)
 KoStyleManager::~KoStyleManager()
 {
     delete d;
+}
+
+void KoStyleManager::setUndoStack(KUndo2Stack *undoStack)
+{
+    d->undoStack = undoStack;
 }
 
 void KoStyleManager::saveOdfDefaultStyles(KoShapeSavingContext &context)
@@ -422,48 +430,80 @@ void KoStyleManager::setBibliographyConfiguration(KoOdfBibliographyConfiguration
 
 void KoStyleManager::remove(KoCharacterStyle *style)
 {
+    if (!style || !d->changeCommand) {
+        return;
+    }
+
     if (d->charStyles.remove(style->styleId()))
         emit styleRemoved(style);
 }
 
 void KoStyleManager::remove(KoParagraphStyle *style)
 {
+    if (!style || !d->changeCommand) {
+        return;
+    }
+
     if (d->paragStyles.remove(style->styleId()))
         emit styleRemoved(style);
 }
 
 void KoStyleManager::remove(KoListStyle *style)
 {
+    if (!style || !d->changeCommand) {
+        return;
+    }
+
     if (d->listStyles.remove(style->styleId()))
         emit styleRemoved(style);
 }
 
 void KoStyleManager::remove(KoTableStyle *style)
 {
+    if (!style || !d->changeCommand) {
+        return;
+    }
+
     if (d->tableStyles.remove(style->styleId()))
         emit styleRemoved(style);
 }
 
 void KoStyleManager::remove(KoTableColumnStyle *style)
 {
+    if (!style || !d->changeCommand) {
+        return;
+    }
+
     if (d->tableColumnStyles.remove(style->styleId()))
         emit styleRemoved(style);
 }
 
 void KoStyleManager::remove(KoTableRowStyle *style)
 {
+    if (!style || !d->changeCommand) {
+        return;
+    }
+
     if (d->tableRowStyles.remove(style->styleId()))
         emit styleRemoved(style);
 }
 
 void KoStyleManager::remove(KoTableCellStyle *style)
 {
+    if (!style || !d->changeCommand) {
+        return;
+    }
+
     if (d->tableCellStyles.remove(style->styleId()))
         emit styleRemoved(style);
 }
 
 void KoStyleManager::remove(KoSectionStyle *style)
 {
+    if (!style || !d->changeCommand) {
+        return;
+    }
+
     if (d->sectionStyles.remove(style->styleId()))
         emit styleRemoved(style);
 }
@@ -473,101 +513,133 @@ void KoStyleManager::remove(ChangeFollower *cf)
     d->documentUpdaterProxies.removeAll(cf);
 }
 
-void KoStyleManager::alteredStyle(const KoParagraphStyle *style)
+void KoStyleManager::alteredStyle(const KoParagraphStyle *newStyle)
 {
-    Q_ASSERT(style);
-    int id = style->styleId();
+    Q_ASSERT(newStyle);
+    if (!newStyle || !d->changeCommand) {
+        return;
+    }
+
+    int id = newStyle->styleId();
     if (id <= 0) {
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    if (! d->updateQueue.contains(id))
-        d->updateQueue.append(id);
-    requestFireUpdate();
+    d->changeCommand->changedStyle(id);
+
+    KoParagraphStyle *style = paragraphStyle(id);
+    if (style != newStyle) {
+        d->changeCommand->origStyle(style->clone());
+        d->changeCommand->changedStyle(newStyle->clone());
+    }
 
     // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
-    foreach(KoParagraphStyle *ps, d->paragStyles) {
+    foreach(const KoParagraphStyle *ps, d->paragStyles) {
         if (ps->parentStyle() == style)
-            alteredStyle(ps);
+            alteredStyle(ps); //since it's our own copy it will only be flagged
     }
 }
 
-void KoStyleManager::alteredStyle(const KoCharacterStyle *style)
+void KoStyleManager::alteredStyle(const KoCharacterStyle *newStyle)
 {
-    Q_ASSERT(style);
-    int id = style->styleId();
+    Q_ASSERT(newStyle);
+    if (!newStyle || !d->changeCommand) {
+        return;
+    }
+
+    int id = newStyle->styleId();
     if (id <= 0) {
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    if (! d->updateQueue.contains(id))
-        d->updateQueue.append(id);
-    requestFireUpdate();
+    d->changeCommand->changedStyle(id);
+
+    KoCharacterStyle *style = characterStyle(id);
+    if (style != newStyle) {
+        d->changeCommand->origStyle(style->clone());
+        d->changeCommand->changedStyle(newStyle->clone());
+    }
+
+    // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
+    foreach(const KoCharacterStyle *cs, d->charStyles) {
+        if (cs->parentStyle() == style)
+            alteredStyle(cs); //since it's our own copy it will only be flagged
+    }
 }
 
 void KoStyleManager::alteredStyle(const KoListStyle *style)
 {
     Q_ASSERT(style);
+    if (!style || !d->changeCommand) {
+        return;
+    }
+
     int id = style->styleId();
     if (id <= 0) {
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    if (!d->updateQueue.contains(id))
-        d->updateQueue.append(id);
-    requestFireUpdate();
+    d->changeCommand->changedStyle(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableStyle *style)
 {
     Q_ASSERT(style);
+    if (!style || !d->changeCommand) {
+        return;
+    }
+
     int id = style->styleId();
     if (id <= 0) {
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    if (!d->updateQueue.contains(id))
-        d->updateQueue.append(id);
-    requestFireUpdate();
+    d->changeCommand->changedStyle(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableColumnStyle *style)
 {
     Q_ASSERT(style);
+    if (!style || !d->changeCommand) {
+        return;
+    }
+
     int id = style->styleId();
     if (id <= 0) {
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    if (!d->updateQueue.contains(id))
-        d->updateQueue.append(id);
-    requestFireUpdate();
+    d->changeCommand->changedStyle(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableRowStyle *style)
 {
     Q_ASSERT(style);
+    if (!style || !d->changeCommand) {
+        return;
+    }
+
     int id = style->styleId();
     if (id <= 0) {
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    if (!d->updateQueue.contains(id))
-        d->updateQueue.append(id);
-    requestFireUpdate();
+    d->changeCommand->changedStyle(id);
 }
 
 void KoStyleManager::alteredStyle(const KoTableCellStyle *style)
 {
     Q_ASSERT(style);
+    if (!style || !d->changeCommand) {
+        return;
+    }
+
     int id = style->styleId();
     if (id <= 0) {
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    if (!d->updateQueue.contains(id))
-        d->updateQueue.append(id);
-    requestFireUpdate();
+    d->changeCommand->changedStyle(id);
 }
 
 void KoStyleManager::alteredStyle(const KoSectionStyle *style)
@@ -578,30 +650,24 @@ void KoStyleManager::alteredStyle(const KoSectionStyle *style)
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    if (!d->updateQueue.contains(id))
-        d->updateQueue.append(id);
-    requestFireUpdate();
+    d->changeCommand->changedStyle(id);
 }
 
-void KoStyleManager::updateAlteredStyles()
+void KoStyleManager::beginEdit()
 {
-    foreach(ChangeFollower *cf, d->documentUpdaterProxies) {
-        cf->processUpdates(d->updateQueue);
-    }
-    d->updateQueue.clear();
-    d->updateTriggered = false;
+    d->changeCommand = new ChangeStylesMacroCommand(d->documentUpdaterProxies, this);
 }
 
-void KoStyleManager::requestFireUpdate()
+void KoStyleManager::endEdit()
 {
-    if (d->updateTriggered)
-        return;
-    QTimer::singleShot(0, this, SLOT(updateAlteredStyles()));
-    d->updateTriggered = true;
+    Q_ASSERT (d->changeCommand);
+    d->undoStack->push(d->changeCommand);
+    d->changeCommand = 0;
 }
 
 void KoStyleManager::add(QTextDocument *document)
 {
+    d->undoStack = KoTextDocument(document).undoStack();
     foreach(ChangeFollower *cf, d->documentUpdaterProxies) {
         if (cf->document() == document) {
             return; // already present.
@@ -806,6 +872,9 @@ KoListStyle *KoStyleManager::defaultOutlineStyle() const
             KoListLevelProperties llp = d->defaultOutlineStyle->levelProperties(level);
             llp.setOutlineList(true);
             llp.setDisplayLevel(level);
+            llp.setTabStopPosition(0);
+            llp.setMargin(0);
+            llp.setTextIndent(0);
             d->defaultOutlineStyle->setLevelProperties(llp);
         }
         d->defaultOutlineStyle->setStyleId(d->s_stylesNumber++);

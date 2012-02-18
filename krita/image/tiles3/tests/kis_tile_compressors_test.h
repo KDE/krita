@@ -18,7 +18,7 @@
 #ifndef KIS_TILE_COMPRESSORS_TEST_H
 #define KIS_TILE_COMPRESSORS_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisAbstractTileCompressor;
 

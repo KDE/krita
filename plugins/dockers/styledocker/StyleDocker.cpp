@@ -51,10 +51,10 @@
 
 #include <klocale.h>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QToolButton>
-#include <QtGui/QLabel>
+#include <QGridLayout>
+#include <QStackedWidget>
+#include <QToolButton>
+#include <QLabel>
 
 const int MsecsThresholdForMergingCommands = 2000;
 

@@ -89,6 +89,10 @@ void ShivaFilter::process(KisPaintDeviceSP dev,
             }
         }
     }
+    
+    kernel.setParameter(OpenShiva::Kernel::IMAGE_WIDTH, float(dev->defaultBounds()->bounds().width()));
+    kernel.setParameter(OpenShiva::Kernel::IMAGE_HEIGHT, float(dev->defaultBounds()->bounds().height()));
+    
     KisGtlLocker gtlLocker;
     {
         dbgPlugins << "Compile: " << m_source->name().c_str();

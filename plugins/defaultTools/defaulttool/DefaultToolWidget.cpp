@@ -37,8 +37,8 @@
 
 #include <KAction>
 #include <QSize>
-#include <QtGui/QRadioButton>
-#include <QtGui/QLabel>
+#include <QRadioButton>
+#include <QLabel>
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QList>

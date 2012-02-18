@@ -91,6 +91,8 @@ set(kotext_LIB_SRCS
 
     commands/ChangeAnchorPropertiesCommand.cpp
     commands/ChangeListCommand.cpp
+    commands/ChangeStylesCommand.cpp
+    commands/ChangeStylesMacroCommand.cpp
     commands/ChangeTrackedDeleteCommand.cpp
     commands/DeleteAnchorsCommand.cpp
     commands/DeleteCommand.cpp

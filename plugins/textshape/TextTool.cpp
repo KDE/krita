@@ -166,7 +166,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
     QSignalMapper *signalMapper = new QSignalMapper(this);
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
     QList<QAction*> list;
-    list.append(this->action("text_default"));
     list.append(this->action("format_font"));
     foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
@@ -648,8 +647,8 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                 }
                 QRectF drawRect(shapeMatrix.map(rect.topLeft()), shapeMatrix.map(rect.bottomLeft()));
                 drawRect.setWidth(2);
-                painter.fillRect(drawRect, QColor(Qt::white));
-                painter.fillRect(drawRect, QBrush(Qt::black, Qt::Dense3Pattern));
+                painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
+                painter.fillRect(drawRect, QColor(128, 255, 128));
                 if (m_textEditor.data()->isEditProtected(true)) {
                     QRectF circleRect(shapeMatrix.map(baselinePoint),QSizeF(14, 14));
                     circleRect.translate(-7.5, -7.5);
@@ -853,7 +852,7 @@ void TextTool::copy() const
         rm = canvas()->shapeController()->resourceManager();
     }
     if (rm && rm->hasResource(KoText::DocumentRdf)) {
-        KoDocumentRdfBase *rdf = static_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<void*>());
+        KoDocumentRdfBase *rdf = qobject_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<QObject*>());
         if (rdf) {
             saveHelper.setRdfModel(rdf->model());
         }
@@ -868,8 +867,7 @@ void TextTool::copy() const
 
 void TextTool::deleteSelection()
 {
-    m_textEditor.data()->deleteChar(KoTextEditor::NextChar, m_changeTracker && m_changeTracker->recordChanges(),
-                                    canvas()->shapeController());
+    m_textEditor.data()->deleteChar(KoTextEditor::NextChar, canvas()->shapeController());
     editingPluginEvents();
 }
 
@@ -919,7 +917,7 @@ void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
         // When whift is pressed we behave as a single press
         return mousePressEvent(event);
     }
- 
+
     int pos = m_textEditor.data()->position();
     m_textEditor.data()->select(QTextCursor::WordUnderCursor);
 
@@ -938,7 +936,7 @@ void TextTool::mouseTripleClickEvent(KoPointerEvent *event)
         // When whift is pressed we behave as a single press
         return mousePressEvent(event);
     }
- 
+
     int pos = m_textEditor.data()->position();
 
     m_textEditor.data()->clearSelection();
@@ -1060,15 +1058,17 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 // backspace at beginning of numbered list item, makes it unnumbered
                 textEditor->toggleListNumbering(false);
             } else {
+                KoListLevelProperties llp;
+                llp.setStyle(KoListStyle::None);
+                llp.setLevel(0);
                 // backspace on numbered, empty parag, removes numbering.
-                textEditor->setListProperties(KoListStyle::None, 0 /* level */);
+                textEditor->setListProperties(llp);
             }
         } else if (textEditor->position() > 0 || textEditor->hasSelection()) {
             if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) { // delete prev word.
                 textEditor->movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
             }
-            textEditor->deleteChar(KoTextEditor::PreviousChar, m_changeTracker && m_changeTracker->recordChanges(),
-                                       canvas()->shapeController());
+            textEditor->deleteChar(KoTextEditor::PreviousChar, canvas()->shapeController());
 
             editingPluginEvents();
         }
@@ -1090,8 +1090,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         }
         // the event only gets through when the Del is not used in the app
         // if the app forwards Del then deleteSelection is used
-        textEditor->deleteChar(KoTextEditor::NextChar, m_changeTracker && m_changeTracker->recordChanges(),
-                                   canvas()->shapeController());
+        textEditor->deleteChar(KoTextEditor::NextChar, canvas()->shapeController());
         editingPluginEvents();
     } else if ((event->key() == Qt::Key_Left) && (event->modifiers() & Qt::ControlModifier) == 0) {
         moveOperation = QTextCursor::Left;
@@ -1250,8 +1249,7 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
     if (event->replacementLength() > 0) {
         textEditor->setPosition(textEditor->position() + event->replacementStart());
         for (int i = event->replacementLength(); i > 0; --i) {
-            textEditor->deleteChar(KoTextEditor::NextChar, m_changeTracker && m_changeTracker->recordChanges(),
-                                       canvas()->shapeController());
+            textEditor->deleteChar(KoTextEditor::NextChar, canvas()->shapeController());
         }
     }
     if (!event->commitString().isEmpty()) {
@@ -1933,12 +1931,10 @@ void TextTool::showStyleManager(int styleId)
     if (paragraphStyle) {
         dia->setParagraphStyle(paragraphStyle);
     }
-/*TODO enable when we have the charStyles in the styleManager
     KoCharacterStyle *characterStyle = styleManager->characterStyle(styleId);
     if (characterStyle) {
         dia->setCharacterStyle(characterStyle);
     }
-*/
     dia->show();
 }
 

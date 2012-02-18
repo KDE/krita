@@ -20,7 +20,7 @@
 #ifndef TestColorConversionSystem_H
 #define TestColorConversionSystem_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 struct ModelDepthProfile {
     ModelDepthProfile(const QString& _model, const QString& _depth, const QString& _profile)

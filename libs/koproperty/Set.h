@@ -22,8 +22,8 @@
 #ifndef KPROPERTY_SET_H
 #define KPROPERTY_SET_H
 
-#include <QtCore/QObject>
-#include <QtCore/QHash>
+#include <QObject>
+#include <QHash>
 #include "Property.h"
 
 namespace KoProperty

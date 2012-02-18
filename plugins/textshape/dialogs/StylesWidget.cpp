@@ -85,7 +85,7 @@ void StylesWidget::setCurrentFormat(const QTextBlockFormat &format)
         return;
     m_currentBlockFormat = format;
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
-    bool unchanged = true;
+    // bool unchanged = true;
     KoParagraphStyle *usedStyle = 0;
     if (m_styleManager)
         usedStyle = m_styleManager->paragraphStyle(id);
@@ -96,7 +96,7 @@ void StylesWidget::setCurrentFormat(const QTextBlockFormat &format)
             if (property == KoParagraphStyle::ListStyleId)
                 continue;
             if (m_currentBlockFormat.property(property) != usedStyle->value(property)) {
-                unchanged = false;
+                // unchanged = false;
                 break;
             }
         }
@@ -115,7 +115,7 @@ void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
     m_currentCharFormat = format;
 
     int id = m_currentCharFormat.intProperty(KoCharacterStyle::StyleId);
-    bool unchanged = true;
+    //bool unchanged = true;
     KoCharacterStyle *usedStyle = 0;
     if (m_styleManager)
         usedStyle = m_styleManager->characterStyle(id);
@@ -127,7 +127,7 @@ void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
                 continue;
             if (m_currentCharFormat.property(property) != usedStyle->value(property)
                     && m_currentCharFormat.property(property) != defaultFormat.property(property)) {
-                unchanged = false;
+      //          unchanged = false;
                 break;
             }
         }

@@ -20,7 +20,7 @@
 #ifndef KIS_ITERATOR_H_
 #define KIS_ITERATOR_H_
 
-#include <qglobal.h>
+#include <QtGlobal>
 #include <kis_shared_ptr.h>
 #include <krita_export.h>
 

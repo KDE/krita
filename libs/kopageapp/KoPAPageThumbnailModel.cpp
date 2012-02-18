@@ -19,7 +19,7 @@
 
 #include "KoPAPageThumbnailModel.h"
 
-#include <QtGui/QIcon>
+#include <QIcon>
 
 #include <KLocale>
 

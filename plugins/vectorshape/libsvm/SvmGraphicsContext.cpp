@@ -18,7 +18,7 @@
 
 #include "SvmGraphicsContext.h"
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 
 namespace Libsvm

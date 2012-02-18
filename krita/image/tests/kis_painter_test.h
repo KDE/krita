@@ -19,7 +19,7 @@
 #ifndef KIS_PAINTER_TEST_H
 #define KIS_PAINTER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KoColorSpace;
 
@@ -50,6 +50,9 @@ private slots:
     void testSelectionBitBltFixedSelection();
     void testSelectionBitBltEraseCompositeOp();
 
+    void testBitBltOldData();
+    void benchmarkBitBlt();
+    void benchmarkBitBltOldData();
 
 };
 

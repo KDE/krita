@@ -126,7 +126,7 @@ void KisCloneLayerTest::testOriginalUpdatesOutOfBounds()
     paintLayer1(image)->setDirty(fillRect);
     image->waitForDone();
 
-    const QRect expectedRect(-10,-10,20,20);
+    const QRect expectedRect(0,0,10,10);
     QCOMPARE(root->projection()->exactBounds(), expectedRect);
 
     QCOMPARE(groupLayer1(image)->projection()->exactBounds(), fillRect);
@@ -145,6 +145,43 @@ void KisCloneLayerTest::testOriginalRefresh()
 
     const QRect expectedRect(10,10,110,110);
     QCOMPARE(root->projection()->exactBounds(), expectedRect);
+}
+
+#include "commands/kis_image_commands.h"
+
+void KisCloneLayerTest::testRemoveSourceLayer()
+{
+    KisImageSP image = createImage();
+    KisNodeSP root = image->root();
+
+    KisNodeSP group1 = groupLayer1(image);
+
+    /**
+     * We are checking that noone keeps a pointer to the
+     * source layer after it is deleted. Uncomment the first
+     * line to see how perfectly it crashed if removing the
+     * source directly through the node facade
+     */
+    //image->removeNode(group1);
+
+    KUndo2Command *cmd = new KisImageLayerRemoveCommand(image, group1);
+    cmd->redo();
+    delete cmd;
+
+    // We are veeeery bad! Never do like this! >:)
+    qDebug() << "Ref. count:" << group1->refCount();
+    KisNodeWSP group1_wsp = group1;
+    KisNode *group1_ptr = group1.data();
+    group1 = 0;
+    if(group1_wsp.isValid()) {
+        group1_wsp = 0;
+        while(group1_ptr->refCount()) group1_ptr->deref();
+        delete group1_ptr;
+    }
+
+    // Are we crashing?
+    image->refreshGraph();
+    image->waitForDone();
 }
 
 QTEST_KDEMAIN(KisCloneLayerTest, GUI)

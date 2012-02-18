@@ -19,8 +19,8 @@
 
 #include "psd.h"
 #include "psd_utils.h"
-#include <QtCore/QByteArray>
-#include <qrgb.h>
+#include <QByteArray>
+#include <QColor>
 #include <QColor>
 
 PSDColorModeBlock::PSDColorModeBlock(PSDColorMode colormode)

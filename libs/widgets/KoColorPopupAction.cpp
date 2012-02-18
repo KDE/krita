@@ -82,6 +82,7 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
     d->opacitySlider = new KoColorSlider( Qt::Vertical, widget );
     d->opacitySlider->setFixedWidth(25);
     d->opacitySlider->setRange(0, 255);
+    d->opacitySlider->setValue(255);
     d->opacitySlider->setToolTip( i18n( "Opacity" ) );
 
     QGridLayout * layout = new QGridLayout( widget );

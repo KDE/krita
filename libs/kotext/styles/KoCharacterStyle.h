@@ -415,7 +415,7 @@ public:
     void copyProperties(const KoCharacterStyle *style);
     void copyProperties(const QTextCharFormat &format);
 
-    KoCharacterStyle *clone(QObject *parent = 0);
+    KoCharacterStyle *clone(QObject *parent = 0) const;
 
     /// return the name of the style.
     QString name() const;

@@ -19,7 +19,7 @@
 #ifndef KIS_SENSORS_TEST_H
 #define KIS_SENSORS_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include "kis_paint_information.h"
 

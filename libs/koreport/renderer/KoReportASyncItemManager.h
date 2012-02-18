@@ -23,7 +23,7 @@
 
 #include <QObject>
 #include "KoReportASyncItemBase.h"
-#include <qqueue.h>
+#include <QQueue>
 
 class RenderData {
 public:

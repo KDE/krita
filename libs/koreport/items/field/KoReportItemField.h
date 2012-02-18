@@ -19,7 +19,7 @@
 #define KRFIELDDATA_H
 #include <KoReportItemBase.h>
 #include <QRect>
-#include <qdom.h>
+#include <QDomDocument>
 #include <krsize.h>
 
 /**

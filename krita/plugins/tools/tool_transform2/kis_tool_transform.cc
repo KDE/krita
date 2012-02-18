@@ -2141,7 +2141,7 @@ void KisToolTransform::applyTransform()
     // Perform the transform. Since we copied the original state back, this doesn't degrade
     // after many tweaks. Since we started the transaction before the copy back, the memento
     // has the previous state.
-    if (m_origSelection) {
+    if (!currentNode()->inherits("KisMask") && m_origSelection) {
         KoUpdaterPtr copyPixels = updater->startSubtask(5);
         KoUpdaterPtr transformPixels = updater->startSubtask(10);
         KoUpdaterPtr copyBackPixels = updater->startSubtask(5);

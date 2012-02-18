@@ -1107,6 +1107,38 @@ bool Axis::showOuterMajorTicks() const
     return d->showOuterMajorTicks;
 }
 
+void Axis::setShowInnerMinorTicks( bool showTicks )
+{
+    d->showInnerMinorTicks = showTicks;
+    KDChart::RulerAttributes attr = kdAxis()->rulerAttributes();
+    attr.setShowMinorTickMarks(d->showInnerMinorTicks || d->showOuterMinorTicks);
+    kdAxis()->setRulerAttributes( attr );
+}
+
+void Axis::setShowOuterMinorTicks( bool showTicks )
+{
+    d->showOuterMinorTicks = showTicks;
+    KDChart::RulerAttributes attr = kdAxis()->rulerAttributes();
+    attr.setShowMinorTickMarks(d->showInnerMinorTicks || d->showOuterMinorTicks);
+    kdAxis()->setRulerAttributes( attr );
+}
+
+void Axis::setShowInnerMajorTicks( bool showTicks )
+{
+    d->showInnerMajorTicks = showTicks;
+    KDChart::RulerAttributes attr = kdAxis()->rulerAttributes();
+    attr.setShowMajorTickMarks(d->showInnerMajorTicks || d->showOuterMajorTicks);
+    kdAxis()->setRulerAttributes( attr );
+}
+
+void Axis::setShowOuterMajorTicks( bool showTicks )
+{
+    d->showOuterMajorTicks = showTicks;
+    KDChart::RulerAttributes attr = kdAxis()->rulerAttributes();
+    attr.setShowMajorTickMarks(d->showInnerMajorTicks || d->showOuterMajorTicks);
+    kdAxis()->setRulerAttributes( attr );
+}
+
 void Axis::setScalingLogarithmic( bool logarithmicScaling )
 {
     d->logarithmicScaling = logarithmicScaling;
@@ -1345,6 +1377,18 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
             setMajorInterval( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-major" ) ) );
         if ( styleStack.hasProperty( KoXmlNS::chart, "interval-minor-divisor" ) )
             setMinorIntervalDivisor( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-minor-divisor" ) ) );
+        else if ( styleStack.hasProperty( KoXmlNS::chart, "interval-minor" ) )
+            setMinorInterval( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-minor" ) ) );
+
+        if ( styleStack.hasProperty( KoXmlNS::chart, "tick-marks-minor-inner" ) )
+            setShowInnerMinorTicks(styleStack.property( KoXmlNS::chart, "tick-marks-minor-inner" ) == "true");
+        if ( styleStack.hasProperty( KoXmlNS::chart, "tick-marks-minor-outer" ) )
+            setShowOuterMinorTicks(styleStack.property( KoXmlNS::chart, "tick-marks-minor-outer" ) == "true");
+        if ( styleStack.hasProperty( KoXmlNS::chart, "tick-marks-major-inner" ) )
+            setShowInnerMajorTicks(styleStack.property( KoXmlNS::chart, "tick-marks-major-inner" ) == "true");
+        if ( styleStack.hasProperty( KoXmlNS::chart, "tick-marks-major-outer" ) )
+            setShowOuterMajorTicks(styleStack.property( KoXmlNS::chart, "tick-marks-major-outer" ) == "true");
+
         if ( styleStack.hasProperty( KoXmlNS::chart, "display-label" ) )
             setShowLabels( styleStack.property( KoXmlNS::chart, "display-label" ) != "false" );
         if ( styleStack.hasProperty( KoXmlNS::chart, "visible" ) )
@@ -1369,6 +1413,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
             else
                 d->kdPlane->setHorizontalRange( qMakePair( minimum, maximum ) );
         }
+
         styleStack.setTypeProperties( "text" );
         if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) )
         {

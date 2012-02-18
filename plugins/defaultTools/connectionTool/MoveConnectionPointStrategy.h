@@ -23,7 +23,7 @@
 
 #include <KoInteractionStrategy.h>
 #include <KoConnectionPoint.h>
-#include <QtCore/QPointF>
+#include <QPointF>
 
 class KoShape;
 

@@ -292,6 +292,7 @@ void KisToolFreehand::keyPressEvent(QKeyEvent *event)
 {
     if (mode() != KisTool::PAINT_MODE) {
         KisToolPaint::keyPressEvent(event);
+        updateOutlineRect();
         return;
     }
 
@@ -302,6 +303,7 @@ void KisToolFreehand::keyReleaseEvent(QKeyEvent* event)
 {
     if (mode() != KisTool::PAINT_MODE) {
         KisToolPaint::keyReleaseEvent(event);
+        updateOutlineRect();
         return;
     }
 
@@ -405,20 +407,7 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
 #endif
 
     {
-        KisPaintOpSettings::OutlineMode outlineMode;
-        outlineMode = KisPaintOpSettings::CursorIsNotOutline;
-
-        if (m_explicitShowOutline ||
-                mode() == KisTool::GESTURE_MODE ||
-                (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE &&
-                 (mode() == HOVER_MODE ||
-                  (mode() == PAINT_MODE && cfg.showOutlineWhilePainting())))) {
-
-            outlineMode = KisPaintOpSettings::CursorIsOutline;
-        }
-
-        QPainterPath path = getOutlinePath(m_outlineDocPoint, outlineMode);
-        paintToolOutline(&gc,pixelToView(path));
+        paintToolOutline(&gc,pixelToView(m_currentOutline));
     }
 }
 
@@ -490,7 +479,19 @@ void KisToolFreehand::decreaseBrushSize()
 
 void KisToolFreehand::updateOutlineRect()
 {
-    QRectF outlinePixelRect = getOutlinePath(m_outlineDocPoint, KisPaintOpSettings::CursorIsOutline).boundingRect();
+    KisConfig cfg;
+    KisPaintOpSettings::OutlineMode outlineMode;
+    outlineMode = KisPaintOpSettings::CursorIsNotOutline;
+
+    if (m_explicitShowOutline ||
+            mode() == KisTool::GESTURE_MODE ||
+            (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE &&
+                (mode() == HOVER_MODE ||
+                (mode() == PAINT_MODE && cfg.showOutlineWhilePainting())))) {
+        outlineMode = KisPaintOpSettings::CursorIsOutline;
+    }
+    m_currentOutline = getOutlinePath(m_outlineDocPoint, outlineMode);
+    QRectF outlinePixelRect = m_currentOutline.boundingRect();
     QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
 
     if (!m_oldOutlineRect.isEmpty()) {

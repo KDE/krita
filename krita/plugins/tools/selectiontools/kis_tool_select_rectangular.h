@@ -68,7 +68,7 @@ public:
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("tool_rect_selection");
-        setShortcut(KShortcut(Qt::Key_R));
+        setShortcut(KShortcut(Qt::CTRL + Qt::Key_R));
         setPriority(52);
     }
 

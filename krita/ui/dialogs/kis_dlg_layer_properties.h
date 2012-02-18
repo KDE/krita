@@ -59,6 +59,9 @@ public:
 
     virtual ~KisDlgLayerProperties();
 
+private:
+
+    bool haveChanges() const;
     QString getName() const;
     qint32 getOpacity() const;
     QString getCompositeOp() const;

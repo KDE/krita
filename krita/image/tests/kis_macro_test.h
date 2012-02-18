@@ -19,7 +19,7 @@
 #ifndef KIS_MACRO_TEST_H
 #define KIS_MACRO_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisMacroTest : public QObject
 {

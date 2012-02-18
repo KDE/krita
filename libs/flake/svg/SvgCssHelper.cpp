@@ -20,8 +20,8 @@
 #include "SvgCssHelper.h"
 #include <KoXmlReader.h>
 #include <KDebug>
-#include <QtCore/QPair>
-#include <QtCore/QStack>
+#include <QPair>
+#include <QStack>
 
 /// Token types used for tokenizing complex selectors
 enum CssTokenType {

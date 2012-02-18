@@ -23,7 +23,7 @@
 
 #include <krita_export.h>
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 /**
  * This is a class that return a pseudo-random number that will be constant for a given

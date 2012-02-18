@@ -19,7 +19,7 @@
 #ifndef KIS_PIXEL_SELECTION_H
 #define KIS_PIXEL_SELECTION_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisPixelSelectionTest : public QObject
 {

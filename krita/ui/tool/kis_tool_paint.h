@@ -111,9 +111,6 @@ protected:
         return QString();
     }
 
-    /// Reimplemented
-    virtual void setupPainter(KisPainter* painter);
-
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 
     qreal pressureToCurve(qreal pressure){

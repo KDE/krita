@@ -20,7 +20,7 @@
 #ifndef KIS_IMAGE_TESTER_H
 #define KIS_IMAGE_TESTER_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisImageTest : public QObject
 {
@@ -29,6 +29,7 @@ class KisImageTest : public QObject
 private slots:
 
     void layerTests();
+    void testConvertImageColorSpace();
 };
 
 #endif

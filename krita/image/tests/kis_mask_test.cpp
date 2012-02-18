@@ -25,7 +25,8 @@
 #include "kis_node.h"
 #include "kis_mask.h"
 #include "kis_selection.h"
-
+#include "kis_image.h"
+#include "kis_group_layer.h"
 
 class TestMask : public KisMask
 {
@@ -88,6 +89,32 @@ void KisMaskTest::testCropUpdateBySelection()
      * the area that is outside its selection.
      * Please consider fixing KisMask::apply() first
      */
+}
+
+void KisMaskTest::testSelectionParent()
+{
+    {
+        KisMaskSP mask = new TestMask;
+        KisSelectionSP selection = mask->selection(); // Fix after removing lazy initialization
+        QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
+    }
+
+    {
+        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+        KisImageSP image = new KisImage(0, 100, 100, cs, "stest");
+
+        KisMaskSP mask = new TestMask;
+        mask->initSelection(0, image->rootLayer());
+        KisSelectionSP selection = mask->selection();
+        QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
+    }
+
+    {
+        KisMaskSP mask = new TestMask;
+        mask->setSelection(new KisSelection());
+        KisSelectionSP selection = mask->selection();
+        QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
+    }
 }
 
 QTEST_KDEMAIN(KisMaskTest, GUI)

@@ -19,7 +19,7 @@
  */
 #include "TestKoTextEditor.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QUuid>
 #include <QString>
 #include <QTextDocument>
@@ -137,7 +137,7 @@ public:
         KoTextEditor *editor = new KoTextEditor(m_document);
 
         textDoc.setInlineTextObjectManager(&m_inlineObjectManager);
-        textDoc.setStyleManager(new KoStyleManager());
+        textDoc.setStyleManager(new KoStyleManager(0));
         textDoc.setTextEditor(editor);
 
     }

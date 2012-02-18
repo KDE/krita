@@ -18,7 +18,7 @@
 #ifndef KIS_TILED_ITERATOR_H_
 #define KIS_TILED_ITERATOR_H_
 
-//#include <qglobal.h>
+//#include <QtGlobal>
 
 #include <kis_shared.h>
 

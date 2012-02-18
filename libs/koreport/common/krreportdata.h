@@ -22,7 +22,7 @@
 #define KRREPORTDATA_H
 
 #include <QObject>
-#include <qdom.h>
+#include <QDomDocument>
 #include "krsectiondata.h"
 #include "reportpageoptions.h"
 

@@ -22,13 +22,13 @@
 #include <KoResourceModel.h>
 #include <KoResourceItemView.h>
 #include <KoResourceItemDelegate.h>
-#include <QtGui/QPainter>
-#include <QtGui/QTableView>
-#include <QtGui/QListView>
-#include <QtGui/QHeaderView>
-#include <QtGui/QHeaderView>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QStyledItemDelegate>
+#include <QPainter>
+#include <QTableView>
+#include <QListView>
+#include <QHeaderView>
+#include <QHeaderView>
+#include <QMouseEvent>
+#include <QStyledItemDelegate>
 
 #include <KDebug>
 

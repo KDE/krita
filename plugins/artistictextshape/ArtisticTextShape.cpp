@@ -43,10 +43,10 @@
 #include <KLocale>
 #include <KDebug>
 
-#include <QtCore/QBuffer>
-#include <QtGui/QPen>
-#include <QtGui/QPainter>
-#include <QtGui/QFont>
+#include <QBuffer>
+#include <QPen>
+#include <QPainter>
+#include <QFont>
 
 ArtisticTextShape::ArtisticTextShape()
     : m_path(0), m_startOffset(0.0)

@@ -19,7 +19,7 @@
 #ifndef KIS_PAINT_LAYER_TEST_H
 #define KIS_PAINT_LAYER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisPaintLayerTest : public QObject
 {

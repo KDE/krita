@@ -56,16 +56,8 @@ public:
     {
     }
 
-    void aboutToAddANode(KisNode *, int) {}
-    void nodeHasBeenAdded(KisNode *, int) {}
-    void aboutToRemoveANode(KisNode *, int) {}
-    void nodeHasBeenRemoved(KisNode *, int) {}
-    void aboutToMoveNode(KisNode *, int, int) {}
-    void nodeHasBeenMoved(KisNode *, int, int) {}
-    void nodeChanged(KisNode*) {}
-
     void requestProjectionUpdate(KisNode *node, const QRect& rect) {
-        Q_UNUSED(node);
+        KisNodeGraphListener::requestProjectionUpdate(node, rect);
 
         QMutexLocker locker(&m_lock);
         m_scratchPad->imageUpdated(rect);

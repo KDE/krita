@@ -152,7 +152,6 @@ public:
      *
      * @param dstX the destination x-coordinate
      * @param dstY the destination y-coordinate
-     * @param op a pointer to the composite op used to blast the pixels from @param srcDev to the current paint device
      * @param srcDev the source device
      * @param srcX the source x-coordinate
      * @param srcY the source y-coordinate
@@ -176,16 +175,10 @@ public:
     void bitBlt(const QPoint & pos, const KisPaintDeviceSP srcDev, const QRect & srcRect);
 
     /**
-     * Blast a region of srcWidth @param srcWidth and srcHeight @param srcHeight from @param
-     * srcDev onto the current paint device. @param srcX and @param srcY set the x and y
-     * positions of the origin top-left corner, @param dstX and @param dstY those of
-     * the destination.
-     * Any pixel read outside the limits of @param srcDev will return the
-     * default pixel, this is a property of \ref KisPaintDevice.
+     * The same as @ref bitBlt() but reads data from oldData() part of the device
      *
      * @param dstX the destination x-coordinate
      * @param dstY the destination y-coordinate
-     * @param op a pointer to the composite op used to blast the pixels from @param srcDev to the current paint device
      * @param srcDev the source device
      * @param srcX the source x-coordinate
      * @param srcY the source y-coordinate
@@ -193,9 +186,9 @@ public:
      * @param srcHeight the height of the region to be manipulated
      */
     void bitBltOldData(qint32 dstX, qint32 dstY,
-                const KisPaintDeviceSP srcDev,
-                qint32 srcX, qint32 srcY,
-                qint32 srcWidth, qint32 srcHeight);
+                       const KisPaintDeviceSP srcDev,
+                       qint32 srcX, qint32 srcY,
+                       qint32 srcWidth, qint32 srcHeight);
 
     /**
      * Convenience method that uses QPoint and QRect.
@@ -268,7 +261,6 @@ public:
      *
      * @param dstX the destination x-coordinate
      * @param dstY the destination y-coordinate
-     * @param op a pointer to the composite op use to blast the pixels from srcDev on dst
      * @param srcDev the source device
      * @param srcX the source x-coordinate
      * @param srcY the source y-coordinate
@@ -310,7 +302,6 @@ public:
      *
      * @param dstX the destination x-coordinate
      * @param dstY the destination y-coordinate
-     * @param op a pointer to the composite op use to blast the pixels from srcDev on dst
      * @param srcDev the source device
      * @param selection the selection stored in fixed device
      * @param selX the selection x-coordinate
@@ -727,6 +718,13 @@ private:
 
 protected:
     KoUpdater * progressUpdater();
+
+private:
+    template <bool useOldSrcData>
+        void bitBltImpl(qint32 dstX, qint32 dstY,
+                        const KisPaintDeviceSP srcDev,
+                        qint32 srcX, qint32 srcY,
+                        qint32 srcWidth, qint32 srcHeight);
 
 private:
 

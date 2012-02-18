@@ -21,7 +21,7 @@
 #ifndef KOREPORTPLUGININTERFACE_H
 #define KOREPORTPLUGININTERFACE_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <KoReportDesigner.h>
 #include <QGraphicsScene>
 #include <KLocalizedString>

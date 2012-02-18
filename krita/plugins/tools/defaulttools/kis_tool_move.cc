@@ -46,30 +46,6 @@
 #include <commands/kis_deselect_global_selection_command.h>
 #include "strokes/move_stroke_strategy.h"
 
-/**
- * Deferred activation of a node. After it is actually added to the
- * layer stack. In the future it might be shared with the methods of
- * KisNodeManager which are not ported to strokes yet.
- */
-class ActivateNodeCommand : public KUndo2Command
-{
-public:
-    ActivateNodeCommand(KisView2 *view, KisNodeSP node)
-        : m_view(view), m_node(node)
-    {}
-
-    void redo() {
-        // TEMPORARY HACK ALERT: https://bugs.kde.org/show_bug.cgi?id=290708
-        //m_view->nodeManager()->activateNode(m_node);
-    }
-
-    void undo() {}
-
-private:
-    KisView2 *m_view;
-    KisNodeSP m_node;
-};
-
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
 {
@@ -218,11 +194,6 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
 
             KisLayerSP oldLayer = dynamic_cast<KisLayer*>(node.data());
             KisLayerSP newLayer = createSelectionCopy(oldLayer, selection, image, m_strokeId);
-
-            KisView2 *view = dynamic_cast<KisCanvas2*>(canvas())->view();
-            image->addJob(m_strokeId,
-                          new KisStrokeStrategyUndoCommandBased::Data(
-                              new ActivateNodeCommand(view, newLayer)));
 
             node = newLayer;
         }

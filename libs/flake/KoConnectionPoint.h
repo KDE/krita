@@ -23,7 +23,7 @@
 
 #include "KoFlake.h"
 #include "flake_export.h"
-#include <QtCore/QPointF>
+#include <QPointF>
 
 /// Data of a single connection point
 struct FLAKE_EXPORT KoConnectionPoint

@@ -20,7 +20,7 @@
 #ifndef KIS_KS_COLORSPACE_TEST_H_
 #define KIS_KS_COLORSPACE_TEST_H_
 
-#include <QtTest/QtTest>
+#include <QtTest>
 #include <QStringList>
 
 class KisKSColorSpaceTest : public QObject

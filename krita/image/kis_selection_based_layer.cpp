@@ -83,6 +83,7 @@ void KisSelectionBasedLayer::initSelection()
 {
     m_d->selection = new KisSelection();
     m_d->selection->getOrCreatePixelSelection()->select(image()->bounds());
+    m_d->selection->setParentNode(this);
     m_d->selection->updateProjection();
 }
 
@@ -189,6 +190,7 @@ void KisSelectionBasedLayer::setSelection(KisSelectionSP selection)
 {
     if (selection) {
         m_d->selection = new KisSelection(*selection.data());
+        m_d->selection->setParentNode(this);
         m_d->selection->updateProjection();
     } else
         m_d->selection = 0;

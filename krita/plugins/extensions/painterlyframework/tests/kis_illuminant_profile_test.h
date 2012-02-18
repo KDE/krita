@@ -20,7 +20,7 @@
 #ifndef KIS_ILLUMINANT_PROFILE_TEST_H_
 #define KIS_ILLUMINANT_PROFILE_TEST_H_
 
-#include <QtTest/QtTest>
+#include <QtTest>
 #include <QStringList>
 
 class KisIlluminantProfileTest : public QObject

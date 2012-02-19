@@ -36,15 +36,13 @@
 #include <QDomElement>
 #include <QTemporaryFile>
 
-KisMimeData::KisMimeData() :
-    QMimeData()
+KisMimeData::KisMimeData(KisNodeSP node)
+    : QMimeData()
+    , m_node(node)
 {
+    Q_ASSERT(m_node);
 }
 
-void KisMimeData::setNode(KisNodeSP node)
-{
-    m_node = node;
-}
 
 KisNodeSP KisMimeData::node() const
 {
@@ -63,9 +61,10 @@ QStringList KisMimeData::formats () const
 
 QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type preferredType) const
 {
+    Q_ASSERT(m_node);
     if (mimetype == "application/x-qt-image") {
         KisConfig cfg;
-        return m_node->paintDevice()->convertToQImage(cfg.displayProfile());
+        return m_node->projection()->convertToQImage(cfg.displayProfile());
     }
     else if (mimetype == "application/x-krita-node"
              || mimetype == "application/zip") {

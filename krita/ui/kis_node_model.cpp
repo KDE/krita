@@ -426,8 +426,8 @@ QMimeData * KisNodeModel::mimeData(const QModelIndexList &indexes) const
     Q_ASSERT(indexes.count() == 1); // we only allow one node at a time to be stored as mimedata
 
     KisNodeSP node = nodeFromIndex(indexes.first());
-    KisMimeData* data = new KisMimeData();
-    data->setNode(node);
+    KisMimeData* data = new KisMimeData(node);
+
     return data;
 }
 

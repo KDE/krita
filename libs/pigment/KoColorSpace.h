@@ -118,7 +118,7 @@ public:
     virtual quint32 channelCount() const = 0;
 
     /**
-     * The total number of color channels (excludes alpha and substance) for a single
+     * The total number of color channels (excludes alpha) for a single
      * pixel in this color model.
      */
     virtual quint32 colorChannelCount() const = 0;
@@ -129,13 +129,11 @@ public:
      *
      * @param color if true, set all color channels to true
      * @param alpha if true, set all alpha channels to true
-     * @param substance if true, set all substance channels to true
-     * @param substrate if true, set all substrate channels to true
      *
      * The order of channels is the colorspace descriptive order,
      * not the pixel order.
      */
-    QBitArray channelFlags(bool color = true, bool alpha = false, bool substance = false, bool substrate = false) const;
+    QBitArray channelFlags(bool color = true, bool alpha = false) const;
 
     /**
      * The size in bytes of a single pixel in this color model

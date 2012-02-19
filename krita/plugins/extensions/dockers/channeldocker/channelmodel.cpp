@@ -95,14 +95,15 @@ bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int 
             
             if (index.column() == 0) {
                 QBitArray flags = m_currentLayer->channelFlags();
-                flags = flags.isEmpty() ? m_currentLayer->colorSpace()->channelFlags(true, true, true, true) : flags;
+
+                flags = flags.isEmpty() ? m_currentLayer->colorSpace()->channelFlags(true, true) : flags;
                 flags.setBit(channelIndex, value.toInt() == Qt::Checked);
                 m_currentLayer->setChannelFlags(flags);
             }
             else { //if (index.column() == 1)
                 KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(m_currentLayer.data());
                 QBitArray      flags      = paintLayer->channelLockFlags();
-                flags = flags.isEmpty() ? m_currentLayer->colorSpace()->channelFlags(true, true, true, true) : flags;
+                flags = flags.isEmpty() ? m_currentLayer->colorSpace()->channelFlags(true, true) : flags;
                 flags.setBit(channelIndex, value.toInt() == Qt::Unchecked);
                 paintLayer->setChannelLockFlags(flags);
             }

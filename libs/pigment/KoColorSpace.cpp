@@ -104,17 +104,15 @@ QList<KoChannelInfo *> KoColorSpace::channels() const
     return d->channels;
 }
 
-QBitArray KoColorSpace::channelFlags(bool color, bool alpha, bool substance, bool substrate) const
+QBitArray KoColorSpace::channelFlags(bool color, bool alpha) const
 {
     QBitArray ba(d->channels.size());
-    if (!color && !alpha && !substance && !substrate) return ba;
+    if (!color && !alpha) return ba;
 
     for (int i = 0; i < d->channels.size(); ++i) {
         KoChannelInfo * channel = d->channels.at(i);
         if ((color && channel->channelType() == KoChannelInfo::COLOR) ||
-                (alpha && channel->channelType() == KoChannelInfo::ALPHA) ||
-                (substrate && channel->channelType() == KoChannelInfo::SUBSTRATE) ||
-                (substance && channel->channelType() == KoChannelInfo::SUBSTANCE))
+                (alpha && channel->channelType() == KoChannelInfo::ALPHA))
             ba.setBit(i, true);
     }
     return ba;

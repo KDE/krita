@@ -189,17 +189,17 @@ void KisLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyL
 void KisLayer::disableAlphaChannel(bool disable)
 {
     if(m_d->channelFlags.isEmpty())
-        m_d->channelFlags = colorSpace()->channelFlags(true, true, true, true);
+        m_d->channelFlags = colorSpace()->channelFlags(true, true);
     
     if(disable)
-        m_d->channelFlags &= colorSpace()->channelFlags(true, false, true, true);
+        m_d->channelFlags &= colorSpace()->channelFlags(true, false);
     else
-        m_d->channelFlags |= colorSpace()->channelFlags(false, true, false, false);
+        m_d->channelFlags |= colorSpace()->channelFlags(false, true);
 }
 
 bool KisLayer::alphaChannelDisabled() const
 {
-    QBitArray flags = colorSpace()->channelFlags(false, true, false, false) & m_d->channelFlags;
+    QBitArray flags = colorSpace()->channelFlags(false, true) & m_d->channelFlags;
     return flags.count(true) == 0 && !m_d->channelFlags.isEmpty();
 }
 

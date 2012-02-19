@@ -320,6 +320,7 @@ bool KisAsyncMerger::compositeWithProjection(KisLayerSP layer, const QRect &rect
 
     QBitArray channelFlags = layer->channelFlags();
 
+
     // if the color spaces don't match we will have a problem with the channel flags
     // because the channel flags from the source layer doesn't match with the colorspace of the projection device
     // this leads to the situation that the wrong channels will be enabled/disabled

@@ -52,7 +52,7 @@ public:
      *
      * The border op decides what to do with pixels too close to the edge of the rect as defined above.
      *
-     * The channels flag determines which set out of color channels, alpha channels, substance or substrate
+     * The channels flag determines which set out of color channels, alpha channels.
      * channels we convolve.
      *
      * Note that we do not (currently) support different kernels for

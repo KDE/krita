@@ -2324,11 +2324,11 @@ void KisPainter::setMaskImageSize(qint32 width, qint32 height)
 void KisPainter::setLockAlpha(bool protect)
 {
     if(d->paramInfo.channelFlags.isEmpty()) {
-        d->paramInfo.channelFlags = d->colorSpace->channelFlags(true, true, true, true);
+        d->paramInfo.channelFlags = d->colorSpace->channelFlags(true, true);
     }
 
     QBitArray switcher =
-        d->colorSpace->channelFlags(protect, !protect, protect, protect);
+        d->colorSpace->channelFlags(protect, !protect);
 
     if(protect) {
         d->paramInfo.channelFlags &= switcher;
@@ -2342,7 +2342,7 @@ void KisPainter::setLockAlpha(bool protect)
 
 bool KisPainter::alphaLocked() const
 {
-    QBitArray switcher = d->colorSpace->channelFlags(false, true, false, false);
+    QBitArray switcher = d->colorSpace->channelFlags(false, true);
     return !(d->paramInfo.channelFlags & switcher).count(true);
 }
 

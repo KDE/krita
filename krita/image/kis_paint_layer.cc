@@ -214,19 +214,19 @@ QRect KisPaintLayer::exactBounds() const
 
 bool KisPaintLayer::alphaLocked() const
 {
-    QBitArray flags = colorSpace()->channelFlags(false, true, false, false) & m_d->paintChannelFlags;
+    QBitArray flags = colorSpace()->channelFlags(false, true) & m_d->paintChannelFlags;
     return flags.count(true) == 0 && !m_d->paintChannelFlags.isEmpty();
 }
 
 void KisPaintLayer::setAlphaLocked(bool lock)
 {
     if(m_d->paintChannelFlags.isEmpty())
-        m_d->paintChannelFlags = colorSpace()->channelFlags(true, true, true, true);
+        m_d->paintChannelFlags = colorSpace()->channelFlags(true, true);
     
     if(lock)
-        m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false, true, true);
+        m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false);
     else
-        m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true, false, false);
+        m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true);
 }
 
 

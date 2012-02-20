@@ -307,8 +307,6 @@ public slots:
 
     bool atStart() const;
 
-    void beginEditBlock();
-
     QTextBlock block() const;
 
     QTextCharFormat blockCharFormat() const;
@@ -323,12 +321,19 @@ public slots:
 
     int columnNumber() const;
 
+//the two following methods are called by the DeleteCommand. They are not meant to be called directly. Do it with extreme care, if and only if you perfectly understand the undo/redo framework.
     void deleteChar();
 
     void deletePreviousChar();
 
     const QTextDocument *document() const;
 
+    //Starts a new custom command. Everything between these two is one custom command. These should not be called from whithin a KUndo2Command
+//    void beginCustomCommand();
+//    void endCustomCommand();
+
+    //Same as Qt, only to be used inside KUndo2Commands
+    void beginEditBlock();
     void endEditBlock();
 
     bool hasComplexSelection() const;

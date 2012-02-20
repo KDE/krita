@@ -31,6 +31,7 @@
 #include <KLocale>
 #include <kdebug.h>
 
+#include <QStack>
 #include <QTextBlock>
 #include <QTextDocument>
 #include <QTimer>
@@ -62,7 +63,9 @@ public:
     KoTextEditor *q;
     QTextCursor caret;
     QTextDocument *document;
-    KUndo2Command *headCommand;
+    QStack<KUndo2Command*> commandStack;
+    bool addNewCommand;
+    int inCustomCommand;
     QString commandTitle;
 
     State editorState;

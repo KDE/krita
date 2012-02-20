@@ -122,11 +122,13 @@ void DeleteCommand::doDelete()
 
     //Now finally Delete the selected text. Don't use selection.deleteChar() direct
     //cause the Texteditor needs to know about the changes too.
-    if (m_mode == PreviousChar)
+    if (m_mode == PreviousChar) {
         textEditor->deletePreviousChar();
-    else
+    }
+    else {
         textEditor->deleteChar();
- }
+    }
+}
 
 void DeleteCommand::deleteInlineObjects()
 {
@@ -168,7 +170,7 @@ void DeleteCommand::deleteTextAnchor(KoInlineObject *object)
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
         if (anchor) {
             KoShape *shape = anchor->shape();
-            KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape);
+            KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
             shapeDeleteCommand->redo();
             m_shapeDeleteCommands.push_back(shapeDeleteCommand);
         }
@@ -295,4 +297,3 @@ DeleteCommand::~DeleteCommand()
             delete command;
     }
 }
-

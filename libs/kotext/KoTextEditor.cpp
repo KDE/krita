@@ -94,7 +94,8 @@ Q_DECLARE_METATYPE(QTextFrame*)
 KoTextEditor::Private::Private(KoTextEditor *qq, QTextDocument *document)
     : q(qq)
     , document (document)
-    , headCommand(0)
+    , addNewCommand(true)
+    , inCustomCommand(0)
     , editProtectionCached(false)
 {
     caret = QTextCursor(document);
@@ -121,7 +122,9 @@ void KoTextEditor::Private::documentCommandAdded()
             QTextDocument *doc = m_document.data();
             if (doc == 0)
                 return;
+            KoTextDocument(doc).textEditor()->cursor()->beginEditBlock(); //These are needed to get around a Qt bug in 4.8. A change through a QTextCursor outside an editBlock will crash (cursor position calculation on non layed out doc).
             doc->undo(KoTextDocument(doc).textEditor()->cursor());
+            KoTextDocument(doc).textEditor()->cursor()->endEditBlock();
             m_p->emitTextFormatChanged();
         }
 
@@ -129,7 +132,9 @@ void KoTextEditor::Private::documentCommandAdded()
             QTextDocument *doc = m_document.data();
             if (doc == 0)
                 return;
+            KoTextDocument(doc).textEditor()->cursor()->beginEditBlock(); //Same as above
             doc->redo(KoTextDocument(doc).textEditor()->cursor());
+            KoTextDocument(doc).textEditor()->cursor()->endEditBlock();
             m_p->emitTextFormatChanged();
         }
 
@@ -137,35 +142,50 @@ void KoTextEditor::Private::documentCommandAdded()
         KoTextEditor::Private *m_p;
     };
 
-    //kDebug() << "editor state: " << editorState << " headcommand: " << headCommand;
-    if (!headCommand || editorState == NoOp) {
-        headCommand = new KUndo2Command(commandTitle);
+    if (commandStack.isEmpty()) {
+        commandStack.push(new KUndo2Command(commandTitle, !commandStack.isEmpty()?commandStack.top():0));
         if (KoTextDocument(document).undoStack()) {
-            //kDebug() << "pushing head: " << headCommand->text();
-            KoTextDocument(document).undoStack()->push(headCommand);
+            KoTextDocument(document).undoStack()->push(commandStack.top());
         }
+        addNewCommand = false;
     }
-    else if ((editorState == KeyPress || editorState == Delete) && headCommand->childCount()) {
-        headCommand = new KUndo2Command(commandTitle);
+    else if (addNewCommand) {
+        commandStack.push(new KUndo2Command(commandTitle, !commandStack.isEmpty()?commandStack.top():0));
+        addNewCommand = false;
+    }
+    else if ((editorState == KeyPress || editorState == Delete) && !commandStack.isEmpty() && commandStack.top()->childCount()) {
+        commandStack.pop();
+        commandStack.push(new KUndo2Command(commandTitle, !commandStack.isEmpty()?commandStack.top():0));
         if (KoTextDocument(document).undoStack()) {
-            //kDebug() << "pushing head: " << headCommand->text();
-            KoTextDocument(document).undoStack()->push(headCommand);
+            KoTextDocument(document).undoStack()->push(commandStack.top());
         }
     }
 
-    new UndoTextCommand(document, this, headCommand);
+    new UndoTextCommand(document, this, commandStack.top());
 }
 
 void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, QString title)
 {
-    if (editorState == Custom && newState !=NoOp)
+    if (editorState == Custom && newState != NoOp) {
+        addNewCommand = true;
+        if (!title.isEmpty())
+            commandTitle = title;
+        else
+            commandTitle = i18n("Text");
         return;
-    //kDebug() << "updateState from: " << editorState << " to: " << newState;
+    }
+    if (newState == NoOp && !commandStack.isEmpty()) {
+        commandStack.pop();
+        addNewCommand = true;
+        if (commandStack.isEmpty()) {
+            editorState = NoOp;
+        }
+        return;
+    }
     if (editorState != newState || commandTitle != title) {
-        if (headCommand /*&& headCommand->childCount() && KoTextDocument(document).undoStack()*/) {
-            //kDebug() << "reset headCommand";
-            //            KoTextDocument(document).undoStack()->push(headCommand);
-            headCommand = 0;
+        if (!commandStack.isEmpty()) {
+            commandStack.pop();
+            addNewCommand = true;
         }
     }
     editorState = newState;
@@ -173,7 +193,6 @@ void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, Q
         commandTitle = title;
     else
         commandTitle = i18n("Text");
-    //kDebug() << "commandTitle is now: " << commandTitle;
 }
 
 bool KoTextEditor::Private::deleteInlineObjects(bool backwards)
@@ -347,26 +366,37 @@ QTextCursor* KoTextEditor::cursor()
 
 void KoTextEditor::addCommand(KUndo2Command *command)
 {
+    ++d->inCustomCommand;
     d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty())?command->text():i18n("Text"));
-    //kDebug() << "will push the custom command: " << command->text();
-    d->headCommand = command;
-    KUndo2QStack *stack = KoTextDocument(d->document).undoStack();
-    if (stack) {
-        stack->push(command);
-    } else {
+    d->addNewCommand = false;
+    if (d->commandStack.isEmpty()) {
+        d->commandStack.push(command);
+        KUndo2QStack *stack = KoTextDocument(d->document).undoStack();
+        if (stack && !command->hasParent()) {
+            stack->push(command);
+        } else {
+            command->redo();
+        }
+    }
+    else {
+        d->commandStack.push(command);
         command->redo();
     }
-    //kDebug() << "custom command pushed";
+    while(d->commandStack.top() != command) { //clean auto generated commands which at that point should not be here anymore. in particular insertText being open ended will not have been cleared.
+        d->commandStack.pop();
+    }
+    d->updateState(KoTextEditor::Private::NoOp);
+    --d->inCustomCommand;
 }
 
 void KoTextEditor::instantlyExecuteCommand(KUndo2Command *command)
 {
     d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty())?command->text():i18n("Text"));
-    //kDebug() << "will push the custom command: " << command->text();
-    d->headCommand = command; // So any text it does is store as sub commands
     command->redo();
     // instant replay done let's not keep it dangling
-    d->updateState(KoTextEditor::Private::NoOp);
+    if (!command->hasParent()) {
+        d->updateState(KoTextEditor::Private::NoOp);
+    }
 }
 
 void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
@@ -836,8 +866,8 @@ public:
 
         QList<QTextCharFormat>::Iterator it = m_formats.begin();
         foreach(QTextCursor cursor, m_cursors) {
-            cursor.setCharFormat(*it);
             QTextFormat prevFormat(cursor.charFormat());
+            cursor.setCharFormat(*it);
             editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, i18n("Set Character Style"), *it, prevFormat, false);
             ++it;
         }
@@ -1068,6 +1098,8 @@ KoInlineObject *KoTextEditor::insertIndexMarker()
         return 0;
     }
 
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Index"));
+
     int startPosition = d->caret.position();
 
     if (d->caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
@@ -1091,7 +1123,6 @@ KoInlineObject *KoTextEditor::insertIndexMarker()
     if (block.text()[ d->caret.position() - block.position()].isSpace())
         return 0; // can't insert one on a whitespace as that does not indicate a word.
 
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Index"));
     KoTextLocator *tl = new KoTextLocator();
     KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, tl);
     d->updateState(KoTextEditor::Private::NoOp);
@@ -1163,7 +1194,7 @@ void KoTextEditor::updateInlineObjectPosition(int start, int end)
 void KoTextEditor::removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent)
 {
     Q_ASSERT(parent);
-    instantlyExecuteCommand(new DeleteAnchorsCommand(anchors, d->document, parent));
+    addCommand(new DeleteAnchorsCommand(anchors, d->document, parent));
 }
 
 void KoTextEditor::insertFrameBreak()
@@ -1483,18 +1514,14 @@ void KoTextEditor::deleteChar()
         }
     }
 
-    if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
-        d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
+    QTextCharFormat charFormat = d->caret.charFormat();
 
-        QTextCharFormat charFormat = d->caret.charFormat();
+    if (!d->caret.hasSelection())
+        d->caret.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
 
-        if (!d->caret.hasSelection())
-            d->caret.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+    d->caret.deleteChar();
 
-        d->caret.deleteChar();
-
-        d->caret.setCharFormat(charFormat);
-    }
+    d->caret.setCharFormat(charFormat);
 
     emit cursorPositionChanged();
 }
@@ -1528,18 +1555,14 @@ void KoTextEditor::deletePreviousChar()
         }
     }
 
-    if (!d->deleteInlineObjects(false) || d->caret.hasSelection()) {
-        d->updateState(KoTextEditor::Private::Delete, i18n("Delete"));
+    QTextCharFormat charFormat = d->caret.charFormat();
 
-        QTextCharFormat charFormat = d->caret.charFormat();
+    if (!d->caret.hasSelection())
+        d->caret.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
 
-        if (!d->caret.hasSelection())
-            d->caret.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+    d->caret.deleteChar();
 
-        d->caret.deleteChar();
-
-        d->caret.setCharFormat(charFormat);
-    }
+    d->caret.setCharFormat(charFormat);
     emit cursorPositionChanged();
 }
 
@@ -1980,10 +2003,18 @@ void KoTextEditor::insertText(const QString &text)
         return;
     }
 
-    d->updateState(KoTextEditor::Private::KeyPress, i18nc("(qtundo-format)", "Typing"));
+    bool hasSelection = d->caret.hasSelection();
+//    if (!hasSelection) {
+        d->updateState(KoTextEditor::Private::KeyPress, i18nc("(qtundo-format)", "Typing"));
+//    }
+//    else {
+//        beginEditBlock();
+//        d->commandTitle = i18nc("(qtundo-format)", "Typing");
+//        addCommand(new );
+//    }
 
     //first we make sure that we clear the inlineObject charProperty, if we have no selection
-    if (!d->caret.hasSelection() && d->caret.charFormat().hasProperty(KoCharacterStyle::InlineInstanceId))
+    if (!hasSelection && d->caret.charFormat().hasProperty(KoCharacterStyle::InlineInstanceId))
         d->clearCharFormatProperty(KoCharacterStyle::InlineInstanceId);
 
     int startPosition = d->caret.position();
@@ -2374,17 +2405,20 @@ const QTextTable *KoTextEditor::currentTable () const
     return d->caret.currentTable();
 }
 
-
 void KoTextEditor::beginEditBlock()
 {
-    d->updateState(KoTextEditor::Private::Custom);
+    if (!d->inCustomCommand) {
+        d->updateState(KoTextEditor::Private::Custom);
+    }
     d->caret.beginEditBlock();
 }
 
 void KoTextEditor::endEditBlock()
 {
     d->caret.endEditBlock();
-    d->updateState(KoTextEditor::Private::NoOp);
+    if (!d->inCustomCommand) {
+        d->updateState(KoTextEditor::Private::NoOp);
+    }
 }
 
 #include <KoTextEditor.moc>

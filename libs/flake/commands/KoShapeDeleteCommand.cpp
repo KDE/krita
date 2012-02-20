@@ -24,6 +24,8 @@
 
 #include <klocale.h>
 
+#include <KDebug>
+
 class KoShapeDeleteCommand::Private
 {
 public:

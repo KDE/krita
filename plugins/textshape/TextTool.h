@@ -244,6 +244,8 @@ private slots:
     void setStyle(KoParagraphStyle *syle);
     /// set the characterStyle of the current selection. see above.
     void setStyle(KoCharacterStyle *style);
+    /// set the level of current selected list
+    void setListLevel(int level);
 
     /// slot to call when a series of commands is started that together need to become 1 undo action.
     void startMacro(const QString &title);

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>230</width>
+    <width>232</width>
     <height>90</height>
    </rect>
   </property>
@@ -34,44 +34,14 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <zorder></zorder>
     </widget>
    </item>
    <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout">
+    <layout class="QGridLayout" name="gridLayout" columnstretch="0,2,0,0,0,0,0,0,0,0,0,0">
      <property name="spacing">
       <number>2</number>
      </property>
-     <item row="2" column="0" colspan="2">
-      <widget class="FormattingButton" name="bulletListButton">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2" colspan="2">
-      <widget class="FormattingButton" name="numberedListButton">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="4" colspan="2">
-      <widget class="QToolButton" name="decreaseIndent">
-       <property name="autoRaise">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="6" colspan="2">
-      <widget class="QToolButton" name="increaseIndent">
-       <property name="autoRaise">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="8">
-      <widget class="QToolButton" name="changeTextDirection"/>
-     </item>
      <item row="3" column="0">
       <widget class="QToolButton" name="alignLeft">
        <property name="autoRaise">
@@ -79,12 +49,28 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1" colspan="2">
-      <widget class="QToolButton" name="alignCenter">
+     <item row="3" column="5" colspan="2">
+      <widget class="QToolButton" name="alignBlock">
        <property name="autoRaise">
         <bool>false</bool>
        </property>
       </widget>
+     </item>
+     <item row="1" column="0" colspan="12">
+      <widget class="StylesCombo" name="paragraphStyleCombo"/>
+     </item>
+     <item row="2" column="10">
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>100</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item row="3" column="3" colspan="2">
       <widget class="QToolButton" name="alignRight">
@@ -93,8 +79,22 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="5" colspan="2">
-      <widget class="QToolButton" name="alignBlock">
+     <item row="2" column="3">
+      <widget class="QToolButton" name="decreaseIndent">
+       <property name="autoRaise">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" colspan="2">
+      <widget class="FormattingButton" name="bulletListButton">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" colspan="2">
+      <widget class="QToolButton" name="alignCenter">
        <property name="autoRaise">
         <bool>false</bool>
        </property>
@@ -116,28 +116,22 @@
        </property>
       </spacer>
      </item>
-     <item row="1" column="0" colspan="12">
-      <widget class="StylesCombo" name="paragraphStyleCombo"/>
-     </item>
-     <item row="2" column="10">
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
      <item row="3" column="11">
       <widget class="QToolButton" name="moreOptions">
        <property name="text">
         <string>...</string>
        </property>
       </widget>
+     </item>
+     <item row="2" column="5">
+      <widget class="QToolButton" name="increaseIndent">
+       <property name="autoRaise">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="7">
+      <widget class="QToolButton" name="changeTextDirection"/>
      </item>
     </layout>
    </item>

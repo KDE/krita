@@ -35,6 +35,8 @@ class KoStyleThumbnailer;
 class StylesModel;
 class StylesDelegate;
 
+class QSignalMapper;
+
 class SimpleParagraphWidget : public QWidget
 {
     Q_OBJECT
@@ -57,6 +59,7 @@ signals:
 private slots:
     void listStyleChanged(int id);
     void styleSelected(int index);
+    void changeListLevel(int level);
 
 private:
     enum DirectionButtonState {
@@ -78,6 +81,7 @@ private:
     TextTool *m_tool;
     DirectionButtonState m_directionButtonState;
     KoStyleThumbnailer *m_thumbnailer;
+    QSignalMapper *m_mapper;
 
     StylesModel *m_stylesModel;
     StylesDelegate *m_stylesDelegate;

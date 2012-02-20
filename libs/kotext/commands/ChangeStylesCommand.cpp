@@ -62,7 +62,7 @@ void ChangeStylesCommand::redo()
 
     if (m_first) {
         m_first = false;
-        m_changeFollower->processUpdates(m_changedStyles);
+        m_changeFollower->processUpdates();
     }
 }
 

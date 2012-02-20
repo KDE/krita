@@ -42,6 +42,7 @@
 Q_DECLARE_METATYPE(QAbstractTextDocumentLayout::Selection)
 Q_DECLARE_METATYPE(QTextFrame*)
 Q_DECLARE_METATYPE(QTextCharFormat)
+Q_DECLARE_METATYPE(QTextBlockFormat)
 
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");
@@ -58,6 +59,7 @@ const QUrl KoTextDocument::LayoutTextPageUrl = QUrl("kotext://layoutTextPage");
 const QUrl KoTextDocument::ParaTableSpacingAtStartUrl = QUrl("kotext://spacingAtStart");
 const QUrl KoTextDocument::IndexGeneratorManagerUrl = QUrl("kotext://indexGeneratorManager");
 const QUrl KoTextDocument::FrameCharFormatUrl = QUrl("kotext://frameCharFormat");
+const QUrl KoTextDocument::FrameBlockFormatUrl = QUrl("kotext://frameBlockFormat");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
@@ -348,3 +350,16 @@ void KoTextDocument::setFrameCharFormat(QTextCharFormat format)
     m_document->addResource(KoTextDocument::FrameCharFormat, FrameCharFormatUrl, QVariant::fromValue(format));
 }
 
+QTextBlockFormat KoTextDocument::frameBlockFormat() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::FrameBlockFormat, FrameBlockFormatUrl);
+    if (resource.isValid())
+        return resource.value<QTextBlockFormat>();
+    else
+        return QTextBlockFormat();
+}
+
+void KoTextDocument::setFrameBlockFormat(QTextBlockFormat format)
+{
+    m_document->addResource(KoTextDocument::FrameBlockFormat, FrameBlockFormatUrl, QVariant::fromValue(format));
+}

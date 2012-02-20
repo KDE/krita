@@ -163,9 +163,37 @@ public:
     void setParaTableSpacingAtStart(bool spacingAtStart);
     bool paraTableSpacingAtStart() const;
 
+    /**
+     * Returns the character format for the frame of this document.
+     *
+     * @return the character format for the frame of this document.
+     * @see setFrameCharFormat
+     */
     QTextCharFormat frameCharFormat() const;
 
+    /**
+     * Sets the character format for the frame of this document.
+     *
+     * @param format the character format for the frame of this document.
+     * @see frameCharFormat
+     */
     void setFrameCharFormat(QTextCharFormat format);
+
+    /**
+     * Returns the block format for the frame of this document.
+     *
+     * @return the block format for the frame of this document.
+     * @see setFrameBlockFormat
+     */
+    QTextBlockFormat frameBlockFormat() const;
+
+    /**
+     * Sets the block format for the frame of this document.
+     *
+     * @param format the block format for the frame of this document.
+     * @see frameBlockFormat
+     */
+    void setFrameBlockFormat(QTextBlockFormat format);
 
     /**
      * Clears the text in the document. Unlike QTextDocument::clear(), this
@@ -188,8 +216,9 @@ public:
         Selections,
         LayoutTextPage, /// this is used for setting the correct page variable on the first resize and should not be used for other purposes
         ParaTableSpacingAtStart, /// this is used during layouting to specify if at the first paragraph margin-top should be applied.
-        IndexGeneratorManager
-        , FrameCharFormat
+        IndexGeneratorManager,
+        FrameCharFormat,
+        FrameBlockFormat
     };
 
     static const QUrl StyleManagerURL;
@@ -208,6 +237,7 @@ public:
     static const QUrl ParaTableSpacingAtStartUrl;
     static const QUrl IndexGeneratorManagerUrl;
     static const QUrl FrameCharFormatUrl;
+    static const QUrl FrameBlockFormatUrl;
 
 private:
     QTextDocument *m_document;

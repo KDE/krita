@@ -67,18 +67,24 @@ public:
     void collectNeededInfo(const QSet<int> &changedStyles);
 
     /**
-     * Will update all the text in the document that were identified during the build
+     * Will update all the text in the document that were identified during the collect
      * stage.
      * during the apply stage the updated styles are applied.
-     * @param changedStyles a list of styleIds. from KoParagraphStyle::styleId
-     *      and KoCharacterStyle::styleId
      */
-    void processUpdates(const QSet<int> &changedStyles);
+    void processUpdates();
 
     /// return the document this follower is following.
     const QTextDocument *document() const {
         return m_document;
     }
+
+private:
+    /**
+     * Helper function for clearing common properties.
+     *
+     * Clears properties in @a firstFormat that have the same value in @a secondFormat.
+     */
+    void clearCommonProperties(QTextFormat *firstFormat, const QTextFormat &secondFormat);
 
 private:
     struct Memento

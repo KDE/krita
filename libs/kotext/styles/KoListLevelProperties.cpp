@@ -445,6 +445,11 @@ void KoListLevelProperties::onStyleChanged(int key)
     int bullet=KoListStyle::bulletCharacter(key);
     if (bullet != 0)
         setBulletCharacter(QChar(bullet));
+
+    //for numbered list the relative bullet size is made 100
+    if (KoListStyle::isNumberingStyle(key)) {
+        setRelativeBulletSize(100);
+    }
 }
 
 void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& style)

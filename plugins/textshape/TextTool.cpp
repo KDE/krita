@@ -1989,6 +1989,7 @@ void TextTool::insertSpecialCharacter()
 void TextTool::insertString(const QString& string)
 {
     m_textEditor.data()->insertText(string);
+    returnFocusToCanvas();
 }
 
 void TextTool::selectFont()

@@ -49,7 +49,6 @@ private:
     KoShapeContainer *m_newParent;
     QPointF m_oldAbsPos;
     bool m_first;
-    bool m_macroFirst;
 };
 
 #endif // CHANGEANCHORPROPERTIESCOMMAND_H

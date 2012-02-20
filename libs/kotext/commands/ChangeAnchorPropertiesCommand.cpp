@@ -35,7 +35,6 @@ ChangeAnchorPropertiesCommand::ChangeAnchorPropertiesCommand(KoTextAnchor *ancho
     , m_oldParent(anchor->shape()->parent())
     , m_newParent(newParent)
     , m_first(true)
-    , m_macroFirst(parent != 0)
 {
     copyLayoutProperties(anchor, &m_oldAnchor);
     copyLayoutProperties(&newAnchorData, &m_newAnchor);
@@ -62,19 +61,6 @@ void ChangeAnchorPropertiesCommand::redo()
         textData = qobject_cast<KoTextShapeDataBase*>(m_oldParent->userData());
     } else  if (m_newParent) {
         textData = qobject_cast<KoTextShapeDataBase*>(m_newParent->userData());
-    }
-
-    // We need this weird construct if we are played within a macro then our first job
-    // is to call instantlyExecuteCommand which will "redo" us immidiately in what is the normal
-    // "first" time
-    if (m_macroFirst) {
-        m_macroFirst = false;
-        if (textData) {
-            KoTextEditor *editor = KoTextDocument(textData->document()).textEditor();
-            editor->instantlyExecuteCommand(this);
-            return;
-        }
-        //fall through as it's just a AnchorPage to AnchorPage change
     }
 
     KUndo2Command::redo();

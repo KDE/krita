@@ -43,6 +43,7 @@
 #include "kis_resource_server_provider.h"
 #include "kis_global.h"
 #include "kis_slider_spin_box.h"
+#include "kis_config.h"
 
 /// The resource item delegate for rendering the resource preview
 class KisPresetDelegate : public QAbstractItemDelegate
@@ -113,7 +114,10 @@ class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>
 
 public:
     KisPresetProxyAdapter(KoResourceServer< KisPaintOpPreset >* resourceServer)
-        : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer), m_showAll(false), m_filterNames(false){}
+        : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer), m_filterNames(false)
+    {
+        m_showAll = KisConfig().presetShowAllMode();
+    }
     virtual ~KisPresetProxyAdapter() {}
 
     virtual QList< KoResource* > resources() {

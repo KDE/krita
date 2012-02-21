@@ -26,7 +26,6 @@
 #include <KoToolManager.h>
 #include <kis_paintop_preset.h>
 #include <KoID.h>
-#include <ui_wdgpaintoppresets.h>
 #include <kconfig.h>
 #include <kglobalsettings.h>
 #include "ko_favorite_resource_manager.h"

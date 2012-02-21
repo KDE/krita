@@ -815,3 +815,15 @@ void KisConfig::setFavoriteCompositeOps(const QStringList& compositeOps)
 {
     m_cfg.writeEntry("favoriteCompositeOps", compositeOps);
 }
+
+QString KisConfig::exportConfiguration(const QString &filterId) const
+{
+    return m_cfg.readEntry("ExportConfiguration-" + filterId, QString());
+}
+
+void KisConfig::setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties)
+{
+    QString exportConfig = properties.toXML();
+    m_cfg.writeEntry("ExportConfiguration-" + filterId, exportConfig);
+
+}

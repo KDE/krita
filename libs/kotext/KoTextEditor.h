@@ -321,7 +321,7 @@ public slots:
 //    void endCustomCommand();
 
     //Same as Qt, only to be used inside KUndo2Commands
-    void beginEditBlock();
+    KUndo2Command *beginEditBlock(QString title = QString());
     void endEditBlock();
 
     bool hasComplexSelection() const;

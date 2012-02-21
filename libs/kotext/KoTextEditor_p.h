@@ -65,6 +65,7 @@ public:
     QTextDocument *document;
     QStack<KUndo2Command*> commandStack;
     bool addNewCommand;
+    bool dummyMacroAdded;
     int inCustomCommand;
     QString commandTitle;
 

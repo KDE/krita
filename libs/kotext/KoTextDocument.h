@@ -43,6 +43,7 @@ class KUndo2Stack;
 class KoTextEditor;
 class KoOdfLineNumberingConfiguration;
 class KoChangeTracker;
+class KoShapeController;
 
 /**
  * KoTextDocument provides an easy mechanism to set and access the
@@ -142,6 +143,12 @@ public:
     /// Set the KoInlineTextObjectManager
     void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
+    /// Set the KoDocument's shapeController. This controller exists as long as KoDocument exists. It should only be used for deleting shapes.
+    void setShapeController(KoShapeController *controller);
+
+    /// Returns the shapeController
+    KoShapeController *shapeController() const;
+
     QTextFrame* auxillaryFrame();
 
     /**
@@ -188,8 +195,9 @@ public:
         Selections,
         LayoutTextPage, /// this is used for setting the correct page variable on the first resize and should not be used for other purposes
         ParaTableSpacingAtStart, /// this is used during layouting to specify if at the first paragraph margin-top should be applied.
-        IndexGeneratorManager
-        , FrameCharFormat
+        IndexGeneratorManager ,
+        FrameCharFormat ,
+        ShapeController
     };
 
     static const QUrl StyleManagerURL;
@@ -208,6 +216,7 @@ public:
     static const QUrl ParaTableSpacingAtStartUrl;
     static const QUrl IndexGeneratorManagerUrl;
     static const QUrl FrameCharFormatUrl;
+    static const QUrl ShapeControllerURL;
 
 private:
     QTextDocument *m_document;

@@ -96,6 +96,7 @@ KoTextEditor::Private::Private(KoTextEditor *qq, QTextDocument *document)
     : q(qq)
     , document (document)
     , addNewCommand(true)
+    , dummyMacroAdded(false)
     , inCustomCommand(0)
     , editProtectionCached(false)
 {
@@ -144,14 +145,14 @@ void KoTextEditor::Private::documentCommandAdded()
     };
 
     if (commandStack.isEmpty()) {
-        commandStack.push(new KUndo2Command(commandTitle, !commandStack.isEmpty()?commandStack.top():0));
+        commandStack.push(new KUndo2Command(commandTitle));
         if (KoTextDocument(document).undoStack()) {
             KoTextDocument(document).undoStack()->push(commandStack.top());
         }
         addNewCommand = false;
     }
     else if (addNewCommand) {
-        commandStack.push(new KUndo2Command(commandTitle, !commandStack.isEmpty()?commandStack.top():0));
+        commandStack.push(new KUndo2Command(commandTitle, commandStack.top()));
         addNewCommand = false;
     }
     else if ((editorState == KeyPress || editorState == Delete) && !commandStack.isEmpty() && commandStack.top()->childCount()) {
@@ -177,8 +178,8 @@ void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, Q
     }
     if (newState == NoOp && !commandStack.isEmpty()) {
         commandStack.pop();
-        addNewCommand = true;
         if (commandStack.isEmpty()) {
+            addNewCommand = true;
             editorState = NoOp;
         }
         return;
@@ -1191,6 +1192,7 @@ bool KoTextEditor::deleteInlineObjects(bool backward)
     return d->deleteInlineObjects(backward);
 }
 
+//TODO: use the KoTextDocument provided shapeController. Then remove the parameter sent from the TextTool
 void KoTextEditor::paste(const QMimeData *mimeData,
                          KoShapeController *shapeController,
                          bool pasteAsText)
@@ -1283,6 +1285,7 @@ bool KoTextEditor::paste(KoTextEditor *editor,
     return true;
 }
 
+//TODO use the KoTextDocument shapeController. Then remove the parameter sent from TextTool
 void KoTextEditor::deleteChar(bool previous, KoShapeController *shapeController)
 {
     if (isEditProtected()) {
@@ -1951,14 +1954,14 @@ void KoTextEditor::insertText(const QString &text)
     }
 
     bool hasSelection = d->caret.hasSelection();
-//    if (!hasSelection) {
+    if (!hasSelection) {
         d->updateState(KoTextEditor::Private::KeyPress, i18nc("(qtundo-format)", "Typing"));
-//    }
-//    else {
-//        beginEditBlock();
-//        d->commandTitle = i18nc("(qtundo-format)", "Typing");
-//        addCommand(new );
-//    }
+    }
+    else {
+        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Typing"));
+        addCommand(new DeleteCommand(DeleteCommand::NextChar, d->document, KoTextDocument(d->document).shapeController(), topCommand));
+        d->caret.beginEditBlock();
+    }
 
     //first we make sure that we clear the inlineObject charProperty, if we have no selection
     if (!hasSelection && d->caret.charFormat().hasProperty(KoCharacterStyle::InlineInstanceId))
@@ -1997,6 +2000,11 @@ void KoTextEditor::insertText(const QString &text)
     d->caret.clearSelection();
 
     emit cursorPositionChanged();
+
+    if (hasSelection) {
+        d->caret.endEditBlock();
+        endEditBlock();
+    }
 }
 
 void KoTextEditor::insertText(const QString &text, const QTextCharFormat &format)
@@ -2352,17 +2360,38 @@ const QTextTable *KoTextEditor::currentTable () const
     return d->caret.currentTable();
 }
 
-void KoTextEditor::beginEditBlock()
+KUndo2Command *KoTextEditor::beginEditBlock(QString title)
 {
     if (!d->inCustomCommand) {
-        d->updateState(KoTextEditor::Private::Custom);
+        d->updateState(KoTextEditor::Private::Custom, title);
+        if (d->commandStack.isEmpty()) {
+            KUndo2Command *command = new KUndo2Command(title);
+            d->commandStack.push(command);
+            ++d->inCustomCommand;
+            d->dummyMacroAdded = true;
+            KUndo2QStack *stack = KoTextDocument(d->document).undoStack();
+            if (stack) {
+                stack->push(command);
+            } else {
+                command->redo();
+            }
+        }
     }
-    d->caret.beginEditBlock();
+    if (!(d->dummyMacroAdded && d->inCustomCommand == 1)) {
+        d->caret.beginEditBlock();
+    }
+
+    return (d->commandStack.isEmpty())?0:d->commandStack.top();
 }
 
 void KoTextEditor::endEditBlock()
 {
-    d->caret.endEditBlock();
+    if (d->dummyMacroAdded && d->inCustomCommand == 1) {
+        --d->inCustomCommand;
+        d->dummyMacroAdded = false;
+    } else {
+        d->caret.endEditBlock();
+    }
     if (!d->inCustomCommand) {
         d->updateState(KoTextEditor::Private::NoOp);
     }

@@ -1022,8 +1022,9 @@ void KisView2::slotSaveIncremental()
         KMessageBox::error(this, "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental version");
         return;
     }
-
+    pDoc->setSaveInBatchMode(true);
     pDoc->saveAs(fileName);
+    pDoc->setSaveInBatchMode(false);
 
     shell()->updateCaption();
 }
@@ -1128,8 +1129,10 @@ void KisView2::slotSaveIncrementalBackup()
         } while (fileAlreadyExists);
 
         // Save both as backup and on current file for interapplication workflow
+        pDoc->setSaveInBatchMode(true);
         pDoc->saveAs(backupFileName);
         pDoc->saveAs(fileName);
+        pDoc->setSaveInBatchMode(false);
 
         shell()->updateCaption();
     }

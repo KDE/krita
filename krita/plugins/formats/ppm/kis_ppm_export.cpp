@@ -19,6 +19,7 @@
 #include "kis_ppm_export.h"
 
 #include <KPluginFactory>
+#include <KApplication>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
@@ -32,6 +33,8 @@
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
+#include <kis_properties_configuration.h>
+#include <kis_config.h>
 
 #include "ui_kis_wdg_options_ppm.h"
 #include <qendian.h>
@@ -155,7 +158,14 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     optionsPPM.setupUi(wdg);
 
     kdb->setMainWidget(wdg);
-    
+    kapp->restoreOverrideCursor();
+
+    QString filterConfig = KisConfig().exportConfiguration("PPM");
+    KisPropertiesConfiguration cfg;
+    cfg.fromXML(filterConfig);
+
+    optionsPPM.type->setCurrentIndex(cfg.getInt("type", 0));
+
     if (!m_chain->manager()->getBatchMode()) {
         if (kdb->exec() == QDialog::Rejected) {
             return KoFilter::OK; // FIXME Cancel doesn't exist :(
@@ -164,6 +174,10 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
 
     bool rgb = (to == "image/x-portable-pixmap");
     bool binary = optionsPPM.type->currentIndex() == 0;
+    cfg.setProperty("type", optionsPPM.type->currentIndex());
+    KisConfig().setExportConfiguration("PPM", cfg);
+
+
     bool bitmap = (to == "image/x-portable-bitmap");
 
     KisImageWSP image = output->image();

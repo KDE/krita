@@ -2,6 +2,7 @@
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -806,47 +807,6 @@ void KoTextEditor::setTextColor(const QColor &color)
     emit textFormatChanged();
 }
 
-class KoTextVisitor
-{
-public:
-    KoTextVisitor(KoTextEditor *editor)
-        : m_abortVisiting(false)
-        , m_editor(editor)
-    {
-    }
-
-    virtual ~KoTextVisitor() {}
-    // called whenever a visit was prevented by editprotection
-    virtual void nonVisit() {}
-
-    virtual void visitFragmentSelection(QTextCursor )
-    {
-    }
-
-    // The default implementation calls visitFragmentSelection on each fragment.intersect.selection
-    virtual void visitBlock(QTextBlock block, const QTextCursor &caret)
-    {
-        for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
-            QTextCursor fragmentSelection(caret);
-            fragmentSelection.setPosition(qMax(caret.selectionStart(), it.fragment().position()));
-            fragmentSelection.setPosition(qMin(caret.selectionEnd(), it.fragment().position() + it.fragment().length()), QTextCursor::KeepAnchor);
-
-            if (fragmentSelection.anchor() >= fragmentSelection.position()) {
-                continue;
-            }
-
-            visitFragmentSelection(fragmentSelection);
-        }
-    }
-
-    bool abortVisiting() { return m_abortVisiting;}
-    void setAbortVisiting(bool abort) {m_abortVisiting = abort;}
-    KoTextEditor * editor() {return m_editor;}
-private:
-    bool m_abortVisiting;
-    KoTextEditor *m_editor;
-};
-
 class SetCharacterStyleVisitor : public KoTextVisitor
 {
 public:
@@ -1323,7 +1283,7 @@ bool KoTextEditor::paste(KoTextEditor *editor,
     return true;
 }
 
-void KoTextEditor::deleteChar(MoveOperation direction, KoShapeController *shapeController)
+void KoTextEditor::deleteChar(bool previous, KoShapeController *shapeController)
 {
     if (isEditProtected()) {
         return;
@@ -1336,7 +1296,7 @@ void KoTextEditor::deleteChar(MoveOperation direction, KoShapeController *shapeC
         trackChanges = true;
     }
 
-    if (direction == PreviousChar) {
+    if (previous) {
         if (d->caret.block().blockFormat().hasProperty(KoParagraphStyle::HiddenByTable)) {
             movePosition(QTextCursor::PreviousCharacter);
             return; // it becomes just a cursor movement;
@@ -1352,7 +1312,7 @@ void KoTextEditor::deleteChar(MoveOperation direction, KoShapeController *shapeC
     }
 
     if (trackChanges) {
-        if (direction == PreviousChar) {
+        if (previous) {
             addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar,
                                                       d->document,
                                                       shapeController));
@@ -1364,7 +1324,7 @@ void KoTextEditor::deleteChar(MoveOperation direction, KoShapeController *shapeC
         }
     }
     else {
-        if (direction == PreviousChar) {
+        if (previous) {
             addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
                                          d->document,
                                          shapeController));
@@ -1463,7 +1423,7 @@ QTextCharFormat KoTextEditor::blockCharFormat() const
 
 QTextBlockFormat KoTextEditor::blockFormat() const
 {
-    return d->caret.blockFormat();
+     return d->caret.blockFormat();
 }
 
 int KoTextEditor::blockNumber() const
@@ -1514,14 +1474,7 @@ void KoTextEditor::deleteChar()
         }
     }
 
-    QTextCharFormat charFormat = d->caret.charFormat();
-
-    if (!d->caret.hasSelection())
-        d->caret.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-
-    d->caret.deleteChar();
-
-    d->caret.setCharFormat(charFormat);
+    deleteChar(false, 0);
 
     emit cursorPositionChanged();
 }
@@ -1555,14 +1508,8 @@ void KoTextEditor::deletePreviousChar()
         }
     }
 
-    QTextCharFormat charFormat = d->caret.charFormat();
+    deleteChar(true, 0);
 
-    if (!d->caret.hasSelection())
-        d->caret.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-
-    d->caret.deleteChar();
-
-    d->caret.setCharFormat(charFormat);
     emit cursorPositionChanged();
 }
 

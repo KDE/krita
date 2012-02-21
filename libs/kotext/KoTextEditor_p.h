@@ -74,6 +74,47 @@ public:
     bool editProtectionCached;
 };
 
+class KoTextVisitor
+{
+public:
+    KoTextVisitor(KoTextEditor *editor)
+        : m_abortVisiting(false)
+        , m_editor(editor)
+    {
+    }
+
+    virtual ~KoTextVisitor() {}
+    // called whenever a visit was prevented by editprotection
+    virtual void nonVisit() {}
+
+    virtual void visitFragmentSelection(QTextCursor )
+    {
+    }
+
+    // The default implementation calls visitFragmentSelection on each fragment.intersect.selection
+    virtual void visitBlock(QTextBlock block, const QTextCursor &caret)
+    {
+        for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
+            QTextCursor fragmentSelection(caret);
+            fragmentSelection.setPosition(qMax(caret.selectionStart(), it.fragment().position()));
+            fragmentSelection.setPosition(qMin(caret.selectionEnd(), it.fragment().position() + it.fragment().length()), QTextCursor::KeepAnchor);
+
+            if (fragmentSelection.anchor() >= fragmentSelection.position()) {
+                continue;
+            }
+
+            visitFragmentSelection(fragmentSelection);
+        }
+    }
+
+    bool abortVisiting() { return m_abortVisiting;}
+    void setAbortVisiting(bool abort) {m_abortVisiting = abort;}
+    KoTextEditor * editor() {return m_editor;}
+private:
+    bool m_abortVisiting;
+    KoTextEditor *m_editor;
+};
+
 class BlockFormatVisitor
 {
 public:

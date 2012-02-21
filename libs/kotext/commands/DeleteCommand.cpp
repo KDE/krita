@@ -3,6 +3,7 @@
  * Copyright (C) 2009 Ganesh Paramasivam <ganesh@crystalfab.com>
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +26,7 @@
 #include <kundo2command.h>
 
 #include <KoTextEditor.h>
+#include "KoTextEditor_p.h"
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextAnchor.h>
@@ -81,87 +83,86 @@ void DeleteCommand::redo()
     }
 }
 
+class DeleteVisitor : public KoTextVisitor
+{
+public:
+    DeleteVisitor(KoTextEditor *editor, DeleteCommand *command)
+        : KoTextVisitor(editor)
+        , m_first(true)
+        , m_mergePossible(true)
+        , m_command(command)
+    {
+    }
+
+    virtual void visitFragmentSelection(QTextCursor fragmentSelection)
+    {
+        if (m_first) {
+            m_firstFormat = fragmentSelection.charFormat();
+            m_first = false;
+        }
+
+        if (m_mergePossible && fragmentSelection.charFormat() != m_firstFormat) {
+            m_mergePossible = false;
+        }
+
+        KoTextDocument textDocument(fragmentSelection.document());
+        KoInlineTextObjectManager *manager = textDocument.inlineTextObjectManager();
+        KoInlineObject *object;
+
+        QString selected = fragmentSelection.selectedText();
+        fragmentSelection.setPosition(fragmentSelection.selectionStart() + 1);
+        int position = fragmentSelection.position();
+        const QChar *data = selected.constData();
+        for (int i = 0; i < selected.length(); i++) {
+            if (data->unicode() == QChar::ObjectReplacementCharacter) {
+                fragmentSelection.setPosition(position + i);
+                object = manager->inlineTextObject(fragmentSelection);
+                m_command->deleteTextAnchor(object);
+                m_command->m_invalidInlineObjects.insert(object);
+            }
+            data++;
+        }
+    }
+
+    bool m_first;
+    bool m_mergePossible;
+    DeleteCommand *m_command;
+    QTextCharFormat m_firstFormat;
+};
+
 void DeleteCommand::doDelete()
 {
     KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
     Q_ASSERT(textEditor);
     QTextCursor *caret = textEditor->cursor();
-    QTextCursor cursor(*caret);
+    QTextCharFormat charFormat = caret->charFormat();
 
-    //Store the position and length. Will be used in checkMerge
-    m_position = cursor.selectionStart();
-    m_length = cursor.selectionEnd() - cursor.selectionStart();
+    DeleteVisitor visitor(textEditor, this);
+    textEditor->recursivelyVisitSelection(m_document.data()->rootFrame()->begin(), visitor);
+    m_mergePossible = visitor.m_mergePossible;
 
-    //TODO FIXME Should handle complex selections
-    //Store the charFormat. If the selection has multiple charFormats set m_multipleFormatDeletion to true. Will be used in checkMerge
-    QTextCharFormat currFormat;
-    QTextCharFormat firstFormat;
-
-    m_multipleFormatDeletion = false;
-
-    for (int i = m_position; i < (m_position + m_length); i++) {
-        cursor.setPosition(i+1);
-        currFormat = cursor.charFormat();
-
-        if (i == m_position ) {
-            firstFormat = currFormat;
-            continue;
-        }
-
-        if (currFormat != firstFormat) {
-            m_multipleFormatDeletion = true;
-            break;
+    if (!textEditor->hasSelection()) {
+        if (m_mode == PreviousChar) {
+            caret->movePosition(QTextCursor::Left, QTextCursor::KeepAnchor);
+        } else {
+            caret->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
         }
     }
 
-    if (!m_multipleFormatDeletion)
-        m_format = caret->charFormat();;
-
-    //Delete any inline objects present within the selection
-    deleteInlineObjects();
-
-    //Now finally Delete the selected text. Don't use selection.deleteChar() direct
-    //cause the Texteditor needs to know about the changes too.
-    if (m_mode == PreviousChar) {
-        textEditor->deletePreviousChar();
+    if (textEditor->hasComplexSelection()) {
+        m_mergePossible = false;
     }
-    else {
-        textEditor->deleteChar();
+
+    if (m_mergePossible) {
+        // Store various info needed for checkMerge
+        m_format = textEditor->charFormat();;
+        m_position = textEditor->selectionStart();
+        m_length = textEditor->selectionEnd() - textEditor->selectionStart();
     }
-}
 
-void DeleteCommand::deleteInlineObjects()
-{
-    KoTextDocument textDocument(m_document);
-    KoTextEditor *textEditor = textDocument.textEditor();
-    Q_ASSERT(textEditor);
-    QTextCursor *caret = textEditor->cursor();
-    QTextCursor cursor(*caret);
-    KoInlineTextObjectManager *manager = textDocument.inlineTextObjectManager();
-    KoInlineObject *object;
+    caret->deleteChar();
 
-    if (cursor.hasSelection()) {
-        QString selected = cursor.selectedText();
-        cursor.setPosition(cursor.selectionStart() + 1);
-        int position = cursor.position();
-        const QChar *data = selected.constData();
-        for (int i = 0; i < selected.length(); i++) {
-            if (data->unicode() == QChar::ObjectReplacementCharacter) {
-                cursor.setPosition(position + i);
-                object = manager->inlineTextObject(cursor);
-                deleteTextAnchor(object);
-                m_invalidInlineObjects.insert(object);
-            }
-            data++;
-        }
-    } else {
-        if (!(m_mode == PreviousChar))
-            cursor.movePosition(QTextCursor::Right);
-
-        object = manager->inlineTextObject(cursor);
-        deleteTextAnchor(object);
-        m_invalidInlineObjects.insert(object);
-    }
+    caret->setCharFormat(charFormat);
 }
 
 void DeleteCommand::deleteTextAnchor(KoInlineObject *object)
@@ -232,15 +233,14 @@ bool DeleteCommand::mergeWith(const KUndo2Command *command)
     return true;
 }
 
-bool DeleteCommand::checkMerge( const KUndo2Command *command )
+bool DeleteCommand::checkMerge(const KUndo2Command *command)
 {
     DeleteCommand *other = const_cast<DeleteCommand *>(static_cast<const DeleteCommand *>(command));
 
-    if (m_multipleFormatDeletion || other->m_multipleFormatDeletion)
+    if (!(m_mergePossible && other->m_mergePossible))
         return false;
 
-    if (m_position == other->m_position
-            && m_format == other->m_format) {
+    if (m_position == other->m_position && m_format == other->m_format) {
         m_length += other->m_length;
         return true;
     }

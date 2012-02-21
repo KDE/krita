@@ -2,6 +2,7 @@
 * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
 * Copyright (C) 2009 Thomas Zander <zander@kde.org>
 * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
+* Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Library General Public
@@ -63,12 +64,6 @@ class KOTEXT_EXPORT KoTextEditor: public QObject
 {
     Q_OBJECT
 public:
-
-    enum MoveOperation {
-        PreviousChar,
-        NextChar
-    };
-
     enum ChangeListFlag {
         NoFlags = 0,
         ModifyExistingList = 1,
@@ -276,13 +271,6 @@ public slots:
                bool pasteAsText = false);
 
     /**
-     * Delete one character in the specified direction.
-     * @param direction the direction into which we delete. Valid values are
-     * @param shapeController the canvas' shapeController
-     */
-    void deleteChar(MoveOperation direction, KoShapeController *shapeController);
-
-    /**
      * @param numberingEnabled when true, we will enable numbering for the current paragraph (block).
      */
     void toggleListNumbering(bool numberingEnabled);
@@ -477,6 +465,13 @@ signals:
     void textFormatChanged();
 
 protected:
+    /**
+     * Delete one character in the specified direction.
+     * @param direction the direction into which we delete. Valid values are
+     * @param shapeController the canvas' shapeController
+     */
+    void deleteChar(bool previous, KoShapeController *shapeController);
+
     void recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisitor &visitor) const;
 
 private:

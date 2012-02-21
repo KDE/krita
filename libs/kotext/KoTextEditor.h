@@ -243,9 +243,6 @@ public slots:
      */
     void insertFrameBreak();
 
-    /// delete all inline objects in current cursor position or selection
-    bool deleteInlineObjects(bool backward = false);
-
     /**
      * paste the given mimedata object at the current position
      * @param mimeData: the mimedata containing text, html or odf
@@ -325,16 +322,6 @@ public slots:
 
     bool hasComplexSelection() const;
 
-    void insertBlock();
-
-    void insertBlock(const QTextBlockFormat &format);
-
-    void insertBlock(const QTextBlockFormat &format, const QTextCharFormat &charFormat);
-
-// NOT part of the api, since QTextDocumentFragment translates to html, losing all formatting.
-// so intentionally not exposed.
-//    void insertFragment(const QTextDocumentFragment &fragment);
-
      /**
      * Insert a table at the current cursor position.
      * @param rows the number of rows in the created table.
@@ -410,16 +397,9 @@ public slots:
 
     void insertText(const QString &text);
 
-    void insertText(const QString &text, const QTextCharFormat &format);
-
     void insertHtml(const QString &html);
-//    void joinPreviousEditBlock ();
-
-    void mergeBlockCharFormat( const QTextCharFormat &modifier);
 
     void mergeBlockFormat( const QTextBlockFormat &modifier);
-
-    void mergeCharFormat(const QTextCharFormat &modifier);
 
     bool movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int n = 1);
 
@@ -439,15 +419,9 @@ public slots:
 
     int selectionStart() const;
 
-// intentionally commented out: these  are unimplemented.
+    void setBlockFormat(const QTextBlockFormat &format);
 
-//    void setBlockCharFormat(const QTextCharFormat &format);
-
-   void setBlockFormat(const QTextBlockFormat &format);
-
-   void setCharFormat(const QTextCharFormat &format);
-
-//    void setTableFormat(const QTextTableFormat &format);
+    void setCharFormat(const QTextCharFormat &format);
 
     void setPosition(int pos, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
 
@@ -468,7 +442,7 @@ protected:
      * Delete one character in the specified direction or a selection.
      * @param previous should be true if act like backspace
      */
-    void deleteChar(bool previous);
+    void deleteChar(bool previous, KUndo2Command *parent = 0);
 
     void recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisitor &visitor) const;
 

@@ -194,8 +194,6 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(KoTextEditor *editor)
     editor->setPosition(editor->anchor() -1);
     editor->movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, block.length());
     deleteSelection(editor);
-    // Insert a new Block and paste the copied contents
-    editor->insertBlock();
     // Mark it as inserted content
     QTextCharFormat format = editor->charFormat();
     editor->registerTrackedChange(*editor->cursor(), KoGenChange::InsertChange, i18n("Key Press"), format, format, false);

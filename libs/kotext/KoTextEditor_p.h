@@ -36,6 +36,8 @@
 #include <QTextDocument>
 #include <QTimer>
 
+class KUndo2Command;
+
 class KoTextEditor::Private
 {
 public:
@@ -54,8 +56,7 @@ public:
     void documentCommandAdded();
     void updateState(State newState, QString title = QString());
 
-    bool deleteInlineObjects(bool backwards = false);
-    void newLine();
+    void newLine(KUndo2Command *parent);
     void clearCharFormatProperty(int propertyId);
 
     void emitTextFormatChanged();

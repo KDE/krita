@@ -1,0 +1,6 @@
+Rulers
+
+* should be saved in document
+* toggle visiblity en-masse/individually
+* list rulers
+* should not interfere with one another; "activate" one particular ruler or set of rulers?

@@ -28,7 +28,7 @@
 #include <QTextDocument>
 
 ChangeAnchorPropertiesCommand::ChangeAnchorPropertiesCommand(KoTextAnchor *anchor, const KoTextAnchor &newAnchorData, KoShapeContainer *newParent, KUndo2Command *parent)
-    : KUndo2Command(parent)
+    : KUndo2Command("Change Anchor Properties", parent) //Don't translate
     , m_anchor(anchor)
     , m_oldAnchor(0)
     , m_newAnchor(0)

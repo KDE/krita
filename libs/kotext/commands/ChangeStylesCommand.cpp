@@ -31,7 +31,7 @@ ChangeStylesCommand::ChangeStylesCommand(ChangeFollower *changeFollower
         , const QList<KoParagraphStyle *> &origParagraphStyles
         , const QSet<int> &changedStyles
         , KUndo2Command *parent)
-    : KUndo2Command(parent)
+    : KUndo2Command("stylechangecommand",parent) //Don't translate
     , m_changeFollower(changeFollower)
     , m_origCharacterStyles(origCharacterStyles)
     , m_origParagraphStyles(origParagraphStyles)

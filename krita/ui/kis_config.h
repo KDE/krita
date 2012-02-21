@@ -221,6 +221,9 @@ public:
     int presetChooserViewMode() const;
     void setPresetChooserViewMode(const int mode);
 
+    bool presetShowAllMode() const;
+    void setPresetShowAllMode(bool showAll);
+
     bool firstRun() const;
     void setFirstRun(const bool firstRun) const;
 

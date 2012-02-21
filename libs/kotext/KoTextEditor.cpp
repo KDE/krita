@@ -1285,12 +1285,13 @@ bool KoTextEditor::paste(KoTextEditor *editor,
     return true;
 }
 
-//TODO use the KoTextDocument shapeController. Then remove the parameter sent from TextTool
-void KoTextEditor::deleteChar(bool previous, KoShapeController *shapeController)
+void KoTextEditor::deleteChar(bool previous)
 {
     if (isEditProtected()) {
         return;
     }
+
+    KoShapeController *shapeController = KoTextDocument(d->document).shapeController();
 
     // Find out if we should track changes or not
     KoChangeTracker *ct = KoTextDocument(d->document).changeTracker();
@@ -1477,7 +1478,7 @@ void KoTextEditor::deleteChar()
         }
     }
 
-    deleteChar(false, 0);
+    deleteChar(false);
 
     emit cursorPositionChanged();
 }
@@ -1511,7 +1512,7 @@ void KoTextEditor::deletePreviousChar()
         }
     }
 
-    deleteChar(true, 0);
+    deleteChar(true);
 
     emit cursorPositionChanged();
 }

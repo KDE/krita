@@ -117,7 +117,6 @@ public:
             if (data->unicode() == QChar::ObjectReplacementCharacter) {
                 fragmentSelection.setPosition(position + i);
                 object = manager->inlineTextObject(fragmentSelection);
-                m_command->deleteTextAnchor(object);
                 m_command->m_invalidInlineObjects.insert(object);
             }
             data++;
@@ -141,6 +140,9 @@ void DeleteCommand::doDelete()
     textEditor->recursivelyVisitSelection(m_document.data()->rootFrame()->begin(), visitor);
     m_mergePossible = visitor.m_mergePossible;
 
+   foreach (KoInlineObject *object, m_invalidInlineObjects) {
+        deleteTextAnchor(object);
+   }
     if (!textEditor->hasSelection()) {
         if (m_mode == PreviousChar) {
             caret->movePosition(QTextCursor::Left, QTextCursor::KeepAnchor);

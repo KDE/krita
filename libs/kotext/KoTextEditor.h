@@ -309,7 +309,6 @@ public slots:
 
     int columnNumber() const;
 
-//the two following methods are called by the DeleteCommand. They are not meant to be called directly. Do it with extreme care, if and only if you perfectly understand the undo/redo framework.
     void deleteChar();
 
     void deletePreviousChar();
@@ -466,11 +465,10 @@ signals:
 
 protected:
     /**
-     * Delete one character in the specified direction.
-     * @param direction the direction into which we delete. Valid values are
-     * @param shapeController the canvas' shapeController
+     * Delete one character in the specified direction or a selection.
+     * @param previous should be true if act like backspace
      */
-    void deleteChar(bool previous, KoShapeController *shapeController);
+    void deleteChar(bool previous);
 
     void recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisitor &visitor) const;
 

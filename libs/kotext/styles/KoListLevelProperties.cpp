@@ -6,6 +6,7 @@
  * Copyright (C) 2010 Nandita Suri <suri.nandita@gmail.com>
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
  * Copyright (C) 2011-2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
+ * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -586,6 +587,45 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         case KoOdfNumberDefinition::RomanUpperCase:
             setStyle(KoListStyle::UpperRomanItem);
             break;
+        case KoOdfNumberDefinition::ArabicAlphabet:
+                    setStyle(KoListStyle::ArabicAlphabet);
+                    break;
+        case KoOdfNumberDefinition::Thai:
+            setStyle(KoListStyle::Thai);
+            break;
+        case KoOdfNumberDefinition::Abjad:
+            setStyle(KoListStyle::Abjad);
+            break;
+        case KoOdfNumberDefinition::AbjadMinor:
+            setStyle(KoListStyle::AbjadMinor);
+            break;
+        case KoOdfNumberDefinition::Tibetan:
+            setStyle(KoListStyle::Tibetan);
+            break;
+        case KoOdfNumberDefinition::Telugu:
+            setStyle(KoListStyle::Telugu);
+            break;
+        case KoOdfNumberDefinition::Tamil:
+            setStyle(KoListStyle::Tamil);
+            break;
+        case KoOdfNumberDefinition::Oriya:
+            setStyle(KoListStyle::Oriya);
+            break;
+        case KoOdfNumberDefinition::Malayalam:
+            setStyle(KoListStyle::Malayalam);
+            break;
+        case KoOdfNumberDefinition::Kannada:
+            setStyle(KoListStyle::Kannada);
+            break;
+        case KoOdfNumberDefinition::Gurumukhi:
+            setStyle(KoListStyle::Gurumukhi);
+            break;
+        case KoOdfNumberDefinition::Gujarati:
+            setStyle(KoListStyle::Gujarati);
+            break;
+        case KoOdfNumberDefinition::Bengali:
+            setStyle(KoListStyle::Bengali);
+            break;
         case KoOdfNumberDefinition::Numeric:
         default:
             setStyle(KoListStyle::DecimalItem);
@@ -752,14 +792,26 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
         if (d->stylesPrivate.contains(KoListStyle::DisplayLevel))
             writer->addAttribute("text:display-levels", d->stylesPrivate.value(KoListStyle::DisplayLevel).toInt());
 
-        QChar format;
+        QByteArray format;
         switch (style()) {
-        case KoListStyle::DecimalItem:      format = '1'; break;
-        case KoListStyle::AlphaLowerItem:   format = 'a'; break;
-        case KoListStyle::UpperAlphaItem:   format = 'A'; break;
-        case KoListStyle::RomanLowerItem:   format = 'i'; break;
-        case KoListStyle::UpperRomanItem:   format = 'I'; break;
-        default:                            format = QChar::Null; break;
+        case KoListStyle::DecimalItem:      format = "1"; break;
+        case KoListStyle::AlphaLowerItem:   format = "a"; break;
+        case KoListStyle::UpperAlphaItem:   format = "A"; break;
+        case KoListStyle::RomanLowerItem:   format = "i"; break;
+        case KoListStyle::UpperRomanItem:   format = "I"; break;
+        case KoListStyle::ArabicAlphabet:   format = "أ, ب, ت, ..."; break;
+        case KoListStyle::Thai:             format = "ก, ข, ค, ..."; break;
+        case KoListStyle::Abjad:            format = "أ, ب, ج, ..."; break;
+        case KoListStyle::AbjadMinor:       format = "ﺃ,ﺏ, ﺝ, ... "; break;
+        case KoListStyle::Telugu:           format = "౧, ౨, ౩, ..."; break;
+        case KoListStyle::Tamil:            format = "௧, ௨, ௪, ..."; break;
+        case KoListStyle::Oriya:            format = "୧, ୨, ୩, ..."; break;
+        case KoListStyle::Malayalam:        format = "൧, ൨, ൩, ..."; break;
+        case KoListStyle::Kannada:          format = "೧, ೨, ೩, ..."; break;
+        case KoListStyle::Gurumukhi:        format = "੧, ੨, ੩, ..."; break;
+        case KoListStyle::Gujarati:         format = "૧, ૨, ૩, ..."; break;
+        case KoListStyle::Bengali:          format = "১, ২, ৩, ..."; break;
+        default:                            format = ""; break;
         }
         writer->addAttribute("style:num-format", format);
     }

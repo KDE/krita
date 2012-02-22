@@ -353,7 +353,7 @@ void RdfTest::testRemoveMarkers()
     Q_ASSERT(editor.hasSelection());
 
     // remove the table + the markers from the document
-    editor.removeSelectedText();
+    editor.deleteChar();
 
     results = TestSemanticItem::allObjects(&rdfDoc);
 

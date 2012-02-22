@@ -119,7 +119,7 @@ void TestKoTextEditor::testRemoveSelectedText()
     Q_ASSERT(editor.hasSelection());
 
     // remove the table + the markers from the document
-    editor.removeSelectedText();
+    editor.deleteChar();
 
     // check whether the bookmarks have gone.
     Q_ASSERT(inlineObjectManager.inlineTextObjects().length() == 0);

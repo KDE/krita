@@ -38,6 +38,8 @@ class KoShape;
 class QTextCursor;
 
 class DeleteVisitor;
+class KoBookmark;
+class KoTextEditor;
 
 class DeleteCommand : public KoTextCommandBase
 {
@@ -64,6 +66,8 @@ private:
 
     QList<KUndo2Command *> m_shapeDeleteCommands;
     QSet<KoInlineObject *> m_invalidInlineObjects;
+    QList<KoBookmark *>m_unmatchedBookmarks;
+    QSet<KoInlineObject *> m_bookmarksToRemove;
     bool m_first;
     bool m_undone;
     DeleteMode m_mode;
@@ -73,6 +77,8 @@ private:
     bool m_mergePossible;
 
     void doDelete();
+    void deleteBookmark(KoInlineObject *object);
+    void restoreUnmatchedBookmarks(KoTextEditor *editor);
     void deleteTextAnchor(KoInlineObject *object);
     bool checkMerge(const KUndo2Command *command);
     void updateListChanges();

@@ -407,8 +407,6 @@ public slots:
 
     int position() const;
 
-    void removeSelectedText();
-
     void select(QTextCursor::SelectionType selection);
 
     QString selectedText() const;

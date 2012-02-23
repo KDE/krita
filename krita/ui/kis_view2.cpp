@@ -330,7 +330,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("view_show_just_the_canvas", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
 
-
     //Workaround, by default has the same shortcut as mirrorCanvas
     KAction* action = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
     if (action) {
@@ -494,6 +493,8 @@ void KisView2::dropEvent(QDropEvent *event)
             QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
             QAction *openInNewDocuments = new KAction(i18n("Open in New Documents"), &popup);
 
+            QAction *replaceCurrentDocument = new KAction(i18n("Replace Current Document"), &popup);
+
             QAction *cancel = new KAction(i18n("Cancel"), &popup);
 
             if (urls.count() == 1) {
@@ -501,6 +502,7 @@ void KisView2::dropEvent(QDropEvent *event)
                     popup.addAction(insertAsNewLayer);
                 }
                 popup.addAction(openInNewDocument);
+                popup.addAction(replaceCurrentDocument);
             } else {
                 if (!image().isNull()) {
                     popup.addAction(insertAsNewLayers);
@@ -518,6 +520,15 @@ void KisView2::dropEvent(QDropEvent *event)
 
                     if (action == insertAsNewLayer || action == insertAsNewLayers) {
                         m_d->imageManager->importImage(KUrl(url));
+                    }
+                    else if (action == replaceCurrentDocument) {
+                        if (m_d->doc->isModified()) {
+                            m_d->doc->save();
+                        }
+                        if (shell() != 0) {
+                            shell()->openDocument(url);
+                        }
+                        shell()->close();
                     } else {
                         Q_ASSERT(action == openInNewDocument || action == openInNewDocuments);
 
@@ -1236,5 +1247,6 @@ void KisView2::showJustTheCanvas(bool toggled)
         }
     }
 }
+
 
 #include "kis_view2.moc"

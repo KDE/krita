@@ -923,7 +923,7 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     }
     else {
         lock();
-        KisPaintDeviceSP mergedDevice = new KisPaintDevice(*prevLayer->projection());
+        mergedDevice = new KisPaintDevice(*prevLayer->projection());
         unlock();
 
         KisPainter gc(mergedDevice);

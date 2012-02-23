@@ -895,28 +895,48 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     KisLayerSP prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
     if (!prevLayer) return 0;
 
-
     refreshHiddenArea(layer, bounds());
     refreshHiddenArea(prevLayer, bounds());
 
     QRect layerProjectionExtent = layer->projection()->extent();
     QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
 
-    lock();
-    KisPaintDeviceSP mergedDevice = new KisPaintDevice(*prevLayer->projection());
-    unlock();
+    KisPaintDeviceSP mergedDevice;
 
-    KisPainter gc(mergedDevice);
-    gc.setChannelFlags(layer->channelFlags());
-    gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
-    gc.setOpacity(layer->opacity());
-    gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
+    if (layer->compositeOpId() != prevLayer->compositeOpId() || layer->opacity() != prevLayer->opacity()) {
 
-    KisPaintLayerSP mergedLayer = new KisPaintLayer(this, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
+        mergedDevice = new KisPaintDevice(layer->colorSpace(), "merged");
+        KisPainter gc(mergedDevice);
+
+        gc.setChannelFlags(prevLayer->channelFlags());
+        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(prevLayer->compositeOpId()));
+        gc.setOpacity(prevLayer->opacity());
+
+        gc.bitBlt(prevLayerProjectionExtent.topLeft(), prevLayer->projection(), prevLayerProjectionExtent);
+
+
+        gc.setChannelFlags(layer->channelFlags());
+        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
+        gc.setOpacity(layer->opacity());
+
+        gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
+    }
+    else {
+        lock();
+        KisPaintDeviceSP mergedDevice = new KisPaintDevice(*prevLayer->projection());
+        unlock();
+
+        KisPainter gc(mergedDevice);
+        gc.setChannelFlags(layer->channelFlags());
+        gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
+        gc.setOpacity(layer->opacity());
+        gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
+    }
+
+    KisPaintLayerSP mergedLayer = new KisPaintLayer(this, layer->name(), layer->opacity(), mergedDevice);
     Q_CHECK_PTR(mergedLayer);
-    mergedLayer->setCompositeOp(prevLayer->compositeOp()->id());
-    mergedLayer->setOpacity(prevLayer->opacity());
-    mergedLayer->setChannelFlags(prevLayer->channelFlags());
+    mergedLayer->setCompositeOp(layer->compositeOp()->id());
+    mergedLayer->setChannelFlags(layer->channelFlags());
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;

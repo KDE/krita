@@ -196,7 +196,11 @@ void KisImage::nodeChanged(KisNode* node)
 KisSelectionSP KisImage::globalSelection() const
 {
     KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
-    return selectionMask ? selectionMask->selection() : 0;
+    if (selectionMask) {
+        return selectionMask->selection();
+    } else {
+        return 0;
+    }
 }
 
 void KisImage::setGlobalSelection(KisSelectionSP globalSelection)

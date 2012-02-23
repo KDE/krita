@@ -40,14 +40,14 @@ void KisReselectGlobalSelectionCommand::redo()
 {
     m_canReselect = m_image->canReselectGlobalSelection();
 
-    if(m_canReselect) {
+    if (m_canReselect) {
         m_image->reselectGlobalSelection();
     }
 }
 
 void KisReselectGlobalSelectionCommand::undo()
 {
-    if(m_canReselect) {
+    if (m_canReselect) {
         m_image->deselectGlobalSelection();
     }
 }

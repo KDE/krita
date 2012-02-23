@@ -237,7 +237,7 @@ bool KisSelectionManager::havePixelsSelected()
 {
     KisLayerSP activeLayer = m_view->activeLayer();
     KisSelectionSP activeSelection;
-    if(activeLayer && !activeLayer->userLocked()
+    if (activeLayer && !activeLayer->userLocked()
        && activeLayer->visible()) {
 
         activeSelection = activeLayer->selection();
@@ -350,7 +350,7 @@ void KisSelectionManager::cut()
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
 
-    if(haveShapesSelected()) {
+    if (haveShapesSelected()) {
         m_view->canvasBase()->toolProxy()->cut();
     }
     else {
@@ -378,7 +378,7 @@ void KisSelectionManager::copy()
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
 
-    if(haveShapesSelected()) {
+    if (haveShapesSelected()) {
         m_view->canvasBase()->toolProxy()->copy();
     }
     else {
@@ -429,7 +429,7 @@ void KisSelectionManager::paste()
     if (clip) {
         // Pasted layer content could be outside image bounds and invisible, if that is the case move content into the bounds
         QRect exactBounds = clip->exactBounds();
-        if(!exactBounds.isEmpty() && !exactBounds.intersects(image->bounds())) {
+        if (!exactBounds.isEmpty() && !exactBounds.intersects(image->bounds())) {
             clip->setX(clip->x() - exactBounds.x());
             clip->setY(clip->y() - exactBounds.y());
         }

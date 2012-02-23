@@ -128,7 +128,7 @@ void KisMaskManager::createFilterMask()
 void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
 {
     KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent.data());
-    if(!parentLayer) return;
+    if (!parentLayer) return;
 
     KisSelectionMaskSP mask = new KisSelectionMask(m_view->image());
     mask->initSelection(m_view->selection(), parentLayer);
@@ -257,7 +257,7 @@ void KisMaskManager::duplicateMask()
     m_commandsAdapter->addNode(newMask, m_activeMask->parent(), m_activeMask);
 
     KisSelectionMaskSP selectionMask = dynamic_cast<KisSelectionMask*>(newMask.data());
-    if(selectionMask) {
+    if (selectionMask) {
         selectionMask->setActive(true);
     }
 

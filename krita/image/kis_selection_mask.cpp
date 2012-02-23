@@ -128,16 +128,16 @@ void KisSelectionMask::setActive(bool active)
     KisImageWSP image = this->image();
     KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
 
-    if(active && parentLayer) {
+    if (active && parentLayer) {
         KisSelectionMaskSP activeMask = parentLayer->selectionMask();
-        if(activeMask) {
+        if (activeMask) {
             activeMask->setActive(false);
         }
     }
 
     nodeProperties().setProperty("active", active);
 
-    if(image) {
+    if (image) {
         image->nodeChanged(this);
         image->undoAdapter()->emitSelectionChanged();
     }

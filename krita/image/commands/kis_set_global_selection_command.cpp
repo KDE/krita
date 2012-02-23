@@ -26,18 +26,11 @@
 #include "kis_selection_mask.h"
 #include "kis_pixel_selection.h"
 
-KisSetGlobalSelectionCommand::KisSetGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent, KisSelectionSP selection) :
-        KUndo2Command(parent)
-        , m_image(image)
+KisSetGlobalSelectionCommand::KisSetGlobalSelectionCommand(KisImageWSP image, KisSelectionSP selection)
+    : m_image(image)
 {
     m_oldSelection = m_image->globalSelection();
-
-    m_image->setGlobalSelection(selection);
-    m_newSelection = m_image->globalSelection();
-}
-
-KisSetGlobalSelectionCommand::~KisSetGlobalSelectionCommand()
-{
+    m_newSelection = selection;
 }
 
 void KisSetGlobalSelectionCommand::redo()
@@ -47,10 +40,10 @@ void KisSetGlobalSelectionCommand::redo()
 
 void KisSetGlobalSelectionCommand::undo()
 {
-    if (m_oldSelection)
-        m_image->setGlobalSelection(m_oldSelection);
-    else
-        m_image->removeGlobalSelection();
-    m_image->undoAdapter()->emitSelectionChanged();
+    m_image->setGlobalSelection(m_oldSelection);
 }
 
+KisSetEmptyGlobalSelectionCommand::KisSetEmptyGlobalSelectionCommand(KisImageWSP image)
+    : KisSetGlobalSelectionCommand(image, new KisSelection(new KisDefaultBounds(image)))
+{
+}

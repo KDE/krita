@@ -347,14 +347,10 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     quint8* srcBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
     srcDev->readBytes(srcBytes, srcX, srcY, srcWidth, srcHeight);
 
-    /* This checks whether there is nothing selected.
-    When there is nothing selected, execute the IF block.
-    When there is something selected, execute the ELSE block.
-    Note that this IF-ELSE block is not redundant.
-    d->selection must be located first in the if statement, because
-    if it is null and not checked first, d->selection->isDeselected()
-    will call unreferenced memory and crash. */
-    if (!(d->selection && !d->selection->isDeselected())) {
+    /*
+     * This checks whether there is nothing selected.
+     */
+    if (!d->selection) {
         /* As there's nothing selected, blit to dstBytes (intermediary bit array),
           ignoring d->selection (the user selection)*/
         d->paramInfo.dstRowStart   = dstBytes;
@@ -746,7 +742,6 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     d->paramInfo.rows          = srcHeight;
     d->paramInfo.cols          = srcWidth;
 
-    // TODO: use the d->selection && !isDeselected() combo
     if (d->selection) {
         /* d->selection is a KisPaintDevice, so first a readBytes is performed to
         get the area of interest... */
@@ -807,8 +802,7 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
     quint8* dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
     d->device->readBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
-    // Check bitBltWithFixedSelection for an explanation of this if-check
-    if (!(d->selection && !d->selection->isDeselected())) {
+    if (!d->selection) {
         /* As there's nothing selected, blit to dstBytes (intermediary bit array),
           ignoring d->selection (the user selection)*/
         d->paramInfo.dstRowStart   = dstBytes;

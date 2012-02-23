@@ -2111,7 +2111,7 @@ void KisToolTransform::applyTransform()
     //gc.end();
 
     // Also restore the original pixel selection (the shape selection will also be restored : see below)
-    if (m_origSelection && !m_origSelection->isDeselected()) {
+    if (m_origSelection) {
         if (currentSelection()) {
             //KoUpdaterPtr restorePixSelection = updater->startSubtask(5);
             // copy the pixel selection

@@ -196,65 +196,67 @@ void KisImage::nodeChanged(KisNode* node)
 KisSelectionSP KisImage::globalSelection() const
 {
     KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
-    if (selectionMask) {
-        return selectionMask->selection();
-    }
-    else {
-        return 0;
-    }
+    return selectionMask ? selectionMask->selection() : 0;
 }
 
 void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
 {
     KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
-    if (!selectionMask) {
-        selectionMask = new KisSelectionMask(this);
-        selectionMask->setActive(true);
-        bool success = addNode(selectionMask, m_d->rootLayer, 0);
-        Q_ASSERT(success);
-        if (!success) {
-            warnKrita << "Could not creaste global selection mask!";
+
+    if(!globalSelection) {
+        if(selectionMask) {
+            removeNode(selectionMask);
         }
     }
-    if (globalSelection) {
+    else {
+        if(!selectionMask) {
+            selectionMask = new KisSelectionMask(this);
+            addNode(selectionMask);
+            selectionMask->setActive(true);
+        }
         selectionMask->setSelection(globalSelection);
+
+        Q_ASSERT(m_d->rootLayer->childCount() > 0);
+        Q_ASSERT(m_d->rootLayer->selectionMask());
     }
-    else {
-        selectionMask->setSelection(new KisSelection(new KisDefaultBounds(this)));
-    }
-    Q_ASSERT(m_d->rootLayer->childCount() > 0);
-    Q_ASSERT(m_d->rootLayer->selectionMask());
+
+    m_d->legacyUndoAdapter->emitSelectionChanged();
 }
 
-void KisImage::removeGlobalSelection()
+void KisImage::deselectGlobalSelection()
 {
     KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
-    if (selectionMask) {
-        removeNode(selectionMask);
+    if(selectionMask) {
+        selectionMask->setActive(false);
     }
+
+    m_d->legacyUndoAdapter->emitSelectionChanged();
 }
 
-KisSelectionSP KisImage::deselectedGlobalSelection()
+bool KisImage::canReselectGlobalSelection()
 {
-    KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
-    if (selectionMask) {
-        return selectionMask->deselectedSelection();
-    }
-    else {
-        return 0;
-    }
+    return deselectedMask();
 }
 
-void KisImage::setDeselectedGlobalSelection(KisSelectionSP selection)
+void KisImage::reselectGlobalSelection()
 {
-    KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
-    if (!selectionMask) {
-        setGlobalSelection();
-        selectionMask = m_d->rootLayer->selectionMask();
+    KisSelectionMaskSP mask = deselectedMask();
+    if(mask) {
+        mask->setActive(true);
     }
-    Q_ASSERT(selectionMask);
-    selectionMask->setDeselectedSelection(selection);
 
+    m_d->legacyUndoAdapter->emitSelectionChanged();
+}
+
+KisSelectionMaskSP KisImage::deselectedMask()
+{
+    // Get a list of non-active masks
+    KoProperties properties;
+    properties.setProperty("active", false);
+    QList<KisNodeSP> masks = root()->childNodes(QStringList("KisSelectionMask"), properties);
+
+    return masks.size() > 0 ?
+        static_cast<KisSelectionMask*>(masks.last().data()) : 0;
 }
 
 KisBackgroundSP KisImage::backgroundPattern() const

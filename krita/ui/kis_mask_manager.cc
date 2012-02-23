@@ -127,20 +127,18 @@ void KisMaskManager::createFilterMask()
 
 void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
 {
-    KisLayer * layer = dynamic_cast<KisLayer*>(parent.data());
-    if (layer && layer->selectionMask())
-        layer->selectionMask()->setActive(false);
+    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent.data());
+    if(!parentLayer) return;
 
-    KisSelectionMask *mask = new KisSelectionMask(m_view->image());
-    mask->initSelection(m_view->selection(), layer);
-
-    connect(mask,SIGNAL(changeActivity(KisSelectionMask*,bool)),this,SLOT(changeActivity(KisSelectionMask*,bool)));
+    KisSelectionMaskSP mask = new KisSelectionMask(m_view->image());
+    mask->initSelection(m_view->selection(), parentLayer);
 
     //counting number of KisSelectionMask
-    QList<KisNodeSP> selectionMasks = layer->childNodes(QStringList("KisSelectionMask"),KoProperties());
-
+    QList<KisNodeSP> selectionMasks = parentLayer->childNodes(QStringList("KisSelectionMask"),KoProperties());
     mask->setName(i18n("Selection ")+QString::number(selectionMasks.count()+1));
-    m_commandsAdapter->addNode(mask, parent, above);
+    m_commandsAdapter->addNode(mask, parentLayer, above);
+
+    mask->setActive(true);
 
     activateMask(mask);
     masksUpdated();
@@ -201,7 +199,7 @@ void KisMaskManager::maskToSelection()
     KisImageWSP image = m_view->image();
     if (!image) return;
     m_commandsAdapter->beginMacro(i18n("Mask to Selection"));
-    KUndo2Command* cmd = new KisSetGlobalSelectionCommand(image, 0, m_activeMask->selection());
+    KUndo2Command* cmd = new KisSetGlobalSelectionCommand(image, m_activeMask->selection());
     image->undoAdapter()->addCommand(cmd);
     m_commandsAdapter->removeNode(m_activeMask);
     m_commandsAdapter->endMacro();
@@ -254,21 +252,16 @@ void KisMaskManager::duplicateMask()
     if (!m_activeMask) return;
     if (!m_view->image()) return;
 
-    KisNodeSP newMask = m_activeMask->clone();
-    KisSelectionMask *selMask=NULL;
-
-    if (m_activeMask->inherits("KisSelectionMask")) {
-        KisLayerSP l=m_view->activeLayer();
-        if (l && l->selectionMask())
-               l->selectionMask()->setActive(false);
-        selMask=dynamic_cast<KisSelectionMask*>(newMask.data());
-        connect(selMask,SIGNAL(changeActivity(KisSelectionMask*,bool)),this,SLOT(changeActivity(KisSelectionMask*,bool)));
-    }
+    KisMaskSP newMask = dynamic_cast<KisMask*>(m_activeMask->clone().data());
     newMask->setName(i18n("Duplication of ") + m_activeMask->name());
     m_commandsAdapter->addNode(newMask, m_activeMask->parent(), m_activeMask);
-    activateMask(dynamic_cast<KisMask*>(newMask.data()));
-    if (selMask)
-        changeActivity(selMask,true);
+
+    KisSelectionMaskSP selectionMask = dynamic_cast<KisSelectionMask*>(newMask.data());
+    if(selectionMask) {
+        selectionMask->setActive(true);
+    }
+
+    activateMask(newMask);
     masksUpdated();
 }
 
@@ -389,22 +382,5 @@ void KisMaskManager::maskToBottom()
     if (!m_view->image()) return;
     m_commandsAdapter->toBottom(m_activeMask);
 }
-
-void KisMaskManager::changeActivity(KisSelectionMask *mask,bool active)
-{
-    KisLayer * layer = dynamic_cast<KisLayer*>(mask->parent().data());
-
-    if (active && layer && layer->selectionMask()) {
-        KisSelectionMask* selectionMask = layer->selectionMask().data();
-        layer->selectionMask()->nodeProperties().setProperty("active", false);
-        if (m_view->image()) {
-            m_view->image()->nodeChanged(selectionMask);
-        }
-    }
-
-    mask->nodeProperties().setProperty("active", active);
-    m_view->selectionManager()->selectionChanged();
-}
-
 
 #include "kis_mask_manager.moc"

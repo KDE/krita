@@ -33,6 +33,7 @@
 #include "testutil.h"
 #include "kis_fill_painter.h"
 #include "kis_transaction.h"
+#include "commands/kis_selection_commands.h"
 
 
 void KisPixelSelectionTest::testCreation()
@@ -80,8 +81,8 @@ void KisPixelSelectionTest::testInvertWithImage()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 200, 200, cs, "merge test");
-    
-    image->setGlobalSelection();
+
+    KisSetEmptyGlobalSelectionCommand(image).redo();
     KisPixelSelectionSP selection =  image->globalSelection()->getOrCreatePixelSelection();
     selection->select(QRect(5, 5, 10, 10));
     selection->invert();
@@ -195,8 +196,8 @@ void KisPixelSelectionTest::testExactRectWithImage()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 200, 200, cs, "merge test");
 
-    image->setGlobalSelection();
-    KisPixelSelectionSP selection =  image->globalSelection()->getOrCreatePixelSelection();
+    KisSetEmptyGlobalSelectionCommand(image).redo();
+    KisPixelSelectionSP selection = image->globalSelection()->getOrCreatePixelSelection();
     selection->select(QRect(100, 50, 200, 100));
     QCOMPARE(selection->selectedExactRect(), QRect(100, 50, 200, 100));
 }

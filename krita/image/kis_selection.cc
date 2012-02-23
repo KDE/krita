@@ -27,8 +27,7 @@
 
 struct KisSelection::Private {
     Private()
-        : isDeselected(false),
-          isVisible(true),
+        : isVisible(true),
           shapeSelection(0)
     {
     }
@@ -36,7 +35,6 @@ struct KisSelection::Private {
     // used for forwarding setDirty signals only
     KisNodeWSP parentNode;
 
-    bool isDeselected; // true if the selection is empty, no pixels are selected
     bool isVisible; //false is the selection decoration should not be displayed
     KisDefaultBoundsBaseSP defaultBounds;
     KisPixelSelectionSP projection;
@@ -72,7 +70,6 @@ KisSelection::KisSelection(const KisSelection& rhs)
     : KisShared(),
       m_d(new Private)
 {
-    m_d->isDeselected = rhs.m_d->isDeselected;
     m_d->isVisible = rhs.m_d->isVisible;
     m_d->defaultBounds = rhs.m_d->defaultBounds;
     m_d->parentNode = 0; // not supposed to be shared
@@ -100,7 +97,6 @@ KisSelection::KisSelection(const KisSelection& rhs)
 KisSelection &KisSelection::operator=(const KisSelection &rhs)
 {
     if (&rhs != this) {
-        m_d->isDeselected = rhs.m_d->isDeselected;
         m_d->isVisible = rhs.m_d->isVisible;
         m_d->defaultBounds = rhs.m_d->defaultBounds;
         m_d->parentNode = 0; // not supposed to be shared
@@ -256,16 +252,6 @@ void KisSelection::updateProjection()
     if(m_d->shapeSelection) {
         m_d->shapeSelection->renderToProjection(currentProjection.data());
     }
-}
-
-void KisSelection::setDeselected(bool deselected)
-{
-    m_d->isDeselected = deselected;
-}
-
-bool KisSelection::isDeselected()
-{
-    return m_d->isDeselected;
 }
 
 void KisSelection::setVisible(bool visible)

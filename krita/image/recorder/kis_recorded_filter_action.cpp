@@ -93,11 +93,9 @@ void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& _info, KoU
 
     KisImageWSP image = _info.image();
     r1 = r1.intersected(image->bounds());
-    if (layer && layer->selectionMask()) {
-        r1 = r1.intersected(layer->selectionMask()->exactBounds());
+    if (layer && layer->selection()) {
+        r1 = r1.intersected(layer->selection()->selectedExactRect());
     }
-    if (image->globalSelection())
-        r1 = r1.intersected(image->globalSelection()->selectedExactRect());
 
     d->filter->process(dev, r1, kfc, _updater);
     node->setDirty(r1);

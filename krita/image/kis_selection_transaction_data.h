@@ -46,7 +46,6 @@ public:
 private:
     KisImageWSP m_image;
     KisSelectionSP m_selection;
-    bool m_wasDeselected;
 };
 
 #endif /* KIS_SELECTION_TRANSACTION_DATA_H_ */

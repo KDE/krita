@@ -30,6 +30,7 @@ private slots:
 
     void layerTests();
     void testConvertImageColorSpace();
+    void testGlobalSelection();
 };
 
 #endif

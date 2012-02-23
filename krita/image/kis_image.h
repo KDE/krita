@@ -480,6 +480,13 @@ public:
 
     KisImageSignalRouter* signalRouter();
 
+    /**
+     * Returns whether we can reselect current global selection
+     *
+     * \see reselectGlobalSelection()
+     */
+    bool canReselectGlobalSelection();
+
 signals:
 
     /**
@@ -598,29 +605,29 @@ private:
     friend class KisDeselectGlobalSelectionCommand;
     friend class KisReselectGlobalSelectionCommand;
     friend class KisSetGlobalSelectionCommand;
-    friend class KisPixelSelectionTest;
+    friend class KisImageTest;
 
     /**
      * Replaces the current global selection with globalSelection. If
-     * globalSelection is empty, a new selection object will be
-     * created that is by default completely deselected.
+     * \p globalSelection is empty, removes the selection object, so that
+     * \ref globalSelection() will return 0 after that.
      */
-    void setGlobalSelection(KisSelectionSP globalSelection = 0);
+    void setGlobalSelection(KisSelectionSP globalSelection);
 
     /**
-     * Removes the global selection.
+     * Deselects current global selection.
+     * \ref globalSelection() will return 0 after that.
      */
-    void removeGlobalSelection();
+    void deselectGlobalSelection();
 
     /**
-     * @return the deselected global selection or 0 if no global selection was deselected
+     * Reselects current deselected selection
+     *
+     * \see deselectGlobalSelection()
      */
-    KisSelectionSP deselectedGlobalSelection();
+    void reselectGlobalSelection();
 
-    /**
-     * Set deselected global selection
-     */
-    void setDeselectedGlobalSelection(KisSelectionSP selection);
+    KisSelectionMaskSP deselectedMask();
 
 private:
     class KisImagePrivate;

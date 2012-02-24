@@ -63,7 +63,7 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
         return KoFilter::NotImplemented;
 
     KDialog dialog;
-    dialog.setWindowTitle(i18n("TIFF Export Options"));
+    dialog.setWindowTitle(i18n("OpenEXR Export Options"));
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
     Ui::ExrExportWidget widget;
     QWidget *page = new QWidget(&dialog);

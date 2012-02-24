@@ -1012,6 +1012,10 @@ void KoTextEditor::insertTable(int rows, int columns)
 
     QTextTable *table = d->caret.insertTable(rows, columns, tableFormat);
 
+    // Get (and thus create) columnandrowstyle manager so it becomes part of undo
+    // and not something that happens uncontrollably during layout
+    KoTableColumnAndRowStyleManager::getManager(table);
+
     // 'Hide' the block before the table
     QTextBlockFormat blockFormat = currentBlock.blockFormat();
     QTextCursor cursor(currentBlock);

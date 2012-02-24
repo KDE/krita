@@ -97,7 +97,7 @@ KoTextEditor::Private::Private(KoTextEditor *qq, QTextDocument *document)
     , document (document)
     , addNewCommand(true)
     , dummyMacroAdded(false)
-    , inCustomCommand(0)
+    , customCommandCount(0)
     , editProtectionCached(false)
 {
     caret = QTextCursor(document);
@@ -732,8 +732,7 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
             addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::PreviousChar,
                                                       d->document,
                                                       shapeController, parent));
-        }
-        else {
+        } else {
             addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar,
                                                       d->document,
                                                       shapeController, parent));
@@ -744,8 +743,7 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
             addCommand(new DeleteCommand(DeleteCommand::PreviousChar,
                                          d->document,
                                          shapeController, parent));
-        }
-        else {
+        } else {
             addCommand(new DeleteCommand(DeleteCommand::NextChar,
                                          d->document,
                                          shapeController, parent));
@@ -975,8 +973,7 @@ void KoTextEditor::insertTable(int rows, int columns)
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
         d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Table"));
-    }
-    else {
+    } else {
         KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Table"));
         deleteChar(false, topCommand);
         d->caret.beginEditBlock();
@@ -1201,8 +1198,7 @@ KoInlineNote *KoTextEditor::insertFootNote()
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
         d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Footnote"));
-    }
-    else {
+    } else {
         KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Footnote"));
         deleteChar(false, topCommand);
         d->caret.beginEditBlock();
@@ -1234,8 +1230,7 @@ KoInlineNote *KoTextEditor::insertEndNote()
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
         d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Endnote"));
-    }
-    else {
+    } else {
         KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Endnote"));
         deleteChar(false, topCommand);
         d->caret.beginEditBlock();
@@ -1267,8 +1262,7 @@ void KoTextEditor::insertTableOfContents(KoTableOfContentsGeneratorInfo *info)
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
         d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Table Of Contents"));
-    }
-    else {
+    } else {
         KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Table Of Contents"));
         deleteChar(false, topCommand);
         d->caret.beginEditBlock();
@@ -1339,8 +1333,7 @@ void KoTextEditor::insertBibliography()
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
         d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Bibliography"));
-    }
-    else {
+    } else {
         KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Bibliography"));
         deleteChar(false, topCommand);
         d->caret.beginEditBlock();
@@ -1394,8 +1387,7 @@ KoInlineCite *KoTextEditor::insertCitation()
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
         d->updateState(KoTextEditor::Private::KeyPress, i18nc("(qtundo-format)", "Add Citation"));
-    }
-    else {
+    } else {
         KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Add Citation"));
         deleteChar(false, topCommand);
         d->caret.beginEditBlock();
@@ -1424,8 +1416,7 @@ void KoTextEditor::insertText(const QString &text)
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
         d->updateState(KoTextEditor::Private::KeyPress, i18nc("(qtundo-format)", "Typing"));
-    }
-    else {
+    } else {
         KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Typing"));
         deleteChar(false, topCommand);
         d->caret.beginEditBlock();
@@ -1564,8 +1555,7 @@ void KoTextEditor::newLine()
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
         d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "New Paragraph"));
-    }
-    else {
+    } else {
         KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "New Paragraph"));
         deleteChar(false, topCommand);
         d->caret.beginEditBlock();

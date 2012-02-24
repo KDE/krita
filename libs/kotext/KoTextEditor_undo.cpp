@@ -249,7 +249,7 @@ void KoTextEditor::addCommand(KUndo2Command *command)
     //When we reach that point, the command has been executed. We first need to clean up all the automatically generated headCommand on our commandStack, which could potentially have been created during the editing. When we reach our pushed command, the commandStack is clean. We can then call a state update to NoOp and decrease the inCustomCommand counter.
     kDebug(32500) << "the command has been executed. we need to clean up the commandStack of the auto generated headCommands";
     kDebug(32500) << "before cleaning. commandStack count: " << d->commandStack.count();
-    while(d->commandStack.top() != command) {
+    while (d->commandStack.top() != command) {
         d->commandStack.pop();
     }
     kDebug(32500) << "after cleaning. commandStack count: " << d->commandStack.count() << " will set NoOp";

@@ -196,7 +196,7 @@ public:
         LayoutTextPage, /// this is used for setting the correct page variable on the first resize and should not be used for other purposes
         ParaTableSpacingAtStart, /// this is used during layouting to specify if at the first paragraph margin-top should be applied.
         IndexGeneratorManager ,
-        FrameCharFormat ,
+        FrameCharFormat,
         ShapeController
     };
 
@@ -216,7 +216,7 @@ public:
     static const QUrl ParaTableSpacingAtStartUrl;
     static const QUrl IndexGeneratorManagerUrl;
     static const QUrl FrameCharFormatUrl;
-    static const QUrl ShapeControllerURL;
+    static const QUrl ShapeControllerUrl;
 
 private:
     QTextDocument *m_document;

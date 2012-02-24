@@ -59,7 +59,7 @@ const QUrl KoTextDocument::LayoutTextPageUrl = QUrl("kotext://layoutTextPage");
 const QUrl KoTextDocument::ParaTableSpacingAtStartUrl = QUrl("kotext://spacingAtStart");
 const QUrl KoTextDocument::IndexGeneratorManagerUrl = QUrl("kotext://indexGeneratorManager");
 const QUrl KoTextDocument::FrameCharFormatUrl = QUrl("kotext://frameCharFormat");
-const QUrl KoTextDocument::ShapeControllerURL = QUrl("kotext://shapeController");
+const QUrl KoTextDocument::ShapeControllerUrl = QUrl("kotext://shapeController");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
@@ -147,12 +147,12 @@ void KoTextDocument::setShapeController(KoShapeController *controller)
 {
     QVariant v;
     v.setValue(controller);
-    m_document->addResource(KoTextDocument::ShapeController, ShapeControllerURL, v);
+    m_document->addResource(KoTextDocument::ShapeController, ShapeControllerUrl, v);
 }
 
 KoShapeController *KoTextDocument::shapeController() const
 {
-    QVariant resource = m_document->resource(KoTextDocument::ShapeController, ShapeControllerURL);
+    QVariant resource = m_document->resource(KoTextDocument::ShapeController, ShapeControllerUrl);
     if (resource.isValid()) {
         return resource.value<KoShapeController *>();
     }

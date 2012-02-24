@@ -67,7 +67,7 @@ public:
     QStack<KUndo2Command*> commandStack;
     bool addNewCommand;
     bool dummyMacroAdded;
-    int inCustomCommand;
+    int customCommandCount;
     QString commandTitle;
 
     State editorState;

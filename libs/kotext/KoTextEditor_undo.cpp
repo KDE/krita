@@ -72,7 +72,7 @@
 
   addNewCommand: bool used to tell the framework to create a new headCommand and push it on the commandStack, when receiving an undoCommandAdded signal from QTextDocument.
 
-  inCustomCommand: counter used to keep track of nested KUndo2Commands that are pushed on the KoTextEditor.
+  customCommandCount: counter used to keep track of nested KUndo2Commands that are pushed on the KoTextEditor.
   */
 
 
@@ -211,13 +211,13 @@ void KoTextEditor::addCommand(KUndo2Command *command)
 {
     kDebug(32500) << "we receive a command to add on the stack.";
     kDebug(32500) << "commandStack count: " << d->commandStack.count();
-    kDebug(32500) << "inCustomCommand counter: " << d->inCustomCommand << " will increase";
+    kDebug(32500) << "customCommandCount counter: " << d->customCommandCount << " will increase";
 
-    //We increase the inCustomCommand counter to inform the framework that we are having a further KUndo2Command and update the KoTextEditor's state to Custom.
+    //We increase the customCommandCount counter to inform the framework that we are having a further KUndo2Command and update the KoTextEditor's state to Custom.
     //However, this update will request a new headCommand to be pushed on the commandStack. This is what we want for internal complex editions but not in this case. Indeed, it must be the KUndo2Command which will parent the UndoTextCommands. Therefore we set the addNewCommand back to false.
     //If the commandStack is empty, we are the highest "macro" command and we should therefore push the KUndo2Command on the application's stack.
     //On the contrary, if the commandStack is not empty, or the pushed command has a parent, it means that we are adding a nested KUndo2Command. In which case we just want to put it on the commandStack to parent UndoTextCommands. We need to call the redo method manually though.
-    ++d->inCustomCommand;
+    ++d->customCommandCount;
     kDebug(32500) << "we will now go to custom state";
     d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty())?command->text():i18n("Text"));
     kDebug(32500) << "but will set the addCommand to false. we don't want a new headCommand";
@@ -246,7 +246,7 @@ void KoTextEditor::addCommand(KUndo2Command *command)
         kDebug(32500) << "called redo still";
     }
 
-    //When we reach that point, the command has been executed. We first need to clean up all the automatically generated headCommand on our commandStack, which could potentially have been created during the editing. When we reach our pushed command, the commandStack is clean. We can then call a state update to NoOp and decrease the inCustomCommand counter.
+    //When we reach that point, the command has been executed. We first need to clean up all the automatically generated headCommand on our commandStack, which could potentially have been created during the editing. When we reach our pushed command, the commandStack is clean. We can then call a state update to NoOp and decrease the customCommandCount counter.
     kDebug(32500) << "the command has been executed. we need to clean up the commandStack of the auto generated headCommands";
     kDebug(32500) << "before cleaning. commandStack count: " << d->commandStack.count();
     while (d->commandStack.top() != command) {
@@ -254,8 +254,8 @@ void KoTextEditor::addCommand(KUndo2Command *command)
     }
     kDebug(32500) << "after cleaning. commandStack count: " << d->commandStack.count() << " will set NoOp";
     d->updateState(KoTextEditor::Private::NoOp);
-    kDebug(32500) << "after NoOp set. inCustomCounter: " << d->inCustomCommand << " will decrease and return";
-    --d->inCustomCommand;
+    kDebug(32500) << "after NoOp set. inCustomCounter: " << d->customCommandCount << " will decrease and return";
+    --d->customCommandCount;
 }
 
 /// DO NOT USE THIS. It stays here for compiling reasons. But it will severely break everything. Again: DO NOT USE THIS.
@@ -279,8 +279,8 @@ KUndo2Command *KoTextEditor::beginEditBlock(QString title)
 {
     kDebug(32500) << "beginEditBlock";
     kDebug(32500) << "commandStack count: " << d->commandStack.count();
-    kDebug(32500) << "inCustomCommand counter: " << d->inCustomCommand;
-    if (!d->inCustomCommand) {
+    kDebug(32500) << "customCommandCount counter: " << d->customCommandCount;
+    if (!d->customCommandCount) {
         // We are not in a custom macro command. So we first need to update the KoTextEditor's state to Custom. Additionnaly, if the commandStack is empty, we need to create a master headCommand for our macro and push it on the stack.
         kDebug(32500) << "we are not in a custom command. will update state to custom";
         d->updateState(KoTextEditor::Private::Custom, title);
@@ -289,7 +289,7 @@ KUndo2Command *KoTextEditor::beginEditBlock(QString title)
             kDebug(32500) << "the commandStack is empty. we need a dummy headCommand both on the commandStack and on the application's stack";
             KUndo2Command *command = new KUndo2Command(title);
             d->commandStack.push(command);
-            ++d->inCustomCommand;
+            ++d->customCommandCount;
             d->dummyMacroAdded = true; //This bool is used to tell endEditBlock that we have created a master headCommand.
             KUndo2QStack *stack = KoTextDocument(d->document).undoStack();
             if (stack) {
@@ -297,11 +297,11 @@ KUndo2Command *KoTextEditor::beginEditBlock(QString title)
             } else {
                 command->redo();
             }
-            kDebug(32500) << "done adding the headCommand. commandStack count: " << d->commandStack.count() << " inCommand counter: " << d->inCustomCommand;
+            kDebug(32500) << "done adding the headCommand. commandStack count: " << d->commandStack.count() << " inCommand counter: " << d->customCommandCount;
         }
     }
     //QTextDocument sends the undoCommandAdded signal at the end of the QTextCursor edit block. Since we want our master headCommand to parent the signal induced UndoTextCommands, we should not call QTextCursor::beginEditBlock for the headCommand.
-    if (!(d->dummyMacroAdded && d->inCustomCommand == 1)) {
+    if (!(d->dummyMacroAdded && d->customCommandCount == 1)) {
         kDebug(32500) << "we did not add a dummy command, or we are further down nesting. call beginEditBlock on the caret to nest the QTextDoc changes";
         //we don't call beginEditBlock for the first headCommand because we want the signals to be sent before we finished our command.
         d->caret.beginEditBlock();
@@ -313,18 +313,18 @@ KUndo2Command *KoTextEditor::beginEditBlock(QString title)
 void KoTextEditor::endEditBlock()
 {
     kDebug(32500) << "endEditBlock";
-    //Only the self created master headCommand (see beginEditBlock) is left on the commandStack, we need to decrease the inCustomCommand counter that we increased on creation.
+    //Only the self created master headCommand (see beginEditBlock) is left on the commandStack, we need to decrease the customCommandCount counter that we increased on creation.
     //If we are not yet at this master headCommand, we can call QTextCursor::endEditBlock
-    if (d->dummyMacroAdded && d->inCustomCommand == 1) {
+    if (d->dummyMacroAdded && d->customCommandCount == 1) {
         kDebug(32500) << "only the created dummy headCommand from beginEditBlock is left. we need to decrease further the nesting counter";
         //we don't call caret.endEditBlock because we did not begin a block for the first headCommand
-        --d->inCustomCommand;
+        --d->customCommandCount;
         d->dummyMacroAdded = false;
     } else {
         kDebug(32500) << "we are not at our top dummy headCommand. call caret.endEditBlock";
         d->caret.endEditBlock();
     }
-    if (!d->inCustomCommand) {
+    if (!d->customCommandCount) {
         //We have now finished completely the macro, set the editor state to NoOp then.
         kDebug(32500) << "we have finished completely the macro, set the state to NoOp now. commandStack count: " << d->commandStack.count();
         d->updateState(KoTextEditor::Private::NoOp);

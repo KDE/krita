@@ -132,7 +132,6 @@ public:
         readOnly = false;
         dockWidgetMenu = 0;
         dockerManager = 0;
-        deferredClosingEvent = 0;
     }
     ~KoMainWindowPrivate() {
         qDeleteAll(toolbarList);
@@ -210,8 +209,6 @@ public:
     KoDockerManager *dockerManager;
     QList<QDockWidget *> dockWidgets;
     QList<QDockWidget *> hiddenDockwidgets; // List of dockers hiddent by the call to hideDocker
-
-    QCloseEvent *deferredClosingEvent;
 
 };
 
@@ -742,10 +739,6 @@ void KoMainWindow::slotSaveCompleted()
     disconnect(pDoc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
     disconnect(pDoc, SIGNAL(canceled(const QString &)),
                this, SLOT(slotSaveCanceled(const QString &)));
-
-    if (d->deferredClosingEvent) {
-        KParts::MainWindow::closeEvent(d->deferredClosingEvent);
-    }
 }
 
 // returns true if we should save, false otherwise.
@@ -1049,7 +1042,6 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
         return;
     }
     if (queryClose()) {
-        d->deferredClosingEvent = e;
         if (d->docToOpen) {
             // The open pane is visible
             d->docToOpen->deleteOpenPane(true);
@@ -1065,9 +1057,9 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
             foreach(QDockWidget* dockWidget, d->dockWidgetsMap)
                 dockWidget->setVisible(d->dockWidgetVisibilityMap.value(dockWidget));
         }
-    } else {
+        KParts::MainWindow::closeEvent(e);
+    } else
         e->setAccepted(false);
-    }
 }
 
 void KoMainWindow::saveWindowSettings()
@@ -1148,7 +1140,7 @@ bool KoMainWindow::queryClose()
         switch (res) {
         case KMessageBox::Yes : {
             bool isNative = (d->rootDoc->outputMimeType() == d->rootDoc->nativeFormatMimeType());
-            if (!saveDocument(!isNative))
+            if (! saveDocument(!isNative))
                 return false;
             break;
         }

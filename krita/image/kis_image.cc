@@ -923,7 +923,7 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     }
     else {
         lock();
-        mergedDevice = new KisPaintDevice(*prevLayer->projection());
+        KisPaintDeviceSP mergedDevice = new KisPaintDevice(*prevLayer->projection());
         unlock();
 
         KisPainter gc(mergedDevice);
@@ -933,9 +933,9 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
         gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
     }
 
-    KisPaintLayerSP mergedLayer = new KisPaintLayer(this, layer->name(), OPACITY_OPAQUE_U8, mergedDevice);
+    KisPaintLayerSP mergedLayer = new KisPaintLayer(this, layer->name(), layer->opacity(), mergedDevice);
     Q_CHECK_PTR(mergedLayer);
-    mergedLayer->setCompositeOp(COMPOSITE_OVER);
+    mergedLayer->setCompositeOp(layer->compositeOp()->id());
     mergedLayer->setChannelFlags(layer->channelFlags());
 
     // Merge meta data

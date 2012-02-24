@@ -661,13 +661,17 @@ void KoStyleManager::beginEdit()
 void KoStyleManager::endEdit()
 {
     Q_ASSERT (d->changeCommand);
-    d->undoStack->push(d->changeCommand);
+    if (d->undoStack) {
+        d->undoStack->push(d->changeCommand);
+    }
     d->changeCommand = 0;
 }
 
 void KoStyleManager::add(QTextDocument *document)
 {
-    d->undoStack = KoTextDocument(document).undoStack();
+    if (!d->undoStack) {
+        d->undoStack = KoTextDocument(document).undoStack();
+    }
     foreach(ChangeFollower *cf, d->documentUpdaterProxies) {
         if (cf->document() == document) {
             return; // already present.

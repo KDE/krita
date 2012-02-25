@@ -52,10 +52,6 @@ DeleteCommand::DeleteCommand(DeleteMode mode,
 
 void DeleteCommand::undo()
 {
-    foreach (KUndo2Command *command, m_shapeDeleteCommands) {
-        command->undo();
-    }
-
     KoTextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
     updateListChanges();
@@ -66,9 +62,6 @@ void DeleteCommand::redo()
 {
     m_undone = false;
     if (!m_first) {
-        foreach (KUndo2Command *command, m_shapeDeleteCommands)
-            command->redo();
-
         KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
     } else {
@@ -239,7 +232,6 @@ void DeleteCommand::deleteTextAnchor(KoInlineObject *object)
             KoShape *shape = anchor->shape();
             KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
             shapeDeleteCommand->redo();
-            m_shapeDeleteCommands.push_back(shapeDeleteCommand);
         }
     }
 }
@@ -286,9 +278,6 @@ bool DeleteCommand::mergeWith(const KUndo2Command *command)
         return false;
 
     DeleteCommand *other = const_cast<DeleteCommand *>(static_cast<const DeleteCommand *>(command));
-
-    m_shapeDeleteCommands += other->m_shapeDeleteCommands;
-    other->m_shapeDeleteCommands.clear();
 
     m_invalidInlineObjects += other->m_invalidInlineObjects;
     other->m_invalidInlineObjects.clear();
@@ -355,11 +344,4 @@ void DeleteCommand::updateListChanges()
 
 DeleteCommand::~DeleteCommand()
 {
-    if (!m_undone && m_document) {
-        KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
-        if (textEditor == 0)
-            return;
-        foreach (KUndo2Command *command, m_shapeDeleteCommands)
-            delete command;
-    }
 }

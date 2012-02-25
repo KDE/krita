@@ -627,8 +627,6 @@ private:
      */
     void reselectGlobalSelection();
 
-    KisSelectionMaskSP deselectedMask();
-
 private:
     class KisImagePrivate;
     KisImagePrivate * const m_d;

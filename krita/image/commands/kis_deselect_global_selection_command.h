@@ -41,6 +41,7 @@ public:
 
 private:
     KisImageWSP m_image;
+    KisSelectionSP m_oldSelection;
 };
 
 #endif

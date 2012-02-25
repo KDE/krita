@@ -112,7 +112,7 @@ void KisImageTest::testGlobalSelection()
     image->deselectGlobalSelection();
     QCOMPARE(image->globalSelection(), KisSelectionSP(0));
     QCOMPARE(image->canReselectGlobalSelection(), true);
-    QCOMPARE(image->root()->childCount(), 1U);
+    QCOMPARE(image->root()->childCount(), 0U);
 
     image->reselectGlobalSelection();
     QCOMPARE(image->globalSelection(), selection2);
@@ -124,17 +124,12 @@ void KisImageTest::testGlobalSelection()
     image->deselectGlobalSelection();
     QCOMPARE(image->globalSelection(), KisSelectionSP(0));
     QCOMPARE(image->canReselectGlobalSelection(), true);
-    QCOMPARE(image->root()->childCount(), 1U);
+    QCOMPARE(image->root()->childCount(), 0U);
 
     image->setGlobalSelection(selection1);
     QCOMPARE(image->globalSelection(), selection1);
-    QCOMPARE(image->canReselectGlobalSelection(), true);
-    QCOMPARE(image->root()->childCount(), 2U);
-
-    image->reselectGlobalSelection();
-    QCOMPARE(image->globalSelection(), selection2);
-    QCOMPARE(image->canReselectGlobalSelection(), true);
-    QCOMPARE(image->root()->childCount(), 2U);
+    QCOMPARE(image->canReselectGlobalSelection(), false);
+    QCOMPARE(image->root()->childCount(), 1U);
 }
 
 QTEST_KDEMAIN(KisImageTest, NoGUI)

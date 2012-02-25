@@ -109,6 +109,7 @@ public:
 
     const KoColorSpace * colorSpace;
 
+    KisSelectionSP deselectedGlobalSelection;
     KisGroupLayerSP rootLayer; // The layers are contained in here
     QList<KisLayer*> dirtyLayers; // for thumbnails
 
@@ -224,43 +225,27 @@ void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
         Q_ASSERT(m_d->rootLayer->selectionMask());
     }
 
+    m_d->deselectedGlobalSelection = 0;
     m_d->legacyUndoAdapter->emitSelectionChanged();
 }
 
 void KisImage::deselectGlobalSelection()
 {
-    KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
-    if (selectionMask) {
-        selectionMask->setActive(false);
-    }
-
-    m_d->legacyUndoAdapter->emitSelectionChanged();
+    KisSelectionSP savedSelection = globalSelection();
+    setGlobalSelection(0);
+    m_d->deselectedGlobalSelection = savedSelection;
 }
 
 bool KisImage::canReselectGlobalSelection()
 {
-    return deselectedMask();
+    return m_d->deselectedGlobalSelection;
 }
 
 void KisImage::reselectGlobalSelection()
 {
-    KisSelectionMaskSP mask = deselectedMask();
-    if (mask) {
-        mask->setActive(true);
+    if(m_d->deselectedGlobalSelection) {
+        setGlobalSelection(m_d->deselectedGlobalSelection);
     }
-
-    m_d->legacyUndoAdapter->emitSelectionChanged();
-}
-
-KisSelectionMaskSP KisImage::deselectedMask()
-{
-    // Get a list of non-active masks
-    KoProperties properties;
-    properties.setProperty("active", false);
-    QList<KisNodeSP> masks = root()->childNodes(QStringList("KisSelectionMask"), properties);
-
-    return masks.size() > 0 ?
-        static_cast<KisSelectionMask*>(masks.last().data()) : 0;
 }
 
 KisBackgroundSP KisImage::backgroundPattern() const

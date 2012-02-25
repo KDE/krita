@@ -38,10 +38,11 @@ KisDeselectGlobalSelectionCommand::~KisDeselectGlobalSelectionCommand()
 
 void KisDeselectGlobalSelectionCommand::redo()
 {
+    m_oldSelection = m_image->globalSelection();
     m_image->deselectGlobalSelection();
 }
 
 void KisDeselectGlobalSelectionCommand::undo()
 {
-    m_image->reselectGlobalSelection();
+    m_image->setGlobalSelection(m_oldSelection);
 }

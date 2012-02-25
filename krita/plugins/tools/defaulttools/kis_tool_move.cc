@@ -189,7 +189,6 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
             !node->inherits("KisGroupLayer") &&
             node->paintDevice() &&
             selection &&
-            !selection->isDeselected() &&
             !selection->isTotallyUnselected(image->bounds())) {
 
             KisLayerSP oldLayer = dynamic_cast<KisLayer*>(node.data());

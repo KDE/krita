@@ -91,7 +91,7 @@ void KisSelectionDecoration::selectionChanged()
     if (m_mode == Ants) {
         m_outline.clear();
 
-        if (selection && !selection->isDeselected()) {
+        if (selection) {
             if (selection->hasPixelSelection() || selection->hasShapeSelection()) {
                 if (!m_timer->isActive())
                     m_timer->start(300);
@@ -169,7 +169,7 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     Q_UNUSED(updateRect);
 
     KisSelectionSP selection = view()->selection();
-    if (!selection || selection->isDeselected() || !selection->isVisible())
+    if (!selection || !selection->isVisible())
         return;
 
     if (m_mode == Mask) {

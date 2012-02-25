@@ -87,5 +87,50 @@ void KisImageTest::testConvertImageColorSpace()
     image->refreshGraph();
 }
 
+void KisImageTest::testGlobalSelection()
+{
+    const KoColorSpace *cs8 = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 1000, 1000, cs8, "stest");
+
+    QCOMPARE(image->globalSelection(), KisSelectionSP(0));
+    QCOMPARE(image->canReselectGlobalSelection(), false);
+    QCOMPARE(image->root()->childCount(), 0U);
+
+    KisSelectionSP selection1 = new KisSelection(new KisDefaultBounds(image));
+    KisSelectionSP selection2 = new KisSelection(new KisDefaultBounds(image));
+
+    image->setGlobalSelection(selection1);
+    QCOMPARE(image->globalSelection(), selection1);
+    QCOMPARE(image->canReselectGlobalSelection(), false);
+    QCOMPARE(image->root()->childCount(), 1U);
+
+    image->setGlobalSelection(selection2);
+    QCOMPARE(image->globalSelection(), selection2);
+    QCOMPARE(image->canReselectGlobalSelection(), false);
+    QCOMPARE(image->root()->childCount(), 1U);
+
+    image->deselectGlobalSelection();
+    QCOMPARE(image->globalSelection(), KisSelectionSP(0));
+    QCOMPARE(image->canReselectGlobalSelection(), true);
+    QCOMPARE(image->root()->childCount(), 0U);
+
+    image->reselectGlobalSelection();
+    QCOMPARE(image->globalSelection(), selection2);
+    QCOMPARE(image->canReselectGlobalSelection(), false);
+    QCOMPARE(image->root()->childCount(), 1U);
+
+    // mixed deselecting/setting/reselecting
+
+    image->deselectGlobalSelection();
+    QCOMPARE(image->globalSelection(), KisSelectionSP(0));
+    QCOMPARE(image->canReselectGlobalSelection(), true);
+    QCOMPARE(image->root()->childCount(), 0U);
+
+    image->setGlobalSelection(selection1);
+    QCOMPARE(image->globalSelection(), selection1);
+    QCOMPARE(image->canReselectGlobalSelection(), false);
+    QCOMPARE(image->root()->childCount(), 1U);
+}
+
 QTEST_KDEMAIN(KisImageTest, NoGUI)
 #include "kis_image_test.moc"

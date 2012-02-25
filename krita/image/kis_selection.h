@@ -131,9 +131,6 @@ public:
     void updateProjection(const QRect& rect);
     void updateProjection();
 
-    void setDeselected(bool deselected);
-    bool isDeselected();
-
     void setVisible(bool visible);
     bool isVisible();
 

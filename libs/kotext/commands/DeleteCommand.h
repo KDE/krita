@@ -64,7 +64,6 @@ private:
     QWeakPointer<QTextDocument> m_document;
     KoShapeController *m_shapeController;
 
-    QList<KUndo2Command *> m_shapeDeleteCommands;
     QSet<KoInlineObject *> m_invalidInlineObjects;
     QList<KoBookmark *>m_unmatchedBookmarks;
     QSet<KoInlineObject *> m_bookmarksToRemove;

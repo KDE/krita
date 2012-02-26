@@ -24,6 +24,8 @@
 #include "KoTextDocument.h"
 #include "KoInlineTextObjectManager.h"
 
+#include <KDebug>
+
 bool sortAnchor(KoTextAnchor *a1, KoTextAnchor *a2)
 {
     return a1->positionInDocument() > a2->positionInDocument();
@@ -59,7 +61,9 @@ void DeleteAnchorsCommand::redo()
         foreach (KoTextAnchor *anchor, m_anchors) {
             QTextCursor cursor(m_document);
             cursor.setPosition(anchor->positionInDocument());
-            cursor.deleteChar();
+//            cursor.beginEditBlock();
+            cursor.deleteChar(); //this works also when the DeleteCommand further deletes its selection, which contained this char. Odd
+//            cursor.endEditBlock();
         }
     }
     KoInlineTextObjectManager *manager = KoTextDocument(m_document).inlineTextObjectManager();
@@ -83,4 +87,3 @@ void DeleteAnchorsCommand::undo()
     KUndo2Command::undo();
     m_deleteAnchors = false;
 }
-

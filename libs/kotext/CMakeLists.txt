@@ -17,6 +17,8 @@ set(kotext_LIB_SRCS
     KoTextPaste.cpp
     KoTextDocument.cpp
     KoTextEditor.cpp
+    KoTextEditor_undo.cpp
+    KoTextEditor_format.cpp
     KoList.cpp
 
     KoTextEditingRegistry.cpp

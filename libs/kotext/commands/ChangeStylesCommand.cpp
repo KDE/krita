@@ -31,13 +31,12 @@ ChangeStylesCommand::ChangeStylesCommand(ChangeFollower *changeFollower
         , const QList<KoParagraphStyle *> &origParagraphStyles
         , const QSet<int> &changedStyles
         , KUndo2Command *parent)
-    : KUndo2Command(parent)
+    : KUndo2Command("stylechangecommand",parent) //Don't translate
     , m_changeFollower(changeFollower)
     , m_origCharacterStyles(origCharacterStyles)
     , m_origParagraphStyles(origParagraphStyles)
     , m_changedStyles(changedStyles)
     , m_first(true)
-    , m_macroFirst(parent != 0)
 {
     m_changeFollower->collectNeededInfo(m_changedStyles);
 }
@@ -48,16 +47,6 @@ ChangeStylesCommand::~ChangeStylesCommand()
 
 void ChangeStylesCommand::redo()
 {
-    // We need this weird construct if we are played within a macro then our first job
-    // is to call instantlyExecuteCommand which will "redo" us immediately in what is the normal
-    // "first" time
-    if (m_macroFirst) {
-        m_macroFirst = false;
-        KoTextEditor *editor = KoTextDocument(m_changeFollower->document()).textEditor();
-        editor->instantlyExecuteCommand(this);
-        return;
-    }
-
     KUndo2Command::redo();
 
     if (m_first) {

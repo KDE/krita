@@ -23,8 +23,10 @@
 #include "ChangeStylesCommand.h"
 #include "KoCharacterStyle.h"
 #include "KoParagraphStyle.h"
+#include "ChangeFollower.h"
 
 #include <KoTextDocument.h>
+#include <KoTextEditor.h>
 
 #include <KLocale>
 
@@ -48,13 +50,6 @@ ChangeStylesMacroCommand::~ChangeStylesMacroCommand()
 //     finally the new styles are applied to the documents through super::redo()
 void ChangeStylesMacroCommand::redo()
 {
-    if (m_first) {
-        foreach(ChangeFollower *cf, m_changeFollowers) {
-            new ChangeStylesCommand(cf, m_origCharacterStyles, m_origParagraphStyles, m_changedStyles, this);
-        }
-        m_first = false;
-    }
-
     foreach(KoCharacterStyle *newStyle, m_changedCharacterStyles) {
         int id = newStyle->styleId();
         m_styleManager->characterStyle(id)->copyProperties(newStyle);
@@ -69,7 +64,17 @@ void ChangeStylesMacroCommand::redo()
         emit m_styleManager->styleAltered(m_styleManager->paragraphStyle(id));
     }
 
-    KUndo2Command::redo(); // calls redo on all children
+    if (m_first) {
+        foreach(ChangeFollower *cf, m_changeFollowers) {
+            ChangeStylesCommand *cmd = new ChangeStylesCommand(cf, m_origCharacterStyles, m_origParagraphStyles, m_changedStyles, this);
+
+            //add and execute it's redo
+            KoTextDocument(cf->document()).textEditor()->addCommand(cmd);
+        }
+        m_first = false;
+    } else {
+        KUndo2Command::redo(); // calls redo on all children
+    }
 }
 
 void ChangeStylesMacroCommand::undo()

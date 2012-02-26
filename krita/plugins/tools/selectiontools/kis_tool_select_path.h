@@ -28,12 +28,22 @@
 class KoCanvasBase;
 class KoLineBorder;
 
-#define REDIRECT_EVENT(name, EventType)         \
-    void name(EventType *e) {                   \
-        m_localTool->name(e);                   \
-        if (!e->isAccepted()) {                 \
-            KisToolSelectBase::name(e);         \
-        }                                       \
+#define REDIRECT_EVENT_0P(name)              \
+    void name() {                            \
+        m_localTool->name();                 \
+        KisToolSelectBase::name();           \
+    }
+
+#define REDIRECT_EVENT_1P(name, P1)          \
+    void name(P1 p1) {                       \
+        m_localTool->name(p1);               \
+        KisToolSelectBase::name(p1);         \
+    }
+
+#define REDIRECT_EVENT_2P(name, P1, P2)      \
+    void name(P1 p1, P2 p2) {                \
+        m_localTool->name(p1, p2);           \
+        KisToolSelectBase::name(p1, p2);     \
     }
 
 class KisToolSelectPath : public KisToolSelectBase
@@ -45,13 +55,13 @@ public:
     virtual ~KisToolSelectPath();
 
     void paint(QPainter& gc, const KoViewConverter &converter) {m_localTool->paint(gc, converter);}
-    REDIRECT_EVENT(mousePressEvent, KoPointerEvent);
-    REDIRECT_EVENT(mouseMoveEvent, KoPointerEvent);
-    REDIRECT_EVENT(mouseReleaseEvent, KoPointerEvent);
-    REDIRECT_EVENT(keyPressEvent, QKeyEvent);
-    REDIRECT_EVENT(keyReleaseEvent, QKeyEvent);
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) {m_localTool->activate(toolActivation, shapes); KisToolSelectBase::activate(toolActivation, shapes);}
-    void deactivate() {m_localTool->deactivate(); KisToolSelectBase::deactivate();}
+    REDIRECT_EVENT_1P(mousePressEvent, KoPointerEvent*);
+    REDIRECT_EVENT_1P(mouseMoveEvent, KoPointerEvent*);
+    REDIRECT_EVENT_1P(mouseReleaseEvent, KoPointerEvent*);
+    REDIRECT_EVENT_1P(keyPressEvent, QKeyEvent*);
+    REDIRECT_EVENT_1P(keyReleaseEvent, QKeyEvent*);
+    REDIRECT_EVENT_2P(activate, ToolActivation, const QSet<KoShape*>&);
+    REDIRECT_EVENT_0P(deactivate);
 
 private:
     /// reimplemented

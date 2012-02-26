@@ -604,12 +604,6 @@ QWidget* KisTool::createOptionWidget()
     return d->optionWidget;
 }
 
-QWidget* KisTool::optionWidget()
-{
-    return d->optionWidget;
-}
-
-
 void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
     //KisToolSelectMagnetic uses custom painting, so don't forget to update that as well

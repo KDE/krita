@@ -636,11 +636,6 @@ QWidget* KisToolCrop::createOptionWidget()
     return m_optWidget;
 }
 
-QWidget* KisToolCrop::optionWidget()
-{
-    return m_optWidget;
-}
-
 QRectF KisToolCrop::lowerRightHandleRect(QRectF cropBorderRect)
 {
     return QRectF(cropBorderRect.right() - m_handleSize / 2.0, cropBorderRect.bottom() - m_handleSize / 2.0, m_handleSize, m_handleSize);

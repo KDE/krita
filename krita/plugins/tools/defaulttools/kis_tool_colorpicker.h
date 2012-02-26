@@ -52,7 +52,6 @@ public:
 
 public:
     virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
 
 
     virtual void mousePressEvent(KoPointerEvent *event);

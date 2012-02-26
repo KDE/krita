@@ -148,7 +148,6 @@ protected:
     void updateCanvasViewRect(const QRectF &viewRect);
 
     virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
 
     inline void setOutlineStyle(PaintMode mode) {
         m_outlinePaintMode = mode;

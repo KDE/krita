@@ -2433,11 +2433,6 @@ QWidget* KisToolTransform::createOptionWidget() {
     return m_optWidget;
 }
 
-QWidget* KisToolTransform::optionWidget()
-{
-    return m_optWidget;
-}
-
 void KisToolTransform::updateOptionWidget()
 {
     if (m_optWidget == 0)

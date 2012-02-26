@@ -35,7 +35,6 @@ public:
                       const QString &windowTitle);
 
     QWidget* createOptionWidget();
-    QWidget* optionWidget();
     KisSelectionOptions* selectionOptionWidget();
 
     SelectionMode selectionMode() const;

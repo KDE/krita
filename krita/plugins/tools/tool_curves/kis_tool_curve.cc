@@ -586,14 +586,4 @@ QWidget* KisToolCurve::createSelectionOptionWidget(QWidget* parent)
     return m_optWidget;
 }
 
-QWidget* KisToolCurve::optionWidget()
-{
-    /*
-        if (toolType() == TOOL_SELECT)
-            return m_optWidget;
-        else
-            return KisToolPaint::optionWidget();
-    */
-}
-
 #include "kis_tool_curve.moc"

@@ -64,11 +64,6 @@ void KisTool%{APPNAME}::paint(QPainter& gc, const KoViewConverter &converter)
 // {
 //     return 0;
 // }
-//
-// QWidget* KisTool%{APPNAME}::optionWidget()
-// {
-//         return 0;
-// }
 
 
 #include "kis_tool_%{APPNAMELC}.moc"

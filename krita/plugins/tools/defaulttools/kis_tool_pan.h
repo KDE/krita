@@ -47,9 +47,6 @@ public:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
-//    virtual QWidget* createOptionWidget();
-//    virtual QWidget* optionWidget();
-
 private:
     void adjustCursor();
     bool isInCheckerArea(QPointF pt);

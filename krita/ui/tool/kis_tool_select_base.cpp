@@ -51,11 +51,6 @@ QWidget* KisToolSelectBase::createOptionWidget()
     return m_widgetHelper.optionWidget();
 }
 
-QWidget* KisToolSelectBase::optionWidget()
-{
-    return m_widgetHelper.optionWidget();
-}
-
 KisSelectionOptions* KisToolSelectBase::selectionOptionWidget()
 {
     return m_widgetHelper.optionWidget();

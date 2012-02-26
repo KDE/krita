@@ -1,6 +1,7 @@
 install(FILES
     over.ctlt
     alphadarken.ctlt
+    erase.ctlt
     DESTINATION ${DATA_INSTALL_DIR}/pigmentcms/ctlcompositeops)
 
 install(FILES

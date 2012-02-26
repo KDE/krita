@@ -22,41 +22,27 @@
 #ifndef KIS_TOOL_SELECT_RECTANGULAR_H_
 #define KIS_TOOL_SELECT_RECTANGULAR_H_
 
-#include "krita/ui/tool/kis_tool_select_base.h"
 #include "KoToolFactoryBase.h"
 #include "kis_tool_rectangle_base.h"
+#include "kis_selection_tool_config_widget_helper.h"
 
-class KoCanvasBase;
 
-class KisToolSelectRectangular : public KisToolSelectBase
+class KisToolSelectRectangular : public KisToolRectangleBase
 {
-
     Q_OBJECT
 
 public:
     KisToolSelectRectangular(KoCanvasBase * canvas);
-    virtual ~KisToolSelectRectangular();
-
-    virtual QWidget * createOptionWidget();
+    QWidget* createOptionWidget();
 
 private:
-    class LocalTool : public KisToolRectangleBase {
-    public:
-        LocalTool(KoCanvasBase * canvas, KisToolSelectRectangular* selectingTool)
-            : KisToolRectangleBase(canvas), m_selectingTool(selectingTool) {}
-    public:
-        void finishRect(const QRectF& rect);
-    private:
-        KisToolSelectRectangular* const m_selectingTool;
-    };
-    LocalTool m_localTool;
+    void keyPressEvent(QKeyEvent *event);
+    void finishRect(const QRectF& rect);
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter) {m_localTool.paint(gc, converter);}
-    virtual void mousePressEvent(KoPointerEvent *e) {m_localTool.mousePressEvent(e);}
-    virtual void mouseMoveEvent(KoPointerEvent *e) {m_localTool.mouseMoveEvent(e);}
-    virtual void mouseReleaseEvent(KoPointerEvent *e) {m_localTool.mouseReleaseEvent(e);}
-    virtual void deactivate() {m_localTool.deactivate();}
+private:
+    KisSelectionToolConfigWidgetHelper m_widgetHelper;
 };
+
 
 class KisToolSelectRectangularFactory : public KoToolFactoryBase
 {

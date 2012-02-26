@@ -78,7 +78,7 @@ protected:
     KisPaintingInformationBuilder* paintingInformationBuilder() const;
     KisRecordingAdapter* recordingAdapter() const;
     void resetHelper(KisToolFreehandHelper *helper);
-    void updateOutlineDocPoint(const QPointF &point);
+    void requestUpdateOutline(const QPointF &outlineDocPoint);
 
 protected slots:
 
@@ -102,7 +102,6 @@ private:
 
     void showOutlineTemporary();
 
-    void updateOutlineRect();
     QPainterPath getOutlinePath(const QPointF &documentPos,
                                 KisPaintOpSettings::OutlineMode outlineMode);
 

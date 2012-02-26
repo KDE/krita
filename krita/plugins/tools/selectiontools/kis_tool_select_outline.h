@@ -43,8 +43,6 @@ public:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
-    QWidget* createOptionWidget();
-
 public slots:
     virtual void deactivate();
 

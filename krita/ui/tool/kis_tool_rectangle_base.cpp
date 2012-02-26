@@ -41,8 +41,8 @@ void KisToolRectangleBase::paint(QPainter& gc, const KoViewConverter &converter)
 void KisToolRectangleBase::deactivate()
 {
     updateArea();
+    KisToolShape::deactivate();
 }
-
 
 void KisToolRectangleBase::mousePressEvent(KoPointerEvent *event)
 {

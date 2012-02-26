@@ -95,6 +95,8 @@ protected:
 
 
 protected:
+    bool specialHoverModeActive() const;
+
 
     /// Add the tool-specific layout to the default option widget layout.
     void addOptionWidgetLayout(QLayout *layout);
@@ -158,6 +160,7 @@ private:
 
 private:
 
+    bool m_specialHoverModifier;
     QGridLayout *m_optionWidgetLayout;
 
     bool m_supportOutline;

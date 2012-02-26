@@ -22,58 +22,43 @@
  */
 
 #include "kis_tool_select_polygonal.h"
-#include <QApplication>
-#include <QPainter>
-#include <QRegion>
-#include <QWidget>
-#include <QLayout>
-#include <QVBoxLayout>
 
-#include <kis_debug.h>
-#include <klocale.h>
-
-#include <KoPointerEvent.h>
-#include <KoShapeController.h>
 #include <KoPathShape.h>
-#include <KoColorSpace.h>
-#include <KoCompositeOp.h>
 
-#include "kis_layer.h"
-#include "kis_selection_options.h"
-#include "kis_cursor.h"
-#include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_paintop_registry.h"
-#include "canvas/kis_canvas2.h"
+#include "kis_selection_options.h"
+#include "kis_canvas2.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
+#include "kis_shape_tool_helper.h"
+
 
 KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas)
-        : KisToolSelectBase(canvas, KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6)),
-        m_localTool(canvas, this)
+    : KisToolPolylineBase(canvas,
+                          KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6)),
+      m_widgetHelper(i18n("Polygonal Selection"))
 {
     setObjectName("tool_select_polygonal");
-    setPopupActionList(m_localTool.popupActionList());
-}
-
-KisToolSelectPolygonal::~KisToolSelectPolygonal()
-{
-}
-
-void KisToolSelectPolygonal::keyPressEvent(QKeyEvent *e)
-{
-    KisToolSelectBase::keyPressEvent(e);
-    m_localTool.keyPressEvent(e);
 }
 
 QWidget* KisToolSelectPolygonal::createOptionWidget()
 {
-    KisToolSelectBase::createOptionWidget();
-    m_optWidget->setWindowTitle(i18n("Polygonal Selection"));
-    return m_optWidget;
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
+    Q_ASSERT(canvas);
+
+    m_widgetHelper.createOptionWidget(canvas, this->toolId());
+    return m_widgetHelper.optionWidget();
 }
 
-void KisToolSelectPolygonal::LocalTool::finishPolyline(const QVector<QPointF> &points)
+void KisToolSelectPolygonal::keyPressEvent(QKeyEvent *event)
+{
+    if (!m_widgetHelper.processKeyPressEvent(event)) {
+        KisTool::keyPressEvent(event);
+    }
+}
+
+void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
@@ -82,24 +67,20 @@ void KisToolSelectPolygonal::LocalTool::finishPolyline(const QVector<QPointF> &p
 
     KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Polygonal Selection"));
 
-    if (m_selectingTool->m_selectionMode == PIXEL_SELECTION) {
-
-        KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+    if (m_widgetHelper.selectionMode() == PIXEL_SELECTION) {
+        KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
         KisPainter painter(tmpSel);
         painter.setBounds(currentImage()->bounds());
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
+        painter.setPaintOpPreset(currentPaintOpPreset(), currentImage()); // And now the painter owns the op and will destroy it.
+        painter.setAntiAliasPolygonFill(m_widgetHelper.optionWidget()->antiAliasSelection());
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-        painter.setGradient(m_selectingTool->currentGradient());
-        painter.setPattern(m_selectingTool->currentPattern());
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-        painter.setAntiAliasPolygonFill(m_selectingTool->m_optWidget->antiAliasSelection());
-        painter.setOpacity(OPACITY_OPAQUE_U8);
-        painter.setPaintOpPreset(m_selectingTool->currentPaintOpPreset(), currentImage()); // And now the painter owns the op and will destroy it.
-        painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
+
         painter.paintPolygon(points);
 
-        helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
+        helper.selectPixelSelection(tmpSel, m_widgetHelper.selectionAction());
     } else {
         KoPathShape* path = new KoPathShape();
         path->setShapeId(KoPathShapeId);
@@ -115,5 +96,3 @@ void KisToolSelectPolygonal::LocalTool::finishPolyline(const QVector<QPointF> &p
         helper.addSelectionShape(path);
     }
 }
-
-#include "kis_tool_select_polygonal.moc"

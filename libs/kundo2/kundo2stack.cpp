@@ -519,6 +519,7 @@ KUndo2QStack::~KUndo2QStack()
 
 void KUndo2QStack::clear()
 {
+    qDebug()<<"clearing undostack";
     if (m_command_list.isEmpty())
         return;
 

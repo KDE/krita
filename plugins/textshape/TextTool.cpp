@@ -1531,7 +1531,9 @@ void TextTool::repaintSelection()
 QRectF TextTool::caretRect(QTextCursor *cursor) const
 {
     QTextCursor tmpCursor(*cursor);
+    tmpCursor.beginEditBlock(); //needed to work around qt4.8 bug
     tmpCursor.setPosition(cursor->position()); // looses the anchor
+    tmpCursor.endEditBlock();
 
     QRectF rect = textRect(tmpCursor);
     if (rect.size() == QSizeF(0,0)) {

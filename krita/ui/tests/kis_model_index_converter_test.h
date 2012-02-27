@@ -36,19 +36,26 @@ private slots:
     void cleanup();
 
     void testIndexFromDummy();
-    void testIndexFromAddedDummy();
+    void testIndexFromAddedAllowedDummy();
+    void testIndexFromAddedDeniedDummy();
     void testDummyFromRow();
     void testRowCount();
 
     void testIndexFromDummyShowAll();
-    void testIndexFromAddedDummyShowAll();
+    void testIndexFromAddedAllowedDummyShowAll();
+    void testIndexFromAddedDeniedDummyShowAll();
     void testDummyFromRowShowAll();
     void testRowCountShowAll();
 
 private:
     inline void checkIndexFromDummy(KisNodeSP node, int row);
     inline void checkInvalidIndexFromDummy(KisNodeSP node);
-    inline void checkIndexFromAddedDummy(KisNodeSP parent, int index, int parentRow, int childRow, bool parentValid);
+    inline void checkIndexFromAddedAllowedDummy(KisNodeSP parent, int index, int parentRow, int childRow, bool parentValid);
+    inline void checkIndexFromAddedDeniedDummy(KisNodeSP parent, int index, int parentRow, int childRow, bool parentValid);
+    inline void checkIndexFromAddedDummy(KisNodeSP parent, int index, const QString &type, int parentRow, int childRow, bool parentValid);
+    inline void checkInvalidIndexFromAddedAllowedDummy(KisNodeSP parent, int index);
+    inline void checkInvalidIndexFromAddedDeniedDummy(KisNodeSP parent, int index);
+    inline void checkInvalidIndexFromAddedDummy(KisNodeSP parent, int index, const QString &type);
     inline void checkDummyFromRow(KisNodeSP parent, int row, KisNodeSP expectedNode);
     inline void checkRowCount(KisNodeSP parent, int rowCount);
 

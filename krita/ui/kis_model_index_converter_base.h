@@ -59,9 +59,15 @@ public:
 
     /**
      * Calculates the parent and the position in the model for newly created dummy
+     * \param newNodeMetaObjectType is a class name of a newly added node
+     *        This name is got from Qt's meta object system so you must
+     *        compare this value against a corresponding staticMetaObject
+     *        object only.
+     *        We do not pass a pointer to a real node to limit the access to
+     *        real nodes.
      * Return whether the new dummy will be shown in the model
      */
-    virtual bool indexFromAddedDummy(KisNodeDummy *parentDummy, int index, QModelIndex &parentIndex, int &row) = 0;
+    virtual bool indexFromAddedDummy(KisNodeDummy *parentDummy, int index, const QString &newNodeMetaObjectType, QModelIndex &parentIndex, int &row) = 0;
 
     /**
      * Returns the number of children of the given index of the model

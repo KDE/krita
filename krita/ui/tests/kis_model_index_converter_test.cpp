@@ -73,7 +73,19 @@ inline void KisModelIndexConverterTest::checkInvalidIndexFromDummy(KisNodeSP nod
     QVERIFY(!index.isValid());
 }
 
-inline void KisModelIndexConverterTest::checkIndexFromAddedDummy(KisNodeSP parent, int index, int parentRow, int childRow, bool parentValid)
+inline void KisModelIndexConverterTest::checkIndexFromAddedAllowedDummy(KisNodeSP parent, int index, int parentRow, int childRow, bool parentValid)
+{
+    QString type = KisLayer::staticMetaObject.className();
+    checkIndexFromAddedDummy(parent, index, type, parentRow, childRow, parentValid);
+}
+
+inline void KisModelIndexConverterTest::checkIndexFromAddedDeniedDummy(KisNodeSP parent, int index, int parentRow, int childRow, bool parentValid)
+{
+    QString type = KisSelectionMask::staticMetaObject.className();
+    checkIndexFromAddedDummy(parent, index, type, parentRow, childRow, parentValid);
+}
+
+inline void KisModelIndexConverterTest::checkIndexFromAddedDummy(KisNodeSP parent, int index, const QString &type, int parentRow, int childRow, bool parentValid)
 {
    QModelIndex modelIndex;
    KisNodeDummy *dummy;
@@ -82,7 +94,9 @@ inline void KisModelIndexConverterTest::checkIndexFromAddedDummy(KisNodeSP paren
    bool result;
 
    dummy = parent ? m_dummiesFacade->dummyForNode(parent) : 0;
-   result = m_indexConverter->indexFromAddedDummy(dummy, index, modelIndex, row);
+   result = m_indexConverter->indexFromAddedDummy(dummy, index, type, modelIndex, row);
+   if(!result) qDebug() << "Failing parent:" << (parent ? parent->name() : "none") << "index:" << index;
+   QVERIFY(result);
 
    QCOMPARE(modelIndex.isValid(), parentValid);
 
@@ -91,10 +105,33 @@ inline void KisModelIndexConverterTest::checkIndexFromAddedDummy(KisNodeSP paren
        QCOMPARE(modelIndex.column(), 0);
    }
 
-   if(result) {
-       if(row != childRow) qDebug() << "Failing parent:" << (parent ? parent->name() : "none") << "index:" << index;
-       QCOMPARE(row, childRow);
-   }
+   if(row != childRow) qDebug() << "Failing parent:" << (parent ? parent->name() : "none") << "index:" << index;
+   QCOMPARE(row, childRow);
+}
+
+inline void KisModelIndexConverterTest::checkInvalidIndexFromAddedAllowedDummy(KisNodeSP parent, int index)
+{
+    QString type = KisLayer::staticMetaObject.className();
+    checkInvalidIndexFromAddedDummy(parent, index, type);
+}
+
+inline void KisModelIndexConverterTest::checkInvalidIndexFromAddedDeniedDummy(KisNodeSP parent, int index)
+{
+    QString type = KisSelectionMask::staticMetaObject.className();
+    checkInvalidIndexFromAddedDummy(parent, index, type);
+}
+
+inline void KisModelIndexConverterTest::checkInvalidIndexFromAddedDummy(KisNodeSP parent, int index, const QString &type)
+{
+    QModelIndex modelIndex;
+    KisNodeDummy *dummy;
+
+    int row = 0;
+    bool result;
+
+    dummy = parent ? m_dummiesFacade->dummyForNode(parent) : 0;
+    result = m_indexConverter->indexFromAddedDummy(dummy, index, type, modelIndex, row);
+    QVERIFY(!result);
 }
 
 inline void KisModelIndexConverterTest::checkDummyFromRow(KisNodeSP parent, int row, KisNodeSP expectedNode)
@@ -116,7 +153,6 @@ inline void KisModelIndexConverterTest::checkDummyFromRow(KisNodeSP parent, int 
         QFAIL("Wrong node");
     }
 }
-
 
 inline void KisModelIndexConverterTest::checkRowCount(KisNodeSP parent, int rowCount)
 {
@@ -155,25 +191,46 @@ void KisModelIndexConverterTest::testIndexFromDummy()
     checkInvalidIndexFromDummy(m_sel2);
 }
 
-void KisModelIndexConverterTest::testIndexFromAddedDummy()
+void KisModelIndexConverterTest::testIndexFromAddedAllowedDummy()
 {
     m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel);
 
-    checkIndexFromAddedDummy(m_image->root(), 0, 0, 4, false);
-    checkIndexFromAddedDummy(m_image->root(), 1, 0, 4, false);
-    checkIndexFromAddedDummy(m_image->root(), 2, 0, 3, false);
-    checkIndexFromAddedDummy(m_image->root(), 3, 0, 2, false);
-    checkIndexFromAddedDummy(m_image->root(), 4, 0, 2, false);
-    checkIndexFromAddedDummy(m_image->root(), 5, 0, 1, false);
-    checkIndexFromAddedDummy(m_image->root(), 6, 0, 0, false);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 0, 0, 4, false);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 1, 0, 4, false);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 2, 0, 3, false);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 3, 0, 2, false);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 4, 0, 2, false);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 5, 0, 1, false);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 6, 0, 0, false);
 
-    checkIndexFromAddedDummy(m_layer1, 0, 3, 0, true);
+    checkIndexFromAddedAllowedDummy(m_layer1, 0, 3, 0, true);
 
-    checkIndexFromAddedDummy(m_layer3, 0, 1, 2, true);
-    checkIndexFromAddedDummy(m_layer3, 1, 1, 1, true);
-    checkIndexFromAddedDummy(m_layer3, 2, 1, 0, true);
+    checkIndexFromAddedAllowedDummy(m_layer3, 0, 1, 2, true);
+    checkIndexFromAddedAllowedDummy(m_layer3, 1, 1, 1, true);
+    checkIndexFromAddedAllowedDummy(m_layer3, 2, 1, 0, true);
 
-    checkIndexFromAddedDummy(0, 0, 0, 0, false);
+    checkInvalidIndexFromAddedAllowedDummy(0, 0);
+}
+
+void KisModelIndexConverterTest::testIndexFromAddedDeniedDummy()
+{
+    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel);
+
+    checkInvalidIndexFromAddedDeniedDummy(m_image->root(), 0);
+    checkInvalidIndexFromAddedDeniedDummy(m_image->root(), 1);
+    checkInvalidIndexFromAddedDeniedDummy(m_image->root(), 2);
+    checkInvalidIndexFromAddedDeniedDummy(m_image->root(), 3);
+    checkInvalidIndexFromAddedDeniedDummy(m_image->root(), 4);
+    checkInvalidIndexFromAddedDeniedDummy(m_image->root(), 5);
+    checkInvalidIndexFromAddedDeniedDummy(m_image->root(), 6);
+
+    checkIndexFromAddedDeniedDummy(m_layer1, 0, 3, 0, true);
+
+    checkIndexFromAddedDeniedDummy(m_layer3, 0, 1, 2, true);
+    checkIndexFromAddedDeniedDummy(m_layer3, 1, 1, 1, true);
+    checkIndexFromAddedDeniedDummy(m_layer3, 2, 1, 0, true);
+
+    checkInvalidIndexFromAddedDeniedDummy(0, 0);
 }
 
 void KisModelIndexConverterTest::testDummyFromRow()
@@ -224,25 +281,46 @@ void KisModelIndexConverterTest::testIndexFromDummyShowAll()
     checkIndexFromDummy(m_image->root(), 0);
 }
 
-void KisModelIndexConverterTest::testIndexFromAddedDummyShowAll()
+void KisModelIndexConverterTest::testIndexFromAddedAllowedDummyShowAll()
 {
     m_indexConverter = new KisModelIndexConverterShowAll(m_dummiesFacade, m_nodeModel);
 
-    checkIndexFromAddedDummy(m_image->root(), 0, 0, 6, true);
-    checkIndexFromAddedDummy(m_image->root(), 1, 0, 5, true);
-    checkIndexFromAddedDummy(m_image->root(), 2, 0, 4, true);
-    checkIndexFromAddedDummy(m_image->root(), 3, 0, 3, true);
-    checkIndexFromAddedDummy(m_image->root(), 4, 0, 2, true);
-    checkIndexFromAddedDummy(m_image->root(), 5, 0, 1, true);
-    checkIndexFromAddedDummy(m_image->root(), 6, 0, 0, true);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 0, 0, 6, true);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 1, 0, 5, true);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 2, 0, 4, true);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 3, 0, 3, true);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 4, 0, 2, true);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 5, 0, 1, true);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 6, 0, 0, true);
 
-    checkIndexFromAddedDummy(m_layer1, 0, 4, 0, true);
+    checkIndexFromAddedAllowedDummy(m_layer1, 0, 4, 0, true);
 
-    checkIndexFromAddedDummy(m_layer3, 0, 1, 2, true);
-    checkIndexFromAddedDummy(m_layer3, 1, 1, 1, true);
-    checkIndexFromAddedDummy(m_layer3, 2, 1, 0, true);
+    checkIndexFromAddedAllowedDummy(m_layer3, 0, 1, 2, true);
+    checkIndexFromAddedAllowedDummy(m_layer3, 1, 1, 1, true);
+    checkIndexFromAddedAllowedDummy(m_layer3, 2, 1, 0, true);
 
-    checkIndexFromAddedDummy(0, 0, 0, 0, false);
+    checkIndexFromAddedAllowedDummy(0, 0, 0, 0, false);
+}
+
+void KisModelIndexConverterTest::testIndexFromAddedDeniedDummyShowAll()
+{
+    m_indexConverter = new KisModelIndexConverterShowAll(m_dummiesFacade, m_nodeModel);
+
+    checkIndexFromAddedDeniedDummy(m_image->root(), 0, 0, 6, true);
+    checkIndexFromAddedDeniedDummy(m_image->root(), 1, 0, 5, true);
+    checkIndexFromAddedDeniedDummy(m_image->root(), 2, 0, 4, true);
+    checkIndexFromAddedDeniedDummy(m_image->root(), 3, 0, 3, true);
+    checkIndexFromAddedDeniedDummy(m_image->root(), 4, 0, 2, true);
+    checkIndexFromAddedDeniedDummy(m_image->root(), 5, 0, 1, true);
+    checkIndexFromAddedDeniedDummy(m_image->root(), 6, 0, 0, true);
+
+    checkIndexFromAddedDeniedDummy(m_layer1, 0, 4, 0, true);
+
+    checkIndexFromAddedDeniedDummy(m_layer3, 0, 1, 2, true);
+    checkIndexFromAddedDeniedDummy(m_layer3, 1, 1, 1, true);
+    checkIndexFromAddedDeniedDummy(m_layer3, 2, 1, 0, true);
+
+    checkIndexFromAddedDeniedDummy(0, 0, 0, 0, false);
 }
 
 void KisModelIndexConverterTest::testDummyFromRowShowAll()

@@ -72,7 +72,7 @@ signals:
     void requestMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
 
 private slots:
-    void slotBeginInsertDummy(KisNodeDummy *parent, int index);
+    void slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType);
     void slotEndInsertDummy(KisNodeDummy *dummy);
     void slotBeginRemoveDummy(KisNodeDummy *dummy);
     void slotEndRemoveDummy();

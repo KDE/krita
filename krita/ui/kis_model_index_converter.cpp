@@ -37,6 +37,12 @@ inline bool KisModelIndexConverter::checkDummyType(KisNodeDummy *dummy)
     return !mask;
 }
 
+inline bool KisModelIndexConverter::checkDummyMetaObjectType(const QString &type)
+{
+    QString blacklistedType = KisSelectionMask::staticMetaObject.className();
+    return type != blacklistedType;
+}
+
 KisNodeDummy* KisModelIndexConverter::dummyFromRow(int row, QModelIndex parent)
 {
 
@@ -111,7 +117,11 @@ QModelIndex KisModelIndexConverter::indexFromDummy(KisNodeDummy *dummy)
     return m_model->createIndex(row, 0, (void*)dummy);
 }
 
-bool KisModelIndexConverter::indexFromAddedDummy(KisNodeDummy *parentDummy, int index, QModelIndex &parentIndex, int &row)
+bool KisModelIndexConverter::indexFromAddedDummy(KisNodeDummy *parentDummy,
+                                                 int index,
+                                                 const QString &newNodeMetaObjectType,
+                                                 QModelIndex &parentIndex,
+                                                 int &row)
 {
     // adding a root node
     if(!parentDummy) {
@@ -121,10 +131,9 @@ bool KisModelIndexConverter::indexFromAddedDummy(KisNodeDummy *parentDummy, int 
 
     // adding a child of the root node
     if(!parentDummy->parent()) {
-        //TODO:
-        //if(!right_type) {
-        //    return false;
-        //}
+        if(!checkDummyMetaObjectType(newNodeMetaObjectType)) {
+            return false;
+        }
 
         row = 0;
 

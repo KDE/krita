@@ -65,8 +65,14 @@ QModelIndex KisModelIndexConverterShowAll::indexFromDummy(KisNodeDummy *dummy)
     return m_model->createIndex(row, 0, (void*)dummy);
 }
 
-bool KisModelIndexConverterShowAll::indexFromAddedDummy(KisNodeDummy *parentDummy, int index, QModelIndex &parentIndex, int &row)
+bool KisModelIndexConverterShowAll::indexFromAddedDummy(KisNodeDummy *parentDummy,
+                                                        int index,
+                                                        const QString &newNodeMetaObjectType,
+                                                        QModelIndex &parentIndex,
+                                                        int &row)
 {
+    Q_UNUSED(newNodeMetaObjectType);
+
     Q_ASSERT(parentDummy || !index);
 
     if(!parentDummy) {

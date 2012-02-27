@@ -173,8 +173,8 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
             connectDummies(rootDummy, true);
         }
 
-        connect(m_d->dummiesFacade, SIGNAL(sigBeginInsertDummy(KisNodeDummy*, int)),
-                SLOT(slotBeginInsertDummy(KisNodeDummy*, int)));
+        connect(m_d->dummiesFacade, SIGNAL(sigBeginInsertDummy(KisNodeDummy*, int, const QString&)),
+                SLOT(slotBeginInsertDummy(KisNodeDummy*, int, QString)));
         connect(m_d->dummiesFacade, SIGNAL(sigEndInsertDummy(KisNodeDummy*)),
                 SLOT(slotEndInsertDummy(KisNodeDummy*)));
         connect(m_d->dummiesFacade, SIGNAL(sigBeginRemoveDummy(KisNodeDummy*)),
@@ -189,13 +189,15 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
     reset();
 }
 
-void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index)
+void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType)
 {
     int row = 0;
     QModelIndex parentIndex;
 
     bool willAdd =
-        m_d->indexConverter->indexFromAddedDummy(parent, index, parentIndex, row);
+        m_d->indexConverter->indexFromAddedDummy(parent, index,
+                                                 metaObjectType,
+                                                 parentIndex, row);
 
     if(willAdd) {
         beginInsertRows(parentIndex, row, row);
@@ -205,9 +207,8 @@ void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index)
 
 void KisNodeModel::slotEndInsertDummy(KisNodeDummy *dummy)
 {
-    connectDummy(dummy, true);
-
     if(m_d->needFinishInsertRows) {
+        connectDummy(dummy, true);
         endInsertRows();
         m_d->needFinishInsertRows = false;
     }
@@ -215,8 +216,6 @@ void KisNodeModel::slotEndInsertDummy(KisNodeDummy *dummy)
 
 void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
 {
-    connectDummy(dummy, false);
-
     // FIXME: is it really what we want?
     m_d->updateTimer->stop();
     m_d->updateQueue.clear();
@@ -231,6 +230,7 @@ void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
     QModelIndex itemIndex = m_d->indexConverter->indexFromDummy(dummy);
 
     if(itemIndex.isValid()) {
+        connectDummy(dummy, false);
         beginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
         m_d->needFinishRemoveRows = true;
     }

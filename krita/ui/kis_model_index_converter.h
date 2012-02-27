@@ -41,12 +41,15 @@ public:
     KisNodeDummy* dummyFromIndex(QModelIndex index);
 
     QModelIndex indexFromDummy(KisNodeDummy *dummy);
-    bool indexFromAddedDummy(KisNodeDummy *parentDummy, int index, QModelIndex &parentIndex, int &row);
+    bool indexFromAddedDummy(KisNodeDummy *parentDummy, int index,
+                             const QString &newNodeMetaObjectType,
+                             QModelIndex &parentIndex, int &row);
 
     int rowCount(QModelIndex parent);
 
 private:
     static inline bool checkDummyType(KisNodeDummy *dummy);
+    static inline bool checkDummyMetaObjectType(const QString &type);
 
 private:
     KisDummiesFacadeBase *m_dummiesFacade;

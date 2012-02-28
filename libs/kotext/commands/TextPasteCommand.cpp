@@ -36,6 +36,7 @@
 
 #include "ChangeTrackedDeleteCommand.h"
 #include "DeleteCommand.h"
+#include "KoDocumentRdfBase.h"
 
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>

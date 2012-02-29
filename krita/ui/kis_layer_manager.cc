@@ -47,6 +47,7 @@
 #include <kis_filter_strategy.h>
 #include <generator/kis_generator_layer.h>
 #include <kis_adjustment_layer.h>
+#include <kis_mask.h>
 #include <kis_clone_layer.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
@@ -569,14 +570,12 @@ void KisLayerManager::layerBack()
 void KisLayerManager::mirrorLayerX()
 {
     KisLayerSP layer = activeLayer();
+    m_view->image()->undoAdapter()->beginMacro(i18n("Mirror Layer X"));
 
     if (layer->inherits("KisShapeLayer")) {
-        m_view->image()->undoAdapter()->beginMacro(i18n("Mirror Layer X"));
 
         KisTransformVisitor visitor(m_view->image(), -1.0, 1.0, 0.0, 0.0, 0.0, m_view->image()->width(), 0, 0, 0);
         layer->accept(visitor);
-
-        m_view->image()->undoAdapter()->endMacro();
     } else {
         KisPaintDeviceSP dev = activeDevice();
         if (!dev) return;
@@ -588,6 +587,18 @@ void KisLayerManager::mirrorLayerX()
 
         transaction.commit(m_view->image()->undoAdapter());
     }
+    // Now for the masks
+    KoProperties properties;
+    foreach(KisNodeSP mask, layer->childNodes(QStringList("KisMask"), properties)) {
+        KisPaintDeviceSP dev = qobject_cast<KisMask*>(mask.data())->selection()->getOrCreatePixelSelection();
+        if (!dev) continue;
+        KisTransaction transaction(i18n("Mirror Mask X"), dev);
+        QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection());
+        transaction.commit(m_view->image()->undoAdapter());
+        mask->setDirty(dirty);
+    }
+
+    m_view->image()->undoAdapter()->endMacro();
     m_doc->setModified(true);
     layersUpdated();
     m_view->canvas()->update();
@@ -597,13 +608,12 @@ void KisLayerManager::mirrorLayerY()
 {
     KisLayerSP layer = activeLayer();
 
-    if (layer->inherits("KisShapeLayer")) {
-        m_view->image()->undoAdapter()->beginMacro(i18n("Mirror Layer Y"));
+    m_view->image()->undoAdapter()->beginMacro(i18n("Mirror Layer Y"));
 
+    if (layer->inherits("KisShapeLayer")) {
         KisTransformVisitor visitor(m_view->image(), 1.0, -1.0, 0.0, 0.0, 0.0, 0, m_view->image()->height(), 0, 0);
         layer->accept(visitor);
 
-        m_view->image()->undoAdapter()->endMacro();
     } else {
         KisPaintDeviceSP dev = activeDevice();
         if (!dev) return;
@@ -615,6 +625,19 @@ void KisLayerManager::mirrorLayerY()
 
         transaction.commit(m_view->image()->undoAdapter());
     }
+    // Now for the masks
+    KoProperties properties;
+    foreach(KisNodeSP mask, layer->childNodes(QStringList("KisMask"), properties)) {
+        KisPaintDeviceSP dev = qobject_cast<KisMask*>(mask.data())->selection()->getOrCreatePixelSelection();
+        if (!dev) continue;
+        KisTransaction transaction(i18n("Mirror Mask Y"), dev);
+        QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection());
+        transaction.commit(m_view->image()->undoAdapter());
+        mask->setDirty(dirty);
+    }
+
+    m_view->image()->undoAdapter()->endMacro();
+
     m_doc->setModified(true);
     layersUpdated();
     m_view->canvas()->update();

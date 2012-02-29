@@ -422,7 +422,7 @@ void KisImage::setSize(const QSize& size)
 
 void KisImage::resizeImageImpl(const QRect& newRect, bool cropLayers)
 {
-    if (newRect == bounds()) return;
+    if (newRect == bounds() && !cropLayers) return;
 
     QString actionName = cropLayers ? i18n("Crop Image") : i18n("Resize Image");
 

@@ -977,7 +977,7 @@ void ArtisticTextShape::finishTextUpdate()
 
 bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
 {
-    context.shapeWriter().startElement("text");
+    context.shapeWriter().startElement("text", false);
     context.shapeWriter().addAttribute("id", context.getID(this));
 
     SvgStyleWriter::saveSvgStyle(this, context);
@@ -1053,7 +1053,7 @@ void ArtisticTextShape::saveSvgFont(const QFont &font, SvgSavingContext &context
 
 void ArtisticTextShape::saveSvgTextRange(const ArtisticTextRange &range, SvgSavingContext &context, bool saveRangeFont, qreal baselineOffset)
 {
-    context.shapeWriter().startElement("tspan");
+    context.shapeWriter().startElement("tspan", false);
     if (range.hasXOffsets()) {
         const char *attributeName = (range.xOffsetType() == ArtisticTextRange::AbsoluteOffset ? "x" : "dx");
         QString attributeValue;

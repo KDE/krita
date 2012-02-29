@@ -45,6 +45,7 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, 
         ,m_popupPalette(0)
         ,m_paintopBox(paintopBox)
         ,m_colorList(0)
+        ,m_blockUpdates(false)
 {
 
     //connect(paintopBox, SIGNAL(signalPaintopChanged(KisPaintOpPresetSP)), this, SLOT(slotChangePaintopLabel(KisPaintOpPresetSP)));
@@ -270,6 +271,9 @@ void KoFavoriteResourceManager::addRecentColor(const KoColor& color)
 
 void KoFavoriteResourceManager::removingResource(KisPaintOpPreset* resource)
 {
+    if(m_blockUpdates) {
+        return;
+    }
     removeFavoritePreset(resource->name());
 }
 
@@ -279,6 +283,11 @@ void KoFavoriteResourceManager::resourceAdded(KisPaintOpPreset* /*resource*/)
 
 void KoFavoriteResourceManager::resourceChanged(KisPaintOpPreset* /*resource*/)
 {
+}
+
+void KoFavoriteResourceManager::setBlockUpdates(bool block)
+{
+    m_blockUpdates = block;
 }
 
 #include "ko_favorite_resource_manager.moc"

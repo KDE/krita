@@ -19,6 +19,9 @@
 
 #include "KoTextWriter_p.h"
 
+
+#include <KoElementReference.h>
+
 // A convenience function to get a listId from a list-format
 static KoListStyle::ListIdType ListId(const QTextListFormat &format)
 {
@@ -212,42 +215,13 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
     return listStyles;
 }
 
-void KoTextWriter::Private::saveChange(int changeId)
+void KoTextWriter::Private::saveAllChanges()
 {
     if (!changeTracker) return;
-
-    if(changeTransTable.value(changeId).length())
-        return;
-
-    if ((changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) &&
-         (changeTracker->saveFormat() == KoChangeTracker::ODF_1_2)) {
-        return;
-    }
-
-    KoGenChange change;
-    if (changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
-        change.setChangeFormat(KoGenChange::ODF_1_2);
-    } else {
-        change.setChangeFormat(KoGenChange::DELTAXML);
-    }
-
-    changeTracker->saveInlineChange(changeId, change);
-    QString changeName = sharedData->genChanges().insert(change);
-    changeTransTable.insert(changeId, changeName);
+    changeTransTable = changeTracker->saveInlineChanges(changeTransTable, sharedData->genChanges());
 }
 
 //---------------------------- PRIVATE -----------------------------------------------------------
-
-void KoTextWriter::Private::saveChange(QTextCharFormat format)
-{
-    if (!changeTracker /*&& changeTracker->isEnabled()*/)
-        return;//The change tracker exist and we are allowed to save tracked changes
-
-    int changeId = format.property(KoCharacterStyle::ChangeTrackerId).toInt();
-    if (changeId) { //There is a tracked change
-        saveChange(changeId);
-    }
-}
 
 void KoTextWriter::Private::saveODF12Change(QTextCharFormat format)
 {
@@ -411,7 +385,7 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
         changeStack.push(returnChangeId);
     }
 
-    while(changeHistory.size()) {
+    while (changeHistory.size()) {
         int changeId = changeHistory.pop();
         if (changeTracker->isDuplicateChangeId(changeId)) {
             changeId = changeTracker->originalChangeId(changeId);
@@ -420,7 +394,7 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
         if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
             writer->startElement("delta:removed-content", false);
             writer->addAttribute("delta:removal-change-idref", changeTransTable.value(changeId));
-        }else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
+        } else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
             tagInformation.addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
             tagInformation.addAttribute("delta:insertion-type", "insert-with-content");
         } else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::FormatChange && elementType == KoTextWriter::Private::Span) {
@@ -705,11 +679,14 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     if (!styleName.isEmpty())
         writer->addAttribute("text:style-name", styleName);
 
-    if ( const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
-        // text:id is deprecated. if present, it must have the same value as
-        // xml:id
-        writer->addAttribute("xml:id", context.subId(blockData));
-        writer->addAttribute("text:id", context.subId(blockData));
+    KoElementReference xmlid;
+    xmlid.invalidate();
+
+    if (const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
+        if (blockData->saveXmlID()) {
+            xmlid = context.xmlid(blockData);
+            xmlid.saveOdf(writer, KoElementReference::TextId);
+        }
     }
 
     if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
@@ -738,8 +715,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     QTextBlock::iterator it;
     if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(blockCharFormat)) {
         // Write xml:id here for Rdf
-        kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
-        inlineRdf->saveOdf(context, writer);
+        kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId() << "active xml id" << xmlid.toString();
+        inlineRdf->saveOdf(context, writer, xmlid);
     }
 
     QString previousFragmentLink;

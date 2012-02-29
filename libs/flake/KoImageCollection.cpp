@@ -218,8 +218,6 @@ void KoImageCollection::update(qint64 oldKey, qint64 newKey)
         d->images.remove(oldKey);
         d->images.insert(newKey, imageData);
     }
-    Q_ASSERT(d->images.contains(newKey));
-    Q_ASSERT(!d->images.contains(oldKey));
 }
 
 void KoImageCollection::removeOnKey(qint64 imageDataKey)

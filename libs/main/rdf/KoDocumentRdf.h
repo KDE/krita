@@ -507,6 +507,15 @@ private:
     void addLocations(Soprano::Model *m, QList<KoRdfLocation*> &ret,
                       bool isGeo84, const QString &sparql);
 
+
+    /**
+     * idrefList queries soprano after loading and creates a list of all rdfid's that
+     * where found in the manifest.rdf document. This list is used to make sure we do not
+     * create more inline rdf objects than necessary
+     * @return a list of xml-id's
+     */
+    QStringList idrefList() const;
+
 private:
 
     /**

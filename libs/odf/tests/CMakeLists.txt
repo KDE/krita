@@ -66,11 +66,13 @@ target_link_libraries(TestStorage koodf ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY}
 ########### next target ###############
 
 set(kopropertiestest_SRCS KoPropertiesTest.cpp )
-kde4_add_unit_test(KoPropertiesTest TESTNAME libs-kobase-KoPropertiesTest ${kopropertiestest_SRCS})
+kde4_add_unit_test(KoPropertiesTest TESTNAME libs-koodf-KoPropertiesTest ${kopropertiestest_SRCS})
 target_link_libraries(KoPropertiesTest  ${KDE4_KDEUI_LIBS} koodf ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
 set(TestKoUnit_SRCS TestKoUnit.cpp)
-kde4_add_unit_test(TestKoUnit TESTNAME libs-kobase-TestKoUnit ${TestKoUnit_SRCS})
+kde4_add_unit_test(TestKoUnit TESTNAME libs-koodf-TestKoUnit ${TestKoUnit_SRCS})
 target_link_libraries(TestKoUnit koodf ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
@@ -78,5 +80,11 @@ target_link_libraries(TestKoUnit koodf ${QT_QTTEST_LIBRARY})
 set(TestNumberStyle_SRCS TestNumberStyle.cpp )
 kde4_add_unit_test(TestNumberStyle TESTNAME libs-odf-TestNumberStyle ${TestNumberStyle_SRCS})
 target_link_libraries(TestNumberStyle koodf ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestKoElementReference_SRCS TestKoElementReference.cpp)
+kde4_add_unit_test(TestKoElementReference TESTNAME libs-koodf-TestKoElementReference ${TestKoElementReference_SRCS})
+target_link_libraries(TestKoElementReference koodf ${QT_QTTEST_LIBRARY})
 
 ########### end ###############

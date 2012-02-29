@@ -22,6 +22,7 @@
 
 #include "kotext_export.h"
 #include <KoXmlReaderForward.h>
+#include <KoElementReference.h>
 
 #include <QTextBlockUserData>
 #include <QTextTableCell>
@@ -100,7 +101,7 @@ public:
     static void attach(KoTextInlineRdf *inlineRdf, QTextCursor &cursor);
 
     bool loadOdf(const KoXmlElement &element);
-    bool saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer);
+    bool saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer, KoElementReference id = KoElementReference());
 
     /**
      * Get the RDF subject for this inline RDF

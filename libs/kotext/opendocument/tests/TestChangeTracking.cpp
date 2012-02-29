@@ -197,7 +197,7 @@ QString TestChangeTracking::documentToOdt(const QString &testCase, QTextDocument
     contentWriter->startElement("office:body");
     contentWriter->startElement("office:text");
 
-    changes.saveOdfChanges(contentWriter);
+    changes.saveOdfChanges(contentWriter, false);
 
     contentWriter->addCompleteElement(&contentTmpFile);
 

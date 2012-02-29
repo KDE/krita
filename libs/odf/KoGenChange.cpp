@@ -83,6 +83,7 @@ void KoGenChange::writeODF12Change(KoXmlWriter *writer, const QString &name) con
 {
     writer->startElement("text:changed-region");
     writer->addAttribute("text:id", name);
+    writer->addAttribute("xml:id", name);
 
     const char* elementName;
     switch (m_type) {

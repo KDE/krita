@@ -158,6 +158,14 @@ public:
      */
     KoTextBlockPaintStrategyBase *paintStrategy() const;
 
+    /**
+     * @brief saveXmlID can be used to determine whether we need to save the xml:id
+     *    for this text block data object. This is true if the text block data describes
+     *    animations.
+     * @return true of we need to save the xml id, false if not.
+     */
+    bool saveXmlID() const;
+
 private:
     class Private;
     Private * const d;

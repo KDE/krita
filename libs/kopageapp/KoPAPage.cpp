@@ -51,7 +51,6 @@ KoPAPage::~KoPAPage()
 void KoPAPage::saveOdf( KoShapeSavingContext & context ) const
 {
     KoPASavingContext &paContext = static_cast<KoPASavingContext&>( context );
-
     paContext.xmlWriter().startElement( "draw:page" );
     paContext.xmlWriter().addAttribute( "draw:name", paContext.pageName( this ) );
     if (!name().isEmpty() && name() != paContext.pageName( this )) {

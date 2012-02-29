@@ -21,7 +21,6 @@
 
 #include "kis_shape_layer.h"
 
-
 #include <QPainter>
 #include <QPainterPath>
 #include <QRect>
@@ -39,6 +38,7 @@
 #include <kicon.h>
 #include <kdebug.h>
 
+#include <KoElementReference.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoDataCenterBase.h>
@@ -328,7 +328,10 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
 
     shapeContext.xmlWriter().startElement("draw:page");
     shapeContext.xmlWriter().addAttribute("draw:name", "");
-    shapeContext.xmlWriter().addAttribute("draw:id", "page1");
+
+    KoElementReference elementRef("page", 1);
+    elementRef.saveOdf(&shapeContext.xmlWriter(), KoElementReference::DrawId);
+
     shapeContext.xmlWriter().addAttribute("draw:master-page-name", "Default");
 
     saveOdf(shapeContext);

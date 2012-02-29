@@ -28,6 +28,7 @@
 #include <QImage>
 #include <QTransform>
 #include <QTextBlockUserData>
+#include <KoElementReference.h>
 
 class KoShape;
 class KoXmlWriter;
@@ -56,7 +57,8 @@ public:
          */
         PresentationShape = 1,
         /**
-         * Save the draw:id used for referencing the shape.
+         * Save the draw:id used for referencing the shape. If draw:id is saved, xml:id is also
+         * saved.
          * See OpenDocument 9.2.15 Common Drawing Shape Attributes / ID
          */
         DrawId = 2,
@@ -139,39 +141,32 @@ public:
      */
     ShapeSavingOptions options() const;
 
+
     /**
-     * @brief Get the draw id for a shape
-     *
-     * The draw:id is unique for all shapes.
-     *
-     * @param shape for which the draw id should be returned
-     * @param insert if true a new draw id will be generated if there is non yet
-     *
-     * @return the draw id for the shape or and empty string if it was not found
+     * @brief xmlid returns an element reference that can be related to the given referent. If there is a
+     *   prefix given, this prefix will be used in addition to either the counter or the uuid.
+     * @param referent the object we are referring to
+     * @param prefix a prefix for the xml:id string
+     * @param counter if counter is true, shapesavingcontext will use a counter to create the xml:id
+     * @return a KoElementReference; if insert is false and referent doesn't exist yet in the list, the elementrefence will be invalid.
      */
-    QString drawId(const KoShape *shape, bool insert = true);
+    KoElementReference xmlid(const void *referent, const QString& prefix = QString::null, KoElementReference::GenerationOption counter = KoElementReference::UUID);
+
+    /**
+     * @brief existingXmlid retrieve an existing xml id or invalid xml id if the referent object doesn't exist
+     */
+    KoElementReference existingXmlid(const void *referent);
 
     /**
      * @brief Clear out all given draw ids
+     * @param prefix: removes all xml:id's that have the given prefix.
      *
      * This is needed for checking if master pages are the same. In normal saving
      * this should not be called.
      *
      * @see KoPAPastePage::process
      */
-    void clearDrawIds();
-
-    /**
-     * @brief Get the text id for a sub-item
-     *
-     * The text:id is unique for all sub-item.
-     *
-     * @param subitem for which the sub-item id should be returned
-     * @param insert if true a new sub-item id will be generated if there is non yet
-     *
-     * @return the sub-item id for the sub-item or and empty string if it was not found
-     */
-    QString subId(const QTextBlockUserData *subItem, bool insert = true);
+    void clearXmlIds(const QString &prefix);
 
     /**
      * Adds a layer to save into a layer-set in styles.xml according to 9.1.2/9.1.3 odf spec
@@ -256,7 +251,7 @@ public:
      */
     KoSharedSavingData *sharedData(const QString &id) const;
 
-    /*
+    /**
      * Add an offset that will be applied to the shape position when saved
      *
      * This is needed e.g. for shapes anchored to a text shape as the position is

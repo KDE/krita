@@ -187,6 +187,7 @@ public:
 
     /// return the inline-object Id that is assigned for this object.
     int id() const;
+
     /// Set the inline-object Id that is assigned for this object by the KoInlineTextObjectManager.
     void setId(int id);
 

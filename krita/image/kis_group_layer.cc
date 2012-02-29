@@ -31,6 +31,7 @@
 #include "kis_paint_device.h"
 #include "kis_default_bounds.h"
 #include "kis_clone_layer.h"
+#include "kis_selection_mask.h"
 
 struct KisGroupLayer::Private
 {
@@ -110,7 +111,9 @@ bool KisGroupLayer::checkNodeRecursively(KisNodeSP node) const
 bool KisGroupLayer::allowAsChild(KisNodeSP node) const
 {
     return checkNodeRecursively(node) &&
-        (parent() || !node->inherits("KisEffectMask"));
+        (parent() ||
+         (node->inherits("KisSelectionMask") && !selectionMask()) ||
+         !node->inherits("KisMask"));
 }
 
 const KoColorSpace * KisGroupLayer::colorSpace() const

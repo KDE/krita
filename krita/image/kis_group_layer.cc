@@ -68,35 +68,49 @@ KisGroupLayer::~KisGroupLayer()
     delete m_d;
 }
 
-bool KisGroupLayer::allowAsChild(KisNodeSP node) const
+bool KisGroupLayer::checkCloneLayer(KisCloneLayerSP clone) const
 {
-    if (node->inherits("KisCloneLayer")) {
-        KisNodeSP source = qobject_cast<KisCloneLayer*>(node.data())->copyFrom();
-        if (source) {
-            if (source->inherits("KisGroupLayer")) {
-                KisNodeSP parent = const_cast<KisGroupLayer*>(this);
-                while (parent && parent->parent()) {
-                    if (parent == source || !parent->allowAsChild(source)) {
-                        return false;
-                    }
-                    parent = parent->parent();
+    KisNodeSP source = clone->copyFrom();
+    if (source) {
+        if(!allowAsChild(source)) return false;
+
+        if (source->inherits("KisGroupLayer")) {
+            KisNodeSP newParent = const_cast<KisGroupLayer*>(this);
+            while (newParent) {
+                if (newParent == source) {
+                    return false;
                 }
-            } else if (source->inherits("KisCloneLayer")) {
-                return allowAsChild(source);
+                newParent = newParent->parent();
             }
         }
     }
-    
-    if (node->inherits("KisGroupLayer")) {
+
+    return true;
+}
+
+bool KisGroupLayer::checkNodeRecursively(KisNodeSP node) const
+{
+    KisCloneLayerSP cloneLayer = dynamic_cast<KisCloneLayer*>(node.data());
+    if(cloneLayer) {
+        return checkCloneLayer(cloneLayer);
+    }
+    else if (node->inherits("KisGroupLayer")) {
         KisNodeSP child = node->firstChild();
         while (child) {
-            if (!allowAsChild(child)) {
+            if (!checkNodeRecursively(child)) {
                 return false;
             }
             child = child->nextSibling();
         }
     }
+
     return true;
+}
+
+bool KisGroupLayer::allowAsChild(KisNodeSP node) const
+{
+    return checkNodeRecursively(node) &&
+        (parent() || !node->inherits("KisEffectMask"));
 }
 
 const KoColorSpace * KisGroupLayer::colorSpace() const

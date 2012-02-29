@@ -83,6 +83,10 @@ protected:
     KisPaintDeviceSP tryObligeChild() const;
 
 private:
+    bool checkCloneLayer(KisCloneLayerSP clone) const;
+    bool checkNodeRecursively(KisNodeSP node) const;
+
+private:
     struct Private;
     Private * const m_d;
 };

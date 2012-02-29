@@ -436,8 +436,6 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
 
 void KisToolCrop::crop()
 {
-    // XXX: Should cropping be part of KisImage/KisPaintDevice's API?
-
     m_haveCropSelection = false;
     useCursor(cursor());
 

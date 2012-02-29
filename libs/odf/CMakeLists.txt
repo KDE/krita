@@ -61,6 +61,7 @@ set(koodf_LIB_SRCS
     KoColumnStyle.cpp
     KoRowStyle.cpp
     KoTblStyle.cpp
+    KoElementReference.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
@@ -115,5 +116,6 @@ install( FILES
     KoXmlReaderForward.h
     KoProperties.h
     KoUnit.h
+    KoElementReference.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

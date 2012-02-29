@@ -60,7 +60,7 @@ void ChangeFollower::collectNeededInfo(const QSet<int> &changedStyles)
     while (block.isValid()) {
         memento->blockPosition = block.position();
         memento->blockParentCharFormat = block.charFormat();
-        // FIXME memento->blockParentFormat = KoTextDocument(m_document).frameBlockFormat();
+        memento->blockParentFormat = KoTextDocument(m_document).frameBlockFormat();
         memento->paragraphStyleId = 0;
 
         if (!memento->blockParentCharFormat.isTableCellFormat()) {
@@ -70,26 +70,20 @@ void ChangeFollower::collectNeededInfo(const QSet<int> &changedStyles)
         bool blockChanged = false;
         int id =  block.blockFormat().intProperty(KoParagraphStyle::StyleId);
         if (id > 0 && changedStyles.contains(id)) {
-            /* FIXME we should extract any direct formatting. Like this but needs testing:
             KoParagraphStyle *style = sm->paragraphStyle(id);
             Q_ASSERT(style);
 
-            style->applyStyle(bf);
-            memento->blockDirectFormat = block.blockFormat();
+            // Calculate block format of direct formatting.
+            memento->blockDirectFormat = block.blockFormat(); // frame + style + direct
+            style->applyStyle(memento->blockParentFormat);
+            clearCommonProperties(&memento->blockDirectFormat, memento->blockParentFormat);
 
-            QMap<int, QVariant> blockProperties = bf.properties();
-            foreach(int key, blockProperties.keys()) {
-                if (memento->blockDirectFormat.property(key) == bf.property(key)) {
-                    memento->blockDirectFormat.clearProperty(key);
-                }
-            }
+            // Calculate char format of direct formatting.
+            memento->blockDirectCharFormat = block.charFormat(); // frame + style + direct
+            style->KoCharacterStyle::applyStyle(memento->blockParentCharFormat);
+            style->KoCharacterStyle::ensureMinimalProperties(memento->blockParentCharFormat);
+            clearCommonProperties(&memento->blockDirectCharFormat, memento->blockParentCharFormat);
 
-            QTextCharFormat basis = memento->blockParentCharFormat;
-            style->KoCharacterStyle::applyStyle(basis);
-            style->KoCharacterStyle::ensureMinimalProperties(basis);
-            memento->blockDirectCharFormat = block.charFormat();
-            memento->blockDirectCharFormat->removeDuplicates(basis);
-            */
             memento->paragraphStyleId = id;
             blockChanged = true;
         }
@@ -111,12 +105,8 @@ void ChangeFollower::collectNeededInfo(const QSet<int> &changedStyles)
                     style->ensureMinimalProperties(blockCharFormat);
                 }
 
-                QMap<int, QVariant> props = blockCharFormat.properties();
-                foreach(int key, props.keys()) {
-                    if (cf.property(key) == blockCharFormat.property(key)) {
-                        cf.clearProperty(key);
-                    }
-                }
+                clearCommonProperties(&cf, blockCharFormat);
+
                 memento->fragmentStyleId.append(id);
                 memento->fragmentDirectFormats.append(cf);
                 memento->fragmentCursors.append(cursor);
@@ -133,7 +123,7 @@ void ChangeFollower::collectNeededInfo(const QSet<int> &changedStyles)
     delete memento; // we always have one that is unused
 }
 
-void ChangeFollower::processUpdates(const QSet<int> &changedStyles)
+void ChangeFollower::processUpdates()
 {
     KoStyleManager *sm = m_styleManager.data();
 
@@ -146,19 +136,26 @@ void ChangeFollower::processUpdates(const QSet<int> &changedStyles)
             KoParagraphStyle *style = sm->paragraphStyle(memento->paragraphStyleId);
             Q_ASSERT(style);
 
+            // apply paragraph style with direct formatting on top.
+            style->applyStyle(memento->blockParentFormat);
+            memento->blockParentFormat.merge(memento->blockDirectFormat);
+            cursor.setBlockFormat(memento->blockParentFormat);
+
+            // apply list style formatting
             if (KoTextDocument(m_document).list(block.textList())) {
                 if (style->list() == KoTextDocument(m_document).list(block.textList())) {
-                    style->applyParagraphListStyle(block, block.blockFormat());
+                    style->applyParagraphListStyle(block, memento->blockParentFormat);
                 }
             } else {
-                style->applyParagraphListStyle(block, block.blockFormat());
+                style->applyParagraphListStyle(block, memento->blockParentFormat);
             }
 
+            // apply character style with direct formatting on top.
             style->KoCharacterStyle::applyStyle(memento->blockParentCharFormat);
             style->KoCharacterStyle::ensureMinimalProperties(memento->blockParentCharFormat);
-            cursor.setBlockCharFormat(memento->blockParentCharFormat);
+            memento->blockParentCharFormat.merge(memento->blockDirectCharFormat);
 
-            //QTextBlockFormat bf = block.blockFormat();
+            cursor.setBlockCharFormat(memento->blockParentCharFormat);
         }
 
         QList<QTextCharFormat>::Iterator fmtIt = memento->fragmentDirectFormats.begin();
@@ -183,6 +180,16 @@ void ChangeFollower::processUpdates(const QSet<int> &changedStyles)
     }
     qDeleteAll(m_mementos);
     m_mementos.clear();
+}
+
+void ChangeFollower::clearCommonProperties(QTextFormat *firstFormat, const QTextFormat &secondFormat)
+{
+    Q_ASSERT(firstFormat);
+    foreach(int key, secondFormat.properties().keys()) {
+        if (firstFormat->property(key) == secondFormat.property(key)) {
+            firstFormat->clearProperty(key);
+        }
+    }
 }
 
 #include <ChangeFollower.moc>

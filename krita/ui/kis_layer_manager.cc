@@ -59,6 +59,8 @@
 #include <kis_transform_visitor.h>
 #include <kis_undo_adapter.h>
 #include <kis_painter.h>
+#include <metadata/kis_meta_data_store.h>
+#include <metadata/kis_meta_data_merge_strategy_registry.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"
@@ -82,6 +84,7 @@
 #include "kis_progress_widget.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_node_manager.h"
+
 
 KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
         : m_view(view)
@@ -146,7 +149,7 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_rasterizeLayer  = new KAction(i18n("Rasterize Layer"), this);
     actionCollection->addAction("rasterize_layer", m_rasterizeLayer);
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
-    
+
     m_layerSaveAs  = new KAction(KIcon("document-save"), i18n("Save Layer as Image..."), this);
     actionCollection->addAction("save_layer_as_image", m_layerSaveAs);
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
@@ -566,7 +569,7 @@ void KisLayerManager::layerBack()
 void KisLayerManager::mirrorLayerX()
 {
     KisLayerSP layer = activeLayer();
-    
+
     if (layer->inherits("KisShapeLayer")) {
         m_view->image()->undoAdapter()->beginMacro(i18n("Mirror Layer X"));
 
@@ -593,7 +596,7 @@ void KisLayerManager::mirrorLayerX()
 void KisLayerManager::mirrorLayerY()
 {
     KisLayerSP layer = activeLayer();
-    
+
     if (layer->inherits("KisShapeLayer")) {
         m_view->image()->undoAdapter()->beginMacro(i18n("Mirror Layer Y"));
 
@@ -715,10 +718,19 @@ void KisLayerManager::mergeLayer()
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view);
-    if (!strategy) return;
+    if (!layer->prevSibling()) return;
 
-    KisLayerSP  newLayer = image->mergeDown(layer, strategy);
+    if (layer->metaData()->isEmpty() && layer->prevSibling() && dynamic_cast<KisLayer*>(layer->prevSibling().data())->metaData()->isEmpty()) {
+        image->mergeDown(layer, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
+    }
+    else {
+        const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view);
+        if (!strategy) return;
+        image->mergeDown(layer, strategy);
+
+    }
+
+
     m_view->updateGUI();
 }
 
@@ -744,15 +756,15 @@ void KisLayerManager::rasterizeLayer()
 
     KisLayerSP layer = activeLayer();
     if (!layer) return;
-    
+
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, layer->name(), layer->opacity());
     KisPainter gc(paintLayer->paintDevice());
     QRect rc = layer->projection()->exactBounds();
     gc.bitBlt(rc.topLeft(), layer->projection(), rc);
-    
+
     m_commandsAdapter->beginMacro(i18n("Rasterize Layer"));
     m_commandsAdapter->addNode(paintLayer.data(), layer->parent().data(), layer.data());
-    
+
     int childCount = layer->childCount();
     for (int i = 0; i < childCount; i++) {
         m_commandsAdapter->moveNode(layer->firstChild(), paintLayer, paintLayer->lastChild());

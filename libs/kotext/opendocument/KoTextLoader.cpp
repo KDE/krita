@@ -61,6 +61,8 @@
 #include "KoBibliographyInfo.h"
 #include "KoSection.h"
 #include "KoTextSoftPageBreak.h"
+#include "KoDocumentRdfBase.h"
+#include "KoElementReference.h"
 
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
@@ -161,6 +163,7 @@ public:
 
     QMap<QString, KoList *> xmlIdToListMap;
     QVector<KoList *> m_previousList;
+    QStringList rdfIdList;
 
     /// level is between 1 and 10
     void setCurrentList(KoList *currentList, int level);
@@ -470,6 +473,10 @@ KoTextLoader::KoTextLoader(KoShapeLoadingContext &context, KoShape *shape)
             Q_ASSERT(false);
         }
     }
+
+    if (context.documentRdf()) {
+        d->rdfIdList = qobject_cast<KoDocumentRdfBase*>(context.documentRdf())->idrefList();
+    }
 }
 
 KoTextLoader::~KoTextLoader()
@@ -489,6 +496,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
         d->defaultBlockFormat = cursor.blockFormat();
         d->defaultCharFormat = cursor.charFormat();
         KoTextDocument(document).setFrameCharFormat(cursor.blockCharFormat());
+        KoTextDocument(document).setFrameBlockFormat(cursor.blockFormat());
     }
     rootCallChecker++;
 
@@ -1063,21 +1071,25 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
 
     // Some paragraph have id's defined which we need to store so that we can eg
     // attach text animations to this specific paragraph later on
-    QString id(element.attributeNS(KoXmlNS::text, "id"));
-    if (!id.isEmpty() && d->shape) {
+    KoElementReference id;
+    id.loadOdf(element);
+
+    if (id.isValid() && d->shape) {
         QTextBlock block = cursor.block();
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
         if (!data) {
             data = new KoTextBlockData();
             block.setUserData(data);
         }
-        d->context.addShapeSubItemId(d->shape, QVariant::fromValue(data), id);
+        d->context.addShapeSubItemId(d->shape, QVariant::fromValue(data), id.toString());
     }
 
     // attach Rdf to cursor.block()
-    // remember inline Rdf metadata
+    // remember inline Rdf metadata -- if the xml-id is actually
+    // about rdf.
     if (element.hasAttributeNS(KoXmlNS::xhtml, "property")
-            || element.hasAttribute("id")) {
+            || d->rdfIdList.contains(id.toString()))
+    {
         QTextBlock block = cursor.block();
         KoTextInlineRdf* inlineRdf =
                 new KoTextInlineRdf((QTextDocument*)block.document(), block);
@@ -1197,8 +1209,11 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
 
     // attach Rdf to cursor.block()
     // remember inline Rdf metadata
+    KoElementReference id;
+    id.loadOdf(element);
+
     if (element.hasAttributeNS(KoXmlNS::xhtml, "property")
-            || element.hasAttribute("id")) {
+            || d->rdfIdList.contains(id.toString())) {
         QTextBlock block = cursor.block();
         KoTextInlineRdf* inlineRdf =
                 new KoTextInlineRdf((QTextDocument*)block.document(), block);
@@ -1833,8 +1848,11 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 textObjectManager->insertInlineObject(cursor, startmark);
 
                 // Add inline Rdf here.
+                KoElementReference id;
+                id.loadOdf(ts);
+
                 if (ts.hasAttributeNS(KoXmlNS::xhtml, "property")
-                        || ts.hasAttribute("id")) {
+                        || (id.isValid() && d->rdfIdList.contains(id.toString()))) {
                     KoTextInlineRdf* inlineRdf =
                             new KoTextInlineRdf((QTextDocument*)document, startmark);
                     if (inlineRdf->loadOdf(ts)) {
@@ -2393,7 +2411,10 @@ void KoTextLoader::loadTableCell(KoXmlElement &rowTag, QTextTable *tbl, QList<QR
 
         // handle inline Rdf
         // rowTag is the current table cell.
-        if (rowTag.hasAttributeNS(KoXmlNS::xhtml, "property") || rowTag.hasAttribute("id")) {
+        KoElementReference id;
+        id.loadOdf(rowTag);
+
+        if (rowTag.hasAttributeNS(KoXmlNS::xhtml, "property") || d->rdfIdList.contains(id.toString())) {
             KoTextInlineRdf* inlineRdf = new KoTextInlineRdf((QTextDocument*)cursor.block().document(),cell);
             if (inlineRdf->loadOdf(rowTag)) {
                 QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();

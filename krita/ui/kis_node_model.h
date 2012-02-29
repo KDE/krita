@@ -91,7 +91,7 @@ private:
 
     void resetIndexConverter();
 
-    void correctNewNodeLocation(KisNodeSP node,
+    bool correctNewNodeLocation(KisNodeSP node,
                                 KisNodeDummy* &parentDummy,
                                 KisNodeDummy* &aboveThisDummy);
 private:

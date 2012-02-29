@@ -76,3 +76,8 @@ bool KoDocumentRdfBase::completeSaving(KoStore */*store*/, KoXmlWriter */*manife
 {
     return false;
 }
+
+QStringList KoDocumentRdfBase::idrefList() const
+{
+    return QStringList();
+}

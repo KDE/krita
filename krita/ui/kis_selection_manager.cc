@@ -294,6 +294,10 @@ void KisSelectionManager::updateGUI()
         activeLayer && activeLayer->isEditable() &&
         image && image->canReselectGlobalSelection();
 
+    bool canDeselect = activeLayer && activeLayer->isEditable() &&
+        image && image->globalSelection();
+
+
     m_clear->setEnabled(haveDevice || havePixelsSelected || haveShapesSelected);
     m_cut->setEnabled(havePixelsSelected || haveShapesSelected);
     m_copy->setEnabled(havePixelsSelected || haveShapesSelected);
@@ -314,7 +318,7 @@ void KisSelectionManager::updateGUI()
     m_fillPattern->setEnabled(haveDevice);
 
     m_selectAll->setEnabled(true);
-    m_deselect->setEnabled(havePixelsSelected);
+    m_deselect->setEnabled(canDeselect);
     m_reselect->setEnabled(canReselect);
 
 

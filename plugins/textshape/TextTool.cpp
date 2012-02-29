@@ -867,7 +867,7 @@ void TextTool::copy() const
 
 void TextTool::deleteSelection()
 {
-    m_textEditor.data()->deleteChar(KoTextEditor::NextChar, canvas()->shapeController());
+    m_textEditor.data()->deleteChar();
     editingPluginEvents();
 }
 
@@ -1068,7 +1068,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) { // delete prev word.
                 textEditor->movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
             }
-            textEditor->deleteChar(KoTextEditor::PreviousChar, canvas()->shapeController());
+            textEditor->deletePreviousChar();
 
             editingPluginEvents();
         }
@@ -1090,7 +1090,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         }
         // the event only gets through when the Del is not used in the app
         // if the app forwards Del then deleteSelection is used
-        textEditor->deleteChar(KoTextEditor::NextChar, canvas()->shapeController());
+        textEditor->deleteChar();
         editingPluginEvents();
     } else if ((event->key() == Qt::Key_Left) && (event->modifiers() & Qt::ControlModifier) == 0) {
         moveOperation = QTextCursor::Left;
@@ -1249,7 +1249,7 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
     if (event->replacementLength() > 0) {
         textEditor->setPosition(textEditor->position() + event->replacementStart());
         for (int i = event->replacementLength(); i > 0; --i) {
-            textEditor->deleteChar(KoTextEditor::NextChar, canvas()->shapeController());
+            textEditor->deleteChar();
         }
     }
     if (!event->commitString().isEmpty()) {
@@ -1531,7 +1531,9 @@ void TextTool::repaintSelection()
 QRectF TextTool::caretRect(QTextCursor *cursor) const
 {
     QTextCursor tmpCursor(*cursor);
+    tmpCursor.beginEditBlock(); //needed to work around qt4.8 bug
     tmpCursor.setPosition(cursor->position()); // looses the anchor
+    tmpCursor.endEditBlock();
 
     QRectF rect = textRect(tmpCursor);
     if (rect.size() == QSizeF(0,0)) {

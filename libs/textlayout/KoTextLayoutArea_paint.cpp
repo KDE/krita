@@ -95,15 +95,18 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     QTextFrame::iterator it = m_startOfArea->it;
     QTextFrame::iterator stop = m_endOfArea->it;
     if (!stop.currentBlock().isValid() || m_endOfArea->lineTextStart >= 0) {
-        ++stop;
+        // Last thing we show is a frame (table) or first part of a paragraph split in two
+        // The stop point should be the object after that
+        // However if stop is already atEnd we shouldn't increment further
+        if (!stop.atEnd()) {
+            ++stop;
+        }
     }
 
     int tableAreaIndex = 0;
     int blockIndex = 0;
     int tocIndex = 0;
-    bool isAtEnd = false;
-    for (; it != stop && !isAtEnd; ++it) {
-        isAtEnd = it.atEnd();
+    for (; it != stop && !it.atEnd(); ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();

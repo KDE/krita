@@ -277,7 +277,6 @@ QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoX
     int count = 0;
     for ( ; it != masterStyles.constEnd(); ++it )
     {
-        kDebug(30010) << "Master:" << it.key();
         KoPAMasterPage * masterPage = newMasterPage();
         masterPage->loadOdf( *( it.value() ), context );
         masterPages.append( masterPage );
@@ -356,7 +355,7 @@ bool KoPADocument::saveOdfPages( KoPASavingContext &paContext, QList<KoPAPageBas
     // save master pages
     foreach( KoPAPageBase *page, masterPages ) {
         if ( paContext.isSetClearDrawIds() ) {
-            paContext.clearDrawIds();
+            paContext.clearXmlIds("shape");
         }
         page->saveOdf( paContext );
     }

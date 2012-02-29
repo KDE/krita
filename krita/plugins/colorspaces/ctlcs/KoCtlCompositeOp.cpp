@@ -128,8 +128,12 @@ QString KoCTLCompositeOp::idForFile(const std::string& _file)
     QString basename = fi.baseName();
     if (basename == "over") {
         return COMPOSITE_OVER;
-    } else if (basename == "alphadarken") {
-        return COMPOSITE_DARKEN;
+    }
+    else if (basename == "alphadarken") {
+        return COMPOSITE_ALPHA_DARKEN;
+    }
+    else if (basename == "erase") {
+        return COMPOSITE_ERASE;
     }
     qFatal("No id for: %s", _file.c_str());
     return QString::null; // Make gcc 4.5.1 happy
@@ -141,8 +145,12 @@ QString KoCTLCompositeOp::descriptionForFile(const std::string& _file)
     QString basename = fi.baseName();
     if (basename == "over") {
         return i18n("Normal");
-    } else if (basename == "alphadarken") {
+    }
+    else if (basename == "alphadarken") {
         return i18n("Alpha darken");
+    }
+    else if (basename == "erase") {
+        return i18n("Erase");
     }
     qFatal("No description for: %s", _file.c_str());
     return QString::null; // Make gcc 4.5.1 happy
@@ -152,7 +160,9 @@ QString KoCTLCompositeOp::categoryForFile(const std::string& _file)
 {
     QFileInfo fi(_file.c_str());
     QString basename = fi.baseName();
-    if (basename == "over" || basename == "alphadarken") {
+    if (basename == "over"
+            || basename == "alphadarken"
+            || basename == "erase") {
         return KoCompositeOp::categoryMix();
     }
     qFatal("No category for: %s", _file.c_str());

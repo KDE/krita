@@ -49,6 +49,7 @@
 #include "KoOdfWorkaround.h"
 #include "KoFilterEffectStack.h"
 #include <KoSnapData.h>
+#include <KoElementReference.h>
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -1381,11 +1382,10 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
     }
 
     if (attributes & OdfId) {
-        if (element.hasAttributeNS(KoXmlNS::draw, "id")) {
-            QString id = element.attributeNS(KoXmlNS::draw, "id");
-            if (!id.isNull()) {
-                context.addShapeId(this, id);
-            }
+        KoElementReference ref;
+        ref.loadOdf(element);
+        if (ref.isValid()) {
+            context.addShapeId(this, ref.toString());
         }
     }
 
@@ -1571,6 +1571,9 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
         if (child.localName() != "glue-point")
             continue;
 
+        // NOTE: this uses draw:id, but apparently while ODF 1.2 has deprecated
+        // all use of draw:id for xml:id, it didn't specify that here, so it
+        // doesn't support xml:id (and so, maybe, shouldn't use KoElementReference.
         const QString id = child.attributeNS(KoXmlNS::draw, "id", QString());
         const int index = id.toInt();
         if(id.isEmpty() || index < 4 || d->connectors.contains(index)) {
@@ -1748,8 +1751,8 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
 
     if (attributes & OdfId)  {
         if (context.isSet(KoShapeSavingContext::DrawId)) {
-            context.xmlWriter().addAttribute("draw:id", context.drawId(this));
-            context.xmlWriter().addAttribute("xml:id", context.drawId(this));
+            KoElementReference ref = context.xmlid(this, "shape", KoElementReference::Counter);
+            ref.saveOdf(&context.xmlWriter(), KoElementReference::DrawId);
         }
     }
 
@@ -1855,7 +1858,6 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
                 continue;
             context.xmlWriter().startElement("draw:glue-point");
             context.xmlWriter().addAttribute("draw:id", QString("%1").arg(cp.key()));
-            context.xmlWriter().addAttribute("xml:id", QString("%1").arg(cp.key()));
             if (cp.value().alignment == KoConnectionPoint::AlignNone) {
                 // convert to percent from center
                 const qreal x = cp.value().position.x() * 100.0 - 50.0;

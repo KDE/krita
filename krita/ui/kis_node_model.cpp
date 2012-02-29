@@ -431,21 +431,22 @@ QMimeData * KisNodeModel::mimeData(const QModelIndexList &indexes) const
     return data;
 }
 
-void KisNodeModel::correctNewNodeLocation(KisNodeSP node,
+bool KisNodeModel::correctNewNodeLocation(KisNodeSP node,
                                           KisNodeDummy* &parentDummy,
                                           KisNodeDummy* &aboveThisDummy)
 {
     KisNodeSP parentNode = parentDummy->node();
+    bool result = true;
 
     if(!parentDummy->node()->allowAsChild(node)) {
-        // root layer must accept all the layers
-        Q_ASSERT(parentDummy->parent());
-
         aboveThisDummy = parentDummy;
         parentDummy = parentDummy->parent();
 
-        correctNewNodeLocation(node, parentDummy, aboveThisDummy);
+        result = (!parentDummy) ? false :
+            correctNewNodeLocation(node, parentDummy, aboveThisDummy);
     }
+
+    return result;
 }
 
 bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent)
@@ -455,7 +456,7 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
     const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data);
     KisNodeSP node = mimedata ? mimedata->node() : 0;
 
-    if(!node) return false;
+    if (!node) return false;
 
     KisNodeDummy *parentDummy = 0;
     KisNodeDummy *aboveThisDummy = 0;
@@ -464,14 +465,16 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
         m_d->indexConverter->dummyFromIndex(parent) :
         m_d->dummiesFacade->rootDummy();
 
-    if(row == -1) {
+    if (row == -1) {
         aboveThisDummy = parent.isValid() ? parentDummy->lastChild() : 0;
     }
     else {
         aboveThisDummy = row < m_d->indexConverter->rowCount(parent) ? m_d->indexConverter->dummyFromRow(row, parent) : 0;
     }
 
-    correctNewNodeLocation(node, parentDummy, aboveThisDummy);
+    if (!correctNewNodeLocation(node, parentDummy, aboveThisDummy)) {
+        return false;
+    }
 
     Q_ASSERT(parentDummy);
     KisNodeSP aboveThisNode = aboveThisDummy ? aboveThisDummy->node() : 0;
@@ -479,10 +482,10 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
 
     bool result = true;
 
-    if(action == Qt::CopyAction) {
+    if (action == Qt::CopyAction) {
         emit requestAddNode(node->clone(), parentDummy->node(), aboveThisNode);
     }
-    else if(action == Qt::MoveAction) {
+    else if (action == Qt::MoveAction) {
         emit requestMoveNode(node, parentDummy->node(), aboveThisNode);
     }
     else {

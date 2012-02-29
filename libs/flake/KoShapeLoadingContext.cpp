@@ -43,7 +43,8 @@ public:
     Private(KoOdfLoadingContext &c, KoDocumentResourceManager *resourceManager)
             : context(c),
             zIndex(0),
-            documentResources(resourceManager)
+            documentResources(resourceManager),
+            documentRdf(0)
     {
     }
     ~Private() {
@@ -60,6 +61,7 @@ public:
     QMap<QString, KoLoadingShapeUpdater*> updaterById;
     QMap<KoShape *, KoLoadingShapeUpdater*> updaterByShape;
     KoDocumentResourceManager *documentResources;
+    QObject *documentRdf;
 };
 
 KoShapeLoadingContext::KoShapeLoadingContext(KoOdfLoadingContext & context, KoDocumentResourceManager *documentResources)
@@ -190,4 +192,15 @@ QSet<KoShapeLoadingContext::AdditionalAttributeData> KoShapeLoadingContext::addi
 KoDocumentResourceManager *KoShapeLoadingContext::documentResourceManager() const
 {
     return d->documentResources;
+}
+
+QObject *KoShapeLoadingContext::documentRdf() const
+{
+    return d->documentRdf;
+}
+
+
+void KoShapeLoadingContext::setDocumentRdf(QObject *documentRdf)
+{
+    d->documentRdf = documentRdf;
 }

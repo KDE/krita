@@ -78,9 +78,13 @@ public:
     int childCount() const;
     const KUndo2Command *child(int index) const;
 
+    bool hasParent();
+
 private:
     Q_DISABLE_COPY(KUndo2Command)
     friend class KUndo2QStack;
+
+    bool m_hasParent;
 };
 
 #endif // QT_NO_UNDOCOMMAND

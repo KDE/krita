@@ -369,7 +369,6 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         if (qAbs(topLeft.y()) > 1E-5) {
             diff.setY(topLeft.y()*currentSize.height()/m_viewBound.height());
         }
-        qDebug() << "XXX" << m_viewBox << m_viewBound << outline().boundingRect() << position() << diff << position() - diff;
 
         if (diff.isNull()) {
             saveOdfAttributes(context, OdfAllAttributes&~OdfSize);

@@ -8,6 +8,10 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_KRITADEVS "-O2 -g" CACHE STRING "" FORCE)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
+if(MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+endif(MSVC)
+
 include(CheckFunctionExists)
 
 macro_optional_find_package(GLEW)

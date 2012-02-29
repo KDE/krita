@@ -488,6 +488,8 @@ void KisPaintopBox::slotSaveActivePreset()
     if (!curPreset)
         return;
 
+    m_view->canvasBase()->favoriteResourceManager()->setBlockUpdates(true);
+
     KisPaintOpPreset* newPreset = curPreset->clone();
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
@@ -510,6 +512,7 @@ void KisPaintopBox::slotSaveActivePreset()
     foreach(const QString& tag, tags) {
         rServer->addTag(newPreset, tag);
     }
+    m_view->canvasBase()->favoriteResourceManager()->setBlockUpdates(false);
 }
 
 void KisPaintopBox::slotUpdatePreset()

@@ -31,10 +31,12 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoSharedSavingData.h>
+#include <KoElementReference.h>
 
 #include <kmimetype.h>
 #include <kdebug.h>
 #include <QMap>
+#include <QUuid>
 
 class KoShapeSavingContextPrivate {
 public:
@@ -43,29 +45,31 @@ public:
 
     KoXmlWriter *xmlWriter;
     KoShapeSavingContext::ShapeSavingOptions savingOptions;
-    QMap<const KoShape *, QString> drawIds;
-    QMap<const QTextBlockUserData*, QString> subIds;
+
     QList<const KoShapeLayer*> layers;
     QSet<KoDataCenterBase *> dataCenters;
-    int drawId;
-    int subId;
     QMap<QString, KoSharedSavingData*> sharedData;
+
     QMap<qint64, QString> imageNames;
     int imageId;
     QMap<QString, QImage> images;
+
     QHash<const KoShape *, QTransform> shapeOffsets;
     QMap<const KoMarker *, QString> markerRefs;
 
     KoGenStyles& mainStyles;
     KoEmbeddedDocumentSaver& embeddedSaver;
+
+    QMap<const void*, KoElementReference> references;
+    QMap<QString, int> referenceCounters;
+    QMap<QString, QList<const void*> > prefixedReferences;
+
 };
 
 KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w,
         KoGenStyles &s, KoEmbeddedDocumentSaver &e)
         : xmlWriter(&w),
         savingOptions(0),
-        drawId(0),
-        subId(0),
         imageId(0),
         mainStyles(s),
         embeddedSaver(e)
@@ -83,7 +87,7 @@ KoShapeSavingContext::KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &
         KoEmbeddedDocumentSaver &embeddedSaver)
     : d(new KoShapeSavingContextPrivate(xmlWriter, mainStyles, embeddedSaver))
 {
-    // by default allow saving of draw:id
+    // by default allow saving of draw:id + xml:id
     addOption(KoShapeSavingContext::DrawId);
 }
 
@@ -138,36 +142,64 @@ void KoShapeSavingContext::removeOption(ShapeSavingOption option)
         d->savingOptions = d->savingOptions ^ option; // xor to remove it.
 }
 
-QString KoShapeSavingContext::drawId(const KoShape *shape, bool insert)
+KoElementReference KoShapeSavingContext::xmlid(const void *referent, const QString& prefix, KoElementReference::GenerationOption counter)
 {
-    QMap<const KoShape *, QString>::iterator it(d->drawIds.find(shape));
-    if (it == d->drawIds.end()) {
-        if (insert == true) {
-            it = d->drawIds.insert(shape, QString("shape%1").arg(++d->drawId));
-        } else {
-            return QString();
+    Q_ASSERT(counter == KoElementReference::UUID || (counter == KoElementReference::Counter && !prefix.isEmpty()));
+
+    if (d->references.contains(referent)) {
+        return d->references[referent];
+    }
+
+    KoElementReference ref;
+
+    if (counter == KoElementReference::Counter) {
+        int referenceCounter = d->referenceCounters[prefix];
+        referenceCounter++;
+        ref = KoElementReference(prefix, referenceCounter);
+        d->references.insert(referent, ref);
+        d->referenceCounters[prefix] = referenceCounter;
+    }
+    else {
+        if (!prefix.isEmpty()) {
+            ref = KoElementReference(prefix);
+            d->references.insert(referent, ref);
+        }
+        else {
+            d->references.insert(referent, ref);
         }
     }
-    return it.value();
-}
 
-void KoShapeSavingContext::clearDrawIds()
-{
-    d->drawIds.clear();
-    d->drawId = 0;
-}
-
-QString KoShapeSavingContext::subId(const QTextBlockUserData *subItem, bool insert)
-{
-    QMap<const QTextBlockUserData*, QString>::iterator it(d->subIds.find(subItem));
-    if (it == d->subIds.end()) {
-        if (insert == true) {
-            it = d->subIds.insert(subItem, QString("subitem%1").arg(++d->subId));
-        } else {
-            return QString();
-        }
+    if (!prefix.isNull()) {
+        d->prefixedReferences[prefix].append(referent);
     }
-    return it.value();
+    return ref;
+}
+
+KoElementReference KoShapeSavingContext::existingXmlid(const void *referent)
+{
+    if (d->references.contains(referent)) {
+        return d->references[referent];
+    }
+    else {
+        KoElementReference ref;
+        ref.invalidate();
+        return ref;
+    }
+}
+
+void KoShapeSavingContext::clearXmlIds(const QString &prefix)
+{
+
+    if (d->prefixedReferences.contains(prefix)) {
+        foreach(const void* ptr, d->prefixedReferences[prefix]) {
+            d->references.remove(ptr);
+        }
+        d->prefixedReferences.remove(prefix);
+    }
+
+    if (d->referenceCounters.contains(prefix)) {
+        d->referenceCounters[prefix] = 0;
+    }
 }
 
 void KoShapeSavingContext::addLayerForSaving(const KoShapeLayer *layer)
@@ -213,7 +245,7 @@ QString KoShapeSavingContext::imageHref(KoImageData * image)
 
 QString KoShapeSavingContext::imageHref(QImage &image)
 {
-    // TODO this can be optimized to recocnice images which have the same content
+    // TODO this can be optimized to recognize images which have the same content
     // Also this can use quite a lot of memeory as the qimage are all kept until
     // the they are saved to the store in memory
     QString href = QString("Pictures/image%1.png").arg(++d->imageId);

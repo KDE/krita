@@ -132,7 +132,9 @@ void KoSemanticStylesheet::format(KoRdfSemanticItem *obj, KoTextEditor *editor, 
     editor->setPosition(startpos, QTextCursor::MoveAnchor);
     editor->movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, endpos - startpos);
     QString oldText = editor->selectedText();
-    editor->removeSelectedText();
+    if (editor->hasSelection()) {
+        editor->deleteChar(); // deletes the selection
+    }
     editor->setPosition(startpos, QTextCursor::MoveAnchor);
     kDebug(30015) << "formating start:" << startpos << " end:" << endpos;
     kDebug(30015) << "semantic item oldText:" << oldText;

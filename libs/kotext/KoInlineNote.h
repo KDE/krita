@@ -72,20 +72,11 @@ public:
      */
     void setAutoNumber(int autoNumber);
 
-    /**
-     * Set the id that is used to reference this note.
-     * @param id the new id
-     */
-    void setId(const QString &id);
-
     /// return the current text
     QTextFrame *textFrame() const;
 
     /// return the current label
     QString label() const;
-
-    /// return the current id
-    QString id() const;
 
     /**
      * @return whether the label should be automatically recreated or if the label is static.

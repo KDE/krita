@@ -49,6 +49,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoStoreDevice.h>
 #include <KoShapeTransformCommand.h>
+#include <KoElementReference.h>
 
 #include "kis_painter.h"
 #include "kis_paint_device.h"
@@ -159,7 +160,10 @@ bool KisShapeSelection::saveSelection(KoStore * store) const
 
     shapeContext.xmlWriter().startElement("draw:page");
     shapeContext.xmlWriter().addAttribute("draw:name", "");
-    shapeContext.xmlWriter().addAttribute("draw:id", "page1");
+
+    KoElementReference elementRef;
+    elementRef.saveOdf(&shapeContext.xmlWriter(), KoElementReference::DrawId);
+
     shapeContext.xmlWriter().addAttribute("draw:master-page-name", "Default");
 
     saveOdf(shapeContext);

@@ -81,6 +81,12 @@ public:
     virtual void resourceAdded(KisPaintOpPreset* resource);
     virtual void resourceChanged(KisPaintOpPreset* resource);
 
+    /**
+     Set palette to block updates, paintops won't be deleted when they are deleted from server
+     Used when overwriting a resource
+     **/
+    void setBlockUpdates(bool block);
+
 signals:
     void sigSetFGColor(const KoColor& c);
 
@@ -109,6 +115,7 @@ private:
     KisPaletteManager *m_favoriteBrushManager;
     KisPopupPalette* m_popupPalette;
     KisPaintopBox* m_paintopBox;
+    bool m_blockUpdates;
 
     QStringList m_favoritePresetsList;
 

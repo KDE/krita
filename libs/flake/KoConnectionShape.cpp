@@ -345,7 +345,7 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
     }
 
     if (d->shape1) {
-        context.xmlWriter().addAttribute("draw:start-shape", context.drawId(d->shape1));
+        context.xmlWriter().addAttribute("draw:start-shape", context.xmlid(d->shape1, "shape", KoElementReference::Counter).toString());
         context.xmlWriter().addAttribute("draw:start-glue-point", d->connectionPointId1);
     } else {
         QPointF p(shapeToDocument(d->handles[StartHandle]) * context.shapeOffset(this));
@@ -353,7 +353,7 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
         context.xmlWriter().addAttributePt("svg:y1", p.y());
     }
     if (d->shape2) {
-        context.xmlWriter().addAttribute("draw:end-shape", context.drawId(d->shape2));
+        context.xmlWriter().addAttribute("draw:end-shape", context.xmlid(d->shape2, "shape", KoElementReference::Counter).toString());
         context.xmlWriter().addAttribute("draw:end-glue-point", d->connectionPointId2);
     } else {
         QPointF p(shapeToDocument(d->handles[EndHandle]) * context.shapeOffset(this));

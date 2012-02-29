@@ -49,7 +49,6 @@ private:
     QList<KoParagraphStyle *> m_origParagraphStyles;
     QSet<int> m_changedStyles;
     bool m_first;
-    bool m_macroFirst;
 };
 
 #endif // CHANGESTYLESCOMMAND_H

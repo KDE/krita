@@ -50,7 +50,9 @@
 #include "kis_slider_spin_box.h"
 
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
-        : KisToolSelectBase(canvas, KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6))
+        : KisToolSelectBase(canvas,
+                            KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
+                            i18n("Contiguous Area Selection"))
 {
     setObjectName("tool_select_contiguous");
     m_fuzziness = 20;
@@ -82,8 +84,12 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent *event)
         fillpainter.setWidth(rc.width());
         fillpainter.setFillThreshold(m_fuzziness);
         fillpainter.setSampleMerged(!m_limitToCurrentLayer);
+
+        KisImageWSP image = currentImage();
+        image->lock();
         KisSelectionSP selection =
-            fillpainter.createFloodSelection(pos.x(), pos.y(), currentImage()->mergedImage());
+            fillpainter.createFloodSelection(pos.x(), pos.y(), image->projection());
+        image->unlock();
 
         KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         if (!kisCanvas || !selection->pixelSelection()) {
@@ -91,7 +97,7 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent *event)
             return;
         }
         KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Contiguous Area Selection"));
-        helper.selectPixelSelection(selection->pixelSelection(), m_selectAction);
+        helper.selectPixelSelection(selection->pixelSelection(), selectionAction());
 
         QApplication::restoreOverrideCursor();
     }
@@ -114,21 +120,22 @@ void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
 QWidget* KisToolSelectContiguous::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
-    m_optWidget->setWindowTitle(i18n("Contiguous Area Selection"));
-    m_optWidget->disableAntiAliasSelectionOption();
-    m_optWidget->disableSelectionModeOption();
+    KisSelectionOptions *selectionWidget = selectionOptionWidget();
 
-    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    selectionWidget->disableAntiAliasSelectionOption();
+    selectionWidget->disableSelectionModeOption();
+
+    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);
     if (l) {
         QHBoxLayout * hbox = new QHBoxLayout();
         Q_CHECK_PTR(hbox);
         l->insertLayout(1, hbox);
 
-        QLabel * lbl = new QLabel(i18n("Fuzziness: "), m_optWidget);
+        QLabel * lbl = new QLabel(i18n("Fuzziness: "), selectionWidget);
         hbox->addWidget(lbl);
 
-        KisSliderSpinBox *input = new KisSliderSpinBox(m_optWidget);
+        KisSliderSpinBox *input = new KisSliderSpinBox(selectionWidget);
         Q_CHECK_PTR(input);
         input->setObjectName("fuzziness");
         input->setRange(0, 200);
@@ -137,14 +144,14 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         hbox->addWidget(input);
         connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
 
-        QCheckBox* limitToCurrentLayer = new QCheckBox(i18n("Limit to current layer"), m_optWidget);
+        QCheckBox* limitToCurrentLayer = new QCheckBox(i18n("Limit to current layer"), selectionWidget);
         l->insertWidget(2, limitToCurrentLayer);
         limitToCurrentLayer->setChecked(m_limitToCurrentLayer);
         connect(limitToCurrentLayer, SIGNAL(stateChanged(int)),
                 this, SLOT(slotLimitToCurrentLayer(int)));
 
     }
-    return m_optWidget;
+    return selectionWidget;
 }
 
 void KisToolSelectContiguous::slotLimitToCurrentLayer(int state)

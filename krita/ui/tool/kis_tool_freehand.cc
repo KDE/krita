@@ -161,22 +161,10 @@ void KisToolFreehand::endStroke()
     setCurrentNodeLocked(false);
 }
 
-void KisToolFreehand::updateOutlineDocPoint(const QPointF &point)
-{
-    m_outlineDocPoint = point;
-}
-
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
     if (mode() == KisTool::PAINT_MODE)
         return;
-
-    updateOutlineDocPoint(e->point);
-
-    KisConfig cfg;
-    if (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
-        updateOutlineRect();
-    }
 
     /**
      * FIXME: we need some better way to implement modifiers
@@ -207,6 +195,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
             e->modifiers() == Qt::NoModifier &&
             !specialModifierActive()) {
 
+        requestUpdateOutline(e->point);
 
         if (nodePaintAbility() != PAINT)
             return;
@@ -223,25 +212,22 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     }
     else {
         KisToolPaint::mousePressEvent(e);
+        requestUpdateOutline(e->point);
     }
 }
 
 void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 {
+    requestUpdateOutline(e->point);
+
     /**
      * Update outline
      */
     if (mode() == KisTool::HOVER_MODE ||
             mode() == KisTool::PAINT_MODE) {
-        updateOutlineDocPoint(e->point);
-
-        KisConfig cfg;
-        if (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
-            updateOutlineRect();
-        }
-
 #if defined(HAVE_OPENGL)
-        else if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL) {
+        KisConfig cfg;
+        if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL) {
             if (isCanvasOpenGL()) {
                 m_xTilt = e->xTilt();
                 m_yTilt = e->yTilt();
@@ -285,6 +271,7 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
     }
     else {
         KisToolPaint::mouseReleaseEvent(e);
+        requestUpdateOutline(e->point);
     }
 }
 
@@ -292,7 +279,7 @@ void KisToolFreehand::keyPressEvent(QKeyEvent *event)
 {
     if (mode() != KisTool::PAINT_MODE) {
         KisToolPaint::keyPressEvent(event);
-        updateOutlineRect();
+        requestUpdateOutline(m_outlineDocPoint);
         return;
     }
 
@@ -303,7 +290,7 @@ void KisToolFreehand::keyReleaseEvent(QKeyEvent* event)
 {
     if (mode() != KisTool::PAINT_MODE) {
         KisToolPaint::keyReleaseEvent(event);
-        updateOutlineRect();
+        requestUpdateOutline(m_outlineDocPoint);
         return;
     }
 
@@ -313,8 +300,7 @@ void KisToolFreehand::keyReleaseEvent(QKeyEvent* event)
 void KisToolFreehand::gesture(const QPointF &offsetInDocPixels, const QPointF &initialDocPoint)
 {
     currentPaintOpPreset()->settings()->changePaintOpSize(offsetInDocPixels.x(), offsetInDocPixels.y());
-    updateOutlineDocPoint(initialDocPoint);
-    updateOutlineRect();
+    requestUpdateOutline(initialDocPoint);
 }
 
 bool KisToolFreehand::wantsAutoScroll() const
@@ -477,26 +463,26 @@ void KisToolFreehand::decreaseBrushSize()
     showOutlineTemporary();
 }
 
-void KisToolFreehand::updateOutlineRect()
+void KisToolFreehand::requestUpdateOutline(const QPointF &outlineDocPoint)
 {
     KisConfig cfg;
     KisPaintOpSettings::OutlineMode outlineMode;
     outlineMode = KisPaintOpSettings::CursorIsNotOutline;
 
     if (m_explicitShowOutline ||
-            mode() == KisTool::GESTURE_MODE ||
-            (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE &&
-                (mode() == HOVER_MODE ||
-                (mode() == PAINT_MODE && cfg.showOutlineWhilePainting())))) {
+        mode() == KisTool::GESTURE_MODE ||
+        (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE &&
+         ((mode() == HOVER_MODE && !specialHoverModeActive()) ||
+          (mode() == PAINT_MODE && cfg.showOutlineWhilePainting())))) {
+
         outlineMode = KisPaintOpSettings::CursorIsOutline;
     }
+
+    m_outlineDocPoint = outlineDocPoint;
     m_currentOutline = getOutlinePath(m_outlineDocPoint, outlineMode);
+
     QRectF outlinePixelRect = m_currentOutline.boundingRect();
     QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
-
-    if (!m_oldOutlineRect.isEmpty()) {
-        canvas()->updateCanvas(m_oldOutlineRect);
-    }
 
     // This adjusted call is needed as we paint with a 3 pixel wide brush and the pen is outside the bounds of the path
     // Pen uses view coordinates so we have to zoom the document value to match 2 pixel in view coordiates
@@ -506,22 +492,30 @@ void KisToolFreehand::updateOutlineRect()
     canvas()->viewConverter()->zoom(&zoomX, &zoomY);
     qreal xoffset = 2.0/zoomX;
     qreal yoffset = 2.0/zoomY;
-    m_oldOutlineRect = outlineDocRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
+    QRectF newOutlineRect = outlineDocRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
 
-    canvas()->updateCanvas(m_oldOutlineRect);
+    if (!m_oldOutlineRect.isEmpty()) {
+        canvas()->updateCanvas(m_oldOutlineRect);
+    }
+
+    if (!newOutlineRect.isEmpty()) {
+        canvas()->updateCanvas(newOutlineRect);
+    }
+
+    m_oldOutlineRect = newOutlineRect;
 }
 
 void KisToolFreehand::showOutlineTemporary()
 {
     m_explicitShowOutline = true;
     m_outlineTimer.start(HIDE_OUTLINE_TIMEOUT);
-    updateOutlineRect();
+    requestUpdateOutline(m_outlineDocPoint);
 }
 
 void KisToolFreehand::hideOutline()
 {
     m_explicitShowOutline = false;
-    updateOutlineRect();
+    requestUpdateOutline(m_outlineDocPoint);
 }
 
 #include "kis_tool_freehand.moc"

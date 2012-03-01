@@ -181,11 +181,6 @@ public:
      */
     virtual QWidget* createSelectionOptionWidget(QWidget* parent);
 
-    /*
-     * This return our internal KisSelectionOptions if toolType() returns TOOL_SELECT
-     */
-    virtual QWidget* optionWidget();
-
 public slots:
 
     /*

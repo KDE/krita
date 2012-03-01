@@ -67,7 +67,6 @@ public:
     virtual ~KisToolCrop();
 
     virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
 
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);

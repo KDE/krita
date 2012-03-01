@@ -390,7 +390,7 @@ void KisTool::setMode(ToolMode mode) {
     m_mode = mode;
 }
 
-KisTool::ToolMode KisTool::mode() {
+KisTool::ToolMode KisTool::mode() const {
     return m_mode;
 }
 
@@ -458,38 +458,48 @@ void KisTool::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Space) {
 
-        KisConfig cfg;
-        if(cfg.clicklessSpacePan()) {
-            initPan(d->lastDocumentPoint);
+        if (!event->isAutoRepeat()) {
+            KisConfig cfg;
+            if(mode() == HOVER_MODE && cfg.clicklessSpacePan()) {
+                initPan(d->lastDocumentPoint);
+            }
+            else {
+                d->spacePressed = true;
+            }
         }
-        else {
-            d->spacePressed = true;
-        }
+        event->accept();
+
+    } else if (mode() == GESTURE_MODE ||
+               mode() == PAN_MODE) {
 
         event->accept();
-        return;
+    } else {
+        event->ignore();
     }
-
-    event->ignore();
 }
 
 void KisTool::keyReleaseEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Space) {
 
-        KisConfig cfg;
-        if(cfg.clicklessSpacePan()) {
-            endPan();
+        if (!event->isAutoRepeat()) {
+            KisConfig cfg;
+            if(mode() == PAN_MODE && cfg.clicklessSpacePan()) {
+                endPan();
+            }
+            else {
+                d->spacePressed = false;
+            }
         }
-        else {
-            d->spacePressed = false;
-        }
+        event->accept();
+
+    } else if (mode() == GESTURE_MODE ||
+               mode() == PAN_MODE) {
 
         event->accept();
-        return;
+    } else {
+        event->ignore();
     }
-
-    event->ignore();
 }
 
 void KisTool::initPan(const QPointF &docPoint)
@@ -593,12 +603,6 @@ QWidget* KisTool::createOptionWidget()
     d->optionWidget->setObjectName(toolId() + " Option Widget");
     return d->optionWidget;
 }
-
-QWidget* KisTool::optionWidget()
-{
-    return d->optionWidget;
-}
-
 
 void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {

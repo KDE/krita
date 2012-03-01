@@ -148,7 +148,6 @@ protected:
     void updateCanvasViewRect(const QRectF &viewRect);
 
     virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
 
     inline void setOutlineStyle(PaintMode mode) {
         m_outlinePaintMode = mode;
@@ -200,7 +199,6 @@ protected:
 protected:
     enum ToolMode {
         HOVER_MODE,
-        SECONDARY_HOVER_MODE,
         PAINT_MODE,
         SECONDARY_PAINT_MODE,
         MIRROR_AXIS_SETUP_MODE,
@@ -210,7 +208,7 @@ protected:
     };
 
     virtual void setMode(ToolMode mode);
-    virtual ToolMode mode();
+    virtual ToolMode mode() const;
 
 
 protected slots:

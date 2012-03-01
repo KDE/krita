@@ -47,7 +47,7 @@ KisToolShape::KisToolShape(KoCanvasBase * canvas, const QCursor & cursor)
 KisToolShape::~KisToolShape()
 {
     // in case the widget hasn't been shown
-    if (!m_shapeOptionsWidget->parent()) {
+    if (m_shapeOptionsWidget && !m_shapeOptionsWidget->parent()) {
         delete m_shapeOptionsWidget;
     }
 }

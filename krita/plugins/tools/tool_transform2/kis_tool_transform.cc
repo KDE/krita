@@ -509,35 +509,36 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
             QPointF pos = bRect.center() - QPointF(m_currImg.width(), m_currImg.height()) / 2;
             gc.drawImage(pos.toPoint(), m_currImg, QRectF(m_currImg.rect()));
             gc.setOpacity(1.0);
-
-            for (int i = 1; i >= 0; --i) {
-                gc.setPen(pen[i]);
-                gc.drawRect(handleRect.translated(topleft));
-                gc.drawRect(handleRect.translated(middletop));
-                gc.drawRect(handleRect.translated(topright));
-                gc.drawRect(handleRect.translated(middleright));
-                gc.drawRect(handleRect.translated(bottomright));
-                gc.drawRect(handleRect.translated(middlebottom));
-                gc.drawRect(handleRect.translated(bottomleft));
-                gc.drawRect(handleRect.translated(middleleft));
-
-                gc.drawLine(topleft, topright);
-                gc.drawLine(topright, bottomright);
-                gc.drawLine(bottomright, bottomleft);
-                gc.drawLine(bottomleft, topleft);
-            }
-
-            QPointF rotationCenter = converter.documentToView(QPointF(m_rotationCenterProj.x() / kisimage->xRes(), m_rotationCenterProj.y() / kisimage->yRes()));
-            QRectF rotationCenterRect(- m_rotationCenterRadius / 2., - m_rotationCenterRadius / 2., m_rotationCenterRadius, m_rotationCenterRadius);
-
-            for (int i = 1; i >= 0; --i) {
-                gc.setPen(pen[i]);
-                gc.drawEllipse(rotationCenterRect.translated(rotationCenter));
-                gc.drawLine(QPointF(rotationCenter.x() - m_rotationCenterRadius / 2. - 2, rotationCenter.y()), QPointF(rotationCenter.x() + m_rotationCenterRadius / 2. + 2, rotationCenter.y()));
-                gc.drawLine(QPointF(rotationCenter.x(), rotationCenter.y() - m_rotationCenterRadius / 2. - 2), QPointF(rotationCenter.x(), rotationCenter.y() + m_rotationCenterRadius / 2. + 2));
-            }
-
         }
+
+        for (int i = 1; i >= 0; --i) {
+            gc.setPen(pen[i]);
+            gc.drawRect(handleRect.translated(topleft));
+            gc.drawRect(handleRect.translated(middletop));
+            gc.drawRect(handleRect.translated(topright));
+            gc.drawRect(handleRect.translated(middleright));
+            gc.drawRect(handleRect.translated(bottomright));
+            gc.drawRect(handleRect.translated(middlebottom));
+            gc.drawRect(handleRect.translated(bottomleft));
+            gc.drawRect(handleRect.translated(middleleft));
+
+            gc.drawLine(topleft, topright);
+            gc.drawLine(topright, bottomright);
+            gc.drawLine(bottomright, bottomleft);
+            gc.drawLine(bottomleft, topleft);
+        }
+
+        QPointF rotationCenter = converter.documentToView(QPointF(m_rotationCenterProj.x() / kisimage->xRes(), m_rotationCenterProj.y() / kisimage->yRes()));
+        QRectF rotationCenterRect(- m_rotationCenterRadius / 2., - m_rotationCenterRadius / 2., m_rotationCenterRadius, m_rotationCenterRadius);
+
+        for (int i = 1; i >= 0; --i) {
+            gc.setPen(pen[i]);
+            gc.drawEllipse(rotationCenterRect.translated(rotationCenter));
+            gc.drawLine(QPointF(rotationCenter.x() - m_rotationCenterRadius / 2. - 2, rotationCenter.y()), QPointF(rotationCenter.x() + m_rotationCenterRadius / 2. + 2, rotationCenter.y()));
+            gc.drawLine(QPointF(rotationCenter.x(), rotationCenter.y() - m_rotationCenterRadius / 2. - 2), QPointF(rotationCenter.x(), rotationCenter.y() + m_rotationCenterRadius / 2. + 2));
+        }
+
+
     }
     else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
         pen[0].setWidth(2);
@@ -555,6 +556,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
             if (!m_origSelectionImg.isNull())
                 m_scaledOrigSelectionImg = m_origSelectionImg.scaled(m_refSize.width() * m_origSelectionImg.width(), m_refSize.height() * m_origSelectionImg.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         }
+
         if (m_optWidget && m_optWidget->showDecorationsBox && m_optWidget->showDecorationsBox->isChecked()) {
             gc.setOpacity(0.6);
             gc.drawImage(origtopleft, m_scaledOrigSelectionImg, QRectF(m_scaledOrigSelectionImg.rect()));
@@ -562,40 +564,39 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
             gc.setOpacity(1.0);
             QPointF warptranslate = converter.documentToView(QPointF(m_currentArgs.previewPos().x() / kisimage->xRes(), m_currentArgs.previewPos().y() / kisimage->yRes()));
             gc.drawImage(QPointF(warptranslate), m_currImg, QRectF(m_currImg.rect()));
-
-            for (int j = 1; j >= 0; --j) {
-                gc.setPen(pen[j]);
-                for (int i = 0; i < m_viewTransfPoints.size(); ++i) {
-                    gc.drawEllipse(handleRect.translated(m_viewTransfPoints[i]));
-                }
-            }
-            gc.setPen(pen[1]);
-            for (int i = 0; i < m_viewOrigPoints.size(); ++i) {
-                gc.drawEllipse(smallHandleRect.translated(m_viewOrigPoints[i]));
-            }
-            gc.setPen(pen[0]);
-            gc.setBrush(Qt::SolidPattern);
-            for (int i = 0; i < m_viewOrigPoints.size(); ++i) {
-                gc.drawEllipse(smallHandleRect.translated(m_viewOrigPoints[i]));
-            }
-            pen[1].setWidth(2);
-            gc.setPen(pen[1]);
-            for (int i = 0; i < m_viewOrigPoints.size(); ++i) {
-                gc.drawLine(m_viewTransfPoints[i], m_viewOrigPoints[i]);
-            }
-            pen[0].setStyle(Qt::DashLine);
-            gc.setPen(pen[0]);
-            for (int i = 0; i < m_viewOrigPoints.size(); ++i) {
-                gc.drawLine(m_viewTransfPoints[i], m_viewOrigPoints[i]);
-            }
-
-            gc.setBrush(Qt::NoBrush);
         }
-        else {
-            gc.setOpacity(1.0);
-            QPointF warptranslate = converter.documentToView(QPointF(m_currentArgs.previewPos().x() / kisimage->xRes(), m_currentArgs.previewPos().y() / kisimage->yRes()));
-            gc.drawImage(QPointF(warptranslate), m_currImg, QRectF(m_currImg.rect()));
+
+        for (int j = 1; j >= 0; --j) {
+            gc.setPen(pen[j]);
+            for (int i = 0; i < m_viewTransfPoints.size(); ++i) {
+                gc.drawEllipse(handleRect.translated(m_viewTransfPoints[i]));
+            }
         }
+        gc.setPen(pen[1]);
+        for (int i = 0; i < m_viewOrigPoints.size(); ++i) {
+            gc.drawEllipse(smallHandleRect.translated(m_viewOrigPoints[i]));
+        }
+        gc.setPen(pen[0]);
+        gc.setBrush(Qt::SolidPattern);
+        for (int i = 0; i < m_viewOrigPoints.size(); ++i) {
+            gc.drawEllipse(smallHandleRect.translated(m_viewOrigPoints[i]));
+        }
+        pen[1].setWidth(2);
+        gc.setPen(pen[1]);
+        for (int i = 0; i < m_viewOrigPoints.size(); ++i) {
+            gc.drawLine(m_viewTransfPoints[i], m_viewOrigPoints[i]);
+        }
+        pen[0].setStyle(Qt::DashLine);
+        gc.setPen(pen[0]);
+        for (int i = 0; i < m_viewOrigPoints.size(); ++i) {
+            gc.drawLine(m_viewTransfPoints[i], m_viewOrigPoints[i]);
+        }
+
+        gc.setBrush(Qt::NoBrush);
+        gc.setOpacity(1.0);
+        QPointF warptranslate = converter.documentToView(QPointF(m_currentArgs.previewPos().x() / kisimage->xRes(), m_currentArgs.previewPos().y() / kisimage->yRes()));
+        gc.drawImage(QPointF(warptranslate), m_currImg, QRectF(m_currImg.rect()));
+
     }
 
     gc.setPen(oldPen);

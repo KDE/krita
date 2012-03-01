@@ -84,7 +84,7 @@ void TextPasteCommand::redo()
         if (editor->hasSelection()) { //TODO
             // XXX: this was m_tool->m_actionShowChanges.isChecked -- but shouldn't we check
             // whether we should record changes here, instead of showing?
-            if (textDocument.changeTracker()->recordChanges()) {
+            if (textDocument.changeTracker() && textDocument.changeTracker()->recordChanges()) {
                 editor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_document.data(), m_shapeController, this));
             } else {
                 editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_document.data(), m_shapeController, this));

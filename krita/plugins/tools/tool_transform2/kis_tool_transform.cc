@@ -117,9 +117,6 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     m_handleDir[8] = QPointF(0, 0); // also add the center
     m_defaultPointsPerLine = 3;
     m_imageTooBig = false;
-    m_origImg = NULL;
-    m_origSelectionImg = NULL;
-
     m_origDevice = 0;
     m_origSelection = 0;
     m_handleRadius = 12;
@@ -289,10 +286,10 @@ void KisToolTransform::recalcOutline()
 
         QTransform scaleTransform;
         scaleTransform.scale(s.width(), s.height());
-        if (m_origImg == NULL)
+        if (m_origImg.isNull())
             m_currentArgs.setPreviewPos(m_originalTopLeft);
         else {
-            m_currImg = m_origImg->transformed(scaleTransform);
+            m_currImg = m_origImg.transformed(scaleTransform);
             if (!m_editWarpPoints) {
                 QPointF origtopleft = m_canvas->viewConverter()->documentToView(QPointF(m_originalTopLeft.x() / kisimage->xRes(), m_originalTopLeft.y() / kisimage->yRes()));
                 QPointF warptranslate;
@@ -412,8 +409,8 @@ void KisToolTransform::recalcOutline()
         m.translate(- m_originalWidth2 * m_currentArgs.scaleX(), - m_originalHeight2 * m_currentArgs.scaleY(), 0);
         m.scale(m_currentArgs.scaleX(), m_currentArgs.scaleY());
         m_transform = m.toTransform(m_cameraPos.z());
-        if (m_origImg != NULL)
-            m_currImg = m_origImg->transformed(m_transform);
+        if (!m_origImg.isNull())
+            m_currImg = m_origImg.transformed(m_transform);
     }
 }
 
@@ -479,8 +476,9 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
             // need to update m_scaledOrigSelectionImg and m_currentImg
             m_refSize = newRefSize;
             recalcOutline();
-            if (m_origSelectionImg != NULL)
-                m_scaledOrigSelectionImg = m_origSelectionImg->scaled(m_refSize.width() * m_origSelectionImg->width(), m_refSize.height() * m_origSelectionImg->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            if (!m_origSelectionImg.isNull()) {
+                m_scaledOrigSelectionImg = m_origSelectionImg.scaled(m_refSize.width() * m_origSelectionImg.width(), m_refSize.height() * m_origSelectionImg.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            }
         }
         if (m_optWidget && m_optWidget->showDecorationsBox && !m_optWidget->showDecorationsBox->isChecked()) {
             if (m_imageTooBig)
@@ -543,8 +541,8 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
         if (newRefSize != m_refSize) {
             m_refSize = newRefSize;
             recalcOutline();
-            if (m_origSelectionImg != NULL)
-                m_scaledOrigSelectionImg = m_origSelectionImg->scaled(m_refSize.width() * m_origSelectionImg->width(), m_refSize.height() * m_origSelectionImg->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            if (!m_origSelectionImg.isNull())
+                m_scaledOrigSelectionImg = m_origSelectionImg.scaled(m_refSize.width() * m_origSelectionImg.width(), m_refSize.height() * m_origSelectionImg.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         }
         if (m_optWidget && m_optWidget->showDecorationsBox && m_optWidget->showDecorationsBox->isChecked()) {
             gc.setOpacity(0.6);
@@ -1959,8 +1957,8 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
         initFreeTransform();
 
     if (!dev) {
-        m_origImg = 0;
-        m_origSelectionImg = 0;
+        m_origImg = QImage();
+        m_origSelectionImg = QImage();
     } else {
 #ifdef __GNUC__
 #warning "QIMAGE: This code potentially creates enormous QImages! See https://bugs.kde.org/show_bug.cgi?id=263170"
@@ -1968,24 +1966,24 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
 
         const KisImage *kisimage = image();
         m_transform = QTransform();
-        m_origImg = new QImage(dev->convertToQImage(0, x, y, w, h));
+        m_origImg = dev->convertToQImage(0, x, y, w, h);
         if (selection) {
-            m_origSelectionImg = new QImage(selection->projection()->convertToQImage(0, x, y, w, h));
+            m_origSelectionImg = selection->projection()->convertToQImage(0, x, y, w, h);
         } else {
-            m_origSelectionImg = new QImage(w, h, QImage::Format_ARGB32_Premultiplied);
-            m_origSelectionImg->fill(0xFFFFFFFF);
+            m_origSelectionImg = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
+            m_origSelectionImg.fill(0xFFFFFFFF);
         }
-        QImage alphaMask(*m_origSelectionImg);
+        QImage alphaMask = m_origSelectionImg;
 
-        m_origImg->setAlphaChannel(alphaMask);
-        m_currImg = QImage(*m_origImg); // create a shallow copy
-        m_origSelectionImg->invertPixels();
-        m_origSelectionImg->setAlphaChannel(alphaMask);
+        m_origImg.setAlphaChannel(alphaMask);
+        m_currImg = m_origImg; // create a shallow copy
+        m_origSelectionImg.invertPixels();
+        m_origSelectionImg.setAlphaChannel(alphaMask);
         if (m_canvas && m_canvas->viewConverter() && kisimage)
             m_refSize = m_canvas->viewConverter()->documentToView(QSizeF(1 / kisimage->xRes(), 1 / kisimage->yRes()));
         else
             m_refSize = QSizeF(1, 1);
-        m_scaledOrigSelectionImg = m_origSelectionImg->scaled(m_refSize.width() * m_origSelectionImg->width(), m_refSize.height() * m_origSelectionImg->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        m_scaledOrigSelectionImg = m_origSelectionImg.scaled(m_refSize.width() * m_origSelectionImg.width(), m_refSize.height() * m_origSelectionImg.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
 
     outlineChanged();
@@ -2025,7 +2023,9 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
                 m_viewTransfPoints.resize(nbPoints);
 
                 m_origSelection = presentCmd2->origSelection(m_originalTopLeft, m_originalBottomRight);
-                presentCmd2->origPreviews(m_origImg, m_origSelectionImg);
+
+                m_origImg = presentCmd2->originalImage();
+                m_origSelectionImg = presentCmd2->originalSelectionImage();
 
                 m_editWarpPoints = false;
                 updateOptionWidget();
@@ -2317,7 +2317,9 @@ void KisToolTransform::notifyCommandExecuted(const KUndo2Command * command)
                 m_viewTransfPoints.resize(nbPoints);
 
                 m_origSelection = presentCmd2->origSelection(m_originalTopLeft, m_originalBottomRight);
-                presentCmd2->origPreviews(m_origImg, m_origSelectionImg);
+
+                m_origImg = presentCmd2->originalImage();
+                m_origSelectionImg = presentCmd2->originalSelectionImage();
 
                 m_originalCenter = (m_originalTopLeft + m_originalBottomRight) / 2;
                 m_originalHeight2 = m_originalCenter.y() - m_originalTopLeft.y();

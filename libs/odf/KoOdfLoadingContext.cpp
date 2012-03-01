@@ -92,9 +92,9 @@ KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStor
         }
     }
 
-    if (!parseManifest(d->manifestDoc)) {
-        kWarning(30010) << "could not parse manifest document";
-    }
+//    if (!parseManifest(d->manifestDoc)) {
+//        kWarning(30010) << "could not parse manifest document";
+//    }
 }
 
 KoOdfLoadingContext::~KoOdfLoadingContext()

@@ -510,9 +510,9 @@ bool KoFilterManager::filterAvailable(KoFilterEntry::Ptr entry)
         QByteArray symname = "check_" + QString(library.objectName()).toLatin1();
         KLibrary::void_function_ptr sym = library.resolveFunction(symname);
         if (!sym) {
-            kWarning(30500) << "The library " << library.objectName()
-                << " does not offer a check_" << library.objectName()
-                << " function." << endl;
+//            kWarning(30500) << "The library " << library.objectName()
+//                << " does not offer a check_" << library.objectName()
+//                << " function." << endl;
             m_filterAvailable[key] = false;
         } else {
             typedef int (*t_func)();

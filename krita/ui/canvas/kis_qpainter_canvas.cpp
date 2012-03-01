@@ -169,6 +169,9 @@ bool KisQPainterCanvas::event(QEvent *e)
 
 void KisQPainterCanvas::enterEvent(QEvent* e)
 {
+    if(!hasFocus()) {
+        setFocus();
+    }
     QWidget::enterEvent(e);
 }
 

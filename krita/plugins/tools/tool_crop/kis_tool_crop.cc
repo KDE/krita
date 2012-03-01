@@ -93,6 +93,8 @@ void KisToolCrop::deactivate()
     m_rectCrop = QRect(0, 0, 0, 0);
     updateWidgetValues();
     updateCanvasPixelRect(image()->bounds());
+
+    KisTool::deactivate();
 }
 
 void KisToolCrop::resourceChanged(int key, const QVariant &res)

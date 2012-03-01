@@ -66,7 +66,8 @@ protected:
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent* event);
     virtual bool wantsAutoScroll() const;
-    virtual void deactivate();
+    void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
+    void deactivate();
 
     virtual void initStroke(KoPointerEvent *event);
     virtual void doStroke(KoPointerEvent *event);
@@ -135,9 +136,6 @@ private:
     QRectF m_oldOutlineRect;
     QPainterPath m_currentOutline;
     bool m_explicitShowOutline;
-
-    KAction* m_increaseBrushSize;
-    KAction* m_decreaseBrushSize;
 
     KisPaintingInformationBuilder *m_infoBuilder;
     KisToolFreehandHelper *m_helper;

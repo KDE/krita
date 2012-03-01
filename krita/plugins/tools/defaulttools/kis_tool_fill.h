@@ -35,8 +35,6 @@ class QWidget;
 class QLabel;
 class QCheckBox;
 class KisSliderSpinBox;
-//class KActionCollection;
-
 class KoCanvasBase;
 
 class KisToolFill : public KisToolPaint

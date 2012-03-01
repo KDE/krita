@@ -171,9 +171,6 @@ private:
     bool m_toForegroundColor;
     // used to skip some of the tablet events and don't update the colour that often
     QTimer m_colorPickerDelayTimer;
-    KAction* m_lighterColor;
-    KAction* m_darkerColor;
-
 
 signals:
     void sigFavoritePaletteCalled(const QPoint&);

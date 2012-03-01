@@ -37,11 +37,10 @@ public:
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
 protected:
-    virtual void finishPolyline(const QVector<QPointF>& points)=0;
+    virtual void finishPolyline(const QVector<QPointF>& points) = 0;
     void updateArea();
     QRectF dragBoundingRect();
 
-private slots:
     void cancel();
     void finish();
 

@@ -39,6 +39,7 @@
 #include <kicon.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kactioncollection.h>
 
 #include <KoShape.h>
 #include <KoShapeManager.h>
@@ -47,6 +48,7 @@
 #include <KoPointerEvent.h>
 #include <KoColor.h>
 #include <KoCanvasBase.h>
+#include <KoCanvasController.h>
 
 #include <opengl/kis_opengl.h>
 #include <kis_types.h>
@@ -84,20 +86,24 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
 
     m_supportOutline = false;
 
+    KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
+
+    if(!collection->action("make_brush_color_lighter")) {
+        KAction *lighterColor = new KAction(i18n("Make Brush color lighter"), collection);
+        lighterColor->setShortcut(Qt::Key_L);
+        collection->addAction("make_brush_color_lighter", lighterColor);
+    }
+
+    if(!collection->action("make_brush_color_darker")) {
+        KAction *darkerColor = new KAction(i18n("Make Brush color darker"), collection);
+        darkerColor->setShortcut(Qt::Key_K);
+        collection->addAction("make_brush_color_darker", darkerColor);
+    }
+
+    addAction("make_brush_color_lighter", dynamic_cast<KAction*>(collection->action("make_brush_color_lighter")));
+    addAction("make_brush_color_darker", dynamic_cast<KAction*>(collection->action("make_brush_color_darker")));
+
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
-
-    m_lighterColor = new KAction(i18n("Make Brush color lighter"), this);
-    m_lighterColor->setShortcut(Qt::Key_L);
-    connect(m_lighterColor, SIGNAL(activated()), SLOT(makeColorLighter()));
-    m_lighterColor->setEnabled(false);
-    addAction("make_brush_color_lighter", m_lighterColor);
-
-    m_darkerColor = new KAction(i18n("Make Brush color darker"), this);
-    m_darkerColor->setShortcut(Qt::Key_K);
-    connect(m_darkerColor, SIGNAL(activated()), SLOT(makeColorDarker()));
-    m_darkerColor->setEnabled(false);
-    addAction("make_brush_color_darker", m_darkerColor);
-
     connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), kiscanvas, SIGNAL(favoritePaletteCalled(const QPoint&)));
     connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->view()->resourceProvider(), SLOT(slotPainting()));
 }
@@ -133,15 +139,15 @@ void KisToolPaint::resourceChanged(int key, const QVariant& v)
 void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
-    resetCursorStyle();
-    m_lighterColor->setEnabled(true);
-    m_darkerColor->setEnabled(true);
+    connect(actions().value("make_brush_color_lighter"), SIGNAL(triggered()), SLOT(makeColorLighter()));
+    connect(actions().value("make_brush_color_darker"), SIGNAL(triggered()), SLOT(makeColorDarker()));
 }
 
 void KisToolPaint::deactivate()
 {
-    m_lighterColor->setEnabled(false);
-    m_darkerColor->setEnabled(false);
+    disconnect(actions().value("make_brush_color_lighter"), 0, this, 0);
+    disconnect(actions().value("make_brush_color_darker"), 0, this, 0);
+    KisTool::deactivate();
 }
 
 

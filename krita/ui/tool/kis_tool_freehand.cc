@@ -28,9 +28,11 @@
 #include <QThreadPool>
 
 #include <kaction.h>
+#include <kactioncollection.h>
 
 #include <KoPointerEvent.h>
 #include <KoViewConverter.h>
+#include <KoCanvasController.h>
 
 //pop up palette
 #include <kis_canvas_resource_provider.h>
@@ -82,19 +84,25 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_prevyTilt = 0.0;
 #endif
 
-    m_increaseBrushSize = new KAction(i18n("Increase Brush Size"), this);
-    m_increaseBrushSize->setShortcut(Qt::Key_Period);
-    connect(m_increaseBrushSize, SIGNAL(activated()), SLOT(increaseBrushSize()));
-    addAction("increase_brush_size", m_increaseBrushSize);
+    KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
-    m_decreaseBrushSize = new KAction(i18n("Decrease Brush Size"), this);
-    m_decreaseBrushSize->setShortcut(Qt::Key_Comma);
-    connect(m_decreaseBrushSize, SIGNAL(activated()), SLOT(decreaseBrushSize()));
-    addAction("decrease_brush_size", m_decreaseBrushSize);
+    if (!collection->action("increase_brush_size")) {
+        KAction *increaseBrushSize = new KAction(i18n("Increase Brush Size"), collection);
+        increaseBrushSize->setShortcut(Qt::Key_Period);
+        collection->addAction("increase_brush_size", increaseBrushSize);
+    }
+
+    if (!collection->action("decrease_brush_size")) {
+        KAction *decreaseBrushSize = new KAction(i18n("Decrease Brush Size"), collection);
+        decreaseBrushSize->setShortcut(Qt::Key_Comma);
+        collection->addAction("decrease_brush_size", decreaseBrushSize);
+    }
+
+    addAction("increase_brush_size", dynamic_cast<KAction*>(collection->action("increase_brush_size")));
+    addAction("decrease_brush_size", dynamic_cast<KAction*>(collection->action("decrease_brush_size")));
 
     m_outlineTimer.setSingleShot(true);
     connect(&m_outlineTimer, SIGNAL(timeout()), this, SLOT(hideOutline()));
-
 
     m_infoBuilder = new KisToolPaintingInformationBuilder(this);
     m_recordingAdapter = new KisRecordingAdapter();
@@ -129,13 +137,21 @@ int KisToolFreehand::flags() const
     return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
 }
 
+void KisToolFreehand::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
+{
+    KisToolPaint::activate(activation, shapes);
+    connect(actions().value("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()));
+    connect(actions().value("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()));
+}
+
 void KisToolFreehand::deactivate()
 {
-    if (mode() == PAINT_MODE)
-    {
+    if (mode() == PAINT_MODE) {
         endStroke();
         setMode(KisTool::HOVER_MODE);
     }
+    disconnect(actions().value("increase_brush_size"), 0, this, 0);
+    disconnect(actions().value("decrease_brush_size"), 0, this, 0);
     KisToolPaint::deactivate();
 }
 

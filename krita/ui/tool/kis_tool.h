@@ -50,6 +50,7 @@
 
 #define MOVE_CONDITION(_event, _mode) (mode() == (_mode))
 
+class KActionCollection;
 class KoCanvasBase;
 class KisPattern;
 class KoAbstractGradient;

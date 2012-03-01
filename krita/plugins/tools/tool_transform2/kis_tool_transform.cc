@@ -1993,9 +1993,9 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
     setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
 }
 
-void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
+void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    Q_UNUSED(toolActivation);
+    KisTool::activate(toolActivation, shapes);
 
     if (currentNode()) {
         image()->undoAdapter()->setCommandHistoryListener(this);
@@ -2049,21 +2049,18 @@ void KisToolTransform::deactivate()
 {
     KisImageWSP kisimage = image();
 
-    if (!kisimage)
-        return;
+    if (kisimage) {
+        QRectF rc = boundRect(m_topLeftProj, m_topRightProj, m_bottomRightProj, m_bottomLeftProj);
+        rc = QRect(QPoint(rc.left() / kisimage->xRes(), rc.top() / kisimage->yRes()), QPoint(rc.right() / kisimage->xRes(), rc.bottom() / kisimage->yRes()));
+        double maxRadiusX = m_canvas->viewConverter()->viewToDocumentX(m_maxRadius);
+        double maxRadiusY = m_canvas->viewConverter()->viewToDocumentY(m_maxRadius);
+        rc |= QRect(m_originalTopLeft, m_originalBottomRight);
+        m_canvas->updateCanvas(rc.adjusted(-maxRadiusX, -maxRadiusY, maxRadiusX, maxRadiusY));
 
-    QRectF rc = boundRect(m_topLeftProj, m_topRightProj, m_bottomRightProj, m_bottomLeftProj);
-    rc = QRect(QPoint(rc.left() / kisimage->xRes(), rc.top() / kisimage->yRes()), QPoint(rc.right() / kisimage->xRes(), rc.bottom() / kisimage->yRes()));
-    double maxRadiusX = m_canvas->viewConverter()->viewToDocumentX(m_maxRadius);
-    double maxRadiusY = m_canvas->viewConverter()->viewToDocumentY(m_maxRadius);
-    rc |= QRect(m_originalTopLeft, m_originalBottomRight);
-    m_canvas->updateCanvas(rc.adjusted(-maxRadiusX, -maxRadiusY, maxRadiusX, maxRadiusY));
-
-    if (!kisimage)
-        return;
-
-    if (kisimage->undoAdapter())
         kisimage->undoAdapter()->removeCommandHistoryListener(this);
+    }
+
+    KisTool::deactivate();
 }
 
 void KisToolTransform::transform()

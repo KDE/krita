@@ -25,6 +25,7 @@
 
 #include <klocale.h>
 #include <kaction.h>
+#include <kactioncollection.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
@@ -89,9 +90,6 @@ struct KisTool::Private {
     KisFilterConfiguration * currentGenerator;
     QWidget* optionWidget;
 
-    KAction* toggleFgBg;
-    KAction* resetFgBg;
-
     bool spacePressed;
     QPointF lastDocumentPoint;
     QPointF initialGestureDocPoint;
@@ -107,15 +105,22 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
 
-    d->toggleFgBg = new KAction(i18n("Swap Foreground and Background Color"), this);
-    d->toggleFgBg->setShortcut(QKeySequence(Qt::Key_X));
-    connect(d->toggleFgBg, SIGNAL(triggered()), this, SLOT(slotToggleFgBg()));
-    addAction("toggle_fg_bg", d->toggleFgBg);
+    KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
-    d->resetFgBg = new KAction(i18n("Reset Foreground and Background Color"), this);
-    d->resetFgBg->setShortcut(QKeySequence(Qt::Key_D));
-    connect(d->resetFgBg, SIGNAL(triggered()), this, SLOT(slotResetFgBg()));
-    addAction("reset_fg_bg", d->resetFgBg);
+    if (!collection->action("toggle_fg_bg")) {
+        KAction *toggleFgBg = new KAction(i18n("Swap Foreground and Background Color"), collection);
+        toggleFgBg->setShortcut(QKeySequence(Qt::Key_X));
+        collection->addAction("toggle_fg_bg", toggleFgBg);
+    }
+
+    if (!collection->action("reset_fg_bg")) {
+        KAction *resetFgBg = new KAction(i18n("Reset Foreground and Background Color"), collection);
+        resetFgBg->setShortcut(QKeySequence(Qt::Key_D));
+        collection->addAction("reset_fg_bg", resetFgBg);
+    }
+
+    addAction("toggle_fg_bg", dynamic_cast<KAction*>(collection->action("toggle_fg_bg")));
+    addAction("reset_fg_bg", dynamic_cast<KAction*>(collection->action("reset_fg_bg")));
 
     setMode(HOVER_MODE);
 }
@@ -150,10 +155,15 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
                                             resource(KisCanvasResourceProvider::HdrExposure).toDouble());
     d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->
                           resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void *>());
+
+    connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()));
+    connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()));
 }
 
 void KisTool::deactivate()
 {
+    disconnect(actions().value("toggle_fg_bg"), 0, this, 0);
+    disconnect(actions().value("reset_fg_bg"), 0, this, 0);
 }
 
 void KisTool::resourceChanged(int key, const QVariant & v)

@@ -36,7 +36,8 @@ public:
     virtual ~KisToolPolyline();
 
 protected:
-    virtual void finishPolyline(const QVector<QPointF>& points);
+    QWidget* createOptionWidget();
+    void finishPolyline(const QVector<QPointF>& points);
 };
 
 

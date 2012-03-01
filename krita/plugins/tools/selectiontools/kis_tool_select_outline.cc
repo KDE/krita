@@ -191,6 +191,8 @@ void KisToolSelectOutline::deactivate()
     if (canvas()) {
         updateCanvasPixelRect(image()->bounds());
     }
+
+    KisToolSelectBase::deactivate();
 }
 
 #include "kis_tool_select_outline.moc"

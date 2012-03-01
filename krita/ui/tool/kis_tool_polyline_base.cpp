@@ -31,22 +31,10 @@
 
 #define PREVIEW_LINE_WIDTH 1
 
-KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas, const QCursor & cursor) :
-        KisToolShape(canvas, cursor),
-        m_dragging(false)
+KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas, const QCursor & cursor)
+    : KisToolShape(canvas, cursor),
+      m_dragging(false)
 {
-    KAction *action = new KAction(i18n("&Finish"), this);
-    addAction("finish_polyline", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(finish()));
-    action = new KAction(KIcon("dialog-cancel"), i18n("&Cancel"), this);
-    addAction("cancel_polyline", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(cancel()));
-
-
-    QList<QAction*> list;
-    list.append(this->action("finish_polyline"));
-    list.append(this->action("cancel_polyline"));
-    setPopupActionList(list);
 }
 
 void KisToolPolylineBase::mousePressEvent(KoPointerEvent *event)

@@ -91,6 +91,7 @@ void KisToolCurve::deactivate()
 
     m_actionOptions = NOOPTIONS;
     m_drawPivots = true;
+    KisToolPaint::deactivate();
 }
 
 void KisToolCurve::mousePressEvent(KoPointerEvent *event)

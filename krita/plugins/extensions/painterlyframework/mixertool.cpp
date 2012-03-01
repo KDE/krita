@@ -129,10 +129,8 @@ void MixerTool::setRadius(qreal radius)
     m_d->mixingBrush->settings()->changePaintOpSize(radius, radius);
 }
 
-void MixerTool::activate(ToolActivation toolActivation, const QSet<KoShape*> & shapes)
+void MixerTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
-    KisTool::activate(toolActivation, shapes);
-    Q_UNUSED(toolActivation)
     m_d->state = HOVER;
     useCursor(m_d->cursor);
     m_d->foregroundColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();

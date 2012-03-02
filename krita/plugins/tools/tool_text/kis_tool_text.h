@@ -38,6 +38,9 @@ public:
 
     virtual KisPainter::FillStyle fillStyle();
 
+private slots:
+    void slotActivateTextTool();
+
 protected:
     virtual void finishRect(const QRectF& rect);
     KisTextToolOptionWidget* m_optionWidget;

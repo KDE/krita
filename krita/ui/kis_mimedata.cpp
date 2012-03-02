@@ -58,7 +58,6 @@ QStringList KisMimeData::formats () const
           << "application/x-qt-image";
 #else
         f << "application/x-krita-node";
-#else
 #endif
     }
     return f;

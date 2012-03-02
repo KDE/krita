@@ -483,18 +483,8 @@ void KisLayerBox::slotRmClicked()
 {
     if(!m_canvas) return;
 
-    QModelIndexList l = m_wdgLayerBox->listLayers->selectionModel()->selectedIndexes();
-    if (l.count() < 2 && m_nodeManager->activeNode() && !l.contains(m_wdgLayerBox->listLayers->currentIndex())) {
-        l.clear();
-        l.append(m_wdgLayerBox->listLayers->currentIndex());
-    }
-
-    for (int i = 0, n = l.count(); i < n; ++i) {
-        KisNodeSP node = m_nodeModel->nodeFromIndex(l.at(i));
-        if (!node->systemLocked()) {
-            m_nodeManager->removeNode(node);
-        }
-    }
+    KisNodeSP node = m_nodeManager->activeNode();
+    m_nodeManager->removeNode(node);
 }
 
 void KisLayerBox::slotRaiseClicked()

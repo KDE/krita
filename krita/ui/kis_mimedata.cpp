@@ -53,8 +53,10 @@ QStringList KisMimeData::formats () const
 {
     QStringList f = QMimeData::formats();
     if (m_node) {
-        f << "application/x-krita-node"
+        f << "application/x-krita-node";
+#if QT_VERSION  < 0x040800
           << "application/x-qt-image";
+#endif
     }
     return f;
 }

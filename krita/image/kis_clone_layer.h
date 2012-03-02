@@ -65,7 +65,7 @@ public:
      * because the source might become unreachable quite soon. This
      * method builds a paint layer representation of this clone.
      */
-    KisNodeSP reincarnateAsPaintLayer() const;
+    KisLayerSP reincarnateAsPaintLayer() const;
 
     bool allowAsChild(KisNodeSP) const;
 

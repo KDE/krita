@@ -79,7 +79,7 @@ KisCloneLayer::~KisCloneLayer()
     delete m_d;
 }
 
-KisNodeSP KisCloneLayer::reincarnateAsPaintLayer() const
+KisLayerSP KisCloneLayer::reincarnateAsPaintLayer() const
 {
     KisPaintDeviceSP newOriginal = new KisPaintDevice(*original());
     KisPaintLayerSP newLayer = new KisPaintLayer(image(), name(), opacity(), newOriginal);
@@ -87,6 +87,7 @@ KisNodeSP KisCloneLayer::reincarnateAsPaintLayer() const
     newLayer->setY(y());
     newLayer->setCompositeOp(compositeOpId());
     newLayer->mergeNodeProperties(nodeProperties());
+
     return newLayer;
 }
 

@@ -138,8 +138,9 @@ bool KoApplication::start()
 {
     if (d->splashScreen) {
         d->splashScreen->show();
+        d->splashScreen->showMessage(".");
     }
-    d->splashScreen->showMessage("...");
+
 
 
     ResetStarting resetStarting(d->splashScreen); // reset m_starting to false when we're done

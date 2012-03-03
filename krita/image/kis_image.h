@@ -202,8 +202,15 @@ public:
 
     /**
      * Execute a rotate transform on all layers in this image.
+     * Image is resized to fit rotated image.
      */
-    void rotate(double radians);
+    void rotateImage(double radians);
+
+    /**
+     * Execute a rotate transform on on a subtree of this image.
+     * Image is not resized.
+     */
+    void rotateNode(KisNodeSP node, double radians);
 
     /**
      * Execute a shear transform on all layers in this image.
@@ -588,6 +595,8 @@ private:
     void emitSizeChanged();
 
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
+    void rotateImpl(const QString &actionName, KisNodeSP rootNode,
+                    bool resizeImage, double radians);
     void shearImpl(const QString &actionName, KisNodeSP rootNode,
                    bool resizeImage, double angleX, double angleY,
                    const QPointF &origin);

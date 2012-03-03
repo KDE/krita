@@ -673,29 +673,7 @@ void KisLayerManager::rotateLayer(double radians)
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    KisUndoAdapter * undoAdapter = m_view->image()->undoAdapter();
-    undoAdapter->beginMacro(i18n("Rotate Layer"));
-
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
-    QRect r;
-
-    if (KisSelectionSP selection = activeLayer()->selection())
-        r = selection->selectedExactRect();
-    else
-        r = layer->exactBounds();
-    double cx = r.x() + r.width() / 2.0;
-    double cy = r.y() + r.height() / 2.0;
-    qint32 tx = qint32(cx * cos(radians) - cy * sin(radians) - cx + 0.5);
-    qint32 ty = qint32(cy * cos(radians) + cx * sin(radians) - cy + 0.5);
-    KisTransformVisitor visitor(m_view->image(), 1.0, 1.0, 0, 0, radians, -tx, -ty, 0, filter);
-    layer->accept(visitor);
-    layer->parent()->setDirty(r);
-
-    undoAdapter->endMacro();
-
-    m_doc->setModified(true);
-    layersUpdated();
-    m_view->canvas()->update();
+    m_view->image()->rotateNode(layer, radians);
 }
 
 void KisLayerManager::shearLayer(double angleX, double angleY)

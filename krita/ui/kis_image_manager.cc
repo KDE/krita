@@ -120,7 +120,7 @@ void KisImageManager::scaleCurrentImage(const QSize &size, qreal xres, qreal yre
 void KisImageManager::rotateCurrentImage(double radians)
 {
     if (!m_view->image()) return;
-    m_view->image()->rotate(radians);
+    m_view->image()->rotateImage(radians);
 }
 
 void KisImageManager::shearCurrentImage(double angleX, double angleY)

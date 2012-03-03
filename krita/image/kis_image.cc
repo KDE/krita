@@ -538,19 +538,37 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
     applicator.end();
 }
 
-void KisImage::rotate(double radians)
+void KisImage::rotateImpl(const QString &actionName,
+                          KisNodeSP rootNode,
+                          bool resizeImage,
+                          double radians)
 {
-    qint32 w = width();
-    qint32 h = height();
-    qint32 tx = qint32((w * cos(radians) - h * sin(radians) - w) / 2 + 0.5);
-    qint32 ty = qint32((h * cos(radians) + w * sin(radians) - h) / 2 + 0.5);
-    w = (qint32)(width() * qAbs(cos(radians)) + height() * qAbs(sin(radians)) + 0.5);
-    h = (qint32)(height() * qAbs(cos(radians)) + width() * qAbs(sin(radians)) + 0.5);
+    QPointF offset;
+    QSize newSize;
 
-    tx -= (w - width()) / 2;
-    ty -= (h - height()) / 2;
+    {
+        KisTransformWorker worker(0,
+                                  1.0, 1.0,
+                                  0, 0, 0, 0,
+                                  radians,
+                                  0, 0, 0, 0);
+        QTransform transform = worker.transform();
 
-    bool sizeChanged = w != width() || h != height();
+        if (resizeImage) {
+            QRect newRect = transform.mapRect(bounds());
+            newSize = newRect.size();
+            offset = -newRect.topLeft();
+        }
+        else {
+            QPointF origin = QRectF(rootNode->exactBounds()).center();
+
+            newSize = size();
+            offset = -(transform.map(origin) - origin);
+        }
+    }
+
+    bool sizeChanged = resizeImage &&
+        (newSize.width() != width() || newSize.height() != height());
 
     // These signals will be emitted after processing is done
     KisImageSignalVector emitSignals;
@@ -559,15 +577,14 @@ void KisImage::rotate(double radians)
 
     // These flags determine whether updates are transferred to the UI during processing
     KisProcessingApplicator::ProcessingFlags signalFlags =
-        (emitSignals.contains(SizeChangedSignal)) ?
-                KisProcessingApplicator::NO_UI_UPDATES :
-                KisProcessingApplicator::NONE;
+        sizeChanged ?
+        KisProcessingApplicator::NO_UI_UPDATES :
+        KisProcessingApplicator::NONE;
 
 
-    // XXX i18n("Rotate Image") after 2.4
-    KisProcessingApplicator applicator(this, m_d->rootLayer,
+    KisProcessingApplicator applicator(this, rootNode,
                                        KisProcessingApplicator::RECURSIVE | signalFlags,
-                                       emitSignals, "Rotate Image");
+                                       emitSignals, actionName);
 
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
 
@@ -575,14 +592,27 @@ void KisImage::rotate(double radians)
             new KisTransformProcessingVisitor(1.0, 1.0, 0.0, 0.0,
                                               QPointF(),
                                               radians,
-                                              -tx, -ty, filter);
+                                              offset.x(), offset.y(),
+                                              filter);
 
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
 
     if (sizeChanged) {
-        applicator.applyCommand(new KisImageResizeCommand(this, QSize(w,h)));
+        applicator.applyCommand(new KisImageResizeCommand(this, newSize));
     }
     applicator.end();
+}
+
+
+void KisImage::rotateImage(double radians)
+{
+    // XXX i18n("Rotate Image") after 2.4
+    rotateImpl("Rotate Image", root(), true, radians);
+}
+
+void KisImage::rotateNode(KisNodeSP node, double radians)
+{
+    rotateImpl(i18n("Rotate Layer"), node, false, radians);
 }
 
 void KisImage::shearImpl(const QString &actionName,
@@ -591,7 +621,7 @@ void KisImage::shearImpl(const QString &actionName,
                          double angleX, double angleY,
                          const QPointF &origin)
 {
-        //angleX, angleY are in degrees
+    //angleX, angleY are in degrees
     const qreal pi = 3.1415926535897932385;
     const qreal deg2rad = pi / 180.0;
 
@@ -647,7 +677,7 @@ void KisImage::shearImpl(const QString &actionName,
 
 void KisImage::shearNode(KisNodeSP node, double angleX, double angleY)
 {
-    QPointF shearOrigin = 0.5 * (QPointF(1.0,1.0) + bounds().bottomRight());
+    QPointF shearOrigin = QRectF(bounds()).center();
 
     shearImpl(i18n("Shear layer"), node, false,
               angleX, angleY, shearOrigin);

@@ -123,7 +123,7 @@ public:
     BlockFormatVisitor() {}
     virtual ~BlockFormatVisitor() {}
 
-    virtual void visit(QTextBlockFormat &format) const = 0;
+    virtual void visit(QTextBlock &block) const = 0;
 
     static void visitSelection(KoTextEditor *editor, const BlockFormatVisitor &visitor, QString title = i18n("Format"), bool resetProperties = false, bool registerChange = true) {
         int start = qMin(editor->position(), editor->anchor());
@@ -135,7 +135,7 @@ public:
 
         // now loop over all blocks that the selection contains and alter the text fragments where applicable.
         while (block.isValid() && block.position() <= end) {
-            QTextBlockFormat format = block.blockFormat();
+            QTextBlockFormat prevFormat = block.blockFormat();
             if (resetProperties) {
                 if (KoTextDocument(editor->document()).styleManager()) {
                     KoParagraphStyle *old = KoTextDocument(editor->document()).styleManager()->paragraphStyle(block.blockFormat().intProperty(KoParagraphStyle::StyleId));
@@ -143,12 +143,11 @@ public:
                         old->unapplyStyle(block);
                 }
             }
-            visitor.visit(format);
+            visitor.visit(block);
             QTextCursor cursor(block);
-            QTextBlockFormat prevFormat = cursor.blockFormat();
+            QTextBlockFormat format = cursor.blockFormat();
             if (registerChange)
                 editor->registerTrackedChange(cursor, KoGenChange::FormatChange, title, format, prevFormat, true);
-            cursor.setBlockFormat(format);
             block = block.next();
         }
     }

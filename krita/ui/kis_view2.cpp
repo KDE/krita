@@ -493,8 +493,7 @@ void KisView2::dropEvent(QDropEvent *event)
             QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
             QAction *openInNewDocuments = new KAction(i18n("Open in New Documents"), &popup);
 
-            // XXX: translate after 2.4
-            QAction *replaceCurrentDocument = new KAction("Replace Current Document", &popup);
+            QAction *replaceCurrentDocument = new KAction(i18n("Replace Current Document"), &popup);
 
             QAction *cancel = new KAction(i18n("Cancel"), &popup);
 

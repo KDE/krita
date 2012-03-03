@@ -17,7 +17,7 @@ endif(SHOULD_BUILD_SCRIPTING)
 add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( together )
-#add_subdirectory( tonemapping )
+add_subdirectory( tonemapping )
 add_subdirectory( dockers )
 add_subdirectory( extensionsmanager )
 

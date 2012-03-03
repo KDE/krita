@@ -235,6 +235,9 @@ public:
 
 void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
 {
+    if (!changeTracker)
+        return;
+
     QString id;
     AttributeChangeRecord attributeChange;
 
@@ -335,6 +338,9 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
 
 void KoTextLoader::Private::closeChangeRegion(const KoXmlElement& element)
 {
+    if (!changeTracker)
+        return;
+
     QString id;
     int changeId;
     if (element.localName() == "change-end") {

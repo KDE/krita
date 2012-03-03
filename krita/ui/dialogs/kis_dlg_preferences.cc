@@ -607,7 +607,6 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     m_tabletSettings = new TabletSettingsTab(vbox);
     m_tabletSettings->m_page->pressureCurve->setMaximumSize(QSize(1000, 1000));
 
-/* disabled for 2.4
     // full-screen mode
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Canvas-only settings"));
@@ -615,7 +614,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setIcon(KIcon("preferences-system-performance"));
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
-*/
+
 
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     foreach (KisAbstractPreferenceSetFactory *preferenceSetFactory, preferenceSetRegistry->values()) {
@@ -652,7 +651,7 @@ void KisDlgPreferences::slotDefault()
 #endif
     m_gridSettings->setDefault();
     m_tabletSettings->setDefault();
-//    m_fullscreenSettings->setDefault();
+    m_fullscreenSettings->setDefault();
 }
 
 bool KisDlgPreferences::editPreferences()
@@ -737,12 +736,12 @@ bool KisDlgPreferences::editPreferences()
         cfg.setGridOffsetY(dialog->m_gridSettings->intYOffset->value());
         cfg.setGridOffsetAspect(dialog->m_gridSettings->offsetAspectButton->keepAspectRatio());
 
-//        cfg.setHideDockersFullscreen(dialog->m_fullscreenSettings->chkDockers->checkState());
-//        cfg.setHideMenuFullscreen(dialog->m_fullscreenSettings->chkMenu->checkState());
-//        cfg.setHideScrollbarsFullscreen(dialog->m_fullscreenSettings->chkScrollbars->checkState());
-//        cfg.setHideStatusbarFullscreen(dialog->m_fullscreenSettings->chkStatusbar->checkState());
-//        cfg.setHideTitlebarFullscreen(dialog->m_fullscreenSettings->chkTitlebar->checkState());
-//        cfg.setHideToolbarFullscreen(dialog->m_fullscreenSettings->chkToolbar->checkState());
+        cfg.setHideDockersFullscreen(dialog->m_fullscreenSettings->chkDockers->checkState());
+        cfg.setHideMenuFullscreen(dialog->m_fullscreenSettings->chkMenu->checkState());
+        cfg.setHideScrollbarsFullscreen(dialog->m_fullscreenSettings->chkScrollbars->checkState());
+        cfg.setHideStatusbarFullscreen(dialog->m_fullscreenSettings->chkStatusbar->checkState());
+        cfg.setHideTitlebarFullscreen(dialog->m_fullscreenSettings->chkTitlebar->checkState());
+        cfg.setHideToolbarFullscreen(dialog->m_fullscreenSettings->chkToolbar->checkState());
 
     }
     delete dialog;

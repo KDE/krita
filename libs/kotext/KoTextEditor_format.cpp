@@ -157,8 +157,11 @@ void KoTextEditor::setHorizontalTextAlignment(Qt::Alignment align)
     {
     public:
         Aligner(Qt::Alignment align) : alignment(align) {}
-        void visit(QTextBlockFormat &format) const {
+        void visit(QTextBlock &block) const {
+            QTextBlockFormat format = block.blockFormat();
             format.setAlignment(alignment);
+            QTextCursor cursor(block);
+            cursor.setBlockFormat(format);
         }
         Qt::Alignment alignment;
     };
@@ -201,9 +204,19 @@ void KoTextEditor::decreaseIndent()
     class Indenter : public BlockFormatVisitor
     {
     public:
-        void visit(QTextBlockFormat &format) const {
+        void visit(QTextBlock &block) const {
+            QTextBlockFormat format = block.blockFormat();
             // TODO make the 10 configurable.
             format.setLeftMargin(qMax(qreal(0.0), format.leftMargin() - 10));
+
+            if (block.textList()) {
+                const QTextListFormat listFormat = block.textList()->format();
+                if (format.leftMargin() < listFormat.doubleProperty(KoListStyle::Margin)) {
+                    format.setLeftMargin(listFormat.doubleProperty(KoListStyle::Margin));
+                }
+            }
+            QTextCursor cursor(block);
+            cursor.setBlockFormat(format);
         }
         Qt::Alignment alignment;
     };
@@ -224,9 +237,22 @@ void KoTextEditor::increaseIndent()
     class Indenter : public BlockFormatVisitor
     {
     public:
-        void visit(QTextBlockFormat &format) const {
+        void visit(QTextBlock &block) const {
+            QTextBlockFormat format = block.blockFormat();
             // TODO make the 10 configurable.
-            format.setLeftMargin(format.leftMargin() + 10);
+
+            if (!block.textList()) {
+                format.setLeftMargin(format.leftMargin() + 10);
+            } else {
+                const QTextListFormat listFormat = block.textList()->format();
+                if (format.leftMargin() == 0) {
+                    format.setLeftMargin(listFormat.doubleProperty(KoListStyle::Margin) + 10);
+                } else {
+                    format.setLeftMargin(format.leftMargin() + 10);
+                }
+            }
+            QTextCursor cursor(block);
+            cursor.setBlockFormat(format);
         }
         Qt::Alignment alignment;
     };

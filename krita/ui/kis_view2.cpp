@@ -320,7 +320,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
-/* DISABLED for 2.4
     tAction = new KToggleAction(i18n("Show Canvas Only"), this);
     tAction->setCheckedState(KGuiItem(i18n("Return to Window")));
     tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
@@ -330,7 +329,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     tAction->setChecked(false);
     actionCollection()->addAction("view_show_just_the_canvas", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
-*/
+
     //Workaround, by default has the same shortcut as mirrorCanvas
     KAction* action = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
     if (action) {
@@ -494,8 +493,7 @@ void KisView2::dropEvent(QDropEvent *event)
             QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
             QAction *openInNewDocuments = new KAction(i18n("Open in New Documents"), &popup);
 
-            // XXX: translate after 2.4
-            QAction *replaceCurrentDocument = new KAction("Replace Current Document", &popup);
+            QAction *replaceCurrentDocument = new KAction(i18n("Replace Current Document"), &popup);
 
             QAction *cancel = new KAction(i18n("Cancel"), &popup);
 

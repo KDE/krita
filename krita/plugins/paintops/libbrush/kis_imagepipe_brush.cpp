@@ -27,7 +27,7 @@ public:
     QString parasiteString; // Contains instructions on how to use the brush
     mutable KisPipeBrushParasite parasite;
     qint32 numOfBrushes;
-    mutable quint32 currentBrush;
+    mutable quint32 currentBrushIndex;
 
     QByteArray data;
     mutable QList<KisGbrBrush*> brushes;
@@ -41,7 +41,7 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& filename)
 {
     m_d->brushType = INVALID;
     m_d->numOfBrushes = 0;
-    m_d->currentBrush = 0;
+    m_d->currentBrushIndex = 0;
 }
 
 KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
@@ -229,8 +229,8 @@ void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceS
 {
     if (m_d->brushes.isEmpty()) return;
     selectNextBrush(info);
-    if (m_d->currentBrush )
-    m_d->brushes.at(m_d->currentBrush)->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
+
+    m_d->brushes.at(m_d->currentBrushIndex)->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
 }
 
 KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
@@ -239,7 +239,7 @@ KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(const KoColorSpace * colorS
     Q_UNUSED(angle);
     if (m_d->brushes.isEmpty()) return KisFixedPaintDeviceSP(0);
     selectNextBrush(info);
-    return m_d->brushes.at(m_d->currentBrush)->paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
+    return m_d->brushes.at(m_d->currentBrushIndex)->paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
 }
 
 void KisImagePipeBrush::setParasiteString(const QString& parasite)
@@ -330,7 +330,7 @@ const KisBoundary* KisImagePipeBrush::boundary() const
 
 void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const
 {
-    m_d->currentBrush = brushIndex(info);
+    m_d->currentBrushIndex = brushIndex(info);
 }
 
 bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info)

@@ -69,7 +69,11 @@ public:
         /**
          * If set duplicate master pages will be merged to one
          */
-        UniqueMasterPages = 8
+        UniqueMasterPages = 8,
+        /**
+         * If set the z-index is saved in the shape
+         */
+        ZIndex = 16
     };
     Q_DECLARE_FLAGS(ShapeSavingOptions, ShapeSavingOption)
 

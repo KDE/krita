@@ -97,6 +97,7 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
         , m_imageResizeToLayer(0)
         , m_flattenLayer(0)
         , m_rasterizeLayer(0)
+        , m_duplicateLayer(0)
         , m_activeLayer(0)
         , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
 {
@@ -158,6 +159,11 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_imageResizeToLayer  = new KAction(i18n("Size Canvas to Size of Current Layer"), this);
     actionCollection->addAction("resizeimagetolayer", m_imageResizeToLayer);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
+
+    m_duplicateLayer = new KAction(i18n("Duplicate current layer"), this);
+    m_duplicateLayer->setShortcut(KShortcut(Qt::ControlModifier + Qt::Key_J));
+    actionCollection->addAction("duplicatelayer", m_duplicateLayer);
+    connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(layerDuplicate()));
 }
 
 void KisLayerManager::addAction(QAction * action)

@@ -40,6 +40,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kactioncollection.h>
+#include <kaction.h>
 
 #include <KoShape.h>
 #include <KoShapeManager.h>
@@ -58,21 +59,20 @@
 #include <kis_layer.h>
 #include <kis_view2.h>
 #include <kis_canvas2.h>
+#include <kis_cubic_curve.h>
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
-
 #include "kis_cursor.h"
 #include "widgets/kis_cmb_composite.h"
 #include "widgets/kis_slider_spin_box.h"
 #include "kis_canvas_resource_provider.h"
 #include <recorder/kis_recorded_paint_action.h>
-#include <kis_cubic_curve.h>
 #include "kis_color_picker_utils.h"
 #include <kis_paintop.h>
-#include <kaction.h>
+#include "kis_canvas_resource_provider.h"
 
-const int STEP = 20;
+const int STEP = 25;
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     : KisTool(canvas, cursor)
@@ -88,20 +88,36 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
 
     KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
-    if(!collection->action("make_brush_color_lighter")) {
-        KAction *lighterColor = new KAction(i18n("Make Brush color lighter"), collection);
+    if (!collection->action("make_brush_color_lighter")) {
+        KAction *lighterColor = new KAction(i18n("Make brush color lighter"), collection);
         lighterColor->setShortcut(Qt::Key_L);
         collection->addAction("make_brush_color_lighter", lighterColor);
     }
 
-    if(!collection->action("make_brush_color_darker")) {
-        KAction *darkerColor = new KAction(i18n("Make Brush color darker"), collection);
+    if (!collection->action("make_brush_color_darker")) {
+        KAction *darkerColor = new KAction(i18n("Make brush color darker"), collection);
         darkerColor->setShortcut(Qt::Key_K);
         collection->addAction("make_brush_color_darker", darkerColor);
     }
 
     addAction("make_brush_color_lighter", dynamic_cast<KAction*>(collection->action("make_brush_color_lighter")));
     addAction("make_brush_color_darker", dynamic_cast<KAction*>(collection->action("make_brush_color_darker")));
+
+    if (!collection->action("increase_opacity")) {
+        KAction *increaseOpacity = new KAction(i18n("Increase opacity"), collection);
+        increaseOpacity->setShortcut(Qt::Key_O);
+        collection->addAction("increase_opacity", increaseOpacity);
+    }
+
+    if (!collection->action("decrease_opacity")) {
+        KAction *increaseOpacity = new KAction(i18n("Decrease opacity"), collection);
+        increaseOpacity->setShortcut(Qt::Key_I);
+        collection->addAction("decrease_opacity", increaseOpacity);
+    }
+
+    addAction("decrease_opacity", dynamic_cast<KAction*>(collection->action("decrease_opacity")));
+    addAction("increase_opacity", dynamic_cast<KAction*>(collection->action("increase_opacity")));
+
 
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
     connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), kiscanvas, SIGNAL(favoritePaletteCalled(const QPoint&)));
@@ -141,12 +157,16 @@ void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> 
     KisTool::activate(toolActivation, shapes);
     connect(actions().value("make_brush_color_lighter"), SIGNAL(triggered()), SLOT(makeColorLighter()));
     connect(actions().value("make_brush_color_darker"), SIGNAL(triggered()), SLOT(makeColorDarker()));
+    connect(actions().value("increase_opacity"), SIGNAL(triggered()), SLOT(increaseOpacity()));
+    connect(actions().value("decrease_opacity"), SIGNAL(triggered()), SLOT(decreaseOpacity()));
 }
 
 void KisToolPaint::deactivate()
 {
     disconnect(actions().value("make_brush_color_lighter"), 0, this, 0);
     disconnect(actions().value("make_brush_color_darker"), 0, this, 0);
+    disconnect(actions().value("increase_opacity"), 0, this, 0);
+    disconnect(actions().value("decrease_opacity"), 0, this, 0);
     KisTool::deactivate();
 }
 
@@ -473,14 +493,37 @@ void KisToolPaint::transformColor(int step)
     canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, color);
 }
 
+
 void KisToolPaint::makeColorDarker()
 {
+    qDebug() << "make color darker";
     transformColor(-STEP);
 }
 
 void KisToolPaint::makeColorLighter()
 {
+    qDebug() << "make color lighter";
     transformColor(STEP);
+}
+
+
+void KisToolPaint::stepAlpha(float step)
+{
+    qreal alpha = canvas()->resourceManager()->resource(KisCanvasResourceProvider::Opacity).toDouble();
+    alpha += step;
+    alpha = qBound(0.0, alpha, 1.0);
+    canvas()->resourceManager ()->setResource(KisCanvasResourceProvider::Opacity, alpha);
+}
+
+
+void KisToolPaint::increaseOpacity()
+{
+    stepAlpha(0.1);
+}
+
+void KisToolPaint::decreaseOpacity()
+{
+    stepAlpha(-0.1);
 }
 
 

@@ -170,12 +170,12 @@ protected:
 
     KisImageWSP currentImage();
     KisPattern* currentPattern();
-    KoAbstractGradient * currentGradient();
+    KoAbstractGradient *currentGradient();
     KisNodeSP currentNode();
     KoColor currentFgColor();
     KoColor currentBgColor();
     KisPaintOpPresetSP currentPaintOpPreset();
-    KisFilterConfiguration * currentGenerator();
+    KisFilterConfiguration *currentGenerator();
 
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 

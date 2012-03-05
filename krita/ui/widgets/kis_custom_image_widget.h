@@ -65,6 +65,7 @@ private slots:
     void screenSizeClicked();
     void predefinedClicked(int index);
     void saveAsPredefined();
+    void switchWidthHeight();
 signals:
     /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'
     void documentSelected();

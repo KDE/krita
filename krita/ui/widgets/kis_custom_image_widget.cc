@@ -101,6 +101,10 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     connect(createButton, SIGNAL(clicked()), this, SLOT(createImage()));
     createButton->setDefault(true);
 
+    bnPortrait->setIcon(KIcon("portrait"));
+    connect(bnPortrait, SIGNAL(toggled(bool)), SLOT(switchWidthHeight()));
+    bnLandscape->setIcon(KIcon("landscape"));
+
     connect(bnSaveAsPredefined, SIGNAL(clicked()), this, SLOT(saveAsPredefined()));
 
     chkFromClipboard->setChecked(clipAvailable);
@@ -314,7 +318,8 @@ void KisCustomImageWidget::fillPredefined()
 
 void KisCustomImageWidget::predefinedClicked(int index)
 {
-    Q_ASSERT(m_predefined.size() >= index);
+    if (index < 1 || index > m_predefined.size()) return;
+
     KisPropertiesConfiguration *predefined = m_predefined[index - 1];
     txtPredefinedName->setText(predefined->getString("name"));
     doubleWidth->setValue(predefined->getDouble("width"));
@@ -371,6 +376,13 @@ void KisCustomImageWidget::saveAsPredefined()
         cmbPredefined->addItem(txtPredefinedName->text());
     }
 
+}
+
+void KisCustomImageWidget::switchWidthHeight()
+{
+    double width = doubleWidth->value();
+    doubleWidth->setValue(doubleHeight->value());
+    doubleHeight->setValue(width);
 }
 
 #include "kis_custom_image_widget.moc"

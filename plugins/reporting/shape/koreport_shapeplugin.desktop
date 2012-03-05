@@ -2,6 +2,7 @@
 Name=Shape Report Plugin
 Name[ca]=Connector d'informes de forma
 Name[ca@valencia]=Connector d'informes de forma
+Name[de]=Objektberichtmodul
 Name[es]=Complemento de informe de formas
 Name[et]=Aruande kujundiplugin
 Name[it]=Estensione rapporti forme
@@ -19,6 +20,7 @@ Comment=KoReport Shape Plugin
 Comment[ca]=Connector de forma KoReport
 Comment[ca@valencia]=Connector de forma KoReport
 Comment[da]=Form-plugin til KoReport
+Comment[de]=KoReport-Objektmodul
 Comment[es]=Complemento de forma de KoReport
 Comment[et]=KoReporti kujundiplugin
 Comment[it]=Estensione per le forme di KoReport

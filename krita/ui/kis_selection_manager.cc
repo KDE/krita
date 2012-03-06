@@ -165,7 +165,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
     m_copyToNewLayer  = new KAction(i18n("Copy Selection to New Layer"), this);
     collection->addAction("copy_selection_to_new_layer", m_copyToNewLayer);
-    m_copyToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_J));
+    m_copyToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_J));
     connect(m_copyToNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
 
     m_cutToNewLayer  = new KAction(i18n("Cut Selection to New Layer"), this);

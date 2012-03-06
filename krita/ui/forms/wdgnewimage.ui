@@ -166,6 +166,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="bnPortrait">
+          <property name="toolTip">
+           <string>Portrait</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
@@ -185,6 +188,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="bnLandscape">
+          <property name="toolTip">
+           <string>Landscape</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>

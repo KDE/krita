@@ -142,6 +142,9 @@ private slots:
     void makeColorLighter();
     void makeColorDarker();
 
+    void increaseOpacity();
+    void decreaseOpacity();
+
 protected slots:
     virtual void resetCursorStyle();
     virtual void updateTabletPressureSamples();
@@ -157,6 +160,7 @@ private:
                    bool toForegroundColor);
 
     void transformColor(int step);
+    void stepAlpha(float step);
 
 private:
 

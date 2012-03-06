@@ -295,7 +295,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
     m_d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
-    m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
     connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)),m_d->canvas, SLOT(mirrorCanvas(bool)));
 
     KAction *rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);

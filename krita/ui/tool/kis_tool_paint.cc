@@ -146,8 +146,8 @@ void KisToolPaint::resourceChanged(int key, const QVariant& v)
         break;
     }
 
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateTabletPressureSamples()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()), Qt::UniqueConnection);
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateTabletPressureSamples()), Qt::UniqueConnection);
 
 }
 
@@ -155,10 +155,10 @@ void KisToolPaint::resourceChanged(int key, const QVariant& v)
 void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
-    connect(actions().value("make_brush_color_lighter"), SIGNAL(triggered()), SLOT(makeColorLighter()));
-    connect(actions().value("make_brush_color_darker"), SIGNAL(triggered()), SLOT(makeColorDarker()));
-    connect(actions().value("increase_opacity"), SIGNAL(triggered()), SLOT(increaseOpacity()));
-    connect(actions().value("decrease_opacity"), SIGNAL(triggered()), SLOT(decreaseOpacity()));
+    connect(actions().value("make_brush_color_lighter"), SIGNAL(triggered()), SLOT(makeColorLighter()), Qt::UniqueConnection);
+    connect(actions().value("make_brush_color_darker"), SIGNAL(triggered()), SLOT(makeColorDarker()), Qt::UniqueConnection);
+    connect(actions().value("increase_opacity"), SIGNAL(triggered()), SLOT(increaseOpacity()), Qt::UniqueConnection);
+    connect(actions().value("decrease_opacity"), SIGNAL(triggered()), SLOT(decreaseOpacity()), Qt::UniqueConnection);
 }
 
 void KisToolPaint::deactivate()
@@ -496,13 +496,11 @@ void KisToolPaint::transformColor(int step)
 
 void KisToolPaint::makeColorDarker()
 {
-    qDebug() << "make color darker";
     transformColor(-STEP);
 }
 
 void KisToolPaint::makeColorLighter()
 {
-    qDebug() << "make color lighter";
     transformColor(STEP);
 }
 

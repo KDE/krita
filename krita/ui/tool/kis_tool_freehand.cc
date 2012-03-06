@@ -140,8 +140,8 @@ int KisToolFreehand::flags() const
 void KisToolFreehand::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
     KisToolPaint::activate(activation, shapes);
-    connect(actions().value("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()));
-    connect(actions().value("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()));
+    connect(actions().value("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()), Qt::UniqueConnection);
+    connect(actions().value("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()), Qt::UniqueConnection);
 }
 
 void KisToolFreehand::deactivate()

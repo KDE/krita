@@ -156,8 +156,8 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
     d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->
                           resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void *>());
 
-    connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()));
-    connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()));
+    connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
+    connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
 }
 
 void KisTool::deactivate()

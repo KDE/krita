@@ -84,6 +84,8 @@ SET ( textshape_SRCS
     dialogs/TableOfContentsEntryDelegate.cpp
     dialogs/TableOfContentsEntryModel.cpp
     dialogs/TableOfContentsTemplate.cpp
+    dialogs/BibliographyTemplate.cpp
+    dialogs/BibliographyPreview.cpp
     dialogs/ListLevelChooser.cpp
 
     commands/ChangeListLevelCommand.cpp

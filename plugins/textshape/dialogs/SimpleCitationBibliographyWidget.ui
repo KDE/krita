@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>174</width>
-    <height>92</height>
+    <height>102</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,12 +17,6 @@
    </sizepolicy>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="sizeConstraint">
-    <enum>QLayout::SetMinAndMaxSize</enum>
-   </property>
-   <property name="margin">
-    <number>0</number>
-   </property>
    <item>
     <widget class="QToolButton" name="addCitation">
      <property name="toolTip">
@@ -37,12 +31,15 @@
     </widget>
    </item>
    <item>
-    <widget class="QToolButton" name="addBibliography">
-     <property name="toolTip">
-      <string>Insert bibliography at current position</string>
-     </property>
+    <widget class="FormattingButton" name="addBibliography">
      <property name="text">
       <string>Insert Bibliography</string>
+     </property>
+     <property name="popupMode">
+      <enum>QToolButton::InstantPopup</enum>
+     </property>
+     <property name="toolButtonStyle">
+      <enum>Qt::ToolButtonTextOnly</enum>
      </property>
      <property name="autoRaise">
       <bool>false</bool>
@@ -59,18 +56,15 @@
      </property>
     </widget>
    </item>
-   <item>
-    <widget class="QWidget" name="SpecialSpacer" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FormattingButton</class>
+   <extends>QToolButton</extends>
+   <header>dialogs/FormattingButton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

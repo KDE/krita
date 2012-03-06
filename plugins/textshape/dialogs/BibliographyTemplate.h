@@ -16,44 +16,27 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef INSERTBIBLIOGRAPHYDIALOG_H
-#define INSERTBIBLIOGRAPHYDIALOG_H
 
-#include "ui_InsertBibliographyDialog.h"
+#ifndef BIBLIOGRAPHYTEMPLATE_H
+#define BIBLIOGRAPHYTEMPLATE_H
 
-#include <QDialog>
-#include <QTextBlock>
+#include <QList>
 
-#include <KoTextEditor.h>
-
-class KoInlineCite;
 class KoBibliographyInfo;
-class BibliographyEntryTemplate;
-class QListWidgetItem;
+class KoStyleManager;
 
-class InsertBibliographyDialog : public QDialog
+class BibliographyTemplate
 {
-    Q_OBJECT
 public:
-    explicit InsertBibliographyDialog(KoTextEditor *editor , QWidget *parent = 0);
-    QString bibliographyType();
+    BibliographyTemplate(KoStyleManager *manager);
 
-public slots:
-    void insert();
-    void updateFields();
-    void addField();
-    void removeField();
-    void addSpan();
-    void insertTabStop();
-    void removeTabStop();
-    void spanChanged( QListWidgetItem *);
+    QList<KoBibliographyInfo *> templates();
+
+    /// this method moves the styles used in info Bibliography from unused styles list to used
+    void moveTemplateToUsed(KoBibliographyInfo *info);
 
 private:
-    Ui::InsertBibliographyDialog dialog;
-    bool m_blockSignals;
-    KoTextEditor *m_editor;
-    KoBibliographyInfo *m_bibInfo;
+    KoStyleManager *m_manager;
 };
 
-
-#endif // INSERTBIBLIOGRAPHYDIALOG_H
+#endif // BIBLIOGRAPHYTEMPLATE_H

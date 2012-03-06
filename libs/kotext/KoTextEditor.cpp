@@ -26,8 +26,10 @@
 #include "KoDocumentRdfBase.h"
 #include "KoBookmark.h"
 #include "KoInlineTextObjectManager.h"
+#include "KoInlineNote.h"
+#include "KoInlineCite.h"
+#include "BibliographyGenerator.h"
 #include <KoOdf.h>
-#include <KoInlineNote.h>
 #include <KoTextPaste.h>
 #include <KoShapeController.h>
 #include <KoTextOdfSaveHelper.h>
@@ -38,6 +40,7 @@
 #include "KoTextOdfSaveHelper.h"
 #include "KoTableOfContentsGeneratorInfo.h"
 #include "KoBibliographyInfo.h"
+#include "KoInlineCite.h"
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
 #include "changetracker/KoDeleteChangeMarker.h"
@@ -59,7 +62,7 @@
 #include "commands/InsertInlineObjectCommand.h"
 #include "commands/DeleteCommand.h"
 #include "commands/DeleteAnchorsCommand.h"
-#include "KoInlineCite.h"
+
 #include <KoShapeCreateCommand.h>
 
 #include <KLocale>
@@ -1332,7 +1335,7 @@ void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info
     const_cast<QTextDocument *>(document())->markContentsDirty(document()->firstBlock().position(), 0);
 }
 
-void KoTextEditor::insertBibliography()
+void KoTextEditor::insertBibliography(KoBibliographyInfo *info)
 {
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
@@ -1344,10 +1347,10 @@ void KoTextEditor::insertBibliography()
     }
 
     QTextBlockFormat bibFormat;
-    KoBibliographyInfo *info = new KoBibliographyInfo();
+    KoBibliographyInfo *newBibInfo = info->clone();
     QTextDocument *bibDocument = new QTextDocument();
 
-    bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info));
+    bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(newBibInfo));
     bibFormat.setProperty( KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
@@ -1375,6 +1378,7 @@ void KoTextEditor::insertBibliography()
     d->caret.insertBlock(bibFormat);
     d->caret.movePosition(QTextCursor::Right);
 
+    new BibliographyGenerator(bibDocument, block(), newBibInfo);
 
     if (hasSelection) {
         d->caret.endEditBlock();

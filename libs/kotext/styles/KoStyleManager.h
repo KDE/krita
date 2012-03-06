@@ -408,6 +408,12 @@ public:
     /// returns the default style for the ToC title
     KoParagraphStyle *defaultTableOfcontentsTitleStyle();
 
+    /// returns the default style for the Bibliography entries for the specified bibliography type
+    KoParagraphStyle *defaultBibliographyEntryStyle(QString bibType);
+
+    /// returns the default style for the Bibliography title
+    KoParagraphStyle *defaultBibliographyTitleStyle();
+
     /// adds a paragraph style to unused paragraph style list
     void addUnusedStyle(KoParagraphStyle *style);
 

@@ -169,23 +169,6 @@ void KisBrushChooser::setBrush(KisBrushSP _brush)
     KoResource *resource = static_cast<KoResource*>(_brush.data());
     m_itemChooser->setCurrentResource( resource );
     update( resource );
-    /*
-      XXX: why is this uncommented?
-
-        KisGbrBrush* brush = static_cast<KisGbrBrush*>(_brush.data());
-
-        QString text = QString("%1 (%2 x %3)")
-                       .arg(brush->name())
-                       .arg(brush->width())
-                       .arg(brush->height());
-
-        m_lbName->setText(text);
-        m_slSpacing->setValue(brush->spacing());
-        m_chkColorMask->setChecked(brush->useColorAsMask());
-        m_chkColorMask->setEnabled(brush->hasColor());
-
-        m_brush = brush;
-    */
 }
 
 void KisBrushChooser::slotSetItemScale(qreal scaleValue)

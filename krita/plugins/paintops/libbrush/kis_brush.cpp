@@ -349,6 +349,7 @@ double KisBrush::ySpacing(double scale) const
 
 void KisBrush::setSpacing(double s)
 {
+    if (s < 0.1) s = 0.1;
     d->spacing = s;
 }
 

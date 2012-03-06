@@ -163,7 +163,7 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_duplicateLayer = new KAction(i18n("Duplicate current layer"), this);
     m_duplicateLayer->setShortcut(KShortcut(Qt::ControlModifier + Qt::Key_J));
     actionCollection->addAction("duplicatelayer", m_duplicateLayer);
-    connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(layerDuplicate()));
+    connect(m_duplicateLayer, SIGNAL(triggered()), this, SLOT(layerDuplicate()));
 }
 
 void KisLayerManager::addAction(QAction * action)

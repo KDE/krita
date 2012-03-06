@@ -2,6 +2,7 @@
  * Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,9 +21,9 @@
  */
 
 #include "PictureShape.h"
-#include "GreyscaleFilterEffect.h"
-#include "MonoFilterEffect.h"
-#include "WatermarkFilterEffect.h"
+#include "filters/GreyscaleFilterEffect.h"
+#include "filters/MonoFilterEffect.h"
+#include "filters/WatermarkFilterEffect.h"
 
 #include <KoViewConverter.h>
 #include <KoImageCollection.h>
@@ -47,59 +48,52 @@
 #include <QPainter>
 #include <QTimer>
 #include <QPixmapCache>
-#include <QBuffer>
+#include <QThreadPool>
 
 QString generate_key(qint64 key, const QSize & size)
 {
     return QString("%1-%2-%3").arg(key).arg(size.width()).arg(size.height());
 }
 
-void LoadWaiter::setImageData(KJob *job)
-{
-    if (m_pictureShape == 0)
-        return; // ugh, the shape got deleted meanwhile
-    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
-    Q_ASSERT(transferJob);
+// ----------------------------------------------------------------- //
 
-    if (m_pictureShape->imageCollection()) {
-        KoImageData *data = m_pictureShape->imageCollection()->createImageData(transferJob->data());
-        if (data) {
-            m_pictureShape->setUserData(data);
-            m_pictureShape->setSize(data->imageSize());
-        }
-    }
-    deleteLater();
+_Private::PixmapScaler::PixmapScaler(PictureShape* pictureShape, const QSize& pixmapSize):
+    m_size(pixmapSize)
+{
+    m_image = pictureShape->imageData()->image();
+    m_imageKey = pictureShape->imageData()->key();
+    connect(this, SIGNAL(finished(QString,QImage)), &pictureShape->m_proxy, SLOT(setImage(QString,QImage)));
 }
 
-void RenderQueue::renderImage()
+void _Private::PixmapScaler::run()
 {
-    KoImageData *imageData = qobject_cast<KoImageData*>(m_pictureShape->userData());
-    if (m_wantedImageSize.isEmpty() || imageData == 0) {
-        return;
-    }
-    QSize size = m_wantedImageSize.takeFirst();
-    QString key(generate_key(imageData->key(), size));
-    if (QPixmapCache::find(key) == 0) {
-        QPixmap pixmap = imageData->pixmap(size);
-        QPixmapCache::insert(key, pixmap);
-        m_pictureShape->update();
-    }
-    if (! m_wantedImageSize.isEmpty()) {
-        QTimer::singleShot(0, this, SLOT(renderImage()));
-    }
+    QString key = generate_key(m_imageKey, m_size);
+
+    m_image = m_image.scaled(
+        m_size.width(),
+        m_size.height(),
+        Qt::IgnoreAspectRatio,
+        Qt::SmoothTransformation
+    );
+
+    emit finished(key, m_image);
 }
 
-void RenderQueue::updateShape()
+// ----------------------------------------------------------------- //
+
+void _Private::PictureShapeProxy::setImage(const QString& key, const QImage& image)
 {
+    QPixmapCache::insert(key, QPixmap::fromImage(image));
     m_pictureShape->update();
 }
 
-//////////////
+// ----------------------------------------------------------------- //
+
 PictureShape::PictureShape()
     : KoFrameShape(KoXmlNS::draw, "image"),
     m_imageCollection(0),
-    m_renderQueue(new RenderQueue(this)),
-    m_mode(Standard)
+    m_mode(Standard),
+    m_proxy(this)
 {
     setKeepAspectRatio(true);
     KoFilterEffectStack * effectStack = new KoFilterEffectStack();
@@ -107,78 +101,125 @@ PictureShape::PictureShape()
     setFilterEffectStack(effectStack);
 }
 
-PictureShape::~PictureShape()
+KoImageData* PictureShape::imageData() const
 {
-    delete m_renderQueue;
+    return qobject_cast<KoImageData*>(userData());
+}
+
+QRectF PictureShape::cropRect() const
+{
+    return m_clippingRect.toRect();
+}
+
+bool PictureShape::isPictureInProportion() const
+{
+    QSizeF clippingRectSize(
+        imageData()->imageSize().width() * m_clippingRect.width(),
+        imageData()->imageSize().height() * m_clippingRect.height()
+    );
+
+    qreal shapeAspect = size().width() / size().height();
+    qreal rectAspect = clippingRectSize.width() / clippingRectSize.height();
+
+    return qAbs(shapeAspect - rectAspect) <= 0.025;
+}
+
+void PictureShape::setCropRect(const QRectF& rect)
+{
+    m_clippingRect.setRect(rect, true);
+    update();
+}
+
+QSize PictureShape::calcOptimalPixmapSize(const QSizeF& shapeSize, const QSizeF& imageSize) const
+{
+    qreal imageAspect = imageSize.width() / imageSize.height();
+    qreal shapeAspect = shapeSize.width() / shapeSize.height();
+    qreal scale = 1.0;
+
+    if (shapeAspect > imageAspect) {
+        scale = shapeSize.width()  / imageSize.width()  / m_clippingRect.width();
+    }
+    else {
+        scale = shapeSize.height() / imageSize.height() / m_clippingRect.height();
+    }
+
+    scale = qMin(1.0, scale); // prevent upscaling
+    return (imageSize * scale).toSize();
+}
+
+ClippingRect PictureShape::parseClippingRectString(QString string) const
+{
+    ClippingRect rect;
+    string = string.trimmed();
+
+    if ((!string.isEmpty()) && string.startsWith("rect")) {
+        QStringList points = string.replace("rect("," ").replace(QChar(')'), QChar(' ')).trimmed().split(",");
+        qreal values[4] = { 0, 0, 0, 0 };
+
+        for (int i=0; i<points.size(); ++i) {
+            values[i] = KoUnit::parseValue(points[i].trimmed(), 0.0);
+        }
+
+        rect.top = values[0];
+        rect.right = values[1];
+        rect.bottom = values[2];
+        rect.left = values[3];
+        rect.uniform = false;
+        rect.inverted = true;
+    }
+
+    return rect;
 }
 
 void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
-    QRectF pixelsF = converter.documentToView(QRectF(QPointF(0,0), size()));
-    KoImageData *imageData = qobject_cast<KoImageData*>(userData());
-    if (imageData == 0) {
-        painter.fillRect(pixelsF, QColor(Qt::gray));
+    QRectF viewRect = converter.documentToView(QRectF(QPointF(0,0), size()));
+
+    if (imageData() == 0) {
+        painter.fillRect(viewRect, QColor(Qt::gray));
         return;
     }
-    const QRect pixels = pixelsF.toRect();
-    QSize pixmapSize = pixelsF.size().toSize();
 
-    QString key(generate_key(imageData->key(), pixmapSize));
-    QPixmap pixmap;
-#if QT_VERSION  >= 0x040600
-    if (!QPixmapCache::find(key, &pixmap)) { // first check cache.
-#else
-    if (!QPixmapCache::find(key, pixmap)) { // first check cache.
-#endif
-        // no? Does the imageData have it then?
-        if (!(imageData->hasCachedPixmap() && imageData->pixmap().size() == pixmapSize)) {
-            // ok, not what we want.
-            // before asking to render it, make sure the image doesn't get too big
-            QSize imageSize = imageData->image().size();
-            if (imageSize.width() < pixmapSize.width() || imageSize.height() < pixmapSize.height()) {
-                // kDebug() << "clipping size to orig image size" << imageSize;
-                pixmapSize.setWidth(imageSize.width());
-                pixmapSize.setHeight(imageSize.height());
-            }
+    QSize pixmapSize = calcOptimalPixmapSize(viewRect.size(), imageData()->image().size());
 
-            if (m_printQualityImage.isNull()) {
-                const int MaxSize = 1000; // TODO set the number as a KoImageCollection size
-                // make sure our pixmap doesn't get too slow.
-                // In future we may want to make this action cause a multi-threaded rescale of the pixmap.
-                if (pixmapSize.width() > MaxSize) { // resize to max size.
-                    pixmapSize.setHeight(qRound(pixelsF.height() / pixelsF.width() * MaxSize));
-                    pixmapSize.setWidth(MaxSize);
-                }
-                if (pixmapSize.height() > MaxSize) {
-                    pixmapSize.setWidth(qRound(pixelsF.width() / pixelsF.height() * MaxSize));
-                    pixmapSize.setHeight(MaxSize);
-                }
-            }
-            key = generate_key(imageData->key(), pixmapSize);
-        }
-    }
+    // normalize the clipping rect if it isn't already done
+    m_clippingRect.normalize(imageData()->imageSize());
 
-    if (!m_printQualityImage.isNull() && pixmapSize == m_printQualityImage.size()) { // painting the image as prepared in waitUntilReady()
-        painter.drawImage(pixels, m_printQualityImage, QRect(0, 0, pixmapSize.width(), pixmapSize.height()));
+    // painting the image as prepared in waitUntilReady()
+    if (!m_printQualityImage.isNull() && pixmapSize != m_printQualityImage.size()) {
+        QSizeF imageSize = m_printQualityImage.size();
+        QRectF cropRect(
+            imageSize.width()  * m_clippingRect.left,
+            imageSize.height() * m_clippingRect.top,
+            imageSize.width()  * m_clippingRect.width(),
+            imageSize.height() * m_clippingRect.height()
+        );
+
+        painter.drawImage(viewRect, m_printQualityImage, cropRect);
         m_printQualityImage = QImage(); // free memory
-        return;
     }
+    else {
+        QPixmap pixmap;
+        QString key(generate_key(imageData()->key(), pixmapSize));
 
-#if QT_VERSION  >= 0x040600
-    if (!QPixmapCache::find(key, &pixmap)) {
-#else
-    if (!QPixmapCache::find(key, pixmap)) {
-#endif
-        m_renderQueue->addSize(pixmapSize);
-        QTimer::singleShot(0, m_renderQueue, SLOT(renderImage()));
-        if (!imageData->hasCachedPixmap()
-            || imageData->pixmap().size().width() > pixmapSize.width()) { // don't scale down
-            QTimer::singleShot(0, m_renderQueue, SLOT(updateShape()));
-            return;
+        // if the required pixmap is not in the cache
+        // lunch a task in a background thread that scales
+        // the source image to the required size
+        if (!QPixmapCache::find(key, &pixmap)) {
+            QThreadPool::globalInstance()->start(new _Private::PixmapScaler(this, pixmapSize));
+            painter.fillRect(viewRect, QColor(Qt::gray)); // just paint a gray rect as long as we don't have the required pixmap
         }
-        pixmap = imageData->pixmap();
+        else {
+            QRectF cropRect(
+                pixmapSize.width()  * m_clippingRect.left,
+                pixmapSize.height() * m_clippingRect.top,
+                pixmapSize.width()  * m_clippingRect.width(),
+                pixmapSize.height() * m_clippingRect.height()
+            );
+
+            painter.drawPixmap(viewRect, pixmap, cropRect);
+        }
     }
-    painter.drawPixmap(pixels, pixmap, QRect(0, 0, pixmap.width(), pixmap.height()));
 }
 
 void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
@@ -295,7 +336,23 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
         style.addProperty("draw:color-mode", "mono");
         break;
     }
-    
+
+    QSizeF       imageSize = imageData()->imageSize();
+    ClippingRect rect      = m_clippingRect;
+
+    rect.normalize(imageSize);
+    rect.bottom = 1.0 - rect.bottom;
+    rect.right = 1.0 - rect.right;
+
+    if (!qFuzzyCompare(rect.left + rect.right + rect.top + rect.bottom, qreal(0))) {
+        style.addProperty("fo:clip", QString("rect(%1pt, %2pt, %3pt, %4pt)")
+            .arg(rect.top * imageSize.height())
+            .arg(rect.right * imageSize.width())
+            .arg(rect.bottom * imageSize.height())
+            .arg(rect.left * imageSize.width())
+        );
+    }
+
     return KoShape::saveStyle(style, context);
 }
 
@@ -305,35 +362,38 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.setTypeProperties("graphic");
 
-    //FIXME: are there other applicable properties?
     if (styleStack.hasProperty(KoXmlNS::draw, "color-mode")) {
         QString colorMode = styleStack.property(KoXmlNS::draw, "color-mode");
         if (colorMode == "greyscale") {
-            setMode(Greyscale);
+            setColorMode(Greyscale);
         }
         else if (colorMode == "mono") {
-            setMode(Mono);
+            setColorMode(Mono);
         }
         else if (colorMode == "watermark") {
-            setMode(Watermark);
+            setColorMode(Watermark);
         }
     }
-    const QString opacity(styleStack.property(KoXmlNS::draw, "image-opacity"));
+
+    QString opacity(styleStack.property(KoXmlNS::draw, "image-opacity"));
+
     if (! opacity.isEmpty() && opacity.right(1) == "%") {
         setTransparency(1.0 - (opacity.left(opacity.length() - 1).toFloat() / 100.0));
     }
+
+    m_clippingRect = parseClippingRectString(styleStack.property(KoXmlNS::fo, "clip"));
 }
 
-PictureShape::PictureMode PictureShape::mode() const
+PictureShape::ColorMode PictureShape::colorMode() const
 {
     return m_mode;
 }
 
-void PictureShape::setMode(PictureShape::PictureMode mode)
+void PictureShape::setColorMode(PictureShape::ColorMode mode)
 {
     if (mode != m_mode) {
         filterEffectStack()->removeFilterEffect(0);
-        
+
         switch(mode)
         {
         case Greyscale:
@@ -348,7 +408,7 @@ void PictureShape::setMode(PictureShape::PictureMode mode)
         default:
             break;
         }
-        
+
         m_mode = mode;
         update();
     }
@@ -418,6 +478,5 @@ bool PictureShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &conte
     setUserData(data);
     setSize(QSizeF(w, h));
     setPosition(QPointF(x, y));
-
     return true;
 }

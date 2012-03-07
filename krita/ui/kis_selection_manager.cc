@@ -175,7 +175,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
     m_fillForegroundColor  = new KAction(i18n("Fill with Foreground Color"), this);
     collection->addAction("fill_selection_foreground_color", m_fillForegroundColor);
-    m_fillForegroundColor->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Backspace));
+    m_fillForegroundColor->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Backspace));
     connect(m_fillForegroundColor, SIGNAL(triggered()), this, SLOT(fillForegroundColor()));
 
     m_fillBackgroundColor  = new KAction(i18n("Fill with Background Color"), this);

@@ -147,7 +147,7 @@ KoXmlWriter* KoOdfWriteStore::bodyWriter()
         Q_ASSERT(!d->contentTmpFile);
         d->contentTmpFile = new KTemporaryFile;
         if (!d->contentTmpFile->open()) {
-            kWarning(30002) << "Failed to open the temporary content file";
+            kWarning() << "Failed to open the temporary content file";
             delete d->contentTmpFile;
             d->contentTmpFile = 0;
             return 0;

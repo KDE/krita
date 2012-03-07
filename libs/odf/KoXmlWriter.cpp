@@ -152,8 +152,10 @@ void KoXmlWriter::addCompleteElement(QIODevice* indev)
     // already open but for writing, and we need to rewind.
     const bool openOk = indev->open(QIODevice::ReadOnly);
     Q_ASSERT(openOk);
-    if (!openOk)
+    if (!openOk) {
+        kWarning() << "Failed to re-open the device! wasOpen=" << wasOpen;
         return;
+    }
 
     static const int MAX_CHUNK_SIZE = 8 * 1024; // 8 KB
     QByteArray buffer;

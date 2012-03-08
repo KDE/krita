@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Template Shape
+Name[x-test]=xxTemplate Shapexx
+X-KDE-ServiceTypes=Calligra/Shape
+Type=Service
+X-KDE-Library=templateshape
+X-Flake-MinVersion=4
+X-Flake-PluginVersion=4

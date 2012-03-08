@@ -37,7 +37,7 @@ class KRecentFilesAction;
 class QDockWidget;
 class QLabel;
 
-class KoPageLayout;
+struct KoPageLayout;
 
 // Calligra class but not in main module
 class KoDockerManager;

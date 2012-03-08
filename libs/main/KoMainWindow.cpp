@@ -1720,18 +1720,24 @@ void KoMainWindow::slotEmailFile()
         bool const tmp_modified = rootDocument()->isModified();
         KUrl const tmp_url = rootDocument()->url();
         QByteArray const tmp_mimetype = rootDocument()->outputMimeType();
-        KTemporaryFile tmpfile; //TODO: The temorary file should be deleted when the mail program is closed
-        tmpfile.setAutoRemove(false);
-        tmpfile.open();
+
+        // a little open, close, delete dance to make sure we have a nice filename
+        // to use, but won't block windows from creating a new file with this name.
+        KTemporaryFile *tmpfile = new KTemporaryFile();
+        tmpfile->open();
+        QString fileName = tmpfile->fileName();
+        tmpfile->close();
+        delete tmpfile;
+
         KUrl u;
-        u.setPath(tmpfile.fileName());
+        u.setPath(fileName);
         rootDocument()->setUrl(u);
         rootDocument()->setModified(true);
         rootDocument()->setOutputMimeType(rootDocument()->nativeFormatMimeType());
 
         saveDocument(false, true);
 
-        fileURL = tmpfile.fileName();
+        fileURL = fileName;
         theSubject = i18n("Document");
         urls.append(fileURL);
 

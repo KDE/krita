@@ -40,10 +40,7 @@ QVariant CompositionModel::data(const QModelIndex& index, int role) const
             }
             case Qt::DecorationRole:
             {
-//                 if(m_compositions.at(index.row())->icon().isNull()) {
                     return KIcon("tools-wizard");
-//                 }
-//                 return m_compositions.at(index.row())->icon();
             }
         }
     }

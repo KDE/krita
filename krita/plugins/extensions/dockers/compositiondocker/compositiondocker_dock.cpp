@@ -34,55 +34,14 @@
 #include <kis_canvas2.h>
 #include "compositionmodel.h"
 
-
-// class KisTasksetDelegate : public QStyledItemDelegate
-// {
-// public:
-//     KisTasksetDelegate(QObject * parent = 0) : QStyledItemDelegate(parent) {}
-//     virtual ~KisTasksetDelegate() {}
-//     /// reimplemented
-//     QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const {
-//         return QSize(QStyledItemDelegate::sizeHint(option, index).width(),
-//                      qMin(QStyledItemDelegate::sizeHint(option, index).width(), 25));
-//     }
-// };
-// 
-// class KisTasksetResourceDelegate : public QStyledItemDelegate
-// {
-// public:
-//     KisTasksetResourceDelegate(QObject * parent = 0) : QStyledItemDelegate(parent) {}
-//     virtual ~KisTasksetResourceDelegate() {}
-//     /// reimplemented
-//     virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
-// };
-// 
-// void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
-// {
-//     if (! index.isValid())
-//         return;
-// 
-//     TasksetResource* taskset = static_cast<TasksetResource*>(index.internalPointer());
-// 
-//     if (option.state & QStyle::State_Selected) {
-//         painter->setPen(QPen(option.palette.highlight(), 2.0));
-//         painter->fillRect(option.rect, option.palette.highlight());
-//     }
-// 
-//     painter->setPen(Qt::black);
-//     painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, taskset->name());
-// 
-// }
-
 CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions")), m_canvas(0)
 {
     QWidget* widget = new QWidget(this);
     setupUi(widget);
     m_model = new CompositionModel(this);
     compositionView->setModel(m_model);
-//     tasksetView->setItemDelegate(new KisTasksetDelegate(this));
     deleteButton->setIcon(KIcon("edit-delete"));
     saveButton->setIcon(KIcon("document-save"));
-//     saveButton->setEnabled(false);
 
     setWidget(widget);
 

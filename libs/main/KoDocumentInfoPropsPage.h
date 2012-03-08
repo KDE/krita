@@ -38,7 +38,6 @@ public:
     virtual void applyChanges();
 
 private:
-    void copy(const QString &path, const KArchiveEntry *entry);
     class KoDocumentInfoPropsPagePrivate;
     KoDocumentInfoPropsPagePrivate * const d;
 };

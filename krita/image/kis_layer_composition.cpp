@@ -62,12 +62,13 @@ public:
         if(m_mode == STORE) {
             m_layerComposition->m_visibilityMap[node->uuid()] = node->visible();
         } else {
+            bool newState = false;
             if(m_layerComposition->m_visibilityMap.contains(node->uuid())) {
-                bool newState = m_layerComposition->m_visibilityMap[node->uuid()];
-                if(node->visible() != newState) {
-                    node->setVisible(m_layerComposition->m_visibilityMap[node->uuid()]);
-                    node->setDirty();
-                }
+                newState = m_layerComposition->m_visibilityMap[node->uuid()];
+            }
+            if(node->visible() != newState) {
+                node->setVisible(m_layerComposition->m_visibilityMap[node->uuid()]);
+                node->setDirty();
             }
         }
         

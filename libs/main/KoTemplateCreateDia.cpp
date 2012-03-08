@@ -323,10 +323,7 @@ void KoTemplateCreateDia::slotOk() {
     // don't overwrite the hidden template file with a new non-hidden one
     if ( !ignore )
     {
-        // copy the template file
-        KIO::FileCopyJob *job = KIO::file_copy( orig, dest, 0600, KIO::Overwrite | KIO::HideProgressInfo);
-        job->exec();
- 
+        QFile::copy(m_file, dest.toLocalFile());
         // save the picture
         if(d->m_default->isChecked() && !m_pixmap.isNull())
             m_pixmap.save(icon, "PNG");

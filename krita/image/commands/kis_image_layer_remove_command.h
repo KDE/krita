@@ -47,6 +47,7 @@ private:
     void restoreClones();
     void processClones(KisNodeSP node);
     void moveChildren(KisNodeSP src, KisNodeSP dst);
+    void moveClones(KisLayerSP src, KisLayerSP dst);
 
 private:
     struct Private;

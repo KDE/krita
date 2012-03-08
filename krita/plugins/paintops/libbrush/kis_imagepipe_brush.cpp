@@ -27,9 +27,8 @@ public:
     QString parasiteString; // Contains instructions on how to use the brush
     mutable KisPipeBrushParasite parasite;
     qint32 numOfBrushes;
-    mutable quint32 currentBrush;
+    mutable quint32 currentBrushIndex;
 
-    QByteArray data;
     mutable QList<KisGbrBrush*> brushes;
 
     enumBrushType brushType;
@@ -41,7 +40,7 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& filename)
 {
     m_d->brushType = INVALID;
     m_d->numOfBrushes = 0;
-    m_d->currentBrush = 0;
+    m_d->currentBrushIndex = 0;
 }
 
 KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
@@ -96,12 +95,12 @@ bool KisImagePipeBrush::load()
 {
     QFile file(filename());
     file.open(QIODevice::ReadOnly);
-    m_d->data = file.readAll();
+    QByteArray data = file.readAll();
     file.close();
-    return init();
+    return initFromData(data);
 }
 
-bool KisImagePipeBrush::init()
+bool KisImagePipeBrush::initFromData(const QByteArray &data)
 {
     // XXX: this doesn't correctly load the image pipe brushes yet.
 
@@ -111,8 +110,8 @@ bool KisImagePipeBrush::init()
 
     qint32 i = 0;
 
-    while (m_d->data[i] != '\n' && i < m_d->data.size()) {
-        line1.append(m_d->data[i]);
+    while (data[i] != '\n' && i < data.size()) {
+        line1.append(data[i]);
         i++;
     }
     setName(QString::fromUtf8(line1, line1.size()));
@@ -123,8 +122,8 @@ bool KisImagePipeBrush::init()
 
     // XXX: This stuff is in utf-8, too.
     QByteArray line2;
-    while (m_d->data[i] != '\n' && i < m_d->data.size()) {
-        line2.append(m_d->data[i]);
+    while (data[i] != '\n' && i < data.size()) {
+        line2.append(data[i]);
         i++;
     }
 
@@ -135,9 +134,9 @@ bool KisImagePipeBrush::init()
     i++; // Skip past the second newline
 
     qint32 numOfBrushes = 0;
-    while (numOfBrushes < m_d->numOfBrushes && i < m_d->data.size()) {
+    while (numOfBrushes < m_d->numOfBrushes && i < data.size()) {
         KisGbrBrush* brush = new KisGbrBrush(name() + '_' + QString().setNum(numOfBrushes),
-                                             m_d->data,
+                                             data,
                                              i);
         Q_CHECK_PTR(brush);
 
@@ -157,8 +156,6 @@ bool KisImagePipeBrush::init()
         setWidth(m_d->brushes.at(0)->width());
         setHeight(m_d->brushes.at(0)->height());
     }
-
-    m_d->data.resize(0);
 
     sanitize();
 
@@ -221,6 +218,20 @@ QImage KisImagePipeBrush::image() const
     }
 }
 
+KisGbrBrush* KisImagePipeBrush::currentBrush() const
+{
+    return !m_d->brushes.isEmpty() ? m_d->brushes.at(m_d->currentBrushIndex) : 0;
+}
+
+QList<KisGbrBrush*> KisImagePipeBrush::testingGetBrushes() const
+{
+    return m_d->brushes;
+}
+
+void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const
+{
+    m_d->currentBrushIndex = brushIndex(info);
+}
 
 void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
                                                             double scaleX, double scaleY, double angle, const KisPaintInformation& info,
@@ -228,18 +239,18 @@ void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceS
                                                             qreal softnessFactor) const
 {
     if (m_d->brushes.isEmpty()) return;
+
+    currentBrush()->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
     selectNextBrush(info);
-    if (m_d->currentBrush )
-    m_d->brushes.at(m_d->currentBrush)->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
 }
 
 KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
-    Q_UNUSED(scale);
-    Q_UNUSED(angle);
     if (m_d->brushes.isEmpty()) return KisFixedPaintDeviceSP(0);
+
+    KisFixedPaintDeviceSP device = currentBrush()->paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
     selectNextBrush(info);
-    return m_d->brushes.at(m_d->currentBrush)->paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
+    return device;
 }
 
 void KisImagePipeBrush::setParasiteString(const QString& parasite)
@@ -282,9 +293,8 @@ quint32 KisImagePipeBrush::brushIndex(const KisPaintInformation& info) const
         m_d->parasite.index[i] = index;
         brushIndex += m_d->parasite.brushesCount[i] * index;
     }
-    if (brushIndex > m_d->brushes.size()) {
-        brushIndex = 0;
-    }
+    brushIndex %= m_d->brushes.size();
+
     return brushIndex;
 }
 
@@ -326,11 +336,6 @@ const KisBoundary* KisImagePipeBrush::boundary() const
 {
     Q_ASSERT(!m_d->brushes.isEmpty());
     return m_d->brushes.at(0)->boundary();
-}
-
-void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const
-{
-    m_d->currentBrush = brushIndex(info);
 }
 
 bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info)
@@ -375,6 +380,18 @@ void KisImagePipeBrush::sanitize()
     }
 }
 
+qint32 KisImagePipeBrush::maskWidth(double scale, double angle) const
+{
+    KisGbrBrush *currentBrush = this->currentBrush();
+    return currentBrush ? currentBrush->maskWidth(scale, angle) : 0;
+}
+
+qint32 KisImagePipeBrush::maskHeight(double scale, double angle) const
+{
+    KisGbrBrush *currentBrush = this->currentBrush();
+    return currentBrush ? currentBrush->maskHeight(scale, angle) : 0;
+}
+
 void KisImagePipeBrush::setAngle(qreal _angle)
 {
     KisBrush::setAngle(_angle);
@@ -391,4 +408,12 @@ void KisImagePipeBrush::setScale(qreal _scale)
         m_d->brushes.at(i)->setScale(_scale);
     }
 
+}
+
+void KisImagePipeBrush::setSpacing(double _spacing)
+{
+    KisBrush::setSpacing(_spacing);
+    for (int i = 0; i < m_d->brushes.count(); i++){
+        m_d->brushes.at(i)->setSpacing(_spacing);
+    }
 }

@@ -176,11 +176,16 @@ void KoCharacterStyle::ensureMinimalProperties(QTextCharFormat &format) const
         QMap<int, QVariant> props = d->defaultStyle->d->stylesPrivate.properties();
         QMap<int, QVariant>::const_iterator it = props.constBegin();
         while (it != props.constEnd()) {
-            if (it.key() == KoCharacterStyle::UseWindowFontColor) {
-                if (format.hasProperty(QTextFormat::ForegroundBrush)) {
-                    ++it;
-                    continue;
-                }
+            // in case there is already a foreground color don't apply the use window font color as then the forground color
+            // should be used.
+            if (it.key() == KoCharacterStyle::UseWindowFontColor && format.hasProperty(QTextFormat::ForegroundBrush)) {
+                ++it;
+                continue;
+            }
+            // in case there is already a use window font color don't apply the forground brush as this overwrite the foreground color
+            if (it.key() == QTextFormat::ForegroundBrush && format.hasProperty(KoCharacterStyle::UseWindowFontColor)) {
+                ++it;
+                continue;
             }
 
             if (!it.value().isNull() && !format.hasProperty(it.key())) {
@@ -193,6 +198,11 @@ void KoCharacterStyle::ensureMinimalProperties(QTextCharFormat &format) const
     QMap<int, QVariant>::const_iterator it = props.constBegin();
     while (it != props.constEnd()) {
         if (!it.value().isNull() && !format.hasProperty(it.key())) {
+            if (it.key() == QTextFormat::ForegroundBrush && format.hasProperty(KoCharacterStyle::UseWindowFontColor)) {
+                ++it;
+                continue;
+            }
+
             format.setProperty(it.key(), it.value());
         }
         ++it;
@@ -427,6 +437,7 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
     bool fontSizeSet = false; // if this style has already set size don't apply the relatives
     const QMap<int, QVariant> props = d->stylesPrivate.properties();
     QMap<int, QVariant>::const_iterator it = props.begin();
+    QList<int> clearProperty;
     while (it != props.end()) {
         if (!it.value().isNull()) {
             if (it.key() == KoCharacterStyle::PercentageFontSize && !fontSizeSet) {
@@ -447,7 +458,20 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
                 }
                 format.setProperty(QTextFormat::FontPointSize, size);
             }
+            else if (it.key() == QTextFormat::FontFamily) {
+                if (!props.contains(QTextFormat::FontStyleHint)) {
+                    clearProperty.append(QTextFormat::FontStyleHint);
+                }
+                if (!props.contains(QTextFormat::FontFixedPitch)) {
+                    clearProperty.append(QTextFormat::FontFixedPitch);
+                }
+                if (!props.contains(KoCharacterStyle::FontCharset)) {
+                    clearProperty.append(KoCharacterStyle::FontCharset);
+                }
+                format.setProperty(it.key(), it.value());
+            }
             else {
+                kDebug(32500) << "setProperty" << it.key() << it.value();
                 format.setProperty(it.key(), it.value());
             }
 
@@ -456,10 +480,15 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
             }
 
             if (it.key() == QTextFormat::ForegroundBrush) {
-                format.clearProperty(KoCharacterStyle::UseWindowFontColor);
+                clearProperty.append(KoCharacterStyle::UseWindowFontColor);
             }
         }
         ++it;
+    }
+
+    foreach (int property, clearProperty) {
+        kDebug(32500) << "clearProperty" << property;
+        format.clearProperty(property);
     }
 }
 

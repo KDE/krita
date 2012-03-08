@@ -47,7 +47,9 @@ USING_PART_OF_NAMESPACE_EIGEN
 
 
 KisToolSelectBrush::KisToolSelectBrush(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas, KisCursor::load("tool_brush_selection_cursor.png", 6, 6)),
+        : KisToolSelectBase(canvas,
+                            KisCursor::load("tool_brush_selection_cursor.png", 6, 6),
+                            i18n("Brush Selection")),
         m_brushRadius(15),
         m_lastMousePosition(-1, -1)
 {
@@ -61,25 +63,25 @@ KisToolSelectBrush::~KisToolSelectBrush()
 QWidget* KisToolSelectBrush::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
-    m_optWidget->setWindowTitle(i18n("Brush Selection"));
+    KisSelectionOptions *selectionWidget = selectionOptionWidget();
 
     QHBoxLayout* fl = new QHBoxLayout();
-    QLabel * lbl = new QLabel(i18n("Brush size:"), m_optWidget);
+    QLabel * lbl = new QLabel(i18n("Brush size:"), selectionWidget);
     fl->addWidget(lbl);
 
-    KIntNumInput * input = new KIntNumInput(m_optWidget);
+    KIntNumInput * input = new KIntNumInput(selectionWidget);
     input->setRange(0, 500, 5);
     input->setValue(m_brushRadius*2);
     fl->addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetBrushSize(int)));
 
-    QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);
     l->insertLayout(1, fl);
 
-    m_optWidget->disableSelectionModeOption();
+    selectionWidget->disableSelectionModeOption();
 
-    return m_optWidget;
+    return selectionWidget;
 }
 
 void KisToolSelectBrush::paint(QPainter& gc, const KoViewConverter &converter)
@@ -172,11 +174,6 @@ void KisToolSelectBrush::mouseReleaseEvent(KoPointerEvent *event)
     }
 }
 
-void KisToolSelectBrush::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
-{
-    KisToolSelectBase::activate(toolActivation, shapes);
-}
-
 void KisToolSelectBrush::deactivate()
 {
     resetSelection();
@@ -196,25 +193,21 @@ void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
 
     KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Brush Selection"));
 
-    if (m_selectionMode == PIXEL_SELECTION) {
+    if (selectionMode() == PIXEL_SELECTION) {
 
         KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
         KisPainter painter(tmpSel);
         painter.setBounds(currentImage()->bounds());
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-        painter.setGradient(currentGradient());
-        painter.setPattern(currentPattern());
+        painter.setPaintOpPreset(currentPaintOpPreset(), currentImage());
+        painter.setAntiAliasPolygonFill(selectionOptionWidget()->antiAliasSelection());
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-        painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
-        painter.setOpacity(OPACITY_OPAQUE_U8);
-        painter.setPaintOpPreset(currentPaintOpPreset(), currentImage());
-        painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
 
         painter.fillPainterPath(selection);
 
-        helper.selectPixelSelection(tmpSel, m_selectAction);
+        helper.selectPixelSelection(tmpSel, selectionAction());
 
         resetSelection();
     }

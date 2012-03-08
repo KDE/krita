@@ -80,7 +80,6 @@ void KisCanvasResourceProvider::setResourceManager(KoCanvasResourceManager *reso
 
     connect(m_resourceManager, SIGNAL(resourceChanged(int, const QVariant &)),
             this, SLOT(slotResourceChanged(int, const QVariant&)));
-
 }
 
 
@@ -317,6 +316,10 @@ void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & re
         break;
     case(CurrentCompositeOp) :
         emit sigCompositeOpChanged(currentCompositeOp());
+    case (Opacity):
+    {
+        emit sigOpacityChanged(res.toDouble());
+    }
     default:
         ;
         // Do nothing

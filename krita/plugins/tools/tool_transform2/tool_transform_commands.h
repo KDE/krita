@@ -59,7 +59,7 @@ public:
 class TransformCmd : public KUndo2Command
 {
 public:
-    TransformCmd(KisToolTransform *tool, const ToolTransformArgs &args, KisSelectionSP origSel, QPoint startPos, QPoint endPos, QImage *origImg, QImage *origSelectionImg);
+    TransformCmd(KisToolTransform *tool, const ToolTransformArgs &args, KisSelectionSP origSel, QPoint startPos, QPoint endPos, const QImage &origImg, const QImage &origSelectionImg);
     virtual ~TransformCmd();
 
 public:
@@ -67,14 +67,18 @@ public:
     virtual void undo();
     void transformArgs(ToolTransformArgs &args) const;
     KisSelectionSP origSelection(QPoint &startPos, QPoint &endPos) const;
-    void origPreviews(QImage *&origImg, QImage *&origSelectionImg) const;
+
+    const QImage &originalImage() const;
+    const QImage &originalSelectionImage() const;
+
 private:
     ToolTransformArgs m_args;
     KisToolTransform *m_tool;
     KisSelectionSP m_origSelection;
     QPoint m_originalTopLeft;
     QPoint m_originalBottomRight;
-    QImage *m_origImg, *m_origSelectionImg;
+    QImage m_origImg;
+    QImage m_origSelectionImg;
 };
 
 #endif // TOOL_TRANSFORM_COMMANDS_H_

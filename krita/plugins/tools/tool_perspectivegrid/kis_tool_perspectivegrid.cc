@@ -80,6 +80,8 @@ void KisToolPerspectiveGrid::deactivate()
         m_points.clear();
     }
     m_canvas->updateCanvas();
+
+    KisTool::deactivate();
 }
 
 bool KisToolPerspectiveGrid::mouseNear(const QPointF& mousep, const QPointF& point)

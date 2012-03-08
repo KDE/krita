@@ -49,6 +49,8 @@ public:
     KoTextEditor *editor();
     /// inserts a ToC and open a configure dialog for customization
     void insertCustomToC(KoTableOfContentsGeneratorInfo *defaultTemplate);
+    /// insert a bibliography and open a configure dialog for customization
+    void insertCustomBibliography(KoBibliographyInfo *defaultTemplate);
 
 protected:
     /// reimplemented from superclass
@@ -57,8 +59,6 @@ protected:
 private slots:
     /// insert a citation
     void insertCitation();
-    /// insert a bibliography
-    void insertBibliography();
     /// configure a bibliography
     void configureBibliography();
     /// format the table of contents template

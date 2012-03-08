@@ -391,7 +391,7 @@ public slots:
      */
     void setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, QTextBlock block);
 
-    void insertBibliography();
+    void insertBibliography(KoBibliographyInfo *info);
 
     KoInlineCite *insertCitation();
 

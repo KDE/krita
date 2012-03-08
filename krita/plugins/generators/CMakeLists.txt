@@ -1,5 +1,1 @@
 add_subdirectory(solid)
-#add_subdirectory(noise)
-#add_subdirectory(perlin)
-#add_subdirectory(plasma)
-#add_subdirectory(flame)

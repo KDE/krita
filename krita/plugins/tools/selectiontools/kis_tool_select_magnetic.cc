@@ -89,7 +89,7 @@ inline QVector2D rotateAntiClockWise(const QVector2D &v)
 }
 
 KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas, KisCursor::load("tool_magneticoutline_selection_cursor.png", 6, 6)),
+    : KisToolSelectBase(canvas, KisCursor::load("tool_magneticoutline_selection_cursor.png", 6, 6), i18n("Magnetic Selection")),
         m_magneticOptions(0),
         m_localTool(canvas, this)
 {
@@ -131,19 +131,21 @@ bool KisToolSelectMagnetic::limitToCurrentLayer() const
 QWidget* KisToolSelectMagnetic::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
-    m_optWidget->setWindowTitle(i18n("Magnetic Selection"));
-    m_optWidget->disableAntiAliasSelectionOption();
-    m_optWidget->disableSelectionModeOption();
+    KisSelectionOptions *selectionWidget = selectionOptionWidget();
+
+    selectionWidget->setWindowTitle();
+    selectionWidget->disableAntiAliasSelectionOption();
+    selectionWidget->disableSelectionModeOption();
 
     KisToolSelectMagneticOptionWidget *magneticOptionsWidget;
-    magneticOptionsWidget = new KisToolSelectMagneticOptionWidget(m_optWidget);
+    magneticOptionsWidget = new KisToolSelectMagneticOptionWidget(selectionWidget);
     m_magneticOptions = magneticOptionsWidget->ui;
 
-    QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);
     l->addWidget(magneticOptionsWidget);
 
-    return m_optWidget;
+    return selectionWidget;
 }
 
 

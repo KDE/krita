@@ -35,6 +35,13 @@ enum KisConvolutionBorderOp {
     BORDER_AVOID = 3 // Skip convolving the border pixels at all.
 };
 
+/**
+ * @brief The KisConvolutionPainter class applies a convolution kernel to a paint device.
+ *
+ *
+ * Note: https://bugs.kde.org/show_bug.cgi?id=220310 shows that there's something here
+ * that we need to fix...
+ */
 class KRITAIMAGE_EXPORT KisConvolutionPainter : public KisPainter
 {
 

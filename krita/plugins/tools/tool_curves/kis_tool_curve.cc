@@ -91,6 +91,7 @@ void KisToolCurve::deactivate()
 
     m_actionOptions = NOOPTIONS;
     m_drawPivots = true;
+    KisToolPaint::deactivate();
 }
 
 void KisToolCurve::mousePressEvent(KoPointerEvent *event)
@@ -584,16 +585,6 @@ QWidget* KisToolCurve::createSelectionOptionWidget(QWidget* parent)
     l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
     m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
     return m_optWidget;
-}
-
-QWidget* KisToolCurve::optionWidget()
-{
-    /*
-        if (toolType() == TOOL_SELECT)
-            return m_optWidget;
-        else
-            return KisToolPaint::optionWidget();
-    */
 }
 
 #include "kis_tool_curve.moc"

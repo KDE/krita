@@ -73,6 +73,7 @@ public:
             return 0;
         return m_items.at(i);
     }
+
     QLayoutItem* takeAt(int i) { return m_items.takeAt(i); }
     int count() const { return m_items.count(); }
 
@@ -112,10 +113,12 @@ public:
             const_cast<SectionLayout*> (this)->m_buttonSize = m_items[0]->widget()->sizeHint();
         return m_buttonSize;
     }
+
     void setOrientation (Qt::Orientation orientation)
     {
         m_orientation = orientation;
     }
+
 private:
     QSize m_buttonSize;
     QMap<QAbstractButton*, int> m_priorities;
@@ -166,18 +169,22 @@ public:
         }
         return count;
     }
+
     void setSeperator(Seperators seperators)
     {
         m_seperators = seperators;
     }
+
     Seperators seperators() const
     {
         return m_seperators;
     }
+
     void setOrientation (Qt::Orientation orientation)
     {
         m_layout->setOrientation(orientation);
     }
+
 private:
     SectionLayout *m_layout;
     QString m_name;

@@ -161,6 +161,7 @@ signals:
     void sigFGColorUsed(const KoColor&);
     void sigCompositeOpChanged(const QString &);
     void sigOnScreenResolutionChanged(qreal scaleX, qreal scaleY);
+    void sigOpacityChanged(qreal);
 
 private:
 

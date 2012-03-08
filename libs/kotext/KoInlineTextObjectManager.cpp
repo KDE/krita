@@ -279,9 +279,36 @@ QMap<QString, KoInlineCite*> KoInlineTextObjectManager::citations(bool duplicate
         KoInlineCite* cite = dynamic_cast<KoInlineCite*>(object);
         if (cite && (cite->type() == KoInlineCite::Citation ||
                      (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
-            answers.insert(cite->identifier(),cite);
+            answers.insert(cite->identifier(), cite);
         }
     }
+    return answers;
+}
+
+QList<KoInlineCite*> KoInlineTextObjectManager::citationsSortedByPosition(bool duplicatesEnabled, QTextBlock block) const
+{
+    QList<KoInlineCite*> answers;
+
+    while (block.isValid()) {
+        QString text = block.text();
+        int pos = text.indexOf(QChar::ObjectReplacementCharacter);
+
+        while (pos >= 0 && pos <= block.length() ) {
+            QTextCursor cursor(block);
+            cursor.setPosition(block.position() + pos);
+            cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
+
+            KoInlineCite *cite = dynamic_cast<KoInlineCite*>(this->inlineTextObject(cursor));
+
+            if (cite && (cite->type() == KoInlineCite::Citation ||
+                         (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
+                answers.append(cite);
+            }
+            pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
+        }
+        block = block.next();
+    }
+
     return answers;
 }
 

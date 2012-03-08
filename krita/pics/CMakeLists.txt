@@ -37,6 +37,8 @@ install(FILES
     shear_vertical.png
     offset_horizontal.png
     offset_vertical.png
+    portrait.png
+    landscape.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 kde4_install_icons( ${ICON_INSTALL_DIR}   )

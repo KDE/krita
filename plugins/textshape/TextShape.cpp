@@ -259,9 +259,7 @@ QString TextShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) c
     if (resize == KoTextShapeData::ShrinkToFitResize)
         style.addProperty("draw:fit-to-size", "true");
 
-    if (m_paragraphStyle) {
-        m_paragraphStyle->saveOdf(style, context);
-    }
+    m_textShapeData->saveStyle(style, context);
 
     return KoShape::saveStyle(style, context);
 }
@@ -325,53 +323,23 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
     m_textShapeData->document()->setUndoRedoEnabled(false);
     loadOdfAttributes(element, context, OdfAllAttributes);
 
-    // load the (text) style of the frame
-    const KoXmlElement *style = 0;
-    if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
-        style = context.odfLoadingContext().stylesReader().findStyle(
-                    element.attributeNS(KoXmlNS::draw, "style-name"), "graphic",
-                    context.odfLoadingContext().useStylesAutoStyles());
-        if (!style) {
-            kDebug(32500) << "graphic style not found:" << element.attributeNS(KoXmlNS::draw, "style-name");
-        }
-    }
-    if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
-        style = context.odfLoadingContext().stylesReader().findStyle(
-                    element.attributeNS(KoXmlNS::presentation, "style-name"), "presentation",
-                    context.odfLoadingContext().useStylesAutoStyles());
-        if (!style) {
-            kDebug(32500) << "presentation style not found:" << element.attributeNS(KoXmlNS::presentation, "style-name");
-        }
-    }
-
-    if (style) {
-        delete m_paragraphStyle;
-        m_paragraphStyle = new KoParagraphStyle();
-        m_paragraphStyle->loadOdf(style, context, true);
-        QTextDocument *document = m_textShapeData->document();
-        QTextCursor cursor(document);
-        QTextBlockFormat format;
-        m_paragraphStyle->applyStyle(format);
-        cursor.setBlockFormat(format);
-        QTextCharFormat cformat;
-        m_paragraphStyle->KoCharacterStyle::applyStyle(cformat);
-        cursor.setCharFormat(cformat);
-        cursor.setBlockCharFormat(cformat);
+    // this cannot be done in loadStyle as that fill the style stack wrongly and therefor it results 
+    // in wrong data to be loaded.
+    m_textShapeData->loadStyle(element, context);
 
 #ifndef NWORKAROUND_ODF_BUGS
-        KoTextShapeData::ResizeMethod method = m_textShapeData->resizeMethod();
-        if (KoOdfWorkaround::fixAutoGrow(method, context)) {
-            KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-            Q_ASSERT(lay);
-            if (lay) {
-                SimpleRootAreaProvider *provider = dynamic_cast<SimpleRootAreaProvider*>(lay->provider());
-                if (provider) {
-                    provider->m_fixAutogrow = true;
-                }
+    KoTextShapeData::ResizeMethod method = m_textShapeData->resizeMethod();
+    if (KoOdfWorkaround::fixAutoGrow(method, context)) {
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+        Q_ASSERT(lay);
+        if (lay) {
+            SimpleRootAreaProvider *provider = dynamic_cast<SimpleRootAreaProvider*>(lay->provider());
+            if (provider) {
+                provider->m_fixAutogrow = true;
             }
         }
-#endif
     }
+#endif
 
     bool answer = loadOdfFrame(element, context);
     m_textShapeData->document()->setUndoRedoEnabled(true);

@@ -49,6 +49,7 @@ void KisToolEllipseBase::paint(QPainter& gc, const KoViewConverter &converter)
 void KisToolEllipseBase::deactivate()
 {
     updateArea();
+    KisToolShape::deactivate();
 }
 
 

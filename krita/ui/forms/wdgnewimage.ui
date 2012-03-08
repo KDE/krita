@@ -13,10 +13,7 @@
   <property name="windowTitle">
    <string>New Image</string>
   </property>
-  <layout class="QVBoxLayout">
-   <property name="margin">
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout">
      <item>
@@ -43,8 +40,32 @@
      <property name="title">
       <string>Image Size</string>
      </property>
-     <layout class="QVBoxLayout">
-      <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>&amp;Predefined:</string>
+          </property>
+          <property name="buddy">
+           <cstring>cmbPredefined</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cmbPredefined">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
        <layout class="QHBoxLayout">
         <item>
          <layout class="QVBoxLayout">
@@ -57,23 +78,26 @@
           <item>
            <widget class="QLabel" name="lblWidth">
             <property name="text">
-             <string>Width:</string>
+             <string>&amp;Width:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>doubleWidth</cstring>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QLabel" name="lblHeight">
             <property name="text">
-             <string>Height:</string>
+             <string>&amp;Height:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
             <property name="buddy">
-             <cstring></cstring>
+             <cstring>doubleHeight</cstring>
             </property>
            </widget>
           </item>
@@ -141,6 +165,47 @@
          </layout>
         </item>
         <item>
+         <widget class="QToolButton" name="bnPortrait">
+          <property name="toolTip">
+           <string>Portrait</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="bnLandscape">
+          <property name="toolTip">
+           <string>Landscape</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="lblResolution">
           <property name="text">
            <string>Resolution:</string>
@@ -191,8 +256,8 @@
         </item>
        </layout>
       </item>
-      <item>
-       <layout class="QHBoxLayout">
+      <item row="2" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QPushButton" name="bnScreenSize">
           <property name="toolTip">
@@ -215,6 +280,26 @@
            </size>
           </property>
          </spacer>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="txtPredefinedName">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="bnSaveAsPredefined">
+          <property name="toolTip">
+           <string>Save the current dimensions</string>
+          </property>
+          <property name="text">
+           <string>&amp;Save</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -242,17 +327,20 @@
       <item row="0" column="0">
        <widget class="QLabel" name="lblColor">
         <property name="text">
-         <string>Canvas color:</string>
+         <string>C&amp;anvas color:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>cmbColor</cstring>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="lblOpacity">
         <property name="text">
-         <string>Opacity:</string>
+         <string>&amp;Opacity:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -322,7 +410,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="lblDescription">
         <property name="text">
-         <string>Description:</string>
+         <string>&amp;Description:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
@@ -338,7 +426,7 @@
       <item row="3" column="0" colspan="2">
        <widget class="QCheckBox" name="chkFromClipboard">
         <property name="text">
-         <string>First layer from clipboard</string>
+         <string>&amp;First layer from clipboard</string>
         </property>
        </widget>
       </item>
@@ -388,11 +476,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="m_createButton">
+      <widget class="QPushButton" name="createButton">
        <property name="text">
-        <string>Create</string>
+        <string>&amp;Create</string>
        </property>
        <property name="autoDefault">
+        <bool>true</bool>
+       </property>
+       <property name="default">
         <bool>true</bool>
        </property>
       </widget>
@@ -418,16 +509,18 @@
  </customwidgets>
  <tabstops>
   <tabstop>txtName</tabstop>
+  <tabstop>cmbPredefined</tabstop>
   <tabstop>doubleWidth</tabstop>
   <tabstop>cmbWidthUnit</tabstop>
   <tabstop>doubleHeight</tabstop>
   <tabstop>cmbHeightUnit</tabstop>
-  <tabstop>bnScreenSize</tabstop>
   <tabstop>doubleResolution</tabstop>
+  <tabstop>bnScreenSize</tabstop>
+  <tabstop>cmbColor</tabstop>
   <tabstop>sliderOpacity</tabstop>
   <tabstop>txtDescription</tabstop>
   <tabstop>chkFromClipboard</tabstop>
-  <tabstop>m_createButton</tabstop>
+  <tabstop>createButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>

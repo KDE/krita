@@ -276,12 +276,3 @@ QWidget* KisToolMove::createOptionWidget()
     m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
     return m_optionsWidget;
 }
-
-
-QWidget* KisToolMove::optionWidget()
-{
-    return m_optionsWidget;
-}
-
-
-#include "kis_tool_move.moc"

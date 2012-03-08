@@ -77,6 +77,7 @@ bool KoTosContainer::loadText(const KoXmlElement &element, KoShapeLoadingContext
             // everything, so we have to use the KoTextShapeData object instead.
             KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(textShape->userData());
             Q_ASSERT(shapeData);
+            shapeData->loadStyle(element, context);
             bool loadOdf = shapeData->loadOdf(element, context);
             return loadOdf;
         }

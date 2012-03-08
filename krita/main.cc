@@ -59,7 +59,6 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     QPixmap pm(splash_screen_xpm);
     QSplashScreen *splash = new KSplashScreen(pm);
     app.setSplashScreen(splash);
-    splash->showMessage(" ");
 
     if (!app.start()) {
         return 1;

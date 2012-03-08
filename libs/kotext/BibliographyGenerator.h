@@ -20,6 +20,7 @@
 #define BIBLIOGRAPHYGENERATOR_H
 
 #include <KoBibliographyInfo.h>
+#include <KoOdfBibliographyConfiguration.h>
 #include "kotext_export.h"
 
 #include <QAbstractTextDocumentLayout>
@@ -28,6 +29,8 @@
 class KoInlineTextObjectManager;
 class KoTextDocumentLayout;
 class QTextFrame;
+class KoInlineCite;
+class KoOdfBibliographyConfiguration;
 
 class KOTEXT_EXPORT BibliographyGenerator : public QObject, public BibliographyGeneratorInterface
 {
@@ -36,14 +39,12 @@ public:
     explicit BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block, KoBibliographyInfo *bibInfo);
     virtual ~BibliographyGenerator();
 
+    static QMap<QString, BibliographyEntryTemplate> defaultBibliographyEntryTemplates();
 
 public slots:
     void generate();
 
 private:
-    //QString resolvePageNumber(const QTextBlock &headingBlock);
-    void generateEntry(QString bibType, QTextCursor &cursor, QTextBlock block, int &blockId);
-
     QTextDocument *m_document;
     QTextDocument *m_bibDocument;
     KoBibliographyInfo *m_bibInfo;

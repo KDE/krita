@@ -54,7 +54,7 @@ public:
     virtual int flags() const;
 
 protected:
-    virtual QWidget * createOptionWidget();
+    QWidget* createOptionWidget();
 
     virtual KisPainter::FillStyle fillStyle();
     KisPainter::StrokeStyle strokeStyle();

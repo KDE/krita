@@ -184,6 +184,46 @@ void KisCloneLayerTest::testRemoveSourceLayer()
     image->waitForDone();
 }
 
+void KisCloneLayerTest::testUndoingRemovingSource()
+{
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 128, 128, colorSpace, "clones test");
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisLayerSP cloneLayer1 = new KisCloneLayer(paintLayer1, image, "clone_of_p1", OPACITY_OPAQUE_U8);
+
+    image->addNode(paintLayer1);
+    image->addNode(cloneLayer1);
+
+    QCOMPARE(image->root()->lastChild(), KisNodeSP(cloneLayer1));
+    QCOMPARE(image->root()->lastChild()->name(), QString("clone_of_p1"));
+    QCOMPARE(image->root()->firstChild()->name(), QString("paint1"));
+
+    KUndo2Command *cmd1 = new KisImageLayerRemoveCommand(image, paintLayer1);
+    cmd1->redo();
+
+    QCOMPARE(image->root()->lastChild()->name(), QString("clone_of_p1"));
+    QVERIFY(image->root()->lastChild() != KisNodeSP(cloneLayer1));
+
+    KisNodeSP reincarnatedLayer = image->root()->lastChild();
+
+    KUndo2Command *cmd2 = new KisImageLayerRemoveCommand(image, reincarnatedLayer);
+    cmd2->redo();
+
+    cmd2->undo();
+    cmd1->undo();
+
+    cmd1->redo();
+
+    QCOMPARE(image->root()->lastChild()->name(), QString("clone_of_p1"));
+    QCOMPARE(image->root()->lastChild(), reincarnatedLayer);
+    QVERIFY(image->root()->lastChild() != KisNodeSP(cloneLayer1));
+
+    cmd2->redo();
+
+    delete cmd1;
+    delete cmd2;
+}
 
 struct CyclingTester {
     CyclingTester() {

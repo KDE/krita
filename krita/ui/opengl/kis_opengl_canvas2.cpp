@@ -403,6 +403,9 @@ bool KisOpenGLCanvas2::event(QEvent *e)
 
 void KisOpenGLCanvas2::enterEvent(QEvent* e)
 {
+    if(!hasFocus()) {
+        setFocus();
+    }
     QWidget::enterEvent(e);
 }
 

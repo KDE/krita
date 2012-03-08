@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2007 Montel Laurent <montel@kde.org>
+   Copyright 2011 Silvio Heinrich <plassy@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +25,11 @@
 #include <KJob>
 
 class PictureShape;
+class KoFilterEffect;
+class QComboBox;
+class QScrollArea;
+class CropWidget;
+struct PictureToolUI;
 
 class PictureTool : public KoToolBase
 {
@@ -52,11 +58,18 @@ protected:
     virtual QWidget *createOptionWidget();
 
 private slots:
+    void colorModeChanged(int cmbBoxIndex);
     void changeUrlPressed();
+    void cropRegionChanged(const QRectF& rect);
+    void cropEditFieldsChanged();
+    void aspectCheckBoxChanged(bool checked);
+    void fillButtonPressed();
+    void updateControlElements();
     void setImageData(KJob *job);
 
 private:
     PictureShape *m_pictureshape;
+    PictureToolUI *m_pictureToolUI;
 };
 
 #endif

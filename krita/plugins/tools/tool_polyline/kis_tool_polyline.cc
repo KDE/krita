@@ -45,6 +45,12 @@ KisToolPolyline::~KisToolPolyline()
 {
 }
 
+QWidget* KisToolPolyline::createOptionWidget()
+{
+    // there are no options there
+    return KisTool::createOptionWidget();
+}
+
 void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
 {
     if (image()) {

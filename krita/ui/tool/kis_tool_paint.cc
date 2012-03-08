@@ -39,6 +39,8 @@
 #include <kicon.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kactioncollection.h>
+#include <kaction.h>
 
 #include <KoShape.h>
 #include <KoShapeManager.h>
@@ -47,6 +49,7 @@
 #include <KoPointerEvent.h>
 #include <KoColor.h>
 #include <KoCanvasBase.h>
+#include <KoCanvasController.h>
 
 #include <opengl/kis_opengl.h>
 #include <kis_types.h>
@@ -56,25 +59,25 @@
 #include <kis_layer.h>
 #include <kis_view2.h>
 #include <kis_canvas2.h>
+#include <kis_cubic_curve.h>
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
-
 #include "kis_cursor.h"
 #include "widgets/kis_cmb_composite.h"
 #include "widgets/kis_slider_spin_box.h"
 #include "kis_canvas_resource_provider.h"
 #include <recorder/kis_recorded_paint_action.h>
-#include <kis_cubic_curve.h>
 #include "kis_color_picker_utils.h"
 #include <kis_paintop.h>
-#include <kaction.h>
+#include "kis_canvas_resource_provider.h"
 
-const int STEP = 20;
+const int STEP = 25;
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     : KisTool(canvas, cursor)
 {
+    m_specialHoverModifier = false;
     m_optionWidgetLayout = 0;
 
     m_opacity = OPACITY_OPAQUE_U8;
@@ -83,20 +86,40 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
 
     m_supportOutline = false;
 
+    KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
+
+    if (!collection->action("make_brush_color_lighter")) {
+        KAction *lighterColor = new KAction(i18n("Make brush color lighter"), collection);
+        lighterColor->setShortcut(Qt::Key_L);
+        collection->addAction("make_brush_color_lighter", lighterColor);
+    }
+
+    if (!collection->action("make_brush_color_darker")) {
+        KAction *darkerColor = new KAction(i18n("Make brush color darker"), collection);
+        darkerColor->setShortcut(Qt::Key_K);
+        collection->addAction("make_brush_color_darker", darkerColor);
+    }
+
+    addAction("make_brush_color_lighter", dynamic_cast<KAction*>(collection->action("make_brush_color_lighter")));
+    addAction("make_brush_color_darker", dynamic_cast<KAction*>(collection->action("make_brush_color_darker")));
+
+    if (!collection->action("increase_opacity")) {
+        KAction *increaseOpacity = new KAction(i18n("Increase opacity"), collection);
+        increaseOpacity->setShortcut(Qt::Key_O);
+        collection->addAction("increase_opacity", increaseOpacity);
+    }
+
+    if (!collection->action("decrease_opacity")) {
+        KAction *increaseOpacity = new KAction(i18n("Decrease opacity"), collection);
+        increaseOpacity->setShortcut(Qt::Key_I);
+        collection->addAction("decrease_opacity", increaseOpacity);
+    }
+
+    addAction("decrease_opacity", dynamic_cast<KAction*>(collection->action("decrease_opacity")));
+    addAction("increase_opacity", dynamic_cast<KAction*>(collection->action("increase_opacity")));
+
+
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
-
-    m_lighterColor = new KAction(i18n("Make Brush color lighter"), this);
-    m_lighterColor->setShortcut(Qt::Key_L);
-    connect(m_lighterColor, SIGNAL(activated()), SLOT(makeColorLighter()));
-    m_lighterColor->setEnabled(false);
-    addAction("make_brush_color_lighter", m_lighterColor);
-
-    m_darkerColor = new KAction(i18n("Make Brush color darker"), this);
-    m_darkerColor->setShortcut(Qt::Key_K);
-    connect(m_darkerColor, SIGNAL(activated()), SLOT(makeColorDarker()));
-    m_darkerColor->setEnabled(false);
-    addAction("make_brush_color_darker", m_darkerColor);
-
     connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), kiscanvas, SIGNAL(favoritePaletteCalled(const QPoint&)));
     connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->view()->resourceProvider(), SLOT(slotPainting()));
 }
@@ -123,8 +146,8 @@ void KisToolPaint::resourceChanged(int key, const QVariant& v)
         break;
     }
 
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateTabletPressureSamples()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()), Qt::UniqueConnection);
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateTabletPressureSamples()), Qt::UniqueConnection);
 
 }
 
@@ -132,15 +155,19 @@ void KisToolPaint::resourceChanged(int key, const QVariant& v)
 void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
-    resetCursorStyle();
-    m_lighterColor->setEnabled(true);
-    m_darkerColor->setEnabled(true);
+    connect(actions().value("make_brush_color_lighter"), SIGNAL(triggered()), SLOT(makeColorLighter()), Qt::UniqueConnection);
+    connect(actions().value("make_brush_color_darker"), SIGNAL(triggered()), SLOT(makeColorDarker()), Qt::UniqueConnection);
+    connect(actions().value("increase_opacity"), SIGNAL(triggered()), SLOT(increaseOpacity()), Qt::UniqueConnection);
+    connect(actions().value("decrease_opacity"), SIGNAL(triggered()), SLOT(decreaseOpacity()), Qt::UniqueConnection);
 }
 
 void KisToolPaint::deactivate()
 {
-    m_lighterColor->setEnabled(false);
-    m_darkerColor->setEnabled(false);
+    disconnect(actions().value("make_brush_color_lighter"), 0, this, 0);
+    disconnect(actions().value("make_brush_color_darker"), 0, this, 0);
+    disconnect(actions().value("increase_opacity"), 0, this, 0);
+    disconnect(actions().value("decrease_opacity"), 0, this, 0);
+    KisTool::deactivate();
 }
 
 
@@ -170,8 +197,7 @@ void KisToolPaint::mousePressEvent(KoPointerEvent *event)
         useCursor(KisCursor::crossCursor());
         canvas()->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, convertToPixelCoord(event->point));
     }
-    else if(mode() == KisTool::SECONDARY_HOVER_MODE &&
-            (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) &&
+    else if((event->button() == Qt::LeftButton || event->button() == Qt::RightButton) &&
             event->modifiers() & Qt::ControlModifier &&
             !specialModifierActive()) {
 
@@ -218,10 +244,8 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
         resetCursorStyle();
         event->accept();
     } else if(mode() == KisTool::SECONDARY_PAINT_MODE) {
-        if(event->modifiers() & Qt::ControlModifier) {
-            setMode(KisTool::SECONDARY_HOVER_MODE);
-        } else {
-            setMode(KisTool::HOVER_MODE);
+        setMode(KisTool::HOVER_MODE);
+        if(!(event->modifiers() == Qt::ControlModifier)) {
             resetCursorStyle();
         }
         event->accept();
@@ -232,24 +256,54 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisToolPaint::keyPressEvent(QKeyEvent *event)
 {
-    if ((event->key() == Qt::Key_Control) && (event->modifiers() == Qt::ControlModifier)) {
+    if (mode() == KisTool::HOVER_MODE &&
+        (event->key() == Qt::Key_Control || event->key() == Qt::Key_Shift) &&
+        (event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier))) {
+        useCursor(KisCursor::crossCursor());
+        m_specialHoverModifier = true;
+        event->accept();
+    } else if (mode() == KisTool::HOVER_MODE &&
+               event->key() == Qt::Key_Control) {
         useCursor(KisCursor::pickerCursor());
-        setMode(KisTool::SECONDARY_HOVER_MODE);
-    } else if ((event->key() == Qt::Key_Control || event->key() == Qt::Key_Shift)) {
-        if (event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) {
-            useCursor(KisCursor::crossCursor());
-        }
+        m_specialHoverModifier = true;
+        event->accept();
+    } else if (mode() == KisTool::SECONDARY_PAINT_MODE ||
+               mode() == KisTool::MIRROR_AXIS_SETUP_MODE) {
+
+        event->accept();
+    } else {
+        KisTool::keyPressEvent(event);
     }
-    KisTool::keyPressEvent(event);
 }
 
 void KisToolPaint::keyReleaseEvent(QKeyEvent* event)
 {
-    if (mode() != KisTool::PAINT_MODE){
-        resetCursorStyle();
-        setMode(KisTool::HOVER_MODE);
+    bool mirrorCondition =
+        (event->key() == Qt::Key_Control && event->modifiers() == Qt::ShiftModifier) ||
+        (event->key() == Qt::Key_Shift && event->modifiers() == Qt::ControlModifier);
+
+    bool pickerCondition =
+        event->key() == Qt::Key_Control;
+
+    if(mirrorCondition || pickerCondition) {
+        m_specialHoverModifier = false;
+        if(mode() != KisTool::SECONDARY_PAINT_MODE &&
+           mode() != KisTool::MIRROR_AXIS_SETUP_MODE) {
+            resetCursorStyle();
+            event->accept();
+        }
+    } else if (mode() == KisTool::SECONDARY_PAINT_MODE ||
+               mode() == KisTool::MIRROR_AXIS_SETUP_MODE) {
+
+        event->accept();
+    } else {
+        KisTool::keyReleaseEvent(event);
     }
-    KisTool::keyReleaseEvent(event);
+}
+
+bool KisToolPaint::specialHoverModeActive() const
+{
+    return mode() == KisTool::HOVER_MODE && m_specialHoverModifier;
 }
 
 void KisToolPaint::pickColor(const QPointF &documentPixel,
@@ -439,6 +493,7 @@ void KisToolPaint::transformColor(int step)
     canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, color);
 }
 
+
 void KisToolPaint::makeColorDarker()
 {
     transformColor(-STEP);
@@ -447,6 +502,26 @@ void KisToolPaint::makeColorDarker()
 void KisToolPaint::makeColorLighter()
 {
     transformColor(STEP);
+}
+
+
+void KisToolPaint::stepAlpha(float step)
+{
+    qreal alpha = canvas()->resourceManager()->resource(KisCanvasResourceProvider::Opacity).toDouble();
+    alpha += step;
+    alpha = qBound(0.0, alpha, 1.0);
+    canvas()->resourceManager ()->setResource(KisCanvasResourceProvider::Opacity, alpha);
+}
+
+
+void KisToolPaint::increaseOpacity()
+{
+    stepAlpha(0.1);
+}
+
+void KisToolPaint::decreaseOpacity()
+{
+    stepAlpha(-0.1);
 }
 
 

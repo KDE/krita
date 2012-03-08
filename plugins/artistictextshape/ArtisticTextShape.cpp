@@ -977,7 +977,7 @@ void ArtisticTextShape::finishTextUpdate()
 
 bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
 {
-    context.shapeWriter().startElement("text");
+    context.shapeWriter().startElement("text", false);
     context.shapeWriter().addAttribute("id", context.getID(this));
 
     SvgStyleWriter::saveSvgStyle(this, context);
@@ -1001,16 +1001,9 @@ bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
 
     // check if we are set on a path
     if (layout() == ArtisticTextShape::Straight) {
-        QTransform m = transformation();
-        if (m.type() == QTransform::TxTranslate) {
-            const QPointF pos = position();
-            context.shapeWriter().addAttributePt("x", pos.x() + anchorOffset);
-            context.shapeWriter().addAttributePt("y", pos.y() + baselineOffset());
-        } else {
-            context.shapeWriter().addAttributePt("x", anchorOffset);
-            context.shapeWriter().addAttributePt("y", baselineOffset());
-            context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
-        }
+        context.shapeWriter().addAttributePt("x", anchorOffset);
+        context.shapeWriter().addAttributePt("y", baselineOffset());
+        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
         foreach(const ArtisticTextRange &range, formattedText) {
             saveSvgTextRange(range, context, !hasSingleRange, baselineOffset());
         }
@@ -1053,7 +1046,7 @@ void ArtisticTextShape::saveSvgFont(const QFont &font, SvgSavingContext &context
 
 void ArtisticTextShape::saveSvgTextRange(const ArtisticTextRange &range, SvgSavingContext &context, bool saveRangeFont, qreal baselineOffset)
 {
-    context.shapeWriter().startElement("tspan");
+    context.shapeWriter().startElement("tspan", false);
     if (range.hasXOffsets()) {
         const char *attributeName = (range.xOffsetType() == ArtisticTextRange::AbsoluteOffset ? "x" : "dx");
         QString attributeValue;

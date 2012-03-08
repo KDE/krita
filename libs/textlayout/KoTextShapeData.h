@@ -113,6 +113,12 @@ public:
         saveOdf(context, 0, from, to);
     }
 
+    // reimplemented
+    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    // reimplemented
+    virtual void saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
+
     /**
      * Set the page direction.
      * The page direction will determine behavior on the insertion of new text and those

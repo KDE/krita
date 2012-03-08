@@ -23,7 +23,6 @@ public:
 
 // Uncomment if you have a configuration widget
 //     QWidget* createOptionWidget();
-//     virtual QWidget* optionWidget();
 
 public slots:
     virtual void activate(bool temp = false);

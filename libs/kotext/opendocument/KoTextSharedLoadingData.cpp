@@ -249,6 +249,7 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
     }
 
     // second pass; resolve all the 'next-style's and parent-style's.
+    // TODO iterate via values
     foreach (KoParagraphStyle *style, nextStyles.keys()) {
         KoParagraphStyle *next = d->namedParagraphStyles.value(nextStyles.value(style));
         if (next && next->styleId() >= 0)

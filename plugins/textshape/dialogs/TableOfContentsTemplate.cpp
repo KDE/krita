@@ -22,6 +22,7 @@
 #include <KoTableOfContentsGeneratorInfo.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
+#include <KLocale>
 
 TableOfContentsTemplate::TableOfContentsTemplate(KoStyleManager *manager):
     m_manager(manager)
@@ -36,7 +37,7 @@ QList<KoTableOfContentsGeneratorInfo *> TableOfContentsTemplate::templates()
 
     QList<KoTableOfContentsGeneratorInfo *> predefinedTemplates;
     KoTableOfContentsGeneratorInfo *firstTemplate = new KoTableOfContentsGeneratorInfo();
-    firstTemplate->m_indexTitleTemplate.text = "Table Of Contents";
+    firstTemplate->m_indexTitleTemplate.text = i18n("Table Of Contents");
 
     firstTemplate->m_indexTitleTemplate.styleId = m_manager->defaultTableOfcontentsTitleStyle()->styleId();
     firstTemplate->m_indexTitleTemplate.styleName = m_manager->defaultTableOfcontentsTitleStyle()->name();
@@ -47,7 +48,7 @@ QList<KoTableOfContentsGeneratorInfo *> TableOfContentsTemplate::templates()
     }
 
     KoTableOfContentsGeneratorInfo *secondTemplate = new KoTableOfContentsGeneratorInfo();
-    secondTemplate->m_indexTitleTemplate.text = "Contents";
+    secondTemplate->m_indexTitleTemplate.text = i18n("Contents");
 
     secondTemplate->m_indexTitleTemplate.styleId = m_manager->defaultTableOfcontentsTitleStyle()->styleId();
     secondTemplate->m_indexTitleTemplate.styleName = m_manager->defaultTableOfcontentsTitleStyle()->name();

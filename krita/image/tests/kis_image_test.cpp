@@ -34,6 +34,7 @@
 #include "kis_adjustment_layer.h"
 #include "kis_selection.h"
 #include <kis_debug.h>
+#include <kis_layer_composition.h>
 
 #define IMAGE_WIDTH 128
 #define IMAGE_HEIGHT 128
@@ -131,6 +132,43 @@ void KisImageTest::testGlobalSelection()
     QCOMPARE(image->canReselectGlobalSelection(), false);
     QCOMPARE(image->root()->childCount(), 1U);
 }
+
+void KisImageTest::testLayerComposition()
+{
+    KisImageSP image = new KisImage(0, IMAGE_WIDTH, IMAGE_WIDTH, 0, "layer tests");
+    QVERIFY(image->rootLayer() != 0);
+    QVERIFY(image->rootLayer()->firstChild() == 0);
+
+    KisLayerSP layer = new KisPaintLayer(image, "layer 1", OPACITY_OPAQUE_U8);
+    image->addNode(layer);
+    KisLayerSP layer2 = new KisPaintLayer(image, "layer 2", OPACITY_OPAQUE_U8);
+    image->addNode(layer2);
+
+    QVERIFY(layer->visible());
+    QVERIFY(layer2->visible());
+
+    KisLayerComposition comp(image, "comp 1");
+    comp.store();
+
+    layer2->setVisible(false);
+
+    QVERIFY(layer->visible());
+    QVERIFY(!layer2->visible());
+
+    KisLayerComposition comp2(image, "comp 2");
+    comp2.store();
+
+    comp.apply();
+
+    QVERIFY(layer->visible());
+    QVERIFY(layer2->visible());
+
+    comp2.apply();
+
+    QVERIFY(layer->visible());
+    QVERIFY(!layer2->visible());
+}
+
 
 QTEST_KDEMAIN(KisImageTest, NoGUI)
 #include "kis_image_test.moc"

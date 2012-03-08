@@ -202,6 +202,7 @@ set(kritaimage_LIB_SRCS
    kis_processing_applicator.cpp
    krita_utils.cpp
    kis_outline_generator.cpp
+   kis_layer_composition.cpp
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_filter.cc
    metadata/kis_meta_data_filter_p.cc

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Composition Docker
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritacompositiondocker
+X-Krita-Version=5

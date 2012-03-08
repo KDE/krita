@@ -76,6 +76,7 @@ private:
 
     KisNode* loadSelectionMask(KisImageWSP image, const KoXmlElement& elem);
 
+    void loadCompositions(const KoXmlElement& elem, KisImageWSP image);
 
 private:
 

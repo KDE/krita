@@ -97,8 +97,12 @@ public:
     virtual KisImagePipeBrush* clone() const;
 
     virtual QString defaultFileExtension() const;
-    virtual void setAngle(qreal _angle);
-    virtual void setScale(qreal _scale);
+    void setAngle(qreal _angle);
+    void setScale(qreal _scale);
+    void setSpacing(double _spacing);
+
+    qint32 maskWidth(double scale, double angle) const;
+    qint32 maskHeight(double scale, double angle) const;
 
     /**
      *  @return the next mask in the pipe.
@@ -116,8 +120,10 @@ protected:
     KisImagePipeBrush(const KisImagePipeBrush& rhs);
 
 private:
-
-    bool init();
+    friend class KisImagePipeBrushTest;
+    KisGbrBrush* currentBrush() const;
+    QList<KisGbrBrush*> testingGetBrushes() const; // for testing purposes only
+    bool initFromData(const QByteArray &data);
     void setParasiteString(const QString& parasite);
     void selectNextBrush(const KisPaintInformation& info) const;
     void sanitize(); // Force some default values in case the ones read in don't make sense

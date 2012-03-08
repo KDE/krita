@@ -77,8 +77,6 @@ public:
         m_add=0;
         m_remove=0;
         m_defaultTemplate=0;
-        m_tempFile.setSuffix(".png");
-        m_tempFile.open();
     }
     ~KoTemplateCreateDiaPrivate() {
         delete m_tree;
@@ -96,8 +94,6 @@ public:
     QCheckBox *m_defaultTemplate;
     KComponentData m_componentData;
     bool m_changed;
-    /// Temp file for remote picture file
-    KTemporaryFile m_tempFile;
 };
 
 
@@ -400,7 +396,6 @@ void KoTemplateCreateDia::slotSelect() {
         }
         return;
     }
-    // ### TODO: do a better remote loading without having to have d->m_tempFile
     QString path = KIconLoader::global()->iconPath(name, KIconLoader::Desktop);
     d->m_customFile = path;
     d->m_customPixmap=QPixmap();

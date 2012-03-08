@@ -24,7 +24,7 @@
 
 #include <kdialog.h>
 #include "komain_export.h"
-//Added by qt3to4:
+
 #include <QPixmap>
 #include <QByteArray>
 

@@ -425,7 +425,7 @@ KoStoreDevice* KoFilterChain::storageHelper(const QString& file, const QString& 
         return storageCleanupHelper(storage);
 
     // Seems that we got a valid storage, at least. Even if we can't open
-    // the stream the "user" asked us to open, we nontheless change the
+    // the stream the "user" asked us to open, we nonetheless change the
     // IOState from File to Storage, as it might be possible to open other streams
     if (mode == KoStore::Read)
         m_inputQueried = Storage;

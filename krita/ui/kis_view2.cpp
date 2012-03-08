@@ -923,22 +923,26 @@ void KisView2::slotCreateTemplate()
     int height = 60;
     QPixmap pix = m_d->doc->generatePreview(QSize(width, height));
 
-    KTemporaryFile tempFile;
-    tempFile.setSuffix(".kra");
+    KTemporaryFile *tempFile = new KTemporaryFile();
+    tempFile->setSuffix(".kra");
 
     //Check that creation of temp file was successful
-    if (!tempFile.open()) {
+    if (!tempFile->open()) {
         qWarning("Creation of temporary file to store template failed.");
         return;
     }
+    QString fileName = tempFile->fileName();
+    tempFile->close(); // need to close on Windows before we can open it again to save
+    delete tempFile; // now the file has disappeared and we can create a new file with the generated name
 
-    m_d->doc->saveNativeFormat(tempFile.fileName());
-
+    m_d->doc->saveNativeFormat(fileName);
     KoTemplateCreateDia::createTemplate("krita_template", KisFactory2::componentData(),
-                                        tempFile.fileName(), pix, this);
+                                        fileName, pix, this);
 
     KisFactory2::componentData().dirs()->addResourceType("krita_template", "data", "krita/templates/");
 
+    QDir d;
+    d.remove(fileName);
 }
 
 void KisView2::slotDocumentSaved()

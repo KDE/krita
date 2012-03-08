@@ -22,9 +22,9 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <migration/keximigrate.h>
 #include <migration/keximigrate_p.h>
-#include <tables/part/Doc.h>
-#include <tables/Map.h>
-#include <tables/Sheet.h>
+#include <sheets/part/Doc.h>
+#include <sheets/Map.h>
+#include <sheets/Sheet.h>
 #include <KoStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>

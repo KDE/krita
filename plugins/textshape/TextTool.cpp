@@ -805,6 +805,7 @@ void TextTool::setShapeData(KoTextShapeData *data)
         KoTextDocument document(m_textShapeData->document());
         foreach (QAction *action, document.inlineTextObjectManager()->createInsertVariableActions(canvas())) {
             m_variableMenu->addAction(action);
+            connect(action, SIGNAL(triggered()), this, SLOT(returnFocusToCanvas()));
         }
 
         connect(m_textEditor.data(), SIGNAL(textFormatChanged()), this, SLOT(updateActions()));
@@ -1595,7 +1596,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));
     connect(stw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
-    // Connect to/with simple table widget (docker)
+    // Connect to/with simple insert widget (docker)
     connect(siw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(siw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
 

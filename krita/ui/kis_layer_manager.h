@@ -142,6 +142,7 @@ private:
     KAction *m_flattenLayer;
     KAction *m_rasterizeLayer;
     KAction *m_duplicateLayer;
+    KAction *m_addPaintLayer;
     KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;
 };

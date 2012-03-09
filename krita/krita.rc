@@ -89,6 +89,7 @@
   	<Action name="copy_selection_to_new_layer"/>
     <Action name="create_layer_from_mask"/>
     <Action name="duplicatelayer"/>
+    <Action name="add_new_paint_layer"/>
   </Menu>
   <Action name="resizelayertoowner"/>
   <Separator/>

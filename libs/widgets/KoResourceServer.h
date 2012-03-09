@@ -147,8 +147,6 @@ public:
                             resource->setName( fname );
                         }
                         m_resourcesByName[resource->name()] = resource;
-                        m_resources.append(resource);
-
                         notifyResourceAdded(resource);
                     }
                     else {
@@ -158,6 +156,13 @@ public:
                 m_loadLock.unlock();
             }
         }
+
+        QMap<QString, T*> sortedNames;
+        foreach(QString name, m_resourcesByName.keys()) {
+            sortedNames.insert(name.toLower(), m_resourcesByName[name]);
+        }
+        m_resources = sortedNames.values();
+
         kDebug(30009) << "done loading  resources for type " << type();
     }
 

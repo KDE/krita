@@ -206,6 +206,10 @@ public slots:
 
     void setStyle(KoCharacterStyle *style);
 
+    void mergeAutoStyle(QTextCharFormat deltaCharFormat);
+
+    void mergeAutoStyle(QTextCharFormat deltaCharFormat, QTextBlockFormat deltaBlockFormat);
+
     /**
      * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
      * @param inliner the object to insert.

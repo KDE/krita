@@ -30,10 +30,10 @@
 #include <QTextBlock>
 #include <QTimer>
 
-ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, QTextCursor *cursor, QWidget* parent)
+ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *editor, QWidget* parent)
         : KDialog(parent),
         m_tool(tool),
-        m_cursor(cursor)
+        m_editor(editor)
 {
     setCaption(i18n("Paragraph Format"));
     setModal(true);
@@ -55,8 +55,8 @@ ParagraphSettingsDialog::~ParagraphSettingsDialog()
 
 void ParagraphSettingsDialog::initTabs()
 {
-    KoParagraphStyle *style = KoParagraphStyle::fromBlock(m_cursor->block());
-    m_paragraphGeneral->setStyle(style, KoList::level(m_cursor->block()));
+    KoParagraphStyle *style = KoParagraphStyle::fromBlock(m_editor->block());
+    m_paragraphGeneral->setStyle(style, KoList::level(m_editor->block()));
 }
 
 void ParagraphSettingsDialog::slotOk()
@@ -67,23 +67,26 @@ void ParagraphSettingsDialog::slotOk()
 
 void ParagraphSettingsDialog::slotApply()
 {
-    emit startMacro(i18n("Paragraph Settings"));
+    m_editor->beginEditBlock(i18n("Paragraph Settings"));
     KoParagraphStyle chosenStyle;
     m_paragraphGeneral->save(&chosenStyle);
+    QTextCharFormat cformat;
     QTextBlockFormat format;
+    chosenStyle.KoCharacterStyle::applyStyle(cformat);
     chosenStyle.applyStyle(format);
-    m_cursor->mergeBlockFormat(format);
+
+    m_editor->mergeAutoStyle(cformat, format);
     if (chosenStyle.listStyle()) {
         KoTextEditor::ChangeListFlags flags(KoTextEditor::AutoListStyle | KoTextEditor::DontUnsetIfSame);
         m_tool->textEditor()->setListProperties(chosenStyle.listStyle()->levelProperties(chosenStyle.listStyle()->listLevels().first()),
                                                 flags);
     } else {
-        QTextList *list = m_cursor->block().textList();
+        QTextList *list = m_editor->block().textList();
         if (list) { // then remove it.
-            list->remove(m_cursor->block());
+            list->remove(m_editor->block());
         }
     }
-    emit stopMacro();
+    m_editor->endEditBlock();
 }
 
 void ParagraphSettingsDialog::setUnit(const KoUnit &unit)

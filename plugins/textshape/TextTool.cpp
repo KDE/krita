@@ -1848,13 +1848,12 @@ void TextTool::splitTableCells()
 
 void TextTool::formatParagraph()
 {
-    ParagraphSettingsDialog *dia = new ParagraphSettingsDialog(this, m_textEditor.data()->cursor());//TODO  check this with KoTextEditor
+    ParagraphSettingsDialog *dia = new ParagraphSettingsDialog(this, m_textEditor.data());
     dia->setUnit(canvas()->unit());
-    connect(dia, SIGNAL(startMacro(const QString&)), this, SLOT(startMacro(const QString&)));//TODO
-    connect(dia, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
 
     dia->exec();
     delete dia;
+    returnFocusToCanvas();
 }
 
 void TextTool::testSlot(bool on)
@@ -1997,11 +1996,10 @@ void TextTool::insertString(const QString& string)
 
 void TextTool::selectFont()
 {
-    FontDia *fontDlg = new FontDia(m_textEditor.data()->cursor());//TODO check this with KoTextEditor
-    connect(fontDlg, SIGNAL(startMacro(const QString &)), this, SLOT(startMacro(const QString &)));
-    connect(fontDlg, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
+    FontDia *fontDlg = new FontDia(m_textEditor.data());
     fontDlg->exec();
     delete fontDlg;
+    returnFocusToCanvas();
 }
 
 void TextTool::shapeAddedToCanvas()

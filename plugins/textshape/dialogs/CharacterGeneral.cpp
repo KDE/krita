@@ -29,14 +29,14 @@
 
 #include "kdebug.h"
 
-CharacterGeneral::CharacterGeneral(QWidget *parent, bool uniqueFormat)
+CharacterGeneral::CharacterGeneral(QWidget *parent)
         : QWidget(parent),
         m_blockSignals(false),
         m_style(0)
 {
     widget.setupUi(this);
 
-    m_characterHighlighting = new CharacterHighlighting(uniqueFormat, this);
+    m_characterHighlighting = new CharacterHighlighting(true, this);
     connect(m_characterHighlighting, SIGNAL(underlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)), this, SLOT(slotUnderlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)));
     connect(m_characterHighlighting, SIGNAL(strikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)), this, SLOT(slotStrikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)));
     connect(m_characterHighlighting, SIGNAL(capitalizationChanged(QFont::Capitalization)), this, SLOT(slotCapitalizationChanged(QFont::Capitalization)));
@@ -44,7 +44,7 @@ CharacterGeneral::CharacterGeneral(QWidget *parent, bool uniqueFormat)
     connect(m_characterHighlighting, SIGNAL(backgroundColorChanged(QColor)), this, SLOT(slotBackgroundColorChanged(QColor)));
     connect(m_characterHighlighting, SIGNAL(textColorChanged(QColor)), this, SLOT(slotTextColorChanged(QColor)));
 
-    m_languageTab = new LanguageTab(uniqueFormat, this);
+    m_languageTab = new LanguageTab(true, this);
 
     widget.tabs->addTab(m_characterHighlighting, i18n("Font"));
 

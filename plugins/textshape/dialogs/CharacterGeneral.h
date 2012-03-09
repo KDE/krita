@@ -33,7 +33,7 @@ class CharacterGeneral : public QWidget
 {
     Q_OBJECT
 public:
-    explicit CharacterGeneral(QWidget *parent = 0, bool uniqueFormat = true);
+    explicit CharacterGeneral(QWidget *parent = 0);
 
     void setStyle(KoCharacterStyle *style);
     void hideStyleName(bool hide);

@@ -30,7 +30,6 @@
 #include <QString>
 #include <QTime>
 #include <QTimer>
-#include <QPixmap>
 #include <QApplication>
 #include <QMenu>
 

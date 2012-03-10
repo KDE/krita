@@ -33,7 +33,6 @@
 #include <QImage>
 #include <QMap>
 #include <QPainter>
-#include <QPixmap>
 #include <QRect>
 #include <QString>
 

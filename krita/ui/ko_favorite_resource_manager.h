@@ -24,7 +24,6 @@
 #include "kis_color_data_list.h"
 #include <QQueue>
 #include <QList>
-#include <QPixmap>
 #include "KoResourceServerObserver.h"
 
 class QString;

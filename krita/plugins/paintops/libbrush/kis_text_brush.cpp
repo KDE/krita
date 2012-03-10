@@ -23,7 +23,6 @@
 #include <QDomElement>
 #include <QFontMetrics>
 #include <QPainter>
-#include <QPixmap>
 #include "kis_gbr_brush.h"
 
 KisTextBrush::KisTextBrush()
@@ -114,22 +113,23 @@ void KisTextBrush::updateBrush()
 QImage KisTextBrush::renderChar(const QString& text)
 {
     QFontMetrics metric(m_font);
-    int w = metric.width(text);
-    int h = metric.height();
+    QRect rect = metric.boundingRect(text);
 
-    // don't crash, if there is no text
-    if (w==0) w=1;
-    if (h==0) h=1;
+    if (rect.isEmpty()) {
+        rect = QRect(0, 0, 1, 1); // paint at least something
+    }
 
-    QPixmap px(w, h);
+    QRect paintingRect = rect.translated(-rect.x(), -rect.y());
+
+    QImage renderedChar(paintingRect.size(), QImage::Format_ARGB32);
     QPainter p;
-    p.begin(&px);
+    p.begin(&renderedChar);
     p.setFont(m_font);
-    p.fillRect(0, 0, w, h, Qt::white);
+    p.fillRect(paintingRect, Qt::white);
     p.setPen(Qt::black);
-    p.drawText(0, metric.ascent(), text);
+    p.drawText(-rect.x(), -rect.y(), text);
     p.end();
-    return px.toImage();
+    return renderedChar;
 }
 
 

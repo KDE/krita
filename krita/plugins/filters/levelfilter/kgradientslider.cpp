@@ -28,7 +28,6 @@
 
 // Qt includes.
 
-#include <QPixmap>
 #include <QPainter>
 #include <QPoint>
 #include <QPen>
@@ -60,7 +59,6 @@ void KGradientSlider::paintEvent(QPaintEvent *)
 
     const int gradientHeight = (int)round((double)wHeight / 7.0 * 2);
 
-    // A QPixmap is used for enable the double buffering.
     QPainter p1(this);
 
     // Draw first gradient

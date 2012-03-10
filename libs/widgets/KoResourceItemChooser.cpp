@@ -25,14 +25,21 @@
 #include <QGridLayout>
 #include <QButtonGroup>
 #include <QPushButton>
-#include <klineedit.h>
 #include <QHeaderView>
 #include <QAbstractProxyModel>
+#include <QLabel>
+#include <QScrollArea>
+#include <QImage>
+#include <QPixmap>
+#include <QPainter>
+#include <QToolButton>
 
 #include <kfiledialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <klineedit.h>
+
 
 #ifdef GHNS
 #include <attica/version.h>
@@ -56,12 +63,16 @@ public:
     KLineEdit *tagSearchLineEdit, *tagOpLineEdit;
     QString knsrcFile;
     QCompleter *tagCompleter;
+    QScrollArea *previewScroller;
+    QLabel *previewLabel;
 };
 
-KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent )
+KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent )
     : QWidget( parent ), d( new Private() )
 {
     Q_ASSERT(resourceAdapter);
+    QWidget *page = new QWidget(this);
+
     d->model = new KoResourceModel(resourceAdapter, this);
     d->view = new KoResourceItemView(this);
     d->view->setModel(d->model);
@@ -69,6 +80,18 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->view->setSelectionMode( QAbstractItemView::SingleSelection );
     connect( d->view, SIGNAL(clicked( const QModelIndex & ) ),
              this, SLOT(activated ( const QModelIndex & ) ) );
+
+    d->previewScroller = new QScrollArea(this);
+    d->previewScroller->setWidgetResizable(true);
+    d->previewScroller->setBackgroundRole(QPalette::Dark);
+    d->previewLabel = new QLabel(this);
+    d->previewScroller->setWidget(d->previewLabel);
+    d->previewScroller->setVisible(false);
+    d->previewScroller->setAlignment(Qt::AlignCenter);
+
+    QHBoxLayout *chooserLayout = new QHBoxLayout(page);
+    chooserLayout->addWidget(d->view);
+    chooserLayout->addWidget(d->previewScroller);
 
     d->buttonGroup = new QButtonGroup( this );
     d->buttonGroup->setExclusive( false );
@@ -84,7 +107,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
 
     QVBoxLayout* layout = new QVBoxLayout( this );
     layout->addWidget( d->tagSearchLineEdit );
-    layout->addWidget( d->view );
+    layout->addWidget(page);
 
     QGridLayout* buttonLayout = new QGridLayout;
 
@@ -117,7 +140,6 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     button->hide();
     d->buttonGroup->addButton( button, Button_GhnsUpload);
     buttonLayout->addWidget( button, 0, 4 );
-
 
     connect( d->buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ));
 
@@ -299,6 +321,11 @@ void KoResourceItemChooser::setCurrentResource(KoResource* resource)
     setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(resource));
 }
 
+void KoResourceItemChooser::showPreview(bool show)
+{
+    d->previewScroller->setVisible(show);
+}
+
 void KoResourceItemChooser::setCurrentItem(int row, int column)
 {
     QModelIndex index = d->model->index(row, column);
@@ -321,7 +348,8 @@ void KoResourceItemChooser::activated(const QModelIndex &/*index*/)
         emit resourceSelected( resource );
         setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(resource));
     }
-
+    QImage image = resource->image();
+    d->previewLabel->setPixmap(QPixmap::fromImage(image));
     updateButtonState();
 }
 

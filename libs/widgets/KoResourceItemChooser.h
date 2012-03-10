@@ -83,6 +83,9 @@ public:
 
     void showButtons( bool show );
 
+    /// shows the aside preview with the resource's image
+    void showPreview(bool show);
+
     void showGetHotNewStuff( bool showDownload, bool showUpload);
     /// sets the visibilty of tagging KlineEdits.
     void showTaggingBar( bool showSearchBar, bool showOpBar );

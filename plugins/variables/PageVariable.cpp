@@ -70,7 +70,8 @@ void PageVariable::propertyChanged(Property property, const QVariant &value)
     switch (m_type) {
     case PageCount:
         if (property == KoInlineObject::PageCount) {
-            QString newValue = value.toInt() >= 0 ? m_numberFormat.formattedNumber(value.toInt()) : QString();
+            KoOdfNumberDefinition defaultDefinition; // FIXME Should fetch from pagestyle
+            QString newValue = value.toInt() >= 0 ? m_numberFormat.formattedNumber(value.toInt(), &defaultDefinition) : QString();
             setValue(newValue);
         }
         break;

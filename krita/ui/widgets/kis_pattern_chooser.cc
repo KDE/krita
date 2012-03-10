@@ -34,10 +34,9 @@
 #include "kis_pattern.h"
 #include "kis_resource_server_provider.h"
 
-KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name)
+KisPatternChooser::KisPatternChooser(QWidget *parent)
         : QFrame(parent)
 {
-    setObjectName(name);
     m_lbName = new QLabel(this);
 
     KoResourceServer<KisPattern> * rserver = KisResourceServerProvider::instance()->patternServer();
@@ -48,7 +47,6 @@ KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name)
     m_itemChooser->setKnsrcFile(knsrcFile);
     m_itemChooser->showGetHotNewStuff(true, true);
     m_itemChooser->showTaggingBar(true, true);
-    m_itemChooser->setObjectName(name);
     m_itemChooser->setFixedSize(500, 300);
     m_itemChooser->setRowHeight(30);
 

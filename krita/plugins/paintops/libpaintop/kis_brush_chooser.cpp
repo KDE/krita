@@ -214,11 +214,13 @@ void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
     KoResource * resource = static_cast<KoResource *>(m_itemChooser->currentResource());
 
     if (resource) {
-        KisGbrBrush* brush = static_cast<KisGbrBrush*>(resource);
-        brush->setUseColorAsMask(useColorAsMask);
-        slotActivatedBrush(brush);
+        KisGbrBrush* brush = dynamic_cast<KisGbrBrush*>(resource);
+        if (brush) {
+            brush->setUseColorAsMask(useColorAsMask);
+            slotActivatedBrush(brush);
 
-        emit sigBrushChanged();
+            emit sigBrushChanged();
+        }
     }
 }
 

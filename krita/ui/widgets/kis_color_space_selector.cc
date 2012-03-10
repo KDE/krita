@@ -184,8 +184,12 @@ void KisColorSpaceSelector::installProfile()
 
     foreach (QString profileName, profileNames) {
         KUrl file(profileName);
-        KIO::copy(file, saveLocation);
+        if (!QFile::copy(profileName, saveLocation + file.fileName())) {
+            kWarning() << "Could not install profile!";
+            return;
+        }
         iccEngine->addProfile(saveLocation + file.fileName());
+
     }
 
     fillCmbProfiles();

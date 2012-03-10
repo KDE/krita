@@ -84,7 +84,7 @@
           <item>
            <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Distance to paragraph :</string>
+             <string>Distance to paragraph:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -94,7 +94,7 @@
           <item>
            <widget class="QLabel" name="label_3">
             <property name="text">
-             <string>Number of Charachters :</string>
+             <string>Number of characters:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -104,7 +104,7 @@
           <item>
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Number of lines to expand :</string>
+             <string>Number of lines it covers:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

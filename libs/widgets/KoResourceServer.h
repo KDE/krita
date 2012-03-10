@@ -30,7 +30,7 @@
 #include <QStringList>
 #include <QList>
 #include <QFileInfo>
-
+#include <QMultiMap>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
@@ -129,7 +129,6 @@ public:
 
             QString fname = QFileInfo(front).fileName();
 
-            //kDebug(30009) << "Loading " << fname << " of type " << type();
             // XXX: Don't load resources with the same filename. Actually, we should look inside
             //      the resource to find out whether they are really the same, but for now this
             //      will prevent the same brush etc. showing up twice.
@@ -140,11 +139,13 @@ public:
                 foreach(T* resource, resources) {
                     Q_CHECK_PTR(resource);
                     if (resource->load() && resource->valid()) {
-
                         m_resourcesByFilename[resource->shortFilename()] = resource;
 
-                        if ( resource->name().isNull() ) {
+                        if ( resource->name().isEmpty() ) {
                             resource->setName( fname );
+                        }
+                        if (m_resourcesByName.contains(resource->name())) {
+                            resource->setName(resource->name() + "(" + resource->shortFilename() + ")");
                         }
                         m_resourcesByName[resource->name()] = resource;
                         notifyResourceAdded(resource);

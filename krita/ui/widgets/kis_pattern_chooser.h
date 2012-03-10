@@ -20,10 +20,11 @@
 
 #include <QFrame>
 #include <KoResourceItemChooser.h>
+#include <krita_export.h>
 
 class QLabel;
 
-class KisPatternChooser : public QFrame
+class KRITAUI_EXPORT KisPatternChooser : public QFrame
 {
 
     Q_OBJECT
@@ -37,6 +38,9 @@ public:
     KoResource *currentResource();
 
     void setCurrentItem(int row, int column);
+
+    /// determines whether the preview right or below the splitter
+    void setPreviewOrientation(Qt::Orientation orientation);
 
 signals:
     /// Emitted when a resource was selected

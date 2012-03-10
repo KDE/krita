@@ -43,12 +43,11 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisPattern>(rserver);
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->showPreview(true);
+    m_itemChooser->setPreviewOrientation(Qt::Horizontal);
     QString knsrcFile = "kritapatterns.knsrc";
     m_itemChooser->setKnsrcFile(knsrcFile);
     m_itemChooser->showGetHotNewStuff(true, true);
     m_itemChooser->showTaggingBar(true, true);
-    m_itemChooser->setFixedSize(500, 300);
-    m_itemChooser->setRowHeight(30);
 
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
             this, SLOT(update(KoResource *)));
@@ -79,6 +78,11 @@ void KisPatternChooser::setCurrentItem(int row, int column)
     m_itemChooser->setCurrentItem(row, column);
     if (currentResource())
         update(currentResource());
+}
+
+void KisPatternChooser::setPreviewOrientation(Qt::Orientation orientation)
+{
+    m_itemChooser->setPreviewOrientation(orientation);
 }
 
 void KisPatternChooser::update(KoResource * resource)

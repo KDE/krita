@@ -33,6 +33,7 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QToolButton>
+#include <QSplitter>
 
 #include <kfiledialog.h>
 #include <kiconloader.h>
@@ -65,13 +66,14 @@ public:
     QCompleter *tagCompleter;
     QScrollArea *previewScroller;
     QLabel *previewLabel;
+    QSplitter *splitter;
 };
 
 KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent )
     : QWidget( parent ), d( new Private() )
 {
     Q_ASSERT(resourceAdapter);
-    QWidget *page = new QWidget(this);
+    d->splitter = new QSplitter(this);
 
     d->model = new KoResourceModel(resourceAdapter, this);
     d->view = new KoResourceItemView(this);
@@ -84,14 +86,13 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->previewScroller = new QScrollArea(this);
     d->previewScroller->setWidgetResizable(true);
     d->previewScroller->setBackgroundRole(QPalette::Dark);
-    d->previewLabel = new QLabel(this);
-    d->previewScroller->setWidget(d->previewLabel);
     d->previewScroller->setVisible(false);
     d->previewScroller->setAlignment(Qt::AlignCenter);
+    d->previewLabel = new QLabel(this);
+    d->previewScroller->setWidget(d->previewLabel);
 
-    QHBoxLayout *chooserLayout = new QHBoxLayout(page);
-    chooserLayout->addWidget(d->view);
-    chooserLayout->addWidget(d->previewScroller);
+    d->splitter->addWidget(d->view);
+    d->splitter->addWidget(d->previewScroller);
 
     d->buttonGroup = new QButtonGroup( this );
     d->buttonGroup->setExclusive( false );
@@ -107,7 +108,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
 
     QVBoxLayout* layout = new QVBoxLayout( this );
     layout->addWidget( d->tagSearchLineEdit );
-    layout->addWidget(page);
+    layout->addWidget( d->splitter );
 
     QGridLayout* buttonLayout = new QGridLayout;
 
@@ -324,6 +325,11 @@ void KoResourceItemChooser::setCurrentResource(KoResource* resource)
 void KoResourceItemChooser::showPreview(bool show)
 {
     d->previewScroller->setVisible(show);
+}
+
+void KoResourceItemChooser::setPreviewOrientation(Qt::Orientation orientation)
+{
+    d->splitter->setOrientation(orientation);
 }
 
 void KoResourceItemChooser::setCurrentItem(int row, int column)

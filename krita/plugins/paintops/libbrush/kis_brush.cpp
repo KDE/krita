@@ -97,7 +97,7 @@ void KisBrush::PaintDeviceColoringInformation::nextRow()
 
 
 struct KisBrush::Private {
-    Private() : boundary(0), angle(0), scale(1.0) {}
+    Private() : boundary(0), angle(0), scale(1.0), hasColor(false), brushType(INVALID) {}
     ~Private() {
         delete boundary;
     }

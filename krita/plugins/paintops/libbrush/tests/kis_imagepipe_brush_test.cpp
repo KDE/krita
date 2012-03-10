@@ -65,7 +65,7 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
      * Check mask size values, they depend on current brush
      */
 
-    QVERIFY(brush->currentBrush());
+    QVERIFY(brush->testingGetCurrentBrush());
 
     qreal realScale = 1;
     qreal realAngle = 0;
@@ -74,7 +74,7 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
 
     int maskWidth = brush->maskWidth(realScale, realAngle);
     int maskHeight = brush->maskHeight(realScale, realAngle);
-    KisQImagemaskSP outputMask = brush->currentBrush()->createMask(realScale, subPixelX, subPixelY);
+    KisQImagemaskSP outputMask = brush->testingGetCurrentBrush()->createMask(realScale, subPixelX, subPixelY);
 
     QCOMPARE(maskWidth, outputMask->width());
     QCOMPARE(maskHeight, outputMask->height());
@@ -104,24 +104,16 @@ void KisImagePipeBrushTest::testChangingBrushes()
 
     for (int i = 0; i < 100; i++) {
         checkConsistency(brush);
-        brush->selectNextBrush(info);
+        brush->testingSelectNextBrush(info);
     }
 
     delete brush;
 }
 
-void KisImagePipeBrushTest::testDabApplication()
+void checkIncrementalPainting(KisBrush *brush, const QString &prefix)
 {
-    KisImagePipeBrush *brush = new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih");
-    brush->load();
-    QVERIFY(brush->valid());
-
-    checkConsistency(brush);
-
     qreal realScale = 1;
     qreal realAngle = 0;
-    qreal subPixelX = 0;
-    qreal subPixelY = 0;
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     KoColor fillColor(Qt::red, cs);
@@ -138,11 +130,92 @@ void KisImagePipeBrushTest::testDabApplication()
         QRect fillRect(0, 0, maskWidth, maskHeight);
 
         fixedDab->setRect(fillRect);
+        fixedDab->initialize();
         fixedDab->fill(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), fillColor.data());
 
         brush->mask(fixedDab, realScale, realScale, realAngle, info);
-        fixedDab->convertToQImage(0).save(QString("fixed_dab_%1.png").arg(i));
+        QCOMPARE(fixedDab->bounds(), fillRect);
+
+        QImage result = fixedDab->convertToQImage(0);
+        result.save(QString("fixed_dab_%1_%2.png").arg(prefix).arg(i));
     }
+}
+
+void KisImagePipeBrushTest::testSimpleDabApplication()
+{
+    KisImagePipeBrush *brush = new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih");
+    brush->load();
+    QVERIFY(brush->valid());
+
+    checkConsistency(brush);
+    checkIncrementalPainting(brush, "simple");
+
+    delete brush;
+}
+
+void KisImagePipeBrushTest::testColoredDab()
+{
+    KisImagePipeBrush *brush = new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "G_Sparks.gih");
+    brush->load();
+    QVERIFY(brush->valid());
+
+    checkConsistency(brush);
+
+    QCOMPARE(brush->useColorAsMask(), false);
+    QCOMPARE(brush->hasColor(), true);
+    QCOMPARE(brush->brushType(), PIPE_IMAGE);
+
+    // let it be the mask (should be revertible)
+    brush->setUseColorAsMask(true);
+
+    QCOMPARE(brush->useColorAsMask(), true);
+    QCOMPARE(brush->hasColor(), true);
+    QCOMPARE(brush->brushType(), PIPE_MASK);
+
+    // revert back
+    brush->setUseColorAsMask(false);
+
+    QCOMPARE(brush->useColorAsMask(), false);
+    QCOMPARE(brush->hasColor(), true);
+    QCOMPARE(brush->brushType(), PIPE_IMAGE);
+
+    // convert to the mask (irreversible)
+    brush->makeMaskImage();
+
+    QCOMPARE(brush->useColorAsMask(), false);
+    QCOMPARE(brush->hasColor(), false);
+    QCOMPARE(brush->brushType(), PIPE_MASK);
+
+    checkConsistency(brush);
+    delete brush;
+}
+
+#include "kis_text_brush.h"
+
+void KisImagePipeBrushTest::testTextBrushNoPipes()
+{
+    KisTextBrush *brush = new KisTextBrush();
+
+    brush->setPipeMode(false);
+    brush->setFont(QApplication::font());
+    brush->setText("The_Quick_Brown_Fox_Jumps_Over_The_Lazy_Dog");
+    brush->updateBrush();
+
+    checkIncrementalPainting(brush, "text_no_incremental");
+
+    delete brush;
+}
+
+void KisImagePipeBrushTest::testTextBrushPiped()
+{
+    KisTextBrush *brush = new KisTextBrush();
+
+    brush->setPipeMode(true);
+    brush->setFont(QApplication::font());
+    brush->setText("The_Quick_Brown_Fox_Jumps_Over_The_Lazy_Dog");
+    brush->updateBrush();
+
+    checkIncrementalPainting(brush, "text_incremental");
 
     delete brush;
 }

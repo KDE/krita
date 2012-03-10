@@ -300,13 +300,13 @@ protected:
     /**
      * XXX
      */
-    void setBrushType(enumBrushType type);
+    virtual void setBrushType(enumBrushType type);
 
     void clearScaledBrushes();
 
     void createScaledBrushes() const;
 
-    void setHasColor(bool hasColor);
+    virtual void setHasColor(bool hasColor);
 
 protected:
 

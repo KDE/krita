@@ -90,6 +90,20 @@ void KisPipeBrushParasite::init()
     }
 }
 
+void KisPipeBrushParasite::sanitize()
+{
+    for (int i = 0; i < dim; i++) {
+        // In the 2 listed cases, we'd divide by 0!
+        if (rank[i] == 0 &&
+            (selection[i] == KisParasite::Incremental
+             || selection[i] == KisParasite::Angular)) {
+
+            warnImage << "PIPE brush has a wrong rank for its selection mode!";
+            selection[i] = KisParasite::Constant;
+        }
+    }
+}
+
 void KisPipeBrushParasite::setBrushesCount()
 {
     // I assume ncells is correct. If it isn't, complain to the parasite header.

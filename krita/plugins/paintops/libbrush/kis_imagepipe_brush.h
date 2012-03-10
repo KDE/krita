@@ -73,19 +73,14 @@ public:
     /**
      * @return the next image in the pipe.
     */
-    virtual QImage image() const;
-
     virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
                                               double scale, double angle,
                                               const KisPaintInformation& info,
                                               double subPixelX = 0, double subPixelY = 0) const;
 
-    virtual bool useColorAsMask() const;
     virtual void setUseColorAsMask(bool useColorAsMask);
     virtual bool hasColor() const;
     
-    virtual quint32 brushIndex(const KisPaintInformation& info) const;
-
     virtual enumBrushType brushType() const;
 
     virtual const KisBoundary* boundary() const;
@@ -115,17 +110,19 @@ public:
             
 
 protected:
-
+    void setBrushType(enumBrushType type);
+    void setHasColor(bool hasColor);
 
     KisImagePipeBrush(const KisImagePipeBrush& rhs);
 
 private:
     friend class KisImagePipeBrushTest;
-    KisGbrBrush* currentBrush() const;
-    QList<KisGbrBrush*> testingGetBrushes() const; // for testing purposes only
+
+    KisGbrBrush* testingGetCurrentBrush() const;
+    QVector<KisGbrBrush*> testingGetBrushes() const;
+    void testingSelectNextBrush(const KisPaintInformation& info) const;
+
     bool initFromData(const QByteArray &data);
-    void setParasiteString(const QString& parasite);
-    void selectNextBrush(const KisPaintInformation& info) const;
     void sanitize(); // Force some default values in case the ones read in don't make sense
 private:
     struct Private;

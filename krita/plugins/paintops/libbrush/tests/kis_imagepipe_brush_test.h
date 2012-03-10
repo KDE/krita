@@ -29,7 +29,10 @@ class KisImagePipeBrushTest : public QObject
 private slots:
     void testLoading();
     void testChangingBrushes();
-    void testDabApplication();
+    void testSimpleDabApplication();
+    void testColoredDab();
+    void testTextBrushNoPipes();
+    void testTextBrushPiped();
 
 private:
     void checkConsistency(KisImagePipeBrush *brush);

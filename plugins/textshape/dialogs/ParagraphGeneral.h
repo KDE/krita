@@ -30,6 +30,7 @@ class ParagraphBulletsNumbers;
 class ParagraphIndentSpacing;
 class ParagraphLayout;
 class ParagraphDecorations;
+class ParagraphDropCaps;
 
 class ParagraphGeneral : public CharacterGeneral
 {
@@ -65,6 +66,7 @@ private:
     ParagraphLayout *m_paragraphLayout;
     ParagraphBulletsNumbers *m_paragraphBulletsNumbers;
     ParagraphDecorations *m_paragraphDecorations;
+    ParagraphDropCaps *m_paragraphDropCaps;
 
     KoParagraphStyle *m_style;
     QList<KoParagraphStyle*> m_paragraphStyles;

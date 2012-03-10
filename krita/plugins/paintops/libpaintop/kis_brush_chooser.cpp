@@ -240,10 +240,11 @@ void KisBrushChooser::update(KoResource * resource)
 
 
     // useColorAsMask support is only in gimp brush so far
-    if (KisGbrBrush * gimpBrush = dynamic_cast<KisGbrBrush*>(resource)){
+    KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(resource);
+    if (gimpBrush) {
         m_chkColorMask->setChecked(gimpBrush->useColorAsMask());
     }
-    m_chkColorMask->setEnabled(brush->hasColor());
+    m_chkColorMask->setEnabled(brush->hasColor() && gimpBrush);
 
     emit sigBrushChanged();
 }

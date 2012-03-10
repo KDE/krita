@@ -824,10 +824,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         int dropCapsLength = pStyle.dropCapsLength();
         int dropCapsLines = pStyle.dropCapsLines();
 
-        if (dropCaps && dropCapsLength != 0 && dropCapsLines > 1 && block.length() > 1) {
+        if (dropCaps && dropCapsLines > 1 && block.length() > 1) {
             QString blockText = block.text();
 
-            if (dropCapsLength < 0) { // means whole word is to be dropped
+            if (dropCapsLength == 0) { // means whole word is to be dropped
                 int firstNonSpace = blockText.indexOf(QRegExp("[^ ]"));
                 dropCapsLength = blockText.indexOf(QRegExp("\\W"), firstNonSpace);
             } else {

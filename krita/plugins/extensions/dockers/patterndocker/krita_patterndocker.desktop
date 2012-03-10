@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Pattern Docker
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritapatterndocker
+X-Krita-Version=5

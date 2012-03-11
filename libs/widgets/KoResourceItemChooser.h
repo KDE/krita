@@ -87,6 +87,8 @@ public:
     void showPreview(bool show);
     /// determines whether the preview right or below the splitter
     void setPreviewOrientation(Qt::Orientation orientation);
+    /// determines whether the preview should tile the resource's image or not
+    void setPreviewTiled(bool tiled);
 
     void showGetHotNewStuff( bool showDownload, bool showUpload);
     /// sets the visibilty of tagging KlineEdits.

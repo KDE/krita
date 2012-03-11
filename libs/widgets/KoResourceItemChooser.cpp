@@ -57,7 +57,12 @@
 class KoResourceItemChooser::Private
 {
 public:
-    Private() : model(0), view(0), buttonGroup(0) {}
+    Private()
+        : model(0)
+        , view(0)
+        , buttonGroup(0)
+        , tiledPreview(false)
+    {}
     KoResourceModel* model;
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
@@ -67,6 +72,7 @@ public:
     QScrollArea *previewScroller;
     QLabel *previewLabel;
     QSplitter *splitter;
+    bool tiledPreview;
 };
 
 KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent )
@@ -82,6 +88,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->view->setSelectionMode( QAbstractItemView::SingleSelection );
     connect( d->view, SIGNAL(clicked( const QModelIndex & ) ),
              this, SLOT(activated ( const QModelIndex & ) ) );
+    d->view->setMinimumSize(200, 200);
 
     d->previewScroller = new QScrollArea(this);
     d->previewScroller->setWidgetResizable(true);
@@ -90,6 +97,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->previewScroller->setAlignment(Qt::AlignCenter);
     d->previewLabel = new QLabel(this);
     d->previewScroller->setWidget(d->previewLabel);
+    d->previewScroller->setMinimumSize(200, 200);
 
     d->splitter->addWidget(d->view);
     d->splitter->addWidget(d->previewScroller);
@@ -164,8 +172,8 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->tagCompleter = new QCompleter(getTagNamesList(""),this);
     d->tagSearchLineEdit->setCompleter(d->tagCompleter);
 
-
     updateButtonState();
+    activated(d->model->index(0, 0));
 }
 
 KoResourceItemChooser::~KoResourceItemChooser()
@@ -306,9 +314,9 @@ void KoResourceItemChooser::setItemDelegate( QAbstractItemDelegate * delegate )
 KoResource *  KoResourceItemChooser::currentResource()
 {
     QModelIndex index = d->view->currentIndex();
-    if( index.isValid() )
+    if (index.isValid()) {
         return resourceFromModelIndex(index);
-
+    }
     return 0;
 }
 
@@ -332,6 +340,11 @@ void KoResourceItemChooser::setPreviewOrientation(Qt::Orientation orientation)
     d->splitter->setOrientation(orientation);
 }
 
+void KoResourceItemChooser::setPreviewTiled(bool tiled)
+{
+    d->tiledPreview = tiled;
+}
+
 void KoResourceItemChooser::setCurrentItem(int row, int column)
 {
     QModelIndex index = d->model->index(row, column);
@@ -350,13 +363,24 @@ void KoResourceItemChooser::setProxyModel( QAbstractProxyModel* proxyModel )
 void KoResourceItemChooser::activated(const QModelIndex &/*index*/)
 {
     KoResource* resource = currentResource();
-    if( resource ) {
+    if (resource) {
         emit resourceSelected( resource );
         setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(resource));
+
+        QImage image = resource->image();
+        if (d->tiledPreview) {
+            int width = qMax(d->previewScroller->width() * 4, image.width() * 4);
+            int height = qMax(d->previewScroller->height() * 4, image.height() * 4);
+            QImage img(width, height, image.format());
+            QPainter gc(&img);
+            gc.setPen(Qt::NoPen);
+            gc.setBrush(QBrush(image));
+            gc.drawRect(img.rect());
+            image = img;
+        }
+        d->previewLabel->setPixmap(QPixmap::fromImage(image));
+        updateButtonState();
     }
-    QImage image = resource->image();
-    d->previewLabel->setPixmap(QPixmap::fromImage(image));
-    updateButtonState();
 }
 
 void KoResourceItemChooser::updateButtonState()

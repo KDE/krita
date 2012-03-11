@@ -328,6 +328,7 @@ void KoResourceItemChooser::setCurrentResource(KoResource* resource)
 
     d->view->setCurrentIndex(index);
     setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(resource));
+    updatePreview(resource);
 }
 
 void KoResourceItemChooser::showPreview(bool show)

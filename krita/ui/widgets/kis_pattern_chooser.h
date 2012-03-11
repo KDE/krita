@@ -36,7 +36,7 @@ public:
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
     KoResource *currentResource();
-
+    void setCurrentPattern(KoResource *resource);
     void setCurrentItem(int row, int column);
 
     /// determines whether the preview right or below the splitter

@@ -39,6 +39,7 @@ PatternDockerDock::PatternDockerDock( )
 {
     m_patternChooser = new KisPatternChooser(this);
     m_patternChooser->setPreviewOrientation(Qt::Vertical);
+    m_patternChooser->setCurrentItem(0,0);
     m_patternChooser->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     setWidget(m_patternChooser);
 }
@@ -47,25 +48,25 @@ void PatternDockerDock::setCanvas(KoCanvasBase * canvas)
 {
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-        m_patternChooser->disconnect(m_canvas->view()->paintOpBox());
+        m_patternChooser->disconnect(m_canvas->view()->resourceProvider());
+        m_canvas->view()->resourceProvider()->disconnect(this);
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(m_canvas);
     if (!m_canvas) return;
 
-    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-           this, SLOT(resourceChanged(int, const QVariant&)));
+    connect(m_canvas->view()->resourceProvider(), SIGNAL(sigPatternChanged(KisPattern*)),
+            this, SLOT(patternChanged(KisPattern*)));
 
     connect(m_patternChooser, SIGNAL(resourceSelected(KoResource*)),
-            m_canvas->view()->paintOpBox(), SLOT(resourceSelected(KoResource*)));
+            m_canvas->view()->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
+
 }
 
-void PatternDockerDock::resourceChanged(int /*key*/, const QVariant& /*v*/)
+void PatternDockerDock::patternChanged(KisPattern *pattern)
 {
-//    if (m_canvas) {
-//        KisPattern *pattern = m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentPattern).value<KisPattern*>();
-//    }
+    m_patternChooser->setCurrentPattern(pattern);
 }
 
 #include "patterndocker_dock.moc"

@@ -22,6 +22,7 @@
 #include <KoColor.h>
 #include <KoCanvasObserverBase.h>
 
+class KisPattern;
 class KisPatternChooser;
 class KisCanvas2;
 
@@ -32,8 +33,9 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_canvas = 0; }
 public slots:
-    void resourceChanged(int, const QVariant&);
+    void patternChanged(KisPattern *pattern);
 private slots:
+
 private:
     KisCanvas2* m_canvas;
     KisPatternChooser* m_patternChooser;

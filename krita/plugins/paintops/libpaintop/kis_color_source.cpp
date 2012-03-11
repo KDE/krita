@@ -239,10 +239,10 @@ const KoColorSpace* KisPatternColorSource::colorSpace() const
 void KisPatternColorSource::colorize(KisPaintDeviceSP device, const QRect& rect, const QPoint& offset) const
 {
     KisFillPainter painter(device);
-    if(m_locked)
-    {
+    if (m_locked) {
         painter.fillRect(rect.x(), rect.y(), rect.width(), rect.height(), m_device, m_bounds);
-    } else {
+    }
+    else {
         int x = offset.x() % m_bounds.width();
         int y = offset.y() % m_bounds.height();
         

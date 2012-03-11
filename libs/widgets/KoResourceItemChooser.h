@@ -69,7 +69,7 @@ public:
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
-    KoResource * currentResource();
+    KoResource *currentResource();
 
     /// Sets the item representing the resource as selected
     void setCurrentResource(KoResource* resource);

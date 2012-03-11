@@ -580,7 +580,7 @@ void KisBrush::createScaledBrushes() const
     // Construct a series of brushes where each one's dimensions are
     // half the size of the previous one.
     // IMORTANT: and make sure that a brush with a size > MAXIMUM_MIPMAP_SIZE
-    // will not get scaled up anymore or the memory consumption gets to height
+    // will not get scaled up anymore or the memory consumption gets too high
     // also don't scale the brush up more then MAXIMUM_MIPMAP_SCALE times
     int scale  = qBound(1, MAXIMUM_MIPMAP_SIZE*2 / qMax(image().width(),image().height()), MAXIMUM_MIPMAP_SCALE);
     int width  = ceil((double)(image().width()  * scale));

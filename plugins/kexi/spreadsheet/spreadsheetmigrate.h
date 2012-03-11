@@ -80,9 +80,9 @@ public:
 
   private:
     QString m_FileName;
-    Calligra::Tables::Sheet *m_CurSheet;
+    Calligra::Sheets::Sheet *m_CurSheet;
     
-    Calligra::Tables::Doc *m_KSDoc;
+    Calligra::Sheets::Doc *m_KSDoc;
 
     QStringList m_FieldNames;
 

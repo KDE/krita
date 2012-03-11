@@ -124,6 +124,7 @@ private slots:
 
 private:
     void updateButtonState();
+    void updatePreview(KoResource *resource);
 
     /// Resource for a given model index
     /// @returns the resource pointer, 0 is index not valid

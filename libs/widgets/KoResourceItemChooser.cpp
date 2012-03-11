@@ -352,6 +352,11 @@ void KoResourceItemChooser::setCurrentItem(int row, int column)
         return;
 
     d->view->setCurrentIndex(index);
+    if (index.isValid()) {
+        updatePreview(resourceFromModelIndex(index));
+    }
+
+
 }
 
 void KoResourceItemChooser::setProxyModel( QAbstractProxyModel* proxyModel )
@@ -366,20 +371,7 @@ void KoResourceItemChooser::activated(const QModelIndex &/*index*/)
     if (resource) {
         emit resourceSelected( resource );
         setTagOpLineEdit(d->model->resourceServerAdapter()->getAssignedTagsList(resource));
-
-        QImage image = resource->image();
-        if (d->tiledPreview) {
-            int width = qMax(d->previewScroller->width() * 4, image.width() * 4);
-            int height = qMax(d->previewScroller->height() * 4, image.height() * 4);
-            QImage img(width, height, image.format());
-            QPainter gc(&img);
-            gc.fillRect(img.rect(), Qt::white);
-            gc.setPen(Qt::NoPen);
-            gc.setBrush(QBrush(image));
-            gc.drawRect(img.rect());
-            image = img;
-        }
-        d->previewLabel->setPixmap(QPixmap::fromImage(image));
+        updatePreview(resource);
         updateButtonState();
     }
 }
@@ -405,6 +397,26 @@ void KoResourceItemChooser::updateButtonState()
     removeButton->setEnabled( false );
     uploadButton->setEnabled(false);
     d->tagOpLineEdit->setEnabled( false );
+}
+
+void KoResourceItemChooser::updatePreview(KoResource *resource)
+{
+    if (!resource) return;
+
+    QImage image = resource->image();
+    if (d->tiledPreview) {
+        int width = qMax(d->previewScroller->width() * 4, image.width() * 4);
+        int height = qMax(d->previewScroller->height() * 4, image.height() * 4);
+        QImage img(width, height, image.format());
+        QPainter gc(&img);
+        gc.fillRect(img.rect(), Qt::white);
+        gc.setPen(Qt::NoPen);
+        gc.setBrush(QBrush(image));
+        gc.drawRect(img.rect());
+        image = img;
+    }
+    d->previewLabel->setPixmap(QPixmap::fromImage(image));
+
 }
 
 KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& index)

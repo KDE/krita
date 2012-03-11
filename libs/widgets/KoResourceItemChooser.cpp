@@ -373,6 +373,7 @@ void KoResourceItemChooser::activated(const QModelIndex &/*index*/)
             int height = qMax(d->previewScroller->height() * 4, image.height() * 4);
             QImage img(width, height, image.format());
             QPainter gc(&img);
+            gc.fillRect(img.rect(), Qt::white);
             gc.setPen(Qt::NoPen);
             gc.setBrush(QBrush(image));
             gc.drawRect(img.rect());

@@ -77,8 +77,9 @@ KoResource *  KisPatternChooser::currentResource()
 void KisPatternChooser::setCurrentItem(int row, int column)
 {
     m_itemChooser->setCurrentItem(row, column);
-    if (currentResource())
+    if (currentResource()) {
         update(currentResource());
+    }
 }
 
 void KisPatternChooser::setPreviewOrientation(Qt::Orientation orientation)

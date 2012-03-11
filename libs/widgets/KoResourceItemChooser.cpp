@@ -88,7 +88,6 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->view->setSelectionMode( QAbstractItemView::SingleSelection );
     connect( d->view, SIGNAL(clicked( const QModelIndex & ) ),
              this, SLOT(activated ( const QModelIndex & ) ) );
-    d->view->setMinimumSize(200, 200);
 
     d->previewScroller = new QScrollArea(this);
     d->previewScroller->setWidgetResizable(true);
@@ -97,7 +96,6 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->previewScroller->setAlignment(Qt::AlignCenter);
     d->previewLabel = new QLabel(this);
     d->previewScroller->setWidget(d->previewLabel);
-    d->previewScroller->setMinimumSize(200, 200);
 
     d->splitter->addWidget(d->view);
     d->splitter->addWidget(d->previewScroller);
@@ -334,6 +332,10 @@ void KoResourceItemChooser::setCurrentResource(KoResource* resource)
 void KoResourceItemChooser::showPreview(bool show)
 {
     d->previewScroller->setVisible(show);
+    if (show) {
+        d->view->setMinimumSize(200, 200);
+        d->previewScroller->setMinimumSize(200, 200);
+    }
 }
 
 void KoResourceItemChooser::setPreviewOrientation(Qt::Orientation orientation)

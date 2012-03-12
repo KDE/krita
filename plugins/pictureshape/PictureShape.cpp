@@ -337,20 +337,24 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
         break;
     }
 
-    QSizeF       imageSize = imageData()->imageSize();
-    ClippingRect rect      = m_clippingRect;
+    KoImageData *imageData = qobject_cast<KoImageData*>(userData());
 
-    rect.normalize(imageSize);
-    rect.bottom = 1.0 - rect.bottom;
-    rect.right = 1.0 - rect.right;
+    if (imageData != 0) {
+        QSizeF       imageSize = imageData->imageSize();
+        ClippingRect rect      = m_clippingRect;
 
-    if (!qFuzzyCompare(rect.left + rect.right + rect.top + rect.bottom, qreal(0))) {
-        style.addProperty("fo:clip", QString("rect(%1pt, %2pt, %3pt, %4pt)")
-            .arg(rect.top * imageSize.height())
-            .arg(rect.right * imageSize.width())
-            .arg(rect.bottom * imageSize.height())
-            .arg(rect.left * imageSize.width())
-        );
+        rect.normalize(imageSize);
+        rect.bottom = 1.0 - rect.bottom;
+        rect.right = 1.0 - rect.right;
+
+        if (!qFuzzyCompare(rect.left + rect.right + rect.top + rect.bottom, qreal(0))) {
+            style.addProperty("fo:clip", QString("rect(%1pt, %2pt, %3pt, %4pt)")
+                .arg(rect.top * imageSize.height())
+                .arg(rect.right * imageSize.width())
+                .arg(rect.bottom * imageSize.height())
+                .arg(rect.left * imageSize.width())
+            );
+        }
     }
 
     return KoShape::saveStyle(style, context);

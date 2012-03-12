@@ -61,7 +61,6 @@ public:
     virtual QDockWidget* createDockWidget()
     {
         PatternDockerDock * dockWidget = new PatternDockerDock();
-        dockWidget->setAllowedAreas(Qt::RightDockWidgetArea);
         dockWidget->setObjectName(id());
 
         return dockWidget;

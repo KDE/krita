@@ -193,7 +193,7 @@ public:
     /**
      * Get the image href under which the image will be saved in the store
      */
-    QString imageHref(KoImageData *image);
+    QString imageHref(const KoImageData *image);
 
     /**
      * Get the image href under which the image will be save in the store
@@ -201,7 +201,7 @@ public:
      * This should only be used for temporary images that are onle there during
      * saving, e.g. a pixmap representation of a draw:frame
      */
-    QString imageHref(QImage &image);
+    QString imageHref(const QImage &image);
 
     /**
      * Get the images that needs to be saved to the store

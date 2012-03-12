@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Pattern Docker
+Name[pt]=Área de Padrões
+Name[pt_BR]=Área de padrões
+Name[sv]=Mönsterdockningsfönster
+Name[uk]=Панель візерунків
+Name[x-test]=xxPattern Dockerxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritapatterndocker

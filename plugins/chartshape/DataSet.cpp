@@ -1573,6 +1573,11 @@ void DataSet::saveOdf( KoShapeSavingContext &context ) const
 
     KoGenStyle style( KoGenStyle::ChartAutoStyle, "chart" );
 
+    if (pieAttributes().explode()) {
+        const int pieExplode = (int)(pieAttributes().explodeFactor()*100);
+        style.addProperty("chart:pie-offset", pieExplode, KoGenStyle::ChartType);
+    }
+
     DataSet::ValueLabelType type = valueLabelType();
     if ( type.number && type.percentage )
         style.addProperty( "chart:data-label-number", "value-and-percentage" );
@@ -1601,6 +1606,21 @@ void DataSet::saveOdf( KoShapeSavingContext &context ) const
     QString label = labelDataRegion().toString();
     if (!label.isEmpty())
         bodyWriter.addAttribute( "chart:label-cell-address", label );
+
+    if (chartType() == KChart::CircleChartType || chartType() == KChart::RingChartType) {
+        for (int j=0; j<yDataRegion().cellCount(); ++j) {
+        bodyWriter.startElement("chart:data-point");
+
+        KoGenStyle dps(KoGenStyle::GraphicAutoStyle, "chart");
+        dps.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
+        dps.addProperty( "draw:fill-color", brush(j).color().name(), KoGenStyle::GraphicType );
+
+        const QString styleName = mainStyles.insert( dps, "ch");
+        bodyWriter.addAttribute( "chart:style-name", styleName );
+
+        bodyWriter.endElement();
+        }
+    }
 
     bodyWriter.endElement(); // chart:series
 }

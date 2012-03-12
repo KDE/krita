@@ -45,6 +45,7 @@
 #include <KDChartPosition>
 #include <KDChartCartesianAxis>
 #include <KDChartGridAttributes>
+#include <KDChartPieAttributes>
 #include <KDChartAbstractCartesianDiagram>
 #include <KDChartLegend>
 #include <KDChartDataValueAttributes>
@@ -942,6 +943,10 @@ void ChartConfigWidget::update()
     // Update "Bar Properties" in "Data Sets" tab
     d->ui.gapBetweenBars->setValue( d->shape->plotArea()->gapBetweenBars() );
     d->ui.gapBetweenSets->setValue( d->shape->plotArea()->gapBetweenSets() );
+
+    // Update "Pie Properties" in "Data Sets" tab
+    d->ui.pieExplodeFactor->setValue(
+                (int)(d->shape->plotArea()->dataSets().at(0)->pieAttributes().explodeFactor()*100) );
 
     if (    d->type    != d->shape->chartType()
          || d->subtype != d->shape->chartSubType() )

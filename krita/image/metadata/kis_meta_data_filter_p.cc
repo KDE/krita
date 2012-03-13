@@ -22,8 +22,6 @@
 #include <klocale.h>
 #include <calligraversion.h>
 
-#include "kis_aboutdata.h"
-
 #include "kis_meta_data_entry.h"
 #include "kis_meta_data_schema.h"
 #include "kis_meta_data_schema_registry.h"

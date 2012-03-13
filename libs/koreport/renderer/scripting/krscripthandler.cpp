@@ -1,6 +1,7 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2007-2008 by Adam Pigg <adam@piggz.co.uk>
+ * Copyright (C) 2012 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -91,7 +92,7 @@ KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KoReportReportData*
 
     QString code = m_koreportData->scriptCode(m_reportData->script(), m_reportData->interpreter());
 
-    m_action->setCode(code.toLocal8Bit());
+    m_action->setCode(code.toUtf8());
 
 }
 
@@ -155,7 +156,8 @@ void KRScriptHandler::slotEnteredSection(KRSectionData *section, OROPage* cp, QP
 QVariant KRScriptHandler::evaluate(const QString &code)
 {
     if (!m_action->hadError()) {
-        return m_action->evaluate(code.toLocal8Bit());
+        QVariant result = m_action->evaluate(code.toUtf8());
+        return QString::fromUtf8(result.toByteArray());
     } else {
         return QVariant();
     }

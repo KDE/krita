@@ -78,8 +78,7 @@ class BRUSH_EXPORT KisBrush : public KoResource, public KisShared
 
     class ScaledBrush;
 
-protected:
-
+public:
     class ColoringInformation
     {
     public:
@@ -88,6 +87,9 @@ protected:
         virtual void nextColumn() = 0;
         virtual void nextRow() = 0;
     };
+
+protected:
+
 
     class PlainColoringInformation : public ColoringInformation
     {

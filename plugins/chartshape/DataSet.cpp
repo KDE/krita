@@ -683,11 +683,18 @@ KDChart::PieAttributes DataSet::pieAttributes() const
 
 QBrush DataSet::brush( int section ) const
 {
-    if ( d->brushes.contains( section ) )
-        return d->brushes[ section ];
-    if ( d->brushIsSet )
-        return brush();
-    return d->defaultBrush( section );
+    Qt::Orientation modelDataDirection = d->kdChartModel->dataDirection();
+    // Horizontally aligned diagrams have a specific color per category
+    // See for example pie or ring charts. A pie chart contains a single
+    // data set, but the slices must have different brushes.
+    if (modelDataDirection == Qt::Horizontal) {
+        if (d->brushes.contains( section )) {
+            return d->brushes[ section ];
+        }
+        return d->defaultBrush( section );
+    }
+    // Vertically aligned diagrams only have one brush per data set
+    return brush();
 }
 
 KDChart::PieAttributes DataSet::pieAttributes( int section ) const
@@ -1609,16 +1616,16 @@ void DataSet::saveOdf( KoShapeSavingContext &context ) const
 
     if (chartType() == KChart::CircleChartType || chartType() == KChart::RingChartType) {
         for (int j=0; j<yDataRegion().cellCount(); ++j) {
-        bodyWriter.startElement("chart:data-point");
+            bodyWriter.startElement("chart:data-point");
 
-        KoGenStyle dps(KoGenStyle::GraphicAutoStyle, "chart");
-        dps.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
-        dps.addProperty( "draw:fill-color", brush(j).color().name(), KoGenStyle::GraphicType );
+            KoGenStyle dps(KoGenStyle::GraphicAutoStyle, "chart");
+            dps.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
+            dps.addProperty( "draw:fill-color", brush(j).color().name(), KoGenStyle::GraphicType );
 
-        const QString styleName = mainStyles.insert( dps, "ch");
-        bodyWriter.addAttribute( "chart:style-name", styleName );
+            const QString styleName = mainStyles.insert( dps, "ch");
+            bodyWriter.addAttribute( "chart:style-name", styleName );
 
-        bodyWriter.endElement();
+            bodyWriter.endElement();
         }
     }
 

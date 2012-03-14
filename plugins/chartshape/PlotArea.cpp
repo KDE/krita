@@ -813,10 +813,8 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
                              dataSourceHasLabels );
 
     // Save the axes.
-    if ( isCartesian( d->chartType ) ) {
-        foreach( Axis *axis, d->axes ) {
-            axis->saveOdf( context );
-        }
+    foreach( Axis *axis, d->axes ) {
+        axis->saveOdf( context );
     }
 
     // Save data series

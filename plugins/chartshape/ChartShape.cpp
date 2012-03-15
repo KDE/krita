@@ -1189,6 +1189,12 @@ static void saveOdfDataRow( KoXmlWriter &bodyWriter, QAbstractItemModel *table, 
         QModelIndex  index = table->index( row, col );
         QVariant     value = table->data( index );
 
+        bool ok;
+        double val = value.toDouble(&ok);
+        if (ok) {
+            value = val;
+        }
+
         QString  valType;
         QString  valStr;
 

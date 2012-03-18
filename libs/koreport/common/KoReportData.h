@@ -63,6 +63,7 @@ public:
     //!Return the total number of records
     virtual qint64 recordCount() const = 0;
 
+#warning 2.5: change fieldNumber() to int!
     //!Return the index number of the field given by nane field
     virtual unsigned int fieldNumber(const QString &field) const = 0;
 

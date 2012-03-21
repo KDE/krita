@@ -25,8 +25,6 @@ K_EXPORT_PLUGIN(%{APPNAME}PluginFactory("krita"))
     {
         m_view = (KisView2*) parent;
 
-        setComponentData(%{APPNAME}PluginFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data","kritaplugins/%{APPNAMELC}.rc"), true);
 
         KAction *action  = new KAction(i18n("&My action !"), this);

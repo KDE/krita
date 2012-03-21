@@ -68,7 +68,6 @@ private:
     {
         m_view = (KisView2*) parent;
 
-        setComponentData(%{APPNAME}PluginFactory::componentData());
         %{APPNAME}DockFactory dockFactory( m_view);
         m_view->createDockWidget( &dockFactory );
     }

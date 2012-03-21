@@ -78,8 +78,6 @@ Bracketing2HDRPlugin::Bracketing2HDRPlugin(QObject *parent, const QVariantList &
     if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
 
-        setComponentData(Bracketing2HDRPluginFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/bracketing2hdr.rc"), true);
 
         KAction *action  = new KAction(i18n("HDR Layer from bracketing"), this);

@@ -46,8 +46,6 @@ tonemappingPlugin::tonemappingPlugin(QObject *parent, const QVariantList &)
     if (parent->inherits("KisView2") && KisToneMappingOperatorsRegistry::instance()->count() > 0) {
         m_view = (KisView2*) parent;
 
-        setComponentData(tonemappingPluginFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/tonemapping.rc"), true);
 
         m_toneMappingAction  = new KAction(i18n("Tonemapping..."), this);

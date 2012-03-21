@@ -49,8 +49,6 @@ TogetherPlugin::TogetherPlugin(QObject *parent, const QVariantList &)
     if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
 
-        setComponentData(TogetherPluginFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/together.rc"), true);
 
     }

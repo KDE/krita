@@ -53,11 +53,11 @@ KoPageLayoutDialog::KoPageLayoutDialog(QWidget *parent, const KoPageLayout &layo
 
     d->pageLayoutWidget = new KoPageLayoutWidget(widget, layout);
     d->pageLayoutWidget->showUnitchooser(false);
-    lay->addWidget(d->pageLayoutWidget);
+    lay->addWidget(d->pageLayoutWidget,1);
 
     KoPagePreviewWidget *prev = new KoPagePreviewWidget(widget);
     prev->setPageLayout(layout);
-    lay->addWidget(prev);
+    lay->addWidget(prev, 1);
 
     connect (d->pageLayoutWidget, SIGNAL(layoutChanged(const KoPageLayout&)),
             prev, SLOT(setPageLayout(const KoPageLayout&)));

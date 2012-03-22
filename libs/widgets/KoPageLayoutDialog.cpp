@@ -50,12 +50,9 @@ KoPageLayoutDialog::KoPageLayoutDialog(QWidget *parent, const KoPageLayout &layo
     addPage(widget, i18n("Page"));
 
     QHBoxLayout *lay = new QHBoxLayout(widget);
-    lay->setMargin(0);
-    widget->setLayout(lay);
 
     d->pageLayoutWidget = new KoPageLayoutWidget(widget, layout);
     d->pageLayoutWidget->showUnitchooser(false);
-    d->pageLayoutWidget->layout()->setMargin(0);
     lay->addWidget(d->pageLayoutWidget);
 
     KoPagePreviewWidget *prev = new KoPagePreviewWidget(widget);

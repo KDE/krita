@@ -761,7 +761,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
     if (event->button() == Qt::RightButton) {
         KoTextEditingPlugin *plugin = m_textEditingPlugins->spellcheck();
         if (plugin)
-            plugin->setCurrentCursorPosition(m_textEditor.data()->document(), m_textEditor.data()->position());
+            plugin->setCurrentCursorPosition(m_textShapeData->document(), m_textEditor.data()->position());
 
         event->ignore();
     }

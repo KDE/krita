@@ -19,14 +19,8 @@
    <property name="margin">
     <number>0</number>
    </property>
-   <item row="0" column="0" alignment="Qt::AlignRight">
+   <item row="0" column="0">
     <widget class="QLabel" name="unitsLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text">
       <string>Unit:</string>
      </property>
@@ -45,14 +39,8 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" alignment="Qt::AlignRight">
+   <item row="1" column="0">
     <widget class="QLabel" name="stylesLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text">
       <string>Follow style:</string>
      </property>
@@ -67,14 +55,8 @@
    <item row="1" column="1" colspan="2">
     <widget class="QComboBox" name="pageStyle"/>
    </item>
-   <item row="2" column="0" alignment="Qt::AlignRight">
+   <item row="2" column="0">
     <widget class="QLabel" name="label_2">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text">
       <string>Size:</string>
      </property>
@@ -89,14 +71,8 @@
    <item row="2" column="1" colspan="2">
     <widget class="QComboBox" name="sizes"/>
    </item>
-   <item row="3" column="0" alignment="Qt::AlignRight">
+   <item row="3" column="0">
     <widget class="QLabel" name="label_3">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text">
       <string>Width:</string>
      </property>
@@ -137,14 +113,8 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="0" alignment="Qt::AlignRight">
+   <item row="4" column="0">
     <widget class="QLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text">
       <string>Orientation:</string>
      </property>
@@ -167,14 +137,8 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0" alignment="Qt::AlignRight">
+   <item row="5" column="0">
     <widget class="QLabel" name="facingPageLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text">
       <string>Facing pages:</string>
      </property>
@@ -197,14 +161,8 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0" alignment="Qt::AlignRight">
+   <item row="6" column="0">
     <widget class="QLabel" name="directionLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="text">
       <string>Text direction:</string>
      </property>

@@ -371,7 +371,7 @@ KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
         KConfigGroup cfgGrp(componentData().config(), "RDF");
         bool rdfEnabled = cfgGrp.readEntry("rdf_enabled", false);
         if (rdfEnabled) {
-            d->docRdf  = new KoDocumentRdf(this);
+            setDocumentRdf(KoDocumentRdf(this));
         }
     }
 #endif
@@ -815,7 +815,9 @@ KoDocumentInfo *KoDocument::documentInfo() const
 KoDocumentRdf *KoDocument::documentRdf() const
 {
 #ifdef SHOULD_BUILD_RDF
-    return d->docRdf;
+    if (d->docRdf->model()) {
+        return d->docRdf;
+    }
 #endif
     return 0;
 }

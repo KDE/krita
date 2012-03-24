@@ -30,6 +30,8 @@
 KoPointedAt::KoPointedAt()
     : position(-1)
     , bookmark(0)
+    , table(0)
+    , tableHit(None)
 {
 }
 
@@ -38,6 +40,12 @@ KoPointedAt::KoPointedAt(KoPointedAt *other)
     position = other->position;
     bookmark = other->bookmark;
     externalHRef = other->externalHRef;
+    tableHit = other->tableHit;
+    tableRowDivider = other->tableRowDivider;
+    tableColumnDivider = other->tableColumnDivider;
+    tableLeadSize = other->tableLeadSize;
+    tableTrailSize = other->tableTrailSize;
+    table = other->table;
 }
 
 void KoPointedAt::fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *inlineManager)

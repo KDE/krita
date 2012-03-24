@@ -55,6 +55,7 @@
 #include "commands/DeleteTableColumnCommand.h"
 #include "commands/InsertTableRowCommand.h"
 #include "commands/InsertTableColumnCommand.h"
+#include "commands/ResizeTableCommand.h"
 #include "commands/TextPasteCommand.h"
 #include "commands/ChangeTrackedDeleteCommand.h"
 #include "commands/ListItemNumberingCommand.h"
@@ -1193,6 +1194,37 @@ void KoTextEditor::splitTableCells()
         table->splitCell(cell.row(), cell.column(),  1, 1);
     }
 
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
+void KoTextEditor::adjustTableColumnWidth(QTextTable *table, int column, qreal width, KUndo2Command *parentCommand)
+{
+    ResizeTableCommand *cmd = new ResizeTableCommand(table, true, column, width, parentCommand);
+
+    addCommand(cmd);
+}
+
+
+void KoTextEditor::adjustTableRowHeight(QTextTable *table, int column, qreal height, KUndo2Command *parentCommand)
+{
+    ResizeTableCommand *cmd = new ResizeTableCommand(table, false, column, height, parentCommand);
+
+    addCommand(cmd);
+}
+
+void KoTextEditor::adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight)
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Adjust Table Width"));
+    d->caret.beginEditBlock();
+    QTextTableFormat fmt = table->format();
+    if (dLeft) {
+        fmt.setLeftMargin(fmt.leftMargin() + dLeft);
+    }
+    if (dRight) {
+        fmt.setRightMargin(fmt.rightMargin() + dRight);
+    }
+    table->setFormat(fmt);
+    d->caret.endEditBlock();
     d->updateState(KoTextEditor::Private::NoOp);
 }
 

@@ -64,6 +64,7 @@
 #include <KoBookmarkManager.h>
 #include <KoListLevelProperties.h>
 #include <KoTextLayoutRootArea.h>
+//#include <ResizeTableCommand.h>
 
 #include <kdebug.h>
 #include <KRun>
@@ -82,6 +83,7 @@
 #include <QToolTip>
 #include <QSignalMapper>
 #include <QGraphicsWidget>
+#include <QLinearGradient>
 
 #include <KoDocumentRdfBase.h>
 
@@ -134,13 +136,15 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_changeTipTimer(this),
         m_changeTipCursorPos(0),
         m_delayedEnsureVisible(false),
-        m_toolSelection(0),
-        m_lastImMicroFocus(QRectF(0,0,0,0))
+        m_toolSelection(0)
+        , m_tableDraggedOnce(false)
+        ,m_lastImMicroFocus(QRectF(0,0,0,0))
 {
     setTextMode(true);
 
     createActions();
 
+    m_unit = canvas->resourceManager()->unitResource(KoCanvasResourceManager::Unit);
     m_textEditingPlugins = canvas->resourceManager()->
         resource(TextEditingPluginContainer::ResourceId).value<TextEditingPluginContainer*>();
     if (m_textEditingPlugins == 0) {
@@ -512,6 +516,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     m_changeTipTimer(this),
     m_changeTipCursorPos(0)
     , m_delayedEnsureVisible(false)
+    , m_tableDraggedOnce(false)
 {
     // we could init some vars here, but we probably don't have to
     KGlobal::setLocale(new KLocale("en"));
@@ -619,6 +624,105 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
     shapeMatrix.scale(zoomX, zoomY);
     shapeMatrix.translate(0, -m_textShapeData->documentOffset());
+
+    // Possibly draw table dragging visual cues
+    const qreal boxHeight = 20;
+    if (m_tableDragInfo.tableHit == KoPointedAt::ColumnDivider) {
+        QPointF anchorPos = m_tableDragInfo.tableDividerPos - QPointF(m_dx, 0.0);
+        if (m_tableDragInfo.tableColumnDivider > 0) {
+            //let's draw left
+            qreal w = m_tableDragInfo.tableLeadSize - m_dx;
+            QRectF rect(anchorPos - QPointF(w, 0.0), QSizeF(w, 0.0));
+            QRectF drawRect(shapeMatrix.map(rect.topLeft()), shapeMatrix.map(rect.bottomRight()));
+            drawRect.setHeight(boxHeight);
+            drawRect.moveTop(drawRect.top() - 1.5 * boxHeight);
+            QString label = m_unit.toUserStringValue(w);
+            int labelWidth = QFontMetrics(QToolTip::font()).boundingRect(label).width();
+            painter.fillRect(drawRect, QColor(64, 255, 64, 196));
+            painter.setPen(QColor(0, 0, 0, 196));
+            if (labelWidth + 10 < drawRect.width()) {
+                QPointF centerLeft(drawRect.left(), drawRect.center().y());
+                QPointF centerRight(drawRect.right(), drawRect.center().y());
+                painter.drawLine(centerLeft, drawRect.center() - QPointF(labelWidth/2+5, 0.0));
+                painter.drawLine(centerLeft, centerLeft + QPointF(7, -5));
+                painter.drawLine(centerLeft, centerLeft + QPointF(7, 5));
+                painter.drawLine(drawRect.center() + QPointF(labelWidth/2+5, 0.0), centerRight);
+                painter.drawLine(centerRight, centerRight + QPointF(-7, -5));
+                painter.drawLine(centerRight, centerRight + QPointF(-7, 5));
+                painter.drawText(drawRect, Qt::AlignCenter, label);
+            }
+        }
+        if (m_tableDragInfo.tableColumnDivider <  m_tableDragInfo.table->columns()) {
+            //let's draw right
+            qreal w = m_tableDragInfo.tableTrailSize + m_dx;
+            QRectF rect(anchorPos, QSizeF(w, 0.0));
+            QRectF drawRect(shapeMatrix.map(rect.topLeft()), shapeMatrix.map(rect.bottomRight()));
+            drawRect.setHeight(boxHeight);
+            drawRect.moveTop(drawRect.top() - 1.5 * boxHeight);
+            QString label;
+            int labelWidth;
+            if (m_tableDragWithShift) {
+                label = i18n("follows along");
+                labelWidth = QFontMetrics(QToolTip::font()).boundingRect(label).width();
+                drawRect.setWidth(2 * labelWidth);
+                QLinearGradient g(drawRect.topLeft(), drawRect.topRight());
+                g.setColorAt(0.6, QColor(255, 64, 64, 196));
+                g.setColorAt(1.0, QColor(255, 64, 64, 0));
+                QBrush brush(g);
+                painter.fillRect(drawRect, brush);
+            } else {
+                label = m_unit.toUserStringValue(w);
+                labelWidth = QFontMetrics(QToolTip::font()).boundingRect(label).width();
+                painter.fillRect(drawRect, QColor(64, 255, 64, 196));
+            }
+            painter.setPen(QColor(0, 0, 0, 196));
+            if (labelWidth + 10 < drawRect.width()) {
+                QPointF centerLeft(drawRect.left(), drawRect.center().y());
+                QPointF centerRight(drawRect.right(), drawRect.center().y());
+                painter.drawLine(centerLeft, drawRect.center() - QPointF(labelWidth/2+5, 0.0));
+                painter.drawLine(centerLeft, centerLeft + QPointF(7, -5));
+                painter.drawLine(centerLeft, centerLeft + QPointF(7, 5));
+                if (!m_tableDragWithShift) {
+                    painter.drawLine(drawRect.center() + QPointF(labelWidth/2+5, 0.0), centerRight);
+                    painter.drawLine(centerRight, centerRight + QPointF(-7, -5));
+                    painter.drawLine(centerRight, centerRight + QPointF(-7, 5));
+                    painter.drawText(drawRect, Qt::AlignCenter, label);
+                } else {
+                    painter.drawText(drawRect, Qt::AlignCenter, label);
+                }
+            }
+        }
+    }
+    // Possibly draw table dragging visual cues
+    if (m_tableDragInfo.tableHit == KoPointedAt::RowDivider) {
+        QPointF anchorPos = m_tableDragInfo.tableDividerPos - QPointF(0.0, m_dy);
+        if (m_tableDragInfo.tableRowDivider > 0) {
+            qreal h = m_tableDragInfo.tableLeadSize - m_dy;
+            QRectF rect(anchorPos - QPointF(0.0, h), QSizeF(0.0, h));
+            QRectF drawRect(shapeMatrix.map(rect.topLeft()), shapeMatrix.map(rect.bottomRight()));
+            drawRect.setWidth(boxHeight);
+            drawRect.moveLeft(drawRect.left() - 1.5 * boxHeight);
+            QString label = m_unit.toUserStringValue(h);
+            QRectF labelRect = QFontMetrics(QToolTip::font()).boundingRect(label);
+            labelRect.setHeight(boxHeight);
+            labelRect.setWidth(labelRect.width() + 10);
+            labelRect.moveTopLeft(drawRect.center() - QPointF(labelRect.width(), labelRect.height())/2);
+            painter.fillRect(drawRect, QColor(64, 255, 64, 196));
+            painter.fillRect(labelRect, QColor(64, 255, 64, 196));
+            painter.setPen(QColor(0, 0, 0, 196));
+            if (labelRect.height() + 10 < drawRect.height()) {
+                QPointF centerTop(drawRect.center().x(), drawRect.top());
+                QPointF centerBottom(drawRect.center().x(), drawRect.bottom());
+                painter.drawLine(centerTop, drawRect.center() - QPointF(0.0, labelRect.height()/2+5));
+                painter.drawLine(centerTop, centerTop + QPointF(-5, 7));
+                painter.drawLine(centerTop, centerTop + QPointF(5, 7));
+                painter.drawLine(drawRect.center() + QPointF(0.0, labelRect.height()/2+5), centerBottom);
+                painter.drawLine(centerBottom, centerBottom + QPointF(-5, -7));
+                painter.drawLine(centerBottom, centerBottom + QPointF(5, -7));
+            }
+            painter.drawText(labelRect, Qt::AlignCenter, label);
+        }
+    }
     if (m_caretTimerState) {
         // Lets draw the caret ourselves, as the Qt method doesn't take cursor
         // charFormat into consideration.
@@ -727,34 +831,55 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         }
     }
 
-    const bool canMoveCaret = !m_textEditor.data()->hasSelection() || event->button() !=  Qt::RightButton;
-    if (canMoveCaret) {
-        if (m_textEditor.data()->hasSelection())
-            repaintSelection(); // will erase selection
-        else
-            repaintCaret();
+    if (m_textEditor.data()->hasSelection())
+        repaintSelection(); // will erase selection
+    else
+        repaintCaret();
 
-        updateSelectedShape(event->point);
+    updateSelectedShape(event->point);
 
-        KoSelection *selection = canvas()->shapeManager()->selection();
-        if (m_textShape && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
-            selection->deselectAll();
-            selection->select(m_textShape);
-        }
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    if (m_textShape && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
+        selection->deselectAll();
+        selection->select(m_textShape);
+    }
 
-        bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
-        KoPointedAt pointedAt = hitTest(event->point);
-        if (pointedAt.position != -1) {
+    bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
+    KoPointedAt pointedAt = hitTest(event->point);
+    m_tableDraggedOnce = false;
+    if (pointedAt.position != -1) {
+        if(event->button() == Qt::LeftButton || !m_textEditor.data()->hasSelection()) {
+            m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+        } else if (false /*within previous selection*/) {
             m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
         }
-        if (shiftPressed) // altered selection.
-            repaintSelection();
-        else
-            repaintCaret();
+        m_tableDragInfo.tableHit = KoPointedAt::None;
+        if (m_caretTimer.isActive()) { // make the caret not blink, (blinks again after first draw)
+            m_caretTimer.stop();
+            m_caretTimer.setInterval(50);
+            m_caretTimer.start();
+            m_caretTimerState = true; // turn caret instantly on on click
+        }
+    } else {
+        m_tableDragInfo = pointedAt;
+        if (event->button() == Qt::RightButton) {
+            KoTextEditingPlugin *plugin = m_textEditingPlugins->spellcheck();
+            if (plugin)
+                plugin->setCurrentCursorPosition(m_textShapeData->document(), -1);
 
-        updateSelectionHandler();
-        updateStyleManager();
+            event->ignore();
+        }
+
+        return;
     }
+    if (shiftPressed) // altered selection.
+        repaintSelection();
+    else
+        repaintCaret();
+
+    updateSelectionHandler();
+    updateStyleManager();
+
     updateActions();
 
     //activate context-menu for spelling-suggestions
@@ -919,7 +1044,6 @@ void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
         return mousePressEvent(event);
     }
 
-    int pos = m_textEditor.data()->position();
     m_textEditor.data()->select(QTextCursor::WordUnderCursor);
 
     repaintSelection();
@@ -937,8 +1061,6 @@ void TextTool::mouseTripleClickEvent(KoPointerEvent *event)
         // When whift is pressed we behave as a single press
         return mousePressEvent(event);
     }
-
-    int pos = m_textEditor.data()->position();
 
     m_textEditor.data()->clearSelection();
     m_textEditor.data()->movePosition(QTextCursor::StartOfBlock);
@@ -964,9 +1086,19 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
     KoPointedAt pointedAt = hitTest(event->point);
 
     if (event->buttons() == Qt::NoButton) {
-        //if (!m_textShapeData ){//FIXME|| m_textShapeData->endPosition() == position) {
         if (!m_textShapeData || pointedAt.position < 0) {
-            useCursor(Qt::IBeamCursor);
+            if (pointedAt.tableHit == KoPointedAt::ColumnDivider) {
+                useCursor(Qt::SplitHCursor);
+                m_draggingOrigin = event->point;
+            } else if (pointedAt.tableHit == KoPointedAt::RowDivider) {
+                if (pointedAt.tableRowDivider > 0) {
+                    useCursor(Qt::SplitVCursor);
+                    m_draggingOrigin = event->point;
+                } else
+                    useCursor(Qt::IBeamCursor);
+            } else {
+                useCursor(Qt::IBeamCursor);
+            }
             return;
         }
 
@@ -993,20 +1125,94 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
         useCursor(Qt::IBeamCursor);
         return;
     } else {
-        useCursor(Qt::IBeamCursor);
-        if (pointedAt.position == m_textEditor.data()->position()) return;
-        if (pointedAt.position >= 0) {
-            if (m_textEditor.data()->hasSelection())
-                repaintSelection(); // will erase selection
-            else
-                repaintCaret();
+        if (m_tableDragInfo.tableHit == KoPointedAt::ColumnDivider) {
+            m_tableDragWithShift = event->modifiers() & Qt::ShiftModifier;
+            if(m_tableDraggedOnce) {
+                canvas()->shapeController()->resourceManager()->undoStack()->undo();
+            }
+            KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Adjust Column Width"));
+            m_dx = m_draggingOrigin.x() - event->point.x();
+            if (m_tableDragInfo.tableColumnDivider < m_tableDragInfo.table->columns()
+                    && m_tableDragInfo.tableTrailSize + m_dx < 0) {
+                m_dx = -m_tableDragInfo.tableTrailSize;
+            }
+            if (m_tableDragInfo.tableColumnDivider > 0) {
+                if (m_tableDragInfo.tableLeadSize - m_dx < 0) {
+                    m_dx = m_tableDragInfo.tableLeadSize;
+                }
+                m_textEditor.data()->adjustTableColumnWidth(m_tableDragInfo.table,
+                    m_tableDragInfo.tableColumnDivider - 1,
+                    m_tableDragInfo.tableLeadSize - m_dx, topCmd);
+            } else {
+                m_textEditor.data()->adjustTableWidth(m_tableDragInfo.table, -m_dx, 0.0);
+            }
+            if (m_tableDragInfo.tableColumnDivider < m_tableDragInfo.table->columns()) {
+                if (!m_tableDragWithShift) {
+                    m_textEditor.data()->adjustTableColumnWidth(m_tableDragInfo.table,
+                        m_tableDragInfo.tableColumnDivider,
+                        m_tableDragInfo.tableTrailSize + m_dx, topCmd);
+                }
+            } else {
+                m_tableDragWithShift = true; // act like shift pressed
+            }
+            if (m_tableDragWithShift) {
+                m_textEditor.data()->adjustTableWidth(m_tableDragInfo.table, 0.0, m_dx);
+            }
+            m_textEditor.data()->endEditBlock();
+            m_tableDragInfo.tableDividerPos.setY(m_textShape->convertScreenPos(event->point).y());
+            if (m_tableDraggedOnce) {
+                //we need to redraw like this so we update outside the textshape too
+                if (canvas()->canvasWidget())
+                    canvas()->canvasWidget()->update();
+                if (canvas()->canvasItem())
+                    canvas()->canvasItem()->update();
+            }
+            m_tableDraggedOnce = true;
+        } else if (m_tableDragInfo.tableHit == KoPointedAt::RowDivider) {
+            if(m_tableDraggedOnce) {
+                canvas()->shapeController()->resourceManager()->undoStack()->undo();
+            }
+            if (m_tableDragInfo.tableRowDivider > 0) {
+                KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Adjust Row Height"));
+                m_dy = m_draggingOrigin.y() - event->point.y();
 
-            m_textEditor.data()->setPosition(pointedAt.position, QTextCursor::KeepAnchor);
+                if (m_tableDragInfo.tableLeadSize - m_dy < 0) {
+                    m_dy = m_tableDragInfo.tableLeadSize;
+                }
 
-            if (m_textEditor.data()->hasSelection())
-                repaintSelection();
-            else
-                repaintCaret();
+                m_textEditor.data()->adjustTableRowHeight(m_tableDragInfo.table,
+                    m_tableDragInfo.tableRowDivider - 1,
+                    m_tableDragInfo.tableLeadSize - m_dy, topCmd);
+
+                m_textEditor.data()->endEditBlock();
+
+                m_tableDragInfo.tableDividerPos.setX(m_textShape->convertScreenPos(event->point).x());
+                if (m_tableDraggedOnce) {
+                    //we need to redraw like this so we update outside the textshape too
+                    if (canvas()->canvasWidget())
+                        canvas()->canvasWidget()->update();
+                    if (canvas()->canvasItem())
+                        canvas()->canvasItem()->update();
+                }
+                m_tableDraggedOnce = true;
+            }
+
+        } else {
+            useCursor(Qt::IBeamCursor);
+            if (pointedAt.position == m_textEditor.data()->position()) return;
+            if (pointedAt.position >= 0) {
+                if (m_textEditor.data()->hasSelection())
+                    repaintSelection(); // will erase selection
+                else
+                    repaintCaret();
+
+                m_textEditor.data()->setPosition(pointedAt.position, QTextCursor::KeepAnchor);
+
+                if (m_textEditor.data()->hasSelection())
+                    repaintSelection();
+                else
+                    repaintCaret();
+            }
         }
 
         updateSelectionHandler();
@@ -1017,6 +1223,16 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     event->ignore();
     editingPluginEvents();
+
+    m_tableDragInfo.tableHit = KoPointedAt::None;
+    if (m_tableDraggedOnce) {
+        m_tableDraggedOnce = false;
+        //we need to redraw like this so we update outside the textshape too
+        if (canvas()->canvasWidget())
+            canvas()->canvasWidget()->update();
+        if (canvas()->canvasItem())
+            canvas()->canvasItem()->update();
+    }
 
     if (!m_textShapeData)
         return;
@@ -1972,6 +2188,8 @@ void TextTool::resourceChanged(int key, const QVariant &var)
         int pos = m_textEditor.data()->position();
         m_textEditor.data()->setPosition(var.toInt());
         m_textEditor.data()->setPosition(pos, QTextCursor::KeepAnchor);
+    } else if (key == KoCanvasResourceManager::Unit) {
+        m_unit = var.value<KoUnit>();
     } else return;
 
     repaintSelection();

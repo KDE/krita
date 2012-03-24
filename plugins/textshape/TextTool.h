@@ -29,6 +29,7 @@
 
 #include <KoToolBase.h>
 #include <KoTextCommandBase.h>
+#include <KoUnit.h>
 
 #include <QClipboard>
 #include <QHash>
@@ -311,6 +312,7 @@ private:
     KoTextShapeData *m_textShapeData; // where caret of m_textEditor currently is
     QWeakPointer<KoTextEditor> m_textEditor;
     KoChangeTracker *m_changeTracker;
+    KoUnit m_unit;
     bool m_allowActions;
     bool m_allowAddUndoCommand;
     bool m_allowResourceManagerUpdates;
@@ -360,6 +362,12 @@ private:
     bool m_delayedEnsureVisible;
     TextToolSelection *m_toolSelection;
 
+    KoPointedAt m_tableDragInfo;
+    bool m_tableDraggedOnce;
+    bool m_tableDragWithShift;
+    QPointF m_draggingOrigin;
+    qreal m_dx;
+    qreal m_dy;
     mutable QRectF m_lastImMicroFocus;
 };
 

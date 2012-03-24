@@ -316,12 +316,18 @@ void TabletSettingsTab::setDefault()
 TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget(parent)
 {
     setObjectName(name);
+
+    QGridLayout * l = new QGridLayout(this);
+    l->setSpacing(KDialog::spacingHint());
+    l->setMargin(0);
     m_page = new WdgTabletSettings(this);
+    l->addWidget(m_page, 0, 0);
 
     KisConfig cfg;
     KisCubicCurve curve;
     curve.fromString( cfg.pressureTabletCurve() );
 
+    m_page->pressureCurve->setMaximumSize(QSize(1000, 1000));
     m_page->pressureCurve->setCurve(curve);
 }
 
@@ -604,7 +610,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setIcon(KIcon("preferences-system-performance"));
     addPage(page);
     m_tabletSettings = new TabletSettingsTab(vbox);
-    m_tabletSettings->m_page->pressureCurve->setMaximumSize(QSize(1000, 1000));
+
 
     // full-screen mode
     vbox = new KVBox();

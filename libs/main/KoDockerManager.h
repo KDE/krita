@@ -48,8 +48,6 @@ public slots:
 
 
 private:
-    Q_PRIVATE_SLOT(d, void moveToolBarsBack())
-    Q_PRIVATE_SLOT(d, void moveToolBars())
     Q_PRIVATE_SLOT(d, void restoringDone())
     class Private;
     Private * const d;

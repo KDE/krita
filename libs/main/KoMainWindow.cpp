@@ -1615,9 +1615,6 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         return;
     }
 
-    // important so dockermanager can move toolbars back
-    emit beforeHandlingToolBars();
-
 
     KXMLGUIFactory *factory = guiFactory();
 
@@ -1683,8 +1680,6 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         d->activeView = 0;
         d->activePart = 0;
     }
-    // important so dockermanager can move toolbars where wanted
-    emit afterHandlingToolBars();
 // ###  setUpdatesEnabled( true );
 }
 

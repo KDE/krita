@@ -482,6 +482,10 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
             if (it.key() == QTextFormat::ForegroundBrush) {
                 clearProperty.append(KoCharacterStyle::UseWindowFontColor);
             }
+            else if (it.key() == KoCharacterStyle::UseWindowFontColor) {
+                clearProperty.append(QTextFormat::ForegroundBrush);
+            }
+
         }
         ++it;
     }

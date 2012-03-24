@@ -327,7 +327,7 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
     KisCubicCurve curve;
     curve.fromString( cfg.pressureTabletCurve() );
 
-    m_page->pressureCurve->setMaximumSize(QSize(1000, 1000));
+    m_page->pressureCurve->setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
     m_page->pressureCurve->setCurve(curve);
 }
 
@@ -607,7 +607,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Tablet settings"));
     page->setHeader(i18n("Tablet"));
-    page->setIcon(KIcon("preferences-system-performance"));
+    page->setIcon(KIcon("input-tablet"));
     addPage(page);
     m_tabletSettings = new TabletSettingsTab(vbox);
 

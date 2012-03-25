@@ -104,10 +104,13 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
     layer->setName(elem.attribute("name"));
     layer->setX(elem.attribute("x").toInt());
     layer->setY(elem.attribute("y").toInt());
-    if(elem.attribute("visibility") == "hidden") {
+    if (elem.attribute("visibility") == "hidden") {
         layer->setVisible(false);
     } else {
         layer->setVisible(true);
+    }
+    if (elem.hasAttribute("edit-locked")) {
+        layer->setUserLocked(true);
     }
 
     QString compop = elem.attribute("composite-op");

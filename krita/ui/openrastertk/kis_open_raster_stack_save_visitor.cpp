@@ -38,11 +38,14 @@ struct KisOpenRasterStackSaveVisitor::Private {
     KisOpenRasterSaveContext* saveContext;
     QDomDocument layerStack;
     QDomElement* currentElement;
+    vKisNodeSP activeNodes;
 };
 
-KisOpenRasterStackSaveVisitor::KisOpenRasterStackSaveVisitor(KisOpenRasterSaveContext* saveContext) : d(new Private)
+KisOpenRasterStackSaveVisitor::KisOpenRasterStackSaveVisitor(KisOpenRasterSaveContext* saveContext, vKisNodeSP activeNodes)
+    : d(new Private)
 {
     d->saveContext = saveContext;
+    d->activeNodes = activeNodes;
 }
 
 KisOpenRasterStackSaveVisitor::~KisOpenRasterStackSaveVisitor()
@@ -57,6 +60,9 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     elt.setAttribute("visibility", layer->visible() ? "visible" : "hidden");
     if (layer->userLocked()) {
         elt.setAttribute("edit-locked", "edit-locked");
+    }
+    if (d->activeNodes.contains(layer)) {
+        elt.setAttribute("selected", "selected");
     }
     QString compop = layer->compositeOpId();
     if (layer->compositeOpId() == COMPOSITE_CLEAR) compop = "svg:clear";

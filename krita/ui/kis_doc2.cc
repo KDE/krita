@@ -96,6 +96,7 @@
 #include "widgets/kis_progress_widget.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_resource_server_provider.h"
+#include "kis_node_manager.h"
 
 static const char *CURRENT_DTD_VERSION = "2.0";
 
@@ -129,6 +130,7 @@ public:
     qint32 macroNestDepth;
 
     KisImageSP image;
+    KisNodeSP preActivatedNode;
     KisShapeController* shapeController;
 
     KisKraLoader* kraLoader;
@@ -414,9 +416,8 @@ bool KisDoc2::newImage(const QString& name,
 KoView* KisDoc2::createViewInstance(QWidget* parent)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
-    KisView2 * v = new KisView2(this, parent);
+    KisView2 *v = new KisView2(this, parent);
     Q_CHECK_PTR(v);
-
     m_d->shapeController->setInitialShapeForView(v);
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 
@@ -494,6 +495,31 @@ KoShapeBasedDocumentBase * KisDoc2::shapeController() const
 KoShapeLayer* KisDoc2::shapeForNode(KisNodeSP layer) const
 {
     return m_d->shapeController->shapeForNode(layer);
+}
+
+vKisNodeSP KisDoc2::activeNodes() const
+{
+    vKisNodeSP nodes;
+    foreach(KoView *v, views()) {
+        KisView2 *view = qobject_cast<KisView2*>(v);
+        if (view) {
+            KisNodeSP activeNode = view->activeNode();
+            if (!nodes.contains(activeNode)) {
+                nodes.append(activeNode);
+            }
+        }
+    }
+    return nodes;
+}
+
+void KisDoc2::setPreActivatedNode(KisNodeSP activatedNode)
+{
+    m_d->preActivatedNode = activatedNode;
+}
+
+KisNodeSP KisDoc2::preActivatedNode() const
+{
+    return m_d->preActivatedNode;
 }
 
 void KisDoc2::prepareForImport()

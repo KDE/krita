@@ -314,6 +314,11 @@ QList<KoPAPageBase *> KoPADocument::loadOdfPages( const KoXmlElement & body, KoP
             KoPAPage *page = newPage(static_cast<KoPAMasterPage*>(d->masterPages.first()));
             page->loadOdf( element, context );
             pages.append( page );
+            // in case the page name is pageX where X is the page number remove the name as this is
+            // remove the page name and show the default page name like Slide X or Page X. 
+            if (page->name() == QString("page%1").arg(pages.size())) {
+                page->setName("");
+            }
         }
 
         if (d->odfPageProgressUpdater) {

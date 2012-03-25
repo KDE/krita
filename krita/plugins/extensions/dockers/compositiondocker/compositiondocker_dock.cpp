@@ -50,6 +50,9 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
 
     connect( deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteClicked()));
     connect( saveButton, SIGNAL(clicked(bool)), this, SLOT(saveClicked()));
+#if QT_VERSION >= 0x040700
+    saveNameEdit->setPlaceholderText(i18n("Insert Name"));
+#endif
 }
 
 CompositionDockerDock::~CompositionDockerDock()

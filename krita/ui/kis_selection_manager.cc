@@ -697,9 +697,9 @@ void KisSelectionManager::shapeSelectionChanged()
     foreach(KoShape* shape, shapeManager->shapes()) {
         if (dynamic_cast<KisShapeSelection*>(shape->parent())) {
             if (selectedShapes.contains(shape))
-                shape->setBorder(border);
+                shape->setStroke(border);
             else
-                shape->setBorder(0);
+                shape->setStroke(0);
         }
     }
     updateGUI();

@@ -78,7 +78,7 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
         path->normalize();
 
         KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
-        path->setBorder(border);
+        path->setStroke(border);
 
         addShape(path);
     }

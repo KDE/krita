@@ -348,16 +348,18 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
         layer->setCompositeOp(compositeOpName);
     }
 
-    if(node->inherits("KisPaintLayer")) {
+    if (node->inherits("KisPaintLayer")) {
         KisPaintLayer* layer            = qobject_cast<KisPaintLayer*>(node);
         QBitArray      channelLockFlags = stringToFlags(element.attribute(CHANNEL_LOCK_FLAGS, ""), colorSpace->channelCount());
         layer->setChannelLockFlags(channelLockFlags);
     }
 
-    if (element.attribute(FILE_NAME).isNull())
+    if (element.attribute(FILE_NAME).isNull()) {
         m_d->layerFilenames[node] = name;
-    else
+    }
+    else {
         m_d->layerFilenames[node] = element.attribute(FILE_NAME);
+    }
 
     if (element.hasAttribute("selected") && element.attribute("selected") == "true")  {
         m_d->selectedNodes.append(node);

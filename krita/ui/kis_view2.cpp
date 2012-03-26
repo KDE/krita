@@ -679,6 +679,7 @@ void KisView2::slotLoadingFinished()
     }
 
     KisNodeSP activeNode = m_d->doc->preActivatedNode();
+    m_d->doc->setPreActivatedNode(0); // to make sure that we don't keep a reference to a layer the user can later delete.
 
     if (!activeNode) {
         activeNode = image()->rootLayer()->firstChild();

@@ -27,6 +27,9 @@
           <property name="text">
            <string>Prefix:</string>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
           <property name="buddy">
            <cstring>prefix</cstring>
           </property>
@@ -40,6 +43,9 @@
           <property name="text">
            <string>Suffix:</string>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
           <property name="buddy">
            <cstring>suffix</cstring>
           </property>
@@ -52,6 +58,9 @@
          <widget class="QLabel" name="label_2">
           <property name="text">
            <string>Start at:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
           <property name="buddy">
            <cstring>startValue</cstring>
@@ -76,6 +85,9 @@
           <property name="text">
            <string>Alignment:</string>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
           <property name="buddy">
            <cstring>alignment</cstring>
           </property>
@@ -88,6 +100,9 @@
          <widget class="QLabel" name="label_3">
           <property name="text">
            <string>Depth:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
           <property name="buddy">
            <cstring>depth</cstring>
@@ -109,6 +124,9 @@
           <property name="text">
            <string>Display Levels:</string>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
           <property name="buddy">
            <cstring>levels</cstring>
           </property>
@@ -125,6 +143,9 @@
          <widget class="QLabel" name="label_8">
           <property name="text">
            <string>Bullet/Number followed by</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>
@@ -160,6 +181,9 @@
           <property name="text">
            <string>Aligned at</string>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
          </widget>
         </item>
         <item row="5" column="3">
@@ -173,6 +197,9 @@
          <widget class="QLabel" name="label_11">
           <property name="text">
            <string>Indented at</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>

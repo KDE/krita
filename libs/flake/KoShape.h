@@ -45,7 +45,7 @@ class QRectF;
 class QPainterPath;
 
 class KoShapeContainer;
-class KoShapeBorderModel;
+class KoShapeStrokeModel;
 class KoShapeBackground;
 class KoShapeManager;
 class KoShapeUserData;
@@ -122,7 +122,7 @@ public:
         ParentChanged,   ///< used after a setParent()
         CollisionDetected, ///< used when another shape moved in our boundingrect
         Deleted, ///< the shape was deleted
-        BorderChanged, ///< the shapes border has changed
+        StrokeChanged, ///< the shapes stroke has changed
         BackgroundChanged, ///< the shapes background has changed
         ShadowChanged, ///< the shapes shadow has changed
         ParameterChanged, ///< the shapes parameter has changed (KoParameterShape only)
@@ -256,7 +256,7 @@ public:
      * scaling is a so called secondary operation which is comparable to zooming in
      * instead of changing the size of the basic shape.
      * Easiest example of this difference is that using this method will not distort the
-     * size of pattern-fills and borders.
+     * size of pattern-fills and strokes.
      */
     virtual void setSize(const QSizeF &size);
 
@@ -622,7 +622,7 @@ public:
     /**
      * returns the outline of the shape in the form of a path.
      * The outline returned will always be relative to the position() of the shape, so
-     * moving the shape will not alter the result.  The outline is used to draw the border
+     * moving the shape will not alter the result.  The outline is used to draw the stroke
      * on, for example.
      * @returns the outline of the shape in the form of a path.
      */
@@ -638,22 +638,22 @@ public:
     virtual QRectF outlineRect() const;
 
     /**
-     * Returns the currently set border, or 0 if there is no border.
-     * @return the currently set border, or 0 if there is no border.
+     * Returns the currently set stroke, or 0 if there is no stroke.
+     * @return the currently set stroke, or 0 if there is no stroke.
      */
-    KoShapeBorderModel *border() const;
+    KoShapeStrokeModel *stroke() const;
 
     /**
-     * Set a new border, removing the old one.
-     * @param border the new border, or 0 if there should be no border.
+     * Set a new stroke, removing the old one.
+     * @param stroke the new stroke, or 0 if there should be no stroke.
      */
-    void setBorder(KoShapeBorderModel *border);
+    void setStroke(KoShapeStrokeModel *stroke);
 
     /**
-     * Return the insets of the border.
-     * Convenience method for KoShapeBorderModel::borderInsets()
+     * Return the insets of the stroke.
+     * Convenience method for KoShapeStrokeModel::strokeInsets()
      */
-    KoInsets borderInsets() const;
+    KoInsets strokeInsets() const;
 
     /// Sets the new shadow, removing the old one
     void setShadow(KoShapeShadow *shadow);
@@ -1053,7 +1053,7 @@ protected:
     /**
      * @brief Saves the style used for the shape
      *
-     * This method fills the given style object with the border and
+     * This method fills the given style object with the stroke and
      * background properties and then adds the style to the context.
      *
      * @param style the style object to fill
@@ -1072,7 +1072,7 @@ protected:
     virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// Loads the stroke style
-    KoShapeBorderModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    KoShapeStrokeModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     /// Loads the shadow style
     KoShapeBackground *loadOdfFill(KoShapeLoadingContext &context) const;

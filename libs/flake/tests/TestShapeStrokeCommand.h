@@ -16,16 +16,16 @@
 * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 * Boston, MA 02110-1301, USA.
 */
-#ifndef TESTSHAPEBORDERCOMMAND_H
-#define TESTSHAPEBORDERCOMMAND_H
+#ifndef TESTSHAPESTROKECOMMAND_H
+#define TESTSHAPESTROKECOMMAND_H
 
 #include <QtTest>
 
-class TestShapeBorderCommand : public QObject
+class TestShapeStrokeCommand : public QObject
 {
     Q_OBJECT
 private slots:
     void refCounting();
 };
 
-#endif // TESTSHAPEBORDERCOMMAND_H
+#endif // TESTSHAPESTROKECOMMAND_H

@@ -87,7 +87,7 @@
 #include <KoSelection.h>
 #include <KoShapeBackground.h>
 #include <KoInsets.h>
-#include <KoShapeBorderModel.h>
+#include <KoShapeStrokeModel.h>
 #include <KoColorBackground.h>
 #include <KoLineBorder.h>
 #include <KoOdfWorkaround.h>
@@ -509,8 +509,8 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     KoColorBackground *background = new KoColorBackground( Qt::white );
     setBackground( background );
 
-    KoLineBorder *border = new KoLineBorder( 0, Qt::black );
-    setBorder( border );
+    KoLineBorder *stroke = new KoLineBorder( 0, Qt::black );
+    setStroke( stroke );
 
     ChartLayout *l = layout();
     l->setPosition( d->plotArea, CenterPosition );
@@ -751,7 +751,7 @@ void ChartShape::paintDecorations( QPainter &painter,
     if ( canvas->shapeManager()->selection()->selectedShapes().contains( this ) )
         return;
 
-    if ( border() )
+    if ( stroke() )
         return;
 
     QRectF border = QRectF( QPointF( -1.5, -1.5 ),

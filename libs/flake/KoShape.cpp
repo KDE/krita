@@ -29,7 +29,7 @@
 #include "KoSelection.h"
 #include "KoPointerEvent.h"
 #include "KoInsets.h"
-#include "KoShapeBorderModel.h"
+#include "KoShapeStrokeModel.h"
 #include "KoShapeBackground.h"
 #include "KoColorBackground.h"
 #include "KoGradientBackground.h"
@@ -75,13 +75,13 @@
 // KoShapePrivate
 
 KoShapePrivate::KoShapePrivate(KoShape *shape)
-    : size(50, 50),
+    : q_ptr(shape),
+      size(50, 50),
       parent(0),
       userData(0),
       appData(0),
+      stroke(0),
       fill(0),
-      border(0),
-      q_ptr(shape),
       shadow(0),
       clipPath(0),
       filterEffectStack(0),
@@ -116,8 +116,8 @@ KoShapePrivate::~KoShapePrivate()
     }
     delete userData;
     delete appData;
-    if (border && !border->deref())
-        delete border;
+    if (stroke && !stroke->deref())
+        delete stroke;
     if (shadow && !shadow->deref())
         delete shadow;
     if (fill && !fill->deref())
@@ -138,13 +138,13 @@ void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
         shape->shapeChanged(type, q);
 }
 
-void KoShapePrivate::updateBorder()
+void KoShapePrivate::updateStroke()
 {
     Q_Q(KoShape);
-    if (border == 0)
+    if (stroke == 0)
         return;
     KoInsets insets;
-    border->borderInsets(q, insets);
+    stroke->strokeInsets(q, insets);
     QSizeF inner = q->size();
     // update left
     q->update(QRectF(-insets.left, -insets.top, insets.left,
@@ -357,9 +357,9 @@ bool KoShape::hitTest(const QPointF &position) const
 
     QPointF point = absoluteTransformation(0).inverted().map(position);
     QRectF bb(QPointF(), size());
-    if (d->border) {
+    if (d->stroke) {
         KoInsets insets;
-        d->border->borderInsets(this, insets);
+        d->stroke->strokeInsets(this, insets);
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
     if (bb.contains(point))
@@ -382,9 +382,9 @@ QRectF KoShape::boundingRect() const
 
     QTransform transform = absoluteTransformation(0);
     QRectF bb = outlineRect();
-    if (d->border) {
+    if (d->stroke) {
         KoInsets insets;
-        d->border->borderInsets(this, insets);
+        d->stroke->strokeInsets(this, insets);
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
     bb = transform.mapRect(bb);
@@ -721,12 +721,12 @@ qreal KoShape::transparency(bool recursive) const
     }
 }
 
-KoInsets KoShape::borderInsets() const
+KoInsets KoShape::strokeInsets() const
 {
     Q_D(const KoShape);
     KoInsets answer;
-    if (d->border)
-        d->border->borderInsets(this, answer);
+    if (d->stroke)
+        d->stroke->strokeInsets(this, answer);
     return answer;
 }
 
@@ -1083,23 +1083,23 @@ bool KoShape::collisionDetection()
     return d->detectCollision;
 }
 
-KoShapeBorderModel *KoShape::border() const
+KoShapeStrokeModel *KoShape::stroke() const
 {
     Q_D(const KoShape);
-    return d->border;
+    return d->stroke;
 }
 
-void KoShape::setBorder(KoShapeBorderModel *border)
+void KoShape::setStroke(KoShapeStrokeModel *stroke)
 {
     Q_D(KoShape);
-    if (border)
-        border->ref();
-    d->updateBorder();
-    if (d->border)
-        d->border->deref();
-    d->border = border;
-    d->updateBorder();
-    d->shapeChanged(BorderChanged);
+    if (stroke)
+        stroke->ref();
+    d->updateStroke();
+    if (d->stroke)
+        d->stroke->deref();
+    d->stroke = stroke;
+    d->updateStroke();
+    d->shapeChanged(StrokeChanged);
     notifyChanged();
 }
 
@@ -1187,7 +1187,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
 {
     Q_D(const KoShape);
     // and fill the style
-    KoShapeBorderModel *b = border();
+    KoShapeStrokeModel *b = stroke();
     if (b) {
         b->fillStyle(style, context);
     }
@@ -1287,16 +1287,16 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
         delete d->fill;
         d->fill = 0;
     }
-    if (d->border && !d->border->deref()) {
-        delete d->border;
-        d->border = 0;
+    if (d->stroke && !d->stroke->deref()) {
+        delete d->stroke;
+        d->stroke = 0;
     }
     if (d->shadow && !d->shadow->deref()) {
         delete d->shadow;
         d->shadow = 0;
     }
     setBackground(loadOdfFill(context));
-    setBorder(loadOdfStroke(element, context));
+    setStroke(loadOdfStroke(element, context));
     setShadow(d->loadOdfShadow(context));
 
     QString protect(styleStack.property(KoXmlNS::style, "protect"));
@@ -1485,7 +1485,7 @@ KoShapeBackground *KoShape::loadOdfFill(KoShapeLoadingContext &context) const
     return bg;
 }
 
-KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const
+KoShapeStrokeModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
@@ -1494,41 +1494,41 @@ KoShapeBorderModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
     if (stroke == "solid" || stroke == "dash") {
         QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, stroke, stylesReader);
 
-        KoLineBorder *border = new KoLineBorder();
+        KoLineBorder *stroke = new KoLineBorder();
 
         if (styleStack.hasProperty(KoXmlNS::calligra, "stroke-gradient")) {
             QString gradientName = styleStack.property(KoXmlNS::calligra, "stroke-gradient");
             QBrush brush = KoOdfGraphicStyles::loadOdfGradientStyleByName(stylesReader, gradientName, size());
-            border->setLineBrush(brush);
+            stroke->setLineBrush(brush);
         } else {
-            border->setColor(pen.color());
+            stroke->setColor(pen.color());
         }
 
 #ifndef NWORKAROUND_ODF_BUGS
         KoOdfWorkaround::fixPenWidth(pen, context);
 #endif
-        border->setLineWidth(pen.widthF());
-        border->setJoinStyle(pen.joinStyle());
-        border->setLineStyle(pen.style(), pen.dashPattern());
-        border->setCapStyle(pen.capStyle());
+        stroke->setLineWidth(pen.widthF());
+        stroke->setJoinStyle(pen.joinStyle());
+        stroke->setLineStyle(pen.style(), pen.dashPattern());
+        stroke->setCapStyle(pen.capStyle());
 
-        return border;
+        return stroke;
 #ifndef NWORKAROUND_ODF_BUGS
     } else if (stroke.isEmpty()) {
         QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, "solid", stylesReader);
         if (KoOdfWorkaround::fixMissingStroke(pen, element, context, this)) {
-            KoLineBorder *border = new KoLineBorder();
+            KoLineBorder *stroke = new KoLineBorder();
 
 #ifndef NWORKAROUND_ODF_BUGS
             KoOdfWorkaround::fixPenWidth(pen, context);
 #endif
-            border->setLineWidth(pen.widthF());
-            border->setJoinStyle(pen.joinStyle());
-            border->setLineStyle(pen.style(), pen.dashPattern());
-            border->setCapStyle(pen.capStyle());
-            border->setColor(pen.color());
+            stroke->setLineWidth(pen.widthF());
+            stroke->setJoinStyle(pen.joinStyle());
+            stroke->setLineStyle(pen.style(), pen.dashPattern());
+            stroke->setCapStyle(pen.capStyle());
+            stroke->setColor(pen.color());
 
-            return border;
+            return stroke;
         }
 #endif
     }

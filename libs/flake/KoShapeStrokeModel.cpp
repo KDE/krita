@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
+ *
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,36 +19,36 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoShapeBorderModel.h"
+#include "KoShapeStrokeModel.h"
 
-class KoShapeBorderModel::Private
+class KoShapeStrokeModel::Private
 {
 public:
     Private() : refCount(0) { }
     QAtomicInt refCount;
 };
 
-KoShapeBorderModel::KoShapeBorderModel()
-        : d(new Private())
+KoShapeStrokeModel::KoShapeStrokeModel()
+    : d(new Private())
 {
 }
 
-KoShapeBorderModel::~KoShapeBorderModel()
+KoShapeStrokeModel::~KoShapeStrokeModel()
 {
     delete d;
 }
 
-bool KoShapeBorderModel::ref()
+bool KoShapeStrokeModel::ref()
 {
     return d->refCount.ref();
 }
 
-bool KoShapeBorderModel::deref()
+bool KoShapeStrokeModel::deref()
 {
     return d->refCount.deref();
 }
 
-int KoShapeBorderModel::useCount() const
+int KoShapeStrokeModel::useCount() const
 {
     return d->refCount;
 }

@@ -42,7 +42,7 @@ KoConnectionShapeFactory::KoConnectionShapeFactory()
 KoShape* KoConnectionShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     KoConnectionShape * shape = new KoConnectionShape();
-    shape->setBorder(new KoLineBorder());
+    shape->setStroke(new KoLineBorder());
     shape->setShapeId(KoPathShapeId);
     return shape;
 }

@@ -77,7 +77,7 @@ void TestShapeGroupCommand::init()
     strokeShape2->setPosition( QPointF(25,25) );
 
     strokeGroup = new KoShapeGroup();
-    strokeGroup->setBorder( new KoLineBorder( 2.0f ) );
+    strokeGroup->setStroke( new KoLineBorder( 2.0f ) );
     strokeGroup->setShadow( new KoShapeShadow() );
 }
 

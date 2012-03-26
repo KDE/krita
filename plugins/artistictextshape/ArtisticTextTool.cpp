@@ -565,7 +565,7 @@ void ArtisticTextTool::convertText()
     KoPathShape * path = KoPathShape::createShapeFromPainterPath( m_currentShape->outline() );
     path->setParent( m_currentShape->parent() );
     path->setZIndex( m_currentShape->zIndex() );
-    path->setBorder( m_currentShape->border() );
+    path->setStroke( m_currentShape->stroke() );
     path->setBackground( m_currentShape->background() );
     path->setTransformation( m_currentShape->transformation() );
     path->setShapeId( KoPathShapeId );

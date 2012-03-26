@@ -112,9 +112,9 @@ void KoCreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, cons
     KoShapePaintingContext paintContext; //FIXME
     pathShape.paint(painter, converter, paintContext);
     painter.restore();
-    if (pathShape.border()) {
+    if (pathShape.stroke()) {
         painter.save();
-        pathShape.border()->paint(d->shape, painter, converter);
+        pathShape.stroke()->paint(d->shape, painter, converter);
         painter.restore();
     }
 }
@@ -167,10 +167,10 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         d->shape=pathShape;
         pathShape->setShapeId(KoPathShapeId);
 
-        KoLineBorder *border = new KoLineBorder(canvas()->resourceManager()->activeBorder());
-        border->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
+        KoLineBorder *stroke = new KoLineBorder(canvas()->resourceManager()->activeStroke());
+        stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
 
-        pathShape->setBorder(border);
+        pathShape->setStroke(stroke);
         canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
         QPointF point = canvas()->snapGuide()->snap(event->point, event->modifiers());
 

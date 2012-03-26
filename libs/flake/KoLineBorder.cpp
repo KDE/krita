@@ -68,7 +68,7 @@ KoLineBorder::KoLineBorder()
 }
 
 KoLineBorder::KoLineBorder(const KoLineBorder &other)
-        : KoShapeBorderModel(), d(new Private())
+        : KoShapeStrokeModel(), d(new Private())
 {
     d->color = other.d->color;
     d->pen = other.d->pen;
@@ -110,7 +110,7 @@ void KoLineBorder::fillStyle(KoGenStyle &style, KoShapeSavingContext &context) c
     KoOdfGraphicStyles::saveOdfStrokeStyle(style, context.mainStyles(), pen);
 }
 
-void KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets) const
+void KoLineBorder::strokeInsets(const KoShape *shape, KoInsets &insets) const
 {
     Q_UNUSED(shape);
     qreal lineWidth = d->pen.widthF();

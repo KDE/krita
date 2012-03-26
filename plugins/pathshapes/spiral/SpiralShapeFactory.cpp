@@ -39,7 +39,7 @@ KoShape *SpiralShapeFactory::createDefaultShape(KoDocumentResourceManager *) con
 {
     SpiralShape *spiral = new SpiralShape();
 
-    spiral->setBorder(new KoLineBorder(1.0));
+    spiral->setStroke(new KoLineBorder(1.0));
     spiral->setShapeId(KoPathShapeId);
 
     return spiral;

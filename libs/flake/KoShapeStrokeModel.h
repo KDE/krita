@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
+ *
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007,2009 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOSHAPEBORDERMODEL_H
-#define KOSHAPEBORDERMODEL_H
+#ifndef KOSHAPESTROKEMODEL_H
+#define KOSHAPESTROKEMODEL_H
 
 #include "KoInsets.h"
 
@@ -33,18 +35,18 @@ class KoShapeSavingContext;
 class KoViewConverter;
 
 /**
- * A model for borders around KoShapes.
- * Classes that implement this model will be allowed to draw a border on the outline
+ * A model for strokes of KoShapes.
+ * Classes that implement this model will be allowed to draw the stroke of the outline
  * of a shape.
  * Note that since the important members take a KoShape as argument it is possible,
- * and preferred behavior, to have one instance of a border that is reused on several
+ * and preferred behavior, to have one instance of a stroke that is reused on several
  * objects.
  */
-class FLAKE_EXPORT KoShapeBorderModel
+class FLAKE_EXPORT KoShapeStrokeModel
 {
 public:
-    KoShapeBorderModel();
-    virtual ~KoShapeBorderModel();
+    KoShapeStrokeModel();
+    virtual ~KoShapeStrokeModel();
 
     /**
      * @brief Fill the style object (aka save)
@@ -55,19 +57,19 @@ public:
     virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) const = 0;
 
     /**
-     * Return a borderInsets object filled with the size inside the shape that this border takes.
+     * Return a strokeInsets object filled with the size inside the shape that this stroke takes.
      * @param shape the shape the insets will be calculated for
      * @param insets the insets object that will be filled and returned.
      */
-    virtual void borderInsets(const KoShape *shape, KoInsets &insets) const = 0;
+    virtual void strokeInsets(const KoShape *shape, KoInsets &insets) const = 0;
     /**
-     * Returns true if there is some transparency, false if the border is fully opaque.
-     * @return if the border is transparent.
+     * Returns true if there is some transparency, false if the stroke is fully opaque.
+     * @return if the stroke is transparent.
      */
     virtual bool hasTransparency() const = 0;
     /**
-     * Paint the border.
-     * This method should paint the border around shape.
+     * Paint the stroke.
+     * This method should paint the stroke around shape.
      * @param shape the shape to paint around
      * @param painter the painter to paint to, the painter will have the topleft of the
      *       shape as its start coordinate.
@@ -76,15 +78,15 @@ public:
     virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter) = 0;
 
     /**
-     * Paint the border in the given color
+     * Paint the stroke in the given color
      *
-     * This method should paint the border around the shape in the given color.
+     * This method should paint the stroke around the shape in the given color.
      *
      * @param shape the shape to paint around
      * @param painter the painter to paint to, the painter will have the topleft of the
      *       shape as its start coordinate.
      * @param converter to convert between internal and view coordinates.
-     * @param color to use to paint the border.
+     * @param color to use to paint the stroke.
      */
     virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color) = 0;
 

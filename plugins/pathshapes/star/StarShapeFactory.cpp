@@ -110,7 +110,7 @@ KoShape *StarShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     StarShape *star = new StarShape();
 
-    star->setBorder(new KoLineBorder(1.0));
+    star->setStroke(new KoLineBorder(1.0));
     star->setShapeId(KoPathShapeId);
 
     return star;
@@ -128,7 +128,7 @@ KoShape *StarShapeFactory::createShape(const KoProperties *params, KoDocumentRes
     star->setTipRadius(params->doubleProperty("tipRadius", 50.0));
     star->setBaseRoundness(params->doubleProperty("baseRoundness", 0.0));
     star->setTipRoundness(params->doubleProperty("tipRoundness", 0.0));
-    star->setBorder(new KoLineBorder(1.0));
+    star->setStroke(new KoLineBorder(1.0));
     star->setShapeId(KoPathShapeId);
     QVariant v;
     if (params->property("background", v))

@@ -28,7 +28,7 @@
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
 #include "KoShapeRegistry.h"
-#include "KoShapeBorderModel.h"
+#include "KoShapeStrokeModel.h"
 #include "KoShapeShadow.h"
 
 #include <QPainter>
@@ -228,13 +228,13 @@ void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)
     Q_UNUSED(shape);
     KoShapeContainer::shapeChanged(type, shape);
     switch (type) {
-    case KoShape::BorderChanged:
+    case KoShape::StrokeChanged:
     {
-        KoShapeBorderModel *stroke = border();
-        if (stroke) {
-            if (stroke->deref())
-                delete stroke;
-            setBorder(0);
+        KoShapeStrokeModel *str = stroke();
+        if (str) {
+            if (str->deref())
+                delete str;
+            setStroke(0);
         }
         break;
     }

@@ -117,7 +117,7 @@ qreal EnhancedPathNamedParameter::evaluate()
     case IdentifierYstretch:
         break;
     case IdentifierHasStroke:
-        return parent()->border() ? 1.0 : 0.0;
+        return parent()->stroke() ? 1.0 : 0.0;
         break;
     case IdentifierHasFill:
         return parent()->background() ? 0.0 : 1.0;

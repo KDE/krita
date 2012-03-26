@@ -24,7 +24,7 @@
 #include "KoShapeGroup.h"
 #include "KoSelection.h"
 #include "KoShapeSavingContext.h"
-#include "KoShapeBorderModel.h"
+#include "KoShapeStrokeModel.h"
 #include "KoShape.h"
 #include "KoInsets.h"
 #include "KoUnit.h"
@@ -105,7 +105,7 @@ void KoShapeShadow::Private::paintShadow(KoShape *shape, QPainter &painter, cons
         painter.restore();
     }
 
-    if (shape->border()) {
+    if (shape->stroke()) {
         painter.save();
         QTransform oldPainterMatrix = painter.transform();
         KoShape::applyConversion(painter, converter);
@@ -116,7 +116,7 @@ void KoShapeShadow::Private::paintShadow(KoShape *shape, QPainter &painter, cons
         // compensate applyConversion call in paint
         QTransform scaleMatrix = newPainterMatrix * oldPainterMatrix.inverted();
         painter.setTransform(scaleMatrix.inverted() * painter.transform());
-        shape->border()->paint(shape, painter, converter);
+        shape->stroke()->paint(shape, painter, converter);
         painter.restore();
     }
 }

@@ -20,7 +20,7 @@
 #include "KoShapeContainer.h"
 #include "KoShapeContainer_p.h"
 #include "KoShapeContainerModel.h"
-#include "KoShapeBorderModel.h"
+#include "KoShapeStrokeModel.h"
 #include "KoShapeContainerDefaultModel.h"
 #include "KoShapeSavingContext.h"
 
@@ -196,10 +196,10 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
         painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
         shape->paint(painter, converter, paintcontext);
         painter.restore();
-        if (shape->border()) {
+        if (shape->stroke()) {
             painter.save();
             painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
-            shape->border()->paint(shape, painter, converter);
+            shape->stroke()->paint(shape, painter, converter);
             painter.restore();
         }
     }

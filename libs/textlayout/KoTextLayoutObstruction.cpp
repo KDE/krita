@@ -20,7 +20,7 @@
 
 #include "KoTextLayoutObstruction.h"
 #include <KoShapeContainer.h>
-#include <KoShapeBorderModel.h>
+#include <KoShapeStrokeModel.h>
 #include <KoShapeShadow.h>
 #include <KoShapeGroup.h>
 
@@ -77,9 +77,9 @@ QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qre
     QRectF bb = shape->outlineRect();
     borderHalfWidth = 0;
  
-    if (shape->border()) {
+    if (shape->stroke()) {
         KoInsets insets;
-        shape->border()->borderInsets(shape, insets);
+        shape->stroke()->strokeInsets(shape, insets);
         /*
         bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
         path = QPainterPath();

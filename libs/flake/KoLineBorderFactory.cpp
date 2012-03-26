@@ -26,7 +26,7 @@ KoLineBorderFactory::KoLineBorderFactory()
 {
 }
 
-KoShapeBorderModel * KoLineBorderFactory::createBorder() const
+KoShapeStrokeModel * KoLineBorderFactory::createStroke() const
 {
     return new KoLineBorder();
 }

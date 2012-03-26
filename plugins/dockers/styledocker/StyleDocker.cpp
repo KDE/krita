@@ -33,7 +33,7 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoLineBorder.h>
-#include <KoShapeBorderCommand.h>
+#include <KoShapeStrokeCommand.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoPathFillRuleCommand.h>
 #include <KoShapeTransparencyCommand.h>
@@ -173,11 +173,11 @@ void StyleDocker::setCanvas(KoCanvasBase * canvas)
 
     KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
     if (shape)
-        updateStyle(shape->border(), shape->background());
+        updateStyle(shape->stroke(), shape->background());
     else {
         KoShape* page = m_canvas->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
         if (page) {
-            updateStyle(page->border(), page->background());
+            updateStyle(page->stroke(), page->background());
         }
         else {
             updateStyle(0, 0);
@@ -212,7 +212,7 @@ void StyleDocker::updateStyle()
     m_opacity->blockSignals(true);
     KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
     if (shape) {
-        updateStyle(shape->border(), shape->background());
+        updateStyle(shape->stroke(), shape->background());
         m_opacity->setValue(100-shape->transparency()*100);
     }
     else {
@@ -222,7 +222,7 @@ void StyleDocker::updateStyle()
     m_opacity->blockSignals(false);
 }
 
-void StyleDocker::updateStyle(KoShapeBorderModel * stroke, KoShapeBackground * fill)
+void StyleDocker::updateStyle(KoShapeStrokeModel * stroke, KoShapeBackground * fill)
 {
     if (! m_canvas)
         return;
@@ -232,9 +232,9 @@ void StyleDocker::updateStyle(KoShapeBorderModel * stroke, KoShapeBackground * f
 
     QColor qColor;
     if (activeStyle == KoFlake::Foreground) {
-        KoLineBorder * border = dynamic_cast<KoLineBorder*>(stroke);
-        if (border)
-            qColor = border->color();
+        KoLineBorder * stroke2 = dynamic_cast<KoLineBorder*>(stroke);
+        if (stroke)
+            qColor = stroke2->color();
         else
             qColor = m_canvas->resourceManager()->foregroundColor().toQColor();
     }
@@ -296,7 +296,7 @@ void StyleDocker::styleButtonPressed(int buttonId)
             if (provider->resource(KoCanvasResourceManager::ActiveStyleType).toInt() == KoFlake::Background)
                 m_canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), 0));
             else
-                m_canvas->addCommand(new KoShapeBorderCommand(selection->selectedShapes(), 0));
+                m_canvas->addCommand(new KoShapeStrokeCommand(selection->selectedShapes(), 0));
             m_stack->setCurrentIndex(0);
             updateStyle();
             break;
@@ -367,10 +367,10 @@ void StyleDocker::updateColor(const QColor &c, const QList<KoShape*> & selectedS
             m_lastStrokeCommand = 0;
         }
         if (m_lastColorStrokes.count() && m_lastStrokeCommand) {
-            foreach(KoShapeBorderModel * border, m_lastColorStrokes) {
-                KoLineBorder * lineBorder = dynamic_cast<KoLineBorder*>(border);
-                if (lineBorder)
-                    lineBorder->setColor(c);
+            foreach(KoShapeStrokeModel * stroke, m_lastColorStrokes) {
+                KoLineBorder * lineStroke = dynamic_cast<KoLineBorder*>(stroke);
+                if (lineStroke)
+                    lineStroke->setColor(c);
             }
             m_lastStrokeCommand->redo();
         }
@@ -378,22 +378,22 @@ void StyleDocker::updateColor(const QColor &c, const QList<KoShape*> & selectedS
             m_lastColorStrokes.clear();
             QList<KoShape *>::const_iterator it(selectedShapes.begin());
             for (;it != selectedShapes.end(); ++it) {
-                // get the border of the first selected shape and check if it is a line border
-                KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>((*it)->border());
-                KoLineBorder * newBorder = 0;
-                if (oldBorder) {
-                    // preserve the properties of the old border if it is a line border
-                    newBorder = new KoLineBorder(*oldBorder);
-                    newBorder->setLineBrush(QBrush());
-                    newBorder->setColor(c);
+                // get the stroke of the first selected shape and check if it is a line stroke
+                KoLineBorder * oldStroke = dynamic_cast<KoLineBorder*>((*it)->stroke());
+                KoLineBorder * newStroke = 0;
+                if (oldStroke) {
+                    // preserve the properties of the old stroke if it is a line stroke
+                    newStroke = new KoLineBorder(*oldStroke);
+                    newStroke->setLineBrush(QBrush());
+                    newStroke->setColor(c);
                 }
                 else {
-                    newBorder = new KoLineBorder(1.0, c);
+                    newStroke = new KoLineBorder(1.0, c);
                 }
-                m_lastColorStrokes.append(newBorder);
+                m_lastColorStrokes.append(newStroke);
             }
 
-            m_lastStrokeCommand = new KoShapeBorderCommand(selectedShapes, m_lastColorStrokes);
+            m_lastStrokeCommand = new KoShapeStrokeCommand(selectedShapes, m_lastColorStrokes);
             m_canvas->addCommand(m_lastStrokeCommand);
         }
         m_lastColorChange = QTime::currentTime();
@@ -450,7 +450,7 @@ void StyleDocker::updateGradient(KoResource * item)
     KoCanvasResourceManager * provider = m_canvas->resourceManager();
     int activeStyle = provider->resource(KoCanvasResourceManager::ActiveStyleType).toInt();
 
-    // check which color to set foreground == border, background == fill
+    // check which color to set foreground == stroke, background == fill
     if (activeStyle == KoFlake::Background) {
         KUndo2Command * firstCommand = 0;
         foreach (KoShape * shape, selectedShapes) {
@@ -465,22 +465,22 @@ void StyleDocker::updateGradient(KoResource * item)
         m_canvas->addCommand(firstCommand);
     }
     else {
-        QList<KoShapeBorderModel*> newBorders;
+        QList<KoShapeStrokeModel*> newStrokes;
         foreach (KoShape * shape, selectedShapes) {
             QBrush brush = applyStrokeGradientStops(shape, newStops);
             if (brush.style() == Qt::NoBrush)
                 continue;
 
-            KoLineBorder * border = dynamic_cast<KoLineBorder*>(shape->border());
-            KoLineBorder * newBorder = 0;
-            if (border)
-                newBorder = new KoLineBorder(*border);
+            KoLineBorder * stroke = dynamic_cast<KoLineBorder*>(shape->stroke());
+            KoLineBorder * newStroke = 0;
+            if (stroke)
+                newStroke = new KoLineBorder(*stroke);
             else
-                newBorder = new KoLineBorder(1.0);
-            newBorder->setLineBrush(brush);
-            newBorders.append(newBorder);
+                newStroke = new KoLineBorder(1.0);
+            newStroke->setLineBrush(brush);
+            newStrokes.append(newStroke);
         }
-        m_canvas->addCommand(new KoShapeBorderCommand(selectedShapes, newBorders));
+        m_canvas->addCommand(new KoShapeStrokeCommand(selectedShapes, newStrokes));
     }
     updateStyle();
 }
@@ -634,9 +634,9 @@ QBrush StyleDocker::applyStrokeGradientStops(KoShape *shape, const QGradientStop
         return QBrush();
 
     QBrush gradientBrush;
-    KoLineBorder *border = dynamic_cast<KoLineBorder*>(shape->border());
-    if (border)
-        gradientBrush = border->lineBrush();
+    KoLineBorder *stroke = dynamic_cast<KoLineBorder*>(shape->stroke());
+    if (stroke)
+        gradientBrush = stroke->lineBrush();
 
     QGradient *newGradient = 0;
     const QGradient *oldGradient = gradientBrush.gradient();

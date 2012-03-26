@@ -164,7 +164,7 @@ bool Legend::showFrame() const
 void Legend::setShowFrame( bool show )
 {
     d->showFrame = show;
-    setBorder( show ? d->lineBorder : 0 );
+    setStroke( show ? d->lineBorder : 0 );
 }
 
 QPen Legend::framePen() const

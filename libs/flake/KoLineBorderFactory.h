@@ -27,7 +27,7 @@ public:
     KoLineBorderFactory();
 
     /// reimplemented
-    virtual KoShapeBorderModel *createBorder() const;
+    virtual KoShapeStrokeModel *createStroke() const;
 };
 
 #endif

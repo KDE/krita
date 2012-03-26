@@ -30,7 +30,7 @@
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
 #include "KoShapeRegistry.h"
-#include "KoShapeBorderModel.h"
+//#include "KoShapeStrokeModel.h"
 #include "KoShapeShadow.h"
 #include <KoShapeRegistry.h>
 #include <KoXmlNS.h>

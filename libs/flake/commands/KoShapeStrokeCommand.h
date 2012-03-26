@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
+ *
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOSHAPEBORDERCOMMAND_H
-#define KOSHAPEBORDERCOMMAND_H
+#ifndef KOSHAPESTROKECOMMAND_H
+#define KOSHAPESTROKECOMMAND_H
 
 #include "flake_export.h"
 
@@ -27,37 +29,37 @@
 #include <QList>
 
 class KoShape;
-class KoShapeBorderModel;
+class KoShapeStrokeModel;
 
-/// The undo / redo command for setting the shape border
-class FLAKE_EXPORT KoShapeBorderCommand : public KUndo2Command
+/// The undo / redo command for setting the shape stroke
+class FLAKE_EXPORT KoShapeStrokeCommand : public KUndo2Command
 {
 public:
     /**
-     * Command to set a new shape border.
-     * @param shapes a set of all the shapes that should get the new border.
-     * @param border the new border, the same for all given shapes
+     * Command to set a new shape stroke.
+     * @param shapes a set of all the shapes that should get the new stroke.
+     * @param stroke the new stroke, the same for all given shapes
      * @param parent the parent command used for macro commands
      */
-    KoShapeBorderCommand(const QList<KoShape*> &shapes, KoShapeBorderModel *border, KUndo2Command *parent = 0);
+    KoShapeStrokeCommand(const QList<KoShape*> &shapes, KoShapeStrokeModel *stroke, KUndo2Command *parent = 0);
 
     /**
-     * Command to set new shape borders.
-     * @param shapes a set of all the shapes that should get a new border.
-     * @param borders the new borders, one for each shape
+     * Command to set new shape strokes.
+     * @param shapes a set of all the shapes that should get a new stroke.
+     * @param strokes the new strokes, one for each shape
      * @param parent the parent command used for macro commands
      */
-    KoShapeBorderCommand(const QList<KoShape*> &shapes, const QList<KoShapeBorderModel*> &borders, KUndo2Command *parent = 0);
+    KoShapeStrokeCommand(const QList<KoShape*> &shapes, const QList<KoShapeStrokeModel*> &strokes, KUndo2Command *parent = 0);
 
     /**
-     * Command to set a new shape border.
-     * @param shape a single shape that should get the new border.
-     * @param border the new border
+     * Command to set a new shape stroke.
+     * @param shape a single shape that should get the new stroke.
+     * @param stroke the new stroke
      * @param parent the parent command used for macro commands
      */
-    KoShapeBorderCommand(KoShape* shape, KoShapeBorderModel *border, KUndo2Command *parent = 0);
+    KoShapeStrokeCommand(KoShape* shape, KoShapeStrokeModel *stroke, KUndo2Command *parent = 0);
 
-    virtual ~KoShapeBorderCommand();
+    virtual ~KoShapeStrokeCommand();
     /// redo the command
     void redo();
     /// revert the actions done in redo

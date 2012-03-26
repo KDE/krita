@@ -114,20 +114,20 @@ KoUnit KoCanvasResourceManager::unitResource(int key) const
 }
 
 
-void KoCanvasResourceManager::setActiveBorder(const KoLineBorder &border)
+void KoCanvasResourceManager::setActiveStroke(const KoLineBorder &stroke)
 {
     QVariant v;
-    v.setValue(border);
-    setResource(ActiveBorder, v);
+    v.setValue(stroke);
+    setResource(ActiveStroke, v);
 }
 
-KoLineBorder KoCanvasResourceManager::activeBorder() const
+KoLineBorder KoCanvasResourceManager::activeStroke() const
 {
-    if (!d->manager.hasResource(ActiveBorder)) {
+    if (!d->manager.hasResource(ActiveStroke)) {
         KoLineBorder empty;
         return empty;
     }
-    return resource(ActiveBorder).value<KoLineBorder>();
+    return resource(ActiveStroke).value<KoLineBorder>();
 }
 
 bool KoCanvasResourceManager::boolResource(int key) const

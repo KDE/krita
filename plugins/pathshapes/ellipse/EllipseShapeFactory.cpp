@@ -49,7 +49,7 @@ KoShape *EllipseShapeFactory::createDefaultShape(KoDocumentResourceManager *) co
 {
     EllipseShape *ellipse = new EllipseShape();
 
-    ellipse->setBorder(new KoLineBorder(1.0));
+    ellipse->setStroke(new KoLineBorder(1.0));
     ellipse->setShapeId(KoPathShapeId);
 
     QRadialGradient *gradient = new QRadialGradient(QPointF(0.5,0.5), 0.5, QPointF(0.25,0.25));

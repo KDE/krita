@@ -72,10 +72,10 @@ CommentShape::CommentShape(KoDocumentResourceManager* resourceManager)
     gradient->setColorAt(1.0, QColor(254, 201, 7));
     m_comment->setBackground(new KoGradientBackground(gradient));
 
-    KoLineBorder* border = new KoLineBorder;
-    border->setLineBrush(QBrush(Qt::black));
-    border->setLineWidth(0.5);
-    m_comment->setBorder(border);
+    KoLineBorder* stroke = new KoLineBorder;
+    stroke->setLineBrush(QBrush(Qt::black));
+    stroke->setLineWidth(0.5);
+    m_comment->setStroke(stroke);
 
     addShape(m_comment);
 

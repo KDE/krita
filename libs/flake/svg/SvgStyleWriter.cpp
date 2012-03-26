@@ -101,7 +101,7 @@ void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
 
 void SvgStyleWriter::saveSvgStroke(KoShape *shape, SvgSavingContext &context)
 {
-    const KoLineBorder * line = dynamic_cast<const KoLineBorder*>(shape->border());
+    const KoLineBorder * line = dynamic_cast<const KoLineBorder*>(shape->stroke());
     if (! line)
         return;
 

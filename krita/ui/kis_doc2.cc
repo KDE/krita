@@ -317,6 +317,11 @@ bool KisDoc2::completeLoading(KoStore *store)
 
     m_d->kraLoader->loadBinaryData(store, m_d->image, url().url(), isStoredExtern());
 
+    vKisNodeSP preselectedNodes = m_d->kraLoader->selectedNodes();
+    if (preselectedNodes.size() > 0) {
+        m_d->preActivatedNode = preselectedNodes.first();
+    }
+
     delete m_d->kraLoader;
     m_d->kraLoader = 0;
 
@@ -481,7 +486,6 @@ QPixmap KisDoc2::generatePreview(const QSize& size)
         newSize.scale(size, Qt::KeepAspectRatio);
 
         QImage image = m_d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
-        //image.save("thumb.png");
         return QPixmap::fromImage(image);
     }
     return QPixmap(size);
@@ -505,6 +509,9 @@ vKisNodeSP KisDoc2::activeNodes() const
         if (view) {
             KisNodeSP activeNode = view->activeNode();
             if (!nodes.contains(activeNode)) {
+                if (activeNode->inherits("KisMask")) {
+                    activeNode = activeNode->parent();
+                }
                 nodes.append(activeNode);
             }
         }

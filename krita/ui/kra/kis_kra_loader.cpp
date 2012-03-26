@@ -66,6 +66,7 @@ public:
     QString imageComment; // used to be stored in the image, is now in the documentInfo block
     QMap<KisNode*, QString> layerFilenames; // temp storage during loading
     int syntaxVersion; // version of the fileformat we are loading
+    vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
 
 };
 
@@ -212,6 +213,11 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
 
 }
 
+vKisNodeSP KisKraLoader::selectedNodes() const
+{
+    return m_d->selectedNodes;
+}
+
 KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent)
 {
 
@@ -351,7 +357,11 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
     if (element.attribute(FILE_NAME).isNull())
         m_d->layerFilenames[node] = name;
     else
-        m_d->layerFilenames[node] = QString(element.attribute(FILE_NAME));
+        m_d->layerFilenames[node] = element.attribute(FILE_NAME);
+
+    if (element.hasAttribute("selected") && element.attribute("selected") == "true")  {
+        m_d->selectedNodes.append(node);
+    }
 
     return node;
 }

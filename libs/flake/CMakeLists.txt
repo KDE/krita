@@ -77,10 +77,7 @@ set(flake_SRCS
     KoPathShapeLoader.cpp
     ShapeDeleter_p.cpp
     KoShapeStrokeModel.cpp
-    KoShapeBorderFactoryBase.cpp
-    KoShapeBorderRegistry.cpp
     KoLineBorder.cpp
-    KoLineBorderFactory.cpp
     KoShapeBackground.cpp
     KoColorBackground.cpp
     KoGradientBackground.cpp

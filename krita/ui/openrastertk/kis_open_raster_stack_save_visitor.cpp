@@ -59,10 +59,10 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     elt.setAttribute("opacity", QString().setNum(layer->opacity() / 255.0));
     elt.setAttribute("visibility", layer->visible() ? "visible" : "hidden");
     if (layer->userLocked()) {
-        elt.setAttribute("edit-locked", "edit-locked");
+        elt.setAttribute("edit-locked", "true");
     }
     if (d->activeNodes.contains(layer)) {
-        elt.setAttribute("selected", "selected");
+        elt.setAttribute("selected", "true");
     }
     QString compop = layer->compositeOpId();
     if (layer->compositeOpId() == COMPOSITE_CLEAR) compop = "svg:clear";

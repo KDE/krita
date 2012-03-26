@@ -116,9 +116,9 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
         layer->setVisible(true);
     }
     if (elem.hasAttribute("edit-locked")) {
-        layer->setUserLocked(true);
+        layer->setUserLocked(elem.attribute("edit-locked") == "true");
     }
-    if (elem.hasAttribute("selected")) {
+    if (elem.hasAttribute("selected") && elem.attribute("selected") == "true") {
         d->activeNodes.append(layer);
     }
 

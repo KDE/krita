@@ -43,6 +43,11 @@ public:
 
     void setCollapsable(bool collapsable);
 
+    enum TextVisibilityMode {TextCanBeInvisible, FullTextAlwaysVisible};
+    /// Define whether the minimal width should ensure that the full text is visible.
+    /// textVisibilityMode is FullTextAlwaysVisible by default
+    void setTextVisibilityMode(TextVisibilityMode textVisibilityMode);
+
 protected:
     virtual void paintEvent(QPaintEvent* event); ///< reimplemented from QWidget
     virtual void resizeEvent(QResizeEvent* event); ///< reimplemented from QWidget

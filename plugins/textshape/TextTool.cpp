@@ -261,11 +261,13 @@ void TextTool::createActions()
 
 
     m_actionFormatSuper = new KAction(KIcon("format-text-superscript"), i18n("Superscript"), this);
+    m_actionFormatSuper->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
     addAction("format_super", m_actionFormatSuper);
     m_actionFormatSuper->setCheckable(true);
     connect(m_actionFormatSuper, SIGNAL(triggered(bool)), this, SLOT(superScript(bool)));
 
     m_actionFormatSub = new KAction(KIcon("format-text-subscript"), i18n("Subscript"), this);
+    m_actionFormatSub->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_B);
     addAction("format_sub", m_actionFormatSub);
     m_actionFormatSub->setCheckable(true);
     connect(m_actionFormatSub, SIGNAL(triggered(bool)), this, SLOT(subScript(bool)));

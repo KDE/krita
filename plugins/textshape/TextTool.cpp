@@ -334,11 +334,10 @@ void TextTool::createActions()
     action->setShortcut(Qt::SHIFT + Qt::Key_Return);
     connect(action, SIGNAL(triggered()), this, SLOT(lineBreak()));
 
-    action  = new KAction(QString(), this);
+    action  = new KAction(KIcon("insert-pagebreak"), i18n("Page Break"), this);
     addAction("insert_framebreak", action);
     action->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Return));
     connect(action, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
-    action->setText(i18n("Page Break"));
     action->setToolTip(i18n("Force the remainder of the text into the next page"));
     action->setWhatsThis(i18n("All text after this point will be moved into the next page."));
 

@@ -1,7 +1,9 @@
 /* This file is part of the KDE project
+ *
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2007,2009 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2012      Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,25 +37,25 @@ class KoViewConverter;
 /**
  * A border for shapes that draws a single line around the object.
  */
-class FLAKE_EXPORT KoLineBorder : public KoShapeStrokeModel
+class FLAKE_EXPORT KoShapeStroke : public KoShapeStrokeModel
 {
 public:
     /// Constructor for a thin line in black
-    KoLineBorder();
+    KoShapeStroke();
 
     /// Copy constructor
-    KoLineBorder(const KoLineBorder &other);
+    KoShapeStroke(const KoShapeStroke &other);
 
     /**
-     * Constructor for a lineBorder
+     * Constructor for a Stroke
      * @param lineWidth the width, in pt
      * @param color the color we draw the outline in.
      */
-    explicit KoLineBorder(qreal lineWidth, const QColor &color = Qt::black);
-    virtual ~KoLineBorder();
+    explicit KoShapeStroke(qreal lineWidth, const QColor &color = Qt::black);
+    virtual ~KoShapeStroke();
 
     /// Assignment operator
-    KoLineBorder& operator = (const KoLineBorder &rhs);
+    KoShapeStroke& operator = (const KoShapeStroke &rhs);
 
     /// Sets the lines cap style
     void setCapStyle(Qt::PenCapStyle style);
@@ -104,6 +106,6 @@ private:
     Private * const d;
 };
 
-Q_DECLARE_METATYPE( KoLineBorder )
+Q_DECLARE_METATYPE( KoShapeStroke )
 
 #endif

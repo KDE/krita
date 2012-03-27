@@ -21,6 +21,11 @@
  */
 
 #include "ConnectionTool.h"
+
+#include <QPointF>
+#include <QKeyEvent>
+#include <QPainter>
+
 #include "AddConnectionPointCommand.h"
 #include "RemoveConnectionPointCommand.h"
 #include "ChangeConnectionPointCommand.h"
@@ -37,7 +42,6 @@
 #include <KoShapeLayer.h>
 #include <KoShapeRegistry.h>
 #include <KoSelection.h>
-#include <KoLineBorder.h>
 #include <KoDocumentResourceManager.h>
 #include <KoInteractionStrategy.h>
 #include <KoShapeConfigWidgetBase.h>
@@ -47,8 +51,7 @@
 #include <KDebug>
 #include <KStandardDirs>
 #include <kundo2command.h>
-#include <QPointF>
-#include <QKeyEvent>
+
 
 ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     : KoToolBase(canvas)

@@ -31,7 +31,7 @@
 #include <KoShapeRegistry.h>
 #include <KoTextShapeData.h>
 #include <KoColorBackground.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoGradientBackground.h>
 #include <KoApplication.h>
 
@@ -72,7 +72,7 @@ CommentShape::CommentShape(KoDocumentResourceManager* resourceManager)
     gradient->setColorAt(1.0, QColor(254, 201, 7));
     m_comment->setBackground(new KoGradientBackground(gradient));
 
-    KoLineBorder* stroke = new KoLineBorder;
+    KoShapeStroke* stroke = new KoShapeStroke;
     stroke->setLineBrush(QBrush(Qt::black));
     stroke->setLineWidth(0.5);
     m_comment->setStroke(stroke);

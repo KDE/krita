@@ -40,7 +40,6 @@
 #include <KoPathShape.h>
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>
-#include <KoLineBorder.h>
 #include <KoInteractionStrategy.h>
 
 #include <KLocale>

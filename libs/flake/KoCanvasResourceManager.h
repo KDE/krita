@@ -32,7 +32,7 @@
 #include <KoUnit.h>
 
 class KoShape;
-class KoLineBorder;
+class KoShapeStroke;
 class KUndo2Stack;
 class KoImageCollection;
 class KoOdfDocument;
@@ -159,10 +159,10 @@ public:
     KoColor backgroundColor() const;
 
     /// Sets the stroke resource
-    void setActiveStroke(const KoLineBorder &stroke);
+    void setActiveStroke(const KoShapeStroke &stroke);
 
     /// Returns the stroke resource
-    KoLineBorder activeStroke() const;
+    KoShapeStroke activeStroke() const;
 
     /**
      * Return the resource determined by param key as a boolean.

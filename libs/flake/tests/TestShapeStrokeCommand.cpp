@@ -20,15 +20,15 @@
 
 #include <MockShapes.h>
 #include "KoShapeStrokeModel.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 #include "KoShapeStrokeCommand.h"
 
 void TestShapeStrokeCommand::refCounting()
 {
     MockShape * shape1 = new MockShape();
-    KoShapeStrokeModel * whiteStroke = new KoLineBorder(1.0, QColor(Qt::white));
-    KoShapeStrokeModel * blackStroke = new KoLineBorder(1.0, QColor(Qt::black));
-    KoShapeStrokeModel * redStroke = new KoLineBorder(1.0, QColor(Qt::red));
+    KoShapeStrokeModel *whiteStroke = new KoShapeStroke(1.0, QColor(Qt::white));
+    KoShapeStrokeModel *blackStroke = new KoShapeStroke(1.0, QColor(Qt::black));
+    KoShapeStrokeModel *redStroke   = new KoShapeStroke(1.0, QColor(Qt::red));
 
     shape1->setStroke(whiteStroke);
     QVERIFY(shape1->stroke() == whiteStroke);

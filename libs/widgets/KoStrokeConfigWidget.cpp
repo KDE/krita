@@ -48,7 +48,7 @@
 
 // Calligra
 #include <KoUnit.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoLineStyleSelector.h>
 #include <KoUnitDoubleSpinBox.h>
 #include "KoMarkerSelector.h"
@@ -243,16 +243,16 @@ KoMarker *KoStrokeConfigWidget::endMarker() const
 // ----------------------------------------------------------------
 //                         Other public functions
 
-void KoStrokeConfigWidget::updateControls(KoLineBorder &border, KoMarker *startMarker, KoMarker *endMarker)
+void KoStrokeConfigWidget::updateControls(KoShapeStroke &stroke, KoMarker *startMarker, KoMarker *endMarker)
 {
     blockChildSignals(true);
 
-    d->capGroup->button(border.capStyle())->setChecked(true);
-    d->joinGroup->button(border.joinStyle())->setChecked(true);
-    d->lineWidth->changeValue(border.lineWidth());
-    d->miterLimit->changeValue(border.miterLimit());
-    d->lineStyle->setLineStyle(border.lineStyle(), border.lineDashes());
-    d->miterLimit->setEnabled(border.joinStyle() == Qt::MiterJoin);
+    d->capGroup->button(stroke.capStyle())->setChecked(true);
+    d->joinGroup->button(stroke.joinStyle())->setChecked(true);
+    d->lineWidth->changeValue(stroke.lineWidth());
+    d->miterLimit->changeValue(stroke.miterLimit());
+    d->lineStyle->setLineStyle(stroke.lineStyle(), stroke.lineDashes());
+    d->miterLimit->setEnabled(stroke.joinStyle() == Qt::MiterJoin);
     d->startMarkerSelector->setMarker(startMarker);
     d->endMarkerSelector->setMarker(endMarker);
 

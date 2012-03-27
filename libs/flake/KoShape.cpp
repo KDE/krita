@@ -40,7 +40,7 @@
 #include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
 #include "KoViewConverter.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 #include "ShapeDeleter_p.h"
 #include "KoShapeShadow.h"
 #include "KoClipPath.h"
@@ -1494,7 +1494,7 @@ KoShapeStrokeModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
     if (stroke == "solid" || stroke == "dash") {
         QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, stroke, stylesReader);
 
-        KoLineBorder *stroke = new KoLineBorder();
+        KoShapeStroke *stroke = new KoShapeStroke();
 
         if (styleStack.hasProperty(KoXmlNS::calligra, "stroke-gradient")) {
             QString gradientName = styleStack.property(KoXmlNS::calligra, "stroke-gradient");
@@ -1517,7 +1517,7 @@ KoShapeStrokeModel *KoShape::loadOdfStroke(const KoXmlElement &element, KoShapeL
     } else if (stroke.isEmpty()) {
         QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, "solid", stylesReader);
         if (KoOdfWorkaround::fixMissingStroke(pen, element, context, this)) {
-            KoLineBorder *stroke = new KoLineBorder();
+            KoShapeStroke *stroke = new KoShapeStroke();
 
 #ifndef NWORKAROUND_ODF_BUGS
             KoOdfWorkaround::fixPenWidth(pen, context);

@@ -24,7 +24,7 @@
 #include "KoShapeController.h"
 #include "KoPointerEvent.h"
 #include "KoPathShape.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 #include "KoSelection.h"
 #include "commands/KoPathPointMergeCommand.h"
 #include "SnapGuideConfigWidget.h"
@@ -167,7 +167,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         d->shape=pathShape;
         pathShape->setShapeId(KoPathShapeId);
 
-        KoLineBorder *stroke = new KoLineBorder(canvas()->resourceManager()->activeStroke());
+        KoShapeStroke *stroke = new KoShapeStroke(canvas()->resourceManager()->activeStroke());
         stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
 
         pathShape->setStroke(stroke);

@@ -53,7 +53,7 @@
 #include <KoShapeStrokeCommand.h>
 #include <KoShapeStrokeModel.h>
 #include <KoSelection.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoPathShape.h>
 #include <KoMarker.h>
 #include <KoPathShapeMarkerCommand.h>
@@ -70,7 +70,7 @@ public:
 
     KoMarker *startMarker;
     KoMarker *endMarker;
-    KoLineBorder stroke;
+    KoShapeStroke stroke;
     KoCanvasBase *canvas;
     KoStrokeConfigWidget *mainWidget;
 };
@@ -120,8 +120,8 @@ void StrokeDocker::applyChanges()
     if (!selection || !selection->count())
         return;
 
-    KoLineBorder *newStroke = new KoLineBorder(d->stroke);
-    KoLineBorder *oldStroke = dynamic_cast<KoLineBorder*>( selection->firstSelectedShape()->stroke() );
+    KoShapeStroke *newStroke = new KoShapeStroke(d->stroke);
+    KoShapeStroke *oldStroke = dynamic_cast<KoShapeStroke*>( selection->firstSelectedShape()->stroke() );
     if (oldStroke) {
         newStroke->setColor(oldStroke->color());
         newStroke->setLineBrush(oldStroke->lineBrush());
@@ -212,7 +212,7 @@ void StrokeDocker::endMarkerChanged()
 
 void StrokeDocker::setStroke( const KoShapeStrokeModel *stroke )
 {
-    const KoLineBorder *lineStroke = dynamic_cast<const KoLineBorder*>( stroke );
+    const KoShapeStroke *lineStroke = dynamic_cast<const KoShapeStroke*>( stroke );
     if (lineStroke) {
         d->stroke.setLineWidth( lineStroke->lineWidth() );
         d->stroke.setCapStyle( lineStroke->capStyle() );

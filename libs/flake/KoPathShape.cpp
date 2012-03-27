@@ -35,7 +35,7 @@
 #include "KoFilterEffectStack.h"
 #include "KoMarker.h"
 #include "KoMarkerSharedLoadingData.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -199,7 +199,7 @@ QString KoPathShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context)
 
     style.addProperty("svg:fill-rule", d->fillRule == Qt::OddEvenFill ? "evenodd" : "nonzero");
 
-    KoLineBorder *lineBorder = dynamic_cast<KoLineBorder*>(stroke());
+    KoShapeStroke *lineBorder = dynamic_cast<KoShapeStroke*>(stroke());
     qreal lineWidth = 0;
     if (lineBorder) {
         lineWidth = lineBorder->lineWidth();
@@ -228,7 +228,7 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
 #endif
     }
 
-    KoLineBorder *lineBorder = dynamic_cast<KoLineBorder*>(stroke());
+    KoShapeStroke *lineBorder = dynamic_cast<KoShapeStroke*>(stroke());
     qreal lineWidth = 0;
     if (lineBorder) {
         lineWidth = lineBorder->lineWidth();
@@ -411,7 +411,7 @@ QRectF KoPathShape::boundingRect() const
     // calculate the bounding rect of the transformed outline
     QRectF bb;
     if (d->startMarker.marker() || d->endMarker.marker()) {
-        KoLineBorder *lineBorder = dynamic_cast<KoLineBorder*>(stroke());
+        KoShapeStroke *lineBorder = dynamic_cast<KoShapeStroke*>(stroke());
         QPen pen;
         if (lineBorder) {
             pen.setWidthF(lineBorder->lineWidth());

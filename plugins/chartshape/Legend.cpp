@@ -42,7 +42,7 @@
 #include <KoGenStyles.h>
 #include <KoUnit.h>
 #include <KoColorBackground.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 
 // KDChart
 #include <KDChartChart>
@@ -79,7 +79,7 @@ public:
     QFont titleFont;
     QColor fontColor;
     Qt::Alignment alignment;
-    KoLineBorder *lineBorder;
+    KoShapeStroke *lineBorder;
 
     // The connection to KDChart
     KDChart::Legend *kdLegend;
@@ -94,7 +94,7 @@ public:
 
 Legend::Private::Private()
 {
-    lineBorder = new KoLineBorder( 0.5, Qt::black );
+    lineBorder = new KoShapeStroke( 0.5, Qt::black );
     showFrame = true;
     framePen = QPen();
     backgroundBrush = QBrush();

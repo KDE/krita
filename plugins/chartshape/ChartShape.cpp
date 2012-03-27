@@ -89,7 +89,7 @@
 #include <KoInsets.h>
 #include <KoShapeStrokeModel.h>
 #include <KoColorBackground.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoOdfWorkaround.h>
 
 // KChart
@@ -509,7 +509,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
     KoColorBackground *background = new KoColorBackground( Qt::white );
     setBackground( background );
 
-    KoLineBorder *stroke = new KoLineBorder( 0, Qt::black );
+    KoShapeStroke *stroke = new KoShapeStroke( 0, Qt::black );
     setStroke( stroke );
 
     ChartLayout *l = layout();

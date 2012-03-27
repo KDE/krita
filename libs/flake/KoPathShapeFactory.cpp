@@ -19,7 +19,7 @@
  */
 #include "KoPathShapeFactory.h"
 #include "KoPathShape.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 #include "KoImageCollection.h"
 #include "KoMarkerCollection.h"
 #include "KoDocumentResourceManager.h"
@@ -48,7 +48,7 @@ KoShape *KoPathShapeFactory::createDefaultShape(KoDocumentResourceManager *) con
     path->curveTo(QPointF(0, 120), QPointF(50, 120), QPointF(50, 50));
     path->curveTo(QPointF(50, -20), QPointF(100, -20), QPointF(100, 50));
     path->normalize();
-    path->setStroke(new KoLineBorder(1.0));
+    path->setStroke(new KoShapeStroke(1.0));
     return path;
 }
 

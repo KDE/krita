@@ -179,6 +179,8 @@ private slots:
     void softHyphen();
     /// insert a linebreak at the caret position
     void lineBreak();
+    /// force the remainder of the text into the next page
+    void insertFrameBreak();
     /// align all of the selected text left
     void alignLeft();
     /// align all of the selected text right

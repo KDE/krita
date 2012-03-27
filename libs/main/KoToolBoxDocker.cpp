@@ -51,7 +51,6 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     connect(this, SIGNAL(topLevelChanged(bool)),
             this, SLOT(updateFloating(bool)));
     KoDockWidgetTitleBar* titleBar = new KoDockWidgetTitleBar(this);
-    titleBar->setIgnoreTextSize(false);
     setTitleBarWidget(titleBar);
 }
 

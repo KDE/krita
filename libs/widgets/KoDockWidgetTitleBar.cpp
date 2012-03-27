@@ -217,16 +217,6 @@ void KoDockWidgetTitleBar::setCollapsable(bool collapsable)
     d->collapseButton->setVisible(collapsable);
 }
 
-void KoDockWidgetTitleBar::setTextVisible(bool visible)
-{
-    d->textVisible = visible;
-}
-
-void KoDockWidgetTitleBar::setIgnoreTextSize(bool ignore)
-{
-    d->ignoreTextSize = ignore;
-}
-
 void KoDockWidgetTitleBar::Private::toggleFloating()
 {
     QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());

@@ -42,9 +42,6 @@ public:
     void setCollapsed(bool collapsed);
 
     void setCollapsable(bool collapsable);
-    void setTextVisible(bool visible);
-    /// Define wether the text size should be ignored in @ref sizeHint
-    void setIgnoreTextSize(bool ignore);
 
 protected:
     virtual void paintEvent(QPaintEvent* event); ///< reimplemented from QWidget

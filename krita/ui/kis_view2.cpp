@@ -48,6 +48,7 @@
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <kaction.h>
+#include <kactionmenu.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kparts/componentfactory.h>
@@ -122,6 +123,8 @@
 #include <kis_paintop_preset.h>
 #include "ko_favorite_resource_manager.h"
 #include "kis_paintop_box.h"
+
+#include "thememanager.h"
 
 class BlockingUserInputEventFilter : public QObject
 {
@@ -213,6 +216,8 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     : KoView(doc, parent),
       m_d(new KisView2Private())
 {
+    // populate theme menu
+    Digikam::ThemeManager::instance();
 
     setFocusPolicy(Qt::NoFocus);
 
@@ -405,6 +410,8 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
 KisView2::~KisView2()
 {
+    KConfigGroup group(KGlobal::config(), "theme");
+    group.writeEntry("Theme", Digikam::ThemeManager::instance()->currentThemeName());
     delete m_d;
 }
 
@@ -714,7 +721,15 @@ void KisView2::createActions()
     KAction* action = new KAction(i18n("Edit Palette..."), this);
     actionCollection()->addAction("edit_palette", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotEditPalette()));
+
+    KConfigGroup group(KGlobal::config(), "theme");
+    Digikam::ThemeManager::instance()->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
+    Digikam::ThemeManager::instance()->registerThemeActions(actionCollection());
+    Digikam::ThemeManager::instance()->setCurrentTheme(group.readEntry("Theme",
+                                                       Digikam::ThemeManager::instance()->defaultThemeName()));
+
 }
+
 
 
 void KisView2::createManagers()

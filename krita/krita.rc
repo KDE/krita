@@ -148,6 +148,7 @@
   <!--Action name="view_toggledockers" group="settings_show"/-->
   <!--Action name="showStatusBar" group="settings_show"/-->
   <Action name="preferences" group="settings_configure"/>
+  <Action name="theme_menu" />
 </Menu>
 
 

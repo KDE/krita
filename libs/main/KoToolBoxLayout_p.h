@@ -27,8 +27,6 @@
 #include <QRect>
 #include <QAbstractButton>
 
-#include "math.h"
-
 
 class SectionLayout : public QLayout
 {
@@ -274,8 +272,9 @@ public:
                 section->setGeometry(1000, 1000, 0, 0);
                 continue;
             }
-            // kDebug() << " + section" << buttonCount;
-            int rows = (int) ceilf(buttonCount / (float) maxColumns);
+
+            // rows needed for the buttons (calculation gets the ceiling value of the plain div)
+            int rows = ((buttonCount-1) / maxColumns) + 1;
 
             int length = 0;
             if (firstSection) {

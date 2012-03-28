@@ -253,20 +253,15 @@ public:
 
     void setGeometry (const QRect &rect)
     {
-        if (m_orientation == Qt::Vertical) {
-            tryPlaceItems(rect.width(), true);
-        } else {
-            tryPlaceItems(rect.height(), true);
-        }
-    }
-
-    /// returns height
-    int tryPlaceItems(int width, bool actuallyPlace) const
-    {
+        // nothing to do?
         if (m_sections.isEmpty())
-            return 0;
-        QSize iconSize = static_cast<Section*> (m_sections[0]->widget())->iconSize();
-        const int maxColumns = qMax(1, width / iconSize.width());
+            return;
+
+        const QSize iconSize = static_cast<Section*> (m_sections.first()->widget())->iconSize();
+        // using qMax to protect against div by 0
+        const int maxColumns = qMax(1,
+            (m_orientation == Qt::Vertical) ? (rect.width() / qMax(1, iconSize.width())) :
+                                              (rect.height() / qMax(1, iconSize.height())));
 
         int x = 0;
         int y = 0;
@@ -276,8 +271,7 @@ public:
             Section *section = static_cast<Section*> (wi->widget());
             const int buttonCount = section->visibleButtonCount();
             if (buttonCount == 0) {
-                if (actuallyPlace)
-                    section->setGeometry(1000, 1000, 0, 0);
+                section->setGeometry(1000, 1000, 0, 0);
                 continue;
             }
             // kDebug() << " + section" << buttonCount;
@@ -308,14 +302,12 @@ public:
                 }
             }
 
-            if (actuallyPlace) {
-                if (m_orientation == Qt::Vertical) {
-                    section->setGeometry(QRect(x, y, maxColumns * iconSize.width() - length,
-                                               rows * iconSize.height()));
-                } else {
-                    section->setGeometry(QRect(x, y, rows * iconSize.width(),
-                                               maxColumns * iconSize.height() - length));
-                }
+            if (m_orientation == Qt::Vertical) {
+                section->setGeometry(QRect(x, y, maxColumns * iconSize.width() - length,
+                                            rows * iconSize.height()));
+            } else {
+                section->setGeometry(QRect(x, y, rows * iconSize.width(),
+                                            maxColumns * iconSize.height() - length));
             }
 
             unusedButtons -= buttonCount;
@@ -335,7 +327,6 @@ public:
         } else {
             m_currentWidth += iconSize.width();
         }
-        return m_currentHeight;
     }
 
     void setOrientation (Qt::Orientation orientation)

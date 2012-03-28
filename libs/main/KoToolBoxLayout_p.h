@@ -129,10 +129,10 @@ private:
 class Section : public QWidget
 {
 public:
-    enum SeperatorFlag {
-        SeperatorTop = 0x0001,/* SeperatorBottom = 0x0002, SeperatorRight = 0x0004,*/ SeperatorLeft = 0x0008
+    enum SeparatorFlag {
+        SeparatorTop = 0x0001,/* SeparatorBottom = 0x0002, SeparatorRight = 0x0004,*/ SeparatorLeft = 0x0008
     };
-    Q_DECLARE_FLAGS(Seperators, SeperatorFlag)
+    Q_DECLARE_FLAGS(Separators, SeparatorFlag)
     Section(QWidget *parent = 0)
         : QWidget(parent),
         m_layout(new SectionLayout(this))
@@ -170,14 +170,14 @@ public:
         return count;
     }
 
-    void setSeperator(Seperators seperators)
+    void setSeparator(Separators separators)
     {
-        m_seperators = seperators;
+        m_separators = separators;
     }
 
-    Seperators seperators() const
+    Separators separators() const
     {
-        return m_seperators;
+        return m_separators;
     }
 
     void setOrientation (Qt::Orientation orientation)
@@ -188,10 +188,10 @@ public:
 private:
     SectionLayout *m_layout;
     QString m_name;
-    Seperators m_seperators;
+    Separators m_separators;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Section::Seperators)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Section::Separators)
 
 class KoToolBoxLayout : public QLayout
 {
@@ -293,21 +293,21 @@ public:
             } else if (buttonCount > unusedButtons) {
                 if (m_orientation == Qt::Vertical) {
                     y += iconSize.height() + spacing();
-                    section->setSeperator(Section::SeperatorTop);
+                    section->setSeparator(Section::SeparatorTop);
                 } else {
                     x += iconSize.height() + spacing();
-                    section->setSeperator(Section::SeperatorLeft);
+                    section->setSeparator(Section::SeparatorLeft);
                 }
                 unusedButtons = rows * maxColumns;
             } else {
                 if (m_orientation == Qt::Vertical) {
                     length = (maxColumns - unusedButtons) * iconSize.width();
                     x = length + spacing();
-                    section->setSeperator(Section::SeperatorTop | Section::SeperatorLeft);
+                    section->setSeparator(Section::SeparatorTop | Section::SeparatorLeft);
                 } else {
                     length = (maxColumns - unusedButtons) * iconSize.height();
                     y = length + spacing();
-                    section->setSeperator(Section::SeperatorTop | Section::SeperatorLeft);
+                    section->setSeparator(Section::SeparatorTop | Section::SeparatorLeft);
                 }
             }
 

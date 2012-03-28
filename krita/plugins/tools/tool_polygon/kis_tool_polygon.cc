@@ -26,7 +26,7 @@
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
 #include <KoPathShape.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 
 #include "kis_paintop_registry.h"
 #include "kis_figure_painting_tool_helper.h"
@@ -74,7 +74,7 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
         path->close();
         path->normalize();
 
-        KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
+        KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
         path->setStroke(border);
 
         addShape(path);

@@ -31,7 +31,7 @@
 #include <KoPointerEvent.h>
 #include <KoPathShape.h>
 #include <KoShapeController.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 
 #include <kis_debug.h>
 #include <kis_cursor.h>
@@ -221,7 +221,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
             path->lineTo(resolutionMatrix.map(m_endPos.pos()));
             path->normalize();
 
-            KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
+            KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
             path->setStroke(border);
 
             KUndo2Command * cmd = canvas()->shapeController()->addShape(path);

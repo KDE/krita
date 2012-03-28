@@ -41,7 +41,7 @@
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoToolProxy.h>
@@ -693,7 +693,7 @@ void KisSelectionManager::shapeSelectionChanged()
     KoSelection * selection = shapeManager->selection();
     QList<KoShape*> selectedShapes = selection->selectedShapes();
 
-    KoLineBorder* border = new KoLineBorder(0, Qt::lightGray);
+    KoShapeStroke* border = new KoShapeStroke(0, Qt::lightGray);
     foreach(KoShape* shape, shapeManager->shapes()) {
         if (dynamic_cast<KisShapeSelection*>(shape->parent())) {
             if (selectedShapes.contains(shape))

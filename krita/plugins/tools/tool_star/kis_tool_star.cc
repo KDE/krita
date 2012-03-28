@@ -25,7 +25,7 @@
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
 #include <KoPathShape.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 
 #include <kis_debug.h>
 #include <canvas/kis_canvas2.h>
@@ -135,7 +135,7 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
             path->close();
             path->normalize();
 
-            KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
+            KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
             path->setStroke(border);
 
             addShape(path);

@@ -192,7 +192,7 @@ class KoToolBoxLayout : public QLayout
 {
 public:
     KoToolBoxLayout(QWidget *parent)
-        : QLayout(parent), m_orientation(Qt::Vertical), m_currentHeight(0), m_currentWidth(0)
+        : QLayout(parent), m_orientation(Qt::Vertical), m_currentHeight(0)
     {
         setSpacing(6);
     }
@@ -216,7 +216,7 @@ public:
         if (m_orientation == Qt::Vertical) {
             s.setHeight(m_currentHeight);
         } else {
-            s.setWidth(m_currentWidth);
+            s.setWidth(m_currentHeight);
         }
         return s;
     }
@@ -255,7 +255,11 @@ public:
         if (m_sections.isEmpty())
             return;
 
+        // the names of the variables assume a vertical orientation,
+        // but all calculations are done based on the real orientation
+
         const QSize iconSize = static_cast<Section*> (m_sections.first()->widget())->iconSize();
+
         // using qMax to protect against div by 0
         const int maxColumns = qMax(1,
             (m_orientation == Qt::Vertical) ? (rect.width() / qMax(1, iconSize.width())) :
@@ -319,12 +323,12 @@ public:
                 x += (rows - 1) * iconSize.width();
             }
         }
-        m_currentWidth = x;
-        m_currentHeight = y;
+
+        // store total height (or width)
         if (m_orientation == Qt::Vertical) {
-            m_currentHeight += iconSize.height();
+            m_currentHeight = y + iconSize.height();
         } else {
-            m_currentWidth += iconSize.width();
+            m_currentHeight = x + iconSize.width();
         }
     }
 
@@ -337,7 +341,7 @@ public:
 private:
     QList <QWidgetItem*> m_sections;
     Qt::Orientation m_orientation;
-    mutable int m_currentHeight, m_currentWidth;
+    mutable int m_currentHeight;
 };
 
 #endif

@@ -23,25 +23,13 @@
 #include "KoToolBoxLayout_p.h"
 
 #include <KoCanvasController.h>
-#include <KoToolManager.h>
 #include <KoShapeLayer.h>
-#include <KoInteractionTool.h>
-
-#include <KDebug>
-#include <QLayout>
-#include <QMap>
 #include <QButtonGroup>
 #include <QToolButton>
-#include <QHash>
-#include <QPainter>
-#include <QRect>
-#include <QTimer>
-#include <QStyle>
 #include <QStyleOptionFrameV3>
+#include <QPainter>
+#include <QHash>
 #include <QApplication>
-
-#include "math.h"
-#include <KoDockWidgetTitleBar.h>
 
 
 class KoToolBox::Private
@@ -254,7 +242,7 @@ void KoToolBox::resizeEvent(QResizeEvent* event)
 void KoToolBox::setOrientation(Qt::Orientation orientation)
 {
     d->layout->setOrientation(orientation);
-    QTimer::singleShot(0, this, SLOT(update()));
+    QMetaObject::invokeMethod(this, SLOT(update()), Qt::QueuedConnection);
     foreach(Section* section, d->sections) {
         section->setOrientation(orientation);
     }

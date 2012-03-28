@@ -24,14 +24,11 @@
 #include <KDebug>
 #include <QLayout>
 #include <QMap>
-#include <QButtonGroup>
-#include <QToolButton>
-#include <QHash>
-#include <QPainter>
 #include <QRect>
-#include <QTimer>
+#include <QAbstractButton>
 
 #include "math.h"
+
 
 class SectionLayout : public QLayout
 {

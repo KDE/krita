@@ -292,7 +292,7 @@ public:
                     y += iconSize.height() + spacing();
                     section->setSeparator(Section::SeparatorTop);
                 } else {
-                    x += iconSize.height() + spacing();
+                    x += iconSize.width() + spacing();
                     section->setSeparator(Section::SeparatorLeft);
                 }
                 unusedButtons = rows * maxColumns;
@@ -325,7 +325,7 @@ public:
                 y += (rows - 1) * iconSize.height();
             } else {
                 y = 0;
-                x += (rows - 1) * iconSize.height();
+                x += (rows - 1) * iconSize.width();
             }
         }
         m_currentWidth = x;
@@ -333,7 +333,7 @@ public:
         if (m_orientation == Qt::Vertical) {
             m_currentHeight += iconSize.height();
         } else {
-            m_currentWidth += iconSize.height();
+            m_currentWidth += iconSize.width();
         }
         return m_currentHeight;
     }

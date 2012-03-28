@@ -48,8 +48,8 @@ class ThemeManager : public QObject
 
 public:
 
+    ThemeManager(QObject *parent);
     ~ThemeManager();
-    static ThemeManager* instance();
 
     QString currentThemeName() const;
     void    setCurrentTheme(const QString& name);
@@ -71,7 +71,6 @@ private Q_SLOTS:
 
 private:
 
-    ThemeManager();
 
     void    populateThemeMenu();
     QPixmap createSchemePreviewIcon(const KSharedConfigPtr& config);
@@ -79,8 +78,6 @@ private:
     void    updateCurrentKDEdefaultThemePreview();
 
 private:
-
-    friend class ThemeManagerCreator;
 
     class ThemeManagerPriv;
     ThemeManagerPriv* const d;

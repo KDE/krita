@@ -162,8 +162,9 @@ public:
         , imageManager(0)
         , gridManager(0)
         , perspectiveGridManager(0)
-        , paintingAssistantManager(0) {
-
+        , paintingAssistantManager(0)
+        , themeManager(0)
+    {
     }
 
     ~KisView2Private() {
@@ -209,6 +210,7 @@ public:
     KisPaintingAssistantsManager* paintingAssistantManager;
     KoFavoriteResourceManager* favoriteResourceManager;
     BlockingUserInputEventFilter blockingEventFilter;
+    Digikam::ThemeManager *themeManager;
 };
 
 
@@ -217,7 +219,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
       m_d(new KisView2Private())
 {
     // populate theme menu
-    Digikam::ThemeManager::instance();
+    m_d->themeManager = new Digikam::ThemeManager(this);
 
     setFocusPolicy(Qt::NoFocus);
 
@@ -411,7 +413,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 KisView2::~KisView2()
 {
     KConfigGroup group(KGlobal::config(), "theme");
-    group.writeEntry("Theme", Digikam::ThemeManager::instance()->currentThemeName());
+    group.writeEntry("Theme", m_d->themeManager->currentThemeName());
     delete m_d;
 }
 
@@ -723,10 +725,10 @@ void KisView2::createActions()
     connect(action, SIGNAL(triggered()), this, SLOT(slotEditPalette()));
 
     KConfigGroup group(KGlobal::config(), "theme");
-    Digikam::ThemeManager::instance()->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
-    Digikam::ThemeManager::instance()->registerThemeActions(actionCollection());
-    Digikam::ThemeManager::instance()->setCurrentTheme(group.readEntry("Theme",
-                                                       Digikam::ThemeManager::instance()->defaultThemeName()));
+    m_d->themeManager->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
+    m_d->themeManager->registerThemeActions(actionCollection());
+    m_d->themeManager->setCurrentTheme(group.readEntry("Theme",
+                                                       m_d->themeManager->defaultThemeName()));
 
 }
 

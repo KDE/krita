@@ -59,15 +59,6 @@
 namespace Digikam
 {
 
-class ThemeManagerCreator
-{
-public:
-
-    ThemeManager object;
-};
-
-K_GLOBAL_STATIC(ThemeManagerCreator, creator)
-
 // ---------------------------------------------------------------
 
 
@@ -89,8 +80,9 @@ public:
     KActionMenu*           themeMenuAction;
 };
 
-ThemeManager::ThemeManager()
-    : d(new ThemeManagerPriv)
+ThemeManager::ThemeManager(QObject *parent)
+    : QObject(parent)
+    , d(new ThemeManagerPriv)
 {
     connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
             this, SLOT(slotSettingsChanged()));
@@ -101,11 +93,6 @@ ThemeManager::~ThemeManager()
     delete d;
 }
 
-ThemeManager* ThemeManager::instance()
-{
-    return &creator->object;
-}
-
 QString ThemeManager::defaultThemeName() const
 {
     return d->defaultThemeName;
@@ -114,6 +101,7 @@ QString ThemeManager::defaultThemeName() const
 QString ThemeManager::currentThemeName() const
 {
     if (!d->themeMenuAction || !d->themeMenuActionGroup) return defaultThemeName();
+    qDebug() << d->themeMenuActionGroup;
     QAction* action = d->themeMenuActionGroup->checkedAction();
     return !action ? defaultThemeName() : action->text().remove('&');
 }

@@ -44,7 +44,8 @@ SpellCheck::SpellCheck()
     m_allowSignals(true),
     m_documentIsLoading(false),
     m_isChecking(false),
-    m_spellCheckMenu(0)
+    m_spellCheckMenu(0),
+    m_document(0)
 {
     /* setup actions for this plugin */
     KAction *configureAction = new KAction(i18n("Configure &Spell Checking..."), this);

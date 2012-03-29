@@ -18,8 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KGRADIENTSLIDER_H
-#define KGRADIENTSLIDER_H
+#ifndef KIS_GRADIENT_SLIDER_H
+#define KIS_GRADIENT_SLIDER_H
 
 // Qt includes.
 
@@ -28,7 +28,9 @@
 #include <QList>
 #include <QPair>
 
-class KGradientSlider : public QWidget
+#include <krita_export.h>
+
+class KRITAUI_EXPORT KisGradientSlider : public QWidget
 {
     Q_OBJECT
 
@@ -40,9 +42,12 @@ class KGradientSlider : public QWidget
     } eCursor;
 
 public:
-    KGradientSlider(QWidget *parent = 0);
+    KisGradientSlider(QWidget *parent = 0);
 
-    virtual ~KGradientSlider();
+    virtual ~KisGradientSlider();
+
+    int black() const;
+    int white() const;
 
 public slots:
     void slotModifyBlack(int);
@@ -90,4 +95,4 @@ private:
 };
 
 
-#endif /* KGRADIENTSLIDER_H */
+#endif /* KIS_GRADIENT_SLIDER_H */

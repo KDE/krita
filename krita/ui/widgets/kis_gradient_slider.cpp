@@ -19,7 +19,7 @@
  */
 
 // Local includes.
-#include "kgradientslider.h"
+#include "kis_gradient_slider.h"
 
 // C++ includes.
 
@@ -37,7 +37,7 @@
 
 
 
-KGradientSlider::KGradientSlider(QWidget *parent)
+KisGradientSlider::KisGradientSlider(QWidget *parent)
         : QWidget(parent), m_black(0), m_white(255), m_gamma(1.0), m_gammaEnabled(false)
 {
     m_feedback = false;
@@ -47,11 +47,21 @@ KGradientSlider::KGradientSlider(QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
 }
 
-KGradientSlider::~KGradientSlider()
+KisGradientSlider::~KisGradientSlider()
 {
 }
 
-void KGradientSlider::paintEvent(QPaintEvent *)
+int KisGradientSlider::black() const
+{
+    return m_black;
+}
+
+int KisGradientSlider::white() const
+{
+    return m_white;
+}
+
+void KisGradientSlider::paintEvent(QPaintEvent *)
 {
     int x, y;
     int wWidth = width();
@@ -112,14 +122,14 @@ void KGradientSlider::paintEvent(QPaintEvent *)
     p1.drawPolygon(a, 3);
 }
 
-void KGradientSlider::resizeEvent(QResizeEvent *)
+void KisGradientSlider::resizeEvent(QResizeEvent *)
 {
     m_scalingFactor = (double)width() / 255;
     calculateCursorPositions();
     update();
 }
 
-void KGradientSlider::mousePressEvent(QMouseEvent * e)
+void KisGradientSlider::mousePressEvent(QMouseEvent * e)
 {
     eCursor closest_cursor;
     int distance;
@@ -200,7 +210,7 @@ void KGradientSlider::mousePressEvent(QMouseEvent * e)
     update();
 }
 
-void KGradientSlider::mouseReleaseEvent(QMouseEvent * e)
+void KisGradientSlider::mouseReleaseEvent(QMouseEvent * e)
 {
     if (e->button() != Qt::LeftButton)
         return;
@@ -229,7 +239,7 @@ void KGradientSlider::mouseReleaseEvent(QMouseEvent * e)
     m_feedback = false;
 }
 
-void KGradientSlider::mouseMoveEvent(QMouseEvent * e)
+void KisGradientSlider::mouseMoveEvent(QMouseEvent * e)
 {
     int x = e->pos().x();
 
@@ -274,14 +284,14 @@ void KGradientSlider::mouseMoveEvent(QMouseEvent * e)
     update();
 }
 
-void KGradientSlider::calculateCursorPositions()
+void KisGradientSlider::calculateCursorPositions()
 {
     m_blackCursor = (int)round(m_black * m_scalingFactor);
     m_whiteCursor = (int)round(m_white * m_scalingFactor);
     m_gammaCursor = calculateGammaCursor();
 }
 
-unsigned int KGradientSlider::calculateGammaCursor()
+unsigned int KisGradientSlider::calculateGammaCursor()
 {
     double delta = (double)(m_whiteCursor - m_blackCursor) / 2.0;
     double mid   = (double)m_blackCursor + delta;
@@ -290,18 +300,18 @@ unsigned int KGradientSlider::calculateGammaCursor()
 }
 
 
-void KGradientSlider::enableGamma(bool b)
+void KisGradientSlider::enableGamma(bool b)
 {
     m_gammaEnabled = b;
     update();
 }
 
-double KGradientSlider::getGamma(void)
+double KisGradientSlider::getGamma(void)
 {
     return m_gamma;
 }
 
-void KGradientSlider::slotModifyBlack(int v)
+void KisGradientSlider::slotModifyBlack(int v)
 {
     if (v >= 0 && v <= (int)m_white && !m_feedback) {
         m_black = v;
@@ -310,7 +320,7 @@ void KGradientSlider::slotModifyBlack(int v)
         update();
     }
 }
-void KGradientSlider::slotModifyWhite(int v)
+void KisGradientSlider::slotModifyWhite(int v)
 {
     if (v >= (int)m_black && v <= width() && !m_feedback) {
         m_white = v;
@@ -319,7 +329,7 @@ void KGradientSlider::slotModifyWhite(int v)
         update();
     }
 }
-void KGradientSlider::slotModifyGamma(double v)
+void KisGradientSlider::slotModifyGamma(double v)
 {
     if (m_gamma != v) {
         emit sigModifiedGamma(v);
@@ -329,4 +339,4 @@ void KGradientSlider::slotModifyGamma(double v)
     update();
 }
 
-#include "kgradientslider.moc"
+#include "kis_gradient_slider.moc"

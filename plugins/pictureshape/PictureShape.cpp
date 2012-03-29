@@ -186,7 +186,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
     m_clippingRect.normalize(imageData()->imageSize());
 
     // painting the image as prepared in waitUntilReady()
-    if (!m_printQualityImage.isNull() && pixmapSize != m_printQualityImage.size()) {
+    if (!m_printQualityImage.isNull() && pixmapSize != m_printQualityRequestedSize) {
         QSizeF imageSize = m_printQualityImage.size();
         QRectF cropRect(
             imageSize.width()  * m_clippingRect.left,
@@ -236,6 +236,7 @@ void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchr
         if (image.isNull()) {
             return;
         }
+        m_printQualityRequestedSize = pixels;
         if (image.size().width() < pixels.width()) { // don't scale up.
             pixels = image.size();
         }

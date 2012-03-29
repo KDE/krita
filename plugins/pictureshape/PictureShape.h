@@ -133,6 +133,7 @@ private:
 private:
     KoImageCollection *m_imageCollection;
     mutable QImage m_printQualityImage;
+    mutable QSizeF m_printQualityRequestedSize;
     ColorMode m_mode;
     ClippingRect m_clippingRect;
     _Private::PictureShapeProxy m_proxy;

@@ -47,6 +47,8 @@ public:
 
     virtual ~KoDeferredShapeFactoryBase();
 
+    virtual QString deferredPluginName() = 0;
+
     /**
      * This method should be implemented by factories to create a shape that the user
      * gets when doing a base insert. For example from a script.  The created shape

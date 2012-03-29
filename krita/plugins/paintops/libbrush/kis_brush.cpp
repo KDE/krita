@@ -72,7 +72,9 @@ void KisBrush::PlainColoringInformation::nextRow()
 {
 }
 
-KisBrush::PaintDeviceColoringInformation::PaintDeviceColoringInformation(const KisPaintDeviceSP source, int width) : m_source(source), m_iterator(new KisHLineConstIteratorPixel(m_source->createHLineConstIterator(0, 0, width)))
+KisBrush::PaintDeviceColoringInformation::PaintDeviceColoringInformation(const KisPaintDeviceSP source, int width)
+    : m_source(source)
+    , m_iterator(new KisHLineConstIteratorPixel(m_source->createHLineConstIterator(0, 0, width)))
 {
 }
 
@@ -97,10 +99,18 @@ void KisBrush::PaintDeviceColoringInformation::nextRow()
 
 
 struct KisBrush::Private {
-    Private() : boundary(0), angle(0), scale(1.0), hasColor(false), brushType(INVALID) {}
+    Private()
+        : boundary(0)
+        , angle(0)
+        , scale(1.0)
+        , hasColor(false)
+        , brushType(INVALID)
+    {}
+
     ~Private() {
         delete boundary;
     }
+
     enumBrushType brushType;
     qint32 width;
     qint32 height;

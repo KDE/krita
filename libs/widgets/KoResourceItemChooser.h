@@ -89,6 +89,9 @@ public:
     void setPreviewOrientation(Qt::Orientation orientation);
     /// determines whether the preview should tile the resource's image or not
     void setPreviewTiled(bool tiled);
+    /// shows the preview converted to grayscale
+    void setGrayscalePreview(bool grayscale);
+
 
     void showGetHotNewStuff( bool showDownload, bool showUpload);
     /// sets the visibilty of tagging KlineEdits.
@@ -107,7 +110,7 @@ public:
 signals:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );
-
+    void splitterMoved();
 public slots:
     void slotButtonClicked( int button );
     

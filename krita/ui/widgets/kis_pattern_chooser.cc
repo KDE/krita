@@ -19,9 +19,12 @@
 
 #include "widgets/kis_pattern_chooser.h"
 
+#include <math.h>
 #include <QLabel>
 #include <QLayout>
 #include <QVBoxLayout>
+#include <QResizeEvent>
+#include <QShowEvent>
 
 #include <klocale.h>
 #include <kfiledialog.h>
@@ -56,11 +59,16 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
             this, SIGNAL(resourceSelected(KoResource *)));
 
+    connect(m_itemChooser, SIGNAL(splitterMoved()),
+            this, SLOT(updateItemSize()));
+
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
     mainLayout->setMargin(2);
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(m_itemChooser, 10);
+
+
 
     setLayout(mainLayout);
 }
@@ -98,6 +106,29 @@ void KisPatternChooser::update(KoResource * resource)
 
     QString text = QString("%1 (%2 x %3)").arg(i18n(pattern->name().toUtf8().data())).arg(pattern->width()).arg(pattern->height());
     m_lbName->setText(text);
+}
+
+void KisPatternChooser::setGrayscalePreview(bool grayscale)
+{
+    m_itemChooser->setGrayscalePreview(grayscale);
+}
+
+void KisPatternChooser::showEvent(QShowEvent*)
+{
+    updateItemSize();
+}
+
+void KisPatternChooser::updateItemSize()
+{
+    KisPattern* current = static_cast<KisPattern*>(currentResource());
+    int width = m_itemChooser->viewSize().width();
+    int cols = width/50 + 1;
+    m_itemChooser->setRowHeight(floor((double)width/cols));
+    m_itemChooser->setColumnCount(cols);
+    //restore current pattern
+    if(current) {
+        setCurrentPattern(current);
+    }
 }
 
 #include "kis_pattern_chooser.moc"

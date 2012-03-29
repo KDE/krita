@@ -39,6 +39,7 @@
 #include <kis_pressure_spacing_option.h>
 #include <kis_compositeop_option.h>
 #include <kis_pressure_flow_opacity_option_widget.h>
+#include <kis_texture_option.h>
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
         : KisBrushBasedPaintopOptionWidget(parent)
@@ -65,6 +66,9 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createValueOption()));
     addPaintOpOption(new KisAirbrushOption(false));
     addPaintOpOption(new KisPaintActionTypeOption());
+
+    // Texture options
+    addPaintOpOption(new KisTextureOption());
 }
 
 KisBrushOpSettingsWidget::~KisBrushOpSettingsWidget()

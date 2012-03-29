@@ -28,7 +28,7 @@
 #include <QTimer>
 
 KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
-                      : QWidget(parent)
+    : QWidget(parent)
 {
     setupUi(this);
     smallPresetChooser->showButtons(false);

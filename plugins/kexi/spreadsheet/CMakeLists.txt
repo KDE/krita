@@ -17,7 +17,7 @@ target_link_libraries(keximigrate_spreadsheet
     keximigrate
     kexidb
     kexiutils
-    calligratablescommon
+    calligrasheetscommon
 )
 
 install(TARGETS keximigrate_spreadsheet DESTINATION ${PLUGIN_INSTALL_DIR})

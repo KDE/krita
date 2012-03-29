@@ -52,6 +52,7 @@ class KisFilterStrategy;
 class KoColorProfile;
 class KoUpdater;
 class KisPerspectiveGrid;
+class KisLayerComposition;
 
 namespace KisMetaData
 {
@@ -493,6 +494,21 @@ public:
      * \see reselectGlobalSelection()
      */
     bool canReselectGlobalSelection();
+
+    /**
+     * Returns the layer compositions for the image
+     */
+    QList<KisLayerComposition*> compositions();
+
+    /**
+     * Adds a new layer composition, will be saved with the image
+     */
+    void addComposition(KisLayerComposition* composition);
+
+    /**
+     * Remove the layer compostion
+     */
+    void removeComposition(KisLayerComposition* composition);
 
 signals:
 

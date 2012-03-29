@@ -17,7 +17,6 @@
  */
 
 #include "kis_paintop_registry.h"
-#include <QPixmap>
 
 #include <kglobal.h>
 #include <klocale.h>

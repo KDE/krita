@@ -21,21 +21,33 @@
 
 #include <ui_SimpleCitationBibliographyWidget.h>
 #include <KoListStyle.h>
+#include "FormattingButton.h"
 
 #include <QWidget>
 #include <QTextBlock>
 
-class TextTool;
+class ReferencesTool;
 class KoStyleManager;
+class KoBibliographyInfo;
+class BibliographyPreview;
+class BibliographyTemplate;
+class QSignalMapper;
 
 class SimpleCitationBibliographyWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleCitationBibliographyWidget(TextTool *tool,QWidget *parent = 0);
+    explicit SimpleCitationBibliographyWidget(ReferencesTool *tool,QWidget *parent = 0);
+    ~SimpleCitationBibliographyWidget();
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
+    void prepareTemplateMenu();
+    void pixmapReady(int templateId);
+
+private slots:
+    void applyTemplate(int templateId);
+    void insertCustomBibliography();
 
 signals:
     void doneWithFocus();
@@ -44,9 +56,13 @@ private:
     Ui::SimpleCitationBibliographyWidget widget;
     KoStyleManager *m_styleManager;
     bool m_blockSignals;
-    bool m_comboboxHasBidiItems;
     QTextBlock m_currentBlock;
-    TextTool *m_tool;
+    ReferencesTool *m_referenceTool;
+    QList<KoBibliographyInfo *> m_templateList;
+    //each template in the template list will have have a previewGenerator that will be deleted after preview is generated
+    QList<BibliographyPreview *> m_previewGenerator;
+    QSignalMapper *m_signalMapper;
+    BibliographyTemplate *m_templateGenerator;
 };
 
 #endif

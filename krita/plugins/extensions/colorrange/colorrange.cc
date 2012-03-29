@@ -58,8 +58,6 @@ ColorRange::ColorRange(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(ColorRangeFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/colorrange.rc"),
                    true);
         m_view = dynamic_cast<KisView2*>(parent);

@@ -61,7 +61,7 @@ private slots:
     void resourceChanged(KoResource *resource);
 
 private:
-    KoAbstractResourceServerAdapter * m_resourceAdapter;
+    KoAbstractResourceServerAdapter *m_resourceAdapter;
     int m_columnCount;
 };
 

@@ -1617,9 +1617,13 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         setDropCaps(true);
         const QString length = dropCap.attributeNS(KoXmlNS::style, "length", QString("1"));
         if (length.toLower() == "word") {
-            setDropCapsLength(-1); // -1 indicates drop caps of the whole first word
+            setDropCapsLength(0); // 0 indicates drop caps of the whole first word
         } else {
-            setDropCapsLength(length.toInt());
+            int l = length.toInt();
+            if (l > 0) // somefiles may use this to turn dropcaps off
+                setDropCapsLength(length.toInt());
+            else 
+                setDropCaps(false);
         }
         const QString lines = dropCap.attributeNS(KoXmlNS::style, "lines", QString("1"));
         setDropCapsLines(lines.toInt());
@@ -2188,7 +2192,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
         KoXmlWriter elementWriter(&buf, indentation);
         elementWriter.startElement("style:drop-cap");
         elementWriter.addAttribute("style:lines", QString::number(dropCapsLines()));
-        elementWriter.addAttribute("style:length", dropCapsLength() < 0 ? "word" : QString::number(dropCapsLength()));
+        elementWriter.addAttribute("style:length", dropCapsLength() == 0 ? "word" : QString::number(dropCapsLength()));
         if (dropCapsDistance())
             elementWriter.addAttributePt("style:distance", dropCapsDistance());
         elementWriter.endElement();

@@ -105,21 +105,21 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
 
     if (!m_colorSelAction != 0) {
         m_colorSelAction = new KAction("Show color selector", this);
-        m_colorSelAction->setShortcut(Qt::Key_I);
+        m_colorSelAction->setShortcut(Qt::Key_Shift + Qt::Key_I);
         connect(m_colorSelAction, SIGNAL(triggered()), m_colorSelector, SLOT(showPopup()), Qt::UniqueConnection);
     }
     actionCollection->addAction("show_color_selector", m_colorSelAction);
 
     if (!m_mypaintAction) {
         m_mypaintAction = new KAction("Show MyPaint shade selector", this);
-        m_mypaintAction->setShortcut(Qt::Key_M);
+        m_mypaintAction->setShortcut(Qt::Key_Shift + Qt::Key_M);
         connect(m_mypaintAction, SIGNAL(triggered()), m_myPaintShadeSelector, SLOT(showPopup()), Qt::UniqueConnection);
     }
     actionCollection->addAction("show_mypaint_shade_selector", m_mypaintAction);
 
     if (!m_minimalAction) {
         m_minimalAction = new KAction("Show minimal shade selector", this);
-        m_minimalAction->setShortcut(Qt::Key_N);
+        m_minimalAction->setShortcut(Qt::Key_Shift + Qt::Key_N);
         connect(m_minimalAction, SIGNAL(triggered()), m_minimalShadeSelector, SLOT(showPopup()), Qt::UniqueConnection);
     }
     actionCollection->addAction("show_minimal_shade_selector", m_minimalAction);

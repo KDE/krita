@@ -112,7 +112,7 @@ QHash<QString, KAction*> KoTextEditingPlugin::actions() const
     return d->actionCollection;
 }
 
-void KoTextEditingPlugin::setCurrentCursorPosition(const QTextDocument *document, int cursorPosition)
+void KoTextEditingPlugin::setCurrentCursorPosition(QTextDocument *document, int cursorPosition)
 {
     Q_UNUSED(cursorPosition);
     Q_UNUSED(document);

@@ -76,9 +76,10 @@ class KoDocumentRdfPrivate
 public:
 
     KoDocumentRdfPrivate()
-            : model(Soprano::createModel())
+            : model(0)
             , prefixMapping(0)
     {
+        model = Soprano::createModel();
     }
 
     ~KoDocumentRdfPrivate()

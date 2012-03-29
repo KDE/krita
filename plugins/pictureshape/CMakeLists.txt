@@ -10,15 +10,18 @@ SET (pictureshape_LIB_SRCS
     Plugin.cpp
     PictureShapeConfigWidget.cpp
     ChangeImageCommand.cpp
-    GreyscaleFilterEffect.cpp
-    MonoFilterEffect.cpp
-    WatermarkFilterEffect.cpp
+    CropWidget.cpp
+    SelectionRect.cpp
+    ClippingRect.cpp
+    filters/GreyscaleFilterEffect.cpp
+    filters/MonoFilterEffect.cpp
+    filters/WatermarkFilterEffect.cpp
 )
 
+kde4_add_ui_files(pictureshape_LIB_SRCS forms/wdgPictureTool.ui)
 kde4_add_plugin(pictureshape ${pictureshape_LIB_SRCS})
 
-target_link_libraries(pictureshape komain flake    ${KDE4_KFILE_LIBRARY}
-)
+target_link_libraries(pictureshape komain flake ${KDE4_KFILE_LIBRARY})
 install(TARGETS pictureshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

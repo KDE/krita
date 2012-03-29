@@ -270,7 +270,7 @@ private:
 
     int splitEndBlockNumber;
     bool splitRegionOpened;
-    bool splitIdCounter;
+    int splitIdCounter;
 
     //For saving of delete-changes that result in a merge between two elements
     bool deleteMergeRegionOpened;

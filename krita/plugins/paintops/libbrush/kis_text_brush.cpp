@@ -23,69 +23,158 @@
 #include <QDomElement>
 #include <QFontMetrics>
 #include <QPainter>
-#include <QPixmap>
+
 #include "kis_gbr_brush.h"
+#include "kis_brushes_pipe.h"
+
+class KisTextBrushesPipe : public KisBrushesPipe<KisGbrBrush>
+{
+public:
+    KisTextBrushesPipe() {
+        m_charIndex = 0;
+    }
+
+    KisTextBrushesPipe(const KisTextBrushesPipe &rhs)
+        : KisBrushesPipe(rhs)
+    {
+        m_brushesMap.clear();
+
+        QMapIterator<QChar, KisGbrBrush*> iter(rhs.m_brushesMap);
+        while (iter.hasNext()) {
+            iter.next();
+            m_brushesMap.insert(iter.key(), iter.value());
+        }
+    }
+
+    void setText(const QString &text, const QFont &font) {
+        m_text = text;
+        m_charIndex = 0;
+
+        clear();
+
+        for (int i = 0; i < m_text.length(); i++) {
+            QChar letter = m_text.at(i);
+            QImage image = renderChar(letter, font);
+            KisGbrBrush *brush = new KisGbrBrush(image, letter);
+            brush->setSpacing(0.1); // support for letter spacing?
+            brush->makeMaskImage();
+
+            m_brushesMap.insert(letter, brush);
+            KisBrushesPipe<KisGbrBrush>::addBrush(brush);
+        }
+    }
+
+    static QImage renderChar(const QString& text, const QFont &font) {
+        QFontMetrics metric(font);
+        QRect rect = metric.boundingRect(text);
+
+        if (rect.isEmpty()) {
+            rect = QRect(0, 0, 1, 1); // paint at least something
+        }
+
+        QRect paintingRect = rect.translated(-rect.x(), -rect.y());
+
+        QImage renderedChar(paintingRect.size(), QImage::Format_ARGB32);
+        QPainter p;
+        p.begin(&renderedChar);
+        p.setFont(font);
+        p.fillRect(paintingRect, Qt::white);
+        p.setPen(Qt::black);
+        p.drawText(-rect.x(), -rect.y(), text);
+        p.end();
+        return renderedChar;
+    }
+
+    void clear() {
+        m_brushesMap.clear();
+        KisBrushesPipe<KisGbrBrush>::clear();
+    }
+
+    KisGbrBrush* firstBrush() const{
+        return m_brushesMap.value(m_text.at(0));
+    }
+
+protected:
+    void selectNextBrush(const KisPaintInformation& info) {
+        Q_UNUSED(info);
+
+        m_charIndex++;
+        if (m_charIndex >= m_text.size()) {
+            m_charIndex = 0;
+        }
+
+        QChar letter = m_text.at(m_charIndex);
+        Q_ASSERT(m_brushesMap.contains(letter));
+
+        m_currentBrushIndex = m_brushes.indexOf(m_brushesMap.value(letter));
+    }
+
+private:
+    QMap<QChar, KisGbrBrush*> m_brushesMap;
+    QString m_text;
+    int m_charIndex;
+};
+
 
 KisTextBrush::KisTextBrush()
-    : KisBrush()
-    , m_letterIndex(0)
-    , m_currentBrush(0)
+    : m_brushesPipe(new KisTextBrushesPipe())
 {
-    setBrushType(MASK);
+    setPipeMode(false);
 }
 
-KisTextBrush::KisTextBrush(const QString& txt, const QFont& font, bool pipe)
-    : KisBrush()
-    , m_letterIndex(0)
-    , m_currentBrush(0)
+KisTextBrush::KisTextBrush(const KisTextBrush &rhs)
+    : KisBrush(rhs),
+      m_brushesPipe(new KisTextBrushesPipe(*rhs.m_brushesPipe))
 {
-    setFont(font);
-    setText(txt);
-    setPipeMode(pipe);
-    updateBrush();
 }
 
 KisTextBrush::~KisTextBrush()
 {
-    clearBrushes();
+    delete m_brushesPipe;
 }
 
 void KisTextBrush::setPipeMode(bool pipe)
 {
-    if (pipe) {
-        setBrushType(PIPE_MASK);
-    } else
-    {
-        setBrushType(MASK);
-    }
+    setBrushType(pipe ? PIPE_MASK : MASK);
 }
 
+bool KisTextBrush::pipeMode() const
+{
+    return brushType() == PIPE_MASK;
+}
+
+void KisTextBrush::setText(const QString& txt)
+{
+    m_text = txt;
+}
+
+void KisTextBrush::setFont(const QFont& font)
+{
+    m_font = font;
+}
+
+QFont KisTextBrush::font()
+{
+    return m_font;
+}
 
 void KisTextBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const
 {
     if (brushType() == MASK){
         KisBrush::generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
     } else /* if (brushType() == PIPE_MASK)*/ {
-        if (m_brushes.isEmpty()) {
-            kWarning() << "No brush masks to rendered";
-            return;
-        }
-        selectNextBrush(info);
-        m_currentBrush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
+        m_brushesPipe->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
     }
 }
 
-void KisTextBrush::selectNextBrush(const KisPaintInformation& info) const
+KisFixedPaintDeviceSP KisTextBrush::paintDevice(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
-    Q_UNUSED(info);
-    if (m_letterIndex >= m_txt.length()){
-        m_letterIndex = 0;
+    if (brushType() == MASK){
+        return KisBrush::paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
+    } else /* if (brushType() == PIPE_MASK)*/ {
+        return m_brushesPipe->paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
     }
-    Q_ASSERT(m_brushes.contains( m_txt.at(m_letterIndex) ));
-    m_currentBrush = m_brushes.value( m_txt.at(m_letterIndex) );
-    m_letterIndex++;
 }
-
 
 void KisTextBrush::toXML(QDomDocument& doc, QDomElement& e) const
 {
@@ -93,7 +182,7 @@ void KisTextBrush::toXML(QDomDocument& doc, QDomElement& e) const
 
     e.setAttribute("type", "kis_text_brush");
     e.setAttribute("spacing", spacing());
-    e.setAttribute("text", m_txt);
+    e.setAttribute("text", m_text);
     e.setAttribute("font", m_font.toString());
     e.setAttribute("pipe", (brushType() == PIPE_MASK) ? "true" : "false");
     KisBrush::toXML(doc, e);
@@ -103,74 +192,49 @@ void KisTextBrush::updateBrush()
 {
     Q_ASSERT((brushType() == PIPE_MASK) || (brushType() == MASK));
     if (brushType() == PIPE_MASK) {
-        init();
-    } else {
-        setImage( renderChar(m_txt) );
+        m_brushesPipe->setText(m_text, m_font);
+        setImage(m_brushesPipe->firstBrush()->image());
+    } else /* if (brushType() == MASK)*/ {
+        setImage(KisTextBrushesPipe::renderChar(m_text, m_font));
     }
+
     resetBoundary();
     setValid(true);
 }
 
-QImage KisTextBrush::renderChar(const QString& text)
+qint32 KisTextBrush::maskWidth(double scale, double angle) const
 {
-    QFontMetrics metric(m_font);
-    int w = metric.width(text);
-    int h = metric.height();
-
-    // don't crash, if there is no text
-    if (w==0) w=1;
-    if (h==0) h=1;
-
-    QPixmap px(w, h);
-    QPainter p;
-    p.begin(&px);
-    p.setFont(m_font);
-    p.fillRect(0, 0, w, h, Qt::white);
-    p.setPen(Qt::black);
-    p.drawText(0, metric.ascent(), text);
-    p.end();
-    return px.toImage();
+    return brushType() == MASK ?
+        KisBrush::maskWidth(scale, angle) :
+        m_brushesPipe->maskWidth(scale, angle);
 }
 
-
-void KisTextBrush::init()
+qint32 KisTextBrush::maskHeight(double scale, double angle) const
 {
-    clearBrushes();
-    for (int i = 0; i < m_txt.length();i++) {
-        QImage brush = renderChar(m_txt.at(i));
-        KisGbrBrush * singleLetter = new KisGbrBrush(brush, m_txt.at(i));
-        singleLetter->setSpacing(0.1); // support for letter spacing?
-        singleLetter->makeMaskImage();
-        m_brushes.insert(m_txt.at(i), singleLetter );
-    }
-    // TODO: think about alternative to set width and height in
-    // generateMaskAndApplyMaskOrCreateDab -- KisBrush API is confusing so might
-    // give weird results
-    setImage( m_brushes.value(m_txt.at(0))->image() ); //set
+    return brushType() == MASK ?
+        KisBrush::maskHeight(scale, angle) :
+        m_brushesPipe->maskHeight(scale, angle);
 }
-
 
 void KisTextBrush::setAngle(qreal _angle)
 {
     KisBrush::setAngle(_angle);
-    QMap<QString, KisGbrBrush*>::iterator i;
-    for (i = m_brushes.begin(); i!= m_brushes.end(); ++i){
-            i.value()->setAngle(_angle);
-    }
+    m_brushesPipe->setAngle(_angle);
 }
-
 
 void KisTextBrush::setScale(qreal _scale)
 {
     KisBrush::setScale(_scale);
-    QMap<QString, KisGbrBrush*>::iterator i;
-    for (i = m_brushes.begin(); i!= m_brushes.end(); ++i){
-            i.value()->setScale(_scale);
-    }
+    m_brushesPipe->setScale(_scale);
 }
 
-void KisTextBrush::clearBrushes()
+void KisTextBrush::setSpacing(double _spacing)
 {
-    qDeleteAll(m_brushes.begin(), m_brushes.end());
-    m_brushes.clear();
+    KisBrush::setSpacing(_spacing);
+    m_brushesPipe->setSpacing(_spacing);
+}
+
+KisBrush* KisTextBrush::clone() const
+{
+    return new KisTextBrush(*this);
 }

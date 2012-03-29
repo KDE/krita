@@ -27,15 +27,15 @@
 #include <ui_wdgCompositeOpOption.h>
 #include <kis_composite_ops_model.h>
 
-KisCompositeOpOption::KisCompositeOpOption(bool creatConfigWidget):
+KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
     KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::brushCategory(), true),
-    m_createConfigWidget(creatConfigWidget)
+    m_createConfigWidget(createConfigWidget)
 {
     m_checkable         = false;
     m_prevCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
     m_currCompositeOpID = m_prevCompositeOpID;
     
-    if(creatConfigWidget) {
+    if(createConfigWidget) {
         QWidget* widget = new QWidget();
         
         Ui_wdgCompositeOpOption ui;

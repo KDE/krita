@@ -312,6 +312,15 @@ void KoFilterChain::manageIO()
     m_inputFile.clear();
 
     if (!m_outputFile.isEmpty()) {
+        if (m_outputTempFile == 0) {
+            m_inputTempFile = new KTemporaryFile;
+            m_inputTempFile->setAutoRemove(true);
+            m_inputTempFile->setFileName(m_outputFile);
+        }
+        else {
+            m_inputTempFile = m_outputTempFile;
+            m_outputTempFile = 0;
+        }
         m_inputFile = m_outputFile;
         m_outputFile.clear();
         m_inputTempFile = m_outputTempFile;
@@ -390,6 +399,16 @@ void KoFilterChain::outputFileHelper(bool autoDelete)
         m_outputFile.clear();
     } else
         m_outputFile = m_outputTempFile->fileName();
+
+    // We will recreate this file, not re-use it later on,
+    // so on windows it cannot exist, we just need the temporary
+    // name.
+#ifdef Q_OS_WIN
+    m_outputTempFile->close();
+    m_outputTempFile->setAutoRemove(true);
+    delete m_outputTempFile;
+    m_outputTempFile = 0;
+#endif
 }
 
 KoStoreDevice* KoFilterChain::storageNewStreamHelper(KoStore** storage, KoStoreDevice** device,
@@ -425,7 +444,7 @@ KoStoreDevice* KoFilterChain::storageHelper(const QString& file, const QString& 
         return storageCleanupHelper(storage);
 
     // Seems that we got a valid storage, at least. Even if we can't open
-    // the stream the "user" asked us to open, we nontheless change the
+    // the stream the "user" asked us to open, we nonetheless change the
     // IOState from File to Storage, as it might be possible to open other streams
     if (mode == KoStore::Read)
         m_inputQueried = Storage;

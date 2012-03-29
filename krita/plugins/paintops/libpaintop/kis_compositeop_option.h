@@ -36,7 +36,7 @@ class PAINTOP_EXPORT KisCompositeOpOption: public KisPaintOpOption
     Q_OBJECT
     
 public:
-     KisCompositeOpOption(bool creatConfigWidget=false);
+     KisCompositeOpOption(bool createConfigWidget=false);
     ~KisCompositeOpOption();
     
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;

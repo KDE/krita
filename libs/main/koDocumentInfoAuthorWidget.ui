@@ -10,10 +10,13 @@
    </rect>
   </property>
   <layout class="QGridLayout" >
-   <item row="0" column="0" >
+   <item row="0" column="0"  colspan="4" >
     <widget class="QLabel" name="fullNameLabel" >
      <property name="text" >
       <string>Name:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -39,6 +42,9 @@
      <property name="text" >
       <string>Initials:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="buddy" >
       <cstring>leInitials</cstring>
      </property>
@@ -59,6 +65,9 @@
      <property name="text" >
       <string>Title:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="buddy" >
       <cstring>leTitle</cstring>
      </property>
@@ -71,6 +80,9 @@
     <widget class="QLabel" name="lblPositionDesc" >
      <property name="text" >
       <string>Position:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy" >
       <cstring>lePosition</cstring>
@@ -85,6 +97,9 @@
      <property name="text" >
       <string>Company:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="buddy" >
       <cstring>leCompany</cstring>
      </property>
@@ -97,6 +112,9 @@
     <widget class="QLabel" name="lblEmailDesc" >
      <property name="text" >
       <string>Email:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy" >
       <cstring>leEmail</cstring>
@@ -111,6 +129,9 @@
      <property name="text" >
       <string>Telephone (home):</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="buddy" >
       <cstring>lePhoneHome</cstring>
      </property>
@@ -123,6 +144,9 @@
     <widget class="QLabel" name="lblPhoneWork" >
      <property name="text" >
       <string>Telephone (work):</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy" >
       <cstring>lePhoneWork</cstring>
@@ -137,6 +161,9 @@
      <property name="text" >
       <string>Fax:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="buddy" >
       <cstring>leFax</cstring>
      </property>
@@ -149,6 +176,9 @@
     <widget class="QLabel" name="lblStreetDesc" >
      <property name="text" >
       <string>Street:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy" >
       <cstring>leStreet</cstring>
@@ -163,6 +193,9 @@
      <property name="text" >
       <string>Postal code:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="buddy" >
       <cstring>lePostal</cstring>
      </property>
@@ -176,6 +209,9 @@
      <property name="text" >
       <string>City:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="buddy" >
       <cstring>leCity</cstring>
      </property>
@@ -188,6 +224,9 @@
     <widget class="QLabel" name="lblCountryDesc" >
      <property name="text" >
       <string>Country:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy" >
       <cstring>leCountry</cstring>

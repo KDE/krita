@@ -109,14 +109,14 @@ public:
     KeepWithNext keepWithNext() const;
 
     enum WritingMode {
-        LrTbWrittingMode,
-        RlTbWrittingMode,
-        TbRlWrittingMode,
-        TbLrWrittingMode,
-        LrWrittingMode,
-        RlWrittingMode,
-        TbWrittingMode,
-        PageWrittingMode
+        LrTbWritingMode,
+        RlTbWritingMode,
+        TbRlWritingMode,
+        TbLrWritingMode,
+        LrWritingMode,
+        RlWritingMode,
+        TbWritingMode,
+        PageWritingMode
     };
     void setWritingMode(WritingMode writingMode);
     WritingMode writingMode() const;

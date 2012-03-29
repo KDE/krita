@@ -69,9 +69,6 @@ ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QVariantList &
 {
     if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
-
-        setComponentData(ColorSpaceConversionFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/colorspaceconversion.rc"),
                    true);
 

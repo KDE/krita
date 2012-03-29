@@ -23,8 +23,13 @@
 
 #include <QDialog>
 #include <QTextDocument>
+#include <QComboBox>
+#include <QRadioButton>
+#include <QHBoxLayout>
 
 #include "KoOdfBibliographyConfiguration.h"
+
+class KoInlineCite;
 
 class BibliographyConfigureDialog : public QDialog
 {
@@ -34,12 +39,34 @@ public:
     explicit BibliographyConfigureDialog(const QTextDocument *document, QWidget *parent = 0);
 
 public slots:
+    void addSortKey();
     void save(QAbstractButton *);
-
+    void sortMethodChanged(bool);
 
 private:
     Ui::BibliographyConfigureDialog dialog;
     const QTextDocument *m_document;
+    KoOdfBibliographyConfiguration *m_bibConfiguration;
+};
+
+class SortKeyWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit SortKeyWidget(QString sortKey, Qt::SortOrder order, QWidget *parent);
+
+    QString sortKey() const;
+    Qt::SortOrder sortOrder() const;
+
+    void setSortKey(QString &sortKey);
+    void setSortOrder(Qt::SortOrder order);
+
+private:
+    QComboBox *m_dataFields;
+    QRadioButton *m_ascButton;
+    QRadioButton *m_dscButton;
+    QHBoxLayout *m_layout;
 
 };
 

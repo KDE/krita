@@ -83,6 +83,7 @@ public:
     KoListStyle *defaultOutlineStyle;
     KoListStyle *outlineStyle;
     QList<int> defaultToCEntriesStyleId;
+    QList<int> defaultBibEntriesStyleId;
     KoOdfNotesConfiguration *footNotesConfiguration;
     KoOdfNotesConfiguration *endNotesConfiguration;
     KoOdfBibliographyConfiguration *bibliographyConfiguration;
@@ -133,6 +134,13 @@ KoStyleManager::KoStyleManager(QObject *parent)
         style->setLeftMargin(QTextLength(QTextLength::FixedLength, (outlineLevel - 1) * 8));
         add(style);
         d->defaultToCEntriesStyleId.append(style->styleId());
+    }
+
+    for (int typeIndex = 0; typeIndex < KoOdfBibliographyConfiguration::bibTypes.size(); typeIndex++) {
+        KoParagraphStyle *style = new KoParagraphStyle();
+        style->setName("Bibliography " + KoOdfBibliographyConfiguration::bibTypes.at(typeIndex));
+        add(style);
+        d->defaultBibEntriesStyleId.append(style->styleId());
     }
 
     d->footNotesConfiguration = 0;
@@ -949,6 +957,21 @@ KoParagraphStyle *KoStyleManager::defaultTableOfContentsEntryStyle(int outlineLe
 KoParagraphStyle *KoStyleManager::defaultTableOfcontentsTitleStyle()
 {
     return defaultParagraphStyle();
+}
+
+KoParagraphStyle *KoStyleManager::defaultBibliographyEntryStyle(QString bibType)
+{
+    KoParagraphStyle *style = paragraphStyle(d->defaultBibEntriesStyleId
+                                             .at(KoOdfBibliographyConfiguration::bibTypes.indexOf(bibType)));
+    return style;
+}
+
+KoParagraphStyle *KoStyleManager::defaultBibliographyTitleStyle()
+{
+    KoParagraphStyle *style = new KoParagraphStyle();
+    style->setName("Bibliography Heading");
+    style->setFontPointSize(16);
+    return style;
 }
 
 void KoStyleManager::addUnusedStyle(KoParagraphStyle *style)

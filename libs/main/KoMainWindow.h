@@ -37,7 +37,7 @@ class KRecentFilesAction;
 class QDockWidget;
 class QLabel;
 
-class KoPageLayout;
+struct KoPageLayout;
 
 // Calligra class but not in main module
 class KoDockerManager;
@@ -188,13 +188,6 @@ signals:
 
     /// This signal is emitted right after the docker states have been succefully restored from config
     void restoringDone();
-
-    /// This signal is emitted right before we handle loading or saving of toolbars
-    void beforeHandlingToolBars();
-
-    /// This signal is emitted right after we handled loading or saving of toolbars
-    void afterHandlingToolBars();
-
 public slots:
 
     /**

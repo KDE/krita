@@ -79,7 +79,7 @@
 
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::rotateCursor())
-        , m_canvas(canvas)
+         , m_canvas(canvas), m_isActive(false)
 {
     setObjectName("tool_transform");
     useCursor(KisCursor::selectCursor());
@@ -930,6 +930,14 @@ void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
 
     setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
     KisTool::keyReleaseEvent(event);
+}
+
+void KisToolTransform::resourceChanged(int key, const QVariant& res)
+{
+    KisTool::resourceChanged(key, res);
+    if(m_isActive && key == KisCanvasResourceProvider::CurrentKritaNode) {
+        initTransform(m_currentArgs.mode());
+    }
 }
 
 /* A sort of gradient descent method is used to find the correct scale
@@ -2092,6 +2100,7 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
     else {
         updateOptionWidget();
     }
+    m_isActive = true;
 }
 
 void KisToolTransform::deactivate()
@@ -2110,6 +2119,7 @@ void KisToolTransform::deactivate()
     }
 
     KisTool::deactivate();
+    m_isActive = false;
 }
 
 void KisToolTransform::transform()

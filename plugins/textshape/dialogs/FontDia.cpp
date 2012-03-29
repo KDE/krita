@@ -28,6 +28,8 @@
 
 #include "FormattingPreview.h"
 
+#include <KoTextEditor.h>
+
 #include <klocale.h>
 #include <kvbox.h>
 #include <kfontdialog.h>
@@ -37,50 +39,18 @@
 #include <QTextDocument>
 #include <QTextCursor>
 
-FontDia::FontDia(QTextCursor* cursor, QWidget* parent)
-        : KDialog(parent),
-        m_cursor(cursor)
+FontDia::FontDia(KoTextEditor *editor, QWidget* parent)
+        : KDialog(parent)
+        , m_editor(editor)
 {
-    //First find out if we have more than one charFormat in our selection. If so, m_initialFormat/m_style will get initialised with the charFormat at the cursor's position. The tabs will get informed of this.
-
-    if (m_cursor->hasSelection()) {
-        int begin = qMin(m_cursor->anchor(), m_cursor->position());
-        int end = qMax(m_cursor->anchor(), m_cursor->position());
-        QTextBlock block = m_cursor->block().document()->findBlock(begin);
-        m_uniqueFormat = true;
-        QTextCursor caret(*m_cursor);
-        caret.setPosition(begin+1);
-        m_initialFormat = caret.charFormat();
-        while (block.isValid() && block.position() < end) {
-            QTextBlock::iterator iter = block.begin();
-            while (! iter.atEnd()) {
-                QTextFragment fragment = iter.fragment();
-                if (fragment.position() >= end)
-                    break;
-                if (fragment.position() + fragment.length() <= begin) {
-                    ++iter;
-                    continue;
-                }
-                if (!(m_uniqueFormat = (fragment.charFormat() == m_initialFormat)))
-                    break;
-                ++iter;
-            }
-            if (!m_uniqueFormat)
-                break;
-            block = block.next();
-        }
-    }
-    else {
-        m_initialFormat = cursor->charFormat();
-        m_uniqueFormat = true;
-    }
+    m_initialFormat = m_editor->charFormat();
 
     setCaption(i18n("Select Font"));
     setModal(true);
     setButtons(Ok | Cancel | Reset | Apply);
     setDefaultButton(Ok);
 
-    m_characterGeneral = new CharacterGeneral(this, m_uniqueFormat);
+    m_characterGeneral = new CharacterGeneral(this);
     m_characterGeneral->hideStyleName(true);
     setMainWidget(m_characterGeneral);
 
@@ -98,11 +68,13 @@ void FontDia::initTabs()
 
 void FontDia::slotApply()
 {
-    emit startMacro(i18n("Font"));
+    m_editor->beginEditBlock(i18n("Font"));
     KoCharacterStyle chosenStyle;
     m_characterGeneral->save(&chosenStyle);
-    chosenStyle.applyStyle(m_cursor);
-    emit stopMacro();
+    QTextCharFormat cformat;
+    chosenStyle.applyStyle(cformat);
+    m_editor->mergeAutoStyle(cformat);
+    m_editor->endEditBlock();
 }
 
 void FontDia::slotOk()

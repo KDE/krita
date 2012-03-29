@@ -48,6 +48,7 @@
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <kaction.h>
+#include <kactionmenu.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kparts/componentfactory.h>
@@ -123,6 +124,8 @@
 #include "ko_favorite_resource_manager.h"
 #include "kis_paintop_box.h"
 
+#include "thememanager.h"
+
 class BlockingUserInputEventFilter : public QObject
 {
     bool eventFilter(QObject *watched, QEvent *event)
@@ -159,8 +162,9 @@ public:
         , imageManager(0)
         , gridManager(0)
         , perspectiveGridManager(0)
-        , paintingAssistantManager(0) {
-
+        , paintingAssistantManager(0)
+        , themeManager(0)
+    {
     }
 
     ~KisView2Private() {
@@ -206,6 +210,7 @@ public:
     KisPaintingAssistantsManager* paintingAssistantManager;
     KoFavoriteResourceManager* favoriteResourceManager;
     BlockingUserInputEventFilter blockingEventFilter;
+    Digikam::ThemeManager *themeManager;
 };
 
 
@@ -213,10 +218,10 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     : KoView(doc, parent),
       m_d(new KisView2Private())
 {
+    // populate theme menu
+    m_d->themeManager = new Digikam::ThemeManager(this);
 
     setFocusPolicy(Qt::NoFocus);
-
-    setComponentData(KisFactory2::componentData(), false);
 
     if (!doc->isReadWrite()) {
         setXMLFile("krita_readonly.rc");
@@ -295,7 +300,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
     m_d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
-    m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
     connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)),m_d->canvas, SLOT(mirrorCanvas(bool)));
 
     KAction *rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);
@@ -346,7 +351,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     if (shell())
     {
-        KoToolBoxFactory toolBoxFactory(m_d->canvasController, " ");
+        KoToolBoxFactory toolBoxFactory(m_d->canvasController);
         shell()->createDockWidget(&toolBoxFactory);
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
@@ -405,6 +410,8 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
 KisView2::~KisView2()
 {
+    KConfigGroup group(KGlobal::config(), "theme");
+    group.writeEntry("Theme", m_d->themeManager->currentThemeName());
     delete m_d;
 }
 
@@ -678,9 +685,14 @@ void KisView2::slotLoadingFinished()
         image()->unlock();
     }
 
-    KisNodeSP activeNode = image()->rootLayer()->firstChild();
+    KisNodeSP activeNode = m_d->doc->preActivatedNode();
+    m_d->doc->setPreActivatedNode(0); // to make sure that we don't keep a reference to a layer the user can later delete.
 
-    while(activeNode && !activeNode->inherits("KisLayer")) {
+    if (!activeNode) {
+        activeNode = image()->rootLayer()->firstChild();
+    }
+
+    while (activeNode && !activeNode->inherits("KisLayer")) {
         activeNode = activeNode->nextSibling();
     }
 
@@ -709,7 +721,15 @@ void KisView2::createActions()
     KAction* action = new KAction(i18n("Edit Palette..."), this);
     actionCollection()->addAction("edit_palette", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotEditPalette()));
+
+    KConfigGroup group(KGlobal::config(), "theme");
+    m_d->themeManager->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
+    m_d->themeManager->registerThemeActions(actionCollection());
+    m_d->themeManager->setCurrentTheme(group.readEntry("Theme",
+                                                       m_d->themeManager->defaultThemeName()));
+
 }
+
 
 
 void KisView2::createManagers()
@@ -923,22 +943,26 @@ void KisView2::slotCreateTemplate()
     int height = 60;
     QPixmap pix = m_d->doc->generatePreview(QSize(width, height));
 
-    KTemporaryFile tempFile;
-    tempFile.setSuffix(".kra");
+    KTemporaryFile *tempFile = new KTemporaryFile();
+    tempFile->setSuffix(".kra");
 
     //Check that creation of temp file was successful
-    if (!tempFile.open()) {
+    if (!tempFile->open()) {
         qWarning("Creation of temporary file to store template failed.");
         return;
     }
+    QString fileName = tempFile->fileName();
+    tempFile->close(); // need to close on Windows before we can open it again to save
+    delete tempFile; // now the file has disappeared and we can create a new file with the generated name
 
-    m_d->doc->saveNativeFormat(tempFile.fileName());
-
+    m_d->doc->saveNativeFormat(fileName);
     KoTemplateCreateDia::createTemplate("krita_template", KisFactory2::componentData(),
-                                        tempFile.fileName(), pix, this);
+                                        fileName, pix, this);
 
     KisFactory2::componentData().dirs()->addResourceType("krita_template", "data", "krita/templates/");
 
+    QDir d;
+    d.remove(fileName);
 }
 
 void KisView2::slotDocumentSaved()

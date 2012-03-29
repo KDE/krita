@@ -34,11 +34,9 @@ class QPushButton;
 
 class KToolBar;
 
-class KoResourceItem;
-
 class KoAbstractGradient;
 class KisGradientChooser;
-class KoResourceItemChooser;
+class KisPatternChooser;
 class KisPaintopBox;
 class KisView2;
 class KisIconWidget;
@@ -83,12 +81,13 @@ private:
     KisIconWidget *m_patternWidget;
     KisIconWidget *m_gradientWidget;
 
-    QWidget * m_patternChooserPopup;
-    QWidget * m_gradientChooserPopup;
+    QWidget *m_patternChooserPopup;
+    QWidget *m_gradientChooserPopup;
 
-    KisGradientChooser * m_gradientChooser;
+    KisGradientChooser *m_gradientChooser;
+    KisPatternChooser *m_patternChooser;
 
-    KisPaintopBox * m_paintopBox;
+    KisPaintopBox *m_paintopBox;
 
 };
 

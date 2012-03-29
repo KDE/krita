@@ -24,6 +24,8 @@
 #include "KoVariableManager.h"
 #include "kotext_export.h"
 
+#include <KoOdfBibliographyConfiguration.h>
+
 // Qt + kde
 #include <QHash>
 #include <QTextCharFormat>
@@ -174,6 +176,9 @@ public:
     QList<KoInlineNote*> endNotes() const;
 
     QMap<QString, KoInlineCite*> citations(bool duplicatesEnabled = true) const;
+
+    QList<KoInlineCite*> citationsSortedByPosition(bool duplicatesEnabled = true,
+                                                           QTextBlock block = QTextBlock()) const;
 
 public slots:
     void documentInformationUpdated(const QString &info, const QString &data);

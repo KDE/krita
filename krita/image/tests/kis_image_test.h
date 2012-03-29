@@ -31,6 +31,7 @@ private slots:
     void layerTests();
     void testConvertImageColorSpace();
     void testGlobalSelection();
+    void testLayerComposition();
 };
 
 #endif

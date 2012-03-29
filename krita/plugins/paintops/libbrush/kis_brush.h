@@ -78,8 +78,7 @@ class BRUSH_EXPORT KisBrush : public KoResource, public KisShared
 
     class ScaledBrush;
 
-protected:
-
+public:
     class ColoringInformation
     {
     public:
@@ -88,6 +87,9 @@ protected:
         virtual void nextColumn() = 0;
         virtual void nextRow() = 0;
     };
+
+protected:
+
 
     class PlainColoringInformation : public ColoringInformation
     {
@@ -152,7 +154,7 @@ public:
      * @param spacing a spacing of 1.0 means that strokes will be separated from one time the size
      *                of the brush.
      */
-    void setSpacing(double spacing);
+    virtual void setSpacing(double spacing);
 
     /**
      * @return the spacing between two strokes for this brush
@@ -172,18 +174,18 @@ public:
     /**
      * @return the width of the mask for the given scale and angle
      */
-    qint32 maskWidth(double scale, double angle) const;
+    virtual qint32 maskWidth(double scale, double angle) const;
 
     /**
      * @return the height of the mask for the given scale and angle
      */
-    qint32 maskHeight(double scale, double angle) const;
-    
+    virtual qint32 maskHeight(double scale, double angle) const;
+
     /**
      * @return the angle of the mask adding the given angle
      */
     double maskAngle(double angle=0) const;
-    
+
     /**
      * @return the index of the brush
      *         if the brush consists of multiple images
@@ -300,13 +302,13 @@ protected:
     /**
      * XXX
      */
-    void setBrushType(enumBrushType type);
+    virtual void setBrushType(enumBrushType type);
 
     void clearScaledBrushes();
 
     void createScaledBrushes() const;
 
-    void setHasColor(bool hasColor);
+    virtual void setHasColor(bool hasColor);
 
 protected:
 
@@ -315,6 +317,7 @@ protected:
     void resetBoundary();
 
 private:
+    friend class KisImagePipeBrushTest;
 
     KisQImagemaskSP createMask(double scale, double subPixelX, double subPixelY) const;
 

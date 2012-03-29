@@ -114,13 +114,50 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
     }
 
     // Test normal cells.
-    if (point.y() > d->rowPositions[firstRow] && point.y() < d->rowPositions[lastRow + 1]) {
+    if (point.y() > d->rowPositions[firstRow] - 3.0 && point.y() < d->rowPositions[lastRow + 1] + 3.0) {
         QVector<qreal>::const_iterator start = d->rowPositions.constBegin() + firstRow;
         QVector<qreal>::const_iterator end = d->rowPositions.constBegin() + lastRow + 1;
         int row = qLowerBound(start, end, point.y()) - d->rowPositions.constBegin() - 1;
         int column = qLowerBound(d->columnPositions, point.x()) - d->columnPositions.constBegin() - 1;
-        QTextTableCell cell = d->table->cellAt(row, qBound(0, column, d->table->columns() - 1));
-        return d->cellAreas[cell.row()][cell.column()]->hitTest(point, accuracy);
+        if (point.y() < d->rowPositions[firstRow]) {
+            row++;
+        }
+        column = qBound(0, column, d->table->columns() - 1);
+        KoPointedAt pointedAt;
+        if (qAbs(d->columnPositions[column] - point.x()) < 3.0) {
+            pointedAt.tableHit = KoPointedAt::ColumnDivider;
+        } else if (qAbs(d->columnPositions[column+1] - point.x()) < 3.0) {
+            pointedAt.tableHit = KoPointedAt::ColumnDivider;
+            ++column;
+        } else if (qAbs(d->rowPositions[row] - point.y()) < 3.0) {
+            pointedAt.tableHit = KoPointedAt::RowDivider;
+        } else if (qAbs(d->rowPositions[row+1] - point.y()) < 3.0) {
+            pointedAt.tableHit = KoPointedAt::RowDivider;
+            ++row;
+        } else {
+            QTextTableCell cell = d->table->cellAt(row, column);
+            pointedAt = d->cellAreas[cell.row()][cell.column()]->hitTest(point, accuracy);
+        }
+        if (pointedAt.tableHit == KoPointedAt::ColumnDivider) {
+            if (column > 0) {
+                pointedAt.tableLeadSize = d->columnPositions[column] - d->columnPositions[column-1];
+            }
+            if (column < d->table->columns()) {
+                pointedAt.tableTrailSize = d->columnPositions[column+1] - d->columnPositions[column];
+            }
+        } else if (pointedAt.tableHit == KoPointedAt::RowDivider) {
+            if (row > 0) {
+                pointedAt.tableLeadSize = d->rowPositions[row] - d->rowPositions[row-1];
+            }
+            if (row < d->table->rows()) {
+                pointedAt.tableTrailSize = d->rowPositions[row+1] - d->rowPositions[row];
+            }
+        }
+        pointedAt.table = d->table;
+        pointedAt.tableRowDivider = row;
+        pointedAt.tableColumnDivider = column;
+        pointedAt.tableDividerPos = QPointF(d->columnPositions[column],d->rowPositions[row]);
+        return pointedAt;
     }
 
     // Test header row cells.
@@ -130,8 +167,21 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
         QVector<qreal>::const_iterator end = d->headerRowPositions.constBegin() + d->headerRows;
         int row = qLowerBound(start, end, headerPoint.y()) - d->headerRowPositions.constBegin() - 1;
         int column = qLowerBound(d->columnPositions, headerPoint.x()) - d->columnPositions.constBegin() - 1;
-        QTextTableCell cell = d->table->cellAt(row, qBound(0, column, d->table->columns() - 1));
-        return d->cellAreas[cell.row()][cell.column()]->hitTest(headerPoint, accuracy);
+        column = qBound(0, column, d->table->columns() - 1);
+        KoPointedAt pointedAt;
+        if (qAbs(d->columnPositions[column] - headerPoint.x()) < 3.0) {
+            pointedAt.tableHit = KoPointedAt::ColumnDivider;
+        } else if (qAbs(d->columnPositions[column+1] - headerPoint.x()) < 3.0) {
+            pointedAt.tableHit = KoPointedAt::ColumnDivider;
+            ++column;
+        } else {
+            QTextTableCell cell = d->table->cellAt(row, column);
+            pointedAt = d->cellAreas[cell.row()][cell.column()]->hitTest(headerPoint, accuracy);
+        }
+        pointedAt.table = d->table;
+        pointedAt.tableRowDivider = row;
+        pointedAt.tableColumnDivider = column;
+        return pointedAt;
     }
 
     return KoPointedAt();
@@ -480,7 +530,6 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
     qreal rowHeight = rowStyle.rowHeight();
     bool rowHasExactHeight = rowStyle.hasProperty(KoTableRowStyle::RowHeight);
     qreal rowBottom;
-
     if (rowHasExactHeight) {
         rowBottom = d->rowPositions[row] + rowHeight;
     } else {

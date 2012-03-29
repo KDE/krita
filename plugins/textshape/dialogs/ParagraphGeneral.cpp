@@ -22,6 +22,7 @@
 #include "ParagraphLayout.h"
 #include "ParagraphBulletsNumbers.h"
 #include "ParagraphDecorations.h"
+#include "ParagraphDropCaps.h"
 
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
@@ -68,6 +69,9 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 
     connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
     connect(widget.name, SIGNAL(textChanged(const QString &)), this, SLOT(setName(const QString&)));
+
+    m_paragraphDropCaps = new ParagraphDropCaps(this);
+    widget.tabs->addTab(m_paragraphDropCaps, i18n("Drop Caps"));
 }
 
 void ParagraphGeneral::hideStyleName(bool hide)
@@ -141,6 +145,7 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
     m_paragraphLayout->setDisplay(style);
     m_paragraphBulletsNumbers->setDisplay(style, level);
     m_paragraphDecorations->setDisplay(style);
+    m_paragraphDropCaps->setDisplay(style);
 
     m_blockSignals = false;
 }
@@ -156,6 +161,7 @@ void ParagraphGeneral::setParagraphStyles(const QList<KoParagraphStyle*> styles)
 void ParagraphGeneral::setUnit(const KoUnit &unit)
 {
     m_paragraphIndentSpacing->setUnit(unit);
+    m_paragraphDropCaps->setUnit(unit);
 }
 
 void ParagraphGeneral::save(KoParagraphStyle *style)
@@ -176,6 +182,7 @@ void ParagraphGeneral::save(KoParagraphStyle *style)
     m_paragraphLayout->save(savingStyle);
     m_paragraphBulletsNumbers->save(savingStyle);
     m_paragraphDecorations->save(savingStyle);
+    m_paragraphDropCaps->save(style);
 
     savingStyle->setNextStyle(widget.nextStyle->itemData(widget.nextStyle->currentIndex()).toInt());
     emit styleAltered(savingStyle);

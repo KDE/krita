@@ -22,3 +22,9 @@ target_link_libraries(KisBrushTest  ${KDE4_KDEUI_LIBS} kritaimage kritalibbrush 
 set(kis_boundary_test_SRCS kis_boundary_test.cpp )
 kde4_add_unit_test(KisBoundaryTest TESTNAME krita-libbrush-KisBoundaryTest ${kis_boundary_test_SRCS})
 target_link_libraries(KisBoundaryTest  ${KDE4_KDEUI_LIBS} kritaimage kritalibbrush ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_imagepipe_brush_test_SRCS kis_imagepipe_brush_test.cpp )
+kde4_add_unit_test(KisImagePipeBrushTest TESTNAME krita-libbrush-KisImagePipeBrushTest ${kis_imagepipe_brush_test_SRCS})
+target_link_libraries(KisImagePipeBrushTest  ${KDE4_KDEUI_LIBS} kritaimage kritalibbrush ${QT_QTTEST_LIBRARY})

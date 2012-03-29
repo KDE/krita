@@ -20,9 +20,9 @@
 #define PARAGRAPHSETTINGSDIALOG_H
 
 #include <KoUnit.h>
+#include <KoTextEditor.h>
 
 #include <KDialog>
-#include <QTextCursor>
 
 class TextTool;
 class ParagraphGeneral;
@@ -32,16 +32,10 @@ class ParagraphSettingsDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit ParagraphSettingsDialog(TextTool *tool, QTextCursor *cursor, QWidget* parent = 0);
+    explicit ParagraphSettingsDialog(TextTool *tool, KoTextEditor *editor, QWidget* parent = 0);
     ~ParagraphSettingsDialog();
 
     void setUnit(const KoUnit &unit);
-
-signals:
-    /// emitted when a series of commands is started that together need to become 1 undo action.
-    void startMacro(const QString &name);
-    /// emitted when a series of commands has ended that together should be 1 undo action.
-    void stopMacro();
 
 protected slots:
     void slotApply();
@@ -52,7 +46,7 @@ private:
 
     ParagraphGeneral *m_paragraphGeneral;
     TextTool *m_tool;
-    QTextCursor *m_cursor;
+    KoTextEditor *m_editor;
     bool m_uniqueFormat;
 };
 

@@ -132,8 +132,10 @@ void ReferencesTool::createActions()
     action = new KAction(i18n("Insert Bibliography"),this);
     addAction("insert_bibliography",action);
     action->setToolTip(i18n("Insert a bibliography into the document."));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertBibliography()));
 
+    action = new KAction(i18n("Insert Custom Bibliography"), this);
+    addAction("insert_custom_bibliography", action);
+    action->setToolTip(i18n("Insert a custom Bibliography into the document."));
     action = new KAction(i18n("Configure"),this);
     addAction("configure_bibliography",action);
     action->setToolTip(i18n("Configure the bibliography"));
@@ -183,20 +185,18 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
 
 void ReferencesTool::insertCitation()
 {
-    CitationInsertionDialog *dialog = new CitationInsertionDialog(textEditor(), m_scbw);
-    dialog->show();
+    new CitationInsertionDialog(textEditor(), m_scbw);
 }
 
-void ReferencesTool::insertBibliography()
+void ReferencesTool::insertCustomBibliography(KoBibliographyInfo *defaultTemplate)
 {
-    InsertBibliographyDialog *dialog = new InsertBibliographyDialog(textEditor(), m_scbw);
-    dialog->show();
+    Q_UNUSED(defaultTemplate);
+    new InsertBibliographyDialog(textEditor(), m_scbw);
 }
 
 void ReferencesTool::configureBibliography()
 {
-    BibliographyConfigureDialog *dialog = new BibliographyConfigureDialog(textEditor()->document(), m_scbw);
-    dialog->show();
+    new BibliographyConfigureDialog(textEditor()->document(), m_scbw);
 }
 
 void ReferencesTool::formatTableOfContents()

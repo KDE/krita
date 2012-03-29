@@ -36,6 +36,7 @@
 #include <kis_group_layer.h>
 #include <kis_layer.h>
 #include <kis_adjustment_layer.h>
+#include <kis_layer_composition.h>
 
 #include "kis_doc2.h"
 
@@ -85,9 +86,13 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
 
     quint32 count = 1; // We don't save the root layer, but it does count
     KisSaveXmlVisitor visitor(doc, imageElement, count, true);
+    visitor.setSelectedNodes(m_d->doc->activeNodes());
 
     image->rootLayer()->accept(visitor);
     m_d->nodeFileNames = visitor.nodeFileNames();
+
+    saveCompositions(doc, imageElement, image);
+
     return imageElement;
 }
 
@@ -141,4 +146,13 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
         }
     }
     return true;
+}
+
+void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image)
+{
+    QDomElement e = doc.createElement("compositions");
+    foreach(KisLayerComposition* composition, image->compositions()) {
+        composition->save(doc, e);
+    }
+    element.appendChild(e);
 }

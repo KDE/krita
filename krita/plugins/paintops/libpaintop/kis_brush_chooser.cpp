@@ -63,9 +63,7 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     if (! index.isValid())
         return;
 
-    KisBrush * brush = static_cast<KisBrush*>(index.internalPointer());
-    if (!brush)
-        return;
+    KisBrush *brush = static_cast<KisBrush*>(index.internalPointer());
 
     QRect itemRect = option.rect;
     QImage thumbnail = brush->image();
@@ -110,7 +108,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     m_lbSpacing = new QLabel(i18n("Spacing: "), this);
     m_slSpacing = new KisDoubleSliderSpinBox(this);
-    m_slSpacing->setRange(0.0, 10, 2);
+    m_slSpacing->setRange(0.02, 10, 2);
     m_slSpacing->setValue(0.1);
     m_slSpacing->setExponentRatio(3.0);
     QObject::connect(m_slSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSpacing(qreal)));
@@ -166,34 +164,14 @@ KisBrushChooser::~KisBrushChooser()
 
 void KisBrushChooser::setBrush(KisBrushSP _brush)
 {
-    KoResource *resource = static_cast<KoResource*>(_brush.data());
-    m_itemChooser->setCurrentResource( resource );
-    update( resource );
-    /*
-      XXX: why is this uncommented?
-
-        KisGbrBrush* brush = static_cast<KisGbrBrush*>(_brush.data());
-
-        QString text = QString("%1 (%2 x %3)")
-                       .arg(brush->name())
-                       .arg(brush->width())
-                       .arg(brush->height());
-
-        m_lbName->setText(text);
-        m_slSpacing->setValue(brush->spacing());
-        m_chkColorMask->setChecked(brush->useColorAsMask());
-        m_chkColorMask->setEnabled(brush->hasColor());
-
-        m_brush = brush;
-    */
+    m_itemChooser->setCurrentResource(_brush.data());
+    update(_brush.data());
 }
 
 void KisBrushChooser::slotSetItemScale(qreal scaleValue)
 {
-    KoResource * resource = static_cast<KoResource *>(m_itemChooser->currentResource());
-
-    if (resource) {
-        KisBrush *brush = static_cast<KisBrush *>(resource);
+    KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
+    if (brush) {
         brush->setScale(scaleValue);
         slotActivatedBrush(brush);
 
@@ -202,10 +180,8 @@ void KisBrushChooser::slotSetItemScale(qreal scaleValue)
 }
 void KisBrushChooser::slotSetItemRotation(qreal rotationValue)
 {
-    KoResource * resource = static_cast<KoResource *>(m_itemChooser->currentResource());
-
-    if (resource) {
-        KisBrush *brush = static_cast<KisBrush *>(resource);
+    KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
+    if (brush) {
         brush->setAngle(rotationValue / 180.0 * M_PI);
         slotActivatedBrush(brush);
 
@@ -215,10 +191,8 @@ void KisBrushChooser::slotSetItemRotation(qreal rotationValue)
 
 void KisBrushChooser::slotSetItemSpacing(qreal spacingValue)
 {
-    KoResource * resource = static_cast<KoResource *>(m_itemChooser->currentResource());
-
-    if (resource) {
-        KisBrush *brush = static_cast<KisBrush *>(resource);
+    KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
+    if (brush) {
         brush->setSpacing(spacingValue);
         slotActivatedBrush(brush);
 
@@ -228,10 +202,8 @@ void KisBrushChooser::slotSetItemSpacing(qreal spacingValue)
 
 void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
 {
-    KoResource * resource = static_cast<KoResource *>(m_itemChooser->currentResource());
-
-    if (resource) {
-        KisGbrBrush* brush = static_cast<KisGbrBrush*>(resource);
+    KisGbrBrush *brush = dynamic_cast<KisGbrBrush *>(m_itemChooser->currentResource());
+    if (brush) {
         brush->setUseColorAsMask(useColorAsMask);
         slotActivatedBrush(brush);
 
@@ -241,26 +213,29 @@ void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
 
 void KisBrushChooser::update(KoResource * resource)
 {
-    KisBrush* brush = static_cast<KisBrush*>(resource);
+    KisBrush* brush = dynamic_cast<KisBrush*>(resource);
 
-    QString text = QString("%1 (%2 x %3)")
-                   .arg(i18n(brush->name().toUtf8().data()))
-                   .arg(brush->width())
-                   .arg(brush->height());
+    if (brush) {
+        QString text = QString("%1 (%2 x %3)")
+                .arg(i18n(brush->name().toUtf8().data()))
+                .arg(brush->width())
+                .arg(brush->height());
 
-    m_lbName->setText(text);
-    m_slSpacing->setValue(brush->spacing());
-    m_slRotation->setValue(brush->angle() * 180 / M_PI);
-    m_slScale->setValue(brush->scale());
+        m_lbName->setText(text);
+        m_slSpacing->setValue(brush->spacing());
+        m_slRotation->setValue(brush->angle() * 180 / M_PI);
+        m_slScale->setValue(brush->scale());
 
 
-    // useColorAsMask support is only in gimp brush so far
-    if (KisGbrBrush * gimpBrush = dynamic_cast<KisGbrBrush*>(resource)){
-        m_chkColorMask->setChecked(gimpBrush->useColorAsMask());
+        // useColorAsMask support is only in gimp brush so far
+        KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(resource);
+        if (gimpBrush) {
+            m_chkColorMask->setChecked(gimpBrush->useColorAsMask());
+        }
+        m_chkColorMask->setEnabled(brush->hasColor() && gimpBrush);
+
+        emit sigBrushChanged();
     }
-    m_chkColorMask->setEnabled(brush->hasColor());
-
-    emit sigBrushChanged();
 }
 
 void KisBrushChooser::slotActivatedBrush(KoResource * resource)

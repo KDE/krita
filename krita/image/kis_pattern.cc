@@ -22,18 +22,19 @@
 
 #include "kis_pattern.h"
 
-
 #include <sys/types.h>
 #include <netinet/in.h>
 
 #include <limits.h>
 #include <stdlib.h>
 
+#include <QCryptographicHash>
 #include <QPoint>
 #include <QSize>
 #include <QImage>
 #include <QMap>
 #include <QFile>
+#include <QBuffer>
 #include <QTextStream>
 
 #include "KoColor.h"
@@ -43,6 +44,17 @@
 #include "kis_debug.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
+
+QByteArray generateMD5(const QImage &pattern)
+{
+    QByteArray ba;
+    QBuffer buffer(&ba);
+    buffer.open(QIODevice::WriteOnly);
+    pattern.save(&buffer, "PNG");
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(ba);
+    return md5.result();
+}
 
 KisPattern::KisPattern(const QString& file)
         : KoPattern(file)
@@ -74,3 +86,15 @@ KisPattern* KisPattern::clone() const
     pattern->setName(name());
     return pattern;
 }
+
+bool KisPattern::operator ==(KisPattern &other)
+{
+    if (m_md5.isEmpty()) {
+        m_md5 = generateMD5(image());
+    }
+    if (other.m_md5.isEmpty()) {
+        other.m_md5 = generateMD5(other.image());
+    }
+    return m_md5 == other.m_md5;
+}
+

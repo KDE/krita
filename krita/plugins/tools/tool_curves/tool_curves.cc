@@ -47,8 +47,6 @@ K_EXPORT_PLUGIN(ToolCurvesFactory("krita"))
 ToolCurves::ToolCurves(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(ToolCurvesFactory::componentData());
-
     if (parent->inherits("KoToolRegistry")) {
         KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
         //r->add(new KisToolBezierPaintFactory());

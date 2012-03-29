@@ -73,19 +73,6 @@ KisColorSmudgeOp::~KisColorSmudgeOp()
 
 void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale, double rotation)
 {
-    /*
-    // Extract the brush mask (m_maskDab) from brush with the correct scaled size
-    if(m_brush->brushType() == IMAGE || m_brush->brushType() == PIPE_IMAGE) {
-        // This is for bitmap brushes
-        m_maskDab    = m_brush->paintDevice(painter()->device()->colorSpace(), scale, rotation, info, 0.0, 0.0);
-        m_maskBounds = m_maskDab->bounds();
-    } else {
-        // This is for parametric brushes, those created in the Autobrush popup config dialogue
-        m_maskDab = cachedDab();
-        m_brush->mask(m_maskDab, painter()->paintColor(), scale, scale, rotation, info, 0.0, 0.0);
-        m_maskBounds = m_maskDab->bounds();
-    }//*/
-     
     // Extract the brush mask (m_maskDab) from brush with the correct scaled size
     if(m_brush->brushType() == IMAGE || m_brush->brushType() == PIPE_IMAGE) {
         // This is for bitmap brushes

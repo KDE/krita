@@ -25,7 +25,7 @@
 #include <QDebug>
 
 /**
- * An Insets object is a representation of the borders of a shape.
+ * An Insets object is a representation of the strokes of a shape.
  */
 struct FLAKE_EXPORT KoInsets
 {

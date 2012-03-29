@@ -26,62 +26,53 @@
 #include "krita_export.h"
 #include "kis_gbr_brush.h"
 
+class KisTextBrushesPipe;
+
+
 class BRUSH_EXPORT KisTextBrush : public KisBrush
 {
 
 public:
     KisTextBrush();
-    KisTextBrush(const QString& txt, const QFont& font, bool animate = false);
+    KisTextBrush(const KisTextBrush &rhs);
     virtual ~KisTextBrush();
 
-    virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
+    void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
             double scaleX, double scaleY, double angle,
             const KisPaintInformation& info,
             double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
+    KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const;
 
     virtual bool load() {
         return false;
     }
 
-    void setText(const QString& txt) {
-        m_txt = txt;
-    }
+    void setText(const QString& txt);
 
-    void setFont(const QFont& font) {
-        m_font = font;
-    }
+    QFont font();
+    void setFont(const QFont& font);
 
     void setPipeMode(bool pipe);
-
-    bool pipeMode() const {
-        return (brushType() == PIPE_MASK);
-    }
-
-    QFont font() {
-        return m_font;
-    }
+    bool pipeMode() const;
 
     void updateBrush();
-
     void toXML(QDomDocument& , QDomElement&) const;
 
-    virtual void setAngle(qreal _angle);
-    virtual void setScale(qreal _scale);
+    qint32 maskWidth(double scale, double angle) const;
+    qint32 maskHeight(double scale, double angle) const;
+    void setAngle(qreal _angle);
+    void setScale(qreal _scale);
+    void setSpacing(double _spacing);
 
-private:
-    void init();
-    QImage renderChar(const QString& text);
-    void selectNextBrush(const KisPaintInformation& info) const;
-    void clearBrushes();
+    KisBrush* clone() const;
 
 private:
     QFont m_font;
-    QString m_txt;
+    QString m_text;
 
-    mutable int m_letterIndex;
-    mutable KisGbrBrush * m_currentBrush;
-    mutable QMap<QString, KisGbrBrush*> m_brushes;
+private:
+    KisTextBrushesPipe *m_brushesPipe;
 };
 
 #endif

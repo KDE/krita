@@ -157,8 +157,13 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     QLabel* labelMode = new QLabel(i18n("Mode: "), this);
     labelMode->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
-    m_cmbCompositeOp  = new KisCompositeOpComboBox();
-    m_paletteButton   = new QPushButton(i18n("Save to Palette"));
+
+    m_cmbCompositeOp = new KisCompositeOpComboBox();
+    m_cmbCompositeOp->setFixedHeight(30);
+
+    m_paletteButton = new QPushButton(i18n("Save to Palette"));
+    m_paletteButton->setFixedHeight(30);
+
     m_workspaceWidget = new KisPopupButton(view);
     m_workspaceWidget->setIcon(KIcon("document-multiple"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
@@ -246,8 +251,9 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("flow")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
     connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
 
-    //Needed to connect canvas to favoriate resource manager
+    //Needed to connect canvas to favorite resource manager
     m_view->canvasBase()->createFavoriteResourceManager(this);
+    connect(m_view->resourceProvider(), SIGNAL(sigOpacityChanged(qreal)), SLOT(slotOpacityChanged(qreal)));
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -283,15 +289,15 @@ void KisPaintopBox::updatePaintops(const KoColorSpace* colorSpace)
 
 void KisPaintopBox::resourceSelected(KoResource* resource)
 {
-    KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(resource);
-    dbgUI << "preset " << preset->name() << "selected";
+    KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
+    if (preset) {
+        if(!preset->settings()->isLoadable())
+            return;
 
-    if(!preset->settings()->isLoadable())
-        return;
-
-    setCurrentPaintop(preset->paintOp(), preset->clone());
-    m_presetsPopup->setPresetImage(preset->image());
-    m_presetsPopup->resourceSelected(resource);
+        setCurrentPaintop(preset->paintOp(), preset->clone());
+        m_presetsPopup->setPresetImage(preset->image());
+        m_presetsPopup->resourceSelected(resource);
+    }
 }
 
 QPixmap KisPaintopBox::paintopPixmap(const KoID& paintop)
@@ -691,4 +697,14 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
         }
     }
     else setWidgetState(DISABLE_ALL);
+}
+
+void KisPaintopBox::slotOpacityChanged(qreal opacity)
+{
+    for (int i = 0; i < 2; ++i) {
+        KisDoubleSliderSpinBox *opacitySlider = m_sliderChooser[i]->getWidget<KisDoubleSliderSpinBox>("opacity");
+        opacitySlider->blockSignals(true);
+        opacitySlider->setValue(opacity);
+        opacitySlider->blockSignals(false);
+    }
 }

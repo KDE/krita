@@ -52,6 +52,7 @@
 #include <kis_selection_mask.h>
 #include <kis_shape_layer.h>
 #include <kis_transparency_mask.h>
+#include <kis_layer_composition.h>
 
 
 using namespace KRA;
@@ -65,6 +66,7 @@ public:
     QString imageComment; // used to be stored in the image, is now in the documentInfo block
     QMap<KisNode*, QString> layerFilenames; // temp storage during loading
     int syntaxVersion; // version of the fileformat we are loading
+    vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
 
 };
 
@@ -154,6 +156,13 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         image->setResolution(xres, yres);
         loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
 
+        KoXmlNode child;
+        for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
+            KoXmlElement e = child.toElement();
+            if(e.tagName() == "compositions") {
+                loadCompositions(e, image);
+            }
+        }
     }
 
     return image;
@@ -204,10 +213,15 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
 
 }
 
+vKisNodeSP KisKraLoader::selectedNodes() const
+{
+    return m_d->selectedNodes;
+}
+
 KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent)
 {
 
-    KoXmlNode node = element.lastChild();
+    KoXmlNode node = element.firstChild();
     KoXmlNode child;
 
     QDomDocument doc;
@@ -245,7 +259,6 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
     // ALWAYS define a default value in case the property is not
     // present in the layer definition: this helps a LOT with backward
     // compatibility.
-
     QString name = element.attribute(NAME, "No Name");
 
     QUuid id = QUuid(element.attribute(UUID, QUuid().toString()));
@@ -335,16 +348,22 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
         layer->setCompositeOp(compositeOpName);
     }
 
-    if(node->inherits("KisPaintLayer")) {
+    if (node->inherits("KisPaintLayer")) {
         KisPaintLayer* layer            = qobject_cast<KisPaintLayer*>(node);
         QBitArray      channelLockFlags = stringToFlags(element.attribute(CHANNEL_LOCK_FLAGS, ""), colorSpace->channelCount());
         layer->setChannelLockFlags(channelLockFlags);
     }
 
-    if (element.attribute(FILE_NAME).isNull())
+    if (element.attribute(FILE_NAME).isNull()) {
         m_d->layerFilenames[node] = name;
-    else
-        m_d->layerFilenames[node] = QString(element.attribute(FILE_NAME));
+    }
+    else {
+        m_d->layerFilenames[node] = element.attribute(FILE_NAME);
+    }
+
+    if (element.hasAttribute("selected") && element.attribute("selected") == "true")  {
+        m_d->selectedNodes.append(node);
+    }
 
     return node;
 }
@@ -553,4 +572,16 @@ KisNode* KisKraLoader::loadSelectionMask(KisImageWSP image, const KoXmlElement& 
     Q_CHECK_PTR(mask);
 
     return mask;
+}
+
+void KisKraLoader::loadCompositions(const KoXmlElement& elem, KisImageWSP image)
+{
+    KoXmlNode child;
+    for (child = elem.firstChild(); !child.isNull(); child = child.nextSibling()) {
+        KoXmlElement e = child.toElement();
+        QString name = e.attribute("name");
+        KisLayerComposition* composition = new KisLayerComposition(image, name);
+        composition->load(e);
+        image->addComposition(composition);
+    }
 }

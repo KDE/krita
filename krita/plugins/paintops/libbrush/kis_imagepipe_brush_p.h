@@ -75,6 +75,8 @@ public:
     }
 
     void init();
+    void sanitize();
+
     /// Initializes the brushesCount helper
     void setBrushesCount();
 

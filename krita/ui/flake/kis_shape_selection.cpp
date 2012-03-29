@@ -27,7 +27,7 @@
 
 #include <ktemporaryfile.h>
 
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoPathShape.h>
 #include <KoShapeGroup.h>
 #include <KoCompositeOp.h>

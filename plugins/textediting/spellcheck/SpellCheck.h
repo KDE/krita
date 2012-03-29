@@ -54,7 +54,7 @@ public:
     void checkSection(QTextDocument *document, int startPosition, int endPosition);
 
     ///reimplemented from superclass
-    void setCurrentCursorPosition(const QTextDocument *document, int cursorPosition);
+    void setCurrentCursorPosition(QTextDocument *document, int cursorPosition);
 
     QStringList availableBackends() const;
     QStringList availableLanguages() const;
@@ -68,7 +68,7 @@ public:
     bool skipRunTogetherWords();
 
     //reimplemented from Calligra2.0, we disconnect and re- connect the 'documentChanged' signal only when the document has replaced
-    void setDocument(const QTextDocument *document);
+    void setDocument(QTextDocument *document);
 
     void replaceWordBySuggestion(const QString &word, int startPosition,int lengthOfWord);
 

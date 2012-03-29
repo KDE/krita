@@ -407,7 +407,6 @@ public:
     virtual void visitFragmentSelection(QTextCursor fragmentSelection)
     {
         QTextCharFormat format = m_newFormat;
-        fragmentSelection.charFormat();
 
         QVariant v;
         v = fragmentSelection.charFormat().property(KoCharacterStyle::InlineInstanceId);
@@ -438,7 +437,7 @@ public:
 void KoTextEditor::setStyle(KoCharacterStyle *style)
 {
     Q_ASSERT(style);
-    d->updateState(KoTextEditor::Private::Format, i18n("Set Character Style"));
+    d->updateState(KoTextEditor::Private::Custom, i18n("Set Character Style"));
 
     SetCharacterStyleVisitor visitor(this, style);
 
@@ -478,7 +477,7 @@ public:
 
 void KoTextEditor::setStyle(KoParagraphStyle *style)
 {
-    d->updateState(KoTextEditor::Private::Format, i18n("Set Paragraph Style"));
+    d->updateState(KoTextEditor::Private::Custom, i18n("Set Paragraph Style"));
 
     KoStyleManager *styleManager = KoTextDocument(d->document).styleManager();
     SetParagraphStyleVisitor visitor(this, styleManager, style);
@@ -489,6 +488,116 @@ void KoTextEditor::setStyle(KoParagraphStyle *style)
     emit textFormatChanged();
 }
 
+class MergeAutoCharacterStyleVisitor : public KoTextVisitor
+{
+public:
+    MergeAutoCharacterStyleVisitor(KoTextEditor *editor, QTextCharFormat deltaCharFormat)
+        : KoTextVisitor(editor)
+        , m_deltaCharFormat(deltaCharFormat)
+    {
+    }
+
+    virtual void visitBlock(QTextBlock block, const QTextCursor &caret)
+    {
+        KoTextVisitor::visitBlock(block, caret);
+
+        QList<QTextCharFormat>::Iterator it = m_formats.begin();
+        foreach(QTextCursor cursor, m_cursors) {
+            QTextFormat prevFormat(cursor.charFormat());
+            cursor.setCharFormat(*it);
+            editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, i18n("Formatting"), *it, prevFormat, false);
+            ++it;
+        }
+    }
+
+    virtual void visitFragmentSelection(QTextCursor fragmentSelection)
+    {
+        QTextCharFormat format = fragmentSelection.charFormat();
+        format.merge(m_deltaCharFormat);
+
+        m_formats.append(format);
+        m_cursors.append(fragmentSelection);
+    }
+
+    QTextCharFormat m_deltaCharFormat;
+    QList<QTextCharFormat> m_formats;
+    QList<QTextCursor> m_cursors;
+};
+
+void KoTextEditor::mergeAutoStyle(QTextCharFormat deltaCharFormat)
+{
+    d->updateState(KoTextEditor::Private::Custom, "Formatting");
+
+    MergeAutoCharacterStyleVisitor visitor(this, deltaCharFormat);
+
+    recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
+
+    d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
+}
+
+class MergeAutoParagraphStyleVisitor : public KoTextVisitor
+{
+public:
+    MergeAutoParagraphStyleVisitor(KoTextEditor *editor, QTextCharFormat deltaCharFormat, QTextBlockFormat deltaBlockFormat)
+        : KoTextVisitor(editor)
+        , m_deltaCharFormat(deltaCharFormat)
+        , m_deltaBlockFormat(deltaBlockFormat)
+    {
+    }
+
+    virtual void visitBlock(QTextBlock block, const QTextCursor &caret)
+    {
+        for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
+            QTextCursor fragmentSelection(caret);
+            fragmentSelection.setPosition(it.fragment().position());
+            fragmentSelection.setPosition(it.fragment().position() + it.fragment().length(), QTextCursor::KeepAnchor);
+
+            if (fragmentSelection.anchor() >= fragmentSelection.position()) {
+                continue;
+            }
+
+            visitFragmentSelection(fragmentSelection);
+        }
+
+        QList<QTextCharFormat>::Iterator it = m_formats.begin();
+        foreach(QTextCursor cursor, m_cursors) {
+            QTextFormat prevFormat(cursor.charFormat());
+            cursor.setCharFormat(*it);
+            editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, i18n("Formatting"), *it, prevFormat, false);
+            ++it;
+        }
+        QTextCursor cursor(caret);
+        cursor.mergeBlockFormat(m_deltaBlockFormat);
+        cursor.mergeBlockCharFormat(m_deltaCharFormat);
+    }
+
+    virtual void visitFragmentSelection(QTextCursor fragmentSelection)
+    {
+        QTextCharFormat format = fragmentSelection.charFormat();
+        format.merge(m_deltaCharFormat);
+
+        m_formats.append(format);
+        m_cursors.append(fragmentSelection);
+    }
+
+    QTextCharFormat m_deltaCharFormat;
+    QTextBlockFormat m_deltaBlockFormat;
+    QList<QTextCharFormat> m_formats;
+    QList<QTextCursor> m_cursors;
+};
+
+void KoTextEditor::mergeAutoStyle(QTextCharFormat deltaCharFormat, QTextBlockFormat deltaBlockFormat)
+{
+    d->updateState(KoTextEditor::Private::Custom, "Formatting");
+
+    MergeAutoParagraphStyleVisitor visitor(this, deltaCharFormat, deltaBlockFormat);
+
+    recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
+
+    d->updateState(KoTextEditor::Private::NoOp);
+    emit textFormatChanged();
+}
 
 QTextCharFormat KoTextEditor::blockCharFormat() const
 {

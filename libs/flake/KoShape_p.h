@@ -48,8 +48,12 @@ public:
     /// Loads the shadow style
     KoShapeShadow *loadOdfShadow(KoShapeLoadingContext &context) const;
 
-    /// calls update on the shape where the border is.
-    void updateBorder();
+    /// calls update on the shape where the stroke is.
+    void updateStroke();
+
+    // Members
+
+    KoShape *q_ptr;             // Points the shape that owns this class.
 
     mutable QSizeF size; // size in pt
     QString shapeId;
@@ -64,9 +68,8 @@ public:
     QSet<KoShape *> toolDelegates;
     KoShapeUserData *userData;
     KoShapeApplicationData *appData;
+    KoShapeStrokeModel *stroke; ///< points to a stroke, or 0 if there is no stroke
     KoShapeBackground * fill; ///< Stands for the background color / fill etc.
-    KoShapeBorderModel *border; ///< points to a border, or 0 if there is no border
-    KoShape *q_ptr;
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
     KoShapeShadow * shadow; ///< the current shape shadow
     KoClipPath * clipPath; ///< the current clip path

@@ -21,6 +21,7 @@
 
 #include <QDomElement>
 #include <QFileInfo>
+#include <QDebug>
 
 struct KoResource::Private {
     QString name;

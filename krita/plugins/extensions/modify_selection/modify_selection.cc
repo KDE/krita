@@ -61,8 +61,6 @@ ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(ModifySelectionFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/modify_selection.rc"),
                    true);
 

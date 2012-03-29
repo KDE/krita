@@ -26,8 +26,10 @@
 #include "KoDocumentRdfBase.h"
 #include "KoBookmark.h"
 #include "KoInlineTextObjectManager.h"
+#include "KoInlineNote.h"
+#include "KoInlineCite.h"
+#include "BibliographyGenerator.h"
 #include <KoOdf.h>
-#include <KoInlineNote.h>
 #include <KoTextPaste.h>
 #include <KoShapeController.h>
 #include <KoTextOdfSaveHelper.h>
@@ -38,6 +40,7 @@
 #include "KoTextOdfSaveHelper.h"
 #include "KoTableOfContentsGeneratorInfo.h"
 #include "KoBibliographyInfo.h"
+#include "KoInlineCite.h"
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
 #include "changetracker/KoDeleteChangeMarker.h"
@@ -52,6 +55,7 @@
 #include "commands/DeleteTableColumnCommand.h"
 #include "commands/InsertTableRowCommand.h"
 #include "commands/InsertTableColumnCommand.h"
+#include "commands/ResizeTableCommand.h"
 #include "commands/TextPasteCommand.h"
 #include "commands/ChangeTrackedDeleteCommand.h"
 #include "commands/ListItemNumberingCommand.h"
@@ -59,7 +63,7 @@
 #include "commands/InsertInlineObjectCommand.h"
 #include "commands/DeleteCommand.h"
 #include "commands/DeleteAnchorsCommand.h"
-#include "KoInlineCite.h"
+
 #include <KoShapeCreateCommand.h>
 
 #include <KLocale>
@@ -1193,6 +1197,37 @@ void KoTextEditor::splitTableCells()
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
+void KoTextEditor::adjustTableColumnWidth(QTextTable *table, int column, qreal width, KUndo2Command *parentCommand)
+{
+    ResizeTableCommand *cmd = new ResizeTableCommand(table, true, column, width, parentCommand);
+
+    addCommand(cmd);
+}
+
+
+void KoTextEditor::adjustTableRowHeight(QTextTable *table, int column, qreal height, KUndo2Command *parentCommand)
+{
+    ResizeTableCommand *cmd = new ResizeTableCommand(table, false, column, height, parentCommand);
+
+    addCommand(cmd);
+}
+
+void KoTextEditor::adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight)
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Adjust Table Width"));
+    d->caret.beginEditBlock();
+    QTextTableFormat fmt = table->format();
+    if (dLeft) {
+        fmt.setLeftMargin(fmt.leftMargin() + dLeft);
+    }
+    if (dRight) {
+        fmt.setRightMargin(fmt.rightMargin() + dRight);
+    }
+    table->setFormat(fmt);
+    d->caret.endEditBlock();
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
 KoInlineNote *KoTextEditor::insertFootNote()
 {
     if (isEditProtected()) {
@@ -1332,7 +1367,7 @@ void KoTextEditor::setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info
     const_cast<QTextDocument *>(document())->markContentsDirty(document()->firstBlock().position(), 0);
 }
 
-void KoTextEditor::insertBibliography()
+void KoTextEditor::insertBibliography(KoBibliographyInfo *info)
 {
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
@@ -1344,10 +1379,10 @@ void KoTextEditor::insertBibliography()
     }
 
     QTextBlockFormat bibFormat;
-    KoBibliographyInfo *info = new KoBibliographyInfo();
+    KoBibliographyInfo *newBibInfo = info->clone();
     QTextDocument *bibDocument = new QTextDocument();
 
-    bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info));
+    bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(newBibInfo));
     bibFormat.setProperty( KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
@@ -1375,6 +1410,7 @@ void KoTextEditor::insertBibliography()
     d->caret.insertBlock(bibFormat);
     d->caret.movePosition(QTextCursor::Right);
 
+    new BibliographyGenerator(bibDocument, block(), newBibInfo);
 
     if (hasSelection) {
         d->caret.endEditBlock();

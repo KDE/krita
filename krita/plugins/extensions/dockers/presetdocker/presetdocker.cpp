@@ -61,7 +61,6 @@ public:
     virtual QDockWidget* createDockWidget()
     {
         PresetDockerDock * dockWidget = new PresetDockerDock();
-        dockWidget->setAllowedAreas(Qt::RightDockWidgetArea);
         dockWidget->setObjectName(id());
 
         return dockWidget;

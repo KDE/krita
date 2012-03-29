@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Composition Docker
+Name[nl]=Vaszetter van compositie
+Name[pt]=Área de Composição
+Name[pt_BR]=Área de composição
+Name[sv]=Kompositionsdockningsfönster
+Name[uk]=Панель композиції
+Name[x-test]=xxComposition Dockerxx
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritacompositiondocker
+X-Krita-Version=5

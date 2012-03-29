@@ -26,7 +26,7 @@
 #include <KoPointerEvent.h>
 
 class KoCanvasBase;
-class KoLineBorder;
+class KoShapeStroke;
 
 #define REDIRECT_EVENT_0P(name)              \
     void name() {                            \
@@ -75,7 +75,7 @@ private:
         virtual void addPathShape(KoPathShape* pathShape);
     private:
         KisToolSelectPath* const m_selectionTool;
-        KoLineBorder* m_borderBackup;
+        KoShapeStroke* m_borderBackup;
     };
     LocalTool* const m_localTool;
 

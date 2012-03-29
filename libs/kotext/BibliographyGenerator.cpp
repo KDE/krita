@@ -33,6 +33,8 @@
 
 #include <QTextFrame>
 
+static QList<SortKeyPair> sortKeys;
+
 BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block, KoBibliographyInfo *bibInfo)
     : QObject(bibDocument)
     , m_bibDocument(bibDocument)
@@ -53,12 +55,31 @@ BibliographyGenerator::~BibliographyGenerator()
     delete m_bibInfo;
 }
 
-static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager,QString bibType) {
-    KoParagraphStyle *style = new KoParagraphStyle();
-    style->setName("Bibliography_"+bibType);
-    style->setParent(styleManager->paragraphStyle("Standard"));
-    styleManager->add(style);
-    return style;
+static bool compare_on(int keyIndex, KoInlineCite *c1, KoInlineCite *c2)
+{
+    if ( keyIndex == sortKeys.size() ) return false;
+    else if (sortKeys[keyIndex].second == Qt::AscendingOrder) {
+        if (c1->dataField( sortKeys[keyIndex].first ) < c2->dataField( sortKeys[keyIndex].first )) return true;
+        else if (c1->dataField( sortKeys[keyIndex].first ) > c2->dataField( sortKeys[keyIndex].first )) return false;
+    } else if (sortKeys[keyIndex].second == Qt::DescendingOrder) {
+        if (c1->dataField( sortKeys[keyIndex].first ) < c2->dataField( sortKeys[keyIndex].first )) return false;
+        else if (c1->dataField( sortKeys[keyIndex].first ) > c2->dataField( sortKeys[keyIndex].first )) return true;
+    } else return compare_on( keyIndex + 1, c1, c2 );
+
+    return false;
+}
+
+static bool lessThan(KoInlineCite *c1, KoInlineCite *c2)
+{
+    return compare_on(0, c1, c2);
+}
+
+static QList<KoInlineCite *> sort(QList<KoInlineCite *> cites, QList<SortKeyPair> keys)
+{
+    sortKeys = keys;
+    sortKeys << QPair<QString, Qt::SortOrder>("identifier", Qt::AscendingOrder);
+    qSort(cites.begin(), cites.end(), lessThan);
+    return cites;
 }
 
 void BibliographyGenerator::generate()
@@ -75,7 +96,8 @@ void BibliographyGenerator::generate()
     if (!m_bibInfo->m_indexTitleTemplate.text.isNull()) {
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_bibInfo->m_indexTitleTemplate.styleId);
         if (!titleStyle) {
-            titleStyle = styleManager->defaultParagraphStyle();
+            titleStyle = styleManager->defaultBibliographyTitleStyle();
+            m_bibInfo->m_indexTitleTemplate.styleName = titleStyle->name();
         }
 
         QTextBlock titleTextBlock = cursor.block();
@@ -85,9 +107,17 @@ void BibliographyGenerator::generate()
         cursor.insertBlock();
     }
 
-    qDebug() << "\n" << m_bibInfo->m_indexTitleTemplate.text;
     QTextCharFormat savedCharFormat = cursor.charFormat();
-    QList<KoInlineCite*> citeList = KoTextDocument(m_block.document()).inlineTextObjectManager()->citations(false).values();
+
+    QList<KoInlineCite*> citeList;
+    if ( KoTextDocument(m_block.document()).styleManager()->bibliographyConfiguration()->sortByPosition() ) {
+        citeList = KoTextDocument(m_block.document())
+                .inlineTextObjectManager()->citationsSortedByPosition(false, m_block.document()->firstBlock());
+    } else {
+        KoTextDocument *doc = new KoTextDocument(m_block.document());
+        citeList = sort(doc->inlineTextObjectManager()->citationsSortedByPosition(false, m_block.document()->firstBlock()),
+                        KoTextDocument(m_block.document()).styleManager()->bibliographyConfiguration()->sortKeys());
+    }
 
     foreach (KoInlineCite *cite, citeList)
     {
@@ -99,7 +129,8 @@ void BibliographyGenerator::generate()
 
             bibTemplateStyle = styleManager->paragraphStyle(bibEntryTemplate.styleId);
             if (bibTemplateStyle == 0) {
-                bibTemplateStyle = generateTemplateStyle(styleManager, cite->bibliographyType());
+                bibTemplateStyle = styleManager->defaultBibliographyEntryStyle(bibEntryTemplate.bibliographyType);
+                bibEntryTemplate.styleName = bibTemplateStyle->name();
             }
         } else {
             qDebug() << "Bibliography meta-data has not BibliographyEntryTemplate for " << cite->bibliographyType();
@@ -111,21 +142,19 @@ void BibliographyGenerator::generate()
         QTextBlock bibEntryTextBlock = cursor.block();
         bibTemplateStyle->applyStyle(bibEntryTextBlock);
         bool spanEnabled = false;           //true if data field is not empty
-        QString debug;
+
         foreach (IndexEntry * entry, bibEntryTemplate.indexEntries) {
             switch(entry->name) {
                 case IndexEntry::BIBLIOGRAPHY: {
                     IndexEntryBibliography *indexEntry = static_cast<IndexEntryBibliography *>(entry);
-                    cursor.insertText(cite->dataField(indexEntry->dataField));
-                    debug.append(cite->dataField(indexEntry->dataField));
-                    spanEnabled = (cite->dataField(indexEntry->dataField).length()>0);
+                    cursor.insertText(QString(((spanEnabled)?" ":"")).append(cite->dataField(indexEntry->dataField)));
+                    spanEnabled = !cite->dataField(indexEntry->dataField).isEmpty();
                     break;
                 }
                 case IndexEntry::SPAN: {
                     if(spanEnabled) {
                         IndexEntrySpan *span = static_cast<IndexEntrySpan*>(entry);
                         cursor.insertText(span->text);
-                        debug.append(span->text);
                     }
                     break;
                 }
@@ -152,12 +181,41 @@ void BibliographyGenerator::generate()
                 }
             }
         }// foreach
-        qDebug() << "\n\t" << debug;
     }
     cursor.setCharFormat(savedCharFormat);   // restore the cursor char format
 }
 
+QMap<QString, BibliographyEntryTemplate> BibliographyGenerator::defaultBibliographyEntryTemplates()
+{
+    QMap<QString, BibliographyEntryTemplate> entryTemplates;
+    foreach (QString bibType, KoOdfBibliographyConfiguration::bibTypes) {
+        BibliographyEntryTemplate bibEntryTemplate;
 
+        //Now creating default IndexEntries for all BibliographyEntryTemplates
+        IndexEntryBibliography *identifier = new IndexEntryBibliography(QString());
+        IndexEntryBibliography *author = new IndexEntryBibliography(QString());
+        IndexEntryBibliography *title = new IndexEntryBibliography(QString());
+        IndexEntryBibliography *year = new IndexEntryBibliography(QString());
+        IndexEntrySpan *firstSpan = new IndexEntrySpan(QString());
+        IndexEntrySpan *otherSpan = new IndexEntrySpan(QString());
 
+        identifier->dataField = "identifier";
+        author->dataField = "author";
+        title->dataField = "title";
+        year->dataField = "year";
+        firstSpan->text = ":";
+        otherSpan->text = ",";
 
+        bibEntryTemplate.bibliographyType = bibType;
+        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(identifier));
+        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(firstSpan));
+        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(author));
+        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(otherSpan));
+        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(title));
+        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(otherSpan));
+        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(year));
 
+        entryTemplates[bibType] = bibEntryTemplate;
+    }
+    return entryTemplates;
+}

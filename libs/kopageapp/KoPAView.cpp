@@ -308,7 +308,7 @@ void KoPAView::initGUI()
     d->verticalRuler->createGuideToolConnection(d->canvas);
     d->horizontalRuler->createGuideToolConnection(d->canvas);
 
-    KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools") );
+    KoToolBoxFactory toolBoxFactory(d->canvasController);
     if (shell())
     {
         shell()->createDockWidget( &toolBoxFactory );

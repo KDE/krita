@@ -228,7 +228,7 @@ void KoShapeSavingContext::clearLayers()
     d->layers.clear();
 }
 
-QString KoShapeSavingContext::imageHref(KoImageData * image)
+QString KoShapeSavingContext::imageHref(const KoImageData *image)
 {
     QMap<qint64, QString>::iterator it(d->imageNames.find(image->key()));
     if (it == d->imageNames.end()) {
@@ -243,7 +243,7 @@ QString KoShapeSavingContext::imageHref(KoImageData * image)
     return it.value();
 }
 
-QString KoShapeSavingContext::imageHref(QImage &image)
+QString KoShapeSavingContext::imageHref(const QImage &image)
 {
     // TODO this can be optimized to recognize images which have the same content
     // Also this can use quite a lot of memeory as the qimage are all kept until

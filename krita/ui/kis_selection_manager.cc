@@ -41,7 +41,7 @@
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoToolProxy.h>
@@ -165,7 +165,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
     m_copyToNewLayer  = new KAction(i18n("Copy Selection to New Layer"), this);
     collection->addAction("copy_selection_to_new_layer", m_copyToNewLayer);
-    m_copyToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_J));
+    m_copyToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_J));
     connect(m_copyToNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
 
     m_cutToNewLayer  = new KAction(i18n("Cut Selection to New Layer"), this);
@@ -175,7 +175,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
     m_fillForegroundColor  = new KAction(i18n("Fill with Foreground Color"), this);
     collection->addAction("fill_selection_foreground_color", m_fillForegroundColor);
-    m_fillForegroundColor->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Backspace));
+    m_fillForegroundColor->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Backspace));
     connect(m_fillForegroundColor, SIGNAL(triggered()), this, SLOT(fillForegroundColor()));
 
     m_fillBackgroundColor  = new KAction(i18n("Fill with Background Color"), this);
@@ -693,13 +693,13 @@ void KisSelectionManager::shapeSelectionChanged()
     KoSelection * selection = shapeManager->selection();
     QList<KoShape*> selectedShapes = selection->selectedShapes();
 
-    KoLineBorder* border = new KoLineBorder(0, Qt::lightGray);
+    KoShapeStroke* border = new KoShapeStroke(0, Qt::lightGray);
     foreach(KoShape* shape, shapeManager->shapes()) {
         if (dynamic_cast<KisShapeSelection*>(shape->parent())) {
             if (selectedShapes.contains(shape))
-                shape->setBorder(border);
+                shape->setStroke(border);
             else
-                shape->setBorder(0);
+                shape->setStroke(0);
         }
     }
     updateGUI();

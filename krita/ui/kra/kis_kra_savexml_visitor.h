@@ -31,6 +31,8 @@ class KRITAUI_EXPORT KisSaveXmlVisitor : public KisNodeVisitor
 public:
     KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, bool root = false);
 
+    void setSelectedNodes(vKisNodeSP selectedNodes);
+
     using KisNodeVisitor::visit;
 
 public:
@@ -60,6 +62,7 @@ private:
 
     friend class KisKraSaveXmlVisitorTest;
 
+    vKisNodeSP m_selectedNodes;
     QMap<const KisNode*,  QString> m_nodeFileNames;
     QDomDocument m_doc;
     QDomElement m_elem;

@@ -280,7 +280,7 @@ bool PSDLayerRecord::read(QIODevice* io)
 
     dbgFile << "\ttransparency protected" << transparencyProtected;
 
-    visible = flags & 2 ? true : false;
+    visible = flags & 2 ? false : true;
 
     dbgFile << "\tvisible" << visible;
 

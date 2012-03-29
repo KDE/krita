@@ -42,7 +42,9 @@ void KisMultipliersDoubleSliderSpinBox::Private::updateRange()
     form.sliderSpinBox->setRange(m * min, m * max, decimals);
 }
 
-KisMultipliersDoubleSliderSpinBox::KisMultipliersDoubleSliderSpinBox(QWidget* _parent) : QWidget(_parent), d(new Private)
+KisMultipliersDoubleSliderSpinBox::KisMultipliersDoubleSliderSpinBox(QWidget* _parent)
+    : QWidget(_parent)
+    , d(new Private)
 {
     d->form.setupUi(this);
     addMultiplier(1.0);

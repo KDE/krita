@@ -40,7 +40,7 @@
 #include "kis_iterator.h"
 #include "kis_histogram.h"
 #include "kis_painter.h"
-#include "kgradientslider.h"
+#include "kis_gradient_slider.h"
 #include "kis_processing_information.h"
 #include "kis_selection.h"
 #include "kis_types.h"

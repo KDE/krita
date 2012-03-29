@@ -34,9 +34,11 @@ SimpleInsertWidget::SimpleInsertWidget(TextTool *tool, QWidget *parent)
     widget.insertVariable->setPopupMode(QToolButton::InstantPopup); //because action overrode ui file
     widget.insertSpecialChar->setDefaultAction(tool->action("insert_specialchar"));
     widget.quickTable->addAction(tool->action("insert_table"));
+    widget.insertPageBreak->setDefaultAction(tool->action("insert_framebreak"));
 
     connect(widget.insertVariable, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.insertSpecialChar, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.insertPageBreak, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 
     connect(widget.quickTable, SIGNAL(create(int, int)), this, SIGNAL(insertTableQuick(int, int)));
     connect(widget.quickTable, SIGNAL(create(int, int)), this, SIGNAL(doneWithFocus()));

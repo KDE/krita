@@ -206,6 +206,10 @@ public slots:
 
     void setStyle(KoCharacterStyle *style);
 
+    void mergeAutoStyle(QTextCharFormat deltaCharFormat);
+
+    void mergeAutoStyle(QTextCharFormat deltaCharFormat, QTextBlockFormat deltaBlockFormat);
+
     /**
      * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
      * @param inliner the object to insert.
@@ -322,52 +326,72 @@ public slots:
 
     bool hasComplexSelection() const;
 
-     /**
+    /**
      * Insert a table at the current cursor position.
      * @param rows the number of rows in the created table.
      * @param columns the number of columns in the created table.
      */
     void insertTable(int rows, int columns);
 
-     /**
+    /**
      * Insert a table row above the current cursor position (if in a table).
      */
     void insertTableRowAbove();
 
-     /**
+    /**
      * Insert a table row below the current cursor position (if in a table).
      */
     void insertTableRowBelow();
 
-     /**
+    /**
      * Insert a table column to the left of the current cursor position (if in a table).
      */
     void insertTableColumnLeft();
 
-     /**
+    /**
      * Insert a table column to the right of the current cursor position (if in a table).
      */
     void insertTableColumnRight();
 
-     /**
+    /**
      * Delete a table column where the cursor is (if in a table).
      */
     void deleteTableColumn();
 
-     /**
+    /**
      * Delete a table row where the cursor is (if in a table).
      */
     void deleteTableRow();
 
-     /**
+    /**
      * Merge table cells (selected by the cursor).
      */
     void mergeTableCells();
 
-     /**
+    /**
      * Split table cells (selected by the cursor) that were previously merged.
      */
     void splitTableCells();
+
+    /**
+     * Sets the width of a table column.
+     * @param table is tha table to be adjusted.
+     */
+    void adjustTableColumnWidth(QTextTable *table, int column, qreal width, KUndo2Command *parentCommand = 0);
+
+    /**
+     * Sets the height of a table row.
+     * @param table is tha table to be adjusted.
+     */
+    void adjustTableRowHeight(QTextTable *table, int row, qreal height, KUndo2Command *parentCommand = 0);
+
+    /**
+     * Changes the width of a table by adjusting the margins.
+     * @param table is tha table to be adjusted.
+     * @param dLeft delta value for the left margin.
+     * @param dRight delta value for the right margin.
+     */
+    void adjustTableWidth(QTextTable *table, qreal dLeft, qreal dRight);
 
     /**
      * Insert a footnote at the current cursor position
@@ -391,7 +415,7 @@ public slots:
      */
     void setTableOfContentsConfig(KoTableOfContentsGeneratorInfo *info, QTextBlock block);
 
-    void insertBibliography();
+    void insertBibliography(KoBibliographyInfo *info);
 
     KoInlineCite *insertCitation();
 

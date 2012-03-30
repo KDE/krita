@@ -24,10 +24,8 @@
 
 #include <KoCanvasObserverBase.h>
 
+#include <QWidget>
 #include <QList>
-#include <QMap>
-#include <QHash>
-#include <QDockWidget>
 
 #include <KoToolManager.h>
 

@@ -14,6 +14,7 @@ endif(MSVC)
 
 include(CheckFunctionExists)
 
+if (NOT WIN32)
 macro_optional_find_package(GLEW)
 macro_bool_to_01(GLEW_FOUND HAVE_GLEW)
 configure_file(config-glew.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-glew.h )
@@ -29,6 +30,7 @@ if(HAVE_OPENGL)
 else(HAVE_OPENGL)
     message(STATUS "OpenGL NOT found - krita will not be able to use OpenGL for hardware accelerated rendering.")
 endif(HAVE_OPENGL)
+endif (NOT WIN32)
 
 if(UNIX)
     set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")

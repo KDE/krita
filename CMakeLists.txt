@@ -175,9 +175,9 @@ macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 ##
 ## Look for OpenGL
 ##
-
-macro_optional_find_package(OpenGL)
 set(HAVE_OPENGL 0)
+if (NOT WIN32)
+macro_optional_find_package(OpenGL)
 
 if(OPENGL_FOUND)
     message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
@@ -192,6 +192,7 @@ else(OPENGL_FOUND)
 endif(OPENGL_FOUND)
 
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
+endif (NOT WIN32)
 
 ##
 ## Test for kdepimlibs

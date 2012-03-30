@@ -237,7 +237,6 @@ void KisTextureProperties::recalculateMask()
 
     if (!pattern) return;
 
-    delete m_mask;
     m_mask = 0;
 
     QImage mask = pattern->image();

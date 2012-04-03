@@ -145,9 +145,9 @@ void DeleteCommand::doDelete()
 
     if (!textEditor->hasSelection()) {
         if (m_mode == PreviousChar) {
-            caret->movePosition(QTextCursor::Left, QTextCursor::KeepAnchor);
+            caret->movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
         } else {
-            caret->movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
+            caret->movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
         }
     }
 

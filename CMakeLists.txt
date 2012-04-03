@@ -215,7 +215,7 @@ macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Manag
 ## Test for eigen2
 ##
 macro_optional_find_package(Eigen2)
-macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by Tables and Krita")
+macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by Calligra Sheets and Krita")
 
 ##
 ## Test for QCA2
@@ -484,7 +484,7 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 #
 
 
-### Tables: eigen2, boost
+### Calligra Sheets: eigen2, boost
 if(NOT EIGEN2_FOUND)
     set(SHOULD_BUILD_SHEETS FALSE)
 endif(NOT EIGEN2_FOUND)

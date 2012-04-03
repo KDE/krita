@@ -59,6 +59,9 @@ public:
     QPointF convertScreenPos(const QPointF &point) const;
 
     /// reimplemented
+    QPainterPath outline() const;
+
+    /// reimplemented
     QRectF outlineRect() const;
 
     ///reimplemented
@@ -117,6 +120,7 @@ private:
     KoImageCollection *m_imageCollection;
     QRegion m_paintRegion;
     KoParagraphStyle * m_paragraphStyle;
+    bool m_clip;
 };
 
 #endif

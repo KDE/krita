@@ -3,6 +3,7 @@
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -183,10 +184,45 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
 
     QSize pixmapSize = calcOptimalPixmapSize(viewRect.size(), imageData()->image().size());
 
-    // normalize the clipping rect if it isn't already done
+    // Normalize the clipping rect if it isn't already done.
     m_clippingRect.normalize(imageData()->imageSize());
 
-    // painting the image as prepared in waitUntilReady()
+    // Handle style:mirror, i.e. mirroring horizontally and/or vertically.
+    // 
+    // NOTE: At this point we don't handle HorizontalOnEven
+    //       and HorizontalOnOdd, which have to know which
+    //       page they are on.  In those cases we treat it as
+    //       no horizontal mirroring at all.
+    QTransform outputTransform = painter.transform();
+    QTransform worldTransform  = QTransform();
+    QSizeF     shapeSize       = size();
+
+    bool  flip = false;
+    qreal midpointX = 0.0;
+    qreal midpointY = 0.0;
+    qreal scaleX = 1.0;
+    qreal scaleY = 1.0;
+    if (m_mirrorMode & MirrorHorizontal) {
+        midpointX = shapeSize.width() / qreal(2.0);
+        scaleX = -1.0;
+        flip = true;
+    }
+    if (m_mirrorMode & MirrorVertical) {
+        midpointY = shapeSize.height() / qreal(2.0);
+        scaleY = -1.0;
+        flip = true;
+    }
+    if (flip) {
+        //kDebug(31000) << "Flipping" << midpointX << midpointY << scaleX << scaleY;
+        worldTransform.translate(midpointX, midpointY);
+        worldTransform.scale(scaleX, scaleY);
+        worldTransform.translate(-midpointX, -midpointY);
+        //kDebug(31000) << "After flipping for window" << mWorldTransform;
+    }
+    QTransform newTransform = worldTransform * outputTransform;
+    painter.setWorldTransform(newTransform);
+
+    // Paint the image as prepared in waitUntilReady()
     if (!m_printQualityImage.isNull() && pixmapSize != m_printQualityRequestedSize) {
         QSizeF imageSize = m_printQualityImage.size();
         QRectF cropRect(
@@ -203,8 +239,8 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter, Ko
         QPixmap pixmap;
         QString key(generate_key(imageData()->key(), pixmapSize));
 
-        // if the required pixmap is not in the cache
-        // lunch a task in a background thread that scales
+        // If the required pixmap is not in the cache
+        // launch a task in a background thread that scales
         // the source image to the required size
         if (!QPixmapCache::find(key, &pixmap)) {
             QThreadPool::globalInstance()->start(new _Private::PixmapScaler(this, pixmapSize));

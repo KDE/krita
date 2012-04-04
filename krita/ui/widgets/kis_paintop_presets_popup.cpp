@@ -184,8 +184,8 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     if (widget) {
         widget->setFont(m_d->smallFont);
 
-        widget->setMinimumSize(QSize(750, 450));
-        m_d->settingsWidget->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+        widget->setFixedSize(QSize(600, 450));
+        m_d->settingsWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
         m_d->layout->addWidget(widget);
 
         m_d->layout->update();

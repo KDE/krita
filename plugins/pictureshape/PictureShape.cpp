@@ -90,10 +90,11 @@ void _Private::PictureShapeProxy::setImage(const QString& key, const QImage& ima
 // ----------------------------------------------------------------- //
 
 PictureShape::PictureShape()
-    : KoFrameShape(KoXmlNS::draw, "image"),
-    m_imageCollection(0),
-    m_mode(Standard),
-    m_proxy(this)
+    : KoFrameShape(KoXmlNS::draw, "image")
+    , m_imageCollection(0)
+    , m_mirrorMode(MirrorNone)
+    , m_colorMode(Standard)
+    , m_proxy(this)
 {
     setKeepAspectRatio(true);
     KoFilterEffectStack * effectStack = new KoFilterEffectStack();
@@ -322,7 +323,27 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
         style.addProperty("draw:image-opacity", QString("%1%").arg((1.0 - transparency()) * 100.0));
     }
 
-    switch(m_mode)
+    // Mirroring
+    if (m_mirrorMode != MirrorNone) {
+        QString mode;
+
+        if (m_mirrorMode & MirrorHorizontal)
+            mode = "horizontal";
+        else if (m_mirrorMode & MirrorHorizontalOnEven)
+            mode = "horizontal-on-even";
+        else if (m_mirrorMode & MirrorHorizontalOnOdd)
+            mode = "horizontal-on-odd";
+
+        if (m_mirrorMode & MirrorVertical) {
+            if (!mode.isEmpty())
+                mode += ' ';
+            mode += "vertical";
+        }
+
+        style.addProperty("style:mirror", mode);
+    }
+
+    switch(m_colorMode)
     {
     case Standard:
         style.addProperty("draw:color-mode", "standard");
@@ -363,10 +384,37 @@ QString PictureShape::saveStyle(KoGenStyle& style, KoShapeSavingContext& context
 
 void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context)
 {
+    // Load the common parts of the style.
     KoShape::loadStyle(element, context);
+
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.setTypeProperties("graphic");
 
+    // Mirroring
+    if (styleStack.hasProperty(KoXmlNS::style, "mirror")) {
+        QString mirrorMode = styleStack.property(KoXmlNS::style, "mirror");
+
+        int  mode = 0;
+
+        // Only one of the horizontal modes
+        if (mirrorMode.contains("horizontal-on-even")) {
+            mode |= MirrorHorizontalOnEven;
+        }
+        else if (mirrorMode.contains("horizontal-on-odd")) {
+            mode |= MirrorHorizontalOnOdd;
+        }
+        else if (mirrorMode.contains("horizontal")) {
+            mode |= MirrorHorizontal;
+        }
+
+        if (mirrorMode.contains("vertical")) {
+            mode |= MirrorVertical;
+        }
+        
+        m_mirrorMode = mode;
+    }
+
+    // Color-mode (effects)
     if (styleStack.hasProperty(KoXmlNS::draw, "color-mode")) {
         QString colorMode = styleStack.property(KoXmlNS::draw, "color-mode");
         if (colorMode == "greyscale") {
@@ -380,23 +428,47 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
         }
     }
 
+    // image opacity
     QString opacity(styleStack.property(KoXmlNS::draw, "image-opacity"));
-
     if (! opacity.isEmpty() && opacity.right(1) == "%") {
         setTransparency(1.0 - (opacity.left(opacity.length() - 1).toFloat() / 100.0));
     }
 
+    // clip rect
     m_clippingRect = parseClippingRectString(styleStack.property(KoXmlNS::fo, "clip"));
+}
+
+int PictureShape::mirrorMode() const
+{
+    return m_mirrorMode;
 }
 
 PictureShape::ColorMode PictureShape::colorMode() const
 {
-    return m_mode;
+    return m_colorMode;
+}
+
+void PictureShape::setMirrorMode(int mode)
+{
+    // Sanity check
+    mode &= MirrorMask;
+
+    // Make sure only one bit of the horizontal modes is set.
+    if (mode & MirrorHorizontal)
+        mode &= ~(MirrorHorizontalOnEven | MirrorHorizontalOnOdd);
+    else if (mode & MirrorHorizontalOnEven)
+        mode &= ~MirrorHorizontalOnOdd;
+
+    // If the mode changes, redraw the image.
+    if (mode != m_mirrorMode) {
+        m_mirrorMode = mode;
+        update();
+    }
 }
 
 void PictureShape::setColorMode(PictureShape::ColorMode mode)
 {
-    if (mode != m_mode) {
+    if (mode != m_colorMode) {
         filterEffectStack()->removeFilterEffect(0);
 
         switch(mode)
@@ -414,7 +486,7 @@ void PictureShape::setColorMode(PictureShape::ColorMode mode)
             break;
         }
 
-        m_mode = mode;
+        m_colorMode = mode;
         update();
     }
 }

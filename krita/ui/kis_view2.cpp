@@ -115,6 +115,7 @@
 #include "kis_painting_assistants_manager.h"
 #include <kis_paint_layer.h>
 #include "kis_progress_widget.h"
+#include "kis_shape_layer.h"
 
 #include <QDebug>
 #include <QPoint>
@@ -456,8 +457,20 @@ void KisView2::dropEvent(QDropEvent *event)
             if (layer) {
                 layer->setImage(kisimage);
             }
+            KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
+            if (shapeLayer) {
+                KoShapeContainer * parentContainer =
+                    dynamic_cast<KoShapeContainer*>(m_d->doc->shapeForNode(kisimage->rootLayer()));
 
-            node->setName(i18n("Pasted Layer"));
+                KisShapeLayer *shapeLayer2 = new KisShapeLayer(parentContainer, m_d->doc->shapeController(), kisimage, node->name(), node->opacity());
+                QList<KoShape *> shapes = shapeLayer->shapes();
+                shapeLayer->removeAllShapes();
+                foreach(KoShape *shape, shapes) {
+                    shapeLayer2->addShape(shape);
+                }
+                node = shapeLayer2;
+            }
+
         }
         else if (event->mimeData()->hasImage()) {
             QImage qimage = qvariant_cast<QImage>(event->mimeData()->imageData());

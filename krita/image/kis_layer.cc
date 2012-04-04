@@ -190,7 +190,7 @@ void KisLayer::disableAlphaChannel(bool disable)
 {
     if(m_d->channelFlags.isEmpty())
         m_d->channelFlags = colorSpace()->channelFlags(true, true);
-    
+
     if(disable)
         m_d->channelFlags &= colorSpace()->channelFlags(true, false);
     else
@@ -232,6 +232,7 @@ KisImageWSP KisLayer::image() const
 
 void KisLayer::setImage(KisImageWSP image)
 {
+    qDebug() << ">>>>>>>>>>>> " << kisimage;
     m_d->image = image;
     for (uint i = 0; i < childCount(); ++i) {
         // Only layers know about the image

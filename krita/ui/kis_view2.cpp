@@ -432,7 +432,8 @@ void KisView2::dragEnterEvent(QDragEnterEvent *event)
 
 void KisView2::dropEvent(QDropEvent *event)
 {
-    KisImageWSP kisimage = image();
+    KisImageSP kisimage = image();
+
     QPointF pos = kisimage->documentToIntPixel(m_d->viewConverter->viewToDocument(event->pos() + m_d->canvas->documentOffset() - m_d->canvas->documentOrigin()));
 
     if (event->mimeData()->hasFormat("application/x-krita-node") || event->mimeData()->hasImage())
@@ -450,9 +451,9 @@ void KisView2::dropEvent(QDropEvent *event)
             node = tempImage->rootLayer()->firstChild();
             tempImage->removeNode(node);
 
-            // layers store a lisk to the image, so update it
+            // layers store a link to the image, so update it
             KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
-            if(layer) {
+            if (layer) {
                 layer->setImage(kisimage);
             }
 

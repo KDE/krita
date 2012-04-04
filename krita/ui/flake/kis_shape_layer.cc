@@ -87,7 +87,9 @@
 class ShapeLayerContainerModel : public SimpleShapeContainerModel
 {
 public:
-    ShapeLayerContainerModel(KisShapeLayer *parent) : q(parent) {}
+    ShapeLayerContainerModel(KisShapeLayer *parent)
+        : q(parent)
+{}
 
     void add(KoShape *child) {
         SimpleShapeContainerModel::add(child);
@@ -107,7 +109,13 @@ private:
 struct KisShapeLayer::Private
 {
 public:
-    Private() : x(0), y(0) {}
+    Private()
+        : converter(0)
+        , canvas(0)
+        , controller(0)
+        , x(0)
+        , y(0)
+         {}
 
     KoViewConverter * converter;
     KisPaintDeviceSP paintDevice;
@@ -158,7 +166,7 @@ KisShapeLayer::~KisShapeLayer()
      * Small hack alert: we set the image to null to disable
      * updates those will be emitted on shape deletion
      */
-    setImage(0);
+    KisLayer::setImage(0);
 
     foreach(KoShape *shape, shapes()) {
         shape->setParent(0);
@@ -179,6 +187,8 @@ void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
     m_d->canvas->setProjection(m_d->paintDevice);
     m_d->controller = controller;
 
+    m_d->canvas->shapeManager()->selection()->disconnect(this);
+
     connect(m_d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
     connect(m_d->canvas->shapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)), this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
@@ -188,6 +198,14 @@ void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller)
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const
 {
     return node->inherits("KisMask");
+}
+
+void KisShapeLayer::setImage(KisImageWSP _image)
+{
+    KisLayer::setImage(_image);
+    delete m_d->converter;
+    m_d->converter = new KisImageViewConverter(image());
+    m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
 }
 
 QIcon KisShapeLayer::icon() const

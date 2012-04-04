@@ -232,7 +232,6 @@ KisImageWSP KisLayer::image() const
 
 void KisLayer::setImage(KisImageWSP image)
 {
-    qDebug() << ">>>>>>>>>>>> " << kisimage;
     m_d->image = image;
     for (uint i = 0; i < childCount(); ++i) {
         // Only layers know about the image

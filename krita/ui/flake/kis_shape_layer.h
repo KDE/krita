@@ -66,6 +66,8 @@ public:
     }
     bool allowAsChild(KisNodeSP) const;
 
+
+    virtual void setImage(KisImageWSP image);
 public:
 
     // KoShape overrides

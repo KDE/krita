@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -81,12 +82,26 @@ namespace _Private
     };
 }
 
+
 class PictureShape : public KoTosContainer, public KoFrameShape, public SvgShape
 {
     friend class _Private::PixmapScaler;
     friend class _Private::PictureShapeProxy;
 
 public:
+    // Odf 1.2: 20.313  style:mirror
+    // The value could be 0, or a combination of one of the Horizontal* and/or Vertical
+    // separated by whitespace.
+    enum MirrorMode {
+        MirrorNone             = 0x00,
+        MirrorHorizontal       = 0x01,
+        MirrorHorizontalOnEven = 0x02,
+        MirrorHorizontalOnOdd  = 0x04,
+        MirrorVertical         = 0x08,
+
+        MirrorMask = 0x0f      // Only used as a mask, never as a value.
+    };
+
     enum ColorMode {
         Standard,
         Greyscale,
@@ -113,12 +128,14 @@ public:
      */
     KoImageCollection *imageCollection() const;
     KoImageData *imageData() const;
+    int mirrorMode() const;
     ColorMode colorMode() const;
     QRectF cropRect() const;
     bool isPictureInProportion() const;
 
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
     void setCropRect(const QRectF& rect);
+    void setMirrorMode(int mode);
     void setColorMode(ColorMode mode);
 
 protected:
@@ -134,8 +151,11 @@ private:
     KoImageCollection *m_imageCollection;
     mutable QImage m_printQualityImage;
     mutable QSizeF m_printQualityRequestedSize;
-    ColorMode m_mode;
-    ClippingRect m_clippingRect;
+
+    int            m_mirrorMode;
+    ColorMode      m_colorMode;
+    ClippingRect   m_clippingRect;
+
     _Private::PictureShapeProxy m_proxy;
 };
 

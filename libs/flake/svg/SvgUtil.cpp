@@ -30,7 +30,7 @@
 
 #define DPI 72.0
 
-#define DEG2RAD(degree) degree*180.0/M_PI
+#define DEG2RAD(degree) degree/180.0*M_PI
 
 double SvgUtil::fromUserSpace(double value)
 {
@@ -117,20 +117,20 @@ QTransform SvgUtil::parseTransform(const QString &transform)
         QStringList subtransform = (*it).simplified().split('(', QString::SkipEmptyParts);
         if (subtransform.count() < 2)
             continue;
-        
+
         subtransform[0] = subtransform[0].trimmed().toLower();
         subtransform[1] = subtransform[1].simplified();
         QRegExp reg("[,( ]");
         QStringList params = subtransform[1].split(reg, QString::SkipEmptyParts);
-        
+
         if (subtransform[0].startsWith(';') || subtransform[0].startsWith(','))
             subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);
-        
+
         if (subtransform[0] == "rotate") {
             if (params.count() == 3) {
                 double x = params[1].toDouble();
                 double y = params[2].toDouble();
-                
+
                 result.translate(x, y);
                 result.rotate(params[0].toDouble());
                 result.translate(-x, -y);
@@ -163,7 +163,7 @@ QTransform SvgUtil::parseTransform(const QString &transform)
             }
         }
     }
-    
+
     return result;
 }
 
